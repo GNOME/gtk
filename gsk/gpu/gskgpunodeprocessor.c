@@ -1727,6 +1727,26 @@ gsk_gpu_lookup_texture (GskGpuFrame    *frame,
   return image;
 }
 
+static GskGpuSampler
+gsk_gpu_sampler_for_scaling_filter (GskScalingFilter scaling_filter)
+{
+  switch (scaling_filter)
+    {
+      case GSK_SCALING_FILTER_LINEAR:
+        return GSK_GPU_SAMPLER_DEFAULT;
+
+      case GSK_SCALING_FILTER_NEAREST:
+        return GSK_GPU_SAMPLER_NEAREST;
+
+      case GSK_SCALING_FILTER_TRILINEAR:
+        return GSK_GPU_SAMPLER_MIPMAP_DEFAULT;
+
+      default:
+        g_assert_not_reached ();
+        return GSK_GPU_SAMPLER_DEFAULT;
+    }
+}
+
 /* must be set up with BLEND_ADD to avoid seams */
 static void
 gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
@@ -2045,24 +2065,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
   if (need_mipmap && !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_MIPMAP))
     gsk_gpu_mipmap_op (self->frame, image);
 
-  switch (scaling_filter)
-    {
-      case GSK_SCALING_FILTER_LINEAR:
-        descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_DEFAULT);
-        break;
-
-      case GSK_SCALING_FILTER_NEAREST:
-        descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_NEAREST);
-        break;
-
-      case GSK_SCALING_FILTER_TRILINEAR:
-        descriptor = gsk_gpu_node_processor_add_image (self, image, GSK_GPU_SAMPLER_MIPMAP_DEFAULT);
-        break;
-
-      default:
-        g_assert_not_reached ();
-        return;
-    }
+  descriptor = gsk_gpu_node_processor_add_image (self, image, gsk_gpu_sampler_for_scaling_filter (scaling_filter));
 
   gsk_gpu_texture_op (self->frame,
                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
