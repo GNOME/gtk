@@ -326,6 +326,9 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
           gdk_texture_downloader_finish (&downloader);
           g_object_unref (texture);
           g_clear_object (&image);
+
+          /* Let's GC like a madman, we draw oversized stuff and don't want to OOM */
+          gsk_gpu_device_maybe_gc (priv->device);
         }
     }
 
