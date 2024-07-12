@@ -2018,8 +2018,15 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
   guint32 descriptor;
   gboolean need_mipmap, need_offscreen;
 
-  need_offscreen = self->modelview != NULL ||
-            !graphene_vec2_equal (&self->scale, graphene_vec2_one ());
+  texture = gsk_texture_scale_node_get_texture (node);
+  scaling_filter = gsk_texture_scale_node_get_filter (node);
+  need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
+  image = gsk_gpu_lookup_texture (self->frame, self->ccs, texture, need_mipmap, &image_cs);
+
+  need_offscreen = image == NULL ||
+                   self->modelview != NULL ||
+                   !graphene_vec2_equal (&self->scale, graphene_vec2_one ());
+
   if (need_offscreen)
     {
       GskGpuImage *offscreen;
@@ -2038,11 +2045,20 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
         return;
       clip_bounds.size.width = ceilf (clip_bounds.size.width);
       clip_bounds.size.height = ceilf (clip_bounds.size.height);
-      offscreen = gsk_gpu_node_processor_create_offscreen (self->frame,
-                                                           self->ccs,
-                                                           graphene_vec2_one (),
-                                                           &clip_bounds,
-                                                           node);
+      if (image == NULL)
+        offscreen = gsk_gpu_get_texture_tiles_as_image (self->frame,
+                                                        self->ccs,
+                                                        &clip_bounds,
+                                                        graphene_vec2_one (),
+                                                        &node->bounds,
+                                                        texture,
+                                                        scaling_filter);
+      else
+        offscreen = gsk_gpu_node_processor_create_offscreen (self->frame,
+                                                             self->ccs,
+                                                             graphene_vec2_one (),
+                                                             &clip_bounds,
+                                                             node);
       descriptor = gsk_gpu_node_processor_add_image (self, offscreen, GSK_GPU_SAMPLER_DEFAULT);
       gsk_gpu_texture_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
@@ -2052,22 +2068,6 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
                           &self->offset,
                           &clip_bounds);
       g_object_unref (offscreen);
-      return;
-    }
-
-  texture = gsk_texture_scale_node_get_texture (node);
-  scaling_filter = gsk_texture_scale_node_get_filter (node);
-  need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
-
-  image = gsk_gpu_lookup_texture (self->frame, self->ccs, texture, need_mipmap, &image_cs);
-
-  if (image == NULL)
-    {
-      GSK_DEBUG (FALLBACK, "Unsupported texture format %u for size %dx%d",
-                 gdk_texture_get_format (texture),
-                 gdk_texture_get_width (texture),
-                 gdk_texture_get_height (texture));
-      gsk_gpu_node_processor_add_cairo_node (self, node);
       return;
     }
 
