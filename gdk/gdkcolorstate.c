@@ -131,6 +131,7 @@ gboolean
 
 /* }}} */
 /* {{{ Default implementation */
+/* {{{ Vfuncs */
 
 static gboolean
 gdk_default_color_state_equal (GdkColorState *self,
@@ -155,6 +156,35 @@ gdk_default_color_state_get_no_srgb_tf (GdkColorState *color_state)
   return self->no_srgb;
 }
 
+static GdkFloatColorConvert
+gdk_default_color_state_get_convert_to (GdkColorState  *color_state,
+                                        GdkColorState  *target)
+{
+  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
+
+  if (!GDK_IS_DEFAULT_COLOR_STATE (target))
+    return NULL;
+
+  return self->convert_to[GDK_DEFAULT_COLOR_STATE_ID (target)];
+}
+
+/* }}} */
+/* {{{ Conversion functions */
+
+#define COORDINATE_TRANSFORM(name, tf) \
+static void \
+name(GdkColorState  *self, \
+     float         (*values)[4], \
+     gsize           n_values) \
+{ \
+  for (gsize i = 0; i < n_values; i++) \
+    { \
+      values[i][0] = tf (values[i][0]); \
+      values[i][1] = tf (values[i][1]); \
+      values[i][2] = tf (values[i][2]); \
+    } \
+}
+
 static inline float
 srgb_oetf (float v)
 {
@@ -173,47 +203,10 @@ srgb_eotf (float v)
     return v / 12.92f;
 }
 
-static void
-gdk_default_srgb_to_linear_srgb (GdkColorState  *self,
-                                 float         (*values)[4],
-                                 gsize           n_values)
-{
-  gsize i;
+COORDINATE_TRANSFORM(gdk_default_srgb_to_srgb_linear, srgb_eotf)
+COORDINATE_TRANSFORM(gdk_default_srgb_linear_to_srgb, srgb_oetf)
 
-  for (i = 0; i < n_values; i++)
-    {
-      values[i][0] = srgb_eotf (values[i][0]);
-      values[i][1] = srgb_eotf (values[i][1]);
-      values[i][2] = srgb_eotf (values[i][2]);
-    }
-}
-
-static void
-gdk_default_srgb_linear_to_srgb (GdkColorState  *self,
-                                 float         (*values)[4],
-                                 gsize           n_values)
-{
-  gsize i;
-
-  for (i = 0; i < n_values; i++)
-    {
-      values[i][0] = srgb_oetf (values[i][0]);
-      values[i][1] = srgb_oetf (values[i][1]);
-      values[i][2] = srgb_oetf (values[i][2]);
-    }
-}
-
-static GdkFloatColorConvert
-gdk_default_color_state_get_convert_to (GdkColorState  *color_state,
-                                        GdkColorState  *target)
-{
-  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
-
-  if (!GDK_IS_DEFAULT_COLOR_STATE (target))
-    return NULL;
-
-  return self->convert_to[GDK_DEFAULT_COLOR_STATE_ID (target)];
-}
+/* }}} */
 
 static const
 GdkColorStateClass GDK_DEFAULT_COLOR_STATE_CLASS = {
@@ -235,7 +228,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
     .name = "srgb",
     .no_srgb = GDK_COLOR_STATE_SRGB_LINEAR,
     .convert_to = {
-      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_srgb_to_linear_srgb,
+      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_srgb_to_srgb_linear,
     },
   },
   [GDK_COLOR_STATE_ID_SRGB_LINEAR] = {
