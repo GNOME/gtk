@@ -780,7 +780,7 @@ gsk_gpu_cache_lookup_texture_image (GskGpuCache   *self,
 
   texture_cache = gsk_gpu_cache_get_texture_hash_table (self, color_state);
   if (texture_cache == NULL)
-    return FALSE;
+    return NULL;
 
   cache = gdk_texture_get_render_data (texture, self);
   /* color_state_equal() isn't necessary and if we'd use it,
