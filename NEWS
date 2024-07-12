@@ -1,6 +1,41 @@
 Overview of Changes in 4.15.4, xx-xx-xxxx
 =========================================
 
+* GtkPopover:
+ - Fix size allocation with wrapping labels
+
+* CSS:
+ - Fix fallout from recent changes
+ - Make implementation of currentcolor inheritance match browsers
+
+* Gdk:
+ - Introduce GdkColorState for encoding color space information
+
+* Gsk:
+ - Improve caching of glyphs and textures
+ - Remove the uber shader
+ - Numerous bug fixes
+ - Fix corner cases in offload handling
+ - Implement occlusion culling for opaque content
+ - Allow offloading (some) transformed textures
+ - Take colorstate into account when compositing
+ - Add GDK_DEBUG=linear to opt into linear compositing
+ - Implement tiling for large textures
+
+* Wayland:
+ - Allow offloading GL textures via dmabuf export
+
+* Deprecations:
+ - GskGLShader and the render node
+
+* Tools:
+ - Improve the rendernode tool extract command
+
+* Translation updates
+ Georgian
+ Hindi
+
+
 Overview of Changes in 4.15.3, 29-06-2024
 =========================================
 
