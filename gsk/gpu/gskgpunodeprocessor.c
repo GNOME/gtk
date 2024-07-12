@@ -43,8 +43,10 @@
 #include "gskprivate.h"
 
 #include "gdk/gdkcolorstateprivate.h"
+#include "gdk/gdkmemorytextureprivate.h"
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdksubsurfaceprivate.h"
+#include "gdk/gdktextureprivate.h"
 
 /* the epsilon we allow pixels to be off due to rounding errors.
  * Chosen rather randomly.
@@ -1725,6 +1727,110 @@ gsk_gpu_lookup_texture (GskGpuFrame    *frame,
   return image;
 }
 
+static GskGpuImage *
+gsk_gpu_get_texture_tiles_as_image (GskGpuFrame            *frame,
+                                    GdkColorState          *ccs,
+                                    const graphene_rect_t  *clip_bounds,
+                                    const graphene_vec2_t  *scale,
+                                    const graphene_rect_t  *texture_bounds,
+                                    GdkTexture             *texture)
+{
+  GskGpuNodeProcessor self;
+  GskGpuCache *cache;
+  GskGpuDevice *device;
+  gint64 timestamp;
+  GskGpuImage *image, *tile;
+  GdkColorState *tile_cs;
+  GdkMemoryTexture *memtex;
+  GdkTexture *subtex;
+  float scaled_tile_width, scaled_tile_height;
+  gsize tile_size, width, height, n_width, n_height, x, y;
+
+  device = gsk_gpu_frame_get_device (frame);
+  cache = gsk_gpu_device_get_cache (device);
+  timestamp = gsk_gpu_frame_get_timestamp (frame);
+  tile_size = gsk_gpu_device_get_tile_size (device);
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+  n_width = (width + tile_size - 1) / tile_size;
+  n_height = (height + tile_size - 1) / tile_size;
+  scaled_tile_width = texture_bounds->size.width * tile_size / width;
+  scaled_tile_height = texture_bounds->size.height * tile_size / height;
+
+  image = gsk_gpu_node_processor_init_draw (&self,
+                                            frame,
+                                            ccs,
+                                            gdk_texture_get_depth (texture),
+                                            scale,
+                                            clip_bounds);
+  if (image == NULL)
+    return NULL;
+
+  self.blend = GSK_GPU_BLEND_ADD;
+  self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
+  gsk_gpu_node_processor_sync_globals (&self, 0);
+  
+  memtex = NULL;
+  for (y = 0; y < n_height; y++)
+    {
+      for (x = 0; x < n_width; x++)
+        {
+          graphene_rect_t tile_rect = GRAPHENE_RECT_INIT (texture_bounds->origin.x + scaled_tile_width * x,
+                                                          texture_bounds->origin.y + scaled_tile_height * y,
+                                                          scaled_tile_width,
+                                                          scaled_tile_height);
+          if (!gsk_rect_intersection (&tile_rect, texture_bounds, &tile_rect) ||
+              !gsk_rect_intersects (clip_bounds, &tile_rect))
+            continue;
+
+          tile = gsk_gpu_cache_lookup_tile (cache, texture, y * n_width + x, timestamp);
+          if (tile == NULL)
+            {
+              if (memtex == NULL)
+                memtex = gdk_memory_texture_from_texture (texture);
+              subtex = gdk_memory_texture_new_subtexture (memtex,
+                                                          x * tile_size,
+                                                          y * tile_size,
+                                                          MIN (tile_size, width - x * tile_size),
+                                                          MIN (tile_size, height - y * tile_size));
+              tile = gsk_gpu_upload_texture_op_try (self.frame, FALSE, subtex);
+              g_object_unref (subtex);
+              if (tile == NULL)
+                {
+                  g_warning ("failed to create %zux%zu tile for %zux%zu texture. Out of memory?",
+                             tile_size, tile_size, width, height);
+                  goto out;
+                }
+
+              gsk_gpu_cache_cache_tile (cache, timestamp, texture, y * n_width + x, tile);
+            }
+
+          tile_cs = gdk_texture_get_color_state (texture);
+          if (gsk_gpu_image_get_flags (tile) & GSK_GPU_IMAGE_SRGB)
+            {
+              tile_cs = gdk_color_state_get_no_srgb_tf (tile_cs);
+              g_assert (tile_cs);
+            }
+
+          gsk_gpu_node_processor_image_op (&self,
+                                           tile,
+                                           tile_cs,
+                                           GSK_GPU_SAMPLER_DEFAULT,
+                                           &tile_rect,
+                                           &tile_rect);
+
+          g_object_unref (tile);
+        }
+    }
+
+out:
+  gsk_gpu_node_processor_finish_draw (&self, image);
+
+  g_clear_object (&memtex);
+
+  return image;
+}
+
 static void
 gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
                                          GskRenderNode       *node)
@@ -1741,11 +1847,25 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
 
   if (image == NULL)
     {
-      GSK_DEBUG (FALLBACK, "Unsupported texture format %u for size %dx%d",
-                 gdk_texture_get_format (texture),
-                 gdk_texture_get_width (texture),
-                 gdk_texture_get_height (texture));
-      gsk_gpu_node_processor_add_cairo_node (self, node);
+      graphene_rect_t clip, rounded_clip;
+
+      if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip))
+        return;
+      rect_round_to_pixels (&clip, &self->scale, &self->offset, &rounded_clip);
+
+      image = gsk_gpu_get_texture_tiles_as_image (self->frame,
+                                                  self->ccs,
+                                                  &rounded_clip,
+                                                  &self->scale,
+                                                  &node->bounds,
+                                                  texture);
+      gsk_gpu_node_processor_image_op (self,
+                                       image,
+                                       self->ccs,
+                                       GSK_GPU_SAMPLER_DEFAULT,
+                                       &clip,
+                                       &rounded_clip);
+      g_object_unref (image);
       return;
     }
 
@@ -1803,9 +1923,17 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
 
   image = gsk_gpu_lookup_texture (frame, ccs, texture, FALSE, &image_cs);
 
-  /* Happens ie for oversized textures */
   if (image == NULL)
-    return gsk_gpu_get_node_as_image_via_offscreen (frame, ccs, clip_bounds, scale, node, out_bounds);
+    {
+      image = gsk_gpu_get_texture_tiles_as_image (frame,
+                                                  ccs,
+                                                  clip_bounds,
+                                                  scale,
+                                                  &node->bounds,
+                                                  gsk_texture_node_get_texture (node));
+      *out_bounds = *clip_bounds;
+      return image;
+    }
 
   if (!gdk_color_state_equal (ccs, image_cs) ||
       gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
