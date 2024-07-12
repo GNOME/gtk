@@ -39,6 +39,17 @@ void                    gsk_gpu_cache_cache_texture_image               (GskGpuC
                                                                          gint64                  timestamp,
                                                                          GskGpuImage            *image,
                                                                          GdkColorState          *color_state);
+GskGpuImage *           gsk_gpu_cache_lookup_tile                       (GskGpuCache            *self,
+                                                                         GdkTexture             *texture,
+                                                                         gsize                   tile_id,
+                                                                         gint64                  timestamp,
+                                                                         GdkColorState         **out_color_state);
+void                    gsk_gpu_cache_cache_tile                        (GskGpuCache            *self,
+                                                                         gint64                  timestamp,
+                                                                         GdkTexture             *texture,
+                                                                         guint                   tile_id,
+                                                                         GskGpuImage            *image,
+                                                                         GdkColorState          *color_state);
 
 typedef enum
 {

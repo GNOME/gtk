@@ -6,6 +6,8 @@
 
 G_BEGIN_DECLS
 
+#define GSK_GPU_DEVICE_DEFAULT_TILE_SIZE 1024
+
 #define GSK_TYPE_GPU_DEVICE         (gsk_gpu_device_get_type ())
 #define GSK_GPU_DEVICE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GSK_TYPE_GPU_DEVICE, GskGpuDevice))
 #define GSK_GPU_DEVICE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), GSK_TYPE_GPU_DEVICE, GskGpuDeviceClass))
@@ -50,12 +52,14 @@ GType                   gsk_gpu_device_get_type                         (void) G
 
 void                    gsk_gpu_device_setup                            (GskGpuDevice           *self,
                                                                          GdkDisplay             *display,
-                                                                         gsize                   max_image_size);
+                                                                         gsize                   max_image_size,
+                                                                         gsize                   tile_size);
 void                    gsk_gpu_device_maybe_gc                         (GskGpuDevice           *self);
 void                    gsk_gpu_device_queue_gc                         (GskGpuDevice           *self);
 GdkDisplay *            gsk_gpu_device_get_display                      (GskGpuDevice           *self);
 GskGpuCache *           gsk_gpu_device_get_cache                        (GskGpuDevice           *self);
 gsize                   gsk_gpu_device_get_max_image_size               (GskGpuDevice           *self);
+gsize                   gsk_gpu_device_get_tile_size                    (GskGpuDevice           *self);
 
 GskGpuImage *           gsk_gpu_device_create_offscreen_image           (GskGpuDevice           *self,
                                                                          gboolean                with_mipmap,
