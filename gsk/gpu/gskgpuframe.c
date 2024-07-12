@@ -89,8 +89,6 @@ gsk_gpu_frame_default_upload_texture (GskGpuFrame *self,
   GskGpuImage *image;
 
   image = gsk_gpu_upload_texture_op_try (self, with_mipmap, texture);
-  if (image)
-    g_object_ref (image);
 
   return image;
 }

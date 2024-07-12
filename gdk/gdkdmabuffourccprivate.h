@@ -10,6 +10,10 @@
 				 ((__u32)(c) << 16) | ((__u32)(d) << 24))
 #endif
 
+#ifndef DRM_FORMAT_INVALID
+#define DRM_FORMAT_INVALID	0
+#endif
+
 #ifndef DRM_FORMAT_C1
 #define DRM_FORMAT_C1		fourcc_code('C', '1', ' ', ' ')
 #endif

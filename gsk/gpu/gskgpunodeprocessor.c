@@ -334,20 +334,18 @@ rect_round_to_pixels (const graphene_rect_t  *src,
                       const graphene_point_t *pixel_offset,
                       graphene_rect_t        *dest)
 {
-  float x, y, xscale, yscale, inv_xscale, inv_yscale;
+  float x, y, xscale, yscale;
 
   xscale = graphene_vec2_get_x (pixel_scale);
   yscale = graphene_vec2_get_y (pixel_scale);
-  inv_xscale = 1.0f / xscale;
-  inv_yscale = 1.0f / yscale;
 
   x = floorf ((src->origin.x + pixel_offset->x) * xscale);
   y = floorf ((src->origin.y + pixel_offset->y) * yscale);
   *dest = GRAPHENE_RECT_INIT (
-      x * inv_xscale - pixel_offset->x,
-      y * inv_yscale - pixel_offset->y,
-      (ceilf ((src->origin.x + pixel_offset->x + src->size.width) * xscale) - x) * inv_xscale,
-      (ceilf ((src->origin.y + pixel_offset->y + src->size.height) * yscale) - y) * inv_yscale);
+      x / xscale - pixel_offset->x,
+      y / yscale - pixel_offset->y,
+      (ceilf ((src->origin.x + pixel_offset->x + src->size.width) * xscale) - x) / xscale,
+      (ceilf ((src->origin.y + pixel_offset->y + src->size.height) * yscale) - y) / yscale);
 }
 
 static GskGpuImage *
@@ -2619,7 +2617,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   PangoFont *font;
   graphene_point_t offset;
   guint i, num_glyphs;
-  float scale, inv_scale;
+  float scale;
   GdkRGBA color;
   float align_scale_x, align_scale_y;
   float inv_align_scale_x, inv_align_scale_y;
@@ -2647,7 +2645,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   offset.y += self->offset.y;
 
   scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
-  inv_scale = 1.f / scale;
 
   if (gsk_font_get_hint_style (font) != CAIRO_HINT_STYLE_NONE)
     {
@@ -2691,16 +2688,16 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                                  &glyph_bounds,
                                                  &glyph_offset);
 
-      glyph_tex_rect = GRAPHENE_RECT_INIT (-glyph_bounds.origin.x * inv_scale,
-                                           -glyph_bounds.origin.y * inv_scale,
-                                           gsk_gpu_image_get_width (image) * inv_scale,
-                                           gsk_gpu_image_get_height (image) * inv_scale);
+      glyph_tex_rect = GRAPHENE_RECT_INIT (-glyph_bounds.origin.x / scale,
+                                           -glyph_bounds.origin.y / scale,
+                                           gsk_gpu_image_get_width (image) / scale,
+                                           gsk_gpu_image_get_height (image) / scale);
       glyph_bounds = GRAPHENE_RECT_INIT (0,
                                          0,
-                                         glyph_bounds.size.width * inv_scale,
-                                         glyph_bounds.size.height * inv_scale);
-      glyph_origin = GRAPHENE_POINT_INIT (glyph_origin.x - glyph_offset.x * inv_scale,
-                                          glyph_origin.y - glyph_offset.y * inv_scale);
+                                         glyph_bounds.size.width / scale,
+                                         glyph_bounds.size.height / scale);
+      glyph_origin = GRAPHENE_POINT_INIT (glyph_origin.x - glyph_offset.x / scale,
+                                          glyph_origin.y - glyph_offset.y / scale);
 
       if (image != last_image)
         {
