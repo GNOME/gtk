@@ -1751,13 +1751,16 @@ gsk_gpu_sampler_for_scaling_filter (GskScalingFilter scaling_filter)
 static void
 gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
                                            const graphene_rect_t  *texture_bounds,
-                                           GdkTexture             *texture)
+                                           GdkTexture             *texture,
+                                           GskScalingFilter        scaling_filter)
 {
   GskGpuCache *cache;
   GskGpuDevice *device;
   gint64 timestamp;
   GskGpuImage *tile;
   GdkColorState *tile_cs;
+  GskGpuSampler sampler;
+  gboolean need_mipmap;
   GdkMemoryTexture *memtex;
   GdkTexture *subtex;
   float scaled_tile_width, scaled_tile_height;
@@ -1767,6 +1770,8 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
   device = gsk_gpu_frame_get_device (self->frame);
   cache = gsk_gpu_device_get_cache (device);
   timestamp = gsk_gpu_frame_get_timestamp (self->frame);
+  sampler = gsk_gpu_sampler_for_scaling_filter (scaling_filter);
+  need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
   gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
   tile_size = gsk_gpu_device_get_tile_size (device);
   width = gdk_texture_get_width (texture);
@@ -1789,7 +1794,8 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
               !gsk_rect_intersects (&clip_bounds, &tile_rect))
             continue;
 
-          tile = gsk_gpu_cache_lookup_tile (cache, texture, y * n_width + x, timestamp);
+          tile = gsk_gpu_cache_lookup_tile (cache, texture, y * n_width + x, timestamp, &tile_cs);
+
           if (tile == NULL)
             {
               if (memtex == NULL)
@@ -1799,7 +1805,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
                                                           y * tile_size,
                                                           MIN (tile_size, width - x * tile_size),
                                                           MIN (tile_size, height - y * tile_size));
-              tile = gsk_gpu_upload_texture_op_try (self->frame, FALSE, subtex);
+              tile = gsk_gpu_upload_texture_op_try (self->frame, need_mipmap, subtex);
               g_object_unref (subtex);
               if (tile == NULL)
                 {
@@ -1808,20 +1814,30 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
                   goto out;
                 }
 
-              gsk_gpu_cache_cache_tile (cache, timestamp, texture, y * n_width + x, tile);
+              tile_cs = gdk_texture_get_color_state (texture);
+              if (gsk_gpu_image_get_flags (tile) & GSK_GPU_IMAGE_SRGB)
+                {
+                  tile_cs = gdk_color_state_get_no_srgb_tf (tile_cs);
+                  g_assert (tile_cs);
+                }
+
+              gsk_gpu_cache_cache_tile (cache, timestamp, texture, y * n_width + x, tile, tile_cs);
             }
 
-          tile_cs = gdk_texture_get_color_state (texture);
-          if (gsk_gpu_image_get_flags (tile) & GSK_GPU_IMAGE_SRGB)
+          if (need_mipmap &&
+              (gsk_gpu_image_get_flags (tile) & (GSK_GPU_IMAGE_STRAIGHT_ALPHA | GSK_GPU_IMAGE_CAN_MIPMAP)) != GSK_GPU_IMAGE_CAN_MIPMAP)
             {
-              tile_cs = gdk_color_state_get_no_srgb_tf (tile_cs);
-              g_assert (tile_cs);
+              tile = gsk_gpu_copy_image (self->frame, self->ccs, tile, tile_cs, TRUE);
+              tile_cs = self->ccs;
+              gsk_gpu_cache_cache_tile (cache, timestamp, texture, y * n_width + x, tile, tile_cs);
             }
+          if (need_mipmap && !(gsk_gpu_image_get_flags (tile) & GSK_GPU_IMAGE_MIPMAP))
+            gsk_gpu_mipmap_op (self->frame, tile);
 
           gsk_gpu_node_processor_image_op (self,
                                            tile,
                                            tile_cs,
-                                           GSK_GPU_SAMPLER_DEFAULT,
+                                           sampler,
                                            &tile_rect,
                                            &tile_rect);
 
@@ -1839,7 +1855,8 @@ gsk_gpu_get_texture_tiles_as_image (GskGpuFrame            *frame,
                                     const graphene_rect_t  *clip_bounds,
                                     const graphene_vec2_t  *scale,
                                     const graphene_rect_t  *texture_bounds,
-                                    GdkTexture             *texture)
+                                    GdkTexture             *texture,
+                                    GskScalingFilter        scaling_filter)
 {
   GskGpuNodeProcessor self;
   GskGpuImage *image;
@@ -1859,7 +1876,8 @@ gsk_gpu_get_texture_tiles_as_image (GskGpuFrame            *frame,
 
   gsk_gpu_node_processor_draw_texture_tiles (&self,
                                              texture_bounds,
-                                             texture);
+                                             texture,
+                                             scaling_filter);
 
   gsk_gpu_node_processor_finish_draw (&self, image);
 
@@ -1893,7 +1911,8 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
                                                   &rounded_clip,
                                                   &self->scale,
                                                   &node->bounds,
-                                                  texture);
+                                                  texture,
+                                                  should_mipmap ? GSK_SCALING_FILTER_TRILINEAR : GSK_SCALING_FILTER_LINEAR);
       gsk_gpu_node_processor_image_op (self,
                                        image,
                                        self->ccs,
@@ -1952,10 +1971,9 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
   GdkTexture *texture = gsk_texture_node_get_texture (node);
   GdkColorState *image_cs;
   GskGpuImage *image;
+  gboolean should_mipmap;
 
-  if (texture_node_should_mipmap (node, frame, scale))
-    return gsk_gpu_get_node_as_image_via_offscreen (frame, ccs, clip_bounds, scale, node, out_bounds);
-
+  should_mipmap = texture_node_should_mipmap (node, frame, scale);
   image = gsk_gpu_lookup_texture (frame, ccs, texture, FALSE, &image_cs);
 
   if (image == NULL)
@@ -1965,10 +1983,14 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
                                                   clip_bounds,
                                                   scale,
                                                   &node->bounds,
-                                                  gsk_texture_node_get_texture (node));
+                                                  gsk_texture_node_get_texture (node),
+                                                  should_mipmap ? GSK_SCALING_FILTER_TRILINEAR : GSK_SCALING_FILTER_LINEAR);
       *out_bounds = *clip_bounds;
       return image;
     }
+
+  if (should_mipmap)
+    return gsk_gpu_get_node_as_image_via_offscreen (frame, ccs, clip_bounds, scale, node, out_bounds);
 
   if (!gdk_color_state_equal (ccs, image_cs) ||
       gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)

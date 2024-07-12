@@ -417,6 +417,7 @@ struct _GskGpuCachedTile
   gsize *dead_pixels_counter;
 
   GskGpuImage *image;
+  GdkColorState *color_state;
 };
 
 static void
@@ -427,6 +428,7 @@ gsk_gpu_cached_tile_free (GskGpuCache  *cache,
   gpointer key, value;
 
   g_clear_object (&self->image);
+  g_clear_pointer (&self->color_state, gdk_color_state_unref);
 
   if (g_hash_table_steal_extended (cache->tile_cache, self, &key, &value))
     {
@@ -512,7 +514,8 @@ static GskGpuCachedTile *
 gsk_gpu_cached_tile_new (GskGpuCache   *cache,
                          GdkTexture    *texture,
                          guint          tile_id,
-                         GskGpuImage   *image)
+                         GskGpuImage   *image,
+                         GdkColorState *color_state)
 {
   GskGpuCachedTile *self;
 
@@ -520,6 +523,7 @@ gsk_gpu_cached_tile_new (GskGpuCache   *cache,
   self->texture = texture;
   self->tile_id = tile_id;
   self->image = g_object_ref (image);
+  self->color_state = gdk_color_state_ref (color_state);
   ((GskGpuCached *)self)->pixels = gsk_gpu_image_get_width (image) * gsk_gpu_image_get_height (image);
   self->dead_pixels_counter = &cache->dead_texture_pixels;
   self->use_count = 2;
@@ -534,10 +538,11 @@ gsk_gpu_cached_tile_new (GskGpuCache   *cache,
 }
 
 GskGpuImage *
-gsk_gpu_cache_lookup_tile (GskGpuCache   *self,
-                           GdkTexture    *texture,
-                           gsize          tile_id,
-                           gint64         timestamp)
+gsk_gpu_cache_lookup_tile (GskGpuCache    *self,
+                           GdkTexture     *texture,
+                           gsize           tile_id,
+                           gint64          timestamp,
+                           GdkColorState **out_color_state)
 {
   GskGpuCachedTile *tile;
   GskGpuCachedTile lookup = {
@@ -554,19 +559,22 @@ gsk_gpu_cache_lookup_tile (GskGpuCache   *self,
 
   gsk_gpu_cached_use (self, (GskGpuCached *) tile, timestamp);
 
+  *out_color_state = tile->color_state;
+
   return g_object_ref (tile->image);
 }
 
 void
-gsk_gpu_cache_cache_tile (GskGpuCache *self,
-                          gint64       timestamp,
-                          GdkTexture  *texture,
-                          guint        tile_id,
-                          GskGpuImage *image)
+gsk_gpu_cache_cache_tile (GskGpuCache   *self,
+                          gint64         timestamp,
+                          GdkTexture    *texture,
+                          guint          tile_id,
+                          GskGpuImage   *image,
+                          GdkColorState *color_state)
 {
   GskGpuCachedTile *tile;
 
-  tile = gsk_gpu_cached_tile_new (self, texture, tile_id, image);
+  tile = gsk_gpu_cached_tile_new (self, texture, tile_id, image, color_state);
 
   gsk_gpu_cached_use (self, (GskGpuCached *) tile, timestamp);
 }
