@@ -344,7 +344,7 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame *frame,
   self->texture = g_object_ref (texture);
   self->image = image;
 
-  return self->image;
+  return g_object_ref (self->image);
 }
 
 typedef struct _GskGpuUploadCairoOp GskGpuUploadCairoOp;
