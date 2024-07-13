@@ -4,8 +4,8 @@
 
 #include "gskgpuopprivate.h"
 #include "gskgpuprintprivate.h"
-/* for gsk_gpu_rgba_to_float() */
-#include "gskgpushaderopprivate.h"
+
+#include "gdk/gdkcolorstateprivate.h"
 
 typedef struct _GskGpuClearOp GskGpuClearOp;
 
