@@ -1845,9 +1845,13 @@ gtk_column_view_measure_across (GtkColumnView *self,
       int col_min, col_nat;
 
       column = g_list_model_get_item (G_LIST_MODEL (self->columns), i);
-      gtk_column_view_column_measure (column, &col_min, &col_nat);
-      min += col_min;
-      nat += col_nat;
+
+      if (gtk_column_view_column_get_visible (column))
+        {
+          gtk_column_view_column_measure (column, &col_min, &col_nat);
+          min += col_min;
+          nat += col_nat;
+        }
 
       g_object_unref (column);
     }
