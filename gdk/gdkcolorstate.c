@@ -82,6 +82,14 @@ void
  *
  * Returns the color state object representing the sRGB color space.
  *
+ * This color state uses the primaries defined by BT.709-6 and the transfer function
+ * defined by IEC 61966-2-1.
+ *
+ * It is equivalent to H.273 ColourPrimaries 1 with TransferCharacteristics 13 and MatrixCoefficients 0.
+ *
+ * See e.g. [the CSS Color Module](https://www.w3.org/TR/css-color-4/#predefined-sRGB)
+ * for details about this colorstate.
+ *
  * Returns: the color state object for sRGB
  *
  * Since: 4.16
@@ -97,6 +105,13 @@ gdk_color_state_get_srgb (void)
  *
  * Returns the color state object representing the linearized sRGB color space.
  *
+ * This color state uses the primaries defined by BT.709-6 and a linear transfer function.
+ *
+ * It is equivalent to H.273 ColourPrimaries 1 with TransferCharacteristics 8 and MatrixCoefficients 0.
+ *
+ * See e.g. [the CSS Color Module](https://www.w3.org/TR/css-color-4/#predefined-sRGB-linear)
+ * for details about this colorstate.
+ *
  * Returns: the color state object for linearized sRGB
  *
  * Since: 4.16
@@ -105,6 +120,52 @@ GdkColorState *
 gdk_color_state_get_srgb_linear (void)
 {
   return GDK_COLOR_STATE_SRGB_LINEAR;
+}
+
+/**
+ * gdk_color_state_get_rec2100_pq:
+ *
+ * Returns the color state object representing the rec2100-pq color space.
+ *
+ * This color state uses the primaries defined by BT.2020-2 and BT.2100-0 and the transfer
+ * function defined by SMPTE ST 2084 and BT.2100-2.
+ *
+ * It is equivalent to H.273 ColourPrimaries code point 9 with TransferCharacteristics 16.
+ *
+ * See e.g. [the CSS HDR Module](https://drafts.csswg.org/css-color-hdr/#valdef-color-rec2100-pq)
+ * for details about this colorstate.
+ *
+ * Returns: the color state object for rec2100-pq
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_color_state_get_rec2100_pq (void)
+{
+  return GDK_COLOR_STATE_REC2100_PQ;
+}
+
+/**
+ * gdk_color_state_get_rec2100_linear:
+ *
+ * Returns the color state object representing the linear rec2100 color space.
+ *
+ * This color state uses the primaries defined by BT.2020-2 and BT.2100-0 and a linear
+ * transfer function.
+ *
+ * It is equivalent to H.273 ColourPrimaries code point 9 with TransferCharacteristics 8.
+ *
+ * See e.g. [the CSS HDR Module](https://drafts.csswg.org/css-color-hdr/#valdef-color-rec2100-linear)
+ * for details about this colorstate.
+ *
+ * Returns: the color state object for linearized rec2100
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_color_state_get_rec2100_linear (void)
+{
+  return GDK_COLOR_STATE_REC2100_LINEAR;
 }
 
 /**
@@ -171,17 +232,30 @@ gdk_default_color_state_get_convert_to (GdkColorState  *color_state,
 /* }}} */
 /* {{{ Conversion functions */
 
-#define COORDINATE_TRANSFORM(name, tf) \
+#define TRANSFORM(name, eotf, matrix, oetf) \
 static void \
-name(GdkColorState  *self, \
-     float         (*values)[4], \
-     gsize           n_values) \
+name (GdkColorState  *self, \
+      float         (*values)[4], \
+      gsize           n_values) \
 { \
   for (gsize i = 0; i < n_values; i++) \
     { \
-      values[i][0] = tf (values[i][0]); \
-      values[i][1] = tf (values[i][1]); \
-      values[i][2] = tf (values[i][2]); \
+      values[i][0] = eotf (values[i][0]); \
+      values[i][1] = eotf (values[i][1]); \
+      values[i][2] = eotf (values[i][2]); \
+      if ((float **)matrix != IDENTITY) \
+        { \
+          float res[3]; \
+          res[0] = matrix[0][0] * values[i][0] + matrix[0][1] * values[i][1] + matrix[0][2] * values[i][2]; \
+          res[1] = matrix[1][0] * values[i][0] + matrix[1][1] * values[i][1] + matrix[1][2] * values[i][2]; \
+          res[2] = matrix[2][0] * values[i][0] + matrix[2][1] * values[i][1] + matrix[2][2] * values[i][2]; \
+          values[i][0] = res[0]; \
+          values[i][1] = res[1]; \
+          values[i][2] = res[2]; \
+        } \
+      values[i][0] = oetf (values[i][0]); \
+      values[i][1] = oetf (values[i][1]); \
+      values[i][2] = oetf (values[i][2]); \
     } \
 }
 
@@ -203,8 +277,86 @@ srgb_eotf (float v)
     return v / 12.92f;
 }
 
-COORDINATE_TRANSFORM(gdk_default_srgb_to_srgb_linear, srgb_eotf)
-COORDINATE_TRANSFORM(gdk_default_srgb_linear_to_srgb, srgb_oetf)
+static inline float
+pq_eotf (float v)
+{
+  float ninv = (1 << 14) / 2610.0;
+  float minv = (1 << 5) / 2523.0;
+  float c1 = 3424.0 / (1 << 12);
+  float c2 = 2413.0 / (1 << 7);
+  float c3 = 2392.0 / (1 << 7);
+
+  float x = powf (MAX ((powf (v, minv) - c1), 0) / (c2 - (c3 * (powf (v, minv)))), ninv);
+
+  return x * 10000 / 203.0;
+}
+
+static inline float
+pq_oetf (float v)
+{
+  float x = v * 203.0 / 10000.0;
+  float n = 2610.0 / (1 << 14);
+  float m = 2523.0 / (1 << 5);
+  float c1 = 3424.0 / (1 << 12);
+  float c2 = 2413.0 / (1 << 7);
+  float c3 = 2392.0 / (1 << 7);
+
+  return powf (((c1 + (c2 * powf (x, n))) / (1 + (c3 * powf (x, n)))), m);
+}
+
+/* These matrices are derived by combining the standard abc_to_xyz onces:
+ *
+ * rec2020_to_srgb = srgb_to_xyz⁻¹ * rec2020_to_xyz
+ * srgb_to_rec2020 = rec2020_to_xyz⁻¹ * srgb_to_xyz
+ *
+ * These values were used here:
+ *
+ * static const float srgb_to_xyz[3][3] = {
+ *   { 0.4125288,  0.3581642,  0.1774037 },
+ *   { 0.2127102,  0.7163284,  0.0709615 },
+ *   { 0.0193373,  0.1193881,  0.9343260 },
+ * }
+ *
+ * static const float rec2020_to_xyz[3][3] = {
+ *   { 0.6369615,  0.1448079,  0.1663273 },
+ *   { 0.2627016,  0.6788934,  0.0584050 },
+ *   { 0.0000000,  0.0281098,  1.0449416 },
+ * };
+ *
+ * See http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
+ * for how to derive the abc_to_xyz matrices from chromaticity coordinates.
+ */
+
+static const float rec2020_to_srgb[3][3] = {
+  { 1.659944, -0.588220, -0.071724 },
+  { -0.124350, 1.132559, -0.008210 },
+  { -0.018466, -0.102459, 1.120924 },
+};
+
+static const float srgb_to_rec2020[3][3] = {
+  { 0.627610, 0.329815, 0.042574 },
+  { 0.069029, 0.919817, 0.011154 },
+  { 0.016649, 0.089510, 0.893842 },
+};
+
+#define IDENTITY ((float**)0)
+#define NONE(x) x
+
+TRANSFORM(gdk_default_srgb_to_srgb_linear,           srgb_eotf, IDENTITY,        NONE);
+TRANSFORM(gdk_default_srgb_linear_to_srgb,           NONE,      IDENTITY,        srgb_oetf)
+TRANSFORM(gdk_default_rec2100_pq_to_rec2100_linear,  pq_eotf,   IDENTITY,        NONE)
+TRANSFORM(gdk_default_rec2100_linear_to_rec2100_pq,  NONE,      IDENTITY,        pq_oetf)
+TRANSFORM(gdk_default_srgb_linear_to_rec2100_linear, NONE,      srgb_to_rec2020, NONE)
+TRANSFORM(gdk_default_rec2100_linear_to_srgb_linear, NONE,      rec2020_to_srgb, NONE)
+TRANSFORM(gdk_default_srgb_to_rec2100_linear,        srgb_eotf, srgb_to_rec2020, NONE)
+TRANSFORM(gdk_default_rec2100_pq_to_srgb_linear,     pq_eotf,   rec2020_to_srgb, NONE)
+TRANSFORM(gdk_default_srgb_linear_to_rec2100_pq,     NONE,      srgb_to_rec2020, pq_oetf)
+TRANSFORM(gdk_default_rec2100_linear_to_srgb,        NONE,      rec2020_to_srgb, srgb_oetf)
+TRANSFORM(gdk_default_srgb_to_rec2100_pq,            srgb_eotf, srgb_to_rec2020, pq_oetf)
+TRANSFORM(gdk_default_rec2100_pq_to_srgb,            pq_eotf,   rec2020_to_srgb, srgb_oetf)
+
+#undef IDENTITY
+#undef NONE
 
 /* }}} */
 
@@ -229,6 +381,8 @@ GdkDefaultColorState gdk_default_color_states[] = {
     .no_srgb = GDK_COLOR_STATE_SRGB_LINEAR,
     .convert_to = {
       [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_srgb_to_srgb_linear,
+      [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_default_srgb_to_rec2100_pq,
+      [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_srgb_to_rec2100_linear,
     },
   },
   [GDK_COLOR_STATE_ID_SRGB_LINEAR] = {
@@ -242,6 +396,38 @@ GdkDefaultColorState gdk_default_color_states[] = {
     .no_srgb = NULL,
     .convert_to = {
       [GDK_COLOR_STATE_ID_SRGB] = gdk_default_srgb_linear_to_srgb,
+      [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_default_srgb_linear_to_rec2100_pq,
+      [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_srgb_linear_to_rec2100_linear,
+    },
+  },
+  [GDK_COLOR_STATE_ID_REC2100_PQ] = {
+    .parent = {
+      .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
+      .ref_count = 0,
+      .depth = GDK_MEMORY_FLOAT16,
+      .rendering_color_state = GDK_COLOR_STATE_REC2100_LINEAR,
+    },
+    .name = "rec2100-pq",
+    .no_srgb = NULL,
+    .convert_to = {
+      [GDK_COLOR_STATE_ID_SRGB] = gdk_default_rec2100_pq_to_srgb,
+      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_rec2100_pq_to_srgb_linear,
+      [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_rec2100_pq_to_rec2100_linear,
+    },
+  },
+  [GDK_COLOR_STATE_ID_REC2100_LINEAR] = {
+    .parent = {
+      .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
+      .ref_count = 0,
+      .depth = GDK_MEMORY_FLOAT16,
+      .rendering_color_state = GDK_COLOR_STATE_REC2100_LINEAR,
+    },
+    .name = "rec2100-linear",
+    .no_srgb = NULL,
+    .convert_to = {
+      [GDK_COLOR_STATE_ID_SRGB] = gdk_default_rec2100_linear_to_srgb,
+      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_rec2100_linear_to_srgb_linear,
+      [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_default_rec2100_linear_to_rec2100_pq,
     },
   },
 };
