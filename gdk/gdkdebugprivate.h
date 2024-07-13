@@ -54,7 +54,6 @@ typedef enum {
   GDK_DEBUG_GL_GLX          = 1 << 24,
   GDK_DEBUG_GL_WGL          = 1 << 25,
   GDK_DEBUG_VULKAN_DISABLE  = 1 << 26,
-  GDK_DEBUG_VULKAN_VALIDATE = 1 << 27,
   GDK_DEBUG_DEFAULT_SETTINGS= 1 << 28,
   GDK_DEBUG_HIGH_DEPTH      = 1 << 29,
   GDK_DEBUG_NO_VSYNC        = 1 << 30,

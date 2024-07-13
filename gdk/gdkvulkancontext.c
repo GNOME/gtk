@@ -1658,8 +1658,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   uint32_t i;
   GPtrArray *used_extensions;
-  GPtrArray *used_layers;
-  gboolean validate = FALSE, have_debug_report = FALSE;
+  gboolean have_debug_report = FALSE;
   VkResult res;
 
   if (gdk_display_get_debug_flags (display) & GDK_DEBUG_VULKAN_DISABLE)
@@ -1708,43 +1707,6 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
         g_ptr_array_add (used_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME);
     }
 
-  uint32_t n_layers;
-  GDK_VK_CHECK (vkEnumerateInstanceLayerProperties, &n_layers, NULL);
-  VkLayerProperties *layers = g_newa (VkLayerProperties, n_layers);
-  GDK_VK_CHECK (vkEnumerateInstanceLayerProperties, &n_layers, layers);
-
-  used_layers = g_ptr_array_new ();
-
-  for (i = 0; i < n_layers; i++)
-    {
-      if (GDK_DISPLAY_DEBUG_CHECK (display, VULKAN))
-        g_print ("Layer available: %s v%u.%u.%u (%s)\n",
-                                 layers[i].layerName,
-                                 VK_VERSION_MAJOR (layers[i].specVersion),
-                                 VK_VERSION_MINOR (layers[i].specVersion),
-                                 VK_VERSION_PATCH (layers[i].specVersion),
-                                 layers[i].description);
-      if (gdk_display_get_debug_flags (display) & GDK_DEBUG_VULKAN_VALIDATE)
-        {
-          const char *validation_layer_names[] = {
-            "VK_LAYER_LUNARG_standard_validation",
-            "VK_LAYER_KHRONOS_validation",
-            NULL,
-          };
-
-          if (g_strv_contains (validation_layer_names, layers[i].layerName))
-            {
-              g_ptr_array_add (used_layers, layers[i].layerName);
-              validate = TRUE;
-            }
-        }
-    }
-
-  if ((gdk_display_get_debug_flags (display) & GDK_DEBUG_VULKAN_VALIDATE) && !validate)
-    {
-      g_warning ("Vulkan validation layers were requested, but not found. Running without.");
-    }
-
   res = GDK_VK_CHECK (vkCreateInstance, &(VkInstanceCreateInfo) {
                                              .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
                                              .pNext = NULL,
@@ -1758,14 +1720,13 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                                  .engineVersion = VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
                                                  .apiVersion = VK_API_VERSION_1_3
                                              },
-                                             .enabledLayerCount = used_layers->len,
-                                             .ppEnabledLayerNames = (const char * const *) used_layers->pdata,
+                                             .enabledLayerCount = 0,
+                                             .ppEnabledLayerNames = NULL,
                                              .enabledExtensionCount = used_extensions->len,
                                              .ppEnabledExtensionNames = (const char * const *) used_extensions->pdata,
                                          },
                                          NULL,
                                          &display->vk_instance);
-  g_ptr_array_free (used_layers, TRUE);
   g_ptr_array_free (used_extensions, TRUE);
 
   if (res != VK_SUCCESS)
