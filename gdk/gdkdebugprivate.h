@@ -41,6 +41,7 @@ typedef enum {
 
   /* flags below are influencing behavior */
   GDK_DEBUG_LINEAR          = 1 << 13,
+  GDK_DEBUG_HDR             = 1 << 14,
   GDK_DEBUG_PORTALS         = 1 << 15,
   GDK_DEBUG_NO_PORTALS      = 1 << 16,
   GDK_DEBUG_GL_DISABLE      = 1 << 17,
