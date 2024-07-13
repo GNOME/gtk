@@ -693,13 +693,14 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
                                    &(cairo_rectangle_int_t) { 0, 0, width, height },
                                    &rect);
 
-      /* FIXME: With blend mode SOURCE/OFF we wouldn't need the clear here */
       gsk_gpu_render_pass_begin_op (other.frame,
                                     copy,
                                     &(cairo_rectangle_int_t) { 0, 0, width, height },
-                                    GSK_VEC4_TRANSPARENT,
+                                    NULL,
                                     GSK_RENDER_PASS_OFFSCREEN);
 
+      other.blend = GSK_GPU_BLEND_NONE;
+      other.pending_globals |= GSK_GPU_GLOBAL_BLEND;
       gsk_gpu_node_processor_sync_globals (&other, 0);
 
       gsk_gpu_node_processor_image_op (&other,
@@ -3928,6 +3929,10 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
 
           gsk_gpu_node_processor_add_node (&self, node);
         }
+
+      gsk_gpu_render_pass_end_op (frame,
+                                  target,
+                                  pass_type);
     }
   else
     {
@@ -3951,7 +3956,13 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
 
       if (image != NULL)
         {
-          self.blend = GSK_GPU_BLEND_ADD;
+          gsk_gpu_render_pass_begin_op (frame,
+                                        target,
+                                        clip,
+                                        NULL,
+                                        pass_type);
+
+          self.blend = GSK_GPU_BLEND_NONE;
           self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
           gsk_gpu_node_processor_sync_globals (&self, 0);
 
@@ -3966,14 +3977,14 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                               &node->bounds,
                               &self.offset,
                               &tex_rect);
+
+          gsk_gpu_render_pass_end_op (frame,
+                                      target,
+                                      pass_type);
+
           g_object_unref (image);
         }
     }
-
-
-  gsk_gpu_render_pass_end_op (frame,
-                              target,
-                              pass_type);
 
   gsk_gpu_node_processor_finish (&self);
 }

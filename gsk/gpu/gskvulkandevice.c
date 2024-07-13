@@ -911,7 +911,14 @@ struct _GskVulkanShaderSpecialization
   guint32 variation;
 };
 
-static VkPipelineColorBlendAttachmentState blend_attachment_states[3] = {
+static VkPipelineColorBlendAttachmentState blend_attachment_states[4] = {
+  [GSK_GPU_BLEND_NONE] = {
+    .blendEnable = VK_FALSE,
+    .colorWriteMask = VK_COLOR_COMPONENT_A_BIT
+                    | VK_COLOR_COMPONENT_R_BIT
+                    | VK_COLOR_COMPONENT_G_BIT
+                    | VK_COLOR_COMPONENT_B_BIT
+  },
   [GSK_GPU_BLEND_OVER] = {
     .blendEnable = VK_TRUE,
     .colorBlendOp = VK_BLEND_OP_ADD,

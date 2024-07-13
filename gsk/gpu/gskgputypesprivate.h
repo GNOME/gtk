@@ -49,6 +49,7 @@ typedef enum {
 } GskGpuShaderClip;
 
 typedef enum {
+  GSK_GPU_BLEND_NONE,
   GSK_GPU_BLEND_OVER,
   GSK_GPU_BLEND_ADD,
   GSK_GPU_BLEND_CLEAR
