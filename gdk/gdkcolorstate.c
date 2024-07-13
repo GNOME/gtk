@@ -82,6 +82,14 @@ void
  *
  * Returns the color state object representing the sRGB color space.
  *
+ * This color state uses the primaries defined by BT.709-6 and the transfer function
+ * defined by IEC 61966-2-1.
+ *
+ * It is equivalent to H.273 ColourPrimaries 1 with TransferCharacteristics 13 and MatrixCoefficients 0.
+ *
+ * See e.g. [the CSS Color Module](https://www.w3.org/TR/css-color-4/#predefined-sRGB)
+ * for details about this colorstate.
+ *
  * Returns: the color state object for sRGB
  *
  * Since: 4.16
@@ -96,6 +104,13 @@ gdk_color_state_get_srgb (void)
  * gdk_color_state_get_srgb_linear:
  *
  * Returns the color state object representing the linearized sRGB color space.
+ *
+ * This color state uses the primaries defined by BT.709-6 and a linear transfer function.
+ *
+ * It is equivalent to H.273 ColourPrimaries 1 with TransferCharacteristics 8 and MatrixCoefficients 0.
+ *
+ * See e.g. [the CSS Color Module](https://www.w3.org/TR/css-color-4/#predefined-sRGB-linear)
+ * for details about this colorstate.
  *
  * Returns: the color state object for linearized sRGB
  *
