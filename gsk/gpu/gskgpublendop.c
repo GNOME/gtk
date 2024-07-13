@@ -30,6 +30,9 @@ gsk_gpu_blend_op_print (GskGpuOp    *op,
   gsk_gpu_print_op (string, indent, "blend");
   switch (self->blend)
     {
+      case GSK_GPU_BLEND_NONE:
+        gsk_gpu_print_string (string, "none");
+        break;
       case GSK_GPU_BLEND_OVER:
         gsk_gpu_print_string (string, "over");
         break;
@@ -69,15 +72,25 @@ gsk_gpu_blend_op_gl_command (GskGpuOp          *op,
 
   switch (self->blend)
     {
+      case GSK_GPU_BLEND_NONE:
+        glDisable (GL_BLEND);
+        break;
+
       case GSK_GPU_BLEND_OVER:
+        glEnable (GL_BLEND);
         glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
         break;
+
       case GSK_GPU_BLEND_ADD:
+        glEnable (GL_BLEND);
         glBlendFunc (GL_ONE, GL_ONE);
         break;
+
       case GSK_GPU_BLEND_CLEAR:
+        glEnable (GL_BLEND);
         glBlendFunc (GL_ZERO, GL_ONE_MINUS_SRC_ALPHA);
         break;
+
       default:
         g_assert_not_reached ();
         break;
