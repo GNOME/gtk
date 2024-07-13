@@ -598,7 +598,8 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
 
   image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                  FALSE,
-                                                 gsk_render_node_get_preferred_depth (node),
+                                                 gdk_memory_depth_merge (gdk_color_state_get_depth (ccs),
+                                                                         gsk_render_node_get_preferred_depth (node)),
                                                  area.width, area.height);
   if (image == NULL)
     return NULL;
@@ -1065,7 +1066,8 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
   mask_image = gsk_gpu_node_processor_init_draw (&other,
                                                  self->frame,
                                                  self->ccs,
-                                                 gsk_render_node_get_preferred_depth (node),
+                                                 gdk_memory_depth_merge (gdk_color_state_get_depth (self->ccs),
+                                                                         gsk_render_node_get_preferred_depth (node)),
                                                  &self->scale,
                                                  &clip_bounds);
   gsk_gpu_node_processor_sync_globals (&other, 0);
@@ -2277,7 +2279,8 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
   image = gsk_gpu_node_processor_init_draw (&other,
                                             self->frame,
                                             self->ccs,
-                                            gsk_render_node_get_preferred_depth (node),
+                                            gdk_memory_depth_merge (gdk_color_state_get_depth (self->ccs),
+                                                                    gsk_render_node_get_preferred_depth (node)),
                                             &self->scale,
                                             &bounds);
 
