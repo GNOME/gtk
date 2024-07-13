@@ -2047,23 +2047,31 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       gsk_rect_round_larger (&clip_bounds);
       /* now intersect with actual node bounds */
       if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
-        return;
+        {
+          g_object_unref (image);
+          return;
+        }
       clip_bounds.size.width = ceilf (clip_bounds.size.width);
       clip_bounds.size.height = ceilf (clip_bounds.size.height);
       if (image == NULL)
-        offscreen = gsk_gpu_get_texture_tiles_as_image (self->frame,
-                                                        self->ccs,
-                                                        &clip_bounds,
-                                                        graphene_vec2_one (),
-                                                        &node->bounds,
-                                                        texture,
-                                                        scaling_filter);
+        {
+          offscreen = gsk_gpu_get_texture_tiles_as_image (self->frame,
+                                                          self->ccs,
+                                                          &clip_bounds,
+                                                          graphene_vec2_one (),
+                                                          &node->bounds,
+                                                          texture,
+                                                          scaling_filter);
+        }
       else
-        offscreen = gsk_gpu_node_processor_create_offscreen (self->frame,
-                                                             self->ccs,
-                                                             graphene_vec2_one (),
-                                                             &clip_bounds,
-                                                             node);
+        {
+          offscreen = gsk_gpu_node_processor_create_offscreen (self->frame,
+                                                               self->ccs,
+                                                               graphene_vec2_one (),
+                                                               &clip_bounds,
+                                                               node);
+          g_object_unref (image);
+        }
       descriptor = gsk_gpu_node_processor_add_image (self, offscreen, GSK_GPU_SAMPLER_DEFAULT);
       gsk_gpu_texture_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
