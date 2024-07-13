@@ -107,6 +107,7 @@ static void
 gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
                                              GdkDmabufTexture    *texture,
                                              GdkMemoryFormat      format,
+                                             GdkColorState       *color_state,
                                              guchar              *data,
                                              gsize                stride)
 {
@@ -121,6 +122,7 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
                                   g_get_monotonic_time (),
                                   GDK_TEXTURE (texture),
                                   format,
+                                  color_state,
                                   data,
                                   stride);
 

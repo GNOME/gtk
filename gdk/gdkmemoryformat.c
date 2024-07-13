@@ -1846,9 +1846,11 @@ void
 gdk_memory_convert (guchar              *dest_data,
                     gsize                dest_stride,
                     GdkMemoryFormat      dest_format,
+                    GdkColorState       *dest_cs,
                     const guchar        *src_data,
                     gsize                src_stride,
                     GdkMemoryFormat      src_format,
+                    GdkColorState       *src_cs,
                     gsize                width,
                     gsize                height)
 {
@@ -1856,7 +1858,9 @@ gdk_memory_convert (guchar              *dest_data,
   const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
   float (*tmp)[4];
   gsize y;
+  GdkFloatColorConvert convert_func = NULL;
   void (*func) (guchar *, const guchar *, gsize) = NULL;
+  gboolean needs_premultiply, needs_unpremultiply;
 
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
@@ -1866,7 +1870,7 @@ gdk_memory_convert (guchar              *dest_data,
   g_assert (dest_data + gdk_memory_format_min_buffer_size (dest_format, dest_stride, width, height) <= src_data ||
             src_data + gdk_memory_format_min_buffer_size (src_format, src_stride, width, height) <= dest_data);
 
-  if (src_format == dest_format)
+  if (src_format == dest_format && gdk_color_state_equal (dest_cs, src_cs))
     {
       gsize bytes_per_row = src_desc->bytes_per_pixel * width;
 
@@ -1886,7 +1890,9 @@ gdk_memory_convert (guchar              *dest_data,
       return;
     }
 
-  if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+  if (!gdk_color_state_equal (dest_cs, src_cs))
+    convert_func = gdk_color_state_get_convert_to (src_cs, dest_cs);
+  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
     func = r8g8b8a8_to_r8g8b8a8_premultiplied;
   else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
     func = r8g8b8a8_to_b8g8r8a8_premultiplied;
@@ -1936,12 +1942,25 @@ gdk_memory_convert (guchar              *dest_data,
 
   tmp = g_malloc (sizeof (*tmp) * width);
 
+  if (convert_func)
+    {
+      needs_unpremultiply = src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED;
+      needs_premultiply = src_desc->alpha != GDK_MEMORY_ALPHA_OPAQUE && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT;
+    }
+  else
+    {
+      needs_unpremultiply = src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED && dest_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT;
+      needs_premultiply = src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT;
+    }
+
   for (y = 0; y < height; y++)
     {
       src_desc->to_float (tmp, src_data, width);
-      if (src_desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED && dest_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT)
+      if (needs_unpremultiply)
         unpremultiply (tmp, width);
-      else if (src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT)
+      if (convert_func)
+        convert_func (src_cs, tmp, width);
+      if (needs_premultiply)
         premultiply (tmp, width);
       dest_desc->from_float (dest_data, tmp, width);
       src_data += src_stride;

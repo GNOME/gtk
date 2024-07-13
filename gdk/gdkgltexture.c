@@ -137,6 +137,7 @@ typedef struct _Download Download;
 struct _Download
 {
   GdkMemoryFormat format;
+  GdkColorState *color_state;
   guchar *data;
   gsize stride;
 };
@@ -211,6 +212,14 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
                          gl_format,
                          gl_type,
                          download->data);
+
+          gdk_memory_convert_color_state (download->data,
+                                          download->stride,
+                                          download->format,
+                                          download->color_state,
+                                          texture->color_state,
+                                          texture->width,
+                                          texture->height);
         }
       else
         {
@@ -227,14 +236,15 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
           gdk_memory_convert (download->data,
                               download->stride,
                               download->format,
+                              download->color_state,
                               pixels,
                               stride,
                               format,
+                              texture->color_state,
                               texture->width,
                               texture->height);
 
           g_free (pixels);
-
         }
     }
   else
@@ -288,6 +298,14 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
                         gl_read_format,
                         gl_read_type,
                         download->data);
+
+          gdk_memory_convert_color_state (download->data,
+                                          download->stride,
+                                          download->format,
+                                          download->color_state,
+                                          texture->color_state,
+                                          texture->width,
+                                          texture->height);
         }
       else
         {
@@ -379,9 +397,11 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
           gdk_memory_convert (download->data,
                               download->stride,
                               download->format,
+                              download->color_state,
                               pixels,
                               stride,
                               actual_format,
+                              texture->color_state,
                               texture->width,
                               texture->height);
 
@@ -395,6 +415,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
 static void
 gdk_gl_texture_download (GdkTexture      *texture,
                          GdkMemoryFormat  format,
+                         GdkColorState   *color_state,
                          guchar          *data,
                          gsize            stride)
 {
@@ -403,11 +424,12 @@ gdk_gl_texture_download (GdkTexture      *texture,
 
   if (self->saved)
     {
-      gdk_texture_do_download (self->saved, format, data, stride);
+      gdk_texture_do_download (self->saved, format, color_state, data, stride);
       return;
     }
 
   download.format = format;
+  download.color_state = color_state;
   download.data = data;
   download.stride = stride;
 

@@ -48,6 +48,7 @@ struct _GdkTextureClass {
   /* mandatory: Download in the given format into data */
   void                  (* download)                    (GdkTexture             *texture,
                                                          GdkMemoryFormat         format,
+                                                         GdkColorState          *color_state,
                                                          guchar                 *data,
                                                          gsize                   stride);
 };
@@ -62,6 +63,7 @@ GdkMemoryDepth          gdk_texture_get_depth           (GdkTexture             
 
 void                    gdk_texture_do_download         (GdkTexture             *texture,
                                                          GdkMemoryFormat         format,
+                                                         GdkColorState          *color_state,
                                                          guchar                 *data,
                                                          gsize                   stride);
 void                    gdk_texture_diff                (GdkTexture             *self,

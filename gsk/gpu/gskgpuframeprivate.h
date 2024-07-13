@@ -84,6 +84,7 @@ void                    gsk_gpu_frame_download_texture                  (GskGpuF
                                                                          gint64                  timestamp,
                                                                          GdkTexture             *texture,
                                                                          GdkMemoryFormat         format,
+                                                                         GdkColorState          *color_state,
                                                                          guchar                 *data,
                                                                          gsize                   stride);
 GskGpuOp               *gsk_gpu_frame_get_last_op                       (GskGpuFrame            *self);

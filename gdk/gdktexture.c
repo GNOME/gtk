@@ -262,6 +262,7 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkTexture, gdk_texture, G_TYPE_OBJECT,
 static void
 gdk_texture_default_download (GdkTexture      *texture,
                               GdkMemoryFormat  format,
+                              GdkColorState   *color_state,
                               guchar          *data,
                               gsize            stride)
 {
@@ -821,10 +822,11 @@ gdk_texture_get_color_state (GdkTexture *self)
 void
 gdk_texture_do_download (GdkTexture      *texture,
                          GdkMemoryFormat  format,
+                         GdkColorState   *color_state,
                          guchar          *data,
                          gsize            stride)
 {
-  GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, data, stride);
+  GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, color_state, data, stride);
 }
 
 static gboolean
@@ -1006,6 +1008,7 @@ gdk_texture_download (GdkTexture *texture,
 
   gdk_texture_do_download (texture,
                            GDK_MEMORY_DEFAULT,
+                           GDK_COLOR_STATE_SRGB,
                            data,
                            stride);
 }
