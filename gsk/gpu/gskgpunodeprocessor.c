@@ -384,7 +384,7 @@ gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
   gsk_gpu_render_pass_begin_op (frame,
                                 image,
                                 &area,
-                                &GDK_RGBA_TRANSPARENT,
+                                GSK_VEC4_TRANSPARENT,
                                 GSK_RENDER_PASS_OFFSCREEN);
 
   return image;
@@ -697,7 +697,7 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
       gsk_gpu_render_pass_begin_op (other.frame,
                                     copy,
                                     &(cairo_rectangle_int_t) { 0, 0, width, height },
-                                    &GDK_RGBA_TRANSPARENT,
+                                    GSK_VEC4_TRANSPARENT,
                                     GSK_RENDER_PASS_OFFSCREEN);
 
       gsk_gpu_node_processor_sync_globals (&other, 0);
@@ -1627,6 +1627,7 @@ gsk_gpu_node_processor_add_first_color_node (GskGpuNodeProcessor         *self,
                                              GskRenderNode               *node)
 {
   graphene_rect_t clip_bounds;
+  float color[4];
 
   if (!node->fully_opaque)
     return FALSE;
@@ -1635,10 +1636,11 @@ gsk_gpu_node_processor_add_first_color_node (GskGpuNodeProcessor         *self,
   if (!gsk_rect_contains_rect (&node->bounds, &clip_bounds))
     return FALSE;
 
+  gdk_color_state_from_rgba (self->ccs, gsk_color_node_get_color (node), color);
   gsk_gpu_render_pass_begin_op (self->frame,
                                 target,
                                 clip,
-                                gsk_color_node_get_color (node),
+                                color,
                                 pass_type);
 
   return TRUE;
@@ -3921,7 +3923,7 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
           gsk_gpu_render_pass_begin_op (frame,
                                         target,
                                         clip,
-                                        &GDK_RGBA_TRANSPARENT,
+                                        GSK_VEC4_TRANSPARENT,
                                         pass_type);
 
           gsk_gpu_node_processor_add_node (&self, node);
