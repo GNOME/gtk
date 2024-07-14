@@ -617,27 +617,33 @@ gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   G_GNUC_UNUSED GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  GdkSurface *surface;
+  GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
+  GdkColorState *color_state;
   cairo_region_t *damage;
   double scale;
   int ww, wh;
   int i;
 
-  surface = gdk_draw_context_get_surface (draw_context);
+  color_state = gdk_surface_get_color_state (surface);
   scale = gdk_gl_context_get_scale (context);
+
+  depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));
+
+  g_assert (depth != GDK_MEMORY_U8_SRGB || gdk_color_state_get_no_srgb_tf (color_state) != NULL);
 
 #ifdef HAVE_EGL
   if (priv->egl_context)
     *out_depth = gdk_surface_ensure_egl_surface (surface, depth);
   else
-    *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
+    *out_depth = GDK_MEMORY_U8;
+
   if (*out_depth == GDK_MEMORY_U8_SRGB)
-    *out_color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+    *out_color_state = gdk_color_state_get_no_srgb_tf (color_state);
   else
-    *out_color_state = GDK_COLOR_STATE_SRGB;
+    *out_color_state = color_state;
 #else
-  *out_color_state = GDK_COLOR_STATE_SRGB;
-  *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
+  *out_color_state = gdk_color_state_get_srgb ();
+  *out_depth = GDK_MEMORY_U8;
 #endif
 
   damage = GDK_GL_CONTEXT_GET_CLASS (context)->get_damage (context);

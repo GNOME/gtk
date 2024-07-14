@@ -642,8 +642,15 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
+  GdkColorState *color_state;
   VkResult acquire_result;
   guint i;
+
+  color_state = gdk_surface_get_color_state (surface);
+  depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));
+
+  g_assert (depth != GDK_MEMORY_U8_SRGB || gdk_color_state_get_no_srgb_tf (color_state) != NULL);
 
   if (depth != priv->current_depth && depth != GDK_MEMORY_NONE)
     {
@@ -695,9 +702,9 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
   cairo_region_union (region, priv->regions[priv->draw_index]);
 
   if (priv->current_depth == GDK_MEMORY_U8_SRGB)
-    *out_color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+    *out_color_state = gdk_color_state_get_no_srgb_tf (color_state);
   else
-    *out_color_state = GDK_COLOR_STATE_SRGB;
+    *out_color_state = color_state;
   *out_depth = priv->current_depth;
 }
 
