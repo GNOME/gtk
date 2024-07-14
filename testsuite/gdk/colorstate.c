@@ -1,35 +1,76 @@
 #include <gdk/gdk.h>
-#include <gdk/gdkcolorstateprivate.h>
-#include <gdk/gdkmemoryformatprivate.h>
 #include <math.h>
 
-static void
-test_srgb (void)
+static GdkColorState *
+get_color_state (guint        id,
+                 const char **out_name)
 {
-  GdkColorState *srgb;
-  GdkColorState *srgb_linear;
+  const char *unused;
 
-  srgb = gdk_color_state_get_srgb ();
-  srgb_linear = gdk_color_state_get_srgb_linear ();
+  if (out_name == NULL)
+    out_name = &unused;
 
-  g_assert_true (gdk_color_state_equal (srgb, srgb));
-  g_assert_true (gdk_color_state_equal (srgb_linear, srgb_linear));
-  g_assert_false (gdk_color_state_equal (srgb, srgb_linear));
+  switch (id)
+  {
+    case 0:
+      *out_name = "srgb";
+      return gdk_color_state_ref (gdk_color_state_get_srgb ());
+    case 1:
+      *out_name = "srgb-linear";
+      return gdk_color_state_ref (gdk_color_state_get_srgb_linear ());
+    case 2:
+      *out_name = "rec2100-pq";
+      return gdk_color_state_ref (gdk_color_state_get_rec2100_pq ());
+    case 3:
+      *out_name = "rec2100-linear";
+      return gdk_color_state_ref (gdk_color_state_get_rec2100_linear ());
+    default:
+      return NULL;
+  }
+}
+
+static void
+test_equal (void)
+{
+  GdkColorState *csi, *csj;
+  guint i, j;
+
+  for (i = 0; ; i++)
+    {
+      csi = get_color_state (i, NULL);
+      if (csi == NULL)
+        break;
+
+      g_assert_true (gdk_color_state_equal (csi, csi));
+
+      for (j = 0; ; j++)
+        {
+          csj = get_color_state (j, NULL);
+          if (csj == NULL)
+            break;
+
+          if (i != j)
+            g_assert_false (gdk_color_state_equal (csi, csj));
+          else
+            g_assert_true (gdk_color_state_equal (csi, csj)); /* might break for non-default? */
+        }
+    }
 }
 
 static float
 image_distance (const guchar *data,
+                gsize         stride,
                 const guchar *data2,
+                gsize         stride2,
                 gsize         width,
-                gsize         height,
-                gsize         stride)
+                gsize         height)
 {
   float dist = 0;
 
   for (gsize i = 0; i < height; i++)
     {
       const float *p = (const float *) (data + i * stride);
-      const float *p2 = (const float *) (data2 + i * stride);
+      const float *p2 = (const float *) (data2 + i * stride2);
 
       for (gsize j = 0; j < width; j++)
         {
@@ -50,56 +91,72 @@ image_distance (const guchar *data,
 static void
 test_convert (gconstpointer testdata)
 {
-  GdkColorState *cs;
+  GdkColorState *cs = (GdkColorState *) testdata;
   char *path;
-  GdkTexture *texture;
+  GdkTexture *texture, *texture2;
   GdkTextureDownloader *downloader;
+  GdkMemoryTextureBuilder *membuild;
   GError *error = NULL;
-  GBytes *bytes;
-  const guchar *data;
-  guchar *data2;
+  GBytes *bytes, *bytes2;
+  const guchar *data, *data2;
+  gsize stride, stride2;
   gsize width, height;
-  gsize size;
-  gsize stride;
+  GdkMemoryFormat test_format;
 
-  cs = gdk_color_state_get_by_id ((GdkColorStateId) GPOINTER_TO_UINT (testdata));
+  if (g_test_rand_bit ())
+    test_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+  else
+    test_format = GDK_MEMORY_R32G32B32A32_FLOAT;
 
   path = g_test_build_filename (G_TEST_DIST, "image-data", "image.png", NULL);
 
+  /* Create a texture */
   texture = gdk_texture_new_from_filename (path, &error);
   g_assert_no_error (error);
-
+  g_assert_true (gdk_color_state_equal (gdk_texture_get_color_state (texture),
+                                        gdk_color_state_get_srgb ()));
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
 
+  /* download the texture as float for later comparison */
   downloader = gdk_texture_downloader_new (texture);
-  gdk_texture_downloader_set_format (downloader, GDK_MEMORY_R32G32B32A32_FLOAT);
-
+  gdk_texture_downloader_set_format (downloader, test_format);
+  gdk_texture_downloader_set_color_state (downloader, gdk_texture_get_color_state (texture));
   bytes = gdk_texture_downloader_download_bytes (downloader, &stride);
-  data = g_bytes_get_data (bytes, &size);
-  data2 = g_memdup2 (data, size);
+  data = g_bytes_get_data (bytes, NULL);
 
-  gdk_memory_convert_color_state (data2,
-                                  stride,
-                                  GDK_MEMORY_R32G32B32A32_FLOAT,
-                                  gdk_texture_get_color_state (texture),
-                                  cs,
-                                  width,
-                                  height);
+  /* Download the texture into the test colorstate, this does a conversion */
+  gdk_texture_downloader_set_color_state (downloader, cs);
+  bytes2 = gdk_texture_downloader_download_bytes (downloader, &stride2);
 
-  gdk_memory_convert_color_state (data2,
-                                  stride,
-                                  GDK_MEMORY_R32G32B32A32_FLOAT,
-                                  cs,
-                                  gdk_texture_get_color_state (texture),
-                                  width,
-                                  height);
+  /* Create a new texture in the test colorstate with the just downloaded data */
+  membuild = gdk_memory_texture_builder_new ();
+  gdk_memory_texture_builder_set_format (membuild, test_format);
+  gdk_memory_texture_builder_set_color_state (membuild, cs);
+  gdk_memory_texture_builder_set_width (membuild, width);
+  gdk_memory_texture_builder_set_height (membuild, height);
+  gdk_memory_texture_builder_set_bytes (membuild, bytes2);
+  gdk_memory_texture_builder_set_stride (membuild, stride2);
+  texture2 = gdk_memory_texture_builder_build (membuild);
+  g_object_unref (membuild);
+  g_bytes_unref (bytes2);
 
-  g_assert_true (image_distance (data, data2, width, height, stride) < 0.001);
+  /* Download the data of the new texture in the original texture's colorstate.
+   * This does the reverse conversion. */
+  gdk_texture_downloader_set_texture (downloader, texture2);
+  gdk_texture_downloader_set_color_state (downloader, gdk_texture_get_color_state (texture));
+  bytes2 = gdk_texture_downloader_download_bytes (downloader, &stride2);
+  data2 = g_bytes_get_data (bytes2, NULL);
 
-  g_free (data2);
+  /* Check that the conversions produce pixels that are close enough */
+  g_assert_cmpfloat (image_distance (data, stride, data2, stride2, width, height), <, 0.001);
+
+  g_test_message ("%g\n", image_distance (data, stride, data2, stride2, width, height));
+
+  g_bytes_unref (bytes2);
   g_bytes_unref (bytes);
   gdk_texture_downloader_free (downloader);
+  g_object_unref (texture2);
   g_object_unref (texture);
   g_free (path);
 }
@@ -107,10 +164,26 @@ test_convert (gconstpointer testdata)
 int
 main (int argc, char *argv[])
 {
+  guint i;
+
   (g_test_init) (&argc, &argv, NULL);
 
-  g_test_add_func ("/colorstate/srgb", test_srgb);
-  g_test_add_data_func ("/colorstate/convert/srgb<->srgb-linear", GUINT_TO_POINTER (GDK_COLOR_STATE_ID_SRGB_LINEAR), test_convert);
+  g_test_add_func ("/colorstate/equal", test_equal);
+
+  for (i = 0; ; i++)
+    {
+      GdkColorState *csi;
+      const char *cs_name;
+      char *test_name;
+
+      csi = get_color_state (i, &cs_name);
+      if (csi == NULL)
+        break;
+
+      test_name = g_strdup_printf ("/colorstate/convert/srgb/%s", cs_name);
+      g_test_add_data_func_full (test_name, csi, test_convert, (GDestroyNotify) gdk_color_state_unref);
+      g_free (test_name);
+    }
 
   return g_test_run ();
 }
