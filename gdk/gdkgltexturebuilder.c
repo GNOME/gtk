@@ -368,7 +368,7 @@ gdk_gl_texture_builder_get_context (GdkGLTextureBuilder *self)
 /**
  * gdk_gl_texture_builder_set_context: (attributes org.gtk.Method.set_property=context)
  * @self: a `GdkGLTextureBuilder`
- * @context: (nullable): The context the texture beongs to or %NULL to unset
+ * @context: (nullable): The context the texture belongs to or %NULL to unset
  *
  * Sets the context to be used for the texture. This is the context that owns
  * the texture.
