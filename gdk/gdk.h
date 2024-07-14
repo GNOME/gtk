@@ -62,6 +62,7 @@
 #include <gdk/gdkkeys.h>
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkmemorytexture.h>
+#include <gdk/gdkmemorytexturebuilder.h>
 #include <gdk/gdkmonitor.h>
 #include <gdk/gdkpaintable.h>
 #include <gdk/gdkpango.h>

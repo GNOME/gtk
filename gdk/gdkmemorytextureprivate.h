@@ -21,6 +21,7 @@
 
 #include "gdkmemorytexture.h"
 
+#include "gdkmemorytexturebuilder.h"
 #include "gdktextureprivate.h"
 
 G_BEGIN_DECLS
@@ -34,6 +35,8 @@ GdkTexture *            gdk_memory_texture_new_subtexture   (GdkMemoryTexture  *
                                                              int                y,
                                                              int                width,
                                                              int                height);
+
+GdkTexture *            gdk_memory_texture_new_from_builder (GdkMemoryTextureBuilder    *builder);
 
 GBytes *                gdk_memory_texture_get_bytes        (GdkMemoryTexture  *self,
                                                              gsize             *out_stride);
