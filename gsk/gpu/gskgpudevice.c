@@ -62,17 +62,24 @@ cache_gc_cb (gpointer data)
   GskGpuDevice *self = data;
   GskGpuDevicePrivate *priv = gsk_gpu_device_get_instance_private (self);
   gint64 timestamp;
+  gboolean result = G_SOURCE_CONTINUE;
 
   timestamp = g_get_monotonic_time ();
   GSK_DEBUG (CACHE, "Periodic GC (timestamp %lld)", (long long) timestamp);
 
+  /* gc can collect the device if all windows are closed and only
+   * the cache is keeping it alive */
+  g_object_ref (self);
+
   if (gsk_gpu_device_gc (self, timestamp))
     {
       priv->cache_gc_source = 0;
-      return G_SOURCE_REMOVE;
+      result = G_SOURCE_REMOVE;
     }
 
-  return G_SOURCE_CONTINUE;
+  g_object_unref (self);
+
+  return result;
 }
 
 void
