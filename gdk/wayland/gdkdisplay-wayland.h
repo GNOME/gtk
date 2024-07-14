@@ -32,6 +32,7 @@
 #include <gdk/wayland/xdg-shell-client-protocol.h>
 #include <gdk/wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <gdk/wayland/xdg-foreign-unstable-v1-client-protocol.h>
+#include <gdk/wayland/xdg-foreign-unstable-v2-client-protocol.h>
 #include <gdk/wayland/keyboard-shortcuts-inhibit-unstable-v1-client-protocol.h>
 #include <gdk/wayland/server-decoration-client-protocol.h>
 #include <gdk/wayland/xdg-output-unstable-v1-client-protocol.h>
@@ -96,8 +97,10 @@ struct _GdkWaylandDisplay
   struct gtk_primary_selection_device_manager *gtk_primary_selection_manager;
   struct zwp_primary_selection_device_manager_v1 *zwp_primary_selection_manager_v1;
   struct zwp_tablet_manager_v2 *tablet_manager;
-  struct zxdg_exporter_v1 *xdg_exporter;
-  struct zxdg_importer_v1 *xdg_importer;
+  struct zxdg_exporter_v1 *xdg_exporter_v1;
+  struct zxdg_importer_v1 *xdg_importer_v1;
+  struct zxdg_exporter_v2 *xdg_exporter_v2;
+  struct zxdg_importer_v2 *xdg_importer_v2;
   struct zwp_keyboard_shortcuts_inhibit_manager_v1 *keyboard_shortcuts_inhibit;
   struct org_kde_kwin_server_decoration_manager *server_decoration_manager;
   struct zxdg_output_manager_v1 *xdg_output_manager;
