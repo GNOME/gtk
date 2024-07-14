@@ -76,6 +76,8 @@ struct _GdkSurfacePrivate
 #endif
 
   gpointer widget;
+
+  GdkColorState *color_state;
 };
 
 enum {
@@ -475,6 +477,8 @@ gdk_surface_event_marshallerv (GClosure *closure,
 static void
 gdk_surface_init (GdkSurface *surface)
 {
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
+
   /* 0-initialization is good for all other fields. */
 
   surface->state = 0;
@@ -488,6 +492,8 @@ gdk_surface_init (GdkSurface *surface)
                                                  NULL, g_object_unref);
 
   surface->subsurfaces = g_ptr_array_new ();
+
+  priv->color_state = gdk_color_state_ref (gdk_color_state_get_srgb ());
 }
 
 static double
@@ -745,6 +751,7 @@ static void
 gdk_surface_finalize (GObject *object)
 {
   GdkSurface *surface = GDK_SURFACE (object);
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
 
   g_clear_handle_id (&surface->request_motion_id, g_source_remove);
 
@@ -772,6 +779,8 @@ gdk_surface_finalize (GObject *object)
   g_assert (surface->subsurfaces->len == 0);
 
   g_ptr_array_unref (surface->subsurfaces);
+
+  g_clear_pointer (&priv->color_state, gdk_color_state_unref);
 
   G_OBJECT_CLASS (gdk_surface_parent_class)->finalize (object);
 }
@@ -3104,4 +3113,27 @@ gdk_surface_get_subsurface (GdkSurface *surface,
                             gsize       idx)
 {
   return g_ptr_array_index (surface->subsurfaces, idx);
+}
+
+GdkColorState *
+gdk_surface_get_color_state (GdkSurface *surface)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
+
+  return priv->color_state;
+}
+
+void
+gdk_surface_set_color_state (GdkSurface    *surface,
+                             GdkColorState *color_state)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
+
+  if (gdk_color_state_equal (priv->color_state, color_state))
+    return;
+
+  gdk_color_state_unref (priv->color_state);
+  priv->color_state = gdk_color_state_ref (color_state);
+
+  gdk_surface_invalidate_rect (surface, NULL);
 }
