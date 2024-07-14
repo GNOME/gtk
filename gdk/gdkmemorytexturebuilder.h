@@ -65,6 +65,12 @@ void                            gdk_memory_texture_builder_set_format           
                                                                                  GdkMemoryFormat                 format);
 
 GDK_AVAILABLE_IN_4_16
+GdkColorState *                 gdk_memory_texture_builder_get_color_state      (GdkMemoryTextureBuilder        *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_16
+void                            gdk_memory_texture_builder_set_color_state      (GdkMemoryTextureBuilder        *self,
+                                                                                 GdkColorState                  *color_state);
+
+GDK_AVAILABLE_IN_4_16
 GdkTexture *                    gdk_memory_texture_builder_get_update_texture   (GdkMemoryTextureBuilder        *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_16
 void                            gdk_memory_texture_builder_set_update_texture   (GdkMemoryTextureBuilder        *self,

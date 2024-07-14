@@ -21,6 +21,7 @@
 
 #include "gdkmemorytexturebuilder.h"
 
+#include "gdkcolorstate.h"
 #include "gdkenumtypes.h"
 #include "gdkmemorytextureprivate.h"
 
@@ -35,6 +36,7 @@ struct _GdkMemoryTextureBuilder
   int width;
   int height;
   GdkMemoryFormat format;
+  GdkColorState *color_state;
 
   GdkTexture *update_texture;
   cairo_region_t *update_region;
@@ -67,6 +69,7 @@ enum
 {
   PROP_0,
   PROP_BYTES,
+  PROP_COLOR_STATE,
   PROP_FORMAT,
   PROP_HEIGHT,
   PROP_STRIDE,
@@ -87,6 +90,7 @@ gdk_memory_texture_builder_dispose (GObject *object)
   GdkMemoryTextureBuilder *self = GDK_MEMORY_TEXTURE_BUILDER (object);
 
   g_clear_pointer (&self->bytes, g_bytes_unref);
+  g_clear_pointer (&self->color_state, gdk_color_state_unref);
 
   g_clear_object (&self->update_texture);
   g_clear_pointer (&self->update_region, cairo_region_destroy);
@@ -106,6 +110,10 @@ gdk_memory_texture_builder_get_property (GObject    *object,
     {
     case PROP_BYTES:
       g_value_set_boxed (value, self->bytes);
+      break;
+
+    case PROP_COLOR_STATE:
+      g_value_set_boxed (value, self->color_state);
       break;
 
     case PROP_FORMAT:
@@ -150,6 +158,10 @@ gdk_memory_texture_builder_set_property (GObject      *object,
     {
     case PROP_BYTES:
       gdk_memory_texture_builder_set_bytes (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_COLOR_STATE:
+      gdk_memory_texture_builder_set_color_state (self, g_value_get_boxed (value));
       break;
 
     case PROP_FORMAT:
@@ -201,6 +213,18 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
   properties[PROP_BYTES] =
     g_param_spec_boxed ("bytes", NULL, NULL,
                         G_TYPE_BYTES,
+                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkMemoryTextureBuilder:color-state:
+   *
+   * The colorstate describing the data.
+   *
+   * Since: 4.16
+   */
+  properties[PROP_COLOR_STATE] =
+    g_param_spec_boxed ("color-state", NULL, NULL,
+                        GDK_TYPE_COLOR_STATE,
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
@@ -286,6 +310,7 @@ static void
 gdk_memory_texture_builder_init (GdkMemoryTextureBuilder *self)
 {
   self->format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+  self->color_state = gdk_color_state_ref (gdk_color_state_get_srgb ());
 }
 
 /**
@@ -349,6 +374,54 @@ gdk_memory_texture_builder_set_bytes (GdkMemoryTextureBuilder *self,
     g_bytes_ref (bytes);
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_BYTES]);
+}
+
+/**
+ * gdk_memory_texture_builder_get_color_state: (attributes org.gtk.Method.get_property=color-state)
+ * @self: a `GdkMemoryTextureBuilder`
+ *
+ * Gets the colorstate previously set via gdk_memory_texture_builder_set_color_state().
+ *
+ * Returns: (transfer none): The colorstate
+ *
+ * Since: 4.16
+ */
+GdkColorState *
+gdk_memory_texture_builder_get_color_state (GdkMemoryTextureBuilder *self)
+{
+  g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self), NULL);
+
+  return self->color_state;
+}
+
+/**
+ * gdk_memory_texture_builder_set_color_state: (attributes org.gtk.Method.set_property=color-state)
+ * @self: a `GdkMemoryTextureBuilder`
+ * @color_state: (nullable): The colorstate describing the data
+ *
+ * Sets the colorstate describing the data.
+ *
+ * By default, the sRGB colorstate is used. If you don't know
+ * what colorstates are, this is probably the right thing.
+ *
+ * Since: 4.16
+ */
+void
+gdk_memory_texture_builder_set_color_state (GdkMemoryTextureBuilder *self,
+                                            GdkColorState           *color_state)
+{
+  g_return_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self));
+  g_return_if_fail (color_state != NULL);
+
+  if (self->color_state == color_state)
+    return;
+
+  g_clear_pointer (&self->color_state, gdk_color_state_unref);
+  self->color_state = color_state;
+  if (color_state)
+    gdk_color_state_ref (color_state);
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR_STATE]);
 }
 
 /**
