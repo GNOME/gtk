@@ -76,7 +76,6 @@ struct _GdkVulkanContextPrivate {
   GdkMemoryDepth current_depth;
 
   VkSwapchainKHR swapchain;
-  VkSemaphore draw_semaphore;
 
   guint n_images;
   VkImage *images;
@@ -366,14 +365,6 @@ gdk_vulkan_context_dispose (GObject *gobject)
   priv->n_images = 0;
 
   device = gdk_vulkan_context_get_device (context);
-
-  if (priv->draw_semaphore != VK_NULL_HANDLE)
-    {
-      vkDestroySemaphore (device,
-                           priv->draw_semaphore,
-                           NULL);
-      priv->draw_semaphore = VK_NULL_HANDLE;
-    }
 
   if (priv->swapchain != VK_NULL_HANDLE)
     {
@@ -679,7 +670,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
       acquire_result = GDK_VK_CHECK (vkAcquireNextImageKHR, gdk_vulkan_context_get_device (context),
                                                             priv->swapchain,
                                                             UINT64_MAX,
-                                                            priv->draw_semaphore,
+                                                            VK_NULL_HANDLE,
                                                             VK_NULL_HANDLE,
                                                             &priv->draw_index);
       if ((acquire_result == VK_ERROR_OUT_OF_DATE_KHR) ||
@@ -751,10 +742,8 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
   GDK_VK_CHECK (vkQueuePresentKHR, gdk_vulkan_context_get_queue (context),
                                    &(VkPresentInfoKHR) {
                                        .sType = VK_STRUCTURE_TYPE_PRESENT_INFO_KHR,
-                                       .waitSemaphoreCount = 1,
-                                       .pWaitSemaphores = (VkSemaphore[]) {
-                                           priv->draw_semaphore
-                                       },
+                                       .waitSemaphoreCount = 0,
+                                       .pWaitSemaphores = NULL,
                                        .swapchainCount = 1,
                                        .pSwapchains = (VkSwapchainKHR[]) {
                                            priv->swapchain
@@ -972,13 +961,6 @@ gdk_vulkan_context_real_init (GInitable     *initable,
 
       if (!gdk_vulkan_context_check_swapchain (context, error))
         goto out_surface;
-
-      GDK_VK_CHECK (vkCreateSemaphore, gdk_vulkan_context_get_device (context),
-                                       &(VkSemaphoreCreateInfo) {
-                                           .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
-                                       },
-                                       NULL,
-                                       &priv->draw_semaphore);
 
       return TRUE;
     }
@@ -1383,29 +1365,6 @@ gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
   g_return_val_if_fail (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)), 0);
 
   return priv->draw_index;
-}
-
-/**
- * gdk_vulkan_context_get_draw_semaphore:
- * @context: a `GdkVulkanContext`
- *
- * Gets the Vulkan semaphore that protects access to the image that is
- * currently being drawn.
- *
- * This function can only be used between [method@Gdk.DrawContext.begin_frame]
- * and [method@Gdk.DrawContext.end_frame] calls.
- *
- * Returns: (transfer none): the VkSemaphore
- */
-VkSemaphore
-gdk_vulkan_context_get_draw_semaphore (GdkVulkanContext *context)
-{
-  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-
-  g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), VK_NULL_HANDLE);
-  g_return_val_if_fail (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)), VK_NULL_HANDLE);
-
-  return priv->draw_semaphore;
 }
 
 static gboolean
