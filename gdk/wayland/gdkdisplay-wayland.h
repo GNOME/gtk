@@ -59,6 +59,7 @@ G_BEGIN_DECLS
 
 #define GDK_ZWP_POINTER_GESTURES_V1_VERSION 3
 
+typedef struct _GdkWaylandColor GdkWaylandColor;
 typedef struct _GdkWaylandSelection GdkWaylandSelection;
 
 typedef struct {
@@ -123,6 +124,7 @@ struct _GdkWaylandDisplay
   struct wp_viewporter *viewporter;
   struct wp_presentation *presentation;
   struct wp_single_pixel_buffer_manager_v1 *single_pixel_buffer;
+  GdkWaylandColor *color;
 
   GList *async_roundtrips;
 

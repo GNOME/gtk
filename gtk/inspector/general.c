@@ -67,6 +67,7 @@
 #include <epoxy/egl.h>
 #include <xkbcommon/xkbcommon.h>
 #include "wayland/gdkdisplay-wayland.h"
+#include "wayland/gdkwaylandcolor-private.h"
 #endif
 
 #ifdef GDK_WINDOWING_BROADWAY
@@ -695,6 +696,7 @@ add_wayland_protocols (GdkDisplay          *display,
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->viewporter);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->presentation);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->single_pixel_buffer);
+      append_wayland_protocol_row (gen, gdk_wayland_color_get_color_manager (d->color));
     }
 }
 #endif

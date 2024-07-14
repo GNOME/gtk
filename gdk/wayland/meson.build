@@ -23,6 +23,7 @@ gdk_wayland_sources = files([
   'gdktoplevel-wayland.c',
   'gdkpopup-wayland.c',
   'gdkvulkancontext-wayland.c',
+  'gdkwaylandcolor.c',
   'gdkwaylandpresentationtime.c',
   'wm-button-layout-translation.c',
 ])
@@ -144,6 +145,11 @@ proto_sources = [
     'name': 'xdg-dialog',
     'stability': 'staging',
     'version': 1,
+  },
+  {
+    'name': 'xx-color-management',
+    'stability': 'private',
+    'version': 2,
   },
 ]
 

@@ -56,7 +56,6 @@
 
 #include "gsk/gskrectprivate.h"
 
-
 /**
  * GdkWaylandSurface:
  *
@@ -907,6 +906,14 @@ static const struct wl_surface_listener surface_listener = {
 };
 
 static void
+preferred_changed (GdkWaylandColorSurface *color,
+                   GdkColorState          *color_state,
+                   gpointer                data)
+{
+  gdk_surface_set_color_state (GDK_SURFACE (data), color_state);
+}
+
+static void
 gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
 {
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
@@ -929,6 +936,12 @@ gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
       self->display_server.viewport =
           wp_viewporter_get_viewport (display_wayland->viewporter, wl_surface);
     }
+
+  if (display_wayland->color)
+    self->display_server.color = gdk_wayland_color_surface_new (display_wayland->color,
+                                                                wl_surface,
+                                                                preferred_changed,
+                                                                self);
 
   self->display_server.wl_surface = wl_surface;
 }
@@ -983,6 +996,7 @@ gdk_wayland_surface_destroy_wl_surface (GdkWaylandSurface *self)
 
   g_clear_pointer (&self->display_server.viewport, wp_viewport_destroy);
   g_clear_pointer (&self->display_server.fractional_scale, wp_fractional_scale_v1_destroy);
+  g_clear_pointer (&self->display_server.color, gdk_wayland_color_surface_free);
 
   g_clear_pointer (&self->display_server.wl_surface, wl_surface_destroy);
 

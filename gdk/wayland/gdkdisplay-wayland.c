@@ -52,6 +52,7 @@
 #include "gdkprofilerprivate.h"
 #include "gdkdihedralprivate.h"
 #include "gdktoplevel-wayland-private.h"
+#include "gdkwaylandcolor-private.h"
 #include <wayland/pointer-gestures-unstable-v1-client-protocol.h>
 #include "tablet-unstable-v2-client-protocol.h"
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
@@ -533,6 +534,10 @@ gdk_registry_handle_global (void               *data,
                           &wp_presentation_interface,
                           MIN (version, 1));
     }
+  else if (strcmp (interface, "xx_color_manager_v2") == 0)
+    {
+      display_wayland->color = gdk_wayland_color_new (registry, id, version);
+    }
   else if (strcmp (interface, wp_single_pixel_buffer_manager_v1_interface.name) == 0)
     {
       display_wayland->single_pixel_buffer =
@@ -693,6 +698,12 @@ _gdk_wayland_display_open (const char *display_name)
       return NULL;
     }
 
+  if (display_wayland->color)
+    {
+      if (!gdk_wayland_color_prepare (display_wayland->color))
+        g_clear_pointer (&display_wayland->color, gdk_wayland_color_free );
+    }
+
   gdk_display_emit_opened (display);
 
   return display;
@@ -753,6 +764,7 @@ gdk_wayland_display_dispose (GObject *object)
   g_clear_pointer (&display_wayland->single_pixel_buffer, wp_single_pixel_buffer_manager_v1_destroy);
   g_clear_pointer (&display_wayland->linux_dmabuf, zwp_linux_dmabuf_v1_destroy);
   g_clear_pointer (&display_wayland->dmabuf_formats_info, dmabuf_formats_info_free);
+  g_clear_pointer (&display_wayland->color, gdk_wayland_color_free);
 
   g_clear_pointer (&display_wayland->shm, wl_shm_destroy);
   g_clear_pointer (&display_wayland->wl_registry, wl_registry_destroy);

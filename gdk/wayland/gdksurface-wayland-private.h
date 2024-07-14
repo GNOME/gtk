@@ -18,6 +18,7 @@
 #pragma once
 
 #include "gdkprivate-wayland.h"
+#include "gdkwaylandcolor-private.h"
 
 typedef enum _PopupState
 {
@@ -39,6 +40,7 @@ struct _GdkWaylandSurface
     struct wl_egl_window *egl_window;
     struct wp_fractional_scale_v1 *fractional_scale;
     struct wp_viewport *viewport;
+    GdkWaylandColorSurface *color;
   } display_server;
 
   struct wl_event_queue *event_queue;
