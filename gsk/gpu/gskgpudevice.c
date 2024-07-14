@@ -65,12 +65,16 @@ cache_gc_cb (gpointer data)
   timestamp = g_get_monotonic_time ();
   GSK_DEBUG (CACHE, "Periodic GC (timestamp %lld)", (long long) timestamp);
 
+  g_object_ref (self);
+
   if (gsk_gpu_device_gc (self, timestamp))
     {
       priv->cache_gc_source = 0;
+      g_object_unref (self);
       return G_SOURCE_REMOVE;
     }
 
+  g_object_unref (self);
   return G_SOURCE_CONTINUE;
 }
 
