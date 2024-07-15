@@ -261,6 +261,26 @@ test_take (void)
   g_object_unref (list);
 }
 
+static void
+test_find (void)
+{
+  GtkStringList *list;
+  guint pos;
+
+  list = new_model ((const char *[]){ "a", "b", "c", "d", "e", NULL });
+
+  pos = gtk_string_list_find (list, "a");
+  g_assert_true (pos == 0);
+
+  pos = gtk_string_list_find (list, "ab");
+  g_assert_true (pos == G_MAXUINT);
+
+  pos = gtk_string_list_find (list, "e");
+  g_assert_true (pos == 4);
+
+  g_object_unref (list);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -277,6 +297,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/stringlist/splice", test_splice);
   g_test_add_func ("/stringlist/add_remove", test_add_remove);
   g_test_add_func ("/stringlist/take", test_take);
+  g_test_add_func ("/stringlist/find", test_find);
 
   return g_test_run ();
 }
