@@ -191,57 +191,6 @@ gboolean
 }
 
 /* }}} */
-/* {{{ Default implementation */
-/* {{{ Vfuncs */
-
-static gboolean
-gdk_default_color_state_equal (GdkColorState *self,
-                               GdkColorState *other)
-{
-  return self == other;
-}
-
-static const char *
-gdk_default_color_state_get_name (GdkColorState *color_state)
-{
-  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
-
-  return self->name;
-}
-
-static GdkColorState *
-gdk_default_color_state_get_no_srgb_tf (GdkColorState *color_state)
-{
-  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
-
-  return self->no_srgb;
-}
-
-static GdkFloatColorConvert
-gdk_default_color_state_get_convert_to (GdkColorState  *color_state,
-                                        GdkColorState  *target)
-{
-  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
-
-  if (!GDK_IS_DEFAULT_COLOR_STATE (target))
-    return NULL;
-
-  return self->convert_to[GDK_DEFAULT_COLOR_STATE_ID (target)];
-}
-
-static GdkFloatColorConvert
-gdk_default_color_state_get_convert_from (GdkColorState  *color_state,
-                                          GdkColorState  *source)
-{
-  GdkDefaultColorState *self = (GdkDefaultColorState *) source;
-
-  if (!GDK_IS_DEFAULT_COLOR_STATE (color_state))
-    return NULL;
-
-  return self->convert_to[GDK_DEFAULT_COLOR_STATE_ID (color_state)];
-}
-
-/* }}} */
 /* {{{ Conversion functions */
 
 #define TRANSFORM(name, eotf, matrix, oetf) \
@@ -369,6 +318,57 @@ TRANSFORM(gdk_default_rec2100_pq_to_srgb,            pq_eotf,   rec2020_to_srgb,
 
 #undef IDENTITY
 #undef NONE
+
+/* }}} */
+/* {{{ Default implementation */
+/* {{{ Vfuncs */
+
+static gboolean
+gdk_default_color_state_equal (GdkColorState *self,
+                               GdkColorState *other)
+{
+  return self == other;
+}
+
+static const char *
+gdk_default_color_state_get_name (GdkColorState *color_state)
+{
+  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
+
+  return self->name;
+}
+
+static GdkColorState *
+gdk_default_color_state_get_no_srgb_tf (GdkColorState *color_state)
+{
+  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
+
+  return self->no_srgb;
+}
+
+static GdkFloatColorConvert
+gdk_default_color_state_get_convert_to (GdkColorState  *color_state,
+                                        GdkColorState  *target)
+{
+  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
+
+  if (!GDK_IS_DEFAULT_COLOR_STATE (target))
+    return NULL;
+
+  return self->convert_to[GDK_DEFAULT_COLOR_STATE_ID (target)];
+}
+
+static GdkFloatColorConvert
+gdk_default_color_state_get_convert_from (GdkColorState  *color_state,
+                                          GdkColorState  *source)
+{
+  GdkDefaultColorState *self = (GdkDefaultColorState *) source;
+
+  if (!GDK_IS_DEFAULT_COLOR_STATE (color_state))
+    return NULL;
+
+  return self->convert_to[GDK_DEFAULT_COLOR_STATE_ID (color_state)];
+}
 
 /* }}} */
 
