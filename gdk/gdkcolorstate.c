@@ -229,6 +229,18 @@ gdk_default_color_state_get_convert_to (GdkColorState  *color_state,
   return self->convert_to[GDK_DEFAULT_COLOR_STATE_ID (target)];
 }
 
+static GdkFloatColorConvert
+gdk_default_color_state_get_convert_from (GdkColorState  *color_state,
+                                          GdkColorState  *source)
+{
+  GdkDefaultColorState *self = (GdkDefaultColorState *) source;
+
+  if (!GDK_IS_DEFAULT_COLOR_STATE (color_state))
+    return NULL;
+
+  return self->convert_to[GDK_DEFAULT_COLOR_STATE_ID (color_state)];
+}
+
 /* }}} */
 /* {{{ Conversion functions */
 

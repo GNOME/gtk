@@ -40,6 +40,8 @@ struct _GdkColorStateClass
   GdkColorState *       (* get_no_srgb_tf)      (GdkColorState  *self);
   GdkFloatColorConvert  (* get_convert_to)      (GdkColorState  *self,
                                                  GdkColorState  *target);
+  GdkFloatColorConvert  (* get_convert_from)    (GdkColorState  *self,
+                                                 GdkColorState  *source);
 };
 
 typedef struct _GdkDefaultColorState GdkDefaultColorState;
@@ -138,12 +140,19 @@ gdk_color_state_get_convert_to (GdkColorState *self,
   return self->klass->get_convert_to (self, target);
 }
 
+static inline GdkFloatColorConvert
+gdk_color_state_get_convert_from (GdkColorState *self,
+                                  GdkColorState *source)
+{
+  return self->klass->get_convert_from (self, source);
+}
+
 static inline void
 gdk_color_state_from_rgba (GdkColorState *self,
                            const GdkRGBA *rgba,
                            float          out_color[4])
 {
-  GdkFloatColorConvert convert_to;
+  GdkFloatColorConvert convert;
 
   out_color[0] = rgba->red;
   out_color[1] = rgba->green;
@@ -153,6 +162,6 @@ gdk_color_state_from_rgba (GdkColorState *self,
   if (gdk_color_state_equal (GDK_COLOR_STATE_SRGB, self))
     return;
 
-  convert_to = gdk_color_state_get_convert_to (GDK_COLOR_STATE_SRGB, self);
-  convert_to (GDK_COLOR_STATE_SRGB, (float(*)[4]) out_color, 1);
+  convert = gdk_color_state_get_convert_to (GDK_COLOR_STATE_SRGB, self);
+  convert (GDK_COLOR_STATE_SRGB, (float(*)[4]) out_color, 1);
 }
