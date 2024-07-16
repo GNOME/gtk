@@ -2062,13 +2062,21 @@ out:
 void
 gdk_dmabuf_download_mmap (GdkTexture      *texture,
                           GdkMemoryFormat  format,
+                          GdkColorState   *color_state,
                           guchar          *data,
                           gsize            stride)
 {
   GdkMemoryFormat src_format = gdk_texture_get_format (texture);
+  GdkColorState *src_color_state = gdk_texture_get_color_state (texture);
 
   if (format == src_format)
-    gdk_dmabuf_do_download_mmap (texture, data, stride);
+    {
+      gdk_dmabuf_do_download_mmap (texture, data, stride);
+      gdk_memory_convert_color_state (data, stride, format,
+                                      src_color_state, color_state,
+                                      gdk_texture_get_width (texture),
+                                      gdk_texture_get_height (texture));
+    }
   else
     {
       unsigned int width, height;
@@ -2083,8 +2091,8 @@ gdk_dmabuf_download_mmap (GdkTexture      *texture,
 
       gdk_dmabuf_do_download_mmap (texture, src_data, src_stride);
 
-      gdk_memory_convert (data, stride, format,
-                          src_data, src_stride, src_format,
+      gdk_memory_convert (data, stride, format, color_state,
+                          src_data, src_stride, src_format, src_color_state,
                           width, height);
 
       g_free (src_data);

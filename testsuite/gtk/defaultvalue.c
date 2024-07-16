@@ -22,14 +22,18 @@
 
 static void
 check_property (const char *output,
-	        GParamSpec *pspec,
-		GValue *value)
+                GParamSpec *pspec,
+                GValue *value)
 {
   GValue default_value = G_VALUE_INIT;
   char *v, *dv, *msg;
 
   if (g_param_value_defaults (pspec, value))
-      return;
+    return;
+
+  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_COLOR_STATE &&
+      g_value_get_boxed (value) == gdk_color_state_get_srgb ())
+    return;
 
   g_value_init (&default_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
   g_param_value_set_default (pspec, &default_value);
@@ -38,12 +42,12 @@ check_property (const char *output,
   dv = g_strdup_value_contents (&default_value);
 
   msg = g_strdup_printf ("%s %s.%s: %s != %s\n",
-			 output,
-			 g_type_name (pspec->owner_type),
-			 pspec->name,
-			 dv, v);
+                         output,
+                         g_type_name (pspec->owner_type),
+                         pspec->name,
+                         dv, v);
   g_assertion_message (G_LOG_DOMAIN, __FILE__, __LINE__,
-		       G_STRFUNC, msg);
+                       G_STRFUNC, msg);
   g_free (msg);
 
   g_free (v);
@@ -155,16 +159,16 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       gboolean check = TRUE;
 
       if (pspec->owner_type != type)
-	continue;
+        continue;
 
       if ((pspec->flags & G_PARAM_READABLE) == 0)
-	continue;
+        continue;
 
       /* This is set by the treelistmodel, plain 
        * g_object_new() will crash here */
       if (g_type_is_a (type, GTK_TYPE_TREE_LIST_ROW) &&
-	  (strcmp (pspec->name, "item") == 0))
-	continue;
+          (strcmp (pspec->name, "item") == 0))
+        continue;
 
       /* This is set via class_init, and we have a11y tests to verify it */
       if (g_type_is_a (type, GTK_TYPE_ACCESSIBLE) &&
@@ -177,121 +181,121 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         check = FALSE;
 
       if (g_type_is_a (type, GDK_TYPE_CLIPBOARD) &&
-	  strcmp (pspec->name, "display") == 0)
-	check = FALSE;
+          strcmp (pspec->name, "display") == 0)
+        check = FALSE;
 
       /* These are set in init() */
       if ((g_type_is_a (type, GDK_TYPE_CLIPBOARD) ||
            g_type_is_a (type, GDK_TYPE_CONTENT_PROVIDER) ||
            g_type_is_a (type, GTK_TYPE_DROP_TARGET)) &&
-	  strcmp (pspec->name, "formats") == 0)
-	check = FALSE;
+          strcmp (pspec->name, "formats") == 0)
+        check = FALSE;
 
       if (g_type_is_a (type, GDK_TYPE_CONTENT_PROVIDER) &&
-	  strcmp (pspec->name, "storable-formats") == 0)
-	check = FALSE;
+          strcmp (pspec->name, "storable-formats") == 0)
+        check = FALSE;
 
       if (g_type_is_a (type, GDK_TYPE_DMABUF_TEXTURE_BUILDER) &&
-	  strcmp (pspec->name, "display") == 0)
-	check = FALSE;
+          strcmp (pspec->name, "display") == 0)
+        check = FALSE;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       /* set in the constructor */
       if (g_type_is_a (type, GSK_TYPE_GL_SHADER) &&
-	  strcmp (pspec->name, "source") == 0)
-	check = FALSE;
+          strcmp (pspec->name, "source") == 0)
+        check = FALSE;
 G_GNUC_END_IGNORE_DEPRECATIONS
 
       /* This one has a special-purpose default value */
       if (g_type_is_a (type, GTK_TYPE_DIALOG) &&
-	  (strcmp (pspec->name, "use-header-bar") == 0))
-	check = FALSE;
+          (strcmp (pspec->name, "use-header-bar") == 0))
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_ASSISTANT) &&
-	  (strcmp (pspec->name, "use-header-bar") == 0 ||
+          (strcmp (pspec->name, "use-header-bar") == 0 ||
            strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
-	check = FALSE;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_STACK) &&
-	  (strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
-	check = FALSE;
+          (strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_NOTEBOOK) &&
-	  (strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
-	check = FALSE;
+          (strcmp (pspec->name, "pages") == 0)) /* pages always gets a non-NULL value */
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_COMBO_BOX) &&
           (strcmp (pspec->name, "child") == 0))
         check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_POPOVER) &&
-	  (strcmp (pspec->name, "pointing-to") == 0))
-	check = FALSE;
+          (strcmp (pspec->name, "pointing-to") == 0))
+        check = FALSE;
 
       if (g_type_is_a (type, GDK_TYPE_DISPLAY_MANAGER) &&
-	  (strcmp (pspec->name, "default-display") == 0))
-	check = FALSE;
+          (strcmp (pspec->name, "default-display") == 0))
+        check = FALSE;
 
       if (g_type_is_a (type, GDK_TYPE_DISPLAY) &&
-	  (strcmp (pspec->name, "dmabuf-formats") == 0))
-	check = FALSE;
+          (strcmp (pspec->name, "dmabuf-formats") == 0))
+        check = FALSE;
 
       if (g_type_is_a (type, GDK_TYPE_MONITOR) &&
           (strcmp (pspec->name, "geometry") == 0))
         check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_ABOUT_DIALOG) &&
-	  (strcmp (pspec->name, "program-name") == 0))
-	check = FALSE;
+          (strcmp (pspec->name, "program-name") == 0))
+        check = FALSE;
 
       /* These are set to the current date */
       if (g_type_is_a (type, GTK_TYPE_CALENDAR) &&
-	  (strcmp (pspec->name, "year") == 0 ||
-	   strcmp (pspec->name, "month") == 0 ||
-	   strcmp (pspec->name, "day") == 0))
-	check = FALSE;
+          (strcmp (pspec->name, "year") == 0 ||
+           strcmp (pspec->name, "month") == 0 ||
+           strcmp (pspec->name, "day") == 0))
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_CELL_AREA_CONTEXT) &&
-	  (strcmp (pspec->name, "minimum-width") == 0 ||
-	   strcmp (pspec->name, "minimum-height") == 0 ||
-	   strcmp (pspec->name, "natural-width") == 0 ||
-	   strcmp (pspec->name, "natural-height") == 0))
-	check = FALSE;
+          (strcmp (pspec->name, "minimum-width") == 0 ||
+           strcmp (pspec->name, "minimum-height") == 0 ||
+           strcmp (pspec->name, "natural-width") == 0 ||
+           strcmp (pspec->name, "natural-height") == 0))
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_CELL_RENDERER_TEXT) &&
-	  (strcmp (pspec->name, "background-gdk") == 0 ||
-	   strcmp (pspec->name, "foreground-gdk") == 0 ||
-	   strcmp (pspec->name, "background-rgba") == 0 ||
-	   strcmp (pspec->name, "foreground-rgba") == 0 ||
-	   strcmp (pspec->name, "font") == 0 ||
-	   strcmp (pspec->name, "font-desc") == 0))
-	check = FALSE;
+          (strcmp (pspec->name, "background-gdk") == 0 ||
+           strcmp (pspec->name, "foreground-gdk") == 0 ||
+           strcmp (pspec->name, "background-rgba") == 0 ||
+           strcmp (pspec->name, "foreground-rgba") == 0 ||
+           strcmp (pspec->name, "font") == 0 ||
+           strcmp (pspec->name, "font-desc") == 0))
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_CELL_VIEW) &&
-	  (strcmp (pspec->name, "background-gdk") == 0 ||
-	   strcmp (pspec->name, "foreground-gdk") == 0 ||
-	   strcmp (pspec->name, "foreground-rgba") == 0 ||
-	   strcmp (pspec->name, "background-rgba") == 0 ||
+          (strcmp (pspec->name, "background-gdk") == 0 ||
+           strcmp (pspec->name, "foreground-gdk") == 0 ||
+           strcmp (pspec->name, "foreground-rgba") == 0 ||
+           strcmp (pspec->name, "background-rgba") == 0 ||
            strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
-	check = FALSE;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_COLOR_BUTTON) &&
-	  (strcmp (pspec->name, "color") == 0 ||
-	   strcmp (pspec->name, "rgba") == 0))
-	check = FALSE;
+          (strcmp (pspec->name, "color") == 0 ||
+           strcmp (pspec->name, "rgba") == 0))
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_COLUMN_VIEW) &&
           (strcmp (pspec->name, "columns") == 0 ||
-	   strcmp (pspec->name, "sorter") == 0))
-	check = FALSE;
+           strcmp (pspec->name, "sorter") == 0))
+        check = FALSE;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_COMBO_BOX) &&
-	  (strcmp (pspec->name, "cell-area") == 0 ||
+          (strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
-	check = FALSE;
+        check = FALSE;
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
@@ -299,21 +303,21 @@ G_GNUC_END_IGNORE_DEPRECATIONS
        * and buffer gets created on-demand
        */
       if (g_type_is_a (type, GTK_TYPE_ENTRY) &&
-	  (strcmp (pspec->name, "invisible-char") == 0 ||
+          (strcmp (pspec->name, "invisible-char") == 0 ||
            strcmp (pspec->name, "buffer") == 0))
-	check = FALSE;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_TEXT) &&
-	  (strcmp (pspec->name, "invisible-char") == 0 ||
+          (strcmp (pspec->name, "invisible-char") == 0 ||
            strcmp (pspec->name, "buffer") == 0))
-	check = FALSE;
+        check = FALSE;
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_ENTRY_COMPLETION) &&
-	  (strcmp (pspec->name, "cell-area") == 0 ||
+          (strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
-	check = FALSE;
+        check = FALSE;
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
@@ -325,8 +329,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_TREE_LIST_MODEL) &&
-	  (strcmp (pspec->name, "item-type") == 0)) /* might be a treelistrow */
-	check = FALSE;
+          (strcmp (pspec->name, "item-type") == 0)) /* might be a treelistrow */
+        check = FALSE;
 
       /* This is set in init() */
       if (g_type_is_a (type, GTK_TYPE_FONT_CHOOSER_WIDGET) &&
@@ -336,30 +340,30 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_ICON_VIEW) &&
-	  (strcmp (pspec->name, "cell-area") == 0 ||
+          (strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
-	check = FALSE;
+        check = FALSE;
 
 G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (g_type_is_a (type, GTK_TYPE_MESSAGE_DIALOG) &&
           (strcmp (pspec->name, "image") == 0 ||
            strcmp (pspec->name, "message-area") == 0))
-	check = FALSE;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_PANED) &&
-	  strcmp (pspec->name, "max-position") == 0)
-	check = FALSE;
+          strcmp (pspec->name, "max-position") == 0)
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_PRINT_OPERATION) &&
-	  strcmp (pspec->name, "job-name") == 0)
-	check = FALSE;
+          strcmp (pspec->name, "job-name") == 0)
+        check = FALSE;
 
 #ifdef G_OS_UNIX
       if (g_type_is_a (type, GTK_TYPE_PRINT_UNIX_DIALOG) &&
-	  (strcmp (pspec->name, "page-setup") == 0 ||
-	   strcmp (pspec->name, "print-settings") == 0))
-	check = FALSE;
+          (strcmp (pspec->name, "page-setup") == 0 ||
+           strcmp (pspec->name, "print-settings") == 0))
+        check = FALSE;
 #endif
 
       if (g_type_is_a (type, GTK_TYPE_PROGRESS_BAR) &&
@@ -369,7 +373,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       /* filename value depends on $HOME */
       if (g_type_is_a (type, GTK_TYPE_RECENT_MANAGER) &&
           (strcmp (pspec->name, "filename") == 0 ||
-	   strcmp (pspec->name, "size") == 0))
+           strcmp (pspec->name, "size") == 0))
         check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_SCALE_BUTTON) &&
@@ -377,15 +381,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_SCROLLED_WINDOW) &&
-	  (strcmp (pspec->name, "hadjustment") == 0 ||
+          (strcmp (pspec->name, "hadjustment") == 0 ||
            strcmp (pspec->name, "vadjustment") == 0))
-	check = FALSE;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_SETTINGS))
         check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_SHORTCUT) &&
-	  (strcmp (pspec->name, "action") == 0 ||
+          (strcmp (pspec->name, "action") == 0 ||
            strcmp (pspec->name, "trigger") == 0))
         check = FALSE;
 
@@ -407,9 +411,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       if (g_type_is_a (type, GTK_TYPE_TEXT_TAG) &&
           (strcmp (pspec->name, "background-gdk") == 0 ||
            strcmp (pspec->name, "foreground-gdk") == 0 ||
-	   strcmp (pspec->name, "language") == 0 ||
-	   strcmp (pspec->name, "font") == 0 ||
-	   strcmp (pspec->name, "font-desc") == 0))
+           strcmp (pspec->name, "language") == 0 ||
+           strcmp (pspec->name, "font") == 0 ||
+           strcmp (pspec->name, "font-desc") == 0))
         check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_TEXT_VIEW) &&
@@ -417,25 +421,25 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_TREE_VIEW) &&
-	  (strcmp (pspec->name, "hadjustment") == 0 ||
+          (strcmp (pspec->name, "hadjustment") == 0 ||
            strcmp (pspec->name, "vadjustment") == 0))
-	check = FALSE;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_TREE_VIEW_COLUMN) &&
-	  (strcmp (pspec->name, "cell-area") == 0 ||
+          (strcmp (pspec->name, "cell-area") == 0 ||
            strcmp (pspec->name, "cell-area-context") == 0))
-	check = FALSE;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_VIEWPORT) &&
-	  (strcmp (pspec->name, "hadjustment") == 0 ||
+          (strcmp (pspec->name, "hadjustment") == 0 ||
            strcmp (pspec->name, "vadjustment") == 0))
-	check = FALSE;
+        check = FALSE;
 
       if (g_type_is_a (type, GTK_TYPE_WIDGET) &&
           (strcmp (pspec->name, "name") == 0 ||
-	   strcmp (pspec->name, "display") == 0 ||
-	   strcmp (pspec->name, "style") == 0))
-	check = FALSE;
+           strcmp (pspec->name, "display") == 0 ||
+           strcmp (pspec->name, "style") == 0))
+        check = FALSE;
 
       /* resize-grip-visible is determined at runtime */
       if (g_type_is_a (type, GTK_TYPE_WINDOW) &&
@@ -555,10 +559,10 @@ main (int argc, char **argv)
         continue;
 
       testname = g_strdup_printf ("/Default Values/%s",
-				  g_type_name (otypes[i]));
+                                  g_type_name (otypes[i]));
       g_test_add_data_func (testname,
                             &otypes[i],
-			    test_type);
+                            test_type);
       g_free (testname);
     }
 

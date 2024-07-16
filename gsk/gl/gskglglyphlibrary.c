@@ -281,9 +281,11 @@ gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
       pixel_data = free_data = g_malloc (width * height * 4);
       gdk_memory_convert (pixel_data, width * 4,
                           GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                          GDK_COLOR_STATE_SRGB,
                           cairo_image_surface_get_data (surface),
                           stride,
                           GDK_MEMORY_DEFAULT,
+                          GDK_COLOR_STATE_SRGB,
                           width, height);
       stride = width * 4;
       gl_format = GL_RGBA;

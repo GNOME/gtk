@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_4_10
 GType                   gdk_texture_downloader_get_type         (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_4_10
-GdkTextureDownloader *  gdk_texture_downloader_new              (GdkTexture             *texture);
+GdkTextureDownloader *  gdk_texture_downloader_new              (GdkTexture                     *texture);
 
 GDK_AVAILABLE_IN_4_10
 GdkTextureDownloader *  gdk_texture_downloader_copy             (const GdkTextureDownloader     *self);
@@ -48,6 +48,11 @@ void                    gdk_texture_downloader_set_format       (GdkTextureDownl
                                                                  GdkMemoryFormat                 format);
 GDK_AVAILABLE_IN_4_10
 GdkMemoryFormat         gdk_texture_downloader_get_format       (const GdkTextureDownloader     *self);
+GDK_AVAILABLE_IN_4_16
+void                    gdk_texture_downloader_set_color_state  (GdkTextureDownloader           *self,
+                                                                 GdkColorState                  *color_state);
+GDK_AVAILABLE_IN_4_16
+GdkColorState *         gdk_texture_downloader_get_color_state  (const GdkTextureDownloader     *self);
 
 
 GDK_AVAILABLE_IN_4_10

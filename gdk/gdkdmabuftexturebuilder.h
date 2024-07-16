@@ -100,6 +100,12 @@ void                     gdk_dmabuf_texture_builder_set_offset       (GdkDmabufT
                                                                       unsigned int                plane,
                                                                       unsigned int                offset);
 
+GDK_AVAILABLE_IN_4_16
+GdkColorState *          gdk_dmabuf_texture_builder_get_color_state    (GdkDmabufTextureBuilder  *self);
+GDK_AVAILABLE_IN_4_16
+void                     gdk_dmabuf_texture_builder_set_color_state    (GdkDmabufTextureBuilder  *self,
+                                                                        GdkColorState            *color_state);
+
 GDK_AVAILABLE_IN_4_14
 GdkTexture *             gdk_dmabuf_texture_builder_get_update_texture (GdkDmabufTextureBuilder  *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_14

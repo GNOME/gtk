@@ -58,6 +58,7 @@ gdk_memory_texture_dispose (GObject *object)
 static void
 gdk_memory_texture_download (GdkTexture      *texture,
                              GdkMemoryFormat  format,
+                             GdkColorState   *color_state,
                              guchar          *data,
                              gsize            stride)
 {
@@ -65,9 +66,11 @@ gdk_memory_texture_download (GdkTexture      *texture,
 
   gdk_memory_convert (data, stride,
                       format,
+                      color_state,
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
                       self->stride,
                       texture->format,
+                      texture->color_state,
                       gdk_texture_get_width (texture),
                       gdk_texture_get_height (texture));
 }
@@ -121,6 +124,46 @@ gdk_memory_sanitize (GBytes          *bytes,
 
   *out_stride = copy_stride;
   return g_bytes_new_take (copy, copy_stride * height);
+}
+
+GdkTexture *
+gdk_memory_texture_new_from_builder (GdkMemoryTextureBuilder *builder)
+{
+  GdkMemoryTexture *self;
+  GdkTexture *texture, *update_texture;
+
+  self = g_object_new (GDK_TYPE_MEMORY_TEXTURE,
+                       "width", gdk_memory_texture_builder_get_width (builder),
+                       "height", gdk_memory_texture_builder_get_height (builder),
+                       "color-state", gdk_memory_texture_builder_get_color_state (builder),
+                       NULL);
+  texture = GDK_TEXTURE (self);
+
+  texture->format = gdk_memory_texture_builder_get_format (builder);
+  self->bytes = gdk_memory_sanitize (g_bytes_ref (gdk_memory_texture_builder_get_bytes (builder)),
+                                     texture->width,
+                                     texture->height,
+                                     texture->format,
+                                     gdk_memory_texture_builder_get_stride (builder),
+                                     &self->stride);
+
+  update_texture = gdk_memory_texture_builder_get_update_texture (builder);
+  if (update_texture)
+    {
+      cairo_region_t *update_region = gdk_memory_texture_builder_get_update_region (builder);
+      if (update_region)
+        {
+          update_region = cairo_region_copy (update_region);
+          cairo_region_intersect_rectangle (update_region,
+                                            &(cairo_rectangle_int_t) {
+                                              0, 0,
+                                              update_texture->width, update_texture->height
+                                            });
+          gdk_texture_set_diff (GDK_TEXTURE (self), update_texture, update_region);
+        }
+    }
+
+  return GDK_TEXTURE (self);
 }
 
 /**
@@ -217,7 +260,7 @@ gdk_memory_texture_from_texture (GdkTexture *texture)
   stride = texture->width * gdk_memory_format_bytes_per_pixel (texture->format);
   data = g_malloc_n (stride, texture->height);
 
-  gdk_texture_do_download (texture, texture->format, data, stride);
+  gdk_texture_do_download (texture, texture->format, texture->color_state, data, stride);
   bytes = g_bytes_new_take (data, stride * texture->height);
   result = gdk_memory_texture_new (texture->width,
                                    texture->height,
