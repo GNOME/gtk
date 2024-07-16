@@ -451,15 +451,11 @@ gdk_save_png (GdkTexture *texture)
       return NULL;
     }
 
-  gdk_texture_downloader_init (&downloader, texture);
-  gdk_texture_downloader_set_format (&downloader, format);
-  bytes = gdk_texture_downloader_download_bytes (&downloader, &stride);
-  gdk_texture_downloader_finish (&downloader);
-  data = g_bytes_get_data (bytes, NULL);
+  bytes = NULL;
 
   if (sigsetjmp (png_jmpbuf (png), 1))
     {
-      g_bytes_unref (bytes);
+      g_clear_pointer (&bytes, g_bytes_unref);
       g_free (io.data);
       png_destroy_read_struct (&png, &info, NULL);
       return NULL;
@@ -478,6 +474,12 @@ gdk_save_png (GdkTexture *texture)
 #if G_BYTE_ORDER == G_LITTLE_ENDIAN
   png_set_swap (png);
 #endif
+
+  gdk_texture_downloader_init (&downloader, texture);
+  gdk_texture_downloader_set_format (&downloader, format);
+  bytes = gdk_texture_downloader_download_bytes (&downloader, &stride);
+  gdk_texture_downloader_finish (&downloader);
+  data = g_bytes_get_data (bytes, NULL);
 
   for (y = 0; y < height; y++)
     png_write_row (png, data + y * stride);
