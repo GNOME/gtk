@@ -107,7 +107,7 @@ dmabuf_buffer_release (void             *data,
   GdkTexture *texture = data;
 
   g_object_unref (texture);
-  wl_buffer_destroy (buffer);
+  g_clear_pointer (&buffer, wl_buffer_destroy);
 }
 
 static const struct wl_buffer_listener dmabuf_buffer_listener = {
