@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-07-11 21:15+0000\n"
-"PO-Revision-Date: 2024-07-13 07:32+0200\n"
+"POT-Creation-Date: 2024-07-16 21:09+0000\n"
+"PO-Revision-Date: 2024-07-16 23:44+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -55,7 +55,7 @@ msgstr "შემცველობის %s-ად გამოტანა შ
 msgid "The current backend does not support OpenGL"
 msgstr "მიმდინარე უკანაბოლოს OpenGL-ის მხარდაჭერა არ გააჩნია"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1668
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1633
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Vulkan-ის მხარდაჭერა გამორთულია GDK_DEBUG-ით"
 
@@ -124,27 +124,27 @@ msgstr "GL API არ არის დაშვებული."
 msgid "Unable to create a GL context"
 msgstr "GL-ის კონტექსტის შექმნა შეუძლებელია"
 
-#: gdk/gdkglcontext.c:1328
+#: gdk/gdkglcontext.c:1334
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "OpenGL ES გამორთულია GDK_DEBUG საშუალებით"
 
-#: gdk/gdkglcontext.c:1340
+#: gdk/gdkglcontext.c:1346
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "OpenGL გამორთულია GDK_DEBUG საშუალებით"
 
-#: gdk/gdkglcontext.c:1351
+#: gdk/gdkglcontext.c:1357
 #, c-format
 msgid "Application does not support %s API"
 msgstr "აპლიკაციას %s-ის API-ის მხარდაჭერა არ გააცნია"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2139
+#: gdk/gdkglcontext.c:2145
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s გამოყენების მცდელობა, მაგრამ %s უკვე გამოიყენება"
 
-#: gdk/gdktexture.c:660
+#: gdk/gdktexture.c:661
 msgid "Unknown image format."
 msgstr "გამოსახულების ფაილის უცნობი ფორმატი."
 
@@ -535,27 +535,33 @@ msgstr "JPEG გამოსახულების ფაილის კი�
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "მხარდაუჭერელი JPEG ფერთა სივრცე (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:289 gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:455 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "არასაკმარისი მეხსიერება გამოსახულების ჩასატვირთად %ux%u"
 
-#: gdk/loaders/gdkpng.c:118
+#: gdk/loaders/gdkpng.c:120
 #, c-format
 msgid "Error reading png (%s)"
 msgstr "PNG-ის წაკითხვის შეცდომა (%s)"
 
-#: gdk/loaders/gdkpng.c:215
+#. Translators: the variables at the end are just the numbers as they appear in the PNG
+#: gdk/loaders/gdkpng.c:217
+#, c-format
+msgid "Unsupported CICP color properties: %d/%d/%d %d"
+msgstr "მხარდაუჭერელი CICP ფერის თვისებები: %d/%d/%d %d"
+
+#: gdk/loaders/gdkpng.c:376
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "PNG გამოსახულების მხარდაუჭერელი ფერთა სიღრმე %u"
 
-#: gdk/loaders/gdkpng.c:265
+#: gdk/loaders/gdkpng.c:426
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "PNG გამოსახულების ფერების მხარდაუჭერელი ტიპი %u"
 
-#: gdk/loaders/gdkpng.c:275
+#: gdk/loaders/gdkpng.c:440
 #, c-format
 msgid "Image stride too large for image size %ux%u"
 msgstr "გამოსახულებს ბიჯი მეტისმეტად დიდია გამოსახულების ზომისთვის %ux%u"
@@ -852,7 +858,7 @@ msgstr "არასწორი ფორმატები შედგენ�
 msgid "Unsupported encoding “%s”"
 msgstr "კოდირება \"%s\" მხარდაუჭერელია"
 
-#: gsk/gl/gskglrenderer.c:213
+#: gsk/gl/gskglrenderer.c:215
 #, c-format
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr ""
@@ -3871,37 +3877,37 @@ msgstr "სტილის კლასები"
 msgid "CSS Property"
 msgstr "CSS-ის თვისება"
 
-#: gtk/inspector/general.c:371
+#: gtk/inspector/general.c:372
 msgctxt "GL version"
 msgid "None"
 msgstr "არცერთი"
 
-#: gtk/inspector/general.c:462
+#: gtk/inspector/general.c:463
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "უცნობი"
 
-#: gtk/inspector/general.c:524
+#: gtk/inspector/general.c:525
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "გამორთულია"
 
-#: gtk/inspector/general.c:525 gtk/inspector/general.c:526
+#: gtk/inspector/general.c:526 gtk/inspector/general.c:527
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "გამორთულია"
 
-#: gtk/inspector/general.c:577
+#: gtk/inspector/general.c:578
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "არცერთი"
 
-#: gtk/inspector/general.c:578 gtk/inspector/general.c:579
+#: gtk/inspector/general.c:579 gtk/inspector/general.c:580
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "არცერთი"
 
-#: gtk/inspector/general.c:930
+#: gtk/inspector/general.c:933
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM-ის კონტექსტი GTK_IM_MODULE-ში ხელითაა ჩაწერილი"
 
