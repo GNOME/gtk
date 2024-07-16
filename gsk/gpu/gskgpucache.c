@@ -373,11 +373,18 @@ gsk_gpu_cached_texture_new (GskGpuCache   *cache,
   self = gdk_texture_get_render_data (texture, cache);
   if (self)
     {
-      gdk_texture_steal_render_data (texture);
-      g_object_weak_ref (G_OBJECT (texture), (GWeakNotify) gsk_gpu_cached_texture_destroy_cb, self);
-      texture_cache = gsk_gpu_cache_get_texture_hash_table (cache, self->color_state);
-      g_assert (texture_cache != NULL);
-      g_hash_table_insert (texture_cache, texture, self);
+      if (gsk_gpu_cached_texture_is_invalid (self))
+        {
+          gdk_texture_clear_render_data (texture);
+        }
+      else
+        {
+          gdk_texture_steal_render_data (texture);
+          g_object_weak_ref (G_OBJECT (texture), (GWeakNotify) gsk_gpu_cached_texture_destroy_cb, self);
+          texture_cache = gsk_gpu_cache_get_texture_hash_table (cache, self->color_state);
+          g_assert (texture_cache != NULL);
+          g_hash_table_insert (texture_cache, texture, self);
+        }
     }
 
   self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_TEXTURE_CLASS, NULL);
