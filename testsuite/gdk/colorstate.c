@@ -161,6 +161,44 @@ test_convert (gconstpointer testdata)
   g_free (path);
 }
 
+static void
+test_png (gconstpointer testdata)
+{
+  GdkColorState *cs = (GdkColorState *) testdata;
+  static const float texture_data[] = { 0,0,0,1,  0,0,1,1,  0,1,0,1,  0,1,1,1,
+                                        1,0,0,1,  1,0,1,1,  1,1,0,1,  1,1,1,1 };
+  static gsize width = 4, height = 2, stride = 4 * 4 * sizeof (float);
+  GdkMemoryTextureBuilder *membuild;
+  GdkTexture *saved, *loaded;
+  GBytes *bytes;
+  GError *error = NULL;
+
+  membuild = gdk_memory_texture_builder_new ();
+  gdk_memory_texture_builder_set_format (membuild, GDK_MEMORY_R32G32B32A32_FLOAT);
+  gdk_memory_texture_builder_set_color_state (membuild, cs);
+  gdk_memory_texture_builder_set_width (membuild, width);
+  gdk_memory_texture_builder_set_height (membuild, height);
+  bytes = g_bytes_new_static (texture_data, sizeof (texture_data));
+  gdk_memory_texture_builder_set_bytes (membuild, bytes);
+  g_bytes_unref (bytes);
+  gdk_memory_texture_builder_set_stride (membuild, stride);
+  saved = gdk_memory_texture_builder_build (membuild);
+  g_object_unref (membuild);
+
+  bytes = gdk_texture_save_to_png_bytes (saved);
+  loaded = gdk_texture_new_from_bytes (bytes, &error);
+  g_assert_nonnull (loaded);
+  g_assert_no_error (error);
+  g_bytes_unref (bytes);
+
+  g_assert_cmpint (gdk_texture_get_width (saved), ==, gdk_texture_get_width (loaded));
+  g_assert_cmpint (gdk_texture_get_height (saved), ==, gdk_texture_get_height (loaded));
+  g_assert_true (gdk_color_state_equal (gdk_texture_get_color_state (saved), gdk_texture_get_color_state (loaded)));
+
+  g_object_unref (saved);
+  g_object_unref (loaded);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -182,6 +220,9 @@ main (int argc, char *argv[])
 
       test_name = g_strdup_printf ("/colorstate/convert/srgb/%s", cs_name);
       g_test_add_data_func_full (test_name, csi, test_convert, (GDestroyNotify) gdk_color_state_unref);
+      g_free (test_name);
+      test_name = g_strdup_printf ("/colorstate/png/%s", cs_name);
+      g_test_add_data_func_full (test_name, csi, test_png, (GDestroyNotify) gdk_color_state_unref);
       g_free (test_name);
     }
 
