@@ -29,7 +29,11 @@ check_property (const char *output,
   char *v, *dv, *msg;
 
   if (g_param_value_defaults (pspec, value))
-      return;
+    return;
+
+  if (G_PARAM_SPEC_VALUE_TYPE (pspec) == GDK_TYPE_COLOR_STATE &&
+      g_value_get_boxed (value) == gdk_color_state_get_srgb ())
+    return;
 
   g_value_init (&default_value, G_PARAM_SPEC_VALUE_TYPE (pspec));
   g_param_value_set_default (pspec, &default_value);
