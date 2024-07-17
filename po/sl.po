@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-07-09 03:04+0000\n"
-"PO-Revision-Date: 2024-07-09 05:59+0200\n"
+"POT-Creation-Date: 2024-07-16 21:09+0000\n"
+"PO-Revision-Date: 2024-07-17 09:05+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -56,7 +56,7 @@ msgstr "Ni mogoče določiti vsebine kot %s."
 msgid "The current backend does not support OpenGL"
 msgstr "Trenutno zagnan ozadnji program ne podpira OpenGL"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1642
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1633
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Podpora Vulkan je onemogočena prek GDK_DEBUG"
 
@@ -64,23 +64,23 @@ msgstr "Podpora Vulkan je onemogočena prek GDK_DEBUG"
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je onemogočena prek GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1675
+#: gdk/gdkdisplay.c:1683
 msgid "No EGL configuration available"
 msgstr "Nastavitve EGL niso na voljo"
 
-#: gdk/gdkdisplay.c:1683
+#: gdk/gdkdisplay.c:1691
 msgid "Failed to get EGL configurations"
 msgstr "Pridobivanje nastavitev EGL je sodletelo"
 
-#: gdk/gdkdisplay.c:1713
+#: gdk/gdkdisplay.c:1721
 msgid "No EGL configuration with required features found"
 msgstr "Ni mogoče najti nastavitev EGL za zahtevane možnosti"
 
-#: gdk/gdkdisplay.c:1720
+#: gdk/gdkdisplay.c:1728
 msgid "No perfect EGL configuration found"
 msgstr "Nastavitve EGL ni mogoče najti"
 
-#: gdk/gdkdisplay.c:1762
+#: gdk/gdkdisplay.c:1770
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -89,23 +89,23 @@ msgstr[1] "Vstavku EGL manjka %2$d razširitev: %1$s"
 msgstr[2] "Vstavku EGL manjkata %2$d razširitvi: %1$s"
 msgstr[3] "Vstavku EGL manjkajo %2$d razširitve: %1$s"
 
-#: gdk/gdkdisplay.c:1811
+#: gdk/gdkdisplay.c:1819
 msgid "libEGL not available in this sandbox"
 msgstr "Sandbox ne podpira knjižnice libEGL"
 
-#: gdk/gdkdisplay.c:1812
+#: gdk/gdkdisplay.c:1820
 msgid "libEGL not available"
 msgstr "Knjižnica libEL ni na voljo"
 
-#: gdk/gdkdisplay.c:1822
+#: gdk/gdkdisplay.c:1830
 msgid "Failed to create EGL display"
 msgstr "Ustvarjanje zaslona EGL je sodletelo"
 
-#: gdk/gdkdisplay.c:1831
+#: gdk/gdkdisplay.c:1839
 msgid "Could not initialize EGL display"
 msgstr "Ni mogoče začeti zaslona EGL"
 
-#: gdk/gdkdisplay.c:1841
+#: gdk/gdkdisplay.c:1849
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "Različica EGL %d.%d je prestara, Oklje GTK zahteva različico %d.%d"
@@ -118,37 +118,37 @@ msgstr "Funkcija Poteg/Spust iz drugih programov ni podprta."
 msgid "No compatible formats to transfer contents."
 msgstr "Ni skladnih zapisov za prenos vsebine."
 
-#: gdk/gdkglcontext.c:431 gdk/x11/gdkglcontext-glx.c:645
+#: gdk/gdkglcontext.c:431 gdk/x11/gdkglcontext-glx.c:661
 msgid "No GL API allowed."
 msgstr "API GL ni dovoljen."
 
-#: gdk/gdkglcontext.c:454 gdk/win32/gdkglcontext-win32-wgl.c:409
-#: gdk/win32/gdkglcontext-win32-wgl.c:552
-#: gdk/win32/gdkglcontext-win32-wgl.c:596 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:454 gdk/win32/gdkglcontext-win32-wgl.c:411
+#: gdk/win32/gdkglcontext-win32-wgl.c:554
+#: gdk/win32/gdkglcontext-win32-wgl.c:598 gdk/x11/gdkglcontext-glx.c:707
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
-#: gdk/gdkglcontext.c:1317
+#: gdk/gdkglcontext.c:1334
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "Podpora OpenGL ES je onemogočena z GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1329
+#: gdk/gdkglcontext.c:1346
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "Podpora GL je onemogočena z GDK_DEBUG"
 
-#: gdk/gdkglcontext.c:1340
+#: gdk/gdkglcontext.c:1357
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Program ne podpira vmesnika API %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2128
+#: gdk/gdkglcontext.c:2145
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Podana je zahteva za uporabo %s, a je %s že v uporabi."
 
-#: gdk/gdktexture.c:587
+#: gdk/gdktexture.c:661
 msgid "Unknown image format."
 msgstr "Neznan zapis slike."
 
@@ -539,27 +539,33 @@ msgstr "Napaka med tolmačenjem slikovne datoteke JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Nepodprt barvni prostor JPEG (%d) "
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:289 gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:455 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Ni dovolj pomnilnika za sliko velikosti %ux%u"
 
-#: gdk/loaders/gdkpng.c:118
+#: gdk/loaders/gdkpng.c:120
 #, c-format
 msgid "Error reading png (%s)"
 msgstr "Napaka branja zapisa png (%s)"
 
-#: gdk/loaders/gdkpng.c:215
+#. Translators: the variables at the end are just the numbers as they appear in the PNG
+#: gdk/loaders/gdkpng.c:217
+#, c-format
+msgid "Unsupported CICP color properties: %d/%d/%d %d"
+msgstr "Nepodprte barvne lastnosti CICP: %d/%d/%d %d"
+
+#: gdk/loaders/gdkpng.c:376
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Slika PNG ima nepodprto barvno globino %u"
 
-#: gdk/loaders/gdkpng.c:265
+#: gdk/loaders/gdkpng.c:426
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Nepodprta barvna globina %u v sliki PNG"
 
-#: gdk/loaders/gdkpng.c:275
+#: gdk/loaders/gdkpng.c:440
 #, c-format
 msgid "Image stride too large for image size %ux%u"
 msgstr "Korak slike je prevelik za velikost slike %ux%u"
@@ -742,21 +748,21 @@ msgstr ""
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Pretvarjanje podatkov DnD za zapis W32 0x%x to %p (%s) je spodletelo."
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:343
+#: gdk/win32/gdkglcontext-win32-wgl.c:345
 msgid "No GL implementation is available"
 msgstr "Okolje GL ni na voljo"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:418
+#: gdk/win32/gdkglcontext-win32-wgl.c:420
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Različica WGL %d.%d je prestara, zahtevana je različica vsaj %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:436
+#: gdk/win32/gdkglcontext-win32-wgl.c:438
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Izvedba GL ne more uporabiti vsebine GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:716
+#: gdk/win32/gdkglcontext-win32-wgl.c:718
 msgid "No available configurations for the given pixel format"
 msgstr "Ni navedenih nastavitev za podan točkovni zapis"
 
@@ -821,15 +827,15 @@ msgstr "Upravljalnik odložišča ne uspe shraniti izbire."
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Ni mogoče shraniti odložišča. Ni dejavnega upravljalnika."
 
-#: gdk/x11/gdkglcontext-glx.c:810
+#: gdk/x11/gdkglcontext-glx.c:827
 msgid "No GLX configurations available"
 msgstr "Nastavitve GLX niso na voljo"
 
-#: gdk/x11/gdkglcontext-glx.c:883
+#: gdk/x11/gdkglcontext-glx.c:914
 msgid "No GLX configuration with required features found"
 msgstr "Ni mogoče najti nastavitev GLX za zahtevane možnosti"
 
-#: gdk/x11/gdkglcontext-glx.c:957
+#: gdk/x11/gdkglcontext-glx.c:988
 msgid "GLX is not supported"
 msgstr "Podpora GLX ni na voljo"
 
@@ -860,12 +866,12 @@ msgstr "Neveljavni zapisi pri sestavljeni pretvorbi besedila."
 msgid "Unsupported encoding “%s”"
 msgstr "Nepodprto kodiranje »%s«."
 
-#: gsk/gl/gskglrenderer.c:213
+#: gsk/gl/gskglrenderer.c:215
 #, c-format
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr "Sistem GLES %d.%d ne podpira pol-plavajočih podatkov"
 
-#: gsk/gpu/gskgldevice.c:246
+#: gsk/gpu/gskgldevice.c:254
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "Izrisovalnik ne podpira OpenGL ES 3.0"
@@ -3879,37 +3885,37 @@ msgstr "Razredi slogov"
 msgid "CSS Property"
 msgstr "Lastnosti CSS"
 
-#: gtk/inspector/general.c:371
+#: gtk/inspector/general.c:372
 msgctxt "GL version"
 msgid "None"
 msgstr "Brez"
 
-#: gtk/inspector/general.c:462
+#: gtk/inspector/general.c:463
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: gtk/inspector/general.c:524
+#: gtk/inspector/general.c:525
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: gtk/inspector/general.c:525 gtk/inspector/general.c:526
+#: gtk/inspector/general.c:526 gtk/inspector/general.c:527
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: gtk/inspector/general.c:577
+#: gtk/inspector/general.c:578
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Neopredeljeno"
 
-#: gtk/inspector/general.c:578 gtk/inspector/general.c:579
+#: gtk/inspector/general.c:579 gtk/inspector/general.c:580
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Neopredeljeno"
 
-#: gtk/inspector/general.c:930
+#: gtk/inspector/general.c:933
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Vsebina IM je določena z vrednostjo GTK_IM_MODULE"
 
