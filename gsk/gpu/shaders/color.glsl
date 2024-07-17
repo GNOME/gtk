@@ -24,6 +24,12 @@ color_unpremultiply (vec4 color)
   return color.a > 0.0 ? color / vec4 (color.aaa, 1.0) : color;
 }
 
+float
+luminance (vec3 color)
+{
+  return dot (vec3 (0.2126, 0.7152, 0.0722), color);
+}
+
 vec4
 alt_color_alpha (vec4  color,
                  float alpha)
@@ -90,6 +96,20 @@ pq_oetf (float v)
   return pow (((c1 + (c2 * pow (x, n))) / (1.0 + (c3 * pow (x, n)))), m);
 }
 
+/* Note that these matrices are transposed from the C version */
+
+const mat3 srgb_from_rec2020 = mat3(
+  1.659944, -0.124350, -0.018466,
+  -0.588220, 1.132559, -0.102459,
+  -0.071724, -0.008210, 1.120924
+);
+
+const mat3 rec2020_from_srgb = mat3(
+  0.627610, 0.069029, 0.016649,
+  0.329815, 0.919817, 0.089510,
+  0.042574, 0.011154, 0.893842
+);
+
 vec3
 apply_eotf (vec3 color,
             uint cs)
@@ -139,19 +159,6 @@ apply_oetf (vec3 color,
       return vec3(0.0, 1.0, 0.8);
     }
 }
-
-/* Note that these matrices are transposed from the C version */
-const mat3 srgb_from_rec2020 = mat3(
-  1.659944, -0.124350, -0.018466,
-  -0.588220, 1.132559, -0.102459,
-  -0.071724, -0.008210, 1.120924
-);
-
-const mat3 rec2020_from_srgb = mat3(
-  0.627610, 0.069029, 0.016649,
-  0.329815, 0.919817, 0.089510,
-  0.042574, 0.011154, 0.893842
-);
 
 vec3
 convert_linear (vec3 color,
@@ -224,12 +231,6 @@ output_color_from_alt (vec4 color)
   return convert_color (color,
                         ALT_COLOR_SPACE, ALT_PREMULTIPLIED,
                         OUTPUT_COLOR_SPACE, OUTPUT_PREMULTIPLIED);
-}
-
-float
-luminance (vec3 color)
-{
-  return dot (vec3 (0.2126, 0.7152, 0.0722), color);
 }
 
 #endif /* _COLOR_ */
