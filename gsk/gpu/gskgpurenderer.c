@@ -419,16 +419,16 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   gsk_gpu_device_maybe_gc (priv->device);
 
   depth = gsk_render_node_get_preferred_depth (root);
+  frame = gsk_gpu_renderer_get_frame (self);
+  scale = gsk_gpu_renderer_get_scale (self);
 
-  gdk_draw_context_begin_frame_full (priv->context, depth, region);
+  gsk_gpu_frame_begin (frame, priv->context, depth, region);
 
   gsk_gpu_renderer_make_current (self);
 
   backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
 
-  frame = gsk_gpu_renderer_get_frame (self);
   render_region = get_render_region (self);
-  scale = gsk_gpu_renderer_get_scale (self);
 
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),
@@ -443,7 +443,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
                         ),
                         NULL);
 
-  gdk_draw_context_end_frame (priv->context);
+  gsk_gpu_frame_end (frame, priv->context);
 
   gsk_gpu_device_queue_gc (priv->device);
 
