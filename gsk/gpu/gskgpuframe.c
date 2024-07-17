@@ -638,7 +638,8 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
 }
 
 static void
-gsk_gpu_frame_submit (GskGpuFrame *self)
+gsk_gpu_frame_submit (GskGpuFrame       *self,
+                      GskRenderPassType  pass_type)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
@@ -662,6 +663,7 @@ gsk_gpu_frame_submit (GskGpuFrame *self)
     }
 
   GSK_GPU_FRAME_GET_CLASS (self)->submit (self,
+                                          pass_type,
                                           priv->vertex_buffer,
                                           priv->first_op);
 }
@@ -676,11 +678,13 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
                       const graphene_rect_t  *viewport,
                       GdkTexture            **texture)
 {
+  GskRenderPassType pass_type = texture ? GSK_RENDER_PASS_EXPORT : GSK_RENDER_PASS_PRESENT;
+
   gsk_gpu_frame_cleanup (self);
 
   gsk_gpu_frame_record (self, timestamp, target, target_color_state, region, node, viewport, texture);
 
-  gsk_gpu_frame_submit (self);
+  gsk_gpu_frame_submit (self, pass_type);
 }
 
 typedef struct _Download Download;
@@ -745,6 +749,6 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                            .stride = stride
                        }, sizeof (Download)));
 
-  gsk_gpu_frame_submit (self);
+  gsk_gpu_frame_submit (self, GSK_RENDER_PASS_EXPORT);
   g_object_unref (image);
 }

@@ -42,6 +42,7 @@ struct _GskGpuFrameClass
   GskGpuBuffer *        (* create_storage_buffer)                       (GskGpuFrame            *self,
                                                                          gsize                   size);
   void                  (* submit)                                      (GskGpuFrame            *self,
+                                                                         GskRenderPassType       pass_type,
                                                                          GskGpuBuffer           *vertex_buffer,
                                                                          GskGpuOp               *op);
 };

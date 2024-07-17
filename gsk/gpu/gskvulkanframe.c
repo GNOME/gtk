@@ -361,9 +361,10 @@ gsk_vulkan_frame_create_storage_buffer (GskGpuFrame *frame,
 }
 
 static void
-gsk_vulkan_frame_submit (GskGpuFrame  *frame,
-                         GskGpuBuffer *vertex_buffer,
-                         GskGpuOp     *op)
+gsk_vulkan_frame_submit (GskGpuFrame       *frame,
+                         GskRenderPassType  pass_type,
+                         GskGpuBuffer      *vertex_buffer,
+                         GskGpuOp          *op)
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
   GskVulkanSemaphores semaphores;
