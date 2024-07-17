@@ -16,6 +16,7 @@
 #include "gskrendererprivate.h"
 
 #include "gdk/gdkdmabufdownloaderprivate.h"
+#include "gdk/gdkdrawcontextprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
 
 #define DEFAULT_VERTEX_BUFFER_SIZE 128 * 1024
@@ -76,6 +77,22 @@ gsk_gpu_frame_default_cleanup (GskGpuFrame *self)
 }
 
 static void
+gsk_gpu_frame_default_begin (GskGpuFrame          *self,
+                             GdkDrawContext       *context,
+                             GdkMemoryDepth        depth,
+                             const cairo_region_t *region)
+{
+  gdk_draw_context_begin_frame_full (context, depth, region);
+}
+
+static void
+gsk_gpu_frame_default_end (GskGpuFrame    *self,
+                           GdkDrawContext *context)
+{
+  gdk_draw_context_end_frame (context);
+}
+
+static void
 gsk_gpu_frame_cleanup (GskGpuFrame *self)
 {
   GSK_GPU_FRAME_GET_CLASS (self)->cleanup (self);
@@ -126,6 +143,8 @@ gsk_gpu_frame_class_init (GskGpuFrameClass *klass)
 
   klass->setup = gsk_gpu_frame_default_setup;
   klass->cleanup = gsk_gpu_frame_default_cleanup;
+  klass->begin = gsk_gpu_frame_default_begin;
+  klass->end = gsk_gpu_frame_default_end;
   klass->upload_texture = gsk_gpu_frame_default_upload_texture;
 
   object_class->dispose = gsk_gpu_frame_dispose;
@@ -154,6 +173,22 @@ gsk_gpu_frame_setup (GskGpuFrame         *self,
   priv->optimizations = optimizations;
 
   GSK_GPU_FRAME_GET_CLASS (self)->setup (self);
+}
+
+void
+gsk_gpu_frame_begin (GskGpuFrame          *self,
+                     GdkDrawContext       *context,
+                     GdkMemoryDepth        depth,
+                     const cairo_region_t *region)
+{
+  GSK_GPU_FRAME_GET_CLASS (self)->begin (self, context, depth, region);
+}
+
+void
+gsk_gpu_frame_end (GskGpuFrame    *self,
+                   GdkDrawContext *context)
+{
+  GSK_GPU_FRAME_GET_CLASS (self)->end (self, context);
 }
 
 GskGpuDevice *
@@ -603,7 +638,8 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
 }
 
 static void
-gsk_gpu_frame_submit (GskGpuFrame *self)
+gsk_gpu_frame_submit (GskGpuFrame       *self,
+                      GskRenderPassType  pass_type)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
 
@@ -627,6 +663,7 @@ gsk_gpu_frame_submit (GskGpuFrame *self)
     }
 
   GSK_GPU_FRAME_GET_CLASS (self)->submit (self,
+                                          pass_type,
                                           priv->vertex_buffer,
                                           priv->first_op);
 }
@@ -641,11 +678,13 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
                       const graphene_rect_t  *viewport,
                       GdkTexture            **texture)
 {
+  GskRenderPassType pass_type = texture ? GSK_RENDER_PASS_EXPORT : GSK_RENDER_PASS_PRESENT;
+
   gsk_gpu_frame_cleanup (self);
 
   gsk_gpu_frame_record (self, timestamp, target, target_color_state, region, node, viewport, texture);
 
-  gsk_gpu_frame_submit (self);
+  gsk_gpu_frame_submit (self, pass_type);
 }
 
 typedef struct _Download Download;
@@ -710,6 +749,6 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                            .stride = stride
                        }, sizeof (Download)));
 
-  gsk_gpu_frame_submit (self);
+  gsk_gpu_frame_submit (self, GSK_RENDER_PASS_EXPORT);
   g_object_unref (image);
 }

@@ -169,9 +169,10 @@ gsk_gl_frame_create_storage_buffer (GskGpuFrame *frame,
 }
 
 static void
-gsk_gl_frame_submit (GskGpuFrame  *frame,
-                     GskGpuBuffer *vertex_buffer,
-                     GskGpuOp     *op)
+gsk_gl_frame_submit (GskGpuFrame       *frame,
+                     GskRenderPassType  pass_type,
+                     GskGpuBuffer      *vertex_buffer,
+                     GskGpuOp          *op)
 {
   GskGLFrame *self = GSK_GL_FRAME (frame);
   GskGLCommandState state = { 0, };

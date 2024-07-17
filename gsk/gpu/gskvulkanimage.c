@@ -1440,7 +1440,7 @@ gsk_vulkan_image_transition (GskVulkanImage       *self,
       self->vk_access == access)
     return;
 
-  if (self->vk_pipeline_stage == VK_IMAGE_LAYOUT_UNDEFINED &&
+  if (self->vk_pipeline_stage == VK_IMAGE_LAYOUT_GENERAL &&
       self->vk_semaphore)
     {
       gsk_vulkan_semaphores_add_wait (semaphores, self->vk_semaphore, stage);
