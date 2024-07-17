@@ -416,11 +416,11 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
       return;
     }
 
+  gsk_gpu_device_maybe_gc (priv->device);
+
   depth = gsk_render_node_get_preferred_depth (root);
 
   gdk_draw_context_begin_frame_full (priv->context, depth, region);
-
-  gsk_gpu_device_maybe_gc (priv->device);
 
   gsk_gpu_renderer_make_current (self);
 
@@ -443,9 +443,9 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
                         ),
                         NULL);
 
-  gsk_gpu_device_queue_gc (priv->device);
-
   gdk_draw_context_end_frame (priv->context);
+
+  gsk_gpu_device_queue_gc (priv->device);
 
   g_clear_pointer (&render_region, cairo_region_destroy);
 }
