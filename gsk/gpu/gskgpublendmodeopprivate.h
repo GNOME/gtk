@@ -13,10 +13,8 @@ void                    gsk_gpu_blend_mode_op                           (GskGpuF
                                                                          const graphene_point_t         *offset,
                                                                          float                           opacity,
                                                                          GskBlendMode                    blend_mode,
-                                                                         guint32                         start_descriptor,
-                                                                         const graphene_rect_t          *start_rect,
-                                                                         guint32                         end_descriptor,
-                                                                         const graphene_rect_t          *end_rect);
+                                                                         const GskGpuShaderImage        *bottom,
+                                                                         const GskGpuShaderImage        *top);
 
 
 G_END_DECLS

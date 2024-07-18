@@ -2625,10 +2625,20 @@ gsk_gpu_node_processor_add_blend_node (GskGpuNodeProcessor *self,
                          &self->offset,
                          self->opacity,
                          gsk_blend_node_get_blend_mode (node),
-                         descriptors[0],
-                         &bottom_rect,
-                         descriptors[1],
-                         &top_rect);
+                         &(GskGpuShaderImage) {
+                             bottom_image,
+                             GSK_GPU_SAMPLER_DEFAULT,
+                             descriptors[0],
+                             NULL,
+                             &bottom_rect
+                         },
+                         &(GskGpuShaderImage) {
+                             top_image,
+                             GSK_GPU_SAMPLER_DEFAULT,
+                             descriptors[1],
+                             NULL,
+                             &top_rect
+                         });
 
   g_object_unref (top_image);
   g_object_unref (bottom_image);
