@@ -2502,10 +2502,14 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                gsk_gpu_clip_get_shader_clip (&self->clip, &shadow_offset, &child->bounds),
                                gsk_gpu_node_processor_color_states_for_rgba (self),
                                desc,
-                               descriptor,
-                               &child->bounds,
                                &shadow_offset,
-                               &tex_rect,
+                               &(GskGpuShaderImage) {
+                                   image,
+                                   GSK_GPU_SAMPLER_TRANSPARENT,
+                                   descriptor,
+                                   &child->bounds,
+                                   &tex_rect,
+                               },
                                GSK_RGBA_TO_VEC4 (&shadow->color));
         }
       else
@@ -2736,10 +2740,14 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                            gsk_gpu_node_processor_color_states_for_rgba (self),
                            self->desc,
-                           descriptor,
-                           &node->bounds,
                            &self->offset,
-                           &mask_rect,
+                           &(GskGpuShaderImage) {
+                               mask_image,
+                               GSK_GPU_SAMPLER_DEFAULT,
+                               descriptor,
+                               &node->bounds,
+                               &mask_rect,
+                           },
                            GSK_RGBA_TO_VEC4_ALPHA (rgba, self->opacity));
     }
   else
@@ -2892,10 +2900,14 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                              gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_offset, &glyph_bounds),
                              gsk_gpu_node_processor_color_states_for_rgba (self),
                              self->desc,
-                             descriptor,
-                             &glyph_bounds,
                              &glyph_origin,
-                             &glyph_tex_rect,
+                             &(GskGpuShaderImage) {
+                                 image,
+                                 GSK_GPU_SAMPLER_DEFAULT,
+                                 descriptor,
+                                 &glyph_bounds,
+                                 &glyph_tex_rect
+                             },
                              GSK_RGBA_TO_VEC4 (&color));
 
       offset.x += glyphs[i].geometry.width * inv_pango_scale;

@@ -15,6 +15,7 @@ typedef struct _GskGpuFrame             GskGpuFrame;
 typedef struct _GskGpuImage             GskGpuImage;
 typedef struct _GskGpuOp                GskGpuOp;
 typedef struct _GskGpuOpClass           GskGpuOpClass;
+typedef struct _GskGpuShaderImage       GskGpuShaderImage;
 typedef struct _GskGpuShaderOp          GskGpuShaderOp;
 typedef struct _GskGpuShaderOpClass     GskGpuShaderOpClass;
 typedef struct _GskVulkanDescriptors    GskVulkanDescriptors;
