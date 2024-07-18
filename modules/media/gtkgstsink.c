@@ -469,17 +469,22 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
     }
   else if (gst_video_frame_map (frame, &self->v_info, buffer, GST_MAP_READ))
     {
+      GdkMemoryTextureBuilder *builder;
       GBytes *bytes;
 
       bytes = g_bytes_new_with_free_func (frame->data[0],
                                           frame->info.height * frame->info.stride[0],
                                           (GDestroyNotify) video_frame_free,
                                           frame);
-      texture = gdk_memory_texture_new (frame->info.width,
-                                        frame->info.height,
-                                        gtk_gst_memory_format_from_video_info (&frame->info),
-                                        bytes,
-                                        frame->info.stride[0]);
+
+      builder = gdk_memory_texture_builder_new ();
+      gdk_memory_texture_builder_set_format (builder, gtk_gst_memory_format_from_video_info (&frame->info));
+      gdk_memory_texture_builder_set_width (builder, frame->info.width);
+      gdk_memory_texture_builder_set_height (builder, frame->info.height);
+      gdk_memory_texture_builder_set_bytes (builder, bytes);
+      gdk_memory_texture_builder_set_stride (builder, frame->info.stride[0]);
+
+      texture = gdk_memory_texture_builder_build (builder);
       g_bytes_unref (bytes);
 
       *pixel_aspect_ratio = ((double) frame->info.par_n) / ((double) frame->info.par_d);
