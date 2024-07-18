@@ -241,6 +241,112 @@ download_nv12 (guchar          *dst_data,
     }
 }
 
+static inline void
+get_uv_values16 (const YUVCoefficients *coeffs,
+                 guint16                u,
+                 guint16                v,
+                 gint64                *out_r,
+                 gint64                *out_g,
+                 gint64                *out_b)
+{
+  gint64 u2 = (gint64) u - 32767;
+  gint64 v2 = (gint64) v - 32767;
+  *out_r = coeffs->v_to_r * v2;
+  *out_g = coeffs->u_to_g * u2 + coeffs->v_to_g * v2;
+  *out_b = coeffs->u_to_b * u2;
+}
+
+static inline void
+set_rgb_values16 (guint16 rgb[3],
+                  guint16 y,
+                  gint64  r,
+                  gint64  g,
+                  gint64  b)
+{
+  gint64 y2 = (gint64) y * 65536;
+
+  rgb[0] = CLAMP ((y2 + r) >> 16, 0, 65535);
+  rgb[1] = CLAMP ((y2 + g) >> 16, 0, 65535);
+  rgb[2] = CLAMP ((y2 + b) >> 16, 0, 65535);
+}
+
+static void
+download_p010 (guchar          *dst,
+               gsize            dst_stride,
+               GdkMemoryFormat  dst_format,
+               gsize            width,
+               gsize            height,
+               const GdkDmabuf *dmabuf,
+               const guchar    *src_data[GDK_DMABUF_MAX_PLANES],
+               gsize            sizes[GDK_DMABUF_MAX_PLANES])
+{
+  const guint16 *y_data, *uv_data;
+  guint16 *dst_data;
+  gsize x, y, y_stride, uv_stride;
+  gsize U, V, X_SUB, Y_SUB;
+  guint16 SIZE, MASK;
+
+  switch (dmabuf->fourcc)
+    {
+    case DRM_FORMAT_P010:
+      U = 0; V = 1; X_SUB = 2; Y_SUB = 2;
+      SIZE = 10;
+      break;
+    case DRM_FORMAT_P012:
+      U = 0; V = 1; X_SUB = 2; Y_SUB = 2;
+      SIZE = 12;
+      break;
+    case DRM_FORMAT_P016:
+      U = 0; V = 1; X_SUB = 2; Y_SUB = 2;
+      SIZE = 16;
+      break;
+    default:
+      g_assert_not_reached ();
+      return;
+    }
+  MASK = 0xFFFF << (16 - SIZE);
+
+  static int counter = 0;
+  if (counter++ < 8)
+    return;
+
+  y_stride = dmabuf->planes[0].stride / 2;
+  y_data = (const guint16 *) (src_data[0] + dmabuf->planes[0].offset);
+  g_return_if_fail (sizes[0] >= dmabuf->planes[0].offset + height * dmabuf->planes[0].stride);
+  uv_stride = dmabuf->planes[1].stride / 2;
+  uv_data = (const guint16 *) (src_data[1] + dmabuf->planes[1].offset);
+  g_return_if_fail (sizes[1] >= dmabuf->planes[1].offset + (height + Y_SUB - 1) / Y_SUB * dmabuf->planes[1].stride);
+  dst_data = (guint16 *) dst;
+  dst_stride /= 2;
+
+  for (y = 0; y < height; y += Y_SUB)
+    {
+      for (x = 0; x < width; x += X_SUB)
+        {
+          gint64 r, g, b;
+          gsize xs, ys;
+          guint16 u, v;
+
+          u = uv_data[x / X_SUB * 2 + U];
+          u = (u & MASK) | (u >> SIZE);
+          v = uv_data[x / X_SUB * 2 + V];
+          v = (v & MASK) | (v >> SIZE);
+          get_uv_values16 (&itu601_narrow, u, v, &r, &g, &b);
+
+          for (ys = 0; ys < Y_SUB && y + ys < height; ys++)
+            for (xs = 0; xs < X_SUB && x + xs < width; xs++)
+              {
+                guint16 y_ = y_data[x + xs + y_stride * ys];
+                y_ = (y_ & MASK) | (y_ >> SIZE);
+                set_rgb_values16 (&dst_data[3 * (x + xs) + dst_stride * ys], y_, r, g, b);
+              }
+        }
+      dst_data += Y_SUB * dst_stride;
+      y_data += Y_SUB * y_stride;
+      uv_data += uv_stride;
+    }
+}
+
 static void
 download_yuv_3 (guchar          *dst_data,
                 gsize            dst_stride,
@@ -1682,7 +1788,7 @@ static const GdkDrmFormatInfo supported_formats[] = {
     .fourcc = DRM_FORMAT_P010,
     .memory_format = GDK_MEMORY_R16G16B16,
     .is_yuv = TRUE,
-    .download = NULL,
+    .download = download_p010,
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G10X6_B10X6R10X6_2PLANE_422_UNORM_3PACK16,
@@ -1694,7 +1800,7 @@ static const GdkDrmFormatInfo supported_formats[] = {
     .fourcc = DRM_FORMAT_P012,
     .memory_format = GDK_MEMORY_R16G16B16,
     .is_yuv = TRUE,
-    .download = NULL,
+    .download = download_p010,
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G12X4_B12X4R12X4_2PLANE_422_UNORM_3PACK16,
@@ -1706,7 +1812,7 @@ static const GdkDrmFormatInfo supported_formats[] = {
     .fourcc = DRM_FORMAT_P016,
     .memory_format = GDK_MEMORY_R16G16B16,
     .is_yuv = TRUE,
-    .download = NULL,
+    .download = download_p010,
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G16_B16R16_2PLANE_422_UNORM,
@@ -2028,8 +2134,8 @@ gdk_dmabuf_do_download_mmap (GdkTexture *texture,
       if (gdk_dmabuf_ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_START|DMA_BUF_SYNC_READ }) < 0)
         g_warning ("Failed to sync dmabuf: %s", g_strerror (errno));
 
-      src_data[i] = mmap (NULL, sizes[i], PROT_READ, MAP_SHARED, dmabuf->planes[i].fd, dmabuf->planes[i].offset);
-      if (src_data[i] == NULL)
+      src_data[i] = mmap (NULL, sizes[i], PROT_READ, MAP_SHARED, dmabuf->planes[i].fd, 0);
+      if (src_data[i] == NULL || src_data[i] == MAP_FAILED)
         {
           g_warning ("Failed to mmap dmabuf: %s", g_strerror (errno));
           goto out;
