@@ -2739,10 +2739,20 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
                          &self->offset,
                          self->opacity,
                          progress,
-                         descriptors[0],
-                         &start_rect,
-                         descriptors[1],
-                         &end_rect);
+                         &(GskGpuShaderImage) {
+                             start_image,
+                             GSK_GPU_SAMPLER_DEFAULT,
+                             descriptors[0],
+                             NULL,
+                             &start_rect
+                         },
+                         &(GskGpuShaderImage) {
+                             end_image,
+                             GSK_GPU_SAMPLER_DEFAULT,
+                             descriptors[1],
+                             NULL,
+                             &end_rect
+                         });
 
   g_object_unref (end_image);
   g_object_unref (start_image);

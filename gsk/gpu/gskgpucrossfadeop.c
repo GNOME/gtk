@@ -50,18 +50,16 @@ static const GskGpuShaderOpClass GSK_GPU_CROSS_FADE_OP_CLASS = {
 };
 
 void
-gsk_gpu_cross_fade_op (GskGpuFrame            *frame,
-                       GskGpuShaderClip        clip,
-                       GskGpuColorStates       color_states,
-                       GskGpuDescriptors      *desc,
-                       const graphene_rect_t  *rect,
-                       const graphene_point_t *offset,
-                       float                   opacity,
-                       float                   progress,
-                       guint32                 start_descriptor,
-                       const graphene_rect_t  *start_rect,
-                       guint32                 end_descriptor,
-                       const graphene_rect_t  *end_rect)
+gsk_gpu_cross_fade_op (GskGpuFrame             *frame,
+                       GskGpuShaderClip         clip,
+                       GskGpuColorStates        color_states,
+                       GskGpuDescriptors       *desc,
+                       const graphene_rect_t   *rect,
+                       const graphene_point_t  *offset,
+                       float                    opacity,
+                       float                    progress,
+                       const GskGpuShaderImage *start,
+                       const GskGpuShaderImage *end)
 {
   GskGpuCrossfadeInstance *instance;
 
@@ -76,8 +74,8 @@ gsk_gpu_cross_fade_op (GskGpuFrame            *frame,
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   instance->opacity_progress[0] = opacity;
   instance->opacity_progress[1] = progress;
-  gsk_gpu_rect_to_float (start_rect, offset, instance->start_rect);
-  instance->start_id = start_descriptor;
-  gsk_gpu_rect_to_float (end_rect, offset, instance->end_rect);
-  instance->end_id = end_descriptor;
+  gsk_gpu_rect_to_float (start->bounds, offset, instance->start_rect);
+  instance->start_id = start->descriptor;
+  gsk_gpu_rect_to_float (end->bounds, offset, instance->end_rect);
+  instance->end_id = end->descriptor;
 }
