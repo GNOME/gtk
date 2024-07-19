@@ -1,3 +1,5 @@
+#define GSK_N_TEXTURES 1
+
 #include "common.glsl"
 
 #define VARIATION_OPACITY              (1u << 0)

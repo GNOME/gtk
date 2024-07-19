@@ -1,3 +1,5 @@
+#define GSK_N_TEXTURES 2
+
 #include "common.glsl"
 #include "blendmode.glsl"
 

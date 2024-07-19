@@ -1,3 +1,5 @@
+#define GSK_N_TEXTURES 2
+
 #include "common.glsl"
 
 PASS(0) vec2 _pos;

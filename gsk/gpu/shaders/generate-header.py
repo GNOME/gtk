@@ -7,6 +7,7 @@ import os
 name = os.path.splitext(os.path.splitext(os.path.basename(sys.argv[1]))[0])[0][6:]
 var_name = "gsk_gpu_" + name.replace('-', '_')
 struct_name = "GskGpu" + name.title().replace('-', '') + "Instance"
+n_textures = -1
 filename = sys.argv[1]
 
 with open(filename) as f:
@@ -14,6 +15,10 @@ with open(filename) as f:
     matches = []
 
     for pos, line in enumerate (lines):
+        match = re.search(r"^#define GSK_N_TEXTURES ([0-9]+)$", line)
+        if match:
+            n_textures = int(match.group(1))
+
         match = re.search(r"^IN\(([0-9]+)\) ([a-z0-9]+) ([a-zA-Z0-9_]+);$", line)
         if not match:
             if re.search(r"layout.*\sin\s.*", line):
@@ -26,8 +31,15 @@ with open(filename) as f:
                         'location': int(match.group(1)),
                         'type': match.group(2)})
 
+if n_textures < 0:
+    raise Exception(f'''{filename}: GSK_N_TEXTURES not defined''')
+if n_textures > 2:
+    raise Exception(f'''{filename}: GSK_N_TEXTURES must be <= 2''')
+
 print(f'''/* This file is auto-generated; any change will not be preserved */
 #pragma once
+
+#define {var_name}_n_textures {n_textures}
 
 typedef struct _{struct_name} {struct_name};
 

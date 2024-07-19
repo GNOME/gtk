@@ -1,3 +1,5 @@
+#define GSK_N_TEXTURES 1
+
 #include "common.glsl"
 
 /* blur radius (aka in_blur_direction) 0 is NOT supported and MUST be caught before */

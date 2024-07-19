@@ -1,3 +1,5 @@
+#define GSK_N_TEXTURES 2
+
 #include "common.glsl"
 
 #define VARIATION_MASK_MODE GSK_VARIATION

@@ -1,3 +1,5 @@
+#define GSK_N_TEXTURES 1
+
 #include "common.glsl"
 
 PASS_FLAT(0) mat4 _color_matrix;
