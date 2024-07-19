@@ -548,11 +548,15 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                                                         TRUE),
                           self->opacity,
                           self->desc,
-                          descriptor,
                           straight_alpha,
-                          rect,
                           &self->offset,
-                          tex_rect);
+                          &(GskGpuShaderImage) {
+                              image,
+                              sampler,
+                              descriptor,
+                              rect,
+                              tex_rect
+                          });
     }
   else
     {
@@ -4070,11 +4074,15 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                               gsk_gpu_node_processor_color_states_explicit (&self, ccs, TRUE),
                               self.opacity,
                               self.desc,
-                              descriptor,
                               FALSE,
-                              &node->bounds,
                               &self.offset,
-                              &tex_rect);
+                              &(GskGpuShaderImage) {
+                                  image,
+                                  GSK_GPU_SAMPLER_DEFAULT,
+                                  descriptor,
+                                  &node->bounds,
+                                  &tex_rect
+                              });
 
           gsk_gpu_render_pass_end_op (frame,
                                       target,
