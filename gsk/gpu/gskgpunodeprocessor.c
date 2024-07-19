@@ -278,14 +278,7 @@ gsk_gpu_node_processor_add_image (GskGpuNodeProcessor *self,
 {
   guint32 descriptor;
 
-  if (self->desc != NULL)
-    {
-      if (gsk_gpu_descriptors_add_image (self->desc, image, sampler, &descriptor))
-        return descriptor;
-
-      g_object_unref (self->desc);
-    }
-
+  g_clear_object (&self->desc);
   self->desc = gsk_gpu_frame_create_descriptors (self->frame);
 
   if (!gsk_gpu_descriptors_add_image (self->desc, image, sampler, &descriptor))
@@ -305,15 +298,13 @@ gsk_gpu_node_processor_add_two_images (GskGpuNodeProcessor *self,
                                        GskGpuSampler        sampler2,
                                        guint32             *out_descriptors)
 {
-  GskGpuDescriptors *desc;
-
-  do
+  g_clear_object (&self->desc);
+  self->desc = gsk_gpu_frame_create_descriptors (self->frame);
+  if (!gsk_gpu_descriptors_add_image (self->desc, image1, sampler1, &out_descriptors[0]) ||
+      !gsk_gpu_descriptors_add_image (self->desc, image2, sampler2, &out_descriptors[1]))
     {
-      out_descriptors[0] = gsk_gpu_node_processor_add_image (self, image1, sampler1);
-      desc = self->desc;
-      out_descriptors[1] = gsk_gpu_node_processor_add_image (self, image2, sampler2);
+      g_assert_not_reached ();
     }
-  while (desc != self->desc);
 }
 
 static void
