@@ -151,7 +151,6 @@ gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
                              GskGpuFrame                 *frame,
                              GskGpuImage                 *target,
                              GdkColorState               *ccs,
-                             GskGpuDescriptors           *desc,
                              const cairo_rectangle_int_t *clip,
                              const graphene_rect_t       *viewport)
 {
@@ -162,10 +161,7 @@ gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
 
   self->frame = frame;
   self->ccs = ccs;
-  if (desc)
-    self->desc = g_object_ref (desc);
-  else
-    self->desc = NULL;
+  self->desc = NULL;
 
   self->scissor = *clip;
   self->blend = GSK_GPU_BLEND_OVER;
@@ -367,7 +363,6 @@ gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
                                frame,
                                image,
                                ccs,
-                               NULL,
                                &area,
                                viewport);
 
@@ -680,7 +675,6 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
                                    frame,
                                    copy,
                                    ccs,
-                                   NULL,
                                    &(cairo_rectangle_int_t) { 0, 0, width, height },
                                    &rect);
 
@@ -3913,7 +3907,6 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                frame,
                                target,
                                target_color_state,
-                               NULL,
                                clip,
                                viewport);
 
