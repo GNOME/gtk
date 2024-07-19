@@ -41,6 +41,11 @@ struct _GskGpuFrameClass
                                                                          gsize                   size);
   GskGpuBuffer *        (* create_storage_buffer)                       (GskGpuFrame            *self,
                                                                          gsize                   size);
+  void                  (* write_texture_vertex_data)                   (GskGpuFrame            *self,
+                                                                         guchar                 *data,
+                                                                         GskGpuImage           **images,
+                                                                         GskGpuSampler          *samplers,
+                                                                         gsize                   n_images);
   void                  (* submit)                                      (GskGpuFrame            *self,
                                                                          GskRenderPassType       pass_type,
                                                                          GskGpuBuffer           *vertex_buffer,
@@ -54,6 +59,10 @@ void                    gsk_gpu_frame_setup                             (GskGpuF
                                                                          GskGpuRenderer         *renderer,
                                                                          GskGpuDevice           *device,
                                                                          GskGpuOptimizations     optimizations);
+void                    gsk_gpu_frame_set_texture_vertex_size           (GskGpuFrame            *self,
+                                                                         gsize                   texture_vertex_size);
+gsize                   gsk_gpu_frame_get_texture_vertex_size           (GskGpuFrame            *self,
+                                                                         gsize                   n_textures);
 
 void                    gsk_gpu_frame_begin                             (GskGpuFrame            *self,
                                                                          GdkDrawContext         *context,
@@ -78,6 +87,11 @@ gsize                   gsk_gpu_frame_reserve_vertex_data               (GskGpuF
                                                                          gsize                   size);
 guchar *                gsk_gpu_frame_get_vertex_data                   (GskGpuFrame            *self,
                                                                          gsize                   offset);
+void                    gsk_gpu_frame_write_texture_vertex_data         (GskGpuFrame            *self,
+                                                                         guchar                 *data,
+                                                                         GskGpuImage           **images,
+                                                                         GskGpuSampler          *samplers,
+                                                                         gsize                   n_images);
 GskGpuBuffer *          gsk_gpu_frame_write_storage_buffer              (GskGpuFrame            *self,
                                                                          const guchar           *data,
                                                                          gsize                   size,

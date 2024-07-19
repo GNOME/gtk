@@ -37,6 +37,7 @@ struct _GskGpuFramePrivate
   GskGpuRenderer *renderer;
   GskGpuDevice *device;
   GskGpuOptimizations optimizations;
+  gsize texture_vertex_size;
   gint64 timestamp;
 
   GskGpuOps ops;
@@ -173,6 +174,28 @@ gsk_gpu_frame_setup (GskGpuFrame         *self,
   priv->optimizations = optimizations;
 
   GSK_GPU_FRAME_GET_CLASS (self)->setup (self);
+}
+
+/*
+ * gsk_gpu_frame_set_texture_vertex_size:
+ * @self: the frame
+ * @texture_vertex_size: bytes to reserve in the vertex data per
+ *   texture rendered
+ *
+ * Some renderers want to attach vertex data for textures, usually
+ * for supporting bindless textures. This is the number of bytes
+ * reserved per texture.
+ *
+ * GskGpuFrameClass::write_texture_vertex_data() is used to write that
+ * data.
+ **/
+void
+gsk_gpu_frame_set_texture_vertex_size (GskGpuFrame *self,
+                                       gsize        texture_vertex_size)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  priv->texture_vertex_size = texture_vertex_size;
 }
 
 void
@@ -477,6 +500,15 @@ round_up (gsize number, gsize divisor)
 }
 
 gsize
+gsk_gpu_frame_get_texture_vertex_size (GskGpuFrame *self,
+                                       gsize        n_textures)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  return priv->texture_vertex_size * n_textures;
+}
+
+gsize
 gsk_gpu_frame_reserve_vertex_data (GskGpuFrame *self,
                                    gsize        size)
 {
@@ -533,6 +565,16 @@ gsk_gpu_frame_ensure_storage_buffer (GskGpuFrame *self)
     priv->storage_buffer = gsk_gpu_frame_create_storage_buffer (self, DEFAULT_STORAGE_BUFFER_SIZE);
 
   priv->storage_buffer_data = gsk_gpu_buffer_map (priv->storage_buffer);
+}
+
+void
+gsk_gpu_frame_write_texture_vertex_data (GskGpuFrame    *self,
+                                         guchar         *data,
+                                         GskGpuImage   **images,
+                                         GskGpuSampler  *samplers,
+                                         gsize           n_images)
+{
+  GSK_GPU_FRAME_GET_CLASS (self)->write_texture_vertex_data (self, data, images, samplers, n_images);
 }
 
 GskGpuBuffer *

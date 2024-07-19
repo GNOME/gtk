@@ -356,6 +356,15 @@ gsk_vulkan_frame_create_storage_buffer (GskGpuFrame *frame,
 }
 
 static void
+gsk_vulkan_frame_write_texture_vertex_data (GskGpuFrame    *self,
+                                            guchar         *data,
+                                            GskGpuImage   **images,
+                                            GskGpuSampler  *samplers,
+                                            gsize           n_images)
+{
+}
+
+static void
 gsk_vulkan_frame_submit (GskGpuFrame       *frame,
                          GskRenderPassType  pass_type,
                          GskGpuBuffer      *vertex_buffer,
@@ -481,6 +490,7 @@ gsk_vulkan_frame_class_init (GskVulkanFrameClass *klass)
   gpu_frame_class->create_descriptors = gsk_vulkan_frame_create_descriptors;
   gpu_frame_class->create_vertex_buffer = gsk_vulkan_frame_create_vertex_buffer;
   gpu_frame_class->create_storage_buffer = gsk_vulkan_frame_create_storage_buffer;
+  gpu_frame_class->write_texture_vertex_data = gsk_vulkan_frame_write_texture_vertex_data;
   gpu_frame_class->submit = gsk_vulkan_frame_submit;
 
   object_class->finalize = gsk_vulkan_frame_finalize;

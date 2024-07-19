@@ -248,9 +248,19 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
 {
   GskGpuOp *last;
   GskGpuShaderOp *last_shader;
-  gsize i, vertex_offset;
+  gsize i, vertex_offset, vertex_size, texture_vertex_size;
+  guchar *vertex_data;
 
-  vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, op_class->vertex_size);
+  texture_vertex_size = gsk_gpu_frame_get_texture_vertex_size (frame, op_class->n_textures);
+  vertex_size = texture_vertex_size + op_class->vertex_size;
+  vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, vertex_size);
+  vertex_data = gsk_gpu_frame_get_vertex_data (frame, vertex_offset);
+
+  gsk_gpu_frame_write_texture_vertex_data (frame,
+                                           vertex_data,
+                                           images,
+                                           samplers,
+                                           op_class->n_textures);
 
   last = gsk_gpu_frame_get_last_op (frame);
   /* careful: We're casting without checking, but the if() does the check */
@@ -260,7 +270,7 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
       last_shader->color_states == color_states &&
       last_shader->variation == variation &&
       last_shader->clip == clip &&
-      last_shader->vertex_offset + last_shader->n_ops * op_class->vertex_size == vertex_offset &&
+      last_shader->vertex_offset + last_shader->n_ops * vertex_size == vertex_offset &&
       (op_class->n_textures < 1 || (last_shader->images[0] == images[0] && last_shader->samplers[0] == samplers[0])) &&
       (op_class->n_textures < 2 || (last_shader->images[1] == images[1] && last_shader->samplers[1] == samplers[1])))
     {
@@ -287,6 +297,6 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
         }
     }
 
-  *((gpointer *) out_vertex_data) = gsk_gpu_frame_get_vertex_data (frame, vertex_offset);
+  *((gpointer *) out_vertex_data) = vertex_data + texture_vertex_size;
 }
 
