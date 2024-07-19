@@ -39,6 +39,7 @@ static const GskGpuShaderOpClass GSK_GPU_CONIC_GRADIENT_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpuconicgradient",
+  gsk_gpu_conicgradient_n_textures,
   sizeof (GskGpuConicgradientInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_conicgradient_info,

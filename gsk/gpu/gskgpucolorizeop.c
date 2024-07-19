@@ -39,6 +39,7 @@ static const GskGpuShaderOpClass GSK_GPU_COLORIZE_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpucolorize",
+  gsk_gpu_colorize_n_textures,
   sizeof (GskGpuColorizeInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_colorize_info,

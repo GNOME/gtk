@@ -40,6 +40,7 @@ static const GskGpuShaderOpClass GSK_GPU_CROSS_FADE_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpucrossfade",
+  gsk_gpu_crossfade_n_textures,
   sizeof (GskGpuCrossfadeInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_crossfade_info,

@@ -84,6 +84,7 @@ static const GskGpuShaderOpClass GSK_GPU_BORDER_OP_CLASS = {
     gsk_gpu_border_op_gl_command
   },
   "gskgpuborder",
+  gsk_gpu_border_n_textures,
   sizeof (GskGpuBorderInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_border_info,

@@ -63,6 +63,7 @@ static const GskGpuShaderOpClass GSK_GPU_BOX_SHADOW_OP_CLASS = {
     gsk_gpu_box_shadow_op_gl_command
   },
   "gskgpuboxshadow",
+  gsk_gpu_boxshadow_n_textures,
   sizeof (GskGpuBoxshadowInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_boxshadow_info,

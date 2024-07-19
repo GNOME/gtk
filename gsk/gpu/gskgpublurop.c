@@ -43,6 +43,7 @@ static const GskGpuShaderOpClass GSK_GPU_BLUR_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpublur",
+  gsk_gpu_blur_n_textures,
   sizeof (GskGpuBlurInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_blur_info,

@@ -35,6 +35,7 @@ struct _GskGpuShaderOpClass
   GskGpuOpClass         parent_class;
 
   const char *          shader_name;
+  gsize                 n_textures;
   gsize                 vertex_size;
 #ifdef GDK_RENDERING_VULKAN
   const VkPipelineVertexInputStateCreateInfo *vertex_input_state;

@@ -41,6 +41,7 @@ static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpumask",
+  gsk_gpu_mask_n_textures,
   sizeof (GskGpuMaskInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_mask_info,

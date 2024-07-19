@@ -42,6 +42,7 @@ static const GskGpuShaderOpClass GSK_GPU_RADIAL_GRADIENT_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpuradialgradient",
+  gsk_gpu_radialgradient_n_textures,
   sizeof (GskGpuRadialgradientInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_radialgradient_info,

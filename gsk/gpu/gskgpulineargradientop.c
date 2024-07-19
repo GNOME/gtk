@@ -42,6 +42,7 @@ static const GskGpuShaderOpClass GSK_GPU_LINEAR_GRADIENT_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpulineargradient",
+  gsk_gpu_lineargradient_n_textures,
   sizeof (GskGpuLineargradientInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_lineargradient_info,
