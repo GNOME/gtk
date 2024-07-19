@@ -23,6 +23,8 @@ struct _GskGpuShaderOp
   GskGpuOp parent_op;
 
   GskGpuDescriptors *desc;
+  GskGpuImage *images[2];
+  GskGpuSampler samplers[2];
   GskGpuColorStates color_states;
   guint32 variation;
   GskGpuShaderClip clip;
@@ -53,6 +55,8 @@ void                    gsk_gpu_shader_op_alloc                         (GskGpuF
                                                                          guint32                 variation,
                                                                          GskGpuShaderClip        clip,
                                                                          GskGpuDescriptors      *desc,
+                                                                         GskGpuImage           **images,
+                                                                         GskGpuSampler          *samplers,
                                                                          gpointer                out_vertex_data);
 
 void                    gsk_gpu_shader_op_finish                        (GskGpuOp               *op);

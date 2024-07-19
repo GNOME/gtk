@@ -66,6 +66,8 @@ gsk_gpu_color_matrix_op (GskGpuFrame             *frame,
                            0,
                            clip,
                            desc,
+                           (GskGpuImage *[1]) { image->image },
+                           (GskGpuSampler[1]) { image->sampler },
                            &instance);
 
   gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);

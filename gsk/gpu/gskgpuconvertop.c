@@ -73,6 +73,8 @@ gsk_gpu_convert_op (GskGpuFrame             *frame,
                            (straight_alpha ? VARIATION_STRAIGHT_ALPHA : 0),
                            clip,
                            desc,
+                           (GskGpuImage *[1]) { image->image },
+                           (GskGpuSampler[1]) { image->sampler },
                            &instance);
 
   gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);

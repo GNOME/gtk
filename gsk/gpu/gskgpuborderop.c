@@ -113,6 +113,8 @@ gsk_gpu_border_op (GskGpuFrame            *frame,
                            0,
                            clip,
                            NULL,
+                           NULL,
+                           NULL,
                            &instance);
 
   gsk_rounded_rect_to_float (outline, offset, instance->outline);

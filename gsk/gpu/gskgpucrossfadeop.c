@@ -70,6 +70,8 @@ gsk_gpu_cross_fade_op (GskGpuFrame             *frame,
                            0,
                            clip,
                            desc,
+                           (GskGpuImage *[2]) { start->image, end->image },
+                           (GskGpuSampler[2]) { start->sampler, end->sampler },
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);

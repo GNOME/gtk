@@ -27,6 +27,8 @@ gsk_gpu_shader_op_finish (GskGpuOp *op)
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
 
   g_clear_object (&self->desc);
+  g_clear_object (&self->images[0]);
+  g_clear_object (&self->images[1]);
 }
 
 void
@@ -192,7 +194,9 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
           next_shader->color_states != self->color_states ||
           next_shader->variation != self->variation ||
           next_shader->clip != self->clip ||
-          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size)
+          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size ||
+          (shader_op_class->n_textures > 0 && (next_shader->images[0] != self->images[0] || next_shader->samplers[0] != self->samplers[0])) ||
+          (shader_op_class->n_textures > 1 && (next_shader->images[1] != self->images[1] || next_shader->samplers[1] != self->samplers[1])))
         break;
 
       n_ops += next_shader->n_ops;
@@ -238,11 +242,13 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
                          guint32                    variation,
                          GskGpuShaderClip           clip,
                          GskGpuDescriptors         *desc,
+                         GskGpuImage              **images,
+                         GskGpuSampler             *samplers,
                          gpointer                   out_vertex_data)
 {
   GskGpuOp *last;
   GskGpuShaderOp *last_shader;
-  gsize vertex_offset;
+  gsize i, vertex_offset;
 
   vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, op_class->vertex_size);
 
@@ -251,11 +257,12 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
   last_shader = (GskGpuShaderOp *) last;
   if (last &&
       last->op_class == (const GskGpuOpClass *) op_class &&
-      last_shader->desc == desc &&
       last_shader->color_states == color_states &&
       last_shader->variation == variation &&
       last_shader->clip == clip &&
-      last_shader->vertex_offset + last_shader->n_ops * op_class->vertex_size == vertex_offset)
+      last_shader->vertex_offset + last_shader->n_ops * op_class->vertex_size == vertex_offset &&
+      (op_class->n_textures < 1 || (last_shader->images[0] == images[0] && last_shader->samplers[0] == samplers[0])) &&
+      (op_class->n_textures < 2 || (last_shader->images[1] == images[1] && last_shader->samplers[1] == samplers[1])))
     {
       last_shader->n_ops++;
     }
@@ -273,6 +280,11 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
       else
         self->desc = NULL;
       self->n_ops = 1;
+      for (i = 0; i < op_class->n_textures; i++)
+        {
+          self->images[i] = g_object_ref (images[i]);
+          self->samplers[i] = samplers[i];
+        }
     }
 
   *((gpointer *) out_vertex_data) = gsk_gpu_frame_get_vertex_data (frame, vertex_offset);

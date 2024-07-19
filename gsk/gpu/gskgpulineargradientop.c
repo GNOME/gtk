@@ -78,6 +78,8 @@ gsk_gpu_linear_gradient_op (GskGpuFrame            *frame,
                            (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GRADIENTS) ? VARIATION_SUPERSAMPLING : 0),
                            clip,
                            NULL,
+                           NULL,
+                           NULL,
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);

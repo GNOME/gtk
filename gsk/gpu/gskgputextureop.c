@@ -63,6 +63,8 @@ gsk_gpu_texture_op (GskGpuFrame             *frame,
                            0,
                            clip,
                            desc,
+                           (GskGpuImage *[1]) { image->image },
+                           (GskGpuSampler[1]) { image->sampler },
                            &instance);
 
   gsk_gpu_rect_to_float (image->coverage ? image->coverage : image->bounds, offset, instance->rect);

@@ -70,6 +70,8 @@ gsk_gpu_mask_op (GskGpuFrame             *frame,
                            mask_mode,
                            clip,
                            desc,
+                           (GskGpuImage *[2]) { source->image, mask->image },
+                           (GskGpuSampler[2]) { source->sampler, mask->sampler },
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);

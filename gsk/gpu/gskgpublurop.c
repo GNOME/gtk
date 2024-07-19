@@ -72,6 +72,8 @@ gsk_gpu_blur_op_full (GskGpuFrame             *frame,
                            variation,
                            clip,
                            desc,
+                           (GskGpuImage *[1]) { image->image },
+                           (GskGpuSampler[1]) { image->sampler },
                            &instance);
 
   gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);

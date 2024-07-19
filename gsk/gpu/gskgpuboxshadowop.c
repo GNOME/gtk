@@ -97,6 +97,8 @@ gsk_gpu_box_shadow_op (GskGpuFrame            *frame,
                            inset ? VARIATION_INSET : 0,
                            clip,
                            NULL,
+                           NULL,
+                           NULL,
                            &instance);
 
   gsk_gpu_rect_to_float (bounds, offset, instance->bounds);

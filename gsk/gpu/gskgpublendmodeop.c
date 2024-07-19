@@ -71,6 +71,8 @@ gsk_gpu_blend_mode_op (GskGpuFrame             *frame,
                            blend_mode,
                            clip,
                            desc,
+                           (GskGpuImage *[2]) { bottom->image, top->image },
+                           (GskGpuSampler[2]) { bottom->sampler, top->sampler },
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
