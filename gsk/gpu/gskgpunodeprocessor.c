@@ -2988,10 +2988,14 @@ gsk_gpu_node_processor_add_color_matrix_node (GskGpuNodeProcessor *self,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                            gsk_gpu_node_processor_color_states_explicit (self, self->ccs, FALSE),
                            self->desc,
-                           descriptor,
-                           &node->bounds,
                            &self->offset,
-                           &tex_rect,
+                           &(GskGpuShaderImage) {
+                               image,
+                               GSK_GPU_SAMPLER_DEFAULT,
+                               descriptor,
+                               &node->bounds,
+                               &tex_rect,
+                           },
                            color_matrix,
                            gsk_color_matrix_node_get_color_offset (node));
 
