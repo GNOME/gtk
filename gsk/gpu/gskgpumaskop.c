@@ -51,17 +51,15 @@ static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
 };
 
 void
-gsk_gpu_mask_op (GskGpuFrame            *frame,
-                 GskGpuShaderClip        clip,
-                 GskGpuDescriptors      *desc,
-                 const graphene_rect_t  *rect,
-                 const graphene_point_t *offset,
-                 float                   opacity,
-                 GskMaskMode             mask_mode,
-                 guint32                 source_descriptor,
-                 const graphene_rect_t  *source_rect,
-                 guint32                 mask_descriptor,
-                 const graphene_rect_t  *mask_rect)
+gsk_gpu_mask_op (GskGpuFrame             *frame,
+                 GskGpuShaderClip         clip,
+                 GskGpuDescriptors       *desc,
+                 const graphene_rect_t   *rect,
+                 const graphene_point_t  *offset,
+                 float                    opacity,
+                 GskMaskMode              mask_mode,
+                 const GskGpuShaderImage *source,
+                 const GskGpuShaderImage *mask)
 {
   GskGpuMaskInstance *instance;
 
@@ -74,9 +72,9 @@ gsk_gpu_mask_op (GskGpuFrame            *frame,
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
-  gsk_gpu_rect_to_float (source_rect, offset, instance->source_rect);
-  instance->source_id = source_descriptor;
-  gsk_gpu_rect_to_float (mask_rect, offset, instance->mask_rect);
-  instance->mask_id = mask_descriptor;
+  gsk_gpu_rect_to_float (source->bounds, offset, instance->source_rect);
+  instance->source_id = source->descriptor;
+  gsk_gpu_rect_to_float (mask->bounds, offset, instance->mask_rect);
+  instance->mask_id = mask->descriptor;
   instance->opacity = opacity;
 }
