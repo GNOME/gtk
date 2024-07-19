@@ -53,17 +53,15 @@ static const GskGpuShaderOpClass GSK_GPU_BLUR_OP_CLASS = {
 };
 
 static void
-gsk_gpu_blur_op_full (GskGpuFrame            *frame,
-                      GskGpuShaderClip        clip,
-                      GskGpuColorStates       color_states,
-                      guint32                 variation,
-                      GskGpuDescriptors      *desc,
-                      guint32                 descriptor,
-                      const graphene_rect_t  *rect,
-                      const graphene_point_t *offset,
-                      const graphene_rect_t  *tex_rect,
-                      const graphene_vec2_t  *blur_direction,
-                      float                   blur_color[4])
+gsk_gpu_blur_op_full (GskGpuFrame             *frame,
+                      GskGpuShaderClip         clip,
+                      GskGpuColorStates        color_states,
+                      guint32                  variation,
+                      GskGpuDescriptors       *desc,
+                      const graphene_point_t  *offset,
+                      const GskGpuShaderImage *image,
+                      const graphene_vec2_t   *blur_direction,
+                      float                    blur_color[4])
 {
   GskGpuBlurInstance *instance;
 
@@ -75,58 +73,50 @@ gsk_gpu_blur_op_full (GskGpuFrame            *frame,
                            desc,
                            &instance);
 
-  gsk_gpu_rect_to_float (rect, offset, instance->rect);
-  gsk_gpu_rect_to_float (tex_rect, offset, instance->tex_rect);
+  gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);
+  gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
   graphene_vec2_to_float (blur_direction, instance->blur_direction);
   gsk_gpu_color_to_float (blur_color, instance->blur_color);
-  instance->tex_id = descriptor;
+  instance->tex_id = image->descriptor;
 }
 
 void
-gsk_gpu_blur_op (GskGpuFrame            *frame,
-                 GskGpuShaderClip        clip,
-                 GskGpuColorStates       color_states,
-                 GskGpuDescriptors      *desc,
-                 guint32                 descriptor,
-                 const graphene_rect_t  *rect,
-                 const graphene_point_t *offset,
-                 const graphene_rect_t  *tex_rect,
-                 const graphene_vec2_t  *blur_direction)
+gsk_gpu_blur_op (GskGpuFrame             *frame,
+                 GskGpuShaderClip         clip,
+                 GskGpuColorStates        color_states,
+                 GskGpuDescriptors       *desc,
+                 const graphene_point_t  *offset,
+                 const GskGpuShaderImage *image,
+                 const graphene_vec2_t   *blur_direction)
 {
   gsk_gpu_blur_op_full (frame,
                         clip,
                         color_states,
                         0,
                         desc,
-                        descriptor,
-                        rect,
                         offset,
-                        tex_rect,
+                        image,
                         blur_direction,
                         (float[4]) { 1, 1, 1, 1 });
 }
 
 void
-gsk_gpu_blur_shadow_op (GskGpuFrame            *frame,
-                        GskGpuShaderClip        clip,
-                        GskGpuColorStates       color_states,
-                        GskGpuDescriptors      *desc,
-                        guint32                 descriptor,
-                        const graphene_rect_t  *rect,
-                        const graphene_point_t *offset,
-                        const graphene_rect_t  *tex_rect,
-                        const graphene_vec2_t  *blur_direction,
-                        float                   shadow_color[4])
+gsk_gpu_blur_shadow_op (GskGpuFrame             *frame,
+                        GskGpuShaderClip         clip,
+                        GskGpuColorStates        color_states,
+                        GskGpuDescriptors       *desc,
+                        const graphene_point_t  *offset,
+                        const GskGpuShaderImage *image,
+                        const graphene_vec2_t   *blur_direction,
+                        float                    shadow_color[4])
 {
   gsk_gpu_blur_op_full (frame,
                         clip,
                         color_states,
                         VARIATION_COLORIZE,
                         desc,
-                        descriptor,
-                        rect,
                         offset,
-                        tex_rect,
+                        image,
                         blur_direction,
                         shadow_color);
 }
