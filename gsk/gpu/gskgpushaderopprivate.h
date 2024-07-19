@@ -25,9 +25,9 @@ struct _GskGpuShaderOp
   GskGpuDescriptors *desc;
   GskGpuImage *images[2];
   GskGpuSampler samplers[2];
+  GskGpuShaderFlags flags;
   GskGpuColorStates color_states;
   guint32 variation;
-  GskGpuShaderClip clip;
   gsize vertex_offset;
   gsize n_ops;
 };

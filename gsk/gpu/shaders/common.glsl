@@ -13,6 +13,8 @@ void            main_clip_rounded               (void);
 #include "common-gl.glsl"
 #endif
 
+#define GSK_SHADER_CLIP (GSK_FLAGS & 3u)
+
 #include "color.glsl"
 #include "rect.glsl"
 #include "roundedrect.glsl"

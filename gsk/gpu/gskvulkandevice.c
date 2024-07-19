@@ -77,9 +77,9 @@ struct _ConversionCacheEntry
 struct _PipelineCacheKey
 {
   const GskGpuShaderOpClass *op_class;
+  GskGpuShaderFlags flags;
   GskGpuColorStates color_states;
   guint32 variation;
-  GskGpuShaderClip clip;
   GskGpuBlend blend;
   VkFormat format;
   VkPipeline pipeline;
@@ -117,10 +117,11 @@ pipeline_cache_key_hash (gconstpointer data)
   const PipelineCacheKey *key = data;
 
   return GPOINTER_TO_UINT (key->op_class) ^
-         key->clip ^
-         (key->variation << 2) ^
-         (key->blend << 6) ^
-         (key->format << 8);
+         key->flags ^
+         (key->color_states << 8) ^
+         (key->variation << 16) ^
+         (key->blend << 24) ^
+         (key->format << 21) ^ (key->format >> 11);
 }
 
 static gboolean
@@ -131,8 +132,9 @@ pipeline_cache_key_equal (gconstpointer a,
   const PipelineCacheKey *keyb = b;
 
   return keya->op_class == keyb->op_class &&
+         keya->flags == keyb->flags &&
+         keya->color_states == keyb->color_states &&
          keya->variation == keyb->variation &&
-         keya->clip == keyb->clip &&
          keya->blend == keyb->blend &&
          keya->format == keyb->format;
 }
@@ -903,7 +905,7 @@ gsk_vulkan_device_get_vk_render_pass (GskVulkanDevice *self,
 typedef struct _GskVulkanShaderSpecialization GskVulkanShaderSpecialization;
 struct _GskVulkanShaderSpecialization
 {
-  guint32 clip;
+  guint32 flags;
   guint32 n_immutable_samplers;
   guint32 n_samplers;
   guint32 n_buffers;
@@ -964,9 +966,9 @@ VkPipeline
 gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                    GskVulkanPipelineLayout   *layout,
                                    const GskGpuShaderOpClass *op_class,
+                                   GskGpuShaderFlags          flags,
                                    GskGpuColorStates          color_states,
                                    guint32                    variation,
-                                   GskGpuShaderClip           clip,
                                    GskGpuBlend                blend,
                                    VkFormat                   format,
                                    VkRenderPass               render_pass)
@@ -978,14 +980,13 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   const char *version_string;
   char *vertex_shader_name, *fragment_shader_name;
   G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
-  const char *clip_name[] = { "NONE", "RECT", "ROUNDED" };
   const char *blend_name[] = { "NONE", "OVER", "ADD", "CLEAR" };
 
   cache_key = (PipelineCacheKey) {
     .op_class = op_class,
     .color_states = color_states,
     .variation = variation,
-    .clip = clip,
+    .flags = flags,
     .blend = blend,
     .format = format,
   };
@@ -1027,7 +1028,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                            .pMapEntries = (VkSpecializationMapEntry[6]) {
                                                                {
                                                                    .constantID = 0,
-                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, clip),
+                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, flags),
                                                                    .size = sizeof (guint32),
                                                                },
                                                                {
@@ -1058,7 +1059,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                            },
                                                            .dataSize = sizeof (GskVulkanShaderSpecialization),
                                                            .pData = &(GskVulkanShaderSpecialization) {
-                                                               .clip = clip,
+                                                               .flags = flags,
                                                                .n_immutable_samplers = MAX (1, layout->setup.n_immutable_samplers),
                                                                .n_samplers = layout->setup.n_samplers - MAX (3 * layout->setup.n_immutable_samplers, 1),
                                                                .n_buffers = layout->setup.n_buffers,
@@ -1077,7 +1078,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                            .pMapEntries = (VkSpecializationMapEntry[6]) {
                                                                {
                                                                    .constantID = 0,
-                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, clip),
+                                                                   .offset = G_STRUCT_OFFSET (GskVulkanShaderSpecialization, flags),
                                                                    .size = sizeof (guint32),
                                                                },
                                                                {
@@ -1108,7 +1109,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                                            },
                                                            .dataSize = sizeof (GskVulkanShaderSpecialization),
                                                            .pData = &(GskVulkanShaderSpecialization) {
-                                                               .clip = clip,
+                                                               .flags = flags,
                                                                .n_immutable_samplers = MAX (1, layout->setup.n_immutable_samplers),
                                                                .n_samplers = layout->setup.n_samplers - MAX (3 * layout->setup.n_immutable_samplers, 1),
                                                                .n_buffers = layout->setup.n_buffers,
@@ -1170,22 +1171,22 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                            &pipeline);
 
   gdk_profiler_end_markf (begin_time,
-                          "Create Vulkan pipeline", "%s version=%s color states=%u variation=%u clip=%s blend=%s format=%u",
+                          "Create Vulkan pipeline", "%s version=%s color states=%u variation=%u clip=%u blend=%s format=%u",
                           op_class->shader_name,
                           version_string + 1,
+                          flags,
                           color_states, 
                           variation,
-                          clip_name[clip],
                           blend_name[blend],
                           format);
 
   GSK_DEBUG (SHADERS,
-             "Create Vulkan pipeline (%s %s, %u/%u/%s/%s/%u) for layout (%" G_GSIZE_FORMAT "/%" G_GSIZE_FORMAT "/%" G_GSIZE_FORMAT ")",
+             "Create Vulkan pipeline (%s %s, %u/%u/%u/%s/%u) for layout (%" G_GSIZE_FORMAT "/%" G_GSIZE_FORMAT "/%" G_GSIZE_FORMAT ")",
              op_class->shader_name,
              version_string + 1,
+             flags,
              color_states, 
              variation,
-             clip_name[clip],
              blend_name[blend],
              format,
              layout->setup.n_buffers,

@@ -5,6 +5,7 @@
 #include "gskgpucolorstatesprivate.h"
 #include "gskgpudescriptorsprivate.h"
 #include "gskgpuimageprivate.h"
+#include "gskgpushaderflagsprivate.h"
 
 void
 gsk_gpu_print_indent (GString *string,
@@ -14,9 +15,11 @@ gsk_gpu_print_indent (GString *string,
 }
 
 void
-gsk_gpu_print_shader_clip (GString          *string,
-                           GskGpuShaderClip  clip)
+gsk_gpu_print_shader_flags (GString           *string,
+                            GskGpuShaderFlags  flags)
 {
+  GskGpuShaderClip clip = gsk_gpu_shader_flags_get_clip (flags);
+
   switch (clip)
     {
       case GSK_GPU_SHADER_CLIP_NONE:

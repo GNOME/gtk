@@ -10,7 +10,7 @@ layout(push_constant) uniform PushConstants {
     vec2 scale;
 } push;
 
-layout(constant_id=0) const uint GSK_SHADER_CLIP = GSK_GPU_SHADER_CLIP_NONE;
+layout(constant_id=0) const uint GSK_FLAGS = 0;
 layout(constant_id=1) const uint GSK_N_IMMUTABLE_SAMPLERS = 32;
 layout(constant_id=2) const uint GSK_N_SAMPLERS = 32;
 layout(constant_id=3) const uint GSK_N_BUFFERS = 32;
