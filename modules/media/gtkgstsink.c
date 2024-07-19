@@ -379,7 +379,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
 #ifdef HAVE_GSTREAMER_DRM
   if (gst_is_dmabuf_memory (gst_buffer_peek_memory (buffer, 0)))
     {
-      g_autoptr (GdkDmabufTextureBuilder) builder = NULL;
+      GdkDmabufTextureBuilder *builder = NULL;
       const GstVideoMeta *vmeta = gst_buffer_get_video_meta (buffer);
       GError *error = NULL;
       int i;
@@ -427,6 +427,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
                                                   (GDestroyNotify) gst_buffer_unref,
                                                   gst_buffer_ref (buffer),
                                                   &error);
+      g_object_unref (builder);
       if (!texture)
         GST_ERROR_OBJECT (self, "Failed to create dmabuf texture: %s", error->message);
 

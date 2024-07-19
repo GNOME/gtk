@@ -55,14 +55,6 @@ gsk_gl_frame_wait (GskGpuFrame *frame)
 }
 
 static void
-gsk_gl_frame_setup (GskGpuFrame *frame)
-{
-  GskGLFrame *self = GSK_GL_FRAME (frame);
-
-  glGenBuffers (1, &self->globals_buffer_id);
-}
-
-static void
 gsk_gl_frame_cleanup (GskGpuFrame *frame)
 {
   GskGLFrame *self = GSK_GL_FRAME (frame);
@@ -207,7 +199,8 @@ gsk_gl_frame_finalize (GObject *object)
   GskGLFrame *self = GSK_GL_FRAME (object);
 
   g_hash_table_unref (self->vaos);
-  glDeleteBuffers (1, &self->globals_buffer_id);
+  if (self->globals_buffer_id != 0)
+    glDeleteBuffers (1, &self->globals_buffer_id);
 
   G_OBJECT_CLASS (gsk_gl_frame_parent_class)->finalize (object);
 }
@@ -220,7 +213,6 @@ gsk_gl_frame_class_init (GskGLFrameClass *klass)
 
   gpu_frame_class->is_busy = gsk_gl_frame_is_busy;
   gpu_frame_class->wait = gsk_gl_frame_wait;
-  gpu_frame_class->setup = gsk_gl_frame_setup;
   gpu_frame_class->cleanup = gsk_gl_frame_cleanup;
   gpu_frame_class->upload_texture = gsk_gl_frame_upload_texture;
   gpu_frame_class->create_descriptors = gsk_gl_frame_create_descriptors;
@@ -276,6 +268,9 @@ gsk_gl_frame_use_program (GskGLFrame                *self,
 void
 gsk_gl_frame_bind_globals (GskGLFrame *self)
 {
+  if (self->globals_buffer_id == 0)
+    glGenBuffers (1, &self->globals_buffer_id);
+
   glBindBufferBase (GL_UNIFORM_BUFFER, 0, self->globals_buffer_id);
 }
 
