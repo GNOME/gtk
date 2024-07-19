@@ -14,8 +14,7 @@ GskVulkanRealDescriptors *      gsk_vulkan_real_descriptors_new                 
 gboolean                        gsk_vulkan_real_descriptors_is_full             (GskVulkanRealDescriptors       *self);
 
 void                            gsk_vulkan_real_descriptors_prepare             (GskVulkanRealDescriptors       *self,
-                                                                                 gsize                          *n_images,
-                                                                                 gsize                          *n_buffers);
+                                                                                 gsize                          *n_images);
 void                            gsk_vulkan_real_descriptors_update_sets         (GskVulkanRealDescriptors       *self,
                                                                                  VkDescriptorPool                vk_descriptor_pool);
 

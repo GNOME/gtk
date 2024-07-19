@@ -242,26 +242,23 @@ gsk_vulkan_frame_prepare_descriptors (GskVulkanFrame *self)
 {
   GskVulkanDevice *device;
   VkDevice vk_device;
-  gsize i, n_images, n_buffers, n_sets;
+  gsize i, n_images, n_sets;
 
   device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self)));
   vk_device = gsk_vulkan_device_get_vk_device (device);
 
   n_images = 0;
-  n_buffers = 0;
   n_sets = 2 * gsk_descriptors_get_size (&self->descriptors);
   for (i = 0; i < gsk_descriptors_get_size (&self->descriptors); i++)
     {
-      gsize n_desc_images, n_desc_buffers;
+      gsize n_desc_images;
       GskVulkanRealDescriptors *desc = gsk_descriptors_get (&self->descriptors, i);
-      gsk_vulkan_real_descriptors_prepare (desc, &n_desc_images, &n_desc_buffers);
+      gsk_vulkan_real_descriptors_prepare (desc, &n_desc_images);
       n_images += n_desc_images;
-      n_buffers += n_desc_buffers;
     }
 
   if (n_sets > self->pool_n_sets ||
-      n_images > self->pool_n_images ||
-      n_buffers > self->pool_n_buffers)
+      n_images > self->pool_n_images)
     {
       if (self->vk_descriptor_pool != VK_NULL_HANDLE)
         {
@@ -274,8 +271,6 @@ gsk_vulkan_frame_prepare_descriptors (GskVulkanFrame *self)
         self->pool_n_sets = 4 << g_bit_nth_msf (n_sets - 1, -1);
       if (n_images > self->pool_n_images)
         self->pool_n_images = 2 << g_bit_nth_msf (n_images - 1, -1);
-      if (n_buffers > self->pool_n_buffers)
-        self->pool_n_buffers = 4 << g_bit_nth_msf (n_buffers - 1, -1);
     }
 
   if (self->vk_descriptor_pool == VK_NULL_HANDLE)

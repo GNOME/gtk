@@ -2,7 +2,6 @@
 
 #include "gskvulkandescriptorsprivate.h"
 
-#include "gskvulkanbufferprivate.h"
 #include "gskvulkanframeprivate.h"
 #include "gskvulkanimageprivate.h"
 
