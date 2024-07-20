@@ -3,7 +3,6 @@
 #include "gskgpuprintprivate.h"
 
 #include "gskgpucolorstatesprivate.h"
-#include "gskgpudescriptorsprivate.h"
 #include "gskgpuimageprivate.h"
 #include "gskgpushaderflagsprivate.h"
 
@@ -165,14 +164,5 @@ gsk_gpu_print_image (GString     *string,
                           gsk_gpu_image_get_height (image),
                           gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB ? "S" : "",
                           gdk_memory_format_get_name (gsk_gpu_image_get_format (image)));
-}
-
-void
-gsk_gpu_print_image_descriptor (GString           *string,
-                                GskGpuDescriptors *desc,
-                                guint32            descriptor)
-{
-  gsize id = gsk_gpu_descriptors_find_image (desc, descriptor);
-  gsk_gpu_print_image (string, gsk_gpu_descriptors_get_image (desc, id));
 }
 

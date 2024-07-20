@@ -5,11 +5,9 @@
 
 #include "gdk/gdkmemoryformatprivate.h"
 
-typedef struct _GskGLDescriptors        GskGLDescriptors;
 typedef struct _GskGpuBuffer            GskGpuBuffer;
 typedef struct _GskGpuCache             GskGpuCache;
 typedef guint32                         GskGpuColorStates;
-typedef struct _GskGpuDescriptors       GskGpuDescriptors;
 typedef struct _GskGpuDevice            GskGpuDevice;
 typedef struct _GskGpuFrame             GskGpuFrame;
 typedef struct _GskGpuImage             GskGpuImage;
@@ -19,7 +17,6 @@ typedef guint32                         GskGpuShaderFlags;
 typedef struct _GskGpuShaderImage       GskGpuShaderImage;
 typedef struct _GskGpuShaderOp          GskGpuShaderOp;
 typedef struct _GskGpuShaderOpClass     GskGpuShaderOpClass;
-typedef struct _GskVulkanDescriptors    GskVulkanDescriptors;
 typedef struct _GskVulkanSemaphores     GskVulkanSemaphores;
 
 typedef enum {

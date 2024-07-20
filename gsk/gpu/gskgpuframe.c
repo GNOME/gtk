@@ -473,12 +473,6 @@ gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
   return image;
 }
 
-GskGpuDescriptors *
-gsk_gpu_frame_create_descriptors (GskGpuFrame *self)
-{
-  return GSK_GPU_FRAME_GET_CLASS (self)->create_descriptors (self);
-}
-
 static GskGpuBuffer *
 gsk_gpu_frame_create_vertex_buffer (GskGpuFrame *self,
                                     gsize        size)

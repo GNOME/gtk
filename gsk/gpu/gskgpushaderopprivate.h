@@ -13,7 +13,6 @@ struct _GskGpuShaderImage
 {
   GskGpuImage           *image;         /* image to draw */
   GskGpuSampler          sampler;       /* sampler to use for image */
-  guint32                descriptor;    /* FIXME: preallocated descriptor for image + sampler */
   const graphene_rect_t *coverage;      /* the clip area for the image or NULL for unclipped */
   const graphene_rect_t *bounds;        /* bounds for the image */
 };
@@ -22,7 +21,6 @@ struct _GskGpuShaderOp
 {
   GskGpuOp parent_op;
 
-  GskGpuDescriptors *desc;
   GskGpuImage *images[2];
   GskGpuSampler samplers[2];
   GskGpuShaderFlags flags;
@@ -54,7 +52,6 @@ void                    gsk_gpu_shader_op_alloc                         (GskGpuF
                                                                          GskGpuColorStates       color_states,
                                                                          guint32                 variation,
                                                                          GskGpuShaderClip        clip,
-                                                                         GskGpuDescriptors      *desc,
                                                                          GskGpuImage           **images,
                                                                          GskGpuSampler          *samplers,
                                                                          gpointer                out_vertex_data);

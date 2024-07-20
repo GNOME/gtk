@@ -15,8 +15,7 @@ void                    gsk_gl_device_use_program                       (GskGLDe
                                                                          const GskGpuShaderOpClass *op_class,
                                                                          GskGpuShaderFlags       flags,
                                                                          GskGpuColorStates       color_states,
-                                                                         guint32                 variation,
-                                                                         guint                   n_external_textures);
+                                                                         guint32                 variation);
 
 GLuint                  gsk_gl_device_get_sampler_id                    (GskGLDevice            *self,
                                                                          GskGpuSampler           sampler);

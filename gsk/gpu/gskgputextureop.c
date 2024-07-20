@@ -51,7 +51,6 @@ static const GskGpuShaderOpClass GSK_GPU_TEXTURE_OP_CLASS = {
 void
 gsk_gpu_texture_op (GskGpuFrame             *frame,
                     GskGpuShaderClip         clip,
-                    GskGpuDescriptors       *desc,
                     const graphene_point_t  *offset,
                     const GskGpuShaderImage *image)
 {
@@ -62,7 +61,6 @@ gsk_gpu_texture_op (GskGpuFrame             *frame,
                            gsk_gpu_color_states_create_equal (TRUE, TRUE),
                            0,
                            clip,
-                           desc,
                            (GskGpuImage *[1]) { image->image },
                            (GskGpuSampler[1]) { image->sampler },
                            &instance);

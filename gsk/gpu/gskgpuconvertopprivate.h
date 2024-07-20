@@ -10,7 +10,6 @@ void                    gsk_gpu_convert_op                              (GskGpuF
                                                                          GskGpuShaderClip                clip,
                                                                          GskGpuColorStates               color_states,
                                                                          float                           opacity,
-                                                                         GskGpuDescriptors              *desc,
                                                                          gboolean                        straight_alpha,
                                                                          const graphene_point_t         *offset,
                                                                          const GskGpuShaderImage        *image);

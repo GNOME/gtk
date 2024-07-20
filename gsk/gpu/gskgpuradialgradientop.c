@@ -81,7 +81,6 @@ gsk_gpu_radial_gradient_op (GskGpuFrame            *frame,
                            clip,
                            NULL,
                            NULL,
-                           NULL,
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);

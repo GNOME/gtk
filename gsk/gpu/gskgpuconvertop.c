@@ -59,7 +59,6 @@ gsk_gpu_convert_op (GskGpuFrame             *frame,
                     GskGpuShaderClip         clip,
                     GskGpuColorStates        color_states,
                     float                    opacity,
-                    GskGpuDescriptors       *desc,
                     gboolean                 straight_alpha,
                     const graphene_point_t  *offset,
                     const GskGpuShaderImage *image)
@@ -72,7 +71,6 @@ gsk_gpu_convert_op (GskGpuFrame             *frame,
                            (opacity < 1.0 ? VARIATION_OPACITY : 0) |
                            (straight_alpha ? VARIATION_STRAIGHT_ALPHA : 0),
                            clip,
-                           desc,
                            (GskGpuImage *[1]) { image->image },
                            (GskGpuSampler[1]) { image->sampler },
                            &instance);

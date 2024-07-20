@@ -11,7 +11,6 @@
 #include "gskrendernodeprivate.h"
 #ifdef GDK_RENDERING_VULKAN
 #include "gskvulkanimageprivate.h"
-#include "gskvulkandescriptorsprivate.h"
 #endif
 
 typedef struct _GskGpuRenderPassOp GskGpuRenderPassOp;
@@ -72,6 +71,7 @@ static void
 gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp     *self,
                                     GskVulkanCommandState  *state)
 {
+#if 0
   GskGpuShaderOp *shader;
   GskGpuOp *op;
   GskGpuDescriptors *desc = NULL;
@@ -99,6 +99,7 @@ gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp     *self,
 
   if (desc == NULL)
     gsk_vulkan_descriptors_transition (state->desc, state->semaphores, state->vk_command_buffer);
+#endif
 }
 
 static GskGpuOp *

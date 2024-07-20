@@ -159,7 +159,7 @@ gsk_gpu_mipmap_op_gl_command (GskGpuOp          *op,
   glActiveTexture (GL_TEXTURE0);
   gsk_gl_image_bind_texture (GSK_GL_IMAGE (self->image));
   /* need to reset the images again */
-  state->desc = NULL;
+  state->current_images[0] = NULL;
 
   glGenerateMipmap (GL_TEXTURE_2D);
 

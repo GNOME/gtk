@@ -4,22 +4,12 @@
 
 #include "gskgpuopprivate.h"
 #include "gskvulkanbufferprivate.h"
-#include "gskvulkandescriptorsprivate.h"
 #include "gskvulkandeviceprivate.h"
 #include "gskvulkanimageprivate.h"
-#include "gskvulkanrealdescriptorsprivate.h"
-#include "gskvulkansubdescriptorsprivate.h"
 
 #include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 #include "gdk/gdkgltextureprivate.h"
-
-#define GDK_ARRAY_NAME gsk_descriptors
-#define GDK_ARRAY_TYPE_NAME GskDescriptors
-#define GDK_ARRAY_ELEMENT_TYPE GskVulkanRealDescriptors *
-#define GDK_ARRAY_FREE_FUNC g_object_unref
-#define GDK_ARRAY_NO_MEMSET 1
-#include "gdk/gdkarrayimpl.c"
 
 #define GDK_ARRAY_NAME gsk_semaphores
 #define GDK_ARRAY_TYPE_NAME GskSemaphores
@@ -50,8 +40,6 @@ struct _GskVulkanFrame
   VkFence vk_fence;
   VkCommandBuffer vk_command_buffer;
   VkDescriptorPool vk_descriptor_pool;
-
-  GskDescriptors descriptors;
 
   gsize pool_n_sets;
   gsize pool_n_images;
@@ -158,8 +146,6 @@ gsk_vulkan_frame_cleanup (GskGpuFrame *frame)
                                            0);
     }
 
-  gsk_descriptors_set_size (&self->descriptors, 0);
-
   GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->cleanup (frame);
 }
 
@@ -240,6 +226,7 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
 static void
 gsk_vulkan_frame_prepare_descriptors (GskVulkanFrame *self)
 {
+#if 0
   GskVulkanDevice *device;
   VkDevice vk_device;
   gsize i, n_images, n_sets;
@@ -302,43 +289,7 @@ gsk_vulkan_frame_prepare_descriptors (GskVulkanFrame *self)
 
       gsk_vulkan_real_descriptors_update_sets (desc, self->vk_descriptor_pool);
     }
-}
-
-static GskGpuDescriptors *
-gsk_vulkan_frame_create_descriptors (GskGpuFrame *frame)
-{
-  GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
-
-  if (gsk_vulkan_device_has_feature (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)), GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING))
-    {
-      GskVulkanRealDescriptors *parent;
-
-      if (gsk_descriptors_get_size (&self->descriptors) > 0)
-        {
-          parent = gsk_descriptors_get (&self->descriptors, gsk_descriptors_get_size (&self->descriptors) - 1);
-          if (gsk_vulkan_real_descriptors_is_full (parent))
-            parent = NULL;
-        }
-      else
-        parent = NULL;
-
-      if (parent == NULL)
-        {
-          parent = gsk_vulkan_real_descriptors_new (self);
-          gsk_descriptors_append (&self->descriptors, parent);
-        }
-
-      return GSK_GPU_DESCRIPTORS (gsk_vulkan_sub_descriptors_new (GSK_VULKAN_DESCRIPTORS (parent)));
-    }
-  else
-    {
-      GskVulkanRealDescriptors *desc;
-
-      desc = gsk_vulkan_real_descriptors_new (self);
-      gsk_descriptors_append (&self->descriptors, desc);
-
-      return GSK_GPU_DESCRIPTORS (g_object_ref (desc));
-    }
+#endif
 }
 
 static GskGpuBuffer *
@@ -374,8 +325,10 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
   GskVulkanSemaphores semaphores;
   GskVulkanCommandState state;
 
+#if 0
   if (gsk_descriptors_get_size (&self->descriptors) == 0)
     gsk_descriptors_append (&self->descriptors, gsk_vulkan_real_descriptors_new (self));
+#endif
 
   gsk_vulkan_frame_prepare_descriptors (self);
 
@@ -409,12 +362,7 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
   state.vk_render_pass = VK_NULL_HANDLE;
   state.vk_format = VK_FORMAT_UNDEFINED;
   state.blend = GSK_GPU_BLEND_OVER; /* should we have a BLEND_NONE? */
-  state.desc = GSK_VULKAN_DESCRIPTORS (gsk_descriptors_get (&self->descriptors, 0));
   state.semaphores = &semaphores;
-
-  gsk_vulkan_descriptors_bind (GSK_VULKAN_DESCRIPTORS (gsk_descriptors_get (&self->descriptors, 0)),
-                               NULL,
-                               state.vk_command_buffer);
 
   while (op)
     {
@@ -460,7 +408,6 @@ gsk_vulkan_frame_finalize (GObject *object)
                                self->vk_descriptor_pool,
                                NULL);
     }
-  gsk_descriptors_clear (&self->descriptors);
 
   vkFreeCommandBuffers (vk_device,
                         vk_command_pool,
@@ -487,7 +434,6 @@ gsk_vulkan_frame_class_init (GskVulkanFrameClass *klass)
   gpu_frame_class->cleanup = gsk_vulkan_frame_cleanup;
   gpu_frame_class->begin = gsk_vulkan_frame_begin;
   gpu_frame_class->upload_texture = gsk_vulkan_frame_upload_texture;
-  gpu_frame_class->create_descriptors = gsk_vulkan_frame_create_descriptors;
   gpu_frame_class->create_vertex_buffer = gsk_vulkan_frame_create_vertex_buffer;
   gpu_frame_class->create_storage_buffer = gsk_vulkan_frame_create_storage_buffer;
   gpu_frame_class->write_texture_vertex_data = gsk_vulkan_frame_write_texture_vertex_data;
@@ -499,8 +445,6 @@ gsk_vulkan_frame_class_init (GskVulkanFrameClass *klass)
 static void
 gsk_vulkan_frame_init (GskVulkanFrame *self)
 {
-  gsk_descriptors_init (&self->descriptors);
-
   self->pool_n_sets = 4;
   self->pool_n_images = 8;
   self->pool_n_buffers = 8;

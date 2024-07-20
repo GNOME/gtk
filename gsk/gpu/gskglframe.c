@@ -6,7 +6,6 @@
 #include "gskgpuopprivate.h"
 #include "gskgpushaderopprivate.h"
 #include "gskglbufferprivate.h"
-#include "gskgldescriptorsprivate.h"
 #include "gskgldeviceprivate.h"
 #include "gskglimageprivate.h"
 
@@ -125,12 +124,6 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
   return GSK_GPU_FRAME_CLASS (gsk_gl_frame_parent_class)->upload_texture (frame, with_mipmap, texture);
 }
 
-static GskGpuDescriptors *
-gsk_gl_frame_create_descriptors (GskGpuFrame *frame)
-{
-  return GSK_GPU_DESCRIPTORS (gsk_gl_descriptors_new (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame))));
-}
-
 static GskGpuBuffer *
 gsk_gl_frame_create_vertex_buffer (GskGpuFrame *frame,
                                    gsize        size)
@@ -227,7 +220,6 @@ gsk_gl_frame_class_init (GskGLFrameClass *klass)
   gpu_frame_class->wait = gsk_gl_frame_wait;
   gpu_frame_class->cleanup = gsk_gl_frame_cleanup;
   gpu_frame_class->upload_texture = gsk_gl_frame_upload_texture;
-  gpu_frame_class->create_descriptors = gsk_gl_frame_create_descriptors;
   gpu_frame_class->create_vertex_buffer = gsk_gl_frame_create_vertex_buffer;
   gpu_frame_class->create_storage_buffer = gsk_gl_frame_create_storage_buffer;
   gpu_frame_class->write_texture_vertex_data = gsk_gl_frame_write_texture_vertex_data;
@@ -253,8 +245,7 @@ gsk_gl_frame_use_program (GskGLFrame                *self,
                           const GskGpuShaderOpClass *op_class,
                           GskGpuShaderFlags          flags,
                           GskGpuColorStates          color_states,
-                          guint32                    variation,
-                          guint                      n_external_textures)
+                          guint32                    variation)
 {
   GLuint vao;
 
@@ -262,8 +253,7 @@ gsk_gl_frame_use_program (GskGLFrame                *self,
                              op_class,
                              flags,
                              color_states,
-                             variation,
-                             n_external_textures);
+                             variation);
 
   vao = GPOINTER_TO_UINT (g_hash_table_lookup (self->vaos, op_class));
   if (vao)

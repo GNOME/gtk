@@ -55,7 +55,6 @@ static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
 void
 gsk_gpu_blend_mode_op (GskGpuFrame             *frame,
                        GskGpuShaderClip         clip,
-                       GskGpuDescriptors       *desc,
                        const graphene_rect_t   *rect,
                        const graphene_point_t  *offset,
                        float                    opacity,
@@ -70,7 +69,6 @@ gsk_gpu_blend_mode_op (GskGpuFrame             *frame,
                            gsk_gpu_color_states_create_equal (TRUE, TRUE),
                            blend_mode,
                            clip,
-                           desc,
                            (GskGpuImage *[2]) { bottom->image, top->image },
                            (GskGpuSampler[2]) { bottom->sampler, top->sampler },
                            &instance);

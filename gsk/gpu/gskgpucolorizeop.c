@@ -53,7 +53,6 @@ void
 gsk_gpu_colorize_op (GskGpuFrame             *frame,
                      GskGpuShaderClip         clip,
                      GskGpuColorStates        color_states,
-                     GskGpuDescriptors       *descriptors,
                      const graphene_point_t  *offset,
                      const GskGpuShaderImage *image,
                      const float              color[4])
@@ -65,7 +64,6 @@ gsk_gpu_colorize_op (GskGpuFrame             *frame,
                            color_states,
                            0,
                            clip,
-                           descriptors,
                            (GskGpuImage *[1]) { image->image },
                            (GskGpuSampler[1]) { image->sampler },
                            &instance);

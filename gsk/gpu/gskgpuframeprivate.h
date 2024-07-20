@@ -36,7 +36,6 @@ struct _GskGpuFrameClass
   GskGpuImage *         (* upload_texture)                              (GskGpuFrame            *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkTexture             *texture);
-  GskGpuDescriptors *   (* create_descriptors)                          (GskGpuFrame            *self);
   GskGpuBuffer *        (* create_vertex_buffer)                        (GskGpuFrame            *self,
                                                                          gsize                   size);
   GskGpuBuffer *        (* create_storage_buffer)                       (GskGpuFrame            *self,
@@ -82,7 +81,6 @@ gpointer                gsk_gpu_frame_alloc_op                          (GskGpuF
 GskGpuImage *           gsk_gpu_frame_upload_texture                    (GskGpuFrame            *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkTexture             *texture);
-GskGpuDescriptors *     gsk_gpu_frame_create_descriptors                (GskGpuFrame            *self);
 gsize                   gsk_gpu_frame_reserve_vertex_data               (GskGpuFrame            *self,
                                                                          gsize                   size);
 guchar *                gsk_gpu_frame_get_vertex_data                   (GskGpuFrame            *self,

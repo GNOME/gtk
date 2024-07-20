@@ -34,6 +34,3 @@ void                    gsk_gpu_print_rgba                              (GString
                                                                          const float                     rgba[4]);
 void                    gsk_gpu_print_image                             (GString                        *string,
                                                                          GskGpuImage                    *image);
-void                    gsk_gpu_print_image_descriptor                  (GString                        *string,
-                                                                         GskGpuDescriptors              *desc,
-                                                                         guint32                         descriptor);

@@ -28,11 +28,9 @@ struct _GskGLCommandState
     GskGpuShaderFlags flags;
     GskGpuColorStates color_states;
     guint32 variation;
-    gsize n_external;
   } current_program;
   GskGpuImage *current_images[2];
   GskGpuSampler current_samplers[2];
-  GskGLDescriptors *desc;
 };
 
 #ifdef GDK_RENDERING_VULKAN
@@ -43,7 +41,6 @@ struct _GskVulkanCommandState
   VkCommandBuffer vk_command_buffer;
   GskGpuBlend blend;
 
-  GskVulkanDescriptors *desc;
   GskVulkanSemaphores *semaphores;
 };
 #endif

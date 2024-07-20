@@ -54,7 +54,6 @@ static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
 void
 gsk_gpu_mask_op (GskGpuFrame             *frame,
                  GskGpuShaderClip         clip,
-                 GskGpuDescriptors       *desc,
                  const graphene_rect_t   *rect,
                  const graphene_point_t  *offset,
                  float                    opacity,
@@ -69,7 +68,6 @@ gsk_gpu_mask_op (GskGpuFrame             *frame,
                            gsk_gpu_color_states_create_equal (TRUE, TRUE),
                            mask_mode,
                            clip,
-                           desc,
                            (GskGpuImage *[2]) { source->image, mask->image },
                            (GskGpuSampler[2]) { source->sampler, mask->sampler },
                            &instance);

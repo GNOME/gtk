@@ -12,8 +12,7 @@ void                    gsk_gl_frame_use_program                        (GskGLFr
                                                                          const GskGpuShaderOpClass *op_class,
                                                                          GskGpuShaderFlags       flags,
                                                                          GskGpuColorStates       color_states,
-                                                                         guint32                 variation,
-                                                                         guint                   n_external_textures);
+                                                                         guint32                 variation);
 
 void                    gsk_gl_frame_bind_globals                       (GskGLFrame             *self);
 

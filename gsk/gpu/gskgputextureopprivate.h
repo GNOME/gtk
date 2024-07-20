@@ -8,7 +8,6 @@ G_BEGIN_DECLS
 
 void                    gsk_gpu_texture_op                              (GskGpuFrame                    *frame,
                                                                          GskGpuShaderClip                clip,
-                                                                         GskGpuDescriptors              *desc,
                                                                          const graphene_point_t         *offset,
                                                                          const GskGpuShaderImage        *image);
 
