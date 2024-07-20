@@ -25,8 +25,8 @@ gsk_gpu_mask_op_print_instance (GskGpuShaderOp *shader,
 
   gsk_gpu_print_enum (string, GSK_TYPE_MASK_MODE, shader->variation);
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->source_id);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->mask_id);
+  gsk_gpu_print_image (string, shader->images[0]);
+  gsk_gpu_print_image (string, shader->images[1]);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
@@ -76,8 +76,6 @@ gsk_gpu_mask_op (GskGpuFrame             *frame,
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   gsk_gpu_rect_to_float (source->bounds, offset, instance->source_rect);
-  instance->source_id = source->descriptor;
   gsk_gpu_rect_to_float (mask->bounds, offset, instance->mask_rect);
-  instance->mask_id = mask->descriptor;
   instance->opacity = opacity;
 }

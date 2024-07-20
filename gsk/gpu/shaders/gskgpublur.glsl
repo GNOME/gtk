@@ -12,7 +12,6 @@ PASS_FLAT(2) vec4 _blur_color;
 PASS(3) vec2 _tex_coord;
 PASS_FLAT(4) vec2 _tex_blur_step;
 PASS_FLAT(5) uint _samples_per_side;
-PASS_FLAT(6) uint _tex_id;
 PASS_FLAT(7) vec3 _initial_gaussian;
 
 
@@ -22,7 +21,6 @@ IN(0) vec4 in_rect;
 IN(1) vec4 in_blur_color;
 IN(2) vec4 in_tex_rect;
 IN(3) vec2 in_blur_direction;
-IN(4) uint in_tex_id;
 
 void
 run (out vec2 pos)
@@ -36,7 +34,6 @@ run (out vec2 pos)
   _blur_color = output_color_from_alt (in_blur_color);
   Rect tex_rect = rect_from_gsk (in_tex_rect);
   _tex_coord = rect_get_coord (tex_rect, pos);
-  _tex_id = in_tex_id;
 
   float blur_radius = length (GSK_GLOBAL_SCALE * in_blur_direction);
   _tex_blur_step = GSK_GLOBAL_SCALE * in_blur_direction / blur_radius / rect_size (tex_rect);
@@ -58,15 +55,15 @@ run (out vec4 color,
      out vec2 position)
 {
   vec3 incremental_gaussian = _initial_gaussian;
-  vec4 sum = gsk_texture (_tex_id, _tex_coord) * incremental_gaussian.x;
+  vec4 sum = texture (GSK_TEXTURE0, _tex_coord) * incremental_gaussian.x;
   float coefficient_sum = incremental_gaussian.x;
   incremental_gaussian.xy *= incremental_gaussian.yz;
   vec2 p = _tex_blur_step;
 
   for (uint i = 0u; i < _samples_per_side; i++)
     {
-      sum += gsk_texture (_tex_id, _tex_coord - p) * incremental_gaussian.x;
-      sum += gsk_texture (_tex_id, _tex_coord + p) * incremental_gaussian.x;
+      sum += texture (GSK_TEXTURE0, _tex_coord - p) * incremental_gaussian.x;
+      sum += texture (GSK_TEXTURE0, _tex_coord + p) * incremental_gaussian.x;
 
       coefficient_sum += 2.0 * incremental_gaussian.x;
       incremental_gaussian.xy *= incremental_gaussian.yz;

@@ -554,7 +554,6 @@ gsk_gl_device_use_program (GskGLDevice               *self,
     .variation = variation,
     .n_external_textures = n_external_textures
   };
-  guint i, n_textures;
 
   program_id = GPOINTER_TO_UINT (g_hash_table_lookup (self->gl_programs, &key));
   if (program_id)
@@ -575,21 +574,9 @@ gsk_gl_device_use_program (GskGLDevice               *self,
 
   glUseProgram (program_id);
 
-  n_textures = 16 - 3 * n_external_textures;
-
-  for (i = 0; i < n_external_textures; i++)
-    {
-      char *name = g_strdup_printf ("external_textures[%u]", i);
-      glUniform1i (glGetUniformLocation (program_id, name), n_textures + 3 * i);
-      g_free (name);
-    }
-
-  for (i = 0; i < n_textures; i++)
-    {
-      char *name = g_strdup_printf ("textures[%u]", i);
-      glUniform1i (glGetUniformLocation (program_id, name), i);
-      g_free (name);
-    }
+  /* space by 3 because external textures may need 3 texture units */
+  glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE0"), 0);
+  glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE1"), 3);
 }
 
 GLuint

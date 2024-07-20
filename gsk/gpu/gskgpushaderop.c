@@ -174,10 +174,20 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
                                 n_external);
     }
 
-  if (desc != state->desc && desc)
+  for (i = 0; i < shader_op_class->n_textures; i++)
     {
-      gsk_gl_descriptors_use (desc);
-      state->desc = desc;
+      if (state->current_images[i] != self->images[i])
+        {
+          glActiveTexture (GL_TEXTURE0 + 3 * i);
+          gsk_gl_image_bind_texture (GSK_GL_IMAGE (self->images[i]));
+          state->current_images[i] = self->images[i];
+        }
+      if (state->current_samplers[i] != self->samplers[i])
+        {
+          glBindSampler (3 * i, gsk_gl_device_get_sampler_id (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                              self->samplers[i]));
+          state->current_samplers[i] = self->samplers[i];
+        }
     }
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))

@@ -23,7 +23,7 @@ gsk_gpu_colorize_op_print_instance (GskGpuShaderOp *shader,
   GskGpuColorizeInstance *instance = (GskGpuColorizeInstance *) instance_;
 
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
+  gsk_gpu_print_image (string, shader->images[0]);
   gsk_gpu_print_rgba (string, instance->color);
 }
 
@@ -72,6 +72,5 @@ gsk_gpu_colorize_op (GskGpuFrame             *frame,
 
   gsk_gpu_rect_to_float (image->coverage ? image->coverage : image->bounds, offset, instance->rect);
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
-  instance->tex_id = image->descriptor;
   gsk_gpu_color_to_float (color, instance->color);
 }

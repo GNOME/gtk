@@ -27,7 +27,7 @@ gsk_gpu_convert_op_print_instance (GskGpuShaderOp *shader,
   GskGpuConvertInstance *instance = (GskGpuConvertInstance *) instance_;
 
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
+  gsk_gpu_print_image (string, shader->images[0]);
   if (shader->variation & VARIATION_STRAIGHT_ALPHA)
     gsk_gpu_print_string (string, "straight");
 }
@@ -79,7 +79,6 @@ gsk_gpu_convert_op (GskGpuFrame             *frame,
 
   gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
-  instance->tex_id = image->descriptor;
   instance->opacity = opacity;
 }
 

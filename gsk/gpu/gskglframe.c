@@ -176,7 +176,10 @@ gsk_gl_frame_submit (GskGpuFrame       *frame,
                      GskGpuOp          *op)
 {
   GskGLFrame *self = GSK_GL_FRAME (frame);
-  GskGLCommandState state = { 0, };
+  GskGLCommandState state = {
+    /* rest is 0 */
+    .current_samplers = { GSK_GPU_SAMPLER_N_SAMPLERS, GSK_GPU_SAMPLER_N_SAMPLERS }
+  };
 
   glEnable (GL_SCISSOR_TEST);
 

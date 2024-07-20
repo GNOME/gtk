@@ -30,6 +30,8 @@ struct _GskGLCommandState
     guint32 variation;
     gsize n_external;
   } current_program;
+  GskGpuImage *current_images[2];
+  GskGpuSampler current_samplers[2];
   GskGLDescriptors *desc;
 };
 

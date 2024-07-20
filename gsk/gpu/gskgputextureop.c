@@ -23,7 +23,7 @@ gsk_gpu_texture_op_print_instance (GskGpuShaderOp *shader,
   GskGpuTextureInstance *instance = (GskGpuTextureInstance *) instance_;
 
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
+  gsk_gpu_print_image (string, shader->images[0]);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_TEXTURE_OP_CLASS = {
@@ -69,5 +69,4 @@ gsk_gpu_texture_op (GskGpuFrame             *frame,
 
   gsk_gpu_rect_to_float (image->coverage ? image->coverage : image->bounds, offset, instance->rect);
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
-  instance->tex_id = image->descriptor;
 }

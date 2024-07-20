@@ -28,7 +28,7 @@ gsk_gpu_blur_op_print_instance (GskGpuShaderOp *shader,
 
   g_string_append_printf (string, "%g,%g ", instance->blur_direction[0], instance->blur_direction[1]);
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
+  gsk_gpu_print_image (string, shader->images[0]);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_BLUR_OP_CLASS = {
@@ -80,7 +80,6 @@ gsk_gpu_blur_op_full (GskGpuFrame             *frame,
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
   graphene_vec2_to_float (blur_direction, instance->blur_direction);
   gsk_gpu_color_to_float (blur_color, instance->blur_color);
-  instance->tex_id = image->descriptor;
 }
 
 void

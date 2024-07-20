@@ -23,7 +23,7 @@ gsk_gpu_color_matrix_op_print_instance (GskGpuShaderOp *shader,
   GskGpuColormatrixInstance *instance = (GskGpuColormatrixInstance *) instance_;
 
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
+  gsk_gpu_print_image (string, shader->images[0]);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_COLOR_MATRIX_OP_CLASS = {
@@ -72,7 +72,6 @@ gsk_gpu_color_matrix_op (GskGpuFrame             *frame,
 
   gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
-  instance->tex_id = image->descriptor;
   graphene_matrix_to_float (color_matrix, instance->color_matrix);
   graphene_vec4_to_float (color_offset, instance->color_offset);
 }
