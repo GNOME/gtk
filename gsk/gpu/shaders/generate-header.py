@@ -7,19 +7,20 @@ import os
 name = os.path.splitext(os.path.splitext(os.path.basename(sys.argv[1]))[0])[0][6:]
 var_name = "gsk_gpu_" + name.replace('-', '_')
 struct_name = "GskGpu" + name.title().replace('-', '') + "Instance"
+filename = sys.argv[1]
 
-with open(sys.argv[1]) as f:
+with open(filename) as f:
     lines = f.readlines()
     matches = []
 
-    for line in lines:
+    for pos, line in enumerate (lines):
         match = re.search(r"^IN\(([0-9]+)\) ([a-z0-9]+) ([a-zA-Z0-9_]+);$", line)
         if not match:
             if re.search(r"layout.*\sin\s.*", line):
-                raise Exception("Failed to parse file")
+                raise Exception(f'''{filename}:{pos}: Failed to parse file''')
             continue
         if not match.group(3).startswith('in'):
-            raise Exception("Variable doesn't start with 'in'")
+            raise Exception(f'''{filename}:{pos}: Variable doesn't start with "in"''')
         matches.append({'name': ''.join('_' + char.lower() if char.isupper() else char for char in match.group(3))[3:],
                         'attrib_name': match.group(3),
                         'location': int(match.group(1)),
@@ -35,7 +36,7 @@ struct _{struct_name} {{''')
 expected = 0
 for match in matches:
     if expected != int(match['location']):
-        raise Exception(f"Should be layout location {expected} but is {match['location']}")  # noqa
+        raise Exception(f"{filename}: Should be layout location {expected} but is {match['location']}")  # noqa
 
     if match['type'] == 'float':
         print(f"  float {match['name']};")
@@ -65,7 +66,7 @@ for match in matches:
         print(f"  float {match['name']}[16];")
         expected += 4
     else:
-        raise Exception(f"Don't know what a {match['type']} is")
+        raise Exception(f"{filename}: Don't know what a {match['type']} is")
 
 print(f'''}};
 ''')
@@ -185,7 +186,7 @@ for i, match in enumerate(matches):
                          sizeof ({struct_name}),
                          GSIZE_TO_POINTER (offset + G_STRUCT_OFFSET({struct_name}, {match['name']}) + sizeof (float) * 12));''')
     else:
-        raise Exception(f"Don't know what a {match['type']} is")
+        raise Exception(f"{filename}: Don't know what a {match['type']} is")
 
 print(f'''}}
 
@@ -315,7 +316,7 @@ for match in matches:
         .offset = G_STRUCT_OFFSET({struct_name}, {match['name']}) + sizeof (float) * 12,
       }},''')
     else:
-        raise Exception(f"Don't know what a {match['type']} is")
+        raise Exception(f"{filename}: Don't know what a {match['type']} is")
 
 print(f'''  }},
 }};
