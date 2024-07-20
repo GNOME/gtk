@@ -3,16 +3,10 @@
 #include "gskgpudeviceprivate.h"
 
 #include "gskgpucacheprivate.h"
-#include "gskgpuframeprivate.h"
-#include "gskgpuimageprivate.h"
-#include "gskgpuuploadopprivate.h"
 
-#include "gdk/gdkdisplayprivate.h"
-#include "gdk/gdktextureprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 
 #include "gsk/gskdebugprivate.h"
-#include "gsk/gskprivate.h"
 
 #define CACHE_TIMEOUT 15  /* seconds */
 
