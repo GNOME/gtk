@@ -27,9 +27,6 @@
 G_STATIC_ASSERT (MAX_ATLAS_ITEM_SIZE < ATLAS_SIZE);
 G_STATIC_ASSERT (MIN_ALIVE_PIXELS < ATLAS_SIZE * ATLAS_SIZE);
 
-typedef struct _GskGpuCached GskGpuCached;
-typedef struct _GskGpuCachedClass GskGpuCachedClass;
-typedef struct _GskGpuCachedAtlas GskGpuCachedAtlas;
 typedef struct _GskGpuCachedGlyph GskGpuCachedGlyph;
 typedef struct _GskGpuCachedTexture GskGpuCachedTexture;
 typedef struct _GskGpuCachedTile GskGpuCachedTile;
@@ -57,32 +54,6 @@ struct _GskGpuCache
 G_DEFINE_TYPE (GskGpuCache, gsk_gpu_cache, G_TYPE_OBJECT)
 
 /* {{{ Cached base class */
-
-struct _GskGpuCachedClass
-{
-  gsize size;
-  const char *name;
-
-  void                  (* free)                        (GskGpuCache            *cache,
-                                                         GskGpuCached           *cached);
-  gboolean              (* should_collect)              (GskGpuCache            *cache,
-                                                         GskGpuCached           *cached,
-                                                         gint64                  cache_timeout,
-                                                         gint64                  timestamp);
-};
-
-struct _GskGpuCached
-{
-  const GskGpuCachedClass *class;
-
-  GskGpuCachedAtlas *atlas;
-  GskGpuCached *next;
-  GskGpuCached *prev;
-
-  gint64 timestamp;
-  gboolean stale;
-  guint pixels;   /* For glyphs and textures, pixels. For atlases, alive pixels */
-};
 
 static inline void
 mark_as_stale (GskGpuCached *cached,
@@ -151,7 +122,7 @@ gsk_gpu_cached_new_from_atlas (GskGpuCache             *cache,
   return cached;
 }
 
-static gpointer
+gpointer
 gsk_gpu_cached_new (GskGpuCache             *cache,
                     const GskGpuCachedClass *class)
 {
