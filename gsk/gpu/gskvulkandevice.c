@@ -19,10 +19,6 @@ struct _GskVulkanDevice
   GskVulkanAllocator *external_allocator;
   GdkVulkanFeatures features;
 
-  guint max_immutable_samplers;
-  guint max_samplers;
-  guint max_buffers;
-
   GHashTable *conversion_cache;
   GHashTable *render_pass_cache;
   GHashTable *pipeline_cache;
@@ -431,34 +427,12 @@ static void
 gsk_vulkan_device_setup (GskVulkanDevice *self,
                          GdkDisplay      *display)
 {
-  VkPhysicalDeviceVulkan12Properties vk12_props = {
-    .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_PROPERTIES,
-  };
   VkPhysicalDeviceProperties2 vk_props = {
     .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2,
-    .pNext = &vk12_props
+    .pNext = NULL
   };
 
   vkGetPhysicalDeviceProperties2 (display->vk_physical_device, &vk_props);
-  if (gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING))
-    {
-      self->max_buffers = vk12_props.maxPerStageDescriptorUpdateAfterBindUniformBuffers;
-      self->max_samplers = vk12_props.maxPerStageDescriptorUpdateAfterBindSampledImages;
-    }
-  else
-    {
-      self->max_buffers = vk_props.properties.limits.maxPerStageDescriptorUniformBuffers;
-      self->max_samplers = vk_props.properties.limits.maxPerStageDescriptorSampledImages;
-    }
-  if (!gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DYNAMIC_INDEXING) ||
-      !gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
-    {
-      /* These numbers can be improved in the shader sources by adding more
-       * entries to the big if() ladders */
-      self->max_buffers = MIN (self->max_buffers, 32);
-      self->max_samplers = MIN (self->max_samplers, 32);
-    }
-  self->max_immutable_samplers = MIN (self->max_samplers / 3, 32);
   gsk_gpu_device_setup (GSK_GPU_DEVICE (self),
                         display,
                         vk_props.properties.limits.maxImageDimension2D,
@@ -488,24 +462,6 @@ gsk_vulkan_device_get_for_display (GdkDisplay  *display,
   g_object_set_data (G_OBJECT (display), "-gsk-vulkan-device", self);
 
   return GSK_GPU_DEVICE (self);
-}
-
-gsize
-gsk_vulkan_device_get_max_immutable_samplers (GskVulkanDevice *self)
-{
-  return self->max_immutable_samplers;
-}
-
-gsize
-gsk_vulkan_device_get_max_samplers (GskVulkanDevice *self)
-{
-  return self->max_samplers;
-}
-
-gsize
-gsk_vulkan_device_get_max_buffers (GskVulkanDevice *self)
-{
-  return self->max_buffers;
 }
 
 gboolean

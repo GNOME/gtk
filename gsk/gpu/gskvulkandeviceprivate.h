@@ -18,9 +18,6 @@ G_DECLARE_FINAL_TYPE(GskVulkanDevice, gsk_vulkan_device, GSK, VULKAN_DEVICE, Gsk
 GskGpuDevice *          gsk_vulkan_device_get_for_display               (GdkDisplay             *display,
                                                                          GError                **error);
 
-gsize                   gsk_vulkan_device_get_max_immutable_samplers    (GskVulkanDevice        *self);
-gsize                   gsk_vulkan_device_get_max_samplers              (GskVulkanDevice        *self);
-gsize                   gsk_vulkan_device_get_max_buffers               (GskVulkanDevice        *self);
 gboolean                gsk_vulkan_device_has_feature                   (GskVulkanDevice        *self,
                                                                          GdkVulkanFeatures       feature) G_GNUC_PURE;
 
