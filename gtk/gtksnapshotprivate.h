@@ -37,5 +37,10 @@ GskRenderNode *         gtk_snapshot_pop_collect                (GtkSnapshot    
 void                    gtk_snapshot_push_subsurface            (GtkSnapshot            *snapshot,
                                                                  GdkSubsurface          *subsurface);
 
+void                    gtk_snapshot_push_scroll_offset         (GtkSnapshot            *snapshot,
+                                                                 GdkSurface             *target_surface,
+                                                                 double                  scroll_x,
+                                                                 double                  scroll_y);
+
 G_END_DECLS
 

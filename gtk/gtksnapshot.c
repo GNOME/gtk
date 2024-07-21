@@ -826,6 +826,68 @@ gtk_snapshot_ensure_identity (GtkSnapshot *snapshot)
 }
 
 /**
+ * gtk_snapshot_push_scroll_offset
+ * @snapshot: a `GtkSnapshot`
+ * @target_surface: the surface that the snapshot will be rendered onto
+ *    **FIXME**: this goes away if we add a proper render node for this.
+ * @scroll_x: amount to translate child nodes by
+ * @scroll_y: amount to translate child nodes by
+ *
+ * Adds a translation to child nodes of the render tree that is handled
+ * in an optimal way for animation, as during scrolling.
+ */
+void
+gtk_snapshot_push_scroll_offset (GtkSnapshot            *snapshot,
+                                 GdkSurface             *target_surface,
+                                 double                  scroll_x,
+                                 double                  scroll_y)
+{
+  const GtkSnapshotState *state = gtk_snapshot_get_current_state (snapshot);
+  graphene_point_t offset;
+
+  if (target_surface &&
+      gsk_transform_get_category (state->transform) >= GSK_TRANSFORM_CATEGORY_2D_AFFINE)
+    {
+     double device_scale;
+     double device_x, device_y;
+     float scale_x, scale_y, dx, dy;
+
+      gsk_transform_to_affine (state->transform, &scale_x, &scale_y, &dx, &dy);
+      device_scale = gdk_surface_get_scale (target_surface);
+      scale_x *= device_scale;
+      scale_y *= device_scale;
+
+      /* We want the difference between one offset and another to be an
+       * integral number of device pixels to avoid scrolling changing
+       * appearance, but we don't want the offsets themselves to be
+       * an integral number of device pixels, because that can result
+       * in a glyph being positioned, say, at 11.0001 in one frame
+       * and then at 110.9999 in another frame once we've scrolled
+       * by 100 pixels, and those get rounded differently by the
+       * glyph code, which uses floorf(position). 0.125 (1/8th) is
+       * because there are 4 phases.
+       */
+      device_x = 0.125 + round (scroll_x * scale_y + dx);
+      device_y = 0.125 + round (scroll_y * scale_y + dy);
+
+      offset.x = (device_x - dx) / scale_x;
+      offset.y = (device_y - dy) / scale_y;
+    }
+  else
+    {
+      offset.x = scroll_x;
+      offset.y = scroll_y;
+    }
+
+  state = gtk_snapshot_push_state (snapshot,
+                                   state->transform,
+                                   gtk_snapshot_collect_default,
+                                   NULL);
+
+  gtk_snapshot_translate (snapshot, &offset);
+}
+
+/**
  * gtk_snapshot_push_repeat:
  * @snapshot: a `GtkSnapshot`
  * @bounds: the bounds within which to repeat

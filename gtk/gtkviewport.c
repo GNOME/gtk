@@ -31,6 +31,7 @@
 #include "gtkprivate.h"
 #include "gtkscrollable.h"
 #include "gtkscrollinfoprivate.h"
+#include "gtksnapshotprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkbuildable.h"
@@ -198,6 +199,25 @@ gtk_viewport_measure (GtkWidget      *widget,
 }
 
 static void
+gtk_viewport_snapshot (GtkWidget   *widget,
+                       GtkSnapshot *snapshot)
+{
+  GtkViewport *viewport = GTK_VIEWPORT (widget);
+  double offset_x = - gtk_adjustment_get_value (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+  double offset_y = - gtk_adjustment_get_value (viewport->adjustment[GTK_ORIENTATION_VERTICAL]);
+
+  /* add a translation to the child nodes in a way that will look good
+   * when animating */
+  gtk_snapshot_push_scroll_offset (snapshot,
+                                   gtk_widget_get_surface (widget),
+                                   offset_x, offset_y);
+  /* We need to undo the (less good looking) offset we add to children */
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- (int)offset_x, - (int)offset_y));
+  GTK_WIDGET_CLASS (gtk_viewport_parent_class)->snapshot (widget, snapshot);
+  gtk_snapshot_pop (snapshot);
+}
+
+static void
 gtk_viewport_compute_expand (GtkWidget *widget,
                              gboolean  *hexpand,
                              gboolean  *vexpand)
@@ -300,6 +320,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
 
   widget_class->size_allocate = gtk_viewport_size_allocate;
   widget_class->measure = gtk_viewport_measure;
+  widget_class->snapshot = gtk_viewport_snapshot;
   widget_class->root = gtk_viewport_root;
   widget_class->unroot = gtk_viewport_unroot;
   widget_class->compute_expand = gtk_viewport_compute_expand;

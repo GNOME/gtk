@@ -52,6 +52,7 @@
 #include "gtkscrollable.h"
 #include "gtksettings.h"
 #include "gtksnapshot.h"
+#include "gtksnapshotprivate.h"
 #include "gtktextiterprivate.h"
 #include "gtktexthandleprivate.h"
 #include "gtktextviewchildprivate.h"
@@ -241,6 +242,9 @@ struct _GtkTextViewPrivate
    * taking top_padding and top_margin in account
    */
   int yoffset;
+
+  /* Same thing, but with full double resolution*/
+  double xoffset_unrounded, yoffset_unrounded;
 
   /* Width and height of the buffer */
   int width;
@@ -6025,6 +6029,17 @@ gtk_text_view_motion (GtkEventController *controller,
 }
 
 static void
+push_snapshot_scroll_offset (GtkTextView *text_view,
+                             GtkSnapshot *snapshot)
+{
+  GtkTextViewPrivate *priv = text_view->priv;
+
+  gtk_snapshot_push_scroll_offset (snapshot,
+                                   gtk_widget_get_surface (GTK_WIDGET (text_view)),
+                                   -priv->xoffset_unrounded, -priv->yoffset_unrounded);
+}
+
+static void
 gtk_text_view_paint (GtkWidget   *widget,
                      GtkSnapshot *snapshot)
 {
@@ -6051,8 +6066,7 @@ gtk_text_view_paint (GtkWidget   *widget,
       g_assert_not_reached ();
     }
 
-  gtk_snapshot_save (snapshot);
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-priv->xoffset, -priv->yoffset));
+  push_snapshot_scroll_offset (text_view, snapshot);
 
   gtk_text_layout_snapshot (priv->layout,
                             widget,
@@ -6066,7 +6080,7 @@ gtk_text_view_paint (GtkWidget   *widget,
                             priv->selection_style_changed,
                             priv->cursor_alpha);
 
-  gtk_snapshot_restore (snapshot);
+  gtk_snapshot_pop (snapshot);
 
   priv->selection_style_changed = FALSE;
 }
@@ -6096,30 +6110,32 @@ draw_text (GtkWidget   *widget,
                                                SCREEN_WIDTH (widget),
                                                SCREEN_HEIGHT (widget)));
 
+  push_snapshot_scroll_offset (text_view, snapshot);
+
   style = gtk_css_node_get_style (text_view->priv->text_window->css_node);
   gtk_css_boxes_init_border_box (&boxes, style,
-                                 -priv->xoffset, -priv->yoffset - priv->top_margin,
+                                 0, 0 - priv->top_margin,
                                  MAX (SCREEN_WIDTH (text_view), priv->width),
                                  MAX (SCREEN_HEIGHT (text_view), priv->height));
   gtk_css_style_snapshot_background (&boxes, snapshot);
   gtk_css_style_snapshot_border (&boxes, snapshot);
 
+  gtk_snapshot_pop (snapshot);
+
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer != NULL)
     {
-      gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-priv->xoffset, -priv->yoffset));
+      push_snapshot_scroll_offset (text_view, snapshot);
       GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer (text_view, GTK_TEXT_VIEW_LAYER_BELOW_TEXT, snapshot);
-      gtk_snapshot_restore (snapshot);
+      gtk_snapshot_pop (snapshot);
     }
 
   gtk_text_view_paint (widget, snapshot);
 
   if (GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer != NULL)
     {
-      gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-priv->xoffset, -priv->yoffset));
+      push_snapshot_scroll_offset (text_view, snapshot);
       GTK_TEXT_VIEW_GET_CLASS (text_view)->snapshot_layer (text_view, GTK_TEXT_VIEW_LAYER_ABOVE_TEXT, snapshot);
-      gtk_snapshot_restore (snapshot);
+      gtk_snapshot_pop (snapshot);
     }
 
   gtk_snapshot_pop (snapshot);
@@ -6129,12 +6145,33 @@ draw_text (GtkWidget   *widget,
 }
 
 static inline void
-snapshot_text_view_child (GtkWidget        *widget,
+snapshot_text_view_child (GtkTextView      *text_view,
                           GtkTextViewChild *child,
-                          GtkSnapshot      *snapshot)
+                          GtkSnapshot      *snapshot,
+                          gboolean          use_xoffset,
+                          gboolean          use_yoffset)
 {
   if (child != NULL)
-    gtk_widget_snapshot_child (widget, GTK_WIDGET (child), snapshot);
+    {
+      GtkTextViewPrivate *priv = text_view->priv;
+
+      gtk_snapshot_push_scroll_offset (snapshot,
+                                       gtk_widget_get_surface (GTK_WIDGET (text_view)),
+                                       use_xoffset ? - priv->xoffset_unrounded : 0,
+                                       use_yoffset ? - priv->yoffset_unrounded : 0);
+      /* Reverse the offset we applied to the children during allocation, since
+      * we are handling the offset via gtk_snapshot_push_scroll_offset()
+      */
+      gtk_snapshot_translate (snapshot,
+                              &GRAPHENE_POINT_INIT (
+                                use_xoffset ? priv->xoffset : 0,
+                                use_yoffset ? priv->yoffset : 0
+                              ));
+
+      gtk_widget_snapshot_child (GTK_WIDGET (text_view), GTK_WIDGET (child), snapshot);
+
+      gtk_snapshot_pop (snapshot);
+    }
 }
 
 static void
@@ -6149,17 +6186,19 @@ gtk_text_view_snapshot (GtkWidget   *widget,
 
   draw_text (widget, snapshot);
 
-  snapshot_text_view_child (widget, priv->left_child, snapshot);
-  snapshot_text_view_child (widget, priv->right_child, snapshot);
-  snapshot_text_view_child (widget, priv->top_child, snapshot);
-  snapshot_text_view_child (widget, priv->bottom_child, snapshot);
-  snapshot_text_view_child (widget, priv->center_child, snapshot);
+  snapshot_text_view_child (text_view, priv->left_child, snapshot, FALSE, TRUE);
+  snapshot_text_view_child (text_view, priv->right_child, snapshot, FALSE, TRUE);
+  snapshot_text_view_child (text_view, priv->top_child, snapshot, TRUE, FALSE);
+  snapshot_text_view_child (text_view, priv->bottom_child, snapshot, TRUE, FALSE);
+  snapshot_text_view_child (text_view, priv->center_child, snapshot, FALSE, FALSE);
 
+  push_snapshot_scroll_offset (text_view, snapshot);
   for (iter = priv->anchored_children.head; iter; iter = iter->next)
     {
       const AnchoredChild *vc = iter->data;
       gtk_widget_snapshot_child (widget, vc->widget, snapshot);
     }
+  gtk_snapshot_pop (snapshot);
 }
 
 /**
@@ -8668,11 +8707,13 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
     {
       dx = priv->xoffset - (int)gtk_adjustment_get_value (adjustment);
       priv->xoffset = (int)gtk_adjustment_get_value (adjustment) - priv->left_padding;
+      priv->xoffset_unrounded = gtk_adjustment_get_value (adjustment) - priv->left_padding;
     }
   else if (adjustment == priv->vadjustment)
     {
       dy = priv->yoffset - (int)gtk_adjustment_get_value (adjustment) + priv->top_margin ;
       priv->yoffset -= dy;
+      priv->yoffset_unrounded = gtk_adjustment_get_value (adjustment) - priv->top_margin;
 
       if (priv->layout)
         {
