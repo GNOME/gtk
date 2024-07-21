@@ -37,7 +37,7 @@
 #ifdef GDK_RENDERING_VULKAN
 static const GdkDebugKey gsk_vulkan_feature_keys[] = {
   { "dmabuf", GDK_VULKAN_FEATURE_DMABUF, "Never import Dmabufs" },
-  { "ycbcr", GDK_VULKAN_FEATURE_YCBCR, "Do not support Ycbcr textures" },
+  { "ycbcr", GDK_VULKAN_FEATURE_YCBCR, "Do not support Ycbcr textures (also disables dmabufs)" },
   { "descriptor-indexing", GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING, "Force slow descriptor set layout codepath" },
   { "dynamic-indexing", GDK_VULKAN_FEATURE_DYNAMIC_INDEXING, "Hardcode small number of buffer and texture arrays" },
   { "nonuniform-indexing", GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING, "Split draw calls to ensure uniform texture accesses" },
@@ -1430,6 +1430,8 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   skip_features = gdk_parse_debug_var ("GDK_VULKAN_DISABLE",
                                        gsk_vulkan_feature_keys,
                                        G_N_ELEMENTS (gsk_vulkan_feature_keys));
+  if (skip_features & GDK_VULKAN_FEATURE_YCBCR)
+    skip_features |= GDK_VULKAN_FEATURE_DMABUF;
 
   override = g_getenv ("GDK_VULKAN_DEVICE");
   list_devices = FALSE;
