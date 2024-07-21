@@ -1,7 +1,3 @@
-#ifdef HAVE_VULKAN_1_2
-#extension GL_EXT_nonuniform_qualifier : enable
-#endif
-
 #include "enums.glsl"
 
 layout(push_constant) uniform PushConstants {

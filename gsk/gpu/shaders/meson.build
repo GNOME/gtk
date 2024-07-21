@@ -61,27 +61,13 @@ foreach shader: gsk_private_gpu_shaders
 
   if (have_vulkan)
     glslc_options = [
-      [ fs.name (fs.replace_suffix (shader, '')) + '.1.2.vert.spv',
-        [ '--target-env=vulkan1.2',
-          '-fshader-stage=vertex',
-          '-DGSK_VERTEX_SHADER=1',
-          '-DHAVE_VULKAN_1_2=1'
-        ]
-      ],
-      [ fs.name (fs.replace_suffix (shader, '')) + '.1.2.frag.spv',
-        [ '--target-env=vulkan1.2',
-          '-fshader-stage=fragment',
-          '-DGSK_FRAGMENT_SHADER=1',
-          '-DHAVE_VULKAN_1_2=1'
-        ]
-      ],
-      [ fs.name (fs.replace_suffix (shader, '')) + '.1.0.vert.spv',
+      [ fs.name (fs.replace_suffix (shader, '')) + '.vert.spv',
         [ '--target-env=vulkan1.0',
           '-fshader-stage=vertex',
           '-DGSK_VERTEX_SHADER=1',
         ]
       ],
-      [ fs.name (fs.replace_suffix (shader, '')) + '.1.0.frag.spv',
+      [ fs.name (fs.replace_suffix (shader, '')) + '.frag.spv',
         [ '--target-env=vulkan1.0',
           '-fshader-stage=fragment',
           '-DGSK_FRAGMENT_SHADER=1',

@@ -811,7 +811,6 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   PipelineCacheKey *cached_result;
   VkPipeline vk_pipeline;
   GdkDisplay *display;
-  const char *version_string;
   char *vertex_shader_name, *fragment_shader_name;
   G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   const char *blend_name[] = { "NONE", "OVER", "ADD", "CLEAR" };
@@ -830,19 +829,13 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
     return cached_result->vk_pipeline;
 
   display = gsk_gpu_device_get_display (GSK_GPU_DEVICE (self));
-  if (gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_DYNAMIC_INDEXING) &&
-      gsk_vulkan_device_has_feature (self, GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
-    version_string = ".1.2";
-  else
-    version_string = ".1.0";
+
   vertex_shader_name = g_strconcat ("/org/gtk/libgsk/shaders/vulkan/",
                                     op_class->shader_name,
-                                    version_string,
                                     ".vert.spv",
                                     NULL);
   fragment_shader_name = g_strconcat ("/org/gtk/libgsk/shaders/vulkan/",
                                       op_class->shader_name,
-                                      version_string,
                                       ".frag.spv",
                                       NULL);
 
@@ -970,9 +963,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                                            &vk_pipeline);
 
   gdk_profiler_end_markf (begin_time,
-                          "Create Vulkan pipeline", "%s version=%s color states=%u variation=%u clip=%u blend=%s format=%u",
+                          "Create Vulkan pipeline", "%s color states=%u variation=%u clip=%u blend=%s format=%u",
                           op_class->shader_name,
-                          version_string + 1,
                           flags,
                           color_states, 
                           variation,
@@ -980,9 +972,8 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
                           vk_format);
 
   GSK_DEBUG (SHADERS,
-             "Create Vulkan pipeline (%s %s, %u/%u/%u/%s/%u)",
+             "Create Vulkan pipeline (%s, %u/%u/%u/%s/%u)",
              op_class->shader_name,
-             version_string + 1,
              flags,
              color_states, 
              variation,
