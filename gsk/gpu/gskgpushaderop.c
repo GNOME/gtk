@@ -74,9 +74,7 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
   VkPipelineLayout vk_pipeline_layout;
   gsize i, n_ops, max_ops_per_draw;
 
-  if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE) &&
-      gsk_vulkan_device_has_feature (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                     GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
+  if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
     max_ops_per_draw = MAX_MERGE_OPS;
   else
     max_ops_per_draw = 1;
