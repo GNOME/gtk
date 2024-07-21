@@ -130,9 +130,9 @@ gsk_gpu_cached_should_collect (GskGpuCache  *cache,
 }
 
 static gpointer
-gsk_gpu_cached_new (GskGpuCache             *cache,
-                    const GskGpuCachedClass *class,
-                    GskGpuCachedAtlas       *atlas)
+gsk_gpu_cached_new_from_atlas (GskGpuCache             *cache,
+                               const GskGpuCachedClass *class,
+                               GskGpuCachedAtlas       *atlas)
 {
   GskGpuCached *cached;
 
@@ -149,6 +149,13 @@ gsk_gpu_cached_new (GskGpuCache             *cache,
     cache->first_cached = cached;
 
   return cached;
+}
+
+static gpointer
+gsk_gpu_cached_new (GskGpuCache             *cache,
+                    const GskGpuCachedClass *class)
+{
+  return gsk_gpu_cached_new_from_atlas (cache, class, NULL);
 }
 
 static void
@@ -240,7 +247,7 @@ gsk_gpu_cached_atlas_new (GskGpuCache *cache)
 {
   GskGpuCachedAtlas *self;
 
-  self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_ATLAS_CLASS, NULL);
+  self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_ATLAS_CLASS);
   self->image = gsk_gpu_device_create_atlas_image (cache->device, ATLAS_SIZE, ATLAS_SIZE);
   self->remaining_pixels = gsk_gpu_image_get_width (self->image) * gsk_gpu_image_get_height (self->image);
 
@@ -525,7 +532,7 @@ gsk_gpu_cached_texture_new (GskGpuCache   *cache,
         }
     }
 
-  self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_TEXTURE_CLASS, NULL);
+  self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_TEXTURE_CLASS);
   self->texture = texture;
   self->image = g_object_ref (image);
   self->color_state = color_state;
@@ -665,7 +672,7 @@ gsk_gpu_cached_tile_new (GskGpuCache   *cache,
 {
   GskGpuCachedTile *self;
 
-  self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_TILE_CLASS, NULL);
+  self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_TILE_CLASS);
   self->texture = texture;
   self->tile_id = tile_id;
   self->image = g_object_ref (image);
@@ -1092,7 +1099,7 @@ gsk_gpu_cache_lookup_glyph_image (GskGpuCache            *self,
       g_object_ref (image);
       rect.origin.x = atlas_x + padding;
       rect.origin.y = atlas_y + padding;
-      cache = gsk_gpu_cached_new (self, &GSK_GPU_CACHED_GLYPH_CLASS, self->current_atlas);
+      cache = gsk_gpu_cached_new_from_atlas (self, &GSK_GPU_CACHED_GLYPH_CLASS, self->current_atlas);
     }
   else
     {
@@ -1100,7 +1107,7 @@ gsk_gpu_cache_lookup_glyph_image (GskGpuCache            *self,
       rect.origin.x = 0;
       rect.origin.y = 0;
       padding = 0;
-      cache = gsk_gpu_cached_new (self, &GSK_GPU_CACHED_GLYPH_CLASS, NULL);
+      cache = gsk_gpu_cached_new (self, &GSK_GPU_CACHED_GLYPH_CLASS);
     }
 
   cache->font = g_object_ref (font);
