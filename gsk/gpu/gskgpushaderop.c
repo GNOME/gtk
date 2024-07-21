@@ -102,16 +102,22 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
 
   for (i = 0; i < shader_op_class->n_textures; i++)
     {
-      vkCmdBindDescriptorSets (state->vk_command_buffer,
-                               VK_PIPELINE_BIND_POINT_GRAPHICS,
-                               vk_pipeline_layout,
-                               i,
-                               1,
-                               (VkDescriptorSet[1]) {
-                                   gsk_vulkan_image_get_vk_descriptor_set (GSK_VULKAN_IMAGE (self->images[i]), self->samplers[i]),
-                               },
-                               0,
-                               NULL);
+      if (state->current_images[i] != self->images[i] ||
+          state->current_samplers[i] != self->samplers[i])
+        {
+          vkCmdBindDescriptorSets (state->vk_command_buffer,
+                                   VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                   vk_pipeline_layout,
+                                   i,
+                                   1,
+                                   (VkDescriptorSet[1]) {
+                                       gsk_vulkan_image_get_vk_descriptor_set (GSK_VULKAN_IMAGE (self->images[i]), self->samplers[i]),
+                                   },
+                                   0,
+                                   NULL);
+          state->current_images[i] = self->images[i];
+          state->current_samplers[i] = self->samplers[i];
+        }
     }
                                
   vkCmdBindPipeline (state->vk_command_buffer,

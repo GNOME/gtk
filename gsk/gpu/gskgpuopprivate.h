@@ -42,6 +42,8 @@ struct _GskVulkanCommandState
   GskGpuBlend blend;
 
   GskVulkanSemaphores *semaphores;
+  GskGpuImage *current_images[2];
+  GskGpuSampler current_samplers[2];
 };
 #endif
 
