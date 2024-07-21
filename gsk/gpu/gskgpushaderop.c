@@ -96,7 +96,9 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
       n_ops += next_shader->n_ops;
     }
 
-  vk_pipeline_layout = gsk_vulkan_device_get_default_vk_pipeline_layout (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)));
+  vk_pipeline_layout = gsk_vulkan_device_get_vk_pipeline_layout (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                                 shader_op_class->n_textures > 0 ? gsk_vulkan_image_get_ycbcr (GSK_VULKAN_IMAGE (self->images[0])) : NULL,
+                                                                 shader_op_class->n_textures > 1 ? gsk_vulkan_image_get_ycbcr (GSK_VULKAN_IMAGE (self->images[1])) : NULL);
 
   for (i = 0; i < shader_op_class->n_textures; i++)
     {

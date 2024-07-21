@@ -5,6 +5,7 @@
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkanframeprivate.h"
 #include "gskvulkanmemoryprivate.h"
+#include "gskvulkanycbcrprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
@@ -31,7 +32,7 @@ struct _GskVulkanImage
   VkImageView vk_image_view;
   VkFramebuffer vk_framebuffer;
   VkImageView vk_framebuffer_image_view;
-  VkSampler vk_sampler;
+  GskVulkanYcbcr *ycbcr;
   VkSemaphore vk_semaphore;
   VkDescriptorSet vk_descriptor_sets[GSK_GPU_SAMPLER_N_SAMPLERS];
 
@@ -1115,7 +1116,11 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
 #endif
 
   if (is_yuv)
-    vk_conversion = gsk_vulkan_device_get_vk_conversion (device, vk_format, &self->vk_sampler);
+    {
+      self->ycbcr = gsk_vulkan_device_get_ycbcr (device, vk_format);
+      gsk_vulkan_ycbcr_ref (self->ycbcr);
+      vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
+    }
   else
     vk_conversion = VK_NULL_HANDLE;
 
@@ -1290,6 +1295,8 @@ gsk_vulkan_image_finalize (GObject *object)
   vk_device = gsk_vulkan_device_get_vk_device (self->device);
   vk_descriptor_pool = gsk_vulkan_device_get_vk_descriptor_pool (self->device);
 
+  g_clear_pointer (&self->ycbcr, gsk_vulkan_ycbcr_unref);
+
   for (i = 0; i < GSK_GPU_SAMPLER_N_SAMPLERS; i++)
     {
       if (self->vk_descriptor_sets[i])
@@ -1395,12 +1402,6 @@ gsk_vulkan_image_get_vk_framebuffer (GskVulkanImage *self,
   return self->vk_framebuffer;
 }
 
-VkSampler
-gsk_vulkan_image_get_vk_sampler (GskVulkanImage *self)
-{
-  return self->vk_sampler;
-}
-
 VkDescriptorSet
 gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
                                         GskGpuSampler   sampler)
@@ -1415,7 +1416,8 @@ gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
                                                   .descriptorPool = gsk_vulkan_device_get_vk_descriptor_pool (self->device),
                                                   .descriptorSetCount = 1,
                                                   .pSetLayouts = (VkDescriptorSetLayout[1]) {
-                                                      gsk_vulkan_device_get_vk_image_set_layout (self->device),
+                                                      self->ycbcr ? gsk_vulkan_ycbcr_get_vk_descriptor_set_layout (self->ycbcr)
+                                                                  : gsk_vulkan_device_get_vk_image_set_layout (self->device),
                                                   },
                                               },
                                               &self->vk_descriptor_sets[sampler]);
@@ -1430,7 +1432,8 @@ gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
                                   .descriptorCount = 1,
                                   .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
                                   .pImageInfo = &(VkDescriptorImageInfo) {
-                                      .sampler = gsk_vulkan_device_get_vk_sampler (self->device, sampler),
+                                      .sampler = self->ycbcr ? gsk_vulkan_ycbcr_get_vk_sampler (self->ycbcr)
+                                                             : gsk_vulkan_device_get_vk_sampler (self->device, sampler),
                                       .imageView = self->vk_image_view,
                                       .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
                                   },
@@ -1440,6 +1443,12 @@ gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
     }
 
   return self->vk_descriptor_sets[sampler];
+}
+
+GskVulkanYcbcr *
+gsk_vulkan_image_get_ycbcr (GskVulkanImage *self)
+{
+  return self->ycbcr;
 }
 
 VkImage
