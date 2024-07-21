@@ -57,6 +57,7 @@ GskGpuCache *           gsk_gpu_cache_new                               (GskGpuD
 gpointer                gsk_gpu_cached_new                              (GskGpuCache            *cache,
                                                                          const GskGpuCachedClass *class);
 
+GskGpuDevice *          gsk_gpu_cache_get_device                        (GskGpuCache            *self);
 void                    gsk_gpu_cache_set_time                          (GskGpuCache            *self,
                                                                          gint64                  timestamp);
 

@@ -785,6 +785,12 @@ static const GskGpuCachedClass GSK_GPU_CACHED_GLYPH_CLASS =
 /* }}} */
 /* {{{ GskGpuCache */
 
+GskGpuDevice *
+gsk_gpu_cache_get_device (GskGpuCache *self)
+{
+  return self->device;
+}
+
 /*
  * gsk_gpu_cache_set_time:
  * @self: a `GskGpuCache`
