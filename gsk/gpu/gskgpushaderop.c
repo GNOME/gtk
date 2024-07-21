@@ -10,6 +10,7 @@
 #include "gskglimageprivate.h"
 #ifdef GDK_RENDERING_VULKAN
 #include "gskvulkandeviceprivate.h"
+#include "gskvulkanimageprivate.h"
 #endif
 
 #include "gdkglcontextprivate.h"
@@ -67,10 +68,10 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
                                 GskVulkanCommandState *state,
                                 gsize                  instance_scale)
 {
-#if 0
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
   GskGpuOp *next;
+  VkPipelineLayout vk_pipeline_layout;
   gsize i, n_ops, max_ops_per_draw;
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE) &&
@@ -80,33 +81,43 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
   else
     max_ops_per_draw = 1;
 
-  desc = GSK_VULKAN_DESCRIPTORS (self->desc);
-  if (desc && state->desc != desc)
-    {
-      gsk_vulkan_descriptors_bind (desc, state->desc, state->vk_command_buffer);
-      state->desc = desc;
-    }
-
   n_ops = self->n_ops;
   for (next = op->next; next; next = next->next)
     {
       GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
   
       if (next->op_class != op->op_class ||
-          next_shader->desc != self->desc ||
           next_shader->flags != self->flags ||
           next_shader->color_states != self->color_states ||
           next_shader->variation != self->variation ||
-          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size)
+          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size ||
+          (shader_op_class->n_textures > 0 && (next_shader->images[0] != self->images[0] || next_shader->samplers[0] != self->samplers[0])) ||
+          (shader_op_class->n_textures > 1 && (next_shader->images[1] != self->images[1] || next_shader->samplers[1] != self->samplers[1])))
         break;
 
       n_ops += next_shader->n_ops;
     }
 
+  vk_pipeline_layout = gsk_vulkan_device_get_default_vk_pipeline_layout (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)));
+
+  for (i = 0; i < shader_op_class->n_textures; i++)
+    {
+      vkCmdBindDescriptorSets (state->vk_command_buffer,
+                               VK_PIPELINE_BIND_POINT_GRAPHICS,
+                               vk_pipeline_layout,
+                               i,
+                               1,
+                               (VkDescriptorSet[1]) {
+                                   gsk_vulkan_image_get_vk_descriptor_set (GSK_VULKAN_IMAGE (self->images[i]), self->samplers[i]),
+                               },
+                               0,
+                               NULL);
+    }
+                               
   vkCmdBindPipeline (state->vk_command_buffer,
                      VK_PIPELINE_BIND_POINT_GRAPHICS,
                      gsk_vulkan_device_get_vk_pipeline (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                                        gsk_vulkan_descriptors_get_pipeline_layout (state->desc),
+                                                        vk_pipeline_layout,
                                                         shader_op_class,
                                                         self->flags,
                                                         self->color_states,
@@ -123,8 +134,6 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
     }
  
   return next;
-#endif
-  return NULL;
 }
 
 GskGpuOp *

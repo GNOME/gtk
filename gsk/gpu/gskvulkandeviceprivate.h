@@ -11,19 +11,9 @@
 
 G_BEGIN_DECLS
 
-/* also used by gskvulkanframe.c */
-enum {
-  GSK_VULKAN_IMAGE_SET_LAYOUT,
-  GSK_VULKAN_BUFFER_SET_LAYOUT,
-
-  GSK_VULKAN_N_DESCRIPTOR_SETS
-};
-
 #define GSK_TYPE_VULKAN_DEVICE (gsk_vulkan_device_get_type ())
 
 G_DECLARE_FINAL_TYPE(GskVulkanDevice, gsk_vulkan_device, GSK, VULKAN_DEVICE, GskGpuDevice)
-
-typedef struct _GskVulkanPipelineLayout GskVulkanPipelineLayout;
 
 GskGpuDevice *          gsk_vulkan_device_get_for_display               (GdkDisplay             *display,
                                                                          GError                **error);
@@ -39,28 +29,11 @@ VkPhysicalDevice        gsk_vulkan_device_get_vk_physical_device        (GskVulk
 VkQueue                 gsk_vulkan_device_get_vk_queue                  (GskVulkanDevice        *self) G_GNUC_PURE;
 uint32_t                gsk_vulkan_device_get_vk_queue_family_index     (GskVulkanDevice        *self) G_GNUC_PURE;
 VkCommandPool           gsk_vulkan_device_get_vk_command_pool           (GskVulkanDevice        *self) G_GNUC_PURE;
+VkDescriptorPool        gsk_vulkan_device_get_vk_descriptor_pool        (GskVulkanDevice        *self) G_GNUC_PURE;
+VkDescriptorSetLayout   gsk_vulkan_device_get_vk_image_set_layout       (GskVulkanDevice        *self) G_GNUC_PURE;
+VkPipelineLayout        gsk_vulkan_device_get_default_vk_pipeline_layout (GskVulkanDevice       *self) G_GNUC_PURE;
 VkSampler               gsk_vulkan_device_get_vk_sampler                (GskVulkanDevice        *self,
                                                                          GskGpuSampler           sampler) G_GNUC_PURE;
-
-GskVulkanPipelineLayout *
-                        gsk_vulkan_device_acquire_pipeline_layout       (GskVulkanDevice        *self,
-                                                                         VkSampler              *immutable_samplers,
-                                                                         gsize                   n_immutable_samplers,
-                                                                         gsize                   n_samplers,
-                                                                         gsize                   n_buffers);
-void                    gsk_vulkan_device_release_pipeline_layout       (GskVulkanDevice        *self,
-                                                                         GskVulkanPipelineLayout*layout);
-void                    gsk_vulkan_device_get_pipeline_sizes            (GskVulkanDevice        *self,
-                                                                         GskVulkanPipelineLayout*layout,
-                                                                         gsize                  *n_immutable_samplers,
-                                                                         gsize                  *n_samplers,
-                                                                         gsize                  *n_buffers);
-VkDescriptorSetLayout   gsk_vulkan_device_get_vk_image_set_layout       (GskVulkanDevice        *self,
-                                                                         GskVulkanPipelineLayout*layout) G_GNUC_PURE;
-VkDescriptorSetLayout   gsk_vulkan_device_get_vk_buffer_set_layout      (GskVulkanDevice        *self,
-                                                                         GskVulkanPipelineLayout*layout) G_GNUC_PURE;
-VkPipelineLayout        gsk_vulkan_device_get_vk_pipeline_layout        (GskVulkanDevice        *self,
-                                                                         GskVulkanPipelineLayout*layout) G_GNUC_PURE;
 
 VkSamplerYcbcrConversion
                         gsk_vulkan_device_get_vk_conversion             (GskVulkanDevice        *self,
@@ -71,13 +44,13 @@ VkRenderPass            gsk_vulkan_device_get_vk_render_pass            (GskVulk
                                                                          VkImageLayout           from_layout,
                                                                          VkImageLayout           to_layout);
 VkPipeline              gsk_vulkan_device_get_vk_pipeline               (GskVulkanDevice        *self,
-                                                                         GskVulkanPipelineLayout*layout,
+                                                                         VkPipelineLayout        layout,
                                                                          const GskGpuShaderOpClass *op_class,
                                                                          GskGpuShaderFlags       flags,
                                                                          GskGpuColorStates       color_states,
                                                                          guint32                 variation,
                                                                          GskGpuBlend             blend,
-                                                                         VkFormat                format,
+                                                                         VkFormat                vk_format,
                                                                          VkRenderPass            render_pass);
 
 GskVulkanAllocator *    gsk_vulkan_device_get_external_allocator        (GskVulkanDevice        *self);

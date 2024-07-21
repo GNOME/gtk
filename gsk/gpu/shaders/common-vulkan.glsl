@@ -11,11 +11,8 @@ layout(push_constant) uniform PushConstants {
 } push;
 
 layout(constant_id=0) const uint GSK_FLAGS = 0;
-layout(constant_id=1) const uint GSK_N_IMMUTABLE_SAMPLERS = 32;
-layout(constant_id=2) const uint GSK_N_SAMPLERS = 32;
-layout(constant_id=3) const uint GSK_N_BUFFERS = 32;
-layout(constant_id=4) const uint GSK_COLOR_STATES = 0;
-layout(constant_id=5) const uint GSK_VARIATION = 0;
+layout(constant_id=1) const uint GSK_COLOR_STATES = 0;
+layout(constant_id=2) const uint GSK_VARIATION = 0;
 
 #define GSK_GLOBAL_MVP push.mvp
 #define GSK_GLOBAL_CLIP push.clip
@@ -35,13 +32,10 @@ layout(constant_id=5) const uint GSK_VARIATION = 0;
 #define PASS(_loc) layout(location = _loc) in
 #define PASS_FLAT(_loc) layout(location = _loc) flat in
 
-layout(set = 0, binding = 0) uniform sampler2D immutable_textures[GSK_N_IMMUTABLE_SAMPLERS];
-layout(set = 0, binding = 1) uniform sampler2D textures[GSK_N_SAMPLERS];
+layout(set = 0, binding = 0) uniform sampler2D GSK_TEXTURE0;
+layout(set = 1, binding = 0) uniform sampler2D GSK_TEXTURE1;
 
 layout(location = 0) out vec4 out_color;
-
-#define GSK_TEXTURE0 textures[0]
-#define GSK_TEXTURE1 textures[1]
 
 void
 gsk_set_output_color (vec4 color)

@@ -39,7 +39,6 @@ struct _GskVulkanFrame
   VkSemaphore vk_acquire_semaphore;
   VkFence vk_fence;
   VkCommandBuffer vk_command_buffer;
-  VkDescriptorPool vk_descriptor_pool;
 
   gsize pool_n_sets;
   gsize pool_n_images;
@@ -139,13 +138,6 @@ gsk_vulkan_frame_cleanup (GskGpuFrame *frame)
   GSK_VK_CHECK (vkResetCommandBuffer, self->vk_command_buffer,
                                       0);
 
-  if (self->vk_descriptor_pool != VK_NULL_HANDLE)
-    {
-      GSK_VK_CHECK (vkResetDescriptorPool, vk_device,
-                                           self->vk_descriptor_pool,
-                                           0);
-    }
-
   GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->cleanup (frame);
 }
 
@@ -223,75 +215,6 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
   return GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->upload_texture (frame, with_mipmap, texture);
 }
 
-static void
-gsk_vulkan_frame_prepare_descriptors (GskVulkanFrame *self)
-{
-#if 0
-  GskVulkanDevice *device;
-  VkDevice vk_device;
-  gsize i, n_images, n_sets;
-
-  device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self)));
-  vk_device = gsk_vulkan_device_get_vk_device (device);
-
-  n_images = 0;
-  n_sets = 2 * gsk_descriptors_get_size (&self->descriptors);
-  for (i = 0; i < gsk_descriptors_get_size (&self->descriptors); i++)
-    {
-      gsize n_desc_images;
-      GskVulkanRealDescriptors *desc = gsk_descriptors_get (&self->descriptors, i);
-      gsk_vulkan_real_descriptors_prepare (desc, &n_desc_images);
-      n_images += n_desc_images;
-    }
-
-  if (n_sets > self->pool_n_sets ||
-      n_images > self->pool_n_images)
-    {
-      if (self->vk_descriptor_pool != VK_NULL_HANDLE)
-        {
-          vkDestroyDescriptorPool (vk_device,
-                                   self->vk_descriptor_pool,
-                                   NULL);
-          self->vk_descriptor_pool = VK_NULL_HANDLE;
-        }
-      if (n_sets > self->pool_n_sets)
-        self->pool_n_sets = 4 << g_bit_nth_msf (n_sets - 1, -1);
-      if (n_images > self->pool_n_images)
-        self->pool_n_images = 2 << g_bit_nth_msf (n_images - 1, -1);
-    }
-
-  if (self->vk_descriptor_pool == VK_NULL_HANDLE)
-    {
-      GSK_VK_CHECK (vkCreateDescriptorPool, vk_device,
-                                            &(VkDescriptorPoolCreateInfo) {
-                                                .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-                                                .flags = 0,
-                                                .maxSets = self->pool_n_sets,
-                                                .poolSizeCount = 2,
-                                                .pPoolSizes = (VkDescriptorPoolSize[2]) {
-                                                    {
-                                                        .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                        .descriptorCount = self->pool_n_images,
-                                                    },
-                                                    {
-                                                        .type = VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,
-                                                        .descriptorCount = self->pool_n_buffers,
-                                                    }
-                                                }
-                                            },
-                                            NULL,
-                                            &self->vk_descriptor_pool);
-    }
-
-  for (i = 0; i < gsk_descriptors_get_size (&self->descriptors); i++)
-    {
-      GskVulkanRealDescriptors *desc = gsk_descriptors_get (&self->descriptors, i);
-
-      gsk_vulkan_real_descriptors_update_sets (desc, self->vk_descriptor_pool);
-    }
-#endif
-}
-
 static GskGpuBuffer *
 gsk_vulkan_frame_create_vertex_buffer (GskGpuFrame *frame,
                                        gsize        size)
@@ -323,14 +246,7 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
   GskVulkanSemaphores semaphores;
-  GskVulkanCommandState state;
-
-#if 0
-  if (gsk_descriptors_get_size (&self->descriptors) == 0)
-    gsk_descriptors_append (&self->descriptors, gsk_vulkan_real_descriptors_new (self));
-#endif
-
-  gsk_vulkan_frame_prepare_descriptors (self);
+  GskVulkanCommandState state = { 0, };
 
   GSK_VK_CHECK (vkBeginCommandBuffer, self->vk_command_buffer,
                                       &(VkCommandBufferBeginInfo) {
@@ -401,13 +317,6 @@ gsk_vulkan_frame_finalize (GObject *object)
   device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (GSK_GPU_FRAME (self)));
   vk_device = gsk_vulkan_device_get_vk_device (device);
   vk_command_pool = gsk_vulkan_device_get_vk_command_pool (device);
-
-  if (self->vk_descriptor_pool != VK_NULL_HANDLE)
-    {
-      vkDestroyDescriptorPool (vk_device,
-                               self->vk_descriptor_pool,
-                               NULL);
-    }
 
   vkFreeCommandBuffers (vk_device,
                         vk_command_pool,

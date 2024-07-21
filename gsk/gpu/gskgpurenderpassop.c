@@ -71,10 +71,8 @@ static void
 gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp     *self,
                                     GskVulkanCommandState  *state)
 {
-#if 0
   GskGpuShaderOp *shader;
   GskGpuOp *op;
-  GskGpuDescriptors *desc = NULL;
 
   for (op = ((GskGpuOp *) self)->next;
        op->op_class->stage != GSK_GPU_STAGE_END_PASS;
@@ -85,21 +83,21 @@ gsk_gpu_render_pass_op_do_barriers (GskGpuRenderPassOp     *self,
 
       shader = (GskGpuShaderOp *) op;
 
-      if (shader->desc == NULL || shader->desc == desc)
-        continue;
-
-      if (desc == NULL)
-        {
-          gsk_vulkan_descriptors_bind (GSK_VULKAN_DESCRIPTORS (shader->desc), state->desc, state->vk_command_buffer);
-          state->desc = GSK_VULKAN_DESCRIPTORS (shader->desc);
-        }
-      desc = shader->desc;
-      gsk_vulkan_descriptors_transition (GSK_VULKAN_DESCRIPTORS (desc), state->semaphores, state->vk_command_buffer);
+      if (shader->images[0])
+        gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (shader->images[0]),
+                                     state->semaphores,
+                                     state->vk_command_buffer,
+                                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                                     VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                     VK_ACCESS_SHADER_READ_BIT);
+      if (shader->images[1])
+        gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (shader->images[1]),
+                                     state->semaphores,
+                                     state->vk_command_buffer,
+                                     VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT,
+                                     VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL,
+                                     VK_ACCESS_SHADER_READ_BIT);
     }
-
-  if (desc == NULL)
-    gsk_vulkan_descriptors_transition (state->desc, state->semaphores, state->vk_command_buffer);
-#endif
 }
 
 static GskGpuOp *
