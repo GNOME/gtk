@@ -2631,6 +2631,17 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
   end_child = gsk_cross_fade_node_get_end_child (node);
   progress = gsk_cross_fade_node_get_progress (node);
 
+  if (progress <= 0.0)
+    {
+      gsk_gpu_node_processor_add_node (self, start_child);
+      return;
+    }
+  if (progress >= 1.0)
+    {
+      gsk_gpu_node_processor_add_node (self, end_child);
+      return;
+    }
+
   start_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                           NULL,
                                                           start_child,
