@@ -409,7 +409,7 @@ gdk_dmabuf_texture_builder_init (GdkDmabufTextureBuilder *self)
   for (int i = 0; i < GDK_DMABUF_MAX_PLANES; i++)
     self->dmabuf.planes[i].fd = -1;
 
-  self->color_state = gdk_color_state_ref (gdk_color_state_get_srgb ());
+  self->color_state = NULL;
 }
 
 /**
@@ -876,7 +876,7 @@ gdk_dmabuf_texture_builder_set_offset (GdkDmabufTextureBuilder *self,
  *
  * Gets the color state previously set via gdk_dmabuf_texture_builder_set_color_state().
  *
- * Returns: the color state
+ * Returns: (nullable): the color state
  *
  * Since: 4.16
  */
@@ -891,12 +891,13 @@ gdk_dmabuf_texture_builder_get_color_state (GdkDmabufTextureBuilder *self)
 /**
  * gdk_dmabuf_texture_builder_set_color_state: (attributes org.gtk.Method.set_property=color-state)
  * @self: a `GdkDmabufTextureBuilder`
- * @color_state: a `GdkColorState`
+ * @color_state: (nullable): a `GdkColorState` or `NULL` to unset the colorstate.
  *
  * Sets the color state for the texture.
  *
- * By default, the sRGB colorstate is used. If you don't know what
- * colorstates are, this is probably the right thing.
+ * By default, the colorstate is `NULL`. In that case, GTK will choose the
+ * correct colorstate based on the format.
+ * If you don't know what colorstates are, this is probably the right thing.
  *
  * Since: 4.16
  */
@@ -905,13 +906,16 @@ gdk_dmabuf_texture_builder_set_color_state (GdkDmabufTextureBuilder *self,
                                             GdkColorState           *color_state)
 {
   g_return_if_fail (GDK_IS_DMABUF_TEXTURE_BUILDER (self));
-  g_return_if_fail (color_state != NULL);
 
-  if (gdk_color_state_equal (self->color_state, color_state))
+  if (self->color_state == color_state ||
+      (self->color_state != NULL && color_state != NULL && gdk_color_state_equal (self->color_state, color_state)))
     return;
 
   g_clear_pointer (&self->color_state, gdk_color_state_unref);
-  self->color_state = gdk_color_state_ref (color_state);
+  self->color_state = color_state;
+  if (color_state)
+    gdk_color_state_ref (color_state);
+
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR_STATE]);
 }
 

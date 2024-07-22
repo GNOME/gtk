@@ -182,6 +182,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   GdkTexture *update_texture;
   GdkDisplay *display;
   GdkDmabuf dmabuf;
+  GdkColorState *color_state;
   GError *local_error = NULL;
   int width, height;
   gboolean premultiplied;
@@ -201,10 +202,24 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 
   gdk_display_init_dmabuf (display);
 
+  color_state = gdk_dmabuf_texture_builder_get_color_state (builder);
+  if (color_state == NULL)
+    {
+      gboolean is_yuv;
+
+      if (gdk_dmabuf_fourcc_is_yuv (dmabuf.fourcc, &is_yuv) && is_yuv)
+        {
+          g_warning_once ("FIXME: Implement the proper colorstate for YUV dmabufs");
+          color_state = gdk_color_state_get_srgb ();
+        }
+      else
+        color_state = gdk_color_state_get_srgb ();
+    }
+
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
                        "width", width,
                        "height", height,
-                       "color-state", gdk_dmabuf_texture_builder_get_color_state (builder),
+                       "color-state", color_state,
                        NULL);
 
   g_set_object (&self->display, display);
