@@ -406,6 +406,12 @@ gsk_gl_device_load_shader (GskGLDevice       *self,
       g_assert (!gsk_gpu_shader_flags_has_external_textures (flags));
     }
 
+  /* work with AMD's compiler, too */
+  if (gsk_gpu_shader_flags_has_external_texture0 (flags))
+    g_string_append (preamble, "#define GSK_TEXTURE0_IS_EXTERNAL 1\n");
+  if (gsk_gpu_shader_flags_has_external_texture1 (flags))
+    g_string_append (preamble, "#define GSK_TEXTURE1_IS_EXTERNAL 1\n");
+
   switch (shader_type)
     {
       case GL_VERTEX_SHADER:

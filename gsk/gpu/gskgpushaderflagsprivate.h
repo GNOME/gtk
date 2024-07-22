@@ -18,6 +18,18 @@ gsk_gpu_shader_flags_has_external_textures (GskGpuShaderFlags flags)
   return flags & (3 << GSK_GPU_SHADER_CLIP_SHIFT) ? TRUE : FALSE;
 }
 
+static inline gboolean
+gsk_gpu_shader_flags_has_external_texture0 (GskGpuShaderFlags flags)
+{
+  return flags & (1 << GSK_GPU_SHADER_CLIP_SHIFT) ? TRUE : FALSE;
+}
+
+static inline gboolean
+gsk_gpu_shader_flags_has_external_texture1 (GskGpuShaderFlags flags)
+{
+  return flags & (2 << GSK_GPU_SHADER_CLIP_SHIFT) ? TRUE : FALSE;
+}
+
 static inline GskGpuShaderClip
 gsk_gpu_shader_flags_get_clip (GskGpuShaderFlags flags)
 {

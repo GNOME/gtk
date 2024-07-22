@@ -1,8 +1,5 @@
 precision highp float;
 
-#define GSK_TEXTURE0_IS_EXTERNAL GSK_FLAGS & 4u
-#define GSK_TEXTURE1_IS_EXTERNAL GSK_FLAGS & 8u
-
 #if __VERSION__ < 420 || (defined(GSK_GLES) && __VERSION__ < 310)
 layout(std140)
 #else
@@ -36,7 +33,7 @@ uniform PushConstants
 
 #if GSK_N_TEXTURES > 0
 
-#if GSK_TEXTURE0_IS_EXTERNAL
+#ifdef GSK_TEXTURE0_IS_EXTERNAL
 uniform samplerExternalOES GSK_TEXTURE0;
 #else
 uniform sampler2D GSK_TEXTURE0;
@@ -44,7 +41,7 @@ uniform sampler2D GSK_TEXTURE0;
 
 #if GSK_N_TEXTURES > 1
 
-#if GSK_TEXTURE1_IS_EXTERNAL
+#ifdef GSK_TEXTURE1_IS_EXTERNAL
 uniform samplerExternalOES GSK_TEXTURE1;
 #else
 uniform sampler2D GSK_TEXTURE1;
