@@ -137,7 +137,7 @@ typedef struct
   int color_primaries;
   int transfer_function;
   int matrix_coefficients;
-  int full_range;
+  int range;
 } CICPData;
 
 static int
@@ -154,7 +154,7 @@ png_read_chunk_func (png_structp        png,
       cicp->color_primaries = chunk->data[0];
       cicp->transfer_function = chunk->data[1];
       cicp->matrix_coefficients = chunk->data[2];
-      cicp->full_range = chunk->data[3];
+      cicp->range = chunk->data[3];
 
       return 1;
     }
@@ -162,32 +162,18 @@ png_read_chunk_func (png_structp        png,
   return 0;
 }
 
-/* we use "chunk_read" here to mean "is supported" */
-static const CICPData colorstate_cicp[GDK_COLOR_STATE_N_IDS] = {
-  [GDK_COLOR_STATE_ID_SRGB] = { TRUE, 1, 13, 0, 1 },
-  [GDK_COLOR_STATE_ID_SRGB_LINEAR] = { TRUE, 1, 8, 0, 1 },
-  [GDK_COLOR_STATE_ID_REC2100_PQ] = { TRUE, 9, 16, 0, 1 },
-  [GDK_COLOR_STATE_ID_REC2100_LINEAR] = { TRUE, 9, 8, 0, 1 }
-};
-
 static GdkColorState *
-gdk_png_get_color_state_from_cicp (const CICPData *cicp)
+gdk_png_get_color_state_from_cicp (const CICPData  *data,
+                                   GError         **error)
 {
-  gsize i;
+  GdkCicp cicp;
 
-  for (i = 0; i < GDK_COLOR_STATE_N_IDS; i++)
-    {
-      if (!colorstate_cicp[i].cicp_chunk_read)
-        continue;
+  cicp.color_primaries = data->color_primaries;
+  cicp.transfer_function = data->transfer_function;
+  cicp.matrix_coefficients= data->matrix_coefficients;
+  cicp.range = data->range;
 
-      if (colorstate_cicp[i].color_primaries == cicp->color_primaries &&
-          colorstate_cicp[i].transfer_function == cicp->transfer_function &&
-          colorstate_cicp[i].matrix_coefficients == cicp->matrix_coefficients &&
-          colorstate_cicp[i].full_range == cicp->full_range)
-        return gdk_color_state_ref ((GdkColorState *) &gdk_default_color_states[i]);
-    }
-
-  return NULL;
+  return gdk_color_state_new_for_cicp (&cicp, error);
 }
 
 static GdkColorState *
@@ -203,7 +189,9 @@ gdk_png_get_color_state (png_struct  *png,
 
   if (cicp->cicp_chunk_read)
     {
-      color_state = gdk_png_get_color_state_from_cicp (cicp);
+      GError *local_error = NULL;
+
+      color_state = gdk_png_get_color_state_from_cicp (cicp, &local_error);
       if (color_state)
         {
           g_debug ("Color state from cICP data: %s", gdk_color_state_get_name (color_state));
@@ -211,14 +199,10 @@ gdk_png_get_color_state (png_struct  *png,
         }
       else
         {
-          g_set_error (error,
-                       GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED_CONTENT,
-                       /* Translators: the variables at the end are just the numbers as they appear in the PNG */
-                       _("Unsupported CICP color properties: %d/%d/%d %d"),
-                       cicp->color_primaries,
-                       cicp->transfer_function,
-                       cicp->matrix_coefficients,
-                       cicp->full_range);
+          g_set_error_literal (error,
+                               GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED_CONTENT,
+                               local_error->message);
+          g_error_free (local_error);
         }
     }
 
@@ -247,14 +231,11 @@ gdk_png_set_color_state (png_struct    *png,
                          GdkColorState *color_state,
                          png_byte      *chunk_data)
 {
-  const CICPData *cicp;
+  const GdkCicp *cicp;
 
-  if (GDK_IS_DEFAULT_COLOR_STATE (color_state))
-    cicp = &colorstate_cicp[GDK_DEFAULT_COLOR_STATE_ID (color_state)];
-  else
-    cicp = NULL;
+  cicp = gdk_color_state_get_cicp (color_state);
 
-  if (cicp && cicp->cicp_chunk_read)
+  if (cicp)
     {
       png_unknown_chunk chunk = {
         .name = { 'c', 'I', 'C', 'P', '\0' },
@@ -265,8 +246,8 @@ gdk_png_set_color_state (png_struct    *png,
 
       chunk_data[0] = (png_byte) cicp->color_primaries;
       chunk_data[1] = (png_byte) cicp->transfer_function;
-      chunk_data[2] = (png_byte) cicp->matrix_coefficients;
-      chunk_data[3] = (png_byte) cicp->full_range;
+      chunk_data[2] = (png_byte) 0; /* png only supports this */
+      chunk_data[3] = (png_byte) cicp->range;
 
       png_set_unknown_chunks (png, info, &chunk, 1);
     }
