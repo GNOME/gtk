@@ -2,6 +2,7 @@
 
 #include "gskgpucacheprivate.h"
 
+#include "gskgpucachedprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
 #include "gskgpuimageprivate.h"

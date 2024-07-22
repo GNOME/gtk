@@ -3,6 +3,7 @@
 #include "gskvulkanycbcrprivate.h"
 
 #include "gskgpucacheprivate.h"
+#include "gskgpucachedprivate.h"
 
 struct _GskVulkanYcbcr
 {
