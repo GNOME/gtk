@@ -50,7 +50,9 @@ GdkTexture *            gsk_vulkan_image_to_dmabuf_texture              (GskVulk
 guchar *                gsk_vulkan_image_get_data                       (GskVulkanImage         *self,
                                                                          gsize                  *out_stride);
 
-VkSampler               gsk_vulkan_image_get_vk_sampler                 (GskVulkanImage         *self);
+GskVulkanYcbcr *        gsk_vulkan_image_get_ycbcr                      (GskVulkanImage         *self);
+VkDescriptorSet         gsk_vulkan_image_get_vk_descriptor_set          (GskVulkanImage         *self,
+                                                                         GskGpuSampler           sampler);
 VkPipelineStageFlags    gsk_vulkan_image_get_vk_pipeline_stage          (GskVulkanImage         *self);
 VkImageLayout           gsk_vulkan_image_get_vk_image_layout            (GskVulkanImage         *self);
 VkAccessFlags           gsk_vulkan_image_get_vk_access                  (GskVulkanImage         *self);

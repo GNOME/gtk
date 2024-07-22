@@ -23,7 +23,7 @@ gsk_gpu_color_matrix_op_print_instance (GskGpuShaderOp *shader,
   GskGpuColormatrixInstance *instance = (GskGpuColormatrixInstance *) instance_;
 
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
+  gsk_gpu_print_image (string, shader->images[0]);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_COLOR_MATRIX_OP_CLASS = {
@@ -38,6 +38,7 @@ static const GskGpuShaderOpClass GSK_GPU_COLOR_MATRIX_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpucolormatrix",
+  gsk_gpu_colormatrix_n_textures,
   sizeof (GskGpuColormatrixInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_colormatrix_info,
@@ -51,11 +52,8 @@ void
 gsk_gpu_color_matrix_op (GskGpuFrame             *frame,
                          GskGpuShaderClip         clip,
                          GskGpuColorStates        color_states,
-                         GskGpuDescriptors       *desc,
-                         guint32                  descriptor,
-                         const graphene_rect_t   *rect,
                          const graphene_point_t  *offset,
-                         const graphene_rect_t   *tex_rect,
+                         const GskGpuShaderImage *image,
                          const graphene_matrix_t *color_matrix,
                          const graphene_vec4_t   *color_offset)
 {
@@ -66,12 +64,12 @@ gsk_gpu_color_matrix_op (GskGpuFrame             *frame,
                            color_states,
                            0,
                            clip,
-                           desc,
+                           (GskGpuImage *[1]) { image->image },
+                           (GskGpuSampler[1]) { image->sampler },
                            &instance);
 
-  gsk_gpu_rect_to_float (rect, offset, instance->rect);
-  gsk_gpu_rect_to_float (tex_rect, offset, instance->tex_rect);
-  instance->tex_id = descriptor;
+  gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);
+  gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
   graphene_matrix_to_float (color_matrix, instance->color_matrix);
   graphene_vec4_to_float (color_offset, instance->color_offset);
 }

@@ -5,16 +5,27 @@
 #include "gskgputypesprivate.h"
 #include "gskgpucolorstatesprivate.h"
 
+#include <graphene.h>
+
 G_BEGIN_DECLS
+
+struct _GskGpuShaderImage
+{
+  GskGpuImage           *image;         /* image to draw */
+  GskGpuSampler          sampler;       /* sampler to use for image */
+  const graphene_rect_t *coverage;      /* the clip area for the image or NULL for unclipped */
+  const graphene_rect_t *bounds;        /* bounds for the image */
+};
 
 struct _GskGpuShaderOp
 {
   GskGpuOp parent_op;
 
-  GskGpuDescriptors *desc;
+  GskGpuImage *images[2];
+  GskGpuSampler samplers[2];
+  GskGpuShaderFlags flags;
   GskGpuColorStates color_states;
   guint32 variation;
-  GskGpuShaderClip clip;
   gsize vertex_offset;
   gsize n_ops;
 };
@@ -24,6 +35,7 @@ struct _GskGpuShaderOpClass
   GskGpuOpClass         parent_class;
 
   const char *          shader_name;
+  gsize                 n_textures;
   gsize                 vertex_size;
 #ifdef GDK_RENDERING_VULKAN
   const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
@@ -40,7 +52,8 @@ void                    gsk_gpu_shader_op_alloc                         (GskGpuF
                                                                          GskGpuColorStates       color_states,
                                                                          guint32                 variation,
                                                                          GskGpuShaderClip        clip,
-                                                                         GskGpuDescriptors      *desc,
+                                                                         GskGpuImage           **images,
+                                                                         GskGpuSampler          *samplers,
                                                                          gpointer                out_vertex_data);
 
 void                    gsk_gpu_shader_op_finish                        (GskGpuOp               *op);

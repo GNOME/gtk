@@ -5,6 +5,7 @@
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkanframeprivate.h"
 #include "gskvulkanmemoryprivate.h"
+#include "gskvulkanycbcrprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
@@ -31,8 +32,12 @@ struct _GskVulkanImage
   VkImageView vk_image_view;
   VkFramebuffer vk_framebuffer;
   VkImageView vk_framebuffer_image_view;
-  VkSampler vk_sampler;
+  GskVulkanYcbcr *ycbcr;
   VkSemaphore vk_semaphore;
+  struct {
+    VkDescriptorSet vk_descriptor_set;
+    gsize pool_id;
+  } descriptor_sets[GSK_GPU_SAMPLER_N_SAMPLERS];
 
   VkPipelineStageFlags vk_pipeline_stage;
   VkImageLayout vk_image_layout;
@@ -1114,7 +1119,11 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
 #endif
 
   if (is_yuv)
-    vk_conversion = gsk_vulkan_device_get_vk_conversion (device, vk_format, &self->vk_sampler);
+    {
+      self->ycbcr = gsk_vulkan_device_get_ycbcr (device, vk_format);
+      gsk_vulkan_ycbcr_ref (self->ycbcr);
+      vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
+    }
   else
     vk_conversion = VK_NULL_HANDLE;
 
@@ -1283,8 +1292,19 @@ gsk_vulkan_image_finalize (GObject *object)
 {
   GskVulkanImage *self = GSK_VULKAN_IMAGE (object);
   VkDevice vk_device;
+  gsize i;
 
   vk_device = gsk_vulkan_device_get_vk_device (self->device);
+
+  g_clear_pointer (&self->ycbcr, gsk_vulkan_ycbcr_unref);
+
+  for (i = 0; i < GSK_GPU_SAMPLER_N_SAMPLERS; i++)
+    {
+      if (self->descriptor_sets[i].vk_descriptor_set)
+        gsk_vulkan_device_free_descriptor (self->device,
+                                           self->descriptor_sets[i].pool_id,
+                                           self->descriptor_sets[i].vk_descriptor_set);
+    }
 
   if (self->vk_framebuffer != VK_NULL_HANDLE)
     vkDestroyFramebuffer (vk_device, self->vk_framebuffer, NULL);
@@ -1382,10 +1402,45 @@ gsk_vulkan_image_get_vk_framebuffer (GskVulkanImage *self,
   return self->vk_framebuffer;
 }
 
-VkSampler
-gsk_vulkan_image_get_vk_sampler (GskVulkanImage *self)
+VkDescriptorSet
+gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
+                                        GskGpuSampler   sampler)
 {
-  return self->vk_sampler;
+  if (!self->descriptor_sets[sampler].vk_descriptor_set)
+    {
+      self->descriptor_sets[sampler].vk_descriptor_set =
+        gsk_vulkan_device_allocate_descriptor (self->device,
+                                               self->ycbcr ? gsk_vulkan_ycbcr_get_vk_descriptor_set_layout (self->ycbcr)
+                                                           : gsk_vulkan_device_get_vk_image_set_layout (self->device),
+                                               &self->descriptor_sets[sampler].pool_id);
+
+      vkUpdateDescriptorSets (gsk_vulkan_device_get_vk_device (self->device),
+                              1,
+                              &(VkWriteDescriptorSet) {
+                                  .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+                                  .dstSet = self->descriptor_sets[sampler].vk_descriptor_set,
+                                  .dstBinding = 0,
+                                  .dstArrayElement = 0,
+                                  .descriptorCount = 1,
+                                  .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                  .pImageInfo = &(VkDescriptorImageInfo) {
+                                      .sampler = self->ycbcr ? gsk_vulkan_ycbcr_get_vk_sampler (self->ycbcr)
+                                                             : gsk_vulkan_device_get_vk_sampler (self->device, sampler),
+                                      .imageView = self->vk_image_view,
+                                      .imageLayout = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+                                  },
+                              },
+                              0,
+                              NULL);
+    }
+
+  return self->descriptor_sets[sampler].vk_descriptor_set;
+}
+
+GskVulkanYcbcr *
+gsk_vulkan_image_get_ycbcr (GskVulkanImage *self)
+{
+  return self->ycbcr;
 }
 
 VkImage

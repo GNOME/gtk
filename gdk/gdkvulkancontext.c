@@ -38,9 +38,6 @@
 static const GdkDebugKey gsk_vulkan_feature_keys[] = {
   { "dmabuf", GDK_VULKAN_FEATURE_DMABUF, "Never import Dmabufs" },
   { "ycbcr", GDK_VULKAN_FEATURE_YCBCR, "Do not support Ycbcr textures (also disables dmabufs)" },
-  { "descriptor-indexing", GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING, "Force slow descriptor set layout codepath" },
-  { "dynamic-indexing", GDK_VULKAN_FEATURE_DYNAMIC_INDEXING, "Hardcode small number of buffer and texture arrays" },
-  { "nonuniform-indexing", GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING, "Split draw calls to ensure uniform texture accesses" },
   { "semaphore-export", GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT, "Disable sync of exported dmabufs" },
   { "semaphore-import", GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT, "Disable sync of imported dmabufs" },
   { "incremental-present", GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT, "Do not send damage regions" },
@@ -584,23 +581,6 @@ physical_device_check_features (VkPhysicalDevice device)
                                                   &semaphore_props);
 
   features = 0;
-
-  if (v10_features.features.shaderUniformBufferArrayDynamicIndexing &&
-      v10_features.features.shaderSampledImageArrayDynamicIndexing)
-    features |= GDK_VULKAN_FEATURE_DYNAMIC_INDEXING;
-
-  if (v12_features.descriptorIndexing &&
-      v12_features.descriptorBindingPartiallyBound &&
-      v12_features.descriptorBindingVariableDescriptorCount &&
-      v12_features.descriptorBindingSampledImageUpdateAfterBind &&
-      v12_features.descriptorBindingStorageBufferUpdateAfterBind)
-    features |= GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING;
-  else if (physical_device_supports_extension (device, VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME))
-    features |= GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING;
-
-  if (v12_features.shaderSampledImageArrayNonUniformIndexing &&
-      v12_features.shaderStorageBufferArrayNonUniformIndexing)
-    features |= GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING;
 
   if (ycbcr_features.samplerYcbcrConversion ||
       physical_device_supports_extension (device, VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME))
@@ -1532,8 +1512,6 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
               device_extensions = g_ptr_array_new ();
               g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-              if (features & GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING)
-                g_ptr_array_add (device_extensions, (gpointer) VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME);
               if (features & GDK_VULKAN_FEATURE_YCBCR)
                 {
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
@@ -1576,16 +1554,6 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                                                     .pNext = &(VkPhysicalDeviceVulkan11Features) {
                                                         .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_1_FEATURES,
                                                         .samplerYcbcrConversion = ENABLE_IF (GDK_VULKAN_FEATURE_YCBCR),
-                                                        .pNext = &(VkPhysicalDeviceVulkan12Features) {
-                                                            .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_VULKAN_1_2_FEATURES,
-                                                            .shaderSampledImageArrayNonUniformIndexing = ENABLE_IF (GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING),
-                                                            .shaderStorageBufferArrayNonUniformIndexing = ENABLE_IF (GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING),
-                                                            .descriptorIndexing = ENABLE_IF (GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING),
-                                                            .descriptorBindingPartiallyBound = ENABLE_IF (GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING),
-                                                            .descriptorBindingVariableDescriptorCount = ENABLE_IF (GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING),
-                                                            .descriptorBindingSampledImageUpdateAfterBind = ENABLE_IF (GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING),
-                                                            .descriptorBindingStorageBufferUpdateAfterBind = ENABLE_IF (GDK_VULKAN_FEATURE_DESCRIPTOR_INDEXING),
-                                                        }
                                                     }
                                                 },
                                                 NULL,

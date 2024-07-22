@@ -10,10 +10,9 @@ G_DECLARE_FINAL_TYPE (GskGLFrame, gsk_gl_frame, GSK, GL_FRAME, GskGpuFrame)
 
 void                    gsk_gl_frame_use_program                        (GskGLFrame             *self,
                                                                          const GskGpuShaderOpClass *op_class,
+                                                                         GskGpuShaderFlags       flags,
                                                                          GskGpuColorStates       color_states,
-                                                                         guint32                 variation,
-                                                                         GskGpuShaderClip        clip,
-                                                                         guint                   n_external_textures);
+                                                                         guint32                 variation);
 
 void                    gsk_gl_frame_bind_globals                       (GskGLFrame             *self);
 

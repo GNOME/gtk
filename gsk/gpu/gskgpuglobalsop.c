@@ -9,7 +9,6 @@
 #ifdef GDK_RENDERING_VULKAN
 #include "gskvulkandeviceprivate.h"
 #include "gskvulkanframeprivate.h"
-#include "gskvulkandescriptorsprivate.h"
 #endif
 
 typedef struct _GskGpuGlobalsOp GskGpuGlobalsOp;
@@ -51,8 +50,7 @@ gsk_gpu_globals_op_vk_command (GskGpuOp              *op,
   GskGpuGlobalsOp *self = (GskGpuGlobalsOp *) op;
 
   vkCmdPushConstants (state->vk_command_buffer,
-                      gsk_vulkan_device_get_vk_pipeline_layout (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                                                gsk_vulkan_descriptors_get_pipeline_layout (state->desc)),
+                      gsk_vulkan_device_get_default_vk_pipeline_layout (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame))),
                       VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
                       0,
                       sizeof (self->instance),

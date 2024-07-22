@@ -3,6 +3,7 @@
 #include "gskgldeviceprivate.h"
 
 #include "gskdebugprivate.h"
+#include "gskgpushaderflagsprivate.h"
 #include "gskgpushaderopprivate.h"
 #include "gskglbufferprivate.h"
 #include "gskglimageprivate.h"
@@ -34,10 +35,9 @@ typedef struct _GLProgramKey GLProgramKey;
 struct _GLProgramKey
 {
   const GskGpuShaderOpClass *op_class;
+  GskGpuShaderFlags flags;
   GskGpuColorStates color_states;
   guint32 variation;
-  GskGpuShaderClip clip;
-  guint n_external_textures;
 };
 
 G_DEFINE_TYPE (GskGLDevice, gsk_gl_device, GSK_TYPE_GPU_DEVICE)
@@ -48,9 +48,8 @@ gl_program_key_hash (gconstpointer data)
   const GLProgramKey *key = data;
 
   return GPOINTER_TO_UINT (key->op_class) ^
-         key->clip ^
-         (key->variation << 2) ^
-         (key->n_external_textures << 24) ^
+         ((key->flags << 11) | (key->flags >> 21)) ^
+         ((key->variation << 21) | ( key->variation >> 11)) ^
          key->color_states;
 }
 
@@ -62,10 +61,9 @@ gl_program_key_equal (gconstpointer a,
   const GLProgramKey *keyb = b;
 
   return keya->op_class == keyb->op_class &&
+         keya->flags == keyb->flags && 
          keya->color_states == keyb->color_states && 
-         keya->variation == keyb->variation && 
-         keya->clip == keyb->clip && 
-         keya->n_external_textures == keyb->n_external_textures;
+         keya->variation == keyb->variation;
 }
 
 static GskGpuImage *
@@ -380,10 +378,9 @@ static GLuint
 gsk_gl_device_load_shader (GskGLDevice       *self,
                            const char        *program_name,
                            GLenum             shader_type,
+                           GskGpuShaderFlags  flags,
                            GskGpuColorStates  color_states,
                            guint32            variation,
-                           GskGpuShaderClip   clip,
-                           guint              n_external_textures,
                            GError           **error)
 {
   GString *preamble;
@@ -397,21 +394,23 @@ gsk_gl_device_load_shader (GskGLDevice       *self,
   g_string_append (preamble, "\n");
   if (self->api == GDK_GL_API_GLES)
     {
-      if (n_external_textures > 0)
+      if (gsk_gpu_shader_flags_has_external_textures (flags))
         {
           g_string_append (preamble, "#extension GL_OES_EGL_image_external_essl3 : require\n");
           g_string_append (preamble, "#extension GL_OES_EGL_image_external : require\n");
         }
       g_string_append (preamble, "#define GSK_GLES 1\n");
-      g_assert (3 * n_external_textures <= 16);
     }
   else
     {
-      g_assert (n_external_textures == 0);
+      g_assert (!gsk_gpu_shader_flags_has_external_textures (flags));
     }
 
-  g_string_append_printf (preamble, "#define N_TEXTURES %u\n", 16 - 3 * n_external_textures);
-  g_string_append_printf (preamble, "#define N_EXTERNAL_TEXTURES %u\n", n_external_textures);
+  /* work with AMD's compiler, too */
+  if (gsk_gpu_shader_flags_has_external_texture0 (flags))
+    g_string_append (preamble, "#define GSK_TEXTURE0_IS_EXTERNAL 1\n");
+  if (gsk_gpu_shader_flags_has_external_texture1 (flags))
+    g_string_append (preamble, "#define GSK_TEXTURE1_IS_EXTERNAL 1\n");
 
   switch (shader_type)
     {
@@ -428,24 +427,9 @@ gsk_gl_device_load_shader (GskGLDevice       *self,
         return 0;
     }
 
+  g_string_append_printf (preamble, "#define GSK_FLAGS %uu\n", flags);
   g_string_append_printf (preamble, "#define GSK_COLOR_STATES %uu\n", color_states);
   g_string_append_printf (preamble, "#define GSK_VARIATION %uu\n", variation);
-
-  switch (clip)
-  {
-    case GSK_GPU_SHADER_CLIP_NONE:
-      g_string_append (preamble, "#define GSK_SHADER_CLIP GSK_GPU_SHADER_CLIP_NONE\n");
-      break;
-    case GSK_GPU_SHADER_CLIP_RECT:
-      g_string_append (preamble, "#define GSK_SHADER_CLIP GSK_GPU_SHADER_CLIP_RECT\n");
-      break;
-    case GSK_GPU_SHADER_CLIP_ROUNDED:
-      g_string_append (preamble, "#define GSK_SHADER_CLIP GSK_GPU_SHADER_CLIP_ROUNDED\n");
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-  }
 
   resource_name = g_strconcat ("/org/gtk/libgsk/shaders/gl/", program_name, ".glsl", NULL);
   bytes = g_resources_lookup_data (resource_name, 0, error);
@@ -482,21 +466,20 @@ gsk_gl_device_load_shader (GskGLDevice       *self,
 static GLuint
 gsk_gl_device_load_program (GskGLDevice               *self,
                             const GskGpuShaderOpClass *op_class,
+                            GskGpuShaderFlags          flags,
                             GskGpuColorStates          color_states,
                             guint32                    variation,
-                            GskGpuShaderClip           clip,
-                            guint                      n_external_textures,
                             GError                   **error)
 {
   G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   GLuint vertex_shader_id, fragment_shader_id, program_id;
   GLint link_status;
 
-  vertex_shader_id = gsk_gl_device_load_shader (self, op_class->shader_name, GL_VERTEX_SHADER, color_states, variation, clip, n_external_textures, error);
+  vertex_shader_id = gsk_gl_device_load_shader (self, op_class->shader_name, GL_VERTEX_SHADER, flags, color_states, variation, error);
   if (vertex_shader_id == 0)
     return 0;
 
-  fragment_shader_id = gsk_gl_device_load_shader (self, op_class->shader_name, GL_FRAGMENT_SHADER, color_states, variation, clip, n_external_textures, error);
+  fragment_shader_id = gsk_gl_device_load_shader (self, op_class->shader_name, GL_FRAGMENT_SHADER, flags, color_states, variation, error);
   if (fragment_shader_id == 0)
     return 0;
 
@@ -554,21 +537,18 @@ gsk_gl_device_load_program (GskGLDevice               *self,
 void
 gsk_gl_device_use_program (GskGLDevice               *self,
                            const GskGpuShaderOpClass *op_class,
+                           GskGpuShaderFlags          flags,
                            GskGpuColorStates          color_states,
-                           guint32                    variation,
-                           GskGpuShaderClip           clip,
-                           guint                      n_external_textures)
+                           guint32                    variation)
 {
   GError *error = NULL;
   GLuint program_id;
   GLProgramKey key = {
     .op_class = op_class,
+    .flags = flags,
     .color_states = color_states,
     .variation = variation,
-    .clip = clip,
-    .n_external_textures = n_external_textures
   };
-  guint i, n_textures;
 
   program_id = GPOINTER_TO_UINT (g_hash_table_lookup (self->gl_programs, &key));
   if (program_id)
@@ -577,7 +557,7 @@ gsk_gl_device_use_program (GskGLDevice               *self,
       return;
     }
 
-  program_id = gsk_gl_device_load_program (self, op_class, color_states, variation, clip, n_external_textures, &error);
+  program_id = gsk_gl_device_load_program (self, op_class, flags, color_states, variation, &error);
   if (program_id == 0)
     {
       g_critical ("Failed to load shader program: %s", error->message);
@@ -589,21 +569,9 @@ gsk_gl_device_use_program (GskGLDevice               *self,
 
   glUseProgram (program_id);
 
-  n_textures = 16 - 3 * n_external_textures;
-
-  for (i = 0; i < n_external_textures; i++)
-    {
-      char *name = g_strdup_printf ("external_textures[%u]", i);
-      glUniform1i (glGetUniformLocation (program_id, name), n_textures + 3 * i);
-      g_free (name);
-    }
-
-  for (i = 0; i < n_textures; i++)
-    {
-      char *name = g_strdup_printf ("textures[%u]", i);
-      glUniform1i (glGetUniformLocation (program_id, name), i);
-      g_free (name);
-    }
+  /* space by 3 because external textures may need 3 texture units */
+  glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE0"), 0);
+  glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE1"), 3);
 }
 
 GLuint

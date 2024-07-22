@@ -23,8 +23,8 @@ gsk_gpu_cross_fade_op_print_instance (GskGpuShaderOp *shader,
   GskGpuCrossfadeInstance *instance = (GskGpuCrossfadeInstance *) instance_;
 
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->start_id);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->end_id);
+  gsk_gpu_print_image (string, shader->images[0]);
+  gsk_gpu_print_image (string, shader->images[1]);
   g_string_append_printf (string, "%g%%", 100 * instance->opacity_progress[1]);
 }
 
@@ -40,6 +40,7 @@ static const GskGpuShaderOpClass GSK_GPU_CROSS_FADE_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpucrossfade",
+  gsk_gpu_crossfade_n_textures,
   sizeof (GskGpuCrossfadeInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_crossfade_info,
@@ -50,18 +51,15 @@ static const GskGpuShaderOpClass GSK_GPU_CROSS_FADE_OP_CLASS = {
 };
 
 void
-gsk_gpu_cross_fade_op (GskGpuFrame            *frame,
-                       GskGpuShaderClip        clip,
-                       GskGpuColorStates       color_states,
-                       GskGpuDescriptors      *desc,
-                       const graphene_rect_t  *rect,
-                       const graphene_point_t *offset,
-                       float                   opacity,
-                       float                   progress,
-                       guint32                 start_descriptor,
-                       const graphene_rect_t  *start_rect,
-                       guint32                 end_descriptor,
-                       const graphene_rect_t  *end_rect)
+gsk_gpu_cross_fade_op (GskGpuFrame             *frame,
+                       GskGpuShaderClip         clip,
+                       GskGpuColorStates        color_states,
+                       const graphene_rect_t   *rect,
+                       const graphene_point_t  *offset,
+                       float                    opacity,
+                       float                    progress,
+                       const GskGpuShaderImage *start,
+                       const GskGpuShaderImage *end)
 {
   GskGpuCrossfadeInstance *instance;
 
@@ -70,14 +68,13 @@ gsk_gpu_cross_fade_op (GskGpuFrame            *frame,
                            color_states,
                            0,
                            clip,
-                           desc,
+                           (GskGpuImage *[2]) { start->image, end->image },
+                           (GskGpuSampler[2]) { start->sampler, end->sampler },
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   instance->opacity_progress[0] = opacity;
   instance->opacity_progress[1] = progress;
-  gsk_gpu_rect_to_float (start_rect, offset, instance->start_rect);
-  instance->start_id = start_descriptor;
-  gsk_gpu_rect_to_float (end_rect, offset, instance->end_rect);
-  instance->end_id = end_descriptor;
+  gsk_gpu_rect_to_float (start->bounds, offset, instance->start_rect);
+  gsk_gpu_rect_to_float (end->bounds, offset, instance->end_rect);
 }

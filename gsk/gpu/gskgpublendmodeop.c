@@ -25,9 +25,9 @@ gsk_gpu_blend_mode_op_print_instance (GskGpuShaderOp *shader,
 
   gsk_gpu_print_enum (string, GSK_TYPE_BLEND_MODE, shader->variation);
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->bottom_id);
+  gsk_gpu_print_image (string, shader->images[0]);
   gsk_gpu_print_enum (string, GSK_TYPE_BLEND_MODE, shader->variation);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->top_id);
+  gsk_gpu_print_image (string, shader->images[1]);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
@@ -42,6 +42,7 @@ static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpublendmode",
+  gsk_gpu_blendmode_n_textures,
   sizeof (GskGpuBlendmodeInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_blendmode_info,
@@ -52,17 +53,14 @@ static const GskGpuShaderOpClass GSK_GPU_BLEND_MODE_OP_CLASS = {
 };
 
 void
-gsk_gpu_blend_mode_op (GskGpuFrame            *frame,
-                       GskGpuShaderClip        clip,
-                       GskGpuDescriptors      *desc,
-                       const graphene_rect_t  *rect,
-                       const graphene_point_t *offset,
-                       float                   opacity,
-                       GskBlendMode            blend_mode,
-                       guint32                 bottom_descriptor,
-                       const graphene_rect_t  *bottom_rect,
-                       guint32                 top_descriptor,
-                       const graphene_rect_t  *top_rect)
+gsk_gpu_blend_mode_op (GskGpuFrame             *frame,
+                       GskGpuShaderClip         clip,
+                       const graphene_rect_t   *rect,
+                       const graphene_point_t  *offset,
+                       float                    opacity,
+                       GskBlendMode             blend_mode,
+                       const GskGpuShaderImage *bottom,
+                       const GskGpuShaderImage *top)
 {
   GskGpuBlendmodeInstance *instance;
 
@@ -71,13 +69,12 @@ gsk_gpu_blend_mode_op (GskGpuFrame            *frame,
                            gsk_gpu_color_states_create_equal (TRUE, TRUE),
                            blend_mode,
                            clip,
-                           desc,
+                           (GskGpuImage *[2]) { bottom->image, top->image },
+                           (GskGpuSampler[2]) { bottom->sampler, top->sampler },
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
   instance->opacity = opacity;
-  gsk_gpu_rect_to_float (bottom_rect, offset, instance->bottom_rect);
-  instance->bottom_id = bottom_descriptor;
-  gsk_gpu_rect_to_float (top_rect, offset, instance->top_rect);
-  instance->top_id = top_descriptor;
+  gsk_gpu_rect_to_float (bottom->bounds, offset, instance->bottom_rect);
+  gsk_gpu_rect_to_float (top->bounds, offset, instance->top_rect);
 }

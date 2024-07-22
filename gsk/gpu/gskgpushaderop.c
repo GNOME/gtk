@@ -4,13 +4,13 @@
 
 #include "gskgpuframeprivate.h"
 #include "gskgpuprintprivate.h"
-#include "gskgldescriptorsprivate.h"
+#include "gskgpushaderflagsprivate.h"
 #include "gskgldeviceprivate.h"
 #include "gskglframeprivate.h"
 #include "gskglimageprivate.h"
 #ifdef GDK_RENDERING_VULKAN
-#include "gskvulkandescriptorsprivate.h"
 #include "gskvulkandeviceprivate.h"
+#include "gskvulkanimageprivate.h"
 #endif
 
 #include "gdkglcontextprivate.h"
@@ -26,7 +26,8 @@ gsk_gpu_shader_op_finish (GskGpuOp *op)
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
 
-  g_clear_object (&self->desc);
+  g_clear_object (&self->images[0]);
+  g_clear_object (&self->images[1]);
 }
 
 void
@@ -51,7 +52,7 @@ gsk_gpu_shader_op_print (GskGpuOp    *op,
   for (i = 0; i < self->n_ops; i++)
     {
       gsk_gpu_print_op (string, indent, shader_name);
-      gsk_gpu_print_shader_clip (string, self->clip);
+      gsk_gpu_print_shader_flags (string, self->flags);
       gsk_gpu_print_color_states (string, self->color_states);
       shader_class->print_instance (self,
                                     instance + i * shader_class->vertex_size,
@@ -69,23 +70,14 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
-  GskVulkanDescriptors *desc;
   GskGpuOp *next;
+  VkPipelineLayout vk_pipeline_layout;
   gsize i, n_ops, max_ops_per_draw;
 
-  if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE) &&
-      gsk_vulkan_device_has_feature (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                     GDK_VULKAN_FEATURE_NONUNIFORM_INDEXING))
+  if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
     max_ops_per_draw = MAX_MERGE_OPS;
   else
     max_ops_per_draw = 1;
-
-  desc = GSK_VULKAN_DESCRIPTORS (self->desc);
-  if (desc && state->desc != desc)
-    {
-      gsk_vulkan_descriptors_bind (desc, state->desc, state->vk_command_buffer);
-      state->desc = desc;
-    }
 
   n_ops = self->n_ops;
   for (next = op->next; next; next = next->next)
@@ -93,24 +85,49 @@ gsk_gpu_shader_op_vk_command_n (GskGpuOp              *op,
       GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
   
       if (next->op_class != op->op_class ||
-          next_shader->desc != self->desc ||
+          next_shader->flags != self->flags ||
           next_shader->color_states != self->color_states ||
           next_shader->variation != self->variation ||
-          next_shader->clip != self->clip ||
-          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size)
+          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size ||
+          (shader_op_class->n_textures > 0 && (next_shader->images[0] != self->images[0] || next_shader->samplers[0] != self->samplers[0])) ||
+          (shader_op_class->n_textures > 1 && (next_shader->images[1] != self->images[1] || next_shader->samplers[1] != self->samplers[1])))
         break;
 
       n_ops += next_shader->n_ops;
     }
 
+  vk_pipeline_layout = gsk_vulkan_device_get_vk_pipeline_layout (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                                 shader_op_class->n_textures > 0 ? gsk_vulkan_image_get_ycbcr (GSK_VULKAN_IMAGE (self->images[0])) : NULL,
+                                                                 shader_op_class->n_textures > 1 ? gsk_vulkan_image_get_ycbcr (GSK_VULKAN_IMAGE (self->images[1])) : NULL);
+
+  for (i = 0; i < shader_op_class->n_textures; i++)
+    {
+      if (state->current_images[i] != self->images[i] ||
+          state->current_samplers[i] != self->samplers[i])
+        {
+          vkCmdBindDescriptorSets (state->vk_command_buffer,
+                                   VK_PIPELINE_BIND_POINT_GRAPHICS,
+                                   vk_pipeline_layout,
+                                   i,
+                                   1,
+                                   (VkDescriptorSet[1]) {
+                                       gsk_vulkan_image_get_vk_descriptor_set (GSK_VULKAN_IMAGE (self->images[i]), self->samplers[i]),
+                                   },
+                                   0,
+                                   NULL);
+          state->current_images[i] = self->images[i];
+          state->current_samplers[i] = self->samplers[i];
+        }
+    }
+                               
   vkCmdBindPipeline (state->vk_command_buffer,
                      VK_PIPELINE_BIND_POINT_GRAPHICS,
                      gsk_vulkan_device_get_vk_pipeline (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                                        gsk_vulkan_descriptors_get_pipeline_layout (state->desc),
+                                                        vk_pipeline_layout,
                                                         shader_op_class,
+                                                        self->flags,
                                                         self->color_states,
                                                         self->variation,
-                                                        self->clip,
                                                         state->blend,
                                                         state->vk_format,
                                                         state->vk_render_pass));
@@ -142,39 +159,39 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
 {
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
-  GskGLDescriptors *desc;
   GskGpuOp *next;
-  gsize i, n_ops, n_external, max_ops_per_draw;
-
-  desc = GSK_GL_DESCRIPTORS (self->desc);
-  if (desc)
-    n_external = gsk_gl_descriptors_get_n_external (desc);
-  else
-    n_external = 0;
+  gsize i, n_ops, max_ops_per_draw;
 
   if (state->current_program.op_class != op->op_class ||
       state->current_program.color_states != self->color_states ||
       state->current_program.variation != self->variation ||
-      state->current_program.clip != self->clip ||
-      state->current_program.n_external != n_external)
+      state->current_program.flags != self->flags)
     {
       state->current_program.op_class = op->op_class;
+      state->current_program.flags = self->flags;
       state->current_program.color_states = self->color_states;
       state->current_program.variation = self->variation;
-      state->current_program.clip = self->clip;
-      state->current_program.n_external = n_external;
       gsk_gl_frame_use_program (GSK_GL_FRAME (frame),
                                 shader_op_class,
+                                self->flags,
                                 self->color_states,
-                                self->variation,
-                                self->clip,
-                                n_external);
+                                self->variation);
     }
 
-  if (desc != state->desc && desc)
+  for (i = 0; i < shader_op_class->n_textures; i++)
     {
-      gsk_gl_descriptors_use (desc);
-      state->desc = desc;
+      if (state->current_images[i] != self->images[i])
+        {
+          glActiveTexture (GL_TEXTURE0 + 3 * i);
+          gsk_gl_image_bind_texture (GSK_GL_IMAGE (self->images[i]));
+          state->current_images[i] = self->images[i];
+        }
+      if (state->current_samplers[i] != self->samplers[i])
+        {
+          glBindSampler (3 * i, gsk_gl_device_get_sampler_id (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                              self->samplers[i]));
+          state->current_samplers[i] = self->samplers[i];
+        }
     }
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
@@ -188,11 +205,12 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
       GskGpuShaderOp *next_shader = (GskGpuShaderOp *) next;
 
       if (next->op_class != op->op_class ||
-          next_shader->desc != self->desc ||
+          next_shader->flags != self->flags ||
           next_shader->color_states != self->color_states ||
           next_shader->variation != self->variation ||
-          next_shader->clip != self->clip ||
-          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size)
+          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size ||
+          (shader_op_class->n_textures > 0 && (next_shader->images[0] != self->images[0] || next_shader->samplers[0] != self->samplers[0])) ||
+          (shader_op_class->n_textures > 1 && (next_shader->images[1] != self->images[1] || next_shader->samplers[1] != self->samplers[1])))
         break;
 
       n_ops += next_shader->n_ops;
@@ -237,25 +255,41 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
                          GskGpuColorStates          color_states,
                          guint32                    variation,
                          GskGpuShaderClip           clip,
-                         GskGpuDescriptors         *desc,
+                         GskGpuImage              **images,
+                         GskGpuSampler             *samplers,
                          gpointer                   out_vertex_data)
 {
   GskGpuOp *last;
   GskGpuShaderOp *last_shader;
-  gsize vertex_offset;
+  gsize i, vertex_offset, vertex_size, texture_vertex_size;
+  guchar *vertex_data;
+  GskGpuShaderFlags flags;
 
-  vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, op_class->vertex_size);
+  flags = gsk_gpu_shader_flags_create (clip,
+                                       op_class->n_textures > 0 && (gsk_gpu_image_get_flags (images[0]) & GSK_GPU_IMAGE_EXTERNAL),
+                                       op_class->n_textures > 1 && (gsk_gpu_image_get_flags (images[1]) & GSK_GPU_IMAGE_EXTERNAL));
+  texture_vertex_size = gsk_gpu_frame_get_texture_vertex_size (frame, op_class->n_textures);
+  vertex_size = texture_vertex_size + op_class->vertex_size;
+  vertex_offset = gsk_gpu_frame_reserve_vertex_data (frame, vertex_size);
+  vertex_data = gsk_gpu_frame_get_vertex_data (frame, vertex_offset);
+
+  gsk_gpu_frame_write_texture_vertex_data (frame,
+                                           vertex_data,
+                                           images,
+                                           samplers,
+                                           op_class->n_textures);
 
   last = gsk_gpu_frame_get_last_op (frame);
   /* careful: We're casting without checking, but the if() does the check */
   last_shader = (GskGpuShaderOp *) last;
   if (last &&
       last->op_class == (const GskGpuOpClass *) op_class &&
-      last_shader->desc == desc &&
       last_shader->color_states == color_states &&
       last_shader->variation == variation &&
-      last_shader->clip == clip &&
-      last_shader->vertex_offset + last_shader->n_ops * op_class->vertex_size == vertex_offset)
+      last_shader->flags == flags &&
+      last_shader->vertex_offset + last_shader->n_ops * vertex_size == vertex_offset &&
+      (op_class->n_textures < 1 || (last_shader->images[0] == images[0] && last_shader->samplers[0] == samplers[0])) &&
+      (op_class->n_textures < 2 || (last_shader->images[1] == images[1] && last_shader->samplers[1] == samplers[1])))
     {
       last_shader->n_ops++;
     }
@@ -264,17 +298,18 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
       GskGpuShaderOp *self;
       self = (GskGpuShaderOp *) gsk_gpu_op_alloc (frame, &op_class->parent_class);
 
+      self->flags = flags;
       self->color_states = color_states;
       self->variation = variation;
-      self->clip = clip;
       self->vertex_offset = vertex_offset;
-      if (desc)
-        self->desc = g_object_ref (desc);
-      else
-        self->desc = NULL;
       self->n_ops = 1;
+      for (i = 0; i < op_class->n_textures; i++)
+        {
+          self->images[i] = g_object_ref (images[i]);
+          self->samplers[i] = samplers[i];
+        }
     }
 
-  *((gpointer *) out_vertex_data) = gsk_gpu_frame_get_vertex_data (frame, vertex_offset);
+  *((gpointer *) out_vertex_data) = vertex_data + texture_vertex_size;
 }
 

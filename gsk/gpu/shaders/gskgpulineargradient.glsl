@@ -1,3 +1,5 @@
+#define GSK_N_TEXTURES 0
+
 #include "common.glsl"
 
 #define VARIATION_SUPERSAMPLING ((GSK_VARIATION & (1u << 0)) == (1u << 0))

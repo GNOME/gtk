@@ -25,8 +25,8 @@ gsk_gpu_mask_op_print_instance (GskGpuShaderOp *shader,
 
   gsk_gpu_print_enum (string, GSK_TYPE_MASK_MODE, shader->variation);
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->source_id);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->mask_id);
+  gsk_gpu_print_image (string, shader->images[0]);
+  gsk_gpu_print_image (string, shader->images[1]);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
@@ -41,6 +41,7 @@ static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpumask",
+  gsk_gpu_mask_n_textures,
   sizeof (GskGpuMaskInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_mask_info,
@@ -51,17 +52,14 @@ static const GskGpuShaderOpClass GSK_GPU_MASK_OP_CLASS = {
 };
 
 void
-gsk_gpu_mask_op (GskGpuFrame            *frame,
-                 GskGpuShaderClip        clip,
-                 GskGpuDescriptors      *desc,
-                 const graphene_rect_t  *rect,
-                 const graphene_point_t *offset,
-                 float                   opacity,
-                 GskMaskMode             mask_mode,
-                 guint32                 source_descriptor,
-                 const graphene_rect_t  *source_rect,
-                 guint32                 mask_descriptor,
-                 const graphene_rect_t  *mask_rect)
+gsk_gpu_mask_op (GskGpuFrame             *frame,
+                 GskGpuShaderClip         clip,
+                 const graphene_rect_t   *rect,
+                 const graphene_point_t  *offset,
+                 float                    opacity,
+                 GskMaskMode              mask_mode,
+                 const GskGpuShaderImage *source,
+                 const GskGpuShaderImage *mask)
 {
   GskGpuMaskInstance *instance;
 
@@ -70,13 +68,12 @@ gsk_gpu_mask_op (GskGpuFrame            *frame,
                            gsk_gpu_color_states_create_equal (TRUE, TRUE),
                            mask_mode,
                            clip,
-                           desc,
+                           (GskGpuImage *[2]) { source->image, mask->image },
+                           (GskGpuSampler[2]) { source->sampler, mask->sampler },
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
-  gsk_gpu_rect_to_float (source_rect, offset, instance->source_rect);
-  instance->source_id = source_descriptor;
-  gsk_gpu_rect_to_float (mask_rect, offset, instance->mask_rect);
-  instance->mask_id = mask_descriptor;
+  gsk_gpu_rect_to_float (source->bounds, offset, instance->source_rect);
+  gsk_gpu_rect_to_float (mask->bounds, offset, instance->mask_rect);
   instance->opacity = opacity;
 }

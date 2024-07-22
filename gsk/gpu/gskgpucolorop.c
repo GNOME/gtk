@@ -40,6 +40,7 @@ static const GskGpuShaderOpClass GSK_GPU_COLOR_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpucolor",
+  gsk_gpu_color_n_textures,
   sizeof (GskGpuColorInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_color_info,
@@ -64,6 +65,7 @@ gsk_gpu_color_op (GskGpuFrame            *frame,
                            color_states,
                            0,
                            clip,
+                           NULL,
                            NULL,
                            &instance);
 

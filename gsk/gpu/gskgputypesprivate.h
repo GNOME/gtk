@@ -5,19 +5,18 @@
 
 #include "gdk/gdkmemoryformatprivate.h"
 
-typedef struct _GskGLDescriptors        GskGLDescriptors;
 typedef struct _GskGpuBuffer            GskGpuBuffer;
 typedef struct _GskGpuCache             GskGpuCache;
 typedef guint32                         GskGpuColorStates;
-typedef struct _GskGpuDescriptors       GskGpuDescriptors;
 typedef struct _GskGpuDevice            GskGpuDevice;
 typedef struct _GskGpuFrame             GskGpuFrame;
 typedef struct _GskGpuImage             GskGpuImage;
 typedef struct _GskGpuOp                GskGpuOp;
 typedef struct _GskGpuOpClass           GskGpuOpClass;
+typedef guint32                         GskGpuShaderFlags;
+typedef struct _GskGpuShaderImage       GskGpuShaderImage;
 typedef struct _GskGpuShaderOp          GskGpuShaderOp;
 typedef struct _GskGpuShaderOpClass     GskGpuShaderOpClass;
-typedef struct _GskVulkanDescriptors    GskVulkanDescriptors;
 typedef struct _GskVulkanSemaphores     GskVulkanSemaphores;
 
 typedef enum {
@@ -47,6 +46,8 @@ typedef enum {
   GSK_GPU_SHADER_CLIP_RECT,
   GSK_GPU_SHADER_CLIP_ROUNDED
 } GskGpuShaderClip;
+#define GSK_GPU_SHADER_CLIP_SHIFT 2
+#define GSK_GPU_SHADER_CLIP_MASK ((1 << GSK_GPU_SHADER_CLIP_SHIFT) - 1)
 
 typedef enum {
   GSK_GPU_BLEND_NONE,

@@ -27,7 +27,7 @@ gsk_gpu_convert_op_print_instance (GskGpuShaderOp *shader,
   GskGpuConvertInstance *instance = (GskGpuConvertInstance *) instance_;
 
   gsk_gpu_print_rect (string, instance->rect);
-  gsk_gpu_print_image_descriptor (string, shader->desc, instance->tex_id);
+  gsk_gpu_print_image (string, shader->images[0]);
   if (shader->variation & VARIATION_STRAIGHT_ALPHA)
     gsk_gpu_print_string (string, "straight");
 }
@@ -44,6 +44,7 @@ static const GskGpuShaderOpClass GSK_GPU_CONVERT_OP_CLASS = {
     gsk_gpu_shader_op_gl_command
   },
   "gskgpuconvert",
+  gsk_gpu_convert_n_textures,
   sizeof (GskGpuConvertInstance),
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_convert_info,
@@ -54,16 +55,13 @@ static const GskGpuShaderOpClass GSK_GPU_CONVERT_OP_CLASS = {
 };
 
 void
-gsk_gpu_convert_op (GskGpuFrame            *frame,
-                    GskGpuShaderClip        clip,
-                    GskGpuColorStates       color_states,
-                    float                   opacity,
-                    GskGpuDescriptors      *desc,
-                    guint32                 descriptor,
-                    gboolean                straight_alpha,
-                    const graphene_rect_t  *rect,
-                    const graphene_point_t *offset,
-                    const graphene_rect_t  *tex_rect)
+gsk_gpu_convert_op (GskGpuFrame             *frame,
+                    GskGpuShaderClip         clip,
+                    GskGpuColorStates        color_states,
+                    float                    opacity,
+                    gboolean                 straight_alpha,
+                    const graphene_point_t  *offset,
+                    const GskGpuShaderImage *image)
 {
   GskGpuConvertInstance *instance;
 
@@ -73,12 +71,12 @@ gsk_gpu_convert_op (GskGpuFrame            *frame,
                            (opacity < 1.0 ? VARIATION_OPACITY : 0) |
                            (straight_alpha ? VARIATION_STRAIGHT_ALPHA : 0),
                            clip,
-                           desc,
+                           (GskGpuImage *[1]) { image->image },
+                           (GskGpuSampler[1]) { image->sampler },
                            &instance);
 
-  gsk_gpu_rect_to_float (rect, offset, instance->rect);
-  gsk_gpu_rect_to_float (tex_rect, offset, instance->tex_rect);
-  instance->tex_id = descriptor;
+  gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);
+  gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
   instance->opacity = opacity;
 }
 
