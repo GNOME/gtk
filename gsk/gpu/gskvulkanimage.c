@@ -22,7 +22,7 @@ struct _GskVulkanImage
 {
   GskGpuImage parent_instance;
 
-  GdkDisplay *display;
+  GskVulkanDevice *device;
 
   VkFormat vk_format;
   VkImageTiling vk_tiling;
@@ -164,7 +164,7 @@ gsk_vulkan_image_create_view (GskVulkanImage            *self,
                               const VkComponentMapping  *vk_components,
                               VkSamplerYcbcrConversion   vk_conversion)
 {
-  GSK_VK_CHECK (vkCreateImageView, self->display->vk_device,
+  GSK_VK_CHECK (vkCreateImageView, gsk_vulkan_device_get_vk_device (self->device),
                                  &(VkImageViewCreateInfo) {
                                      .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                                      .image = self->vk_image,
@@ -348,8 +348,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
-  self->display = g_object_ref (gsk_gpu_device_get_display (GSK_GPU_DEVICE (device)));
-  gdk_display_ref_vulkan (self->display);
+  self->device = g_object_ref (device);
   self->vk_format = vk_format;
   self->vk_tiling = tiling;
   self->vk_usage = usage;
@@ -462,7 +461,7 @@ gsk_vulkan_image_get_data (GskVulkanImage *self,
   image_res.mipLevel = 0;
   image_res.arrayLayer = 0;
 
-  vkGetImageSubresourceLayout (self->display->vk_device,
+  vkGetImageSubresourceLayout (gsk_vulkan_device_get_vk_device (self->device),
                                self->vk_image, &image_res, &image_layout);
 
   *out_stride = image_layout.rowPitch;
@@ -483,8 +482,7 @@ gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
-  self->display = g_object_ref (gsk_gpu_device_get_display (GSK_GPU_DEVICE (device)));
-  gdk_display_ref_vulkan (self->display);
+  self->device = g_object_ref (device);
   self->vk_tiling = VK_IMAGE_TILING_OPTIMAL;
   self->vk_image = image;
   self->vk_format = format;
@@ -754,8 +752,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
-  self->display = g_object_ref (gsk_gpu_device_get_display (GSK_GPU_DEVICE (device)));
-  gdk_display_ref_vulkan (self->display);
+  self->device = g_object_ref (device);
   self->vk_tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT;
   self->vk_format = vk_format;
   self->vk_pipeline_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
@@ -907,8 +904,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
-  self->display = g_object_ref (gsk_gpu_device_get_display (GSK_GPU_DEVICE (device)));
-  gdk_display_ref_vulkan (self->display);
+  self->device = g_object_ref (device);
   self->vk_tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT;
   self->vk_format = vk_format;
   self->vk_pipeline_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
@@ -1061,7 +1057,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
     }
 
 #if 1
-  GSK_VK_CHECK (vkBindImageMemory2, self->display->vk_device,
+  GSK_VK_CHECK (vkBindImageMemory2, gsk_vulkan_device_get_vk_device (self->device),
                                     1,
                                     &(VkBindImageMemoryInfo) {
                                         .sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO,
@@ -1070,7 +1066,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                         .memoryOffset = self->allocation.offset,
                                     });
 #else
-  GSK_VK_CHECK (vkBindImageMemory2, self->display->vk_device,
+  GSK_VK_CHECK (vkBindImageMemory2, gsk_vulkan_device_get_vk_device (self->device),
                                     dmabuf->n_planes,
                                     (VkBindImageMemoryInfo[4]) {
                                         {
@@ -1157,7 +1153,7 @@ gsk_vulkan_image_get_n_planes (GskVulkanImage *self,
   };
   gsize i;
 
-  vkGetPhysicalDeviceFormatProperties2 (self->display->vk_physical_device,
+  vkGetPhysicalDeviceFormatProperties2 (gsk_vulkan_device_get_vk_physical_device (self->device),
                                         self->vk_format,
                                         &properties);
   
@@ -1182,6 +1178,7 @@ gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self)
     .sType = VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_PROPERTIES_EXT,
   };
   VkSubresourceLayout layout;
+  VkDevice vk_device;
   GdkTexture *texture;
   VkResult res;
   guint32 fourcc;
@@ -1195,16 +1192,18 @@ gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self)
   if (fourcc == 0)
     return FALSE;
 
+  vk_device = gsk_vulkan_device_get_vk_device (self->device);
+
   func_vkGetImageDrmFormatModifierPropertiesEXT = (PFN_vkGetImageDrmFormatModifierPropertiesEXT)
-    vkGetDeviceProcAddr (self->display->vk_device, "vkGetImageDrmFormatModifierPropertiesEXT");
-  func_vkGetMemoryFdKHR = (PFN_vkGetMemoryFdKHR) vkGetDeviceProcAddr (self->display->vk_device, "vkGetMemoryFdKHR");
-  res = GSK_VK_CHECK (func_vkGetImageDrmFormatModifierPropertiesEXT, self->display->vk_device, self->vk_image, &properties);
+    vkGetDeviceProcAddr (vk_device, "vkGetImageDrmFormatModifierPropertiesEXT");
+  func_vkGetMemoryFdKHR = (PFN_vkGetMemoryFdKHR) vkGetDeviceProcAddr (vk_device, "vkGetMemoryFdKHR");
+  res = GSK_VK_CHECK (func_vkGetImageDrmFormatModifierPropertiesEXT, vk_device, self->vk_image, &properties);
   if (res != VK_SUCCESS)
     return FALSE;
   n_planes = gsk_vulkan_image_get_n_planes (self, properties.drmFormatModifier);
   if (n_planes == 0 || n_planes > GDK_DMABUF_MAX_PLANES)
     return FALSE;
-  res = GSK_VK_CHECK (func_vkGetMemoryFdKHR, self->display->vk_device,
+  res = GSK_VK_CHECK (func_vkGetMemoryFdKHR, vk_device,
                                              &(VkMemoryGetFdInfoKHR) {
                                                  .sType = VK_STRUCTURE_TYPE_MEMORY_GET_FD_INFO_KHR,
                                                  .memory = self->allocation.vk_memory,
@@ -1215,7 +1214,7 @@ gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self)
     return FALSE;
 
   builder = gdk_dmabuf_texture_builder_new ();
-  gdk_dmabuf_texture_builder_set_display (builder, self->display);
+  gdk_dmabuf_texture_builder_set_display (builder, gsk_gpu_device_get_display (GSK_GPU_DEVICE (self->device)));
   gdk_dmabuf_texture_builder_set_width (builder, gsk_gpu_image_get_width (image));
   gdk_dmabuf_texture_builder_set_height (builder, gsk_gpu_image_get_height (image));
   gdk_dmabuf_texture_builder_set_fourcc (builder, fourcc);
@@ -1231,7 +1230,7 @@ gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self)
         VK_IMAGE_ASPECT_MEMORY_PLANE_2_BIT_EXT,
         VK_IMAGE_ASPECT_MEMORY_PLANE_3_BIT_EXT
       };
-      vkGetImageSubresourceLayout (self->display->vk_device,
+      vkGetImageSubresourceLayout (vk_device,
                                    self->vk_image,
                                    &(VkImageSubresource) {
                                        .aspectMask = aspect[plane],
@@ -1283,34 +1282,33 @@ static void
 gsk_vulkan_image_finalize (GObject *object)
 {
   GskVulkanImage *self = GSK_VULKAN_IMAGE (object);
-  VkDevice device;
+  VkDevice vk_device;
 
-  device = self->display->vk_device;
+  vk_device = gsk_vulkan_device_get_vk_device (self->device);
 
   if (self->vk_framebuffer != VK_NULL_HANDLE)
-    vkDestroyFramebuffer (device, self->vk_framebuffer, NULL);
+    vkDestroyFramebuffer (vk_device, self->vk_framebuffer, NULL);
 
   if (self->vk_framebuffer_image_view != VK_NULL_HANDLE &&
       self->vk_framebuffer_image_view != self->vk_image_view)
-    vkDestroyImageView (device, self->vk_framebuffer_image_view, NULL);
+    vkDestroyImageView (vk_device, self->vk_framebuffer_image_view, NULL);
 
   if (self->vk_image_view != VK_NULL_HANDLE)
-    vkDestroyImageView (device, self->vk_image_view, NULL);
+    vkDestroyImageView (vk_device, self->vk_image_view, NULL);
 
   if (self->vk_semaphore != VK_NULL_HANDLE)
-    vkDestroySemaphore (device, self->vk_semaphore, NULL);
+    vkDestroySemaphore (vk_device, self->vk_semaphore, NULL);
 
   /* memory is NULL for for_swapchain() images, where we don't own
    * the VkImage */
   if (self->allocator)
     {
-      vkDestroyImage (device, self->vk_image, NULL);
+      vkDestroyImage (vk_device, self->vk_image, NULL);
       gsk_vulkan_free (self->allocator, &self->allocation);
       gsk_vulkan_allocator_unref (self->allocator);
     }
 
-  gdk_display_unref_vulkan (self->display);
-  g_object_unref (self->display);
+  g_object_unref (self->device);
 
   G_OBJECT_CLASS (gsk_vulkan_image_parent_class)->finalize (object);
 }
@@ -1335,12 +1333,16 @@ VkFramebuffer
 gsk_vulkan_image_get_vk_framebuffer (GskVulkanImage *self,
                                      VkRenderPass    render_pass)
 {
+  VkDevice vk_device;
+
   if (self->vk_framebuffer)
     return self->vk_framebuffer;
 
+  vk_device = gsk_vulkan_device_get_vk_device (self->device);
+
   if (gsk_gpu_image_get_flags (GSK_GPU_IMAGE (self)) & GSK_GPU_IMAGE_CAN_MIPMAP)
     {
-      GSK_VK_CHECK (vkCreateImageView, self->display->vk_device,
+      GSK_VK_CHECK (vkCreateImageView, vk_device,
                                      &(VkImageViewCreateInfo) {
                                          .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                                          .image = self->vk_image,
@@ -1362,7 +1364,7 @@ gsk_vulkan_image_get_vk_framebuffer (GskVulkanImage *self,
       self->vk_framebuffer_image_view = self->vk_image_view;
     }
 
-  GSK_VK_CHECK (vkCreateFramebuffer, self->display->vk_device,
+  GSK_VK_CHECK (vkCreateFramebuffer, vk_device,
                                      &(VkFramebufferCreateInfo) {
                                          .sType = VK_STRUCTURE_TYPE_FRAMEBUFFER_CREATE_INFO,
                                          .renderPass = render_pass,

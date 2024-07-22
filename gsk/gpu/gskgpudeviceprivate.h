@@ -2,8 +2,6 @@
 
 #include "gskgputypesprivate.h"
 
-#include <graphene.h>
-
 G_BEGIN_DECLS
 
 #define GSK_GPU_DEVICE_DEFAULT_TILE_SIZE 1024
