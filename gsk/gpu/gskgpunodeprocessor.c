@@ -1684,20 +1684,18 @@ gsk_gpu_lookup_texture (GskGpuFrame    *frame,
 {
   GskGpuCache *cache;
   GdkColorState *image_cs;
-  gint64 timestamp;
   GskGpuImage *image;
 
   cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (frame));
-  timestamp = gsk_gpu_frame_get_timestamp (frame);
 
-  image = gsk_gpu_cache_lookup_texture_image (cache, texture, timestamp, ccs);
+  image = gsk_gpu_cache_lookup_texture_image (cache, texture, ccs);
   if (image)
     {
       *out_image_cs = ccs;
       return image;
     }
 
-  image = gsk_gpu_cache_lookup_texture_image (cache, texture, timestamp, NULL);
+  image = gsk_gpu_cache_lookup_texture_image (cache, texture, NULL);
   if (image == NULL)
     image = gsk_gpu_frame_upload_texture (frame, try_mipmap, texture);
 
@@ -1746,7 +1744,6 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
 {
   GskGpuCache *cache;
   GskGpuDevice *device;
-  gint64 timestamp;
   GskGpuImage *tile;
   GdkColorState *tile_cs;
   GskGpuSampler sampler;
@@ -1759,7 +1756,6 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
 
   device = gsk_gpu_frame_get_device (self->frame);
   cache = gsk_gpu_device_get_cache (device);
-  timestamp = gsk_gpu_frame_get_timestamp (self->frame);
   sampler = gsk_gpu_sampler_for_scaling_filter (scaling_filter);
   need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
   gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
@@ -1784,7 +1780,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
               !gsk_rect_intersects (&clip_bounds, &tile_rect))
             continue;
 
-          tile = gsk_gpu_cache_lookup_tile (cache, texture, y * n_width + x, timestamp, &tile_cs);
+          tile = gsk_gpu_cache_lookup_tile (cache, texture, y * n_width + x, &tile_cs);
 
           if (tile == NULL)
             {
@@ -1811,7 +1807,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
                   g_assert (tile_cs);
                 }
 
-              gsk_gpu_cache_cache_tile (cache, timestamp, texture, y * n_width + x, tile, tile_cs);
+              gsk_gpu_cache_cache_tile (cache, texture, y * n_width + x, tile, tile_cs);
             }
 
           if (need_mipmap &&
@@ -1819,7 +1815,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
             {
               tile = gsk_gpu_copy_image (self->frame, self->ccs, tile, tile_cs, TRUE);
               tile_cs = self->ccs;
-              gsk_gpu_cache_cache_tile (cache, timestamp, texture, y * n_width + x, tile, tile_cs);
+              gsk_gpu_cache_cache_tile (cache, texture, y * n_width + x, tile, tile_cs);
             }
           if (need_mipmap && !(gsk_gpu_image_get_flags (tile) & GSK_GPU_IMAGE_MIPMAP))
             gsk_gpu_mipmap_op (self->frame, tile);
@@ -1922,7 +1918,6 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
           image_cs = self->ccs;
           gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame)),
                                              texture,
-                                             gsk_gpu_frame_get_timestamp (self->frame),
                                              image,
                                              image_cs);
         }
@@ -1988,7 +1983,6 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame            *frame,
       image = gsk_gpu_copy_image (frame, ccs, image, image_cs, FALSE);
       gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (frame)),
                                          texture,
-                                         gsk_gpu_frame_get_timestamp (frame),
                                          image,
                                          ccs);
     }
@@ -2077,7 +2071,6 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       image_cs = self->ccs;
       gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame)),
                                          texture,
-                                         gsk_gpu_frame_get_timestamp (self->frame),
                                          image,
                                          image_cs);
     }
@@ -2630,6 +2623,17 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
   start_child = gsk_cross_fade_node_get_start_child (node);
   end_child = gsk_cross_fade_node_get_end_child (node);
   progress = gsk_cross_fade_node_get_progress (node);
+
+  if (progress <= 0.0)
+    {
+      gsk_gpu_node_processor_add_node (self, start_child);
+      return;
+    }
+  if (progress >= 1.0)
+    {
+      gsk_gpu_node_processor_add_node (self, end_child);
+      return;
+    }
 
   start_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                           NULL,

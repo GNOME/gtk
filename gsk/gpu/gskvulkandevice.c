@@ -979,7 +979,7 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   char *vertex_shader_name, *fragment_shader_name;
   G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   const char *clip_name[] = { "NONE", "RECT", "ROUNDED" };
-  const char *blend_name[] = { "OVER", "ADD", "CLEAR" };
+  const char *blend_name[] = { "NONE", "OVER", "ADD", "CLEAR" };
 
   cache_key = (PipelineCacheKey) {
     .op_class = op_class,
