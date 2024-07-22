@@ -1,0 +1,64 @@
+cross-fade {
+  start: cross-fade "foo15" {
+    start: cross-fade "foo14" {
+      start: cross-fade "foo13" {
+        start: cross-fade "foo12" {
+          start: cross-fade "foo11" {
+            start: cross-fade "foo10" {
+              start: cross-fade "foo9" {
+                start: cross-fade "foo8" {
+                  start: cross-fade "foo7" {
+                    start: cross-fade "foo6" {
+                      start: cross-fade "foo5" {
+                        start: cross-fade "foo4" {
+                          start: cross-fade "foo3" {
+                            start: cross-fade "foo2" {
+                              start: color "foo1" {
+                                bounds: 0 0 10 10;
+                                color: red;
+                              }
+                              end: "foo1";
+                              progress: 0.4;
+                            }
+                            end: "foo2";
+                            progress: 0.4;
+                          }
+                          end: "foo3";
+                          progress: 0.8;
+                        }
+                        end: "foo4";
+                        progress: 0.6;
+                      }
+                      end: "foo5";
+                      progress: 0.4;
+                    }
+                    end: "foo6";
+                    progress: 0.2;
+                  }
+                  end: "foo7";
+                  progress: 0.6;
+                }
+                end: "foo8";
+                progress: 0.6;
+              }
+              end: "foo9";
+              progress: 0.8;
+            }
+            end: "foo10";
+            progress: 0.6;
+          }
+          end: "foo11";
+          progress: 0.4;
+        }
+        end: "foo12";
+        progress: 0.6;
+      }
+      end: "foo13";
+      progress: 0.2;
+    }
+    end: "foo14";
+    progress: 0.4;
+  }
+  end: "foo15";
+  progress: 0.2;
+}

@@ -99,6 +99,7 @@ compare_render_tests = [
   'linear-gradient-3d-nocairo',
   'linear-gradient-nonorthogonal-scale-nogl',
   'linear-gradient-with-64-colorstops',
+  'lots-of-offscreens-nogl',
   'mask',
   'mask-clipped-inverted-alpha',
   'mask-empty-mask',

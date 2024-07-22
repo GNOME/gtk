@@ -34,7 +34,10 @@ struct _GskVulkanImage
   VkImageView vk_framebuffer_image_view;
   GskVulkanYcbcr *ycbcr;
   VkSemaphore vk_semaphore;
-  VkDescriptorSet vk_descriptor_sets[GSK_GPU_SAMPLER_N_SAMPLERS];
+  struct {
+    VkDescriptorSet vk_descriptor_set;
+    gsize pool_id;
+  } descriptor_sets[GSK_GPU_SAMPLER_N_SAMPLERS];
 
   VkPipelineStageFlags vk_pipeline_stage;
   VkImageLayout vk_image_layout;
@@ -1288,22 +1291,19 @@ static void
 gsk_vulkan_image_finalize (GObject *object)
 {
   GskVulkanImage *self = GSK_VULKAN_IMAGE (object);
-  VkDescriptorPool vk_descriptor_pool;
   VkDevice vk_device;
   gsize i;
 
   vk_device = gsk_vulkan_device_get_vk_device (self->device);
-  vk_descriptor_pool = gsk_vulkan_device_get_vk_descriptor_pool (self->device);
 
   g_clear_pointer (&self->ycbcr, gsk_vulkan_ycbcr_unref);
 
   for (i = 0; i < GSK_GPU_SAMPLER_N_SAMPLERS; i++)
     {
-      if (self->vk_descriptor_sets[i])
-        vkFreeDescriptorSets (vk_device,
-                              vk_descriptor_pool,
-                              1,
-                              &self->vk_descriptor_sets[i]);
+      if (self->descriptor_sets[i].vk_descriptor_set)
+        gsk_vulkan_device_free_descriptor (self->device,
+                                           self->descriptor_sets[i].pool_id,
+                                           self->descriptor_sets[i].vk_descriptor_set);
     }
 
   if (self->vk_framebuffer != VK_NULL_HANDLE)
@@ -1406,27 +1406,19 @@ VkDescriptorSet
 gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
                                         GskGpuSampler   sampler)
 {
-  if (self->vk_descriptor_sets[sampler] == NULL)
+  if (!self->descriptor_sets[sampler].vk_descriptor_set)
     {
-      VkDevice vk_device = gsk_vulkan_device_get_vk_device (self->device);
+      self->descriptor_sets[sampler].vk_descriptor_set =
+        gsk_vulkan_device_allocate_descriptor (self->device,
+                                               self->ycbcr ? gsk_vulkan_ycbcr_get_vk_descriptor_set_layout (self->ycbcr)
+                                                           : gsk_vulkan_device_get_vk_image_set_layout (self->device),
+                                               &self->descriptor_sets[sampler].pool_id);
 
-      GSK_VK_CHECK (vkAllocateDescriptorSets, vk_device,
-                                              &(VkDescriptorSetAllocateInfo) {
-                                                  .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
-                                                  .descriptorPool = gsk_vulkan_device_get_vk_descriptor_pool (self->device),
-                                                  .descriptorSetCount = 1,
-                                                  .pSetLayouts = (VkDescriptorSetLayout[1]) {
-                                                      self->ycbcr ? gsk_vulkan_ycbcr_get_vk_descriptor_set_layout (self->ycbcr)
-                                                                  : gsk_vulkan_device_get_vk_image_set_layout (self->device),
-                                                  },
-                                              },
-                                              &self->vk_descriptor_sets[sampler]);
-      g_assert (self->vk_descriptor_sets[sampler]);
-      vkUpdateDescriptorSets (vk_device,
+      vkUpdateDescriptorSets (gsk_vulkan_device_get_vk_device (self->device),
                               1,
                               &(VkWriteDescriptorSet) {
                                   .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-                                  .dstSet = self->vk_descriptor_sets[sampler],
+                                  .dstSet = self->descriptor_sets[sampler].vk_descriptor_set,
                                   .dstBinding = 0,
                                   .dstArrayElement = 0,
                                   .descriptorCount = 1,
@@ -1442,7 +1434,7 @@ gsk_vulkan_image_get_vk_descriptor_set (GskVulkanImage *self,
                               NULL);
     }
 
-  return self->vk_descriptor_sets[sampler];
+  return self->descriptor_sets[sampler].vk_descriptor_set;
 }
 
 GskVulkanYcbcr *

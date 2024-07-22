@@ -29,7 +29,12 @@ VkPhysicalDevice        gsk_vulkan_device_get_vk_physical_device        (GskVulk
 VkQueue                 gsk_vulkan_device_get_vk_queue                  (GskVulkanDevice        *self) G_GNUC_PURE;
 uint32_t                gsk_vulkan_device_get_vk_queue_family_index     (GskVulkanDevice        *self) G_GNUC_PURE;
 VkCommandPool           gsk_vulkan_device_get_vk_command_pool           (GskVulkanDevice        *self) G_GNUC_PURE;
-VkDescriptorPool        gsk_vulkan_device_get_vk_descriptor_pool        (GskVulkanDevice        *self) G_GNUC_PURE;
+VkDescriptorSet         gsk_vulkan_device_allocate_descriptor           (GskVulkanDevice        *self,
+                                                                         const VkDescriptorSetLayout layout,
+                                                                         gsize                  *out_pool_id);
+void                    gsk_vulkan_device_free_descriptor               (GskVulkanDevice        *self,
+                                                                         gsize                   pool_id,
+                                                                         VkDescriptorSet         set);
 VkDescriptorSetLayout   gsk_vulkan_device_get_vk_image_set_layout       (GskVulkanDevice        *self) G_GNUC_PURE;
 VkPipelineLayout        gsk_vulkan_device_create_vk_pipeline_layout     (GskVulkanDevice        *self,
                                                                          VkDescriptorSetLayout   image1_layout,

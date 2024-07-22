@@ -12,6 +12,13 @@
 #include "gdk/gdkvulkancontextprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 
+#define GDK_ARRAY_NAME descriptor_pools
+#define GDK_ARRAY_TYPE_NAME DescriptorPools
+#define GDK_ARRAY_ELEMENT_TYPE VkDescriptorPool
+#define GDK_ARRAY_PREALLOC 4
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
+
 struct _GskVulkanDevice
 {
   GskGpuDevice parent_instance;
@@ -25,7 +32,8 @@ struct _GskVulkanDevice
   GHashTable *pipeline_cache;
 
   VkCommandPool vk_command_pool;
-  VkDescriptorPool vk_descriptor_pool;
+  DescriptorPools descriptor_pools;
+  gsize last_pool;
   VkSampler vk_samplers[GSK_GPU_SAMPLER_N_SAMPLERS];
   VkDescriptorSetLayout vk_image_set_layout;
   VkPipelineLayout default_vk_pipeline_layout;
@@ -318,9 +326,11 @@ gsk_vulkan_device_finalize (GObject *object)
   vkDestroyDescriptorSetLayout (vk_device,
                                 self->vk_image_set_layout,
                                 NULL);
-  vkDestroyDescriptorPool (vk_device,
-                           self->vk_descriptor_pool,
-                           NULL);
+  for (i = 0; i < descriptor_pools_get_size (&self->descriptor_pools); i++)
+    vkDestroyDescriptorPool (vk_device,
+                             descriptor_pools_get (&self->descriptor_pools, i),
+                             NULL);
+  descriptor_pools_clear (&self->descriptor_pools);
   vkDestroyCommandPool (vk_device,
                         self->vk_command_pool,
                         NULL);
@@ -355,6 +365,8 @@ gsk_vulkan_device_init (GskVulkanDevice *self)
   self->ycbcr_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
   self->render_pass_cache = g_hash_table_new (render_pass_cache_key_hash, render_pass_cache_key_equal);
   self->pipeline_cache = g_hash_table_new (pipeline_cache_key_hash, pipeline_cache_key_equal);
+
+  descriptor_pools_init (&self->descriptor_pools);
 }
 
 static void
@@ -372,21 +384,6 @@ gsk_vulkan_device_create_vk_objects (GskVulkanDevice *self)
                                      },
                                      NULL,
                                      &self->vk_command_pool);
-  GSK_VK_CHECK (vkCreateDescriptorPool, vk_device,
-                                        &(VkDescriptorPoolCreateInfo) {
-                                            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-                                            .flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
-                                            .maxSets = 10000,
-                                            .poolSizeCount = 1,
-                                            .pPoolSizes = (VkDescriptorPoolSize[1]) {
-                                                {
-                                                    .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                    .descriptorCount = 10000,
-                                                },
-                                            }
-                                        },
-                                        NULL,
-                                        &self->vk_descriptor_pool);
 
   self->vk_image_set_layout = gsk_vulkan_device_create_vk_image_set_layout (self);
 
@@ -509,10 +506,91 @@ gsk_vulkan_device_get_vk_command_pool (GskVulkanDevice *self)
   return self->vk_command_pool;
 }
 
-VkDescriptorPool
-gsk_vulkan_device_get_vk_descriptor_pool (GskVulkanDevice *self)
+VkDescriptorSet
+gsk_vulkan_device_allocate_descriptor (GskVulkanDevice             *self,
+                                       const VkDescriptorSetLayout  layout,
+                                       gsize                       *out_pool_id)
 {
-  return self->vk_descriptor_pool;
+  VkDescriptorSet result;
+  VkDevice vk_device;
+  VkDescriptorPool new_pool;
+  gsize i, n;
+
+  vk_device = gsk_vulkan_device_get_vk_device (self);
+  n = descriptor_pools_get_size (&self->descriptor_pools);
+
+  for (i = 0; i < n; i++)
+    {
+      gsize pool_id = (i + self->last_pool) % n;
+      VkResult res = vkAllocateDescriptorSets (vk_device,
+                                               &(VkDescriptorSetAllocateInfo) {
+                                                   .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+                                                   .descriptorPool = descriptor_pools_get (&self->descriptor_pools, pool_id),
+                                                   .descriptorSetCount = 1,
+                                                   .pSetLayouts = (VkDescriptorSetLayout[1]) {
+                                                       layout,
+                                                   },
+                                              },
+                                              &result);
+      if (res == VK_SUCCESS)
+        {
+          self->last_pool = pool_id;
+          *out_pool_id = self->last_pool;
+          return result;
+        }
+      else if (res == VK_ERROR_OUT_OF_POOL_MEMORY ||
+               res == VK_ERROR_FRAGMENTED_POOL)
+        {
+          continue;
+        }
+      else
+        {
+          gsk_vulkan_handle_result (res, "vkAllocateDescriptorSets");
+        }
+    }
+
+  GSK_VK_CHECK (vkCreateDescriptorPool, vk_device,
+                                        &(VkDescriptorPoolCreateInfo) {
+                                            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+                                            .flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
+                                            .maxSets = 100,
+                                            .poolSizeCount = 1,
+                                            .pPoolSizes = (VkDescriptorPoolSize[1]) {
+                                                {
+                                                    .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+                                                    .descriptorCount = 100,
+                                                },
+                                            }
+                                        },
+                                        NULL,
+                                        &new_pool);
+  descriptor_pools_append (&self->descriptor_pools, new_pool);
+  GSK_VK_CHECK (vkAllocateDescriptorSets, vk_device,
+                                          &(VkDescriptorSetAllocateInfo) {
+                                              .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+                                              .descriptorPool = new_pool,
+                                              .descriptorSetCount = 1,
+                                              .pSetLayouts = (VkDescriptorSetLayout[1]) {
+                                                  layout,
+                                              },
+                                          },
+                                          &result);
+
+  self->last_pool = descriptor_pools_get_size (&self->descriptor_pools) - 1;
+  *out_pool_id = self->last_pool;
+
+  return result;
+}
+
+void
+gsk_vulkan_device_free_descriptor (GskVulkanDevice *self,
+                                   gsize            pool_id,
+                                   VkDescriptorSet  set)
+{
+  vkFreeDescriptorSets (gsk_vulkan_device_get_vk_device (self),
+                        descriptor_pools_get (&self->descriptor_pools, pool_id),
+                        1,
+                        &set);
 }
 
 static VkSampler
