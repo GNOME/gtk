@@ -38,4 +38,15 @@ gpointer                gsk_gpu_cached_new                              (GskGpuC
 
 void                    gsk_gpu_cached_use                              (GskGpuCached                   *cached);
 
+static inline gboolean
+gsk_gpu_cached_is_old (GskGpuCached *cached,
+                       gint64        cache_timeout,
+                       gint64        timestamp)
+{
+  if (cache_timeout < 0)
+    return -1;
+  else
+    return timestamp - cached->timestamp > cache_timeout;
+}
+
 G_END_DECLS

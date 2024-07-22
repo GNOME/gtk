@@ -73,17 +73,6 @@ gsk_vulkan_ycbcr_free (GskGpuCached *cached)
   g_free (self);
 }
 
-static inline gboolean
-gsk_gpu_cached_is_old (GskGpuCached *cached,
-                       gint64        cache_timeout,
-                       gint64        timestamp)
-{
-  if (cache_timeout < 0)
-    return -1;
-  else
-    return timestamp - cached->timestamp > cache_timeout;
-}
-
 static gboolean
 gsk_vulkan_ycbcr_should_collect (GskGpuCached *cached,
                                  gint64        cache_timeout,
