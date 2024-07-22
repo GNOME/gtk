@@ -50,10 +50,10 @@ gsk_vulkan_ycbcr_info_equal (gconstpointer info1_,
 }
 
 static void
-gsk_vulkan_ycbcr_free (GskGpuCache  *cache,
-                       GskGpuCached *cached)
+gsk_vulkan_ycbcr_free (GskGpuCached *cached)
 {
   GskVulkanYcbcr *self = (GskVulkanYcbcr *) cached;
+  GskGpuCache *cache = cached->cache;
   GskVulkanDevice *device;
   VkDevice vk_device;
 
@@ -74,8 +74,7 @@ gsk_vulkan_ycbcr_free (GskGpuCache  *cache,
 }
 
 static inline gboolean
-gsk_gpu_cached_is_old (GskGpuCache  *self,
-                       GskGpuCached *cached,
+gsk_gpu_cached_is_old (GskGpuCached *cached,
                        gint64        cache_timeout,
                        gint64        timestamp)
 {
@@ -86,8 +85,7 @@ gsk_gpu_cached_is_old (GskGpuCache  *self,
 }
 
 static gboolean
-gsk_vulkan_ycbcr_should_collect (GskGpuCache  *cache,
-                                 GskGpuCached *cached,
+gsk_vulkan_ycbcr_should_collect (GskGpuCached *cached,
                                  gint64        cache_timeout,
                                  gint64        timestamp)
 {
@@ -96,7 +94,7 @@ gsk_vulkan_ycbcr_should_collect (GskGpuCache  *cache,
   if (self->ref_count > 0)
     return FALSE;
 
-  return gsk_gpu_cached_is_old (cache, cached, cache_timeout, timestamp);
+  return gsk_gpu_cached_is_old (cached, cache_timeout, timestamp);
 }
 
 static const GskGpuCachedClass GSK_VULKAN_YCBCR_CLASS =
