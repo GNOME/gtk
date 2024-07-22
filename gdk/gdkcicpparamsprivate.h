@@ -1,12 +1,8 @@
 #pragma once
 
-typedef struct _GdkCicp GdkCicp;
+#include "gdkcicpparams.h"
 
-typedef enum
-{
-  GDK_CICP_RANGE_NARROW,
-  GDK_CICP_RANGE_FULL,
-} GdkCicpRange;
+typedef struct _GdkCicp GdkCicp;
 
 struct _GdkCicp
 {
@@ -82,3 +78,7 @@ gdk_cicp_equivalent (const GdkCicp *p1,
 
   return gdk_cicp_equal (&n1, &n2);
 }
+
+const GdkCicp * gdk_cicp_params_get_cicp (GdkCicpParams *params);
+
+GdkCicpParams * gdk_cicp_params_new_for_cicp (const GdkCicp  *cicp);

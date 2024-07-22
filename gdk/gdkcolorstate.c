@@ -192,6 +192,31 @@ gboolean
   return _gdk_color_state_equal (self, other);
 }
 
+/**
+ * gdk_color_state_create_cicp_params:
+ * @self: a `GdkColorState`
+ *
+ * Create a [class@Gdk.CicpParams] representing the colorstate.
+ *
+ * It is not guaranteed that every `GdkColorState` can be
+ * represented with Cicp parameters. If that is the case,
+ * this function returns `NULL`.
+ *
+ * Returns: (transfer full) (nullable): A new [class@Gdk.CicpParams]
+ *
+ * Since: 4.16
+ */
+GdkCicpParams *
+gdk_color_state_create_cicp_params (GdkColorState *self)
+{
+  const GdkCicp *cicp = gdk_color_state_get_cicp (self);
+
+  if (cicp)
+    return gdk_cicp_params_new_for_cicp (cicp);
+
+  return NULL;
+}
+
 /* }}} */
 /* {{{ Conversion functions */
 

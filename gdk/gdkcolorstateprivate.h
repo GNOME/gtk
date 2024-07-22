@@ -2,11 +2,10 @@
 
 #include "gdkcolorstate.h"
 
+#include "gdkcicpparamsprivate.h"
 #include "gdkdebugprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkrgba.h"
-
-#include "gdkcicpparamsprivate.h"
 
 typedef enum
 {
