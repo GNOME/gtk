@@ -161,7 +161,8 @@
  * - colors (in a format understood by [method@Gdk.RGBA.parse])
  * - `GVariant` (can be specified in the format understood by
  *    [func@GLib.Variant.parse])
- * - pixbufs (can be specified as a filename of an image file to load)
+ * - pixbufs (can be specified as an object id, a resource path or a filename of an image file to load relative to the Builder file or the CWD if [method@Gtk.Builder.add_from_string] was used)
+ * - GFile (like pixbufs, can be specified as an object id, a URI or a filename of a file to load relative to the Builder file or the CWD if [method@Gtk.Builder.add_from_string] was used)
  *
  * Objects can be referred to by their name and by default refer to
  * objects declared in the local XML fragment and objects exposed via
@@ -2656,20 +2657,49 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
         }
       else if (G_VALUE_HOLDS (value, G_TYPE_FILE))
         {
+          GObject *object = g_hash_table_lookup (priv->objects, string);
           GFile *file;
 
-          if (g_hash_table_contains (priv->objects, string))
+          if (object)
             {
-              g_set_error (error,
-                           GTK_BUILDER_ERROR,
-                           GTK_BUILDER_ERROR_INVALID_VALUE,
-                           "Could not create file '%s': "
-                           " '%s' is already used as object id",
-                           string, string);
-              return FALSE;
+              if (g_type_is_a (G_OBJECT_TYPE (object), G_VALUE_TYPE (value)))
+                {
+                  g_value_set_object (value, object);
+                  return TRUE;
+                }
+              else
+                {
+                  g_set_error (error,
+                               GTK_BUILDER_ERROR,
+                               GTK_BUILDER_ERROR_INVALID_VALUE,
+                               "Could not create file '%s': "
+                               " '%s' is already used as object id",
+                               string, string);
+                  return FALSE;
+                }
             }
 
-          file = g_file_new_for_uri (string);
+          if (!g_uri_is_valid (string, G_URI_FLAGS_NONE, NULL))
+            {
+              gchar *fullpath = _gtk_builder_get_absolute_filename (builder, string);
+              file = g_file_new_for_path (fullpath);
+              g_free (fullpath);
+            }
+          else if (g_str_has_prefix (string, "file://"))
+            {
+              gchar *path = g_uri_unescape_string (string + strlen ("file://"), "/");
+              gchar *fullpath = _gtk_builder_get_absolute_filename (builder, path);
+
+              file = g_file_new_for_path (fullpath);
+
+              g_free (fullpath);
+              g_free (path);
+            }
+          else
+            {
+              file = g_file_new_for_uri (string);
+            }
+
           g_value_set_object (value, file);
           g_object_unref (G_OBJECT (file));
 
