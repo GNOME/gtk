@@ -247,6 +247,142 @@ gsk_gpu_cached_atlas_new (GskGpuCache *cache)
   return self;
 }
 
+/* This rounds up to the next number that has <= 2 bits set:
+ * 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, ...
+ * That is roughly sqrt(2), so it should limit waste
+ */
+static gsize
+round_up_atlas_size (gsize num)
+{
+  gsize storage = g_bit_storage (num);
+
+  num = num + (((1 << storage) - 1) >> 2);
+  num &= (((gsize) 7) << storage) >> 2;
+
+  return num;
+}
+
+static gboolean
+gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
+                               gsize              width,
+                               gsize              height,
+                               gsize             *out_x,
+                               gsize             *out_y)
+{
+  gsize i;
+  gsize waste, slice_waste;
+  gsize best_slice;
+  gsize y, best_y;
+  gboolean can_add_slice;
+
+  best_y = 0;
+  best_slice = G_MAXSIZE;
+  can_add_slice = atlas->n_slices < MAX_SLICES_PER_ATLAS;
+  if (can_add_slice)
+    waste = height; /* Require less than 100% waste */
+  else
+    waste = G_MAXSIZE; /* Accept any slice, we can't make better ones */
+
+  for (i = 0, y = 0; i < atlas->n_slices; y += atlas->slices[i].height, i++)
+    {
+      if (atlas->slices[i].height < height || ATLAS_SIZE - atlas->slices[i].width < width)
+        continue;
+
+      slice_waste = atlas->slices[i].height - height;
+      if (slice_waste < waste)
+        {
+          waste = slice_waste;
+          best_slice = i;
+          best_y = y;
+          if (waste == 0)
+            break;
+        }
+    }
+
+  if (best_slice >= i && i == atlas->n_slices)
+    {
+      gsize slice_height;
+
+      if (!can_add_slice)
+        return FALSE;
+
+      slice_height = round_up_atlas_size (MAX (height, 4));
+      if (slice_height > ATLAS_SIZE - y)
+        return FALSE;
+
+      atlas->n_slices++;
+      if (atlas->n_slices == MAX_SLICES_PER_ATLAS)
+        slice_height = ATLAS_SIZE - y;
+
+      atlas->slices[i].width = 0;
+      atlas->slices[i].height = slice_height;
+      best_y = y;
+      best_slice = i;
+    }
+
+  *out_x = atlas->slices[best_slice].width;
+  *out_y = best_y;
+
+  atlas->slices[best_slice].width += width;
+  g_assert (atlas->slices[best_slice].width <= ATLAS_SIZE);
+
+  atlas->remaining_pixels -= width * height;
+  ((GskGpuCached *) atlas)->pixels += width * height;
+
+  return TRUE;
+}
+
+static void
+gsk_gpu_cache_ensure_atlas (GskGpuCache *self,
+                            gboolean     recreate)
+{
+  if (self->current_atlas && !recreate)
+    return;
+
+  if (self->current_atlas)
+    self->current_atlas->remaining_pixels = 0;
+
+  self->current_atlas = gsk_gpu_cached_atlas_new (self);
+}
+
+GskGpuImage *
+gsk_gpu_cache_get_atlas_image (GskGpuCache *self)
+{
+  gsk_gpu_cache_ensure_atlas (self, FALSE);
+
+  return self->current_atlas->image;
+}
+
+static GskGpuImage *
+gsk_gpu_cache_add_atlas_image (GskGpuCache      *self,
+                               gint64            timestamp,
+                               gsize             width,
+                               gsize             height,
+                               gsize            *out_x,
+                               gsize            *out_y)
+{
+  if (width > MAX_ATLAS_ITEM_SIZE || height > MAX_ATLAS_ITEM_SIZE)
+    return NULL;
+
+  gsk_gpu_cache_ensure_atlas (self, FALSE);
+
+  if (gsk_gpu_cached_atlas_allocate (self->current_atlas, width, height, out_x, out_y))
+    {
+      gsk_gpu_cached_use (self, (GskGpuCached *) self->current_atlas, timestamp);
+      return self->current_atlas->image;
+    }
+
+  gsk_gpu_cache_ensure_atlas (self, TRUE);
+
+  if (gsk_gpu_cached_atlas_allocate (self->current_atlas, width, height, out_x, out_y))
+    {
+      gsk_gpu_cached_use (self, (GskGpuCached *) self->current_atlas, timestamp);
+      return self->current_atlas->image;
+    }
+
+  return NULL;
+}
+
 /* }}} */
 /* {{{ CachedTexture */
 
@@ -839,142 +975,6 @@ gsk_gpu_cache_init (GskGpuCache *self)
                                         gsk_gpu_cached_glyph_equal);
   self->texture_cache = g_hash_table_new (g_direct_hash,
                                           g_direct_equal);
-}
-
-/* This rounds up to the next number that has <= 2 bits set:
- * 1, 2, 3, 4, 6, 8, 12, 16, 24, 32, 48, 64, 96, 128, ...
- * That is roughly sqrt(2), so it should limit waste
- */
-static gsize
-round_up_atlas_size (gsize num)
-{
-  gsize storage = g_bit_storage (num);
-
-  num = num + (((1 << storage) - 1) >> 2);
-  num &= (((gsize) 7) << storage) >> 2;
-
-  return num;
-}
-
-static gboolean
-gsk_gpu_cached_atlas_allocate (GskGpuCachedAtlas *atlas,
-                               gsize              width,
-                               gsize              height,
-                               gsize             *out_x,
-                               gsize             *out_y)
-{
-  gsize i;
-  gsize waste, slice_waste;
-  gsize best_slice;
-  gsize y, best_y;
-  gboolean can_add_slice;
-
-  best_y = 0;
-  best_slice = G_MAXSIZE;
-  can_add_slice = atlas->n_slices < MAX_SLICES_PER_ATLAS;
-  if (can_add_slice)
-    waste = height; /* Require less than 100% waste */
-  else
-    waste = G_MAXSIZE; /* Accept any slice, we can't make better ones */
-
-  for (i = 0, y = 0; i < atlas->n_slices; y += atlas->slices[i].height, i++)
-    {
-      if (atlas->slices[i].height < height || ATLAS_SIZE - atlas->slices[i].width < width)
-        continue;
-
-      slice_waste = atlas->slices[i].height - height;
-      if (slice_waste < waste)
-        {
-          waste = slice_waste;
-          best_slice = i;
-          best_y = y;
-          if (waste == 0)
-            break;
-        }
-    }
-
-  if (best_slice >= i && i == atlas->n_slices)
-    {
-      gsize slice_height;
-
-      if (!can_add_slice)
-        return FALSE;
-
-      slice_height = round_up_atlas_size (MAX (height, 4));
-      if (slice_height > ATLAS_SIZE - y)
-        return FALSE;
-
-      atlas->n_slices++;
-      if (atlas->n_slices == MAX_SLICES_PER_ATLAS)
-        slice_height = ATLAS_SIZE - y;
-
-      atlas->slices[i].width = 0;
-      atlas->slices[i].height = slice_height;
-      best_y = y;
-      best_slice = i;
-    }
-
-  *out_x = atlas->slices[best_slice].width;
-  *out_y = best_y;
-
-  atlas->slices[best_slice].width += width;
-  g_assert (atlas->slices[best_slice].width <= ATLAS_SIZE);
-
-  atlas->remaining_pixels -= width * height;
-  ((GskGpuCached *) atlas)->pixels += width * height;
-
-  return TRUE;
-}
-
-static void
-gsk_gpu_cache_ensure_atlas (GskGpuCache *self,
-                            gboolean     recreate)
-{
-  if (self->current_atlas && !recreate)
-    return;
-
-  if (self->current_atlas)
-    self->current_atlas->remaining_pixels = 0;
-
-  self->current_atlas = gsk_gpu_cached_atlas_new (self);
-}
-
-GskGpuImage *
-gsk_gpu_cache_get_atlas_image (GskGpuCache *self)
-{
-  gsk_gpu_cache_ensure_atlas (self, FALSE);
-
-  return self->current_atlas->image;
-}
-
-static GskGpuImage *
-gsk_gpu_cache_add_atlas_image (GskGpuCache      *self,
-                               gint64            timestamp,
-                               gsize             width,
-                               gsize             height,
-                               gsize            *out_x,
-                               gsize            *out_y)
-{
-  if (width > MAX_ATLAS_ITEM_SIZE || height > MAX_ATLAS_ITEM_SIZE)
-    return NULL;
-
-  gsk_gpu_cache_ensure_atlas (self, FALSE);
-
-  if (gsk_gpu_cached_atlas_allocate (self->current_atlas, width, height, out_x, out_y))
-    {
-      gsk_gpu_cached_use (self, (GskGpuCached *) self->current_atlas, timestamp);
-      return self->current_atlas->image;
-    }
-
-  gsk_gpu_cache_ensure_atlas (self, TRUE);
-
-  if (gsk_gpu_cached_atlas_allocate (self->current_atlas, width, height, out_x, out_y))
-    {
-      gsk_gpu_cached_use (self, (GskGpuCached *) self->current_atlas, timestamp);
-      return self->current_atlas->image;
-    }
-
-  return NULL;
 }
 
 GskGpuImage *
