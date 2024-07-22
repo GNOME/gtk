@@ -212,6 +212,8 @@ void
 gsk_vulkan_ycbcr_unref (GskVulkanYcbcr *self)
 {
   self->ref_count--;
+
+  gsk_gpu_cached_use ((GskGpuCached *) self);
 }
 
 VkSamplerYcbcrConversion
