@@ -447,6 +447,17 @@ GdkDefaultColorState gdk_default_color_states[] = {
 /* }}} */
 /* {{{ Private API */
 
+/*<private>
+ * gdk_color_state_get_name:
+ * @self: a colorstate
+ *
+ * Returns the name of @self.
+ *
+ * This is *not* a translated, user-visible string.
+ *
+ * Returns: (transfer none): a name for representing the color state
+ *     in diagnostic output
+ */
 const char *
 gdk_color_state_get_name (GdkColorState *self)
 {
