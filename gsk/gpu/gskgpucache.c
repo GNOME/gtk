@@ -60,6 +60,7 @@ G_DEFINE_TYPE (GskGpuCache, gsk_gpu_cache, G_TYPE_OBJECT)
 struct _GskGpuCachedClass
 {
   gsize size;
+  const char *name;
 
   void                  (* free)                        (GskGpuCache            *cache,
                                                          GskGpuCached           *cached);
@@ -229,6 +230,7 @@ gsk_gpu_cached_atlas_should_collect (GskGpuCache  *cache,
 static const GskGpuCachedClass GSK_GPU_CACHED_ATLAS_CLASS =
 {
   sizeof (GskGpuCachedAtlas),
+  "Atlas",
   gsk_gpu_cached_atlas_free,
   gsk_gpu_cached_atlas_should_collect
 };
@@ -341,6 +343,7 @@ gsk_gpu_cached_texture_should_collect (GskGpuCache *cache,
 static const GskGpuCachedClass GSK_GPU_CACHED_TEXTURE_CLASS =
 {
   sizeof (GskGpuCachedTexture),
+  "Texture",
   gsk_gpu_cached_texture_free,
   gsk_gpu_cached_texture_should_collect
 };
@@ -479,6 +482,7 @@ gsk_gpu_cached_tile_should_collect (GskGpuCache  *cache,
 static const GskGpuCachedClass GSK_GPU_CACHED_TILE_CLASS =
 {
   sizeof (GskGpuCachedTile),
+  "Tile",
   gsk_gpu_cached_tile_free,
   gsk_gpu_cached_tile_should_collect
 };
@@ -662,6 +666,7 @@ gsk_gpu_cached_glyph_equal (gconstpointer v1,
 static const GskGpuCachedClass GSK_GPU_CACHED_GLYPH_CLASS =
 {
   sizeof (GskGpuCachedGlyph),
+  "Glyph",
   gsk_gpu_cached_glyph_free,
   gsk_gpu_cached_glyph_should_collect
 };
@@ -669,33 +674,37 @@ static const GskGpuCachedClass GSK_GPU_CACHED_GLYPH_CLASS =
 /* }}} */
 /* {{{ GskGpuCache */
 
+typedef struct
+{
+  guint n_items;
+  guint n_stale;
+} CacheData;
+
 static void
 print_cache_stats (GskGpuCache *self)
 {
   GskGpuCached *cached;
-  guint glyphs = 0;
-  guint stale_glyphs = 0;
-  guint textures = 0;
-  guint atlases = 0;
+  GString *message;
   GString *ratios = g_string_new ("");
+  GHashTable *classes = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, g_free);
+  GHashTableIter iter;
+  gpointer key, value;
 
   for (cached = self->first_cached; cached != NULL; cached = cached->next)
     {
-      if (cached->class == &GSK_GPU_CACHED_GLYPH_CLASS)
+      CacheData *cache_data = g_hash_table_lookup (classes, cached->class);
+      if (cache_data == NULL)
         {
-          glyphs++;
-          if (cached->stale)
-            stale_glyphs++;
+          cache_data = g_new0 (CacheData, 1);
+          g_hash_table_insert (classes, (gpointer) cached->class, cache_data);
         }
-      else if (cached->class == &GSK_GPU_CACHED_TEXTURE_CLASS)
-        {
-          textures++;
-        }
-      else if (cached->class == &GSK_GPU_CACHED_ATLAS_CLASS)
+      cache_data->n_items++;
+      if (cached->stale)
+        cache_data->n_stale++;
+
+      if (cached->class == &GSK_GPU_CACHED_ATLAS_CLASS)
         {
           double ratio;
-
-          atlases++;
 
           ratio = (double) cached->pixels / (double) (ATLAS_SIZE * ATLAS_SIZE);
 
@@ -710,14 +719,24 @@ print_cache_stats (GskGpuCache *self)
   if (ratios->len > 0)
     g_string_append (ratios, ")");
 
-  gdk_debug_message ("Cached items\n"
-                     "  glyphs:   %5u (%u stale)\n"
-                     "  textures: %5u (%u in hash)\n"
-                     "  atlases:  %5u%s",
-                     glyphs, stale_glyphs,
-                     textures, g_hash_table_size (self->texture_cache),
-                     atlases, ratios->str);
+  message = g_string_new ("Cached items");
+  g_hash_table_iter_init (&iter, classes);
+  while (g_hash_table_iter_next (&iter, &key, &value))
+    {
+      const GskGpuCachedClass *class = key;
+      const CacheData *cache_data = value;
 
+      g_string_append_printf (message, "\n  %s:%*s%5u (%u stale)", class->name, 12 - MIN (12, (int) strlen (class->name)), "", cache_data->n_items, cache_data->n_stale);
+
+      if (class == &GSK_GPU_CACHED_ATLAS_CLASS)
+        g_string_append_printf (message, "%s", ratios->str);
+      else if (class == &GSK_GPU_CACHED_TEXTURE_CLASS)
+        g_string_append_printf (message, " (%u in hash)", g_hash_table_size (self->texture_cache));
+    }
+
+  gdk_debug_message ("%s", message->str);
+  g_string_free (message, TRUE);
+  g_hash_table_unref (classes);
   g_string_free (ratios, TRUE);
 }
 
