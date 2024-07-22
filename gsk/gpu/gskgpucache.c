@@ -39,6 +39,7 @@ struct _GskGpuCache
   GObject parent_instance;
 
   GskGpuDevice *device;
+  gint64 timestamp;
 
   GskGpuCached *first_cached;
   GskGpuCached *last_cached;
@@ -152,10 +153,9 @@ gsk_gpu_cached_new (GskGpuCache             *cache,
 
 static void
 gsk_gpu_cached_use (GskGpuCache  *self,
-                    GskGpuCached *cached,
-                    gint64        timestamp)
+                    GskGpuCached *cached)
 {
-  cached->timestamp = timestamp;
+  cached->timestamp = self->timestamp;
   mark_as_stale (cached, FALSE);
 }
 
@@ -355,7 +355,6 @@ gsk_gpu_cache_get_atlas_image (GskGpuCache *self)
 
 static GskGpuImage *
 gsk_gpu_cache_add_atlas_image (GskGpuCache      *self,
-                               gint64            timestamp,
                                gsize             width,
                                gsize             height,
                                gsize            *out_x,
@@ -368,7 +367,7 @@ gsk_gpu_cache_add_atlas_image (GskGpuCache      *self,
 
   if (gsk_gpu_cached_atlas_allocate (self->current_atlas, width, height, out_x, out_y))
     {
-      gsk_gpu_cached_use (self, (GskGpuCached *) self->current_atlas, timestamp);
+      gsk_gpu_cached_use (self, (GskGpuCached *) self->current_atlas);
       return self->current_atlas->image;
     }
 
@@ -376,7 +375,7 @@ gsk_gpu_cache_add_atlas_image (GskGpuCache      *self,
 
   if (gsk_gpu_cached_atlas_allocate (self->current_atlas, width, height, out_x, out_y))
     {
-      gsk_gpu_cached_use (self, (GskGpuCached *) self->current_atlas, timestamp);
+      gsk_gpu_cached_use (self, (GskGpuCached *) self->current_atlas);
       return self->current_atlas->image;
     }
 
@@ -688,7 +687,6 @@ GskGpuImage *
 gsk_gpu_cache_lookup_tile (GskGpuCache    *self,
                            GdkTexture     *texture,
                            gsize           tile_id,
-                           gint64          timestamp,
                            GdkColorState **out_color_state)
 {
   GskGpuCachedTile *tile;
@@ -704,7 +702,7 @@ gsk_gpu_cache_lookup_tile (GskGpuCache    *self,
   if (tile == NULL)
     return NULL;
 
-  gsk_gpu_cached_use (self, (GskGpuCached *) tile, timestamp);
+  gsk_gpu_cached_use (self, (GskGpuCached *) tile);
 
   *out_color_state = tile->color_state;
 
@@ -713,7 +711,6 @@ gsk_gpu_cache_lookup_tile (GskGpuCache    *self,
 
 void
 gsk_gpu_cache_cache_tile (GskGpuCache   *self,
-                          gint64         timestamp,
                           GdkTexture    *texture,
                           guint          tile_id,
                           GskGpuImage   *image,
@@ -723,7 +720,7 @@ gsk_gpu_cache_cache_tile (GskGpuCache   *self,
 
   tile = gsk_gpu_cached_tile_new (self, texture, tile_id, image, color_state);
 
-  gsk_gpu_cached_use (self, (GskGpuCached *) tile, timestamp);
+  gsk_gpu_cached_use (self, (GskGpuCached *) tile);
 }
 
 /* }}} */
@@ -809,6 +806,21 @@ static const GskGpuCachedClass GSK_GPU_CACHED_GLYPH_CLASS =
 
 /* }}} */
 /* {{{ GskGpuCache */
+
+/*
+ * gsk_gpu_cache_set_time:
+ * @self: a `GskGpuCache`
+ * @timestamp: time in whatever the frameclock uses
+ *
+ * Sets the timestamp to use for all following operations.
+ * Frames should set this when they start drawing.
+ **/
+void
+gsk_gpu_cache_set_time (GskGpuCache *self,
+                        gint64       timestamp)
+{
+  self->timestamp = timestamp;
+}
 
 typedef struct
 {
@@ -980,7 +992,6 @@ gsk_gpu_cache_init (GskGpuCache *self)
 GskGpuImage *
 gsk_gpu_cache_lookup_texture_image (GskGpuCache   *self,
                                     GdkTexture    *texture,
-                                    gint64         timestamp,
                                     GdkColorState *color_state)
 {
   GskGpuCachedTexture *cache;
@@ -999,7 +1010,7 @@ gsk_gpu_cache_lookup_texture_image (GskGpuCache   *self,
   if (!cache || !cache->image || gsk_gpu_cached_texture_is_invalid (cache))
     return NULL;
 
-  gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
+  gsk_gpu_cached_use (self, (GskGpuCached *) cache);
 
   return g_object_ref (cache->image);
 }
@@ -1007,7 +1018,6 @@ gsk_gpu_cache_lookup_texture_image (GskGpuCache   *self,
 void
 gsk_gpu_cache_cache_texture_image (GskGpuCache   *self,
                                    GdkTexture    *texture,
-                                   gint64         timestamp,
                                    GskGpuImage   *image,
                                    GdkColorState *color_state)
 {
@@ -1016,7 +1026,7 @@ gsk_gpu_cache_cache_texture_image (GskGpuCache   *self,
   cache = gsk_gpu_cached_texture_new (self, texture, image, color_state);
   g_return_if_fail (cache != NULL);
 
-  gsk_gpu_cached_use (self, (GskGpuCached *) cache, timestamp);
+  gsk_gpu_cached_use (self, (GskGpuCached *) cache);
 }
 
 GskGpuImage *
@@ -1048,7 +1058,7 @@ gsk_gpu_cache_lookup_glyph_image (GskGpuCache            *self,
   cache = g_hash_table_lookup (self->glyph_cache, &lookup);
   if (cache)
     {
-      gsk_gpu_cached_use (self, (GskGpuCached *) cache, gsk_gpu_frame_get_timestamp (frame));
+      gsk_gpu_cached_use (self, (GskGpuCached *) cache);
 
       *out_bounds = cache->bounds;
       *out_origin = cache->origin;
@@ -1075,7 +1085,6 @@ gsk_gpu_cache_lookup_glyph_image (GskGpuCache            *self,
   padding = 1;
 
   image = gsk_gpu_cache_add_atlas_image (self,
-                                         gsk_gpu_frame_get_timestamp (frame),
                                          rect.size.width + 2 * padding, rect.size.height + 2 * padding,
                                          &atlas_x, &atlas_y);
   if (image)
@@ -1118,7 +1127,7 @@ gsk_gpu_cache_lookup_glyph_image (GskGpuCache            *self,
                                                  cache->origin.y + padding));
 
   g_hash_table_insert (self->glyph_cache, cache, cache);
-  gsk_gpu_cached_use (self, (GskGpuCached *) cache, gsk_gpu_frame_get_timestamp (frame));
+  gsk_gpu_cached_use (self, (GskGpuCached *) cache);
 
   *out_bounds = cache->bounds;
   *out_origin = cache->origin;

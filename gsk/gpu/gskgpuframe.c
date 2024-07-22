@@ -445,7 +445,7 @@ gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
   image = GSK_GPU_FRAME_GET_CLASS (self)->upload_texture (self, with_mipmap, texture);
 
   if (image)
-    gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (priv->device), texture, priv->timestamp, image, NULL);
+    gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (priv->device), texture, image, NULL);
 
   return image;
 }
@@ -605,6 +605,7 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
   GskRenderPassType pass_type = texture ? GSK_RENDER_PASS_EXPORT : GSK_RENDER_PASS_PRESENT;
 
   priv->timestamp = timestamp;
+  gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
   if (clip)
     {
@@ -725,7 +726,10 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuImage *image;
 
-  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, timestamp, NULL);
+  priv->timestamp = timestamp;
+  gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
+
+  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, NULL);
   if (image == NULL)
     image = gsk_gpu_frame_upload_texture (self, FALSE, texture);
   if (image == NULL)
@@ -735,8 +739,6 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
     }
 
   gsk_gpu_frame_cleanup (self);
-
-  priv->timestamp = timestamp;
 
   gsk_gpu_download_op (self,
                        image,
