@@ -133,7 +133,221 @@ gdk_win32_gl_context_wgl_begin_frame (GdkDrawContext  *draw_context,
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->begin_frame (draw_context, depth, update_area, out_color_state, out_depth);
 }
 
-#define PIXEL_ATTRIBUTES 21
+typedef struct {
+  GArray *array;
+  guint committed;
+} attribs_t;
+
+static void
+attribs_init (attribs_t *attribs,
+              guint      reserved)
+{
+  attribs->array = g_array_sized_new (TRUE, FALSE, sizeof (int), reserved);
+  attribs->committed = 0;
+}
+
+static void
+attribs_commit (attribs_t *attribs)
+{
+  g_assert_true (attribs->array->len % 2 == 0);
+
+  attribs->committed = attribs->array->len;
+}
+
+static void
+attribs_reset (attribs_t *attribs)
+{
+  g_array_set_size (attribs->array, attribs->committed);
+}
+
+static void
+attribs_add_bulk (attribs_t *attribs,
+                  const int *array,
+                  int        n_elements)
+{
+  g_assert (n_elements >= 0);
+  g_assert_true (n_elements % 2 == 0);
+
+  g_array_append_vals (attribs->array, array, n_elements);
+}
+
+static void
+attribs_add (attribs_t *attribs,
+             int        key,
+             int        value)
+{
+  int array[2] = {key, value};
+  attribs_add_bulk (attribs, array, G_N_ELEMENTS (array));
+}
+
+static bool
+attribs_remove_last (attribs_t *attribs)
+{
+  if (attribs->array->len > attribs->committed)
+    {
+      g_array_set_size (attribs->array, attribs->array->len - 1);
+      return true;
+    }
+
+  return false;
+}
+
+static const int *
+attribs_data (attribs_t *attribs)
+{
+  return (const int *) attribs->array->data;
+}
+
+static void
+attribs_fini (attribs_t *attribs)
+{
+  g_array_free (attribs->array, TRUE);
+}
+
+#define attribs_add_static_array(attribs, array) \
+  do attribs_add_bulk (attribs, array, G_N_ELEMENTS (array)); while (0)
+
+static int
+find_pixel_format_with_defined_swap_flag (HDC  hdc,
+                                          int  formats[],
+                                          UINT count)
+{
+  for (UINT i = 0; i < count; i++)
+    {
+      int query = WGL_SWAP_METHOD_ARB;
+      int value = WGL_SWAP_UNDEFINED_ARB;
+
+      SetLastError (0);
+      if (!wglGetPixelFormatAttribivARB (hdc, formats[i], 0, 1, &query, &value))
+        {
+          WIN32_API_FAILED ("wglGetPixelFormatAttribivARB");
+          continue;
+        }
+
+      if (value != WGL_SWAP_UNDEFINED_ARB)
+        return formats[i];
+    }
+
+  return 0;
+}
+
+static int
+choose_pixel_format_arb_attribs (HDC hdc)
+{
+  const int attribs_base[] = {
+    WGL_DRAW_TO_WINDOW_ARB,
+      GL_TRUE,
+
+    WGL_SUPPORT_OPENGL_ARB,
+      GL_TRUE,
+
+    WGL_DOUBLE_BUFFER_ARB,
+      GL_TRUE,
+
+    WGL_ACCELERATION_ARB,
+      WGL_FULL_ACCELERATION_ARB,
+
+    WGL_PIXEL_TYPE_ARB,
+      WGL_TYPE_RGBA_ARB,
+
+    WGL_COLOR_BITS_ARB,
+      32,
+
+    WGL_ALPHA_BITS_ARB,
+      8,
+  };
+  const int attribs_ancillary_buffers[] = {
+    WGL_STENCIL_BITS_ARB,
+      0,
+
+    WGL_ACCUM_BITS_ARB,
+      0,
+
+    WGL_DEPTH_BITS_ARB,
+      0,
+  };
+  attribs_t attribs;
+  int formats[4];
+  UINT count = 0;
+  int format = 0;
+  int saved = 0;
+
+#define EXT_CALL(api, args) \
+  do {                                               \
+    memset (formats, 0, sizeof (formats));           \
+    count = G_N_ELEMENTS (formats);                  \
+                                                     \
+    if (!api args || count > G_N_ELEMENTS (formats)) \
+      {                                              \
+        count = 0;                                   \
+      }                                              \
+    }                                                \
+  while (0)
+
+  const guint reserved = G_N_ELEMENTS (attribs_base) + 
+                         G_N_ELEMENTS (attribs_ancillary_buffers) + 
+                         1;
+  attribs_init (&attribs, reserved);
+
+  attribs_add_static_array (&attribs, attribs_base);
+  attribs_commit (&attribs);
+
+  /* Avoid ancillary buffers */
+
+  attribs_add_static_array (&attribs, attribs_ancillary_buffers);
+
+  do
+    {
+      EXT_CALL (wglChoosePixelFormatARB, (hdc, attribs_data (&attribs), NULL,
+                                          G_N_ELEMENTS (formats), formats,
+                                          &count));
+    }
+  while (count == 0 && attribs_remove_last (&attribs));
+
+  if (count == 0)
+    goto done;
+
+  attribs_commit (&attribs);
+
+  /* That's an usable pixel format, save it so that we
+   * have something if we can't find any better */
+  saved = formats[0];
+
+  /* Do we have a defined swap method? */
+  format = find_pixel_format_with_defined_swap_flag (hdc, formats, count);
+  if (format > 0)
+    goto done;
+
+  /* Nope, but we can try to ask for it explicitly */
+  const int swap_methods[] = {
+    WGL_SWAP_EXCHANGE_ARB,
+    WGL_SWAP_COPY_ARB,
+  };
+  for (size_t i = 0; i < G_N_ELEMENTS (swap_methods); i++)
+    {
+      attribs_add (&attribs, WGL_SWAP_METHOD_ARB, swap_methods[i]);
+
+      EXT_CALL (wglChoosePixelFormatARB, (hdc, attribs_data (&attribs), NULL,
+                                          G_N_ELEMENTS (formats), formats,
+                                          &count));
+      format = find_pixel_format_with_defined_swap_flag (hdc, formats, count);
+      if (format > 0)
+        goto done;
+
+      attribs_reset (&attribs);
+    }
+
+done:
+
+  attribs_fini (&attribs);
+
+  if (format == 0)
+    return saved;
+
+  return format;
+
+#undef EXT_CALL
+}
 
 static int
 get_wgl_pfd (HDC                    hdc,
@@ -146,53 +360,9 @@ get_wgl_pfd (HDC                    hdc,
 
   if (display_win32->hasWglARBPixelFormat)
     {
-      UINT num_formats;
-      int colorbits = GetDeviceCaps (hdc, BITSPIXEL);
-      int i = 0;
-      int pixelAttribs[PIXEL_ATTRIBUTES];
-
       /* Save up the HDC and HGLRC that we are currently using, to restore back to it when we are done here */
       HDC hdc_current = wglGetCurrentDC ();
       HGLRC hglrc_current = wglGetCurrentContext ();
-
-      /* Update PIXEL_ATTRIBUTES above if any groups are added here! */
-      pixelAttribs[i++] = WGL_DRAW_TO_WINDOW_ARB;
-      pixelAttribs[i++] = GL_TRUE;
-
-      pixelAttribs[i++] = WGL_SUPPORT_OPENGL_ARB;
-      pixelAttribs[i++] = GL_TRUE;
-
-      pixelAttribs[i++] = WGL_DOUBLE_BUFFER_ARB;
-      pixelAttribs[i++] = GL_TRUE;
-
-      pixelAttribs[i++] = WGL_ACCELERATION_ARB;
-      pixelAttribs[i++] = WGL_FULL_ACCELERATION_ARB;
-
-      pixelAttribs[i++] = WGL_PIXEL_TYPE_ARB;
-      pixelAttribs[i++] = WGL_TYPE_RGBA_ARB;
-
-      pixelAttribs[i++] = WGL_COLOR_BITS_ARB;
-      pixelAttribs[i++] = colorbits;
-
-      pixelAttribs[i++] = WGL_ALPHA_BITS_ARB;
-      pixelAttribs[i++] = 8;
-
-      pixelAttribs[i++] = WGL_STENCIL_BITS_ARB;
-      pixelAttribs[i++] = 0;
-
-      pixelAttribs[i++] = WGL_ACCUM_BITS_ARB;
-      pixelAttribs[i++] = 0;
-
-      if (!display_win32->force_enable_depth_bits)
-        {
-          pixelAttribs[i++] = WGL_DEPTH_BITS_ARB;
-          pixelAttribs[i++] = 0;
-        }
-
-      /* end of "Update PIXEL_ATTRIBUTES above if any groups are added here!" */
-
-      pixelAttribs[i++] = 0; /* end of pixelAttribs */
-      g_assert (i == PIXEL_ATTRIBUTES);
 
       if (!wglMakeCurrent (display_win32->dummy_context_wgl.hdc,
                            display_win32->dummy_context_wgl.hglrc))
@@ -201,12 +371,7 @@ get_wgl_pfd (HDC                    hdc,
           return 0;
         }
 
-      wglChoosePixelFormatARB (hdc,
-                               pixelAttribs,
-                               NULL,
-                               1,
-                               &best_pf,
-                               &num_formats);
+      best_pf = choose_pixel_format_arb_attribs (hdc);
 
       /* Go back to the HDC that we were using, since we are done with the dummy HDC and GL Context */
       wglMakeCurrent (hdc_current, hglrc_current);
