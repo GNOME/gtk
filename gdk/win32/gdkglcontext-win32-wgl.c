@@ -350,13 +350,77 @@ done:
 }
 
 static int
+get_distance (PIXELFORMATDESCRIPTOR *pfd)
+{
+  const DWORD swap_flags = PFD_SWAP_COPY | PFD_SWAP_EXCHANGE;
+
+  int is_double_buffered = (pfd->dwFlags & PFD_DOUBLEBUFFER) != 0;
+  int is_swap_defined = (pfd->dwFlags & swap_flags) != 0;
+  int is_bgra = pfd->cBlueShift == 0 && pfd->cGreenShift == 8 &&
+                pfd->cRedShift == 16 && pfd->cAlphaShift == 24;
+  int is_mono = (pfd->dwFlags & PFD_STEREO) == 0;
+  int ancillary_bits = pfd->cStencilBits + pfd->cDepthBits + pfd->cAccumBits;
+
+  int quality_distance = !is_double_buffered * 1000;
+  int performance_distance = !is_swap_defined * 200 + !is_bgra * 100;
+  int memory_distance = !is_mono + ancillary_bits;
+
+  return quality_distance +
+         performance_distance +
+         memory_distance;
+}
+
+/* ChoosePixelFormat ignored some fields and flags, which makes it
+ * less useful for GTK. In particular, it ignores the PFD_SWAP flags,
+ * which are very important for GUI toolkits. Here we implement an
+ * analog function which is tied to the needs of GTK */
+static int
+choose_pixel_format_opengl32 (HDC hdc)
+{
+  const DWORD skip_flags = PFD_GENERIC_FORMAT |
+                           PFD_GENERIC_ACCELERATED;
+  const DWORD required_flags = PFD_DRAW_TO_WINDOW |
+                               PFD_SUPPORT_OPENGL;
+
+  struct {
+    int index;
+    int distance;
+  } best = { 0, 1, }, current;
+  PIXELFORMATDESCRIPTOR pfd;
+
+  int count = DescribePixelFormat (hdc, 1, sizeof (pfd), NULL);
+  for (current.index = 1; current.index <= count && best.distance > 0; current.index++)
+    {
+      if (DescribePixelFormat (hdc, current.index, sizeof (pfd), &pfd) <= 0)
+        {
+          WIN32_API_FAILED ("DescribePixelFormat");
+          return 0;
+        }
+
+      if ((pfd.dwFlags & skip_flags) != 0 ||
+          (pfd.dwFlags & required_flags) != required_flags)
+        continue;
+
+      if (pfd.iPixelType != PFD_TYPE_RGBA ||
+          (pfd.cRedBits != 8 || pfd.cGreenBits != 8 ||
+           pfd.cBlueBits != 8 || pfd.cAlphaBits != 8))
+        continue;
+
+      current.distance = get_distance (&pfd);
+
+      if (best.index == 0 || current.distance < best.distance)
+        best = current;
+    }
+
+  return best.index;
+}
+
+static int
 get_wgl_pfd (HDC                    hdc,
              PIXELFORMATDESCRIPTOR *pfd,
              GdkWin32Display       *display_win32)
 {
   int best_pf = 0;
-
-  pfd->nSize = sizeof (PIXELFORMATDESCRIPTOR);
 
   if (display_win32->hasWglARBPixelFormat)
     {
@@ -378,26 +442,10 @@ get_wgl_pfd (HDC                    hdc,
     }
   else
     {
-      pfd->nVersion = 1;
-      pfd->dwFlags = PFD_SUPPORT_OPENGL | PFD_DRAW_TO_WINDOW | PFD_DOUBLEBUFFER;
-      pfd->iPixelType = PFD_TYPE_RGBA;
-      pfd->cColorBits = GetDeviceCaps (hdc, BITSPIXEL);
-      pfd->cAlphaBits = 8;
-      pfd->iLayerType = PFD_MAIN_PLANE;
-      pfd->cAccumBits = 0;
-      pfd->cStencilBits = 0;
+      best_pf = choose_pixel_format_opengl32 (hdc);
 
-      if (!display_win32->force_enable_depth_bits)
-        pfd->cDepthBits = 0;
-
-      best_pf = ChoosePixelFormat (hdc, pfd);
-
-      /* try again if driver enforces depth buffers */
-      if (best_pf == 0 && !display_win32->force_enable_depth_bits)
-        {
-          display_win32->force_enable_depth_bits = TRUE;
-          get_wgl_pfd (hdc, pfd, display_win32);
-        }
+      if (best_pf > 0)
+        DescribePixelFormat (hdc, best_pf, sizeof (PIXELFORMATDESCRIPTOR), pfd);
     }
 
   return best_pf;
