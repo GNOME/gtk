@@ -1,0 +1,8 @@
+<interface>
+  <object class="GtkPicture" id="relative_path">
+    <property name="file">../../gdk/image-data/image.png</property>
+  </object>
+  <object class="GtkPicture" id="relative_uri">
+    <property name="file">file://../../gdk/image-data/image.png</property>
+  </object>
+</interface>
