@@ -47,6 +47,17 @@ struct _GdkWin32GLContextWGL
 
   HGLRC wgl_context;
   guint do_frame_sync : 1;
+  guint double_buffered : 1;
+
+  enum {
+    SWAP_METHOD_UNDEFINED = 0,
+    SWAP_METHOD_COPY,
+    SWAP_METHOD_EXCHANGE,
+  } swap_method;
+
+  /* Note: this member is only set when
+   * swap_method is exchange */
+  cairo_region_t *previous_frame_damage;
 };
 
 typedef struct _GdkWin32GLContextClass    GdkWin32GLContextWGLClass;
@@ -57,6 +68,8 @@ static void
 gdk_win32_gl_context_wgl_dispose (GObject *gobject)
 {
   GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (gobject);
+
+  g_clear_pointer (&context_wgl->previous_frame_damage, cairo_region_destroy);
 
   if (context_wgl->wgl_context != NULL)
     {
@@ -114,11 +127,41 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
     }
 
   SwapBuffers (hdc);
+
+  context_wgl->previous_frame_damage = cairo_region_copy (painted);
 }
 
 static void
 gdk_win32_gl_context_wgl_empty_frame (GdkDrawContext *draw_context)
 {
+}
+
+static cairo_region_t *
+gdk_win32_gl_context_wgl_get_damage (GdkGLContext *gl_context)
+{
+  GdkWin32GLContextWGL *self = GDK_WIN32_GL_CONTEXT_WGL (gl_context);
+
+  if (!self->double_buffered ||
+      self->swap_method == SWAP_METHOD_COPY)
+    {
+      return cairo_region_create ();
+    }
+
+  if (self->swap_method == SWAP_METHOD_EXCHANGE &&
+      self->previous_frame_damage)
+    {
+      return self->previous_frame_damage;
+    }
+
+  return GDK_GL_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->get_damage (gl_context);
+}
+
+static void
+gdk_win32_gl_context_wgl_surface_resized (GdkDrawContext *draw_context)
+{
+  GdkWin32GLContextWGL *self = (GdkWin32GLContextWGL*) draw_context;
+
+  g_clear_pointer (&self->previous_frame_damage, cairo_region_destroy);
 }
 
 static void
@@ -256,6 +299,7 @@ choose_pixel_format_arb_attribs (HDC hdc)
     WGL_ALPHA_BITS_ARB,
       8,
   };
+
   const int attribs_ancillary_buffers[] = {
     WGL_STENCIL_BITS_ARB,
       0,
@@ -266,6 +310,7 @@ choose_pixel_format_arb_attribs (HDC hdc)
     WGL_DEPTH_BITS_ARB,
       0,
   };
+
   attribs_t attribs;
   int formats[4];
   UINT count = 0;
@@ -292,8 +337,6 @@ choose_pixel_format_arb_attribs (HDC hdc)
   attribs_add_static_array (&attribs, attribs_base);
   attribs_commit (&attribs);
 
-  /* Avoid ancillary buffers */
-
   attribs_add_static_array (&attribs, attribs_ancillary_buffers);
 
   do
@@ -309,16 +352,18 @@ choose_pixel_format_arb_attribs (HDC hdc)
 
   attribs_commit (&attribs);
 
-  /* That's an usable pixel format, save it so that we
-   * have something if we can't find any better */
+  /* That's an usable pixel format, save it */
+
   saved = formats[0];
 
   /* Do we have a defined swap method? */
+
   format = find_pixel_format_with_defined_swap_flag (hdc, formats, count);
   if (format > 0)
     goto done;
 
   /* Nope, but we can try to ask for it explicitly */
+
   const int swap_methods[] = {
     WGL_SWAP_EXCHANGE_ARB,
     WGL_SWAP_COPY_ARB,
@@ -356,13 +401,11 @@ get_distance (PIXELFORMATDESCRIPTOR *pfd)
 
   int is_double_buffered = (pfd->dwFlags & PFD_DOUBLEBUFFER) != 0;
   int is_swap_defined = (pfd->dwFlags & swap_flags) != 0;
-  int is_bgra = pfd->cBlueShift == 0 && pfd->cGreenShift == 8 &&
-                pfd->cRedShift == 16 && pfd->cAlphaShift == 24;
   int is_mono = (pfd->dwFlags & PFD_STEREO) == 0;
   int ancillary_bits = pfd->cStencilBits + pfd->cDepthBits + pfd->cAccumBits;
 
   int quality_distance = !is_double_buffered * 1000;
-  int performance_distance = !is_swap_defined * 200 + !is_bgra * 100;
+  int performance_distance = !is_swap_defined * 200;
   int memory_distance = !is_mono + ancillary_bits;
 
   return quality_distance +
@@ -373,7 +416,12 @@ get_distance (PIXELFORMATDESCRIPTOR *pfd)
 /* ChoosePixelFormat ignored some fields and flags, which makes it
  * less useful for GTK. In particular, it ignores the PFD_SWAP flags,
  * which are very important for GUI toolkits. Here we implement an
- * analog function which is tied to the needs of GTK */
+ * analog function which is tied to the needs of GTK.
+ *
+ * Note that ChoosePixelFormat is not implemented by the ICD, it's
+ * implemented in OpenGL32.DLL (though the driver can influence the
+ * outcome by ordering pixel formats in specific ways.
+ */
 static int
 choose_pixel_format_opengl32 (HDC hdc)
 {
@@ -973,12 +1021,70 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   if (hglrc == NULL)
     return 0;
 
+  context_wgl->wgl_context = hglrc;
+
+  HDC hdc_current = wglGetCurrentDC ();
+  HGLRC hglrc_current = wglGetCurrentContext ();
+
+  if (wglMakeCurrent (hdc, hglrc))
+    {
+      if (display_win32->hasWglARBPixelFormat)
+        {
+          /* wglChoosePixelFormatARB should match these attributes exactly
+           * as requested, according to the spec, but better check anyway */
+          int query_attribs[] = {
+            WGL_DOUBLE_BUFFER_ARB,
+            WGL_SWAP_METHOD_ARB,
+          };
+          int query_values[G_N_ELEMENTS (query_attribs)];
+
+          memset (query_values, 0, sizeof (query_values));
+
+          if (wglGetPixelFormatAttribivARB (hdc, pixel_format, 0, G_N_ELEMENTS (query_attribs), query_attribs, query_values))
+            {
+              context_wgl->double_buffered = (query_values[0] == GL_TRUE);
+
+              switch (query_values[1])
+                {
+                case WGL_SWAP_COPY_ARB:
+                  context_wgl->swap_method = SWAP_METHOD_COPY;
+                  break;
+                case WGL_SWAP_EXCHANGE_ARB:
+                  context_wgl->swap_method = SWAP_METHOD_EXCHANGE;
+                  break;
+                default:
+                  context_wgl->swap_method = SWAP_METHOD_UNDEFINED;
+                  break;
+                }
+            }
+        }
+      else
+        {
+          PIXELFORMATDESCRIPTOR pfd = {0};
+
+          if (DescribePixelFormat (hdc, pixel_format, sizeof (pfd), &pfd))
+            {
+              context_wgl->double_buffered = (pfd.dwFlags & PFD_DOUBLEBUFFER) != 0;
+
+              if (pfd.dwFlags & PFD_SWAP_COPY)
+                context_wgl->swap_method = SWAP_METHOD_COPY;
+              else if (pfd.dwFlags & PFD_SWAP_EXCHANGE)
+                context_wgl->swap_method = SWAP_METHOD_EXCHANGE;
+              else
+                context_wgl->swap_method = SWAP_METHOD_UNDEFINED;
+            }
+        }
+    }
+
+  wglMakeCurrent (hdc_current, hglrc_current);
+
+  if (context_wgl->swap_method == SWAP_METHOD_UNDEFINED)
+    g_message ("Unkwown swap method");
+
   GDK_NOTE (OPENGL,
             g_print ("Created WGL context[%p], pixel_format=%d\n",
                      hglrc,
                      pixel_format));
-
-  context_wgl->wgl_context = hglrc;
 
   return GDK_GL_API_GL;
 }
@@ -1049,10 +1155,12 @@ gdk_win32_gl_context_wgl_class_init (GdkWin32GLContextWGLClass *klass)
   context_class->make_current = gdk_win32_gl_context_wgl_make_current;
   context_class->clear_current = gdk_win32_gl_context_wgl_clear_current;
   context_class->is_current = gdk_win32_gl_context_wgl_is_current;
+  context_class->get_damage = gdk_win32_gl_context_wgl_get_damage;
 
   draw_context_class->begin_frame = gdk_win32_gl_context_wgl_begin_frame;
   draw_context_class->end_frame = gdk_win32_gl_context_wgl_end_frame;
   draw_context_class->empty_frame = gdk_win32_gl_context_wgl_empty_frame;
+  draw_context_class->surface_resized = gdk_win32_gl_context_wgl_surface_resized;
 
   gobject_class->dispose = gdk_win32_gl_context_wgl_dispose;
 }
