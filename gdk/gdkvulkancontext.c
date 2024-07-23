@@ -674,7 +674,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
       break;
     }
 
-  priv->draw_semaphore = NULL;
+  priv->draw_semaphore = VK_NULL_HANDLE;
 
   cairo_region_union (region, priv->regions[priv->draw_index]);
 
