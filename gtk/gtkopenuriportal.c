@@ -443,14 +443,14 @@ window_handle_exported (GtkWindow  *window,
   else
     display = gdk_display_get_default ();
 
-  /* FIXME
-   * Call the vfunc directly since g_app_launch_context_get_startup_notify_id
-   * has NULL checks.
-   *
-   * We should have a more direct way to do this.
-   */
   context = G_APP_LAUNCH_CONTEXT (gdk_display_get_app_launch_context (display));
+
+#if GLIB_CHECK_VERSION (2, 82, 0)
+  activation_token = g_app_launch_get_startup_notify_id (context, NULL, NULL);
+#else
   activation_token = G_APP_LAUNCH_CONTEXT_GET_CLASS (context)->get_startup_notify_id (context, NULL, NULL);
+#endif
+
   g_object_unref (context);
 
   open_uri (data, handle, activation_token, open_uri_done);
