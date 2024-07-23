@@ -634,20 +634,22 @@ gdk_wayland_color_get_image_description (GdkWaylandColor *color,
                                          GdkColorState   *cs)
 {
   const GdkCicp *params;
+  GdkCicp normalized;
 
   params = gdk_color_state_get_cicp (cs);
+  gdk_cicp_normalize (params, &normalized);
 
   if (params)
     for (int i = 0; i < color->image_descs->len; i++)
       {
         ImageDescEntry *e = &g_array_index (color->image_descs, ImageDescEntry, i);
-        if (e->cp == params->color_primaries && e->tf == params->transfer_function)
+        if (e->cp == normalized.color_primaries && e->tf == normalized.transfer_function)
           return e->desc;
       }
 
   create_image_desc (color,
-                     cicp_to_wl_primaries (params->color_primaries),
-                     cicp_to_wl_transfer (params->transfer_function));
+                     cicp_to_wl_primaries (normalized.color_primaries),
+                     cicp_to_wl_transfer (normalized.transfer_function));
   return NULL;
 }
 
