@@ -2822,7 +2822,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
 
       if (glyphs[i].attr.is_color)
         gsk_gpu_texture_op (self->frame,
-                            gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_offset, &glyph_bounds),
+                            gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_origin, &glyph_bounds),
                             &glyph_origin,
                             &(GskGpuShaderImage) {
                                 image,
@@ -2832,7 +2832,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                             });
       else
         gsk_gpu_colorize_op (self->frame,
-                             gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_offset, &glyph_bounds),
+                             gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_origin, &glyph_bounds),
                              gsk_gpu_node_processor_color_states_for_rgba (self),
                              &glyph_origin,
                              &(GskGpuShaderImage) {
