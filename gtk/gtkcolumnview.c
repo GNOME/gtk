@@ -37,6 +37,7 @@
 #include "gtkscrollable.h"
 #include "gtkscrollinfoprivate.h"
 #include "gtksizerequest.h"
+#include "gtksnapshotprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
@@ -548,6 +549,27 @@ gtk_column_view_hide (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_column_view_parent_class)->hide (widget);
 }
 
+
+static void
+gtk_column_view_snapshot(GtkWidget   *widget,
+                         GtkSnapshot *snapshot)
+{
+  GtkColumnView *self = GTK_COLUMN_VIEW (widget);
+  double dx;
+
+  dx = gtk_adjustment_get_value (self->hadjustment);
+
+  /* add a translation to the child nodes in a way that will look good
+   * when animating */
+  gtk_snapshot_push_scroll_offset (snapshot,
+                                   gtk_widget_get_surface (widget),
+                                   -dx, 0);
+  /* We need to undo the (less good looking) offset we add to children */
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT ((int)dx, 0));
+  GTK_WIDGET_CLASS (gtk_column_view_parent_class)->snapshot (widget, snapshot);
+  gtk_snapshot_pop (snapshot);
+}
+
 static void
 gtk_column_view_activate_cb (GtkListView   *listview,
                              guint          pos,
@@ -795,6 +817,7 @@ gtk_column_view_class_init (GtkColumnViewClass *klass)
   widget_class->unroot = gtk_column_view_unroot;
   widget_class->show = gtk_column_view_show;
   widget_class->hide = gtk_column_view_hide;
+  widget_class->snapshot = gtk_column_view_snapshot;
 
   gobject_class->dispose = gtk_column_view_dispose;
   gobject_class->finalize = gtk_column_view_finalize;

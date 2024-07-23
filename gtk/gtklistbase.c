@@ -36,7 +36,7 @@
 #include "gtkscrollable.h"
 #include "gtkscrollinfoprivate.h"
 #include "gtksingleselection.h"
-#include "gtksnapshot.h"
+#include "gtksnapshotprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
@@ -961,6 +961,29 @@ gtk_list_base_set_focus_child (GtkWidget *widget,
 }
 
 static void
+gtk_list_base_snapshot(GtkWidget *widget,
+                       GtkSnapshot *snapshot)
+{
+  GtkListBase *self = GTK_LIST_BASE (widget);
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+
+  double dx, dy;
+
+  dx = gtk_adjustment_get_value (priv->adjustment[OPPOSITE_ORIENTATION (priv->orientation)]);
+  dy = gtk_adjustment_get_value (priv->adjustment[priv->orientation]);
+
+  /* add a translation to the child nodes in a way that will look good
+   * when animating */
+  gtk_snapshot_push_scroll_offset (snapshot,
+                                   gtk_widget_get_surface (widget),
+                                   -dx, -dy);
+  /* We need to undo the (less good looking) offset we add to children */
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT ((int)dx, (int)dy));
+  GTK_WIDGET_CLASS (gtk_list_base_parent_class)->snapshot (widget, snapshot);
+  gtk_snapshot_pop (snapshot);
+}
+
+static void
 gtk_list_base_select_item_action (GtkWidget  *widget,
                                   const char *action_name,
                                   GVariant   *parameter)
@@ -1218,6 +1241,7 @@ gtk_list_base_class_init (GtkListBaseClass *klass)
   widget_class->focus = gtk_list_base_focus;
   widget_class->grab_focus = gtk_list_base_grab_focus;
   widget_class->set_focus_child = gtk_list_base_set_focus_child;
+  widget_class->snapshot = gtk_list_base_snapshot;
 
   gobject_class->dispose = gtk_list_base_dispose;
   gobject_class->get_property = gtk_list_base_get_property;
