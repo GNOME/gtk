@@ -4,7 +4,8 @@
     Copyright 2019 Sebastian Wick
     Copyright 2019 Erwin Burema
     Copyright 2020 AMD
-    Copyright 2020, 2022, 2023 Collabora, Ltd.
+    Copyright 2020-2024 Collabora, Ltd.
+    Copyright 2024 Xaver Hugl
 
     Permission is hereby granted, free of charge, to any person obtaining a
     copy of this software and associated documentation files (the "Software"),
@@ -64,7 +65,7 @@
     protocol.
   </description>
 
-  <interface name="xx_color_manager_v2" version="1">
+  <interface name="xx_color_manager_v4" version="1">
     <description summary="color manager singleton">
       A global interface used for getting color management extensions for
       wl_surface and wl_output objects, and for creating client defined image
@@ -75,13 +76,16 @@
 
     <request name="destroy" type="destructor">
       <description summary="destroy the color manager">
-        Destroy the xx_color_manager_v2 object. This does not affect any other
+        Destroy the xx_color_manager_v4 object. This does not affect any other
         objects in any way.
       </description>
     </request>
 
     <enum name="error">
-      <entry name="unsupported_feature" value="0" summary="request not supported"/>
+      <entry name="unsupported_feature" value="0"
+             summary="request not supported"/>
+      <entry name="surface_exists" value="1"
+             summary="color management surface exists already"/>
     </enum>
 
     <enum name="render_intent">
@@ -89,17 +93,21 @@
         See the ICC.1:2022 specification from the International Color Consortium
         for more details about rendering intents.
 
-        The principles of ICC defined rendering intents apply with all types
-        of image descriptions, not only those with ICC file profiles.
+        The principles of ICC defined rendering intents apply with all types of
+        image descriptions, not only those with ICC file profiles.
 
         Compositors must support the perceptual rendering intent. Other
         rendering intents are optional.
       </description>
 
-      <entry name="perceptual" value="0" summary="perceptual"/>
-      <entry name="relative" value="1" summary="media-relative colorimetric"/>
-      <entry name="saturation" value="2" summary="saturation"/>
-      <entry name="absolute" value="3" summary="ICC-absolute colorimetric"/>
+      <entry name="perceptual" value="0"
+             summary="perceptual"/>
+      <entry name="relative" value="1"
+             summary="media-relative colorimetric"/>
+      <entry name="saturation" value="2"
+             summary="saturation"/>
+      <entry name="absolute" value="3"
+             summary="ICC-absolute colorimetric"/>
       <entry name="relative_bpc" value="4"
              summary="media-relative colorimetric + black point compensation"/>
     </enum>
@@ -107,18 +115,23 @@
     <enum name="feature">
       <description summary="compositor supported features"/>
 
-      <entry name="icc_v2_v4" value="0" summary="new_icc_creator request"/>
-      <entry name="parametric" value="1" summary="new_parametric_creator request"/>
-      <entry name="set_primaries" value="2" summary="parametric set_primaries request"/>
-      <entry name="set_tf_power" value="3" summary="parametric set_tf_power request"/>
-      <entry name="set_mastering_display_primaries" value="4">
+      <entry name="icc_v2_v4" value="0"
+             summary="new_icc_creator request"/>
+      <entry name="parametric" value="1"
+             summary="new_parametric_creator request"/>
+      <entry name="set_primaries" value="2"
+             summary="parametric set_primaries request"/>
+      <entry name="set_tf_power" value="3"
+             summary="parametric set_tf_power request"/>
+      <entry name="set_luminances" value="4"
+             summary="parametric set_luminances request"/>
+      <entry name="set_mastering_display_primaries" value="5">
         <description summary="parametric set_mastering_display_primaries request">
-          The compositor supports set_mastering_display_primaries request
-          with a target color volume fully contained inside the primary
-          color volume.
+          The compositor supports set_mastering_display_primaries request with a
+          target color volume fully contained inside the primary color volume.
         </description>
       </entry>
-      <entry name="extended_target_volume" value="5">
+      <entry name="extended_target_volume" value="6">
         <description summary="parametric target exceeds primary color volume">
           The compositor additionally supports target color volumes that
           extend outside of the primary color volume.
@@ -131,19 +144,23 @@
 
     <enum name="primaries">
       <description summary="named color primaries">
-        Named color primaries used to encode well-known sets of primaries.
-        H.273 is the authority, when it comes to the exact values of primaries and authoritative specifications,
-        where an equivalent code point exists.
+        Named color primaries used to encode well-known sets of primaries. H.273
+        is the authority, when it comes to the exact values of primaries and
+        authoritative specifications, where an equivalent code point exists.
+
         Descriptions do list the specifications for convenience.
       </description>
+
       <entry name="srgb" value="0">
         <description summary="Color primaries for the sRGB color space as defined by the BT.709 standard">
           Color primaries as defined by
           - Rec. ITU-R BT.709-6
-          - Rec. ITU-R BT.1361-0 conventional colour gamut system and extended colour gamut system (historical)
+          - Rec. ITU-R BT.1361-0 conventional colour gamut system and extended
+            colour gamut system (historical)
           - IEC 61966-2-1 sRGB or sYCC
           - IEC 61966-2-4
-          - Society of Motion Picture and Television Engineers (SMPTE) RP 177 (1993) Annex B
+          - Society of Motion Picture and Television Engineers (SMPTE) RP 177
+            (1993) Annex B
           Equivalent to H.273 ColourPrimaries code point 1.
         </description>
       </entry>
@@ -151,8 +168,10 @@
         <description summary="Color primaries for PAL-M as defined by the BT.470 standard">
           Color primaries as defined by
           - Rec. ITU-R BT.470-6 System M (historical)
-          - United States National Television System Committee 1953 Recommendation for transmission standards for color television
-          - United States Federal Communications Commission (2003) Title 47 Code of Federal Regulations 73.682 (a)(20)
+          - United States National Television System Committee 1953
+            Recommendation for transmission standards for color television
+          - United States Federal Communications Commission (2003) Title 47 Code
+            of Federal Regulations 73.682 (a)(20)
           Equivalent to H.273 ColourPrimaries code point 4.
         </description>
       </entry>
@@ -193,7 +212,8 @@
       </entry>
       <entry name="cie1931_xyz" value="6">
         <description summary="Color primaries of the full CIE 1931 XYZ color space">
-          Color primaries as defined as the maximum of the CIE 1931 XYZ color space by
+          Color primaries as defined as the maximum of the CIE 1931 XYZ color
+          space by
           - SMPTE ST 428-1
           - (CIE 1931 XYZ as in ISO 11664-1)
           Equivalent to H.273 ColourPrimaries code point 10.
@@ -201,27 +221,36 @@
       </entry>
       <entry name="dci_p3" value="7">
         <description summary="Color primaries of the DCI P3 color space as defined by the SMPTE RP 431 standard">
-          Color primaries as defined by Digital Cinema System and published in SMPTE RP 431-2 (2011).
-          Equivalent to H.273 ColourPrimaries code point 11.
+          Color primaries as defined by Digital Cinema System and published in
+          SMPTE RP 431-2 (2011). Equivalent to H.273 ColourPrimaries code point
+          11.
         </description>
       </entry>
       <entry name="display_p3" value="8">
         <description summary="Color primaries of Display P3 variant of the DCI-P3 color space as defined by the SMPTE EG 432 standard">
-          Color primaries as defined by Digital Cinema System and published in SMPTE EG 432-1 (2010).
+          Color primaries as defined by Digital Cinema System and published in
+          SMPTE EG 432-1 (2010).
           Equivalent to H.273 ColourPrimaries code point 12.
         </description>
       </entry>
       <entry name="adobe_rgb" value="9">
         <description summary="Color primaries of the Adobe RGB color space as defined by the ISO 12640 standard">
-          Color primaries as defined by Adobe as "Adobe RGB" and later published by ISO 12640-4 (2011).
+          Color primaries as defined by Adobe as "Adobe RGB" and later published
+          by ISO 12640-4 (2011).
         </description>
       </entry>
     </enum>
 
     <enum name="transfer_function">
       <description summary="named transfer functions">
-        Named Transfer Functions.
+        Named transfer functions used to encode well-known transfer
+        characteristics. H.273 is the authority, when it comes to the exact
+        formulas and authoritative specifications, where an equivalent code
+        point exists.
+
+        Descriptions do list the specifications for convenience.
       </description>
+
       <entry name="bt709" value="0">
         <description summary="BT.709 transfer function">
           Transfer characteristics as defined by
@@ -234,8 +263,10 @@
         <description summary="Assumed display gamma 2.2 transfer function">
           Transfer characteristics as defined by
           - Rec. ITU-R BT.470-6 System M (historical)
-          - United States National Television System Committee 1953 Recommendation for transmission standards for color television
-          - United States Federal Communications Commission (2003) Title 47 Code of Federal Regulations 73.682 (a) (20)
+          - United States National Television System Committee 1953
+            Recommendation for transmission standards for color television
+          - United States Federal Communications Commission (2003) Title 47 Code
+            of Federal Regulations 73.682 (a) (20)
           - Rec. ITU-R BT.1700-0 625 PAL and 625 SECAM
           Equivalent to H.273 TransferCharacteristics code point 4.
         </description>
@@ -290,14 +321,16 @@
         <description summary="sRGB piece-wise transfer function">
           Transfer characteristics as defined by
           - IEC 61966-2-1 sRGB
-          Equivalent to H.273 TransferCharacteristics code point 13 with MatrixCoefficients set to 0.
+          Equivalent to H.273 TransferCharacteristics code point 13 with
+          MatrixCoefficients set to 0.
         </description>
       </entry>
       <entry name="ext_srgb" value="10">
         <description summary="Extended sRGB piece-wise transfer function">
           Transfer characteristics as defined by
           - IEC 61966-2-1 sYCC
-          Equivalent to H.273 TransferCharacteristics code point 13 with MatrixCoefficients set to anything but 0.
+          Equivalent to H.273 TransferCharacteristics code point 13 with
+          MatrixCoefficients set to anything but 0.
         </description>
       </entry>
       <entry name="st2084_pq" value="11">
@@ -306,6 +339,11 @@
           - SMPTE ST 2084 (2014) for 10-, 12-, 14- and 16-bit systems
           - Rec. ITU-R BT.2100-2 perceptual quantization (PQ) system
           Equivalent to H.273 TransferCharacteristics code point 16.
+
+          This TF implies these default luminances
+          - primary color volume minimum: 0.005 cd/m²
+          - primary color volume maximum: 10000 cd/m²
+          - reference white: 203 cd/m²
         </description>
       </entry>
       <entry name="st428" value="12">
@@ -321,31 +359,55 @@
           - ARIB STD-B67 (2015)
           - Rec. ITU-R BT.2100-2 hybrid log-gamma (HLG) system
           Equivalent to H.273 TransferCharacteristics code point 18.
+
+          This TF implies these default luminances
+          - primary color volume minimum: 0.005 cd/m²
+          - primary color volume maximum: 1000 cd/m²
+          - reference white: 203 cd/m²
+          Note: HLG is a scene referred signal. All absolute luminance values
+          used here for HLG assume a 1000 cd/m² display.
         </description>
       </entry>
     </enum>
 
     <request name="get_output">
       <description summary="create a color management interface for a wl_output">
-        This creates a new xx_color_management_output_v2 object for the
+        This creates a new xx_color_management_output_v4 object for the
         given wl_output.
 
-        See the xx_color_management_output_v2 interface for more details.
+        See the xx_color_management_output_v4 interface for more details.
       </description>
 
-      <arg name="id" type="new_id" interface="xx_color_management_output_v2"/>
+      <arg name="id" type="new_id" interface="xx_color_management_output_v4"/>
       <arg name="output" type="object" interface="wl_output"/>
     </request>
 
     <request name="get_surface">
       <description summary="create a color management interface for a wl_surface">
-        This creates a new color xx_color_management_surface_v2 object for the
+        If a xx_color_management_surface_v4 object already exists for the given
+        wl_surface, the protocol error surface_exists is raised.
+
+        This creates a new color xx_color_management_surface_v4 object for the
         given wl_surface.
 
-        See the xx_color_management_surface_v2 interface for more details.
+        See the xx_color_management_surface_v4 interface for more details.
       </description>
 
-      <arg name="id" type="new_id" interface="xx_color_management_surface_v2"/>
+      <arg name="id" type="new_id" interface="xx_color_management_surface_v4"/>
+      <arg name="surface" type="object" interface="wl_surface"/>
+    </request>
+
+    <request name="get_feedback_surface">
+      <description summary="create a color management feedback interface">
+        This creates a new color xx_color_management_feedback_surface_v4 object
+        for the given wl_surface.
+
+        See the xx_color_management_feedback_surface_v4 interface for more
+        details.
+      </description>
+
+      <arg name="id" type="new_id"
+           interface="xx_color_management_feedback_surface_v4"/>
       <arg name="surface" type="object" interface="wl_surface"/>
     </request>
 
@@ -354,15 +416,15 @@
         Makes a new ICC-based image description creator object with all
         properties initially unset. The client can then use the object's
         interface to define all the required properties for an image description
-        and finally create a xx_image_description_v2 object.
+        and finally create a xx_image_description_v4 object.
 
         This request can be used when the compositor advertises
-        xx_color_manager_v2.feature.icc_v2_v4.
+        xx_color_manager_v4.feature.icc_v2_v4.
         Otherwise this request raises the protocol error unsupported_feature.
       </description>
 
-      <arg name="obj" type="new_id"
-           interface="xx_image_description_creator_icc_v2"
+      <arg name="obj"
+           type="new_id" interface="xx_image_description_creator_icc_v4"
            summary="the new creator object"/>
     </request>
 
@@ -371,22 +433,22 @@
         Makes a new parametric image description creator object with all
         properties initially unset. The client can then use the object's
         interface to define all the required properties for an image description
-        and finally create a xx_image_description_v2 object.
+        and finally create a xx_image_description_v4 object.
 
         This request can be used when the compositor advertises
-        xx_color_manager_v2.feature.parametric.
+        xx_color_manager_v4.feature.parametric.
         Otherwise this request raises the protocol error unsupported_feature.
       </description>
 
-      <arg name="obj" type="new_id"
-           interface="xx_image_description_creator_params_v2"
+      <arg name="obj"
+           type="new_id" interface="xx_image_description_creator_params_v4"
            summary="the new creator object"/>
     </request>
 
     <event name="supported_intent">
       <description summary="supported rendering intent">
-        When this object is created, it shall immediately send this event
-        once for each rendering intent the compositor supports.
+        When this object is created, it shall immediately send this event once
+        for each rendering intent the compositor supports.
       </description>
 
       <arg name="render_intent" type="uint" enum="render_intent"
@@ -395,118 +457,129 @@
 
     <event name="supported_feature">
       <description summary="supported features">
-        When this object is created, it shall immediately send this event
-        once for each compositor supported feature listed in the enumeration.
+        When this object is created, it shall immediately send this event once
+        for each compositor supported feature listed in the enumeration.
       </description>
 
-      <arg name="feature" type="uint" enum="feature" summary="supported feature"/>
+      <arg name="feature" type="uint" enum="feature"
+           summary="supported feature"/>
     </event>
 
     <event name="supported_tf_named">
       <description summary="supported named transfer characteristic">
-        When this object is created, it shall immediately send this event
-        once for each named transfer function the compositor
-        supports with the parametric image description creator.
+        When this object is created, it shall immediately send this event once
+        for each named transfer function the compositor supports with the
+        parametric image description creator.
       </description>
 
-      <arg name="tf" type="uint" enum="transfer_function" summary="Named transfer function"/>
+      <arg name="tf" type="uint" enum="transfer_function"
+           summary="Named transfer function"/>
     </event>
 
     <event name="supported_primaries_named">
       <description summary="supported named primaries">
-        When this object is created, it shall immediately send this event
-        once for each named set of primaries the compositor
-        supports with the parametric image description creator.
+        When this object is created, it shall immediately send this event once
+        for each named set of primaries the compositor supports with the
+        parametric image description creator.
       </description>
 
-      <arg name="primaries" type="uint" enum="primaries" summary="Named color primaries"/>
+      <arg name="primaries" type="uint" enum="primaries"
+           summary="Named color primaries"/>
     </event>
   </interface>
 
-  <interface name="xx_color_management_output_v2" version="1">
+  <interface name="xx_color_management_output_v4" version="1">
     <description summary="output color properties">
-      A xx_color_management_output_v2 describes the color properties of an
+      A xx_color_management_output_v4 describes the color properties of an
       output.
 
-      The xx_color_management_output_v2 is associated with the wl_output global
+      The xx_color_management_output_v4 is associated with the wl_output global
       underlying the wl_output object. Therefore the client destroying the
       wl_output object has no impact, but the compositor removing the output
-      global makes the xx_color_management_output_v2 object inert.
+      global makes the xx_color_management_output_v4 object inert.
     </description>
 
     <request name="destroy" type="destructor">
       <description summary="destroy the color management output">
-        Destroy the color xx_color_management_output_v2 object. This does not
+        Destroy the color xx_color_management_output_v4 object. This does not
         affect any remaining protocol objects.
       </description>
     </request>
 
     <event name="image_description_changed">
       <description summary="image description changed">
-        This event is sent whenever the image description of the
-        output changed, followed by one wl_output.done event common to
-        output events across all extensions.
+        This event is sent whenever the image description of the output changed,
+        followed by one wl_output.done event common to output events across all
+        extensions.
 
-        If the client wants to use the updated image description, it needs
-        to do get_image_description again, because image description objects
-        are immutable.
+        If the client wants to use the updated image description, it needs to do
+        get_image_description again, because image description objects are
+        immutable.
       </description>
     </event>
 
     <request name="get_image_description">
       <description summary="get the image description of the output">
-        This creates a new xx_image_description_v2 object for the current image description
-        of the output. There always is exactly one image description active for an
-        output so the client should destroy the image description created by earlier
-        invocations of this request. This request is usually sent as a reaction
-        to the image_description_changed event or when creating a
-        xx_color_management_output_v2 object.
+        This creates a new xx_image_description_v4 object for the current image
+        description of the output. There always is exactly one image description
+        active for an output so the client should destroy the image description
+        created by earlier invocations of this request. This request is usually
+        sent as a reaction to the image_description_changed event or when
+        creating a xx_color_management_output_v4 object.
 
-        The created xx_image_description_v2 object preserves the image description
-        of the output from the time the object was created.
+        The image description of an output represents the color encoding the
+        output expects. There might be performance and power advantages, as well
+        as improved color reproduction, if a content update matches the image
+        description of the output it is being shown on. If a content update is
+        shown on any other output than the one it matches the image description
+        of, then the color reproduction on those outputs might be considerably
+        worse.
+
+        The created xx_image_description_v4 object preserves the image
+        description of the output from the time the object was created.
 
         The resulting image description object allows get_information request.
 
-        If this protocol object is inert, the resulting image
-        description object shall immediately deliver the
-        xx_image_description_v2.failed event with the no_output cause.
+        If this protocol object is inert, the resulting image description object
+        shall immediately deliver the xx_image_description_v4.failed event with
+        the no_output cause.
 
         If the interface version is inadequate for the output's image
-        description, meaning that the client does not support all the
-        events needed to deliver the crucial information, the resulting image
+        description, meaning that the client does not support all the events
+        needed to deliver the crucial information, the resulting image
         description object shall immediately deliver the
-        xx_image_description_v2.failed event with the low_version cause.
+        xx_image_description_v4.failed event with the low_version cause.
 
         Otherwise the object shall immediately deliver the ready event.
       </description>
 
-      <arg name="image_description" type="new_id" interface="xx_image_description_v2"/>
+      <arg name="image_description"
+           type="new_id" interface="xx_image_description_v4"/>
     </request>
   </interface>
 
-  <interface name="xx_color_management_surface_v2" version="1">
+  <interface name="xx_color_management_surface_v4" version="1">
     <description summary="color management extension to a surface">
-        A xx_color_management_surface_v2 allows the client to set the color
+        A xx_color_management_surface_v4 allows the client to set the color
         space and HDR properties of a surface.
 
-        If the wl_surface associated with the xx_color_management_surface_v2 is
-        destroyed, the xx_color_management_surface_v2 object becomes inert.
+        If the wl_surface associated with the xx_color_management_surface_v4 is
+        destroyed, the xx_color_management_surface_v4 object becomes inert.
     </description>
 
     <request name="destroy" type="destructor">
       <description summary="destroy the color management interface for a surface">
-        Destroy the xx_color_management_surface_v2 object.
-
-        When the last xx_color_management_surface_v2 object for a wl_surface
-        is destroyed, it does the same as unset_image_description.
+        Destroy the xx_color_management_surface_v4 object and do the same as
+        unset_image_description.
       </description>
     </request>
 
     <enum name="error">
       <description summary="protocol errors"/>
-
-      <entry name="inert" value="0" summary="forbidden request on inert object"/>
-      <entry name="render_intent" value="1" summary="unsupported rendering intent"/>
+      <entry name="render_intent" value="0"
+             summary="unsupported rendering intent"/>
+      <entry name="image_description" value="1"
+             summary="invalid image description"/>
     </enum>
 
     <request name="set_image_description">
@@ -517,12 +590,21 @@
 
         It is the client's responsibility to understand the image description
         it sets on a surface, and to provide content that matches that image
-        description.
+        description. Compositors might convert images to match their own or any
+        other image descriptions.
+
+        Image description whose creation gracefully failed (received
+        xx_image_description_v4.failed) are forbidden in this request, and in
+        such case the protocol error image_description is raised.
+
+        All image descriptions whose creation succeeded (received
+        xx_image_description_v4.ready) are allowed and must always be accepted
+        by the compositor.
 
         A rendering intent provides the client's preference on how content
         colors should be mapped to each output. The render_intent value must
         be one advertised by the compositor with
-        xx_color_manager_v2.render_intent event, otherwise the protocol error
+        xx_color_manager_v4.render_intent event, otherwise the protocol error
         render_intent is raised.
 
         By default, a surface does not have an associated image description
@@ -532,8 +614,10 @@
         requirements.
       </description>
 
-      <arg name="image_description" type="object" interface="xx_image_description_v2"/>
-      <arg name="render_intent" type="uint" enum="xx_color_manager_v2.render_intent"
+      <arg name="image_description"
+           type="object" interface="xx_image_description_v4"/>
+      <arg name="render_intent"
+           type="uint" enum="xx_color_manager_v4.render_intent"
            summary="rendering intent"/>
     </request>
 
@@ -541,19 +625,39 @@
       <description summary="remove the surface image description">
         This request removes any image description from the surface. See
         set_image_description for how a compositor handles a surface without
-	an image description. This is double-buffered state, see
+        an image description. This is double-buffered state, see
         wl_surface.commit.
       </description>
     </request>
+  </interface>
+
+  <interface name="xx_color_management_feedback_surface_v4" version="1">
+    <description summary="color management extension to a surface">
+        A xx_color_management_feedback_surface_v4 allows the client to get the
+        preferred color description of a surface.
+
+        If the wl_surface associated with this object is destroyed, the
+        xx_color_management_feedback_surface_v4 object becomes inert.
+    </description>
+
+    <request name="destroy" type="destructor">
+      <description summary="destroy the color management interface for a surface">
+        Destroy the xx_color_management_feedback_surface_v4 object.
+      </description>
+    </request>
+
+    <enum name="error">
+      <description summary="protocol errors"/>
+      <entry name="inert" value="0"
+             summary="forbidden request on inert object"/>
+    </enum>
 
     <event name="preferred_changed">
-      <description summary="compositor's preferred image description for the surface">
+      <description summary="the preferred image description changed">
         The preferred image description is the one which likely has the most
         performance and/or quality benefits for the compositor if used by the
         client for its wl_surface contents. This event is sent whenever the
         compositor changes the wl_surface's preferred image description.
-
-        This is not an initial event.
 
         This event is merely a notification. When the client wants to know
         what the preferred image description is, it shall use the get_preferred
@@ -572,15 +676,21 @@
       <description summary="get the preferred image description">
         If this protocol object is inert, the protocol error inert is raised.
 
-        This creates a new xx_image_description_v2 object for the currently
+        The preferred image description represents the compositor's preferred
+        color encoding for this wl_surface at the current time. There might be
+        performance and power advantages, as well as improved color
+        reproduction, if the image description of a content update matches the
+        preferred image description.
+
+        This creates a new xx_image_description_v4 object for the currently
         preferred image description for the wl_surface. The client should
         stop using and destroy the image descriptions created by earlier
         invocations of this request for the associated wl_surface.
         This request is usually sent as a reaction to the preferred_changed
-        event or when creating a xx_color_management_surface_v2 object if
-        the client is capable of adapting to image descriptions.
+        event or when creating a xx_color_management_feedback_surface_v4 object
+        if the client is capable of adapting to image descriptions.
 
-        The created xx_image_description_v2 object preserves the preferred image
+        The created xx_image_description_v4 object preserves the preferred image
         description of the wl_surface from the time the object was created.
 
         The resulting image description object allows get_information request.
@@ -589,18 +699,19 @@
         description, meaning that the client does not support all the
         events needed to deliver the crucial information, the resulting image
         description object shall immediately deliver the
-        xx_image_description_v2.failed event with the low_version cause,
+        xx_image_description_v4.failed event with the low_version cause,
         otherwise the object shall immediately deliver the ready event.
       </description>
 
-      <arg name="image_description" type="new_id" interface="xx_image_description_v2"/>
+      <arg name="image_description"
+           type="new_id" interface="xx_image_description_v4"/>
     </request>
   </interface>
 
-  <interface name="xx_image_description_creator_icc_v2" version="1">
+  <interface name="xx_image_description_creator_icc_v4" version="1">
     <description summary="holder of image description ICC information">
       This type of object is used for collecting all the information required
-      to create a xx_image_description_v2 object from an ICC file. A complete
+      to create a xx_image_description_v4 object from an ICC file. A complete
       set of required parameters consists of these properties:
       - ICC file
 
@@ -618,11 +729,16 @@
     <enum name="error">
       <description summary="protocol errors"/>
 
-      <entry name="incomplete_set" value="0" summary="incomplete parameter set"/>
-      <entry name="already_set" value="1" summary="property already set"/>
-      <entry name="bad_fd" value="2" summary="fd not seekable and readable"/>
-      <entry name="bad_size" value="3" summary="no or too much data"/>
-      <entry name="out_of_file" value="4" summary="offset + length exceeds file size"/>
+      <entry name="incomplete_set" value="0"
+             summary="incomplete parameter set"/>
+      <entry name="already_set" value="1"
+             summary="property already set"/>
+      <entry name="bad_fd" value="2"
+             summary="fd not seekable and readable"/>
+      <entry name="bad_size" value="3"
+             summary="no or too much data"/>
+      <entry name="out_of_file" value="4"
+             summary="offset + length exceeds file size"/>
     </enum>
 
     <request name="create" type="destructor">
@@ -637,18 +753,19 @@
 
         If the particular combination of the information is not supported
         by the compositor, the resulting image description object shall
-        immediately deliver the xx_image_description_v2.failed event with the
+        immediately deliver the xx_image_description_v4.failed event with the
         'unsupported' cause. If a valid image description was created from the
-        information, the xx_image_description_v2.ready event will eventually
+        information, the xx_image_description_v4.ready event will eventually
         be sent instead.
 
-        This request destroys the xx_image_description_creator_icc_v2 object.
+        This request destroys the xx_image_description_creator_icc_v4 object.
 
         The resulting image description object does not allow get_information
         request.
       </description>
 
-      <arg name="image_description" type="new_id" interface="xx_image_description_v2"/>
+      <arg name="image_description"
+           type="new_id" interface="xx_image_description_v4"/>
     </request>
 
     <request name="set_icc_file">
@@ -656,37 +773,36 @@
         Sets the ICC profile file to be used as the basis of the image
         description.
 
-        The data shall be found through the given fd at the given offset,
-        having the given length. The fd must seekable and readable. Violating
-        these requirements raises the bad_fd protocol error.
+        The data shall be found through the given fd at the given offset, having
+        the given length. The fd must seekable and readable. Violating these
+        requirements raises the bad_fd protocol error.
 
         If reading the data fails due to an error independent of the client, the
-        compositor shall send the xx_image_description_v2.failed event on the
-        created xx_image_description_v2 with the 'operating_system' cause.
+        compositor shall send the xx_image_description_v4.failed event on the
+        created xx_image_description_v4 with the 'operating_system' cause.
 
-        The maximum size of the ICC profile is 4 MB. If length is greater
-        than that or zero, the protocol error bad_size is raised.
-        If offset + length exceeds the file size, the protocol error
-        out_of_file is raised.
+        The maximum size of the ICC profile is 4 MB. If length is greater than
+        that or zero, the protocol error bad_size is raised. If offset + length
+        exceeds the file size, the protocol error out_of_file is raised.
 
         A compositor may read the file at any time starting from this request
         and only until whichever happens first:
-        - If create request was issued, the xx_image_description_v2 object
+        - If create request was issued, the xx_image_description_v4 object
           delivers either failed or ready event; or
         - if create request was not issued, this
-          xx_image_description_creator_icc_v2 object is destroyed.
+          xx_image_description_creator_icc_v4 object is destroyed.
 
         A compositor shall not modify the contents of the file, and the fd may
         be sealed for writes and size changes. The client must ensure to its
         best ability that the data does not change while the compositor is
         reading it.
 
-        The data must represent a valid ICC profile.
-        The ICC profile version must be 2 or 4, it must be a 3 channel profile
-        and the class must be 'display'.
-        Violating these requirements will not result in a protocol error but
-        will eventually send the xx_image_description_v2.failed event on the
-        created xx_image_description_v2 with the 'unsupported' cause.
+        The data must represent a valid ICC profile. The ICC profile version
+        must be 2 or 4, it must be a 3 channel profile and the class must be
+        Display or ColorSpace. Violating these requirements will not result in a
+        protocol error but will eventually send the
+        xx_image_description_v4.failed event on the created
+        xx_image_description_v4 with the 'unsupported' cause.
 
         See the International Color Consortium specification ICC.1:2022 for more
         details about ICC profiles.
@@ -695,22 +811,27 @@
         already_set is raised.
       </description>
 
-      <arg name="icc_profile" type="fd" summary="ICC profile"/>
-      <arg name="offset" type="uint" summary="byte offset in fd to start of ICC data"/>
-      <arg name="length" type="uint" summary="length of ICC data in bytes"/>
+      <arg name="icc_profile" type="fd"
+           summary="ICC profile"/>
+      <arg name="offset" type="uint"
+           summary="byte offset in fd to start of ICC data"/>
+      <arg name="length" type="uint"
+           summary="length of ICC data in bytes"/>
     </request>
   </interface>
 
-  <interface name="xx_image_description_creator_params_v2" version="1">
+  <interface name="xx_image_description_creator_params_v4" version="1">
     <description summary="holder of image description parameters">
       This type of object is used for collecting all the parameters required
-      to create a xx_image_description_v2 object. A complete set of required
+      to create a xx_image_description_v4 object. A complete set of required
       parameters consists of these properties:
       - transfer characteristic function (tf)
       - chromaticities of primaries and white point (primary color volume)
 
       The following properties are optional and have a well-defined default
       if not explicitly set:
+      - primary color volume luminance range
+      - reference white luminance level
       - mastering display primaries and white point (target color volume)
       - mastering luminance range
       - maximum content light level
@@ -730,13 +851,22 @@
     <enum name="error">
       <description summary="protocol errors"/>
 
-      <entry name="incomplete_set" value="0" summary="incomplete parameter set"/>
-      <entry name="inconsistent_set" value="1" summary="invalid combination of parameters"/>
-      <entry name="already_set" value="2" summary="property already set"/>
-      <entry name="invalid_tf" value="3" summary="invalid transfer characteristic"/>
-      <entry name="invalid_primaries" value="4" summary="invalid primaries or white point"/>
-      <entry name="invalid_luminance" value="5" summary="invalid luminance value or range"/>
-      <entry name="invalid_mastering" value="6" summary="invalid mastering information"/>
+      <entry name="incomplete_set" value="0"
+             summary="incomplete parameter set"/>
+      <entry name="inconsistent_set" value="1"
+             summary="invalid combination of parameters"/>
+      <entry name="already_set" value="2"
+             summary="property already set"/>
+      <entry name="unsupported_feature" value="3"
+             summary="request not supported"/>
+      <entry name="invalid_tf" value="4"
+             summary="invalid transfer characteristic"/>
+      <entry name="invalid_primaries" value="5"
+             summary="invalid primaries or white point"/>
+      <entry name="invalid_luminance" value="6"
+             summary="invalid luminance value or range"/>
+      <entry name="invalid_mastering" value="7"
+             summary="invalid mastering information"/>
     </enum>
 
     <request name="create" type="destructor">
@@ -748,56 +878,68 @@
         complete, the protocol error incomplete_set is raised. For the
         definition of a complete set, see the description of this interface.
 
+        Also, the combination of the parameter set is verified. If the set is
+        not consistent, the protocol error inconsistent_set is raised.
+
         If the particular combination of the parameter set is not supported
         by the compositor, the resulting image description object shall
-        immediately deliver the xx_image_description_v2.failed event with the
+        immediately deliver the xx_image_description_v4.failed event with the
         'unsupported' cause. If a valid image description was created from the
-        parameter set, the xx_image_description_v2.ready event will eventually
+        parameter set, the xx_image_description_v4.ready event will eventually
         be sent instead.
 
-        This request destroys the xx_image_description_creator_params_v2
+        This request destroys the xx_image_description_creator_params_v4
         object.
 
         The resulting image description object does not allow get_information
         request.
       </description>
 
-      <arg name="image_description" type="new_id" interface="xx_image_description_v2"/>
+      <arg name="image_description"
+           type="new_id" interface="xx_image_description_v4"/>
     </request>
 
     <request name="set_tf_named">
       <description summary="named transfer characteristic">
-        Sets the transfer characteristic using explicitly enumerated named functions.
+        Sets the transfer characteristic using explicitly enumerated named
+        functions.
 
-        Only names advertised with xx_color_manager_v2
-        event supported_tf_named are allowed. Other values shall raise the
-        protocol error invalid_tf.
+        When the resulting image description is attached to an image, the
+        content should be encoded and decoded according to the industry standard
+        practices for the transfer characteristic.
+
+        Only names advertised with xx_color_manager_v4 event supported_tf_named
+        are allowed. Other values shall raise the protocol error invalid_tf.
 
         If transfer characteristic has already been set on this object, the
         protocol error already_set is raised.
       </description>
 
-      <arg name="tf" type="uint" enum="transfer_function" summary="named transfer function"/>
+      <arg name="tf" type="uint" enum="xx_color_manager_v4.transfer_function"
+           summary="named transfer function"/>
     </request>
 
     <request name="set_tf_power">
       <description summary="transfer characteristic as a power curve">
-        Sets the color component transfer characteristic to a power curve
-        with the given exponent. This curve represents the conversion from
-        electrical to optical pixel or color values.
+        Sets the color component transfer characteristic to a power curve with
+        the given exponent. This curve represents the conversion from electrical
+        to optical pixel or color values.
 
-        The curve exponent shall be multiplied by 10000 to get the argument
-        eexp value to carry the precision of 4 decimals.
+        When the resulting image description is attached to an image, the
+        content should be encoded with the inverse of the power curve.
 
-        The curve exponent must be at least 1.0 and at most 10.0. Otherwise
-        the protocol error invalid_tf is raised.
+        The curve exponent shall be multiplied by 10000 to get the argument eexp
+        value to carry the precision of 4 decimals.
+
+        The curve exponent must be at least 1.0 and at most 10.0. Otherwise the
+        protocol error invalid_tf is raised.
 
         If transfer characteristic has already been set on this object, the
         protocol error already_set is raised.
 
         This request can be used when the compositor advertises
-        xx_color_manager_v2.feature.set_tf_power. Otherwise this request raises
-        the protocol error invalid_tf.
+        xx_color_manager_v4.feature.set_tf_power. Otherwise this request raises
+        the protocol error unsupported_feature.
       </description>
 
       <arg name="eexp" type="uint" summary="the exponent * 10000"/>
@@ -806,45 +948,99 @@
     <request name="set_primaries_named">
       <description summary="named primaries">
         Sets the color primaries and white point using explicitly named sets.
-        This describes the primary color volume which is the basis
-        for color value encoding.
+        This describes the primary color volume which is the basis for color
+        value encoding.
 
-        Only names advertised with xx_color_manager_v2
-        event supported_primaries_named are allowed. Other values shall raise the
+        Only names advertised with xx_color_manager_v4 event
+        supported_primaries_named are allowed. Other values shall raise the
         protocol error invalid_primaries.
 
         If primaries have already been set on this object, the protocol error
         already_set is raised.
       </description>
 
-      <arg name="primaries" type="uint" enum="primaries" summary="named primaries"/>
+      <arg name="primaries" type="uint" enum="xx_color_manager_v4.primaries"
+           summary="named primaries"/>
     </request>
 
     <request name="set_primaries">
       <description summary="primaries as chromaticity coordinates">
-        Sets the color primaries and white point using CIE 1931 xy
-        chromaticity coordinates. This describes the primary color volume
-        which is the basis for color value encoding.
+        Sets the color primaries and white point using CIE 1931 xy chromaticity
+        coordinates. This describes the primary color volume which is the basis
+        for color value encoding.
 
-        Each coordinate value is multiplied by 10000 to get the argument
-        value to carry precision of 4 decimals.
+        Each coordinate value is multiplied by 10000 to get the argument value
+        to carry precision of 4 decimals.
 
         If primaries have already been set on this object, the protocol error
         already_set is raised.
 
         This request can be used if the compositor advertises
-        xx_color_manager_v2.feature.set_primaries. Otherwise this request
-        raises the protocol error invalid_primaries.
+        xx_color_manager_v4.feature.set_primaries. Otherwise this request raises
+        the protocol error unsupported_feature.
       </description>
 
-      <arg name="r_x" type="uint" summary="Red x * 10000"/>
-      <arg name="r_y" type="uint" summary="Red y * 10000"/>
-      <arg name="g_x" type="uint" summary="Green x * 10000"/>
-      <arg name="g_y" type="uint" summary="Green y * 10000"/>
-      <arg name="b_x" type="uint" summary="Blue x * 10000"/>
-      <arg name="b_y" type="uint" summary="Blue y * 10000"/>
-      <arg name="w_x" type="uint" summary="White x * 10000"/>
-      <arg name="w_y" type="uint" summary="White y * 10000"/>
+      <arg name="r_x" type="int" summary="Red x * 10000"/>
+      <arg name="r_y" type="int" summary="Red y * 10000"/>
+      <arg name="g_x" type="int" summary="Green x * 10000"/>
+      <arg name="g_y" type="int" summary="Green y * 10000"/>
+      <arg name="b_x" type="int" summary="Blue x * 10000"/>
+      <arg name="b_y" type="int" summary="Blue y * 10000"/>
+      <arg name="w_x" type="int" summary="White x * 10000"/>
+      <arg name="w_y" type="int" summary="White y * 10000"/>
+    </request>
+
+    <request name="set_luminances">
+      <description summary="primary color volume luminance range and reference white">
+        Sets the primary color volume luminance range and the reference white
+        luminance level.
+
+        The default luminances are
+        - primary color volume minimum: 0.2 cd/m²
+        - primary color volume maximum: 80 cd/m²
+        - reference white: 80 cd/m²
+
+        Setting a named transfer characteristic can imply other default
+        luminances.
+
+        The default luminances get overwritten when this request is used.
+
+        'min_lum' and 'max_lum' specify the minimum and maximum luminances of
+        the primary color volume as reproduced by the targeted display.
+
+        'reference_lum' specifies the luminance of the reference white as
+        reproduced by the targeted display, and reflects the targeted viewing
+        environment.
+
+        Compositors should make sure that all content is anchored, meaning that
+        an input signal level of 'reference_lum' on one image description and
+        another input signal level of 'reference_lum' on another image
+        description should produce the same output level, even though the
+        'reference_lum' on both image representations can be different.
+
+        If 'max_lum' is less than the 'reference_lum', or 'reference_lum' is
+        less than or equal to 'min_lum', the protocol error invalid_luminance is
+        raised.
+
+        The minimum luminance is multiplied by 10000 to get the argument
+        'min_lum' value and carries precision of 4 decimals. The maximum
+        luminance and reference white luminance values are unscaled.
+
+        If the primary color volume luminance range and the reference white
+        luminance level have already been set on this object, the protocol error
+        already_set is raised.
+
+        This request can be used if the compositor advertises
+        xx_color_manager_v4.feature.set_luminances. Otherwise this request
+        raises the protocol error unsupported_feature.
+      </description>
+
+      <arg name="min_lum" type="uint"
+           summary="minimum luminance (cd/m²) * 10000"/>
+      <arg name="max_lum" type="uint"
+           summary="maximum luminance (cd/m²)"/>
+      <arg name="reference_lum" type="uint"
+           summary="reference white luminance (cd/m²)"/>
     </request>
 
     <request name="set_mastering_display_primaries">
@@ -855,8 +1051,8 @@
 
         The mastering display primaries define the target color volume.
 
-        If mastering display primaries are not explicitly set, the target
-        color volume is assumed to be equal to the primary color volume.
+        If mastering display primaries are not explicitly set, the target color
+        volume is assumed to be equal to the primary color volume.
 
         The target color volume is defined by all tristimulus values between 0.0
         and 1.0 (inclusive) of the color space defined by the given mastering
@@ -875,36 +1071,35 @@
         has to be chosen (e.g. floating point to exceed the primary color
         volume, or abusing limited quantization range as with xvYCC).
 
-        Each coordinate value is multiplied by 10000 to get the argument
-        value to carry precision of 4 decimals.
+        Each coordinate value is multiplied by 10000 to get the argument value
+        to carry precision of 4 decimals.
 
-        If mastering display primaries have already been set on this object,
-        the protocol error already_set is raised.
+        If mastering display primaries have already been set on this object, the
+        protocol error already_set is raised.
 
         This request can be used if the compositor advertises
-        xx_color_manager_v2.feature.set_mastering_display_primaries.
-        Otherwise this request raises the protocol error invalid_mastering.
-        The advertisement implies support only for target color
-        volumes fully contained within the primary color volume.
+        xx_color_manager_v4.feature.set_mastering_display_primaries. Otherwise
+        this request raises the protocol error unsupported_feature. The
+        advertisement implies support only for target color volumes fully
+        contained within the primary color volume.
 
-        If a compositor additionally supports target color volume exceeding
-        the primary color volume, it must advertise
-        xx_color_manager_v2.feature.extended_target_volume.
-        If a client uses target color volume exceeding the primary color volume
-        and the compositor does not support it, the result is implementation
-        defined. Compositors are recommended to detect this case and fail the
-        image description gracefully, but it may as well result in color
-        artifacts.
+        If a compositor additionally supports target color volume exceeding the
+        primary color volume, it must advertise
+        xx_color_manager_v4.feature.extended_target_volume. If a client uses
+        target color volume exceeding the primary color volume and the
+        compositor does not support it, the result is implementation defined.
+        Compositors are recommended to detect this case and fail the image
+        description gracefully, but it may as well result in color artifacts.
       </description>
 
-      <arg name="r_x" type="uint" summary="Red x * 10000"/>
-      <arg name="r_y" type="uint" summary="Red y * 10000"/>
-      <arg name="g_x" type="uint" summary="Green x * 10000"/>
-      <arg name="g_y" type="uint" summary="Green y * 10000"/>
-      <arg name="b_x" type="uint" summary="Blue x * 10000"/>
-      <arg name="b_y" type="uint" summary="Blue y * 10000"/>
-      <arg name="w_x" type="uint" summary="White x * 10000"/>
-      <arg name="w_y" type="uint" summary="White y * 10000"/>
+      <arg name="r_x" type="int" summary="Red x * 10000"/>
+      <arg name="r_y" type="int" summary="Red y * 10000"/>
+      <arg name="g_x" type="int" summary="Green x * 10000"/>
+      <arg name="g_y" type="int" summary="Green y * 10000"/>
+      <arg name="b_x" type="int" summary="Blue x * 10000"/>
+      <arg name="b_y" type="int" summary="Blue y * 10000"/>
+      <arg name="w_x" type="int" summary="White x * 10000"/>
+      <arg name="w_y" type="int" summary="White y * 10000"/>
     </request>
 
     <request name="set_mastering_luminance">
@@ -912,11 +1107,6 @@
         Sets the luminance range that was used during the content mastering
         process as the minimum and maximum absolute luminance L. This is
         compatible with the SMPTE ST 2086 definition of HDR static metadata.
-
-        This can only be set when set_tf_cicp is used to set the transfer
-        characteristic to Rec. ITU-R BT.2100-2 perceptual quantization system.
-        Otherwise, 'create' request shall raise inconsistent_set protocol
-        error.
 
         The mastering luminance range is undefined by default.
 
@@ -953,8 +1143,7 @@
 
         This can only be set when set_tf_cicp is used to set the transfer
         characteristic to Rec. ITU-R BT.2100-2 perceptual quantization system.
-        Otherwise, 'create' request shall raise inconsistent_set protocol
-        error.
+        Otherwise, 'create' request shall raise inconsistent_set protocol error.
 
         max_fall is undefined by default.
       </description>
@@ -963,15 +1152,15 @@
     </request>
   </interface>
 
-  <interface name="xx_image_description_v2" version="1">
+  <interface name="xx_image_description_v4" version="1">
     <description summary="Colorimetric image description">
-      An image description carries information about the color encoding used
-      on a surface when attached to a wl_surface via
-      xx_color_management_surface_v2.set_image_description. A compositor can
-      use this information to decode pixel values into colorimetrically
-      meaningful quantities.
+      An image description carries information about the color encoding used on
+      a surface when attached to a wl_surface via
+      xx_color_management_surface_v4.set_image_description. A compositor can use
+      this information to decode pixel values into colorimetrically meaningful
+      quantities.
 
-      Note, that the xx_image_description_v2 object is not ready to be used
+      Note, that the xx_image_description_v4 object is not ready to be used
       immediately after creation. The object eventually delivers either the
       'ready' or the 'failed' event, specified in all requests creating it. The
       object is deemed "ready" after receiving the 'ready' event.
@@ -981,61 +1170,70 @@
       protocol error. Attempts to use an object which is not ready through other
       interfaces shall raise protocol errors defined there.
 
-      Once created and regardless of how it was created, a xx_image_description_v2
-      object always refers to one fixed image description. It cannot change
-      after creation.
+      Once created and regardless of how it was created, a
+      xx_image_description_v4 object always refers to one fixed image
+      description. It cannot change after creation.
     </description>
 
     <request name="destroy" type="destructor">
       <description summary="destroy the image description">
         Destroy this object. It is safe to destroy an object which is not ready.
 
-        Destroying a xx_image_description_v2 object has no side-effects, not
-        even if a xx_color_management_surface_v2.set_image_description has
-        not yet been followed by a wl_surface.commit.
+        Destroying a xx_image_description_v4 object has no side-effects, not
+        even if a xx_color_management_surface_v4.set_image_description has not
+        yet been followed by a wl_surface.commit.
       </description>
     </request>
 
     <enum name="error">
       <description summary="protocol errors"/>
 
-      <entry name="not_ready" value="0" summary="attempted to use an object which is not ready"/>
-      <entry name="no_information" value="1" summary="get_information not allowed"/>
+      <entry name="not_ready" value="0"
+             summary="attempted to use an object which is not ready"/>
+      <entry name="no_information" value="1"
+             summary="get_information not allowed"/>
     </enum>
 
     <enum name="cause">
       <description summary="generic reason for failure"/>
 
-      <entry name="low_version" value="0" summary="interface version too low"/>
-      <entry name="unsupported" value="1" summary="unsupported image description data"/>
-      <entry name="operating_system" value="2" summary="error independent of the client"/>
-      <entry name="no_output" value="3" summary="the relevant output no longer exists"/>
+      <entry name="low_version" value="0"
+             summary="interface version too low"/>
+      <entry name="unsupported" value="1"
+             summary="unsupported image description data"/>
+      <entry name="operating_system" value="2"
+             summary="error independent of the client"/>
+      <entry name="no_output" value="3"
+             summary="the relevant output no longer exists"/>
     </enum>
 
     <event name="failed">
       <description summary="graceful error on creating the image description">
-        If creating a xx_image_description_v2 object fails for a reason that
-        is not defined as a protocol error, this event is sent.
-        The requests that create image description objects define whether
-        and when this can occur. Only such creation requests can trigger this
-        event. This event cannot be triggered after the image description was
+        If creating a xx_image_description_v4 object fails for a reason that is
+        not defined as a protocol error, this event is sent.
+
+        The requests that create image description objects define whether and
+        when this can occur. Only such creation requests can trigger this event.
+        This event cannot be triggered after the image description was
         successfully formed.
 
-        Once this event has been sent, the xx_image_description_v2 object will
+        Once this event has been sent, the xx_image_description_v4 object will
         never become ready and it can only be destroyed.
       </description>
 
-      <arg name="cause" type="uint" enum="cause" summary="generic reason"/>
-      <arg name="msg" type="string" summary="ad hoc human-readable explanation"/>
+      <arg name="cause" type="uint" enum="cause"
+           summary="generic reason"/>
+      <arg name="msg" type="string"
+           summary="ad hoc human-readable explanation"/>
     </event>
 
     <event name="ready">
       <description summary="indication that the object is ready to be used">
-        Once this event has been sent, the xx_image_description_v2 object is
+        Once this event has been sent, the xx_image_description_v4 object is
         deemed "ready". Ready objects can be used to send requests and can be
         used through other interfaces.
 
-        Every ready xx_image_description_v2 protocol object refers to an
+        Every ready xx_image_description_v4 protocol object refers to an
         underlying image description record in the compositor. Multiple protocol
         objects may end up referring to the same record. Clients may identify
         these "copies" by comparing their id numbers: if the numbers from two
@@ -1044,15 +1242,15 @@
         cannot have the same id number simultaneously. The id number does not
         change during the lifetime of the image description record.
 
-        The id number is valid only as long as the protocol object is alive.
-        If all protocol objects referring to the same image description record
-        are destroyed, the id number may be recycled for a different image
+        The id number is valid only as long as the protocol object is alive. If
+        all protocol objects referring to the same image description record are
+        destroyed, the id number may be recycled for a different image
         description record.
 
         Image description id number is not a protocol object id. Zero is
-        reserved as an invalid id number. It shall not be possible for a
-        client to refer to an image description by its id number in protocol.
-        The id numbers might not be portable between Wayland connections.
+        reserved as an invalid id number. It shall not be possible for a client
+        to refer to an image description by its id number in protocol. The id
+        numbers might not be portable between Wayland connections.
 
         This identity allows clients to de-duplicate image description records
         and avoid get_information request if they already have the image
@@ -1064,7 +1262,7 @@
 
     <request name="get_information">
       <description summary="get information about the image description">
-        Creates a xx_image_description_info_v2 object which delivers the
+        Creates a xx_image_description_info_v4 object which delivers the
         information that makes up the image description.
 
         Not all image description protocol objects allow get_information
@@ -1073,20 +1271,21 @@
         error no_information is raised.
       </description>
 
-      <arg name="information" type="new_id" interface="xx_image_description_info_v2"/>
+      <arg name="information"
+           type="new_id" interface="xx_image_description_info_v4"/>
     </request>
   </interface>
 
-  <interface name="xx_image_description_info_v2" version="1">
+  <interface name="xx_image_description_info_v4" version="1">
     <description summary="Colorimetric image description information">
       Sends all matching events describing an image description object exactly
       once and finally sends the 'done' event.
 
-      Once a xx_image_description_info_v2 object has delivered a 'done' event
-      it is automatically destroyed.
+      Once a xx_image_description_info_v4 object has delivered a 'done' event it
+      is automatically destroyed.
 
-      Every xx_image_description_info_v2 created from the same
-      xx_image_description_v2 shall always return the exact same data.
+      Every xx_image_description_info_v4 created from the same
+      xx_image_description_v4 shall always return the exact same data.
     </description>
 
     <event name="done" type="destructor">
@@ -1114,41 +1313,42 @@
 
     <event name="primaries">
       <description summary="primaries as chromaticity coordinates">
-        Delivers the primary color volume primaries and white point
-        using CIE 1931 xy chromaticity coordinates.
+        Delivers the primary color volume primaries and white point using CIE
+        1931 xy chromaticity coordinates.
 
-        Each coordinate value is multiplied by 10000 to get the argument
-        value to carry precision of 4 decimals.
+        Each coordinate value is multiplied by 10000 to get the argument value
+        to carry precision of 4 decimals.
       </description>
 
-      <arg name="r_x" type="uint" summary="Red x * 10000"/>
-      <arg name="r_y" type="uint" summary="Red y * 10000"/>
-      <arg name="g_x" type="uint" summary="Green x * 10000"/>
-      <arg name="g_y" type="uint" summary="Green y * 10000"/>
-      <arg name="b_x" type="uint" summary="Blue x * 10000"/>
-      <arg name="b_y" type="uint" summary="Blue y * 10000"/>
-      <arg name="w_x" type="uint" summary="White x * 10000"/>
-      <arg name="w_y" type="uint" summary="White y * 10000"/>
+      <arg name="r_x" type="int" summary="Red x * 10000"/>
+      <arg name="r_y" type="int" summary="Red y * 10000"/>
+      <arg name="g_x" type="int" summary="Green x * 10000"/>
+      <arg name="g_y" type="int" summary="Green y * 10000"/>
+      <arg name="b_x" type="int" summary="Blue x * 10000"/>
+      <arg name="b_y" type="int" summary="Blue y * 10000"/>
+      <arg name="w_x" type="int" summary="White x * 10000"/>
+      <arg name="w_y" type="int" summary="White y * 10000"/>
     </event>
 
     <event name="primaries_named">
       <description summary="named primaries">
-        Delivers the primary color volume primaries and white point using a
+        Delivers the primary color volume primaries and white point using an
         explicitly enumerated named set.
       </description>
 
-      <arg name="primaries" type="uint" enum="xx_color_manager_v2.primaries" summary="named primaries"/>
+      <arg name="primaries" type="uint" enum="xx_color_manager_v4.primaries"
+           summary="named primaries"/>
     </event>
 
     <event name="tf_power">
       <description summary="transfer characteristic as a power curve">
-        The color component transfer characteristic of this image description
-        is a pure power curve. This event provides the exponent of the power
+        The color component transfer characteristic of this image description is
+        a pure power curve. This event provides the exponent of the power
         function. This curve represents the conversion from electrical to
         optical pixel or color values.
 
-        The curve exponent has been multiplied by 10000 to get the argument
-        eexp value to carry the precision of 4 decimals.
+        The curve exponent has been multiplied by 10000 to get the argument eexp
+        value to carry the precision of 4 decimals.
       </description>
 
       <arg name="eexp" type="uint" summary="the exponent * 10000"/>
@@ -1160,46 +1360,64 @@
         named function.
       </description>
 
-      <arg name="tf" type="uint" enum="xx_color_manager_v2.transfer_function" summary="named transfer function"/>
+      <arg name="tf" type="uint" enum="xx_color_manager_v4.transfer_function"
+           summary="named transfer function"/>
+    </event>
+
+    <event name="luminances">
+      <description summary="primary color volume luminance range and reference white">
+        Delivers the primary color volume luminance range and the reference
+        white luminance level.
+
+        The minimum luminance is multiplied by 10000 to get the argument
+        'min_lum' value and carries precision of 4 decimals. The maximum
+        luminance and reference white luminance values are unscaled.
+      </description>
+
+      <arg name="min_lum" type="uint"
+           summary="minimum luminance (cd/m²) * 10000"/>
+      <arg name="max_lum" type="uint"
+           summary="maximum luminance (cd/m²)"/>
+      <arg name="reference_lum" type="uint"
+           summary="reference white luminance (cd/m²)"/>
     </event>
 
     <event name="target_primaries">
       <description summary="target primaries as chromaticity coordinates">
-        Provides the color primaries and white point of the target
-        color volume using CIE 1931 xy chromaticity coordinates. This is
-        compatible with the SMPTE ST 2086 definition of HDR static metadata
-        for mastering displays.
+        Provides the color primaries and white point of the target color volume
+        using CIE 1931 xy chromaticity coordinates. This is compatible with the
+        SMPTE ST 2086 definition of HDR static metadata for mastering displays.
 
-        While primary color volume is about how color is encoded, the
-        target color volume is the actually displayable color volume.
-        If target color volume is equal to the primary color volume,
-        then this event is not sent.
+        While primary color volume is about how color is encoded, the target
+        color volume is the actually displayable color volume. If target color
+        volume is equal to the primary color volume, then this event is not
+        sent.
 
-        Each coordinate value is multiplied by 10000 to get the argument
-        value to carry precision of 4 decimals.
+        Each coordinate value is multiplied by 10000 to get the argument value
+        to carry precision of 4 decimals.
       </description>
 
-      <arg name="r_x" type="uint" summary="Red x * 10000"/>
-      <arg name="r_y" type="uint" summary="Red y * 10000"/>
-      <arg name="g_x" type="uint" summary="Green x * 10000"/>
-      <arg name="g_y" type="uint" summary="Green y * 10000"/>
-      <arg name="b_x" type="uint" summary="Blue x * 10000"/>
-      <arg name="b_y" type="uint" summary="Blue y * 10000"/>
-      <arg name="w_x" type="uint" summary="White x * 10000"/>
-      <arg name="w_y" type="uint" summary="White y * 10000"/>
+      <arg name="r_x" type="int" summary="Red x * 10000"/>
+      <arg name="r_y" type="int" summary="Red y * 10000"/>
+      <arg name="g_x" type="int" summary="Green x * 10000"/>
+      <arg name="g_y" type="int" summary="Green y * 10000"/>
+      <arg name="b_x" type="int" summary="Blue x * 10000"/>
+      <arg name="b_y" type="int" summary="Blue y * 10000"/>
+      <arg name="w_x" type="int" summary="White x * 10000"/>
+      <arg name="w_y" type="int" summary="White y * 10000"/>
     </event>
 
     <event name="target_luminance">
       <description summary="target luminance range">
-        Provides the luminance range that the image description is targeting
-        as the minimum and maximum absolute luminance L. This is compatible
-        with the SMPTE ST 2086 definition of HDR static metadata.
+        Provides the luminance range that the image description is targeting as
+        the minimum and maximum absolute luminance L. This is compatible with
+        the SMPTE ST 2086 definition of HDR static metadata.
 
         This luminance range is only theoretical and may not correspond to the
         luminance of light emitted on an actual display.
 
-        Min L value is multiplied by 10000 to get the argument min_lum value
-        and carry precision of 4 decimals. Max L value is unscaled for max_lum.
+        Min L value is multiplied by 10000 to get the argument min_lum value and
+        carry precision of 4 decimals. Max L value is unscaled for max_lum.
       </description>
 
       <arg name="min_lum" type="uint" summary="min L (cd/m²) * 10000"/>
@@ -1215,7 +1433,8 @@
         luminance of light emitted on an actual display.
       </description>
 
-      <arg name="max_cll" type="uint" summary="Maximum content light-level (cd/m²)"/>
+      <arg name="max_cll" type="uint"
+           summary="Maximum content light-level (cd/m²)"/>
     </event>
 
     <event name="target_max_fall">
@@ -1227,7 +1446,8 @@
         luminance of light emitted on an actual display.
       </description>
 
-      <arg name="max_fall" type="uint" summary="Maximum frame-average light level (cd/m²)"/>
+      <arg name="max_fall" type="uint"
+           summary="Maximum frame-average light level (cd/m²)"/>
     </event>
   </interface>
 </protocol>

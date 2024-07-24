@@ -149,7 +149,7 @@ proto_sources = [
   {
     'name': 'xx-color-management',
     'stability': 'private',
-    'version': 2,
+    'version': 4,
   },
 ]
 
