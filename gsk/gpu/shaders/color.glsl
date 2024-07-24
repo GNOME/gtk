@@ -50,65 +50,10 @@ output_color_alpha (vec4  color,
     return vec4 (color.rgb, color.a * alpha);
 }
 
-float
-srgb_eotf (float v)
-{
-  if (v >= 0.04045)
-    return pow (((v + 0.055) / (1.0 + 0.055)), 2.4);
-  else
-    return v / 12.92;
-}
-
-float
-srgb_oetf (float v)
-{
-  if (v > 0.0031308)
-    return 1.055 * pow (v, 1.0 / 2.4) - 0.055;
-  else
-    return 12.92 * v;
-}
-
-float
-pq_eotf (float v)
-{
-  const float ninv = 16384.0 / 2610.0;
-  const float minv = 32.0 / 2523.0;
-  const float c1 = 3424.0 / 4096.0;
-  const float c2 = 2413.0 / 128.0;
-  const float c3 = 2392.0 / 128.0;
-
-  float x = pow (max ((pow (v, minv) - c1), 0.0) / (c2 - (c3 * (pow (v, minv)))), ninv);
-
-  return x * 10000.0 / 203.0;
-}
-
-float
-pq_oetf (float v)
-{
-  const float n = 2610.0 / 16384.0;
-  const float m = 2523.0 / 32.0;
-  const float c1 = 3424.0 / 4096.0;
-  const float c2 = 2413.0 / 128.0;
-  const float c3 = 2392.0 / 128.0;
-
-  float x = v * 203.0 / 10000.0;
-
-  return pow (((c1 + (c2 * pow (x, n))) / (1.0 + (c3 * pow (x, n)))), m);
-}
-
-/* Note that these matrices are transposed from the C version */
-
-const mat3 srgb_from_rec2020 = mat3(
-  1.660227, -0.124553, -0.018155,
- -0.587548,  1.132926, -0.100603,
- -0.072838, -0.008350, 1.118998
-);
-
-const mat3 rec2020_from_srgb = mat3(
-  0.627504, 0.069108, 0.016394,
-  0.329275, 0.919519, 0.088011,
-  0.043303, 0.011360, 0.895380
-);
+#define COLOR_IN_GLSL
+#define NEED_CORE_TF
+#define NEED_CORE_MATRICES
+#include "../../../gdk/gdkcolor.defs"
 
 vec3
 apply_eotf (vec3 color,
@@ -166,9 +111,9 @@ convert_linear (vec3 color,
                 uint to)
 {
   if (to == GDK_COLOR_STATE_ID_REC2100_LINEAR && from == GDK_COLOR_STATE_ID_SRGB_LINEAR)
-    return rec2020_from_srgb * color;
+    return srgb_to_rec2020 * color;
   else if (to == GDK_COLOR_STATE_ID_SRGB_LINEAR && from == GDK_COLOR_STATE_ID_REC2100_LINEAR)
-    return srgb_from_rec2020 * color;
+    return rec2020_to_srgb * color;
   else
     return vec3(0.8, 1.0, 0.0);
 }

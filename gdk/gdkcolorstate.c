@@ -22,7 +22,7 @@
 
 #include <math.h>
 
-#include "gdkcolordefs.h"
+#include "gdkcolor.defs"
 
 #include <glib/gi18n-lib.h>
 

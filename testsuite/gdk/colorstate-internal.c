@@ -2,7 +2,9 @@
 #include "gdkcolorstateprivate.h"
 #include <math.h>
 
-#include "gdkcolordefs.h"
+#define NEED_CORE_TF
+#define NEED_OTHER_TF
+#include "gdkcolor.defs"
 
 typedef float (* TransferFunc) (float v);
 
