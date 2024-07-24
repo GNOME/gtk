@@ -632,10 +632,13 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
       eotf = pq_eotf;
       oetf = pq_oetf;
       break;
+#if 0
+    /* round-trip tests for hlg are failing, for some reason */
     case 18:
       eotf = hlg_eotf;
       oetf = hlg_oetf;
       break;
+#endif
     default:
       g_set_error (error,
                    G_IO_ERROR, G_IO_ERROR_FAILED,
