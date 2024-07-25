@@ -185,3 +185,11 @@ gdk_color_state_get_cicp (GdkColorState *self)
 
 GdkColorState * gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
                                               GError        **error);
+
+#ifndef GDK_COLOR_STATE_IMPL
+extern GdkColorState gdk_color_state_bt601_narrow;
+extern GdkColorState gdk_color_state_bt601_full;
+#endif
+
+#define GDK_COLOR_STATE_YUV  ((GdkColorState *) &gdk_color_state_bt601_narrow)
+#define GDK_COLOR_STATE_JPEG ((GdkColorState *) &gdk_color_state_bt601_full)

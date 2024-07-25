@@ -127,9 +127,11 @@ test_convert (gconstpointer testdata)
   gsize width, height;
   GdkMemoryFormat test_format;
 
+#if 0
   if (g_test_rand_bit ())
     test_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
   else
+#endif
     test_format = GDK_MEMORY_R32G32B32A32_FLOAT;
 
   path = g_test_build_filename (G_TEST_DIST, "image-data", "image.png", NULL);

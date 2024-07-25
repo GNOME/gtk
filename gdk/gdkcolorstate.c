@@ -18,6 +18,7 @@
 
 #include "config.h"
 
+#define GDK_COLOR_STATE_IMPL
 #include "gdkcolorstateprivate.h"
 
 #include <math.h>
@@ -411,7 +412,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
   },
 };
 
- /* }}} */
+/* }}} */
 /* {{{ Cicp implementation */
 
 typedef struct _GdkCicpColorState GdkCicpColorState;
@@ -431,25 +432,128 @@ struct _GdkCicpColorState
   float *from_srgb;
   float *from_rec2020;
 
+  const float *from_yuv;
+  const float *to_yuv;
+
   GdkCicp cicp;
 };
 
 /* {{{ Conversion functions */
 
-#define cicp ((GdkCicpColorState *)self)
+#define TRANSFORM_FROM_CICP(name, matrix, oetf) \
+static void \
+name (GdkColorState  *color_state, \
+      float         (*values)[4], \
+      gsize           n_values) \
+{ \
+  GdkCicpColorState *self = (GdkCicpColorState *) color_state; \
+\
+  for (gsize i = 0; i < n_values; i++) \
+    { \
+      if (self->cicp.range == GDK_CICP_RANGE_NARROW) \
+        { \
+          values[i][0] = CLAMP ((values[i][0] - 16.0/255.0) * 255.0 / 219.0, -10, 10); \
+          values[i][1] = CLAMP ((values[i][1] - 16.0/255.0) * 255.0 / 224.0, -10, 10); \
+          values[i][2] = CLAMP ((values[i][2] - 16.0/255.0) * 255.0 / 224.0, -10, 10); \
+        } \
+      if (self->from_yuv) \
+        { \
+          float res[3]; \
+          values[i][1] -= 0.5; \
+          values[i][2] -= 0.5; \
+          res[0] = self->from_yuv[0] * values[i][0] + self->from_yuv[1] * values[i][1] + self->from_yuv[2] * values[i][2]; \
+          res[1] = self->from_yuv[3] * values[i][0] + self->from_yuv[4] * values[i][1] + self->from_yuv[5] * values[i][2]; \
+          res[2] = self->from_yuv[6] * values[i][0] + self->from_yuv[7] * values[i][1] + self->from_yuv[8] * values[i][2]; \
+          values[i][0] = res[0]; \
+          values[i][1] = res[1]; \
+          values[i][2] = res[2]; \
+        } \
+      if (self->eotf != NONE) \
+        { \
+          values[i][0] = self->eotf (values[i][0]); \
+          values[i][1] = self->eotf (values[i][1]); \
+          values[i][2] = self->eotf (values[i][2]); \
+        } \
+      if (self->matrix != IDENTITY) \
+        { \
+          float res[3]; \
+          res[0] = self->matrix[0] * values[i][0] + self->matrix[1] * values[i][1] + self->matrix[2] * values[i][2]; \
+          res[1] = self->matrix[3] * values[i][0] + self->matrix[4] * values[i][1] + self->matrix[5] * values[i][2]; \
+          res[2] = self->matrix[6] * values[i][0] + self->matrix[7] * values[i][1] + self->matrix[8] * values[i][2]; \
+          values[i][0] = res[0]; \
+          values[i][1] = res[1]; \
+          values[i][2] = res[2]; \
+        } \
+      if (oetf != NONE) \
+        { \
+          values[i][0] = oetf (values[i][0]); \
+          values[i][1] = oetf (values[i][1]); \
+          values[i][2] = oetf (values[i][2]); \
+        } \
+    } \
+}
 
-TRANSFORM(gdk_cicp_to_srgb,             cicp->eotf,  cicp->to_srgb,      srgb_oetf)
-TRANSFORM(gdk_cicp_to_srgb_linear,      cicp->eotf,  cicp->to_srgb,      NONE)
-TRANSFORM(gdk_cicp_to_rec2100_pq,       cicp->eotf,  cicp->to_rec2020,   pq_oetf)
-TRANSFORM(gdk_cicp_to_rec2100_linear,   cicp->eotf,  cicp->to_rec2020,   NONE)
-TRANSFORM(gdk_cicp_from_srgb,           srgb_eotf,   cicp->from_srgb,    cicp->oetf)
-TRANSFORM(gdk_cicp_from_srgb_linear,    NONE,        cicp->from_srgb,    cicp->oetf)
-TRANSFORM(gdk_cicp_from_rec2100_pq,     pq_eotf,     cicp->from_rec2020, cicp->oetf)
-TRANSFORM(gdk_cicp_from_rec2100_linear, NONE,        cicp->from_rec2020, cicp->oetf)
+#define TRANSFORM_TO_CICP(name, eotf, matrix) \
+static void \
+name (GdkColorState  *color_state, \
+      float         (*values)[4], \
+      gsize           n_values) \
+{ \
+  GdkCicpColorState *self = (GdkCicpColorState *) color_state; \
+\
+  for (gsize i = 0; i < n_values; i++) \
+    { \
+      if (eotf != NONE) \
+        { \
+          values[i][0] = eotf (values[i][0]); \
+          values[i][1] = eotf (values[i][1]); \
+          values[i][2] = eotf (values[i][2]); \
+        } \
+      if (self->matrix != IDENTITY) \
+        { \
+          float res[3]; \
+          res[0] = self->matrix[0] * values[i][0] + self->matrix[1] * values[i][1] + self->matrix[2] * values[i][2]; \
+          res[1] = self->matrix[3] * values[i][0] + self->matrix[4] * values[i][1] + self->matrix[5] * values[i][2]; \
+          res[2] = self->matrix[6] * values[i][0] + self->matrix[7] * values[i][1] + self->matrix[8] * values[i][2]; \
+          values[i][0] = res[0]; \
+          values[i][1] = res[1]; \
+          values[i][2] = res[2]; \
+        } \
+      if (self->oetf != NONE) \
+        { \
+          values[i][0] = self->oetf (values[i][0]); \
+          values[i][1] = self->oetf (values[i][1]); \
+          values[i][2] = self->oetf (values[i][2]); \
+        } \
+      if (self->to_yuv) \
+        { \
+          float res[3]; \
+          res[0] = self->to_yuv[0] * values[i][0] + self->to_yuv[1] * values[i][1] + self->to_yuv[2] * values[i][2]; \
+          res[1] = self->to_yuv[3] * values[i][0] + self->to_yuv[4] * values[i][1] + self->to_yuv[5] * values[i][2]; \
+          res[2] = self->to_yuv[6] * values[i][0] + self->to_yuv[7] * values[i][1] + self->to_yuv[8] * values[i][2]; \
+          values[i][0] = res[0]; \
+          values[i][1] = res[1] + 0.5; \
+          values[i][2] = res[2] + 0.5; \
+        } \
+      if (self->cicp.range == GDK_CICP_RANGE_NARROW) \
+        { \
+          values[i][0] = values[i][0] * 219.0 / 255.0 + 16.0 / 255.0; \
+          values[i][1] = values[i][1] * 224.0 / 255.0 + 16.0 / 255.0; \
+          values[i][2] = values[i][2] * 224.0 / 255.0 + 16.0 / 255.0; \
+        } \
+    } \
+}
 
-#undef cicp
+TRANSFORM_FROM_CICP(gdk_cicp_to_srgb,           to_srgb,      srgb_oetf)
+TRANSFORM_FROM_CICP(gdk_cicp_to_srgb_linear,    to_srgb,      NONE)
+TRANSFORM_FROM_CICP(gdk_cicp_to_rec2100_pq,     to_rec2020,   pq_oetf)
+TRANSFORM_FROM_CICP(gdk_cicp_to_rec2100_linear, to_rec2020,   NONE)
 
-/* }}} */
+TRANSFORM_TO_CICP(gdk_cicp_from_srgb,           srgb_eotf,   from_srgb)
+TRANSFORM_TO_CICP(gdk_cicp_from_srgb_linear,    NONE,        from_srgb)
+TRANSFORM_TO_CICP(gdk_cicp_from_rec2100_pq,     pq_eotf,     from_rec2020)
+TRANSFORM_TO_CICP(gdk_cicp_from_rec2100_linear, NONE,        from_rec2020)
+
 /* }}} */
 /* {{{ Vfuncs */
 
@@ -555,7 +659,7 @@ gdk_cicp_color_state_get_cicp (GdkColorState  *color_state)
   return &self->cicp;
 }
 
-/* }}} */ 
+/* }}} */
 
 static const
 GdkColorStateClass GDK_CICP_COLOR_STATE_CLASS = {
@@ -566,6 +670,46 @@ GdkColorStateClass GDK_CICP_COLOR_STATE_CLASS = {
   .get_convert_to = gdk_cicp_color_state_get_convert_to,
   .get_convert_from = gdk_cicp_color_state_get_convert_from,
   .get_cicp = gdk_cicp_color_state_get_cicp,
+};
+
+GdkCicpColorState gdk_color_state_bt601_narrow = {
+  .parent = {
+    .klass = &GDK_CICP_COLOR_STATE_CLASS,
+    .ref_count = 1,
+    .depth = GDK_MEMORY_FLOAT16,
+    .rendering_color_state = GDK_COLOR_STATE_REC2100_LINEAR,
+  },
+  .name = "cicp-1/13/6/0",
+  .no_srgb = NULL,
+  .cicp = { 1, 13, 6, 0 },
+  .eotf = srgb_eotf,
+  .oetf = srgb_oetf,
+  .to_yuv = rgb_to_bt601,
+  .from_yuv = bt601_to_rgb,
+  .to_srgb = IDENTITY,
+  .to_rec2020 = (float *) srgb_to_rec2020,
+  .from_srgb = IDENTITY,
+  .from_rec2020 = (float *) rec2020_to_srgb,
+};
+
+GdkCicpColorState gdk_color_state_bt601_full = {
+  .parent = {
+    .klass = &GDK_CICP_COLOR_STATE_CLASS,
+    .ref_count = 1,
+    .depth = GDK_MEMORY_FLOAT16,
+    .rendering_color_state = GDK_COLOR_STATE_REC2100_LINEAR,
+  },
+  .name = "cicp-1/13/6/1",
+  .no_srgb = NULL,
+  .cicp = { 1, 13, 6, 1 },
+  .eotf = srgb_eotf,
+  .oetf = srgb_oetf,
+  .to_yuv = rgb_to_bt601,
+  .from_yuv = bt601_to_rgb,
+  .to_srgb = IDENTITY,
+  .to_rec2020 = (float *) srgb_to_rec2020,
+  .from_srgb = IDENTITY,
+  .from_rec2020 = (float *) rec2020_to_srgb,
 };
 
 static inline float *
@@ -592,14 +736,8 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
   GdkTransferFunc oetf;
   gconstpointer to_xyz;
   gconstpointer from_xyz;
-
-  if (cicp->range == GDK_CICP_RANGE_NARROW || cicp->matrix_coefficients != 0)
-    {
-      g_set_error (error,
-                   G_IO_ERROR, G_IO_ERROR_FAILED,
-                   _("cicp: Narrow range or YUV not supported"));
-      return NULL;
-    }
+  gconstpointer to_yuv = NULL;
+  gconstpointer from_yuv = NULL;
 
   if (cicp->color_primaries == 2 ||
       cicp->transfer_function == 2 ||
@@ -613,9 +751,15 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
 
   for (guint i = 0; i < GDK_COLOR_STATE_N_IDS; i++)
     {
-      if (gdk_cicp_equivalent (cicp, &gdk_default_color_states[i].cicp))
+      if (gdk_cicp_equal (cicp, &gdk_default_color_states[i].cicp))
         return (GdkColorState *) &gdk_default_color_states[i];
     }
+
+  if (gdk_cicp_equal (cicp, &gdk_color_state_bt601_narrow.cicp))
+    return gdk_color_state_ref ((GdkColorState *) &gdk_color_state_bt601_narrow);
+
+  if (gdk_cicp_equal (cicp, &gdk_color_state_bt601_full.cicp))
+    return gdk_color_state_ref ((GdkColorState *) &gdk_color_state_bt601_full);
 
   switch (cicp->transfer_function)
     {
@@ -669,6 +813,7 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
       from_xyz = xyz_to_pal;
       break;
     case 6:
+    case 7:
       to_xyz = ntsc_to_xyz;
       from_xyz = xyz_to_ntsc;
       break;
@@ -692,6 +837,34 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
       return NULL;
     }
 
+  switch (cicp->matrix_coefficients)
+    {
+    case 0:
+      to_yuv = IDENTITY;
+      from_yuv = IDENTITY;
+      break;
+    case 1:
+      to_yuv = rgb_to_bt709;
+      from_yuv = bt709_to_rgb;
+      break;
+    case 5:
+    case 6:
+      to_yuv = rgb_to_bt601;
+      from_yuv = bt601_to_rgb;
+      break;
+    case 9:
+      to_yuv = rgb_to_bt2020;
+      from_yuv = bt2020_to_rgb;
+      break;
+    default:
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   _("cicp: Matrix coefficients %u, %s not supported"),
+                   cicp->matrix_coefficients,
+                   cicp->range == GDK_CICP_RANGE_NARROW ? "narrow" : "full");
+      return NULL;
+    }
+
   self = g_new0 (GdkCicpColorState, 1);
 
   self->parent.klass = &GDK_CICP_COLOR_STATE_CLASS;
@@ -703,6 +876,9 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
   self->parent.depth = GDK_MEMORY_FLOAT16;
 
   memcpy (&self->cicp, cicp, sizeof (GdkCicp));
+
+  self->to_yuv = to_yuv;
+  self->from_yuv = from_yuv;
 
   self->eotf = eotf;
   self->oetf = oetf;
