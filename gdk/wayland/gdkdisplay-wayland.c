@@ -534,7 +534,7 @@ gdk_registry_handle_global (void               *data,
                           &wp_presentation_interface,
                           MIN (version, 1));
     }
-  else if (strcmp (interface, "xx_color_manager_v2") == 0)
+  else if (strcmp (interface, "xx_color_manager_v4") == 0)
     {
       display_wayland->color = gdk_wayland_color_new (registry, id, version);
     }

@@ -7,9 +7,13 @@ void            main_clip_rounded               (void);
 
 #include "enums.glsl"
 
+/* Needs to be exactly like this and not use #else
+ * because our include script is too dumb
+ */
 #ifdef VULKAN
 #include "common-vulkan.glsl"
-#else
+#endif /* VULKAN */
+#ifndef VULKAN
 #include "common-gl.glsl"
 #endif
 
