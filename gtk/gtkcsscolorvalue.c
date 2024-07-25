@@ -978,7 +978,8 @@ gtk_css_color_value_new_relative (GtkCssValue      *origin,
         {
           if (values[i])
             {
-              if (!gtk_css_value_is_computed (values[i]))
+              if (!gtk_css_value_is_computed (values[i]) &&
+                  !gtk_css_number_value_has_percent (values[i]))
                 computed = FALSE;
               if (gtk_css_value_contains_current_color (values[i]))
                 resolved = FALSE;

@@ -108,7 +108,7 @@ test_number_value (gconstpointer data)
   if (test->is_computed)
     g_assert_true (res == value);
 
-  g_assert_true (gtk_css_value_is_computed (res));
+  g_assert_true (gtk_css_number_value_has_percent (res) || gtk_css_value_is_computed (res));
 
   if (test->computed)
     {
@@ -140,7 +140,7 @@ static CssColorValueTest color_tests[] = {
   { "rgba(255, 255, 128, 0.1)", TRUE, FALSE, "rgba(255,255,128,0.1)", "rgba(255,255,128,0.1)" },
   { "currentcolor", TRUE, TRUE, "currentcolor", "currentcolor", "color(srgb 1 0 0)", "color(srgb 1 0 0)" },
   { "color(from color(srgb 0.5 0.5 0.2) srgb 0.5 calc(r * g) b / calc(alpha / 2))", TRUE, FALSE, "color(srgb 0.5 0.25 0.2 / 0.5)", "color(srgb 0.5 0.25 0.2 / 0.5)" },
-  { "rgb(from currentcolor r g 40% / 50%)", FALSE, TRUE, "color(from currentcolor srgb r g 40% / 50%)", "color(from currentcolor srgb r g 40% / 50%)", "color(srgb 1 0 0)", "color(srgb 1 0 0.4 / 0.5)" },
+  { "rgb(from currentcolor r g 40% / 50%)", TRUE, TRUE, "color(from currentcolor srgb r g 40% / 50%)", "color(from currentcolor srgb r g 40% / 50%)", "color(srgb 1 0 0)", "color(srgb 1 0 0.4 / 0.5)" },
   { "rgb(from darkgoldenrod r g 100 / 50%)", TRUE, FALSE, "color(srgb 0.721569 0.52549 0.392157 / 0.5)", "color(srgb 0.721569 0.52549 0.392157 / 0.5)" },
   { "rgb(from white 100% 100% 100% / 100%)", TRUE, FALSE, "color(srgb 1 1 1)", "color(srgb 1 1 1)" },
   { "color(from white srgb 100% 100% 100% / 100%)", TRUE, FALSE, "color(srgb 1 1 1)", "color(srgb 1 1 1)" },
