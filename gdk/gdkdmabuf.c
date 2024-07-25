@@ -1779,7 +1779,7 @@ static const GdkDrmFormatInfo supported_formats[] = {
     .download = NULL,
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
-        .format = VK_FORMAT_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16,
+        .format = VK_FORMAT_G10X6_B10X6R10X6_2PLANE_422_UNORM_3PACK16,
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
@@ -1791,7 +1791,7 @@ static const GdkDrmFormatInfo supported_formats[] = {
     .download = download_p010,
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
-        .format = VK_FORMAT_G10X6_B10X6R10X6_2PLANE_422_UNORM_3PACK16,
+        .format = VK_FORMAT_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16,
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
@@ -1803,7 +1803,7 @@ static const GdkDrmFormatInfo supported_formats[] = {
     .download = download_p010,
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
-        .format = VK_FORMAT_G12X4_B12X4R12X4_2PLANE_422_UNORM_3PACK16,
+        .format = VK_FORMAT_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16,
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
@@ -1815,7 +1815,7 @@ static const GdkDrmFormatInfo supported_formats[] = {
     .download = download_p010,
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
-        .format = VK_FORMAT_G16_B16R16_2PLANE_422_UNORM,
+        .format = VK_FORMAT_G16_B16R16_2PLANE_420_UNORM,
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
