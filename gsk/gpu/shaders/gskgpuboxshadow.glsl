@@ -112,7 +112,7 @@ blur_corner (vec2 p,
     return 0.0;
 
   float result = 0.0;
-  float step = 1.0;
+  float step = max (1.0, r.y / 8.0);
   for (float y = 0.5 * step; y <= r.y; y += step)
     {
       float x = r.x - ellipse_x (r, r.y - y);
