@@ -99,7 +99,7 @@ hlg_eotf (float v)
   if (v <= 0.5)
     return (v * v) / 3;
   else
-    return expf (((v - c) / a) + b) / 12.0;
+    return (expf ((v - c) / a) + b) / 12.0;
 }
 
 static inline float
