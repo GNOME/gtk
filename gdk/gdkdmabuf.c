@@ -24,6 +24,7 @@
 #include "gdkdmabuffourccprivate.h"
 #include "gdkdmabuftextureprivate.h"
 #include "gdkmemoryformatprivate.h"
+#include "gdkcolorstate.h"
 
 #ifdef HAVE_DMABUF
 #include <sys/mman.h>
@@ -133,49 +134,6 @@ download_memcpy_3_1 (guchar          *dst_data,
     }
 }
 
-typedef struct _YUVCoefficients YUVCoefficients;
-
-struct _YUVCoefficients
-{
-  int v_to_r;
-  int u_to_g;
-  int v_to_g;
-  int u_to_b;
-};
-
-/* multiplied by 65536 */
-static const YUVCoefficients itu601_narrow = { 104597, -25675, -53279, 132201 };
-//static const YUVCoefficients itu601_wide = { 74711, -25864, -38050, 133176 };
-
-static inline void
-get_uv_values (const YUVCoefficients *coeffs,
-               guint8                 u,
-               guint8                 v,
-               int                   *out_r,
-               int                   *out_g,
-               int                   *out_b)
-{
-  int u2 = (int) u - 127;
-  int v2 = (int) v - 127;
-  *out_r = coeffs->v_to_r * v2;
-  *out_g = coeffs->u_to_g * u2 + coeffs->v_to_g * v2;
-  *out_b = coeffs->u_to_b * u2;
-}
-
-static inline void
-set_rgb_values (guint8 rgb[3],
-                guint8 y,
-                int    r,
-                int    g,
-                int    b)
-{
-  int y2 = y * 65536;
-
-  rgb[0] = CLAMP ((y2 + r) >> 16, 0, 255);
-  rgb[1] = CLAMP ((y2 + g) >> 16, 0, 255);
-  rgb[2] = CLAMP ((y2 + b) >> 16, 0, 255);
-}
-
 static void
 download_nv12 (guchar          *dst_data,
                gsize            dst_stride,
@@ -226,48 +184,26 @@ download_nv12 (guchar          *dst_data,
     {
       for (x = 0; x < width; x += X_SUB)
         {
-          int r, g, b;
+          int u_, v_;
           gsize xs, ys;
 
-          get_uv_values (&itu601_narrow, uv_data[x / X_SUB * 2 + U], uv_data[x / X_SUB * 2 + V], &r, &g, &b);
+          u_ = uv_data[x / X_SUB * 2 + U];
+          v_ = uv_data[x / X_SUB * 2 + V];
 
           for (ys = 0; ys < Y_SUB && y + ys < height; ys++)
             for (xs = 0; xs < X_SUB && x + xs < width; xs++)
-              set_rgb_values (&dst_data[3 * (x + xs) + dst_stride * ys], y_data[x + xs + y_stride * ys], r, g, b);
+              {
+                guint8 *rgb = &dst_data[3 * (x + xs) + dst_stride * ys];
+
+                rgb[0] = y_data[x + xs + y_stride * ys];
+                rgb[1] = u_;
+                rgb[2] = v_;
+              }
         }
       dst_data += Y_SUB * dst_stride;
       y_data += Y_SUB * y_stride;
       uv_data += uv_stride;
     }
-}
-
-static inline void
-get_uv_values16 (const YUVCoefficients *coeffs,
-                 guint16                u,
-                 guint16                v,
-                 gint64                *out_r,
-                 gint64                *out_g,
-                 gint64                *out_b)
-{
-  gint64 u2 = (gint64) u - 32767;
-  gint64 v2 = (gint64) v - 32767;
-  *out_r = coeffs->v_to_r * v2;
-  *out_g = coeffs->u_to_g * u2 + coeffs->v_to_g * v2;
-  *out_b = coeffs->u_to_b * u2;
-}
-
-static inline void
-set_rgb_values16 (guint16 rgb[3],
-                  guint16 y,
-                  gint64  r,
-                  gint64  g,
-                  gint64  b)
-{
-  gint64 y2 = (gint64) y * 65536;
-
-  rgb[0] = CLAMP ((y2 + r) >> 16, 0, 65535);
-  rgb[1] = CLAMP ((y2 + g) >> 16, 0, 65535);
-  rgb[2] = CLAMP ((y2 + b) >> 16, 0, 65535);
 }
 
 static void
@@ -319,22 +255,24 @@ download_p010 (guchar          *dst,
     {
       for (x = 0; x < width; x += X_SUB)
         {
-          gint64 r, g, b;
           gsize xs, ys;
-          guint16 u, v;
+          guint16 u_, v_;
 
-          u = uv_data[x / X_SUB * 2 + U];
-          u = (u & MASK) | (u >> SIZE);
-          v = uv_data[x / X_SUB * 2 + V];
-          v = (v & MASK) | (v >> SIZE);
-          get_uv_values16 (&itu601_narrow, u, v, &r, &g, &b);
+          u_ = uv_data[x / X_SUB * 2 + U];
+          u_ = (u_ & MASK) | (u_ >> SIZE);
+          v_ = uv_data[x / X_SUB * 2 + V];
+          v_ = (v_ & MASK) | (v_ >> SIZE);
 
           for (ys = 0; ys < Y_SUB && y + ys < height; ys++)
             for (xs = 0; xs < X_SUB && x + xs < width; xs++)
               {
+                guint16 *rgb = &dst_data[3 * (x + xs) + dst_stride * ys];
                 guint16 y_ = y_data[x + xs + y_stride * ys];
                 y_ = (y_ & MASK) | (y_ >> SIZE);
-                set_rgb_values16 (&dst_data[3 * (x + xs) + dst_stride * ys], y_, r, g, b);
+
+                rgb[0] = y_;
+                rgb[1] = u_;
+                rgb[2] = v_;
               }
         }
       dst_data += Y_SUB * dst_stride;
@@ -408,14 +346,21 @@ download_yuv_3 (guchar          *dst_data,
     {
       for (x = 0; x < width; x += X_SUB)
         {
-          int r, g, b;
+          int u_, v_;
           gsize xs, ys;
 
-          get_uv_values (&itu601_narrow, u_data[x / X_SUB], v_data[x / X_SUB], &r, &g, &b);
+          u_ = u_data[x / X_SUB];
+          v_ = v_data[x / X_SUB];
 
           for (ys = 0; ys < Y_SUB && y + ys < height; ys++)
             for (xs = 0; xs < X_SUB && x + xs < width; xs++)
-              set_rgb_values (&dst_data[3 * (x + xs) + dst_stride * ys], y_data[x + xs + y_stride * ys], r, g, b);
+              {
+                guint8 *rgb = &dst_data[3 * (x + xs) + dst_stride * ys];
+
+                rgb[0] = y_data[x + xs + y_stride * ys];
+                rgb[1] = u_;
+                rgb[2] = v_;
+              }
         }
       dst_data += Y_SUB * dst_stride;
       y_data += Y_SUB * y_stride;
@@ -465,12 +410,23 @@ download_yuyv (guchar          *dst_data,
     {
       for (x = 0; x < width; x += 2)
         {
-          int r, g, b;
+          guint8 *rgb;
+          int u_, v_;
 
-          get_uv_values (&itu601_narrow, src_data[2 * x + U], src_data[2 * x + V], &r, &g, &b);
-          set_rgb_values (&dst_data[3 * x], src_data[2 * x + Y1], r, g, b);
+          u_ = src_data[2 * x + U];
+          v_ = src_data[2 * x + V];
+
+          rgb = &dst_data[3 * x];
+          rgb[0] = src_data[2 * x + Y1];
+          rgb[1] = u_;
+          rgb[2] = v_;
           if (x + 1 < width)
-            set_rgb_values (&dst_data[3 * (x + 1)], src_data[2 * x + Y2], r, g, b);
+            {
+              rgb = &dst_data[3 * (x + 1)];
+              rgb[0] = src_data[2 * x + Y2];
+              rgb[1] = u_;
+              rgb[2] = v_;
+            }
         }
       dst_data += dst_stride;
       src_data += src_stride;
@@ -2139,14 +2095,14 @@ gdk_dmabuf_do_download_mmap (GdkTexture *texture,
       needs_unmap[i] = TRUE;
     }
 
-    info->download (data,
-                    stride,
-                    gdk_texture_get_format (texture),
-                    gdk_texture_get_width (texture),
-                    gdk_texture_get_height (texture),
-                    dmabuf,
-                    src_data,
-                    sizes);
+  info->download (data,
+                  stride,
+                  gdk_texture_get_format (texture),
+                  gdk_texture_get_width (texture),
+                  gdk_texture_get_height (texture),
+                  dmabuf,
+                  src_data,
+                  sizes);
 
 out:
   for (i = 0; i < dmabuf->n_planes; i++)
