@@ -381,7 +381,14 @@ handle_accessible_get_property (GDBusConnection       *connection,
   else if (g_strcmp0 (property_name, "Locale") == 0)
     res = g_variant_new_string (setlocale (LC_MESSAGES, NULL));
   else if (g_strcmp0 (property_name, "AccessibleId") == 0)
-    res = g_variant_new_string ("");
+    {
+      const char *id = NULL;
+      GApplication *application = g_application_get_default ();
+      if (application)
+        id = g_application_get_application_id (application);
+
+      res = g_variant_new_string (id ? id : "");
+    }
   else if (g_strcmp0 (property_name, "Parent") == 0)
     res = g_variant_new ("(so)", self->desktop_name, self->desktop_path);
   else if (g_strcmp0 (property_name, "ChildCount") == 0)
