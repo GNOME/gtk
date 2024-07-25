@@ -251,3 +251,4 @@ gdk_color_state_from_rgba (GdkColorState *self,
                                  self,
                                  out_color);
 }
+
