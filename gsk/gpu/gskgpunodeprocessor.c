@@ -16,6 +16,7 @@
 #include "gskgpucoloropprivate.h"
 #include "gskgpuconicgradientopprivate.h"
 #include "gskgpuconvertopprivate.h"
+#include "gskgpuconvertcicpopprivate.h"
 #include "gskgpucrossfadeopprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
@@ -486,9 +487,29 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
 
   straight_alpha = gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA;
 
-  if (straight_alpha ||
-      self->opacity < 1.0 ||
-      !gdk_color_state_equal (image_color_state, self->ccs))
+  if (!GDK_IS_DEFAULT_COLOR_STATE (image_color_state))
+    {
+      const GdkCicp *cicp = gdk_color_state_get_cicp (image_color_state);
+
+      g_assert (cicp != NULL);
+
+      gsk_gpu_convert_from_cicp_op (self->frame,
+                                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                                    cicp,
+                                    gsk_gpu_color_states_create_cicp (self->ccs, TRUE, TRUE),
+                                    self->opacity,
+                                    straight_alpha,
+                                    &self->offset,
+                                    &(GskGpuShaderImage) {
+                                      image,
+                                      sampler,
+                                      rect,
+                                      tex_rect
+                                    });
+    }
+  else if (straight_alpha ||
+           self->opacity < 1.0 ||
+           !gdk_color_state_equal (image_color_state, self->ccs))
     {
       gsk_gpu_convert_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
@@ -3910,18 +3931,41 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
           self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
           gsk_gpu_node_processor_sync_globals (&self, 0);
 
-          gsk_gpu_convert_op (self.frame,
-                              gsk_gpu_clip_get_shader_clip (&self.clip, &self.offset, &node->bounds),
-                              gsk_gpu_node_processor_color_states_explicit (&self, ccs, TRUE),
-                              self.opacity,
-                              FALSE,
-                              &self.offset,
-                              &(GskGpuShaderImage) {
-                                  image,
-                                  GSK_GPU_SAMPLER_DEFAULT,
-                                  &node->bounds,
-                                  &tex_rect
-                              });
+          if (!GDK_IS_DEFAULT_COLOR_STATE (target_color_state))
+            {
+              const GdkCicp *cicp = gdk_color_state_get_cicp (target_color_state);
+
+              g_assert (cicp != NULL);
+
+              gsk_gpu_convert_to_cicp_op (self.frame,
+                                          gsk_gpu_clip_get_shader_clip (&self.clip, &self.offset, &node->bounds),
+                                          cicp,
+                                          gsk_gpu_color_states_create_cicp (self.ccs, TRUE, TRUE),
+                                          self.opacity,
+                                          FALSE,
+                                          &self.offset,
+                                          &(GskGpuShaderImage) {
+                                              image,
+                                              GSK_GPU_SAMPLER_DEFAULT,
+                                              &node->bounds,
+                                              &tex_rect
+                                          });
+            }
+          else
+            {
+              gsk_gpu_convert_op (self.frame,
+                                  gsk_gpu_clip_get_shader_clip (&self.clip, &self.offset, &node->bounds),
+                                  gsk_gpu_node_processor_color_states_explicit (&self, ccs, TRUE),
+                                  self.opacity,
+                                  FALSE,
+                                  &self.offset,
+                                  &(GskGpuShaderImage) {
+                                      image,
+                                      GSK_GPU_SAMPLER_DEFAULT,
+                                      &node->bounds,
+                                      &tex_rect
+                                  });
+            }
 
           gsk_gpu_render_pass_end_op (frame,
                                       target,

@@ -88,6 +88,7 @@ gsk_private_sources = files([
   'gpu/gskgpucolorop.c',
   'gpu/gskgpuconicgradientop.c',
   'gpu/gskgpuconvertop.c',
+  'gpu/gskgpuconvertcicpop.c',
   'gpu/gskgpucrossfadeop.c',
   'gpu/gskgpudownloadop.c',
   'gpu/gskgpudevice.c',

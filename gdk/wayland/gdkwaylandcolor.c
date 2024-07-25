@@ -4,6 +4,73 @@
 #include "gdksurface-wayland-private.h"
 #include <gdk/wayland/xx-color-management-v4-client-protocol.h>
 
+static uint primaries_map[] = {
+  [XX_COLOR_MANAGER_V4_PRIMARIES_SRGB] = 1,
+  [XX_COLOR_MANAGER_V4_PRIMARIES_PAL_M] = 4,
+  [XX_COLOR_MANAGER_V4_PRIMARIES_PAL] = 5,
+  [XX_COLOR_MANAGER_V4_PRIMARIES_NTSC] = 6,
+  [XX_COLOR_MANAGER_V4_PRIMARIES_GENERIC_FILM] = 8,
+  [XX_COLOR_MANAGER_V4_PRIMARIES_BT2020] = 9,
+  [XX_COLOR_MANAGER_V4_PRIMARIES_CIE1931_XYZ] = 10,
+  [XX_COLOR_MANAGER_V4_PRIMARIES_DCI_P3] = 11,
+  [XX_COLOR_MANAGER_V4_PRIMARIES_DISPLAY_P3] = 12,
+  [XX_COLOR_MANAGER_V4_PRIMARIES_ADOBE_RGB] = 0,
+};
+
+static uint
+wl_to_cicp_primaries (enum xx_color_manager_v4_primaries cp)
+{
+  return primaries_map[cp];
+}
+
+static enum xx_color_manager_v4_primaries
+cicp_to_wl_primaries (uint cp)
+{
+  for (guint i = 0; i < G_N_ELEMENTS (primaries_map); i++)
+    if (primaries_map[i] == cp)
+       return (enum xx_color_manager_v4_primaries)i;
+
+  return 0;
+}
+
+static uint transfer_map[] = {
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_BT709] = 1,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_GAMMA22] = 4,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_GAMMA28] = 5,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST240] = 7,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR] = 8,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LOG_100] = 9,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LOG_316] = 10,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_XVYCC] = 11,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_BT1361] = 12,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_SRGB] = 13,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_EXT_SRGB] = 13,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST2084_PQ] = 16,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST428] = 17,
+  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_HLG] = 18,
+};
+
+static uint
+wl_to_cicp_transfer (enum xx_color_manager_v4_transfer_function tf)
+{
+  return transfer_map[tf];
+}
+
+static enum xx_color_manager_v4_transfer_function
+cicp_to_wl_transfer (uint tf)
+{
+  for (guint i = 0; i < G_N_ELEMENTS (transfer_map); i++)
+    if (transfer_map[i] == tf)
+       return (enum xx_color_manager_v4_transfer_function)i;
+
+  return 0;
+}
+
+typedef struct
+{
+  guint cp, tf;
+  struct xx_image_description_v4 *desc;
+} ImageDescEntry;
 
 struct _GdkWaylandColor
 {
@@ -14,15 +81,13 @@ struct _GdkWaylandColor
     unsigned int transfers;
     unsigned int primaries;
   } color_manager_supported;
-  struct xx_image_description_v4 *srgb;
-  struct xx_image_description_v4 *srgb_linear;
-  struct xx_image_description_v4 *rec2100_pq;
-  struct xx_image_description_v4 *rec2100_linear;
+
+  GArray *image_descs;
 };
 
 static void
 xx_color_manager_v4_supported_intent (void                       *data,
-                                      struct xx_color_manager_v4 *xx_color_manager_v2,
+                                      struct xx_color_manager_v4 *xx_color_manager_v4,
                                       uint32_t                    render_intent)
 {
   GdkWaylandColor *color = data;
@@ -32,7 +97,7 @@ xx_color_manager_v4_supported_intent (void                       *data,
 
 static void
 xx_color_manager_v4_supported_feature (void                       *data,
-                                       struct xx_color_manager_v4 *xx_color_manager_v2,
+                                       struct xx_color_manager_v4 *xx_color_manager_v4,
                                        uint32_t                    feature)
 {
   GdkWaylandColor *color = data;
@@ -42,7 +107,7 @@ xx_color_manager_v4_supported_feature (void                       *data,
 
 static void
 xx_color_manager_v4_supported_tf_named (void                       *data,
-                                        struct xx_color_manager_v4 *xx_color_manager_v2,
+                                        struct xx_color_manager_v4 *xx_color_manager_v4,
                                         uint32_t                    tf)
 {
   GdkWaylandColor *color = data;
@@ -52,7 +117,7 @@ xx_color_manager_v4_supported_tf_named (void                       *data,
 
 static void
 xx_color_manager_v4_supported_primaries_named (void                       *data,
-                                               struct xx_color_manager_v4 *xx_color_manager_v2,
+                                               struct xx_color_manager_v4 *xx_color_manager_v4,
                                                uint32_t                    primaries)
 {
   GdkWaylandColor *color = data;
@@ -76,6 +141,8 @@ gdk_wayland_color_new (struct wl_registry *registry,
 
   color = g_new0 (GdkWaylandColor, 1);
 
+  color->image_descs = g_array_new (FALSE, FALSE, sizeof (ImageDescEntry));
+
   color->color_manager = wl_registry_bind (registry,
                                            id,
                                            &xx_color_manager_v4_interface,
@@ -92,10 +159,15 @@ void
 gdk_wayland_color_free (GdkWaylandColor *color)
 {
   g_clear_pointer (&color->color_manager, xx_color_manager_v4_destroy);
-  g_clear_pointer (&color->srgb, xx_image_description_v4_destroy);
-  g_clear_pointer (&color->srgb_linear, xx_image_description_v4_destroy);
-  g_clear_pointer (&color->rec2100_pq, xx_image_description_v4_destroy);
-  g_clear_pointer (&color->rec2100_linear, xx_image_description_v4_destroy);
+
+  for (int i = 0; i < color->image_descs->len; i++)
+    {
+      ImageDescEntry *e = &g_array_index (color->image_descs, ImageDescEntry, i);
+      xx_image_description_v4_destroy (e->desc);
+    }
+
+  g_array_unref (color->image_descs);
+
   g_free (color);
 }
 
@@ -131,22 +203,34 @@ static struct xx_image_description_v4_listener std_image_desc_listener = {
 };
 
 static void
-create_image_desc (GdkWaylandColor                 *color,
-                   uint32_t                         primaries,
-                   uint32_t                         tf,
-                   struct xx_image_description_v4 **out_desc)
+create_image_desc (GdkWaylandColor *color,
+                   uint32_t         primaries,
+                   uint32_t         transfer)
 {
   struct xx_image_description_creator_params_v4 *creator;
   struct xx_image_description_v4 *desc;
+  ImageDescEntry entry;
+  ImageDescEntry *e;
+
+  entry.cp = primaries;
+  entry.tf = transfer;
+  entry.desc = NULL;
+
+  g_array_append_val (color->image_descs, entry);
+  e = &g_array_index (color->image_descs, ImageDescEntry, color->image_descs->len - 1);
+
+  if ((color->color_manager_supported.primaries & (1 << primaries)) == 0 ||
+      (color->color_manager_supported.transfers & (1 << transfer)) == 0)
+    return;
 
   creator = xx_color_manager_v4_new_parametric_creator (color->color_manager);
 
   xx_image_description_creator_params_v4_set_primaries_named (creator, primaries);
-  xx_image_description_creator_params_v4_set_tf_named (creator, tf);
+  xx_image_description_creator_params_v4_set_tf_named (creator, transfer);
 
   desc = xx_image_description_creator_params_v4_create (creator);
 
-  xx_image_description_v4_add_listener (desc, &std_image_desc_listener, out_desc);
+  xx_image_description_v4_add_listener (desc, &std_image_desc_listener, &e->desc);
 }
 
 gboolean
@@ -216,28 +300,24 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
     {
       create_image_desc (color,
                          XX_COLOR_MANAGER_V4_PRIMARIES_SRGB,
-                         XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_SRGB,
-                         &color->srgb);
+                         XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_SRGB);
 
       if (color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR))
         create_image_desc (color,
                            XX_COLOR_MANAGER_V4_PRIMARIES_SRGB,
-                           XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR,
-                           &color->srgb_linear);
+                           XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR);
 
       if (color->color_manager_supported.primaries & (1 << XX_COLOR_MANAGER_V4_PRIMARIES_BT2020))
         {
           if (color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST2084_PQ))
             create_image_desc (color,
                                XX_COLOR_MANAGER_V4_PRIMARIES_BT2020,
-                               XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST2084_PQ,
-                               &color->rec2100_pq);
+                               XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST2084_PQ);
 
           if (color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR))
             create_image_desc (color,
                                XX_COLOR_MANAGER_V4_PRIMARIES_BT2020,
-                               XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR,
-                               &color->rec2100_linear);
+                               XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR);
         }
     }
 
@@ -286,33 +366,19 @@ typedef struct
 static GdkColorState *
 gdk_color_state_from_image_description_bits (ImageDescription *desc)
 {
-  GdkColorState *cs = GDK_COLOR_STATE_SRGB;
-
   if (desc->has_primaries_named && desc->has_tf_named)
     {
-      if (desc->primaries == XX_COLOR_MANAGER_V4_PRIMARIES_SRGB &&
-          desc->tf_named == XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_SRGB)
-        {
-          cs = GDK_COLOR_STATE_SRGB;
-        }
-      else if (desc->primaries == XX_COLOR_MANAGER_V4_PRIMARIES_SRGB &&
-               desc->tf_named == XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR)
-        {
-          cs = GDK_COLOR_STATE_SRGB_LINEAR;
-        }
-      else if (desc->primaries == XX_COLOR_MANAGER_V4_PRIMARIES_BT2020 &&
-               desc->tf_named == XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST2084_PQ)
-        {
-          cs = GDK_COLOR_STATE_REC2100_PQ;
-        }
-      else if (desc->primaries == XX_COLOR_MANAGER_V4_PRIMARIES_BT2020 &&
-               desc->tf_named == XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR)
-        {
-          cs = GDK_COLOR_STATE_REC2100_LINEAR;
-        }
-    }
+      GdkCicp cicp;
 
-  return cs;
+      cicp.color_primaries = wl_to_cicp_primaries (desc->primaries);
+      cicp.transfer_function = wl_to_cicp_transfer (desc->tf_named);
+      cicp.matrix_coefficients = 0;
+      cicp.range = GDK_CICP_RANGE_FULL;
+
+      return gdk_color_state_new_for_cicp (&cicp, NULL);
+    }
+  else
+    return GDK_COLOR_STATE_SRGB;
 }
 
 static void
@@ -563,21 +629,28 @@ gdk_wayland_color_surface_free (GdkWaylandColorSurface *self)
   g_free (self);
 }
 
-
 static struct xx_image_description_v4 *
 gdk_wayland_color_get_image_description (GdkWaylandColor *color,
                                          GdkColorState   *cs)
 {
-  if (gdk_color_state_equal (cs, GDK_COLOR_STATE_SRGB))
-    return color->srgb;
-  else if (gdk_color_state_equal (cs, GDK_COLOR_STATE_SRGB_LINEAR))
-    return color->srgb_linear;
-  else if (gdk_color_state_equal (cs, GDK_COLOR_STATE_REC2100_PQ))
-    return color->rec2100_pq;
-  else if (gdk_color_state_equal (cs, GDK_COLOR_STATE_REC2100_LINEAR))
-    return color->rec2100_linear;
-  else
-    return color->srgb;
+  const GdkCicp *params;
+  GdkCicp normalized;
+
+  params = gdk_color_state_get_cicp (cs);
+  gdk_cicp_normalize (params, &normalized);
+
+  if (params)
+    for (int i = 0; i < color->image_descs->len; i++)
+      {
+        ImageDescEntry *e = &g_array_index (color->image_descs, ImageDescEntry, i);
+        if (e->cp == normalized.color_primaries && e->tf == normalized.transfer_function)
+          return e->desc;
+      }
+
+  create_image_desc (color,
+                     cicp_to_wl_primaries (normalized.color_primaries),
+                     cicp_to_wl_transfer (normalized.transfer_function));
+  return NULL;
 }
 
 void
