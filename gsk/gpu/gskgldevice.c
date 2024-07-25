@@ -302,8 +302,9 @@ prepend_line_numbers (char *code)
 }
 
 static gboolean
-gsk_gl_device_check_shader_error (int      shader_id,
-                                  GError **error)
+gsk_gl_device_check_shader_error (const char  *name,
+                                  int          shader_id,
+                                  GError     **error)
 {
   GLint status;
   GLint log_len;
@@ -329,13 +330,14 @@ gsk_gl_device_check_shader_error (int      shader_id,
   g_set_error (error,
                GDK_GL_ERROR,
                GDK_GL_ERROR_COMPILATION_FAILED,
-               "Compilation failure in shader.\n"
+               "Compilation failure in shader %s.\n"
                "Source Code:\n"
                "%s\n"
                "\n"
                "Error Message:\n"
                "%s\n"
                "\n",
+               name,
                code,
                log);
 
@@ -454,7 +456,7 @@ gsk_gl_device_load_shader (GskGLDevice       *self,
 
   print_shader_info (shader_type == GL_FRAGMENT_SHADER ? "fragment" : "vertex", shader_id, program_name);
 
-  if (!gsk_gl_device_check_shader_error (shader_id, error))
+  if (!gsk_gl_device_check_shader_error (program_name, shader_id, error))
     {
       glDeleteShader (shader_id);
       return 0;
