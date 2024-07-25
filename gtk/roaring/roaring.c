@@ -9724,7 +9724,7 @@ roaring_bitmap_t *roaring_bitmap_lazy_xor(const roaring_bitmap_t *x1,
                 container_lazy_xor(c1, container_type_1, c2, container_type_2,
                                    &container_result_type);
 
-            if (container_nonzero_cardinality(c, container_result_type)) {
+            if (c && container_nonzero_cardinality(c, container_result_type)) {
                 ra_append(&answer->high_low_container, s1, c,
                           container_result_type);
             } else {
