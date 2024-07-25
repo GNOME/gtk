@@ -603,7 +603,8 @@ physical_device_check_features (VkPhysicalDevice device)
     features |= GDK_VULKAN_FEATURE_YCBCR;
 
   if (physical_device_supports_extension (device, VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME) &&
-      physical_device_supports_extension (device, VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME))
+      physical_device_supports_extension (device, VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME) &&
+      physical_device_supports_extension (device, VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME))
     features |= GDK_VULKAN_FEATURE_DMABUF;
 
   if (physical_device_supports_extension (device, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME))
@@ -628,6 +629,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  VkResult acquire_result;
   guint i;
 
   if (depth != priv->current_format)
@@ -649,12 +651,29 @@ gdk_vulkan_context_begin_frame (GdkDrawContext *draw_context,
       cairo_region_union (priv->regions[i], region);
     }
 
-  GDK_VK_CHECK (vkAcquireNextImageKHR, gdk_vulkan_context_get_device (context),
-                                       priv->swapchain,
-                                       UINT64_MAX,
-                                       priv->draw_semaphore,
-                                       VK_NULL_HANDLE,
-                                       &priv->draw_index);
+acquire_next_image:
+  acquire_result = GDK_VK_CHECK (vkAcquireNextImageKHR, gdk_vulkan_context_get_device (context),
+                                                        priv->swapchain,
+                                                        UINT64_MAX,
+                                                        priv->draw_semaphore,
+                                                        VK_NULL_HANDLE,
+                                                        &priv->draw_index);
+  if ((acquire_result == VK_ERROR_OUT_OF_DATE_KHR) ||
+      (acquire_result == VK_SUBOPTIMAL_KHR))
+    {
+      GError *error = NULL;
+
+      GDK_DEBUG (VULKAN, "Recreating the swapchain");
+
+      if (!gdk_vulkan_context_check_swapchain (context, &error))
+        {
+          g_warning ("%s", error->message);
+          g_error_free (error);
+          return;
+        }
+
+       goto acquire_next_image;
+     }
 
   cairo_region_union (region, priv->regions[priv->draw_index]);
 }
@@ -1485,6 +1504,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME);
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_MEMORY_EXTENSION_NAME);
+                  g_ptr_array_add (device_extensions, (gpointer) VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME);
 
                   g_ptr_array_add (device_extensions, (gpointer) VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME);
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);

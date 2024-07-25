@@ -314,9 +314,11 @@ gtk_uri_launcher_launch (GtkUriLauncher      *self,
     gtk_openuri_portal_open_uri_async (self->uri, parent, cancellable, open_done, task);
   else
 #endif
+    {
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-    gtk_show_uri_full (parent, self->uri, GDK_CURRENT_TIME, cancellable, show_uri_done, task);
+      gtk_show_uri_full (parent, self->uri, GDK_CURRENT_TIME, cancellable, show_uri_done, task);
 G_GNUC_END_IGNORE_DEPRECATIONS
+    }
 }
 
 /**

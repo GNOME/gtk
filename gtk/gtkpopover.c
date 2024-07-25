@@ -377,6 +377,7 @@ update_popover_layout (GtkPopover     *popover,
   GdkRectangle final_rect;
   gboolean flipped_x;
   gboolean flipped_y;
+  gboolean attachment_point_changed;
   GdkPopup *popup = GDK_POPUP (priv->surface);
   GtkPositionType position;
 
@@ -400,6 +401,9 @@ update_popover_layout (GtkPopover     *popover,
                          gdk_popup_get_rect_anchor (popup)) &&
     did_flip_vertically (gdk_popup_layout_get_surface_anchor (layout),
                          gdk_popup_get_surface_anchor (popup));
+
+  attachment_point_changed = final_rect.x != priv->final_rect.x ||
+                             final_rect.y != priv->final_rect.y;
 
   priv->final_rect = final_rect;
 
@@ -426,7 +430,8 @@ update_popover_layout (GtkPopover     *popover,
 
   if (priv->final_position != position ||
       priv->final_rect.width != width ||
-      priv->final_rect.height != height)
+      priv->final_rect.height != height ||
+      attachment_point_changed)
     {
       gtk_widget_queue_allocate (GTK_WIDGET (popover));
       g_clear_pointer (&priv->arrow_render_node, gsk_render_node_unref);
@@ -693,6 +698,18 @@ gtk_popover_native_layout (GtkNative *native,
   GtkPopover *popover = GTK_POPOVER (native);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
+  int min_height_for_width, min_width_for_height;
+
+  gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, width,
+                      &min_height_for_width, NULL, NULL, NULL);
+  gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, height,
+                      &min_width_for_height, NULL, NULL, NULL);
+
+  if (width < min_width_for_height || height < min_height_for_width)
+    {
+      gtk_popover_popdown (popover);
+      return;
+    }
 
   update_popover_layout (popover, gdk_popup_layout_ref (priv->layout), width, height);
 
@@ -1487,11 +1504,19 @@ gtk_popover_measure (GtkWidget      *widget,
   GtkCssStyle *style;
   GtkBorder shadow_width;
 
-  if (for_size >= 0 && (POS_IS_VERTICAL (priv->position) == (orientation == GTK_ORIENTATION_HORIZONTAL)))
-    for_size -= tail_height;
-
   style = gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (priv->contents_widget)));
   gtk_css_shadow_value_get_extents (style->background->box_shadow, &shadow_width);
+
+  if (for_size >= 0)
+    {
+      if ((POS_IS_VERTICAL (priv->position) == (orientation == GTK_ORIENTATION_HORIZONTAL)))
+        for_size -= tail_height;
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        for_size -= shadow_width.top + shadow_width.bottom;
+      else
+        for_size -= shadow_width.left + shadow_width.right;
+    }
 
   gtk_widget_measure (priv->contents_widget,
                       orientation, for_size,

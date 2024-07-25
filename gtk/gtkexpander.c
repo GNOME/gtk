@@ -897,9 +897,14 @@ gtk_expander_set_expanded (GtkExpander *expander,
         {
           gtk_box_append (GTK_BOX (expander->box), child);
           g_object_unref (expander->child);
+          gtk_accessible_update_relation (GTK_ACCESSIBLE (expander),
+                                          GTK_ACCESSIBLE_RELATION_CONTROLS, expander->child, NULL,
+                                          -1);
         }
       else
         {
+          gtk_accessible_reset_relation (GTK_ACCESSIBLE (expander),
+                                         GTK_ACCESSIBLE_RELATION_CONTROLS);
           g_object_ref (expander->child);
           gtk_box_remove (GTK_BOX (expander->box), child);
         }
@@ -1209,13 +1214,18 @@ gtk_expander_set_child (GtkExpander *expander,
        * dropped once the expander is expanded
        */
       if (expander->expanded)
-        gtk_box_append (GTK_BOX (expander->box), expander->child);
+        {
+          gtk_box_append (GTK_BOX (expander->box), expander->child);
+          gtk_accessible_update_relation (GTK_ACCESSIBLE (expander),
+                                          GTK_ACCESSIBLE_RELATION_CONTROLS, expander->child, NULL,
+                                          -1);
+        }
       else
-        g_object_ref_sink (expander->child);
-
-      gtk_accessible_update_relation (GTK_ACCESSIBLE (expander),
-                                      GTK_ACCESSIBLE_RELATION_CONTROLS, expander->child, NULL,
-                                      -1);
+        {
+          gtk_accessible_reset_relation (GTK_ACCESSIBLE (expander),
+                                         GTK_ACCESSIBLE_RELATION_CONTROLS);
+          g_object_ref_sink (expander->child);
+        }
     }
   else
     {

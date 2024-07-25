@@ -3867,9 +3867,25 @@ pointer_surface_leave (void              *data,
   pointer_surface_update_scale (device);
 }
 
+static void
+pointer_surface_preferred_buffer_scale (void              *data,
+                                        struct wl_surface *wl_surface,
+                                        int32_t            factor)
+{
+}
+
+static void
+pointer_surface_preferred_buffer_transform (void              *data,
+                                            struct wl_surface *wl_surface,
+                                            uint32_t           transform)
+{
+}
+
 static const struct wl_surface_listener pointer_surface_listener = {
   pointer_surface_enter,
-  pointer_surface_leave
+  pointer_surface_leave,
+  pointer_surface_preferred_buffer_scale,
+  pointer_surface_preferred_buffer_transform,
 };
 
 static void
@@ -4058,9 +4074,12 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
         {
           GdkWaylandTabletData *tablet = l->data;
 
-          gdk_wayland_device_maybe_emit_grab_crossing (tablet->logical_device,
-                                                       surface,
-                                                       evtime);
+          if (tablet->current_tool)
+            {
+              gdk_wayland_device_maybe_emit_grab_crossing (tablet->logical_device,
+                                                           surface,
+                                                           evtime);
+            }
 
           _gdk_display_add_device_grab (display,
                                         tablet->logical_device,

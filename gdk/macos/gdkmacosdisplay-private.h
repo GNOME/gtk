@@ -176,6 +176,7 @@ void             _gdk_macos_display_set_drop                       (GdkMacosDisp
                                                                     GdkDrop         *drop);
 void             _gdk_macos_display_position_surface               (GdkMacosDisplay *self,
                                                                     GdkMacosSurface *surface,
+                                                                    GdkMonitor      *monitor,
                                                                     int             *x,
                                                                     int             *y);
 

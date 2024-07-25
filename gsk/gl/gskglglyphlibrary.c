@@ -127,7 +127,7 @@ gsk_gl_glyph_library_init_atlas (GskGLTextureLibrary *self,
   else
     {
       gl_format = GL_BGRA;
-      gl_type = GL_UNSIGNED_BYTE;
+      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
     }
   glBindTexture (GL_TEXTURE_2D, atlas->texture_id);
 
@@ -293,7 +293,7 @@ gsk_gl_glyph_library_upload_glyph (GskGLGlyphLibrary     *self,
     {
       pixel_data = cairo_image_surface_get_data (surface);
       gl_format = GL_BGRA;
-      gl_type = GL_UNSIGNED_BYTE;
+      gl_type = GL_UNSIGNED_INT_8_8_8_8_REV;
     }
 
   glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / 4);

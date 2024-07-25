@@ -1956,8 +1956,6 @@ gdk_gl_context_get_glsl_version_string (GdkGLContext *self)
         return "#version 310 es";
       else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)))
         return "#version 300 es";
-      else if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)))
-        return "#version 300 es";
       else
         return "#version 100";
     }

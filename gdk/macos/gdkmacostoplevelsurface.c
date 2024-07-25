@@ -261,7 +261,30 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
   if (gdk_toplevel_layout_get_fullscreen (layout, &fullscreen))
     {
       if (fullscreen)
-        _gdk_macos_toplevel_surface_fullscreen (self);
+        {
+          GdkMonitor *fullscreen_monitor =
+            gdk_toplevel_layout_get_fullscreen_monitor (layout);
+
+          if (fullscreen_monitor)
+            {
+              int x = 0, y = 0;
+
+              _gdk_macos_display_position_surface (GDK_MACOS_DISPLAY (display),
+                                                   GDK_MACOS_SURFACE (self),
+                                                   fullscreen_monitor,
+                                                   &x, &y);
+
+              GDK_DEBUG (MISC, "Moving toplevel \"%s\" to %d,%d",
+                         GDK_MACOS_SURFACE (self)->title ?
+                         GDK_MACOS_SURFACE (self)->title :
+                         "untitled",
+                         x, y);
+
+              _gdk_macos_surface_move (GDK_MACOS_SURFACE (self), x, y);
+            }
+
+          _gdk_macos_toplevel_surface_fullscreen (self);
+        }
       else
         _gdk_macos_toplevel_surface_unfullscreen (self);
     }
@@ -274,6 +297,7 @@ _gdk_macos_toplevel_surface_present (GdkToplevel       *toplevel,
 
       _gdk_macos_display_position_surface (GDK_MACOS_DISPLAY (display),
                                            GDK_MACOS_SURFACE (self),
+                                           gdk_toplevel_layout_get_fullscreen_monitor (layout),
                                            &x, &y);
 
       GDK_DEBUG (MISC, "Placing new toplevel \"%s\" at %d,%d",
@@ -657,6 +681,7 @@ _gdk_macos_toplevel_surface_attach_to_parent (GdkMacosToplevelSurface *self)
       _gdk_macos_display_clear_sorting (GDK_MACOS_DISPLAY (surface->display));
       _gdk_macos_display_position_surface (GDK_MACOS_DISPLAY (surface->display),
                                            GDK_MACOS_SURFACE (surface),
+                                           NULL,
                                            &x, &y);
       _gdk_macos_surface_move (GDK_MACOS_SURFACE (surface), x, y);
     }

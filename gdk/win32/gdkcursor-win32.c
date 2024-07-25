@@ -36,6 +36,7 @@ static struct {
   { "appstarting", IDC_APPSTARTING },
   { "arrow", IDC_ARROW },
   { "cross", IDC_CROSS },
+  { "dnd-move", IDC_ARROW },
   { "hand",  IDC_HAND },
   { "help",  IDC_HELP },
   { "ibeam", IDC_IBEAM },
@@ -907,7 +908,9 @@ _gdk_win32_create_hicon_for_texture (GdkTexture *texture,
   width = cairo_image_surface_get_width (surface);
   height = cairo_image_surface_get_height (surface);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   pixbuf = gdk_pixbuf_get_from_surface (surface, 0, 0, width, height);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   icon = pixbuf_to_hicon (pixbuf, is_icon, x, y);
 

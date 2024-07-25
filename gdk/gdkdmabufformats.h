@@ -55,4 +55,6 @@ GDK_AVAILABLE_IN_4_14
 gboolean           gdk_dmabuf_formats_equal           (const GdkDmabufFormats *formats1,
                                                        const GdkDmabufFormats *formats2);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC (GdkDmabufFormats, gdk_dmabuf_formats_unref);
+
 G_END_DECLS
