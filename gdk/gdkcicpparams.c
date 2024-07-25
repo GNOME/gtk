@@ -209,7 +209,10 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
    * Supported values:
    *
    * - 0: RGB
+   * - 1: BT.709
    * - 2: unspecified
+   * - 5,6: BT.601
+   * - 9: BT.2020
    *
    * Since: 4.16
    */

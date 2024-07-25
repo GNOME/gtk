@@ -36,7 +36,8 @@ gsk_gpu_convert_cicp_op_print_instance (GskGpuShaderOp *shader,
   g_string_append_printf (string, "cicp %u/%u/%u/%u",
                           instance->color_primaries,
                           instance->transfer_function,
-                          0, 1);
+                          instance->matrix_coefficients,
+                          instance->range);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_CONVERT_CICP_OP_CLASS = {
@@ -88,6 +89,8 @@ gsk_gpu_convert_from_cicp_op (GskGpuFrame             *frame,
   instance->opacity = opacity;
   instance->color_primaries = cicp->color_primaries;
   instance->transfer_function = cicp->transfer_function;
+  instance->matrix_coefficients = cicp->matrix_coefficients;
+  instance->range = cicp->range == GDK_CICP_RANGE_NARROW ? 0 : 1;
 }
 
 void
@@ -118,4 +121,6 @@ gsk_gpu_convert_to_cicp_op (GskGpuFrame             *frame,
   instance->opacity = opacity;
   instance->color_primaries = cicp->color_primaries;
   instance->transfer_function = cicp->transfer_function;
+  instance->matrix_coefficients = cicp->matrix_coefficients;
+  instance->range = cicp->range == GDK_CICP_RANGE_NARROW ? 0 : 1;
 }
