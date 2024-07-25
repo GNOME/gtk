@@ -643,7 +643,8 @@ gdk_wayland_color_get_image_description (GdkWaylandColor *color,
     for (int i = 0; i < color->image_descs->len; i++)
       {
         ImageDescEntry *e = &g_array_index (color->image_descs, ImageDescEntry, i);
-        if (e->cp == normalized.color_primaries && e->tf == normalized.transfer_function)
+        if (wl_to_cicp_primaries (e->cp) == normalized.color_primaries &&
+            wl_to_cicp_transfer (e->tf) == normalized.transfer_function)
           return e->desc;
       }
 
