@@ -307,6 +307,7 @@ gdk_save_jpeg (GdkTexture *texture)
 
   gdk_texture_downloader_init (&downloader, texture);
   gdk_texture_downloader_set_format (&downloader, GDK_MEMORY_R8G8B8);
+  gdk_texture_downloader_set_color_state (&downloader, GDK_COLOR_STATE_SRGB);
   texbytes = gdk_texture_downloader_download_bytes (&downloader, &texstride);
   gdk_texture_downloader_finish (&downloader);
   texdata = g_bytes_get_data (texbytes, NULL);
