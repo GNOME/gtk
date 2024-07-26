@@ -2271,6 +2271,13 @@ gtk_label_copy_clipboard (GtkLabel *self)
 }
 
 static void
+gtk_label_direction_changed (GtkWidget        *widget,
+                             GtkTextDirection  previous_direction)
+{
+  gtk_label_clear_layout (GTK_LABEL (widget));
+}
+
+static void
 gtk_label_class_init (GtkLabelClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
@@ -2294,6 +2301,7 @@ gtk_label_class_init (GtkLabelClass *class)
   widget_class->focus = gtk_label_focus;
   widget_class->get_request_mode = gtk_label_get_request_mode;
   widget_class->measure = gtk_label_measure;
+  widget_class->direction_changed = gtk_label_direction_changed;
 
   class->move_cursor = gtk_label_move_cursor;
   class->copy_clipboard = gtk_label_copy_clipboard;
