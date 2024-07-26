@@ -326,11 +326,11 @@ run (out vec4 color,
     pixel = texture (GSK_TEXTURE0, _tex_coord);
 
   if (HAS_VARIATION (VARIATION_REVERSE))
-    pixel = convert_color_to_cicp (color,
+    pixel = convert_color_to_cicp (pixel,
                                    ALT_PREMULTIPLIED,
                                    OUTPUT_COLOR_SPACE, OUTPUT_PREMULTIPLIED);
   else
-    pixel = convert_color_from_cicp (color,
+    pixel = convert_color_from_cicp (pixel,
                                      ALT_PREMULTIPLIED,
                                      OUTPUT_COLOR_SPACE, OUTPUT_PREMULTIPLIED);
 
