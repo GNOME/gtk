@@ -68,6 +68,9 @@ gdk_texture_downloader_finish (GdkTextureDownloader *self)
  *
  * Creates a new texture downloader for @texture.
  *
+ * By default, the downloader will convert the data to
+ * the default memory format, and to the sRGB color state.
+ *
  * Returns: A new texture downloader
  *
  * Since: 4.10
