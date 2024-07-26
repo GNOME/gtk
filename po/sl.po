@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-07-16 21:09+0000\n"
-"PO-Revision-Date: 2024-07-17 09:05+0200\n"
+"POT-Creation-Date: 2024-07-26 03:37+0000\n"
+"PO-Revision-Date: 2024-07-26 11:36+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -56,7 +56,7 @@ msgstr "Ni mogoče določiti vsebine kot %s."
 msgid "The current backend does not support OpenGL"
 msgstr "Trenutno zagnan ozadnji program ne podpira OpenGL"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1633
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1634
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Podpora Vulkan je onemogočena prek GDK_DEBUG"
 
@@ -539,7 +539,7 @@ msgstr "Napaka med tolmačenjem slikovne datoteke JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Nepodprt barvni prostor JPEG (%d) "
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:455 gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:436 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Ni dovolj pomnilnika za sliko velikosti %ux%u"
@@ -549,23 +549,17 @@ msgstr "Ni dovolj pomnilnika za sliko velikosti %ux%u"
 msgid "Error reading png (%s)"
 msgstr "Napaka branja zapisa png (%s)"
 
-#. Translators: the variables at the end are just the numbers as they appear in the PNG
-#: gdk/loaders/gdkpng.c:217
-#, c-format
-msgid "Unsupported CICP color properties: %d/%d/%d %d"
-msgstr "Nepodprte barvne lastnosti CICP: %d/%d/%d %d"
-
-#: gdk/loaders/gdkpng.c:376
+#: gdk/loaders/gdkpng.c:357
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Slika PNG ima nepodprto barvno globino %u"
 
-#: gdk/loaders/gdkpng.c:426
+#: gdk/loaders/gdkpng.c:407
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Nepodprta barvna globina %u v sliki PNG"
 
-#: gdk/loaders/gdkpng.c:440
+#: gdk/loaders/gdkpng.c:421
 #, c-format
 msgid "Image stride too large for image size %ux%u"
 msgstr "Korak slike je prevelik za velikost slike %ux%u"
@@ -871,7 +865,7 @@ msgstr "Nepodprto kodiranje »%s«."
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr "Sistem GLES %d.%d ne podpira pol-plavajočih podatkov"
 
-#: gsk/gpu/gskgldevice.c:254
+#: gsk/gpu/gskgldevice.c:252
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "Izrisovalnik ne podpira OpenGL ES 3.0"
@@ -7246,7 +7240,7 @@ msgstr ""
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
 #: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
-#: tools/gtk-rendernode-tool-info.c:225 tools/gtk-rendernode-tool-show.c:116
+#: tools/gtk-rendernode-tool-info.c:226 tools/gtk-rendernode-tool-show.c:116
 msgid "FILE"
 msgstr "DATOTEKA"
 
@@ -7875,7 +7869,7 @@ msgid "Benchmark rendering of a .node file."
 msgstr "Preizkusno izrisovanje datoteke .node."
 
 #: tools/gtk-rendernode-tool-benchmark.c:127
-#: tools/gtk-rendernode-tool-info.c:247 tools/gtk-rendernode-tool-render.c:283
+#: tools/gtk-rendernode-tool-info.c:248 tools/gtk-rendernode-tool-render.c:283
 #: tools/gtk-rendernode-tool-show.c:144
 #, c-format
 msgid "No .node file specified\n"
@@ -7942,40 +7936,30 @@ msgid "No differences.\n"
 msgstr "Brez razlik.\n"
 
 #: tools/gtk-rendernode-tool-info.c:193
-#, c-format
-msgid "Number of nodes: %u\n"
-msgstr "Število vozlišč: %u\n"
+msgid "Number of nodes:"
+msgstr "Število vozlišč:"
 
 #: tools/gtk-rendernode-tool-info.c:200
-#, c-format
-msgid "Depth: %u\n"
-msgstr "Globina: %u\n"
+msgid "Depth:"
+msgstr "Globina:"
 
 #: tools/gtk-rendernode-tool-info.c:203
-#, c-format
-msgid "Bounds: %g x %g\n"
-msgstr "Meje: %g x %g\n"
+msgid "Bounds:"
+msgstr "Meje:"
 
 #: tools/gtk-rendernode-tool-info.c:204
-#, c-format
-msgid "Origin: %g %g\n"
-msgstr "Izvor: %g %g\n"
+msgid "Origin:"
+msgstr "Izvor:"
 
-#: tools/gtk-rendernode-tool-info.c:207
-#, c-format
-msgid "Opaque part: %g %g, %g x %g (%.0f%%)\n"
-msgstr "Neprosojni del: %g %g, %g x %g (%.0f%%)\n"
+#: tools/gtk-rendernode-tool-info.c:208 tools/gtk-rendernode-tool-info.c:214
+msgid "Opaque part:"
+msgstr "Neprosojni del:"
 
-#: tools/gtk-rendernode-tool-info.c:213
-#, c-format
-msgid "Opaque part: none\n"
-msgstr "Neprosojni del: brez\n"
-
-#: tools/gtk-rendernode-tool-info.c:234
+#: tools/gtk-rendernode-tool-info.c:235
 msgid "Provide information about the render node."
 msgstr "Navesti je traba podrobnosti o vozlišču za izrisovanje."
 
-#: tools/gtk-rendernode-tool-info.c:253
+#: tools/gtk-rendernode-tool-info.c:254
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Sprejeti je mogoče le eno datoteko .node\n"
