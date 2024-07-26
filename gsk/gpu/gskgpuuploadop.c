@@ -249,6 +249,7 @@ gsk_gpu_upload_texture_op_draw (GskGpuOp *op,
 
   downloader = gdk_texture_downloader_new (self->texture);
   gdk_texture_downloader_set_format (downloader, gsk_gpu_image_get_format (self->image));
+  gdk_texture_downloader_set_color_state (downloader, gdk_texture_get_color_state (self->texture));
   gdk_texture_downloader_download_into (downloader, data, stride);
   gdk_texture_downloader_free (downloader);
 }

@@ -955,13 +955,13 @@ gdk_texture_download_surface (GdkTexture    *texture,
 
   gdk_texture_downloader_init (&downloader, texture);
   gdk_texture_downloader_set_format (&downloader,
-                                     gdk_cairo_format_to_memory_format  (surface_format));
+                                     gdk_cairo_format_to_memory_format (surface_format));
+  gdk_texture_downloader_set_color_state (&downloader, color_state);
   gdk_texture_downloader_download_into (&downloader,
                                         cairo_image_surface_get_data (surface),
                                         cairo_image_surface_get_stride (surface));
   gdk_texture_downloader_finish (&downloader);
 
-  gdk_cairo_surface_convert_color_state (surface, texture->color_state, color_state);
   cairo_surface_mark_dirty (surface);
 
   return surface;
