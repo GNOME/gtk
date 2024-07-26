@@ -257,6 +257,10 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
         {
           [panel setCanChooseDirectories:YES];
           [panel setCanChooseFiles:NO];
+          if (data->create_folders)
+            {
+              [panel setCanCreateDirectories:YES];
+            }
         }
       else
       {
