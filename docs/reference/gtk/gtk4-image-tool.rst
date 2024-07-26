@@ -20,7 +20,7 @@ SYNOPSIS
 |   **gtk4-image-tool** convert [OPTIONS...] <FILE1> <FILE2>
 |   **gtk4-image-tool** info [OPTIONS...] <FILE>
 |   **gtk4-image-tool** relabel [OPTIONS...] <FILE1> <FILE2>
-|   **gtk4-image-tool** show [OPTIONS...] <FILE>
+|   **gtk4-image-tool** show [OPTIONS...] <FILE>...
 
 DESCRIPTION
 -----------
@@ -39,7 +39,7 @@ as its format and color state.
 Showing
 ^^^^^^^
 
-The ``show`` command displays the image.
+The ``show`` command displays one or more images, side-by-side.
 
 Compare
 ^^^^^^^
