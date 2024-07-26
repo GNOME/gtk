@@ -190,27 +190,28 @@ file_info (const char *filename)
         namelen = MAX (namelen, strlen (get_node_name (i)));
     }
 
-  g_print (_("Number of nodes: %u\n"), total);
+  g_print ("%s %u\n", _("Number of nodes:"), total);
   for (unsigned int i = 0; i < G_N_ELEMENTS (counts); i++)
     {
       if (counts[i] > 0)
         g_print ("  %*s: %u\n", namelen, get_node_name (i), counts[i]);
     }
 
-  g_print (_("Depth: %u\n"), depth);
+  g_print ("%s %u\n", _("Depth:"), depth);
 
   gsk_render_node_get_bounds (node, &bounds);
-  g_print (_("Bounds: %g x %g\n"), bounds.size.width, bounds.size.height);
-  g_print (_("Origin: %g %g\n"), bounds.origin.x, bounds.origin.y);
+  g_print ("%s %g x %g\n", _("Bounds:"), bounds.size.width, bounds.size.height);
+  g_print ("%s %g %g\n", _("Origin:"), bounds.origin.x, bounds.origin.y);
   if (gsk_render_node_get_opaque_rect (node, &opaque))
     {
-      g_print (_("Opaque part: %g %g, %g x %g (%.0f%%)\n"),
+      g_print ("%s %g %g, %g x %g (%.0f%%)\n",
+               _("Opaque part:"),
                opaque.origin.x, opaque.origin.y,
                opaque.size.width, opaque.size.height,
                100 * (opaque.size.width * opaque.size.height) / (bounds.size.width * bounds.size.height));
     }
   else
-    g_print (_("Opaque part: none\n"));
+    g_print ("%s none\n", _("Opaque part:"));
 
   gsk_render_node_unref (node);
 }
