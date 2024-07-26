@@ -72,7 +72,6 @@ update_caret_pos (GtkATContext *context,
 
 static void
 update_selection_bound (GtkATContext *context,
-                        guint         selection_bound,
                         gpointer      data)
 {
   TestData *td = data;
