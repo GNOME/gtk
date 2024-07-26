@@ -149,37 +149,39 @@ gdk_load_jpeg (GBytes  *input_bytes,
                 g_bytes_get_size (input_bytes));
 
   jpeg_read_header (&info, TRUE);
+
+  if (info.jpeg_color_space == JCS_GRAYSCALE)
+    {
+      color_state = GDK_COLOR_STATE_SRGB;
+      info.out_color_space = JCS_GRAYSCALE;
+      format = GDK_MEMORY_G8;
+    }
+  else if (info.jpeg_color_space == JCS_YCbCr)
+    {
+      color_state = GDK_COLOR_STATE_JPEG;
+      info.out_color_space = JCS_YCbCr;
+      format = GDK_MEMORY_R8G8B8;
+    }
+  else if (info.jpeg_color_space == JCS_CMYK)
+    {
+      color_state = GDK_COLOR_STATE_SRGB;
+      info.out_color_space = JCS_CMYK;
+      format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+    }
+  else
+    {
+      color_state = GDK_COLOR_STATE_SRGB;
+      info.out_color_space = JCS_RGB;
+      format = GDK_MEMORY_R8G8B8;
+    }
+
   jpeg_start_decompress (&info);
 
   width = info.output_width;
   height = info.output_height;
+  stride = gdk_memory_format_bytes_per_pixel (format) * width;
 
-  color_state = GDK_COLOR_STATE_SRGB;
-
-  switch ((int)info.out_color_space)
-    {
-    case JCS_GRAYSCALE:
-      stride = width;
-      data = g_try_malloc_n (stride, height);
-      format = GDK_MEMORY_G8;
-      break;
-    case JCS_RGB:
-      stride = 3 * width;
-      data = g_try_malloc_n (stride, height);
-      format = GDK_MEMORY_R8G8B8;
-      break;
-    case JCS_CMYK:
-      stride = 4 * width;
-      data = g_try_malloc_n (stride, height);
-      format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
-      break;
-    default:
-      g_set_error (error,
-                   GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_UNSUPPORTED_CONTENT,
-                   _("Unsupported JPEG colorspace (%d)"), info.out_color_space);
-      jpeg_destroy_decompress (&info);
-      return NULL;
-    }
+  data = g_try_malloc_n (stride, height);
 
   if (!data)
     {
@@ -215,7 +217,6 @@ gdk_load_jpeg (GBytes  *input_bytes,
 
   texture = gdk_memory_texture_builder_build (builder);
 
-  gdk_color_state_unref (color_state);
   g_object_unref (builder);
   g_bytes_unref (bytes);
 
