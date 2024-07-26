@@ -2294,6 +2294,8 @@ gtk_spin_button_set_numeric (GtkSpinButton *spin_button,
   if (spin_button->numeric != numeric)
     {
       spin_button->numeric = numeric;
+      gtk_text_set_input_purpose (GTK_TEXT (spin_button->entry),
+                                  numeric ? GTK_INPUT_PURPOSE_NUMBER: GTK_INPUT_PURPOSE_FREE_FORM);
       g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_NUMERIC]);
     }
 }
