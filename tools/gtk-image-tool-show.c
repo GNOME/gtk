@@ -30,17 +30,6 @@
 #include "gtk-image-tool.h"
 
 static void
-set_window_title (GtkWindow  *window,
-                  const char *filename)
-{
-  char *name;
-
-  name = g_path_get_basename (filename);
-  gtk_window_set_title (window, name);
-  g_free (name);
-}
-
-static void
 quit_cb (GtkWidget *widget,
          gpointer   user_data)
 {
@@ -52,36 +41,65 @@ quit_cb (GtkWidget *widget,
 }
 
 static void
-show_file (const char *filename)
+show_files (char **filenames)
 {
-  GdkTexture *texture;
   GtkWidget *sw;
   GtkWidget *window;
   gboolean done = FALSE;
-  GtkWidget *picture;
+  GString *title;
+  GtkWidget *box;
 
-  texture = load_image_file (filename);
+  window = gtk_window_new ();
+  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
-  picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (texture));
-  gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
-  gtk_picture_set_content_fit (GTK_PICTURE (picture), GTK_CONTENT_FIT_SCALE_DOWN);
+  title = g_string_new ("");
+  for (int i = 0; i < g_strv_length (filenames); i++)
+    {
+      char *name = g_path_get_basename (filenames[i]);
+
+      if (title->len > 0)
+        g_string_append (title, " / ");
+      g_string_append (title, name);
+
+      g_free (name);
+    }
+
+  gtk_window_set_title (GTK_WINDOW (window), title->str);
+  g_string_free (title, TRUE);
 
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_propagate_natural_width (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (sw), TRUE);
-  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), picture);
 
-  window = gtk_window_new ();
-  set_window_title (GTK_WINDOW (window), filename);
   gtk_window_set_child (GTK_WINDOW (window), sw);
 
+  box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
+
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), box);
+
+  for (int i = 0; i < g_strv_length (filenames); i++)
+    {
+      GdkTexture *texture;
+      GtkWidget *picture;
+
+      texture = load_image_file (filenames[i]);
+
+      picture = gtk_picture_new_for_paintable (GDK_PAINTABLE (texture));
+      gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
+      gtk_picture_set_content_fit (GTK_PICTURE (picture), GTK_CONTENT_FIT_SCALE_DOWN);
+
+      if (i > 0)
+        gtk_box_append (GTK_BOX (box), gtk_separator_new (GTK_ORIENTATION_VERTICAL));
+
+      gtk_box_append (GTK_BOX (box), picture);
+
+      g_object_unref (texture);
+    }
+
   gtk_window_present (GTK_WINDOW (window));
-  g_signal_connect (window, "destroy", G_CALLBACK (quit_cb), &done);
 
   while (!done)
     g_main_context_iteration (NULL, TRUE);
-
-  g_object_unref (texture);
 }
 
 void
@@ -91,7 +109,7 @@ do_show (int          *argc,
   GOptionContext *context;
   char **filenames = NULL;
   const GOptionEntry entries[] = {
-    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
+    { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
   GError *error = NULL;
@@ -100,7 +118,7 @@ do_show (int          *argc,
   context = g_option_context_new (NULL);
   g_option_context_set_translation_domain (context, GETTEXT_PACKAGE);
   g_option_context_add_main_entries (context, entries, NULL);
-  g_option_context_set_summary (context, _("Show the image."));
+  g_option_context_set_summary (context, _("Show one or more images."));
 
   if (!g_option_context_parse (context, argc, (char ***)argv, &error))
     {
@@ -117,13 +135,7 @@ do_show (int          *argc,
       exit (1);
     }
 
-  if (g_strv_length (filenames) > 1)
-    {
-      g_printerr (_("Can only accept a single image file\n"));
-      exit (1);
-    }
-
-  show_file (filenames[0]);
+  show_files (filenames);
 
   g_strfreev (filenames);
 }
