@@ -240,6 +240,7 @@ gdk_save_jpeg (GdkTexture *texture)
   gsize texstride;
   guchar *row;
   int width, height;
+  GdkColorState *color_state;
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
@@ -269,13 +270,24 @@ gdk_save_jpeg (GdkTexture *texture)
   jpeg_set_defaults (&info);
   jpeg_set_quality (&info, 75, TRUE);
 
+  color_state = gdk_texture_get_color_state (texture);
+  if (gdk_color_state_equal (color_state, GDK_COLOR_STATE_JPEG))
+    {
+      info.in_color_space = JCS_YCbCr;
+    }
+  else
+    {
+      info.in_color_space = JCS_RGB;
+      color_state = GDK_COLOR_STATE_SRGB;
+    }
+
   info.mem->max_memory_to_use = 300 * 1024 * 1024;
 
   jpeg_mem_dest (&info, &data, &size);
 
   gdk_texture_downloader_init (&downloader, texture);
   gdk_texture_downloader_set_format (&downloader, GDK_MEMORY_R8G8B8);
-  gdk_texture_downloader_set_color_state (&downloader, GDK_COLOR_STATE_SRGB);
+  gdk_texture_downloader_set_color_state (&downloader, color_state);
   texbytes = gdk_texture_downloader_download_bytes (&downloader, &texstride);
   gdk_texture_downloader_finish (&downloader);
   texdata = g_bytes_get_data (texbytes, NULL);
