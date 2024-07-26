@@ -31,6 +31,8 @@ gsk_gpu_convert_cicp_op_print_instance (GskGpuShaderOp *shader,
   gsk_gpu_print_image (string, shader->images[0]);
   if (shader->variation & VARIATION_STRAIGHT_ALPHA)
     gsk_gpu_print_string (string, "straight");
+  if (shader->variation & VARIATION_REVERSE)
+    gsk_gpu_print_string (string, "reverse");
   g_string_append_printf (string, "cicp %u/%u/%u/%u",
                           instance->color_primaries,
                           instance->transfer_function,
