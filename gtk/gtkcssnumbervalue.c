@@ -365,7 +365,6 @@ gtk_css_value_number_compute (GtkCssValue          *number,
     }
   else
     {
-      GtkCssValue *result;
       double value = number->dimension.value;
 
       switch (number->dimension.unit)
@@ -374,68 +373,50 @@ gtk_css_value_number_compute (GtkCssValue          *number,
           /* percentages for font sizes are computed, other percentages aren't */
           if (property_id == GTK_CSS_PROPERTY_FONT_SIZE)
             {
-              result = gtk_css_dimension_value_new (value / 100.0 *
-                                                    get_base_font_size_px (property_id, provider, style, parent_style),
-                                                    GTK_CSS_PX);
-              break;
+              return gtk_css_dimension_value_new (value / 100.0 *
+                                                  get_base_font_size_px (property_id, provider, style, parent_style),
+                                                  GTK_CSS_PX);
             }
           G_GNUC_FALLTHROUGH;
         case GTK_CSS_NUMBER:
         case GTK_CSS_PX:
         case GTK_CSS_DEG:
         case GTK_CSS_S:
-          result = gtk_css_dimension_value_new (value, number->dimension.unit);
-          break;
+          return gtk_css_dimension_value_new (value, number->dimension.unit);
         case GTK_CSS_PT:
-          result = gtk_css_dimension_value_new (value * get_dpi (style) / 72.0, GTK_CSS_PX);
-          break;
+          return gtk_css_dimension_value_new (value * get_dpi (style) / 72.0, GTK_CSS_PX);
         case GTK_CSS_PC:
-          result = gtk_css_dimension_value_new (value * get_dpi (style) / 72.0 * 12.0, GTK_CSS_PX);
-          break;
+          return gtk_css_dimension_value_new (value * get_dpi (style) / 72.0 * 12.0, GTK_CSS_PX);
         case GTK_CSS_IN:
-          result = gtk_css_dimension_value_new (value * get_dpi (style), GTK_CSS_PX);
-          break;
+          return gtk_css_dimension_value_new (value * get_dpi (style), GTK_CSS_PX);
         case GTK_CSS_CM:
-          result = gtk_css_dimension_value_new (value * get_dpi (style) * 0.39370078740157477, GTK_CSS_PX);
-          break;
+          return gtk_css_dimension_value_new (value * get_dpi (style) * 0.39370078740157477, GTK_CSS_PX);
         case GTK_CSS_MM:
-          result = gtk_css_dimension_value_new (value * get_dpi (style) * 0.039370078740157477, GTK_CSS_PX);
-          break;
+          return gtk_css_dimension_value_new (value * get_dpi (style) * 0.039370078740157477, GTK_CSS_PX);
         case GTK_CSS_EM:
-          result = gtk_css_dimension_value_new (value *
-                                                get_base_font_size_px (property_id, provider, style, parent_style),
-                                                GTK_CSS_PX);
-          break;
+          return gtk_css_dimension_value_new (value *
+                                              get_base_font_size_px (property_id, provider, style, parent_style),
+                                              GTK_CSS_PX);
         case GTK_CSS_EX:
           /* for now we pretend ex is half of em */
-          result = gtk_css_dimension_value_new (value * 0.5 *
-                                                get_base_font_size_px (property_id, provider, style, parent_style),
-                                                GTK_CSS_PX);
-          break;
+          return gtk_css_dimension_value_new (value * 0.5 *
+                                              get_base_font_size_px (property_id, provider, style, parent_style),
+                                              GTK_CSS_PX);
         case GTK_CSS_REM:
-          result = gtk_css_dimension_value_new (value *
-                                                gtk_css_font_size_get_default_px (provider, style),
-                                                GTK_CSS_PX);
-          break;
+          return gtk_css_dimension_value_new (value *
+                                              gtk_css_font_size_get_default_px (provider, style),
+                                              GTK_CSS_PX);
         case GTK_CSS_RAD:
-          result = gtk_css_dimension_value_new (value * 360.0 / (2 * G_PI), GTK_CSS_DEG);
-          break;
+          return gtk_css_dimension_value_new (value * 360.0 / (2 * G_PI), GTK_CSS_DEG);
         case GTK_CSS_GRAD:
-          result = gtk_css_dimension_value_new (value * 360.0 / 400.0, GTK_CSS_DEG);
-          break;
+          return gtk_css_dimension_value_new (value * 360.0 / 400.0, GTK_CSS_DEG);
         case GTK_CSS_TURN:
-          result = gtk_css_dimension_value_new (value * 360.0, GTK_CSS_DEG);
-          break;
+          return gtk_css_dimension_value_new (value * 360.0, GTK_CSS_DEG);
         case GTK_CSS_MS:
-          result = gtk_css_dimension_value_new (value / 1000.0, GTK_CSS_S);
-          break;
+          return gtk_css_dimension_value_new (value / 1000.0, GTK_CSS_S);
         default:
           g_assert_not_reached();
         }
-
-      result->is_computed = TRUE;
-
-      return result;
     }
 }
 
@@ -720,9 +701,9 @@ gtk_css_dimension_value_new (double     value,
     { &GTK_CSS_VALUE_NUMBER, 1, 1, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_PX, 64 }} },
   };
   static GtkCssValue percent_singletons[] = {
-    { &GTK_CSS_VALUE_NUMBER, 1, 1, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_PERCENT, 0 }} },
-    { &GTK_CSS_VALUE_NUMBER, 1, 1, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_PERCENT, 50 }} },
-    { &GTK_CSS_VALUE_NUMBER, 1, 1, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_PERCENT, 100 }} },
+    { &GTK_CSS_VALUE_NUMBER, 1, 0, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_PERCENT, 0 }} },
+    { &GTK_CSS_VALUE_NUMBER, 1, 0, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_PERCENT, 50 }} },
+    { &GTK_CSS_VALUE_NUMBER, 1, 0, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_PERCENT, 100 }} },
   };
   static GtkCssValue second_singletons[] = {
     { &GTK_CSS_VALUE_NUMBER, 1, 1, 0, 0, TYPE_DIMENSION, {{ GTK_CSS_S, 0 }} },
