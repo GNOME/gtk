@@ -24,6 +24,8 @@
 #include <glib/gi18n-lib.h>
 #include "gdktexture.h"
 #include "gdktexturedownloaderprivate.h"
+#include "gdkmemorytexturebuilder.h"
+#include "gdkcolorstateprivate.h"
 
 #include "gdkprofilerprivate.h"
 
@@ -144,8 +146,10 @@ gdk_load_jpeg (GBytes  *input_bytes,
   unsigned char *data = NULL;
   unsigned char *row[1];
   GBytes *bytes;
+  GdkMemoryTextureBuilder *builder;
   GdkTexture *texture;
   GdkMemoryFormat format;
+  GdkColorState *color_state;
   G_GNUC_UNUSED guint64 before = GDK_PROFILER_CURRENT_TIME;
 
   info.err = jpeg_std_error (&jerr.pub);
@@ -174,6 +178,8 @@ gdk_load_jpeg (GBytes  *input_bytes,
 
   width = info.output_width;
   height = info.output_height;
+
+  color_state = GDK_COLOR_STATE_SRGB;
 
   switch ((int)info.out_color_space)
     {
@@ -231,14 +237,23 @@ gdk_load_jpeg (GBytes  *input_bytes,
 
   bytes = g_bytes_new_take (data, stride * height);
 
-  texture = gdk_memory_texture_new (width, height,
-                                    format,
-                                    bytes, stride);
+  builder = gdk_memory_texture_builder_new ();
 
+  gdk_memory_texture_builder_set_bytes (builder, bytes);
+  gdk_memory_texture_builder_set_stride (builder, stride);
+  gdk_memory_texture_builder_set_width (builder, width);
+  gdk_memory_texture_builder_set_height (builder, height);
+  gdk_memory_texture_builder_set_format (builder, format);
+  gdk_memory_texture_builder_set_color_state (builder, color_state);
+
+  texture = gdk_memory_texture_builder_build (builder);
+
+  gdk_color_state_unref (color_state);
+  g_object_unref (builder);
   g_bytes_unref (bytes);
 
   gdk_profiler_end_mark (before, "Load jpeg", NULL);
- 
+
   return texture;
 }
 
