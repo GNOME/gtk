@@ -175,10 +175,23 @@ gtk_gst_color_state_from_colorimetry (GtkGstSink                *self,
   GError *error = NULL;
 
   params = gdk_cicp_params_new ();
-  gdk_cicp_params_set_color_primaries (params, gst_video_color_primaries_to_iso (colorimetry->primaries));
-  gdk_cicp_params_set_transfer_function (params, gst_video_transfer_function_to_iso (colorimetry->transfer));
+
+  if (colorimetry->primaries == GST_VIDEO_COLOR_PRIMARIES_UNKNOWN)
+    gdk_cicp_params_set_color_primaries (params, 1);
+  else
+    gdk_cicp_params_set_color_primaries (params, gst_video_color_primaries_to_iso (colorimetry->primaries));
+
+  if (colorimetry->transfer == GST_VIDEO_TRANSFER_UNKNOWN)
+    gdk_cicp_params_set_transfer_function (params, 13);
+  else
+    gdk_cicp_params_set_transfer_function (params, gst_video_transfer_function_to_iso (colorimetry->transfer));
+
 #if 0
-  gdk_cicp_params_set_matrix_coefficients (params, gst_video_color_matrix_to_iso (colorimetry->matrix));
+  if (colorimetry->matrix == GST_VIDEO_COLOR_MATRIX_UNKNOWN)
+    gdk_cicp_params_set_matrix_coefficients (params, 6);
+  else
+    gdk_cicp_params_set_matrix_coefficients (params, gst_video_color_matrix_to_iso (colorimetry->matrix));
+
   gdk_cicp_params_set_range (params, colorimetry->range == GST_VIDEO_COLOR_RANGE_0_255 ? GDK_CICP_RANGE_FULL : GDK_CICP_RANGE_NARROW);
 #else
   gdk_cicp_params_set_matrix_coefficients (params, 0);
