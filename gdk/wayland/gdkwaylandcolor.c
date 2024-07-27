@@ -437,6 +437,8 @@ typedef struct
   struct xx_image_description_v4 *image_desc;
   struct xx_image_description_info_v4 *info;
 
+  uint32_t identity;
+
   int32_t icc;
   uint32_t icc_size;
   int32_t r_x, r_y, g_x, g_y, b_x, b_y, w_x, w_y;
@@ -475,7 +477,7 @@ gdk_color_state_from_image_description_bits (ImageDescription *desc)
       return gdk_color_state_new_for_cicp (&cicp, NULL);
     }
   else
-    return GDK_COLOR_STATE_SRGB;
+    return NULL;
 }
 
 static void
@@ -487,13 +489,26 @@ image_desc_info_done (void *data,
   GdkColorState *cs;
 
   cs = gdk_color_state_from_image_description_bits (desc);
+  if (cs)
+    {
+      g_hash_table_insert (self->color->cs_to_desc,
+                           gdk_color_state_ref (cs),
+                           desc->image_desc);
+      g_hash_table_insert (self->color->id_to_cs,
+                           GUINT_TO_POINTER (desc->identity),
+                           gdk_color_state_ref (cs));
+    }
+  else
+    {
+      cs = GDK_COLOR_STATE_SRGB;
+      xx_image_description_v4_destroy (desc->image_desc);
+    }
 
   if (self->callback)
     self->callback (desc->surface, cs, self->data);
 
   gdk_color_state_unref (cs);
 
-  xx_image_description_v4_destroy (desc->image_desc);
   xx_image_description_info_v4_destroy (desc->info);
   g_free (desc);
 }
@@ -563,10 +578,10 @@ image_desc_info_tf_named (void *data,
 
 static void
 image_desc_info_luminances (void *data,
-                             struct xx_image_description_info_v4 *info,
-                             uint32_t min_lum,
-                             uint32_t max_lum,
-                             uint32_t ref_lum)
+                            struct xx_image_description_info_v4 *info,
+                            uint32_t min_lum,
+                            uint32_t max_lum,
+                            uint32_t ref_lum)
 {
   ImageDescription *desc = data;
 
@@ -677,6 +692,7 @@ image_desc_ready (void                           *data,
     }
 
   desc->info = xx_image_description_v4_get_information (image_desc);
+  desc->identity = identity;
 
   xx_image_description_info_v4_add_listener (desc->info, &info_listener, desc);
 }
