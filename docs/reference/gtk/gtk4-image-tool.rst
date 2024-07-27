@@ -70,6 +70,11 @@ The ``convert`` command converts the image to a different format or color state.
   Convert to the given color state. The supported color states can be
   listed with ``--format=list``.
 
+``--cicp=CICP``
+
+  Convert to a color state that is specified as a cicp tuple. The cicp tuple
+  must be specified as four numbers, separated by /, e.g. 1/13/6/0.
+
 Relabeling
 ^^^^^^^^^^
 
@@ -78,5 +83,10 @@ This can be useful to produce wrong color renderings for diagnostics.
 
 ``--color-state=COLORSTATE``
 
-  Convert to the given color state. The supported color states can be
+  Relabel to the given color state. The supported color states can be
   listed with ``--format=list``.
+
+``--cicp=CICP``
+
+  Relabel to a color state that is specified as a cicp tuple. The cicp tuple
+  must be specified as four numbers, separated by /, e.g. 1/13/6/0.

@@ -79,31 +79,6 @@ output_message_handler (j_common_ptr cinfo)
 /* {{{ Format conversion */
 
 static void
-convert_grayscale_to_rgb (guchar *data,
-                          int     width,
-                          int     height,
-                          int     stride)
-{
-  gsize x, y;
-  guchar *dest, *src;
-
-  for (y = 0; y < height; y++)
-    {
-      src = data + width;
-      dest = data + 3 * width;
-      for (x = 0; x < width; x++)
-        {
-          dest -= 3;
-          src -= 1;
-          dest[0] = *src;
-          dest[1] = *src;
-          dest[2] = *src;
-        }
-      data += stride;
-    }
-}
-
-static void
 convert_cmyk_to_rgba (guchar *data,
                       int     width,
                       int     height,
@@ -184,6 +159,10 @@ gdk_load_jpeg (GBytes  *input_bytes,
   switch ((int)info.out_color_space)
     {
     case JCS_GRAYSCALE:
+      stride = width;
+      data = g_try_malloc_n (stride, height);
+      format = GDK_MEMORY_G8;
+      break;
     case JCS_RGB:
       stride = 3 * width;
       data = g_try_malloc_n (stride, height);
@@ -217,20 +196,8 @@ gdk_load_jpeg (GBytes  *input_bytes,
        jpeg_read_scanlines (&info, row, 1);
     }
 
-  switch ((int)info.out_color_space)
-    {
-    case JCS_GRAYSCALE:
-      convert_grayscale_to_rgb (data, width, height, stride);
-      format = GDK_MEMORY_R8G8B8;
-      break;
-    case JCS_RGB:
-      break;
-    case JCS_CMYK:
-      convert_cmyk_to_rgba (data, width, height, stride);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
+  if (info.out_color_space == JCS_CMYK)
+    convert_cmyk_to_rgba (data, width, height, stride);
 
   jpeg_finish_decompress (&info);
   jpeg_destroy_decompress (&info);
@@ -307,6 +274,7 @@ gdk_save_jpeg (GdkTexture *texture)
 
   gdk_texture_downloader_init (&downloader, texture);
   gdk_texture_downloader_set_format (&downloader, GDK_MEMORY_R8G8B8);
+  gdk_texture_downloader_set_color_state (&downloader, GDK_COLOR_STATE_SRGB);
   texbytes = gdk_texture_downloader_download_bytes (&downloader, &texstride);
   gdk_texture_downloader_finish (&downloader);
   texdata = g_bytes_get_data (texbytes, NULL);

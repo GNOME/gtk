@@ -79,13 +79,15 @@ do_relabel (int          *argc,
   GOptionContext *context;
   char **filenames = NULL;
   char *colorstate_name = NULL;
+  char *cicp_tuple = NULL;
   const GOptionEntry entries[] = {
     { "color-state", 0, 0, G_OPTION_ARG_STRING, &colorstate_name, N_("Color state to use"), N_("COLORSTATE") },
+    { "cicp", 0, 0, G_OPTION_ARG_STRING, &cicp_tuple, N_("Color state to use, as cicp tuple"), N_("CICP") },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
   GError *error = NULL;
-  GdkColorState *color_state = gdk_color_state_get_srgb ();
+  GdkColorState *color_state = NULL;
 
   g_set_prgname ("gtk4-image-tool relabel");
   context = g_option_context_new (NULL);
@@ -130,6 +132,26 @@ do_relabel (int          *argc,
           exit (1);
         }
     }
+
+  if (cicp_tuple)
+    {
+      if (color_state)
+        {
+          g_printerr (_("Can't specify both --color-state and --cicp\n"));
+          exit (1);
+        }
+
+      color_state = parse_cicp_tuple (cicp_tuple, &error);
+
+      if (!color_state)
+        {
+          g_printerr (_("Not a supported cicp tuple: %s\n"), error->message);
+          exit (1);
+        }
+    }
+
+  if (!color_state)
+    color_state = gdk_color_state_get_srgb ();
 
   relabel_image (filenames[0], filenames[1], color_state);
 

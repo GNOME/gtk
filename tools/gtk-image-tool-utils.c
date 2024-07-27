@@ -221,3 +221,42 @@ get_color_state_name (GdkColorState *color_state)
 
   return name;
 }
+
+GdkColorState *
+parse_cicp_tuple (const char  *cicp_tuple,
+                  GError     **error)
+{
+  char **tokens;
+  guint64 num[4];
+  GdkCicpParams *params;
+  GdkColorState *color_state;
+
+  tokens = g_strsplit (cicp_tuple, "/", 0);
+
+  if (g_strv_length (tokens) != 4 ||
+      !g_ascii_string_to_unsigned (tokens[0], 10, 0, 255, &num[0], NULL) ||
+      !g_ascii_string_to_unsigned (tokens[1], 10, 0, 255, &num[1], NULL) ||
+      !g_ascii_string_to_unsigned (tokens[2], 10, 0, 255, &num[2], NULL) ||
+      !g_ascii_string_to_unsigned (tokens[3], 10, 0, 255, &num[3], NULL))
+    {
+      g_strfreev (tokens);
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   _("cicp must be 4 numbers, separated by /\n"));
+      return NULL;
+    }
+
+  g_strfreev (tokens);
+
+  params = gdk_cicp_params_new ();
+
+  gdk_cicp_params_set_color_primaries (params, (guint) num[0]);
+  gdk_cicp_params_set_transfer_function (params, (guint) num[1]);
+  gdk_cicp_params_set_matrix_coefficients (params, (guint) num[2]);
+  gdk_cicp_params_set_range (params, num[3] == 0 ? GDK_CICP_RANGE_NARROW : GDK_CICP_RANGE_FULL);
+  color_state = gdk_cicp_params_build_color_state (params, error);
+
+  g_object_unref (params);
+
+  return color_state;
+}

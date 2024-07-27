@@ -223,9 +223,9 @@ gdk_color_state_create_cicp_params (GdkColorState *self)
 /* {{{ Conversion functions */
 
 typedef float (* GdkTransferFunc) (float v);
-typedef const float GdkColorMatrix[3][3];
+typedef const float GdkColorMatrix[9];
 
-#define IDENTITY ((float**)0)
+#define IDENTITY ((float*)0)
 #define NONE ((GdkTransferFunc)0)
 
 #define TRANSFORM(name, eotf, matrix, oetf) \
@@ -242,12 +242,12 @@ name (GdkColorState  *self, \
           values[i][1] = eotf (values[i][1]); \
           values[i][2] = eotf (values[i][2]); \
         } \
-      if ((float **)matrix != IDENTITY) \
+      if (matrix != IDENTITY) \
         { \
           float res[3]; \
-          res[0] = matrix[0][0] * values[i][0] + matrix[0][1] * values[i][1] + matrix[0][2] * values[i][2]; \
-          res[1] = matrix[1][0] * values[i][0] + matrix[1][1] * values[i][1] + matrix[1][2] * values[i][2]; \
-          res[2] = matrix[2][0] * values[i][0] + matrix[2][1] * values[i][1] + matrix[2][2] * values[i][2]; \
+          res[0] = matrix[0] * values[i][0] + matrix[1] * values[i][1] + matrix[2] * values[i][2]; \
+          res[1] = matrix[3] * values[i][0] + matrix[4] * values[i][1] + matrix[5] * values[i][2]; \
+          res[2] = matrix[6] * values[i][0] + matrix[7] * values[i][1] + matrix[8] * values[i][2]; \
           values[i][0] = res[0]; \
           values[i][1] = res[1]; \
           values[i][2] = res[2]; \
@@ -426,10 +426,10 @@ struct _GdkCicpColorState
   GdkTransferFunc eotf;
   GdkTransferFunc oetf;
 
-  float to_srgb[3][3];
-  float to_rec2020[3][3];
-  float from_srgb[3][3];
-  float from_rec2020[3][3];
+  float *to_srgb;
+  float *to_rec2020;
+  float *from_srgb;
+  float *from_rec2020;
 
   GdkCicp cicp;
 };
@@ -449,7 +449,8 @@ TRANSFORM(gdk_cicp_from_rec2100_linear, NONE,        cicp->from_rec2020, cicp->o
 
 #undef cicp
 
- /* }}} */
+/* }}} */
+/* }}} */
 /* {{{ Vfuncs */
 
 static void
@@ -459,6 +460,11 @@ gdk_cicp_color_state_free (GdkColorState *cs)
 
   if (self->no_srgb)
     gdk_color_state_unref (self->no_srgb);
+
+  g_free (self->to_srgb);
+  g_free (self->to_rec2020);
+  g_free (self->from_srgb);
+  g_free (self->from_rec2020);
 
   g_free (self);
 }
@@ -549,7 +555,7 @@ gdk_cicp_color_state_get_cicp (GdkColorState  *color_state)
   return &self->cicp;
 }
 
-/* }}} */
+/* }}} */ 
 
 static const
 GdkColorStateClass GDK_CICP_COLOR_STATE_CLASS = {
@@ -562,19 +568,19 @@ GdkColorStateClass GDK_CICP_COLOR_STATE_CLASS = {
   .get_cicp = gdk_cicp_color_state_get_cicp,
 };
 
-static inline void
-multiply (float       res[3][3],
-          const float m1[3][3],
-          const float m2[3][3])
+static inline float *
+multiply (float       res[9],
+          const float m1[9],
+          const float m2[9])
 {
-  if ((float **) m1 == IDENTITY)
-    memcpy (res, m2, sizeof (float) * 3 * 3);
-  else if ((float **) m2 == IDENTITY)
-    memcpy (res, m1, sizeof (float) * 3 * 3);
-  else
-    for (int i = 0; i < 3; i++)
-      for (int j = 0; j < 3; j++)
-        res[i][j] = m1[i][0] * m2[0][j] + m1[i][1] * m2[1][j] + m1[i][2] * m2[2][j];
+#define IDX(i,j) 3*i+j
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      res[IDX(i,j)] =   m1[IDX(i,0)] * m2[IDX(0,j)]
+                      + m1[IDX(i,1)] * m2[IDX(1,j)]
+                      + m1[IDX(i,2)] * m2[IDX(2,j)];
+
+  return res;
 }
 
 GdkColorState *
@@ -663,8 +669,8 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
       from_xyz = xyz_to_rec2020;
       break;
     case 10:
-      to_xyz = IDENTITY;
-      from_xyz = IDENTITY;
+      to_xyz = identity;
+      from_xyz = identity;
       break;
     case 12:
       to_xyz = p3_to_xyz;
@@ -693,10 +699,10 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
   self->eotf = eotf;
   self->oetf = oetf;
 
-  multiply (self->to_srgb,      xyz_to_srgb,    to_xyz);
-  multiply (self->to_rec2020,   xyz_to_rec2020, to_xyz);
-  multiply (self->from_srgb,    from_xyz,       srgb_to_xyz);
-  multiply (self->from_rec2020, from_xyz,       rec2020_to_xyz);
+  self->to_srgb = multiply (g_new (float, 9), xyz_to_srgb, to_xyz);
+  self->to_rec2020 = multiply (g_new (float, 9), xyz_to_rec2020, to_xyz);
+  self->from_srgb = multiply (g_new (float, 9), from_xyz, srgb_to_xyz);
+  self->from_rec2020 = multiply (g_new (float, 9), from_xyz, rec2020_to_xyz);
 
   self->name = g_strdup_printf ("cicp-%u/%u/%u/%u",
                                 cicp->color_primaries,
