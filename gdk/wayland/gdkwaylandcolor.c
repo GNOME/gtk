@@ -693,6 +693,9 @@ preferred_changed (void *data,
   GdkWaylandColorSurface *self = data;
   ImageDescription *desc;
 
+  if (!self->callback)
+    return;
+
   desc = g_new0 (ImageDescription, 1);
 
   desc->surface = self;
