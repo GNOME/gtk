@@ -209,12 +209,15 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
                              int              width,
                              int              height,
                              const GdkDmabuf *dmabuf,
+                             int              color_space_hint,
+                             int              range_hint,
                              int              target)
 {
   EGLDisplay egl_display = gdk_display_get_egl_display (display);
   EGLint attribs[64];
   int i;
   EGLImage image;
+  gboolean is_yuv;
 
   g_return_val_if_fail (width > 0, 0);
   g_return_val_if_fail (height > 0, 0);
@@ -226,6 +229,25 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
       GDK_DISPLAY_DEBUG (display, DMABUF,
                          "Can't import dmabufs into GL, missing EGL or EGL_EXT_image_dma_buf_import_modifiers");
       return EGL_NO_IMAGE;
+    }
+
+  if (gdk_dmabuf_fourcc_is_yuv (dmabuf->fourcc, &is_yuv) && is_yuv)
+    {
+      if (color_space_hint == 0 || range_hint == 0)
+        {
+          GDK_DISPLAY_DEBUG (display, DMABUF,
+                             "Can't import yuv dmabuf into GL without color space hints");
+          return EGL_NO_IMAGE;
+        }
+    }
+  else
+    {
+      if (color_space_hint != 0 || range_hint != 0)
+        {
+          GDK_DISPLAY_DEBUG (display, DMABUF,
+                             "Can't import non-yuv dmabuf into GL with color space hints");
+          return EGL_NO_IMAGE;
+        }
     }
 
   GDK_DISPLAY_DEBUG (display, DMABUF,
@@ -241,10 +263,16 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
   attribs[i++] = height;
   attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
   attribs[i++] = dmabuf->fourcc;
-  attribs[i++] = EGL_YUV_COLOR_SPACE_HINT_EXT;
-  attribs[i++] = EGL_ITU_REC601_EXT;
-  attribs[i++] = EGL_SAMPLE_RANGE_HINT_EXT;
-  attribs[i++] = EGL_YUV_NARROW_RANGE_EXT;
+  if (color_space_hint != 0)
+    {
+      attribs[i++] = EGL_YUV_COLOR_SPACE_HINT_EXT;
+      attribs[i++] = color_space_hint;
+    }
+  if (range_hint != 0)
+    {
+      attribs[i++] = EGL_SAMPLE_RANGE_HINT_EXT;
+      attribs[i++] = range_hint;
+    }
 
 #define ADD_PLANE(plane) \
   { \

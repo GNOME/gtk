@@ -5,6 +5,7 @@
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkdmabuffourccprivate.h>
 #include <gdk/gdkdmabuftextureprivate.h>
+#include <gdk/gdkdmabufeglprivate.h>
 
 static cairo_surface_t *
 make_surface (int width,
@@ -191,6 +192,8 @@ test_dmabuf_import (void)
   GdkGLTextureBuilder *builder;
   guchar *data;
   gboolean external;
+  GdkColorState *color_state;
+  int color_space, range;
 
   display = gdk_display_get_default ();
   if (!gdk_display_prepare_gl (display, &error))
@@ -229,7 +232,9 @@ test_dmabuf_import (void)
   g_assert_no_error (error);
 
   dmabuf2 = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
-  texture_id2 = gdk_gl_context_import_dmabuf (context2, 64, 64, dmabuf2, &external);
+  color_state = gdk_texture_get_color_state (texture);
+  gdk_dmabuf_get_egl_yuv_hints (dmabuf2, color_state, &color_space, &range);
+  texture_id2 = gdk_gl_context_import_dmabuf (context2, 64, 64, dmabuf2, color_space, range, &external);
   g_assert_cmpint (texture_id2, !=, 0);
   g_assert_false (external);
 
