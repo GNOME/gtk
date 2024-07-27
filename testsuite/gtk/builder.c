@@ -2917,6 +2917,70 @@ test_buildable (void)
   g_object_unref (my_gtk_buildable);
 }
 
+
+static GFile *
+builder_object_get_file_property (GtkBuilder  *builder, const gchar *object_id)
+{
+  GObject *obj = gtk_builder_get_object (builder, object_id);
+  GFile *value = NULL;
+
+  g_assert (obj);
+
+  g_object_get(obj, "file", &value, NULL);
+  g_assert (value);
+
+  g_assert (g_type_is_a (G_OBJECT_TYPE (value), G_TYPE_FILE));
+
+  return value;
+}
+
+static void
+test_picture (void)
+{
+  GtkBuilder *builder;
+  GError *error = NULL;
+  GFile *file_path, *file_uri;
+  gchar *contents = NULL;
+  gchar *path, *uri;
+
+  /* Load from file so builder knows where to read the files from */
+  path = g_test_build_filename (G_TEST_DIST, "ui", "picture.ui", NULL);
+  builder = gtk_builder_new ();
+  gtk_builder_add_from_file (builder, path, &error);
+  if (error)
+    {
+      g_print ("ERROR: %s", error->message);
+      g_error_free (error);
+    }
+  g_assert_null (error);
+
+  file_path = builder_object_get_file_property (builder, "relative_path");
+  path = g_file_get_path (file_path);
+  g_assert (path);
+
+  /* Check path is absolute */
+  g_assert (g_path_is_absolute (path));
+
+  /* Check contents can be loaded */
+  g_assert (g_file_load_contents (file_path, NULL, &contents, NULL, NULL, NULL));
+  g_free (contents);
+
+  file_uri = builder_object_get_file_property (builder, "relative_uri");
+  uri = g_file_get_uri (file_uri);
+  g_assert (uri);
+
+  /* Check uri is absolute */
+  g_assert (g_str_has_prefix (uri, "file://"));
+  g_assert (g_path_is_absolute (uri + strlen("file://")));
+
+  g_assert (g_file_load_contents (file_uri, NULL, &contents, NULL, NULL, NULL));
+  g_free (contents);
+
+  g_object_unref (builder);
+  g_free (path);
+  g_free (uri);
+}
+
 int
 main (int argc, char **argv)
 {
@@ -2966,6 +3030,7 @@ main (int argc, char **argv)
   g_test_add_func ("/Builder/Expressions", test_expressions);
   g_test_add_func ("/Builder/Child Dispose Order", test_child_dispose_order);
   g_test_add_func ("/Builder/Buildable", test_buildable);
+  g_test_add_func ("/Builder/Picture", test_picture);
 
   return g_test_run();
 }
