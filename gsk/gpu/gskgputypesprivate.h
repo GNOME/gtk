@@ -29,7 +29,13 @@ typedef enum {
   GSK_GPU_IMAGE_FILTERABLE     = (1 << 6),
   GSK_GPU_IMAGE_RENDERABLE     = (1 << 7),
   GSK_GPU_IMAGE_SRGB           = (1 << 8),
+  GSK_GPU_IMAGE_NARROW_RANGE   = (1 << 9),
+  GSK_GPU_IMAGE_BT601          = (1 << 10),
+  GSK_GPU_IMAGE_BT709          = (2 << 10),
+  GSK_GPU_IMAGE_BT2020         = (3 << 10),
 } GskGpuImageFlags;
+
+#define GSK_GPU_IMAGE_YUV (GSK_GPU_IMAGE_BT2020)
 
 typedef enum {
   GSK_GPU_SAMPLER_DEFAULT,
