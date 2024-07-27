@@ -1167,7 +1167,7 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
 
   file = gdk_vulkan_get_pipeline_cache_file (display);
 
-  GDK_DEBUG (VULKAN, "Saving pipeline cache of size %lu to %s", size, g_file_peek_path (file));
+  GDK_DEBUG (VULKAN, "Saving pipeline cache of size %" G_GSIZE_FORMAT " to %s", size, g_file_peek_path (file));
 
   if (!g_file_replace_contents (file,
                                 data,
@@ -1261,7 +1261,7 @@ gdk_display_create_pipeline_cache (GdkDisplay *display)
     }
   else
     {
-      GDK_DEBUG (VULKAN, "Loading pipeline cache (%lu bytes)", display->vk_pipeline_cache_size);
+      GDK_DEBUG (VULKAN, "Loading pipeline cache (%" G_GSIZE_FORMAT " bytes)", display->vk_pipeline_cache_size);
     }
 }
 

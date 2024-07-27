@@ -304,7 +304,7 @@ handle_cache_method (GDBusConnection       *connection,
 
       self->in_get_items = FALSE;
 
-      GTK_DEBUG (A11Y, "Returning %lu items", g_variant_n_children (items));
+      GTK_DEBUG (A11Y, "Returning %" G_GSIZE_FORMAT " items", g_variant_n_children (items));
 
       g_dbus_method_invocation_return_value (invocation, items);
     }

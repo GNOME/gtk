@@ -105,7 +105,7 @@ image_distance (const guchar *data,
   if (g_test_verbose() &&
       dist > 0)
     {
-      g_print ("worst pixel %lu %lu: %f %f %f %f  vs  %f %f %f %f\n",
+      g_print ("worst pixel %" G_GSIZE_FORMAT " %" G_GSIZE_FORMAT ": %f %f %f %f  vs  %f %f %f %f\n",
                imax, jmax, r1, g1, b1, a1, r2, g2, b2, a2);
     }
 

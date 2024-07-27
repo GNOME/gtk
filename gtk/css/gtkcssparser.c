@@ -242,7 +242,7 @@ gtk_css_parser_finalize (GtkCssParser *self)
   g_clear_object (&self->file);
   g_clear_object (&self->directory);
   if (gtk_css_parser_blocks_get_size (&self->blocks) > 0)
-    g_critical ("Finalizing CSS parser with %lu remaining blocks", gtk_css_parser_blocks_get_size (&self->blocks));
+    g_critical ("Finalizing CSS parser with %" G_GSIZE_FORMAT " remaining blocks", gtk_css_parser_blocks_get_size (&self->blocks));
   gtk_css_parser_blocks_clear (&self->blocks);
 
   g_free (self);
