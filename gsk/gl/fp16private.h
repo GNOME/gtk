@@ -28,6 +28,26 @@ G_BEGIN_DECLS
 #define FP16_ONE ((guint16)15360)
 #define FP16_MINUS_ONE ((guint16)48128)
 
+static inline guint16
+float_to_half_one (const float x)
+{
+  const guint b = *(guint*)&x+0x00001000; // round-to-nearest-even
+  const guint e = (b&0x7F800000)>>23; // exponent
+  const guint m = b&0x007FFFFF; // mantissa
+  guint n0 = 0;
+  guint n1 = 0;
+  guint n2 = 0;
+
+  if (e > 112)
+    n0 = (((e - 112) << 10) & 0x7C00) | m >> 13;
+  if (e < 113 && e > 101)
+    n1 = (((0x007FF000 + m) >> (125- e)) + 1) >> 1;
+  if (e > 143)
+    n2 = 0x7FFF;
+
+  return (b & 0x80000000) >> 16 | n0 | n1 | n2; // sign : normalized : denormalized : saturate
+}
+
 void float_to_half4 (const float f[4],
                      guint16     h[4]);
 
