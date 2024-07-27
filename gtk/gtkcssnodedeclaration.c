@@ -446,9 +446,9 @@ gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
 
   for (i = 0; i < sizeof (GtkStateFlags) * 8; i++)
     {
-      if (decl->state & (1 << i))
+      if (decl->state & (1u << i))
         {
-          const char *name = gtk_css_pseudoclass_name (1 << i);
+          const char *name = gtk_css_pseudoclass_name (1u << i);
           g_assert (name);
           g_string_append_c (string, ':');
           g_string_append (string, name);
