@@ -110,7 +110,8 @@ gtk_symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable   *paintable,
         [GTK_SYMBOLIC_COLOR_SUCCESS] = { 0.3046921492332342,0.6015716792553597, 0.023437857633325704, 1.0 }
       };
 
-      memcpy (real_colors, colors, sizeof (GdkRGBA) * n_colors);
+      if (n_colors != 0)
+        memcpy (real_colors, colors, sizeof (GdkRGBA) * n_colors);
 
       iface->snapshot_symbolic (paintable, snapshot, width, height, real_colors, 4);
     }
