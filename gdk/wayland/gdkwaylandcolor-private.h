@@ -1,11 +1,13 @@
 #pragma once
 
 #include "gdkcolorstateprivate.h"
+#include "gdkwaylanddisplay.h"
 #include <wayland-client.h>
 
 typedef struct _GdkWaylandColor GdkWaylandColor;
 
-GdkWaylandColor * gdk_wayland_color_new                         (struct wl_registry     *registry,
+GdkWaylandColor * gdk_wayland_color_new                         (GdkWaylandDisplay      *display,
+                                                                 struct wl_registry     *registry,
                                                                  uint32_t                id,
                                                                  uint32_t                version);
 
