@@ -536,7 +536,7 @@ gdk_registry_handle_global (void               *data,
     }
   else if (strcmp (interface, "xx_color_manager_v4") == 0)
     {
-      display_wayland->color = gdk_wayland_color_new (registry, id, version);
+      display_wayland->color = gdk_wayland_color_new (display_wayland, registry, id, version);
     }
   else if (strcmp (interface, wp_single_pixel_buffer_manager_v1_interface.name) == 0)
     {
