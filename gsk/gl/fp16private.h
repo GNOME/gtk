@@ -28,6 +28,37 @@ G_BEGIN_DECLS
 #define FP16_ONE ((guint16)15360)
 #define FP16_MINUS_ONE ((guint16)48128)
 
+static inline guint
+as_uint (const float x)
+{
+  return *(guint*)&x;
+}
+
+static inline float
+as_float (const guint x)
+{
+  return *(float*)&x;
+}
+
+// IEEE-754 16-bit floating-point format (without infinity): 1-5-10
+static inline float
+half_to_float_one (const guint16 x)
+{
+  const guint e = (x & 0x7C00) >> 10; // exponent
+  const guint m = (x & 0x03FF) << 13; // mantissa
+  const guint v = as_uint ((float) m) >> 23;
+  guint normalized = 0;
+  guint denormalized = 0;
+
+  if (e != 0)
+    normalized = (e + 112) << 23 | m;
+
+  if (e == 0 && m != 0)
+    denormalized = (v - 37) << 23 | ((m << (150 - v)) & 0x007FE000);
+
+  return as_float ((x & 0x8000u) << 16 | normalized | denormalized);
+}
+
 static inline guint16
 float_to_half_one (const float x)
 {

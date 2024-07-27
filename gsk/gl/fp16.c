@@ -22,29 +22,6 @@
 
 #include "fp16private.h"
 
-static inline guint
-as_uint (const float x)
-{
-  return *(guint*)&x;
-}
-
-static inline float
-as_float (const guint x)
-{
-  return *(float*)&x;
-}
-
-// IEEE-754 16-bit floating-point format (without infinity): 1-5-10
-
-static inline float
-half_to_float_one (const guint16 x)
-{
-  const guint e = (x&0x7C00)>>10; // exponent
-  const guint m = (x&0x03FF)<<13; // mantissa
-  const guint v = as_uint((float)m)>>23;
-  return as_float((x&0x8000)<<16 | (e!=0)*((e+112)<<23|m) | ((e==0)&(m!=0))*((v-37)<<23|((m<<(150-v))&0x007FE000)));
-}
-
 void
 float_to_half4_c (const float f[4],
                   guint16     h[4])
