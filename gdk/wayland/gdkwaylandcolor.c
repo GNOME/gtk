@@ -704,6 +704,7 @@ gdk_wayland_color_surface_new (GdkWaylandColor          *color,
   self->data = data;
 
   xx_color_management_feedback_surface_v4_add_listener (self->feedback, &color_listener, self);
+  preferred_changed (self, self->feedback);
 
   return self;
 }
