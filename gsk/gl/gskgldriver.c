@@ -43,6 +43,7 @@
 #include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdktextureprivate.h>
+#include <gdk/gdkdmabufeglprivate.h>
 
 #include <gdk/gdkmemoryformatprivate.h>
 #include <gdk/gdkdmabuftextureprivate.h>
@@ -811,6 +812,8 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
   gboolean external;
   GdkMemoryFormat format;
   gboolean premultiply;
+  GdkColorState *color_state;
+  int color_space, range;
 
   gdk_gl_context_make_current (context);
 
@@ -828,10 +831,16 @@ gsk_gl_driver_import_dmabuf_texture (GskGLDriver      *self,
   dmabuf = gdk_dmabuf_texture_get_dmabuf (texture);
   format = gdk_texture_get_format (GDK_TEXTURE (texture));
   premultiply = gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT;
+  color_state = gdk_texture_get_color_state (GDK_TEXTURE (texture));
+
+  gdk_dmabuf_get_egl_yuv_hints (dmabuf, color_state, &color_space, &range);
+
 
   texture_id = gdk_gl_context_import_dmabuf (context,
                                              width, height,
                                              dmabuf,
+                                             color_space,
+                                             range,
                                              &external);
   if (texture_id == 0)
     return 0;

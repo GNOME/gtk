@@ -184,6 +184,8 @@ guint                   gdk_gl_context_import_dmabuf            (GdkGLContext   
                                                                  int              width,
                                                                  int              height,
                                                                  const GdkDmabuf *dmabuf,
+                                                                 int              color_space_hint,
+                                                                 int              range_hint,
                                                                  gboolean        *external);
 
 gboolean                gdk_gl_context_export_dmabuf            (GdkGLContext    *self,

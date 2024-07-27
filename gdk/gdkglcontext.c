@@ -2179,6 +2179,8 @@ gdk_gl_context_import_dmabuf_for_target (GdkGLContext    *self,
                                          int              width,
                                          int              height,
                                          const GdkDmabuf *dmabuf,
+                                         int              color_space_hint,
+                                         int              range_hint,
                                          int              target)
 {
 #if defined(HAVE_EGL) && defined(HAVE_DMABUF)
@@ -2190,6 +2192,8 @@ gdk_gl_context_import_dmabuf_for_target (GdkGLContext    *self,
                                        width,
                                        height,
                                        dmabuf,
+                                       color_space_hint,
+                                       range_hint,
                                        target);
   if (image == EGL_NO_IMAGE)
     return 0;
@@ -2213,6 +2217,8 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
                               int              width,
                               int              height,
                               const GdkDmabuf *dmabuf,
+                              int              color_space_hint,
+                              int              range_hint,
                               gboolean        *external)
 {
   GdkDisplay *display = gdk_gl_context_get_display (self);
@@ -2229,6 +2235,8 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
           texture_id = gdk_gl_context_import_dmabuf_for_target (self,
                                                                 width, height,
                                                                 dmabuf,
+                                                                color_space_hint,
+                                                                range_hint,
                                                                 GL_TEXTURE_2D);
           if (texture_id == 0)
             {
@@ -2258,6 +2266,8 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
       texture_id = gdk_gl_context_import_dmabuf_for_target (self,
                                                             width, height,
                                                             dmabuf,
+                                                            color_space_hint,
+                                                            range_hint,
                                                             GL_TEXTURE_EXTERNAL_OES);
       if (texture_id == 0)
         {
@@ -2290,6 +2300,8 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
       texture_id = gdk_gl_context_import_dmabuf_for_target (self,
                                                             width, height,
                                                             dmabuf,
+                                                            color_space_hint,
+                                                            range_hint,
                                                             target);
 
       if (texture_id == 0)

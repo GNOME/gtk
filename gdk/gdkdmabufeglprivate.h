@@ -13,6 +13,8 @@ EGLImage                    gdk_dmabuf_egl_create_image         (GdkDisplay     
                                                                  int                             width,
                                                                  int                             height,
                                                                  const GdkDmabuf                *dmabuf,
+                                                                 int                             color_state_hint,
+                                                                 int                             range_hint,
                                                                  int                             target);
 
 void                        gdk_dmabuf_get_egl_yuv_hints        (const GdkDmabuf                *dmabuf,

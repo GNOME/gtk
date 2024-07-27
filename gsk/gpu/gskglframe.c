@@ -10,6 +10,7 @@
 #include "gskglimageprivate.h"
 
 #include "gdkdmabuftextureprivate.h"
+#include "gdkdmabufeglprivate.h"
 #include "gdkglcontextprivate.h"
 #include "gdkgltextureprivate.h"
 
@@ -105,11 +106,20 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
     {
       gboolean external;
       GLuint tex_id;
+      int color_space_hint;
+      int range_hint;
+
+      gdk_dmabuf_get_egl_yuv_hints (gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
+                                    gdk_texture_get_color_state (texture),
+                                    &color_space_hint,
+                                    &range_hint);
 
       tex_id = gdk_gl_context_import_dmabuf (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
                                              gdk_texture_get_width (texture),
                                              gdk_texture_get_height (texture),
                                              gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
+                                             color_space_hint,
+                                             range_hint,
                                              &external);
       if (tex_id)
         {
