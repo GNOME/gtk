@@ -79,6 +79,7 @@ struct _GdkWaylandColor
   } color_manager_supported;
 
   GHashTable *cs_to_desc; /* GdkColorState => xx_image_description_v4 or NULL */
+  GHashTable *id_to_cs; /* uint32 identifier => GdkColorState */
 };
 
 static guint
@@ -181,6 +182,10 @@ gdk_wayland_color_new (GdkWaylandDisplay  *display,
                                              color_state_equal,
                                              (GDestroyNotify) gdk_color_state_unref,
                                              (GDestroyNotify) xx_image_description_v4_destroy);
+  color->id_to_cs = g_hash_table_new_full (g_direct_hash,
+                                           g_direct_equal,
+                                           NULL,
+                                           (GDestroyNotify) gdk_color_state_unref);
 
   color->color_manager = wl_registry_bind (registry,
                                            id,
@@ -200,6 +205,7 @@ gdk_wayland_color_free (GdkWaylandColor *color)
   g_clear_pointer (&color->color_manager, xx_color_manager_v4_destroy);
 
   g_hash_table_unref (color->cs_to_desc);
+  g_hash_table_unref (color->id_to_cs);
 
   g_free (color);
 }
@@ -256,6 +262,9 @@ cs_image_desc_ready (void                           *data,
   g_hash_table_insert (csi->color->cs_to_desc,
                        gdk_color_state_ref (csi->color_state),
                        desc);
+  g_hash_table_insert (csi->color->id_to_cs,
+                       GUINT_TO_POINTER (identity),
+                       gdk_color_state_ref (csi->color_state));
  
   cs_image_listener_data_free (csi);
 }
@@ -654,6 +663,18 @@ image_desc_ready (void                           *data,
                   uint32_t                        identity)
 {
   ImageDescription *desc = data;
+  GdkWaylandColorSurface *self = desc->surface;
+  GdkColorState *cs;
+
+  cs = g_hash_table_lookup (self->color->id_to_cs, GUINT_TO_POINTER (identity));
+  if (cs)
+    {
+      self->callback (self, cs, self->data);
+
+      xx_image_description_v4_destroy (desc->image_desc);
+      g_free (desc);
+      return;
+    }
 
   desc->info = xx_image_description_v4_get_information (image_desc);
 
