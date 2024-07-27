@@ -620,7 +620,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
   VkResult acquire_result;
   guint i;
 
-  g_assert (priv->draw_semaphore != NULL);
+  g_assert (priv->draw_semaphore != VK_NULL_HANDLE);
 
   color_state = gdk_surface_get_color_state (surface);
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));
@@ -1373,7 +1373,7 @@ gdk_vulkan_context_set_draw_semaphore (GdkVulkanContext *context,
 
   g_return_if_fail (GDK_IS_VULKAN_CONTEXT (context));
   g_return_if_fail (!gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)));
-  g_return_if_fail (priv->draw_semaphore == NULL);
+  g_return_if_fail (priv->draw_semaphore == VK_NULL_HANDLE);
 
   priv->draw_semaphore = semaphore;
 }
