@@ -772,6 +772,20 @@ gdk_wayland_surface_sync_viewport (GdkSurface *surface)
   self->viewport_dirty = FALSE;
 }
 
+static void
+gdk_wayland_surface_sync_color_state (GdkSurface *surface)
+{
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (surface);
+
+  if (!self->color_state_changed)
+    return;
+
+  gdk_wayland_color_surface_set_color_state (self->display_server.color,
+                                             gdk_surface_get_color_state (surface));
+
+  self->color_state_changed = FALSE;
+}
+
 void
 gdk_wayland_surface_sync (GdkSurface *surface)
 {
@@ -779,6 +793,7 @@ gdk_wayland_surface_sync (GdkSurface *surface)
   gdk_wayland_surface_sync_opaque_region (surface);
   gdk_wayland_surface_sync_input_region (surface);
   gdk_wayland_surface_sync_buffer_scale (surface);
+  gdk_wayland_surface_sync_color_state (surface);
   gdk_wayland_surface_sync_viewport (surface);
 }
 
@@ -791,6 +806,7 @@ gdk_wayland_surface_needs_commit (GdkSurface *surface)
          self->opaque_region_dirty ||
          self->input_region_dirty ||
          self->buffer_scale_dirty ||
+         self->color_state_changed ||
          self->viewport_dirty;
 }
 
@@ -910,7 +926,11 @@ preferred_changed (GdkWaylandColorSurface *color,
                    GdkColorState          *color_state,
                    gpointer                data)
 {
-  gdk_surface_set_color_state (GDK_SURFACE (data), color_state);
+  GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (data);
+
+  gdk_surface_set_color_state (GDK_SURFACE (self), color_state);
+
+  self->color_state_changed = TRUE;
 }
 
 static void
