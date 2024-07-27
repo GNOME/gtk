@@ -188,6 +188,7 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
               image = gsk_vulkan_image_new_for_dmabuf (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                        gdk_texture_get_width (texture),
                                                        gdk_texture_get_height (texture),
+                                                       gdk_texture_get_color_state (texture),
                                                        &dmabuf,
                                                        gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
 
@@ -210,6 +211,7 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
       image = gsk_vulkan_image_new_for_dmabuf (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                gdk_texture_get_width (texture),
                                                gdk_texture_get_height (texture),
+                                               gdk_texture_get_color_state (texture),
                                                gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
                                                gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
       if (image)

@@ -93,7 +93,7 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
                                                 gdk_gl_texture_get_id (gl_texture),
                                                 FALSE,
                                                 gdk_gl_texture_has_mipmap (gl_texture) ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) : 0);
-         
+
           /* This is a hack, but it works */
           sync = gdk_gl_texture_get_sync (gl_texture);
           if (sync)
@@ -106,13 +106,15 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
     {
       gboolean external;
       GLuint tex_id;
-      int color_space_hint;
-      int range_hint;
+      int color_space_hint = 0;
+      int range_hint = 0;
 
+#if defined (HAVE_DMABUF) && defined (HAVE_EGL)
       gdk_dmabuf_get_egl_yuv_hints (gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
                                     gdk_texture_get_color_state (texture),
                                     &color_space_hint,
                                     &range_hint);
+#endif
 
       tex_id = gdk_gl_context_import_dmabuf (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
                                              gdk_texture_get_width (texture),
@@ -121,13 +123,39 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
                                              color_space_hint,
                                              range_hint,
                                              &external);
+
       if (tex_id)
         {
+          GskGpuImageFlags flags = 0;
+
+          if (external)
+            flags |= GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT;
+
+#if defined (HAVE_DMABUF) && defined (HAVE_EGL)
+          switch (color_space_hint)
+            {
+            case EGL_ITU_REC709_EXT:
+              flags |= GSK_GPU_IMAGE_BT709;
+              break;
+            case EGL_ITU_REC601_EXT:
+              flags |= GSK_GPU_IMAGE_BT601;
+              break;
+            case EGL_ITU_REC2020_EXT:
+              flags |= GSK_GPU_IMAGE_BT2020;
+              break;
+            default:
+              break;
+            }
+
+          if (range_hint == EGL_YUV_NARROW_RANGE_EXT)
+            flags |= GSK_GPU_IMAGE_NARROW_RANGE;
+#endif
+
           return gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                texture,
                                                tex_id,
                                                TRUE,
-                                               (external ? GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT : 0));
+                                               flags);
         }
     }
 
