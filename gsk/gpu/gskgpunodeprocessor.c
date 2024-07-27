@@ -1659,7 +1659,6 @@ gsk_gpu_lookup_texture (GskGpuFrame    *frame,
                         GdkColorState **out_image_cs)
 {
   GskGpuCache *cache;
-  GdkColorState *image_cs;
   GskGpuImage *image;
 
   cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (frame));
@@ -1682,15 +1681,9 @@ gsk_gpu_lookup_texture (GskGpuFrame    *frame,
       return NULL;
     }
 
-  image_cs = gdk_texture_get_color_state (texture);
+  *out_image_cs = gsk_gpu_image_adjust_color_state (image,
+                                                    gdk_texture_get_color_state (texture));
 
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
-    {
-      image_cs = gdk_color_state_get_no_srgb_tf (image_cs);
-      g_assert (image_cs);
-    }
-
-  *out_image_cs = gdk_color_state_ref (image_cs);
   return image;
 }
 
@@ -1780,14 +1773,8 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
                   goto out;
                 }
 
-              tile_cs = gdk_texture_get_color_state (texture);
-              if (gsk_gpu_image_get_flags (tile) & GSK_GPU_IMAGE_SRGB)
-                {
-                  tile_cs = gdk_color_state_get_no_srgb_tf (tile_cs);
-                  g_assert (tile_cs);
-                }
-              tile_cs = gdk_color_state_ref (tile_cs);
-
+              tile_cs = gsk_gpu_image_adjust_color_state (tile,
+                                                          gdk_texture_get_color_state (texture));
               gsk_gpu_cache_cache_tile (cache, texture, y * n_width + x, tile, tile_cs);
             }
 

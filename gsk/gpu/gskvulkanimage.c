@@ -844,6 +844,7 @@ GskGpuImage *
 gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                  gsize            width,
                                  gsize            height,
+                                 GdkColorState   *color_state,
                                  const GdkDmabuf *dmabuf,
                                  gboolean         premultiplied)
 {
@@ -859,6 +860,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
   GdkMemoryFormat format;
   GskGpuImageFlags flags;
   gboolean is_yuv;
+  const GdkCicp *cicp;
 
   if (!gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF))
     {
@@ -968,13 +970,36 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
       return NULL;
     }
 
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
-                       flags |
-                       (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0) |
-                       (is_yuv ? (GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT) : 0) |
-                       (gsk_component_mapping_is_framebuffer_compatible (&vk_components) ? 0 : GSK_GPU_IMAGE_NO_BLIT),
-                       format,
-                       width, height);
+  if (is_yuv)
+    flags |= GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT;
+
+  if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
+    flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
+
+  if (!gsk_component_mapping_is_framebuffer_compatible (&vk_components))
+    flags |= GSK_GPU_IMAGE_NO_BLIT;
+
+  cicp = gdk_color_state_get_cicp (color_state);
+  switch (cicp->matrix_coefficients)
+    {
+    case 1:
+      flags |= GSK_GPU_IMAGE_BT709;
+      break;
+    case 5:
+    case 6:
+      flags |= GSK_GPU_IMAGE_BT601;
+      break;
+    case 9:
+      flags |= GSK_GPU_IMAGE_BT2020;
+      break;
+    default:
+      break;
+    }
+
+  if (cicp->range == GDK_CICP_RANGE_NARROW)
+    flags |= GSK_GPU_IMAGE_NARROW_RANGE;
+
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, format, width, height);
 
   self->allocator = gsk_vulkan_device_get_external_allocator (device);
   gsk_vulkan_allocator_ref (self->allocator);
