@@ -24,6 +24,8 @@
 
 #include "gtkgstpaintableprivate.h"
 
+#include "gdk/gdkdmabuffourccprivate.h"
+
 #if GST_GL_HAVE_WINDOW_X11 && (GST_GL_HAVE_PLATFORM_GLX || GST_GL_HAVE_PLATFORM_EGL) && defined (GDK_WINDOWING_X11)
 #define HAVE_GST_X11_SUPPORT
 #include <gdk/x11/gdkx.h>
@@ -168,7 +170,8 @@ add_drm_formats_and_modifiers (GstCaps          *caps,
 
 static GdkColorState *
 gtk_gst_color_state_from_colorimetry (GtkGstSink                *self,
-                                      const GstVideoColorimetry *colorimetry)
+                                      const GstVideoColorimetry *colorimetry,
+                                      gconstpointer              drm)
 {
   GdkCicpParams *params;
   GdkColorState *color_state;
@@ -186,18 +189,92 @@ gtk_gst_color_state_from_colorimetry (GtkGstSink                *self,
   else
     gdk_cicp_params_set_transfer_function (params, gst_video_transfer_function_to_iso (colorimetry->transfer));
 
-#if 0
+  gdk_cicp_params_set_range (params, colorimetry->range == GST_VIDEO_COLOR_RANGE_16_235 ? GDK_CICP_RANGE_NARROW : GDK_CICP_RANGE_FULL);
+
   if (colorimetry->matrix == GST_VIDEO_COLOR_MATRIX_UNKNOWN)
-    gdk_cicp_params_set_matrix_coefficients (params, 6);
+    {
+      gdk_cicp_params_set_matrix_coefficients (params, 0);
+#ifdef HAVE_GSTREAMER_DRM
+      const GstVideoInfoDmaDrm *drm_info = drm;
+      if (drm_info)
+        {
+          switch (drm_info->drm_fourcc)
+            {
+            case DRM_FORMAT_YUYV:
+            case DRM_FORMAT_YVYU:
+            case DRM_FORMAT_VYUY:
+            case DRM_FORMAT_UYVY:
+            case DRM_FORMAT_AYUV:
+            case DRM_FORMAT_AVUY8888:
+            case DRM_FORMAT_XYUV8888:
+            case DRM_FORMAT_XVUY8888:
+            case DRM_FORMAT_VUY888:
+            case DRM_FORMAT_VUY101010:
+            case DRM_FORMAT_Y210:
+            case DRM_FORMAT_Y212:
+            case DRM_FORMAT_Y216:
+            case DRM_FORMAT_Y410:
+            case DRM_FORMAT_Y412:
+            case DRM_FORMAT_Y416:
+            case DRM_FORMAT_XVYU2101010:
+            case DRM_FORMAT_XVYU12_16161616:
+            case DRM_FORMAT_XVYU16161616:
+            case DRM_FORMAT_Y0L0:
+            case DRM_FORMAT_X0L0:
+            case DRM_FORMAT_Y0L2:
+            case DRM_FORMAT_X0L2:
+            case DRM_FORMAT_YUV420_8BIT:
+            case DRM_FORMAT_YUV420_10BIT:
+            case DRM_FORMAT_NV12:
+            case DRM_FORMAT_NV21:
+            case DRM_FORMAT_NV16:
+            case DRM_FORMAT_NV61:
+            case DRM_FORMAT_NV24:
+            case DRM_FORMAT_NV42:
+            case DRM_FORMAT_NV15:
+            case DRM_FORMAT_P210:
+            case DRM_FORMAT_P010:
+            case DRM_FORMAT_P012:
+            case DRM_FORMAT_P016:
+            case DRM_FORMAT_P030:
+            case DRM_FORMAT_Q410:
+            case DRM_FORMAT_Q401:
+            case DRM_FORMAT_YUV410:
+            case DRM_FORMAT_YVU410:
+            case DRM_FORMAT_YUV411:
+            case DRM_FORMAT_YVU411:
+            case DRM_FORMAT_YUV420:
+            case DRM_FORMAT_YVU420:
+            case DRM_FORMAT_YUV422:
+            case DRM_FORMAT_YVU422:
+            case DRM_FORMAT_YUV444:
+            case DRM_FORMAT_YVU444:
+              g_debug ("Assuming fourcc %.*s is yuv", 4, (char *)&drm_info->drm_fourcc);
+              gdk_cicp_params_set_matrix_coefficients (params, 6);
+              gdk_cicp_params_set_range (params, GDK_CICP_RANGE_NARROW);
+              break;
+            default:
+              break;
+            }
+        }
+#endif
+    }
   else
     gdk_cicp_params_set_matrix_coefficients (params, gst_video_color_matrix_to_iso (colorimetry->matrix));
 
-  gdk_cicp_params_set_range (params, colorimetry->range == GST_VIDEO_COLOR_RANGE_0_255 ? GDK_CICP_RANGE_FULL : GDK_CICP_RANGE_NARROW);
-#else
-  gdk_cicp_params_set_matrix_coefficients (params, 0);
-  gdk_cicp_params_set_range (params, GDK_CICP_RANGE_FULL);
-#endif
   color_state = gdk_cicp_params_build_color_state (params, &error);
+  g_debug ("cicp received: %u/%u/%u/%u",
+           gst_video_color_primaries_to_iso (colorimetry->primaries),
+           gst_video_transfer_function_to_iso (colorimetry->transfer),
+           gst_video_color_matrix_to_iso (colorimetry->matrix),
+           colorimetry->range == GST_VIDEO_COLOR_RANGE_0_255);
+
+  g_debug ("cicp used: %u/%u/%u/%u",
+           gdk_cicp_params_get_color_primaries (params),
+           gdk_cicp_params_get_transfer_function (params),
+           gdk_cicp_params_get_matrix_coefficients (params),
+           gdk_cicp_params_get_range (params));
+
   g_object_unref (params);
 
   if (color_state == NULL)
@@ -281,7 +358,14 @@ gtk_gst_sink_set_caps (GstBaseSink *bsink,
 #endif
 
   g_clear_pointer (&self->color_state, gdk_color_state_unref);
-  self->color_state = gtk_gst_color_state_from_colorimetry (self, &self->v_info.colorimetry);
+  self->color_state = gtk_gst_color_state_from_colorimetry (self,
+                                                            &self->v_info.colorimetry,
+#ifdef HAVE_GSTREAMER_DRM
+                                                            &self->drm_info
+#else
+                                                            NULL
+#endif
+                                                            );
   if (self->color_state == NULL)
     return FALSE;
 
