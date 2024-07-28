@@ -43,6 +43,14 @@
 
 #include <fribidi.h>
 
+/* GTK has a general architectural assumption that gsize is pointer-sized
+ * (equivalent to uintptr_t), making it non-portable to architectures like
+ * CHERI where that isn't true. If a future release relaxes that
+ * assumption, changes will be needed in numerous places.
+ * See also https://gitlab.gnome.org/GNOME/glib/-/issues/2842 for the
+ * equivalent in GLib, which would be a prerequisite. */
+G_STATIC_ASSERT (sizeof (gsize) == sizeof (void *));
+G_STATIC_ASSERT (G_ALIGNOF (gsize) == G_ALIGNOF (void *));
 
 /**
  * GDK_WINDOWING_X11:
