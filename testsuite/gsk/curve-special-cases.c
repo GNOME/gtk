@@ -25,11 +25,11 @@ static void
 test_curve_tangents (void)
 {
   GskCurve c;
-  graphene_point_t p[4];
+  GskAlignedPoint p[4];
   graphene_vec2_t t;
 
-  graphene_point_init (&p[0], 0, 0);
-  graphene_point_init (&p[1], 100, 0);
+  graphene_point_init (&p[0].pt, 0, 0);
+  graphene_point_init (&p[1].pt, 100, 0);
   gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_LINE, p));
 
   gsk_curve_get_start_tangent (&c, &t);
@@ -37,8 +37,8 @@ test_curve_tangents (void)
   gsk_curve_get_end_tangent (&c, &t);
   g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
 
-  graphene_point_init (&p[0], 0, 0);
-  graphene_point_init (&p[1], 0, 100);
+  graphene_point_init (&p[0].pt, 0, 0);
+  graphene_point_init (&p[1].pt, 0, 100);
   gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_LINE, p));
 
   gsk_curve_get_start_tangent (&c, &t);
@@ -46,10 +46,10 @@ test_curve_tangents (void)
   gsk_curve_get_end_tangent (&c, &t);
   g_assert_true (graphene_vec2_near (&t, graphene_vec2_y_axis (), 0.0001));
 
-  graphene_point_init (&p[0], 0, 0);
-  graphene_point_init (&p[1], 50, 0);
-  graphene_point_init (&p[2], 100, 50);
-  graphene_point_init (&p[3], 100, 100);
+  graphene_point_init (&p[0].pt, 0, 0);
+  graphene_point_init (&p[1].pt, 50, 0);
+  graphene_point_init (&p[2].pt, 100, 50);
+  graphene_point_init (&p[3].pt, 100, 100);
   gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CUBIC, p));
 
   gsk_curve_get_start_tangent (&c, &t);
@@ -62,13 +62,13 @@ static void
 test_curve_degenerate_tangents (void)
 {
   GskCurve c;
-  graphene_point_t p[4];
+  GskAlignedPoint p[4];
   graphene_vec2_t t;
 
-  graphene_point_init (&p[0], 0, 0);
-  graphene_point_init (&p[1], 0, 0);
-  graphene_point_init (&p[2], 100, 0);
-  graphene_point_init (&p[3], 100, 0);
+  graphene_point_init (&p[0].pt, 0, 0);
+  graphene_point_init (&p[1].pt, 0, 0);
+  graphene_point_init (&p[2].pt, 100, 0);
+  graphene_point_init (&p[3].pt, 100, 0);
   gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CUBIC, p));
 
   gsk_curve_get_start_tangent (&c, &t);
@@ -76,10 +76,10 @@ test_curve_degenerate_tangents (void)
   gsk_curve_get_end_tangent (&c, &t);
   g_assert_true (graphene_vec2_near (&t, graphene_vec2_x_axis (), 0.0001));
 
-  graphene_point_init (&p[0], 0, 0);
-  graphene_point_init (&p[1], 50, 0);
-  graphene_point_init (&p[2], 50, 0);
-  graphene_point_init (&p[3], 100, 0);
+  graphene_point_init (&p[0].pt, 0, 0);
+  graphene_point_init (&p[1].pt, 50, 0);
+  graphene_point_init (&p[2].pt, 50, 0);
+  graphene_point_init (&p[3].pt, 100, 0);
   gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CUBIC, p));
 
   gsk_curve_get_start_tangent (&c, &t);

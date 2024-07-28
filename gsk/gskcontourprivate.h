@@ -28,7 +28,7 @@
 G_BEGIN_DECLS
 
 GskContour *            gsk_standard_contour_new                (GskPathFlags            flags,
-                                                                 const graphene_point_t *points,
+                                                                 const GskAlignedPoint  *points,
                                                                  gsize                   n_points,
                                                                  const gskpathop        *ops,
                                                                  gsize                   n_ops,

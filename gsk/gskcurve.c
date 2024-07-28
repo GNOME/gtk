@@ -157,30 +157,30 @@ gsk_curve_elevate (const GskCurve *curve,
 {
   if (curve->op == GSK_PATH_LINE)
     {
-      graphene_point_t p[3];
+      GskAlignedPoint p[3];
 
-      p[0] = curve->line.points[0];
+      p[0].pt = curve->line.points[0];
       graphene_point_interpolate (&curve->line.points[0],
                                   &curve->line.points[1],
                                   0.5,
-                                  &p[1]);
-      p[2] = curve->line.points[1];
+                                  &p[1].pt);
+      p[2].pt = curve->line.points[1];
       gsk_curve_init (elevated, gsk_pathop_encode (GSK_PATH_QUAD, p));
     }
   else if (curve->op == GSK_PATH_QUAD)
     {
-      graphene_point_t p[4];
+      GskAlignedPoint p[4];
 
-      p[0] = curve->quad.points[0];
+      p[0].pt = curve->quad.points[0];
       graphene_point_interpolate (&curve->quad.points[0],
                                   &curve->quad.points[1],
                                   2/3.,
-                                  &p[1]);
+                                  &p[1].pt);
       graphene_point_interpolate (&curve->quad.points[2],
                                   &curve->quad.points[1],
                                   2/3.,
-                                  &p[2]);
-      p[3] = curve->quad.points[2];
+                                  &p[2].pt);
+      p[3].pt = curve->quad.points[2];
       gsk_curve_init (elevated, gsk_pathop_encode (GSK_PATH_CUBIC, p));
     }
   else
@@ -300,7 +300,7 @@ gsk_line_curve_pathop (const GskCurve *curve)
 {
   const GskLineCurve *self = &curve->line;
 
-  return gsk_pathop_encode (self->op, self->points);
+  return gsk_pathop_encode (self->op, self->aligned_points);
 }
 
 static const graphene_point_t *
@@ -576,7 +576,7 @@ gsk_quad_curve_pathop (const GskCurve *curve)
 {
   const GskQuadCurve *self = &curve->quad;
 
-  return gsk_pathop_encode (self->op, self->points);
+  return gsk_pathop_encode (self->op, self->aligned_points);
 }
 
 static const graphene_point_t *
@@ -1003,7 +1003,7 @@ gsk_cubic_curve_pathop (const GskCurve *curve)
 {
   const GskCubicCurve *self = &curve->cubic;
 
-  return gsk_pathop_encode (self->op, self->points);
+  return gsk_pathop_encode (self->op, self->aligned_points);
 }
 
 static const graphene_point_t *
@@ -1499,7 +1499,7 @@ gsk_conic_curve_pathop (const GskCurve *curve)
 {
   const GskConicCurve *self = &curve->conic;
 
-  return gsk_pathop_encode (self->op, self->points);
+  return gsk_pathop_encode (self->op, self->aligned_points);
 }
 
 static const graphene_point_t *
@@ -1726,7 +1726,7 @@ gsk_conic_curve_split (const GskCurve   *curve,
   const GskConicCurve *self = &curve->conic;
   graphene_point3d_t p[3];
   graphene_point3d_t l[3], r[3];
-  graphene_point_t left[4], right[4];
+  GskAlignedPoint left[4], right[4];
   float w;
 
   /* do de Casteljau in homogeneous coordinates... */
@@ -1738,13 +1738,13 @@ gsk_conic_curve_split (const GskCurve   *curve,
   split_bezier3d (p, 3, progress, l, r);
 
   /* then project the control points down */
-  left[0] = GRAPHENE_POINT_INIT (l[0].x / l[0].z, l[0].y / l[0].z);
-  left[1] = GRAPHENE_POINT_INIT (l[1].x / l[1].z, l[1].y / l[1].z);
-  left[3] = GRAPHENE_POINT_INIT (l[2].x / l[2].z, l[2].y / l[2].z);
+  left[0].pt = GRAPHENE_POINT_INIT (l[0].x / l[0].z, l[0].y / l[0].z);
+  left[1].pt = GRAPHENE_POINT_INIT (l[1].x / l[1].z, l[1].y / l[1].z);
+  left[3].pt = GRAPHENE_POINT_INIT (l[2].x / l[2].z, l[2].y / l[2].z);
 
-  right[0] = GRAPHENE_POINT_INIT (r[0].x / r[0].z, r[0].y / r[0].z);
-  right[1] = GRAPHENE_POINT_INIT (r[1].x / r[1].z, r[1].y / r[1].z);
-  right[3] = GRAPHENE_POINT_INIT (r[2].x / r[2].z, r[2].y / r[2].z);
+  right[0].pt = GRAPHENE_POINT_INIT (r[0].x / r[0].z, r[0].y / r[0].z);
+  right[1].pt = GRAPHENE_POINT_INIT (r[1].x / r[1].z, r[1].y / r[1].z);
+  right[3].pt = GRAPHENE_POINT_INIT (r[2].x / r[2].z, r[2].y / r[2].z);
 
   /* normalize the outer weights to be 1 by using
    * the fact that weights w_i and c*w_i are equivalent
@@ -1760,8 +1760,8 @@ gsk_conic_curve_split (const GskCurve   *curve,
    * the fact that w_0*w_2/w_1^2 is a constant for
    * all equivalent weights.
    */
-  left[2] = GRAPHENE_POINT_INIT (l[1].z / sqrt (l[2].z), 0);
-  right[2] = GRAPHENE_POINT_INIT (r[1].z / sqrt (r[0].z), 0);
+  left[2].pt = GRAPHENE_POINT_INIT (l[1].z / sqrt (l[2].z), 0);
+  right[2].pt = GRAPHENE_POINT_INIT (r[1].z / sqrt (r[0].z), 0);
 
   if (start)
     gsk_curve_init (start, gsk_pathop_encode (GSK_PATH_CONIC, left));
@@ -1899,17 +1899,17 @@ cubic_approximation (const GskCurve *curve,
                      GskCurve       *cubic)
 {
   const GskConicCurve *self = &curve->conic;
-  graphene_point_t p[4];
+  GskAlignedPoint p[4];
   float w = self->points[2].x;
   float w2 = w*w;
   float lambda;
 
   lambda = 2 * (6*w2 + 1 - sqrt (3*w2 + 1)) / (12*w2 + 3);
 
-  p[0] = self->points[0];
-  p[3] = self->points[3];
-  graphene_point_interpolate (&self->points[0], &self->points[1], lambda, &p[1]);
-  graphene_point_interpolate (&self->points[3], &self->points[1], lambda, &p[2]);
+  p[0].pt = self->points[0];
+  p[3].pt = self->points[3];
+  graphene_point_interpolate (&self->points[0], &self->points[1], lambda, &p[1].pt);
+  graphene_point_interpolate (&self->points[3], &self->points[1], lambda, &p[2].pt);
 
   gsk_curve_init (cubic, gsk_pathop_encode (GSK_PATH_CUBIC, p));
 }

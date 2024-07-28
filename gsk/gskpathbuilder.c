@@ -156,7 +156,7 @@ static inline gskpathop
 gsk_pathop_encode_index (GskPathOperation op,
                          gsize            index)
 {
-  return gsk_pathop_encode (op, ((graphene_point_t *) NULL) + index);
+  return gsk_pathop_encode (op, ((GskAlignedPoint *) NULL) + index);
 }
 
 static void
@@ -193,7 +193,7 @@ gsk_path_builder_end_current (GskPathBuilder *self)
    return;
 
   contour = gsk_standard_contour_new (self->flags,
-                                      (graphene_point_t *) self->points->data,
+                                      (GskAlignedPoint *) self->points->data,
                                       self->points->len,
                                       (gskpathop *) self->ops->data,
                                       self->ops->len,
