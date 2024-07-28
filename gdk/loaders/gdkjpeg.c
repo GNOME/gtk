@@ -108,7 +108,7 @@ convert_cmyk_to_rgba (guchar *data,
     }
 }
 
- /* }}} */
+/* }}} */
 /* {{{ Public API */
 
 GdkTexture *
