@@ -48,6 +48,9 @@ void                    gsk_gpu_image_set_flags                         (GskGpuI
 void                    gsk_gpu_image_get_projection_matrix             (GskGpuImage            *self,
                                                                          graphene_matrix_t      *out_projection);
 
+GdkColorState *         gsk_gpu_image_adjust_color_state                (GskGpuImage            *self,
+                                                                         GdkColorState          *color_state);
+
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuImage, g_object_unref)
 
