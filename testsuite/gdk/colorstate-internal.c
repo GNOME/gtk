@@ -33,21 +33,19 @@ test_transfer (gconstpointer data)
     }
 }
 
-typedef const float Matrix[9];
-
 typedef struct
 {
   const char *name;
-  Matrix *to_xyz;
-  Matrix *from_xyz;
+  const float *to_xyz;
+  const float *from_xyz;
 } MatrixTest;
 static MatrixTest matrices[] = {
-  { "srgb", &srgb_to_xyz, &xyz_to_srgb },
-  { "rec2020", &rec2020_to_xyz, &xyz_to_rec2020 },
-  { "pal", &pal_to_xyz, &xyz_to_pal },
-  { "ntsc", &ntsc_to_xyz, &xyz_to_ntsc },
-  { "p3", &p3_to_xyz, &xyz_to_p3 },
-  { "srgb<>rec2020", &rec2020_to_srgb, &srgb_to_rec2020 },
+  { "srgb", srgb_to_xyz, xyz_to_srgb },
+  { "rec2020", rec2020_to_xyz, xyz_to_rec2020 },
+  { "pal", pal_to_xyz, xyz_to_pal },
+  { "ntsc", ntsc_to_xyz, xyz_to_ntsc },
+  { "p3", p3_to_xyz, xyz_to_p3 },
+  { "srgb<>rec2020", rec2020_to_srgb, srgb_to_rec2020 },
 };
 
 #define IDX(i,j) 3*i+j
@@ -99,7 +97,7 @@ test_matrix (gconstpointer data)
   float res[9];
   float res2[9];
 
-  multiply (res, *matrix->to_xyz, *matrix->from_xyz);
+  multiply (res, matrix->to_xyz, matrix->from_xyz);
 
   if (g_test_verbose ())
     print_matrix (res);
