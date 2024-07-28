@@ -620,7 +620,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
   VkResult acquire_result;
   guint i;
 
-  g_assert (priv->draw_semaphore != NULL);
+  g_assert (priv->draw_semaphore != VK_NULL_HANDLE);
 
   color_state = gdk_surface_get_color_state (surface);
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));
@@ -1167,7 +1167,7 @@ gdk_vulkan_save_pipeline_cache (GdkDisplay *display)
 
   file = gdk_vulkan_get_pipeline_cache_file (display);
 
-  GDK_DEBUG (VULKAN, "Saving pipeline cache of size %lu to %s", size, g_file_peek_path (file));
+  GDK_DEBUG (VULKAN, "Saving pipeline cache of size %" G_GSIZE_FORMAT " to %s", size, g_file_peek_path (file));
 
   if (!g_file_replace_contents (file,
                                 data,
@@ -1261,7 +1261,7 @@ gdk_display_create_pipeline_cache (GdkDisplay *display)
     }
   else
     {
-      GDK_DEBUG (VULKAN, "Loading pipeline cache (%lu bytes)", display->vk_pipeline_cache_size);
+      GDK_DEBUG (VULKAN, "Loading pipeline cache (%" G_GSIZE_FORMAT " bytes)", display->vk_pipeline_cache_size);
     }
 }
 
@@ -1373,7 +1373,7 @@ gdk_vulkan_context_set_draw_semaphore (GdkVulkanContext *context,
 
   g_return_if_fail (GDK_IS_VULKAN_CONTEXT (context));
   g_return_if_fail (!gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)));
-  g_return_if_fail (priv->draw_semaphore == NULL);
+  g_return_if_fail (priv->draw_semaphore == VK_NULL_HANDLE);
 
   priv->draw_semaphore = semaphore;
 }

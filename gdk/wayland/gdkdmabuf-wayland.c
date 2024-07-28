@@ -51,7 +51,7 @@ update_dmabuf_formats (DmabufFormatsInfo *info)
   DmabufFormats *formats = info->dmabuf_formats;
 
   GDK_DISPLAY_DEBUG (info->display, MISC,
-                     "dmabuf format table (%lu entries)", info->n_dmabuf_formats);
+                     "dmabuf format table (%" G_GSIZE_FORMAT " entries)", info->n_dmabuf_formats);
   GDK_DISPLAY_DEBUG (info->display, MISC,
                      "dmabuf main device: %u %u",
                      major (formats->main_device),
@@ -67,7 +67,7 @@ update_dmabuf_formats (DmabufFormatsInfo *info)
                          minor (tranche->target_device));
 
       GDK_DISPLAY_DEBUG (info->display, MISC,
-                         "dmabuf%s tranche (%lu entries):",
+                         "dmabuf%s tranche (%" G_GSIZE_FORMAT " entries):",
                          tranche->flags & ZWP_LINUX_DMABUF_FEEDBACK_V1_TRANCHE_FLAGS_SCANOUT ? " scanout" : "",
                          tranche->n_formats);
 

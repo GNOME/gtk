@@ -936,7 +936,7 @@ search_results_update (GObject    *filter_model,
       char *text;
 
       if (n_items > 0)
-        text = g_strdup_printf (ngettext ("%ld search result", "%ld search results", n_items), n_items);
+        text = g_strdup_printf (ngettext ("%ld search result", "%ld search results", (long) n_items), (long) n_items);
       else
         text = g_strdup (_("No search results"));
 
