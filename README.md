@@ -53,7 +53,7 @@ Building and installing
 
 In order to build GTK you will need:
 
-  - [a C99 compatible compiler](https://gitlab.gnome.org/GNOME/glib/-/blob/main/docs/toolchain-requirements.md)
+  - [a C11 compatible compiler](https://gitlab.gnome.org/GNOME/glib/-/blob/main/docs/toolchain-requirements.md)
   - [Python 3](https://www.python.org/)
   - [Meson](http://mesonbuild.com)
   - [Ninja](https://ninja-build.org)
