@@ -1,6 +1,7 @@
 #include "config.h"
 
 #include "gskgpuimageprivate.h"
+#include "gdkcolorstateprivate.h"
 
 typedef struct _GskGpuImagePrivate GskGpuImagePrivate;
 
@@ -161,4 +162,62 @@ gsk_gpu_image_get_projection_matrix (GskGpuImage       *self,
                                      graphene_matrix_t *out_projection)
 {
   GSK_GPU_IMAGE_GET_CLASS (self)->get_projection_matrix (self, out_projection);
+}
+
+GdkColorState *
+gsk_gpu_image_adjust_color_state (GskGpuImage   *self,
+                                  GdkColorState *color_state)
+{
+  GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
+  GdkColorState *adjusted;
+  GdkCicp cicp;
+
+  adjusted = gdk_color_state_ref (color_state);
+
+  if (priv->flags & GSK_GPU_IMAGE_SRGB)
+    {
+      GdkColorState *no_srgb;
+
+      no_srgb = gdk_color_state_get_no_srgb_tf (adjusted);
+      g_assert (no_srgb);
+
+      gdk_color_state_unref (adjusted);
+      adjusted = gdk_color_state_ref (no_srgb);
+    }
+
+  if (!gdk_color_state_get_cicp (adjusted))
+    return adjusted;
+
+  cicp = *gdk_color_state_get_cicp (adjusted);
+
+  if (priv->flags & GSK_GPU_IMAGE_NARROW_RANGE)
+    cicp.range = GDK_CICP_RANGE_FULL;
+
+  switch (priv->flags & GSK_GPU_IMAGE_YUV)
+    {
+    case GSK_GPU_IMAGE_BT709:
+      g_assert (cicp.matrix_coefficients == 1);
+      cicp.matrix_coefficients = 0;
+      break;
+    case GSK_GPU_IMAGE_BT601:
+      g_assert (cicp.matrix_coefficients == 5 ||
+                cicp.matrix_coefficients == 6);
+      cicp.matrix_coefficients = 0;
+      break;
+    case GSK_GPU_IMAGE_BT2020:
+      g_assert (cicp.matrix_coefficients == 9);
+      cicp.matrix_coefficients = 0;
+      break;
+    default:
+      break;
+    }
+
+  if (!gdk_cicp_equal (&cicp, gdk_color_state_get_cicp (adjusted)))
+    {
+      gdk_color_state_unref (adjusted);
+      adjusted = gdk_color_state_new_for_cicp (&cicp, NULL);
+      g_assert (adjusted);
+    }
+
+  return adjusted;
 }
