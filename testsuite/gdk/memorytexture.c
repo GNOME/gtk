@@ -2,6 +2,8 @@
 
 #include <epoxy/gl.h>
 
+#include "gsk/gl/fp16private.h"
+
 #define N 10
 
 static GdkGLContext *gl_context = NULL;
@@ -43,49 +45,6 @@ struct _TextureBuilder
   gsize stride;
   gsize offset;
 };
-
-static inline guint
-as_uint (const float x)
-{
-  return *(guint*)&x;
-}
-
-static inline float
-as_float (const guint x)
-{
-  return *(float*)&x;
-}
-
-// IEEE-754 16-bit floating-point format (without infinity): 1-5-10
-//
-static inline float
-half_to_float (const guint16 x)
-{
-  const guint e = (x&0x7C00)>>10; // exponent
-  const guint m = (x&0x03FF)<<13; // mantissa
-  const guint v = as_uint((float)m)>>23;
-  return as_float((x&0x8000)<<16 | (e!=0)*((e+112)<<23|m) | ((e==0)&(m!=0))*((v-37)<<23|((m<<(150-v))&0x007FE000)));
-}
-
-static inline guint16
-float_to_half (const float x)
-{
-  const guint b = *(guint*)&x+0x00001000; // round-to-nearest-even
-  const guint e = (b&0x7F800000)>>23; // exponent
-  const guint m = b&0x007FFFFF; // mantissa
-  guint n0 = 0;
-  guint n1 = 0;
-  guint n2 = 0;
-
-  if (e > 112)
-    n0 = (((e - 112) << 10) & 0x7C00) | m >> 13;
-  if (e < 113 && e > 101)
-    n1 = (((0x007FF000 + m) >> (125- e)) + 1) >> 1;
-  if (e > 143)
-    n2 = 0x7FFF;
-
-  return (b & 0x80000000) >> 16 | n0 | n1 | n2; // sign : normalized : denormalized : saturate
-}
 
 static gsize
 gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
@@ -432,7 +391,7 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_R16G16B16_FLOAT:
       {
         const guint16 *data16 = (const guint16 *) data;
-        g_string_append_printf (string, "%f %f %f", half_to_float (data16[0]), half_to_float (data16[1]), half_to_float (data16[2]));
+        g_string_append_printf (string, "%f %f %f", half_to_float_one (data16[0]), half_to_float_one (data16[1]), half_to_float_one (data16[2]));
       }
       break;
 
@@ -440,13 +399,13 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
       {
         const guint16 *data16 = (const guint16 *) data;
-        g_string_append_printf (string, "%f %f %f %f", half_to_float (data16[0]), half_to_float (data16[1]), half_to_float (data16[2]), half_to_float (data16[3]));
+        g_string_append_printf (string, "%f %f %f %f", half_to_float_one (data16[0]), half_to_float_one (data16[1]), half_to_float_one (data16[2]), half_to_float_one (data16[3]));
       }
       break;
     case GDK_MEMORY_A16_FLOAT:
       {
         const guint16 *data16 = (const guint16 *) data;
-        g_string_append_printf (string, "%f", half_to_float (data16[0]));
+        g_string_append_printf (string, "%f", half_to_float_one (data16[0]));
       }
       break;
 
@@ -537,8 +496,8 @@ gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
         guint i;
         for (i = 0; i < gdk_memory_format_bytes_per_pixel (format) / sizeof (guint16); i++)
           {
-            float f1 = half_to_float (((guint16 *) pixel1)[i]);
-            float f2 = half_to_float (((guint16 *) pixel2)[i]);
+            float f1 = half_to_float_one (((guint16 *) pixel1)[i]);
+            float f2 = half_to_float_one (((guint16 *) pixel2)[i]);
             if (!G_APPROX_VALUE (f1, f2, accurate ? 1./65535 : 1./255))
               return FALSE;
           }
@@ -774,9 +733,9 @@ texture_builder_set_pixel (TextureBuilder  *builder,
     case GDK_MEMORY_R16G16B16_FLOAT:
       {
         guint16 pixels[3] = {
-          float_to_half (color->red * color->alpha),
-          float_to_half (color->green * color->alpha),
-          float_to_half (color->blue * color->alpha)
+          float_to_half_one (color->red * color->alpha),
+          float_to_half_one (color->green * color->alpha),
+          float_to_half_one (color->blue * color->alpha)
         };
         memcpy (data, pixels, 3 * sizeof (guint16));
       }
@@ -784,10 +743,10 @@ texture_builder_set_pixel (TextureBuilder  *builder,
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
       {
         guint16 pixels[4] = {
-          float_to_half (color->red * color->alpha),
-          float_to_half (color->green * color->alpha),
-          float_to_half (color->blue * color->alpha),
-          float_to_half (color->alpha)
+          float_to_half_one (color->red * color->alpha),
+          float_to_half_one (color->green * color->alpha),
+          float_to_half_one (color->blue * color->alpha),
+          float_to_half_one (color->alpha)
         };
         memcpy (data, pixels, 4 * sizeof (guint16));
       }
@@ -795,10 +754,10 @@ texture_builder_set_pixel (TextureBuilder  *builder,
     case GDK_MEMORY_R16G16B16A16_FLOAT:
       {
         guint16 pixels[4] = {
-          float_to_half (color->red),
-          float_to_half (color->green),
-          float_to_half (color->blue),
-          float_to_half (color->alpha)
+          float_to_half_one (color->red),
+          float_to_half_one (color->green),
+          float_to_half_one (color->blue),
+          float_to_half_one (color->alpha)
         };
         memcpy (data, pixels, 4 * sizeof (guint16));
       }
@@ -889,7 +848,7 @@ texture_builder_set_pixel (TextureBuilder  *builder,
       break;
     case GDK_MEMORY_A16_FLOAT:
       {
-        guint16 pixel = float_to_half (color->alpha);
+        guint16 pixel = float_to_half_one (color->alpha);
         memcpy (data, &pixel, sizeof (guint16));
       }
       break;
