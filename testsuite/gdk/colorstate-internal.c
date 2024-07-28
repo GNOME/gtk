@@ -18,6 +18,8 @@ TransferTest transfers[] = {
   { "pq", pq_oetf, pq_eotf },
   { "bt709", bt709_oetf, bt709_eotf },
   { "hlg", hlg_oetf, hlg_eotf },
+  { "gamma22", gamma22_oetf, gamma22_eotf },
+  { "gamma28", gamma28_oetf, gamma28_eotf },
 };
 
 static void

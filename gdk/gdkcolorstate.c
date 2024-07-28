@@ -626,6 +626,14 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
       eotf = bt709_eotf;
       oetf = bt709_oetf;
       break;
+    case 4:
+      eotf = gamma22_eotf;
+      oetf = gamma22_oetf;
+      break;
+    case 5:
+      eotf = gamma28_eotf;
+      oetf = gamma28_oetf;
+      break;
     case 8:
       eotf = NONE;
       oetf = NONE;

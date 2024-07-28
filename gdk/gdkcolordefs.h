@@ -39,6 +39,30 @@ srgb_eotf (float v)
 }
 
 static inline float
+gamma22_oetf (float v)
+{
+  return powf (v, 1.f / 2.2f);
+}
+
+static inline float
+gamma22_eotf (float v)
+{
+  return powf (v, 2.2f);
+}
+
+static inline float
+gamma28_oetf (float v)
+{
+  return powf (v, 1.f / 2.8f);
+}
+
+static inline float
+gamma28_eotf (float v)
+{
+  return powf (v, 2.8f);
+}
+
+static inline float
 pq_eotf (float v)
 {
   float ninv = (1 << 14) / 2610.0;
