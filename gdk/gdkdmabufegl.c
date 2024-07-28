@@ -289,4 +289,48 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
   return image;
 }
 
+void
+gdk_dmabuf_get_egl_yuv_hints (const GdkDmabuf *dmabuf,
+                              GdkColorState   *color_state,
+                              int             *color_space_hint,
+                              int             *range_hint)
+{
+  gboolean is_yuv;
+  const GdkCicp *cicp;
+
+  cicp = gdk_color_state_get_cicp (color_state);
+
+  if (cicp &&
+      gdk_dmabuf_fourcc_is_yuv (dmabuf->fourcc, &is_yuv) && is_yuv)
+    {
+      if (cicp->range == GDK_CICP_RANGE_NARROW)
+        *range_hint = EGL_YUV_NARROW_RANGE_EXT;
+      else
+        *range_hint = EGL_YUV_FULL_RANGE_EXT;
+
+      switch (cicp->matrix_coefficients)
+        {
+        case 1:
+          *color_space_hint = EGL_ITU_REC709_EXT;
+          break;
+        case 5:
+        case 6:
+          *color_space_hint = EGL_ITU_REC601_EXT;
+          break;
+        case 9:
+          *color_space_hint = EGL_ITU_REC2020_EXT;
+          break;
+        default:
+          *color_space_hint = 0;
+          *range_hint = 0;
+          break;
+        }
+    }
+  else
+    {
+      *color_space_hint = 0;
+      *range_hint = 0;
+    }
+}
+
 #endif  /* HAVE_DMABUF && HAVE_EGL */
