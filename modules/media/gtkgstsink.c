@@ -832,7 +832,7 @@ gtk_gst_sink_dispose (GObject *object)
 {
   GtkGstSink *self = GTK_GST_SINK (object);
 
-  g_clear_object (&self->color_state);
+  g_clear_pointer (&self->color_state, gdk_color_state_unref);
   g_clear_object (&self->paintable);
   g_clear_object (&self->gst_gdk_context);
   g_clear_object (&self->gst_display);
