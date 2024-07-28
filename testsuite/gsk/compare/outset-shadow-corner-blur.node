@@ -1,0 +1,7 @@
+clip {
+  clip: 0 0 15 15;
+  child: outset-shadow {
+    blur: 10;
+    outline: 0 0 100 100 / 100 0 100 0;
+  }
+}

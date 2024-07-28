@@ -119,6 +119,8 @@ compare_render_tests = [
   'opacity-colormatrix-combinations',
   'opacity-overdraw',
   'opacity-overlapping-children',
+  'outset-shadow-corner-blur',
+  'outset-shadow-corner-blur-huge-nocairo-nogl',
   'outset_shadow_offset_both',
   'outset_shadow_offset_x',
   'outset_shadow_offset_y',

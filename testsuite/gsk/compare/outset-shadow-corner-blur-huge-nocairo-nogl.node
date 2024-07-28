@@ -1,0 +1,10 @@
+clip {
+  clip: 1400 1400 20 20;
+  child: color-matrix {
+    matrix: matrix3d(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255);
+    child: outset-shadow {
+      blur: 1000;
+      outline: 0 0 1000 1000 / 1000 0 1000 0;
+    }
+  }
+}
