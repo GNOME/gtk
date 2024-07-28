@@ -682,7 +682,7 @@ gsk_gpu_cache_lookup_tile (GskGpuCache    *self,
 
   gsk_gpu_cached_use (self, (GskGpuCached *) tile);
 
-  *out_color_state = tile->color_state;
+  *out_color_state = gdk_color_state_ref (tile->color_state);
 
   return g_object_ref (tile->image);
 }
