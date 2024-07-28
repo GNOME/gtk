@@ -41,7 +41,10 @@ struct _GskLineCurve
 
   gboolean padding;
 
-  graphene_point_t points[2];
+  union {
+    graphene_point_t points[2];
+    GskAlignedPoint aligned_points[2];
+  };
 };
 
 struct _GskQuadCurve
@@ -50,7 +53,10 @@ struct _GskQuadCurve
 
   gboolean has_coefficients;
 
-  graphene_point_t points[3];
+  union {
+    graphene_point_t points[3];
+    GskAlignedPoint aligned_points[3];
+  };
 
   graphene_point_t coeffs[3];
 };
@@ -61,7 +67,10 @@ struct _GskCubicCurve
 
   gboolean has_coefficients;
 
-  graphene_point_t points[4];
+  union {
+    graphene_point_t points[4];
+    GskAlignedPoint aligned_points[4];
+  };
 
   graphene_point_t coeffs[4];
 };
@@ -75,7 +84,10 @@ struct _GskConicCurve
   /* points[0], points[1], points[3] are the control points,
    * points[2].x is the weight
    */
-  graphene_point_t points[4];
+  union {
+    graphene_point_t points[4];
+    GskAlignedPoint aligned_points[4];
+  };
 
   graphene_point_t num[3];
   graphene_point_t denom[3];

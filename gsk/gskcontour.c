@@ -532,7 +532,7 @@ struct _GskStandardContour
 
   gsize n_ops;
   gsize n_points;
-  graphene_point_t *points;
+  GskAlignedPoint *points;
   gskpathop ops[];
 };
 
@@ -540,19 +540,27 @@ static gsize
 gsk_standard_contour_compute_size (gsize n_ops,
                                    gsize n_points)
 {
-  gsize align = MAX (G_ALIGNOF (graphene_point_t),
-                     MAX (G_ALIGNOF (gpointer),
-                          G_ALIGNOF (GskStandardContour)));
-  gsize s = sizeof (GskStandardContour)
-          + sizeof (gskpathop) * n_ops
-          + sizeof (graphene_point_t) * n_points;
+  const gsize point_align = G_ALIGNOF (GskAlignedPoint);
+  const gsize align = MAX (G_ALIGNOF (GskAlignedPoint),
+                           MAX (G_ALIGNOF (gpointer),
+                                G_ALIGNOF (GskStandardContour)));
+  gsize s = sizeof (GskStandardContour);
+
+  s += sizeof (gskpathop) * n_ops;
+
+  /* The array of points needs to be 8-byte aligned, but on 32-bit,
+   * a single entry in ops might only be 4 bytes, so we might need
+   * 4 bytes of padding before starting the array of points */
+  s += (point_align - (s % point_align));
+  s += sizeof (GskAlignedPoint) * n_points;
+
   return s + (align - (s % align));
 }
 
 static void
 gsk_standard_contour_init (GskContour             *contour,
                            GskPathFlags            flags,
-                           const graphene_point_t *points,
+                           const GskAlignedPoint  *points,
                            gsize                   n_points,
                            const gskpathop        *ops,
                            gsize                   n_ops,
@@ -625,8 +633,8 @@ gsk_standard_contour_reverse (const GskContour *contour)
 
   builder = gsk_path_builder_new ();
 
-  gsk_path_builder_move_to (builder, self->points[self->n_points - 1].x,
-                                     self->points[self->n_points - 1].y);
+  gsk_path_builder_move_to (builder, self->points[self->n_points - 1].pt.x,
+                                     self->points[self->n_points - 1].pt.y);
 
   for (int i = self->n_ops - 1; i >= 0; i--)
     gsk_pathop_foreach (self->ops[i], add_reverse, builder);
@@ -714,8 +722,8 @@ gsk_standard_contour_get_winding (const GskContour       *contour,
       GskCurve c;
 
       gsk_curve_init (&c, gsk_pathop_encode (GSK_PATH_CLOSE,
-                                             (const graphene_point_t[]) { self->points[self->n_points - 1],
-                                                                          self->points[0] }));
+                                             (const GskAlignedPoint[]) { self->points[self->n_points - 1],
+                                                                         self->points[0] }));
 
       winding += gsk_curve_get_crossing (&c, point);
     }
@@ -748,7 +756,7 @@ gsk_standard_contour_get_closest_point (const GskContour       *contour,
     {
       float dist;
 
-      dist = graphene_point_distance (point, &self->points[0], NULL, NULL);
+      dist = graphene_point_distance (point, &self->points[0].pt, NULL, NULL);
       if (dist <= threshold)
         {
           *out_dist = dist;
@@ -799,7 +807,7 @@ gsk_standard_contour_get_position (const GskContour   *contour,
 
   if (G_UNLIKELY (point->idx == 0))
     {
-      *position = self->points[0];
+      *position = self->points[0].pt;
       return;
     }
 
@@ -1288,36 +1296,43 @@ static const GskContourClass GSK_STANDARD_CONTOUR_CLASS =
 static void
 gsk_standard_contour_init (GskContour             *contour,
                            GskPathFlags            flags,
-                           const graphene_point_t *points,
+                           const GskAlignedPoint  *points,
                            gsize                   n_points,
                            const gskpathop        *ops,
                            gsize                   n_ops,
                            gssize                  offset)
 
 {
+  const gsize align = G_ALIGNOF (GskAlignedPoint);
   GskStandardContour *self = (GskStandardContour *) contour;
+  guint8 *points_addr;
 
   self->contour.klass = &GSK_STANDARD_CONTOUR_CLASS;
 
   self->flags = flags;
   self->n_ops = n_ops;
   self->n_points = n_points;
-  self->points = (graphene_point_t *) &self->ops[n_ops];
+  points_addr = (guint8 *) &self->ops[n_ops];
+  /* The array of points needs to be 8-byte aligned, but on 32-bit,
+   * a single entry in ops might only be 4 bytes, so we might need
+   * 4 bytes of padding before starting the array of points. */
+  points_addr += align - (((gsize) points_addr) % align);
+  self->points = (GskAlignedPoint *) points_addr;
   memcpy (self->points, points, sizeof (graphene_point_t) * n_points);
 
   offset += self->points - points;
   for (gsize i = 0; i < n_ops; i++)
     self->ops[i] = gsk_pathop_encode (gsk_pathop_op (ops[i]),
-                                      gsk_pathop_points (ops[i]) + offset);
+                                      gsk_pathop_aligned_points (ops[i]) + offset);
 
-  gsk_bounding_box_init (&self->bounds,  &self->points[0], &self->points[0]);
+  gsk_bounding_box_init (&self->bounds,  &self->points[0].pt, &self->points[0].pt);
   for (gsize i = 1; i < self->n_points; i ++)
-    gsk_bounding_box_expand (&self->bounds, &self->points[i]);
+    gsk_bounding_box_expand (&self->bounds, &self->points[i].pt);
 }
 
 GskContour *
 gsk_standard_contour_new (GskPathFlags            flags,
-                          const graphene_point_t *points,
+                          const GskAlignedPoint  *points,
                           gsize                   n_points,
                           const gskpathop        *ops,
                           gsize                   n_ops,

@@ -701,6 +701,13 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
                              gpointer                data)
 {
   GskPathForeachTrampoline *trampoline = data;
+  GskAlignedPoint *aligned = g_alloca (sizeof (graphene_point_t) * n_pts);
+
+  /* We can't necessarily guarantee that pts is 8-byte aligned
+   * (probably it is, but we've been through too many layers of
+   * indirection to be sure) so copy it into a buffer that is
+   * definitely suitably-aligned. */
+  memcpy (aligned, pts, sizeof (graphene_point_t) * n_pts);
 
   switch (op)
     {
@@ -731,7 +738,7 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
                                      trampoline->user_data);
           }
 
-        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_QUAD, pts));
+        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_QUAD, aligned));
         return gsk_curve_decompose (&curve,
                                     trampoline->tolerance,
                                     gsk_path_foreach_trampoline_add_line,
@@ -745,7 +752,7 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
         if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CUBIC)
           return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 
-        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CUBIC, pts));
+        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CUBIC, aligned));
         if (trampoline->flags & (GSK_PATH_FOREACH_ALLOW_QUAD|GSK_PATH_FOREACH_ALLOW_CONIC))
           return gsk_curve_decompose_curve (&curve,
                                             trampoline->flags,
@@ -766,7 +773,7 @@ gsk_path_foreach_trampoline (GskPathOperation        op,
         if (trampoline->flags & GSK_PATH_FOREACH_ALLOW_CONIC)
           return trampoline->func (op, pts, n_pts, weight, trampoline->user_data);
 
-        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CONIC, (graphene_point_t[4]) { pts[0], pts[1], { weight, 0.f }, pts[2] } ));
+        gsk_curve_init (&curve, gsk_pathop_encode (GSK_PATH_CONIC, (GskAlignedPoint[4]) { { pts[0] }, { pts[1] }, { { weight, 0.f } }, { pts[2] } } ));
         if (trampoline->flags & (GSK_PATH_FOREACH_ALLOW_QUAD|GSK_PATH_FOREACH_ALLOW_CUBIC))
           return gsk_curve_decompose_curve (&curve,
                                             trampoline->flags,
