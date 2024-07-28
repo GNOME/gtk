@@ -1724,7 +1724,6 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
   GskGpuCache *cache;
   GskGpuDevice *device;
   GskGpuImage *tile;
-  GdkColorState *tile_cs;
   GskGpuSampler sampler;
   gboolean need_mipmap;
   GdkMemoryTexture *memtex;
@@ -1751,6 +1750,8 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
     {
       for (x = 0; x < n_width; x++)
         {
+          GdkColorState *tile_cs = NULL;
+
           graphene_rect_t tile_rect = GRAPHENE_RECT_INIT (texture_bounds->origin.x + scaled_tile_width * x,
                                                           texture_bounds->origin.y + scaled_tile_height * y,
                                                           scaled_tile_width,
@@ -1785,6 +1786,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
                   tile_cs = gdk_color_state_get_no_srgb_tf (tile_cs);
                   g_assert (tile_cs);
                 }
+              tile_cs = gdk_color_state_ref (tile_cs);
 
               gsk_gpu_cache_cache_tile (cache, texture, y * n_width + x, tile, tile_cs);
             }
@@ -1793,7 +1795,8 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
               (gsk_gpu_image_get_flags (tile) & (GSK_GPU_IMAGE_STRAIGHT_ALPHA | GSK_GPU_IMAGE_CAN_MIPMAP)) != GSK_GPU_IMAGE_CAN_MIPMAP)
             {
               tile = gsk_gpu_copy_image (self->frame, self->ccs, tile, tile_cs, TRUE);
-              tile_cs = self->ccs;
+              gdk_color_state_unref (tile_cs);
+              tile_cs = gdk_color_state_ref (self->ccs);
               gsk_gpu_cache_cache_tile (cache, texture, y * n_width + x, tile, tile_cs);
             }
           if (need_mipmap && !(gsk_gpu_image_get_flags (tile) & GSK_GPU_IMAGE_MIPMAP))
@@ -1806,6 +1809,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
                                            &tile_rect,
                                            &tile_rect);
 
+          gdk_color_state_unref (tile_cs);
           g_object_unref (tile);
         }
     }
