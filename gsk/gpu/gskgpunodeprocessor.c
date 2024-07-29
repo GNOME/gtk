@@ -2104,7 +2104,7 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
   spread = gsk_inset_shadow_node_get_spread (node);
   blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
 
-  if (blur_radius == 0)
+  if (blur_radius < 0.01)
     {
       float color[4]; 
 
@@ -2156,7 +2156,7 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
   dx = gsk_outset_shadow_node_get_dx (node);
   dy = gsk_outset_shadow_node_get_dy (node);
 
-  if (blur_radius == 0)
+  if (blur_radius < 0.01)
     {
       GskRoundedRect outline;
       float color[4]; 
