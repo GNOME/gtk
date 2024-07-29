@@ -491,9 +491,6 @@ image_desc_info_done (void *data,
   cs = gdk_color_state_from_image_description_bits (desc);
   if (cs)
     {
-      g_hash_table_insert (self->color->cs_to_desc,
-                           gdk_color_state_ref (cs),
-                           desc->image_desc);
       g_hash_table_insert (self->color->id_to_cs,
                            GUINT_TO_POINTER (desc->identity),
                            gdk_color_state_ref (cs));
