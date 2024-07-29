@@ -41,7 +41,8 @@ quit_cb (GtkWidget *widget,
 }
 
 static void
-show_files (char **filenames)
+show_files (char     **filenames,
+            gboolean   decorated)
 {
   GtkWidget *sw;
   GtkWidget *window;
@@ -63,6 +64,9 @@ show_files (char **filenames)
 
       g_free (name);
     }
+
+  gtk_window_set_decorated (GTK_WINDOW (window), decorated);
+  gtk_window_set_resizable (GTK_WINDOW (window), decorated);
 
   gtk_window_set_title (GTK_WINDOW (window), title->str);
   g_string_free (title, TRUE);
@@ -108,7 +112,10 @@ do_show (int          *argc,
 {
   GOptionContext *context;
   char **filenames = NULL;
+  gboolean decorated = TRUE;
   const GOptionEntry entries[] = {
+    { "undecorated", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &decorated, N_("Don't add a titlebar"), NULL },
+
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
@@ -135,7 +142,7 @@ do_show (int          *argc,
       exit (1);
     }
 
-  show_files (filenames);
+  show_files (filenames, decorated);
 
   g_strfreev (filenames);
 }

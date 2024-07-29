@@ -159,14 +159,17 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
   /**
    * GdkCicpParams:color-primaries:
    *
+   * The color primaries to use.
+   *
    * Supported values:
-   * 1 - BT.709 / sRGB
-   * 2 - unspecified
-   * 5 - PAL
-   * 6,7 - BT.601 / NTSC
-   * 9 - BT.2020
-   * 10 - CIE XYZ
-   * 12 - Display P3
+   *
+   * - 1: BT.709 / sRGB
+   * - 2: unspecified
+   * - 5: PAL
+   * - 6,7: BT.601 / NTSC
+   * - 9: BT.2020
+   * - 10: CIE XYZ
+   * - 12: Display P3
    *
    * Since: 4.16
    */
@@ -178,15 +181,18 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
   /**
    * GdkCicpParams:transfer-function:
    *
+   * The transfer function to use.
+   *
    * Supported values:
-   * 1,6,14,15 - BT.709, BT.601, BT.2020
-   * 2 - unspecified
-   * 4 - gamma 2.2
-   * 5 - gamma 2.8
-   * 8 - linear
-   * 13 - sRGB
-   * 16 - BT.2100 PQ
-   * 18 - BT.2100 HLG
+   *
+   * - 1,6,14,15: BT.709, BT.601, BT.2020
+   * - 2: unspecified
+   * - 4: gamma 2.2
+   * - 5: gamma 2.8
+   * - 8: linear
+   * - 13: sRGB
+   * - 16: BT.2100 PQ
+   * - 18: BT.2100 HLG
    *
    * Since: 4.16
    */
@@ -198,9 +204,12 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
   /**
    * GdkCicpParams:matrix-coefficients:
    *
+   * The matrix coefficients (for YUV to RGB conversion).
+   *
    * Supported values:
-   * 0 - RGB
-   * 2 - unspecified
+   *
+   * - 0: RGB
+   * - 2: unspecified
    *
    * Since: 4.16
    */
@@ -211,6 +220,8 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
 
   /**
    * GdkCicpParams:range:
+   *
+   * Whether the data is using the full range of values.
    *
    * The range of the data.
    *

@@ -55,6 +55,20 @@ GDK_AVAILABLE_IN_4_16
 void            gdk_cicp_params_set_matrix_coefficients (GdkCicpParams    *self,
                                                          guint             matrix_coefficients);
 
+/**
+ * GdkCicpRange:
+ * @GDK_CICP_RANGE_NARROW: The values use the range of 16-235 (for Y) and 16-240 for u and v.
+ * @GDK_CICO_RANGE_FULL: The values use the full range.
+ *
+ * The values of this enumeration describe whether image data uses
+ * the full range of 8-bit values.
+ *
+ * In digital broadcasting, it is common to reserve the lowest and
+ * highest values. Typically the allowed values for the narrow range
+ * are 16-235 for Y and 16-240 for u,v (when dealing with YUV data).
+ *
+ * Since: 4.16
+ */
 typedef enum
 {
   GDK_CICP_RANGE_NARROW,

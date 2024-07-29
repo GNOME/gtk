@@ -89,7 +89,7 @@ void
  * This color state uses the primaries defined by BT.709-6 and the transfer function
  * defined by IEC 61966-2-1.
  *
- * It is equivalent to H.273 ColourPrimaries 1 with TransferCharacteristics 13 and MatrixCoefficients 0.
+ * It is equivalent to the [Cicp](class.CicpParams.html) tuple 1/13/0/1.
  *
  * See e.g. [the CSS Color Module](https://www.w3.org/TR/css-color-4/#predefined-sRGB)
  * for details about this colorstate.
@@ -111,7 +111,7 @@ gdk_color_state_get_srgb (void)
  *
  * This color state uses the primaries defined by BT.709-6 and a linear transfer function.
  *
- * It is equivalent to H.273 ColourPrimaries 1 with TransferCharacteristics 8 and MatrixCoefficients 0.
+ * It is equivalent to the [Cicp](class.CicpParams.html) tuple 1/8/0/1.
  *
  * See e.g. [the CSS Color Module](https://www.w3.org/TR/css-color-4/#predefined-sRGB-linear)
  * for details about this colorstate.
@@ -134,7 +134,7 @@ gdk_color_state_get_srgb_linear (void)
  * This color state uses the primaries defined by BT.2020-2 and BT.2100-0 and the transfer
  * function defined by SMPTE ST 2084 and BT.2100-2.
  *
- * It is equivalent to H.273 ColourPrimaries code point 9 with TransferCharacteristics 16.
+ * It is equivalent to the [Cicp](class.CicpParams.html) tuple 9/16/0/1.
  *
  * See e.g. [the CSS HDR Module](https://drafts.csswg.org/css-color-hdr/#valdef-color-rec2100-pq)
  * for details about this colorstate.
@@ -157,7 +157,7 @@ gdk_color_state_get_rec2100_pq (void)
  * This color state uses the primaries defined by BT.2020-2 and BT.2100-0 and a linear
  * transfer function.
  *
- * It is equivalent to H.273 ColourPrimaries code point 9 with TransferCharacteristics 8.
+ * It is equivalent to the [Cicp](class.CicpParams.html) tuple 9/8/0/1.
  *
  * See e.g. [the CSS HDR Module](https://drafts.csswg.org/css-color-hdr/#valdef-color-rec2100-linear)
  * for details about this colorstate.
