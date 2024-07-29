@@ -2445,8 +2445,8 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
                                                     const GskRenderNode *node)
 {
   const GskRoundedRect *outline = gsk_outset_shadow_node_get_outline (node);
-  float scale_x = job->scale_x;
-  float scale_y = job->scale_y;
+  float scale_x = fabsf (job->scale_x);
+  float scale_y = fabsf (job->scale_y);
   float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
   float blur_extra = blur_radius * 2.0f; /* 2.0 = shader radius_multiplier */
   float half_blur_extra = blur_extra / 2.0f;
@@ -2577,8 +2577,8 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
                                            &offscreen,
                                            texture_width,
                                            texture_height,
-                                           blur_radius * fabsf (scale_x),
-                                           blur_radius * fabsf (scale_y));
+                                           blur_radius * scale_x,
+                                           blur_radius * scale_y);
 
       gsk_gl_shadow_library_insert (job->driver->shadows_library,
                                     &scaled_outline,
