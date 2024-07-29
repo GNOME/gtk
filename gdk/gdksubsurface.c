@@ -29,11 +29,14 @@ gdk_subsurface_init (GdkSubsurface *self)
 {
 }
 
+static void remove_subsurface (GdkSubsurface *subsurface);
+
 static void
 gdk_subsurface_finalize (GObject *object)
 {
   GdkSubsurface *subsurface = GDK_SUBSURFACE (object);
 
+  remove_subsurface (subsurface);
   g_ptr_array_remove (subsurface->parent->subsurfaces, subsurface);
   g_clear_object (&subsurface->parent);
 
