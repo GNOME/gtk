@@ -1880,4 +1880,27 @@ typedef enum {
   GTK_FONT_RENDERING_MANUAL,
 } GtkFontRendering;
 
+/**
+ * GtkTextBufferNotifyFlags:
+ * @GTK_TEXT_BUFFER_NOTIFY_BEFORE_INSERT: Be notified before text
+ *   is inserted into the underlying buffer.
+ * @GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT: Be notified after text
+ *   has been inserted into the underlying buffer.
+ * @GTK_TEXT_BUFFER_NOTIFY_BEFORE_DELETE: Be notified before text
+ *   is deleted from the underlying buffer.
+ * @GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE: Be notified after text
+ *   has been deleted from the underlying buffer.
+ *
+ * Values for [callback@Gtk.TextBufferCommitNotify] to denote the
+ * point of the notification.
+ *
+ * Since: 4.16
+ */
+typedef enum {
+  GTK_TEXT_BUFFER_NOTIFY_BEFORE_INSERT = 1 << 0,
+  GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT  = 1 << 1,
+  GTK_TEXT_BUFFER_NOTIFY_BEFORE_DELETE = 1 << 2,
+  GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE  = 1 << 3,
+} GtkTextBufferNotifyFlags;
+
 G_END_DECLS

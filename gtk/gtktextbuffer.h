@@ -54,6 +54,55 @@ struct _GtkTextBuffer
 };
 
 /**
+ * GtkTextBufferCommitNotify:
+ * @buffer: the text buffer being notified
+ * @flags: the type of commit notification
+ * @position: the position of the text operation
+ * @length: the length of the text operation in characters
+ * @user_data: (closure): user data passed to the callback
+ *
+ * A notification callback used by [method@Gtk.TextBuffer.add_commit_notify].
+ *
+ * You may not modify the [class@Gtk.TextBuffer] from a
+ * [callback@Gtk.TextBufferCommitNotify] callback and that is enforced
+ * by the [class@Gtk.TextBuffer] API.
+ *
+ * [callback@Gtk.TextBufferCommitNotify] may be used to be notified about
+ * changes to the underlying buffer right before-or-after the changes are
+ * committed to the underlying B-Tree. This is useful if you want to observe
+ * changes to the buffer without other signal handlers potentially modifying
+ * state on the way to the default signal handler.
+ *
+ * When @flags is `GTK_TEXT_BUFFER_NOTIFY_BEFORE_INSERT`, `position` is set to
+ * the offset in characters from the start of the buffer where the insertion
+ * will occur. `length` is set to the number of characters to be inserted.  You
+ * may not yet retrieve the text until it has been inserted. You may access the
+ * text from `GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT` using
+ * [method@Gtk.TextBuffer.get_slice].
+ *
+ * When @flags is `GTK_TEXT_BUFFER_NOTIFY_AFTER_INSERT`, `position` is set to
+ * offset in characters where the insertion occurred and `length` is set
+ * to the number of characters inserted.
+ *
+ * When @flags is `GTK_TEXT_BUFFER_NOTIFY_BEFORE_DELETE`, `position` is set to
+ * offset in characters where the deletion will occur and `length` is set
+ * to the number of characters that will be removed. You may still retrieve
+ * the text from this handler using `position` and `length`.
+ *
+ * When @flags is `GTK_TEXT_BUFFER_NOTIFY_AFTER_DELETE`, `length` is set to
+ * zero to denote that the delete-range has already been committed to the
+ * underlying B-Tree. You may no longer retrieve the text that has been
+ * deleted from the [class@Gtk.TextBuffer].
+ *
+ * Since: 4.16
+ */
+typedef void (*GtkTextBufferCommitNotify) (GtkTextBuffer            *buffer,
+                                           GtkTextBufferNotifyFlags  flags,
+                                           guint                     position,
+                                           guint                     length,
+                                           gpointer                  user_data);
+
+/**
  * GtkTextBufferClass:
  * @parent_class: The object class structure needs to be the first.
  * @insert_text: The class handler for the `GtkTextBuffer::insert-text` signal.
@@ -459,6 +508,15 @@ GDK_AVAILABLE_IN_ALL
 void            gtk_text_buffer_begin_user_action         (GtkTextBuffer *buffer);
 GDK_AVAILABLE_IN_ALL
 void            gtk_text_buffer_end_user_action           (GtkTextBuffer *buffer);
+GDK_AVAILABLE_IN_4_16
+guint           gtk_text_buffer_add_commit_notify         (GtkTextBuffer             *buffer,
+                                                           GtkTextBufferNotifyFlags   flags,
+                                                           GtkTextBufferCommitNotify  commit_notify,
+                                                           gpointer                   user_data,
+                                                           GDestroyNotify             destroy);
+GDK_AVAILABLE_IN_4_16
+void            gtk_text_buffer_remove_commit_notify      (GtkTextBuffer             *buffer,
+                                                           guint                      commit_notify_handler);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTextBuffer, g_object_unref)
 
