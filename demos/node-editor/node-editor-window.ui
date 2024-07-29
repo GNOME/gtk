@@ -94,6 +94,7 @@
     <property name="default-width">1024</property>
     <property name="default-height">768</property>
     <property name="focus-widget">text_view</property>
+    <property name="paned-position" bind-source="paned" bind-property="position" bind-flags="sync-create|bidirectional"/>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
         <child type="start">
@@ -286,7 +287,7 @@ You can turn it back on in the menu.
           </object>
         </child>
         <property name="child">
-          <object class="GtkPaned">
+          <object class="GtkPaned" id="paned">
             <property name="shrink-start-child">false</property>
             <property name="shrink-end-child">false</property>
             <property name="position">400</property>
