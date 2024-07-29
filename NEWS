@@ -1,8 +1,11 @@
-Overview of Changes in 4.15.4, xx-xx-xxxx
+Overview of Changes in 4.15.4, 30-07-2024
 =========================================
 
 * GtkPopover:
  - Fix size allocation with wrapping labels
+
+* GtkColumnView:
+ - Check column visibility when measuring
 
 * CSS:
  - Fix fallout from recent changes
@@ -10,6 +13,14 @@ Overview of Changes in 4.15.4, xx-xx-xxxx
 
 * Gdk:
  - Introduce GdkColorState for encoding color space information
+   Currently, we support srgb, srgb-linear, rec2100-pq and rec2100-linear
+ - Add color states to GdkTexture, as well as to the texture builder
+   and downloader objects, and convert as necessary
+ - Add GdkMemoryTextureBuilder
+ - Attach color states when loading or saving textures
+ - Add GdkCicpParams to create color state objects for cicp tuples
+ - Drop GDK_DEBUG=vulkan-validate
+   Use VK_INSTEANCE_LAYERS=VK_LAYER_KHRONOS_validation instead
 
 * Gsk:
  - Improve caching of glyphs and textures
@@ -21,19 +32,34 @@ Overview of Changes in 4.15.4, xx-xx-xxxx
  - Take colorstate into account when compositing
  - Add GDK_DEBUG=linear to opt into linear compositing
  - Implement tiling for large textures
+ - Stop using descriptors and go back to simpler texture
+   management that should work better with older GL
+ - Use correct shader clip mode for glyphs
+ - Improve shadow rendering
+
+* Media:
+ - Attach color states to textures obtained from gstreamer
 
 * Wayland:
  - Allow offloading GL textures via dmabuf export
+ - Suppot the xx-color-management-v4 protocol
 
 * Deprecations:
  - GskGLShader and the render node
 
 * Tools:
  - Improve the rendernode tool extract command
+ - Add an image tool that is about manipulating textures
+
+* Build:
+ - GTK now requires a C11 compiler
 
 * Translation updates
  Georgian
+ Hebrew
  Hindi
+ Occitan
+ Slovenian
 
 
 Overview of Changes in 4.15.3, 29-06-2024
