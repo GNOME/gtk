@@ -41,6 +41,11 @@ Showing
 
 The ``show`` command displays one or more images, side-by-side.
 
+``--undecorated``
+
+Removes window decorations. This is meant for rendering of exactly the image
+without any titlebar.
+
 Compare
 ^^^^^^^
 
