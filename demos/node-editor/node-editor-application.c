@@ -195,6 +195,16 @@ node_editor_application_startup (GApplication *app)
   const char *quit_accels[2] = { "<Ctrl>Q", NULL };
   const char *open_accels[2] = { "<Ctrl>O", NULL };
   GtkCssProvider *provider;
+  GSettings *settings;
+  gchar *session_id;
+
+  settings = g_settings_new ("org.gtk.NodeEditor4");
+  session_id = g_settings_get_string (settings, "session-id");
+  if (session_id)
+    {
+      gtk_application_set_session_id (GTK_APPLICATION (app), session_id);
+      g_free (session_id);
+    }
 
   G_APPLICATION_CLASS (node_editor_application_parent_class)->startup (app);
 
@@ -211,6 +221,9 @@ node_editor_application_startup (GApplication *app)
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                               GTK_STYLE_PROVIDER (provider),
                                               GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+
+  g_settings_set_string (settings, "session-id",
+                         gtk_application_get_current_session_id (GTK_APPLICATION (app)));
 }
 
 static void

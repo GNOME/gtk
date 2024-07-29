@@ -109,6 +109,7 @@
     <property name="default-width">1024</property>
     <property name="default-height">768</property>
     <property name="focus-widget">text_view</property>
+    <property name="session-id">main-window</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
         <child type="start">

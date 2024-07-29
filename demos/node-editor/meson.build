@@ -30,6 +30,9 @@ endforeach
 # desktop file
 install_data('org.gtk.gtk4.NodeEditor.desktop', install_dir: gtk_applicationsdir)
 
+install_data('org.gtk.NodeEditor4.gschema.xml', install_dir: gtk_schemasdir)
+gnome.compile_schemas()
+
 # appdata
 configure_file(
   input: 'org.gtk.gtk4.NodeEditor.appdata.xml.in',

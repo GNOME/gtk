@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schemalist>
+
+  <schema id='org.gtk.NodeEditor4' path='/org/gtk/NodeEditor4/'>
+    <key name='session-id' type='s'>
+      <default>''</default>
+    </key>
+  </schema>
+
+</schemalist>
