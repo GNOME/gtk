@@ -1860,7 +1860,6 @@ gdk_memory_convert (guchar              *dest_data,
   gsize y;
   GdkFloatColorConvert convert_func = NULL;
   GdkFloatColorConvert convert_func2 = NULL;
-  GdkColorState *connection = NULL;
   void (*func) (guchar *, const guchar *, gsize) = NULL;
   gboolean needs_premultiply, needs_unpremultiply;
 
@@ -1897,14 +1896,11 @@ gdk_memory_convert (guchar              *dest_data,
       convert_func = gdk_color_state_get_convert_to (src_cs, dest_cs);
 
       if (!convert_func)
-        {
-          connection = dest_cs;
-          convert_func2 = gdk_color_state_get_convert_from (dest_cs, src_cs);
-        }
+        convert_func2 = gdk_color_state_get_convert_from (dest_cs, src_cs);
 
       if (!convert_func && !convert_func2)
         {
-          connection = GDK_COLOR_STATE_REC2100_LINEAR;
+          GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
           convert_func = gdk_color_state_get_convert_to (src_cs, connection);
           convert_func2 = gdk_color_state_get_convert_from (dest_cs, connection);
         }
@@ -1981,7 +1977,7 @@ gdk_memory_convert (guchar              *dest_data,
         convert_func (src_cs, tmp, width);
 
       if (convert_func2)
-        convert_func2 (connection, tmp, width);
+        convert_func2 (dest_cs, tmp, width);
 
       if (needs_premultiply)
         premultiply (tmp, width);
@@ -2150,7 +2146,6 @@ gdk_memory_convert_color_state (guchar          *data,
   const GdkMemoryFormatDescription *desc = &memory_formats[format];
   GdkFloatColorConvert convert_func = NULL;
   GdkFloatColorConvert convert_func2 = NULL;
-  GdkColorState *connection = NULL;
   float (*tmp)[4];
 
   if (gdk_color_state_equal (src_cs, dest_cs))
@@ -2175,13 +2170,12 @@ gdk_memory_convert_color_state (guchar          *data,
 
   if (!convert_func)
     {
-      connection = dest_cs;
       convert_func2 = gdk_color_state_get_convert_from (dest_cs, src_cs);
     }
 
   if (!convert_func && !convert_func2)
     {
-      connection = GDK_COLOR_STATE_REC2100_LINEAR;
+      GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
       convert_func = gdk_color_state_get_convert_to (src_cs, connection);
       convert_func2 = gdk_color_state_get_convert_from (dest_cs, connection);
     }
@@ -2197,8 +2191,9 @@ gdk_memory_convert_color_state (guchar          *data,
 
       if (convert_func)
         convert_func (src_cs, tmp, width);
+
       if (convert_func2)
-        convert_func2 (connection, tmp, width);
+        convert_func2 (dest_cs, tmp, width);
 
       if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
         premultiply (tmp, width);
