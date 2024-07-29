@@ -177,6 +177,30 @@ bt709_oetf (float v)
 }
 
 float
+gamma22_oetf (float v)
+{
+  return pow (v, 1.0 / 2.2);
+}
+
+float
+gamma22_eotf (float v)
+{
+  return pow (v, 2.2);
+}
+
+float
+gamma28_oetf (float v)
+{
+  return pow (v, 1.0 / 2.8);
+}
+
+float
+gamma28_eotf (float v)
+{
+  return pow (v, 2.8);
+}
+
+float
 hlg_eotf (float v)
 {
   const float a = 0.17883277;
@@ -216,6 +240,16 @@ apply_cicp_eotf (vec3 color,
                    bt709_eotf (color.g),
                    bt709_eotf (color.b));
 
+    case 4u:
+      return vec3 (gamma22_eotf (color.r),
+                   gamma22_eotf (color.g),
+                   gamma22_eotf (color.b));
+
+    case 5u:
+      return vec3 (gamma28_eotf (color.r),
+                   gamma28_eotf (color.g),
+                   gamma28_eotf (color.b));
+
     case 8u:
       return color;
 
@@ -252,6 +286,16 @@ apply_cicp_oetf (vec3 color,
       return vec3 (bt709_oetf (color.r),
                    bt709_oetf (color.g),
                    bt709_oetf (color.b));
+
+    case 4u:
+      return vec3 (gamma22_oetf (color.r),
+                   gamma22_oetf (color.g),
+                   gamma22_oetf (color.b));
+
+    case 5u:
+      return vec3 (gamma28_oetf (color.r),
+                   gamma28_oetf (color.g),
+                   gamma28_oetf (color.b));
 
     case 8u:
       return color;
