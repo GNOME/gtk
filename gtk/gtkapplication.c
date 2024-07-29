@@ -109,6 +109,34 @@
  * inform the user about the negative consequences of ending the
  * session while inhibitors are present.
  *
+ * ## Restoring window state
+ *
+ * In windowing environments that support it, `GtkApplication` supports
+ * restoring window state (this is up to the environment, but typically
+ * includes the position, size, and states such as maximized or fullscreen).
+ *
+ * In order to restore state from a previous execution, the application needs
+ * to specify a session identifier through [method@Gtk.Application.set_session_id]
+ * obtained from a previous session. In order to start a new session, %NULL
+ * should be used.
+ *
+ * The session will be registered during [signal@Gio.Application.startup],
+ * at which point [method@Gtk.Application.get_current_session_id] will return
+ * the session identifier for the current session. This is the session identifier
+ * that needs to be preserved for future runs. If the session is being restored
+ * from a prior run, this identifier will match the one given through
+ * [method@Gtk.Application.set_session_id], otherwise it will be a new identifier.
+ *
+ * Individual windows are identified through [method@Gtk.Window.set_session_id],
+ * so application toplevel windows can be matched with the previously saved
+ * session state. Windows that whose state was saved will be restored to their
+ * previous position when mapped.
+ *
+ * The window state is saved automatically in the background, thus no explicit
+ * save() call is necessary. Other state, such as the active tab in a notebook
+ * or scroll positions, is not preserved automatically and needs to be saved by
+ * the application, if that is desired.
+ *
  * ## See Also
  *
  * - [Using GtkApplication](https://developer.gnome.org/documentation/tutorials/application.html)
@@ -664,6 +692,9 @@ gtk_application_class_init (GtkApplicationClass *class)
    * GtkApplication:session-id: (attributes org.gtk.Property.get=gtk_application_get_session_id org.gtk.Property.set=gtk_application_set_session_id)
    *
    * The identifier of the session used to restore window state.
+   *
+   * This property should be set to the ID of a previously saved session
+   * before ::startup (if available).
    *
    * Since: 4.16
    */
@@ -1272,11 +1303,14 @@ gtk_application_set_screensaver_active (GtkApplication *application,
  * through [method@Gtk.Application.get_current_session_id].
  *
  * This session identifier must be set before `GApplication::startup` happens,
- * as it will be applied there. In the case %NULL was passed, or the request
- * resulted in a new session being created from scratch,
- * [method@Gtk.Application.get_current_session_id] may return a different
- * identifier than the one passed here.
- **/
+ * as it will be applied there.
+ *
+ * In the case %NULL was passed, or the request resulted in a new session being
+ * created from scratch, [method@Gtk.Application.get_current_session_id] may
+ * return a different identifier than the one passed here.
+ *
+ * Since: 4.16
+ */
 void
 gtk_application_set_session_id (GtkApplication *application,
                                 const char     *session_id)
@@ -1301,7 +1335,9 @@ gtk_application_set_session_id (GtkApplication *application,
  * session management.
  *
  * Returns: (nullable): The session management ID
- **/
+ *
+ * Since: 4.16
+ */
 const char *
 gtk_application_get_session_id (GtkApplication *application)
 {
@@ -1340,7 +1376,9 @@ gtk_application_get_session_id (GtkApplication *application)
  * Currently, session management is only supported in the Wayland backend.
  *
  * Returns: (nullable): The session identifier to preserve for future runs
- **/
+ *
+ * Since: 4.16
+ */
 const char *
 gtk_application_get_current_session_id (GtkApplication *application)
 {
