@@ -998,6 +998,13 @@ gdk_event_triggers_context_menu (GdkEvent *event)
       if (bevent->button == GDK_BUTTON_SECONDARY &&
           ! (bevent->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
         return TRUE;
+
+#ifdef __APPLE__
+      if (bevent->button == GDK_BUTTON_PRIMARY &&
+          (bevent->state & GDK_CONTROL_MASK) &&
+          ! (bevent->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
+        return TRUE;
+#endif
     }
 
   return FALSE;
