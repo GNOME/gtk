@@ -111,12 +111,14 @@ blur_corner (vec2 p,
   if (min (r.x, r.y) <= 0.0)
     return 0.0;
 
+  p /= _sigma;
+  r /= _sigma;
   float result = 0.0;
   float step = max (1.0, r.y / 8.0);
   for (float y = 0.5 * step; y <= r.y; y += step)
     {
       float x = r.x - ellipse_x (r, r.y - y);
-      result -= gauss (p.y - y, _sigma.y) * erf_range (vec2 (- p.x, x - p.x), _sigma.x);
+      result -= gauss (p.y - y, 1.0) * erf_range (vec2 (- p.x, x - p.x), 1.0);
   }
   return result;
 }
