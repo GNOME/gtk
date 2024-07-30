@@ -33,6 +33,12 @@ if x11_enabled
   ]
 endif
 
+if os_linux
+  tests += [
+    { 'name': 'dmabuftexture2' },
+  ]
+endif
+
 foreach t : tests
   test_name = t.get('name')
   test_exe = executable(test_name,
