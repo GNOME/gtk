@@ -5,18 +5,28 @@
 #include <sys/ioctl.h>
 #include <linux/udmabuf.h>
 #include <drm_fourcc.h>
+#include <errno.h>
 
 #include <gtk/gtk.h>
 
 static int udmabuf_fd;
 
 static gboolean
-initialize_udmabuf (void)
+initialize_udmabuf (GError **error)
 {
   if (udmabuf_fd == 0)
-    udmabuf_fd = open("/dev/udmabuf", O_RDWR);
+    udmabuf_fd = open ("/dev/udmabuf", O_RDWR);
 
-  return udmabuf_fd != -1;
+  if (udmabuf_fd == -1)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "Opening /dev/udmabuf failed: %s", strerror (errno));
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 #define align(x,y) (((x) + (y) - 1) & ~((y) - 1))
@@ -42,32 +52,51 @@ udmabuf_free (gpointer data)
 }
 
 static UDmabuf *
-allocate_udmabuf (size_t size)
+allocate_udmabuf (size_t   size,
+                  GError **error)
 {
-   int mem_fd = -1;
-   int dmabuf_fd = -1;
-   uint64_t alignment;
-   int res;
-   gpointer data;
-   UDmabuf *udmabuf;
+  int mem_fd = -1;
+  int dmabuf_fd = -1;
+  uint64_t alignment;
+  int res;
+  gpointer data;
+  UDmabuf *udmabuf;
 
-   if (udmabuf_fd == -1)
-     goto fail;
+  if (udmabuf_fd == -1)
+    goto fail;
 
-   alignment = sysconf (_SC_PAGE_SIZE);
+  alignment = sysconf (_SC_PAGE_SIZE);
 
-   size = align(size, alignment);
+  size = align(size, alignment);
 
-   mem_fd = memfd_create ("gtk", MFD_ALLOW_SEALING);
-   if (mem_fd == -1)
-     goto fail;
+  mem_fd = memfd_create ("gtk", MFD_ALLOW_SEALING);
+  if (mem_fd == -1)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "memfd_create failed: %s", strerror (errno));
+      goto fail;
+    }
 
-   res = ftruncate (mem_fd, size);
-   if (res == -1)
-     goto fail;
+  res = ftruncate (mem_fd, size);
+  if (res == -1)
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "ftruncate failed: %s", strerror (errno));
+       goto fail;
+    }
 
   if (fcntl (mem_fd, F_ADD_SEALS, F_SEAL_SHRINK) < 0)
-    goto fail;
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "fcntl failed: %s", strerror (errno));
+      goto fail;
+    }
 
   dmabuf_fd = ioctl (udmabuf_fd,
                      UDMABUF_CREATE,
@@ -79,12 +108,24 @@ allocate_udmabuf (size_t size)
                      });
 
   if (dmabuf_fd < 0)
-    goto fail;
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "UDMABUF_CREATE ioctl failed");
+      goto fail;
+    }
 
   data = mmap (NULL, size, PROT_WRITE | PROT_READ, MAP_SHARED, mem_fd, 0);
 
   if (!data)
-    goto fail;
+    {
+      g_set_error (error,
+                   G_IO_ERROR,
+                   G_IO_ERROR_FAILED,
+                   "mmap failed: %s", strerror (errno));
+      goto fail;
+    }
 
   udmabuf = g_new0 (UDmabuf, 1);
 
@@ -117,14 +158,20 @@ test_dmabuf_no_gpu (void)
   GBytes *bytes;
   const guchar *data;
 
-  if (!initialize_udmabuf ())
+  if (!initialize_udmabuf (&error))
     {
-      g_test_skip_printf ("no udmabuf support");
+      g_test_skip (error->message);
+      g_error_free (error);
       return;
     }
 
-  udmabuf = allocate_udmabuf (32);
-  g_assert (udmabuf);
+  udmabuf = allocate_udmabuf (32, &error);
+  if (!udmabuf)
+    {
+      g_test_fail_printf ("%s", error->message);
+      g_error_free (error);
+      return;
+    }
 
   buffer = udmabuf->data;
 
