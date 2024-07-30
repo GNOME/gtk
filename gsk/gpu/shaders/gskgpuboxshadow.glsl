@@ -115,7 +115,7 @@ blur_corner (vec2 p,
   r /= _sigma;
 
   if (min (p.x, p.y) <= -2.95 ||
-      max (p.x, p.y) >= 2.95)
+      max (p.x - r.x, p.y - r.y) >= 2.95)
     return 0.0;
 
   float result = 0.0;
