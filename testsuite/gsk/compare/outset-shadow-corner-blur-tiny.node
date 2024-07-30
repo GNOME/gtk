@@ -1,0 +1,11 @@
+color {
+  bounds: 0 0 100 100;
+  color: rgba(0,0,0,0);
+}
+clip {
+  clip: 10 10 20 20;
+  child: outset-shadow {
+    blur: 0.00001;
+    outline: 0 0 100 100 / 100 0 100 0;
+  }
+}
