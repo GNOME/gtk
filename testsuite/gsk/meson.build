@@ -121,6 +121,7 @@ compare_render_tests = [
   'opacity-overlapping-children',
   'outset-shadow-corner-blur',
   'outset-shadow-corner-blur-huge-nocairo-nogl',
+  'outset-shadow-corner-blur-normal',
   'outset-shadow-corner-blur-tiny',
   'outset_shadow_offset_both',
   'outset_shadow_offset_x',
