@@ -37,5 +37,9 @@ GskRenderNode *         gtk_snapshot_pop_collect                (GtkSnapshot    
 void                    gtk_snapshot_push_subsurface            (GtkSnapshot            *snapshot,
                                                                  GdkSubsurface          *subsurface);
 
+void                    gtk_snapshot_append_color2              (GtkSnapshot            *snapshot,
+                                                                 const GdkColor         *color,
+                                                                 const graphene_rect_t  *bounds);
+
 G_END_DECLS
 

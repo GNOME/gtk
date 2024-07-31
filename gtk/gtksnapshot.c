@@ -27,6 +27,7 @@
 #include "gsktransformprivate.h"
 
 #include "gdk/gdkrgbaprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskroundedrectprivate.h"
@@ -2384,6 +2385,26 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
                            const GdkRGBA         *color,
                            const graphene_rect_t *bounds)
 {
+  GdkColor color2;
+  gdk_color_init_from_rgba (&color2, color);
+  gtk_snapshot_append_color2 (snapshot, &color2, bounds);
+}
+
+/*< private >
+ * gtk_snapshot_append_color2:
+ * @snapshot: a `GtkSnapshot`
+ * @color: the color to draw
+ * @bounds: the bounds for the new node
+ *
+ * Creates a new render node drawing the @color into the
+ * given @bounds and appends it to the current render node
+ * of @snapshot.
+ */
+void
+gtk_snapshot_append_color2 (GtkSnapshot           *snapshot,
+                            const GdkColor        *color,
+                            const graphene_rect_t *bounds)
+{
   GskRenderNode *node;
   graphene_rect_t real_bounds;
   float scale_x, scale_y, dx, dy;
@@ -2395,7 +2416,7 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
 
-  node = gsk_color_node_new (color, &real_bounds);
+  node = gsk_color_node_new2 (color, &real_bounds);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
