@@ -115,4 +115,13 @@ void gtk_css_color_interpolation_method_print (GtkCssColorSpace        in,
                                                GtkCssHueInterpolation  interp,
                                                GString                *string);
 
+static inline gboolean
+gtk_css_color_is_clear (const GtkCssColor *color)
+{
+  return color->values[3] < (float) 0x00ff / (float) 0xffff;
+}
+
+GdkColorState * gtk_css_color_get_color (const GtkCssColor *color,
+                                         float              values[4]);
+
 G_END_DECLS

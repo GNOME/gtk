@@ -1164,4 +1164,61 @@ gtk_css_color_interpolation_method_print (GtkCssColorSpace        in,
 }
 
 /* }}} */
+
+GdkColorState *
+gtk_css_color_get_color (const GtkCssColor *color,
+                         float              values[4])
+{
+  GtkCssColor out;
+
+  switch (color->color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
+      memcpy (values, color->values, sizeof (float) * 4);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_HSL:
+    case GTK_CSS_COLOR_SPACE_HWB:
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      gtk_css_color_convert (color, GTK_CSS_COLOR_SPACE_SRGB, &out);
+      memcpy (values, out.values, sizeof (float) * 4);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+      gtk_css_color_convert (color, GTK_CSS_COLOR_SPACE_REC2100_PQ, &out);
+      memcpy (values, out.values, sizeof (float) * 4);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  switch (color->color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+    case GTK_CSS_COLOR_SPACE_HSL:
+    case GTK_CSS_COLOR_SPACE_HWB:
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      return gdk_color_state_get_srgb ();
+
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+      return gdk_color_state_get_srgb_linear ();
+
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
+      return gdk_color_state_get_rec2100_pq ();
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /* vim:set foldmethod=marker expandtab: */
