@@ -42,6 +42,7 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
 #include "gdk/gdkrgbaprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 #include <cairo.h>
 #ifdef CAIRO_HAS_SVG_SURFACE
@@ -174,7 +175,20 @@ struct _GskColorNode
   GskRenderNode render_node;
 
   GdkRGBA color;
+
+  GdkColorState *color_state;
 };
+
+static void
+gsk_color_node_finalize (GskRenderNode *node)
+{
+  GskColorNode *self = (GskColorNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_COLOR_NODE));
+
+  gdk_color_state_unref (self->color_state);
+
+  parent_class->finalize (node);
+}
 
 static void
 gsk_color_node_draw (GskRenderNode *node,
@@ -183,7 +197,7 @@ gsk_color_node_draw (GskRenderNode *node,
 {
   GskColorNode *self = (GskColorNode *) node;
 
-  gdk_cairo_set_source_rgba_ccs (cr, ccs, &self->color);
+  gdk_cairo_set_source_color_ccs (cr, ccs, self->color_state, (const float *) &self->color);
 
   gdk_cairo_rect (cr, &node->bounds);
   cairo_fill (cr);
@@ -198,6 +212,7 @@ gsk_color_node_diff (GskRenderNode *node1,
   GskColorNode *self2 = (GskColorNode *) node2;
 
   if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
+      gdk_color_state_equal (self1->color_state, self2->color_state) &&
       gdk_rgba_equal (&self1->color, &self2->color))
     return;
 
@@ -212,6 +227,7 @@ gsk_color_node_class_init (gpointer g_class,
 
   node_class->node_type = GSK_COLOR_NODE;
 
+  node_class->finalize = gsk_color_node_finalize;
   node_class->draw = gsk_color_node_draw;
   node_class->diff = gsk_color_node_diff;
 }
@@ -234,6 +250,26 @@ gsk_color_node_get_color (const GskRenderNode *node)
   return &self->color;
 }
 
+const float *
+gsk_color_node_get_color2 (const GskRenderNode *node)
+{
+  GskColorNode *self = (GskColorNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_COLOR_NODE), NULL);
+
+  return (const float *) &self->color;
+}
+
+GdkColorState *
+gsk_color_node_get_color_state (const GskRenderNode *node)
+{
+  GskColorNode *self = (GskColorNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_COLOR_NODE), NULL);
+
+  return self->color_state;
+}
+
 /**
  * gsk_color_node_new:
  * @rgba: a `GdkRGBA` specifying a color
@@ -248,19 +284,30 @@ GskRenderNode *
 gsk_color_node_new (const GdkRGBA         *rgba,
                     const graphene_rect_t *bounds)
 {
+  return gsk_color_node_new2 (GDK_COLOR_STATE_SRGB, (const float *) rgba, bounds);
+}
+
+GskRenderNode *
+gsk_color_node_new2 (GdkColorState         *color_state,
+                     const float            color[4],
+                     const graphene_rect_t *bounds)
+{
   GskColorNode *self;
   GskRenderNode *node;
 
-  g_return_val_if_fail (rgba != NULL, NULL);
+  g_return_val_if_fail (color_state != NULL, NULL);
+  g_return_val_if_fail (color != NULL, NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
   self = gsk_render_node_alloc (GSK_COLOR_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->fully_opaque = gdk_rgba_is_opaque (rgba);
-  node->preferred_depth = my_color_get_depth (rgba);
+  node->fully_opaque = color[3] > (float) 0xff00 / (float) 0xffff;
+  node->preferred_depth = gdk_color_state_get_depth (color_state);
 
-  self->color = *rgba;
+  memcpy (&self->color, color, sizeof (float) * 4);
+  self->color_state = gdk_color_state_ref (color_state);
+
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
 
