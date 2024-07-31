@@ -4,6 +4,7 @@
 #include <gtk/gtk.h>
 #include <stdlib.h>
 #include "../reftests/reftest-compare.h"
+#include "dmabufize.h"
 
 
 static char *arg_output_dir = NULL;
@@ -15,6 +16,7 @@ static gboolean mask = FALSE;
 static gboolean replay = FALSE;
 static gboolean clip = FALSE;
 static gboolean colorflip = FALSE;
+static gboolean dmabuf = FALSE;
 
 extern void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot);
@@ -172,6 +174,7 @@ static const GOptionEntry options[] = {
   { "replay", 0, 0, G_OPTION_ARG_NONE, &replay, "Do replay test", NULL },
   { "clip", 0, 0, G_OPTION_ARG_NONE, &clip, "Do clip test", NULL },
   { "colorflip", 0, 0, G_OPTION_ARG_NONE, &colorflip, "Swap colors", NULL },
+  { "dmabuf", 0, 0, G_OPTION_ARG_NONE, &dmabuf, "Turn into dmabufs", NULL },
   { NULL }
 };
 
@@ -719,6 +722,37 @@ skip_clip:
       if (diff_texture)
         {
           save_image (diff_texture, node_file, "-colorflipped.diff.png");
+          success = FALSE;
+        }
+
+      g_clear_object (&diff_texture);
+      g_clear_object (&rendered_texture);
+      g_clear_object (&reference_texture);
+      gsk_render_node_unref (node2);
+    }
+
+  if (dmabuf)
+    {
+      GskRenderNode *node2;
+      graphene_rect_t node_bounds;
+
+      gsk_render_node_get_bounds (node, &node_bounds);
+
+      node2 = dmabufize_node (node);
+
+      save_node (node2, node_file, "-dmabuf.node");
+
+      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
+      save_image (rendered_texture, node_file, "-dmabuf.out.png");
+
+      reference_texture = gsk_renderer_render_texture (renderer, node, &node_bounds);
+      save_image (reference_texture, node_file, "-dmabuf.ref.png");
+
+      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+
+      if (diff_texture)
+        {
+          save_image (diff_texture, node_file, "-dmabuf.diff.png");
           success = FALSE;
         }
 
