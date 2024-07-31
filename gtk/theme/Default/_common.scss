@@ -14,6 +14,12 @@ $menu_margin: $menu_radius; //margin around menuitems & sidebar items
 $window_radius: $button_radius + 3;
 $popover_radius: $button_radius + 4;
 
+/* disable context alternative ligatures for input */
+entry text,
+textview {
+ font-variant-ligatures: no-contextual;
+}
+
 /***************
  * Base States *
  ***************/
