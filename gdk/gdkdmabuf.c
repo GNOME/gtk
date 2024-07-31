@@ -2361,7 +2361,7 @@ gdk_dmabuf_is_disjoint (const GdkDmabuf *dmabuf)
     {
       struct stat plane_stat;
 
-      if (fstat (dmabuf->planes[0].fd, &plane_stat) != 0)
+      if (fstat (dmabuf->planes[i].fd, &plane_stat) != 0)
         return TRUE;
 
       if (first_stat.st_ino != plane_stat.st_ino)
