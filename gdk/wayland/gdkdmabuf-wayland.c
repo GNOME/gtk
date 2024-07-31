@@ -53,14 +53,15 @@ update_dmabuf_formats (DmabufFormatsInfo *info)
 {
   DmabufFormats *formats = info->dmabuf_formats;
 
-  GDK_DISPLAY_DEBUG (info->display, MISC,
-                     "dmabuf format table (%" G_GSIZE_FORMAT " entries)", info->n_dmabuf_formats);
+  GDK_DISPLAY_DEBUG_FULL (info->display, GDK_DEBUG_DMABUF | GDK_DEBUG_MISC,
+                          "dmabuf format table (%" G_GSIZE_FORMAT " entries)",
+                          info->n_dmabuf_formats);
 
 #ifdef HAVE_SYS_SYSMACROS_H
-  GDK_DISPLAY_DEBUG (info->display, MISC,
-                     "dmabuf main device: %u %u",
-                     major (formats->main_device),
-                     minor (formats->main_device));
+  GDK_DISPLAY_DEBUG_FULL (info->display, GDK_DEBUG_DMABUF | GDK_DEBUG_MISC,
+                          "dmabuf main device: %u %u",
+                          major (formats->main_device),
+                          minor (formats->main_device));
 #endif
 
   for (gsize i = 0; i < formats->tranches->len; i++)
@@ -68,23 +69,24 @@ update_dmabuf_formats (DmabufFormatsInfo *info)
       DmabufTranche *tranche = g_ptr_array_index (formats->tranches, i);
 
 #ifdef HAVE_SYS_SYSMACROS_H
-      GDK_DISPLAY_DEBUG (info->display, MISC,
-                         "dmabuf tranche target device: %u %u",
-                         major (tranche->target_device),
-                         minor (tranche->target_device));
+      GDK_DISPLAY_DEBUG_FULL (info->display, GDK_DEBUG_DMABUF | GDK_DEBUG_MISC,
+                              "dmabuf tranche target device: %u %u",
+                              major (tranche->target_device),
+                              minor (tranche->target_device));
 #endif
 
-      GDK_DISPLAY_DEBUG (info->display, MISC,
-                         "dmabuf%s tranche (%" G_GSIZE_FORMAT " entries):",
-                         tranche->flags & ZWP_LINUX_DMABUF_FEEDBACK_V1_TRANCHE_FLAGS_SCANOUT ? " scanout" : "",
-                         tranche->n_formats);
+      GDK_DISPLAY_DEBUG_FULL (info->display, GDK_DEBUG_DMABUF | GDK_DEBUG_MISC,
+                              "dmabuf%s tranche (%" G_GSIZE_FORMAT " entries):",
+                              tranche->flags & ZWP_LINUX_DMABUF_FEEDBACK_V1_TRANCHE_FLAGS_SCANOUT ?
+                                " scanout" : "",
+                              tranche->n_formats);
 
       for (gsize j = 0; j < tranche->n_formats; j++)
         {
-          GDK_DISPLAY_DEBUG (info->display, MISC,
-                             "  %.4s:%#" G_GINT64_MODIFIER "x",
-                             (char *) &(tranche->formats[j].fourcc),
-                             tranche->formats[j].modifier);
+          GDK_DISPLAY_DEBUG_FULL (info->display, GDK_DEBUG_DMABUF | GDK_DEBUG_MISC,
+                                  "  %.4s:%#" G_GINT64_MODIFIER "x",
+                                  (char *) &(tranche->formats[j].fourcc),
+                                  tranche->formats[j].modifier);
         }
     }
 }
