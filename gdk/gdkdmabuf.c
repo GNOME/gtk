@@ -220,7 +220,7 @@ download_p010 (guchar          *dst,
   guint16 *dst_data;
   gsize x, y, y_stride, uv_stride;
   gsize U, V, X_SUB, Y_SUB;
-  guint16 SIZE, MASK;
+  guint16 SIZE;
 
   switch (dmabuf->fourcc)
     {
@@ -240,7 +240,6 @@ download_p010 (guchar          *dst,
       g_assert_not_reached ();
       return;
     }
-  MASK = 0xFFFF << (16 - SIZE);
 
   y_stride = dmabuf->planes[0].stride / 2;
   y_data = (const guint16 *) (src_data[0] + dmabuf->planes[0].offset);
@@ -259,16 +258,16 @@ download_p010 (guchar          *dst,
           guint16 u_, v_;
 
           u_ = uv_data[x / X_SUB * 2 + U];
-          u_ = (u_ & MASK) | (u_ >> SIZE);
+          u_ = u_ | (u_ >> SIZE);
           v_ = uv_data[x / X_SUB * 2 + V];
-          v_ = (v_ & MASK) | (v_ >> SIZE);
+          v_ = v_ | (v_ >> SIZE);
 
           for (ys = 0; ys < Y_SUB && y + ys < height; ys++)
             for (xs = 0; xs < X_SUB && x + xs < width; xs++)
               {
                 guint16 *rgb = &dst_data[3 * (x + xs) + dst_stride * ys];
                 guint16 y_ = y_data[x + xs + y_stride * ys];
-                y_ = (y_ & MASK) | (y_ >> SIZE);
+                y_ = y_ | (y_ >> SIZE);
 
                 rgb[0] = y_;
                 rgb[1] = u_;
