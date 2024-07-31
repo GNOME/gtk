@@ -44,6 +44,7 @@ struct GtkPrinterOptionWidgetPrivate
 {
   GtkPrinterOption *source;
   gulong source_changed_handler;
+  gulong comboentry_changed_handler_id;
 
   GtkWidget *check;
   GtkWidget *combo;
@@ -765,9 +766,7 @@ filter_numeric (const char *val,
 }
 
 static void
-combo_changed_cb (GtkWidget              *combo,
-                  GParamSpec             *pspec,
-		  GtkPrinterOptionWidget *widget)
+handle_combo_entry_change (GtkPrinterOptionWidget *widget)
 {
   GtkPrinterOptionWidgetPrivate *priv = widget->priv;
   char *value;
@@ -813,7 +812,9 @@ combo_changed_cb (GtkWidget              *combo,
       if (changed)
         {
           GtkWidget *entry = gtk_widget_get_first_child (priv->combo);
+          g_signal_handler_block (entry, priv->comboentry_changed_handler_id);
           gtk_editable_set_text (GTK_EDITABLE (entry), filtered_val);
+          g_signal_handler_unblock (entry, priv->comboentry_changed_handler_id);
         }
       value = filtered_val;
     }
@@ -823,6 +824,21 @@ combo_changed_cb (GtkWidget              *combo,
   g_free (value);
   g_signal_handler_unblock (priv->source, priv->source_changed_handler);
   emit_changed (widget);
+}
+
+static void
+combo_changed_cb (GtkWidget              *combo,
+                  GParamSpec             *pspec,
+                  GtkPrinterOptionWidget *widget)
+{
+  handle_combo_entry_change (widget);
+}
+
+static void
+comboentry_changed_cb (GtkEditable            *editable,
+                       GtkPrinterOptionWidget *widget)
+{
+  handle_combo_entry_change (widget);
 }
 
 static void
@@ -958,9 +974,15 @@ construct_widgets (GtkPrinterOptionWidget *widget)
                           source->choices[i]);
       gtk_box_append (GTK_BOX (widget), priv->combo);
       if (GTK_IS_DROP_DOWN (priv->combo))
-        g_signal_connect (priv->combo, "notify::selected", G_CALLBACK (combo_changed_cb),widget);
+        {
+          g_signal_connect (priv->combo, "notify::selected", G_CALLBACK (combo_changed_cb),widget);
+        }
       else
-        g_signal_connect (gtk_widget_get_last_child (priv->combo), "notify::selected",G_CALLBACK (combo_changed_cb), widget);
+        {
+          g_signal_connect (gtk_widget_get_last_child (priv->combo), "notify::selected", G_CALLBACK (combo_changed_cb), widget);
+          priv->comboentry_changed_handler_id = g_signal_connect (gtk_widget_get_first_child (priv->combo), "changed", G_CALLBACK (comboentry_changed_cb), widget);
+        }
+
 
       text = g_strdup_printf ("%s:", source->display_text);
       priv->label = gtk_label_new_with_mnemonic (text);
