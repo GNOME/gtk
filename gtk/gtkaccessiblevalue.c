@@ -859,7 +859,7 @@ static const GtkAccessibleCollect collect_rels[] = {
   },
   [GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE] = {
     .value = GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE,
-    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE_LIST,
     .name = "errormessage"
   },
   [GTK_ACCESSIBLE_RELATION_FLOW_TO] = {

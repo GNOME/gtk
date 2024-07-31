@@ -661,7 +661,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/a11y/relation/controls", GUINT_TO_POINTER (GTK_ACCESSIBLE_RELATION_CONTROLS), test_reflist_relation);
   g_test_add_data_func ("/a11y/relation/described-by", GUINT_TO_POINTER (GTK_ACCESSIBLE_RELATION_DESCRIBED_BY), test_reflist_relation);
   g_test_add_data_func ("/a11y/relation/details", GUINT_TO_POINTER (GTK_ACCESSIBLE_RELATION_DETAILS), test_reflist_relation);
-  g_test_add_data_func ("/a11y/relation/error-message", GUINT_TO_POINTER (GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE), test_ref_relation);
+  g_test_add_data_func ("/a11y/relation/error-message", GUINT_TO_POINTER (GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE), test_reflist_relation);
   g_test_add_data_func ("/a11y/relation/flow-to", GUINT_TO_POINTER (GTK_ACCESSIBLE_RELATION_FLOW_TO), test_reflist_relation);
   g_test_add_data_func ("/a11y/relation/labelled-by", GUINT_TO_POINTER (GTK_ACCESSIBLE_RELATION_LABELLED_BY), test_reflist_relation);
   g_test_add_data_func ("/a11y/relation/owns", GUINT_TO_POINTER (GTK_ACCESSIBLE_RELATION_OWNS), test_reflist_relation);

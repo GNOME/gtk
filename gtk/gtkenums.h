@@ -1684,8 +1684,8 @@ typedef enum {
  *    that describes the object. Value type: reference
  * @GTK_ACCESSIBLE_RELATION_DETAILS: Identifies the element (or elements) that
  *    provide additional information related to the object. Value type: reference
- * @GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE: Identifies the element that provides
- *    an error message for an object. Value type: reference
+ * @GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE: Identifies the element (or elements) that
+ *    provide an error message for an object. Value type: reference
  * @GTK_ACCESSIBLE_RELATION_FLOW_TO: Identifies the next element (or elements)
  *    in an alternate reading order of content which, at the user's discretion,
  *    allows assistive technology to override the general default of reading in

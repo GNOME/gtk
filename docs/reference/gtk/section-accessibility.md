@@ -171,7 +171,7 @@ Each relation name is part of the `GtkAccessibleRelation` enumeration.
 | %GTK_ACCESSIBLE_RELATION_CONTROLS | “aria-controls” | a list of `GtkAccessible` |
 | %GTK_ACCESSIBLE_RELATION_DESCRIBED_BY | “aria-describedby” | a list of `GtkAccessible` |
 | %GTK_ACCESSIBLE_RELATION_DETAILS | “aria-details” | a list of `GtkAccessible` |
-| %GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE | “aria-errormessage” | `GtkAccessible` |
+| %GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE | “aria-errormessage” | a list of `GtkAccessible` |
 | %GTK_ACCESSIBLE_RELATION_FLOW_TO | “aria-flowto” | a list of `GtkAccessible` |
 | %GTK_ACCESSIBLE_RELATION_LABELLED_BY | “aria-labelledby” | a list of `GtkAccessible` |
 | %GTK_ACCESSIBLE_RELATION_OWNS | “aria-owns” | a list of `GtkAccessible` |
