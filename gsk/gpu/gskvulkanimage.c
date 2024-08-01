@@ -523,7 +523,7 @@ gsk_vulkan_image_new_for_atlas (GskVulkanDevice *device,
 
   self = gsk_vulkan_image_new (device,
                                GDK_MEMORY_DEFAULT,
-                               TRUE,
+                               FALSE,
                                GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE,
                                width,
                                height,
