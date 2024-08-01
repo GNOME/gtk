@@ -6,6 +6,12 @@ clipboard_client = executable('clipboard-client',
   install: false,
 )
 
+extra_yuv_sources = []
+
+if avif_dep.found()
+  extra_yuv_sources += ['../../gdk/loaders/gdkavif.c']
+endif
+
 tests = [
   { 'name': 'array' },
   { 'name': 'cairo' },
@@ -24,7 +30,11 @@ tests = [
   { 'name': 'texture-threads' },
   { 'name': 'toplevellayout' },
   { 'name': 'popuplayout' },
+  { 'name': 'yuv',
+    'sources': [ 'yuv.c', '../reftests/reftest-compare.c' ] + extra_yuv_sources,
+  },
 ]
+
 
 if x11_enabled
   tests += [
@@ -36,7 +46,7 @@ endif
 foreach t : tests
   test_name = t.get('name')
   test_exe = executable(test_name,
-    sources: '@0@.c'.format(test_name),
+    sources: ['@0@.c'.format(test_name)] + t.get('sources', []),
     c_args: common_cflags,
     dependencies: libgtk_dep,
     install: false,
@@ -76,7 +86,7 @@ endif
 foreach t : internal_tests
   test_name = t.get('name')
   test_exe = executable(test_name,
-    sources: '@0@.c'.format(test_name),
+    sources: ['@0@.c'.format(test_name)] + t.get('sources', []),
     c_args: common_cflags + ['-DGTK_COMPILATION'],
     dependencies: libgtk_static_dep,
     install: false,
