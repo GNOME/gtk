@@ -2786,7 +2786,6 @@ parse_node (GtkCssParser *parser,
   guint i;
 
   token = gtk_css_parser_get_token (parser);
-  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
   if (gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
     {
       GskRenderNode *node;
