@@ -57,10 +57,16 @@ gsk_vulkan_frame_is_busy (GskGpuFrame *frame)
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
   VkDevice device;
+  VkResult res;
 
   device = gsk_vulkan_device_get_vk_device (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)));
 
-  return vkGetFenceStatus (device, self->vk_fence) == VK_NOT_READY;
+  res = vkGetFenceStatus (device, self->vk_fence);
+  if (res == VK_NOT_READY)
+    return TRUE;
+
+  gsk_vulkan_handle_result (res, "vkGetFenceStatus");
+  return res;
 }
 
 static void
@@ -183,14 +189,15 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
                                                        gdk_texture_get_height (texture),
                                                        &dmabuf,
                                                        gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
+
+              /* Vulkan import dups the fds, so we can close these */
+              gdk_dmabuf_close_fds (&dmabuf);
+
               if (image)
                 {
                   gsk_gpu_image_toggle_ref_texture (image, texture);
                   return image;
                 }
-
-              /* Vulkan import dups the fds, so we can close these */
-              gdk_dmabuf_close_fds (&dmabuf);
             }
         }
     }
