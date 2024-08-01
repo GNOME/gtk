@@ -189,14 +189,15 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
                                                        gdk_texture_get_height (texture),
                                                        &dmabuf,
                                                        gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
+
+              /* Vulkan import dups the fds, so we can close these */
+              gdk_dmabuf_close_fds (&dmabuf);
+
               if (image)
                 {
                   gsk_gpu_image_toggle_ref_texture (image, texture);
                   return image;
                 }
-
-              /* Vulkan import dups the fds, so we can close these */
-              gdk_dmabuf_close_fds (&dmabuf);
             }
         }
     }
