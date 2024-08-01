@@ -74,6 +74,12 @@ gdk_public_sources = files([
   'loaders/gdkjpeg.c',
 ])
 
+if avif_dep.found()
+  gdk_public_sources += [
+    'loaders/gdkavif.c'
+  ]
+endif
+
 gdk_public_headers = files([
   'gdk.h',
   'gdkapplaunchcontext.h',
@@ -237,6 +243,7 @@ gdk_deps = [
   png_dep,
   tiff_dep,
   jpeg_dep,
+  avif_dep,
 ]
 
 if profiler_enabled

@@ -265,6 +265,13 @@ support in the file chooser.
 This option controls whether GTK should use colord for color
 calibration support in the cups print backend.
 
+## `avif`
+
+This option controls whether GTK will use libavif for loading
+textures from AVIF image files. Note that the purpose of this option
+is to facilitate development of GTK. The support for this image format
+is not guaranteed and may go away at any time.
+
 ### `documentation`, `man-pages` and `screenshots`
 
 The *gi-docgen* package is used to generate the reference documentation

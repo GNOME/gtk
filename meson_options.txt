@@ -52,6 +52,11 @@ option('print-cups',
 
 # Optional features
 
+option('avif',
+       type: 'feature',
+       value: 'disabled',
+       description: 'Enable support for AVIF images, for GTK development')
+
 option('vulkan',
        type: 'feature',
        value: 'enabled',

@@ -983,6 +983,8 @@ gdk_texture_download_surface (GdkTexture    *texture,
  * %CAIRO_FORMAT_ARGB32, so every downloaded pixel requires
  * 4 bytes of memory.
  *
+ * The downloaded data is converted to the sRGB color state.
+ *
  * Downloading a texture into a Cairo image surface:
  * ```c
  * surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
