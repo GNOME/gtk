@@ -57,10 +57,16 @@ gsk_vulkan_frame_is_busy (GskGpuFrame *frame)
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
   VkDevice device;
+  VkResult res;
 
   device = gsk_vulkan_device_get_vk_device (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)));
 
-  return vkGetFenceStatus (device, self->vk_fence) == VK_NOT_READY;
+  res = vkGetFenceStatus (device, self->vk_fence);
+  if (res == VK_NOT_READY)
+    return TRUE;
+
+  gsk_vulkan_handle_result (res, "vkGetFenceStatus");
+  return res;
 }
 
 static void
