@@ -133,5 +133,13 @@ GskRenderNode * gsk_border_node_new2                    (const GskRoundedRect  *
 GdkColorState **gsk_border_node_get_color_states        (const GskRenderNode   *node);
 const float *   gsk_border_node_get_colors2             (const GskRenderNode   *node);
 
+GskRenderNode * gsk_text_node_new2                      (PangoFont              *font,
+                                                         PangoGlyphString       *glyphs,
+                                                         GdkColorState          *color_state,
+                                                         const float             color[4],
+                                                         const graphene_point_t *offset);
+GdkColorState * gsk_text_node_get_color_state           (const GskRenderNode    *node);
+const float *   gsk_text_node_get_color2                (const GskRenderNode    *node);
+
 G_END_DECLS
 

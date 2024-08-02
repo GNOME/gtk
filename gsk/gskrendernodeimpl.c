@@ -6038,6 +6038,7 @@ struct _GskTextNode
   PangoFont *font;
   gboolean has_color_glyphs;
 
+  GdkColorState *color_state;
   GdkRGBA color;
   graphene_point_t offset;
 
@@ -6054,6 +6055,7 @@ gsk_text_node_finalize (GskRenderNode *node)
   g_object_unref (self->font);
   g_object_unref (self->fontmap);
   g_free (self->glyphs);
+  gdk_color_state_unref (self->color_state);
 
   parent_class->finalize (node);
 }
@@ -6079,7 +6081,7 @@ gsk_text_node_draw (GskRenderNode *node,
     }
   else
     {
-      gdk_cairo_set_source_rgba_ccs (cr, ccs, &self->color);
+      gdk_cairo_set_source_color_ccs (cr, ccs, self->color_state, (const float *) &self->color);
       cairo_translate (cr, self->offset.x, self->offset.y);
       pango_cairo_show_glyph_string (cr, self->font, &glyphs);
     }
@@ -6097,6 +6099,7 @@ gsk_text_node_diff (GskRenderNode *node1,
 
   if (self1->font == self2->font &&
       gdk_rgba_equal (&self1->color, &self2->color) &&
+      gdk_color_state_equal (self1->color_state, self2->color_state) &&
       graphene_point_equal (&self1->offset, &self2->offset) &&
       self1->num_glyphs == self2->num_glyphs)
     {
@@ -6144,25 +6147,12 @@ pango_units_to_float (int i)
   return (float) i / PANGO_SCALE;
 }
 
-/**
- * gsk_text_node_new:
- * @font: the `PangoFont` containing the glyphs
- * @glyphs: the `PangoGlyphString` to render
- * @color: the foreground color to render with
- * @offset: offset of the baseline
- *
- * Creates a render node that renders the given glyphs.
- *
- * Note that @color may not be used if the font contains
- * color glyphs.
- *
- * Returns: (nullable) (transfer full) (type GskTextNode): a new `GskRenderNode`
- */
 GskRenderNode *
-gsk_text_node_new (PangoFont              *font,
-                   PangoGlyphString       *glyphs,
-                   const GdkRGBA          *color,
-                   const graphene_point_t *offset)
+gsk_text_node_new2 (PangoFont              *font,
+                    PangoGlyphString       *glyphs,
+                    GdkColorState          *color_state,
+                    const float             color[4],
+                    const graphene_point_t *offset)
 {
   GskTextNode *self;
   GskRenderNode *node;
@@ -6179,11 +6169,12 @@ gsk_text_node_new (PangoFont              *font,
   self = gsk_render_node_alloc (GSK_TEXT_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->preferred_depth = my_color_get_depth (color);
+  node->preferred_depth = gdk_color_state_get_depth (color_state);
 
   self->fontmap = g_object_ref (pango_font_get_font_map (font));
   self->font = g_object_ref (font);
-  self->color = *color;
+  self->color_state = gdk_color_state_ref (color_state);
+  memcpy (&self->color, color, sizeof (float) * 4);
   self->offset = *offset;
   self->has_color_glyphs = FALSE;
 
@@ -6217,6 +6208,29 @@ gsk_text_node_new (PangoFont              *font,
 }
 
 /**
+ * gsk_text_node_new:
+ * @font: the `PangoFont` containing the glyphs
+ * @glyphs: the `PangoGlyphString` to render
+ * @color: the foreground color to render with
+ * @offset: offset of the baseline
+ *
+ * Creates a render node that renders the given glyphs.
+ *
+ * Note that @color may not be used if the font contains
+ * color glyphs.
+ *
+ * Returns: (nullable) (transfer full) (type GskTextNode): a new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_text_node_new (PangoFont              *font,
+                   PangoGlyphString       *glyphs,
+                   const GdkRGBA          *color,
+                   const graphene_point_t *offset)
+{
+  return gsk_text_node_new2 (font, glyphs, GDK_COLOR_STATE_SRGB, (const float *) color, offset);
+}
+
+/**
  * gsk_text_node_get_color:
  * @node: (type GskTextNode): a text `GskRenderNode`
  *
@@ -6230,6 +6244,22 @@ gsk_text_node_get_color (const GskRenderNode *node)
   const GskTextNode *self = (const GskTextNode *) node;
 
   return &self->color;
+}
+
+const float *
+gsk_text_node_get_color2 (const GskRenderNode *node)
+{
+  GskTextNode *self = (GskTextNode *) node;
+
+  return (const float *) &self->color;
+}
+
+GdkColorState *
+gsk_text_node_get_color_state (const GskRenderNode *node)
+{
+  GskTextNode *self = (GskTextNode *) node;
+
+  return self->color_state;
 }
 
 /**
