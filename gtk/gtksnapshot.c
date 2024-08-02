@@ -120,7 +120,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     struct {
       gsize n_shadows;
       GskShadow *shadows;
+      GdkColorState **color_states;
       GskShadow a_shadow; /* Used if n_shadows == 1 */
+      GdkColorState *a_color_state;
     } shadow;
     struct {
       GskBlendMode blend_mode;
@@ -1347,11 +1349,14 @@ gtk_snapshot_collect_shadow (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  shadow_node = gsk_shadow_node_new (node,
-                                     state->data.shadow.shadows != NULL ?
-                                     state->data.shadow.shadows :
-                                     &state->data.shadow.a_shadow,
-                                     state->data.shadow.n_shadows);
+  shadow_node = gsk_shadow_node_new2 (node,
+                                      state->data.shadow.shadows != NULL
+                                        ? state->data.shadow.shadows
+                                        : &state->data.shadow.a_shadow,
+                                      state->data.shadow.n_shadows,
+                                      state->data.shadow.color_states != NULL
+                                        ? state->data.shadow.color_states
+                                        : &state->data.shadow.a_color_state);
 
   gsk_render_node_unref (node);
 
@@ -1408,6 +1413,21 @@ gtk_snapshot_push_shadow (GtkSnapshot     *snapshot,
                           const GskShadow *shadow,
                           gsize            n_shadows)
 {
+  GdkColorState **color_states;
+
+  color_states = g_newa (GdkColorState *, n_shadows);
+  for (gsize i = 0; i < n_shadows; i++)
+    color_states[i] = GDK_COLOR_STATE_SRGB;
+
+  gtk_snapshot_push_shadow2 (snapshot, shadow, n_shadows, color_states);
+}
+
+void
+gtk_snapshot_push_shadow2 (GtkSnapshot      *snapshot,
+                           const GskShadow  *shadow,
+                           gsize             n_shadows,
+                           GdkColorState   **color_states)
+{
   GtkSnapshotState *state;
   GskTransform *transform;
   float scale_x, scale_y, dx, dy;
@@ -1428,20 +1448,24 @@ gtk_snapshot_push_shadow (GtkSnapshot     *snapshot,
   if (n_shadows == 1)
     {
       state->data.shadow.shadows = NULL;
+      state->data.shadow.color_states = NULL;
       memcpy (&state->data.shadow.a_shadow, shadow, sizeof (GskShadow));
       state->data.shadow.a_shadow.dx *= scale_x;
       state->data.shadow.a_shadow.dy *= scale_y;
       state->data.shadow.a_shadow.radius *= scale_x;
+      state->data.shadow.a_color_state = color_states[0];
     }
   else
     {
       state->data.shadow.shadows = g_malloc (sizeof (GskShadow) * n_shadows);
+      state->data.shadow.color_states = g_malloc (sizeof (GdkColorState *) * n_shadows);
       memcpy (state->data.shadow.shadows, shadow, sizeof (GskShadow) * n_shadows);
       for (i = 0; i < n_shadows; i++)
         {
           state->data.shadow.shadows[i].dx *= scale_x;
           state->data.shadow.shadows[i].dy *= scale_y;
           state->data.shadow.shadows[i].radius *= scale_x;
+          state->data.shadow.color_states[i] = color_states[i];
         }
     }
 

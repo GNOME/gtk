@@ -72,5 +72,10 @@ void                    gtk_snapshot_append_outset_shadow2      (GtkSnapshot    
                                                                  float                 spread,
                                                                  float                 blur_radius);
 
+void                    gtk_snapshot_push_shadow2               (GtkSnapshot          *snapshot,
+                                                                 const GskShadow      *shadow,
+                                                                 gsize                 n_shadows,
+                                                                 GdkColorState       **color_states);
+
 G_END_DECLS
 
