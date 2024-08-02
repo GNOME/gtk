@@ -55,6 +55,7 @@ gsk_pango_renderer_set_shape_handler (GskPangoRenderer    *crenderer,
   crenderer->shape_handler = handler;
 }
 
+/* FIXME: get color states too */
 static void
 get_color (GskPangoRenderer *crenderer,
            PangoRenderPart   part,
