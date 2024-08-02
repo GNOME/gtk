@@ -53,21 +53,20 @@ static const GskGpuShaderOpClass GSK_GPU_RADIAL_GRADIENT_OP_CLASS = {
 };
 
 void
-gsk_gpu_radial_gradient_op (GskGpuFrame            *frame,
-                            GskGpuShaderClip        clip,
-                            GskGpuColorStates       color_states,
-                            gboolean                repeating,
-                            const graphene_rect_t  *rect,
-                            const graphene_point_t *center,
-                            const graphene_point_t *radius,
-                            float                   start,
-                            float                   end,
-                            const graphene_point_t *offset,
-                            const GskColorStop     *stops,
-                            gsize                   n_stops)
+gsk_gpu_radial_gradient_op (GskGpuFrame             *frame,
+                            GskGpuShaderClip         clip,
+                            GskGpuColorStates        color_states,
+                            gboolean                 repeating,
+                            const graphene_rect_t   *rect,
+                            const graphene_point_t  *center,
+                            const graphene_point_t  *radius,
+                            float                    start,
+                            float                    end,
+                            const graphene_point_t  *offset,
+                            const GskColorStop      *stops,
+                            gsize                    n_stops)
 {
   GskGpuRadialgradientInstance *instance;
-  GdkColorState *color_state = gsk_gpu_color_states_get_alt (color_states);
 
   g_assert (n_stops > 1);
   g_assert (n_stops <= 7);
@@ -88,18 +87,19 @@ gsk_gpu_radial_gradient_op (GskGpuFrame            *frame,
   gsk_gpu_point_to_float (radius, graphene_point_zero(), &instance->center_radius[2]);
   instance->startend[0] = start;
   instance->startend[1] = end;
-  gdk_color_state_from_rgba (color_state, &stops[MIN (n_stops - 1, 6)].color, instance->color6);
+  
+  gsk_gpu_color_to_float ((const float *) &stops[MIN (n_stops - 1, 6)].color, instance->color6);
   instance->offsets1[2] = stops[MIN (n_stops - 1, 6)].offset;
-  gdk_color_state_from_rgba (color_state, &stops[MIN (n_stops - 1, 5)].color, instance->color5);
+  gsk_gpu_color_to_float ((const float *) &stops[MIN (n_stops - 1, 5)].color, instance->color5);
   instance->offsets1[1] = stops[MIN (n_stops - 1, 5)].offset;
-  gdk_color_state_from_rgba (color_state, &stops[MIN (n_stops - 1, 4)].color, instance->color4);
+  gsk_gpu_color_to_float ((const float *) &stops[MIN (n_stops - 1, 4)].color, instance->color4);
   instance->offsets1[0] = stops[MIN (n_stops - 1, 4)].offset;
-  gdk_color_state_from_rgba (color_state, &stops[MIN (n_stops - 1, 3)].color, instance->color3);
+  gsk_gpu_color_to_float ((const float *) &stops[MIN (n_stops - 1, 3)].color, instance->color3);
   instance->offsets0[3] = stops[MIN (n_stops - 1, 3)].offset;
-  gdk_color_state_from_rgba (color_state, &stops[MIN (n_stops - 1, 2)].color, instance->color2);
+  gsk_gpu_color_to_float ((const float *) &stops[MIN (n_stops - 1, 2)].color, instance->color2);
   instance->offsets0[2] = stops[MIN (n_stops - 1, 2)].offset;
-  gdk_color_state_from_rgba (color_state, &stops[1].color, instance->color1);
+  gsk_gpu_color_to_float ((const float *) &stops[MIN (n_stops - 1, 1)].color, instance->color1);
   instance->offsets0[1] = stops[1].offset;
-  gdk_color_state_from_rgba (color_state, &stops[0].color, instance->color0);
+  gsk_gpu_color_to_float ((const float *) &stops[0].color, instance->color0);
   instance->offsets0[0] = stops[0].offset;
 }
