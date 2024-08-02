@@ -56,6 +56,7 @@
 #include <gdk/gdksurfaceprivate.h>
 #include <gdk/gdktextureprivate.h>
 #include <gdk/gdkrgbaprivate.h>
+#include <gdk/gdkcolorstateprivate.h>
 #include "gtk/gtkdebug.h"
 #include "gtk/gtkbuiltiniconprivate.h"
 #include "gtk/gtkrendernodepaintableprivate.h"
@@ -394,6 +395,22 @@ recordings_clear_all (GtkButton            *button,
   g_list_store_remove_all (G_LIST_STORE (recorder->recordings));
 }
 
+static char *
+color_to_string (GdkColorState *color_state,
+                 const float    values[4])
+{
+  if (gdk_color_state_equal (color_state, GDK_COLOR_STATE_SRGB))
+    return gdk_rgba_to_string ((const GdkRGBA *)values);
+  else if (GDK_IS_DEFAULT_COLOR_STATE (color_state))
+    return g_strdup_printf ("color(%s, %.2f %.2f %.2f / %.2f)",
+                            gdk_color_state_get_name (color_state),
+                            values[0], values[1], values[2], values[3]);
+  else
+    return g_strdup_printf ("color(\"%s\", %.2f %.2f %.2f / %.2f)",
+                            gdk_color_state_get_name (color_state),
+                            values[0], values[1], values[2], values[3]);
+}
+
 static const char *
 node_type_name (GskRenderNodeType type)
 {
@@ -506,7 +523,8 @@ node_name (GskRenderNode *node)
       return g_strdup (gsk_debug_node_get_message (node));
 
     case GSK_COLOR_NODE:
-      return gdk_rgba_to_string (gsk_color_node_get_color (node));
+      return color_to_string (gsk_color_node_get_color_state (node),
+                              gsk_color_node_get_color2 (node));
 
     case GSK_TEXTURE_NODE:
       {
@@ -793,36 +811,43 @@ recording_selected (GtkSingleSelection   *selection,
 }
 
 static GdkTexture *
-get_color_texture (const GdkRGBA *color)
+get_color2_texture (GdkColorState *color_state,
+                    const float    values[4])
 {
+  GdkMemoryTextureBuilder *builder;
   GdkTexture *texture;
-  guchar pixel[4];
+  gsize stride;
   guchar *data;
   GBytes *bytes;
   int width = 30;
   int height = 30;
-  int i;
 
-  pixel[0] = round (color->red * 255);
-  pixel[1] = round (color->green * 255);
-  pixel[2] = round (color->blue * 255);
-  pixel[3] = round (color->alpha * 255);
+  stride = width * 4 * sizeof (float);
+  data = g_malloc (stride * height);
+  for (int i = 0; i < width * height; i++)
+    memcpy (data + 4 * sizeof (float) * i, values, 4 * sizeof (float));
 
-  data = g_malloc (4 * width * height);
-  for (i = 0; i < width * height; i++)
-    {
-      memcpy (data + 4 * i, pixel, 4);
-    }
+  bytes = g_bytes_new_take (data, stride * height);
 
-  bytes = g_bytes_new_take (data, 4 * width * height);
-  texture = gdk_memory_texture_new (width,
-                                    height,
-                                    GDK_MEMORY_R8G8B8A8,
-                                    bytes,
-                                    width * 4);
+  builder = gdk_memory_texture_builder_new ();
+  gdk_memory_texture_builder_set_bytes (builder, bytes);
+  gdk_memory_texture_builder_set_stride (builder, stride);
+  gdk_memory_texture_builder_set_width (builder, 30);
+  gdk_memory_texture_builder_set_height (builder, 30);
+  gdk_memory_texture_builder_set_format (builder, GDK_MEMORY_R32G32B32A32_FLOAT);
+  gdk_memory_texture_builder_set_color_state (builder, color_state);
+
+  texture = gdk_memory_texture_builder_build (builder);
+
   g_bytes_unref (bytes);
 
   return texture;
+}
+
+static GdkTexture *
+get_color_texture (const GdkRGBA *color)
+{
+  return get_color2_texture (GDK_COLOR_STATE_SRGB, (const float *) color);
 }
 
 static GdkTexture *
@@ -902,6 +927,22 @@ add_color_row (GListStore    *store,
 
   text = gdk_rgba_to_string (color);
   texture = get_color_texture (color);
+  list_store_add_object_property (store, name, text, texture);
+  g_free (text);
+  g_object_unref (texture);
+}
+
+static void
+add_color2_row (GListStore    *store,
+                const char    *name,
+                GdkColorState *color_state,
+                const float    values[4])
+{
+  char *text;
+  GdkTexture *texture;
+
+  text = color_to_string (color_state, values);
+  texture = get_color2_texture (color_state, values);
   list_store_add_object_property (store, name, text, texture);
   g_free (text);
   g_object_unref (texture);
@@ -1067,7 +1108,9 @@ populate_render_node_properties (GListStore    *store,
       break;
 
     case GSK_COLOR_NODE:
-      add_color_row (store, "Color", gsk_color_node_get_color (node));
+      add_color2_row (store, "Color",
+                      gsk_color_node_get_color_state (node),
+                      gsk_color_node_get_color2 (node));
       break;
 
     case GSK_LINEAR_GRADIENT_NODE:
