@@ -54,5 +54,23 @@ void                    gtk_snapshot_append_border2             (GtkSnapshot    
                                                                  GdkColorState          *color_state[4],
                                                                  const float             border_color[4][4]);
 
+void                    gtk_snapshot_append_inset_shadow2       (GtkSnapshot          *snapshot,
+                                                                 const GskRoundedRect *outline,
+                                                                 GdkColorState        *color_state,
+                                                                 const float           color[4],
+                                                                 float                 dx,
+                                                                 float                 dy,
+                                                                 float                 spread,
+                                                                 float                 blur_radius);
+
+void                    gtk_snapshot_append_outset_shadow2      (GtkSnapshot          *snapshot,
+                                                                 const GskRoundedRect *outline,
+                                                                 GdkColorState        *color_state,
+                                                                 const float           color[4],
+                                                                 float                 dx,
+                                                                 float                 dy,
+                                                                 float                 spread,
+                                                                 float                 blur_radius);
+
 G_END_DECLS
 
