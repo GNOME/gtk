@@ -3,3 +3,9 @@ border {
   widths: 1 1 1 1;
   colors: rgba(213, 208, 204, 1) rgba(213, 208, 204, 1) rgba(213, 208, 204, 1) rgba(213, 208, 204, 1);
 }
+
+border {
+  outline: -1 -1 50 26 / 13;
+  widths: 2 1 3 1;
+  colors: color(rec2100-pq 0.2 0.4 0.6) color(srgb 0.8 0.2 0.4 / 1) rgba(0, 0, 0, 1) rgb(200, 100, 50);
+}
