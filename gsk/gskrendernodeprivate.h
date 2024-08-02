@@ -123,10 +123,15 @@ _gsk_render_node_ref (GskRenderNode *node)
 GskRenderNode * gsk_color_node_new2                     (GdkColorState         *color_state,
                                                          const float            color[4],
                                                          const graphene_rect_t *bounds);
-
 GdkColorState * gsk_color_node_get_color_state          (const GskRenderNode   *node);
-
 const float *   gsk_color_node_get_color2               (const GskRenderNode   *node);
+
+GskRenderNode * gsk_border_node_new2                    (const GskRoundedRect  *outline,
+                                                         const float            border_width[4],
+                                                         GdkColorState         *color_state[4],
+                                                         const float            border_color[4][4]);
+GdkColorState **gsk_border_node_get_color_states        (const GskRenderNode   *node);
+const float *   gsk_border_node_get_colors2             (const GskRenderNode   *node);
 
 G_END_DECLS
 

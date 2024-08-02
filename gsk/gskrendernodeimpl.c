@@ -1428,12 +1428,26 @@ struct _GskBorderNode
   GskRoundedRect outline;
   float border_width[4];
   GdkRGBA border_color[4];
+  GdkColorState *color_state[4];
 };
+
+static void
+gsk_border_node_finalize (GskRenderNode *node)
+{
+  GskBorderNode *self = (GskBorderNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_BORDER_NODE));
+
+  for (int i = 0; i < 4; i++)
+    gdk_color_state_unref (self->color_state[i]);
+
+  parent_class->finalize (node);
+}
 
 static void
 gsk_border_node_mesh_add_patch (cairo_pattern_t *pattern,
                                 GdkColorState   *ccs,
-                                const GdkRGBA   *rgba,
+                                GdkColorState   *src_cs,
+                                const float      src_color[4],
                                 double           x0,
                                 double           y0,
                                 double           x1,
@@ -1445,7 +1459,7 @@ gsk_border_node_mesh_add_patch (cairo_pattern_t *pattern,
 {
   float color[4];
 
-  gdk_color_state_from_rgba (ccs, rgba, color);
+  gdk_color_state_convert_color (src_cs, ccs, src_color, color);
   cairo_mesh_pattern_begin_patch (pattern);
   cairo_mesh_pattern_move_to (pattern, x0, y0);
   cairo_mesh_pattern_line_to (pattern, x1, y1);
@@ -1479,9 +1493,12 @@ gsk_border_node_draw (GskRenderNode *node,
 
   if (gdk_rgba_equal (&self->border_color[0], &self->border_color[1]) &&
       gdk_rgba_equal (&self->border_color[0], &self->border_color[2]) &&
-      gdk_rgba_equal (&self->border_color[0], &self->border_color[3]))
+      gdk_rgba_equal (&self->border_color[0], &self->border_color[3]) &&
+      gdk_color_state_equal (self->color_state[0], self->color_state[1]) &&
+      gdk_color_state_equal (self->color_state[0], self->color_state[2]) &&
+      gdk_color_state_equal (self->color_state[0], self->color_state[3]))
     {
-      gdk_cairo_set_source_rgba_ccs (cr, ccs, &self->border_color[0]);
+      gdk_cairo_set_source_color_ccs (cr, ccs, self->color_state[0], (const float *) &self->border_color[0]);
     }
   else
     {
@@ -1524,7 +1541,8 @@ gsk_border_node_draw (GskRenderNode *node,
         {
           gsk_border_node_mesh_add_patch (mesh,
                                           ccs,
-                                          &self->border_color[0],
+                                          self->color_state[0],
+                                          (const float *) &self->border_color[0],
                                           0, 0,
                                           tl.x, tl.y,
                                           br.x, tl.y,
@@ -1536,7 +1554,8 @@ gsk_border_node_draw (GskRenderNode *node,
         {
           gsk_border_node_mesh_add_patch (mesh,
                                           ccs,
-                                          &self->border_color[1],
+                                          self->color_state[1],
+                                          (const float *) &self->border_color[1],
                                           bounds->size.width, 0,
                                           br.x, tl.y,
                                           br.x, br.y,
@@ -1548,7 +1567,8 @@ gsk_border_node_draw (GskRenderNode *node,
         {
           gsk_border_node_mesh_add_patch (mesh,
                                           ccs,
-                                          &self->border_color[2],
+                                          self->color_state[2],
+                                          (const float *) &self->border_color[2],
                                           0, bounds->size.height,
                                           tl.x, br.y,
                                           br.x, br.y,
@@ -1560,7 +1580,8 @@ gsk_border_node_draw (GskRenderNode *node,
         {
           gsk_border_node_mesh_add_patch (mesh,
                                           ccs,
-                                          &self->border_color[3],
+                                          self->color_state[3],
+                                          (const float *) &self->border_color[3],
                                           0, 0,
                                           tl.x, tl.y,
                                           tl.x, br.y,
@@ -1589,7 +1610,8 @@ gsk_border_node_diff (GskRenderNode *node1,
       uniform2 &&
       self1->border_width[0] == self2->border_width[0] &&
       gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
-      gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]))
+      gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]) &&
+      gdk_color_state_equal (self1->color_state[0], self2->color_state[0]))
     return;
 
   /* Different uniformity -> diff impossible */
@@ -1607,6 +1629,10 @@ gsk_border_node_diff (GskRenderNode *node1,
       gdk_rgba_equal (&self1->border_color[1], &self2->border_color[1]) &&
       gdk_rgba_equal (&self1->border_color[2], &self2->border_color[2]) &&
       gdk_rgba_equal (&self1->border_color[3], &self2->border_color[3]) &&
+      gdk_color_state_equal (self1->color_state[0], self2->color_state[0]) &&
+      gdk_color_state_equal (self1->color_state[1], self2->color_state[1]) &&
+      gdk_color_state_equal (self1->color_state[2], self2->color_state[2]) &&
+      gdk_color_state_equal (self1->color_state[3], self2->color_state[3]) &&
       gsk_rounded_rect_equal (&self1->outline, &self2->outline))
     return;
 
@@ -1621,6 +1647,7 @@ gsk_border_node_class_init (gpointer g_class,
 
   node_class->node_type = GSK_BORDER_NODE;
 
+  node_class->finalize = gsk_border_node_finalize;
   node_class->draw = gsk_border_node_draw;
   node_class->diff = gsk_border_node_diff;
 }
@@ -1676,6 +1703,75 @@ gsk_border_node_get_colors (const GskRenderNode *node)
   return self->border_color;
 }
 
+const float *
+gsk_border_node_get_colors2 (const GskRenderNode *node)
+{
+  const GskBorderNode *self = (const GskBorderNode *) node;
+
+  return (const float *) self->border_color;
+}
+
+GdkColorState **
+gsk_border_node_get_color_states (const GskRenderNode *node)
+{
+  const GskBorderNode *self = (const GskBorderNode *) node;
+
+  return (GdkColorState **) self->color_state;
+}
+
+GskRenderNode *
+gsk_border_node_new2 (const GskRoundedRect *outline,
+                      const float           border_width[4],
+                      GdkColorState        *color_state[4],
+                      const float           border_color[4][4])
+{
+  GskBorderNode *self;
+  GskRenderNode *node;
+
+  g_return_val_if_fail (outline != NULL, NULL);
+  g_return_val_if_fail (border_width != NULL, NULL);
+  g_return_val_if_fail (border_color != NULL, NULL);
+
+  self = gsk_render_node_alloc (GSK_BORDER_NODE);
+  node = (GskRenderNode *) self;
+  node->offscreen_for_opacity = FALSE;
+  node->preferred_depth = gdk_memory_depth_merge (
+                            gdk_memory_depth_merge (gdk_color_state_get_depth (color_state[0]),
+                                                    gdk_color_state_get_depth (color_state[1])),
+                            gdk_memory_depth_merge (gdk_color_state_get_depth (color_state[2]),
+                                                    gdk_color_state_get_depth (color_state[3])));
+
+  gsk_rounded_rect_init_copy (&self->outline, outline);
+  memcpy (self->border_width, border_width, sizeof (self->border_width));
+  memcpy (self->border_color, border_color, sizeof (self->border_color));
+
+  self->color_state[0] = gdk_color_state_ref (color_state[0]);
+  self->color_state[1] = gdk_color_state_ref (color_state[1]);
+  self->color_state[2] = gdk_color_state_ref (color_state[2]);
+  self->color_state[3] = gdk_color_state_ref (color_state[3]);
+
+  if (border_width[0] == border_width[1] &&
+      border_width[0] == border_width[2] &&
+      border_width[0] == border_width[3])
+    self->uniform_width = TRUE;
+  else
+    self->uniform_width = FALSE;
+
+  if (gdk_rgba_equal (&border_color[0], &border_color[1]) &&
+      gdk_rgba_equal (&border_color[0], &border_color[2]) &&
+      gdk_rgba_equal (&border_color[0], &border_color[3]) &&
+      gdk_color_state_equal (color_state[0], color_state[1]) &&
+      gdk_color_state_equal (color_state[0], color_state[2]) &&
+      gdk_color_state_equal (color_state[0], color_state[3]))
+    self->uniform_color = TRUE;
+  else
+    self->uniform_color = FALSE;
+
+  gsk_rect_init_from_rect (&node->bounds, &self->outline.bounds);
+
+  return node;
+}
+
 /**
  * gsk_border_node_new:
  * @outline: a `GskRoundedRect` describing the outline of the border
@@ -1696,43 +1792,14 @@ gsk_border_node_new (const GskRoundedRect *outline,
                      const float           border_width[4],
                      const GdkRGBA         border_color[4])
 {
-  GskBorderNode *self;
-  GskRenderNode *node;
-
-  g_return_val_if_fail (outline != NULL, NULL);
-  g_return_val_if_fail (border_width != NULL, NULL);
-  g_return_val_if_fail (border_color != NULL, NULL);
-
-  self = gsk_render_node_alloc (GSK_BORDER_NODE);
-  node = (GskRenderNode *) self;
-  node->offscreen_for_opacity = FALSE;
-  node->preferred_depth = gdk_memory_depth_merge (
-                            gdk_memory_depth_merge (my_color_get_depth (&border_color[0]),
-                                                    my_color_get_depth (&border_color[1])),
-                            gdk_memory_depth_merge (my_color_get_depth (&border_color[2]),
-                                                    my_color_get_depth (&border_color[3])));
-
-  gsk_rounded_rect_init_copy (&self->outline, outline);
-  memcpy (self->border_width, border_width, sizeof (self->border_width));
-  memcpy (self->border_color, border_color, sizeof (self->border_color));
-
-  if (border_width[0] == border_width[1] &&
-      border_width[0] == border_width[2] &&
-      border_width[0] == border_width[3])
-    self->uniform_width = TRUE;
-  else
-    self->uniform_width = FALSE;
-
-  if (gdk_rgba_equal (&border_color[0], &border_color[1]) &&
-      gdk_rgba_equal (&border_color[0], &border_color[2]) &&
-      gdk_rgba_equal (&border_color[0], &border_color[3]))
-    self->uniform_color = TRUE;
-  else
-    self->uniform_color = FALSE;
-
-  gsk_rect_init_from_rect (&node->bounds, &self->outline.bounds);
-
-  return node;
+  return gsk_border_node_new2 (outline, border_width,
+                               (GdkColorState *[]) {
+                                 GDK_COLOR_STATE_SRGB,
+                                 GDK_COLOR_STATE_SRGB,
+                                 GDK_COLOR_STATE_SRGB,
+                                 GDK_COLOR_STATE_SRGB,
+                               },
+                               (float(*)[4]) border_color);
 }
 
 /* Private */
