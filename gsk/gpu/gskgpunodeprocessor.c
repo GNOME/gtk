@@ -2586,14 +2586,18 @@ static void
 gsk_gpu_node_processor_add_gl_shader_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
-  GdkRGBA pink = { 255 / 255., 105 / 255., 180 / 255., 1.0 };
+  float pink[4] = { 255 / 255., 105 / 255., 180 / 255., 1.0 };
+  float color[4];
+
+  gdk_color_state_convert_color (GDK_COLOR_STATE_SRGB, self->ccs, pink, color);
+  color[3] *= self->opacity;
 
   gsk_gpu_color_op (self->frame,
                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                    gsk_gpu_node_processor_color_states_for_rgba (self),
+                    gsk_gpu_node_processor_color_states_self (self),
                     &node->bounds,
                     &self->offset,
-                    GSK_RGBA_TO_VEC4_ALPHA (&pink, self->opacity));
+                    color);
 }
 
 static void
