@@ -119,8 +119,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     } stroke;
     struct {
       gsize n_shadows;
-      GskShadow *shadows;
-      GskShadow a_shadow; /* Used if n_shadows == 1 */
+      GskShadow2 *shadows;
+      GskShadow2 a_shadow; /* Used if n_shadows == 1 */
     } shadow;
     struct {
       GskBlendMode blend_mode;
@@ -1348,11 +1348,11 @@ gtk_snapshot_collect_shadow (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  shadow_node = gsk_shadow_node_new (node,
-                                     state->data.shadow.shadows != NULL ?
-                                     state->data.shadow.shadows :
-                                     &state->data.shadow.a_shadow,
-                                     state->data.shadow.n_shadows);
+  shadow_node = gsk_shadow_node_new2 (node,
+                                      state->data.shadow.shadows != NULL
+                                        ? state->data.shadow.shadows
+                                        : &state->data.shadow.a_shadow,
+                                      state->data.shadow.n_shadows);
 
   gsk_render_node_unref (node);
 
@@ -1391,6 +1391,12 @@ gtk_snapshot_append_stroke (GtkSnapshot     *snapshot,
 static void
 gtk_snapshot_clear_shadow (GtkSnapshotState *state)
 {
+  if (state->data.shadow.shadows != 0)
+    for (gsize i = 0; i < state->data.shadow.n_shadows; i++)
+      gdk_color_finish (&state->data.shadow.shadows[i].color);
+  else
+    gdk_color_finish (&state->data.shadow.a_shadow.color);
+
   g_free (state->data.shadow.shadows);
 }
 
@@ -1408,6 +1414,41 @@ void
 gtk_snapshot_push_shadow (GtkSnapshot     *snapshot,
                           const GskShadow *shadow,
                           gsize            n_shadows)
+{
+  GskShadow2 *shadow2;
+
+  g_return_if_fail (n_shadows > 0);
+
+  shadow2 = g_new (GskShadow2, n_shadows);
+  for (gsize i = 0; i < n_shadows; i++)
+    {
+      gdk_color_init_from_rgba (&shadow2[i].color, &shadow[i].color);
+      graphene_point_init (&shadow2[i].offset, shadow[i].dx,shadow[i].dy);
+      shadow2[i].radius = shadow[i].radius;
+    }
+
+  gtk_snapshot_push_shadow2 (snapshot, shadow2, n_shadows);
+
+  for (gsize i = 0; i < n_shadows; i++)
+    gdk_color_finish (&shadow2[i].color);
+
+  g_free (shadow2);
+}
+
+/*< private >
+ * gtk_snapshot_push_shadow2:
+ * @snapshot: a `GtkSnapshot`
+ * @shadow: (array length=n_shadows): the first shadow specification
+ * @n_shadows: number of shadow specifications
+ *
+ * Applies a shadow to an image.
+ *
+ * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
+ */
+void
+gtk_snapshot_push_shadow2 (GtkSnapshot      *snapshot,
+                           const GskShadow2 *shadow,
+                           gsize             n_shadows)
 {
   GtkSnapshotState *state;
   GskTransform *transform;
@@ -1429,20 +1470,23 @@ gtk_snapshot_push_shadow (GtkSnapshot     *snapshot,
   if (n_shadows == 1)
     {
       state->data.shadow.shadows = NULL;
-      memcpy (&state->data.shadow.a_shadow, shadow, sizeof (GskShadow));
-      state->data.shadow.a_shadow.dx *= scale_x;
-      state->data.shadow.a_shadow.dy *= scale_y;
-      state->data.shadow.a_shadow.radius *= scale_x;
+      gdk_color_init_copy (&state->data.shadow.a_shadow.color, &shadow->color);
+      graphene_point_init (&state->data.shadow.a_shadow.offset,
+                           shadow->offset.x * scale_x,
+                           shadow->offset.y * scale_y);
+      state->data.shadow.a_shadow.radius = shadow->radius * scale_x;
     }
   else
     {
-      state->data.shadow.shadows = g_malloc (sizeof (GskShadow) * n_shadows);
-      memcpy (state->data.shadow.shadows, shadow, sizeof (GskShadow) * n_shadows);
+      state->data.shadow.shadows = g_malloc (sizeof (GskShadow2) * n_shadows);
+      memcpy (state->data.shadow.shadows, shadow, sizeof (GskShadow2) * n_shadows);
       for (i = 0; i < n_shadows; i++)
         {
-          state->data.shadow.shadows[i].dx *= scale_x;
-          state->data.shadow.shadows[i].dy *= scale_y;
-          state->data.shadow.shadows[i].radius *= scale_x;
+          gdk_color_init_copy (&state->data.shadow.shadows[i].color, &shadow[i].color);
+          graphene_point_init (&state->data.shadow.shadows[i].offset,
+                               shadow[i].offset.x * scale_x,
+                               shadow[i].offset.y * scale_y);
+          state->data.shadow.shadows[i].radius = shadow[i].radius * scale_x;
         }
     }
 
