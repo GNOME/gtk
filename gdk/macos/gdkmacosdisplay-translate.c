@@ -207,6 +207,7 @@ fill_button_event (GdkMacosDisplay *display,
   GdkSeat *seat;
   GdkEventType type;
   GdkModifierType state;
+  guint button;
   GdkDevice *pointer = NULL;
   GdkDeviceTool *tool = NULL;
   double *axes = NULL;
@@ -216,6 +217,7 @@ fill_button_event (GdkMacosDisplay *display,
   g_assert (GDK_IS_MACOS_SURFACE (surface));
 
   seat = gdk_display_get_default_seat (GDK_DISPLAY (display));
+  button = get_mouse_button_from_ns_event (nsevent);
   state = get_keyboard_modifiers_from_ns_event (nsevent) |
          _gdk_macos_display_get_current_mouse_modifiers (display);
   input_region = GDK_SURFACE (surface)->input_region;
@@ -227,6 +229,13 @@ fill_button_event (GdkMacosDisplay *display,
     case NSEventTypeOtherMouseDown:
       type = GDK_BUTTON_PRESS;
       state &= ~get_mouse_button_modifiers_from_ns_event (nsevent);
+
+      // Ctrl + left click == right click on macOS
+      if (button == 1 && state & GDK_CONTROL_MASK)
+        {
+          button = 3;
+          state &= ~GDK_CONTROL_MASK;
+        }
       break;
 
     case NSEventTypeLeftMouseUp:
@@ -261,7 +270,7 @@ fill_button_event (GdkMacosDisplay *display,
                                tool,
                                get_time_from_ns_event (nsevent),
                                state,
-                               get_mouse_button_from_ns_event (nsevent),
+                               button,
                                x,
                                y,
                                axes);
