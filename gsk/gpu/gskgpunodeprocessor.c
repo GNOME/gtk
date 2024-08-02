@@ -1625,13 +1625,6 @@ static void
 gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
                                         GskRenderNode       *node)
 {
-  const GdkRGBA *rgbas;
-  GdkColor colors[4];
-
-  rgbas = gsk_border_node_get_colors (node);
-  for (int i = 0; i < 4; i++)
-    gdk_color_init_from_rgba (&colors[i], &rgbas[i]);
-
   gsk_gpu_border_op (self->frame,
                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                      self->ccs,
@@ -1640,10 +1633,7 @@ gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
                      gsk_border_node_get_outline (node),
                      graphene_point_zero (),
                      gsk_border_node_get_widths (node),
-                     colors);
-
-  for (int i = 0; i < 4; i++)
-    gdk_color_finish (&colors[i]);
+                     gsk_border_node_get_colors2 (node));
 }
 
 static gboolean
