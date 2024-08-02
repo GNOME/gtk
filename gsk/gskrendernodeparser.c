@@ -684,19 +684,36 @@ parse_float4 (GtkCssParser *parser,
   return TRUE;
 }
 
+typedef struct
+{
+  GdkColorState *color_state;
+  float values[4];
+} Color;
+
+typedef struct
+{
+  GArray *shadows;
+  GPtrArray *color_states;
+} ShadowData;
+
+static gboolean parse_color2 (GtkCssParser *parser,
+                              Context      *context,
+                              gpointer      color);
+
 static gboolean
 parse_shadows (GtkCssParser *parser,
                Context      *context,
                gpointer      out_shadows)
 {
-  GArray *shadows = out_shadows;
+  ShadowData *data = out_shadows;
 
   do
     {
       GskShadow shadow = { GDK_RGBA("000000"), 0, 0, 0 };
+      Color color = { GDK_COLOR_STATE_SRGB, { 0, 0, 0, 1 } };
       double dx = 0, dy = 0, radius = 0;
 
-      if (!gdk_rgba_parser_parse (parser, &shadow.color))
+      if (!parse_color2 (parser, context, &color))
         gtk_css_parser_error_value (parser, "Expected shadow color");
 
       if (!gtk_css_parser_consume_number (parser, &dx))
@@ -711,11 +728,13 @@ parse_shadows (GtkCssParser *parser,
             gtk_css_parser_error_value (parser, "Expected shadow blur radius");
         }
 
+      memcpy (&shadow.color, color.values, sizeof (float) * 4);
       shadow.dx = dx;
       shadow.dy = dy;
       shadow.radius = radius;
 
-      g_array_append_val (shadows, shadow);
+      g_array_append_val (data->shadows, shadow);
+      g_ptr_array_add (data->color_states, color.color_state);
     }
   while (gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA));
 
@@ -725,7 +744,10 @@ parse_shadows (GtkCssParser *parser,
 static void
 clear_shadows (gpointer inout_shadows)
 {
-  g_array_set_size (inout_shadows, 0);
+  ShadowData *data = inout_shadows;
+
+  g_array_set_size (data->shadows, 0);
+  g_ptr_array_set_size (data->color_states, 0);
 }
 
 static const struct
@@ -1427,12 +1449,6 @@ create_default_path (void)
 
   return gsk_path_builder_free_to_path (builder);
 }
-
-typedef struct
-{
-  GdkColorState *color_state;
-  float values[4];
-} Color;
 
 static gboolean
 parse_cicp_range (GtkCssParser *parser,
@@ -2956,10 +2972,13 @@ parse_shadow_node (GtkCssParser *parser,
                    Context      *context)
 {
   GskRenderNode *child = NULL;
-  GArray *shadows = g_array_new (FALSE, TRUE, sizeof (GskShadow));
+  ShadowData data = {
+    g_array_new (FALSE, TRUE, sizeof (GskShadow)),
+    g_ptr_array_new_with_free_func ((GDestroyNotify) gdk_color_state_unref),
+  };
   const Declaration declarations[] = {
     { "child", parse_node, clear_node, &child },
-    { "shadows", parse_shadows, clear_shadows, shadows }
+    { "shadows", parse_shadows, clear_shadows, &data }
   };
   GskRenderNode *result;
 
@@ -2967,15 +2986,22 @@ parse_shadow_node (GtkCssParser *parser,
   if (child == NULL)
     child = create_default_render_node ();
 
-  if (shadows->len == 0)
+  if (data.shadows->len == 0)
     {
       GskShadow default_shadow = { GDK_RGBA("000000"), 1, 1, 0 };
-      g_array_append_val (shadows, default_shadow);
+      g_array_append_val (data.shadows, default_shadow);
+      g_ptr_array_add (data.color_states, GDK_COLOR_STATE_SRGB);
     }
 
-  result = gsk_shadow_node_new (child, (GskShadow *)shadows->data, shadows->len);
+  g_assert (data.shadows->len == data.color_states->len);
 
-  g_array_free (shadows, TRUE);
+  result = gsk_shadow_node_new2 (child,
+                                 (GskShadow *)data.shadows->data,
+                                 data.shadows->len,
+                                 (GdkColorState **)data.color_states->pdata);
+
+  g_array_free (data.shadows, TRUE);
+  g_ptr_array_free (data.color_states, TRUE);
   gsk_render_node_unref (child);
 
   return result;
@@ -3413,6 +3439,8 @@ printer_init_duplicates_for_node (Printer       *printer,
 
     case GSK_SHADOW_NODE:
       printer_init_duplicates_for_node (printer, gsk_shadow_node_get_child (node));
+      for (int i = 0; i < gsk_shadow_node_get_n_shadows (node); i++)
+        printer_init_check_color_state (printer, gsk_shadow_node_get_color_state (node, i));
       break;
 
     case GSK_DEBUG_NODE:
@@ -4538,13 +4566,13 @@ render_node_print (Printer       *p,
         for (i = 0; i < n_shadows; i ++)
           {
             const GskShadow *s = gsk_shadow_node_get_shadow (node, i);
-            char *color;
 
             if (i > 0)
               g_string_append (p->str, ", ");
 
-            color = gdk_rgba_to_string (&s->color);
-            g_string_append (p->str, color);
+            print_color (p,
+                         gsk_shadow_node_get_color_state (node, i),
+                         (const float *) &s->color);
             g_string_append_c (p->str, ' ');
             string_append_double (p->str, s->dx);
             g_string_append_c (p->str, ' ');
@@ -4554,8 +4582,6 @@ render_node_print (Printer       *p,
                 g_string_append_c (p->str, ' ');
                 string_append_double (p->str, s->radius);
               }
-
-            g_free (color);
           }
 
         g_string_append_c (p->str, ';');
