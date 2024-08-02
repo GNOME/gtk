@@ -47,6 +47,7 @@
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdksubsurfaceprivate.h"
 #include "gdk/gdktextureprivate.h"
+#include "gdk/gdkcairoprivate.h"
 
 /* the epsilon we allow pixels to be off due to rounding errors.
  * Chosen rather randomly.
@@ -3202,7 +3203,8 @@ typedef struct _FillData FillData;
 struct _FillData
 {
   GskPath *path;
-  GdkRGBA color;
+  GdkColorState *color_state;
+  float color[4];
   GskFillRule fill_rule;
 };
 
@@ -3211,6 +3213,7 @@ gsk_fill_data_free (gpointer data)
 {
   FillData *fill = data;
 
+  gdk_color_state_unref (fill->color_state);
   gsk_path_unref (fill->path);
   g_free (fill);
 }
@@ -3234,7 +3237,7 @@ gsk_gpu_node_processor_fill_path (gpointer  data,
       break;
   }
   gsk_path_to_cairo (fill->path, cr);
-  gdk_cairo_set_source_rgba (cr, &fill->color);
+  gdk_cairo_set_source_color_ccs (cr, GDK_COLOR_STATE_SRGB, fill->color_state, fill->color);
   cairo_fill (cr);
 }
 
@@ -3245,6 +3248,9 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
   graphene_rect_t clip_bounds, source_rect;
   GskGpuImage *mask_image, *source_image;
   GskRenderNode *child;
+  const float white[] = { 1, 1, 1, 1 };
+  const float *color;
+  GdkColorState *color_state;
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
     return;
@@ -3252,15 +3258,25 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
 
   child = gsk_fill_node_get_child (node);
 
+  if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
+    {
+      color = gsk_color_node_get_color2 (child);
+      color_state = gsk_color_node_get_color_state (child);
+    }
+  else
+    {
+      color = white;
+      color_state = GDK_COLOR_STATE_SRGB;
+    }
+
   mask_image = gsk_gpu_upload_cairo_op (self->frame,
                                         &self->scale,
                                         &clip_bounds,
                                         gsk_gpu_node_processor_fill_path,
                                         g_memdup (&(FillData) {
                                             .path = gsk_path_ref (gsk_fill_node_get_path (node)),
-                                            .color = GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE
-                                                   ? *gsk_color_node_get_color (child)
-                                                   : GDK_RGBA_WHITE,
+                                            .color_state = gdk_color_state_ref (color_state),
+                                            .color = { color[0], color[1], color[2], color[3] },
                                             .fill_rule = gsk_fill_node_get_fill_rule (node)
                                         }, sizeof (FillData)),
                                         (GDestroyNotify) gsk_fill_data_free);
@@ -3309,7 +3325,8 @@ typedef struct _StrokeData StrokeData;
 struct _StrokeData
 {
   GskPath *path;
-  GdkRGBA color;
+  GdkColorState *color_state;
+  float color[4];
   GskStroke stroke;
 };
 
@@ -3319,6 +3336,7 @@ gsk_stroke_data_free (gpointer data)
   StrokeData *stroke = data;
 
   gsk_path_unref (stroke->path);
+  gdk_color_state_unref (stroke->color_state);
   gsk_stroke_clear (&stroke->stroke);
   g_free (stroke);
 }
@@ -3331,7 +3349,7 @@ gsk_gpu_node_processor_stroke_path (gpointer  data,
 
   gsk_stroke_to_cairo (&stroke->stroke, cr);
   gsk_path_to_cairo (stroke->path, cr);
-  gdk_cairo_set_source_rgba (cr, &stroke->color);
+  gdk_cairo_set_source_color_ccs (cr, GDK_COLOR_STATE_SRGB, stroke->color_state, stroke->color);
   cairo_stroke (cr);
 }
 
@@ -3342,6 +3360,9 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
   graphene_rect_t clip_bounds, source_rect;
   GskGpuImage *mask_image, *source_image;
   GskRenderNode *child;
+  const float white[] = { 1, 1, 1, 1 };
+  const float *color;
+  GdkColorState *color_state;
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
     return;
@@ -3349,15 +3370,25 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
 
   child = gsk_stroke_node_get_child (node);
 
+  if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
+    {
+      color = gsk_color_node_get_color2 (child);
+      color_state = gsk_color_node_get_color_state (child);
+    }
+  else
+    {
+      color = white;
+      color_state = GDK_COLOR_STATE_SRGB;
+    }
+
   mask_image = gsk_gpu_upload_cairo_op (self->frame,
                                         &self->scale,
                                         &clip_bounds,
                                         gsk_gpu_node_processor_stroke_path,
                                         g_memdup (&(StrokeData) {
                                             .path = gsk_path_ref (gsk_stroke_node_get_path (node)),
-                                            .color = GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE
-                                                   ? *gsk_color_node_get_color (child)
-                                                   : GDK_RGBA_WHITE,
+                                            .color_state = gdk_color_state_ref (color_state),
+                                            .color = { color[0], color[1], color[2], color[3] },
                                             .stroke = GSK_STROKE_INIT_COPY (gsk_stroke_node_get_stroke (node))
                                         }, sizeof (StrokeData)),
                                         (GDestroyNotify) gsk_stroke_data_free);

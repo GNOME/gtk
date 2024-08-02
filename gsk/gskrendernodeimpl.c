@@ -5087,7 +5087,9 @@ gsk_fill_node_draw (GskRenderNode *node,
   if (gsk_render_node_get_node_type (self->child) == GSK_COLOR_NODE &&
       gsk_rect_contains_rect (&self->child->bounds, &node->bounds))
     {
-      gdk_cairo_set_source_rgba_ccs (cr, ccs, gsk_color_node_get_color (self->child));
+      const float *color = gsk_color_node_get_color2 (self->child);
+      GdkColorState *color_state = gsk_color_node_get_color_state (self->child);
+      gdk_cairo_set_source_color_ccs (cr, ccs, color_state, color);
       cairo_fill (cr);
     }
   else
@@ -5283,7 +5285,9 @@ gsk_stroke_node_draw (GskRenderNode *node,
   if (gsk_render_node_get_node_type (self->child) == GSK_COLOR_NODE &&
       gsk_rect_contains_rect (&self->child->bounds, &node->bounds))
     {
-      gdk_cairo_set_source_rgba_ccs (cr, ccs, gsk_color_node_get_color (self->child));
+      const float *color = gsk_color_node_get_color2 (self->child);
+      GdkColorState *color_state = gsk_color_node_get_color_state (self->child);
+      gdk_cairo_set_source_color_ccs (cr, ccs, color_state, color);
     }
   else
     {
