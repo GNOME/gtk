@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gdkcolorstateprivate.h"
+#include "gdkcolorprivate.h"
 
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytexture.h"
@@ -89,14 +90,24 @@ gdk_cairo_format_to_memory_format (cairo_format_t format)
 }
 
 static inline void
+gdk_cairo_set_source_color (cairo_t        *cr,
+                            GdkColorState  *ccs,
+                            const GdkColor *color)
+{
+  float c[4];
+  gdk_color_to_float (color, ccs, c);
+  cairo_set_source_rgba (cr, c[0], c[1], c[2], c[3]);
+}
+
+static inline void
 gdk_cairo_set_source_rgba_ccs (cairo_t       *cr,
                                GdkColorState *ccs,
                                const GdkRGBA *rgba)
 {
-  float color[4];
-
-  gdk_color_state_from_rgba (ccs, rgba, color);
-  cairo_set_source_rgba (cr, color[0], color[1], color[2], color[3]);
+  GdkColor c;
+  gdk_color_init_from_rgba (&c, rgba);
+  gdk_cairo_set_source_color (cr, ccs, &c);
+  gdk_color_finish (&c);
 }
 
 static inline void
