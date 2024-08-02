@@ -319,6 +319,7 @@ node_parser_tests = [
   'blend-unknown-mode.node',
   'blend-unknown-mode.ref.node',
   'border.node',
+  'box-shadow.node',
   'color.node',
   'color2.node',
   'conic-gradient.node',

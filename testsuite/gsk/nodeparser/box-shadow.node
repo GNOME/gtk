@@ -1,0 +1,4 @@
+outset-shadow {
+  blur: 2;
+  color: color(rec2100-pq 1 0.5 0 / 0.75);
+}
