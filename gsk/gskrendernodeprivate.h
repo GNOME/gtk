@@ -149,6 +149,20 @@ GskRenderNode * gsk_outset_shadow_node_new2             (const GskRoundedRect *o
                                                          float                 blur_radius);
 const GdkColor *gsk_outset_shadow_node_get_color2       (const GskRenderNode  *node);
 
+typedef struct _GskShadow2 GskShadow2;
+struct _GskShadow2
+{
+  GdkColor color;
+  graphene_point_t offset;
+  float radius;
+};
+
+GskRenderNode * gsk_shadow_node_new2                    (GskRenderNode        *child,
+                                                         const GskShadow2     *shadows,
+                                                         gsize                 n_shadows);
+
+const GskShadow2 *gsk_shadow_node_get_shadow2           (const GskRenderNode  *node,
+                                                         gsize                 i);
 
 
 G_END_DECLS
