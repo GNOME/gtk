@@ -4159,7 +4159,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   crenderer->widget = widget;
   crenderer->snapshot = snapshot;
-  crenderer->fg_color = color;
+  gdk_color_init_from_rgba (&crenderer->fg_color, color);
 
   have_selection = gtk_text_buffer_get_selection_bounds (layout->buffer,
                                                          &selection_start,
@@ -4334,6 +4334,8 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   /* Only update eviction source once per snapshot */
   gtk_text_line_display_cache_delay_eviction (priv->cache);
+
+  gdk_color_finish (&crenderer->fg_color);
 
   gsk_pango_renderer_release (crenderer);
 }

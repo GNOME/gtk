@@ -68,11 +68,11 @@ get_color (GskPangoRenderer *crenderer,
       rgba->red = color->red / 65535.;
       rgba->green = color->green / 65535.;
       rgba->blue = color->blue / 65535.;
-      rgba->alpha = a ? a  / 65535. : crenderer->fg_color->alpha;
+      rgba->alpha = a ? a  / 65535. : crenderer->fg_color.alpha;
     }
   else
     {
-      *rgba = *crenderer->fg_color;
+      gdk_color_to_float (&crenderer->fg_color, GDK_COLOR_STATE_SRGB, (float *) rgba);
       if (a)
         rgba->alpha = a / 65535.;
     }
@@ -490,6 +490,32 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
                             PangoLayout   *layout,
                             const GdkRGBA *color)
 {
+  GdkColor color2;
+
+  gdk_color_init_from_rgba (&color2, color);
+  gtk_snapshot_append_layout2 (snapshot, layout, &color2);
+  gdk_color_finish (&color2);
+}
+
+/* < private >
+ * gtk_snapshot_append_layout2:
+ * @snapshot: a `GtkSnapshot`
+ * @layout: the `PangoLayout` to render
+ * @color: the foreground color to render the layout in
+ *
+ * Creates render nodes for rendering @layout in the given foregound @color
+ * and appends them to the current node of @snapshot without changing the
+ * current node. The current theme's foreground color for a widget can be
+ * obtained with [method@Gtk.Widget.get_color].
+ *
+ * Note that if the layout does not produce any visible output, then nodes
+ * may not be added to the @snapshot.
+ **/
+void
+gtk_snapshot_append_layout2 (GtkSnapshot    *snapshot,
+                             PangoLayout    *layout,
+                             const GdkColor *color)
+{
   GskPangoRenderer *crenderer;
 
   g_return_if_fail (snapshot != NULL);
@@ -498,9 +524,11 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
   crenderer = gsk_pango_renderer_acquire ();
 
   crenderer->snapshot = snapshot;
-  crenderer->fg_color = color;
+  gdk_color_init_copy (&crenderer->fg_color, color);
 
   pango_renderer_draw_layout (PANGO_RENDERER (crenderer), layout, 0, 0);
+
+  gdk_color_finish (&crenderer->fg_color);
 
   gsk_pango_renderer_release (crenderer);
 }
