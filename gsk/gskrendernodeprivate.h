@@ -133,5 +133,23 @@ GskRenderNode * gsk_border_node_new2                    (const GskRoundedRect  *
                                                          const GdkColor         border_color[4]);
 const GdkColor *gsk_border_node_get_colors2             (const GskRenderNode   *node);
 
+GskRenderNode * gsk_inset_shadow_node_new2              (const GskRoundedRect *outline,
+                                                         const GdkColor       *color,
+                                                         float                 dx,
+                                                         float                 dy,
+                                                         float                 spread,
+                                                         float                 blur_radius);
+const GdkColor *gsk_inset_shadow_node_get_color2        (const GskRenderNode  *node);
+
+GskRenderNode * gsk_outset_shadow_node_new2             (const GskRoundedRect *outline,
+                                                         const GdkColor       *color,
+                                                         float                 dx,
+                                                         float                 dy,
+                                                         float                 spread,
+                                                         float                 blur_radius);
+const GdkColor *gsk_outset_shadow_node_get_color2       (const GskRenderNode  *node);
+
+
+
 G_END_DECLS
 
