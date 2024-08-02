@@ -161,6 +161,13 @@ GskRenderNode * gsk_outset_shadow_node_new2             (const GskRoundedRect *o
 GdkColorState * gsk_outset_shadow_node_get_color_state  (const GskRenderNode  *node);
 const float *   gsk_outset_shadow_node_get_color2       (const GskRenderNode  *node);
 
+GskRenderNode * gsk_shadow_node_new2                    (GskRenderNode        *child,
+                                                         const GskShadow      *shadows,
+                                                         gsize                 n_shadows,
+                                                         GdkColorState       **color_states);
+
+GdkColorState * gsk_shadow_node_get_color_state         (const GskRenderNode  *node,
+                                                         gsize                 i);
 
 
 G_END_DECLS

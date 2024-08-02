@@ -78,13 +78,6 @@ gsk_color_stops_are_opaque (const GskColorStop *stops,
 
 /* FIXME: Replace this once GdkColor lands */
 static inline GdkMemoryDepth
-my_color_get_depth (const GdkRGBA *rgba)
-{
-  return gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
-}
-
-/* FIXME: Replace this once GdkColor lands */
-static inline GdkMemoryDepth
 my_color_stops_get_depth (const GskColorStop *stops,
                           gsize               n_stops)
 {
@@ -5472,6 +5465,8 @@ struct _GskShadowNode
 
   gsize n_shadows;
   GskShadow *shadows;
+
+  GdkColorState **color_states;
 };
 
 static void
@@ -5482,6 +5477,9 @@ gsk_shadow_node_finalize (GskRenderNode *node)
 
   gsk_render_node_unref (self->child);
   g_free (self->shadows);
+
+  for (gsize i = 0; i < self->n_shadows; i++)
+    gdk_color_state_unref (self->color_states[i]);
 
   parent_class->finalize (node);
 }
@@ -5518,12 +5516,12 @@ gsk_shadow_node_draw (GskRenderNode *node,
       gsk_render_node_draw_ccs (self->child, cr, ccs);
       pattern = cairo_pop_group (cr);
       cairo_reset_clip (cr);
-      gdk_cairo_set_source_rgba_ccs (cr, ccs, &shadow->color);
+      gdk_cairo_set_source_color_ccs (cr, ccs, self->color_states[i], (const float *) &shadow->color);
       cairo_mask (cr, pattern);
       cairo_pattern_destroy (pattern);
       cairo_restore (cr);
 
-      cr = gsk_cairo_blur_finish_drawing (cr, ccs, 0.5 * shadow->radius, GDK_COLOR_STATE_SRGB, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
+      cr = gsk_cairo_blur_finish_drawing (cr, ccs, 0.5 * shadow->radius, self->color_states[i], &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
       cairo_restore (cr);
     }
 
@@ -5555,6 +5553,7 @@ gsk_shadow_node_diff (GskRenderNode *node1,
       float clip_radius;
 
       if (!gdk_rgba_equal (&shadow1->color, &shadow2->color) ||
+          !gdk_color_state_equal (self1->color_states[i], self2->color_states[i]) ||
           shadow1->dx != shadow2->dx ||
           shadow1->dy != shadow2->dy ||
           shadow1->radius != shadow2->radius)
@@ -5639,6 +5638,21 @@ gsk_shadow_node_new (GskRenderNode   *child,
                      const GskShadow *shadows,
                      gsize            n_shadows)
 {
+  GdkColorState **color_states;
+
+  color_states = g_newa (GdkColorState *, n_shadows);
+  for (gsize i = 0; i < n_shadows; i++)
+    color_states[i] = GDK_COLOR_STATE_SRGB;
+
+  return gsk_shadow_node_new2 (child, shadows, n_shadows, color_states);
+}
+
+GskRenderNode *
+gsk_shadow_node_new2 (GskRenderNode    *child,
+                      const GskShadow  *shadows,
+                      gsize             n_shadows,
+                      GdkColorState   **color_states)
+{
   GskShadowNode *self;
   GskRenderNode *node;
   gsize i;
@@ -5655,15 +5669,16 @@ gsk_shadow_node_new (GskRenderNode   *child,
   self->n_shadows = n_shadows;
   self->shadows = g_malloc_n (n_shadows, sizeof (GskShadow));
   memcpy (self->shadows, shadows, n_shadows * sizeof (GskShadow));
+  self->color_states = g_malloc_n (n_shadows, sizeof (GdkColorState *));
+  for (i = 0; i < n_shadows; i++)
+    self->color_states[i] = gdk_color_state_ref (color_states[i]);
 
   gsk_shadow_node_get_bounds (self, &node->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   for (i = 0; i < n_shadows; i++)
-    {
-      node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
-                                                      my_color_get_depth (&shadows->color));
-    }
+    node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
+                                                    gdk_color_state_get_depth (self->color_states[i]));
 
   return node;
 }
@@ -5700,6 +5715,15 @@ gsk_shadow_node_get_shadow (const GskRenderNode *node,
   const GskShadowNode *self = (const GskShadowNode *) node;
 
   return &self->shadows[i];
+}
+
+GdkColorState *
+gsk_shadow_node_get_color_state (const GskRenderNode *node,
+                                 gsize                i)
+{
+  const GskShadowNode *self = (const GskShadowNode *) node;
+
+  return self->color_states[i];
 }
 
 /**
