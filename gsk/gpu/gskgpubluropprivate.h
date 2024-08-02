@@ -19,7 +19,7 @@ void                    gsk_gpu_blur_shadow_op                          (GskGpuF
                                                                          const graphene_point_t         *offset,
                                                                          const GskGpuShaderImage        *image,
                                                                          const graphene_vec2_t          *blur_direction,
-                                                                         float                           shadow_color[4]);
+                                                                         const float                     shadow_color[4]);
 
 
 G_END_DECLS

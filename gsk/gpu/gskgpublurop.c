@@ -61,7 +61,7 @@ gsk_gpu_blur_op_full (GskGpuFrame             *frame,
                       const graphene_point_t  *offset,
                       const GskGpuShaderImage *image,
                       const graphene_vec2_t   *blur_direction,
-                      float                    blur_color[4])
+                      const float              blur_color[4])
 {
   GskGpuBlurInstance *instance;
 
@@ -105,7 +105,7 @@ gsk_gpu_blur_shadow_op (GskGpuFrame             *frame,
                         const graphene_point_t  *offset,
                         const GskGpuShaderImage *image,
                         const graphene_vec2_t   *blur_direction,
-                        float                    shadow_color[4])
+                        const float              shadow_color[4])
 {
   gsk_gpu_blur_op_full (frame,
                         clip,
