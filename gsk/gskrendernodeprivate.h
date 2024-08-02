@@ -169,6 +169,48 @@ GskRenderNode * gsk_shadow_node_new2                    (GskRenderNode        *c
 GdkColorState * gsk_shadow_node_get_color_state         (const GskRenderNode  *node,
                                                          gsize                 i);
 
+GskRenderNode * gsk_linear_gradient_node_new2           (const graphene_rect_t   *bounds,
+                                                         const graphene_point_t  *start,
+                                                         const graphene_point_t  *end,
+                                                         const GskColorStop      *color_stops,
+                                                         gsize                    n_color_stops,
+                                                         GdkColorState          **color_states);
+GskRenderNode * gsk_repeating_linear_gradient_node_new2  (const graphene_rect_t   *bounds,
+                                                          const graphene_point_t  *start,
+                                                          const graphene_point_t  *end,
+                                                          const GskColorStop      *color_stops,
+                                                          gsize                    n_color_stops,
+                                                          GdkColorState          **color_states);
+GdkColorState ** gsk_linear_gradient_node_get_color_states (const GskRenderNode *node);
+
+GskRenderNode * gsk_radial_gradient_node_new2            (const graphene_rect_t   *bounds,
+                                                          const graphene_point_t  *center,
+                                                          float                    hradius,
+                                                          float                    vradius,
+                                                          float                    start,
+                                                          float                    end,
+                                                          const GskColorStop      *color_stops,
+                                                          gsize                    n_color_stops,
+                                                          GdkColorState          **color_states);
+GskRenderNode * gsk_repeating_radial_gradient_node_new2  (const graphene_rect_t   *bounds,
+                                                          const graphene_point_t  *center,
+                                                          float                    hradius,
+                                                          float                    vradius,
+                                                          float                    start,
+                                                          float                    end,
+                                                          const GskColorStop      *color_stops,
+                                                          gsize                    n_color_stops,
+                                                          GdkColorState          **color_states);
+GdkColorState ** gsk_radial_gradient_node_get_color_states (const GskRenderNode *node);
+
+GskRenderNode * gsk_conic_gradient_node_new2             (const graphene_rect_t   *bounds,
+                                                          const graphene_point_t  *center,
+                                                          float                    rotation,
+                                                          const GskColorStop      *color_stops,
+                                                          gsize                    n_color_stops,
+                                                          GdkColorState          **color_states);
+GdkColorState ** gsk_conic_gradient_node_get_color_states (const GskRenderNode *node);
+
 
 G_END_DECLS
 

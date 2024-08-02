@@ -330,6 +330,8 @@ struct _GskLinearGradientNode
 
   gsize n_stops;
   GskColorStop *stops;
+
+  GdkColorState **color_states;
 };
 
 static void
@@ -339,6 +341,10 @@ gsk_linear_gradient_node_finalize (GskRenderNode *node)
   GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_LINEAR_GRADIENT_NODE));
 
   g_free (self->stops);
+
+  for (gsize i = 0; i < self->n_stops; i++)
+    gdk_color_state_unref (self->color_states[i]);
+  g_free (self->color_states);
 
   parent_class->finalize (node);
 }
@@ -359,16 +365,25 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
     cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
 
   if (self->stops[0].offset > 0.0)
-    gdk_cairo_pattern_add_color_stop_rgba_ccs (pattern, ccs, 0.0, &self->stops[0].color);
+    gdk_cairo_pattern_add_color_stop_color_ccs (pattern,
+                                                ccs,
+                                                0.0,
+                                                self->color_states[0],
+                                                &self->stops[0].color);
   for (i = 0; i < self->n_stops; i++)
     {
-      gdk_cairo_pattern_add_color_stop_rgba_ccs (pattern,
-                                                 ccs,
-                                                 self->stops[i].offset,
-                                                 &self->stops[i].color);
+      gdk_cairo_pattern_add_color_stop_color_ccs (pattern,
+                                                  ccs,
+                                                  self->stops[i].offset,
+                                                  self->color_states[i],
+                                                  &self->stops[i].color);
     }
   if (self->stops[self->n_stops-1].offset < 1.0)
-    gdk_cairo_pattern_add_color_stop_rgba_ccs (pattern, ccs, 1.0, &self->stops[self->n_stops-1].color);
+    gdk_cairo_pattern_add_color_stop_color_ccs (pattern,
+                                                ccs,
+                                                1.0,
+                                                self->color_states[self->n_stops - 1],
+                                                &self->stops[self->n_stops - 1].color);
 
   cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
@@ -397,7 +412,8 @@ gsk_linear_gradient_node_diff (GskRenderNode *node1,
           GskColorStop *stop2 = &self2->stops[i];
 
           if (stop1->offset == stop2->offset &&
-              gdk_rgba_equal (&stop1->color, &stop2->color))
+              gdk_rgba_equal (&stop1->color, &stop2->color) &&
+              gdk_color_state_equal (self1->color_states[i], self2->color_states[i]))
             continue;
 
           gsk_render_node_diff_impossible (node1, node2, data);
@@ -459,6 +475,27 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
                               const GskColorStop     *color_stops,
                               gsize                   n_color_stops)
 {
+  GdkColorState **color_states;
+
+  color_states = g_newa (GdkColorState *, n_color_stops);
+  for (gsize i = 0; i < n_color_stops; i++)
+    color_states[i] = GDK_COLOR_STATE_SRGB;
+
+  return gsk_linear_gradient_node_new2 (bounds,
+                                        start, end,
+                                        color_stops,
+                                        n_color_stops,
+                                        color_states);
+}
+
+GskRenderNode *
+gsk_linear_gradient_node_new2 (const graphene_rect_t   *bounds,
+                               const graphene_point_t  *start,
+                               const graphene_point_t  *end,
+                               const GskColorStop      *color_stops,
+                               gsize                    n_color_stops,
+                               GdkColorState          **color_states)
+{
   GskLinearGradientNode *self;
   GskRenderNode *node;
   gsize i;
@@ -488,6 +525,10 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
   self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
   memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
 
+  self->color_states = g_malloc_n (n_color_stops, sizeof (GdkColorState *));
+  for (i = 0; i < n_color_stops; i++)
+    self->color_states[i] = gdk_color_state_ref (color_states[i]);
+
   return node;
 }
 
@@ -514,6 +555,27 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
                                         const graphene_point_t *end,
                                         const GskColorStop     *color_stops,
                                         gsize                   n_color_stops)
+{
+  GdkColorState **color_states;
+
+  color_states = g_newa (GdkColorState *, n_color_stops);
+  for (gsize i = 0; i < n_color_stops; i++)
+    color_states[i] = GDK_COLOR_STATE_SRGB;
+
+  return gsk_repeating_linear_gradient_node_new2 (bounds,
+                                                  start, end,
+                                                  color_stops,
+                                                  n_color_stops,
+                                                  color_states);
+}
+
+GskRenderNode *
+gsk_repeating_linear_gradient_node_new2 (const graphene_rect_t   *bounds,
+                                         const graphene_point_t  *start,
+                                         const graphene_point_t  *end,
+                                         const GskColorStop      *color_stops,
+                                         gsize                    n_color_stops,
+                                         GdkColorState          **color_states)
 {
   GskLinearGradientNode *self;
   GskRenderNode *node;
@@ -543,6 +605,10 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
   self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
   memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
   self->n_stops = n_color_stops;
+
+  self->color_states = g_malloc_n (n_color_stops, sizeof (GdkColorState *));
+  for (i = 0; i < n_color_stops; i++)
+    self->color_states[i] = gdk_color_state_ref (color_states[i]);
 
   return node;
 }
@@ -616,6 +682,14 @@ gsk_linear_gradient_node_get_color_stops (const GskRenderNode *node,
   return self->stops;
 }
 
+GdkColorState **
+gsk_linear_gradient_node_get_color_states (const GskRenderNode *node)
+{
+  const GskLinearGradientNode *self = (const GskLinearGradientNode *) node;
+
+  return self->color_states;
+}
+
 /* }}} */
 /* {{{ GSK_RADIAL_GRADIENT_NODE */
 
@@ -643,6 +717,7 @@ struct _GskRadialGradientNode
 
   gsize n_stops;
   GskColorStop *stops;
+  GdkColorState **color_states;
 };
 
 static void
@@ -652,6 +727,10 @@ gsk_radial_gradient_node_finalize (GskRenderNode *node)
   GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_RADIAL_GRADIENT_NODE));
 
   g_free (self->stops);
+
+  for (gsize i = 0; i < self->n_stops; i++)
+    gdk_color_state_unref (self->color_states[i]);
+  g_free (self->color_states);
 
   parent_class->finalize (node);
 }
@@ -682,16 +761,25 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
     cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
   if (self->stops[0].offset > 0.0)
-    gdk_cairo_pattern_add_color_stop_rgba_ccs (pattern, ccs, 0.0, &self->stops[0].color);
+    gdk_cairo_pattern_add_color_stop_color_ccs (pattern,
+                                                ccs,
+                                                0.0,
+                                                self->color_states[0],
+                                                &self->stops[0].color);
   for (i = 0; i < self->n_stops; i++)
     {
-      gdk_cairo_pattern_add_color_stop_rgba_ccs (pattern,
-                                                 ccs,
-                                                 self->stops[i].offset,
-                                                 &self->stops[i].color);
+      gdk_cairo_pattern_add_color_stop_color_ccs (pattern,
+                                                  ccs,
+                                                  self->stops[i].offset,
+                                                  self->color_states[i],
+                                                  &self->stops[i].color);
     }
   if (self->stops[self->n_stops-1].offset < 1.0)
-    gdk_cairo_pattern_add_color_stop_rgba_ccs (pattern, ccs, 1.0, &self->stops[self->n_stops-1].color);
+    gdk_cairo_pattern_add_color_stop_color_ccs (pattern,
+                                                ccs,
+                                                1.0,
+                                                self->color_states[self->n_stops - 1],
+                                                &self->stops[self->n_stops-1].color);
 
   gdk_cairo_rect (cr, &node->bounds);
   cairo_translate (cr, self->center.x, self->center.y);
@@ -724,7 +812,8 @@ gsk_radial_gradient_node_diff (GskRenderNode *node1,
           GskColorStop *stop2 = &self2->stops[i];
 
           if (stop1->offset == stop2->offset &&
-              gdk_rgba_equal (&stop1->color, &stop2->color))
+              gdk_rgba_equal (&stop1->color, &stop2->color) &&
+              gdk_color_state_equal (self1->color_states[i], self2->color_states[i]))
             continue;
 
           gsk_render_node_diff_impossible (node1, node2, data);
@@ -795,6 +884,31 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
                               const GskColorStop     *color_stops,
                               gsize                   n_color_stops)
 {
+  GdkColorState **color_states;
+
+  color_states = g_newa (GdkColorState *, n_color_stops);
+  for (gsize i = 0; i < n_color_stops; i++)
+    color_states[i] = GDK_COLOR_STATE_SRGB;
+
+  return gsk_radial_gradient_node_new2 (bounds, center,
+                                        hradius, vradius,
+                                        start, end,
+                                        color_stops,
+                                        n_color_stops,
+                                        color_states);
+}
+
+GskRenderNode *
+gsk_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
+                               const graphene_point_t  *center,
+                               float                    hradius,
+                               float                    vradius,
+                               float                    start,
+                               float                    end,
+                               const GskColorStop      *color_stops,
+                               gsize                    n_color_stops,
+                               GdkColorState          **color_states)
+{
   GskRadialGradientNode *self;
   GskRenderNode *node;
   gsize i;
@@ -832,6 +946,10 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
   memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
 
+  self->color_states = g_malloc_n (n_color_stops, sizeof (GdkColorState *));
+  for (i = 0; i < n_color_stops; i++)
+    self->color_states[i] = gdk_color_state_ref (color_states[i]);
+
   return node;
 }
 
@@ -866,6 +984,31 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
                                         float                   end,
                                         const GskColorStop     *color_stops,
                                         gsize                   n_color_stops)
+{
+  GdkColorState **color_states;
+
+  color_states = g_newa (GdkColorState *, n_color_stops);
+  for (gsize i = 0; i < n_color_stops; i++)
+    color_states[i] = GDK_COLOR_STATE_SRGB;
+
+  return gsk_repeating_radial_gradient_node_new2 (bounds, center,
+                                                  hradius, vradius,
+                                                  start, end,
+                                                  color_stops,
+                                                  n_color_stops,
+                                                  color_states);
+}
+
+GskRenderNode *
+gsk_repeating_radial_gradient_node_new2 (const graphene_rect_t   *bounds,
+                                         const graphene_point_t  *center,
+                                         float                    hradius,
+                                         float                    vradius,
+                                         float                    start,
+                                         float                    end,
+                                         const GskColorStop      *color_stops,
+                                         gsize                    n_color_stops,
+                                         GdkColorState          **color_states)
 {
   GskRadialGradientNode *self;
   GskRenderNode *node;
@@ -903,6 +1046,10 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
   self->n_stops = n_color_stops;
   self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
   memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
+
+  self->color_states = g_malloc_n (n_color_stops, sizeof (GdkColorState *));
+  for (i = 0; i < n_color_stops; i++)
+    self->color_states[i] = gdk_color_state_ref (color_states[i]);
 
   return node;
 }
@@ -1024,6 +1171,14 @@ gsk_radial_gradient_node_get_end (const GskRenderNode *node)
   return self->end;
 }
 
+GdkColorState **
+gsk_radial_gradient_node_get_color_states (const GskRenderNode *node)
+{
+  const GskRadialGradientNode *self = (const GskRadialGradientNode *) node;
+
+  return self->color_states;
+}
+
 /* }}} */
 /* {{{ GSK_CONIC_GRADIENT_NODE */
 
@@ -1043,6 +1198,7 @@ struct _GskConicGradientNode
 
   gsize n_stops;
   GskColorStop *stops;
+  GdkColorState **color_states;
 };
 
 static void
@@ -1052,6 +1208,10 @@ gsk_conic_gradient_node_finalize (GskRenderNode *node)
   GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_CONIC_GRADIENT_NODE));
 
   g_free (self->stops);
+
+  for (gsize i = 0; i < self->n_stops; i++)
+    gdk_color_state_unref (self->color_states[i]);
+  g_free (self->color_states);
 
   parent_class->finalize (node);
 }
@@ -1086,15 +1246,13 @@ project (double  angle,
 
 static void
 gsk_conic_gradient_node_add_patch (cairo_pattern_t *pattern,
-                                   GdkColorState   *ccs,
                                    float            radius,
                                    float            start_angle,
-                                   const GdkRGBA   *start_color,
+                                   const float      start_color[4],
                                    float            end_angle,
-                                   const GdkRGBA   *end_color)
+                                   const float      end_color[4])
 {
   double x, y;
-  float start[4], end[4];
 
   cairo_mesh_pattern_begin_patch (pattern);
 
@@ -1105,12 +1263,10 @@ gsk_conic_gradient_node_add_patch (cairo_pattern_t *pattern,
   cairo_mesh_pattern_line_to  (pattern, x, y);
   cairo_mesh_pattern_line_to  (pattern, 0, 0);
 
-  gdk_color_state_from_rgba (ccs, start_color, start);
-  _cairo_mesh_pattern_set_corner_rgba (pattern, 0, start);
-  _cairo_mesh_pattern_set_corner_rgba (pattern, 1, start);
-  gdk_color_state_from_rgba (ccs, end_color, end);
-  _cairo_mesh_pattern_set_corner_rgba (pattern, 2, end);
-  _cairo_mesh_pattern_set_corner_rgba (pattern, 3, end);
+  _cairo_mesh_pattern_set_corner_rgba (pattern, 0, start_color);
+  _cairo_mesh_pattern_set_corner_rgba (pattern, 1, start_color);
+  _cairo_mesh_pattern_set_corner_rgba (pattern, 2, end_color);
+  _cairo_mesh_pattern_set_corner_rgba (pattern, 3, end_color);
 
   cairo_mesh_pattern_end_patch (pattern);
 }
@@ -1163,34 +1319,40 @@ gsk_conic_gradient_node_draw (GskRenderNode *node,
     {
       GskColorStop *stop1 = &self->stops[MAX (i, 1) - 1];
       GskColorStop *stop2 = &self->stops[MIN (i, self->n_stops - 1)];
+      GdkColorState *color_state1 = self->color_states[MAX (i, 1) - 1];
+      GdkColorState *color_state2 = self->color_states[MIN (i, self->n_stops - 1)];
       double offset1 = i > 0 ? stop1->offset : 0;
       double offset2 = i < self->n_stops ? stop2->offset : 1;
       double start_angle, end_angle;
+      float color1[4];
+      float color2[4];
 
       offset1 = offset1 * 360 + self->rotation - 90;
       offset2 = offset2 * 360 + self->rotation - 90;
 
+      gdk_color_state_convert_color (color_state1, ccs, (const float *)&stop1->color, color1);
+      gdk_color_state_convert_color (color_state2, ccs, (const float *)&stop2->color, color2);
+
       for (start_angle = offset1; start_angle < offset2; start_angle = end_angle)
         {
-          GdkRGBA start_color, end_color;
+          float start_color[4], end_color[4];
           end_angle = (floor (start_angle / 45) + 1) * 45;
           end_angle = MIN (end_angle, offset2);
-          gdk_rgba_color_interpolate (&start_color,
-                                      &stop1->color,
-                                      &stop2->color,
+          gdk_rgba_color_interpolate ((GdkRGBA *) &start_color,
+                                      (const GdkRGBA *) &color1,
+                                      (const GdkRGBA *) &color2,
                                       (start_angle - offset1) / (offset2 - offset1));
-          gdk_rgba_color_interpolate (&end_color,
-                                      &stop1->color,
-                                      &stop2->color,
+          gdk_rgba_color_interpolate ((GdkRGBA *) &end_color,
+                                      (const GdkRGBA *) &color1,
+                                      (const GdkRGBA *) &color2,
                                       (end_angle - offset1) / (offset2 - offset1));
 
           gsk_conic_gradient_node_add_patch (pattern,
-                                             ccs,
                                              radius,
                                              DEG_TO_RAD (start_angle),
-                                             &start_color,
+                                             start_color,
                                              DEG_TO_RAD (end_angle),
-                                             &end_color);
+                                             end_color);
         }
     }
 
@@ -1227,7 +1389,8 @@ gsk_conic_gradient_node_diff (GskRenderNode *node1,
       GskColorStop *stop2 = &self2->stops[i];
 
       if (stop1->offset != stop2->offset ||
-          !gdk_rgba_equal (&stop1->color, &stop2->color))
+          !gdk_rgba_equal (&stop1->color, &stop2->color) ||
+          !gdk_color_state_equal (self1->color_states[i], self2->color_states[i]))
         {
           gsk_render_node_diff_impossible (node1, node2, data);
           return;
@@ -1274,6 +1437,27 @@ gsk_conic_gradient_node_new (const graphene_rect_t  *bounds,
                              const GskColorStop     *color_stops,
                              gsize                   n_color_stops)
 {
+  GdkColorState **color_states;
+
+  color_states = g_newa (GdkColorState *, n_color_stops);
+  for (gsize i = 0; i < n_color_stops; i++)
+    color_states[i] = GDK_COLOR_STATE_SRGB;
+
+  return gsk_conic_gradient_node_new2 (bounds, center,
+                                       rotation,
+                                       color_stops,
+                                       n_color_stops,
+                                       color_states);
+}
+
+GskRenderNode *
+gsk_conic_gradient_node_new2 (const graphene_rect_t   *bounds,
+                              const graphene_point_t  *center,
+                              float                    rotation,
+                              const GskColorStop      *color_stops,
+                              gsize                    n_color_stops,
+                              GdkColorState          **color_states)
+{
   GskConicGradientNode *self;
   GskRenderNode *node;
   gsize i;
@@ -1302,6 +1486,10 @@ gsk_conic_gradient_node_new (const graphene_rect_t  *bounds,
   self->n_stops = n_color_stops;
   self->stops = g_malloc_n (n_color_stops, sizeof (GskColorStop));
   memcpy (self->stops, color_stops, n_color_stops * sizeof (GskColorStop));
+
+  self->color_states = g_malloc_n (n_color_stops, sizeof (GdkColorState *));
+  for (i = 0; i < n_color_stops; i++)
+    self->color_states[i] = gdk_color_state_ref (color_states[i]);
 
   self->angle = 90.f - self->rotation;
   self->angle = G_PI * self->angle / 180.f;
@@ -1402,6 +1590,14 @@ gsk_conic_gradient_node_get_angle (const GskRenderNode *node)
   const GskConicGradientNode *self = (const GskConicGradientNode *) node;
 
   return self->angle;
+}
+
+GdkColorState **
+gsk_conic_gradient_node_get_color_states (const GskRenderNode *node)
+{
+  const GskConicGradientNode *self = (const GskConicGradientNode *) node;
+
+  return self->color_states;
 }
 
 /* }}} */
