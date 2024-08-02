@@ -121,6 +121,19 @@ gdk_cairo_pattern_add_color_stop_rgba_ccs (cairo_pattern_t *pattern,
 }
 
 static inline void
+gdk_cairo_pattern_add_color_stop_color_ccs (cairo_pattern_t *pattern,
+                                            GdkColorState   *ccs,
+                                            double           offset,
+                                            GdkColorState   *color_state,
+                                            const GdkRGBA   *rgba)
+{
+  float color[4];
+
+  gdk_color_state_convert_color (color_state, ccs, (const float *) rgba, color);
+  cairo_pattern_add_color_stop_rgba (pattern, offset, color[0], color[1], color[2], color[3]);
+}
+
+static inline void
 gdk_cairo_rect (cairo_t               *cr,
                 const graphene_rect_t *rect)
 {
