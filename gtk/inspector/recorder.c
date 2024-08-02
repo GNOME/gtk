@@ -845,12 +845,6 @@ get_color2_texture (GdkColorState *color_state,
 }
 
 static GdkTexture *
-get_color_texture (const GdkRGBA *color)
-{
-  return get_color2_texture (GDK_COLOR_STATE_SRGB, (const float *) color);
-}
-
-static GdkTexture *
 get_linear_gradient_texture (gsize n_stops, const GskColorStop *stops)
 {
   cairo_surface_t *surface;
@@ -915,21 +909,6 @@ add_text_row (GListStore *store,
   va_end (args);
   list_store_add_object_property (store, name, text, NULL);
   g_free (text);
-}
-
-static void
-add_color_row (GListStore    *store,
-               const char    *name,
-               const GdkRGBA *color)
-{
-  char *text;
-  GdkTexture *texture;
-
-  text = gdk_rgba_to_string (color);
-  texture = get_color_texture (color);
-  list_store_add_object_property (store, name, text, texture);
-  g_free (text);
-  g_object_unref (texture);
 }
 
 static void
@@ -1535,9 +1514,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           {
             char *label;
             const GskShadow *shadow = gsk_shadow_node_get_shadow (node, i);
+            GdkColorState *color_state = gsk_shadow_node_get_color_state (node, i);
 
             label = g_strdup_printf ("Color %d", i);
-            add_color_row (store, label, &shadow->color);
+            add_color2_row (store, label, color_state, (const float *) &shadow->color);
             g_free (label);
 
             label = g_strdup_printf ("Offset %d", i);
