@@ -1208,7 +1208,6 @@ populate_render_node_properties (GListStore    *store,
     case GSK_TEXT_NODE:
       {
         const PangoFont *font = gsk_text_node_get_font (node);
-        const GdkRGBA *color = gsk_text_node_get_color (node);
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
         PangoFontDescription *desc;
         GString *s;
@@ -1227,7 +1226,9 @@ populate_render_node_properties (GListStore    *store,
 
         add_text_row (store, "Position", "%.2f %.2f", offset->x, offset->y);
 
-        add_color_row (store, "Color", color);
+        add_color2_row (store, "Color",
+                        gsk_text_node_get_color_state (node),
+                        gsk_text_node_get_color2 (node));
       }
       break;
 
