@@ -2207,7 +2207,7 @@ draw_shadow (cairo_t              *cr,
 
   cairo_fill (shadow_cr);
 
-  gsk_cairo_blur_finish_drawing (shadow_cr, radius, color, blur_flags);
+  gsk_cairo_blur_finish_drawing (shadow_cr, ccs, radius, color, blur_flags);
 }
 
 typedef struct {
@@ -5310,7 +5310,7 @@ gsk_shadow_node_draw (GskRenderNode *node,
       cairo_pattern_destroy (pattern);
       cairo_restore (cr);
 
-      cr = gsk_cairo_blur_finish_drawing (cr, 0.5 * shadow->radius, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
+      cr = gsk_cairo_blur_finish_drawing (cr, ccs, 0.5 * shadow->radius, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
       cairo_restore (cr);
     }
 

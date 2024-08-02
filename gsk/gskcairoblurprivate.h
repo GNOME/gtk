@@ -44,6 +44,7 @@ cairo_t *       gsk_cairo_blur_start_drawing    (cairo_t         *cr,
                                                  float            radius,
                                                  GskBlurFlags     blur_flags);
 cairo_t *       gsk_cairo_blur_finish_drawing   (cairo_t         *cr,
+                                                 GdkColorState   *ccs,
                                                  float            radius,
                                                  const GdkRGBA   *color,
                                                  GskBlurFlags     blur_flags);

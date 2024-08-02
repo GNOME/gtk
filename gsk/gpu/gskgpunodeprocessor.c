@@ -2150,7 +2150,7 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
   float spread, blur_radius, dx, dy;
   const GdkRGBA *rgba;
 
-  rgba = gsk_inset_shadow_node_get_color (node);
+  rgba = gsk_outset_shadow_node_get_color (node);
   spread = gsk_outset_shadow_node_get_spread (node);
   blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
   dx = gsk_outset_shadow_node_get_dx (node);
