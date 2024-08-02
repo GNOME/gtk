@@ -41,6 +41,11 @@ void                    gtk_snapshot_append_color2              (GtkSnapshot    
                                                                  GdkColorState          *color_state,
                                                                  const float             values[4],
                                                                  const graphene_rect_t  *bounds);
+void                    gtk_snapshot_append_border2             (GtkSnapshot            *snapshot,
+                                                                 const GskRoundedRect   *outline,
+                                                                 const float             border_width[4],
+                                                                 GdkColorState          *color_state[4],
+                                                                 const float             border_color[4][4]);
 
 G_END_DECLS
 
