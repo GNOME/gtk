@@ -2,6 +2,11 @@
 
 #include <gsk/gskcairoblurprivate.h>
 
+/* This is a hack to work around the fact that this code includes
+ * private headers that inline access to non-exported variables.
+ */
+GdkColorState *gdk_default_color_states;
+
 static void
 init_surface (cairo_t *cr)
 {
@@ -25,6 +30,8 @@ main (int argc, char **argv)
   double msec;
   int i, j;
   int size;
+
+  gdk_default_color_states = gdk_color_state_get_srgb ();
 
   timer = g_timer_new ();
 
