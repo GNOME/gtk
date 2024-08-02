@@ -1235,7 +1235,8 @@ populate_render_node_properties (GListStore    *store,
       {
         const char *name[4] = { "Top", "Right", "Bottom", "Left" };
         const float *widths = gsk_border_node_get_widths (node);
-        const GdkRGBA *colors = gsk_border_node_get_colors (node);
+        const float *colors = gsk_border_node_get_colors2 (node);
+        GdkColorState **color_state = gsk_border_node_get_color_states (node);
         int i;
 
         for (i = 0; i < 4; i++)
@@ -1243,9 +1244,9 @@ populate_render_node_properties (GListStore    *store,
             GdkTexture *texture;
             char *text, *tmp;
 
-            text = gdk_rgba_to_string (&colors[i]);
+            text = color_to_string (color_state[i], &colors[4 * i]);
             tmp = g_strdup_printf ("%.2f, %s", widths[i], text);
-            texture = get_color_texture (&colors[i]);
+            texture = get_color2_texture (color_state[i], &colors[4 * i]);
             list_store_add_object_property (store, name[i], tmp, texture);
             g_object_unref (texture);
 
