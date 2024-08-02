@@ -2806,6 +2806,36 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
                             const float           border_width[4],
                             const GdkRGBA         border_color[4])
 {
+  GdkColor color[4];
+
+  for (int i = 0; i < 4; i++)
+    gdk_color_init_from_rgba (&color[i], &border_color[i]);
+
+  gtk_snapshot_append_border2 (snapshot, outline, border_width, color);
+
+  for (int i = 0; i < 4; i++)
+    gdk_color_finish (&color[i]);
+}
+
+/*< private >
+ * gtk_snapshot_append_border2:
+ * @snapshot: a `GtkSnapshot`
+ * @outline: the outline of the border
+ * @border_width: (array fixed-size=4): the stroke width of the border on
+ *   the top, right, bottom and left side respectively.
+ * @border_color: (array fixed-size=4): the color used on the top, right,
+ *   bottom and left side.
+ *
+ * Appends a stroked border rectangle inside the given @outline.
+ *
+ * The four sides of the border can have different widths and colors.
+ */
+void
+gtk_snapshot_append_border2 (GtkSnapshot          *snapshot,
+                             const GskRoundedRect *outline,
+                             const float           border_width[4],
+                             const GdkColor        border_color[4])
+{
   GskRenderNode *node;
   GskRoundedRect real_outline;
   float scale_x, scale_y, dx, dy;
@@ -2818,14 +2848,14 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, dx, dy);
 
-  node = gsk_border_node_new (&real_outline,
-                              (float[4]) {
-                                border_width[0] * scale_y,
-                                border_width[1] * scale_x,
-                                border_width[2] * scale_y,
-                                border_width[3] * scale_x,
-                              },
-                              border_color);
+  node = gsk_border_node_new2 (&real_outline,
+                               (float[4]) {
+                                 border_width[0] * scale_y,
+                                 border_width[1] * scale_x,
+                                 border_width[2] * scale_y,
+                                 border_width[3] * scale_x,
+                               },
+                               border_color);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
