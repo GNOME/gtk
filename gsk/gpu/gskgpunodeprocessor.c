@@ -2820,7 +2820,10 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   graphene_point_t offset;
   guint i, num_glyphs;
   float scale;
-  GdkRGBA color;
+  float color[4];
+  const float *node_color;
+  GdkColorState *node_color_state;
+  GskGpuColorStates color_states;
   float align_scale_x, align_scale_y;
   float inv_align_scale_x, inv_align_scale_y;
   unsigned int flags_mask;
@@ -2836,8 +2839,21 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
 
   cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
 
-  color = *gsk_text_node_get_color (node);
-  color.alpha *= self->opacity;
+  node_color = gsk_text_node_get_color2 (node);
+  node_color_state = gsk_text_node_get_color_state (node);
+
+  if (GDK_IS_DEFAULT_COLOR_STATE (node_color_state))
+    {
+      memcpy (color, node_color, sizeof (float) * 4);
+      color_states = gsk_gpu_node_processor_color_states_explicit (self, node_color_state, FALSE);
+    }
+  else
+    {
+      gdk_color_state_convert_color (node_color_state, self->ccs, node_color, color);
+      color_states = gsk_gpu_node_processor_color_states_self (self);
+    }
+  color[3] *= self->opacity;
+
   num_glyphs = gsk_text_node_get_num_glyphs (node);
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   font = gsk_text_node_get_font (node);
@@ -2915,15 +2931,15 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       else
         gsk_gpu_colorize_op (self->frame,
                              gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_origin, &glyph_bounds),
-                             gsk_gpu_node_processor_color_states_for_rgba (self),
+                             color_states,
                              &glyph_origin,
                              &(GskGpuShaderImage) {
                                  image,
                                  GSK_GPU_SAMPLER_DEFAULT,
                                  &glyph_bounds,
                                  &glyph_tex_rect
-                             },
-                             GSK_RGBA_TO_VEC4 (&color));
+                              },
+                              color);
 
       offset.x += glyphs[i].geometry.width * inv_pango_scale;
     }
