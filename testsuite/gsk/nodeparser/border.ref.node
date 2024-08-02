@@ -2,3 +2,8 @@ border {
   colors: rgb(213,208,204);
   outline: -1 -1 50 26 / 13;
 }
+border {
+  colors: color(rec2100-pq 0.100000 0.200000 0.300000) rgba(51,77,255,0.5) rgba(77,255,128,0.5) rgba(255,128,128,0.6);
+  outline: -1 -1 50 26 / 13;
+  widths: 2 1 3;
+}

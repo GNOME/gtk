@@ -693,34 +693,6 @@ parse_float4 (GtkCssParser *parser,
 }
 
 static gboolean
-parse_colors4 (GtkCssParser *parser,
-               Context      *context,
-               gpointer      out_colors)
-{
-  GdkRGBA colors[4];
-  int i;
-
-  for (i = 0; i < 4 && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF); i ++)
-    {
-      if (!gdk_rgba_parser_parse (parser, &colors[i]))
-        return FALSE;
-    }
-  if (i == 0)
-    {
-      gtk_css_parser_error_syntax (parser, "Expected a color");
-      return FALSE;
-    }
-  for (; i < 4; i++)
-    {
-      colors[i] = colors[(i - 1) >> 1];
-    }
-
-  memcpy (out_colors, colors, sizeof (GdkRGBA) * 4);
-
-  return TRUE;
-}
-
-static gboolean
 parse_shadows (GtkCssParser *parser,
                Context      *context,
                gpointer      out_shadows)
@@ -1740,6 +1712,34 @@ parse_color2 (GtkCssParser *parser,
   return FALSE;
 }
 
+static gboolean
+parse_colors4 (GtkCssParser *parser,
+               Context      *context,
+               gpointer      out_colors)
+{
+  Color colors[4];
+  int i;
+
+  for (i = 0; i < 4 && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF); i ++)
+    {
+      if (!parse_color2 (parser, context, &colors[i]))
+        return FALSE;
+    }
+  if (i == 0)
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a color");
+      return FALSE;
+    }
+  for (; i < 4; i++)
+    {
+      colors[i] = colors[(i - 1) >> 1];
+    }
+
+  memcpy (out_colors, colors, sizeof (Color) * 4);
+
+  return TRUE;
+}
+
 static GskRenderNode *
 parse_color_node (GtkCssParser *parser,
                   Context      *context)
@@ -2204,16 +2204,29 @@ parse_border_node (GtkCssParser *parser,
 {
   GskRoundedRect outline = GSK_ROUNDED_RECT_INIT (0, 0, 50, 50);
   float widths[4] = { 1, 1, 1, 1 };
-  GdkRGBA colors[4] = { GDK_RGBA("000"), GDK_RGBA("000"), GDK_RGBA("000"), GDK_RGBA("000") };
+  Color colors[4] = {
+    { GDK_COLOR_STATE_SRGB, { 0, 0, 0, 1 } },
+    { GDK_COLOR_STATE_SRGB, { 0, 0, 0, 1 } },
+    { GDK_COLOR_STATE_SRGB, { 0, 0, 0, 1 } },
+    { GDK_COLOR_STATE_SRGB, { 0, 0, 0, 1 } },
+  };
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
     { "widths", parse_float4, NULL, &widths },
     { "colors", parse_colors4, NULL, &colors }
   };
+  GdkColorState *color_state[4];
+  float border_color[4][4];
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  return gsk_border_node_new (&outline, widths, colors);
+  for (int i = 0; i < 4; i++)
+    {
+      color_state[i] = colors[i].color_state;
+      memcpy (border_color[i], colors[i].values, sizeof (float) * 4);
+    }
+
+  return gsk_border_node_new2 (&outline, widths, color_state, border_color);
 }
 
 static GskRenderNode *
@@ -3344,13 +3357,20 @@ printer_init_duplicates_for_node (Printer       *printer,
       printer_init_check_color_state (printer, gsk_color_node_get_color_state (node));
       break;
 
+    case GSK_BORDER_NODE:
+      {
+        GdkColorState **color_state = gsk_border_node_get_color_states (node);
+        for (int i = 0; i < 4; i++)
+          printer_init_check_color_state (printer, color_state[i]);
+      }
+      break;
+
     case GSK_CAIRO_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_RADIAL_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
     case GSK_CONIC_GRADIENT_NODE:
-    case GSK_BORDER_NODE:
     case GSK_INSET_SHADOW_NODE:
     case GSK_OUTSET_SHADOW_NODE:
       /* no children */
@@ -3673,7 +3693,6 @@ print_color (Printer       *p,
     {
       gdk_rgba_print ((const GdkRGBA *)color, p->str);
     }
-
   else
     {
       g_string_append (p->str, "color(");
@@ -4457,18 +4476,22 @@ render_node_print (Printer       *p,
 
     case GSK_BORDER_NODE:
       {
-        const GdkRGBA *colors = gsk_border_node_get_colors (node);
+        const float *colors = gsk_border_node_get_colors2 (node);
+        GdkColorState **color_state = gsk_border_node_get_color_states (node);
         const float *widths = gsk_border_node_get_widths (node);
         guint i, n;
         start_node (p, "border", node_name);
 
-        if (!gdk_rgba_equal (&colors[3], &colors[1]))
+        if (!gdk_rgba_equal ((const GdkRGBA *) &colors[3 * 4], (const GdkRGBA *) &colors[1 * 4]) ||
+            !gdk_color_state_equal (color_state[3], color_state[1]))
           n = 4;
-        else if (!gdk_rgba_equal (&colors[2], &colors[0]))
+        else if (!gdk_rgba_equal ((const GdkRGBA *) &colors[2 * 4], (const GdkRGBA *) &colors[0 * 4]) ||
+                 !gdk_color_state_equal (color_state[2], color_state[0]))
           n = 3;
-        else if (!gdk_rgba_equal (&colors[1], &colors[0]))
+        else if (!gdk_rgba_equal ((const GdkRGBA *) &colors[1 * 4], (const GdkRGBA *) &colors[0 * 4]) ||
+                 !gdk_color_state_equal (color_state[1], color_state[0]))
           n = 2;
-        else if (!gdk_rgba_equal (&colors[0], &GDK_RGBA("000000")))
+        else if (!gdk_rgba_equal ((const GdkRGBA *) &colors[0 * 4], &GDK_RGBA("000000")))
           n = 1;
         else
           n = 0;
@@ -4481,7 +4504,7 @@ render_node_print (Printer       *p,
               {
                 if (i > 0)
                   g_string_append_c (p->str, ' ');
-                gdk_rgba_print (&colors[i], p->str);
+                print_color (p, color_state[i], &colors[i]);
               }
             g_string_append (p->str, ";\n");
           }
