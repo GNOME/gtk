@@ -1569,9 +1569,9 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
         }
 
       gsk_gpu_clear_op (self->frame,
-                        self->ccs,
+                        gsk_gpu_node_processor_color_states_for_rgba (self),
                         &int_clipped,
-                        color);
+                        (const float *) color);
       return;
     }
 
@@ -3323,9 +3323,9 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
           if (gdk_rectangle_intersect (&int_clipped, &self->scissor, &int_clipped))
             {
               gsk_gpu_clear_op (self->frame,
-                                GDK_COLOR_STATE_SRGB,
+                                gsk_gpu_node_processor_color_states_explicit (self, GDK_COLOR_STATE_SRGB, FALSE),
                                 &int_clipped,
-                                &GDK_RGBA_TRANSPARENT);
+                                (const float *) &GDK_RGBA_TRANSPARENT);
             }
         }
       else
