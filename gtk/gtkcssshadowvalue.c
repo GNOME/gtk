@@ -755,28 +755,31 @@ gboolean
 gtk_css_shadow_value_push_snapshot (const GtkCssValue *value,
                                     GtkSnapshot       *snapshot)
 {
-  GskShadow *shadows;
+  GskShadow2 *shadows;
   guint i;
 
   if (gtk_css_shadow_value_is_clear (value))
     return FALSE;
 
-  shadows = g_newa (GskShadow, value->n_shadows);
+  shadows = g_newa (GskShadow2, value->n_shadows);
 
   for (i = 0; i < value->n_shadows; i++)
     {
       const ShadowValue *shadow = &value->shadows[i];
 
-      shadows[i].color = *gtk_css_color_value_get_rgba (shadow->color);
-
-      shadows[i].dx = gtk_css_number_value_get (shadow->hoffset, 0);
-      shadows[i].dy = gtk_css_number_value_get (shadow->voffset, 0);
+      gtk_css_color_to_color (gtk_css_color_value_get_color (shadow->color), &shadows[i].color);
+      graphene_point_init (&shadows[i].offset,
+                           gtk_css_number_value_get (shadow->hoffset, 0),
+                           gtk_css_number_value_get (shadow->voffset, 0));
       shadows[i].radius = gtk_css_number_value_get (shadow->radius, 0);
       if (value->is_filter)
         shadows[i].radius *= 2;
     }
 
-  gtk_snapshot_push_shadow (snapshot, shadows, value->n_shadows);
+  gtk_snapshot_push_shadow2 (snapshot, shadows, value->n_shadows);
+
+  for (i = 0; i < value->n_shadows; i++)
+     gdk_color_finish (&shadows[i].color);
 
   return TRUE;
 }
