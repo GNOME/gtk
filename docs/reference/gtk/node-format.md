@@ -181,14 +181,20 @@ matrix3d() production to specify all 16 values individually.
 
 ### conic-gradient
 
-| property | syntax           | default                | printed     |
-| -------- | ---------------- | ---------------------- | ----------- |
-| bounds   | `<rect>`         | 50                     | always      |
-| center   | `<point>`        | 25, 25                 | always      |
-| rotation | `<number>`       | 0                      | always      |
-| stops    | `<color-stop>`   | 0 #AF0, 1 #F0C         | always      |
+| property          | syntax          | default        | printed     |
+| ----------------- | --------------- | -------------- | ----------- |
+| bounds            | `<rect>`        | 50             | always      |
+| center            | `<point>`       | 25, 25         | always      |
+| rotation          | `<number>`      | 0              | always      |
+| stops             | `<color-stop>`  | 0 #AF0, 1 #F0C | always      |
+| interpolation     | `<color-state>` | srgb           | non-default |
+| hue-interpolation | `<hue-interp>`  | shorter        | non-default |
 
 Creates a node like `gsk_conic_gradient_node_new()` with the given properties.
+
+Possible values for the hue-interpolation property are:
+
+    hue-interpolation: shorter | longer | increasing | decreasing
 
 ### cross-fade
 
@@ -258,12 +264,14 @@ Creates a node like `gsk_inset_shadow_node_new()` with the given properties.
 
 ### linear-gradient
 
-| property | syntax           | default                | printed     |
-| -------- | ---------------- | ---------------------- | ----------- |
-| bounds   | `<rect>`         | 50                     | always      |
-| start    | `<point>`        | 0 0                    | always      |
-| end      | `<point>`        | 0 50                   | always      |
-| stops    | `<color-stop>`   | 0 #AF0, 1 #F0C         | always      |
+| property          | syntax          | default        | printed     |
+| ----------------- | --------------- | -------------- | ----------- |
+| bounds            | `<rect>`        | 50             | always      |
+| start             | `<point>`       | 0 0            | always      |
+| end               | `<point>`       | 0 50           | always      |
+| stops             | `<color-stop>`  | 0 #AF0, 1 #F0C | always      |
+| interpolation     | `<color-state>` | srgb           | non-default |
+| hue-interpolation | `<hue-interp>`  | shorter        | non-default |
 
 Creates a node like `gsk_linear_gradient_node_new()` with the given properties.
 
@@ -305,15 +313,17 @@ Creates a node like `gsk_outset_shadow_node_new()` with the given properties.
 
 ### radial-gradient
 
-| property | syntax           | default                | printed     |
-| -------- | ---------------- | ---------------------- | ----------- |
-| bounds   | `<rect>`         | 50                     | always      |
-| center   | `<point>`        | 25 25                  | always      |
-| hradius  | `<number>`       | 25                     | always      |
-| vradius  | `<number>`       | 25                     | always      |
-| start    | `<number>`       | 0                      | always      |
-| end      | `<number>`       | 1                      | always      |
-| stops    | `<color-stop>`   | 0 #AF0, 1 #F0C         | always      |
+| property          | syntax          | default        | printed     |
+| ----------------- | --------------- | -------------- | ----------- |
+| bounds            | `<rect>`        | 50             | always      |
+| center            | `<point>`       | 25 25          | always      |
+| hradius           | `<number>`      | 25             | always      |
+| vradius           | `<number>`      | 25             | always      |
+| start             | `<number>`      | 0              | always      |
+| end               | `<number>`      | 1              | always      |
+| stops             | `<color-stop>`  | 0 #AF0, 1 #F0C | always      |
+| interpolation     | `<color-state>` | srgb           | non-default |
+| hue-interpolation | `<hue-interp>`  | shorter        | non-default |
 
 Creates a node like `gsk_radial_gradient_node_new()` with the given properties.
 
