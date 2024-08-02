@@ -89,14 +89,23 @@ gdk_cairo_format_to_memory_format (cairo_format_t format)
 }
 
 static inline void
+gdk_cairo_set_source_color_ccs (cairo_t       *cr,
+                                GdkColorState *ccs,
+                                GdkColorState *color_state,
+                                const float    values[4])
+{
+  float color[4];
+
+  gdk_color_state_convert_color (color_state, ccs, values, color);
+  cairo_set_source_rgba (cr, color[0], color[1], color[2], color[3]);
+}
+
+static inline void
 gdk_cairo_set_source_rgba_ccs (cairo_t       *cr,
                                GdkColorState *ccs,
                                const GdkRGBA *rgba)
 {
-  float color[4];
-
-  gdk_color_state_from_rgba (ccs, rgba, color);
-  cairo_set_source_rgba (cr, color[0], color[1], color[2], color[3]);
+  gdk_cairo_set_source_color_ccs (cr, ccs, GDK_COLOR_STATE_SRGB, (const float *) rgba);
 }
 
 static inline void
