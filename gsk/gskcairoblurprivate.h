@@ -37,7 +37,7 @@ typedef enum {
 
 void            gsk_cairo_blur_surface          (cairo_surface_t *surface,
                                                  double           radius,
-						 GskBlurFlags     flags);
+                                                 GskBlurFlags     flags);
 int             gsk_cairo_blur_compute_pixels   (double           radius) G_GNUC_CONST;
 
 cairo_t *       gsk_cairo_blur_start_drawing    (cairo_t         *cr,
@@ -46,6 +46,7 @@ cairo_t *       gsk_cairo_blur_start_drawing    (cairo_t         *cr,
 cairo_t *       gsk_cairo_blur_finish_drawing   (cairo_t         *cr,
                                                  GdkColorState   *ccs,
                                                  float            radius,
+                                                 GdkColorState   *color_state,
                                                  const GdkRGBA   *color,
                                                  GskBlurFlags     blur_flags);
 

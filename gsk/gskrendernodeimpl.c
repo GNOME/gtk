@@ -2285,7 +2285,20 @@ struct _GskInsetShadowNode
   float dy;
   float spread;
   float blur_radius;
+
+  GdkColorState *color_state;
 };
+
+static void
+gsk_inset_shadow_node_finalize (GskRenderNode *node)
+{
+  GskInsetShadowNode *self = (GskInsetShadowNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_INSET_SHADOW_NODE));
+
+  gdk_color_state_unref (self->color_state);
+
+  parent_class->finalize (node);
+}
 
 static gboolean
 has_empty_clip (cairo_t *cr)
@@ -2303,6 +2316,7 @@ draw_shadow (cairo_t              *cr,
              const GskRoundedRect *box,
              const GskRoundedRect *clip_box,
              float                 radius,
+             GdkColorState        *color_state,
              const GdkRGBA        *color,
              GskBlurFlags          blur_flags)
 {
@@ -2311,7 +2325,7 @@ draw_shadow (cairo_t              *cr,
   if (has_empty_clip (cr))
     return;
 
-  gdk_cairo_set_source_rgba_ccs (cr, ccs, color);
+  gdk_cairo_set_source_color_ccs (cr, ccs, color_state, (const float *) color);
   shadow_cr = gsk_cairo_blur_start_drawing (cr, radius, blur_flags);
 
   cairo_set_fill_rule (shadow_cr, CAIRO_FILL_RULE_EVEN_ODD);
@@ -2321,7 +2335,7 @@ draw_shadow (cairo_t              *cr,
 
   cairo_fill (shadow_cr);
 
-  gsk_cairo_blur_finish_drawing (shadow_cr, ccs, radius, color, blur_flags);
+  gsk_cairo_blur_finish_drawing (shadow_cr, ccs, radius, color_state, color, blur_flags);
 }
 
 typedef struct {
@@ -2361,6 +2375,7 @@ draw_shadow_corner (cairo_t               *cr,
                     const GskRoundedRect  *box,
                     const GskRoundedRect  *clip_box,
                     float                  radius,
+                    GdkColorState         *color_state,
                     const GdkRGBA         *color,
                     GskCorner              corner,
                     cairo_rectangle_int_t *drawn_rect)
@@ -2439,7 +2454,7 @@ draw_shadow_corner (cairo_t               *cr,
     {
       /* Fall back to generic path if inset or if the corner radius
          runs into each other */
-      draw_shadow (cr, ccs, inset, box, clip_box, radius, color, GSK_BLUR_X | GSK_BLUR_Y);
+      draw_shadow (cr, ccs, inset, box, clip_box, radius, color_state, color, GSK_BLUR_X | GSK_BLUR_Y);
       return;
     }
 
@@ -2485,7 +2500,7 @@ draw_shadow_corner (cairo_t               *cr,
       g_hash_table_insert (corner_mask_cache, g_memdup2 (&key, sizeof (key)), mask);
     }
 
-  gdk_cairo_set_source_rgba_ccs (cr, ccs, color);
+  gdk_cairo_set_source_color_ccs (cr, ccs, color_state, (const float *) color);
   pattern = cairo_pattern_create_for_surface (mask);
   cairo_matrix_init_identity (&matrix);
   cairo_matrix_scale (&matrix, sx, sy);
@@ -2502,6 +2517,7 @@ draw_shadow_side (cairo_t               *cr,
                   const GskRoundedRect  *box,
                   const GskRoundedRect  *clip_box,
                   float                  radius,
+                  GdkColorState         *color_state,
                   const GdkRGBA         *color,
                   Side                   side,
                   cairo_rectangle_int_t *drawn_rect)
@@ -2553,7 +2569,7 @@ draw_shadow_side (cairo_t               *cr,
 
   cairo_rectangle (cr, x1, y1, x2 - x1, y2 - y1);
   cairo_clip (cr);
-  draw_shadow (cr, ccs, inset, box, clip_box, radius, color, blur_flags);
+  draw_shadow (cr, ccs, inset, box, clip_box, radius, color_state, color, blur_flags);
 }
 
 static gboolean
@@ -2603,7 +2619,7 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
   gsk_rounded_rect_shrink (&clip_box, -clip_radius, -clip_radius, -clip_radius, -clip_radius);
 
   if (!needs_blur (blur_radius))
-    draw_shadow (cr, ccs, TRUE, &box, &clip_box, blur_radius, &self->color, GSK_BLUR_NONE);
+    draw_shadow (cr, ccs, TRUE, &box, &clip_box, blur_radius, self->color_state, &self->color, GSK_BLUR_NONE);
   else
     {
       cairo_region_t *remaining;
@@ -2631,7 +2647,7 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
           /* Always clip with remaining to ensure we never draw any area twice */
           gdk_cairo_region (cr, remaining);
           cairo_clip (cr);
-          draw_shadow_corner (cr, ccs, TRUE, &box, &clip_box, blur_radius, &self->color, i, &r);
+          draw_shadow_corner (cr, ccs, TRUE, &box, &clip_box, blur_radius, self->color_state, &self->color, i, &r);
           cairo_restore (cr);
 
           /* We drew the region, remove it from remaining */
@@ -2645,7 +2661,7 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
           /* Always clip with remaining to ensure we never draw any area twice */
           gdk_cairo_region (cr, remaining);
           cairo_clip (cr);
-          draw_shadow_side (cr, ccs, TRUE, &box, &clip_box, blur_radius, &self->color, i, &r);
+          draw_shadow_side (cr, ccs, TRUE, &box, &clip_box, blur_radius, self->color_state, &self->color, i, &r);
           cairo_restore (cr);
 
           /* We drew the region, remove it from remaining */
@@ -2657,7 +2673,7 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
       cairo_save (cr);
       gdk_cairo_region (cr, remaining);
       cairo_clip (cr);
-      draw_shadow (cr, ccs, TRUE, &box, &clip_box, blur_radius, &self->color, GSK_BLUR_NONE);
+      draw_shadow (cr, ccs, TRUE, &box, &clip_box, blur_radius, self->color_state, &self->color, GSK_BLUR_NONE);
       cairo_restore (cr);
 
       cairo_region_destroy (remaining);
@@ -2676,6 +2692,7 @@ gsk_inset_shadow_node_diff (GskRenderNode *node1,
 
   if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
       gdk_rgba_equal (&self1->color, &self2->color) &&
+      gdk_color_state_equal (self1->color_state, self2->color_state) &&
       self1->dx == self2->dx &&
       self1->dy == self2->dy &&
       self1->spread == self2->spread &&
@@ -2693,6 +2710,7 @@ gsk_inset_shadow_node_class_init (gpointer g_class,
 
   node_class->node_type = GSK_INSET_SHADOW_NODE;
 
+  node_class->finalize = gsk_inset_shadow_node_finalize;
   node_class->draw = gsk_inset_shadow_node_draw;
   node_class->diff = gsk_inset_shadow_node_diff;
 }
@@ -2719,6 +2737,21 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
                            float                 spread,
                            float                 blur_radius)
 {
+  return gsk_inset_shadow_node_new2 (outline,
+                                     GDK_COLOR_STATE_SRGB,
+                                     (const float *) color,
+                                     dx, dy, spread, blur_radius);
+}
+
+GskRenderNode *
+gsk_inset_shadow_node_new2 (const GskRoundedRect *outline,
+                            GdkColorState        *color_state,
+                            const float           color[4],
+                            float                 dx,
+                            float                 dy,
+                            float                 spread,
+                            float                 blur_radius)
+{
   GskInsetShadowNode *self;
   GskRenderNode *node;
 
@@ -2729,16 +2762,18 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
   self = gsk_render_node_alloc (GSK_INSET_SHADOW_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->preferred_depth = my_color_get_depth (color);
+  node->preferred_depth = gdk_color_state_get_depth (color_state);
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
-  self->color = *color;
+  memcpy (&self->color, color, sizeof (float) * 4);
   self->dx = dx;
   self->dy = dy;
   self->spread = spread;
   self->blur_radius = blur_radius;
 
   gsk_rect_init_from_rect (&node->bounds, &self->outline.bounds);
+
+  self->color_state = gdk_color_state_ref (color_state);
 
   return node;
 }
@@ -2773,6 +2808,22 @@ gsk_inset_shadow_node_get_color (const GskRenderNode *node)
   const GskInsetShadowNode *self = (const GskInsetShadowNode *) node;
 
   return &self->color;
+}
+
+const float *
+gsk_inset_shadow_node_get_color2 (const GskRenderNode *node)
+{
+  const GskInsetShadowNode *self = (const GskInsetShadowNode *) node;
+
+  return (const float *) &self->color;
+}
+
+GdkColorState *
+gsk_inset_shadow_node_get_color_state (const GskRenderNode *node)
+{
+  const GskInsetShadowNode *self = (const GskInsetShadowNode *) node;
+
+  return self->color_state;
 }
 
 /**
@@ -2857,7 +2908,20 @@ struct _GskOutsetShadowNode
   float dy;
   float spread;
   float blur_radius;
+
+  GdkColorState *color_state;
 };
+
+static void
+gsk_outset_shadow_node_finalize (GskRenderNode *node)
+{
+  GskInsetShadowNode *self = (GskInsetShadowNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_OUTSET_SHADOW_NODE));
+
+  gdk_color_state_unref (self->color_state);
+
+  parent_class->finalize (node);
+}
 
 static void
 gsk_outset_shadow_get_extents (GskOutsetShadowNode *self,
@@ -2916,7 +2980,7 @@ gsk_outset_shadow_node_draw (GskRenderNode *node,
   gsk_rounded_rect_shrink (&box, -self->spread, -self->spread, -self->spread, -self->spread);
 
   if (!needs_blur (blur_radius))
-    draw_shadow (cr, ccs, FALSE, &box, &clip_box, blur_radius, &self->color, GSK_BLUR_NONE);
+    draw_shadow (cr, ccs, FALSE, &box, &clip_box, blur_radius, self->color_state, &self->color, GSK_BLUR_NONE);
   else
     {
       int i;
@@ -2946,7 +3010,7 @@ gsk_outset_shadow_node_draw (GskRenderNode *node,
           /* Always clip with remaining to ensure we never draw any area twice */
           gdk_cairo_region (cr, remaining);
           cairo_clip (cr);
-          draw_shadow_corner (cr, ccs, FALSE, &box, &clip_box, blur_radius, &self->color, i, &r);
+          draw_shadow_corner (cr, ccs, FALSE, &box, &clip_box, blur_radius, self->color_state, &self->color, i, &r);
           cairo_restore (cr);
 
           /* We drew the region, remove it from remaining */
@@ -2960,7 +3024,7 @@ gsk_outset_shadow_node_draw (GskRenderNode *node,
           /* Always clip with remaining to ensure we never draw any area twice */
           gdk_cairo_region (cr, remaining);
           cairo_clip (cr);
-          draw_shadow_side (cr, ccs, FALSE, &box, &clip_box, blur_radius, &self->color, i, &r);
+          draw_shadow_side (cr, ccs, FALSE, &box, &clip_box, blur_radius, self->color_state, &self->color, i, &r);
           cairo_restore (cr);
 
           /* We drew the region, remove it from remaining */
@@ -2972,7 +3036,7 @@ gsk_outset_shadow_node_draw (GskRenderNode *node,
       cairo_save (cr);
       gdk_cairo_region (cr, remaining);
       cairo_clip (cr);
-      draw_shadow (cr, ccs, FALSE, &box, &clip_box, blur_radius, &self->color, GSK_BLUR_NONE);
+      draw_shadow (cr, ccs, FALSE, &box, &clip_box, blur_radius, self->color_state, &self->color, GSK_BLUR_NONE);
       cairo_restore (cr);
 
       cairo_region_destroy (remaining);
@@ -2991,6 +3055,7 @@ gsk_outset_shadow_node_diff (GskRenderNode *node1,
 
   if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
       gdk_rgba_equal (&self1->color, &self2->color) &&
+      gdk_color_state_equal (self1->color_state, self2->color_state) &&
       self1->dx == self2->dx &&
       self1->dy == self2->dy &&
       self1->spread == self2->spread &&
@@ -3008,6 +3073,7 @@ gsk_outset_shadow_node_class_init (gpointer g_class,
 
   node_class->node_type = GSK_OUTSET_SHADOW_NODE;
 
+  node_class->finalize = gsk_outset_shadow_node_finalize;
   node_class->draw = gsk_outset_shadow_node_draw;
   node_class->diff = gsk_outset_shadow_node_diff;
 }
@@ -3034,6 +3100,21 @@ gsk_outset_shadow_node_new (const GskRoundedRect *outline,
                             float                 spread,
                             float                 blur_radius)
 {
+  return gsk_outset_shadow_node_new2 (outline,
+                                      GDK_COLOR_STATE_SRGB,
+                                      (const float *)color,
+                                      dx, dy, spread, blur_radius);
+}
+
+GskRenderNode *
+gsk_outset_shadow_node_new2 (const GskRoundedRect *outline,
+                             GdkColorState        *color_state,
+                             const float           color[4],
+                             float                 dx,
+                             float                 dy,
+                             float                 spread,
+                             float                 blur_radius)
+{
   GskOutsetShadowNode *self;
   GskRenderNode *node;
   float top, right, bottom, left;
@@ -3045,10 +3126,10 @@ gsk_outset_shadow_node_new (const GskRoundedRect *outline,
   self = gsk_render_node_alloc (GSK_OUTSET_SHADOW_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->preferred_depth = my_color_get_depth (color);
+  node->preferred_depth = gdk_color_state_get_depth (color_state);
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
-  self->color = *color;
+  memcpy (&self->color, color, sizeof (float) * 4);
   self->dx = dx;
   self->dy = dy;
   self->spread = spread;
@@ -3061,6 +3142,8 @@ gsk_outset_shadow_node_new (const GskRoundedRect *outline,
   node->bounds.origin.y -= top;
   node->bounds.size.width += left + right;
   node->bounds.size.height += top + bottom;
+
+  self->color_state = gdk_color_state_ref (color_state);
 
   return node;
 }
@@ -3095,6 +3178,22 @@ gsk_outset_shadow_node_get_color (const GskRenderNode *node)
   const GskOutsetShadowNode *self = (const GskOutsetShadowNode *) node;
 
   return &self->color;
+}
+
+const float *
+gsk_outset_shadow_node_get_color2 (const GskRenderNode *node)
+{
+  const GskOutsetShadowNode *self = (const GskOutsetShadowNode *) node;
+
+  return (const float *) &self->color;
+}
+
+GdkColorState *
+gsk_outset_shadow_node_get_color_state (const GskRenderNode *node)
+{
+  const GskOutsetShadowNode *self = (const GskOutsetShadowNode *) node;
+
+  return self->color_state;
 }
 
 /**
@@ -5424,7 +5523,7 @@ gsk_shadow_node_draw (GskRenderNode *node,
       cairo_pattern_destroy (pattern);
       cairo_restore (cr);
 
-      cr = gsk_cairo_blur_finish_drawing (cr, ccs, 0.5 * shadow->radius, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
+      cr = gsk_cairo_blur_finish_drawing (cr, ccs, 0.5 * shadow->radius, GDK_COLOR_STATE_SRGB, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
       cairo_restore (cr);
     }
 

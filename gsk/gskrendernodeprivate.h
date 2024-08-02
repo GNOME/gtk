@@ -141,5 +141,27 @@ GskRenderNode * gsk_text_node_new2                      (PangoFont              
 GdkColorState * gsk_text_node_get_color_state           (const GskRenderNode    *node);
 const float *   gsk_text_node_get_color2                (const GskRenderNode    *node);
 
+GskRenderNode * gsk_inset_shadow_node_new2              (const GskRoundedRect *outline,
+                                                         GdkColorState        *color_state,
+                                                         const float           color[4],
+                                                         float                 dx,
+                                                         float                 dy,
+                                                         float                 spread,
+                                                         float                 blur_radius);
+GdkColorState * gsk_inset_shadow_node_get_color_state   (const GskRenderNode  *node);
+const float *   gsk_inset_shadow_node_get_color2        (const GskRenderNode  *node);
+
+GskRenderNode * gsk_outset_shadow_node_new2             (const GskRoundedRect *outline,
+                                                         GdkColorState        *color_state,
+                                                         const float           color[4],
+                                                         float                 dx,
+                                                         float                 dy,
+                                                         float                 spread,
+                                                         float                 blur_radius);
+GdkColorState * gsk_outset_shadow_node_get_color_state  (const GskRenderNode  *node);
+const float *   gsk_outset_shadow_node_get_color2       (const GskRenderNode  *node);
+
+
+
 G_END_DECLS
 

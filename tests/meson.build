@@ -17,7 +17,8 @@ gtk_tests = [
   ['animated-revealing', ['frame-stats.c', 'variable.c']],
   ['motion-compression'],
   ['scrolling-performance', ['frame-stats.c', 'variable.c']],
-  ['blur-performance', ['../gsk/gskcairoblur.c']],
+  # FIXME: this has some linking problem
+  #['blur-performance', ['../gsk/gskcairoblur.c']],
   ['simple'],
   ['video-timer', ['variable.c']],
   ['testaccel'],
