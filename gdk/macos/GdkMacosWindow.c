@@ -785,19 +785,12 @@ typedef NSString *CALayerContentsGravity;
 
   if (decorated)
     {
-      style_mask &= ~NSWindowStyleMaskFullSizeContentView;
-      [self setTitleVisibility:NSWindowTitleVisible];
+      style_mask |= NSWindowStyleMaskTitled;
     }
   else
     {
-      style_mask |= NSWindowStyleMaskFullSizeContentView;
-      [self setTitleVisibility:NSWindowTitleHidden];
+      style_mask &= ~NSWindowStyleMaskTitled;
     }
-
-  [self setTitlebarAppearsTransparent:!decorated];
-  [[self standardWindowButton:NSWindowCloseButton] setHidden:!decorated];
-  [[self standardWindowButton:NSWindowMiniaturizeButton] setHidden:!decorated];
-  [[self standardWindowButton:NSWindowZoomButton] setHidden:!decorated];
 
   [self setStyleMask:style_mask];
 }
