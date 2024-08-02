@@ -750,18 +750,20 @@ gtk_css_shadow_value_push_snapshot (const GtkCssValue *value,
                                     GtkSnapshot       *snapshot)
 {
   GskShadow *shadows;
+  GdkColorState **color_states;
   guint i;
 
   if (gtk_css_shadow_value_is_clear (value))
     return FALSE;
 
   shadows = g_newa (GskShadow, value->n_shadows);
+  color_states = g_newa (GdkColorState *, value->n_shadows);
 
   for (i = 0; i < value->n_shadows; i++)
     {
       const ShadowValue *shadow = &value->shadows[i];
 
-      shadows[i].color = *gtk_css_color_value_get_rgba (shadow->color);
+      color_states[i] = gtk_css_color_get_color (gtk_css_color_value_get_color (shadow->color), (float *) &shadows[i].color);
 
       shadows[i].dx = gtk_css_number_value_get (shadow->hoffset, 0);
       shadows[i].dy = gtk_css_number_value_get (shadow->voffset, 0);
@@ -770,7 +772,7 @@ gtk_css_shadow_value_push_snapshot (const GtkCssValue *value,
         shadows[i].radius *= 2;
     }
 
-  gtk_snapshot_push_shadow (snapshot, shadows, value->n_shadows);
+  gtk_snapshot_push_shadow2 (snapshot, shadows, value->n_shadows, color_states);
 
   return TRUE;
 }
