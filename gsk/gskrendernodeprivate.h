@@ -126,5 +126,10 @@ GskRenderNode * gsk_color_node_new2                     (const GdkColor        *
 
 const GdkColor* gsk_color_node_get_color2               (const GskRenderNode   *node);
 
+GskRenderNode * gsk_border_node_new2                    (const GskRoundedRect  *outline,
+                                                         const float            border_width[4],
+                                                         const GdkColor         border_color[4]);
+const GdkColor *gsk_border_node_get_colors2             (const GskRenderNode   *node);
+
 G_END_DECLS
 
