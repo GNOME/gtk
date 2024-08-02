@@ -594,7 +594,8 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue    *value,
 {
   guint i;
   double dx, dy, spread, radius;
-  const GdkRGBA *color;
+  float color[4];
+  GdkColorState *color_state;
 
   g_return_if_fail (value->class == &GTK_CSS_VALUE_SHADOW);
 
@@ -605,10 +606,10 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue    *value,
       if (shadow->inset)
         continue;
 
-      color = gtk_css_color_value_get_rgba (shadow->color);
+      color_state = gtk_css_color_get_color (gtk_css_color_value_get_color (shadow->color), color);
 
       /* We don't need to draw invisible shadows */
-      if (gdk_rgba_is_clear (color))
+      if (gdk_rgba_is_clear ((GdkRGBA *) color))
         continue;
 
       dx = gtk_css_number_value_get (shadow->hoffset, 0);
@@ -618,7 +619,9 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue    *value,
       if (value->is_filter)
         radius = 2 * radius;
 
-      gtk_snapshot_append_outset_shadow (snapshot, border_box, color, dx, dy, spread, radius);
+      gtk_snapshot_append_outset_shadow2 (snapshot, border_box,
+                                          color_state, color,
+                                          dx, dy, spread, radius);
     }
 }
 
@@ -629,7 +632,8 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue    *value,
 {
   guint i;
   double dx, dy, spread, radius;
-  const GdkRGBA *color;
+  float color[4];
+  GdkColorState *color_state;
 
   g_return_if_fail (value->class == &GTK_CSS_VALUE_SHADOW);
 
@@ -640,10 +644,10 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue    *value,
       if (!shadow->inset)
         continue;
 
-      color = gtk_css_color_value_get_rgba (shadow->color);
+      color_state = gtk_css_color_get_color (gtk_css_color_value_get_color (shadow->color), color);
 
       /* We don't need to draw invisible shadows */
-      if (gdk_rgba_is_clear (color))
+      if (gdk_rgba_is_clear ((GdkRGBA *) color))
         continue;
 
       dx = gtk_css_number_value_get (shadow->hoffset, 0);
@@ -663,54 +667,55 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue    *value,
             {
               const float y = dy > 0 ? dy : 0;
 
-              gtk_snapshot_append_color (snapshot, color,
-                                         &GRAPHENE_RECT_INIT (
-                                           padding_bounds->origin.x,
-                                           padding_bounds->origin.y + y,
-                                           dx,
-                                           padding_bounds->size.height - ABS (dy)
-                                         ));
+              gtk_snapshot_append_color2 (snapshot, color_state, color,
+                                          &GRAPHENE_RECT_INIT (
+                                            padding_bounds->origin.x,
+                                            padding_bounds->origin.y + y,
+                                            dx,
+                                            padding_bounds->size.height - ABS (dy)
+                                          ));
             }
           else if (dx < 0)
             {
               const float y = dy > 0 ? dy : 0;
 
-              gtk_snapshot_append_color (snapshot, color,
-                                         &GRAPHENE_RECT_INIT (
-                                           padding_bounds->origin.x + padding_bounds->size.width + dx,
-                                           padding_bounds->origin.y + y,
-                                           - dx,
-                                           padding_bounds->size.height - ABS (dy)
-                                         ));
+              gtk_snapshot_append_color2 (snapshot, color_state, color,
+                                          &GRAPHENE_RECT_INIT (
+                                            padding_bounds->origin.x + padding_bounds->size.width + dx,
+                                            padding_bounds->origin.y + y,
+                                            - dx,
+                                            padding_bounds->size.height - ABS (dy)
+                                          ));
             }
 
           if (dy > 0)
             {
-              gtk_snapshot_append_color (snapshot, color,
-                                         &GRAPHENE_RECT_INIT (
-                                           padding_bounds->origin.x,
-                                           padding_bounds->origin.y,
-                                           padding_bounds->size.width,
-                                           dy
-                                         ));
+              gtk_snapshot_append_color2 (snapshot, color_state, color,
+                                          &GRAPHENE_RECT_INIT (
+                                            padding_bounds->origin.x,
+                                            padding_bounds->origin.y,
+                                            padding_bounds->size.width,
+                                            dy
+                                          ));
             }
           else if (dy < 0)
             {
-              gtk_snapshot_append_color (snapshot, color,
-                                         &GRAPHENE_RECT_INIT (
-                                           padding_bounds->origin.x,
-                                           padding_bounds->origin.y + padding_bounds->size.height + dy,
-                                           padding_bounds->size.width,
-                                           - dy
-                                         ));
+              gtk_snapshot_append_color2 (snapshot, color_state, color,
+                                          &GRAPHENE_RECT_INIT (
+                                            padding_bounds->origin.x,
+                                            padding_bounds->origin.y + padding_bounds->size.height + dy,
+                                            padding_bounds->size.width,
+                                            - dy
+                                          ));
             }
         }
       else
         {
-          gtk_snapshot_append_inset_shadow (snapshot,
-                                            padding_box,
-                                            color,
-                                            dx, dy, spread, radius);
+          gtk_snapshot_append_inset_shadow2 (snapshot,
+                                             padding_box,
+                                             color_state,
+                                             color,
+                                             dx, dy, spread, radius);
         }
     }
 }
