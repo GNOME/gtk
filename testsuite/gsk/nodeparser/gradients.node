@@ -1,0 +1,23 @@
+linear-gradient {
+  bounds: 10 10 100 100;
+  start: 2 3;
+  end: 20 40;
+  stops: 0 rgb(0, 0, 0),  0.5 color(rec2100-pq 0.4 0.5 0.6), 1 #AF0;
+}
+
+radial-gradient {
+  bounds: 10 10 100 100;
+  center: 25 26;
+  hradius: 10;
+  vradius: 20;
+  start: 0.1;
+  end: 0.9;
+  stops: 0 rgb(0, 0, 0),  0.5 color(rec2100-pq 0.4 0.5 0.6), 1 #AF0;
+}
+
+conic-gradient {
+  bounds: 10 10 100 100;
+  center: 25 26;
+  rotation: 200;
+  stops: 0 rgb(0, 0, 0),  0.5 color(rec2100-pq 0.4 0.5 0.6), 1 #AF0;
+}
