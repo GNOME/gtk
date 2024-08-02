@@ -1471,6 +1471,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
   cairo_rectangle_int_t int_clipped;
   graphene_rect_t rect, clipped;
   const GdkRGBA *color;
+  float clear_color[4];
 
   color = gsk_color_node_get_color (node);
   graphene_rect_offset_r (&node->bounds,
@@ -1568,10 +1569,8 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
             }
         }
 
-      gsk_gpu_clear_op (self->frame,
-                        self->ccs,
-                        &int_clipped,
-                        color);
+      gdk_color_state_from_rgba (self->ccs, color, clear_color);
+      gsk_gpu_clear_op (self->frame, &int_clipped, clear_color);
       return;
     }
 
@@ -3322,10 +3321,10 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
         {
           if (gdk_rectangle_intersect (&int_clipped, &self->scissor, &int_clipped))
             {
-              gsk_gpu_clear_op (self->frame,
-                                GDK_COLOR_STATE_SRGB,
-                                &int_clipped,
-                                &GDK_RGBA_TRANSPARENT);
+              float color[4];
+
+              gdk_color_state_from_rgba (self->ccs, &GDK_RGBA_TRANSPARENT, color);
+              gsk_gpu_clear_op (self->frame, &int_clipped, color);
             }
         }
       else
