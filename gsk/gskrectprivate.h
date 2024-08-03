@@ -185,6 +185,16 @@ gsk_rect_to_cairo_grow (const graphene_rect_t *graphene,
   cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
 }
 
+static inline void
+gsk_rect_to_cairo_shrink (const graphene_rect_t *graphene,
+                          cairo_rectangle_int_t *cairo)
+{
+  cairo->x = ceilf (graphene->origin.x);
+  cairo->y = ceilf (graphene->origin.y);
+  cairo->width = floorf (graphene->origin.x + graphene->size.width) - cairo->x;
+  cairo->height = floorf (graphene->origin.y + graphene->size.height) - cairo->y;
+}
+
 static inline gboolean
 gsk_rect_equal (const graphene_rect_t *r1,
                 const graphene_rect_t *r2)
