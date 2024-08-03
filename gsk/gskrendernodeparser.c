@@ -1462,20 +1462,161 @@ create_default_path (void)
   return gsk_path_builder_free_to_path (builder);
 }
 
+typedef struct
+{
+  GdkColorState *color_state;
+  float values[4];
+} Color;
+
+static gboolean
+parse_color_state (GtkCssParser *parser,
+                   Context      *context,
+                   gpointer      color_state)
+{
+  GdkColorState *cs = NULL;
+
+  if (gtk_css_parser_try_ident (parser, "srgb"))
+    cs = gdk_color_state_get_srgb ();
+  else if (gtk_css_parser_try_ident (parser, "srgb-linear"))
+    cs = gdk_color_state_get_srgb_linear ();
+  else if (gtk_css_parser_try_ident (parser, "rec2100-pq"))
+    cs = gdk_color_state_get_rec2100_pq ();
+  else if (gtk_css_parser_try_ident (parser, "rec2100-linear"))
+    cs = gdk_color_state_get_rec2100_linear ();
+  else
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a valid color state");
+      return FALSE;
+    }
+
+  *(GdkColorState **) color_state = cs;
+  return TRUE;
+}
+
+static gboolean
+parse_color2 (GtkCssParser *parser,
+              Context      *context,
+              gpointer      color)
+{
+  GdkRGBA rgba;
+
+  if (gtk_css_parser_has_function (parser, "color"))
+    {
+      const GtkCssToken *token;
+      GdkColorState *color_state;
+      float values[4];
+
+      gtk_css_parser_start_block (parser);
+
+      if (!parse_color_state (parser, context, &color_state))
+        {
+          gtk_css_parser_end_block (parser);
+          return FALSE;
+        }
+
+      for (int i = 0; i < 3; i++)
+        {
+          token = gtk_css_parser_get_token (parser);
+
+          if (gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE))
+            {
+              values[i] = CLAMP (token->number.number / 100.0, 0, 1);
+              gtk_css_parser_consume_token (parser);
+            }
+          else if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_NUMBER) ||
+                   gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_NUMBER) ||
+                   gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
+                   gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
+            {
+              values[i] = CLAMP (token->number.number, 0, 1);
+              gtk_css_parser_consume_token (parser);
+            }
+          else
+            {
+              gtk_css_parser_error_syntax (parser, "Expected a number or percentage");
+              gtk_css_parser_end_block (parser);
+              return FALSE;
+            }
+        }
+
+      token = gtk_css_parser_get_token (parser);
+      if (gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+        {
+          values[3] = 1;
+        }
+      else if (gtk_css_token_is_delim (token, '/'))
+        {
+          gtk_css_parser_consume_token (parser);
+          token = gtk_css_parser_get_token (parser);
+
+          if (gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE))
+            {
+              values[3] = CLAMP (token->number.number / 100.0, 0, 1);
+              gtk_css_parser_consume_token (parser);
+            }
+          else if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_NUMBER) ||
+                   gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_NUMBER) ||
+                   gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNED_INTEGER) ||
+                   gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
+            {
+              values[3] = CLAMP (token->number.number, 0, 1);
+              gtk_css_parser_consume_token (parser);
+            }
+          else
+            {
+              gtk_css_parser_error_syntax (parser, "Expected a number or percentage");
+              gtk_css_parser_end_block (parser);
+              return FALSE;
+            }
+
+          token = gtk_css_parser_get_token (parser);
+          if (!gtk_css_token_is (token, GTK_CSS_TOKEN_EOF))
+            {
+              gtk_css_parser_error_syntax (parser, "Garbage at the end of the value");
+              gtk_css_parser_end_block (parser);
+              return FALSE;
+            }
+
+          gtk_css_parser_consume_token (parser);
+        }
+      else
+        {
+          gtk_css_parser_error_syntax (parser, "Expected '/'");
+          gtk_css_parser_end_block (parser);
+          return FALSE;
+        }
+
+      gtk_css_parser_end_block (parser);
+
+      ((Color *) color)->color_state = gdk_color_state_ref (color_state);
+      memcpy (((Color *) color)->values, values, sizeof (float) * 4);
+      return TRUE;
+    }
+  else if (gdk_rgba_parser_parse (parser, &rgba))
+    {
+      ((Color *) color)->color_state = GDK_COLOR_STATE_SRGB;
+      memcpy (((Color *) color)->values, &rgba, sizeof (float) * 4);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static GskRenderNode *
 parse_color_node (GtkCssParser *parser,
                   Context      *context)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
-  GdkRGBA color = GDK_RGBA("FF00CC");
+  Color color = { GDK_COLOR_STATE_SRGB,  { 1.f, 0.f, 0.8f, 1.f } };
+
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
-    { "color", parse_color, NULL, &color },
+    { "color", parse_color2, NULL, &color },
   };
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  return gsk_color_node_new (&color, &bounds);
+  return gsk_color_node_new2 (color.color_state, color.values, &bounds);
 }
 
 static GskRenderNode *
@@ -3343,6 +3484,40 @@ append_rgba_param (Printer       *p,
 }
 
 static void
+print_color (Printer       *p,
+             GdkColorState *color_state,
+             const float    color[4])
+{
+  if (gdk_color_state_equal (color_state, GDK_COLOR_STATE_SRGB))
+    {
+      gdk_rgba_print ((const GdkRGBA *)color, p->str);
+    }
+  else
+    {
+      g_string_append (p->str, "color(");
+      g_string_append (p->str, gdk_color_state_get_name (color_state));
+      g_string_append_printf (p->str, " %f %f %f",
+                              color[0], color[1], color[2]);
+      if (color[3] < 0.999)
+        g_string_append_printf (p->str, " / %f", color[3]);
+      g_string_append (p->str, ")");
+    }
+}
+
+static void
+append_color_param (Printer       *p,
+                    const char    *param_name,
+                    GdkColorState *color_state,
+                    const float   *color)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  print_color (p, color_state, color);
+  g_string_append_c (p->str, ';');
+  g_string_append_c (p->str, '\n');
+}
+
+static void
 append_rect_param (Printer               *p,
                    const char            *param_name,
                    const graphene_rect_t *value)
@@ -3899,7 +4074,9 @@ render_node_print (Printer       *p,
       {
         start_node (p, "color", node_name);
         append_rect_param (p, "bounds", &node->bounds);
-        append_rgba_param (p, "color", gsk_color_node_get_color (node));
+        append_color_param (p, "color",
+                            gsk_color_node_get_color_state (node),
+                            gsk_color_node_get_color2 (node));
         end_node (p);
       }
       break;
