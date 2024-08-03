@@ -3882,13 +3882,12 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
                                GskRenderPassType            pass_type)
 {
   GskGpuNodeProcessor self;
-  int i;
 
-  for (i = 0; i < cairo_region_num_rectangles (clip); i++)
+  while (cairo_region_num_rectangles (clip) > 0)
     {
       cairo_rectangle_int_t rect;
 
-      cairo_region_get_rectangle (clip, i, &rect);
+      cairo_region_get_rectangle (clip, 0, &rect);
 
       gsk_gpu_node_processor_init (&self,
                                    frame,
@@ -3915,6 +3914,8 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
       gsk_gpu_render_pass_end_op (frame,
                                   target,
                                   pass_type);
+
+      cairo_region_subtract_rectangle (clip, &self.scissor);
 
       gsk_gpu_node_processor_finish (&self);
     }
