@@ -28,6 +28,7 @@
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssprovider.h"
+#include "gtksnapshotprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageRadial, _gtk_css_image_radial, GTK_TYPE_CSS_IMAGE)
 
@@ -81,6 +82,7 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
 {
   GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
   GskColorStop *stops;
+  GdkColorState **color_states;
   double x, y;
   double hradius, vradius;
   double start, end;
@@ -160,6 +162,7 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
   offset = start;
   last = -1;
   stops = g_newa (GskColorStop, radial->n_stops);
+  color_states = g_newa (GdkColorState *, radial->n_stops);
 
   for (i = 0; i < radial->n_stops; i++)
     {
@@ -187,7 +190,8 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
           offset += step;
 
           stops[last].offset = (offset - start) / (end - start);
-          stops[last].color = *gtk_css_color_value_get_rgba (stop->color);
+          color_states[last] = gtk_css_color_get_color (gtk_css_color_value_get_color (stop->color),
+                                                        (float *) &stops[last].color);
         }
 
       offset = pos;
@@ -198,25 +202,27 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
 
  if (radial->repeating)
-   gtk_snapshot_append_repeating_radial_gradient (snapshot,
-                                                  &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                                  &GRAPHENE_POINT_INIT (x, y),
-                                                  hradius,
-                                                  vradius,
-                                                  start,
-                                                  end,
-                                                  stops,
-                                                  radial->n_stops);
+   gtk_snapshot_append_repeating_radial_gradient2 (snapshot,
+                                                   &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                                   &GRAPHENE_POINT_INIT (x, y),
+                                                   hradius,
+                                                   vradius,
+                                                   start,
+                                                   end,
+                                                   stops,
+                                                   radial->n_stops,
+                                                   color_states);
   else
-    gtk_snapshot_append_radial_gradient (snapshot,
-                                         &GRAPHENE_RECT_INIT (0, 0, width, height),
-                                         &GRAPHENE_POINT_INIT (x, y),
-                                         hradius,
-                                         vradius,
-                                         start,
-                                         end,
-                                         stops,
-                                         radial->n_stops);
+    gtk_snapshot_append_radial_gradient2 (snapshot,
+                                          &GRAPHENE_RECT_INIT (0, 0, width, height),
+                                          &GRAPHENE_POINT_INIT (x, y),
+                                          hradius,
+                                          vradius,
+                                          start,
+                                          end,
+                                          stops,
+                                          radial->n_stops,
+                                          color_states);
 }
 
 static guint
