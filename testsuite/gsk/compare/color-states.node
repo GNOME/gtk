@@ -1,0 +1,23 @@
+@cicp "mycolors" {
+  primaries: 1;
+  transfer: 13;
+  matrix: 0;
+  range: full;
+}
+
+color {
+  bounds: 0 0 100 100;
+  color: color(srgb 1 0 0);
+}
+color {
+  bounds: 100 0 100 100;
+  color: color(srgb-linear 1 0 0);
+}
+color {
+  bounds: 0 100 100 100;
+  color: color(rec2100-pq 0.792 0.231 0.0738);
+}
+color {
+  bounds: 100 100 100 100;
+  color: color("mycolors" 1 0 0);
+}
