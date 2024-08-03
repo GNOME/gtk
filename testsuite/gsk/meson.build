@@ -320,6 +320,7 @@ node_parser_tests = [
   'blend-unknown-mode.ref.node',
   'border.node',
   'color.node',
+  'color2.node',
   'conic-gradient.node',
   'conic-gradient.ref.node',
   'crash1.errors',
