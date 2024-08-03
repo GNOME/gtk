@@ -27,6 +27,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsspositionvalueprivate.h"
 #include "gtkcssprovider.h"
+#include "gtksnapshotprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageConic, gtk_css_image_conic, GTK_TYPE_CSS_IMAGE)
 
@@ -37,11 +38,11 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
                               double              height)
 {
   GtkCssImageConic *self = GTK_CSS_IMAGE_CONIC (image);
-  GskColorStop *stops;
+  GskColorStop2 *stops;
   int i, last;
   double offset;
 
-  stops = g_newa (GskColorStop, self->n_stops);
+  stops = g_newa (GskColorStop2, self->n_stops);
 
   last = -1;
   offset = 0;
@@ -74,7 +75,7 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
           offset += step;
 
           stops[last].offset = offset;
-          stops[last].color = *gtk_css_color_value_get_rgba (stop->color);
+          gtk_css_color_to_color (gtk_css_color_value_get_color (stop->color), &stops[last].color);
         }
 
       offset = pos;
@@ -84,14 +85,18 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
   if (self->color_space != GTK_CSS_COLOR_SPACE_SRGB)
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
 
-  gtk_snapshot_append_conic_gradient (
+  gtk_snapshot_append_conic_gradient2 (
           snapshot,
           &GRAPHENE_RECT_INIT (0, 0, width, height),
           &GRAPHENE_POINT_INIT (_gtk_css_position_value_get_x (self->center, width),
                                 _gtk_css_position_value_get_y (self->center, height)),
           gtk_css_number_value_get (self->rotation, 360),
-          stops,
-          self->n_stops);
+          gtk_css_color_space_get_color_state (self->color_space),
+          gtk_css_hue_interpolation_to_hue_interpolation (self->hue_interp),
+          stops, self->n_stops);
+
+  for (i = 0; i < self->n_stops; i++)
+    gdk_color_finish (&stops[i].color);
 }
 
 static gboolean
@@ -100,7 +105,7 @@ parse_angles (GtkCssParser *parser,
               gpointer      unused)
 {
   GtkCssValue **angles = option_data;
-  
+
   angles[0] = gtk_css_number_value_parse (parser, GTK_CSS_PARSE_ANGLE | GTK_CSS_PARSE_PERCENT);
   if (angles[0] == NULL)
     return FALSE;
@@ -121,7 +126,7 @@ parse_color (GtkCssParser *parser,
              gpointer      unused)
 {
   GtkCssValue **color = option_data;
-  
+
   *color = gtk_css_color_value_parse (parser);
   if (*color == NULL)
     return FALSE;
