@@ -382,7 +382,6 @@ window_notify_cb (GtkWindowControls *self,
       pspec->name == I_("maximized") ||
       pspec->name == I_("modal") ||
       pspec->name == I_("resizable") ||
-      pspec->name == I_("scale-factor") ||
       pspec->name == I_("transient-for"))
     update_window_buttons (self);
 }
