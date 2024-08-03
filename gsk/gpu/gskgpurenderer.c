@@ -323,7 +323,6 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                                      image_height),
                                 &texture);
           g_object_unref (frame);
-          cairo_region_destroy (clip_region);
 
           g_assert (texture);
           gdk_texture_downloader_init (&downloader, texture);
@@ -400,7 +399,6 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
                         &rounded_viewport,
                         &texture);
 
-  cairo_region_destroy (clip_region);
   g_object_unref (frame);
   g_object_unref (image);
 
@@ -461,8 +459,6 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   gsk_gpu_frame_end (frame, priv->context);
 
   gsk_gpu_device_queue_gc (priv->device);
-
-  g_clear_pointer (&render_region, cairo_region_destroy);
 }
 
 static double

@@ -632,7 +632,7 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
                       gint64                  timestamp,
                       GskGpuImage            *target,
                       GdkColorState          *target_color_state,
-                      const cairo_region_t   *clip,
+                      cairo_region_t         *clip,
                       GskRenderNode          *node,
                       const graphene_rect_t  *viewport,
                       GdkTexture            **texture)
@@ -654,6 +654,8 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
 
   if (texture)
     gsk_gpu_download_op (self, target, TRUE, copy_texture, texture);
+
+  cairo_region_destroy (clip);
 }
 
 static void
@@ -692,7 +694,7 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
                       gint64                  timestamp,
                       GskGpuImage            *target,
                       GdkColorState          *target_color_state,
-                      const cairo_region_t   *region,
+                      cairo_region_t         *clip,
                       GskRenderNode          *node,
                       const graphene_rect_t  *viewport,
                       GdkTexture            **texture)
@@ -701,7 +703,7 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
 
   gsk_gpu_frame_cleanup (self);
 
-  gsk_gpu_frame_record (self, timestamp, target, target_color_state, region, node, viewport, texture);
+  gsk_gpu_frame_record (self, timestamp, target, target_color_state, clip, node, viewport, texture);
 
   gsk_gpu_frame_submit (self, pass_type);
 }
