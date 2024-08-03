@@ -52,16 +52,20 @@ static const GskGpuShaderOpClass GSK_GPU_ROUNDED_COLOR_OP_CLASS = {
 void
 gsk_gpu_rounded_color_op (GskGpuFrame            *frame,
                           GskGpuShaderClip        clip,
-                          GskGpuColorStates       color_states,
+                          GdkColorState          *ccs,
+                          float                   opacity,
                           const GskRoundedRect   *outline,
                           const graphene_point_t *offset,
-                          const float             color[4])
+                          const GdkColor         *color)
 {
   GskGpuRoundedcolorInstance *instance;
+  GdkColorState *target;
+
+  target = gsk_gpu_target_color_state (ccs, color);
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_ROUNDED_COLOR_OP_CLASS,
-                           color_states,
+                           gsk_gpu_color_states_create (ccs, TRUE, target, FALSE),
                            0,
                            clip,
                            NULL,
@@ -69,6 +73,6 @@ gsk_gpu_rounded_color_op (GskGpuFrame            *frame,
                            &instance);
 
   gsk_rounded_rect_to_float (outline, offset, instance->outline);
-  gsk_gpu_vec4_to_float (color, instance->color);
+  gsk_gpu_color_to_float (color, target, opacity, instance->color);
 }
 
