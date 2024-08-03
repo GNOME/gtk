@@ -77,5 +77,50 @@ void                    gtk_snapshot_push_shadow2               (GtkSnapshot    
                                                                  gsize                 n_shadows,
                                                                  GdkColorState       **color_states);
 
+void                    gtk_snapshot_append_linear_gradient2    (GtkSnapshot             *snapshot,
+                                                                 const graphene_rect_t   *bounds,
+                                                                 const graphene_point_t  *start_point,
+                                                                 const graphene_point_t  *end_point,
+                                                                 const GskColorStop      *stops,
+                                                                 gsize                    n_stops,
+                                                                 GdkColorState          **color_states);
+void                    gtk_snapshot_append_repeating_linear_gradient2
+                                                                (GtkSnapshot             *snapshot,
+                                                                 const graphene_rect_t   *bounds,
+                                                                 const graphene_point_t  *start_point,
+                                                                 const graphene_point_t  *end_point,
+                                                                 const GskColorStop      *stops,
+                                                                 gsize                    n_stops,
+                                                                 GdkColorState          **color_states);
+void                    gtk_snapshot_append_radial_gradient2    (GtkSnapshot             *snapshot,
+                                                                 const graphene_rect_t   *bounds,
+                                                                 const graphene_point_t  *center,
+                                                                 float                    hradius,
+                                                                 float                    vradius,
+                                                                 float                    start,
+                                                                 float                    end,
+                                                                 const GskColorStop      *stops,
+                                                                 gsize                    n_stops,
+                                                                 GdkColorState          **color_states);
+void                    gtk_snapshot_append_repeating_radial_gradient2
+                                                                (GtkSnapshot             *snapshot,
+                                                                 const graphene_rect_t   *bounds,
+                                                                 const graphene_point_t  *center,
+                                                                 float                    hradius,
+                                                                 float                    vradius,
+                                                                 float                    start,
+                                                                 float                    end,
+                                                                 const GskColorStop      *stops,
+                                                                 gsize                    n_stops,
+                                                                 GdkColorState          **color_states);
+void                    gtk_snapshot_append_conic_gradient2     (GtkSnapshot             *snapshot,
+                                                                 const graphene_rect_t   *bounds,
+                                                                 const graphene_point_t  *center,
+                                                                 float                    rotation,
+                                                                 const GskColorStop      *stops,
+                                                                 gsize                    n_stops,
+                                                                 GdkColorState          **color_states);
+
+
 G_END_DECLS
 
