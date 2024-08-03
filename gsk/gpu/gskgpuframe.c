@@ -639,23 +639,14 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskRenderPassType pass_type = texture ? GSK_RENDER_PASS_EXPORT : GSK_RENDER_PASS_PRESENT;
-  int i;
 
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
-  for (i = 0; i < cairo_region_num_rectangles (clip); i++)
-    {
-      cairo_rectangle_int_t rect;
-
-      cairo_region_get_rectangle (clip, i, &rect);
-      gsk_gpu_node_processor_process  (self, target, target_color_state, &rect, node, viewport, pass_type);
-    }
+  gsk_gpu_node_processor_process (self, target, target_color_state, clip, node, viewport, pass_type);
 
   if (texture)
     gsk_gpu_download_op (self, target, TRUE, copy_texture, texture);
-
-  cairo_region_destroy (clip);
 }
 
 static void
