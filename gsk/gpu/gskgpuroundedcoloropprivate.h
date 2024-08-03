@@ -2,6 +2,7 @@
 
 #include "gskgputypesprivate.h"
 #include "gsktypes.h"
+#include "gdkcolorprivate.h"
 
 #include <graphene.h>
 
@@ -9,10 +10,11 @@ G_BEGIN_DECLS
 
 void                    gsk_gpu_rounded_color_op                               (GskGpuFrame                    *frame,
                                                                                 GskGpuShaderClip                clip,
-                                                                                GskGpuColorStates               color_states,
-                                                                                const GskRoundedRect           *outline,
+                                                                                GdkColorState                  *ccs,
+                                                                                float                           opacity,
                                                                                 const graphene_point_t         *offset,
-                                                                                const float                     color[4]);
+                                                                                const GskRoundedRect           *outline,
+                                                                                const GdkColor                 *color);
 
 
 G_END_DECLS

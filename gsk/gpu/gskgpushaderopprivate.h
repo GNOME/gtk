@@ -4,6 +4,7 @@
 
 #include "gskgputypesprivate.h"
 #include "gskgpucolorstatesprivate.h"
+#include "gdkcolorprivate.h"
 
 #include <graphene.h>
 
@@ -92,7 +93,6 @@ gsk_gpu_vec4_to_float (const float color[4],
   values[2] = color[2];
   values[3] = color[3];
 }
-#include <graphene.h>
 
 static inline void
 gsk_gpu_point_to_float (const graphene_point_t *point,
@@ -103,5 +103,14 @@ gsk_gpu_point_to_float (const graphene_point_t *point,
   values[1] = point->y + offset->y;
 }
 
-G_END_DECLS
+static inline void
+gsk_gpu_color_to_float (const GdkColor *color,
+                        GdkColorState  *target,
+                        float           opacity,
+                        float           values[4])
+{
+  gdk_color_to_float (color, target, values);
+  values[3] *= opacity;
+}
 
+G_END_DECLS
