@@ -121,7 +121,7 @@ gsk_gpu_border_op (GskGpuFrame            *frame,
   for (i = 0; i < 4; i++)
     {
       instance->border_widths[i] = widths[i];
-      gsk_gpu_color_to_float (colors[i], &instance->border_colors[4 * i]);
+      gsk_gpu_vec4_to_float (colors[i], &instance->border_colors[4 * i]);
     }
   instance->offset[0] = inside_offset->x;
   instance->offset[1] = inside_offset->y;

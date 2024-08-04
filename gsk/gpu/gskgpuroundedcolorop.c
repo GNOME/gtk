@@ -69,6 +69,6 @@ gsk_gpu_rounded_color_op (GskGpuFrame            *frame,
                            &instance);
 
   gsk_rounded_rect_to_float (outline, offset, instance->outline);
-  gsk_gpu_color_to_float (color, instance->color);
+  gsk_gpu_vec4_to_float (color, instance->color);
 }
 

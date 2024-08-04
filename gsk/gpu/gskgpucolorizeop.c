@@ -70,5 +70,5 @@ gsk_gpu_colorize_op (GskGpuFrame             *frame,
 
   gsk_gpu_rect_to_float (image->coverage ? image->coverage : image->bounds, offset, instance->rect);
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
-  gsk_gpu_color_to_float (color, instance->color);
+  gsk_gpu_vec4_to_float (color, instance->color);
 }
