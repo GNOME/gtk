@@ -1,14 +1,15 @@
-# The Node file format
+Title: The Node file format
 
 GSK render nodes can be serialized and deserialized using APIs such as `gsk_render_node_serialize()` and `gsk_render_node_deserialize()`. The intended use for this is development - primarily the development of GTK - by allowing things such as creating testsuites and benchmarks, exchanging nodes in bug reports. GTK includes the `gtk4-node-editor` application for creating such test files.
 
 The format is a text format that follows the [CSS syntax rules](https://drafts.csswg.org/css-syntax-3/). In particular, this means that every array of bytes will produce a render node when parsed, as there is a defined error recovery method. For more details on error handling, please refer to the documentation of the parsing APIs.
 
 The grammar of a node text representation using [the CSS value definition syntax](https://drafts.csswg.org/css-values-3/#value-defs) looks like this:
-**document**: `<@-rule>\*<node>\*`
-**@-rule**: @cicp "name" { <property>* }
-**node**: container [ "name" ] { <document> } | `<node-type> [ "name" ] { <property>* }` | "name"
-**property**: `<property-name>: <node> | <value> ;`
+
+    document: <@-rule>*<node>*
+    @-rule: @cicp "name" { <property>* }
+    node: container [ "name" ] { <document> } | <node-type> [ "name" ] { <property>* } | "name"
+    property: <property-name>: <node> | <value> ;
 
 Each node has its own `<node-type>` and supports a custom set of properties, each with their own `<property-name>` and syntax. The following paragraphs document each of the nodes and their properties.
 
@@ -31,13 +32,13 @@ Just like nodes, textures can be referenced by name. When defining a named textu
 Color states are represented either by an ident (for builtin ones) or a string
 (for custom ones):
 
-**color-state**: `<ident> | <string>`
+    color-state: <ident> | <string>
 
-Custom color states can be defined at the beginning of the document, with an `@cicp` rule.
+Custom color states can be defined at the beginning of the document, with an @‌cicp rule.
 
-The format for `@cicp` rules is
+The format for @‌cicp rules is
 
-    @cicp "name" {
+    @‌cicp "name" {
       ...
     }
 
