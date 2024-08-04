@@ -314,12 +314,15 @@ foreach renderer : renderers
 endforeach
 
 node_parser_tests = [
+  'at-rule.node',
   'blend.node',
   'blend-unknown-mode.errors',
   'blend-unknown-mode.node',
   'blend-unknown-mode.ref.node',
   'border.node',
   'color.node',
+  'color2.node',
+  'color3.node',
   'conic-gradient.node',
   'conic-gradient.ref.node',
   'crash1.errors',

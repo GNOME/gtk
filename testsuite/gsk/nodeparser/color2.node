@@ -1,0 +1,11 @@
+@cicp "cs1" {
+  primaries: 1;
+  transfer: 1;
+  matrix: 0;
+  range: full;
+}
+
+color {
+  bounds: 100 100 200 300;
+  color: color("cs1" 0.4 50% 1 / 20%);
+}
