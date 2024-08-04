@@ -2303,9 +2303,14 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
     }
   else
     {
+      GdkColor color;
+
+      gdk_color_init_from_rgba (&color, rgba);
       gsk_gpu_box_shadow_op (self->frame,
                              gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                             gsk_gpu_node_processor_color_states_for_rgba (self),
+                             self->ccs,
+                             self->opacity,
+                             &self->offset,
                              TRUE,
                              &node->bounds,
                              gsk_inset_shadow_node_get_outline (node),
@@ -2313,8 +2318,8 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
                                                    gsk_inset_shadow_node_get_dy (node)),
                              spread,
                              blur_radius,
-                             &self->offset,
-                             GSK_RGBA_TO_VEC4_ALPHA (rgba, self->opacity));
+                             &color);
+      gdk_color_finish (&color);
     }
 }
 
@@ -2357,17 +2362,22 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
     }
   else
     {
+      GdkColor color;
+
+      gdk_color_init_from_rgba (&color, rgba);
       gsk_gpu_box_shadow_op (self->frame,
                              gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                             gsk_gpu_node_processor_color_states_for_rgba (self),
+                             self->ccs,
+                             self->opacity,
+                             &self->offset,
                              FALSE,
                              &node->bounds,
                              gsk_outset_shadow_node_get_outline (node),
                              &GRAPHENE_POINT_INIT (dx, dy),
                              spread,
                              blur_radius,
-                             &self->offset,
-                             GSK_RGBA_TO_VEC4_ALPHA (rgba, self->opacity));
+                             &color);
+      gdk_color_finish (&color);
     }
 }
 
