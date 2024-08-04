@@ -132,6 +132,7 @@ gboolean                gtk_css_parser_has_ident                (GtkCssParser   
 gboolean                gtk_css_parser_has_url                  (GtkCssParser                   *self);
 gboolean                gtk_css_parser_has_number               (GtkCssParser                   *self);
 gboolean                gtk_css_parser_has_integer              (GtkCssParser                   *self);
+gboolean                gtk_css_parser_has_percentage           (GtkCssParser                   *self);
 gboolean                gtk_css_parser_has_function             (GtkCssParser                   *self,
                                                                  const char                     *name);
 

@@ -953,6 +953,16 @@ gtk_css_parser_has_integer (GtkCssParser *self)
          gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER);
 }
 
+gboolean
+gtk_css_parser_has_percentage (GtkCssParser *self)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_parser_get_token (self);
+
+  return gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE);
+}
+
 /**
  * gtk_css_parser_has_function:
  * @self: a `GtkCssParser`
