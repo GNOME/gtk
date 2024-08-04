@@ -70,5 +70,5 @@ gsk_gpu_color_op (GskGpuFrame            *frame,
                            &instance);
 
   gsk_gpu_rect_to_float (rect, offset, instance->rect);
-  gsk_gpu_color_to_float (color, instance->color);
+  gsk_gpu_vec4_to_float (color, instance->color);
 }

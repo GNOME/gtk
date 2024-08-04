@@ -77,7 +77,7 @@ gsk_gpu_blur_op_full (GskGpuFrame             *frame,
   gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
   graphene_vec2_to_float (blur_direction, instance->blur_direction);
-  gsk_gpu_color_to_float (blur_color, instance->blur_color);
+  gsk_gpu_vec4_to_float (blur_color, instance->blur_color);
 }
 
 void

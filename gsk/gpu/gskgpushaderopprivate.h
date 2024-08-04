@@ -84,8 +84,8 @@ GskGpuOp *              gsk_gpu_shader_op_gl_command                    (GskGpuO
 #define GSK_VEC4_TRANSPARENT (float[4]) { 0.0f, 0.0f, 0.0f, 0.0f }
 
 static inline void
-gsk_gpu_color_to_float (const float color[4],
-                        float       values[4])
+gsk_gpu_vec4_to_float (const float color[4],
+                       float       values[4])
 {
   values[0] = color[0];
   values[1] = color[1];

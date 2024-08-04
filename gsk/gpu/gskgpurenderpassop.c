@@ -340,7 +340,7 @@ gsk_gpu_render_pass_begin_op (GskGpuFrame                 *frame,
   self->area = *area;
   self->clear = clear_color_or_null != NULL;
   if (clear_color_or_null)
-    gsk_gpu_color_to_float (clear_color_or_null, self->clear_color);
+    gsk_gpu_vec4_to_float (clear_color_or_null, self->clear_color);
   self->pass_type = pass_type;
 }
 
