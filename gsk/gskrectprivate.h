@@ -5,6 +5,8 @@
 #include <graphene.h>
 #include <math.h>
 
+#define GSK_RECT_INIT_CAIRO(cairo_rect) GRAPHENE_RECT_INIT((cairo_rect)->x, (cairo_rect)->y, (cairo_rect)->width, (cairo_rect)->height)
+
 static inline void
 gsk_rect_init (graphene_rect_t *r,
                float            x,
