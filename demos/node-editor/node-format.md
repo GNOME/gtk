@@ -5,7 +5,8 @@ GSK render nodes can be serialized and deserialized using APIs such as `gsk_rend
 The format is a text format that follows the [CSS syntax rules](https://drafts.csswg.org/css-syntax-3/). In particular, this means that every array of bytes will produce a render node when parsed, as there is a defined error recovery method. For more details on error handling, please refer to the documentation of the parsing APIs.
 
 The grammar of a node text representation using [the CSS value definition syntax](https://drafts.csswg.org/css-values-3/#value-defs) looks like this:
-**document**: `<node>\*`
+**document**: `<@-rule>\*<node>\*`
+**@-rule**: @cicp "name" { <property>* }
 **node**: container [ "name" ] { <document> } | `<node-type> [ "name" ] { <property>* }` | "name"
 **property**: `<property-name>: <node> | <value> ;`
 
@@ -24,6 +25,42 @@ Nodes can be given a name by adding a string after the `<node-type>` in their de
 ### Textures
 
 Just like nodes, textures can be referenced by name. When defining a named texture, the name has to be placed in front of the URL.
+
+# Color states
+
+Color states are represented either by an ident (for builtin ones) or a string
+(for custom ones):
+
+**color-state**: `<ident> | <string>`
+
+Custom color states can be defined at the beginning of the document, with an `@cicp` rule.
+
+The format for `@cicp` rules is
+
+    @cicp "name" {
+      ...
+    }
+
+The following properties can be set for custom color states:
+
+| property  | syntax           | default  | printed     |
+| --------- | ---------------- | -------- | ----------- |
+| primaries | `<integer>`      | 1        | always      |
+| transfer  | `<integer>`      | 13       | always      |
+| matrix    | `<integer>`      | 0        | always      |
+| range     | `narrow | full`  | full     | always      |
+
+
+# Colors
+
+Colors can be specified with a variation of the modern CSS color syntax:
+
+    color(<color-state> <number> <number> <number> ["/" <number>])
+
+The traditional syntax for sRGB colors still works as well:
+
+    rgba(<number>, <number>, <number>, <number)
+    rgb(<number, <number>, <number>)
 
 # Nodes
 

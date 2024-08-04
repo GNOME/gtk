@@ -33,6 +33,7 @@
 #include "gskprivate.h"
 
 #include "gdk/gdkcolorstateprivate.h"
+#include "gdk/gdkcolorprivate.h"
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
@@ -65,6 +66,7 @@ struct _Context
 {
   GHashTable *named_nodes;
   GHashTable *named_textures;
+  GHashTable *named_color_states;
   PangoFontMap *fontmap;
 };
 
@@ -89,6 +91,7 @@ context_finish (Context *context)
 {
   g_clear_pointer (&context->named_nodes, g_hash_table_unref);
   g_clear_pointer (&context->named_textures, g_hash_table_unref);
+  g_clear_pointer (&context->named_color_states, g_hash_table_unref);
   g_clear_object (&context->fontmap);
 }
 
@@ -1469,6 +1472,126 @@ typedef struct
 } Color;
 
 static gboolean
+parse_cicp_range (GtkCssParser *parser,
+                  Context      *context,
+                  gpointer      out)
+{
+  if (!parse_enum (parser, GDK_TYPE_CICP_RANGE, out))
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
+parse_unsigned (GtkCssParser *parser,
+                Context      *context,
+                guint        *valid,
+                guint         n_valid,
+                gpointer      out)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_parser_get_token (parser);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
+    {
+      gtk_css_parser_consume_token (parser);
+      guint number = (guint) token->number.number;
+      for (guint i = 0; i < n_valid; i++)
+        {
+          if (number == valid[i])
+            {
+              *((guint *)out) = number;
+              return TRUE;
+            }
+        }
+    }
+
+  gtk_css_parser_error_value (parser, "Not an allowed value here");
+  return FALSE;
+}
+
+static gboolean
+parse_primaries (GtkCssParser *parser,
+                 Context      *context,
+                 gpointer      out)
+{
+  guint valid[] = { 1, 5, 6, 7, 9, 10, 12 };
+  return parse_unsigned (parser, context, valid, G_N_ELEMENTS (valid), out);
+}
+
+static gboolean
+parse_transfer (GtkCssParser *parser,
+                Context      *context,
+                gpointer      out)
+{
+  guint valid[] = { 1, 4, 5, 6, 8, 13, 14, 15, 16, 18 };
+  return parse_unsigned (parser, context, valid, G_N_ELEMENTS (valid), out);
+}
+
+static gboolean
+parse_matrix (GtkCssParser *parser,
+              Context      *context,
+              gpointer      out)
+{
+  guint valid[] = { 0 };
+  return parse_unsigned (parser, context, valid, G_N_ELEMENTS (valid), out);
+}
+
+static gboolean
+parse_color_state_rule (GtkCssParser *parser,
+                        Context      *context)
+{
+  char *name = NULL;
+  GdkColorState *cs = NULL;
+  GdkCicp cicp = { 1, 13, 0, GDK_CICP_RANGE_FULL };
+  const Declaration declarations[] = {
+    { "primaries", parse_primaries, NULL, &cicp.color_primaries },
+    { "transfer", parse_transfer, NULL, &cicp.transfer_function },
+    { "matrix", parse_matrix, NULL, &cicp.matrix_coefficients },
+    { "range", parse_cicp_range, NULL, &cicp.range },
+  };
+  const char *default_names[] = { "srgb", "srgb-linear", "rec2100-pq", "rec2100-linear", NULL};
+
+  GError *error = NULL;
+
+  if (!gtk_css_parser_try_at_keyword (parser, "cicp"))
+    return FALSE;
+
+  name = gtk_css_parser_consume_string (parser);
+  if (name == NULL)
+    return FALSE;
+
+  if (g_strv_contains (default_names, name) ||
+      (context->named_color_states &&
+       g_hash_table_contains (context->named_color_states, name)))
+    {
+      gtk_css_parser_error_value (parser, "A color state named \"%s\" already exists", name);
+      g_free (name);
+      return FALSE;
+    }
+
+  gtk_css_parser_end_block_prelude (parser);
+
+  parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+
+  cs = gdk_color_state_new_for_cicp (&cicp, &error);
+
+  if (!cs)
+    {
+      gtk_css_parser_error_value (parser, "Not a valid cicp tuple: %s", error->message);
+      g_error_free (error);
+      return FALSE;
+    }
+
+  if (context->named_color_states == NULL)
+    context->named_color_states = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                         g_free, (GDestroyNotify) gdk_color_state_unref);
+  g_hash_table_insert (context->named_color_states, name, cs);
+
+  return TRUE;
+}
+
+static gboolean
 parse_color_state (GtkCssParser *parser,
                    Context      *context,
                    gpointer      color_state)
@@ -1483,13 +1606,29 @@ parse_color_state (GtkCssParser *parser,
     cs = gdk_color_state_get_rec2100_pq ();
   else if (gtk_css_parser_try_ident (parser, "rec2100-linear"))
     cs = gdk_color_state_get_rec2100_linear ();
+  else if (gtk_css_token_is (gtk_css_parser_get_token (parser), GTK_CSS_TOKEN_STRING))
+    {
+      char *name = gtk_css_parser_consume_string (parser);
+
+      if (context->named_color_states)
+        cs = g_hash_table_lookup (context->named_color_states, name);
+
+      if (!cs)
+        {
+          gtk_css_parser_error_value (parser, "No color state named \"%s\"", name);
+          g_free (name);
+          return FALSE;
+        }
+
+      g_free (name);
+    }
   else
     {
       gtk_css_parser_error_syntax (parser, "Expected a valid color state");
       return FALSE;
     }
 
-  *(GdkColorState **) color_state = cs;
+  *(GdkColorState **) color_state = gdk_color_state_ref (cs);
   return TRUE;
 }
 
@@ -3057,6 +3196,16 @@ gsk_render_node_deserialize_from_bytes (GBytes            *bytes,
                                          &error_func_pair, NULL);
   context_init (&context);
 
+  while (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_AT_KEYWORD))
+    {
+      gtk_css_parser_start_semicolon_block (parser, GTK_CSS_TOKEN_OPEN_CURLY);
+      if (!parse_color_state_rule (parser, &context))
+        {
+          gtk_css_parser_error_syntax (parser, "Unknown @ rule");
+        }
+      gtk_css_parser_end_block (parser);
+    }
+
   root = parse_container_node (parser, &context);
 
   if (root && gsk_container_node_get_n_children (root) == 1)
@@ -3084,6 +3233,8 @@ typedef struct
   gsize named_node_counter;
   GHashTable *named_textures;
   gsize named_texture_counter;
+  GHashTable *named_color_states;
+  gsize named_color_state_counter;
   GHashTable *fonts;
 } Printer;
 
@@ -3097,6 +3248,22 @@ printer_init_check_texture (Printer    *printer,
     g_hash_table_insert (printer->named_textures, texture, NULL);
   else if (name == NULL)
     g_hash_table_insert (printer->named_textures, texture, g_strdup (""));
+}
+
+static void
+printer_init_check_color_state (Printer       *printer,
+                                GdkColorState *cs)
+{
+  gpointer name;
+
+  if (GDK_IS_DEFAULT_COLOR_STATE (cs))
+    return;
+
+  if (!g_hash_table_lookup_extended (printer->named_color_states, cs, NULL, &name))
+    {
+      name = g_strdup_printf ("cs%zu", ++printer->named_color_state_counter);
+      g_hash_table_insert (printer->named_color_states, cs, name);
+    }
 }
 
 typedef struct {
@@ -3174,8 +3341,11 @@ printer_init_duplicates_for_node (Printer       *printer,
       printer_init_collect_font_info (printer, node);
       break;
 
-    case GSK_CAIRO_NODE:
     case GSK_COLOR_NODE:
+      printer_init_check_color_state (printer, gsk_color_node_get_color2 (node)->color_state);
+      break;
+
+    case GSK_CAIRO_NODE:
     case GSK_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
     case GSK_RADIAL_GRADIENT_NODE:
@@ -3300,6 +3470,8 @@ printer_init (Printer       *self,
   self->named_node_counter = 0;
   self->named_textures = g_hash_table_new_full (NULL, NULL, NULL, g_free);
   self->named_texture_counter = 0;
+  self->named_color_states = g_hash_table_new_full (NULL, NULL, NULL, g_free);
+  self->named_color_state_counter = 0;
   self->fonts = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL, font_info_free);
 
   printer_init_duplicates_for_node (self, node);
@@ -3312,6 +3484,7 @@ printer_clear (Printer *self)
     g_string_free (self->str, TRUE);
   g_hash_table_unref (self->named_nodes);
   g_hash_table_unref (self->named_textures);
+  g_hash_table_unref (self->named_color_states);
   g_hash_table_unref (self->fonts);
 }
 
@@ -3472,6 +3645,15 @@ append_float_param (Printer    *p,
 }
 
 static void
+append_unsigned_param (Printer    *p,
+                       const char *param_name,
+                       guint       value)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: %u;\n", param_name, value);
+}
+
+static void
 append_rgba_param (Printer       *p,
                    const char    *param_name,
                    const GdkRGBA *value)
@@ -3493,8 +3675,18 @@ print_color (Printer        *p,
     }
   else
     {
-      g_string_append_printf (p->str, "color(%s ",
-                              gdk_color_state_get_name (color->color_state));
+      if (GDK_IS_DEFAULT_COLOR_STATE (color->color_state))
+        {
+          g_string_append_printf (p->str, "color(%s ",
+                                  gdk_color_state_get_name (color->color_state));
+        }
+      else
+        {
+          const char *name = g_hash_table_lookup (p->named_color_states,
+                                                  color->color_state);
+          g_string_append_printf (p->str, "color(\"%s\" ", name ? name : "???");
+        }
+
       g_string_append_printf (p->str, "%g %g %g", color->r, color->g, color->b);
       if (color->a < 1)
         g_string_append_printf (p->str, " / %g", color->a);
@@ -4720,6 +4912,23 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     }
 }
 
+static void
+serialize_color_state (Printer       *p,
+                       GdkColorState *color_state,
+                       const char    *name)
+{
+  const GdkCicp *cicp = gdk_color_state_get_cicp (color_state);
+
+  g_string_append_printf (p->str, "@cicp \"%s\" {\n", name);
+  p->indentation_level ++;
+  append_unsigned_param (p, "primaries", cicp->color_primaries);
+  append_unsigned_param (p, "transfer", cicp->transfer_function);
+  append_unsigned_param (p, "matrix", cicp->matrix_coefficients);
+  append_enum_param (p, "range", GDK_TYPE_CICP_RANGE, cicp->range);
+  p->indentation_level --;
+  g_string_append (p->str, "}\n");
+}
+
 /**
  * gsk_render_node_serialize:
  * @node: a `GskRenderNode`
@@ -4741,8 +4950,15 @@ gsk_render_node_serialize (GskRenderNode *node)
 {
   Printer p;
   GBytes *res;
+  GHashTableIter iter;
+  GdkColorState *cs;
+  const char *name;
 
   printer_init (&p, node);
+
+  g_hash_table_iter_init (&iter, p.named_color_states);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&cs, (gpointer *)&name))
+    serialize_color_state (&p, cs, name);
 
   if (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE)
     {
