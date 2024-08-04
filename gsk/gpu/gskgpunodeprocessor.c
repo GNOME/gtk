@@ -4030,12 +4030,24 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
                                GskRenderPassType            pass_type)
 {
   GskGpuNodeProcessor self;
+  int i, n, best, best_size;
+  cairo_rectangle_int_t rect;
 
-  while (cairo_region_num_rectangles (clip) > 0)
+  while ((n = cairo_region_num_rectangles (clip)) > 0)
     {
-      cairo_rectangle_int_t rect;
+      best = -1;
+      best_size = 0;
+      for (i = 0; i < n; i++)
+        {
+          cairo_region_get_rectangle (clip, i, &rect);
+          if (rect.width * rect.height > best_size)
+            {
+              best = i;
+              best_size = rect.width * rect.height;
+            }
+        }
 
-      cairo_region_get_rectangle (clip, 0, &rect);
+      cairo_region_get_rectangle (clip, best, &rect);
 
       gsk_gpu_node_processor_init (&self,
                                    frame,
@@ -4044,7 +4056,8 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
                                    &rect,
                                    viewport);
 
-      if (!gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_OCCLUSION_CULLING) ||
+      if (best_size < MIN_PIXELS_FOR_OCCLUSION_PASS ||
+          !gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_OCCLUSION_CULLING) ||
           !gsk_gpu_node_processor_add_first_node (&self,
                                                   target,
                                                   pass_type,
