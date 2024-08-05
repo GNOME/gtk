@@ -3596,10 +3596,15 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
                                                  gsize                min_occlusion_pixels,
                                                  GskRenderNode       *node)
 {
+  graphene_rect_t opaque;
   int i, n;
 
   n = gsk_container_node_get_n_children (node);
   if (n == 0)
+    return FALSE;
+
+  if (!gsk_render_node_get_opaque_rect (node, &opaque) ||
+      !gsk_gpu_node_processor_clip_first_node (self, min_occlusion_pixels, &opaque))
     return FALSE;
 
   for (i = n; i-->0; )
@@ -3614,14 +3619,6 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
 
   if (i < 0)
     {
-      graphene_rect_t opaque;
-
-      if (!gsk_render_node_get_opaque_rect (node, &opaque))
-        return FALSE;
-
-      if (!gsk_gpu_node_processor_clip_first_node (self, min_occlusion_pixels, &opaque))
-        return FALSE;
-
       gsk_gpu_render_pass_begin_op (self->frame,
                                     target,
                                     &self->scissor,
