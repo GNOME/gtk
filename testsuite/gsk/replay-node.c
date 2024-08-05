@@ -219,10 +219,10 @@ replay_shadow_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   gsize n_shadows = gsk_shadow_node_get_n_shadows (node);
   /* Hack: we know GskShadowNode stores shadows in a contiguous array.  */
-  const GskShadow *shadow = gsk_shadow_node_get_shadow (node, 0);
+  const GskShadow2 *shadow = gsk_shadow_node_get_shadow2 (node, 0);
   GskRenderNode *child = gsk_shadow_node_get_child (node);
 
-  gtk_snapshot_push_shadow (snapshot, shadow, n_shadows);
+  gtk_snapshot_push_shadow2 (snapshot, shadow, n_shadows);
   replay_node (child, snapshot);
   gtk_snapshot_pop (snapshot);
 }
