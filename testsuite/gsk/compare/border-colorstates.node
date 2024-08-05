@@ -1,0 +1,10 @@
+border {
+  colors: rgb(255,0,0) color(srgb-linear 1 0 0) color(rec2100-pq 0.792 0.231 0.0738) rgb(255,0,0);
+  outline: 0 0 100 100;
+  widths: 50;
+}
+border {
+  colors: rgb(255,0,0) color(srgb-linear 1 0 0) color(rec2100-pq 0.792 0.231 0.0738) rgb(255,0,0);
+  outline: -50 -50 200 200;
+  widths: 5;
+}
