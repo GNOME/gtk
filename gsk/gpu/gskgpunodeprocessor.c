@@ -4125,13 +4125,20 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
                                    &rect,
                                    viewport);
 
-      gsk_gpu_render_pass_begin_op (frame,
-                                    target,
-                                    &rect,
-                                    GSK_VEC4_TRANSPARENT,
-                                    pass_type);
+      if (!gsk_gpu_node_processor_add_first_node (&self,
+                                                  target,
+                                                  pass_type,
+                                                  rect.width * rect.height,
+                                                  node))
+        {
+          gsk_gpu_render_pass_begin_op (frame,
+                                        target,
+                                        &rect,
+                                        GSK_VEC4_TRANSPARENT,
+                                        pass_type);
 
-      gsk_gpu_node_processor_add_node (&self, node);
+          gsk_gpu_node_processor_add_node (&self, node);
+        }
 
       gsk_gpu_render_pass_end_op (frame,
                                   target,
