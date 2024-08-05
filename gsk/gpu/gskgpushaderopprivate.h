@@ -113,4 +113,18 @@ gsk_gpu_color_to_float (const GdkColor *color,
   values[3] *= opacity;
 }
 
+static inline void
+gsk_gpu_rgba_to_float (const GdkRGBA   *rgba,
+                        GdkColorState  *target,
+                        float           opacity,
+                        float           values[4])
+{
+  GdkColor color;
+
+  gdk_color_init_from_rgba (&color, rgba);
+  gdk_color_to_float (&color, target, values);
+  values[3] *= opacity;
+  gdk_color_finish (&color);
+}
+
 G_END_DECLS
