@@ -266,12 +266,6 @@ gsk_gpu_node_processor_color_states_explicit (GskGpuNodeProcessor *self,
 }
 
 static inline GskGpuColorStates
-gsk_gpu_node_processor_color_states_self (GskGpuNodeProcessor *self)
-{
-  return gsk_gpu_color_states_create_equal (TRUE, TRUE);
-}
-
-static inline GskGpuColorStates
 gsk_gpu_node_processor_color_states_for_rgba (GskGpuNodeProcessor *self)
 {
   return gsk_gpu_color_states_create (self->ccs,
@@ -2638,15 +2632,13 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
 
   for (i = 0; i < n_shadows; i++)
     {
-      const GskShadow *shadow = gsk_shadow_node_get_shadow (node, i);
+      const GskShadow2 *shadow = gsk_shadow_node_get_shadow2 (node, i);
 
       if (shadow->radius == 0)
         {
-          GdkColor color;
-          graphene_point_t shadow_offset = GRAPHENE_POINT_INIT (self->offset.x + shadow->dx,
-                                                                self->offset.y + shadow->dy);
+          graphene_point_t shadow_offset = GRAPHENE_POINT_INIT (self->offset.x + shadow->offset.x,
+                                                                self->offset.y + shadow->offset.y);
 
-          gdk_color_init_from_rgba (&color, &shadow->color);
           gsk_gpu_colorize_op (self->frame,
                                gsk_gpu_clip_get_shader_clip (&self->clip, &shadow_offset, &child->bounds),
                                self->ccs,
@@ -2658,26 +2650,22 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                    &child->bounds,
                                    &tex_rect,
                                },
-                               &color);
-          gdk_color_finish (&color);
+                               &shadow->color);
         }
       else
         {
           graphene_rect_t bounds;
           float clip_radius = gsk_cairo_blur_compute_pixels (0.5 * shadow->radius);
-          GdkColor color;
           graphene_rect_inset_r (&child->bounds, - clip_radius, - clip_radius, &bounds);
-          gdk_color_init_from_rgba (&color, &shadow->color);
           gsk_gpu_node_processor_blur_op (self,
                                           &bounds,
-                                          &GRAPHENE_POINT_INIT (shadow->dx, shadow->dy),
+                                          &shadow->offset,
                                           shadow->radius,
-                                          &color,
+                                          &shadow->color,
                                           image,
                                           gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
                                                                        gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB),
                                           &tex_rect);
-          gdk_color_finish (&color);
         }
     }
 
