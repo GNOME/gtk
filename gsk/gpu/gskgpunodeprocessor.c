@@ -136,6 +136,7 @@ static void             gsk_gpu_node_processor_add_node                 (GskGpuN
 static gboolean         gsk_gpu_node_processor_add_first_node           (GskGpuNodeProcessor            *self,
                                                                          GskGpuImage                    *target,
                                                                          GskRenderPassType               pass_type,
+                                                                         gsize                           min_occlusion_pixels,
                                                                          GskRenderNode                  *node);
 static GskGpuImage *    gsk_gpu_get_node_as_image                       (GskGpuFrame                    *frame,
                                                                          GdkColorState                  *ccs,
@@ -1090,14 +1091,15 @@ gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
 /*
  * gsk_gpu_node_processor_clip_first_node:
  * @self: the nodeprocessor
+ * @min_occlusion_pixels: Minimum size of resulting scissor rect
  * @opaque: an opaque rectangle to clip to
  *
  * Shrinks the clip during a first node determination to only cover
  * the passed in opaque rect - or rather its intersection with the
  * previous clip.
  *
- * This can fail if the resulting scissor rect would be too small to warrant
- * an occlusion pass.
+ * This can fail if the resulting scissor rect would be smaller than
+ * min_occlusion_pixels and not warrant an occlusion pass.
  *
  * Adjusts scissor rect and clip, when not starting a first node,
  * you need to revert them.
@@ -1106,6 +1108,7 @@ gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
  **/
 static gboolean
 gsk_gpu_node_processor_clip_first_node (GskGpuNodeProcessor   *self,
+                                        gsize                  min_occlusion_pixels,
                                         const graphene_rect_t *opaque)
 {
   cairo_rectangle_int_t device_clip;
@@ -1113,7 +1116,7 @@ gsk_gpu_node_processor_clip_first_node (GskGpuNodeProcessor   *self,
 
   if (!gsk_gpu_node_processor_rect_to_device_shrink (self, opaque, &device_clip) ||
       !gdk_rectangle_intersect (&device_clip, &self->scissor, &device_clip) ||
-      device_clip.width * device_clip.height < MIN_PIXELS_FOR_OCCLUSION_PASS)
+      device_clip.width * device_clip.height < min_occlusion_pixels)
     return FALSE;
 
   self->scissor = device_clip;
@@ -1131,6 +1134,7 @@ gsk_gpu_node_processor_add_first_node_clipped (GskGpuNodeProcessor   *self,
                                                GskGpuImage           *target,
                                                GskRenderPassType      pass_type,
                                                const graphene_rect_t *clip,
+                                               gsize                  min_occlusion_pixels,
                                                GskRenderNode         *node)
 {
   GskGpuClip old_clip;
@@ -1139,12 +1143,13 @@ gsk_gpu_node_processor_add_first_node_clipped (GskGpuNodeProcessor   *self,
   old_scissor = self->scissor;
   gsk_gpu_clip_init_copy (&old_clip, &self->clip);
 
-  if (!gsk_gpu_node_processor_clip_first_node (self, clip))
+  if (!gsk_gpu_node_processor_clip_first_node (self, min_occlusion_pixels, clip))
     return FALSE;
 
   if (gsk_gpu_node_processor_add_first_node (self,
                                              target,
                                              pass_type,
+                                             min_occlusion_pixels,
                                              node))
     {
       /* don't revert clip here, the add_first_node() adjusted it to a correct value */
@@ -1161,12 +1166,14 @@ static gboolean
 gsk_gpu_node_processor_add_first_clip_node (GskGpuNodeProcessor *self,
                                             GskGpuImage         *target,
                                             GskRenderPassType    pass_type,
+                                            gsize                min_occlusion_pixels,
                                             GskRenderNode       *node)
 {
   return gsk_gpu_node_processor_add_first_node_clipped (self,
                                                         target,
                                                         pass_type,
                                                         &node->bounds,
+                                                        min_occlusion_pixels,
                                                         gsk_clip_node_get_child (node));
 }
 
@@ -1293,6 +1300,7 @@ static gboolean
 gsk_gpu_node_processor_add_first_rounded_clip_node (GskGpuNodeProcessor *self,
                                                     GskGpuImage         *target,
                                                     GskRenderPassType    pass_type,
+                                                    gsize                min_occlusion_pixels,
                                                     GskRenderNode       *node)
 {
   graphene_rect_t cover, clip;
@@ -1306,6 +1314,7 @@ gsk_gpu_node_processor_add_first_rounded_clip_node (GskGpuNodeProcessor *self,
                                                         target,
                                                         pass_type,
                                                         &cover,
+                                                        min_occlusion_pixels,
                                                         gsk_rounded_clip_node_get_child (node));
 }
 
@@ -1503,10 +1512,11 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor         *self,
-                                                 GskGpuImage                 *target,
-                                                 GskRenderPassType            pass_type,
-                                                 GskRenderNode               *node)
+gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor *self,
+                                                 GskGpuImage         *target,
+                                                 GskRenderPassType    pass_type,
+                                                 gsize                min_occlusion_pixels,
+                                                 GskRenderNode       *node)
 {
   GskTransform *transform;
   float dx, dy, scale_x, scale_y;
@@ -1528,6 +1538,7 @@ gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor         *se
       result = gsk_gpu_node_processor_add_first_node (self,
                                                       target,
                                                       pass_type,
+                                                      min_occlusion_pixels,
                                                       gsk_transform_node_get_child (node));
       self->offset = old_offset;
       return result;
@@ -1550,6 +1561,7 @@ gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor         *se
       result = gsk_gpu_node_processor_add_first_node (self,
                                                       target,
                                                       pass_type,
+                                                      min_occlusion_pixels,
                                                       gsk_transform_node_get_child (node));
 
       self->offset = old_offset;
@@ -1592,6 +1604,7 @@ gsk_gpu_node_processor_add_first_transform_node (GskGpuNodeProcessor         *se
         result = gsk_gpu_node_processor_add_first_node (self,
                                                         target,
                                                         pass_type,
+                                                        min_occlusion_pixels,
                                                         gsk_transform_node_get_child (node));
 
         self->offset = old_offset;
@@ -1757,6 +1770,7 @@ static gboolean
 gsk_gpu_node_processor_add_first_color_node (GskGpuNodeProcessor *self,
                                              GskGpuImage         *target,
                                              GskRenderPassType    pass_type,
+                                             gsize                min_occlusion_pixels,
                                              GskRenderNode       *node)
 {
   float clear_color[4];
@@ -1764,7 +1778,7 @@ gsk_gpu_node_processor_add_first_color_node (GskGpuNodeProcessor *self,
   if (!node->fully_opaque)
     return FALSE;
 
-  if (!gsk_gpu_node_processor_clip_first_node (self, &node->bounds))
+  if (!gsk_gpu_node_processor_clip_first_node (self, min_occlusion_pixels, &node->bounds))
     return FALSE;
 
   gdk_color_to_float (gsk_color_node_get_color2 (node), self->ccs, clear_color);
@@ -3571,10 +3585,11 @@ gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor         *self,
-                                                 GskGpuImage                 *target,
-                                                 GskRenderPassType            pass_type,
-                                                 GskRenderNode               *node)
+gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
+                                                 GskGpuImage         *target,
+                                                 GskRenderPassType    pass_type,
+                                                 gsize                min_occlusion_pixels,
+                                                 GskRenderNode       *node)
 {
   int i, n;
 
@@ -3587,6 +3602,7 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor         *se
       if (gsk_gpu_node_processor_add_first_node (self,
                                                  target,
                                                  pass_type,
+                                                 min_occlusion_pixels,
                                                  gsk_container_node_get_child (node, i)))
           break;
     }
@@ -3598,7 +3614,7 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor         *se
       if (!gsk_render_node_get_opaque_rect (node, &opaque))
         return FALSE;
 
-      if (!gsk_gpu_node_processor_clip_first_node (self, &opaque))
+      if (!gsk_gpu_node_processor_clip_first_node (self, min_occlusion_pixels, &opaque))
         return FALSE;
 
       gsk_gpu_render_pass_begin_op (self->frame,
@@ -3650,6 +3666,7 @@ static const struct
   gboolean              (* process_first_node)                  (GskGpuNodeProcessor    *self,
                                                                  GskGpuImage            *target,
                                                                  GskRenderPassType       pass_type,
+                                                                 gsize                   min_occlusion_pixels,
                                                                  GskRenderNode          *node);
   GskGpuImage *         (* get_node_as_image)                   (GskGpuFrame            *self,
                                                                  GdkColorState          *ccs,
@@ -3922,10 +3939,11 @@ gsk_gpu_node_processor_add_node (GskGpuNodeProcessor *self,
 }
 
 static gboolean
-gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor         *self,
-                                       GskGpuImage                 *target,
-                                       GskRenderPassType            pass_type,
-                                       GskRenderNode               *node)
+gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor *self,
+                                       GskGpuImage         *target,
+                                       GskRenderPassType    pass_type,
+                                       gsize                min_occlusion_pixels,
+                                       GskRenderNode       *node)
 {
   GskRenderNodeType node_type;
   graphene_rect_t opaque;
@@ -3948,10 +3966,10 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor         *self,
     }
 
   if (nodes_vtable[node_type].process_first_node)
-    return nodes_vtable[node_type].process_first_node (self, target, pass_type, node);
+    return nodes_vtable[node_type].process_first_node (self, target, pass_type, min_occlusion_pixels, node);
 
   /* fallback starts here */
-  if (!gsk_gpu_node_processor_clip_first_node (self, &opaque))
+  if (!gsk_gpu_node_processor_clip_first_node (self, min_occlusion_pixels, &opaque))
     return FALSE;
 
   gsk_gpu_render_pass_begin_op (self->frame,
@@ -4066,6 +4084,7 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
       if (!gsk_gpu_node_processor_add_first_node (&self,
                                                   target,
                                                   pass_type,
+                                                  MIN_PIXELS_FOR_OCCLUSION_PASS,
                                                   node))
         {
           gsk_gpu_render_pass_begin_op (frame,
