@@ -5080,6 +5080,15 @@ gdk_win32_surface_apply_queued_move_resize (GdkSurface *surface,
 
       GDK_NOTE (EVENTS, g_print (" ... set window position\n"));
 
+      /*
+       * Workaround situations in the current Win32 surface resize code that may have notified GDK
+       * too late for resizes, which manifests on nVidia drivers (and AMD drivers in mailbox
+       * presentation mode) running under Vulkan when one interactively enlarges the surface (HWND).
+       *
+       * See MR !7562 for more details
+       */
+      _gdk_surface_update_size (surface);
+
       return;
     }
 
