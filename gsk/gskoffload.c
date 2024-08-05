@@ -69,6 +69,15 @@ find_texture_transform (GskTransform *transform)
   return dihedral;
 }
 
+static gboolean
+color_is_black (const GdkColor *color)
+{
+  return color->red < 255.f / 65535.f &&
+         color->green < 255.f / 65535.f &&
+         color->blue < 255.f / 65535.f &&
+         color->alpha > 65280.f / 65535.f;
+}
+
 static GdkTexture *
 find_texture_to_attach (GskOffload          *self,
                         const GskRenderNode *subsurface_node,
@@ -116,7 +125,7 @@ find_texture_to_attach (GskOffload          *self,
               gsk_transform_transform_bounds (transform, &child->bounds, &bounds);
               if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE &&
                   gsk_rect_equal (&bounds, &subsurface_node->bounds) &&
-                  gdk_rgba_equal (gsk_color_node_get_color (child), &GDK_RGBA_BLACK))
+                  color_is_black (gsk_color_node_get_color2 (child)))
                 {
                   *has_background = TRUE;
                   node = gsk_container_node_get_child (node, 1);
