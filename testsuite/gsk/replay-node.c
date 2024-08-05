@@ -25,11 +25,8 @@ replay_cairo_node (GskRenderNode *node, GtkSnapshot *snapshot)
 static void
 replay_color_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
-  graphene_rect_t bounds;
-  gsk_render_node_get_bounds (node, &bounds);
-  gtk_snapshot_append_color (snapshot,
-                             gsk_color_node_get_color (node),
-                             &bounds);
+  /* FIXME: can't recreate color nodes without gsk_color_node_new2 */
+  gtk_snapshot_append_node (snapshot, node);
 }
 
 static void
