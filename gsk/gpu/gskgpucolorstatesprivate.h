@@ -2,6 +2,7 @@
 
 #include "gskgputypesprivate.h"
 
+#include "gdk/gdkcolorprivate.h"
 #include "gdk/gdkcolorstateprivate.h"
 
 #define COLOR_SPACE_OUTPUT_PREMULTIPLIED (1u << 2)
@@ -73,3 +74,12 @@ gsk_gpu_color_states_is_alt_premultiplied (GskGpuColorStates self)
   return !!(self & COLOR_SPACE_ALT_PREMULTIPLIED);
 }
 
+static inline GdkColorState *
+gsk_gpu_color_states_find (GdkColorState  *ccs,
+                           const GdkColor *color)
+{
+  if (GDK_IS_DEFAULT_COLOR_STATE (color->color_state))
+    return color->color_state;
+  else
+    return ccs;
+}

@@ -1,0 +1,8 @@
+repeat {
+  bounds: 0 0 40 40;
+  child-bounds: 0 0 10 10;
+  child: color {
+    bounds: 0 0 10 10;
+    color: color(srgb-linear 0.604 0 0);
+  }
+}

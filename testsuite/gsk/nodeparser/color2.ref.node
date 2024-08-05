@@ -1,0 +1,9 @@
+@cicp "cicp1" {
+  primaries: 1;
+  transfer: 1;
+  matrix: 0;
+}
+color {
+  bounds: 100 100 200 300;
+  color: color("cicp1" 0.4 0.5 1 / 0.2);
+}

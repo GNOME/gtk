@@ -4,6 +4,7 @@
 #include <cairo.h>
 
 #include "gdk/gdkmemoryformatprivate.h"
+#include "gdk/gdkcolorprivate.h"
 
 G_BEGIN_DECLS
 
@@ -119,6 +120,11 @@ _gsk_render_node_ref (GskRenderNode *node)
   g_atomic_ref_count_inc (&node->ref_count);
   return node;
 }
+
+GskRenderNode * gsk_color_node_new2                     (const GdkColor        *color,
+                                                         const graphene_rect_t *bounds);
+
+const GdkColor* gsk_color_node_get_color2               (const GskRenderNode   *node);
 
 G_END_DECLS
 

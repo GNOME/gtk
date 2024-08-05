@@ -23,6 +23,7 @@
 
 #include "config.h"
 
+#include <gdk/gdkcolorprivate.h>
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdkrgbaprivate.h>
@@ -1447,20 +1448,28 @@ blur_node (GskGLRenderJob       *job,
 
 #define ATLAS_SIZE 512
 
+static void
+get_color_node_color_as_srgb (const GskRenderNode *node,
+                              GdkRGBA             *rgba)
+{
+  const GdkColor *color = gsk_color_node_get_color2 (node);
+  gdk_color_to_float (color, GDK_COLOR_STATE_SRGB, (float *) rgba);
+}
+
 static inline void
 gsk_gl_render_job_visit_color_node (GskGLRenderJob      *job,
                                     const GskRenderNode *node)
 {
-  const GdkRGBA *rgba;
+  GdkRGBA rgba;
   guint16 color[4];
   GskGLProgram *program;
   GskGLCommandBatch *batch;
 
-  rgba = gsk_color_node_get_color (node);
-  if (RGBA_IS_CLEAR (rgba))
+  get_color_node_color_as_srgb (node, &rgba);
+  if (RGBA_IS_CLEAR (&rgba))
     return;
 
-  rgba_to_half (rgba, color);
+  rgba_to_half (&rgba, color);
 
   /* Avoid switching away from the coloring program for
    * rendering a solid color.
@@ -1965,12 +1974,14 @@ gsk_gl_render_job_visit_css_background (GskGLRenderJob      *job,
   GskGLDrawVertex *vertices;
   guint16 color[4];
   guint16 color2[4];
+  GdkRGBA rgba;
 
   if (node_is_invisible (node2))
     return;
 
+  get_color_node_color_as_srgb (child, &rgba);
   rgba_to_half (&gsk_border_node_get_colors (node2)[0], color);
-  rgba_to_half (gsk_color_node_get_color (child), color2);
+  rgba_to_half (&rgba, color2);
 
   gsk_gl_render_job_translate_rounded_rect (job, rounded_outline, &outline);
 
@@ -3328,10 +3339,10 @@ gsk_gl_render_job_texture_mask_for_color (GskGLRenderJob        *job,
 {
   int max_texture_size = job->command_queue->max_texture_size;
   GdkTexture *texture = gsk_texture_node_get_texture (mask);
-  const GdkRGBA *rgba;
+  GdkRGBA rgba;
 
-  rgba = gsk_color_node_get_color (color);
-  if (RGBA_IS_CLEAR (rgba))
+  get_color_node_color_as_srgb (color, &rgba);
+  if (RGBA_IS_CLEAR (&rgba))
     return TRUE;
 
   if G_LIKELY (texture->width <= max_texture_size &&
@@ -3347,7 +3358,7 @@ gsk_gl_render_job_texture_mask_for_color (GskGLRenderJob        *job,
       use_mipmap = (scale_x * fabsf (job->scale_x)) < 0.5 ||
                    (scale_y * fabsf (job->scale_y)) < 0.5;
 
-      rgba_to_half (rgba, cc);
+      rgba_to_half (&rgba, cc);
       gsk_gl_render_job_upload_texture (job, texture, use_mipmap, &offscreen);
       gsk_gl_program_set_uniform_texture_with_sync (job->current_program,
                                                     UNIFORM_SHARED_SOURCE, 0,

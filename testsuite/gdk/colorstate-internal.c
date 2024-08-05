@@ -1,5 +1,6 @@
 #include <gdk/gdk.h>
 #include "gdkcolorstateprivate.h"
+#include "gdkcolorprivate.h"
 #include <math.h>
 
 #include "gdkcolordefs.h"
@@ -134,6 +135,29 @@ test_rec2020_to_srgb (void)
   g_assert_cmpfloat_with_epsilon (norm (res), 0, 0.001);
 }
 
+/* Verify that this color is different enough in srgb-linear and srgb
+ * to be detected.
+ */
+static void
+test_color_mislabel (void)
+{
+  GdkColor color;
+  GdkColor color1;
+  GdkColor color2;
+  guint red1, red2;
+
+  gdk_color_init (&color, gdk_color_state_get_srgb_linear (), (float[]) { 0.604, 0, 0, 1 });
+  gdk_color_convert (&color1, gdk_color_state_get_srgb (), &color);
+  gdk_color_init (&color2, gdk_color_state_get_srgb (), (float[]) { 0.604, 0, 0, 1 });
+
+  g_assert_true (!gdk_color_equal (&color1, &color2));
+
+  red1 = round (color1.red * 255.0);
+  red2 = round (color2.red * 255.0);
+
+  g_assert_true (red1 != red2);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -157,6 +181,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/colorstate/matrix/srgb_to_rec2020", test_srgb_to_rec2020);
   g_test_add_func ("/colorstate/matrix/rec2020_to_srgb", test_rec2020_to_srgb);
+  g_test_add_func ("/color/mislabel", test_color_mislabel);
 
   return g_test_run ();
 }

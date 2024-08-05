@@ -36,6 +36,7 @@
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssstyleprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gtksnapshotprivate.h"
 
 #include <math.h>
 
@@ -46,30 +47,29 @@
 static void
 gtk_theming_background_snapshot_color (GtkCssBoxes       *boxes,
                                        GtkSnapshot       *snapshot,
-                                       const GdkRGBA     *bg_color,
+                                       const GtkCssColor *bg_color,
                                        guint              n_bg_values)
 {
   GtkCssStyle *style = boxes->style;
   const GskRoundedRect *box;
   GtkCssArea clip;
+  GdkColor color;
 
   clip = _gtk_css_area_value_get (_gtk_css_array_value_get_nth (style->background->background_clip, n_bg_values - 1));
   box = gtk_css_boxes_get_box (boxes, clip);
 
+  gtk_css_color_to_color (bg_color, &color);
   if (gsk_rounded_rect_is_rectilinear (box))
     {
-      gtk_snapshot_append_color (snapshot,
-                                 bg_color,
-                                 &box->bounds);
+      gtk_snapshot_append_color2 (snapshot, &color, &box->bounds);
     }
   else
     {
       gtk_snapshot_push_rounded_clip (snapshot, box);
-      gtk_snapshot_append_color (snapshot,
-                                 bg_color,
-                                 &box->bounds);
+      gtk_snapshot_append_color2 (snapshot, &color, &box->bounds);
       gtk_snapshot_pop (snapshot);
     }
+  gdk_color_finish (&color);
 }
 
 static void
@@ -248,7 +248,7 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
 {
   GtkCssStyle *style = boxes->style;
   GtkCssValue *background_image;
-  const GdkRGBA *bg_color;
+  const GtkCssColor *bg_color;
   const GtkCssValue *box_shadow;
   gboolean has_bg_color;
   gboolean has_bg_image;
@@ -260,10 +260,10 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
     return;
 
   background_image = style->used->background_image;
-  bg_color = gtk_css_color_value_get_rgba (style->used->background_color);
+  bg_color = gtk_css_color_value_get_color (style->used->background_color);
   box_shadow = style->used->box_shadow;
 
-  has_bg_color = !gdk_rgba_is_clear (bg_color);
+  has_bg_color = !gtk_css_color_is_clear (bg_color);
   has_bg_image = _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (background_image, 0)) != NULL;
   has_shadow = !gtk_css_shadow_value_is_none (box_shadow);
 

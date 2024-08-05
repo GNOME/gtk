@@ -22,6 +22,7 @@
 
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtkcsstypesprivate.h"
+#include "gdk/gdkcolorprivate.h"
 
 G_BEGIN_DECLS
 
@@ -114,5 +115,14 @@ gboolean gtk_css_color_interpolation_method_parse (GtkCssParser           *parse
 void gtk_css_color_interpolation_method_print (GtkCssColorSpace        in,
                                                GtkCssHueInterpolation  interp,
                                                GString                *string);
+
+static inline gboolean
+gtk_css_color_is_clear (const GtkCssColor *color)
+{
+  return color->values[3] < (float) 0x00ff / (float) 0xffff;
+}
+
+void gtk_css_color_to_color (const GtkCssColor *css,
+                             GdkColor          *color);
 
 G_END_DECLS

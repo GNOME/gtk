@@ -46,6 +46,7 @@ compare_render_tests = [
   'color-matrix-identity',
   'color-matrix-merge',
   'color-matrix-parsing',
+  'color-states',
   'conic-gradient-with-64-colorstops',
   'container-single-child-offscreen-for-opacity',
   'crossfade-clip-both-children',
@@ -133,6 +134,7 @@ compare_render_tests = [
   'repeat',
   'repeating-linear-gradient-edge-colors',
   'repeating-radial-gradient-edge-colors',
+  'repeat-color',
   'repeat-child-bounds',
   'repeat-empty-child-bounds',
   'repeat-huge-overdraw',
@@ -314,12 +316,15 @@ foreach renderer : renderers
 endforeach
 
 node_parser_tests = [
+  'at-rule.node',
   'blend.node',
   'blend-unknown-mode.errors',
   'blend-unknown-mode.node',
   'blend-unknown-mode.ref.node',
   'border.node',
   'color.node',
+  'color2.node',
+  'color3.node',
   'conic-gradient.node',
   'conic-gradient.ref.node',
   'crash1.errors',

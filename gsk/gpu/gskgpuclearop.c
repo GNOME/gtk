@@ -104,14 +104,13 @@ static const GskGpuOpClass GSK_GPU_CLEAR_OP_CLASS = {
 
 void
 gsk_gpu_clear_op (GskGpuFrame                 *frame,
-                  GdkColorState               *ccs,
                   const cairo_rectangle_int_t *rect,
-                  const GdkRGBA               *color)
+                  const float                  color[4])
 {
   GskGpuClearOp *self;
 
   self = (GskGpuClearOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_CLEAR_OP_CLASS);
 
   self->rect = *rect;
-  gdk_color_state_from_rgba (ccs, color, self->color);
+  memcpy (self->color, color, sizeof (float) * 4);
 }
