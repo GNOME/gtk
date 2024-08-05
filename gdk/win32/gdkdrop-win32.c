@@ -1016,6 +1016,7 @@ gdk_win32_drop_read_async (GdkDrop             *drop,
         {
           g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                                    _("No compatible transfer format found"));
+          g_object_unref (task);
           g_clear_pointer (&drop_win32->dropfiles_list, g_free);
 
           return;
@@ -1025,6 +1026,7 @@ gdk_win32_drop_read_async (GdkDrop             *drop,
       drop_win32->dropfiles_list = NULL;
       g_object_set_data (G_OBJECT (stream), "gdk-dnd-stream-contenttype", (gpointer) "text/uri-list");
       g_task_return_pointer (task, stream, g_object_unref);
+      g_object_unref (task);
 
       return;
     }
@@ -1035,6 +1037,7 @@ gdk_win32_drop_read_async (GdkDrop             *drop,
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
                                _("GDK surface 0x%p is not registered as a drop target"), gdk_drop_get_surface (drop));
+      g_object_unref (task);
       return;
     }
 
@@ -1042,6 +1045,7 @@ gdk_win32_drop_read_async (GdkDrop             *drop,
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
                                _("Target context record 0x%p has no data object"), tctx);
+      g_object_unref (task);
       return;
     }
 
@@ -1061,6 +1065,7 @@ gdk_win32_drop_read_async (GdkDrop             *drop,
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                                _("No compatible transfer format found"));
+      g_object_unref (task);
       return;
     }
 
@@ -1080,6 +1085,7 @@ gdk_win32_drop_read_async (GdkDrop             *drop,
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
                                _("IDataObject_GetData (0x%x) failed, returning 0x%lx"), fmt.cfFormat, hr);
+      g_object_unref (task);
       return;
     }
 
@@ -1092,6 +1098,7 @@ gdk_win32_drop_read_async (GdkDrop             *drop,
           if (data == NULL)
             {
               ReleaseStgMedium (&storage);
+              g_object_unref (task);
 
               return;
             }
@@ -1112,12 +1119,14 @@ gdk_win32_drop_read_async (GdkDrop             *drop,
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
                                _("Failed to transmute DnD data W32 format 0x%x to %p (%s)"), pair->w32format, pair->contentformat, pair->contentformat);
+      g_object_unref (task);
       return;
     }
 
   stream = g_memory_input_stream_new_from_data (data, data_len, g_free);
   g_object_set_data (G_OBJECT (stream), "gdk-dnd-stream-contenttype", (gpointer) pair->contentformat);
   g_task_return_pointer (task, stream, g_object_unref);
+  g_object_unref (task);
 }
 
 static GInputStream *
