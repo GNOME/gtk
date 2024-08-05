@@ -59,6 +59,11 @@
  */
 #define MIN_PIXELS_FOR_OCCLUSION_PASS 1000 * 100
 
+/* the amount of the whole image for us to potentially save to warrant
+ * carving out a rectangle for an extra render pass
+ */
+#define MIN_PERCENTAGE_FOR_OCCLUSION_PASS 10
+
 /* A note about coordinate systems
  *
  * The rendering code keeps track of multiple coordinate systems to optimize rendering as
@@ -4049,10 +4054,14 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
 {
   GskGpuNodeProcessor self;
   int i, n, best, best_size;
+  gsize min_occlusion_pixels;
   cairo_rectangle_int_t rect;
   gboolean do_culling;
 
   do_culling = gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_OCCLUSION_CULLING);
+  min_occlusion_pixels = gsk_gpu_image_get_width (target) * gsk_gpu_image_get_height (target) *
+                         MIN_PERCENTAGE_FOR_OCCLUSION_PASS / 100;
+  min_occlusion_pixels = MAX (min_occlusion_pixels, MIN_PIXELS_FOR_OCCLUSION_PASS);
 
   while (do_culling &&
          (n = cairo_region_num_rectangles (clip)) > 0)
@@ -4084,7 +4093,7 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
       if (!gsk_gpu_node_processor_add_first_node (&self,
                                                   target,
                                                   pass_type,
-                                                  MIN_PIXELS_FOR_OCCLUSION_PASS,
+                                                  min_occlusion_pixels,
                                                   node))
         {
           gsk_gpu_render_pass_begin_op (frame,
