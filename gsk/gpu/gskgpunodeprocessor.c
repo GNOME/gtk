@@ -4032,8 +4032,12 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
   GskGpuNodeProcessor self;
   int i, n, best, best_size;
   cairo_rectangle_int_t rect;
+  gboolean do_culling;
 
-  while ((n = cairo_region_num_rectangles (clip)) > 0)
+  do_culling = gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_OCCLUSION_CULLING);
+
+  while (do_culling &&
+         (n = cairo_region_num_rectangles (clip)) > 0)
     {
       best = -1;
       best_size = 0;
@@ -4049,6 +4053,9 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
 
       cairo_region_get_rectangle (clip, best, &rect);
 
+      if (best_size < MIN_PIXELS_FOR_OCCLUSION_PASS)
+        break;
+
       gsk_gpu_node_processor_init (&self,
                                    frame,
                                    target,
@@ -4056,9 +4063,7 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
                                    &rect,
                                    viewport);
 
-      if (best_size < MIN_PIXELS_FOR_OCCLUSION_PASS ||
-          !gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_OCCLUSION_CULLING) ||
-          !gsk_gpu_node_processor_add_first_node (&self,
+      if (!gsk_gpu_node_processor_add_first_node (&self,
                                                   target,
                                                   pass_type,
                                                   node))
@@ -4068,8 +4073,8 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
                                         &rect,
                                         GSK_VEC4_TRANSPARENT,
                                         pass_type);
-
           gsk_gpu_node_processor_add_node (&self, node);
+          do_culling = FALSE;
         }
 
       gsk_gpu_render_pass_end_op (frame,
@@ -4077,6 +4082,32 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
                                   pass_type);
 
       cairo_region_subtract_rectangle (clip, &self.scissor);
+
+      gsk_gpu_node_processor_finish (&self);
+    }
+
+  for (i = 0; i < cairo_region_num_rectangles (clip); i++) 
+    {
+      cairo_region_get_rectangle (clip, i, &rect);
+
+      gsk_gpu_node_processor_init (&self,
+                                   frame,
+                                   target,
+                                   ccs,
+                                   &rect,
+                                   viewport);
+
+      gsk_gpu_render_pass_begin_op (frame,
+                                    target,
+                                    &rect,
+                                    GSK_VEC4_TRANSPARENT,
+                                    pass_type);
+
+      gsk_gpu_node_processor_add_node (&self, node);
+
+      gsk_gpu_render_pass_end_op (frame,
+                                  target,
+                                  pass_type);
 
       gsk_gpu_node_processor_finish (&self);
     }
