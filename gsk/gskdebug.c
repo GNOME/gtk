@@ -15,6 +15,7 @@ static const GdkDebugKey gsk_debug_keys[] = {
   { "staging", GSK_DEBUG_STAGING, "Use a staging image for texture upload (Vulkan only)" },
   { "offload-disable", GSK_DEBUG_OFFLOAD_DISABLE, "Disable graphics offload" },
   { "cairo", GSK_DEBUG_CAIRO, "Overlay error pattern over Cairo drawing (finds fallbacks)" },
+  { "occlusion", GSK_DEBUG_OCCLUSION, "Overlay highlight over areas optimized via occlusion culling" },
 };
 
 static guint gsk_debug_flags;
