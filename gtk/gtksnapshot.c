@@ -706,8 +706,9 @@ gtk_snapshot_collect_repeat (GtkSnapshot      *snapshot,
       graphene_rect_equal (child_bounds, &node->bounds))
     {
       /* Repeating a color node entirely is pretty easy by just increasing
-       * the size of the color node. */
-      GskRenderNode *color_node = gsk_color_node_new (gsk_color_node_get_color (node), bounds);
+       * the size of the color node.
+       */
+      GskRenderNode *color_node = gsk_color_node_new2 (gsk_color_node_get_color2 (node), bounds);
 
       gsk_render_node_unref (node);
 

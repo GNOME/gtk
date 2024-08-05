@@ -133,6 +133,7 @@ compare_render_tests = [
   'repeat',
   'repeating-linear-gradient-edge-colors',
   'repeating-radial-gradient-edge-colors',
+  'repeat-color',
   'repeat-child-bounds',
   'repeat-empty-child-bounds',
   'repeat-huge-overdraw',
