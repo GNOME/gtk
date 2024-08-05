@@ -1,4 +1,6 @@
 #include <gtk/gtk.h>
+#include <gtk/gtksnapshotprivate.h>
+#include <gsk/gskrendernodeprivate.h>
 
 void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot);
@@ -25,8 +27,11 @@ replay_cairo_node (GskRenderNode *node, GtkSnapshot *snapshot)
 static void
 replay_color_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
-  /* FIXME: can't recreate color nodes without gsk_color_node_new2 */
-  gtk_snapshot_append_node (snapshot, node);
+  graphene_rect_t bounds;
+  gsk_render_node_get_bounds (node, &bounds);
+  gtk_snapshot_append_color2 (snapshot,
+                              gsk_color_node_get_color2 (node),
+                              &bounds);
 }
 
 static void

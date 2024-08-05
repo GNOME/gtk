@@ -1,6 +1,6 @@
 compare_render = executable('compare-render',
   ['compare-render.c', '../reftests/reftest-compare.c', 'replay-node.c'],
-  dependencies: libgtk_dep,
+  dependencies: libgtk_static_dep,
   c_args: common_cflags,
 )
 

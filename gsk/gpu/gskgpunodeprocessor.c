@@ -43,6 +43,7 @@
 #include "gskprivate.h"
 
 #include "gdk/gdkcolorstateprivate.h"
+#include "gdk/gdkcairoprivate.h"
 #include "gdk/gdkmemorytextureprivate.h"
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdksubsurfaceprivate.h"
@@ -3105,7 +3106,7 @@ typedef struct _FillData FillData;
 struct _FillData
 {
   GskPath *path;
-  GdkRGBA color;
+  GdkColor color;
   GskFillRule fill_rule;
 };
 
@@ -3114,6 +3115,7 @@ gsk_fill_data_free (gpointer data)
 {
   FillData *fill = data;
 
+  gdk_color_finish (&fill->color);
   gsk_path_unref (fill->path);
   g_free (fill);
 }
@@ -3137,7 +3139,7 @@ gsk_gpu_node_processor_fill_path (gpointer  data,
       break;
   }
   gsk_path_to_cairo (fill->path, cr);
-  gdk_cairo_set_source_rgba (cr, &fill->color);
+  gdk_cairo_set_source_color (cr, GDK_COLOR_STATE_SRGB, &fill->color);
   cairo_fill (cr);
 }
 
@@ -3148,6 +3150,7 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
   graphene_rect_t clip_bounds, source_rect;
   GskGpuImage *mask_image, *source_image;
   GskRenderNode *child;
+  GdkColor color;
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
     return;
@@ -3155,15 +3158,18 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
 
   child = gsk_fill_node_get_child (node);
 
+  if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
+    gdk_color_init_copy (&color, gsk_color_node_get_color2 (child));
+  else
+    gdk_color_init (&color, GDK_COLOR_STATE_SRGB, (float[]) { 1, 1, 1, 1 });
+
   mask_image = gsk_gpu_upload_cairo_op (self->frame,
                                         &self->scale,
                                         &clip_bounds,
                                         gsk_gpu_node_processor_fill_path,
                                         g_memdup (&(FillData) {
                                             .path = gsk_path_ref (gsk_fill_node_get_path (node)),
-                                            .color = GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE
-                                                   ? *gsk_color_node_get_color (child)
-                                                   : GDK_RGBA_WHITE,
+                                            .color = color,
                                             .fill_rule = gsk_fill_node_get_fill_rule (node)
                                         }, sizeof (FillData)),
                                         (GDestroyNotify) gsk_fill_data_free);
@@ -3212,7 +3218,7 @@ typedef struct _StrokeData StrokeData;
 struct _StrokeData
 {
   GskPath *path;
-  GdkRGBA color;
+  GdkColor color;
   GskStroke stroke;
 };
 
@@ -3221,6 +3227,7 @@ gsk_stroke_data_free (gpointer data)
 {
   StrokeData *stroke = data;
 
+  gdk_color_finish (&stroke->color);
   gsk_path_unref (stroke->path);
   gsk_stroke_clear (&stroke->stroke);
   g_free (stroke);
@@ -3234,7 +3241,7 @@ gsk_gpu_node_processor_stroke_path (gpointer  data,
 
   gsk_stroke_to_cairo (&stroke->stroke, cr);
   gsk_path_to_cairo (stroke->path, cr);
-  gdk_cairo_set_source_rgba (cr, &stroke->color);
+  gdk_cairo_set_source_color (cr, GDK_COLOR_STATE_SRGB, &stroke->color);
   cairo_stroke (cr);
 }
 
@@ -3245,6 +3252,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
   graphene_rect_t clip_bounds, source_rect;
   GskGpuImage *mask_image, *source_image;
   GskRenderNode *child;
+  GdkColor color;
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
     return;
@@ -3252,15 +3260,18 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
 
   child = gsk_stroke_node_get_child (node);
 
+  if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
+    gdk_color_init_copy (&color, gsk_color_node_get_color2 (child));
+  else
+    gdk_color_init (&color, GDK_COLOR_STATE_SRGB, (float[]) { 1, 1, 1, 1 });
+
   mask_image = gsk_gpu_upload_cairo_op (self->frame,
                                         &self->scale,
                                         &clip_bounds,
                                         gsk_gpu_node_processor_stroke_path,
                                         g_memdup (&(StrokeData) {
                                             .path = gsk_path_ref (gsk_stroke_node_get_path (node)),
-                                            .color = GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE
-                                                   ? *gsk_color_node_get_color (child)
-                                                   : GDK_RGBA_WHITE,
+                                            .color = color,
                                             .stroke = GSK_STROKE_INIT_COPY (gsk_stroke_node_get_stroke (node))
                                         }, sizeof (StrokeData)),
                                         (GDestroyNotify) gsk_stroke_data_free);
