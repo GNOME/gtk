@@ -8221,7 +8221,7 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
 GtkTextAttributes*
 gtk_text_view_get_default_attributes (GtkTextView *text_view)
 {
-  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), NULL);
+  g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), gtk_text_attributes_new());
 
   gtk_text_view_ensure_layout (text_view);
 
