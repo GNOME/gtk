@@ -1635,6 +1635,51 @@ gtk_css_parser_consume_number_or_percentage (GtkCssParser *parser,
     }
 }
 
+typedef struct {
+  Context *context;
+  GdkColor *color;
+} ColorArgData;
+
+static guint
+parse_color_arg (GtkCssParser *parser,
+                 guint         arg,
+                 gpointer      data)
+{
+  ColorArgData *d = data;
+  GdkColorState *color_state;
+  float values[4];
+
+  if (!parse_color_state (parser, d->context, &color_state))
+    return 0;
+
+  for (int i = 0; i < 3; i++)
+    {
+      double number;
+
+      if (!gtk_css_parser_consume_number_or_percentage (parser, 0, 1, &number))
+        return 0;
+
+      values[i] = number;
+    }
+
+  if (gtk_css_parser_try_delim (parser, '/'))
+    {
+      double number;
+
+      if (!gtk_css_parser_consume_number_or_percentage (parser, 0, 1, &number))
+        return 0;
+
+      values[3] = number;
+    }
+  else
+    {
+      values[3] = 1;
+    }
+
+  gdk_color_init (d->color, color_state, values);
+  return 1;
+}
+
 static gboolean
 parse_color2 (GtkCssParser *parser,
               Context      *context,
@@ -1644,50 +1689,11 @@ parse_color2 (GtkCssParser *parser,
 
   if (gtk_css_parser_has_function (parser, "color"))
     {
-      GdkColorState *color_state;
-      float values[4];
+      ColorArgData data = { context, color };
 
-      gtk_css_parser_start_block (parser);
+      if (!gtk_css_parser_consume_function (parser, 1, 1, parse_color_arg, &data))
+        return FALSE;
 
-      if (!parse_color_state (parser, context, &color_state))
-        {
-          gtk_css_parser_end_block (parser);
-          return FALSE;
-        }
-
-      for (int i = 0; i < 3; i++)
-        {
-          double number;
-
-          if (!gtk_css_parser_consume_number_or_percentage (parser, 0, 1, &number))
-            {
-              gtk_css_parser_end_block (parser);
-              return FALSE;
-            }
-
-          values[i] = number;
-        }
-
-      if (gtk_css_parser_try_delim (parser, '/'))
-        {
-          double number;
-
-          if (!gtk_css_parser_consume_number_or_percentage (parser, 0, 1, &number))
-            {
-              gtk_css_parser_end_block (parser);
-              return FALSE;
-            }
-
-          values[3] = number;
-        }
-      else
-        {
-          values[3] = 1;
-        }
-
-      gtk_css_parser_end_block (parser);
-
-      gdk_color_init ((GdkColor *) color, color_state, values);
       return TRUE;
     }
   else if (gdk_rgba_parser_parse (parser, &rgba))
@@ -1704,7 +1710,7 @@ parse_color_node (GtkCssParser *parser,
                   Context      *context)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
-  GdkColor color = GDK_COLOR_INIT_SRGB (1, 0, 0.8, 1);
+  GdkColor color = GDK_COLOR_SRGB (1, 0, 0.8, 1);
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "color", parse_color2, NULL, &color },

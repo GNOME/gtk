@@ -2521,16 +2521,13 @@ static void
 gsk_gpu_node_processor_add_gl_shader_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
-  GdkColor pink = GDK_COLOR_INIT_SRGB (1, 105/255., 180/255., 1);
-
   gsk_gpu_color_op (self->frame,
                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                     self->ccs,
                     self->opacity,
                     &self->offset,
                     &node->bounds,
-                    &pink);
-  gdk_color_finish (&pink);
+                    &GDK_COLOR_SRGB (1, 105/255., 180/255., 1));
 }
 
 static void
