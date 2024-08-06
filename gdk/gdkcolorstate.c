@@ -363,6 +363,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .ref_count = 0,
       .depth = GDK_MEMORY_U8_SRGB,
       .rendering_color_state = GDK_COLOR_STATE_SRGB_LINEAR,
+      .clamped = TRUE,
     },
     .name = "srgb",
     .no_srgb = GDK_COLOR_STATE_SRGB_LINEAR,
@@ -379,6 +380,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .ref_count = 0,
       .depth = GDK_MEMORY_U8,
       .rendering_color_state = GDK_COLOR_STATE_SRGB_LINEAR,
+      .clamped = TRUE,
     },
     .name = "srgb-linear",
     .no_srgb = NULL,
@@ -395,6 +397,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .ref_count = 0,
       .depth = GDK_MEMORY_FLOAT16,
       .rendering_color_state = GDK_COLOR_STATE_REC2100_LINEAR,
+      .clamped = TRUE,
     },
     .name = "rec2100-pq",
     .no_srgb = NULL,
@@ -411,6 +414,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .ref_count = 0,
       .depth = GDK_MEMORY_FLOAT16,
       .rendering_color_state = GDK_COLOR_STATE_REC2100_LINEAR,
+      .clamped = FALSE,
     },
     .name = "rec2100-linear",
     .no_srgb = NULL,
@@ -709,6 +713,8 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
 
   self->parent.depth = GDK_MEMORY_FLOAT16;
 
+  self->parent.clamped = TRUE;
+
   memcpy (&self->cicp, cicp, sizeof (GdkCicp));
 
   self->eotf = eotf;
@@ -778,6 +784,27 @@ gdk_color_state_get_no_srgb_tf (GdkColorState *self)
     return FALSE;
 
   return self->klass->get_no_srgb_tf (self);
+}
+
+/*< private >
+ * gdk_color_state_clamp:
+ * @self: a `GdkColorState`
+ * @values: color coordinates
+ *
+ * Clamps the values to be within the allowed ranges for the given
+ * color state.
+ */
+void
+gdk_color_state_clamp (GdkColorState *self,
+                       float          values[4])
+{
+  if (!self->clamped)
+    return;
+
+  values[0] = CLAMP (values[0], 0, 1);
+  values[1] = CLAMP (values[1], 0, 1);
+  values[2] = CLAMP (values[2], 0, 1);
+  values[3] = CLAMP (values[3], 0, 1);
 }
 
 /* }}} */

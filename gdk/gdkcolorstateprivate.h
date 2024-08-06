@@ -26,6 +26,7 @@ struct _GdkColorState
 
   GdkMemoryDepth depth;
   GdkColorState *rendering_color_state;
+  gboolean clamped;
 };
 
 /* Note: self may be the source or the target colorstate */
@@ -44,9 +45,6 @@ struct _GdkColorStateClass
                                                  GdkColorState  *target);
   GdkFloatColorConvert  (* get_convert_from)    (GdkColorState  *self,
                                                  GdkColorState  *source);
-  void                  (* clamp)               (GdkColorState  *self,
-                                                 float         (*values)[4],
-                                                 gsize           n_values);
   const GdkCicp *       (* get_cicp)            (GdkColorState  *self);
 };
 
@@ -79,6 +77,9 @@ GdkColorState * gdk_color_state_get_no_srgb_tf          (GdkColorState          
 
 GdkColorState * gdk_color_state_new_for_cicp            (const GdkCicp          *cicp,
                                                          GError                **error);
+
+void            gdk_color_state_clamp                   (GdkColorState          *self,
+                                                         float                   values[4]);
 
 static inline GdkColorState *
 gdk_color_state_get_rendering_color_state (GdkColorState *self)
@@ -213,4 +214,3 @@ gdk_color_state_from_rgba (GdkColorState *self,
                                  self,
                                  out_color);
 }
-
