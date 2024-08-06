@@ -671,7 +671,7 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
     }
 
   if (texture)
-    gsk_gpu_download_op (self, target, TRUE, copy_texture, texture);
+    gsk_gpu_download_op (self, target, TRUE, target_color_state, copy_texture, texture);
 }
 
 static void
@@ -779,6 +779,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
   gsk_gpu_download_op (self,
                        image,
                        FALSE,
+                       color_state,
                        do_download,
                        g_memdup (&(Download) {
                            .format = format,
