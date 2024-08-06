@@ -20,6 +20,7 @@
 #include "gdk/gdkglcontextprivate.h"
 
 #ifdef HAVE_DMABUF
+#include <glib-unix.h>
 #include <linux/dma-buf.h>
 #endif
 
