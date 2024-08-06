@@ -34,6 +34,7 @@ gboolean        gtk_css_color_value_can_parse           (GtkCssParser   *parser)
 GtkCssValue *   gtk_css_color_value_parse               (GtkCssParser   *parser);
 
 const GdkRGBA * gtk_css_color_value_get_rgba            (const GtkCssValue *color) G_GNUC_CONST;
+const GdkColor *gtk_css_color_value_get_color           (const GtkCssValue *color) G_GNUC_CONST;
 
 GtkCssValue *   gtk_css_color_value_new_color           (GtkCssColorSpace color_space,
                                                          gboolean         serialize_as_rgb,

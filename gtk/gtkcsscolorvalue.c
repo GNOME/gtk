@@ -28,6 +28,7 @@
 
 #include "gdk/gdkhslaprivate.h"
 #include "gdk/gdkrgbaprivate.h"
+#include "gdk/gdkcolorprivate.h"
 #include "gtkcsscolorprivate.h"
 #include "gtkcolorutilsprivate.h"
 
@@ -71,6 +72,7 @@ struct _GtkCssValue
   guint serialize_as_rgb : 1;
   guint type : 16;
   GdkRGBA rgba;
+  GdkColor color;
 
   union
   {
@@ -150,6 +152,9 @@ gtk_css_value_color_free (GtkCssValue *color)
       break;
 
     case COLOR_TYPE_COLOR:
+      gdk_color_finish (&color->color);
+      break;
+
     case COLOR_TYPE_CURRENT_COLOR:
     default:
       break;
@@ -864,6 +869,7 @@ static GtkCssValue transparent_black_singleton = { .class = &GTK_CSS_VALUE_COLOR
                                                    .serialize_as_rgb = TRUE,
                                                    .type = COLOR_TYPE_COLOR,
                                                    .rgba = {0, 0, 0, 0},
+                                                   .color = GDK_COLOR_SRGB (0, 0, 0, 0),
                                                    .css_color = { GTK_CSS_COLOR_SPACE_SRGB, {0, 0, 0, 0}, 0 } };
 static GtkCssValue white_singleton             = { .class = &GTK_CSS_VALUE_COLOR,
                                                    .ref_count = 1,
@@ -873,6 +879,7 @@ static GtkCssValue white_singleton             = { .class = &GTK_CSS_VALUE_COLOR
                                                    .serialize_as_rgb = TRUE,
                                                    .type = COLOR_TYPE_COLOR,
                                                    .rgba = {1, 1, 1, 1},
+                                                   .color = GDK_COLOR_SRGB (1, 1, 1, 1),
                                                    .css_color = { GTK_CSS_COLOR_SPACE_SRGB, {1, 1, 1, 1}, 0 } };
 
 static GtkCssValue current_color_singleton     = { .class = &GTK_CSS_VALUE_COLOR,
@@ -883,6 +890,7 @@ static GtkCssValue current_color_singleton     = { .class = &GTK_CSS_VALUE_COLOR
                                                    .serialize_as_rgb = FALSE,
                                                    .type = COLOR_TYPE_CURRENT_COLOR,
                                                    .rgba = {0, 0, 0, 0 },
+                                                   .color = GDK_COLOR_SRGB (0, 0, 0, 0),
                                                    .css_color = { GTK_CSS_COLOR_SPACE_SRGB, {0, 0, 0, 0}, 0 } };
 
 GtkCssValue *
@@ -901,6 +909,58 @@ GtkCssValue *
 gtk_css_color_value_new_current_color (void)
 {
   return gtk_css_value_ref (&current_color_singleton);
+}
+
+static GtkCssColorSpace
+css_color_space_to_gdk (GtkCssColorSpace color_space)
+{
+  switch (color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+    case GTK_CSS_COLOR_SPACE_HSL:
+    case GTK_CSS_COLOR_SPACE_HWB:
+      return GTK_CSS_COLOR_SPACE_SRGB;
+
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+      return GTK_CSS_COLOR_SPACE_SRGB_LINEAR;
+
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
+      return GTK_CSS_COLOR_SPACE_REC2100_PQ;
+
+    default:
+      g_assert_not_reached ();
+    }
+}
+
+static GdkColorState *
+css_color_space_to_color_state (GtkCssColorSpace color_space)
+{
+  switch (color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+    case GTK_CSS_COLOR_SPACE_HSL:
+    case GTK_CSS_COLOR_SPACE_HWB:
+      return gdk_color_state_get_srgb ();
+
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+      return gdk_color_state_get_srgb_linear ();
+
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
+      return gdk_color_state_get_rec2100_pq ();
+
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 GtkCssValue *
@@ -925,6 +985,11 @@ gtk_css_color_value_new_color (GtkCssColorSpace color_space,
   value->rgba.green = tmp.values[1];
   value->rgba.blue = tmp.values[2];
   value->rgba.alpha = tmp.values[3];
+
+  gtk_css_color_convert (&value->css_color, css_color_space_to_gdk (color_space), &tmp);
+  gdk_color_init (&value->color,
+                  css_color_space_to_color_state (color_space),
+                  tmp.values);
 
   return value;
 }
@@ -952,6 +1017,7 @@ gtk_css_color_value_new_color_from_rgba (const GdkRGBA *rgba)
                       (float[4]) { rgba->red, rgba->green, rgba->blue, rgba->alpha });
 
   value->rgba = *rgba;
+  gdk_color_init_from_rgba (&value->color, rgba);
 
   return value;
 }
@@ -2192,6 +2258,15 @@ gtk_css_color_value_get_rgba (const GtkCssValue *color)
   g_assert (color->type == COLOR_TYPE_COLOR);
 
   return &color->rgba;
+}
+
+const GdkColor *
+gtk_css_color_value_get_color (const GtkCssValue *color)
+{
+  g_assert (color->class == &GTK_CSS_VALUE_COLOR);
+  g_assert (color->type == COLOR_TYPE_COLOR);
+
+  return &color->color;
 }
 
 const GtkCssColor *
