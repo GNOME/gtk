@@ -133,3 +133,15 @@ _gdk_color_get_depth (const GdkColor *self)
   return gdk_color_state_get_depth (self->color_state);
 }
 
+#define gdk_color_is_in_range(self) _gdk_color_is_in_range ((self))
+static inline gboolean
+_gdk_color_is_in_range (const GdkColor *self)
+{
+  float values[4];
+
+  memcpy (values, self->values, sizeof (float) * 4);
+
+  gdk_color_state_clamp (self->color_state, values);
+
+  return memcmp (values, self->values, sizeof (float) * 4) == 0;
+}

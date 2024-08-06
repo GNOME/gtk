@@ -102,6 +102,8 @@ void              gdk_color_print               (const GdkColor         *self,
 
 char *            gdk_color_to_string           (const GdkColor         *self);
 
+gboolean          gdk_color_is_in_range         (const GdkColor         *self);
+
 #include "gdkcolorimpl.h"
 
 G_END_DECLS

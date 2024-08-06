@@ -244,6 +244,30 @@ GdkMemoryDepth
 }
 
 /*< private >
+ * gdk_color_is_in_range:
+ * @self: a `GdkColor`
+ *
+ * Returns whether the color values are within the allowed
+ * range for the the color state.
+ *
+ Colors must be in range at all times, it is invalid to construct
+ * a `GdkColor` where values are not in range.
+ * So this function is only useful for assertions.
+ *
+ * Note that 'within range' and 'in gamut' are not necessarily
+ * the same. For example, for the rec2100-linear color state,
+ * the gamut goes from 0 to about 70, but any values are within
+ * range.
+ *
+ * Returns: `TRUE` if the values are within range
+ */
+gboolean
+(gdk_color_is_in_range) (const GdkColor *self)
+{
+  return gdk_color_is_in_range (self);
+}
+
+/*< private >
  * gdk_color_print:
  * @self: the `GdkColor` to print
  * @string: the string to print to
@@ -297,5 +321,3 @@ gdk_color_to_string (const GdkColor *self)
   gdk_color_print (self, string);
   return g_string_free (string, FALSE);
 }
-
-
