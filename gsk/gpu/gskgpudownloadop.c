@@ -143,7 +143,7 @@ gsk_gpu_download_op_vk_command (GskGpuOp              *op,
 
 #ifdef HAVE_DMABUF
   if (self->allow_dmabuf)
-    self->texture = gsk_vulkan_image_to_dmabuf_texture (GSK_VULKAN_IMAGE (self->image));
+    self->texture = gsk_vulkan_image_to_dmabuf_texture (GSK_VULKAN_IMAGE (self->image), NULL);
   if (self->texture)
     {
       GskGpuDevice *device = gsk_gpu_frame_get_device (frame);
