@@ -70,7 +70,7 @@ color_from_string (const char  *str,
   gtk_css_parser_unref (parser);
   g_bytes_unref (bytes);
 
-  gtk_css_color_init_from_color (res, gtk_css_color_value_get_color (value));
+  gtk_css_color_init_from_color (res, gtk_css_color_value_get_css_color (value));
 
   gtk_css_value_unref (value);
 }

@@ -4056,7 +4056,7 @@ render_para (GskPangoRenderer   *crenderer,
               node = gtk_widget_get_css_node (crenderer->widget);
               style = gtk_css_node_get_style (node);
 
-              gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->caret_color),
+              gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->caret_color),
                                       &cursor_color);
 
               gtk_snapshot_push_opacity (crenderer->snapshot, cursor_alpha);
@@ -4157,7 +4157,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   crenderer->widget = widget;
   crenderer->snapshot = snapshot;
-  gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->color),
+  gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->color),
                           &crenderer->fg_color);
 
   have_selection = gtk_text_buffer_get_selection_bounds (layout->buffer,
@@ -4173,7 +4173,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
       selection_node = gtk_text_view_get_selection_node ((GtkTextView*)widget);
       style = gtk_css_node_get_style (selection_node);
 
-      gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->background_color),
+      gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->background_color),
                               &selection_color);
 
       draw_selection_text = !gdk_color_is_clear (&crenderer->fg_color);

@@ -2195,7 +2195,7 @@ gtk_css_color_value_get_rgba (const GtkCssValue *color)
 }
 
 const GtkCssColor *
-gtk_css_color_value_get_color (const GtkCssValue *color)
+gtk_css_color_value_get_css_color (const GtkCssValue *color)
 {
   g_assert (color->class == &GTK_CSS_VALUE_COLOR);
   g_assert (color->type == COLOR_TYPE_COLOR);

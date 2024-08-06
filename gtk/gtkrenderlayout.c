@@ -48,7 +48,7 @@ gtk_css_style_snapshot_layout (GtkCssBoxes *boxes,
     }
 
   style = boxes->style;
-  gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->color), &color);
+  gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->color), &color);
 
   has_shadow = gtk_css_shadow_value_push_snapshot (style->used->text_shadow, snapshot);
 
@@ -194,8 +194,8 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
   GdkColor color;
 
   gtk_css_color_to_color (is_primary
-                            ? gtk_css_color_value_get_color (style->used->caret_color)
-                            : gtk_css_color_value_get_color (style->used->secondary_caret_color),
+                            ? gtk_css_color_value_get_css_color (style->used->caret_color)
+                            : gtk_css_color_value_get_css_color (style->used->secondary_caret_color),
                           &color);
 
   if (width != 0 || draw_arrow)

@@ -41,7 +41,7 @@ GtkCssValue *   gtk_css_color_value_new_color           (GtkCssColorSpace color_
                                                          gboolean         missing[4]) G_GNUC_PURE;
 
 const GtkCssColor *
-                gtk_css_color_value_get_color           (const GtkCssValue *color) G_GNUC_CONST;
+                gtk_css_color_value_get_css_color       (const GtkCssValue *color) G_GNUC_CONST;
 
 float           gtk_css_color_value_get_coord           (const GtkCssValue *color,
                                                          GtkCssColorSpace   color_space,

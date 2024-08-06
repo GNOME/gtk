@@ -692,10 +692,10 @@ gtk_css_style_snapshot_border (GtkCssBoxes *boxes,
                           gtk_css_boxes_get_padding_rect (boxes)))
         return;
 
-      gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->border_top_color), &colors[0]);
-      gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->border_right_color), &colors[1]);
-      gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->border_bottom_color), &colors[2]);
-      gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->border_left_color), &colors[3]);
+      gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->border_top_color), &colors[0]);
+      gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->border_right_color), &colors[1]);
+      gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->border_bottom_color), &colors[2]);
+      gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->border_left_color), &colors[3]);
 
       alpha_test_vector = graphene_simd4f_init (colors[0].alpha,
                                                 colors[1].alpha,
@@ -757,7 +757,7 @@ gtk_css_style_snapshot_outline (GtkCssBoxes *boxes,
     {
       GdkColor color;
 
-      gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->outline_color), &color);
+      gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->outline_color), &color);
 
       if (gdk_color_is_clear (&color))
         {

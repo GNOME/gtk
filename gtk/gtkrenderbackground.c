@@ -257,7 +257,7 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
     return;
 
   background_image = style->used->background_image;
-  gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->background_color), &bg_color);
+  gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->background_color), &bg_color);
   box_shadow = style->used->box_shadow;
 
   has_bg_color = !gdk_color_is_clear (&bg_color);

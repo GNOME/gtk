@@ -605,7 +605,7 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue    *value,
       if (shadow->inset)
         continue;
 
-      gtk_css_color_to_color (gtk_css_color_value_get_color (shadow->color), &color);
+      gtk_css_color_to_color (gtk_css_color_value_get_css_color (shadow->color), &color);
 
       /* We don't need to draw invisible shadows */
       if (gdk_color_is_clear (&color))
@@ -647,7 +647,7 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue    *value,
       if (!shadow->inset)
         continue;
 
-      gtk_css_color_to_color (gtk_css_color_value_get_color (shadow->color), &color);
+      gtk_css_color_to_color (gtk_css_color_value_get_css_color (shadow->color), &color);
 
       /* We don't need to draw invisible shadows */
       if (gdk_color_is_clear (&color))
@@ -769,7 +769,7 @@ gtk_css_shadow_value_push_snapshot (const GtkCssValue *value,
     {
       const ShadowValue *shadow = &value->shadows[i];
 
-      gtk_css_color_to_color (gtk_css_color_value_get_color (shadow->color), &shadows[i].color);
+      gtk_css_color_to_color (gtk_css_color_value_get_css_color (shadow->color), &shadows[i].color);
       graphene_point_init (&shadows[i].offset,
                            gtk_css_number_value_get (shadow->hoffset, 0),
                            gtk_css_number_value_get (shadow->voffset, 0));
