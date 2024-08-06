@@ -676,10 +676,6 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
       to_xyz = rec2020_to_xyz;
       from_xyz = xyz_to_rec2020;
       break;
-    case 10:
-      to_xyz = identity;
-      from_xyz = identity;
-      break;
     case 12:
       to_xyz = p3_to_xyz;
       from_xyz = xyz_to_p3;
