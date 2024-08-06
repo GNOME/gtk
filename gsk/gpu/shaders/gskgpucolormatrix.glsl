@@ -20,7 +20,7 @@ void
 run (out vec2 pos)
 {
   Rect r = rect_from_gsk (in_rect);
-  
+
   pos = rect_get_position (r);
 
   _pos = pos;
@@ -44,7 +44,7 @@ run (out vec4 color,
   pixel = alt_color_from_output (pixel);
 
   pixel = _color_matrix * pixel + _color_offset;
-  pixel = clamp (pixel, 0.0, 1.0);
+  pixel = alt_color_clamp (pixel);
 
   pixel = output_color_from_alt (pixel);
 
