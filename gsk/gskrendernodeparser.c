@@ -3030,11 +3030,9 @@ parse_node (GtkCssParser *parser,
     { "subsurface", parse_subsurface_node },
   };
   GskRenderNode **node_p = out_node;
-  const GtkCssToken *token;
   guint i;
 
-  token = gtk_css_parser_get_token (parser);
-  if (gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
     {
       GskRenderNode *node;
       char *node_name;
