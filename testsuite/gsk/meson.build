@@ -1,7 +1,7 @@
 compare_render = executable('compare-render',
   ['compare-render.c', '../reftests/reftest-compare.c', 'replay-node.c'],
   dependencies: libgtk_static_dep,
-  c_args: common_cflags,
+  c_args: common_cflags + ['-DGTK_COMPILATION'],
 )
 
 node_parser = executable('node-parser', 'node-parser.c',
