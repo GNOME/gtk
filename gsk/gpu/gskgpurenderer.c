@@ -352,6 +352,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   GdkTexture *texture;
   graphene_rect_t rounded_viewport;
   GdkColorState *color_state;
+  GdkMemoryDepth depth;
 
   gsk_gpu_device_maybe_gc (priv->device);
 
@@ -361,8 +362,17 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
                                          viewport->origin.y,
                                          ceil (viewport->size.width),
                                          ceil (viewport->size.height));
+
+  if (gsk_render_node_is_hdr (root))
+    color_state = GDK_COLOR_STATE_REC2100_PQ;
+  else
+    color_state = GDK_COLOR_STATE_SRGB;
+
+  depth = gdk_memory_depth_merge (gsk_render_node_get_preferred_depth (root),
+                                  gdk_color_state_get_depth (color_state));
+
   image = gsk_gpu_device_create_download_image (priv->device,
-                                                gsk_render_node_get_preferred_depth (root),
+                                                depth,
                                                 rounded_viewport.size.width,
                                                 rounded_viewport.size.height);
 
@@ -370,9 +380,10 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
     return gsk_gpu_renderer_fallback_render_texture (self, root, &rounded_viewport);
 
   if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
-    color_state = GDK_COLOR_STATE_SRGB_LINEAR;
-  else
-    color_state = GDK_COLOR_STATE_SRGB;
+    {
+      g_assert (gdk_color_state_equal (color_state, GDK_COLOR_STATE_SRGB));
+      color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+    }
 
   frame = gsk_gpu_renderer_create_frame (self);
 
