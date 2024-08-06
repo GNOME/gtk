@@ -168,7 +168,6 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
    * - 5: PAL
    * - 6,7: BT.601 / NTSC
    * - 9: BT.2020
-   * - 10: CIE XYZ
    * - 12: Display P3
    *
    * Since: 4.16
