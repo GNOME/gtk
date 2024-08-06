@@ -44,6 +44,9 @@ struct _GdkColorStateClass
                                                  GdkColorState  *target);
   GdkFloatColorConvert  (* get_convert_from)    (GdkColorState  *self,
                                                  GdkColorState  *source);
+  void                  (* clamp)               (GdkColorState  *self,
+                                                 float         (*values)[4],
+                                                 gsize           n_values);
   const GdkCicp *       (* get_cicp)            (GdkColorState  *self);
 };
 

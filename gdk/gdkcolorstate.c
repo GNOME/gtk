@@ -225,10 +225,16 @@ gdk_color_state_create_cicp_params (GdkColorState *self)
 typedef float (* GdkTransferFunc) (float v);
 typedef const float GdkColorMatrix[9];
 
+static inline float
+clamp_01 (float v)
+{
+  return CLAMP (v, 0, 1);
+}
+
 #define IDENTITY ((float*)0)
 #define NONE ((GdkTransferFunc)0)
 
-#define TRANSFORM(name, eotf, matrix, oetf) \
+#define TRANSFORM(name, eotf, matrix, oetf, clamp) \
 static void \
 name (GdkColorState  *self, \
       float         (*values)[4], \
@@ -258,21 +264,27 @@ name (GdkColorState  *self, \
           values[i][1] = oetf (values[i][1]); \
           values[i][2] = oetf (values[i][2]); \
         } \
+      if (clamp != NONE) \
+        { \
+          values[i][0] = clamp (values[i][0]); \
+          values[i][1] = clamp (values[i][1]); \
+          values[i][2] = clamp (values[i][2]); \
+        } \
     } \
 }
 
-TRANSFORM(gdk_default_srgb_to_srgb_linear,           srgb_eotf, IDENTITY,        NONE);
-TRANSFORM(gdk_default_srgb_linear_to_srgb,           NONE,      IDENTITY,        srgb_oetf)
-TRANSFORM(gdk_default_rec2100_pq_to_rec2100_linear,  pq_eotf,   IDENTITY,        NONE)
-TRANSFORM(gdk_default_rec2100_linear_to_rec2100_pq,  NONE,      IDENTITY,        pq_oetf)
-TRANSFORM(gdk_default_srgb_linear_to_rec2100_linear, NONE,      srgb_to_rec2020, NONE)
-TRANSFORM(gdk_default_rec2100_linear_to_srgb_linear, NONE,      rec2020_to_srgb, NONE)
-TRANSFORM(gdk_default_srgb_to_rec2100_linear,        srgb_eotf, srgb_to_rec2020, NONE)
-TRANSFORM(gdk_default_rec2100_pq_to_srgb_linear,     pq_eotf,   rec2020_to_srgb, NONE)
-TRANSFORM(gdk_default_srgb_linear_to_rec2100_pq,     NONE,      srgb_to_rec2020, pq_oetf)
-TRANSFORM(gdk_default_rec2100_linear_to_srgb,        NONE,      rec2020_to_srgb, srgb_oetf)
-TRANSFORM(gdk_default_srgb_to_rec2100_pq,            srgb_eotf, srgb_to_rec2020, pq_oetf)
-TRANSFORM(gdk_default_rec2100_pq_to_srgb,            pq_eotf,   rec2020_to_srgb, srgb_oetf)
+TRANSFORM(gdk_default_srgb_to_srgb_linear,           srgb_eotf, IDENTITY,        NONE,      clamp_01);
+TRANSFORM(gdk_default_srgb_linear_to_srgb,           NONE,      IDENTITY,        srgb_oetf, clamp_01)
+TRANSFORM(gdk_default_rec2100_pq_to_rec2100_linear,  pq_eotf,   IDENTITY,        NONE,      NONE)
+TRANSFORM(gdk_default_rec2100_linear_to_rec2100_pq,  NONE,      IDENTITY,        pq_oetf,   clamp_01)
+TRANSFORM(gdk_default_srgb_linear_to_rec2100_linear, NONE,      srgb_to_rec2020, NONE,      NONE)
+TRANSFORM(gdk_default_rec2100_linear_to_srgb_linear, NONE,      rec2020_to_srgb, NONE,      clamp_01)
+TRANSFORM(gdk_default_srgb_to_rec2100_linear,        srgb_eotf, srgb_to_rec2020, NONE,      NONE)
+TRANSFORM(gdk_default_rec2100_pq_to_srgb_linear,     pq_eotf,   rec2020_to_srgb, NONE,      clamp_01)
+TRANSFORM(gdk_default_srgb_linear_to_rec2100_pq,     NONE,      srgb_to_rec2020, pq_oetf,   clamp_01)
+TRANSFORM(gdk_default_rec2100_linear_to_srgb,        NONE,      rec2020_to_srgb, srgb_oetf, clamp_01)
+TRANSFORM(gdk_default_srgb_to_rec2100_pq,            srgb_eotf, srgb_to_rec2020, pq_oetf,   clamp_01)
+TRANSFORM(gdk_default_rec2100_pq_to_srgb,            pq_eotf,   rec2020_to_srgb, srgb_oetf, clamp_01)
 
 /* }}} */
 /* {{{ Default implementation */
@@ -411,7 +423,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
   },
 };
 
- /* }}} */
+/* }}} */
 /* {{{ Cicp implementation */
 
 typedef struct _GdkCicpColorState GdkCicpColorState;
@@ -438,18 +450,17 @@ struct _GdkCicpColorState
 
 #define cicp ((GdkCicpColorState *)self)
 
-TRANSFORM(gdk_cicp_to_srgb,             cicp->eotf,  cicp->to_srgb,      srgb_oetf)
-TRANSFORM(gdk_cicp_to_srgb_linear,      cicp->eotf,  cicp->to_srgb,      NONE)
-TRANSFORM(gdk_cicp_to_rec2100_pq,       cicp->eotf,  cicp->to_rec2020,   pq_oetf)
-TRANSFORM(gdk_cicp_to_rec2100_linear,   cicp->eotf,  cicp->to_rec2020,   NONE)
-TRANSFORM(gdk_cicp_from_srgb,           srgb_eotf,   cicp->from_srgb,    cicp->oetf)
-TRANSFORM(gdk_cicp_from_srgb_linear,    NONE,        cicp->from_srgb,    cicp->oetf)
-TRANSFORM(gdk_cicp_from_rec2100_pq,     pq_eotf,     cicp->from_rec2020, cicp->oetf)
-TRANSFORM(gdk_cicp_from_rec2100_linear, NONE,        cicp->from_rec2020, cicp->oetf)
+TRANSFORM(gdk_cicp_to_srgb,             cicp->eotf,  cicp->to_srgb,      srgb_oetf,  clamp_01)
+TRANSFORM(gdk_cicp_to_srgb_linear,      cicp->eotf,  cicp->to_srgb,      NONE,       clamp_01)
+TRANSFORM(gdk_cicp_to_rec2100_pq,       cicp->eotf,  cicp->to_rec2020,   pq_oetf,    clamp_01)
+TRANSFORM(gdk_cicp_to_rec2100_linear,   cicp->eotf,  cicp->to_rec2020,   NONE,       NONE)
+TRANSFORM(gdk_cicp_from_srgb,           srgb_eotf,   cicp->from_srgb,    cicp->oetf, clamp_01)
+TRANSFORM(gdk_cicp_from_srgb_linear,    NONE,        cicp->from_srgb,    cicp->oetf, clamp_01)
+TRANSFORM(gdk_cicp_from_rec2100_pq,     pq_eotf,     cicp->from_rec2020, cicp->oetf, clamp_01)
+TRANSFORM(gdk_cicp_from_rec2100_linear, NONE,        cicp->from_rec2020, cicp->oetf, NONE)
 
 #undef cicp
 
-/* }}} */
 /* }}} */
 /* {{{ Vfuncs */
 
@@ -555,7 +566,7 @@ gdk_cicp_color_state_get_cicp (GdkColorState  *color_state)
   return &self->cicp;
 }
 
-/* }}} */ 
+/* }}} */
 
 static const
 GdkColorStateClass GDK_CICP_COLOR_STATE_CLASS = {
