@@ -325,6 +325,7 @@ node_parser_tests = [
   'color.node',
   'color2.node',
   'color3.node',
+  'color4.node',
   'conic-gradient.node',
   'conic-gradient.ref.node',
   'crash1.errors',
