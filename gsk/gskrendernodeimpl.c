@@ -91,6 +91,17 @@ my_color_stops_get_depth (const GskColorStop *stops,
   return gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 
+static inline gboolean
+color_state_is_hdr (GdkColorState *color_state)
+{
+  GdkColorState *rendering_cs;
+
+  rendering_cs = gdk_color_state_get_rendering_color_state (color_state);
+
+  return rendering_cs != GDK_COLOR_STATE_SRGB &&
+         rendering_cs != GDK_COLOR_STATE_SRGB_LINEAR;
+}
+
 /* apply a rectangle that bounds @rect in
  * pixel-aligned device coordinates.
  *
@@ -316,6 +327,7 @@ gsk_color_node_new2 (const GdkColor        *color,
   node->offscreen_for_opacity = FALSE;
   node->fully_opaque = gdk_color_is_opaque (color);
   node->preferred_depth = gdk_color_get_depth (color);
+  node->is_hdr = color_state_is_hdr (color->color_state);
 
   gdk_color_init_copy (&self->color, color);
 
@@ -1978,6 +1990,7 @@ gsk_texture_node_new (GdkTexture            *texture,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
   node->fully_opaque = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE;
+  node->is_hdr = color_state_is_hdr (gdk_texture_get_color_state (texture));
 
   self->texture = g_object_ref (texture);
   gsk_rect_init_from_rect (&node->bounds, bounds);
@@ -2200,6 +2213,7 @@ gsk_texture_scale_node_new (GdkTexture            *texture,
   node->fully_opaque = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE &&
     bounds->size.width == floor (bounds->size.width) &&
     bounds->size.height == floor (bounds->size.height);
+  node->is_hdr = color_state_is_hdr (gdk_texture_get_color_state (texture));
 
   self->texture = g_object_ref (texture);
   gsk_rect_init_from_rect (&node->bounds, bounds);
@@ -3481,6 +3495,7 @@ gsk_container_node_new (GskRenderNode **children,
     {
       graphene_rect_t child_opaque;
       gboolean have_opaque;
+      gboolean is_hdr;
 
       self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
 
@@ -3489,6 +3504,7 @@ gsk_container_node_new (GskRenderNode **children,
       node->preferred_depth = children[0]->preferred_depth;
       gsk_rect_init_from_rect (&node->bounds, &(children[0]->bounds));
       have_opaque = gsk_render_node_get_opaque_rect (self->children[0], &self->opaque);
+      is_hdr = gsk_render_node_is_hdr (self->children[0]);
 
       for (guint i = 1; i < n_children; i++)
         {
@@ -3507,10 +3523,13 @@ gsk_container_node_new (GskRenderNode **children,
                   have_opaque = TRUE;
                 }
             }
+
+          is_hdr |= gsk_render_node_is_hdr (self->children[i]);
         }
 
       node->offscreen_for_opacity = node->offscreen_for_opacity || !self->disjoint;
-    }
+      node->is_hdr = is_hdr;
+   }
 
   return node;
 }
@@ -3805,6 +3824,7 @@ gsk_transform_node_new (GskRenderNode *child,
                                   &node->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -3957,6 +3977,7 @@ gsk_opacity_node_new (GskRenderNode *child,
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -4190,6 +4211,7 @@ gsk_color_matrix_node_new (GskRenderNode           *child,
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -4497,6 +4519,7 @@ gsk_repeat_node_new (const graphene_rect_t *bounds,
     }
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
   node->fully_opaque = child->fully_opaque && gsk_rect_contains_rect (&child->bounds, &self->child_bounds);
 
   return node;
@@ -4664,6 +4687,7 @@ gsk_clip_node_new (GskRenderNode         *child,
   gsk_rect_intersection (&self->clip, &child->bounds, &node->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -4847,6 +4871,7 @@ gsk_rounded_clip_node_new (GskRenderNode         *child,
   gsk_rect_intersection (&self->clip.bounds, &child->bounds, &node->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -5017,6 +5042,7 @@ gsk_fill_node_new (GskRenderNode *child,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = child->offscreen_for_opacity;
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);
@@ -5227,6 +5253,7 @@ gsk_stroke_node_new (GskRenderNode   *child,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = child->offscreen_for_opacity;
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);
@@ -5504,6 +5531,7 @@ gsk_shadow_node_new (GskRenderNode   *child,
   gsk_shadow_node_get_bounds (self, &node->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
   for (i = 0; i < n_shadows; i++)
     {
       node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
@@ -5727,6 +5755,8 @@ gsk_blend_node_new (GskRenderNode *bottom,
 
   node->preferred_depth = gdk_memory_depth_merge (gsk_render_node_get_preferred_depth (bottom),
                                                   gsk_render_node_get_preferred_depth (top));
+  node->is_hdr = gsk_render_node_is_hdr (bottom) ||
+                 gsk_render_node_is_hdr (top);
 
   return node;
 }
@@ -5914,6 +5944,8 @@ gsk_cross_fade_node_new (GskRenderNode *start,
 
   node->preferred_depth = gdk_memory_depth_merge (gsk_render_node_get_preferred_depth (start),
                                                   gsk_render_node_get_preferred_depth (end));
+  node->is_hdr = gsk_render_node_is_hdr (start) ||
+                 gsk_render_node_is_hdr (end);
 
   return node;
 }
@@ -6566,6 +6598,7 @@ gsk_blur_node_new (GskRenderNode *child,
   graphene_rect_inset (&self->render_node.bounds, - clip_radius, - clip_radius);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -6802,6 +6835,8 @@ gsk_mask_node_new (GskRenderNode *source,
     self->render_node.bounds = *graphene_rect_zero ();
 
   self->render_node.preferred_depth = gsk_render_node_get_preferred_depth (source);
+  self->render_node.is_hdr = gsk_render_node_is_hdr (source) ||
+                             gsk_render_node_is_hdr (mask);
 
   return &self->render_node;
 }
@@ -6980,6 +7015,7 @@ gsk_debug_node_new (GskRenderNode *child,
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  self->render_node.is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -7402,6 +7438,7 @@ gsk_subsurface_node_new (GskRenderNode *child,
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
