@@ -2713,7 +2713,7 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
 
       gsk_gpu_colorize_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                           gsk_gpu_node_processor_color_states_self (self),
+                           gsk_gpu_node_processor_color_states_explicit (self, self->ccs, FALSE),
                            &self->offset,
                            &(GskGpuShaderImage) {
                                mask_image,
