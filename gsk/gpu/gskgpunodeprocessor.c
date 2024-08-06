@@ -620,15 +620,18 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
   GskGpuImage *copy;
   gsize width, height;
   GskGpuImageFlags flags;
+  GdkMemoryDepth depth;
 
   width = gsk_gpu_image_get_width (image);
   height = gsk_gpu_image_get_height (image);
   flags = gsk_gpu_image_get_flags (image);
+  depth = gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
+                                       flags & GSK_GPU_IMAGE_SRGB);
+  depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (ccs));
 
   copy = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                 prepare_mipmap,
-                                                gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
-                                                                             flags & GSK_GPU_IMAGE_SRGB),
+                                                depth,
                                                 width, height);
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_BLIT) &&
