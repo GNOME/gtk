@@ -75,7 +75,7 @@ struct _GtkCssValue
   union
   {
     char *name;
-    GtkCssColor color;
+    GtkCssColor css_color;
 
     struct
     {
@@ -227,7 +227,7 @@ gtk_css_value_color_equal (const GtkCssValue *value1,
   switch (value1->type)
     {
     case COLOR_TYPE_COLOR:
-      return gtk_css_color_equal (&value1->color, &value2->color);
+      return gtk_css_color_equal (&value1->css_color, &value2->css_color);
 
     case COLOR_TYPE_RELATIVE:
       return value1->relative.color_space == value2->relative.color_space &&
@@ -338,7 +338,7 @@ gtk_css_value_color_print (const GtkCssValue *value,
   switch (value->type)
     {
     case COLOR_TYPE_COLOR:
-      gtk_css_color_print (&value->color, value->serialize_as_rgb, string);
+      gtk_css_color_print (&value->css_color, value->serialize_as_rgb, string);
       break;
 
     case COLOR_TYPE_RELATIVE:
@@ -620,7 +620,7 @@ apply_color_mix (GtkCssColorSpace        in,
   normalize_color_mix_percentages (percentage1, percentage2,
                                    NULL, &p2, &alpha_multiplier);
 
-  gtk_css_color_interpolate (&value1->color, &value2->color,
+  gtk_css_color_interpolate (&value1->css_color, &value2->css_color,
                              p2 * 0.01, in, interp, &output);
 
   output.values[3] *= alpha_multiplier;
@@ -864,7 +864,7 @@ static GtkCssValue transparent_black_singleton = { .class = &GTK_CSS_VALUE_COLOR
                                                    .serialize_as_rgb = TRUE,
                                                    .type = COLOR_TYPE_COLOR,
                                                    .rgba = {0, 0, 0, 0},
-                                                   .color = { GTK_CSS_COLOR_SPACE_SRGB, {0, 0, 0, 0}, 0 } };
+                                                   .css_color = { GTK_CSS_COLOR_SPACE_SRGB, {0, 0, 0, 0}, 0 } };
 static GtkCssValue white_singleton             = { .class = &GTK_CSS_VALUE_COLOR,
                                                    .ref_count = 1,
                                                    .is_computed = TRUE,
@@ -873,7 +873,7 @@ static GtkCssValue white_singleton             = { .class = &GTK_CSS_VALUE_COLOR
                                                    .serialize_as_rgb = TRUE,
                                                    .type = COLOR_TYPE_COLOR,
                                                    .rgba = {1, 1, 1, 1},
-                                                   .color = { GTK_CSS_COLOR_SPACE_SRGB, {1, 1, 1, 1}, 0 } };
+                                                   .css_color = { GTK_CSS_COLOR_SPACE_SRGB, {1, 1, 1, 1}, 0 } };
 
 static GtkCssValue current_color_singleton     = { .class = &GTK_CSS_VALUE_COLOR,
                                                    .ref_count = 1,
@@ -883,7 +883,7 @@ static GtkCssValue current_color_singleton     = { .class = &GTK_CSS_VALUE_COLOR
                                                    .serialize_as_rgb = FALSE,
                                                    .type = COLOR_TYPE_CURRENT_COLOR,
                                                    .rgba = {0, 0, 0, 0 },
-                                                   .color = { GTK_CSS_COLOR_SPACE_SRGB, {0, 0, 0, 0}, 0 } };
+                                                   .css_color = { GTK_CSS_COLOR_SPACE_SRGB, {0, 0, 0, 0}, 0 } };
 
 GtkCssValue *
 gtk_css_color_value_new_transparent (void)
@@ -913,13 +913,13 @@ gtk_css_color_value_new_color (GtkCssColorSpace color_space,
   GtkCssColor tmp;
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
-  value->color.color_space = color_space;
+  value->css_color.color_space = color_space;
   value->is_computed = TRUE;
   value->serialize_as_rgb = serialize_as_rgb;
   value->type = COLOR_TYPE_COLOR;
-  gtk_css_color_init_with_missing (&value->color, color_space, values, missing);
+  gtk_css_color_init_with_missing (&value->css_color, color_space, values, missing);
 
-  gtk_css_color_convert (&value->color, GTK_CSS_COLOR_SPACE_SRGB, &tmp);
+  gtk_css_color_convert (&value->css_color, GTK_CSS_COLOR_SPACE_SRGB, &tmp);
 
   value->rgba.red = tmp.values[0];
   value->rgba.green = tmp.values[1];
@@ -943,11 +943,11 @@ gtk_css_color_value_new_color_from_rgba (const GdkRGBA *rgba)
     return gtk_css_value_ref (&transparent_black_singleton);
 
   value = gtk_css_value_new (GtkCssValue, &GTK_CSS_VALUE_COLOR);
-  value->color.color_space = GTK_CSS_COLOR_SPACE_SRGB;
+  value->css_color.color_space = GTK_CSS_COLOR_SPACE_SRGB;
   value->is_computed = TRUE;
   value->serialize_as_rgb = TRUE;
   value->type = COLOR_TYPE_COLOR;
-  gtk_css_color_init (&value->color,
+  gtk_css_color_init (&value->css_color,
                       GTK_CSS_COLOR_SPACE_SRGB,
                       (float[4]) { rgba->red, rgba->green, rgba->blue, rgba->alpha });
 
@@ -2200,7 +2200,7 @@ gtk_css_color_value_get_color (const GtkCssValue *color)
   g_assert (color->class == &GTK_CSS_VALUE_COLOR);
   g_assert (color->type == COLOR_TYPE_COLOR);
 
-  return &color->color;
+  return &color->css_color;
 }
 
 float
@@ -2217,7 +2217,7 @@ gtk_css_color_value_get_coord (const GtkCssValue *color,
     return 0;
 
   if (color->type == COLOR_TYPE_COLOR)
-    gtk_css_color_init_from_color (&origin, &color->color);
+    gtk_css_color_init_from_color (&origin, &color->css_color);
   else
     gtk_css_color_init (&origin, GTK_CSS_COLOR_SPACE_SRGB, (float *) &color->rgba);
 
