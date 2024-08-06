@@ -4042,7 +4042,7 @@ render_para (GskPangoRenderer   *crenderer,
             {
               GtkCssNode *node;
               GtkCssStyle *style;
-              GdkColor cursor_color;
+              const GdkColor *cursor_color;
               graphene_rect_t bounds = {
                 .origin.x = line_display->x_offset + line_display->block_cursor.x,
                 .origin.y = line_display->block_cursor.y + line_display->top_margin,
@@ -4056,11 +4056,10 @@ render_para (GskPangoRenderer   *crenderer,
               node = gtk_widget_get_css_node (crenderer->widget);
               style = gtk_css_node_get_style (node);
 
-              gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->caret_color),
-                                      &cursor_color);
+              cursor_color = gtk_css_color_value_get_color (style->used->caret_color);
 
               gtk_snapshot_push_opacity (crenderer->snapshot, cursor_alpha);
-              gtk_snapshot_append_color2 (crenderer->snapshot, &cursor_color, &bounds);
+              gtk_snapshot_append_color2 (crenderer->snapshot, cursor_color, &bounds);
 
               /* draw text under the cursor if any */
               if (!line_display->cursor_at_line_end)
@@ -4115,7 +4114,8 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   int selection_end_line;
   gboolean have_selection;
   gboolean draw_selection_text;
-  GdkColor selection_color;
+  GdkColor no_selection_color = GDK_COLOR_SRGB (0, 0, 0, 0);
+  const GdkColor *selection_color;
   GtkSnapshot *cursor_snapshot;
   GtkTextBTree *btree;
   GtkTextLine *first_line;
@@ -4157,8 +4157,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   crenderer->widget = widget;
   crenderer->snapshot = snapshot;
-  gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->color),
-                          &crenderer->fg_color);
+  gdk_color_init_copy (&crenderer->fg_color, gtk_css_color_value_get_color (style->used->color));
 
   have_selection = gtk_text_buffer_get_selection_bounds (layout->buffer,
                                                          &selection_start,
@@ -4173,8 +4172,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
       selection_node = gtk_text_view_get_selection_node ((GtkTextView*)widget);
       style = gtk_css_node_get_style (selection_node);
 
-      gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->background_color),
-                              &selection_color);
+      selection_color = gtk_css_color_value_get_color (style->used->background_color);
 
       draw_selection_text = !gdk_color_is_clear (&crenderer->fg_color);
     }
@@ -4182,7 +4180,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
     {
       selection_start_line = -1;
       selection_end_line = -1;
-      gdk_color_init (&selection_color, GDK_COLOR_STATE_SRGB, (float[]) { 0, 0, 0, 0 });
+      selection_color = &no_selection_color;
       draw_selection_text = FALSE;
     }
 
@@ -4258,7 +4256,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
               gtk_snapshot_push_collect (snapshot);
               render_para (crenderer, line_display,
                            selection_start_index, selection_end_index,
-                           &selection_color,
+                           selection_color,
                            draw_selection_text,
                            cursor_alpha);
               line_display->node = gtk_snapshot_pop_collect (snapshot);

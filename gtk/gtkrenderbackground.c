@@ -245,7 +245,7 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
 {
   GtkCssStyle *style = boxes->style;
   GtkCssValue *background_image;
-  GdkColor bg_color;
+  const GdkColor *bg_color;
   const GtkCssValue *box_shadow;
   gboolean has_bg_color;
   gboolean has_bg_image;
@@ -257,19 +257,16 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
     return;
 
   background_image = style->used->background_image;
-  gtk_css_color_to_color (gtk_css_color_value_get_css_color (style->used->background_color), &bg_color);
+  bg_color = gtk_css_color_value_get_color (style->used->background_color);
   box_shadow = style->used->box_shadow;
 
-  has_bg_color = !gdk_color_is_clear (&bg_color);
+  has_bg_color = !gdk_color_is_clear (bg_color);
   has_bg_image = _gtk_css_image_value_get_image (_gtk_css_array_value_get_nth (background_image, 0)) != NULL;
   has_shadow = !gtk_css_shadow_value_is_none (box_shadow);
 
   /* This is the common default case of no background */
   if (!has_bg_color && !has_bg_image && !has_shadow)
-    {
-      gdk_color_finish (&bg_color);
-      return;
-    }
+    return;
 
   gtk_snapshot_push_debug (snapshot, "CSS background");
 
@@ -294,7 +291,7 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
         }
 
       if (has_bg_color)
-        gtk_theming_background_snapshot_color (boxes, snapshot, &bg_color, number_of_layers);
+        gtk_theming_background_snapshot_color (boxes, snapshot, bg_color, number_of_layers);
 
       for (idx = number_of_layers - 1; idx >= 0; idx--)
         {
@@ -312,7 +309,7 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
     }
   else if (has_bg_color)
     {
-      gtk_theming_background_snapshot_color (boxes, snapshot, &bg_color, number_of_layers);
+      gtk_theming_background_snapshot_color (boxes, snapshot, bg_color, number_of_layers);
     }
 
   if (has_shadow)
@@ -321,7 +318,5 @@ gtk_css_style_snapshot_background (GtkCssBoxes *boxes,
                                          gtk_css_boxes_get_padding_box (boxes));
 
   gtk_snapshot_pop (snapshot);
-
-  gdk_color_finish (&bg_color);
 }
 
