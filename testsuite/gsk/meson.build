@@ -130,6 +130,7 @@ compare_render_tests = [
   'outset_shadow_rounded_top',
   'outset-shadow-scale-offset',
   'outset_shadow_simple',
+  'premul-color-nogl',
   'radial-gradient-with-64-colorstops',
   'repeat',
   'repeating-linear-gradient-edge-colors',
