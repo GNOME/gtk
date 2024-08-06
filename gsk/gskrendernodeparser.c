@@ -1704,7 +1704,7 @@ parse_color_node (GtkCssParser *parser,
                   Context      *context)
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
-  GdkColor color = GDK_COLOR_INIT_SRGB (1, 0, 0.8, 1);
+  GdkColor color = GDK_COLOR_SRGB (1, 0, 0.8, 1);
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "color", parse_color2, NULL, &color },

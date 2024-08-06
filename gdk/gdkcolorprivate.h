@@ -65,7 +65,7 @@ G_STATIC_ASSERT (G_STRUCT_OFFSET (GdkColor, b) == G_STRUCT_OFFSET (GdkColor, val
 G_STATIC_ASSERT (G_STRUCT_OFFSET (GdkColor, a) == G_STRUCT_OFFSET (GdkColor, values[3]));
 #endif
 
-#define GDK_COLOR_INIT_SRGB(r,g,b,a) { \
+#define GDK_COLOR_SRGB(r,g,b,a) (GdkColor) { \
   .color_state = GDK_COLOR_STATE_SRGB, \
   .values = { (r), (g), (b), (a) } \
 }
