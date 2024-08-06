@@ -187,6 +187,37 @@ linear_color_space (uint cs)
 }
 
 vec4
+clamp_color (vec4 color,
+             uint cs)
+{
+  switch (cs)
+    {
+    case GDK_COLOR_STATE_ID_REC2100_LINEAR:
+      return color;
+
+    case GDK_COLOR_STATE_ID_SRGB:
+    case GDK_COLOR_STATE_ID_SRGB_LINEAR:
+    case GDK_COLOR_STATE_ID_REC2100_PQ:
+      return clamp (color, 0.0, 1.0);
+
+    default:
+      return vec4 (0.8, 1.0, 0.0, 1.0);
+    }
+}
+
+vec4
+alt_color_clamp (vec4 color)
+{
+  return clamp_color (color, ALT_COLOR_SPACE);
+}
+
+vec4
+output_color_clamp (vec4 color)
+{
+  return clamp_color (color, OUTPUT_COLOR_SPACE);
+}
+
+vec4
 convert_color (vec4 color,
                uint from,
                bool from_premul,
@@ -209,6 +240,8 @@ convert_color (vec4 color,
 
       if (to_linear != to)
         color.rgb = apply_oetf (color.rgb, to);
+
+      color = clamp_color (color, to);
     }
 
   if (to_premul && (!from_premul || from != to))

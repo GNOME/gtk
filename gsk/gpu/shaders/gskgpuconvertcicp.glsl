@@ -333,6 +333,8 @@ convert_color_from_cicp (vec4 color,
   color.rgb = _mat * color.rgb;
   color.rgb = apply_oetf (color.rgb, to);
 
+  color = clamp_color (color, to);
+
   if (to_premul)
     color = color_premultiply (color);
 
@@ -351,6 +353,8 @@ convert_color_to_cicp (vec4 color,
   color.rgb = apply_eotf (color.rgb, from);
   color.rgb = _mat * color.rgb;
   color.rgb = apply_cicp_oetf (color.rgb, _transfer_function);
+
+  color = clamp_color (color, GDK_COLOR_STATE_ID_SRGB);
 
   if (to_premul)
     color = color_premultiply (color);
