@@ -46,6 +46,7 @@ compare_render_tests = [
   'color-matrix-identity',
   'color-matrix-merge',
   'color-matrix-parsing',
+  'color-pq-transparency',
   'color-states',
   'conic-gradient-with-64-colorstops',
   'container-single-child-offscreen-for-opacity',
