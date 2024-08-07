@@ -25,6 +25,7 @@ compare_render_tests = [
   'blur-contents-outside-of-clip',
   'blur-huge-contents-outside-of-clip-nogl',
   'border-bottom-right',
+  'border-colorstates',
   'border-one-rounded',
   'border-opacity',
   'border-zero-width-color',

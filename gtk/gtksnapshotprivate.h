@@ -40,6 +40,10 @@ void                    gtk_snapshot_push_subsurface            (GtkSnapshot    
 void                    gtk_snapshot_append_color2              (GtkSnapshot            *snapshot,
                                                                  const GdkColor         *color,
                                                                  const graphene_rect_t  *bounds);
+void                    gtk_snapshot_append_border2             (GtkSnapshot            *snapshot,
+                                                                 const GskRoundedRect   *outline,
+                                                                 const float             border_width[4],
+                                                                 const GdkColor          border_color[4]);
 
 G_END_DECLS
 

@@ -101,9 +101,9 @@ replay_border_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   const GskRoundedRect *outline = gsk_border_node_get_outline (node);
   const float *border_width = gsk_border_node_get_widths (node);
-  const GdkRGBA *border_color = gsk_border_node_get_colors (node);
+  const GdkColor *border_color = gsk_border_node_get_colors2 (node);
 
-  gtk_snapshot_append_border (snapshot, outline, border_width, border_color);
+  gtk_snapshot_append_border2 (snapshot, outline, border_width, border_color);
 }
 
 static void

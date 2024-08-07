@@ -1628,25 +1628,15 @@ static void
 gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
                                         GskRenderNode       *node)
 {
-  const GdkRGBA *rgbas;
-  float colors[4][4];
-  gsize i;
-
-  rgbas = gsk_border_node_get_colors (node);
-  for (i = 0; i < G_N_ELEMENTS (colors); i++)
-    {
-      gdk_color_state_from_rgba (GDK_COLOR_STATE_SRGB, &rgbas[i], colors[i]);
-      colors[i][3] *= self->opacity;
-    }
-
   gsk_gpu_border_op (self->frame,
                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                     gsk_gpu_node_processor_color_states_for_rgba (self),
-                     gsk_border_node_get_outline (node),
+                     self->ccs,
+                     self->opacity,
                      &self->offset,
+                     gsk_border_node_get_outline (node),
                      graphene_point_zero (),
                      gsk_border_node_get_widths (node),
-                     colors);
+                     gsk_border_node_get_colors2 (node));
 }
 
 static gboolean
@@ -2120,25 +2110,24 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
 
   if (blur_radius < 0.01)
     {
-      float color[4]; 
+      GdkColor colors[4];
 
-      gdk_color_state_from_rgba (GDK_COLOR_STATE_SRGB, rgba, color);
-      color[3] *= self->opacity;
+      for (int i = 0; i < 4; i++)
+        gdk_color_init_from_rgba (&colors[i], rgba);
 
       gsk_gpu_border_op (self->frame,
                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                         gsk_gpu_node_processor_color_states_for_rgba (self),
-                         gsk_inset_shadow_node_get_outline (node),
+                         self->ccs,
+                         self->opacity,
                          &self->offset,
+                         gsk_inset_shadow_node_get_outline (node),
                          &GRAPHENE_POINT_INIT (gsk_inset_shadow_node_get_dx (node),
                                                gsk_inset_shadow_node_get_dy (node)),
                          (float[4]) { spread, spread, spread, spread },
-                         (float[4][4]) {
-                             { color[0], color[1], color[2], color[3] },
-                             { color[0], color[1], color[2], color[3] },
-                             { color[0], color[1], color[2], color[3] },
-                             { color[0], color[1], color[2], color[3] }
-                         });
+                         colors);
+
+       for (int i = 0; i < 4; i++)
+         gdk_color_finish (&colors[i]);
     }
   else
     {
@@ -2173,28 +2162,26 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
   if (blur_radius < 0.01)
     {
       GskRoundedRect outline;
-      float color[4]; 
+      GdkColor colors[4];
+
+      for (int i = 0; i < 4; i++)
+        gdk_color_init_from_rgba (&colors[i], rgba);
 
       gsk_rounded_rect_init_copy (&outline, gsk_outset_shadow_node_get_outline (node));
       gsk_rounded_rect_shrink (&outline, -spread, -spread, -spread, -spread);
       graphene_rect_offset (&outline.bounds, dx, dy);
 
-      gdk_color_state_from_rgba (GDK_COLOR_STATE_SRGB, rgba, color);
-      color[3] *= self->opacity;
-
       gsk_gpu_border_op (self->frame,
                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                         gsk_gpu_node_processor_color_states_for_rgba (self),
-                         &outline,
+                         self->ccs,
+                         self->opacity,
                          &self->offset,
+                         &outline,
                          &GRAPHENE_POINT_INIT (-dx, -dy),
                          (float[4]) { spread, spread, spread, spread },
-                         (float[4][4]) {
-                             { color[0], color[1], color[2], color[3] },
-                             { color[0], color[1], color[2], color[3] },
-                             { color[0], color[1], color[2], color[3] },
-                             { color[0], color[1], color[2], color[3] }
-                         });
+                         colors);
+      for (int i = 0; i < 4; i++)
+        gdk_color_finish (&colors[i]);
     }
   else
     {
