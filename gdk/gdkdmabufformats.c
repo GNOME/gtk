@@ -207,7 +207,8 @@ gdk_dmabuf_formats_new (GdkDmabufFormat *formats,
   self->n_formats = n_formats;
   self->formats = g_new (GdkDmabufFormat, n_formats);
 
-  memcpy (self->formats, formats, n_formats * sizeof (GdkDmabufFormat));
+  if (n_formats != 0)
+    memcpy (self->formats, formats, n_formats * sizeof (GdkDmabufFormat));
 
   return self;
 }

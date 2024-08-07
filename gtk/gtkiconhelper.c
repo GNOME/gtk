@@ -339,8 +339,7 @@ gtk_icon_helper_invalidate (GtkIconHelper *self)
   g_clear_object (&self->paintable);
   self->texture_is_symbolic = FALSE;
 
-  if (!GTK_IS_CSS_TRANSIENT_NODE (self->node))
-    gtk_widget_queue_resize (self->owner);
+  gtk_widget_queue_draw (self->owner);
 }
 
 void

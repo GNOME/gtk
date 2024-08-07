@@ -157,8 +157,9 @@ gtk_tim_sort_ensure_capacity (GtkTimSort *self,
       new_size |= new_size >> 4;
       new_size |= new_size >> 8;
       new_size |= new_size >> 16;
-      if (sizeof(new_size) > 4)
-        new_size |= new_size >> 32;
+#if GLIB_SIZEOF_SIZE_T > 4
+      new_size |= new_size >> 32;
+#endif
 
       new_size++;
       if (new_size == 0) /* (overflow) Not bloody likely! */
