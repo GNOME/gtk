@@ -380,32 +380,3 @@ gsk_gpu_download_op (GskGpuFrame        *frame,
   self->func = func,
   self->user_data = user_data;
 }
-
-static void
-gsk_gpu_download_save_png_cb (gpointer    filename,
-                              GdkTexture *texture)
-{
-  gdk_texture_save_to_png (texture, filename);
-
-  g_free (filename);
-}
-
-void
-gsk_gpu_download_png_op (GskGpuFrame *frame,
-                         GskGpuImage *image,
-                         const char  *filename_format,
-                         ...)
-{
-  va_list args;
-  char *filename;
-
-  va_start (args, filename_format);
-  filename = g_strdup_vprintf (filename_format, args);
-  va_end (args);
-
-  gsk_gpu_download_op (frame,
-                       image,
-                       FALSE,
-                       gsk_gpu_download_save_png_cb,
-                       filename);
-}
