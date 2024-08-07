@@ -531,14 +531,25 @@ static void
 gsk_gpu_node_processor_get_clip_bounds (GskGpuNodeProcessor *self,
                                         graphene_rect_t     *out_bounds)
 {
-  graphene_rect_offset_r (&self->clip.rect.bounds,
-                          - self->offset.x,
-                          - self->offset.y,
-                          out_bounds);
- 
-  /* FIXME: We could try the scissor rect here.
-   * But how often is that smaller than the clip bounds?
-   */
+  graphene_rect_t scissor;
+
+  if (gsk_gpu_node_processor_rect_device_to_clip (self,
+                                                  &GSK_RECT_INIT_CAIRO (&self->scissor),
+                                                  &scissor))
+    {
+      if (!gsk_rect_intersection (&scissor, &self->clip.rect.bounds, out_bounds))
+        {
+          g_warning ("Clipping is broken, everything is clipped, but we didn't early-exit.\n");
+          *out_bounds = self->clip.rect.bounds;
+        }
+    }
+  else
+    {
+      *out_bounds = self->clip.rect.bounds;
+    }
+
+  out_bounds->origin.x -= self->offset.x;
+  out_bounds->origin.y -= self->offset.y;
 }
  
 static gboolean G_GNUC_WARN_UNUSED_RESULT
