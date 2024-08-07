@@ -380,7 +380,7 @@ gsk_render_node_draw_ccs (GskRenderNode *node,
                           GdkColorState *ccs)
 {
   /* Check that the calling function did pass a correct color state */
-  g_assert (ccs == gdk_color_state_get_rendering_color_state (ccs));
+  g_assert (ccs == gdk_color_state_get_rendering_color_state (ccs, FALSE));
 
   cairo_save (cr);
 
@@ -413,7 +413,7 @@ gsk_render_node_draw_with_color_state (GskRenderNode *node,
 {
   GdkColorState *ccs;
 
-  ccs = gdk_color_state_get_rendering_color_state (color_state);
+  ccs = gdk_color_state_get_rendering_color_state (color_state, FALSE);
 
   if (gdk_color_state_equal (color_state, ccs))
     {

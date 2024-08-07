@@ -78,8 +78,15 @@ GdkColorState * gdk_color_state_new_for_cicp            (const GdkCicp          
                                                          GError                **error);
 
 static inline GdkColorState *
-gdk_color_state_get_rendering_color_state (GdkColorState *self)
+gdk_color_state_get_rendering_color_state (GdkColorState *self,
+                                           gboolean       srgb)
 {
+  if (srgb)
+    {
+      self = gdk_color_state_get_no_srgb_tf (self);
+      g_assert (self);
+    }
+
   if (GDK_DEBUG_CHECK (HDR))
     self = GDK_COLOR_STATE_REC2100_PQ;
 
