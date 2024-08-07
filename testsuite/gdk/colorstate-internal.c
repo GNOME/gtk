@@ -191,6 +191,52 @@ test_rendering_colorstate (void)
     }
 }
 
+static void
+test_color_conversion (void)
+{
+  GdkColor color;
+  GdkColor color2;
+  GdkColor color3;
+
+  gdk_color_init (&color, GDK_COLOR_STATE_REC2100_PQ, (float[4]) { 0, 0.5, 1, 1 });
+  gdk_color_convert (&color2, GDK_COLOR_STATE_REC2100_LINEAR, &color);
+
+  g_assert_cmpfloat_with_epsilon (0,     color2.values[0], 0.005);
+  g_assert_cmpfloat_with_epsilon (0.45,  color2.values[1], 0.005);
+  g_assert_cmpfloat_with_epsilon (49.26, color2.values[2], 0.005);
+  g_assert_cmpfloat_with_epsilon (1,     color2.values[3], 0.005);
+
+  gdk_color_convert (&color3, GDK_COLOR_STATE_REC2100_PQ, &color2);
+
+  g_assert_cmpfloat_with_epsilon (color3.values[0], color.values[0], 0.005);
+  g_assert_cmpfloat_with_epsilon (color3.values[1], color.values[1], 0.005);
+  g_assert_cmpfloat_with_epsilon (color3.values[2], color.values[2], 0.005);
+  g_assert_cmpfloat_with_epsilon (color3.values[3], color.values[3], 0.005);
+
+  gdk_color_finish (&color);
+  gdk_color_finish (&color2);
+  gdk_color_finish (&color3);
+
+  gdk_color_init (&color, GDK_COLOR_STATE_SRGB, (float[4]) { 0, 0.5, 1, 1 });
+  gdk_color_convert (&color2, GDK_COLOR_STATE_REC2100_LINEAR, &color);
+
+  g_assert_cmpfloat_with_epsilon (0.114, color2.values[0], 0.005);
+  g_assert_cmpfloat_with_epsilon (0.208, color2.values[1], 0.005);
+  g_assert_cmpfloat_with_epsilon (0.914, color2.values[2], 0.005);
+  g_assert_cmpfloat_with_epsilon (1,     color2.values[3], 0.005);
+
+  gdk_color_convert (&color3, GDK_COLOR_STATE_SRGB, &color2);
+
+  g_assert_cmpfloat_with_epsilon (color3.values[0], color.values[0], 0.005);
+  g_assert_cmpfloat_with_epsilon (color3.values[1], color.values[1], 0.005);
+  g_assert_cmpfloat_with_epsilon (color3.values[2], color.values[2], 0.005);
+  g_assert_cmpfloat_with_epsilon (color3.values[3], color.values[3], 0.005);
+
+  gdk_color_finish (&color);
+  gdk_color_finish (&color2);
+  gdk_color_finish (&color3);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -215,8 +261,10 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/colorstate/matrix/srgb_to_rec2020", test_srgb_to_rec2020);
   g_test_add_func ("/colorstate/matrix/rec2020_to_srgb", test_rec2020_to_srgb);
-  g_test_add_func ("/color/mislabel", test_color_mislabel);
   g_test_add_func ("/colorstate/rendering", test_rendering_colorstate);
+  g_test_add_func ("/color/mislabel", test_color_mislabel);
+  g_test_add_func ("/color/conversion", test_color_conversion);
 
   return g_test_run ();
 }
+
