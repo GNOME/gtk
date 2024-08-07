@@ -376,6 +376,9 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   if (image == NULL)
     return gsk_gpu_renderer_fallback_render_texture (self, root, &rounded_viewport);
 
+  g_print ("render_texture: image depth %s, target color state %s\n",
+           gdk_memory_depth_get_name (depth), gdk_color_state_get_name (color_state));
+
   frame = gsk_gpu_renderer_create_frame (self);
 
   texture = NULL;
