@@ -1584,9 +1584,17 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
         }
 
       gdk_color_to_float (gsk_color_node_get_color2 (node), self->ccs, clear_color);
+      g_print ("node processor: add color via clear %s -> %s %f %f %f %f\n",
+               gdk_color_to_string (gsk_color_node_get_color2 (node)),
+               gdk_color_state_get_name (self->ccs),
+               clear_color[0], clear_color[1], clear_color[2], clear_color[3]);
       gsk_gpu_clear_op (self->frame, &int_clipped, clear_color);
       return;
     }
+
+  g_print ("node processor: add color %s -> %s\n",
+           gdk_color_to_string (gsk_color_node_get_color2 (node)),
+           gdk_color_state_get_name (self->ccs));
 
   gsk_gpu_color_op (self->frame,
                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
@@ -1615,6 +1623,10 @@ gsk_gpu_node_processor_add_first_color_node (GskGpuNodeProcessor         *self,
     return FALSE;
 
   gdk_color_to_float (gsk_color_node_get_color2 (node), self->ccs, clear_color);
+  g_print ("node processor: add first color %s -> %s %f %f %f %f\n",
+           gdk_color_to_string (gsk_color_node_get_color2 (node)),
+           gdk_color_state_get_name (self->ccs),
+           clear_color[0], clear_color[1], clear_color[2], clear_color[3]);
   gsk_gpu_render_pass_begin_op (self->frame,
                                 target,
                                 clip,
@@ -3906,6 +3918,8 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                viewport);
 
   ccs = gdk_color_state_get_rendering_color_state (target_color_state, gsk_gpu_image_get_flags (target) & GSK_GPU_IMAGE_SRGB);
+
+  g_print ("node processor: rendering color state %s\n", gdk_color_state_get_name (ccs));
 
   if (gdk_color_state_equal (ccs, target_color_state))
     {
