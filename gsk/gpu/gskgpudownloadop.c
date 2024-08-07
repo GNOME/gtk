@@ -54,7 +54,20 @@ gsk_gpu_download_op_finish (GskGpuOp *op)
   if (self->create_func)
     self->create_func (self);
 
-  if (!gdk_color_state_equal (self->color_state, gdk_texture_get_color_state (self->texture)))
+  g_print ("downloaded texture: %s %.4s depth %s format %s color state %s\n",
+           GDK_IS_DMABUF_TEXTURE (self->texture)
+             ? "dmabuf"
+             : (GDK_IS_GL_TEXTURE (self->texture)
+               ? "gl"
+               : "memory"),
+           GDK_IS_DMABUF_TEXTURE (self->texture)
+             ?  (char *) &gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (self->texture))->fourcc
+             : "",
+          gdk_memory_depth_get_name (gdk_memory_format_get_depth (gdk_texture_get_format (self->texture), FALSE)),
+          gdk_memory_format_get_name (gdk_texture_get_format (self->texture)),
+          gdk_color_state_get_name (gdk_texture_get_color_state (self->texture)));
+
+  if (!gdk_color_state_equal (gdk_texture_get_color_state (self->texture), self->color_state))
     {
       GdkTextureDownloader *downloader;
       GdkMemoryTextureBuilder *builder;
@@ -62,6 +75,11 @@ gsk_gpu_download_op_finish (GskGpuOp *op)
       gsize stride;
       GdkTexture *texture;
 
+      g_print ("converting rendered %s texture after download: %s -> %s\n",
+               GDK_IS_DMABUF_TEXTURE (self->texture) ? "dmabuf" :
+                 (GDK_IS_GL_TEXTURE (self->texture) ? "gl" : "memory"),
+               gdk_color_state_get_name (gdk_texture_get_color_state (self->texture)),
+               gdk_color_state_get_name (self->color_state));
       downloader = gdk_texture_downloader_new (self->texture);
       gdk_texture_downloader_set_format (downloader, gdk_texture_get_format (self->texture));
       gdk_texture_downloader_set_color_state (downloader, self->color_state);
