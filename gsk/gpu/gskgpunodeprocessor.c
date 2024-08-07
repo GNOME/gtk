@@ -405,11 +405,11 @@ extract_scale_from_transform (GskTransform *transform,
 }
 
 static gboolean
-gsk_gpu_node_processor_rect_is_integer (GskGpuNodeProcessor   *self,
-                                        const graphene_rect_t *rect,
-                                        cairo_rectangle_int_t *int_rect)
+gsk_gpu_node_processor_rect_clip_to_device (GskGpuNodeProcessor   *self,
+                                            const graphene_rect_t *src,
+                                            graphene_rect_t       *dest)
 {
-  graphene_rect_t transformed_rect;
+  graphene_rect_t transformed;
   float scale_x = graphene_vec2_get_x (&self->scale);
   float scale_y = graphene_vec2_get_y (&self->scale);
 
@@ -425,8 +425,8 @@ gsk_gpu_node_processor_rect_is_integer (GskGpuNodeProcessor   *self,
     case GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE:
     case GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE:
     case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
-      gsk_transform_transform_bounds (self->modelview, rect, &transformed_rect);
-      rect = &transformed_rect;
+      gsk_transform_transform_bounds (self->modelview, src, &transformed);
+      src = &transformed;
       break;
 
     case GSK_FINE_TRANSFORM_CATEGORY_IDENTITY:
@@ -434,15 +434,30 @@ gsk_gpu_node_processor_rect_is_integer (GskGpuNodeProcessor   *self,
       break;
     }
 
-  int_rect->x = rect->origin.x * scale_x;
-  int_rect->y = rect->origin.y * scale_y;
-  int_rect->width = rect->size.width * scale_x;
-  int_rect->height = rect->size.height * scale_y;
+  dest->origin.x = src->origin.x * scale_x;
+  dest->origin.y = src->origin.y * scale_y;
+  dest->size.width = src->size.width * scale_x;
+  dest->size.height = src->size.height * scale_y;
 
-  return int_rect->x == rect->origin.x * scale_x
-      && int_rect->y == rect->origin.y * scale_y
-      && int_rect->width == rect->size.width * scale_x
-      && int_rect->height == rect->size.height * scale_y;
+  return TRUE;
+}
+
+static gboolean
+gsk_gpu_node_processor_rect_is_integer (GskGpuNodeProcessor   *self,
+                                        const graphene_rect_t *rect,
+                                        cairo_rectangle_int_t *int_rect)
+{
+  graphene_rect_t tmp;
+
+  if (!gsk_gpu_node_processor_rect_clip_to_device (self, rect, &tmp))
+    return FALSE;
+
+  gsk_rect_to_cairo_shrink (&tmp, int_rect);
+
+  return int_rect->x == tmp.origin.x
+      && int_rect->y == tmp.origin.y
+      && int_rect->width == tmp.size.width
+      && int_rect->height == tmp.size.height;
 }
 
 static void
