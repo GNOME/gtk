@@ -207,7 +207,17 @@ gsk_gpu_download_op_vk_command (GskGpuOp              *op,
 
 #ifdef HAVE_DMABUF
   if (self->allow_dmabuf)
-    self->texture = gsk_vulkan_image_to_dmabuf_texture (GSK_VULKAN_IMAGE (self->image));
+    {
+      GdkColorState *cs;
+
+      if (gsk_gpu_image_get_flags (self->image) & GSK_GPU_IMAGE_SRGB)
+        cs = GDK_COLOR_STATE_SRGB;
+      else
+        cs = self->image_cs;
+
+      self->texture = gsk_vulkan_image_to_dmabuf_texture (GSK_VULKAN_IMAGE (self->image), cs);
+    }
+
   if (self->texture)
     {
       GskGpuDevice *device = gsk_gpu_frame_get_device (frame);

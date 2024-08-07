@@ -1176,7 +1176,8 @@ gsk_vulkan_image_get_n_planes (GskVulkanImage *self,
 }
 
 GdkTexture *
-gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self)
+gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self,
+                                    GdkColorState  *color_state)
 {
   GskGpuImage *image = GSK_GPU_IMAGE (self);
   GdkDmabufTextureBuilder *builder;
@@ -1226,6 +1227,7 @@ gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self)
   gdk_dmabuf_texture_builder_set_display (builder, gsk_gpu_device_get_display (GSK_GPU_DEVICE (self->device)));
   gdk_dmabuf_texture_builder_set_width (builder, gsk_gpu_image_get_width (image));
   gdk_dmabuf_texture_builder_set_height (builder, gsk_gpu_image_get_height (image));
+  gdk_dmabuf_texture_builder_set_color_state (builder, color_state);
   gdk_dmabuf_texture_builder_set_fourcc (builder, fourcc);
   gdk_dmabuf_texture_builder_set_modifier (builder, properties.drmFormatModifier);
   gdk_dmabuf_texture_builder_set_premultiplied (builder, !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA));
