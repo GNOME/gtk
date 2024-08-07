@@ -76,7 +76,7 @@ gsk_vulkan_handle_result (VkResult    res,
 {
   if (res != VK_SUCCESS)
     {
-      GSK_DEBUG (VULKAN, "%s(): %s (%d)", called_function, gdk_vulkan_strerror (res), res);
+      g_warning ("%s(): %s (%d)", called_function, gdk_vulkan_strerror (res), res);
     }
   return res;
 }
