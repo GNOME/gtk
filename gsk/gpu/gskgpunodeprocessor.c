@@ -3548,6 +3548,42 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
     }
 }
 
+static gboolean
+gsk_gpu_node_processor_add_first_subsurface_node (GskGpuNodeProcessor *self,
+                                                  GskGpuImage         *target,
+                                                  GskRenderPassType    pass_type,
+                                                  gsize                min_occlusion_pixels,
+                                                  GskRenderNode       *node)
+{
+  GdkSubsurface *subsurface;
+
+  subsurface = gsk_subsurface_node_get_subsurface (node);
+  if (subsurface == NULL ||
+      gdk_subsurface_get_texture (subsurface) == NULL ||
+      gdk_subsurface_get_parent (subsurface) != gdk_draw_context_get_surface (gsk_gpu_frame_get_context (self->frame)))
+    {
+      return gsk_gpu_node_processor_add_first_node (self,
+                                                    target,
+                                                    pass_type,
+                                                    min_occlusion_pixels,
+                                                    gsk_subsurface_node_get_child (node));
+    }
+
+  if (gdk_subsurface_is_above_parent (subsurface))
+    return FALSE;
+
+  if (!gsk_gpu_node_processor_clip_first_node (self, min_occlusion_pixels, &node->bounds))
+    return FALSE;
+
+  gsk_gpu_render_pass_begin_op (self->frame,
+                                target,
+                                &self->scissor,
+                                GSK_VEC4_TRANSPARENT,
+                                pass_type);
+
+  return TRUE;
+}
+
 static GskGpuImage *
 gsk_gpu_get_subsurface_node_as_image (GskGpuFrame            *frame,
                                       GdkColorState          *ccs,
@@ -3905,7 +3941,7 @@ static const struct
     GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR | GSK_GPU_GLOBAL_BLEND,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_subsurface_node,
-    NULL,
+    gsk_gpu_node_processor_add_first_subsurface_node,
     gsk_gpu_get_subsurface_node_as_image,
   },
 };
