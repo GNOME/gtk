@@ -531,6 +531,7 @@ tests = [
   [ 'path', [ 'path-utils.c' ], [ 'flaky'] ],
   [ 'path-special-cases' ],
   [ 'scaling' ],
+  [ 'rendertexture' ],
 ]
 
 test_cargs = []
