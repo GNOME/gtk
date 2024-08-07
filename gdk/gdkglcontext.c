@@ -637,10 +637,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
   else
     *out_depth = GDK_MEMORY_U8;
 
-  if (*out_depth == GDK_MEMORY_U8_SRGB)
-    *out_color_state = gdk_color_state_get_no_srgb_tf (color_state);
-  else
-    *out_color_state = color_state;
+  *out_color_state = color_state;
 #else
   *out_color_state = gdk_color_state_get_srgb ();
   *out_depth = GDK_MEMORY_U8;

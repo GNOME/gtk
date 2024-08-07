@@ -96,7 +96,7 @@ color_state_is_hdr (GdkColorState *color_state)
 {
   GdkColorState *rendering_cs;
 
-  rendering_cs = gdk_color_state_get_rendering_color_state (color_state);
+  rendering_cs = gdk_color_state_get_rendering_color_state (color_state, FALSE);
 
   return rendering_cs != GDK_COLOR_STATE_SRGB &&
          rendering_cs != GDK_COLOR_STATE_SRGB_LINEAR;
