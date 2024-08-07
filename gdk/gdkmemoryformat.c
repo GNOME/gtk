@@ -1879,6 +1879,12 @@ gdk_memory_convert (guchar              *dest_data,
   g_assert (dest_data + gdk_memory_format_min_buffer_size (dest_format, dest_stride, width, height) <= src_data ||
             src_data + gdk_memory_format_min_buffer_size (src_format, src_stride, width, height) <= dest_data);
 
+  g_print ("memory convert %s %s -> %s %s\n",
+           gdk_memory_format_get_name (src_format),
+           gdk_color_state_get_name (src_cs),
+           gdk_memory_format_get_name (dest_format),
+           gdk_color_state_get_name (dest_cs));
+
   if (src_format == dest_format && gdk_color_state_equal (dest_cs, src_cs))
     {
       gsize bytes_per_row = src_desc->bytes_per_pixel * width;
@@ -1952,6 +1958,7 @@ gdk_memory_convert (guchar              *dest_data,
 
   if (func != NULL)
     {
+      g_print ("convert format\n");
       for (y = 0; y < height; y++)
         {
           func (dest_data, src_data, width);
@@ -1974,9 +1981,12 @@ gdk_memory_convert (guchar              *dest_data,
       needs_premultiply = src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT;
     }
 
+  g_print ("convert color %lu %lu\n", width, height);
   for (y = 0; y < height; y++)
     {
       src_desc->to_float (tmp, src_data, width);
+
+      g_print ("after to_float: %f %f %f %f\n", tmp[0][0], tmp[0][1], tmp[0][2], tmp[0][3]);
 
       if (needs_unpremultiply)
         unpremultiply (tmp, width);
@@ -2158,6 +2168,10 @@ gdk_memory_convert_color_state (guchar          *data,
 
   if (gdk_color_state_equal (src_cs, dest_cs))
     return;
+
+  g_print ("memory convert color state %s -> %s\n",
+           gdk_color_state_get_name (src_cs),
+           gdk_color_state_get_name (dest_cs));
 
   if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
       src_cs == GDK_COLOR_STATE_SRGB &&
