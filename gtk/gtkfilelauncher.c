@@ -485,6 +485,7 @@ gtk_file_launcher_launch (GtkFileLauncher     *self,
       g_task_return_new_error (task,
                                GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
                                "No file to launch");
+      g_object_unref (task);
       return;
     }
 
@@ -576,6 +577,7 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
       g_task_return_new_error (task,
                                GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
                                "No file to open");
+      g_object_unref (task);
       return;
     }
 
@@ -584,6 +586,7 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
       g_task_return_new_error (task,
                                GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
                                "Operation not supported on non-native files");
+      g_object_unref (task);
       return;
     }
 
