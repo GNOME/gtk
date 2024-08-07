@@ -66,6 +66,7 @@ GdkMemoryDepth          gdk_memory_depth_merge              (GdkMemoryDepth     
                                                              GdkMemoryDepth              depth2) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_depth_get_format         (GdkMemoryDepth              depth) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_depth_get_alpha_format   (GdkMemoryDepth              depth) G_GNUC_CONST;
+const char *            gdk_memory_depth_get_name           (GdkMemoryDepth              depth);
 void                    gdk_memory_format_gl_format         (GdkMemoryFormat             format,
                                                              gboolean                    gles,
                                                              GLint                      *out_internal_format,

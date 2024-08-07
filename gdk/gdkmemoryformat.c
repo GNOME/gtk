@@ -1524,6 +1524,14 @@ gdk_memory_format_get_depth (GdkMemoryFormat format,
   return depth;
 }
 
+const char *
+gdk_memory_depth_get_name (GdkMemoryDepth depth)
+{
+  const char *names[] = { "none", "u8", "u8-srgb", "u16", "f16", "f32" };
+
+  return names[depth];
+}
+
 /*<private>
  * gdk_memory_depth_merge:
  * @depth1: the first depth
