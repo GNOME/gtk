@@ -812,9 +812,21 @@ handle_combo_entry_change (GtkPrinterOptionWidget *widget)
       if (changed)
         {
           GtkWidget *entry = gtk_widget_get_first_child (priv->combo);
+          gssize     buffer_length, filtered_buffer_length;
+          gint       position;
+
+          position = gtk_editable_get_position (GTK_EDITABLE (entry));
+          buffer_length = gtk_entry_buffer_get_length (gtk_entry_get_buffer (GTK_ENTRY (entry)));
+
           g_signal_handler_block (entry, priv->comboentry_changed_handler_id);
           gtk_editable_set_text (GTK_EDITABLE (entry), filtered_val);
           g_signal_handler_unblock (entry, priv->comboentry_changed_handler_id);
+
+          filtered_buffer_length = gtk_entry_buffer_get_length (gtk_entry_get_buffer (GTK_ENTRY (entry)));
+
+          /* Maintain position of the cursor with respect to the end of the buffer. */
+          if (position > 0 && filtered_buffer_length < buffer_length)
+            gtk_editable_set_position (GTK_EDITABLE (entry), position - (buffer_length - filtered_buffer_length));
         }
       value = filtered_val;
     }
