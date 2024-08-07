@@ -827,6 +827,12 @@ gsk_render_node_get_preferred_depth (const GskRenderNode *node)
   return node->preferred_depth;
 }
 
+gboolean
+gsk_render_node_is_hdr (const GskRenderNode *node)
+{
+  return node->is_hdr;
+}
+
 /* Whether we need an offscreen to handle opacity correctly for this node.
  * We don't if there is only one drawing node inside (could be child
  * node, or grandchild, or...).
