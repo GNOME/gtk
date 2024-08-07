@@ -3905,7 +3905,7 @@ gsk_gpu_node_processor_process (GskGpuFrame                 *frame,
                                clip,
                                viewport);
 
-  ccs = gdk_color_state_get_rendering_color_state (target_color_state);
+  ccs = gdk_color_state_get_rendering_color_state (target_color_state, gsk_gpu_image_get_flags (target) & GSK_GPU_IMAGE_SRGB);
 
   if (gdk_color_state_equal (ccs, target_color_state))
     {

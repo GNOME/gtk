@@ -1,6 +1,7 @@
-#include <gdk/gdk.h>
+#include <gtk.h>
 #include "gdkcolorstateprivate.h"
 #include "gdkcolorprivate.h"
+#include "gdkdebugprivate.h"
 #include <math.h>
 
 #include "gdkcolordefs.h"
@@ -158,9 +159,42 @@ test_color_mislabel (void)
   g_assert_true (red1 != red2);
 }
 
+static void
+test_rendering_colorstate (void)
+{
+  struct {
+    GdkColorState *surface;
+    gboolean srgb;
+    GdkColorState *rendering;
+  } tests[] = {
+    { GDK_COLOR_STATE_SRGB,           0, GDK_COLOR_STATE_SRGB           },
+    { GDK_COLOR_STATE_SRGB,           1, GDK_COLOR_STATE_SRGB_LINEAR    },
+    { GDK_COLOR_STATE_SRGB_LINEAR,    0, GDK_COLOR_STATE_SRGB_LINEAR    },
+    { GDK_COLOR_STATE_SRGB_LINEAR,    1, GDK_COLOR_STATE_SRGB_LINEAR    },
+    { GDK_COLOR_STATE_REC2100_PQ,     0, GDK_COLOR_STATE_REC2100_PQ     },
+    { GDK_COLOR_STATE_REC2100_PQ,     1, GDK_COLOR_STATE_SRGB_LINEAR    },
+    { GDK_COLOR_STATE_REC2100_LINEAR, 0, GDK_COLOR_STATE_REC2100_LINEAR },
+    { GDK_COLOR_STATE_REC2100_LINEAR, 1, GDK_COLOR_STATE_SRGB_LINEAR    },
+  };
+
+  if (GDK_DEBUG_CHECK (HDR) || GDK_DEBUG_CHECK (LINEAR))
+    {
+      g_test_skip ("Skip because GDK_DEBUG flags hdr or linear are set");
+      return;
+    }
+
+  for (int i = 0; i < G_N_ELEMENTS (tests); i++)
+    {
+      GdkColorState *res = gdk_color_state_get_rendering_color_state (tests[i].surface, tests[i].srgb);
+
+      g_assert_true (gdk_color_state_equal (res, tests[i].rendering));
+    }
+}
+
 int
 main (int argc, char *argv[])
 {
+  gtk_init ();
   (g_test_init) (&argc, &argv, NULL);
 
   for (guint i = 0; i < G_N_ELEMENTS (transfers); i++)
@@ -182,6 +216,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/colorstate/matrix/srgb_to_rec2020", test_srgb_to_rec2020);
   g_test_add_func ("/colorstate/matrix/rec2020_to_srgb", test_rec2020_to_srgb);
   g_test_add_func ("/color/mislabel", test_color_mislabel);
+  g_test_add_func ("/colorstate/rendering", test_rendering_colorstate);
 
   return g_test_run ();
 }
