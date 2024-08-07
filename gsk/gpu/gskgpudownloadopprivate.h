@@ -9,7 +9,8 @@ typedef void            (* GskGpuDownloadFunc)                          (gpointe
 
 void                    gsk_gpu_download_op                             (GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *image,
-                                                                         GdkColorState                  *color_state,
+                                                                         GdkColorState                  *image_cs,
+                                                                         GdkColorState                  *download_cs,
                                                                          gboolean                        allow_dmabuf,
                                                                          GskGpuDownloadFunc              func,
                                                                          gpointer                        user_data);

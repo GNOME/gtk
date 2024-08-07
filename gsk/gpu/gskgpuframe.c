@@ -671,7 +671,20 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
     }
 
   if (texture)
-    gsk_gpu_download_op (self, target, target_color_state, TRUE, copy_texture, texture);
+    {
+      GdkColorState *image_cs;
+      GdkColorState *download_cs;
+
+      image_cs = gdk_color_state_get_rendering_color_state (target_color_state,
+                                                            gsk_gpu_image_get_flags (target) & GSK_GPU_IMAGE_SRGB);
+
+      if (image_cs == GDK_COLOR_STATE_SRGB_LINEAR)
+        download_cs = GDK_COLOR_STATE_SRGB;
+      else
+        download_cs = image_cs;
+
+      gsk_gpu_download_op (self, target, target_color_state, download_cs, TRUE, copy_texture, texture);
+    }
 }
 
 static void
@@ -778,6 +791,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
 
   gsk_gpu_download_op (self,
                        image,
+                       gdk_texture_get_color_state (texture),
                        color_state,
                        FALSE,
                        do_download,
