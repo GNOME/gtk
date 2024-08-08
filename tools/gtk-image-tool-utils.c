@@ -189,6 +189,27 @@ get_color_state_names (void)
 }
 
 char *
+get_color_state_cicp (GdkColorState *color_state)
+{
+  GdkCicpParams *params;
+  char *str = NULL;
+
+  params = gdk_color_state_create_cicp_params (color_state);
+
+  if (params)
+    {
+      str = g_strdup_printf ("%u/%u/%u/%u",
+                              gdk_cicp_params_get_color_primaries (params),
+                              gdk_cicp_params_get_transfer_function (params),
+                              gdk_cicp_params_get_matrix_coefficients (params),
+                              gdk_cicp_params_get_range (params));
+      g_object_unref (params);
+    }
+
+  return str;
+}
+
+char *
 get_color_state_name (GdkColorState *color_state)
 {
   char **names;
