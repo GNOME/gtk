@@ -233,6 +233,7 @@ gdk_x11_drop_read_async (GdkDrop             *drop,
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                                _("No compatible transfer format found"));
+      g_object_unref (task);
       return;
     }
 

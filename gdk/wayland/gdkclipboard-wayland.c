@@ -236,6 +236,7 @@ gdk_wayland_clipboard_read_async (GdkClipboard        *clipboard,
     {
       g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED,
                                _("No compatible transfer format found"));
+      g_object_unref (task);
       return;
     }
   /* offer formats should be empty if we have no offer */
@@ -246,6 +247,7 @@ gdk_wayland_clipboard_read_async (GdkClipboard        *clipboard,
   if (!g_unix_open_pipe (pipe_fd, O_CLOEXEC, &error))
     {
       g_task_return_error (task, error);
+      g_object_unref (task);
       return;
     }
 
@@ -253,6 +255,7 @@ gdk_wayland_clipboard_read_async (GdkClipboard        *clipboard,
   stream = g_unix_input_stream_new (pipe_fd[0], TRUE);
   close (pipe_fd[1]);
   g_task_return_pointer (task, stream, g_object_unref);
+  g_object_unref (task);
 }
 
 static GInputStream *

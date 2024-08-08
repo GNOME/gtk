@@ -222,6 +222,7 @@ gtk_color_picker_win32_pick (GtkColorPicker      *cp,
                                G_IO_ERROR,
                                G_IO_ERROR_FAILED,
                                "Cannot capture the mouse pointer");
+      g_object_unref (picker->task);
       return;
     }
 
