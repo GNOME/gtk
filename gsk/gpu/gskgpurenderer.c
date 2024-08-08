@@ -264,6 +264,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
   guchar *data;
   GdkTexture *texture;
   GdkTextureDownloader downloader;
+  cairo_region_t *clip_region;
   GskGpuFrame *frame;
 
   max_size = gsk_gpu_device_get_max_image_size (priv->device);
@@ -304,12 +305,17 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
           else
             color_state = GDK_COLOR_STATE_SRGB;
 
+          clip_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                                           0, 0,
+                                                           gsk_gpu_image_get_width (image),
+                                                           gsk_gpu_image_get_height (image)
+                                                       });
           frame = gsk_gpu_renderer_create_frame (self);
           gsk_gpu_frame_render (frame,
                                 g_get_monotonic_time (),
                                 image,
                                 color_state,
-                                NULL,
+                                clip_region,
                                 root,
                                 &GRAPHENE_RECT_INIT (rounded_viewport->origin.x + x,
                                                      rounded_viewport->origin.y + y,
@@ -352,6 +358,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   GdkTexture *texture;
   graphene_rect_t rounded_viewport;
   GdkColorState *color_state;
+  cairo_region_t *clip_region;
 
   gsk_gpu_device_maybe_gc (priv->device);
 
@@ -376,12 +383,18 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
 
   frame = gsk_gpu_renderer_create_frame (self);
 
+  clip_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                                   0, 0,
+                                                   gsk_gpu_image_get_width (image),
+                                                   gsk_gpu_image_get_height (image)
+                                               });
+
   texture = NULL;
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),
                         image,
                         color_state,
-                        NULL,
+                        clip_region,
                         root,
                         &rounded_viewport,
                         &texture);
@@ -446,8 +459,6 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   gsk_gpu_frame_end (frame, priv->context);
 
   gsk_gpu_device_queue_gc (priv->device);
-
-  g_clear_pointer (&render_region, cairo_region_destroy);
 }
 
 static double

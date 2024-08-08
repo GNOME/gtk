@@ -102,7 +102,7 @@ void                    gsk_gpu_frame_render                            (GskGpuF
                                                                          gint64                  timestamp,
                                                                          GskGpuImage            *target,
                                                                          GdkColorState          *target_color_state,
-                                                                         const cairo_region_t   *region,
+                                                                         cairo_region_t         *clip,
                                                                          GskRenderNode          *node,
                                                                          const graphene_rect_t  *viewport,
                                                                          GdkTexture            **texture);

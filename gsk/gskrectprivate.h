@@ -5,6 +5,8 @@
 #include <graphene.h>
 #include <math.h>
 
+#define GSK_RECT_INIT_CAIRO(cairo_rect) GRAPHENE_RECT_INIT((cairo_rect)->x, (cairo_rect)->y, (cairo_rect)->width, (cairo_rect)->height)
+
 static inline void
 gsk_rect_init (graphene_rect_t *r,
                float            x,
@@ -183,6 +185,16 @@ gsk_rect_to_cairo_grow (const graphene_rect_t *graphene,
   cairo->y = floorf (graphene->origin.y);
   cairo->width = ceilf (graphene->origin.x + graphene->size.width) - cairo->x;
   cairo->height = ceilf (graphene->origin.y + graphene->size.height) - cairo->y;
+}
+
+static inline void
+gsk_rect_to_cairo_shrink (const graphene_rect_t *graphene,
+                          cairo_rectangle_int_t *cairo)
+{
+  cairo->x = ceilf (graphene->origin.x);
+  cairo->y = ceilf (graphene->origin.y);
+  cairo->width = floorf (graphene->origin.x + graphene->size.width) - cairo->x;
+  cairo->height = floorf (graphene->origin.y + graphene->size.height) - cairo->y;
 }
 
 static inline gboolean

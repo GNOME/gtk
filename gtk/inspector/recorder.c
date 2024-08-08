@@ -1033,7 +1033,7 @@ static void
 populate_render_node_properties (GListStore    *store,
                                  GskRenderNode *node)
 {
-  graphene_rect_t bounds;
+  graphene_rect_t bounds, opaque;
 
   g_list_store_remove_all (store);
 
@@ -1042,11 +1042,25 @@ populate_render_node_properties (GListStore    *store,
   add_text_row (store, "Type", "%s", node_type_name (gsk_render_node_get_node_type (node)));
 
   add_text_row (store, "Bounds",
-                       "%.2f x %.2f + %.2f + %.2f",
-                       bounds.size.width,
-                       bounds.size.height,
+                       "(%.2f, %.2f) to (%.2f, %.2f) - %.2f x %.2f",
                        bounds.origin.x,
-                       bounds.origin.y);
+                       bounds.origin.y,
+                       bounds.origin.x + bounds.size.width,
+                       bounds.origin.y + bounds.size.height,
+                       bounds.size.width,
+                       bounds.size.height);
+
+  if (gsk_render_node_get_opaque_rect (node, &opaque))
+    add_text_row (store, "Opaque",
+                         "(%.2f, %.2f) to (%.2f, %.2f) - %.2f x %.2f",
+                         opaque.origin.x,
+                         opaque.origin.y,
+                         opaque.origin.x + opaque.size.width,
+                         opaque.origin.y + opaque.size.height,
+                         opaque.size.width,
+                         opaque.size.height);
+  else
+    add_text_row (store, "Opaque", "no");
 
   switch (gsk_render_node_get_node_type (node))
     {
