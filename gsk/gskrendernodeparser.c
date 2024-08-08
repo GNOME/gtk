@@ -41,6 +41,7 @@
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/css/gtkcssserializerprivate.h"
+#include "gdk/loaders/gdkavifprivate.h"
 
 #ifdef CAIRO_HAS_SCRIPT_SURFACE
 #include <cairo-script.h>
@@ -216,11 +217,19 @@ parse_texture (GtkCssParser *parser,
   if (scheme && g_ascii_strcasecmp (scheme, "data") == 0)
     {
       GBytes *bytes;
+      char *mimetype;
 
-      bytes = gtk_css_data_url_parse (url, NULL, &error);
+      bytes = gtk_css_data_url_parse (url, &mimetype, &error);
       if (bytes)
         {
-          texture = gdk_texture_new_from_bytes (bytes, &error);
+#ifdef HAVE_AVIF
+          if (strcmp (mimetype, "image/avif") == 0)
+            texture = gdk_load_avif (bytes, &error);
+          else
+#endif
+            texture = gdk_texture_new_from_bytes (bytes, &error);
+
+          g_free (mimetype);
           g_bytes_unref (bytes);
         }
       else
@@ -3922,12 +3931,27 @@ base64_encode_with_linebreaks (const guchar *data,
   return out;
 }
 
+#ifdef HAVE_AVIF
+static gboolean
+texture_should_use_avif (GdkTexture *texture)
+{
+  GdkColorState *color_state;
+  const GdkCicp *cicp;
+
+  color_state = gdk_texture_get_color_state (texture);
+  cicp = gdk_color_state_get_cicp (color_state);
+
+  return cicp->matrix_coefficients != 0;
+}
+#endif
+
 static void
 append_texture_param (Printer    *p,
                       const char *param_name,
                       GdkTexture *texture)
 {
   GBytes *bytes;
+  const char *mimetype;
   char *b64;
   const char *texture_name;
 
@@ -3956,26 +3980,38 @@ append_texture_param (Printer    *p,
       g_hash_table_insert (p->named_textures, texture, new_name);
     }
 
-  switch (gdk_texture_get_depth (texture))
+#ifdef HAVE_AVIF
+  if (texture_should_use_avif (texture))
     {
-    case GDK_MEMORY_U8:
-    case GDK_MEMORY_U8_SRGB:
-    case GDK_MEMORY_U16:
-      bytes = gdk_texture_save_to_png_bytes (texture);
-      g_string_append (p->str, "url(\"data:image/png;base64,\\\n");
-      break;
-
-    case GDK_MEMORY_FLOAT16:
-    case GDK_MEMORY_FLOAT32:
-      bytes = gdk_texture_save_to_tiff_bytes (texture);
-      g_string_append (p->str, "url(\"data:image/tiff;base64,\\\n");
-      break;
-
-    case GDK_MEMORY_NONE:
-    case GDK_N_DEPTHS:
-    default:
-      g_assert_not_reached ();
+      bytes = gdk_save_avif (texture);
+      mimetype = "image/avif";
     }
+  else
+#endif
+    {
+      switch (gdk_texture_get_depth (texture))
+        {
+        case GDK_MEMORY_U8:
+        case GDK_MEMORY_U8_SRGB:
+        case GDK_MEMORY_U16:
+          bytes = gdk_texture_save_to_png_bytes (texture);
+          mimetype = "image/png";
+          break;
+
+        case GDK_MEMORY_FLOAT16:
+        case GDK_MEMORY_FLOAT32:
+          bytes = gdk_texture_save_to_tiff_bytes (texture);
+          mimetype = "image/tiff";
+          break;
+
+        case GDK_MEMORY_NONE:
+        case GDK_N_DEPTHS:
+        default:
+          g_assert_not_reached ();
+        }
+    }
+
+  g_string_append_printf (p->str, "url(\"data:%s;base64,\\\n", mimetype);
 
   b64 = base64_encode_with_linebreaks (g_bytes_get_data (bytes, NULL),
                                        g_bytes_get_size (bytes));
