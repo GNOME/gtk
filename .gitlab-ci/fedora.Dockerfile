@@ -99,7 +99,10 @@ RUN dnf -y install \
     which \
     wireplumber \
     xorg-x11-server-Xvfb \
- && dnf update && :dnf clean all
+ && dnf -y update \
+ && dnf clean all
+
+RUN rm /usr/share/vulkan/icd.d/powervr_mesa_icd.x86_64.json
 
 # Enable sudo for wheel users
 RUN sed -i -e 's/# %wheel/%wheel/' -e '0,/%wheel/{s/%wheel/# %wheel/}' /etc/sudoers
