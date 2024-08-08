@@ -28,15 +28,29 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtk-image-tool.h"
-
+#include "gdk/loaders/gdkavifprivate.h"
 
 GdkTexture *
 load_image_file (const char *filename)
 {
   GError *error = NULL;
-  GdkTexture *texture;
+  GdkTexture *texture = NULL;
+  char *data;
+  gsize size;
+  GBytes *bytes;
 
-  texture = gdk_texture_new_from_filename (filename, &error);
+  if (g_file_get_contents (filename, &data, &size, &error))
+    {
+      bytes = g_bytes_new_take (data, size);
+
+#ifdef HAVE_AVIF
+      if (gdk_is_avif (bytes))
+        texture = gdk_load_avif (bytes, &error);
+      else
+#endif
+        texture = gdk_texture_new_from_bytes (bytes, &error);
+    }
+
   if (!texture)
     {
       g_printerr ("%s\n", error->message);
@@ -44,7 +58,37 @@ load_image_file (const char *filename)
       exit (1);
     }
 
+  g_bytes_unref (bytes);
+
   return texture;
+}
+
+gboolean
+save_texture (GdkTexture *texture,
+              const char *filename)
+{
+  if (g_str_has_suffix (filename, ".png"))
+    return gdk_texture_save_to_png (texture, filename);
+  else if (g_str_has_suffix (filename, ".tiff"))
+    return gdk_texture_save_to_tiff (texture, filename);
+#ifdef HAVE_AVIF
+  else if (g_str_has_suffix (filename, ".avif"))
+    {
+      GBytes *bytes;
+      gboolean result;
+
+      bytes = gdk_save_avif (texture);
+      result = g_file_set_contents (filename,
+                                    g_bytes_get_data (bytes, NULL),
+                                    g_bytes_get_size (bytes),
+                                    NULL);
+      g_bytes_unref (bytes);
+
+      return result;
+    }
+#endif
+
+  return FALSE;
 }
 
 gboolean

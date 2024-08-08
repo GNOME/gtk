@@ -22,6 +22,12 @@ if win32_enabled
   extra_update_icon_cache_objs = import('windows').compile_resources(uac_rc)
 endif
 
+extra_image_tool_sources = []
+
+if avif_dep.found()
+  extra_image_tool_sources = ['../gdk/loaders/gdkavif.c']
+endif
+
 gtk_tools = [
   ['gtk4-path-tool', ['gtk-path-tool.c',
                       'gtk-path-tool-decompose.c',
@@ -56,7 +62,8 @@ gtk_tools = [
                        'gtk-image-tool-relabel.c',
                        'gtk-image-tool-show.c',
                        'gtk-image-tool-utils.c',
-                        '../testsuite/reftests/reftest-compare.c'], [libgtk_dep] ],
+                        '../testsuite/reftests/reftest-compare.c'] + extra_image_tool_sources,
+                        [libgtk_dep] ],
   ['gtk4-update-icon-cache', ['updateiconcache.c', '../gtk/gtkiconcachevalidator.c' ] + extra_update_icon_cache_objs, [ libgtk_dep ] ],
   ['gtk4-encode-symbolic-svg', ['encodesymbolic.c'], [ libgtk_static_dep ] ],
 ]

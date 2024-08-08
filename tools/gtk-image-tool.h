@@ -8,7 +8,8 @@ void do_relabel     (int *argc, const char ***argv);
 void do_show        (int *argc, const char ***argv);
 
 GdkTexture * load_image_file (const char *filename);
-
+gboolean     save_texture    (GdkTexture *texture,
+                              const char *filename);
 
 gboolean        find_format_by_name      (const char      *name,
                                           GdkMemoryFormat *format);

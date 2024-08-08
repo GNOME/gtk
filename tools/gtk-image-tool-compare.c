@@ -79,10 +79,10 @@ do_compare (int          *argc,
 
   for (int i = 0; i < 2; i++)
     {
-      texture[i] = gdk_texture_new_from_filename (filenames[i], &error);
+      texture[i] = load_image_file (filenames[i]);
       if (texture[i] == NULL)
         {
-          g_printerr (_("Failed to load %s: %s\n"), filenames[i], error->message);
+          g_printerr (_("Failed to load %s\n"), filenames[i]);
           exit (1);
         }
     }
