@@ -1,4 +1,4 @@
-FROM fedora:39
+FROM fedora:40
 
 RUN dnf -y install \
     adwaita-icon-theme \
@@ -99,7 +99,7 @@ RUN dnf -y install \
     which \
     wireplumber \
     xorg-x11-server-Xvfb \
- && dnf clean all
+ && dnf update && :dnf clean all
 
 # Enable sudo for wheel users
 RUN sed -i -e 's/# %wheel/%wheel/' -e '0,/%wheel/{s/%wheel/# %wheel/}' /etc/sudoers
