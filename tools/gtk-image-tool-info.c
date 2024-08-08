@@ -48,12 +48,23 @@ static void
 file_info (const char *filename)
 {
   GdkTexture *texture;
+  char *name;
+  char *cicp;
 
   texture = load_image_file (filename);
 
   g_print ("%s %dx%d\n", _("Size:"), gdk_texture_get_width (texture), gdk_texture_get_height (texture));
   g_print ("%s %s\n", _("Format:"), get_format_name (gdk_texture_get_format (texture)));
-  g_print ("%s %s\n", _("Color state:"), get_color_state_name (gdk_texture_get_color_state (texture)));
+
+  name = get_color_state_name (gdk_texture_get_color_state (texture));
+  cicp = get_color_state_cicp (gdk_texture_get_color_state (texture));
+
+  if (name && cicp)
+    g_print ("%s %s (cicp %s)\n", _("Color state:"), name, cicp);
+  else if (cicp)
+    g_print ("%s cicp %s\n", _("Color state:"), cicp);
+  else
+    g_print ("%s %s\n", _("Color state:"), _("unknown"));
 
   g_object_unref (texture);
 }

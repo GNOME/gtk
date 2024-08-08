@@ -151,6 +151,17 @@ find_color_state_by_name (const char *name)
 
       color_state = gdk_cicp_params_build_color_state (params, &error);
     }
+  else if (g_strcmp0 (name, "jpeg") == 0)
+    {
+      params = gdk_cicp_params_new ();
+
+      gdk_cicp_params_set_color_primaries (params, 1);
+      gdk_cicp_params_set_transfer_function (params, 13);
+      gdk_cicp_params_set_matrix_coefficients (params, 6);
+      gdk_cicp_params_set_range (params, GDK_CICP_RANGE_FULL);
+
+      color_state = gdk_cicp_params_build_color_state (params, &error);
+    }
   else if (g_strcmp0 (name, "bt709") == 0)
     {
       params = gdk_cicp_params_new ();
@@ -181,11 +192,32 @@ get_color_state_names (void)
   static const char *names[] = {
     "srgb", "srgb-linear", "display-p3", "rec2020",
     "rec2100-pq", "rec2100-linear", "rec2100-hlg",
-    "yuv", "bt601", "bt709",
+    "yuv", "jpeg", "bt601", "bt709",
     NULL,
   };
 
   return g_strdupv ((char **) names);
+}
+
+char *
+get_color_state_cicp (GdkColorState *color_state)
+{
+  GdkCicpParams *params;
+  char *str = NULL;
+
+  params = gdk_color_state_create_cicp_params (color_state);
+
+  if (params)
+    {
+      str = g_strdup_printf ("%u/%u/%u/%u",
+                              gdk_cicp_params_get_color_primaries (params),
+                              gdk_cicp_params_get_transfer_function (params),
+                              gdk_cicp_params_get_matrix_coefficients (params),
+                              gdk_cicp_params_get_range (params));
+      g_object_unref (params);
+    }
+
+  return str;
 }
 
 char *
