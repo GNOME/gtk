@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "gskcairoblurprivate.h"
+#include "gdkcairoprivate.h"
 
 #include "gdkcairoprivate.h"
 
@@ -377,7 +378,7 @@ cairo_t *
 gsk_cairo_blur_finish_drawing (cairo_t         *cr,
                                GdkColorState   *ccs,
                                float            radius,
-                               const GdkRGBA   *color,
+                               const GdkColor  *color,
                                GskBlurFlags     blur_flags)
 {
   cairo_t *original_cr;
@@ -397,7 +398,7 @@ gsk_cairo_blur_finish_drawing (cairo_t         *cr,
 
   gsk_cairo_blur_surface (surface, x_scale * radius, blur_flags);
 
-  gdk_cairo_set_source_rgba_ccs (original_cr, ccs, color);
+  gdk_cairo_set_source_color (original_cr, ccs, color);
   if (blur_flags & GSK_BLUR_REPEAT)
     mask_surface_repeat (original_cr, surface);
   else

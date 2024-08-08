@@ -1369,13 +1369,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_INSET_SHADOW_NODE:
       {
-        const GdkRGBA *color = gsk_inset_shadow_node_get_color (node);
+        const GdkColor *color = gsk_inset_shadow_node_get_color2 (node);
         float dx = gsk_inset_shadow_node_get_dx (node);
         float dy = gsk_inset_shadow_node_get_dy (node);
         float spread = gsk_inset_shadow_node_get_spread (node);
         float radius = gsk_inset_shadow_node_get_blur_radius (node);
 
-        add_color_row (store, "Color", color);
+        add_color2_row (store, "Color", color);
 
         add_text_row (store, "Offset", "%.2f %.2f", dx, dy);
 
@@ -1387,7 +1387,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     case GSK_OUTSET_SHADOW_NODE:
       {
         const GskRoundedRect *outline = gsk_outset_shadow_node_get_outline (node);
-        const GdkRGBA *color = gsk_outset_shadow_node_get_color (node);
+        const GdkColor *color = gsk_outset_shadow_node_get_color2 (node);
         float dx = gsk_outset_shadow_node_get_dx (node);
         float dy = gsk_outset_shadow_node_get_dy (node);
         float spread = gsk_outset_shadow_node_get_spread (node);
@@ -1399,7 +1399,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                              "%.2f x %.2f + %.2f + %.2f",
                              rect[2], rect[3], rect[0], rect[1]);
 
-        add_color_row (store, "Color", color);
+        add_color2_row (store, "Color", color);
 
         add_text_row (store, "Offset", "%.2f %.2f", dx, dy);
 
