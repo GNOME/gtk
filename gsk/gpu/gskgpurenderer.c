@@ -432,13 +432,13 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 
   gsk_gpu_device_maybe_gc (priv->device);
 
+  gsk_gpu_renderer_make_current (self);
+
   depth = gsk_render_node_get_preferred_depth (root);
   frame = gsk_gpu_renderer_get_frame (self);
   scale = gsk_gpu_renderer_get_scale (self);
 
   gsk_gpu_frame_begin (frame, priv->context, depth, region);
-
-  gsk_gpu_renderer_make_current (self);
 
   backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
 

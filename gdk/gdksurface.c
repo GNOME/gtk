@@ -1134,10 +1134,11 @@ gdk_surface_set_egl_native_window (GdkSurface *self,
     {
       GdkDisplay *display = gdk_surface_get_display (self);
 
-      gdk_gl_context_clear_current_if_surface (self);
       eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
       priv->egl_surface = NULL;
     }
+
+  gdk_gl_context_clear_current_if_surface (self);
 
   priv->egl_native_window = native_window;
 }
