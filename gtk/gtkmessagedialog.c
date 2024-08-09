@@ -373,7 +373,12 @@ update_accessible_name (GtkMessageDialog *dialog)
   if (!GTK_IS_ACCESSIBLE (atk_obj))
     return;
 
-  const char *name = NULL;
+  const char *name = gtk_window_get_title (GTK_WINDOW (dialog));
+  if (name && name[0])
+  {
+    atk_object_set_name (atk_obj, name);
+    return;
+  }
 
   switch (dialog->priv->message_type)
   {
@@ -438,6 +443,8 @@ update_title (GObject    *dialog,
   title = gtk_window_get_title (GTK_WINDOW (dialog));
   gtk_label_set_label (GTK_LABEL (label), title);
   gtk_widget_set_visible (label, title && title[0]);
+
+  update_accessible_name (GTK_MESSAGE_DIALOG (dialog));
 }
 
 static void
