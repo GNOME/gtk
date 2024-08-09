@@ -122,6 +122,7 @@ struct _GdkGLContextPrivate
   GdkGLMemoryFlags memory_flags[GDK_MEMORY_N_FORMATS];
 
   GdkGLFeatures features;
+  guint surface_attached : 1;
   guint use_khr_debug : 1;
   guint has_debug_output : 1;
   guint extensions_checked : 1;
@@ -829,20 +830,28 @@ gdk_gl_context_init (GdkGLContext *self)
 /* Must have called gdk_display_prepare_gl() before */
 GdkGLContext *
 gdk_gl_context_new (GdkDisplay *display,
-                    GdkSurface *surface)
+                    GdkSurface *surface,
+                    gboolean    surface_attached)
 {
-  GdkGLContext *shared;
+  GdkGLContextPrivate *priv;
+  GdkGLContext *shared, *result;
 
   g_assert (surface == NULL || display == gdk_surface_get_display (surface));
+  g_assert (!surface_attached || surface != NULL);
 
   /* assert gdk_display_prepare_gl() had been called */
   shared = gdk_display_get_gl_context (display);
   g_assert (shared);
 
-  return g_object_new (G_OBJECT_TYPE (shared),
-                       "display", display,
-                       "surface", surface,
-                       NULL);
+  result = g_object_new (G_OBJECT_TYPE (shared),
+                         "display", display,
+                         "surface", surface,
+                         NULL);
+
+  priv = gdk_gl_context_get_instance_private (result);
+  priv->surface_attached = surface_attached;
+
+  return result;
 }
 
 void
@@ -1825,12 +1834,22 @@ gdk_gl_context_check_is_current (GdkGLContext *context)
 void
 gdk_gl_context_make_current (GdkGLContext *context)
 {
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   MaskedContext *current, *masked_context;
   gboolean surfaceless;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  surfaceless = !gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context));
+  if (priv->surface_attached)
+    {
+      surfaceless = FALSE;
+    }
+  else
+    {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      surfaceless = !gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context));
+G_GNUC_END_IGNORE_DEPRECATIONS
+    }
   masked_context = mask_context (context, surfaceless);
 
   current = g_private_get (&thread_current_context);

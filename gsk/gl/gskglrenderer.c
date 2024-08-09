@@ -192,12 +192,12 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   g_assert (self->context == NULL);
   g_assert (self->command_queue == NULL);
 
-  if (surface == NULL)
-    context = gdk_display_create_gl_context (display, error);
-  else
-    context = gdk_surface_create_gl_context (surface, error);
+  if (!gdk_display_prepare_gl (display, error))
+    goto failure;
 
-  if (!context || !gdk_gl_context_realize (context, error))
+  context = gdk_gl_context_new (display, surface, surface != NULL);
+
+  if (!gdk_gl_context_realize (context, error))
     goto failure;
 
   api = gdk_gl_context_get_api (context);
