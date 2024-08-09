@@ -2696,6 +2696,9 @@ gdk_surface_update_opaque_region (GdkSurface *self)
  * is opaque, as we know where the opaque regions are. If your surface
  * background is not opaque, please update this property in your
  * [GtkWidgetClass.css_changed](../gtk4/vfunc.Widget.css_changed.html) handler.
+ *
+ * Deprecated: 4.16: GDK can figure out the opaque parts of a window itself
+ *   by inspecting the contents that are drawn.
  */
 void
 gdk_surface_set_opaque_region (GdkSurface      *surface,
