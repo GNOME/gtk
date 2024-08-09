@@ -96,8 +96,6 @@ struct _GdkSurface
   GSList *draw_contexts;
   GdkDrawContext *paint_context;
 
-  cairo_region_t *opaque_region;
-
   GdkSeat *current_shortcuts_inhibited_seat;
 
   GPtrArray *subsurfaces;

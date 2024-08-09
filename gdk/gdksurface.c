@@ -75,6 +75,8 @@ struct _GdkSurfacePrivate
   GdkMemoryDepth egl_surface_depth;
 #endif
 
+  cairo_region_t *opaque_region;
+
   gpointer widget;
 
   GdkColorState *color_state;
@@ -511,6 +513,12 @@ gdk_surface_real_create_subsurface (GdkSurface *surface)
 }
 
 static void
+gdk_surface_default_set_opaque_region (GdkSurface     *surface,
+                                       cairo_region_t *region)
+{
+}
+
+static void
 gdk_surface_constructed (GObject *object)
 {
   G_GNUC_UNUSED GdkSurface *surface = GDK_SURFACE (object);
@@ -533,6 +541,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   klass->beep = gdk_surface_real_beep;
   klass->get_scale = gdk_surface_real_get_scale;
   klass->create_subsurface = gdk_surface_real_create_subsurface;
+  klass->set_opaque_region = gdk_surface_default_set_opaque_region;
 
   /**
    * GdkSurface:cursor: (attributes org.gtk.Property.get=gdk_surface_get_cursor org.gtk.Property.set=gdk_surface_set_cursor)
@@ -771,7 +780,7 @@ gdk_surface_finalize (GObject *object)
 
   g_clear_object (&surface->display);
 
-  g_clear_pointer (&surface->opaque_region, cairo_region_destroy);
+  g_clear_pointer (&priv->opaque_region, cairo_region_destroy);
 
   if (surface->parent)
     surface->parent->children = g_list_remove (surface->parent->children, surface);
@@ -2660,22 +2669,20 @@ void
 gdk_surface_set_opaque_region (GdkSurface      *surface,
                                cairo_region_t *region)
 {
-  GdkSurfaceClass *class;
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (!GDK_SURFACE_DESTROYED (surface));
 
-  if (cairo_region_equal (surface->opaque_region, region))
+  if (cairo_region_equal (priv->opaque_region, region))
     return;
 
-  g_clear_pointer (&surface->opaque_region, cairo_region_destroy);
+  g_clear_pointer (&priv->opaque_region, cairo_region_destroy);
 
   if (region != NULL)
-    surface->opaque_region = cairo_region_reference (region);
+    priv->opaque_region = cairo_region_reference (region);
 
-  class = GDK_SURFACE_GET_CLASS (surface);
-  if (class->set_opaque_region)
-    class->set_opaque_region (surface, region);
+  GDK_SURFACE_GET_CLASS (surface)->set_opaque_region (surface, region);
 }
 
 void
