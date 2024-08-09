@@ -2887,7 +2887,8 @@ gtk_snapshot_append_inset_shadow (GtkSnapshot          *snapshot,
   gtk_snapshot_append_inset_shadow2 (snapshot,
                                      outline,
                                      &color2,
-                                     dx, dy, spread, blur_radius);
+                                     &GRAPHENE_POINT_INIT (dx, dy),
+                                     spread, blur_radius);
   gdk_color_finish (&color2);
 }
 
@@ -2896,21 +2897,19 @@ gtk_snapshot_append_inset_shadow (GtkSnapshot          *snapshot,
  * @snapshot: a `GtkSnapshot`
  * @outline: outline of the region surrounded by shadow
  * @color: color of the shadow
- * @dx: horizontal offset of shadow
- * @dy: vertical offset of shadow
+ * @offset: offset of shadow
  * @spread: how far the shadow spreads towards the inside
  * @blur_radius: how much blur to apply to the shadow
  *
  * Appends an inset shadow into the box given by @outline.
  */
 void
-gtk_snapshot_append_inset_shadow2 (GtkSnapshot          *snapshot,
-                                   const GskRoundedRect *outline,
-                                   const GdkColor       *color,
-                                   float                 dx,
-                                   float                 dy,
-                                   float                 spread,
-                                   float                 blur_radius)
+gtk_snapshot_append_inset_shadow2 (GtkSnapshot            *snapshot,
+                                   const GskRoundedRect   *outline,
+                                   const GdkColor         *color,
+                                   const graphene_point_t *offset,
+                                   float                   spread,
+                                   float                   blur_radius)
 {
   GskRenderNode *node;
   GskRoundedRect real_outline;
@@ -2919,14 +2918,15 @@ gtk_snapshot_append_inset_shadow2 (GtkSnapshot          *snapshot,
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (outline != NULL);
   g_return_if_fail (color != NULL);
+  g_return_if_fail (offset != NULL);
 
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &x, &y);
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
 
   node = gsk_inset_shadow_node_new2 (&real_outline,
                                      color,
-                                     scale_x * dx,
-                                     scale_y * dy,
+                                     &GRAPHENE_POINT_INIT (scale_x * offset->x,
+                                                           scale_y * offset->y),
                                      spread,
                                      blur_radius);
 
@@ -2960,7 +2960,8 @@ gtk_snapshot_append_outset_shadow (GtkSnapshot          *snapshot,
   gtk_snapshot_append_outset_shadow2 (snapshot,
                                       outline,
                                       &color2,
-                                      dx, dy, spread, blur_radius);
+                                      &GRAPHENE_POINT_INIT (dx, dy),
+                                      spread, blur_radius);
   gdk_color_finish (&color2);
 }
 
@@ -2969,21 +2970,19 @@ gtk_snapshot_append_outset_shadow (GtkSnapshot          *snapshot,
  * @snapshot: a `GtkSnapshot`
  * @outline: outline of the region surrounded by shadow
  * @color: color of the shadow
- * @dx: horizontal offset of shadow
- * @dy: vertical offset of shadow
+ * @offset: offset of shadow
  * @spread: how far the shadow spreads towards the outside
  * @blur_radius: how much blur to apply to the shadow
  *
  * Appends an outset shadow node around the box given by @outline.
  */
 void
-gtk_snapshot_append_outset_shadow2 (GtkSnapshot          *snapshot,
-                                    const GskRoundedRect *outline,
-                                    const GdkColor       *color,
-                                    float                 dx,
-                                    float                 dy,
-                                    float                 spread,
-                                    float                 blur_radius)
+gtk_snapshot_append_outset_shadow2 (GtkSnapshot            *snapshot,
+                                    const GskRoundedRect   *outline,
+                                    const GdkColor         *color,
+                                    const graphene_point_t *offset,
+                                    float                   spread,
+                                    float                   blur_radius)
 {
   GskRenderNode *node;
   GskRoundedRect real_outline;
@@ -2992,14 +2991,15 @@ gtk_snapshot_append_outset_shadow2 (GtkSnapshot          *snapshot,
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (outline != NULL);
   g_return_if_fail (color != NULL);
+  g_return_if_fail (offset != NULL);
 
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &x, &y);
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
 
   node = gsk_outset_shadow_node_new2 (&real_outline,
                                       color,
-                                      scale_x * dx,
-                                      scale_y * dy,
+                                      &GRAPHENE_POINT_INIT (scale_x * offset->x,
+                                                            scale_y * offset->y),
                                       spread,
                                       blur_radius);
 

@@ -121,13 +121,12 @@ replay_inset_shadow_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   const GskRoundedRect *outline = gsk_inset_shadow_node_get_outline (node);
   const GdkColor *color = gsk_inset_shadow_node_get_color2 (node);
-  float dx = gsk_inset_shadow_node_get_dx (node);
-  float dy = gsk_inset_shadow_node_get_dy (node);
+  const graphene_point_t *offset = gsk_inset_shadow_node_get_offset (node);
   float spread = gsk_inset_shadow_node_get_spread (node);
   float blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
 
   gtk_snapshot_append_inset_shadow2 (snapshot, outline, color,
-                                     dx, dy, spread, blur_radius);
+                                     offset, spread, blur_radius);
 }
 
 static void
@@ -135,13 +134,12 @@ replay_outset_shadow_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   const GskRoundedRect *outline = gsk_outset_shadow_node_get_outline (node);
   const GdkColor *color = gsk_outset_shadow_node_get_color2 (node);
-  float dx = gsk_outset_shadow_node_get_dx (node);
-  float dy = gsk_outset_shadow_node_get_dy (node);
+  const graphene_point_t *offset = gsk_outset_shadow_node_get_offset (node);
   float spread = gsk_outset_shadow_node_get_spread (node);
   float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
 
   gtk_snapshot_append_outset_shadow2 (snapshot, outline, color,
-                                      dx, dy, spread, blur_radius);
+                                      offset, spread, blur_radius);
 }
 
 static void
