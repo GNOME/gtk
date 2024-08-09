@@ -553,29 +553,6 @@ gdk_macos_surface_init (GdkMacosSurface *self)
   self->monitors = g_ptr_array_new_with_free_func (g_object_unref);
 }
 
-gboolean
-_gdk_macos_surface_is_opaque (GdkMacosSurface *self)
-{
-  GdkSurface *surface = (GdkSurface *)self;
-
-  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), FALSE);
-
-  if (surface->opaque_region != NULL &&
-      cairo_region_num_rectangles (surface->opaque_region) == 1)
-    {
-      cairo_rectangle_int_t extents;
-
-      cairo_region_get_extents (surface->opaque_region, &extents);
-
-      return (extents.x == 0 &&
-              extents.y == 0 &&
-              extents.width == GDK_SURFACE (self)->width &&
-              extents.height == GDK_SURFACE (self)->height);
-    }
-
-  return FALSE;
-}
-
 const char *
 _gdk_macos_surface_get_title (GdkMacosSurface *self)
 {

@@ -40,7 +40,7 @@
 #include <glib/gi18n-lib.h>
 #include "gdkmarshalers.h"
 #include "gdkpopupprivate.h"
-#include "gdkrectangle.h"
+#include "gdkrectangleprivate.h"
 #include "gdktoplevelprivate.h"
 #include "gdkvulkancontext.h"
 #include "gdksubsurfaceprivate.h"
@@ -2736,6 +2736,33 @@ gdk_surface_set_opaque_rect (GdkSurface            *self,
   priv->opaque_rect = opaque;
 
   gdk_surface_update_opaque_region (self);
+}
+
+/*
+ * gdk_surface_is_opaque:
+ * @self: a surface
+ *
+ * Checks if the whole surface is known to be opaque.
+ * This allows using an RGBx buffer instead of RGBA.
+ *
+ * This function works for the currently rendered frame inside
+ * begin_frame() implementations.
+ *
+ * Returns: %TRUE if the whole surface is provably opaque
+ **/
+gboolean
+gdk_surface_is_opaque (GdkSurface *self)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+  cairo_rectangle_int_t whole = { 0, 0, self->width, self->height };
+
+  if (gdk_rectangle_contains (&priv->opaque_rect, &whole))
+    return TRUE;
+
+  if (cairo_region_contains_rectangle (priv->opaque_region, &whole) == CAIRO_REGION_OVERLAP_IN)
+    return TRUE;
+
+  return FALSE;
 }
 
 void
