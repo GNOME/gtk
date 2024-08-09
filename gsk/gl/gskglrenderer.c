@@ -295,65 +295,6 @@ get_render_region (GdkSurface   *surface,
   return cairo_region_create_rectangle (&extents);
 }
 
-static gboolean
-update_area_requires_clear (GdkSurface           *surface,
-                            const cairo_region_t *update_area)
-{
-  cairo_rectangle_int_t rect;
-  guint n_rects;
-
-  g_assert (GDK_IS_SURFACE (surface));
-
-  /* No opaque region, assume we have to clear */
-  if (surface->opaque_region == NULL)
-    return TRUE;
-
-  /* If the update_area is the whole surface, then clear it
-   * because many drivers optimize for this by avoiding extra
-   * work to reload any contents.
-   */
-  if (update_area == NULL)
-    return TRUE;
-
-  if (cairo_region_num_rectangles (update_area) == 1)
-    {
-      cairo_region_get_rectangle (update_area, 0, &rect);
-
-      if (rect.x == 0 &&
-          rect.y == 0 &&
-          rect.width == surface->width &&
-          rect.height == surface->height)
-        return TRUE;
-    }
-
-  /* If the entire surface is opaque, then we can skip clearing
-   * (with the exception of full surface clearing above).
-   */
-  if (cairo_region_num_rectangles (surface->opaque_region) == 1)
-    {
-      cairo_region_get_rectangle (surface->opaque_region, 0, &rect);
-
-      if (rect.x == 0 &&
-          rect.y == 0 &&
-          rect.width == surface->width &&
-          rect.height == surface->height)
-        return FALSE;
-    }
-
-  /* If any update_area rectangle overlaps our transparent
-   * regions, then we need to clear the area.
-   */
-  n_rects = cairo_region_num_rectangles (update_area);
-  for (guint i = 0; i < n_rects; i++)
-    {
-      cairo_region_get_rectangle (update_area, i, &rect);
-      if (cairo_region_contains_rectangle (surface->opaque_region, &rect) != CAIRO_REGION_OVERLAP_IN)
-        return TRUE;
-    }
-
-  return FALSE;
-}
-
 static void
 gsk_gl_renderer_render (GskRenderer          *renderer,
                         GskRenderNode        *root,
@@ -364,7 +305,6 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   graphene_rect_t viewport;
   GskGLRenderJob *job;
   GdkSurface *surface;
-  gboolean clear_framebuffer;
   graphene_rect_t opaque;
   float scale;
 
@@ -393,10 +333,9 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
 
   /* Must be called *AFTER* gdk_draw_context_begin_frame() */
   render_region = get_render_region (surface, self->context);
-  clear_framebuffer = update_area_requires_clear (surface, render_region);
 
   gsk_gl_driver_begin_frame (self->driver, self->command_queue);
-  job = gsk_gl_render_job_new (self->driver, &viewport, scale, render_region, 0, clear_framebuffer);
+  job = gsk_gl_render_job_new (self->driver, &viewport, scale, render_region, 0, TRUE);
   gsk_gl_render_job_render (job, root);
   gsk_gl_driver_end_frame (self->driver);
   gsk_gl_render_job_free (job);
