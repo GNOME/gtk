@@ -258,6 +258,8 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
   g_clear_object (&self->driver);
   g_clear_object (&self->command_queue);
   g_clear_object (&self->context);
+
+  gdk_gl_context_clear_current ();
 }
 
 static cairo_region_t *
