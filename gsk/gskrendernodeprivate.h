@@ -128,7 +128,6 @@ _gsk_render_node_ref (GskRenderNode *node)
 
 GskRenderNode *         gsk_color_node_new2                     (const GdkColor         *color,
                                                                  const graphene_rect_t  *bounds);
-
 const GdkColor *        gsk_color_node_get_color2               (const GskRenderNode    *node);
 
 GskRenderNode *         gsk_border_node_new2                    (const GskRoundedRect   *outline,
@@ -184,5 +183,13 @@ _gsk_render_node_get_node_type (const GskRenderNode *node)
   return GSK_RENDER_NODE_GET_CLASS (node)->node_type;
 }
 
-G_END_DECLS
+typedef enum
+{
+  GSK_HUE_INTERPOLATION_SHORTER,
+  GSK_HUE_INTERPOLATION_LONGER,
+  GSK_HUE_INTERPOLATION_INCREASING,
+  GSK_HUE_INTERPOLATION_DECREASING,
+} GskHueInterpolation;
 
+
+G_END_DECLS
