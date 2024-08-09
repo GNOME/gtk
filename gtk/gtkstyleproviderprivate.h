@@ -28,6 +28,8 @@
 
 G_BEGIN_DECLS
 
+#define GTK_STYLE_PROVIDER_PRIORITY_INSPECTOR  1000
+
 #define GTK_STYLE_PROVIDER_GET_INTERFACE(o)  (G_TYPE_INSTANCE_GET_INTERFACE ((o), GTK_TYPE_STYLE_PROVIDER, GtkStyleProviderInterface))
 
 typedef struct _GtkStyleProviderInterface GtkStyleProviderInterface;
