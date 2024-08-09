@@ -432,6 +432,8 @@ gdk_draw_context_end_frame_full (GdkDrawContext        *context,
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
+  gdk_surface_set_opaque_rect (priv->surface, opaque);
+
   GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, priv->frame_region);
 
   gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (priv->frame_region));

@@ -45,6 +45,8 @@
 #include "gdkvulkancontext.h"
 #include "gdksubsurfaceprivate.h"
 
+#include "gsk/gskrectprivate.h"
+
 #include <math.h>
 
 #ifdef HAVE_EGL
@@ -76,6 +78,7 @@ struct _GdkSurfacePrivate
 #endif
 
   cairo_region_t *opaque_region;
+  cairo_rectangle_int_t opaque_rect; /* This is different from the region */
 
   gpointer widget;
 
@@ -2643,6 +2646,35 @@ gdk_surface_get_scale (GdkSurface *surface)
   return GDK_SURFACE_GET_CLASS (surface)->get_scale (surface);
 }
 
+static void
+gdk_surface_update_opaque_region (GdkSurface *self)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+  cairo_region_t *region;
+
+  if (priv->opaque_region == NULL)
+    {
+      if (priv->opaque_rect.width <= 0)
+        region = NULL;
+      else
+        region = cairo_region_create_rectangle (&priv->opaque_rect);
+    }
+  else
+    {
+      if (priv->opaque_rect.width <= 0)
+        region = cairo_region_reference (priv->opaque_region);
+      else
+        {
+          region = cairo_region_copy (priv->opaque_region);
+          cairo_region_union_rectangle (region, &priv->opaque_rect);
+        }
+    }
+
+  GDK_SURFACE_GET_CLASS (self)->set_opaque_region (self, region);
+
+  g_clear_pointer (&region, cairo_region_destroy);
+}
+
 /**
  * gdk_surface_set_opaque_region:
  * @surface: a top-level `GdkSurface`
@@ -2682,7 +2714,28 @@ gdk_surface_set_opaque_region (GdkSurface      *surface,
   if (region != NULL)
     priv->opaque_region = cairo_region_reference (region);
 
-  GDK_SURFACE_GET_CLASS (surface)->set_opaque_region (surface, region);
+  gdk_surface_update_opaque_region (surface);
+}
+
+/* Sets the opaque rect from the rendernode via end_frame() */
+void
+gdk_surface_set_opaque_rect (GdkSurface            *self,
+                             const graphene_rect_t *rect)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+  cairo_rectangle_int_t opaque;
+
+  if (rect)
+    gsk_rect_to_cairo_shrink (rect, &opaque);
+  else
+    opaque = (cairo_rectangle_int_t) { 0, 0, 0, 0 };
+
+  if (gdk_rectangle_equal (&priv->opaque_rect, &opaque))
+    return;
+
+  priv->opaque_rect = opaque;
+
+  gdk_surface_update_opaque_region (self);
 }
 
 void

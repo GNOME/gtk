@@ -251,14 +251,16 @@ gdk_gravity_flip_vertically (GdkGravity anchor)
   g_assert_not_reached ();
 }
 
-void       _gdk_surface_destroy           (GdkSurface      *surface,
-                                           gboolean        foreign_destroy);
-void       gdk_surface_invalidate_rect    (GdkSurface           *surface,
-                                           const GdkRectangle   *rect);
-void       gdk_surface_invalidate_region  (GdkSurface           *surface,
-                                           const cairo_region_t *region);
-void       _gdk_surface_clear_update_area (GdkSurface      *surface);
-void       _gdk_surface_update_size       (GdkSurface      *surface);
+void       _gdk_surface_destroy           (GdkSurface           *surface,
+                                           gboolean               foreign_destroy);
+void       gdk_surface_invalidate_rect    (GdkSurface            *surface,
+                                           const GdkRectangle    *rect);
+void       gdk_surface_invalidate_region  (GdkSurface            *surface,
+                                           const cairo_region_t  *region);
+void       _gdk_surface_clear_update_area (GdkSurface            *surface);
+void       _gdk_surface_update_size       (GdkSurface            *surface);
+void       gdk_surface_set_opaque_rect    (GdkSurface            *self,
+                                           const graphene_rect_t *rect);
 
 GdkGLContext * gdk_surface_get_paint_gl_context (GdkSurface *surface,
                                                  GError   **error);
