@@ -148,15 +148,16 @@ gsk_vulkan_frame_cleanup (GskGpuFrame *frame)
 }
 
 static void
-gsk_vulkan_frame_begin (GskGpuFrame          *frame,
-                        GdkDrawContext       *context,
-                        GdkMemoryDepth        depth,
-                        const cairo_region_t *region)
+gsk_vulkan_frame_begin (GskGpuFrame           *frame,
+                        GdkDrawContext        *context,
+                        GdkMemoryDepth         depth,
+                        const cairo_region_t  *region,
+                        const graphene_rect_t *opaque)
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
 
   gdk_vulkan_context_set_draw_semaphore (GDK_VULKAN_CONTEXT (context), self->vk_acquire_semaphore);
-  GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->begin (frame, context, depth, region);
+  GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->begin (frame, context, depth, region, opaque);
 }
 
 static GskGpuImage *

@@ -59,9 +59,9 @@ void                    gdk_draw_context_surface_resized        (GdkDrawContext 
 
 void                    gdk_draw_context_begin_frame_full       (GdkDrawContext         *context,
                                                                  GdkMemoryDepth          depth,
-                                                                 const cairo_region_t   *region);
-void                    gdk_draw_context_end_frame_full         (GdkDrawContext         *context,
+                                                                 const cairo_region_t   *region,
                                                                  const graphene_rect_t  *opaque);
+void                    gdk_draw_context_end_frame_full         (GdkDrawContext         *context);
 
 void                    gdk_draw_context_empty_frame            (GdkDrawContext         *context);
 

@@ -330,11 +330,12 @@ gdk_draw_context_begin_frame (GdkDrawContext       *context,
   g_return_if_fail (priv->surface != NULL);
   g_return_if_fail (region != NULL);
 
-  gdk_draw_context_begin_frame_full (context, GDK_MEMORY_U8, region);
+  gdk_draw_context_begin_frame_full (context, GDK_MEMORY_U8, region, NULL);
 }
 
 /*
  * @depth: best depth to render in
+ * @opaque: (nullable): opaque region of the rendering
  *
  * If the given depth is not `GDK_MEMORY_U8`, GDK will see about providing a
  * rendering target that supports a higher bit depth than 8 bits per channel.
@@ -357,9 +358,10 @@ gdk_draw_context_begin_frame (GdkDrawContext       *context,
  * to choose.
  */
 void
-gdk_draw_context_begin_frame_full (GdkDrawContext       *context,
-                                   GdkMemoryDepth        depth,
-                                   const cairo_region_t *region)
+gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
+                                   GdkMemoryDepth         depth,
+                                   const cairo_region_t  *region,
+                                   const graphene_rect_t *opaque)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
@@ -383,6 +385,8 @@ gdk_draw_context_begin_frame_full (GdkDrawContext       *context,
         }
       return;
     }
+
+  gdk_surface_set_opaque_rect (priv->surface, opaque);
 
   if (gdk_display_get_debug_flags (priv->display) & GDK_DEBUG_HIGH_DEPTH)
     depth = GDK_MEMORY_FLOAT32;
@@ -427,12 +431,9 @@ region_get_pixels (cairo_region_t *region)
 #endif
 
 void
-gdk_draw_context_end_frame_full (GdkDrawContext        *context,
-                                 const graphene_rect_t *opaque)
+gdk_draw_context_end_frame_full (GdkDrawContext *context)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
-
-  gdk_surface_set_opaque_rect (priv->surface, opaque);
 
   GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, priv->frame_region);
 
@@ -486,7 +487,7 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
       return;
     }
 
-  gdk_draw_context_end_frame_full (context, NULL);
+  gdk_draw_context_end_frame_full (context);
 }
 
 /**

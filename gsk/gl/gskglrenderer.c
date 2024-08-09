@@ -305,7 +305,8 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   graphene_rect_t viewport;
   GskGLRenderJob *job;
   GdkSurface *surface;
-  graphene_rect_t opaque;
+  graphene_rect_t opaque_tmp;
+  const graphene_rect_t *opaque;
   float scale;
 
   g_assert (GSK_IS_GL_RENDERER (renderer));
@@ -325,9 +326,14 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   viewport.size.width = gdk_surface_get_width (surface) * scale;
   viewport.size.height = gdk_surface_get_height (surface) * scale;
 
+  if (gsk_render_node_get_opaque_rect (root, &opaque_tmp))
+    opaque = &opaque_tmp;
+  else
+    opaque = NULL;
   gdk_draw_context_begin_frame_full (GDK_DRAW_CONTEXT (self->context),
                                      gsk_render_node_get_preferred_depth (root),
-                                     update_area);
+                                     update_area,
+                                     opaque);
 
   gdk_gl_context_make_current (self->context);
 
@@ -340,10 +346,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   gsk_gl_driver_end_frame (self->driver);
   gsk_gl_render_job_free (job);
 
-  if (gsk_render_node_get_opaque_rect (root, &opaque))
-    gdk_draw_context_end_frame_full (GDK_DRAW_CONTEXT (self->context), &opaque);
-  else
-    gdk_draw_context_end_frame_full (GDK_DRAW_CONTEXT (self->context), NULL);
+  gdk_draw_context_end_frame_full (GDK_DRAW_CONTEXT (self->context));
 
   gsk_gl_driver_after_frame (self->driver);
 

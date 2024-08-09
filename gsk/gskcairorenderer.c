@@ -159,12 +159,18 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
                            const cairo_region_t *region)
 {
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
-  graphene_rect_t opaque;
+  graphene_rect_t opaque_tmp;
+  const graphene_rect_t *opaque;
   cairo_t *cr;
 
+  if (gsk_render_node_get_opaque_rect (root, &opaque_tmp))
+    opaque = &opaque_tmp;
+  else
+    opaque = NULL;
   gdk_draw_context_begin_frame_full (GDK_DRAW_CONTEXT (self->cairo_context),
                                      GDK_MEMORY_U8,
-                                     region);
+                                     region,
+                                     opaque);
   cr = gdk_cairo_context_cairo_create (self->cairo_context);
 
   g_return_if_fail (cr != NULL);
@@ -190,10 +196,7 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
 
   cairo_destroy (cr);
 
-  if (gsk_render_node_get_opaque_rect (root, &opaque))
-    gdk_draw_context_end_frame_full (GDK_DRAW_CONTEXT (self->cairo_context), &opaque);
-  else
-    gdk_draw_context_end_frame_full (GDK_DRAW_CONTEXT (self->cairo_context), NULL);
+  gdk_draw_context_end_frame_full (GDK_DRAW_CONTEXT (self->cairo_context));
 }
 
 static void

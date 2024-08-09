@@ -78,20 +78,20 @@ gsk_gpu_frame_default_cleanup (GskGpuFrame *self)
 }
 
 static void
-gsk_gpu_frame_default_begin (GskGpuFrame          *self,
-                             GdkDrawContext       *context,
-                             GdkMemoryDepth        depth,
-                             const cairo_region_t *region)
+gsk_gpu_frame_default_begin (GskGpuFrame           *self,
+                             GdkDrawContext        *context,
+                             GdkMemoryDepth         depth,
+                             const cairo_region_t  *region,
+                             const graphene_rect_t *opaque)
 {
-  gdk_draw_context_begin_frame_full (context, depth, region);
+  gdk_draw_context_begin_frame_full (context, depth, region, opaque);
 }
 
 static void
-gsk_gpu_frame_default_end (GskGpuFrame           *self,
-                           GdkDrawContext        *context,
-                           const graphene_rect_t *opaque)
+gsk_gpu_frame_default_end (GskGpuFrame    *self,
+                           GdkDrawContext *context)
 {
-  gdk_draw_context_end_frame_full (context, opaque);
+  gdk_draw_context_end_frame_full (context);
 }
 
 static void
@@ -203,17 +203,17 @@ void
 gsk_gpu_frame_begin (GskGpuFrame          *self,
                      GdkDrawContext       *context,
                      GdkMemoryDepth        depth,
-                     const cairo_region_t *region)
+                     const cairo_region_t *region,
+                     const graphene_rect_t *opaque)
 {
-  GSK_GPU_FRAME_GET_CLASS (self)->begin (self, context, depth, region);
+  GSK_GPU_FRAME_GET_CLASS (self)->begin (self, context, depth, region, opaque);
 }
 
 void
-gsk_gpu_frame_end (GskGpuFrame           *self,
-                   GdkDrawContext        *context,
-                   const graphene_rect_t *opaque)
+gsk_gpu_frame_end (GskGpuFrame    *self,
+                   GdkDrawContext *context)
 {
-  GSK_GPU_FRAME_GET_CLASS (self)->end (self, context, opaque);
+  GSK_GPU_FRAME_GET_CLASS (self)->end (self, context);
 }
 
 GskGpuDevice *
