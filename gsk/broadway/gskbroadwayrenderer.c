@@ -934,7 +934,7 @@ gsk_broadway_renderer_render (GskRenderer          *renderer,
 
   self->node_lookup = g_hash_table_new (g_direct_hash, g_direct_equal);
 
-  gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->draw_context), update_area);
+  gdk_draw_context_begin_frame_full (GDK_DRAW_CONTEXT (self->draw_context), GDK_MEMORY_U8, update_area);
 
   /* These are owned by the draw context between begin and end, but
      cache them here for easier access during the render */

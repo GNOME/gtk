@@ -162,8 +162,9 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
   graphene_rect_t opaque;
   cairo_t *cr;
 
-  gdk_draw_context_begin_frame (GDK_DRAW_CONTEXT (self->cairo_context),
-                                region);
+  gdk_draw_context_begin_frame_full (GDK_DRAW_CONTEXT (self->cairo_context),
+                                     GDK_MEMORY_U8,
+                                     region);
   cr = gdk_cairo_context_cairo_create (self->cairo_context);
 
   g_return_if_fail (cr != NULL);
