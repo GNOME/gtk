@@ -367,11 +367,54 @@ setup_primary_label_font (GtkMessageDialog *dialog)
 }
 
 static void
+update_accessible_name (GtkMessageDialog *dialog)
+{
+  AtkObject *atk_obj = gtk_widget_get_accessible (GTK_WIDGET (dialog));
+  if (!GTK_IS_ACCESSIBLE (atk_obj))
+    return;
+
+  const char *name = gtk_window_get_title (GTK_WINDOW (dialog));
+  if (name && name[0])
+  {
+    atk_object_set_name (atk_obj, name);
+    return;
+  }
+
+  switch (dialog->priv->message_type)
+  {
+  case GTK_MESSAGE_INFO:
+    name = _("Information");
+    break;
+
+  case GTK_MESSAGE_QUESTION:
+    name = _("Question");
+    break;
+
+  case GTK_MESSAGE_WARNING:
+    name = _("Warning");
+    break;
+
+  case GTK_MESSAGE_ERROR:
+    name = _("Error");
+    break;
+
+  case GTK_MESSAGE_OTHER:
+    break;
+
+  default:
+    g_warning ("Unknown GtkMessageType %u", dialog->priv->message_type);
+    break;
+  }
+
+  if (name)
+      atk_object_set_name (atk_obj, name);
+}
+
+static void
 setup_type (GtkMessageDialog *dialog,
 	    GtkMessageType    type)
 {
   GtkMessageDialogPrivate *priv = dialog->priv;
-  const gchar *name = NULL;
   AtkObject *atk_obj;
 
   if (priv->message_type == type)
@@ -379,38 +422,12 @@ setup_type (GtkMessageDialog *dialog,
 
   priv->message_type = type;
 
-  switch (type)
-    {
-    case GTK_MESSAGE_INFO:
-      name = _("Information");
-      break;
-
-    case GTK_MESSAGE_QUESTION:
-      name = _("Question");
-      break;
-
-    case GTK_MESSAGE_WARNING:
-      name = _("Warning");
-      break;
-
-    case GTK_MESSAGE_ERROR:
-      name = _("Error");
-      break;
-
-    case GTK_MESSAGE_OTHER:
-      break;
-
-    default:
-      g_warning ("Unknown GtkMessageType %u", type);
-      break;
-    }
 
   atk_obj = gtk_widget_get_accessible (GTK_WIDGET (dialog));
   if (GTK_IS_ACCESSIBLE (atk_obj))
     {
       atk_object_set_role (atk_obj, ATK_ROLE_ALERT);
-      if (name)
-        atk_object_set_name (atk_obj, name);
+      update_accessible_name (dialog);
     }
 
   g_object_notify (G_OBJECT (dialog), "message-type");
@@ -426,6 +443,8 @@ update_title (GObject    *dialog,
   title = gtk_window_get_title (GTK_WINDOW (dialog));
   gtk_label_set_label (GTK_LABEL (label), title);
   gtk_widget_set_visible (label, title && title[0]);
+
+  update_accessible_name (GTK_MESSAGE_DIALOG (dialog));
 }
 
 static void
