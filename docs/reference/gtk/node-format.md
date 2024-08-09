@@ -6,7 +6,7 @@ The format is a text format that follows the [CSS syntax rules](https://drafts.c
 
 The grammar of a node text representation using [the CSS value definition syntax](https://drafts.csswg.org/css-values-3/#value-defs) looks like this:
 
-    document: <@-rule>*<node>*
+    document: <@-rule>*<node>
     @-rule: @cicp "name" { <property>* }
     node: container [ "name" ] { <document> } | <node-type> [ "name" ] { <property>* } | "name"
     property: <property-name>: <node> | <value> ;
@@ -69,6 +69,16 @@ The traditional syntax for sRGB colors still works as well:
 
     rgba(<number>, <number>, <number>, <number)
     rgb(<number, <number>, <number>)
+
+# Rectangles
+
+Rectangles can be specified just as four integers for x, y, width and height:
+
+    rect: <number> <number> <number> <number>
+
+Rounded rectangles use a CSS-like syntax:
+
+    rounded-rect: <rect> [ "/" <number>{1,4} [ "/" <number>{1,4} ] ]
 
 # Nodes
 
@@ -396,9 +406,9 @@ Possible values for the line-join property are:
 | font         | `<string>` `<url>`? | "Cantarell 15px"    | always      |
 | glyphs       | `<glyphs>`          | "Hello"             | always      |
 | offset       | `<point>`           | 0 0                 | non-default |
-| hint-style   | `<hint style>`      | slight              | non-default |
+| hint-style   | `<hint-style>`      | slight              | non-default |
 | antialias    | `<antialias>`       | gray                | non-default |
-| hint-metrics | `<hint metrics>`    | off                 | non-default |
+| hint-metrics | `<hint-metrics>`    | off                 | non-default |
 
 Creates a node like `gsk_text_node_new()` with the given properties.
 
