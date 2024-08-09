@@ -894,9 +894,9 @@ add_text_row (GListStore *store,
 }
 
 static void
-add_color2_row (GListStore     *store,
-                const char     *name,
-                const GdkColor *color)
+add_color_row (GListStore     *store,
+               const char     *name,
+               const GdkColor *color)
 {
   char *text;
   GdkTexture *texture;
@@ -1084,7 +1084,7 @@ populate_render_node_properties (GListStore    *store,
       break;
 
     case GSK_COLOR_NODE:
-      add_color2_row (store, "Color", gsk_color_node_get_color2 (node));
+      add_color_row (store, "Color", gsk_color_node_get_color2 (node));
       break;
 
     case GSK_LINEAR_GRADIENT_NODE:
@@ -1200,7 +1200,7 @@ populate_render_node_properties (GListStore    *store,
 
         add_text_row (store, "Position", "%.2f %.2f", offset->x, offset->y);
 
-        add_color2_row (store, "Color", gsk_text_node_get_color2 (node));
+        add_color_row (store, "Color", gsk_text_node_get_color2 (node));
       }
       break;
 
@@ -1346,7 +1346,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         float spread = gsk_inset_shadow_node_get_spread (node);
         float radius = gsk_inset_shadow_node_get_blur_radius (node);
 
-        add_color2_row (store, "Color", color);
+        add_color_row (store, "Color", color);
 
         add_text_row (store, "Offset", "%.2f %.2f", dx, dy);
 
@@ -1370,7 +1370,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                              "%.2f x %.2f + %.2f + %.2f",
                              rect[2], rect[3], rect[0], rect[1]);
 
-        add_color2_row (store, "Color", color);
+        add_color_row (store, "Color", color);
 
         add_text_row (store, "Offset", "%.2f %.2f", dx, dy);
 
@@ -1506,7 +1506,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
             const GskShadow2 *shadow = gsk_shadow_node_get_shadow2 (node, i);
 
             label = g_strdup_printf ("Color %d", i);
-            add_color2_row (store, label, &shadow->color);
+            add_color_row (store, label, &shadow->color);
             g_free (label);
 
             label = g_strdup_printf ("Offset %d", i);
