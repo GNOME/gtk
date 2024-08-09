@@ -107,32 +107,13 @@ _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
       cairo_clip (cr);
     }
 
-  /* If we have some exposed transparent area in the damage region,
-   * we need to clear the existing content first to leave an transparent
-   * area for cairo. We use (surface_bounds or damage)-(opaque) to get
-   * the smallest set of rectangles we need to clear as it's expensive.
-   */
   if (!opaque)
     {
-      cairo_region_t *transparent;
-      cairo_rectangle_int_t r = { 0, 0, width/scale, height/scale };
-
       cairo_save (cr);
 
-      if (damage != NULL)
-        cairo_region_get_extents (damage, &r);
-      transparent = cairo_region_create_rectangle (&r);
-      if (surface->opaque_region)
-        cairo_region_subtract (transparent, surface->opaque_region);
+      cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
+      cairo_paint (cr);
 
-      if (!cairo_region_is_empty (transparent))
-        {
-          gdk_cairo_region (cr, transparent);
-          cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
-          cairo_fill (cr);
-        }
-
-      cairo_region_destroy (transparent);
       cairo_restore (cr);
     }
 
