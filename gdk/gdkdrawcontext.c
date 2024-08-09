@@ -223,6 +223,9 @@ gdk_draw_context_init (GdkDrawContext *self)
  *
  * Returns: %TRUE if the context is between [method@Gdk.DrawContext.begin_frame]
  *   and [method@Gdk.DrawContext.end_frame] calls.
+ *
+ * Deprecated: 4.16: Drawing directly to the surface is no longer recommended.
+ *   Use `GskRenderNode` and `GskRenderer`.
  */
 gboolean
 gdk_draw_context_is_in_frame (GdkDrawContext *context)
@@ -313,6 +316,9 @@ gdk_draw_context_get_surface (GdkDrawContext *context)
  * gdk_draw_context_begin_frame() and gdk_draw_context_end_frame() via the
  * use of [GskRenderer](../gsk4/class.Renderer.html)s, so application code
  * does not need to call these functions explicitly.
+ *
+ * Deprecated: 4.16: Drawing directly to the surface is no longer recommended.
+ *   Use `GskRenderNode` and `GskRenderer`.
  */
 void
 gdk_draw_context_begin_frame (GdkDrawContext       *context,
@@ -448,6 +454,9 @@ gdk_draw_context_end_frame_full (GdkDrawContext        *context,
  * When using a [class@Gdk.GLContext], this function may call `glFlush()`
  * implicitly before returning; it is not recommended to call `glFlush()`
  * explicitly before calling this function.
+ *
+ * Deprecated: 4.16: Drawing directly to the surface is no longer recommended.
+ *   Use `GskRenderNode` and `GskRenderer`.
  */
 void
 gdk_draw_context_end_frame (GdkDrawContext *context)
@@ -492,6 +501,9 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
  * and [method@Gdk.DrawContext.end_frame], %NULL will be returned.
  *
  * Returns: (transfer none) (nullable): a Cairo region
+ *
+ * Deprecated: 4.16: Drawing directly to the surface is no longer recommended.
+ *   Use `GskRenderNode` and `GskRenderer`.
  */
 const cairo_region_t *
 _gdk_draw_context_get_frame_region (GdkDrawContext *context)
