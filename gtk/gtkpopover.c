@@ -1029,8 +1029,6 @@ gtk_popover_realize (GtkWidget *widget)
   priv->renderer = gsk_renderer_new_for_surface (priv->surface);
 
   gtk_native_realize (GTK_NATIVE (popover));
-
-  gtk_native_update_opaque_region (GTK_NATIVE (popover), priv->contents_widget, TRUE, TRUE, 0);
 }
 
 static void
@@ -1467,9 +1465,6 @@ gtk_popover_update_shape (GtkPopover *popover)
       gdk_surface_set_input_region (priv->surface, region);
       cairo_region_destroy (region);
     }
-
-  if (_gtk_widget_get_realized (GTK_WIDGET (popover)))
-    gtk_native_update_opaque_region (GTK_NATIVE (popover), priv->contents_widget, TRUE, TRUE, 0);
 }
 
 static int

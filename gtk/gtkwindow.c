@@ -470,8 +470,6 @@ static void gtk_window_activate_close (GtkWidget  *widget,
                                        const char *action_name,
                                        GVariant   *parameter);
 
-static void        gtk_window_css_changed               (GtkWidget      *widget,
-                                                         GtkCssStyleChange *change);
 static void _gtk_window_set_is_active (GtkWindow *window,
 			               gboolean   is_active);
 static void gtk_window_present_toplevel (GtkWindow *window);
@@ -782,7 +780,6 @@ gtk_window_class_init (GtkWindowClass *klass)
   widget_class->focus = gtk_window_focus;
   widget_class->move_focus = gtk_window_move_focus;
   widget_class->measure = gtk_window_measure;
-  widget_class->css_changed = gtk_window_css_changed;
 
   klass->activate_default = gtk_window_real_activate_default;
   klass->activate_focus = gtk_window_real_activate_focus;
@@ -4060,30 +4057,6 @@ out:
 }
 
 static void
-update_opaque_region (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  gboolean subtract_decoration_corners;
-  gboolean subtract_shadow;
-
-  subtract_decoration_corners = (priv->client_decorated &&
-                                 priv->decorated &&
-                                 !priv->fullscreen &&
-                                 !priv->maximized);
-  subtract_shadow = (priv->client_decorated &&
-                     priv->decorated &&
-                     priv->use_client_shadow &&
-                     !priv->maximized &&
-                     !priv->fullscreen);
-
-  gtk_native_update_opaque_region (GTK_NATIVE (window),
-                                   NULL,
-                                   subtract_decoration_corners,
-                                   subtract_shadow,
-                                   RESIZE_HANDLE_SIZE);
-}
-
-static void
 update_realized_window_properties (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
@@ -4091,8 +4064,6 @@ update_realized_window_properties (GtkWindow *window)
   GtkCssBoxes css_boxes;
   const graphene_rect_t *border_rect;
   double native_x, native_y;
-
-  update_opaque_region (window);
 
   if (!priv->client_decorated || !priv->use_client_shadow)
     return;
@@ -5198,19 +5169,6 @@ gtk_window_set_focus (GtkWindow *window,
     gtk_widget_grab_focus (focus);
   else
     gtk_window_root_set_focus (GTK_ROOT (window), NULL);
-}
-
-static void
-gtk_window_css_changed (GtkWidget         *widget,
-                        GtkCssStyleChange *change)
-{
-  GtkWindow *window = GTK_WINDOW (widget);
-
-  GTK_WIDGET_CLASS (gtk_window_parent_class)->css_changed (widget, change);
-
-  if (!_gtk_widget_get_alloc_needed (widget) &&
-      (change == NULL || gtk_css_style_change_changes_property (change, GTK_CSS_PROPERTY_BACKGROUND_COLOR)))
-    update_opaque_region (window);
 }
 
 /*

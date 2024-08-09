@@ -28,11 +28,6 @@ struct _GtkNativeInterface
 };
 
 void    gtk_native_queue_relayout         (GtkNative    *native);
-void    gtk_native_update_opaque_region   (GtkNative    *native,
-                                           GtkWidget    *contents,
-                                           gboolean      subtract_decoration_corners,
-                                           gboolean      subtract_shadow,
-                                           int           resize_handle_size);
 
 G_END_DECLS
 
