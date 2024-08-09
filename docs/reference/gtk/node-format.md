@@ -49,11 +49,15 @@ The following properties can be set for custom color states:
 | primaries | `<integer>`      | 2        | always      |
 | transfer  | `<integer>`      | 2        | always      |
 | matrix    | `<integer>`      | 2        | always      |
-| range     | `narrow | full`  | full     | non-default |
+| range     | `<range>`        | full     | non-default |
 
 Note that the primaries, transfer and matrix properties always need
 to be specified, since GTK does not allow creating color state objects
 with these being set to 2 (== unspecified).
+
+Range can have the following values:
+
+    range: narrow | full
 
 # Colors
 
@@ -81,6 +85,13 @@ The **container** node is a special node that allows specifying a list of child 
 | top      | `<node>`         | color { }              | always      |
 
 Creates a node like `gsk_blend_node_new()` with the given properties.
+
+Possible values for the mode property are:
+
+    blend-mode: normal | multiply | screen | overlay | darken |
+                lighten | color-dodge | color-burn | hard-light |
+                soft-light | difference | exclusion | color |
+                hue | saturation | luminosity
 
 ### blur
 
@@ -201,6 +212,10 @@ Creates a node like `gsk_fill_node_new()` with the given properties.
 The default child node is the default color node, but created with the
 bounds of the path.
 
+Possible values for the fill-rule property are:
+
+    fill-rule: winding | even-odd
+
 ### glshader
 
 | property   | syntax             | default                | printed     |
@@ -252,6 +267,10 @@ Creates a node like `gsk_linear_gradient_node_new()` with the given properties.
 
 Creates a node like `gsk_mask_node_new()` with the given properties.
 
+Possible values for the mode property are:
+
+    mask-mode: alpha | inverted-alpha | luminance | inverted-luminance
+
 ### opacity
 
 | property | syntax           | default                | printed     |
@@ -290,11 +309,11 @@ Creates a node like `gsk_radial_gradient_node_new()` with the given properties.
 
 ### repeat
 
-| property    | syntax           | default                | printed     |
-| ----------- | ---------------- | ---------------------- | ----------- |
-| bounds      | `<rect>`         | *bounds of child node* | non-default |
-| child       | `<node>`         | color { }              | always      |
-| child-bounds| `<rect>`         | *bounds of child node* | non-default |
+| property     | syntax     | default                | printed     |
+| ------------ | ---------- | ---------------------- | ----------- |
+| bounds       | `<rect>`   | *bounds of child node* | non-default |
+| child        | `<node>`   | color { }              | always      |
+| child-bounds | `<rect>`   | *bounds of child node* | non-default |
 
 Creates a node like `gsk_repeat_node_new()` with the given properties.
 
@@ -361,6 +380,14 @@ Creates a node like `gsk_stroke_node_new()` with the given properties.
 The default child node is the default color node, but created with the
 stroke bounds of the path.
 
+Possible values for the line-cap property are:
+
+    line-cap: butt | round | square
+
+Possible values for the line-join property are:
+
+    line-join: miter | round | bevel
+
 ### text
 
 | property     | syntax              | default             | printed     |
@@ -386,9 +413,17 @@ be specified as well, like this: 40 10 0 0 color.
 If the given font does not exist or the given glyphs are invalid for the given
 font, an error node will be returned.
 
-Possible values for hint-style are none, slight or full.
-Possible value for antialias are none or gray.
-Possible value for hint-metrics are on or off.
+Possible values for the hint-style property are:
+
+    hint-style: none | slight | full
+
+Possible value for the antialias property are:
+
+    antialias:  none | gray
+
+Possible value for hint-metrics are:
+
+    hint-metrics:  on | off
 
 ### texture
 
@@ -414,14 +449,15 @@ representation for this texture is `url("data:image/png;base64,iVBORw0KGgoAAAANS
 | -------- | ---------------- | ---------------------- | ----------- |
 | bounds   | `<rect>`         | 50                     | always      |
 | texture  | `<url>`          | *see below*            | always      |
-| filter   | `filter`         | *see below*            | non-default |
+| filter   | `filter`         | linear                 | non-default |
 
 Creates a node like `gsk_texture_scale_node_new()` with the given properties.
 
 The default texture is a 10x10 checkerboard, just like for texture.
 
-The possible filter values are `linear`, `nearest` and `trilinear`, with
-`linear` being the default.
+Possible values for the filter property are:
+
+    filter: linear | nearest | trilinear
 
 ### transform
 
