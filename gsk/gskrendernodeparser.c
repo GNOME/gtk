@@ -1578,35 +1578,6 @@ parse_color_state (GtkCssParser *parser,
   return TRUE;
 }
 
-static gboolean
-gtk_css_parser_consume_number_or_percentage (GtkCssParser *parser,
-                                             double        min,
-                                             double        max,
-                                             double       *value)
-{
-  if (gtk_css_parser_has_percentage (parser))
-    {
-      double number;
-
-      gtk_css_parser_consume_percentage (parser, &number);
-      *value = min + (number / 100.0) * (max - min);
-      return TRUE;
-    }
-  else if (gtk_css_parser_has_number (parser))
-    {
-      double number;
-
-      gtk_css_parser_consume_number (parser, &number);
-      *value = number;
-      return TRUE;
-    }
-  else
-    {
-      gtk_css_parser_error_syntax (parser, "Expected a number or percentage");
-      return FALSE;
-    }
-}
-
 typedef struct {
   Context *context;
   GdkColor *color;
