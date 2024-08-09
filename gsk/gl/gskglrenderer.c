@@ -363,6 +363,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   GskGLRenderJob *job;
   GdkSurface *surface;
   gboolean clear_framebuffer;
+  graphene_rect_t opaque;
   float scale;
 
   g_assert (GSK_IS_GL_RENDERER (renderer));
@@ -398,7 +399,10 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   gsk_gl_driver_end_frame (self->driver);
   gsk_gl_render_job_free (job);
 
-  gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->context));
+  if (gsk_render_node_get_opaque_rect (root, &opaque))
+    gdk_draw_context_end_frame_full (GDK_DRAW_CONTEXT (self->context), &opaque);
+  else
+    gdk_draw_context_end_frame_full (GDK_DRAW_CONTEXT (self->context), NULL);
 
   gsk_gl_driver_after_frame (self->driver);
 

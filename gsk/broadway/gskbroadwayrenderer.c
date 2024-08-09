@@ -946,7 +946,7 @@ gsk_broadway_renderer_render (GskRenderer          *renderer,
   self->nodes = NULL;
   self->node_textures = NULL;
 
-  gdk_draw_context_end_frame (GDK_DRAW_CONTEXT (self->draw_context));
+  gdk_draw_context_end_frame_full (GDK_DRAW_CONTEXT (self->draw_context), NULL);
 
   if (self->last_node_lookup)
     g_hash_table_unref (self->last_node_lookup);

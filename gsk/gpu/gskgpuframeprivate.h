@@ -32,7 +32,8 @@ struct _GskGpuFrameClass
                                                                          GdkMemoryDepth          depth,
                                                                          const cairo_region_t   *region);
   void                  (* end)                                         (GskGpuFrame            *self,
-                                                                         GdkDrawContext         *context);
+                                                                         GdkDrawContext         *context,
+                                                                         const graphene_rect_t  *opaque);
   GskGpuImage *         (* upload_texture)                              (GskGpuFrame            *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkTexture             *texture);
@@ -68,7 +69,8 @@ void                    gsk_gpu_frame_begin                             (GskGpuF
                                                                          GdkMemoryDepth          depth,
                                                                          const cairo_region_t   *region);
 void                    gsk_gpu_frame_end                               (GskGpuFrame            *self,
-                                                                         GdkDrawContext         *context);
+                                                                         GdkDrawContext         *context,
+                                                                         const graphene_rect_t  *opaque);
 
 GdkDrawContext *        gsk_gpu_frame_get_context                       (GskGpuFrame            *self) G_GNUC_PURE;
 GskGpuDevice *          gsk_gpu_frame_get_device                        (GskGpuFrame            *self) G_GNUC_PURE;

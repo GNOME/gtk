@@ -25,6 +25,8 @@
 #include "gdkcolorstateprivate.h"
 #include "gdkmemoryformatprivate.h"
 
+#include <graphene.h>
+
 G_BEGIN_DECLS
 
 #define GDK_DRAW_CONTEXT_CLASS(klass) 	(G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_DRAW_CONTEXT, GdkDrawContextClass))
@@ -58,6 +60,8 @@ void                    gdk_draw_context_surface_resized        (GdkDrawContext 
 void                    gdk_draw_context_begin_frame_full       (GdkDrawContext         *context,
                                                                  GdkMemoryDepth          depth,
                                                                  const cairo_region_t   *region);
+void                    gdk_draw_context_end_frame_full         (GdkDrawContext         *context,
+                                                                 const graphene_rect_t  *opaque);
 
 void                    gdk_draw_context_empty_frame            (GdkDrawContext         *context);
 
