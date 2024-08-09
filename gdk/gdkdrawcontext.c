@@ -494,13 +494,19 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
  * Returns: (transfer none) (nullable): a Cairo region
  */
 const cairo_region_t *
-gdk_draw_context_get_frame_region (GdkDrawContext *context)
+_gdk_draw_context_get_frame_region (GdkDrawContext *context)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
+  return priv->frame_region;
+}
+
+const cairo_region_t *
+(gdk_draw_context_get_frame_region) (GdkDrawContext *context)
+{
   g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), NULL);
 
-  return priv->frame_region;
+  return _gdk_draw_context_get_frame_region (context);
 }
 
 /*<private>
