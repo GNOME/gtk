@@ -1254,6 +1254,7 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
   GskRoundedRect clip;
   const GskRoundedRect *original_clip;
   GskRenderNode *child;
+  graphene_rect_t scissor;
 
   child = gsk_rounded_clip_node_get_child (node);
   original_clip = gsk_rounded_clip_node_get_clip (node);
@@ -1285,6 +1286,15 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
       gsk_gpu_clip_init_copy (&self->clip, &old_clip);
       gsk_gpu_node_processor_add_rounded_clip_node_with_mask (self, node);
       return;
+    }
+
+  if (gsk_gpu_node_processor_rect_device_to_clip (self,
+                                                  &GSK_RECT_INIT_CAIRO (&self->scissor),
+                                                  &scissor))
+    {
+      GskGpuClip scissored_clip;
+      if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, &scissor))
+        gsk_gpu_clip_init_copy (&self->clip, &scissored_clip);
     }
 
   if (self->clip.type == GSK_GPU_CLIP_ALL_CLIPPED)
