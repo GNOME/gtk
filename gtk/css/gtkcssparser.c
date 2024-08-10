@@ -1290,6 +1290,35 @@ gtk_css_parser_consume_percentage (GtkCssParser *self,
   return FALSE;
 }
 
+gboolean
+gtk_css_parser_consume_number_or_percentage (GtkCssParser *parser,
+                                             double        min,
+                                             double        max,
+                                             double       *value)
+{
+  double number = 0;
+
+  if (gtk_css_parser_has_percentage (parser))
+    {
+      if (gtk_css_parser_consume_percentage (parser, &number))
+        {
+          *value = min + (number / 100.0) * (max - min);
+          return TRUE;
+        }
+    }
+  else if (gtk_css_parser_has_number (parser))
+    {
+      if (gtk_css_parser_consume_number (parser, &number))
+        {
+          *value = number;
+          return TRUE;
+        }
+    }
+
+  gtk_css_parser_error_syntax (parser, "Expected a number or percentage");
+  return FALSE;
+}
+
 gsize
 gtk_css_parser_consume_any (GtkCssParser            *parser,
                             const GtkCssParseOption *options,

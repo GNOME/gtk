@@ -1532,14 +1532,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         for (i = 0; i < gsk_shadow_node_get_n_shadows (node); i++)
           {
             char *label;
-            const GskShadow *shadow = gsk_shadow_node_get_shadow (node, i);
+            const GskShadow2 *shadow = gsk_shadow_node_get_shadow2 (node, i);
 
             label = g_strdup_printf ("Color %d", i);
-            add_color_row (store, label, &shadow->color);
+            add_color2_row (store, label, &shadow->color);
             g_free (label);
 
             label = g_strdup_printf ("Offset %d", i);
-            add_text_row (store, label, "%.2f %.2f", shadow->dx, shadow->dy);
+            add_text_row (store, label, "%.2f %.2f", shadow->offset.x, shadow->offset.y);
             g_free (label);
 
             label = g_strdup_printf ("Radius %d", i);

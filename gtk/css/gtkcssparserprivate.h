@@ -154,6 +154,11 @@ gboolean                gtk_css_parser_consume_integer          (GtkCssParser   
                                                                  int                            *number);
 gboolean                gtk_css_parser_consume_percentage       (GtkCssParser                   *self,
                                                                  double                         *number);
+gboolean                gtk_css_parser_consume_number_or_percentage
+                                                                (GtkCssParser                   *parser,
+                                                                 double                          min,
+                                                                 double                          max,
+                                                                 double                         *value);
 gboolean                gtk_css_parser_consume_function         (GtkCssParser                   *self,
                                                                  guint                           min_args,
                                                                  guint                           max_args,

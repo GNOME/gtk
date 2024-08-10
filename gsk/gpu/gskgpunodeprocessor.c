@@ -266,12 +266,6 @@ gsk_gpu_node_processor_color_states_explicit (GskGpuNodeProcessor *self,
 }
 
 static inline GskGpuColorStates
-gsk_gpu_node_processor_color_states_self (GskGpuNodeProcessor *self)
-{
-  return gsk_gpu_color_states_create_equal (TRUE, TRUE);
-}
-
-static inline GskGpuColorStates
 gsk_gpu_node_processor_color_states_for_rgba (GskGpuNodeProcessor *self)
 {
   return gsk_gpu_color_states_create (self->ccs,
@@ -833,7 +827,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                                 const graphene_rect_t     *rect,
                                 const graphene_point_t    *shadow_offset,
                                 float                      blur_radius,
-                                const GdkRGBA             *shadow_color,
+                                const GdkColor            *shadow_color,
                                 GskGpuImage               *source_image,
                                 GdkMemoryDepth             source_depth,
                                 const graphene_rect_t     *source_rect)
@@ -869,7 +863,8 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   graphene_vec2_init (&direction, blur_radius, 0.0f);
   gsk_gpu_blur_op (other.frame,
                    gsk_gpu_clip_get_shader_clip (&other.clip, &other.offset, &intermediate_rect),
-                   gsk_gpu_node_processor_color_states_self (&other),
+                   other.ccs,
+                   1,
                    &other.offset,
                    &(GskGpuShaderImage) {
                        source_image,
@@ -888,7 +883,8 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
     {
       gsk_gpu_blur_shadow_op (self->frame,
                               gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
-                              gsk_gpu_node_processor_color_states_for_rgba (self),
+                              self->ccs,
+                              1,
                               &real_offset,
                               &(GskGpuShaderImage) {
                                   intermediate,
@@ -897,13 +893,14 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                                   &intermediate_rect,
                               },
                               &direction,
-                              GSK_RGBA_TO_VEC4 (shadow_color));
+                              shadow_color);
     }
   else
     {
       gsk_gpu_blur_op (self->frame,
                        gsk_gpu_clip_get_shader_clip (&self->clip, &real_offset, rect),
-                       gsk_gpu_node_processor_color_states_self (self),
+                       self->ccs,
+                       1,
                        &real_offset,
                        &(GskGpuShaderImage) {
                            intermediate,
@@ -2635,14 +2632,17 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
 
   for (i = 0; i < n_shadows; i++)
     {
-      const GskShadow *shadow = gsk_shadow_node_get_shadow (node, i);
+      const GskShadow2 *shadow = gsk_shadow_node_get_shadow2 (node, i);
+
       if (shadow->radius == 0)
         {
-          graphene_point_t shadow_offset = GRAPHENE_POINT_INIT (self->offset.x + shadow->dx,
-                                                                self->offset.y + shadow->dy);
+          graphene_point_t shadow_offset = GRAPHENE_POINT_INIT (self->offset.x + shadow->offset.x,
+                                                                self->offset.y + shadow->offset.y);
+
           gsk_gpu_colorize_op (self->frame,
                                gsk_gpu_clip_get_shader_clip (&self->clip, &shadow_offset, &child->bounds),
-                               gsk_gpu_node_processor_color_states_for_rgba (self),
+                               self->ccs,
+                               1,
                                &shadow_offset,
                                &(GskGpuShaderImage) {
                                    image,
@@ -2650,7 +2650,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                    &child->bounds,
                                    &tex_rect,
                                },
-                               GSK_RGBA_TO_VEC4 (&shadow->color));
+                               &shadow->color);
         }
       else
         {
@@ -2659,7 +2659,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
           graphene_rect_inset_r (&child->bounds, - clip_radius, - clip_radius, &bounds);
           gsk_gpu_node_processor_blur_op (self,
                                           &bounds,
-                                          &GRAPHENE_POINT_INIT (shadow->dx, shadow->dy),
+                                          &shadow->offset,
                                           shadow->radius,
                                           &shadow->color,
                                           image,
@@ -2871,14 +2871,10 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
   if (gsk_render_node_get_node_type (source_child) == GSK_COLOR_NODE &&
       mask_mode == GSK_MASK_MODE_ALPHA)
     {
-      float color[4];
-
-      gdk_color_to_float (gsk_color_node_get_color2 (source_child), self->ccs, color);
-      color[3] *= self->opacity;
-
       gsk_gpu_colorize_op (self->frame,
                            gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                           gsk_gpu_node_processor_color_states_explicit (self, self->ccs, FALSE),
+                           self->ccs,
+                           self->opacity,
                            &self->offset,
                            &(GskGpuShaderImage) {
                                mask_image,
@@ -2886,7 +2882,7 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
                                &node->bounds,
                                &mask_rect,
                            },
-                           color);
+                           gsk_color_node_get_color2 (source_child));
     }
   else
     {
@@ -2938,7 +2934,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   graphene_point_t offset;
   guint i, num_glyphs;
   float scale;
-  GdkRGBA color;
+  GdkColor color;
   float align_scale_x, align_scale_y;
   float inv_align_scale_x, inv_align_scale_y;
   unsigned int flags_mask;
@@ -2954,8 +2950,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
 
   cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
 
-  color = *gsk_text_node_get_color (node);
-  color.alpha *= self->opacity;
+  gdk_color_init_from_rgba (&color, gsk_text_node_get_color (node));
   num_glyphs = gsk_text_node_get_num_glyphs (node);
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   font = gsk_text_node_get_font (node);
@@ -3033,7 +3028,8 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       else
         gsk_gpu_colorize_op (self->frame,
                              gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_origin, &glyph_bounds),
-                             gsk_gpu_node_processor_color_states_for_rgba (self),
+                             self->ccs,
+                             self->opacity,
                              &glyph_origin,
                              &(GskGpuShaderImage) {
                                  image,
@@ -3041,10 +3037,12 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                  &glyph_bounds,
                                  &glyph_tex_rect
                              },
-                             GSK_RGBA_TO_VEC4 (&color));
+                             &color);
 
       offset.x += glyphs[i].geometry.width * inv_pango_scale;
     }
+
+  gdk_color_finish (&color);
 }
 
 static void

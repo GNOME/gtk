@@ -5565,7 +5565,9 @@ struct _GskShadowNode
   GskRenderNode *child;
 
   gsize n_shadows;
-  GskShadow *shadows;
+  GskShadow2 *shadows;
+
+  GskShadow *rgba_shadows;
 };
 
 static void
@@ -5575,7 +5577,12 @@ gsk_shadow_node_finalize (GskRenderNode *node)
   GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_SHADOW_NODE));
 
   gsk_render_node_unref (self->child);
+
+  for (gsize i = 0; i < self->n_shadows; i++)
+    gdk_color_finish (&self->shadows[i].color);
   g_free (self->shadows);
+
+  g_free (self->rgba_shadows);
 
   parent_class->finalize (node);
 }
@@ -5596,31 +5603,28 @@ gsk_shadow_node_draw (GskRenderNode *node,
 
   for (i = 0; i < self->n_shadows; i++)
     {
-      GskShadow *shadow = &self->shadows[i];
+      GskShadow2 *shadow = &self->shadows[i];
       cairo_pattern_t *pattern;
-      GdkColor color;
 
       /* We don't need to draw invisible shadows */
-      if (gdk_rgba_is_clear (&shadow->color))
+      if (gdk_color_is_clear (&shadow->color))
         continue;
 
       cairo_save (cr);
       cr = gsk_cairo_blur_start_drawing (cr, 0.5 * shadow->radius, GSK_BLUR_X | GSK_BLUR_Y);
 
       cairo_save (cr);
-      cairo_translate (cr, shadow->dx, shadow->dy);
+      cairo_translate (cr, shadow->offset.x, shadow->offset.y);
       cairo_push_group (cr);
       gsk_render_node_draw_ccs (self->child, cr, ccs);
       pattern = cairo_pop_group (cr);
       cairo_reset_clip (cr);
-      gdk_cairo_set_source_rgba_ccs (cr, ccs, &shadow->color);
+      gdk_cairo_set_source_color (cr, ccs, &shadow->color);
       cairo_mask (cr, pattern);
       cairo_pattern_destroy (pattern);
       cairo_restore (cr);
 
-      gdk_color_init_from_rgba (&color, &shadow->color);
-      cr = gsk_cairo_blur_finish_drawing (cr, ccs, 0.5 * shadow->radius, &color, GSK_BLUR_X | GSK_BLUR_Y);
-      gdk_color_finish (&color);
+      cr = gsk_cairo_blur_finish_drawing (cr, ccs, 0.5 * shadow->radius, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
       cairo_restore (cr);
     }
 
@@ -5647,13 +5651,12 @@ gsk_shadow_node_diff (GskRenderNode *node1,
 
   for (i = 0; i < self1->n_shadows; i++)
     {
-      GskShadow *shadow1 = &self1->shadows[i];
-      GskShadow *shadow2 = &self2->shadows[i];
+      GskShadow2 *shadow1 = &self1->shadows[i];
+      GskShadow2 *shadow2 = &self2->shadows[i];
       float clip_radius;
 
-      if (!gdk_rgba_equal (&shadow1->color, &shadow2->color) ||
-          shadow1->dx != shadow2->dx ||
-          shadow1->dy != shadow2->dy ||
+      if (!gdk_color_equal (&shadow1->color, &shadow2->color) ||
+          !graphene_point_equal (&shadow1->offset, &shadow2->offset) ||
           shadow1->radius != shadow2->radius)
         {
           gsk_render_node_diff_impossible (node1, node2, data);
@@ -5661,10 +5664,10 @@ gsk_shadow_node_diff (GskRenderNode *node1,
         }
 
       clip_radius = gsk_cairo_blur_compute_pixels (shadow1->radius / 2.0);
-      top = MAX (top, ceil (clip_radius - shadow1->dy));
-      right = MAX (right, ceil (clip_radius + shadow1->dx));
-      bottom = MAX (bottom, ceil (clip_radius + shadow1->dy));
-      left = MAX (left, ceil (clip_radius - shadow1->dx));
+      top = MAX (top, ceil (clip_radius - shadow1->offset.y));
+      right = MAX (right, ceil (clip_radius + shadow1->offset.x));
+      bottom = MAX (bottom, ceil (clip_radius + shadow1->offset.y));
+      left = MAX (left, ceil (clip_radius - shadow1->offset.x));
     }
 
   sub = cairo_region_create ();
@@ -5695,10 +5698,10 @@ gsk_shadow_node_get_bounds (GskShadowNode *self,
   for (i = 0; i < self->n_shadows; i++)
     {
       float clip_radius = gsk_cairo_blur_compute_pixels (self->shadows[i].radius / 2.0);
-      top = MAX (top, clip_radius - self->shadows[i].dy);
-      right = MAX (right, clip_radius + self->shadows[i].dx);
-      bottom = MAX (bottom, clip_radius + self->shadows[i].dy);
-      left = MAX (left, clip_radius - self->shadows[i].dx);
+      top = MAX (top, clip_radius - self->shadows[i].offset.y);
+      right = MAX (right, clip_radius + self->shadows[i].offset.x);
+      bottom = MAX (bottom, clip_radius + self->shadows[i].offset.y);
+      left = MAX (left, clip_radius - self->shadows[i].offset.x);
     }
 
   bounds->origin.x -= left;
@@ -5736,9 +5739,51 @@ gsk_shadow_node_new (GskRenderNode   *child,
                      const GskShadow *shadows,
                      gsize            n_shadows)
 {
+  GskShadow2 *shadows2;
+  GskRenderNode *node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+  g_return_val_if_fail (shadows != NULL, NULL);
+  g_return_val_if_fail (n_shadows > 0, NULL);
+
+  shadows2 = g_new (GskShadow2, n_shadows);
+  for (gsize i = 0; i < n_shadows; i++)
+    {
+      gdk_color_init_from_rgba (&shadows2[i].color, &shadows[i].color);
+      graphene_point_init (&shadows2[i].offset, shadows[i].dx, shadows[i].dy);
+      shadows2[i].radius = shadows[i].radius;
+    }
+
+  node = gsk_shadow_node_new2 (child, shadows2, n_shadows);
+
+  for (gsize i = 0; i < n_shadows; i++)
+    gdk_color_finish (&shadows2[i].color);
+  g_free (shadows2);
+
+  return node;
+}
+
+/*< private >
+ * gsk_shadow_node_new2:
+ * @child: The node to draw
+ * @shadows: (array length=n_shadows): The shadows to apply
+ * @n_shadows: number of entries in the @shadows array
+ *
+ * Creates a `GskRenderNode` that will draw a @child with the given
+ * @shadows below it.
+ *
+ * Returns: (transfer full) (type GskShadowNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_shadow_node_new2 (GskRenderNode    *child,
+                      const GskShadow2 *shadows,
+                      gsize             n_shadows)
+{
   GskShadowNode *self;
   GskRenderNode *node;
   gsize i;
+  GdkMemoryDepth depth;
+  gboolean is_hdr;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
   g_return_val_if_fail (shadows != NULL, NULL);
@@ -5750,18 +5795,24 @@ gsk_shadow_node_new (GskRenderNode   *child,
 
   self->child = gsk_render_node_ref (child);
   self->n_shadows = n_shadows;
-  self->shadows = g_malloc_n (n_shadows, sizeof (GskShadow));
-  memcpy (self->shadows, shadows, n_shadows * sizeof (GskShadow));
+  self->shadows = g_new (GskShadow2, n_shadows);
 
-  gsk_shadow_node_get_bounds (self, &node->bounds);
+  depth = gsk_render_node_get_preferred_depth (child);
+  is_hdr = gsk_render_node_is_hdr (child);
 
-  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
-  node->is_hdr = gsk_render_node_is_hdr (child);
   for (i = 0; i < n_shadows; i++)
     {
-      node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
-                                                      my_color_get_depth (&shadows->color));
+      gdk_color_init_copy (&self->shadows[i].color, &shadows[i].color);
+      graphene_point_init_from_point (&self->shadows[i].offset, &shadows[i].offset);
+      self->shadows[i].radius = shadows[i].radius;
+      depth = gdk_memory_depth_merge (depth, gdk_color_get_depth (&shadows[i].color));
+      is_hdr = is_hdr || color_state_is_hdr (shadows[i].color.color_state);
     }
+
+  node->preferred_depth = depth;
+  node->is_hdr = is_hdr;
+
+  gsk_shadow_node_get_bounds (self, &node->bounds);
 
   return node;
 }
@@ -5794,6 +5845,45 @@ gsk_shadow_node_get_child (const GskRenderNode *node)
 const GskShadow *
 gsk_shadow_node_get_shadow (const GskRenderNode *node,
                             gsize                i)
+{
+  GskShadowNode *self = (GskShadowNode *) node;
+  const GskShadow *shadow;
+
+  G_LOCK (rgba);
+
+  if (self->rgba_shadows == NULL)
+    {
+      self->rgba_shadows = g_new (GskShadow, self->n_shadows);
+      for (gsize j = 0; j < self->n_shadows; j++)
+        {
+          gdk_color_to_float (&self->shadows[j].color,
+                              GDK_COLOR_STATE_SRGB,
+                              (float *) &self->rgba_shadows[j].color);
+          self->rgba_shadows[j].dx = self->shadows[j].offset.x;
+          self->rgba_shadows[j].dy = self->shadows[j].offset.y;
+          self->rgba_shadows[j].radius = self->shadows[j].radius;
+        }
+    }
+
+  shadow = &self->rgba_shadows[i];
+
+  G_UNLOCK (rgba);
+
+  return shadow;
+}
+
+/*< private >
+ * gsk_shadow_node_get_shadow2:
+ * @node: (type GskShadowNode): a shadow `GskRenderNode`
+ * @i: the given index
+ *
+ * Retrieves the shadow data at the given index @i.
+ *
+ * Returns: (transfer none): the shadow data
+ */
+const GskShadow2 *
+gsk_shadow_node_get_shadow2 (const GskRenderNode *node,
+                             gsize                i)
 {
   const GskShadowNode *self = (const GskShadowNode *) node;
 
