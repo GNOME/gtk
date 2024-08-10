@@ -25,6 +25,7 @@
 #include "gtksnapshotprivate.h"
 #include "gtktypebuiltins.h"
 #include "gtksettings.h"
+#include "gdkcairoprivate.h"
 
 
 void
@@ -71,7 +72,7 @@ draw_insertion_cursor (cairo_t         *cr,
                        double           width,
                        double           height,
                        double           aspect_ratio,
-                       const GdkRGBA   *color,
+                       const GdkColor  *color,
                        PangoDirection   direction,
                        gboolean         draw_arrow)
 {
@@ -83,7 +84,7 @@ draw_insertion_cursor (cairo_t         *cr,
   cairo_save (cr);
   cairo_new_path (cr);
 
-  gdk_cairo_set_source_rgba (cr, color);
+  gdk_cairo_set_source_color (cr, GDK_COLOR_STATE_SRGB, color);
 
   stem_width = height * aspect_ratio + 1;
 
@@ -190,12 +191,12 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
                            PangoDirection   direction,
                            gboolean         draw_arrow)
 {
-  const GdkRGBA *color;
+  GdkColor color;
 
-  if (is_primary)
-    color = gtk_css_color_value_get_rgba (style->used->caret_color);
-  else
-    color = gtk_css_color_value_get_rgba (style->used->secondary_caret_color);
+  gtk_css_color_to_color (is_primary
+                            ? gtk_css_color_value_get_color (style->used->caret_color)
+                            : gtk_css_color_value_get_color (style->used->secondary_caret_color),
+                          &color);
 
   if (width != 0 || draw_arrow)
     {
@@ -205,7 +206,7 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
       get_insertion_cursor_bounds (width, height, aspect_ratio, direction, draw_arrow, &bounds);
       cr = gtk_snapshot_append_cairo (snapshot, &bounds);
 
-      draw_insertion_cursor (cr, 0, 0, width, height, aspect_ratio, color, direction, draw_arrow);
+      draw_insertion_cursor (cr, 0, 0, width, height, aspect_ratio, &color, direction, draw_arrow);
 
       cairo_destroy (cr);
     }
@@ -222,9 +223,9 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
       else
         offset = stem_width - stem_width / 2;
 
-      gtk_snapshot_append_color (snapshot,
-                                 color,
-                                 &GRAPHENE_RECT_INIT (- offset, 0, stem_width, height));
+      gtk_snapshot_append_color2 (snapshot,
+                                  &color,
+                                  &GRAPHENE_RECT_INIT (- offset, 0, stem_width, height));
     }
 }
 
