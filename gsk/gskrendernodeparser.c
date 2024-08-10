@@ -494,14 +494,6 @@ parse_rounded_rect (GtkCssParser *parser,
 }
 
 static gboolean
-parse_color (GtkCssParser *parser,
-             Context      *context,
-             gpointer      out_color)
-{
-  return gdk_rgba_parser_parse (parser, out_color);
-}
-
-static gboolean
 parse_double (GtkCssParser *parser,
               Context      *context,
               gpointer      out_double)
@@ -2578,7 +2570,7 @@ parse_text_node (GtkCssParser *parser,
 {
   PangoFont *font = NULL;
   graphene_point_t offset = GRAPHENE_POINT_INIT (0, 0);
-  GdkRGBA color = GDK_RGBA("000000");
+  GdkColor color = GDK_COLOR_SRGB (0, 0, 0, 1);
   PangoGlyphString *glyphs = NULL;
   cairo_hint_style_t hint_style = CAIRO_HINT_STYLE_SLIGHT;
   cairo_antialias_t antialias = CAIRO_ANTIALIAS_GRAY;
@@ -2587,7 +2579,7 @@ parse_text_node (GtkCssParser *parser,
   const Declaration declarations[] = {
     { "font", parse_font, clear_font, &font },
     { "offset", parse_point, NULL, &offset },
-    { "color", parse_color, NULL, &color },
+    { "color", parse_color2, NULL, &color },
     { "glyphs", parse_glyphs, clear_glyphs, &glyphs },
     { "hint-style", parse_hint_style, NULL, &hint_style },
     { "antialias", parse_antialias, NULL, &antialias },
@@ -2630,7 +2622,7 @@ parse_text_node (GtkCssParser *parser,
     }
   else
     {
-      result = gsk_text_node_new (font, glyphs, &color, &offset);
+      result = gsk_text_node_new2 (font, glyphs, &color, &offset);
       if (result == NULL)
         {
           gtk_css_parser_error_value (parser, "Glyphs result in empty text");
@@ -2643,6 +2635,8 @@ parse_text_node (GtkCssParser *parser,
   /* return anything, whatever, just not NULL */
   if (result == NULL)
     result = create_default_render_node ();
+
+  gdk_color_finish (&color);
 
   return result;
 }
@@ -3301,6 +3295,7 @@ printer_init_duplicates_for_node (Printer       *printer,
     {
     case GSK_TEXT_NODE:
       printer_init_collect_font_info (printer, node);
+      printer_init_check_color_state (printer, gsk_text_node_get_color2 (node)->color_state);
       break;
 
     case GSK_COLOR_NODE:
@@ -3631,18 +3626,6 @@ append_unsigned_param (Printer    *p,
 {
   _indent (p);
   g_string_append_printf (p->str, "%s: %u;\n", param_name, value);
-}
-
-static void
-append_rgba_param (Printer       *p,
-                   const char    *param_name,
-                   const GdkRGBA *value)
-{
-  _indent (p);
-  g_string_append_printf (p->str, "%s: ", param_name);
-  gdk_rgba_print (value, p->str);
-  g_string_append_c (p->str, ';');
-  g_string_append_c (p->str, '\n');
 }
 
 static void
@@ -4588,12 +4571,12 @@ render_node_print (Printer       *p,
     case GSK_TEXT_NODE:
       {
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
-        const GdkRGBA *color = gsk_text_node_get_color (node);
+        const GdkColor *color = gsk_text_node_get_color2 (node);
 
         start_node (p, "text", node_name);
 
-        if (!gdk_rgba_equal (color, &GDK_RGBA ("000000")))
-          append_rgba_param (p, "color", color);
+        if (!gdk_color_equal (color, &GDK_COLOR_SRGB (0, 0, 0, 1)))
+          append_color_param (p, "color", color);
 
         _indent (p);
         g_string_append (p->str, "font: ");

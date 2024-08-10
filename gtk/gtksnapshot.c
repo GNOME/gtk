@@ -2474,15 +2474,30 @@ gtk_snapshot_append_text (GtkSnapshot           *snapshot,
                           float                  x,
                           float                  y)
 {
+  GdkColor color2;
+
+  gdk_color_init_from_rgba (&color2, color);
+  gtk_snapshot_append_text2 (snapshot, font, glyphs, &color2, x, y);
+  gdk_color_finish (&color2);
+}
+
+void
+gtk_snapshot_append_text2 (GtkSnapshot      *snapshot,
+                           PangoFont        *font,
+                           PangoGlyphString *glyphs,
+                           const GdkColor   *color,
+                           float             x,
+                           float             y)
+{
   GskRenderNode *node;
   float dx, dy;
 
   gtk_snapshot_ensure_translate (snapshot, &dx, &dy);
 
-  node = gsk_text_node_new (font,
-                            glyphs,
-                            color,
-                            &GRAPHENE_POINT_INIT (x + dx, y + dy));
+  node = gsk_text_node_new2 (font,
+                             glyphs,
+                             color,
+                             &GRAPHENE_POINT_INIT (x + dx, y + dy));
   if (node == NULL)
     return;
 

@@ -164,6 +164,11 @@ GskRenderNode * gsk_shadow_node_new2                    (GskRenderNode        *c
 const GskShadow2 *gsk_shadow_node_get_shadow2           (const GskRenderNode  *node,
                                                          gsize                 i);
 
+GskRenderNode * gsk_text_node_new2                      (PangoFont              *font,
+                                                         PangoGlyphString       *glyphs,
+                                                         const GdkColor         *color,
+                                                         const graphene_point_t *offset);
+const GdkColor *gsk_text_node_get_color2                (const GskRenderNode    *node);
 
 G_END_DECLS
 

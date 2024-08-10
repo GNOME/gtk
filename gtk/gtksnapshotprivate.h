@@ -30,6 +30,16 @@ void                    gtk_snapshot_append_text                (GtkSnapshot    
                                                                  const GdkRGBA          *color,
                                                                  float                   x,
                                                                  float                   y);
+void                    gtk_snapshot_append_text2               (GtkSnapshot            *snapshot,
+                                                                 PangoFont              *font,
+                                                                 PangoGlyphString       *glyphs,
+                                                                 const GdkColor         *color,
+                                                                 float                   x,
+                                                                 float                   y);
+
+void                    gtk_snapshot_append_layout2             (GtkSnapshot            *snapshot,
+                                                                 PangoLayout            *layout,
+                                                                 const GdkColor         *color);
 
 void                    gtk_snapshot_push_collect               (GtkSnapshot            *snapshot);
 GskRenderNode *         gtk_snapshot_pop_collect                (GtkSnapshot            *snapshot);

@@ -2960,7 +2960,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   graphene_point_t offset;
   guint i, num_glyphs;
   float scale;
-  GdkColor color;
   float align_scale_x, align_scale_y;
   float inv_align_scale_x, inv_align_scale_y;
   unsigned int flags_mask;
@@ -2976,7 +2975,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
 
   cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
 
-  gdk_color_init_from_rgba (&color, gsk_text_node_get_color (node));
   num_glyphs = gsk_text_node_get_num_glyphs (node);
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   font = gsk_text_node_get_font (node);
@@ -3063,12 +3061,10 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                  &glyph_bounds,
                                  &glyph_tex_rect
                              },
-                             &color);
+                             gsk_text_node_get_color2 (node));
 
       offset.x += glyphs[i].geometry.width * inv_pango_scale;
     }
-
-  gdk_color_finish (&color);
 }
 
 static void

@@ -3,3 +3,8 @@ text {
   font: "Cantarell 300px";
   glyphs: 50 312, 2712 0 -156 -29 color;
 }
+text {
+  color: color(srgb-linear 0.3 0.4 1 / 0.5);
+  font: "Cantarell 300px";
+  glyphs: 50 312, 2712 0 -156 -29 color;
+}

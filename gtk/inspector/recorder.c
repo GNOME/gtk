@@ -827,19 +827,6 @@ get_color2_texture (const GdkColor *color)
 }
 
 static GdkTexture *
-get_color_texture (const GdkRGBA *rgba)
-{
-  GdkColor color;
-  GdkTexture *texture;
-
-  gdk_color_init_from_rgba (&color, rgba);
-  texture = get_color2_texture (&color);
-  gdk_color_finish (&color);
-
-  return texture;
-}
-
-static GdkTexture *
 get_linear_gradient_texture (gsize n_stops, const GskColorStop *stops)
 {
   cairo_surface_t *surface;
@@ -907,24 +894,9 @@ add_text_row (GListStore *store,
 }
 
 static void
-add_color_row (GListStore    *store,
-               const char    *name,
-               const GdkRGBA *color)
-{
-  char *text;
-  GdkTexture *texture;
-
-  text = gdk_rgba_to_string (color);
-  texture = get_color_texture (color);
-  list_store_add_object_property (store, name, text, texture);
-  g_free (text);
-  g_object_unref (texture);
-}
-
-static void
-add_color2_row (GListStore     *store,
-                const char     *name,
-                const GdkColor *color)
+add_color_row (GListStore     *store,
+               const char     *name,
+               const GdkColor *color)
 {
   char *text;
   GdkTexture *texture;
@@ -1112,7 +1084,7 @@ populate_render_node_properties (GListStore    *store,
       break;
 
     case GSK_COLOR_NODE:
-      add_color2_row (store, "Color", gsk_color_node_get_color2 (node));
+      add_color_row (store, "Color", gsk_color_node_get_color2 (node));
       break;
 
     case GSK_LINEAR_GRADIENT_NODE:
@@ -1210,7 +1182,6 @@ populate_render_node_properties (GListStore    *store,
     case GSK_TEXT_NODE:
       {
         const PangoFont *font = gsk_text_node_get_font (node);
-        const GdkRGBA *color = gsk_text_node_get_color (node);
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
         PangoFontDescription *desc;
         GString *s;
@@ -1229,7 +1200,7 @@ populate_render_node_properties (GListStore    *store,
 
         add_text_row (store, "Position", "%.2f %.2f", offset->x, offset->y);
 
-        add_color_row (store, "Color", color);
+        add_color_row (store, "Color", gsk_text_node_get_color2 (node));
       }
       break;
 
@@ -1375,7 +1346,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         float spread = gsk_inset_shadow_node_get_spread (node);
         float radius = gsk_inset_shadow_node_get_blur_radius (node);
 
-        add_color2_row (store, "Color", color);
+        add_color_row (store, "Color", color);
 
         add_text_row (store, "Offset", "%.2f %.2f", dx, dy);
 
@@ -1399,7 +1370,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                              "%.2f x %.2f + %.2f + %.2f",
                              rect[2], rect[3], rect[0], rect[1]);
 
-        add_color2_row (store, "Color", color);
+        add_color_row (store, "Color", color);
 
         add_text_row (store, "Offset", "%.2f %.2f", dx, dy);
 
@@ -1535,7 +1506,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
             const GskShadow2 *shadow = gsk_shadow_node_get_shadow2 (node, i);
 
             label = g_strdup_printf ("Color %d", i);
-            add_color2_row (store, label, &shadow->color);
+            add_color_row (store, label, &shadow->color);
             g_free (label);
 
             label = g_strdup_printf ("Offset %d", i);
