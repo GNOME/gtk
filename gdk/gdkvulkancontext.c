@@ -38,6 +38,7 @@
 static const GdkDebugKey gsk_vulkan_feature_keys[] = {
   { "dmabuf", GDK_VULKAN_FEATURE_DMABUF, "Never import Dmabufs" },
   { "ycbcr", GDK_VULKAN_FEATURE_YCBCR, "Do not support Ycbcr textures (also disables dmabufs)" },
+  { "srgb", GDK_VULKAN_FEATURE_SRGB, "Do not support SRGB images" },
   { "semaphore-export", GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT, "Disable sync of exported dmabufs" },
   { "semaphore-import", GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT, "Disable sync of imported dmabufs" },
   { "incremental-present", GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT, "Do not send damage regions" },
@@ -466,8 +467,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   res = GDK_VK_CHECK (vkCreateSwapchainKHR, device,
                                             &(VkSwapchainCreateInfoKHR) {
                                                 .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
-                                                .pNext = NULL,
-                                                .flags = 0,
+                                                .flags = priv->current_depth == GDK_MEMORY_U8_SRGB ? VK_SWAPCHAIN_CREATE_MUTABLE_FORMAT_BIT_KHR : 0,
                                                 .surface = priv->surface,
                                                 .minImageCount = CLAMP (4,
                                                                         capabilities.minImageCount,
@@ -486,7 +486,15 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                                 .compositeAlpha = composite_alpha,
                                                 .presentMode = present_mode,
                                                 .clipped = VK_FALSE,
-                                                .oldSwapchain = priv->swapchain
+                                                .oldSwapchain = priv->swapchain,
+                                                .pNext = priv->current_depth == GDK_MEMORY_U8_SRGB ? &(VkImageFormatListCreateInfo) {
+                                                    .sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR,
+                                                    .viewFormatCount = 2,
+                                                    .pViewFormats = (VkFormat[]) {
+                                                        priv->formats[priv->current_depth].vk_format.format,
+                                                        priv->formats[GDK_MEMORY_U8].vk_format.format,
+                                                    }
+                                                } : NULL,
                                             },
                                             NULL,
                                             &new_swapchain);
@@ -600,6 +608,9 @@ physical_device_check_features (VkPhysicalDevice device)
       physical_device_supports_extension (device, VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME))
     features |= GDK_VULKAN_FEATURE_DMABUF;
 
+  if (physical_device_supports_extension (device, VK_KHR_SWAPCHAIN_MUTABLE_FORMAT_EXTENSION_NAME))
+    features |= GDK_VULKAN_FEATURE_SRGB;
+
   if (physical_device_supports_extension (device, VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME))
     {
       if (semaphore_props.externalSemaphoreFeatures & VK_EXTERNAL_SEMAPHORE_FEATURE_EXPORTABLE_BIT)
@@ -633,6 +644,9 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
 
   color_state = gdk_surface_get_color_state (surface);
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));
+
+  if (depth == GDK_MEMORY_U8_SRGB && !gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_SRGB))
+    depth = GDK_MEMORY_U8;
 
   g_assert (depth != GDK_MEMORY_U8_SRGB || gdk_color_state_get_no_srgb_tf (color_state) != NULL);
 
@@ -1533,6 +1547,10 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
                   g_ptr_array_add (device_extensions, (gpointer) VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME);
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
+                }
+              if (features & GDK_VULKAN_FEATURE_SRGB)
+                {
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SWAPCHAIN_MUTABLE_FORMAT_EXTENSION_NAME);
                 }
               if (features & (GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT | GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT))
                 {
