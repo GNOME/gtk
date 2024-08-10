@@ -303,6 +303,15 @@ surface_present_mode_to_string (VkPresentModeKHR present_mode)
   return "(unknown)";
 }
 
+static gboolean
+gdk_vulkan_context_has_feature (GdkVulkanContext  *self,
+                                GdkVulkanFeatures  feature)
+{
+  GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self));
+
+  return (display->vulkan_features & feature) ? TRUE : FALSE;
+}
+
 static const VkPresentModeKHR preferred_present_modes[] = {
   VK_PRESENT_MODE_MAILBOX_KHR,
   VK_PRESENT_MODE_IMMEDIATE_KHR,
@@ -689,11 +698,10 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
-  GdkDisplay *display = gdk_draw_context_get_display (draw_context);
   VkRectLayerKHR *rectangles;
   int n_regions;
 
-  if (display->vulkan_features & GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT)
+  if (gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT))
     {
       double scale;
 
