@@ -4208,6 +4208,52 @@ gsk_gpu_node_processor_render (GskGpuFrame                 *frame,
   cairo_region_destroy (clip);
 }
 
+static void
+gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
+                                   GskGpuImage           *image,
+                                   GdkColorState         *image_color_state,
+                                   const graphene_rect_t *rect,
+                                   const graphene_rect_t *tex_rect)
+{
+  gsk_gpu_node_processor_sync_globals (self, 0);
+
+  if (!GDK_IS_DEFAULT_COLOR_STATE (self->ccs))
+    {
+      const GdkCicp *cicp = gdk_color_state_get_cicp (self->ccs);
+
+      g_assert (cicp != NULL);
+
+      gsk_gpu_convert_to_cicp_op (self->frame,
+                                  gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                                  cicp,
+                                  gsk_gpu_color_states_create_cicp (image_color_state, TRUE, TRUE),
+                                  self->opacity,
+                                  FALSE,
+                                  &self->offset,
+                                  &(GskGpuShaderImage) {
+                                      image,
+                                      GSK_GPU_SAMPLER_DEFAULT,
+                                      rect,
+                                      tex_rect
+                                  });
+    }
+  else
+    {
+      gsk_gpu_convert_op (self->frame,
+                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                          gsk_gpu_node_processor_color_states_explicit (self, image_color_state, TRUE),
+                          self->opacity,
+                          FALSE,
+                          &self->offset,
+                          &(GskGpuShaderImage) {
+                              image,
+                              GSK_GPU_SAMPLER_DEFAULT,
+                              rect,
+                              tex_rect
+                          });
+    }
+}
+
 void
 gsk_gpu_node_processor_process (GskGpuFrame           *frame,
                                 GskGpuImage           *target,
@@ -4272,43 +4318,12 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
 
       self.blend = GSK_GPU_BLEND_NONE;
       self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
-      gsk_gpu_node_processor_sync_globals (&self, 0);
 
-      if (!GDK_IS_DEFAULT_COLOR_STATE (target_color_state))
-        {
-          const GdkCicp *cicp = gdk_color_state_get_cicp (target_color_state);
-
-          g_assert (cicp != NULL);
-
-          gsk_gpu_convert_to_cicp_op (self.frame,
-                                      gsk_gpu_clip_get_shader_clip (&self.clip, &self.offset, &node->bounds),
-                                      cicp,
-                                      gsk_gpu_color_states_create_cicp (self.ccs, TRUE, TRUE),
-                                      self.opacity,
-                                      FALSE,
-                                      &self.offset,
-                                      &(GskGpuShaderImage) {
-                                          image,
-                                          GSK_GPU_SAMPLER_DEFAULT,
-                                          &node->bounds,
-                                          &tex_rect
-                                      });
-        }
-      else
-        {
-          gsk_gpu_convert_op (self.frame,
-                              gsk_gpu_clip_get_shader_clip (&self.clip, &self.offset, &node->bounds),
-                              gsk_gpu_node_processor_color_states_explicit (&self, ccs, TRUE),
-                              self.opacity,
-                              FALSE,
-                              &self.offset,
-                              &(GskGpuShaderImage) {
-                                  image,
-                                  GSK_GPU_SAMPLER_DEFAULT,
-                                  &node->bounds,
-                                  &tex_rect
-                              });
-        }
+      gsk_gpu_node_processor_convert_to (&self,
+                                         image,
+                                         ccs,
+                                         &clip_bounds,
+                                         &tex_rect);
 
       gsk_gpu_render_pass_end_op (frame,
                                   target,
