@@ -1,6 +1,7 @@
 #include "config.h"
 
 #include "gskgpuconicgradientopprivate.h"
+#include "gskgpulineargradientopprivate.h"
 
 #include "gskgpuframeprivate.h"
 #include "gskgpuprintprivate.h"
@@ -97,4 +98,11 @@ gsk_gpu_conic_gradient_op (GskGpuFrame            *frame,
   instance->offsets0[1] = stops[1].offset;
   gsk_gpu_color_to_float (&stops[0].color, ics, opacity, instance->color0);
   instance->offsets0[0] = stops[0].offset;
+
+  gsk_adjust_hue (ics, hue_interp, instance->color0, instance->color1);
+  gsk_adjust_hue (ics, hue_interp, instance->color1, instance->color2);
+  gsk_adjust_hue (ics, hue_interp, instance->color2, instance->color3);
+  gsk_adjust_hue (ics, hue_interp, instance->color3, instance->color4);
+  gsk_adjust_hue (ics, hue_interp, instance->color4, instance->color5);
+  gsk_adjust_hue (ics, hue_interp, instance->color5, instance->color6);
 }

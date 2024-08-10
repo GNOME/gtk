@@ -23,5 +23,10 @@ void                    gsk_gpu_linear_gradient_op                      (GskGpuF
                                                                          gsize                           n_stops);
 
 
+void gsk_adjust_hue (GdkColorState       *ics,
+                     GskHueInterpolation  interp,
+                     const float          color1[4],
+                     float                color2[4]);
+
 G_END_DECLS
 
