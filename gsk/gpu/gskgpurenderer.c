@@ -300,10 +300,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                                           MIN (image_width, width - x),
                                                           MIN (image_height, height - y));
 
-          if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
-            color_state = GDK_COLOR_STATE_SRGB_LINEAR;
-          else
-            color_state = GDK_COLOR_STATE_SRGB;
+          color_state = GDK_COLOR_STATE_SRGB;
 
           clip_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                            0, 0,
@@ -376,10 +373,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   if (image == NULL)
     return gsk_gpu_renderer_fallback_render_texture (self, root, &rounded_viewport);
 
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
-    color_state = GDK_COLOR_STATE_SRGB_LINEAR;
-  else
-    color_state = GDK_COLOR_STATE_SRGB;
+  color_state = GDK_COLOR_STATE_SRGB;
 
   frame = gsk_gpu_renderer_create_frame (self);
 

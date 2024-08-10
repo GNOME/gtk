@@ -4291,6 +4291,11 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
   cairo_rectangle_int_t extents;
   int i;
 
+  if (gsk_gpu_image_get_flags (target) & GSK_GPU_IMAGE_SRGB)
+    {
+      target_color_state = gdk_color_state_get_no_srgb_tf (target_color_state);
+      g_assert (target_color_state);
+    }
   ccs = gdk_color_state_get_rendering_color_state (target_color_state);
 
   cairo_region_get_extents (clip, &extents);

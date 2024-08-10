@@ -161,6 +161,7 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
   graphene_rect_t opaque_tmp;
   const graphene_rect_t *opaque;
+  GdkColorState *ccs;
   cairo_t *cr;
 
   if (gsk_render_node_get_opaque_rect (root, &opaque_tmp))
@@ -189,9 +190,15 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
       cairo_restore (cr);
     }
 
+  ccs = gdk_draw_context_get_color_state (GDK_DRAW_CONTEXT (self->cairo_context));
+  if (gdk_draw_context_get_depth (GDK_DRAW_CONTEXT (self->cairo_context)) == GDK_MEMORY_U8_SRGB)
+    {
+      ccs = gdk_color_state_get_no_srgb_tf (ccs);
+      g_assert (ccs);
+    }
   gsk_cairo_renderer_do_render (renderer,
                                 cr,
-                                gdk_draw_context_get_color_state (GDK_DRAW_CONTEXT (self->cairo_context)),
+                                ccs,
                                 root);
 
   cairo_destroy (cr);

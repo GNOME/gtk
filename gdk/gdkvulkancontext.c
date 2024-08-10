@@ -678,10 +678,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
 
   cairo_region_union (region, priv->regions[priv->draw_index]);
 
-  if (priv->current_depth == GDK_MEMORY_U8_SRGB)
-    *out_color_state = gdk_color_state_get_no_srgb_tf (color_state);
-  else
-    *out_color_state = color_state;
+  *out_color_state = color_state;
   *out_depth = priv->current_depth;
 }
 
