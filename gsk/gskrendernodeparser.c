@@ -4339,7 +4339,7 @@ render_node_print (Printer       *p,
         start_node (p, "outset-shadow", node_name);
 
         append_float_param (p, "blur", gsk_outset_shadow_node_get_blur_radius (node), 0.0f);
-        if (!gdk_color_equal (gsk_inset_shadow_node_get_color2 (node), &GDK_COLOR_SRGB (0, 0, 0, 1)))
+        if (!gdk_color_equal (gsk_outset_shadow_node_get_color2 (node), &GDK_COLOR_SRGB (0, 0, 0, 1)))
           append_color_param (p, "color", gsk_outset_shadow_node_get_color2 (node));
         append_float_param (p, "dx", gsk_outset_shadow_node_get_dx (node), 1.0f);
         append_float_param (p, "dy", gsk_outset_shadow_node_get_dy (node), 1.0f);
