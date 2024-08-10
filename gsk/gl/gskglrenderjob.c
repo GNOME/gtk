@@ -4221,10 +4221,12 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
     break;
 
     case GSK_TEXT_NODE:
-      gsk_gl_render_job_visit_text_node (job,
-                                         node,
-                                         gsk_text_node_get_color (node),
-                                         FALSE);
+      {
+        GdkRGBA rgba;
+
+        gdk_color_to_float (gsk_text_node_get_color2 (node), GDK_COLOR_STATE_SRGB, (float *) &rgba);
+        gsk_gl_render_job_visit_text_node (job, node, &rgba, FALSE);
+      }
     break;
 
     case GSK_TEXTURE_NODE:
