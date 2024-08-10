@@ -1188,9 +1188,13 @@ gtk_css_color_space_get_color_state (GtkCssColorSpace color_space)
     case GTK_CSS_COLOR_SPACE_SRGB:
     case GTK_CSS_COLOR_SPACE_HSL:
     case GTK_CSS_COLOR_SPACE_HWB:
-    case GTK_CSS_COLOR_SPACE_OKLAB:
-    case GTK_CSS_COLOR_SPACE_OKLCH:
       return GDK_COLOR_STATE_SRGB;
+
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+      return GDK_COLOR_STATE_OKLAB;
+
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      return GDK_COLOR_STATE_OKLCH;
 
     case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
       return GDK_COLOR_STATE_SRGB_LINEAR;
@@ -1225,10 +1229,17 @@ gtk_css_color_to_color (const GtkCssColor *css,
       gdk_color_init (color, GDK_COLOR_STATE_REC2100_PQ, css->values);
       break;
 
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+      gdk_color_init (color, GDK_COLOR_STATE_OKLAB, css->values);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      gdk_color_init (color, GDK_COLOR_STATE_OKLCH, css->values);
+      break;
+
+
     case GTK_CSS_COLOR_SPACE_HSL:
     case GTK_CSS_COLOR_SPACE_HWB:
-    case GTK_CSS_COLOR_SPACE_OKLAB:
-    case GTK_CSS_COLOR_SPACE_OKLCH:
       {
         GtkCssColor tmp;
         gtk_css_color_convert (css, GTK_CSS_COLOR_SPACE_SRGB, &tmp);
