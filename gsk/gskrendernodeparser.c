@@ -628,6 +628,10 @@ parse_color_state (GtkCssParser *parser,
     cs = gdk_color_state_get_rec2100_pq ();
   else if (gtk_css_parser_try_ident (parser, "rec2100-linear"))
     cs = gdk_color_state_get_rec2100_linear ();
+  else if (gtk_css_parser_try_ident (parser, "oklab"))
+    cs = gdk_color_state_get_oklab ();
+  else if (gtk_css_parser_try_ident (parser, "oklch"))
+    cs = gdk_color_state_get_oklch ();
   else if (gtk_css_token_is (gtk_css_parser_get_token (parser), GTK_CSS_TOKEN_STRING))
     {
       char *name = gtk_css_parser_consume_string (parser);
