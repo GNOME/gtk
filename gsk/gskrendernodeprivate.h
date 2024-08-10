@@ -123,31 +123,31 @@ _gsk_render_node_ref (GskRenderNode *node)
   return node;
 }
 
-GskRenderNode * gsk_color_node_new2                     (const GdkColor        *color,
-                                                         const graphene_rect_t *bounds);
+GskRenderNode *         gsk_color_node_new2                     (const GdkColor         *color,
+                                                                 const graphene_rect_t  *bounds);
 
-const GdkColor* gsk_color_node_get_color2               (const GskRenderNode   *node);
+const GdkColor *        gsk_color_node_get_color2               (const GskRenderNode    *node);
 
-GskRenderNode * gsk_border_node_new2                    (const GskRoundedRect  *outline,
-                                                         const float            border_width[4],
-                                                         const GdkColor         border_color[4]);
-const GdkColor *gsk_border_node_get_colors2             (const GskRenderNode   *node);
+GskRenderNode *         gsk_border_node_new2                    (const GskRoundedRect   *outline,
+                                                                 const float             border_width[4],
+                                                                 const GdkColor          border_color[4]);
+const GdkColor *        gsk_border_node_get_colors2             (const GskRenderNode    *node);
 
-GskRenderNode * gsk_inset_shadow_node_new2              (const GskRoundedRect *outline,
-                                                         const GdkColor       *color,
-                                                         float                 dx,
-                                                         float                 dy,
-                                                         float                 spread,
-                                                         float                 blur_radius);
-const GdkColor *gsk_inset_shadow_node_get_color2        (const GskRenderNode  *node);
+GskRenderNode *         gsk_inset_shadow_node_new2              (const GskRoundedRect   *outline,
+                                                                 const GdkColor         *color,
+                                                                 const graphene_point_t *offset,
+                                                                 float                   spread,
+                                                                 float                   blur_radius);
+const GdkColor *        gsk_inset_shadow_node_get_color2        (const GskRenderNode    *node);
+const graphene_point_t *gsk_inset_shadow_node_get_offset        (const GskRenderNode    *node);
 
-GskRenderNode * gsk_outset_shadow_node_new2             (const GskRoundedRect *outline,
-                                                         const GdkColor       *color,
-                                                         float                 dx,
-                                                         float                 dy,
-                                                         float                 spread,
-                                                         float                 blur_radius);
-const GdkColor *gsk_outset_shadow_node_get_color2       (const GskRenderNode  *node);
+GskRenderNode *         gsk_outset_shadow_node_new2             (const GskRoundedRect   *outline,
+                                                                 const GdkColor         *color,
+                                                                 const graphene_point_t *offset,
+                                                                 float                   spread,
+                                                                 float                   blur_radius);
+const GdkColor *        gsk_outset_shadow_node_get_color2       (const GskRenderNode    *node);
+const graphene_point_t *gsk_outset_shadow_node_get_offset       (const GskRenderNode    *node);
 
 typedef struct _GskShadow2 GskShadow2;
 struct _GskShadow2

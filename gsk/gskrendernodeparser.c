@@ -1872,7 +1872,7 @@ parse_inset_shadow_node (GtkCssParser *parser,
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  node = gsk_inset_shadow_node_new2 (&outline, &color, dx, dy, spread, blur);
+  node = gsk_inset_shadow_node_new2 (&outline, &color, &GRAPHENE_POINT_INIT (dx, dy), spread, blur);
 
   gdk_color_finish (&color);
 
@@ -2286,7 +2286,7 @@ parse_outset_shadow_node (GtkCssParser *parser,
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  node = gsk_outset_shadow_node_new2 (&outline, &color, dx, dy, spread, blur);
+  node = gsk_outset_shadow_node_new2 (&outline, &color, &GRAPHENE_POINT_INIT (dx, dy), spread, blur);
 
   gdk_color_finish (&color);
 

@@ -125,7 +125,7 @@ void       gdk_surface_request_layout     (GdkSurface       *surface);
 GDK_AVAILABLE_IN_ALL
 GdkFrameClock* gdk_surface_get_frame_clock      (GdkSurface     *surface);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_16
 void       gdk_surface_set_opaque_region        (GdkSurface      *surface,
                                                  cairo_region_t *region);
 

@@ -420,6 +420,8 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   GskGpuFrame *frame;
   GskGpuImage *backbuffer;
   cairo_region_t *render_region;
+  graphene_rect_t opaque_tmp;
+  const graphene_rect_t *opaque;
   double scale;
   GdkMemoryDepth depth;
 
@@ -431,13 +433,17 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 
   gsk_gpu_device_maybe_gc (priv->device);
 
+  gsk_gpu_renderer_make_current (self);
+
   depth = gsk_render_node_get_preferred_depth (root);
   frame = gsk_gpu_renderer_get_frame (self);
   scale = gsk_gpu_renderer_get_scale (self);
 
-  gsk_gpu_frame_begin (frame, priv->context, depth, region);
-
-  gsk_gpu_renderer_make_current (self);
+  if (gsk_render_node_get_opaque_rect (root, &opaque_tmp))
+    opaque = &opaque_tmp;
+  else
+    opaque = NULL;
+  gsk_gpu_frame_begin (frame, priv->context, depth, region, opaque);
 
   backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
 

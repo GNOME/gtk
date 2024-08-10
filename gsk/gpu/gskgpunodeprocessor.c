@@ -1251,6 +1251,7 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
   GskRoundedRect clip;
   const GskRoundedRect *original_clip;
   GskRenderNode *child;
+  graphene_rect_t scissor;
 
   child = gsk_rounded_clip_node_get_child (node);
   original_clip = gsk_rounded_clip_node_get_clip (node);
@@ -1282,6 +1283,15 @@ gsk_gpu_node_processor_add_rounded_clip_node (GskGpuNodeProcessor *self,
       gsk_gpu_clip_init_copy (&self->clip, &old_clip);
       gsk_gpu_node_processor_add_rounded_clip_node_with_mask (self, node);
       return;
+    }
+
+  if (gsk_gpu_node_processor_rect_device_to_clip (self,
+                                                  &GSK_RECT_INIT_CAIRO (&self->scissor),
+                                                  &scissor))
+    {
+      GskGpuClip scissored_clip;
+      if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, &scissor))
+        gsk_gpu_clip_init_copy (&self->clip, &scissored_clip);
     }
 
   if (self->clip.type == GSK_GPU_CLIP_ALL_CLIPPED)
@@ -1418,6 +1428,7 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
       {
         GskTransform *clip_transform;
         float scale_x, scale_y, old_pixels, new_pixels;
+        graphene_rect_t scissor;
 
         clip_transform = gsk_transform_transform (gsk_transform_translate (NULL, &self->offset), transform);
         gsk_gpu_clip_init_copy (&old_clip, &self->clip);
@@ -1487,6 +1498,23 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
         self->modelview = gsk_transform_scale (self->modelview, 1 / scale_x, 1 / scale_y);
         graphene_vec2_init (&self->scale, scale_x, scale_y);
         self->offset = *graphene_point_zero ();
+
+        if (gsk_gpu_node_processor_rect_device_to_clip (self,
+                                                        &GSK_RECT_INIT_CAIRO (&self->scissor),
+                                                        &scissor))
+          {
+            GskGpuClip scissored_clip;
+            if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, &scissor))
+              gsk_gpu_clip_init_copy (&self->clip, &scissored_clip);
+
+            if (self->clip.type == GSK_GPU_CLIP_ALL_CLIPPED)
+              {
+                self->offset = old_offset;
+                self->scale = old_scale;
+                gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+              }
+          }
+
       }
       break;
 
@@ -2290,8 +2318,7 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
                          self->opacity,
                          &self->offset,
                          gsk_inset_shadow_node_get_outline (node),
-                         &GRAPHENE_POINT_INIT (gsk_inset_shadow_node_get_dx (node),
-                                               gsk_inset_shadow_node_get_dy (node)),
+                         gsk_inset_shadow_node_get_offset (node),
                          (float[4]) { spread, spread, spread, spread },
                          colors);
 
@@ -2308,8 +2335,7 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
                              TRUE,
                              &node->bounds,
                              gsk_inset_shadow_node_get_outline (node),
-                             &GRAPHENE_POINT_INIT (gsk_inset_shadow_node_get_dx (node),
-                                                   gsk_inset_shadow_node_get_dy (node)),
+                             gsk_inset_shadow_node_get_offset (node),
                              spread,
                              blur_radius,
                              color);
@@ -2320,14 +2346,14 @@ static void
 gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
                                                GskRenderNode       *node)
 {
-  float spread, blur_radius, dx, dy;
+  float spread, blur_radius;
   const GdkColor *color;
+  const graphene_point_t *offset;
 
   color = gsk_outset_shadow_node_get_color2 (node);
   spread = gsk_outset_shadow_node_get_spread (node);
   blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
-  dx = gsk_outset_shadow_node_get_dx (node);
-  dy = gsk_outset_shadow_node_get_dy (node);
+  offset = gsk_outset_shadow_node_get_offset (node);
 
   if (blur_radius < 0.01)
     {
@@ -2336,7 +2362,7 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
 
       gsk_rounded_rect_init_copy (&outline, gsk_outset_shadow_node_get_outline (node));
       gsk_rounded_rect_shrink (&outline, -spread, -spread, -spread, -spread);
-      graphene_rect_offset (&outline.bounds, dx, dy);
+      graphene_rect_offset (&outline.bounds, offset->x, offset->y);
 
       for (int i = 0; i < 4; i++)
         gdk_color_init_copy (&colors[i], color);
@@ -2347,7 +2373,7 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
                          self->opacity,
                          &self->offset,
                          &outline,
-                         &GRAPHENE_POINT_INIT (-dx, -dy),
+                         &GRAPHENE_POINT_INIT (- offset->x, - offset->y),
                          (float[4]) { spread, spread, spread, spread },
                          colors);
 
@@ -2364,7 +2390,7 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
                              FALSE,
                              &node->bounds,
                              gsk_outset_shadow_node_get_outline (node),
-                             &GRAPHENE_POINT_INIT (dx, dy),
+                             offset,
                              spread,
                              blur_radius,
                              color);

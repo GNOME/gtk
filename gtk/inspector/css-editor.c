@@ -26,15 +26,15 @@
 #include "window.h"
 #include "css-editor.h"
 
-#include "gtkcssprovider.h"
-#include "gtkstyleprovider.h"
-#include "gtktextview.h"
 #include "gtkalertdialog.h"
+#include "gtkcssprovider.h"
 #include "gtkfiledialog.h"
-#include "gtktogglebutton.h"
 #include "gtklabel.h"
-#include "gtktooltip.h"
+#include "gtkstyleproviderprivate.h"
 #include "gtktextiter.h"
+#include "gtktextview.h"
+#include "gtktogglebutton.h"
+#include "gtktooltip.h"
 
 #include "gtk/css/gtkcss.h"
 
@@ -174,7 +174,7 @@ disable_toggled (GtkToggleButton       *button,
   else
     gtk_style_context_add_provider_for_display (ce->priv->display,
                                                 GTK_STYLE_PROVIDER (ce->priv->provider),
-                                                GTK_STYLE_PROVIDER_PRIORITY_USER);
+                                                GTK_STYLE_PROVIDER_PRIORITY_INSPECTOR);
 }
 
 static void

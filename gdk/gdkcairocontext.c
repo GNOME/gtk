@@ -82,8 +82,10 @@ gdk_cairo_context_cairo_create (GdkCairoContext *self)
 
   draw_context = GDK_DRAW_CONTEXT (self);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (!gdk_draw_context_is_in_frame (draw_context))
     return NULL;
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   cr = GDK_CAIRO_CONTEXT_GET_CLASS (self)->cairo_create (self);
 

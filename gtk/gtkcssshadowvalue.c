@@ -623,7 +623,8 @@ gtk_css_shadow_value_snapshot_outset (const GtkCssValue    *value,
 
       gtk_snapshot_append_outset_shadow2 (snapshot, border_box,
                                           &color,
-                                          dx, dy, spread, radius);
+                                          &GRAPHENE_POINT_INIT (dx, dy),
+                                          spread, radius);
       gdk_color_finish (&color);
     }
 }
@@ -719,7 +720,8 @@ gtk_css_shadow_value_snapshot_inset (const GtkCssValue    *value,
           gtk_snapshot_append_inset_shadow2 (snapshot,
                                              padding_box,
                                              &color,
-                                             dx, dy, spread, radius);
+                                             &GRAPHENE_POINT_INIT (dx, dy),
+                                             spread, radius);
         }
 
       gdk_color_finish (&color);

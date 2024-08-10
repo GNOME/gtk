@@ -1477,7 +1477,7 @@ gdk_display_create_gl_context (GdkDisplay  *self,
   if (!gdk_display_prepare_gl (self, error))
     return NULL;
 
-  return gdk_gl_context_new (self, NULL);
+  return gdk_gl_context_new (self, NULL, FALSE);
 }
 
 /*< private >

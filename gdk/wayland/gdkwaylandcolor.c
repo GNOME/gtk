@@ -1,8 +1,9 @@
-#include "config.h"
 
 #include "gdkwaylandcolor-private.h"
 #include "gdksurface-wayland-private.h"
 #include <gdk/wayland/xx-color-management-v4-client-protocol.h>
+
+typedef struct _ImageDescription ImageDescription;
 
 static uint primaries_map[] = {
   [XX_COLOR_MANAGER_V4_PRIMARIES_SRGB] = 1,
@@ -426,11 +427,12 @@ struct _GdkWaylandColorSurface
   GdkWaylandColor *color;
   struct xx_color_management_surface_v4 *surface;
   struct xx_color_management_feedback_surface_v4 *feedback;
+  ImageDescription *current_desc;
   GdkColorStateChanged callback;
   gpointer data;
 };
 
-typedef struct
+struct _ImageDescription
 {
   GdkWaylandColorSurface *surface;
 
@@ -460,7 +462,7 @@ typedef struct
   unsigned int has_target_luminance : 1;
   unsigned int has_target_max_cll : 1;
   unsigned int has_target_max_fall : 1;
-} ImageDescription;
+};
 
 static GdkColorState *
 gdk_color_state_from_image_description_bits (ImageDescription *desc)
@@ -481,12 +483,29 @@ gdk_color_state_from_image_description_bits (ImageDescription *desc)
 }
 
 static void
+gdk_wayland_color_surface_clear_image_desc (GdkWaylandColorSurface *self)
+{
+  ImageDescription *desc = self->current_desc;
+
+  if (desc == NULL)
+    return;
+
+  g_clear_pointer (&desc->image_desc, xx_image_description_v4_destroy);
+  g_clear_pointer (&desc->info, xx_image_description_info_v4_destroy);
+  g_free (desc);
+
+  self->current_desc = NULL;
+}
+
+static void
 image_desc_info_done (void *data,
                       struct xx_image_description_info_v4 *info)
 {
   ImageDescription *desc = data;
   GdkWaylandColorSurface *self = desc->surface;
   GdkColorState *cs;
+
+  g_assert (self->current_desc == desc);
 
   cs = gdk_color_state_from_image_description_bits (desc);
   if (cs)
@@ -498,7 +517,7 @@ image_desc_info_done (void *data,
   else
     {
       cs = GDK_COLOR_STATE_SRGB;
-      xx_image_description_v4_destroy (desc->image_desc);
+      g_clear_pointer (&desc->image_desc, xx_image_description_v4_destroy);
     }
 
   if (self->callback)
@@ -506,8 +525,7 @@ image_desc_info_done (void *data,
 
   gdk_color_state_unref (cs);
 
-  xx_image_description_info_v4_destroy (desc->info);
-  g_free (desc);
+  gdk_wayland_color_surface_clear_image_desc (self);
 }
 
 static void
@@ -663,10 +681,11 @@ image_desc_failed (void                           *data,
   ImageDescription *desc = data;
   GdkWaylandColorSurface *self = desc->surface;
 
+  g_assert (self->current_desc == desc);
+
   self->callback (self, GDK_COLOR_STATE_SRGB, self->data);
 
-  xx_image_description_v4_destroy (desc->image_desc);
-  g_free (desc);
+  gdk_wayland_color_surface_clear_image_desc (self);
 }
 
 static void
@@ -678,13 +697,14 @@ image_desc_ready (void                           *data,
   GdkWaylandColorSurface *self = desc->surface;
   GdkColorState *cs;
 
+  g_assert (self->current_desc == desc);
+
   cs = g_hash_table_lookup (self->color->id_to_cs, GUINT_TO_POINTER (identity));
   if (cs)
     {
       self->callback (self, cs, self->data);
 
-      xx_image_description_v4_destroy (desc->image_desc);
-      g_free (desc);
+      gdk_wayland_color_surface_clear_image_desc (self);
       return;
     }
 
@@ -709,9 +729,13 @@ preferred_changed (void *data,
   if (!self->callback)
     return;
 
+  /* If there's still an ongoing query, cancel it. It's outdated. */
+  gdk_wayland_color_surface_clear_image_desc (self);
+
   desc = g_new0 (ImageDescription, 1);
 
   desc->surface = self;
+  self->current_desc = desc;
 
   desc->image_desc = xx_color_management_feedback_surface_v4_get_preferred (self->feedback);
 
@@ -749,6 +773,8 @@ gdk_wayland_color_surface_new (GdkWaylandColor          *color,
 void
 gdk_wayland_color_surface_free (GdkWaylandColorSurface *self)
 {
+  gdk_wayland_color_surface_clear_image_desc (self);
+
   xx_color_management_surface_v4_destroy (self->surface);
   xx_color_management_feedback_surface_v4_destroy (self->feedback);
 

@@ -217,6 +217,9 @@ gsk_gl_driver_dispose (GObject *object)
   g_assert (GSK_IS_GL_DRIVER (self));
   g_assert (self->in_frame == FALSE);
 
+  if (self->shared_command_queue)
+    gsk_gl_command_queue_make_current (self->shared_command_queue);
+
 #define GSK_GL_NO_UNIFORMS
 #define GSK_GL_SHADER_RESOURCE(name)
 #define GSK_GL_SHADER_STRING(str)

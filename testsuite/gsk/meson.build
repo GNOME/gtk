@@ -114,6 +114,7 @@ compare_render_tests = [
   'mipmap-with-1x1',
   'nested-rounded-clips',
   'offscreen-forced-downscale',
+  'offscreen-forced-downscale-all-clipped',
   'offscreen-fractional-translate-nogl',
   'offscreen-pixel-alignment-nogl-nocairo',
   'offscreen-pixel-alignment2',

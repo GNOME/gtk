@@ -122,8 +122,9 @@ void                    gdk_gl_backend_use                      (GdkGLBackend   
 
 void                    gdk_gl_context_clear_current_if_surface (GdkSurface      *surface);
 
-GdkGLContext *          gdk_gl_context_new                      (GdkDisplay      *display,
-                                                                 GdkSurface      *surface);
+GdkGLContext *          gdk_gl_context_new                      (GdkDisplay             *display,
+                                                                 GdkSurface             *surface,
+                                                                 gboolean                surface_attached);
 
 gboolean                gdk_gl_context_is_api_allowed           (GdkGLContext           *self,
                                                                  GdkGLAPI                api,
