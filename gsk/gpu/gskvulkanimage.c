@@ -366,7 +366,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   GSK_VK_CHECK (vkCreateImage, vk_device,
                                 &(VkImageCreateInfo) {
                                     .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
-                                    .flags = 0,
+                                    .flags = (vk_format == vk_srgb_format) ? VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT : 0,
                                     .imageType = VK_IMAGE_TYPE_2D,
                                     .format = vk_format,
                                     .extent = { width, height, 1 },
@@ -378,6 +378,15 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                              (flags & GSK_GPU_IMAGE_NO_BLIT ? 0 : VK_IMAGE_USAGE_TRANSFER_SRC_BIT),
                                     .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
                                     .initialLayout = self->vk_image_layout,
+                                    .pNext = (vk_format == vk_srgb_format) ? &(VkImageFormatListCreateInfo) {
+                                        .sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR,
+                                        .pNext = NULL,
+                                        .viewFormatCount = 2,
+                                        .pViewFormats = (VkFormat[]) {
+                                            vk_format,
+                                            gdk_memory_format_vk_format (format, NULL),
+                                        }
+                                    } : NULL,
                                 },
                                 NULL,
                                 &self->vk_image);
@@ -775,7 +784,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   res = vkCreateImage (vk_device,
                        &(VkImageCreateInfo) {
                            .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
-                           .flags = 0,
+                           .flags = (vk_format == vk_srgb_format) ? VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT : 0,
                            .imageType = VK_IMAGE_TYPE_2D,
                            .format = vk_format,
                            .extent = { width, height, 1 },
@@ -793,7 +802,16 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                                .pNext = &(VkImageDrmFormatModifierListCreateInfoEXT) {
                                    .sType = VK_STRUCTURE_TYPE_IMAGE_DRM_FORMAT_MODIFIER_LIST_CREATE_INFO_EXT,
                                    .drmFormatModifierCount = n_modifiers,
-                                   .pDrmFormatModifiers = modifiers
+                                   .pDrmFormatModifiers = modifiers,
+                                   .pNext = (vk_format == vk_srgb_format) ? &(VkImageFormatListCreateInfo) {
+                                       .sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR,
+                                       .pNext = NULL,
+                                       .viewFormatCount = 2,
+                                       .pViewFormats = (VkFormat[]) {
+                                           vk_format,
+                                           gdk_memory_format_vk_format (format, NULL),
+                                       }
+                                   } : NULL,
                                }
                            },
                        },
