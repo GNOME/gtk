@@ -2182,6 +2182,10 @@ gsk_gl_render_job_visit_unblurred_inset_shadow_node (GskGLRenderJob      *job,
 
   if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow)))
     {
+      const GdkRGBA rgba;
+
+      gdk_color_to_float (gsk_inset_shadow_node_get_color2 (node), GDK_COLOR_STATE_SRGB, (float *) &rgba);
+
       gsk_gl_program_set_uniform_rounded_rect (job->current_program,
                                                UNIFORM_INSET_SHADOW_OUTLINE_RECT, 0,
                                                &transformed_outline);
@@ -2192,7 +2196,7 @@ gsk_gl_render_job_visit_unblurred_inset_shadow_node (GskGLRenderJob      *job,
                                     UNIFORM_INSET_SHADOW_OFFSET, 0,
                                     gsk_inset_shadow_node_get_dx (node),
                                     gsk_inset_shadow_node_get_dy (node));
-      rgba_to_half (gsk_inset_shadow_node_get_color (node), color);
+      rgba_to_half (&rgba, color);
       gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, color);
       gsk_gl_render_job_end_draw (job);
     }
@@ -2285,6 +2289,10 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
       /* Actual inset shadow outline drawing */
       if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow)))
         {
+          const GdkRGBA rgba;
+
+          gdk_color_to_float (gsk_inset_shadow_node_get_color2 (node), GDK_COLOR_STATE_SRGB, (float *) &rgba);
+
           gsk_gl_program_set_uniform_rounded_rect (job->current_program,
                                                    UNIFORM_INSET_SHADOW_OUTLINE_RECT, 0,
                                                    &transformed_outline);
@@ -2295,7 +2303,7 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
                                         UNIFORM_INSET_SHADOW_OFFSET, 0,
                                         offset_x * scale_x,
                                         offset_y * scale_y);
-          rgba_to_half (gsk_inset_shadow_node_get_color (node), color);
+          rgba_to_half (&rgba, color);
           gsk_gl_render_job_draw_with_color (job,
                                              0, 0, texture_width, texture_height,
                                              color);
@@ -2378,6 +2386,7 @@ gsk_gl_render_job_visit_unblurred_outset_shadow_node (GskGLRenderJob      *job,
   float spread = gsk_outset_shadow_node_get_spread (node);
   float dx = gsk_outset_shadow_node_get_dx (node);
   float dy = gsk_outset_shadow_node_get_dy (node);
+  GdkRGBA rgba;
   guint16 color[4];
   const float edge_sizes[] = { // Top, right, bottom, left
     spread - dy, spread + dx, spread + dy, spread - dx
@@ -2389,7 +2398,8 @@ gsk_gl_render_job_visit_unblurred_outset_shadow_node (GskGLRenderJob      *job,
     { outline->corner[3].width + spread - dx, outline->corner[3].height + spread + dy },
   };
 
-  rgba_to_half (gsk_outset_shadow_node_get_color (node), color);
+  gdk_color_to_float (gsk_outset_shadow_node_get_color2 (node), GDK_COLOR_STATE_SRGB, (float *) &rgba);
+  rgba_to_half (&rgba, color);
 
   gsk_gl_render_job_translate_rounded_rect (job, outline, &transformed_outline);
 
@@ -2473,11 +2483,13 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
   int blurred_texture_id;
   int cached_tid;
   gboolean do_slicing;
+  GdkRGBA rgba;
   guint16 color[4];
   float half_width = outline->bounds.size.width / 2;
   float half_height = outline->bounds.size.height / 2;
 
-  rgba_to_half (gsk_outset_shadow_node_get_color (node), color);
+  gdk_color_to_float (gsk_outset_shadow_node_get_color2 (node), GDK_COLOR_STATE_SRGB, (float *)  &rgba);
+  rgba_to_half (&rgba, color);
 
   /* scaled_outline is the minimal outline we need to draw the given drop shadow,
    * enlarged by the spread and offset by the blur radius. */

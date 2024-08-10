@@ -1,6 +1,37 @@
 Overview of Changes in 4.15.5, xx-xx-xxxx
 =========================================
 
+* GtkTextView:
+ - ADd GtkTextBufferCommitNotify
+
+* CSS:
+ - Propagate color state information to GSK for many features:
+   colors, borders, shadows
+
+* Gdk:
+ - Fix an fd leak in the Vulkan code
+ - Fix a leak of EGLSurfaces and DMA buffers
+ - Set the opaque region of surfaces automatically based on their content
+
+* Gsk:
+ - Fix Emoji rendering in Vulkan
+ - Rework color handling to take color states into account
+ - Implement more powerful occlusion culling
+
+* Macos:
+ - Fix window transparency
+
+* Debugging:
+ - The inspector shows details about color states now
+
+* Deprecations:
+ - gdk_draw_context_begin/end_frame
+ - gdk_surface_set_opaque_region
+
+* Build:
+ - Require gstreamer 1.24
+
+
 Overview of Changes in 4.15.4, 30-07-2024
 =========================================
 
