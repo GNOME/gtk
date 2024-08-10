@@ -1431,6 +1431,7 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
       {
         GskTransform *clip_transform;
         float scale_x, scale_y, old_pixels, new_pixels;
+        graphene_rect_t scissor;
 
         clip_transform = gsk_transform_transform (gsk_transform_translate (NULL, &self->offset), transform);
         gsk_gpu_clip_init_copy (&old_clip, &self->clip);
@@ -1500,6 +1501,23 @@ gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
         self->modelview = gsk_transform_scale (self->modelview, 1 / scale_x, 1 / scale_y);
         graphene_vec2_init (&self->scale, scale_x, scale_y);
         self->offset = *graphene_point_zero ();
+
+        if (gsk_gpu_node_processor_rect_device_to_clip (self,
+                                                        &GSK_RECT_INIT_CAIRO (&self->scissor),
+                                                        &scissor))
+          {
+            GskGpuClip scissored_clip;
+            if (gsk_gpu_clip_intersect_rect (&scissored_clip, &self->clip, &scissor))
+              gsk_gpu_clip_init_copy (&self->clip, &scissored_clip);
+
+            if (self->clip.type == GSK_GPU_CLIP_ALL_CLIPPED)
+              {
+                self->offset = old_offset;
+                self->scale = old_scale;
+                gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+              }
+          }
+
       }
       break;
 
