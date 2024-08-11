@@ -17,12 +17,13 @@ Overview of Changes in 4.15.5, xx-xx-xxxx
  - Fix Emoji rendering in Vulkan
  - Rework color handling to take color states into account
  - Implement more powerful occlusion culling
+ - Minimize our use of renderpasses
 
 * Macos:
  - Fix window transparency
 
 * Debugging:
- - The inspector shows details about color states now
+ - The inspector shows details about color states
 
 * Deprecations:
  - gdk_draw_context_begin/end_frame
@@ -30,6 +31,9 @@ Overview of Changes in 4.15.5, xx-xx-xxxx
 
 * Build:
  - Require gstreamer 1.24
+
+* Translation updates
+ Romanian
 
 
 Overview of Changes in 4.15.4, 30-07-2024
