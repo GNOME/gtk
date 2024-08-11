@@ -141,8 +141,14 @@ typedef struct _GskGpuFirstNodeInfo GskGpuFirstNodeInfo;
 struct _GskGpuFirstNodeInfo
 {
   GskGpuImage *target;
+  cairo_rectangle_int_t extents;
   GskRenderPassType pass_type;
   gsize min_occlusion_pixels;
+  float background_color[4];
+
+  guint whole_area : 1;
+  guint has_background : 1;
+  guint has_started_rendering : 1;
 };
 
 static void             gsk_gpu_node_processor_add_node                 (GskGpuNodeProcessor            *self,
@@ -1104,13 +1110,54 @@ gsk_gpu_first_node_begin_rendering (GskGpuNodeProcessor *self,
                                     GskGpuFirstNodeInfo *info,
                                     float                clear_color[4])
 {
-  gsk_gpu_render_pass_begin_op (self->frame,
-                                info->target,
-                                &self->scissor,
-                                clear_color ? GSK_GPU_LOAD_OP_CLEAR
-                                            : GSK_GPU_LOAD_OP_DONT_CARE,
-                                clear_color,
-                                info->pass_type);
+  if (info->has_started_rendering)
+    {
+      if (clear_color &&
+          (!info->has_background ||
+           (info->has_background &&
+            (clear_color[0] != info->background_color[0] ||
+             clear_color[1] != info->background_color[1] ||
+             clear_color[2] != info->background_color[2] ||
+             clear_color[3] != info->background_color[3]))))
+        {
+          gsk_gpu_clear_op (self->frame, &self->scissor, clear_color);
+        }
+    }
+  else
+    {
+      GskGpuLoadOp load_op;
+
+      if (!info->whole_area)
+        {
+          info->has_background = FALSE;
+          load_op = GSK_GPU_LOAD_OP_LOAD;
+        }
+      else if (clear_color)
+        {
+          info->background_color[0] = clear_color[0];
+          info->background_color[1] = clear_color[1];
+          info->background_color[2] = clear_color[2];
+          info->background_color[3] = clear_color[3];
+          info->has_background = TRUE;
+          load_op = GSK_GPU_LOAD_OP_CLEAR;
+        }
+      else
+        {
+          info->has_background = FALSE;
+          load_op = GSK_GPU_LOAD_OP_DONT_CARE;
+        }
+
+      info->has_started_rendering = TRUE;
+      gsk_gpu_render_pass_begin_op (self->frame,
+                                    info->target,
+                                    &info->extents,
+                                    load_op,
+                                    clear_color,
+                                    info->pass_type);
+
+      if (!info->whole_area && clear_color)
+        gsk_gpu_clear_op (self->frame, &self->scissor, clear_color);
+    }
 }
 
 /*
@@ -4095,13 +4142,16 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
                                GskRenderNode         *node,
                                GskRenderPassType      pass_type)
 {
-  GskGpuFirstNodeInfo info;
+  GskGpuFirstNodeInfo info = {
+    .target = target,
+    .pass_type = pass_type,
+  };
   int i, n, best, best_size;
   cairo_rectangle_int_t rect;
   gboolean do_culling;
 
-  info.target = target;
-  info.pass_type = pass_type;
+  cairo_region_get_extents (clip, &info.extents);
+  info.whole_area = cairo_region_contains_rectangle (clip, &info.extents) == CAIRO_REGION_OVERLAP_IN;
   info.min_occlusion_pixels = gsk_gpu_image_get_width (target) * gsk_gpu_image_get_height (target) *
                               MIN_PERCENTAGE_FOR_OCCLUSION_PASS / 100;
   info.min_occlusion_pixels = MAX (info.min_occlusion_pixels, MIN_PIXELS_FOR_OCCLUSION_PASS);
@@ -4150,10 +4200,6 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
                             &GDK_COLOR_SRGB (1.0, 1.0, 1.0, 0.6));
         }
 
-      gsk_gpu_render_pass_end_op (self->frame,
-                                  target,
-                                  pass_type);
-
       cairo_region_subtract_rectangle (clip, &self->scissor);
     }
 
@@ -4173,7 +4219,10 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
           gsk_gpu_first_node_begin_rendering (self, &info, GSK_VEC4_TRANSPARENT);
           gsk_gpu_node_processor_add_node (self, node);
         }
+    }
 
+  if (info.has_started_rendering)
+    {
       gsk_gpu_render_pass_end_op (self->frame,
                                   target,
                                   pass_type);
