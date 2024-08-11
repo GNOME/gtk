@@ -450,7 +450,6 @@ TRANSFORM(gdk_cicp_from_rec2100_linear, NONE,        cicp->from_rec2020, cicp->o
 #undef cicp
 
 /* }}} */
-/* }}} */
 /* {{{ Vfuncs */
 
 static void
