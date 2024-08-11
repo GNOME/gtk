@@ -262,6 +262,12 @@ A number of options affect behavior instead of logging:
 `high-depth`
 : Use high bit depth rendering if possible
 
+`linear`
+: Enable linear rendering
+
+`hdr`
+: Force HDR rendering
+
 `no-vsync`
 : Repaint instantly (uses 100% CPU with animations)
 
@@ -279,9 +285,6 @@ are only available when GTK has been configured with `-Ddebug=true`.
 
 `renderer`
 : General renderer information
-
-`opengl`
-: OpenGL renderer information
 
 `vulkan`
 : Check Vulkan errors
@@ -314,6 +317,9 @@ A number of options affect behavior instead of logging:
 
 `cairo`
 : Overlay error pattern over cairo drawing (finds fallbacks)
+
+`occlusion`
+: Overlay highlight over areas optimized via occlusion culling
 
 The special value `all` can be used to turn on all debug options. The special
 value `help` can be used to obtain a list of all supported debug options.
@@ -461,11 +467,11 @@ using and the GDK backend supports them:
 This variable can be set to a list of values, which cause GSK to
 disable certain optimizations of the "ngl" and "vulkan" renderer.
 
-`uber`
-: Don't use the uber shader
-
 `clear`
 : Use shaders instead of vkCmdClearAttachment()/glClear()
+
+`merge`
+: USe one vkCmdDraw()/glDrawArrays() per operation
 
 `blit`
 : Use shaders instead of vkCmdBlit()/glBlitFramebuffer()
@@ -475,6 +481,13 @@ disable certain optimizations of the "ngl" and "vulkan" renderer.
 
 `mipmap`
 : Avoid creating mipmaps
+
+`to-image`
+: Don't fast-path creation of images for nodes
+
+`occlusion`
+: Disable occlusion culling via opacity tracking
+
 
 The special value `all` can be used to turn on all values. The special
 value `help` can be used to obtain a list of all supported values.
