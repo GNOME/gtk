@@ -176,7 +176,10 @@ gdk_color_state_convert_color (GdkColorState *src_cs,
   GdkFloatColorConvert convert = NULL;
   GdkFloatColorConvert convert2 = NULL;
 
-  memcpy (dest, src, sizeof (float) * 4);
+  dest[0] = src[0];
+  dest[1] = src[1];
+  dest[2] = src[2];
+  dest[3] = src[3];
 
   if (gdk_color_state_equal (src_cs, dest_cs))
     return;
