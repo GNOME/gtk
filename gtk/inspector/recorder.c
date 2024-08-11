@@ -1552,13 +1552,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     case GSK_TRANSFORM_NODE:
       {
         static const char * category_names[] = {
-          [GSK_TRANSFORM_CATEGORY_UNKNOWN] = "unknown",
-          [GSK_TRANSFORM_CATEGORY_ANY] = "any",
-          [GSK_TRANSFORM_CATEGORY_3D] = "3D",
-          [GSK_TRANSFORM_CATEGORY_2D] = "2D",
-          [GSK_TRANSFORM_CATEGORY_2D_AFFINE] = "2D affine",
-          [GSK_TRANSFORM_CATEGORY_2D_TRANSLATE] = "2D translate",
-          [GSK_TRANSFORM_CATEGORY_IDENTITY] = "identity"
+          [GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN] = "unknown",
+          [GSK_FINE_TRANSFORM_CATEGORY_ANY] = "any",
+          [GSK_FINE_TRANSFORM_CATEGORY_3D] = "3D",
+          [GSK_FINE_TRANSFORM_CATEGORY_2D] = "2D",
+          [GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL] = "2D dihedral",
+          [GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE] = "2D negative affine",
+          [GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE] = "2D affine",
+          [GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE] = "2D translate",
+          [GSK_FINE_TRANSFORM_CATEGORY_IDENTITY] = "identity"
         };
         GskTransform *transform;
         char *s;
@@ -1567,7 +1569,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         s = gsk_transform_to_string (transform);
         add_text_row (store, "Matrix", "%s", s);
         g_free (s);
-        add_text_row (store, "Category", "%s", category_names[gsk_transform_get_category (transform)]);
+        add_text_row (store, "Category", "%s", category_names[gsk_transform_get_fine_category (transform)]);
       }
       break;
 
