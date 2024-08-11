@@ -116,7 +116,10 @@ _gdk_color_to_float (const GdkColor  *self,
 {
   if (gdk_color_state_equal (self->color_state, color_state))
     {
-      memcpy (values, self->values, sizeof (float) * 4);
+      values[0] = self->values[0];
+      values[1] = self->values[1];
+      values[2] = self->values[2];
+      values[3] = self->values[3];
       return;
     }
 
