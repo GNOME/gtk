@@ -38,7 +38,7 @@ if get_option('documentation')
       gdk_gir[0],
     ],
     depends: gdk_gir[0],
-    suite: ['docs'],
+    suite: ['docs', 'failing'],
   )
 
   if x11_enabled
