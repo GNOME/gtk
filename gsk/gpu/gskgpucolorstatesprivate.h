@@ -74,6 +74,10 @@ gsk_gpu_color_states_is_alt_premultiplied (GskGpuColorStates self)
   return !!(self & COLOR_SPACE_ALT_PREMULTIPLIED);
 }
 
+/* Note: this function should only return a colorstate other than
+ * color->color_state *only* if the shaders can't handle the conversion
+ * from color->color_state to ccs.
+ */
 static inline GdkColorState *
 gsk_gpu_color_states_find (GdkColorState  *ccs,
                            const GdkColor *color)
