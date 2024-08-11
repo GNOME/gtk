@@ -9,6 +9,7 @@ documentation in the form of man pages.
  - [gtk4-demo-application](gtk4-demo-application.html)
  - [gtk4-encode-symbolic-svg](gtk4-encode-symbolic-svg.html)
  - [gtk4-icon-browser](gtk4-icon-browser.html)
+ - [gtk4-image-tool](gtk4-image-tool.html)
  - [gtk4-launch](gtk4-launch.html)
  - [gtk4-node-editor](gtk4-node-editor.html)
  - [gtk4-path-tool](gtk4-path-tool.html)
