@@ -1089,6 +1089,27 @@ gsk_gpu_node_processor_add_clip_node (GskGpuNodeProcessor *self,
 }
 
 /*
+ * gsk_gpu_first_node_begin_rendering:
+ * @self: The node processor
+ * @info: The first node info
+ * @clear_color: (nullable): The color to clear to
+ *
+ * Begins rendering the given scissor rect and if given clears the background
+ * to the given clear color.
+ **/
+static void
+gsk_gpu_first_node_begin_rendering (GskGpuNodeProcessor *self,
+                                    GskGpuFirstNodeInfo *info,
+                                    float                clear_color[4])
+{
+  gsk_gpu_render_pass_begin_op (self->frame,
+                                info->target,
+                                &self->scissor,
+                                clear_color,
+                                info->pass_type);
+}
+
+/*
  * gsk_gpu_node_processor_clip_first_node:
  * @self: the nodeprocessor
  * @info: the first pass info
@@ -1788,11 +1809,7 @@ gsk_gpu_node_processor_add_first_color_node (GskGpuNodeProcessor *self,
     return FALSE;
 
   gdk_color_to_float (gsk_color_node_get_color2 (node), self->ccs, clear_color);
-  gsk_gpu_render_pass_begin_op (self->frame,
-                                info->target,
-                                &self->scissor,
-                                clear_color,
-                                info->pass_type);
+  gsk_gpu_first_node_begin_rendering (self, info, clear_color);
 
   return TRUE;
 }
@@ -3556,11 +3573,7 @@ gsk_gpu_node_processor_add_first_subsurface_node (GskGpuNodeProcessor *self,
   if (!gsk_gpu_node_processor_clip_first_node (self, info, &node->bounds))
     return FALSE;
 
-  gsk_gpu_render_pass_begin_op (self->frame,
-                                info->target,
-                                &self->scissor,
-                                GSK_VEC4_TRANSPARENT,
-                                info->pass_type);
+  gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
 
   return TRUE;
 }
@@ -3631,13 +3644,7 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
     }
 
   if (i < 0)
-    {
-      gsk_gpu_render_pass_begin_op (self->frame,
-                                    info->target,
-                                    &self->scissor,
-                                    NULL,
-                                    info->pass_type);
-    }
+    gsk_gpu_first_node_begin_rendering (self, info, NULL);
 
   for (i++; i < n; i++)
     gsk_gpu_node_processor_add_node (self, gsk_container_node_get_child (node, i));
@@ -3993,12 +4000,7 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor *self,
   if (!gsk_gpu_node_processor_clip_first_node (self, info, &opaque))
     return FALSE;
 
-  gsk_gpu_render_pass_begin_op (self->frame,
-                                info->target,
-                                &self->scissor,
-                                NULL,
-                                info->pass_type);
-
+  gsk_gpu_first_node_begin_rendering (self, info, NULL);
   gsk_gpu_node_processor_add_node (self, node);
 
   return TRUE;
@@ -4128,11 +4130,7 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
                                                   &info,
                                                   node))
         {
-          gsk_gpu_render_pass_begin_op (self->frame,
-                                        target,
-                                        &rect,
-                                        GSK_VEC4_TRANSPARENT,
-                                        pass_type);
+          gsk_gpu_first_node_begin_rendering (self, &info, GSK_VEC4_TRANSPARENT);
           gsk_gpu_node_processor_add_node (self, node);
           do_culling = FALSE;
         }
@@ -4168,12 +4166,7 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
                                                   &info,
                                                   node))
         {
-          gsk_gpu_render_pass_begin_op (self->frame,
-                                        target,
-                                        &rect,
-                                        GSK_VEC4_TRANSPARENT,
-                                        pass_type);
-
+          gsk_gpu_first_node_begin_rendering (self, &info, GSK_VEC4_TRANSPARENT);
           gsk_gpu_node_processor_add_node (self, node);
         }
 
