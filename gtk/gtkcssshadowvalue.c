@@ -731,7 +731,7 @@ gtk_css_shadow_value_is_clear (const GtkCssValue *value)
     {
       const ShadowValue *shadow = &value->shadows[i];
 
-      if (!gdk_rgba_is_clear (gtk_css_color_value_get_rgba (shadow->color)))
+      if (!gdk_color_is_clear (gtk_css_color_value_get_color (shadow->color)))
         return FALSE;
     }
 
