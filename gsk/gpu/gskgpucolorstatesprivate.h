@@ -27,11 +27,11 @@ gsk_gpu_color_states_create (GdkColorState *output_color_state,
                              GdkColorState *alt_color_state,
                              gboolean       alt_is_premultiplied)
 {
-  g_assert (GDK_IS_DEFAULT_COLOR_STATE (output_color_state));
-  g_assert (GDK_IS_DEFAULT_COLOR_STATE (alt_color_state));
-
   if (gdk_color_state_equal (output_color_state, alt_color_state))
     return gsk_gpu_color_states_create_equal (output_is_premultiplied, alt_is_premultiplied);
+
+  g_assert (GDK_IS_DEFAULT_COLOR_STATE (output_color_state));
+  g_assert (GDK_IS_DEFAULT_COLOR_STATE (alt_color_state));
 
   return (GDK_DEFAULT_COLOR_STATE_ID (output_color_state) << COLOR_SPACE_OUTPUT_SHIFT) |
          (output_is_premultiplied ? COLOR_SPACE_OUTPUT_PREMULTIPLIED : 0) |
