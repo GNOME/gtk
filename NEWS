@@ -6,7 +6,7 @@ Overview of Changes in 4.15.5, xx-xx-xxxx
 
 * CSS:
  - Propagate color state information to GSK for many features:
-   colors, borders, shadows
+   colors, borders, shadows, text
 
 * Gdk:
  - Fix an fd leak in the Vulkan code

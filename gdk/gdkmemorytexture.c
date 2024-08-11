@@ -111,7 +111,7 @@ gdk_memory_sanitize (GBytes          *bytes,
       stride % align == 0)
     {
       *out_stride = stride;
-      return g_bytes_ref (bytes);
+      return bytes;
     }
 
   bpp = gdk_memory_format_bytes_per_pixel (format);
@@ -121,6 +121,8 @@ gdk_memory_sanitize (GBytes          *bytes,
   copy = g_malloc (copy_stride * height);
   for (y = 0; y < height; y++)
     memcpy (copy + y * copy_stride, data + y * stride, bpp * width);
+
+  g_bytes_unref (bytes);
 
   *out_stride = copy_stride;
   return g_bytes_new_take (copy, copy_stride * height);
@@ -197,7 +199,7 @@ gdk_memory_texture_new (int              width,
   /* needs to be this complex to support subtexture of the bottom right part */
   g_return_val_if_fail (g_bytes_get_size (bytes) >= gdk_memory_format_min_buffer_size (format, stride, width, height), NULL);
 
-  bytes = gdk_memory_sanitize (bytes, width, height, format, stride, &stride);
+  bytes = gdk_memory_sanitize (g_bytes_ref (bytes), width, height, format, stride, &stride);
 
   self = g_object_new (GDK_TYPE_MEMORY_TEXTURE,
                        "width", width,
