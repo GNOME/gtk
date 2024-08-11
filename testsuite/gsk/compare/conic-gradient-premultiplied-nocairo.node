@@ -1,0 +1,15 @@
+color-matrix {
+  matrix: matrix3d(2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 100);
+  child: container {
+    conic-gradient {
+      bounds: 0 0 50 50;
+      center: 25 25;
+      stops: 0 rgb(255,0,0), 0.6 rgba(0,255,255,0);
+    }
+    conic-gradient {
+      bounds: 0 0 50 50;
+      center: 25 25;
+      stops: 0.4 rgba(0,255,255,0), 1 rgb(255,0,0);
+    }
+  }
+}

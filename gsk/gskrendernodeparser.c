@@ -517,6 +517,33 @@ parse_positive_double (GtkCssParser *parser,
 }
 
 static gboolean
+parse_strictly_positive_double (GtkCssParser *parser,
+                                Context      *context,
+                                gpointer      out_double)
+{
+  double tmp;
+
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNED_NUMBER)
+      || gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNED_INTEGER))
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a strictly positive number");
+      return FALSE;
+    }
+
+  if (!gtk_css_parser_consume_number (parser, &tmp))
+    return FALSE;
+
+  if (tmp == 0)
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a strictly positive number");
+      return FALSE;
+    }
+
+  *(double *) out_double = tmp;
+  return TRUE;
+}
+
+static gboolean
 parse_point (GtkCssParser *parser,
              Context      *context,
              gpointer      out_point)
@@ -1765,8 +1792,8 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "center", parse_point, NULL, &center },
-    { "hradius", parse_positive_double, NULL, &hradius },
-    { "vradius", parse_positive_double, NULL, &vradius },
+    { "hradius", parse_strictly_positive_double, NULL, &hradius },
+    { "vradius", parse_strictly_positive_double, NULL, &vradius },
     { "start", parse_positive_double, NULL, &start },
     { "end", parse_positive_double, NULL, &end },
     { "stops", parse_stops, clear_stops, &stops },
@@ -1784,7 +1811,16 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
       g_array_append_val (stops, to);
     }
 
-  if (repeating)
+  if (end <= start)
+    {
+      gtk_css_parser_error (parser,
+                            GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                            gtk_css_parser_get_block_location (parser),
+                            gtk_css_parser_get_end_location (parser),
+                            "\"start\" must be larger than \"end\"");
+      result = NULL;
+    }
+  else if (repeating)
     result = gsk_repeating_radial_gradient_node_new (&bounds, &center, hradius, vradius, start, end,
                                                      (GskColorStop *) stops->data, stops->len);
   else
