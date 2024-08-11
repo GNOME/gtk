@@ -77,10 +77,10 @@ void main() {
 
     if (offset < next_offset) {
       float f = (offset - curr_offset) / (next_offset - curr_offset);
-      vec4 curr_color = get_color(i);
-      vec4 next_color = get_color(i + 1);
+      vec4 curr_color = gsk_scaled_premultiply (get_color(i), u_alpha);
+      vec4 next_color = gsk_scaled_premultiply (get_color(i + 1), u_alpha);
       vec4 color = mix(curr_color, next_color, f);
-      gskSetScaledOutputColor(gsk_premultiply(color), u_alpha);
+      gskSetOutputColor(color);
       return;
     }
   }

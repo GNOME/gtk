@@ -1,0 +1,9 @@
+color-matrix {
+  matrix: matrix3d(2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 2, 0, 0, 0, 0, 100);
+  child: linear-gradient {
+    bounds: 0 0 50 50;
+    start: 0 -50;
+    end: 0 100;
+    stops: 0 rgb(255,0,0), 1 rgba(0,255,255,0);
+  }
+}
