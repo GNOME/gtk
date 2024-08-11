@@ -615,7 +615,7 @@ gsk_render_node_diff (GskRenderNode  *node1,
 /**
  * gsk_render_node_get_opaque_rect:
  * @self: a `GskRenderNode`
- * @out_opaque: (out): 
+ * @out_opaque: (out): return location for the opaque rect
  *
  * Gets an opaque rectangle inside the node that GTK can determine to
  * be fully opaque.
