@@ -709,8 +709,8 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   PangoAttrList *attrs = NULL;
   GtkTextDecorationLine decoration_line;
   GtkTextDecorationStyle decoration_style;
-  const GdkRGBA *color;
-  const GdkRGBA *decoration_color;
+  const GdkColor *color;
+  const GdkColor *decoration_color;
   gboolean has_decoration_color;
   double letter_spacing;
 
@@ -718,34 +718,49 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   decoration_line = _gtk_css_text_decoration_line_value_get (style->font_variant->text_decoration_line);
   decoration_style = _gtk_css_text_decoration_style_value_get (style->font_variant->text_decoration_style);
 
-  color = gtk_css_color_value_get_rgba (style->used->color);
-  decoration_color = gtk_css_color_value_get_rgba (style->used->text_decoration_color);
+  color = gtk_css_color_value_get_color (style->used->color);
+  decoration_color = gtk_css_color_value_get_color (style->used->text_decoration_color);
 
-  has_decoration_color = !gdk_rgba_equal (color, decoration_color);
+  has_decoration_color = !gdk_color_equal (color, decoration_color);
 
   if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_UNDERLINE)
     {
       attrs = add_pango_attr (attrs, pango_attr_underline_new (get_pango_underline_from_style (decoration_style)));
       if (has_decoration_color)
-        attrs = add_pango_attr (attrs, pango_attr_underline_color_new (decoration_color->red * 65535. + 0.5,
-                                                                       decoration_color->green * 65535. + 0.5,
-                                                                       decoration_color->blue * 65535. + 0.5));
+        {
+          GdkRGBA rgba;
+
+          gdk_color_to_float (decoration_color, GDK_COLOR_STATE_SRGB, (float *) &rgba);
+          attrs = add_pango_attr (attrs, pango_attr_underline_color_new (rgba.red * 65535. + 0.5,
+                                                                         rgba.green * 65535. + 0.5,
+                                                                         rgba.blue * 65535. + 0.5));
+        }
     }
   if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_OVERLINE)
     {
       attrs = add_pango_attr (attrs, pango_attr_overline_new (get_pango_overline_from_style (decoration_style)));
       if (has_decoration_color)
-        attrs = add_pango_attr (attrs, pango_attr_overline_color_new (decoration_color->red * 65535. + 0.5,
-                                                                      decoration_color->green * 65535. + 0.5,
-                                                                      decoration_color->blue * 65535. + 0.5));
+        {
+          GdkRGBA rgba;
+
+          gdk_color_to_float (decoration_color, GDK_COLOR_STATE_SRGB, (float *) &rgba);
+          attrs = add_pango_attr (attrs, pango_attr_overline_color_new (rgba.red * 65535. + 0.5,
+                                                                        rgba.green * 65535. + 0.5,
+                                                                        rgba.blue * 65535. + 0.5));
+        }
     }
   if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_LINE_THROUGH)
     {
       attrs = add_pango_attr (attrs, pango_attr_strikethrough_new (TRUE));
-      if (!has_decoration_color)
-        attrs = add_pango_attr (attrs, pango_attr_strikethrough_color_new (decoration_color->red * 65535. + 0.5,
-                                                                           decoration_color->green * 65535. + 0.5,
-                                                                           decoration_color->blue * 65535. + 0.5));
+      if (has_decoration_color)
+        {
+          GdkRGBA rgba;
+
+          gdk_color_to_float (decoration_color, GDK_COLOR_STATE_SRGB, (float *) &rgba);
+          attrs = add_pango_attr (attrs, pango_attr_strikethrough_color_new (rgba.red * 65535. + 0.5,
+                                                                             rgba.green * 65535. + 0.5,
+                                                                             rgba.blue * 65535. + 0.5));
+       }
     }
 
   /* letter-spacing */
@@ -877,7 +892,9 @@ gtk_css_style_lookup_symbolic_colors (GtkCssStyle *style,
     [GTK_SYMBOLIC_COLOR_SUCCESS] = "success"
   };
 
-  color_out[GTK_SYMBOLIC_COLOR_FOREGROUND] = *gtk_css_color_value_get_rgba (style->used->color);
+  gdk_color_to_float (gtk_css_color_value_get_color (style->used->color),
+                      GDK_COLOR_STATE_SRGB,
+                      (float *) &color_out[GTK_SYMBOLIC_COLOR_FOREGROUND]);
 
   for (gsize i = 1; i < 4; i++)
     {
@@ -886,7 +903,9 @@ gtk_css_style_lookup_symbolic_colors (GtkCssStyle *style,
       lookup = gtk_css_palette_value_get_color (style->used->icon_palette, names[i]);
 
       if (lookup)
-        color_out[i] = *gtk_css_color_value_get_rgba (lookup);
+        gdk_color_to_float (gtk_css_color_value_get_color (lookup),
+                            GDK_COLOR_STATE_SRGB,
+                            (float *) &color_out[i]);
       else
         color_out[i] = color_out[GTK_SYMBOLIC_COLOR_FOREGROUND];
     }
