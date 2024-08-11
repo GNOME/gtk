@@ -64,6 +64,13 @@ typedef enum
   GSK_RENDER_PASS_EXPORT
 } GskRenderPassType;
 
+typedef enum
+{
+  GSK_GPU_LOAD_OP_LOAD,
+  GSK_GPU_LOAD_OP_CLEAR,
+  GSK_GPU_LOAD_OP_DONT_CARE
+} GskGpuLoadOp;
+
 typedef enum {
   GSK_GPU_PATTERN_DONE,
   GSK_GPU_PATTERN_COLOR,

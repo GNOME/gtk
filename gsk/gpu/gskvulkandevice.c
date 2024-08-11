@@ -74,6 +74,7 @@ struct _PipelineCacheKey
 struct _RenderPassCacheKey
 {
   VkFormat format;
+  VkAttachmentLoadOp vk_load_op;
   VkImageLayout from_layout;
   VkImageLayout to_layout;
   VkRenderPass render_pass;
@@ -114,8 +115,9 @@ render_pass_cache_key_hash (gconstpointer data)
 {
   const RenderPassCacheKey *key = data;
 
-  return (key->from_layout << 20) ^
-         (key->to_layout << 16) ^
+  return (key->from_layout << 26) ^
+         (key->to_layout << 18) ^
+         (key->vk_load_op << 16) ^
          (key->format);
 }
 
@@ -128,6 +130,7 @@ render_pass_cache_key_equal (gconstpointer a,
 
   return keya->from_layout == keyb->from_layout &&
          keya->to_layout == keyb->to_layout &&
+         keya->vk_load_op == keyb->vk_load_op &&
          keya->format == keyb->format;
 }
 
@@ -706,10 +709,11 @@ gsk_vulkan_device_remove_ycbcr (GskVulkanDevice *self,
 }
 
 VkRenderPass
-gsk_vulkan_device_get_vk_render_pass (GskVulkanDevice *self,
-                                      VkFormat         format,
-                                      VkImageLayout    from_layout,
-                                      VkImageLayout    to_layout)
+gsk_vulkan_device_get_vk_render_pass (GskVulkanDevice    *self,
+                                      VkFormat            format,
+                                      VkAttachmentLoadOp  vk_load_op,
+                                      VkImageLayout       from_layout,
+                                      VkImageLayout       to_layout)
 {
   RenderPassCacheKey cache_key;
   RenderPassCacheKey *cached_result;
@@ -718,6 +722,7 @@ gsk_vulkan_device_get_vk_render_pass (GskVulkanDevice *self,
 
   cache_key = (RenderPassCacheKey) {
     .format = format,
+    .vk_load_op = vk_load_op,
     .from_layout = from_layout,
     .to_layout = to_layout,
   };
@@ -735,7 +740,7 @@ gsk_vulkan_device_get_vk_render_pass (GskVulkanDevice *self,
                                            {
                                               .format = format,
                                               .samples = VK_SAMPLE_COUNT_1_BIT,
-                                              .loadOp = VK_ATTACHMENT_LOAD_OP_CLEAR,
+                                              .loadOp = vk_load_op,
                                               .storeOp = VK_ATTACHMENT_STORE_OP_STORE,
                                               .initialLayout = from_layout,
                                               .finalLayout = to_layout
