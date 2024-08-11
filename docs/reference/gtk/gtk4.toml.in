@@ -260,4 +260,4 @@ name = "StyleProvider"
   hidden = true
 
 [check]
-skip_deprecated = true
+ignore_deprecated = true

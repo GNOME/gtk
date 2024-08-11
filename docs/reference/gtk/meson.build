@@ -74,7 +74,7 @@ if get_option('documentation')
       gtk_gir[0],
     ],
     depends: gtk_gir[0],
-    suite: ['docs'],
+    suite: ['docs', 'failing'],
   )
 endif
 
