@@ -38,7 +38,7 @@
  * Crucially, GTK knows how to convert colors from one color
  * state to another.
  *
- * `GdkColorState objects are immutable and therefore threadsafe.
+ * `GdkColorState` objects are immutable and therefore threadsafe.
  *
  * Since 4.16
  */
