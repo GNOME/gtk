@@ -714,8 +714,8 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
               .layer = 0,
               .offset.x = (int) floor (r.x * scale),
               .offset.y = (int) floor (r.y * scale),
-              .extent.width = (int) ceil (r.width * scale),
-              .extent.height = (int) ceil (r.height * scale),
+              .extent.width = (int) ceil ((r.x + r.width) * scale) - floor (r.x * scale),
+              .extent.height = (int) ceil ((r.y + r.height) * scale) - floor (r.y * scale),
           };
         }
     }
