@@ -155,6 +155,21 @@ GListModel *     gtk_file_dialog_select_multiple_folders_finish
                                                      (GtkFileDialog        *self,
                                                       GAsyncResult         *result,
                                                       GError              **error);
-
+GDK_AVAILABLE_IN_4_16
+void             gtk_file_dialog_add_choice          (GtkFileDialog        *self,
+                                                      const char           *id,
+                                                      const char           *label,
+                                                      const char * const   *options,
+                                                      const char * const   *option_labels);
+GDK_AVAILABLE_IN_4_16
+void             gtk_file_dialog_remove_choice       (GtkFileDialog        *self,
+                                                      const char           *id);
+GDK_AVAILABLE_IN_4_16
+const char      *gtk_file_dialog_get_choice          (GtkFileDialog        *self,
+                                                      const char           *id);
+GDK_AVAILABLE_IN_4_16
+void             gtk_file_dialog_set_choice          (GtkFileDialog        *self,
+                                                      const char           *id,
+                                                      const char           *option);
 
 G_END_DECLS

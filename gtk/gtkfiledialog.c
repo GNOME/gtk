@@ -57,7 +57,17 @@ struct _GtkFileDialog
   GFile *initial_folder;
   char *initial_name;
   GFile *initial_file;
+  GPtrArray *choices;
 };
+
+typedef struct
+{
+  char *id;
+  char *label;
+  char **options;
+  char **option_labels;
+  char *choice;
+} Choice;
 
 enum
 {
@@ -79,9 +89,23 @@ static GParamSpec *properties[NUM_PROPERTIES];
 G_DEFINE_TYPE (GtkFileDialog, gtk_file_dialog, G_TYPE_OBJECT)
 
 static void
+choice_free (gpointer data)
+{
+  Choice *choice = data;
+
+  g_clear_pointer (&choice->id, g_free);
+  g_clear_pointer (&choice->label, g_free);
+  g_clear_pointer (&choice->options, g_strfreev);
+  g_clear_pointer (&choice->option_labels, g_strfreev);
+  g_clear_pointer (&choice->choice, g_free);
+  g_free (choice);
+}
+
+static void
 gtk_file_dialog_init (GtkFileDialog *self)
 {
   self->modal = TRUE;
+  self->choices = g_ptr_array_new_with_free_func (choice_free);
 }
 
 static void
@@ -95,6 +119,7 @@ gtk_file_dialog_finalize (GObject *object)
   g_clear_object (&self->default_filter);
   g_clear_object (&self->initial_folder);
   g_free (self->initial_name);
+  g_clear_pointer (&self->choices, g_ptr_array_unref);
 
   G_OBJECT_CLASS (gtk_file_dialog_parent_class)->finalize (object);
 }
@@ -738,6 +763,184 @@ invalid_file:
   g_object_thaw_notify (G_OBJECT (self));
 }
 
+static Choice *
+find_choice (GtkFileDialog *self,
+             const char    *id)
+{
+  for (guint i = 0; i < self->choices->len; i++)
+    {
+      Choice *choice = g_ptr_array_index (self->choices, i);
+
+      if (strcmp (id, choice->id) == 0)
+        return choice;
+    }
+
+  return NULL;
+}
+
+/**
+ * gtk_file_dialog_add_choice:
+ * @self: a `GtkFileDialog`
+ * @id: id for the added choice
+ * @label: user-visible label for the added choice
+ * @options: (nullable) (array zero-terminated=1): ids for the options of the choice, or %NULL for a boolean choice
+ * @option_labels: (nullable) (array zero-terminated=1): user-visible labels for the options, must be the same length as @options
+ *
+ * Adds a 'choice' to the file dialog.
+ *
+ * This is typically implemented as a combobox or, for boolean choices,
+ * as a checkbutton. You can select a value using
+ * [method@Gtk.FileDialog.set_choice] before the dialog is shown,
+ * and you can obtain the user-selected value using
+ * [method@Gtk.FileDialog.get_choice] from the appropriate async
+ * finish function.
+ *
+ * This function should be called before opening the dialog.
+ *
+ * Since: 4.16
+ */
+void
+gtk_file_dialog_add_choice (GtkFileDialog      *self,
+                            const char         *id,
+                            const char         *label,
+                            const char * const *options,
+                            const char * const *option_labels)
+{
+  Choice *choice;
+
+  g_return_if_fail (GTK_IS_FILE_DIALOG (self));
+  g_return_if_fail (id != NULL);
+  g_return_if_fail (label != NULL);
+  g_return_if_fail ((options == NULL && option_labels == NULL) ||
+                    (options != NULL && option_labels != NULL));
+  g_return_if_fail ((options == NULL && option_labels == NULL) ||
+                    (g_strv_length ((char **)options) == g_strv_length ((char **)option_labels)));
+
+  choice = find_choice (self, id);
+
+  if (choice != NULL)
+    {
+      g_warning ("Choice with id %s already added to %s %p", id, G_OBJECT_TYPE_NAME (self), self);
+      return;
+    }
+
+  choice = g_new0 (Choice, 1);
+  choice->id = g_strdup (id);
+  choice->label = g_strdup (label);
+  choice->options = g_strdupv ((char **)options);
+  choice->option_labels = g_strdupv ((char **)option_labels);
+  choice->choice = NULL;
+
+  g_ptr_array_add (self->choices, choice);
+}
+
+/**
+ * gtk_file_dialog_remove_choice:
+ * @self: a `GtkFileChooser`
+ * @id: the ID of the choice to remove
+ *
+ * Removes a 'choice' that has been added with gtk_file_dialog_add_choice().
+ *
+ * Since: 4.16
+ */
+void
+gtk_file_dialog_remove_choice (GtkFileDialog *self,
+                               const char    *id)
+{
+  g_return_if_fail (GTK_IS_FILE_DIALOG (self));
+  g_return_if_fail (id != NULL);
+
+  for (guint i = 0; i < self->choices->len; i++)
+    {
+      Choice *choice = g_ptr_array_index (self->choices, i);
+
+      if (strcmp (id, choice->id) == 0)
+        {
+          g_ptr_array_remove_index (self->choices, i);
+          return;
+        }
+    }
+
+  g_warning ("No choice with id %s found in %s %p", id, G_OBJECT_TYPE_NAME (self), self);
+}
+
+/**
+ * gtk_file_dialog_get_choice:
+ * @self: a `GtkFileDialog`
+ * @id: the ID of the choice to get
+ *
+ * Gets the currently selected option in the 'choice' with the given ID.
+ *
+ * This function should be used within the `finish` function to obtain
+ * the options that the user selected in the dialog.
+ *
+ * Returns: (nullable): the ID of the currently selected option
+ *
+ * Since: 4.16
+ */
+const char *
+gtk_file_dialog_get_choice (GtkFileDialog *self,
+                            const char    *id)
+{
+  Choice *choice;
+
+  g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
+
+  choice = find_choice (self, id);
+
+  if (choice == NULL)
+    {
+      g_warning ("No choice with id %s found in %s %p", id, G_OBJECT_TYPE_NAME (self), self);
+      return NULL;
+    }
+
+  return choice->choice;
+}
+
+/**
+ * gtk_file_dialog_set_choice:
+ * @self: a `GtkFileDialog`
+ * @id: the ID of the choice to set
+ * @option: the ID of the option to select
+ *
+ * Selects an option in a 'choice' that has been added with
+ * gtk_file_dialog_add_choice().
+ *
+ * For a boolean choice, the possible options are "true" and "false".
+ *
+ * Since: 4.16
+ */
+void
+gtk_file_dialog_set_choice (GtkFileDialog *self,
+                            const char    *id,
+                            const char    *option)
+{
+  Choice *choice;
+
+  g_return_if_fail (GTK_IS_FILE_DIALOG (self));
+  g_return_if_fail (id != NULL);
+
+  choice = find_choice (self, id);
+
+  if (choice == NULL)
+    {
+      g_warning ("No choice with id %s found in %s %p", id, G_OBJECT_TYPE_NAME (self), self);
+      return;
+    }
+
+  if (option != NULL)
+    {
+      if (choice->options == NULL ||
+          !g_strv_contains ((const char * const *)choice->options, option))
+        {
+          g_warning ("No choice %s registered for id %s found in %s %p", option, id, G_OBJECT_TYPE_NAME (self), self);
+          return;
+        }
+    }
+
+  g_set_str (&choice->choice, option);
+}
+
 /* }}} */
 /* {{{ Async implementation */
 
@@ -756,7 +959,9 @@ response_cb (GTask *task,
              int    response)
 {
   GCancellable *cancellable;
+  GtkFileDialog *dialog;
 
+  dialog = g_task_get_source_object (task);
   cancellable = g_task_get_cancellable (task);
 
   if (cancellable)
@@ -770,6 +975,15 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
       chooser = GTK_FILE_CHOOSER (g_task_get_task_data (task));
       files = gtk_file_chooser_get_files (chooser);
+
+      for (guint i = 0; i < dialog->choices->len; i++)
+        {
+          Choice *choice = g_ptr_array_index (dialog->choices, i);
+          const char *value = gtk_file_chooser_get_choice (chooser, choice->id);
+
+          g_set_str (&choice->choice, value);
+        }
+
       g_task_return_pointer (task, files, g_object_unref);
 G_GNUC_END_IGNORE_DEPRECATIONS
     }
@@ -869,6 +1083,17 @@ create_file_chooser (GtkFileDialog        *self,
     gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (chooser), self->initial_folder, NULL);
   if (self->initial_name && action == GTK_FILE_CHOOSER_ACTION_SAVE)
     gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (chooser), self->initial_name);
+
+  for (guint i = 0; i < self->choices->len; i++)
+    {
+      const Choice *choice = g_ptr_array_index (self->choices, i);
+
+      gtk_file_chooser_add_choice (GTK_FILE_CHOOSER (chooser),
+                                   choice->id,
+                                   choice->label,
+                                   (const char **)choice->options,
+                                   (const char **)choice->option_labels);
+    }
 
   return chooser;
 }
