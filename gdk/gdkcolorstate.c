@@ -40,7 +40,7 @@
  *
  * `GdkColorState` objects are immutable and therefore threadsafe.
  *
- * Since 4.16
+ * Since: 4.16
  */
 
 G_DEFINE_BOXED_TYPE (GdkColorState, gdk_color_state,
