@@ -451,6 +451,7 @@ init_gl (GtkInspectorGeneral *gen)
       gtk_label_set_text (GTK_LABEL (gen->gl_backend_vendor), "Microsoft WGL");
       gtk_widget_set_visible (gen->gl_backend_version, FALSE);
 
+      append_gl_extension_row (gen, "GL_WIN_swap_hint");
       append_wgl_extension_row (gen, "WGL_EXT_create_context");
       append_wgl_extension_row (gen, "WGL_EXT_swap_control");
       append_wgl_extension_row (gen, "WGL_OML_sync_control");

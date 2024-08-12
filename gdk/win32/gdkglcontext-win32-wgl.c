@@ -41,6 +41,9 @@
 #include <cairo.h>
 #include <epoxy/wgl.h>
 
+/* libepoxy doesn't know about GL_WIN_swap_hint */
+typedef void (WINAPI *glAddSwapHintRectWIN_t) (GLint, GLint, GLsizei, GLsizei);
+
 struct _GdkWin32GLContextWGL
 {
   GdkWin32GLContext parent_instance;
@@ -58,6 +61,8 @@ struct _GdkWin32GLContextWGL
   /* Note: this member is only set when
    * swap_method is exchange */
   cairo_region_t *previous_frame_damage;
+
+  glAddSwapHintRectWIN_t ptr_glAddSwapHintRectWIN;
 };
 
 typedef struct _GdkWin32GLContextClass    GdkWin32GLContextWGLClass;
@@ -93,6 +98,7 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
   GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkWin32Display *display_win32 = (GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context)));
+  GdkWin32Surface *surface_win32 = GDK_WIN32_SURFACE (surface);
   gboolean can_wait = display_win32->hasWglOMLSyncControl;
   HDC hdc;
 
@@ -103,9 +109,32 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "win32", "swap buffers");
 
   if (surface != NULL)
-    hdc = GDK_WIN32_SURFACE (surface)->hdc;
+    hdc = surface_win32->hdc;
   else
     hdc = display_win32->dummy_context_wgl.hdc;
+
+  if (context_wgl->ptr_glAddSwapHintRectWIN)
+    {
+      int num_rectangles = cairo_region_num_rectangles (painted);
+      int scale = surface_win32->surface_scale;
+      cairo_rectangle_int_t rectangle;
+
+      for (int i = 0; i < num_rectangles; i++)
+        {
+          cairo_region_get_rectangle (painted, i, &rectangle);
+
+          /* glAddSwapHintRectWIN works in OpenGL buffer coordinates and uses OpenGL
+           * conventions. Coordinates are that of the client-area, but the origin is
+           * at the lower-left corner; rectangles are passed by their lower-left corner
+           */
+          rectangle.y = surface->height - rectangle.y - rectangle.height;
+
+          context_wgl->ptr_glAddSwapHintRectWIN (rectangle.x * scale,
+                                                 rectangle.y * scale,
+                                                 rectangle.width * scale,
+                                                 rectangle.height * scale);
+        }
+    }
 
   if (context_wgl->do_frame_sync)
     {
@@ -616,6 +645,8 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
     epoxy_has_wgl_extension (hdc, "WGL_OML_sync_control");
   display_win32->hasWglARBPixelFormat =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_pixel_format");
+  display_win32->hasGlWINSwapHint =
+    epoxy_has_gl_extension ("GL_WIN_swap_hint");
 
   context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL,
                           "display", display,
@@ -635,13 +666,15 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                          "\t* WGL_ARB_pixel_format: %s\n"
                          "\t* WGL_ARB_create_context: %s\n"
                          "\t* WGL_EXT_swap_control: %s\n"
-                         "\t* WGL_OML_sync_control: %s\n",
+                         "\t* WGL_OML_sync_control: %s\n"
+                         "\t* GL_WIN_swap_hint: %s\n",
                          major, minor,
                          glGetString (GL_VENDOR),
                          display_win32->hasWglARBPixelFormat ? "yes" : "no",
                          display_win32->hasWglARBCreateContext ? "yes" : "no",
                          display_win32->hasWglEXTSwapControl ? "yes" : "no",
-                         display_win32->hasWglOMLSyncControl ? "yes" : "no"));
+                         display_win32->hasWglOMLSyncControl ? "yes" : "no",
+                         display_win32->hasGlWINSwapHint ? "yes" : "no"));
   }
 
   wglMakeCurrent (NULL, NULL);
@@ -1073,6 +1106,12 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
               else
                 context_wgl->swap_method = SWAP_METHOD_UNDEFINED;
             }
+        }
+
+      if (display_win32->hasGlWINSwapHint)
+        {
+          context_wgl->ptr_glAddSwapHintRectWIN = (glAddSwapHintRectWIN_t)
+            wglGetProcAddress ("glAddSwapHintRectWIN");
         }
     }
 
