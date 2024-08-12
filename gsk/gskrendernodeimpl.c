@@ -358,6 +358,140 @@ gsk_linear_gradient_node_finalize (GskRenderNode *node)
   parent_class->finalize (node);
 }
 
+static float
+adjust_hue (GskHueInterpolation  interp,
+            float                h1,
+            float                h2)
+{
+  float d;
+
+  d = h2 - h1;
+  while (d > 360)
+    {
+      h2 -= 360;
+      d = h2 - h1;
+    }
+  while (d < -360)
+    {
+      h2 += 360;
+      d = h2 - h1;
+    }
+
+  g_assert (fabsf (d) <= 360);
+
+  switch (interp)
+    {
+    case GSK_HUE_INTERPOLATION_SHORTER:
+      {
+        if (d > 180)
+          h2 -= 360;
+        else if (d < -180)
+          h2 += 360;
+      }
+      g_assert (fabsf (h2 - h1) <= 180);
+      break;
+
+    case GSK_HUE_INTERPOLATION_LONGER:
+      {
+        if (0 < d && d < 180)
+          h2 -= 360;
+        else if (-180 < d && d <= 0)
+          h2 += 360;
+      g_assert (fabsf (h2 - h1) >= 180);
+      }
+      break;
+
+    case GSK_HUE_INTERPOLATION_INCREASING:
+      if (h2 < h1)
+        h2 += 360;
+      d = h2 - h1;
+      g_assert (h1 <= h2);
+      break;
+
+    case GSK_HUE_INTERPOLATION_DECREASING:
+      if (h1 < h2)
+        h2 -= 360;
+      d = h2 - h1;
+      g_assert (h1 >= h2);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return h2;
+}
+
+#define lerp(t,a,b) ((a) + (t) * ((b) - (a)))
+
+typedef void (* ColorStopCallback) (float          offset,
+                                    GdkColorState *ccs,
+                                    float          values[4],
+                                    gpointer       data);
+
+static void
+interpolate_color_stops (GdkColorState         *ccs,
+                         GdkColorState         *interpolation,
+                         GskHueInterpolation    hue_interpolation,
+                         float                  offset1,
+                         GdkColor              *color1,
+                         float                  offset2,
+                         GdkColor              *color2,
+                         ColorStopCallback      callback,
+                         gpointer               data)
+{
+  float values1[4];
+  float values2[4];
+  int n;
+
+  gdk_color_to_float (color1, interpolation, values1);
+  gdk_color_to_float (color2, interpolation, values2);
+
+  if (gdk_color_state_equal (interpolation, GDK_COLOR_STATE_OKLCH))
+    {
+      values2[2] = adjust_hue (hue_interpolation, values1[2], values2[2]);
+      /* don't make hue steps larger than 30° */
+      n = ceilf (fabsf (values2[2] - values1[2]) / 30);
+    }
+  else
+    {
+      /* just some steps */
+      n = 4;
+    }
+
+  for (int k = 1; k < n; k++)
+    {
+      float f = k / (float) n;
+      float values[4];
+      float offset;
+      GdkColor c;
+
+      values[0] = lerp (f, values1[0], values2[0]);
+      values[1] = lerp (f, values1[1], values2[1]);
+      values[2] = lerp (f, values1[2], values2[2]);
+      values[3] = lerp (f, values1[3], values2[3]);
+      offset = lerp (f, offset1, offset2);
+
+      gdk_color_init (&c, interpolation, values);
+      gdk_color_to_float (&c, ccs, values);
+
+      callback (offset, ccs, values, data);
+
+      gdk_color_finish (&c);
+    }
+}
+
+static void
+add_color_stop_to_pattern (float          offset,
+                           GdkColorState *ccs,
+                           float          values[4],
+                           gpointer       data)
+{
+  cairo_pattern_t *pattern = data;
+
+  cairo_pattern_add_color_stop_rgba (pattern, offset, values[0], values[1], values[2], values[3]);
+}
+
 static void
 gsk_linear_gradient_node_draw (GskRenderNode *node,
                                cairo_t       *cr,
@@ -378,18 +512,42 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
                                             ccs,
                                             0.0,
                                             &self->stops[0].color);
+
   for (i = 0; i < self->n_stops; i++)
     {
+      if (!gdk_color_state_equal (self->interpolation, ccs))
+        interpolate_color_stops (ccs,
+                                 self->interpolation, self->hue_interpolation,
+                                 i > 0 ? self->stops[i-1].offset : 0,
+                                 i > 0 ? &self->stops[i-1].color : &self->stops[i].color,
+                                 self->stops[i].offset,
+                                 &self->stops[i].color,
+                                 add_color_stop_to_pattern,
+                                 pattern);
+
       gdk_cairo_pattern_add_color_stop_color (pattern,
                                               ccs,
                                               self->stops[i].offset,
                                               &self->stops[i].color);
     }
+
   if (self->stops[self->n_stops-1].offset < 1.0)
-    gdk_cairo_pattern_add_color_stop_color (pattern,
-                                            ccs,
-                                            1.0,
-                                            &self->stops[self->n_stops - 1].color);
+    {
+      if (!gdk_color_state_equal (self->interpolation, ccs))
+        interpolate_color_stops (ccs,
+                                 self->interpolation, self->hue_interpolation,
+                                 self->stops[self->n_stops-1].offset,
+                                 &self->stops[self->n_stops-1].color,
+                                 1,
+                                 &self->stops[self->n_stops-1].color,
+                                 add_color_stop_to_pattern,
+                                 pattern);
+
+      gdk_cairo_pattern_add_color_stop_color (pattern,
+                                              ccs,
+                                              1.0,
+                                              &self->stops[self->n_stops-1].color);
+    }
 
   cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
@@ -925,18 +1083,42 @@ gsk_radial_gradient_node_draw (GskRenderNode *node,
                                             ccs,
                                             0.0,
                                             &self->stops[0].color);
+
   for (i = 0; i < self->n_stops; i++)
     {
+      if (!gdk_color_state_equal (self->interpolation, ccs))
+        interpolate_color_stops (ccs,
+                                 self->interpolation, self->hue_interpolation,
+                                 i > 0 ? self->stops[i-1].offset : 0,
+                                 i > 0 ? &self->stops[i-1].color : &self->stops[i].color,
+                                 self->stops[i].offset,
+                                 &self->stops[i].color,
+                                 add_color_stop_to_pattern,
+                                 pattern);
+
       gdk_cairo_pattern_add_color_stop_color (pattern,
                                               ccs,
                                               self->stops[i].offset,
                                               &self->stops[i].color);
     }
+
   if (self->stops[self->n_stops-1].offset < 1.0)
-    gdk_cairo_pattern_add_color_stop_color (pattern,
-                                            ccs,
-                                            1.0,
-                                            &self->stops[self->n_stops-1].color);
+    {
+      if (!gdk_color_state_equal (self->interpolation, ccs))
+        interpolate_color_stops (ccs,
+                                 self->interpolation, self->hue_interpolation,
+                                 self->stops[self->n_stops-1].offset,
+                                 &self->stops[self->n_stops-1].color,
+                                 1,
+                                 &self->stops[self->n_stops-1].color,
+                                 add_color_stop_to_pattern,
+                                 pattern);
+
+      gdk_cairo_pattern_add_color_stop_color (pattern,
+                                              ccs,
+                                              1.0,
+                                              &self->stops[self->n_stops-1].color);
+    }
 
   gdk_cairo_rect (cr, &node->bounds);
   cairo_translate (cr, self->center.x, self->center.y);
@@ -1624,6 +1806,29 @@ gdk_rgba_color_interpolate (GdkRGBA       *dest,
 }
 
 static void
+add_color_stop_to_array (float    offset,
+                         GdkColorState *ccs,
+                         float    values[4],
+                         gpointer data)
+{
+  GArray *stops = data;
+  GskColorStop2 stop;
+
+  stop.offset = offset;
+  gdk_color_init (&stop.color, ccs, values);
+
+  g_array_append_val (stops, stop);
+}
+
+static void
+clear_stop (gpointer data)
+{
+  GskColorStop2 *stop = data;
+
+  gdk_color_finish (&stop->color);
+}
+
+static void
 gsk_conic_gradient_node_draw (GskRenderNode *node,
                               cairo_t       *cr,
                               GdkColorState *ccs)
@@ -1633,6 +1838,7 @@ gsk_conic_gradient_node_draw (GskRenderNode *node,
   graphene_point_t corner;
   float radius;
   gsize i;
+  GArray *stops;
 
   pattern = cairo_pattern_create_mesh ();
   graphene_rect_get_top_right (&node->bounds, &corner);
@@ -1644,10 +1850,41 @@ gsk_conic_gradient_node_draw (GskRenderNode *node,
   graphene_rect_get_top_left (&node->bounds, &corner);
   radius = MAX (radius, graphene_point_distance (&self->center, &corner, NULL, NULL));
 
-  for (i = 0; i <= self->n_stops; i++)
+  stops = g_array_new (FALSE, TRUE, sizeof (GskColorStop2));
+  g_array_set_clear_func (stops, clear_stop);
+
+  if (gdk_color_state_equal (self->interpolation, ccs))
     {
-      GskColorStop2 *stop1 = &self->stops[MAX (i, 1) - 1];
-      GskColorStop2 *stop2 = &self->stops[MIN (i, self->n_stops - 1)];
+      for (i = 0; i < self->n_stops; i++)
+        {
+          GskColorStop2 *stop = &self->stops[i];
+          g_array_append_val (stops, *stop);
+          /* take a ref, since clear_stop removes one */
+          gdk_color_state_ref (stop->color.color_state);
+        }
+    }
+  else
+    {
+      g_array_append_val (stops, self->stops[0]);
+
+      for (i = 1; i < self->n_stops; i++)
+        {
+          interpolate_color_stops (ccs,
+                                   self->interpolation, self->hue_interpolation,
+                                   self->stops[i-1].offset, &self->stops[i-1].color,
+                                   self->stops[i].offset, &self->stops[i].color,
+                                   add_color_stop_to_array,
+                                   stops);
+          g_array_append_val (stops, self->stops[i]);
+          /* take a ref, since clear_stop removes one */
+          gdk_color_state_ref (self->stops[i].color.color_state);
+        }
+    }
+
+  for (i = 0; i <= stops->len; i++)
+    {
+      GskColorStop2 *stop1 = &g_array_index (stops, GskColorStop2, MAX (i, 1) - 1);
+      GskColorStop2 *stop2 = &g_array_index (stops, GskColorStop2, MIN (i, stops->len - 1));
       double offset1 = i > 0 ? stop1->offset : 0;
       double offset2 = i < self->n_stops ? stop2->offset : 1;
       double start_angle, end_angle;
@@ -1682,6 +1919,8 @@ gsk_conic_gradient_node_draw (GskRenderNode *node,
                                              end_color);
         }
     }
+
+  g_array_unref (stops);
 
   cairo_pattern_set_extend (pattern, CAIRO_EXTEND_PAD);
 
