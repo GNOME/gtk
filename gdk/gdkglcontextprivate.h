@@ -34,6 +34,7 @@ typedef enum {
   GDK_GL_FEATURE_SYNC                       = 1 << 3,
   GDK_GL_FEATURE_BASE_INSTANCE              = 1 << 4,
   GDK_GL_FEATURE_BUFFER_STORAGE             = 1 << 5,
+  GDK_GL_FEATURE_SRGB                       = 1 << 6,
 } GdkGLFeatures;
 
 typedef enum {
