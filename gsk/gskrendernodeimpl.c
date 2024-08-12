@@ -358,6 +358,111 @@ gsk_linear_gradient_node_finalize (GskRenderNode *node)
   parent_class->finalize (node);
 }
 
+static float
+adjust_hue (GdkColorState       *ics,
+            GskHueInterpolation  interp,
+            float                h1,
+            float                h2)
+{
+  float d;
+
+  if (!gdk_color_state_equal (ics, GDK_COLOR_STATE_OKLCH))
+    return h2;
+
+  d = h2 - h1;
+  while (d > 360)
+    {
+      h2 -= 360;
+      d = h2 - h1;
+    }
+  while (d < -360)
+    {
+      h2 += 360;
+      d = h2 - h1;
+    }
+
+  g_assert (fabsf (d) <= 360);
+
+  switch (interp)
+    {
+    case GSK_HUE_INTERPOLATION_SHORTER:
+      {
+        if (d > 180)
+          h2 -= 360;
+        else if (d < -180)
+          h2 += 360;
+      }
+      g_assert (fabsf (h2 - h1) <= 180);
+      break;
+
+    case GSK_HUE_INTERPOLATION_LONGER:
+      {
+        if (0 < d && d < 180)
+          h2 -= 360;
+        else if (-180 < d && d <= 0)
+          h2 += 360;
+      g_assert (fabsf (h2 - h1) >= 180);
+      }
+      break;
+
+    case GSK_HUE_INTERPOLATION_INCREASING:
+      if (h2 < h1)
+        h2 += 360;
+      d = h2 - h1;
+      g_assert (h1 <= h2);
+      break;
+
+    case GSK_HUE_INTERPOLATION_DECREASING:
+      if (h1 < h2)
+        h2 -= 360;
+      d = h2 - h1;
+      g_assert (h1 >= h2);
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return h2;
+}
+
+#define lerp(t,a,b) ((a) + (t) * ((b) - (a)))
+
+static void
+interpolate_color_stops (cairo_pattern_t       *pattern,
+                         GskLinearGradientNode *self,
+                         GdkColorState         *ccs,
+                         float                  offset1,
+                         GdkColor              *color1,
+                         float                  offset2,
+                         GdkColor              *color2)
+{
+  float values1[4];
+  float values2[4];
+
+  gdk_color_to_float (color1, self->interpolation, values1);
+  gdk_color_to_float (color2, self->interpolation, values2);
+
+  values2[2] = adjust_hue (self->interpolation, self->hue_interpolation, values1[2], values2[2]);
+
+  for (int k = 1; k <= 10; k++)
+    {
+      float values[4];
+      float offset;
+      GdkColor c;
+
+      values[0] = lerp (k / 10.0, values1[0], values2[0]);
+      values[1] = lerp (k / 10.0, values1[1], values2[1]);
+      values[2] = lerp (k / 10.0, values1[2], values2[2]);
+      values[3] = lerp (k / 10.0, values1[3], values2[3]);
+
+      offset = lerp (k / 10.0, offset1, offset2);
+
+      gdk_color_init (&c, self->interpolation, values);
+      gdk_cairo_pattern_add_color_stop_color (pattern, ccs, offset, &c);
+    }
+}
+
 static void
 gsk_linear_gradient_node_draw (GskRenderNode *node,
                                cairo_t       *cr,
@@ -374,22 +479,41 @@ gsk_linear_gradient_node_draw (GskRenderNode *node,
     cairo_pattern_set_extend (pattern, CAIRO_EXTEND_REPEAT);
 
   if (self->stops[0].offset > 0.0)
-    gdk_cairo_pattern_add_color_stop_color (pattern,
-                                            ccs,
-                                            0.0,
-                                            &self->stops[0].color);
+    {
+      gdk_cairo_pattern_add_color_stop_color (pattern, ccs, 0, &self->stops[0].color);
+    }
+
   for (i = 0; i < self->n_stops; i++)
     {
-      gdk_cairo_pattern_add_color_stop_color (pattern,
-                                              ccs,
-                                              self->stops[i].offset,
-                                              &self->stops[i].color);
+      if (self->interpolation != ccs)
+        {
+          interpolate_color_stops (pattern, self, ccs,
+                                   i > 0 ? self->stops[i-1].offset : 0,
+                                   i > 0 ? &self->stops[i-1].color : &self->stops[i].color,
+                                   self->stops[i].offset,
+                                   &self->stops[i].color);
+        }
+      else
+        {
+          gdk_cairo_pattern_add_color_stop_color (pattern, ccs, self->stops[i].offset, &self->stops[i].color);
+        }
     }
+
   if (self->stops[self->n_stops-1].offset < 1.0)
-    gdk_cairo_pattern_add_color_stop_color (pattern,
-                                            ccs,
-                                            1.0,
-                                            &self->stops[self->n_stops - 1].color);
+    {
+      if (self->interpolation != ccs)
+        {
+          interpolate_color_stops (pattern, self, ccs,
+                                   self->stops[self->n_stops-1].offset,
+                                   &self->stops[self->n_stops-1].color,
+                                   1,
+                                   &self->stops[self->n_stops-1].color);
+        }
+      else
+        {
+          gdk_cairo_pattern_add_color_stop_color (pattern, ccs, 1, &self->stops[self->n_stops-1].color);
+        }
+    }
 
   cairo_set_source (cr, pattern);
   cairo_pattern_destroy (pattern);
