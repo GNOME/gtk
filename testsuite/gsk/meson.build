@@ -492,7 +492,7 @@ endforeach
 if os_linux
   offload = executable('offload', 'offload.c', 'gskrendernodeattach.c',
     dependencies : libgtk_static_dep,
-    c_args: common_cflags,
+    c_args: common_cflags + [ '-DGTK_COMPILATION=1' ],
   )
 
   offload_tests = [
