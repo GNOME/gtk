@@ -394,13 +394,15 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   priv->frame_region = cairo_region_copy (region);
   priv->surface->paint_context = g_object_ref (context);
 
+  g_assert (priv->color_state == NULL);
+
   GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context,
                                                      depth,
                                                      priv->frame_region,
                                                      &priv->color_state,
                                                      &priv->depth);
 
-  /* the callback is meant to set them */
+  /* The callback is meant to set them. Note that it does not return a ref */
   g_assert (priv->color_state != NULL);
   g_assert (priv->depth < GDK_N_DEPTHS);
 
@@ -439,7 +441,7 @@ gdk_draw_context_end_frame_full (GdkDrawContext *context)
 
   gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (priv->frame_region));
 
-  g_clear_pointer (&priv->color_state, gdk_color_state_unref);
+  priv->color_state = NULL;
   g_clear_pointer (&priv->frame_region, cairo_region_destroy);
   g_clear_object (&priv->surface->paint_context);
   priv->depth = GDK_N_DEPTHS;
