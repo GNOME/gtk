@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gdkcolorstateprivate.h"
+#include "gdkhdrmetadataprivate.h"
 #include "gdkwaylanddisplay.h"
 #include <wayland-client.h>
 
@@ -20,20 +21,23 @@ struct wl_proxy * gdk_wayland_color_get_color_manager           (GdkWaylandColor
 
 typedef struct _GdkWaylandColorSurface GdkWaylandColorSurface;
 
-typedef void      (* GdkColorStateChanged)                      (GdkWaylandColorSurface *self,
-                                                                 GdkColorState          *cs,
+typedef void      (* GdkImageDescriptionChanged)                (GdkWaylandColorSurface *self,
+                                                                 GdkColorState          *target_color_state,
+                                                                 GdkHdrMetadata         *target_color_volume,
                                                                  gpointer                data);
 
 GdkWaylandColorSurface *
-                  gdk_wayland_color_surface_new                 (GdkWaylandColor        *color,
-                                                                 struct wl_surface      *wl_surface,
-                                                                 GdkColorStateChanged    callback,
-                                                                 gpointer                data);
+                  gdk_wayland_color_surface_new                 (GdkWaylandColor            *color,
+                                                                 struct wl_surface          *wl_surface,
+                                                                 GdkImageDescriptionChanged  callback,
+                                                                 gpointer                    data);
 
 void              gdk_wayland_color_surface_free                (GdkWaylandColorSurface *self);
 
-void              gdk_wayland_color_surface_set_color_state     (GdkWaylandColorSurface *self,
-                                                                 GdkColorState          *cs);
+void              gdk_wayland_color_surface_set_image_description (GdkWaylandColorSurface *self,
+                                                                   GdkColorState          *color_state,
+                                                                   GdkHdrMetadata         *volume);
 
-gboolean          gdk_wayland_color_surface_can_set_color_state (GdkWaylandColorSurface *self,
-                                                                 GdkColorState          *cs);
+gboolean          gdk_wayland_color_surface_can_set_image_description (GdkWaylandColorSurface *self,
+                                                                       GdkColorState          *color_state,
+                                                                       GdkHdrMetadata         *volume);

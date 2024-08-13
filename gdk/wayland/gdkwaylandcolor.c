@@ -108,6 +108,49 @@ cicp_to_wl_transfer (uint tf)
   return 0;
 }
 
+typedef struct {
+  gatomicrefcount ref_count;
+
+  GdkColorState *cs;
+  GdkHdrMetadata *hdr;
+} GdkImageDescription;
+
+static GdkImageDescription *
+gdk_image_description_new (GdkColorState  *cs,
+                           GdkHdrMetadata *hdr)
+{
+  GdkImageDescription *desc;
+
+  desc = g_new0 (GdkImageDescription, 1);
+  desc->ref_count = 1;
+
+  desc->cs = gdk_color_state_ref (cs);
+  if (hdr)
+    desc->hdr = gdk_hdr_metadata_ref (hdr);
+
+  return desc;
+}
+
+static GdkImageDescription *
+gdk_image_description_ref (GdkImageDescription *desc)
+{
+  g_atomic_ref_count_inc (&desc->ref_count);
+
+  return desc;
+}
+
+static void
+gdk_image_description_unref (GdkImageDescription *desc)
+{
+  if (g_atomic_ref_count_dec (&desc->ref_count))
+    {
+      gdk_color_state_unref (desc->cs);
+      if (desc->hdr)
+        gdk_hdr_metadata_unref (desc->hdr);
+      g_free (desc);
+    }
+}
+
 struct _GdkWaylandColor
 {
   GdkWaylandDisplay *display;
@@ -120,17 +163,17 @@ struct _GdkWaylandColor
     unsigned int primaries;
   } color_manager_supported;
 
-  GHashTable *cs_to_desc; /* GdkColorState => xx_image_description_v4 or NULL */
-  GHashTable *id_to_cs; /* uint32 identifier => GdkColorState */
+  GHashTable *cs_to_desc; /* GdkImageDescription => xx_image_description_v4 or NULL */
+  GHashTable *id_to_cs;   /* uint32 identifier => GdkImageDescription */
 };
 
 static guint
-color_state_hash (gconstpointer data)
+gdk_image_description_hash (gconstpointer data)
 {
-  GdkColorState *cs = (GdkColorState *) data;
+  GdkImageDescription *desc = (GdkImageDescription *) data;
   const GdkCicp *cicp;
 
-  cicp = gdk_color_state_get_cicp (cs);
+  cicp = gdk_color_state_get_cicp (desc->cs);
   if (cicp)
     {
       GdkCicp norm;
@@ -142,16 +185,16 @@ color_state_hash (gconstpointer data)
 }
 
 static gboolean
-color_state_equal (gconstpointer a,
-                   gconstpointer b)
+gdk_image_description_equal (gconstpointer a,
+                             gconstpointer b)
 {
-  GdkColorState *csa = (GdkColorState *) a;
-  GdkColorState *csb = (GdkColorState *) b;
+  const GdkImageDescription *desca = (const GdkImageDescription *) a;
+  const GdkImageDescription *descb = (const GdkImageDescription *) b;
   const GdkCicp *cicpa, *cicpb;
   GdkCicp norma, normb;
 
-  cicpa = gdk_color_state_get_cicp (csa);
-  cicpb = gdk_color_state_get_cicp (csb);
+  cicpa = gdk_color_state_get_cicp (desca->cs);
+  cicpb = gdk_color_state_get_cicp (descb->cs);
   if (cicpa == NULL || cicpb == NULL)
     return FALSE;
 
@@ -159,7 +202,8 @@ color_state_equal (gconstpointer a,
   gdk_cicp_normalize (cicpb, &normb);
 
   return norma.color_primaries == normb.color_primaries &&
-         norma.transfer_function == normb.transfer_function;
+         norma.transfer_function == normb.transfer_function &&
+         gdk_hdr_metadata_equal (desca->hdr, descb->hdr);
 }
 
 static void
@@ -220,14 +264,14 @@ gdk_wayland_color_new (GdkWaylandDisplay  *display,
   color = g_new0 (GdkWaylandColor, 1);
 
   color->display = display;
-  color->cs_to_desc = g_hash_table_new_full (color_state_hash,
-                                             color_state_equal,
-                                             (GDestroyNotify) gdk_color_state_unref,
+  color->cs_to_desc = g_hash_table_new_full (gdk_image_description_hash,
+                                             gdk_image_description_equal,
+                                             (GDestroyNotify) gdk_image_description_unref,
                                              (GDestroyNotify) xx_image_description_v4_destroy);
   color->id_to_cs = g_hash_table_new_full (g_direct_hash,
                                            g_direct_equal,
                                            NULL,
-                                           (GDestroyNotify) gdk_color_state_unref);
+                                           (GDestroyNotify) gdk_image_description_unref);
 
   color->color_manager = wl_registry_bind (registry,
                                            id,
@@ -260,7 +304,8 @@ gdk_wayland_color_get_color_manager (GdkWaylandColor *color)
 
 typedef struct _CsImageDescListenerData {
   GdkWaylandColor *color;
-  GdkColorState   *color_state;
+  GdkColorState   *cs;
+  GdkHdrMetadata  *hdr;
   gboolean         sync;
   gboolean         done;
 } CsImageDescListenerData;
@@ -272,6 +317,10 @@ cs_image_listener_data_free (CsImageDescListenerData *csi)
 
   if (csi->sync)
     return;
+
+  gdk_color_state_unref (csi->cs);
+  if (csi->hdr)
+    gdk_hdr_metadata_unref (csi->hdr);
 
   g_free (csi);
 }
@@ -288,7 +337,7 @@ cs_image_desc_failed (void                           *data,
   xx_image_description_v4_destroy (desc);
 
   g_hash_table_insert (csi->color->cs_to_desc,
-                       gdk_color_state_ref (csi->color_state),
+                       gdk_image_description_new (csi->cs, csi->hdr),
                        NULL);
 
   cs_image_listener_data_free (csi);
@@ -296,18 +345,19 @@ cs_image_desc_failed (void                           *data,
 
 static void
 cs_image_desc_ready (void                           *data,
-                     struct xx_image_description_v4 *desc,
+                     struct xx_image_description_v4 *wl_desc,
                      uint32_t                        identity)
 {
   CsImageDescListenerData *csi = data;
+  GdkImageDescription *gdk_desc;
 
-  g_hash_table_insert (csi->color->cs_to_desc,
-                       gdk_color_state_ref (csi->color_state),
-                       desc);
+  gdk_desc = gdk_image_description_new (csi->cs, csi->hdr);
+
+  g_hash_table_insert (csi->color->cs_to_desc, gdk_desc, wl_desc);
   g_hash_table_insert (csi->color->id_to_cs,
                        GUINT_TO_POINTER (identity),
-                       gdk_color_state_ref (csi->color_state));
- 
+                       gdk_image_description_ref (gdk_desc));
+
   cs_image_listener_data_free (csi);
 }
 
@@ -319,6 +369,7 @@ static struct xx_image_description_v4_listener cs_image_desc_listener = {
 static void
 create_image_desc (GdkWaylandColor *color,
                    GdkColorState   *cs,
+                   GdkHdrMetadata  *hdr,
                    gboolean         sync)
 {
   CsImageDescListenerData data;
@@ -333,10 +384,10 @@ create_image_desc (GdkWaylandColor *color,
     {
       GDK_DEBUG (MISC, "Unsupported color state %s: Not a CICP colorstate",
                  gdk_color_state_get_name (cs));
-      g_hash_table_insert (color->cs_to_desc, gdk_color_state_ref (cs), NULL);
+      g_hash_table_insert (color->cs_to_desc, gdk_image_description_new (cs, hdr), NULL);
       return;
     }
-  
+
   gdk_cicp_normalize (cicp, &norm);
   primaries = cicp_to_wl_primaries (norm.color_primaries);
   tf = cicp_to_wl_transfer (norm.transfer_function);
@@ -347,12 +398,13 @@ create_image_desc (GdkWaylandColor *color,
     {
       GDK_DEBUG (MISC, "Unsupported color state %s: Primaries or transfer function unsupported",
                  gdk_color_state_get_name (cs));
-      g_hash_table_insert (color->cs_to_desc, gdk_color_state_ref (cs), NULL);
+      g_hash_table_insert (color->cs_to_desc, gdk_image_description_new (cs, hdr), NULL);
       return;
     }
 
   data.color = color;
-  data.color_state = cs;
+  data.cs = cs;
+  data.hdr = hdr;
   data.sync = sync;
   data.done = FALSE;
 
@@ -373,12 +425,33 @@ create_image_desc (GdkWaylandColor *color,
     }
   xx_image_description_creator_params_v4_set_tf_named (creator, tf);
 
+  if (hdr &&
+      color->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V4_FEATURE_SET_MASTERING_DISPLAY_PRIMARIES))
+    {
+      xx_image_description_creator_params_v4_set_mastering_display_primaries (creator,
+                                                                              hdr->rx * 10000, hdr->ry * 10000,
+                                                                              hdr->gx * 10000, hdr->gy * 10000,
+                                                                              hdr->bx * 10000, hdr->by * 10000,
+                                                                              hdr->wx * 10000, hdr->wy * 10000);
+      xx_image_description_creator_params_v4_set_mastering_luminance (creator,
+                                                                      hdr->min_lum * 10000,
+                                                                      hdr->max_lum);
+
+      if (tf == XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST2084_PQ)
+        {
+          if (hdr->max_cll != 0)
+            xx_image_description_creator_params_v4_set_max_cll (creator, hdr->max_cll);
+          if (hdr->max_fall != 0)
+            xx_image_description_creator_params_v4_set_max_fall (creator, hdr->max_fall);
+        }
+    }
+
   desc = xx_image_description_creator_params_v4_create (creator);
 
   if (sync)
     {
       struct wl_event_queue *event_queue;
-      
+
       event_queue = wl_display_create_queue (color->display->wl_display);
       wl_proxy_set_queue ((struct wl_proxy *) desc, event_queue);
       xx_image_description_v4_add_listener (desc, &cs_image_desc_listener, &data);
@@ -389,6 +462,8 @@ create_image_desc (GdkWaylandColor *color,
     }
   else
     {
+      gdk_color_state_ref (data.cs);
+      gdk_hdr_metadata_ref (data.hdr);
       xx_image_description_v4_add_listener (desc, &cs_image_desc_listener, g_memdup (&data, sizeof data));
     }
 }
@@ -459,19 +534,19 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
 
   if (color->color_manager)
     {
-      create_image_desc (color, GDK_COLOR_STATE_SRGB, FALSE);
+      create_image_desc (color, GDK_COLOR_STATE_SRGB, NULL, FALSE);
 
       if (color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR))
-        create_image_desc (color, GDK_COLOR_STATE_SRGB_LINEAR, FALSE);
+        create_image_desc (color, GDK_COLOR_STATE_SRGB_LINEAR, NULL, FALSE);
 
       if ((color->color_manager_supported.primaries & (1 << XX_COLOR_MANAGER_V4_PRIMARIES_BT2020) ||
           (color->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V4_FEATURE_SET_PRIMARIES))))
         {
           if (color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST2084_PQ))
-            create_image_desc (color, GDK_COLOR_STATE_REC2100_PQ, FALSE);
+            create_image_desc (color, GDK_COLOR_STATE_REC2100_PQ, NULL, FALSE);
 
           if (color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR))
-            create_image_desc (color, GDK_COLOR_STATE_REC2100_LINEAR, FALSE);
+            create_image_desc (color, GDK_COLOR_STATE_REC2100_LINEAR, NULL, FALSE);
         }
     }
 
@@ -484,7 +559,7 @@ struct _GdkWaylandColorSurface
   struct xx_color_management_surface_v4 *surface;
   struct xx_color_management_feedback_surface_v4 *feedback;
   ImageDescription *current_desc;
-  GdkColorStateChanged callback;
+  GdkImageDescriptionChanged callback;
   gpointer data;
 };
 
@@ -521,19 +596,35 @@ struct _ImageDescription
 };
 
 static GdkColorState *
-gdk_color_state_from_image_description_bits (ImageDescription *desc)
+gdk_color_state_from_image_description_bits (ImageDescription *bits)
 {
-  if (desc->has_primaries_named && desc->has_tf_named)
+  if (bits->has_primaries_named && bits->has_tf_named)
     {
       GdkCicp cicp;
 
-      cicp.color_primaries = wl_to_cicp_primaries (desc->primaries);
-      cicp.transfer_function = wl_to_cicp_transfer (desc->tf_named);
+      cicp.color_primaries = wl_to_cicp_primaries (bits->primaries);
+      cicp.transfer_function = wl_to_cicp_transfer (bits->tf_named);
       cicp.matrix_coefficients = 0;
       cicp.range = GDK_CICP_RANGE_FULL;
 
       return gdk_color_state_new_for_cicp (&cicp, NULL);
     }
+  else
+    return NULL;
+}
+
+static GdkHdrMetadata *
+gdk_hdr_metadata_from_image_description_bits (ImageDescription *bits)
+{
+  if (bits->has_target_primaries && bits->has_target_luminance)
+    return gdk_hdr_metadata_new (bits->target_r_x / 10000.0, bits->target_r_y / 10000.0,
+                                 bits->target_g_x / 10000.0, bits->target_g_y / 10000.0,
+                                 bits->target_b_x / 10000.0, bits->target_b_y / 10000.0,
+                                 bits->target_w_x / 10000.0, bits->target_w_y / 10000.0,
+                                 bits->target_min_lum / 10000.0,
+                                 bits->target_max_lum,
+                                 bits->target_max_cll,
+                                 bits->target_max_fall);
   else
     return NULL;
 }
@@ -560,15 +651,17 @@ image_desc_info_done (void *data,
   ImageDescription *desc = data;
   GdkWaylandColorSurface *self = desc->surface;
   GdkColorState *cs;
+  GdkHdrMetadata *hdr;
 
   g_assert (self->current_desc == desc);
 
   cs = gdk_color_state_from_image_description_bits (desc);
+  hdr = gdk_hdr_metadata_from_image_description_bits (desc);
   if (cs)
     {
       g_hash_table_insert (self->color->id_to_cs,
                            GUINT_TO_POINTER (desc->identity),
-                           gdk_color_state_ref (cs));
+                           gdk_image_description_new (cs, hdr));
     }
   else
     {
@@ -577,9 +670,10 @@ image_desc_info_done (void *data,
     }
 
   if (self->callback)
-    self->callback (desc->surface, cs, self->data);
+    self->callback (desc->surface, cs, hdr, self->data);
 
   gdk_color_state_unref (cs);
+  gdk_hdr_metadata_unref (hdr);
 
   gdk_wayland_color_surface_clear_image_desc (self);
 }
@@ -749,7 +843,7 @@ image_desc_failed (void                           *data,
 
   g_assert (self->current_desc == desc);
 
-  self->callback (self, GDK_COLOR_STATE_SRGB, self->data);
+  self->callback (self, GDK_COLOR_STATE_SRGB, NULL, self->data);
 
   gdk_wayland_color_surface_clear_image_desc (self);
 }
@@ -759,25 +853,24 @@ image_desc_ready (void                           *data,
                   struct xx_image_description_v4 *image_desc,
                   uint32_t                        identity)
 {
-  ImageDescription *desc = data;
-  GdkWaylandColorSurface *self = desc->surface;
-  GdkColorState *cs;
+  ImageDescription *bits = data;
+  GdkWaylandColorSurface *self = bits->surface;
+  GdkImageDescription *desc;
 
-  g_assert (self->current_desc == desc);
+  g_assert (self->current_desc == bits);
 
-  cs = g_hash_table_lookup (self->color->id_to_cs, GUINT_TO_POINTER (identity));
-  if (cs)
+  desc = g_hash_table_lookup (self->color->id_to_cs, GUINT_TO_POINTER (identity));
+  if (desc)
     {
-      self->callback (self, cs, self->data);
-
+      self->callback (self, desc->cs, desc->hdr, self->data);
       gdk_wayland_color_surface_clear_image_desc (self);
       return;
     }
 
-  desc->info = xx_image_description_v4_get_information (image_desc);
-  desc->identity = identity;
+  bits->info = xx_image_description_v4_get_information (image_desc);
+  bits->identity = identity;
 
-  xx_image_description_info_v4_add_listener (desc->info, &info_listener, desc);
+  xx_image_description_info_v4_add_listener (bits->info, &info_listener, bits);
 }
 
 static const struct xx_image_description_v4_listener image_desc_listener = {
@@ -813,10 +906,10 @@ static const struct xx_color_management_feedback_surface_v4_listener color_liste
 };
 
 GdkWaylandColorSurface *
-gdk_wayland_color_surface_new (GdkWaylandColor          *color,
-                               struct wl_surface        *wl_surface,
-                               GdkColorStateChanged      callback,
-                               gpointer                  data)
+gdk_wayland_color_surface_new (GdkWaylandColor            *color,
+                               struct wl_surface          *wl_surface,
+                               GdkImageDescriptionChanged  callback,
+                               gpointer                    data)
 {
   GdkWaylandColorSurface *self;
 
@@ -849,30 +942,33 @@ gdk_wayland_color_surface_free (GdkWaylandColorSurface *self)
 
 static struct xx_image_description_v4 *
 gdk_wayland_color_get_image_description (GdkWaylandColor *color,
-                                         GdkColorState   *cs)
+                                         GdkColorState   *cs,
+                                         GdkHdrMetadata  *hdr)
 {
   gpointer result;
+  GdkImageDescription key = { 0, cs, hdr };
 
-  if (g_hash_table_lookup_extended (color->cs_to_desc, cs, NULL, &result))
+  if (g_hash_table_lookup_extended (color->cs_to_desc, &key, NULL, &result))
     return result;
-  
-  create_image_desc (color, cs, TRUE);
 
-  if (!g_hash_table_lookup_extended (color->cs_to_desc, cs, NULL, &result))
+  create_image_desc (color, cs, hdr, TRUE);
+
+  if (!g_hash_table_lookup_extended (color->cs_to_desc, &key, NULL, &result))
     {
       g_assert_not_reached ();
     }
-  
+
   return result;
 }
 
 void
-gdk_wayland_color_surface_set_color_state (GdkWaylandColorSurface *self,
-                                           GdkColorState          *cs)
+gdk_wayland_color_surface_set_image_description (GdkWaylandColorSurface *self,
+                                                 GdkColorState          *cs,
+                                                 GdkHdrMetadata         *hdr)
 {
   struct xx_image_description_v4 *desc;
 
-  desc = gdk_wayland_color_get_image_description (self->color, cs);
+  desc = gdk_wayland_color_get_image_description (self->color, cs, hdr);
 
   if (desc)
     xx_color_management_surface_v4_set_image_description (self->surface,
@@ -883,8 +979,9 @@ gdk_wayland_color_surface_set_color_state (GdkWaylandColorSurface *self,
 }
 
 gboolean
-gdk_wayland_color_surface_can_set_color_state (GdkWaylandColorSurface *self,
-                                               GdkColorState          *cs)
+gdk_wayland_color_surface_can_set_image_description (GdkWaylandColorSurface *self,
+                                                     GdkColorState          *cs,
+                                                     GdkHdrMetadata         *hdr)
 {
-  return gdk_wayland_color_get_image_description (self->color, cs) != NULL;
+  return gdk_wayland_color_get_image_description (self->color, cs, hdr) != NULL;
 }

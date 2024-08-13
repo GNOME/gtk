@@ -780,8 +780,9 @@ gdk_wayland_surface_sync_color_state (GdkSurface *surface)
   if (!self->color_state_changed)
     return;
 
-  gdk_wayland_color_surface_set_color_state (self->display_server.color,
-                                             gdk_surface_get_color_state (surface));
+  gdk_wayland_color_surface_set_image_description (self->display_server.color,
+                                                   gdk_surface_get_color_state (surface),
+                                                   gdk_surface_get_hdr_metadata (surface));
 
   self->color_state_changed = FALSE;
 }
@@ -924,11 +925,13 @@ static const struct wl_surface_listener surface_listener = {
 static void
 preferred_changed (GdkWaylandColorSurface *color,
                    GdkColorState          *color_state,
+                   GdkHdrMetadata         *hdr_metadata,
                    gpointer                data)
 {
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (data);
 
   gdk_surface_set_color_state (GDK_SURFACE (self), color_state);
+  gdk_surface_set_hdr_metadata (GDK_SURFACE (self), hdr_metadata);
 
   self->color_state_changed = TRUE;
 }

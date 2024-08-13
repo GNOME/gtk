@@ -542,7 +542,9 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          self);
     }
   else if (self->color &&
-           !gdk_wayland_color_surface_can_set_color_state (self->color, gdk_texture_get_color_state (texture)))
+           !gdk_wayland_color_surface_can_set_image_description (self->color,
+                                                                 gdk_texture_get_color_state (texture),
+                                                                 gdk_texture_get_hdr_metadata (texture)))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "[%p] 🗙 Texture colorstate %s not supported",
@@ -560,7 +562,9 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
 
       if (self->texture && texture)
         color_state_changed = !gdk_color_state_equal (gdk_texture_get_color_state (self->texture),
-                                                      gdk_texture_get_color_state (texture));
+                                                      gdk_texture_get_color_state (texture)) ||
+                              !gdk_hdr_metadata_equal (gdk_texture_get_hdr_metadata (self->texture),
+                                                       gdk_texture_get_hdr_metadata (texture));
       else
         color_state_changed = TRUE;
 
@@ -659,7 +663,9 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                     gdk_texture_get_height (texture));
 
           if (self->color && color_state_changed)
-            gdk_wayland_color_surface_set_color_state (self->color, gdk_texture_get_color_state (texture));
+            gdk_wayland_color_surface_set_image_description (self->color,
+                                                             gdk_texture_get_color_state (texture),
+                                                             gdk_texture_get_hdr_metadata (texture));
 
           needs_commit = TRUE;
         }
