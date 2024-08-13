@@ -60,6 +60,7 @@
 #include <gdk/gdkglcontext.h>
 #include <gdk/gdkgltexture.h>
 #include <gdk/gdkgltexturebuilder.h>
+#include <gdk/gdkhdrmetadata.h>
 #include <gdk/gdkkeys.h>
 #include <gdk/gdkkeysyms.h>
 #include <gdk/gdkmemorytexture.h>

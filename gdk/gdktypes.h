@@ -76,6 +76,7 @@ typedef cairo_rectangle_int_t         GdkRectangle;
 typedef struct _GdkRGBA               GdkRGBA;
 typedef struct _GdkCicpParams         GdkCicpParams;
 typedef struct _GdkColorState         GdkColorState;
+typedef struct _GdkHdrMetadata        GdkHdrMetadata;
 typedef struct _GdkContentFormats     GdkContentFormats;
 typedef struct _GdkContentProvider    GdkContentProvider;
 typedef struct _GdkCursor             GdkCursor;
