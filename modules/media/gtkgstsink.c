@@ -53,6 +53,7 @@
 #include <gst/gl/gstglfuncs.h>
 
 #include <gdk/gdkdmabuffourccprivate.h>
+#include <gdk/gdkhdrmetadataprivate.h>
 #include <gst/allocators/gstdmabuf.h>
 
 enum {
@@ -199,6 +200,29 @@ gtk_gst_color_state_from_colorimetry (GtkGstSink                *self,
   return color_state;
 }
 
+static GdkHdrMetadata *
+gtk_gst_hdr_metadata_from_caps (GstCaps *caps)
+{
+  GstVideoMasteringDisplayInfo mi;
+  GstVideoContentLightLevel li;
+
+  gst_video_mastering_display_info_init (&mi);
+  if (!gst_video_mastering_display_info_from_caps (&mi, caps))
+    return NULL;
+
+  gst_video_content_light_level_init (&li);
+  gst_video_content_light_level_from_caps (&li, caps);
+
+  return gdk_hdr_metadata_new (mi.display_primaries[0].x / 50000.0, mi.display_primaries[0].y / 50000.0,
+                               mi.display_primaries[1].x / 50000.0, mi.display_primaries[1].y / 50000.0,
+                               mi.display_primaries[2].x / 50000.0, mi.display_primaries[2].y / 50000.0,
+                               mi.white_point.x / 50000.0, mi.white_point.y / 50000.0,
+                               mi.min_display_mastering_luminance / 10000.0,
+                               mi.max_display_mastering_luminance / 10000.0,
+                               li.max_content_light_level,
+                               li.max_frame_average_light_level);
+}
+
 static GstCaps *
 gtk_gst_sink_get_caps (GstBaseSink *bsink,
                        GstCaps     *filter)
@@ -269,6 +293,9 @@ gtk_gst_sink_set_caps (GstBaseSink *bsink,
   self->color_state = gtk_gst_color_state_from_colorimetry (self, &self->v_info.colorimetry);
   if (self->color_state == NULL)
     return FALSE;
+
+  g_clear_pointer (&self->hdr_metadata, gdk_hdr_metadata_unref);
+  self->hdr_metadata = gtk_gst_hdr_metadata_from_caps (caps);
 
   return TRUE;
 }
@@ -429,6 +456,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       gdk_dmabuf_texture_builder_set_height (builder, vmeta->height);
       gdk_dmabuf_texture_builder_set_n_planes (builder, vmeta->n_planes);
       gdk_dmabuf_texture_builder_set_color_state (builder, self->color_state);
+      gdk_dmabuf_texture_builder_set_hdr_metadata (builder, self->hdr_metadata);
 
       for (i = 0; i < vmeta->n_planes; i++)
         {
@@ -489,6 +517,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       gdk_gl_texture_builder_set_height (builder, frame->info.height);
       gdk_gl_texture_builder_set_sync (builder, sync_meta ? sync_meta->data : NULL);
       gdk_gl_texture_builder_set_color_state (builder, self->color_state);
+      gdk_gl_texture_builder_set_hdr_metadata (builder, self->hdr_metadata);
 
       texture = gdk_gl_texture_builder_build (builder,
                                               (GDestroyNotify) video_frame_free,
@@ -514,6 +543,8 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       gdk_memory_texture_builder_set_height (builder, frame->info.height);
       gdk_memory_texture_builder_set_bytes (builder, bytes);
       gdk_memory_texture_builder_set_stride (builder, frame->info.stride[0]);
+      gdk_memory_texture_builder_set_color_state (builder, self->color_state);
+      gdk_memory_texture_builder_set_hdr_metadata (builder, self->hdr_metadata);
 
       texture = gdk_memory_texture_builder_build (builder);
       g_bytes_unref (bytes);
@@ -801,6 +832,7 @@ gtk_gst_sink_dispose (GObject *object)
   GtkGstSink *self = GTK_GST_SINK (object);
 
   g_clear_pointer (&self->color_state, gdk_color_state_unref);
+  g_clear_pointer (&self->hdr_metadata, gdk_hdr_metadata_unref);
   g_clear_object (&self->paintable);
   g_clear_object (&self->gst_gdk_context);
   g_clear_object (&self->gst_display);

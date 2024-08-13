@@ -27,6 +27,7 @@
 #include <gst/gl/gl.h>
 #include <gst/video/gstvideosink.h>
 #include <gst/video/video.h>
+#include <gst/video/video-hdr.h>
 
 #define GTK_TYPE_GST_SINK            (gtk_gst_sink_get_type())
 #define GTK_GST_SINK(obj)            (G_TYPE_CHECK_INSTANCE_CAST((obj),GTK_TYPE_GST_SINK,GtkGstSink))
@@ -55,6 +56,7 @@ struct _GtkGstSink
   GstGLContext *       gst_gdk_context;
   GstGLContext *       gst_context;
   GdkColorState *      color_state;
+  GdkHdrMetadata *     hdr_metadata;
 };
 
 struct _GtkGstSinkClass
