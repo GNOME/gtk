@@ -42,7 +42,7 @@
  *
  * ## GtkPopover as menu replacement
  *
- * `GtkPopover` is often used to replace menus. The best was to do this
+ * `GtkPopover` is often used to replace menus. The best way to do this
  * is to use the [class@Gtk.PopoverMenu] subclass which supports being
  * populated from a `GMenuModel` with [ctor@Gtk.PopoverMenu.new_from_model].
  *
