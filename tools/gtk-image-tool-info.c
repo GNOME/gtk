@@ -28,6 +28,7 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 #include "gtk-image-tool.h"
+#include "gdk/gdkhdrmetadataprivate.h"
 
 static const char *
 get_format_name (GdkMemoryFormat format)
@@ -44,16 +45,44 @@ get_format_name (GdkMemoryFormat format)
   return name;
 }
 
+static char *
+format_hdr_metadata (GdkHdrMetadata *hdr)
+{
+  GString *str;
+  int indent;
+
+  if (!hdr)
+    return g_strdup ("―");
+
+  indent = strlen (_("Hdr metadata: "));
+
+  str = g_string_new ("");
+
+  g_string_append_printf (str, "r %f %f\n", hdr->rx, hdr->ry);
+  g_string_append_printf (str, "%.*sg %f %f\n", indent, "", hdr->gx, hdr->gy);
+  g_string_append_printf (str, "%.*sb %f %f\n", indent, "", hdr->bx, hdr->by);
+  g_string_append_printf (str, "%.*sw %f %f\n", indent, "", hdr->wx, hdr->wy);
+  g_string_append_printf (str, "%.*slum  %f - %f\n", indent, "", hdr->min_lum, hdr->max_lum);
+  g_string_append_printf (str, "%.*scll %f\n", indent, "", hdr->max_cll);
+  g_string_append_printf (str, "%.*sfall %f\n", indent, "", hdr->max_fall);
+
+  return g_string_free (str, FALSE);
+}
+
 static void
 file_info (const char *filename)
 {
   GdkTexture *texture;
+  char *hdr_metadata;
 
   texture = load_image_file (filename);
 
   g_print ("%s %dx%d\n", _("Size:"), gdk_texture_get_width (texture), gdk_texture_get_height (texture));
   g_print ("%s %s\n", _("Format:"), get_format_name (gdk_texture_get_format (texture)));
   g_print ("%s %s\n", _("Color state:"), get_color_state_name (gdk_texture_get_color_state (texture)));
+  hdr_metadata = format_hdr_metadata (gdk_texture_get_hdr_metadata (texture));
+  g_print ("%s %s\n", _("Hdr metadata:"), hdr_metadata);
+  g_free (hdr_metadata);
 
   g_object_unref (texture);
 }
