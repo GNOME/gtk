@@ -718,8 +718,8 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
           cairo_region_get_rectangle (painted, i, &rect);
           rects[j++] = (int) floor (rect.x * scale);
           rects[j++] = (int) floor ((surface_height - rect.height - rect.y) * scale);
-          rects[j++] = (int) ceil (rect.width * scale);
-          rects[j++] = (int) ceil (rect.height * scale);
+          rects[j++] = (int) ceil ((rect.x + rect.width) * scale) - floor (rect.x * scale);
+          rects[j++] = (int) ceil ((surface_height - rect.y) * scale) - floor ((surface_height - rect.height - rect.y) * scale);
         }
       priv->eglSwapBuffersWithDamage (gdk_display_get_egl_display (display), egl_surface, rects, n_rects);
       g_free (heap_rects);
