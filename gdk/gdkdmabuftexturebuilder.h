@@ -106,6 +106,13 @@ GDK_AVAILABLE_IN_4_16
 void                     gdk_dmabuf_texture_builder_set_color_state    (GdkDmabufTextureBuilder  *self,
                                                                         GdkColorState            *color_state);
 
+GDK_AVAILABLE_IN_4_16
+GdkHdrMetadata *         gdk_dmabuf_texture_builder_get_hdr_metadata   (GdkDmabufTextureBuilder  *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_16
+void                     gdk_dmabuf_texture_builder_set_hdr_metadata   (GdkDmabufTextureBuilder  *self,
+                                                                        GdkHdrMetadata           *hdr_metadata);
+
+
 GDK_AVAILABLE_IN_4_14
 GdkTexture *             gdk_dmabuf_texture_builder_get_update_texture (GdkDmabufTextureBuilder  *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_14
