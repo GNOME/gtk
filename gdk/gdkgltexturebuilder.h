@@ -82,6 +82,12 @@ GDK_AVAILABLE_IN_4_16
 void                    gdk_gl_texture_builder_set_color_state  (GdkGLTextureBuilder    *self,
                                                                  GdkColorState          *color_state);
 
+GDK_AVAILABLE_IN_4_16
+GdkHdrMetadata *        gdk_gl_texture_builder_get_hdr_metadata (GdkGLTextureBuilder    *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_16
+void                    gdk_gl_texture_builder_set_hdr_metadata (GdkGLTextureBuilder   *self,
+                                                                 GdkHdrMetadata        *hdr_metadata);
+
 GDK_AVAILABLE_IN_4_12
 GdkTexture *            gdk_gl_texture_builder_get_update_texture (GdkGLTextureBuilder  *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_12
