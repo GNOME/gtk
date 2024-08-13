@@ -771,6 +771,12 @@ gsk_renderer_new_for_surface (GdkSurface *surface)
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
+  if (g_strcmp0 (g_getenv ("GSK_RENDERER"), "gl") == 0)
+    {
+      g_print ("GSK_RENDERER=gl is set in the environment; please try "
+               "removing it before reporting bugs.\n");
+    }
+
   for (i = 0; i < G_N_ELEMENTS (renderer_possibilities); i++)
     {
       renderer_type = renderer_possibilities[i].get_renderer (surface);
