@@ -161,43 +161,43 @@ run (out vec2 pos)
 float
 bt709_eotf (float v)
 {
-  if (v < 0.081)
+  if (abs (v) < 0.081)
     return v / 4.5;
   else
-    return pow ((v + 0.099) / 1.099, 1.0/0.45);
+    return sign (v) * pow ((abs (v) + 0.099) / 1.099, 1.0/0.45);
 }
 
 float
 bt709_oetf (float v)
 {
-  if (v < 0.081)
+  if (abs (v) < 0.081)
     return v * 4.5;
   else
-    return 1.099  * pow (v, 0.45) - 0.099;
+    return 1.099 * sign (v) * pow (abs (v), 0.45) - 0.099;
 }
 
 float
 gamma22_oetf (float v)
 {
-  return pow (v, 1.0 / 2.2);
+  return sign (v) * pow (abs (v), 1.0 / 2.2);
 }
 
 float
 gamma22_eotf (float v)
 {
-  return pow (v, 2.2);
+  return sign (v) * pow (abs (v), 2.2);
 }
 
 float
 gamma28_oetf (float v)
 {
-  return pow (v, 1.0 / 2.8);
+  return sign (v) * pow (abs (v), 1.0 / 2.8);
 }
 
 float
 gamma28_eotf (float v)
 {
-  return pow (v, 2.8);
+  return sign (v) * pow (abs (v), 2.8);
 }
 
 float
