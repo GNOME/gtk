@@ -971,15 +971,41 @@ enum_to_nick (GType type,
   return v->value_nick;
 }
 
+static char *
+format_hdr_metadata (GdkHdrMetadata *hdr)
+{
+  GString *str = g_string_new ("");
+
+  g_string_append_printf (str, "r %f %f\n", hdr->rx, hdr->ry);
+  g_string_append_printf (str, "g %f %f\n", hdr->gx, hdr->gy);
+  g_string_append_printf (str, "b %f %f\n", hdr->bx, hdr->by);
+  g_string_append_printf (str, "w %f %f\n", hdr->wx, hdr->wy);
+  g_string_append_printf (str, "lum  %f - %f\n", hdr->min_lum, hdr->max_lum);
+  g_string_append_printf (str, "cll %f\n", hdr->max_cll);
+  g_string_append_printf (str, "fall %f\n", hdr->max_fall);
+
+  return g_string_free (str, FALSE);
+}
+
 static void
 add_texture_rows (GListStore *store,
                   GdkTexture *texture)
 {
+  GdkHdrMetadata *hdr_metadata;
+
   list_store_add_object_property (store, "Texture", NULL, texture);
   add_text_row (store, "Type", "%s", G_OBJECT_TYPE_NAME (texture));
   add_text_row (store, "Size", "%u x %u", gdk_texture_get_width (texture), gdk_texture_get_height (texture));
   add_text_row (store, "Format", "%s", enum_to_nick (GDK_TYPE_MEMORY_FORMAT, gdk_texture_get_format (texture)));
   add_text_row (store, "Color State", "%s", gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
+
+  hdr_metadata = gdk_texture_get_hdr_metadata (texture);
+  if (hdr_metadata)
+    {
+      char *text = format_hdr_metadata (hdr_metadata);
+      add_text_row (store, "Hdr metadata", "%s", text);
+      g_free (text);
+    }
 
   if (GDK_IS_MEMORY_TEXTURE (texture))
     {
