@@ -37,6 +37,7 @@ gdk_broadway_cairo_context_begin_frame (GdkDrawContext  *draw_context,
                                         GdkMemoryDepth   depth,
                                         cairo_region_t  *region,
                                         GdkColorState  **out_color_state,
+                                        GdkHdrMetadata **out_hdr_metadata,
                                         GdkMemoryDepth  *out_depth)
 {
   GdkBroadwayCairoContext *self = GDK_BROADWAY_CAIRO_CONTEXT (draw_context);
@@ -63,6 +64,7 @@ gdk_broadway_cairo_context_begin_frame (GdkDrawContext  *draw_context,
   cairo_destroy (cr);
 
   *out_color_state = GDK_COLOR_STATE_SRGB;
+  *out_hdr_metadata = NULL;
   *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 

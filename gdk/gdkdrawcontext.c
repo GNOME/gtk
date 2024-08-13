@@ -49,6 +49,7 @@ struct _GdkDrawContextPrivate {
 
   cairo_region_t *frame_region;
   GdkColorState *color_state;
+  GdkHdrMetadata *hdr_metadata;
   GdkMemoryDepth depth;
 };
 
@@ -395,11 +396,13 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   priv->surface->paint_context = g_object_ref (context);
 
   g_assert (priv->color_state == NULL);
+  g_assert (priv->hdr_metadata == NULL);
 
   GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context,
                                                      depth,
                                                      priv->frame_region,
                                                      &priv->color_state,
+                                                     &priv->hdr_metadata,
                                                      &priv->depth);
 
   /* The callback is meant to set them. Note that it does not return a ref */
@@ -442,6 +445,7 @@ gdk_draw_context_end_frame_full (GdkDrawContext *context)
   gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (priv->frame_region));
 
   priv->color_state = NULL;
+  priv->hdr_metadata = NULL;
   g_clear_pointer (&priv->frame_region, cairo_region_destroy);
   g_clear_object (&priv->surface->paint_context);
   priv->depth = GDK_N_DEPTHS;
@@ -530,7 +534,9 @@ const cairo_region_t *
  * gdk_draw_context_get_color_state:
  * @self: a `GdkDrawContext`
  *
- * Gets the target color state while rendering. If no rendering is going on, %NULL is returned.
+ * Gets the target color state while rendering.
+ *
+ * If no rendering is going on, %NULL is returned.
  *
  * Returns: (transfer none) (nullable): the target color state
  **/
@@ -540,6 +546,24 @@ gdk_draw_context_get_color_state (GdkDrawContext *self)
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
 
   return priv->color_state;
+}
+
+/*<private>
+ * gdk_draw_context_get_hdr_metadata:
+ * @self: a `GdkDrawContext`
+ *
+ * Gets the target hdr_metadata while rendering.
+ *
+ * If no rendering is going on, %NULL is returned.
+ *
+ * Returns: (transfer none) (nullable): the target hdr metadata
+ **/
+GdkHdrMetadata *
+gdk_draw_context_get_hdr_metadata (GdkDrawContext *self)
+{
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
+
+  return priv->hdr_metadata;
 }
 
 /*<private>

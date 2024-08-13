@@ -58,6 +58,7 @@ gdk_x11_cairo_context_begin_frame (GdkDrawContext  *draw_context,
                                    GdkMemoryDepth   depth,
                                    cairo_region_t  *region,
                                    GdkColorState  **out_color_state,
+                                   GdkHdrMetadata **out_hdr_metadata,
                                    GdkMemoryDepth  *out_depth)
 {
   GdkX11CairoContext *self = GDK_X11_CAIRO_CONTEXT (draw_context);
@@ -82,6 +83,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   cairo_surface_set_device_offset (self->paint_surface, -clip_box.x*sx, -clip_box.y*sy);
 
   *out_color_state = GDK_COLOR_STATE_SRGB;
+  *out_hdr_metadata = NULL;
   *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 

@@ -148,6 +148,7 @@ gdk_wayland_cairo_context_begin_frame (GdkDrawContext  *draw_context,
                                        GdkMemoryDepth   depth,
                                        cairo_region_t  *region,
                                        GdkColorState  **out_color_state,
+                                       GdkHdrMetadata **out_hdr_metadata,
                                        GdkMemoryDepth  *out_depth)
 {
   GdkWaylandCairoContext *self = GDK_WAYLAND_CAIRO_CONTEXT (draw_context);
@@ -178,6 +179,7 @@ gdk_wayland_cairo_context_begin_frame (GdkDrawContext  *draw_context,
   cairo_destroy (cr);
 
   *out_color_state = gdk_surface_get_color_state (surface);
+  *out_hdr_metadata = gdk_surface_get_hdr_metadata (surface);
   *out_depth = GDK_MEMORY_U8;
 }
 

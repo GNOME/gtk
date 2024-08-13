@@ -182,6 +182,7 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext  *draw_context,
                                       GdkMemoryDepth   depth,
                                       cairo_region_t  *region,
                                       GdkColorState  **out_color_state,
+                                      GdkHdrMetadata **out_hdr_metadata,
                                       GdkMemoryDepth  *out_depth)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;
@@ -234,6 +235,7 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext  *draw_context,
     }
 
   *out_color_state = GDK_COLOR_STATE_SRGB;
+  *out_hdr_metadata = NULL;
   *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
 

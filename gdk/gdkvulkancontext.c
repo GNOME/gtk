@@ -611,6 +611,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
                                 GdkMemoryDepth   depth,
                                 cairo_region_t  *region,
                                 GdkColorState  **out_color_state,
+                                GdkHdrMetadata **out_hdr_metadata,
                                 GdkMemoryDepth  *out_depth)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
@@ -621,6 +622,8 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
   guint i;
 
   g_assert (priv->draw_semaphore != VK_NULL_HANDLE);
+
+  *out_hdr_metadata = gdk_surface_get_hdr_metadata (surface);
 
   color_state = gdk_surface_get_color_state (surface);
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));

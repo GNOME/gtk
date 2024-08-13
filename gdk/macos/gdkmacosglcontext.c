@@ -482,6 +482,7 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext  *context,
                                   GdkMemoryDepth   depth,
                                   cairo_region_t  *region,
                                   GdkColorState  **out_color_state,
+                                  GdkHdrMetadata **out_hdr_metadata,
                                   GdkMemoryDepth  *out_depth)
 {
   GdkMacosGLContext *self = (GdkMacosGLContext *)context;
@@ -500,7 +501,7 @@ gdk_macos_gl_context_begin_frame (GdkDrawContext  *context,
   gdk_gl_context_make_current (GDK_GL_CONTEXT (self));
   gdk_macos_gl_context_allocate (self);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->begin_frame (context, depth, region, out_color_state, out_depth);
+  GDK_DRAW_CONTEXT_CLASS (gdk_macos_gl_context_parent_class)->begin_frame (context, depth, region, out_color_state, out_hdr_metadata, out_depth);
 
   gdk_gl_context_make_current (GDK_GL_CONTEXT (self));
   CHECK_GL (NULL, glBindFramebuffer (GL_FRAMEBUFFER, self->fbo));

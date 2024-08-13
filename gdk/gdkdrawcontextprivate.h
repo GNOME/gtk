@@ -23,6 +23,7 @@
 #include "gdkdrawcontext.h"
 
 #include "gdkcolorstateprivate.h"
+#include "gdkhdrmetadataprivate.h"
 #include "gdkmemoryformatprivate.h"
 
 #include <graphene.h>
@@ -48,6 +49,7 @@ struct _GdkDrawContextClass
                                                                  GdkMemoryDepth          depth,
                                                                  cairo_region_t         *update_area,
                                                                  GdkColorState         **out_color_state,
+                                                                 GdkHdrMetadata        **out_hdr_metadata,
                                                                  GdkMemoryDepth         *out_depth);
   void                  (* end_frame)                           (GdkDrawContext         *context,
                                                                  cairo_region_t         *painted);
@@ -68,6 +70,7 @@ void                    gdk_draw_context_empty_frame            (GdkDrawContext 
 #define gdk_draw_context_get_frame_region(...) _gdk_draw_context_get_frame_region(__VA_ARGS__)
 const cairo_region_t *  _gdk_draw_context_get_frame_region      (GdkDrawContext         *self);
 GdkColorState *         gdk_draw_context_get_color_state        (GdkDrawContext         *self);
+GdkHdrMetadata *        gdk_draw_context_get_hdr_metadata       (GdkDrawContext         *self);
 GdkMemoryDepth          gdk_draw_context_get_depth              (GdkDrawContext         *self);
 
 
