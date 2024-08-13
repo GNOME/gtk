@@ -24,6 +24,7 @@
 #include "gdkmemoryformatprivate.h"
 #include "gdksurface.h"
 #include "gdktoplevel.h"
+#include "gdkhdrmetadataprivate.h"
 #include <graphene.h>
 
 G_BEGIN_DECLS
@@ -357,5 +358,9 @@ GdkSubsurface * gdk_surface_get_subsurface     (GdkSurface          *surface,
 GdkColorState * gdk_surface_get_color_state    (GdkSurface          *surface);
 void            gdk_surface_set_color_state    (GdkSurface          *surface,
                                                 GdkColorState       *color_state);
+
+GdkHdrMetadata * gdk_surface_get_hdr_metadata  (GdkSurface          *surface);
+void             gdk_surface_set_hdr_metadata  (GdkSurface          *surface,
+                                                GdkHdrMetadata      *hdr_metadata);
 
 G_END_DECLS

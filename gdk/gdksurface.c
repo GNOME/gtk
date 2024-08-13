@@ -83,6 +83,7 @@ struct _GdkSurfacePrivate
   gpointer widget;
 
   GdkColorState *color_state;
+  GdkHdrMetadata *hdr_metadata;
 };
 
 enum {
@@ -3238,6 +3239,29 @@ gdk_surface_set_color_state (GdkSurface    *surface,
 
   gdk_color_state_unref (priv->color_state);
   priv->color_state = gdk_color_state_ref (color_state);
+
+  gdk_surface_invalidate_rect (surface, NULL);
+}
+
+GdkHdrMetadata *
+gdk_surface_get_hdr_metadata (GdkSurface *surface)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
+
+  return priv->hdr_metadata;
+}
+
+void
+gdk_surface_set_hdr_metadata (GdkSurface     *surface,
+                              GdkHdrMetadata *hdr_metadata)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
+
+  if (gdk_hdr_metadata_equal (priv->hdr_metadata, hdr_metadata))
+    return;
+
+  gdk_hdr_metadata_unref (priv->hdr_metadata);
+  priv->hdr_metadata = gdk_hdr_metadata_ref (hdr_metadata);
 
   gdk_surface_invalidate_rect (surface, NULL);
 }
