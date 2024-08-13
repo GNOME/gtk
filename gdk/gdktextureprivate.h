@@ -27,6 +27,7 @@ struct _GdkTexture
   int width;
   int height;
   GdkColorState *color_state;
+  GdkHdrMetadata *hdr_metadata;
 
   gpointer render_key;
   gpointer render_data;

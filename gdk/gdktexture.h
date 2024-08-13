@@ -86,6 +86,9 @@ GdkMemoryFormat         gdk_texture_get_format                 (GdkTexture      
 GDK_AVAILABLE_IN_4_16
 GdkColorState *         gdk_texture_get_color_state            (GdkTexture      *self);
 
+GDK_AVAILABLE_IN_4_16
+GdkHdrMetadata *        gdk_texture_get_hdr_metadata           (GdkTexture      *self);
+
 GDK_AVAILABLE_IN_ALL
 void                    gdk_texture_download                   (GdkTexture      *texture,
                                                                 guchar          *data,

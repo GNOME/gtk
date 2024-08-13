@@ -42,6 +42,7 @@
 
 #include "gdkcairoprivate.h"
 #include "gdkcolorstateprivate.h"
+#include "gdkhdrmetadataprivate.h"
 #include "gdkmemorytextureprivate.h"
 #include "gdkpaintable.h"
 #include "gdksnapshot.h"
@@ -73,6 +74,7 @@ enum {
   PROP_WIDTH,
   PROP_HEIGHT,
   PROP_COLOR_STATE,
+  PROP_HDR_METADATA,
 
   N_PROPS
 };
@@ -292,6 +294,10 @@ gdk_texture_set_property (GObject      *gobject,
       g_assert (self->color_state);
       break;
 
+    case PROP_HDR_METADATA:
+      self->hdr_metadata = g_value_dup_boxed (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (gobject, prop_id, pspec);
       break;
@@ -318,6 +324,10 @@ gdk_texture_get_property (GObject    *gobject,
 
     case PROP_COLOR_STATE:
       g_value_set_boxed (value, self->color_state);
+      break;
+
+    case PROP_HDR_METADATA:
+      g_value_set_boxed (value, self->hdr_metadata);
       break;
 
     default:
@@ -367,6 +377,7 @@ gdk_texture_finalize (GObject *object)
   GdkTexture *self = GDK_TEXTURE (object);
 
   gdk_color_state_unref (self->color_state);
+  g_clear_pointer (&self->hdr_metadata, gdk_hdr_metadata_unref);
 
   G_OBJECT_CLASS (gdk_texture_parent_class)->finalize (object);
 }
@@ -423,6 +434,21 @@ gdk_texture_class_init (GdkTextureClass *klass)
   properties[PROP_COLOR_STATE] =
     g_param_spec_boxed ("color-state", NULL, NULL,
                         GDK_TYPE_COLOR_STATE,
+                        G_PARAM_READWRITE |
+                        G_PARAM_CONSTRUCT_ONLY |
+                        G_PARAM_STATIC_STRINGS |
+                        G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GdkTexture:hdr-metadata: (attributes org.gtk.Property.get=gdk_texture_get_hdr_metadata)
+   *
+   * HDR metadata for the texture, if known.
+   *
+   * Since: 4.16
+   */
+  properties[PROP_HDR_METADATA] =
+    g_param_spec_boxed ("hdr-metadata", NULL, NULL,
+                        GDK_TYPE_HDR_METADATA,
                         G_PARAM_READWRITE |
                         G_PARAM_CONSTRUCT_ONLY |
                         G_PARAM_STATIC_STRINGS |
@@ -817,6 +843,24 @@ gdk_texture_get_color_state (GdkTexture *self)
   g_return_val_if_fail (GDK_IS_TEXTURE (self), NULL);
 
   return self->color_state;
+}
+
+/**
+ * gdk_texture_get_hdr_metadata:
+ * @self: a `GdkTexture`
+ *
+ * Returns HDR metadata associated with the texture, if known.
+ *
+ * Returns: (transfer none) (nullable): HDR metadata for the `GdkTexture`
+ *
+ * Since: 4.16
+ */
+GdkHdrMetadata *
+gdk_texture_get_hdr_metadata (GdkTexture *self)
+{
+  g_return_val_if_fail (GDK_IS_TEXTURE (self), NULL);
+
+  return self->hdr_metadata;
 }
 
 void
@@ -1219,4 +1263,3 @@ gdk_texture_save_to_tiff_bytes (GdkTexture *texture)
 
   return gdk_save_tiff (texture);
 }
-
