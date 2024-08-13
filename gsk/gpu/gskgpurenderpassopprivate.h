@@ -10,6 +10,7 @@ G_BEGIN_DECLS
 
 void                    gsk_gpu_render_pass_begin_op                    (GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *image,
+                                                                         gboolean                        no_srgb,
                                                                          const cairo_rectangle_int_t    *area,
                                                                          GskGpuLoadOp                    load_op,
                                                                          float                           clear_color[4],

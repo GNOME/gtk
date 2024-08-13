@@ -73,8 +73,10 @@ void                    gsk_vulkan_image_transition                     (GskVulk
 
 VkImage                 gsk_vulkan_image_get_vk_image                   (GskVulkanImage         *self);
 VkImageView             gsk_vulkan_image_get_vk_image_view              (GskVulkanImage         *self);
-VkFormat                gsk_vulkan_image_get_vk_format                  (GskVulkanImage         *self);
+VkFormat                gsk_vulkan_image_get_vk_format                  (GskVulkanImage         *self,
+                                                                         gboolean                no_srgb);
 VkFramebuffer           gsk_vulkan_image_get_vk_framebuffer             (GskVulkanImage         *self,
+                                                                         gboolean                no_srgb,
                                                                          VkRenderPass            pass);
 
 static inline guint

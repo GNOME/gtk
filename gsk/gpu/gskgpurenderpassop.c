@@ -20,6 +20,7 @@ struct _GskGpuRenderPassOp
   GskGpuOp op;
 
   GskGpuImage *target;
+  gboolean no_srgb;
   cairo_rectangle_int_t area;
   GskGpuLoadOp load_op;
   float clear_color[4];
@@ -140,7 +141,7 @@ gsk_gpu_render_pass_op_vk_command (GskGpuOp              *op,
 
   gsk_gpu_render_pass_op_do_barriers (self, state);
 
-  state->vk_format = gsk_vulkan_image_get_vk_format (GSK_VULKAN_IMAGE (self->target));
+  state->vk_format = gsk_vulkan_image_get_vk_format (GSK_VULKAN_IMAGE (self->target), self->no_srgb);
   state->vk_render_pass = gsk_vulkan_device_get_vk_render_pass (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                                 state->vk_format,
                                                                 gsk_gpu_load_op_to_vk_load_op (self->load_op),
@@ -165,6 +166,7 @@ gsk_gpu_render_pass_op_vk_command (GskGpuOp              *op,
                             .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
                             .renderPass = state->vk_render_pass,
                             .framebuffer = gsk_vulkan_image_get_vk_framebuffer (GSK_VULKAN_IMAGE(self->target),
+                                                                                self->no_srgb,
                                                                                 state->vk_render_pass),
                             .renderArea = { 
                                 { self->area.x, self->area.y },
@@ -214,6 +216,14 @@ gsk_gpu_render_pass_op_gl_command (GskGpuOp          *op,
     state->flip_y = gsk_gpu_image_get_height (self->target);
   else
     state->flip_y = 0;
+
+  if (gsk_gpu_image_get_flags (self->target) & GSK_GPU_IMAGE_SRGB)
+    {
+      if (self->no_srgb)
+        glDisable (GL_FRAMEBUFFER_SRGB);
+      else
+        glEnable (GL_FRAMEBUFFER_SRGB);
+    }
 
   glViewport (0, 0,
               gsk_gpu_image_get_width (self->target),
@@ -357,6 +367,7 @@ static const GskGpuOpClass GSK_GPU_RENDER_PASS_END_OP_CLASS = {
 void
 gsk_gpu_render_pass_begin_op (GskGpuFrame                 *frame,
                               GskGpuImage                 *image,
+                              gboolean                     no_srgb,
                               const cairo_rectangle_int_t *area,
                               GskGpuLoadOp                 load_op,
                               float                        clear_color[4],
@@ -365,10 +376,12 @@ gsk_gpu_render_pass_begin_op (GskGpuFrame                 *frame,
   GskGpuRenderPassOp *self;
 
   g_assert (load_op != GSK_GPU_LOAD_OP_CLEAR || clear_color != NULL);
+  g_assert (!no_srgb || gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB);
 
   self = (GskGpuRenderPassOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_RENDER_PASS_OP_CLASS);
 
   self->target = g_object_ref (image);
+  self->no_srgb = no_srgb;
   self->area = *area;
   self->load_op = load_op;
   if (self->load_op == GSK_GPU_LOAD_OP_CLEAR)

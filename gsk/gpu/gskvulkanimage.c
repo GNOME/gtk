@@ -19,19 +19,24 @@
 #include <linux/dma-buf.h>
 #endif
 
+enum {
+  DEFAULT = 0,
+  NO_SRGB = 1
+};
+
 struct _GskVulkanImage
 {
   GskGpuImage parent_instance;
 
   GskVulkanDevice *device;
 
-  VkFormat vk_format;
+  VkFormat vk_format[2];
   VkImageTiling vk_tiling;
   VkImageUsageFlags vk_usage;
   VkImage vk_image;
   VkImageView vk_image_view;
-  VkFramebuffer vk_framebuffer;
-  VkImageView vk_framebuffer_image_view;
+  VkFramebuffer vk_framebuffer[2];
+  VkImageView vk_framebuffer_image_view[2];
   GskVulkanYcbcr *ycbcr;
   VkSemaphore vk_semaphore;
   struct {
@@ -278,11 +283,15 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                       tiling, usage, width, height,
                                       &tiling, &flags))
     {
-      vk_format = vk_srgb_format;
+      /* all fine */
     }
-  else if (!gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
-                                            tiling, usage, width, height,
-                                            &tiling, &flags))
+  else if (gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
+                                           tiling, usage, width, height,
+                                           &tiling, &flags))
+    {
+      vk_srgb_format = VK_FORMAT_UNDEFINED;
+    }
+  else
     {
       GdkMemoryFormat rgba_format;
 
@@ -296,11 +305,15 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                           tiling, usage, width, height,
                                           &tiling, &flags))
         {
-          vk_format = vk_srgb_format;
+          /* all fine */
         }
-      else if (!gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
-                                                tiling, usage, width, height,
-                                                &tiling, &flags))
+      else if (gsk_vulkan_device_check_format (device, vk_format, &vk_components, required_flags,
+                                               tiling, usage, width, height,
+                                               &tiling, &flags))
+        {
+          vk_srgb_format = VK_FORMAT_UNDEFINED;
+        }
+      else
         {
           const GdkMemoryFormat *fallbacks;
           gsize i;
@@ -316,7 +329,6 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                                   tiling, usage, width, height,
                                                   &tiling, &flags))
                 {
-                  vk_format = vk_srgb_format;
                   format = fallbacks[i];
                   break;
                 }
@@ -324,6 +336,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                                        tiling, usage, width, height,
                                                        &tiling, &flags))
                 {
+                  vk_srgb_format = VK_FORMAT_UNDEFINED;
                   format = fallbacks[i];
                   break;
                 }
@@ -335,7 +348,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
         }
     }
 
-  if (vk_format == vk_srgb_format)
+  if (vk_srgb_format != VK_FORMAT_UNDEFINED)
     flags |= GSK_GPU_IMAGE_SRGB;
 
   if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
@@ -354,7 +367,11 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
   self->device = g_object_ref (device);
-  self->vk_format = vk_format;
+  self->vk_format[NO_SRGB] = vk_format;
+  if (flags & GSK_GPU_IMAGE_SRGB)
+    self->vk_format[DEFAULT] = vk_srgb_format;
+  else
+    self->vk_format[DEFAULT] = vk_format;
   self->vk_tiling = tiling;
   self->vk_usage = usage;
   self->vk_pipeline_stage = stage;
@@ -366,7 +383,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   GSK_VK_CHECK (vkCreateImage, vk_device,
                                 &(VkImageCreateInfo) {
                                     .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
-                                    .flags = (vk_format == vk_srgb_format) ? VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT : 0,
+                                    .flags = (flags & GSK_GPU_IMAGE_SRGB) ? VK_IMAGE_CREATE_MUTABLE_FORMAT_BIT : 0,
                                     .imageType = VK_IMAGE_TYPE_2D,
                                     .format = vk_format,
                                     .extent = { width, height, 1 },
@@ -378,13 +395,13 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                              (flags & GSK_GPU_IMAGE_NO_BLIT ? 0 : VK_IMAGE_USAGE_TRANSFER_SRC_BIT),
                                     .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
                                     .initialLayout = self->vk_image_layout,
-                                    .pNext = (vk_format == vk_srgb_format) ? &(VkImageFormatListCreateInfo) {
+                                    .pNext = (flags & GSK_GPU_IMAGE_SRGB) ? &(VkImageFormatListCreateInfo) {
                                         .sType = VK_STRUCTURE_TYPE_IMAGE_FORMAT_LIST_CREATE_INFO_KHR,
                                         .pNext = NULL,
                                         .viewFormatCount = 2,
                                         .pViewFormats = (VkFormat[]) {
                                             vk_format,
-                                            gdk_memory_format_vk_format (format, NULL),
+                                            vk_srgb_format
                                         }
                                     } : NULL,
                                 },
@@ -486,8 +503,8 @@ gsk_vulkan_image_get_data (GskVulkanImage *self,
 GskGpuImage *
 gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
                                     VkImage           image,
-                                    VkFormat          format,
-                                    GdkMemoryFormat   memory_format,
+                                    VkFormat          vk_format,
+                                    GdkMemoryFormat   format,
                                     gsize             width,
                                     gsize             height)
 {
@@ -499,19 +516,25 @@ gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
   self->device = g_object_ref (device);
   self->vk_tiling = VK_IMAGE_TILING_OPTIMAL;
   self->vk_image = image;
-  self->vk_format = format;
+  self->vk_format[0] = vk_format;
+  if (vk_format == gdk_memory_format_vk_srgb_format (format))
+    {
+      self->vk_format[1] = gdk_memory_format_vk_format (format, NULL);
+      flags |= GSK_GPU_IMAGE_SRGB;
+    }
+  else
+    {
+      self->vk_format[1] = vk_format;
+    }
   self->vk_pipeline_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
   self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
   self->vk_access = 0;
 
-  if (format == gdk_memory_format_vk_srgb_format (memory_format))
-    flags |= GSK_GPU_IMAGE_SRGB;
-
   /* FIXME: The flags here are very suboptimal */
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, memory_format, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, format, width, height);
 
   gsk_vulkan_image_create_view (self,
-                                format,
+                                vk_format,
                                 &(VkComponentMapping) {
                                   VK_COMPONENT_SWIZZLE_R,
                                   VK_COMPONENT_SWIZZLE_G,
@@ -768,7 +791,8 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
 
   self->device = g_object_ref (device);
   self->vk_tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT;
-  self->vk_format = vk_format;
+  self->vk_format[0] = vk_format;
+  self->vk_format[1] = vk_format;
   self->vk_pipeline_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
   self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
   self->vk_access = 0;
@@ -929,7 +953,8 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
 
   self->device = g_object_ref (device);
   self->vk_tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT;
-  self->vk_format = vk_format;
+  self->vk_format[0] = vk_format;
+  self->vk_format[1] = vk_format;
   self->vk_pipeline_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
   self->vk_image_layout = VK_IMAGE_LAYOUT_GENERAL;
   self->vk_access = 0;
@@ -1181,7 +1206,7 @@ gsk_vulkan_image_get_n_planes (GskVulkanImage *self,
   gsize i;
 
   vkGetPhysicalDeviceFormatProperties2 (gsk_vulkan_device_get_vk_physical_device (self->device),
-                                        self->vk_format,
+                                        self->vk_format[0],
                                         &properties);
   
   for (i = 0; i < drm_properties.drmFormatModifierCount; i++)
@@ -1326,12 +1351,14 @@ gsk_vulkan_image_finalize (GObject *object)
                                            self->descriptor_sets[i].vk_descriptor_set);
     }
 
-  if (self->vk_framebuffer != VK_NULL_HANDLE)
-    vkDestroyFramebuffer (vk_device, self->vk_framebuffer, NULL);
-
-  if (self->vk_framebuffer_image_view != VK_NULL_HANDLE &&
-      self->vk_framebuffer_image_view != self->vk_image_view)
-    vkDestroyImageView (vk_device, self->vk_framebuffer_image_view, NULL);
+  for (i = 0; i < 2; i++)
+    {
+      if (self->vk_framebuffer[i] != VK_NULL_HANDLE)
+        vkDestroyFramebuffer (vk_device, self->vk_framebuffer[0], NULL);
+      if (self->vk_framebuffer_image_view[i] != VK_NULL_HANDLE &&
+          self->vk_framebuffer_image_view[i] != self->vk_image_view)
+        vkDestroyImageView (vk_device, self->vk_framebuffer_image_view[i], NULL);
+    }
 
   if (self->vk_image_view != VK_NULL_HANDLE)
     vkDestroyImageView (vk_device, self->vk_image_view, NULL);
@@ -1371,23 +1398,32 @@ gsk_vulkan_image_init (GskVulkanImage *self)
 
 VkFramebuffer
 gsk_vulkan_image_get_vk_framebuffer (GskVulkanImage *self,
+                                     gboolean        no_srgb,
                                      VkRenderPass    render_pass)
 {
   VkDevice vk_device;
+  GskGpuImageFlags flags;
+  guint id;
 
-  if (self->vk_framebuffer)
-    return self->vk_framebuffer;
+  flags = gsk_gpu_image_get_flags (GSK_GPU_IMAGE (self));
+  if (flags & GSK_GPU_IMAGE_SRGB)
+    id = no_srgb ? NO_SRGB : DEFAULT;
+  else
+    id = DEFAULT;
+
+  if (self->vk_framebuffer[id])
+    return self->vk_framebuffer[id];
 
   vk_device = gsk_vulkan_device_get_vk_device (self->device);
 
-  if (gsk_gpu_image_get_flags (GSK_GPU_IMAGE (self)) & GSK_GPU_IMAGE_CAN_MIPMAP)
+  if (flags & (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_SRGB))
     {
       GSK_VK_CHECK (vkCreateImageView, vk_device,
                                      &(VkImageViewCreateInfo) {
                                          .sType = VK_STRUCTURE_TYPE_IMAGE_VIEW_CREATE_INFO,
                                          .image = self->vk_image,
                                          .viewType = VK_IMAGE_VIEW_TYPE_2D,
-                                         .format = self->vk_format,
+                                         .format = self->vk_format[id],
                                          .subresourceRange = {
                                              .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
                                              .baseMipLevel = 0,
@@ -1397,11 +1433,11 @@ gsk_vulkan_image_get_vk_framebuffer (GskVulkanImage *self,
                                          }
                                      },
                                  NULL,
-                                 &self->vk_framebuffer_image_view);
+                                 &self->vk_framebuffer_image_view[id]);
     }
   else
     {
-      self->vk_framebuffer_image_view = self->vk_image_view;
+      self->vk_framebuffer_image_view[id] = self->vk_image_view;
     }
 
   GSK_VK_CHECK (vkCreateFramebuffer, vk_device,
@@ -1410,16 +1446,16 @@ gsk_vulkan_image_get_vk_framebuffer (GskVulkanImage *self,
                                          .renderPass = render_pass,
                                          .attachmentCount = 1,
                                          .pAttachments = (VkImageView[1]) {
-                                             self->vk_framebuffer_image_view,
+                                             self->vk_framebuffer_image_view[id],
                                          },
                                          .width = gsk_gpu_image_get_width (GSK_GPU_IMAGE (self)),
                                          .height = gsk_gpu_image_get_height (GSK_GPU_IMAGE (self)),
                                          .layers = 1
                                      },
                                      NULL,
-                                     &self->vk_framebuffer);
+                                     &self->vk_framebuffer[id]);
 
-  return self->vk_framebuffer;
+  return self->vk_framebuffer[id];
 }
 
 VkDescriptorSet
@@ -1551,8 +1587,9 @@ gsk_vulkan_image_transition (GskVulkanImage       *self,
 }
 
 VkFormat
-gsk_vulkan_image_get_vk_format (GskVulkanImage *self)
+gsk_vulkan_image_get_vk_format (GskVulkanImage *self,
+                                gboolean        no_srgb)
 {
-  return self->vk_format;
+  return self->vk_format[no_srgb ? NO_SRGB : DEFAULT];
 }
 
