@@ -34,6 +34,7 @@
 #include "gtkbinlayout.h"
 #include "gtkwidgetprivate.h"
 #include "gdk/gdksurfaceprivate.h"
+#include "gdk/gdkhdrmetadataprivate.h"
 
 struct _GtkInspectorMiscInfo
 {
@@ -83,6 +84,8 @@ struct _GtkInspectorMiscInfo
   GtkWidget *scale;
   GtkWidget *color_state_row;
   GtkWidget *color_state;
+  GtkWidget *hdr_metadata_row;
+  GtkWidget *hdr_metadata;
   GtkWidget *framecount_row;
   GtkWidget *framecount;
   GtkWidget *mapped_row;
@@ -351,6 +354,27 @@ update_direction (GtkInspectorMiscInfo *sl)
     }
 }
 
+static char *
+format_hdr_metadata (GdkHdrMetadata *hdr)
+{
+  GString *str;
+
+  if (!hdr)
+    return g_strdup ("―");
+
+  str = g_string_new ("");
+
+  g_string_append_printf (str, "r %f %f\n", hdr->rx, hdr->ry);
+  g_string_append_printf (str, "g %f %f\n", hdr->gx, hdr->gy);
+  g_string_append_printf (str, "b %f %f\n", hdr->bx, hdr->by);
+  g_string_append_printf (str, "w %f %f\n", hdr->wx, hdr->wy);
+  g_string_append_printf (str, "lum  %f - %f\n", hdr->min_lum, hdr->max_lum);
+  g_string_append_printf (str, "cll %f\n", hdr->max_cll);
+  g_string_append_printf (str, "fall %f\n", hdr->max_fall);
+
+  return g_string_free (str, FALSE);
+}
+
 static gboolean
 update_info (gpointer data)
 {
@@ -456,12 +480,17 @@ update_info (gpointer data)
   if (GDK_IS_SURFACE (sl->object))
     {
       char buf[64];
+      char *hdr_metadata;
 
       g_snprintf (buf, sizeof (buf), "%g", gdk_surface_get_scale (GDK_SURFACE (sl->object)));
 
       gtk_label_set_label (GTK_LABEL (sl->scale), buf);
 
       gtk_label_set_label (GTK_LABEL (sl->color_state), gdk_color_state_get_name (gdk_surface_get_color_state (GDK_SURFACE (sl->object))));
+
+      hdr_metadata = format_hdr_metadata (gdk_surface_get_hdr_metadata (GDK_SURFACE (sl->object)));
+      gtk_label_set_label (GTK_LABEL (sl->hdr_metadata), hdr_metadata);
+      g_free (hdr_metadata);
     }
 
   return G_SOURCE_CONTINUE;
@@ -529,6 +558,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   gtk_widget_set_visible (sl->framerate_row, GDK_IS_FRAME_CLOCK (object));
   gtk_widget_set_visible (sl->scale_row, GDK_IS_SURFACE (object));
   gtk_widget_set_visible (sl->color_state_row, GDK_IS_SURFACE (object));
+  gtk_widget_set_visible (sl->hdr_metadata_row, GDK_IS_SURFACE (object));
 
   if (GTK_IS_WIDGET (object))
     {
@@ -644,6 +674,8 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, scale);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, color_state_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, color_state);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, hdr_metadata_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, hdr_metadata);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, mapped_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, mapped);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, realized_row);
