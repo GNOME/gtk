@@ -21,6 +21,7 @@
 
 #include <glib/gi18n-lib.h>
 #include "gdkcolorstateprivate.h"
+#include "gdkhdrmetadataprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkmemorytexturebuilder.h"
 #include "gdkprofilerprivate.h"
@@ -129,51 +130,88 @@ png_simple_warning_callback (png_structp     png,
 }
 
 /* }}} */
-/* {{{ Color profile handling */
+ /* {{{ Color profile handling */
 
 typedef struct
 {
   gboolean cicp_chunk_read;
-  int color_primaries;
-  int transfer_function;
-  int matrix_coefficients;
-  int range;
-} CICPData;
+  gboolean mdcv_chunk_read;
+  gboolean clli_chunk_read;
+  GdkCicp cicp;
+  guint16 rx, ry;
+  guint16 gx, gy;
+  guint16 bx, by;
+  guint16 wx, wy;
+  guint32 min_lum;
+  guint32 max_lum;
+  guint32 max_cll;
+  guint32 max_fall;
+} ColorData;
 
 static int
 png_read_chunk_func (png_structp        png,
                      png_unknown_chunkp chunk)
 {
+  ColorData *data = png_get_user_chunk_ptr (png);
+
   if (strcmp ((char *) chunk->name, "cICP") == 0 &&
       chunk->size == 4)
     {
-      CICPData *cicp = png_get_user_chunk_ptr (png);
+      data->cicp_chunk_read = TRUE;
 
-      cicp->cicp_chunk_read = TRUE;
-
-      cicp->color_primaries = chunk->data[0];
-      cicp->transfer_function = chunk->data[1];
-      cicp->matrix_coefficients = chunk->data[2];
-      cicp->range = chunk->data[3];
+      data->cicp.color_primaries = chunk->data[0];
+      data->cicp.transfer_function = chunk->data[1];
+      data->cicp.matrix_coefficients = chunk->data[2];
+      data->cicp.range = chunk->data[3];
 
       return 1;
+    }
+  else if (strcmp ((char *) chunk->name, "mDCv") == 0 &&
+           chunk->size == 24)
+    {
+      data->mdcv_chunk_read = TRUE;
+
+      data->rx = PNG_get_uint_16 (&chunk->data[0]);
+      data->ry = PNG_get_uint_16 (&chunk->data[2]);
+      data->gx = PNG_get_uint_16 (&chunk->data[4]);
+      data->gy = PNG_get_uint_16 (&chunk->data[6]);
+      data->bx = PNG_get_uint_16 (&chunk->data[8]);
+      data->by = PNG_get_uint_16 (&chunk->data[10]);
+      data->wx = PNG_get_uint_16 (&chunk->data[12]);
+      data->wy = PNG_get_uint_16 (&chunk->data[14]);
+      data->max_lum = PNG_get_uint_32 (&chunk->data[16]);
+      data->min_lum = PNG_get_uint_32 (&chunk->data[20]);
+    }
+  else if (strcmp ((char *) chunk->name, "cLLi") == 0 &&
+           chunk->size == 8)
+    {
+      data->clli_chunk_read = TRUE;
+
+      data->max_cll = PNG_get_uint_32 (&chunk->data[0]);
+      data->max_fall = PNG_get_uint_32 (&chunk->data[4]);
     }
 
   return 0;
 }
 
-static GdkColorState *
-gdk_png_get_color_state_from_cicp (const CICPData  *data,
-                                   GError         **error)
+static GdkHdrMetadata *
+gdk_png_get_hdr_metadata (png_struct *png)
 {
-  GdkCicp cicp;
+  ColorData *data;
 
-  cicp.color_primaries = data->color_primaries;
-  cicp.transfer_function = data->transfer_function;
-  cicp.matrix_coefficients= data->matrix_coefficients;
-  cicp.range = data->range;
+  data = png_get_user_chunk_ptr (png);
 
-  return gdk_color_state_new_for_cicp (&cicp, error);
+  if (!data->mdcv_chunk_read)
+    return NULL;
+
+  return gdk_hdr_metadata_new (data->rx / 50000.0, data->ry / 50000.0,
+                               data->gx / 50000.0, data->gy / 50000.0,
+                               data->bx / 50000.0, data->by / 50000.0,
+                               data->wx / 50000.0, data->wy / 50000.0,
+                               data->min_lum / 10000.0,
+                               data->max_lum / 10000.0,
+                               data->max_cll / 10000.0,
+                               data->max_fall / 10000.0);
 }
 
 static GdkColorState *
@@ -182,16 +220,16 @@ gdk_png_get_color_state (png_struct  *png,
                          GError     **error)
 {
   GdkColorState *color_state;
-  CICPData *cicp;
+  ColorData *data;
   int intent;
 
-  cicp = png_get_user_chunk_ptr (png);
+  data = png_get_user_chunk_ptr (png);
 
-  if (cicp->cicp_chunk_read)
+  if (data->cicp_chunk_read)
     {
       GError *local_error = NULL;
 
-      color_state = gdk_png_get_color_state_from_cicp (cicp, &local_error);
+      color_state = gdk_color_state_new_for_cicp (&data->cicp, &local_error);
       if (color_state)
         {
           g_debug ("Color state from cICP data: %s", gdk_color_state_get_name (color_state));
@@ -226,30 +264,66 @@ gdk_png_get_color_state (png_struct  *png,
 }
 
 static void
-gdk_png_set_color_state (png_struct    *png,
-                         png_info      *info,
-                         GdkColorState *color_state,
-                         png_byte      *chunk_data)
+gdk_png_set_color_data (png_struct     *png,
+                        png_info       *info,
+                        GdkColorState  *color_state,
+                        GdkHdrMetadata *hdr_metadata,
+                        png_byte       *cicp_data,
+                        png_byte       *mdcv_data,
+                        png_byte       *clli_data)
 {
+  png_unknown_chunk chunk[3];
+  guint n_chunks = 0;
   const GdkCicp *cicp;
 
   cicp = gdk_color_state_get_cicp (color_state);
 
   if (cicp)
     {
-      png_unknown_chunk chunk = {
-        .name = { 'c', 'I', 'C', 'P', '\0' },
-        .data = chunk_data,
-        .size = 4,
-        .location = PNG_HAVE_IHDR,
-      };
+      memcpy (&chunk[0].name, "cICP", 5);
+      chunk[0].data = cicp_data,
+      chunk[0].size = 4,
+      chunk[0].location = PNG_HAVE_IHDR,
 
-      chunk_data[0] = (png_byte) cicp->color_primaries;
-      chunk_data[1] = (png_byte) cicp->transfer_function;
-      chunk_data[2] = (png_byte) 0; /* png only supports this */
-      chunk_data[3] = (png_byte) cicp->range;
+      cicp_data[0] = (png_byte) cicp->color_primaries;
+      cicp_data[1] = (png_byte) cicp->transfer_function;
+      cicp_data[2] = (png_byte) 0; /* png only supports this */
+      cicp_data[3] = (png_byte) cicp->range;
 
-      png_set_unknown_chunks (png, info, &chunk, 1);
+      n_chunks++;
+
+      if (hdr_metadata)
+        {
+          memcpy (&chunk[1].name, "mDCv", 5);
+          chunk[1].data = mdcv_data;
+          chunk[1].size = 24;
+          chunk[1].location = PNG_HAVE_IHDR;
+
+          png_save_uint_16 (&mdcv_data[0], (guint) (hdr_metadata->rx * 50000));
+          png_save_uint_16 (&mdcv_data[2], (guint) (hdr_metadata->ry * 50000));
+          png_save_uint_16 (&mdcv_data[4], (guint) (hdr_metadata->gx * 50000));
+          png_save_uint_16 (&mdcv_data[6], (guint) (hdr_metadata->gy * 50000));
+          png_save_uint_16 (&mdcv_data[8], (guint) (hdr_metadata->bx * 50000));
+          png_save_uint_16 (&mdcv_data[10], (guint) (hdr_metadata->by * 50000));
+          png_save_uint_16 (&mdcv_data[12], (guint) (hdr_metadata->wx * 50000));
+          png_save_uint_16 (&mdcv_data[14], (guint) (hdr_metadata->wy * 50000));
+          png_save_uint_32 (&mdcv_data[16], (guint) (hdr_metadata->max_lum * 10000));
+          png_save_uint_32 (&mdcv_data[20], (guint) (hdr_metadata->min_lum * 10000));
+
+          n_chunks++;
+
+          if (hdr_metadata->max_cll != 0 || hdr_metadata->max_fall != 0)
+            {
+              memcpy (&chunk[2].name, "cLLi", 5);
+              chunk[2].data = clli_data;
+              chunk[2].size = 8;
+              chunk[2].location = PNG_HAVE_IHDR;
+
+              png_save_uint_32 (&clli_data[0], (guint) (hdr_metadata->max_cll * 10000));
+              png_save_uint_32 (&clli_data[4], (guint) (hdr_metadata->max_fall * 10000));
+              n_chunks++;
+            }
+        }
     }
   else
     {
@@ -257,6 +331,8 @@ gdk_png_set_color_state (png_struct    *png,
       gdk_color_state_unref (color_state);
       color_state = gdk_color_state_ref (gdk_color_state_get_srgb ());
     }
+
+  png_set_unknown_chunks (png, info, chunk, n_chunks);
 
   /* For good measure, we add an sRGB chunk too */
   if (gdk_color_state_equal (color_state, GDK_COLOR_STATE_SRGB))
@@ -286,9 +362,12 @@ gdk_load_png (GBytes      *bytes,
   guchar **row_pointers = NULL;
   GBytes *out_bytes;
   GdkColorState *color_state;
+  GdkHdrMetadata *hdr_metadata;
   GdkTexture *texture;
   int bpp;
-  CICPData cicp = { FALSE, };
+  ColorData data;
+
+  memset (&data, 0, sizeof (ColorData));
 
   G_GNUC_UNUSED gint64 before = GDK_PROFILER_CURRENT_TIME;
 
@@ -310,7 +389,7 @@ gdk_load_png (GBytes      *bytes,
     g_error ("Out of memory");
 
   png_set_read_fn (png, &io, png_read_func);
-  png_set_read_user_chunk_fn (png, &cicp, png_read_chunk_func);
+  png_set_read_user_chunk_fn (png, &data, png_read_chunk_func);
 
   if (sigsetjmp (png_jmpbuf (png), 1))
     {
@@ -412,6 +491,8 @@ gdk_load_png (GBytes      *bytes,
   if (color_state == NULL)
     return NULL;
 
+  hdr_metadata = gdk_png_get_hdr_metadata (png);
+
   bpp = gdk_memory_format_bytes_per_pixel (format);
   if (!g_size_checked_mul (&stride, width, bpp) ||
       !g_size_checked_add (&stride, stride, (8 - stride % 8) % 8))
@@ -447,6 +528,7 @@ gdk_load_png (GBytes      *bytes,
   builder = gdk_memory_texture_builder_new ();
   gdk_memory_texture_builder_set_format (builder, format);
   gdk_memory_texture_builder_set_color_state (builder, color_state);
+  gdk_memory_texture_builder_set_hdr_metadata (builder, hdr_metadata);
   gdk_memory_texture_builder_set_width (builder, width);
   gdk_memory_texture_builder_set_height (builder, height);
   gdk_memory_texture_builder_set_bytes (builder, out_bytes);
@@ -455,6 +537,7 @@ gdk_load_png (GBytes      *bytes,
   g_object_unref (builder);
   g_bytes_unref (out_bytes);
   gdk_color_state_unref (color_state);
+  g_clear_pointer (&hdr_metadata, gdk_hdr_metadata_unref);
 
   if (options && png_get_text (png, info, &text, &num_texts))
     {
@@ -494,13 +577,17 @@ gdk_save_png (GdkTexture *texture)
   gsize stride;
   const guchar *data;
   GdkColorState *color_state;
+  GdkHdrMetadata *hdr_metadata;
   int png_format;
   int depth;
-  png_byte chunk_data[4];
+  png_byte cicp_data[4];
+  png_byte mdcv_data[24];
+  png_byte clli_data[8];
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
   color_state = gdk_texture_get_color_state (texture);
+  hdr_metadata = gdk_texture_get_hdr_metadata (texture);
   format = gdk_texture_get_format (texture);
 
   switch (format)
@@ -624,7 +711,7 @@ gdk_save_png (GdkTexture *texture)
                 PNG_COMPRESSION_TYPE_DEFAULT,
                 PNG_FILTER_TYPE_DEFAULT);
 
-  gdk_png_set_color_state (png, info, color_state, chunk_data);
+  gdk_png_set_color_data (png, info, color_state, hdr_metadata, cicp_data, mdcv_data, clli_data);
 
   png_write_info (png, info);
 
