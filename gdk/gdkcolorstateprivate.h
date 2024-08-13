@@ -45,6 +45,7 @@ struct _GdkColorStateClass
   GdkFloatColorConvert  (* get_convert_from)    (GdkColorState  *self,
                                                  GdkColorState  *source);
   const GdkCicp *       (* get_cicp)            (GdkColorState  *self);
+  const float *         (* get_primaries)       (GdkColorState  *self);
 };
 
 typedef struct _GdkDefaultColorState GdkDefaultColorState;
@@ -58,6 +59,8 @@ struct _GdkDefaultColorState
   GdkFloatColorConvert convert_to[GDK_COLOR_STATE_N_IDS];
 
   GdkCicp cicp;
+
+  const float *primaries;
 };
 
 extern GdkDefaultColorState gdk_default_color_states[GDK_COLOR_STATE_N_IDS];
@@ -165,6 +168,12 @@ static inline const GdkCicp *
 gdk_color_state_get_cicp (GdkColorState *self)
 {
   return self->klass->get_cicp (self);
+}
+
+static inline const float *
+gdk_color_state_get_primaries (GdkColorState *self)
+{
+  return self->klass->get_primaries (self);
 }
 
 static inline void

@@ -276,7 +276,7 @@ TRANSFORM(gdk_default_rec2100_pq_to_srgb,            pq_eotf,   rec2020_to_srgb,
 
 /* }}} */
 /* {{{ Default implementation */
-/* {{{ Vfuncs */
+/* {{{ Vfuncs */ 
 
 static gboolean
 gdk_default_color_state_equal (GdkColorState *self,
@@ -331,6 +331,14 @@ gdk_default_color_state_get_cicp (GdkColorState *color_state)
   return &self->cicp;
 }
 
+static const float *
+gdk_default_color_state_get_primaries (GdkColorState *color_state)
+{
+  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
+
+  return self->primaries;
+}
+
 /* }}} */
 
 static const
@@ -342,6 +350,7 @@ GdkColorStateClass GDK_DEFAULT_COLOR_STATE_CLASS = {
   .get_convert_to = gdk_default_color_state_get_convert_to,
   .get_convert_from = gdk_default_color_state_get_convert_from,
   .get_cicp = gdk_default_color_state_get_cicp,
+  .get_primaries = gdk_default_color_state_get_primaries,
 };
 
 GdkDefaultColorState gdk_default_color_states[] = {
@@ -359,6 +368,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_default_srgb_to_rec2100_pq,
       [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_srgb_to_rec2100_linear,
     },
+    .primaries = srgb_primaries,
     .cicp = { 1, 13, 0, 1 },
   },
   [GDK_COLOR_STATE_ID_SRGB_LINEAR] = {
@@ -375,6 +385,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_default_srgb_linear_to_rec2100_pq,
       [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_srgb_linear_to_rec2100_linear,
     },
+    .primaries = srgb_primaries,
     .cicp = { 1, 8, 0, 1 },
   },
   [GDK_COLOR_STATE_ID_REC2100_PQ] = {
@@ -391,6 +402,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_rec2100_pq_to_srgb_linear,
       [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_rec2100_pq_to_rec2100_linear,
     },
+    .primaries = rec2020_primaries,
     .cicp = { 9, 16, 0, 1 },
   },
   [GDK_COLOR_STATE_ID_REC2100_LINEAR] = {
@@ -407,11 +419,12 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_rec2100_linear_to_srgb_linear,
       [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_default_rec2100_linear_to_rec2100_pq,
     },
+    .primaries = rec2020_primaries,
     .cicp = { 9, 8, 0, 1 },
   },
 };
 
- /* }}} */
+/* }}} */
 /* {{{ Cicp implementation */
 
 typedef struct _GdkCicpColorState GdkCicpColorState;
@@ -432,6 +445,8 @@ struct _GdkCicpColorState
   float *from_rec2020;
 
   GdkCicp cicp;
+
+  const float *primaries;
 };
 
 /* {{{ Conversion functions */
@@ -554,7 +569,15 @@ gdk_cicp_color_state_get_cicp (GdkColorState  *color_state)
   return &self->cicp;
 }
 
-/* }}} */ 
+static const float *
+gdk_cicp_color_state_get_primaries (GdkColorState  *color_state)
+{
+  GdkCicpColorState *self = (GdkCicpColorState *) color_state;
+
+  return self->primaries;
+}
+
+/* }}} */
 
 static const
 GdkColorStateClass GDK_CICP_COLOR_STATE_CLASS = {
@@ -565,6 +588,7 @@ GdkColorStateClass GDK_CICP_COLOR_STATE_CLASS = {
   .get_convert_to = gdk_cicp_color_state_get_convert_to,
   .get_convert_from = gdk_cicp_color_state_get_convert_from,
   .get_cicp = gdk_cicp_color_state_get_cicp,
+  .get_primaries = gdk_cicp_color_state_get_primaries,
 };
 
 static inline float *
@@ -591,6 +615,7 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
   GdkTransferFunc oetf;
   gconstpointer to_xyz;
   gconstpointer from_xyz;
+  const float *primaries;
 
   if (cicp->range == GDK_CICP_RANGE_NARROW || cicp->matrix_coefficients != 0)
     {
@@ -660,22 +685,27 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
   switch (cicp->color_primaries)
     {
     case 1:
+      primaries = srgb_primaries;
       to_xyz = srgb_to_xyz;
       from_xyz = xyz_to_srgb;
       break;
     case 5:
+      primaries = pal_primaries;
       to_xyz = pal_to_xyz;
       from_xyz = xyz_to_pal;
       break;
     case 6:
+      primaries = ntsc_primaries;
       to_xyz = ntsc_to_xyz;
       from_xyz = xyz_to_ntsc;
       break;
     case 9:
+      primaries = rec2020_primaries;
       to_xyz = rec2020_to_xyz;
       from_xyz = xyz_to_rec2020;
       break;
     case 12:
+      primaries = p3_primaries;
       to_xyz = p3_to_xyz;
       from_xyz = xyz_to_p3;
       break;
@@ -701,6 +731,8 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
 
   self->eotf = eotf;
   self->oetf = oetf;
+
+  self->primaries = primaries;
 
   self->to_srgb = multiply (g_new (float, 9), xyz_to_srgb, to_xyz);
   self->to_rec2020 = multiply (g_new (float, 9), xyz_to_rec2020, to_xyz);
