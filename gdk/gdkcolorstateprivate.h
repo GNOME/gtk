@@ -26,6 +26,7 @@ struct _GdkColorState
 
   GdkMemoryDepth depth;
   GdkColorState *rendering_color_state;
+  GdkColorState *rendering_color_state_linear;
 };
 
 /* Note: self may be the source or the target colorstate */
@@ -84,9 +85,9 @@ gdk_color_state_get_rendering_color_state (GdkColorState *self)
     self = GDK_COLOR_STATE_REC2100_PQ;
 
   if (!GDK_DEBUG_CHECK (LINEAR))
-    return self;
+    return self->rendering_color_state;
 
-  return self->rendering_color_state;
+  return self->rendering_color_state_linear;
 }
 
 static inline GdkMemoryDepth
