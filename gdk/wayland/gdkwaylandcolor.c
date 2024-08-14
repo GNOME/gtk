@@ -5,7 +5,7 @@
 
 typedef struct _ImageDescription ImageDescription;
 
-static uint primaries_map[] = {
+static const uint primaries_map[] = {
   [XX_COLOR_MANAGER_V4_PRIMARIES_SRGB] = 1,
   [XX_COLOR_MANAGER_V4_PRIMARIES_PAL_M] = 4,
   [XX_COLOR_MANAGER_V4_PRIMARIES_PAL] = 5,
@@ -34,7 +34,48 @@ cicp_to_wl_primaries (uint cp)
   return 0;
 }
 
-static uint transfer_map[] = {
+static const uint primaries_primaries[][8] = {
+  [XX_COLOR_MANAGER_V4_PRIMARIES_SRGB] =         { 6400, 3300, 3000, 6000, 1500,  600, 3127, 3290 },
+  [XX_COLOR_MANAGER_V4_PRIMARIES_PAL_M] =        { 6700, 3300, 2100, 7100, 1400,  800, 3100, 3160 },
+  [XX_COLOR_MANAGER_V4_PRIMARIES_PAL] =          { 6400, 3300, 2900, 6000, 1500,  600, 3127, 3290 },
+  [XX_COLOR_MANAGER_V4_PRIMARIES_NTSC] =         { 6300, 3400, 3100, 5950, 1550,  700, 3127, 3290 },
+  [XX_COLOR_MANAGER_V4_PRIMARIES_GENERIC_FILM] = { 2430, 6920, 1450,  490, 6810, 3190, 3100, 3160 },
+  [XX_COLOR_MANAGER_V4_PRIMARIES_BT2020] =       { 7080, 2920, 1700, 7970, 1310,  460, 3127, 3290 },
+  [XX_COLOR_MANAGER_V4_PRIMARIES_CIE1931_XYZ] =  {10000,    0,    0,10000,    0,    0, 3333, 3333 }, 
+  [XX_COLOR_MANAGER_V4_PRIMARIES_DCI_P3] =       { 6800, 3200, 2650, 6900, 1500,  600, 3140, 3510 },
+  [XX_COLOR_MANAGER_V4_PRIMARIES_DISPLAY_P3] =   { 6800, 3200, 2650, 6900, 1500,  600, 3127, 3290 },
+  [XX_COLOR_MANAGER_V4_PRIMARIES_ADOBE_RGB] =    { 6400, 3300, 2100, 7100, 1500,  600, 3127, 3290 },
+};
+
+static const uint *
+wl_primaries_to_primaries (enum xx_color_manager_v4_primaries primaries)
+{
+  return primaries_primaries[primaries];
+}
+
+static gboolean
+primaries_to_wl_primaries (const uint primaries[8],
+                           enum xx_color_manager_v4_primaries *out_primaries)
+{
+  guint i, j;
+
+  for (i = 0; i < G_N_ELEMENTS (primaries_primaries); i++)
+    {
+      for (j = 0; j < 8; j++)
+        {
+          if (primaries[j] != primaries_primaries[i][j])
+            break;
+        }
+      if (j == 8)
+        {
+          *out_primaries = i;
+          return TRUE;
+        }
+    }
+  return FALSE;
+}
+
+static const uint transfer_map[] = {
   [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_BT709] = 1,
   [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_GAMMA22] = 4,
   [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_GAMMA28] = 5,
@@ -556,6 +597,9 @@ image_desc_info_primaries (void *data,
   desc->b_x = b_x; desc->r_y = b_y;
   desc->w_x = w_x; desc->r_y = w_y;
   desc->has_primaries = 1;
+  if (primaries_to_wl_primaries ((uint[]) { r_x, r_y, g_x, g_y, b_x, b_y, w_x, w_y },
+                                 &desc->primaries))
+    desc->has_primaries_named = 1;
 }
 
 static void
@@ -564,9 +608,16 @@ image_desc_info_primaries_named (void *data,
                                  uint32_t primaries)
 {
   ImageDescription *desc = data;
+  const uint *p;
 
   desc->primaries = primaries;
   desc->has_primaries_named = 1;
+  desc->has_primaries = 1;
+  p = wl_primaries_to_primaries (primaries);
+  desc->r_x = p[0]; desc->r_y = p[1];
+  desc->g_x = p[2]; desc->r_y = p[3];
+  desc->b_x = p[4]; desc->r_y = p[5];
+  desc->w_x = p[6]; desc->r_y = p[7];
 }
 
 static void
