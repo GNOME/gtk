@@ -80,6 +80,10 @@ GdkColorState * gdk_color_state_get_no_srgb_tf          (GdkColorState          
 GdkColorState * gdk_color_state_new_for_cicp            (const GdkCicp          *cicp,
                                                          GError                **error);
 
+GdkColorState * gdk_color_state_new_for_primaries       (const float   primaries[8],
+                                                         guint         transfer_function,
+                                                         GError      **error);
+
 static inline GdkColorState *
 gdk_color_state_get_rendering_color_state (GdkColorState *self)
 {
