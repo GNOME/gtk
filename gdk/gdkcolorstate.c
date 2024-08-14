@@ -278,7 +278,7 @@ TRANSFORM(gdk_default_rec2100_pq_to_srgb,            pq_eotf,   rec2020_to_srgb,
 
 /* }}} */
 /* {{{ Default implementation */
-/* {{{ Vfuncs */ 
+/* {{{ Vfuncs */
 
 static gboolean
 gdk_default_color_state_equal (GdkColorState *self,
@@ -341,6 +341,14 @@ gdk_default_color_state_get_primaries (GdkColorState *color_state)
   return self->primaries;
 }
 
+static const float *
+gdk_default_color_state_get_range (GdkColorState *color_state)
+{
+  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
+
+  return self->range;
+}
+
 /* }}} */
 
 static const
@@ -353,6 +361,7 @@ GdkColorStateClass GDK_DEFAULT_COLOR_STATE_CLASS = {
   .get_convert_from = gdk_default_color_state_get_convert_from,
   .get_cicp = gdk_default_color_state_get_cicp,
   .get_primaries = gdk_default_color_state_get_primaries,
+  .get_range = gdk_default_color_state_get_range,
 };
 
 GdkDefaultColorState gdk_default_color_states[] = {
@@ -371,6 +380,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_srgb_to_rec2100_linear,
     },
     .primaries = srgb_primaries,
+    .range = default_range,
     .cicp = { 1, 13, 0, 1 },
   },
   [GDK_COLOR_STATE_ID_SRGB_LINEAR] = {
@@ -388,6 +398,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_srgb_linear_to_rec2100_linear,
     },
     .primaries = srgb_primaries,
+    .range = default_range,
     .cicp = { 1, 8, 0, 1 },
   },
   [GDK_COLOR_STATE_ID_REC2100_PQ] = {
@@ -405,6 +416,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_rec2100_pq_to_rec2100_linear,
     },
     .primaries = rec2020_primaries,
+    .range = default_range,
     .cicp = { 9, 16, 0, 1 },
   },
   [GDK_COLOR_STATE_ID_REC2100_LINEAR] = {
@@ -422,6 +434,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_default_rec2100_linear_to_rec2100_pq,
     },
     .primaries = rec2020_primaries,
+    .range = rec2100_linear_range,
     .cicp = { 9, 8, 0, 1 },
   },
 };
@@ -449,6 +462,7 @@ struct _GdkCicpColorState
   GdkCicp cicp;
 
   const float *primaries;
+  const float *range;
 };
 
 /* {{{ Conversion functions */
@@ -579,7 +593,15 @@ gdk_cicp_color_state_get_primaries (GdkColorState  *color_state)
   return self->primaries;
 }
 
-/* }}} */
+static const float *
+gdk_cicp_color_state_get_range (GdkColorState  *color_state)
+{
+  GdkCicpColorState *self = (GdkCicpColorState *) color_state;
+
+  return self->range;
+}
+
+/* }}} */ 
 
 static const
 GdkColorStateClass GDK_CICP_COLOR_STATE_CLASS = {
@@ -591,6 +613,7 @@ GdkColorStateClass GDK_CICP_COLOR_STATE_CLASS = {
   .get_convert_from = gdk_cicp_color_state_get_convert_from,
   .get_cicp = gdk_cicp_color_state_get_cicp,
   .get_primaries = gdk_cicp_color_state_get_primaries,
+  .get_range = gdk_cicp_color_state_get_range,
 };
 
 static inline float *
@@ -735,6 +758,7 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
   self->oetf = oetf;
 
   self->primaries = primaries;
+  self->range = default_range;
 
   self->to_srgb = multiply (g_new (float, 9), xyz_to_srgb, to_xyz);
   self->to_rec2020 = multiply (g_new (float, 9), xyz_to_rec2020, to_xyz);

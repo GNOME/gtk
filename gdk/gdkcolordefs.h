@@ -267,3 +267,19 @@ static const float p3_primaries[8] = {
   0.150, 0.060,
   0.3127, 0.3290
 };
+
+/* ranges */
+
+static const float default_range[8] = {
+  0, 1,
+  0, 1,
+  0, 1,
+  0, 1
+};
+
+static const float rec2100_linear_range[8] = {
+  0, 49.2610855,
+  0, 49.2610855,
+  0, 49.2610855,
+  0, 1,
+};
