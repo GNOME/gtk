@@ -100,6 +100,7 @@ const char *    gdk_color_state_get_name                (GdkColorState          
 GdkColorState * gdk_color_state_get_no_srgb_tf          (GdkColorState          *self);
 
 GdkColorState * gdk_color_state_new_for_cicp            (const GdkCicp          *cicp,
+                                                         const GdkLuminance     *luminance,
                                                          GError                **error);
 
 void            gdk_color_state_clamp                   (GdkColorState          *self,

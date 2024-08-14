@@ -436,7 +436,7 @@ GdkColorState *
 gdk_cicp_params_build_color_state (GdkCicpParams  *self,
                                    GError        **error)
 {
-  return gdk_color_state_new_for_cicp (gdk_cicp_params_get_cicp (self), error);
+  return gdk_color_state_new_for_cicp (gdk_cicp_params_get_cicp (self), NULL, error);
 }
 
 /* }}} */

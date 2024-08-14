@@ -1665,7 +1665,7 @@ parse_color_state_rule (GtkCssParser *parser,
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
-  cs = gdk_color_state_new_for_cicp (&cicp, &error);
+  cs = gdk_color_state_new_for_cicp (&cicp, NULL, &error);
 
   if (!cs)
     {

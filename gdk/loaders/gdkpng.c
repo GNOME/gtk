@@ -173,7 +173,7 @@ gdk_png_get_color_state_from_cicp (const CICPData  *data,
   cicp.matrix_coefficients= data->matrix_coefficients;
   cicp.range = data->range;
 
-  return gdk_color_state_new_for_cicp (&cicp, error);
+  return gdk_color_state_new_for_cicp (&cicp, NULL, error);
 }
 
 static GdkColorState *

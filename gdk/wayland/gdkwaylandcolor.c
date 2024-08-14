@@ -532,7 +532,7 @@ gdk_color_state_from_image_description_bits (ImageDescription *desc)
       cicp.matrix_coefficients = 0;
       cicp.range = GDK_CICP_RANGE_FULL;
 
-      return gdk_color_state_new_for_cicp (&cicp, NULL);
+      return gdk_color_state_new_for_cicp (&cicp, NULL, NULL);
     }
   else
     return NULL;

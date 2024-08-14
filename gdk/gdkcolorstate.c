@@ -675,15 +675,24 @@ multiply (float       res[9],
 }
 
 GdkColorState *
-gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
-                              GError        **error)
+gdk_color_state_new_for_cicp (const GdkCicp       *cicp,
+                              const GdkLuminance  *luminance,
+                              GError             **error)
 {
   GdkCicpColorState *self;
   GdkTransferFunc eotf;
   GdkTransferFunc oetf;
   gconstpointer to_xyz;
   gconstpointer from_xyz;
-  const GdkLuminance *luminance = &default_sdr_luminance;
+
+  if (luminance &&
+      !(luminance->min <= luminance->ref && luminance->ref <= luminance->max))
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   _("cicp: Inconsistent luminance values"));
+      return NULL;
+    }
 
   if (cicp->range == GDK_CICP_RANGE_NARROW || cicp->matrix_coefficients != 0)
     {
@@ -705,7 +714,8 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
 
   for (guint i = 0; i < GDK_COLOR_STATE_N_IDS; i++)
     {
-      if (gdk_cicp_equivalent (cicp, &gdk_default_color_states[i].cicp))
+      if (gdk_cicp_equivalent (cicp, &gdk_default_color_states[i].cicp) &&
+          (luminance == NULL || gdk_luminance_equal (luminance, &gdk_default_color_states[i].luminance)))
         return (GdkColorState *) &gdk_default_color_states[i];
     }
 
@@ -717,30 +727,44 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
     case 15:
       eotf = bt709_eotf;
       oetf = bt709_oetf;
+      if (luminance == NULL)
+        luminance = &default_sdr_luminance;
       break;
     case 4:
       eotf = gamma22_eotf;
       oetf = gamma22_oetf;
+      if (luminance == NULL)
+        luminance = &default_sdr_luminance;
       break;
     case 5:
       eotf = gamma28_eotf;
       oetf = gamma28_oetf;
+      if (luminance == NULL)
+        luminance = &default_sdr_luminance;
       break;
     case 8:
       eotf = NONE;
       oetf = NONE;
+      if (luminance == NULL)
+        luminance = &default_sdr_luminance;
       break;
     case 13:
       eotf = srgb_eotf;
       oetf = srgb_oetf;
+      if (luminance == NULL)
+        luminance = &default_sdr_luminance;
       break;
     case 16:
       eotf = pq_eotf;
       oetf = pq_oetf;
+      if (luminance == NULL)
+        luminance = &default_hdr_luminance;
       break;
     case 18:
       eotf = hlg_eotf;
       oetf = hlg_oetf;
+      if (luminance == NULL)
+        luminance = &default_hdr_luminance;
       break;
     default:
       g_set_error (error,
@@ -815,6 +839,7 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
                                                       8,
                                                       cicp->matrix_coefficients,
                                                       cicp->range },
+                                                    luminance,
                                                     NULL);
     }
 
