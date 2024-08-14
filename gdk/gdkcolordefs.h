@@ -238,3 +238,46 @@ static const float srgb_to_rec2020[9] = {
 
 static const GdkLuminance default_sdr_luminance = DEFAULT_SDR_LUMINANCE;
 static const GdkLuminance default_hdr_luminance = DEFAULT_HDR_LUMINANCE;
+
+/* primaries */
+
+#define SRGB_PRIMARIES { \
+  .rx = 0.640, .ry = 0.330, \
+  .gx = 0.300, .gy = 0.600, \
+  .bx = 0.150, .by = 0.060, \
+  .wx = 0.3127, .wy = 0.3290 \
+}
+
+#define PAL_PRIMARIES { \
+  .rx = 0.64, .ry = 0.33, \
+  .gx = 0.29, .gy = 0.60, \
+  .bx = 0.15, .by = 0.06, \
+  .wx = 0.3127, .wy = 0.3290 \
+}
+
+#define NTSC_PRIMARIES { \
+  .rx = 0.630, .ry = 0.340, \
+  .gx = 0.310, .gy = 0.595, \
+  .bx = 0.155, .by = 0.070, \
+  .wx = 0.3127, .wy = 0.3290 \
+}
+
+#define REC2020_PRIMARIES { \
+  .rx = 0.708, .ry = 0.292, \
+  .gx = 0.170, .gy = 0.797, \
+  .bx = 0.131, .by = 0.046, \
+  .wx = 0.3127, .wy = 0.3290 \
+}
+
+#define P3_PRIMARIES { \
+  .rx = 0.680, .ry = 0.320, \
+  .gx = 0.265, .gy = 0.690, \
+  .bx = 0.150, .by = 0.060, \
+  .wx = 0.3127, .wy = 0.3290 \
+}
+
+static const GdkPrimaries srgb_primaries = SRGB_PRIMARIES;
+static const GdkPrimaries pal_primaries = PAL_PRIMARIES;
+static const GdkPrimaries ntsc_primaries = NTSC_PRIMARIES;
+static const GdkPrimaries rec2020_primaries = REC2020_PRIMARIES;
+static const GdkPrimaries p3_primaries = P3_PRIMARIES;

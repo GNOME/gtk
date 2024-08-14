@@ -50,6 +50,26 @@ gdk_luminance_equal (const GdkLuminance *l1,
   return l1->min == l2->min && l1->max == l2->max && l1->ref == l2->ref;
 }
 
+typedef union {
+  float values[8];
+  struct {
+    float rx, ry;
+    float gx, gy;
+    float bx, by;
+    float wx, wy;
+  };
+} GdkPrimaries;
+
+static inline gboolean
+gdk_primaries_equal (const GdkPrimaries *p1,
+                     const GdkPrimaries *p2)
+{
+  return p1->rx == p2->rx && p1->ry == p2->ry &&
+         p1->gx == p2->gx && p1->gy == p2->gy &&
+         p1->bx == p2->bx && p1->by == p2->by &&
+         p1->wx == p2->wx && p1->wy == p2->wy;
+}
+
 struct _GdkColorStateClass
 {
   void                  (* free)                (GdkColorState  *self);
@@ -66,6 +86,7 @@ struct _GdkColorStateClass
                                                  const float     src[4],
                                                  float           dest[4]);
   const GdkLuminance *  (* get_luminance)       (GdkColorState  *self);
+  const GdkPrimaries *  (* get_primaries)       (GdkColorState  *self);
 };
 
 typedef struct _GdkDefaultColorState GdkDefaultColorState;
@@ -81,8 +102,9 @@ struct _GdkDefaultColorState
                   const float     src[4],
                   float           dest[4]);
 
-  GdkCicp cicp;
   GdkLuminance luminance;
+  GdkPrimaries primaries;
+  GdkCicp cicp;
 };
 
 extern GdkDefaultColorState gdk_default_color_states[GDK_COLOR_STATE_N_IDS];
@@ -201,6 +223,12 @@ static inline const GdkLuminance *
 gdk_color_state_get_luminance (GdkColorState *self)
 {
   return self->klass->get_luminance (self);
+}
+
+static inline const GdkPrimaries *
+gdk_color_state_get_primaries (GdkColorState *self)
+{
+  return self->klass->get_primaries (self);
 }
 
 static inline void

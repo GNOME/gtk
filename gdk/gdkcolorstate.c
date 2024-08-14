@@ -401,6 +401,14 @@ gdk_default_color_state_get_luminance (GdkColorState *color_state)
   return &self->luminance;
 }
 
+static const GdkPrimaries *
+gdk_default_color_state_get_primaries (GdkColorState *color_state)
+{
+  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
+
+  return &self->primaries;
+}
+
 /* }}} */
 
 static const
@@ -414,6 +422,7 @@ GdkColorStateClass GDK_DEFAULT_COLOR_STATE_CLASS = {
   .get_cicp = gdk_default_color_state_get_cicp,
   .clamp = gdk_default_color_state_clamp,
   .get_luminance = gdk_default_color_state_get_luminance,
+  .get_primaries = gdk_default_color_state_get_primaries,
 };
 
 GdkDefaultColorState gdk_default_color_states[] = {
@@ -434,6 +443,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
     },
     .clamp = gdk_color_state_clamp_0_1,
     .luminance = DEFAULT_SDR_LUMINANCE,
+    .primaries = SRGB_PRIMARIES,
     .cicp = { 1, 13, 0, 1 },
   },
   [GDK_COLOR_STATE_ID_SRGB_LINEAR] = {
@@ -453,6 +463,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
     },
     .clamp = gdk_color_state_clamp_0_1,
     .luminance = DEFAULT_SDR_LUMINANCE,
+    .primaries = SRGB_PRIMARIES,
     .cicp = { 1, 8, 0, 1 },
   },
   [GDK_COLOR_STATE_ID_REC2100_PQ] = {
@@ -472,6 +483,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
     },
     .clamp = gdk_color_state_clamp_0_1,
     .luminance = DEFAULT_HDR_LUMINANCE,
+    .primaries = REC2020_PRIMARIES,
     .cicp = { 9, 16, 0, 1 },
   },
   [GDK_COLOR_STATE_ID_REC2100_LINEAR] = {
@@ -491,6 +503,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
     },
     .clamp = gdk_color_state_clamp_unbounded,
     .luminance = DEFAULT_HDR_LUMINANCE,
+    .primaries = REC2020_PRIMARIES,
     .cicp = { 9, 8, 0, 1 },
   },
 };
@@ -517,6 +530,7 @@ struct _GdkCicpColorState
 
   GdkCicp cicp;
   GdkLuminance luminance;
+  GdkPrimaries primaries;
 };
 
 /* {{{ Conversion functions */
@@ -644,6 +658,14 @@ gdk_cicp_color_state_get_luminance (GdkColorState  *color_state)
   return &self->luminance;
 }
 
+static const GdkPrimaries *
+gdk_cicp_color_state_get_primaries (GdkColorState  *color_state)
+{
+  GdkCicpColorState *self = (GdkCicpColorState *) color_state;
+
+  return &self->primaries;
+}
+
 /* }}} */
 
 static const
@@ -657,6 +679,7 @@ GdkColorStateClass GDK_CICP_COLOR_STATE_CLASS = {
   .get_cicp = gdk_cicp_color_state_get_cicp,
   .clamp = gdk_color_state_clamp_0_1,
   .get_luminance = gdk_cicp_color_state_get_luminance,
+  .get_primaries = gdk_cicp_color_state_get_primaries,
 };
 
 static inline float *
@@ -684,6 +707,7 @@ gdk_color_state_new_for_cicp (const GdkCicp       *cicp,
   GdkTransferFunc oetf;
   gconstpointer to_xyz;
   gconstpointer from_xyz;
+  const GdkPrimaries *primaries;
 
   if (luminance &&
       !(luminance->min <= luminance->ref && luminance->ref <= luminance->max))
@@ -777,22 +801,27 @@ gdk_color_state_new_for_cicp (const GdkCicp       *cicp,
   switch (cicp->color_primaries)
     {
     case 1:
+      primaries = &srgb_primaries;
       to_xyz = srgb_to_xyz;
       from_xyz = xyz_to_srgb;
       break;
     case 5:
+      primaries = &pal_primaries;
       to_xyz = pal_to_xyz;
       from_xyz = xyz_to_pal;
       break;
     case 6:
+      primaries = &ntsc_primaries;
       to_xyz = ntsc_to_xyz;
       from_xyz = xyz_to_ntsc;
       break;
     case 9:
+      primaries = &rec2020_primaries;
       to_xyz = rec2020_to_xyz;
       from_xyz = xyz_to_rec2020;
       break;
     case 12:
+      primaries = &p3_primaries;
       to_xyz = p3_to_xyz;
       from_xyz = xyz_to_p3;
       break;
@@ -816,6 +845,7 @@ gdk_color_state_new_for_cicp (const GdkCicp       *cicp,
   self->parent.depth = GDK_MEMORY_FLOAT16;
 
   memcpy (&self->luminance, luminance, sizeof (GdkLuminance));
+  memcpy (&self->primaries, primaries, sizeof (GdkPrimaries));
   memcpy (&self->cicp, cicp, sizeof (GdkCicp));
 
   self->eotf = eotf;
