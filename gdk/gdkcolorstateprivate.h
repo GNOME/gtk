@@ -34,6 +34,22 @@ typedef void            (* GdkFloatColorConvert)(GdkColorState  *self,
                                                  float         (*values)[4],
                                                  gsize           n_values);
 
+typedef union {
+  float values[3];
+  struct {
+    float min;
+    float max;
+    float ref;
+  };
+} GdkLuminance;
+
+static inline gboolean
+gdk_luminance_equal (const GdkLuminance *l1,
+                     const GdkLuminance *l2)
+{
+  return l1->min == l2->min && l1->max == l2->max && l1->ref == l2->ref;
+}
+
 struct _GdkColorStateClass
 {
   void                  (* free)                (GdkColorState  *self);
@@ -49,6 +65,7 @@ struct _GdkColorStateClass
   void                  (* clamp)               (GdkColorState  *self,
                                                  const float     src[4],
                                                  float           dest[4]);
+  const GdkLuminance *  (* get_luminance)       (GdkColorState  *self);
 };
 
 typedef struct _GdkDefaultColorState GdkDefaultColorState;
@@ -65,6 +82,7 @@ struct _GdkDefaultColorState
                   float           dest[4]);
 
   GdkCicp cicp;
+  GdkLuminance luminance;
 };
 
 extern GdkDefaultColorState gdk_default_color_states[GDK_COLOR_STATE_N_IDS];
@@ -176,6 +194,12 @@ static inline const GdkCicp *
 gdk_color_state_get_cicp (GdkColorState *self)
 {
   return self->klass->get_cicp (self);
+}
+
+static inline const GdkLuminance *
+gdk_color_state_get_luminance (GdkColorState *self)
+{
+  return self->klass->get_luminance (self);
 }
 
 static inline void

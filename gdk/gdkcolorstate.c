@@ -393,6 +393,14 @@ gdk_default_color_state_clamp (GdkColorState *color_state,
   self->clamp (color_state, in, out);
 }
 
+static const GdkLuminance *
+gdk_default_color_state_get_luminance (GdkColorState *color_state)
+{
+  GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
+
+  return &self->luminance;
+}
+
 /* }}} */
 
 static const
@@ -405,6 +413,7 @@ GdkColorStateClass GDK_DEFAULT_COLOR_STATE_CLASS = {
   .get_convert_from = gdk_default_color_state_get_convert_from,
   .get_cicp = gdk_default_color_state_get_cicp,
   .clamp = gdk_default_color_state_clamp,
+  .get_luminance = gdk_default_color_state_get_luminance,
 };
 
 GdkDefaultColorState gdk_default_color_states[] = {
@@ -424,6 +433,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_srgb_to_rec2100_linear,
     },
     .clamp = gdk_color_state_clamp_0_1,
+    .luminance = DEFAULT_SDR_LUMINANCE,
     .cicp = { 1, 13, 0, 1 },
   },
   [GDK_COLOR_STATE_ID_SRGB_LINEAR] = {
@@ -442,6 +452,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_srgb_linear_to_rec2100_linear,
     },
     .clamp = gdk_color_state_clamp_0_1,
+    .luminance = DEFAULT_SDR_LUMINANCE,
     .cicp = { 1, 8, 0, 1 },
   },
   [GDK_COLOR_STATE_ID_REC2100_PQ] = {
@@ -460,6 +471,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_rec2100_pq_to_rec2100_linear,
     },
     .clamp = gdk_color_state_clamp_0_1,
+    .luminance = DEFAULT_HDR_LUMINANCE,
     .cicp = { 9, 16, 0, 1 },
   },
   [GDK_COLOR_STATE_ID_REC2100_LINEAR] = {
@@ -478,11 +490,12 @@ GdkDefaultColorState gdk_default_color_states[] = {
       [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_default_rec2100_linear_to_rec2100_pq,
     },
     .clamp = gdk_color_state_clamp_unbounded,
+    .luminance = DEFAULT_HDR_LUMINANCE,
     .cicp = { 9, 8, 0, 1 },
   },
 };
 
- /* }}} */
+/* }}} */
 /* {{{ Cicp implementation */
 
 typedef struct _GdkCicpColorState GdkCicpColorState;
@@ -503,6 +516,7 @@ struct _GdkCicpColorState
   float from_rec2020[9];
 
   GdkCicp cicp;
+  GdkLuminance luminance;
 };
 
 /* {{{ Conversion functions */
@@ -622,6 +636,14 @@ gdk_cicp_color_state_get_cicp (GdkColorState  *color_state)
   return &self->cicp;
 }
 
+static const GdkLuminance *
+gdk_cicp_color_state_get_luminance (GdkColorState  *color_state)
+{
+  GdkCicpColorState *self = (GdkCicpColorState *) color_state;
+
+  return &self->luminance;
+}
+
 /* }}} */
 
 static const
@@ -634,6 +656,7 @@ GdkColorStateClass GDK_CICP_COLOR_STATE_CLASS = {
   .get_convert_from = gdk_cicp_color_state_get_convert_from,
   .get_cicp = gdk_cicp_color_state_get_cicp,
   .clamp = gdk_color_state_clamp_0_1,
+  .get_luminance = gdk_cicp_color_state_get_luminance,
 };
 
 static inline float *
@@ -660,6 +683,7 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
   GdkTransferFunc oetf;
   gconstpointer to_xyz;
   gconstpointer from_xyz;
+  const GdkLuminance *luminance = &default_sdr_luminance;
 
   if (cicp->range == GDK_CICP_RANGE_NARROW || cicp->matrix_coefficients != 0)
     {
@@ -767,6 +791,7 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
 
   self->parent.depth = GDK_MEMORY_FLOAT16;
 
+  memcpy (&self->luminance, luminance, sizeof (GdkLuminance));
   memcpy (&self->cicp, cicp, sizeof (GdkCicp));
 
   self->eotf = eotf;

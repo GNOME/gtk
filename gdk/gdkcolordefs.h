@@ -230,3 +230,11 @@ static const float srgb_to_rec2020[9] = {
   0.069108, 0.919519, 0.011360,
   0.016394, 0.088011, 0.895380,
 };
+
+/* luminances */
+
+#define DEFAULT_SDR_LUMINANCE { .min = 0.2, .max = 80, .ref = 80 }
+#define DEFAULT_HDR_LUMINANCE { .min = 0.005, .max = 10000, .ref = 203 }
+
+static const GdkLuminance default_sdr_luminance = DEFAULT_SDR_LUMINANCE;
+static const GdkLuminance default_hdr_luminance = DEFAULT_HDR_LUMINANCE;
