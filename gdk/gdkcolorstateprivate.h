@@ -128,6 +128,10 @@ GdkColorState * gdk_color_state_new_for_cicp            (const GdkCicp          
 void            gdk_color_state_clamp                   (GdkColorState          *self,
                                                          const float             src[4],
                                                          float                   dest[4]);
+GdkColorState * gdk_color_state_new_for_primaries       (const GdkPrimaries     *primaries,
+                                                         const GdkLuminance     *luminance,
+                                                         guint                   transfer_function,
+                                                         GError                **error);
 
 static inline GdkColorState *
 gdk_color_state_get_rendering_color_state (GdkColorState *self)

@@ -24,6 +24,8 @@
 
 #include "gdkcolordefs.h"
 
+#include <graphene.h>
+
 #include <glib/gi18n-lib.h>
 
 /**
@@ -872,6 +874,345 @@ gdk_color_state_new_for_cicp (const GdkCicp       *cicp,
                                                     luminance,
                                                     NULL);
     }
+
+  return (GdkColorState *) self;
+}
+
+/* }}} */
+/* {{{ Primaries implementation */
+
+typedef struct _GdkPrimariesColorState GdkPrimariesColorState;
+struct _GdkPrimariesColorState
+{
+  GdkColorState parent;
+
+  char *name;
+
+  GdkTransferFunc eotf;
+  GdkTransferFunc oetf;
+
+  float to_srgb[9];
+  float to_rec2020[9];
+  float from_srgb[9];
+  float from_rec2020[9];
+
+  GdkCicp cicp;
+  GdkLuminance luminance;
+  GdkPrimaries primaries;
+};
+
+/* {{{ Conversion functions */
+
+#define prim ((GdkPrimariesColorState *)self)
+
+TRANSFORM(gdk_primaries_to_srgb,             prim->eotf,  prim->to_srgb,      srgb_oetf)
+TRANSFORM(gdk_primaries_to_srgb_linear,      prim->eotf,  prim->to_srgb,      NONE)
+TRANSFORM(gdk_primaries_to_rec2100_pq,       prim->eotf,  prim->to_rec2020,   pq_oetf)
+TRANSFORM(gdk_primaries_to_rec2100_linear,   prim->eotf,  prim->to_rec2020,   NONE)
+TRANSFORM(gdk_primaries_from_srgb,           srgb_eotf,   prim->from_srgb,    prim->oetf)
+TRANSFORM(gdk_primaries_from_srgb_linear,    NONE,        prim->from_srgb,    prim->oetf)
+TRANSFORM(gdk_primaries_from_rec2100_pq,     pq_eotf,     prim->from_rec2020, prim->oetf)
+TRANSFORM(gdk_primaries_from_rec2100_linear, NONE,        prim->from_rec2020, prim->oetf)
+
+#undef prim
+
+/* }}} */
+/* {{{ Vfuncs */
+
+static void
+gdk_primaries_color_state_free (GdkColorState *cs)
+{
+  GdkPrimariesColorState *self = (GdkPrimariesColorState *) cs;
+
+  g_free (self->name);
+
+  g_free (self);
+}
+
+static gboolean
+gdk_primaries_color_state_equal (GdkColorState *self,
+                                 GdkColorState *other)
+{
+  GdkPrimariesColorState *cs1 = (GdkPrimariesColorState *) self;
+  GdkPrimariesColorState *cs2 = (GdkPrimariesColorState *) other;
+
+  return memcmp (&cs1->primaries, &cs2->primaries, sizeof (GdkPrimaries)) == 0 &&
+         memcmp (&cs1->luminance, &cs2->luminance, sizeof (GdkLuminance)) == 0 &&
+         cs1->eotf == cs2->eotf;
+}
+
+static const char *
+gdk_primaries_color_state_get_name (GdkColorState *self)
+{
+  GdkPrimariesColorState *cs = (GdkPrimariesColorState *) self;
+
+  return cs->name;
+}
+
+static GdkColorState *
+gdk_primaries_color_state_get_no_srgb_tf (GdkColorState *self)
+{
+  return NULL;
+}
+
+static GdkFloatColorConvert
+gdk_primaries_color_state_get_convert_to (GdkColorState *self,
+                                          GdkColorState *target)
+{
+  if (!GDK_IS_DEFAULT_COLOR_STATE (target))
+    return NULL;
+
+  switch (GDK_DEFAULT_COLOR_STATE_ID (target))
+    {
+    case GDK_COLOR_STATE_ID_SRGB:
+      return gdk_primaries_to_srgb;
+    case GDK_COLOR_STATE_ID_SRGB_LINEAR:
+      return gdk_primaries_to_srgb_linear;
+    case GDK_COLOR_STATE_ID_REC2100_PQ:
+      return gdk_primaries_to_rec2100_pq;
+    case GDK_COLOR_STATE_ID_REC2100_LINEAR:
+      return gdk_primaries_to_rec2100_linear;
+
+    case GDK_COLOR_STATE_N_IDS:
+    default:
+      g_assert_not_reached ();
+    }
+
+  return NULL;
+}
+
+static GdkFloatColorConvert
+gdk_primaries_color_state_get_convert_from (GdkColorState *self,
+                                            GdkColorState *source)
+{
+  if (!GDK_IS_DEFAULT_COLOR_STATE (source))
+    return NULL;
+
+  switch (GDK_DEFAULT_COLOR_STATE_ID (source))
+    {
+    case GDK_COLOR_STATE_ID_SRGB:
+      return gdk_primaries_from_srgb;
+    case GDK_COLOR_STATE_ID_SRGB_LINEAR:
+      return gdk_primaries_from_srgb_linear;
+    case GDK_COLOR_STATE_ID_REC2100_PQ:
+      return gdk_primaries_from_rec2100_pq;
+    case GDK_COLOR_STATE_ID_REC2100_LINEAR:
+      return gdk_primaries_from_rec2100_linear;
+
+    case GDK_COLOR_STATE_N_IDS:
+    default:
+      g_assert_not_reached ();
+    }
+
+  return NULL;
+}
+
+static const GdkCicp *
+gdk_primaries_color_state_get_cicp (GdkColorState *color_state)
+{
+  GdkPrimariesColorState *self = (GdkPrimariesColorState *) color_state;
+
+  return &self->cicp;
+}
+
+static const GdkLuminance *
+gdk_primaries_color_state_get_luminance (GdkColorState  *color_state)
+{
+  GdkPrimariesColorState *self = (GdkPrimariesColorState *) color_state;
+
+  return &self->luminance;
+}
+
+static const GdkPrimaries *
+gdk_primaries_color_state_get_primaries (GdkColorState  *color_state)
+{
+  GdkPrimariesColorState *self = (GdkPrimariesColorState *) color_state;
+
+  return &self->primaries;
+}
+
+/* }}} */
+
+static const
+GdkColorStateClass GDK_PRIMARIES_COLOR_STATE_CLASS = {
+  .free = gdk_primaries_color_state_free,
+  .equal = gdk_primaries_color_state_equal,
+  .get_name = gdk_primaries_color_state_get_name,
+  .get_no_srgb_tf = gdk_primaries_color_state_get_no_srgb_tf,
+  .get_convert_to = gdk_primaries_color_state_get_convert_to,
+  .get_convert_from = gdk_primaries_color_state_get_convert_from,
+  .get_cicp = gdk_primaries_color_state_get_cicp,
+  .get_luminance = gdk_primaries_color_state_get_luminance,
+  .get_primaries = gdk_primaries_color_state_get_primaries,
+};
+
+static void
+compute_to_xyz_from_primaries (float       to_xyz[9],
+                               const float primaries[8])
+{
+  float rx, ry, gx, gy, bx, by, wx, wy;
+  float rY, bY, gY;
+
+  rx = primaries[0]; ry = primaries[1];
+  gx = primaries[2]; gy = primaries[3];
+  bx = primaries[4]; by = primaries[5];
+  wx = primaries[6]; wy = primaries[7];
+
+  bY = (((1 - wx)/wy - (1 - rx)/ry)*(gx/gy - rx/ry) - (wx/wy - rx/ry)*((1 - gx)/gy - (1 - rx)/ry)) /
+        (((1 - bx)/by - (1 - rx)/ry)*(gx/gy - rx/ry) - (bx/by - rx/ry)*((1 - gx)/gy - (1 - rx)/ry));
+
+  gY = (wx/wy - rx/ry - bY*(bx/by - rx/ry)) / (gx/gy - rx/ry);
+
+  rY = 1 - gY - bY;
+
+  to_xyz[0] = rY/ry * rx;        to_xyz[1] = gY/gy * gx;        to_xyz[2] = bY/by * bx;
+  to_xyz[3] = rY;                to_xyz[4] = gY;                to_xyz[5] = bY;
+  to_xyz[6] = rY/ry * (1-rx-ry); to_xyz[7] = gY/gy * (1-gx-gy); to_xyz[8] = bY/by * (1-bx-by);
+}
+
+static void
+invert (float       res[9],
+        const float   a[9])
+{
+  graphene_matrix_t m, m2;
+  float v[16];
+
+  graphene_matrix_init_from_float (&m,
+                                   (const float *)&(float[]) {
+                                    a[0], a[1], a[2], 0,
+                                    a[3], a[4], a[5], 0,
+                                    a[6], a[7], a[8], 0,
+                                       0,    0,    0, 1
+                                   });
+
+  graphene_matrix_inverse (&m, &m2);
+  graphene_matrix_to_float (&m2, v);
+
+  for (int i = 0; i < 3; i++)
+    for (int j = 0; j < 3; j++)
+      res[3 * i + j] = v[4 * i + j];
+}
+
+GdkColorState *
+gdk_color_state_new_for_primaries (const GdkPrimaries  *primaries,
+                                   const GdkLuminance  *luminance,
+                                   guint                transfer_function,
+                                   GError             **error)
+{
+  GdkPrimariesColorState *self;
+  float to_xyz[9];
+  float from_xyz[9];
+  GdkTransferFunc eotf;
+  GdkTransferFunc oetf;
+
+  if (gdk_primaries_equal (primaries, &srgb_primaries))
+    return gdk_color_state_new_for_cicp (&(GdkCicp) { 1, transfer_function, 0, GDK_CICP_RANGE_FULL },
+                                         luminance,
+                                         error);
+  else if (gdk_primaries_equal (primaries, &pal_primaries))
+    return gdk_color_state_new_for_cicp (&(GdkCicp) { 5, transfer_function, 0, GDK_CICP_RANGE_FULL },
+                                         luminance,
+                                         error);
+  else if (gdk_primaries_equal (primaries, &ntsc_primaries))
+    return gdk_color_state_new_for_cicp (&(GdkCicp) { 6, transfer_function, 0, GDK_CICP_RANGE_FULL },
+                                         luminance,
+                                         error);
+  else if (gdk_primaries_equal (primaries, &rec2020_primaries))
+    return gdk_color_state_new_for_cicp (&(GdkCicp) { 9, transfer_function, 0, GDK_CICP_RANGE_FULL },
+                                         luminance,
+                                         error);
+  else if (gdk_primaries_equal (primaries, &p3_primaries))
+    return gdk_color_state_new_for_cicp (&(GdkCicp) { 12, transfer_function, 0, GDK_CICP_RANGE_FULL },
+                                         luminance,
+                                         error);
+
+  compute_to_xyz_from_primaries (to_xyz, primaries->values);
+  invert (from_xyz, to_xyz);
+
+  switch (transfer_function)
+    {
+    case 1:
+    case 6:
+    case 14:
+    case 15:
+      eotf = bt709_eotf;
+      oetf = bt709_oetf;
+      if (luminance == NULL)
+        luminance = &default_sdr_luminance;
+      break;
+    case 4:
+      eotf = gamma22_eotf;
+      oetf = gamma22_oetf;
+      if (luminance == NULL)
+        luminance = &default_sdr_luminance;
+      break;
+    case 5:
+      eotf = gamma28_eotf;
+      oetf = gamma28_oetf;
+      if (luminance == NULL)
+        luminance = &default_sdr_luminance;
+      break;
+    case 8:
+      eotf = NONE;
+      oetf = NONE;
+      if (luminance == NULL)
+        luminance = &default_sdr_luminance;
+      break;
+    case 13:
+      eotf = srgb_eotf;
+      oetf = srgb_oetf;
+      if (luminance == NULL)
+        luminance = &default_sdr_luminance;
+      break;
+    case 16:
+      eotf = pq_eotf;
+      oetf = pq_oetf;
+      if (luminance == NULL)
+        luminance = &default_hdr_luminance;
+      break;
+    case 18:
+      eotf = hlg_eotf;
+      oetf = hlg_oetf;
+      if (luminance == NULL)
+        luminance = &default_hdr_luminance;
+      break;
+    default:
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   _("primaries: Transfer function %u not supported"),
+                   transfer_function);
+      return NULL;
+    }
+
+  self = g_new0 (GdkPrimariesColorState, 1);
+
+  self->parent.klass = &GDK_PRIMARIES_COLOR_STATE_CLASS;
+  self->parent.ref_count = 1;
+
+  self->parent.rendering_color_state = GDK_COLOR_STATE_REC2100_LINEAR;
+  self->parent.depth = GDK_MEMORY_FLOAT16;
+
+  self->eotf = eotf;
+  self->oetf = oetf;
+
+  self->cicp.color_primaries = 2;
+  self->cicp.transfer_function = transfer_function;
+  self->cicp.matrix_coefficients = 0;
+  self->cicp.range = GDK_CICP_RANGE_FULL;
+
+  memcpy (&self->luminance, luminance, sizeof (GdkLuminance));
+  memcpy (&self->primaries, primaries, sizeof (GdkPrimaries));
+
+  multiply (self->to_srgb, xyz_to_srgb, to_xyz);
+  multiply (self->to_rec2020, xyz_to_rec2020, to_xyz);
+  multiply (self->from_srgb, from_xyz, srgb_to_xyz);
+  multiply (self->from_rec2020, from_xyz, rec2020_to_xyz);
+
+  self->name = g_strdup_printf ("primaries(%f,%f,%f,%f,%f,%f,%f,%f)",
+                                primaries->rx, primaries->ry,
+                                primaries->gx, primaries->gy,
+                                primaries->bx, primaries->by,
+                                primaries->wx, primaries->wy);
 
   return (GdkColorState *) self;
 }
