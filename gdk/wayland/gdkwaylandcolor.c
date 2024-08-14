@@ -526,13 +526,23 @@ gdk_color_state_from_image_description_bits (ImageDescription *desc)
   if (desc->has_primaries_named && desc->has_tf_named)
     {
       GdkCicp cicp;
+      GdkLuminance lum;
+      GdkLuminance *luminance = NULL;
 
       cicp.color_primaries = wl_to_cicp_primaries (desc->primaries);
       cicp.transfer_function = wl_to_cicp_transfer (desc->tf_named);
       cicp.matrix_coefficients = 0;
       cicp.range = GDK_CICP_RANGE_FULL;
 
-      return gdk_color_state_new_for_cicp (&cicp, NULL, NULL);
+      if (desc->has_luminances)
+        {
+          lum.min = desc->min_lum * 10000;
+          lum.max = desc->max_lum;
+          lum.ref = desc->ref_lum;
+          luminance = &lum;
+        }
+
+      return gdk_color_state_new_for_cicp (&cicp, luminance, NULL);
     }
   else
     return NULL;
