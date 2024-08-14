@@ -63,7 +63,7 @@ float
 srgb_oetf (float v)
 {
   if (abs (v) > 0.0031308)
-    return 1.055 * sign (v) * pow (abs (v), 1.0 / 2.4) - 0.055;
+    return sign (v) * (1.055 * pow (abs (v), 1.0 / 2.4) - 0.055);
   else
     return 12.92 * v;
 }
