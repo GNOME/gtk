@@ -102,6 +102,12 @@ void              gdk_color_print               (const GdkColor         *self,
 
 char *            gdk_color_to_string           (const GdkColor         *self);
 
+gboolean          gdk_color_in_gamut            (const GdkColor         *self,
+                                                 GdkColorState          *color_state);
+
+void              gdk_color_clamp_to_gamut      (GdkColor               *self,
+                                                 GdkColorState          *color_state);
+
 #include "gdkcolorimpl.h"
 
 G_END_DECLS

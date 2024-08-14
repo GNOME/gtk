@@ -298,4 +298,46 @@ gdk_color_to_string (const GdkColor *self)
   return g_string_free (string, FALSE);
 }
 
+gboolean
+gdk_color_in_gamut (const GdkColor *self,
+                    GdkColorState  *color_state)
+{
+  float values[4];
+  const float *range;
 
+  gdk_color_to_float (self, color_state, values);
+
+  range = gdk_color_state_get_range (color_state);
+
+  return range[0] <= values[0] && values[0] <= range[1] &&
+         range[2] <= values[1] && values[1] <= range[3] &&
+         range[4] <= values[2] && values[2] <= range[5] &&
+         range[6] <= values[3] && values[3] <= range[7];
+}
+
+void
+gdk_color_clamp_to_gamut (GdkColor      *self,
+                          GdkColorState *color_state)
+{
+  GdkColor tmp;
+  const float *range;
+
+  gdk_color_to_float (self, color_state, tmp.values);
+
+  range = gdk_color_state_get_range (color_state);
+
+  if (range[0] > tmp.values[0] || tmp.values[0] > range[1] ||
+      range[2] > tmp.values[1] || tmp.values[1] > range[3] ||
+      range[4] > tmp.values[2] || tmp.values[2] > range[5] ||
+      range[6] > tmp.values[3] || tmp.values[3] > range[7])
+    {
+      tmp.color_state = color_state;
+
+      tmp.values[0] = CLAMP (tmp.values[0], range[0], range[1]);
+      tmp.values[1] = CLAMP (tmp.values[1], range[2], range[3]);
+      tmp.values[2] = CLAMP (tmp.values[2], range[4], range[5]);
+      tmp.values[3] = CLAMP (tmp.values[3], range[6], range[7]);
+
+      gdk_color_to_float (&tmp, self->color_state, self->values);
+    }
+}

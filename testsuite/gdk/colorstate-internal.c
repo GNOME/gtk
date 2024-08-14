@@ -210,6 +210,36 @@ test_color_mislabel (void)
   g_assert_true (red1 != red2);
 }
 
+static void
+test_color_gamut (void)
+{
+  GdkColor color = GDK_COLOR_SRGB (1, 0, 0, 1);
+
+  g_assert_true (gdk_color_in_gamut (&color, GDK_COLOR_STATE_SRGB));
+  g_assert_true (gdk_color_in_gamut (&color, GDK_COLOR_STATE_SRGB_LINEAR));
+  g_assert_true (gdk_color_in_gamut (&color, GDK_COLOR_STATE_REC2100_PQ));
+  g_assert_true (gdk_color_in_gamut (&color, GDK_COLOR_STATE_REC2100_LINEAR));
+
+  gdk_color_finish (&color);
+
+  gdk_color_init (&color, GDK_COLOR_STATE_REC2100_PQ, (float[]) {0.9, 0.9, 0.9, 1});
+
+  g_assert_false (gdk_color_in_gamut (&color, GDK_COLOR_STATE_SRGB));
+  g_assert_false (gdk_color_in_gamut (&color, GDK_COLOR_STATE_SRGB_LINEAR));
+  g_assert_true (gdk_color_in_gamut (&color, GDK_COLOR_STATE_REC2100_PQ));
+  g_assert_true (gdk_color_in_gamut (&color, GDK_COLOR_STATE_REC2100_LINEAR));
+
+  gdk_color_clamp_to_gamut (&color, GDK_COLOR_STATE_SRGB);
+
+  /* clamping an out-of-gamut gray to srgb yields media white */
+  g_assert_cmpfloat_with_epsilon (color.red, 0.58, 0.001);
+  g_assert_cmpfloat_with_epsilon (color.green, 0.58, 0.001);
+  g_assert_cmpfloat_with_epsilon (color.blue, 0.58, 0.001);
+  g_assert_cmpfloat_with_epsilon (color.alpha, 1, 0.001);
+
+  gdk_color_finish (&color);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -242,6 +272,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/colorstate/matrix/srgb_to_rec2020", test_srgb_to_rec2020);
   g_test_add_func ("/colorstate/matrix/rec2020_to_srgb", test_rec2020_to_srgb);
   g_test_add_func ("/color/mislabel", test_color_mislabel);
+  g_test_add_func ("/color/gamut", test_color_gamut);
 
   return g_test_run ();
 }
