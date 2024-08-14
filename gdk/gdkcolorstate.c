@@ -425,15 +425,15 @@ struct _GdkCicpColorState
 
   GdkColorState *no_srgb;
 
-  const char *name;
+  char *name;
 
   GdkTransferFunc eotf;
   GdkTransferFunc oetf;
 
-  float *to_srgb;
-  float *to_rec2020;
-  float *from_srgb;
-  float *from_rec2020;
+  float to_srgb[9];
+  float to_rec2020[9];
+  float from_srgb[9];
+  float from_rec2020[9];
 
   GdkCicp cicp;
 };
@@ -461,13 +461,10 @@ gdk_cicp_color_state_free (GdkColorState *cs)
 {
   GdkCicpColorState *self = (GdkCicpColorState *) cs;
 
+  g_free (self->name);
+
   if (self->no_srgb)
     gdk_color_state_unref (self->no_srgb);
-
-  g_free (self->to_srgb);
-  g_free (self->to_rec2020);
-  g_free (self->from_srgb);
-  g_free (self->from_rec2020);
 
   g_free (self);
 }
@@ -558,7 +555,7 @@ gdk_cicp_color_state_get_cicp (GdkColorState  *color_state)
   return &self->cicp;
 }
 
-/* }}} */ 
+/* }}} */
 
 static const
 GdkColorStateClass GDK_CICP_COLOR_STATE_CLASS = {
@@ -707,10 +704,10 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
   self->eotf = eotf;
   self->oetf = oetf;
 
-  self->to_srgb = multiply (g_new (float, 9), xyz_to_srgb, to_xyz);
-  self->to_rec2020 = multiply (g_new (float, 9), xyz_to_rec2020, to_xyz);
-  self->from_srgb = multiply (g_new (float, 9), from_xyz, srgb_to_xyz);
-  self->from_rec2020 = multiply (g_new (float, 9), from_xyz, rec2020_to_xyz);
+  multiply (self->to_srgb, xyz_to_srgb, to_xyz);
+  multiply (self->to_rec2020, xyz_to_rec2020, to_xyz);
+  multiply (self->from_srgb, from_xyz, srgb_to_xyz);
+  multiply (self->from_rec2020, from_xyz, rec2020_to_xyz);
 
   self->name = g_strdup_printf ("cicp-%u/%u/%u/%u",
                                 cicp->color_primaries,
@@ -720,12 +717,12 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
 
   if (cicp->transfer_function == 13)
     {
-      GdkCicp no_srgb;
-
-      memcpy (&no_srgb, cicp, sizeof (GdkCicp));
-      no_srgb.transfer_function = 8;
-
-      self->no_srgb = gdk_color_state_new_for_cicp (&no_srgb, NULL);
+      self->no_srgb = gdk_color_state_new_for_cicp (&(GdkCicp) {
+                                                      cicp->color_primaries,
+                                                      8,
+                                                      cicp->matrix_coefficients,
+                                                      cicp->range },
+                                                    NULL);
     }
 
   return (GdkColorState *) self;
