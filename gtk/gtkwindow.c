@@ -6282,6 +6282,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  *
  * The debugger offers access to the widget hierarchy of the application
  * and to useful debugging tools.
+ *
+ * This function allows applications that already use
+ * <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>I</kbd> (or <kbd>D</kbd>) for their
+ * own key shortcuts to add a different shortcut. If you are not overriding
+ * the default key shortcuts for the inspector, you should not be calling this
+ * function. For instance, adding a menu item to call this function isn’t
+ * recommended: the Inspector is a debugging and development tool.
  */
 void
 gtk_window_set_interactive_debugging (gboolean enable)
