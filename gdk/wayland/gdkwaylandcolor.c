@@ -341,7 +341,8 @@ create_image_desc (GdkWaylandColor *color,
   primaries = cicp_to_wl_primaries (norm.color_primaries);
   tf = cicp_to_wl_transfer (norm.transfer_function);
 
-  if ((color->color_manager_supported.primaries & (1 << primaries)) == 0 ||
+  if (((color->color_manager_supported.primaries & (1 << primaries)) == 0 &&
+       (color->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V4_FEATURE_SET_PRIMARIES)) == 0) ||
       (color->color_manager_supported.transfers & (1 << tf)) == 0)
     {
       GDK_DEBUG (MISC, "Unsupported color state %s: Primaries or transfer function unsupported",
@@ -357,7 +358,19 @@ create_image_desc (GdkWaylandColor *color,
 
   creator = xx_color_manager_v4_new_parametric_creator (color->color_manager);
 
-  xx_image_description_creator_params_v4_set_primaries_named (creator, primaries);
+  if (color->color_manager_supported.primaries & (1 << primaries))
+    {
+      xx_image_description_creator_params_v4_set_primaries_named (creator, primaries);
+    }
+  else
+    {
+      const uint *p = wl_primaries_to_primaries (primaries);
+      xx_image_description_creator_params_v4_set_primaries (creator,
+                                                            p[0], p[1],
+                                                            p[2], p[3],
+                                                            p[4], p[5],
+                                                            p[6], p[7]);
+    }
   xx_image_description_creator_params_v4_set_tf_named (creator, tf);
 
   desc = xx_image_description_creator_params_v4_create (creator);
@@ -436,7 +449,8 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
   if (color->color_manager &&
       (!(color->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V4_FEATURE_PARAMETRIC)) ||
        !(color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_SRGB)) ||
-       !(color->color_manager_supported.primaries & (1 << XX_COLOR_MANAGER_V4_PRIMARIES_SRGB))))
+       !((color->color_manager_supported.primaries & (1 << XX_COLOR_MANAGER_V4_PRIMARIES_SRGB)) ||
+         (color->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V4_FEATURE_SET_PRIMARIES)))))
 
     {
       GDK_DEBUG (MISC, "Not using color management: Can't create srgb image description");
@@ -450,7 +464,8 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
       if (color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR))
         create_image_desc (color, GDK_COLOR_STATE_SRGB_LINEAR, FALSE);
 
-      if (color->color_manager_supported.primaries & (1 << XX_COLOR_MANAGER_V4_PRIMARIES_BT2020))
+      if ((color->color_manager_supported.primaries & (1 << XX_COLOR_MANAGER_V4_PRIMARIES_BT2020) ||
+          (color->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V4_FEATURE_SET_PRIMARIES))))
         {
           if (color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST2084_PQ))
             create_image_desc (color, GDK_COLOR_STATE_REC2100_PQ, FALSE);
