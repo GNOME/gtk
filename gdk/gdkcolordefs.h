@@ -30,7 +30,7 @@ static inline float
 srgb_oetf (float v)
 {
   if (fabsf (v) > 0.0031308f)
-    return 1.055f * sign (v) * powf (fabsf (v), 1.f / 2.4f) - 0.055f;
+    return sign (v) * (1.055f * powf (fabsf (v), 1.f / 2.4f) - 0.055f);
   else
     return 12.92f * v;
 }
@@ -118,7 +118,7 @@ bt709_oetf (float v)
   if (fabsf (v) < b)
     return v * 4.5f;
   else
-    return a * sign (v) * powf (fabsf (v), 0.45f) - (a - 1);
+    return sign (v) * (a * powf (fabsf (v), 0.45f) - (a - 1));
 }
 
 static inline float
@@ -128,10 +128,10 @@ hlg_eotf (float v)
   const float b = 0.28466892;
   const float c = 0.55991073;
 
-  if (v <= 0.5)
-    return (v * v) / 3;
+  if (fabsf (v) <= 0.5)
+    return sign (v) * (v * v) / 3;
   else
-    return (expf ((v - c) / a) + b) / 12.0;
+    return sign (v) * (expf ((fabsf (v) - c) / a) + b) / 12.0;
 }
 
 static inline float
@@ -141,10 +141,10 @@ hlg_oetf (float v)
   const float b = 0.28466892;
   const float c = 0.55991073;
 
-  if (v <= 1/12.0)
-    return sqrtf (3 * v);
+  if (fabsf (v) <= 1/12.0)
+    return sign (v) * sqrtf (3 * fabsf (v));
   else
-    return a * logf (12 * v - b) + c;
+    return sign (v) * (a * logf (12 * fabsf (v) - b) + c);
 }
 
 /* See http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html
