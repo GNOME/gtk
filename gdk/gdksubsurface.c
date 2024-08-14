@@ -167,6 +167,12 @@ gdk_subsurface_attach (GdkSubsurface         *subsurface,
   g_return_val_if_fail (sibling == NULL || GDK_IS_SUBSURFACE (sibling), FALSE);
   g_return_val_if_fail (sibling == NULL || sibling->parent == subsurface->parent, FALSE);
 
+  /* if the texture fully covers the background, ignore it */
+  if (background &&
+      gsk_rect_contains_rect (dest, background) &&
+      gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE)
+    background = NULL;
+
   result = GDK_SUBSURFACE_GET_CLASS (subsurface)->attach (subsurface,
                                                           texture,
                                                           source,

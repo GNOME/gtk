@@ -350,7 +350,8 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
       .ref_count = 0,
       .depth = GDK_MEMORY_U8_SRGB,
-      .rendering_color_state = GDK_COLOR_STATE_SRGB_LINEAR,
+      .rendering_color_state = GDK_COLOR_STATE_SRGB,
+      .rendering_color_state_linear = GDK_COLOR_STATE_SRGB_LINEAR,
     },
     .name = "srgb",
     .no_srgb = GDK_COLOR_STATE_SRGB_LINEAR,
@@ -367,6 +368,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .ref_count = 0,
       .depth = GDK_MEMORY_U8,
       .rendering_color_state = GDK_COLOR_STATE_SRGB_LINEAR,
+      .rendering_color_state_linear = GDK_COLOR_STATE_SRGB_LINEAR,
     },
     .name = "srgb-linear",
     .no_srgb = NULL,
@@ -382,7 +384,8 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
       .ref_count = 0,
       .depth = GDK_MEMORY_FLOAT16,
-      .rendering_color_state = GDK_COLOR_STATE_REC2100_LINEAR,
+      .rendering_color_state = GDK_COLOR_STATE_REC2100_PQ,
+      .rendering_color_state_linear = GDK_COLOR_STATE_REC2100_LINEAR,
     },
     .name = "rec2100-pq",
     .no_srgb = NULL,
@@ -399,6 +402,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
       .ref_count = 0,
       .depth = GDK_MEMORY_FLOAT16,
       .rendering_color_state = GDK_COLOR_STATE_REC2100_LINEAR,
+      .rendering_color_state_linear = GDK_COLOR_STATE_REC2100_LINEAR,
     },
     .name = "rec2100-linear",
     .no_srgb = NULL,
@@ -693,7 +697,8 @@ gdk_color_state_new_for_cicp (const GdkCicp  *cicp,
   self->parent.ref_count = 1;
 
   /* sRGB is special-cased by being a default colorstate */
-  self->parent.rendering_color_state = GDK_COLOR_STATE_REC2100_LINEAR;
+  self->parent.rendering_color_state = GDK_COLOR_STATE_REC2100_PQ;
+  self->parent.rendering_color_state_linear = GDK_COLOR_STATE_REC2100_LINEAR;
 
   self->parent.depth = GDK_MEMORY_FLOAT16;
 
