@@ -425,7 +425,7 @@ struct _GdkCicpColorState
 
   GdkColorState *no_srgb;
 
-  const char *name;
+  char *name;
 
   GdkTransferFunc eotf;
   GdkTransferFunc oetf;
@@ -460,6 +460,8 @@ static void
 gdk_cicp_color_state_free (GdkColorState *cs)
 {
   GdkCicpColorState *self = (GdkCicpColorState *) cs;
+
+  g_free (self->name);
 
   if (self->no_srgb)
     gdk_color_state_unref (self->no_srgb);
