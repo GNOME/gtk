@@ -105,6 +105,20 @@ static MatrixTest matrices[] = {
   { "srgb<>rec2020", rec2020_to_srgb, srgb_to_rec2020 },
 };
 
+typedef struct
+{
+  const char *name;
+  const GdkPrimaries *primaries;
+  const float *to_xyz;
+} PrimaryTest;
+static PrimaryTest primary_tests[] = {
+  { "srgb", &srgb_primaries, srgb_to_xyz },
+  { "pal", &pal_primaries, pal_to_xyz },
+  { "ntsc", &ntsc_primaries, ntsc_to_xyz },
+  { "rec2020", &rec2020_primaries, rec2020_to_xyz },
+  { "p3", &p3_primaries, p3_to_xyz },
+};
+
 #define IDX(i,j) 3*i+j
 static inline void
 multiply (float       res[9],
@@ -165,6 +179,44 @@ test_matrix (gconstpointer data)
     g_print ("distance: %f\n", norm (res2));
 
   g_assert_cmpfloat_with_epsilon (norm (res2), 0, 0.001);
+}
+
+static void
+compute_to_xyz_from_primaries (const float primaries[8],
+                               float       to_xyz[9])
+{
+  float rx, ry, gx, gy, bx, by, wx, wy;
+  float rY, bY, gY;
+
+  rx = primaries[0]; ry = primaries[1];
+  gx = primaries[2]; gy = primaries[3];
+  bx = primaries[4]; by = primaries[5];
+  wx = primaries[6]; wy = primaries[7];
+
+  bY = (((1 - wx)/wy - (1 - rx)/ry)*(gx/gy - rx/ry) - (wx/wy - rx/ry)*((1 - gx)/gy - (1 - rx)/ry)) /
+        (((1 - bx)/by - (1 - rx)/ry)*(gx/gy - rx/ry) - (bx/by - rx/ry)*((1 - gx)/gy - (1 - rx)/ry));
+
+  gY = (wx/wy - rx/ry - bY*(bx/by - rx/ry)) / (gx/gy - rx/ry);
+
+  rY = 1 - gY - bY;
+
+  to_xyz[0] = rY/ry * rx;        to_xyz[1] = gY/gy * gx;        to_xyz[2] = bY/by * bx;
+  to_xyz[3] = rY;                to_xyz[4] = gY;                to_xyz[5] = bY;
+  to_xyz[6] = rY/ry * (1-rx-ry); to_xyz[7] = gY/gy * (1-gx-gy); to_xyz[8] = bY/by * (1-bx-by);
+}
+
+static void
+test_primaries (gconstpointer data)
+{
+  float res[9], res2[9];
+
+  PrimaryTest *test = (PrimaryTest *) data;
+
+  compute_to_xyz_from_primaries (test->primaries->values, res);
+
+  difference (res2, res, test->to_xyz);
+
+  g_assert_cmpfloat_with_epsilon (norm (res2), 0, 0.00001);
 }
 
 static void
@@ -238,6 +290,14 @@ main (int argc, char *argv[])
       MatrixTest *test = &matrices[i];
       char *path = g_strdup_printf ("/colorstate/matrix/%s", test->name);
       g_test_add_data_func (path, test, test_matrix);
+      g_free (path);
+    }
+
+  for (guint i = 0; i < G_N_ELEMENTS (primary_tests); i++)
+    {
+      PrimaryTest *test = &primary_tests[i];
+      char *path = g_strdup_printf ("/colorstate/primaries/%s", test->name);
+      g_test_add_data_func (path, test, test_primaries);
       g_free (path);
     }
 
