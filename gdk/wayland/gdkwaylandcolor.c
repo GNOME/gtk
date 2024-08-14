@@ -322,63 +322,84 @@ create_image_desc (GdkWaylandColor *color,
                    gboolean         sync)
 {
   CsImageDescListenerData data;
-  struct xx_image_description_creator_params_v4 *creator;
+  struct xx_image_description_creator_params_v4 *creator = NULL;
   struct xx_image_description_v4 *desc;
   const GdkCicp *cicp;
-  GdkCicp norm;
-  uint32_t primaries, tf;
 
   cicp = gdk_color_state_get_cicp (cs);
-  if (!cicp)
+  if (cicp && cicp->color_primaries != 2)
     {
-      GDK_DEBUG (MISC, "Unsupported color state %s: Not a CICP colorstate",
-                 gdk_color_state_get_name (cs));
-      g_hash_table_insert (color->cs_to_desc, gdk_color_state_ref (cs), NULL);
-      return;
-    }
-  
-  gdk_cicp_normalize (cicp, &norm);
-  primaries = cicp_to_wl_primaries (norm.color_primaries);
-  tf = cicp_to_wl_transfer (norm.transfer_function);
+      GdkCicp norm;
+      uint32_t primaries_named;
+      uint32_t tf_named;
 
-  if (((color->color_manager_supported.primaries & (1 << primaries)) == 0 &&
-       (color->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V4_FEATURE_SET_PRIMARIES)) == 0) ||
-      (color->color_manager_supported.transfers & (1 << tf)) == 0)
+      gdk_cicp_normalize (cicp, &norm);
+      primaries_named = cicp_to_wl_primaries (norm.color_primaries);
+      tf_named = cicp_to_wl_transfer (norm.transfer_function);
+
+      if ((color->color_manager_supported.primaries & (1 << primaries_named)) == 0 ||
+          (color->color_manager_supported.transfers & (1 << tf_named)) == 0)
+        {
+          GDK_DEBUG (MISC, "Unsupported color state %s: Primaries or transfer function unsupported",
+                     gdk_color_state_get_name (cs));
+          g_hash_table_insert (color->cs_to_desc, gdk_color_state_ref (cs), NULL);
+          return;
+        }
+
+      creator = xx_color_manager_v4_new_parametric_creator (color->color_manager);
+
+      xx_image_description_creator_params_v4_set_primaries_named (creator, primaries_named);
+      xx_image_description_creator_params_v4_set_tf_named (creator, tf_named);
+    }
+  else if (cicp && cicp->color_primaries == 2)
     {
-      GDK_DEBUG (MISC, "Unsupported color state %s: Primaries or transfer function unsupported",
-                 gdk_color_state_get_name (cs));
+      const GdkPrimaries *primaries = gdk_color_state_get_primaries (cs);
+      GdkCicp norm;
+      uint32_t tf_named;
+
+      gdk_cicp_normalize (cicp, &norm);
+      tf_named = cicp_to_wl_transfer (norm.transfer_function);
+
+      if ((color->color_manager_supported.features & (1 << XX_IMAGE_DESCRIPTION_CREATOR_PARAMS_V4_SET_PRIMARIES)) == 0 ||
+          (color->color_manager_supported.transfers & (1 << tf_named)) == 0)
+        {
+          GDK_DEBUG (MISC, "Unsupported color state %s: Primaries or transfer function unsupported",
+                     gdk_color_state_get_name (cs));
+          g_hash_table_insert (color->cs_to_desc, gdk_color_state_ref (cs), NULL);
+          return;
+        }
+
+      creator = xx_color_manager_v4_new_parametric_creator (color->color_manager);
+
+      xx_image_description_creator_params_v4_set_primaries (creator,
+                                                            primaries->rx * 10000,
+                                                            primaries->ry * 10000,
+                                                            primaries->gx * 10000,
+                                                            primaries->gy * 10000,
+                                                            primaries->bx * 10000,
+                                                            primaries->by * 10000,
+                                                            primaries->wx * 10000,
+                                                            primaries->wy * 10000);
+      xx_image_description_creator_params_v4_set_tf_named (creator, tf_named);
+    }
+  else
+    {
+      GDK_DEBUG (MISC, "Unsupported color state %s: Primaries or transfer function unsupported", gdk_color_state_get_name (cs));
       g_hash_table_insert (color->cs_to_desc, gdk_color_state_ref (cs), NULL);
       return;
     }
+
+  desc = xx_image_description_creator_params_v4_create (creator);
 
   data.color = color;
   data.color_state = cs;
   data.sync = sync;
   data.done = FALSE;
 
-  creator = xx_color_manager_v4_new_parametric_creator (color->color_manager);
-
-  if (color->color_manager_supported.primaries & (1 << primaries))
-    {
-      xx_image_description_creator_params_v4_set_primaries_named (creator, primaries);
-    }
-  else
-    {
-      const uint *p = wl_primaries_to_primaries (primaries);
-      xx_image_description_creator_params_v4_set_primaries (creator,
-                                                            p[0], p[1],
-                                                            p[2], p[3],
-                                                            p[4], p[5],
-                                                            p[6], p[7]);
-    }
-  xx_image_description_creator_params_v4_set_tf_named (creator, tf);
-
-  desc = xx_image_description_creator_params_v4_create (creator);
-
   if (sync)
     {
       struct wl_event_queue *event_queue;
-      
+
       event_queue = wl_display_create_queue (color->display->wl_display);
       wl_proxy_set_queue ((struct wl_proxy *) desc, event_queue);
       xx_image_description_v4_add_listener (desc, &cs_image_desc_listener, &data);
@@ -523,26 +544,42 @@ struct _ImageDescription
 static GdkColorState *
 gdk_color_state_from_image_description_bits (ImageDescription *desc)
 {
+  GdkLuminance lum;
+  GdkLuminance *luminance = NULL;
+
+  if (desc->has_luminances)
+    {
+      lum.min = desc->min_lum * 10000;
+      lum.max = desc->max_lum;
+      lum.ref = desc->ref_lum;
+      luminance = &lum;
+    }
+
   if (desc->has_primaries_named && desc->has_tf_named)
     {
       GdkCicp cicp;
-      GdkLuminance lum;
-      GdkLuminance *luminance = NULL;
 
       cicp.color_primaries = wl_to_cicp_primaries (desc->primaries);
       cicp.transfer_function = wl_to_cicp_transfer (desc->tf_named);
       cicp.matrix_coefficients = 0;
       cicp.range = GDK_CICP_RANGE_FULL;
 
-      if (desc->has_luminances)
-        {
-          lum.min = desc->min_lum * 10000;
-          lum.max = desc->max_lum;
-          lum.ref = desc->ref_lum;
-          luminance = &lum;
-        }
-
       return gdk_color_state_new_for_cicp (&cicp, luminance, NULL);
+    }
+  else if (desc->has_primaries && desc->has_tf_named)
+    {
+      GdkPrimaries primaries;
+
+      primaries.rx = desc->r_x / 10000.0;
+      primaries.ry = desc->r_y / 10000.0;
+      primaries.gx = desc->g_x / 10000.0;
+      primaries.gy = desc->g_y / 10000.0;
+      primaries.bx = desc->b_x / 10000.0;
+      primaries.by = desc->b_y / 10000.0;
+      primaries.wx = desc->w_x / 10000.0;
+      primaries.wy = desc->w_y / 10000.0;
+
+      return gdk_color_state_new_for_primaries (&primaries, luminance, desc->tf_named, NULL);
     }
   else
     return NULL;
