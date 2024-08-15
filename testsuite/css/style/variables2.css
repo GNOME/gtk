@@ -1,0 +1,11 @@
+:root {
+  --b: var(--a);
+}
+
+:root {
+  --a: var(--a, red);
+}
+
+* {
+ background: var(--b);
+}

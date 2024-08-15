@@ -1,0 +1,9 @@
+window.background:dir(ltr)
+  background-color: rgba(0,0,0,0); /* variables2.css:10:2-23 */
+  background-clip: border-box; /* variables2.css:10:2-23 */
+  background-origin: padding-box; /* variables2.css:10:2-23 */
+  background-size: auto; /* variables2.css:10:2-23 */
+  background-position: left top; /* variables2.css:10:2-23 */
+  background-repeat: repeat; /* variables2.css:10:2-23 */
+  background-image: none; /* variables2.css:10:2-23 */
+  --b: var(--a); /* variables2.css:2:8-16 */
