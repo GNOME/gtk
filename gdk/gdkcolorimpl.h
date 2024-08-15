@@ -129,10 +129,3 @@ _gdk_color_to_float (const GdkColor  *self,
                                  values);
 }
 
-#define gdk_color_get_depth(self) _gdk_color_get_depth ((self))
-static inline GdkMemoryDepth
-_gdk_color_get_depth (const GdkColor *self)
-{
-  return gdk_color_state_get_depth (self->color_state);
-}
-

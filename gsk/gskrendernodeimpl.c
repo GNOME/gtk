@@ -81,14 +81,6 @@ gsk_color_stops_are_opaque (const GskColorStop *stops,
   return TRUE;
 }
 
-/* FIXME: Replace this once GdkColor lands */
-static inline GdkMemoryDepth
-my_color_stops_get_depth (const GskColorStop *stops,
-                          gsize               n_stops)
-{
-  return gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
-}
-
 static inline gboolean
 color_state_is_hdr (GdkColorState *color_state)
 {
@@ -324,7 +316,7 @@ gsk_color_node_new2 (const GdkColor        *color,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
   node->fully_opaque = gdk_color_is_opaque (color);
-  node->preferred_depth = gdk_color_get_depth (color);
+  node->preferred_depth = GDK_MEMORY_NONE;
   node->is_hdr = color_state_is_hdr (color->color_state);
 
   gdk_color_init_copy (&self->color, color);
@@ -505,7 +497,7 @@ gsk_linear_gradient_node_new (const graphene_rect_t  *bounds,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
   node->fully_opaque = gsk_color_stops_are_opaque (color_stops, n_color_stops);
-  node->preferred_depth = my_color_stops_get_depth (color_stops, n_color_stops);
+  node->preferred_depth = GDK_MEMORY_NONE;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
@@ -561,7 +553,7 @@ gsk_repeating_linear_gradient_node_new (const graphene_rect_t  *bounds,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
   node->fully_opaque = gsk_color_stops_are_opaque (color_stops, n_color_stops);
-  node->preferred_depth = my_color_stops_get_depth (color_stops, n_color_stops);
+  node->preferred_depth = GDK_MEMORY_NONE;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
@@ -845,7 +837,7 @@ gsk_radial_gradient_node_new (const graphene_rect_t  *bounds,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
   node->fully_opaque = gsk_color_stops_are_opaque (color_stops, n_color_stops);
-  node->preferred_depth = my_color_stops_get_depth (color_stops, n_color_stops);
+  node->preferred_depth = GDK_MEMORY_NONE;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
@@ -917,7 +909,7 @@ gsk_repeating_radial_gradient_node_new (const graphene_rect_t  *bounds,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
   node->fully_opaque = gsk_color_stops_are_opaque (color_stops, n_color_stops);
-  node->preferred_depth = my_color_stops_get_depth (color_stops, n_color_stops);
+  node->preferred_depth = GDK_MEMORY_NONE;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
@@ -1319,7 +1311,7 @@ gsk_conic_gradient_node_new (const graphene_rect_t  *bounds,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
   node->fully_opaque = gsk_color_stops_are_opaque (color_stops, n_color_stops);
-  node->preferred_depth = my_color_stops_get_depth (color_stops, n_color_stops);
+  node->preferred_depth = GDK_MEMORY_NONE;
 
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
@@ -1789,11 +1781,7 @@ gsk_border_node_new2 (const GskRoundedRect *outline,
   self = gsk_render_node_alloc (GSK_BORDER_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->preferred_depth = gdk_memory_depth_merge (
-                            gdk_memory_depth_merge (gdk_color_get_depth (&border_color[0]),
-                                                    gdk_color_get_depth (&border_color[1])),
-                            gdk_memory_depth_merge (gdk_color_get_depth (&border_color[2]),
-                                                    gdk_color_get_depth (&border_color[3])));
+  node->preferred_depth = GDK_MEMORY_NONE;
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
   memcpy (self->border_width, border_width, sizeof (self->border_width));
@@ -2811,7 +2799,7 @@ gsk_inset_shadow_node_new2 (const GskRoundedRect   *outline,
   self = gsk_render_node_alloc (GSK_INSET_SHADOW_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->preferred_depth = gdk_color_get_depth (color);
+  node->preferred_depth = GDK_MEMORY_NONE;
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
   gdk_color_init_copy (&self->color, color);
@@ -3207,7 +3195,7 @@ gsk_outset_shadow_node_new2 (const GskRoundedRect   *outline,
   self = gsk_render_node_alloc (GSK_OUTSET_SHADOW_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->preferred_depth = gdk_color_get_depth (color);
+  node->preferred_depth = GDK_MEMORY_NONE;
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
   gdk_color_init_copy (&self->color, color);
@@ -5801,7 +5789,6 @@ gsk_shadow_node_new2 (GskRenderNode    *child,
   GskShadowNode *self;
   GskRenderNode *node;
   gsize i;
-  GdkMemoryDepth depth;
   gboolean is_hdr;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
@@ -5816,7 +5803,6 @@ gsk_shadow_node_new2 (GskRenderNode    *child,
   self->n_shadows = n_shadows;
   self->shadows = g_new (GskShadow2, n_shadows);
 
-  depth = gsk_render_node_get_preferred_depth (child);
   is_hdr = gsk_render_node_is_hdr (child);
 
   for (i = 0; i < n_shadows; i++)
@@ -5824,11 +5810,10 @@ gsk_shadow_node_new2 (GskRenderNode    *child,
       gdk_color_init_copy (&self->shadows[i].color, &shadows[i].color);
       graphene_point_init_from_point (&self->shadows[i].offset, &shadows[i].offset);
       self->shadows[i].radius = shadows[i].radius;
-      depth = gdk_memory_depth_merge (depth, gdk_color_get_depth (&shadows[i].color));
       is_hdr = is_hdr || color_state_is_hdr (shadows[i].color.color_state);
     }
 
-  node->preferred_depth = depth;
+  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   node->is_hdr = is_hdr;
 
   gsk_shadow_node_get_bounds (self, &node->bounds);
@@ -6520,7 +6505,7 @@ gsk_text_node_new2 (PangoFont              *font,
   self = gsk_render_node_alloc (GSK_TEXT_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->preferred_depth = gdk_color_get_depth (color);
+  node->preferred_depth = GDK_MEMORY_NONE;
   node->is_hdr = color_state_is_hdr (color->color_state);
 
   self->fontmap = g_object_ref (pango_font_get_font_map (font));
