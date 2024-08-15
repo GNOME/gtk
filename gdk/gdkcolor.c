@@ -230,20 +230,6 @@ gdk_color_from_rgba (GdkColor        *self,
 }
 
 /*< private >
- * gdk_color_get_depth:
- * @self: a `GdkColor`
- *
- * Returns the preferred depth for the color state of @self.
- *
- * Returns: the preferred depth
- */
-GdkMemoryDepth
-(gdk_color_get_depth) (const GdkColor *self)
-{
-  return gdk_color_state_get_depth (self->color_state);
-}
-
-/*< private >
  * gdk_color_print:
  * @self: the `GdkColor` to print
  * @string: the string to print to
