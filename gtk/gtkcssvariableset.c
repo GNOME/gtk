@@ -139,6 +139,10 @@ check_references (GtkCssVariableSet   *self,
 
           ref_value = g_hash_table_lookup (self->variables, GINT_TO_POINTER (ref_id));
 
+          /* This variable was already removed, no point in checking further */
+          if (!ref_value)
+            return FALSE;
+
           if (check_variable (self, unvisited_variables, stack, ref_id, ref_value))
             return TRUE;
         }
