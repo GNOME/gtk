@@ -4166,6 +4166,7 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
   if (have_selection)
     {
       GtkCssNode *selection_node;
+      GdkColor text_color;
 
       selection_start_line = gtk_text_iter_get_line (&selection_start);
       selection_end_line = gtk_text_iter_get_line (&selection_end);
@@ -4175,8 +4176,9 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
       gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->background_color),
                               &selection_color);
+      gtk_css_color_to_color (gtk_css_color_value_get_color (style->used->color), &text_color);
 
-      draw_selection_text = !gdk_color_is_clear (&crenderer->fg_color);
+      draw_selection_text = !gdk_color_is_clear (&text_color);
     }
   else
     {
