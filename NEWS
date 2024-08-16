@@ -1,5 +1,64 @@
-Overview of Changes in 4.14.5, xx-xx-xxxx
+Overview of Changes in 4.14.5, 16-08-2024
 =========================================
+
+* GtkSpinner:
+ - Only set :checked state when mapped to avoid animation overhead
+
+* GtkFileChooserWidget:
+ - Plug memory leaks
+
+* GtkProgressBar, GtkRange:
+ - Fix hightlight clipping
+
+* GtkSpinButton:
+ - Set number input hint for numeric spin buttons
+
+* GtkPopover:
+ - Recompute the sampe more often
+ - Handle allocation corner cases better
+
+* GtkIconTheme:
+ - Fix an argument order mishap that could lead to wrong icon selection
+
+* Accessibility:
+ - Use text instead of label for GtkLabesl accessible name
+ - Improve the role mapping for containers
+ - Realize the AT context when needed to fix AdwToast
+ - Fix handling or relations in GtkExpander
+
+* GDK:
+ - Don't leak EGLSurfaces
+
+* GSK:
+ - Speed up mask nodes with cairo
+
+* Vulkan:
+ - Recreate the swapchain when necessary or beneficial
+
+* Wayland:
+ - Support the xdg-dialog protocol
+
+* macOS:
+ - Make Dock>Quit invoke the "app.quit" action
+ - Take shadows into account when positioning popups
+ - Propagate create-folder to Open panels
+
+* Windows:
+ - Backport build and runtime fixes for 32bit Windows
+ - Ensure the dnd-move cursor exists
+
+* Translation updates
+ Catalan
+ Chinese (Taiwan)
+ Galician
+ Hindi
+ Hungarian
+ Kabyle
+ Nepali
+ Persian
+ Portuguese
+ Romanian
+ Serbian
 
 
 Overview of Changes in 4.14.4, 02-05-2024
