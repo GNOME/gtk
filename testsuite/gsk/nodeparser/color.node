@@ -5,7 +5,7 @@ color {
 
 color {
   bounds: 100 100 200 300;
-  color: rgb(1, 0.5, 0.3);
+  color: rgb(255, 127.5, 63.75);
 }
 
 color {
