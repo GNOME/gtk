@@ -125,6 +125,7 @@
 #include "gtkmain.h"
 #include "gtkintl.h"
 #include "gtkmarshalers.h"
+#include <math.h>
 
 typedef struct _GtkGesturePrivate GtkGesturePrivate;
 typedef struct _PointData PointData;
@@ -472,7 +473,7 @@ _update_widget_coordinates (GtkGesture *gesture,
   GtkWidget *event_widget, *widget;
   GtkAllocation allocation;
   gdouble event_x, event_y;
-  gint wx, wy, x, y;
+  gint x, y;
 
   event_widget = gtk_get_event_widget (data->event);
 
@@ -486,6 +487,7 @@ _update_widget_coordinates (GtkGesture *gesture,
 
   while (window && window != event_widget_window)
     {
+      gint wx, wy;
       gdk_window_get_position (window, &wx, &wy);
       event_x += wx;
       event_y += wy;
@@ -502,13 +504,20 @@ _update_widget_coordinates (GtkGesture *gesture,
       event_y -= allocation.y;
     }
 
-  gtk_widget_translate_coordinates (event_widget, widget,
-                                    event_x, event_y, &x, &y);
-  /* gtk_widget_translate() loses the fractional part so we need to
-   * add it back to not lose accuracy */
-  data->widget_x = x + (event_x - (int)event_x);
-  data->widget_y = y + (event_y - (int)event_y);
-
+  if (gtk_widget_translate_coordinates (event_widget, widget,
+                                        event_x, event_y, &x, &y))
+    {
+      /* gtk_widget_translate() loses the fractional part so we need to
+       * add it back to not lose accuracy */
+      data->widget_x = x + (event_x - (int)event_x);
+      data->widget_y = y + (event_y - (int)event_y);
+    }
+  else
+    {
+      /* Mark the coordinates well outside the widget, to
+       * signal that the translation has failed */
+      data->widget_x = data->widget_y = NAN;
+    }
 }
 
 static GtkEventSequenceState
