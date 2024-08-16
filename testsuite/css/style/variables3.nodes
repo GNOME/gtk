@@ -1,0 +1,6 @@
+window.background:dir(ltr)
+  --a: var(--b); /* variables3.css:2:8-16 */
+
+  box.foo.horizontal:dir(ltr)
+    color: rgb(255,255,255); /* variables3.css:7:2-18 */
+    --b: var(--a); /* variables3.css:6:7-15 */
