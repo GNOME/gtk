@@ -431,6 +431,7 @@ node_parser_tests = [
   'shadow-fail.node',
   'shadow-fail.ref.node',
   'shadow-fail.errors',
+  'srgb-high-accuracy.node',
   'string-error.errors',
   'string-error.node',
   'string-error.ref.node',

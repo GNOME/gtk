@@ -3678,7 +3678,10 @@ static void
 print_color (Printer        *p,
              const GdkColor *color)
 {
-  if (gdk_color_state_equal (color->color_state, GDK_COLOR_STATE_SRGB))
+  if (gdk_color_state_equal (color->color_state, GDK_COLOR_STATE_SRGB) &&
+      round (CLAMP (color->red, 0, 1) * 255) == color->red * 255 &&
+      round (CLAMP (color->green, 0, 1) * 255) == color->green * 255 &&
+      round (CLAMP (color->blue, 0, 1) * 255) == color->blue * 255)
     {
       gdk_rgba_print ((const GdkRGBA *) color->values, p->str);
     }
