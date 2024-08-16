@@ -891,7 +891,7 @@ gtk_css_lookup_resolve (GtkCssLookup      *lookup,
   context.provider = provider;
   context.style = (GtkCssStyle *) sstyle;
   context.parent_style = parent_style;
-  context.variables = style->variables;
+  context.variables = NULL;
   context.shorthands = shorthands;
 
   if (_gtk_bitmask_is_empty (_gtk_css_lookup_get_set_values (lookup)))

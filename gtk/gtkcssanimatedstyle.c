@@ -643,7 +643,7 @@ gtk_css_animated_style_recompute (GtkCssAnimatedStyle *style)
   context.provider = style->provider;
   context.style = (GtkCssStyle *) style;
   context.parent_style = style->parent_style;
-  context.variables = ((GtkCssStyle *) style)->variables;
+  context.variables = NULL;
   context.shorthands = shorthands;
 
   gtk_css_core_values_recompute (style, &context);
