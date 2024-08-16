@@ -1,0 +1,18 @@
+color-matrix {
+  matrix: matrix3d(65535, 0, 0, 0, 0, 65535, 0, 0, 0, 0, 65535, 0, 0, 0, 0, 1);
+  child: blend {
+    mode: difference;
+    bottom: texture {
+      bounds: 0 0 10 10;
+      texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKEAYAAADdohP+AAAAAXNSR0IArs4c6QAAAARjSUNQAQ0A\
+AZxpOzIAAAAfSURBVCiRY/w/n4GBgeH/fwYqASZqGTRq4KiBg8lAAH3dA7DFgV4pAAAAAElFTkSu\
+QmCC\
+");
+    }
+    top: color {
+      bounds: 0 0 10 10;
+      color: color(srgb 0.999 0 0);
+    }
+  }
+}

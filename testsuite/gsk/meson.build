@@ -31,6 +31,7 @@ compare_render_tests = [
   'border-zero-width-color',
   'borders-rotated',
   'borders-scaled',
+  'bug-rgba8-offscreen-in-high-depth',
   'clip-contained',
   'clip-coordinates-2d',
   'clip-coordinates-nocairo',
