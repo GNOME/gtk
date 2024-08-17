@@ -5,10 +5,10 @@ window.background:dir(ltr)
     checkbutton.text-button:dir(ltr)
       check:dir(ltr)
       label:dir(ltr)
-    checkbutton.text-button:dir(ltr):checked
+    checkbutton.grouped.text-button:dir(ltr):checked
       radio:dir(ltr):checked
       label:dir(ltr)
-    checkbutton.text-button:dir(ltr)
+    checkbutton.grouped.text-button:dir(ltr)
       radio:dir(ltr)
       label:dir(ltr)
     switch:dir(ltr):checked
