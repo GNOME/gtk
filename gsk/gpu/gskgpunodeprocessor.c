@@ -837,7 +837,6 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
                                 float                      blur_radius,
                                 const GdkColor            *shadow_color,
                                 GskGpuImage               *source_image,
-                                GdkMemoryDepth             source_depth,
                                 const graphene_rect_t     *source_rect)
 {
   GskGpuNodeProcessor other;
@@ -862,7 +861,8 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   intermediate = gsk_gpu_node_processor_init_draw (&other,
                                                    self->frame,
                                                    self->ccs,
-                                                   source_depth,
+                                                   gdk_memory_format_get_depth (gsk_gpu_image_get_format (source_image),
+                                                                                gsk_gpu_image_get_flags (source_image) & GSK_GPU_IMAGE_SRGB),
                                                    &self->scale,
                                                    &intermediate_rect);
 
@@ -2671,8 +2671,6 @@ gsk_gpu_node_processor_add_blur_node (GskGpuNodeProcessor *self,
                                   blur_radius,
                                   NULL,
                                   image,
-                                  gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
-                                                               gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB),
                                   &tex_rect);
 
   g_object_unref (image);
@@ -2736,8 +2734,6 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                           shadow->radius,
                                           &shadow->color,
                                           image,
-                                          gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
-                                                                       gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB),
                                           &tex_rect);
         }
     }
