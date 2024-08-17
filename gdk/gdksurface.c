@@ -2762,7 +2762,8 @@ gdk_surface_is_opaque (GdkSurface *self)
   if (gdk_rectangle_contains (&priv->opaque_rect, &whole))
     return TRUE;
 
-  if (cairo_region_contains_rectangle (priv->opaque_region, &whole) == CAIRO_REGION_OVERLAP_IN)
+  if (priv->opaque_region &&
+      cairo_region_contains_rectangle (priv->opaque_region, &whole) == CAIRO_REGION_OVERLAP_IN)
     return TRUE;
 
   return FALSE;
