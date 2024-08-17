@@ -799,9 +799,9 @@ parse_color_arg (GtkCssParser *parser,
 }
 
 static gboolean
-parse_color2 (GtkCssParser *parser,
-              Context      *context,
-              gpointer      color)
+parse_color (GtkCssParser *parser,
+             Context      *context,
+             gpointer      color)
 {
   GdkRGBA rgba;
 
@@ -837,7 +837,7 @@ parse_shadows (GtkCssParser *parser,
       GdkColor color = GDK_COLOR_SRGB (0, 0, 0, 1);
       double dx = 0, dy = 0, radius = 0;
 
-      if (!parse_color2 (parser, context, &color))
+      if (!parse_color (parser, context, &color))
         gtk_css_parser_error_value (parser, "Expected shadow color");
 
       if (!gtk_css_parser_consume_number (parser, &dx))
@@ -1683,7 +1683,7 @@ parse_colors4 (GtkCssParser *parser,
 
   for (i = 0; i < 4 && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF); i ++)
     {
-      if (!parse_color2 (parser, context, &colors[i]))
+      if (!parse_color (parser, context, &colors[i]))
         return FALSE;
     }
   if (i == 0)
@@ -1709,7 +1709,7 @@ parse_color_node (GtkCssParser *parser,
   GdkColor color = GDK_COLOR_SRGB (1, 0, 0.8, 1);
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
-    { "color", parse_color2, NULL, &color },
+    { "color", parse_color, NULL, &color },
   };
   GskRenderNode *node;
 
@@ -1887,7 +1887,7 @@ parse_inset_shadow_node (GtkCssParser *parser,
   double dx = 1, dy = 1, blur = 0, spread = 0;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
-    { "color", parse_color2, NULL, &color },
+    { "color", parse_color, NULL, &color },
     { "dx", parse_double, NULL, &dx },
     { "dy", parse_double, NULL, &dy },
     { "spread", parse_double, NULL, &spread },
@@ -2301,7 +2301,7 @@ parse_outset_shadow_node (GtkCssParser *parser,
   double dx = 1, dy = 1, blur = 0, spread = 0;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
-    { "color", parse_color2, NULL, &color },
+    { "color", parse_color, NULL, &color },
     { "dx", parse_double, NULL, &dx },
     { "dy", parse_double, NULL, &dy },
     { "spread", parse_double, NULL, &spread },
@@ -2612,7 +2612,7 @@ parse_text_node (GtkCssParser *parser,
   const Declaration declarations[] = {
     { "font", parse_font, clear_font, &font },
     { "offset", parse_point, NULL, &offset },
-    { "color", parse_color2, NULL, &color },
+    { "color", parse_color, NULL, &color },
     { "glyphs", parse_glyphs, clear_glyphs, &glyphs },
     { "hint-style", parse_hint_style, NULL, &hint_style },
     { "antialias", parse_antialias, NULL, &antialias },
