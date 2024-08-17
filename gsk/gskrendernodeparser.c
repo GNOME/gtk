@@ -614,105 +614,6 @@ clear_string (gpointer inout_string)
 }
 
 static gboolean
-parse_stops (GtkCssParser *parser,
-             Context      *context,
-             gpointer      out_stops)
-{
-  GArray *stops;
-  GskColorStop stop;
-
-  stops = g_array_new (FALSE, FALSE, sizeof (GskColorStop));
-
-  for (;;)
-    {
-     double dval;
-
-      if (!gtk_css_parser_consume_number (parser, &dval))
-        goto error;
-
-      stop.offset = dval;
-
-      if (!gdk_rgba_parser_parse (parser, &stop.color))
-        goto error;
-
-      if (stops->len == 0 && stop.offset < 0)
-        gtk_css_parser_error_value (parser, "Color stop offset must be >= 0");
-      else if (stops->len > 0 && stop.offset < g_array_index (stops, GskColorStop, stops->len - 1).offset)
-        gtk_css_parser_error_value (parser, "Color stop offset must be >= previous value");
-      else if (stop.offset > 1)
-        gtk_css_parser_error_value (parser, "Color stop offset must be <= 1");
-      else
-        g_array_append_val (stops, stop);
-
-      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
-        gtk_css_parser_skip (parser);
-      else
-        break;
-  }
-
-  if (stops->len < 2)
-    {
-      gtk_css_parser_error_value (parser, "At least 2 color stops need to be specified");
-      g_array_free (stops, TRUE);
-      return FALSE;
-    }
-
-  if (*(GArray **) out_stops)
-    g_array_free (*(GArray **) out_stops, TRUE);
-  *(GArray **) out_stops = stops;
-
-  return TRUE;
-
-error:
-  g_array_free (stops, TRUE);
-  return FALSE;
-}
-
-static void
-clear_stops (gpointer inout_stops)
-{
-  GArray **stops = (GArray **) inout_stops;
-
-  if (*stops)
-    {
-      g_array_free (*stops, TRUE);
-      *stops = NULL;
-    }
-}
-
-static gboolean
-parse_float4 (GtkCssParser *parser,
-              Context      *context,
-              gpointer      out_floats)
-{
-  float *floats = (float *) out_floats;
-  double d[4];
-  int i;
-
-  for (i = 0; i < 4 && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF); i ++)
-    {
-      if (!gtk_css_parser_consume_number (parser, &d[i]))
-        return FALSE;
-    }
-  if (i == 0)
-    {
-      gtk_css_parser_error_syntax (parser, "Expected a color");
-      return FALSE;
-    }
-  for (; i < 4; i++)
-    {
-      d[i] = d[(i - 1) >> 1];
-    }
-
-  for (i = 0; i < 4; i++)
-    {
-      floats[i] = d[i];
-    }
-
-  return TRUE;
-}
-
-static gboolean
 parse_color_state (GtkCssParser *parser,
                    Context      *context,
                    gpointer      color_state)
@@ -836,6 +737,104 @@ parse_color (GtkCssParser *parser,
   return FALSE;
 }
 
+static gboolean
+parse_stops (GtkCssParser *parser,
+             Context      *context,
+             gpointer      out_stops)
+{
+  GArray *stops;
+  GskColorStop stop;
+
+  stops = g_array_new (FALSE, FALSE, sizeof (GskColorStop));
+
+  for (;;)
+    {
+     double dval;
+
+      if (!gtk_css_parser_consume_number (parser, &dval))
+        goto error;
+
+      stop.offset = dval;
+
+      if (!gdk_rgba_parser_parse (parser, &stop.color))
+        goto error;
+
+      if (stops->len == 0 && stop.offset < 0)
+        gtk_css_parser_error_value (parser, "Color stop offset must be >= 0");
+      else if (stops->len > 0 && stop.offset < g_array_index (stops, GskColorStop, stops->len - 1).offset)
+        gtk_css_parser_error_value (parser, "Color stop offset must be >= previous value");
+      else if (stop.offset > 1)
+        gtk_css_parser_error_value (parser, "Color stop offset must be <= 1");
+      else
+        g_array_append_val (stops, stop);
+
+      if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        gtk_css_parser_skip (parser);
+      else
+        break;
+  }
+
+  if (stops->len < 2)
+    {
+      gtk_css_parser_error_value (parser, "At least 2 color stops need to be specified");
+      g_array_free (stops, TRUE);
+      return FALSE;
+    }
+
+  if (*(GArray **) out_stops)
+    g_array_free (*(GArray **) out_stops, TRUE);
+  *(GArray **) out_stops = stops;
+
+  return TRUE;
+
+error:
+  g_array_free (stops, TRUE);
+  return FALSE;
+}
+
+static void
+clear_stops (gpointer inout_stops)
+{
+  GArray **stops = (GArray **) inout_stops;
+
+  if (*stops)
+    {
+      g_array_free (*stops, TRUE);
+      *stops = NULL;
+    }
+}
+
+static gboolean
+parse_float4 (GtkCssParser *parser,
+              Context      *context,
+              gpointer      out_floats)
+{
+  float *floats = (float *) out_floats;
+  double d[4];
+  int i;
+
+  for (i = 0; i < 4 && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF); i ++)
+    {
+      if (!gtk_css_parser_consume_number (parser, &d[i]))
+        return FALSE;
+    }
+  if (i == 0)
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a color");
+      return FALSE;
+    }
+  for (; i < 4; i++)
+    {
+      d[i] = d[(i - 1) >> 1];
+    }
+
+  for (i = 0; i < 4; i++)
+    {
+      floats[i] = d[i];
+    }
+
+  return TRUE;
+}
 
 static gboolean
 parse_shadows (GtkCssParser *parser,
