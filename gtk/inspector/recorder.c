@@ -699,12 +699,12 @@ static GskRenderNode *
 make_dot (double x, double y)
 {
   GskRenderNode *fill, *dot;
-  GdkRGBA red = (GdkRGBA){ 1, 0, 0, 1 };
+  GdkColor red = GDK_COLOR_SRGB (1, 0, 0, 1);
   graphene_rect_t rect = GRAPHENE_RECT_INIT (x - 3, y - 3, 6, 6);
   graphene_size_t corner = GRAPHENE_SIZE_INIT (3, 3);
   GskRoundedRect clip;
 
-  fill = gsk_color_node_new (&red, &rect);
+  fill = gsk_color_node_new2 (&red, &rect);
   dot = gsk_rounded_clip_node_new (fill, gsk_rounded_rect_init (&clip, &rect,
                                                                &corner, &corner, &corner, &corner));
   gsk_render_node_unref (fill);
