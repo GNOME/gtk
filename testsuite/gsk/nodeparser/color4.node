@@ -1,3 +1,7 @@
 color {
-  color: color(srgb 1 2 3 4 5 6);
+  color: color(srgb 1 2 3);
+}
+
+color {
+  color: color(srgb 1 1 1 1 1 1);
 }

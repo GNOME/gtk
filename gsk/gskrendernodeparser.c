@@ -712,9 +712,130 @@ parse_float4 (GtkCssParser *parser,
   return TRUE;
 }
 
-static gboolean parse_color2 (GtkCssParser *parser,
-                              Context      *context,
-                              gpointer      color);
+static gboolean
+parse_color_state (GtkCssParser *parser,
+                   Context      *context,
+                   gpointer      color_state)
+{
+  GdkColorState *cs = NULL;
+
+  if (gtk_css_parser_try_ident (parser, "srgb"))
+    cs = gdk_color_state_get_srgb ();
+  else if (gtk_css_parser_try_ident (parser, "srgb-linear"))
+    cs = gdk_color_state_get_srgb_linear ();
+  else if (gtk_css_parser_try_ident (parser, "rec2100-pq"))
+    cs = gdk_color_state_get_rec2100_pq ();
+  else if (gtk_css_parser_try_ident (parser, "rec2100-linear"))
+    cs = gdk_color_state_get_rec2100_linear ();
+  else if (gtk_css_token_is (gtk_css_parser_get_token (parser), GTK_CSS_TOKEN_STRING))
+    {
+      char *name = gtk_css_parser_consume_string (parser);
+
+      if (context->named_color_states)
+        cs = g_hash_table_lookup (context->named_color_states, name);
+
+      if (!cs)
+        {
+          gtk_css_parser_error_value (parser, "No color state named \"%s\"", name);
+          g_free (name);
+          return FALSE;
+        }
+
+      g_free (name);
+    }
+  else
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a valid color state");
+      return FALSE;
+    }
+
+  *(GdkColorState **) color_state = gdk_color_state_ref (cs);
+  return TRUE;
+}
+
+typedef struct {
+  Context *context;
+  GdkColor *color;
+} ColorArgData;
+
+static guint
+parse_color_arg (GtkCssParser *parser,
+                 guint         arg,
+                 gpointer      data)
+{
+  ColorArgData *d = data;
+  GdkColorState *color_state;
+  float values[4], clamped[4];
+
+  if (!parse_color_state (parser, d->context, &color_state))
+    return 0;
+
+  for (int i = 0; i < 3; i++)
+    {
+      double number;
+
+      if (!gtk_css_parser_consume_number_or_percentage (parser, 0, 1, &number))
+        return 0;
+
+      values[i] = number;
+    }
+
+  if (gtk_css_parser_try_delim (parser, '/'))
+    {
+      double number;
+
+      if (!gtk_css_parser_consume_number_or_percentage (parser, 0, 1, &number))
+        return 0;
+
+      values[3] = number;
+    }
+  else
+    {
+      values[3] = 1;
+    }
+
+  gdk_color_state_clamp (color_state, values, clamped);
+  if (values[0] != clamped[0] ||
+      values[1] != clamped[1] ||
+      values[2] != clamped[2] ||
+      values[3] != clamped[3])
+    {
+      gtk_css_parser_error (parser,
+                            GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                            gtk_css_parser_get_block_location (parser),
+                            gtk_css_parser_get_end_location (parser),
+                            "Color values out of range for color state");
+    }
+
+  gdk_color_init (d->color, color_state, clamped);
+  return 1;
+}
+
+static gboolean
+parse_color (GtkCssParser *parser,
+             Context      *context,
+             gpointer      color)
+{
+  GdkRGBA rgba;
+
+  if (gtk_css_parser_has_function (parser, "color"))
+    {
+      ColorArgData data = { context, color };
+
+      if (!gtk_css_parser_consume_function (parser, 1, 1, parse_color_arg, &data))
+        return FALSE;
+
+      return TRUE;
+    }
+  else if (gdk_rgba_parser_parse (parser, &rgba))
+    {
+      gdk_color_init_from_rgba ((GdkColor *) color, &rgba);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 
 static gboolean
 parse_shadows (GtkCssParser *parser,
@@ -729,7 +850,7 @@ parse_shadows (GtkCssParser *parser,
       GdkColor color = GDK_COLOR_SRGB (0, 0, 0, 1);
       double dx = 0, dy = 0, radius = 0;
 
-      if (!parse_color2 (parser, context, &color))
+      if (!parse_color (parser, context, &color))
         gtk_css_parser_error_value (parser, "Expected shadow color");
 
       if (!gtk_css_parser_consume_number (parser, &dx))
@@ -1566,117 +1687,6 @@ parse_color_state_rule (GtkCssParser *parser,
 }
 
 static gboolean
-parse_color_state (GtkCssParser *parser,
-                   Context      *context,
-                   gpointer      color_state)
-{
-  GdkColorState *cs = NULL;
-
-  if (gtk_css_parser_try_ident (parser, "srgb"))
-    cs = gdk_color_state_get_srgb ();
-  else if (gtk_css_parser_try_ident (parser, "srgb-linear"))
-    cs = gdk_color_state_get_srgb_linear ();
-  else if (gtk_css_parser_try_ident (parser, "rec2100-pq"))
-    cs = gdk_color_state_get_rec2100_pq ();
-  else if (gtk_css_parser_try_ident (parser, "rec2100-linear"))
-    cs = gdk_color_state_get_rec2100_linear ();
-  else if (gtk_css_token_is (gtk_css_parser_get_token (parser), GTK_CSS_TOKEN_STRING))
-    {
-      char *name = gtk_css_parser_consume_string (parser);
-
-      if (context->named_color_states)
-        cs = g_hash_table_lookup (context->named_color_states, name);
-
-      if (!cs)
-        {
-          gtk_css_parser_error_value (parser, "No color state named \"%s\"", name);
-          g_free (name);
-          return FALSE;
-        }
-
-      g_free (name);
-    }
-  else
-    {
-      gtk_css_parser_error_syntax (parser, "Expected a valid color state");
-      return FALSE;
-    }
-
-  *(GdkColorState **) color_state = gdk_color_state_ref (cs);
-  return TRUE;
-}
-
-typedef struct {
-  Context *context;
-  GdkColor *color;
-} ColorArgData;
-
-static guint
-parse_color_arg (GtkCssParser *parser,
-                 guint         arg,
-                 gpointer      data)
-{
-  ColorArgData *d = data;
-  GdkColorState *color_state;
-  float values[4];
-
-  if (!parse_color_state (parser, d->context, &color_state))
-    return 0;
-
-  for (int i = 0; i < 3; i++)
-    {
-      double number;
-
-      if (!gtk_css_parser_consume_number_or_percentage (parser, 0, 1, &number))
-        return 0;
-
-      values[i] = number;
-    }
-
-  if (gtk_css_parser_try_delim (parser, '/'))
-    {
-      double number;
-
-      if (!gtk_css_parser_consume_number_or_percentage (parser, 0, 1, &number))
-        return 0;
-
-      values[3] = number;
-    }
-  else
-    {
-      values[3] = 1;
-    }
-
-  gdk_color_init (d->color, color_state, values);
-  return 1;
-}
-
-static gboolean
-parse_color2 (GtkCssParser *parser,
-              Context      *context,
-              gpointer      color)
-{
-  GdkRGBA rgba;
-
-  if (gtk_css_parser_has_function (parser, "color"))
-    {
-      ColorArgData data = { context, color };
-
-      if (!gtk_css_parser_consume_function (parser, 1, 1, parse_color_arg, &data))
-        return FALSE;
-
-      return TRUE;
-    }
-  else if (gdk_rgba_parser_parse (parser, &rgba))
-    {
-      gdk_color_init_from_rgba ((GdkColor *) color, &rgba);
-      return TRUE;
-    }
-
-  return FALSE;
-}
-
-static gboolean
 parse_colors4 (GtkCssParser *parser,
                Context      *context,
                gpointer      out_colors)
@@ -1686,7 +1696,7 @@ parse_colors4 (GtkCssParser *parser,
 
   for (i = 0; i < 4 && !gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF); i ++)
     {
-      if (!parse_color2 (parser, context, &colors[i]))
+      if (!parse_color (parser, context, &colors[i]))
         return FALSE;
     }
   if (i == 0)
@@ -1712,7 +1722,7 @@ parse_color_node (GtkCssParser *parser,
   GdkColor color = GDK_COLOR_SRGB (1, 0, 0.8, 1);
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
-    { "color", parse_color2, NULL, &color },
+    { "color", parse_color, NULL, &color },
   };
   GskRenderNode *node;
 
@@ -1890,7 +1900,7 @@ parse_inset_shadow_node (GtkCssParser *parser,
   double dx = 1, dy = 1, blur = 0, spread = 0;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
-    { "color", parse_color2, NULL, &color },
+    { "color", parse_color, NULL, &color },
     { "dx", parse_double, NULL, &dx },
     { "dy", parse_double, NULL, &dy },
     { "spread", parse_double, NULL, &spread },
@@ -2304,7 +2314,7 @@ parse_outset_shadow_node (GtkCssParser *parser,
   double dx = 1, dy = 1, blur = 0, spread = 0;
   const Declaration declarations[] = {
     { "outline", parse_rounded_rect, NULL, &outline },
-    { "color", parse_color2, NULL, &color },
+    { "color", parse_color, NULL, &color },
     { "dx", parse_double, NULL, &dx },
     { "dy", parse_double, NULL, &dy },
     { "spread", parse_double, NULL, &spread },
@@ -2615,7 +2625,7 @@ parse_text_node (GtkCssParser *parser,
   const Declaration declarations[] = {
     { "font", parse_font, clear_font, &font },
     { "offset", parse_point, NULL, &offset },
-    { "color", parse_color2, NULL, &color },
+    { "color", parse_color, NULL, &color },
     { "glyphs", parse_glyphs, clear_glyphs, &glyphs },
     { "hint-style", parse_hint_style, NULL, &hint_style },
     { "antialias", parse_antialias, NULL, &antialias },
@@ -3668,7 +3678,10 @@ static void
 print_color (Printer        *p,
              const GdkColor *color)
 {
-  if (gdk_color_state_equal (color->color_state, GDK_COLOR_STATE_SRGB))
+  if (gdk_color_state_equal (color->color_state, GDK_COLOR_STATE_SRGB) &&
+      round (CLAMP (color->red, 0, 1) * 255) == color->red * 255 &&
+      round (CLAMP (color->green, 0, 1) * 255) == color->green * 255 &&
+      round (CLAMP (color->blue, 0, 1) * 255) == color->blue * 255)
     {
       gdk_rgba_print ((const GdkRGBA *) color->values, p->str);
     }

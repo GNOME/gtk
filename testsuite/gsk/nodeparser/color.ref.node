@@ -4,7 +4,7 @@ color {
 }
 color {
   bounds: 100 100 200 300;
-  color: rgb(1,1,0);
+  color: color(srgb 0.00392157 0.00196078 0.00117647);
 }
 color {
   bounds: 100 100 200 300;
