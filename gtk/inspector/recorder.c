@@ -212,6 +212,8 @@ struct _GtkInspectorRecorder
 
   gboolean debug_nodes;
   gboolean highlight_sequences;
+  gboolean record_events;
+  gboolean stop_after_next_frame;
 
   GdkEventSequence *selected_sequence;
 
@@ -2473,6 +2475,7 @@ gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
     {
       recorder->recording = gtk_inspector_start_recording_new ();
       recorder->start_time = 0;
+      recorder->record_events = TRUE;
       gtk_inspector_recorder_add_recording (recorder, recorder->recording);
     }
   else
@@ -2483,10 +2486,29 @@ gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
   g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_RECORDING]);
 }
 
+void
+gtk_inspector_recorder_record_single_frame (GtkInspectorRecorder *recorder)
+{
+  if (gtk_inspector_recorder_is_recording (recorder))
+    return;
+
+  recorder->recording = gtk_inspector_start_recording_new ();
+  recorder->start_time = 0;
+  recorder->record_events = FALSE;
+  recorder->stop_after_next_frame = TRUE;
+  gtk_inspector_recorder_add_recording (recorder, recorder->recording);
+}
+
 gboolean
 gtk_inspector_recorder_is_recording (GtkInspectorRecorder *recorder)
 {
   return recorder->recording != NULL;
+}
+
+static gboolean
+gtk_inspector_recorder_is_recording_events (GtkInspectorRecorder *recorder)
+{
+  return recorder->recording != NULL && recorder->record_events;
 }
 
 void
@@ -2526,6 +2548,18 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                                   node);
   gtk_inspector_recorder_add_recording (recorder, recording);
   g_object_unref (recording);
+
+  if (recorder->stop_after_next_frame)
+    {
+      GtkSingleSelection *selection;
+
+      recorder->stop_after_next_frame = FALSE;
+      gtk_inspector_recorder_set_recording (recorder, FALSE);
+
+      selection = GTK_SINGLE_SELECTION (gtk_list_view_get_model (GTK_LIST_VIEW (recorder->recordings_list)));
+      gtk_single_selection_set_selected (selection, g_list_model_get_n_items (G_LIST_MODEL (selection)) - 1);
+      render_node_clip (NULL, recorder);
+    }
 }
 
 void
@@ -2537,7 +2571,7 @@ gtk_inspector_recorder_record_event (GtkInspectorRecorder *recorder,
   GdkFrameClock *frame_clock;
   gint64 frame_time;
 
-  if (!gtk_inspector_recorder_is_recording (recorder))
+  if (!gtk_inspector_recorder_is_recording_events (recorder))
     return;
 
   frame_clock = gtk_widget_get_frame_clock (widget);
@@ -2571,6 +2605,9 @@ gtk_inspector_recorder_trace_event (GtkInspectorRecorder *recorder,
                                     gboolean              handled)
 {
   GtkInspectorEventRecording *recording = recorder->last_event_recording;
+
+  if (!gtk_inspector_recorder_is_recording_events (recorder))
+    return;
 
   if (recording == NULL || recording->event != event)
     return;
