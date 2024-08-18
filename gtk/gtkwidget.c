@@ -4586,6 +4586,8 @@ gtk_widget_run_controllers (GtkWidget           *widget,
               is_gesture = GTK_IS_GESTURE (controller);
               this_handled = gtk_event_controller_handle_event (controller, event, target, x, y);
 
+              gtk_inspector_trace_event (event, phase, widget, controller, target, this_handled);
+
               if (GTK_DEBUG_CHECK (KEYBINDINGS))
                 {
                   GdkEventType type = gdk_event_get_event_type (event);
