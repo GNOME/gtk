@@ -2033,22 +2033,13 @@ render_node_clip (GtkButton            *button,
 {
   GskRenderNode *node;
   GdkClipboard *clipboard;
-  GBytes *bytes;
-  GdkContentProvider *content;
 
   node = get_selected_node (recorder);
   if (node == NULL)
     return;
 
-  bytes = gsk_render_node_serialize (node);
-  content = gdk_content_provider_new_for_bytes ("text/plain;charset=utf-8", bytes);
-
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (recorder));
-
-  gdk_clipboard_set_content (clipboard, content);
-
-  g_object_unref (content);
-  g_bytes_unref (bytes);
+  gdk_clipboard_set (clipboard, GSK_TYPE_RENDER_NODE, node);
 }
 
 static void
