@@ -1926,7 +1926,7 @@ gtk_propagate_event_internal (GtkWidget *widget,
       i--;
     }
 
-  /* If not yet handled, also propagate down */
+  /* If not yet handled, also propagate back up */
   if (!handled_event)
     {
       /* Propagate event up the widget tree so that
