@@ -149,14 +149,21 @@ void                    gtk_inspector_window_replace_object  (GtkInspectorWindow
                                                               ChildKind           kind,
                                                               guint               position);
 
-gboolean                gtk_inspector_is_recording                              (GtkWidget              *widget);
-GskRenderNode *         gtk_inspector_prepare_render                            (GtkWidget              *widget,
-                                                                                 GskRenderer            *renderer,
-                                                                                 GdkSurface             *surface,
-                                                                                 const cairo_region_t   *region,
-                                                                                 GskRenderNode          *root,
-                                                                                 GskRenderNode          *widget_node);
-gboolean                gtk_inspector_handle_event                              (GdkEvent               *event);
+gboolean                gtk_inspector_is_recording           (GtkWidget            *widget);
+GskRenderNode *         gtk_inspector_prepare_render         (GtkWidget            *widget,
+                                                              GskRenderer          *renderer,
+                                                              GdkSurface           *surface,
+                                                              const cairo_region_t *region,
+                                                              GskRenderNode        *root,
+                                                              GskRenderNode        *widget_node);
+gboolean                gtk_inspector_handle_event           (GdkEvent             *event);
+void                    gtk_inspector_trace_event            (GdkEvent             *event,
+                                                              GtkPropagationPhase   phase,
+                                                              GtkWidget            *widget,
+                                                              GtkEventController   *controller,
+                                                              GtkWidget            *target,
+                                                              gboolean              handled);
+
 
 G_END_DECLS
 

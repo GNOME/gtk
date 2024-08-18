@@ -52,6 +52,13 @@ void            gtk_inspector_recorder_record_render            (GtkInspectorRec
 void            gtk_inspector_recorder_record_event             (GtkInspectorRecorder   *recorder,
                                                                  GtkWidget              *widget,
                                                                  GdkEvent               *event);
+void            gtk_inspector_recorder_trace_event              (GtkInspectorRecorder   *recorder,
+                                                                 GdkEvent               *event,
+                                                                 GtkPropagationPhase     phase,
+                                                                 GtkWidget              *widget,
+                                                                 GtkEventController     *controller,
+                                                                 GtkWidget              *target,
+                                                                 gboolean                handled);
 
 G_END_DECLS
 

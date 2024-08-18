@@ -902,6 +902,27 @@ gtk_inspector_handle_event (GdkEvent *event)
   return handled;
 }
 
+void
+gtk_inspector_trace_event (GdkEvent            *event,
+                           GtkPropagationPhase  phase,
+                           GtkWidget           *widget,
+                           GtkEventController  *controller,
+                           GtkWidget           *target,
+                           gboolean             handled)
+{
+  GtkInspectorWindow *iw;
+
+  if (!any_inspector_window_constructed)
+    return;
+
+  iw = gtk_inspector_window_get_for_display (gdk_event_get_display (event));
+  if (iw == NULL)
+    return;
+
+  gtk_inspector_recorder_trace_event (GTK_INSPECTOR_RECORDER (iw->widget_recorder),
+                                      event, phase, widget, controller, target, handled);
+}
+
 GdkDisplay *
 gtk_inspector_window_get_inspected_display (GtkInspectorWindow *iw)
 {
