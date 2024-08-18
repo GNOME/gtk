@@ -893,6 +893,24 @@ gtk_inspector_handle_event (GdkEvent *event)
   if (iw == NULL)
     return FALSE;
 
+  if (GDK_IS_EVENT_TYPE (event, GDK_KEY_PRESS))
+    {
+      GtkInspectorRecorder *recorder = GTK_INSPECTOR_RECORDER (iw->widget_recorder);
+
+      if (gdk_key_event_matches (event, GDK_KEY_r, GDK_SUPER_MASK) == GDK_KEY_MATCH_EXACT)
+        {
+          gboolean recording = gtk_inspector_recorder_is_recording (recorder);
+
+          gtk_inspector_recorder_set_recording (recorder, !recording);
+          return TRUE;
+        }
+      else if (gdk_key_event_matches (event, GDK_KEY_c, GDK_SUPER_MASK) == GDK_KEY_MATCH_EXACT)
+        {
+          gtk_inspector_recorder_record_single_frame (recorder);
+          return TRUE;
+        }
+    }
+
   gtk_inspector_recorder_record_event (GTK_INSPECTOR_RECORDER (iw->widget_recorder),
                                        gtk_get_event_widget (event),
                                        event);
