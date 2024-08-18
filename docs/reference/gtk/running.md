@@ -576,6 +576,12 @@ To enable the GTK inspector, you can use the <kbd>Control</kbd>+<kbd>Shift</kbd>
 <kbd>Control</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd> keyboard shortcuts, or
 set the `GTK_DEBUG=interactive` environment variable.
 
+After opening the inspector, it listens for a few keyboard shortcuts that
+let you use its frame and event recording functionality without moving the
+focus away from the application window: <kbd>Super</kbd>+<kbd>R</kbd> turns
+the recording on and off, and <kbd>Super</kbd>+<kbd>C</kbd> records a single
+frame.
+
 There are a few more environment variables that can be set to influence
 how the inspector renders its UI. `GTK_INSPECTOR_DISPLAY` and
 `GTK_INSPECTOR_RENDERER` determine the GDK display and the GSK
@@ -585,6 +591,7 @@ In some situations, it may be inappropriate to give users access to
 the GTK inspector. The keyboard shortcuts can be disabled with the
 `enable-inspector-keybinding` key in the `org.gtk.Settings.Debug`
 GSettings schema.
+
 
 ## Profiling
 
