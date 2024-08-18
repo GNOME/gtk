@@ -212,8 +212,12 @@ struct _GtkInspectorRecorder
 
   gboolean debug_nodes;
   gboolean highlight_sequences;
+  gboolean record_events;
+  gboolean stop_after_next_frame;
 
   GdkEventSequence *selected_sequence;
+
+  GtkInspectorEventRecording *last_event_recording;
 };
 
 typedef struct _GtkInspectorRecorderClass
@@ -735,7 +739,9 @@ show_event (GtkInspectorRecorder *recorder,
 }
 
 static void populate_event_properties (GListStore *store,
-                                       GdkEvent   *event);
+                                       GdkEvent   *event,
+                                       EventTrace *traces,
+                                       gsize       n_traces);
 
 static void
 recording_selected (GtkSingleSelection   *selection,
@@ -765,10 +771,13 @@ recording_selected (GtkSingleSelection   *selection,
   else if (GTK_INSPECTOR_IS_EVENT_RECORDING (recording))
     {
       GdkEvent *event;
+      EventTrace *traces;
+      gsize n_traces;
 
       gtk_stack_set_visible_child_name (GTK_STACK (recorder->recording_data_stack), "event_data");
 
       event = gtk_inspector_event_recording_get_event (GTK_INSPECTOR_EVENT_RECORDING (recording));
+      traces = gtk_inspector_event_recording_get_traces (GTK_INSPECTOR_EVENT_RECORDING (recording), &n_traces);
 
       for (guint pos = gtk_single_selection_get_selected (selection) - 1; pos > 0; pos--)
         {
@@ -785,7 +794,7 @@ recording_selected (GtkSingleSelection   *selection,
             }
         }
 
-      populate_event_properties (recorder->event_properties, event);
+      populate_event_properties (recorder->event_properties, event, traces, n_traces);
 
       if (recorder->highlight_sequences)
         selected_sequence = gdk_event_get_event_sequence (event);
@@ -1738,7 +1747,9 @@ scroll_unit_name (GdkScrollUnit unit)
 
 static void
 populate_event_properties (GListStore *store,
-                           GdkEvent   *event)
+                           GdkEvent   *event,
+                           EventTrace *traces,
+                           gsize       n_traces)
 {
   GdkEventType type;
   GdkDevice *device;
@@ -1909,6 +1920,29 @@ populate_event_properties (GListStore *store,
           g_free (history);
         }
     }
+
+  if (n_traces > 0)
+    {
+      GString *s = g_string_new ("");
+      const char *phase_name[] = { "", "↘", "↙", "⊙" };
+
+      add_text_row (store, "Target", "%s", g_type_name (traces[0].target_type));
+
+      for (gsize i = 0; i < n_traces; i++)
+        {
+          EventTrace *t = &traces[i];
+
+          g_string_append_printf (s, "%s %s %s %s\n",
+                                  phase_name[t->phase],
+                                  g_type_name (t->widget_type),
+                                  g_type_name (t->controller_type),
+                                  t->handled ? "✓" : "");
+          g_string_append_c (s, '\n');
+        }
+
+      add_text_row (store, "Trace", "%s", s->str);
+      g_string_free (s, TRUE);
+    }
 }
 
 static GskRenderNode *
@@ -2033,22 +2067,13 @@ render_node_clip (GtkButton            *button,
 {
   GskRenderNode *node;
   GdkClipboard *clipboard;
-  GBytes *bytes;
-  GdkContentProvider *content;
 
   node = get_selected_node (recorder);
   if (node == NULL)
     return;
 
-  bytes = gsk_render_node_serialize (node);
-  content = gdk_content_provider_new_for_bytes ("text/plain;charset=utf-8", bytes);
-
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (recorder));
-
-  gdk_clipboard_set_content (clipboard, content);
-
-  g_object_unref (content);
-  g_bytes_unref (bytes);
+  gdk_clipboard_set (clipboard, GSK_TYPE_RENDER_NODE, node);
 }
 
 static void
@@ -2450,6 +2475,7 @@ gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
     {
       recorder->recording = gtk_inspector_start_recording_new ();
       recorder->start_time = 0;
+      recorder->record_events = TRUE;
       gtk_inspector_recorder_add_recording (recorder, recorder->recording);
     }
   else
@@ -2460,10 +2486,29 @@ gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
   g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_RECORDING]);
 }
 
+void
+gtk_inspector_recorder_record_single_frame (GtkInspectorRecorder *recorder)
+{
+  if (gtk_inspector_recorder_is_recording (recorder))
+    return;
+
+  recorder->recording = gtk_inspector_start_recording_new ();
+  recorder->start_time = 0;
+  recorder->record_events = FALSE;
+  recorder->stop_after_next_frame = TRUE;
+  gtk_inspector_recorder_add_recording (recorder, recorder->recording);
+}
+
 gboolean
 gtk_inspector_recorder_is_recording (GtkInspectorRecorder *recorder)
 {
   return recorder->recording != NULL;
+}
+
+static gboolean
+gtk_inspector_recorder_is_recording_events (GtkInspectorRecorder *recorder)
+{
+  return recorder->recording != NULL && recorder->record_events;
 }
 
 void
@@ -2503,6 +2548,18 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                                   node);
   gtk_inspector_recorder_add_recording (recorder, recording);
   g_object_unref (recording);
+
+  if (recorder->stop_after_next_frame)
+    {
+      GtkSingleSelection *selection;
+
+      recorder->stop_after_next_frame = FALSE;
+      gtk_inspector_recorder_set_recording (recorder, FALSE);
+
+      selection = GTK_SINGLE_SELECTION (gtk_list_view_get_model (GTK_LIST_VIEW (recorder->recordings_list)));
+      gtk_single_selection_set_selected (selection, g_list_model_get_n_items (G_LIST_MODEL (selection)) - 1);
+      render_node_clip (NULL, recorder);
+    }
 }
 
 void
@@ -2514,7 +2571,7 @@ gtk_inspector_recorder_record_event (GtkInspectorRecorder *recorder,
   GdkFrameClock *frame_clock;
   gint64 frame_time;
 
-  if (!gtk_inspector_recorder_is_recording (recorder))
+  if (!gtk_inspector_recorder_is_recording_events (recorder))
     return;
 
   frame_clock = gtk_widget_get_frame_clock (widget);
@@ -2532,7 +2589,30 @@ gtk_inspector_recorder_record_event (GtkInspectorRecorder *recorder,
 
   recording = gtk_inspector_event_recording_new (frame_time, event);
   gtk_inspector_recorder_add_recording (recorder, recording);
+
+  recorder->last_event_recording = (GtkInspectorEventRecording *) recording;
+
   g_object_unref (recording);
+}
+
+void
+gtk_inspector_recorder_trace_event (GtkInspectorRecorder *recorder,
+                                    GdkEvent             *event,
+                                    GtkPropagationPhase   phase,
+                                    GtkWidget            *widget,
+                                    GtkEventController   *controller,
+                                    GtkWidget            *target,
+                                    gboolean              handled)
+{
+  GtkInspectorEventRecording *recording = recorder->last_event_recording;
+
+  if (!gtk_inspector_recorder_is_recording_events (recorder))
+    return;
+
+  if (recording == NULL || recording->event != event)
+    return;
+
+  gtk_inspector_event_recording_add_trace (recording, phase, widget, controller, target, handled);
 }
 
 void

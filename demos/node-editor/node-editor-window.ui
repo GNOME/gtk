@@ -23,6 +23,10 @@
   <menu id="extra_menu">
     <section>
       <item>
+        <attribute name="label" translatable="yes">Paste _Node</attribute>
+        <attribute name="action">paste-node</attribute>
+      </item>
+      <item>
         <attribute name="label" translatable="yes">Assisted _Edit</attribute>
         <attribute name="action">smart-edit</attribute>
       </item>
