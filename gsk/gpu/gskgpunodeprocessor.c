@@ -4135,30 +4135,18 @@ gsk_gpu_node_processor_set_scissor (GskGpuNodeProcessor         *self,
 }
 
 static void
-gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
-                               GskGpuImage           *target,
-                               cairo_region_t        *clip,
-                               GskRenderNode         *node,
-                               GskRenderPassType      pass_type)
+gsk_gpu_node_processor_cull (GskGpuNodeProcessor *self,
+                             GskGpuFirstNodeInfo *info,
+                             cairo_region_t      *clip,
+                             GskRenderNode       *node)
 {
-  GskGpuFirstNodeInfo info = {
-    .target = target,
-    .pass_type = pass_type,
-  };
-  int i, n, best, best_size;
   cairo_rectangle_int_t rect;
-  gboolean do_culling;
+  int i, n, best, best_size;
 
-  cairo_region_get_extents (clip, &info.extents);
-  info.whole_area = cairo_region_contains_rectangle (clip, &info.extents) == CAIRO_REGION_OVERLAP_IN;
-  info.min_occlusion_pixels = gsk_gpu_image_get_width (target) * gsk_gpu_image_get_height (target) *
-                              MIN_PERCENTAGE_FOR_OCCLUSION_PASS / 100;
-  info.min_occlusion_pixels = MAX (info.min_occlusion_pixels, MIN_PIXELS_FOR_OCCLUSION_PASS);
+  if (!gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_OCCLUSION_CULLING))
+    return;
 
-  do_culling = gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_OCCLUSION_CULLING);
-
-  while (do_culling &&
-         (n = cairo_region_num_rectangles (clip)) > 0)
+  while ((n = cairo_region_num_rectangles (clip)) > 0)
     {
       best = -1;
       best_size = 0;
@@ -4175,17 +4163,18 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
       cairo_region_get_rectangle (clip, best, &rect);
 
       if (best_size < MIN_PIXELS_FOR_OCCLUSION_PASS)
-        break;
+        return;
 
       gsk_gpu_node_processor_set_scissor (self, &rect);
 
       if (!gsk_gpu_node_processor_add_first_node (self,
-                                                  &info,
+                                                  info,
                                                   node))
         {
-          gsk_gpu_first_node_begin_rendering (self, &info, GSK_VEC4_TRANSPARENT);
+          gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
           gsk_gpu_node_processor_add_node (self, node);
-          do_culling = FALSE;
+          cairo_region_subtract_rectangle (clip, &self->scissor);
+          return;
         }
       else if (GSK_DEBUG_CHECK (OCCLUSION))
         {
@@ -4201,6 +4190,30 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
 
       cairo_region_subtract_rectangle (clip, &self->scissor);
     }
+}
+
+
+static void
+gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
+                               GskGpuImage           *target,
+                               cairo_region_t        *clip,
+                               GskRenderNode         *node,
+                               GskRenderPassType      pass_type)
+{
+  GskGpuFirstNodeInfo info = {
+    .target = target,
+    .pass_type = pass_type,
+  };
+  cairo_rectangle_int_t rect;
+  int i;
+
+  cairo_region_get_extents (clip, &info.extents);
+  info.whole_area = cairo_region_contains_rectangle (clip, &info.extents) == CAIRO_REGION_OVERLAP_IN;
+  info.min_occlusion_pixels = gsk_gpu_image_get_width (target) * gsk_gpu_image_get_height (target) *
+                              MIN_PERCENTAGE_FOR_OCCLUSION_PASS / 100;
+  info.min_occlusion_pixels = MAX (info.min_occlusion_pixels, MIN_PIXELS_FOR_OCCLUSION_PASS);
+
+  gsk_gpu_node_processor_cull (self, &info, clip, node);
 
   for (i = 0; i < cairo_region_num_rectangles (clip); i++) 
     {
