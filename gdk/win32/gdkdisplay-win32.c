@@ -425,7 +425,7 @@ gdk_win32_display_get_next_serial (GdkDisplay *display)
 }
 
 static LRESULT CALLBACK
-inner_display_change_window_procedure (HWND   hwnd,
+inner_display_change_hwnd_procedure (HWND   hwnd,
                                        UINT   message,
                                        WPARAM wparam,
                                        LPARAM lparam)
@@ -452,7 +452,7 @@ inner_display_change_window_procedure (HWND   hwnd,
 }
 
 static LRESULT CALLBACK
-display_change_window_procedure (HWND   hwnd,
+display_change_hwnd_procedure (HWND   hwnd,
                                  UINT   message,
                                  WPARAM wparam,
                                  LPARAM lparam)
@@ -464,7 +464,7 @@ display_change_window_procedure (HWND   hwnd,
 			     debug_indent, "",
 			     _gdk_win32_message_to_string (message), hwnd));
   debug_indent += 2;
-  retval = inner_display_change_window_procedure (hwnd, message, wparam, lparam);
+  retval = inner_display_change_hwnd_procedure (hwnd, message, wparam, lparam);
   debug_indent -= 2;
 
   GDK_NOTE (EVENTS, g_print (" => %" G_GINT64_FORMAT "%s", (gint64) retval, (debug_indent == 0 ? "\n" : "")));
@@ -472,7 +472,7 @@ display_change_window_procedure (HWND   hwnd,
   return retval;
 }
 
-/* Use a hidden window to be notified about display changes */
+/* Use a hidden HWND to be notified about display changes */
 static void
 register_display_change_notification (GdkDisplay *display)
 {
@@ -481,7 +481,7 @@ register_display_change_notification (GdkDisplay *display)
   ATOM klass;
 
   wclass.lpszClassName = L"GdkDisplayChange";
-  wclass.lpfnWndProc = display_change_window_procedure;
+  wclass.lpfnWndProc = display_change_hwnd_procedure;
   wclass.hInstance = this_module ();
   wclass.style = CS_OWNDC;
 
@@ -1146,7 +1146,7 @@ gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
       else
         hdc = GetDC (NULL);
 
-      /* in case we can't get the DC for the window, return 1 for the scale */
+      /* in case we can't get the DC for the HWND, return 1 for the scale */
       if (hdc == NULL)
         return 1;
 
@@ -1155,7 +1155,7 @@ gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
 
       /*
        * If surface is not NULL, the HDC should not be released, since surfaces have
-       * Win32 windows created with CS_OWNDC
+       * Win32 HWNDs created with CS_OWNDC
        */
       if (surface == NULL)
         ReleaseDC (NULL, hdc);
