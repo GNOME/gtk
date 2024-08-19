@@ -63,23 +63,23 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext  *draw_context,
   int scale;
   cairo_t *cr;
   int width, height;
-  RECT queued_window_rect;
+  RECT queued_hwnd_rect;
 
   surface = gdk_draw_context_get_surface (draw_context);
   scale = gdk_surface_get_scale_factor (surface);
 
-  queued_window_rect = gdk_win32_surface_handle_queued_move_resize (draw_context);
+  queued_hwnd_rect = gdk_win32_surface_handle_queued_move_resize (draw_context);
 
-  width = queued_window_rect.right - queued_window_rect.left;
-  height = queued_window_rect.bottom - queued_window_rect.top;
+  width = queued_hwnd_rect.right - queued_hwnd_rect.left;
+  height = queued_hwnd_rect.bottom - queued_hwnd_rect.top;
   width = MAX (width, 1);
   height = MAX (height, 1);
 
-  self->window_surface = create_cairo_surface_for_surface (surface, scale);
+  self->hwnd_surface = create_cairo_surface_for_surface (surface, scale);
 
   if (!self->double_buffered)
-    /* Non-double-buffered windows paint on the window surface directly */
-    self->paint_surface = cairo_surface_reference (self->window_surface);
+    /* Non-double-buffered GDK surfaces paint on the window surface directly */
+    self->paint_surface = cairo_surface_reference (self->hwnd_surface);
   else
     {
       if (width > self->db_width ||
@@ -92,13 +92,13 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext  *draw_context,
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           self->db_surface = gdk_surface_create_similar_surface (surface,
-                                                                 cairo_surface_get_content (self->window_surface),
+                                                                 cairo_surface_get_content (self->hwnd_surface),
                                                                  self->db_width,
                                                                  self->db_height);
 G_GNUC_END_IGNORE_DEPRECATIONS
         }
 
-      /* Double-buffered windows paint on a DB surface.
+      /* Double-buffered GDK surfaces paint on a DB surface.
        * Due to performance concerns we don't recreate it unless forced to.
        */
       self->paint_surface = cairo_surface_reference (self->db_surface);
@@ -128,19 +128,19 @@ gdk_win32_cairo_context_end_frame (GdkDrawContext *draw_context,
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
 
-  /* The code to resize double-buffered windows immediately
+  /* The code to resize double-buffered GDK surfaces immediately
    * before blitting the buffer contents onto them used
    * to be here.
    */
 
-  /* For double-buffered windows we need to blit
-   * the DB buffer contents into the window itself.
+  /* For double-buffered GDK surfaces we need to blit
+   * the DB buffer contents into the GDK surface itself.
    */
   if (self->double_buffered)
     {
       cairo_t *cr;
 
-      cr = cairo_create (self->window_surface);
+      cr = cairo_create (self->hwnd_surface);
 
       cairo_set_source_surface (cr, self->paint_surface, 0, 0);
       gdk_cairo_region (cr, painted);
@@ -152,10 +152,10 @@ gdk_win32_cairo_context_end_frame (GdkDrawContext *draw_context,
       cairo_destroy (cr);
     }
 
-  cairo_surface_flush (self->window_surface);
+  cairo_surface_flush (self->hwnd_surface);
 
   g_clear_pointer (&self->paint_surface, cairo_surface_destroy);
-  g_clear_pointer (&self->window_surface, cairo_surface_destroy);
+  g_clear_pointer (&self->hwnd_surface, cairo_surface_destroy);
 }
 
 static void
