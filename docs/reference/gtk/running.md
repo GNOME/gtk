@@ -358,6 +358,9 @@ disable certain features.
 `offload`
 : Disable graphics offload to subsurfaces
 
+`color-mgmt`
+: Disable color management
+
 ### `GDK_GL_DISABLE`
 
 This variable can be set to a list of values, which cause GDK to

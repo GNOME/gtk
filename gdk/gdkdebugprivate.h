@@ -63,9 +63,10 @@ typedef enum {
   GDK_FEATURE_VULKAN           = 1 << 6,
   GDK_FEATURE_DMABUF           = 1 << 7,
   GDK_FEATURE_OFFLOAD          = 1 << 8,
+  GDK_FEATURE_COLOR_MANAGEMENT = 1 << 9,
 } GdkFeatures;
 
-#define GDK_ALL_FEATURES ((1 << 9) - 1)
+#define GDK_ALL_FEATURES ((1 << 10) - 1)
 
 extern guint _gdk_debug_flags;
 
