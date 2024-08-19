@@ -86,8 +86,6 @@ cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN  hrgn,
 void    _gdk_win32_adjust_client_rect   (GdkSurface *window,
                                          RECT      *RECT);
 
-void       _gdk_push_modal_window   (GdkSurface *window);
-void       _gdk_remove_modal_window (GdkSurface *window);
 GdkSurface *_gdk_modal_current       (void);
 gboolean   _gdk_modal_blocked       (GdkSurface *window);
 
