@@ -52,10 +52,10 @@ struct _GdkWin32Drag
    */
   GdkSurface      *grab_surface;
 
-  /* The window currently under cursor.
+  /* The HWND currently under cursor.
    * Will be INVALID_HANDLE_VALUE (not NULL!) if it is not known
    */
-  HWND             dest_window;
+  HWND             dest_hwnd;
 
   /* The surface that we move along with the cursor to indicate
    * what exactly is being dragged.
@@ -91,9 +91,9 @@ struct _GdkWin32DragClass
 };
 
 
-gpointer _gdk_win32_dnd_thread_main                      (gpointer         data);
+gpointer _gdk_win32_dnd_thread_main         (gpointer         data);
 
-GdkDrag *_gdk_win32_find_drag_for_dest_window     (HWND             dest_window);
+GdkDrag *_gdk_win32_find_drag_for_dest_hwnd (HWND             dest_hwnd);
 
 
 G_END_DECLS
