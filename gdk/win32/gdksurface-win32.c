@@ -989,7 +989,7 @@ gdk_win32_surface_move_resize_internal (GdkSurface *surface,
 {
   /* We ignore changes to the surface being moved or resized by the
      user, as we don't want to fight the user */
-  if (GDK_SURFACE_HWND (surface) == _modal_move_resize_window)
+  if (GDK_SURFACE_HWND (surface) == _modal_move_resize_hwnd)
     goto out;
 
   if (with_move && (width < 0 && height < 0))
