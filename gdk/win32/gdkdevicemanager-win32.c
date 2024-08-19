@@ -45,8 +45,9 @@
 #define DEBUG_WINTAB 1		/* Verbose debug messages enabled */
 #define TWOPI (2 * G_PI)
 
+/* TODO: get rid of these global variables */
 static GList     *wintab_contexts = NULL;
-static GdkSurface *wintab_window = NULL;
+static GdkSurface *wintab_surface = NULL;
 extern int        _gdk_input_ignore_core;
 
 typedef UINT (WINAPI *t_WTInfoA) (UINT a, UINT b, LPVOID c);
@@ -426,10 +427,10 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
   GDK_NOTE (INPUT, g_print ("NDEVICES: %d, NCURSORS: %d\n",
 			    ndevices, ncursors));
 #endif
-  /* Create a dummy window to receive wintab events */
-  wintab_window = gdk_win32_drag_surface_new (display);
+  /* Create a dummy surface to receive wintab events */
+  wintab_surface = gdk_win32_drag_surface_new (display);
 
-  g_object_ref (wintab_window);
+  g_object_ref (wintab_surface);
 
   for (devix = 0; devix < ndevices; devix++)
     {
@@ -492,7 +493,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 			print_lc(&lc)));
 #endif
       hctx = g_new (HCTX, 1);
-      if ((*hctx = (*p_WTOpenA) (GDK_SURFACE_HWND (wintab_window), &lc, TRUE)) == NULL)
+      if ((*hctx = (*p_WTOpenA) (GDK_SURFACE_HWND (wintab_surface), &lc, TRUE)) == NULL)
         {
           g_warning ("gdk_input_wintab_init: WTOpen failed");
           return;
@@ -653,7 +654,7 @@ wintab_init_check (GdkDeviceManagerWin32 *device_manager)
 /* Only initialize Wintab after the default display is set for
  * the first time. WTOpenA() executes code beyond our control,
  * and it can cause messages to be sent to the application even
- * before a window is opened. GDK has to be in a fit state to
+ * before a surface HWND is opened. GDK has to be in a fit state to
  * handle them when they come.
  *
  * https://bugzilla.gnome.org/show_bug.cgi?id=774379
@@ -798,7 +799,7 @@ _gdk_wintab_set_tablet_active (void)
   HCTX *hctx;
 
   /* Bring the contexts to the top of the overlap order when one of the
-   * application's windows is activated */
+   * application's HWNDs is activated */
 
   if (!wintab_contexts)
     return; /* No tablet devices found, or Wintab not initialized yet */
@@ -908,7 +909,7 @@ gdk_device_manager_find_wintab_device (GdkDeviceManagerWin32 *device_manager,
 GdkEvent *
 gdk_wintab_make_event (GdkDisplay *display,
                        MSG        *msg,
-                       GdkSurface  *window)
+                       GdkSurface *surface)
 {
   GdkDeviceManagerWin32 *device_manager;
   GdkDeviceWintab *source_device = NULL;
@@ -932,21 +933,21 @@ gdk_wintab_make_event (GdkDisplay *display,
    */
   static guint button_map[8] = {0, 1, 4, 5, 2, 3, 6, 7};
 
-  if (window != wintab_window)
+  if (surface != wintab_surface)
     {
-      g_warning ("gdk_wintab_make_event: not wintab_window?");
+      g_warning ("gdk_wintab_make_event: not wintab_surface?");
       return NULL;
     }
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
-  window = gdk_device_get_surface_at_position (device_manager->core_pointer, &x, &y);
+  surface = gdk_device_get_surface_at_position (device_manager->core_pointer, &x, &y);
 
-  if (window)
-    g_object_ref (window);
+  if (surface)
+    g_object_ref (surface);
 
   GDK_NOTE (EVENTS_OR_INPUT,
-	    g_print ("gdk_wintab_make_event: window=%p %+g%+g\n",
-               window ? GDK_SURFACE_HWND (window) : NULL, x, y));
+	    g_print ("gdk_wintab_make_event: surface=%p %+g%+g\n",
+               surface ? GDK_SURFACE_HWND (surface) : NULL, x, y));
 
   if (msg->message == WT_PACKET || msg->message == WT_CSRCHANGE)
     {
@@ -1002,7 +1003,7 @@ gdk_wintab_make_event (GdkDisplay *display,
       if (source_device == NULL)
 	return NULL;
 
-      /* Don't produce any button or motion events while a window is being
+      /* Don't produce any button or motion events while a surface is being
        * moved or resized, see bug #151090.
        */
       if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
@@ -1015,12 +1016,12 @@ gdk_wintab_make_event (GdkDisplay *display,
 
       if (last_grab && last_grab->surface)
         {
-          g_object_unref (window);
+          g_object_unref (surface);
 
-          window = g_object_ref (last_grab->surface);
+          surface = g_object_ref (last_grab->surface);
         }
 
-      if (window == NULL)
+      if (surface == NULL)
         {
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... is root\n"));
           return NULL;
@@ -1086,7 +1087,7 @@ gdk_wintab_make_event (GdkDisplay *display,
           axes = g_new (double, GDK_AXIS_LAST);
 
           _gdk_device_wintab_translate_axes (source_device,
-                                             window,
+                                             surface,
                                              axes,
                                              &event_x,
                                              &event_y);
@@ -1098,7 +1099,7 @@ gdk_wintab_make_event (GdkDisplay *display,
                             | GDK_BUTTON5_MASK));
 
           event = gdk_button_event_new (event_type,
-                                        window,
+                                        surface,
                                         device_manager->core_pointer,
                                         NULL,
                                         _gdk_win32_get_next_tick (msg->time),
@@ -1120,7 +1121,7 @@ gdk_wintab_make_event (GdkDisplay *display,
         {
           axes = g_new (double, GDK_AXIS_LAST);
           _gdk_device_wintab_translate_axes (source_device,
-                                             window,
+                                             surface,
                                              axes,
                                              &event_x,
                                              &event_y);
@@ -1131,7 +1132,7 @@ gdk_wintab_make_event (GdkDisplay *display,
                             | GDK_BUTTON3_MASK | GDK_BUTTON4_MASK
                             | GDK_BUTTON5_MASK));
 
-          event = gdk_motion_event_new (window,
+          event = gdk_motion_event_new (surface,
                                         device_manager->core_pointer,
                                         NULL,
                                         _gdk_win32_get_next_tick (msg->time),

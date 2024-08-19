@@ -61,10 +61,10 @@ _gdk_device_virtual_set_active (GdkDevice *device,
 
 static void
 gdk_device_virtual_set_surface_cursor (GdkDevice  *device,
-                                       GdkSurface *window,
+                                       GdkSurface *surface,
                                        GdkCursor  *cursor)
 {
-  GdkDisplay *display = gdk_surface_get_display (window);
+  GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWin32HCursor *win32_hcursor = NULL;
 
   if (cursor == NULL)
@@ -74,39 +74,39 @@ gdk_device_virtual_set_surface_cursor (GdkDevice  *device,
     win32_hcursor = gdk_win32_display_get_win32hcursor (GDK_WIN32_DISPLAY (display), cursor);
 
   /* This is correct because the code up the stack already
-   * checked that cursor is currently inside this window,
+   * checked that cursor is currently inside this surface,
    * and wouldn't have called this function otherwise.
    */
   if (win32_hcursor != NULL)
     SetCursor (gdk_win32_hcursor_get_handle (win32_hcursor));
 
-  g_set_object (&GDK_WIN32_SURFACE (window)->cursor, win32_hcursor);
+  g_set_object (&GDK_WIN32_SURFACE (surface)->cursor, win32_hcursor);
 }
 
 void
 gdk_device_virtual_query_state (GdkDevice        *device,
-				GdkSurface        *window,
-				GdkSurface       **child_window,
-				double           *win_x,
-				double           *win_y,
-				GdkModifierType  *mask)
+                                GdkSurface       *surface,
+                                GdkSurface      **child_surface,
+                                double           *win_x,
+                                double           *win_y,
+                                GdkModifierType  *mask)
 {
   GdkDeviceVirtual *virtual = GDK_DEVICE_VIRTUAL (device);
 
   _gdk_device_win32_query_state (virtual->active_device,
-                                 window, child_window,
+                                 surface, child_surface,
                                  win_x, win_y,
                                  mask);
 }
 
 static GdkGrabStatus
 gdk_device_virtual_grab (GdkDevice    *device,
-			 GdkSurface    *window,
-			 gboolean      owner_events,
-			 GdkEventMask  event_mask,
-			 GdkSurface    *confine_to,
-			 GdkCursor    *cursor,
-			 guint32       time_)
+                         GdkSurface   *surface,
+                         gboolean      owner_events,
+                         GdkEventMask  event_mask,
+                         GdkSurface   *confine_to,
+                         GdkCursor    *cursor,
+                         guint32       time_)
 {
   if (gdk_device_get_source (device) != GDK_SOURCE_KEYBOARD)
     {
@@ -124,7 +124,7 @@ gdk_device_virtual_grab (GdkDevice    *device,
       else
         SetCursor (LoadCursor (NULL, IDC_ARROW));
 
-      SetCapture (GDK_SURFACE_HWND (window));
+      SetCapture (GDK_SURFACE_HWND (surface));
     }
 
   return GDK_GRAB_SUCCESS;

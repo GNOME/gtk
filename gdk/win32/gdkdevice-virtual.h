@@ -49,8 +49,8 @@ void _gdk_device_virtual_set_active (GdkDevice *device,
 
 void
 gdk_device_virtual_query_state (GdkDevice        *device,
-                                GdkSurface       *window,
-                                GdkSurface      **child_window,
+                                GdkSurface       *surface,
+                                GdkSurface      **child_surface,
                                 double           *win_x,
                                 double           *win_y,
                                 GdkModifierType  *mask);
