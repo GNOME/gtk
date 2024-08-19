@@ -1632,16 +1632,38 @@ edit_action_cb (GtkWidget  *widget,
 }
 
 static void
+text_received (GObject      *source,
+               GAsyncResult *result,
+               gpointer      data)
+{
+  GdkClipboard *clipboard = GDK_CLIPBOARD (source);
+  NodeEditorWindow *self = NODE_EDITOR_WINDOW (data);
+  char *text;
+
+  text = gdk_clipboard_read_text_finish (clipboard, result, NULL);
+  if (text)
+    {
+      GtkTextBuffer *buffer;
+      GtkTextIter start, end;
+
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->text_view));
+      gtk_text_buffer_begin_user_action (buffer);
+      gtk_text_buffer_get_bounds (buffer, &start, &end);
+      gtk_text_buffer_delete (buffer, &start, &end);
+      gtk_text_buffer_insert (buffer, &start, text, -1);
+      gtk_text_buffer_end_user_action (buffer);
+      g_free (text);
+    }
+}
+
+static void
 paste_node_cb (GtkWidget  *widget,
                const char *action_name,
                GVariant   *parameter)
 {
-  NodeEditorWindow *self = NODE_EDITOR_WINDOW (widget);
-  GtkTextBuffer *buffer;
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (widget);
 
-  buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->text_view));
-  gtk_text_buffer_set_text (buffer, "", 0);
-  gtk_text_buffer_paste_clipboard (buffer, gtk_widget_get_clipboard (widget), NULL, TRUE);
+  gdk_clipboard_read_text_async (clipboard, NULL, text_received, widget);
 }
 
 static void
