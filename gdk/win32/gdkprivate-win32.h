@@ -168,7 +168,7 @@ typedef enum {
 /* Non-zero while a modal sizing, moving, or dnd operation is in progress */
 extern GdkWin32ModalOpKind _modal_operation_in_progress;
 
-extern HWND             _modal_move_resize_window;
+extern HWND             _modal_move_resize_hwnd;
 
 void  _gdk_win32_begin_modal_call (GdkWin32ModalOpKind kind);
 void  _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind);
