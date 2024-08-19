@@ -36,7 +36,7 @@ static VkResult
 gdk_win32_vulkan_context_create_surface (GdkVulkanContext *context,
                                          VkSurfaceKHR     *surface)
 {
-  GdkSurface *window = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
+  GdkSurface *gdk_surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
   VkWin32SurfaceCreateInfoKHR info;
   VkResult result;
@@ -45,7 +45,7 @@ gdk_win32_vulkan_context_create_surface (GdkVulkanContext *context,
   info.pNext = NULL;
   info.flags = 0;
   info.hinstance = this_module ();
-  info.hwnd = GDK_SURFACE_HWND (window);
+  info.hwnd = GDK_SURFACE_HWND (gdk_surface);
 
   result = GDK_VK_CHECK (vkCreateWin32SurfaceKHR,
                          gdk_vulkan_context_get_instance (context),
