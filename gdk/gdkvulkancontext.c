@@ -1626,10 +1626,10 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   gboolean have_debug_report = FALSE;
   VkResult res;
 
-  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_VULKAN_DISABLE)
+  if (!gdk_has_feature (GDK_FEATURE_VULKAN))
     {
       g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                           _("Vulkan support disabled via GDK_DEBUG"));
+                           _("Vulkan support disabled via GDK_DISABLE"));
       return FALSE;
     }
 

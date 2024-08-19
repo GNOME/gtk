@@ -223,35 +223,14 @@ A number of options affect behavior instead of logging:
 : Force graphics offload for all textures, even when slower. This allows
   to debug offloading in the absence of dmabufs.
 
-`gl-disable`
-: Disable OpenGL support
-
 `gl-no-fractional`
 : Disable fractional scaling for OpenGL.
 
 `gl-debug`
 : Insert debugging information in OpenGL
 
-`gl-disable-gl`
-: Don't allow the use of OpenGL GL API. This forces GLES to be used
-
-`gl-disable-gles`
-: Don't allow the use of OpenGL GLES API. This forces GL to be used
-
 `gl-prefer-gl`
 : Prefer OpenGL over OpenGL ES. This was the default behavior before GTK 4.14.
-
-`gl-egl`
-: Use an EGL context on X11 or Windows
-
-`gl-glx`
-: Use GLX on X11
-
-`gl-wgl`
-: Use WGL on Windows
-
-`vulkan-disable`
-: Disable Vulkan support
 
 `vulkan-validate`
 : Load the Vulkan validation layer, if available
@@ -270,9 +249,6 @@ A number of options affect behavior instead of logging:
 
 `no-vsync`
 : Repaint instantly (uses 100% CPU with animations)
-
-`dmabuf-disable`
-: Disable dmabuf support
 
 The special value `all` can be used to turn on all debug options. The special
 value `help` can be used to obtain a list of all supported debug options.
@@ -352,6 +328,35 @@ a `*`, which means: try all remaining backends. The special value
 `help` can be used to make GDK print out a list of all available
 backends. For more information about selecting backends,
 see the [func@Gdk.DisplayManager.get] function.
+
+### `GDK_DISABLE`
+
+This variable can be set to a list of values, which cause GDK to
+disable certain features.
+
+`gl`
+: Disable OpenGL support
+
+`gl-api`
+: Don't allow the use of OpenGL GL API. This forces GLES to be used
+
+`gles-api`
+: Don't allow the use of OpenGL GLES API. This forces GL to be used
+
+`egl`
+: Don't allow the use of an EGL context
+
+`glx`
+: Don't allow the use of GLX
+
+`wgl`
+: Don't allow the use of WGL
+
+`vulkan`
+: Disable Vulkan support
+
+`dmabuf`
+: Disable dmabuf support
 
 ### `GDK_GL_DISABLE`
 

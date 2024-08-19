@@ -1328,31 +1328,28 @@ gdk_gl_context_is_api_allowed (GdkGLContext  *self,
                                GError       **error)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
-  GdkDebugFlags flags;
   GdkGLAPI allowed_apis;
 
   allowed_apis = priv->allowed_apis;
 
-  flags = gdk_display_get_debug_flags (gdk_gl_context_get_display (self));
-
-  if (flags & GDK_DEBUG_GL_DISABLE_GLES)
+  if (!gdk_has_feature (GDK_FEATURE_GLES_API))
     {
       if (api == GDK_GL_API_GLES)
         {
           g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("OpenGL ES disabled via GDK_DEBUG"));
+                               _("OpenGL ES API disabled via GDK_DISABLE"));
           return FALSE;
         }
 
       allowed_apis &= ~GDK_GL_API_GLES;
     }
 
-  if (flags & GDK_DEBUG_GL_DISABLE_GL)
+  if (!gdk_has_feature (GDK_FEATURE_GL_API))
     {
       if (api == GDK_GL_API_GL)
         {
           g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("OpenGL disabled via GDK_DEBUG"));
+                               _("OpenGL API disabled via GDK_DISABLE"));
           return FALSE;
         }
 
@@ -2154,17 +2151,30 @@ gboolean
 gdk_gl_backend_can_be_used (GdkGLBackend   backend_type,
                             GError       **error)
 {
-  if (the_gl_backend_type == GDK_GL_NONE ||
-      the_gl_backend_type == backend_type)
-    return TRUE;
+  if (the_gl_backend_type != GDK_GL_NONE &&
+      the_gl_backend_type != backend_type)
+    {
+      g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                   /* translators: This is about OpenGL backend names, like
+                    * "Trying to use X11 GLX, but EGL is already in use"
+                    */
+                   _("Trying to use %s, but %s is already in use"),
+                   gl_backend_names[backend_type],
+                   gl_backend_names[the_gl_backend_type]);
+      return FALSE;
+    }
 
-  g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-               /* translators: This is about OpenGL backend names, like
-                * "Trying to use X11 GLX, but EGL is already in use" */
-               _("Trying to use %s, but %s is already in use"),
-               gl_backend_names[backend_type],
-               gl_backend_names[the_gl_backend_type]);
-  return FALSE;
+  if ((backend_type == GDK_GL_EGL && !gdk_has_feature (GDK_FEATURE_EGL)) ||
+      (backend_type == GDK_GL_GLX && !gdk_has_feature (GDK_FEATURE_GLX)) ||
+      (backend_type == GDK_GL_WGL && !gdk_has_feature (GDK_FEATURE_WGL)))
+    {
+      g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                   _("Trying to use %s, but it is disabled via GDK_DISABLE"),
+                   gl_backend_names[backend_type]);
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 /*<private>

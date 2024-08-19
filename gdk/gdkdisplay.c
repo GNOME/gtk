@@ -1309,10 +1309,10 @@ gdk_display_create_vulkan_context (GdkDisplay  *self,
   g_return_val_if_fail (surface == NULL || GDK_IS_SURFACE (surface), NULL);
   g_return_val_if_fail (error == NULL || *error == NULL, NULL);
 
-  if (gdk_display_get_debug_flags (self) & GDK_DEBUG_VULKAN_DISABLE)
+  if (!gdk_has_feature (GDK_FEATURE_VULKAN))
     {
       g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                           _("Vulkan support disabled via GDK_DEBUG"));
+                           _("Vulkan support disabled via GDK_DISABLE"));
       return NULL;
     }
 
@@ -1362,11 +1362,11 @@ gdk_display_init_gl (GdkDisplay *self)
 
   before = GDK_PROFILER_CURRENT_TIME;
 
-  if (gdk_display_get_debug_flags (self) & GDK_DEBUG_GL_DISABLE)
+  if (!gdk_has_feature (GDK_FEATURE_OPENGL))
     {
       g_set_error_literal (&priv->gl_error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,
-                           _("GL support disabled via GDK_DEBUG"));
+                           _("OpenGL support disabled via GDK_DISABLE"));
       return;
     }
 
@@ -2006,7 +2006,7 @@ gdk_display_init_dmabuf (GdkDisplay *self)
   builder = gdk_dmabuf_formats_builder_new ();
 
 #ifdef HAVE_DMABUF
-  if (!GDK_DISPLAY_DEBUG_CHECK (self, DMABUF_DISABLE))
+  if (gdk_has_feature (GDK_FEATURE_DMABUF))
     {
 #ifdef GDK_RENDERING_VULKAN
       gdk_display_add_dmabuf_downloader (self, gdk_vulkan_get_dmabuf_downloader (self, builder));
