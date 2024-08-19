@@ -1160,6 +1160,8 @@ gdk_surface_get_egl_surface (GdkSurface *self)
 {
   GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
 
+  gdk_surface_ensure_egl_surface (self, priv->egl_surface_depth);
+
   return priv->egl_surface;
 }
 
@@ -1171,6 +1173,14 @@ gdk_surface_ensure_egl_surface (GdkSurface     *self,
   GdkDisplay *display = gdk_surface_get_display (self);
 
   g_return_val_if_fail (priv->egl_native_window != NULL, depth);
+
+  if (depth == GDK_MEMORY_NONE)
+    {
+      if (priv->egl_surface_depth == GDK_MEMORY_NONE)
+        depth = GDK_MEMORY_U8;
+      else
+        depth = priv->egl_surface_depth;
+    }
 
   if (priv->egl_surface_depth != depth &&
       priv->egl_surface != NULL &&

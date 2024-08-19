@@ -265,15 +265,6 @@ gsk_gpu_node_processor_color_states_explicit (GskGpuNodeProcessor *self,
                                       alt_premultiplied);
 }
 
-static inline GskGpuColorStates
-gsk_gpu_node_processor_color_states_for_rgba (GskGpuNodeProcessor *self)
-{
-  return gsk_gpu_color_states_create (self->ccs,
-                                      TRUE,
-                                      GDK_COLOR_STATE_SRGB,
-                                      FALSE);
-}
-
 static void
 rect_round_to_pixels (const graphene_rect_t  *src,
                       const graphene_vec2_t  *pixel_scale,
@@ -2845,7 +2836,6 @@ gsk_gpu_node_processor_add_cross_fade_node (GskGpuNodeProcessor *self,
 
   gsk_gpu_cross_fade_op (self->frame,
                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                         gsk_gpu_node_processor_color_states_for_rgba (self),
                          &node->bounds,
                          &self->offset,
                          self->opacity,

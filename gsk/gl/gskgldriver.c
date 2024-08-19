@@ -1842,14 +1842,14 @@ gsk_gl_driver_create_gdk_texture (GskGLDriver     *self,
 
   state = g_new0 (GskGLTextureState, 1);
   state->texture_id = texture_id;
-  state->context = g_object_ref (self->command_queue->context);
-  if (gdk_gl_context_has_feature (self->command_queue->context, GDK_GL_FEATURE_SYNC))
+  state->context = g_object_ref (self->shared_command_queue->context);
+  if (gdk_gl_context_has_feature (self->shared_command_queue->context, GDK_GL_FEATURE_SYNC))
     state->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
   g_hash_table_steal (self->textures, GUINT_TO_POINTER (texture_id));
 
   builder = gdk_gl_texture_builder_new ();
-  gdk_gl_texture_builder_set_context (builder, self->command_queue->context);
+  gdk_gl_texture_builder_set_context (builder, self->shared_command_queue->context);
   gdk_gl_texture_builder_set_id (builder, texture_id);
   gdk_gl_texture_builder_set_format (builder, format);
   gdk_gl_texture_builder_set_width (builder, texture->width);
