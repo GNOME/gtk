@@ -150,6 +150,7 @@ static const GdkDebugKey gdk_feature_keys[] = {
   { "wgl",        GDK_FEATURE_WGL,              "Disable WGL" },
   { "vulkan",     GDK_FEATURE_VULKAN,           "Disable Vulkan support" },
   { "dmabuf",     GDK_FEATURE_DMABUF,           "Disable dmabuf support" },
+  { "offload",    GDK_FEATURE_OFFLOAD,          "Disable graphics offload" },
 };
 
 

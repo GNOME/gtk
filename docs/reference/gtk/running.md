@@ -288,9 +288,6 @@ A number of options affect behavior instead of logging:
 `staging`
 : Use a staging image for texture upload (Vulkan only)
 
-`offload-disable`
-: Disable graphics offload to subsurfaces
-
 `cairo`
 : Overlay error pattern over cairo drawing (finds fallbacks)
 
@@ -357,6 +354,9 @@ disable certain features.
 
 `dmabuf`
 : Disable dmabuf support
+
+`offload`
+: Disable graphics offload to subsurfaces
 
 ### `GDK_GL_DISABLE`
 
