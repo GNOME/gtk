@@ -115,6 +115,7 @@ typedef struct
 } GdkDebugKey;
 
 guint gdk_parse_debug_var (const char        *variable,
+                           const char        *docs,
                            const GdkDebugKey *keys,
                            guint              nkeys);
 

@@ -1776,8 +1776,10 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   supported_features = gdk_gl_context_check_features (context);
   disabled_features = gdk_parse_debug_var ("GDK_GL_DISABLE",
-                                           gdk_gl_feature_keys,
-                                           G_N_ELEMENTS (gdk_gl_feature_keys));
+      "GDK_GL_DISABLE can be set to values which cause GDK to disable\n"
+      "certain OpenGL extensions.\n",
+      gdk_gl_feature_keys,
+      G_N_ELEMENTS (gdk_gl_feature_keys));
 
   priv->features = supported_features & ~disabled_features;
 

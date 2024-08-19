@@ -27,8 +27,11 @@ init_debug_flags (void)
   if (g_once_init_enter (&gsk_debug_flags__set))
     {
       gsk_debug_flags = gdk_parse_debug_var ("GSK_DEBUG",
-                                             gsk_debug_keys,
-                                             G_N_ELEMENTS (gsk_debug_keys));
+          "GSK_DEBUG can be set to values that make GSK print out different\n"
+          "types of debugging information or change the behavior of GSK for\n"
+          "debugging purposes.\n",
+          gsk_debug_keys,
+          G_N_ELEMENTS (gsk_debug_keys));
 
       g_once_init_leave (&gsk_debug_flags__set, TRUE);
     }

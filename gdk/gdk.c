@@ -229,6 +229,7 @@ gdk_ensure_resources (void)
 
 guint
 gdk_parse_debug_var (const char        *variable,
+                     const char        *docs,
                      const GdkDebugKey *keys,
                      guint              nkeys)
 {
@@ -289,6 +290,7 @@ gdk_parse_debug_var (const char        *variable,
         max_width = MAX (max_width, strlen (keys[i].key));
       max_width += 4;
 
+      fprintf (stderr, "%s\n", docs);
       fprintf (stderr, "Supported %s values:\n", variable);
       for (i = 0; i < nkeys; i++) {
         fprintf (stderr, "  %s%*s%s\n", keys[i].key, (int)(max_width - strlen (keys[i].key)), " ", keys[i].help);
@@ -323,12 +325,17 @@ gdk_pre_parse (void)
   gdk_ensure_resources ();
 
   _gdk_debug_flags = gdk_parse_debug_var ("GDK_DEBUG",
-                                          gdk_debug_keys,
-                                          G_N_ELEMENTS (gdk_debug_keys));
+      "GDK_DEBUG can be set to values that make GDK print out different\n"
+      "types of debugging information or change the behavior of GDK for\n"
+      "debugging purposes.\n",
+      gdk_debug_keys,
+      G_N_ELEMENTS (gdk_debug_keys));
 
   disabled_features = gdk_parse_debug_var ("GDK_DISABLE",
-                                           gdk_feature_keys,
-                                           G_N_ELEMENTS (gdk_feature_keys));
+      "GDK_DISABLE can be set to values which cause GDK to disable\n"
+      "certain features.\n",
+      gdk_feature_keys,
+      G_N_ELEMENTS (gdk_feature_keys));
 
   gdk_features = GDK_ALL_FEATURES & ~disabled_features;
 

@@ -1406,8 +1406,9 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   last = n_devices;
 
   skip_features = gdk_parse_debug_var ("GDK_VULKAN_DISABLE",
-                                       gsk_vulkan_feature_keys,
-                                       G_N_ELEMENTS (gsk_vulkan_feature_keys));
+      "GDK_VULKAN_DISABLE can be set to a list of Vulkan features to disable.\n",
+      gsk_vulkan_feature_keys,
+      G_N_ELEMENTS (gsk_vulkan_feature_keys));
   if (skip_features & GDK_VULKAN_FEATURE_YCBCR)
     skip_features |= GDK_VULKAN_FEATURE_DMABUF;
 
