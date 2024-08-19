@@ -60,7 +60,7 @@ GType gdk_device_manager_win32_get_type (void) G_GNUC_CONST;
 void     _gdk_wintab_set_tablet_active (void);
 GdkEvent * gdk_wintab_make_event      (GdkDisplay *display,
                                        MSG        *msg,
-                                       GdkSurface  *window);
+                                       GdkSurface *surface);
 
 G_END_DECLS
 
