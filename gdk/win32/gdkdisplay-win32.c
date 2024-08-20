@@ -38,7 +38,6 @@
 
 #include <dwmapi.h>
 
-#include "gdkwin32langnotification.h"
 #ifdef HAVE_EGL
 # include <epoxy/egl.h>
 #endif
@@ -535,7 +534,7 @@ _gdk_win32_display_open (const char *display_name)
                                       NULL);
   _gdk_device_manager->display = _gdk_display;
 
-  _gdk_win32_lang_notification_init ();
+  gdk_win32_display_lang_notification_init (win32_display);
   _gdk_drag_init ();
 
   _gdk_display->clipboard = gdk_win32_clipboard_new (_gdk_display);
@@ -689,7 +688,7 @@ gdk_win32_display_finalize (GObject *object)
 
   _gdk_win32_display_finalize_cursors (display_win32);
   _gdk_win32_dnd_exit ();
-  _gdk_win32_lang_notification_exit ();
+  gdk_win32_display_lang_notification_exit (display_win32);
 
   g_list_store_remove_all (G_LIST_STORE (display_win32->monitors));
   g_object_unref (display_win32->monitors);
@@ -1173,17 +1172,6 @@ gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
     }
   else
     return 1;
-}
-
-static gboolean
-gdk_win32_display_get_setting (GdkDisplay  *display,
-                               const char *name,
-                               GValue      *value)
-{
-  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_DEFAULT_SETTINGS)
-    return FALSE;
-
-  return _gdk_win32_get_setting (name, value);
 }
 
 #ifndef EGL_PLATFORM_ANGLE_ANGLE

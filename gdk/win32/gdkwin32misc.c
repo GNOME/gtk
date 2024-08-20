@@ -1,6 +1,5 @@
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
- * Copyright (C) 1998-2002 Tor Lillqvist
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,15 +23,240 @@
  */
 
 #include "config.h"
-#include <string.h>
-#include <stdlib.h>
-#include <glib/gprintf.h>
-#include <pango/pangowin32.h>
 
-#include "gdkdisplayprivate.h"
 #include "gdkprivate-win32.h"
 #include "gdkdisplay-win32.h"
-#include "gdkwin32.h"
+
+#include <pango/pangowin32.h>
+
+struct _GdkWin32ALPNSink
+{
+  ITfActiveLanguageProfileNotifySink itf_alpn_sink;
+
+  int ref_count;
+  guint input_locale_is_ime : 1;
+};
+
+typedef struct _GdkWin32ALPNSink GdkWin32ALPNSink;
+
+struct _GdkWin32InputLocaleItems
+{
+  /* Input locale items */
+  HKL input_locale;
+
+  /* COM objects to receive language or text service change notifcations in GdkWin32 */
+  GdkWin32ALPNSink *notification_sink;
+  ITfSource *itf_source;
+  DWORD actlangchangenotify_id;
+};
+
+static GHashTable *handle_ht = NULL;
+
+static guint
+gdk_handle_hash (HANDLE *handle)
+{
+#ifdef _WIN64
+  return ((guint *) handle)[0] ^ ((guint *) handle)[1];
+#else
+  return (guint) *handle;
+#endif
+}
+
+static int
+gdk_handle_equal (HANDLE *a,
+		  HANDLE *b)
+{
+  return (*a == *b);
+}
+
+void
+gdk_win32_handle_table_insert (HANDLE  *handle,
+			       gpointer data)
+{
+  g_return_if_fail (handle != NULL);
+
+  if (!handle_ht)
+    handle_ht = g_hash_table_new ((GHashFunc) gdk_handle_hash,
+				  (GEqualFunc) gdk_handle_equal);
+
+  g_hash_table_insert (handle_ht, handle, data);
+}
+
+void
+gdk_win32_handle_table_remove (HANDLE handle)
+{
+  if (!handle_ht)
+    handle_ht = g_hash_table_new ((GHashFunc) gdk_handle_hash,
+				  (GEqualFunc) gdk_handle_equal);
+
+  g_hash_table_remove (handle_ht, &handle);
+}
+
+gpointer
+gdk_win32_handle_table_lookup_ (HWND handle)
+{
+  gpointer data = NULL;
+
+  if (handle_ht)
+    data = g_hash_table_lookup (handle_ht, &handle);
+
+  return data;
+}
+
+gpointer
+gdk_win32_handle_table_lookup (HWND handle)
+{
+  return gdk_win32_handle_table_lookup_ (handle);
+}
+
+/* set up input language or text service change notification for our GdkDisplay */
+
+/* COM implementation for receiving notifications when input language or text service has changed in GDK */
+static ULONG STDMETHODCALLTYPE
+alpn_sink_addref (ITfActiveLanguageProfileNotifySink *This)
+{
+  GdkWin32ALPNSink *alpn_sink = (GdkWin32ALPNSink *) This;
+  int ref_count = ++alpn_sink->ref_count;
+
+  return ref_count;
+}
+
+static HRESULT STDMETHODCALLTYPE
+alpn_sink_queryinterface (ITfActiveLanguageProfileNotifySink *This,
+                          REFIID                              riid,
+                          LPVOID                             *ppvObject)
+{
+  *ppvObject = NULL;
+
+  if (IsEqualGUID (riid, &IID_IUnknown))
+    {
+      ITfActiveLanguageProfileNotifySink_AddRef (This);
+      *ppvObject = This;
+      return S_OK;
+    }
+
+  if (IsEqualGUID (riid, &IID_ITfActiveLanguageProfileNotifySink))
+    {
+      ITfActiveLanguageProfileNotifySink_AddRef (This);
+      *ppvObject = This;
+      return S_OK;
+    }
+
+  return E_NOINTERFACE;
+}
+
+static ULONG STDMETHODCALLTYPE
+alpn_sink_release (ITfActiveLanguageProfileNotifySink *This)
+{
+  GdkWin32ALPNSink *alpn_sink = (GdkWin32ALPNSink *) This;
+  int ref_count = --alpn_sink->ref_count;
+
+  if (ref_count == 0)
+    {
+      g_free (This);
+    }
+
+  return ref_count;
+}
+
+static HRESULT STDMETHODCALLTYPE
+alpn_sink_on_activated (ITfActiveLanguageProfileNotifySink *This,
+                        REFCLSID                            clsid,
+                        REFGUID                             guidProfile,
+                        BOOL                                fActivated)
+{
+  GdkWin32ALPNSink *alpn_sink = (GdkWin32ALPNSink *) This;
+
+  alpn_sink->input_locale_is_ime = fActivated;
+  return S_OK;
+}
+
+static const ITfActiveLanguageProfileNotifySinkVtbl alpn_sink_vtbl = {
+  alpn_sink_queryinterface,
+  alpn_sink_addref,
+  alpn_sink_release,
+  alpn_sink_on_activated,
+};
+
+void
+gdk_win32_display_lang_notification_init (GdkWin32Display *display)
+{
+  HRESULT hr;
+  ITfThreadMgr *itf_threadmgr;
+
+  if (display->input_locale_items == NULL)
+    display->input_locale_items = g_new0 (GdkWin32InputLocaleItems, 1);
+
+  CoInitializeEx (NULL, COINIT_APARTMENTTHREADED);
+
+  if (display->input_locale_items->notification_sink != NULL)
+    return;
+
+  hr = CoCreateInstance (&CLSID_TF_ThreadMgr,
+                         NULL,
+                         CLSCTX_INPROC_SERVER,
+                         &IID_ITfThreadMgr,
+                         (LPVOID *) &itf_threadmgr);
+
+  if (!SUCCEEDED (hr))
+    return;
+
+  hr = ITfThreadMgr_QueryInterface (itf_threadmgr, &IID_ITfSource, (VOID **) &display->input_locale_items->itf_source);
+  ITfThreadMgr_Release (itf_threadmgr);
+
+  if (!SUCCEEDED (hr))
+    return;
+
+  display->input_locale_items->notification_sink = g_new0 (GdkWin32ALPNSink, 1);
+  display->input_locale_items->notification_sink->itf_alpn_sink.lpVtbl = &alpn_sink_vtbl;
+  display->input_locale_items->notification_sink->ref_count = 0;
+  ITfActiveLanguageProfileNotifySink_AddRef (&display->input_locale_items->notification_sink->itf_alpn_sink);
+
+  hr = ITfSource_AdviseSink (display->input_locale_items->itf_source,
+                             &IID_ITfActiveLanguageProfileNotifySink,
+                             (IUnknown *) display->input_locale_items->notification_sink,
+                             &display->input_locale_items->actlangchangenotify_id);
+
+  if (!SUCCEEDED (hr))
+    {
+      ITfActiveLanguageProfileNotifySink_Release (&display->input_locale_items->notification_sink->itf_alpn_sink);
+      display->input_locale_items->notification_sink = NULL;
+      ITfSource_Release (display->input_locale_items->itf_source);
+      display->input_locale_items->itf_source = NULL;
+    }
+}
+
+void
+gdk_win32_display_lang_notification_exit (GdkWin32Display *display)
+{
+  if (display->input_locale_items->notification_sink != NULL && display->input_locale_items->itf_source != NULL)
+    {
+      ITfSource_UnadviseSink (display->input_locale_items->itf_source, display->input_locale_items->actlangchangenotify_id);
+      ITfSource_Release (display->input_locale_items->itf_source);
+      ITfActiveLanguageProfileNotifySink_Release (&display->input_locale_items->notification_sink->itf_alpn_sink);
+    }
+
+  CoUninitialize ();
+
+  g_free (display->input_locale_items->notification_sink);
+  g_free (display->input_locale_items);
+}
+
+void
+gdk_win32_display_set_input_locale (GdkWin32Display *display,
+                                    HKL              input_locale)
+{
+  g_return_if_fail (GDK_IS_WIN32_DISPLAY (display));
+  display->input_locale_items->input_locale = input_locale;
+}
+
+gboolean
+gdk_win32_display_input_locale_is_ime (GdkWin32Display *display)
+{
+  g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), FALSE);
+
+  return display->input_locale_items->notification_sink->input_locale_is_ime;
+}
 
 static char *
 _get_system_font_name (HDC hdc)
@@ -61,9 +285,13 @@ _get_system_font_name (HDC hdc)
 }
 
 gboolean
-_gdk_win32_get_setting (const char *name,
-                        GValue      *value)
+gdk_win32_display_get_setting (GdkDisplay  *display,
+                               const char *name,
+                               GValue      *value)
 {
+  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_DEFAULT_SETTINGS)
+    return FALSE;
+
   if (strcmp ("gtk-alternative-button-order", name) == 0)
     {
       GDK_NOTE(MISC, g_print("gdk_display_get_setting(\"%s\") : TRUE\n", name));
@@ -145,7 +373,7 @@ _gdk_win32_get_setting (const char *name,
     }
   else if (strcmp ("gtk-im-module", name) == 0)
     {
-      const char *im_module = _gdk_input_locale_is_ime ? "ime" : "";
+      const char *im_module = GDK_WIN32_DISPLAY (display)->input_locale_items->notification_sink->input_locale_is_ime ? "ime" : "";
       GDK_NOTE(MISC, g_print("gdk_screen_get_setting(\"%s\") : %s\n", name, im_module));
       g_value_set_static_string (value, im_module);
       return TRUE;
@@ -258,3 +486,4 @@ _gdk_win32_get_setting (const char *name,
 
   return FALSE;
 }
+

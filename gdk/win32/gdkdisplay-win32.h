@@ -26,9 +26,15 @@
  
 #include "gdkglversionprivate.h"
 
+/* Used for active language or text service change notifications */
+#define COBJMACROS
+#include <msctf.h>
+
 #ifdef HAVE_EGL
 # include <epoxy/egl.h>
 #endif
+
+typedef struct _GdkWin32InputLocaleItems GdkWin32InputLocaleItems;
 
 /* Define values used to set DPI-awareness */
 typedef enum _GdkWin32ProcessDpiAwareness {
@@ -125,11 +131,11 @@ struct _GdkWin32Display
 
   HWND hwnd;
 
+  GListModel *monitors;
+  GdkWin32InputLocaleItems *input_locale_items;
+
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;
-
-  GListModel *monitors;
-
   guint hasWglARBCreateContext : 1;
   guint hasWglEXTSwapControl : 1;
   guint hasWglOMLSyncControl : 1;
