@@ -76,7 +76,6 @@ static void gdk_win32_surface_unmaximize (GdkSurface *surface);
 static void gdk_win32_surface_minimize (GdkSurface *surface);
 
 /* TODO: get rid of these global variables */
-static gpointer parent_class = NULL;
 static GSList *modal_surface_stack = NULL;
 
 typedef struct _FullscreenInfo FullscreenInfo;
@@ -171,7 +170,7 @@ gdk_surface_win32_dispose (GObject *object)
 
   g_clear_object (&surface->cursor);
 
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_win32_surface_parent_class)->dispose (object);
 }
 
 
@@ -209,7 +208,7 @@ gdk_surface_win32_finalize (GObject *object)
   g_assert (surface->transient_owner == NULL);
   g_assert (surface->transient_children == NULL);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_win32_surface_parent_class)->finalize (object);
 }
 
 void
@@ -544,7 +543,7 @@ gdk_win32_surface_constructed (GObject *object)
   impl->hdc = GetDC (impl->handle);
   impl->inhibit_configure = TRUE;
 
-  G_OBJECT_CLASS (parent_class)->constructed (object);
+  G_OBJECT_CLASS (gdk_win32_surface_parent_class)->constructed (object);
 }
 
 static void
@@ -4518,8 +4517,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkSurfaceClass *impl_class = GDK_SURFACE_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructed = gdk_win32_surface_constructed;
   object_class->dispose = gdk_surface_win32_dispose;
