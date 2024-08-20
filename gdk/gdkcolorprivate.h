@@ -20,6 +20,7 @@
 
 #include <gdk/gdktypes.h>
 #include <gdk/gdkcolorstate.h>
+#include <gdk/gdkhdrmetadata.h>
 #include <gdk/gdkrgba.h>
 #include <gdk/gdkmemoryformatprivate.h>
 
@@ -101,6 +102,12 @@ void              gdk_color_print               (const GdkColor         *self,
                                                  GString                *string);
 
 char *            gdk_color_to_string           (const GdkColor         *self);
+
+void              gdk_color_map                 (const GdkColor         *src,
+                                                 GdkHdrMetadata         *src_metadata,
+                                                 GdkColorState          *target_color_state,
+                                                 GdkHdrMetadata         *target_metadata,
+                                                 GdkColor               *dest);
 
 #include "gdkcolorimpl.h"
 
