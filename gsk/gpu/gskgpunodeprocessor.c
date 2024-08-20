@@ -666,10 +666,11 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
   area.width = MAX (1, ceilf (graphene_vec2_get_x (scale) * viewport->size.width - EPSILON));
   area.height = MAX (1, ceilf (graphene_vec2_get_y (scale) * viewport->size.height - EPSILON));
 
+  depth = gdk_memory_depth_merge (depth, gsk_render_node_get_preferred_depth (node));
+
   image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                  FALSE,
-                                                 gdk_memory_depth_merge (gdk_color_state_get_depth (ccs),
-                                                                         gsk_render_node_get_preferred_depth (node)),
+                                                 depth,
                                                  area.width, area.height);
   if (image == NULL)
     return NULL;
