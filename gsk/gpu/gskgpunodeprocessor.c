@@ -123,6 +123,7 @@ typedef enum {
 struct _GskGpuNodeProcessor
 {
   GskGpuFrame                   *frame;
+  GskGpuImage                   *target;
   GdkColorState                 *ccs;
   cairo_rectangle_int_t          scissor;
   GskGpuBlend                    blend;
@@ -183,6 +184,7 @@ gsk_gpu_node_processor_init (GskGpuNodeProcessor         *self,
   height = gsk_gpu_image_get_height (target);
 
   self->frame = frame;
+  self->target = target;
   self->ccs = ccs;
 
   self->scissor = *clip;
