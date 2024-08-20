@@ -430,6 +430,8 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   gsk_gpu_renderer_make_current (self);
 
   depth = gsk_render_node_get_preferred_depth (root);
+  if (gsk_render_node_is_hdr (root))
+    depth = gdk_memory_depth_merge (depth, GDK_MEMORY_FLOAT16);
   frame = gsk_gpu_renderer_get_frame (self);
   scale = gsk_gpu_renderer_get_scale (self);
 
