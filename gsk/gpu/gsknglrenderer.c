@@ -91,23 +91,28 @@ static GskGpuImage *
 gsk_ngl_renderer_get_backbuffer (GskGpuRenderer *renderer)
 {
   GskNglRenderer *self = GSK_NGL_RENDERER (renderer);
+  GdkMemoryFormat format;
+  GdkMemoryDepth depth;
   GdkDrawContext *context;
   GdkSurface *surface;
   double scale;
 
   context = gsk_gpu_renderer_get_context (renderer);
   surface = gdk_draw_context_get_surface (context);
+  depth = gdk_draw_context_get_depth (context);
+  format = gdk_memory_depth_get_format (depth);
   scale = gsk_gpu_renderer_get_scale (renderer);
 
   if (self->backbuffer == NULL ||
       !!(gsk_gpu_image_get_flags (self->backbuffer) & GSK_GPU_IMAGE_SRGB) != gdk_surface_get_gl_is_srgb (surface) ||
+      gsk_gpu_image_get_format (self->backbuffer) != format ||
       gsk_gpu_image_get_width (self->backbuffer) != ceil (gdk_surface_get_width (surface) * scale) ||
       gsk_gpu_image_get_height (self->backbuffer) != ceil (gdk_surface_get_height (surface) * scale))
     {
       gsk_ngl_renderer_free_backbuffer (self);
       self->backbuffer = gsk_gl_image_new_backbuffer (GSK_GL_DEVICE (gsk_gpu_renderer_get_device (renderer)),
                                                       GDK_GL_CONTEXT (context),
-                                                      GDK_MEMORY_DEFAULT /* FIXME */,
+                                                      format,
                                                       gdk_surface_get_gl_is_srgb (surface),
                                                       ceil (gdk_surface_get_width (surface) * scale),
                                                       ceil (gdk_surface_get_height (surface) * scale));
