@@ -1175,7 +1175,8 @@ gsk_vulkan_image_get_n_planes (GskVulkanImage *self,
 }
 
 GdkTexture *
-gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self)
+gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self,
+                                    GdkColorState  *color_state)
 {
   GskGpuImage *image = GSK_GPU_IMAGE (self);
   GdkDmabufTextureBuilder *builder;
@@ -1229,6 +1230,7 @@ gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self)
   gdk_dmabuf_texture_builder_set_modifier (builder, properties.drmFormatModifier);
   gdk_dmabuf_texture_builder_set_premultiplied (builder, !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA));
   gdk_dmabuf_texture_builder_set_n_planes (builder, n_planes);
+  gdk_dmabuf_texture_builder_set_color_state (builder, color_state);
   
   for (plane = 0; plane < n_planes; plane++)
     {
