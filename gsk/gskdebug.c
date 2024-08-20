@@ -13,7 +13,6 @@ static const GdkDebugKey gsk_debug_keys[] = {
   { "geometry", GSK_DEBUG_GEOMETRY, "Show borders (when using cairo)" },
   { "full-redraw", GSK_DEBUG_FULL_REDRAW, "Force full redraws" },
   { "staging", GSK_DEBUG_STAGING, "Use a staging image for texture upload (Vulkan only)" },
-  { "offload-disable", GSK_DEBUG_OFFLOAD_DISABLE, "Disable graphics offload" },
   { "cairo", GSK_DEBUG_CAIRO, "Overlay error pattern over Cairo drawing (finds fallbacks)" },
   { "occlusion", GSK_DEBUG_OCCLUSION, "Overlay highlight over areas optimized via occlusion culling" },
 };
@@ -28,8 +27,11 @@ init_debug_flags (void)
   if (g_once_init_enter (&gsk_debug_flags__set))
     {
       gsk_debug_flags = gdk_parse_debug_var ("GSK_DEBUG",
-                                             gsk_debug_keys,
-                                             G_N_ELEMENTS (gsk_debug_keys));
+          "GSK_DEBUG can be set to values that make GSK print out different\n"
+          "types of debugging information or change the behavior of GSK for\n"
+          "debugging purposes.\n",
+          gsk_debug_keys,
+          G_N_ELEMENTS (gsk_debug_keys));
 
       g_once_init_leave (&gsk_debug_flags__set, TRUE);
     }

@@ -44,28 +44,37 @@ typedef enum {
   GDK_DEBUG_HDR             = 1 << 14,
   GDK_DEBUG_PORTALS         = 1 << 15,
   GDK_DEBUG_NO_PORTALS      = 1 << 16,
-  GDK_DEBUG_GL_DISABLE      = 1 << 17,
-  GDK_DEBUG_GL_NO_FRACTIONAL= 1 << 18,
-  GDK_DEBUG_FORCE_OFFLOAD   = 1 << 19,
-  GDK_DEBUG_GL_DISABLE_GL   = 1 << 20,
-  GDK_DEBUG_GL_DISABLE_GLES = 1 << 21,
-  GDK_DEBUG_GL_PREFER_GL    = 1 << 22,
-  GDK_DEBUG_GL_DEBUG        = 1 << 23,
-  GDK_DEBUG_GL_EGL          = 1 << 24,
-  GDK_DEBUG_GL_GLX          = 1 << 25,
-  GDK_DEBUG_GL_WGL          = 1 << 26,
-  GDK_DEBUG_VULKAN_DISABLE  = 1 << 27,
-  GDK_DEBUG_DEFAULT_SETTINGS= 1 << 28,
-  GDK_DEBUG_HIGH_DEPTH      = 1 << 29,
-  GDK_DEBUG_NO_VSYNC        = 1 << 30,
-  GDK_DEBUG_DMABUF_DISABLE  = 1 << 31,
+  GDK_DEBUG_GL_NO_FRACTIONAL= 1 << 17,
+  GDK_DEBUG_FORCE_OFFLOAD   = 1 << 18,
+  GDK_DEBUG_GL_PREFER_GL    = 1 << 19,
+  GDK_DEBUG_GL_DEBUG        = 1 << 20,
+  GDK_DEBUG_DEFAULT_SETTINGS= 1 << 21,
+  GDK_DEBUG_HIGH_DEPTH      = 1 << 22,
+  GDK_DEBUG_NO_VSYNC        = 1 << 23,
 } GdkDebugFlags;
+
+typedef enum {
+  GDK_FEATURE_OPENGL           = 1 << 0,
+  GDK_FEATURE_GL_API           = 1 << 1,
+  GDK_FEATURE_GLES_API         = 1 << 2,
+  GDK_FEATURE_EGL              = 1 << 3,
+  GDK_FEATURE_GLX              = 1 << 4,
+  GDK_FEATURE_WGL              = 1 << 5,
+  GDK_FEATURE_VULKAN           = 1 << 6,
+  GDK_FEATURE_DMABUF           = 1 << 7,
+  GDK_FEATURE_OFFLOAD          = 1 << 8,
+  GDK_FEATURE_COLOR_MANAGEMENT = 1 << 9,
+} GdkFeatures;
+
+#define GDK_ALL_FEATURES ((1 << 10) - 1)
 
 extern guint _gdk_debug_flags;
 
 GdkDebugFlags    gdk_display_get_debug_flags    (GdkDisplay       *display);
 void             gdk_display_set_debug_flags    (GdkDisplay       *display,
                                                  GdkDebugFlags     flags);
+
+gboolean         gdk_has_feature                (GdkFeatures       feature);
 
 static inline void
 gdk_debug_message (const char *format, ...) G_GNUC_PRINTF(1, 2);
@@ -106,6 +115,7 @@ typedef struct
 } GdkDebugKey;
 
 guint gdk_parse_debug_var (const char        *variable,
+                           const char        *docs,
                            const GdkDebugKey *keys,
                            guint              nkeys);
 

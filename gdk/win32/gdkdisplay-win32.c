@@ -1202,7 +1202,7 @@ gdk_win32_display_init_gl (GdkDisplay  *display,
    * Disable defaulting to EGL as EGL is used more as a compatibility layer
    * on Windows rather than being a native citizen on Windows
    */
-  if (gdk_display_get_debug_flags (display) & (GDK_DEBUG_GL_EGL|GDK_DEBUG_GL_DISABLE_GL))
+  if (!gdk_has_feature (GDK_FEATURE_WGL) || !gdk_has_feature (GDK_FEATURE_GL_API))
     {
       init_gl_hdc = GetDC (display_win32->hwnd);
 

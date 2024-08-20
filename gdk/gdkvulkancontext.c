@@ -1406,8 +1406,9 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   last = n_devices;
 
   skip_features = gdk_parse_debug_var ("GDK_VULKAN_DISABLE",
-                                       gsk_vulkan_feature_keys,
-                                       G_N_ELEMENTS (gsk_vulkan_feature_keys));
+      "GDK_VULKAN_DISABLE can be set to a list of Vulkan features to disable.\n",
+      gsk_vulkan_feature_keys,
+      G_N_ELEMENTS (gsk_vulkan_feature_keys));
   if (skip_features & GDK_VULKAN_FEATURE_YCBCR)
     skip_features |= GDK_VULKAN_FEATURE_DMABUF;
 
@@ -1626,10 +1627,10 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   gboolean have_debug_report = FALSE;
   VkResult res;
 
-  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_VULKAN_DISABLE)
+  if (!gdk_has_feature (GDK_FEATURE_VULKAN))
     {
       g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                           _("Vulkan support disabled via GDK_DEBUG"));
+                           _("Vulkan support disabled via GDK_DISABLE"));
       return FALSE;
     }
 
