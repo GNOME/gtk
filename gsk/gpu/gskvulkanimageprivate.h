@@ -44,7 +44,8 @@ GskGpuImage *           gsk_vulkan_image_new_for_dmabuf                 (GskVulk
                                                                          gsize                   height,
                                                                          const GdkDmabuf        *dmabuf,
                                                                          gboolean                premultiplied);
-GdkTexture *            gsk_vulkan_image_to_dmabuf_texture              (GskVulkanImage         *self);
+GdkTexture *            gsk_vulkan_image_to_dmabuf_texture              (GskVulkanImage         *self,
+                                                                         GdkColorState          *color_state);
 #endif
 
 guchar *                gsk_vulkan_image_get_data                       (GskVulkanImage         *self,
