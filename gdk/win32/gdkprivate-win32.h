@@ -144,8 +144,6 @@ extern int               _gdk_input_ignore_core;
 /* These are thread specific, but GDK/win32 works OK only when invoked
  * from a single thread anyway.
  */
-extern HKL               _gdk_input_locale;
-extern gboolean          _gdk_input_locale_is_ime;
 
 extern guint             _gdk_keymap_serial;
 
@@ -237,7 +235,6 @@ GdkDrag *_gdk_win32_surface_drag_begin (GdkSurface         *surface,
                                         double              y_root);
 
 /* Stray GdkWin32Screen members */
-gboolean _gdk_win32_get_setting (const char *name, GValue *value);
 void _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen);
 
 /* Distributed display manager implementation */

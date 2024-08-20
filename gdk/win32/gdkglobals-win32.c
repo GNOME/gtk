@@ -32,9 +32,6 @@ GdkDeviceManagerWin32 *_gdk_device_manager = NULL;
 
 int		  _gdk_input_ignore_core;
 
-HKL		  _gdk_input_locale;
-gboolean	  _gdk_input_locale_is_ime = FALSE;
-
 GdkWin32ModalOpKind	  _modal_operation_in_progress = GDK_WIN32_MODAL_OP_NONE;
 HWND              _modal_move_resize_hwnd = NULL;
 

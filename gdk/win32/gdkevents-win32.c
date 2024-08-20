@@ -1833,15 +1833,14 @@ gdk_event_translate (MSG *msg,
 
         win32_keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
 
-        _gdk_input_locale = (HKL) msg->lParam;
-        _gdk_win32_keymap_set_active_layout (win32_keymap, _gdk_input_locale);
+        win32_display->input_locale_items->input_locale = (HKL) msg->lParam;
+        _gdk_win32_keymap_set_active_layout (win32_keymap, win32_display->input_locale_items->input_locale);
         _gdk_keymap_serial++;
-
         GDK_NOTE (EVENTS,
                   g_print (" cs:%lu hkl:%p%s",
                            (gulong) msg->wParam,
                            (gpointer) msg->lParam,
-                           _gdk_input_locale_is_ime ? " (IME)" : ""));
+                           win32_display->input_locale_items->notifcation_sink->input_locale_is_ime ? " (IME)" : ""));
         gdk_display_setting_changed (display, "gtk-im-module");
 
         /* Generate a dummy key event to "nudge" IMContext */
