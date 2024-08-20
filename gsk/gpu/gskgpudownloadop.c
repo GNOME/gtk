@@ -119,6 +119,7 @@ gsk_gpu_download_op_vk_create (GskGpuDownloadOp *self)
   guchar *data;
   gsize width, height, stride;
   GdkMemoryFormat format;
+  GdkMemoryTextureBuilder *builder;
 
   data = gsk_gpu_buffer_map (self->buffer);
   width = gsk_gpu_image_get_width (self->image);
@@ -126,11 +127,16 @@ gsk_gpu_download_op_vk_create (GskGpuDownloadOp *self)
   format = gsk_gpu_image_get_format (self->image);
   stride = width * gdk_memory_format_bytes_per_pixel (format);
   bytes = g_bytes_new (data, stride * height);
-  self->texture = gdk_memory_texture_new (width,
-                                          height,
-                                          format,
-                                          bytes,
-                                          stride);
+
+  builder = gdk_memory_texture_builder_new ();
+  gdk_memory_texture_builder_set_width (builder, width);
+  gdk_memory_texture_builder_set_height (builder, height);
+  gdk_memory_texture_builder_set_format (builder, format);
+  gdk_memory_texture_builder_set_bytes (builder, bytes);
+  gdk_memory_texture_builder_set_stride (builder, stride);
+  self->texture = gdk_memory_texture_builder_build (builder);
+
+  g_object_unref (builder);
   g_bytes_unref (bytes);
   gsk_gpu_buffer_unmap (self->buffer, 0);
 }
