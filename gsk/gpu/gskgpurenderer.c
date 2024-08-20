@@ -268,11 +268,17 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
   GskGpuFrame *frame;
 
   max_size = gsk_gpu_device_get_max_image_size (priv->device);
-  depth = gsk_render_node_get_preferred_depth (root);
+  if (gsk_render_node_is_hdr (root))
+    color_state = GDK_COLOR_STATE_REC2100_PQ;
+  else
+    color_state = GDK_COLOR_STATE_SRGB;
+  depth = gdk_memory_depth_merge (gdk_color_state_get_depth (color_state),
+                                  gsk_render_node_get_preferred_depth (root));
+
   do
     {
       image = gsk_gpu_device_create_download_image (priv->device,
-                                                    gsk_render_node_get_preferred_depth (root),
+                                                    depth,
                                                     MIN (max_size, rounded_viewport->size.width),
                                                     MIN (max_size, rounded_viewport->size.height));
       max_size /= 2;
@@ -299,8 +305,6 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                                           depth,
                                                           MIN (image_width, width - x),
                                                           MIN (image_height, height - y));
-
-          color_state = GDK_COLOR_STATE_SRGB;
 
           clip_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                            0, 0,
@@ -354,10 +358,18 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   GskGpuImage *image;
   GdkTexture *texture;
   graphene_rect_t rounded_viewport;
+  GdkMemoryDepth depth;
   GdkColorState *color_state;
   cairo_region_t *clip_region;
 
   gsk_gpu_device_maybe_gc (priv->device);
+
+  if (gsk_render_node_is_hdr (root))
+    color_state = GDK_COLOR_STATE_REC2100_PQ;
+  else
+    color_state = GDK_COLOR_STATE_SRGB;
+  depth = gdk_memory_depth_merge (gdk_color_state_get_depth (color_state),
+                                  gsk_render_node_get_preferred_depth (root));
 
   gsk_gpu_renderer_make_current (self);
 
@@ -366,14 +378,12 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
                                          ceil (viewport->size.width),
                                          ceil (viewport->size.height));
   image = gsk_gpu_device_create_download_image (priv->device,
-                                                gsk_render_node_get_preferred_depth (root),
+                                                depth,
                                                 rounded_viewport.size.width,
                                                 rounded_viewport.size.height);
 
   if (image == NULL)
     return gsk_gpu_renderer_fallback_render_texture (self, root, &rounded_viewport);
-
-  color_state = GDK_COLOR_STATE_SRGB;
 
   frame = gsk_gpu_renderer_create_frame (self);
 
