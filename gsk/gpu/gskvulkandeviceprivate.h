@@ -53,6 +53,7 @@ void                    gsk_vulkan_device_remove_ycbcr                  (GskVulk
 
 VkRenderPass            gsk_vulkan_device_get_vk_render_pass            (GskVulkanDevice        *self,
                                                                          VkFormat                format,
+                                                                         VkAttachmentLoadOp      vk_load_op,
                                                                          VkImageLayout           from_layout,
                                                                          VkImageLayout           to_layout);
 VkPipeline              gsk_vulkan_device_get_vk_pipeline               (GskVulkanDevice        *self,
