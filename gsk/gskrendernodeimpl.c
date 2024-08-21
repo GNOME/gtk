@@ -4759,7 +4759,9 @@ gsk_repeat_node_new (const graphene_rect_t *bounds,
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   node->is_hdr = gsk_render_node_is_hdr (child);
-  node->fully_opaque = child->fully_opaque && gsk_rect_contains_rect (&child->bounds, &self->child_bounds);
+  node->fully_opaque = child->fully_opaque &&
+                       gsk_rect_contains_rect (&child->bounds, &self->child_bounds) &&
+                       !gsk_rect_is_empty (&self->child_bounds);
 
   return node;
 }
