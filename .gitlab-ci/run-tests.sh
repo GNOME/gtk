@@ -8,6 +8,7 @@ builddir=$1
 setup=$2
 suite=$3
 multiplier=${MESON_TEST_TIMEOUT_MULTIPLIER:-1}
+n_processes=${MESON_TEST_MAX_PROCESSES:-1}
 
 # Ignore memory leaks lower in dependencies
 export LSAN_OPTIONS=suppressions=$srcdir/lsan.supp:print_suppressions=0:detect_leaks=0:allocator_may_return_null=1
@@ -18,6 +19,7 @@ case "${setup}" in
           meson test -C ${builddir} \
                 --quiet \
                 --timeout-multiplier "${multiplier}" \
+                --num-processes "${n_processes}" \
                 --print-errorlogs \
                 --setup=${setup} \
                 --suite=${suite//,/ --suite=} \
@@ -42,6 +44,7 @@ case "${setup}" in
     meson test -C ${builddir} \
                 --quiet \
                 --timeout-multiplier "${multiplier}" \
+                --num-processes "${n_processes}" \
                 --print-errorlogs \
                 --setup=${setup} \
                 --suite=${suite//,/ --suite=} \
@@ -65,6 +68,7 @@ case "${setup}" in
     meson test -C ${builddir} \
                 --quiet \
                 --timeout-multiplier "${multiplier}" \
+                --num-processes "${n_processes}" \
                 --print-errorlogs \
                 --setup=${setup} \
                 --suite=${suite//,/ --suite=} \
