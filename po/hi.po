@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-07-14 21:11+0000\n"
-"PO-Revision-Date: 2024-07-15 18:43+0530\n"
+"POT-Creation-Date: 2024-08-13 21:42+0000\n"
+"PO-Revision-Date: 2024-08-15 13:57+0530\n"
 "Last-Translator: Scrambled777 <weblate.scrambled777@simplelogin.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "Language: hi\n"
@@ -53,11 +53,11 @@ msgstr "सामग्री को “%s” के रूप में उप�
 msgid "Cannot provide contents as %s"
 msgstr "सामग्री को %s के रूप में उपलब्ध नहीं कराया जा सकता"
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:471
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:472
 msgid "The current backend does not support OpenGL"
 msgstr "वर्तमान बैकएंड OpenGL का समर्थन नहीं करता है"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1633
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1632
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "GDK_DEBUG के माध्यम से Vulkan समर्थन अक्षम किया गया"
 
@@ -117,37 +117,37 @@ msgstr "अन्य अनुप्रयोग से ड्रैग'एन'�
 msgid "No compatible formats to transfer contents."
 msgstr "सामग्री स्थानांतरित करने के लिए कोई संगत प्रारूप नहीं।"
 
-#: gdk/gdkglcontext.c:431 gdk/x11/gdkglcontext-glx.c:661
+#: gdk/gdkglcontext.c:432 gdk/x11/gdkglcontext-glx.c:648
 msgid "No GL API allowed."
 msgstr "कोई GL API की अनुमति नहीं है।"
 
-#: gdk/gdkglcontext.c:454 gdk/win32/gdkglcontext-win32-wgl.c:411
+#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:411
 #: gdk/win32/gdkglcontext-win32-wgl.c:554
-#: gdk/win32/gdkglcontext-win32-wgl.c:598 gdk/x11/gdkglcontext-glx.c:707
+#: gdk/win32/gdkglcontext-win32-wgl.c:598 gdk/x11/gdkglcontext-glx.c:694
 msgid "Unable to create a GL context"
 msgstr "GL प्रसंग बनाने में असमर्थ"
 
-#: gdk/gdkglcontext.c:1334
+#: gdk/gdkglcontext.c:1343
 msgid "OpenGL ES disabled via GDK_DEBUG"
 msgstr "GDK_DEBUG के माध्यम से OpenGL ES अक्षम किया गया"
 
-#: gdk/gdkglcontext.c:1346
+#: gdk/gdkglcontext.c:1355
 msgid "OpenGL disabled via GDK_DEBUG"
 msgstr "GDK_DEBUG के माध्यम से OpenGL अक्षम किया गया"
 
-#: gdk/gdkglcontext.c:1357
+#: gdk/gdkglcontext.c:1366
 #, c-format
 msgid "Application does not support %s API"
 msgstr "अनुप्रयोग %s API का समर्थन नहीं करता"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2145
+#: gdk/gdkglcontext.c:2164
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s का उपयोग करने का प्रयास किया जा रहा है, लेकिन %s पहले से ही उपयोग में है"
 
-#: gdk/gdktexture.c:660
+#: gdk/gdktexture.c:661
 msgid "Unknown image format."
 msgstr "अज्ञात छवि प्रारूप।"
 
@@ -528,37 +528,37 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspend"
 
-#: gdk/loaders/gdkjpeg.c:63
+#: gdk/loaders/gdkjpeg.c:65
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG छवि फाइल की व्याख्या करने में त्रुटि (%s)"
 
-#: gdk/loaders/gdkjpeg.c:194
+#: gdk/loaders/gdkjpeg.c:179
 #, c-format
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "असमर्थित JPEG कलरस्पेस (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:289 gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:188 gdk/loaders/gdkpng.c:436 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "छवि आकार %ux%u के लिए पर्याप्त मेमोरी नहीं है"
 
-#: gdk/loaders/gdkpng.c:118
+#: gdk/loaders/gdkpng.c:120
 #, c-format
 msgid "Error reading png (%s)"
 msgstr "पीएनजी पढ़ने में त्रुटि (%s)"
 
-#: gdk/loaders/gdkpng.c:215
+#: gdk/loaders/gdkpng.c:357
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "पीएनजी छवि में असमर्थित गहराई %u"
 
-#: gdk/loaders/gdkpng.c:265
+#: gdk/loaders/gdkpng.c:407
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "पीएनजी छवि में असमर्थित रंग प्रकार %u"
 
-#: gdk/loaders/gdkpng.c:275
+#: gdk/loaders/gdkpng.c:421
 #, c-format
 msgid "Image stride too large for image size %ux%u"
 msgstr "छवि प्रगति छवि आकार %ux%u के लिए बहुत बड़ी है"
@@ -578,7 +578,7 @@ msgstr "पंक्ति %d पर डेटा पढ़ना विफल �
 
 #: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:238
 #: gdk/wayland/gdkdrop-wayland.c:205 gdk/wayland/gdkprimary-wayland.c:337
-#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
+#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1067
 #: gdk/x11/gdkclipboard-x11.c:799 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "कोई संगत स्थानांतरण प्रारूप नहीं मिला"
@@ -700,22 +700,22 @@ msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "डीएनडी डेटा नहीं मिल सका। डेटा संग्रहीत करने के लिए %s बाइट्स आवंटित करने में विफल।"
 
-#: gdk/win32/gdkdrop-win32.c:1037
+#: gdk/win32/gdkdrop-win32.c:1039
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "GDK सतह 0x%p ड्रॉप लक्ष्य के रूप में पंजीकृत नहीं है"
 
-#: gdk/win32/gdkdrop-win32.c:1044
+#: gdk/win32/gdkdrop-win32.c:1047
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "लक्ष्य संदर्भ रिकॉर्ड 0x%p में कोई डेटा ऑब्जेक्ट नहीं है"
 
-#: gdk/win32/gdkdrop-win32.c:1082
+#: gdk/win32/gdkdrop-win32.c:1087
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) विफल, 0x%lx लौट रहा है"
 
-#: gdk/win32/gdkdrop-win32.c:1114
+#: gdk/win32/gdkdrop-win32.c:1121
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "DnD डेटा W32 प्रारूप 0x%x को %p (%s) में परिवर्तित करने में विफल"
@@ -797,15 +797,15 @@ msgstr "क्लिपबोर्ड प्रबंधक चयन संग
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "क्लिपबोर्ड संग्रहीत नहीं किया जा सकता। कोई क्लिपबोर्ड प्रबंधक सक्रिय नहीं है।"
 
-#: gdk/x11/gdkglcontext-glx.c:827
+#: gdk/x11/gdkglcontext-glx.c:814
 msgid "No GLX configurations available"
 msgstr "कोई GLX विन्यास उपलब्ध नहीं है"
 
-#: gdk/x11/gdkglcontext-glx.c:914
+#: gdk/x11/gdkglcontext-glx.c:901
 msgid "No GLX configuration with required features found"
 msgstr "आवश्यक सुविधाओं के साथ कोई GLX विन्यास नहीं मिला"
 
-#: gdk/x11/gdkglcontext-glx.c:988
+#: gdk/x11/gdkglcontext-glx.c:975
 msgid "GLX is not supported"
 msgstr "जीएलएक्स समर्थित नहीं है"
 
@@ -836,17 +836,17 @@ msgstr "मिश्रित पाठ रूपांतरण में अ�
 msgid "Unsupported encoding “%s”"
 msgstr "असमर्थित एन्कोडिंग “%s”"
 
-#: gsk/gl/gskglrenderer.c:213
+#: gsk/gl/gskglrenderer.c:215
 #, c-format
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr "यह GLES %d.%d कार्यान्वयन आधे-फ्लोट वर्टेक्स डेटा का समर्थन नहीं करता है"
 
-#: gsk/gpu/gskgldevice.c:254
+#: gsk/gpu/gskgldevice.c:252
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "इस रेंडरर द्वारा OpenGL ES 3.0 समर्थित नहीं है।"
 
-#: gsk/gpu/gsknglrenderer.c:71
+#: gsk/gpu/gsknglrenderer.c:68
 msgid "OpenGL 3.3 required"
 msgstr "OpenGL 3.3 आवश्यक"
 
@@ -1135,7 +1135,7 @@ msgstr ""
 "तंत्र नीति परिवर्तन को रोकता है।\n"
 "अपने तंत्र प्रशासक से संपर्क करें"
 
-#: gtk/deprecated/gtkshow.c:182
+#: gtk/deprecated/gtkshow.c:217
 msgid "Could not show link"
 msgstr "कड़ी नहीं दिखा सका"
 
@@ -2277,7 +2277,7 @@ msgstr "उस नाम की फाइल पहले से मौजूद
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6276 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6234 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2293,7 +2293,7 @@ msgstr "खोलें (_O)"
 msgid "_Save"
 msgstr "सहेजें (_S)"
 
-#: gtk/gtkfilechoosernativequartz.c:344 gtk/ui/gtkfilechooserwidget.ui:299
+#: gtk/gtkfilechoosernativequartz.c:348 gtk/ui/gtkfilechooserwidget.ui:299
 msgid "Select which types of files are shown"
 msgstr "चुनें कि किस प्रकार की फाइलें दिखाई जाएं"
 
@@ -2366,7 +2366,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "यदि आप कोई मद मिटाते हैं, तो वह स्थायी रूप से खो जाएगा।"
 
 #: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5875 gtk/gtktext.c:6334 gtk/gtktextview.c:9237
+#: gtk/gtklabel.c:5883 gtk/gtktext.c:6334 gtk/gtktextview.c:9237
 msgid "_Delete"
 msgstr "मिटाएं (_D)"
 
@@ -2722,31 +2722,31 @@ msgstr "बंद करें"
 msgid "Close the infobar"
 msgstr "जानकारी-पट्टी बंद करें"
 
-#: gtk/gtklabel.c:5872 gtk/gtktext.c:6322 gtk/gtktextview.c:9225
+#: gtk/gtklabel.c:5880 gtk/gtktext.c:6322 gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "काटें (_t)"
 
-#: gtk/gtklabel.c:5873 gtk/gtktext.c:6326 gtk/gtktextview.c:9229
+#: gtk/gtklabel.c:5881 gtk/gtktext.c:6326 gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "कॉपी करें (_C)"
 
-#: gtk/gtklabel.c:5874 gtk/gtktext.c:6330 gtk/gtktextview.c:9233
+#: gtk/gtklabel.c:5882 gtk/gtktext.c:6330 gtk/gtktextview.c:9233
 msgid "_Paste"
 msgstr "चिपकाएं (_P)"
 
-#: gtk/gtklabel.c:5880 gtk/gtktext.c:6343 gtk/gtktextview.c:9258
+#: gtk/gtklabel.c:5888 gtk/gtktext.c:6343 gtk/gtktextview.c:9258
 msgid "Select _All"
 msgstr "सभी चुनें (_A)"
 
-#: gtk/gtklabel.c:5885
+#: gtk/gtklabel.c:5893
 msgid "_Open Link"
 msgstr "कड़ी खोलें (_O)"
 
-#: gtk/gtklabel.c:5889
+#: gtk/gtklabel.c:5897
 msgid "Copy _Link Address"
 msgstr "लिंक पता कॉपी करें (_C)"
 
-#: gtk/gtklabel.c:5933 gtk/gtktext.c:2851 gtk/gtktextview.c:9307
+#: gtk/gtklabel.c:5941 gtk/gtktext.c:2851 gtk/gtktextview.c:9307
 msgid "Context menu"
 msgstr "संदर्भ मेनू"
 
@@ -2817,7 +2817,7 @@ msgid "Play"
 msgstr "चलाएं"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6277
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6235
 msgid "_OK"
 msgstr "ठीक है (_O)"
 
@@ -3694,12 +3694,12 @@ msgstr "पूर्ववत करें (_U)"
 msgid "_Redo"
 msgstr "पुनः करें (_R)"
 
-#: gtk/gtkwindow.c:6265
+#: gtk/gtkwindow.c:6223
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "क्या आप GTK इंस्पेक्टर का उपयोग करना चाहते हैं?"
 
-#: gtk/gtkwindow.c:6267
+#: gtk/gtkwindow.c:6225
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3710,7 +3710,7 @@ msgstr ""
 "एक्सप्लोर करने और संशोधित करने की सुविधा देता है। इसका उपयोग करने से अनुप्रयोग टूट सकता है "
 "या क्रैश हो सकता है।"
 
-#: gtk/gtkwindow.c:6272
+#: gtk/gtkwindow.c:6230
 msgid "Don’t show this message again"
 msgstr "यह संदेश दोबारा न दिखाएं"
 
@@ -3922,7 +3922,7 @@ msgctxt "Vulkan version"
 msgid "None"
 msgstr "कुछ नहीं"
 
-#: gtk/inspector/general.c:932
+#: gtk/inspector/general.c:933
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM संदर्भ GTK_IM_MODULE द्वारा हार्डकोड किया गया है"
 
@@ -4114,18 +4114,22 @@ msgid "Scale"
 msgstr "पैमाना"
 
 #: gtk/inspector/misc-info.ui:552
+msgid "Color state"
+msgstr "रंग अवस्था"
+
+#: gtk/inspector/misc-info.ui:577
 msgid "Mapped"
 msgstr "मैप किए गए"
 
-#: gtk/inspector/misc-info.ui:578
+#: gtk/inspector/misc-info.ui:603
 msgid "Realized"
 msgstr "समझना"
 
-#: gtk/inspector/misc-info.ui:604
+#: gtk/inspector/misc-info.ui:629
 msgid "Is Toplevel"
 msgstr "शीर्ष स्तर का है"
 
-#: gtk/inspector/misc-info.ui:630
+#: gtk/inspector/misc-info.ui:655
 msgid "Child Visible"
 msgstr "बच्चा दिखाई दे रहा है"
 
@@ -4237,7 +4241,7 @@ msgstr "स्रोत:"
 msgid "Defined At"
 msgstr "यहाँ परिभाषित"
 
-#: gtk/inspector/recorder.c:1955
+#: gtk/inspector/recorder.c:1987
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "RenderNode को सहेजना विफल रहा"
@@ -7262,7 +7266,7 @@ msgstr ""
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
 #: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
-#: tools/gtk-rendernode-tool-info.c:225 tools/gtk-rendernode-tool-show.c:116
+#: tools/gtk-rendernode-tool-info.c:226 tools/gtk-rendernode-tool-show.c:116
 msgid "FILE"
 msgstr "फाइल"
 
@@ -7891,7 +7895,7 @@ msgid "Benchmark rendering of a .node file."
 msgstr ".node फाइल का बेंचमार्क रेंडरिंग।"
 
 #: tools/gtk-rendernode-tool-benchmark.c:127
-#: tools/gtk-rendernode-tool-info.c:247 tools/gtk-rendernode-tool-render.c:283
+#: tools/gtk-rendernode-tool-info.c:248 tools/gtk-rendernode-tool-render.c:283
 #: tools/gtk-rendernode-tool-show.c:144
 #, c-format
 msgid "No .node file specified\n"
@@ -7956,40 +7960,30 @@ msgid "No differences.\n"
 msgstr "कोई मतभेद नहीं।\n"
 
 #: tools/gtk-rendernode-tool-info.c:193
-#, c-format
-msgid "Number of nodes: %u\n"
-msgstr "नोड्स की संख्या: %u\n"
+msgid "Number of nodes:"
+msgstr "नोड्स की संख्या:"
 
 #: tools/gtk-rendernode-tool-info.c:200
-#, c-format
-msgid "Depth: %u\n"
-msgstr "गहराई: %u\n"
+msgid "Depth:"
+msgstr "गहराई:"
 
 #: tools/gtk-rendernode-tool-info.c:203
-#, c-format
-msgid "Bounds: %g x %g\n"
-msgstr "सीमाएं: %g x %g\n"
+msgid "Bounds:"
+msgstr "सीमाएं:"
 
 #: tools/gtk-rendernode-tool-info.c:204
-#, c-format
-msgid "Origin: %g %g\n"
-msgstr "उत्पत्ति: %g %g\n"
+msgid "Origin:"
+msgstr "उत्पत्ति:"
 
-#: tools/gtk-rendernode-tool-info.c:207
-#, c-format
-msgid "Opaque part: %g %g, %g x %g (%.0f%%)\n"
-msgstr "अपारदर्शी भाग: %g %g, %g x %g (%.0f%%)\n"
+#: tools/gtk-rendernode-tool-info.c:208 tools/gtk-rendernode-tool-info.c:214
+msgid "Opaque part:"
+msgstr "अपारदर्शी भाग:"
 
-#: tools/gtk-rendernode-tool-info.c:213
-#, c-format
-msgid "Opaque part: none\n"
-msgstr "अपारदर्शी भाग: कोई नहीं\n"
-
-#: tools/gtk-rendernode-tool-info.c:234
+#: tools/gtk-rendernode-tool-info.c:235
 msgid "Provide information about the render node."
 msgstr "रेंडर नोड के बारे में जानकारी प्रदान करें।"
 
-#: tools/gtk-rendernode-tool-info.c:253
+#: tools/gtk-rendernode-tool-info.c:254
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "केवल एक .node फाइल स्वीकार कर सकते हैं\n"
