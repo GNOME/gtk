@@ -69,7 +69,7 @@ unintuitive in that they do not apply to the whole subtree of
 widgets, but just to the one widget where the stylesheet was
 added.
 
-GTK 5 will no longer provide this functionality. The recommendations
+GTK 5 will no longer provide this functionality. The recommendation
 is to use a global stylesheet (i.e. gtk_style_context_add_provider_for_display())
 and rely on style classes to make your CSS apply only where desired.
 
@@ -119,7 +119,7 @@ spec.
 
 The color functions can all be replaced by combinations of calc() and color-mix().
 
-ligher(c) and darker(c) are just shade(c, 1.3) or shade(c, 0.7), respectively, and
+lighter(c) and darker(c) are just shade(c, 1.3) or shade(c, 0.7), respectively, and
 thus can be handled the same way as shade in the examples below.
 
 Replace
@@ -190,7 +190,7 @@ language binding. The new API is [class@Gtk.AlertDialog].
 ## GtkDialog is going away
 
 After gtk_dialog_run() was removed, the usefulness of GtkDialog
-is much reduced, and it has awkward, archaice APIs. Therefore,
+is much reduced, and it has awkward, archaic APIs. Therefore,
 it is dropped. The recommended replacement is to just create
 your own window and add buttons as required, either in the header
 or elsewhere.
@@ -209,7 +209,7 @@ Instead of gtk_show_uri(), you should use GtkUriLauncher or GtkFileLauncher.
 
 ## GtkStatusbar is going away
 
-This is an oldfashioned widget that does not do all that much anymore, since
+This is an old fashioned widget that does not do all that much any more, since
 it no longer has a resize handle for the window.
 
 ## GtkLockButton and GtkVolumeButton are going away
@@ -217,7 +217,7 @@ it no longer has a resize handle for the window.
 These are very specialized widgets that should better live with the application
 where they are used.
 
-## Widget size api changes
+## Widget size API changes
 
 The functions gtk_widget_get_allocated_width() and gtk_widget_get_allocated_height()
 are going away. In most cases, [method@Gtk.Widget.get_width] and [method@Gtk.Widget.get_height]
