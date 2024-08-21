@@ -39,12 +39,6 @@
 #include <wintab.h>
 #include <imm.h>
 
-/* Whether GDK initialized COM */
-static gboolean co_initialized = FALSE;
-
-/* Whether GDK initialized OLE */
-static gboolean ole_initialized = FALSE;
-
 void
 _gdk_win32_surfaceing_init (void)
 {
@@ -53,10 +47,13 @@ _gdk_win32_surfaceing_init (void)
   gdk_dmanipulation_initialize ();
 }
 
+/* Whether GDK initialized COM */
 gboolean
 gdk_win32_ensure_com (void)
 {
-  if (!co_initialized)
+  static gsize co_initialized = 0;
+
+  if (g_once_init_enter (&co_initialized))
     {
       /* UI thread should only use STA model. See
        * -> https://devblogs.microsoft.com/oldnewthing/20080424-00/?p=22603
@@ -64,11 +61,12 @@ gdk_win32_ensure_com (void)
        */
       const DWORD flags = COINIT_APARTMENTTHREADED |
                           COINIT_DISABLE_OLE1DDE;
+      gboolean init_result = FALSE;
       HRESULT hr;
 
       hr = CoInitializeEx (NULL, flags);
       if (SUCCEEDED (hr))
-        co_initialized = TRUE;
+        init_result = TRUE;
       else switch (hr)
         {
         case RPC_E_CHANGED_MODE:
@@ -79,19 +77,26 @@ gdk_win32_ensure_com (void)
           HR_LOG (hr);
         break;
         }
+
+      g_once_init_leave (&co_initialized, init_result);
     }
 
   return co_initialized;
 }
 
+/* Whether GDK initialized OLE */
 gboolean
 gdk_win32_ensure_ole (void)
 {
-  if (!ole_initialized)
+  static gsize ole_initialized = 0;
+
+  if (g_once_init_enter (&ole_initialized))
     {
+      gboolean init_result = FALSE;
       HRESULT hr = OleInitialize (NULL);
+
       if (SUCCEEDED (hr))
-        ole_initialized = TRUE;
+        init_result = TRUE;
       else switch (hr)
         {
         case RPC_E_CHANGED_MODE:
@@ -102,6 +107,8 @@ gdk_win32_ensure_ole (void)
           HR_LOG (hr);
         break;
         }
+
+       g_once_init_leave (&ole_initialized, init_result);
     }
 
   return ole_initialized;
