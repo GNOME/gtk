@@ -1944,7 +1944,8 @@ init_settings (GdkDisplay *display)
   GSettings *settings;
   int i;
 
-  if (gdk_should_use_portal ())
+  if (gdk_should_use_portal () &&
+      !(gdk_display_get_debug_flags (display) & GDK_DEBUG_DEFAULT_SETTINGS))
     {
       GVariant *ret;
       GError *error = NULL;
