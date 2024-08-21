@@ -24,8 +24,8 @@ the motivation and goals of larger API changes.
 ## Cell renderers are going away
 
 Cell renderers were introduced in GTK 2 to support rendering of
-"big data" UIs, in particular treeviews. Over the years, more
-"data-like" widgets have started to use them, and cell renderers
+“big data” UIs, in particular treeviews. Over the years, more
+“data-like” widgets have started to use them, and cell renderers
 have grown into a shadowy, alternative rendering infrastructure
 that duplicates much of what widgets do, while duplicating the
 code and adding their own dose of bugs.
@@ -40,7 +40,7 @@ all cell renderer-based widgets.
 The old GTK 2 era rendering APIs for theme components like
 gtk_render_frame() or gtk_render_check() have not been used by
 GTK itself even in later GTK 3, but they have been kept around
-for the benefit of "external drawing" users - applications that
+for the benefit of “external drawing” users — applications that
 want their controls to look like GTK without using widgets.
 
 Supporting this is increasingly getting in the way of making
@@ -62,7 +62,7 @@ get the current style foreground color, using
 
 ## Local stylesheets are going away
 
-The cascading part of GTK's CSS implementation is complicated by
+The cascading part of GTK’s CSS implementation is complicated by
 the existence of local stylesheets (i.e. those added with
 gtk_style_context_add_provider()). And local stylesheets are
 unintuitive in that they do not apply to the whole subtree of
@@ -75,7 +75,7 @@ and rely on style classes to make your CSS apply only where desired.
 
 ## Non-standard CSS extensions are going away
 
-GTK's CSS machinery has a some non-standard extensions around colors:
+GTK’s CSS machinery has a some non-standard extensions around colors:
 named colors with \@define-color and color functions: lighter(), darker(),
 shade(), alpha(), mix().
 
@@ -178,7 +178,7 @@ are phased out. The are being replaced by a new family of async APIs
 that will be more convenient to use from language bindings, in particular
 for languages that have concepts like promises. The new APIs are
 [class@Gtk.ColorDialog], [class@Gtk.FontDialog] and [class@Gtk.FileDialog],
-There are also equivalents for some of the 'button' widgets:
+There are also equivalents for some of the “button” widgets:
 [class@Gtk.ColorDialogButton], [class@Gtk.FontDialogButton].
 
 ## GtkMessageDialog is going away
