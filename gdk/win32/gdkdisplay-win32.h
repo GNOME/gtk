@@ -59,6 +59,13 @@ struct _GdkWin32InputLocaleItems
 };
 typedef struct _GdkWin32InputLocaleItems GdkWin32InputLocaleItems;
 
+struct _GdkWin32CbDnDItems
+{
+  /* used to identify the main thread for this GdkWin32Display */
+  GThread *display_main_thread;
+};
+typedef struct _GdkWin32CbDnDItems GdkWin32CbDnDItems;
+
 /* Define values used to set DPI-awareness */
 typedef enum _GdkWin32ProcessDpiAwareness {
   PROCESS_DPI_UNAWARE = 0,
@@ -156,6 +163,7 @@ struct _GdkWin32Display
 
   GListModel *monitors;
   GdkWin32InputLocaleItems *input_locale_items;
+  GdkWin32CbDnDItems *cb_dnd_items;
 
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;

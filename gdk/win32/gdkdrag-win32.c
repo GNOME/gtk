@@ -703,6 +703,25 @@ static gboolean drag_context_grab (GdkDrag *drag);
 
 G_DEFINE_TYPE (GdkWin32Drag, gdk_win32_drag, GDK_TYPE_DRAG)
 
+static gboolean
+check_drag_display_thread_status (GdkDrag  *drag,
+                                  gboolean  is_self)
+{
+  GdkDisplay *display = gdk_drag_get_display (drag);
+  GThread *current_thread, *display_thread;
+
+  if (display == NULL)
+    return TRUE;
+
+  current_thread = g_thread_self ();
+  display_thread = GDK_WIN32_DISPLAY (display)->cb_dnd_items->display_main_thread;
+
+  if (display_thread == NULL)
+    return TRUE;
+
+  return is_self ? display_thread == current_thread : display_thread != current_thread;
+}
+
 static void
 move_drag_surface (GdkDrag *drag,
                    guint    x_root,
@@ -710,8 +729,7 @@ move_drag_surface (GdkDrag *drag,
 {
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (drag);
 
-  g_assert (_win32_main_thread == NULL ||
-            _win32_main_thread == g_thread_self ());
+  g_assert (check_drag_display_thread_status (drag, TRUE));
 
   gdk_win32_surface_move (drag_win32->drag_surface,
                           x_root - drag_win32->hot_x,
@@ -722,8 +740,7 @@ move_drag_surface (GdkDrag *drag,
 static void
 gdk_win32_drag_init (GdkWin32Drag *drag)
 {
-  g_assert (_win32_main_thread == NULL ||
-            _win32_main_thread == g_thread_self ());
+  g_assert (check_drag_display_thread_status (GDK_DRAG (drag), TRUE));
 
   drag->handle_events = TRUE;
   drag->dest_hwnd = INVALID_HANDLE_VALUE;
@@ -738,14 +755,14 @@ gdk_win32_drag_finalize (GObject *object)
   GdkWin32Drag *drag_win32;
   GdkSurface *drag_surface;
 
-  g_assert (_win32_main_thread == NULL ||
-            _win32_main_thread == g_thread_self ());
-
   GDK_NOTE (DND, g_print ("gdk_win32_drag_finalize %p\n", object));
 
   g_return_if_fail (GDK_IS_WIN32_DRAG (object));
 
   drag = GDK_DRAG (object);
+
+  g_assert (check_drag_display_thread_status (drag, TRUE));
+
   drag_win32 = GDK_WIN32_DRAG (drag);
 
   gdk_drag_set_cursor (drag, NULL);
@@ -1269,8 +1286,9 @@ idataobject_querygetdata (LPDATAOBJECT This,
 {
   HRESULT hr;
 
-  g_assert (_win32_main_thread == NULL ||
-            _win32_main_thread != g_thread_self ());
+  data_object *ctx = (data_object *) This;
+
+  g_assert (check_drag_display_thread_status (ctx->drag, FALSE));
 
   hr = query (This, pFormatEtc, NULL);
 
@@ -1309,8 +1327,9 @@ idataobject_enumformatetc (LPDATAOBJECT     This,
                            DWORD            dwDirection,
                            LPENUMFORMATETC *ppEnumFormatEtc)
 {
-  g_assert (_win32_main_thread == NULL ||
-            _win32_main_thread != g_thread_self ());
+  data_object *ctx = (data_object *) This;
+
+  g_assert (check_drag_display_thread_status (ctx->drag, FALSE));
 
   if (dwDirection != DATADIR_GET)
     {
@@ -1763,8 +1782,7 @@ gdk_win32_drag_drop (GdkDrag *drag,
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
   gpointer ddd;
 
-  g_assert (_win32_main_thread == NULL ||
-            _win32_main_thread == g_thread_self ());
+  g_assert (check_drag_display_thread_status (drag, TRUE));
 
   g_return_if_fail (drag != NULL);
 

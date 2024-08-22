@@ -35,5 +35,3 @@ HWND              _modal_move_resize_hwnd = NULL;
 
 /* The singleton clipdrop object pointer */
 GdkWin32Clipdrop *_win32_clipdrop = NULL;
-
-GThread          *_win32_main_thread = NULL;
