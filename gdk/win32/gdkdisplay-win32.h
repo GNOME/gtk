@@ -34,6 +34,14 @@
 # include <epoxy/egl.h>
 #endif
 
+struct _GdkWin32PointerDeviceItems
+{
+  /* Input Core items */
+  int input_ignore_core;
+};
+
+typedef struct _GdkWin32PointerDeviceItems GdkWin32PointerDeviceItems;
+
 typedef struct _GdkWin32InputLocaleItems GdkWin32InputLocaleItems;
 
 /* Define values used to set DPI-awareness */
@@ -133,6 +141,7 @@ struct _GdkWin32Display
 
   GListModel *monitors;
   GdkWin32InputLocaleItems *input_locale_items;
+  GdkWin32PointerDeviceItems *pointer_device_items;
 
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;
