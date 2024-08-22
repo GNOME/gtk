@@ -120,8 +120,6 @@ static gboolean gdk_event_dispatch (GSource     *source,
 /* Private variable declarations
  */
 
-extern int        _gdk_input_ignore_core;
-
 typedef struct
 {
   GSource source;
@@ -1522,7 +1520,7 @@ generate_button_event (GdkEventType  type,
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
   double x, y;
 
-  if (_gdk_input_ignore_core > 0)
+  if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->input_locale_items->input_ignore_core > 0)
     return;
 
   device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
@@ -2359,7 +2357,7 @@ gdk_event_translate (MSG *msg,
 
       if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
         gdk_win32_surface_do_move_resize_drag (surface, msg->pt.x, msg->pt.y);
-      else if (_gdk_input_ignore_core == 0)
+      else if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->input_locale_items->input_ignore_core == 0)
 	{
           double x = (double) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
           double y = (double) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;

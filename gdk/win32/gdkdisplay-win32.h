@@ -49,6 +49,9 @@ struct _GdkWin32InputLocaleItems
   /* Input locale items */
   HKL input_locale;
 
+  /* Input Core items */
+  int input_ignore_core;
+
   /* COM objects to receive language or text service change notifcations in GdkWin32 */
   GdkWin32ALPNSink *notifcation_sink;
   ITfSource *itf_source;

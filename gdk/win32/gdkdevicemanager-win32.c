@@ -48,7 +48,6 @@
 /* TODO: get rid of these global variables */
 static GList     *wintab_contexts = NULL;
 static GdkSurface *wintab_surface = NULL;
-extern int        _gdk_input_ignore_core;
 
 typedef UINT (WINAPI *t_WTInfoA) (UINT a, UINT b, LPVOID c);
 typedef UINT (WINAPI *t_WTInfoW) (UINT a, UINT b, LPVOID c);
@@ -976,12 +975,12 @@ gdk_wintab_make_event (GdkDisplay *display,
 	    {
 	      _gdk_device_virtual_set_active (device_manager->core_pointer,
 					      GDK_DEVICE (source_device));
-	      _gdk_input_ignore_core += 1;
+	      GDK_WIN32_DISPLAY (display)->input_locale_items->input_ignore_core += 1;
 	    }
 	}
       else if (source_device != NULL &&
 	       source_device->sends_core &&
-               _gdk_input_ignore_core == 0)
+               GDK_WIN32_DISPLAY (display)->input_locale_items->input_ignore_core == 0)
         {
           /* A fallback for cases when two devices (disabled and enabled)
            * were in proximity simultaneously.
@@ -997,7 +996,7 @@ gdk_wintab_make_event (GdkDisplay *display,
            */
 	  _gdk_device_virtual_set_active (device_manager->core_pointer,
 					  GDK_DEVICE (source_device));
-	  _gdk_input_ignore_core += 1;
+	  GDK_WIN32_DISPLAY (display)->input_locale_items->input_ignore_core += 1;
         }
 
       if (source_device == NULL)
@@ -1160,7 +1159,7 @@ gdk_wintab_make_event (GdkDisplay *display,
 	{
 	  _gdk_device_virtual_set_active (device_manager->core_pointer,
 					  GDK_DEVICE (source_device));
-	  _gdk_input_ignore_core += 1;
+	  GDK_WIN32_DISPLAY (display)->input_locale_items->input_ignore_core += 1;
 	}
 
       return NULL;
@@ -1168,11 +1167,11 @@ gdk_wintab_make_event (GdkDisplay *display,
     case WT_PROXIMITY:
       if (LOWORD (msg->lParam) == 0)
         {
-          if (_gdk_input_ignore_core > 0)
+          if (GDK_WIN32_DISPLAY (display)->input_locale_items->input_ignore_core > 0)
             {
-	      _gdk_input_ignore_core -= 1;
+	      GDK_WIN32_DISPLAY (display)->input_locale_items->input_ignore_core -= 1;
 
-	      if (_gdk_input_ignore_core == 0)
+	      if (GDK_WIN32_DISPLAY (display)->input_locale_items->input_ignore_core == 0)
 		_gdk_device_virtual_set_active (device_manager->core_pointer,
 						device_manager->system_pointer);
 	    }

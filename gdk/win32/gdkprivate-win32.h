@@ -139,8 +139,6 @@ extern GdkDisplay       *_gdk_display;
 
 extern GdkDeviceManagerWin32 *_gdk_device_manager;
 
-extern int               _gdk_input_ignore_core;
-
 /* These are thread specific, but GDK/win32 works OK only when invoked
  * from a single thread anyway.
  */
