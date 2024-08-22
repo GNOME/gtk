@@ -29,6 +29,8 @@
 #include "gtkshortcutswindowprivate.h"
 #include "gtktooltipprivate.h"
 
+#include <glib/gi18n-lib.h>
+
 /**
  * GtkApplicationWindow:
  *
@@ -230,6 +232,9 @@ gtk_application_window_update_menubar (GtkApplicationWindow *window)
       g_menu_append_section (combined, NULL, G_MENU_MODEL (priv->menubar_section));
 
       priv->menubar = gtk_popover_menu_bar_new_from_model (G_MENU_MODEL (combined));
+      gtk_accessible_update_property (GTK_ACCESSIBLE (priv->menubar),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, _("Menu bar"),
+                                      -1);
       gtk_widget_set_parent (priv->menubar, GTK_WIDGET (window));
       g_object_unref (combined);
     }
