@@ -15,7 +15,8 @@ export LSAN_OPTIONS=suppressions=$srcdir/lsan.supp:print_suppressions=0:detect_l
 
 case "${setup}" in
   x11*)
-    xvfb-run -a -s "-screen 0 1024x768x24 -noreset" \
+    dbus-run-session -- \
+       xvfb-run -a -s "-screen 0 1024x768x24 -noreset" \
           meson test -C ${builddir} \
                 --quiet \
                 --timeout-multiplier "${multiplier}" \
@@ -41,7 +42,8 @@ case "${setup}" in
     compositor=$!
     export WAYLAND_DISPLAY=wayland-5
 
-    meson test -C ${builddir} \
+    dbus-run-session -- \
+          meson test -C ${builddir} \
                 --quiet \
                 --timeout-multiplier "${multiplier}" \
                 --num-processes "${n_processes}" \
@@ -65,7 +67,8 @@ case "${setup}" in
     server=$!
     export BROADWAY_DISPLAY=:5
 
-    meson test -C ${builddir} \
+    dbus-run-session -- \
+          meson test -C ${builddir} \
                 --quiet \
                 --timeout-multiplier "${multiplier}" \
                 --num-processes "${n_processes}" \
