@@ -1490,7 +1490,6 @@ gdk_win32_clipdrop_class_init (GdkWin32ClipdropClass *klass)
 void
 _gdk_win32_clipdrop_init (void)
 {
-  _win32_main_thread = g_thread_self ();
   _win32_clipdrop = GDK_WIN32_CLIPDROP (g_object_new (GDK_TYPE_WIN32_CLIPDROP, NULL));
 }
 

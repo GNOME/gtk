@@ -688,6 +688,7 @@ gdk_win32_display_finalize (GObject *object)
   _gdk_win32_dnd_exit ();
   gdk_win32_display_lang_notification_exit (display_win32);
   g_free (display_win32->pointer_device_items);
+  g_free (display_win32->cb_dnd_items);
 
   g_list_store_remove_all (G_LIST_STORE (display_win32->monitors));
   g_object_unref (display_win32->monitors);
@@ -1028,8 +1029,10 @@ gdk_win32_display_init (GdkWin32Display *display_win32)
   const char *scale_str = g_getenv ("GDK_SCALE");
 
   display_win32->monitors = G_LIST_MODEL (g_list_store_new (GDK_TYPE_MONITOR));
-
   display_win32->pointer_device_items = g_new0 (GdkWin32PointerDeviceItems, 1);
+  display_win32->cb_dnd_items = g_new0 (GdkWin32CbDnDItems, 1);
+  display_win32->cb_dnd_items->display_main_thread = g_thread_self ();
+
   _gdk_win32_enable_hidpi (display_win32);
   display_win32->running_on_arm64 = _gdk_win32_check_processor (GDK_WIN32_ARM64);
 
