@@ -247,7 +247,7 @@ void _gdk_win32_append_event (GdkEvent *event);
 void     _gdk_win32_surface_handle_aerosnap      (GdkSurface            *surface,
                                                   GdkWin32AeroSnapCombo combo);
 
-gboolean _gdk_win32_get_window_rect             (GdkSurface  *surface,
+gboolean gdk_win32_get_surface_hwnd_rect        (GdkSurface  *surface,
                                                  RECT       *rect);
 void     _gdk_win32_do_emit_configure_event     (GdkSurface  *surface,
                                                  RECT        rect);
