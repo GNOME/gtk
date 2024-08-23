@@ -3495,7 +3495,7 @@ setup_drag_move_resize_context (GdkSurface                  *surface,
   if (restore_configure)
     impl->inhibit_configure = FALSE;
 
-  _gdk_win32_get_window_rect (surface, &rect);
+  gdk_win32_get_surface_hwnd_rect (surface, &rect);
 
   cursor_name = get_cursor_name_from_op (op, edge);
 
@@ -3635,7 +3635,7 @@ gdk_win32_surface_do_move_resize_drag (GdkSurface *surface,
   impl = GDK_WIN32_SURFACE (surface);
   context = &impl->drag_move_resize_context;
 
-  if (!_gdk_win32_get_window_rect (surface, &rect))
+  if (!gdk_win32_get_surface_hwnd_rect (surface, &rect))
     return;
 
   x /= impl->surface_scale;
@@ -4448,7 +4448,7 @@ _gdk_win32_surface_request_layout (GdkSurface *surface)
     }
   else
     {
-      _gdk_win32_get_window_rect (surface, &rect);
+      gdk_win32_get_surface_hwnd_rect (surface, &rect);
 
       /* Keep current position if rect is invalid (i.e. queried in bad context) */
       if (rect.right == rect.left || rect.bottom == rect.top)

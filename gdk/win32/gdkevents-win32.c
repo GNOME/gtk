@@ -1265,8 +1265,8 @@ make_crossing_event (GdkDevice *physical_device,
  * TRUE otherwise.
  */
 gboolean
-_gdk_win32_get_window_rect (GdkSurface *surface,
-                            RECT       *rect)
+gdk_win32_get_surface_hwnd_rect (GdkSurface *surface,
+                                 RECT       *rect)
 {
   RECT client_rect;
   POINT point;
