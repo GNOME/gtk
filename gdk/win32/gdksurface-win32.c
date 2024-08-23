@@ -652,7 +652,7 @@ show_surface_internal (GdkSurface *surface,
       !already_mapped &&
       (surface->state & GDK_TOPLEVEL_STATE_MINIMIZED))
     {
-      GtkShowWindow (surface, SW_SHOWMINNOACTIVE);
+      GtkShowSurfaceHWND (surface, SW_SHOWMINNOACTIVE);
       return;
     }
 
@@ -789,26 +789,26 @@ show_surface_internal (GdkSurface *surface,
 
   if (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED)
     {
-      GtkShowWindow (surface, SW_MAXIMIZE);
+      GtkShowSurfaceHWND (surface, SW_MAXIMIZE);
     }
   else if (surface->state & GDK_TOPLEVEL_STATE_MINIMIZED)
     {
-      GtkShowWindow (surface, SW_RESTORE);
+      GtkShowSurfaceHWND (surface, SW_RESTORE);
     }
   else if (GDK_IS_DRAG_SURFACE (surface))
     {
       if (!IsWindowVisible (GDK_SURFACE_HWND (surface)))
-        GtkShowWindow (surface, SW_SHOWNOACTIVATE);
+        GtkShowSurfaceHWND (surface, SW_SHOWNOACTIVATE);
       else
-        GtkShowWindow (surface, SW_SHOWNA);
+        GtkShowSurfaceHWND (surface, SW_SHOWNA);
     }
   else if (!IsWindowVisible (GDK_SURFACE_HWND (surface)))
     {
-      GtkShowWindow (surface, SW_SHOWNORMAL);
+      GtkShowSurfaceHWND (surface, SW_SHOWNORMAL);
     }
   else
     {
-      GtkShowWindow (surface, SW_SHOW);
+      GtkShowSurfaceHWND (surface, SW_SHOW);
     }
 
   exstyle = GetWindowLong (GDK_SURFACE_HWND (surface), GWL_EXSTYLE);
@@ -849,7 +849,7 @@ gdk_win32_surface_hide (GdkSurface *surface)
 
   _gdk_surface_clear_update_area (surface);
 
-  GtkShowWindow (surface, SW_HIDE);
+  GtkShowSurfaceHWND (surface, SW_HIDE);
 }
 
 static void
@@ -3929,7 +3929,7 @@ gdk_win32_surface_minimize (GdkSurface *surface)
   if (GDK_SURFACE_IS_MAPPED (surface))
     {
       old_active_hwnd = GetActiveWindow ();
-      GtkShowWindow (surface, SW_MINIMIZE);
+      GtkShowSurfaceHWND (surface, SW_MINIMIZE);
       if (old_active_hwnd != GDK_SURFACE_HWND (surface))
 	SetActiveWindow (old_active_hwnd);
     }
@@ -3960,7 +3960,7 @@ gdk_win32_surface_maximize (GdkSurface *surface)
   impl->force_recompute_size = FALSE;
 
   if (GDK_SURFACE_IS_MAPPED (surface))
-    GtkShowWindow (surface, SW_MAXIMIZE);
+    GtkShowSurfaceHWND (surface, SW_MAXIMIZE);
   else
     gdk_synthesize_surface_state (surface,
 				 0,
@@ -3984,7 +3984,7 @@ gdk_win32_surface_unmaximize (GdkSurface *surface)
   _gdk_win32_surface_invalidate_egl_framebuffer (surface);
 
   if (GDK_SURFACE_IS_MAPPED (surface))
-    GtkShowWindow (surface, SW_RESTORE);
+    GtkShowSurfaceHWND (surface, SW_RESTORE);
   else
     gdk_synthesize_surface_state (surface,
 				 GDK_TOPLEVEL_STATE_MAXIMIZED,
@@ -4110,13 +4110,13 @@ gdk_win32_surface_focus (GdkSurface *surface,
 			   _gdk_win32_surface_state_to_string (surface->state)));
 
   if (surface->state & GDK_TOPLEVEL_STATE_MAXIMIZED)
-    GtkShowWindow (surface, SW_SHOWMAXIMIZED);
+    GtkShowSurfaceHWND (surface, SW_SHOWMAXIMIZED);
   else if (surface->state & GDK_TOPLEVEL_STATE_MINIMIZED)
-    GtkShowWindow (surface, SW_RESTORE);
+    GtkShowSurfaceHWND (surface, SW_RESTORE);
   else if (!IsWindowVisible (GDK_SURFACE_HWND (surface)))
-    GtkShowWindow (surface, SW_SHOWNORMAL);
+    GtkShowSurfaceHWND (surface, SW_SHOWNORMAL);
   else
-    GtkShowWindow (surface, SW_SHOW);
+    GtkShowSurfaceHWND (surface, SW_SHOW);
 
   SetFocus (GDK_SURFACE_HWND (surface));
 }
@@ -4199,8 +4199,8 @@ gdk_win32_surface_get_impl_hwnd (GdkSurface *surface)
 }
 
 BOOL WINAPI
-GtkShowWindow (GdkSurface *surface,
-               int         cmd_show)
+GtkShowSurfaceHWND (GdkSurface *surface,
+                    int         cmd_show)
 {
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
 
