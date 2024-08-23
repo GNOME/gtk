@@ -963,7 +963,6 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                         &self->vk_image);
   if (res != VK_SUCCESS)
     {
-      gsk_vulkan_handle_result (res, "vkCreateImage");
       GDK_DEBUG (DMABUF, "vkCreateImage() failed: %s", gdk_vulkan_strerror (res));
       return NULL;
     }
