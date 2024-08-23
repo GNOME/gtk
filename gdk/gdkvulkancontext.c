@@ -1673,26 +1673,26 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
         g_ptr_array_add (used_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME);
     }
 
-  res = GDK_VK_CHECK (vkCreateInstance, &(VkInstanceCreateInfo) {
-                                             .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-                                             .pNext = NULL,
-                                             .flags = 0,
-                                             .pApplicationInfo = &(VkApplicationInfo) {
-                                                 .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
-                                                 .pNext = NULL,
-                                                 .pApplicationName = g_get_application_name (),
-                                                 .applicationVersion = 0,
-                                                 .pEngineName = "GTK",
-                                                 .engineVersion = VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
-                                                 .apiVersion = VK_API_VERSION_1_3
-                                             },
-                                             .enabledLayerCount = 0,
-                                             .ppEnabledLayerNames = NULL,
-                                             .enabledExtensionCount = used_extensions->len,
-                                             .ppEnabledExtensionNames = (const char * const *) used_extensions->pdata,
-                                         },
-                                         NULL,
-                                         &display->vk_instance);
+  res = vkCreateInstance (&(VkInstanceCreateInfo) {
+                               .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+                               .pNext = NULL,
+                               .flags = 0,
+                               .pApplicationInfo = &(VkApplicationInfo) {
+                                   .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
+                                   .pNext = NULL,
+                                   .pApplicationName = g_get_application_name (),
+                                   .applicationVersion = 0,
+                                   .pEngineName = "GTK",
+                                   .engineVersion = VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
+                                   .apiVersion = VK_API_VERSION_1_3
+                               },
+                               .enabledLayerCount = 0,
+                               .ppEnabledLayerNames = NULL,
+                               .enabledExtensionCount = used_extensions->len,
+                               .ppEnabledExtensionNames = (const char * const *) used_extensions->pdata,
+                           },
+                           NULL,
+                           &display->vk_instance);
   g_ptr_array_free (used_extensions, TRUE);
 
   if (res != VK_SUCCESS)

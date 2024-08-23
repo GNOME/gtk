@@ -15,6 +15,7 @@
 
 #include <glib/gstdio.h>
 
+#include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkdmabuftexturebuilderprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
@@ -296,7 +297,9 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
   GdkGLContext *context;
   guint texture_id;
 
-  context = GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame));
+  /* Don't use the renderer context, the texture might survive the frame
+   * and its surface */
+  context = gdk_display_get_gl_context (gsk_gpu_device_get_display (gsk_gpu_frame_get_device (frame)));
   texture_id = gsk_gl_image_steal_texture (GSK_GL_IMAGE (self->image));
 
 #ifdef HAVE_DMABUF
