@@ -976,17 +976,17 @@ show_surface_recurse (GdkSurface *surface,
 		{
 		  if (gdk_toplevel_get_state (GDK_TOPLEVEL (surface)) & GDK_TOPLEVEL_STATE_MAXIMIZED)
 		    {
-		      GtkShowWindow (surface, SW_SHOWMAXIMIZED);
+		      GtkShowSurfaceHWND (surface, SW_SHOWMAXIMIZED);
 		    }
 		  else
 		    {
-		      GtkShowWindow (surface, SW_RESTORE);
+		      GtkShowSurfaceHWND (surface, SW_RESTORE);
 		    }
 		}
 	    }
 	  else
 	    {
-	      GtkShowWindow (surface, SW_MINIMIZE);
+	      GtkShowSurfaceHWND (surface, SW_MINIMIZE);
 	    }
 	}
 

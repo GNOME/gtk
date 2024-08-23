@@ -269,8 +269,8 @@ void gdk_win32_surface_resize (GdkSurface *surface,
                                int         width,
                                int         height);
 
-BOOL WINAPI GtkShowWindow (GdkSurface *surface,
-                           int        cmd_show);
+BOOL WINAPI GtkShowSurfaceHWND (GdkSurface *surface,
+                                int        cmd_show);
 
 /* Initialization */
 void _gdk_win32_surfaceing_init (void);
