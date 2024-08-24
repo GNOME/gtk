@@ -33,6 +33,7 @@ demos/gtk-demo/listview_filebrowser.ui
 demos/gtk-demo/listview_minesweeper.ui
 demos/gtk-demo/listview_settings2.ui
 demos/gtk-demo/listview_settings.ui
+demos/gtk-demo/main.c
 demos/gtk-demo/main.ui
 demos/gtk-demo/menus.ui
 demos/gtk-demo/offscreen_window2.c
@@ -136,12 +137,16 @@ testsuite/css/nodes/notebook.top.ui
 testsuite/css/nodes/notebook.ui
 testsuite/css/style/adjacent-states.ui
 testsuite/css/style/bloomfilter-not.ui
+testsuite/css/style/currentcolor2.ui
+testsuite/css/style/currentcolor3.ui
+testsuite/css/style/currentcolor4.ui
 testsuite/css/style/currentcolor.ui
 testsuite/css/style/font.ui
 testsuite/css/style/inherit.ui
 testsuite/css/style/label.ui
 testsuite/css/style/nth-child.ui
 testsuite/css/style/root.ui
+testsuite/css/style/variables.ui
 testsuite/gtk/filechooser.c
 testsuite/gtk/focus-chain/widget-factory2.ui
 testsuite/gtk/focus-chain/widget-factory3.ui

@@ -4,6 +4,7 @@ gdk/broadway/gdkbroadway-server.c
 gdk/gdkapplaunchcontext.c
 gdk/gdk.c
 gdk/gdkclipboard.c
+gdk/gdkcolorstate.c
 gdk/gdkcontentprovider.c
 gdk/gdkcontentproviderimpl.c
 gdk/gdkcursor.c
@@ -426,6 +427,13 @@ tools/gtk-builder-tool-preview.c
 tools/gtk-builder-tool-screenshot.c
 tools/gtk-builder-tool-simplify.c
 tools/gtk-builder-tool-validate.c
+tools/gtk-image-tool.c
+tools/gtk-image-tool-compare.c
+tools/gtk-image-tool-convert.c
+tools/gtk-image-tool-info.c
+tools/gtk-image-tool-relabel.c
+tools/gtk-image-tool-show.c
+tools/gtk-image-tool-utils.c
 tools/gtk-launch.c
 tools/gtk-path-tool.c
 tools/gtk-path-tool-decompose.c
@@ -438,6 +446,7 @@ tools/gtk-path-tool-utils.c
 tools/gtk-rendernode-tool.c
 tools/gtk-rendernode-tool-benchmark.c
 tools/gtk-rendernode-tool-compare.c
+tools/gtk-rendernode-tool-extract.c
 tools/gtk-rendernode-tool-info.c
 tools/gtk-rendernode-tool-render.c
 tools/gtk-rendernode-tool-show.c
