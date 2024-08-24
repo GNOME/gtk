@@ -85,7 +85,6 @@ typedef enum
  * @GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE: whether the bottom edge is resizable
  * @GDK_TOPLEVEL_STATE_LEFT_TILED: whether the left edge is tiled
  * @GDK_TOPLEVEL_STATE_LEFT_RESIZABLE: whether the left edge is resizable
- * @GDK_TOPLEVEL_STATE_SUSPENDED: the surface is not visible to the user
  *
  * Specifies the state of a toplevel surface.
  *
@@ -94,6 +93,14 @@ typedef enum
  * tiled states is set. On platforms that lack that support, the tiled state
  * will give an indication of tiledness without any of the per-edge states
  * being set.
+ */
+
+/**
+ * GDK_TOPLEVEL_STATE_SUSPENDED:
+ *
+ * The surface is not visible to the user.
+ *
+ * Since: 4.12
  */
 typedef enum
 {
