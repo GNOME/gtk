@@ -610,13 +610,11 @@ main (int argc, char **argv)
       /* Check that the node didn't grow.  */
       success = success && graphene_rect_contains_rect (&node_bounds, &node2_bounds);
 
-      reference_texture = gdk_texture_new_from_filename (png_file, &error);
       rendered_texture = gsk_renderer_render_texture (renderer, node2, &node_bounds);
       save_image (rendered_texture, node_file, "-replayed.out.png");
-      g_assert_nonnull (reference_texture);
       g_assert_nonnull (rendered_texture);
 
-      diff_texture = reftest_compare_textures (reference_texture, rendered_texture);
+      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
 
       if (diff_texture)
         {
