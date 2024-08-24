@@ -376,7 +376,7 @@ main (int argc, char **argv)
           g_print ("Error loading reference surface: %s\n", error->message);
           g_clear_error (&error);
           save_image (rendered_texture, node_file, ".out.png");
-          return 0;
+          return 1;
         }
 
       /* Now compare the two */
