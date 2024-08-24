@@ -396,6 +396,7 @@ main (int argc, char **argv)
     {
       GskRenderNode *node2;
       GdkPixbuf *pixbuf, *pixbuf2;
+      GdkTexture *flipped_reference;
       GskTransform *transform;
 
       transform = gsk_transform_scale (NULL, -1, 1);
@@ -409,13 +410,13 @@ main (int argc, char **argv)
 
       pixbuf = gdk_pixbuf_new_from_file (png_file, &error);
       pixbuf2 = gdk_pixbuf_flip (pixbuf, TRUE);
-      reference_texture = gdk_texture_new_for_pixbuf (pixbuf2);
+      flipped_reference = gdk_texture_new_for_pixbuf (pixbuf2);
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
-      save_image (reference_texture, node_file, "-flipped.ref.png");
+      save_image (flipped_reference, node_file, "-flipped.ref.png");
 
-      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+      diff_texture = reftest_compare_textures (rendered_texture, flipped_reference);
 
       if (diff_texture)
         {
@@ -425,7 +426,7 @@ main (int argc, char **argv)
 
       g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
-      g_clear_object (&reference_texture);
+      g_clear_object (&flipped_reference);
       gsk_render_node_unref (node2);
     }
 
@@ -433,6 +434,7 @@ main (int argc, char **argv)
     {
       GskRenderNode *node2;
       GdkPixbuf *pixbuf, *pixbuf2, *pixbuf3;
+      GdkTexture *repeated_reference;
       int width, height;
       graphene_rect_t node_bounds;
       graphene_rect_t bounds;
@@ -473,15 +475,15 @@ main (int argc, char **argv)
 
       pixbuf3 = gdk_pixbuf_new_subpixbuf (pixbuf2, width / 2, height / 2, MIN (1000, 3 * width), MIN (1000, 3 * height));
 
-      reference_texture = gdk_texture_new_for_pixbuf (pixbuf3);
+      repeated_reference = gdk_texture_new_for_pixbuf (pixbuf3);
 
       g_object_unref (pixbuf3);
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
-      save_image (reference_texture, node_file, "-repeated.ref.png");
+      save_image (repeated_reference, node_file, "-repeated.ref.png");
 
-      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+      diff_texture = reftest_compare_textures (rendered_texture, repeated_reference);
 
       if (diff_texture)
         {
@@ -491,7 +493,7 @@ main (int argc, char **argv)
 
       g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
-      g_clear_object (&reference_texture);
+      g_clear_object (&repeated_reference);
       gsk_render_node_unref (node2);
     }
 
@@ -499,6 +501,7 @@ main (int argc, char **argv)
     {
       GskRenderNode *node2;
       GdkPixbuf *pixbuf, *pixbuf2;
+      GdkTexture *rotated_reference;
       GskTransform *transform;
 
       transform = gsk_transform_rotate (NULL, 90);
@@ -512,13 +515,13 @@ main (int argc, char **argv)
 
       pixbuf = gdk_pixbuf_new_from_file (png_file, &error);
       pixbuf2 = gdk_pixbuf_rotate_simple (pixbuf, GDK_PIXBUF_ROTATE_CLOCKWISE);
-      reference_texture = gdk_texture_new_for_pixbuf (pixbuf2);
+      rotated_reference = gdk_texture_new_for_pixbuf (pixbuf2);
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
-      save_image (reference_texture, node_file, "-rotated.ref.png");
+      save_image (rotated_reference, node_file, "-rotated.ref.png");
 
-      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+      diff_texture = reftest_compare_textures (rendered_texture, rotated_reference);
 
       if (diff_texture)
         {
@@ -528,7 +531,7 @@ main (int argc, char **argv)
 
       g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
-      g_clear_object (&reference_texture);
+      g_clear_object (&rotated_reference);
       gsk_render_node_unref (node2);
     }
 
@@ -536,6 +539,7 @@ main (int argc, char **argv)
     {
       GskRenderNode *node2;
       GdkPixbuf *pixbuf, *pixbuf2;
+      GdkTexture *masked_reference;
       graphene_rect_t bounds;
       GskRenderNode *mask_node;
       GskRenderNode *nodes[2];
@@ -569,13 +573,13 @@ main (int argc, char **argv)
 
       pixbuf = gdk_pixbuf_new_from_file (png_file, &error);
       pixbuf2 = apply_mask_to_pixbuf (pixbuf);
-      reference_texture = gdk_texture_new_for_pixbuf (pixbuf2);
+      masked_reference = gdk_texture_new_for_pixbuf (pixbuf2);
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
-      save_image (reference_texture, node_file, "-masked.ref.png");
+      save_image (masked_reference, node_file, "-masked.ref.png");
 
-      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+      diff_texture = reftest_compare_textures (rendered_texture, masked_reference);
 
       if (diff_texture)
         {
@@ -585,7 +589,7 @@ main (int argc, char **argv)
 
       g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
-      g_clear_object (&reference_texture);
+      g_clear_object (&masked_reference);
       gsk_render_node_unref (node2);
     }
 
@@ -623,7 +627,6 @@ main (int argc, char **argv)
         }
 
       g_clear_object (&diff_texture);
-      g_clear_object (&reference_texture);
       g_clear_object (&rendered_texture);
       gsk_render_node_unref (node2);
     }
@@ -632,6 +635,7 @@ main (int argc, char **argv)
     {
       GskRenderNode *node2;
       GdkPixbuf *pixbuf, *pixbuf2;
+      GdkTexture *clipped_reference;
       graphene_rect_t bounds;
       cairo_rectangle_int_t int_clip;
       graphene_rect_t clip_rect;
@@ -663,13 +667,13 @@ main (int argc, char **argv)
       int_clip.y -= (int) bounds.origin.y;
 
       pixbuf2 = apply_clip_to_pixbuf (pixbuf, &int_clip);
-      reference_texture = gdk_texture_new_for_pixbuf (pixbuf2);
+      clipped_reference = gdk_texture_new_for_pixbuf (pixbuf2);
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
-      save_image (reference_texture, node_file, "-clipped.ref.png");
+      save_image (clipped_reference, node_file, "-clipped.ref.png");
 
-      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+      diff_texture = reftest_compare_textures (rendered_texture, clipped_reference);
 
       if (diff_texture)
         {
@@ -679,7 +683,7 @@ main (int argc, char **argv)
 
       g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
-      g_clear_object (&reference_texture);
+      g_clear_object (&clipped_reference);
       gsk_render_node_unref (node2);
     }
 
@@ -689,6 +693,7 @@ skip_clip:
     {
       GskRenderNode *node2;
       GdkPixbuf *pixbuf, *pixbuf2;
+      GdkTexture *colorflipped_reference;
       graphene_matrix_t matrix;
 
       graphene_matrix_init_from_float (&matrix,
@@ -706,13 +711,13 @@ skip_clip:
 
       pixbuf = gdk_pixbuf_new_from_file (png_file, &error);
       pixbuf2 = apply_colorflip_to_pixbuf (pixbuf);
-      reference_texture = gdk_texture_new_for_pixbuf (pixbuf2);
+      colorflipped_reference = gdk_texture_new_for_pixbuf (pixbuf2);
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
-      save_image (reference_texture, node_file, "-colorflipped.ref.png");
+      save_image (colorflipped_reference, node_file, "-colorflipped.ref.png");
 
-      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+      diff_texture = reftest_compare_textures (rendered_texture, colorflipped_reference);
 
       if (diff_texture)
         {
@@ -722,7 +727,7 @@ skip_clip:
 
       g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
-      g_clear_object (&reference_texture);
+      g_clear_object (&colorflipped_reference);
       gsk_render_node_unref (node2);
     }
 
