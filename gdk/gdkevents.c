@@ -978,9 +978,13 @@ gdk_event_get_axis (GdkEvent   *event,
  * according to platform conventions.
  *
  * The right mouse button typically triggers context menus.
+ * On macOS, Control+left mouse button also triggers.
  *
  * This function should always be used instead of simply checking for
- * event->button == %GDK_BUTTON_SECONDARY.
+ *
+ * ```c
+ * event->button == GDK_BUTTON_SECONDARY
+ * ```
  *
  * Returns: %TRUE if the event should trigger a context menu.
  */
@@ -998,6 +1002,13 @@ gdk_event_triggers_context_menu (GdkEvent *event)
       if (bevent->button == GDK_BUTTON_SECONDARY &&
           ! (bevent->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
         return TRUE;
+
+#ifdef __APPLE__
+      if (bevent->button == GDK_BUTTON_PRIMARY &&
+          (bevent->state & GDK_CONTROL_MASK) &&
+          ! (bevent->state & (GDK_BUTTON1_MASK | GDK_BUTTON2_MASK)))
+        return TRUE;
+#endif
     }
 
   return FALSE;
