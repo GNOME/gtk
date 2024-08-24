@@ -1,5 +1,5 @@
 compare_render = executable('compare-render',
-  ['compare-render.c', '../reftests/reftest-compare.c', 'replay-node.c'],
+  ['compare-render.c', '../reftests/reftest-compare.c', 'replay-node.c', '../gdk/udmabuf.c'],
   dependencies: libgtk_static_dep,
   c_args: common_cflags + ['-DGTK_COMPILATION'],
 )
