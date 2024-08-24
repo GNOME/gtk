@@ -2024,11 +2024,7 @@ gtk_selection_data_get_uris (const GtkSelectionData *selection_data)
           GPtrArray *uris = g_ptr_array_new ();
 
           for (int i = 0; files[i]; i++)
-            {
-              GFile *file = g_file_new_for_path (files[i]);
-              g_ptr_array_add (uris, g_file_get_uri (file));
-              g_object_unref (file);
-            }
+            g_ptr_array_add (uris, g_filename_to_uri (files[i], NULL, NULL));
 
           g_ptr_array_add (uris, NULL);
           result = (char **) g_ptr_array_free (uris, FALSE);
