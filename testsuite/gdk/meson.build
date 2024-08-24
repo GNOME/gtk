@@ -33,10 +33,18 @@ if x11_enabled
   ]
 endif
 
+if os_linux
+  tests += [
+    { 'name': 'dmabuf-support',
+      'sources': [ 'udmabuf.c' ],
+    },
+  ]
+endif
+
 foreach t : tests
   test_name = t.get('name')
   test_exe = executable(test_name,
-    sources: '@0@.c'.format(test_name),
+    sources: [ '@0@.c'.format(test_name) ] + t.get('sources', []),
     c_args: common_cflags,
     dependencies: libgtk_dep,
     install: false,
