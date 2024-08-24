@@ -26,6 +26,7 @@ variables:
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true"
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled -Dbuild-testsuite=true -Dintrospection=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
+  MESON_TEST_MAX_PROCESSES: 32
   FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v52"
 
 workflow:
@@ -414,7 +415,7 @@ static-scan:
 # Run tests with the address sanitizer. We need to turn off introspection
 # and f16c, since they are incompatible with asan
 asan-build:
-  image: $FEDORA_IMAGE
+  extends: .build-fedora-default
   tags: [ asan ]
   stage: analysis
   needs: []
