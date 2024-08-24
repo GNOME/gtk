@@ -100,13 +100,13 @@ typedef struct _GtkSettingsValue GtkSettingsValue;
 /*< private >
  * GtkSettingsValue:
  * @origin: Origin should be something like “filename:linenumber” for
- *    rc files, or e.g. “XProperty” for other sources.
+ *    ini files, or e.g. “XProperty” for other sources.
  * @value: Valid types are LONG, DOUBLE and STRING corresponding to
  *    the token parsed, or a GSTRING holding an unparsed statement
  */
 struct _GtkSettingsValue
 {
-  /* origin should be something like "filename:linenumber" for rc files,
+  /* origin should be something like "filename:linenumber" for ini files,
    * or e.g. "XProperty" for other sources
    */
   char *origin;
@@ -1345,7 +1345,7 @@ apply_queued_setting (GtkSettings      *settings,
     {
       char *debug = g_strdup_value_contents (&qvalue->value);
 
-      g_message ("%s: failed to retrieve property '%s' of type '%s' from rc file value \"%s\" of type '%s'",
+      g_message ("%s: failed to retrieve property '%s' of type '%s' from ini file value \"%s\" of type '%s'",
                  qvalue->origin ? qvalue->origin : "(for origin information, set GTK_DEBUG)",
                  pspec->name,
                  g_type_name (G_PARAM_SPEC_VALUE_TYPE (pspec)),
@@ -1379,6 +1379,7 @@ gtk_settings_set_property_value_internal (GtkSettings            *settings,
 
   if (!G_VALUE_HOLDS_LONG (&new_value->value) &&
       !G_VALUE_HOLDS_DOUBLE (&new_value->value) &&
+      !G_VALUE_HOLDS_ENUM (&new_value->value) &&
       !G_VALUE_HOLDS_STRING (&new_value->value) &&
       !G_VALUE_HOLDS (&new_value->value, G_TYPE_GSTRING))
     {
@@ -1712,7 +1713,7 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
         continue;
 
       value_type = G_PARAM_SPEC_VALUE_TYPE (pspec);
-      switch (value_type)
+      switch (G_TYPE_FUNDAMENTAL (value_type))
         {
         case G_TYPE_BOOLEAN:
           {
@@ -1745,6 +1746,35 @@ gtk_settings_load_from_key_file (GtkSettings       *settings,
             d_val = g_key_file_get_double (keyfile, "Settings", key, &error);
             if (!error)
               g_value_set_double (&svalue.value, d_val);
+            break;
+          }
+
+        case G_TYPE_ENUM:
+          {
+            char *s_val;
+
+            g_value_init (&svalue.value, value_type);
+            s_val = g_key_file_get_string (keyfile, "Settings", key, &error);
+            if (!error)
+              {
+                GEnumClass *eclass;
+                GEnumValue *ev;
+
+                eclass = g_type_class_ref (value_type);
+                ev = g_enum_get_value_by_nick (eclass, s_val);
+
+                if (ev)
+                  g_value_set_enum (&svalue.value, ev->value);
+                else
+                  g_set_error (&error, G_KEY_FILE_ERROR,
+                               G_KEY_FILE_ERROR_INVALID_VALUE,
+                               "Key file contains key “%s” "
+                               "which has a value that cannot be interpreted.",
+                               key);
+
+                g_type_class_unref (eclass);
+              }
+            g_free (s_val);
             break;
           }
 
