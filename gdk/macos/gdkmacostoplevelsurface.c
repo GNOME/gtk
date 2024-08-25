@@ -617,6 +617,14 @@ _gdk_macos_toplevel_surface_constructed (GObject *object)
 
   _gdk_macos_surface_set_native (GDK_MACOS_SURFACE (self), window);
 
+  [window setOpaque:NO];
+
+  /* Workaround: if we use full transparency, window rendering becomes slow,
+   * because macOS tries to dynamically calculate the shadow.
+   * Instead provide a tiny bit of alpha, so shadows are drawn around the window.
+   */
+  [window setBackgroundColor:[[NSColor blackColor] colorWithAlphaComponent:0.00001]];
+
   /* Allow NSWindow to go fullscreen */
   [window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
 
