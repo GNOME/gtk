@@ -255,7 +255,6 @@ typedef struct
   guint    modal                     : 1;
   guint    resizable                 : 1;
   guint    transient_parent_group    : 1;
-  guint    csd_requested             : 1;
   guint    client_decorated          : 1; /* Decorations drawn client-side */
   guint    use_client_shadow         : 1; /* Decorations use client-side shadows */
   guint    maximized                 : 1;
@@ -3806,22 +3805,11 @@ update_window_actions (GtkWindow *window)
   update_csd_visibility (window);
 }
 
-void
-_gtk_window_request_csd (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-
-  priv->csd_requested = TRUE;
-}
-
 static gboolean
 gtk_window_should_use_csd (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   const char *csd_env;
-
-  if (priv->csd_requested)
-    return TRUE;
 
   if (!priv->decorated)
     return FALSE;
