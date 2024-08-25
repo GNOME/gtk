@@ -382,7 +382,7 @@ gtk_scale_allocate_value (GtkScale *scale)
 
         case GTK_POS_TOP:
           value_alloc.x = slider_center_x - value_alloc.width / 2;
-          value_alloc.y = slider_bounds.origin.y - value_alloc.height;
+          value_alloc.y = 0;
           break;
 
         case GTK_POS_BOTTOM:
@@ -582,7 +582,7 @@ gtk_scale_size_allocate (GtkWidget *widget,
                               &marks_height, NULL,
                               NULL, NULL);
           marks_rect.x = 0;
-          marks_rect.y = 0;
+          marks_rect.y = range_rect.y - marks_height;
           marks_rect.width = range_rect.width;
           marks_rect.height = marks_height;
           gtk_widget_size_allocate (priv->top_marks_widget, &marks_rect, -1);
