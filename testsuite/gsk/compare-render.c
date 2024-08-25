@@ -299,6 +299,28 @@ apply_clip_to_pixbuf (GdkPixbuf                   *pixbuf,
                                    int_clip->height);
 }
 
+static GdkPixbuf *
+pixbuf_new_from_texture (GdkTexture *texture)
+{
+  GdkTextureDownloader *downloader;
+  GdkPixbuf *pixbuf;
+
+  downloader = gdk_texture_downloader_new (texture);
+  gdk_texture_downloader_set_format (downloader, GDK_MEMORY_R8G8B8A8);
+
+  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
+                           TRUE,
+                           8,
+                           gdk_texture_get_width (texture),
+                           gdk_texture_get_height (texture));
+  gdk_texture_downloader_download_into (downloader,
+                                        gdk_pixbuf_get_pixels (pixbuf),
+                                        gdk_pixbuf_get_rowstride (pixbuf));
+  gdk_texture_downloader_free (downloader);
+
+  return pixbuf;
+}
+
 typedef struct _TestData TestData;
 
 struct _TestData {
@@ -392,7 +414,7 @@ run_node_test (gconstpointer data)
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, test->node_file, "-flipped.out.png");
 
-      pixbuf = gdk_pixbuf_new_from_file (test->png_file, &error);
+      pixbuf = pixbuf_new_from_texture (reference_texture);
       pixbuf2 = gdk_pixbuf_flip (pixbuf, TRUE);
       flipped_reference = gdk_texture_new_for_pixbuf (pixbuf2);
       g_object_unref (pixbuf2);
@@ -439,7 +461,7 @@ run_node_test (gconstpointer data)
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, test->node_file, "-repeated.out.png");
 
-      pixbuf = gdk_pixbuf_new_from_file (test->png_file, &error);
+      pixbuf = pixbuf_new_from_texture (reference_texture);
 
       width = gdk_pixbuf_get_width (pixbuf);
       height = gdk_pixbuf_get_height (pixbuf);
@@ -497,7 +519,7 @@ run_node_test (gconstpointer data)
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, test->node_file, "-rotated.out.png");
 
-      pixbuf = gdk_pixbuf_new_from_file (test->png_file, &error);
+      pixbuf = pixbuf_new_from_texture (reference_texture);
       pixbuf2 = gdk_pixbuf_rotate_simple (pixbuf, GDK_PIXBUF_ROTATE_CLOCKWISE);
       rotated_reference = gdk_texture_new_for_pixbuf (pixbuf2);
       g_object_unref (pixbuf2);
@@ -555,7 +577,7 @@ run_node_test (gconstpointer data)
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, test->node_file, "-masked.out.png");
 
-      pixbuf = gdk_pixbuf_new_from_file (test->png_file, &error);
+      pixbuf = pixbuf_new_from_texture (reference_texture);
       pixbuf2 = apply_mask_to_pixbuf (pixbuf);
       masked_reference = gdk_texture_new_for_pixbuf (pixbuf2);
       g_object_unref (pixbuf2);
@@ -644,7 +666,7 @@ run_node_test (gconstpointer data)
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, test->node_file, "-clipped.out.png");
 
-      pixbuf = gdk_pixbuf_new_from_file (test->png_file, &error);
+      pixbuf = pixbuf_new_from_texture (reference_texture);
 
       int_clip.x -= (int) bounds.origin.x;
       int_clip.y -= (int) bounds.origin.y;
@@ -692,7 +714,7 @@ skip_clip:
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, test->node_file, "-colorflipped.out.png");
 
-      pixbuf = gdk_pixbuf_new_from_file (test->png_file, &error);
+      pixbuf = pixbuf_new_from_texture (reference_texture);
       pixbuf2 = apply_colorflip_to_pixbuf (pixbuf);
       colorflipped_reference = gdk_texture_new_for_pixbuf (pixbuf2);
       g_object_unref (pixbuf2);
