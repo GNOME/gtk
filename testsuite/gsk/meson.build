@@ -307,7 +307,10 @@ foreach renderer : renderers
           extra_suites += ['failing']
         endif
         test('compare ' + renderer_name + ' ' + testname + ' ' + variant, compare_render,
+          protocol: 'tap',
           args: [
+            '--tap',
+            '-k',
             variants.get(variant),
             '--output', join_paths(meson.current_build_dir(), 'compare', renderer_name),
             join_paths(meson.current_source_dir(), 'compare', testname + '.node'),
