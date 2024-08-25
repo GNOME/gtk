@@ -92,6 +92,7 @@ file_replace_extension (const char *old_file,
 
 static char *
 get_output_file (const char *file,
+                 const char *variant,
                  const char *orig_ext,
                  const char *new_ext)
 {
@@ -101,7 +102,16 @@ get_output_file (const char *file,
 
   dir = get_output_dir ();
   base = g_path_get_basename (file);
-  name = file_replace_extension (base, orig_ext, new_ext);
+  if (variant)
+    {
+      char *s = file_replace_extension (base, orig_ext, "");
+      name = g_strconcat (s, "-", variant, new_ext, NULL);
+      g_free (s);
+    }
+  else
+    {
+      name = file_replace_extension (base, orig_ext, new_ext);
+    }
 
   result = g_strconcat (dir, G_DIR_SEPARATOR_S, name, NULL);
 
@@ -114,9 +124,10 @@ get_output_file (const char *file,
 static void
 save_image (GdkTexture *texture,
             const char *test_name,
+            const char *variant_name,
             const char *extension)
 {
-  char *filename = get_output_file (test_name, ".node", extension);
+  char *filename = get_output_file (test_name, variant_name, ".node", extension);
   gboolean result;
 
   g_print ("Storing test result image at %s\n", filename);
@@ -128,9 +139,10 @@ save_image (GdkTexture *texture,
 static void
 save_node (GskRenderNode *node,
            const char    *test_name,
+           const char    *variant_name,
            const char    *extension)
 {
-  char *filename = get_output_file (test_name, ".node", extension);
+  char *filename = get_output_file (test_name, variant_name, ".node", extension);
   gboolean result;
 
   g_print ("Storing modified nodes at %s\n", filename);
@@ -384,13 +396,13 @@ run_node_test (gconstpointer data)
       rendered_texture = gsk_renderer_render_texture (renderer, node, NULL);
       g_assert_nonnull (rendered_texture);
 
-      save_image (rendered_texture, test->node_file, ".out.png");
+      save_image (rendered_texture, test->node_file, NULL, ".out.png");
 
       /* Now compare the two */
       diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
       if (diff_texture)
         {
-          save_image (diff_texture, test->node_file, ".diff.png");
+          save_image (diff_texture, test->node_file, NULL, ".diff.png");
           g_test_fail ();
         }
 
@@ -409,10 +421,10 @@ run_node_test (gconstpointer data)
       node2 = gsk_transform_node_new (node, transform);
       gsk_transform_unref (transform);
 
-      save_node (node2, test->node_file, "-flipped.node");
+      save_node (node2, test->node_file, "flipped", ".node");
 
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-      save_image (rendered_texture, test->node_file, "-flipped.out.png");
+      save_image (rendered_texture, test->node_file, "flipped", ".out.png");
 
       pixbuf = pixbuf_new_from_texture (reference_texture);
       pixbuf2 = gdk_pixbuf_flip (pixbuf, TRUE);
@@ -420,13 +432,13 @@ run_node_test (gconstpointer data)
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
-      save_image (flipped_reference, test->node_file, "-flipped.ref.png");
+      save_image (flipped_reference, test->node_file, "flipped", ".ref.png");
 
       diff_texture = reftest_compare_textures (rendered_texture, flipped_reference);
 
       if (diff_texture)
         {
-          save_image (diff_texture, test->node_file, "-flipped.diff.png");
+          save_image (diff_texture, test->node_file, "flipped", ".diff.png");
           g_test_fail ();
         }
 
@@ -456,10 +468,10 @@ run_node_test (gconstpointer data)
       bounds.origin.y = node_bounds.origin.y + floorf (node_bounds.size.height / 2);
 
       node2 = gsk_repeat_node_new (&bounds, node, &node_bounds);
-      save_node (node2, test->node_file, "-repeated.node");
+      save_node (node2, test->node_file, "repeated", ".node");
 
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-      save_image (rendered_texture, test->node_file, "-repeated.out.png");
+      save_image (rendered_texture, test->node_file, "repeated", ".out.png");
 
       pixbuf = pixbuf_new_from_texture (reference_texture);
 
@@ -487,13 +499,13 @@ run_node_test (gconstpointer data)
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
-      save_image (repeated_reference, test->node_file, "-repeated.ref.png");
+      save_image (repeated_reference, test->node_file, "repeated", ".ref.png");
 
       diff_texture = reftest_compare_textures (rendered_texture, repeated_reference);
 
       if (diff_texture)
         {
-          save_image (diff_texture, test->node_file, "-repeated.diff.png");
+          save_image (diff_texture, test->node_file, "repeated", ".diff.png");
           g_test_fail ();
         }
 
@@ -514,10 +526,10 @@ run_node_test (gconstpointer data)
       node2 = gsk_transform_node_new (node, transform);
       gsk_transform_unref (transform);
 
-      save_node (node2, test->node_file, "-rotated.node");
+      save_node (node2, test->node_file, "rotated", ".node");
 
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-      save_image (rendered_texture, test->node_file, "-rotated.out.png");
+      save_image (rendered_texture, test->node_file, "rotated", ".out.png");
 
       pixbuf = pixbuf_new_from_texture (reference_texture);
       pixbuf2 = gdk_pixbuf_rotate_simple (pixbuf, GDK_PIXBUF_ROTATE_CLOCKWISE);
@@ -525,13 +537,13 @@ run_node_test (gconstpointer data)
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
-      save_image (rotated_reference, test->node_file, "-rotated.ref.png");
+      save_image (rotated_reference, test->node_file, "rotated", ".ref.png");
 
       diff_texture = reftest_compare_textures (rendered_texture, rotated_reference);
 
       if (diff_texture)
         {
-          save_image (diff_texture, test->node_file, "-rotated.diff.png");
+          save_image (diff_texture, test->node_file, "rotated", ".diff.png");
           g_test_fail ();
         }
 
@@ -572,10 +584,10 @@ run_node_test (gconstpointer data)
 
       node2 = gsk_mask_node_new (node, mask_node, GSK_MASK_MODE_ALPHA);
       gsk_render_node_unref (mask_node);
-      save_node (node2, test->node_file, "-masked.node");
+      save_node (node2, test->node_file, "masked", ".node");
 
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-      save_image (rendered_texture, test->node_file, "-masked.out.png");
+      save_image (rendered_texture, test->node_file, "mask", ".out.png");
 
       pixbuf = pixbuf_new_from_texture (reference_texture);
       pixbuf2 = apply_mask_to_pixbuf (pixbuf);
@@ -583,13 +595,13 @@ run_node_test (gconstpointer data)
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
-      save_image (masked_reference, test->node_file, "-masked.ref.png");
+      save_image (masked_reference, test->node_file, "masked", ".ref.png");
 
       diff_texture = reftest_compare_textures (rendered_texture, masked_reference);
 
       if (diff_texture)
         {
-          save_image (diff_texture, test->node_file, "-masked.diff.png");
+          save_image (diff_texture, test->node_file, "mask", ".diff.png");
           g_test_fail ();
         }
 
@@ -612,7 +624,7 @@ run_node_test (gconstpointer data)
       if (!node2)
         node2 = gsk_container_node_new (NULL, 0);
 
-      save_node (node2, test->node_file, "-replayed.node");
+      save_node (node2, test->node_file, "replayed", ".node");
       gsk_render_node_get_bounds (node, &node_bounds);
       gsk_render_node_get_bounds (node2, &node2_bounds);
       /* Check that the node didn't grow.  */
@@ -620,14 +632,14 @@ run_node_test (gconstpointer data)
         g_test_fail ();
 
       rendered_texture = gsk_renderer_render_texture (renderer, node2, &node_bounds);
-      save_image (rendered_texture, test->node_file, "-replayed.out.png");
+      save_image (rendered_texture, test->node_file, "replayed", ".out.png");
       g_assert_nonnull (rendered_texture);
 
       diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
 
       if (diff_texture)
         {
-          save_image (diff_texture, test->node_file, "-replayed.diff.png");
+          save_image (diff_texture, test->node_file, "replayed", ".diff.png");
           g_test_fail ();
         }
 
@@ -661,10 +673,10 @@ run_node_test (gconstpointer data)
       g_assert_true (graphene_rect_get_area (&clip_rect) != 0);
 
       node2 = gsk_clip_node_new (node, &clip_rect);
-      save_node (node2, test->node_file, "-clipped.node");
+      save_node (node2, test->node_file, "clipped", ".node");
 
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-      save_image (rendered_texture, test->node_file, "-clipped.out.png");
+      save_image (rendered_texture, test->node_file, "clipped", ".out.png");
 
       pixbuf = pixbuf_new_from_texture (reference_texture);
 
@@ -676,13 +688,13 @@ run_node_test (gconstpointer data)
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
-      save_image (clipped_reference, test->node_file, "-clipped.ref.png");
+      save_image (clipped_reference, test->node_file, "clipped", ".ref.png");
 
       diff_texture = reftest_compare_textures (rendered_texture, clipped_reference);
 
       if (diff_texture)
         {
-          save_image (diff_texture, test->node_file, "-clipped.diff.png");
+          save_image (diff_texture, test->node_file, "clipped", ".diff.png");
           g_test_fail ();
         }
 
@@ -709,10 +721,10 @@ skip_clip:
 
       node2 = gsk_color_matrix_node_new (node, &matrix, graphene_vec4_zero ());
 
-      save_node (node2, test->node_file, "-colorflipped.node");
+      save_node (node2, test->node_file, "colorflipped", ".node");
 
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-      save_image (rendered_texture, test->node_file, "-colorflipped.out.png");
+      save_image (rendered_texture, test->node_file, "colorflipped", ".out.png");
 
       pixbuf = pixbuf_new_from_texture (reference_texture);
       pixbuf2 = apply_colorflip_to_pixbuf (pixbuf);
@@ -720,13 +732,13 @@ skip_clip:
       g_object_unref (pixbuf2);
       g_object_unref (pixbuf);
 
-      save_image (colorflipped_reference, test->node_file, "-colorflipped.ref.png");
+      save_image (colorflipped_reference, test->node_file, "colorflipped", ".ref.png");
 
       diff_texture = reftest_compare_textures (rendered_texture, colorflipped_reference);
 
       if (diff_texture)
         {
-          save_image (diff_texture, test->node_file, "-colorflipped.diff.png");
+          save_image (diff_texture, test->node_file, "colorflipped", ".diff.png");
           g_test_fail ();
         }
 
