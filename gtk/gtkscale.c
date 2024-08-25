@@ -1436,11 +1436,12 @@ gtk_scale_measure (GtkWidget      *widget,
   GtkScale *scale = GTK_SCALE (widget);
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkOrientation scale_orientation;
+  int range_minimum, range_natural, scale_minimum = 0, scale_natural = 0;
 
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->measure (widget,
                                                       orientation,
                                                       for_size,
-                                                      minimum, natural,
+                                                      &range_minimum, &range_natural,
                                                       minimum_baseline, natural_baseline);
 
   scale_orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
@@ -1462,8 +1463,8 @@ gtk_scale_measure (GtkWidget      *widget,
 
       marks_size = MAX (top_marks_size, bottom_marks_size);
 
-      *minimum = MAX (*minimum, marks_size);
-      *natural = MAX (*natural, marks_size);
+      scale_minimum = MAX (scale_minimum, marks_size);
+      scale_natural = MAX (scale_natural, marks_size);
     }
 
   if (priv->value_widget)
@@ -1477,29 +1478,32 @@ gtk_scale_measure (GtkWidget      *widget,
         {
           if (orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              *minimum = MAX (*minimum, min);
-              *natural = MAX (*natural, nat);
+              scale_minimum = MAX (scale_minimum, min);
+              scale_natural = MAX (scale_natural, nat);
             }
           else
             {
-              *minimum += min;
-              *natural += nat;
+              scale_minimum += min;
+              scale_natural += nat;
             }
         }
       else
         {
           if (orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              *minimum += min;
-              *natural += nat;
+              scale_minimum += min;
+              scale_natural += nat;
             }
           else
             {
-              *minimum = MAX (*minimum, min);
-              *natural = MAX (*natural, nat);
+              scale_minimum = MAX (scale_minimum, min);
+              scale_natural = MAX (scale_natural, nat);
             }
         }
     }
+
+  *minimum = MAX (range_minimum, scale_minimum);
+  *natural = MAX (range_natural, scale_natural);
 }
 
 static void
