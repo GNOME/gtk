@@ -339,6 +339,7 @@ gtk_scale_allocate_value (GtkScale *scale)
   GtkAllocation value_alloc;
   int range_width, range_height;
   graphene_rect_t slider_bounds;
+  int slider_center_x, slider_center_y;
 
   range_width = gtk_widget_get_width (widget);
   range_height = gtk_widget_get_height (widget);
@@ -346,6 +347,9 @@ gtk_scale_allocate_value (GtkScale *scale)
   slider_widget = gtk_range_get_slider_widget (range);
   if (!gtk_widget_compute_bounds (slider_widget, widget, &slider_bounds))
     graphene_rect_init (&slider_bounds, 0, 0, gtk_widget_get_width (widget), gtk_widget_get_height (widget));
+
+  slider_center_x = slider_bounds.origin.x + slider_bounds.size.width / 2;
+  slider_center_y = slider_bounds.origin.y + slider_bounds.size.height / 2;
 
   gtk_widget_measure (priv->value_widget,
                       GTK_ORIENTATION_HORIZONTAL, -1,
@@ -371,12 +375,12 @@ gtk_scale_allocate_value (GtkScale *scale)
           break;
 
         case GTK_POS_TOP:
-          value_alloc.x = slider_bounds.origin.x + (slider_bounds.size.width - value_alloc.width) / 2;
+          value_alloc.x = slider_center_x - value_alloc.width / 2;
           value_alloc.y = slider_bounds.origin.y - value_alloc.height;
           break;
 
         case GTK_POS_BOTTOM:
-          value_alloc.x = slider_bounds.origin.x + (slider_bounds.size.width - value_alloc.width) / 2;
+          value_alloc.x = slider_center_x - value_alloc.width / 2;
           value_alloc.y = range_height - value_alloc.height;
           break;
 
@@ -391,12 +395,12 @@ gtk_scale_allocate_value (GtkScale *scale)
         {
         case GTK_POS_LEFT:
           value_alloc.x = 0;
-          value_alloc.y = (slider_bounds.origin.y + (slider_bounds.size.height / 2)) - value_alloc.height / 2;
+          value_alloc.y = slider_center_y - value_alloc.height / 2;
           break;
 
         case GTK_POS_RIGHT:
           value_alloc.x = range_width - value_alloc.width;
-          value_alloc.y = (slider_bounds.origin.y + (slider_bounds.size.height / 2)) - value_alloc.height / 2;
+          value_alloc.y = slider_center_y - value_alloc.height / 2;
           break;
 
         case GTK_POS_TOP:
