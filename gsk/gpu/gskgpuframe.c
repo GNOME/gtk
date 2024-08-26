@@ -634,6 +634,7 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
                       gint64                  timestamp,
                       GskGpuImage            *target,
                       GdkColorState          *target_color_state,
+                      GdkHdrMetadata         *target_hdr_metadata,
                       cairo_region_t         *clip,
                       GskRenderNode          *node,
                       const graphene_rect_t  *viewport,
@@ -645,7 +646,7 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
-  gsk_gpu_node_processor_process (self, target, target_color_state, clip, node, viewport, pass_type);
+  gsk_gpu_node_processor_process (self, target, target_color_state, target_hdr_metadata, clip, node, viewport, pass_type);
 
   if (texture)
     gsk_gpu_download_op (self, target, TRUE, copy_texture, texture);
@@ -687,6 +688,7 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
                       gint64                  timestamp,
                       GskGpuImage            *target,
                       GdkColorState          *target_color_state,
+                      GdkHdrMetadata         *target_hdr_metadata,
                       cairo_region_t         *clip,
                       GskRenderNode          *node,
                       const graphene_rect_t  *viewport,
@@ -696,7 +698,7 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
 
   gsk_gpu_frame_cleanup (self);
 
-  gsk_gpu_frame_record (self, timestamp, target, target_color_state, clip, node, viewport, texture);
+  gsk_gpu_frame_record (self, timestamp, target, target_color_state, target_hdr_metadata, clip, node, viewport, texture);
 
   gsk_gpu_frame_submit (self, pass_type);
 }
