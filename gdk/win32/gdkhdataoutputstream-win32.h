@@ -51,7 +51,8 @@ struct GdkWin32HDataOutputStreamClass
 
 GType gdk_win32_hdata_output_stream_get_type            (void) G_GNUC_CONST;
 
-GOutputStream *gdk_win32_hdata_output_stream_new        (GdkWin32ContentFormatPair  *pair,
+GOutputStream *gdk_win32_hdata_output_stream_new        (GdkWin32Clipdrop           *clipdrop,
+                                                         GdkWin32ContentFormatPair  *pair,
                                                          GError                    **error);
 
 HANDLE         gdk_win32_hdata_output_stream_get_handle (GdkWin32HDataOutputStream  *stream,

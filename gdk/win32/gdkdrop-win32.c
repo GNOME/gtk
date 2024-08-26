@@ -269,7 +269,8 @@ idroptarget_release (LPDROPTARGET This)
 }
 
 static GdkContentFormats *
-query_object_formats (LPDATAOBJECT  pDataObj,
+query_object_formats (GdkDisplay   *display,
+                      LPDATAOBJECT  pDataObj,
                       GArray       *w32format_contentformat_map)
 {
   IEnumFORMATETC *pfmt = NULL;
@@ -298,7 +299,7 @@ query_object_formats (LPDATAOBJECT  pDataObj,
         GDK_NOTE (DND, g_print ("supported unnamed? source format 0x%x\n", fmt.cfFormat));
 
       g_free (registered_name);
-      _gdk_win32_add_w32format_to_pairs (fmt.cfFormat, w32format_contentformat_map, builder);
+      gdk_win32_clipdrop_add_win32_format_to_pairs (gdk_win32_display_get_clipdrop (display), fmt.cfFormat, w32format_contentformat_map, builder);
       hr = IEnumFORMATETC_Next (pfmt, 1, &fmt, NULL);
     }
 
@@ -490,12 +491,12 @@ idroptarget_dragenter (LPDROPTARGET This,
   drag = NULL;
 
   if (ctx->surface)
-    drag = _gdk_win32_find_drag_for_dest_hwnd (GDK_SURFACE_HWND (ctx->surface));
+    drag = gdk_win32_find_drag_for_dest_surface (ctx->surface);
 
   display = gdk_surface_get_display (ctx->surface);
 
   droptarget_w32format_contentformat_map = g_array_new (FALSE, FALSE, sizeof (GdkWin32ContentFormatPair));
-  formats = query_object_formats (pDataObj, droptarget_w32format_contentformat_map);
+  formats = query_object_formats (display, pDataObj, droptarget_w32format_contentformat_map);
   drop = gdk_drop_new (display,
                        gdk_seat_get_pointer (gdk_display_get_default_seat (display)),
                        drag,
@@ -1110,7 +1111,12 @@ gdk_win32_drop_read_async (GdkDrop             *drop,
     }
   else
     {
-      _gdk_win32_transmute_windows_data (pair->w32format, pair->contentformat, storage.hGlobal, &data, &data_len);
+      GdkDisplay *display = gdk_drop_get_display (drop);
+      gdk_win32_clipdrop_transmute_windows_data (gdk_win32_display_get_clipdrop (display),
+                                                 pair->w32format, pair->contentformat,
+                                                 storage.hGlobal,
+                                                 &data,
+                                                 &data_len);
     }
 
   ReleaseStgMedium (&storage);

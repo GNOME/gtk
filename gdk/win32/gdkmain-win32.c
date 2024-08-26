@@ -42,8 +42,6 @@
 void
 _gdk_win32_surfaceing_init (void)
 {
-  _gdk_win32_clipdrop_init ();
-
   gdk_dmanipulation_initialize ();
 }
 

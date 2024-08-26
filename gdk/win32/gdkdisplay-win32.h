@@ -63,6 +63,8 @@ struct _GdkWin32CbDnDItems
 {
   /* used to identify the main thread for this GdkWin32Display */
   GThread *display_main_thread;
+
+  GdkWin32Clipdrop *clipdrop;
 };
 typedef struct _GdkWin32CbDnDItems GdkWin32CbDnDItems;
 
@@ -221,9 +223,11 @@ GPtrArray *_gdk_win32_display_get_monitor_list (GdkWin32Display *display);
 
 void        gdk_win32_display_check_composited (GdkWin32Display *display);
 
-guint      gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
-                                                       GdkSurface      *surface,
-                                                       HMONITOR         hmonitor);
+guint      gdk_win32_display_get_monitor_scale_factor  (GdkWin32Display *display_win32,
+                                                        GdkSurface      *surface,
+                                                        HMONITOR         hmonitor);
+
+GdkWin32Clipdrop *gdk_win32_display_get_clipdrop       (GdkDisplay *display);
 
 typedef struct _GdkWin32MessageFilter GdkWin32MessageFilter;
 

@@ -32,6 +32,3 @@ GdkDeviceManagerWin32 *_gdk_device_manager = NULL;
 
 GdkWin32ModalOpKind	  _modal_operation_in_progress = GDK_WIN32_MODAL_OP_NONE;
 HWND              _modal_move_resize_hwnd = NULL;
-
-/* The singleton clipdrop object pointer */
-GdkWin32Clipdrop *_win32_clipdrop = NULL;
