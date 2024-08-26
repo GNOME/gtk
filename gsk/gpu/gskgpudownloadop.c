@@ -325,6 +325,8 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
 
           if (self->texture)
             return op->next;
+
+          gdk_dmabuf_close_fds (&texture->dmabuf);
         }
 
       g_free (texture);
