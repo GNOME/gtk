@@ -273,7 +273,8 @@ quartz_set_client_surface (GtkIMContext *context,
 
   if (widget != NULL)
     {
-      GtkNative *native = gtk_widget_get_native (widget);
+      GtkRoot *root = gtk_widget_get_root (widget);
+      GtkNative *native = gtk_widget_get_native (GTK_WIDGET (root));
 
       if (native != NULL)
         qc->client_surface = gtk_native_get_surface (native);
