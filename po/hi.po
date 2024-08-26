@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-08-13 21:42+0000\n"
-"PO-Revision-Date: 2024-08-15 13:57+0530\n"
+"POT-Creation-Date: 2024-08-22 15:42+0000\n"
+"PO-Revision-Date: 2024-08-24 10:48+0800\n"
 "Last-Translator: Scrambled777 <weblate.scrambled777@simplelogin.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "Language: hi\n"
@@ -57,13 +57,13 @@ msgstr "सामग्री को %s के रूप में उपलब�
 msgid "The current backend does not support OpenGL"
 msgstr "वर्तमान बैकएंड OpenGL का समर्थन नहीं करता है"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1632
-msgid "Vulkan support disabled via GDK_DEBUG"
-msgstr "GDK_DEBUG के माध्यम से Vulkan समर्थन अक्षम किया गया"
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1633
+msgid "Vulkan support disabled via GDK_DISABLE"
+msgstr "GDK_DISABLE के माध्यम से Vulkan समर्थन अक्षम किया गया"
 
 #: gdk/gdkdisplay.c:1369
-msgid "GL support disabled via GDK_DEBUG"
-msgstr "GDK_DEBUG के माध्यम से GL समर्थन अक्षम किया गया"
+msgid "OpenGL support disabled via GDK_DISABLE"
+msgstr "GDK_DISABLE के माध्यम से OpenGL समर्थन अक्षम किया गया"
 
 #: gdk/gdkdisplay.c:1683
 msgid "No EGL configuration available"
@@ -121,31 +121,38 @@ msgstr "सामग्री स्थानांतरित करने क
 msgid "No GL API allowed."
 msgstr "कोई GL API की अनुमति नहीं है।"
 
-#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:411
-#: gdk/win32/gdkglcontext-win32-wgl.c:554
-#: gdk/win32/gdkglcontext-win32-wgl.c:598 gdk/x11/gdkglcontext-glx.c:694
+#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:705
+#: gdk/win32/gdkglcontext-win32-wgl.c:848
+#: gdk/win32/gdkglcontext-win32-wgl.c:892 gdk/x11/gdkglcontext-glx.c:694
 msgid "Unable to create a GL context"
 msgstr "GL प्रसंग बनाने में असमर्थ"
 
-#: gdk/gdkglcontext.c:1343
-msgid "OpenGL ES disabled via GDK_DEBUG"
-msgstr "GDK_DEBUG के माध्यम से OpenGL ES अक्षम किया गया"
+#: gdk/gdkglcontext.c:1340
+msgid "OpenGL ES API disabled via GDK_DISABLE"
+msgstr "GDK_DISABLE के माध्यम से OpenGL ES API अक्षम की गई"
 
-#: gdk/gdkglcontext.c:1355
-msgid "OpenGL disabled via GDK_DEBUG"
-msgstr "GDK_DEBUG के माध्यम से OpenGL अक्षम किया गया"
+#: gdk/gdkglcontext.c:1352
+msgid "OpenGL API disabled via GDK_DISABLE"
+msgstr "GDK_DISABLE के माध्यम से OpenGL API अक्षम की गई"
 
-#: gdk/gdkglcontext.c:1366
+#: gdk/gdkglcontext.c:1363
 #, c-format
 msgid "Application does not support %s API"
 msgstr "अनुप्रयोग %s API का समर्थन नहीं करता"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2164
+#.
+#: gdk/gdkglcontext.c:2163
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s का उपयोग करने का प्रयास किया जा रहा है, लेकिन %s पहले से ही उपयोग में है"
+
+#: gdk/gdkglcontext.c:2174
+#, c-format
+msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
+msgstr ""
+"%s का उपयोग करने का प्रयास किया जा रहा है, लेकिन यह GDK_DISABLE के माध्यम से अक्षम है"
 
 #: gdk/gdktexture.c:661
 msgid "Unknown image format."
@@ -720,21 +727,21 @@ msgstr "IDataObject_GetData (0x%x) विफल, 0x%lx लौट रहा ह�
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "DnD डेटा W32 प्रारूप 0x%x को %p (%s) में परिवर्तित करने में विफल"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:345
+#: gdk/win32/gdkglcontext-win32-wgl.c:635
 msgid "No GL implementation is available"
 msgstr "कोई GL कार्यान्वयन उपलब्ध नहीं है"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:420
+#: gdk/win32/gdkglcontext-win32-wgl.c:714
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL संस्करण %d.%d बहुत कम है, कम से कम %d.%d की आवश्यकता है"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:438
+#: gdk/win32/gdkglcontext-win32-wgl.c:732
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "जीएल कार्यान्वयन जीएल संदर्भों को साझा नहीं कर सकता"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:718
+#: gdk/win32/gdkglcontext-win32-wgl.c:1012
 msgid "No available configurations for the given pixel format"
 msgstr "दिए गए पिक्सल प्रारूप के लिए कोई विन्यास उपलब्ध नहीं है"
 
@@ -2277,7 +2284,7 @@ msgstr "उस नाम की फाइल पहले से मौजूद
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6234 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6223 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2817,7 +2824,7 @@ msgid "Play"
 msgstr "चलाएं"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6235
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6224
 msgid "_OK"
 msgstr "ठीक है (_O)"
 
@@ -3667,12 +3674,12 @@ msgstr "शॉर्टकट"
 msgid "Search Results"
 msgstr "खोज परिणाम"
 
-#: gtk/gtkshortcutswindow.c:1029 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:1029 gtk/ui/gtkemojichooser.ui:350
 #: gtk/ui/gtkfilechooserwidget.ui:250
 msgid "No Results Found"
 msgstr "कोई परिणाम नहीं मिला"
 
-#: gtk/gtkshortcutswindow.c:1040 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1040 gtk/ui/gtkemojichooser.ui:363
 #: gtk/ui/gtkfilechooserwidget.ui:263 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "भिन्न खोज का प्रयास करें"
@@ -3694,12 +3701,12 @@ msgstr "पूर्ववत करें (_U)"
 msgid "_Redo"
 msgstr "पुनः करें (_R)"
 
-#: gtk/gtkwindow.c:6223
+#: gtk/gtkwindow.c:6212
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "क्या आप GTK इंस्पेक्टर का उपयोग करना चाहते हैं?"
 
-#: gtk/gtkwindow.c:6225
+#: gtk/gtkwindow.c:6214
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3710,7 +3717,7 @@ msgstr ""
 "एक्सप्लोर करने और संशोधित करने की सुविधा देता है। इसका उपयोग करने से अनुप्रयोग टूट सकता है "
 "या क्रैश हो सकता है।"
 
-#: gtk/gtkwindow.c:6230
+#: gtk/gtkwindow.c:6219
 msgid "Don’t show this message again"
 msgstr "यह संदेश दोबारा न दिखाएं"
 
@@ -3897,32 +3904,32 @@ msgctxt "GL version"
 msgid "None"
 msgstr "कुछ नहीं"
 
-#: gtk/inspector/general.c:463
+#: gtk/inspector/general.c:464
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "अज्ञात"
 
-#: gtk/inspector/general.c:525
+#: gtk/inspector/general.c:526
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "अक्षम"
 
-#: gtk/inspector/general.c:526 gtk/inspector/general.c:527
+#: gtk/inspector/general.c:527 gtk/inspector/general.c:528
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "अक्षम"
 
-#: gtk/inspector/general.c:578
+#: gtk/inspector/general.c:579
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "कुछ नहीं"
 
-#: gtk/inspector/general.c:579 gtk/inspector/general.c:580
+#: gtk/inspector/general.c:580 gtk/inspector/general.c:581
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "कुछ नहीं"
 
-#: gtk/inspector/general.c:933
+#: gtk/inspector/general.c:934
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM संदर्भ GTK_IM_MODULE द्वारा हार्डकोड किया गया है"
 
@@ -4241,7 +4248,7 @@ msgstr "स्रोत:"
 msgid "Defined At"
 msgstr "यहाँ परिभाषित"
 
-#: gtk/inspector/recorder.c:1987
+#: gtk/inspector/recorder.c:2021
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "RenderNode को सहेजना विफल रहा"
@@ -6250,52 +6257,52 @@ msgstr "(कुछ नहीं)"
 msgid "Search…"
 msgstr "खोजें…"
 
-#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:239
+#: gtk/ui/gtkemojichooser.ui:70 gtk/ui/gtkemojichooser.ui:240
 msgctxt "emoji category"
 msgid "Smileys & People"
 msgstr "स्माइलीज़ और लोग"
 
-#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:248
+#: gtk/ui/gtkemojichooser.ui:95 gtk/ui/gtkemojichooser.ui:249
 msgctxt "emoji category"
 msgid "Body & Clothing"
 msgstr "शरीर एवं वस्त्र"
 
-#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:257
+#: gtk/ui/gtkemojichooser.ui:120 gtk/ui/gtkemojichooser.ui:258
 msgctxt "emoji category"
 msgid "Animals & Nature"
 msgstr "पशु और प्रकृति"
 
-#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:266
+#: gtk/ui/gtkemojichooser.ui:134 gtk/ui/gtkemojichooser.ui:267
 msgctxt "emoji category"
 msgid "Food & Drink"
 msgstr "भोजन पेय"
 
-#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:275
+#: gtk/ui/gtkemojichooser.ui:148 gtk/ui/gtkemojichooser.ui:276
 msgctxt "emoji category"
 msgid "Travel & Places"
 msgstr "यात्रा एवं स्थान"
 
-#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:284
+#: gtk/ui/gtkemojichooser.ui:162 gtk/ui/gtkemojichooser.ui:285
 msgctxt "emoji category"
 msgid "Activities"
 msgstr "गतिविधियां"
 
-#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:293
+#: gtk/ui/gtkemojichooser.ui:176 gtk/ui/gtkemojichooser.ui:294
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "वस्तुएं"
 
-#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:302
+#: gtk/ui/gtkemojichooser.ui:190 gtk/ui/gtkemojichooser.ui:303
 msgctxt "emoji category"
 msgid "Symbols"
 msgstr "प्रतीक"
 
-#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:311
+#: gtk/ui/gtkemojichooser.ui:204 gtk/ui/gtkemojichooser.ui:312
 msgctxt "emoji category"
 msgid "Flags"
 msgstr "फ्लैग"
 
-#: gtk/ui/gtkemojichooser.ui:230
+#: gtk/ui/gtkemojichooser.ui:231
 msgctxt "emoji category"
 msgid "Recent"
 msgstr "हालिया"
