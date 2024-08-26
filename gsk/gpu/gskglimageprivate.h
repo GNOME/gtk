@@ -39,6 +39,7 @@ GLint                   gsk_gl_image_get_gl_internal_format             (GskGLIm
 GLenum                  gsk_gl_image_get_gl_format                      (GskGLImage             *self);
 GLenum                  gsk_gl_image_get_gl_type                        (GskGLImage             *self);
 
-GLuint                  gsk_gl_image_steal_texture                      (GskGLImage             *self);
+GLuint                  gsk_gl_image_get_texture_id                     (GskGLImage             *self);
+void                    gsk_gl_image_steal_texture_ownership            (GskGLImage             *self);
 
 G_END_DECLS

@@ -46,7 +46,7 @@ gsk_gl_image_finalize (GObject *object)
   if (self->texture_id && self->framebuffer_id)
     glDeleteFramebuffers (1, &self->framebuffer_id);
 
-  if (self->owns_texture)
+  if (gsk_gpu_image_get_flags (GSK_GPU_IMAGE (self)) & GSK_GPU_IMAGE_TOGGLE_REF)
     glDeleteTextures (1, &self->texture_id);
 
   G_OBJECT_CLASS (gsk_gl_image_parent_class)->finalize (object);
@@ -336,17 +336,17 @@ gsk_gl_image_get_gl_type (GskGLImage *self)
 }
 
 GLuint
-gsk_gl_image_steal_texture (GskGLImage *self)
+gsk_gl_image_get_texture_id (GskGLImage *self)
 {
-  g_assert (self->owns_texture);
-
-  if (self->framebuffer_id)
-    {
-      glDeleteFramebuffers (1, &self->framebuffer_id);
-      self->framebuffer_id = 0;
-    }
-
-  self->owns_texture = FALSE;
-
   return self->texture_id;
 }
+
+void
+gsk_gl_image_steal_texture_ownership (GskGLImage *self)
+{
+  g_assert (self->texture_id);
+  g_assert (self->owns_texture);
+
+  self->owns_texture = FALSE;
+}
+
