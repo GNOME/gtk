@@ -412,25 +412,26 @@ run_node_test (gconstpointer data)
 
   if (flip)
     {
-      GskRenderNode *node2;
-      GdkPixbuf *pixbuf, *pixbuf2;
+      GskRenderNode *node2, *texture_node, *reference_node;
       GdkTexture *flipped_reference;
       GskTransform *transform;
 
       transform = gsk_transform_scale (NULL, -1, 1);
       node2 = gsk_transform_node_new (node, transform);
-      gsk_transform_unref (transform);
 
       save_node (node2, test->node_file, "flipped", ".node");
 
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, test->node_file, "flipped", ".out.png");
 
-      pixbuf = pixbuf_new_from_texture (reference_texture);
-      pixbuf2 = gdk_pixbuf_flip (pixbuf, TRUE);
-      flipped_reference = gdk_texture_new_for_pixbuf (pixbuf2);
-      g_object_unref (pixbuf2);
-      g_object_unref (pixbuf);
+      texture_node = gsk_texture_node_new (reference_texture,
+                                           &GRAPHENE_RECT_INIT (
+                                             0, 0,
+                                             gdk_texture_get_width (reference_texture),
+                                             gdk_texture_get_height (reference_texture)
+                                           ));
+      reference_node = gsk_transform_node_new (texture_node, transform);
+      flipped_reference = gsk_renderer_render_texture (renderer, reference_node, NULL);
 
       save_image (flipped_reference, test->node_file, "flipped", ".ref.png");
 
@@ -442,9 +443,12 @@ run_node_test (gconstpointer data)
           g_test_fail ();
         }
 
+      gsk_transform_unref (transform);
       g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
       g_clear_object (&flipped_reference);
+      gsk_render_node_unref (reference_node);
+      gsk_render_node_unref (texture_node);
       gsk_render_node_unref (node2);
     }
 
