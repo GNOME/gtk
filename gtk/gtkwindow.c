@@ -12989,8 +12989,6 @@ gtk_window_export_handle (GtkWindow               *window,
     }
 #endif
 
-  g_warning ("Couldn't export handle, unsupported windowing system");
-
   return FALSE;
 }
 
