@@ -280,8 +280,7 @@ release_dmabuf_texture (gpointer data)
 {
   Texture *texture = data;
 
-  for (unsigned int i = 0; i < texture->dmabuf.n_planes; i++)
-    g_close (texture->dmabuf.planes[i].fd, NULL);
+  gdk_dmabuf_close_fds (&texture->dmabuf);
   g_free (texture);
 }
 #endif
