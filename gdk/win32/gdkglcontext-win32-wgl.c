@@ -58,10 +58,6 @@ struct _GdkWin32GLContextWGL
     SWAP_METHOD_EXCHANGE,
   } swap_method;
 
-  /* Note: this member is only set when
-   * swap_method is exchange */
-  cairo_region_t *previous_frame_damage;
-
   glAddSwapHintRectWIN_t ptr_glAddSwapHintRectWIN;
 };
 
@@ -73,8 +69,6 @@ static void
 gdk_win32_gl_context_wgl_dispose (GObject *gobject)
 {
   GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (gobject);
-
-  g_clear_pointer (&context_wgl->previous_frame_damage, cairo_region_destroy);
 
   if (context_wgl->wgl_context != NULL)
     {
@@ -113,15 +107,19 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
   else
     hdc = display_win32->dummy_context_wgl.hdc;
 
-  if (context_wgl->ptr_glAddSwapHintRectWIN)
+  /* context->old_updated_area[0] contains this frame's updated region
+   * (what actually changed since the previous frame) */
+  if (context_wgl->ptr_glAddSwapHintRectWIN &&
+      GDK_GL_MAX_TRACKED_BUFFERS >= 1 &&
+      context->old_updated_area[0])
     {
-      int num_rectangles = cairo_region_num_rectangles (painted);
+      int num_rectangles = cairo_region_num_rectangles (context->old_updated_area[0]);
       int scale = surface_win32->surface_scale;
       cairo_rectangle_int_t rectangle;
 
       for (int i = 0; i < num_rectangles; i++)
         {
-          cairo_region_get_rectangle (painted, i, &rectangle);
+          cairo_region_get_rectangle (context->old_updated_area[0], i, &rectangle);
 
           /* glAddSwapHintRectWIN works in OpenGL buffer coordinates and uses OpenGL
            * conventions. Coordinates are that of the client-area, but the origin is
@@ -156,8 +154,6 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
     }
 
   SwapBuffers (hdc);
-
-  context_wgl->previous_frame_damage = cairo_region_copy (painted);
 }
 
 static void
@@ -177,20 +173,13 @@ gdk_win32_gl_context_wgl_get_damage (GdkGLContext *gl_context)
     }
 
   if (self->swap_method == SWAP_METHOD_EXCHANGE &&
-      self->previous_frame_damage)
+      GDK_GL_MAX_TRACKED_BUFFERS >= 1 &&
+      context->old_updated_area[0])
     {
-      return self->previous_frame_damage;
+      return context->old_updated_area[0];
     }
 
   return GDK_GL_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->get_damage (gl_context);
-}
-
-static void
-gdk_win32_gl_context_wgl_surface_resized (GdkDrawContext *draw_context)
-{
-  GdkWin32GLContextWGL *self = (GdkWin32GLContextWGL*) draw_context;
-
-  g_clear_pointer (&self->previous_frame_damage, cairo_region_destroy);
 }
 
 static void
@@ -1199,7 +1188,6 @@ gdk_win32_gl_context_wgl_class_init (GdkWin32GLContextWGLClass *klass)
   draw_context_class->begin_frame = gdk_win32_gl_context_wgl_begin_frame;
   draw_context_class->end_frame = gdk_win32_gl_context_wgl_end_frame;
   draw_context_class->empty_frame = gdk_win32_gl_context_wgl_empty_frame;
-  draw_context_class->surface_resized = gdk_win32_gl_context_wgl_surface_resized;
 
   gobject_class->dispose = gdk_win32_gl_context_wgl_dispose;
 }
