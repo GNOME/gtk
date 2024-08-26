@@ -688,6 +688,7 @@ gdk_win32_display_finalize (GObject *object)
   _gdk_win32_dnd_exit ();
   gdk_win32_display_lang_notification_exit (display_win32);
   g_free (display_win32->pointer_device_items);
+  g_object_unref (display_win32->cb_dnd_items->clipdrop);
   g_free (display_win32->cb_dnd_items);
 
   g_list_store_remove_all (G_LIST_STORE (display_win32->monitors));
@@ -1032,6 +1033,7 @@ gdk_win32_display_init (GdkWin32Display *display_win32)
   display_win32->pointer_device_items = g_new0 (GdkWin32PointerDeviceItems, 1);
   display_win32->cb_dnd_items = g_new0 (GdkWin32CbDnDItems, 1);
   display_win32->cb_dnd_items->display_main_thread = g_thread_self ();
+  display_win32->cb_dnd_items->clipdrop = GDK_WIN32_CLIPDROP (g_object_new (GDK_TYPE_WIN32_CLIPDROP, NULL));
 
   _gdk_win32_enable_hidpi (display_win32);
   display_win32->running_on_arm64 = _gdk_win32_check_processor (GDK_WIN32_ARM64);
@@ -1261,6 +1263,15 @@ gdk_win32_display_get_egl_display (GdkDisplay *display)
 
   return gdk_display_get_egl_display (display);
 }
+
+GdkWin32Clipdrop *
+gdk_win32_display_get_clipdrop (GdkDisplay *display)
+{
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+
+  return display_win32->cb_dnd_items->clipdrop;
+}
+
 
 static void
 gdk_win32_display_class_init (GdkWin32DisplayClass *klass)

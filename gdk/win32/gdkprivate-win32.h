@@ -145,9 +145,6 @@ extern GdkDeviceManagerWin32 *_gdk_device_manager;
 
 extern guint             _gdk_keymap_serial;
 
-/* The singleton clipdrop object pointer */
-extern GdkWin32Clipdrop *_win32_clipdrop;
-
 typedef enum {
   GDK_WIN32_MODAL_OP_NONE = 0x0,
   GDK_WIN32_MODAL_OP_SIZE = 0x1 << 0,
