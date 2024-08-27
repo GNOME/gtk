@@ -251,10 +251,10 @@ gsk_gpu_upload_texture_op_draw (GskGpuOp *op,
   GdkTextureDownloader *downloader;
 
   downloader = gdk_texture_downloader_new (self->texture);
-  gdk_texture_downloader_set_format (downloader, gsk_gpu_image_get_format (self->image));
   gdk_texture_downloader_set_color_state (downloader, gdk_texture_get_color_state (self->texture));
   if (self->lod_level == 0)
     {
+      gdk_texture_downloader_set_format (downloader, gsk_gpu_image_get_format (self->image));
       gdk_texture_downloader_download_into (downloader, data, stride);
     }
   else
@@ -262,12 +262,14 @@ gsk_gpu_upload_texture_op_draw (GskGpuOp *op,
       GBytes *bytes;
       gsize src_stride;
       
+      gdk_texture_downloader_set_format (downloader, gdk_texture_get_format (self->texture));
       bytes = gdk_texture_downloader_download_bytes (downloader, &src_stride);
       gdk_memory_mipmap (data,
                          stride,
                          gsk_gpu_image_get_format (self->image),
                          g_bytes_get_data (bytes, NULL),
                          src_stride,
+                         gdk_texture_get_format (self->texture),
                          gdk_texture_get_width (self->texture),
                          gdk_texture_get_height (self->texture),
                          self->lod_level);
