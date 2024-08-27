@@ -252,33 +252,6 @@ apply_mask_to_pixbuf (GdkPixbuf *pixbuf)
   return copy;
 }
 
-static GdkPixbuf *
-apply_colorflip_to_pixbuf (GdkPixbuf *pixbuf)
-{
-  GdkPixbuf *copy;
-  int width, height;
-
-  copy = gdk_pixbuf_add_alpha (pixbuf, FALSE, 0, 0, 0);
-  width = gdk_pixbuf_get_width (pixbuf);
-  height = gdk_pixbuf_get_height (pixbuf);
-
-  for (unsigned int j = 0; j < height; j++)
-    {
-      guint8 *row = gdk_pixbuf_get_pixels (copy) + j * gdk_pixbuf_get_rowstride (copy);
-      for (unsigned int i = 0; i < width; i++)
-        {
-          guint8 *p = row + i * 4;
-          guint8 q;
-
-          q = p[0];
-          p[0] = p[1];
-          p[1] = q;
-        }
-    }
-
-  return copy;
-}
-
 static void
 make_random_clip (const graphene_rect_t *bounds,
                   cairo_rectangle_int_t *int_clip)
@@ -706,8 +679,7 @@ skip_clip:
 
   if (colorflip)
     {
-      GskRenderNode *node2;
-      GdkPixbuf *pixbuf, *pixbuf2;
+      GskRenderNode *node2, *texture_node, *reference_node;
       GdkTexture *colorflipped_reference;
       graphene_matrix_t matrix;
 
@@ -724,11 +696,14 @@ skip_clip:
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, test->node_file, "colorflipped", ".out.png");
 
-      pixbuf = pixbuf_new_from_texture (reference_texture);
-      pixbuf2 = apply_colorflip_to_pixbuf (pixbuf);
-      colorflipped_reference = gdk_texture_new_for_pixbuf (pixbuf2);
-      g_object_unref (pixbuf2);
-      g_object_unref (pixbuf);
+      texture_node = gsk_texture_node_new (reference_texture,
+                                           &GRAPHENE_RECT_INIT (
+                                             0, 0,
+                                             gdk_texture_get_width (reference_texture),
+                                             gdk_texture_get_height (reference_texture)
+                                           ));
+      reference_node = gsk_color_matrix_node_new (texture_node, &matrix, graphene_vec4_zero ());
+      colorflipped_reference = gsk_renderer_render_texture (renderer, reference_node, NULL);
 
       save_image (colorflipped_reference, test->node_file, "colorflipped", ".ref.png");
 
@@ -743,6 +718,8 @@ skip_clip:
       g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
       g_clear_object (&colorflipped_reference);
+      gsk_render_node_unref (texture_node);
+      gsk_render_node_unref (reference_node);
       gsk_render_node_unref (node2);
     }
 
