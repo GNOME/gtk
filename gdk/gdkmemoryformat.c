@@ -1939,7 +1939,9 @@ unpremultiply (float (*rgba)[4],
     }
 }
 
-typedef void (* FastConversionFunc) (guchar *, const guchar *, gsize);
+typedef void (* FastConversionFunc) (guchar       *dest,
+                                     const guchar *src,
+                                     gsize         n);
 
 static FastConversionFunc
 get_fast_conversion_func (GdkMemoryFormat dest_format,
@@ -2406,6 +2408,7 @@ gdk_memory_mipmap (guchar          *dest,
     }
   else
     {
+      FastConversionFunc func;
       gsize dest_width;
       gsize size;
       guchar *tmp;
@@ -2415,13 +2418,17 @@ gdk_memory_mipmap (guchar          *dest,
       dest_width = (src_width + n - 1) >> lod_level;
       size = gdk_memory_format_bytes_per_pixel (src_format) * dest_width;
       tmp = g_malloc (size);
+      func = get_fast_conversion_func (dest_format, src_format);
 
       for (y = 0; y < src_height; y += n)
         {
           desc->mipmap (tmp, (size + 7) & 7, src, src_stride, src_width, MIN (n, src_height - y), lod_level);
-          gdk_memory_convert (dest, dest_stride, dest_format, GDK_COLOR_STATE_SRGB,
-                              tmp, (size + 7) & 7, src_format, GDK_COLOR_STATE_SRGB,
-                              dest_width, 1);
+          if (func)
+            func (dest, tmp, dest_width);
+          else
+            gdk_memory_convert (dest, dest_stride, dest_format, GDK_COLOR_STATE_SRGB,
+                                tmp, (size + 7) & 7, src_format, GDK_COLOR_STATE_SRGB,
+                                dest_width, 1);
           dest += dest_stride;
           src += n * src_stride;
         }
