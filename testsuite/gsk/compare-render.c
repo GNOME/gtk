@@ -234,28 +234,6 @@ gsk_rect_from_cairo (graphene_rect_t              *rect,
   rect->size.height = int_rect->height;
 }
 
-static GdkPixbuf *
-pixbuf_new_from_texture (GdkTexture *texture)
-{
-  GdkTextureDownloader *downloader;
-  GdkPixbuf *pixbuf;
-
-  downloader = gdk_texture_downloader_new (texture);
-  gdk_texture_downloader_set_format (downloader, GDK_MEMORY_R8G8B8A8);
-
-  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB,
-                           TRUE,
-                           8,
-                           gdk_texture_get_width (texture),
-                           gdk_texture_get_height (texture));
-  gdk_texture_downloader_download_into (downloader,
-                                        gdk_pixbuf_get_pixels (pixbuf),
-                                        gdk_pixbuf_get_rowstride (pixbuf));
-  gdk_texture_downloader_free (downloader);
-
-  return pixbuf;
-}
-
 typedef struct _TestData TestData;
 
 struct _TestData {
@@ -448,25 +426,27 @@ run_node_test (gconstpointer data)
 
   if (rotate)
     {
-      GskRenderNode *node2;
-      GdkPixbuf *pixbuf, *pixbuf2;
+      GskRenderNode *node2, *texture_node, *reference_node;
       GdkTexture *rotated_reference;
       GskTransform *transform;
 
       transform = gsk_transform_rotate (NULL, 90);
       node2 = gsk_transform_node_new (node, transform);
-      gsk_transform_unref (transform);
 
       save_node (node2, test->node_file, "rotated", ".node");
 
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, test->node_file, "rotated", ".out.png");
 
-      pixbuf = pixbuf_new_from_texture (reference_texture);
-      pixbuf2 = gdk_pixbuf_rotate_simple (pixbuf, GDK_PIXBUF_ROTATE_CLOCKWISE);
-      rotated_reference = gdk_texture_new_for_pixbuf (pixbuf2);
-      g_object_unref (pixbuf2);
-      g_object_unref (pixbuf);
+      texture_node = gsk_texture_node_new (reference_texture,
+                                           &GRAPHENE_RECT_INIT (
+                                             0, 0,
+                                             gdk_texture_get_width (reference_texture),
+                                             gdk_texture_get_height (reference_texture)
+                                           ));
+      reference_node = gsk_transform_node_new (texture_node, transform);
+      rotated_reference = gsk_renderer_render_texture (renderer, reference_node, NULL);
+
 
       save_image (rotated_reference, test->node_file, "rotated", ".ref.png");
 
@@ -478,9 +458,12 @@ run_node_test (gconstpointer data)
           g_test_fail ();
         }
 
+      gsk_transform_unref (transform);
       g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
       g_clear_object (&rotated_reference);
+      gsk_render_node_unref (texture_node);
+      gsk_render_node_unref (reference_node);
       gsk_render_node_unref (node2);
     }
 
