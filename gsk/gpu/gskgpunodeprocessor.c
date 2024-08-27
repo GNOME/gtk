@@ -1964,18 +1964,26 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
   gboolean need_mipmap;
   GdkMemoryTexture *memtex;
   GdkTexture *subtex;
-  float scaled_tile_width, scaled_tile_height;
+  float scale_factor, scaled_tile_width, scaled_tile_height;
   gsize tile_size, width, height, n_width, n_height, x, y;
   graphene_rect_t clip_bounds;
+  guint lod_level;
 
   device = gsk_gpu_frame_get_device (self->frame);
   cache = gsk_gpu_device_get_cache (device);
   sampler = gsk_gpu_sampler_for_scaling_filter (scaling_filter);
   need_mipmap = scaling_filter == GSK_SCALING_FILTER_TRILINEAR;
   gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
-  tile_size = gsk_gpu_device_get_tile_size (device);
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
+  tile_size = gsk_gpu_device_get_tile_size (device);
+  scale_factor = MIN (width / MAX (tile_size, texture_bounds->size.width),
+                      height / MAX (tile_size, texture_bounds->size.height));
+  if (scale_factor <= 1.0)
+    lod_level = 0;
+  else
+    lod_level = floor (log2f (scale_factor));
+  tile_size <<= lod_level;
   n_width = (width + tile_size - 1) / tile_size;
   n_height = (height + tile_size - 1) / tile_size;
   scaled_tile_width = texture_bounds->size.width * tile_size / width;
@@ -1994,7 +2002,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
               !gsk_rect_intersects (&clip_bounds, &tile_rect))
             continue;
 
-          tile = gsk_gpu_cache_lookup_tile (cache, texture, y * n_width + x, &tile_cs);
+          tile = gsk_gpu_cache_lookup_tile (cache, texture, lod_level, y * n_width + x, &tile_cs);
 
           if (tile == NULL)
             {
@@ -2005,7 +2013,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
                                                           y * tile_size,
                                                           MIN (tile_size, width - x * tile_size),
                                                           MIN (tile_size, height - y * tile_size));
-              tile = gsk_gpu_upload_texture_op_try (self->frame, need_mipmap, subtex);
+              tile = gsk_gpu_upload_texture_op_try (self->frame, need_mipmap, lod_level, subtex);
               g_object_unref (subtex);
               if (tile == NULL)
                 {
@@ -2021,7 +2029,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
                   g_assert (tile_cs);
                 }
 
-              gsk_gpu_cache_cache_tile (cache, texture, y * n_width + x, tile, tile_cs);
+              gsk_gpu_cache_cache_tile (cache, texture, lod_level, y * n_width + x, tile, tile_cs);
             }
 
           if (need_mipmap &&
@@ -2029,7 +2037,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
             {
               tile = gsk_gpu_copy_image (self->frame, self->ccs, tile, tile_cs, TRUE);
               tile_cs = self->ccs;
-              gsk_gpu_cache_cache_tile (cache, texture, y * n_width + x, tile, tile_cs);
+              gsk_gpu_cache_cache_tile (cache, texture, lod_level, y * n_width + x, tile, tile_cs);
             }
           if (need_mipmap && !(gsk_gpu_image_get_flags (tile) & GSK_GPU_IMAGE_MIPMAP))
             gsk_gpu_mipmap_op (self->frame, tile);

@@ -22,7 +22,6 @@
 #include "gdkmemoryformatprivate.h"
 
 #include "gdkdmabuffourccprivate.h"
-#include "gdkglcontextprivate.h"
 #include "gdkcolorstateprivate.h"
 #include "gdkparalleltaskprivate.h"
 #include "gtk/gtkcolorutilsprivate.h"
@@ -314,6 +313,61 @@ ADD_ALPHA_FUNC(r8g8b8_to_b8g8r8a8, 0, 1, 2, 2, 1, 0, 3)
 ADD_ALPHA_FUNC(r8g8b8_to_a8r8g8b8, 0, 1, 2, 1, 2, 3, 0)
 ADD_ALPHA_FUNC(r8g8b8_to_a8b8g8r8, 0, 1, 2, 3, 2, 1, 0)
 
+#define MIPMAP_FUNC(SumType, DataType, n_units) \
+static void \
+gdk_mipmap_ ## DataType ## _ ## n_units (guchar       *dest, \
+                                         gsize         dest_stride, \
+                                         const guchar *src, \
+                                         gsize         src_stride, \
+                                         gsize         src_width, \
+                                         gsize         src_height, \
+                                         guint         lod_level) \
+{ \
+  gsize y_dest, y, x_dest, x, i; \
+  gsize n = 1 << lod_level; \
+\
+  for (y_dest = 0; y_dest < src_height; y_dest += n) \
+    { \
+      DataType *dest_data = (DataType *) dest; \
+      for (x_dest = 0; x_dest < src_width; x_dest += n) \
+        { \
+          SumType tmp[n_units] = { 0, }; \
+\
+          for (y = 0; y < MIN (n, src_height - y_dest); y++) \
+            { \
+              const DataType *src_data = (const DataType *) (src + y * src_stride); \
+              for (x = 0; x < MIN (n, src_width - x_dest); x++) \
+                { \
+                  for (i = 0; i < n_units; i++) \
+                    tmp[i] += src_data[n_units * (x_dest + x) + i]; \
+                } \
+            } \
+\
+          for (i = 0; i < n_units; i++) \
+            *dest_data++ = tmp[i] / (x * y); \
+        } \
+      dest += dest_stride; \
+      src += src_stride * n; \
+    } \
+}
+
+MIPMAP_FUNC(guint32, guint8, 1)
+MIPMAP_FUNC(guint32, guint8, 2)
+MIPMAP_FUNC(guint32, guint8, 3)
+MIPMAP_FUNC(guint32, guint8, 4)
+MIPMAP_FUNC(guint32, guint16, 1)
+MIPMAP_FUNC(guint32, guint16, 2)
+MIPMAP_FUNC(guint32, guint16, 3)
+MIPMAP_FUNC(guint32, guint16, 4)
+MIPMAP_FUNC(float, float, 1)
+MIPMAP_FUNC(float, float, 3)
+MIPMAP_FUNC(float, float, 4)
+#define half_float guint16
+MIPMAP_FUNC(float, half_float, 1)
+MIPMAP_FUNC(float, half_float, 3)
+MIPMAP_FUNC(float, half_float, 4)
+#undef half_float
+
 struct _GdkMemoryFormatDescription
 {
   const char *name;
@@ -347,6 +401,7 @@ struct _GdkMemoryFormatDescription
   /* no premultiplication going on here */
   void (* to_float) (float (*)[4], const guchar*, gsize);
   void (* from_float) (guchar *, const float (*)[4], gsize);
+  void (* mipmap) (guchar *, gsize, const guchar *, gsize, gsize, gsize, guint);
 };
 
 #if  G_BYTE_ORDER == G_LITTLE_ENDIAN
@@ -388,6 +443,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = b8g8r8a8_premultiplied_to_float,
     .from_float = b8g8r8a8_premultiplied_from_float,
+    .mipmap = gdk_mipmap_guint8_4,
   },
   [GDK_MEMORY_A8R8G8B8_PREMULTIPLIED] = {
     .name = "ARGB8(p)",
@@ -419,6 +475,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8r8g8b8_premultiplied_to_float,
     .from_float = a8r8g8b8_premultiplied_from_float,
+    .mipmap = gdk_mipmap_guint8_4,
   },
   [GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] = {
     .name = "RGBA8(p)",
@@ -449,6 +506,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r8g8b8a8_premultiplied_to_float,
     .from_float = r8g8b8a8_premultiplied_from_float,
+    .mipmap = gdk_mipmap_guint8_4,
   },
   [GDK_MEMORY_A8B8G8R8_PREMULTIPLIED] = {
     .name = "ABGR8(p)",
@@ -480,6 +538,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8b8g8r8_premultiplied_to_float,
     .from_float = a8b8g8r8_premultiplied_from_float,
+    .mipmap = gdk_mipmap_guint8_4,
   },
   [GDK_MEMORY_B8G8R8A8] = {
     .name = "BGRA8",
@@ -511,6 +570,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = b8g8r8a8_to_float,
     .from_float = b8g8r8a8_from_float,
+    .mipmap = gdk_mipmap_guint8_4,
   },
   [GDK_MEMORY_A8R8G8B8] = {
     .name = "ARGB8",
@@ -542,6 +602,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8r8g8b8_to_float,
     .from_float = a8r8g8b8_from_float,
+    .mipmap = gdk_mipmap_guint8_4,
   },
   [GDK_MEMORY_R8G8B8A8] = {
     .name = "RGBA8",
@@ -572,6 +633,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r8g8b8a8_to_float,
     .from_float = r8g8b8a8_from_float,
+    .mipmap = gdk_mipmap_guint8_4,
   },
   [GDK_MEMORY_A8B8G8R8] = {
     .name = "ABGR8",
@@ -603,6 +665,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8b8g8r8_to_float,
     .from_float = a8b8g8r8_from_float,
+    .mipmap = gdk_mipmap_guint8_4,
   },
   [GDK_MEMORY_B8G8R8X8] = {
     .name = "BGRX8",
@@ -635,6 +698,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = b8g8r8x8_to_float,
     .from_float = b8g8r8x8_from_float,
+    .mipmap = gdk_mipmap_guint8_4,
   },
   [GDK_MEMORY_X8R8G8B8] = {
     .name = "XRGB8",
@@ -667,6 +731,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = x8r8g8b8_to_float,
     .from_float = x8r8g8b8_from_float,
+    .mipmap = gdk_mipmap_guint8_4,
   },
   [GDK_MEMORY_R8G8B8X8] = {
     .name = "RGBX8",
@@ -698,6 +763,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r8g8b8x8_to_float,
     .from_float = r8g8b8x8_from_float,
+    .mipmap = gdk_mipmap_guint8_4,
   },
   [GDK_MEMORY_X8B8G8R8] = {
     .name = "XBGR8",
@@ -730,6 +796,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = x8b8g8r8_to_float,
     .from_float = x8b8g8r8_from_float,
+    .mipmap = gdk_mipmap_guint8_4,
   },
   [GDK_MEMORY_R8G8B8] = {
     .name = "RGB8",
@@ -761,6 +828,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r8g8b8_to_float,
     .from_float = r8g8b8_from_float,
+    .mipmap = gdk_mipmap_guint8_3,
   },
   [GDK_MEMORY_B8G8R8] = {
     .name = "BGR8",
@@ -793,6 +861,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = b8g8r8_to_float,
     .from_float = b8g8r8_from_float,
+    .mipmap = gdk_mipmap_guint8_3,
   },
   [GDK_MEMORY_R16G16B16] = {
     .name = "RGB16",
@@ -827,6 +896,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16_to_float,
     .from_float = r16g16b16_from_float,
+    .mipmap = gdk_mipmap_guint16_3,
   },
   [GDK_MEMORY_R16G16B16A16_PREMULTIPLIED] = {
     .name = "RGBA16(p)",
@@ -860,6 +930,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
+    .mipmap = gdk_mipmap_guint16_4,
   },
   [GDK_MEMORY_R16G16B16A16] = {
     .name = "RGBA16",
@@ -893,6 +964,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
+    .mipmap = gdk_mipmap_guint16_4,
   },
   [GDK_MEMORY_R16G16B16_FLOAT] = {
     .name = "RGBA16f",
@@ -926,6 +998,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16_float_to_float,
     .from_float = r16g16b16_float_from_float,
+    .mipmap = gdk_mipmap_half_float_3,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] = {
     .name = "RGBA16f(p)",
@@ -958,6 +1031,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
+    .mipmap = gdk_mipmap_half_float_4,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT] = {
     .name = "RGBA16f",
@@ -990,6 +1064,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
+    .mipmap = gdk_mipmap_half_float_4,
   },
   [GDK_MEMORY_R32G32B32_FLOAT] = {
     .name = "RGB32f",
@@ -1023,6 +1098,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r32g32b32_float_to_float,
     .from_float = r32g32b32_float_from_float,
+    .mipmap = gdk_mipmap_float_3,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] = {
     .name = "RGBA32f(p)",
@@ -1055,6 +1131,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
+    .mipmap = gdk_mipmap_float_4,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT] = {
     .name = "RGBA32f",
@@ -1087,6 +1164,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
+    .mipmap = gdk_mipmap_float_4,
   },
   [GDK_MEMORY_G8A8_PREMULTIPLIED] = {
     .name = "GA8(p)",
@@ -1118,6 +1196,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g8a8_premultiplied_to_float,
     .from_float = g8a8_premultiplied_from_float,
+    .mipmap = gdk_mipmap_guint8_2,
   },
   [GDK_MEMORY_G8A8] = {
     .name = "GA8",
@@ -1149,6 +1228,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g8a8_to_float,
     .from_float = g8a8_from_float,
+    .mipmap = gdk_mipmap_guint8_2,
   },
   [GDK_MEMORY_G8] = {
     .name = "G8",
@@ -1180,6 +1260,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g8_to_float,
     .from_float = g8_from_float,
+    .mipmap = gdk_mipmap_guint8_1,
   },
   [GDK_MEMORY_G16A16_PREMULTIPLIED] = {
     .name = "GA16(p)",
@@ -1214,6 +1295,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g16a16_premultiplied_to_float,
     .from_float = g16a16_premultiplied_from_float,
+    .mipmap = gdk_mipmap_guint16_2,
   },
   [GDK_MEMORY_G16A16] = {
     .name = "GA16",
@@ -1248,6 +1330,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g16a16_to_float,
     .from_float = g16a16_from_float,
+    .mipmap = gdk_mipmap_guint16_2,
   },
   [GDK_MEMORY_G16] = {
     .name = "G16",
@@ -1282,6 +1365,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g16_to_float,
     .from_float = g16_from_float,
+    .mipmap = gdk_mipmap_guint16_1,
   },
   [GDK_MEMORY_A8] = {
     .name = "A8",
@@ -1313,6 +1397,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8_to_float,
     .from_float = a8_from_float,
+    .mipmap = gdk_mipmap_guint8_1,
   },
   [GDK_MEMORY_A16] = {
     .name = "A16",
@@ -1347,6 +1432,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a16_to_float,
     .from_float = a16_from_float,
+    .mipmap = gdk_mipmap_guint16_1,
   },
   [GDK_MEMORY_A16_FLOAT] = {
     .name = "A16f",
@@ -1380,6 +1466,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a16_float_to_float,
     .from_float = a16_float_from_float,
+    .mipmap = gdk_mipmap_half_float_1,
   },
   [GDK_MEMORY_A32_FLOAT] = {
     .name = "A32f",
@@ -1413,6 +1500,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a32_float_to_float,
     .from_float = a32_float_from_float,
+    .mipmap = gdk_mipmap_float_1,
   }
 };
 
@@ -2296,3 +2384,21 @@ gdk_memory_convert_color_state (guchar          *data,
       gdk_parallel_task_run (gdk_memory_convert_color_state_generic, &mc);
     }
 }
+
+void
+gdk_memory_mipmap (guchar          *dest,
+                   gsize            dest_stride,
+                   GdkMemoryFormat  format,
+                   const guchar    *src,
+                   gsize            src_stride,
+                   gsize            src_width,
+                   gsize            src_height,
+                   guint            lod_level)
+{
+  const GdkMemoryFormatDescription *desc = &memory_formats[format];
+
+  g_assert (lod_level > 0);
+
+  desc->mipmap (dest, dest_stride, src, src_stride, src_width, src_height, lod_level);
+}
+
