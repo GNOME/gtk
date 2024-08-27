@@ -1850,6 +1850,52 @@ unpremultiply (float (*rgba)[4],
     }
 }
 
+typedef void (* FastConversionFunc) (guchar *, const guchar *, gsize);
+
+static FastConversionFunc
+get_fast_conversion_func (GdkMemoryFormat dest_format,
+                          GdkMemoryFormat src_format)
+{
+  if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+    return r8g8b8a8_to_r8g8b8a8_premultiplied;
+  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+    return r8g8b8a8_to_b8g8r8a8_premultiplied;
+  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    return r8g8b8a8_to_b8g8r8a8_premultiplied;
+  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    return r8g8b8a8_to_r8g8b8a8_premultiplied;
+  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
+    return r8g8b8a8_to_a8r8g8b8_premultiplied;
+  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
+    return r8g8b8a8_to_a8b8g8r8_premultiplied;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+    return r8g8b8_to_r8g8b8a8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+    return r8g8b8_to_b8g8r8a8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    return r8g8b8_to_b8g8r8a8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    return r8g8b8_to_r8g8b8a8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
+    return r8g8b8_to_a8r8g8b8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
+    return r8g8b8_to_a8b8g8r8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8)
+    return r8g8b8_to_r8g8b8a8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8)
+    return r8g8b8_to_b8g8r8a8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8)
+    return r8g8b8_to_b8g8r8a8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8)
+    return r8g8b8_to_r8g8b8a8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8)
+    return r8g8b8_to_a8r8g8b8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8)
+    return r8g8b8_to_a8b8g8r8;
+
+  return NULL;
+}
+
 void
 gdk_memory_convert (guchar              *dest_data,
                     gsize                dest_stride,
@@ -1868,7 +1914,6 @@ gdk_memory_convert (guchar              *dest_data,
   gsize y;
   GdkFloatColorConvert convert_func = NULL;
   GdkFloatColorConvert convert_func2 = NULL;
-  void (*func) (guchar *, const guchar *, gsize) = NULL;
   gboolean needs_premultiply, needs_unpremultiply;
 
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
@@ -1913,52 +1958,22 @@ gdk_memory_convert (guchar              *dest_data,
           convert_func2 = gdk_color_state_get_convert_from (dest_cs, connection);
         }
     }
-  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    func = r8g8b8a8_to_r8g8b8a8_premultiplied;
-  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    func = r8g8b8a8_to_b8g8r8a8_premultiplied;
-  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    func = r8g8b8a8_to_b8g8r8a8_premultiplied;
-  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    func = r8g8b8a8_to_r8g8b8a8_premultiplied;
-  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    func = r8g8b8a8_to_a8r8g8b8_premultiplied;
-  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    func = r8g8b8a8_to_a8b8g8r8_premultiplied;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    func = r8g8b8_to_r8g8b8a8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    func = r8g8b8_to_b8g8r8a8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    func = r8g8b8_to_b8g8r8a8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    func = r8g8b8_to_r8g8b8a8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    func = r8g8b8_to_a8r8g8b8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    func = r8g8b8_to_a8b8g8r8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8)
-    func = r8g8b8_to_r8g8b8a8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8)
-    func = r8g8b8_to_b8g8r8a8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8)
-    func = r8g8b8_to_b8g8r8a8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8)
-    func = r8g8b8_to_r8g8b8a8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8)
-    func = r8g8b8_to_a8r8g8b8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8)
-    func = r8g8b8_to_a8b8g8r8;
-
-  if (func != NULL)
+  else
     {
-      for (y = 0; y < height; y++)
+      FastConversionFunc func;
+
+      func = get_fast_conversion_func (dest_format, src_format);
+
+      if (func != NULL)
         {
-          func (dest_data, src_data, width);
-          src_data += src_stride;
-          dest_data += dest_stride;
+          for (y = 0; y < height; y++)
+            {
+              func (dest_data, src_data, width);
+              src_data += src_stride;
+              dest_data += dest_stride;
+            }
+          return;
         }
-      return;
     }
 
   tmp = g_malloc (sizeof (*tmp) * width);
