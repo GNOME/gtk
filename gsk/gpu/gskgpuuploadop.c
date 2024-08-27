@@ -214,6 +214,7 @@ struct _GskGpuUploadTextureOp
   GskGpuImage *image;
   GskGpuBuffer *buffer;
   GdkTexture *texture;
+  guint lod_level;
 };
 
 static void
@@ -236,6 +237,8 @@ gsk_gpu_upload_texture_op_print (GskGpuOp    *op,
 
   gsk_gpu_print_op (string, indent, "upload-texture");
   gsk_gpu_print_image (string, self->image);
+  if (self->lod_level > 0)
+    g_string_append_printf (string, " @%ux ", 1 << self->lod_level);
   gsk_gpu_print_newline (string);
 }
 
@@ -250,7 +253,26 @@ gsk_gpu_upload_texture_op_draw (GskGpuOp *op,
   downloader = gdk_texture_downloader_new (self->texture);
   gdk_texture_downloader_set_format (downloader, gsk_gpu_image_get_format (self->image));
   gdk_texture_downloader_set_color_state (downloader, gdk_texture_get_color_state (self->texture));
-  gdk_texture_downloader_download_into (downloader, data, stride);
+  if (self->lod_level == 0)
+    {
+      gdk_texture_downloader_download_into (downloader, data, stride);
+    }
+  else
+    {
+      GBytes *bytes;
+      gsize src_stride;
+      
+      bytes = gdk_texture_downloader_download_bytes (downloader, &src_stride);
+      gdk_memory_mipmap (data,
+                         stride,
+                         gsk_gpu_image_get_format (self->image),
+                         g_bytes_get_data (bytes, NULL),
+                         src_stride,
+                         gdk_texture_get_width (self->texture),
+                         gdk_texture_get_height (self->texture),
+                         self->lod_level);
+      g_bytes_unref (bytes);
+    }
   gdk_texture_downloader_free (downloader);
 }
 
@@ -298,6 +320,7 @@ static const GskGpuOpClass GSK_GPU_UPLOAD_TEXTURE_OP_CLASS = {
 GskGpuImage *
 gsk_gpu_upload_texture_op_try (GskGpuFrame *frame,
                                gboolean     with_mipmap,
+                               guint        lod_level,
                                GdkTexture  *texture)
 {
   GskGpuUploadTextureOp *self;
@@ -311,8 +334,8 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame *frame,
                                               format,
                                               gdk_memory_format_alpha (format) != GDK_MEMORY_ALPHA_PREMULTIPLIED &&
                                               gdk_color_state_get_no_srgb_tf (gdk_texture_get_color_state (texture)) != NULL,
-                                              gdk_texture_get_width (texture),
-                                              gdk_texture_get_height (texture));
+                                              (gdk_texture_get_width (texture) + (1 << lod_level) - 1) >> lod_level,
+                                              (gdk_texture_get_height (texture) + (1 << lod_level) - 1) >> lod_level);
   if (image == NULL)
     return NULL;
 
@@ -343,6 +366,7 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame *frame,
   self = (GskGpuUploadTextureOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_UPLOAD_TEXTURE_OP_CLASS);
 
   self->texture = g_object_ref (texture);
+  self->lod_level = lod_level;
   self->image = image;
 
   return g_object_ref (self->image);

@@ -537,6 +537,7 @@ struct _GskGpuCachedTile
   GskGpuCached parent;
 
   GdkTexture *texture;
+  guint lod_level;
   gsize tile_id;
 
   /* atomic */ int use_count; /* We count the use by the cache (via the linked
@@ -630,7 +631,7 @@ gsk_gpu_cached_tile_hash (gconstpointer data)
 {
   const GskGpuCachedTile *self = data;
 
-  return g_direct_hash (self->texture) ^ self->tile_id;
+  return g_direct_hash (self->texture) ^ self->tile_id ^ (self->lod_level << 24);
 }
 
 static gboolean
@@ -641,12 +642,14 @@ gsk_gpu_cached_tile_equal (gconstpointer data_a,
   const GskGpuCachedTile *b = data_b;
 
   return a->texture == b->texture &&
+         a->lod_level == b->lod_level &&
          a->tile_id == b->tile_id;
 }
 
 static GskGpuCachedTile *
 gsk_gpu_cached_tile_new (GskGpuCache   *cache,
                          GdkTexture    *texture,
+                         guint          lod_level,
                          guint          tile_id,
                          GskGpuImage   *image,
                          GdkColorState *color_state)
@@ -655,6 +658,7 @@ gsk_gpu_cached_tile_new (GskGpuCache   *cache,
 
   self = gsk_gpu_cached_new (cache, &GSK_GPU_CACHED_TILE_CLASS);
   self->texture = texture;
+  self->lod_level = lod_level;
   self->tile_id = tile_id;
   self->image = g_object_ref (image);
   self->color_state = gdk_color_state_ref (color_state);
@@ -675,12 +679,14 @@ gsk_gpu_cached_tile_new (GskGpuCache   *cache,
 GskGpuImage *
 gsk_gpu_cache_lookup_tile (GskGpuCache    *self,
                            GdkTexture     *texture,
+                           guint           lod_level,
                            gsize           tile_id,
                            GdkColorState **out_color_state)
 {
   GskGpuCachedTile *tile;
   GskGpuCachedTile lookup = {
     .texture = texture,
+    .lod_level = lod_level,
     .tile_id = tile_id
   };
 
@@ -701,13 +707,14 @@ gsk_gpu_cache_lookup_tile (GskGpuCache    *self,
 void
 gsk_gpu_cache_cache_tile (GskGpuCache   *self,
                           GdkTexture    *texture,
-                          guint          tile_id,
+                          guint          lod_level,
+                          gsize          tile_id,
                           GskGpuImage   *image,
                           GdkColorState *color_state)
 {
   GskGpuCachedTile *tile;
 
-  tile = gsk_gpu_cached_tile_new (self, texture, tile_id, image, color_state);
+  tile = gsk_gpu_cached_tile_new (self, texture, lod_level, tile_id, image, color_state);
 
   gsk_gpu_cached_use (self, (GskGpuCached *) tile);
 }
