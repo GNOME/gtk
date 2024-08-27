@@ -2728,19 +2728,8 @@ scale {
 
   // click-and-hold the slider to activate
   &.fine-tune {
-    &.horizontal {
-      padding-top: 9px;
-      padding-bottom: 9px;
-      min-height: 16px;
-    }
-
-    &.vertical {
-      padding-left: 9px;
-      padding-right: 9px;
-      min-width: 16px;
-    }
-
     // to make the trough grow in fine-tune mode
+    > trough { margin: -3px; }
     > trough > slider { margin: -6px; }
 
     > trough > fill,
@@ -2885,7 +2874,7 @@ scale {
       &.top { margin-left: 3px; }
       &.bottom { margin-right: 3px; }
 
-      indicator { min-height: ($_marks_length - 3px); }
+      indicator { min-width: ($_marks_length - 3px); }
     }
   }
 
@@ -2957,7 +2946,7 @@ scale {
           &.fine-tune > trough > slider {
             @if $dir_class == 'horizontal' {
               // bigger negative margins to make the trough grow here as well
-              margin: -7px -10px;
+              margin: -7px;
 
               @if $marks_infix == 'scale-has-marks-above' { margin-top: -11px; }
 
@@ -2965,7 +2954,7 @@ scale {
             }
 
             @else {
-              margin: -10px -7px;
+              margin: -7px;
 
               @if $marks_infix == 'scale-has-marks-above' { margin-left: -11px; }
 
