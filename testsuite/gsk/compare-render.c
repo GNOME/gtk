@@ -301,17 +301,6 @@ gsk_rect_from_cairo (graphene_rect_t              *rect,
 }
 
 static GdkPixbuf *
-apply_clip_to_pixbuf (GdkPixbuf                   *pixbuf,
-                      const cairo_rectangle_int_t *int_clip)
-{
-  return gdk_pixbuf_new_subpixbuf (pixbuf,
-                                   int_clip->x,
-                                   int_clip->y,
-                                   int_clip->width,
-                                   int_clip->height);
-}
-
-static GdkPixbuf *
 pixbuf_new_from_texture (GdkTexture *texture)
 {
   GdkTextureDownloader *downloader;
@@ -658,8 +647,7 @@ run_node_test (gconstpointer data)
 
   if (clip)
     {
-      GskRenderNode *node2;
-      GdkPixbuf *pixbuf, *pixbuf2;
+      GskRenderNode *node2, *texture_node, *reference_node;
       GdkTexture *clipped_reference;
       graphene_rect_t bounds;
       cairo_rectangle_int_t int_clip;
@@ -686,15 +674,15 @@ run_node_test (gconstpointer data)
       rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
       save_image (rendered_texture, test->node_file, "clipped", ".out.png");
 
-      pixbuf = pixbuf_new_from_texture (reference_texture);
-
-      int_clip.x -= (int) bounds.origin.x;
-      int_clip.y -= (int) bounds.origin.y;
-
-      pixbuf2 = apply_clip_to_pixbuf (pixbuf, &int_clip);
-      clipped_reference = gdk_texture_new_for_pixbuf (pixbuf2);
-      g_object_unref (pixbuf2);
-      g_object_unref (pixbuf);
+      texture_node = gsk_texture_node_new (reference_texture,
+                                           &GRAPHENE_RECT_INIT (
+                                             (int) bounds.origin.x,
+                                             (int) bounds.origin.y,
+                                             gdk_texture_get_width (reference_texture),
+                                             gdk_texture_get_height (reference_texture)
+                                           ));
+      reference_node = gsk_clip_node_new (texture_node, &clip_rect);
+      clipped_reference = gsk_renderer_render_texture (renderer, reference_node, NULL);
 
       save_image (clipped_reference, test->node_file, "clipped", ".ref.png");
 
@@ -709,6 +697,8 @@ run_node_test (gconstpointer data)
       g_clear_object (&diff_texture);
       g_clear_object (&rendered_texture);
       g_clear_object (&clipped_reference);
+      gsk_render_node_unref (reference_node);
+      gsk_render_node_unref (texture_node);
       gsk_render_node_unref (node2);
     }
 
