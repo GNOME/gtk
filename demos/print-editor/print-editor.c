@@ -798,7 +798,7 @@ activate (GApplication *app)
   if (g_strcmp0 (PROFILE, "devel") == 0)
     gtk_widget_add_css_class (GTK_WIDGET (main_window), "devel");
 
-  gtk_window_set_icon_name (GTK_WINDOW (main_window), "text-editor");
+  gtk_window_set_icon_name (GTK_WINDOW (main_window), "org.gtk.PrintEditor4");
   gtk_window_set_default_size (GTK_WINDOW (main_window), 400, 600);
   gtk_application_window_set_show_menubar (GTK_APPLICATION_WINDOW (main_window), TRUE);
   update_title (GTK_WINDOW (main_window));

@@ -2241,6 +2241,7 @@ activate (GApplication *app)
   if (g_strcmp0 (PROFILE, "devel") == 0)
     gtk_widget_add_css_class (GTK_WIDGET (window), "devel");
 
+  gtk_window_set_icon_name (window, "org.gtk.WidgetFactory4");
   gtk_application_add_window (GTK_APPLICATION (app), window);
   g_action_map_add_action_entries (G_ACTION_MAP (window),
                                    win_entries, G_N_ELEMENTS (win_entries),
