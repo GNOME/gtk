@@ -20,7 +20,8 @@
 
 #pragma once
 
-void gdk_dmanipulation_initialize (void);
+void gdk_dmanipulation_initialize (GdkWin32Display *display);
+void gdk_win32_display_close_dmanip_manager (GdkDisplay *display);
 
 void gdk_dmanipulation_initialize_surface (GdkSurface *surface);
 void gdk_dmanipulation_finalize_surface   (GdkSurface *surface);
