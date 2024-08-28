@@ -112,7 +112,12 @@ gdk_device_manager_win32_finalize (GObject *object)
 
   device_manager_win32 = GDK_DEVICE_MANAGER_WIN32 (object);
 
-  g_clear_pointer (&device_manager_win32->ignored_interactions, g_ptr_array_free);
+  if (device_manager_win32->ignored_interactions != NULL)
+    {
+      g_ptr_array_free (device_manager_win32->ignored_interactions, FALSE);
+      device_manager_win32->ignored_interactions = NULL;
+    }
+
   g_clear_pointer (&device_manager_win32->winpointer_funcs, g_free);
 
   /* Sadly, no g_clear_pointer() on DestroyWindow() as it is __stdcall */

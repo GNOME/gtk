@@ -39,12 +39,6 @@
 #include <wintab.h>
 #include <imm.h>
 
-void
-_gdk_win32_surfaceing_init (void)
-{
-  gdk_dmanipulation_initialize ();
-}
-
 /* Whether GDK initialized COM */
 gboolean
 gdk_win32_ensure_com (void)

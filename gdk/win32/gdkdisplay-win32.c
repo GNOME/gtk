@@ -28,6 +28,7 @@
 #include "gdkdisplay-win32.h"
 #include "gdkdevicemanager-win32.h"
 #include "gdkglcontext-win32.h"
+#include "gdkinput-dmanipulation.h"
 #include "gdksurface-win32.h"
 #include "gdkwin32display.h"
 #include "gdkwin32screen.h"
@@ -529,8 +530,9 @@ _gdk_win32_display_open (const char *display_name)
   _gdk_events_init (_gdk_display);
 
   win32_display->device_manager = g_object_new (GDK_TYPE_DEVICE_MANAGER_WIN32,
-                                      NULL);
+                                                NULL);
   win32_display->device_manager->display = _gdk_display;
+  gdk_dmanipulation_initialize (win32_display);
 
   gdk_win32_display_lang_notification_init (win32_display);
   _gdk_drag_init ();
@@ -685,6 +687,7 @@ gdk_win32_display_finalize (GObject *object)
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
   _gdk_win32_display_finalize_cursors (display_win32);
+  gdk_win32_display_close_dmanip_manager (GDK_DISPLAY (display_win32));
   _gdk_win32_dnd_exit ();
   gdk_win32_display_lang_notification_exit (display_win32);
   g_free (display_win32->pointer_device_items);
@@ -1310,6 +1313,4 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->get_setting = gdk_win32_display_get_setting;
   display_class->set_cursor_theme = gdk_win32_display_set_cursor_theme;
   display_class->init_gl = gdk_win32_display_init_gl;
-
-  _gdk_win32_surfaceing_init ();
 }

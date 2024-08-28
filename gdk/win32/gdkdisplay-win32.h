@@ -136,6 +136,16 @@ typedef struct
   HGLRC hglrc;
 } GdkWin32GLDummyContextWGL;
 
+/* for Direct Manipulation support */
+typedef struct
+{
+  /* this is an IDirectManipulationManager object */
+  void *manager;
+
+  /* GetPointerType (UINT32 pointerId, POINTER_INPUT_TYPE *pointerType) function pointer */
+  void *getPointerType;
+} dmanip_items;
+
 struct _GdkWin32Display
 {
   GdkDisplay display;
@@ -153,6 +163,8 @@ struct _GdkWin32Display
   GdkWin32PointerDeviceItems *pointer_device_items;
   GdkWin32CbDnDItems *cb_dnd_items;
   GdkDeviceManagerWin32 *device_manager;
+
+  dmanip_items *dmanip_items;
 
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;
