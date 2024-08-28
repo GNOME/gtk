@@ -1,5 +1,104 @@
-Overview of Changes in 4.15.5, xx-xx-xxxx
+Overview of Changes in 4.15.7, xx-xx-xxxx
 =========================================
+
+Overview of Changes in 4.15.6, 08-26-2024
+=========================================
+
+* GtkCheckButton:
+ - Add a grouped style class for radio buttons
+
+* GtkScale:
+ - Fix alignment and positioning problems
+
+* Css:
+ - Fix crashes in the variable support
+
+* Gsk:
+ - Make graphics offloading work better with kwin
+ - Make colorstate transfer functions more robust
+ - GC dead textures more agressively
+ - Only use a single render pass per frame
+
+* GL:
+ - Round damage rectangles properly
+ - Use the shared context when creating textures
+ - Fix a file descriptor leak in dmabuf export
+
+* Vulkan:
+ - Round damage rectangles properly
+
+* Wayland:
+ - Work with the kwin implementation of xx-color-management-v4
+
+* Windows:
+ - Make gtk_show_uri use SHOpenWithDialog()
+ - Enable incremental rendering with WGL
+
+* Macos:
+ - Open context menus on Ctrl-left click
+
+* Debugging:
+ - Show color state information in the inspector
+ - Collect input event traces in the recorder
+ - Add shortcuts for toggling recording: Super-r
+   and for screenshots: Super-c
+ - Split the GDK_DEBUG env var into GDK_DEBUG and GDK_DISABLE
+ - Add GDK_DISABLE=color-mgmt and GDK_DISABLE=offload
+
+* Tools:
+ - Add a 'Paste as node' action in gtk4-node-editor
+
+* Translations updates
+ Basque
+ Belarusian
+ Brazilian Portuguese
+ Chinese (China)
+ Georgian
+ Hebrew
+ Hindi
+ Russian
+ Slovenian
+ Turkish
+ Ukrainian
+
+
+Overview of Changes in 4.15.5, 11-08-2024
+=========================================
+
+* GtkTextView:
+ - ADd GtkTextBufferCommitNotify
+
+* CSS:
+ - Propagate color state information to GSK for many features:
+   colors, borders, shadows, text
+
+* Gdk:
+ - Fix an fd leak in the Vulkan code
+ - Fix a leak of EGLSurfaces and DMA buffers
+ - Set the opaque region of surfaces automatically based on their content
+
+* Gsk:
+ - Fix Emoji rendering in Vulkan
+ - Rework color handling to take color states into account
+ - Implement more powerful occlusion culling
+ - Minimize our use of renderpasses
+
+* Macos:
+ - Fix window transparency
+
+* Debugging:
+ - The inspector shows details about color states
+
+* Deprecations:
+ - gdk_draw_context_begin/end_frame
+ - gdk_surface_set_opaque_region
+
+* Build:
+ - Require gstreamer 1.24
+
+* Translation updates
+ Romanian
+
 
 Overview of Changes in 4.15.4, 30-07-2024
 =========================================

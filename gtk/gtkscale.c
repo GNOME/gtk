@@ -159,7 +159,6 @@ struct _GtkScalePrivate
 
   guint         draw_value : 1;
   guint         value_pos  : 2;
-  guint         has_markup : 1;
 
   GtkScaleFormatValueFunc format_value_func;
   gpointer format_value_func_user_data;
@@ -340,6 +339,8 @@ gtk_scale_allocate_value (GtkScale *scale)
   GtkAllocation value_alloc;
   int range_width, range_height;
   graphene_rect_t slider_bounds;
+  GdkRectangle trough_rect;
+  int slider_center_x, slider_center_y, trough_center_x, trough_center_y;
 
   range_width = gtk_widget_get_width (widget);
   range_height = gtk_widget_get_height (widget);
@@ -347,6 +348,14 @@ gtk_scale_allocate_value (GtkScale *scale)
   slider_widget = gtk_range_get_slider_widget (range);
   if (!gtk_widget_compute_bounds (slider_widget, widget, &slider_bounds))
     graphene_rect_init (&slider_bounds, 0, 0, gtk_widget_get_width (widget), gtk_widget_get_height (widget));
+
+  slider_center_x = slider_bounds.origin.x + slider_bounds.size.width / 2;
+  slider_center_y = slider_bounds.origin.y + slider_bounds.size.height / 2;
+
+  gtk_range_get_range_rect (range, &trough_rect);
+
+  trough_center_x = trough_rect.x + trough_rect.width / 2;
+  trough_center_y = trough_rect.y + trough_rect.height / 2;
 
   gtk_widget_measure (priv->value_widget,
                       GTK_ORIENTATION_HORIZONTAL, -1,
@@ -363,48 +372,27 @@ gtk_scale_allocate_value (GtkScale *scale)
         {
         case GTK_POS_LEFT:
           value_alloc.x = 0;
-          value_alloc.y = (range_height - value_alloc.height) / 2;
+          value_alloc.y = trough_center_y - value_alloc.height / 2;
           break;
 
         case GTK_POS_RIGHT:
           value_alloc.x = range_width - value_alloc.width;
-          value_alloc.y = (range_height - value_alloc.height) / 2;
+          value_alloc.y = trough_center_y - value_alloc.height / 2;
           break;
 
         case GTK_POS_TOP:
-          value_alloc.x = slider_bounds.origin.x + (slider_bounds.size.width - value_alloc.width) / 2;
-          value_alloc.y = slider_bounds.origin.y - value_alloc.height;
+          value_alloc.x = slider_center_x - value_alloc.width / 2;
+          value_alloc.y = 0;
           break;
 
         case GTK_POS_BOTTOM:
-          value_alloc.x = slider_bounds.origin.x + (slider_bounds.size.width - value_alloc.width) / 2;
+          value_alloc.x = slider_center_x - value_alloc.width / 2;
           value_alloc.y = range_height - value_alloc.height;
           break;
 
         default:
           g_return_if_reached ();
           break;
-        }
-      if (priv->has_markup && (priv->value_pos == GTK_POS_LEFT || priv->value_pos == GTK_POS_RIGHT))
-        {
-          if (priv->top_marks_widget)
-            {
-              int marks_height;
-              gtk_widget_measure (priv->top_marks_widget,
-                                  GTK_ORIENTATION_VERTICAL, -1,
-                                  &marks_height, NULL,
-                                  NULL, NULL);
-              value_alloc.y += marks_height / 2;
-            }
-          if (priv->bottom_marks_widget)
-            {
-              int marks_height;
-              gtk_widget_measure (priv->bottom_marks_widget,
-                                  GTK_ORIENTATION_VERTICAL, -1,
-                                  &marks_height, NULL,
-                                  NULL, NULL);
-              value_alloc.y -= marks_height / 2;
-            }
         }
     }
   else /* VERTICAL */
@@ -413,47 +401,26 @@ gtk_scale_allocate_value (GtkScale *scale)
         {
         case GTK_POS_LEFT:
           value_alloc.x = 0;
-          value_alloc.y = (slider_bounds.origin.y + (slider_bounds.size.height / 2)) - value_alloc.height / 2;
+          value_alloc.y = slider_center_y - value_alloc.height / 2;
           break;
 
         case GTK_POS_RIGHT:
           value_alloc.x = range_width - value_alloc.width;
-          value_alloc.y = (slider_bounds.origin.y + (slider_bounds.size.height / 2)) - value_alloc.height / 2;
+          value_alloc.y = slider_center_y - value_alloc.height / 2;
           break;
 
         case GTK_POS_TOP:
-          value_alloc.x = (range_width - value_alloc.width) / 2;
+          value_alloc.x = trough_center_x - value_alloc.width / 2;
           value_alloc.y = 0;
           break;
 
         case GTK_POS_BOTTOM:
-          value_alloc.x = (range_width - value_alloc.width) / 2;
+          value_alloc.x = trough_center_x - value_alloc.width / 2;
           value_alloc.y = range_height - value_alloc.height;
           break;
 
         default:
           g_return_if_reached ();
-        }
-      if (priv->has_markup && (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_BOTTOM))
-        {
-          if (priv->top_marks_widget)
-            {
-              int marks_width;
-              gtk_widget_measure (priv->top_marks_widget,
-                                  GTK_ORIENTATION_HORIZONTAL, -1,
-                                  &marks_width, NULL,
-                                  NULL, NULL);
-              value_alloc.x += marks_width / 2;
-            }
-          if (priv->bottom_marks_widget)
-            {
-              int marks_width;
-              gtk_widget_measure (priv->bottom_marks_widget,
-                                  GTK_ORIENTATION_HORIZONTAL, -1,
-                                  &marks_width, NULL,
-                                  NULL, NULL);
-              value_alloc.x -= marks_width / 2;
-            }
         }
     }
 
@@ -615,7 +582,7 @@ gtk_scale_size_allocate (GtkWidget *widget,
                               &marks_height, NULL,
                               NULL, NULL);
           marks_rect.x = 0;
-          marks_rect.y = 0;
+          marks_rect.y = range_rect.y - marks_height;
           marks_rect.width = range_rect.width;
           marks_rect.height = marks_height;
           gtk_widget_size_allocate (priv->top_marks_widget, &marks_rect, -1);
@@ -1337,7 +1304,6 @@ gtk_scale_get_range_border (GtkRange  *range,
   if (gtk_orientable_get_orientation (GTK_ORIENTABLE (range)) == GTK_ORIENTATION_HORIZONTAL)
     {
       int height;
-      bool need_symmetry = !priv->has_markup && (priv->value_pos == GTK_POS_LEFT || priv->value_pos == GTK_POS_RIGHT || !priv->draw_value);
 
       if (priv->top_marks_widget)
         {
@@ -1346,11 +1312,7 @@ gtk_scale_get_range_border (GtkRange  *range,
                               &height, NULL,
                               NULL, NULL);
           if (height > 0)
-            {
-              border->top += height;
-              if (need_symmetry)
-                border->bottom += height;
-            }
+            border->top += height;
         }
 
       if (priv->bottom_marks_widget)
@@ -1360,17 +1322,12 @@ gtk_scale_get_range_border (GtkRange  *range,
                               &height, NULL,
                               NULL, NULL);
           if (height > 0)
-            {
-              border->bottom += height;
-              if (need_symmetry)
-                border->top += height;
-            }
+            border->bottom += height;
         }
     }
   else
     {
       int width;
-      bool need_symmetry = !priv->has_markup && (priv->value_pos == GTK_POS_TOP || priv->value_pos == GTK_POS_BOTTOM || !priv->draw_value);
 
       if (priv->top_marks_widget)
         {
@@ -1379,11 +1336,7 @@ gtk_scale_get_range_border (GtkRange  *range,
                               &width, NULL,
                               NULL, NULL);
           if (width > 0)
-            {
-              border->left += width;
-              if (need_symmetry)
-                border->right += width;
-            }
+            border->left += width;
         }
 
       if (priv->bottom_marks_widget)
@@ -1393,11 +1346,7 @@ gtk_scale_get_range_border (GtkRange  *range,
                               &width, NULL,
                               NULL, NULL);
           if (width > 0)
-            {
-              border->right += width;
-              if (need_symmetry)
-                border->left += width;
-            }
+            border->right += width;
         }
     }
 }
@@ -1487,11 +1436,12 @@ gtk_scale_measure (GtkWidget      *widget,
   GtkScale *scale = GTK_SCALE (widget);
   GtkScalePrivate *priv = gtk_scale_get_instance_private (scale);
   GtkOrientation scale_orientation;
+  int range_minimum, range_natural, scale_minimum = 0, scale_natural = 0;
 
   GTK_WIDGET_CLASS (gtk_scale_parent_class)->measure (widget,
                                                       orientation,
                                                       for_size,
-                                                      minimum, natural,
+                                                      &range_minimum, &range_natural,
                                                       minimum_baseline, natural_baseline);
 
   scale_orientation = gtk_orientable_get_orientation (GTK_ORIENTABLE (widget));
@@ -1513,8 +1463,8 @@ gtk_scale_measure (GtkWidget      *widget,
 
       marks_size = MAX (top_marks_size, bottom_marks_size);
 
-      *minimum = MAX (*minimum, marks_size);
-      *natural = MAX (*natural, marks_size);
+      scale_minimum = MAX (scale_minimum, marks_size);
+      scale_natural = MAX (scale_natural, marks_size);
     }
 
   if (priv->value_widget)
@@ -1528,29 +1478,32 @@ gtk_scale_measure (GtkWidget      *widget,
         {
           if (orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              *minimum = MAX (*minimum, min);
-              *natural = MAX (*natural, nat);
+              scale_minimum = MAX (scale_minimum, min);
+              scale_natural = MAX (scale_natural, nat);
             }
           else
             {
-              *minimum += min;
-              *natural += nat;
+              scale_minimum += min;
+              scale_natural += nat;
             }
         }
       else
         {
           if (orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              *minimum += min;
-              *natural += nat;
+              scale_minimum += min;
+              scale_natural += nat;
             }
           else
             {
-              *minimum = MAX (*minimum, min);
-              *natural = MAX (*natural, nat);
+              scale_minimum = MAX (scale_minimum, min);
+              scale_natural = MAX (scale_natural, nat);
             }
         }
     }
+
+  *minimum = MAX (range_minimum, scale_minimum);
+  *natural = MAX (range_natural, scale_natural);
 }
 
 static void
@@ -1712,7 +1665,6 @@ gtk_scale_clear_marks (GtkScale *scale)
 
   g_slist_free_full (priv->marks, gtk_scale_mark_free);
   priv->marks = NULL;
-  priv->has_markup = false;
 
   g_clear_pointer (&priv->top_marks_widget, gtk_widget_unparent);
   g_clear_pointer (&priv->bottom_marks_widget, gtk_widget_unparent);
@@ -1831,7 +1783,6 @@ gtk_scale_add_mark (GtkScale        *scale,
         gtk_widget_insert_after (mark->label_widget, mark->widget, NULL);
       else
         gtk_widget_insert_before (mark->label_widget, mark->widget, NULL);
-      priv->has_markup = true;
     }
 
   m = g_slist_find (priv->marks, mark);

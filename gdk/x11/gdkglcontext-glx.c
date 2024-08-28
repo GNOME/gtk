@@ -120,20 +120,6 @@ maybe_wait_for_vblank (GdkDisplay  *display,
     }
 }
 
-static GLXDrawable
-gdk_x11_gl_context_glx_get_drawable (GdkX11GLContextGLX *self)
-{
-  GdkDrawContext *draw_context = GDK_DRAW_CONTEXT (self);
-  GdkSurface *surface;
-
-  if (gdk_draw_context_is_in_frame (draw_context))
-    surface = gdk_draw_context_get_surface (draw_context);
-  else
-    surface = GDK_X11_DISPLAY (gdk_draw_context_get_display (draw_context))->leader_gdk_surface;
-
-  return gdk_x11_surface_get_glx_drawable (surface);
-}
-
 static void
 gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
                                   cairo_region_t *painted)
@@ -318,10 +304,11 @@ gdk_x11_gl_context_glx_get_damage (GdkGLContext *context)
 
   if (display_x11->has_glx_buffer_age)
     {
-      GdkX11GLContextGLX *self = GDK_X11_GL_CONTEXT_GLX (context);
+      GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
 
       gdk_gl_context_make_current (context);
-      glXQueryDrawable (dpy, gdk_x11_gl_context_glx_get_drawable (self),
+      glXQueryDrawable (dpy,
+                        gdk_x11_surface_get_glx_drawable (surface),
                         GLX_BACK_BUFFER_AGE_EXT, &buffer_age);
 
       if (buffer_age > 0 && buffer_age <= GDK_GL_MAX_TRACKED_BUFFERS)

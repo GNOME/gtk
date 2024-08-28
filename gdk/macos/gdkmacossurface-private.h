@@ -86,7 +86,6 @@ CGDirectDisplayID  _gdk_macos_surface_get_screen_id           (GdkMacosSurface  
 const char        *_gdk_macos_surface_get_title               (GdkMacosSurface      *self);
 void               _gdk_macos_surface_set_title               (GdkMacosSurface      *self,
                                                                const char           *title);
-gboolean           _gdk_macos_surface_is_opaque               (GdkMacosSurface      *self);
 NSView            *_gdk_macos_surface_get_view                (GdkMacosSurface      *self);
 gboolean           _gdk_macos_surface_get_modal_hint          (GdkMacosSurface      *self);
 void               _gdk_macos_surface_set_modal_hint          (GdkMacosSurface      *self,

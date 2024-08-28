@@ -52,16 +52,20 @@ static const GskGpuShaderOpClass GSK_GPU_COLORIZE_OP_CLASS = {
 void
 gsk_gpu_colorize_op (GskGpuFrame             *frame,
                      GskGpuShaderClip         clip,
-                     GskGpuColorStates        color_states,
+                     GdkColorState           *ccs,
+                     float                    opacity,
                      const graphene_point_t  *offset,
                      const GskGpuShaderImage *image,
-                     const float              color[4])
+                     const GdkColor          *color)
 {
   GskGpuColorizeInstance *instance;
+  GdkColorState *alt;
+
+  alt = gsk_gpu_color_states_find (ccs, color);
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_COLORIZE_OP_CLASS,
-                           color_states,
+                           gsk_gpu_color_states_create (ccs, TRUE, alt, FALSE),
                            0,
                            clip,
                            (GskGpuImage *[1]) { image->image },
@@ -70,5 +74,5 @@ gsk_gpu_colorize_op (GskGpuFrame             *frame,
 
   gsk_gpu_rect_to_float (image->coverage ? image->coverage : image->bounds, offset, instance->rect);
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
-  gsk_gpu_color_to_float (color, instance->color);
+  gsk_gpu_color_to_float (color, alt, opacity, instance->color);
 }

@@ -2,3 +2,13 @@ color {
   bounds: 100 100 200 300;
   color: red;
 }
+
+color {
+  bounds: 100 100 200 300;
+  color: rgb(255, 127.5, 63.75);
+}
+
+color {
+  bounds: 100 100 200 300;
+  color: color(rec2100-pq 0.4 50% 1 / 20%);
+}

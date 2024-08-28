@@ -117,17 +117,6 @@ find_color_state_by_name (const char *name)
 
       color_state = gdk_cicp_params_build_color_state (params, &error);
     }
-  else if (g_strcmp0 (name, "xyz") == 0)
-    {
-      params = gdk_cicp_params_new ();
-
-      gdk_cicp_params_set_color_primaries (params, 10);
-      gdk_cicp_params_set_transfer_function (params, 8);
-      gdk_cicp_params_set_matrix_coefficients (params, 0);
-      gdk_cicp_params_set_range (params, GDK_CICP_RANGE_FULL);
-
-      color_state = gdk_cicp_params_build_color_state (params, &error);
-    }
   else if (g_strcmp0 (name, "rec2020") == 0)
     {
       params = gdk_cicp_params_new ();
@@ -190,7 +179,7 @@ char **
 get_color_state_names (void)
 {
   static const char *names[] = {
-    "srgb", "srgb-linear", "display-p3", "xyz", "rec2020",
+    "srgb", "srgb-linear", "display-p3", "rec2020",
     "rec2100-pq", "rec2100-linear", "rec2100-hlg",
     "yuv", "bt601", "bt709",
     NULL,

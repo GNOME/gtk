@@ -742,7 +742,7 @@ gtk_css_style_get_pango_attributes (GtkCssStyle *style)
   if (decoration_line & GTK_CSS_TEXT_DECORATION_LINE_LINE_THROUGH)
     {
       attrs = add_pango_attr (attrs, pango_attr_strikethrough_new (TRUE));
-      if (!has_decoration_color)
+      if (has_decoration_color)
         attrs = add_pango_attr (attrs, pango_attr_strikethrough_color_new (decoration_color->red * 65535. + 0.5,
                                                                            decoration_color->green * 65535. + 0.5,
                                                                            decoration_color->blue * 65535. + 0.5));

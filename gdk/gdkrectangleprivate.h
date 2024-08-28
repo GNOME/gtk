@@ -52,6 +52,16 @@ gdk_rectangle_transform_affine (const GdkRectangle *src,
   dest->height = ceilf (MAX (y1, y2)) - dest->y;
 }
 
+static inline gboolean
+gdk_rectangle_contains (const GdkRectangle *rect,
+                        const GdkRectangle *contained)
+{
+  return contained->x >= rect->x
+      && contained->y >= rect->y
+      && contained->x + contained->width <= rect->x + rect->width
+      && contained->y + contained->height <= rect->y + rect->height;
+}
+
 
 G_END_DECLS
 

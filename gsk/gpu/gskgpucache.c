@@ -48,6 +48,7 @@ struct _GskGpuCache
 
   GskGpuCachedAtlas *current_atlas;
 
+  /* atomic */ gsize dead_textures;
   /* atomic */ gsize dead_texture_pixels;
 };
 
@@ -372,6 +373,7 @@ struct _GskGpuCachedTexture
                                * weak ref.
                                */
 
+  gsize *dead_textures_counter;
   gsize *dead_pixels_counter;
 
   GdkTexture *texture;
@@ -470,7 +472,10 @@ gsk_gpu_cached_texture_destroy_cb (gpointer data)
   GskGpuCachedTexture *self = data;
 
   if (!gsk_gpu_cached_texture_is_invalid (self))
-    g_atomic_pointer_add (self->dead_pixels_counter, ((GskGpuCached *) self)->pixels);
+    {
+      g_atomic_pointer_add (self->dead_textures_counter, 1);
+      g_atomic_pointer_add (self->dead_pixels_counter, ((GskGpuCached *) self)->pixels);
+    }
 
   if (g_atomic_int_dec_and_test (&self->use_count))
     g_free (self);
@@ -508,6 +513,7 @@ gsk_gpu_cached_texture_new (GskGpuCache   *cache,
   self->image = g_object_ref (image);
   self->color_state = color_state;
   ((GskGpuCached *)self)->pixels = gsk_gpu_image_get_width (image) * gsk_gpu_image_get_height (image);
+  self->dead_textures_counter = &cache->dead_textures;
   self->dead_pixels_counter = &cache->dead_texture_pixels;
   self->use_count = 2;
 
@@ -537,6 +543,7 @@ struct _GskGpuCachedTile
                                * list) and by the texture (via weak ref)
                                */
 
+  gsize *dead_textures_counter;
   gsize *dead_pixels_counter;
 
   GskGpuImage *image;
@@ -609,7 +616,10 @@ gsk_gpu_cached_tile_destroy_cb (gpointer data)
   GskGpuCachedTile *self = data;
 
   if (!gsk_gpu_cached_tile_is_invalid (self))
-    g_atomic_pointer_add (self->dead_pixels_counter, ((GskGpuCached *) self)->pixels);
+    {
+      g_atomic_pointer_add (self->dead_textures_counter, 1);
+      g_atomic_pointer_add (self->dead_pixels_counter, ((GskGpuCached *) self)->pixels);
+    }
 
   if (g_atomic_int_dec_and_test (&self->use_count))
     g_free (self);
@@ -649,6 +659,7 @@ gsk_gpu_cached_tile_new (GskGpuCache   *cache,
   self->image = g_object_ref (image);
   self->color_state = gdk_color_state_ref (color_state);
   ((GskGpuCached *)self)->pixels = gsk_gpu_image_get_width (image) * gsk_gpu_image_get_height (image);
+  self->dead_textures_counter = &cache->dead_textures;
   self->dead_pixels_counter = &cache->dead_texture_pixels;
   self->use_count = 2;
 
@@ -894,6 +905,7 @@ gsk_gpu_cache_gc (GskGpuCache *self,
         is_empty &= cached->stale;
     }
 
+  g_atomic_pointer_set (&self->dead_textures, 0);
   g_atomic_pointer_set (&self->dead_texture_pixels, 0);
 
   if (GSK_DEBUG_CHECK (CACHE))
@@ -902,6 +914,12 @@ gsk_gpu_cache_gc (GskGpuCache *self,
   gdk_profiler_end_mark (before, "Glyph cache GC", NULL);
 
   return is_empty;
+}
+
+gsize
+gsk_gpu_cache_get_dead_textures (GskGpuCache *self)
+{
+  return GPOINTER_TO_SIZE (g_atomic_pointer_get (&self->dead_textures));
 }
 
 gsize

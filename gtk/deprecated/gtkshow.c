@@ -27,8 +27,13 @@
 #include "gtkalertdialog.h"
 #include <glib/gi18n-lib.h>
 
+#ifdef G_OS_WIN32
+#include "gtkshowwin32.h"
+#endif
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
+#ifndef G_OS_WIN32
 typedef struct {
   GtkWindow *parent;
   char *handle;
@@ -86,6 +91,24 @@ window_handle_exported (GtkWindow  *window,
                                            data);
 }
 
+#else /* G_OS_WIN32 */
+static void
+show_win32_done (GObject      *source,
+                 GAsyncResult *result,
+                 gpointer      user_data)
+{
+  GTask *task = user_data;
+  GError *error = NULL;
+
+  if (gtk_show_uri_win32_finish (GTK_WINDOW (source), result, &error))
+    g_task_return_boolean (task, TRUE);
+  else
+     g_task_return_error (task, error);
+
+  g_object_unref (task);
+}
+#endif
+
 /**
  * gtk_show_uri_full:
  * @parent: (nullable): parent window
@@ -114,6 +137,7 @@ gtk_show_uri_full (GtkWindow           *parent,
                    GAsyncReadyCallback  callback,
                    gpointer             user_data)
 {
+#ifndef G_OS_WIN32
   GtkShowUriData *data;
   GdkAppLaunchContext *context;
   GdkDisplay *display;
@@ -138,6 +162,17 @@ gtk_show_uri_full (GtkWindow           *parent,
 
   if (!parent || !gtk_window_export_handle (parent, window_handle_exported, data))
     window_handle_exported (parent, NULL, data);
+
+#else /* G_OS_WIN32 */
+  GTask *task;
+
+  g_return_if_fail (parent == NULL || GTK_IS_WINDOW (parent));
+  g_return_if_fail (uri != NULL);
+
+  task = g_task_new (parent, cancellable, callback, user_data);
+  g_task_set_source_tag (task, gtk_show_uri_full);
+  gtk_show_uri_win32 (parent, uri, FALSE, cancellable, show_win32_done, task);
+#endif
 }
 
 /**

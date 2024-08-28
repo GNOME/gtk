@@ -15,11 +15,13 @@
 
 #include <glib/gstdio.h>
 
+#include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkdmabuftexturebuilderprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 
 #ifdef HAVE_DMABUF
+#include <glib-unix.h>
 #include <linux/dma-buf.h>
 #endif
 
@@ -278,8 +280,7 @@ release_dmabuf_texture (gpointer data)
 {
   Texture *texture = data;
 
-  for (unsigned int i = 0; i < texture->dmabuf.n_planes; i++)
-    g_close (texture->dmabuf.planes[i].fd, NULL);
+  gdk_dmabuf_close_fds (&texture->dmabuf);
   g_free (texture);
 }
 #endif
@@ -295,8 +296,10 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
   GdkGLContext *context;
   guint texture_id;
 
-  context = GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame));
-  texture_id = gsk_gl_image_steal_texture (GSK_GL_IMAGE (self->image));
+  /* Don't use the renderer context, the texture might survive the frame
+   * and its surface */
+  context = gdk_display_get_gl_context (gsk_gpu_device_get_display (gsk_gpu_frame_get_device (frame)));
+  texture_id = gsk_gl_image_get_texture_id (GSK_GL_IMAGE (self->image));
 
 #ifdef HAVE_DMABUF
   if (self->allow_dmabuf)
@@ -322,6 +325,8 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
 
           if (self->texture)
             return op->next;
+
+          gdk_dmabuf_close_fds (&texture->dmabuf);
         }
 
       g_free (texture);
@@ -346,6 +351,9 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
   self->texture = gdk_gl_texture_builder_build (builder,
                                                 gsk_gl_texture_data_free,
                                                 data);
+
+  gsk_gpu_image_toggle_ref_texture (self->image, self->texture);
+  gsk_gl_image_steal_texture_ownership (GSK_GL_IMAGE (self->image));
 
   g_object_unref (builder);
 
@@ -378,33 +386,4 @@ gsk_gpu_download_op (GskGpuFrame        *frame,
   self->allow_dmabuf = allow_dmabuf;
   self->func = func,
   self->user_data = user_data;
-}
-
-static void
-gsk_gpu_download_save_png_cb (gpointer    filename,
-                              GdkTexture *texture)
-{
-  gdk_texture_save_to_png (texture, filename);
-
-  g_free (filename);
-}
-
-void
-gsk_gpu_download_png_op (GskGpuFrame *frame,
-                         GskGpuImage *image,
-                         const char  *filename_format,
-                         ...)
-{
-  va_list args;
-  char *filename;
-
-  va_start (args, filename_format);
-  filename = g_strdup_vprintf (filename_format, args);
-  va_end (args);
-
-  gsk_gpu_download_op (frame,
-                       image,
-                       FALSE,
-                       gsk_gpu_download_save_png_cb,
-                       filename);
 }

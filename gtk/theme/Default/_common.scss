@@ -2702,6 +2702,7 @@ scale {
   // sizing
   $_marks_length: 6px;
   $_marks_distance: 6px;
+  $_marks_size: $_marks_length + $_marks_distance;
 
   min-height: 10px;
   min-width: 10px;
@@ -2837,6 +2838,14 @@ scale {
       }
     }
 
+    &:not(.marks-before) {
+      > value.top { margin-bottom: $_marks_size; }
+    }
+
+    &:not(.marks-after) {
+      > value.bottom { margin-top: $_marks_size; }
+    }
+
     > value.left  { margin-right: 9px; }
     > value.right { margin-left: 9px; }
 
@@ -2859,6 +2868,14 @@ scale {
         min-height: 1px;
         min-width: $_marks_length;
       }
+    }
+
+    &:not(.marks-before) {
+      > value.left { margin-right: $_marks_size; }
+    }
+
+    &:not(.marks-after) {
+      > value.right { margin-left: $_marks_size; }
     }
 
     > value.top    { margin-bottom: 9px; }

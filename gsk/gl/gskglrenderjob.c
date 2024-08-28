@@ -23,6 +23,7 @@
 
 #include "config.h"
 
+#include <gdk/gdkcolorprivate.h>
 #include <gdk/gdkglcontextprivate.h>
 #include <gdk/gdkprofilerprivate.h>
 #include <gdk/gdkrgbaprivate.h>
@@ -1447,20 +1448,28 @@ blur_node (GskGLRenderJob       *job,
 
 #define ATLAS_SIZE 512
 
+static void
+get_color_node_color_as_srgb (const GskRenderNode *node,
+                              GdkRGBA             *rgba)
+{
+  const GdkColor *color = gsk_color_node_get_color2 (node);
+  gdk_color_to_float (color, GDK_COLOR_STATE_SRGB, (float *) rgba);
+}
+
 static inline void
 gsk_gl_render_job_visit_color_node (GskGLRenderJob      *job,
                                     const GskRenderNode *node)
 {
-  const GdkRGBA *rgba;
+  GdkRGBA rgba;
   guint16 color[4];
   GskGLProgram *program;
   GskGLCommandBatch *batch;
 
-  rgba = gsk_color_node_get_color (node);
-  if (RGBA_IS_CLEAR (rgba))
+  get_color_node_color_as_srgb (node, &rgba);
+  if (RGBA_IS_CLEAR (&rgba))
     return;
 
-  rgba_to_half (rgba, color);
+  rgba_to_half (&rgba, color);
 
   /* Avoid switching away from the coloring program for
    * rendering a solid color.
@@ -1965,12 +1974,14 @@ gsk_gl_render_job_visit_css_background (GskGLRenderJob      *job,
   GskGLDrawVertex *vertices;
   guint16 color[4];
   guint16 color2[4];
+  GdkRGBA rgba;
 
   if (node_is_invisible (node2))
     return;
 
+  get_color_node_color_as_srgb (child, &rgba);
   rgba_to_half (&gsk_border_node_get_colors (node2)[0], color);
-  rgba_to_half (gsk_color_node_get_color (child), color2);
+  rgba_to_half (&rgba, color2);
 
   gsk_gl_render_job_translate_rounded_rect (job, rounded_outline, &outline);
 
@@ -2171,6 +2182,10 @@ gsk_gl_render_job_visit_unblurred_inset_shadow_node (GskGLRenderJob      *job,
 
   if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow)))
     {
+      const GdkRGBA rgba;
+
+      gdk_color_to_float (gsk_inset_shadow_node_get_color2 (node), GDK_COLOR_STATE_SRGB, (float *) &rgba);
+
       gsk_gl_program_set_uniform_rounded_rect (job->current_program,
                                                UNIFORM_INSET_SHADOW_OUTLINE_RECT, 0,
                                                &transformed_outline);
@@ -2181,7 +2196,7 @@ gsk_gl_render_job_visit_unblurred_inset_shadow_node (GskGLRenderJob      *job,
                                     UNIFORM_INSET_SHADOW_OFFSET, 0,
                                     gsk_inset_shadow_node_get_dx (node),
                                     gsk_inset_shadow_node_get_dy (node));
-      rgba_to_half (gsk_inset_shadow_node_get_color (node), color);
+      rgba_to_half (&rgba, color);
       gsk_gl_render_job_draw_rect_with_color (job, &node->bounds, color);
       gsk_gl_render_job_end_draw (job);
     }
@@ -2274,6 +2289,10 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
       /* Actual inset shadow outline drawing */
       if (gsk_gl_render_job_begin_draw (job, CHOOSE_PROGRAM (job, inset_shadow)))
         {
+          const GdkRGBA rgba;
+
+          gdk_color_to_float (gsk_inset_shadow_node_get_color2 (node), GDK_COLOR_STATE_SRGB, (float *) &rgba);
+
           gsk_gl_program_set_uniform_rounded_rect (job->current_program,
                                                    UNIFORM_INSET_SHADOW_OUTLINE_RECT, 0,
                                                    &transformed_outline);
@@ -2284,7 +2303,7 @@ gsk_gl_render_job_visit_blurred_inset_shadow_node (GskGLRenderJob      *job,
                                         UNIFORM_INSET_SHADOW_OFFSET, 0,
                                         offset_x * scale_x,
                                         offset_y * scale_y);
-          rgba_to_half (gsk_inset_shadow_node_get_color (node), color);
+          rgba_to_half (&rgba, color);
           gsk_gl_render_job_draw_with_color (job,
                                              0, 0, texture_width, texture_height,
                                              color);
@@ -2367,6 +2386,7 @@ gsk_gl_render_job_visit_unblurred_outset_shadow_node (GskGLRenderJob      *job,
   float spread = gsk_outset_shadow_node_get_spread (node);
   float dx = gsk_outset_shadow_node_get_dx (node);
   float dy = gsk_outset_shadow_node_get_dy (node);
+  GdkRGBA rgba;
   guint16 color[4];
   const float edge_sizes[] = { // Top, right, bottom, left
     spread - dy, spread + dx, spread + dy, spread - dx
@@ -2378,7 +2398,8 @@ gsk_gl_render_job_visit_unblurred_outset_shadow_node (GskGLRenderJob      *job,
     { outline->corner[3].width + spread - dx, outline->corner[3].height + spread + dy },
   };
 
-  rgba_to_half (gsk_outset_shadow_node_get_color (node), color);
+  gdk_color_to_float (gsk_outset_shadow_node_get_color2 (node), GDK_COLOR_STATE_SRGB, (float *) &rgba);
+  rgba_to_half (&rgba, color);
 
   gsk_gl_render_job_translate_rounded_rect (job, outline, &transformed_outline);
 
@@ -2462,11 +2483,13 @@ gsk_gl_render_job_visit_blurred_outset_shadow_node (GskGLRenderJob      *job,
   int blurred_texture_id;
   int cached_tid;
   gboolean do_slicing;
+  GdkRGBA rgba;
   guint16 color[4];
   float half_width = outline->bounds.size.width / 2;
   float half_height = outline->bounds.size.height / 2;
 
-  rgba_to_half (gsk_outset_shadow_node_get_color (node), color);
+  gdk_color_to_float (gsk_outset_shadow_node_get_color2 (node), GDK_COLOR_STATE_SRGB, (float *)  &rgba);
+  rgba_to_half (&rgba, color);
 
   /* scaled_outline is the minimal outline we need to draw the given drop shadow,
    * enlarged by the spread and offset by the blur radius. */
@@ -3328,10 +3351,10 @@ gsk_gl_render_job_texture_mask_for_color (GskGLRenderJob        *job,
 {
   int max_texture_size = job->command_queue->max_texture_size;
   GdkTexture *texture = gsk_texture_node_get_texture (mask);
-  const GdkRGBA *rgba;
+  GdkRGBA rgba;
 
-  rgba = gsk_color_node_get_color (color);
-  if (RGBA_IS_CLEAR (rgba))
+  get_color_node_color_as_srgb (color, &rgba);
+  if (RGBA_IS_CLEAR (&rgba))
     return TRUE;
 
   if G_LIKELY (texture->width <= max_texture_size &&
@@ -3347,7 +3370,7 @@ gsk_gl_render_job_texture_mask_for_color (GskGLRenderJob        *job,
       use_mipmap = (scale_x * fabsf (job->scale_x)) < 0.5 ||
                    (scale_y * fabsf (job->scale_y)) < 0.5;
 
-      rgba_to_half (rgba, cc);
+      rgba_to_half (&rgba, cc);
       gsk_gl_render_job_upload_texture (job, texture, use_mipmap, &offscreen);
       gsk_gl_program_set_uniform_texture_with_sync (job->current_program,
                                                     UNIFORM_SHARED_SOURCE, 0,
@@ -4198,10 +4221,12 @@ gsk_gl_render_job_visit_node (GskGLRenderJob      *job,
     break;
 
     case GSK_TEXT_NODE:
-      gsk_gl_render_job_visit_text_node (job,
-                                         node,
-                                         gsk_text_node_get_color (node),
-                                         FALSE);
+      {
+        GdkRGBA rgba;
+
+        gdk_color_to_float (gsk_text_node_get_color2 (node), GDK_COLOR_STATE_SRGB, (float *) &rgba);
+        gsk_gl_render_job_visit_text_node (job, node, &rgba, FALSE);
+      }
     break;
 
     case GSK_TEXTURE_NODE:

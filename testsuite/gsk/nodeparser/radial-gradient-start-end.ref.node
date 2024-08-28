@@ -1,0 +1,14 @@
+radial-gradient {
+  bounds: 0 0 50 50;
+  center: 25 25;
+  hradius: 25;
+  vradius: 25;
+  stops: 0 rgb(170,255,0), 1 rgb(255,0,204);
+}
+radial-gradient {
+  bounds: 0 0 50 50;
+  center: 25 25;
+  hradius: 25;
+  vradius: 25;
+  stops: 0 rgb(170,255,0), 1 rgb(255,0,204);
+}

@@ -580,8 +580,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       /* avoid day 30 and 31, since they don't exist in February */
       instance = g_object_new (type,
                                "year", 1984,
-                               "month", 10,
                                "day", 05,
+                               "month", 10,
                                NULL);
     }
   /* special casing for singletons */

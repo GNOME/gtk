@@ -53,8 +53,8 @@ output_color_alpha (vec4  color,
 float
 srgb_eotf (float v)
 {
-  if (v >= 0.04045)
-    return pow (((v + 0.055) / (1.0 + 0.055)), 2.4);
+  if (abs (v) >= 0.04045)
+    return sign (v) * pow (((abs (v) + 0.055) / (1.0 + 0.055)), 2.4);
   else
     return v / 12.92;
 }
@@ -62,8 +62,8 @@ srgb_eotf (float v)
 float
 srgb_oetf (float v)
 {
-  if (v > 0.0031308)
-    return 1.055 * pow (v, 1.0 / 2.4) - 0.055;
+  if (abs (v) > 0.0031308)
+    return sign (v) * (1.055 * pow (abs (v), 1.0 / 2.4) - 0.055);
   else
     return 12.92 * v;
 }
@@ -77,9 +77,10 @@ pq_eotf (float v)
   const float c2 = 2413.0 / 128.0;
   const float c3 = 2392.0 / 128.0;
 
-  float x = pow (max ((pow (v, minv) - c1), 0.0) / (c2 - (c3 * (pow (v, minv)))), ninv);
+  float x = pow (abs (v), minv);
+  x = pow (max (x - c1, 0.0) / (c2 - (c3 * x)), ninv);
 
-  return x * 10000.0 / 203.0;
+  return sign (v) * x * 10000.0 / 203.0;
 }
 
 float
@@ -91,9 +92,9 @@ pq_oetf (float v)
   const float c2 = 2413.0 / 128.0;
   const float c3 = 2392.0 / 128.0;
 
-  float x = v * 203.0 / 10000.0;
+  float x = pow (abs (v) * 203.0 / 10000.0, n);
 
-  return pow (((c1 + (c2 * pow (x, n))) / (1.0 + (c3 * pow (x, n)))), m);
+  return sign (v) * pow (((c1 + (c2 * x)) / (1.0 + (c3 * x))), m);
 }
 
 /* Note that these matrices are transposed from the C version */

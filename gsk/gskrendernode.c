@@ -615,7 +615,7 @@ gsk_render_node_diff (GskRenderNode  *node1,
 /**
  * gsk_render_node_get_opaque_rect:
  * @self: a `GskRenderNode`
- * @out_opaque: (out): 
+ * @out_opaque: (out): return location for the opaque rect
  *
  * Gets an opaque rectangle inside the node that GTK can determine to
  * be fully opaque.
@@ -825,6 +825,12 @@ GdkMemoryDepth
 gsk_render_node_get_preferred_depth (const GskRenderNode *node)
 {
   return node->preferred_depth;
+}
+
+gboolean
+gsk_render_node_is_hdr (const GskRenderNode *node)
+{
+  return node->is_hdr;
 }
 
 /* Whether we need an offscreen to handle opacity correctly for this node.

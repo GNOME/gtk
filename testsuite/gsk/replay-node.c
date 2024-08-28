@@ -1,4 +1,7 @@
 #include <gtk/gtk.h>
+#include <gtk/gtksnapshotprivate.h>
+#include <gsk/gskrendernodeprivate.h>
+#include "../gdk/udmabuf.h"
 
 void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot);
@@ -27,9 +30,9 @@ replay_color_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   graphene_rect_t bounds;
   gsk_render_node_get_bounds (node, &bounds);
-  gtk_snapshot_append_color (snapshot,
-                             gsk_color_node_get_color (node),
-                             &bounds);
+  gtk_snapshot_append_color2 (snapshot,
+                              gsk_color_node_get_color2 (node),
+                              &bounds);
 }
 
 static void
@@ -99,9 +102,9 @@ replay_border_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   const GskRoundedRect *outline = gsk_border_node_get_outline (node);
   const float *border_width = gsk_border_node_get_widths (node);
-  const GdkRGBA *border_color = gsk_border_node_get_colors (node);
+  const GdkColor *border_color = gsk_border_node_get_colors2 (node);
 
-  gtk_snapshot_append_border (snapshot, outline, border_width, border_color);
+  gtk_snapshot_append_border2 (snapshot, outline, border_width, border_color);
 }
 
 static void
@@ -111,35 +114,49 @@ replay_texture_node (GskRenderNode *node, GtkSnapshot *snapshot)
   graphene_rect_t bounds;
   gsk_render_node_get_bounds (node, &bounds);
 
+  g_object_ref (texture);
+
+  if (g_test_rand_bit ())
+    {
+      GdkTexture *t;
+
+      t = udmabuf_texture_from_texture (texture, NULL);
+      if (t)
+        {
+          g_object_unref (texture);
+          texture = t;
+        }
+    }
+
   gtk_snapshot_append_texture (snapshot, texture, &bounds);
+
+  g_object_unref (texture);
 }
 
 static void
 replay_inset_shadow_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   const GskRoundedRect *outline = gsk_inset_shadow_node_get_outline (node);
-  const GdkRGBA *color = gsk_inset_shadow_node_get_color (node);
-  float dx = gsk_inset_shadow_node_get_dx (node);
-  float dy = gsk_inset_shadow_node_get_dy (node);
+  const GdkColor *color = gsk_inset_shadow_node_get_color2 (node);
+  const graphene_point_t *offset = gsk_inset_shadow_node_get_offset (node);
   float spread = gsk_inset_shadow_node_get_spread (node);
   float blur_radius = gsk_inset_shadow_node_get_blur_radius (node);
 
-  gtk_snapshot_append_inset_shadow (snapshot, outline, color,
-                                    dx, dy, spread, blur_radius);
+  gtk_snapshot_append_inset_shadow2 (snapshot, outline, color,
+                                     offset, spread, blur_radius);
 }
 
 static void
 replay_outset_shadow_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   const GskRoundedRect *outline = gsk_outset_shadow_node_get_outline (node);
-  const GdkRGBA *color = gsk_outset_shadow_node_get_color (node);
-  float dx = gsk_outset_shadow_node_get_dx (node);
-  float dy = gsk_outset_shadow_node_get_dy (node);
+  const GdkColor *color = gsk_outset_shadow_node_get_color2 (node);
+  const graphene_point_t *offset = gsk_outset_shadow_node_get_offset (node);
   float spread = gsk_outset_shadow_node_get_spread (node);
   float blur_radius = gsk_outset_shadow_node_get_blur_radius (node);
 
-  gtk_snapshot_append_outset_shadow (snapshot, outline, color,
-                                     dx, dy, spread, blur_radius);
+  gtk_snapshot_append_outset_shadow2 (snapshot, outline, color,
+                                      offset, spread, blur_radius);
 }
 
 static void
@@ -217,10 +234,10 @@ replay_shadow_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
   gsize n_shadows = gsk_shadow_node_get_n_shadows (node);
   /* Hack: we know GskShadowNode stores shadows in a contiguous array.  */
-  const GskShadow *shadow = gsk_shadow_node_get_shadow (node, 0);
+  const GskShadow2 *shadow = gsk_shadow_node_get_shadow2 (node, 0);
   GskRenderNode *child = gsk_shadow_node_get_child (node);
 
-  gtk_snapshot_push_shadow (snapshot, shadow, n_shadows);
+  gtk_snapshot_push_shadow2 (snapshot, shadow, n_shadows);
   replay_node (child, snapshot);
   gtk_snapshot_pop (snapshot);
 }
@@ -327,7 +344,30 @@ replay_texture_scale_node (GskRenderNode *node, GtkSnapshot *snapshot)
   graphene_rect_t bounds;
   gsk_render_node_get_bounds (node, &bounds);
 
+  g_object_ref (texture);
+
+  if (g_test_rand_bit ())
+    {
+      GdkTexture *t;
+      GError *error = NULL;
+
+      t = udmabuf_texture_from_texture (texture, &error);
+      if (t)
+        {
+          g_test_message ("Using dmabuf texture");
+          g_object_unref (texture);
+          texture = t;
+        }
+      else
+        {
+          g_test_message ("Creating dmabuf texture failed: %s", error->message);
+          g_error_free (error);
+        }
+    }
+
   gtk_snapshot_append_scaled_texture (snapshot, texture, filter, &bounds);
+
+  g_object_unref (texture);
 }
 
 static void

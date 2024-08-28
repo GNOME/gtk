@@ -83,8 +83,8 @@ get_icon_lookup_flags (GtkIconHelper *self,
 static GdkPaintable *
 ensure_paintable_for_gicon (GtkIconHelper    *self,
                             GtkCssStyle      *style,
-                            GtkTextDirection  dir,
                             int               scale,
+                            GtkTextDirection  dir,
                             gboolean          preload,
                             GIcon            *gicon,
                             gboolean         *symbolic)
@@ -104,8 +104,9 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
   icon = gtk_icon_theme_lookup_by_gicon (icon_theme,
                                          gicon,
                                          MIN (width, height),
+                                         scale,
                                          dir,
-                                         scale, flags);
+                                         flags);
 
   *symbolic = gtk_icon_paintable_is_symbolic (icon);
   return GDK_PAINTABLE (icon);
@@ -339,8 +340,7 @@ gtk_icon_helper_invalidate (GtkIconHelper *self)
   g_clear_object (&self->paintable);
   self->texture_is_symbolic = FALSE;
 
-  if (!GTK_IS_CSS_TRANSIENT_NODE (self->node))
-    gtk_widget_queue_resize (self->owner);
+  gtk_widget_queue_draw (self->owner);
 }
 
 void

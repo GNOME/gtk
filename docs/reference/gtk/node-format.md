@@ -1,13 +1,15 @@
-# The Node file format
+Title: The Node file format
 
 GSK render nodes can be serialized and deserialized using APIs such as `gsk_render_node_serialize()` and `gsk_render_node_deserialize()`. The intended use for this is development - primarily the development of GTK - by allowing things such as creating testsuites and benchmarks, exchanging nodes in bug reports. GTK includes the `gtk4-node-editor` application for creating such test files.
 
 The format is a text format that follows the [CSS syntax rules](https://drafts.csswg.org/css-syntax-3/). In particular, this means that every array of bytes will produce a render node when parsed, as there is a defined error recovery method. For more details on error handling, please refer to the documentation of the parsing APIs.
 
 The grammar of a node text representation using [the CSS value definition syntax](https://drafts.csswg.org/css-values-3/#value-defs) looks like this:
-**document**: `<node>\*`
-**node**: container [ "name" ] { <document> } | `<node-type> [ "name" ] { <property>* }` | "name"
-**property**: `<property-name>: <node> | <value> ;`
+
+    document: <@-rule>*<node>
+    @-rule: @cicp "name" { <property>* }
+    node: container [ "name" ] { <document> } | <node-type> [ "name" ] { <property>* } | "name"
+    property: <property-name>: <node> | <value> ;
 
 Each node has its own `<node-type>` and supports a custom set of properties, each with their own `<property-name>` and syntax. The following paragraphs document each of the nodes and their properties.
 
@@ -25,6 +27,59 @@ Nodes can be given a name by adding a string after the `<node-type>` in their de
 
 Just like nodes, textures can be referenced by name. When defining a named texture, the name has to be placed in front of the URL.
 
+# Color states
+
+Color states are represented either by an ident (for builtin ones) or a string
+(for custom ones):
+
+    color-state: <ident> | <string>
+
+Custom color states can be defined at the beginning of the document, with an @‌cicp rule.
+
+The format for @‌cicp rules is
+
+    @‌cicp "name" {
+      ...
+    }
+
+The following properties can be set for custom color states:
+
+| property  | syntax           | default  | printed     |
+| --------- | ---------------- | -------- | ----------- |
+| primaries | `<integer>`      | 2        | always      |
+| transfer  | `<integer>`      | 2        | always      |
+| matrix    | `<integer>`      | 2        | always      |
+| range     | `<range>`        | full     | non-default |
+
+Note that the primaries, transfer and matrix properties always need
+to be specified, since GTK does not allow creating color state objects
+with these being set to 2 (== unspecified).
+
+Range can have the following values:
+
+    range: narrow | full
+
+# Colors
+
+Colors can be specified with a variation of the modern CSS color syntax:
+
+    color(<color-state> <number> <number> <number> ["/" <number>])
+
+The traditional syntax for sRGB colors still works as well:
+
+    rgba(<number>, <number>, <number>, <number)
+    rgb(<number, <number>, <number>)
+
+# Rectangles
+
+Rectangles can be specified just as four integers for x, y, width and height:
+
+    rect: <number> <number> <number> <number>
+
+Rounded rectangles use a CSS-like syntax:
+
+    rounded-rect: <rect> [ "/" <number>{1,4} [ "/" <number>{1,4} ] ]
+
 # Nodes
 
 ### container
@@ -40,6 +95,13 @@ The **container** node is a special node that allows specifying a list of child 
 | top      | `<node>`         | color { }              | always      |
 
 Creates a node like `gsk_blend_node_new()` with the given properties.
+
+Possible values for the mode property are:
+
+    blend-mode: normal | multiply | screen | overlay | darken |
+                lighten | color-dodge | color-burn | hard-light |
+                soft-light | difference | exclusion | color |
+                hue | saturation | luminosity
 
 ### blur
 
@@ -160,6 +222,10 @@ Creates a node like `gsk_fill_node_new()` with the given properties.
 The default child node is the default color node, but created with the
 bounds of the path.
 
+Possible values for the fill-rule property are:
+
+    fill-rule: winding | even-odd
+
 ### glshader
 
 | property   | syntax             | default                | printed     |
@@ -211,6 +277,10 @@ Creates a node like `gsk_linear_gradient_node_new()` with the given properties.
 
 Creates a node like `gsk_mask_node_new()` with the given properties.
 
+Possible values for the mode property are:
+
+    mask-mode: alpha | inverted-alpha | luminance | inverted-luminance
+
 ### opacity
 
 | property | syntax           | default                | printed     |
@@ -249,11 +319,11 @@ Creates a node like `gsk_radial_gradient_node_new()` with the given properties.
 
 ### repeat
 
-| property    | syntax           | default                | printed     |
-| ----------- | ---------------- | ---------------------- | ----------- |
-| bounds      | `<rect>`         | *bounds of child node* | non-default |
-| child       | `<node>`         | color { }              | always      |
-| child-bounds| `<rect>`         | *bounds of child node* | non-default |
+| property     | syntax     | default                | printed     |
+| ------------ | ---------- | ---------------------- | ----------- |
+| bounds       | `<rect>`   | *bounds of child node* | non-default |
+| child        | `<node>`   | color { }              | always      |
+| child-bounds | `<rect>`   | *bounds of child node* | non-default |
 
 Creates a node like `gsk_repeat_node_new()` with the given properties.
 
@@ -320,6 +390,14 @@ Creates a node like `gsk_stroke_node_new()` with the given properties.
 The default child node is the default color node, but created with the
 stroke bounds of the path.
 
+Possible values for the line-cap property are:
+
+    line-cap: butt | round | square
+
+Possible values for the line-join property are:
+
+    line-join: miter | round | bevel
+
 ### text
 
 | property     | syntax              | default             | printed     |
@@ -328,9 +406,9 @@ stroke bounds of the path.
 | font         | `<string>` `<url>`? | "Cantarell 15px"    | always      |
 | glyphs       | `<glyphs>`          | "Hello"             | always      |
 | offset       | `<point>`           | 0 0                 | non-default |
-| hint-style   | `<hint style>`      | slight              | non-default |
+| hint-style   | `<hint-style>`      | slight              | non-default |
 | antialias    | `<antialias>`       | gray                | non-default |
-| hint-metrics | `<hint metrics>`    | off                 | non-default |
+| hint-metrics | `<hint-metrics>`    | off                 | non-default |
 
 Creates a node like `gsk_text_node_new()` with the given properties.
 
@@ -345,9 +423,17 @@ be specified as well, like this: 40 10 0 0 color.
 If the given font does not exist or the given glyphs are invalid for the given
 font, an error node will be returned.
 
-Possible values for hint-style are none, slight or full.
-Possible value for antialias are none or gray.
-Possible value for hint-metrics are on or off.
+Possible values for the hint-style property are:
+
+    hint-style: none | slight | full
+
+Possible value for the antialias property are:
+
+    antialias:  none | gray
+
+Possible value for hint-metrics are:
+
+    hint-metrics:  on | off
 
 ### texture
 
@@ -373,14 +459,15 @@ representation for this texture is `url("data:image/png;base64,iVBORw0KGgoAAAANS
 | -------- | ---------------- | ---------------------- | ----------- |
 | bounds   | `<rect>`         | 50                     | always      |
 | texture  | `<url>`          | *see below*            | always      |
-| filter   | `filter`         | *see below*            | non-default |
+| filter   | `filter`         | linear                 | non-default |
 
 Creates a node like `gsk_texture_scale_node_new()` with the given properties.
 
 The default texture is a 10x10 checkerboard, just like for texture.
 
-The possible filter values are `linear`, `nearest` and `trilinear`, with
-`linear` being the default.
+Possible values for the filter property are:
+
+    filter: linear | nearest | trilinear
 
 ### transform
 

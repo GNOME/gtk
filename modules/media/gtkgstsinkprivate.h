@@ -47,9 +47,7 @@ struct _GtkGstSink
   GstVideoSink         parent;
 
   GstVideoInfo         v_info;
-#ifdef HAVE_GSTREAMER_DRM
   GstVideoInfoDmaDrm   drm_info;
-#endif
 
   GtkGstPaintable *    paintable;
   GdkGLContext *       gdk_context;

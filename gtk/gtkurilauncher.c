@@ -292,6 +292,7 @@ gtk_uri_launcher_launch (GtkUriLauncher      *self,
       g_task_return_new_error (task,
                                GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
                                "No uri to launch");
+      g_object_unref (task);
       return;
     }
 
@@ -301,6 +302,7 @@ gtk_uri_launcher_launch (GtkUriLauncher      *self,
                                GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
                                "%s is not a valid uri: %s", self->uri, error->message);
       g_error_free (error);
+      g_object_unref (task);
       return;
     }
 

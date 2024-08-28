@@ -58,7 +58,7 @@ struct _GskPangoRenderer
 
   GtkWidget             *widget;
   GtkSnapshot           *snapshot;
-  const GdkRGBA         *fg_color;
+  GdkColor               fg_color;
   GtkCssStyle           *shadow_style;
 
   /* Error underline color for this widget */

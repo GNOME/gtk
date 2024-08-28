@@ -20,11 +20,17 @@
  * and tests, and must not include other headers.
  */
 
+static inline int
+sign (float v)
+{
+  return v < 0 ? -1 : 1;
+}
+
 static inline float
 srgb_oetf (float v)
 {
-  if (v > 0.0031308f)
-    return 1.055f * powf (v, 1.f / 2.4f) - 0.055f;
+  if (fabsf (v) > 0.0031308f)
+    return sign (v) * (1.055f * powf (fabsf (v), 1.f / 2.4f) - 0.055f);
   else
     return 12.92f * v;
 }
@@ -32,8 +38,8 @@ srgb_oetf (float v)
 static inline float
 srgb_eotf (float v)
 {
-  if (v >= 0.04045f)
-    return powf (((v + 0.055f) / (1.f + 0.055f)), 2.4f);
+  if (fabsf (v) >= 0.04045f)
+    return sign (v) * powf (((fabsf (v) + 0.055f) / (1.f + 0.055f)), 2.4f);
   else
     return v / 12.92f;
 }
@@ -41,25 +47,25 @@ srgb_eotf (float v)
 static inline float
 gamma22_oetf (float v)
 {
-  return powf (v, 1.f / 2.2f);
+  return sign (v) * powf (fabsf (v), 1.f / 2.2f);
 }
 
 static inline float
 gamma22_eotf (float v)
 {
-  return powf (v, 2.2f);
+  return sign (v) * powf (fabsf (v), 2.2f);
 }
 
 static inline float
 gamma28_oetf (float v)
 {
-  return powf (v, 1.f / 2.8f);
+  return sign (v) * powf (fabsf (v), 1.f / 2.8f);
 }
 
 static inline float
 gamma28_eotf (float v)
 {
-  return powf (v, 2.8f);
+  return sign (v) * powf (fabsf (v), 2.8f);
 }
 
 static inline float
@@ -71,9 +77,10 @@ pq_eotf (float v)
   float c2 = 2413.0 / (1 << 7);
   float c3 = 2392.0 / (1 << 7);
 
-  float x = powf (MAX ((powf (v, minv) - c1), 0) / (c2 - (c3 * (powf (v, minv)))), ninv);
+  float x = powf (fabsf (v), minv);
+  x = powf (MAX ((x - c1), 0) / (c2 - (c3 * x)), ninv);
 
-  return x * 10000 / 203.0;
+  return sign (v) * x * 10000 / 203.0;
 }
 
 static inline float
@@ -86,7 +93,8 @@ pq_oetf (float v)
   float c2 = 2413.0 / (1 << 7);
   float c3 = 2392.0 / (1 << 7);
 
-  return powf (((c1 + (c2 * powf (x, n))) / (1 + (c3 * powf (x, n)))), m);
+  x = powf (fabsf (x), n);
+  return sign (v) * powf (((c1 + (c2 * x)) / (1 + (c3 * x))), m);
 }
 
 static inline float
@@ -95,10 +103,10 @@ bt709_eotf (float v)
   const float a = 1.099;
   const float d = 0.0812;
 
-  if (v < d)
+  if (fabsf (v) < d)
     return  v / 4.5f;
   else
-    return powf ((v + (a - 1)) / a, 1 / 0.45f);
+    return sign (v) * powf ((fabsf (v) + (a - 1)) / a, 1 / 0.45f);
 }
 
 static inline float
@@ -107,10 +115,10 @@ bt709_oetf (float v)
   const float a = 1.099;
   const float b = 0.018;
 
-  if (v < b)
+  if (fabsf (v) < b)
     return v * 4.5f;
   else
-    return a * powf (v, 0.45f) - (a - 1);
+    return sign (v) * (a * powf (fabsf (v), 0.45f) - (a - 1));
 }
 
 static inline float
@@ -120,10 +128,10 @@ hlg_eotf (float v)
   const float b = 0.28466892;
   const float c = 0.55991073;
 
-  if (v <= 0.5)
-    return (v * v) / 3;
+  if (fabsf (v) <= 0.5)
+    return sign (v) * (v * v) / 3;
   else
-    return (expf ((v - c) / a) + b) / 12.0;
+    return sign (v) * (expf ((fabsf (v) - c) / a) + b) / 12.0;
 }
 
 static inline float
@@ -133,10 +141,10 @@ hlg_oetf (float v)
   const float b = 0.28466892;
   const float c = 0.55991073;
 
-  if (v <= 1/12.0)
-    return sqrtf (3 * v);
+  if (fabsf (v) <= 1/12.0)
+    return sign (v) * sqrtf (3 * fabsf (v));
   else
-    return a * logf (12 * v - b) + c;
+    return sign (v) * (a * logf (12 * fabsf (v) - b) + c);
 }
 
 /* See http://www.brucelindbloom.com/index.html?Eqn_RGB_XYZ_Matrix.html

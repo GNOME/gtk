@@ -1206,6 +1206,19 @@ node_editor_window_add_renderer (NodeEditorWindow *self,
 }
 
 static void
+update_paste_action (GdkClipboard *clipboard,
+                     GParamSpec   *pspec,
+                     gpointer      data)
+{
+  GtkWidget *widget = GTK_WIDGET (data);
+  gboolean has_node;
+
+  has_node = gdk_content_formats_contain_mime_type (gdk_clipboard_get_formats (clipboard), "application/x-gtk-render-node");
+
+  gtk_widget_action_set_enabled (widget, "paste-node", has_node);
+}
+
+static void
 node_editor_window_realize (GtkWidget *widget)
 {
   NodeEditorWindow *self = NODE_EDITOR_WINDOW (widget);
@@ -1242,6 +1255,7 @@ node_editor_window_realize (GtkWidget *widget)
   self->after_paint_handler = g_signal_connect (frameclock, "after-paint",
                                                 G_CALLBACK (after_paint), self);
 
+  g_signal_connect (gtk_widget_get_clipboard (widget), "notify::formats", G_CALLBACK (update_paste_action), widget);
 }
 
 static void
@@ -1250,6 +1264,8 @@ node_editor_window_unrealize (GtkWidget *widget)
   NodeEditorWindow *self = NODE_EDITOR_WINDOW (widget);
   GdkFrameClock *frameclock;
   guint i;
+
+  g_signal_handlers_disconnect_by_func (gtk_widget_get_clipboard (widget), update_paste_action, widget);
 
   frameclock = gtk_widget_get_frame_clock (widget);
   g_signal_handler_disconnect (frameclock, self->after_paint_handler);
@@ -1616,6 +1632,41 @@ edit_action_cb (GtkWidget  *widget,
 }
 
 static void
+text_received (GObject      *source,
+               GAsyncResult *result,
+               gpointer      data)
+{
+  GdkClipboard *clipboard = GDK_CLIPBOARD (source);
+  NodeEditorWindow *self = NODE_EDITOR_WINDOW (data);
+  char *text;
+
+  text = gdk_clipboard_read_text_finish (clipboard, result, NULL);
+  if (text)
+    {
+      GtkTextBuffer *buffer;
+      GtkTextIter start, end;
+
+      buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (self->text_view));
+      gtk_text_buffer_begin_user_action (buffer);
+      gtk_text_buffer_get_bounds (buffer, &start, &end);
+      gtk_text_buffer_delete (buffer, &start, &end);
+      gtk_text_buffer_insert (buffer, &start, text, -1);
+      gtk_text_buffer_end_user_action (buffer);
+      g_free (text);
+    }
+}
+
+static void
+paste_node_cb (GtkWidget  *widget,
+               const char *action_name,
+               GVariant   *parameter)
+{
+  GdkClipboard *clipboard = gtk_widget_get_clipboard (widget);
+
+  gdk_clipboard_read_text_async (clipboard, NULL, text_received, widget);
+}
+
+static void
 node_editor_window_set_property (GObject      *object,
                                  guint         prop_id,
                                  const GValue *value,
@@ -1725,6 +1776,13 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
 
   trigger = gtk_keyval_trigger_new (GDK_KEY_e, GDK_CONTROL_MASK);
   action = gtk_named_action_new ("smart-edit");
+  shortcut = gtk_shortcut_new (trigger, action);
+  gtk_widget_class_add_shortcut (widget_class, shortcut);
+
+  gtk_widget_class_install_action (widget_class, "paste-node", NULL, paste_node_cb);
+
+  trigger = gtk_keyval_trigger_new (GDK_KEY_v, GDK_CONTROL_MASK | GDK_SHIFT_MASK);
+  action = gtk_named_action_new ("paste-node");
   shortcut = gtk_shortcut_new (trigger, action);
   gtk_widget_class_add_shortcut (widget_class, shortcut);
 }

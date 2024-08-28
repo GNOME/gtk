@@ -122,6 +122,7 @@ struct _GdkGLContextPrivate
   GdkGLMemoryFlags memory_flags[GDK_MEMORY_N_FORMATS];
 
   GdkGLFeatures features;
+  guint surface_attached : 1;
   guint use_khr_debug : 1;
   guint has_debug_output : 1;
   guint extensions_checked : 1;
@@ -717,8 +718,8 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
           cairo_region_get_rectangle (painted, i, &rect);
           rects[j++] = (int) floor (rect.x * scale);
           rects[j++] = (int) floor ((surface_height - rect.height - rect.y) * scale);
-          rects[j++] = (int) ceil (rect.width * scale);
-          rects[j++] = (int) ceil (rect.height * scale);
+          rects[j++] = (int) ceil ((rect.x + rect.width) * scale) - floor (rect.x * scale);
+          rects[j++] = (int) ceil ((surface_height - rect.y) * scale) - floor ((surface_height - rect.height - rect.y) * scale);
         }
       priv->eglSwapBuffersWithDamage (gdk_display_get_egl_display (display), egl_surface, rects, n_rects);
       g_free (heap_rects);
@@ -829,20 +830,28 @@ gdk_gl_context_init (GdkGLContext *self)
 /* Must have called gdk_display_prepare_gl() before */
 GdkGLContext *
 gdk_gl_context_new (GdkDisplay *display,
-                    GdkSurface *surface)
+                    GdkSurface *surface,
+                    gboolean    surface_attached)
 {
-  GdkGLContext *shared;
+  GdkGLContextPrivate *priv;
+  GdkGLContext *shared, *result;
 
   g_assert (surface == NULL || display == gdk_surface_get_display (surface));
+  g_assert (!surface_attached || surface != NULL);
 
   /* assert gdk_display_prepare_gl() had been called */
   shared = gdk_display_get_gl_context (display);
   g_assert (shared);
 
-  return g_object_new (G_OBJECT_TYPE (shared),
-                       "display", display,
-                       "surface", surface,
-                       NULL);
+  result = g_object_new (G_OBJECT_TYPE (shared),
+                         "display", display,
+                         "surface", surface,
+                         NULL);
+
+  priv = gdk_gl_context_get_instance_private (result);
+  priv->surface_attached = surface_attached;
+
+  return result;
 }
 
 void
@@ -1319,31 +1328,28 @@ gdk_gl_context_is_api_allowed (GdkGLContext  *self,
                                GError       **error)
 {
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
-  GdkDebugFlags flags;
   GdkGLAPI allowed_apis;
 
   allowed_apis = priv->allowed_apis;
 
-  flags = gdk_display_get_debug_flags (gdk_gl_context_get_display (self));
-
-  if (flags & GDK_DEBUG_GL_DISABLE_GLES)
+  if (!gdk_has_feature (GDK_FEATURE_GLES_API))
     {
       if (api == GDK_GL_API_GLES)
         {
           g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("OpenGL ES disabled via GDK_DEBUG"));
+                               _("OpenGL ES API disabled via GDK_DISABLE"));
           return FALSE;
         }
 
       allowed_apis &= ~GDK_GL_API_GLES;
     }
 
-  if (flags & GDK_DEBUG_GL_DISABLE_GL)
+  if (!gdk_has_feature (GDK_FEATURE_GL_API))
     {
       if (api == GDK_GL_API_GL)
         {
           g_set_error_literal (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("OpenGL disabled via GDK_DEBUG"));
+                               _("OpenGL API disabled via GDK_DISABLE"));
           return FALSE;
         }
 
@@ -1770,8 +1776,10 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
 
   supported_features = gdk_gl_context_check_features (context);
   disabled_features = gdk_parse_debug_var ("GDK_GL_DISABLE",
-                                           gdk_gl_feature_keys,
-                                           G_N_ELEMENTS (gdk_gl_feature_keys));
+      "GDK_GL_DISABLE can be set to values which cause GDK to disable\n"
+      "certain OpenGL extensions.\n",
+      gdk_gl_feature_keys,
+      G_N_ELEMENTS (gdk_gl_feature_keys));
 
   priv->features = supported_features & ~disabled_features;
 
@@ -1825,12 +1833,22 @@ gdk_gl_context_check_is_current (GdkGLContext *context)
 void
 gdk_gl_context_make_current (GdkGLContext *context)
 {
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   MaskedContext *current, *masked_context;
   gboolean surfaceless;
 
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
-  surfaceless = !gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context));
+  if (priv->surface_attached)
+    {
+      surfaceless = FALSE;
+    }
+  else
+    {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      surfaceless = !gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context));
+G_GNUC_END_IGNORE_DEPRECATIONS
+    }
   masked_context = mask_context (context, surfaceless);
 
   current = g_private_get (&thread_current_context);
@@ -2135,17 +2153,30 @@ gboolean
 gdk_gl_backend_can_be_used (GdkGLBackend   backend_type,
                             GError       **error)
 {
-  if (the_gl_backend_type == GDK_GL_NONE ||
-      the_gl_backend_type == backend_type)
-    return TRUE;
+  if (the_gl_backend_type != GDK_GL_NONE &&
+      the_gl_backend_type != backend_type)
+    {
+      g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                   /* translators: This is about OpenGL backend names, like
+                    * "Trying to use X11 GLX, but EGL is already in use"
+                    */
+                   _("Trying to use %s, but %s is already in use"),
+                   gl_backend_names[backend_type],
+                   gl_backend_names[the_gl_backend_type]);
+      return FALSE;
+    }
 
-  g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-               /* translators: This is about OpenGL backend names, like
-                * "Trying to use X11 GLX, but EGL is already in use" */
-               _("Trying to use %s, but %s is already in use"),
-               gl_backend_names[backend_type],
-               gl_backend_names[the_gl_backend_type]);
-  return FALSE;
+  if ((backend_type == GDK_GL_EGL && !gdk_has_feature (GDK_FEATURE_EGL)) ||
+      (backend_type == GDK_GL_GLX && !gdk_has_feature (GDK_FEATURE_GLX)) ||
+      (backend_type == GDK_GL_WGL && !gdk_has_feature (GDK_FEATURE_WGL)))
+    {
+      g_set_error (error, GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
+                   _("Trying to use %s, but it is disabled via GDK_DISABLE"),
+                   gl_backend_names[backend_type]);
+      return FALSE;
+    }
+
+  return TRUE;
 }
 
 /*<private>

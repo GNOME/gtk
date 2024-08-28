@@ -40,15 +40,15 @@ GdkDisplay *            gdk_draw_context_get_display            (GdkDrawContext 
 GDK_AVAILABLE_IN_ALL
 GdkSurface *            gdk_draw_context_get_surface            (GdkDrawContext         *context);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_16
 void                    gdk_draw_context_begin_frame            (GdkDrawContext         *context,
                                                                  const cairo_region_t   *region);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_16
 void                    gdk_draw_context_end_frame              (GdkDrawContext         *context);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_16
 gboolean                gdk_draw_context_is_in_frame            (GdkDrawContext         *context);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_16
 const cairo_region_t *  gdk_draw_context_get_frame_region       (GdkDrawContext         *context);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDrawContext, g_object_unref)

@@ -1,0 +1,8 @@
+color {
+  bounds: 0 0 50 50;
+  color: rgb(255,255,255);
+}
+color {
+  bounds: 0 0 50 50;
+  color: rgb(255,255,255);
+}

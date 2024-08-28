@@ -411,6 +411,7 @@ init_gl (GtkInspectorGeneral *gen)
       append_egl_extension_row (gen, egl_display, "EGL_KHR_create_context");
       append_egl_extension_row (gen, egl_display, "EGL_EXT_buffer_age");
       append_egl_extension_row (gen, egl_display, "EGL_EXT_swap_buffers_with_damage");
+      append_egl_extension_row (gen, egl_display, "EGL_KHR_swap_buffers_with_damage");
       append_egl_extension_row (gen, egl_display, "EGL_KHR_surfaceless_context");
       append_egl_extension_row (gen, egl_display, "EGL_KHR_no_config_context");
       append_egl_extension_row (gen, egl_display, "EGL_EXT_image_dma_buf_import_modifiers");
@@ -451,6 +452,7 @@ init_gl (GtkInspectorGeneral *gen)
       gtk_label_set_text (GTK_LABEL (gen->gl_backend_vendor), "Microsoft WGL");
       gtk_widget_set_visible (gen->gl_backend_version, FALSE);
 
+      append_gl_extension_row (gen, "GL_WIN_swap_hint");
       append_wgl_extension_row (gen, "WGL_EXT_create_context");
       append_wgl_extension_row (gen, "WGL_EXT_swap_control");
       append_wgl_extension_row (gen, "WGL_OML_sync_control");
@@ -520,7 +522,7 @@ static void
 init_vulkan (GtkInspectorGeneral *gen)
 {
 #ifdef GDK_RENDERING_VULKAN
-  if (gdk_display_get_debug_flags (gen->display) & GDK_DEBUG_VULKAN_DISABLE)
+  if (!gdk_has_feature (GDK_FEATURE_VULKAN))
     {
       gtk_label_set_text (GTK_LABEL (gen->vk_device), C_("Vulkan device", "Disabled"));
       gtk_label_set_text (GTK_LABEL (gen->vk_api_version), C_("Vulkan version", "Disabled"));

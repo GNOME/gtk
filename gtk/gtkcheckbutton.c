@@ -89,7 +89,7 @@
  * # CSS nodes
  *
  * ```
- * checkbutton[.text-button]
+ * checkbutton[.text-button][.grouped]
  * ├── check
  * ╰── [label]
  * ```
@@ -171,16 +171,36 @@ gtk_check_button_dispose (GObject *object)
 }
 
 static void
+update_button_role (GtkCheckButton *self,
+                    GtkButtonRole   role)
+{
+  GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
+
+  if (priv->indicator_widget == NULL)
+    return;
+
+  if (role == GTK_BUTTON_ROLE_RADIO)
+    {
+      gtk_css_node_set_name (gtk_widget_get_css_node (priv->indicator_widget),
+                             g_quark_from_static_string ("radio"));
+
+      gtk_widget_add_css_class (GTK_WIDGET (self), "grouped");
+    }
+  else
+    {
+      gtk_css_node_set_name (gtk_widget_get_css_node (priv->indicator_widget),
+                             g_quark_from_static_string ("check"));
+
+      gtk_widget_remove_css_class (GTK_WIDGET (self), "grouped");
+    }
+}
+
+static void
 button_role_changed (GtkCheckButton *self)
 {
   GtkCheckButtonPrivate *priv = gtk_check_button_get_instance_private (self);
 
-  if (gtk_action_helper_get_role (priv->action_helper) == GTK_BUTTON_ROLE_RADIO)
-    gtk_css_node_set_name (gtk_widget_get_css_node (priv->indicator_widget),
-                           g_quark_from_static_string("radio"));
-  else
-    gtk_css_node_set_name (gtk_widget_get_css_node (priv->indicator_widget),
-                           g_quark_from_static_string("check"));
+  update_button_role (self, gtk_action_helper_get_role (priv->action_helper));
 }
 
 static void
@@ -1033,9 +1053,7 @@ gtk_check_button_set_group (GtkCheckButton *self,
       priv->group_next = NULL;
       priv->group_prev = NULL;
 
-      if (priv->indicator_widget)
-        gtk_css_node_set_name (gtk_widget_get_css_node (priv->indicator_widget),
-                               g_quark_from_static_string("check"));
+      update_button_role (self, GTK_BUTTON_ROLE_CHECK);
 
       return;
     }
@@ -1057,12 +1075,8 @@ gtk_check_button_set_group (GtkCheckButton *self,
   group_priv->group_prev = self;
   priv->group_next = group;
 
-  if (priv->indicator_widget)
-    gtk_css_node_set_name (gtk_widget_get_css_node (priv->indicator_widget),
-                           g_quark_from_static_string("radio"));
-
-  gtk_css_node_set_name (gtk_widget_get_css_node (group_priv->indicator_widget),
-                         g_quark_from_static_string("radio"));
+  update_button_role (self, GTK_BUTTON_ROLE_RADIO);
+  update_button_role (group, GTK_BUTTON_ROLE_RADIO);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_GROUP]);
 }

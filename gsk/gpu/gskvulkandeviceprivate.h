@@ -53,6 +53,7 @@ void                    gsk_vulkan_device_remove_ycbcr                  (GskVulk
 
 VkRenderPass            gsk_vulkan_device_get_vk_render_pass            (GskVulkanDevice        *self,
                                                                          VkFormat                format,
+                                                                         VkAttachmentLoadOp      vk_load_op,
                                                                          VkImageLayout           from_layout,
                                                                          VkImageLayout           to_layout);
 VkPipeline              gsk_vulkan_device_get_vk_pipeline               (GskVulkanDevice        *self,
@@ -76,7 +77,7 @@ gsk_vulkan_handle_result (VkResult    res,
 {
   if (res != VK_SUCCESS)
     {
-      GSK_DEBUG (VULKAN, "%s(): %s (%d)", called_function, gdk_vulkan_strerror (res), res);
+      g_warning ("%s(): %s (%d)", called_function, gdk_vulkan_strerror (res), res);
     }
   return res;
 }

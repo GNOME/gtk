@@ -603,6 +603,9 @@ xfails = [
   'border-image-url.ui',
   'label-background.ui',
   'label-wrap-justify.ui',
+
+  # https://gitlab.freedesktop.org/mesa/mesa/-/issues/11773
+  'glarea-gl-only.ui',
 ]
 
 flaky = [

@@ -53,7 +53,6 @@ static const GskGpuShaderOpClass GSK_GPU_CROSS_FADE_OP_CLASS = {
 void
 gsk_gpu_cross_fade_op (GskGpuFrame             *frame,
                        GskGpuShaderClip         clip,
-                       GskGpuColorStates        color_states,
                        const graphene_rect_t   *rect,
                        const graphene_point_t  *offset,
                        float                    opacity,
@@ -65,7 +64,7 @@ gsk_gpu_cross_fade_op (GskGpuFrame             *frame,
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_CROSS_FADE_OP_CLASS,
-                           color_states,
+                           gsk_gpu_color_states_create_equal (TRUE, TRUE),
                            0,
                            clip,
                            (GskGpuImage *[2]) { start->image, end->image },

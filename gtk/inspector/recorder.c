@@ -56,6 +56,7 @@
 #include <gdk/gdksurfaceprivate.h>
 #include <gdk/gdktextureprivate.h>
 #include <gdk/gdkrgbaprivate.h>
+#include <gdk/gdkcolorstateprivate.h>
 #include "gtk/gtkdebug.h"
 #include "gtk/gtkbuiltiniconprivate.h"
 #include "gtk/gtkrendernodepaintableprivate.h"
@@ -211,8 +212,12 @@ struct _GtkInspectorRecorder
 
   gboolean debug_nodes;
   gboolean highlight_sequences;
+  gboolean record_events;
+  gboolean stop_after_next_frame;
 
   GdkEventSequence *selected_sequence;
+
+  GtkInspectorEventRecording *last_event_recording;
 };
 
 typedef struct _GtkInspectorRecorderClass
@@ -235,9 +240,15 @@ static GParamSpec *props[LAST_PROP] = { NULL, };
 
 G_DEFINE_TYPE (GtkInspectorRecorder, gtk_inspector_recorder, GTK_TYPE_WIDGET)
 
+typedef struct
+{
+  GskRenderNode *node;
+  const char *role;
+} RenderNode;
+
 static GListModel *
-create_render_node_list_model (GskRenderNode **nodes,
-                               guint           n_nodes)
+create_render_node_list_model (RenderNode *nodes,
+                               guint       n_nodes)
 {
   GListStore *store;
   guint i;
@@ -248,9 +259,11 @@ create_render_node_list_model (GskRenderNode **nodes,
   for (i = 0; i < n_nodes; i++)
     {
       graphene_rect_t bounds;
+      GdkPaintable *paintable;
 
-      gsk_render_node_get_bounds (nodes[i], &bounds);
-      GdkPaintable *paintable = gtk_render_node_paintable_new (nodes[i], &bounds);
+      gsk_render_node_get_bounds (nodes[i].node, &bounds);
+      paintable = gtk_render_node_paintable_new (nodes[i].node, &bounds);
+      g_object_set_data (G_OBJECT (paintable), "role", (gpointer) nodes[i].role);
       g_list_store_append (store, paintable);
       g_object_unref (paintable);
     }
@@ -285,46 +298,46 @@ create_list_model_for_render_node (GskRenderNode *node)
       return NULL;
 
     case GSK_TRANSFORM_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_transform_node_get_child (node) }, 1);
+      return create_render_node_list_model (&(RenderNode) { gsk_transform_node_get_child (node), NULL }, 1);
 
     case GSK_OPACITY_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_opacity_node_get_child (node) }, 1);
+      return create_render_node_list_model (&(RenderNode) { gsk_opacity_node_get_child (node), NULL }, 1);
 
     case GSK_COLOR_MATRIX_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_color_matrix_node_get_child (node) }, 1);
+      return create_render_node_list_model (&(RenderNode) { gsk_color_matrix_node_get_child (node), NULL }, 1);
 
     case GSK_BLUR_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_blur_node_get_child (node) }, 1);
+      return create_render_node_list_model (&(RenderNode) { gsk_blur_node_get_child (node), NULL }, 1);
 
     case GSK_REPEAT_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_repeat_node_get_child (node) }, 1);
+      return create_render_node_list_model (&(RenderNode) { gsk_repeat_node_get_child (node), NULL }, 1);
 
     case GSK_CLIP_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_clip_node_get_child (node) }, 1);
+      return create_render_node_list_model (&(RenderNode) { gsk_clip_node_get_child (node), NULL }, 1);
 
     case GSK_ROUNDED_CLIP_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_rounded_clip_node_get_child (node) }, 1);
+      return create_render_node_list_model (&(RenderNode) { gsk_rounded_clip_node_get_child (node), NULL }, 1);
 
     case GSK_FILL_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_fill_node_get_child (node) }, 1);
+      return create_render_node_list_model (&(RenderNode) { gsk_fill_node_get_child (node), NULL }, 1);
 
     case GSK_STROKE_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_stroke_node_get_child (node) }, 1);
+      return create_render_node_list_model (&(RenderNode) { gsk_stroke_node_get_child (node), NULL }, 1);
 
     case GSK_SHADOW_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_shadow_node_get_child (node) }, 1);
+      return create_render_node_list_model (&(RenderNode) { gsk_shadow_node_get_child (node), NULL }, 1);
 
     case GSK_BLEND_NODE:
-      return create_render_node_list_model ((GskRenderNode *[2]) { gsk_blend_node_get_bottom_child (node),
-                                                                   gsk_blend_node_get_top_child (node) }, 2);
+      return create_render_node_list_model ((RenderNode[2]) { { gsk_blend_node_get_bottom_child (node), "Bottom" },
+                                                              { gsk_blend_node_get_top_child (node), "Top" } }, 2);
 
     case GSK_MASK_NODE:
-      return create_render_node_list_model ((GskRenderNode *[2]) { gsk_mask_node_get_source (node),
-                                                                   gsk_mask_node_get_mask (node) }, 2);
+      return create_render_node_list_model ((RenderNode[2]) { { gsk_mask_node_get_source (node), "Source" },
+                                                              { gsk_mask_node_get_mask (node), "Mask" } }, 2);
 
     case GSK_CROSS_FADE_NODE:
-      return create_render_node_list_model ((GskRenderNode *[2]) { gsk_cross_fade_node_get_start_child (node),
-                                                                   gsk_cross_fade_node_get_end_child (node) }, 2);
+      return create_render_node_list_model ((RenderNode[2]) { { gsk_cross_fade_node_get_start_child (node), "Start" },
+                                                              { gsk_cross_fade_node_get_end_child (node), "End" } }, 2);
 
     case GSK_GL_SHADER_NODE:
       {
@@ -371,10 +384,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       }
 
     case GSK_DEBUG_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_debug_node_get_child (node) }, 1);
+      return create_render_node_list_model (&(RenderNode) { gsk_debug_node_get_child (node), NULL }, 1);
 
     case GSK_SUBSURFACE_NODE:
-      return create_render_node_list_model ((GskRenderNode *[1]) { gsk_subsurface_node_get_child (node) }, 1);
+      return create_render_node_list_model (&(RenderNode) { gsk_subsurface_node_get_child (node), NULL }, 1);
     }
 }
 
@@ -506,7 +519,7 @@ node_name (GskRenderNode *node)
       return g_strdup (gsk_debug_node_get_message (node));
 
     case GSK_COLOR_NODE:
-      return gdk_rgba_to_string (gsk_color_node_get_color (node));
+      return gdk_color_to_string (gsk_color_node_get_color2 (node));
 
     case GSK_TEXTURE_NODE:
       {
@@ -690,12 +703,12 @@ static GskRenderNode *
 make_dot (double x, double y)
 {
   GskRenderNode *fill, *dot;
-  GdkRGBA red = (GdkRGBA){ 1, 0, 0, 1 };
+  GdkColor red = GDK_COLOR_SRGB (1, 0, 0, 1);
   graphene_rect_t rect = GRAPHENE_RECT_INIT (x - 3, y - 3, 6, 6);
   graphene_size_t corner = GRAPHENE_SIZE_INIT (3, 3);
   GskRoundedRect clip;
 
-  fill = gsk_color_node_new (&red, &rect);
+  fill = gsk_color_node_new2 (&red, &rect);
   dot = gsk_rounded_clip_node_new (fill, gsk_rounded_rect_init (&clip, &rect,
                                                                &corner, &corner, &corner, &corner));
   gsk_render_node_unref (fill);
@@ -726,7 +739,9 @@ show_event (GtkInspectorRecorder *recorder,
 }
 
 static void populate_event_properties (GListStore *store,
-                                       GdkEvent   *event);
+                                       GdkEvent   *event,
+                                       EventTrace *traces,
+                                       gsize       n_traces);
 
 static void
 recording_selected (GtkSingleSelection   *selection,
@@ -756,10 +771,13 @@ recording_selected (GtkSingleSelection   *selection,
   else if (GTK_INSPECTOR_IS_EVENT_RECORDING (recording))
     {
       GdkEvent *event;
+      EventTrace *traces;
+      gsize n_traces;
 
       gtk_stack_set_visible_child_name (GTK_STACK (recorder->recording_data_stack), "event_data");
 
       event = gtk_inspector_event_recording_get_event (GTK_INSPECTOR_EVENT_RECORDING (recording));
+      traces = gtk_inspector_event_recording_get_traces (GTK_INSPECTOR_EVENT_RECORDING (recording), &n_traces);
 
       for (guint pos = gtk_single_selection_get_selected (selection) - 1; pos > 0; pos--)
         {
@@ -776,7 +794,7 @@ recording_selected (GtkSingleSelection   *selection,
             }
         }
 
-      populate_event_properties (recorder->event_properties, event);
+      populate_event_properties (recorder->event_properties, event, traces, n_traces);
 
       if (recorder->highlight_sequences)
         selected_sequence = gdk_event_get_event_sequence (event);
@@ -793,33 +811,33 @@ recording_selected (GtkSingleSelection   *selection,
 }
 
 static GdkTexture *
-get_color_texture (const GdkRGBA *color)
+get_color2_texture (const GdkColor *color)
 {
+  GdkMemoryTextureBuilder *builder;
   GdkTexture *texture;
-  guchar pixel[4];
+  gsize stride;
   guchar *data;
   GBytes *bytes;
   int width = 30;
   int height = 30;
-  int i;
 
-  pixel[0] = round (color->red * 255);
-  pixel[1] = round (color->green * 255);
-  pixel[2] = round (color->blue * 255);
-  pixel[3] = round (color->alpha * 255);
+  stride = width * 4 * sizeof (float);
+  data = g_malloc (stride * height);
+  for (int i = 0; i < width * height; i++)
+    memcpy (data + 4 * sizeof (float) * i, color->values, 4 * sizeof (float));
 
-  data = g_malloc (4 * width * height);
-  for (i = 0; i < width * height; i++)
-    {
-      memcpy (data + 4 * i, pixel, 4);
-    }
+  bytes = g_bytes_new_take (data, stride * height);
 
-  bytes = g_bytes_new_take (data, 4 * width * height);
-  texture = gdk_memory_texture_new (width,
-                                    height,
-                                    GDK_MEMORY_R8G8B8A8,
-                                    bytes,
-                                    width * 4);
+  builder = gdk_memory_texture_builder_new ();
+  gdk_memory_texture_builder_set_bytes (builder, bytes);
+  gdk_memory_texture_builder_set_stride (builder, stride);
+  gdk_memory_texture_builder_set_width (builder, 30);
+  gdk_memory_texture_builder_set_height (builder, 30);
+  gdk_memory_texture_builder_set_format (builder, GDK_MEMORY_R32G32B32A32_FLOAT);
+  gdk_memory_texture_builder_set_color_state (builder, color->color_state);
+
+  texture = gdk_memory_texture_builder_build (builder);
+
   g_bytes_unref (bytes);
 
   return texture;
@@ -893,15 +911,15 @@ add_text_row (GListStore *store,
 }
 
 static void
-add_color_row (GListStore    *store,
-               const char    *name,
-               const GdkRGBA *color)
+add_color_row (GListStore     *store,
+               const char     *name,
+               const GdkColor *color)
 {
   char *text;
   GdkTexture *texture;
 
-  text = gdk_rgba_to_string (color);
-  texture = get_color_texture (color);
+  text = gdk_color_to_string (color);
+  texture = get_color2_texture (color);
   list_store_add_object_property (store, name, text, texture);
   g_free (text);
   g_object_unref (texture);
@@ -961,6 +979,8 @@ add_texture_rows (GListStore *store,
   add_text_row (store, "Type", "%s", G_OBJECT_TYPE_NAME (texture));
   add_text_row (store, "Size", "%u x %u", gdk_texture_get_width (texture), gdk_texture_get_height (texture));
   add_text_row (store, "Format", "%s", enum_to_nick (GDK_TYPE_MEMORY_FORMAT, gdk_texture_get_format (texture)));
+  add_text_row (store, "Color State", "%s", gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
+
   if (GDK_IS_MEMORY_TEXTURE (texture))
     {
       GBytes *bytes;
@@ -1000,22 +1020,40 @@ add_texture_rows (GListStore *store,
 
 static void
 populate_render_node_properties (GListStore    *store,
-                                 GskRenderNode *node)
+                                 GskRenderNode *node,
+                                 const char    *role)
 {
-  graphene_rect_t bounds;
+  graphene_rect_t bounds, opaque;
 
   g_list_store_remove_all (store);
 
   gsk_render_node_get_bounds (node, &bounds);
 
+  if (role)
+    add_text_row (store, "Role", "%s", role);
+
   add_text_row (store, "Type", "%s", node_type_name (gsk_render_node_get_node_type (node)));
 
   add_text_row (store, "Bounds",
-                       "%.2f x %.2f + %.2f + %.2f",
-                       bounds.size.width,
-                       bounds.size.height,
+                       "(%.2f, %.2f) to (%.2f, %.2f) - %.2f x %.2f",
                        bounds.origin.x,
-                       bounds.origin.y);
+                       bounds.origin.y,
+                       bounds.origin.x + bounds.size.width,
+                       bounds.origin.y + bounds.size.height,
+                       bounds.size.width,
+                       bounds.size.height);
+
+  if (gsk_render_node_get_opaque_rect (node, &opaque))
+    add_text_row (store, "Opaque",
+                         "(%.2f, %.2f) to (%.2f, %.2f) - %.2f x %.2f",
+                         opaque.origin.x,
+                         opaque.origin.y,
+                         opaque.origin.x + opaque.size.width,
+                         opaque.origin.y + opaque.size.height,
+                         opaque.size.width,
+                         opaque.size.height);
+  else
+    add_text_row (store, "Opaque", "no");
 
   switch (gsk_render_node_get_node_type (node))
     {
@@ -1067,7 +1105,7 @@ populate_render_node_properties (GListStore    *store,
       break;
 
     case GSK_COLOR_NODE:
-      add_color_row (store, "Color", gsk_color_node_get_color (node));
+      add_color_row (store, "Color", gsk_color_node_get_color2 (node));
       break;
 
     case GSK_LINEAR_GRADIENT_NODE:
@@ -1165,7 +1203,6 @@ populate_render_node_properties (GListStore    *store,
     case GSK_TEXT_NODE:
       {
         const PangoFont *font = gsk_text_node_get_font (node);
-        const GdkRGBA *color = gsk_text_node_get_color (node);
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
         PangoFontDescription *desc;
         GString *s;
@@ -1184,7 +1221,7 @@ populate_render_node_properties (GListStore    *store,
 
         add_text_row (store, "Position", "%.2f %.2f", offset->x, offset->y);
 
-        add_color_row (store, "Color", color);
+        add_color_row (store, "Color", gsk_text_node_get_color2 (node));
       }
       break;
 
@@ -1192,7 +1229,7 @@ populate_render_node_properties (GListStore    *store,
       {
         const char *name[4] = { "Top", "Right", "Bottom", "Left" };
         const float *widths = gsk_border_node_get_widths (node);
-        const GdkRGBA *colors = gsk_border_node_get_colors (node);
+        const GdkColor *colors = gsk_border_node_get_colors2 (node);
         int i;
 
         for (i = 0; i < 4; i++)
@@ -1200,9 +1237,9 @@ populate_render_node_properties (GListStore    *store,
             GdkTexture *texture;
             char *text, *tmp;
 
-            text = gdk_rgba_to_string (&colors[i]);
+            text = gdk_color_to_string (&colors[i]);
             tmp = g_strdup_printf ("%.2f, %s", widths[i], text);
-            texture = get_color_texture (&colors[i]);
+            texture = get_color2_texture (&colors[i]);
             list_store_add_object_property (store, name[i], tmp, texture);
             g_object_unref (texture);
 
@@ -1324,7 +1361,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_INSET_SHADOW_NODE:
       {
-        const GdkRGBA *color = gsk_inset_shadow_node_get_color (node);
+        const GdkColor *color = gsk_inset_shadow_node_get_color2 (node);
         float dx = gsk_inset_shadow_node_get_dx (node);
         float dy = gsk_inset_shadow_node_get_dy (node);
         float spread = gsk_inset_shadow_node_get_spread (node);
@@ -1342,7 +1379,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     case GSK_OUTSET_SHADOW_NODE:
       {
         const GskRoundedRect *outline = gsk_outset_shadow_node_get_outline (node);
-        const GdkRGBA *color = gsk_outset_shadow_node_get_color (node);
+        const GdkColor *color = gsk_outset_shadow_node_get_color2 (node);
         float dx = gsk_outset_shadow_node_get_dx (node);
         float dy = gsk_outset_shadow_node_get_dy (node);
         float spread = gsk_outset_shadow_node_get_spread (node);
@@ -1487,14 +1524,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         for (i = 0; i < gsk_shadow_node_get_n_shadows (node); i++)
           {
             char *label;
-            const GskShadow *shadow = gsk_shadow_node_get_shadow (node, i);
+            const GskShadow2 *shadow = gsk_shadow_node_get_shadow2 (node, i);
 
             label = g_strdup_printf ("Color %d", i);
             add_color_row (store, label, &shadow->color);
             g_free (label);
 
             label = g_strdup_printf ("Offset %d", i);
-            add_text_row (store, label, "%.2f %.2f", shadow->dx, shadow->dy);
+            add_text_row (store, label, "%.2f %.2f", shadow->offset.x, shadow->offset.y);
             g_free (label);
 
             label = g_strdup_printf ("Radius %d", i);
@@ -1507,13 +1544,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     case GSK_TRANSFORM_NODE:
       {
         static const char * category_names[] = {
-          [GSK_TRANSFORM_CATEGORY_UNKNOWN] = "unknown",
-          [GSK_TRANSFORM_CATEGORY_ANY] = "any",
-          [GSK_TRANSFORM_CATEGORY_3D] = "3D",
-          [GSK_TRANSFORM_CATEGORY_2D] = "2D",
-          [GSK_TRANSFORM_CATEGORY_2D_AFFINE] = "2D affine",
-          [GSK_TRANSFORM_CATEGORY_2D_TRANSLATE] = "2D translate",
-          [GSK_TRANSFORM_CATEGORY_IDENTITY] = "identity"
+          [GSK_FINE_TRANSFORM_CATEGORY_UNKNOWN] = "unknown",
+          [GSK_FINE_TRANSFORM_CATEGORY_ANY] = "any",
+          [GSK_FINE_TRANSFORM_CATEGORY_3D] = "3D",
+          [GSK_FINE_TRANSFORM_CATEGORY_2D] = "2D",
+          [GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL] = "2D dihedral",
+          [GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE] = "2D negative affine",
+          [GSK_FINE_TRANSFORM_CATEGORY_2D_AFFINE] = "2D affine",
+          [GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE] = "2D translate",
+          [GSK_FINE_TRANSFORM_CATEGORY_IDENTITY] = "identity"
         };
         GskTransform *transform;
         char *s;
@@ -1522,7 +1561,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         s = gsk_transform_to_string (transform);
         add_text_row (store, "Matrix", "%s", s);
         g_free (s);
-        add_text_row (store, "Category", "%s", category_names[gsk_transform_get_category (transform)]);
+        add_text_row (store, "Category", "%s", category_names[gsk_transform_get_fine_category (transform)]);
       }
       break;
 
@@ -1708,7 +1747,9 @@ scroll_unit_name (GdkScrollUnit unit)
 
 static void
 populate_event_properties (GListStore *store,
-                           GdkEvent   *event)
+                           GdkEvent   *event,
+                           EventTrace *traces,
+                           gsize       n_traces)
 {
   GdkEventType type;
   GdkDevice *device;
@@ -1879,6 +1920,29 @@ populate_event_properties (GListStore *store,
           g_free (history);
         }
     }
+
+  if (n_traces > 0)
+    {
+      GString *s = g_string_new ("");
+      const char *phase_name[] = { "", "↘", "↙", "⊙" };
+
+      add_text_row (store, "Target", "%s", g_type_name (traces[0].target_type));
+
+      for (gsize i = 0; i < n_traces; i++)
+        {
+          EventTrace *t = &traces[i];
+
+          g_string_append_printf (s, "%s %s %s %s\n",
+                                  phase_name[t->phase],
+                                  g_type_name (t->widget_type),
+                                  g_type_name (t->controller_type),
+                                  t->handled ? "✓" : "");
+          g_string_append_c (s, '\n');
+        }
+
+      add_text_row (store, "Trace", "%s", s->str);
+      g_string_free (s, TRUE);
+    }
 }
 
 static GskRenderNode *
@@ -1907,6 +1971,7 @@ render_node_list_selection_changed (GtkListBox           *list,
   GskRenderNode *node;
   GdkPaintable *paintable;
   GtkTreeListRow *row_item;
+  const char *role;
 
   row_item = gtk_single_selection_get_selected_item (recorder->render_node_selection);
 
@@ -1920,7 +1985,8 @@ render_node_list_selection_changed (GtkListBox           *list,
 
   gtk_picture_set_paintable (GTK_PICTURE (recorder->render_node_view), paintable);
   node = gtk_render_node_paintable_get_render_node (GTK_RENDER_NODE_PAINTABLE (paintable));
-  populate_render_node_properties (recorder->render_node_properties, node);
+  role = g_object_get_data (G_OBJECT (paintable), "role");
+  populate_render_node_properties (recorder->render_node_properties, node, role);
 
   g_object_unref (paintable);
 }
@@ -2001,22 +2067,13 @@ render_node_clip (GtkButton            *button,
 {
   GskRenderNode *node;
   GdkClipboard *clipboard;
-  GBytes *bytes;
-  GdkContentProvider *content;
 
   node = get_selected_node (recorder);
   if (node == NULL)
     return;
 
-  bytes = gsk_render_node_serialize (node);
-  content = gdk_content_provider_new_for_bytes ("text/plain;charset=utf-8", bytes);
-
   clipboard = gtk_widget_get_clipboard (GTK_WIDGET (recorder));
-
-  gdk_clipboard_set_content (clipboard, content);
-
-  g_object_unref (content);
-  g_bytes_unref (bytes);
+  gdk_clipboard_set (clipboard, GSK_TYPE_RENDER_NODE, node);
 }
 
 static void
@@ -2418,6 +2475,7 @@ gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
     {
       recorder->recording = gtk_inspector_start_recording_new ();
       recorder->start_time = 0;
+      recorder->record_events = TRUE;
       gtk_inspector_recorder_add_recording (recorder, recorder->recording);
     }
   else
@@ -2428,10 +2486,29 @@ gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
   g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_RECORDING]);
 }
 
+void
+gtk_inspector_recorder_record_single_frame (GtkInspectorRecorder *recorder)
+{
+  if (gtk_inspector_recorder_is_recording (recorder))
+    return;
+
+  recorder->recording = gtk_inspector_start_recording_new ();
+  recorder->start_time = 0;
+  recorder->record_events = FALSE;
+  recorder->stop_after_next_frame = TRUE;
+  gtk_inspector_recorder_add_recording (recorder, recorder->recording);
+}
+
 gboolean
 gtk_inspector_recorder_is_recording (GtkInspectorRecorder *recorder)
 {
   return recorder->recording != NULL;
+}
+
+static gboolean
+gtk_inspector_recorder_is_recording_events (GtkInspectorRecorder *recorder)
+{
+  return recorder->recording != NULL && recorder->record_events;
 }
 
 void
@@ -2471,6 +2548,18 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                                   node);
   gtk_inspector_recorder_add_recording (recorder, recording);
   g_object_unref (recording);
+
+  if (recorder->stop_after_next_frame)
+    {
+      GtkSingleSelection *selection;
+
+      recorder->stop_after_next_frame = FALSE;
+      gtk_inspector_recorder_set_recording (recorder, FALSE);
+
+      selection = GTK_SINGLE_SELECTION (gtk_list_view_get_model (GTK_LIST_VIEW (recorder->recordings_list)));
+      gtk_single_selection_set_selected (selection, g_list_model_get_n_items (G_LIST_MODEL (selection)) - 1);
+      render_node_clip (NULL, recorder);
+    }
 }
 
 void
@@ -2482,7 +2571,7 @@ gtk_inspector_recorder_record_event (GtkInspectorRecorder *recorder,
   GdkFrameClock *frame_clock;
   gint64 frame_time;
 
-  if (!gtk_inspector_recorder_is_recording (recorder))
+  if (!gtk_inspector_recorder_is_recording_events (recorder))
     return;
 
   frame_clock = gtk_widget_get_frame_clock (widget);
@@ -2500,7 +2589,30 @@ gtk_inspector_recorder_record_event (GtkInspectorRecorder *recorder,
 
   recording = gtk_inspector_event_recording_new (frame_time, event);
   gtk_inspector_recorder_add_recording (recorder, recording);
+
+  recorder->last_event_recording = (GtkInspectorEventRecording *) recording;
+
   g_object_unref (recording);
+}
+
+void
+gtk_inspector_recorder_trace_event (GtkInspectorRecorder *recorder,
+                                    GdkEvent             *event,
+                                    GtkPropagationPhase   phase,
+                                    GtkWidget            *widget,
+                                    GtkEventController   *controller,
+                                    GtkWidget            *target,
+                                    gboolean              handled)
+{
+  GtkInspectorEventRecording *recording = recorder->last_event_recording;
+
+  if (!gtk_inspector_recorder_is_recording_events (recorder))
+    return;
+
+  if (recording == NULL || recording->event != event)
+    return;
+
+  gtk_inspector_event_recording_add_trace (recording, phase, widget, controller, target, handled);
 }
 
 void

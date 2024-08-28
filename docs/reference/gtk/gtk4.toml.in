@@ -85,6 +85,7 @@ content_files = [
   "x11.md",
   "tools.md",
   "visual_index.md",
+  "node-format.md",
 ]
 content_images = [
   "../images/favicon.svg",
@@ -259,4 +260,4 @@ name = "StyleProvider"
   hidden = true
 
 [check]
-skip_deprecated = true
+ignore_deprecated = true

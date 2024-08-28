@@ -6606,7 +6606,7 @@ gtk_text_drag_drop (GtkDropTarget *dest,
       gtk_editable_insert_text (GTK_EDITABLE (self), str, length, &drop_position);
       gtk_accessible_text_update_contents (GTK_ACCESSIBLE_TEXT (self),
                                            GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT,
-                                           drop_position, drop_position + length);
+                                           drop_position, drop_position + g_utf8_strlen (str, length));
     }
   else
     {
@@ -6618,7 +6618,7 @@ gtk_text_drag_drop (GtkDropTarget *dest,
       gtk_editable_insert_text (GTK_EDITABLE (self), str, length, &pos);
       gtk_accessible_text_update_contents (GTK_ACCESSIBLE_TEXT (self),
                                            GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT,
-                                           pos, pos + length);
+                                           pos, pos + g_utf8_strlen (str, length));
       end_change (self);
     }
 
@@ -7200,7 +7200,7 @@ emoji_picked (GtkEmojiChooser *chooser,
   gtk_editable_insert_text (GTK_EDITABLE (self), text, -1, &pos);
   gtk_accessible_text_update_contents (GTK_ACCESSIBLE_TEXT (self),
                                        GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT,
-                                       pos, pos + 1);
+                                       pos, pos + g_utf8_strlen (text, -1));
   gtk_text_set_selection_bounds (self, pos, pos);
   end_change (self);
 }
@@ -7530,7 +7530,7 @@ gtk_text_history_insert_cb (gpointer    funcs_data,
   gtk_editable_insert_text (GTK_EDITABLE (text), str, len, &location);
   gtk_accessible_text_update_contents (GTK_ACCESSIBLE_TEXT (text),
                                        GTK_ACCESSIBLE_TEXT_CONTENT_CHANGE_INSERT,
-                                       location, location + len);
+                                       location, location + g_utf8_strlen (str, len));
 }
 
 static void

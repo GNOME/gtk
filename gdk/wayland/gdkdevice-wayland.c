@@ -265,13 +265,13 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
   guint next_image_index, next_image_delay;
   gboolean retval = G_SOURCE_REMOVE;
   GdkWaylandTabletData *tablet;
-  gboolean use_viewport;
+  gboolean use_viewport = FALSE;
 
   tablet = gdk_wayland_seat_find_tablet (seat, device);
 
-  use_viewport = pointer->pointer_surface_viewport != NULL;
-  if (g_getenv ("NO_POINTER_VIEWPORT"))
-    use_viewport = FALSE;
+  if (pointer->pointer_surface_viewport &&
+      g_getenv ("USE_POINTER_VIEWPORT"))
+    use_viewport = TRUE;
 
   if (pointer->cursor)
     {

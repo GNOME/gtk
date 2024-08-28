@@ -714,8 +714,8 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
               .layer = 0,
               .offset.x = (int) floor (r.x * scale),
               .offset.y = (int) floor (r.y * scale),
-              .extent.width = (int) ceil (r.width * scale),
-              .extent.height = (int) ceil (r.height * scale),
+              .extent.width = (int) ceil ((r.x + r.width) * scale) - floor (r.x * scale),
+              .extent.height = (int) ceil ((r.y + r.height) * scale) - floor (r.y * scale),
           };
         }
     }
@@ -1348,7 +1348,6 @@ gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
 
   g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), 0);
-  g_return_val_if_fail (gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)), 0);
 
   return priv->draw_index;
 }
@@ -1372,7 +1371,6 @@ gdk_vulkan_context_set_draw_semaphore (GdkVulkanContext *context,
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
 
   g_return_if_fail (GDK_IS_VULKAN_CONTEXT (context));
-  g_return_if_fail (!gdk_draw_context_is_in_frame (GDK_DRAW_CONTEXT (context)));
   g_return_if_fail (priv->draw_semaphore == VK_NULL_HANDLE);
 
   priv->draw_semaphore = semaphore;
@@ -1408,8 +1406,9 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   last = n_devices;
 
   skip_features = gdk_parse_debug_var ("GDK_VULKAN_DISABLE",
-                                       gsk_vulkan_feature_keys,
-                                       G_N_ELEMENTS (gsk_vulkan_feature_keys));
+      "GDK_VULKAN_DISABLE can be set to a list of Vulkan features to disable.\n",
+      gsk_vulkan_feature_keys,
+      G_N_ELEMENTS (gsk_vulkan_feature_keys));
   if (skip_features & GDK_VULKAN_FEATURE_YCBCR)
     skip_features |= GDK_VULKAN_FEATURE_DMABUF;
 
@@ -1628,10 +1627,10 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   gboolean have_debug_report = FALSE;
   VkResult res;
 
-  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_VULKAN_DISABLE)
+  if (!gdk_has_feature (GDK_FEATURE_VULKAN))
     {
       g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
-                           _("Vulkan support disabled via GDK_DEBUG"));
+                           _("Vulkan support disabled via GDK_DISABLE"));
       return FALSE;
     }
 
@@ -1674,26 +1673,26 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
         g_ptr_array_add (used_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME);
     }
 
-  res = GDK_VK_CHECK (vkCreateInstance, &(VkInstanceCreateInfo) {
-                                             .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
-                                             .pNext = NULL,
-                                             .flags = 0,
-                                             .pApplicationInfo = &(VkApplicationInfo) {
-                                                 .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
-                                                 .pNext = NULL,
-                                                 .pApplicationName = g_get_application_name (),
-                                                 .applicationVersion = 0,
-                                                 .pEngineName = "GTK",
-                                                 .engineVersion = VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
-                                                 .apiVersion = VK_API_VERSION_1_3
-                                             },
-                                             .enabledLayerCount = 0,
-                                             .ppEnabledLayerNames = NULL,
-                                             .enabledExtensionCount = used_extensions->len,
-                                             .ppEnabledExtensionNames = (const char * const *) used_extensions->pdata,
-                                         },
-                                         NULL,
-                                         &display->vk_instance);
+  res = vkCreateInstance (&(VkInstanceCreateInfo) {
+                               .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
+                               .pNext = NULL,
+                               .flags = 0,
+                               .pApplicationInfo = &(VkApplicationInfo) {
+                                   .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
+                                   .pNext = NULL,
+                                   .pApplicationName = g_get_application_name (),
+                                   .applicationVersion = 0,
+                                   .pEngineName = "GTK",
+                                   .engineVersion = VK_MAKE_VERSION (GDK_MAJOR_VERSION, GDK_MINOR_VERSION, GDK_MICRO_VERSION),
+                                   .apiVersion = VK_API_VERSION_1_3
+                               },
+                               .enabledLayerCount = 0,
+                               .ppEnabledLayerNames = NULL,
+                               .enabledExtensionCount = used_extensions->len,
+                               .ppEnabledExtensionNames = (const char * const *) used_extensions->pdata,
+                           },
+                           NULL,
+                           &display->vk_instance);
   g_ptr_array_free (used_extensions, TRUE);
 
   if (res != VK_SUCCESS)

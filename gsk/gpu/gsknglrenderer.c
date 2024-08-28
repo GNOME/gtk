@@ -45,13 +45,10 @@ gsk_ngl_renderer_create_context (GskGpuRenderer       *renderer,
 {
   GdkGLContext *context;
 
-  if (surface)
-    context = gdk_surface_create_gl_context (surface, error);
-  else
-    context = gdk_display_create_gl_context (display, error);
-
-  if (context == NULL)
+  if (!gdk_display_prepare_gl (display, error))
     return NULL;
+
+  context = gdk_gl_context_new (display, surface, surface != NULL);
 
   /* GLES 2 is not supported */
   gdk_gl_context_set_required_version (context, 3, 0);
@@ -141,6 +138,8 @@ gsk_ngl_renderer_unrealize (GskRenderer *renderer)
   GskNglRenderer *self = GSK_NGL_RENDERER (renderer);
 
   gsk_ngl_renderer_free_backbuffer (self);
+
+  gdk_gl_context_clear_current ();
 
   GSK_RENDERER_CLASS (gsk_ngl_renderer_parent_class)->unrealize (renderer);
 }

@@ -3,7 +3,7 @@
   <gresource prefix="/org/gtk/gtk4/node-editor">
     <file preprocess="xml-stripblanks">node-editor-window.ui</file>
     <file preprocess="xml-stripblanks">help-window.ui</file>
-    <file>node-format.md</file>
+    <file alias='node-format.md'>../../docs/reference/gtk/node-format.md</file>
     <file alias='icons/apps/org.gtk.gtk4.NodeEditor.svg'>data/scalable/apps/org.gtk.gtk4.NodeEditor.svg</file>
   </gresource>
 </gresources>

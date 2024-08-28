@@ -53,22 +53,21 @@ static const GskGpuShaderOpClass GSK_GPU_BLUR_OP_CLASS = {
   gsk_gpu_blur_setup_vao
 };
 
-static void
-gsk_gpu_blur_op_full (GskGpuFrame             *frame,
-                      GskGpuShaderClip         clip,
-                      GskGpuColorStates        color_states,
-                      guint32                  variation,
-                      const graphene_point_t  *offset,
-                      const GskGpuShaderImage *image,
-                      const graphene_vec2_t   *blur_direction,
-                      float                    blur_color[4])
+void
+gsk_gpu_blur_op (GskGpuFrame             *frame,
+                 GskGpuShaderClip         clip,
+                 GdkColorState           *ccs,
+                 float                    opacity,
+                 const graphene_point_t  *offset,
+                 const GskGpuShaderImage *image,
+                 const graphene_vec2_t   *blur_direction)
 {
   GskGpuBlurInstance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_BLUR_OP_CLASS,
-                           color_states,
-                           variation,
+                           gsk_gpu_color_states_create_equal (TRUE, TRUE),
+                           0,
                            clip,
                            (GskGpuImage *[1]) { image->image },
                            (GskGpuSampler[1]) { image->sampler },
@@ -77,43 +76,35 @@ gsk_gpu_blur_op_full (GskGpuFrame             *frame,
   gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
   graphene_vec2_to_float (blur_direction, instance->blur_direction);
-  gsk_gpu_color_to_float (blur_color, instance->blur_color);
-}
-
-void
-gsk_gpu_blur_op (GskGpuFrame             *frame,
-                 GskGpuShaderClip         clip,
-                 GskGpuColorStates        color_states,
-                 const graphene_point_t  *offset,
-                 const GskGpuShaderImage *image,
-                 const graphene_vec2_t   *blur_direction)
-{
-  gsk_gpu_blur_op_full (frame,
-                        clip,
-                        color_states,
-                        0,
-                        offset,
-                        image,
-                        blur_direction,
-                        (float[4]) { 1, 1, 1, 1 });
 }
 
 void
 gsk_gpu_blur_shadow_op (GskGpuFrame             *frame,
                         GskGpuShaderClip         clip,
-                        GskGpuColorStates        color_states,
+                        GdkColorState           *ccs,
+                        float                    opacity,
                         const graphene_point_t  *offset,
                         const GskGpuShaderImage *image,
                         const graphene_vec2_t   *blur_direction,
-                        float                    shadow_color[4])
+                        const GdkColor          *shadow_color)
 {
-  gsk_gpu_blur_op_full (frame,
-                        clip,
-                        color_states,
-                        VARIATION_COLORIZE,
-                        offset,
-                        image,
-                        blur_direction,
-                        shadow_color);
+  GskGpuBlurInstance *instance;
+  GdkColorState *alt;
+
+  alt = gsk_gpu_color_states_find (ccs, shadow_color);
+
+  gsk_gpu_shader_op_alloc (frame,
+                           &GSK_GPU_BLUR_OP_CLASS,
+                           gsk_gpu_color_states_create (ccs, TRUE, alt, FALSE),
+                           VARIATION_COLORIZE,
+                           clip,
+                           (GskGpuImage *[1]) { image->image },
+                           (GskGpuSampler[1]) { image->sampler },
+                           &instance);
+
+  gsk_gpu_rect_to_float (image->coverage, offset, instance->rect);
+  gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
+  graphene_vec2_to_float (blur_direction, instance->blur_direction);
+  gsk_gpu_color_to_float (shadow_color, alt, opacity, instance->blur_color);
 }
 

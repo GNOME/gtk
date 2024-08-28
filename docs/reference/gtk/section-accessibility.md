@@ -300,7 +300,7 @@ The attributes can also enhance the UI:
 
 ```c
 gtk_button_set_label (GTK_BUTTON (button), "Download");
-gtk_box_append (GTK_BOX (button), button);
+gtk_box_append (GTK_BOX (box), button);
 
 gtk_label_set_text (GTK_LABEL (label), "Final report.pdf");
 gtk_box_append (GTK_BOX (box), label);

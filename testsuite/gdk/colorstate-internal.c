@@ -1,5 +1,6 @@
 #include <gdk/gdk.h>
 #include "gdkcolorstateprivate.h"
+#include "gdkcolorprivate.h"
 #include <math.h>
 
 #include "gdkcolordefs.h"
@@ -11,30 +12,84 @@ typedef struct
   const char *name;
   TransferFunc oetf;
   TransferFunc eotf;
+  float o_range[2];
+  float e_range[2];
 } TransferTest;
 
 TransferTest transfers[] = {
-  { "srgb", srgb_oetf, srgb_eotf },
-  { "pq", pq_oetf, pq_eotf },
-  { "bt709", bt709_oetf, bt709_eotf },
-  { "hlg", hlg_oetf, hlg_eotf },
-  { "gamma22", gamma22_oetf, gamma22_eotf },
-  { "gamma28", gamma28_oetf, gamma28_eotf },
+  { "srgb",    srgb_oetf,    srgb_eotf,    { 0, 1 }, { 0, 1} },
+  { "pq",      pq_oetf,      pq_eotf,      { 0, 49.2610855 }, { 0, 1 } },
+  { "bt709",   bt709_oetf,   bt709_eotf,   { 0, 1 }, { 0, 1 } },
+  { "hlg",     hlg_oetf,     hlg_eotf,     { 0, 1}, { 0, 1} },
+  { "gamma22", gamma22_oetf, gamma22_eotf, { 0, 1 }, { 0, 1 } },
+  { "gamma28", gamma28_oetf, gamma28_eotf, { 0, 1 }, { 0, 1 } },
 };
+
+#define LERP(t, a, b) ((a) + (t) * ((b) - (a)))
+
+#define ASSERT_IN_RANGE(v, a, b, epsilon) \
+  g_assert_cmpfloat_with_epsilon (MIN(v,a), a, epsilon); \
+  g_assert_cmpfloat_with_epsilon (MAX(v,b), b, epsilon); \
 
 static void
 test_transfer (gconstpointer data)
 {
   TransferTest *transfer = (TransferTest *) data;
+  float v, v1, v2;
 
-  for (int i = 0; i < 1000; i++)
+  for (int i = 0; i < 1001; i++)
     {
-      float v = i / 1000.0;
-      float v2 = transfer->oetf (transfer->eotf (v));
+      v = LERP (i/1000.0, transfer->e_range[0], transfer->e_range[1]);
+
+      v1 = transfer->eotf (v);
+
+      ASSERT_IN_RANGE (v1, transfer->o_range[0], transfer->o_range[1], 0.0001);
+
+      v2 = transfer->oetf (v1);
+
+      g_assert_cmpfloat_with_epsilon (v, v2, 0.05);
+    }
+
+  for (int i = 0; i < 1001; i++)
+    {
+      v = LERP (i/1000.0, transfer->o_range[0], transfer->o_range[1]);
+
+      v1 = transfer->oetf (v);
+
+      ASSERT_IN_RANGE (v1, transfer->e_range[0], transfer->e_range[1], 0.0001);
+
+      v2 = transfer->eotf (v1);
+
       g_assert_cmpfloat_with_epsilon (v, v2, 0.05);
     }
 }
 
+static void
+test_transfer_symmetry (gconstpointer data)
+{
+  TransferTest *transfer = (TransferTest *) data;
+  float v, v1, v2;
+
+  for (int i = 0; i < 11; i++)
+    {
+      v = LERP (i/10.0, transfer->e_range[0], transfer->e_range[1]);
+
+      v1 = transfer->eotf (v);
+      v2 = -transfer->eotf (-v);
+
+      g_assert_cmpfloat_with_epsilon (v1, v2, 0.05);
+   }
+
+  for (int i = 0; i < 11; i++)
+    {
+      v = LERP (i/10.0, transfer->o_range[0], transfer->o_range[1]);
+
+      v1 = transfer->oetf (v);
+      v2 = -transfer->oetf (-v);
+
+      g_assert_cmpfloat_with_epsilon (v1, v2, 0.05);
+    }
+}
 typedef struct
 {
   const char *name;
@@ -134,6 +189,29 @@ test_rec2020_to_srgb (void)
   g_assert_cmpfloat_with_epsilon (norm (res), 0, 0.001);
 }
 
+/* Verify that this color is different enough in srgb-linear and srgb
+ * to be detected.
+ */
+static void
+test_color_mislabel (void)
+{
+  GdkColor color;
+  GdkColor color1;
+  GdkColor color2;
+  guint red1, red2;
+
+  gdk_color_init (&color, gdk_color_state_get_srgb_linear (), (float[]) { 0.604, 0, 0, 1 });
+  gdk_color_convert (&color1, gdk_color_state_get_srgb (), &color);
+  gdk_color_init (&color2, gdk_color_state_get_srgb (), (float[]) { 0.604, 0, 0, 1 });
+
+  g_assert_true (!gdk_color_equal (&color1, &color2));
+
+  red1 = round (color1.red * 255.0);
+  red2 = round (color2.red * 255.0);
+
+  g_assert_true (red1 != red2);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -147,6 +225,14 @@ main (int argc, char *argv[])
       g_free (path);
     }
 
+  for (guint i = 0; i < G_N_ELEMENTS (transfers); i++)
+    {
+      TransferTest *test = &transfers[i];
+      char *path = g_strdup_printf ("/colorstate/transfer-symmetry/%s", test->name);
+      g_test_add_data_func (path, test, test_transfer_symmetry);
+      g_free (path);
+    }
+
   for (guint i = 0; i < G_N_ELEMENTS (matrices); i++)
     {
       MatrixTest *test = &matrices[i];
@@ -157,6 +243,7 @@ main (int argc, char *argv[])
 
   g_test_add_func ("/colorstate/matrix/srgb_to_rec2020", test_srgb_to_rec2020);
   g_test_add_func ("/colorstate/matrix/rec2020_to_srgb", test_rec2020_to_srgb);
+  g_test_add_func ("/color/mislabel", test_color_mislabel);
 
   return g_test_run ();
 }

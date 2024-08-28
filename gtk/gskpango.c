@@ -28,6 +28,8 @@
 #include "gtkwidgetprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gdk/gdkrgbaprivate.h"
+#include "gdk/gdkcolorprivate.h"
+#include "gdk/gdkcairoprivate.h"
 #include "gtkcssshadowvalueprivate.h"
 
 #include <math.h>
@@ -58,23 +60,26 @@ gsk_pango_renderer_set_shape_handler (GskPangoRenderer    *crenderer,
 static void
 get_color (GskPangoRenderer *crenderer,
            PangoRenderPart   part,
-           GdkRGBA          *rgba)
+           GdkColor         *out_color)
 {
   const PangoColor *color = pango_renderer_get_color ((PangoRenderer *) (crenderer), part);
   const guint16 a = pango_renderer_get_alpha ((PangoRenderer *) (crenderer), part);
 
   if (color)
     {
-      rgba->red = color->red / 65535.;
-      rgba->green = color->green / 65535.;
-      rgba->blue = color->blue / 65535.;
-      rgba->alpha = a ? a  / 65535. : crenderer->fg_color->alpha;
+      gdk_color_init (out_color, GDK_COLOR_STATE_SRGB,
+                      (float[]) {
+                        color->red / 65535.,
+                        color->green / 65535.,
+                        color->blue / 65535.,
+                        a ? a  / 65535. : crenderer->fg_color.alpha,
+                      });
     }
   else
     {
-      *rgba = *crenderer->fg_color;
+      gdk_color_init_copy (out_color, &crenderer->fg_color);
       if (a)
-        rgba->alpha = a / 65535.;
+        out_color->alpha = a / 65535.;
     }
 }
 
@@ -83,10 +88,11 @@ set_color (GskPangoRenderer *crenderer,
            PangoRenderPart   part,
            cairo_t          *cr)
 {
-  GdkRGBA rgba = { 0, 0, 0, 1 };
+  GdkColor color;
 
-  get_color (crenderer, part, &rgba);
-  gdk_cairo_set_source_rgba (cr, &rgba);
+  get_color (crenderer, part, &color);
+  gdk_cairo_set_source_color (cr, GDK_COLOR_STATE_SRGB, &color);
+  gdk_color_finish (&color);
 }
 
 static void
@@ -97,7 +103,7 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
                                     int             y)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  GdkRGBA color;
+  GdkColor color;
   gboolean has_shadow = FALSE;
 
   if (crenderer->shadow_style)
@@ -106,12 +112,14 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
 
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
-  gtk_snapshot_append_text (crenderer->snapshot,
-                            glyph_item->item->analysis.font,
-                            glyph_item->glyphs,
-                            &color,
-                            (float) x / PANGO_SCALE,
-                            (float) y / PANGO_SCALE);
+  gtk_snapshot_append_text2 (crenderer->snapshot,
+                             glyph_item->item->analysis.font,
+                             glyph_item->glyphs,
+                             &color,
+                             (float) x / PANGO_SCALE,
+                             (float) y / PANGO_SCALE);
+
+  gdk_color_finish (&color);
 
   if (has_shadow)
     gtk_snapshot_pop (crenderer->snapshot);
@@ -126,16 +134,18 @@ gsk_pango_renderer_draw_rectangle (PangoRenderer     *renderer,
                                    int                height)
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
-  GdkRGBA rgba;
+  GdkColor color;
 
-  get_color (crenderer, part, &rgba);
+  get_color (crenderer, part, &color);
 
-  gtk_snapshot_append_color (crenderer->snapshot,
-                             &rgba,
-                             &GRAPHENE_RECT_INIT ((double)x / PANGO_SCALE,
-                                                  (double)y / PANGO_SCALE,
-                                                  (double)width / PANGO_SCALE,
-                                                  (double)height / PANGO_SCALE));
+  gtk_snapshot_append_color2 (crenderer->snapshot,
+                              &color,
+                              &GRAPHENE_RECT_INIT ((double)x / PANGO_SCALE,
+                                                   (double)y / PANGO_SCALE,
+                                                   (double)width / PANGO_SCALE,
+                                                   (double)height / PANGO_SCALE));
+
+  gdk_color_finish (&color);
 }
 
 static void
@@ -189,7 +199,7 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
 {
   GskPangoRenderer *crenderer = (GskPangoRenderer *) (renderer);
   double xx, yy, ww, hh;
-  GdkRGBA rgba;
+  GdkColor color;
   GskRoundedRect dot;
 
   xx = (double)x / PANGO_SCALE;
@@ -197,7 +207,7 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
   ww = (double)width / PANGO_SCALE;
   hh = (double)height / PANGO_SCALE;
 
-  get_color (crenderer, PANGO_RENDER_PART_UNDERLINE, &rgba);
+  get_color (crenderer, PANGO_RENDER_PART_UNDERLINE, &color);
 
   gtk_snapshot_push_repeat (crenderer->snapshot,
                             &GRAPHENE_RECT_INIT (xx, yy, ww, hh),
@@ -208,11 +218,13 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
                                    hh / 2);
 
   gtk_snapshot_push_rounded_clip (crenderer->snapshot, &dot);
-  gtk_snapshot_append_color (crenderer->snapshot, &rgba, &dot.bounds);
+  gtk_snapshot_append_color2 (crenderer->snapshot, &color, &dot.bounds);
   gtk_snapshot_pop (crenderer->snapshot);
-  gtk_snapshot_append_color (crenderer->snapshot,
-                             &GDK_RGBA_TRANSPARENT,
-                             &GRAPHENE_RECT_INIT (xx, yy, 1.5 * hh, hh));
+  gtk_snapshot_append_color2 (crenderer->snapshot,
+                              &GDK_COLOR_SRGB (0, 0, 0, 0),
+                              &GRAPHENE_RECT_INIT (xx, yy, 1.5 * hh, hh));
+
+  gdk_color_finish (&color);
 
   gtk_snapshot_pop (crenderer->snapshot);
 }
@@ -490,6 +502,32 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
                             PangoLayout   *layout,
                             const GdkRGBA *color)
 {
+  GdkColor color2;
+
+  gdk_color_init_from_rgba (&color2, color);
+  gtk_snapshot_append_layout2 (snapshot, layout, &color2);
+  gdk_color_finish (&color2);
+}
+
+/* < private >
+ * gtk_snapshot_append_layout2:
+ * @snapshot: a `GtkSnapshot`
+ * @layout: the `PangoLayout` to render
+ * @color: the foreground color to render the layout in
+ *
+ * Creates render nodes for rendering @layout in the given foregound @color
+ * and appends them to the current node of @snapshot without changing the
+ * current node. The current theme's foreground color for a widget can be
+ * obtained with [method@Gtk.Widget.get_color].
+ *
+ * Note that if the layout does not produce any visible output, then nodes
+ * may not be added to the @snapshot.
+ **/
+void
+gtk_snapshot_append_layout2 (GtkSnapshot    *snapshot,
+                             PangoLayout    *layout,
+                             const GdkColor *color)
+{
   GskPangoRenderer *crenderer;
 
   g_return_if_fail (snapshot != NULL);
@@ -498,9 +536,11 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
   crenderer = gsk_pango_renderer_acquire ();
 
   crenderer->snapshot = snapshot;
-  crenderer->fg_color = color;
+  gdk_color_init_copy (&crenderer->fg_color, color);
 
   pango_renderer_draw_layout (PANGO_RENDERER (crenderer), layout, 0, 0);
+
+  gdk_color_finish (&crenderer->fg_color);
 
   gsk_pango_renderer_release (crenderer);
 }

@@ -663,6 +663,7 @@ if os_win32
     'gtkimcontextime.c',
     'gtkfilechoosernativewin32.c',
     'gtkwin32.c',
+    'gtkshowwin32.c',
   ]
 endif
 

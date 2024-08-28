@@ -953,6 +953,16 @@ gtk_css_parser_has_integer (GtkCssParser *self)
          gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER);
 }
 
+gboolean
+gtk_css_parser_has_percentage (GtkCssParser *self)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_parser_get_token (self);
+
+  return gtk_css_token_is (token, GTK_CSS_TOKEN_PERCENTAGE);
+}
+
 /**
  * gtk_css_parser_has_function:
  * @self: a `GtkCssParser`
@@ -1277,6 +1287,35 @@ gtk_css_parser_consume_percentage (GtkCssParser *self,
 
   gtk_css_parser_error_syntax (self, "Expected a percentage");
   /* FIXME: Implement calc() */
+  return FALSE;
+}
+
+gboolean
+gtk_css_parser_consume_number_or_percentage (GtkCssParser *parser,
+                                             double        min,
+                                             double        max,
+                                             double       *value)
+{
+  double number = 0;
+
+  if (gtk_css_parser_has_percentage (parser))
+    {
+      if (gtk_css_parser_consume_percentage (parser, &number))
+        {
+          *value = min + (number / 100.0) * (max - min);
+          return TRUE;
+        }
+    }
+  else if (gtk_css_parser_has_number (parser))
+    {
+      if (gtk_css_parser_consume_number (parser, &number))
+        {
+          *value = number;
+          return TRUE;
+        }
+    }
+
+  gtk_css_parser_error_syntax (parser, "Expected a number or percentage");
   return FALSE;
 }
 

@@ -483,8 +483,11 @@ do_pre_parse_initialization (void)
   gdk_pre_parse ();
 
   debug_flags[0].flags = gdk_parse_debug_var ("GTK_DEBUG",
-                                              gtk_debug_keys,
-                                              G_N_ELEMENTS (gtk_debug_keys));
+      "GTK_DEBUG can be set to values that make GTK print out different\n"
+      "types of debugging information or change the behavior of GTK for\n"
+      "debugging purposes.\n",
+      gtk_debug_keys,
+      G_N_ELEMENTS (gtk_debug_keys));
   any_display_debug_flags_set = debug_flags[0].flags > 0;
 
   env_string = g_getenv ("GTK_SLOWDOWN");
@@ -1926,7 +1929,7 @@ gtk_propagate_event_internal (GtkWidget *widget,
       i--;
     }
 
-  /* If not yet handled, also propagate down */
+  /* If not yet handled, also propagate back up */
   if (!handled_event)
     {
       /* Propagate event up the widget tree so that

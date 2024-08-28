@@ -51,6 +51,7 @@
 #include <graphene-gobject.h>
 #include <cairo-gobject.h>
 #include <gdk/gdk.h>
+#include "gdk/gdkdebugprivate.h"
 
 #ifdef GDK_WINDOWING_X11
 #include <gdk/x11/gdkx.h>
@@ -472,8 +473,7 @@ gsk_renderer_render (GskRenderer          *renderer,
 
   clip = cairo_region_copy (region);
 
-  if (renderer_class->supports_offload &&
-      !GSK_RENDERER_DEBUG_CHECK (renderer, OFFLOAD_DISABLE))
+  if (renderer_class->supports_offload && gdk_has_feature (GDK_FEATURE_OFFLOAD))
     offload = gsk_offload_new (priv->surface, root, clip);
   else
     offload = NULL;

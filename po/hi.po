@@ -1,7 +1,6 @@
-# translation of gtk-main to Hindi
-# This file is distributed under the same license as the PACKAGE package.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER.
-#
+# Hindi translation for gtk.
+# Copyright (C) 2024 gtk's COPYRIGHT HOLDER
+# This file is distributed under the same license as the gtk package.
 # G Karunakar <karunakar@freedomink.org>, 2003.
 # Ravishankar Shrivastava <raviratlami@yahoo.com>, 2004.
 # Rajesh Ranjan <rranjan@redhat.com>, 2005, 2006, 2009.
@@ -13,10 +12,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gtk-main\n"
+"Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-06-20 17:41+0000\n"
-"PO-Revision-Date: 2024-06-21 11:25+0530\n"
+"POT-Creation-Date: 2024-08-22 15:42+0000\n"
+"PO-Revision-Date: 2024-08-24 10:48+0800\n"
 "Last-Translator: Scrambled777 <weblate.scrambled777@simplelogin.com>\n"
 "Language-Team: Hindi <indlinux-hindi@lists.sourceforge.net>\n"
 "Language: hi\n"
@@ -54,58 +53,58 @@ msgstr "सामग्री को “%s” के रूप में उप�
 msgid "Cannot provide contents as %s"
 msgstr "सामग्री को %s के रूप में उपलब्ध नहीं कराया जा सकता"
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:471
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:472
 msgid "The current backend does not support OpenGL"
 msgstr "वर्तमान बैकएंड OpenGL का समर्थन नहीं करता है"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1658
-msgid "Vulkan support disabled via GDK_DEBUG"
-msgstr "GDK_DEBUG के माध्यम से Vulkan समर्थन अक्षम किया गया"
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1633
+msgid "Vulkan support disabled via GDK_DISABLE"
+msgstr "GDK_DISABLE के माध्यम से Vulkan समर्थन अक्षम किया गया"
 
 #: gdk/gdkdisplay.c:1369
-msgid "GL support disabled via GDK_DEBUG"
-msgstr "GDK_DEBUG के माध्यम से GL समर्थन अक्षम किया गया"
+msgid "OpenGL support disabled via GDK_DISABLE"
+msgstr "GDK_DISABLE के माध्यम से OpenGL समर्थन अक्षम किया गया"
 
-#: gdk/gdkdisplay.c:1675
+#: gdk/gdkdisplay.c:1683
 msgid "No EGL configuration available"
 msgstr "कोई EGL विन्यास उपलब्ध नहीं है"
 
-#: gdk/gdkdisplay.c:1683
+#: gdk/gdkdisplay.c:1691
 msgid "Failed to get EGL configurations"
 msgstr "ईजीएल विन्यास प्राप्त करने में विफल"
 
-#: gdk/gdkdisplay.c:1713
+#: gdk/gdkdisplay.c:1721
 msgid "No EGL configuration with required features found"
 msgstr "आवश्यक सुविधाओं के साथ कोई ईजीएल विन्यास नहीं मिला"
 
-#: gdk/gdkdisplay.c:1720
+#: gdk/gdkdisplay.c:1728
 msgid "No perfect EGL configuration found"
 msgstr "कोई संपूर्ण ईजीएल विन्यास नहीं मिला"
 
-#: gdk/gdkdisplay.c:1762
+#: gdk/gdkdisplay.c:1770
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
 msgstr[0] "कोई प्रोफाइल उपलब्ध नहीं"
 msgstr[1] "EGL कार्यान्वयन में %2$d एक्सटेंशन गुम हैं: %1$s"
 
-#: gdk/gdkdisplay.c:1811
+#: gdk/gdkdisplay.c:1819
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL इस सैंडबॉक्स में उपलब्ध नहीं है"
 
-#: gdk/gdkdisplay.c:1812
+#: gdk/gdkdisplay.c:1820
 msgid "libEGL not available"
 msgstr "libEGL उपलब्ध नहीं है"
 
-#: gdk/gdkdisplay.c:1822
+#: gdk/gdkdisplay.c:1830
 msgid "Failed to create EGL display"
 msgstr "ईजीएल डिस्प्ले बनाने में विफल"
 
-#: gdk/gdkdisplay.c:1831
+#: gdk/gdkdisplay.c:1839
 msgid "Could not initialize EGL display"
 msgstr "ईजीएल डिस्प्ले प्रारंभ नहीं किया जा सका"
 
-#: gdk/gdkdisplay.c:1841
+#: gdk/gdkdisplay.c:1849
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "EGL संस्करण %d.%d बहुत पुराना है। GTK को %d.%d की आवश्यकता है"
@@ -118,37 +117,44 @@ msgstr "अन्य अनुप्रयोग से ड्रैग'एन'�
 msgid "No compatible formats to transfer contents."
 msgstr "सामग्री स्थानांतरित करने के लिए कोई संगत प्रारूप नहीं।"
 
-#: gdk/gdkglcontext.c:431 gdk/x11/gdkglcontext-glx.c:645
+#: gdk/gdkglcontext.c:432 gdk/x11/gdkglcontext-glx.c:648
 msgid "No GL API allowed."
 msgstr "कोई GL API की अनुमति नहीं है।"
 
-#: gdk/gdkglcontext.c:454 gdk/win32/gdkglcontext-win32-wgl.c:409
-#: gdk/win32/gdkglcontext-win32-wgl.c:552
-#: gdk/win32/gdkglcontext-win32-wgl.c:596 gdk/x11/gdkglcontext-glx.c:691
+#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:705
+#: gdk/win32/gdkglcontext-win32-wgl.c:848
+#: gdk/win32/gdkglcontext-win32-wgl.c:892 gdk/x11/gdkglcontext-glx.c:694
 msgid "Unable to create a GL context"
 msgstr "GL प्रसंग बनाने में असमर्थ"
 
-#: gdk/gdkglcontext.c:1317
-msgid "OpenGL ES disabled via GDK_DEBUG"
-msgstr "GDK_DEBUG के माध्यम से OpenGL ES अक्षम किया गया"
-
-#: gdk/gdkglcontext.c:1329
-msgid "OpenGL disabled via GDK_DEBUG"
-msgstr "GDK_DEBUG के माध्यम से OpenGL अक्षम किया गया"
-
 #: gdk/gdkglcontext.c:1340
+msgid "OpenGL ES API disabled via GDK_DISABLE"
+msgstr "GDK_DISABLE के माध्यम से OpenGL ES API अक्षम की गई"
+
+#: gdk/gdkglcontext.c:1352
+msgid "OpenGL API disabled via GDK_DISABLE"
+msgstr "GDK_DISABLE के माध्यम से OpenGL API अक्षम की गई"
+
+#: gdk/gdkglcontext.c:1363
 #, c-format
 msgid "Application does not support %s API"
 msgstr "अनुप्रयोग %s API का समर्थन नहीं करता"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2128
+#.
+#: gdk/gdkglcontext.c:2163
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s का उपयोग करने का प्रयास किया जा रहा है, लेकिन %s पहले से ही उपयोग में है"
 
-#: gdk/gdktexture.c:587
+#: gdk/gdkglcontext.c:2174
+#, c-format
+msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
+msgstr ""
+"%s का उपयोग करने का प्रयास किया जा रहा है, लेकिन यह GDK_DISABLE के माध्यम से अक्षम है"
+
+#: gdk/gdktexture.c:661
 msgid "Unknown image format."
 msgstr "अज्ञात छवि प्रारूप।"
 
@@ -529,37 +535,37 @@ msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspend"
 
-#: gdk/loaders/gdkjpeg.c:63
+#: gdk/loaders/gdkjpeg.c:65
 #, c-format
 msgid "Error interpreting JPEG image file (%s)"
 msgstr "JPEG छवि फाइल की व्याख्या करने में त्रुटि (%s)"
 
-#: gdk/loaders/gdkjpeg.c:194
+#: gdk/loaders/gdkjpeg.c:179
 #, c-format
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "असमर्थित JPEG कलरस्पेस (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:289 gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:188 gdk/loaders/gdkpng.c:436 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "छवि आकार %ux%u के लिए पर्याप्त मेमोरी नहीं है"
 
-#: gdk/loaders/gdkpng.c:118
+#: gdk/loaders/gdkpng.c:120
 #, c-format
 msgid "Error reading png (%s)"
 msgstr "पीएनजी पढ़ने में त्रुटि (%s)"
 
-#: gdk/loaders/gdkpng.c:215
+#: gdk/loaders/gdkpng.c:357
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "पीएनजी छवि में असमर्थित गहराई %u"
 
-#: gdk/loaders/gdkpng.c:265
+#: gdk/loaders/gdkpng.c:407
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "पीएनजी छवि में असमर्थित रंग प्रकार %u"
 
-#: gdk/loaders/gdkpng.c:275
+#: gdk/loaders/gdkpng.c:421
 #, c-format
 msgid "Image stride too large for image size %ux%u"
 msgstr "छवि प्रगति छवि आकार %ux%u के लिए बहुत बड़ी है"
@@ -579,7 +585,7 @@ msgstr "पंक्ति %d पर डेटा पढ़ना विफल �
 
 #: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:238
 #: gdk/wayland/gdkdrop-wayland.c:205 gdk/wayland/gdkprimary-wayland.c:337
-#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
+#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1067
 #: gdk/x11/gdkclipboard-x11.c:799 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "कोई संगत स्थानांतरण प्रारूप नहीं मिला"
@@ -701,41 +707,41 @@ msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "डीएनडी डेटा नहीं मिल सका। डेटा संग्रहीत करने के लिए %s बाइट्स आवंटित करने में विफल।"
 
-#: gdk/win32/gdkdrop-win32.c:1037
+#: gdk/win32/gdkdrop-win32.c:1039
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "GDK सतह 0x%p ड्रॉप लक्ष्य के रूप में पंजीकृत नहीं है"
 
-#: gdk/win32/gdkdrop-win32.c:1044
+#: gdk/win32/gdkdrop-win32.c:1047
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "लक्ष्य संदर्भ रिकॉर्ड 0x%p में कोई डेटा ऑब्जेक्ट नहीं है"
 
-#: gdk/win32/gdkdrop-win32.c:1082
+#: gdk/win32/gdkdrop-win32.c:1087
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "IDataObject_GetData (0x%x) विफल, 0x%lx लौट रहा है"
 
-#: gdk/win32/gdkdrop-win32.c:1114
+#: gdk/win32/gdkdrop-win32.c:1121
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "DnD डेटा W32 प्रारूप 0x%x को %p (%s) में परिवर्तित करने में विफल"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:343
+#: gdk/win32/gdkglcontext-win32-wgl.c:635
 msgid "No GL implementation is available"
 msgstr "कोई GL कार्यान्वयन उपलब्ध नहीं है"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:418
+#: gdk/win32/gdkglcontext-win32-wgl.c:714
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL संस्करण %d.%d बहुत कम है, कम से कम %d.%d की आवश्यकता है"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:436
+#: gdk/win32/gdkglcontext-win32-wgl.c:732
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "जीएल कार्यान्वयन जीएल संदर्भों को साझा नहीं कर सकता"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:716
+#: gdk/win32/gdkglcontext-win32-wgl.c:1012
 msgid "No available configurations for the given pixel format"
 msgstr "दिए गए पिक्सल प्रारूप के लिए कोई विन्यास उपलब्ध नहीं है"
 
@@ -798,15 +804,15 @@ msgstr "क्लिपबोर्ड प्रबंधक चयन संग
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "क्लिपबोर्ड संग्रहीत नहीं किया जा सकता। कोई क्लिपबोर्ड प्रबंधक सक्रिय नहीं है।"
 
-#: gdk/x11/gdkglcontext-glx.c:810
+#: gdk/x11/gdkglcontext-glx.c:814
 msgid "No GLX configurations available"
 msgstr "कोई GLX विन्यास उपलब्ध नहीं है"
 
-#: gdk/x11/gdkglcontext-glx.c:883
+#: gdk/x11/gdkglcontext-glx.c:901
 msgid "No GLX configuration with required features found"
 msgstr "आवश्यक सुविधाओं के साथ कोई GLX विन्यास नहीं मिला"
 
-#: gdk/x11/gdkglcontext-glx.c:957
+#: gdk/x11/gdkglcontext-glx.c:975
 msgid "GLX is not supported"
 msgstr "जीएलएक्स समर्थित नहीं है"
 
@@ -837,17 +843,17 @@ msgstr "मिश्रित पाठ रूपांतरण में अ�
 msgid "Unsupported encoding “%s”"
 msgstr "असमर्थित एन्कोडिंग “%s”"
 
-#: gsk/gl/gskglrenderer.c:213
+#: gsk/gl/gskglrenderer.c:215
 #, c-format
 msgid "This GLES %d.%d implementation does not support half-float vertex data"
 msgstr "यह GLES %d.%d कार्यान्वयन आधे-फ्लोट वर्टेक्स डेटा का समर्थन नहीं करता है"
 
-#: gsk/gpu/gskgldevice.c:246
+#: gsk/gpu/gskgldevice.c:252
 #, c-format
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "इस रेंडरर द्वारा OpenGL ES 3.0 समर्थित नहीं है।"
 
-#: gsk/gpu/gsknglrenderer.c:71
+#: gsk/gpu/gsknglrenderer.c:68
 msgid "OpenGL 3.3 required"
 msgstr "OpenGL 3.3 आवश्यक"
 
@@ -1072,13 +1078,13 @@ msgstr "%d %%"
 msgid "Pick a Color"
 msgstr "रंग चुनें"
 
-#: gtk/deprecated/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:313
+#: gtk/deprecated/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:321
 #: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "लाल %d%%, हरा %d%%, नीला %d%%, अल्फा %d%%"
 
-#: gtk/deprecated/gtkcolorbutton.c:511 gtk/gtkcolorchooserwidget.c:319
+#: gtk/deprecated/gtkcolorbutton.c:511 gtk/gtkcolorchooserwidget.c:327
 #: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
@@ -1094,7 +1100,7 @@ msgstr "सैन्स 12"
 msgid "Pick a Font"
 msgstr "फॉन्ट चुनें"
 
-#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3825
+#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3847
 #: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:285
 msgid "Font"
 msgstr "फॉन्ट"
@@ -1136,7 +1142,7 @@ msgstr ""
 "तंत्र नीति परिवर्तन को रोकता है।\n"
 "अपने तंत्र प्रशासक से संपर्क करें"
 
-#: gtk/deprecated/gtkshow.c:182
+#: gtk/deprecated/gtkshow.c:217
 msgid "Could not show link"
 msgstr "कड़ी नहीं दिखा सका"
 
@@ -1159,111 +1165,111 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkaboutdialog.c:119 gtk/ui/gtkaboutdialog.ui:173
+#: gtk/gtkaboutdialog.c:125 gtk/ui/gtkaboutdialog.ui:173
 msgid "License"
 msgstr "लाइसेंस"
 
-#: gtk/gtkaboutdialog.c:120
+#: gtk/gtkaboutdialog.c:126
 msgid "Custom License"
 msgstr "तदनुकूल लाइसेंस"
 
-#: gtk/gtkaboutdialog.c:121
+#: gtk/gtkaboutdialog.c:127
 msgid "GNU General Public License, version 2 or later"
 msgstr "जीएनयू जनरल पब्लिक लाइसेंस, संस्करण 2 या बाद का"
 
-#: gtk/gtkaboutdialog.c:122
+#: gtk/gtkaboutdialog.c:128
 msgid "GNU General Public License, version 3 or later"
 msgstr "जीएनयू जनरल पब्लिक लाइसेंस, संस्करण 3 या बाद का"
 
-#: gtk/gtkaboutdialog.c:123
+#: gtk/gtkaboutdialog.c:129
 msgid "GNU Lesser General Public License, version 2.1 or later"
 msgstr "जीएनयू लेसर जनरल पब्लिक लाइसेंस, संस्करण 2.1 या बाद का"
 
-#: gtk/gtkaboutdialog.c:124
+#: gtk/gtkaboutdialog.c:130
 msgid "GNU Lesser General Public License, version 3 or later"
 msgstr "जीएनयू लेसर जनरल पब्लिक लाइसेंस, संस्करण 3 या बाद का"
 
-#: gtk/gtkaboutdialog.c:125
+#: gtk/gtkaboutdialog.c:131
 msgid "BSD 2-Clause License"
 msgstr "बीएसडी 2-क्लॉज लाइसेंस"
 
-#: gtk/gtkaboutdialog.c:126
+#: gtk/gtkaboutdialog.c:132
 msgid "The MIT License (MIT)"
 msgstr "एमआईटी लाइसेंस (एमआईटी)"
 
-#: gtk/gtkaboutdialog.c:127
+#: gtk/gtkaboutdialog.c:133
 msgid "Artistic License 2.0"
 msgstr "आर्टिस्टिक लाइसेंस 2.0"
 
-#: gtk/gtkaboutdialog.c:128
+#: gtk/gtkaboutdialog.c:134
 msgid "GNU General Public License, version 2 only"
 msgstr "जीएनयू जनरल पब्लिक लाइसेंस, केवल संस्करण 2"
 
-#: gtk/gtkaboutdialog.c:129
+#: gtk/gtkaboutdialog.c:135
 msgid "GNU General Public License, version 3 only"
 msgstr "जीएनयू जनरल पब्लिक लाइसेंस, केवल संस्करण 3"
 
-#: gtk/gtkaboutdialog.c:130
+#: gtk/gtkaboutdialog.c:136
 msgid "GNU Lesser General Public License, version 2.1 only"
 msgstr "जीएनयू लेसर जनरल पब्लिक लाइसेंस, केवल संस्करण 2.1"
 
-#: gtk/gtkaboutdialog.c:131
+#: gtk/gtkaboutdialog.c:137
 msgid "GNU Lesser General Public License, version 3 only"
 msgstr "जीएनयू लेसर जनरल पब्लिक लाइसेंस, केवल संस्करण 3"
 
-#: gtk/gtkaboutdialog.c:132
+#: gtk/gtkaboutdialog.c:138
 msgid "GNU Affero General Public License, version 3 or later"
 msgstr "जीएनयू एफ़ेरो जनरल पब्लिक लाइसेंस, संस्करण 3 या बाद का"
 
-#: gtk/gtkaboutdialog.c:133
+#: gtk/gtkaboutdialog.c:139
 msgid "GNU Affero General Public License, version 3 only"
 msgstr "जीएनयू अफ़ेरो जनरल पब्लिक लाइसेंस, केवल संस्करण 3"
 
-#: gtk/gtkaboutdialog.c:134
+#: gtk/gtkaboutdialog.c:140
 msgid "BSD 3-Clause License"
 msgstr "बीएसडी 3-क्लॉज लाइसेंस"
 
-#: gtk/gtkaboutdialog.c:135
+#: gtk/gtkaboutdialog.c:141
 msgid "Apache License, Version 2.0"
 msgstr "अपाचे लाइसेंस, संस्करण 2.0"
 
-#: gtk/gtkaboutdialog.c:136
+#: gtk/gtkaboutdialog.c:142
 msgid "Mozilla Public License 2.0"
 msgstr "मोज़िला पब्लिक लाइसेंस 2.0"
 
-#: gtk/gtkaboutdialog.c:137
+#: gtk/gtkaboutdialog.c:143
 msgid "BSD Zero-Clause License"
 msgstr "बीएसडी जीरो-क्लॉज लाइसेंस"
 
-#: gtk/gtkaboutdialog.c:1022
+#: gtk/gtkaboutdialog.c:1028
 msgid "Website"
 msgstr "वेबसाइट"
 
-#: gtk/gtkaboutdialog.c:1058 gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:1064 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "%s का परिचय"
 
-#: gtk/gtkaboutdialog.c:2151
+#: gtk/gtkaboutdialog.c:2158
 msgid "Created by"
 msgstr "इनके द्वारा निर्मित"
 
-#: gtk/gtkaboutdialog.c:2154
+#: gtk/gtkaboutdialog.c:2161
 msgid "Documented by"
 msgstr "इनके द्वारा प्रलेखित"
 
-#: gtk/gtkaboutdialog.c:2164
+#: gtk/gtkaboutdialog.c:2171
 msgid "Translated by"
 msgstr "इनके द्वारा अनुवादित"
 
-#: gtk/gtkaboutdialog.c:2169
+#: gtk/gtkaboutdialog.c:2176
 msgid "Design by"
 msgstr "इनके द्वारा डिज़ाइन"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
 #.
-#: gtk/gtkaboutdialog.c:2334
+#: gtk/gtkaboutdialog.c:2341
 #, c-format
 msgid ""
 "This program comes with absolutely no warranty.\n"
@@ -1745,7 +1751,7 @@ msgstr "विजेट"
 #: gtk/gtkaccessible.c:867
 msgctxt "accessibility"
 msgid "window"
-msgstr "खिड़की"
+msgstr "विंडो"
 
 #: gtk/gtkaccessible.c:868
 msgctxt "accessibility"
@@ -1822,7 +1828,7 @@ msgstr "पाठ <%s> के अंदर प्रदर्शित नही
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:659
+#: gtk/gtkcalendar.c:666
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1844,7 +1850,7 @@ msgstr "calendar:week_start:0"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:810
+#: gtk/gtkcalendar.c:817
 msgid "calendar:MY"
 msgstr "calendar:MY"
 
@@ -1854,7 +1860,7 @@ msgstr "calendar:MY"
 #. *
 #. * "%Y" is appropriate for most locales.
 #.
-#: gtk/gtkcalendar.c:995
+#: gtk/gtkcalendar.c:1002
 msgctxt "calendar year format"
 msgid "%Y"
 msgstr "%Y"
@@ -1869,7 +1875,7 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1032
+#: gtk/gtkcalendar.c:1039
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
@@ -1883,252 +1889,252 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1097
+#: gtk/gtkcalendar.c:1104
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
 msgstr "%d"
 
-#: gtk/gtkcolorchooserwidget.c:376 gtk/gtkcoloreditor.c:171
+#: gtk/gtkcolorchooserwidget.c:384 gtk/gtkcoloreditor.c:171
 #, c-format
 msgid "Color: %s"
 msgstr "रंग: %s"
 
-#: gtk/gtkcolorchooserwidget.c:441
+#: gtk/gtkcolorchooserwidget.c:449
 msgctxt "Color name"
 msgid "Very Light Blue"
 msgstr "बहुत हल्का नीला"
 
-#: gtk/gtkcolorchooserwidget.c:442
+#: gtk/gtkcolorchooserwidget.c:450
 msgctxt "Color name"
 msgid "Light Blue"
 msgstr "हल्का नीला"
 
-#: gtk/gtkcolorchooserwidget.c:443
+#: gtk/gtkcolorchooserwidget.c:451
 msgctxt "Color name"
 msgid "Blue"
 msgstr "नीला"
 
-#: gtk/gtkcolorchooserwidget.c:444
+#: gtk/gtkcolorchooserwidget.c:452
 msgctxt "Color name"
 msgid "Dark Blue"
 msgstr "गहरा नीला"
 
-#: gtk/gtkcolorchooserwidget.c:445
+#: gtk/gtkcolorchooserwidget.c:453
 msgctxt "Color name"
 msgid "Very Dark Blue"
 msgstr "बहुत गहरा नीला"
 
-#: gtk/gtkcolorchooserwidget.c:446
+#: gtk/gtkcolorchooserwidget.c:454
 msgctxt "Color name"
 msgid "Very Light Green"
 msgstr "बहुत हल्का हरा"
 
-#: gtk/gtkcolorchooserwidget.c:447
+#: gtk/gtkcolorchooserwidget.c:455
 msgctxt "Color name"
 msgid "Light Green"
 msgstr "हल्का हरा"
 
-#: gtk/gtkcolorchooserwidget.c:448
+#: gtk/gtkcolorchooserwidget.c:456
 msgctxt "Color name"
 msgid "Green"
 msgstr "हरा"
 
-#: gtk/gtkcolorchooserwidget.c:449
+#: gtk/gtkcolorchooserwidget.c:457
 msgctxt "Color name"
 msgid "Dark Green"
 msgstr "गहरा हरा"
 
-#: gtk/gtkcolorchooserwidget.c:450
+#: gtk/gtkcolorchooserwidget.c:458
 msgctxt "Color name"
 msgid "Very Dark Green"
 msgstr "बहुत गहरा हरा"
 
-#: gtk/gtkcolorchooserwidget.c:451
+#: gtk/gtkcolorchooserwidget.c:459
 msgctxt "Color name"
 msgid "Very Light Yellow"
 msgstr "बहुत हल्का पीला"
 
-#: gtk/gtkcolorchooserwidget.c:452
+#: gtk/gtkcolorchooserwidget.c:460
 msgctxt "Color name"
 msgid "Light Yellow"
 msgstr "हल्का पीला"
 
-#: gtk/gtkcolorchooserwidget.c:453
+#: gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
 msgid "Yellow"
 msgstr "पीला"
 
-#: gtk/gtkcolorchooserwidget.c:454
+#: gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
 msgid "Dark Yellow"
 msgstr "गहरा पीला"
 
-#: gtk/gtkcolorchooserwidget.c:455
+#: gtk/gtkcolorchooserwidget.c:463
 msgctxt "Color name"
 msgid "Very Dark Yellow"
 msgstr "बहुत गहरा पीला"
 
-#: gtk/gtkcolorchooserwidget.c:456
+#: gtk/gtkcolorchooserwidget.c:464
 msgctxt "Color name"
 msgid "Very Light Orange"
 msgstr "बहुत हल्का नारंगी"
 
-#: gtk/gtkcolorchooserwidget.c:457
+#: gtk/gtkcolorchooserwidget.c:465
 msgctxt "Color name"
 msgid "Light Orange"
 msgstr "हल्का नारंगी"
 
-#: gtk/gtkcolorchooserwidget.c:458
+#: gtk/gtkcolorchooserwidget.c:466
 msgctxt "Color name"
 msgid "Orange"
 msgstr "नारंगी"
 
-#: gtk/gtkcolorchooserwidget.c:459
+#: gtk/gtkcolorchooserwidget.c:467
 msgctxt "Color name"
 msgid "Dark Orange"
 msgstr "गहरा नारंगी"
 
-#: gtk/gtkcolorchooserwidget.c:460
+#: gtk/gtkcolorchooserwidget.c:468
 msgctxt "Color name"
 msgid "Very Dark Orange"
 msgstr "बहुत गहरा नारंगी"
 
-#: gtk/gtkcolorchooserwidget.c:461
+#: gtk/gtkcolorchooserwidget.c:469
 msgctxt "Color name"
 msgid "Very Light Red"
 msgstr "बहुत हल्का लाल"
 
-#: gtk/gtkcolorchooserwidget.c:462
+#: gtk/gtkcolorchooserwidget.c:470
 msgctxt "Color name"
 msgid "Light Red"
 msgstr "हल्का लाल"
 
-#: gtk/gtkcolorchooserwidget.c:463
+#: gtk/gtkcolorchooserwidget.c:471
 msgctxt "Color name"
 msgid "Red"
 msgstr "लाल"
 
-#: gtk/gtkcolorchooserwidget.c:464
+#: gtk/gtkcolorchooserwidget.c:472
 msgctxt "Color name"
 msgid "Dark Red"
 msgstr "गहरा लाल"
 
-#: gtk/gtkcolorchooserwidget.c:465
+#: gtk/gtkcolorchooserwidget.c:473
 msgctxt "Color name"
 msgid "Very Dark Red"
 msgstr "बहुत गहरा लाल"
 
-#: gtk/gtkcolorchooserwidget.c:466
+#: gtk/gtkcolorchooserwidget.c:474
 msgctxt "Color name"
 msgid "Very Light Purple"
 msgstr "बहुत हल्का बैंगनी"
 
-#: gtk/gtkcolorchooserwidget.c:467
+#: gtk/gtkcolorchooserwidget.c:475
 msgctxt "Color name"
 msgid "Light Purple"
 msgstr "हल्का बैंगनी"
 
-#: gtk/gtkcolorchooserwidget.c:468
+#: gtk/gtkcolorchooserwidget.c:476
 msgctxt "Color name"
 msgid "Purple"
 msgstr "बैंगनी"
 
-#: gtk/gtkcolorchooserwidget.c:469
+#: gtk/gtkcolorchooserwidget.c:477
 msgctxt "Color name"
 msgid "Dark Purple"
 msgstr "गहरा बैंगनी"
 
-#: gtk/gtkcolorchooserwidget.c:470
+#: gtk/gtkcolorchooserwidget.c:478
 msgctxt "Color name"
 msgid "Very Dark Purple"
 msgstr "बहुत गहरा बैंगनी"
 
-#: gtk/gtkcolorchooserwidget.c:471
+#: gtk/gtkcolorchooserwidget.c:479
 msgctxt "Color name"
 msgid "Very Light Brown"
 msgstr "बहुत हल्का भूरा"
 
-#: gtk/gtkcolorchooserwidget.c:472
+#: gtk/gtkcolorchooserwidget.c:480
 msgctxt "Color name"
 msgid "Light Brown"
 msgstr "हल्का भूरा"
 
-#: gtk/gtkcolorchooserwidget.c:473
+#: gtk/gtkcolorchooserwidget.c:481
 msgctxt "Color name"
 msgid "Brown"
 msgstr "भूरा"
 
-#: gtk/gtkcolorchooserwidget.c:474
+#: gtk/gtkcolorchooserwidget.c:482
 msgctxt "Color name"
 msgid "Dark Brown"
 msgstr "गहरा भूरा"
 
-#: gtk/gtkcolorchooserwidget.c:475
+#: gtk/gtkcolorchooserwidget.c:483
 msgctxt "Color name"
 msgid "Very Dark Brown"
 msgstr "बहुत गहरा भूरा"
 
-#: gtk/gtkcolorchooserwidget.c:476
+#: gtk/gtkcolorchooserwidget.c:484
 msgctxt "Color name"
 msgid "White"
 msgstr "सफेद"
 
-#: gtk/gtkcolorchooserwidget.c:477
+#: gtk/gtkcolorchooserwidget.c:485
 msgctxt "Color name"
 msgid "Light Gray 1"
 msgstr "हल्का स्लेटी 1"
 
-#: gtk/gtkcolorchooserwidget.c:478
+#: gtk/gtkcolorchooserwidget.c:486
 msgctxt "Color name"
 msgid "Light Gray 2"
 msgstr "हल्का स्लेटी 2"
 
-#: gtk/gtkcolorchooserwidget.c:479
+#: gtk/gtkcolorchooserwidget.c:487
 msgctxt "Color name"
 msgid "Light Gray 3"
 msgstr "हल्का स्लेटी 3"
 
-#: gtk/gtkcolorchooserwidget.c:480
+#: gtk/gtkcolorchooserwidget.c:488
 msgctxt "Color name"
 msgid "Light Gray 4"
 msgstr "हल्का स्लेटी 4"
 
-#: gtk/gtkcolorchooserwidget.c:481
+#: gtk/gtkcolorchooserwidget.c:489
 msgctxt "Color name"
 msgid "Dark Gray 1"
 msgstr "गहरा स्लेटी 1"
 
-#: gtk/gtkcolorchooserwidget.c:482
+#: gtk/gtkcolorchooserwidget.c:490
 msgctxt "Color name"
 msgid "Dark Gray 2"
 msgstr "गहरा स्लेटी 2"
 
-#: gtk/gtkcolorchooserwidget.c:483
+#: gtk/gtkcolorchooserwidget.c:491
 msgctxt "Color name"
 msgid "Dark Gray 3"
 msgstr "गहरा स्लेटी 3"
 
-#: gtk/gtkcolorchooserwidget.c:484
+#: gtk/gtkcolorchooserwidget.c:492
 msgctxt "Color name"
 msgid "Dark Gray 4"
 msgstr "गहरा स्लेटी 4"
 
-#: gtk/gtkcolorchooserwidget.c:485
+#: gtk/gtkcolorchooserwidget.c:493
 msgctxt "Color name"
 msgid "Black"
 msgstr "काला"
 
 #. translators: label for the custom section in the color chooser
-#: gtk/gtkcolorchooserwidget.c:557
+#: gtk/gtkcolorchooserwidget.c:565
 msgid "Custom"
 msgstr "तदनुकूल"
 
-#: gtk/gtkcolorchooserwidget.c:571
+#: gtk/gtkcolorchooserwidget.c:579
 msgid "Add Color"
 msgstr "रंग जोड़ें"
 
-#: gtk/gtkcolorchooserwidget.c:593
+#: gtk/gtkcolorchooserwidget.c:601
 #, c-format
 msgid "Custom color %d: %s"
 msgstr "तदनुकूल रंग %d: %s"
@@ -2156,7 +2162,7 @@ msgid "Margins from Printer…"
 msgstr "प्रिंटर से हाशिया…"
 
 #. And show the custom paper dialog
-#: gtk/print/gtkcustompaperunixdialog.c:377 gtk/print/gtkprintunixdialog.c:2968
+#: gtk/print/gtkcustompaperunixdialog.c:377 gtk/print/gtkprintunixdialog.c:2970
 msgid "Manage Custom Sizes"
 msgstr "तदनुकूल आकार प्रबंधित करें"
 
@@ -2273,12 +2279,12 @@ msgid "A file with that name already exists"
 msgstr "उस नाम की फाइल पहले से मौजूद है"
 
 #: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkfilechooserwidget.c:1192 gtk/gtkfilechooserwidget.c:4992
+#: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:5014
 #: gtk/gtkfiledialog.c:840 gtk/gtkmessagedialog.c:170
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6257 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6223 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2294,7 +2300,7 @@ msgstr "खोलें (_O)"
 msgid "_Save"
 msgstr "सहेजें (_S)"
 
-#: gtk/gtkfilechoosernativequartz.c:344 gtk/ui/gtkfilechooserwidget.ui:299
+#: gtk/gtkfilechoosernativequartz.c:348 gtk/ui/gtkfilechooserwidget.ui:299
 msgid "Select which types of files are shown"
 msgstr "चुनें कि किस प्रकार की फाइलें दिखाई जाएं"
 
@@ -2307,218 +2313,218 @@ msgstr "चुनें कि किस प्रकार की फाइल�
 msgid "%1$s on %2$s"
 msgstr "%1$s %2$s पर"
 
-#: gtk/gtkfilechooserwidget.c:343
+#: gtk/gtkfilechooserwidget.c:364
 msgid "Type name of new folder"
 msgstr "नये फोल्डर का नाम लिखें"
 
-#: gtk/gtkfilechooserwidget.c:730
+#: gtk/gtkfilechooserwidget.c:751
 msgid "The folder could not be created"
 msgstr "फोल्डर नहीं बनाया जा सका"
 
-#: gtk/gtkfilechooserwidget.c:743
+#: gtk/gtkfilechooserwidget.c:764
 msgid "You need to choose a valid filename."
 msgstr "आपको एक मान्य फाइल नाम चुनना होगा।"
 
-#: gtk/gtkfilechooserwidget.c:746
+#: gtk/gtkfilechooserwidget.c:767
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "%s के अंतर्गत फाइल नहीं बनाई जा सकती क्योंकि यह फोल्डर नहीं है"
 
-#: gtk/gtkfilechooserwidget.c:756
+#: gtk/gtkfilechooserwidget.c:777
 msgid "Cannot create file as the filename is too long"
 msgstr "फाइल नाम बहुत लंबा होने के कारण फाइल नहीं बनाई जा सकती"
 
-#: gtk/gtkfilechooserwidget.c:757
+#: gtk/gtkfilechooserwidget.c:778
 msgid "Try using a shorter name."
 msgstr "छोटे नाम का उपयोग करने का प्रयास करें।"
 
-#: gtk/gtkfilechooserwidget.c:767
+#: gtk/gtkfilechooserwidget.c:788
 msgid "You may only select folders"
 msgstr "आप केवल फोल्डर चुन सकते हैं"
 
-#: gtk/gtkfilechooserwidget.c:768
+#: gtk/gtkfilechooserwidget.c:789
 msgid "The item that you selected is not a folder try using a different item."
 msgstr ""
 "आपके द्वारा चयनित मद एक फोल्डर नहीं है, किसी अन्य मद का उपयोग करने का प्रयास करें।"
 
-#: gtk/gtkfilechooserwidget.c:776
+#: gtk/gtkfilechooserwidget.c:797
 msgid "Invalid file name"
 msgstr "अमान्य फाइल नाम"
 
-#: gtk/gtkfilechooserwidget.c:785
+#: gtk/gtkfilechooserwidget.c:806
 msgid "The folder contents could not be displayed"
 msgstr "फोल्डर की सामग्री प्रदर्शित नहीं की जा सकी"
 
-#: gtk/gtkfilechooserwidget.c:793
+#: gtk/gtkfilechooserwidget.c:814
 msgid "The file could not be deleted"
 msgstr "फाइल को मिटाया नहीं जा सका"
 
-#: gtk/gtkfilechooserwidget.c:801
+#: gtk/gtkfilechooserwidget.c:822
 msgid "The file could not be moved to the Trash"
 msgstr "फाइल को रद्दी में नहीं ले जाया जा सका"
 
-#: gtk/gtkfilechooserwidget.c:1190
+#: gtk/gtkfilechooserwidget.c:1211
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "क्या आप वाकई “%s” को स्थायी रूप से मिटाना चाहते हैं?"
 
-#: gtk/gtkfilechooserwidget.c:1191
+#: gtk/gtkfilechooserwidget.c:1212
 msgid "If you delete an item, it will be permanently lost."
 msgstr "यदि आप कोई मद मिटाते हैं, तो वह स्थायी रूप से खो जाएगा।"
 
-#: gtk/gtkfilechooserwidget.c:1192 gtk/gtkfilechooserwidget.c:1794
-#: gtk/gtklabel.c:5782 gtk/gtktext.c:6207 gtk/gtktextview.c:9119
+#: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1815
+#: gtk/gtklabel.c:5883 gtk/gtktext.c:6334 gtk/gtktextview.c:9237
 msgid "_Delete"
 msgstr "मिटाएं (_D)"
 
-#: gtk/gtkfilechooserwidget.c:1309
+#: gtk/gtkfilechooserwidget.c:1330
 msgid "The file could not be renamed"
 msgstr "फाइल का नाम बदला नहीं जा सका"
 
-#: gtk/gtkfilechooserwidget.c:1485
+#: gtk/gtkfilechooserwidget.c:1506
 msgid "Could not select file"
 msgstr "फाइल का चयन नहीं किया जा सका"
 
-#: gtk/gtkfilechooserwidget.c:1705 gtk/ui/gtkfilechooserwidget.ui:66
+#: gtk/gtkfilechooserwidget.c:1726 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
 msgstr "ग्रिड दृश्य"
 
-#: gtk/gtkfilechooserwidget.c:1711
+#: gtk/gtkfilechooserwidget.c:1732
 msgid "List View"
 msgstr "सूची दृश्य"
 
-#: gtk/gtkfilechooserwidget.c:1774
+#: gtk/gtkfilechooserwidget.c:1795
 msgid "_Visit File"
 msgstr "फाइल पर जाएं (_V)"
 
-#: gtk/gtkfilechooserwidget.c:1778
+#: gtk/gtkfilechooserwidget.c:1799
 msgid "_Open With File Manager"
 msgstr "फाइल प्रबंधक के साथ खोलें (_O)"
 
-#: gtk/gtkfilechooserwidget.c:1782
+#: gtk/gtkfilechooserwidget.c:1803
 msgid "_Copy Location"
 msgstr "स्थान कॉपी करें (_C)"
 
-#: gtk/gtkfilechooserwidget.c:1786
+#: gtk/gtkfilechooserwidget.c:1807
 msgid "_Add to Bookmarks"
 msgstr "पुस्तकचिह्न जोड़ें (_A)"
 
-#: gtk/gtkfilechooserwidget.c:1790 gtk/gtkplacessidebar.c:2312
+#: gtk/gtkfilechooserwidget.c:1811 gtk/gtkplacessidebar.c:2312
 #: gtk/gtkplacessidebar.c:3270 gtk/ui/gtkfilechooserwidget.ui:421
 msgid "_Rename"
 msgstr "नाम बदलें (_R)"
 
-#: gtk/gtkfilechooserwidget.c:1798
+#: gtk/gtkfilechooserwidget.c:1819
 msgid "_Move to Trash"
 msgstr "रद्दी में ले जाएं (_M)"
 
-#: gtk/gtkfilechooserwidget.c:1807
+#: gtk/gtkfilechooserwidget.c:1828
 msgid "Show _Hidden Files"
 msgstr "छुपी फाइलें दिखाएं (_H)"
 
-#: gtk/gtkfilechooserwidget.c:1811
+#: gtk/gtkfilechooserwidget.c:1832
 msgid "Sort _Folders Before Files"
 msgstr "फाइलों से पहले फोल्डर छाटें (_F)"
 
-#: gtk/gtkfilechooserwidget.c:1934 gtk/gtkfilechooserwidget.c:1964
-#: gtk/gtkfilechooserwidget.c:3868
+#: gtk/gtkfilechooserwidget.c:1955 gtk/gtkfilechooserwidget.c:1985
+#: gtk/gtkfilechooserwidget.c:3890
 msgid "Unknown"
 msgstr "अज्ञात"
 
-#: gtk/gtkfilechooserwidget.c:2019 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:2040 gtk/gtkplacessidebar.c:1025
 msgid "Home"
 msgstr "गृह"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2174 gtk/gtkfilechooserwidget.c:7414
+#: gtk/gtkfilechooserwidget.c:2195 gtk/gtkfilechooserwidget.c:7436
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "स्थान"
 
 #  Name entry
 #. Label
-#: gtk/gtkfilechooserwidget.c:2281
+#: gtk/gtkfilechooserwidget.c:2302
 msgid "_Name:"
 msgstr "नाम (_N):"
 
-#: gtk/gtkfilechooserwidget.c:2838 gtk/gtkfilechooserwidget.c:2852
+#: gtk/gtkfilechooserwidget.c:2859 gtk/gtkfilechooserwidget.c:2873
 #, c-format
 msgid "Searching in %s"
 msgstr "%s में खोजा जा रहा है"
 
-#: gtk/gtkfilechooserwidget.c:2858
+#: gtk/gtkfilechooserwidget.c:2879
 msgid "Searching"
 msgstr "खोजा जा रहा है"
 
-#: gtk/gtkfilechooserwidget.c:2864
+#: gtk/gtkfilechooserwidget.c:2885
 msgid "Enter location or URL"
 msgstr "स्थान या URL दर्ज करें"
 
-#: gtk/gtkfilechooserwidget.c:3423 gtk/gtkfilechooserwidget.c:5779
-#: gtk/gtkfilechooserwidget.c:7436
+#: gtk/gtkfilechooserwidget.c:3444 gtk/gtkfilechooserwidget.c:5801
+#: gtk/gtkfilechooserwidget.c:7458
 msgid "Modified"
 msgstr "संशोधित"
 
-#: gtk/gtkfilechooserwidget.c:3608
+#: gtk/gtkfilechooserwidget.c:3629
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s की सामग्री नहीं पढ़ी जा सकी"
 
-#: gtk/gtkfilechooserwidget.c:3612
+#: gtk/gtkfilechooserwidget.c:3633
 msgid "Could not read the contents of the folder"
 msgstr "फोल्डर की सामग्री नहीं पढ़ी जा सकी"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:3763 gtk/gtkfilechooserwidget.c:3806
+#: gtk/gtkfilechooserwidget.c:3784 gtk/gtkfilechooserwidget.c:3828
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:3765 gtk/gtkfilechooserwidget.c:3808
+#: gtk/gtkfilechooserwidget.c:3786 gtk/gtkfilechooserwidget.c:3830
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:3769
+#: gtk/gtkfilechooserwidget.c:3790
 msgid "Yesterday"
 msgstr "बिता कल"
 
-#: gtk/gtkfilechooserwidget.c:3777
-#, c-format
+#: gtk/gtkfilechooserwidget.c:3799
+#, no-c-format
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:3781
+#: gtk/gtkfilechooserwidget.c:3803
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
-#: gtk/gtkfilechooserwidget.c:3823 gtk/gtkfilechooserwidget.c:3831
+#: gtk/gtkfilechooserwidget.c:3845 gtk/gtkfilechooserwidget.c:3853
 msgid "Program"
 msgstr "प्रोग्राम"
 
-#: gtk/gtkfilechooserwidget.c:3824
+#: gtk/gtkfilechooserwidget.c:3846
 msgid "Audio"
 msgstr "ऑडियो"
 
-#: gtk/gtkfilechooserwidget.c:3826 gtk/gtkfilefilter.c:1013
+#: gtk/gtkfilechooserwidget.c:3848 gtk/gtkfilefilter.c:1013
 msgid "Image"
 msgstr "छवि"
 
-#: gtk/gtkfilechooserwidget.c:3827
+#: gtk/gtkfilechooserwidget.c:3849
 msgid "Archive"
 msgstr "अभिलेखागार"
 
-#: gtk/gtkfilechooserwidget.c:3828
+#: gtk/gtkfilechooserwidget.c:3850
 msgid "Markup"
 msgstr "मार्कअप"
 
-#: gtk/gtkfilechooserwidget.c:3829 gtk/gtkfilechooserwidget.c:3830
+#: gtk/gtkfilechooserwidget.c:3851 gtk/gtkfilechooserwidget.c:3852
 msgid "Text"
 msgstr "पाठ"
 
-#: gtk/gtkfilechooserwidget.c:3832
+#: gtk/gtkfilechooserwidget.c:3854
 msgid "Video"
 msgstr "वीडियो"
 
-#: gtk/gtkfilechooserwidget.c:3833
+#: gtk/gtkfilechooserwidget.c:3855
 msgid "Contacts"
 msgstr "संपर्क"
 
@@ -2530,74 +2536,74 @@ msgstr "संपर्क"
 #  * Note that this flipping is in top the text direction flipping,
 #  * so if you have a default text direction of RTL and YM, then
 #  * the year will appear on the right.
-#: gtk/gtkfilechooserwidget.c:3834
+#: gtk/gtkfilechooserwidget.c:3856
 msgid "Calendar"
 msgstr "कैलेंडर"
 
-#: gtk/gtkfilechooserwidget.c:3835
+#: gtk/gtkfilechooserwidget.c:3857
 msgid "Document"
 msgstr "दस्तावेज़"
 
-#: gtk/gtkfilechooserwidget.c:3836
+#: gtk/gtkfilechooserwidget.c:3858
 msgid "Presentation"
 msgstr "प्रस्तुति"
 
-#: gtk/gtkfilechooserwidget.c:3837
+#: gtk/gtkfilechooserwidget.c:3859
 msgid "Spreadsheet"
 msgstr "स्प्रेडशीट"
 
-#: gtk/gtkfilechooserwidget.c:4984 gtk/print/gtkprintunixdialog.c:673
+#: gtk/gtkfilechooserwidget.c:5006 gtk/print/gtkprintunixdialog.c:673
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "“%s” नामक फाइल पहले से मौजूद है।  क्या आप इसे बदलना चाहते हैं?"
 
-#: gtk/gtkfilechooserwidget.c:4986 gtk/print/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:5008 gtk/print/gtkprintunixdialog.c:677
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "“%s” में फाइल पहले से मौजूद है”।  इसे बदलना इसकी सामग्री के ऊपर लिख देगा।"
 
-#: gtk/gtkfilechooserwidget.c:4992 gtk/print/gtkprintunixdialog.c:685
+#: gtk/gtkfilechooserwidget.c:5014 gtk/print/gtkprintunixdialog.c:685
 msgid "_Replace"
 msgstr "बदलें (_R)"
 
-#: gtk/gtkfilechooserwidget.c:5147
+#: gtk/gtkfilechooserwidget.c:5169
 msgid "You do not have access to the specified folder."
 msgstr "आपके पास निर्दिष्ट फोल्डर तक पहुंच नहीं है।"
 
-#: gtk/gtkfilechooserwidget.c:5726
+#: gtk/gtkfilechooserwidget.c:5748
 msgid "Could not send the search request"
 msgstr "खोज अनुरोध नहीं भेजा जा सका"
 
-#: gtk/gtkfilechooserwidget.c:6007
+#: gtk/gtkfilechooserwidget.c:6029
 msgid "Accessed"
 msgstr "अभिगमित"
 
-#: gtk/gtkfilechooserwidget.c:7392
+#: gtk/gtkfilechooserwidget.c:7414
 msgid "_Size"
 msgstr "आकार (_S)"
 
-#: gtk/gtkfilechooserwidget.c:7396
+#: gtk/gtkfilechooserwidget.c:7418
 msgid "T_ype"
 msgstr "प्रकार (_y)"
 
-#: gtk/gtkfilechooserwidget.c:7400
+#: gtk/gtkfilechooserwidget.c:7422
 msgid "_Time"
 msgstr "समय (_T)"
 
-#: gtk/gtkfilechooserwidget.c:7406 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7428 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:396 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "नाम"
 
-#: gtk/gtkfilechooserwidget.c:7423 gtk/inspector/resource-list.ui:82
+#: gtk/gtkfilechooserwidget.c:7445 gtk/inspector/resource-list.ui:82
 #: gtk/ui/gtkfontchooserwidget.ui:218 gtk/ui/gtkfontchooserwidget.ui:387
 msgid "Size"
 msgstr "आकार"
 
-#: gtk/gtkfilechooserwidget.c:7429 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7451 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "प्रकार"
@@ -2658,7 +2664,7 @@ msgstr "तिरछा"
 #: gtk/gtkfontchooserwidget.c:1495
 msgctxt "Font variation axis"
 msgid "Optical Size"
-msgstr "Optical Size"
+msgstr "ऑप्टिकल आकार"
 
 #  Translate to default:RTL if you want your widgets
 #  * to be RTL, otherwise translate to default:LTR.
@@ -2723,39 +2729,39 @@ msgstr "बंद करें"
 msgid "Close the infobar"
 msgstr "जानकारी-पट्टी बंद करें"
 
-#: gtk/gtklabel.c:5779 gtk/gtktext.c:6195 gtk/gtktextview.c:9107
+#: gtk/gtklabel.c:5880 gtk/gtktext.c:6322 gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "काटें (_t)"
 
-#: gtk/gtklabel.c:5780 gtk/gtktext.c:6199 gtk/gtktextview.c:9111
+#: gtk/gtklabel.c:5881 gtk/gtktext.c:6326 gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "कॉपी करें (_C)"
 
-#: gtk/gtklabel.c:5781 gtk/gtktext.c:6203 gtk/gtktextview.c:9115
+#: gtk/gtklabel.c:5882 gtk/gtktext.c:6330 gtk/gtktextview.c:9233
 msgid "_Paste"
 msgstr "चिपकाएं (_P)"
 
-#: gtk/gtklabel.c:5787 gtk/gtktext.c:6216 gtk/gtktextview.c:9140
+#: gtk/gtklabel.c:5888 gtk/gtktext.c:6343 gtk/gtktextview.c:9258
 msgid "Select _All"
 msgstr "सभी चुनें (_A)"
 
-#: gtk/gtklabel.c:5792
+#: gtk/gtklabel.c:5893
 msgid "_Open Link"
 msgstr "कड़ी खोलें (_O)"
 
-#: gtk/gtklabel.c:5796
+#: gtk/gtklabel.c:5897
 msgid "Copy _Link Address"
 msgstr "लिंक पता कॉपी करें (_C)"
 
-#: gtk/gtklabel.c:5840 gtk/gtktext.c:2723 gtk/gtktextview.c:9189
+#: gtk/gtklabel.c:5941 gtk/gtktext.c:2851 gtk/gtktextview.c:9307
 msgid "Context menu"
 msgstr "संदर्भ मेनू"
 
-#: gtk/gtklinkbutton.c:260
+#: gtk/gtklinkbutton.c:273
 msgid "_Copy URL"
 msgstr "URL कॉपी करें (_C)"
 
-#: gtk/gtklinkbutton.c:589
+#: gtk/gtklinkbutton.c:602
 msgid "Invalid URI"
 msgstr "अमान्य URI"
 
@@ -2818,7 +2824,7 @@ msgid "Play"
 msgstr "चलाएं"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6258
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6224
 msgid "_OK"
 msgstr "ठीक है (_O)"
 
@@ -2864,7 +2870,7 @@ msgstr "छिपा हुआ (_H)"
 
 #: gtk/gtkmountoperation.c:729
 msgid "_Windows system"
-msgstr "खिड़कीज़ सिस्टम (_W)"
+msgstr "विंडोज़ सिस्टम (_W)"
 
 #: gtk/gtkmountoperation.c:732
 msgid "_PIM"
@@ -2872,7 +2878,7 @@ msgstr "_PIM"
 
 #: gtk/gtkmountoperation.c:738
 msgid "_Password"
-msgstr "कूटशब्द (_P)"
+msgstr "पासवर्ड (_P)"
 
 #: gtk/gtkmountoperation.c:760
 msgid "Forget password _immediately"
@@ -2922,7 +2928,7 @@ msgstr "शीर्ष कमांड"
 
 #: gtk/gtkmountoperation-x11.c:988
 msgid "Bourne Again Shell"
-msgstr "बोर्न एगेन शैल"
+msgstr "बोर्न अगेन शैल"
 
 #: gtk/gtkmountoperation-x11.c:989
 msgid "Bourne Shell"
@@ -2941,15 +2947,15 @@ msgstr "PID %d की प्रक्रिया समाप्त नही�
 msgid "GTK could not find a media module. Check your installation."
 msgstr "जीटीके को मीडिया मॉड्यूल नहीं मिल सका। अपनी स्थापना की जाँच करें।"
 
-#: gtk/gtknotebook.c:3260
+#: gtk/gtknotebook.c:3304
 msgid "Previous tab"
 msgstr "पिछला टैब"
 
-#: gtk/gtknotebook.c:3264
+#: gtk/gtknotebook.c:3308
 msgid "Next tab"
 msgstr "अगला टैब"
 
-#: gtk/gtknotebook.c:4380 gtk/gtknotebook.c:6590
+#: gtk/gtknotebook.c:4424 gtk/gtknotebook.c:6634
 #, c-format
 msgid "Page %u"
 msgstr "पृष्ठ %u"
@@ -3144,7 +3150,7 @@ msgstr "नए टैब में खोलें (_T)"
 #: gtk/gtkplacessidebar.c:3161 gtk/gtkplacessidebar.c:3251
 #: gtk/gtkplacesview.c:1654
 msgid "Open in New _Window"
-msgstr "नई खिड़की में खोलें (_W)"
+msgstr "नई विंडो में खोलें (_W)"
 
 #: gtk/gtkplacessidebar.c:3262
 msgid "_Add Bookmark"
@@ -3419,7 +3425,7 @@ msgstr "सर्वाधिक संभव कारण है कि एक 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
 #: gtk/print/gtkprintoperation-portal.c:594
-#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3008
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3010
 msgid "Print"
 msgstr "छापें"
 
@@ -3509,63 +3515,63 @@ msgstr "प्रिंटर जानकारी प्राप्त हो
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/print/gtkprintunixdialog.c:2753
+#: gtk/print/gtkprintunixdialog.c:2755
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, top to bottom"
 msgstr "बाएं से दाएं, ऊपर से नीचे"
 
-#: gtk/print/gtkprintunixdialog.c:2753
+#: gtk/print/gtkprintunixdialog.c:2755
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, bottom to top"
 msgstr "बाएं से दाएं, नीचे से ऊपर"
 
-#: gtk/print/gtkprintunixdialog.c:2754
+#: gtk/print/gtkprintunixdialog.c:2756
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, top to bottom"
 msgstr "दाएं से बाएं, ऊपर से नीचे"
 
-#: gtk/print/gtkprintunixdialog.c:2754
+#: gtk/print/gtkprintunixdialog.c:2756
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, bottom to top"
 msgstr "दाएं से बाएं, नीचे से ऊपर"
 
-#: gtk/print/gtkprintunixdialog.c:2755
+#: gtk/print/gtkprintunixdialog.c:2757
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, left to right"
 msgstr "ऊपर से नीचे, बाएं से दाएं"
 
-#: gtk/print/gtkprintunixdialog.c:2755
+#: gtk/print/gtkprintunixdialog.c:2757
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, right to left"
 msgstr "ऊपर से नीचे, दाएं से बाएं"
 
-#: gtk/print/gtkprintunixdialog.c:2756
+#: gtk/print/gtkprintunixdialog.c:2758
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, left to right"
 msgstr "नीचे से ऊपर, बाएं से दाएं"
 
-#: gtk/print/gtkprintunixdialog.c:2756
+#: gtk/print/gtkprintunixdialog.c:2758
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, right to left"
 msgstr "नीचे से ऊपर, दाएं से बाएं"
 
-#: gtk/print/gtkprintunixdialog.c:2760 gtk/print/gtkprintunixdialog.c:2773
+#: gtk/print/gtkprintunixdialog.c:2762 gtk/print/gtkprintunixdialog.c:2775
 msgid "Page Ordering"
 msgstr "पृष्ठ क्रमांकण"
 
-#: gtk/print/gtkprintunixdialog.c:2789
+#: gtk/print/gtkprintunixdialog.c:2791
 msgid "Left to right"
 msgstr "बाएं से दाएं"
 
-#: gtk/print/gtkprintunixdialog.c:2790
+#: gtk/print/gtkprintunixdialog.c:2792
 msgid "Right to left"
 msgstr "दाएं से बाएं"
 
-#: gtk/print/gtkprintunixdialog.c:2802
+#: gtk/print/gtkprintunixdialog.c:2804
 msgid "Top to bottom"
 msgstr "ऊपर से नीचे"
 
-#: gtk/print/gtkprintunixdialog.c:2803
+#: gtk/print/gtkprintunixdialog.c:2805
 msgid "Bottom to top"
 msgstr "नीचे से ऊपर"
 
@@ -3592,7 +3598,7 @@ msgstr "URI “%1$s” वाले मद को “%2$s” पर ले ज�
 msgid "No registered application with name “%s” for item with URI “%s” found"
 msgstr "URI “%2$s” वाले मद के लिए “%1$s” नाम वाला कोई पंजीकृत अनुप्रयोग नहीं मिला"
 
-#: gtk/gtksearchentry.c:814
+#: gtk/gtksearchentry.c:836
 msgid "Clear Entry"
 msgstr "प्रविष्टि साफ़ करें"
 
@@ -3616,7 +3622,7 @@ msgctxt "keyboard side marker"
 msgid "R"
 msgstr "दाएं"
 
-#: gtk/gtkshortcutssection.c:423
+#: gtk/gtkshortcutssection.c:435
 msgid "_Show All"
 msgstr "सभी दिखाएं (_S)"
 
@@ -3653,27 +3659,27 @@ msgid "Swipe right"
 msgstr "दाएं स्वाइप करें"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
-#: gtk/gtkshortcutswindow.c:879 gtk/gtkshortcutswindow.c:946
-#: gtk/gtkshortcutswindow.c:952
+#: gtk/gtkshortcutswindow.c:894 gtk/gtkshortcutswindow.c:961
+#: gtk/gtkshortcutswindow.c:967
 msgid "Search Shortcuts"
 msgstr "शॉर्टकट खोजें"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:911 gtk/inspector/window.ui:498
+#: gtk/gtkshortcutswindow.c:926 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "शॉर्टकट"
 
 #. Translators: This is the window title for the shortcuts window in search mode
-#: gtk/gtkshortcutswindow.c:916
+#: gtk/gtkshortcutswindow.c:931
 msgid "Search Results"
 msgstr "खोज परिणाम"
 
-#: gtk/gtkshortcutswindow.c:1014 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:1029 gtk/ui/gtkemojichooser.ui:350
 #: gtk/ui/gtkfilechooserwidget.ui:250
 msgid "No Results Found"
 msgstr "कोई परिणाम नहीं मिला"
 
-#: gtk/gtkshortcutswindow.c:1025 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1040 gtk/ui/gtkemojichooser.ui:363
 #: gtk/ui/gtkfilechooserwidget.ui:263 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "भिन्न खोज का प्रयास करें"
@@ -3683,24 +3689,24 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "पार्श्वपट्टी"
 
-#: gtk/gtktext.c:6221 gtk/gtktextview.c:9145
+#: gtk/gtktext.c:6348 gtk/gtktextview.c:9263
 msgid "Insert _Emoji"
 msgstr "इमोजी सम्मिलित करें (_E)"
 
-#: gtk/gtktextview.c:9127
+#: gtk/gtktextview.c:9245
 msgid "_Undo"
 msgstr "पूर्ववत करें (_U)"
 
-#: gtk/gtktextview.c:9131
+#: gtk/gtktextview.c:9249
 msgid "_Redo"
 msgstr "पुनः करें (_R)"
 
-#: gtk/gtkwindow.c:6246
+#: gtk/gtkwindow.c:6212
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "क्या आप GTK इंस्पेक्टर का उपयोग करना चाहते हैं?"
 
-#: gtk/gtkwindow.c:6248
+#: gtk/gtkwindow.c:6214
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3711,7 +3717,7 @@ msgstr ""
 "एक्सप्लोर करने और संशोधित करने की सुविधा देता है। इसका उपयोग करने से अनुप्रयोग टूट सकता है "
 "या क्रैश हो सकता है।"
 
-#: gtk/gtkwindow.c:6253
+#: gtk/gtkwindow.c:6219
 msgid "Don’t show this message again"
 msgstr "यह संदेश दोबारा न दिखाएं"
 
@@ -3721,7 +3727,7 @@ msgstr "न्यूनतम करें"
 
 #: gtk/gtkwindowcontrols.c:311
 msgid "Minimize the window"
-msgstr "खिड़की को छोटा करें"
+msgstr "विंडो को छोटा करें"
 
 #: gtk/gtkwindowcontrols.c:335 gtk/gtkwindowhandle.c:240
 msgid "Maximize"
@@ -3729,11 +3735,11 @@ msgstr "अधिकतम करें"
 
 #: gtk/gtkwindowcontrols.c:337
 msgid "Maximize the window"
-msgstr "खिड़की को अधिकतम करें"
+msgstr "विंडो को अधिकतम करें"
 
 #: gtk/gtkwindowcontrols.c:359
 msgid "Close the window"
-msgstr "खिड़की बंद करें"
+msgstr "विंडो बंद करें"
 
 #: gtk/gtkwindowhandle.c:227
 msgid "Restore"
@@ -3893,37 +3899,37 @@ msgstr "शैली वर्ग"
 msgid "CSS Property"
 msgstr "सीएसएस प्रॉपर्टी"
 
-#: gtk/inspector/general.c:371
+#: gtk/inspector/general.c:372
 msgctxt "GL version"
 msgid "None"
 msgstr "कुछ नहीं"
 
-#: gtk/inspector/general.c:462
+#: gtk/inspector/general.c:464
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "अज्ञात"
 
-#: gtk/inspector/general.c:524
+#: gtk/inspector/general.c:526
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "अक्षम"
 
-#: gtk/inspector/general.c:525 gtk/inspector/general.c:526
+#: gtk/inspector/general.c:527 gtk/inspector/general.c:528
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "अक्षम"
 
-#: gtk/inspector/general.c:577
+#: gtk/inspector/general.c:579
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "कुछ नहीं"
 
-#: gtk/inspector/general.c:578 gtk/inspector/general.c:579
+#: gtk/inspector/general.c:580 gtk/inspector/general.c:581
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "कुछ नहीं"
 
-#: gtk/inspector/general.c:930
+#: gtk/inspector/general.c:934
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM संदर्भ GTK_IM_MODULE द्वारा हार्डकोड किया गया है"
 
@@ -4115,18 +4121,22 @@ msgid "Scale"
 msgstr "पैमाना"
 
 #: gtk/inspector/misc-info.ui:552
+msgid "Color state"
+msgstr "रंग अवस्था"
+
+#: gtk/inspector/misc-info.ui:577
 msgid "Mapped"
 msgstr "मैप किए गए"
 
-#: gtk/inspector/misc-info.ui:578
+#: gtk/inspector/misc-info.ui:603
 msgid "Realized"
 msgstr "समझना"
 
-#: gtk/inspector/misc-info.ui:604
+#: gtk/inspector/misc-info.ui:629
 msgid "Is Toplevel"
 msgstr "शीर्ष स्तर का है"
 
-#: gtk/inspector/misc-info.ui:630
+#: gtk/inspector/misc-info.ui:655
 msgid "Child Visible"
 msgstr "बच्चा दिखाई दे रहा है"
 
@@ -4238,7 +4248,7 @@ msgstr "स्रोत:"
 msgid "Defined At"
 msgstr "यहाँ परिभाषित"
 
-#: gtk/inspector/recorder.c:1951
+#: gtk/inspector/recorder.c:2021
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "RenderNode को सहेजना विफल रहा"
@@ -6247,52 +6257,52 @@ msgstr "(कुछ नहीं)"
 msgid "Search…"
 msgstr "खोजें…"
 
-#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:239
+#: gtk/ui/gtkemojichooser.ui:70 gtk/ui/gtkemojichooser.ui:240
 msgctxt "emoji category"
 msgid "Smileys & People"
 msgstr "स्माइलीज़ और लोग"
 
-#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:248
+#: gtk/ui/gtkemojichooser.ui:95 gtk/ui/gtkemojichooser.ui:249
 msgctxt "emoji category"
 msgid "Body & Clothing"
 msgstr "शरीर एवं वस्त्र"
 
-#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:257
+#: gtk/ui/gtkemojichooser.ui:120 gtk/ui/gtkemojichooser.ui:258
 msgctxt "emoji category"
 msgid "Animals & Nature"
 msgstr "पशु और प्रकृति"
 
-#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:266
+#: gtk/ui/gtkemojichooser.ui:134 gtk/ui/gtkemojichooser.ui:267
 msgctxt "emoji category"
 msgid "Food & Drink"
 msgstr "भोजन पेय"
 
-#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:275
+#: gtk/ui/gtkemojichooser.ui:148 gtk/ui/gtkemojichooser.ui:276
 msgctxt "emoji category"
 msgid "Travel & Places"
 msgstr "यात्रा एवं स्थान"
 
-#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:284
+#: gtk/ui/gtkemojichooser.ui:162 gtk/ui/gtkemojichooser.ui:285
 msgctxt "emoji category"
 msgid "Activities"
 msgstr "गतिविधियां"
 
-#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:293
+#: gtk/ui/gtkemojichooser.ui:176 gtk/ui/gtkemojichooser.ui:294
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "वस्तुएं"
 
-#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:302
+#: gtk/ui/gtkemojichooser.ui:190 gtk/ui/gtkemojichooser.ui:303
 msgctxt "emoji category"
 msgid "Symbols"
 msgstr "प्रतीक"
 
-#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:311
+#: gtk/ui/gtkemojichooser.ui:204 gtk/ui/gtkemojichooser.ui:312
 msgctxt "emoji category"
 msgid "Flags"
 msgstr "फ्लैग"
 
-#: gtk/ui/gtkemojichooser.ui:230
+#: gtk/ui/gtkemojichooser.ui:231
 msgctxt "emoji category"
 msgid "Recent"
 msgstr "हालिया"
@@ -7263,7 +7273,7 @@ msgstr ""
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
 #: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
-#: tools/gtk-rendernode-tool-info.c:214 tools/gtk-rendernode-tool-show.c:106
+#: tools/gtk-rendernode-tool-info.c:226 tools/gtk-rendernode-tool-show.c:116
 msgid "FILE"
 msgstr "फाइल"
 
@@ -7297,7 +7307,7 @@ msgstr "CSS फाइल से शैली का उपयोग करें
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268
 #: tools/gtk-rendernode-tool-benchmark.c:106
-#: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:113
+#: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:123
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "विंडोइंग सिस्टम प्रारंभ नहीं किया जा सका\n"
@@ -7553,7 +7563,7 @@ msgstr ""
 "  decompose    पथ विघटित करें\n"
 "  reverse      पथ उल्टे\n"
 "  restrict     पथ को किसी खंड तक सीमित करें\n"
-"  show         पथ को खिड़की में प्रदर्शित करें\n"
+"  show         पथ को विंडो में प्रदर्शित करें\n"
 "  render       पथ को छवि के रूप में प्रस्तुत करें\n"
 "  info         पथ के बारे में जानकारी प्रिंट करें\n"
 "\n"
@@ -7892,8 +7902,8 @@ msgid "Benchmark rendering of a .node file."
 msgstr ".node फाइल का बेंचमार्क रेंडरिंग।"
 
 #: tools/gtk-rendernode-tool-benchmark.c:127
-#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:283
-#: tools/gtk-rendernode-tool-show.c:134
+#: tools/gtk-rendernode-tool-info.c:248 tools/gtk-rendernode-tool-render.c:283
+#: tools/gtk-rendernode-tool-show.c:144
 #, c-format
 msgid "No .node file specified\n"
 msgstr "कोई .node फाइल निर्दिष्ट नहीं है\n"
@@ -7956,31 +7966,31 @@ msgstr "छवियां अलग हैं।\n"
 msgid "No differences.\n"
 msgstr "कोई मतभेद नहीं।\n"
 
-#: tools/gtk-rendernode-tool-info.c:191
-#, c-format
-msgid "Number of nodes: %u\n"
-msgstr "नोड्स की संख्या: %u\n"
+#: tools/gtk-rendernode-tool-info.c:193
+msgid "Number of nodes:"
+msgstr "नोड्स की संख्या:"
 
-#: tools/gtk-rendernode-tool-info.c:198
-#, c-format
-msgid "Depth: %u\n"
-msgstr "गहराई: %u\n"
+#: tools/gtk-rendernode-tool-info.c:200
+msgid "Depth:"
+msgstr "गहराई:"
 
-#: tools/gtk-rendernode-tool-info.c:201
-#, c-format
-msgid "Bounds: %g x %g\n"
-msgstr "सीमाएं: %g x %g\n"
+#: tools/gtk-rendernode-tool-info.c:203
+msgid "Bounds:"
+msgstr "सीमाएं:"
 
-#: tools/gtk-rendernode-tool-info.c:202
-#, c-format
-msgid "Origin: %g %g\n"
-msgstr "उत्पत्ति: %g %g\n"
+#: tools/gtk-rendernode-tool-info.c:204
+msgid "Origin:"
+msgstr "उत्पत्ति:"
 
-#: tools/gtk-rendernode-tool-info.c:223
+#: tools/gtk-rendernode-tool-info.c:208 tools/gtk-rendernode-tool-info.c:214
+msgid "Opaque part:"
+msgstr "अपारदर्शी भाग:"
+
+#: tools/gtk-rendernode-tool-info.c:235
 msgid "Provide information about the render node."
 msgstr "रेंडर नोड के बारे में जानकारी प्रदान करें।"
 
-#: tools/gtk-rendernode-tool-info.c:242
+#: tools/gtk-rendernode-tool-info.c:254
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "केवल एक .node फाइल स्वीकार कर सकते हैं\n"
@@ -8009,15 +8019,15 @@ msgstr "एक .node फाइल को एक छवि में प्रस
 msgid "Can only render a single .node file to a single output file\n"
 msgstr "केवल एक .node फाइल को एकल आउटपुट फाइल में प्रस्तुत कर सकता है\n"
 
-#: tools/gtk-rendernode-tool-show.c:105
+#: tools/gtk-rendernode-tool-show.c:115
 msgid "Don't add a titlebar"
 msgstr "टाइटलबार न जोड़ें"
 
-#: tools/gtk-rendernode-tool-show.c:121
+#: tools/gtk-rendernode-tool-show.c:131
 msgid "Show the render node."
 msgstr "रेंडर नोड दिखाएं।"
 
-#: tools/gtk-rendernode-tool-show.c:140
+#: tools/gtk-rendernode-tool-show.c:150
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "केवल एक .node फाइल का पूर्वावलोकन कर सकते हैं\n"

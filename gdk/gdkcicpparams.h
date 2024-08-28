@@ -58,7 +58,7 @@ void            gdk_cicp_params_set_matrix_coefficients (GdkCicpParams    *self,
 /**
  * GdkCicpRange:
  * @GDK_CICP_RANGE_NARROW: The values use the range of 16-235 (for Y) and 16-240 for u and v.
- * @GDK_CICO_RANGE_FULL: The values use the full range.
+ * @GDK_CICP_RANGE_FULL: The values use the full range.
  *
  * The values of this enumeration describe whether image data uses
  * the full range of 8-bit values.

@@ -32,6 +32,7 @@ GType           gtk_inspector_recorder_get_type                 (void);
 void            gtk_inspector_recorder_set_recording            (GtkInspectorRecorder   *recorder,
                                                                  gboolean                record);
 gboolean        gtk_inspector_recorder_is_recording             (GtkInspectorRecorder   *recorder);
+void            gtk_inspector_recorder_record_single_frame      (GtkInspectorRecorder   *recorder);
 
 void            gtk_inspector_recorder_set_debug_nodes          (GtkInspectorRecorder   *recorder,
                                                                  gboolean                debug_nodes);
@@ -52,6 +53,13 @@ void            gtk_inspector_recorder_record_render            (GtkInspectorRec
 void            gtk_inspector_recorder_record_event             (GtkInspectorRecorder   *recorder,
                                                                  GtkWidget              *widget,
                                                                  GdkEvent               *event);
+void            gtk_inspector_recorder_trace_event              (GtkInspectorRecorder   *recorder,
+                                                                 GdkEvent               *event,
+                                                                 GtkPropagationPhase     phase,
+                                                                 GtkWidget              *widget,
+                                                                 GtkEventController     *controller,
+                                                                 GtkWidget              *target,
+                                                                 gboolean                handled);
 
 G_END_DECLS
 

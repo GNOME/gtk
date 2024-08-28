@@ -78,19 +78,20 @@ gsk_gpu_frame_default_cleanup (GskGpuFrame *self)
 }
 
 static void
-gsk_gpu_frame_default_begin (GskGpuFrame          *self,
-                             GdkDrawContext       *context,
-                             GdkMemoryDepth        depth,
-                             const cairo_region_t *region)
+gsk_gpu_frame_default_begin (GskGpuFrame           *self,
+                             GdkDrawContext        *context,
+                             GdkMemoryDepth         depth,
+                             const cairo_region_t  *region,
+                             const graphene_rect_t *opaque)
 {
-  gdk_draw_context_begin_frame_full (context, depth, region);
+  gdk_draw_context_begin_frame_full (context, depth, region, opaque);
 }
 
 static void
 gsk_gpu_frame_default_end (GskGpuFrame    *self,
                            GdkDrawContext *context)
 {
-  gdk_draw_context_end_frame (context);
+  gdk_draw_context_end_frame_full (context);
 }
 
 static void
@@ -202,9 +203,10 @@ void
 gsk_gpu_frame_begin (GskGpuFrame          *self,
                      GdkDrawContext       *context,
                      GdkMemoryDepth        depth,
-                     const cairo_region_t *region)
+                     const cairo_region_t *region,
+                     const graphene_rect_t *opaque)
 {
-  GSK_GPU_FRAME_GET_CLASS (self)->begin (self, context, depth, region);
+  GSK_GPU_FRAME_GET_CLASS (self)->begin (self, context, depth, region, opaque);
 }
 
 void
@@ -632,7 +634,7 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
                       gint64                  timestamp,
                       GskGpuImage            *target,
                       GdkColorState          *target_color_state,
-                      const cairo_region_t   *clip,
+                      cairo_region_t         *clip,
                       GskRenderNode          *node,
                       const graphene_rect_t  *viewport,
                       GdkTexture            **texture)
@@ -643,32 +645,7 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
-  if (clip)
-    {
-      int i;
-
-      for (i = 0; i < cairo_region_num_rectangles (clip); i++)
-        {
-          cairo_rectangle_int_t rect;
-
-          cairo_region_get_rectangle (clip, i, &rect);
-          gsk_gpu_node_processor_process  (self, target, target_color_state, &rect, node, viewport, pass_type);
-        }
-    }
-  else
-    {
-      gsk_gpu_node_processor_process (self,
-                                      target,
-                                      target_color_state,
-                                      &(cairo_rectangle_int_t) {
-                                          0, 0,
-                                          gsk_gpu_image_get_width (target),
-                                          gsk_gpu_image_get_height (target)
-                                      },
-                                      node,
-                                      viewport,
-                                      pass_type);
-    }
+  gsk_gpu_node_processor_process (self, target, target_color_state, clip, node, viewport, pass_type);
 
   if (texture)
     gsk_gpu_download_op (self, target, TRUE, copy_texture, texture);
@@ -710,7 +687,7 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
                       gint64                  timestamp,
                       GskGpuImage            *target,
                       GdkColorState          *target_color_state,
-                      const cairo_region_t   *region,
+                      cairo_region_t         *clip,
                       GskRenderNode          *node,
                       const graphene_rect_t  *viewport,
                       GdkTexture            **texture)
@@ -719,7 +696,7 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
 
   gsk_gpu_frame_cleanup (self);
 
-  gsk_gpu_frame_record (self, timestamp, target, target_color_state, region, node, viewport, texture);
+  gsk_gpu_frame_record (self, timestamp, target, target_color_state, clip, node, viewport, texture);
 
   gsk_gpu_frame_submit (self, pass_type);
 }

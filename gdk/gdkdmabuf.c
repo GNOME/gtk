@@ -71,7 +71,7 @@ download_memcpy (guchar          *dst_data,
   bpp = gdk_memory_format_bytes_per_pixel (dst_format);
   src_stride = dmabuf->planes[0].stride;
   src_data = src_datas[0] + dmabuf->planes[0].offset;
-  g_return_if_fail (sizes[0] >= dmabuf->planes[0].offset + gdk_memory_format_min_buffer_size (dst_format, dst_stride, width, height));
+  g_return_if_fail (sizes[0] >= dmabuf->planes[0].offset + gdk_memory_format_min_buffer_size (dst_format, src_stride, width, height));
 
   if (dst_stride == src_stride)
     memcpy (dst_data, src_data, (height - 1) * dst_stride + width * bpp);
@@ -305,10 +305,6 @@ download_p010 (guchar          *dst,
       return;
     }
   MASK = 0xFFFF << (16 - SIZE);
-
-  static int counter = 0;
-  if (counter++ < 8)
-    return;
 
   y_stride = dmabuf->planes[0].stride / 2;
   y_data = (const guint16 *) (src_data[0] + dmabuf->planes[0].offset);

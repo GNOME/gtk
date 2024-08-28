@@ -185,8 +185,8 @@ get_dmabuf_wl_buffer (GdkWaylandSubsurface            *self,
   while (!cd.done)
     gdk_wayland_display_dispatch_queue (GDK_DISPLAY (display), event_queue);
 
-  wl_event_queue_destroy (event_queue);
   zwp_linux_buffer_params_v1_destroy (params);
+  wl_event_queue_destroy (event_queue);
 
   buffer = cd.buffer;
 
@@ -491,9 +491,6 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
 
   has_background = self->bg_rect.width > 0 && self->bg_rect.height > 0;
 
-  if (has_background)
-    ensure_bg_surface (self);
-
   if (!scaled_rect_is_integral (dest, 1, &device_rect))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
@@ -669,6 +666,8 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
 
       if (has_background)
         {
+          ensure_bg_surface (self);
+
           if (background_changed)
             {
               wl_subsurface_set_position (self->bg_subsurface, self->bg_rect.x, self->bg_rect.y);

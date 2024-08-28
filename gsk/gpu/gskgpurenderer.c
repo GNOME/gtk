@@ -264,6 +264,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
   guchar *data;
   GdkTexture *texture;
   GdkTextureDownloader downloader;
+  cairo_region_t *clip_region;
   GskGpuFrame *frame;
 
   max_size = gsk_gpu_device_get_max_image_size (priv->device);
@@ -304,12 +305,17 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
           else
             color_state = GDK_COLOR_STATE_SRGB;
 
+          clip_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                                           0, 0,
+                                                           gsk_gpu_image_get_width (image),
+                                                           gsk_gpu_image_get_height (image)
+                                                       });
           frame = gsk_gpu_renderer_create_frame (self);
           gsk_gpu_frame_render (frame,
                                 g_get_monotonic_time (),
                                 image,
                                 color_state,
-                                NULL,
+                                clip_region,
                                 root,
                                 &GRAPHENE_RECT_INIT (rounded_viewport->origin.x + x,
                                                      rounded_viewport->origin.y + y,
@@ -352,6 +358,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   GdkTexture *texture;
   graphene_rect_t rounded_viewport;
   GdkColorState *color_state;
+  cairo_region_t *clip_region;
 
   gsk_gpu_device_maybe_gc (priv->device);
 
@@ -376,12 +383,18 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
 
   frame = gsk_gpu_renderer_create_frame (self);
 
+  clip_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
+                                                   0, 0,
+                                                   gsk_gpu_image_get_width (image),
+                                                   gsk_gpu_image_get_height (image)
+                                               });
+
   texture = NULL;
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),
                         image,
                         color_state,
-                        NULL,
+                        clip_region,
                         root,
                         &rounded_viewport,
                         &texture);
@@ -407,6 +420,8 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   GskGpuFrame *frame;
   GskGpuImage *backbuffer;
   cairo_region_t *render_region;
+  graphene_rect_t opaque_tmp;
+  const graphene_rect_t *opaque;
   double scale;
   GdkMemoryDepth depth;
 
@@ -418,13 +433,17 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 
   gsk_gpu_device_maybe_gc (priv->device);
 
+  gsk_gpu_renderer_make_current (self);
+
   depth = gsk_render_node_get_preferred_depth (root);
   frame = gsk_gpu_renderer_get_frame (self);
   scale = gsk_gpu_renderer_get_scale (self);
 
-  gsk_gpu_frame_begin (frame, priv->context, depth, region);
-
-  gsk_gpu_renderer_make_current (self);
+  if (gsk_render_node_get_opaque_rect (root, &opaque_tmp))
+    opaque = &opaque_tmp;
+  else
+    opaque = NULL;
+  gsk_gpu_frame_begin (frame, priv->context, depth, region, opaque);
 
   backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
 
@@ -446,8 +465,6 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   gsk_gpu_frame_end (frame, priv->context);
 
   gsk_gpu_device_queue_gc (priv->device);
-
-  g_clear_pointer (&render_region, cairo_region_destroy);
 }
 
 static double
@@ -477,8 +494,10 @@ gsk_gpu_renderer_class_init (GskGpuRendererClass *klass)
 
   klass->optimizations = -1;
   klass->optimizations &= ~gdk_parse_debug_var ("GSK_GPU_DISABLE",
-                                                gsk_gpu_optimization_keys,
-                                                G_N_ELEMENTS (gsk_gpu_optimization_keys));
+      "GSK_GPU_DISABLE can be set to of values which cause GSK to disable\n"
+      "certain optimizations in the \'ngl\' and \'vulkan\' renderers.\n",
+      gsk_gpu_optimization_keys,
+      G_N_ELEMENTS (gsk_gpu_optimization_keys));
   klass->get_scale = gsk_gpu_renderer_real_get_scale;
 }
 

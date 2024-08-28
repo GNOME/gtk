@@ -27,6 +27,7 @@
 #include "gsktransformprivate.h"
 
 #include "gdk/gdkrgbaprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 #include "gsk/gskrendernodeprivate.h"
 #include "gsk/gskroundedrectprivate.h"
@@ -118,8 +119,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     } stroke;
     struct {
       gsize n_shadows;
-      GskShadow *shadows;
-      GskShadow a_shadow; /* Used if n_shadows == 1 */
+      GskShadow2 *shadows;
+      GskShadow2 a_shadow; /* Used if n_shadows == 1 */
     } shadow;
     struct {
       GskBlendMode blend_mode;
@@ -705,8 +706,9 @@ gtk_snapshot_collect_repeat (GtkSnapshot      *snapshot,
       graphene_rect_equal (child_bounds, &node->bounds))
     {
       /* Repeating a color node entirely is pretty easy by just increasing
-       * the size of the color node. */
-      GskRenderNode *color_node = gsk_color_node_new (gsk_color_node_get_color (node), bounds);
+       * the size of the color node.
+       */
+      GskRenderNode *color_node = gsk_color_node_new2 (gsk_color_node_get_color2 (node), bounds);
 
       gsk_render_node_unref (node);
 
@@ -1346,11 +1348,11 @@ gtk_snapshot_collect_shadow (GtkSnapshot      *snapshot,
   if (node == NULL)
     return NULL;
 
-  shadow_node = gsk_shadow_node_new (node,
-                                     state->data.shadow.shadows != NULL ?
-                                     state->data.shadow.shadows :
-                                     &state->data.shadow.a_shadow,
-                                     state->data.shadow.n_shadows);
+  shadow_node = gsk_shadow_node_new2 (node,
+                                      state->data.shadow.shadows != NULL
+                                        ? state->data.shadow.shadows
+                                        : &state->data.shadow.a_shadow,
+                                      state->data.shadow.n_shadows);
 
   gsk_render_node_unref (node);
 
@@ -1389,6 +1391,12 @@ gtk_snapshot_append_stroke (GtkSnapshot     *snapshot,
 static void
 gtk_snapshot_clear_shadow (GtkSnapshotState *state)
 {
+  if (state->data.shadow.shadows != 0)
+    for (gsize i = 0; i < state->data.shadow.n_shadows; i++)
+      gdk_color_finish (&state->data.shadow.shadows[i].color);
+  else
+    gdk_color_finish (&state->data.shadow.a_shadow.color);
+
   g_free (state->data.shadow.shadows);
 }
 
@@ -1406,6 +1414,41 @@ void
 gtk_snapshot_push_shadow (GtkSnapshot     *snapshot,
                           const GskShadow *shadow,
                           gsize            n_shadows)
+{
+  GskShadow2 *shadow2;
+
+  g_return_if_fail (n_shadows > 0);
+
+  shadow2 = g_new (GskShadow2, n_shadows);
+  for (gsize i = 0; i < n_shadows; i++)
+    {
+      gdk_color_init_from_rgba (&shadow2[i].color, &shadow[i].color);
+      graphene_point_init (&shadow2[i].offset, shadow[i].dx,shadow[i].dy);
+      shadow2[i].radius = shadow[i].radius;
+    }
+
+  gtk_snapshot_push_shadow2 (snapshot, shadow2, n_shadows);
+
+  for (gsize i = 0; i < n_shadows; i++)
+    gdk_color_finish (&shadow2[i].color);
+
+  g_free (shadow2);
+}
+
+/*< private >
+ * gtk_snapshot_push_shadow2:
+ * @snapshot: a `GtkSnapshot`
+ * @shadow: (array length=n_shadows): the first shadow specification
+ * @n_shadows: number of shadow specifications
+ *
+ * Applies a shadow to an image.
+ *
+ * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
+ */
+void
+gtk_snapshot_push_shadow2 (GtkSnapshot      *snapshot,
+                           const GskShadow2 *shadow,
+                           gsize             n_shadows)
 {
   GtkSnapshotState *state;
   GskTransform *transform;
@@ -1427,20 +1470,23 @@ gtk_snapshot_push_shadow (GtkSnapshot     *snapshot,
   if (n_shadows == 1)
     {
       state->data.shadow.shadows = NULL;
-      memcpy (&state->data.shadow.a_shadow, shadow, sizeof (GskShadow));
-      state->data.shadow.a_shadow.dx *= scale_x;
-      state->data.shadow.a_shadow.dy *= scale_y;
-      state->data.shadow.a_shadow.radius *= scale_x;
+      gdk_color_init_copy (&state->data.shadow.a_shadow.color, &shadow->color);
+      graphene_point_init (&state->data.shadow.a_shadow.offset,
+                           shadow->offset.x * scale_x,
+                           shadow->offset.y * scale_y);
+      state->data.shadow.a_shadow.radius = shadow->radius * scale_x;
     }
   else
     {
-      state->data.shadow.shadows = g_malloc (sizeof (GskShadow) * n_shadows);
-      memcpy (state->data.shadow.shadows, shadow, sizeof (GskShadow) * n_shadows);
+      state->data.shadow.shadows = g_malloc (sizeof (GskShadow2) * n_shadows);
+      memcpy (state->data.shadow.shadows, shadow, sizeof (GskShadow2) * n_shadows);
       for (i = 0; i < n_shadows; i++)
         {
-          state->data.shadow.shadows[i].dx *= scale_x;
-          state->data.shadow.shadows[i].dy *= scale_y;
-          state->data.shadow.shadows[i].radius *= scale_x;
+          gdk_color_init_copy (&state->data.shadow.shadows[i].color, &shadow[i].color);
+          graphene_point_init (&state->data.shadow.shadows[i].offset,
+                               shadow[i].offset.x * scale_x,
+                               shadow[i].offset.y * scale_y);
+          state->data.shadow.shadows[i].radius = shadow[i].radius * scale_x;
         }
     }
 
@@ -2384,6 +2430,26 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
                            const GdkRGBA         *color,
                            const graphene_rect_t *bounds)
 {
+  GdkColor color2;
+  gdk_color_init_from_rgba (&color2, color);
+  gtk_snapshot_append_color2 (snapshot, &color2, bounds);
+}
+
+/*< private >
+ * gtk_snapshot_append_color2:
+ * @snapshot: a `GtkSnapshot`
+ * @color: the color to draw
+ * @bounds: the bounds for the new node
+ *
+ * Creates a new render node drawing the @color into the
+ * given @bounds and appends it to the current render node
+ * of @snapshot.
+ */
+void
+gtk_snapshot_append_color2 (GtkSnapshot           *snapshot,
+                            const GdkColor        *color,
+                            const graphene_rect_t *bounds)
+{
   GskRenderNode *node;
   graphene_rect_t real_bounds;
   float scale_x, scale_y, dx, dy;
@@ -2395,7 +2461,7 @@ gtk_snapshot_append_color (GtkSnapshot           *snapshot,
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
 
-  node = gsk_color_node_new (color, &real_bounds);
+  node = gsk_color_node_new2 (color, &real_bounds);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
@@ -2408,15 +2474,30 @@ gtk_snapshot_append_text (GtkSnapshot           *snapshot,
                           float                  x,
                           float                  y)
 {
+  GdkColor color2;
+
+  gdk_color_init_from_rgba (&color2, color);
+  gtk_snapshot_append_text2 (snapshot, font, glyphs, &color2, x, y);
+  gdk_color_finish (&color2);
+}
+
+void
+gtk_snapshot_append_text2 (GtkSnapshot      *snapshot,
+                           PangoFont        *font,
+                           PangoGlyphString *glyphs,
+                           const GdkColor   *color,
+                           float             x,
+                           float             y)
+{
   GskRenderNode *node;
   float dx, dy;
 
   gtk_snapshot_ensure_translate (snapshot, &dx, &dy);
 
-  node = gsk_text_node_new (font,
-                            glyphs,
-                            color,
-                            &GRAPHENE_POINT_INIT (x + dx, y + dy));
+  node = gsk_text_node_new2 (font,
+                             glyphs,
+                             color,
+                             &GRAPHENE_POINT_INIT (x + dx, y + dy));
   if (node == NULL)
     return;
 
@@ -2784,6 +2865,36 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
                             const float           border_width[4],
                             const GdkRGBA         border_color[4])
 {
+  GdkColor color[4];
+
+  for (int i = 0; i < 4; i++)
+    gdk_color_init_from_rgba (&color[i], &border_color[i]);
+
+  gtk_snapshot_append_border2 (snapshot, outline, border_width, color);
+
+  for (int i = 0; i < 4; i++)
+    gdk_color_finish (&color[i]);
+}
+
+/*< private >
+ * gtk_snapshot_append_border2:
+ * @snapshot: a `GtkSnapshot`
+ * @outline: the outline of the border
+ * @border_width: (array fixed-size=4): the stroke width of the border on
+ *   the top, right, bottom and left side respectively.
+ * @border_color: (array fixed-size=4): the color used on the top, right,
+ *   bottom and left side.
+ *
+ * Appends a stroked border rectangle inside the given @outline.
+ *
+ * The four sides of the border can have different widths and colors.
+ */
+void
+gtk_snapshot_append_border2 (GtkSnapshot          *snapshot,
+                             const GskRoundedRect *outline,
+                             const float           border_width[4],
+                             const GdkColor        border_color[4])
+{
   GskRenderNode *node;
   GskRoundedRect real_outline;
   float scale_x, scale_y, dx, dy;
@@ -2796,14 +2907,14 @@ gtk_snapshot_append_border (GtkSnapshot          *snapshot,
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, dx, dy);
 
-  node = gsk_border_node_new (&real_outline,
-                              (float[4]) {
-                                border_width[0] * scale_y,
-                                border_width[1] * scale_x,
-                                border_width[2] * scale_y,
-                                border_width[3] * scale_x,
-                              },
-                              border_color);
+  node = gsk_border_node_new2 (&real_outline,
+                               (float[4]) {
+                                 border_width[0] * scale_y,
+                                 border_width[1] * scale_x,
+                                 border_width[2] * scale_y,
+                                 border_width[3] * scale_x,
+                               },
+                               border_color);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
@@ -2829,6 +2940,36 @@ gtk_snapshot_append_inset_shadow (GtkSnapshot          *snapshot,
                                   float                 spread,
                                   float                 blur_radius)
 {
+  GdkColor color2;
+
+  gdk_color_init_from_rgba (&color2, color);
+  gtk_snapshot_append_inset_shadow2 (snapshot,
+                                     outline,
+                                     &color2,
+                                     &GRAPHENE_POINT_INIT (dx, dy),
+                                     spread, blur_radius);
+  gdk_color_finish (&color2);
+}
+
+/*< private >
+ * gtk_snapshot_append_inset_shadow2:
+ * @snapshot: a `GtkSnapshot`
+ * @outline: outline of the region surrounded by shadow
+ * @color: color of the shadow
+ * @offset: offset of shadow
+ * @spread: how far the shadow spreads towards the inside
+ * @blur_radius: how much blur to apply to the shadow
+ *
+ * Appends an inset shadow into the box given by @outline.
+ */
+void
+gtk_snapshot_append_inset_shadow2 (GtkSnapshot            *snapshot,
+                                   const GskRoundedRect   *outline,
+                                   const GdkColor         *color,
+                                   const graphene_point_t *offset,
+                                   float                   spread,
+                                   float                   blur_radius)
+{
   GskRenderNode *node;
   GskRoundedRect real_outline;
   float scale_x, scale_y, x, y;
@@ -2836,16 +2977,17 @@ gtk_snapshot_append_inset_shadow (GtkSnapshot          *snapshot,
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (outline != NULL);
   g_return_if_fail (color != NULL);
+  g_return_if_fail (offset != NULL);
 
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &x, &y);
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
 
-  node = gsk_inset_shadow_node_new (&real_outline,
-                                    color,
-                                    scale_x * dx,
-                                    scale_y * dy,
-                                    spread,
-                                    blur_radius);
+  node = gsk_inset_shadow_node_new2 (&real_outline,
+                                     color,
+                                     &GRAPHENE_POINT_INIT (scale_x * offset->x,
+                                                           scale_y * offset->y),
+                                     spread,
+                                     blur_radius);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }
@@ -2871,6 +3013,36 @@ gtk_snapshot_append_outset_shadow (GtkSnapshot          *snapshot,
                                    float                 spread,
                                    float                 blur_radius)
 {
+  GdkColor color2;
+
+  gdk_color_init_from_rgba (&color2, color);
+  gtk_snapshot_append_outset_shadow2 (snapshot,
+                                      outline,
+                                      &color2,
+                                      &GRAPHENE_POINT_INIT (dx, dy),
+                                      spread, blur_radius);
+  gdk_color_finish (&color2);
+}
+
+/*< private >
+ * gtk_snapshot_append_outset_shadow2:
+ * @snapshot: a `GtkSnapshot`
+ * @outline: outline of the region surrounded by shadow
+ * @color: color of the shadow
+ * @offset: offset of shadow
+ * @spread: how far the shadow spreads towards the outside
+ * @blur_radius: how much blur to apply to the shadow
+ *
+ * Appends an outset shadow node around the box given by @outline.
+ */
+void
+gtk_snapshot_append_outset_shadow2 (GtkSnapshot            *snapshot,
+                                    const GskRoundedRect   *outline,
+                                    const GdkColor         *color,
+                                    const graphene_point_t *offset,
+                                    float                   spread,
+                                    float                   blur_radius)
+{
   GskRenderNode *node;
   GskRoundedRect real_outline;
   float scale_x, scale_y, x, y;
@@ -2878,17 +3050,17 @@ gtk_snapshot_append_outset_shadow (GtkSnapshot          *snapshot,
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (outline != NULL);
   g_return_if_fail (color != NULL);
+  g_return_if_fail (offset != NULL);
 
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &x, &y);
   gsk_rounded_rect_scale_affine (&real_outline, outline, scale_x, scale_y, x, y);
 
-  node = gsk_outset_shadow_node_new (&real_outline,
-                                     color,
-                                     scale_x * dx,
-                                     scale_y * dy,
-                                     spread,
-                                     blur_radius);
-
+  node = gsk_outset_shadow_node_new2 (&real_outline,
+                                      color,
+                                      &GRAPHENE_POINT_INIT (scale_x * offset->x,
+                                                            scale_y * offset->y),
+                                      spread,
+                                      blur_radius);
 
   gtk_snapshot_append_node_internal (snapshot, node);
 }

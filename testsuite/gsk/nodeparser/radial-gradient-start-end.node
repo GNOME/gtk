@@ -1,0 +1,17 @@
+radial-gradient {
+  start: 1;
+  end: 0;
+}
+
+radial-gradient {
+  start: 0.5;
+  end: 0.5;
+}
+
+radial-gradient {
+  hradius: 0;
+}
+
+radial-gradient {
+  vradius: 0;
+}

@@ -2,6 +2,7 @@
 
 #include "gskgputypesprivate.h"
 
+#include "gdk/gdkcolorprivate.h"
 #include "gdk/gdkcolorstateprivate.h"
 
 #define COLOR_SPACE_OUTPUT_PREMULTIPLIED (1u << 2)
@@ -43,6 +44,8 @@ gsk_gpu_color_states_create_cicp (GdkColorState *output_color_state,
                                   gboolean       output_is_premultiplied,
                                   gboolean       cicp_is_premultiplied)
 {
+  g_assert (GDK_IS_DEFAULT_COLOR_STATE (output_color_state));
+
   return (GDK_DEFAULT_COLOR_STATE_ID (output_color_state) << COLOR_SPACE_OUTPUT_SHIFT) |
          (output_is_premultiplied ? COLOR_SPACE_OUTPUT_PREMULTIPLIED : 0) |
          (GDK_DEFAULT_COLOR_STATE_ID (output_color_state) << COLOR_SPACE_ALT_SHIFT) |
@@ -73,3 +76,16 @@ gsk_gpu_color_states_is_alt_premultiplied (GskGpuColorStates self)
   return !!(self & COLOR_SPACE_ALT_PREMULTIPLIED);
 }
 
+/* Note: this function should only return a colorstate other than
+ * color->color_state *only* if the shaders can't handle the conversion
+ * from color->color_state to ccs.
+ */
+static inline GdkColorState *
+gsk_gpu_color_states_find (GdkColorState  *ccs,
+                           const GdkColor *color)
+{
+  if (GDK_IS_DEFAULT_COLOR_STATE (color->color_state))
+    return color->color_state;
+  else
+    return ccs;
+}

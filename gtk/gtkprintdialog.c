@@ -188,6 +188,7 @@ gtk_print_setup_set_page_setup (GtkPrintSetup *setup,
 static GtkPrinter *
 gtk_print_setup_get_printer (GtkPrintSetup *setup)
 {
+#ifdef HAVE_GIO_UNIX
   if (!setup->printer)
     {
       const char *name = NULL;
@@ -198,6 +199,7 @@ gtk_print_setup_get_printer (GtkPrintSetup *setup)
       if (name)
         setup->printer = gtk_printer_find (name);
     }
+#endif
 
   return setup->printer;
 }
@@ -1674,8 +1676,8 @@ gtk_print_dialog_print_file (GtkPrintDialog       *self,
 #ifdef HAVE_GIO_UNIX
   PrintTaskData *ptd;
   GFileInputStream *content;
-#endif
   GError *error = NULL;
+#endif
 
   g_return_if_fail (GTK_IS_PRINT_DIALOG (self));
   g_return_if_fail (parent == NULL || GTK_IS_WINDOW (parent));

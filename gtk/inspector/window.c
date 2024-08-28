@@ -725,19 +725,10 @@ get_inspector_display (void)
 
   if (display)
     {
-      GdkDebugFlags flags;
-
       name = g_getenv ("GTK_INSPECTOR_RENDERER");
 
       g_object_set_data_full (G_OBJECT (display), "gsk-renderer",
                               g_strdup (name), g_free);
-
-      flags = gdk_display_get_debug_flags (gdk_display_get_default ());
-
-      gdk_display_set_debug_flags (display, flags & (GDK_DEBUG_GL_DISABLE_GL |
-                                                     GDK_DEBUG_GL_DISABLE_GLES |
-                                                     GDK_DEBUG_GL_GLX));
-      gtk_set_display_debug_flags (display, 0);
     }
 
   if (!display)
@@ -893,6 +884,24 @@ gtk_inspector_handle_event (GdkEvent *event)
   if (iw == NULL)
     return FALSE;
 
+  if (GDK_IS_EVENT_TYPE (event, GDK_KEY_PRESS))
+    {
+      GtkInspectorRecorder *recorder = GTK_INSPECTOR_RECORDER (iw->widget_recorder);
+
+      if (gdk_key_event_matches (event, GDK_KEY_r, GDK_SUPER_MASK) == GDK_KEY_MATCH_EXACT)
+        {
+          gboolean recording = gtk_inspector_recorder_is_recording (recorder);
+
+          gtk_inspector_recorder_set_recording (recorder, !recording);
+          return TRUE;
+        }
+      else if (gdk_key_event_matches (event, GDK_KEY_c, GDK_SUPER_MASK) == GDK_KEY_MATCH_EXACT)
+        {
+          gtk_inspector_recorder_record_single_frame (recorder);
+          return TRUE;
+        }
+    }
+
   gtk_inspector_recorder_record_event (GTK_INSPECTOR_RECORDER (iw->widget_recorder),
                                        gtk_get_event_widget (event),
                                        event);
@@ -900,6 +909,27 @@ gtk_inspector_handle_event (GdkEvent *event)
   g_signal_emit (iw, signals[EVENT], 0, event, &handled);
 
   return handled;
+}
+
+void
+gtk_inspector_trace_event (GdkEvent            *event,
+                           GtkPropagationPhase  phase,
+                           GtkWidget           *widget,
+                           GtkEventController  *controller,
+                           GtkWidget           *target,
+                           gboolean             handled)
+{
+  GtkInspectorWindow *iw;
+
+  if (!any_inspector_window_constructed)
+    return;
+
+  iw = gtk_inspector_window_get_for_display (gdk_event_get_display (event));
+  if (iw == NULL)
+    return;
+
+  gtk_inspector_recorder_trace_event (GTK_INSPECTOR_RECORDER (iw->widget_recorder),
+                                      event, phase, widget, controller, target, handled);
 }
 
 GdkDisplay *

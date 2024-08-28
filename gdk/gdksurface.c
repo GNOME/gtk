@@ -40,10 +40,12 @@
 #include <glib/gi18n-lib.h>
 #include "gdkmarshalers.h"
 #include "gdkpopupprivate.h"
-#include "gdkrectangle.h"
+#include "gdkrectangleprivate.h"
 #include "gdktoplevelprivate.h"
 #include "gdkvulkancontext.h"
 #include "gdksubsurfaceprivate.h"
+
+#include "gsk/gskrectprivate.h"
 
 #include <math.h>
 
@@ -74,6 +76,9 @@ struct _GdkSurfacePrivate
   EGLSurface egl_surface;
   GdkMemoryDepth egl_surface_depth;
 #endif
+
+  cairo_region_t *opaque_region;
+  cairo_rectangle_int_t opaque_rect; /* This is different from the region */
 
   gpointer widget;
 
@@ -511,6 +516,12 @@ gdk_surface_real_create_subsurface (GdkSurface *surface)
 }
 
 static void
+gdk_surface_default_set_opaque_region (GdkSurface     *surface,
+                                       cairo_region_t *region)
+{
+}
+
+static void
 gdk_surface_constructed (GObject *object)
 {
   G_GNUC_UNUSED GdkSurface *surface = GDK_SURFACE (object);
@@ -533,6 +544,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
   klass->beep = gdk_surface_real_beep;
   klass->get_scale = gdk_surface_real_get_scale;
   klass->create_subsurface = gdk_surface_real_create_subsurface;
+  klass->set_opaque_region = gdk_surface_default_set_opaque_region;
 
   /**
    * GdkSurface:cursor: (attributes org.gtk.Property.get=gdk_surface_get_cursor org.gtk.Property.set=gdk_surface_set_cursor)
@@ -771,7 +783,7 @@ gdk_surface_finalize (GObject *object)
 
   g_clear_object (&surface->display);
 
-  g_clear_pointer (&surface->opaque_region, cairo_region_destroy);
+  g_clear_pointer (&priv->opaque_region, cairo_region_destroy);
 
   if (surface->parent)
     surface->parent->children = g_list_remove (surface->parent->children, surface);
@@ -1132,10 +1144,13 @@ gdk_surface_set_egl_native_window (GdkSurface *self,
 
   if (priv->egl_surface != NULL)
     {
-      gdk_gl_context_clear_current_if_surface (self);
-      eglDestroySurface (gdk_surface_get_display (self), priv->egl_surface);
+      GdkDisplay *display = gdk_surface_get_display (self);
+
+      eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
       priv->egl_surface = NULL;
     }
+
+  gdk_gl_context_clear_current_if_surface (self);
 
   priv->egl_native_window = native_window;
 }
@@ -1144,6 +1159,8 @@ gpointer /* EGLSurface */
 gdk_surface_get_egl_surface (GdkSurface *self)
 {
   GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+
+  gdk_surface_ensure_egl_surface (self, priv->egl_surface_depth);
 
   return priv->egl_surface;
 }
@@ -1156,6 +1173,14 @@ gdk_surface_ensure_egl_surface (GdkSurface     *self,
   GdkDisplay *display = gdk_surface_get_display (self);
 
   g_return_val_if_fail (priv->egl_native_window != NULL, depth);
+
+  if (depth == GDK_MEMORY_NONE)
+    {
+      if (priv->egl_surface_depth == GDK_MEMORY_NONE)
+        depth = GDK_MEMORY_U8;
+      else
+        depth = priv->egl_surface_depth;
+    }
 
   if (priv->egl_surface_depth != depth &&
       priv->egl_surface != NULL &&
@@ -1254,7 +1279,7 @@ gdk_surface_create_gl_context (GdkSurface   *surface,
   if (!gdk_display_prepare_gl (surface->display, error))
     return NULL;
 
-  return gdk_gl_context_new (surface->display, surface);
+  return gdk_gl_context_new (surface->display, surface, FALSE);
 }
 
 /**
@@ -2631,6 +2656,35 @@ gdk_surface_get_scale (GdkSurface *surface)
   return GDK_SURFACE_GET_CLASS (surface)->get_scale (surface);
 }
 
+static void
+gdk_surface_update_opaque_region (GdkSurface *self)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+  cairo_region_t *region;
+
+  if (priv->opaque_region == NULL)
+    {
+      if (priv->opaque_rect.width <= 0)
+        region = NULL;
+      else
+        region = cairo_region_create_rectangle (&priv->opaque_rect);
+    }
+  else
+    {
+      if (priv->opaque_rect.width <= 0)
+        region = cairo_region_reference (priv->opaque_region);
+      else
+        {
+          region = cairo_region_copy (priv->opaque_region);
+          cairo_region_union_rectangle (region, &priv->opaque_rect);
+        }
+    }
+
+  GDK_SURFACE_GET_CLASS (self)->set_opaque_region (self, region);
+
+  g_clear_pointer (&region, cairo_region_destroy);
+}
+
 /**
  * gdk_surface_set_opaque_region:
  * @surface: a top-level `GdkSurface`
@@ -2652,27 +2706,77 @@ gdk_surface_get_scale (GdkSurface *surface)
  * is opaque, as we know where the opaque regions are. If your surface
  * background is not opaque, please update this property in your
  * [GtkWidgetClass.css_changed](../gtk4/vfunc.Widget.css_changed.html) handler.
+ *
+ * Deprecated: 4.16: GDK can figure out the opaque parts of a window itself
+ *   by inspecting the contents that are drawn.
  */
 void
 gdk_surface_set_opaque_region (GdkSurface      *surface,
                                cairo_region_t *region)
 {
-  GdkSurfaceClass *class;
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
 
   g_return_if_fail (GDK_IS_SURFACE (surface));
   g_return_if_fail (!GDK_SURFACE_DESTROYED (surface));
 
-  if (cairo_region_equal (surface->opaque_region, region))
+  if (cairo_region_equal (priv->opaque_region, region))
     return;
 
-  g_clear_pointer (&surface->opaque_region, cairo_region_destroy);
+  g_clear_pointer (&priv->opaque_region, cairo_region_destroy);
 
   if (region != NULL)
-    surface->opaque_region = cairo_region_reference (region);
+    priv->opaque_region = cairo_region_reference (region);
 
-  class = GDK_SURFACE_GET_CLASS (surface);
-  if (class->set_opaque_region)
-    class->set_opaque_region (surface, region);
+  gdk_surface_update_opaque_region (surface);
+}
+
+/* Sets the opaque rect from the rendernode via end_frame() */
+void
+gdk_surface_set_opaque_rect (GdkSurface            *self,
+                             const graphene_rect_t *rect)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+  cairo_rectangle_int_t opaque;
+
+  if (rect)
+    gsk_rect_to_cairo_shrink (rect, &opaque);
+  else
+    opaque = (cairo_rectangle_int_t) { 0, 0, 0, 0 };
+
+  if (gdk_rectangle_equal (&priv->opaque_rect, &opaque))
+    return;
+
+  priv->opaque_rect = opaque;
+
+  gdk_surface_update_opaque_region (self);
+}
+
+/*
+ * gdk_surface_is_opaque:
+ * @self: a surface
+ *
+ * Checks if the whole surface is known to be opaque.
+ * This allows using an RGBx buffer instead of RGBA.
+ *
+ * This function works for the currently rendered frame inside
+ * begin_frame() implementations.
+ *
+ * Returns: %TRUE if the whole surface is provably opaque
+ **/
+gboolean
+gdk_surface_is_opaque (GdkSurface *self)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+  cairo_rectangle_int_t whole = { 0, 0, self->width, self->height };
+
+  if (gdk_rectangle_contains (&priv->opaque_rect, &whole))
+    return TRUE;
+
+  if (priv->opaque_region &&
+      cairo_region_contains_rectangle (priv->opaque_region, &whole) == CAIRO_REGION_OVERLAP_IN)
+    return TRUE;
+
+  return FALSE;
 }
 
 void

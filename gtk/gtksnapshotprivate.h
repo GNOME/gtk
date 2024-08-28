@@ -30,12 +30,48 @@ void                    gtk_snapshot_append_text                (GtkSnapshot    
                                                                  const GdkRGBA          *color,
                                                                  float                   x,
                                                                  float                   y);
+void                    gtk_snapshot_append_text2               (GtkSnapshot            *snapshot,
+                                                                 PangoFont              *font,
+                                                                 PangoGlyphString       *glyphs,
+                                                                 const GdkColor         *color,
+                                                                 float                   x,
+                                                                 float                   y);
+
+void                    gtk_snapshot_append_layout2             (GtkSnapshot            *snapshot,
+                                                                 PangoLayout            *layout,
+                                                                 const GdkColor         *color);
 
 void                    gtk_snapshot_push_collect               (GtkSnapshot            *snapshot);
 GskRenderNode *         gtk_snapshot_pop_collect                (GtkSnapshot            *snapshot);
 
 void                    gtk_snapshot_push_subsurface            (GtkSnapshot            *snapshot,
                                                                  GdkSubsurface          *subsurface);
+
+void                    gtk_snapshot_append_color2              (GtkSnapshot            *snapshot,
+                                                                 const GdkColor         *color,
+                                                                 const graphene_rect_t  *bounds);
+void                    gtk_snapshot_append_border2             (GtkSnapshot            *snapshot,
+                                                                 const GskRoundedRect   *outline,
+                                                                 const float             border_width[4],
+                                                                 const GdkColor          border_color[4]);
+
+void                    gtk_snapshot_append_inset_shadow2       (GtkSnapshot            *snapshot,
+                                                                 const GskRoundedRect   *outline,
+                                                                 const GdkColor         *color,
+                                                                 const graphene_point_t *offset,
+                                                                 float                   spread,
+                                                                 float                   blur_radius);
+
+void                    gtk_snapshot_append_outset_shadow2      (GtkSnapshot            *snapshot,
+                                                                 const GskRoundedRect   *outline,
+                                                                 const GdkColor         *color,
+                                                                 const graphene_point_t *offset,
+                                                                 float                   spread,
+                                                                 float                   blur_radius);
+
+void                    gtk_snapshot_push_shadow2               (GtkSnapshot          *snapshot,
+                                                                 const GskShadow2     *shadow,
+                                                                 gsize                 n_shadows);
 
 G_END_DECLS
 

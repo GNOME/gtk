@@ -72,7 +72,7 @@ run (out vec4 color,
     }
 
   if (VARIATION_COLORIZE)
-    color = _blur_color * sum.a / coefficient_sum;
+    color = output_color_alpha (_blur_color, sum.a / coefficient_sum);
   else
     color = sum / coefficient_sum;
   position = _pos;

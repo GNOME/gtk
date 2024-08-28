@@ -19,6 +19,7 @@
 
 #include "gtkcsscolorprivate.h"
 #include "gtkcolorutilsprivate.h"
+#include "gdkcolorstateprivate.h"
 
 /* {{{ Initialization */
 
@@ -1161,6 +1162,53 @@ gtk_css_color_interpolation_method_print (GtkCssColorSpace        in,
     default:
       g_assert_not_reached ();
   }
+}
+
+/* }}} */
+/* {{{ GdkColor conversion */
+
+void
+gtk_css_color_to_color (const GtkCssColor *css,
+                        GdkColor          *color)
+{
+  switch (css->color_space)
+    {
+    case GTK_CSS_COLOR_SPACE_SRGB:
+      gdk_color_init (color, GDK_COLOR_STATE_SRGB, css->values);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_SRGB_LINEAR:
+      gdk_color_init (color, GDK_COLOR_STATE_SRGB_LINEAR, css->values);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_REC2100_PQ:
+      gdk_color_init (color, GDK_COLOR_STATE_REC2100_PQ, css->values);
+      break;
+
+    case GTK_CSS_COLOR_SPACE_HSL:
+    case GTK_CSS_COLOR_SPACE_HWB:
+    case GTK_CSS_COLOR_SPACE_OKLAB:
+    case GTK_CSS_COLOR_SPACE_OKLCH:
+      {
+        GtkCssColor tmp;
+        gtk_css_color_convert (css, GTK_CSS_COLOR_SPACE_SRGB, &tmp);
+        gdk_color_init (color, GDK_COLOR_STATE_SRGB, tmp.values);
+      }
+      break;
+
+    case GTK_CSS_COLOR_SPACE_REC2020:
+    case GTK_CSS_COLOR_SPACE_DISPLAY_P3:
+    case GTK_CSS_COLOR_SPACE_XYZ:
+      {
+        GtkCssColor tmp;
+        gtk_css_color_convert (css, GTK_CSS_COLOR_SPACE_REC2100_PQ, &tmp);
+        gdk_color_init (color, GDK_COLOR_STATE_REC2100_PQ, tmp.values);
+      }
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
 }
 
 /* }}} */

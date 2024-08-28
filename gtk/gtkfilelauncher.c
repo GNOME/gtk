@@ -26,6 +26,10 @@
 #include "deprecated/gtkshow.h"
 #include <glib/gi18n-lib.h>
 
+#ifdef G_OS_WIN32
+#include "gtkshowwin32.h"
+#endif
+
 /**
  * GtkFileLauncher:
  *
@@ -432,7 +436,11 @@ show_uri_done (GObject      *source,
   GTask *task = G_TASK (data);
   GError *error = NULL;
 
+#ifndef G_OS_WIN32
   if (!gtk_show_uri_full_finish (parent, result, &error))
+#else
+  if (!gtk_show_uri_win32_finish (parent, result, &error))
+#endif
     {
       if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         g_task_return_new_error (task, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_CANCELLED, "Cancelled by user");
@@ -485,6 +493,7 @@ gtk_file_launcher_launch (GtkFileLauncher     *self,
       g_task_return_new_error (task,
                                GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
                                "No file to launch");
+      g_object_unref (task);
       return;
     }
 
@@ -502,7 +511,6 @@ gtk_file_launcher_launch (GtkFileLauncher     *self,
       gtk_openuri_portal_open_async (self->file, FALSE, flags, parent, cancellable, open_done, task);
     }
   else
-#endif
     {
       char *uri = g_file_get_uri (self->file);
 
@@ -512,6 +520,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
       g_free (uri);
     }
+#else /* G_OS_WIN32 */
+  char *path = g_file_get_path (self->file);
+  gtk_show_uri_win32 (parent, path, self->always_ask, cancellable, show_uri_done, task);
+  g_free (path);
+#endif
 }
 
 /**
@@ -576,6 +589,7 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
       g_task_return_new_error (task,
                                GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
                                "No file to open");
+      g_object_unref (task);
       return;
     }
 
@@ -584,6 +598,7 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
       g_task_return_new_error (task,
                                GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
                                "Operation not supported on non-native files");
+      g_object_unref (task);
       return;
     }
 

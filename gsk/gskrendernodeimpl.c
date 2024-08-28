@@ -42,6 +42,7 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
 #include "gdk/gdkrgbaprivate.h"
+#include "gdk/gdkcolorstateprivate.h"
 
 #include <cairo.h>
 #ifdef CAIRO_HAS_SVG_SURFACE
@@ -60,6 +61,11 @@
  */
 #define MAX_RECTS_IN_DIFF 30
 
+/* This lock protects all on-demand created legacy rgba data of
+ * render nodes.
+ */
+G_LOCK_DEFINE_STATIC (rgba);
+
 static gboolean
 gsk_color_stops_are_opaque (const GskColorStop *stops,
                             gsize               n_stops)
@@ -77,17 +83,21 @@ gsk_color_stops_are_opaque (const GskColorStop *stops,
 
 /* FIXME: Replace this once GdkColor lands */
 static inline GdkMemoryDepth
-my_color_get_depth (const GdkRGBA *rgba)
-{
-  return gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
-}
-
-/* FIXME: Replace this once GdkColor lands */
-static inline GdkMemoryDepth
 my_color_stops_get_depth (const GskColorStop *stops,
                           gsize               n_stops)
 {
   return gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
+}
+
+static inline gboolean
+color_state_is_hdr (GdkColorState *color_state)
+{
+  GdkColorState *rendering_cs;
+
+  rendering_cs = gdk_color_state_get_rendering_color_state (color_state);
+
+  return rendering_cs != GDK_COLOR_STATE_SRGB &&
+         rendering_cs != GDK_COLOR_STATE_SRGB_LINEAR;
 }
 
 /* apply a rectangle that bounds @rect in
@@ -172,9 +182,19 @@ region_union_region_affine (cairo_region_t       *region,
 struct _GskColorNode
 {
   GskRenderNode render_node;
-
-  GdkRGBA color;
+  GdkColor color;
 };
+
+static void
+gsk_color_node_finalize (GskRenderNode *node)
+{
+  GskColorNode *self = (GskColorNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_COLOR_NODE));
+
+  gdk_color_finish (&self->color);
+
+  parent_class->finalize (node);
+}
 
 static void
 gsk_color_node_draw (GskRenderNode *node,
@@ -183,8 +203,7 @@ gsk_color_node_draw (GskRenderNode *node,
 {
   GskColorNode *self = (GskColorNode *) node;
 
-  gdk_cairo_set_source_rgba_ccs (cr, ccs, &self->color);
-
+  gdk_cairo_set_source_color (cr, ccs, &self->color);
   gdk_cairo_rect (cr, &node->bounds);
   cairo_fill (cr);
 }
@@ -198,7 +217,7 @@ gsk_color_node_diff (GskRenderNode *node1,
   GskColorNode *self2 = (GskColorNode *) node2;
 
   if (gsk_rect_equal (&node1->bounds, &node2->bounds) &&
-      gdk_rgba_equal (&self1->color, &self2->color))
+      gdk_color_equal (&self1->color, &self2->color))
     return;
 
   gsk_render_node_diff_impossible (node1, node2, data);
@@ -212,6 +231,7 @@ gsk_color_node_class_init (gpointer g_class,
 
   node_class->node_type = GSK_COLOR_NODE;
 
+  node_class->finalize = gsk_color_node_finalize;
   node_class->draw = gsk_color_node_draw;
   node_class->diff = gsk_color_node_diff;
 }
@@ -222,10 +242,32 @@ gsk_color_node_class_init (gpointer g_class,
  *
  * Retrieves the color of the given @node.
  *
+ * The value returned by this function will not be correct
+ * if the render node was created for a non-sRGB color.
+ *
  * Returns: (transfer none): the color of the node
  */
 const GdkRGBA *
 gsk_color_node_get_color (const GskRenderNode *node)
+{
+  GskColorNode *self = (GskColorNode *) node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_COLOR_NODE), NULL);
+
+  /* NOTE: This is only correct for nodes with sRGB colors */
+  return (const GdkRGBA *) &self->color.values;
+}
+
+/*< private >
+ * gsk_color_node_get_color2:
+ * @node: (type GskColorNode): a `GskRenderNode`
+ *
+ * Retrieves the color of the given @node.
+ *
+ * Returns: (transfer none): the color of the node
+ */
+const GdkColor *
+gsk_color_node_get_color2 (const GskRenderNode *node)
 {
   GskColorNode *self = (GskColorNode *) node;
 
@@ -248,19 +290,45 @@ GskRenderNode *
 gsk_color_node_new (const GdkRGBA         *rgba,
                     const graphene_rect_t *bounds)
 {
+  GdkColor color;
+  GskRenderNode *node;
+
+  gdk_color_init_from_rgba (&color, rgba);
+  node = gsk_color_node_new2 (&color, bounds);
+  gdk_color_finish (&color);
+
+  return node;
+}
+
+/*< private >
+ * gsk_color_node_new2:
+ * @color: a `GdkColor` specifying a color
+ * @bounds: the rectangle to render the color into
+ *
+ * Creates a `GskRenderNode` that will render the color specified by @color
+ * into the area given by @bounds.
+ *
+ * Returns: (transfer full) (type GskColorNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_color_node_new2 (const GdkColor        *color,
+                     const graphene_rect_t *bounds)
+{
   GskColorNode *self;
   GskRenderNode *node;
 
-  g_return_val_if_fail (rgba != NULL, NULL);
+  g_return_val_if_fail (color != NULL, NULL);
   g_return_val_if_fail (bounds != NULL, NULL);
 
   self = gsk_render_node_alloc (GSK_COLOR_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->fully_opaque = gdk_rgba_is_opaque (rgba);
-  node->preferred_depth = my_color_get_depth (rgba);
+  node->fully_opaque = gdk_color_is_opaque (color);
+  node->preferred_depth = gdk_color_get_depth (color);
+  node->is_hdr = color_state_is_hdr (color->color_state);
 
-  self->color = *rgba;
+  gdk_color_init_copy (&self->color, color);
+
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
 
@@ -1380,13 +1448,28 @@ struct _GskBorderNode
   bool uniform_color: 1;
   GskRoundedRect outline;
   float border_width[4];
-  GdkRGBA border_color[4];
+  GdkColor border_color[4];
+  GdkRGBA *border_rgba;
 };
+
+static void
+gsk_border_node_finalize (GskRenderNode *node)
+{
+  GskBorderNode *self = (GskBorderNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_BORDER_NODE));
+
+  for (int i = 0; i < 4; i++)
+    gdk_color_finish (&self->border_color[i]);
+
+  g_free (self->border_rgba);
+
+  parent_class->finalize (node);
+}
 
 static void
 gsk_border_node_mesh_add_patch (cairo_pattern_t *pattern,
                                 GdkColorState   *ccs,
-                                const GdkRGBA   *rgba,
+                                const GdkColor  *color,
                                 double           x0,
                                 double           y0,
                                 double           x1,
@@ -1396,18 +1479,19 @@ gsk_border_node_mesh_add_patch (cairo_pattern_t *pattern,
                                 double           x3,
                                 double           y3)
 {
-  float color[4];
+  float values[4];
 
-  gdk_color_state_from_rgba (ccs, rgba, color);
+  gdk_color_to_float (color, ccs, values);
+
   cairo_mesh_pattern_begin_patch (pattern);
   cairo_mesh_pattern_move_to (pattern, x0, y0);
   cairo_mesh_pattern_line_to (pattern, x1, y1);
   cairo_mesh_pattern_line_to (pattern, x2, y2);
   cairo_mesh_pattern_line_to (pattern, x3, y3);
-  cairo_mesh_pattern_set_corner_color_rgba (pattern, 0, color[0], color[1], color[2], color[3]);
-  cairo_mesh_pattern_set_corner_color_rgba (pattern, 1, color[0], color[1], color[2], color[3]);
-  cairo_mesh_pattern_set_corner_color_rgba (pattern, 2, color[0], color[1], color[2], color[3]);
-  cairo_mesh_pattern_set_corner_color_rgba (pattern, 3, color[0], color[1], color[2], color[3]);
+  cairo_mesh_pattern_set_corner_color_rgba (pattern, 0, values[0], values[1], values[2], values[3]);
+  cairo_mesh_pattern_set_corner_color_rgba (pattern, 1, values[0], values[1], values[2], values[3]);
+  cairo_mesh_pattern_set_corner_color_rgba (pattern, 2, values[0], values[1], values[2], values[3]);
+  cairo_mesh_pattern_set_corner_color_rgba (pattern, 3, values[0], values[1], values[2], values[3]);
   cairo_mesh_pattern_end_patch (pattern);
 }
 
@@ -1430,11 +1514,11 @@ gsk_border_node_draw (GskRenderNode *node,
   gsk_rounded_rect_path (&self->outline, cr);
   gsk_rounded_rect_path (&inside, cr);
 
-  if (gdk_rgba_equal (&self->border_color[0], &self->border_color[1]) &&
-      gdk_rgba_equal (&self->border_color[0], &self->border_color[2]) &&
-      gdk_rgba_equal (&self->border_color[0], &self->border_color[3]))
+  if (gdk_color_equal (&self->border_color[0], &self->border_color[1]) &&
+      gdk_color_equal (&self->border_color[0], &self->border_color[2]) &&
+      gdk_color_equal (&self->border_color[0], &self->border_color[3]))
     {
-      gdk_cairo_set_source_rgba_ccs (cr, ccs, &self->border_color[0]);
+      gdk_cairo_set_source_color (cr, ccs, &self->border_color[0]);
     }
   else
     {
@@ -1542,7 +1626,7 @@ gsk_border_node_diff (GskRenderNode *node1,
       uniform2 &&
       self1->border_width[0] == self2->border_width[0] &&
       gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
-      gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]))
+      gdk_color_equal (&self1->border_color[0], &self2->border_color[0]))
     return;
 
   /* Different uniformity -> diff impossible */
@@ -1556,10 +1640,10 @@ gsk_border_node_diff (GskRenderNode *node1,
       self1->border_width[1] == self2->border_width[1] &&
       self1->border_width[2] == self2->border_width[2] &&
       self1->border_width[3] == self2->border_width[3] &&
-      gdk_rgba_equal (&self1->border_color[0], &self2->border_color[0]) &&
-      gdk_rgba_equal (&self1->border_color[1], &self2->border_color[1]) &&
-      gdk_rgba_equal (&self1->border_color[2], &self2->border_color[2]) &&
-      gdk_rgba_equal (&self1->border_color[3], &self2->border_color[3]) &&
+      gdk_color_equal (&self1->border_color[0], &self2->border_color[0]) &&
+      gdk_color_equal (&self1->border_color[1], &self2->border_color[1]) &&
+      gdk_color_equal (&self1->border_color[2], &self2->border_color[2]) &&
+      gdk_color_equal (&self1->border_color[3], &self2->border_color[3]) &&
       gsk_rounded_rect_equal (&self1->outline, &self2->outline))
     return;
 
@@ -1574,6 +1658,7 @@ gsk_border_node_class_init (gpointer g_class,
 
   node_class->node_type = GSK_BORDER_NODE;
 
+  node_class->finalize = gsk_border_node_finalize;
   node_class->draw = gsk_border_node_draw;
   node_class->diff = gsk_border_node_diff;
 }
@@ -1624,9 +1709,23 @@ gsk_border_node_get_widths (const GskRenderNode *node)
 const GdkRGBA *
 gsk_border_node_get_colors (const GskRenderNode *node)
 {
-  const GskBorderNode *self = (const GskBorderNode *) node;
+  GskBorderNode *self = (GskBorderNode *) node;
+  const GdkRGBA *colors;
 
-  return self->border_color;
+  G_LOCK (rgba);
+
+  if (self->border_rgba == NULL)
+    {
+      self->border_rgba = g_new (GdkRGBA, 4);
+      for (int i = 0; i < 4; i++)
+        gdk_color_to_float (&self->border_color[i], GDK_COLOR_STATE_SRGB, (float *) &self->border_rgba[i]);
+    }
+
+  colors = self->border_rgba;
+
+  G_UNLOCK (rgba);
+
+  return colors;
 }
 
 /**
@@ -1649,6 +1748,37 @@ gsk_border_node_new (const GskRoundedRect *outline,
                      const float           border_width[4],
                      const GdkRGBA         border_color[4])
 {
+  GdkColor color[4];
+
+  for (int i = 0; i < 4; i++)
+    gdk_color_init_from_rgba (&color[i], &border_color[i]);
+
+  return gsk_border_node_new2 (outline, border_width, color);
+
+  for (int i = 0; i < 4; i++)
+    gdk_color_finish (&color[i]);
+}
+
+/*< private >
+ * gsk_border_node_new2:
+ * @outline: a `GskRoundedRect` describing the outline of the border
+ * @border_width: (array fixed-size=4): the stroke width of the border on
+ *     the top, right, bottom and left side respectively.
+ * @border_color: (array fixed-size=4): the color used on the top, right,
+ *     bottom and left side.
+ *
+ * Creates a `GskRenderNode` that will stroke a border rectangle inside the
+ * given @outline.
+ *
+ * The 4 sides of the border can have different widths and colors.
+ *
+ * Returns: (transfer full) (type GskBorderNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_border_node_new2 (const GskRoundedRect *outline,
+                      const float           border_width[4],
+                      const GdkColor        border_color[4])
+{
   GskBorderNode *self;
   GskRenderNode *node;
 
@@ -1660,14 +1790,16 @@ gsk_border_node_new (const GskRoundedRect *outline,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
   node->preferred_depth = gdk_memory_depth_merge (
-                            gdk_memory_depth_merge (my_color_get_depth (&border_color[0]),
-                                                    my_color_get_depth (&border_color[1])),
-                            gdk_memory_depth_merge (my_color_get_depth (&border_color[2]),
-                                                    my_color_get_depth (&border_color[3])));
+                            gdk_memory_depth_merge (gdk_color_get_depth (&border_color[0]),
+                                                    gdk_color_get_depth (&border_color[1])),
+                            gdk_memory_depth_merge (gdk_color_get_depth (&border_color[2]),
+                                                    gdk_color_get_depth (&border_color[3])));
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
   memcpy (self->border_width, border_width, sizeof (self->border_width));
   memcpy (self->border_color, border_color, sizeof (self->border_color));
+  for (int i = 0; i < 4; i++)
+    gdk_color_init_copy (&self->border_color[i], &border_color[i]);
 
   if (border_width[0] == border_width[1] &&
       border_width[0] == border_width[2] &&
@@ -1676,9 +1808,9 @@ gsk_border_node_new (const GskRoundedRect *outline,
   else
     self->uniform_width = FALSE;
 
-  if (gdk_rgba_equal (&border_color[0], &border_color[1]) &&
-      gdk_rgba_equal (&border_color[0], &border_color[2]) &&
-      gdk_rgba_equal (&border_color[0], &border_color[3]))
+  if (gdk_color_equal (&border_color[0], &border_color[1]) &&
+      gdk_color_equal (&border_color[0], &border_color[2]) &&
+      gdk_color_equal (&border_color[0], &border_color[3]))
     self->uniform_color = TRUE;
   else
     self->uniform_color = FALSE;
@@ -1688,7 +1820,23 @@ gsk_border_node_new (const GskRoundedRect *outline,
   return node;
 }
 
-/* Private */
+/*< private >
+ * gsk_border_node_get_colors2:
+ * @node: (type GskBorderNode): a `GskRenderNode` for a border
+ *
+ * Retrieves the colors of the border.
+ *
+ * Returns: (transfer none): an array of 4 `GdkColor` structs
+ *     for the top, right, bottom and left color of the border
+ */
+const GdkColor *
+gsk_border_node_get_colors2 (const GskRenderNode *node)
+{
+  const GskBorderNode *self = (const GskBorderNode *) node;
+
+  return self->border_color;
+}
+
 bool
 gsk_border_node_get_uniform (const GskRenderNode *self)
 {
@@ -1920,6 +2068,7 @@ gsk_texture_node_new (GdkTexture            *texture,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
   node->fully_opaque = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE;
+  node->is_hdr = color_state_is_hdr (gdk_texture_get_color_state (texture));
 
   self->texture = g_object_ref (texture);
   gsk_rect_init_from_rect (&node->bounds, bounds);
@@ -2142,6 +2291,7 @@ gsk_texture_scale_node_new (GdkTexture            *texture,
   node->fully_opaque = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_OPAQUE &&
     bounds->size.width == floor (bounds->size.width) &&
     bounds->size.height == floor (bounds->size.height);
+  node->is_hdr = color_state_is_hdr (gdk_texture_get_color_state (texture));
 
   self->texture = g_object_ref (texture);
   gsk_rect_init_from_rect (&node->bounds, bounds);
@@ -2166,12 +2316,22 @@ struct _GskInsetShadowNode
   GskRenderNode render_node;
 
   GskRoundedRect outline;
-  GdkRGBA color;
-  float dx;
-  float dy;
+  GdkColor color;
+  graphene_point_t offset;
   float spread;
   float blur_radius;
 };
+
+static void
+gsk_inset_shadow_node_finalize (GskRenderNode *node)
+{
+  GskInsetShadowNode *self = (GskInsetShadowNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_INSET_SHADOW_NODE));
+
+  gdk_color_finish (&self->color);
+
+  parent_class->finalize (node);
+}
 
 static gboolean
 has_empty_clip (cairo_t *cr)
@@ -2189,7 +2349,7 @@ draw_shadow (cairo_t              *cr,
              const GskRoundedRect *box,
              const GskRoundedRect *clip_box,
              float                 radius,
-             const GdkRGBA        *color,
+             const GdkColor       *color,
              GskBlurFlags          blur_flags)
 {
   cairo_t *shadow_cr;
@@ -2197,7 +2357,7 @@ draw_shadow (cairo_t              *cr,
   if (has_empty_clip (cr))
     return;
 
-  gdk_cairo_set_source_rgba_ccs (cr, ccs, color);
+  gdk_cairo_set_source_color (cr, ccs, color);
   shadow_cr = gsk_cairo_blur_start_drawing (cr, radius, blur_flags);
 
   cairo_set_fill_rule (shadow_cr, CAIRO_FILL_RULE_EVEN_ODD);
@@ -2207,7 +2367,7 @@ draw_shadow (cairo_t              *cr,
 
   cairo_fill (shadow_cr);
 
-  gsk_cairo_blur_finish_drawing (shadow_cr, radius, color, blur_flags);
+  gsk_cairo_blur_finish_drawing (shadow_cr, ccs, radius, color, blur_flags);
 }
 
 typedef struct {
@@ -2247,7 +2407,7 @@ draw_shadow_corner (cairo_t               *cr,
                     const GskRoundedRect  *box,
                     const GskRoundedRect  *clip_box,
                     float                  radius,
-                    const GdkRGBA         *color,
+                    const GdkColor        *color,
                     GskCorner              corner,
                     cairo_rectangle_int_t *drawn_rect)
 {
@@ -2371,7 +2531,7 @@ draw_shadow_corner (cairo_t               *cr,
       g_hash_table_insert (corner_mask_cache, g_memdup2 (&key, sizeof (key)), mask);
     }
 
-  gdk_cairo_set_source_rgba_ccs (cr, ccs, color);
+  gdk_cairo_set_source_color (cr, ccs, color);
   pattern = cairo_pattern_create_for_surface (mask);
   cairo_matrix_init_identity (&matrix);
   cairo_matrix_scale (&matrix, sx, sy);
@@ -2388,7 +2548,7 @@ draw_shadow_side (cairo_t               *cr,
                   const GskRoundedRect  *box,
                   const GskRoundedRect  *clip_box,
                   float                  radius,
-                  const GdkRGBA         *color,
+                  const GdkColor        *color,
                   Side                   side,
                   cairo_rectangle_int_t *drawn_rect)
 {
@@ -2465,7 +2625,7 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
   double blur_radius;
 
   /* We don't need to draw invisible shadows */
-  if (gdk_rgba_is_clear (&self->color))
+  if (gdk_color_is_clear (&self->color))
     return;
 
   _graphene_rect_init_from_clip_extents (&clip_rect, cr);
@@ -2482,14 +2642,16 @@ gsk_inset_shadow_node_draw (GskRenderNode *node,
   cairo_clip (cr);
 
   gsk_rounded_rect_init_copy (&box, &self->outline);
-  gsk_rounded_rect_offset (&box, self->dx, self->dy);
+  gsk_rounded_rect_offset (&box, self->offset.x, self->offset.y);
   gsk_rounded_rect_shrink (&box, self->spread, self->spread, self->spread, self->spread);
 
   gsk_rounded_rect_init_copy (&clip_box, &self->outline);
   gsk_rounded_rect_shrink (&clip_box, -clip_radius, -clip_radius, -clip_radius, -clip_radius);
 
   if (!needs_blur (blur_radius))
-    draw_shadow (cr, ccs, TRUE, &box, &clip_box, blur_radius, &self->color, GSK_BLUR_NONE);
+    {
+      draw_shadow (cr, ccs, TRUE, &box, &clip_box, blur_radius, &self->color, GSK_BLUR_NONE);
+    }
   else
     {
       cairo_region_t *remaining;
@@ -2561,9 +2723,8 @@ gsk_inset_shadow_node_diff (GskRenderNode *node1,
   GskInsetShadowNode *self2 = (GskInsetShadowNode *) node2;
 
   if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
-      gdk_rgba_equal (&self1->color, &self2->color) &&
-      self1->dx == self2->dx &&
-      self1->dy == self2->dy &&
+      gdk_color_equal (&self1->color, &self2->color) &&
+      graphene_point_equal (&self1->offset, &self2->offset) &&
       self1->spread == self2->spread &&
       self1->blur_radius == self2->blur_radius)
     return;
@@ -2579,6 +2740,7 @@ gsk_inset_shadow_node_class_init (gpointer g_class,
 
   node_class->node_type = GSK_INSET_SHADOW_NODE;
 
+  node_class->finalize = gsk_inset_shadow_node_finalize;
   node_class->draw = gsk_inset_shadow_node_draw;
   node_class->diff = gsk_inset_shadow_node_diff;
 }
@@ -2605,22 +2767,55 @@ gsk_inset_shadow_node_new (const GskRoundedRect *outline,
                            float                 spread,
                            float                 blur_radius)
 {
+  GdkColor color2;
+  GskRenderNode *node;
+
+  gdk_color_init_from_rgba (&color2, color);
+  node = gsk_inset_shadow_node_new2 (outline,
+                                     &color2,
+                                     &GRAPHENE_POINT_INIT (dx, dy),
+                                     spread, blur_radius);
+  gdk_color_finish (&color2);
+
+  return node;
+}
+
+/*< private >
+ * gsk_inset_shadow_node_new2:
+ * @outline: outline of the region containing the shadow
+ * @color: color of the shadow
+ * @offset: offset of shadow
+ * @spread: how far the shadow spreads towards the inside
+ * @blur_radius: how much blur to apply to the shadow
+ *
+ * Creates a `GskRenderNode` that will render an inset shadow
+ * into the box given by @outline.
+ *
+ * Returns: (transfer full) (type GskInsetShadowNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_inset_shadow_node_new2 (const GskRoundedRect   *outline,
+                            const GdkColor         *color,
+                            const graphene_point_t *offset,
+                            float                   spread,
+                            float                   blur_radius)
+{
   GskInsetShadowNode *self;
   GskRenderNode *node;
 
   g_return_val_if_fail (outline != NULL, NULL);
   g_return_val_if_fail (color != NULL, NULL);
+  g_return_val_if_fail (offset != NULL, NULL);
   g_return_val_if_fail (blur_radius >= 0, NULL);
 
   self = gsk_render_node_alloc (GSK_INSET_SHADOW_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->preferred_depth = my_color_get_depth (color);
+  node->preferred_depth = gdk_color_get_depth (color);
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
-  self->color = *color;
-  self->dx = dx;
-  self->dy = dy;
+  gdk_color_init_copy (&self->color, color);
+  self->offset = *offset;
   self->spread = spread;
   self->blur_radius = blur_radius;
 
@@ -2651,10 +2846,30 @@ gsk_inset_shadow_node_get_outline (const GskRenderNode *node)
  *
  * Retrieves the color of the inset shadow.
  *
+ * The value returned by this function will not be correct
+ * if the render node was created for a non-sRGB color.
+ *
  * Returns: (transfer none): the color of the shadow
  */
 const GdkRGBA *
 gsk_inset_shadow_node_get_color (const GskRenderNode *node)
+{
+  const GskInsetShadowNode *self = (const GskInsetShadowNode *) node;
+
+  /* NOTE: This is only correct for nodes with sRGB colors */
+  return (const GdkRGBA *) &self->color.values;
+}
+
+/*< private >
+ * gsk_inset_shadow_node_get_color2:
+ * @node: (type GskInsetShadowNode): a `GskRenderNode`
+ *
+ * Retrieves the color of the given @node.
+ *
+ * Returns: (transfer none): the color of the node
+ */
+const GdkColor *
+gsk_inset_shadow_node_get_color2 (const GskRenderNode *node)
 {
   const GskInsetShadowNode *self = (const GskInsetShadowNode *) node;
 
@@ -2674,7 +2889,7 @@ gsk_inset_shadow_node_get_dx (const GskRenderNode *node)
 {
   const GskInsetShadowNode *self = (const GskInsetShadowNode *) node;
 
-  return self->dx;
+  return self->offset.x;
 }
 
 /**
@@ -2690,7 +2905,23 @@ gsk_inset_shadow_node_get_dy (const GskRenderNode *node)
 {
   const GskInsetShadowNode *self = (const GskInsetShadowNode *) node;
 
-  return self->dy;
+  return self->offset.y;
+}
+
+/**
+ * gsk_inset_shadow_node_get_offset:
+ * @node: (type GskInsetShadowNode): a `GskRenderNode` for an inset shadow
+ *
+ * Retrieves the offset of the inset shadow.
+ *
+ * Returns: an offset, in pixels
+ **/
+const graphene_point_t *
+gsk_inset_shadow_node_get_offset (const GskRenderNode *node)
+{
+  const GskInsetShadowNode *self = (const GskInsetShadowNode *) node;
+
+  return &self->offset;
 }
 
 /**
@@ -2738,12 +2969,22 @@ struct _GskOutsetShadowNode
   GskRenderNode render_node;
 
   GskRoundedRect outline;
-  GdkRGBA color;
-  float dx;
-  float dy;
+  GdkColor color;
+  graphene_point_t offset;
   float spread;
   float blur_radius;
 };
+
+static void
+gsk_outset_shadow_node_finalize (GskRenderNode *node)
+{
+  GskInsetShadowNode *self = (GskInsetShadowNode *) node;
+  GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_OUTSET_SHADOW_NODE));
+
+  gdk_color_finish (&self->color);
+
+  parent_class->finalize (node);
+}
 
 static void
 gsk_outset_shadow_get_extents (GskOutsetShadowNode *self,
@@ -2755,10 +2996,10 @@ gsk_outset_shadow_get_extents (GskOutsetShadowNode *self,
   float clip_radius;
 
   clip_radius = gsk_cairo_blur_compute_pixels (ceil (self->blur_radius / 2.0));
-  *top = MAX (0, ceil (clip_radius + self->spread - self->dy));
-  *right = MAX (0, ceil (clip_radius + self->spread + self->dx));
-  *bottom = MAX (0, ceil (clip_radius + self->spread + self->dy));
-  *left = MAX (0, ceil (clip_radius + self->spread - self->dx));
+  *top = MAX (0, ceil (clip_radius + self->spread - self->offset.y));
+  *right = MAX (0, ceil (clip_radius + self->spread + self->offset.x));
+  *bottom = MAX (0, ceil (clip_radius + self->spread + self->offset.y));
+  *left = MAX (0, ceil (clip_radius + self->spread - self->offset.x));
 }
 
 static void
@@ -2774,7 +3015,7 @@ gsk_outset_shadow_node_draw (GskRenderNode *node,
   double blur_radius;
 
   /* We don't need to draw invisible shadows */
-  if (gdk_rgba_is_clear (&self->color))
+  if (gdk_color_is_clear (&self->color))
     return;
 
   _graphene_rect_init_from_clip_extents (&clip_rect, cr);
@@ -2798,11 +3039,13 @@ gsk_outset_shadow_node_draw (GskRenderNode *node,
   cairo_clip (cr);
 
   gsk_rounded_rect_init_copy (&box, &self->outline);
-  gsk_rounded_rect_offset (&box, self->dx, self->dy);
+  gsk_rounded_rect_offset (&box, self->offset.x, self->offset.y);
   gsk_rounded_rect_shrink (&box, -self->spread, -self->spread, -self->spread, -self->spread);
 
   if (!needs_blur (blur_radius))
-    draw_shadow (cr, ccs, FALSE, &box, &clip_box, blur_radius, &self->color, GSK_BLUR_NONE);
+    {
+      draw_shadow (cr, ccs, FALSE, &box, &clip_box, blur_radius, &self->color, GSK_BLUR_NONE);
+    }
   else
     {
       int i;
@@ -2876,9 +3119,8 @@ gsk_outset_shadow_node_diff (GskRenderNode *node1,
   GskOutsetShadowNode *self2 = (GskOutsetShadowNode *) node2;
 
   if (gsk_rounded_rect_equal (&self1->outline, &self2->outline) &&
-      gdk_rgba_equal (&self1->color, &self2->color) &&
-      self1->dx == self2->dx &&
-      self1->dy == self2->dy &&
+      gdk_color_equal (&self1->color, &self2->color) &&
+      graphene_point_equal (&self1->offset, &self2->offset) &&
       self1->spread == self2->spread &&
       self1->blur_radius == self2->blur_radius)
     return;
@@ -2894,6 +3136,7 @@ gsk_outset_shadow_node_class_init (gpointer g_class,
 
   node_class->node_type = GSK_OUTSET_SHADOW_NODE;
 
+  node_class->finalize = gsk_outset_shadow_node_finalize;
   node_class->draw = gsk_outset_shadow_node_draw;
   node_class->diff = gsk_outset_shadow_node_diff;
 }
@@ -2920,6 +3163,39 @@ gsk_outset_shadow_node_new (const GskRoundedRect *outline,
                             float                 spread,
                             float                 blur_radius)
 {
+  GdkColor color2;
+  GskRenderNode *node;
+
+  gdk_color_init_from_rgba (&color2, color);
+  node = gsk_outset_shadow_node_new2 (outline,
+                                      &color2,
+                                      &GRAPHENE_POINT_INIT (dx, dy),
+                                      spread, blur_radius);
+  gdk_color_finish (&color2);
+
+  return node;
+}
+
+/*< private >
+ * gsk_outset_shadow_node_new2:
+ * @outline: outline of the region surrounded by shadow
+ * @color: color of the shadow
+ * @offset: offset of shadow
+ * @spread: how far the shadow spreads towards the inside
+ * @blur_radius: how much blur to apply to the shadow
+ *
+ * Creates a `GskRenderNode` that will render an outset shadow
+ * around the box given by @outline.
+ *
+ * Returns: (transfer full) (type GskOutsetShadowNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_outset_shadow_node_new2 (const GskRoundedRect   *outline,
+                             const GdkColor         *color,
+                             const graphene_point_t *offset,
+                             float                   spread,
+                             float                   blur_radius)
+{
   GskOutsetShadowNode *self;
   GskRenderNode *node;
   float top, right, bottom, left;
@@ -2931,12 +3207,11 @@ gsk_outset_shadow_node_new (const GskRoundedRect *outline,
   self = gsk_render_node_alloc (GSK_OUTSET_SHADOW_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->preferred_depth = my_color_get_depth (color);
+  node->preferred_depth = gdk_color_get_depth (color);
 
   gsk_rounded_rect_init_copy (&self->outline, outline);
-  self->color = *color;
-  self->dx = dx;
-  self->dy = dy;
+  gdk_color_init_copy (&self->color, color);
+  self->offset = *offset;
   self->spread = spread;
   self->blur_radius = blur_radius;
 
@@ -2973,10 +3248,30 @@ gsk_outset_shadow_node_get_outline (const GskRenderNode *node)
  *
  * Retrieves the color of the outset shadow.
  *
+ * The value returned by this function will not be correct
+ * if the render node was created for a non-sRGB color.
+ *
  * Returns: (transfer none): a color
  */
 const GdkRGBA *
 gsk_outset_shadow_node_get_color (const GskRenderNode *node)
+{
+  const GskOutsetShadowNode *self = (const GskOutsetShadowNode *) node;
+
+  /* NOTE: This is only correct for nodes with sRGB colors */
+  return (const GdkRGBA *) &self->color.values;
+}
+
+/*< private >
+ * gsk_color_node_get_color2:
+ * @node: (type GskOutsetShadowNode): a `GskRenderNode`
+ *
+ * Retrieves the color of the given @node.
+ *
+ * Returns: (transfer none): the color of the node
+ */
+const GdkColor *
+gsk_outset_shadow_node_get_color2 (const GskRenderNode *node)
 {
   const GskOutsetShadowNode *self = (const GskOutsetShadowNode *) node;
 
@@ -2996,7 +3291,7 @@ gsk_outset_shadow_node_get_dx (const GskRenderNode *node)
 {
   const GskOutsetShadowNode *self = (const GskOutsetShadowNode *) node;
 
-  return self->dx;
+  return self->offset.x;
 }
 
 /**
@@ -3012,7 +3307,23 @@ gsk_outset_shadow_node_get_dy (const GskRenderNode *node)
 {
   const GskOutsetShadowNode *self = (const GskOutsetShadowNode *) node;
 
-  return self->dy;
+  return self->offset.y;
+}
+
+/**
+ * gsk_outset_shadow_node_get_offset:
+ * @node: (type GskOutsetShadowNode): a `GskRenderNode` for an outset shadow
+ *
+ * Retrieves the offset of the outset shadow.
+ *
+ * Returns: an offset, in pixels
+ **/
+const graphene_point_t *
+gsk_outset_shadow_node_get_offset (const GskRenderNode *node)
+{
+  const GskOutsetShadowNode *self = (const GskOutsetShadowNode *) node;
+
+  return &self->offset;
 }
 
 /**
@@ -3423,6 +3734,7 @@ gsk_container_node_new (GskRenderNode **children,
     {
       graphene_rect_t child_opaque;
       gboolean have_opaque;
+      gboolean is_hdr;
 
       self->children = g_malloc_n (n_children, sizeof (GskRenderNode *));
 
@@ -3431,6 +3743,7 @@ gsk_container_node_new (GskRenderNode **children,
       node->preferred_depth = children[0]->preferred_depth;
       gsk_rect_init_from_rect (&node->bounds, &(children[0]->bounds));
       have_opaque = gsk_render_node_get_opaque_rect (self->children[0], &self->opaque);
+      is_hdr = gsk_render_node_is_hdr (self->children[0]);
 
       for (guint i = 1; i < n_children; i++)
         {
@@ -3449,10 +3762,13 @@ gsk_container_node_new (GskRenderNode **children,
                   have_opaque = TRUE;
                 }
             }
+
+          is_hdr |= gsk_render_node_is_hdr (self->children[i]);
         }
 
       node->offscreen_for_opacity = node->offscreen_for_opacity || !self->disjoint;
-    }
+      node->is_hdr = is_hdr;
+   }
 
   return node;
 }
@@ -3747,6 +4063,7 @@ gsk_transform_node_new (GskRenderNode *child,
                                   &node->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -3899,6 +4216,7 @@ gsk_opacity_node_new (GskRenderNode *child,
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -4132,6 +4450,7 @@ gsk_color_matrix_node_new (GskRenderNode           *child,
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -4439,7 +4758,10 @@ gsk_repeat_node_new (const graphene_rect_t *bounds,
     }
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
-  node->fully_opaque = child->fully_opaque && gsk_rect_contains_rect (&child->bounds, &self->child_bounds);
+  node->is_hdr = gsk_render_node_is_hdr (child);
+  node->fully_opaque = child->fully_opaque &&
+                       gsk_rect_contains_rect (&child->bounds, &self->child_bounds) &&
+                       !gsk_rect_is_empty (&self->child_bounds);
 
   return node;
 }
@@ -4606,6 +4928,7 @@ gsk_clip_node_new (GskRenderNode         *child,
   gsk_rect_intersection (&self->clip, &child->bounds, &node->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -4789,6 +5112,7 @@ gsk_rounded_clip_node_new (GskRenderNode         *child,
   gsk_rect_intersection (&self->clip.bounds, &child->bounds, &node->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -4959,6 +5283,7 @@ gsk_fill_node_new (GskRenderNode *child,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = child->offscreen_for_opacity;
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);
@@ -5169,6 +5494,7 @@ gsk_stroke_node_new (GskRenderNode   *child,
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = child->offscreen_for_opacity;
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   self->child = gsk_render_node_ref (child);
   self->path = gsk_path_ref (path);
@@ -5258,7 +5584,9 @@ struct _GskShadowNode
   GskRenderNode *child;
 
   gsize n_shadows;
-  GskShadow *shadows;
+  GskShadow2 *shadows;
+
+  GskShadow *rgba_shadows;
 };
 
 static void
@@ -5268,7 +5596,12 @@ gsk_shadow_node_finalize (GskRenderNode *node)
   GskRenderNodeClass *parent_class = g_type_class_peek (g_type_parent (GSK_TYPE_SHADOW_NODE));
 
   gsk_render_node_unref (self->child);
+
+  for (gsize i = 0; i < self->n_shadows; i++)
+    gdk_color_finish (&self->shadows[i].color);
   g_free (self->shadows);
+
+  g_free (self->rgba_shadows);
 
   parent_class->finalize (node);
 }
@@ -5289,28 +5622,28 @@ gsk_shadow_node_draw (GskRenderNode *node,
 
   for (i = 0; i < self->n_shadows; i++)
     {
-      GskShadow *shadow = &self->shadows[i];
+      GskShadow2 *shadow = &self->shadows[i];
       cairo_pattern_t *pattern;
 
       /* We don't need to draw invisible shadows */
-      if (gdk_rgba_is_clear (&shadow->color))
+      if (gdk_color_is_clear (&shadow->color))
         continue;
 
       cairo_save (cr);
       cr = gsk_cairo_blur_start_drawing (cr, 0.5 * shadow->radius, GSK_BLUR_X | GSK_BLUR_Y);
 
       cairo_save (cr);
-      cairo_translate (cr, shadow->dx, shadow->dy);
+      cairo_translate (cr, shadow->offset.x, shadow->offset.y);
       cairo_push_group (cr);
       gsk_render_node_draw_ccs (self->child, cr, ccs);
       pattern = cairo_pop_group (cr);
       cairo_reset_clip (cr);
-      gdk_cairo_set_source_rgba_ccs (cr, ccs, &shadow->color);
+      gdk_cairo_set_source_color (cr, ccs, &shadow->color);
       cairo_mask (cr, pattern);
       cairo_pattern_destroy (pattern);
       cairo_restore (cr);
 
-      cr = gsk_cairo_blur_finish_drawing (cr, 0.5 * shadow->radius, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
+      cr = gsk_cairo_blur_finish_drawing (cr, ccs, 0.5 * shadow->radius, &shadow->color, GSK_BLUR_X | GSK_BLUR_Y);
       cairo_restore (cr);
     }
 
@@ -5337,13 +5670,12 @@ gsk_shadow_node_diff (GskRenderNode *node1,
 
   for (i = 0; i < self1->n_shadows; i++)
     {
-      GskShadow *shadow1 = &self1->shadows[i];
-      GskShadow *shadow2 = &self2->shadows[i];
+      GskShadow2 *shadow1 = &self1->shadows[i];
+      GskShadow2 *shadow2 = &self2->shadows[i];
       float clip_radius;
 
-      if (!gdk_rgba_equal (&shadow1->color, &shadow2->color) ||
-          shadow1->dx != shadow2->dx ||
-          shadow1->dy != shadow2->dy ||
+      if (!gdk_color_equal (&shadow1->color, &shadow2->color) ||
+          !graphene_point_equal (&shadow1->offset, &shadow2->offset) ||
           shadow1->radius != shadow2->radius)
         {
           gsk_render_node_diff_impossible (node1, node2, data);
@@ -5351,10 +5683,10 @@ gsk_shadow_node_diff (GskRenderNode *node1,
         }
 
       clip_radius = gsk_cairo_blur_compute_pixels (shadow1->radius / 2.0);
-      top = MAX (top, ceil (clip_radius - shadow1->dy));
-      right = MAX (right, ceil (clip_radius + shadow1->dx));
-      bottom = MAX (bottom, ceil (clip_radius + shadow1->dy));
-      left = MAX (left, ceil (clip_radius - shadow1->dx));
+      top = MAX (top, ceil (clip_radius - shadow1->offset.y));
+      right = MAX (right, ceil (clip_radius + shadow1->offset.x));
+      bottom = MAX (bottom, ceil (clip_radius + shadow1->offset.y));
+      left = MAX (left, ceil (clip_radius - shadow1->offset.x));
     }
 
   sub = cairo_region_create ();
@@ -5385,10 +5717,10 @@ gsk_shadow_node_get_bounds (GskShadowNode *self,
   for (i = 0; i < self->n_shadows; i++)
     {
       float clip_radius = gsk_cairo_blur_compute_pixels (self->shadows[i].radius / 2.0);
-      top = MAX (top, clip_radius - self->shadows[i].dy);
-      right = MAX (right, clip_radius + self->shadows[i].dx);
-      bottom = MAX (bottom, clip_radius + self->shadows[i].dy);
-      left = MAX (left, clip_radius - self->shadows[i].dx);
+      top = MAX (top, clip_radius - self->shadows[i].offset.y);
+      right = MAX (right, clip_radius + self->shadows[i].offset.x);
+      bottom = MAX (bottom, clip_radius + self->shadows[i].offset.y);
+      left = MAX (left, clip_radius - self->shadows[i].offset.x);
     }
 
   bounds->origin.x -= left;
@@ -5426,9 +5758,51 @@ gsk_shadow_node_new (GskRenderNode   *child,
                      const GskShadow *shadows,
                      gsize            n_shadows)
 {
+  GskShadow2 *shadows2;
+  GskRenderNode *node;
+
+  g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
+  g_return_val_if_fail (shadows != NULL, NULL);
+  g_return_val_if_fail (n_shadows > 0, NULL);
+
+  shadows2 = g_new (GskShadow2, n_shadows);
+  for (gsize i = 0; i < n_shadows; i++)
+    {
+      gdk_color_init_from_rgba (&shadows2[i].color, &shadows[i].color);
+      graphene_point_init (&shadows2[i].offset, shadows[i].dx, shadows[i].dy);
+      shadows2[i].radius = shadows[i].radius;
+    }
+
+  node = gsk_shadow_node_new2 (child, shadows2, n_shadows);
+
+  for (gsize i = 0; i < n_shadows; i++)
+    gdk_color_finish (&shadows2[i].color);
+  g_free (shadows2);
+
+  return node;
+}
+
+/*< private >
+ * gsk_shadow_node_new2:
+ * @child: The node to draw
+ * @shadows: (array length=n_shadows): The shadows to apply
+ * @n_shadows: number of entries in the @shadows array
+ *
+ * Creates a `GskRenderNode` that will draw a @child with the given
+ * @shadows below it.
+ *
+ * Returns: (transfer full) (type GskShadowNode): A new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_shadow_node_new2 (GskRenderNode    *child,
+                      const GskShadow2 *shadows,
+                      gsize             n_shadows)
+{
   GskShadowNode *self;
   GskRenderNode *node;
   gsize i;
+  GdkMemoryDepth depth;
+  gboolean is_hdr;
 
   g_return_val_if_fail (GSK_IS_RENDER_NODE (child), NULL);
   g_return_val_if_fail (shadows != NULL, NULL);
@@ -5440,17 +5814,24 @@ gsk_shadow_node_new (GskRenderNode   *child,
 
   self->child = gsk_render_node_ref (child);
   self->n_shadows = n_shadows;
-  self->shadows = g_malloc_n (n_shadows, sizeof (GskShadow));
-  memcpy (self->shadows, shadows, n_shadows * sizeof (GskShadow));
+  self->shadows = g_new (GskShadow2, n_shadows);
 
-  gsk_shadow_node_get_bounds (self, &node->bounds);
+  depth = gsk_render_node_get_preferred_depth (child);
+  is_hdr = gsk_render_node_is_hdr (child);
 
-  node->preferred_depth = gsk_render_node_get_preferred_depth (child);
   for (i = 0; i < n_shadows; i++)
     {
-      node->preferred_depth = gdk_memory_depth_merge (node->preferred_depth,
-                                                      my_color_get_depth (&shadows->color));
+      gdk_color_init_copy (&self->shadows[i].color, &shadows[i].color);
+      graphene_point_init_from_point (&self->shadows[i].offset, &shadows[i].offset);
+      self->shadows[i].radius = shadows[i].radius;
+      depth = gdk_memory_depth_merge (depth, gdk_color_get_depth (&shadows[i].color));
+      is_hdr = is_hdr || color_state_is_hdr (shadows[i].color.color_state);
     }
+
+  node->preferred_depth = depth;
+  node->is_hdr = is_hdr;
+
+  gsk_shadow_node_get_bounds (self, &node->bounds);
 
   return node;
 }
@@ -5483,6 +5864,45 @@ gsk_shadow_node_get_child (const GskRenderNode *node)
 const GskShadow *
 gsk_shadow_node_get_shadow (const GskRenderNode *node,
                             gsize                i)
+{
+  GskShadowNode *self = (GskShadowNode *) node;
+  const GskShadow *shadow;
+
+  G_LOCK (rgba);
+
+  if (self->rgba_shadows == NULL)
+    {
+      self->rgba_shadows = g_new (GskShadow, self->n_shadows);
+      for (gsize j = 0; j < self->n_shadows; j++)
+        {
+          gdk_color_to_float (&self->shadows[j].color,
+                              GDK_COLOR_STATE_SRGB,
+                              (float *) &self->rgba_shadows[j].color);
+          self->rgba_shadows[j].dx = self->shadows[j].offset.x;
+          self->rgba_shadows[j].dy = self->shadows[j].offset.y;
+          self->rgba_shadows[j].radius = self->shadows[j].radius;
+        }
+    }
+
+  shadow = &self->rgba_shadows[i];
+
+  G_UNLOCK (rgba);
+
+  return shadow;
+}
+
+/*< private >
+ * gsk_shadow_node_get_shadow2:
+ * @node: (type GskShadowNode): a shadow `GskRenderNode`
+ * @i: the given index
+ *
+ * Retrieves the shadow data at the given index @i.
+ *
+ * Returns: (transfer none): the shadow data
+ */
+const GskShadow2 *
+gsk_shadow_node_get_shadow2 (const GskRenderNode *node,
+                             gsize                i)
 {
   const GskShadowNode *self = (const GskShadowNode *) node;
 
@@ -5669,6 +6089,8 @@ gsk_blend_node_new (GskRenderNode *bottom,
 
   node->preferred_depth = gdk_memory_depth_merge (gsk_render_node_get_preferred_depth (bottom),
                                                   gsk_render_node_get_preferred_depth (top));
+  node->is_hdr = gsk_render_node_is_hdr (bottom) ||
+                 gsk_render_node_is_hdr (top);
 
   return node;
 }
@@ -5856,6 +6278,8 @@ gsk_cross_fade_node_new (GskRenderNode *start,
 
   node->preferred_depth = gdk_memory_depth_merge (gsk_render_node_get_preferred_depth (start),
                                                   gsk_render_node_get_preferred_depth (end));
+  node->is_hdr = gsk_render_node_is_hdr (start) ||
+                 gsk_render_node_is_hdr (end);
 
   return node;
 }
@@ -5924,7 +6348,7 @@ struct _GskTextNode
   PangoFont *font;
   gboolean has_color_glyphs;
 
-  GdkRGBA color;
+  GdkColor color;
   graphene_point_t offset;
 
   guint num_glyphs;
@@ -5940,6 +6364,7 @@ gsk_text_node_finalize (GskRenderNode *node)
   g_object_unref (self->font);
   g_object_unref (self->fontmap);
   g_free (self->glyphs);
+  gdk_color_finish (&self->color);
 
   parent_class->finalize (node);
 }
@@ -5965,7 +6390,7 @@ gsk_text_node_draw (GskRenderNode *node,
     }
   else
     {
-      gdk_cairo_set_source_rgba_ccs (cr, ccs, &self->color);
+      gdk_cairo_set_source_color (cr, ccs, &self->color);
       cairo_translate (cr, self->offset.x, self->offset.y);
       pango_cairo_show_glyph_string (cr, self->font, &glyphs);
     }
@@ -5982,7 +6407,7 @@ gsk_text_node_diff (GskRenderNode *node1,
   GskTextNode *self2 = (GskTextNode *) node2;
 
   if (self1->font == self2->font &&
-      gdk_rgba_equal (&self1->color, &self2->color) &&
+      gdk_color_equal (&self1->color, &self2->color) &&
       graphene_point_equal (&self1->offset, &self2->offset) &&
       self1->num_glyphs == self2->num_glyphs)
     {
@@ -6050,6 +6475,36 @@ gsk_text_node_new (PangoFont              *font,
                    const GdkRGBA          *color,
                    const graphene_point_t *offset)
 {
+  GdkColor color2;
+  GskRenderNode *node;
+
+  gdk_color_init_from_rgba (&color2, color);
+  node = gsk_text_node_new2 (font, glyphs, &color2, offset);
+  gdk_color_finish (&color2);
+
+  return node;
+}
+
+/*< private >
+ * gsk_text_node_new2:
+ * @font: the `PangoFont` containing the glyphs
+ * @glyphs: the `PangoGlyphString` to render
+ * @color: the foreground color to render with
+ * @offset: offset of the baseline
+ *
+ * Creates a render node that renders the given glyphs.
+ *
+ * Note that @color may not be used if the font contains
+ * color glyphs.
+ *
+ * Returns: (nullable) (transfer full) (type GskTextNode): a new `GskRenderNode`
+ */
+GskRenderNode *
+gsk_text_node_new2 (PangoFont              *font,
+                    PangoGlyphString       *glyphs,
+                    const GdkColor         *color,
+                    const graphene_point_t *offset)
+{
   GskTextNode *self;
   GskRenderNode *node;
   PangoRectangle ink_rect;
@@ -6065,11 +6520,12 @@ gsk_text_node_new (PangoFont              *font,
   self = gsk_render_node_alloc (GSK_TEXT_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
-  node->preferred_depth = my_color_get_depth (color);
+  node->preferred_depth = gdk_color_get_depth (color);
+  node->is_hdr = color_state_is_hdr (color->color_state);
 
   self->fontmap = g_object_ref (pango_font_get_font_map (font));
   self->font = g_object_ref (font);
-  self->color = *color;
+  gdk_color_init_copy (&self->color, color);
   self->offset = *offset;
   self->has_color_glyphs = FALSE;
 
@@ -6102,11 +6558,15 @@ gsk_text_node_new (PangoFont              *font,
   return node;
 }
 
+
 /**
  * gsk_text_node_get_color:
  * @node: (type GskTextNode): a text `GskRenderNode`
  *
  * Retrieves the color used by the text @node.
+ *
+ * The value returned by this function will not be correct
+ * if the render node was created for a non-sRGB color.
  *
  * Returns: (transfer none): the text color
  */
@@ -6114,6 +6574,23 @@ const GdkRGBA *
 gsk_text_node_get_color (const GskRenderNode *node)
 {
   const GskTextNode *self = (const GskTextNode *) node;
+
+  /* NOTE: This is only correct for nodes with sRGB colors */
+  return (const GdkRGBA *) &self->color;
+}
+
+/*< private >
+ * gsk_text_node_get_color2:
+ * @node: (type GskTextNode): a `GskRenderNode`
+ *
+ * Retrieves the color of the given @node.
+ *
+ * Returns: (transfer none): the color of the node
+ */
+const GdkColor *
+gsk_text_node_get_color2 (const GskRenderNode *node)
+{
+  GskTextNode *self = (GskTextNode *) node;
 
   return &self->color;
 }
@@ -6508,6 +6985,7 @@ gsk_blur_node_new (GskRenderNode *child,
   graphene_rect_inset (&self->render_node.bounds, - clip_radius, - clip_radius);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -6744,6 +7222,8 @@ gsk_mask_node_new (GskRenderNode *source,
     self->render_node.bounds = *graphene_rect_zero ();
 
   self->render_node.preferred_depth = gsk_render_node_get_preferred_depth (source);
+  self->render_node.is_hdr = gsk_render_node_is_hdr (source) ||
+                             gsk_render_node_is_hdr (mask);
 
   return &self->render_node;
 }
@@ -6922,6 +7402,7 @@ gsk_debug_node_new (GskRenderNode *child,
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  self->render_node.is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
@@ -7344,6 +7825,7 @@ gsk_subsurface_node_new (GskRenderNode *child,
   gsk_rect_init_from_rect (&node->bounds, &child->bounds);
 
   node->preferred_depth = gsk_render_node_get_preferred_depth (child);
+  node->is_hdr = gsk_render_node_is_hdr (child);
 
   return node;
 }
