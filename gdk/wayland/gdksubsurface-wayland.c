@@ -185,8 +185,8 @@ get_dmabuf_wl_buffer (GdkWaylandSubsurface            *self,
   while (!cd.done)
     gdk_wayland_display_dispatch_queue (GDK_DISPLAY (display), event_queue);
 
-  wl_event_queue_destroy (event_queue);
   zwp_linux_buffer_params_v1_destroy (params);
+  wl_event_queue_destroy (event_queue);
 
   buffer = cd.buffer;
 
