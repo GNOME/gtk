@@ -300,7 +300,7 @@ run_node_test (gconstpointer data)
       save_image (rendered_texture, test->node_file, NULL, ".out.png");
 
       /* Now compare the two */
-      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+      diff_texture = reftest_compare_textures (reference_texture, rendered_texture);
       if (diff_texture)
         {
           save_image (diff_texture, test->node_file, NULL, ".diff.png");
@@ -336,7 +336,7 @@ run_node_test (gconstpointer data)
 
       save_image (flipped_reference, test->node_file, "flipped", ".ref.png");
 
-      diff_texture = reftest_compare_textures (rendered_texture, flipped_reference);
+      diff_texture = reftest_compare_textures (flipped_reference, rendered_texture);
 
       if (diff_texture)
         {
@@ -406,7 +406,7 @@ run_node_test (gconstpointer data)
 
       save_image (repeated_reference, test->node_file, "repeated", ".ref.png");
 
-      diff_texture = reftest_compare_textures (rendered_texture, repeated_reference);
+      diff_texture = reftest_compare_textures (repeated_reference, rendered_texture);
 
       if (diff_texture)
         {
@@ -450,7 +450,7 @@ run_node_test (gconstpointer data)
 
       save_image (rotated_reference, test->node_file, "rotated", ".ref.png");
 
-      diff_texture = reftest_compare_textures (rendered_texture, rotated_reference);
+      diff_texture = reftest_compare_textures (rotated_reference, rendered_texture);
 
       if (diff_texture)
         {
@@ -533,7 +533,7 @@ run_node_test (gconstpointer data)
 
       save_image (masked_reference, test->node_file, "masked", ".ref.png");
 
-      diff_texture = reftest_compare_textures (rendered_texture, masked_reference);
+      diff_texture = reftest_compare_textures (masked_reference, rendered_texture);
 
       if (diff_texture)
         {
@@ -573,7 +573,7 @@ run_node_test (gconstpointer data)
       save_image (rendered_texture, test->node_file, "replayed", ".out.png");
       g_assert_nonnull (rendered_texture);
 
-      diff_texture = reftest_compare_textures (rendered_texture, reference_texture);
+      diff_texture = reftest_compare_textures (reference_texture, rendered_texture);
 
       if (diff_texture)
         {
@@ -627,7 +627,7 @@ run_node_test (gconstpointer data)
 
       save_image (clipped_reference, test->node_file, "clipped", ".ref.png");
 
-      diff_texture = reftest_compare_textures (rendered_texture, clipped_reference);
+      diff_texture = reftest_compare_textures (clipped_reference, rendered_texture);
 
       if (diff_texture)
         {
@@ -675,7 +675,7 @@ skip_clip:
 
       save_image (colorflipped_reference, test->node_file, "colorflipped", ".ref.png");
 
-      diff_texture = reftest_compare_textures (rendered_texture, colorflipped_reference);
+      diff_texture = reftest_compare_textures (colorflipped_reference, rendered_texture);
 
       if (diff_texture)
         {
