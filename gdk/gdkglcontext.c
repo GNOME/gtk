@@ -2037,8 +2037,11 @@ gdk_gl_context_clear_current (void)
  *
  * Does a gdk_gl_context_clear_current() if the current context is attached
  * to @surface, leaves the current context alone otherwise.
+ * 
+ * Returns: (nullable) (transfer full): The context that was cleared, so that it can be
+ *   re-made current later
  **/
-void
+GdkGLContext *
 gdk_gl_context_clear_current_if_surface (GdkSurface *surface)
 {
   MaskedContext *current;
@@ -2049,11 +2052,20 @@ gdk_gl_context_clear_current_if_surface (GdkSurface *surface)
       GdkGLContext *context = unmask_context (current);
 
       if (gdk_gl_context_get_surface (context) != surface)
-        return;
+        return NULL;
+
+      g_object_ref (context);
 
       if (GDK_GL_CONTEXT_GET_CLASS (context)->clear_current (context))
-        g_private_replace (&thread_current_context, NULL);
+        {
+          g_private_replace (&thread_current_context, NULL);
+          return context;
+        }
+
+      g_object_unref (context);
     }
+
+  return NULL;
 }
 
 /**
