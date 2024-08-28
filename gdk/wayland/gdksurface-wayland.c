@@ -1447,20 +1447,21 @@ _gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *surface,
   impl->pending_buffer_offset_y = y;
 }
 
-void
+gboolean
 gdk_wayland_surface_ensure_wl_egl_window (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+  int width, height;
 
-  if (impl->display_server.egl_window == NULL)
-    {
-      int width, height;
+  if (impl->display_server.egl_window != NULL)
+    return FALSE;
 
-      get_egl_window_size (surface, &width, &height);
-      impl->display_server.egl_window =
-        wl_egl_window_create (impl->display_server.wl_surface, width, height);
-      gdk_surface_set_egl_native_window (surface, impl->display_server.egl_window);
-    }
+  get_egl_window_size (surface, &width, &height);
+  impl->display_server.egl_window =
+    wl_egl_window_create (impl->display_server.wl_surface, width, height);
+  gdk_surface_set_egl_native_window (surface, impl->display_server.egl_window);
+
+  return TRUE;
 }
 
 /* }}} */

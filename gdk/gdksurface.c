@@ -1160,8 +1160,6 @@ gdk_surface_get_egl_surface (GdkSurface *self)
 {
   GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
 
-  gdk_surface_ensure_egl_surface (self, priv->egl_surface_depth);
-
   return priv->egl_surface;
 }
 

@@ -26,6 +26,6 @@
 
 G_BEGIN_DECLS
 
-void                     gdk_wayland_surface_ensure_wl_egl_window       (GdkSurface  *surface);
+gboolean                gdk_wayland_surface_ensure_wl_egl_window        (GdkSurface  *surface);
 
 G_END_DECLS
