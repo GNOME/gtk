@@ -152,6 +152,7 @@ struct _GdkWin32Display
   GdkWin32InputLocaleItems *input_locale_items;
   GdkWin32PointerDeviceItems *pointer_device_items;
   GdkWin32CbDnDItems *cb_dnd_items;
+  GdkDeviceManagerWin32 *device_manager;
 
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;

@@ -137,8 +137,6 @@ extern LRESULT CALLBACK _gdk_win32_surface_procedure (HWND, UINT, WPARAM, LPARAM
 
 extern GdkDisplay       *_gdk_display;
 
-extern GdkDeviceManagerWin32 *_gdk_device_manager;
-
 /* These are thread specific, but GDK/win32 works OK only when invoked
  * from a single thread anyway.
  */
