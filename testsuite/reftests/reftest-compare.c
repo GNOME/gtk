@@ -79,12 +79,13 @@ memory_format_is_high_depth (GdkMemoryFormat format)
  * Copyright © 2004 Richard D. Worth
  */
 static GdkTexture *
-buffer_diff_u8 (const guchar *buf_a,
-                int           stride_a,
-                const guchar *buf_b,
-                int           stride_b,
-                int           width,
-                int           height)
+buffer_diff_u8 (GdkColorState *color_state,
+                const guchar  *buf_a,
+                int            stride_a,
+                const guchar  *buf_b,
+                int            stride_b,
+                int            width,
+                int            height)
 {
   int x, y;
   guchar *buf_diff = NULL;
@@ -113,15 +114,21 @@ buffer_diff_u8 (const guchar *buf_a,
 
           if (diff == NULL)
             {
+              GdkMemoryTextureBuilder *builder;
               GBytes *bytes;
 
               stride_diff = 4 * width;
               buf_diff = g_malloc0_n (stride_diff, height);
               bytes = g_bytes_new_take (buf_diff, stride_diff * height);
-              diff = gdk_memory_texture_new (width, height,
-                                             GDK_MEMORY_DEFAULT,
-                                             bytes,
-                                             stride_diff);
+              builder = gdk_memory_texture_builder_new ();
+              gdk_memory_texture_builder_set_width (builder, width);
+              gdk_memory_texture_builder_set_height (builder, height);
+              gdk_memory_texture_builder_set_format (builder, GDK_MEMORY_DEFAULT);
+              gdk_memory_texture_builder_set_color_state (builder, color_state);
+              gdk_memory_texture_builder_set_bytes (builder, bytes);
+              gdk_memory_texture_builder_set_stride (builder, stride_diff);
+              diff = gdk_memory_texture_builder_build (builder);
+              g_object_unref (builder);
               row = (guint32 *) (buf_diff + y * stride_diff);
             }
 
@@ -162,12 +169,13 @@ buffer_diff_u8 (const guchar *buf_a,
  * surfaces.
  */
 static GdkTexture *
-buffer_diff_float (const guchar *buf_a,
-                   int           stride_a,
-                   const guchar *buf_b,
-                   int           stride_b,
-                   int           width,
-                   int           height)
+buffer_diff_float (GdkColorState *color_state,
+                   const guchar  *buf_a,
+                   int            stride_a,
+                   const guchar  *buf_b,
+                   int            stride_b,
+                   int            width,
+                   int            height)
 {
   int x, y;
   guchar *buf_diff = NULL;
@@ -199,15 +207,21 @@ buffer_diff_float (const guchar *buf_a,
 
           if (diff == NULL)
             {
+              GdkMemoryTextureBuilder *builder;
               GBytes *bytes;
 
               stride_diff = 4 * width * sizeof (float);
               buf_diff = g_malloc0_n (stride_diff, height);
               bytes = g_bytes_new_take (buf_diff, stride_diff * height);
-              diff = gdk_memory_texture_new (width, height,
-                                             GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
-                                             bytes,
-                                             stride_diff);
+              builder = gdk_memory_texture_builder_new ();
+              gdk_memory_texture_builder_set_width (builder, width);
+              gdk_memory_texture_builder_set_height (builder, height);
+              gdk_memory_texture_builder_set_format (builder, GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED);
+              gdk_memory_texture_builder_set_color_state (builder, color_state);
+              gdk_memory_texture_builder_set_bytes (builder, bytes);
+              gdk_memory_texture_builder_set_stride (builder, stride_diff);
+              diff = gdk_memory_texture_builder_build (builder);
+              g_object_unref (builder);
               row = (float *) (buf_diff + y * stride_diff);
             }
 
@@ -251,13 +265,16 @@ reftest_compare_textures (GdkTexture *texture1,
   int w, h, stride;
   guchar *data1, *data2;
   GdkTextureDownloader *downloader;
+  GdkColorState *color_state;
   GdkTexture *diff;
   gboolean high_depth;
   
   w = MAX (gdk_texture_get_width (texture1), gdk_texture_get_width (texture2));
   h = MAX (gdk_texture_get_height (texture1), gdk_texture_get_height (texture2));
+  color_state = gdk_texture_get_color_state (texture1);
 
   downloader = gdk_texture_downloader_new (texture1);
+  gdk_texture_downloader_set_color_state (downloader, color_state);
   high_depth = memory_format_is_high_depth (gdk_texture_get_format (texture1)) ||
                memory_format_is_high_depth (gdk_texture_get_format (texture1));
   if (high_depth)
@@ -279,13 +296,15 @@ reftest_compare_textures (GdkTexture *texture1,
 
   if (high_depth)
     {
-      diff = buffer_diff_float (data1, stride,
+      diff = buffer_diff_float (color_state,
+                                data1, stride,
                                 data2, stride,
                                 w, h);
     }
   else
     {
-      diff = buffer_diff_u8 (data1, stride,
+      diff = buffer_diff_u8 (color_state,
+                             data1, stride,
                              data2, stride,
                              w, h);
     }
