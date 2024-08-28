@@ -166,6 +166,7 @@ struct _GdkWin32Display
   GListModel *monitors;
   GdkWin32InputLocaleItems *input_locale_items;
   GdkWin32CbDnDItems *cb_dnd_items;
+  GdkDeviceManagerWin32 *device_manager;
 
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;

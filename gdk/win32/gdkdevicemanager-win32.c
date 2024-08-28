@@ -112,6 +112,16 @@ gdk_device_manager_win32_finalize (GObject *object)
 
   device_manager_win32 = GDK_DEVICE_MANAGER_WIN32 (object);
 
+  g_clear_pointer (&device_manager_win32->ignored_interactions, g_ptr_array_free);
+  g_clear_pointer (&device_manager_win32->winpointer_funcs, g_free);
+
+  /* Sadly, no g_clear_pointer() on DestroyWindow() as it is __stdcall */
+  if (device_manager_win32->winpointer_notification_hwnd != NULL)
+    {
+      DestroyWindow (device_manager_win32->winpointer_notification_hwnd);
+      device_manager_win32->winpointer_notification_hwnd = NULL;
+    }
+
   g_object_unref (device_manager_win32->core_pointer);
   g_object_unref (device_manager_win32->core_keyboard);
 
@@ -669,7 +679,7 @@ wintab_default_display_notify_cb (GdkDisplayManager *display_manager)
 
   g_assert (display != NULL);
 
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
+  device_manager = GDK_WIN32_DISPLAY (display)->device_manager;
   g_assert (display_manager != NULL);
 
   default_display_opened = TRUE;
@@ -727,7 +737,7 @@ gdk_device_manager_win32_constructed (GObject *object)
   gdk_seat_default_add_physical_device (GDK_SEAT_DEFAULT (seat), device_manager->system_keyboard);
   g_object_unref (seat);
 
-  _gdk_device_manager = device_manager;
+  display_win32->device_manager = device_manager;
 
   api_preference = g_getenv ("GDK_WIN32_TABLET_INPUT_API");
   if (g_strcmp0 (api_preference, "none") == 0)
@@ -753,7 +763,7 @@ gdk_device_manager_win32_constructed (GObject *object)
 
   if (display_win32->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER)
     {
-      gboolean init_successful = gdk_winpointer_initialize ();
+      gboolean init_successful = gdk_winpointer_initialize (device_manager);
 
       if (!init_successful && !have_api_preference)
         {
@@ -938,7 +948,7 @@ gdk_wintab_make_event (GdkDisplay *display,
       return NULL;
     }
 
-  device_manager = GDK_DEVICE_MANAGER_WIN32 (_gdk_device_manager);
+  device_manager = GDK_WIN32_DISPLAY (display)->device_manager;
   surface = gdk_device_get_surface_at_position (device_manager->core_pointer, &x, &y);
 
   if (surface)

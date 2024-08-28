@@ -37,7 +37,7 @@
 #include "gdkdevicemanager-win32.h"
 #include "gdkdevice-virtual.h"
 #include "gdkdeviceprivate.h"
-#include "gdkdisplayprivate.h"
+#include "gdkdisplay-win32.h"
 #include "gdkeventsprivate.h"
 #include "gdkseatdefaultprivate.h"
 #include "gdkinput-dmanipulation.h"
@@ -327,7 +327,7 @@ dmanip_event_handler_new (GdkSurface *surface,
   handler->gesture = gesture;
 
   handler->surface = surface;
-  handler->device = _gdk_device_manager->core_pointer;
+  handler->device = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->device_manager->core_pointer;
 
   dmanip_event_handler_running_state_clear (handler);
 

@@ -656,9 +656,9 @@ _gdk_win32_display_open (const char *display_name)
 
   _gdk_events_init (_gdk_display);
 
-  _gdk_device_manager = g_object_new (GDK_TYPE_DEVICE_MANAGER_WIN32,
+  win32_display->device_manager = g_object_new (GDK_TYPE_DEVICE_MANAGER_WIN32,
                                       NULL);
-  _gdk_device_manager->display = _gdk_display;
+  win32_display->device_manager->display = _gdk_display;
 
   gdk_win32_display_lang_notification_init (win32_display);
   _gdk_drag_init ();

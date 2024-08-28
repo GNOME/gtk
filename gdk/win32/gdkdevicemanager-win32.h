@@ -43,11 +43,17 @@ struct _GdkDeviceManagerWin32
   GList *winpointer_devices;
   GList *wintab_devices;
 
+
   /* Bumped up every time a wintab device enters the proximity
    * of our context (WT_PROXIMITY). Bumped down when we either
    * receive a WT_PACKET, or a WT_CSRCHANGE.
    */
   int dev_entered_proximity;
+
+  /* used for winpointer support */
+  HWND winpointer_notification_hwnd;
+  GPtrArray *ignored_interactions;
+  void *winpointer_funcs; /* GdkDeviceManagerWin32WinpointerFuncs */
 };
 
 struct _GdkDeviceManagerWin32Class
