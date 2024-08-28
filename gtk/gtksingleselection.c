@@ -164,7 +164,7 @@ gtk_single_selection_unselect_item (GtkSelectionModel *model,
 {
   GtkSingleSelection *self = GTK_SINGLE_SELECTION (model);
 
-  if (!self->can_unselect)
+  if (!self->can_unselect || self->autoselect)
     return FALSE;
 
   if (self->selected == position)
@@ -173,12 +173,21 @@ gtk_single_selection_unselect_item (GtkSelectionModel *model,
   return TRUE;
 }
 
+static gboolean
+gtk_single_selection_unselect_all (GtkSelectionModel *model)
+{
+  GtkSingleSelection *self = GTK_SINGLE_SELECTION (model);
+
+  return gtk_single_selection_unselect_item (model, self->selected);
+}
+
 static void
 gtk_single_selection_selection_model_init (GtkSelectionModelInterface *iface)
 {
   iface->is_selected = gtk_single_selection_is_selected; 
   iface->get_selection_in_range = gtk_single_selection_get_selection_in_range; 
   iface->select_item = gtk_single_selection_select_item; 
+  iface->unselect_all = gtk_single_selection_unselect_all;
   iface->unselect_item = gtk_single_selection_unselect_item; 
 }
 
@@ -642,7 +651,8 @@ gtk_single_selection_get_selected (GtkSingleSelection *self)
  * value of the [property@Gtk.SingleSelection:autoselect] property:
  * If it is set, no change will occur and the old item will stay
  * selected. If it is unset, the selection will be unset and no item
- * will be selected.
+ * will be selected. This also applies if [property@Gtk.SingleSelection:can-unselect]
+ * is set to %FALSE.
  */
 void
 gtk_single_selection_set_selected (GtkSingleSelection *self,
@@ -660,7 +670,12 @@ gtk_single_selection_set_selected (GtkSingleSelection *self,
     new_selected = g_list_model_get_item (self->model, position);
 
   if (new_selected == NULL)
-    position = GTK_INVALID_LIST_POSITION;
+    {
+      if (!self->can_unselect || self->autoselect)
+        return;
+
+      position = GTK_INVALID_LIST_POSITION;
+    }
 
   if (self->selected == position)
     return;
