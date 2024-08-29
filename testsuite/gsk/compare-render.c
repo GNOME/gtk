@@ -376,6 +376,82 @@ rotate_create_reference (GskRenderer *renderer,
 }
 
 static GskRenderNode *
+mask_create_test (GskRenderNode *node)
+{
+  GskRenderNode *result, *nodes[2], *mask_node;
+  graphene_rect_t bounds;
+
+  gsk_render_node_get_bounds (node, &bounds);
+  
+  nodes[0] = gsk_color_node_new (&(GdkRGBA){ 0, 0, 0, 1},
+                                 &GRAPHENE_RECT_INIT (bounds.origin.x, bounds.origin.y, 25, 25));
+  if (bounds.size.width > 25 && bounds.size.height > 25)
+    {
+      nodes[1] = gsk_color_node_new (&(GdkRGBA){ 0, 0, 0, 1},
+                                     &GRAPHENE_RECT_INIT (
+                                         bounds.origin.x + 25,
+                                         bounds.origin.y + 25,
+                                         MIN (1000, bounds.size.width) - 25,
+                                         MIN (1000, bounds.size.height) - 25));
+      mask_node = gsk_container_node_new (nodes, G_N_ELEMENTS (nodes));
+      gsk_render_node_unref (nodes[0]);
+      gsk_render_node_unref (nodes[1]);
+    }
+  else
+    {
+      mask_node = nodes[0];
+    }
+
+  result = gsk_mask_node_new (node, mask_node, GSK_MASK_MODE_ALPHA);
+  gsk_render_node_unref (mask_node);
+
+  return result;
+}
+
+static GdkTexture *
+mask_create_reference (GskRenderer *renderer,
+                       GdkTexture  *texture)
+{
+  GskRenderNode *texture_node, *reference_node;
+  GdkTexture *result;
+  GskRenderNode *nodes[2];
+  int width, height;
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+  texture_node = gsk_texture_node_new (texture,
+                                       &GRAPHENE_RECT_INIT (0, 0, width, height));
+  nodes[0] = gsk_clip_node_new (texture_node,
+                                &GRAPHENE_RECT_INIT (
+                                    0, 0,
+                                    MIN (width, 25),
+                                    MIN (height, 25)
+                                ));
+  if (width > 25 && height > 25)
+    {
+      nodes[1] = gsk_clip_node_new (texture_node,
+                                    &GRAPHENE_RECT_INIT (
+                                        25, 25,
+                                        MIN (1000, width) - 25,
+                                        MIN (1000, height) - 25
+                                    ));
+      reference_node = gsk_container_node_new (nodes, G_N_ELEMENTS (nodes));
+      gsk_render_node_unref (nodes[0]);
+      gsk_render_node_unref (nodes[1]);
+    }
+  else
+    {
+      reference_node = nodes[0];
+    }
+  result = gsk_renderer_render_texture (renderer, reference_node, NULL);
+
+  gsk_render_node_unref (texture_node);
+  gsk_render_node_unref (reference_node);
+
+  return result;
+}
+
+static GskRenderNode *
 colorflip_create_test (GskRenderNode *node)
 {
   graphene_matrix_t matrix;
@@ -447,6 +523,11 @@ static const TestSetup test_setups[] = {
     .name = "rotate",
     .create_test = rotate_create_test,
     .create_reference = rotate_create_reference,
+  },
+  {
+    .name = "mask",
+    .create_test = mask_create_test,
+    .create_reference = mask_create_reference,
   },
   {
     .name = "colorflip",
@@ -567,86 +648,7 @@ run_node_test (gconstpointer data)
     run_single_test (&test_setups[3], test->node_file, renderer, node, reference_texture);
 
   if (mask)
-    {
-      GskRenderNode *node2, *texture_node, *reference_node;
-      GdkTexture *masked_reference;
-      graphene_rect_t bounds;
-      GskRenderNode *mask_node;
-      GskRenderNode *nodes[2];
-      int width, height;
-
-      gsk_render_node_get_bounds (node, &bounds);
-      nodes[0] = gsk_color_node_new (&(GdkRGBA){ 0, 0, 0, 1},
-                                     &GRAPHENE_RECT_INIT (bounds.origin.x, bounds.origin.y, 25, 25));
-      if (bounds.size.width > 25 && bounds.size.height > 25)
-        {
-          nodes[1] = gsk_color_node_new (&(GdkRGBA){ 0, 0, 0, 1},
-                                         &GRAPHENE_RECT_INIT (
-                                             bounds.origin.x + 25,
-                                             bounds.origin.y + 25,
-                                             MIN (1000, bounds.size.width) - 25,
-                                             MIN (1000, bounds.size.height) - 25));
-          mask_node = gsk_container_node_new (nodes, G_N_ELEMENTS (nodes));
-          gsk_render_node_unref (nodes[0]);
-          gsk_render_node_unref (nodes[1]);
-        }
-      else
-        {
-          mask_node = nodes[0];
-        }
-
-      node2 = gsk_mask_node_new (node, mask_node, GSK_MASK_MODE_ALPHA);
-      gsk_render_node_unref (mask_node);
-      save_node (node2, test->node_file, "mask", ".node");
-
-      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-      save_image (rendered_texture, test->node_file, "mask", ".out.png");
-
-      width = gdk_texture_get_width (reference_texture);
-      height = gdk_texture_get_height (reference_texture);
-      texture_node = gsk_texture_node_new (reference_texture,
-                                           &GRAPHENE_RECT_INIT (0, 0, width, height));
-      nodes[0] = gsk_clip_node_new (texture_node,
-                                    &GRAPHENE_RECT_INIT (
-                                        0, 0,
-                                        MIN (width, 25),
-                                        MIN (height, 25)
-                                    ));
-      if (width > 25 && height > 25)
-        {
-          nodes[1] = gsk_clip_node_new (texture_node,
-                                        &GRAPHENE_RECT_INIT (
-                                            25, 25,
-                                            MIN (1000, width) - 25,
-                                            MIN (1000, height) - 25
-                                        ));
-          reference_node = gsk_container_node_new (nodes, G_N_ELEMENTS (nodes));
-          gsk_render_node_unref (nodes[0]);
-          gsk_render_node_unref (nodes[1]);
-        }
-      else
-        {
-          reference_node = nodes[0];
-        }
-      masked_reference = gsk_renderer_render_texture (renderer, reference_node, NULL);
-
-      save_image (masked_reference, test->node_file, "mask", ".ref.png");
-
-      diff_texture = reftest_compare_textures (masked_reference, rendered_texture);
-
-      if (diff_texture)
-        {
-          save_image (diff_texture, test->node_file, "mask", ".diff.png");
-          g_test_fail ();
-        }
-
-      g_clear_object (&diff_texture);
-      g_clear_object (&rendered_texture);
-      g_clear_object (&masked_reference);
-      gsk_render_node_unref (texture_node);
-      gsk_render_node_unref (reference_node);
-      gsk_render_node_unref (node2);
-    }
+    run_single_test (&test_setups[4], test->node_file, renderer, node, reference_texture);
 
   if (replay)
     {
@@ -745,7 +747,7 @@ run_node_test (gconstpointer data)
 skip_clip:
 
   if (colorflip)
-    run_single_test (&test_setups[4], test->node_file, renderer, node, reference_texture);
+    run_single_test (&test_setups[5], test->node_file, renderer, node, reference_texture);
 
   g_object_unref (reference_texture);
   gsk_render_node_unref (node);
