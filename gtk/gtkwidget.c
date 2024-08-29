@@ -2182,6 +2182,7 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
   gboolean emulates_pointer, sequence_handled = FALSE;
   GdkEvent *mimic_event;
   GtkWidget *target;
+  GList *controllers;
   GList *group = NULL, *l;
   GdkEventSequence *seq;
   int n_handled = 0;
@@ -2195,7 +2196,9 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
   emulates_pointer = _gtk_widget_get_emulating_sequence (widget, sequence, &seq);
   mimic_event = _gtk_widget_get_last_event (widget, seq, &target);
 
-  for (l = priv->event_controllers; l; l = l->next)
+  controllers = g_list_copy_deep (priv->event_controllers, (GCopyFunc) g_object_ref, NULL);
+
+  for (l = controllers; l; l = l->next)
     {
       GtkEventController *controller;
       GtkEventSequenceState gesture_state;
@@ -2206,6 +2209,9 @@ _gtk_widget_set_sequence_state_internal (GtkWidget             *widget,
       controller = l->data;
       gesture_state = state;
 
+      /* Look for detached controllers */
+      if (gtk_event_controller_get_widget (controller) != widget)
+        continue;
       if (!GTK_IS_GESTURE (controller))
         continue;
 
@@ -2260,6 +2266,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     _gtk_widget_emulate_press (widget, mimic_event, target);
 
   g_list_free (group);
+  g_list_free_full (controllers, g_object_unref);
 
   return n_handled;
 }
