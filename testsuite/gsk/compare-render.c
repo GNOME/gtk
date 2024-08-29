@@ -288,10 +288,15 @@ struct _TestSetup
 
 static const TestSetup test_setups[] = {
   {
+    .name = "plain",
+    .create_test = NULL,
+    .create_reference = NULL,
+  },
+  {
     .name = "colorflip",
     .create_test = colorflip_create_test,
     .create_reference = colorflip_create_reference,
-  }
+  },
 };
 
 static void
@@ -304,14 +309,24 @@ run_single_test (const TestSetup *setup,
   GskRenderNode *test;
   GdkTexture *reference, *rendered, *diff;
 
-  test = setup->create_test (org_test);
-  save_node (test, file_name, setup->name, ".node");
+  if (setup->create_test)
+    {
+      test = setup->create_test (org_test);
+      save_node (test, file_name, setup->name, ".node");
+    }
+  else
+    test = gsk_render_node_ref (org_test);
 
   rendered = gsk_renderer_render_texture (renderer, test, NULL);
   save_image (rendered, file_name, setup->name, ".out.png");
 
-  reference = setup->create_reference (renderer, org_reference);
-  save_image (reference, file_name, setup->name, ".ref.png");
+  if (setup->create_reference)
+    {
+      reference = setup->create_reference (renderer, org_reference);
+      save_image (reference, file_name, setup->name, ".ref.png");
+    }
+  else
+    reference = g_object_ref (org_reference);
 
   diff = reftest_compare_textures (reference, rendered);
   if (diff)
@@ -384,24 +399,7 @@ run_node_test (gconstpointer data)
     }
 
   if (plain)
-    {
-      /* Render the .node file and download to cairo surface */
-      rendered_texture = gsk_renderer_render_texture (renderer, node, NULL);
-      g_assert_nonnull (rendered_texture);
-
-      save_image (rendered_texture, test->node_file, NULL, ".out.png");
-
-      /* Now compare the two */
-      diff_texture = reftest_compare_textures (reference_texture, rendered_texture);
-      if (diff_texture)
-        {
-          save_image (diff_texture, test->node_file, NULL, ".diff.png");
-          g_test_fail ();
-        }
-
-      g_clear_object (&diff_texture);
-      g_clear_object (&rendered_texture);
-    }
+    run_single_test (&test_setups[0], test->node_file, renderer, node, reference_texture);
 
   if (flip)
     {
@@ -738,7 +736,7 @@ run_node_test (gconstpointer data)
 skip_clip:
 
   if (colorflip)
-    run_single_test (&test_setups[0], test->node_file, renderer, node, reference_texture);
+    run_single_test (&test_setups[1], test->node_file, renderer, node, reference_texture);
 
   g_object_unref (reference_texture);
   gsk_render_node_unref (node);
