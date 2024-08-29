@@ -336,6 +336,46 @@ repeat_create_reference (GskRenderer *renderer,
 }
 
 static GskRenderNode *
+rotate_create_test (GskRenderNode *node)
+{
+  GskRenderNode *result;
+  GskTransform *transform;
+
+  transform = gsk_transform_rotate (NULL, 90);
+  result = gsk_transform_node_new (node, transform);
+  gsk_transform_unref (transform);
+
+  return result;
+}
+
+static GdkTexture *
+rotate_create_reference (GskRenderer *renderer,
+                         GdkTexture  *texture)
+{
+  GskRenderNode *texture_node, *transform_node;
+  GdkTexture *result;
+  GskTransform *transform;
+
+  texture_node = gsk_texture_node_new (texture,
+                                       &GRAPHENE_RECT_INIT (
+                                         0, 0,
+                                         gdk_texture_get_width (texture),
+                                         gdk_texture_get_height (texture)
+                                       ));
+
+  transform = gsk_transform_rotate (NULL, 90);
+  transform_node = gsk_transform_node_new (texture_node, transform);
+  gsk_transform_unref (transform);
+
+  result = gsk_renderer_render_texture (renderer, transform_node, NULL);
+
+  gsk_render_node_unref (transform_node);
+  gsk_render_node_unref (texture_node);
+
+  return result;
+}
+
+static GskRenderNode *
 colorflip_create_test (GskRenderNode *node)
 {
   graphene_matrix_t matrix;
@@ -402,6 +442,11 @@ static const TestSetup test_setups[] = {
     .name = "repeat",
     .create_test = repeat_create_test,
     .create_reference = repeat_create_reference,
+  },
+  {
+    .name = "rotate",
+    .create_test = rotate_create_test,
+    .create_reference = rotate_create_reference,
   },
   {
     .name = "colorflip",
@@ -519,47 +564,7 @@ run_node_test (gconstpointer data)
     run_single_test (&test_setups[2], test->node_file, renderer, node, reference_texture);
 
   if (rotate)
-    {
-      GskRenderNode *node2, *texture_node, *reference_node;
-      GdkTexture *rotated_reference;
-      GskTransform *transform;
-
-      transform = gsk_transform_rotate (NULL, 90);
-      node2 = gsk_transform_node_new (node, transform);
-
-      save_node (node2, test->node_file, "rotate", ".node");
-
-      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-      save_image (rendered_texture, test->node_file, "rotate", ".out.png");
-
-      texture_node = gsk_texture_node_new (reference_texture,
-                                           &GRAPHENE_RECT_INIT (
-                                             0, 0,
-                                             gdk_texture_get_width (reference_texture),
-                                             gdk_texture_get_height (reference_texture)
-                                           ));
-      reference_node = gsk_transform_node_new (texture_node, transform);
-      rotated_reference = gsk_renderer_render_texture (renderer, reference_node, NULL);
-
-
-      save_image (rotated_reference, test->node_file, "rotate", ".ref.png");
-
-      diff_texture = reftest_compare_textures (rotated_reference, rendered_texture);
-
-      if (diff_texture)
-        {
-          save_image (diff_texture, test->node_file, "rotate", ".diff.png");
-          g_test_fail ();
-        }
-
-      gsk_transform_unref (transform);
-      g_clear_object (&diff_texture);
-      g_clear_object (&rendered_texture);
-      g_clear_object (&rotated_reference);
-      gsk_render_node_unref (texture_node);
-      gsk_render_node_unref (reference_node);
-      gsk_render_node_unref (node2);
-    }
+    run_single_test (&test_setups[3], test->node_file, renderer, node, reference_texture);
 
   if (mask)
     {
@@ -740,7 +745,7 @@ run_node_test (gconstpointer data)
 skip_clip:
 
   if (colorflip)
-    run_single_test (&test_setups[3], test->node_file, renderer, node, reference_texture);
+    run_single_test (&test_setups[4], test->node_file, renderer, node, reference_texture);
 
   g_object_unref (reference_texture);
   gsk_render_node_unref (node);
