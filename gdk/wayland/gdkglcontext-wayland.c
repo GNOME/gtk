@@ -53,14 +53,9 @@ gdk_wayland_gl_context_begin_frame (GdkDrawContext  *draw_context,
                                     GdkColorState  **out_color_state,
                                     GdkMemoryDepth  *out_depth)
 {
-  gboolean created_window;
-
-  created_window = gdk_wayland_surface_ensure_wl_egl_window (gdk_draw_context_get_surface (draw_context));
+  gdk_wayland_surface_ensure_wl_egl_window (gdk_draw_context_get_surface (draw_context));
 
   GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->begin_frame (draw_context, depth, region, out_color_state, out_depth);
-
-  if (created_window)
-    gdk_gl_context_make_current (GDK_GL_CONTEXT (draw_context));
 }
 
 static void

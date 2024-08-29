@@ -1136,6 +1136,7 @@ gdk_surface_set_egl_native_window (GdkSurface *self,
 {
 #ifdef HAVE_EGL
   GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+  GdkGLContext *current = NULL;
 
   /* This checks that all EGL platforms we support conform to the same struct sizes.
    * When this ever fails, there will be some fun times happening for whoever tries
@@ -1146,13 +1147,19 @@ gdk_surface_set_egl_native_window (GdkSurface *self,
     {
       GdkDisplay *display = gdk_surface_get_display (self);
 
+      current = gdk_gl_context_clear_current_if_surface (self);
+
       eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
       priv->egl_surface = NULL;
     }
 
-  gdk_gl_context_clear_current_if_surface (self);
-
   priv->egl_native_window = native_window;
+
+  if (current)
+    {
+      gdk_gl_context_make_current (current);
+      g_object_unref (current);
+    }
 }
 
 gpointer /* EGLSurface */
@@ -1180,19 +1187,17 @@ gdk_surface_ensure_egl_surface (GdkSurface     *self,
         depth = priv->egl_surface_depth;
     }
 
-  if (priv->egl_surface_depth != depth &&
-      priv->egl_surface != NULL &&
-      gdk_display_get_egl_config (display, priv->egl_surface_depth) != gdk_display_get_egl_config (display, depth))
+  if (priv->egl_surface == NULL ||
+      (priv->egl_surface != NULL &&
+       gdk_display_get_egl_config (display, priv->egl_surface_depth) != gdk_display_get_egl_config (display, depth)))
     {
-      gdk_gl_context_clear_current_if_surface (self);
-      eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
-      priv->egl_surface = NULL;
-    }
-
-  if (priv->egl_surface == NULL)
-    {
+      GdkGLContext *cleared;
       EGLint attribs[4];
       int i;
+
+      cleared = gdk_gl_context_clear_current_if_surface (self);
+      if (priv->egl_surface != NULL)
+        eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
 
       i = 0;
       if (depth == GDK_MEMORY_U8_SRGB && display->have_egl_gl_colorspace)
@@ -1218,6 +1223,12 @@ gdk_surface_ensure_egl_surface (GdkSurface     *self,
                                                       NULL);
         }
       priv->egl_surface_depth = depth;
+
+      if (cleared)
+        {
+          gdk_gl_context_make_current (cleared);
+          g_object_unref (cleared);
+        }
     }
 
   return priv->egl_surface_depth;
