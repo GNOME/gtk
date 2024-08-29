@@ -1,12 +1,16 @@
 Title: The Broadway windowing system
 Slug: broadway
 
-## Using GTK with Broadway
-
 The GDK Broadway backend provides support for displaying GTK applications in
 a web browser, using HTML5 and web sockets.
 
-To run your application in this way, first run the broadway server,
+Broadway was written as an experiment and is not the most actively developed
+backend. It supports the features that were required of GDK backends in GTK 4.0,
+but may not be up-to-date with the latest developments.
+
+## Using GTK with Broadway
+
+To run your application under Broadway, first run the broadway server,
 `gtk-broadwayd`, that ships with GTK:
 
 ```
