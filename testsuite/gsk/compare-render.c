@@ -234,6 +234,98 @@ gsk_rect_from_cairo (graphene_rect_t              *rect,
   rect->size.height = int_rect->height;
 }
 
+static GskRenderNode *
+colorflip_create_test (GskRenderNode *node)
+{
+  graphene_matrix_t matrix;
+
+  graphene_matrix_init_from_float (&matrix,
+                                   (const float []) { 0, 1, 0, 0,
+                                                      1, 0, 0, 0,
+                                                      0, 0, 1, 0,
+                                                      0, 0, 0, 1 });
+
+  return gsk_color_matrix_node_new (node, &matrix, graphene_vec4_zero ());
+}
+
+static GdkTexture *
+colorflip_create_reference (GskRenderer *renderer,
+                            GdkTexture  *texture)
+{
+  GskRenderNode *texture_node, *reference_node;
+  GdkTexture *result;
+  graphene_matrix_t matrix;
+
+  texture_node = gsk_texture_node_new (texture,
+                                       &GRAPHENE_RECT_INIT (
+                                         0, 0,
+                                         gdk_texture_get_width (texture),
+                                         gdk_texture_get_height (texture)
+                                       ));
+
+  graphene_matrix_init_from_float (&matrix,
+                                   (const float []) { 0, 1, 0, 0,
+                                                      1, 0, 0, 0,
+                                                      0, 0, 1, 0,
+                                                      0, 0, 0, 1 });
+  reference_node = gsk_color_matrix_node_new (texture_node, &matrix, graphene_vec4_zero ());
+  result = gsk_renderer_render_texture (renderer, reference_node, NULL);
+
+  gsk_render_node_unref (texture_node);
+  gsk_render_node_unref (reference_node);
+
+  return result;
+}
+
+typedef struct _TestSetup TestSetup;
+struct _TestSetup
+{
+  const char *name;
+  GskRenderNode * (* create_test)      (GskRenderNode *node);
+  GdkTexture *    (* create_reference) (GskRenderer   *renderer,
+                                        GdkTexture    *texture);
+};
+
+static const TestSetup test_setups[] = {
+  {
+    .name = "colorflip",
+    .create_test = colorflip_create_test,
+    .create_reference = colorflip_create_reference,
+  }
+};
+
+static void
+run_single_test (const TestSetup *setup,
+                 const char      *file_name,
+                 GskRenderer     *renderer,
+                 GskRenderNode   *org_test,
+                 GdkTexture      *org_reference)
+{
+  GskRenderNode *test;
+  GdkTexture *reference, *rendered, *diff;
+
+  test = setup->create_test (org_test);
+  save_node (test, file_name, setup->name, ".node");
+
+  rendered = gsk_renderer_render_texture (renderer, test, NULL);
+  save_image (rendered, file_name, setup->name, ".out.png");
+
+  reference = setup->create_reference (renderer, org_reference);
+  save_image (reference, file_name, setup->name, ".ref.png");
+
+  diff = reftest_compare_textures (reference, rendered);
+  if (diff)
+    {
+      save_image (diff, file_name, setup->name, ".diff.png");
+      g_test_fail ();
+    }
+
+  g_clear_object (&diff);
+  g_object_unref (rendered);
+  g_object_unref (reference);
+  gsk_render_node_unref (test);
+}
+                 
 typedef struct _TestData TestData;
 
 struct _TestData {
@@ -646,50 +738,7 @@ run_node_test (gconstpointer data)
 skip_clip:
 
   if (colorflip)
-    {
-      GskRenderNode *node2, *texture_node, *reference_node;
-      GdkTexture *colorflipped_reference;
-      graphene_matrix_t matrix;
-
-      graphene_matrix_init_from_float (&matrix,
-                                       (const float []) { 0, 1, 0, 0,
-                                                          1, 0, 0, 0,
-                                                          0, 0, 1, 0,
-                                                          0, 0, 0, 1 });
-
-      node2 = gsk_color_matrix_node_new (node, &matrix, graphene_vec4_zero ());
-
-      save_node (node2, test->node_file, "colorflip", ".node");
-
-      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-      save_image (rendered_texture, test->node_file, "colorflip", ".out.png");
-
-      texture_node = gsk_texture_node_new (reference_texture,
-                                           &GRAPHENE_RECT_INIT (
-                                             0, 0,
-                                             gdk_texture_get_width (reference_texture),
-                                             gdk_texture_get_height (reference_texture)
-                                           ));
-      reference_node = gsk_color_matrix_node_new (texture_node, &matrix, graphene_vec4_zero ());
-      colorflipped_reference = gsk_renderer_render_texture (renderer, reference_node, NULL);
-
-      save_image (colorflipped_reference, test->node_file, "colorflip", ".ref.png");
-
-      diff_texture = reftest_compare_textures (colorflipped_reference, rendered_texture);
-
-      if (diff_texture)
-        {
-          save_image (diff_texture, test->node_file, "colorflip", ".diff.png");
-          g_test_fail ();
-        }
-
-      g_clear_object (&diff_texture);
-      g_clear_object (&rendered_texture);
-      g_clear_object (&colorflipped_reference);
-      gsk_render_node_unref (texture_node);
-      gsk_render_node_unref (reference_node);
-      gsk_render_node_unref (node2);
-    }
+    run_single_test (&test_setups[0], test->node_file, renderer, node, reference_texture);
 
   g_object_unref (reference_texture);
   gsk_render_node_unref (node);
