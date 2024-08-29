@@ -235,6 +235,46 @@ gsk_rect_from_cairo (graphene_rect_t              *rect,
 }
 
 static GskRenderNode *
+flip_create_test (GskRenderNode *node)
+{
+  GskRenderNode *result;
+  GskTransform *transform;
+
+  transform = gsk_transform_scale (NULL, -1, 1);
+  result = gsk_transform_node_new (node, transform);
+  gsk_transform_unref (transform);
+
+  return result;
+}
+
+static GdkTexture *
+flip_create_reference (GskRenderer *renderer,
+                       GdkTexture  *texture)
+{
+  GskRenderNode *texture_node, *transform_node;
+  GdkTexture *result;
+  GskTransform *transform;
+
+  texture_node = gsk_texture_node_new (texture,
+                                       &GRAPHENE_RECT_INIT (
+                                         0, 0,
+                                         gdk_texture_get_width (texture),
+                                         gdk_texture_get_height (texture)
+                                       ));
+
+  transform = gsk_transform_scale (NULL, -1, 1);
+  transform_node = gsk_transform_node_new (texture_node, transform);
+  gsk_transform_unref (transform);
+
+  result = gsk_renderer_render_texture (renderer, transform_node, NULL);
+
+  gsk_render_node_unref (transform_node);
+  gsk_render_node_unref (texture_node);
+
+  return result;
+}
+
+static GskRenderNode *
 colorflip_create_test (GskRenderNode *node)
 {
   graphene_matrix_t matrix;
@@ -291,6 +331,11 @@ static const TestSetup test_setups[] = {
     .name = "plain",
     .create_test = NULL,
     .create_reference = NULL,
+  },
+  {
+    .name = "flip",
+    .create_test = flip_create_test,
+    .create_reference = flip_create_reference,
   },
   {
     .name = "colorflip",
@@ -402,46 +447,7 @@ run_node_test (gconstpointer data)
     run_single_test (&test_setups[0], test->node_file, renderer, node, reference_texture);
 
   if (flip)
-    {
-      GskRenderNode *node2, *texture_node, *reference_node;
-      GdkTexture *flipped_reference;
-      GskTransform *transform;
-
-      transform = gsk_transform_scale (NULL, -1, 1);
-      node2 = gsk_transform_node_new (node, transform);
-
-      save_node (node2, test->node_file, "flip", ".node");
-
-      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-      save_image (rendered_texture, test->node_file, "flip", ".out.png");
-
-      texture_node = gsk_texture_node_new (reference_texture,
-                                           &GRAPHENE_RECT_INIT (
-                                             0, 0,
-                                             gdk_texture_get_width (reference_texture),
-                                             gdk_texture_get_height (reference_texture)
-                                           ));
-      reference_node = gsk_transform_node_new (texture_node, transform);
-      flipped_reference = gsk_renderer_render_texture (renderer, reference_node, NULL);
-
-      save_image (flipped_reference, test->node_file, "flip", ".ref.png");
-
-      diff_texture = reftest_compare_textures (flipped_reference, rendered_texture);
-
-      if (diff_texture)
-        {
-          save_image (diff_texture, test->node_file, "flip", ".diff.png");
-          g_test_fail ();
-        }
-
-      gsk_transform_unref (transform);
-      g_clear_object (&diff_texture);
-      g_clear_object (&rendered_texture);
-      g_clear_object (&flipped_reference);
-      gsk_render_node_unref (reference_node);
-      gsk_render_node_unref (texture_node);
-      gsk_render_node_unref (node2);
-    }
+    run_single_test (&test_setups[1], test->node_file, renderer, node, reference_texture);
 
   if (repeat)
     {
@@ -736,7 +742,7 @@ run_node_test (gconstpointer data)
 skip_clip:
 
   if (colorflip)
-    run_single_test (&test_setups[1], test->node_file, renderer, node, reference_texture);
+    run_single_test (&test_setups[2], test->node_file, renderer, node, reference_texture);
 
   g_object_unref (reference_texture);
   gsk_render_node_unref (node);
