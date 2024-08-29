@@ -452,6 +452,41 @@ mask_create_reference (GskRenderer *renderer,
 }
 
 static GskRenderNode *
+replay_create_test (GskRenderNode *node)
+{
+  GskRenderNode *result;
+  graphene_rect_t node_bounds, result_bounds;
+  GtkSnapshot *snapshot = gtk_snapshot_new ();
+
+  replay_node (node, snapshot);
+  result = gtk_snapshot_free_to_node (snapshot);
+  /* If the whole render node tree got eliminated, make sure we have
+     something to work with nevertheless.  */
+  if (result == NULL)
+    result = gsk_container_node_new (NULL, 0);
+
+  gsk_render_node_get_bounds (node, &node_bounds);
+  gsk_render_node_get_bounds (result, &result_bounds);
+  /* Check that the node didn't grow.  */
+  if (!graphene_rect_contains_rect (&node_bounds, &result_bounds))
+    g_test_fail_printf ("Node bounds grew");
+  else if (!graphene_rect_equal (&node_bounds, &result_bounds))
+    {
+      GskRenderNode *nodes[2];
+
+      /* Add a transparent color node to pad the bounds */
+      nodes[0] = gsk_color_node_new (&(GdkRGBA) { 0,0,0,0 },
+                                     &node_bounds);
+      nodes[1] = result;
+      result = gsk_container_node_new (nodes, 2);
+      gsk_render_node_unref (nodes[0]);
+      gsk_render_node_unref (nodes[1]);
+    }
+
+  return result;
+}
+
+static GskRenderNode *
 colorflip_create_test (GskRenderNode *node)
 {
   graphene_matrix_t matrix;
@@ -528,6 +563,11 @@ static const TestSetup test_setups[] = {
     .name = "mask",
     .create_test = mask_create_test,
     .create_reference = mask_create_reference,
+  },
+  {
+    .name = "replay",
+    .create_test = replay_create_test,
+    .create_reference = NULL,
   },
   {
     .name = "colorflip",
@@ -651,41 +691,7 @@ run_node_test (gconstpointer data)
     run_single_test (&test_setups[4], test->node_file, renderer, node, reference_texture);
 
   if (replay)
-    {
-      GskRenderNode *node2;
-      graphene_rect_t node_bounds, node2_bounds;
-      GtkSnapshot *snapshot = gtk_snapshot_new ();
-
-      replay_node (node, snapshot);
-      node2 = gtk_snapshot_free_to_node (snapshot);
-      /* If the whole render node tree got eliminated, make sure we have
-         something to work with nevertheless.  */
-      if (!node2)
-        node2 = gsk_container_node_new (NULL, 0);
-
-      save_node (node2, test->node_file, "replay", ".node");
-      gsk_render_node_get_bounds (node, &node_bounds);
-      gsk_render_node_get_bounds (node2, &node2_bounds);
-      /* Check that the node didn't grow.  */
-      if (!graphene_rect_contains_rect (&node_bounds, &node2_bounds))
-        g_test_fail ();
-
-      rendered_texture = gsk_renderer_render_texture (renderer, node2, &node_bounds);
-      save_image (rendered_texture, test->node_file, "replay", ".out.png");
-      g_assert_nonnull (rendered_texture);
-
-      diff_texture = reftest_compare_textures (reference_texture, rendered_texture);
-
-      if (diff_texture)
-        {
-          save_image (diff_texture, test->node_file, "replay", ".diff.png");
-          g_test_fail ();
-        }
-
-      g_clear_object (&diff_texture);
-      g_clear_object (&rendered_texture);
-      gsk_render_node_unref (node2);
-    }
+    run_single_test (&test_setups[5], test->node_file, renderer, node, reference_texture);
 
   if (clip)
     {
@@ -747,7 +753,7 @@ run_node_test (gconstpointer data)
 skip_clip:
 
   if (colorflip)
-    run_single_test (&test_setups[5], test->node_file, renderer, node, reference_texture);
+    run_single_test (&test_setups[6], test->node_file, renderer, node, reference_texture);
 
   g_object_unref (reference_texture);
   gsk_render_node_unref (node);
