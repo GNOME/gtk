@@ -230,43 +230,43 @@ compare_xfails_small_texture = [
 
 variants = {
   'plain': '--plain',
-  'flipped': '--flip',
-  'rotated': '--rotate',
-  'repeated': '--repeat',
-  'masked': '--mask',
-  'replayed': '--replay',
-  'clipped': '--clip',
-  'colorflipped': '--colorflip',
+  'flip': '--flip',
+  'rotate': '--rotate',
+  'repeat': '--repeat',
+  'mask': '--mask',
+  'replay': '--replay',
+  'clip': '--clip',
+  'colorflip': '--colorflip',
 }
 
 compare_xfails = {
   'ngl': {
     # the gradients are prone to rounding errors which become
     # more pronounced in small clips, it seems
-    'radial-gradient-with-64-colorstops': ['plain','flipped','rotated','repeated','masked','replayed','clipped','colorflipped'],
-    'conic-gradient-with-64-colorstops': ['plain','flipped','rotated','repeated','masked','replayed','clipped','colorflipped'],
-    'blur-child-bounds-oversize-nogl': ['clipped'], # 6450
-    'rounded-clip-with-huge-bounds-nogl': ['plain','flipped','rotated','repeated','masked','replayed','clipped','colorflipped'], # 6532
+    'radial-gradient-with-64-colorstops': ['plain','flip','rotate','repeate','mask','replay','clip','colorflip'],
+    'conic-gradient-with-64-colorstops': ['plain','flip','rotate','repeate','mask','replay','clip','colorflip'],
+    'blur-child-bounds-oversize-nogl': ['clip'], # 6450
+    'rounded-clip-with-huge-bounds-nogl': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
     'big-checkerboard': ['clipped'], # 6444
   },
   'vulkan': {
-    'radial-gradient-with-64-colorstops': ['clipped', 'colorflipped'],
-    'conic-gradient-with-64-colorstops': ['clipped', 'colorflipped'],
-    'blur-child-bounds-oversize-nogl': ['clipped'], # 6450
-    'repeat-repeats-nested-nogl': ['clipped'], # 6522
-    'repeating-radial-gradient-edge-colors': ['colorflipped'],
-    'rounded-clip-with-huge-bounds-nogl': ['plain','flipped','rotated','repeated','masked','replayed','clipped','colorflipped'], # 6532
-    'big-checkerboard': ['clipped'], # 6444
+    'radial-gradient-with-64-colorstops': ['clip', 'colorflip'],
+    'conic-gradient-with-64-colorstops': ['clip', 'colorflip'],
+    'blur-child-bounds-oversize-nogl': ['clip'], # 6450
+    'repeat-repeats-nested-nogl': ['clip'], # 6522
+    'repeating-radial-gradient-edge-colors': ['colorflip'],
+    'rounded-clip-with-huge-bounds-nogl': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
+    'big-checkerboard': ['clip'], # 6444
   },
   'gl': {
     # 6525
-    'container-single-child-offscreen-for-opacity': ['rotated'],
-    'cross-fade-in-opacity': ['rotated'],
-    'mask-modes-in-opacity': ['rotated'],
-    'opacity-overlapping-children': ['rotated'],
-    'scaled-texture-scale': ['rotated'],
-    'shadow-opacity': ['rotated'],
-    'texture-scale-nearest-vs-linear': ['rotated'],
+    'container-single-child-offscreen-for-opacity': ['rotate'],
+    'cross-fade-in-opacity': ['rotate'],
+    'mask-modes-in-opacity': ['rotate'],
+    'opacity-overlapping-children': ['rotate'],
+    'scaled-texture-scale': ['rotate'],
+    'shadow-opacity': ['rotate'],
+    'texture-scale-nearest-vs-linear': ['rotate'],
   },
 }
 
@@ -303,7 +303,7 @@ foreach renderer : renderers
 
       foreach variant : variants.keys()
         extra_suites = [ 'gsk-compare-' + variant + '-' + renderer_name ]
-        if test_xfails.contains(variant) or (renderer_name == 'cairo' and variant == 'clipped')
+        if test_xfails.contains(variant) or (renderer_name == 'cairo' and variant == 'clip')
           extra_suites += ['failing']
         endif
         test('compare ' + renderer_name + ' ' + testname + ' ' + variant, compare_render,
