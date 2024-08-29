@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2024-08-22 15:42+0000\n"
-"PO-Revision-Date: 2024-08-22 22:28+0100\n"
+"PO-Revision-Date: 2024-08-29 22:28+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -174,7 +174,7 @@ msgstr "S'està intentant utilitzar %s, però ja s'està utilitzant %s"
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr ""
-"S'està intentant utilitzar %s, però ja s'està inhabilitat via GDK_DISABLE"
+"S'està intentant utilitzar %s, però està inhabilitat via GDK_DISABLE"
 
 #: gdk/gdktexture.c:661
 msgid "Unknown image format."
