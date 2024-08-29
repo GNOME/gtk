@@ -275,6 +275,67 @@ flip_create_reference (GskRenderer *renderer,
 }
 
 static GskRenderNode *
+repeat_create_test (GskRenderNode *node)
+{
+  graphene_rect_t bounds, node_bounds;
+
+  gsk_render_node_get_bounds (node, &node_bounds);
+
+  node_bounds.size.width = ceil (node_bounds.size.width);
+  node_bounds.size.height = ceil (node_bounds.size.height);
+
+  bounds.size.width = MIN (1000, 3 * node_bounds.size.width);
+  bounds.size.height = MIN (1000, 3 * node_bounds.size.height);
+  bounds.origin.x = node_bounds.origin.x + floorf (node_bounds.size.width / 2);
+  bounds.origin.y = node_bounds.origin.y + floorf (node_bounds.size.height / 2);
+
+  return gsk_repeat_node_new (&bounds, node, &node_bounds);
+}
+
+static GdkTexture *
+repeat_create_reference (GskRenderer *renderer,
+                         GdkTexture  *texture)
+{
+  GskRenderNode *texture_nodes[16], *container_node, *reference_node;
+  GdkTexture *result;
+  int width, height;
+  int i, j;
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+
+  for (i = 0; i < 4; i++)
+    {
+      for (j = 0; j < 4; j++)
+        {
+          texture_nodes[4 * j + i] = gsk_texture_node_new (texture,
+                                                           &GRAPHENE_RECT_INIT (
+                                                               i * width,
+                                                               j * height,
+                                                               width,
+                                                               height
+                                                           ));
+        }
+    }
+  container_node = gsk_container_node_new (texture_nodes, G_N_ELEMENTS (texture_nodes));
+  reference_node = gsk_clip_node_new (container_node,
+                                      &GRAPHENE_RECT_INIT (
+                                        width / 2,
+                                        height / 2,
+                                        MIN (1000, 3 * width),
+                                        MIN (1000, 3 * height)
+                                      ));
+  result = gsk_renderer_render_texture (renderer, reference_node, NULL);
+
+  for (i = 0; i < G_N_ELEMENTS (texture_nodes); i++)
+    gsk_render_node_unref (texture_nodes[i]);
+  gsk_render_node_unref (container_node);
+  gsk_render_node_unref (reference_node);
+
+  return result;
+}
+
+static GskRenderNode *
 colorflip_create_test (GskRenderNode *node)
 {
   graphene_matrix_t matrix;
@@ -336,6 +397,11 @@ static const TestSetup test_setups[] = {
     .name = "flip",
     .create_test = flip_create_test,
     .create_reference = flip_create_reference,
+  },
+  {
+    .name = "repeat",
+    .create_test = repeat_create_test,
+    .create_reference = repeat_create_reference,
   },
   {
     .name = "colorflip",
@@ -450,75 +516,7 @@ run_node_test (gconstpointer data)
     run_single_test (&test_setups[1], test->node_file, renderer, node, reference_texture);
 
   if (repeat)
-    {
-      GskRenderNode *node2, *texture_nodes[16], *container_node, *reference_node;
-      GdkTexture *repeated_reference;
-      int width, height;
-      graphene_rect_t node_bounds;
-      graphene_rect_t bounds;
-      int i, j;
-
-      gsk_render_node_get_bounds (node, &node_bounds);
-
-      node_bounds.size.width = ceil (node_bounds.size.width);
-      node_bounds.size.height = ceil (node_bounds.size.height);
-
-      bounds.size.width = MIN (1000, 3 * node_bounds.size.width);
-      bounds.size.height = MIN (1000, 3 * node_bounds.size.height);
-      bounds.origin.x = node_bounds.origin.x + floorf (node_bounds.size.width / 2);
-      bounds.origin.y = node_bounds.origin.y + floorf (node_bounds.size.height / 2);
-
-      node2 = gsk_repeat_node_new (&bounds, node, &node_bounds);
-      save_node (node2, test->node_file, "repeat", ".node");
-
-      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-      save_image (rendered_texture, test->node_file, "repeat", ".out.png");
-
-      width = gdk_texture_get_width (reference_texture);
-      height = gdk_texture_get_height (reference_texture);
-
-      for (i = 0; i < 4; i++)
-        {
-          for (j = 0; j < 4; j++)
-            {
-              texture_nodes[4 * j + i] = gsk_texture_node_new (reference_texture,
-                                                               &GRAPHENE_RECT_INIT (
-                                                                   i * width,
-                                                                   j * height,
-                                                                   width,
-                                                                   height
-                                                               ));
-            }
-        }
-      container_node = gsk_container_node_new (texture_nodes, G_N_ELEMENTS (texture_nodes));
-      reference_node = gsk_clip_node_new (container_node,
-                                          &GRAPHENE_RECT_INIT (
-                                            width / 2,
-                                            height / 2,
-                                            MIN (1000, 3 * width),
-                                            MIN (1000, 3 * height)
-                                          ));
-      repeated_reference = gsk_renderer_render_texture (renderer, reference_node, NULL);
-
-      save_image (repeated_reference, test->node_file, "repeat", ".ref.png");
-
-      diff_texture = reftest_compare_textures (repeated_reference, rendered_texture);
-
-      if (diff_texture)
-        {
-          save_image (diff_texture, test->node_file, "repeat", ".diff.png");
-          g_test_fail ();
-        }
-
-      g_clear_object (&diff_texture);
-      g_clear_object (&rendered_texture);
-      g_clear_object (&repeated_reference);
-      for (i = 0; i < G_N_ELEMENTS (texture_nodes); i++)
-        gsk_render_node_unref (texture_nodes[i]);
-      gsk_render_node_unref (container_node);
-      gsk_render_node_unref (reference_node);
-      gsk_render_node_unref (node2);
-    }
+    run_single_test (&test_setups[2], test->node_file, renderer, node, reference_texture);
 
   if (rotate)
     {
@@ -742,7 +740,7 @@ run_node_test (gconstpointer data)
 skip_clip:
 
   if (colorflip)
-    run_single_test (&test_setups[2], test->node_file, renderer, node, reference_texture);
+    run_single_test (&test_setups[3], test->node_file, renderer, node, reference_texture);
 
   g_object_unref (reference_texture);
   gsk_render_node_unref (node);
