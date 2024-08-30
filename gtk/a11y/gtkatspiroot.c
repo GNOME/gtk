@@ -31,6 +31,7 @@
 #include "gtkdebug.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
+#include "gdkprivate.h"
 
 #include "a11y/atspi/atspi-accessible.h"
 #include "a11y/atspi/atspi-application.h"
@@ -75,6 +76,7 @@ struct _GtkAtSpiRoot
 
   /* HashTable<str, uint> */
   GHashTable *event_listeners;
+  bool can_use_event_listeners;
 };
 
 enum
@@ -591,6 +593,42 @@ on_event_listener_deregistered (GDBusConnection *connection,
     }
 }
 
+static bool
+check_flatpak_portal_version (GDBusConnection *connection,
+                              unsigned int     minimum_version)
+{
+  GError *error = NULL;
+
+  GVariant *res =
+    g_dbus_connection_call_sync (connection,
+                                 "org.freedesktop.portal.Flatpak",
+                                 "/org/freedesktop/portal/Flatpak",
+                                 "org.freedesktop.DBus.Properties",
+                                 "Get",
+                                 g_variant_new ("(ss)", "org.freedesktop.portal.Flatpak", "version"),
+                                 G_VARIANT_TYPE ("(u)"),
+                                 G_DBUS_CALL_FLAGS_NONE,
+                                 -1,
+                                 NULL,
+                                 &error);
+
+  if (error != NULL)
+    {
+      g_warning ("Unable to retrieve the Flatpak portal version: %s",
+                 error->message);
+      g_clear_error (&error);
+      return false;
+    }
+
+  guint32 version = 0;
+  g_variant_get (res, "(u)", &version);
+  g_variant_unref (res);
+
+  GTK_DEBUG (A11Y, "Flatpak portal version: %u (required: %u)", version, minimum_version);
+
+  return version >= minimum_version;
+}
+
 static void
 on_registered_events_reply (GObject *gobject,
                             GAsyncResult *result,
@@ -701,6 +739,20 @@ on_registration_reply (GObject      *gobject,
 
   g_free (data);
 
+  /* Check if we're running inside a sandbox.
+   *
+   * Flatpak applications need to have the D-Bus proxy set up inside the
+   * sandbox to allow event registration signals to propagate, so we
+   * check if the version of the Flatpak portal is recent enough.
+   */
+  if (gdk_should_use_portal () &&
+      !check_flatpak_portal_version (self->connection, 7))
+    {
+      GTK_DEBUG (A11Y, "Sandboxed does not allow event listener registration");
+      self->can_use_event_listeners = false;
+      return;
+    }
+
   /* Subscribe to notifications on the registered event listeners */
   g_dbus_connection_signal_subscribe (self->connection,
                                       "org.a11y.atspi.Registry",
@@ -739,6 +791,8 @@ on_registration_reply (GObject      *gobject,
                           NULL,
                           on_registered_events_reply,
                           self);
+
+  self->can_use_event_listeners = true;
 }
 
 static gboolean
@@ -1024,6 +1078,10 @@ gtk_at_spi_root_has_event_listeners (GtkAtSpiRoot *self)
 {
   g_return_val_if_fail (GTK_IS_AT_SPI_ROOT (self), FALSE);
 
+  /* If we can't rely on event listeners, we default to being chatty */
+  if (!self->can_use_event_listeners)
+    return TRUE;
+
   return self->event_listeners != NULL &&
-         g_hash_table_size (self->event_listeners) != 0;
+    g_hash_table_size (self->event_listeners) != 0;
 }
