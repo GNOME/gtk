@@ -484,9 +484,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 
   if (priv->swapchain != VK_NULL_HANDLE)
     {
-      vkDestroySwapchainKHR (device,
-                             priv->swapchain,
-                             NULL);
+      /* priv->swapchain was just retired by vkCreateSwapchainKHR */
+      priv->swapchain = VK_NULL_HANDLE;
       for (i = 0; i < priv->n_images; i++)
         {
           cairo_region_destroy (priv->regions[i]);
@@ -523,7 +522,6 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
     {
       g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
                    "Could not create swapchain for this surface: %s", gdk_vulkan_strerror (res));
-      priv->swapchain = VK_NULL_HANDLE;
       return FALSE;
     }
 
