@@ -161,6 +161,13 @@ typedef struct
   void *getPointerType;
 } dmanip_items;
 
+/* for surface tracking items (modal, HWNDs used, etc) */
+typedef struct
+{
+  GHashTable *handle_ht;
+  GSList *modal_surface_stack;
+} surface_records;
+
 struct _GdkWin32Display
 {
   GdkDisplay display;
@@ -177,6 +184,7 @@ struct _GdkWin32Display
   GdkWin32InputLocaleItems *input_locale_items;
   GdkWin32CbDnDItems *cb_dnd_items;
   GdkDeviceManagerWin32 *device_manager;
+  surface_records *display_surface_record;
 
   dmanip_items *dmanip_items;
 

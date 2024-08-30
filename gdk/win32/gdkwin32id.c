@@ -26,56 +26,36 @@
 #include <gdk/gdk.h>
 
 #include "gdkprivate-win32.h"
+#include "gdkdisplay-win32.h"
 
-static GHashTable *handle_ht = NULL;
-
-static guint
-gdk_handle_hash (HANDLE *handle)
-{
-#ifdef _WIN64
-  return ((guint *) handle)[0] ^ ((guint *) handle)[1];
-#else
-  return (guint) *handle;
-#endif
-}
-
-static int
-gdk_handle_equal (HANDLE *a,
-		  HANDLE *b)
-{
-  return (*a == *b);
-}
+#define GDK_DISPLAY_HANDLE_HT(d) GDK_WIN32_DISPLAY(d)->display_surface_record->handle_ht
 
 void
-gdk_win32_handle_table_insert (HANDLE  *handle,
-			       gpointer data)
+gdk_win32_display_handle_table_insert (GdkDisplay *display,
+                                       HANDLE     *handle,
+                                       gpointer    data)
 {
   g_return_if_fail (handle != NULL);
 
-  if (!handle_ht)
-    handle_ht = g_hash_table_new ((GHashFunc) gdk_handle_hash,
-				  (GEqualFunc) gdk_handle_equal);
-
-  g_hash_table_insert (handle_ht, handle, data);
+  g_hash_table_insert (GDK_DISPLAY_HANDLE_HT (display), handle, data);
 }
 
 void
-gdk_win32_handle_table_remove (HANDLE handle)
+gdk_win32_display_handle_table_remove (GdkDisplay *display,
+                                       HANDLE      handle)
 {
-  if (!handle_ht)
-    handle_ht = g_hash_table_new ((GHashFunc) gdk_handle_hash,
-				  (GEqualFunc) gdk_handle_equal);
-
-  g_hash_table_remove (handle_ht, &handle);
+  g_hash_table_remove (GDK_DISPLAY_HANDLE_HT (display), &handle);
 }
 
 gpointer
-gdk_win32_handle_table_lookup_ (HWND handle)
+gdk_win32_display_handle_table_lookup_ (GdkDisplay *display,
+                                        HWND        handle)
 {
   gpointer data = NULL;
+  if (display == NULL)
+    display = gdk_display_get_default ();
 
-  if (handle_ht)
-    data = g_hash_table_lookup (handle_ht, &handle);
+  data = g_hash_table_lookup (GDK_DISPLAY_HANDLE_HT (display), &handle);
 
   return data;
 }
@@ -83,5 +63,5 @@ gdk_win32_handle_table_lookup_ (HWND handle)
 gpointer
 gdk_win32_handle_table_lookup (HWND handle)
 {
-  return gdk_win32_handle_table_lookup_ (handle);
+  return gdk_win32_display_handle_table_lookup_ (NULL, handle);
 }

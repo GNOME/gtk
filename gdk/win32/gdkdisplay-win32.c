@@ -814,6 +814,9 @@ gdk_win32_display_finalize (GObject *object)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
+  g_slist_free_full (display_win32->display_surface_record->modal_surface_stack, g_object_unref);
+  g_hash_table_destroy (display_win32->display_surface_record->handle_ht);
+  g_free (display_win32->display_surface_record);
   _gdk_win32_display_finalize_cursors (display_win32);
   gdk_win32_display_close_dmanip_manager (GDK_DISPLAY (display_win32));
   _gdk_win32_dnd_exit ();
@@ -1156,6 +1159,30 @@ _gdk_win32_check_processor (GdkWin32ProcessorCheckType check_type)
     }
 }
 
+static guint
+gdk_handle_hash (HANDLE *handle)
+{
+#ifdef _WIN64
+  return ((guint *) handle)[0] ^ ((guint *) handle)[1];
+#else
+  return (guint) *handle;
+#endif
+}
+
+static int
+gdk_handle_equal (HANDLE *a,
+                  HANDLE *b)
+{
+  return (*a == *b);
+}
+
+/* facts of life, DestroyWindow() is a __stdcall function */
+static void
+gdk_destroy_surface_hwnd (gpointer hwnd)
+{
+  DestroyWindow ((HWND)hwnd);
+}
+
 static void
 gdk_win32_display_init (GdkWin32Display *display_win32)
 {
@@ -1166,6 +1193,9 @@ gdk_win32_display_init (GdkWin32Display *display_win32)
   display_win32->cb_dnd_items = g_new0 (GdkWin32CbDnDItems, 1);
   display_win32->cb_dnd_items->display_main_thread = g_thread_self ();
   display_win32->cb_dnd_items->clipdrop = GDK_WIN32_CLIPDROP (g_object_new (GDK_TYPE_WIN32_CLIPDROP, NULL));
+  display_win32->display_surface_record = g_new0 (surface_records, 1);
+  display_win32->display_surface_record->handle_ht = g_hash_table_new ((GHashFunc) gdk_handle_hash,
+                                                                       (GEqualFunc) gdk_handle_equal);
 
   _gdk_win32_enable_hidpi (display_win32);
   display_win32->running_on_arm64 = _gdk_win32_check_processor (GDK_WIN32_ARM64);

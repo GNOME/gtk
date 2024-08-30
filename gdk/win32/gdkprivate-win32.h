@@ -76,9 +76,13 @@ gboolean _gdk_win32_surface_enable_transparency (GdkSurface *surface);
 
 void _gdk_win32_dnd_exit (void);
 
-void     gdk_win32_handle_table_insert  (HANDLE   *handle,
-                                         gpointer data);
-void     gdk_win32_handle_table_remove  (HANDLE handle);
+void     gdk_win32_display_handle_table_insert  (GdkDisplay *display,
+                                                 HANDLE     *handle,
+                                                 gpointer    data);
+void     gdk_win32_display_handle_table_remove  (GdkDisplay *display,
+                                                 HANDLE      handle);
+gpointer      gdk_win32_display_handle_table_lookup_ (GdkDisplay *display,
+                                                      HWND        handle);
 
 cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN  hrgn,
                                               guint scale);
@@ -276,8 +280,6 @@ GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
                                                     double *x_hot,
                                                     double *y_hot);
 void          gdk_win32_set_modal_dialog_libgtk_only (HWND hwnd);
-
-gpointer      gdk_win32_handle_table_lookup_       (HWND handle);
 
 extern IMAGE_DOS_HEADER __ImageBase;
 
