@@ -719,19 +719,6 @@ test_data_free (TestData *test)
 
 static gboolean test_enabled[G_N_ELEMENTS (test_setups)] = { FALSE, };
 
-static const GOptionEntry options[] = {
-  { "output", 0, 0, G_OPTION_ARG_FILENAME, &arg_output_dir, "Directory to save image files to", "DIR" },
-  { test_setups[0].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[0], test_setups[0].description, NULL },
-  { test_setups[1].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[1], test_setups[1].description, NULL },
-  { test_setups[2].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[2], test_setups[2].description, NULL },
-  { test_setups[3].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[3], test_setups[3].description, NULL },
-  { test_setups[4].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[4], test_setups[4].description, NULL },
-  { test_setups[5].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[5], test_setups[5].description, NULL },
-  { test_setups[6].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[6], test_setups[6].description, NULL },
-  { test_setups[7].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[7], test_setups[7].description, NULL },
-  { NULL }
-};
-
 /*
  * Non-option arguments:
  *   1) .node file to compare
@@ -788,6 +775,18 @@ run_node_test (gconstpointer data)
 int
 main (int argc, char **argv)
 {
+  GOptionEntry options[] = {
+    { "output", 0, 0, G_OPTION_ARG_FILENAME, &arg_output_dir, "Directory to save image files to", "DIR" },
+    { test_setups[0].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[0], test_setups[0].description, NULL },
+    { test_setups[1].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[1], test_setups[1].description, NULL },
+    { test_setups[2].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[2], test_setups[2].description, NULL },
+    { test_setups[3].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[3], test_setups[3].description, NULL },
+    { test_setups[4].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[4], test_setups[4].description, NULL },
+    { test_setups[5].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[5], test_setups[5].description, NULL },
+    { test_setups[6].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[6], test_setups[6].description, NULL },
+    { test_setups[7].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[7], test_setups[7].description, NULL },
+    { NULL }
+  };
   GOptionContext *context;
   GError *error = NULL;
   TestData *test;
