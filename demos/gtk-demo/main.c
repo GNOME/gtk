@@ -1068,6 +1068,8 @@ command_line (GApplication            *app,
 
   window = gtk_application_get_windows (GTK_APPLICATION (app))->data;
 
+  gtk_window_set_icon_name (GTK_WINDOW (window), "org.gtk.Demo4");
+
   if (name == NULL)
     goto out;
 

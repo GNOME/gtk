@@ -219,6 +219,8 @@ node_editor_application_activate (GApplication *app)
   if (g_strcmp0 (PROFILE, "devel") == 0)
     gtk_widget_add_css_class (GTK_WIDGET (win), "devel");
 
+  gtk_window_set_icon_name (GTK_WINDOW (win), "org.gtk.gtk4.NodeEditor");
+
   gtk_window_present (GTK_WINDOW (win));
 }
 
