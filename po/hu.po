@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-06-16 13:18+0000\n"
-"PO-Revision-Date: 2024-06-28 17:20+0200\n"
+"POT-Creation-Date: 2024-06-28 15:27+0000\n"
+"PO-Revision-Date: 2024-06-28 18:51+0200\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: gdk/broadway/gdkbroadway-server.c:144
 #, c-format
@@ -2576,8 +2576,9 @@ msgid "Yesterday"
 msgstr "Tegnap"
 
 #: gtk/gtkfilechooserwidget.c:4912
+#, c-format
 msgid "%-e %b"
-msgstr "%b. %-e."
+msgstr "%2$b. %1$-e."
 
 #: gtk/gtkfilechooserwidget.c:4916
 msgid "%-e %b %Y"
@@ -8397,4 +8398,3 @@ msgstr "tesztkimenet.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "Nyomtatás tesztnyomtatóra"
-
