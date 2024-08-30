@@ -297,8 +297,11 @@
 #define GDK_KEY_dead_u 0xfe88
 #define GDK_KEY_dead_U 0xfe89
 #define GDK_KEY_dead_small_schwa 0xfe8a
+#define GDK_KEY_dead_schwa 0xfe8a
 #define GDK_KEY_dead_capital_schwa 0xfe8b
+#define GDK_KEY_dead_SCHWA 0xfe8b
 #define GDK_KEY_dead_greek 0xfe8c
+#define GDK_KEY_dead_hamza 0xfe8d
 #define GDK_KEY_First_Virtual_Screen 0xfed0
 #define GDK_KEY_Prev_Virtual_Screen 0xfed1
 #define GDK_KEY_Next_Virtual_Screen 0xfed2
@@ -490,6 +493,7 @@
 #define GDK_KEY_copyright 0x0a9
 #define GDK_KEY_ordfeminine 0x0aa
 #define GDK_KEY_guillemotleft 0x0ab
+#define GDK_KEY_guillemetleft 0x0ab
 #define GDK_KEY_notsign 0x0ac
 #define GDK_KEY_hyphen 0x0ad
 #define GDK_KEY_registered 0x0ae
@@ -505,7 +509,9 @@
 #define GDK_KEY_cedilla 0x0b8
 #define GDK_KEY_onesuperior 0x0b9
 #define GDK_KEY_masculine 0x0ba
+#define GDK_KEY_ordmasculine 0x0ba
 #define GDK_KEY_guillemotright 0x0bb
+#define GDK_KEY_guillemetright 0x0bb
 #define GDK_KEY_onequarter 0x0bc
 #define GDK_KEY_onehalf 0x0bd
 #define GDK_KEY_threequarters 0x0be
@@ -1743,6 +1749,11 @@
 #define GDK_KEY_ohorn 0x10001a1
 #define GDK_KEY_Uhorn 0x10001af
 #define GDK_KEY_uhorn 0x10001b0
+#define GDK_KEY_combining_tilde 0x1000303
+#define GDK_KEY_combining_grave 0x1000300
+#define GDK_KEY_combining_acute 0x1000301
+#define GDK_KEY_combining_hook 0x1000309
+#define GDK_KEY_combining_belowdot 0x1000323
 #define GDK_KEY_EcuSign 0x10020a0
 #define GDK_KEY_ColonSign 0x10020a1
 #define GDK_KEY_CruzeiroSign 0x10020a2
@@ -2313,4 +2324,3 @@
 #define GDK_KEY_Prev_VMode 0x1008fe23
 #define GDK_KEY_LogWindowTree 0x1008fe24
 #define GDK_KEY_LogGrabInfo 0x1008fe25
-
