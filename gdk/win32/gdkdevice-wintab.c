@@ -73,6 +73,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   POINT point;
   HWND hwnd, hwndc;
   int scale;
+  GdkDisplay *display = gdk_device_get_display (device);
 
   device_wintab = GDK_DEVICE_WINTAB (device);
   if (surface)
@@ -82,8 +83,6 @@ gdk_device_wintab_query_state (GdkDevice        *device,
     }
   else
     {
-      GdkDisplay *display = gdk_device_get_display (device);
-
       scale = GDK_WIN32_DISPLAY (display)->surface_scale;
       hwnd = NULL;
     }
@@ -104,7 +103,7 @@ gdk_device_wintab_query_state (GdkDevice        *device,
       hwndc = ChildWindowFromPoint (hwnd, point);
 
       if (hwndc && hwndc != hwnd)
-        *child_surface = gdk_win32_handle_table_lookup_ (hwndc);
+        *child_surface = gdk_win32_display_handle_table_lookup_ (display, hwndc);
       else
         *child_surface = NULL; /* Direct child unknown to gdk */
     }
