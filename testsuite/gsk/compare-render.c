@@ -7,14 +7,6 @@
 
 
 static char *arg_output_dir = NULL;
-static gboolean plain = FALSE;
-static gboolean flip = FALSE;
-static gboolean rotate = FALSE;
-static gboolean repeat = FALSE;
-static gboolean mask = FALSE;
-static gboolean replay = FALSE;
-static gboolean clip = FALSE;
-static gboolean colorflip = FALSE;
 
 extern void
 replay_node (GskRenderNode *node, GtkSnapshot *snapshot);
@@ -173,19 +165,6 @@ deserialize_error_func (const GskParseLocation *start,
 
   g_string_free (string, TRUE);
 }
-
-static const GOptionEntry options[] = {
-  { "output", 0, 0, G_OPTION_ARG_FILENAME, &arg_output_dir, "Directory to save image files to", "DIR" },
-  { "plain", 0, 0, G_OPTION_ARG_NONE, &plain, "Run test as-is", NULL },
-  { "flip", 0, 0, G_OPTION_ARG_NONE, &flip, "Do flipped test", NULL },
-  { "rotate", 0, 0, G_OPTION_ARG_NONE, &rotate, "Do rotated test", NULL },
-  { "repeat", 0, 0, G_OPTION_ARG_NONE, &repeat, "Do repeated test", NULL },
-  { "mask", 0, 0, G_OPTION_ARG_NONE, &mask, "Do masked test", NULL },
-  { "replay", 0, 0, G_OPTION_ARG_NONE, &replay, "Do replay test", NULL },
-  { "clip", 0, 0, G_OPTION_ARG_NONE, &clip, "Do clip test", NULL },
-  { "colorflip", 0, 0, G_OPTION_ARG_NONE, &colorflip, "Swap colors", NULL },
-  { NULL }
-};
 
 static GskRenderNode *
 load_node_file (const char *node_file)
@@ -608,6 +587,7 @@ typedef struct _TestSetup TestSetup;
 struct _TestSetup
 {
   const char *name;
+  const char *description;
   gpointer        (* setup)            (GskRenderNode *node);
   void            (* free)             (gpointer       data);
   GskRenderNode * (* create_test)      (GskRenderNode *node,
@@ -620,36 +600,43 @@ struct _TestSetup
 static const TestSetup test_setups[] = {
   {
     .name = "plain",
+    .description = "Run test as-is",
     .create_test = NULL,
     .create_reference = NULL,
   },
   {
     .name = "flip",
+    .description = "Do flipped test",
     .create_test = flip_create_test,
     .create_reference = flip_create_reference,
   },
   {
     .name = "repeat",
+    .description = "Do rotated test",
     .create_test = repeat_create_test,
     .create_reference = repeat_create_reference,
   },
   {
     .name = "rotate",
+    .description = "Do repeated test",
     .create_test = rotate_create_test,
     .create_reference = rotate_create_reference,
   },
   {
     .name = "mask",
+    .description = "Do masked test",
     .create_test = mask_create_test,
     .create_reference = mask_create_reference,
   },
   {
     .name = "replay",
+    .description = "Do replay test",
     .create_test = replay_create_test,
     .create_reference = NULL,
   },
   {
     .name = "clip",
+    .description = "Do clip test",
     .setup = clip_setup,
     .free = g_free,
     .create_test = clip_create_test,
@@ -657,6 +644,7 @@ static const TestSetup test_setups[] = {
   },
   {
     .name = "colorflip",
+    .description = "Swap colors",
     .create_test = colorflip_create_test,
     .create_reference = colorflip_create_reference,
   },
@@ -729,6 +717,21 @@ test_data_free (TestData *test)
   g_free (test);
 }
 
+static gboolean test_enabled[G_N_ELEMENTS (test_setups)] = { FALSE, };
+
+static const GOptionEntry options[] = {
+  { "output", 0, 0, G_OPTION_ARG_FILENAME, &arg_output_dir, "Directory to save image files to", "DIR" },
+  { test_setups[0].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[0], test_setups[0].description, NULL },
+  { test_setups[1].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[1], test_setups[1].description, NULL },
+  { test_setups[2].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[2], test_setups[2].description, NULL },
+  { test_setups[3].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[3], test_setups[3].description, NULL },
+  { test_setups[4].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[4], test_setups[4].description, NULL },
+  { test_setups[5].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[5], test_setups[5].description, NULL },
+  { test_setups[6].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[6], test_setups[6].description, NULL },
+  { test_setups[7].name, 0, 0, G_OPTION_ARG_NONE, &test_enabled[7], test_setups[7].description, NULL },
+  { NULL }
+};
+
 /*
  * Non-option arguments:
  *   1) .node file to compare
@@ -743,6 +746,7 @@ run_node_test (gconstpointer data)
   GdkSurface *window;
   GskRenderNode *node;
   GError *error = NULL;
+  gsize i;
 
   g_print ("Node file: '%s'\n", test->node_file);
   g_print ("PNG file: '%s'\n", test->png_file);
@@ -768,29 +772,11 @@ run_node_test (gconstpointer data)
       return;
     }
 
-  if (plain)
-    run_single_test (&test_setups[0], test->node_file, renderer, node, reference_texture);
-
-  if (flip)
-    run_single_test (&test_setups[1], test->node_file, renderer, node, reference_texture);
-
-  if (repeat)
-    run_single_test (&test_setups[2], test->node_file, renderer, node, reference_texture);
-
-  if (rotate)
-    run_single_test (&test_setups[3], test->node_file, renderer, node, reference_texture);
-
-  if (mask)
-    run_single_test (&test_setups[4], test->node_file, renderer, node, reference_texture);
-
-  if (replay)
-    run_single_test (&test_setups[5], test->node_file, renderer, node, reference_texture);
-
-  if (clip)
-    run_single_test (&test_setups[6], test->node_file, renderer, node, reference_texture);
-
-  if (colorflip)
-    run_single_test (&test_setups[7], test->node_file, renderer, node, reference_texture);
+  for (i = 0; i < G_N_ELEMENTS (test_setups); i++)
+    {
+      if (test_enabled[i])
+        run_single_test (&test_setups[i], test->node_file, renderer, node, reference_texture);
+    }
 
   g_object_unref (reference_texture);
   gsk_render_node_unref (node);
@@ -806,6 +792,7 @@ main (int argc, char **argv)
   GError *error = NULL;
   TestData *test;
   int result;
+  gsize i;
 
   (g_test_init) (&argc, &argv, NULL);
 
@@ -827,8 +814,13 @@ main (int argc, char **argv)
 
   g_option_context_free (context);
 
-  if (!plain && !flip && !rotate && !repeat && !mask && !replay && !clip && !colorflip)
-    plain = TRUE;
+  for (i = 0; i < G_N_ELEMENTS (test_enabled); i++)
+    {
+      if (test_enabled[i])
+        break;
+    }
+  if (i >= G_N_ELEMENTS (test_enabled))
+    test_enabled[0] = TRUE;
 
   gtk_init ();
 
