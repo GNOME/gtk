@@ -760,7 +760,7 @@ emit_text_changed (GtkAtSpiContext *self,
                    int              end,
                    const char      *text)
 {
-  if (self->connection == NULL)
+  if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
     return;
 
   g_dbus_connection_emit_signal (self->connection,
@@ -780,7 +780,7 @@ emit_text_selection_changed (GtkAtSpiContext *self,
                              const char      *kind,
                              int              cursor_position)
 {
-  if (self->connection == NULL)
+  if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
     return;
 
   if (strcmp (kind, "text-caret-moved") == 0)
@@ -807,7 +807,7 @@ static void
 emit_selection_changed (GtkAtSpiContext *self,
                         const char      *kind)
 {
-  if (self->connection == NULL)
+  if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
     return;
 
   g_dbus_connection_emit_signal (self->connection,
@@ -825,7 +825,7 @@ emit_state_changed (GtkAtSpiContext *self,
                     const char      *name,
                     gboolean         enabled)
 {
-  if (self->connection == NULL)
+  if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
     return;
 
   g_dbus_connection_emit_signal (self->connection,
@@ -841,7 +841,7 @@ emit_state_changed (GtkAtSpiContext *self,
 static void
 emit_defunct (GtkAtSpiContext *self)
 {
-  if (self->connection == NULL)
+  if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
     return;
 
   g_dbus_connection_emit_signal (self->connection,
@@ -858,13 +858,10 @@ emit_property_changed (GtkAtSpiContext *self,
                        const char      *name,
                        GVariant        *value)
 {
-  GVariant *value_owned = g_variant_ref_sink (value);
+  if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
+    return;
 
-  if (self->connection == NULL)
-    {
-      g_variant_unref (value_owned);
-      return;
-    }
+  GVariant *value_owned = g_variant_ref_sink (value);
 
   g_dbus_connection_emit_signal (self->connection,
                                  NULL,
@@ -884,7 +881,7 @@ emit_bounds_changed (GtkAtSpiContext *self,
                      int              width,
                      int              height)
 {
-  if (self->connection == NULL)
+  if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
     return;
 
   g_dbus_connection_emit_signal (self->connection,
@@ -904,7 +901,9 @@ emit_children_changed (GtkAtSpiContext         *self,
                        GtkAccessibleChildState  state)
 {
   /* If we don't have a connection on either contexts, we cannot emit a signal */
-  if (self->connection == NULL || child_context->connection == NULL)
+  if (self->connection == NULL ||
+      child_context->connection == NULL ||
+      !gtk_at_spi_root_has_event_listeners (self->root))
     return;
 
   GVariant *context_ref = gtk_at_spi_context_to_ref (self);
@@ -922,7 +921,7 @@ static void
 emit_window_event (GtkAtSpiContext *self,
                    const char      *event_type)
 {
-  if (self->connection == NULL)
+  if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
     return;
 
   g_dbus_connection_emit_signal (self->connection,
@@ -1587,7 +1586,7 @@ gtk_at_spi_context_update_caret_position (GtkATContext *context)
   GtkAccessibleText *accessible_text = GTK_ACCESSIBLE_TEXT (accessible);
   guint offset;
 
-  if (self->connection == NULL)
+  if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
     return;
 
   offset = gtk_accessible_text_get_caret_position (accessible_text);
@@ -1611,7 +1610,7 @@ gtk_at_spi_context_update_selection_bound (GtkATContext *context)
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
 
-  if (self->connection == NULL)
+  if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
     return;
 
   g_dbus_connection_emit_signal (self->connection,
@@ -1636,7 +1635,7 @@ gtk_at_spi_context_update_text_contents (GtkATContext *context,
 {
   GtkAtSpiContext *self = GTK_AT_SPI_CONTEXT (context);
 
-  if (self->connection == NULL)
+  if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
     return;
 
   GtkAccessible *accessible = gtk_at_context_get_accessible (context);

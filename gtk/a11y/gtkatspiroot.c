@@ -31,6 +31,7 @@
 #include "gtkdebug.h"
 #include "gtkwindow.h"
 #include "gtkprivate.h"
+#include "gdkprivate.h"
 
 #include "a11y/atspi/atspi-accessible.h"
 #include "a11y/atspi/atspi-application.h"
@@ -45,6 +46,7 @@
 #define ATSPI_PATH_PREFIX       "/org/a11y/atspi"
 #define ATSPI_ROOT_PATH         ATSPI_PATH_PREFIX "/accessible/root"
 #define ATSPI_CACHE_PATH        ATSPI_PATH_PREFIX "/cache"
+#define ATSPI_REGISTRY_PATH     ATSPI_PATH_PREFIX "/registry"
 
 struct _GtkAtSpiRoot
 {
@@ -71,6 +73,10 @@ struct _GtkAtSpiRoot
   GtkAtSpiCache *cache;
 
   GListModel *toplevels;
+
+  /* HashTable<str, uint> */
+  GHashTable *event_listeners;
+  bool can_use_event_listeners;
 };
 
 enum
@@ -90,6 +96,7 @@ gtk_at_spi_root_finalize (GObject *gobject)
   GtkAtSpiRoot *self = GTK_AT_SPI_ROOT (gobject);
 
   g_clear_handle_id (&self->register_id, g_source_remove);
+  g_clear_pointer (&self->event_listeners, g_hash_table_unref);
 
   g_free (self->bus_address);
   g_free (self->base_path);
@@ -481,6 +488,198 @@ gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
                                     window_ref);
 }
 
+static void
+on_event_listener_registered (GDBusConnection *connection,
+                              const char *sender_name,
+                              const char *object_path,
+                              const char *interface_name,
+                              const char *signal_name,
+                              GVariant *parameters,
+                              gpointer user_data)
+{
+  GtkAtSpiRoot *self = user_data;
+
+  if (g_strcmp0 (object_path, ATSPI_REGISTRY_PATH) == 0 &&
+      g_strcmp0 (interface_name, "org.a11y.atspi.Registry") == 0 &&
+      g_strcmp0 (signal_name, "EventListenerRegistered") == 0)
+    {
+      char *sender = NULL;
+      char *event_name = NULL;
+      char **event_types = NULL;
+      unsigned int *count;
+
+      if (self->event_listeners == NULL)
+        self->event_listeners = g_hash_table_new_full (g_str_hash, g_str_equal,
+                                                       g_free,
+                                                       g_free);
+
+      g_variant_get (parameters, "(ssas)", &sender, &event_name, &event_types);
+
+      count = g_hash_table_lookup (self->event_listeners, sender);
+      if (count == NULL)
+        {
+          GTK_DEBUG (A11Y, "Registering event listener (%s, %s) on the a11y bus",
+                     sender,
+                     event_name[0] != 0 ? event_name : "(none)");
+          count = g_new (unsigned int, 1);
+          *count = 1;
+          g_hash_table_insert (self->event_listeners, sender, count);
+        }
+      else if (*count == G_MAXUINT)
+        {
+          g_critical ("Reference count for event listener %s reached saturation", sender);
+        }
+      else
+        {
+          GTK_DEBUG (A11Y, "Incrementing refcount for event listener %s", sender);
+          *count += 1;
+        }
+
+      g_free (event_name);
+      g_strfreev (event_types);
+    }
+}
+
+static void
+on_event_listener_deregistered (GDBusConnection *connection,
+                                const char *sender_name,
+                                const char *object_path,
+                                const char *interface_name,
+                                const char *signal_name,
+                                GVariant *parameters,
+                                gpointer user_data)
+{
+  GtkAtSpiRoot *self = user_data;
+
+  if (g_strcmp0 (object_path, ATSPI_REGISTRY_PATH) == 0 &&
+      g_strcmp0 (interface_name, "org.a11y.atspi.Registry") == 0 &&
+      g_strcmp0 (signal_name, "EventListenerDeregistered") == 0)
+    {
+      const char *sender = NULL;
+      const char *event = NULL;
+      unsigned int *count;
+
+      g_variant_get (parameters, "(&s&s)", &sender, &event);
+
+      if (G_UNLIKELY (self->event_listeners == NULL))
+        {
+          g_critical ("Received org.a11y.atspi.Registry::EventListenerDeregistered for "
+                      "sender (%s, %s) without a corresponding EventListenerRegistered "
+                      "signal.",
+                      sender, event[0] != '\0' ? event : "(no event)");
+          return;
+        }
+
+      count = g_hash_table_lookup (self->event_listeners, sender);
+      if (G_UNLIKELY (count == NULL))
+        {
+          g_critical ("Received org.a11y.atspi.Registry::EventListenerDeregistered for "
+                      "sender (%s, %s) without a corresponding EventListenerRegistered "
+                      "signal.",
+                      sender, event[0] != '\0' ? event : "(no event)");
+          return;
+        }
+
+      if (*count > 1)
+        {
+          GTK_DEBUG (A11Y, "Decreasing refcount for listener %s", sender);
+          *count -= 1;
+        }
+      else
+        {
+          GTK_DEBUG (A11Y, "Deregistering event listener %s on the a11y bus", sender);
+          g_hash_table_remove (self->event_listeners, sender);
+        }
+    }
+}
+
+static bool
+check_flatpak_portal_version (GDBusConnection *connection,
+                              unsigned int     minimum_version)
+{
+  GError *error = NULL;
+
+  GVariant *res =
+    g_dbus_connection_call_sync (connection,
+                                 "org.freedesktop.portal.Flatpak",
+                                 "/org/freedesktop/portal/Flatpak",
+                                 "org.freedesktop.DBus.Properties",
+                                 "Get",
+                                 g_variant_new ("(ss)", "org.freedesktop.portal.Flatpak", "version"),
+                                 G_VARIANT_TYPE ("(u)"),
+                                 G_DBUS_CALL_FLAGS_NONE,
+                                 -1,
+                                 NULL,
+                                 &error);
+
+  if (error != NULL)
+    {
+      g_warning ("Unable to retrieve the Flatpak portal version: %s",
+                 error->message);
+      g_clear_error (&error);
+      return false;
+    }
+
+  guint32 version = 0;
+  g_variant_get (res, "(u)", &version);
+  g_variant_unref (res);
+
+  GTK_DEBUG (A11Y, "Flatpak portal version: %u (required: %u)", version, minimum_version);
+
+  return version >= minimum_version;
+}
+
+static void
+on_registered_events_reply (GObject *gobject,
+                            GAsyncResult *result,
+                            gpointer data)
+{
+  GError *error = NULL;
+  GVariant *reply = g_dbus_connection_call_finish (G_DBUS_CONNECTION (gobject), result, &error);
+  if (error != NULL)
+    {
+      g_critical ("Unable to get the list of registered event listeners: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  GtkAtSpiRoot *self = data;
+  GVariant *listeners = g_variant_get_child_value (reply, 0);
+  GVariantIter *iter;
+  const char *sender, *event_name;
+
+  if (self->event_listeners == NULL)
+    self->event_listeners = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+
+  g_variant_get (listeners, "a(ss)", &iter);
+  while (g_variant_iter_loop (iter, "(&s&s)", &sender, &event_name))
+    {
+      unsigned int *count;
+
+      GTK_DEBUG (A11Y, "Registering event listener (%s, %s) on the a11y bus",
+                 sender,
+                 event_name[0] != 0 ? event_name : "(none)");
+
+      count = g_hash_table_lookup (self->event_listeners, sender);
+      if (count == NULL)
+        {
+          count = g_new (unsigned int, 1);
+          *count = 1;
+          g_hash_table_insert (self->event_listeners, g_strdup (sender), count);
+        }
+      else if (*count == G_MAXUINT)
+        {
+          g_critical ("Reference count for event listener %s reached saturation", sender);
+        }
+      else
+        *count += 1;
+    }
+
+  g_variant_iter_free (iter);
+  g_variant_unref (listeners);
+  g_variant_unref (reply);
+}
+
 typedef struct {
   GtkAtSpiRoot *root;
   GtkAtSpiRootRegisterFunc register_func;
@@ -539,6 +738,61 @@ on_registration_reply (GObject      *gobject,
   self->toplevels = gtk_window_get_toplevels ();
 
   g_free (data);
+
+  /* Check if we're running inside a sandbox.
+   *
+   * Flatpak applications need to have the D-Bus proxy set up inside the
+   * sandbox to allow event registration signals to propagate, so we
+   * check if the version of the Flatpak portal is recent enough.
+   */
+  if (gdk_should_use_portal () &&
+      !check_flatpak_portal_version (self->connection, 7))
+    {
+      GTK_DEBUG (A11Y, "Sandboxed does not allow event listener registration");
+      self->can_use_event_listeners = false;
+      return;
+    }
+
+  /* Subscribe to notifications on the registered event listeners */
+  g_dbus_connection_signal_subscribe (self->connection,
+                                      "org.a11y.atspi.Registry",
+                                      "org.a11y.atspi.Registry",
+                                      "EventListenerRegistered",
+                                      ATSPI_REGISTRY_PATH,
+                                      NULL,
+                                      G_DBUS_SIGNAL_FLAGS_NONE,
+                                      on_event_listener_registered,
+                                      self,
+                                      NULL);
+  g_dbus_connection_signal_subscribe (self->connection,
+                                      "org.a11y.atspi.Registry",
+                                      "org.a11y.atspi.Registry",
+                                      "EventListenerDeregistered",
+                                      ATSPI_REGISTRY_PATH,
+                                      NULL,
+                                      G_DBUS_SIGNAL_FLAGS_NONE,
+                                      on_event_listener_deregistered,
+                                      self,
+                                      NULL);
+
+  /* Get the list of ATs listening to events, in case they were started
+   * before the application; we want to delay the D-Bus traffic as much
+   * as possible until we know something is listening on the accessibility
+   * bus
+   */
+  g_dbus_connection_call (self->connection,
+                          "org.a11y.atspi.Registry",
+                          ATSPI_REGISTRY_PATH,
+                          "org.a11y.atspi.Registry",
+                          "GetRegisteredEvents",
+                          g_variant_new ("()"),
+                          G_VARIANT_TYPE ("(a(ss))"),
+                          G_DBUS_CALL_FLAGS_NONE, -1,
+                          NULL,
+                          on_registered_events_reply,
+                          self);
+
+  self->can_use_event_listeners = true;
 }
 
 static gboolean
@@ -817,4 +1071,17 @@ gtk_at_spi_root_get_base_path (GtkAtSpiRoot *self)
   g_return_val_if_fail (GTK_IS_AT_SPI_ROOT (self), NULL);
 
   return self->base_path;
+}
+
+gboolean
+gtk_at_spi_root_has_event_listeners (GtkAtSpiRoot *self)
+{
+  g_return_val_if_fail (GTK_IS_AT_SPI_ROOT (self), FALSE);
+
+  /* If we can't rely on event listeners, we default to being chatty */
+  if (!self->can_use_event_listeners)
+    return TRUE;
+
+  return self->event_listeners != NULL &&
+    g_hash_table_size (self->event_listeners) != 0;
 }
