@@ -214,14 +214,15 @@ load_node_file (const char *node_file)
 }
 
 static void
-make_random_clip (const graphene_rect_t *bounds,
-                  cairo_rectangle_int_t *int_clip)
+make_random_clip (cairo_rectangle_int_t *int_clip,
+                  int                    width,
+                  int                    height)
 {
-  int_clip->width = g_test_rand_int_range (1, (int) floor (bounds->size.width));
-  int_clip->height = g_test_rand_int_range (1, (int) floor (bounds->size.height));
+  int_clip->width = g_test_rand_int_range (1, width);
+  int_clip->height = g_test_rand_int_range (1, height);
 
-  int_clip->x = g_test_rand_int_range ((int) ceil (bounds->origin.x), (int) floor (bounds->origin.x + bounds->size.width - int_clip->width));
-  int_clip->y = g_test_rand_int_range ((int) ceil (bounds->origin.y), (int) floor (bounds->origin.y + bounds->size.height - int_clip->height));
+  int_clip->x = g_test_rand_int_range (0, width - int_clip->width);
+  int_clip->y = g_test_rand_int_range (0, height - int_clip->height);
 }
 
 static void
@@ -235,7 +236,8 @@ gsk_rect_from_cairo (graphene_rect_t              *rect,
 }
 
 static GskRenderNode *
-flip_create_test (GskRenderNode *node)
+flip_create_test (GskRenderNode *node,
+                  gconstpointer  unused)
 {
   GskRenderNode *result;
   GskTransform *transform;
@@ -248,8 +250,9 @@ flip_create_test (GskRenderNode *node)
 }
 
 static GdkTexture *
-flip_create_reference (GskRenderer *renderer,
-                       GdkTexture  *texture)
+flip_create_reference (GskRenderer   *renderer,
+                       GdkTexture    *texture,
+                       gconstpointer  unused)
 {
   GskRenderNode *texture_node, *transform_node;
   GdkTexture *result;
@@ -275,7 +278,8 @@ flip_create_reference (GskRenderer *renderer,
 }
 
 static GskRenderNode *
-repeat_create_test (GskRenderNode *node)
+repeat_create_test (GskRenderNode *node,
+                    gconstpointer  unused)
 {
   graphene_rect_t bounds, node_bounds;
 
@@ -293,8 +297,9 @@ repeat_create_test (GskRenderNode *node)
 }
 
 static GdkTexture *
-repeat_create_reference (GskRenderer *renderer,
-                         GdkTexture  *texture)
+repeat_create_reference (GskRenderer   *renderer,
+                         GdkTexture    *texture,
+                         gconstpointer  unused)
 {
   GskRenderNode *texture_nodes[16], *container_node, *reference_node;
   GdkTexture *result;
@@ -336,7 +341,8 @@ repeat_create_reference (GskRenderer *renderer,
 }
 
 static GskRenderNode *
-rotate_create_test (GskRenderNode *node)
+rotate_create_test (GskRenderNode *node,
+                    gconstpointer  unused)
 {
   GskRenderNode *result;
   GskTransform *transform;
@@ -349,8 +355,9 @@ rotate_create_test (GskRenderNode *node)
 }
 
 static GdkTexture *
-rotate_create_reference (GskRenderer *renderer,
-                         GdkTexture  *texture)
+rotate_create_reference (GskRenderer   *renderer,
+                         GdkTexture    *texture,
+                         gconstpointer  unused)
 {
   GskRenderNode *texture_node, *transform_node;
   GdkTexture *result;
@@ -376,7 +383,8 @@ rotate_create_reference (GskRenderer *renderer,
 }
 
 static GskRenderNode *
-mask_create_test (GskRenderNode *node)
+mask_create_test (GskRenderNode *node,
+                  gconstpointer  unused)
 {
   GskRenderNode *result, *nodes[2], *mask_node;
   graphene_rect_t bounds;
@@ -409,8 +417,9 @@ mask_create_test (GskRenderNode *node)
 }
 
 static GdkTexture *
-mask_create_reference (GskRenderer *renderer,
-                       GdkTexture  *texture)
+mask_create_reference (GskRenderer   *renderer,
+                       GdkTexture    *texture,
+                       gconstpointer  unused)
 {
   GskRenderNode *texture_node, *reference_node;
   GdkTexture *result;
@@ -452,7 +461,8 @@ mask_create_reference (GskRenderer *renderer,
 }
 
 static GskRenderNode *
-replay_create_test (GskRenderNode *node)
+replay_create_test (GskRenderNode *node,
+                    gconstpointer  unused)
 {
   GskRenderNode *result;
   graphene_rect_t node_bounds, result_bounds;
@@ -486,8 +496,72 @@ replay_create_test (GskRenderNode *node)
   return result;
 }
 
+static gpointer
+clip_setup (GskRenderNode *node)
+{
+  cairo_rectangle_int_t *result;
+  graphene_rect_t bounds;
+
+  result = g_new (cairo_rectangle_int_t, 1);
+
+  gsk_render_node_get_bounds (node, &bounds);
+  if (bounds.size.width <= 1 || bounds.size.height <= 1)
+    *result = (cairo_rectangle_int_t) { 0, 0, 1, 1 };
+  else
+    make_random_clip (result, ceil (bounds.size.width), ceil (bounds.size.height));
+
+  g_print ("Random clip rectangle %d %d %d %d\n",
+           result->x, result->y, result->width, result->height);
+
+  return result;
+}
+
 static GskRenderNode *
-colorflip_create_test (GskRenderNode *node)
+clip_create_test (GskRenderNode *node,
+                  gconstpointer  data)
+{
+  const cairo_rectangle_int_t *int_clip = data;
+  graphene_rect_t clip_rect, bounds;
+
+  gsk_rect_from_cairo (&clip_rect, int_clip);
+  gsk_render_node_get_bounds (node, &bounds);
+  clip_rect.origin.x += bounds.origin.x;
+  clip_rect.origin.y += bounds.origin.y;
+  
+  return gsk_clip_node_new (node, &clip_rect);
+}
+
+static GdkTexture *
+clip_create_reference (GskRenderer   *renderer,
+                       GdkTexture    *texture,
+                       gconstpointer  data)
+{
+  const cairo_rectangle_int_t *int_clip = data;
+  GskRenderNode *texture_node, *reference_node;
+  graphene_rect_t clip_rect;
+  GdkTexture *result;
+
+  gsk_rect_from_cairo (&clip_rect, int_clip);
+
+  texture_node = gsk_texture_node_new (texture,
+                                       &GRAPHENE_RECT_INIT (
+                                         0,
+                                         0,
+                                         gdk_texture_get_width (texture),
+                                         gdk_texture_get_height (texture)
+                                       ));
+  reference_node = gsk_clip_node_new (texture_node, &clip_rect);
+  result = gsk_renderer_render_texture (renderer, reference_node, NULL);
+
+  gsk_render_node_unref (reference_node);
+  gsk_render_node_unref (texture_node);
+  
+  return result;
+}
+
+static GskRenderNode *
+colorflip_create_test (GskRenderNode *node,
+                       gconstpointer  unused)
 {
   graphene_matrix_t matrix;
 
@@ -501,8 +575,9 @@ colorflip_create_test (GskRenderNode *node)
 }
 
 static GdkTexture *
-colorflip_create_reference (GskRenderer *renderer,
-                            GdkTexture  *texture)
+colorflip_create_reference (GskRenderer   *renderer,
+                            GdkTexture    *texture,
+                            gconstpointer  unused)
 {
   GskRenderNode *texture_node, *reference_node;
   GdkTexture *result;
@@ -533,9 +608,13 @@ typedef struct _TestSetup TestSetup;
 struct _TestSetup
 {
   const char *name;
-  GskRenderNode * (* create_test)      (GskRenderNode *node);
+  gpointer        (* setup)            (GskRenderNode *node);
+  void            (* free)             (gpointer       data);
+  GskRenderNode * (* create_test)      (GskRenderNode *node,
+                                        gconstpointer  data);
   GdkTexture *    (* create_reference) (GskRenderer   *renderer,
-                                        GdkTexture    *texture);
+                                        GdkTexture    *texture,
+                                        gconstpointer  data);
 };
 
 static const TestSetup test_setups[] = {
@@ -570,6 +649,13 @@ static const TestSetup test_setups[] = {
     .create_reference = NULL,
   },
   {
+    .name = "clip",
+    .setup = clip_setup,
+    .free = g_free,
+    .create_test = clip_create_test,
+    .create_reference = clip_create_reference,
+  },
+  {
     .name = "colorflip",
     .create_test = colorflip_create_test,
     .create_reference = colorflip_create_reference,
@@ -585,10 +671,16 @@ run_single_test (const TestSetup *setup,
 {
   GskRenderNode *test;
   GdkTexture *reference, *rendered, *diff;
+  gpointer test_data;
+
+  if (setup->setup)
+    test_data = setup->setup (org_test);
+  else
+    test_data = NULL;
 
   if (setup->create_test)
     {
-      test = setup->create_test (org_test);
+      test = setup->create_test (org_test, test_data);
       save_node (test, file_name, setup->name, ".node");
     }
   else
@@ -599,11 +691,14 @@ run_single_test (const TestSetup *setup,
 
   if (setup->create_reference)
     {
-      reference = setup->create_reference (renderer, org_reference);
+      reference = setup->create_reference (renderer, org_reference, test_data);
       save_image (reference, file_name, setup->name, ".ref.png");
     }
   else
     reference = g_object_ref (org_reference);
+
+  if (setup->free)
+    setup->free (test_data);
 
   diff = reftest_compare_textures (reference, rendered);
   if (diff)
@@ -644,12 +739,10 @@ run_node_test (gconstpointer data)
 {
   const TestData *test = data;
   GdkTexture *reference_texture = NULL;
-  GdkTexture *rendered_texture = NULL;
   GskRenderer *renderer;
   GdkSurface *window;
   GskRenderNode *node;
   GError *error = NULL;
-  GdkTexture *diff_texture = NULL;
 
   g_print ("Node file: '%s'\n", test->node_file);
   g_print ("PNG file: '%s'\n", test->png_file);
@@ -694,66 +787,10 @@ run_node_test (gconstpointer data)
     run_single_test (&test_setups[5], test->node_file, renderer, node, reference_texture);
 
   if (clip)
-    {
-      GskRenderNode *node2, *texture_node, *reference_node;
-      GdkTexture *clipped_reference;
-      graphene_rect_t bounds;
-      cairo_rectangle_int_t int_clip;
-      graphene_rect_t clip_rect;
-
-      gsk_render_node_get_bounds (node, &bounds);
-
-      if (bounds.size.width <= 1 || bounds.size.height <= 1)
-        {
-          g_test_skip ("Can't make a random clip");
-          goto skip_clip;
-        }
-
-      make_random_clip (&bounds, &int_clip);
-      g_print ("Random clip rectangle %d %d %d %d\n",
-               int_clip.x, int_clip.y, int_clip.width, int_clip.height);
-      gsk_rect_from_cairo (&clip_rect, &int_clip);
-      g_assert_true (graphene_rect_contains_rect (&bounds, &clip_rect));
-      g_assert_true (graphene_rect_get_area (&clip_rect) != 0);
-
-      node2 = gsk_clip_node_new (node, &clip_rect);
-      save_node (node2, test->node_file, "clip", ".node");
-
-      rendered_texture = gsk_renderer_render_texture (renderer, node2, NULL);
-      save_image (rendered_texture, test->node_file, "clip", ".out.png");
-
-      texture_node = gsk_texture_node_new (reference_texture,
-                                           &GRAPHENE_RECT_INIT (
-                                             (int) bounds.origin.x,
-                                             (int) bounds.origin.y,
-                                             gdk_texture_get_width (reference_texture),
-                                             gdk_texture_get_height (reference_texture)
-                                           ));
-      reference_node = gsk_clip_node_new (texture_node, &clip_rect);
-      clipped_reference = gsk_renderer_render_texture (renderer, reference_node, NULL);
-
-      save_image (clipped_reference, test->node_file, "clip", ".ref.png");
-
-      diff_texture = reftest_compare_textures (clipped_reference, rendered_texture);
-
-      if (diff_texture)
-        {
-          save_image (diff_texture, test->node_file, "clip", ".diff.png");
-          g_test_fail ();
-        }
-
-      g_clear_object (&diff_texture);
-      g_clear_object (&rendered_texture);
-      g_clear_object (&clipped_reference);
-      gsk_render_node_unref (reference_node);
-      gsk_render_node_unref (texture_node);
-      gsk_render_node_unref (node2);
-    }
-
-skip_clip:
+    run_single_test (&test_setups[6], test->node_file, renderer, node, reference_texture);
 
   if (colorflip)
-    run_single_test (&test_setups[6], test->node_file, renderer, node, reference_texture);
+    run_single_test (&test_setups[7], test->node_file, renderer, node, reference_texture);
 
   g_object_unref (reference_texture);
   gsk_render_node_unref (node);
