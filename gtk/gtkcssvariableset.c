@@ -309,7 +309,10 @@ gtk_css_variable_set_list_ids (GtkCssVariableSet  *self)
   g_hash_table_iter_init (&iter, all_ids);
 
   while (g_hash_table_iter_next (&iter, &id, NULL))
-    g_array_append_val (ret, id);
+    {
+      int value = GPOINTER_TO_INT (id);
+      g_array_append_val (ret, value);
+    }
 
   g_hash_table_unref (all_ids);
 
