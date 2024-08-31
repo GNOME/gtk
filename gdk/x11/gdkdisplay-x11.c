@@ -1472,7 +1472,7 @@ gdk_x11_display_open (const char *display_name)
   }
 #endif
 
-  /* initialize the display's screens */ 
+  /* initialize the display's screens */
   display_x11->screen = _gdk_x11_screen_new (display, DefaultScreen (display_x11->xdisplay));
 
   /* If GL is available we want to pick better default/rgba visuals,
@@ -1484,8 +1484,11 @@ gdk_x11_display_open (const char *display_name)
    */
   if (!gdk_display_prepare_gl (display, NULL))
     {
-      gdk_x11_display_query_default_visual (display_x11, &display_x11->window_visual, &display_x11->window_depth);
-      gdk_x11_display_init_leader_surface (display_x11);
+      if (!display_x11->leader_gdk_surface)
+        {
+          gdk_x11_display_query_default_visual (display_x11, &display_x11->window_visual, &display_x11->window_depth);
+          gdk_x11_display_init_leader_surface (display_x11);
+        }
     }
 
 #ifdef HAVE_XFIXES
@@ -3021,7 +3024,7 @@ gdk_x11_display_init_gl (GdkDisplay  *display,
   GdkX11Display *self = GDK_X11_DISPLAY (display);
 
   if (!gdk_x11_display_init_gl_backend (self, &self->window_visual, &self->window_depth, error))
-    return FALSE;
+    return NULL;
 
   gdk_x11_display_init_leader_surface (self);
 
