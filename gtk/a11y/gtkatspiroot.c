@@ -527,7 +527,7 @@ on_event_listener_registered (GDBusConnection *connection,
         }
       else if (*count == G_MAXUINT)
         {
-          g_critical ("Reference count for event listener %s reached saturation", sender);
+          GTK_DEBUG (A11Y, "Reference count for event listener %s reached saturation", sender);
         }
       else
         {
@@ -563,24 +563,24 @@ on_event_listener_deregistered (GDBusConnection *connection,
 
       if (G_UNLIKELY (self->event_listeners == NULL))
         {
-          g_critical ("Received org.a11y.atspi.Registry::EventListenerDeregistered for "
-                      "sender (%s, %s) without a corresponding EventListenerRegistered "
-                      "signal.",
-                      sender, event[0] != '\0' ? event : "(no event)");
+          GTK_DEBUG (A11Y,
+                     "Received org.a11y.atspi.Registry::EventListenerDeregistered for "
+                     "sender (%s, %s) without a corresponding EventListenerRegistered "
+                     "signal.",
+                     sender, event[0] != '\0' ? event : "(no event)");
           return;
         }
 
       count = g_hash_table_lookup (self->event_listeners, sender);
       if (G_UNLIKELY (count == NULL))
         {
-          g_critical ("Received org.a11y.atspi.Registry::EventListenerDeregistered for "
-                      "sender (%s, %s) without a corresponding EventListenerRegistered "
-                      "signal.",
-                      sender, event[0] != '\0' ? event : "(no event)");
-          return;
+          GTK_DEBUG (A11Y,
+                     "Received org.a11y.atspi.Registry::EventListenerDeregistered for "
+                     "sender (%s, %s) without a corresponding EventListenerRegistered "
+                     "signal.",
+                     sender, event[0] != '\0' ? event : "(no event)");
         }
-
-      if (*count > 1)
+      else if (*count > 1)
         {
           GTK_DEBUG (A11Y, "Decreasing refcount for listener %s", sender);
           *count -= 1;
