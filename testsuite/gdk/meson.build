@@ -37,6 +37,9 @@ if os_linux
   tests += [
     { 'name': 'dmabuf-support',
       'sources': [ 'udmabuf.c' ],
+      # This needs to pass on upstream Gitlab-CI, but cannot be guaranteed
+      # to work on developer machines or downstream build environments
+      'suites': [ 'needs-udmabuf' ],
     },
   ]
 endif
