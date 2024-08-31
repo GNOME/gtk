@@ -55,7 +55,7 @@ mode_switch_state_set (GtkSwitch *sw,
     {
       gtk_widget_set_visible (label, TRUE);
       gtk_accessible_update_relation (GTK_ACCESSIBLE (sw),
-                                      GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE, label,
+                                      GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE, label, NULL,
                                       -1);
       gtk_accessible_update_state (GTK_ACCESSIBLE (sw),
                                    GTK_ACCESSIBLE_STATE_INVALID, GTK_ACCESSIBLE_INVALID_TRUE,
