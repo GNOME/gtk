@@ -649,7 +649,7 @@ on_registered_events_reply (GObject *gobject,
   const char *sender, *event_name;
 
   if (self->event_listeners == NULL)
-    self->event_listeners = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+    self->event_listeners = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
 
   g_variant_get (listeners, "a(ss)", &iter);
   while (g_variant_iter_loop (iter, "(&s&s)", &sender, &event_name))
