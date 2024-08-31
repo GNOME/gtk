@@ -1484,8 +1484,11 @@ gdk_x11_display_open (const char *display_name)
    */
   if (!gdk_display_prepare_gl (display, NULL))
     {
-      gdk_x11_display_query_default_visual (display_x11, &display_x11->window_visual, &display_x11->window_depth);
-      gdk_x11_display_init_leader_surface (display_x11);
+      if (!display_x11->leader_gdk_surface)
+        {
+          gdk_x11_display_query_default_visual (display_x11, &display_x11->window_visual, &display_x11->window_depth);
+          gdk_x11_display_init_leader_surface (display_x11);
+        }
     }
 
 #ifdef HAVE_XFIXES
