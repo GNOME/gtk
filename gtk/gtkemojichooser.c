@@ -452,7 +452,8 @@ emoji_activated (GtkFlowBox      *box,
 
   item = (GVariant*) g_object_get_data (G_OBJECT (child), "emoji-data");
   modifier = (gunichar) GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (child), "modifier"));
-  add_recent_item (chooser, item, modifier);
+  if ((GtkWidget *) box != chooser->recent.box)
+    add_recent_item (chooser, item, modifier);
 
   g_signal_emit (data, signals[EMOJI_PICKED], 0, text);
   g_free (text);
