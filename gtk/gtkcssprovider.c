@@ -1660,16 +1660,18 @@ compare_properties (gconstpointer a, gconstpointer b, gpointer style)
                  _gtk_style_property_get_name (GTK_STYLE_PROPERTY (styles[*ub].property)));
 }
 
+/* This is looking into a GPtrArray where each "pointer" is actually
+ * GINT_TO_POINTER (id), so a and b are pointers to pointer-sized quantities */
 static int
 compare_custom_properties (gconstpointer a, gconstpointer b, gpointer user_data)
 {
   GtkCssCustomPropertyPool *pool = user_data;
-  int id1 = GPOINTER_TO_INT (*((const int *) a));
-  int id2 = GPOINTER_TO_INT (*((const int *) b));
+  const void * const *ap = a;
+  const void * const *bp = b;
   const char *name1, *name2;
 
-  name1 = gtk_css_custom_property_pool_get_name (pool, id1);
-  name2 = gtk_css_custom_property_pool_get_name (pool, id2);
+  name1 = gtk_css_custom_property_pool_get_name (pool, GPOINTER_TO_INT (*ap));
+  name2 = gtk_css_custom_property_pool_get_name (pool, GPOINTER_TO_INT (*bp));
 
   return strcmp (name1, name2);
 }
