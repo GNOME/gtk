@@ -1133,6 +1133,7 @@
 0x00fe8a dead_small_schwa
 0x00fe8b dead_capital_schwa
 0x00fe8c dead_greek
+0x00fe8d dead_hamza
 0x00fea0 ch
 0x00fea1 Ch
 0x00fea2 CH
@@ -1398,6 +1399,11 @@
 0x1000259 schwa
 0x1000275 obarred
 0x1000292 ezh
+0x1000300 combining_grave
+0x1000301 combining_acute
+0x1000303 combining_tilde
+0x1000309 combining_hook
+0x1000323 combining_belowdot
 0x1000492 Cyrillic_GHE_bar
 0x1000493 Cyrillic_ghe_bar
 0x1000496 Cyrillic_ZHE_descender

@@ -96,8 +96,7 @@ print OUT_GDKKEYSYMS<<EOF;
  * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
  */
 
-#ifndef __GDK_KEYSYMS_H__
-#define __GDK_KEYSYMS_H__
+#pragma once
 
 
 EOF
@@ -165,8 +164,6 @@ close IN_XF86KEYSYM;
 
 
 print OUT_GDKKEYSYMS<<EOF;
-
-#endif /* __GDK_KEYSYMS_H__ */
 EOF
 
 printf "We just finished converting keysymdef.h to gdkkeysyms.h\nThank you\n";

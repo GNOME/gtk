@@ -1510,7 +1510,7 @@ gtk_compose_table_foreach (const GtkComposeTable      *table,
  * are added and we need to update the upper limit.
  */
 #define IS_DEAD_KEY(k) \
-    ((k) >= GDK_KEY_dead_grave && (k) <= GDK_KEY_dead_greek)
+    ((k) >= GDK_KEY_dead_grave && (k) <= GDK_KEY_dead_hamza)
 
 gboolean
 gtk_check_algorithmically (const guint *compose_buffer,
