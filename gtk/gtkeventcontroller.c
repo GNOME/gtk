@@ -84,6 +84,7 @@ gtk_event_controller_unset_widget (GtkEventController *self)
 {
   GtkEventControllerPrivate *priv = gtk_event_controller_get_instance_private (self);
 
+  gtk_event_controller_reset (self);
   priv->widget = NULL;
 }
 
