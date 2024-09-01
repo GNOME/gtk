@@ -309,7 +309,7 @@ gsk_rounded_rect_scale_affine (GskRoundedRect       *dest,
   g_assert (dest != src);
 
   gsk_rect_scale (&src->bounds, scale_x, scale_y, &dest->bounds);
-  graphene_rect_offset (&dest->bounds, dx, dy);
+  gsk_rect_init_offset (&dest->bounds, &dest->bounds, &GRAPHENE_POINT_INIT (dx, dy));
 
   scale_x = fabsf (scale_x);
   scale_y = fabsf (scale_y);

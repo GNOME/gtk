@@ -28,12 +28,11 @@ gsk_rect_init_from_rect (graphene_rect_t       *r,
 }
 
 static inline void
-gsk_rect_init_offset (graphene_rect_t       *r,
-                      const graphene_rect_t *src,
-                      float                  dx,
-                      float                  dy)
+gsk_rect_init_offset (graphene_rect_t        *r,
+                      const graphene_rect_t  *src,
+                      const graphene_point_t *offset)
 {
-  gsk_rect_init (r, src->origin.x + dx, src->origin.y + dy, src->size.width, src->size.height);
+  gsk_rect_init (r, src->origin.x + offset->x, src->origin.y + offset->y, src->size.width, src->size.height);
 }
 
 static inline gboolean G_GNUC_PURE

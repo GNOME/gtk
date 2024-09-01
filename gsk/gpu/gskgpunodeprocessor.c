@@ -501,10 +501,7 @@ gsk_gpu_node_processor_rect_to_device_shrink (GskGpuNodeProcessor   *self,
 {
   graphene_rect_t tmp;
 
-  graphene_rect_offset_r (rect,
-                          self->offset.x,
-                          self->offset.y,
-                          &tmp);
+  gsk_rect_init_offset (&tmp, rect, &self->offset);
 
   if (!gsk_gpu_node_processor_rect_clip_to_device (self, &tmp, &tmp))
     return FALSE;
@@ -990,9 +987,7 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
       return;
     }
 
-  graphene_rect_offset_r (clip_bounds,
-                          self->offset.x, self->offset.y,
-                          &clip);
+  gsk_rect_init_offset (&clip, clip_bounds, &self->offset);
 
   gsk_gpu_clip_init_copy (&old_clip, &self->clip);
 
@@ -1731,9 +1726,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
   graphene_rect_t rect, clipped;
   float clear_color[4];
 
-  graphene_rect_offset_r (&node->bounds,
-                          self->offset.x, self->offset.y,
-                          &rect);
+  gsk_rect_init_offset (&rect, &node->bounds, &self->offset);
   gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped);
 
   if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
@@ -2406,7 +2399,7 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
 
       gsk_rounded_rect_init_copy (&outline, gsk_outset_shadow_node_get_outline (node));
       gsk_rounded_rect_shrink (&outline, -spread, -spread, -spread, -spread);
-      graphene_rect_offset (&outline.bounds, offset->x, offset->y);
+      gsk_rect_init_offset (&outline.bounds, &outline.bounds, offset);
 
       for (int i = 0; i < 4; i++)
         gdk_color_init_copy (&colors[i], color);
@@ -3172,8 +3165,8 @@ gsk_gpu_node_processor_repeat_tile (GskGpuNodeProcessor    *self,
 
   gsk_rect_init_offset (&offset_rect,
                         rect,
-                        - x * child_bounds->size.width,
-                        - y * child_bounds->size.height);
+                        &GRAPHENE_POINT_INIT (- x * child_bounds->size.width,
+                                              - y * child_bounds->size.height));
   if (!gsk_rect_intersection (&offset_rect, child_bounds, &clipped_child_bounds))
     {
       /* The math has gone wrong probably, someone should look at this. */
@@ -3561,9 +3554,7 @@ gsk_gpu_node_processor_add_subsurface_node (GskGpuNodeProcessor *self,
       cairo_rectangle_int_t int_clipped;
       graphene_rect_t rect, clipped;
 
-      graphene_rect_offset_r (&node->bounds,
-                              self->offset.x, self->offset.y,
-                              &rect);
+      gsk_rect_init_offset (&rect, &node->bounds, &self->offset);
       gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped);
 
       if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&

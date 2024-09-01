@@ -57,8 +57,6 @@ void            _gtk_window_notify_keys_changed (GtkWindow *window);
 
 void            _gtk_window_toggle_maximized (GtkWindow *window);
 
-void            _gtk_window_request_csd (GtkWindow *window);
-
 /* Window groups */
 
 GtkWindowGroup *_gtk_window_get_window_group (GtkWindow *window);
