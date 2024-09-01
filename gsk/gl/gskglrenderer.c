@@ -407,7 +407,8 @@ gsk_gl_renderer_render_texture (GskRenderer           *renderer,
 
   /* Don't use float textures for SRGB or node-editor turns on high 
    * depth unconditionally. */
-  if (gsk_render_node_get_preferred_depth (root) != GDK_MEMORY_U8 &&
+  if (gsk_render_node_get_preferred_depth (root) != GDK_MEMORY_NONE &&
+      gsk_render_node_get_preferred_depth (root) != GDK_MEMORY_U8 &&
       gsk_render_node_get_preferred_depth (root) != GDK_MEMORY_U8_SRGB &&
       gdk_gl_context_check_version (self->context, "3.0", "3.0"))
     {
