@@ -296,9 +296,7 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
   GdkGLContext *context;
   guint texture_id;
 
-  /* Don't use the renderer context, the texture might survive the frame
-   * and its surface */
-  context = gdk_display_get_gl_context (gsk_gpu_device_get_display (gsk_gpu_frame_get_device (frame)));
+  context = GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame));
   texture_id = gsk_gl_image_get_texture_id (GSK_GL_IMAGE (self->image));
 
 #ifdef HAVE_DMABUF
@@ -334,14 +332,16 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
 #endif
 
   data = g_new (GskGLTextureData, 1);
-  data->context = g_object_ref (context);
+  /* Don't use the renderer context for the texture,
+   * the texture might survive the frame and its surface */
+  data->context = g_object_ref (gdk_display_get_gl_context (gsk_gpu_device_get_display (gsk_gpu_frame_get_device (frame))));
   data->texture_id = texture_id;
 
   if (gdk_gl_context_has_feature (context, GDK_GL_FEATURE_SYNC))
     data->sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
   builder = gdk_gl_texture_builder_new ();
-  gdk_gl_texture_builder_set_context (builder, context);
+  gdk_gl_texture_builder_set_context (builder, data->context);
   gdk_gl_texture_builder_set_id (builder, data->texture_id);
   gdk_gl_texture_builder_set_format (builder, gsk_gpu_image_get_format (self->image));
   gdk_gl_texture_builder_set_width (builder, gsk_gpu_image_get_width (self->image));
