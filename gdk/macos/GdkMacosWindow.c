@@ -692,24 +692,9 @@ typedef NSString *CALayerContentsGravity;
 
 -(void)setStyleMask:(NSWindowStyleMask)styleMask
 {
-  gboolean was_opaque;
-  gboolean is_opaque;
-
-  was_opaque = (([self styleMask] & NSWindowStyleMaskTitled) != 0);
-
   [super setStyleMask:styleMask];
 
-  is_opaque = (([self styleMask] & NSWindowStyleMaskTitled) != 0);
-
   _gdk_macos_surface_update_fullscreen_state (gdk_surface);
-
-  if (was_opaque != is_opaque)
-    {
-      [self setOpaque:is_opaque];
-
-      if (!is_opaque)
-        [self setBackgroundColor:[NSColor clearColor]];
-    }
 }
 
 -(NSRect)constrainFrameRect:(NSRect)frameRect toScreen:(NSScreen *)screen
@@ -785,12 +770,19 @@ typedef NSString *CALayerContentsGravity;
 
   if (decorated)
     {
-      style_mask |= NSWindowStyleMaskTitled;
+      style_mask &= ~NSWindowStyleMaskFullSizeContentView;
+      [self setTitleVisibility:NSWindowTitleVisible];
     }
   else
     {
-      style_mask &= ~NSWindowStyleMaskTitled;
+      style_mask |= NSWindowStyleMaskFullSizeContentView;
+      [self setTitleVisibility:NSWindowTitleHidden];
     }
+
+  [self setTitlebarAppearsTransparent:!decorated];
+  [[self standardWindowButton:NSWindowCloseButton] setHidden:!decorated];
+  [[self standardWindowButton:NSWindowMiniaturizeButton] setHidden:!decorated];
+  [[self standardWindowButton:NSWindowZoomButton] setHidden:!decorated];
 
   [self setStyleMask:style_mask];
 }
