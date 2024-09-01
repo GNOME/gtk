@@ -76,6 +76,13 @@ struct _GdkBroadwaySurface
   int shadow_right;
   int shadow_top;
   int shadow_bottom;
+
+  int last_computed_width;
+  int last_computed_height;
+
+  guint compute_size_source_id;
+
+  gboolean resizible;
 };
 
 struct _GdkBroadwaySurfaceClass
