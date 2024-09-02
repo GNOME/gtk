@@ -5,6 +5,7 @@
     <property name="default-width">200</property>
     <property name="default-height">200</property>
     <property name="icon-name">document-open</property>
+    <property name="session-id">application-main</property>
     <property name="child">
       <object class="GtkGrid">
         <child>

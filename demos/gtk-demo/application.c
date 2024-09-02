@@ -17,11 +17,6 @@ typedef struct {
   GtkWidget *menubutton;
   GMenuModel *toolmenu;
   GtkTextBuffer *buffer;
-
-  int width;
-  int height;
-  gboolean maximized;
-  gboolean fullscreen;
 } DemoApplicationWindow;
 typedef GtkApplicationWindowClass DemoApplicationWindowClass;
 
@@ -337,6 +332,7 @@ static void
 startup (GApplication *app)
 {
   GtkBuilder *builder;
+  const char *session_id;
 
   G_APPLICATION_CLASS (demo_application_parent_class)->startup (app);
 
@@ -347,6 +343,17 @@ startup (GApplication *app)
                                G_MENU_MODEL (gtk_builder_get_object (builder, "menubar")));
 
   g_object_unref (builder);
+
+  session_id = gtk_application_get_current_session_id (GTK_APPLICATION (app));
+
+  if (session_id)
+    {
+      GSettings *settings = g_settings_new ("org.gtk.Demo4.Application");
+
+      g_settings_set_string (settings, "session-id", session_id);
+
+      g_object_unref (settings);
+    }
 }
 
 static void
@@ -377,7 +384,7 @@ demo_application_init (DemoApplication *app)
   GSettings *settings;
   GAction *action;
 
-  settings = g_settings_new ("org.gtk.Demo4");
+  settings = g_settings_new ("org.gtk.Demo4.Application");
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
@@ -400,38 +407,9 @@ demo_application_class_init (DemoApplicationClass *class)
 }
 
 static void
-demo_application_window_store_state (DemoApplicationWindow *win)
-{
-  GSettings *settings;
-
-  settings = g_settings_new ("org.gtk.Demo4");
-  g_settings_set (settings, "window-size", "(ii)", win->width, win->height);
-  g_settings_set_boolean (settings, "maximized", win->maximized);
-  g_settings_set_boolean (settings, "fullscreen", win->fullscreen);
-  g_object_unref (settings);
-}
-
-static void
-demo_application_window_load_state (DemoApplicationWindow *win)
-{
-  GSettings *settings;
-
-  settings = g_settings_new ("org.gtk.Demo4");
-  g_settings_get (settings, "window-size", "(ii)", &win->width, &win->height);
-  win->maximized = g_settings_get_boolean (settings, "maximized");
-  win->fullscreen = g_settings_get_boolean (settings, "fullscreen");
-  g_object_unref (settings);
-}
-
-static void
 demo_application_window_init (DemoApplicationWindow *window)
 {
   GtkWidget *popover;
-
-  window->width = -1;
-  window->height = -1;
-  window->maximized = FALSE;
-  window->fullscreen = FALSE;
 
   gtk_widget_init_template (GTK_WIDGET (window));
 
@@ -444,75 +422,9 @@ demo_application_window_init (DemoApplicationWindow *window)
 }
 
 static void
-demo_application_window_constructed (GObject *object)
-{
-  DemoApplicationWindow *window = (DemoApplicationWindow *)object;
-
-  demo_application_window_load_state (window);
-
-  gtk_window_set_default_size (GTK_WINDOW (window), window->width, window->height);
-
-  if (window->maximized)
-    gtk_window_maximize (GTK_WINDOW (window));
-
-  if (window->fullscreen)
-    gtk_window_fullscreen (GTK_WINDOW (window));
-
-  G_OBJECT_CLASS (demo_application_window_parent_class)->constructed (object);
-}
-
-static void
-demo_application_window_size_allocate (GtkWidget *widget,
-                                       int        width,
-                                       int        height,
-                                       int        baseline)
-{
-  DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
-
-  GTK_WIDGET_CLASS (demo_application_window_parent_class)->size_allocate (widget,
-                                                                          width,
-                                                                          height,
-                                                                          baseline);
-
-  if (!window->maximized && !window->fullscreen)
-    gtk_window_get_default_size (GTK_WINDOW (window), &window->width, &window->height);
-}
-
-static void
-surface_state_changed (GtkWidget *widget)
-{
-  DemoApplicationWindow *window = (DemoApplicationWindow *)widget;
-  GdkToplevelState new_state;
-
-  new_state = gdk_toplevel_get_state (GDK_TOPLEVEL (gtk_native_get_surface (GTK_NATIVE (widget))));
-  window->maximized = (new_state & GDK_TOPLEVEL_STATE_MAXIMIZED) != 0;
-  window->fullscreen = (new_state & GDK_TOPLEVEL_STATE_FULLSCREEN) != 0;
-}
-
-static void
-demo_application_window_realize (GtkWidget *widget)
-{
-  GTK_WIDGET_CLASS (demo_application_window_parent_class)->realize (widget);
-
-  g_signal_connect_swapped (gtk_native_get_surface (GTK_NATIVE (widget)), "notify::state",
-                            G_CALLBACK (surface_state_changed), widget);
-}
-
-static void
-demo_application_window_unrealize (GtkWidget *widget)
-{
-  g_signal_handlers_disconnect_by_func (gtk_native_get_surface (GTK_NATIVE (widget)),
-                                        surface_state_changed, widget);
-
-  GTK_WIDGET_CLASS (demo_application_window_parent_class)->unrealize (widget);
-}
-
-static void
 demo_application_window_dispose (GObject *object)
 {
   DemoApplicationWindow *window = (DemoApplicationWindow *)object;
-
-  demo_application_window_store_state (window);
 
   gtk_widget_dispose_template (GTK_WIDGET (window), demo_application_window_get_type ());
 
@@ -525,12 +437,7 @@ demo_application_window_class_init (DemoApplicationWindowClass *class)
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  object_class->constructed = demo_application_window_constructed;
   object_class->dispose = demo_application_window_dispose;
-
-  widget_class->size_allocate = demo_application_window_size_allocate;
-  widget_class->realize = demo_application_window_realize;
-  widget_class->unrealize = demo_application_window_unrealize;
 
   gtk_widget_class_set_template_from_resource (widget_class, "/application_demo/application.ui");
   gtk_widget_class_bind_template_child (widget_class, DemoApplicationWindow, message);
@@ -548,11 +455,19 @@ int
 main (int argc, char *argv[])
 {
   GtkApplication *app;
+  GSettings *settings;
+  char *session_id;
 
   app = GTK_APPLICATION (g_object_new (demo_application_get_type (),
                                        "application-id", "org.gtk.Demo4.App",
                                        "flags", G_APPLICATION_HANDLES_OPEN,
                                        NULL));
+
+  settings = g_settings_new ("org.gtk.Demo4.Application");
+  session_id = g_settings_get_string (settings, "session-id");
+  gtk_application_set_session_id (app, session_id);
+  g_free (session_id);
+  g_object_unref (settings);
 
   return g_application_run (G_APPLICATION (app), 0, NULL);
 }
