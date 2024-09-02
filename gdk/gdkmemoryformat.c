@@ -2059,6 +2059,21 @@ gdk_memory_convert (guchar              *dest_data,
   gdk_parallel_task_run (gdk_memory_convert_generic, &mc);
 }
 
+typedef struct _MemoryConvertColorState MemoryConvertColorState;
+
+struct _MemoryConvertColorState
+{
+  guchar *data;
+  gsize stride;
+  GdkMemoryFormat format;
+  GdkColorState *src_cs;
+  GdkColorState *dest_cs;
+  gsize width;
+  gsize height;
+
+  /* atomic */ int rows_done;
+};
+
 static const guchar srgb_lookup[] = {
   0, 12, 21, 28, 33, 38, 42, 46, 49, 52, 55, 58, 61, 63, 66, 68,
   70, 73, 75, 77, 79, 81, 82, 84, 86, 88, 89, 91, 93, 94, 96, 97,
@@ -2163,43 +2178,83 @@ convert_srgb_linear_to_srgb (guchar *data,
 }
 
 static void
-convert_srgb_to_srgb_linear_in_place (guchar *data,
-                                      gsize   stride,
-                                      gsize   width,
-                                      gsize   height)
+gdk_memory_convert_color_state_srgb_to_srgb_linear (gpointer data)
 {
-  if (stride == width * 4)
+  MemoryConvertColorState *mc = data;
+  int y;
+
+  for (y = g_atomic_int_add (&mc->rows_done, 1);
+       y < mc->height;
+       y = g_atomic_int_add (&mc->rows_done, 1))
     {
-      convert_srgb_to_srgb_linear (data, height * width);
-    }
-  else
-    {
-      for (gsize y = 0; y < height; y++)
-        {
-          convert_srgb_to_srgb_linear (data, width);
-          data += stride;
-        }
+      convert_srgb_to_srgb_linear (mc->data + y * mc->stride, mc->width);
     }
 }
 
 static void
-convert_srgb_linear_to_srgb_in_place (guchar *data,
-                                      gsize   stride,
-                                      gsize   width,
-                                      gsize   height)
+gdk_memory_convert_color_state_srgb_linear_to_srgb (gpointer data)
 {
-  if (stride == width * 4)
+  MemoryConvertColorState *mc = data;
+  int y;
+
+  for (y = g_atomic_int_add (&mc->rows_done, 1);
+       y < mc->height;
+       y = g_atomic_int_add (&mc->rows_done, 1))
     {
-      convert_srgb_linear_to_srgb (data, height * width);
+      convert_srgb_linear_to_srgb (mc->data + y * mc->stride, mc->width);
     }
-  else
+}
+
+static void
+gdk_memory_convert_color_state_generic (gpointer user_data)
+{
+  MemoryConvertColorState *mc = user_data;
+  const GdkMemoryFormatDescription *desc = &memory_formats[mc->format];
+  GdkFloatColorConvert convert_func = NULL;
+  GdkFloatColorConvert convert_func2 = NULL;
+  float (*tmp)[4];
+  int y;
+
+  convert_func = gdk_color_state_get_convert_to (mc->src_cs, mc->dest_cs);
+
+  if (!convert_func)
     {
-      for (gsize y = 0; y < height; y++)
-        {
-          convert_srgb_linear_to_srgb (data, width);
-          data += stride;
-        }
+      convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, mc->src_cs);
     }
+
+  if (!convert_func && !convert_func2)
+    {
+      GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
+      convert_func = gdk_color_state_get_convert_to (mc->src_cs, connection);
+      convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, connection);
+    }
+
+  tmp = g_malloc (sizeof (*tmp) * mc->width);
+
+  for (y = g_atomic_int_add (&mc->rows_done, 1);
+       y < mc->height;
+       y = g_atomic_int_add (&mc->rows_done, 1))
+    {
+      guchar *data = mc->data + y * mc->stride;
+
+      desc->to_float (tmp, data, mc->width);
+
+      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+        unpremultiply (tmp, mc->width);
+
+      if (convert_func)
+        convert_func (mc->src_cs, tmp, mc->width);
+
+      if (convert_func2)
+        convert_func2 (mc->dest_cs, tmp, mc->width);
+
+      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+        premultiply (tmp, mc->width);
+
+      desc->from_float (data, tmp, mc->width);
+    }
+
+  g_free (tmp);
 }
 
 void
@@ -2211,10 +2266,15 @@ gdk_memory_convert_color_state (guchar          *data,
                                 gsize            width,
                                 gsize            height)
 {
-  const GdkMemoryFormatDescription *desc = &memory_formats[format];
-  GdkFloatColorConvert convert_func = NULL;
-  GdkFloatColorConvert convert_func2 = NULL;
-  float (*tmp)[4];
+  MemoryConvertColorState mc = {
+    .data = data,
+    .stride = stride,
+    .format = format,
+    .src_cs = src_cs,
+    .dest_cs = dest_cs,
+    .width = width,
+    .height = height,
+  };
 
   if (gdk_color_state_equal (src_cs, dest_cs))
     return;
@@ -2223,52 +2283,16 @@ gdk_memory_convert_color_state (guchar          *data,
       src_cs == GDK_COLOR_STATE_SRGB &&
       dest_cs == GDK_COLOR_STATE_SRGB_LINEAR)
     {
-      convert_srgb_to_srgb_linear_in_place (data, stride, width, height);
-      return;
+      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_to_srgb_linear, &mc);
     }
   else if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
            src_cs == GDK_COLOR_STATE_SRGB_LINEAR &&
            dest_cs == GDK_COLOR_STATE_SRGB)
     {
-      convert_srgb_linear_to_srgb_in_place (data, stride, width, height);
-      return;
+      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_linear_to_srgb, &mc);
     }
-
-  convert_func = gdk_color_state_get_convert_to (src_cs, dest_cs);
-
-  if (!convert_func)
+  else
     {
-      convert_func2 = gdk_color_state_get_convert_from (dest_cs, src_cs);
+      gdk_parallel_task_run (gdk_memory_convert_color_state_generic, &mc);
     }
-
-  if (!convert_func && !convert_func2)
-    {
-      GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
-      convert_func = gdk_color_state_get_convert_to (src_cs, connection);
-      convert_func2 = gdk_color_state_get_convert_from (dest_cs, connection);
-    }
-
-  tmp = g_malloc (sizeof (*tmp) * width);
-
-  for (gsize y = 0; y < height; y++)
-    {
-      desc->to_float (tmp, data, width);
-
-      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-        unpremultiply (tmp, width);
-
-      if (convert_func)
-        convert_func (src_cs, tmp, width);
-
-      if (convert_func2)
-        convert_func2 (dest_cs, tmp, width);
-
-      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-        premultiply (tmp, width);
-
-      desc->from_float (data, tmp, width);
-      data += stride;
-    }
-
-  g_free (tmp);
 }
