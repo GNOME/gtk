@@ -1251,6 +1251,7 @@ add_wayland_protocols (GdkDisplay          *display,
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->single_pixel_buffer);
       append_wayland_protocol_row (gen, d->color ? gdk_wayland_color_get_color_manager (d->color) : NULL);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->system_bell);
+      append_wayland_protocol_row (gen, (struct wl_proxy *)d->xdg_session_manager);
     }
 }
 
@@ -1292,6 +1293,7 @@ dump_wayland_protocols (GdkDisplay *display,
       append_wayland_protocol (ext, (struct wl_proxy *)d->single_pixel_buffer, &count);
       append_wayland_protocol (ext, d->color ? gdk_wayland_color_get_color_manager (d->color) : NULL, &count);
       append_wayland_protocol (ext, (struct wl_proxy *)d->system_bell, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_session_manager);
 
       g_string_append_printf (string, "%u Protocols</summary>%s</details> |\n", count, ext->str);
       g_string_free (ext, TRUE);
