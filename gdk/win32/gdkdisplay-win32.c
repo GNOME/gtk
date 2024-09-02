@@ -48,8 +48,6 @@
 # define IMAGE_FILE_MACHINE_ARM64 0xAA64
 #endif
 
-static int debug_indent = 0;
-
 /**
  * gdk_win32_display_add_filter:
  * @display: a `GdkWin32Display`
@@ -460,15 +458,31 @@ display_change_hwnd_procedure (HWND   hwnd,
 {
   LRESULT retval;
 
-  GDK_NOTE (EVENTS, g_print ("%s%*s%s %p",
-			     (debug_indent > 0 ? "\n" : ""),
-			     debug_indent, "",
-			     _gdk_win32_message_to_string (message), hwnd));
-  debug_indent += 2;
-  retval = inner_display_change_hwnd_procedure (hwnd, message, wparam, lparam);
-  debug_indent -= 2;
+  if (message == WM_NCCREATE)
+    {
+      SetWindowLongPtr (hwnd, GWLP_USERDATA, (LONG_PTR) GINT_TO_POINTER (0));
+      retval = TRUE;
+    }
+  else
+    {
+      int debug_indent;
 
-  GDK_NOTE (EVENTS, g_print (" => %" G_GINT64_FORMAT "%s", (gint64) retval, (debug_indent == 0 ? "\n" : "")));
+      /* I know this does not look that nice, but makes the code a bit clearer on the token of avoiding global variables */
+      debug_indent = GPOINTER_TO_INT (GetWindowLongPtr (hwnd, GWLP_USERDATA));
+      GDK_NOTE (EVENTS, g_print ("%s%*s%s %p",
+                (debug_indent > 0 ? "\n" : ""),
+                 debug_indent, "",
+                _gdk_win32_message_to_string (message), hwnd));
+
+      debug_indent += 2;
+      SetWindowLongPtr (hwnd, GWLP_USERDATA, (LONG_PTR) GINT_TO_POINTER (debug_indent));
+
+      retval = inner_display_change_hwnd_procedure (hwnd, message, wparam, lparam);
+
+      debug_indent = GPOINTER_TO_INT (GetWindowLongPtr (hwnd, GWLP_USERDATA)) - 2;
+      SetWindowLongPtr (hwnd, GWLP_USERDATA, (LONG_PTR) GINT_TO_POINTER (debug_indent));
+      GDK_NOTE (EVENTS, g_print (" => %" G_GINT64_FORMAT "%s", (gint64) retval, (debug_indent == 0 ? "\n" : "")));
+    }
 
   return retval;
 }
