@@ -189,12 +189,12 @@ static GdkTexture *
 create_stipple_texture (GdkMemoryFormat  format,
                         gsize            width,
                         gsize            height,
+                        GdkRGBA          colors[2][2],
                         GdkRGBA         *average)
 {
   TextureBuilder builder;
   GdkTexture *texture;
   int x, y;
-  GdkRGBA colors[2][2];
 
   *average = (GdkRGBA) { 0, 0, 0, 0 };
 
@@ -211,6 +211,7 @@ create_stipple_texture (GdkMemoryFormat  format,
               colors[x][y].green *= 16.f/17.f;
               colors[x][y].blue *= 16.f/17.f;
             }
+
           average->red += colors[x][y].red * colors[x][y].alpha;
           average->green += colors[x][y].green * colors[x][y].alpha;
           average->blue += colors[x][y].blue * colors[x][y].alpha;
@@ -237,6 +238,27 @@ create_stipple_texture (GdkMemoryFormat  format,
 }
 
 static void
+dump_scaling_input (const GdkRGBA  colors[2][2],
+                    const GdkRGBA *average)
+{
+  int x, y;
+
+  for (y = 0; y < 2; y++)
+    {
+      for (x = 0; x < 2; x++)
+        g_test_message ("input stipple texture (%d,%d) r=%f g=%f b=%f a=%f",
+                        x, y,
+                        colors[x][y].red,
+                        colors[x][y].green,
+                        colors[x][y].blue,
+                        colors[x][y].alpha);
+    }
+
+  g_test_message ("expected average r=%f g=%f b=%f a=%f",
+                  average->red, average->green, average->blue, average->alpha);
+}
+
+static void
 test_linear_filtering (gconstpointer data,
                        gsize         width,
                        gsize         height)
@@ -245,16 +267,20 @@ test_linear_filtering (gconstpointer data,
   GskRenderer *renderer;
   GdkTexture *input, *output, *expected;
   GskRenderNode *node;
+  GdkRGBA colors[2][2];
   GdkRGBA average_color;
 
   decode_renderer_format (data, &renderer, &format);
 
-  input = create_stipple_texture (format, width, height, &average_color);
+  input = create_stipple_texture (format, width, height, colors, &average_color);
   node = gsk_texture_scale_node_new (input, &GRAPHENE_RECT_INIT (0, 0, width / 2, height / 2), GSK_SCALING_FILTER_LINEAR);
   output = gsk_renderer_render_texture (renderer, node, NULL);
   expected = create_solid_color_texture (gdk_texture_get_format (output), width / 2, height / 2, &average_color);
 
   compare_textures (expected, output, FALSE);
+
+  if (g_test_failed ())
+    dump_scaling_input (colors, &average_color);
 
   g_object_unref (expected);
   g_object_unref (output);
@@ -269,16 +295,20 @@ test_mipmaps (gconstpointer data)
   GskRenderer *renderer;
   GdkTexture *input, *output, *expected;
   GskRenderNode *node;
+  GdkRGBA colors[2][2];
   GdkRGBA average_color;
 
   decode_renderer_format (data, &renderer, &format);
 
-  input = create_stipple_texture (format, 2, 2, &average_color);
+  input = create_stipple_texture (format, 2, 2, colors, &average_color);
   node = gsk_texture_scale_node_new (input, &GRAPHENE_RECT_INIT (0, 0, 1, 1), GSK_SCALING_FILTER_TRILINEAR);
   output = gsk_renderer_render_texture (renderer, node, NULL);
   expected = create_solid_color_texture (gdk_texture_get_format (output), 1, 1, &average_color);
 
   compare_textures (expected, output, FALSE);
+
+  if (g_test_failed ())
+    dump_scaling_input (colors, &average_color);
 
   g_object_unref (expected);
   g_object_unref (output);
