@@ -51,57 +51,6 @@ decode_renderer_format (gconstpointer     data,
   *format = value;
 }
 
-static void
-compare_textures (GdkTexture *texture1,
-                  GdkTexture *texture2,
-                  gboolean    accurate_compare)
-{
-  GdkTextureDownloader *downloader1, *downloader2;
-  GBytes *bytes1, *bytes2;
-  gsize stride1, stride2, bpp;
-  const guchar *data1, *data2;
-  int width, height, x, y;
-  GdkMemoryFormat format;
-
-  g_assert_cmpint (gdk_texture_get_width (texture1), ==, gdk_texture_get_width (texture2));
-  g_assert_cmpint (gdk_texture_get_height (texture1), ==, gdk_texture_get_height (texture2));
-  g_assert_cmpint (gdk_texture_get_format (texture1), ==, gdk_texture_get_format (texture2));
-
-  format = gdk_texture_get_format (texture1);
-  bpp = gdk_memory_format_bytes_per_pixel (format);
-  width = gdk_texture_get_width (texture1);
-  height = gdk_texture_get_height (texture1);
-
-  downloader1 = gdk_texture_downloader_new (texture1);
-  gdk_texture_downloader_set_format (downloader1, format);
-  bytes1 = gdk_texture_downloader_download_bytes (downloader1, &stride1);
-  g_assert_cmpint (stride1, >=, bpp * width);
-  g_assert_nonnull (bytes1);
-  gdk_texture_downloader_free (downloader1);
-
-  downloader2 = gdk_texture_downloader_new (texture2);
-  gdk_texture_downloader_set_format (downloader2, format);
-  bytes2 = gdk_texture_downloader_download_bytes (downloader2, &stride2);
-  g_assert_cmpint (stride2, >=, bpp * width);
-  g_assert_nonnull (bytes2);
-  gdk_texture_downloader_free (downloader2);
-
-  data1 = g_bytes_get_data (bytes1, NULL);
-  data2 = g_bytes_get_data (bytes2, NULL);
-  for (y = 0; y < height; y++)
-    {
-      for (x = 0; x < width; x++)
-        {
-          g_assert_true (gdk_memory_format_pixel_equal (format, accurate_compare, data1 + bpp * x, data2 + bpp * x));
-        }
-      data1 += stride1;
-      data2 += stride2;
-    }
-
-  g_bytes_unref (bytes2);
-  g_bytes_unref (bytes1);
-}
-
 #if 0
 static GdkTexture *
 ensure_texture_format (GdkTexture      *texture,

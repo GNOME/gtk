@@ -31,6 +31,9 @@ guint       gdk_memory_format_n_colors         (GdkMemoryFormat  format);
 gboolean    gdk_memory_format_has_alpha        (GdkMemoryFormat  format);
 gboolean    gdk_memory_format_is_premultiplied (GdkMemoryFormat  format);
 gboolean    gdk_memory_format_is_deep          (GdkMemoryFormat  format);
+void        gdk_memory_format_pixel_print      (GdkMemoryFormat  format,
+                                                const guchar    *data,
+                                                GString         *string);
 gboolean    gdk_memory_format_pixel_equal      (GdkMemoryFormat  format,
                                                 gboolean         accurate,
                                                 const guchar    *pixel1,
@@ -47,3 +50,7 @@ void        texture_builder_set_pixel (TextureBuilder  *builder,
                                        int              x,
                                        int              y,
                                        const GdkRGBA   *color);
+
+void        compare_textures (GdkTexture *texture1,
+                              GdkTexture *texture2,
+                              gboolean    accurate_compare);
