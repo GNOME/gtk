@@ -1897,87 +1897,47 @@ get_fast_conversion_func (GdkMemoryFormat dest_format,
   return NULL;
 }
 
-void
-gdk_memory_convert (guchar              *dest_data,
-                    gsize                dest_stride,
-                    GdkMemoryFormat      dest_format,
-                    GdkColorState       *dest_cs,
-                    const guchar        *src_data,
-                    gsize                src_stride,
-                    GdkMemoryFormat      src_format,
-                    GdkColorState       *src_cs,
-                    gsize                width,
-                    gsize                height)
+typedef struct _MemoryConvert MemoryConvert;
+
+struct _MemoryConvert
 {
-  const GdkMemoryFormatDescription *dest_desc = &memory_formats[dest_format];
-  const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
+  guchar              *dest_data;
+  gsize                dest_stride;
+  GdkMemoryFormat      dest_format;
+  GdkColorState       *dest_cs;
+  const guchar        *src_data;
+  gsize                src_stride;
+  GdkMemoryFormat      src_format;
+  GdkColorState       *src_cs;
+  gsize                width;
+  gsize                height;
+
+  /* atomic */ int     rows_done;
+};
+
+static void
+gdk_memory_convert_generic (gpointer data)
+{
+  MemoryConvert *mc = data;
+  const GdkMemoryFormatDescription *dest_desc = &memory_formats[mc->dest_format];
+  const GdkMemoryFormatDescription *src_desc = &memory_formats[mc->src_format];
   float (*tmp)[4];
-  gsize y;
   GdkFloatColorConvert convert_func = NULL;
   GdkFloatColorConvert convert_func2 = NULL;
   gboolean needs_premultiply, needs_unpremultiply;
+  gsize y, n;
 
-  g_assert (dest_format < GDK_MEMORY_N_FORMATS);
-  g_assert (src_format < GDK_MEMORY_N_FORMATS);
-  /* We don't allow overlap here. If you want to do in-place color state conversions,
-   * use gdk_memory_convert_color_state.
-   */
-  g_assert (dest_data + gdk_memory_format_min_buffer_size (dest_format, dest_stride, width, height) <= src_data ||
-            src_data + gdk_memory_format_min_buffer_size (src_format, src_stride, width, height) <= dest_data);
+  convert_func = gdk_color_state_get_convert_to (mc->src_cs, mc->dest_cs);
 
-  if (src_format == dest_format && gdk_color_state_equal (dest_cs, src_cs))
+  if (!convert_func)
+    convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, mc->src_cs);
+
+  if (!convert_func && !convert_func2)
     {
-      gsize bytes_per_row = src_desc->bytes_per_pixel * width;
-
-      if (bytes_per_row == src_stride && bytes_per_row == dest_stride)
-        {
-          memcpy (dest_data, src_data, bytes_per_row * height);
-        }
-      else
-        {
-          for (y = 0; y < height; y++)
-            {
-              memcpy (dest_data, src_data, bytes_per_row);
-              src_data += src_stride;
-              dest_data += dest_stride;
-            }
-        }
-      return;
+      GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
+      convert_func = gdk_color_state_get_convert_to (mc->src_cs, connection);
+      convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, connection);
     }
-
-  if (!gdk_color_state_equal (dest_cs, src_cs))
-    {
-      convert_func = gdk_color_state_get_convert_to (src_cs, dest_cs);
-
-      if (!convert_func)
-        convert_func2 = gdk_color_state_get_convert_from (dest_cs, src_cs);
-
-      if (!convert_func && !convert_func2)
-        {
-          GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
-          convert_func = gdk_color_state_get_convert_to (src_cs, connection);
-          convert_func2 = gdk_color_state_get_convert_from (dest_cs, connection);
-        }
-    }
-  else
-    {
-      FastConversionFunc func;
-
-      func = get_fast_conversion_func (dest_format, src_format);
-
-      if (func != NULL)
-        {
-          for (y = 0; y < height; y++)
-            {
-              func (dest_data, src_data, width);
-              src_data += src_stride;
-              dest_data += dest_stride;
-            }
-          return;
-        }
-    }
-
-  tmp = g_malloc (sizeof (*tmp) * width);
 
   if (convert_func)
     {
@@ -1990,29 +1950,113 @@ gdk_memory_convert (guchar              *dest_data,
       needs_premultiply = src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT;
     }
 
-  for (y = 0; y < height; y++)
+  tmp = g_malloc (sizeof (*tmp) * mc->width);
+  n = 1;
+
+  for (y = g_atomic_int_add (&mc->rows_done, n);
+       y < mc->height;
+       y = g_atomic_int_add (&mc->rows_done, n))
     {
-      src_desc->to_float (tmp, src_data, width);
+      const guchar *src_data = mc->src_data + y * mc->src_stride;
+      guchar *dest_data = mc->dest_data + y * mc->dest_stride;
+
+      src_desc->to_float (tmp, src_data, mc->width);
 
       if (needs_unpremultiply)
-        unpremultiply (tmp, width);
+        unpremultiply (tmp, mc->width);
 
       if (convert_func)
-        convert_func (src_cs, tmp, width);
+        convert_func (mc->src_cs, tmp, mc->width);
 
       if (convert_func2)
-        convert_func2 (dest_cs, tmp, width);
+        convert_func2 (mc->dest_cs, tmp, mc->width);
 
       if (needs_premultiply)
-        premultiply (tmp, width);
+        premultiply (tmp, mc->width);
 
-      dest_desc->from_float (dest_data, tmp, width);
-
-      src_data += src_stride;
-      dest_data += dest_stride;
+      dest_desc->from_float (dest_data, tmp, mc->width);
     }
 
   g_free (tmp);
+}
+
+void
+gdk_memory_convert (guchar              *dest_data,
+                    gsize                dest_stride,
+                    GdkMemoryFormat      dest_format,
+                    GdkColorState       *dest_cs,
+                    const guchar        *src_data,
+                    gsize                src_stride,
+                    GdkMemoryFormat      src_format,
+                    GdkColorState       *src_cs,
+                    gsize                width,
+                    gsize                height)
+{
+  MemoryConvert mc = {
+    .dest_data = dest_data,
+    .dest_stride = dest_stride,
+    .dest_format = dest_format,
+    .dest_cs = dest_cs,
+    .src_data = src_data,
+    .src_stride = src_stride,
+    .src_format = src_format,
+    .src_cs = src_cs,
+    .width = width,
+    .height = height,
+  };
+
+  g_assert (dest_format < GDK_MEMORY_N_FORMATS);
+  g_assert (src_format < GDK_MEMORY_N_FORMATS);
+  /* We don't allow overlap here. If you want to do in-place color state conversions,
+   * use gdk_memory_convert_color_state.
+   */
+  g_assert (dest_data + gdk_memory_format_min_buffer_size (dest_format, dest_stride, width, height) <= src_data ||
+            src_data + gdk_memory_format_min_buffer_size (src_format, src_stride, width, height) <= dest_data);
+
+  if (src_format == dest_format && gdk_color_state_equal (dest_cs, src_cs))
+    {
+      const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
+      gsize bytes_per_row = src_desc->bytes_per_pixel * width;
+
+      if (bytes_per_row == src_stride && bytes_per_row == dest_stride)
+        {
+          memcpy (dest_data, src_data, bytes_per_row * height);
+        }
+      else
+        {
+          gsize y;
+
+          for (y = 0; y < height; y++)
+            {
+              memcpy (dest_data, src_data, bytes_per_row);
+              src_data += src_stride;
+              dest_data += dest_stride;
+            }
+        }
+      return;
+    }
+
+  if (gdk_color_state_equal (dest_cs, src_cs))
+    {
+      FastConversionFunc func;
+
+      func = get_fast_conversion_func (dest_format, src_format);
+
+      if (func != NULL)
+        {
+          gsize y;
+
+          for (y = 0; y < height; y++)
+            {
+              func (dest_data, src_data, width);
+              src_data += src_stride;
+              dest_data += dest_stride;
+            }
+          return;
+        }
+    }
+
+  gdk_parallel_task_run (gdk_memory_convert_generic, &mc);
 }
 
 static const guchar srgb_lookup[] = {
