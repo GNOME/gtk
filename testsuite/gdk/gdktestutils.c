@@ -834,8 +834,13 @@ compare_textures (GdkTexture *texture1,
           if (!gdk_memory_format_pixel_equal (format, accurate_compare, data1 + bpp * x, data2 + bpp * x))
             {
               GString *msg = g_string_new (NULL);
+              GEnumClass *enum_class;
+              const char *format_name;
 
-              g_string_append_printf (msg, "(%u %u): ", x, y);
+              enum_class = g_type_class_ref (GDK_TYPE_MEMORY_FORMAT);
+              format_name = g_enum_get_value (enum_class, format)->value_nick;
+
+              g_string_append_printf (msg, "%s (%u %u): ", format_name, x, y);
               gdk_memory_format_pixel_print (format, data1 + bpp * x, msg);
               g_string_append (msg, " != ");
               gdk_memory_format_pixel_print (format, data2 + bpp * x, msg);
