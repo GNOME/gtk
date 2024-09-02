@@ -542,7 +542,7 @@ tests = [
   [ 'opaque' ],
   [ 'path', [ 'path-utils.c' ], [ 'flaky'] ],
   [ 'path-special-cases' ],
-  [ 'scaling' ],
+  [ 'scaling', [ 'scaling.c', '../gdk/gdktestutils.c' ] ],
 ]
 
 test_cargs = []
