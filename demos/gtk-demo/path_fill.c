@@ -225,7 +225,8 @@ print_ready (GObject      *source,
 
   if (!g_output_stream_close (stream, NULL, &error))
     {
-      g_print ("Error from close: %s\n", error->message);
+      if (!g_error_matches (error, GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_DISMISSED))
+        g_print ("Error from close: %s\n", error->message);
       g_error_free (error);
     }
 
