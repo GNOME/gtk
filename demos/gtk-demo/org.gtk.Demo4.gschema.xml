@@ -2,28 +2,15 @@
 
 <schemalist>
 
-  <enum id='org.gtk.Demo4.Color'>
+  <enum id='org.gtk.Demo4.Application.Color'>
     <value nick='red'   value='0'/>
     <value nick='green' value='1'/>
     <value nick='blue'  value='2'/>
   </enum>
 
-  <schema id='org.gtk.Demo4' path='/org/gtk/Demo4/'>
-    <key name='color' enum='org.gtk.Demo4.Color'>
+  <schema id='org.gtk.Demo4.Application' path='/org/gtk/Demo4/Application/'>
+    <key name='color' enum='org.gtk.Demo4.Application.Color'>
       <default>'red'</default>
-    </key>
-    <key name='window-size' type='(ii)'>
-      <default>(-1, -1)</default>
-    </key>
-    <key name='maximized' type='b'>
-      <default>false</default>
-    </key>
-    <key name='fullscreen' type='b'>
-      <default>false</default>
-    </key>
-
-    <key name='session-id' type='s'>
-      <default>''</default>
     </key>
   </schema>
 
