@@ -118,7 +118,8 @@ void                    gdk_memory_mipmap                   (guchar             
                                                              GdkMemoryFormat             src_format,
                                                              gsize                       src_width,
                                                              gsize                       src_height,
-                                                             guint                       lod_level);
+                                                             guint                       lod_level,
+                                                             gboolean                    linear);
 
 
 G_END_DECLS
