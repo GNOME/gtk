@@ -17,7 +17,7 @@ tests = [
   { 'name': 'displaymanager' },
   { 'name': 'glcontext' },
   { 'name': 'keysyms' },
-  { 'name': 'memorytexture' },
+  { 'name': 'memorytexture', 'sources': [ 'gdktestutils.c' ] },
   { 'name': 'rectangle' },
   { 'name': 'rgba' },
   { 'name': 'seat' },
