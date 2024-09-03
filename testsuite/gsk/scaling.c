@@ -284,6 +284,16 @@ test_linear_filtering (gconstpointer data,
 
   decode_renderer_format (data, &renderer, &format);
 
+  /* Cairo/Pixman and GTK/GL/Vulkan disagree on how to convert 241/256
+   * from floating-point to 8bpp (Cairo says 0xf1, GTK says 0xf0) */
+  if (GSK_IS_CAIRO_RENDERER (renderer) &&
+      (gdk_memory_format_get_channel_type (format) == CHANNEL_FLOAT_16 ||
+       gdk_memory_format_get_channel_type (format) == CHANNEL_FLOAT_32))
+    {
+      g_test_skip ("https://gitlab.gnome.org/GNOME/gtk/-/issues/6978");
+      return;
+    }
+
   input = create_stipple_texture (format, width, height, colors, &average_color);
   node = gsk_texture_scale_node_new (input, &GRAPHENE_RECT_INIT (0, 0, width / 2, height / 2), GSK_SCALING_FILTER_LINEAR);
   output = gsk_renderer_render_texture (renderer, node, NULL);
@@ -311,6 +321,16 @@ test_mipmaps (gconstpointer data)
   GdkRGBA average_color;
 
   decode_renderer_format (data, &renderer, &format);
+
+  /* Cairo/Pixman and GTK/GL/Vulkan disagree on how to convert 241/256
+   * from floating-point to 8bpp (Cairo says 0xf1, GTK says 0xf0) */
+  if (GSK_IS_CAIRO_RENDERER (renderer) &&
+      (gdk_memory_format_get_channel_type (format) == CHANNEL_FLOAT_16 ||
+       gdk_memory_format_get_channel_type (format) == CHANNEL_FLOAT_32))
+    {
+      g_test_skip ("https://gitlab.gnome.org/GNOME/gtk/-/issues/6978");
+      return;
+    }
 
   input = create_stipple_texture (format, 2, 2, colors, &average_color);
   node = gsk_texture_scale_node_new (input, &GRAPHENE_RECT_INIT (0, 0, 1, 1), GSK_SCALING_FILTER_TRILINEAR);
