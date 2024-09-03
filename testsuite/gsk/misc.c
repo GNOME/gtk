@@ -214,6 +214,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   res = gsk_renderer_realize (renderer, surface, &error);
 
+  g_assert_no_error (error);
   g_assert_true (res);
 
   g_assert_true (gsk_renderer_is_realized (renderer));
