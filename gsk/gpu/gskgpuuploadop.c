@@ -215,6 +215,7 @@ struct _GskGpuUploadTextureOp
   GskGpuBuffer *buffer;
   GdkTexture *texture;
   guint lod_level;
+  GskScalingFilter lod_filter;
 };
 
 static void
@@ -238,7 +239,9 @@ gsk_gpu_upload_texture_op_print (GskGpuOp    *op,
   gsk_gpu_print_op (string, indent, "upload-texture");
   gsk_gpu_print_image (string, self->image);
   if (self->lod_level > 0)
-    g_string_append_printf (string, " @%ux ", 1 << self->lod_level);
+    g_string_append_printf (string, " @%ux %s",
+                            1 << self->lod_level,
+                            self->lod_filter == GSK_SCALING_FILTER_TRILINEAR ? "linear" : "nearest");
   gsk_gpu_print_newline (string);
 }
 
@@ -272,7 +275,8 @@ gsk_gpu_upload_texture_op_draw (GskGpuOp *op,
                          gdk_texture_get_format (self->texture),
                          gdk_texture_get_width (self->texture),
                          gdk_texture_get_height (self->texture),
-                         self->lod_level);
+                         self->lod_level,
+                         self->lod_filter == GSK_SCALING_FILTER_TRILINEAR ? TRUE : FALSE);
       g_bytes_unref (bytes);
     }
   gdk_texture_downloader_free (downloader);
@@ -320,10 +324,11 @@ static const GskGpuOpClass GSK_GPU_UPLOAD_TEXTURE_OP_CLASS = {
 };
 
 GskGpuImage *
-gsk_gpu_upload_texture_op_try (GskGpuFrame *frame,
-                               gboolean     with_mipmap,
-                               guint        lod_level,
-                               GdkTexture  *texture)
+gsk_gpu_upload_texture_op_try (GskGpuFrame      *frame,
+                               gboolean          with_mipmap,
+                               guint             lod_level,
+                               GskScalingFilter  lod_filter,
+                               GdkTexture       *texture)
 {
   GskGpuUploadTextureOp *self;
   GskGpuImage *image;
@@ -369,6 +374,7 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame *frame,
 
   self->texture = g_object_ref (texture);
   self->lod_level = lod_level;
+  self->lod_filter = lod_filter;
   self->image = image;
 
   return g_object_ref (self->image);

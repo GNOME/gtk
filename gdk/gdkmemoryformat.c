@@ -315,13 +315,40 @@ ADD_ALPHA_FUNC(r8g8b8_to_a8b8g8r8, 0, 1, 2, 3, 2, 1, 0)
 
 #define MIPMAP_FUNC(SumType, DataType, n_units) \
 static void \
-gdk_mipmap_ ## DataType ## _ ## n_units (guchar       *dest, \
-                                         gsize         dest_stride, \
-                                         const guchar *src, \
-                                         gsize         src_stride, \
-                                         gsize         src_width, \
-                                         gsize         src_height, \
-                                         guint         lod_level) \
+gdk_mipmap_ ## DataType ## _ ## n_units ## _nearest (guchar       *dest, \
+                                                     gsize         dest_stride, \
+                                                     const guchar *src, \
+                                                     gsize         src_stride, \
+                                                     gsize         src_width, \
+                                                     gsize         src_height, \
+                                                     guint         lod_level) \
+{ \
+  gsize y, x, i; \
+  gsize n = 1 << lod_level; \
+\
+  for (y = 0; y < src_height; y += n) \
+    { \
+      DataType *dest_data = (DataType *) dest; \
+      for (x = 0; x < src_width; x += n) \
+        { \
+          const DataType *src_data = (const DataType *) (src + (y + MIN (n / 2, src_height - y))  * src_stride); \
+\
+          for (i = 0; i < n_units; i++) \
+            *dest_data++ = src_data[n_units * (x + MIN (n / 2, src_width - n_units)) + i]; \
+        } \
+      dest += dest_stride; \
+      src += src_stride * n; \
+    } \
+} \
+\
+static void \
+gdk_mipmap_ ## DataType ## _ ## n_units ## _linear (guchar       *dest, \
+                                                    gsize         dest_stride, \
+                                                    const guchar *src, \
+                                                    gsize         src_stride, \
+                                                    gsize         src_width, \
+                                                    gsize         src_height, \
+                                                    guint         lod_level) \
 { \
   gsize y_dest, y, x_dest, x, i; \
   gsize n = 1 << lod_level; \
@@ -401,7 +428,8 @@ struct _GdkMemoryFormatDescription
   /* no premultiplication going on here */
   void (* to_float) (float (*)[4], const guchar*, gsize);
   void (* from_float) (guchar *, const float (*)[4], gsize);
-  void (* mipmap) (guchar *, gsize, const guchar *, gsize, gsize, gsize, guint);
+  void (* mipmap_nearest) (guchar *, gsize, const guchar *, gsize, gsize, gsize, guint);
+  void (* mipmap_linear) (guchar *, gsize, const guchar *, gsize, gsize, gsize, guint);
 };
 
 #if  G_BYTE_ORDER == G_LITTLE_ENDIAN
@@ -443,7 +471,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = b8g8r8a8_premultiplied_to_float,
     .from_float = b8g8r8a8_premultiplied_from_float,
-    .mipmap = gdk_mipmap_guint8_4,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_A8R8G8B8_PREMULTIPLIED] = {
     .name = "ARGB8(p)",
@@ -475,7 +504,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8r8g8b8_premultiplied_to_float,
     .from_float = a8r8g8b8_premultiplied_from_float,
-    .mipmap = gdk_mipmap_guint8_4,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] = {
     .name = "RGBA8(p)",
@@ -506,7 +536,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r8g8b8a8_premultiplied_to_float,
     .from_float = r8g8b8a8_premultiplied_from_float,
-    .mipmap = gdk_mipmap_guint8_4,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_A8B8G8R8_PREMULTIPLIED] = {
     .name = "ABGR8(p)",
@@ -538,7 +569,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8b8g8r8_premultiplied_to_float,
     .from_float = a8b8g8r8_premultiplied_from_float,
-    .mipmap = gdk_mipmap_guint8_4,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_B8G8R8A8] = {
     .name = "BGRA8",
@@ -570,7 +602,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = b8g8r8a8_to_float,
     .from_float = b8g8r8a8_from_float,
-    .mipmap = gdk_mipmap_guint8_4,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_A8R8G8B8] = {
     .name = "ARGB8",
@@ -602,7 +635,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8r8g8b8_to_float,
     .from_float = a8r8g8b8_from_float,
-    .mipmap = gdk_mipmap_guint8_4,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_R8G8B8A8] = {
     .name = "RGBA8",
@@ -633,7 +667,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r8g8b8a8_to_float,
     .from_float = r8g8b8a8_from_float,
-    .mipmap = gdk_mipmap_guint8_4,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_A8B8G8R8] = {
     .name = "ABGR8",
@@ -665,7 +700,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8b8g8r8_to_float,
     .from_float = a8b8g8r8_from_float,
-    .mipmap = gdk_mipmap_guint8_4,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_B8G8R8X8] = {
     .name = "BGRX8",
@@ -698,7 +734,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = b8g8r8x8_to_float,
     .from_float = b8g8r8x8_from_float,
-    .mipmap = gdk_mipmap_guint8_4,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_X8R8G8B8] = {
     .name = "XRGB8",
@@ -731,7 +768,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = x8r8g8b8_to_float,
     .from_float = x8r8g8b8_from_float,
-    .mipmap = gdk_mipmap_guint8_4,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_R8G8B8X8] = {
     .name = "RGBX8",
@@ -763,7 +801,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r8g8b8x8_to_float,
     .from_float = r8g8b8x8_from_float,
-    .mipmap = gdk_mipmap_guint8_4,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_X8B8G8R8] = {
     .name = "XBGR8",
@@ -796,7 +835,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = x8b8g8r8_to_float,
     .from_float = x8b8g8r8_from_float,
-    .mipmap = gdk_mipmap_guint8_4,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_R8G8B8] = {
     .name = "RGB8",
@@ -828,7 +868,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r8g8b8_to_float,
     .from_float = r8g8b8_from_float,
-    .mipmap = gdk_mipmap_guint8_3,
+    .mipmap_nearest = gdk_mipmap_guint8_3_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_3_linear,
   },
   [GDK_MEMORY_B8G8R8] = {
     .name = "BGR8",
@@ -861,7 +902,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = b8g8r8_to_float,
     .from_float = b8g8r8_from_float,
-    .mipmap = gdk_mipmap_guint8_3,
+    .mipmap_nearest = gdk_mipmap_guint8_3_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_3_linear,
   },
   [GDK_MEMORY_R16G16B16] = {
     .name = "RGB16",
@@ -896,7 +938,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16_to_float,
     .from_float = r16g16b16_from_float,
-    .mipmap = gdk_mipmap_guint16_3,
+    .mipmap_nearest = gdk_mipmap_guint16_3_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_3_linear,
   },
   [GDK_MEMORY_R16G16B16A16_PREMULTIPLIED] = {
     .name = "RGBA16(p)",
@@ -930,7 +973,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
-    .mipmap = gdk_mipmap_guint16_4,
+    .mipmap_nearest = gdk_mipmap_guint16_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_4_linear,
   },
   [GDK_MEMORY_R16G16B16A16] = {
     .name = "RGBA16",
@@ -964,7 +1008,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
-    .mipmap = gdk_mipmap_guint16_4,
+    .mipmap_nearest = gdk_mipmap_guint16_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_4_linear,
   },
   [GDK_MEMORY_R16G16B16_FLOAT] = {
     .name = "RGBA16f",
@@ -998,7 +1043,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16_float_to_float,
     .from_float = r16g16b16_float_from_float,
-    .mipmap = gdk_mipmap_half_float_3,
+    .mipmap_nearest = gdk_mipmap_half_float_3_nearest,
+    .mipmap_linear = gdk_mipmap_half_float_3_linear,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] = {
     .name = "RGBA16f(p)",
@@ -1031,7 +1077,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
-    .mipmap = gdk_mipmap_half_float_4,
+    .mipmap_nearest = gdk_mipmap_half_float_4_nearest,
+    .mipmap_linear = gdk_mipmap_half_float_4_linear,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT] = {
     .name = "RGBA16f",
@@ -1064,7 +1111,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
-    .mipmap = gdk_mipmap_half_float_4,
+    .mipmap_nearest = gdk_mipmap_half_float_4_nearest,
+    .mipmap_linear = gdk_mipmap_half_float_4_linear,
   },
   [GDK_MEMORY_R32G32B32_FLOAT] = {
     .name = "RGB32f",
@@ -1098,7 +1146,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r32g32b32_float_to_float,
     .from_float = r32g32b32_float_from_float,
-    .mipmap = gdk_mipmap_float_3,
+    .mipmap_nearest = gdk_mipmap_float_3_nearest,
+    .mipmap_linear = gdk_mipmap_float_3_linear,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] = {
     .name = "RGBA32f(p)",
@@ -1131,7 +1180,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
-    .mipmap = gdk_mipmap_float_4,
+    .mipmap_nearest = gdk_mipmap_float_4_nearest,
+    .mipmap_linear = gdk_mipmap_float_4_linear,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT] = {
     .name = "RGBA32f",
@@ -1164,7 +1214,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
-    .mipmap = gdk_mipmap_float_4,
+    .mipmap_nearest = gdk_mipmap_float_4_nearest,
+    .mipmap_linear = gdk_mipmap_float_4_linear,
   },
   [GDK_MEMORY_G8A8_PREMULTIPLIED] = {
     .name = "GA8(p)",
@@ -1196,7 +1247,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g8a8_premultiplied_to_float,
     .from_float = g8a8_premultiplied_from_float,
-    .mipmap = gdk_mipmap_guint8_2,
+    .mipmap_nearest = gdk_mipmap_guint8_2_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_2_linear,
   },
   [GDK_MEMORY_G8A8] = {
     .name = "GA8",
@@ -1228,7 +1280,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g8a8_to_float,
     .from_float = g8a8_from_float,
-    .mipmap = gdk_mipmap_guint8_2,
+    .mipmap_nearest = gdk_mipmap_guint8_2_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_2_linear,
   },
   [GDK_MEMORY_G8] = {
     .name = "G8",
@@ -1260,7 +1313,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g8_to_float,
     .from_float = g8_from_float,
-    .mipmap = gdk_mipmap_guint8_1,
+    .mipmap_nearest = gdk_mipmap_guint8_1_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_1_linear,
   },
   [GDK_MEMORY_G16A16_PREMULTIPLIED] = {
     .name = "GA16(p)",
@@ -1295,7 +1349,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g16a16_premultiplied_to_float,
     .from_float = g16a16_premultiplied_from_float,
-    .mipmap = gdk_mipmap_guint16_2,
+    .mipmap_nearest = gdk_mipmap_guint16_2_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_2_linear,
   },
   [GDK_MEMORY_G16A16] = {
     .name = "GA16",
@@ -1330,7 +1385,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g16a16_to_float,
     .from_float = g16a16_from_float,
-    .mipmap = gdk_mipmap_guint16_2,
+    .mipmap_nearest = gdk_mipmap_guint16_2_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_2_linear,
   },
   [GDK_MEMORY_G16] = {
     .name = "G16",
@@ -1365,7 +1421,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g16_to_float,
     .from_float = g16_from_float,
-    .mipmap = gdk_mipmap_guint16_1,
+    .mipmap_nearest = gdk_mipmap_guint16_1_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_1_linear,
   },
   [GDK_MEMORY_A8] = {
     .name = "A8",
@@ -1397,7 +1454,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8_to_float,
     .from_float = a8_from_float,
-    .mipmap = gdk_mipmap_guint8_1,
+    .mipmap_nearest = gdk_mipmap_guint8_1_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_1_linear,
   },
   [GDK_MEMORY_A16] = {
     .name = "A16",
@@ -1432,7 +1490,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a16_to_float,
     .from_float = a16_from_float,
-    .mipmap = gdk_mipmap_guint16_1,
+    .mipmap_nearest = gdk_mipmap_guint16_1_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_1_linear,
   },
   [GDK_MEMORY_A16_FLOAT] = {
     .name = "A16f",
@@ -1466,7 +1525,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a16_float_to_float,
     .from_float = a16_float_from_float,
-    .mipmap = gdk_mipmap_half_float_1,
+    .mipmap_nearest = gdk_mipmap_half_float_1_nearest,
+    .mipmap_linear = gdk_mipmap_half_float_1_linear,
   },
   [GDK_MEMORY_A32_FLOAT] = {
     .name = "A32f",
@@ -1500,7 +1560,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a32_float_to_float,
     .from_float = a32_float_from_float,
-    .mipmap = gdk_mipmap_float_1,
+    .mipmap_nearest = gdk_mipmap_float_1_nearest,
+    .mipmap_linear = gdk_mipmap_float_1_linear,
   }
 };
 
@@ -2400,12 +2461,13 @@ struct _MipmapData
   gsize            src_width;
   gsize            src_height;
   guint            lod_level;
+  gboolean         linear;
 
   gint             rows_done;
 };
 
 static void
-gdk_memory_mipmap_same_format (gpointer data)
+gdk_memory_mipmap_same_format_nearest (gpointer data)
 {
   MipmapData *mipmap = data;
   const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
@@ -2420,10 +2482,33 @@ gdk_memory_mipmap_same_format (gpointer data)
       guchar *dest = mipmap->dest + (y >> mipmap->lod_level) * mipmap->dest_stride;
       const guchar *src = mipmap->src + y * mipmap->src_stride;
 
-      desc->mipmap (dest, mipmap->dest_stride,
-                    src, mipmap->src_stride,
-                    mipmap->src_width, MIN (n, mipmap->src_height - y),
-                    mipmap->lod_level);
+      desc->mipmap_nearest (dest, mipmap->dest_stride,
+                            src, mipmap->src_stride,
+                            mipmap->src_width, MIN (n, mipmap->src_height - y),
+                            mipmap->lod_level);
+    }
+}
+
+static void
+gdk_memory_mipmap_same_format_linear (gpointer data)
+{
+  MipmapData *mipmap = data;
+  const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
+  gsize n, y;
+
+  n = 1 << mipmap->lod_level;
+
+  for (y = g_atomic_int_add (&mipmap->rows_done, n);
+       y < mipmap->src_height;
+       y = g_atomic_int_add (&mipmap->rows_done, n))
+    {
+      guchar *dest = mipmap->dest + (y >> mipmap->lod_level) * mipmap->dest_stride;
+      const guchar *src = mipmap->src + y * mipmap->src_stride;
+
+      desc->mipmap_linear (dest, mipmap->dest_stride,
+                           src, mipmap->src_stride,
+                           mipmap->src_width, MIN (n, mipmap->src_height - y),
+                           mipmap->lod_level);
     }
 }
 
@@ -2451,10 +2536,16 @@ gdk_memory_mipmap_generic (gpointer data)
       guchar *dest = mipmap->dest + (y >> mipmap->lod_level) * mipmap->dest_stride;
       const guchar *src = mipmap->src + y * mipmap->src_stride;
 
-      desc->mipmap (tmp, (size + 7) & 7,
-                    src, mipmap->src_stride,
-                    mipmap->src_width, MIN (n, mipmap->src_height - y),
-                    mipmap->lod_level);
+      if (mipmap->linear)
+        desc->mipmap_linear (tmp, (size + 7) & 7,
+                             src, mipmap->src_stride,
+                             mipmap->src_width, MIN (n, mipmap->src_height - y),
+                             mipmap->lod_level);
+      else
+        desc->mipmap_nearest (tmp, (size + 7) & 7,
+                              src, mipmap->src_stride,
+                              mipmap->src_width, MIN (n, mipmap->src_height - y),
+                              mipmap->lod_level);
       if (func)
         func (dest, tmp, dest_width);
       else
@@ -2476,7 +2567,8 @@ gdk_memory_mipmap (guchar          *dest,
                    GdkMemoryFormat  src_format,
                    gsize            src_width,
                    gsize            src_height,
-                   guint            lod_level)
+                   guint            lod_level,
+                   gboolean         linear)
 {
   MipmapData mipmap = {
     .dest = dest,
@@ -2488,6 +2580,7 @@ gdk_memory_mipmap (guchar          *dest,
     .src_width = src_width,
     .src_height = src_height,
     .lod_level = lod_level,
+    .linear = linear,
     .rows_done = 0,
   };
 
@@ -2495,7 +2588,10 @@ gdk_memory_mipmap (guchar          *dest,
 
   if (dest_format == src_format)
     {
-      gdk_parallel_task_run (gdk_memory_mipmap_same_format, &mipmap);
+      if (linear)
+        gdk_parallel_task_run (gdk_memory_mipmap_same_format_linear, &mipmap);
+      else
+        gdk_parallel_task_run (gdk_memory_mipmap_same_format_nearest, &mipmap);
     }
   else
     {

@@ -2002,7 +2002,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
               !gsk_rect_intersects (&clip_bounds, &tile_rect))
             continue;
 
-          tile = gsk_gpu_cache_lookup_tile (cache, texture, lod_level, y * n_width + x, &tile_cs);
+          tile = gsk_gpu_cache_lookup_tile (cache, texture, lod_level, scaling_filter, y * n_width + x, &tile_cs);
 
           if (tile == NULL)
             {
@@ -2013,7 +2013,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
                                                           y * tile_size,
                                                           MIN (tile_size, width - x * tile_size),
                                                           MIN (tile_size, height - y * tile_size));
-              tile = gsk_gpu_upload_texture_op_try (self->frame, need_mipmap, lod_level, subtex);
+              tile = gsk_gpu_upload_texture_op_try (self->frame, need_mipmap, lod_level, scaling_filter, subtex);
               g_object_unref (subtex);
               if (tile == NULL)
                 {
@@ -2029,7 +2029,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
                   g_assert (tile_cs);
                 }
 
-              gsk_gpu_cache_cache_tile (cache, texture, lod_level, y * n_width + x, tile, tile_cs);
+              gsk_gpu_cache_cache_tile (cache, texture, lod_level, scaling_filter, y * n_width + x, tile, tile_cs);
             }
 
           if (need_mipmap &&
@@ -2037,7 +2037,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
             {
               tile = gsk_gpu_copy_image (self->frame, self->ccs, tile, tile_cs, TRUE);
               tile_cs = self->ccs;
-              gsk_gpu_cache_cache_tile (cache, texture, lod_level, y * n_width + x, tile, tile_cs);
+              gsk_gpu_cache_cache_tile (cache, texture, lod_level, scaling_filter, y * n_width + x, tile, tile_cs);
             }
           if (need_mipmap && !(gsk_gpu_image_get_flags (tile) & GSK_GPU_IMAGE_MIPMAP))
             gsk_gpu_mipmap_op (self->frame, tile);
