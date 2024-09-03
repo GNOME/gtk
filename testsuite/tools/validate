@@ -32,6 +32,7 @@ for t in ${TESTS[*]}; do
     echo "ok $I $name"
     rm "$diff"
   else
+    sed -e 's/^/# /' < "$diff"
     echo "not ok $I $name"
     cp "$expected" "$ref"
   fi
