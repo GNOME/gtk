@@ -318,7 +318,7 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
   if (!qc->focused)
     return;
 
-  surface_widget = GTK_WIDGET (gdk_surface_get_widget (qc->client_surface));
+  surface_widget = GTK_WIDGET (gtk_widget_get_native (qc->client_widget));
 
   if (!surface_widget)
     return;
