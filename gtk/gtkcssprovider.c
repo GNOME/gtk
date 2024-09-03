@@ -1635,7 +1635,7 @@ gtk_css_provider_load_named (GtkCssProvider *provider,
           else
             gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, "hc");
         }
-      else if (strcmp (name, "HighConstrastInverse") == 0)
+      else if (strcmp (name, "HighContrastInverse") == 0)
         gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, "hc-dark");
       else if (strcmp (name, "Adwaita-dark") == 0)
         gtk_css_provider_load_named (provider, DEFAULT_THEME_NAME, "dark");
