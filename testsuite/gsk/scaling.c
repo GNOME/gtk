@@ -896,10 +896,22 @@ create_stipple_texture (GdkMemoryFormat  format,
         }
     }
 
-  average->red /= average->alpha;
-  average->green /= average->alpha;
-  average->blue /= average->alpha;
-  average->alpha /= 4.0f;
+  if (average->alpha != 0.0f)
+    {
+      average->red /= average->alpha;
+      average->green /= average->alpha;
+      average->blue /= average->alpha;
+      average->alpha /= 4.0f;
+    }
+  else
+    {
+      /* Each component of the average has been multiplied by the alpha
+       * already, so if the alpha is zero, all components should also
+       * be zero */
+      g_assert_cmpfloat (average->red, ==, 0.0f);
+      g_assert_cmpfloat (average->green, ==, 0.0f);
+      g_assert_cmpfloat (average->blue, ==, 0.0f);
+    }
 
   texture_builder_init (&builder, format, width, height);
   for (y = 0; y < height; y++)
