@@ -1046,7 +1046,7 @@ gdk_wintab_make_event (GdkDisplay *display,
       /* Don't produce any button or motion events while a surface is being
        * moved or resized, see bug #151090.
        */
-      if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
+      if (GDK_WIN32_DISPLAY (display)->display_surface_record->modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
         {
           GDK_NOTE (EVENTS_OR_INPUT, g_print ("... ignored when moving/sizing\n"));
           return NULL;
