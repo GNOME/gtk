@@ -646,6 +646,8 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
       return NULL;
     }
 
+  gdk_gl_context_make_current (context);
+
   {
     int major, minor;
     gdk_gl_context_get_version (context, &major, &minor);
@@ -666,7 +668,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                          display_win32->hasGlWINSwapHint ? "yes" : "no"));
   }
 
-  wglMakeCurrent (NULL, NULL);
+  gdk_gl_context_clear_current ();
 
   return context;
 }
