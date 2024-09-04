@@ -828,6 +828,11 @@ gdk_win32_display_finalize (GObject *object)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
+  if (display_win32->display_surface_record->modal_timer != 0)
+    {
+      KillTimer (NULL, display_win32->display_surface_record->modal_timer);
+	  display_win32->display_surface_record->modal_timer = 0;
+    }
   g_slist_free_full (display_win32->display_surface_record->modal_surface_stack, g_object_unref);
   g_hash_table_destroy (display_win32->display_surface_record->handle_ht);
   g_free (display_win32->display_surface_record);

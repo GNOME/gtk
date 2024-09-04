@@ -23,6 +23,7 @@
 
 #include "gdkwin32screen.h"
 #include "gdkwin32cursor.h"
+#include "gdkprivate-win32.h"
  
 #include "gdkglversionprivate.h"
 
@@ -166,6 +167,11 @@ typedef struct
 {
   GHashTable *handle_ht;
   GSList *modal_surface_stack;
+  HWND modal_move_resize_hwnd;
+
+  /* Non-zero while a modal sizing, moving, or dnd operation is in progress */
+  GdkWin32ModalOpKind modal_operation_in_progress;
+  UINT modal_timer;
 } surface_records;
 
 struct _GdkWin32Display

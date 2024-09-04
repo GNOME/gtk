@@ -148,7 +148,6 @@ static HKL latin_locale = NULL;
 #endif
 
 static gboolean in_ime_composition = FALSE;
-static UINT     modal_timer;
 
 static int debug_indent = 0;
 
@@ -1379,42 +1378,50 @@ modal_timer_proc (HWND     hwnd,
 		  DWORD    time)
 {
   int arbitrary_limit = 10;
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (GDK_SURFACE (id)));
 
-  while (_modal_operation_in_progress != GDK_WIN32_MODAL_OP_NONE &&
+  while (display->display_surface_record->modal_operation_in_progress != GDK_WIN32_MODAL_OP_NONE &&
 	 g_main_context_pending (NULL) &&
 	 arbitrary_limit--)
     g_main_context_iteration (NULL, FALSE);
 }
 
-void
-_gdk_win32_begin_modal_call (GdkWin32ModalOpKind kind)
+static void
+_gdk_win32_begin_modal_call (GdkSurface          *surface,
+                             GdkWin32ModalOpKind  kind)
 {
-  GdkWin32ModalOpKind was = _modal_operation_in_progress;
-  g_assert (!(_modal_operation_in_progress & kind));
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
+  GdkWin32ModalOpKind was = display->display_surface_record->modal_operation_in_progress;
+  g_assert (!(was & kind));
 
-  _modal_operation_in_progress |= kind;
+  display->display_surface_record->modal_operation_in_progress |= kind;
 
   if (was == GDK_WIN32_MODAL_OP_NONE)
     {
-      modal_timer = SetTimer (NULL, 0, 10, modal_timer_proc);
+      UINT modal_timer;
+      modal_timer = SetTimer (NULL, (UINT_PTR)surface, 10, modal_timer_proc);
 
       if (modal_timer == 0)
-	WIN32_API_FAILED ("SetTimer");
+	    WIN32_API_FAILED ("SetTimer");
+      else
+        display->display_surface_record->modal_timer = modal_timer;
     }
 }
 
-void
-_gdk_win32_end_modal_call (GdkWin32ModalOpKind kind)
+static void
+_gdk_win32_end_modal_call (GdkSurface          *surface,
+                           GdkWin32ModalOpKind  kind)
 {
-  g_assert (_modal_operation_in_progress & kind);
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
+  g_assert (display->display_surface_record->modal_operation_in_progress & kind);
 
-  _modal_operation_in_progress &= ~kind;
+  display->display_surface_record->modal_operation_in_progress &= ~kind;
 
-  if (_modal_operation_in_progress == GDK_WIN32_MODAL_OP_NONE &&
-      modal_timer != 0)
+  if (display->display_surface_record->modal_operation_in_progress == GDK_WIN32_MODAL_OP_NONE &&
+      display->display_surface_record->modal_timer != 0)
     {
-      API_CALL (KillTimer, (NULL, modal_timer));
-      modal_timer = 0;
+      API_CALL (KillTimer, (NULL, display->display_surface_record->modal_timer));
+      display->display_surface_record->modal_timer = 0;
     }
 }
 
@@ -2752,7 +2759,7 @@ gdk_event_translate (MSG *msg,
     case WM_KILLFOCUS:
       if (keyboard_grab != NULL &&
 	  !GDK_SURFACE_DESTROYED (keyboard_grab->surface) &&
-	  (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_DND) == 0)
+	  (win32_display->display_surface_record->modal_operation_in_progress & GDK_WIN32_MODAL_OP_DND) == 0)
 	{
 	  generate_grab_broken_event (win32_display->device_manager, keyboard_grab->surface, TRUE, NULL);
 	}
@@ -2870,25 +2877,27 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_ENTERSIZEMOVE:
-      _modal_move_resize_hwnd = msg->hwnd;
-      _gdk_win32_begin_modal_call (GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
+      GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_move_resize_hwnd = msg->hwnd;
+      _gdk_win32_begin_modal_call (surface, GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
       break;
 
     case WM_EXITSIZEMOVE:
-      if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
+      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress &
+          GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
 	{
-	  _modal_move_resize_hwnd = NULL;
-	  _gdk_win32_end_modal_call (GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
+	  GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_move_resize_hwnd = NULL;
+	  _gdk_win32_end_modal_call (surface, GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
 	}
       break;
 
     case WM_ENTERMENULOOP:
-      _gdk_win32_begin_modal_call (GDK_WIN32_MODAL_OP_MENU);
+      _gdk_win32_begin_modal_call (surface, GDK_WIN32_MODAL_OP_MENU);
       break;
 
     case WM_EXITMENULOOP:
-      if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_MENU)
-	_gdk_win32_end_modal_call (GDK_WIN32_MODAL_OP_MENU);
+      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress &
+          GDK_WIN32_MODAL_OP_MENU)
+	_gdk_win32_end_modal_call (surface, GDK_WIN32_MODAL_OP_MENU);
       break;
 
       break;
@@ -2903,7 +2912,8 @@ gdk_event_translate (MSG *msg,
      * keyboardless alt-tabbing).
      */
     case WM_CANCELMODE:
-      if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_DND)
+      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress &
+          GDK_WIN32_MODAL_OP_DND)
         {
           return_val = TRUE;
           *ret_valp = 0;
@@ -2914,14 +2924,14 @@ gdk_event_translate (MSG *msg,
       /* Sometimes we don't get WM_EXITSIZEMOVE, for instance when you
 	 select move/size in the menu and then click somewhere without
 	 moving/resizing. We work around this using WM_CAPTURECHANGED. */
-      if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
+      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
 	{
-	  _modal_move_resize_hwnd = NULL;
-	  _gdk_win32_end_modal_call (GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
+	  GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_move_resize_hwnd = NULL;
+	  _gdk_win32_end_modal_call (surface, GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
 	}
 
-      impl = GDK_WIN32_SURFACE (surface);
 
+      impl = GDK_WIN32_SURFACE (surface);
       if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
         gdk_win32_surface_end_move_resize_drag (surface);
       break;
@@ -3073,7 +3083,7 @@ gdk_event_translate (MSG *msg,
 	}
 
       /* Call modal timer immediate so that we repaint faster after a resize. */
-      if (_modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
+      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
 	modal_timer_proc (0,0,0,0);
 
       /* Claim as handled, so that WM_SIZE and WM_MOVE are avoided */
