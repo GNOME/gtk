@@ -322,7 +322,7 @@ static void
 append_wgl_extension_row (GtkInspectorGeneral *gen,
                           const char          *ext)
 {
-  HDC hdc = 0;
+  HDC hdc = wglGetCurrentDC ();
 
   add_check_row (gen, GTK_LIST_BOX (gen->gl_extensions_box), ext, epoxy_has_wgl_extension (hdc, ext), 0);
 }
