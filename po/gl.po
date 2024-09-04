@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+-master-po-gl-77922___.merged\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-09-03 20:22+0000\n"
-"PO-Revision-Date: 2024-09-04 08:10+0200\n"
+"POT-Creation-Date: 2024-09-04 06:11+0000\n"
+"PO-Revision-Date: 2024-09-04 08:33+0200\n"
 "Last-Translator: Fran Dieguez <fran.dieguez@gnome.org>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -7499,21 +7499,7 @@ msgid "Validate the file."
 msgstr "Valida o ficheiro."
 
 #: tools/gtk-image-tool.c:36
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  benchmark    Benchmark rendering of a node\n"
-#| "  compare      Compare nodes or images\n"
-#| "  extract      Extract data urls\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-image-tool [COMMAND] [OPTION…] FILE…\n"
@@ -7529,17 +7515,17 @@ msgid ""
 "\n"
 msgstr ""
 "Uso:\n"
-"  gtk4-rendernode-tool [ORDE] [OPCIÓN…] FICHEIRO\n"
+"  gtk4-image-tool [ORDE] [OPCIÓN…] FICHEIRO\n"
 "\n"
-"Leva a cabo varias tarefas nos nodos do renderizador de GTK.\n"
+"Leva a cabo varias tarefas en imaxes.\n"
 "\n"
 "Ordes:\n"
-"  benchmark    Proba de rendemento do renderizado dun nodo\n"
-"  compare      Comparar nodos ou imaxes\n"
-"  extract      Extraer as urls de datos\n"
-"  info         Fornecer unha información sobre un nodo\n"
-"  show         Mostrar un nodo\n"
-"  render       Sacar unha captura dun nodo\n"
+"  compare      Mostra as diferencias entre dúas imaxes\n"
+"\n"
+"  convert      Converter a imaxe a un formato ou estado de cor diferente\n"
+"  info         Mostrar información xeral dunha imaxe\n"
+"  relabel      Cambiar o estado de cor dunha imaxe sen convertila\n"
+"  show         Mostrar unha imaxe\n"
 "\n"
 
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-rendernode-tool-compare.c:67
@@ -7553,16 +7539,14 @@ msgstr "Comparar dúas imaxes"
 #: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:113
 #: tools/gtk-image-tool-info.c:90 tools/gtk-image-tool-relabel.c:109
 #: tools/gtk-image-tool-show.c:141
-#, fuzzy, c-format
-#| msgid "No .ui file specified\n"
+#, c-format
 msgid "No image file specified\n"
-msgstr "Non se especificou ningún ficheiro .ui\n"
+msgstr "Non se especificou ningún ficheiro\n"
 
 #: tools/gtk-image-tool-compare.c:76
-#, fuzzy, c-format
-#| msgid "Can only accept a single .node file\n"
+#, c-format
 msgid "Can only accept two image files\n"
-msgstr "Só pode aceptar un ficheiro .node\n"
+msgstr "Só pode aceptar dous ficheiros de imaxe\n"
 
 #: tools/gtk-image-tool-compare.c:85 tools/gtk-rendernode-tool-compare.c:111
 #, c-format
@@ -7618,10 +7602,10 @@ msgid "Convert the image to a different format or color state."
 msgstr "Converter a imaxe a un formato diferente ou estado da cor."
 
 #: tools/gtk-image-tool-convert.c:119 tools/gtk-image-tool-relabel.c:115
-#, fuzzy, c-format
-#| msgid "Can only render a single .ui file to a single output file\n"
+#, c-format
 msgid "Can only accept a single image file and output file\n"
-msgstr "Só pode renderizar un ficheiro .ui único nun ficheiro de saída único\n"
+msgstr ""
+"Só pode aceptar un ficheiro único de imaxe e un ficheiro de saída único\n"
 
 #: tools/gtk-image-tool-convert.c:133
 #, c-format
@@ -7664,16 +7648,13 @@ msgid "Color state:"
 msgstr "Estado de cor:"
 
 #: tools/gtk-image-tool-info.c:77
-#, fuzzy
-#| msgid "Provide information about the render node."
 msgid "Provide information about the image."
-msgstr "Fornece información sobre o nodo renderizado."
+msgstr "Fornece información sobre a imaxe."
 
 #: tools/gtk-image-tool-info.c:96
-#, fuzzy, c-format
-#| msgid "Can only accept a single .node file\n"
+#, c-format
 msgid "Can only accept a single image file\n"
-msgstr "Só pode aceptar un ficheiro .node\n"
+msgstr "Só pode aceptar un ficheiro único de imaxe\n"
 
 #: tools/gtk-image-tool-relabel.c:96
 msgid "Change the color state of the image without conversion."
