@@ -653,6 +653,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
     gdk_gl_context_get_version (context, &major, &minor);
     GDK_NOTE (OPENGL, g_print ("WGL API version %d.%d found\n"
                          " - Vendor: %s\n"
+                         " - Renderer: %s\n"
                          " - Checked extensions:\n"
                          "\t* WGL_ARB_pixel_format: %s\n"
                          "\t* WGL_ARB_create_context: %s\n"
@@ -661,6 +662,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                          "\t* GL_WIN_swap_hint: %s\n",
                          major, minor,
                          glGetString (GL_VENDOR),
+                         glGetString (GL_RENDERER),
                          display_win32->hasWglARBPixelFormat ? "yes" : "no",
                          display_win32->hasWglARBCreateContext ? "yes" : "no",
                          display_win32->hasWglEXTSwapControl ? "yes" : "no",
