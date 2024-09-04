@@ -744,7 +744,7 @@ create_wgl_context_with_attribs (HDC           hdc,
 
   GDK_NOTE (OPENGL,
             g_print ("Creating %s WGL context (version:%d.%d, debug:%s, forward:%s)\n",
-                      is_legacy ? "core" : "compat",
+                      is_legacy ? "compat" : "core",
                       gdk_gl_version_get_major (version),
                       gdk_gl_version_get_minor (version),
                       (flags & WGL_CONTEXT_DEBUG_BIT_ARB) ? "yes" : "no",
