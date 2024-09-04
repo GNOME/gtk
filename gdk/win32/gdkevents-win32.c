@@ -3247,7 +3247,7 @@ gdk_event_translate (MSG *msg,
                * NOTE: It doesn't seem to work well if it is done in WM_ACTIVATEAPP
                * instead
                */
-              _gdk_wintab_set_tablet_active ();
+              _gdk_wintab_set_tablet_active (win32_display->device_manager);
            }
         }
 

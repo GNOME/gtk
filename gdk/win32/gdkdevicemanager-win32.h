@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 typedef struct _GdkDeviceManagerWin32 GdkDeviceManagerWin32;
 typedef struct _GdkDeviceManagerWin32Class GdkDeviceManagerWin32Class;
+typedef struct _wintab_items wintab_items;
 
 struct _GdkDeviceManagerWin32
 {
@@ -50,6 +51,9 @@ struct _GdkDeviceManagerWin32
    */
   int dev_entered_proximity;
 
+  /* used for wintab support */
+  wintab_items *wintab_items;
+
   /* used for winpointer support */
   HWND winpointer_notification_hwnd;
   GPtrArray *ignored_interactions;
@@ -63,10 +67,10 @@ struct _GdkDeviceManagerWin32Class
 
 GType gdk_device_manager_win32_get_type (void) G_GNUC_CONST;
 
-void     _gdk_wintab_set_tablet_active (void);
-GdkEvent * gdk_wintab_make_event      (GdkDisplay *display,
-                                       MSG        *msg,
-                                       GdkSurface *surface);
+void     _gdk_wintab_set_tablet_active (GdkDeviceManagerWin32 *device_manager);
+GdkEvent *gdk_wintab_make_event        (GdkDisplay            *display,
+                                        MSG                   *msg,
+                                        GdkSurface            *surface);
 
 G_END_DECLS
 
