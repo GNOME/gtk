@@ -244,9 +244,11 @@ attribs_add (attribs_t *attribs,
 static bool
 attribs_remove_last (attribs_t *attribs)
 {
+  g_assert (attribs->array->len % 2 == 0);
+
   if (attribs->array->len > attribs->committed)
     {
-      g_array_set_size (attribs->array, attribs->array->len - 1);
+      g_array_set_size (attribs->array, attribs->array->len - 2);
       return true;
     }
 
