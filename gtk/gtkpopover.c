@@ -2392,7 +2392,9 @@ cascade_popdown (GtkPopover *popover)
 
       parent = gtk_widget_get_parent (parent);
     }
-    gtk_widget_grab_focus (new_focus);
+
+    if (new_focus)
+      gtk_widget_grab_focus (new_focus);
 }
 
 /**
