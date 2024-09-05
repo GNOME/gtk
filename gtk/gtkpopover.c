@@ -2411,6 +2411,9 @@ gtk_popover_popdown (GtkPopover *popover)
 {
   g_return_if_fail (GTK_IS_POPOVER (popover));
 
+  if (!gtk_widget_get_visible (GTK_WIDGET (popover)))
+    return;
+
   gtk_widget_set_visible (GTK_WIDGET (popover), FALSE);
 
   cascade_popdown (popover);
