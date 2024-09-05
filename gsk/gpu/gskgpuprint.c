@@ -15,9 +15,16 @@ gsk_gpu_print_indent (GString *string,
 
 void
 gsk_gpu_print_shader_flags (GString           *string,
-                            GskGpuShaderFlags  flags)
+                            GskGpuShaderFlags  flags,
+                            gboolean           first)
 {
   GskGpuShaderClip clip = gsk_gpu_shader_flags_get_clip (flags);
+
+  g_string_append (string, first ? "+ " : "| ");
+#if 0
+  g_string_append (string, first ? (last ? "⧫ " : "▲ ") 
+                                 : (last ? "▼ " : "▮ "));
+#endif
 
   switch (clip)
     {
