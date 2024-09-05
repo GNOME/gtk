@@ -22,7 +22,7 @@ gsk_gpu_print_shader_flags (GString           *string,
   switch (clip)
     {
       case GSK_GPU_SHADER_CLIP_NONE:
-        g_string_append (string, "🞨 ");
+        g_string_append (string, "⬚ ");
         break;
       case GSK_GPU_SHADER_CLIP_RECT:
         g_string_append (string, "□ ");
