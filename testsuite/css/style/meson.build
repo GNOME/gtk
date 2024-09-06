@@ -5,6 +5,7 @@ styletest_env.set('G_TEST_SRCDIR', meson.current_source_dir())
 styletest_env.set('G_TEST_BUILDDIR', meson.current_build_dir())
 styletest_env.set('GSETTINGS_BACKEND', 'memory')
 styletest_env.set('G_ENABLE_DIAGNOSTIC', '0')
+styletest_env.set('GTK_DEBUG', '')
 
 cssresources = gnome.compile_resources(
   'cssresources',

@@ -1418,25 +1418,18 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
  */
 void
 gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
-			             const char     *resource_path)
+                                     const char     *resource_path)
 {
-  GFile *file;
-  char *uri, *escaped;
+  GBytes *bytes;
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
   g_return_if_fail (resource_path != NULL);
 
-  escaped = g_uri_escape_string (resource_path,
-				 G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, FALSE);
-  uri = g_strconcat ("resource://", escaped, NULL);
-  g_free (escaped);
+  bytes = g_resources_lookup_data (resource_path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
 
-  file = g_file_new_for_uri (uri);
-  g_free (uri);
+  gtk_css_provider_load_from_bytes (css_provider, bytes);
 
-  gtk_css_provider_load_from_file (css_provider, file);
-
-  g_object_unref (file);
+  g_bytes_unref (bytes);
 }
 
 char *
@@ -1469,39 +1462,38 @@ _gtk_css_provider_get_theme_dir (GtkCssProvider *provider)
 
 /*
  * Look for
- * $dir/$subdir/gtk-4.16/gtk-$variant.css
- * $dir/$subdir/gtk-4.14/gtk-$variant.css
+ * $dir/$subdir/gtk-4.16/$file
+ * $dir/$subdir/gtk-4.14/$file
  *  ...
- * $dir/$subdir/gtk-4.0/gtk-$variant.css
+ * $dir/$subdir/gtk-4.0/$file
  * and return the first found file.
  */
 static char *
 _gtk_css_find_theme_dir (const char *dir,
                          const char *subdir,
                          const char *name,
-                         const char *variant)
+                         const char *file)
 {
-  char *file;
-  char *base;
-  char *subsubdir;
-  int i;
   char *path;
-
-  if (variant)
-    file = g_strconcat ("gtk-", variant, ".css", NULL);
-  else
-    file = g_strdup ("gtk.css");
+  char *base;
 
   if (subdir)
     base = g_build_filename (dir, subdir, name, NULL);
   else
     base = g_build_filename (dir, name, NULL);
 
-  for (i = MINOR; i >= 0; i = i - 2)
+  if (!g_file_test (base, G_FILE_TEST_IS_DIR))
     {
-      subsubdir = g_strdup_printf ("gtk-4.%d", i);
+      g_free (base);
+      return NULL;
+    }
+
+  for (int i = MINOR; i >= 0; i = i - 2)
+    {
+      char subsubdir[64];
+
+      g_snprintf (subsubdir, sizeof (subsubdir), "gtk-4.%d", i);
       path = g_build_filename (base, subsubdir, file, NULL);
-      g_free (subsubdir);
 
       if (g_file_test (path, G_FILE_TEST_EXISTS))
         break;
@@ -1510,7 +1502,6 @@ _gtk_css_find_theme_dir (const char *dir,
       path = NULL;
     }
 
-  g_free (file);
   g_free (base);
 
   return path;
@@ -1522,18 +1513,24 @@ static char *
 _gtk_css_find_theme (const char *name,
                      const char *variant)
 {
+  char file[256];
   char *path;
   const char *const *dirs;
   int i;
   char *dir;
 
+  if (variant)
+    g_snprintf (file, sizeof (file), "gtk-%s.css", variant);
+  else
+    strcpy (file, "gtk.css");
+
   /* First look in the user's data directory */
-  path = _gtk_css_find_theme_dir (g_get_user_data_dir (), "themes", name, variant);
+  path = _gtk_css_find_theme_dir (g_get_user_data_dir (), "themes", name, file);
   if (path)
     return path;
 
   /* Next look in the user's home directory */
-  path = _gtk_css_find_theme_dir (g_get_home_dir (), ".themes", name, variant);
+  path = _gtk_css_find_theme_dir (g_get_home_dir (), ".themes", name, file);
   if (path)
     return path;
 
@@ -1541,14 +1538,14 @@ _gtk_css_find_theme (const char *name,
   dirs = g_get_system_data_dirs ();
   for (i = 0; dirs[i]; i++)
     {
-      path = _gtk_css_find_theme_dir (dirs[i], "themes", name, variant);
+      path = _gtk_css_find_theme_dir (dirs[i], "themes", name, file);
       if (path)
         return path;
     }
 
   /* Finally, try in the default theme directory */
   dir = _gtk_get_theme_dir ();
-  path = _gtk_css_find_theme_dir (dir, NULL, name, variant);
+  path = _gtk_css_find_theme_dir (dir, NULL, name, file);
   g_free (dir);
 
   return path;

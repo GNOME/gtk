@@ -1,0 +1,3 @@
+label {
+  color: oklab(from @foo max(l, 0.75) a b / alpha);
+}
