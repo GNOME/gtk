@@ -322,7 +322,7 @@ static void
 append_wgl_extension_row (GtkInspectorGeneral *gen,
                           const char          *ext)
 {
-  HDC hdc = 0;
+  HDC hdc = wglGetCurrentDC ();
 
   add_check_row (gen, GTK_LIST_BOX (gen->gl_extensions_box), ext, epoxy_has_wgl_extension (hdc, ext), 0);
 }
@@ -453,11 +453,10 @@ init_gl (GtkInspectorGeneral *gen)
       gtk_widget_set_visible (gen->gl_backend_version, FALSE);
 
       append_gl_extension_row (gen, "GL_WIN_swap_hint");
-      append_wgl_extension_row (gen, "WGL_EXT_create_context");
+      append_wgl_extension_row (gen, "WGL_ARB_pixel_format");
+      append_wgl_extension_row (gen, "WGL_ARB_create_context");
       append_wgl_extension_row (gen, "WGL_EXT_swap_control");
       append_wgl_extension_row (gen, "WGL_OML_sync_control");
-      append_wgl_extension_row (gen, "WGL_ARB_pixel_format");
-      append_wgl_extension_row (gen, "WGL_ARB_multisample");
     }
   else
 #endif

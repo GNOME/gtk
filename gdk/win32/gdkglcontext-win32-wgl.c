@@ -244,9 +244,11 @@ attribs_add (attribs_t *attribs,
 static bool
 attribs_remove_last (attribs_t *attribs)
 {
+  g_assert (attribs->array->len % 2 == 0);
+
   if (attribs->array->len > attribs->committed)
     {
-      g_array_set_size (attribs->array, attribs->array->len - 1);
+      g_array_set_size (attribs->array, attribs->array->len - 2);
       return true;
     }
 
@@ -293,7 +295,8 @@ find_pixel_format_with_defined_swap_flag (HDC  hdc,
 }
 
 static int
-choose_pixel_format_arb_attribs (HDC hdc)
+choose_pixel_format_arb_attribs (GdkWin32Display *display_win32,
+                                 HDC              hdc)
 {
   const int attribs_base[] = {
     WGL_DRAW_TO_WINDOW_ARB,
@@ -353,6 +356,10 @@ choose_pixel_format_arb_attribs (HDC hdc)
   attribs_init (&attribs, reserved);
 
   attribs_add_static_array (&attribs, attribs_base);
+
+  if (display_win32->wgl_support_gdi)
+    attribs_add (&attribs, WGL_SUPPORT_GDI_ARB, GL_TRUE);
+
   attribs_commit (&attribs);
 
   attribs_add_static_array (&attribs, attribs_ancillary_buffers);
@@ -441,12 +448,14 @@ get_distance (PIXELFORMATDESCRIPTOR *pfd)
  * outcome by ordering pixel formats in specific ways.
  */
 static int
-choose_pixel_format_opengl32 (HDC hdc)
+choose_pixel_format_opengl32 (GdkWin32Display *display_win32,
+                              HDC              hdc)
 {
   const DWORD skip_flags = PFD_GENERIC_FORMAT |
                            PFD_GENERIC_ACCELERATED;
   const DWORD required_flags = PFD_DRAW_TO_WINDOW |
-                               PFD_SUPPORT_OPENGL;
+                               PFD_SUPPORT_OPENGL |
+                               (display_win32->wgl_support_gdi ? PFD_SUPPORT_GDI : 0);
 
   struct {
     int index;
@@ -501,14 +510,14 @@ get_wgl_pfd (HDC                    hdc,
           return 0;
         }
 
-      best_pf = choose_pixel_format_arb_attribs (hdc);
+      best_pf = choose_pixel_format_arb_attribs (display_win32, hdc);
 
       /* Go back to the HDC that we were using, since we are done with the dummy HDC and GL Context */
       wglMakeCurrent (hdc_current, hglrc_current);
     }
   else
     {
-      best_pf = choose_pixel_format_opengl32 (hdc);
+      best_pf = choose_pixel_format_opengl32 (display_win32, hdc);
 
       if (best_pf > 0)
         DescribePixelFormat (hdc, best_pf, sizeof (PIXELFORMATDESCRIPTOR), pfd);
@@ -585,6 +594,18 @@ create_dummy_gl_window (void)
   return hwnd;
 }
 
+static bool
+check_driver_is_d3d12 (void)
+{
+  const char *vendor = (const char *) glGetString (GL_VENDOR);
+  const char *renderer = (const char *) glGetString (GL_RENDERER);
+
+  return vendor != NULL &&
+         g_ascii_strncasecmp (vendor, "MICROSOFT", strlen ("MICROSOFT")) == 0 &&
+         renderer != NULL &&
+         g_ascii_strncasecmp (renderer, "D3D12", strlen ("D3D12")) == 0;
+}
+
 GdkGLContext *
 gdk_win32_display_init_wgl (GdkDisplay  *display,
                             GError     **error)
@@ -637,6 +658,8 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
   display_win32->hasGlWINSwapHint =
     epoxy_has_gl_extension ("GL_WIN_swap_hint");
 
+  display_win32->wgl_support_gdi = check_driver_is_d3d12();
+
   context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL,
                           "display", display,
                           NULL);
@@ -646,11 +669,15 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
       return NULL;
     }
 
+  gdk_gl_context_make_current (context);
+
   {
     int major, minor;
     gdk_gl_context_get_version (context, &major, &minor);
     GDK_NOTE (OPENGL, g_print ("WGL API version %d.%d found\n"
                          " - Vendor: %s\n"
+                         " - Renderer: %s\n"
+                         " - GDI compatibility required: %s\n"
                          " - Checked extensions:\n"
                          "\t* WGL_ARB_pixel_format: %s\n"
                          "\t* WGL_ARB_create_context: %s\n"
@@ -659,6 +686,8 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                          "\t* GL_WIN_swap_hint: %s\n",
                          major, minor,
                          glGetString (GL_VENDOR),
+                         glGetString (GL_RENDERER),
+                         display_win32->wgl_support_gdi ? "yes" : "no",
                          display_win32->hasWglARBPixelFormat ? "yes" : "no",
                          display_win32->hasWglARBCreateContext ? "yes" : "no",
                          display_win32->hasWglEXTSwapControl ? "yes" : "no",
@@ -666,7 +695,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                          display_win32->hasGlWINSwapHint ? "yes" : "no"));
   }
 
-  wglMakeCurrent (NULL, NULL);
+  gdk_gl_context_clear_current ();
 
   return context;
 }
@@ -740,7 +769,7 @@ create_wgl_context_with_attribs (HDC           hdc,
 
   GDK_NOTE (OPENGL,
             g_print ("Creating %s WGL context (version:%d.%d, debug:%s, forward:%s)\n",
-                      is_legacy ? "core" : "compat",
+                      is_legacy ? "compat" : "core",
                       gdk_gl_version_get_major (version),
                       gdk_gl_version_get_minor (version),
                       (flags & WGL_CONTEXT_DEBUG_BIT_ARB) ? "yes" : "no",
