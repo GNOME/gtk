@@ -33,7 +33,18 @@
  *
  * `GdkTexture` is an immutable object: That means you cannot change
  * anything about it other than increasing the reference count via
- * [method@GObject.Object.ref], and consequently, it is a thread-safe object.
+ * [method@GObject.Object.ref], and consequently, it is a threadsafe object.
+ *
+ * GDK provides a number of threadsafe texture loading functions:
+ * [ctor@Gdk.Texture.new_from_resource],
+ * [ctor@Gdk.Texture.new_from_bytes],
+ * [ctor@Gdk.Texture.new_from_file],
+ * [ctor@Gdk.Texture.new_from_filename],
+ * [ctor@Gdk.Texture.new_for_pixbuf]. Note that these are meant for loading
+ * icons and resources that are shipped with the toolkit or application. It
+ * is recommended that you use a dedicated image loading framework such as
+ * [glycin](https://lib.rs/crates/glycin), if you need to load untrusted image
+ * data.
  */
 
 #include "config.h"
