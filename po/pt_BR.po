@@ -31,8 +31,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-08-22 15:42+0000\n"
-"PO-Revision-Date: 2024-08-24 09:52-0300\n"
+"POT-Creation-Date: 2024-09-03 20:22+0000\n"
+"PO-Revision-Date: 2024-09-06 09:58-0300\n"
 "Last-Translator: Juliano de Souza Camargo <julianosc@pm.me>\n"
 "Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao>>\n"
 "Language: pt_BR\n"
@@ -65,6 +65,26 @@ msgstr "Não é possível ler de área de transferência vazia."
 msgid "No compatible formats to transfer clipboard contents."
 msgstr ""
 "Nenhum formato compatível para transferir conteúdo de área de transferência."
+
+#: gdk/gdkcolorstate.c:668
+#, c-format
+msgid "cicp: Narrow range or YUV not supported"
+msgstr "cicp: faixa estreita ou YUV não suportado"
+
+#: gdk/gdkcolorstate.c:678
+#, c-format
+msgid "cicp: Unspecified parameters not supported"
+msgstr "cicp: parâmetros não especificados não suportados"
+
+#: gdk/gdkcolorstate.c:724
+#, c-format
+msgid "cicp: Transfer function %u not supported"
+msgstr "cicp: Função de transferência %u não suportada"
+
+#: gdk/gdkcolorstate.c:754
+#, c-format
+msgid "cicp: Color primaries %u not supported"
+msgstr "cicp: Cor primária %u não suportada"
 
 #: gdk/gdkcontentprovider.c:106 gdk/gdkcontentproviderimpl.c:313
 #: gdk/gdkcontentproviderimpl.c:532
@@ -142,13 +162,13 @@ msgstr "Não há suporte a arrastar e soltar de outros aplicativos."
 msgid "No compatible formats to transfer contents."
 msgstr "Nenhum formato compatível para transferir conteúdo de transferência."
 
-#: gdk/gdkglcontext.c:432 gdk/x11/gdkglcontext-glx.c:648
+#: gdk/gdkglcontext.c:432 gdk/x11/gdkglcontext-glx.c:651
 msgid "No GL API allowed."
 msgstr "Nenhuma API GL permitida."
 
-#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:705
-#: gdk/win32/gdkglcontext-win32-wgl.c:848
-#: gdk/win32/gdkglcontext-win32-wgl.c:892 gdk/x11/gdkglcontext-glx.c:694
+#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:694
+#: gdk/win32/gdkglcontext-win32-wgl.c:837
+#: gdk/win32/gdkglcontext-win32-wgl.c:881 gdk/x11/gdkglcontext-glx.c:697
 msgid "Unable to create a GL context"
 msgstr "Não foi possível criar um contexto GL"
 
@@ -168,12 +188,12 @@ msgstr "O aplicativo não é compatível com a API %s"
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2163
+#: gdk/gdkglcontext.c:2175
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Tentando usar %s, mas %s já está em uso"
 
-#: gdk/gdkglcontext.c:2174
+#: gdk/gdkglcontext.c:2186
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "Tentando usar %s, mas ele foi desativado via GDK_DISABLE"
@@ -183,379 +203,379 @@ msgid "Unknown image format."
 msgstr "Formato de imagem desconhecido."
 
 #.
-#. * Translators, the strings in the “keyboard label” context are
+#. * Translators, the strings in the 'keyboard label' context are
 #. * display names for keyboard keys. Some of them have prefixes like
-#. * XF86 or ISO_ — these should be removed in the translation. Similarly,
-#. * underscores should be replaced by spaces. The prefix “KP_” stands
-#. * for “key pad” and you may want to include that in your translation.
+#. * XF86 or ISO_ - these should be removed in the translation. Similarly,
+#. * underscores should be replaced by spaces. The prefix 'KP_' stands
+#. * for 'key pad' and you may want to include that in your translation.
 #. * Here are some examples of English translations:
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
 #. * KP_Space      - Space (keypad)
 #.
-#: gdk/keynamesprivate.h:6843
+#: gdk/keynamesprivate.h:6861
 msgctxt "keyboard label"
 msgid "BackSpace"
 msgstr "BackSpace"
 
-#: gdk/keynamesprivate.h:6844
+#: gdk/keynamesprivate.h:6862
 msgctxt "keyboard label"
 msgid "Tab"
 msgstr "Tab"
 
-#: gdk/keynamesprivate.h:6845
+#: gdk/keynamesprivate.h:6863
 msgctxt "keyboard label"
 msgid "Return"
 msgstr "Enter"
 
-#: gdk/keynamesprivate.h:6846
+#: gdk/keynamesprivate.h:6864
 msgctxt "keyboard label"
 msgid "Pause"
 msgstr "Pause"
 
-#: gdk/keynamesprivate.h:6847
+#: gdk/keynamesprivate.h:6865
 msgctxt "keyboard label"
 msgid "Scroll_Lock"
 msgstr "Scroll Lock"
 
-#: gdk/keynamesprivate.h:6848
+#: gdk/keynamesprivate.h:6866
 msgctxt "keyboard label"
 msgid "Sys_Req"
 msgstr "Sys Req"
 
-#: gdk/keynamesprivate.h:6849
+#: gdk/keynamesprivate.h:6867
 msgctxt "keyboard label"
 msgid "Escape"
 msgstr "Esc"
 
-#: gdk/keynamesprivate.h:6850
+#: gdk/keynamesprivate.h:6868
 msgctxt "keyboard label"
 msgid "Multi_key"
 msgstr "Multi_key"
 
-#: gdk/keynamesprivate.h:6851
+#: gdk/keynamesprivate.h:6869
 msgctxt "keyboard label"
 msgid "Home"
 msgstr "Home"
 
-#: gdk/keynamesprivate.h:6852
+#: gdk/keynamesprivate.h:6870
 msgctxt "keyboard label"
 msgid "Left"
 msgstr "Esquerda"
 
-#: gdk/keynamesprivate.h:6853
+#: gdk/keynamesprivate.h:6871
 msgctxt "keyboard label"
 msgid "Up"
 msgstr "Acima"
 
-#: gdk/keynamesprivate.h:6854
+#: gdk/keynamesprivate.h:6872
 msgctxt "keyboard label"
 msgid "Right"
 msgstr "Direita"
 
-#: gdk/keynamesprivate.h:6855
+#: gdk/keynamesprivate.h:6873
 msgctxt "keyboard label"
 msgid "Down"
 msgstr "Abaixo"
 
-#: gdk/keynamesprivate.h:6856 gtk/gtkshortcutlabel.c:217
+#: gdk/keynamesprivate.h:6874 gtk/gtkshortcutlabel.c:217
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page Up"
 
-#: gdk/keynamesprivate.h:6857 gtk/gtkshortcutlabel.c:220
+#: gdk/keynamesprivate.h:6875 gtk/gtkshortcutlabel.c:220
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page Down"
 
-#: gdk/keynamesprivate.h:6858
+#: gdk/keynamesprivate.h:6876
 msgctxt "keyboard label"
 msgid "End"
 msgstr "End"
 
-#: gdk/keynamesprivate.h:6859
+#: gdk/keynamesprivate.h:6877
 msgctxt "keyboard label"
 msgid "Begin"
 msgstr "Begin"
 
 # Print Screen?
-#: gdk/keynamesprivate.h:6860
+#: gdk/keynamesprivate.h:6878
 msgctxt "keyboard label"
 msgid "Print"
 msgstr "Print"
 
-#: gdk/keynamesprivate.h:6861
+#: gdk/keynamesprivate.h:6879
 msgctxt "keyboard label"
 msgid "Insert"
 msgstr "Insert"
 
-#: gdk/keynamesprivate.h:6862
+#: gdk/keynamesprivate.h:6880
 msgctxt "keyboard label"
 msgid "Num_Lock"
 msgstr "Num Lock"
 
-#. Translators: KP_ means “key pad” here
-#: gdk/keynamesprivate.h:6864
+#. Translators: KP_ means 'key pad' here
+#: gdk/keynamesprivate.h:6882
 msgctxt "keyboard label"
 msgid "KP_Space"
 msgstr "Espaço (TN)"
 
-#: gdk/keynamesprivate.h:6865
+#: gdk/keynamesprivate.h:6883
 msgctxt "keyboard label"
 msgid "KP_Tab"
 msgstr "Tab (TN)"
 
-#: gdk/keynamesprivate.h:6866
+#: gdk/keynamesprivate.h:6884
 msgctxt "keyboard label"
 msgid "KP_Enter"
 msgstr "Enter (TN)"
 
-#: gdk/keynamesprivate.h:6867
+#: gdk/keynamesprivate.h:6885
 msgctxt "keyboard label"
 msgid "KP_Home"
 msgstr "Home (TN)"
 
-#: gdk/keynamesprivate.h:6868
+#: gdk/keynamesprivate.h:6886
 msgctxt "keyboard label"
 msgid "KP_Left"
 msgstr "Esquerda (TN)"
 
-#: gdk/keynamesprivate.h:6869
+#: gdk/keynamesprivate.h:6887
 msgctxt "keyboard label"
 msgid "KP_Up"
 msgstr "Acima (TN)"
 
-#: gdk/keynamesprivate.h:6870
+#: gdk/keynamesprivate.h:6888
 msgctxt "keyboard label"
 msgid "KP_Right"
 msgstr "Direita (TN)"
 
-#: gdk/keynamesprivate.h:6871
+#: gdk/keynamesprivate.h:6889
 msgctxt "keyboard label"
 msgid "KP_Down"
 msgstr "Abaixo (TN)"
 
-#: gdk/keynamesprivate.h:6872
+#: gdk/keynamesprivate.h:6890
 msgctxt "keyboard label"
 msgid "KP_Page_Up"
 msgstr "Page Up (TN)"
 
-#: gdk/keynamesprivate.h:6873
+#: gdk/keynamesprivate.h:6891
 msgctxt "keyboard label"
 msgid "KP_Prior"
 msgstr "Anterior (TN)"
 
-#: gdk/keynamesprivate.h:6874
+#: gdk/keynamesprivate.h:6892
 msgctxt "keyboard label"
 msgid "KP_Page_Down"
 msgstr "Page Down (TN)"
 
-#: gdk/keynamesprivate.h:6875
+#: gdk/keynamesprivate.h:6893
 msgctxt "keyboard label"
 msgid "KP_Next"
 msgstr "Próxima (TN)"
 
-#: gdk/keynamesprivate.h:6876
+#: gdk/keynamesprivate.h:6894
 msgctxt "keyboard label"
 msgid "KP_End"
 msgstr "End (TN)"
 
-#: gdk/keynamesprivate.h:6877
+#: gdk/keynamesprivate.h:6895
 msgctxt "keyboard label"
 msgid "KP_Begin"
 msgstr "Begin"
 
-#: gdk/keynamesprivate.h:6878
+#: gdk/keynamesprivate.h:6896
 msgctxt "keyboard label"
 msgid "KP_Insert"
 msgstr "Insert (TN)"
 
-#: gdk/keynamesprivate.h:6879
+#: gdk/keynamesprivate.h:6897
 msgctxt "keyboard label"
 msgid "KP_Delete"
 msgstr "Delete (TN)"
 
-#: gdk/keynamesprivate.h:6880
+#: gdk/keynamesprivate.h:6898
 msgctxt "keyboard label"
 msgid "Delete"
 msgstr "Delete"
 
-#: gdk/keynamesprivate.h:6881
+#: gdk/keynamesprivate.h:6899
 msgctxt "keyboard label"
 msgid "MonBrightnessUp"
 msgstr "Aumentar brilho do monitor"
 
-#: gdk/keynamesprivate.h:6882
+#: gdk/keynamesprivate.h:6900
 msgctxt "keyboard label"
 msgid "MonBrightnessDown"
 msgstr "Diminuir brilho do monitor"
 
-#: gdk/keynamesprivate.h:6883
+#: gdk/keynamesprivate.h:6901
 msgctxt "keyboard label"
 msgid "KbdBrightnessUp"
 msgstr "Aumentar brilho do teclado"
 
-#: gdk/keynamesprivate.h:6884
+#: gdk/keynamesprivate.h:6902
 msgctxt "keyboard label"
 msgid "KbdBrightnessDown"
 msgstr "Diminuir brilho do teclado"
 
-#: gdk/keynamesprivate.h:6885
+#: gdk/keynamesprivate.h:6903
 msgctxt "keyboard label"
 msgid "AudioMute"
 msgstr "Áudio mudo"
 
-#: gdk/keynamesprivate.h:6886
+#: gdk/keynamesprivate.h:6904
 msgctxt "keyboard label"
 msgid "AudioMicMute"
 msgstr "Microfone mudo"
 
-#: gdk/keynamesprivate.h:6887
+#: gdk/keynamesprivate.h:6905
 msgctxt "keyboard label"
 msgid "AudioLowerVolume"
 msgstr "Abaixar volume"
 
-#: gdk/keynamesprivate.h:6888
+#: gdk/keynamesprivate.h:6906
 msgctxt "keyboard label"
 msgid "AudioRaiseVolume"
 msgstr "Aumentar volume"
 
-#: gdk/keynamesprivate.h:6889
+#: gdk/keynamesprivate.h:6907
 msgctxt "keyboard label"
 msgid "AudioPlay"
 msgstr "Reproduzir áudio"
 
-#: gdk/keynamesprivate.h:6890
+#: gdk/keynamesprivate.h:6908
 msgctxt "keyboard label"
 msgid "AudioStop"
 msgstr "Parar áudio"
 
-#: gdk/keynamesprivate.h:6891
+#: gdk/keynamesprivate.h:6909
 msgctxt "keyboard label"
 msgid "AudioNext"
 msgstr "Próximo áudio"
 
-#: gdk/keynamesprivate.h:6892
+#: gdk/keynamesprivate.h:6910
 msgctxt "keyboard label"
 msgid "AudioPrev"
 msgstr "Áudio anterior"
 
-#: gdk/keynamesprivate.h:6893
+#: gdk/keynamesprivate.h:6911
 msgctxt "keyboard label"
 msgid "AudioRecord"
 msgstr "Gravar áudio"
 
-#: gdk/keynamesprivate.h:6894
+#: gdk/keynamesprivate.h:6912
 msgctxt "keyboard label"
 msgid "AudioPause"
 msgstr "Pausar áudio"
 
-#: gdk/keynamesprivate.h:6895
+#: gdk/keynamesprivate.h:6913
 msgctxt "keyboard label"
 msgid "AudioRewind"
 msgstr "Rebobinar áudio"
 
-#: gdk/keynamesprivate.h:6896
+#: gdk/keynamesprivate.h:6914
 msgctxt "keyboard label"
 msgid "AudioMedia"
 msgstr "Mídia"
 
-#: gdk/keynamesprivate.h:6897
+#: gdk/keynamesprivate.h:6915
 msgctxt "keyboard label"
 msgid "Eject"
 msgstr "Ejetar"
 
-#: gdk/keynamesprivate.h:6898
+#: gdk/keynamesprivate.h:6916
 msgctxt "keyboard label"
 msgid "Explorer"
 msgstr "Explorador"
 
-#: gdk/keynamesprivate.h:6899
+#: gdk/keynamesprivate.h:6917
 msgctxt "keyboard label"
 msgid "Calculator"
 msgstr "Calculadora"
 
-#: gdk/keynamesprivate.h:6900
+#: gdk/keynamesprivate.h:6918
 msgctxt "keyboard label"
 msgid "Mail"
 msgstr "Correio"
 
-#: gdk/keynamesprivate.h:6901
+#: gdk/keynamesprivate.h:6919
 msgctxt "keyboard label"
 msgid "WWW"
 msgstr "Web"
 
-#: gdk/keynamesprivate.h:6902
+#: gdk/keynamesprivate.h:6920
 msgctxt "keyboard label"
 msgid "Search"
 msgstr "Pesquisar"
 
-#: gdk/keynamesprivate.h:6903
+#: gdk/keynamesprivate.h:6921
 msgctxt "keyboard label"
 msgid "Tools"
 msgstr "Ferramentas"
 
-#: gdk/keynamesprivate.h:6904
+#: gdk/keynamesprivate.h:6922
 msgctxt "keyboard label"
 msgid "ScreenSaver"
 msgstr "Protetor de tela"
 
-#: gdk/keynamesprivate.h:6905
+#: gdk/keynamesprivate.h:6923
 msgctxt "keyboard label"
 msgid "Battery"
 msgstr "Bateria"
 
-#: gdk/keynamesprivate.h:6906
+#: gdk/keynamesprivate.h:6924
 msgctxt "keyboard label"
 msgid "Launch1"
 msgstr "Lançar 1"
 
-#: gdk/keynamesprivate.h:6907
+#: gdk/keynamesprivate.h:6925
 msgctxt "keyboard label"
 msgid "Forward"
 msgstr "Avançar"
 
-#: gdk/keynamesprivate.h:6908
+#: gdk/keynamesprivate.h:6926
 msgctxt "keyboard label"
 msgid "Back"
 msgstr "Voltar"
 
-#: gdk/keynamesprivate.h:6909
+#: gdk/keynamesprivate.h:6927
 msgctxt "keyboard label"
 msgid "Sleep"
 msgstr "Suspender"
 
-#: gdk/keynamesprivate.h:6910
+#: gdk/keynamesprivate.h:6928
 msgctxt "keyboard label"
 msgid "Hibernate"
 msgstr "Hibernar"
 
-#: gdk/keynamesprivate.h:6911
+#: gdk/keynamesprivate.h:6929
 msgctxt "keyboard label"
 msgid "WLAN"
 msgstr "WLAN"
 
-#: gdk/keynamesprivate.h:6912
+#: gdk/keynamesprivate.h:6930
 msgctxt "keyboard label"
 msgid "WebCam"
 msgstr "WebCam"
 
-#: gdk/keynamesprivate.h:6913
+#: gdk/keynamesprivate.h:6931
 msgctxt "keyboard label"
 msgid "Display"
 msgstr "Tela"
 
-#: gdk/keynamesprivate.h:6914
+#: gdk/keynamesprivate.h:6932
 msgctxt "keyboard label"
 msgid "TouchpadToggle"
 msgstr "Alternar touchpad"
 
-#: gdk/keynamesprivate.h:6915
+#: gdk/keynamesprivate.h:6933
 msgctxt "keyboard label"
 msgid "WakeUp"
 msgstr "Acordar"
 
-#: gdk/keynamesprivate.h:6916
+#: gdk/keynamesprivate.h:6934
 msgctxt "keyboard label"
 msgid "Suspend"
 msgstr "Suspender"
@@ -771,21 +791,21 @@ msgstr "IDataObject_GetData (0x%x) falhou, retornando 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Falha ao transmutar dados DnD W32 de formato 0x%x para %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:635
+#: gdk/win32/gdkglcontext-win32-wgl.c:624
 msgid "No GL implementation is available"
 msgstr "Nenhuma implementação GL está disponível"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:714
+#: gdk/win32/gdkglcontext-win32-wgl.c:703
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL versão %d.%d é muito baixa, é necessária pelo menos %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:732
+#: gdk/win32/gdkglcontext-win32-wgl.c:721
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "A implementação GL não consegue compartilhar contextos GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1012
+#: gdk/win32/gdkglcontext-win32-wgl.c:1001
 msgid "No available configurations for the given pixel format"
 msgstr "Nenhuma configuração disponível para o formato de pixel dado"
 
@@ -850,16 +870,16 @@ msgstr ""
 "Não foi possível armazenar a área de transferência. Nenhum gerenciador está "
 "ativo."
 
-#: gdk/x11/gdkglcontext-glx.c:814
+#: gdk/x11/gdkglcontext-glx.c:817
 msgid "No GLX configurations available"
 msgstr "Nenhuma configuração GLX está disponível"
 
-#: gdk/x11/gdkglcontext-glx.c:901
+#: gdk/x11/gdkglcontext-glx.c:904
 msgid "No GLX configuration with required features found"
 msgstr ""
 "Não foi localizada nenhuma configuração GLX com os recursos necessários"
 
-#: gdk/x11/gdkglcontext-glx.c:975
+#: gdk/x11/gdkglcontext-glx.c:978
 msgid "GLX is not supported"
 msgstr "Sem suporte a GLX"
 
@@ -1009,7 +1029,7 @@ msgctxt "accessibility"
 msgid "Clears the contents of the entry"
 msgstr "Limpa o conteúdo da entrada"
 
-#: gtk/a11y/gtkatspiroot.c:256 gtk/gtkaccessible.c:869
+#: gtk/a11y/gtkatspiroot.c:263 gtk/gtkaccessible.c:869
 msgctxt "accessibility"
 msgid "application"
 msgstr "aplicativo"
@@ -1844,6 +1864,10 @@ msgstr "_Fechar"
 msgid "Reason not specified"
 msgstr "Monitor não especificado"
 
+#: gtk/gtkapplicationwindow.c:236
+msgid "Menu bar"
+msgstr "Barra de menu"
+
 #: gtk/gtkbookmarksmanager.c:53
 #, c-format
 msgid "%s does not exist in the bookmarks list"
@@ -2316,7 +2340,7 @@ msgstr "Um arquivo com esse nome já existe"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6223 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6211 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2844,7 +2868,7 @@ msgid "Play"
 msgstr "Reproduzir"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6224
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6212
 msgid "_OK"
 msgstr "_OK"
 
@@ -3360,11 +3384,11 @@ msgstr "Autenticação"
 msgid "_Remember password"
 msgstr "Lemb_rar senha"
 
-#: gtk/print/gtkprinteroptionwidget.c:702
+#: gtk/print/gtkprinteroptionwidget.c:703
 msgid "Select a filename"
 msgstr "Selecione um nome de arquivo"
 
-#: gtk/print/gtkprinteroptionwidget.c:919
+#: gtk/print/gtkprinteroptionwidget.c:947
 msgid "Not available"
 msgstr "Não disponível"
 
@@ -3750,12 +3774,12 @@ msgstr "_Desfazer"
 msgid "_Redo"
 msgstr "_Refazer"
 
-#: gtk/gtkwindow.c:6212
+#: gtk/gtkwindow.c:6200
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Você deseja usar Inspetor GTK?"
 
-#: gtk/gtkwindow.c:6214
+#: gtk/gtkwindow.c:6202
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3766,7 +3790,7 @@ msgstr ""
 "modifique o estado interno de qualquer aplicativo GTK. Usá-lo pode fazer que "
 "o aplicativo se encerre ou falhe."
 
-#: gtk/gtkwindow.c:6219
+#: gtk/gtkwindow.c:6207
 msgid "Don’t show this message again"
 msgstr "Não mostre essa mensagem novamente"
 
@@ -3968,32 +3992,32 @@ msgctxt "GL version"
 msgid "None"
 msgstr "Nenhuma"
 
-#: gtk/inspector/general.c:464
+#: gtk/inspector/general.c:465
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/inspector/general.c:526
+#: gtk/inspector/general.c:527
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Desativado"
 
-#: gtk/inspector/general.c:527 gtk/inspector/general.c:528
+#: gtk/inspector/general.c:528 gtk/inspector/general.c:529
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Desativada"
 
-#: gtk/inspector/general.c:579
+#: gtk/inspector/general.c:580
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Nenhum"
 
-#: gtk/inspector/general.c:580 gtk/inspector/general.c:581
+#: gtk/inspector/general.c:581 gtk/inspector/general.c:582
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Nenhuma"
 
-#: gtk/inspector/general.c:934
+#: gtk/inspector/general.c:935
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Contexto de IM é codificado por GTK_IM_MODULE"
 
@@ -4360,7 +4384,7 @@ msgstr "Nome:"
 msgid "Type:"
 msgstr "Tipo:"
 
-#: gtk/inspector/resource-list.ui:164
+#: gtk/inspector/resource-list.ui:164 tools/gtk-image-tool-info.c:54
 msgid "Size:"
 msgstr "Tamanho:"
 
@@ -7352,8 +7376,10 @@ msgstr ""
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
 #: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
+#: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:68
 #: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
-#: tools/gtk-rendernode-tool-info.c:226 tools/gtk-rendernode-tool-show.c:116
+#: tools/gtk-rendernode-tool-extract.c:294 tools/gtk-rendernode-tool-info.c:226
+#: tools/gtk-rendernode-tool-show.c:116
 msgid "FILE"
 msgstr "ARQUIVO"
 
@@ -7455,8 +7481,9 @@ msgstr "Salva como arquivo de nó em vez de png"
 msgid "Overwrite existing file"
 msgstr "Substitui arquivo existente"
 
-#: tools/gtk-builder-tool-screenshot.c:363
-#: tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
+#: tools/gtk-image-tool-convert.c:89 tools/gtk-image-tool-relabel.c:86
+#: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:97
 #: tools/gtk-rendernode-tool-render.c:255
 msgid "FILE…"
 msgstr "ARQUIVO…"
@@ -7557,6 +7584,188 @@ msgstr "Falha ao criar uma instância do tipo de modelo %s\n"
 #: tools/gtk-builder-tool-validate.c:276
 msgid "Validate the file."
 msgstr "Valida o arquivo."
+
+#: tools/gtk-image-tool.c:36
+#, c-format
+msgid ""
+"Usage:\n"
+"  gtk4-image-tool [COMMAND] [OPTION…] FILE…\n"
+"\n"
+"Perform various tasks on images.\n"
+"\n"
+"Commands:\n"
+"  compare      Show differences between two images\n"
+"  convert      Convert the image to a different format or color state\n"
+"  info         Show general information about the image\n"
+"  relabel      Change the color state of the image without conversion\n"
+"  show         Show the image\n"
+"\n"
+msgstr ""
+"Uso:\n"
+"  gtk4-image-tool [COMANDO] [OPÇÃO…] ARQUIVO…\n"
+"\n"
+"Executa várias tarefas em imagens.\n"
+"\n"
+"Comandos:\n"
+"  compare      Mostra as diferenças entre duas imagens\n"
+"  convert      Converte a imagem num formato diferente ou estado de cor\n"
+"  info         Mostra informação geral sobre a imagem\n"
+"  relabel      Modifica o estado de cor duma imagem sem conversão\n"
+"  show         Mostra a imagem\n"
+"\n"
+
+#: tools/gtk-image-tool-compare.c:43 tools/gtk-rendernode-tool-compare.c:67
+msgid "Output file"
+msgstr "Arquivo de saída"
+
+#: tools/gtk-image-tool-compare.c:57
+msgid "Compare two images"
+msgstr "Compara duas imagens"
+
+#: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:113
+#: tools/gtk-image-tool-info.c:90 tools/gtk-image-tool-relabel.c:109
+#: tools/gtk-image-tool-show.c:141
+#, c-format
+msgid "No image file specified\n"
+msgstr "Nenhum arquivo de imagem especificado\n"
+
+#: tools/gtk-image-tool-compare.c:76
+#, c-format
+msgid "Can only accept two image files\n"
+msgstr "Aceita apenas dois arquivos de imagem\n"
+
+#: tools/gtk-image-tool-compare.c:85 tools/gtk-rendernode-tool-compare.c:111
+#, c-format
+msgid "Failed to load %s: %s\n"
+msgstr "Falha ao carregar %s: %s\n"
+
+#: tools/gtk-image-tool-compare.c:96 tools/gtk-rendernode-tool-compare.c:122
+#, c-format
+msgid "Could not save diff image to %s\n"
+msgstr "Não foi possível salvar a imagem diferente em %s\n"
+
+#: tools/gtk-image-tool-compare.c:106 tools/gtk-rendernode-tool-compare.c:132
+#, c-format
+msgid "Differences witten to %s.\n"
+msgstr "Diferenças observadas em %s.\n"
+
+#: tools/gtk-image-tool-compare.c:108 tools/gtk-rendernode-tool-compare.c:134
+#, c-format
+msgid "The images are different.\n"
+msgstr "As imagens são diferentes.\n"
+
+#: tools/gtk-image-tool-compare.c:111 tools/gtk-rendernode-tool-compare.c:137
+#, c-format
+msgid "No differences.\n"
+msgstr "Sem diferenças.\n"
+
+#: tools/gtk-image-tool-convert.c:86
+msgid "Format to use"
+msgstr "Formatar para usar"
+
+#: tools/gtk-image-tool-convert.c:86
+msgid "FORMAT"
+msgstr "FORMAT"
+
+#: tools/gtk-image-tool-convert.c:87 tools/gtk-image-tool-relabel.c:84
+msgid "Color state to use"
+msgstr "Estado de cores para usar"
+
+#: tools/gtk-image-tool-convert.c:87 tools/gtk-image-tool-relabel.c:84
+msgid "COLORSTATE"
+msgstr "COLORSTATE"
+
+#: tools/gtk-image-tool-convert.c:88 tools/gtk-image-tool-relabel.c:85
+msgid "Color state to use, as cicp tuple"
+msgstr "Estado de cores para usar, como tupla cicp"
+
+#: tools/gtk-image-tool-convert.c:88 tools/gtk-image-tool-relabel.c:85
+msgid "CICP"
+msgstr "CICP"
+
+#: tools/gtk-image-tool-convert.c:100
+msgid "Convert the image to a different format or color state."
+msgstr "Converter a imagem num formato diferente ou estado de cor."
+
+#: tools/gtk-image-tool-convert.c:119 tools/gtk-image-tool-relabel.c:115
+#, c-format
+msgid "Can only accept a single image file and output file\n"
+msgstr "Aceita apenas um único arquivo de imagem e arquivo de saída\n"
+
+#: tools/gtk-image-tool-convert.c:133
+#, c-format
+msgid ""
+"Not a memory format: %s\n"
+"Possible values:\n"
+"  %s\n"
+msgstr ""
+"Não é um formato de memória: %s\n"
+"Possíveis valores:\n"
+"  %s\n"
+
+#: tools/gtk-image-tool-convert.c:150
+#, c-format
+msgid ""
+"Not a color state: %s\n"
+"Possible values:\n"
+"  %s\n"
+msgstr ""
+"Não é um estado de cor: %s\n"
+"Possíveis valores:\n"
+"  %s\n"
+
+#: tools/gtk-image-tool-convert.c:160 tools/gtk-image-tool-relabel.c:140
+#, c-format
+msgid "Can't specify both --color-state and --cicp\n"
+msgstr "Não pode especificar ambos--color-state e --cicp\n"
+
+#: tools/gtk-image-tool-convert.c:168 tools/gtk-image-tool-relabel.c:148
+#, c-format
+msgid "Not a supported cicp tuple: %s\n"
+msgstr "Não é uma tupla cicp suportada: %s\n"
+
+#: tools/gtk-image-tool-info.c:55
+msgid "Format:"
+msgstr "Formato:"
+
+#: tools/gtk-image-tool-info.c:56
+msgid "Color state:"
+msgstr "Estado de cor:"
+
+#: tools/gtk-image-tool-info.c:77
+msgid "Provide information about the image."
+msgstr "Fornece informações sobre a imagem."
+
+#: tools/gtk-image-tool-info.c:96
+#, c-format
+msgid "Can only accept a single image file\n"
+msgstr "Pode aceitar apenas um arquivo de imagem\n"
+
+#: tools/gtk-image-tool-relabel.c:96
+msgid "Change the color state of the image without conversion."
+msgstr "Modifica o estado de cor duma imagem sem conversão."
+
+#: tools/gtk-image-tool-relabel.c:130
+#, c-format
+msgid ""
+"Not a color state: %s\n"
+"Possible values: %s\n"
+msgstr ""
+"Não é um estado de cor: %s\n"
+"Possíveis valores: %s\n"
+
+#: tools/gtk-image-tool-show.c:117 tools/gtk-rendernode-tool-show.c:115
+msgid "Don't add a titlebar"
+msgstr "Não adicionar uma barra de título"
+
+#: tools/gtk-image-tool-show.c:128
+msgid "Show one or more images."
+msgstr "Mostrar uma ou mais imagens"
+
+#: tools/gtk-image-tool-utils.c:234
+#, c-format
+msgid "cicp must be 4 numbers, separated by /\n"
+msgstr "cicp deve ser 4 números, separados por /\n"
 
 #: tools/gtk-launch.c:40
 msgid "Show program version"
@@ -7982,8 +8191,8 @@ msgid "Benchmark rendering of a .node file."
 msgstr "Renderização de benchmark de um arquivo .node."
 
 #: tools/gtk-rendernode-tool-benchmark.c:127
-#: tools/gtk-rendernode-tool-info.c:248 tools/gtk-rendernode-tool-render.c:283
-#: tools/gtk-rendernode-tool-show.c:144
+#: tools/gtk-rendernode-tool-extract.c:316 tools/gtk-rendernode-tool-info.c:248
+#: tools/gtk-rendernode-tool-render.c:283 tools/gtk-rendernode-tool-show.c:144
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Nenhum arquivo .node especificado\n"
@@ -7997,10 +8206,6 @@ msgstr "Só pode comparar um único arquivo .node\n"
 #: tools/gtk-rendernode-tool-render.c:254
 msgid "Renderer to use"
 msgstr "Renderizador para usar"
-
-#: tools/gtk-rendernode-tool-compare.c:67
-msgid "Output file"
-msgstr "Arquivo de saída"
 
 #: tools/gtk-rendernode-tool-compare.c:70
 msgid "FILE1 FILE2"
@@ -8021,30 +8226,32 @@ msgstr "Deve especificar dois arquivos\n"
 msgid "Failed to create renderer: %s\n"
 msgstr "Falha ao criar renderizador: %s\n"
 
-#: tools/gtk-rendernode-tool-compare.c:111
+#: tools/gtk-rendernode-tool-extract.c:73
+#: tools/gtk-rendernode-tool-extract.c:149
 #, c-format
-msgid "Failed to load %s: %s\n"
-msgstr "Falha ao carregar %s: %s\n"
+msgid "Failed to write %s\n"
+msgstr "Falha ao gravar %s\n"
 
-#: tools/gtk-rendernode-tool-compare.c:122
-#, c-format
-msgid "Could not save diff image to %s\n"
-msgstr "Não foi possível salvar a imagem diferente em %s\n"
+#: tools/gtk-rendernode-tool-extract.c:292
+msgid "Directory to use"
+msgstr "Diretório para usar"
 
-#: tools/gtk-rendernode-tool-compare.c:132
-#, c-format
-msgid "Differences witten to %s.\n"
-msgstr "Diferenças observadas em %s.\n"
+#: tools/gtk-rendernode-tool-extract.c:292
+msgid "DIRECTORY"
+msgstr "DIRECTORY"
 
-#: tools/gtk-rendernode-tool-compare.c:134
-#, c-format
-msgid "The images are different.\n"
-msgstr "As imagens são diferentes.\n"
+#: tools/gtk-rendernode-tool-extract.c:293
+msgid "Be verbose"
+msgstr "Seja detalhado"
 
-#: tools/gtk-rendernode-tool-compare.c:137
+#: tools/gtk-rendernode-tool-extract.c:303
+msgid "Extract data urls from the render node."
+msgstr "Extrai dados de urls dum nó de renderização."
+
+#: tools/gtk-rendernode-tool-extract.c:322 tools/gtk-rendernode-tool-info.c:254
 #, c-format
-msgid "No differences.\n"
-msgstr "Sem diferenças.\n"
+msgid "Can only accept a single .node file\n"
+msgstr "Pode aceitar apenas um único arquivo .node\n"
 
 #: tools/gtk-rendernode-tool-info.c:193
 msgid "Number of nodes:"
@@ -8070,11 +8277,6 @@ msgstr "Parte opaca:"
 msgid "Provide information about the render node."
 msgstr "Fornece informações sobre o nó de renderização."
 
-#: tools/gtk-rendernode-tool-info.c:254
-#, c-format
-msgid "Can only accept a single .node file\n"
-msgstr "Pode aceitar apenas um único arquivo .node\n"
-
 #: tools/gtk-rendernode-tool-render.c:170
 #, c-format
 msgid ""
@@ -8099,10 +8301,6 @@ msgstr "Renderiza um arquivo .node para uma imagem."
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
 "Pode renderizar apenas um único arquivo .node e um único arquivo de saída\n"
-
-#: tools/gtk-rendernode-tool-show.c:115
-msgid "Don't add a titlebar"
-msgstr "Não adicionar uma barra de título"
 
 #: tools/gtk-rendernode-tool-show.c:131
 msgid "Show the render node."
