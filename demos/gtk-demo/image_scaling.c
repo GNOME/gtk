@@ -14,6 +14,103 @@
 #include <gtk/gtk.h>
 #include "demo3widget.h"
 
+static GtkWidget *window = NULL;
+static GCancellable *cancellable = NULL;
+
+static void
+load_texture (GTask        *task,
+              gpointer      source_object,
+              gpointer      task_data,
+              GCancellable *cable)
+{
+  GFile *file = task_data;
+  GdkTexture *texture;
+  GError *error = NULL;
+
+  texture = gdk_texture_new_from_file (file, &error);
+
+  if (texture)
+    g_task_return_pointer (task, texture, g_object_unref);
+  else
+    g_task_return_error (task, error);
+}
+
+static void
+set_wait_cursor (GtkWidget *widget)
+{
+  gtk_widget_set_cursor_from_name (GTK_WIDGET (gtk_widget_get_root (widget)), "wait");
+}
+
+static void
+unset_wait_cursor (GtkWidget *widget)
+{
+  gtk_widget_set_cursor (GTK_WIDGET (gtk_widget_get_root (widget)), NULL);
+}
+
+static void
+texture_loaded (GObject      *source,
+                GAsyncResult *result,
+                gpointer      data)
+{
+  GdkTexture *texture;
+  GError *error = NULL;
+
+  texture = g_task_propagate_pointer (G_TASK (result), &error);
+
+  if (!texture)
+    {
+      g_print ("%s\n", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  if (!window)
+    {
+      g_object_unref (texture);
+      return;
+    }
+
+  unset_wait_cursor (GTK_WIDGET (data));
+
+  g_object_set (G_OBJECT (data), "texture", texture, NULL);
+}
+
+static void
+open_file_async (GFile     *file,
+                 GtkWidget *demo)
+{
+  GTask *task;
+
+  set_wait_cursor (demo);
+
+  task = g_task_new (demo, cancellable, texture_loaded, demo);
+  g_task_set_task_data (task, g_object_ref (file), g_object_unref);
+  g_task_run_in_thread (task, load_texture);
+  g_object_unref (task);
+}
+
+static void
+open_portland_rose (GtkWidget *button,
+                    GtkWidget *demo)
+{
+  GFile *file;
+
+  file = g_file_new_for_uri ("resource:///transparent/portland-rose.jpg");
+  open_file_async (file, demo);
+  g_object_unref (file);
+}
+
+static void
+open_large_image (GtkWidget *button,
+                  GtkWidget *demo)
+{
+  GFile *file;
+
+  file = g_file_new_for_uri ("resource:///org/gtk/Demo4/large-image.png");
+  open_file_async (file, demo);
+  g_object_unref (file);
+}
+
 static void
 file_opened (GObject      *source,
              GAsyncResult *result,
@@ -21,7 +118,6 @@ file_opened (GObject      *source,
 {
   GFile *file;
   GError *error = NULL;
-  GdkTexture *texture;
 
   file = gtk_file_dialog_open_finish (GTK_FILE_DIALOG (source), result, &error);
 
@@ -32,17 +128,9 @@ file_opened (GObject      *source,
       return;
     }
 
-  texture = gdk_texture_new_from_file (file, &error);
-  g_object_unref (file);
-  if (!texture)
-    {
-      g_print ("%s\n", error->message);
-      g_error_free (error);
-      return;
-    }
+  open_file_async (file, data);
 
-  g_object_set (G_OBJECT (data), "texture", texture, NULL);
-  g_object_unref (texture);
+  g_object_unref (file);
 }
 
 static void
@@ -116,11 +204,26 @@ transform_from (GBinding     *binding,
   return TRUE;
 }
 
+static void
+free_cancellable (gpointer data)
+{
+  g_cancellable_cancel (cancellable);
+  g_clear_object (&cancellable);
+}
+
+static gboolean
+cancel_load (GtkWidget *widget,
+             GVariant  *args,
+             gpointer   data)
+{
+  unset_wait_cursor (widget);
+  g_cancellable_cancel (G_CANCELLABLE (data));
+  return TRUE;
+}
+
 GtkWidget *
 do_image_scaling (GtkWidget *do_widget)
 {
-  static GtkWidget *window = NULL;
-
   if (!window)
     {
       GtkWidget *box;
@@ -130,6 +233,7 @@ do_image_scaling (GtkWidget *do_widget)
       GtkWidget *scale;
       GtkWidget *dropdown;
       GtkWidget *button;
+      GtkEventController *controller;
 
       window = gtk_window_new ();
       gtk_window_set_title (GTK_WINDOW (window), "Image Scaling");
@@ -137,6 +241,20 @@ do_image_scaling (GtkWidget *do_widget)
       gtk_window_set_display (GTK_WINDOW (window),
                               gtk_widget_get_display (do_widget));
       g_object_add_weak_pointer (G_OBJECT (window), (gpointer *)&window);
+
+      cancellable = g_cancellable_new ();
+      g_object_set_data_full (G_OBJECT (window), "cancellable",
+                              cancellable, free_cancellable);
+
+      controller = gtk_shortcut_controller_new ();
+      gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller),
+                                            gtk_shortcut_new (
+                                                gtk_keyval_trigger_new (GDK_KEY_Escape, 0),
+                                                gtk_callback_action_new (cancel_load, cancellable, NULL)
+                                                ));
+      gtk_shortcut_controller_set_scope (GTK_SHORTCUT_CONTROLLER (controller),
+                                         GTK_SHORTCUT_SCOPE_GLOBAL);
+      gtk_widget_add_controller (window, controller);
 
       box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
       gtk_window_set_child (GTK_WINDOW (window), box);
@@ -154,6 +272,22 @@ do_image_scaling (GtkWidget *do_widget)
       button = gtk_button_new_from_icon_name ("document-open-symbolic");
       gtk_widget_set_tooltip_text (button, "Open File");
       g_signal_connect (button, "clicked", G_CALLBACK (open_file), widget);
+      gtk_box_append (GTK_BOX (box2), button);
+
+      button = gtk_button_new ();
+      gtk_button_set_child (GTK_BUTTON (button),
+                            gtk_image_new_from_resource ("/org/gtk/Demo4/portland-rose-thumbnail.png"));
+      gtk_widget_add_css_class (button, "image-button");
+      gtk_widget_set_tooltip_text (button, "Portland Rose");
+      g_signal_connect (button, "clicked", G_CALLBACK (open_portland_rose), widget);
+      gtk_box_append (GTK_BOX (box2), button);
+
+      button = gtk_button_new ();
+      gtk_button_set_child (GTK_BUTTON (button),
+                            gtk_image_new_from_resource ("/org/gtk/Demo4/large-image-thumbnail.png"));
+      gtk_widget_add_css_class (button, "image-button");
+      gtk_widget_set_tooltip_text (button, "Large image");
+      g_signal_connect (button, "clicked", G_CALLBACK (open_large_image), widget);
       gtk_box_append (GTK_BOX (box2), button);
 
       button = gtk_button_new_from_icon_name ("object-rotate-right-symbolic");
@@ -191,7 +325,9 @@ do_image_scaling (GtkWidget *do_widget)
   if (!gtk_widget_get_visible (window))
     gtk_widget_set_visible (window, TRUE);
   else
-    gtk_window_destroy (GTK_WINDOW (window));
+    {
+      gtk_window_destroy (GTK_WINDOW (window));
+    }
 
   return window;
 }
