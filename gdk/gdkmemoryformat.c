@@ -22,13 +22,25 @@
 #include "gdkmemoryformatprivate.h"
 
 #include "gdkdmabuffourccprivate.h"
-#include "gdkglcontextprivate.h"
 #include "gdkcolorstateprivate.h"
+#include "gdkparalleltaskprivate.h"
 #include "gtk/gtkcolorutilsprivate.h"
+#include "gdkprofilerprivate.h"
 
 #include "gsk/gl/fp16private.h"
 
 #include <epoxy/gl.h>
+
+/* Don't report quick (< 0.5 msec) runs */
+#define MIN_MARK_DURATION 500000
+
+#define ADD_MARK(before,name,fmt,...) \
+  if (GDK_PROFILER_IS_RUNNING) \
+    { \
+      gint64 duration = GDK_PROFILER_CURRENT_TIME - before; \
+      if (duration > MIN_MARK_DURATION) \
+        gdk_profiler_add_markf (before, duration, name, fmt, __VA_ARGS__); \
+    }
 
 G_STATIC_ASSERT ((1 << GDK_MEMORY_DEPTH_BITS) > GDK_N_DEPTHS);
 
@@ -313,6 +325,88 @@ ADD_ALPHA_FUNC(r8g8b8_to_b8g8r8a8, 0, 1, 2, 2, 1, 0, 3)
 ADD_ALPHA_FUNC(r8g8b8_to_a8r8g8b8, 0, 1, 2, 1, 2, 3, 0)
 ADD_ALPHA_FUNC(r8g8b8_to_a8b8g8r8, 0, 1, 2, 3, 2, 1, 0)
 
+#define MIPMAP_FUNC(SumType, DataType, n_units) \
+static void \
+gdk_mipmap_ ## DataType ## _ ## n_units ## _nearest (guchar       *dest, \
+                                                     gsize         dest_stride, \
+                                                     const guchar *src, \
+                                                     gsize         src_stride, \
+                                                     gsize         src_width, \
+                                                     gsize         src_height, \
+                                                     guint         lod_level) \
+{ \
+  gsize y, x, i; \
+  gsize n = 1 << lod_level; \
+\
+  for (y = 0; y < src_height; y += n) \
+    { \
+      DataType *dest_data = (DataType *) dest; \
+      for (x = 0; x < src_width; x += n) \
+        { \
+          const DataType *src_data = (const DataType *) (src + (y + MIN (n / 2, src_height - y))  * src_stride); \
+\
+          for (i = 0; i < n_units; i++) \
+            *dest_data++ = src_data[n_units * (x + MIN (n / 2, src_width - n_units)) + i]; \
+        } \
+      dest += dest_stride; \
+      src += src_stride * n; \
+    } \
+} \
+\
+static void \
+gdk_mipmap_ ## DataType ## _ ## n_units ## _linear (guchar       *dest, \
+                                                    gsize         dest_stride, \
+                                                    const guchar *src, \
+                                                    gsize         src_stride, \
+                                                    gsize         src_width, \
+                                                    gsize         src_height, \
+                                                    guint         lod_level) \
+{ \
+  gsize y_dest, y, x_dest, x, i; \
+  gsize n = 1 << lod_level; \
+\
+  for (y_dest = 0; y_dest < src_height; y_dest += n) \
+    { \
+      DataType *dest_data = (DataType *) dest; \
+      for (x_dest = 0; x_dest < src_width; x_dest += n) \
+        { \
+          SumType tmp[n_units] = { 0, }; \
+\
+          for (y = 0; y < MIN (n, src_height - y_dest); y++) \
+            { \
+              const DataType *src_data = (const DataType *) (src + y * src_stride); \
+              for (x = 0; x < MIN (n, src_width - x_dest); x++) \
+                { \
+                  for (i = 0; i < n_units; i++) \
+                    tmp[i] += src_data[n_units * (x_dest + x) + i]; \
+                } \
+            } \
+\
+          for (i = 0; i < n_units; i++) \
+            *dest_data++ = tmp[i] / (x * y); \
+        } \
+      dest += dest_stride; \
+      src += src_stride * n; \
+    } \
+}
+
+MIPMAP_FUNC(guint32, guint8, 1)
+MIPMAP_FUNC(guint32, guint8, 2)
+MIPMAP_FUNC(guint32, guint8, 3)
+MIPMAP_FUNC(guint32, guint8, 4)
+MIPMAP_FUNC(guint32, guint16, 1)
+MIPMAP_FUNC(guint32, guint16, 2)
+MIPMAP_FUNC(guint32, guint16, 3)
+MIPMAP_FUNC(guint32, guint16, 4)
+MIPMAP_FUNC(float, float, 1)
+MIPMAP_FUNC(float, float, 3)
+MIPMAP_FUNC(float, float, 4)
+#define half_float guint16
+MIPMAP_FUNC(float, half_float, 1)
+MIPMAP_FUNC(float, half_float, 3)
+MIPMAP_FUNC(float, half_float, 4)
+#undef half_float
+
 struct _GdkMemoryFormatDescription
 {
   const char *name;
@@ -346,6 +440,8 @@ struct _GdkMemoryFormatDescription
   /* no premultiplication going on here */
   void (* to_float) (float (*)[4], const guchar*, gsize);
   void (* from_float) (guchar *, const float (*)[4], gsize);
+  void (* mipmap_nearest) (guchar *, gsize, const guchar *, gsize, gsize, gsize, guint);
+  void (* mipmap_linear) (guchar *, gsize, const guchar *, gsize, gsize, gsize, guint);
 };
 
 #if  G_BYTE_ORDER == G_LITTLE_ENDIAN
@@ -387,6 +483,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = b8g8r8a8_premultiplied_to_float,
     .from_float = b8g8r8a8_premultiplied_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_A8R8G8B8_PREMULTIPLIED] = {
     .name = "ARGB8(p)",
@@ -418,6 +516,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8r8g8b8_premultiplied_to_float,
     .from_float = a8r8g8b8_premultiplied_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] = {
     .name = "RGBA8(p)",
@@ -448,6 +548,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r8g8b8a8_premultiplied_to_float,
     .from_float = r8g8b8a8_premultiplied_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_A8B8G8R8_PREMULTIPLIED] = {
     .name = "ABGR8(p)",
@@ -479,6 +581,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8b8g8r8_premultiplied_to_float,
     .from_float = a8b8g8r8_premultiplied_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_B8G8R8A8] = {
     .name = "BGRA8",
@@ -510,6 +614,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = b8g8r8a8_to_float,
     .from_float = b8g8r8a8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_A8R8G8B8] = {
     .name = "ARGB8",
@@ -541,6 +647,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8r8g8b8_to_float,
     .from_float = a8r8g8b8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_R8G8B8A8] = {
     .name = "RGBA8",
@@ -571,6 +679,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r8g8b8a8_to_float,
     .from_float = r8g8b8a8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_A8B8G8R8] = {
     .name = "ABGR8",
@@ -602,6 +712,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8b8g8r8_to_float,
     .from_float = a8b8g8r8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_B8G8R8X8] = {
     .name = "BGRX8",
@@ -634,6 +746,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = b8g8r8x8_to_float,
     .from_float = b8g8r8x8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_X8R8G8B8] = {
     .name = "XRGB8",
@@ -666,6 +780,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = x8r8g8b8_to_float,
     .from_float = x8r8g8b8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_R8G8B8X8] = {
     .name = "RGBX8",
@@ -697,6 +813,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r8g8b8x8_to_float,
     .from_float = r8g8b8x8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_X8B8G8R8] = {
     .name = "XBGR8",
@@ -729,6 +847,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = x8b8g8r8_to_float,
     .from_float = x8b8g8r8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_R8G8B8] = {
     .name = "RGB8",
@@ -760,6 +880,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r8g8b8_to_float,
     .from_float = r8g8b8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_3_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_3_linear,
   },
   [GDK_MEMORY_B8G8R8] = {
     .name = "BGR8",
@@ -792,6 +914,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = b8g8r8_to_float,
     .from_float = b8g8r8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_3_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_3_linear,
   },
   [GDK_MEMORY_R16G16B16] = {
     .name = "RGB16",
@@ -826,6 +950,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16_to_float,
     .from_float = r16g16b16_from_float,
+    .mipmap_nearest = gdk_mipmap_guint16_3_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_3_linear,
   },
   [GDK_MEMORY_R16G16B16A16_PREMULTIPLIED] = {
     .name = "RGBA16(p)",
@@ -859,6 +985,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
+    .mipmap_nearest = gdk_mipmap_guint16_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_4_linear,
   },
   [GDK_MEMORY_R16G16B16A16] = {
     .name = "RGBA16",
@@ -892,6 +1020,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
+    .mipmap_nearest = gdk_mipmap_guint16_4_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_4_linear,
   },
   [GDK_MEMORY_R16G16B16_FLOAT] = {
     .name = "RGBA16f",
@@ -925,6 +1055,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16_float_to_float,
     .from_float = r16g16b16_float_from_float,
+    .mipmap_nearest = gdk_mipmap_half_float_3_nearest,
+    .mipmap_linear = gdk_mipmap_half_float_3_linear,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] = {
     .name = "RGBA16f(p)",
@@ -957,6 +1089,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
+    .mipmap_nearest = gdk_mipmap_half_float_4_nearest,
+    .mipmap_linear = gdk_mipmap_half_float_4_linear,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT] = {
     .name = "RGBA16f",
@@ -989,6 +1123,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
+    .mipmap_nearest = gdk_mipmap_half_float_4_nearest,
+    .mipmap_linear = gdk_mipmap_half_float_4_linear,
   },
   [GDK_MEMORY_R32G32B32_FLOAT] = {
     .name = "RGB32f",
@@ -1022,6 +1158,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r32g32b32_float_to_float,
     .from_float = r32g32b32_float_from_float,
+    .mipmap_nearest = gdk_mipmap_float_3_nearest,
+    .mipmap_linear = gdk_mipmap_float_3_linear,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] = {
     .name = "RGBA32f(p)",
@@ -1054,6 +1192,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
+    .mipmap_nearest = gdk_mipmap_float_4_nearest,
+    .mipmap_linear = gdk_mipmap_float_4_linear,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT] = {
     .name = "RGBA32f",
@@ -1086,6 +1226,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
+    .mipmap_nearest = gdk_mipmap_float_4_nearest,
+    .mipmap_linear = gdk_mipmap_float_4_linear,
   },
   [GDK_MEMORY_G8A8_PREMULTIPLIED] = {
     .name = "GA8(p)",
@@ -1117,6 +1259,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g8a8_premultiplied_to_float,
     .from_float = g8a8_premultiplied_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_2_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_2_linear,
   },
   [GDK_MEMORY_G8A8] = {
     .name = "GA8",
@@ -1148,6 +1292,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g8a8_to_float,
     .from_float = g8a8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_2_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_2_linear,
   },
   [GDK_MEMORY_G8] = {
     .name = "G8",
@@ -1179,6 +1325,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g8_to_float,
     .from_float = g8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_1_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_1_linear,
   },
   [GDK_MEMORY_G16A16_PREMULTIPLIED] = {
     .name = "GA16(p)",
@@ -1213,6 +1361,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g16a16_premultiplied_to_float,
     .from_float = g16a16_premultiplied_from_float,
+    .mipmap_nearest = gdk_mipmap_guint16_2_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_2_linear,
   },
   [GDK_MEMORY_G16A16] = {
     .name = "GA16",
@@ -1247,6 +1397,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g16a16_to_float,
     .from_float = g16a16_from_float,
+    .mipmap_nearest = gdk_mipmap_guint16_2_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_2_linear,
   },
   [GDK_MEMORY_G16] = {
     .name = "G16",
@@ -1281,6 +1433,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = g16_to_float,
     .from_float = g16_from_float,
+    .mipmap_nearest = gdk_mipmap_guint16_1_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_1_linear,
   },
   [GDK_MEMORY_A8] = {
     .name = "A8",
@@ -1312,6 +1466,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a8_to_float,
     .from_float = a8_from_float,
+    .mipmap_nearest = gdk_mipmap_guint8_1_nearest,
+    .mipmap_linear = gdk_mipmap_guint8_1_linear,
   },
   [GDK_MEMORY_A16] = {
     .name = "A16",
@@ -1346,6 +1502,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a16_to_float,
     .from_float = a16_from_float,
+    .mipmap_nearest = gdk_mipmap_guint16_1_nearest,
+    .mipmap_linear = gdk_mipmap_guint16_1_linear,
   },
   [GDK_MEMORY_A16_FLOAT] = {
     .name = "A16f",
@@ -1379,6 +1537,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a16_float_to_float,
     .from_float = a16_float_from_float,
+    .mipmap_nearest = gdk_mipmap_half_float_1_nearest,
+    .mipmap_linear = gdk_mipmap_half_float_1_linear,
   },
   [GDK_MEMORY_A32_FLOAT] = {
     .name = "A32f",
@@ -1412,6 +1572,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .to_float = a32_float_to_float,
     .from_float = a32_float_from_float,
+    .mipmap_nearest = gdk_mipmap_float_1_nearest,
+    .mipmap_linear = gdk_mipmap_float_1_linear,
   }
 };
 
@@ -1850,118 +2012,97 @@ unpremultiply (float (*rgba)[4],
     }
 }
 
-void
-gdk_memory_convert (guchar              *dest_data,
-                    gsize                dest_stride,
-                    GdkMemoryFormat      dest_format,
-                    GdkColorState       *dest_cs,
-                    const guchar        *src_data,
-                    gsize                src_stride,
-                    GdkMemoryFormat      src_format,
-                    GdkColorState       *src_cs,
-                    gsize                width,
-                    gsize                height)
+typedef void (* FastConversionFunc) (guchar       *dest,
+                                     const guchar *src,
+                                     gsize         n);
+
+static FastConversionFunc
+get_fast_conversion_func (GdkMemoryFormat dest_format,
+                          GdkMemoryFormat src_format)
 {
-  const GdkMemoryFormatDescription *dest_desc = &memory_formats[dest_format];
-  const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
+  if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+    return r8g8b8a8_to_r8g8b8a8_premultiplied;
+  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+    return r8g8b8a8_to_b8g8r8a8_premultiplied;
+  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    return r8g8b8a8_to_b8g8r8a8_premultiplied;
+  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    return r8g8b8a8_to_r8g8b8a8_premultiplied;
+  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
+    return r8g8b8a8_to_a8r8g8b8_premultiplied;
+  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
+    return r8g8b8a8_to_a8b8g8r8_premultiplied;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+    return r8g8b8_to_r8g8b8a8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
+    return r8g8b8_to_b8g8r8a8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    return r8g8b8_to_b8g8r8a8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
+    return r8g8b8_to_r8g8b8a8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
+    return r8g8b8_to_a8r8g8b8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
+    return r8g8b8_to_a8b8g8r8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8)
+    return r8g8b8_to_r8g8b8a8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8)
+    return r8g8b8_to_b8g8r8a8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8)
+    return r8g8b8_to_b8g8r8a8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8)
+    return r8g8b8_to_r8g8b8a8;
+  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8)
+    return r8g8b8_to_a8r8g8b8;
+  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8)
+    return r8g8b8_to_a8b8g8r8;
+
+  return NULL;
+}
+
+typedef struct _MemoryConvert MemoryConvert;
+
+struct _MemoryConvert
+{
+  guchar              *dest_data;
+  gsize                dest_stride;
+  GdkMemoryFormat      dest_format;
+  GdkColorState       *dest_cs;
+  const guchar        *src_data;
+  gsize                src_stride;
+  GdkMemoryFormat      src_format;
+  GdkColorState       *src_cs;
+  gsize                width;
+  gsize                height;
+
+  /* atomic */ int     rows_done;
+};
+
+static void
+gdk_memory_convert_generic (gpointer data)
+{
+  MemoryConvert *mc = data;
+  const GdkMemoryFormatDescription *dest_desc = &memory_formats[mc->dest_format];
+  const GdkMemoryFormatDescription *src_desc = &memory_formats[mc->src_format];
   float (*tmp)[4];
-  gsize y;
   GdkFloatColorConvert convert_func = NULL;
   GdkFloatColorConvert convert_func2 = NULL;
-  void (*func) (guchar *, const guchar *, gsize) = NULL;
   gboolean needs_premultiply, needs_unpremultiply;
+  gsize y, n;
+  gint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
 
-  g_assert (dest_format < GDK_MEMORY_N_FORMATS);
-  g_assert (src_format < GDK_MEMORY_N_FORMATS);
-  /* We don't allow overlap here. If you want to do in-place color state conversions,
-   * use gdk_memory_convert_color_state.
-   */
-  g_assert (dest_data + gdk_memory_format_min_buffer_size (dest_format, dest_stride, width, height) <= src_data ||
-            src_data + gdk_memory_format_min_buffer_size (src_format, src_stride, width, height) <= dest_data);
+  convert_func = gdk_color_state_get_convert_to (mc->src_cs, mc->dest_cs);
 
-  if (src_format == dest_format && gdk_color_state_equal (dest_cs, src_cs))
+  if (!convert_func)
+    convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, mc->src_cs);
+
+  if (!convert_func && !convert_func2)
     {
-      gsize bytes_per_row = src_desc->bytes_per_pixel * width;
-
-      if (bytes_per_row == src_stride && bytes_per_row == dest_stride)
-        {
-          memcpy (dest_data, src_data, bytes_per_row * height);
-        }
-      else
-        {
-          for (y = 0; y < height; y++)
-            {
-              memcpy (dest_data, src_data, bytes_per_row);
-              src_data += src_stride;
-              dest_data += dest_stride;
-            }
-        }
-      return;
+      GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
+      convert_func = gdk_color_state_get_convert_to (mc->src_cs, connection);
+      convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, connection);
     }
-
-  if (!gdk_color_state_equal (dest_cs, src_cs))
-    {
-      convert_func = gdk_color_state_get_convert_to (src_cs, dest_cs);
-
-      if (!convert_func)
-        convert_func2 = gdk_color_state_get_convert_from (dest_cs, src_cs);
-
-      if (!convert_func && !convert_func2)
-        {
-          GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
-          convert_func = gdk_color_state_get_convert_to (src_cs, connection);
-          convert_func2 = gdk_color_state_get_convert_from (dest_cs, connection);
-        }
-    }
-  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    func = r8g8b8a8_to_r8g8b8a8_premultiplied;
-  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    func = r8g8b8a8_to_b8g8r8a8_premultiplied;
-  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    func = r8g8b8a8_to_b8g8r8a8_premultiplied;
-  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    func = r8g8b8a8_to_r8g8b8a8_premultiplied;
-  else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    func = r8g8b8a8_to_a8r8g8b8_premultiplied;
-  else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    func = r8g8b8a8_to_a8b8g8r8_premultiplied;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    func = r8g8b8_to_r8g8b8a8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    func = r8g8b8_to_b8g8r8a8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    func = r8g8b8_to_b8g8r8a8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    func = r8g8b8_to_r8g8b8a8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    func = r8g8b8_to_a8r8g8b8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    func = r8g8b8_to_a8b8g8r8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8)
-    func = r8g8b8_to_r8g8b8a8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8)
-    func = r8g8b8_to_b8g8r8a8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8)
-    func = r8g8b8_to_b8g8r8a8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8)
-    func = r8g8b8_to_r8g8b8a8;
-  else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8)
-    func = r8g8b8_to_a8r8g8b8;
-  else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8)
-    func = r8g8b8_to_a8b8g8r8;
-
-  if (func != NULL)
-    {
-      for (y = 0; y < height; y++)
-        {
-          func (dest_data, src_data, width);
-          src_data += src_stride;
-          dest_data += dest_stride;
-        }
-      return;
-    }
-
-  tmp = g_malloc (sizeof (*tmp) * width);
 
   if (convert_func)
     {
@@ -1974,30 +2115,133 @@ gdk_memory_convert (guchar              *dest_data,
       needs_premultiply = src_desc->alpha == GDK_MEMORY_ALPHA_STRAIGHT && dest_desc->alpha != GDK_MEMORY_ALPHA_STRAIGHT;
     }
 
-  for (y = 0; y < height; y++)
+  tmp = g_malloc (sizeof (*tmp) * mc->width);
+  n = 1;
+
+  for (y = g_atomic_int_add (&mc->rows_done, n), rows = 0;
+       y < mc->height;
+       y = g_atomic_int_add (&mc->rows_done, n), rows++)
     {
-      src_desc->to_float (tmp, src_data, width);
+      const guchar *src_data = mc->src_data + y * mc->src_stride;
+      guchar *dest_data = mc->dest_data + y * mc->dest_stride;
+
+      src_desc->to_float (tmp, src_data, mc->width);
 
       if (needs_unpremultiply)
-        unpremultiply (tmp, width);
+        unpremultiply (tmp, mc->width);
 
       if (convert_func)
-        convert_func (src_cs, tmp, width);
+        convert_func (mc->src_cs, tmp, mc->width);
 
       if (convert_func2)
-        convert_func2 (dest_cs, tmp, width);
+        convert_func2 (mc->dest_cs, tmp, mc->width);
 
       if (needs_premultiply)
-        premultiply (tmp, width);
+        premultiply (tmp, mc->width);
 
-      dest_desc->from_float (dest_data, tmp, width);
-
-      src_data += src_stride;
-      dest_data += dest_stride;
+      dest_desc->from_float (dest_data, tmp, mc->width);
     }
 
   g_free (tmp);
+
+  ADD_MARK (before,
+            "Memory convert (thread)", "size %lux%lu, %lu rows",
+            mc->width, mc->height, rows);
 }
+
+void
+gdk_memory_convert (guchar              *dest_data,
+                    gsize                dest_stride,
+                    GdkMemoryFormat      dest_format,
+                    GdkColorState       *dest_cs,
+                    const guchar        *src_data,
+                    gsize                src_stride,
+                    GdkMemoryFormat      src_format,
+                    GdkColorState       *src_cs,
+                    gsize                width,
+                    gsize                height)
+{
+  MemoryConvert mc = {
+    .dest_data = dest_data,
+    .dest_stride = dest_stride,
+    .dest_format = dest_format,
+    .dest_cs = dest_cs,
+    .src_data = src_data,
+    .src_stride = src_stride,
+    .src_format = src_format,
+    .src_cs = src_cs,
+    .width = width,
+    .height = height,
+  };
+
+  g_assert (dest_format < GDK_MEMORY_N_FORMATS);
+  g_assert (src_format < GDK_MEMORY_N_FORMATS);
+  /* We don't allow overlap here. If you want to do in-place color state conversions,
+   * use gdk_memory_convert_color_state.
+   */
+  g_assert (dest_data + gdk_memory_format_min_buffer_size (dest_format, dest_stride, width, height) <= src_data ||
+            src_data + gdk_memory_format_min_buffer_size (src_format, src_stride, width, height) <= dest_data);
+
+  if (src_format == dest_format && gdk_color_state_equal (dest_cs, src_cs))
+    {
+      const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
+      gsize bytes_per_row = src_desc->bytes_per_pixel * width;
+
+      if (bytes_per_row == src_stride && bytes_per_row == dest_stride)
+        {
+          memcpy (dest_data, src_data, bytes_per_row * height);
+        }
+      else
+        {
+          gsize y;
+
+          for (y = 0; y < height; y++)
+            {
+              memcpy (dest_data, src_data, bytes_per_row);
+              src_data += src_stride;
+              dest_data += dest_stride;
+            }
+        }
+      return;
+    }
+
+  if (gdk_color_state_equal (dest_cs, src_cs))
+    {
+      FastConversionFunc func;
+
+      func = get_fast_conversion_func (dest_format, src_format);
+
+      if (func != NULL)
+        {
+          gsize y;
+
+          for (y = 0; y < height; y++)
+            {
+              func (dest_data, src_data, width);
+              src_data += src_stride;
+              dest_data += dest_stride;
+            }
+          return;
+        }
+    }
+
+  gdk_parallel_task_run (gdk_memory_convert_generic, &mc);
+}
+
+typedef struct _MemoryConvertColorState MemoryConvertColorState;
+
+struct _MemoryConvertColorState
+{
+  guchar *data;
+  gsize stride;
+  GdkMemoryFormat format;
+  GdkColorState *src_cs;
+  GdkColorState *dest_cs;
+  gsize width;
+  gsize height;
+
+  /* atomic */ int rows_done;
+};
 
 static const guchar srgb_lookup[] = {
   0, 12, 21, 28, 33, 38, 42, 46, 49, 52, 55, 58, 61, 63, 66, 68,
@@ -2103,43 +2347,101 @@ convert_srgb_linear_to_srgb (guchar *data,
 }
 
 static void
-convert_srgb_to_srgb_linear_in_place (guchar *data,
-                                      gsize   stride,
-                                      gsize   width,
-                                      gsize   height)
+gdk_memory_convert_color_state_srgb_to_srgb_linear (gpointer data)
 {
-  if (stride == width * 4)
+  MemoryConvertColorState *mc = data;
+  int y;
+  guint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
+
+  for (y = g_atomic_int_add (&mc->rows_done, 1), rows = 0;
+       y < mc->height;
+       y = g_atomic_int_add (&mc->rows_done, 1), rows++)
     {
-      convert_srgb_to_srgb_linear (data, height * width);
+      convert_srgb_to_srgb_linear (mc->data + y * mc->stride, mc->width);
     }
-  else
-    {
-      for (gsize y = 0; y < height; y++)
-        {
-          convert_srgb_to_srgb_linear (data, width);
-          data += stride;
-        }
-    }
+
+  ADD_MARK (before,
+            "Color state convert srgb->srgb-linear (thread)", "size %lux%lu, %lu rows",
+            mc->width, mc->height, rows);
 }
 
 static void
-convert_srgb_linear_to_srgb_in_place (guchar *data,
-                                      gsize   stride,
-                                      gsize   width,
-                                      gsize   height)
+gdk_memory_convert_color_state_srgb_linear_to_srgb (gpointer data)
 {
-  if (stride == width * 4)
+  MemoryConvertColorState *mc = data;
+  int y;
+  guint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
+
+  for (y = g_atomic_int_add (&mc->rows_done, 1), rows = 0;
+       y < mc->height;
+       y = g_atomic_int_add (&mc->rows_done, 1), rows++)
     {
-      convert_srgb_linear_to_srgb (data, height * width);
+      convert_srgb_linear_to_srgb (mc->data + y * mc->stride, mc->width);
     }
-  else
+
+  ADD_MARK (before,
+            "Color state convert srgb-linear->srgb (thread)", "size %lux%lu, %lu rows",
+            mc->width, mc->height, rows);
+}
+
+static void
+gdk_memory_convert_color_state_generic (gpointer user_data)
+{
+  MemoryConvertColorState *mc = user_data;
+  const GdkMemoryFormatDescription *desc = &memory_formats[mc->format];
+  GdkFloatColorConvert convert_func = NULL;
+  GdkFloatColorConvert convert_func2 = NULL;
+  float (*tmp)[4];
+  int y;
+  guint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
+
+  convert_func = gdk_color_state_get_convert_to (mc->src_cs, mc->dest_cs);
+
+  if (!convert_func)
     {
-      for (gsize y = 0; y < height; y++)
-        {
-          convert_srgb_linear_to_srgb (data, width);
-          data += stride;
-        }
+      convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, mc->src_cs);
     }
+
+  if (!convert_func && !convert_func2)
+    {
+      GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
+      convert_func = gdk_color_state_get_convert_to (mc->src_cs, connection);
+      convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, connection);
+    }
+
+  tmp = g_malloc (sizeof (*tmp) * mc->width);
+
+  for (y = g_atomic_int_add (&mc->rows_done, 1), rows = 0;
+       y < mc->height;
+       y = g_atomic_int_add (&mc->rows_done, 1), rows++)
+    {
+      guchar *data = mc->data + y * mc->stride;
+
+      desc->to_float (tmp, data, mc->width);
+
+      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+        unpremultiply (tmp, mc->width);
+
+      if (convert_func)
+        convert_func (mc->src_cs, tmp, mc->width);
+
+      if (convert_func2)
+        convert_func2 (mc->dest_cs, tmp, mc->width);
+
+      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+        premultiply (tmp, mc->width);
+
+      desc->from_float (data, tmp, mc->width);
+    }
+
+  g_free (tmp);
+
+  ADD_MARK (before,
+            "Color state convert (thread)", "size %lux%lu, %lu rows",
+            mc->width, mc->height, rows);
 }
 
 void
@@ -2151,10 +2453,15 @@ gdk_memory_convert_color_state (guchar          *data,
                                 gsize            width,
                                 gsize            height)
 {
-  const GdkMemoryFormatDescription *desc = &memory_formats[format];
-  GdkFloatColorConvert convert_func = NULL;
-  GdkFloatColorConvert convert_func2 = NULL;
-  float (*tmp)[4];
+  MemoryConvertColorState mc = {
+    .data = data,
+    .stride = stride,
+    .format = format,
+    .src_cs = src_cs,
+    .dest_cs = dest_cs,
+    .width = width,
+    .height = height,
+  };
 
   if (gdk_color_state_equal (src_cs, dest_cs))
     return;
@@ -2163,52 +2470,185 @@ gdk_memory_convert_color_state (guchar          *data,
       src_cs == GDK_COLOR_STATE_SRGB &&
       dest_cs == GDK_COLOR_STATE_SRGB_LINEAR)
     {
-      convert_srgb_to_srgb_linear_in_place (data, stride, width, height);
-      return;
+      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_to_srgb_linear, &mc);
     }
   else if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
            src_cs == GDK_COLOR_STATE_SRGB_LINEAR &&
            dest_cs == GDK_COLOR_STATE_SRGB)
     {
-      convert_srgb_linear_to_srgb_in_place (data, stride, width, height);
-      return;
+      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_linear_to_srgb, &mc);
+    }
+  else
+    {
+      gdk_parallel_task_run (gdk_memory_convert_color_state_generic, &mc);
+    }
+}
+
+typedef struct _MipmapData MipmapData;
+
+struct _MipmapData
+{
+  guchar          *dest;
+  gsize            dest_stride;
+  GdkMemoryFormat  dest_format;
+  const guchar    *src;
+  gsize            src_stride;
+  GdkMemoryFormat  src_format;
+  gsize            src_width;
+  gsize            src_height;
+  guint            lod_level;
+  gboolean         linear;
+
+  gint             rows_done;
+};
+
+static void
+gdk_memory_mipmap_same_format_nearest (gpointer data)
+{
+  MipmapData *mipmap = data;
+  const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
+  gsize n, y;
+  guint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
+
+  n = 1 << mipmap->lod_level;
+
+  for (y = g_atomic_int_add (&mipmap->rows_done, n), rows = 0;
+       y < mipmap->src_height;
+       y = g_atomic_int_add (&mipmap->rows_done, n), rows++)
+    {
+      guchar *dest = mipmap->dest + (y >> mipmap->lod_level) * mipmap->dest_stride;
+      const guchar *src = mipmap->src + y * mipmap->src_stride;
+
+      desc->mipmap_nearest (dest, mipmap->dest_stride,
+                            src, mipmap->src_stride,
+                            mipmap->src_width, MIN (n, mipmap->src_height - y),
+                            mipmap->lod_level);
     }
 
-  convert_func = gdk_color_state_get_convert_to (src_cs, dest_cs);
+  ADD_MARK (before,
+            "Mipmap nearest (thread)", "size %lux%lu, lod %u, %lu rows",
+            mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
+}
 
-  if (!convert_func)
+static void
+gdk_memory_mipmap_same_format_linear (gpointer data)
+{
+  MipmapData *mipmap = data;
+  const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
+  gsize n, y;
+  guint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
+
+  n = 1 << mipmap->lod_level;
+
+  for (y = g_atomic_int_add (&mipmap->rows_done, n), rows = 0;
+       y < mipmap->src_height;
+       y = g_atomic_int_add (&mipmap->rows_done, n), rows++)
     {
-      convert_func2 = gdk_color_state_get_convert_from (dest_cs, src_cs);
+      guchar *dest = mipmap->dest + (y >> mipmap->lod_level) * mipmap->dest_stride;
+      const guchar *src = mipmap->src + y * mipmap->src_stride;
+
+      desc->mipmap_linear (dest, mipmap->dest_stride,
+                           src, mipmap->src_stride,
+                           mipmap->src_width, MIN (n, mipmap->src_height - y),
+                           mipmap->lod_level);
     }
 
-  if (!convert_func && !convert_func2)
+  ADD_MARK (before,
+            "Mipmap linear (thread)", "size %lux%lu, lod %u, %lu rows",
+            mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
+}
+
+static void
+gdk_memory_mipmap_generic (gpointer data)
+{
+  MipmapData *mipmap = data;
+  const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
+  FastConversionFunc func;
+  gsize dest_width;
+  gsize size;
+  guchar *tmp;
+  gsize n, y;
+  guint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
+
+  n = 1 << mipmap->lod_level;
+  dest_width = (mipmap->src_width + n - 1) >> mipmap->lod_level;
+  size = gdk_memory_format_bytes_per_pixel (mipmap->src_format) * dest_width;
+  tmp = g_malloc (size);
+  func = get_fast_conversion_func (mipmap->dest_format, mipmap->src_format);
+
+  for (y = g_atomic_int_add (&mipmap->rows_done, n), rows = 0;
+       y < mipmap->src_height;
+       y = g_atomic_int_add (&mipmap->rows_done, n), rows++)
     {
-      GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
-      convert_func = gdk_color_state_get_convert_to (src_cs, connection);
-      convert_func2 = gdk_color_state_get_convert_from (dest_cs, connection);
-    }
+      guchar *dest = mipmap->dest + (y >> mipmap->lod_level) * mipmap->dest_stride;
+      const guchar *src = mipmap->src + y * mipmap->src_stride;
 
-  tmp = g_malloc (sizeof (*tmp) * width);
-
-  for (gsize y = 0; y < height; y++)
-    {
-      desc->to_float (tmp, data, width);
-
-      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-        unpremultiply (tmp, width);
-
-      if (convert_func)
-        convert_func (src_cs, tmp, width);
-
-      if (convert_func2)
-        convert_func2 (dest_cs, tmp, width);
-
-      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-        premultiply (tmp, width);
-
-      desc->from_float (data, tmp, width);
-      data += stride;
+      if (mipmap->linear)
+        desc->mipmap_linear (tmp, (size + 7) & 7,
+                             src, mipmap->src_stride,
+                             mipmap->src_width, MIN (n, mipmap->src_height - y),
+                             mipmap->lod_level);
+      else
+        desc->mipmap_nearest (tmp, (size + 7) & 7,
+                              src, mipmap->src_stride,
+                              mipmap->src_width, MIN (n, mipmap->src_height - y),
+                              mipmap->lod_level);
+      if (func)
+        func (dest, tmp, dest_width);
+      else
+        gdk_memory_convert (dest, mipmap->dest_stride, mipmap->dest_format, GDK_COLOR_STATE_SRGB,
+                            tmp, (size + 7) & 7, mipmap->src_format, GDK_COLOR_STATE_SRGB,
+                            dest_width, 1);
     }
 
   g_free (tmp);
+
+  ADD_MARK (before,
+            "Mipmap generic (thread)", "size %lux%lu, lod %u, %lu rows",
+            mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
 }
+
+void
+gdk_memory_mipmap (guchar          *dest,
+                   gsize            dest_stride,
+                   GdkMemoryFormat  dest_format,
+                   const guchar    *src,
+                   gsize            src_stride,
+                   GdkMemoryFormat  src_format,
+                   gsize            src_width,
+                   gsize            src_height,
+                   guint            lod_level,
+                   gboolean         linear)
+{
+  MipmapData mipmap = {
+    .dest = dest,
+    .dest_stride = dest_stride,
+    .dest_format = dest_format,
+    .src = src,
+    .src_stride = src_stride,
+    .src_format = src_format,
+    .src_width = src_width,
+    .src_height = src_height,
+    .lod_level = lod_level,
+    .linear = linear,
+    .rows_done = 0,
+  };
+
+  g_assert (lod_level > 0);
+
+  if (dest_format == src_format)
+    {
+      if (linear)
+        gdk_parallel_task_run (gdk_memory_mipmap_same_format_linear, &mipmap);
+      else
+        gdk_parallel_task_run (gdk_memory_mipmap_same_format_nearest, &mipmap);
+    }
+  else
+    {
+      gdk_parallel_task_run (gdk_memory_mipmap_generic, &mipmap);
+    }
+}
+

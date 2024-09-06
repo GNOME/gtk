@@ -107,7 +107,7 @@ gsk_gpu_frame_default_upload_texture (GskGpuFrame *self,
 {
   GskGpuImage *image;
 
-  image = gsk_gpu_upload_texture_op_try (self, with_mipmap, texture);
+  image = gsk_gpu_upload_texture_op_try (self, with_mipmap, 0, GSK_SCALING_FILTER_NEAREST, texture);
 
   return image;
 }

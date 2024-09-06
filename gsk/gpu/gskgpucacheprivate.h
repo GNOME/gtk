@@ -77,11 +77,15 @@ void                    gsk_gpu_cache_cache_texture_image               (GskGpuC
                                                                          GdkColorState          *color_state);
 GskGpuImage *           gsk_gpu_cache_lookup_tile                       (GskGpuCache            *self,
                                                                          GdkTexture             *texture,
+                                                                         guint                   lod_level,
+                                                                         GskScalingFilter        lod_filter,
                                                                          gsize                   tile_id,
                                                                          GdkColorState         **out_color_state);
 void                    gsk_gpu_cache_cache_tile                        (GskGpuCache            *self,
                                                                          GdkTexture             *texture,
-                                                                         guint                   tile_id,
+                                                                         guint                   lod_level,
+                                                                         GskScalingFilter        lod_filter,
+                                                                         gsize                   tile_id,
                                                                          GskGpuImage            *image,
                                                                          GdkColorState          *color_state);
 

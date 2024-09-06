@@ -11,6 +11,8 @@ typedef void            (* GskGpuCairoFunc)                             (gpointe
 
 GskGpuImage *           gsk_gpu_upload_texture_op_try                   (GskGpuFrame                    *frame,
                                                                          gboolean                        with_mipmap,
+                                                                         guint                           lod_level,
+                                                                         GskScalingFilter                lod_filter,
                                                                          GdkTexture                     *texture);
 
 GskGpuImage *           gsk_gpu_upload_cairo_op                         (GskGpuFrame                    *frame,
