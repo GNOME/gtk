@@ -25,10 +25,22 @@
 #include "gdkcolorstateprivate.h"
 #include "gdkparalleltaskprivate.h"
 #include "gtk/gtkcolorutilsprivate.h"
+#include "gdkprofilerprivate.h"
 
 #include "gsk/gl/fp16private.h"
 
 #include <epoxy/gl.h>
+
+/* Don't report quick (< 0.5 msec) runs */
+#define MIN_MARK_DURATION 500000
+
+#define ADD_MARK(before,name,fmt,...) \
+  if (GDK_PROFILER_IS_RUNNING) \
+    { \
+      gint64 duration = GDK_PROFILER_CURRENT_TIME - before; \
+      if (duration > MIN_MARK_DURATION) \
+        gdk_profiler_add_markf (before, duration, name, fmt, __VA_ARGS__); \
+    }
 
 G_STATIC_ASSERT ((1 << GDK_MEMORY_DEPTH_BITS) > GDK_N_DEPTHS);
 
@@ -2077,6 +2089,8 @@ gdk_memory_convert_generic (gpointer data)
   GdkFloatColorConvert convert_func2 = NULL;
   gboolean needs_premultiply, needs_unpremultiply;
   gsize y, n;
+  gint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
 
   convert_func = gdk_color_state_get_convert_to (mc->src_cs, mc->dest_cs);
 
@@ -2104,9 +2118,9 @@ gdk_memory_convert_generic (gpointer data)
   tmp = g_malloc (sizeof (*tmp) * mc->width);
   n = 1;
 
-  for (y = g_atomic_int_add (&mc->rows_done, n);
+  for (y = g_atomic_int_add (&mc->rows_done, n), rows = 0;
        y < mc->height;
-       y = g_atomic_int_add (&mc->rows_done, n))
+       y = g_atomic_int_add (&mc->rows_done, n), rows++)
     {
       const guchar *src_data = mc->src_data + y * mc->src_stride;
       guchar *dest_data = mc->dest_data + y * mc->dest_stride;
@@ -2129,6 +2143,10 @@ gdk_memory_convert_generic (gpointer data)
     }
 
   g_free (tmp);
+
+  ADD_MARK (before,
+            "Memory convert (thread)", "size %lux%lu, %lu rows",
+            mc->width, mc->height, rows);
 }
 
 void
@@ -2333,13 +2351,19 @@ gdk_memory_convert_color_state_srgb_to_srgb_linear (gpointer data)
 {
   MemoryConvertColorState *mc = data;
   int y;
+  guint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
 
-  for (y = g_atomic_int_add (&mc->rows_done, 1);
+  for (y = g_atomic_int_add (&mc->rows_done, 1), rows = 0;
        y < mc->height;
-       y = g_atomic_int_add (&mc->rows_done, 1))
+       y = g_atomic_int_add (&mc->rows_done, 1), rows++)
     {
       convert_srgb_to_srgb_linear (mc->data + y * mc->stride, mc->width);
     }
+
+  ADD_MARK (before,
+            "Color state convert srgb->srgb-linear (thread)", "size %lux%lu, %lu rows",
+            mc->width, mc->height, rows);
 }
 
 static void
@@ -2347,13 +2371,19 @@ gdk_memory_convert_color_state_srgb_linear_to_srgb (gpointer data)
 {
   MemoryConvertColorState *mc = data;
   int y;
+  guint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
 
-  for (y = g_atomic_int_add (&mc->rows_done, 1);
+  for (y = g_atomic_int_add (&mc->rows_done, 1), rows = 0;
        y < mc->height;
-       y = g_atomic_int_add (&mc->rows_done, 1))
+       y = g_atomic_int_add (&mc->rows_done, 1), rows++)
     {
       convert_srgb_linear_to_srgb (mc->data + y * mc->stride, mc->width);
     }
+
+  ADD_MARK (before,
+            "Color state convert srgb-linear->srgb (thread)", "size %lux%lu, %lu rows",
+            mc->width, mc->height, rows);
 }
 
 static void
@@ -2365,6 +2395,8 @@ gdk_memory_convert_color_state_generic (gpointer user_data)
   GdkFloatColorConvert convert_func2 = NULL;
   float (*tmp)[4];
   int y;
+  guint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
 
   convert_func = gdk_color_state_get_convert_to (mc->src_cs, mc->dest_cs);
 
@@ -2382,9 +2414,9 @@ gdk_memory_convert_color_state_generic (gpointer user_data)
 
   tmp = g_malloc (sizeof (*tmp) * mc->width);
 
-  for (y = g_atomic_int_add (&mc->rows_done, 1);
+  for (y = g_atomic_int_add (&mc->rows_done, 1), rows = 0;
        y < mc->height;
-       y = g_atomic_int_add (&mc->rows_done, 1))
+       y = g_atomic_int_add (&mc->rows_done, 1), rows++)
     {
       guchar *data = mc->data + y * mc->stride;
 
@@ -2406,6 +2438,10 @@ gdk_memory_convert_color_state_generic (gpointer user_data)
     }
 
   g_free (tmp);
+
+  ADD_MARK (before,
+            "Color state convert (thread)", "size %lux%lu, %lu rows",
+            mc->width, mc->height, rows);
 }
 
 void
@@ -2472,12 +2508,14 @@ gdk_memory_mipmap_same_format_nearest (gpointer data)
   MipmapData *mipmap = data;
   const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
   gsize n, y;
+  guint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
 
   n = 1 << mipmap->lod_level;
 
-  for (y = g_atomic_int_add (&mipmap->rows_done, n);
+  for (y = g_atomic_int_add (&mipmap->rows_done, n), rows = 0;
        y < mipmap->src_height;
-       y = g_atomic_int_add (&mipmap->rows_done, n))
+       y = g_atomic_int_add (&mipmap->rows_done, n), rows++)
     {
       guchar *dest = mipmap->dest + (y >> mipmap->lod_level) * mipmap->dest_stride;
       const guchar *src = mipmap->src + y * mipmap->src_stride;
@@ -2487,6 +2525,10 @@ gdk_memory_mipmap_same_format_nearest (gpointer data)
                             mipmap->src_width, MIN (n, mipmap->src_height - y),
                             mipmap->lod_level);
     }
+
+  ADD_MARK (before,
+            "Mipmap nearest (thread)", "size %lux%lu, lod %u, %lu rows",
+            mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
 }
 
 static void
@@ -2495,12 +2537,14 @@ gdk_memory_mipmap_same_format_linear (gpointer data)
   MipmapData *mipmap = data;
   const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
   gsize n, y;
+  guint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
 
   n = 1 << mipmap->lod_level;
 
-  for (y = g_atomic_int_add (&mipmap->rows_done, n);
+  for (y = g_atomic_int_add (&mipmap->rows_done, n), rows = 0;
        y < mipmap->src_height;
-       y = g_atomic_int_add (&mipmap->rows_done, n))
+       y = g_atomic_int_add (&mipmap->rows_done, n), rows++)
     {
       guchar *dest = mipmap->dest + (y >> mipmap->lod_level) * mipmap->dest_stride;
       const guchar *src = mipmap->src + y * mipmap->src_stride;
@@ -2510,6 +2554,10 @@ gdk_memory_mipmap_same_format_linear (gpointer data)
                            mipmap->src_width, MIN (n, mipmap->src_height - y),
                            mipmap->lod_level);
     }
+
+  ADD_MARK (before,
+            "Mipmap linear (thread)", "size %lux%lu, lod %u, %lu rows",
+            mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
 }
 
 static void
@@ -2522,6 +2570,8 @@ gdk_memory_mipmap_generic (gpointer data)
   gsize size;
   guchar *tmp;
   gsize n, y;
+  guint64 before = GDK_PROFILER_CURRENT_TIME;
+  gsize rows;
 
   n = 1 << mipmap->lod_level;
   dest_width = (mipmap->src_width + n - 1) >> mipmap->lod_level;
@@ -2529,9 +2579,9 @@ gdk_memory_mipmap_generic (gpointer data)
   tmp = g_malloc (size);
   func = get_fast_conversion_func (mipmap->dest_format, mipmap->src_format);
 
-  for (y = g_atomic_int_add (&mipmap->rows_done, n);
+  for (y = g_atomic_int_add (&mipmap->rows_done, n), rows = 0;
        y < mipmap->src_height;
-       y = g_atomic_int_add (&mipmap->rows_done, n))
+       y = g_atomic_int_add (&mipmap->rows_done, n), rows++)
     {
       guchar *dest = mipmap->dest + (y >> mipmap->lod_level) * mipmap->dest_stride;
       const guchar *src = mipmap->src + y * mipmap->src_stride;
@@ -2552,10 +2602,13 @@ gdk_memory_mipmap_generic (gpointer data)
         gdk_memory_convert (dest, mipmap->dest_stride, mipmap->dest_format, GDK_COLOR_STATE_SRGB,
                             tmp, (size + 7) & 7, mipmap->src_format, GDK_COLOR_STATE_SRGB,
                             dest_width, 1);
-      
     }
 
   g_free (tmp);
+
+  ADD_MARK (before,
+            "Mipmap generic (thread)", "size %lux%lu, lod %u, %lu rows",
+            mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
 }
 
 void
