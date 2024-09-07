@@ -29,6 +29,8 @@ gsk_gpu_blur_op_print_instance (GskGpuShaderOp *shader,
   g_string_append_printf (string, "%g,%g ", instance->blur_direction[0], instance->blur_direction[1]);
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image (string, shader->images[0]);
+  if (shader->variation & VARIATION_COLORIZE)
+    gsk_gpu_print_rgba (string, instance->blur_color);
 }
 
 static const GskGpuShaderOpClass GSK_GPU_BLUR_OP_CLASS = {
