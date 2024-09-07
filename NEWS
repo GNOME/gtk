@@ -1,5 +1,100 @@
-Overview of Changes in 4.15.7, xx-xx-xxxx
+Overview of Changes in 4.16.0, 09-06-2024
 =========================================
+
+Note: This release changes the default GSK renderer to be Vulkan,
+on Wayland. Other platforms still use ngl. The intent of this change
+is to use the best available platform APIs. You can still override
+the renderer choice using the GSK_RENDERER environment variable.
+
+We believe that most of the problems reported with the new renderers
+during the 4.13 and 4.15 development cycles have been addressed by now.
+
+But the new renderers and dmabuf support are using graphics drivers
+in different ways than the old gl renderer, and trigger new driver bugs.
+Therefore, it is recommended to use the latest mesa release (24.2)
+with the new renderers.
+
+* GtkScale:
+ - Fix positioning of scale values
+
+* GtkEmojiChooser:
+ - Make Control-clicks work for the recent section
+
+* GtkPopover:
+ - Make sure focus lands on the right widget when cascading
+
+* GtkSpinButton:
+ - Disable Emoji input for numeric spin buttons
+
+* GtkSingleSelection:
+ - Implement unselect_all
+
+* Accssibility:
+ - Fix roles for radio buttons
+ - Check if ATs are listening before exporting trees
+ - Add a check for sandboxed accessibility bus
+ - Fix handling of the error message relation
+ - Turn criticals into debug messages
+ - Set expanded states properly in menus
+
+* CSS:
+ - Fix a few issues on bigendian systems
+ - Avoid a crash with relative colors
+
+* GSK:
+ - Use the right GL context when exporting textures
+ - Don't let colors influence depth decisions
+ - Allow uploading of mipmap levels when tiling textures
+
+* GDK:
+ - Update keysyms from libX11 1.8.10
+ - Implement cpu-side mipmapping
+ - Use a thread pool for color conversions and mipmapping
+
+* Vulkan:
+ - Fix drag surface offsets
+
+* Wayland:
+ - Fix a crash
+ - Associate EGL windows with context later
+
+* X11:
+ - Fix initial EGL context creation
+ - Fix a problem with GL context creation
+
+* Broadway:
+ - Implement compute_size and request_layout
+
+* MacOS:
+ - Set transparent backgroiund for toplevel windows
+
+* Windows:
+ - Improve debug output
+ - Detect Mesas d3d12 driver and request GDI compat
+
+* Demos:
+ - Set window icons in demos
+ - Add a 64k x 64k image to the image scaling demo
+
+* Translation updates
+ Belarusian
+ Brazilian Portuguese
+ Catalan
+ Czech
+ Galician
+ German
+ Hebrew
+ Indonesian
+ Korean
+ Lithuanian
+ Persian
+ Polish
+ Portuguese
+ Slovenian
+ Spanish
+ Turkish
+ Ukrainian
+
 
 Overview of Changes in 4.15.6, 08-26-2024
 =========================================
