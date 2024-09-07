@@ -36,7 +36,10 @@ load_image_file (const char *filename)
   GError *error = NULL;
   GdkTexture *texture;
 
-  texture = gdk_texture_new_from_filename (filename, &error);
+  if (g_str_has_suffix (filename, ".texture"))
+    texture = gdk_texture_undump (filename, &error);
+  else
+    texture = gdk_texture_new_from_filename (filename, &error);
   if (!texture)
     {
       g_printerr ("%s\n", error->message);

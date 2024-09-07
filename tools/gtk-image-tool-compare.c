@@ -79,7 +79,10 @@ do_compare (int          *argc,
 
   for (int i = 0; i < 2; i++)
     {
-      texture[i] = gdk_texture_new_from_filename (filenames[i], &error);
+      if (g_str_has_suffix (filenames[i], ".texture"))
+        texture[i] = gdk_texture_undump (filenames[i], &error);
+      else
+        texture[i] = gdk_texture_new_from_filename (filenames[i], &error);
       if (texture[i] == NULL)
         {
           g_printerr (_("Failed to load %s: %s\n"), filenames[i], error->message);

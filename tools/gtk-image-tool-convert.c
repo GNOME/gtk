@@ -61,7 +61,9 @@ save_image (const char      *filename,
 
   texture = gdk_memory_texture_builder_build (builder);
 
-  if (g_str_has_suffix (output, ".tiff"))
+  if (g_str_has_suffix (output, ".texture"))
+    gdk_texture_dump (texture, output, NULL);
+  else if (g_str_has_suffix (output, ".tiff"))
     gdk_texture_save_to_tiff (texture, output);
   else
     gdk_texture_save_to_png (texture, output);
