@@ -246,7 +246,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   /**
-   * GtkCenterBox:baseline-position: (attributes org.gtk.Property.get=gtk_center_box_get_baseline_position org.gtk.Property.set=gtk_center_box_set_baseline_position)
+   * GtkCenterBox:baseline-position:
    *
    * The position of the baseline aligned widget if extra space is available.
    */
@@ -257,7 +257,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkCenterBox:start-widget: (attributes org.gtk.Property.get=gtk_center_box_get_start_widget org.gtk.Property.set=gtk_center_box_set_start_widget)
+   * GtkCenterBox:start-widget:
    *
    * The widget that is placed at the start position.
    *
@@ -273,7 +273,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkCenterBox:center-widget: (attributes org.gtk.Property.get=gtk_center_box_get_center_widget org.gtk.Property.set=gtk_center_box_set_center_widget)
+   * GtkCenterBox:center-widget:
    *
    * The widget that is placed at the center position.
    *
@@ -285,7 +285,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkCenterBox:end-widget: (attributes org.gtk.Property.get=gtk_center_box_get_end_widget org.gtk.Property.set=gtk_center_box_set_end_widget)
+   * GtkCenterBox:end-widget:
    *
    * The widget that is placed at the end position.
    *
@@ -301,7 +301,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkCenterBox:shrink-center-last: (attributes org.gtk.Property.get=gtk_center_box_get_shrink_center_last org.gtk.Property.set=gtk_center_box_set_shrink_center_last)
+   * GtkCenterBox:shrink-center-last:
    *
    * Whether to shrink the center widget after other children.
    *
@@ -492,7 +492,7 @@ gtk_center_box_get_end_widget (GtkCenterBox *self)
 }
 
 /**
- * gtk_center_box_set_baseline_position: (attributes org.gtk.Method.set_property=baseline-position)
+ * gtk_center_box_set_baseline_position:
  * @self: a `GtkCenterBox`
  * @position: a `GtkBaselinePosition`
  *
@@ -524,7 +524,7 @@ gtk_center_box_set_baseline_position (GtkCenterBox        *self,
 }
 
 /**
- * gtk_center_box_get_baseline_position: (attributes org.gtk.Method.get_property=baseline-position)
+ * gtk_center_box_get_baseline_position:
  * @self: a `GtkCenterBox`
  *
  * Gets the value set by gtk_center_box_set_baseline_position().
@@ -544,7 +544,7 @@ gtk_center_box_get_baseline_position (GtkCenterBox *self)
 }
 
 /**
- * gtk_center_box_set_shrink_center_last: (attributes org.gtk.Method.set_property=shrink-center-last)
+ * gtk_center_box_set_shrink_center_last:
  * @self: a `GtkCenterBox`
  * @shrink_center_last: whether to shrink the center widget after others
  *
@@ -581,7 +581,7 @@ gtk_center_box_set_shrink_center_last (GtkCenterBox *self,
 }
 
 /**
- * gtk_center_box_get_shrink_center_last: (attributes org.gtk.Method.get_property=shrink-center-last)
+ * gtk_center_box_get_shrink_center_last:
  * @self: a `GtkCenterBox`
  *
  * Gets whether @self shrinks the center widget after other children.

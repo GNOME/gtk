@@ -279,7 +279,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
   widget_class->snapshot = gtk_drawing_area_snapshot;
 
   /**
-   * GtkDrawingArea:content-width: (attributes org.gtk.Property.get=gtk_drawing_area_get_content_width org.gtk.Property.set=gtk_drawing_area_set_content_width)
+   * GtkDrawingArea:content-width:
    *
    * The content width.
    */
@@ -289,7 +289,7 @@ gtk_drawing_area_class_init (GtkDrawingAreaClass *class)
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDrawingArea:content-height: (attributes org.gtk.Property.get=gtk_drawing_area_get_content_height org.gtk.Property.set=gtk_drawing_area_set_content_height)
+   * GtkDrawingArea:content-height:
    *
    * The content height.
    */
@@ -345,7 +345,7 @@ gtk_drawing_area_new (void)
 }
 
 /**
- * gtk_drawing_area_set_content_width: (attributes org.gtk.Method.set_property=content-width)
+ * gtk_drawing_area_set_content_width:
  * @self: a `GtkDrawingArea`
  * @width: the width of contents
  *
@@ -377,7 +377,7 @@ gtk_drawing_area_set_content_width (GtkDrawingArea *self,
 }
 
 /**
- * gtk_drawing_area_get_content_width: (attributes org.gtk.Method.get_property=content-width)
+ * gtk_drawing_area_get_content_width:
  * @self: a `GtkDrawingArea`
  *
  * Retrieves the content width of the `GtkDrawingArea`.
@@ -395,7 +395,7 @@ gtk_drawing_area_get_content_width (GtkDrawingArea *self)
 }
 
 /**
- * gtk_drawing_area_set_content_height: (attributes org.gtk.Method.set_property=content-height)
+ * gtk_drawing_area_set_content_height:
  * @self: a `GtkDrawingArea`
  * @height: the height of contents
  *
@@ -427,7 +427,7 @@ gtk_drawing_area_set_content_height (GtkDrawingArea *self,
 }
 
 /**
- * gtk_drawing_area_get_content_height: (attributes org.gtk.Method.get_property=content-height)
+ * gtk_drawing_area_get_content_height:
  * @self: a `GtkDrawingArea`
  *
  * Retrieves the content height of the `GtkDrawingArea`.

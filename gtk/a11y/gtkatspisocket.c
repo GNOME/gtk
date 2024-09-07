@@ -287,7 +287,7 @@ gtk_at_spi_socket_class_init (GtkAtSpiSocketClass *klass)
   object_class->set_property = gtk_at_spi_socket_set_property;
 
   /**
-   * GtkAtSpiSocket:bus-name: (attributes org.gtk.Property.get=gtk_at_spi_socket_get_bus_name)
+   * GtkAtSpiSocket:bus-name:
    *
    * The bus name of the remote accessible client.
    *
@@ -302,7 +302,7 @@ gtk_at_spi_socket_class_init (GtkAtSpiSocketClass *klass)
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAtSpiSocket:height: (attributes org.gtk.Property.get=gtk_at_spi_socket_get_object_path)
+   * GtkAtSpiSocket:height:
    *
    * The object path of the remote accessible object that
    * the socket connects to.

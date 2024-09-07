@@ -312,7 +312,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
   g_object_class_override_property (gobject_class, PROP_VSCROLL_POLICY, "vscroll-policy");
 
   /**
-   * GtkViewport:scroll-to-focus: (attributes org.gtk.Property.get=gtk_viewport_get_scroll_to_focus org.gtk.Property.set=gtk_viewport_set_scroll_to_focus)
+   * GtkViewport:scroll-to-focus:
    *
    * Whether to scroll when the focus changes.
    *
@@ -327,7 +327,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkViewport:child: (attributes org.gtk.Property.get=gtk_viewport_get_child org.gtk.Property.set=gtk_viewport_set_child)
+   * GtkViewport:child:
    *
    * The child widget.
    */
@@ -558,7 +558,7 @@ gtk_viewport_adjustment_value_changed (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_viewport_get_scroll_to_focus: (attributes org.gtk.Method.get_property=scroll-to-focus)
+ * gtk_viewport_get_scroll_to_focus:
  * @viewport: a `GtkViewport`
  *
  * Gets whether the viewport is scrolling to keep the focused
@@ -575,7 +575,7 @@ gtk_viewport_get_scroll_to_focus (GtkViewport *viewport)
 }
 
 /**
- * gtk_viewport_set_scroll_to_focus: (attributes org.gtk.Method.set_property=scroll-to-focus)
+ * gtk_viewport_set_scroll_to_focus:
  * @viewport: a `GtkViewport`
  * @scroll_to_focus: whether to keep the focus widget scrolled to view
  *
@@ -652,7 +652,7 @@ clear_focus_change_handler (GtkViewport *viewport)
 }
 
 /**
- * gtk_viewport_set_child: (attributes org.gtk.Method.set_property=child)
+ * gtk_viewport_set_child:
  * @viewport: a `GtkViewport`
  * @child: (nullable): the child widget
  *
@@ -680,7 +680,7 @@ gtk_viewport_set_child (GtkViewport *viewport,
 }
 
 /**
- * gtk_viewport_get_child: (attributes org.gtk.Method.get_property=child)
+ * gtk_viewport_get_child:
  * @viewport: a `GtkViewport`
  *
  * Gets the child widget of @viewport.

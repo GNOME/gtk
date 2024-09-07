@@ -133,7 +133,7 @@ gtk_string_object_class_init (GtkStringObjectClass *class)
   object_class->get_property = gtk_string_object_get_property;
 
   /**
-   * GtkStringObject:string: (attributes org.gtk.Property.get=gtk_string_object_get_string)
+   * GtkStringObject:string:
    *
    * The string.
    */
@@ -172,7 +172,7 @@ gtk_string_object_new (const char *string)
 }
 
 /**
- * gtk_string_object_get_string: (attributes org.gtk.Method.get_property=string)
+ * gtk_string_object_get_string:
  * @self: a `GtkStringObject`
  *
  * Returns the string contained in a `GtkStringObject`.

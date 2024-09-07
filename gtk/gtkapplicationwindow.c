@@ -673,7 +673,7 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
   object_class->dispose = gtk_application_window_dispose;
 
   /**
-   * GtkApplicationWindow:show-menubar: (attributes org.gtk.Property.get=gtk_application_window_get_show_menubar org.gtk.Property.set=gtk_application_window_set_show_menubar)
+   * GtkApplicationWindow:show-menubar:
    *
    * If this property is %TRUE, the window will display a menubar
    * unless it is shown by the desktop shell.
@@ -708,7 +708,7 @@ gtk_application_window_new (GtkApplication *application)
 }
 
 /**
- * gtk_application_window_get_show_menubar: (attributes org.gtk.Method.get_property=show-menubar)
+ * gtk_application_window_get_show_menubar:
  * @window: a `GtkApplicationWindow`
  *
  * Returns whether the window will display a menubar for the app menu
@@ -724,7 +724,7 @@ gtk_application_window_get_show_menubar (GtkApplicationWindow *window)
 }
 
 /**
- * gtk_application_window_set_show_menubar: (attributes org.gtk.Method.set_property=show-menubar)
+ * gtk_application_window_set_show_menubar:
  * @window: a `GtkApplicationWindow`
  * @show_menubar: whether to show a menubar when needed
  *

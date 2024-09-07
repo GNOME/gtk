@@ -131,7 +131,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
   class->value_changed = NULL;
 
   /**
-   * GtkAdjustment:value: (attributes org.gtk.Property.get=gtk_adjustment_get_value org.gtk.Property.set=gtk_adjustment_set_value)
+   * GtkAdjustment:value:
    *
    * The value of the adjustment.
    */
@@ -142,7 +142,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:lower: (attributes org.gtk.Property.get=gtk_adjustment_get_lower org.gtk.Property.set=gtk_adjustment_set_lower)
+   * GtkAdjustment:lower:
    *
    * The minimum value of the adjustment.
    */
@@ -153,7 +153,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:upper: (attributes org.gtk.Property.get=gtk_adjustment_get_upper org.gtk.Property.set=gtk_adjustment_set_upper)
+   * GtkAdjustment:upper:
    *
    * The maximum value of the adjustment.
    *
@@ -167,7 +167,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:step-increment: (attributes org.gtk.Property.get=gtk_adjustment_get_step_increment org.gtk.Property.set=gtk_adjustment_set_step_increment)
+   * GtkAdjustment:step-increment:
    *
    * The step increment of the adjustment.
    */
@@ -178,7 +178,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:page-increment: (attributes org.gtk.Property.get=gtk_adjustment_get_page_increment org.gtk.Property.set=gtk_adjustment_set_page_increment)
+   * GtkAdjustment:page-increment:
    *
    * The page increment of the adjustment.
    */
@@ -189,7 +189,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkAdjustment:page-size: (attributes org.gtk.Property.get=gtk_adjustment_get_page_size org.gtk.Property.set=gtk_adjustment_set_page_size)
+   * GtkAdjustment:page-size:
    *
    * The page size of the adjustment.
    *
@@ -399,7 +399,7 @@ gtk_adjustment_new (double value,
 }
 
 /**
- * gtk_adjustment_get_value: (attributes org.gtk.Method.get_property=value)
+ * gtk_adjustment_get_value:
  * @adjustment: a `GtkAdjustment`
  *
  * Gets the current value of the adjustment.
@@ -535,7 +535,7 @@ gtk_adjustment_set_value_internal (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_set_value: (attributes org.gtk.Method.set_property=value)
+ * gtk_adjustment_set_value:
  * @adjustment: a `GtkAdjustment`
  * @value: the new value
  *
@@ -568,7 +568,7 @@ gtk_adjustment_animate_to_value (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_get_lower: (attributes org.gtk.Method.get_property=lower)
+ * gtk_adjustment_get_lower:
  * @adjustment: a `GtkAdjustment`
  *
  * Retrieves the minimum value of the adjustment.
@@ -586,7 +586,7 @@ gtk_adjustment_get_lower (GtkAdjustment *adjustment)
 }
 
 /**
- * gtk_adjustment_set_lower: (attributes org.gtk.Method.set_property=lower)
+ * gtk_adjustment_set_lower:
  * @adjustment: a `GtkAdjustment`
  * @lower: the new minimum value
  *
@@ -620,7 +620,7 @@ gtk_adjustment_set_lower (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_get_upper: (attributes org.gtk.Method.get_property=upper)
+ * gtk_adjustment_get_upper:
  * @adjustment: a `GtkAdjustment`
  *
  * Retrieves the maximum value of the adjustment.
@@ -638,7 +638,7 @@ gtk_adjustment_get_upper (GtkAdjustment *adjustment)
 }
 
 /**
- * gtk_adjustment_set_upper: (attributes org.gtk.Method.set_property=upper)
+ * gtk_adjustment_set_upper:
  * @adjustment: a `GtkAdjustment`
  * @upper: the new maximum value
  *
@@ -667,7 +667,7 @@ gtk_adjustment_set_upper (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_get_step_increment: (attributes org.gtk.Method.get_property=step-increment)
+ * gtk_adjustment_get_step_increment:
  * @adjustment: a `GtkAdjustment`
  *
  * Retrieves the step increment of the adjustment.
@@ -685,7 +685,7 @@ gtk_adjustment_get_step_increment (GtkAdjustment *adjustment)
 }
 
 /**
- * gtk_adjustment_set_step_increment: (attributes org.gtk.Method.set_property=step-increment)
+ * gtk_adjustment_set_step_increment:
  * @adjustment: a `GtkAdjustment`
  * @step_increment: the new step increment
  *
@@ -711,7 +711,7 @@ gtk_adjustment_set_step_increment (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_get_page_increment: (attributes org.gtk.Method.get_property=page-increment)
+ * gtk_adjustment_get_page_increment:
  * @adjustment: a `GtkAdjustment`
  *
  * Retrieves the page increment of the adjustment.
@@ -729,7 +729,7 @@ gtk_adjustment_get_page_increment (GtkAdjustment *adjustment)
 }
 
 /**
- * gtk_adjustment_set_page_increment: (attributes org.gtk.Method.set_property=page-increment)
+ * gtk_adjustment_set_page_increment:
  * @adjustment: a `GtkAdjustment`
  * @page_increment: the new page increment
  *
@@ -755,7 +755,7 @@ gtk_adjustment_set_page_increment (GtkAdjustment *adjustment,
 }
 
 /**
- * gtk_adjustment_get_page_size: (attributes org.gtk.Method.get_property=page-size)
+ * gtk_adjustment_get_page_size:
  * @adjustment: a `GtkAdjustment`
  *
  * Retrieves the page size of the adjustment.
@@ -773,7 +773,7 @@ gtk_adjustment_get_page_size (GtkAdjustment *adjustment)
 }
 
 /**
- * gtk_adjustment_set_page_size: (attributes org.gtk.Method.set_property=page-size)
+ * gtk_adjustment_set_page_size:
  * @adjustment: a `GtkAdjustment`
  * @page_size: the new page size
  *

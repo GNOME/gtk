@@ -498,7 +498,7 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
   object_class->set_property = gtk_shortcut_label_set_property;
 
   /**
-   * GtkShortcutLabel:accelerator: (attributes org.gtk.Property.get=gtk_shortcut_label_get_accelerator org.gtk.Property.set=gtk_shortcut_label_set_accelerator)
+   * GtkShortcutLabel:accelerator:
    *
    * The accelerator that @self displays.
    *
@@ -511,7 +511,7 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
                          (G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
-   * GtkShortcutLabel:disabled-text: (attributes org.gtk.Property.get=gtk_shortcut_label_get_disabled_text org.gtk.Property.set=gtk_shortcut_label_set_disabled_text)
+   * GtkShortcutLabel:disabled-text:
    *
    * The text that is displayed when no accelerator is set.
    */
@@ -551,7 +551,7 @@ gtk_shortcut_label_new (const char *accelerator)
 }
 
 /**
- * gtk_shortcut_label_get_accelerator: (attributes org.gtk.Method.get_property=accelerator)
+ * gtk_shortcut_label_get_accelerator:
  * @self: a `GtkShortcutLabel`
  *
  * Retrieves the current accelerator of @self.
@@ -567,7 +567,7 @@ gtk_shortcut_label_get_accelerator (GtkShortcutLabel *self)
 }
 
 /**
- * gtk_shortcut_label_set_accelerator: (attributes org.gtk.Method.set_property=accelerator)
+ * gtk_shortcut_label_set_accelerator:
  * @self: a `GtkShortcutLabel`
  * @accelerator: the new accelerator
  *
@@ -589,7 +589,7 @@ gtk_shortcut_label_set_accelerator (GtkShortcutLabel *self,
 }
 
 /**
- * gtk_shortcut_label_get_disabled_text: (attributes org.gtk.Method.get_property=disabled-text)
+ * gtk_shortcut_label_get_disabled_text:
  * @self: a `GtkShortcutLabel`
  *
  * Retrieves the text that is displayed when no accelerator is set.
@@ -606,7 +606,7 @@ gtk_shortcut_label_get_disabled_text (GtkShortcutLabel *self)
 }
 
 /**
- * gtk_shortcut_label_set_disabled_text: (attributes org.gtk.Method.set_property=disabled-text)
+ * gtk_shortcut_label_set_disabled_text:
  * @self: a `GtkShortcutLabel`
  * @disabled_text: the text to be displayed when no accelerator is set
  *

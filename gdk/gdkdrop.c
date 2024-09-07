@@ -320,7 +320,7 @@ gdk_drop_class_init (GdkDropClass *klass)
   object_class->finalize = gdk_drop_finalize;
 
   /**
-   * GdkDrop:actions: (attributes org.gtk.Property.get=gdk_drop_get_actions)
+   * GdkDrop:actions:
    *
    * The possible actions for this drop
    */
@@ -334,7 +334,7 @@ gdk_drop_class_init (GdkDropClass *klass)
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDrop:device: (attributes org.gtk.Property.get=gdk_drop_get_device)
+   * GdkDrop:device:
    *
    * The `GdkDevice` performing the drop
    */
@@ -347,7 +347,7 @@ gdk_drop_class_init (GdkDropClass *klass)
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDrop:display: (attributes org.gtk.Property.get=gdk_drop_get_display)
+   * GdkDrop:display:
    *
    * The `GdkDisplay` that the drop belongs to.
    */
@@ -359,7 +359,7 @@ gdk_drop_class_init (GdkDropClass *klass)
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDrop:drag: (attributes org.gtk.Property.get=gdk_drop_get_drag)
+   * GdkDrop:drag:
    *
    * The `GdkDrag` that initiated this drop
    */
@@ -372,7 +372,7 @@ gdk_drop_class_init (GdkDropClass *klass)
                          G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDrop:formats: (attributes org.gtk.Property.get=gdk_drop_get_formats)
+   * GdkDrop:formats:
    *
    * The possible formats that the drop can provide its data in.
    */
@@ -385,7 +385,7 @@ gdk_drop_class_init (GdkDropClass *klass)
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GdkDrop:surface: (attributes org.gtk.Property.get=gdk_drop_get_surface)
+   * GdkDrop:surface:
    *
    * The `GdkSurface` the drop happens on
    */
@@ -406,7 +406,7 @@ gdk_drop_init (GdkDrop *self)
 }
 
 /**
- * gdk_drop_get_display: (attributes org.gtk.Method.get_property=display)
+ * gdk_drop_get_display:
  * @self: a `GdkDrop`
  *
  * Gets the `GdkDisplay` that @self was created for.
@@ -424,7 +424,7 @@ gdk_drop_get_display (GdkDrop *self)
 }
 
 /**
- * gdk_drop_get_device: (attributes org.gtk.Method.get_property=device)
+ * gdk_drop_get_device:
  * @self: a `GdkDrop`
  *
  * Returns the `GdkDevice` performing the drop.
@@ -442,7 +442,7 @@ gdk_drop_get_device (GdkDrop *self)
 }
 
 /**
- * gdk_drop_get_formats: (attributes org.gtk.Method.get_property=formats)
+ * gdk_drop_get_formats:
  * @self: a `GdkDrop`
  *
  * Returns the `GdkContentFormats` that the drop offers the data
@@ -461,7 +461,7 @@ gdk_drop_get_formats (GdkDrop *self)
 }
 
 /**
- * gdk_drop_get_surface: (attributes org.gtk.Method.get_property=surface)
+ * gdk_drop_get_surface:
  * @self: a `GdkDrop`
  *
  * Returns the `GdkSurface` performing the drop.
@@ -479,7 +479,7 @@ gdk_drop_get_surface (GdkDrop *self)
 }
 
 /**
- * gdk_drop_get_actions: (attributes org.gtk.Method.get_property=actions)
+ * gdk_drop_get_actions:
  * @self: a `GdkDrop`
  *
  * Returns the possible actions for this `GdkDrop`.
@@ -528,7 +528,7 @@ gdk_drop_set_actions (GdkDrop       *self,
 }
 
 /**
- * gdk_drop_get_drag: (attributes org.gtk.Method.get_property=drag)
+ * gdk_drop_get_drag:
  * @self: a `GdkDrop`
  *
  * If this is an in-app drag-and-drop operation, returns the `GdkDrag`

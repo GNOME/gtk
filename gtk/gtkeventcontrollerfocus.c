@@ -187,7 +187,7 @@ gtk_event_controller_focus_class_init (GtkEventControllerFocusClass *klass)
   controller_class->handle_crossing = gtk_event_controller_focus_handle_crossing;
 
   /**
-   * GtkEventControllerFocus:is-focus: (attributes org.gtk.Property.get=gtk_event_controller_focus_is_focus)
+   * GtkEventControllerFocus:is-focus:
    *
    * %TRUE if focus is in the controllers widget itself,
    * as opposed to in a descendent widget.
@@ -204,7 +204,7 @@ gtk_event_controller_focus_class_init (GtkEventControllerFocusClass *klass)
                             G_PARAM_READABLE);
 
   /**
-   * GtkEventControllerFocus:contains-focus: (attributes org.gtk.Property.get=gtk_event_controller_focus_contains_focus)
+   * GtkEventControllerFocus:contains-focus:
    *
    * %TRUE if focus is contained in the controllers widget.
    *
@@ -287,7 +287,7 @@ gtk_event_controller_focus_new (void)
 }
 
 /**
- * gtk_event_controller_focus_contains_focus: (attributes org.gtk.Method.get_property=contains-focus)
+ * gtk_event_controller_focus_contains_focus:
  * @self: a `GtkEventControllerFocus`
  *
  * Returns %TRUE if focus is within @self or one of its children.
@@ -303,7 +303,7 @@ gtk_event_controller_focus_contains_focus (GtkEventControllerFocus *self)
 }
 
 /**
- * gtk_event_controller_focus_is_focus: (attributes org.gtk.Method.get_property=is-focus)
+ * gtk_event_controller_focus_is_focus:
  * @self: a `GtkEventControllerFocus`
  *
  * Returns %TRUE if focus is within @self, but not one of its children.

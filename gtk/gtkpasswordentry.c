@@ -493,7 +493,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPasswordEntry:show-peek-icon: (attributes org.gtk.Property.get=gtk_password_entry_get_show_peek_icon org.gtk.Property.set=gtk_password_entry_set_show_peek_icon)
+   * GtkPasswordEntry:show-peek-icon:
    *
    * Whether to show an icon for revealing the content.
    */
@@ -503,7 +503,7 @@ gtk_password_entry_class_init (GtkPasswordEntryClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPasswordEntry:extra-menu: (attributes org.gtk.Property.get=gtk_password_entry_get_extra_menu org.gtk.Property.set=gtk_password_entry_set_extra_menu)
+   * GtkPasswordEntry:extra-menu:
    *
    * A menu model whose contents will be appended to
    * the context menu.
@@ -596,7 +596,7 @@ gtk_password_entry_new (void)
 }
 
 /**
- * gtk_password_entry_set_show_peek_icon: (attributes org.gtk.Method.set_property=show-peek-icon)
+ * gtk_password_entry_set_show_peek_icon:
  * @entry: a `GtkPasswordEntry`
  * @show_peek_icon: whether to show the peek icon
  *
@@ -651,7 +651,7 @@ gtk_password_entry_set_show_peek_icon (GtkPasswordEntry *entry,
 }
 
 /**
- * gtk_password_entry_get_show_peek_icon: (attributes org.gtk.Method.get_property=show-peek-icon)
+ * gtk_password_entry_get_show_peek_icon:
  * @entry: a `GtkPasswordEntry`
  *
  * Returns whether the entry is showing an icon to
@@ -668,7 +668,7 @@ gtk_password_entry_get_show_peek_icon (GtkPasswordEntry *entry)
 }
 
 /**
- * gtk_password_entry_set_extra_menu: (attributes org.gtk.Method.set_property=extra-menu)
+ * gtk_password_entry_set_extra_menu:
  * @entry: a `GtkPasswordEntry`
  * @model: (nullable): a `GMenuModel`
  *
@@ -719,7 +719,7 @@ gtk_password_entry_set_extra_menu (GtkPasswordEntry *entry,
 }
 
 /**
- * gtk_password_entry_get_extra_menu: (attributes org.gtk.Method.get_property=extra-menu)
+ * gtk_password_entry_get_extra_menu:
  * @entry: a `GtkPasswordEntry`
  *
  * Gets the menu model set with gtk_password_entry_set_extra_menu().

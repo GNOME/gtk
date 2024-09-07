@@ -400,7 +400,7 @@ gtk_picture_class_init (GtkPictureClass *class)
   widget_class->measure = gtk_picture_measure;
 
   /**
-   * GtkPicture:paintable: (attributes org.gtk.Property.get=gtk_picture_get_paintable org.gtk.Property.set=gtk_picture_set_paintable)
+   * GtkPicture:paintable:
    *
    * The `GdkPaintable` to be displayed by this `GtkPicture`.
    */
@@ -410,7 +410,7 @@ gtk_picture_class_init (GtkPictureClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPicture:file: (attributes org.gtk.Property.get=gtk_picture_get_file org.gtk.Property.set=gtk_picture_set_file)
+   * GtkPicture:file:
    *
    * The `GFile` that is displayed or %NULL if none.
    */
@@ -420,7 +420,7 @@ gtk_picture_class_init (GtkPictureClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPicture:alternative-text: (attributes org.gtk.Property.get=gtk_picture_get_alternative_text org.gtk.Property.set=gtk_picture_set_alternative_text)
+   * GtkPicture:alternative-text:
    *
    * The alternative textual description for the picture.
    */
@@ -430,7 +430,7 @@ gtk_picture_class_init (GtkPictureClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPicture:keep-aspect-ratio: (attributes org.gtk.Property.get=gtk_picture_get_keep_aspect_ratio org.gtk.Property.set=gtk_picture_set_keep_aspect_ratio)
+   * GtkPicture:keep-aspect-ratio:
    *
    * Whether the GtkPicture will render its contents trying to preserve the aspect
    * ratio.
@@ -445,7 +445,7 @@ gtk_picture_class_init (GtkPictureClass *class)
                             G_PARAM_DEPRECATED);
 
   /**
-   * GtkPicture:can-shrink: (attributes org.gtk.Property.get=gtk_picture_get_can_shrink org.gtk.Property.set=gtk_picture_set_can_shrink)
+   * GtkPicture:can-shrink:
    *
    * If the `GtkPicture` can be made smaller than the natural size of its contents.
    */
@@ -455,7 +455,7 @@ gtk_picture_class_init (GtkPictureClass *class)
                             GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkPicture:content-fit: (attributes org.gtk.Property.get=gtk_picture_get_content_fit org.gtk.Property.set=gtk_picture_set_content_fit)
+   * GtkPicture:content-fit:
    *
    * How the content should be resized to fit inside the `GtkPicture`.
    *
@@ -651,7 +651,7 @@ gtk_picture_new_for_resource (const char *resource_path)
 }
 
 /**
- * gtk_picture_set_file: (attributes org.gtk.Method.set_property=file)
+ * gtk_picture_set_file:
  * @self: a `GtkPicture`
  * @file: (nullable): a `GFile`
  *
@@ -688,7 +688,7 @@ gtk_picture_set_file (GtkPicture *self,
 }
 
 /**
- * gtk_picture_get_file: (attributes org.gtk.Method.get_property=file)
+ * gtk_picture_get_file:
  * @self: a `GtkPicture`
  *
  * Gets the `GFile` currently displayed if @self is displaying a file.
@@ -809,7 +809,7 @@ gtk_picture_set_pixbuf (GtkPicture *self,
 }
 
 /**
- * gtk_picture_set_paintable: (attributes org.gtk.Method.set_property=paintable)
+ * gtk_picture_set_paintable:
  * @self: a `GtkPicture`
  * @paintable: (nullable): a `GdkPaintable`
  *
@@ -863,7 +863,7 @@ gtk_picture_set_paintable (GtkPicture   *self,
 }
 
 /**
- * gtk_picture_get_paintable: (attributes org.gtk.Method.get_property=paintable)
+ * gtk_picture_get_paintable:
  * @self: a `GtkPicture`
  *
  * Gets the `GdkPaintable` being displayed by the `GtkPicture`.
@@ -879,7 +879,7 @@ gtk_picture_get_paintable (GtkPicture *self)
 }
 
 /**
- * gtk_picture_set_keep_aspect_ratio: (attributes org.gtk.Method.set_property=keep-aspect-ratio)
+ * gtk_picture_set_keep_aspect_ratio:
  * @self: a `GtkPicture`
  * @keep_aspect_ratio: whether to keep aspect ratio
  *
@@ -908,7 +908,7 @@ gtk_picture_set_keep_aspect_ratio (GtkPicture *self,
 }
 
 /**
- * gtk_picture_get_keep_aspect_ratio: (attributes org.gtk.Method.get_property=keep-aspect-ratio)
+ * gtk_picture_get_keep_aspect_ratio:
  * @self: a `GtkPicture`
  *
  * Returns whether the `GtkPicture` preserves its contents aspect ratio.
@@ -928,7 +928,7 @@ gtk_picture_get_keep_aspect_ratio (GtkPicture *self)
 }
 
 /**
- * gtk_picture_set_can_shrink: (attributes org.gtk.Method.set_property=can-shrink)
+ * gtk_picture_set_can_shrink:
  * @self: a `GtkPicture`
  * @can_shrink: if @self can be made smaller than its contents
  *
@@ -960,7 +960,7 @@ gtk_picture_set_can_shrink (GtkPicture *self,
 }
 
 /**
- * gtk_picture_get_can_shrink: (attributes org.gtk.Method.get_property=can-shrink)
+ * gtk_picture_get_can_shrink:
  * @self: a `GtkPicture`
  *
  * Returns whether the `GtkPicture` respects its contents size.
@@ -976,7 +976,7 @@ gtk_picture_get_can_shrink (GtkPicture *self)
 }
 
 /**
- * gtk_picture_set_content_fit: (attributes org.gtk.Method.set_property=content-fit)
+ * gtk_picture_set_content_fit:
  * @self: a `GtkPicture`
  * @content_fit: the content fit mode
  *
@@ -1011,7 +1011,7 @@ gtk_picture_set_content_fit (GtkPicture    *self,
 }
 
 /**
- * gtk_picture_get_content_fit: (attributes org.gtk.Method.get_property=content-fit)
+ * gtk_picture_get_content_fit:
  * @self: a `GtkPicture`
  *
  * Returns the fit mode for the content of the `GtkPicture`.
@@ -1031,7 +1031,7 @@ gtk_picture_get_content_fit (GtkPicture *self)
 }
 
 /**
- * gtk_picture_set_alternative_text: (attributes org.gtk.Method.set_property=alternative-text)
+ * gtk_picture_set_alternative_text:
  * @self: a `GtkPicture`
  * @alternative_text: (nullable): a textual description of the contents
  *
@@ -1063,7 +1063,7 @@ gtk_picture_set_alternative_text (GtkPicture *self,
 }
 
 /**
- * gtk_picture_get_alternative_text: (attributes org.gtk.Method.get_property=alternative-text)
+ * gtk_picture_get_alternative_text:
  * @self: a `GtkPicture`
  *
  * Gets the alternative textual description of the picture.

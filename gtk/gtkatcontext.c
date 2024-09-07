@@ -246,7 +246,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
   klass->update_text_contents = gtk_at_context_real_update_text_contents;
 
   /**
-   * GtkATContext:accessible-role: (attributes org.gtk.Property.get=gtk_at_context_get_accessible_role)
+   * GtkATContext:accessible-role:
    *
    * The accessible role used by the AT context.
    *
@@ -262,7 +262,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
                        G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkATContext:accessible: (attributes org.gtk.Property.get=gtk_at_context_get_accessible)
+   * GtkATContext:accessible:
    *
    * The `GtkAccessible` that created the `GtkATContext` instance.
    */
@@ -438,7 +438,7 @@ gtk_at_context_init (GtkATContext *self)
 }
 
 /**
- * gtk_at_context_get_accessible: (attributes org.gtk.Method.get_property=accessible)
+ * gtk_at_context_get_accessible:
  * @self: a `GtkATContext`
  *
  * Retrieves the `GtkAccessible` using this context.
@@ -478,7 +478,7 @@ gtk_at_context_set_accessible_role (GtkATContext      *self,
 }
 
 /**
- * gtk_at_context_get_accessible_role: (attributes org.gtk.Method.get_property=accessible-role)
+ * gtk_at_context_get_accessible_role:
  * @self: a `GtkATContext`
  *
  * Retrieves the accessible role of this context.

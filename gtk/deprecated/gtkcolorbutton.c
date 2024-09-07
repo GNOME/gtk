@@ -173,7 +173,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
   g_object_class_override_property (gobject_class, PROP_USE_ALPHA, "use-alpha");
 
   /**
-   * GtkColorButton:title: (attributes org.gtk.Property.get=gtk_color_button_get_title org.gtk.Property.set=gtk_color_button_set_title)
+   * GtkColorButton:title:
    *
    * The title of the color chooser dialog
    */
@@ -243,7 +243,7 @@ gtk_color_button_class_init (GtkColorButtonClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkColorButton:modal: (attributes org.gtk.Property.get=gtk_color_button_get_modal org.gtk.Property.set=gtk_color_button_set_modal)
+   * GtkColorButton:modal:
    *
    * Whether the color chooser dialog should be modal.
    */
@@ -565,7 +565,7 @@ set_use_alpha (GtkColorButton *button,
 }
 
 /**
- * gtk_color_button_set_title: (attributes org.gtk.Method.set_property=title)
+ * gtk_color_button_set_title:
  * @button: a `GtkColorButton`
  * @title: String containing new window title
  *
@@ -592,7 +592,7 @@ gtk_color_button_set_title (GtkColorButton *button,
 }
 
 /**
- * gtk_color_button_get_title: (attributes org.gtk.Method.get_property=title)
+ * gtk_color_button_get_title:
  * @button: a `GtkColorButton`
  *
  * Gets the title of the color chooser dialog.
@@ -610,7 +610,7 @@ gtk_color_button_get_title (GtkColorButton *button)
 }
 
 /**
- * gtk_color_button_set_modal: (attributes org.gtk.Method.set_property=modal)
+ * gtk_color_button_set_modal:
  * @button: a `GtkColorButton`
  * @modal: %TRUE to make the dialog modal
  *
@@ -636,7 +636,7 @@ gtk_color_button_set_modal (GtkColorButton *button,
 }
 
 /**
- * gtk_color_button_get_modal: (attributes org.gtk.Method.get_property=modal)
+ * gtk_color_button_get_modal:
  * @button: a `GtkColorButton`
  *
  * Gets whether the dialog is modal.

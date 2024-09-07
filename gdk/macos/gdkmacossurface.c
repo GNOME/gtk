@@ -533,7 +533,7 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   surface_class->set_opaque_region = gdk_macos_surface_set_opaque_region;
 
   /**
-   * GdkMacosSurface:native: (attributes org.gtk.Property.get=gdk_macos_surface_get_native_window)
+   * GdkMacosSurface:native:
    *
    * The "native" property contains the underlying NSWindow.
    */
@@ -613,7 +613,7 @@ _gdk_macos_surface_set_native (GdkMacosSurface *self,
 }
 
 /**
- * gdk_macos_surface_get_native_window: (attributes org.gtk.Method.get_property=native)
+ * gdk_macos_surface_get_native_window:
  * @self: a #GdkMacosSurface
  *
  * Gets the underlying NSWindow used by the surface.

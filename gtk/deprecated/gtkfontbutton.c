@@ -497,7 +497,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
   _gtk_font_chooser_install_properties (gobject_class);
 
   /**
-   * GtkFontButton:title: (attributes org.gtk.Property.get=gtk_font_button_get_title org.gtk.Property.set=gtk_font_button_set_title)
+   * GtkFontButton:title:
    *
    * The title of the font chooser dialog.
    */
@@ -508,7 +508,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                         GTK_PARAM_READWRITE));
 
   /**
-   * GtkFontButton:use-font: (attributes org.gtk.Property.get=gtk_font_button_get_use_font org.gtk.Property.set=gtk_font_button_set_use_font)
+   * GtkFontButton:use-font:
    *
    * Whether the buttons label will be drawn in the selected font.
    */
@@ -519,7 +519,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkFontButton:use-size: (attributes org.gtk.Property.get=gtk_font_button_get_use_size org.gtk.Property.set=gtk_font_button_set_use_size)
+   * GtkFontButton:use-size:
    *
    * Whether the buttons label will use the selected font size.
    */
@@ -530,7 +530,7 @@ gtk_font_button_class_init (GtkFontButtonClass *klass)
                                                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkFontButton:modal: (attributes org.gtk.Property.get=gtk_font_button_get_modal org.gtk.Property.set=gtk_font_button_set_modal)
+   * GtkFontButton:modal:
    *
    * Whether the font chooser dialog should be modal.
    */
@@ -777,7 +777,7 @@ gtk_font_button_new_with_font (const char *fontname)
 }
 
 /**
- * gtk_font_button_set_title: (attributes org.gtk.Method.set_property=title)
+ * gtk_font_button_set_title:
  * @font_button: a `GtkFontButton`
  * @title: a string containing the font chooser dialog title
  *
@@ -803,7 +803,7 @@ gtk_font_button_set_title (GtkFontButton *font_button,
 }
 
 /**
- * gtk_font_button_get_title: (attributes org.gtk.Method.get_property=title)
+ * gtk_font_button_get_title:
  * @font_button: a `GtkFontButton`
  *
  * Retrieves the title of the font chooser dialog.
@@ -822,7 +822,7 @@ gtk_font_button_get_title (GtkFontButton *font_button)
 }
 
 /**
- * gtk_font_button_set_modal: (attributes org.gtk.Method.set_property=modal)
+ * gtk_font_button_set_modal:
  * @font_button: a `GtkFontButton`
  * @modal: %TRUE to make the dialog modal
  *
@@ -848,7 +848,7 @@ gtk_font_button_set_modal (GtkFontButton *font_button,
 }
 
 /**
- * gtk_font_button_get_modal: (attributes org.gtk.Method.get_property=modal)
+ * gtk_font_button_get_modal:
  * @font_button: a `GtkFontButton`
  *
  * Gets whether the dialog is modal.
@@ -866,7 +866,7 @@ gtk_font_button_get_modal (GtkFontButton *font_button)
 }
 
 /**
- * gtk_font_button_get_use_font: (attributes org.gtk.Method.get_property=use-font)
+ * gtk_font_button_get_use_font:
  * @font_button: a `GtkFontButton`
  *
  * Returns whether the selected font is used in the label.
@@ -884,7 +884,7 @@ gtk_font_button_get_use_font (GtkFontButton *font_button)
 }
 
 /**
- * gtk_font_button_set_use_font: (attributes org.gtk.Method.set_property=use-font)
+ * gtk_font_button_set_use_font:
  * @font_button: a `GtkFontButton`
  * @use_font: If %TRUE, font name will be written using font chosen.
  *
@@ -913,7 +913,7 @@ gtk_font_button_set_use_font (GtkFontButton *font_button,
 
 
 /**
- * gtk_font_button_get_use_size: (attributes org.gtk.Method.get_property=use-size)
+ * gtk_font_button_get_use_size:
  * @font_button: a `GtkFontButton`
  *
  * Returns whether the selected size is used in the label.
@@ -931,7 +931,7 @@ gtk_font_button_get_use_size (GtkFontButton *font_button)
 }
 
 /**
- * gtk_font_button_set_use_size: (attributes org.gtk.Method.set_property=use-size)
+ * gtk_font_button_set_use_size:
  * @font_button: a `GtkFontButton`
  * @use_size: If %TRUE, font name will be written using the
  *   selected size.

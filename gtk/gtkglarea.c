@@ -900,7 +900,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                          G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkGLArea:auto-render: (attributes org.gtk.Property.get=gtk_gl_area_get_auto_render org.gtk.Property.set=gtk_gl_area_set_auto_render)
+   * GtkGLArea:auto-render:
    *
    * If set to %TRUE the ::render signal will be emitted every time
    * the widget draws.
@@ -921,7 +921,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGLArea:has-depth-buffer: (attributes org.gtk.Property.get=gtk_gl_area_get_has_depth_buffer org.gtk.Property.set=gtk_gl_area_set_has_depth_buffer)
+   * GtkGLArea:has-depth-buffer:
    *
    * If set to %TRUE the widget will allocate and enable a depth buffer for the
    * target framebuffer.
@@ -938,7 +938,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGLArea:has-stencil-buffer: (attributes org.gtk.Property.get=gtk_gl_area_get_has_stencil_buffer org.gtk.Property.set=gtk_gl_area_set_has_stencil_buffer)
+   * GtkGLArea:has-stencil-buffer:
    *
    * If set to %TRUE the widget will allocate and enable a stencil buffer for the
    * target framebuffer.
@@ -951,7 +951,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGLArea:use-es: (attributes org.gtk.Property.get=gtk_gl_area_get_use_es org.gtk.Property.set=gtk_gl_area_set_use_es)
+   * GtkGLArea:use-es:
    *
    * If set to %TRUE the widget will try to create a `GdkGLContext` using
    * OpenGL ES instead of OpenGL.
@@ -966,7 +966,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                           G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGLArea:allowed-apis: (attributes org.gtk.Property.get=gtk_gl_area_get_allowed_apis org.gtk.Property.set=gtk_gl_area_set_allowed_apis)
+   * GtkGLArea:allowed-apis:
    *
    * The allowed APIs.
    *
@@ -981,7 +981,7 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
                         G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGLArea:api: (attributes org.gtk.Property.get=gtk_gl_area_get_api)
+   * GtkGLArea:api:
    *
    * The API currently in use.
    *
@@ -1155,7 +1155,7 @@ gtk_gl_area_get_error (GtkGLArea *area)
 }
 
 /**
- * gtk_gl_area_set_use_es: (attributes org.gtk.Method.set_property=use-es)
+ * gtk_gl_area_set_use_es:
  * @area: a `GtkGLArea`
  * @use_es: whether to use OpenGL or OpenGL ES
  *
@@ -1185,7 +1185,7 @@ gtk_gl_area_set_use_es (GtkGLArea *area,
 }
 
 /**
- * gtk_gl_area_get_use_es: (attributes org.gtk.Method.get_property=use-es)
+ * gtk_gl_area_get_use_es:
  * @area: a `GtkGLArea`
  *
  * Returns whether the `GtkGLArea` should use OpenGL ES.
@@ -1343,7 +1343,7 @@ gtk_gl_area_get_required_version (GtkGLArea *area,
 }
 
 /**
- * gtk_gl_area_get_has_depth_buffer: (attributes org.gtk.Method.get_property=has-depth-buffer)
+ * gtk_gl_area_get_has_depth_buffer:
  * @area: a `GtkGLArea`
  *
  * Returns whether the area has a depth buffer.
@@ -1361,7 +1361,7 @@ gtk_gl_area_get_has_depth_buffer (GtkGLArea *area)
 }
 
 /**
- * gtk_gl_area_set_has_depth_buffer: (attributes org.gtk.Method.set_property=has-depth-buffer)
+ * gtk_gl_area_set_has_depth_buffer:
  * @area: a `GtkGLArea`
  * @has_depth_buffer: %TRUE to add a depth buffer
  *
@@ -1392,7 +1392,7 @@ gtk_gl_area_set_has_depth_buffer (GtkGLArea *area,
 }
 
 /**
- * gtk_gl_area_get_has_stencil_buffer: (attributes org.gtk.Method.get_property=has-stencil-buffer)
+ * gtk_gl_area_get_has_stencil_buffer:
  * @area: a `GtkGLArea`
  *
  * Returns whether the area has a stencil buffer.
@@ -1410,7 +1410,7 @@ gtk_gl_area_get_has_stencil_buffer (GtkGLArea *area)
 }
 
 /**
- * gtk_gl_area_set_has_stencil_buffer: (attributes org.gtk.Method.set_property=has-stencil-buffer)
+ * gtk_gl_area_set_has_stencil_buffer:
  * @area: a `GtkGLArea`
  * @has_stencil_buffer: %TRUE to add a stencil buffer
  *
@@ -1468,7 +1468,7 @@ gtk_gl_area_queue_render (GtkGLArea *area)
 
 
 /**
- * gtk_gl_area_get_auto_render: (attributes org.gtk.Method.get_property=auto-render)
+ * gtk_gl_area_get_auto_render:
  * @area: a `GtkGLArea`
  *
  * Returns whether the area is in auto render mode or not.
@@ -1486,7 +1486,7 @@ gtk_gl_area_get_auto_render (GtkGLArea *area)
 }
 
 /**
- * gtk_gl_area_set_auto_render: (attributes org.gtk.Method.set_property=auto-render)
+ * gtk_gl_area_set_auto_render:
  * @area: a `GtkGLArea`
  * @auto_render: a boolean
  *

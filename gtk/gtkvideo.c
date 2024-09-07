@@ -410,7 +410,7 @@ gtk_video_class_init (GtkVideoClass *klass)
   gobject_class->set_property = gtk_video_set_property;
 
   /**
-   * GtkVideo:autoplay: (attributes org.gtk.Property.get=gtk_video_get_autoplay org.gtk.Property.set=gtk_video_set_autoplay)
+   * GtkVideo:autoplay:
    *
    * If the video should automatically begin playing.
    */
@@ -420,7 +420,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:file: (attributes org.gtk.Property.get=gtk_video_get_file org.gtk.Property.set=gtk_video_set_file)
+   * GtkVideo:file:
    *
    * The file played by this video if the video is playing a file.
    */
@@ -430,7 +430,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:loop: (attributes org.gtk.Property.get=gtk_video_get_loop org.gtk.Property.set=gtk_video_set_loop)
+   * GtkVideo:loop:
    *
    * If new media files should be set to loop.
    */
@@ -440,7 +440,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:media-stream: (attributes org.gtk.Property.get=gtk_video_get_media_stream org.gtk.Property.set=gtk_video_set_media_stream)
+   * GtkVideo:media-stream:
    *
    * The media-stream played
    */
@@ -450,7 +450,7 @@ gtk_video_class_init (GtkVideoClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkVideo:graphics-offload: (attributes org.gtk.Property.get=gtk_video_get_graphics_offload org.gtk.Property.set=gtk_video_set_graphics_offload)
+   * GtkVideo:graphics-offload:
    *
    * Whether to enable graphics offload.
    *
@@ -607,7 +607,7 @@ gtk_video_new_for_resource (const char *resource_path)
 }
 
 /**
- * gtk_video_get_media_stream: (attributes org.gtk.Method.get_property=media-stream)
+ * gtk_video_get_media_stream:
  * @self: a `GtkVideo`
  *
  * Gets the media stream managed by @self or %NULL if none.
@@ -695,7 +695,7 @@ gtk_video_notify_cb (GtkMediaStream *stream,
 }
 
 /**
- * gtk_video_set_media_stream: (attributes org.gtk.Method.set_property=media-stream)
+ * gtk_video_set_media_stream:
  * @self: a `GtkVideo`
  * @stream: (nullable): The media stream to play or %NULL to unset
  *
@@ -766,7 +766,7 @@ gtk_video_set_media_stream (GtkVideo       *self,
 }
 
 /**
- * gtk_video_get_file: (attributes org.gtk.Method.get_property=file)
+ * gtk_video_get_file:
  * @self: a `GtkVideo`
  *
  * Gets the file played by @self or %NULL if not playing back
@@ -783,7 +783,7 @@ gtk_video_get_file (GtkVideo *self)
 }
 
 /**
- * gtk_video_set_file: (attributes org.gtk.Method.set_property=file)
+ * gtk_video_set_file:
  * @self: a `GtkVideo`
  * @file: (nullable): the file to play
  *
@@ -898,7 +898,7 @@ gtk_video_set_resource (GtkVideo   *self,
 }
 
 /**
- * gtk_video_get_autoplay: (attributes org.gtk.Method.get_property=autoplay)
+ * gtk_video_get_autoplay:
  * @self: a `GtkVideo`
  *
  * Returns %TRUE if videos have been set to loop.
@@ -914,7 +914,7 @@ gtk_video_get_autoplay (GtkVideo *self)
 }
 
 /**
- * gtk_video_set_autoplay: (attributes org.gtk.Method.set_property=autoplay)
+ * gtk_video_set_autoplay:
  * @self: a `GtkVideo`
  * @autoplay: whether media streams should autoplay
  *
@@ -936,7 +936,7 @@ gtk_video_set_autoplay (GtkVideo *self,
 }
 
 /**
- * gtk_video_get_loop: (attributes org.gtk.Method.get_property=loop)
+ * gtk_video_get_loop:
  * @self: a `GtkVideo`
  *
  * Returns %TRUE if videos have been set to loop.
@@ -952,7 +952,7 @@ gtk_video_get_loop (GtkVideo *self)
 }
 
 /**
- * gtk_video_set_loop: (attributes org.gtk.Method.set_property=loop)
+ * gtk_video_set_loop:
  * @self: a `GtkVideo`
  * @loop: whether media streams should loop
  *
@@ -973,7 +973,7 @@ gtk_video_set_loop (GtkVideo *self,
 }
 
 /**
- * gtk_video_get_graphics_offload: (attributes org.gtk.Method.get_property=graphics-offload)
+ * gtk_video_get_graphics_offload:
  * @self: a `GtkVideo`
  *
  * Returns whether graphics offload is enabled.
@@ -993,7 +993,7 @@ gtk_video_get_graphics_offload (GtkVideo *self)
 }
 
 /**
- * gtk_video_set_graphics_offload: (attributes org.gtk.Method.set_property=graphics-offload)
+ * gtk_video_set_graphics_offload:
  * @self: a `GtkVideo`
  * @enabled: the new graphics offload status
  *

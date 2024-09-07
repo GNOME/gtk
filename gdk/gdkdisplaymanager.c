@@ -149,7 +149,7 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
                   GDK_TYPE_DISPLAY);
 
   /**
-   * GdkDisplayManager:default-display: (attributes org.gtk.Property.get=gdk_display_manager_get_default_display)
+   * GdkDisplayManager:default-display:
    *
    * The default display.
    */
@@ -301,7 +301,7 @@ gdk_display_manager_get (void)
 }
 
 /**
- * gdk_display_manager_get_default_display: (attributes org.gtk.Method.get_property=default-display)
+ * gdk_display_manager_get_default_display:
  * @manager: a `GdkDisplayManager`
  *
  * Gets the default `GdkDisplay`.

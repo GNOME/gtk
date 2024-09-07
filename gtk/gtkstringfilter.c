@@ -247,7 +247,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
   object_class->dispose = gtk_string_filter_dispose;
 
   /**
-   * GtkStringFilter:expression: (type GtkExpression) (attributes org.gtk.Property.get=gtk_string_filter_get_expression org.gtk.Property.set=gtk_string_filter_set_expression)
+   * GtkStringFilter:expression: (type GtkExpression)
    *
    * The expression to evaluate on item to get a string to compare with.
    */
@@ -256,7 +256,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
                                G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStringFilter:ignore-case: (attributes org.gtk.Property.get=gtk_string_filter_get_ignore_case org.gtk.Property.set=gtk_string_filter_set_ignore_case)
+   * GtkStringFilter:ignore-case:
    *
    * If matching is case sensitive.
    */
@@ -266,7 +266,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
                             G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStringFilter:match-mode: (attributes org.gtk.Property.get=gtk_string_filter_get_match_mode org.gtk.Property.set=gtk_string_filter_set_match_mode)
+   * GtkStringFilter:match-mode:
    *
    * If exact matches are necessary or if substrings are allowed.
    */
@@ -277,7 +277,7 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
                          G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkStringFilter:search: (attributes org.gtk.Property.get=gtk_string_filter_get_search org.gtk.Property.set=gtk_string_filter_set_search)
+   * GtkStringFilter:search:
    *
    * The search term.
    */
@@ -323,7 +323,7 @@ gtk_string_filter_new (GtkExpression *expression)
 }
 
 /**
- * gtk_string_filter_get_search: (attributes org.gtk.Method.get_property=search)
+ * gtk_string_filter_get_search:
  * @self: a `GtkStringFilter`
  *
  * Gets the search term.
@@ -339,7 +339,7 @@ gtk_string_filter_get_search (GtkStringFilter *self)
 }
 
 /**
- * gtk_string_filter_set_search: (attributes org.gtk.Method.set_property=search)
+ * gtk_string_filter_set_search:
  * @self: a `GtkStringFilter`
  * @search: (transfer none) (nullable): The string to search for
  *   or %NULL to clear the search
@@ -380,7 +380,7 @@ gtk_string_filter_set_search (GtkStringFilter *self,
 }
 
 /**
- * gtk_string_filter_get_expression: (attributes org.gtk.Method.get_property=expression)
+ * gtk_string_filter_get_expression:
  * @self: a `GtkStringFilter`
  *
  * Gets the expression that the string filter uses to
@@ -397,7 +397,7 @@ gtk_string_filter_get_expression (GtkStringFilter *self)
 }
 
 /**
- * gtk_string_filter_set_expression: (attributes org.gtk.Method.set_property=expression)
+ * gtk_string_filter_set_expression:
  * @self: a `GtkStringFilter`
  * @expression: (nullable): a `GtkExpression`
  *
@@ -426,7 +426,7 @@ gtk_string_filter_set_expression (GtkStringFilter *self,
 }
 
 /**
- * gtk_string_filter_get_ignore_case: (attributes org.gtk.Method.get_property=ignore-case)
+ * gtk_string_filter_get_ignore_case:
  * @self: a `GtkStringFilter`
  *
  * Returns whether the filter ignores case differences.
@@ -442,7 +442,7 @@ gtk_string_filter_get_ignore_case (GtkStringFilter *self)
 }
 
 /**
- * gtk_string_filter_set_ignore_case: (attributes org.gtk.Method.set_property=ignore-case)
+ * gtk_string_filter_set_ignore_case:
  * @self: a `GtkStringFilter`
  * @ignore_case: %TRUE to ignore case
  *
@@ -470,7 +470,7 @@ gtk_string_filter_set_ignore_case (GtkStringFilter *self,
 }
 
 /**
- * gtk_string_filter_get_match_mode: (attributes org.gtk.Method.get_property=match-mode)
+ * gtk_string_filter_get_match_mode:
  * @self: a `GtkStringFilter`
  *
  * Returns the match mode that the filter is using.
@@ -486,7 +486,7 @@ gtk_string_filter_get_match_mode (GtkStringFilter *self)
 }
 
 /**
- * gtk_string_filter_set_match_mode: (attributes org.gtk.Method.set_property=match-mode)
+ * gtk_string_filter_set_match_mode:
  * @self: a `GtkStringFilter`
  * @mode: the new match mode
  *

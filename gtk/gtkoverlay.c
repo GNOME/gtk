@@ -318,7 +318,7 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
   klass->get_child_position = gtk_overlay_get_child_position;
 
   /**
-   * GtkOverlay:child: (attributes org.gtk.Property.get=gtk_overlay_get_child org.gtk.Property.set=gtk_overlay_set_child)
+   * GtkOverlay:child:
    *
    * The main child widget.
    */

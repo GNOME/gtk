@@ -256,7 +256,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
   gesture_class->cancel = gtk_gesture_single_cancel;
 
   /**
-   * GtkGestureSingle:touch-only: (attributes org.gtk.Property.get=gtk_gesture_single_get_touch_only org.gtk.Property.set=gtk_gesture_single_set_touch_only)
+   * GtkGestureSingle:touch-only:
    *
    * Whether the gesture handles only touch events.
    */
@@ -266,7 +266,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGestureSingle:exclusive: (attributes org.gtk.Property.get=gtk_gesture_single_get_exclusive org.gtk.Property.set=gtk_gesture_single_set_exclusive)
+   * GtkGestureSingle:exclusive:
    *
    * Whether the gesture is exclusive.
    *
@@ -278,7 +278,7 @@ gtk_gesture_single_class_init (GtkGestureSingleClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGestureSingle:button: (attributes org.gtk.Property.get=gtk_gesture_single_get_button org.gtk.Property.set=gtk_gesture_single_set_button)
+   * GtkGestureSingle:button:
    *
    * Mouse button number to listen to, or 0 to listen for any button.
    */
@@ -302,7 +302,7 @@ gtk_gesture_single_init (GtkGestureSingle *gesture)
 }
 
 /**
- * gtk_gesture_single_get_touch_only: (attributes org.gtk.Method.get_property=touch-only)
+ * gtk_gesture_single_get_touch_only:
  * @gesture: a `GtkGestureSingle`
  *
  * Returns %TRUE if the gesture is only triggered by touch events.
@@ -322,7 +322,7 @@ gtk_gesture_single_get_touch_only (GtkGestureSingle *gesture)
 }
 
 /**
- * gtk_gesture_single_set_touch_only: (attributes org.gtk.Method.set_property=touch-only)
+ * gtk_gesture_single_set_touch_only:
  * @gesture: a `GtkGestureSingle`
  * @touch_only: whether @gesture handles only touch events
  *
@@ -351,7 +351,7 @@ gtk_gesture_single_set_touch_only (GtkGestureSingle *gesture,
 }
 
 /**
- * gtk_gesture_single_get_exclusive: (attributes org.gtk.Method.get_property=exclusive)
+ * gtk_gesture_single_get_exclusive:
  * @gesture: a `GtkGestureSingle`
  *
  * Gets whether a gesture is exclusive.
@@ -373,7 +373,7 @@ gtk_gesture_single_get_exclusive (GtkGestureSingle *gesture)
 }
 
 /**
- * gtk_gesture_single_set_exclusive: (attributes org.gtk.Method.set_property=exclusive)
+ * gtk_gesture_single_set_exclusive:
  * @gesture: a `GtkGestureSingle`
  * @exclusive: %TRUE to make @gesture exclusive
  *
@@ -402,7 +402,7 @@ gtk_gesture_single_set_exclusive (GtkGestureSingle *gesture,
 }
 
 /**
- * gtk_gesture_single_get_button: (attributes org.gtk.Method.get_property=button)
+ * gtk_gesture_single_get_button:
  * @gesture: a `GtkGestureSingle`
  *
  * Returns the button number @gesture listens for.
@@ -424,7 +424,7 @@ gtk_gesture_single_get_button (GtkGestureSingle *gesture)
 }
 
 /**
- * gtk_gesture_single_set_button: (attributes org.gtk.Method.set_property=button)
+ * gtk_gesture_single_set_button:
  * @gesture: a `GtkGestureSingle`
  * @button: button number to listen to, or 0 for any button
  *

@@ -185,7 +185,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
   object_class->set_property = gtk_alert_dialog_set_property;
 
   /**
-   * GtkAlertDialog:modal: (attributes org.gtk.Property.get=gtk_alert_dialog_get_modal org.gtk.Property.set=gtk_alert_dialog_set_modal)
+   * GtkAlertDialog:modal:
    *
    * Whether the alert is modal.
    *
@@ -197,7 +197,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
                             G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAlertDialog:message: (attributes org.gtk.Property.get=gtk_alert_dialog_get_message org.gtk.Property.set=gtk_alert_dialog_set_message)
+   * GtkAlertDialog:message:
    *
    * The message for the alert.
    *
@@ -209,7 +209,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAlertDialog:detail: (attributes org.gtk.Property.get=gtk_alert_dialog_get_detail org.gtk.Property.set=gtk_alert_dialog_set_detail)
+   * GtkAlertDialog:detail:
    *
    * The detail text for the alert.
    *
@@ -221,7 +221,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAlertDialog:buttons: (attributes org.gtk.Property.get=gtk_alert_dialog_get_buttons org.gtk.Property.set=gtk_alert_dialog_set_buttons)
+   * GtkAlertDialog:buttons:
    *
    * Labels for buttons to show in the alert.
    *
@@ -239,7 +239,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
                           G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAlertDialog:cancel-button: (attributes org.gtk.Property.get=gtk_alert_dialog_get_cancel_button org.gtk.Property.set=gtk_alert_dialog_set_cancel_button)
+   * GtkAlertDialog:cancel-button:
    *
    * This property determines what happens when the Escape key is
    * pressed while the alert is shown.
@@ -259,7 +259,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkAlertDialog:default-button: (attributes org.gtk.Property.get=gtk_alert_dialog_get_default_button org.gtk.Property.set=gtk_alert_dialog_set_default_button)
+   * GtkAlertDialog:default-button:
    *
    * This property determines what happens when the Return key is
    * pressed while the alert is shown.

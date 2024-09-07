@@ -572,7 +572,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   /**
-   * GtkSwitch:active: (attributes org.gtk.Property.get=gtk_switch_get_active org.gtk.Property.set=gtk_switch_set_active)
+   * GtkSwitch:active:
    *
    * Whether the `GtkSwitch` widget is in its on or off state.
    */
@@ -582,7 +582,7 @@ gtk_switch_class_init (GtkSwitchClass *klass)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSwitch:state: (attributes org.gtk.Property.get=gtk_switch_get_state org.gtk.Property.set=gtk_switch_set_state)
+   * GtkSwitch:state:
    *
    * The backend state that is controlled by the switch.
    *
@@ -761,7 +761,7 @@ gtk_switch_new (void)
 }
 
 /**
- * gtk_switch_set_active: (attributes org.gtk.Method.set_property=active)
+ * gtk_switch_set_active:
  * @self: a `GtkSwitch`
  * @is_active: %TRUE if @self should be active, and %FALSE otherwise
  *
@@ -801,7 +801,7 @@ gtk_switch_set_active (GtkSwitch *self,
 }
 
 /**
- * gtk_switch_get_active: (attributes org.gtk.Method.get_property=active)
+ * gtk_switch_get_active:
  * @self: a `GtkSwitch`
  *
  * Gets whether the `GtkSwitch` is in its “on” or “off” state.
@@ -817,7 +817,7 @@ gtk_switch_get_active (GtkSwitch *self)
 }
 
 /**
- * gtk_switch_set_state: (attributes org.gtk.Method.set_property=state)
+ * gtk_switch_set_state:
  * @self: a `GtkSwitch`
  * @state: the new state
  *
@@ -850,7 +850,7 @@ gtk_switch_set_state (GtkSwitch *self,
 }
 
 /**
- * gtk_switch_get_state: (attributes org.gtk.Method.get_property=state)
+ * gtk_switch_get_state:
  * @self: a `GtkSwitch`
  *
  * Gets the underlying state of the `GtkSwitch`.

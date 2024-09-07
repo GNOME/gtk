@@ -601,7 +601,7 @@ gtk_notebook_page_class_init (GtkNotebookPageClass *class)
   object_class->set_property = gtk_notebook_page_set_property;
 
   /**
-   * GtkNotebookPage:child: (attributes org.gtk.Property.get=gtk_notebook_page_get_child)
+   * GtkNotebookPage:child:
    *
    * The child for this page.
    */
@@ -1122,7 +1122,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
   class->create_window = gtk_notebook_create_window;
 
   /**
-   * GtkNotebook:page: (attributes org.gtk.Property.get=gtk_notebook_get_current_page org.gtk.Property.set=gtk_notebook_set_current_page)
+   * GtkNotebook:page: (getter get_current_page) (setter set_current_page)
    *
    * The index of the current page.
    */
@@ -1133,7 +1133,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNotebook:tab-pos: (attributes org.gtk.Property.get=gtk_notebook_get_tab_pos org.gtk.Property.set=gtk_notebook_set_tab_pos)
+   * GtkNotebook:tab-pos:
    *
    * Which side of the notebook holds the tabs.
    */
@@ -1144,7 +1144,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                          GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNotebook:show-tabs: (attributes org.gtk.Property.get=gtk_notebook_get_show_tabs org.gtk.Property.set=gtk_notebook_set_show_tabs)
+   * GtkNotebook:show-tabs:
    *
    * Whether tabs should be shown.
    */
@@ -1154,7 +1154,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNotebook:show-border: (attributes org.gtk.Property.get=gtk_notebook_get_show_border org.gtk.Property.set=gtk_notebook_set_show_border)
+   * GtkNotebook:show-border:
    *
    * Whether the border should be shown.
    */
@@ -1164,7 +1164,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNotebook:scrollable: (attributes org.gtk.Property.get=gtk_notebook_get_scrollable org.gtk.Property.set=gtk_notebook_set_scrollable)
+   * GtkNotebook:scrollable:
    *
    * If %TRUE, scroll arrows are added if there are too many pages to fit.
    */
@@ -1184,7 +1184,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNotebook:group-name: (attributes org.gtk.Property.get=gtk_notebook_get_group_name org.gtk.Property.set=gtk_notebook_set_group_name)
+   * GtkNotebook:group-name:
    *
    * Group name for tab drag and drop.
    */
@@ -1194,7 +1194,7 @@ gtk_notebook_class_init (GtkNotebookClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkNotebook:pages: (attributes org.gtk.Property.get=gtk_notebook_get_pages)
+   * GtkNotebook:pages:
    *
    * A selection model with the pages.
    */
@@ -5976,7 +5976,7 @@ gtk_notebook_remove_page (GtkNotebook *notebook,
  */
 
 /**
- * gtk_notebook_get_current_page: (attributes org.gtk.Method.get_property=page)
+ * gtk_notebook_get_current_page: (get-property page)
  * @notebook: a `GtkNotebook`
  *
  * Returns the page number of the current page.
@@ -6083,7 +6083,7 @@ gtk_notebook_page_num (GtkNotebook      *notebook,
 }
 
 /**
- * gtk_notebook_set_current_page: (attributes org.gtk.Method.set_property=page)
+ * gtk_notebook_set_current_page: (set-property page)
  * @notebook: a `GtkNotebook`
  * @page_num: index of the page to switch to, starting from 0.
  *   If negative, the last page will be used. If greater
@@ -6177,7 +6177,7 @@ gtk_notebook_prev_page (GtkNotebook *notebook)
  * gtk_notebook_get_scrollable
  */
 /**
- * gtk_notebook_set_show_border: (attributes org.gtk.Method.set_property=show-border)
+ * gtk_notebook_set_show_border:
  * @notebook: a `GtkNotebook`
  * @show_border: %TRUE if a bevel should be drawn around the notebook
  *
@@ -6205,7 +6205,7 @@ gtk_notebook_set_show_border (GtkNotebook *notebook,
 }
 
 /**
- * gtk_notebook_get_show_border: (attributes org.gtk.Method.get_property=show-border)
+ * gtk_notebook_get_show_border:
  * @notebook: a `GtkNotebook`
  *
  * Returns whether a bevel will be drawn around the notebook pages.
@@ -6221,7 +6221,7 @@ gtk_notebook_get_show_border (GtkNotebook *notebook)
 }
 
 /**
- * gtk_notebook_set_show_tabs: (attributes org.gtk.Method.set_property=show-tabs)
+ * gtk_notebook_set_show_tabs:
  * @notebook: a `GtkNotebook`
  * @show_tabs: %TRUE if the tabs should be shown
  *
@@ -6279,7 +6279,7 @@ gtk_notebook_set_show_tabs (GtkNotebook *notebook,
 }
 
 /**
- * gtk_notebook_get_show_tabs: (attributes org.gtk.Method.get_property=show-tabs)
+ * gtk_notebook_get_show_tabs:
  * @notebook: a `GtkNotebook`
  *
  * Returns whether the tabs of the notebook are shown.
@@ -6380,7 +6380,7 @@ gtk_notebook_update_tab_pos (GtkNotebook *notebook)
 }
 
 /**
- * gtk_notebook_set_tab_pos: (attributes org.gtk.Method.set_property=tab-pos)
+ * gtk_notebook_set_tab_pos:
  * @notebook: a `GtkNotebook`.
  * @pos: the edge to draw the tabs at
  *
@@ -6404,7 +6404,7 @@ gtk_notebook_set_tab_pos (GtkNotebook     *notebook,
 }
 
 /**
- * gtk_notebook_get_tab_pos: (attributes org.gtk.Method.get_property=tab-pos)
+ * gtk_notebook_get_tab_pos:
  * @notebook: a `GtkNotebook`
  *
  * Gets the edge at which the tabs are drawn.
@@ -6420,7 +6420,7 @@ gtk_notebook_get_tab_pos (GtkNotebook *notebook)
 }
 
 /**
- * gtk_notebook_set_scrollable: (attributes org.gtk.Method.set_property=scrollable)
+ * gtk_notebook_set_scrollable:
  * @notebook: a `GtkNotebook`
  * @scrollable: %TRUE if scroll arrows should be added
  *
@@ -6449,7 +6449,7 @@ gtk_notebook_set_scrollable (GtkNotebook *notebook,
 }
 
 /**
- * gtk_notebook_get_scrollable: (attributes or.gtk.Method.get_property=scrollable)
+ * gtk_notebook_get_scrollable:
  * @notebook: a `GtkNotebook`
  *
  * Returns whether the tab label area has arrows for scrolling.
@@ -6937,7 +6937,7 @@ gtk_notebook_reorder_child (GtkNotebook *notebook,
 }
 
 /**
- * gtk_notebook_set_group_name: (attributes org.gtk.Method.set_property=group-name)
+ * gtk_notebook_set_group_name:
  * @notebook: a `GtkNotebook`
  * @group_name: (nullable): the name of the notebook group,
  *   or %NULL to unset it
@@ -6967,7 +6967,7 @@ gtk_notebook_set_group_name (GtkNotebook *notebook,
 }
 
 /**
- * gtk_notebook_get_group_name: (attributes org.gtk.Method.get_property=group-name)
+ * gtk_notebook_get_group_name:
  * @notebook: a `GtkNotebook`
  *
  * Gets the current group name for @notebook.
@@ -7233,7 +7233,7 @@ gtk_notebook_get_page (GtkNotebook *notebook,
 }
 
 /**
- * gtk_notebook_page_get_child: (attributes org.gtk.Method.get_property=child)
+ * gtk_notebook_page_get_child:
  * @page: a `GtkNotebookPage`
  *
  * Returns the notebook child to which @page belongs.
@@ -7362,7 +7362,7 @@ gtk_notebook_pages_new (GtkNotebook *notebook)
 }
 
 /**
- * gtk_notebook_get_pages: (attributes org.gtk.Method.get_property=pages)
+ * gtk_notebook_get_pages:
  * @notebook: a `GtkNotebook`
  *
  * Returns a `GListModel` that contains the pages of the notebook.

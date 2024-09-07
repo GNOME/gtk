@@ -107,7 +107,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
   object_class->get_property = gdk_device_tool_get_property;
 
   /**
-   * GdkDeviceTool:serial: (attributes org.gtk.Property.get=gdk_device_tool_get_serial)
+   * GdkDeviceTool:serial:
    *
    * The serial number of the tool.
    */
@@ -118,7 +118,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
                                                       G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDeviceTool:tool-type: (attributes org.gtk.Property.get=gdk_device_tool_get_tool_type)
+   * GdkDeviceTool:tool-type:
    *
    * The type of the tool.
    */
@@ -130,7 +130,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
                                                        G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDeviceTool:axes: (attributes org.gtk.Property.get=gdk_device_tool_get_axes)
+   * GdkDeviceTool:axes:
    *
    * The axes of the tool.
    */
@@ -140,7 +140,7 @@ gdk_device_tool_class_init (GdkDeviceToolClass *klass)
                                                    G_PARAM_CONSTRUCT_ONLY);
 
   /**
-   * GdkDeviceTool:hardware-id: (attributes org.gtk.Property.get=gdk_device_tool_get_hardware_id)
+   * GdkDeviceTool:hardware-id:
    *
    * The hardware ID of the tool.
    */
@@ -173,7 +173,7 @@ gdk_device_tool_new (guint64           serial,
 }
 
 /**
- * gdk_device_tool_get_serial: (attributes org.gtk.Method.get_property=serial)
+ * gdk_device_tool_get_serial:
  * @tool: a `GdkDeviceTool`
  *
  * Gets the serial number of this tool.
@@ -192,7 +192,7 @@ gdk_device_tool_get_serial (GdkDeviceTool *tool)
 }
 
 /**
- * gdk_device_tool_get_hardware_id: (attributes org.gtk.Method.get_property=hardware-id)
+ * gdk_device_tool_get_hardware_id:
  * @tool: a `GdkDeviceTool`
  *
  * Gets the hardware ID of this tool, or 0 if it's not known.
@@ -218,7 +218,7 @@ gdk_device_tool_get_hardware_id (GdkDeviceTool *tool)
 }
 
 /**
- * gdk_device_tool_get_tool_type: (attributes org.gtk.Method.get_property=tool-type)
+ * gdk_device_tool_get_tool_type:
  * @tool: a `GdkDeviceTool`
  *
  * Gets the `GdkDeviceToolType` of the tool.
@@ -236,7 +236,7 @@ gdk_device_tool_get_tool_type (GdkDeviceTool *tool)
 }
 
 /**
- * gdk_device_tool_get_axes: (attributes org.gtk.Method.get_property=axes)
+ * gdk_device_tool_get_axes:
  * @tool: a `GdkDeviceTool`
  *
  * Gets the axes of the tool.

@@ -585,7 +585,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
   widget_class->snapshot = gtk_inscription_snapshot;
 
   /**
-   * GtkInscription:attributes: (attributes org.gtk.Property.get=gtk_inscription_get_attributes org.gtk.Property.set=gtk_inscription_set_attributes)
+   * GtkInscription:attributes:
    *
    * A list of style attributes to apply to the text of the inscription.
    *
@@ -597,7 +597,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkInscription:markup: (attributes org.gtk.Property.set=gtk_inscription_set_markup)
+   * GtkInscription:markup:
    *
    * Utility property that sets both the [property@Gtk.Inscription:text] and
    * [property@Gtk.Inscription:attributes] properties, mainly intended for use in
@@ -615,7 +615,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                          G_PARAM_WRITABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkInscription:min-chars: (attributes org.gtk.Property.get=gtk_inscription_get_min_chars org.gtk.Property.set=gtk_inscription_set_min_chars)
+   * GtkInscription:min-chars:
    *
    * The number of characters that should fit into the inscription at minimum.
    *
@@ -638,7 +638,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkInscription:min-lines: (attributes org.gtk.Property.get=gtk_inscription_get_min_lines org.gtk.Property.set=gtk_inscription_set_min_lines)
+   * GtkInscription:min-lines:
    *
    * The number of lines that should fit into the inscription at minimum.
    *
@@ -660,7 +660,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkInscription:nat-chars: (attributes org.gtk.Property.get=gtk_inscription_get_nat_chars org.gtk.Property.set=gtk_inscription_set_nat_chars)
+   * GtkInscription:nat-chars:
    *
    * The number of characters that should ideally fit into the inscription.
    *
@@ -680,7 +680,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkInscription:nat-lines: (attributes org.gtk.Property.get=gtk_inscription_get_nat_lines org.gtk.Property.set=gtk_inscription_set_nat_lines)
+   * GtkInscription:nat-lines:
    *
    * The number of lines that should ideally fit into the inscription.
    *
@@ -700,7 +700,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkInscription:text: (attributes org.gtk.Property.get=gtk_inscription_get_text org.gtk.Property.set=gtk_inscription_set_text)
+   * GtkInscription:text:
    *
    * The displayed text.
    *
@@ -712,7 +712,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkInscription:text-overflow: (attributes org.gtk.Property.get=gtk_inscription_get_text_overflow org.gtk.Property.set=gtk_inscription_set_text_overflow)
+   * GtkInscription:text-overflow:
    *
    * The overflow method to use for the text.
    *
@@ -725,7 +725,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkInscription:wrap-mode: (attributes org.gtk.Property.get=gtk_inscription_get_wrap_mode org.gtk.Property.set=gtk_inscription_set_wrap_mode)
+   * GtkInscription:wrap-mode:
    *
    * Controls how the line wrapping is done.
    *
@@ -740,7 +740,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkInscription:xalign: (attributes org.gtk.Property.get=gtk_inscription_get_xalign org.gtk.Property.set=gtk_inscription_set_xalign)
+   * GtkInscription:xalign:
    *
    * The horizontal alignment of the text inside the allocated size.
    *
@@ -756,7 +756,7 @@ gtk_inscription_class_init (GtkInscriptionClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkInscription:yalign: (attributes org.gtk.Property.get=gtk_inscription_get_yalign org.gtk.Property.set=gtk_inscription_set_yalign)
+   * GtkInscription:yalign:
    *
    * The vertical alignment of the text inside the allocated size.
    *
@@ -818,7 +818,7 @@ gtk_inscription_new (const char *text)
 }
 
 /**
- * gtk_inscription_set_text: (attributes org.gtk.Method.set_property=text)
+ * gtk_inscription_set_text:
  * @self: a `GtkInscription`
  * @text: (nullable): The text to display
  *
@@ -854,7 +854,7 @@ gtk_inscription_set_text (GtkInscription *self,
 }
 
 /**
- * gtk_inscription_get_text: (attributes org.gtk.Method.get_property=text)
+ * gtk_inscription_get_text:
  * @self: a `GtkInscription`
  *
  * Gets the text that is displayed.
@@ -872,7 +872,7 @@ gtk_inscription_get_text (GtkInscription *self)
 }
 
 /**
- * gtk_inscription_set_min_chars: (attributes org.gtk.Method.set_property=min-chars)
+ * gtk_inscription_set_min_chars:
  * @self: a `GtkInscription`
  * @min_chars: the minimum number of characters that should fit, approximately
  *
@@ -899,7 +899,7 @@ gtk_inscription_set_min_chars (GtkInscription *self,
 }
 
 /**
- * gtk_inscription_get_min_chars: (attributes org.gtk.Method.get_property=min-chars)
+ * gtk_inscription_get_min_chars:
  * @self: a `GtkInscription`
  *
  * Gets the `min-chars` of the inscription.
@@ -919,7 +919,7 @@ gtk_inscription_get_min_chars (GtkInscription *self)
 }
 
 /**
- * gtk_inscription_set_nat_chars: (attributes org.gtk.Method.set_property=nat-chars)
+ * gtk_inscription_set_nat_chars:
  * @self: a `GtkInscription`
  * @nat_chars: the number of characters that should ideally fit, approximately
  *
@@ -946,7 +946,7 @@ gtk_inscription_set_nat_chars (GtkInscription *self,
 }
 
 /**
- * gtk_inscription_get_nat_chars: (attributes org.gtk.Method.get_property=nat-chars)
+ * gtk_inscription_get_nat_chars:
  * @self: a `GtkInscription`
  *
  * Gets the `nat-chars` of the inscription.
@@ -966,7 +966,7 @@ gtk_inscription_get_nat_chars (GtkInscription *self)
 }
 
 /**
- * gtk_inscription_set_min_lines: (attributes org.gtk.Method.set_property=min-lines)
+ * gtk_inscription_set_min_lines:
  * @self: a `GtkInscription`
  * @min_lines: the minimum number of lines that should fit, approximately
  *
@@ -993,7 +993,7 @@ gtk_inscription_set_min_lines (GtkInscription *self,
 }
 
 /**
- * gtk_inscription_get_min_lines: (attributes org.gtk.Method.get_property=min-lines)
+ * gtk_inscription_get_min_lines:
  * @self: a `GtkInscription`
  *
  * Gets the `min-lines` of the inscription.
@@ -1013,7 +1013,7 @@ gtk_inscription_get_min_lines (GtkInscription *self)
 }
 
 /**
- * gtk_inscription_set_nat_lines: (attributes org.gtk.Method.set_property=nat-lines)
+ * gtk_inscription_set_nat_lines:
  * @self: a `GtkInscription`
  * @nat_lines: the number of lines that should ideally fit
  *
@@ -1040,7 +1040,7 @@ gtk_inscription_set_nat_lines (GtkInscription *self,
 }
 
 /**
- * gtk_inscription_get_nat_lines: (attributes org.gtk.Method.get_property=nat-lines)
+ * gtk_inscription_get_nat_lines:
  * @self: a `GtkInscription`
  *
  * Gets the `nat-lines` of the inscription.
@@ -1060,7 +1060,7 @@ gtk_inscription_get_nat_lines (GtkInscription *self)
 }
 
 /**
- * gtk_inscription_set_xalign: (attributes org.gtk.Method.set_property=xalign)
+ * gtk_inscription_set_xalign:
  * @self: a `GtkInscription`
  * @xalign: the new xalign value, between 0 and 1
  *
@@ -1091,7 +1091,7 @@ gtk_inscription_set_xalign (GtkInscription *self,
 }
 
 /**
- * gtk_inscription_get_xalign: (attributes org.gtk.Method.get_property=xalign)
+ * gtk_inscription_get_xalign:
  * @self: a `GtkInscription`
  *
  * Gets the `xalign` of the inscription.
@@ -1111,7 +1111,7 @@ gtk_inscription_get_xalign (GtkInscription *self)
 }
 
 /**
- * gtk_inscription_set_yalign: (attributes org.gtk.Method.set_property=yalign)
+ * gtk_inscription_set_yalign:
  * @self: a `GtkInscription`
  * @yalign: the new yalign value, between 0 and 1
  *
@@ -1140,7 +1140,7 @@ gtk_inscription_set_yalign (GtkInscription *self,
 }
 
 /**
- * gtk_inscription_get_yalign: (attributes org.gtk.Method.get_property=yalign)
+ * gtk_inscription_get_yalign:
  * @self: a `GtkInscription`
  *
  * Gets the `yalign` of the inscription.
@@ -1160,7 +1160,7 @@ gtk_inscription_get_yalign (GtkInscription *self)
 }
 
 /**
- * gtk_inscription_set_attributes: (attributes org.gtk.Method.set_property=attributes)
+ * gtk_inscription_set_attributes:
  * @self: a `GtkInscription`
  * @attrs: (nullable): a [struct@Pango.AttrList]
  *
@@ -1194,7 +1194,7 @@ gtk_inscription_set_attributes (GtkInscription *self,
 }
 
 /**
- * gtk_inscription_get_attributes: (attributes org.gtk.Method.get_property=attributes)
+ * gtk_inscription_get_attributes:
  * @self: a `GtkInscription`
  *
  * Gets the inscription's attribute list.
@@ -1212,7 +1212,7 @@ gtk_inscription_get_attributes (GtkInscription *self)
 }
 
 /**
- * gtk_inscription_set_text_overflow: (attributes org.gtk.Method.set_property=text-overflow)
+ * gtk_inscription_set_text_overflow:
  * @self: a `GtkInscription`
  * @overflow: the overflow method to use
  *
@@ -1256,7 +1256,7 @@ gtk_inscription_set_text_overflow (GtkInscription         *self,
 }
 
 /**
- * gtk_inscription_get_text_overflow: (attributes org.gtk.Method.get_property=text-overflow)
+ * gtk_inscription_get_text_overflow:
  * @self: a `GtkInscription`
  *
  * Gets the inscription's overflow method.
@@ -1274,7 +1274,7 @@ gtk_inscription_get_text_overflow (GtkInscription *self)
 }
 
 /**
- * gtk_inscription_set_wrap_mode: (attributes org.gtk.Method.set_property=wrap-mode)
+ * gtk_inscription_set_wrap_mode:
  * @self: a `GtkInscription`
  * @wrap_mode: the line wrapping mode
  *
@@ -1299,7 +1299,7 @@ gtk_inscription_set_wrap_mode (GtkInscription *self,
 }
 
 /**
- * gtk_inscription_get_wrap_mode: (attributes org.gtk.Method.get_property=wrap-mode)
+ * gtk_inscription_get_wrap_mode:
  * @self: a `GtkInscription`
  *
  * Returns line wrap mode used by the inscription.
@@ -1319,7 +1319,7 @@ gtk_inscription_get_wrap_mode (GtkInscription *self)
 }
 
 /**
- * gtk_inscription_set_markup: (attributes org.gtk.Method.set_property=markup)
+ * gtk_inscription_set_markup:
  * @self: a `GtkInscription`
  * @markup: (nullable): The markup to display
  *

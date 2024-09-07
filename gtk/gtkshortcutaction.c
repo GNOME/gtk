@@ -940,7 +940,7 @@ gtk_signal_action_class_init (GtkSignalActionClass *klass)
   action_class->print = gtk_signal_action_print;
 
   /**
-   * GtkSignalAction:signal-name: (attributes org.gtk.Property.get=gtk_signal_action_get_signal_name)
+   * GtkSignalAction:signal-name:
    *
    * The name of the signal to emit.
    */
@@ -991,7 +991,7 @@ gtk_signal_action_new (const char *signal_name)
 }
 
 /**
- * gtk_signal_action_get_signal_name: (attributes org.gtk.Method.get_property=signal-name)
+ * gtk_signal_action_get_signal_name:
  * @self: a signal action
  *
  * Returns the name of the signal that will be emitted.
@@ -1190,7 +1190,7 @@ gtk_named_action_class_init (GtkNamedActionClass *klass)
   action_class->print = gtk_named_action_print;
 
   /**
-   * GtkNamedAction:action-name: (attributes org.gtk.Property.get=gtk_named_action_get_action_name)
+   * GtkNamedAction:action-name:
    *
    * The name of the action to activate.
    */
@@ -1234,7 +1234,7 @@ gtk_named_action_new (const char *name)
 }
 
 /**
- * gtk_named_action_get_action_name: (attributes org.gtk.Method.get_property=action-name)
+ * gtk_named_action_get_action_name:
  * @self: a named action
  *
  * Returns the name of the action that will be activated.

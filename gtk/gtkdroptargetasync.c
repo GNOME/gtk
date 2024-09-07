@@ -381,7 +381,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
   class->drop = gtk_drop_target_async_drop;
 
   /**
-   * GtkDropTargetAsync:actions: (attributes org.gtk.Property.get=gtk_drop_target_async_get_actions org.gtk.Property.set=gtk_drop_target_async_set_actions)
+   * GtkDropTargetAsync:actions:
    *
    * The `GdkDragActions` that this drop target supports.
    */
@@ -391,7 +391,7 @@ gtk_drop_target_async_class_init (GtkDropTargetAsyncClass *class)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDropTargetAsync:formats: (attributes org.gtk.Property.get=gtk_drop_target_async_get_formats org.gtk.Property.set=gtk_drop_target_async_set_formats)
+   * GtkDropTargetAsync:formats:
    *
    * The `GdkContentFormats` that determines the supported data formats.
    */
@@ -577,7 +577,7 @@ gtk_drop_target_async_new (GdkContentFormats *formats,
 }
 
 /**
- * gtk_drop_target_async_set_formats: (attributes org.gtk.Method.set_property=formats)
+ * gtk_drop_target_async_set_formats:
  * @self: a `GtkDropTargetAsync`
  * @formats: (nullable): the supported data formats or %NULL for any format
  *
@@ -604,7 +604,7 @@ gtk_drop_target_async_set_formats (GtkDropTargetAsync *self,
 }
 
 /**
- * gtk_drop_target_async_get_formats: (attributes org.gtk.Method.get_property=formats)
+ * gtk_drop_target_async_get_formats:
  * @self: a `GtkDropTargetAsync`
  *
  * Gets the data formats that this drop target accepts.
@@ -622,7 +622,7 @@ gtk_drop_target_async_get_formats (GtkDropTargetAsync *self)
 }
 
 /**
- * gtk_drop_target_async_set_actions: (attributes org.gtk.Method.set_property=actions)
+ * gtk_drop_target_async_set_actions:
  * @self: a `GtkDropTargetAsync`
  * @actions: the supported actions
  *
@@ -643,7 +643,7 @@ gtk_drop_target_async_set_actions (GtkDropTargetAsync *self,
 }
 
 /**
- * gtk_drop_target_async_get_actions: (attributes org.gtk.Method.get_property=actions)
+ * gtk_drop_target_async_get_actions:
  * @self: a `GtkDropTargetAsync`
  *
  * Gets the actions that this drop target supports.

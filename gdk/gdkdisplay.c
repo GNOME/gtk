@@ -230,7 +230,7 @@ gdk_display_class_init (GdkDisplayClass *class)
   class->opened = gdk_display_real_opened;
 
   /**
-   * GdkDisplay:composited: (attributes org.gtk.Property.get=gdk_display_is_composited)
+   * GdkDisplay:composited: (getter is_composited)
    *
    * %TRUE if the display properly composites the alpha channel.
    */
@@ -240,7 +240,7 @@ gdk_display_class_init (GdkDisplayClass *class)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDisplay:rgba: (attributes org.gtk.Property.get=gdk_display_is_rgba)
+   * GdkDisplay:rgba: (getter is_rgba)
    *
    * %TRUE if the display supports an alpha channel.
    */
@@ -250,7 +250,7 @@ gdk_display_class_init (GdkDisplayClass *class)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDisplay:shadow-width: (attributes org.gtk.Property.get=gdk_display_supports_shadow_width)
+   * GdkDisplay:shadow-width: (getter supports_shadow_width)
    *
    * %TRUE if the display supports extensible frames.
    *
@@ -262,7 +262,7 @@ gdk_display_class_init (GdkDisplayClass *class)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDisplay:input-shapes: (attributes org.gtk.Property.get=gdk_display_supports_input_shapes)
+   * GdkDisplay:input-shapes: (getter supports_input_shapes)
    *
    * %TRUE if the display supports input shapes.
    */
@@ -272,7 +272,7 @@ gdk_display_class_init (GdkDisplayClass *class)
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDisplay:dmabuf-formats: (attributes org.gtk.Property.get=gdk_display_get_dmabuf_formats)
+   * GdkDisplay:dmabuf-formats:
    *
    * The dma-buf formats that are supported on this display
    *
@@ -1116,7 +1116,7 @@ gdk_display_get_primary_clipboard (GdkDisplay *display)
 }
 
 /**
- * gdk_display_supports_input_shapes: (attributes org.gtk.Method.get_property=input-shapes)
+ * gdk_display_supports_input_shapes: (get-property input-shapes)
  * @display: a `GdkDisplay`
  *
  * Returns %TRUE if the display supports input shapes.
@@ -2075,7 +2075,7 @@ gdk_display_set_debug_flags (GdkDisplay    *display,
 }
 
 /**
- * gdk_display_is_composited: (attributes org.gtk.Method.get_property=composited)
+ * gdk_display_is_composited: (get-property composited)
  * @display: a `GdkDisplay`
  *
  * Returns whether surfaces can reasonably be expected to have
@@ -2120,7 +2120,7 @@ gdk_display_set_composited (GdkDisplay *display,
 }
 
 /**
- * gdk_display_is_rgba: (attributes org.gtk.Method.get_property=rgba)
+ * gdk_display_is_rgba: (get-property rgba)
  * @display: a `GdkDisplay`
  *
  * Returns whether surfaces on this @display are created with an
@@ -2165,7 +2165,7 @@ gdk_display_set_rgba (GdkDisplay *display,
 }
 
 /**
- * gdk_display_supports_shadow_width: (attributes org.gtk.Method.get_property=shadow-width)
+ * gdk_display_supports_shadow_width: (get-property shadow-width)
  * @display: a `GdkDisplay`
  *
  * Returns whether it's possible for a surface to draw outside of the window area.

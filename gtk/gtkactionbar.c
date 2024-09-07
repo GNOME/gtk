@@ -172,7 +172,7 @@ gtk_action_bar_class_init (GtkActionBarClass *klass)
   widget_class->focus = gtk_widget_focus_child;
 
   /**
-   * GtkActionBar:revealed: (attributes org.gtk.Property.get=gtk_action_bar_get_revealed org.gtk.Property.set=gtk_action_bar_set_revealed)
+   * GtkActionBar:revealed:
    *
    * Controls whether the action bar shows its contents.
    */
@@ -336,7 +336,7 @@ gtk_action_bar_new (void)
 }
 
 /**
- * gtk_action_bar_set_revealed: (attributes org.gtk.Method.set_property=revealed)
+ * gtk_action_bar_set_revealed:
  * @action_bar: a `GtkActionBar`
  * @revealed: The new value of the property
  *
@@ -360,7 +360,7 @@ gtk_action_bar_set_revealed (GtkActionBar *action_bar,
 }
 
 /**
- * gtk_action_bar_get_revealed: (attributes org.gtk.Method.get_property=revealed)
+ * gtk_action_bar_get_revealed:
  * @action_bar: a `GtkActionBar`
  *
  * Gets whether the contents of the action bar are revealed.

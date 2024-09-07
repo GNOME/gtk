@@ -172,7 +172,7 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
   klass->empty_frame = gdk_draw_context_default_empty_frame;
 
   /**
-   * GdkDrawContext:display: (attributes org.gtk.Property.get=gdk_draw_context_get_display)
+   * GdkDrawContext:display:
    *
    * The `GdkDisplay` used to create the `GdkDrawContext`.
    */
@@ -184,7 +184,7 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
                          G_PARAM_STATIC_STRINGS);
 
   /**
-   * GdkDrawContext:surface: (attributes org.gtk.Property.get=gdk_draw_context_get_surface)
+   * GdkDrawContext:surface:
    *
    * The `GdkSurface` the context is bound to.
    */
@@ -251,7 +251,7 @@ gdk_draw_context_surface_resized (GdkDrawContext *context)
 }
 
 /**
- * gdk_draw_context_get_display: (attributes org.gtk.Method.get_property=display)
+ * gdk_draw_context_get_display:
  * @context: a `GdkDrawContext`
  *
  * Retrieves the `GdkDisplay` the @context is created for
@@ -269,7 +269,7 @@ gdk_draw_context_get_display (GdkDrawContext *context)
 }
 
 /**
- * gdk_draw_context_get_surface: (attributes org.gtk.Method.get_property=surface)
+ * gdk_draw_context_get_surface:
  * @context: a `GdkDrawContext`
  *
  * Retrieves the surface that @context is bound to.

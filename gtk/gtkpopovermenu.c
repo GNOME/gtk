@@ -620,7 +620,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
-   * GtkPopoverMenu:menu-model: (attributes org.gtk.Property.get=gtk_popover_menu_get_menu_model org.gtk.Property.set=gtk_popover_menu_set_menu_model)
+   * GtkPopoverMenu:menu-model:
    *
    * The model from which the menu is made.
    */
@@ -631,7 +631,7 @@ gtk_popover_menu_class_init (GtkPopoverMenuClass *klass)
                                                         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   /**
-   * GtkPopoverMenu:flags: (attributes org.gtk.Property.get=gtk_popover_menu_get_flags org.gtk.Property.set=gtk_popover_menu_set_flags)
+   * GtkPopoverMenu:flags:
    *
    * The flags that @popover uses to create/display a menu from its model.
    *
@@ -824,7 +824,7 @@ gtk_popover_menu_new_from_model_full (GMenuModel          *model,
 }
 
 /**
- * gtk_popover_menu_set_menu_model: (attributes org.gtk.Method.set_property=menu-model)
+ * gtk_popover_menu_set_menu_model:
  * @popover: a `GtkPopoverMenu`
  * @model: (nullable): a `GMenuModel`
  *
@@ -849,7 +849,7 @@ gtk_popover_menu_set_menu_model (GtkPopoverMenu *popover,
 }
 
 /**
- * gtk_popover_menu_set_flags: (attributes org.gtk.Method.set_property=flags)
+ * gtk_popover_menu_set_flags:
  * @popover: a `GtkPopoverMenu`
  * @flags: a set of `GtkPopoverMenuFlags`
  *
@@ -879,7 +879,7 @@ gtk_popover_menu_set_flags (GtkPopoverMenu      *popover,
 }
 
 /**
- * gtk_popover_menu_get_menu_model: (attributes org.gtk.Method.get_property=menu-model)
+ * gtk_popover_menu_get_menu_model:
  * @popover: a `GtkPopoverMenu`
  *
  * Returns the menu model used to populate the popover.
@@ -895,7 +895,7 @@ gtk_popover_menu_get_menu_model (GtkPopoverMenu *popover)
 }
 
 /**
- * gtk_popover_menu_get_flags: (attributes org.gtk.Method.get_property=flags)
+ * gtk_popover_menu_get_flags:
  * @popover: a `GtkPopoverMenu`
  *
  * Returns the flags that @popover uses to create/display a menu from its model.

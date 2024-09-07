@@ -290,7 +290,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   gobject_class->dispose = gtk_media_stream_dispose;
 
   /**
-   * GtkMediaStream:prepared: (attributes org.gtk.Property.get=gtk_media_stream_is_prepared)
+   * GtkMediaStream:prepared: (getter is_prepared)
    *
    * Whether the stream has finished initializing and existence of
    * audio and video is known.
@@ -301,7 +301,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:error: (attributes org.gtk.Property.get=gtk_media_stream_get_error)
+   * GtkMediaStream:error:
    *
    * %NULL for a properly working stream or the `GError`
    * that the stream is in.
@@ -312,7 +312,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:has-audio: (attributes org.gtk.Property.get=gtk_media_stream_has_audio)
+   * GtkMediaStream:has-audio:
    *
    * Whether the stream contains audio.
    */
@@ -322,7 +322,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:has-video: (attributes org.gtk.Property.get=gtk_media_stream_has_video)
+   * GtkMediaStream:has-video:
    *
    * Whether the stream contains video.
    */
@@ -332,7 +332,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:playing: (attributes org.gtk.Property.get=gtk_media_stream_get_playing org.gtk.Property.set=gtk_media_stream_set_playing)
+   * GtkMediaStream:playing:
    *
    * Whether the stream is currently playing.
    */
@@ -342,7 +342,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:ended: (attributes org.gtk.Property.get=gtk_media_stream_get_ended)
+   * GtkMediaStream:ended:
    *
    * Set when playback has finished.
    */
@@ -352,7 +352,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:timestamp: (attributes org.gtk.Property.get=gtk_media_stream_get_timestamp)
+   * GtkMediaStream:timestamp:
    *
    * The current presentation timestamp in microseconds.
    */
@@ -362,7 +362,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:duration: (attributes org.gtk.Property.get=gtk_media_stream_get_duration)
+   * GtkMediaStream:duration:
    *
    * The stream's duration in microseconds or 0 if unknown.
    */
@@ -372,7 +372,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                         G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:seekable: (attributes org.gtk.Property.get=gtk_media_stream_is_seekable)
+   * GtkMediaStream:seekable: (getter is_seekable)
    *
    * Set unless the stream is known to not support seeking.
    */
@@ -382,7 +382,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:seeking: (attributes org.gtk.Property.get=gtk_media_stream_is_seeking)
+   * GtkMediaStream:seeking: (getter is_seeking)
    *
    * Set while a seek is in progress.
    */
@@ -392,7 +392,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:loop: (attributes org.gtk.Property.get=gtk_media_stream_get_loop org.gtk.Property.set=gtk_media_stream_set_loop)
+   * GtkMediaStream:loop:
    *
    * Try to restart the media from the beginning once it ended.
    */
@@ -402,7 +402,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:muted: (attributes org.gtk.Property.get=gtk_media_stream_get_muted org.gtk.Property.set=gtk_media_stream_set_muted)
+   * GtkMediaStream:muted:
    *
    * Whether the audio stream should be muted.
    */
@@ -412,7 +412,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:volume: (attributes org.gtk.Property.get=gtk_media_stream_get_volume org.gtk.Property.set=gtk_media_stream_set_volume)
+   * GtkMediaStream:volume:
    *
    * Volume of the audio stream.
    */
@@ -433,7 +433,7 @@ gtk_media_stream_init (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_is_prepared: (attributes org.gtk.Method.get_property=prepared)
+ * gtk_media_stream_is_prepared: (get-property prepared)
  * @self: a `GtkMediaStream`
  *
  * Returns whether the stream has finished initializing.
@@ -453,7 +453,7 @@ gtk_media_stream_is_prepared (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_has_audio: (attributes org.gtk.Method.get_property=has-audio)
+ * gtk_media_stream_has_audio:
  * @self: a `GtkMediaStream`
  *
  * Returns whether the stream has audio.
@@ -471,7 +471,7 @@ gtk_media_stream_has_audio (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_has_video: (attributes org.gtk.Method.get_property=has-video)
+ * gtk_media_stream_has_video:
  * @self: a `GtkMediaStream`
  *
  * Returns whether the stream has video.
@@ -554,7 +554,7 @@ gtk_media_stream_pause (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_get_playing: (attributes org.gtk.Method.get_property=playing)
+ * gtk_media_stream_get_playing:
  * @self: a `GtkMediaStream`
  *
  * Return whether the stream is currently playing.
@@ -572,7 +572,7 @@ gtk_media_stream_get_playing (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_set_playing: (attributes org.gtk.Method.set_property=playing)
+ * gtk_media_stream_set_playing:
  * @self: a `GtkMediaStream`
  * @playing: whether to start or pause playback
  *
@@ -591,7 +591,7 @@ gtk_media_stream_set_playing (GtkMediaStream *self,
 }
 
 /**
- * gtk_media_stream_get_ended: (attributes org.gtk.Method.get_property=ended)
+ * gtk_media_stream_get_ended:
  * @self: a `GtkMediaStream`
  *
  * Returns whether the streams playback is finished.
@@ -609,7 +609,7 @@ gtk_media_stream_get_ended (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_get_timestamp: (attributes org.gtk.Method.get_property=timestamp)
+ * gtk_media_stream_get_timestamp:
  * @self: a `GtkMediaStream`
  *
  * Returns the current presentation timestamp in microseconds.
@@ -627,7 +627,7 @@ gtk_media_stream_get_timestamp (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_get_duration: (attributes org.gtk.Method.get_property=duration)
+ * gtk_media_stream_get_duration:
  * @self: a `GtkMediaStream`
  *
  * Gets the duration of the stream.
@@ -647,7 +647,7 @@ gtk_media_stream_get_duration (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_is_seekable: (attributes org.gtk.Method.get_property=seekable)
+ * gtk_media_stream_is_seekable: (get-property seekable)
  * @self: a `GtkMediaStream`
  *
  * Checks if a stream may be seekable.
@@ -673,7 +673,7 @@ gtk_media_stream_is_seekable (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_is_seeking: (attributes org.gtk.Method.get_property=seeking)
+ * gtk_media_stream_is_seeking: (get-property seeking)
  * @self: a `GtkMediaStream`
  *
  * Checks if there is currently a seek operation going on.
@@ -691,7 +691,7 @@ gtk_media_stream_is_seeking (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_get_error: (attributes org.gtk.Method.get_property=error)
+ * gtk_media_stream_get_error:
  * @self: a `GtkMediaStream`
  *
  * If the stream is in an error state, returns the `GError`
@@ -769,7 +769,7 @@ gtk_media_stream_seek (GtkMediaStream *self,
 }
 
 /**
- * gtk_media_stream_get_loop: (attributes org.gtk.Method.get_property=loop)
+ * gtk_media_stream_get_loop:
  * @self: a `GtkMediaStream`
  *
  * Returns whether the stream is set to loop.
@@ -789,7 +789,7 @@ gtk_media_stream_get_loop (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_set_loop: (attributes org.gtk.Method.set_property=loop)
+ * gtk_media_stream_set_loop:
  * @self: a `GtkMediaStream`
  * @loop: %TRUE if the stream should loop
  *
@@ -818,7 +818,7 @@ gtk_media_stream_set_loop (GtkMediaStream *self,
 }
 
 /**
- * gtk_media_stream_get_muted: (attributes org.gtk.Method.get_property=muted)
+ * gtk_media_stream_get_muted:
  * @self: a `GtkMediaStream`
  *
  * Returns whether the audio for the stream is muted.
@@ -838,7 +838,7 @@ gtk_media_stream_get_muted (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_set_muted: (attributes org.gtk.Method.set_property=muted)
+ * gtk_media_stream_set_muted:
  * @self: a `GtkMediaStream`
  * @muted: %TRUE if the stream should be muted
  *
@@ -870,7 +870,7 @@ gtk_media_stream_set_muted (GtkMediaStream *self,
 }
 
 /**
- * gtk_media_stream_get_volume: (attributes org.gtk.Method.get_property=volume)
+ * gtk_media_stream_get_volume:
  * @self: a `GtkMediaStream`
  *
  * Returns the volume of the audio for the stream.
@@ -890,7 +890,7 @@ gtk_media_stream_get_volume (GtkMediaStream *self)
 }
 
 /**
- * gtk_media_stream_set_volume: (attributes org.gtk.Method.set_property=volume)
+ * gtk_media_stream_set_volume:
  * @self: a `GtkMediaStream`
  * @volume: New volume of the stream from 0.0 to 1.0
  *

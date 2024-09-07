@@ -521,7 +521,7 @@ gtk_event_controller_scroll_class_init (GtkEventControllerScrollClass *klass)
   controller_class->handle_event = gtk_event_controller_scroll_handle_event;
 
   /**
-   * GtkEventControllerScroll:flags: (attributes org.gtk.Property.get=gtk_event_controller_scroll_get_flags org.gtk.Property.set=gtk_event_controller_scroll_set_flags)
+   * GtkEventControllerScroll:flags:
    *
    * The flags affecting event controller behavior.
    */
@@ -641,7 +641,7 @@ gtk_event_controller_scroll_new (GtkEventControllerScrollFlags flags)
 }
 
 /**
- * gtk_event_controller_scroll_set_flags: (attributes org.gtk.Method.set_property=flags)
+ * gtk_event_controller_scroll_set_flags:
  * @scroll: a `GtkEventControllerScroll`
  * @flags: flags affecting the controller behavior
  *
@@ -661,7 +661,7 @@ gtk_event_controller_scroll_set_flags (GtkEventControllerScroll      *scroll,
 }
 
 /**
- * gtk_event_controller_scroll_get_flags: (attributes org.gtk.Method.get_property=flags)
+ * gtk_event_controller_scroll_get_flags:
  * @scroll: a `GtkEventControllerScroll`
  *
  * Gets the flags conditioning the scroll controller behavior.

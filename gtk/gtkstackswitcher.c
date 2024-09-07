@@ -412,7 +412,7 @@ unset_stack (GtkStackSwitcher *switcher)
 }
 
 /**
- * gtk_stack_switcher_set_stack: (attributes org.gtk.Method.set_property=stack)
+ * gtk_stack_switcher_set_stack:
  * @switcher: a `GtkStackSwitcher`
  * @stack: (nullable): a `GtkStack`
  *
@@ -437,7 +437,7 @@ gtk_stack_switcher_set_stack (GtkStackSwitcher *switcher,
 }
 
 /**
- * gtk_stack_switcher_get_stack: (attributes org.gtk.Method.get_property=stack)
+ * gtk_stack_switcher_get_stack:
  * @switcher: a `GtkStackSwitcher`
  *
  * Retrieves the stack.
@@ -542,7 +542,7 @@ gtk_stack_switcher_class_init (GtkStackSwitcherClass *class)
   object_class->finalize = gtk_stack_switcher_finalize;
 
   /**
-   * GtkStackSwitcher:stack: (attributes org.gtk.Property.get=gtk_stack_switcher_get_stack org.gtk.Property.set=gtk_stack_switcher_set_stack)
+   * GtkStackSwitcher:stack:
    *
    * The stack.
    */

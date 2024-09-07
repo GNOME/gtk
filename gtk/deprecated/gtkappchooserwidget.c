@@ -904,7 +904,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   g_object_class_override_property (gobject_class, PROP_CONTENT_TYPE, "content-type");
 
   /**
-   * GtkAppChooserWidget:show-default: (attributes org.gtk.Property.get=gtk_app_chooser_widget_get_show_default org.gtk.Property.set=gtk_app_chooser_widget_set_show_default)
+   * GtkAppChooserWidget:show-default:
    *
    * Determines whether the app chooser should show the default
    * handler for the content type in a separate section.
@@ -918,7 +918,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   g_object_class_install_property (gobject_class, PROP_SHOW_DEFAULT, pspec);
 
   /**
-   * GtkAppChooserWidget:show-recommended: (attributes org.gtk.Property.get=gtk_app_chooser_widget_get_show_recommended org.gtk.Property.set=gtk_app_chooser_widget_set_show_recommended)
+   * GtkAppChooserWidget:show-recommended:
    *
    * Determines whether the app chooser should show a section
    * for recommended applications.
@@ -932,7 +932,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   g_object_class_install_property (gobject_class, PROP_SHOW_RECOMMENDED, pspec);
 
   /**
-   * GtkAppChooserWidget:show-fallback: (attributes org.gtk.Property.get=gtk_app_chooser_widget_get_show_fallback org.gtk.Property.set=gtk_app_chooser_widget_set_show_fallback)
+   * GtkAppChooserWidget:show-fallback:
    *
    * Determines whether the app chooser should show a section
    * for fallback applications.
@@ -946,7 +946,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   g_object_class_install_property (gobject_class, PROP_SHOW_FALLBACK, pspec);
 
   /**
-   * GtkAppChooserWidget:show-other: (attributes org.gtk.Property.get=gtk_app_chooser_widget_get_show_other org.gtk.Property.set=gtk_app_chooser_widget_set_show_other)
+   * GtkAppChooserWidget:show-other:
    *
    * Determines whether the app chooser should show a section
    * for other applications.
@@ -957,7 +957,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   g_object_class_install_property (gobject_class, PROP_SHOW_OTHER, pspec);
 
   /**
-   * GtkAppChooserWidget:show-all: (attributes org.gtk.Property.get=gtk_app_chooser_widget_get_show_all org.gtk.Property.set=gtk_app_chooser_widget_set_show_all)
+   * GtkAppChooserWidget:show-all:
    *
    * If %TRUE, the app chooser presents all applications
    * in a single list, without subsections for default,
@@ -969,7 +969,7 @@ gtk_app_chooser_widget_class_init (GtkAppChooserWidgetClass *klass)
   g_object_class_install_property (gobject_class, PROP_SHOW_ALL, pspec);
 
   /**
-   * GtkAppChooserWidget:default-text: (attributes org.gtk.Property.get=gtk_app_chooser_widget_get_default_text org.gtk.Property.set=gtk_app_chooser_widget_set_default_text)
+   * GtkAppChooserWidget:default-text:
    *
    * The text that appears in the widget when there are no applications
    * for the given content type.
@@ -1130,7 +1130,7 @@ gtk_app_chooser_widget_new (const char *content_type)
 }
 
 /**
- * gtk_app_chooser_widget_set_show_default: (attributes org.gtk.Method.set_property=show-default)
+ * gtk_app_chooser_widget_set_show_default:
  * @self: a `GtkAppChooserWidget`
  * @setting: the new value for [property@Gtk.AppChooserWidget:show-default]
  *
@@ -1156,7 +1156,7 @@ gtk_app_chooser_widget_set_show_default (GtkAppChooserWidget *self,
 }
 
 /**
- * gtk_app_chooser_widget_get_show_default: (attributes org.gtk.Method.get_property=show-default)
+ * gtk_app_chooser_widget_get_show_default:
  * @self: a `GtkAppChooserWidget`
  *
  * Gets whether the app chooser should show the default handler
@@ -1175,7 +1175,7 @@ gtk_app_chooser_widget_get_show_default (GtkAppChooserWidget *self)
 }
 
 /**
- * gtk_app_chooser_widget_set_show_recommended: (attributes org.gtk.Method.set_property=show-recommended)
+ * gtk_app_chooser_widget_set_show_recommended:
  * @self: a `GtkAppChooserWidget`
  * @setting: the new value for [property@Gtk.AppChooserWidget:show-recommended]
  *
@@ -1201,7 +1201,7 @@ gtk_app_chooser_widget_set_show_recommended (GtkAppChooserWidget *self,
 }
 
 /**
- * gtk_app_chooser_widget_get_show_recommended: (attributes org.gtk.Method.get_property=show-recommended)
+ * gtk_app_chooser_widget_get_show_recommended:
  * @self: a `GtkAppChooserWidget`
  *
  * Gets whether the app chooser should show recommended applications
@@ -1220,7 +1220,7 @@ gtk_app_chooser_widget_get_show_recommended (GtkAppChooserWidget *self)
 }
 
 /**
- * gtk_app_chooser_widget_set_show_fallback: (attributes org.gtk.Method.set_property=show-fallback)
+ * gtk_app_chooser_widget_set_show_fallback:
  * @self: a `GtkAppChooserWidget`
  * @setting: the new value for [property@Gtk.AppChooserWidget:show-fallback]
  *
@@ -1246,7 +1246,7 @@ gtk_app_chooser_widget_set_show_fallback (GtkAppChooserWidget *self,
 }
 
 /**
- * gtk_app_chooser_widget_get_show_fallback: (attributes org.gtk.Method.get_property=show-fallback)
+ * gtk_app_chooser_widget_get_show_fallback:
  * @self: a `GtkAppChooserWidget`
  *
  * Gets whether the app chooser should show related applications
@@ -1265,7 +1265,7 @@ gtk_app_chooser_widget_get_show_fallback (GtkAppChooserWidget *self)
 }
 
 /**
- * gtk_app_chooser_widget_set_show_other: (attributes org.gtk.Method.set_property=show-other)
+ * gtk_app_chooser_widget_set_show_other:
  * @self: a `GtkAppChooserWidget`
  * @setting: the new value for [property@Gtk.AppChooserWidget:show-other]
  *
@@ -1291,7 +1291,7 @@ gtk_app_chooser_widget_set_show_other (GtkAppChooserWidget *self,
 }
 
 /**
- * gtk_app_chooser_widget_get_show_other: (attributes org.gtk.Method.get_property=show-other)
+ * gtk_app_chooser_widget_get_show_other:
  * @self: a `GtkAppChooserWidget`
  *
  * Gets whether the app chooser should show applications
@@ -1310,7 +1310,7 @@ gtk_app_chooser_widget_get_show_other (GtkAppChooserWidget *self)
 }
 
 /**
- * gtk_app_chooser_widget_set_show_all: (attributes org.gtk.Method.set_property=show-all)
+ * gtk_app_chooser_widget_set_show_all:
  * @self: a `GtkAppChooserWidget`
  * @setting: the new value for [property@Gtk.AppChooserWidget:show-all]
  *
@@ -1336,7 +1336,7 @@ gtk_app_chooser_widget_set_show_all (GtkAppChooserWidget *self,
 }
 
 /**
- * gtk_app_chooser_widget_get_show_all: (attributes org.gtk.Method.get_property=show-all)
+ * gtk_app_chooser_widget_get_show_all:
  * @self: a `GtkAppChooserWidget`
  *
  * Gets whether the app chooser should show all applications
@@ -1355,7 +1355,7 @@ gtk_app_chooser_widget_get_show_all (GtkAppChooserWidget *self)
 }
 
 /**
- * gtk_app_chooser_widget_set_default_text: (attributes org.gtk.Method.set_property=default-text)
+ * gtk_app_chooser_widget_set_default_text:
  * @self: a `GtkAppChooserWidget`
  * @text: the new value for [property@Gtk.AppChooserWidget:default-text]
  *
@@ -1382,7 +1382,7 @@ gtk_app_chooser_widget_set_default_text (GtkAppChooserWidget *self,
 }
 
 /**
- * gtk_app_chooser_widget_get_default_text: (attributes org.gtk.Method.get_property=default-text)
+ * gtk_app_chooser_widget_get_default_text:
  * @self: a `GtkAppChooserWidget`
  *
  * Returns the text that is shown if there are not applications

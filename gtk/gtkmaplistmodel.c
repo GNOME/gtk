@@ -406,7 +406,7 @@ gtk_map_list_model_class_init (GtkMapListModelClass *class)
   gobject_class->dispose = gtk_map_list_model_dispose;
 
   /**
-   * GtkMapListModel:has-map: (attributes org.gtk.Property.get=gtk_map_list_model_has_map)
+   * GtkMapListModel:has-map:
    *
    * If a map is set for this model
    */
@@ -428,7 +428,7 @@ gtk_map_list_model_class_init (GtkMapListModelClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMapListModel:model: (attributes org.gtk.Property.get=gtk_map_list_model_get_model org.gtk.Property.set=gtk_map_list_model_set_model)
+   * GtkMapListModel:model:
    *
    * The model being mapped.
    */
@@ -617,7 +617,7 @@ gtk_map_list_model_set_map_func (GtkMapListModel        *self,
 }
 
 /**
- * gtk_map_list_model_set_model: (attributes org.gtk.Method.set_property=model)
+ * gtk_map_list_model_set_model:
  * @self: a `GtkMapListModel`
  * @model: (nullable): The model to be mapped
  *
@@ -667,7 +667,7 @@ gtk_map_list_model_set_model (GtkMapListModel *self,
 }
 
 /**
- * gtk_map_list_model_get_model: (attributes org.gtk.Method.get_property=model)
+ * gtk_map_list_model_get_model:
  * @self: a `GtkMapListModel`
  *
  * Gets the model that is currently being mapped or %NULL if none.
@@ -683,7 +683,7 @@ gtk_map_list_model_get_model (GtkMapListModel *self)
 }
 
 /**
- * gtk_map_list_model_has_map: (attributes org.gtk.Method.get_property=has-map)
+ * gtk_map_list_model_has_map:
  * @self: a `GtkMapListModel`
  *
  * Checks if a map function is currently set on @self.

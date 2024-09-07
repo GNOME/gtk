@@ -337,7 +337,7 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkSliceListModel:model: (attributes org.gtk.Property.get=gtk_slice_list_model_get_model org.gtk.Property.set=gtk_slice_list_model_set_model)
+   * GtkSliceListModel:model:
    *
    * Child model to take slice from.
    */
@@ -359,7 +359,7 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkSliceListModel:offset: (attributes org.gtk.Property.get=gtk_slice_list_model_get_offset org.gtk.Property.set=gtk_slice_list_model_set_offset)
+   * GtkSliceListModel:offset:
    *
    * Offset of slice.
    */
@@ -369,7 +369,7 @@ gtk_slice_list_model_class_init (GtkSliceListModelClass *class)
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkSliceListModel:size: (attributes org.gtk.Property.get=gtk_slice_list_model_get_size org.gtk.Property.set=gtk_slice_list_model_set_size)
+   * GtkSliceListModel:size:
    *
    * Maximum size of slice.
    */
@@ -422,7 +422,7 @@ gtk_slice_list_model_new (GListModel *model,
 }
 
 /**
- * gtk_slice_list_model_set_model: (attributes org.gtk.Method.set_property=model)
+ * gtk_slice_list_model_set_model:
  * @self: a `GtkSliceListModel`
  * @model: (nullable): The model to be sliced
  *
@@ -468,7 +468,7 @@ gtk_slice_list_model_set_model (GtkSliceListModel *self,
 }
 
 /**
- * gtk_slice_list_model_get_model: (attributes org.gtk.Method.get_property=model)
+ * gtk_slice_list_model_get_model:
  * @self: a `GtkSliceListModel`
  *
  * Gets the model that is currently being used or %NULL if none.
@@ -484,7 +484,7 @@ gtk_slice_list_model_get_model (GtkSliceListModel *self)
 }
 
 /**
- * gtk_slice_list_model_set_offset: (attributes org.gtk.Method.set_property=offset)
+ * gtk_slice_list_model_set_offset:
  * @self: a `GtkSliceListModel`
  * @offset: the new offset to use
  *
@@ -519,7 +519,7 @@ gtk_slice_list_model_set_offset (GtkSliceListModel *self,
 }
 
 /**
- * gtk_slice_list_model_get_offset: (attributes org.gtk.Method.get_property=offset)
+ * gtk_slice_list_model_get_offset:
  * @self: a `GtkSliceListModel`
  *
  * Gets the offset set via gtk_slice_list_model_set_offset().
@@ -535,7 +535,7 @@ gtk_slice_list_model_get_offset (GtkSliceListModel *self)
 }
 
 /**
- * gtk_slice_list_model_set_size: (attributes org.gtk.Method.set_property=size)
+ * gtk_slice_list_model_set_size:
  * @self: a `GtkSliceListModel`
  * @size: the maximum size
  *
@@ -578,7 +578,7 @@ gtk_slice_list_model_set_size (GtkSliceListModel *self,
 }
 
 /**
- * gtk_slice_list_model_get_size: (attributes org.gtk.Method.get_property=size)
+ * gtk_slice_list_model_get_size:
  * @self: a `GtkSliceListModel`
  *
  * Gets the size set via gtk_slice_list_model_set_size().

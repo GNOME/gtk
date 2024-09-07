@@ -194,7 +194,7 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
   controller_class->handle_crossing = gtk_event_controller_motion_handle_crossing;
 
   /**
-   * GtkEventControllerMotion:is-pointer: (attributes org.gtk.Property.get=gtk_event_controller_motion_is_pointer)
+   * GtkEventControllerMotion:is-pointer:
    *
    * Whether the pointer is in the controllers widget itself,
    * as opposed to in a descendent widget.
@@ -211,7 +211,7 @@ gtk_event_controller_motion_class_init (GtkEventControllerMotionClass *klass)
                             G_PARAM_READABLE);
 
   /**
-   * GtkEventControllerMotion:contains-pointer: (attributes org.gtk.Property.get=gtk_event_controller_motion_contains_pointer)
+   * GtkEventControllerMotion:contains-pointer:
    *
    * Whether the pointer is in the controllers widget or a descendant.
    *
@@ -303,7 +303,7 @@ gtk_event_controller_motion_new (void)
 }
 
 /**
- * gtk_event_controller_motion_contains_pointer: (attributes org.gtk.Method.get_property=contains-pointer)
+ * gtk_event_controller_motion_contains_pointer:
  * @self: a `GtkEventControllerMotion`
  *
  * Returns if a pointer is within @self or one of its children.
@@ -319,7 +319,7 @@ gtk_event_controller_motion_contains_pointer (GtkEventControllerMotion *self)
 }
 
 /**
- * gtk_event_controller_motion_is_pointer: (attributes org.gtk.Method.get_property=is-pointer)
+ * gtk_event_controller_motion_is_pointer:
  * @self: a `GtkEventControllerMotion`
  *
  * Returns if a pointer is within @self, but not one of its children.

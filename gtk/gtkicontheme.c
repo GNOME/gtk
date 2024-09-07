@@ -3564,7 +3564,7 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
   gobject_class->finalize = gtk_icon_paintable_finalize;
 
   /**
-   * GtkIconPaintable:file: (attributes org.gtk.Property.get=gtk_icon_paintable_get_file)
+   * GtkIconPaintable:file:
    *
    * The file representing the icon, if any.
    */
@@ -3574,7 +3574,7 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
 
   /**
-   * GtkIconPaintable:icon-name: (attributes org.gtk.Property.get=gtk_icon_paintable_get_icon_name)
+   * GtkIconPaintable:icon-name:
    *
    * The icon name that was chosen during lookup.
    */
@@ -3584,7 +3584,7 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
                                                         G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
 
   /**
-   * GtkIconPaintable:is-symbolic: (attributes org.gtk.Property.get=gtk_icon_paintable_is_symbolic)
+   * GtkIconPaintable:is-symbolic: (getter is_symbolic)
    *
    * Whether the icon is symbolic or not.
    */
@@ -3609,7 +3609,7 @@ new_resource_file (const char *filename)
 }
 
 /**
- * gtk_icon_paintable_get_file: (attributes org.gtk.Method.get_property=file)
+ * gtk_icon_paintable_get_file:
  * @self: a `GtkIconPaintable`
  *
  * Gets the `GFile` that was used to load the icon.
@@ -3633,7 +3633,7 @@ gtk_icon_paintable_get_file (GtkIconPaintable *icon)
 }
 
 /**
- * gtk_icon_paintable_get_icon_name: (attributes org.gtk.Method.get_property=icon-name)
+ * gtk_icon_paintable_get_icon_name:
  * @self: a `GtkIconPaintable`
  *
  * Get the icon name being used for this icon.
@@ -3659,7 +3659,7 @@ gtk_icon_paintable_get_icon_name (GtkIconPaintable *icon)
 }
 
 /**
- * gtk_icon_paintable_is_symbolic: (attributes org.gtk.Method.get_property=is-symbolic)
+ * gtk_icon_paintable_is_symbolic: (get-property is-symbolic)
  * @self: a `GtkIconPaintable`
  *
  * Checks if the icon is symbolic or not.

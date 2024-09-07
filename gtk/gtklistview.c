@@ -875,7 +875,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
   gobject_class->set_property = gtk_list_view_set_property;
 
   /**
-   * GtkListView:enable-rubberband: (attributes org.gtk.Property.get=gtk_list_view_get_enable_rubberband org.gtk.Property.set=gtk_list_view_set_enable_rubberband)
+   * GtkListView:enable-rubberband:
    *
    * Allow rubberband selection.
    */
@@ -885,7 +885,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkListView:factory: (attributes org.gtk.Property.get=gtk_list_view_get_factory org.gtk.Property.set=gtk_list_view_set_factory)
+   * GtkListView:factory:
    *
    * Factory for populating list items.
    *
@@ -897,7 +897,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListView:header-factory: (attributes org.gtk.Property.get=gtk_list_view_get_header_factory org.gtk.Property.set=gtk_list_view_set_header_factory)
+   * GtkListView:header-factory:
    *
    * Factory for creating header widgets.
    *
@@ -911,7 +911,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListView:model: (attributes org.gtk.Property.get=gtk_list_view_get_model org.gtk.Property.set=gtk_list_view_set_model)
+   * GtkListView:model:
    *
    * Model for the items displayed.
    */
@@ -921,7 +921,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListView:show-separators: (attributes org.gtk.Property.get=gtk_list_view_get_show_separators org.gtk.Property.set=gtk_list_view_set_show_separators)
+   * GtkListView:show-separators:
    *
    * Show separators between rows.
    */
@@ -931,7 +931,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkListView:single-click-activate: (attributes org.gtk.Property.get=gtk_list_view_get_single_click_activate org.gtk.Property.set=gtk_list_view_set_single_click_activate)
+   * GtkListView:single-click-activate:
    *
    * Activate rows on single click and select them on hover.
    */
@@ -941,7 +941,7 @@ gtk_list_view_class_init (GtkListViewClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkListView:tab-behavior: (attributes org.gtk.Property.get=gtk_list_view_get_tab_behavior org.gtk.Property.set=gtk_list_view_set_tab_behavior)
+   * GtkListView:tab-behavior:
    *
    * Behavior of the <kbd>Tab</kbd> key
    *
@@ -1047,7 +1047,7 @@ gtk_list_view_new (GtkSelectionModel  *model,
 }
 
 /**
- * gtk_list_view_get_model: (attributes org.gtk.Method.get_property=model)
+ * gtk_list_view_get_model:
  * @self: a `GtkListView`
  *
  * Gets the model that's currently used to read the items displayed.
@@ -1063,7 +1063,7 @@ gtk_list_view_get_model (GtkListView *self)
 }
 
 /**
- * gtk_list_view_set_model: (attributes org.gtk.Method.set_property=model)
+ * gtk_list_view_set_model:
  * @self: a `GtkListView`
  * @model: (nullable) (transfer none): the model to use
  *
@@ -1089,7 +1089,7 @@ gtk_list_view_set_model (GtkListView       *self,
 }
 
 /**
- * gtk_list_view_get_factory: (attributes org.gtk.Method.get_property=factory)
+ * gtk_list_view_get_factory:
  * @self: a `GtkListView`
  *
  * Gets the factory that's currently used to populate list items.
@@ -1105,7 +1105,7 @@ gtk_list_view_get_factory (GtkListView *self)
 }
 
 /**
- * gtk_list_view_set_factory: (attributes org.gtk.Method.set_property=factory)
+ * gtk_list_view_set_factory:
  * @self: a `GtkListView`
  * @factory: (nullable) (transfer none): the factory to use
  *
@@ -1127,7 +1127,7 @@ gtk_list_view_set_factory (GtkListView        *self,
 }
 
 /**
- * gtk_list_view_get_header_factory: (attributes org.gtk.Method.get_property=header-factory)
+ * gtk_list_view_get_header_factory:
  * @self: a `GtkListView`
  *
  * Gets the factory that's currently used to populate section headers.
@@ -1145,7 +1145,7 @@ gtk_list_view_get_header_factory (GtkListView *self)
 }
 
 /**
- * gtk_list_view_set_header_factory: (attributes org.gtk.Method.set_property=header-factory)
+ * gtk_list_view_set_header_factory:
  * @self: a `GtkListView`
  * @factory: (nullable) (transfer none): the factory to use
  *
@@ -1190,7 +1190,7 @@ gtk_list_view_set_header_factory (GtkListView        *self,
 }
 
 /**
- * gtk_list_view_set_show_separators: (attributes org.gtk.Method.set_property=show-separators)
+ * gtk_list_view_set_show_separators:
  * @self: a `GtkListView`
  * @show_separators: %TRUE to show separators
  *
@@ -1217,7 +1217,7 @@ gtk_list_view_set_show_separators (GtkListView *self,
 }
 
 /**
- * gtk_list_view_get_show_separators: (attributes org.gtk.Method.get_property=show-separators)
+ * gtk_list_view_get_show_separators:
  * @self: a `GtkListView`
  *
  * Returns whether the list box should show separators
@@ -1234,7 +1234,7 @@ gtk_list_view_get_show_separators (GtkListView *self)
 }
 
 /**
- * gtk_list_view_set_single_click_activate: (attributes org.gtk.Method.set_property=single-click-activate)
+ * gtk_list_view_set_single_click_activate:
  * @self: a `GtkListView`
  * @single_click_activate: %TRUE to activate items on single click
  *
@@ -1266,7 +1266,7 @@ gtk_list_view_set_single_click_activate (GtkListView *self,
 }
 
 /**
- * gtk_list_view_get_single_click_activate: (attributes org.gtk.Method.get_property=single-click-activate)
+ * gtk_list_view_get_single_click_activate:
  * @self: a `GtkListView`
  *
  * Returns whether rows will be activated on single click and
@@ -1283,7 +1283,7 @@ gtk_list_view_get_single_click_activate (GtkListView *self)
 }
 
 /**
- * gtk_list_view_set_enable_rubberband: (attributes org.gtk.Method.set_property=enable-rubberband)
+ * gtk_list_view_set_enable_rubberband:
  * @self: a `GtkListView`
  * @enable_rubberband: %TRUE to enable rubberband selection
  *
@@ -1304,7 +1304,7 @@ gtk_list_view_set_enable_rubberband (GtkListView *self,
 }
 
 /**
- * gtk_list_view_get_enable_rubberband: (attributes org.gtk.Method.get_property=enable-rubberband)
+ * gtk_list_view_get_enable_rubberband:
  * @self: a `GtkListView`
  *
  * Returns whether rows can be selected by dragging with the mouse.
@@ -1320,7 +1320,7 @@ gtk_list_view_get_enable_rubberband (GtkListView *self)
 }
 
 /**
- * gtk_list_view_set_tab_behavior: (attributes org.gtk.Method.set_property=tab-behavior)
+ * gtk_list_view_set_tab_behavior:
  * @self: a `GtkListView`
  * @tab_behavior: The desired tab behavior
  *
@@ -1343,7 +1343,7 @@ gtk_list_view_set_tab_behavior (GtkListView        *self,
 }
 
 /**
- * gtk_list_view_get_tab_behavior: (attributes org.gtk.Method.get_property=tab-behavior)
+ * gtk_list_view_get_tab_behavior:
  * @self: a `GtkListView`
  *
  * Gets the behavior set for the <kbd>Tab</kbd> key.

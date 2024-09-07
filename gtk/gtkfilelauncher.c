@@ -151,7 +151,7 @@ gtk_file_launcher_class_init (GtkFileLauncherClass *class)
   object_class->set_property = gtk_file_launcher_set_property;
 
   /**
-   * GtkFileLauncher:file: (attributes org.gtk.Property.get=gtk_file_launcher_get_file org.gtk.Property.set=gtk_file_launcher_set_file)
+   * GtkFileLauncher:file:
    *
    * The file to launch.
    *
@@ -163,7 +163,7 @@ gtk_file_launcher_class_init (GtkFileLauncherClass *class)
                            G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFileLauncher:always-ask: (attributes org.gtk.Property.get=gtk_file_launcher_get_always_ask org.gtk.Property.set=gtk_file_launcher_set_always_ask)
+   * GtkFileLauncher:always-ask:
    *
    * Whether to ask the user to choose an app for opening the file. If `FALSE`,
    * the file might be opened with a default app or the previous choice.
@@ -176,7 +176,7 @@ gtk_file_launcher_class_init (GtkFileLauncherClass *class)
                             G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFileLauncher:writable: (attributes org.gtk.Property.get=gtk_file_launcher_get_writable org.gtk.Property.set=gtk_file_launcher_set_writable)
+   * GtkFileLauncher:writable:
    *
    * Whether to make the file writable for the handler.
    *

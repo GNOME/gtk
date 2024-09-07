@@ -457,7 +457,7 @@ gtk_flatten_list_model_class_init (GtkFlattenListModelClass *class)
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkFlattenListModel:model: (attributes org.gtk.Property.get=gtk_flatten_list_model_get_model org.gtk.Property.set=gtk_flatten_list_model_set_model)
+   * GtkFlattenListModel:model:
    *
    * The model being flattened.
    */
@@ -512,7 +512,7 @@ gtk_flatten_list_model_new (GListModel *model)
 }
 
 /**
- * gtk_flatten_list_model_set_model: (attributes org.gtk.Method.set_property=model)
+ * gtk_flatten_list_model_set_model:
  * @self: a `GtkFlattenListModel`
  * @model: (nullable) (transfer none): the new model
  *
@@ -557,7 +557,7 @@ gtk_flatten_list_model_set_model (GtkFlattenListModel *self,
 }
 
 /**
- * gtk_flatten_list_model_get_model: (attributes org.gtk.Method.get_property=model)
+ * gtk_flatten_list_model_get_model:
  * @self: a `GtkFlattenListModel`
  *
  * Gets the model set via gtk_flatten_list_model_set_model().

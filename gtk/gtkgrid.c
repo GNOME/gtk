@@ -426,7 +426,7 @@ gtk_grid_class_init (GtkGridClass *class)
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   /**
-   * GtkGrid:row-spacing: (attributes org.gtk.Property.get=gtk_grid_get_row_spacing org.gtk.Property.set=gtk_grid_set_row_spacing)
+   * GtkGrid:row-spacing:
    *
    * The amount of space between two consecutive rows.
    */
@@ -436,7 +436,7 @@ gtk_grid_class_init (GtkGridClass *class)
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGrid:column-spacing: (attributes org.gtk.Property.get=gtk_grid_get_column_spacing org.gtk.Property.set=gtk_grid_set_column_spacing)
+   * GtkGrid:column-spacing:
    *
    * The amount of space between two consecutive columns.
    */
@@ -446,7 +446,7 @@ gtk_grid_class_init (GtkGridClass *class)
                       GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGrid:row-homogeneous: (attributes org.gtk.Property.get=gtk_grid_get_row_homogeneous org.gtk.Property.set=gtk_grid_set_row_homogeneous)
+   * GtkGrid:row-homogeneous:
    *
    * If %TRUE, the rows are all the same height.
    */
@@ -456,7 +456,7 @@ gtk_grid_class_init (GtkGridClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGrid:column-homogeneous: (attributes org.gtk.Property.get=gtk_grid_get_column_homogeneous org.gtk.Property.set=gtk_grid_set_column_homogeneous)
+   * GtkGrid:column-homogeneous:
    *
    * If %TRUE, the columns are all the same width.
    */
@@ -466,7 +466,7 @@ gtk_grid_class_init (GtkGridClass *class)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkGrid:baseline-row: (attributes org.gtk.Property.get=gtk_grid_get_baseline_row org.gtk.Property.set=gtk_grid_set_baseline_row)
+   * GtkGrid:baseline-row:
    *
    * The row to align to the baseline when valign is using baseline alignment.
    */
@@ -962,7 +962,7 @@ gtk_grid_insert_next_to (GtkGrid         *grid,
 }
 
 /**
- * gtk_grid_set_row_homogeneous: (attributes org.gtk.Method.set_property=row-homogeneous)
+ * gtk_grid_set_row_homogeneous:
  * @grid: a `GtkGrid`
  * @homogeneous: %TRUE to make rows homogeneous
  *
@@ -986,7 +986,7 @@ gtk_grid_set_row_homogeneous (GtkGrid  *grid,
 }
 
 /**
- * gtk_grid_get_row_homogeneous: (attributes org.gtk.Method.get_property=row-homogeneous)
+ * gtk_grid_get_row_homogeneous:
  * @grid: a `GtkGrid`
  *
  * Returns whether all rows of @grid have the same height.
@@ -1004,7 +1004,7 @@ gtk_grid_get_row_homogeneous (GtkGrid *grid)
 }
 
 /**
- * gtk_grid_set_column_homogeneous: (attributes org.gtk.Method.set_property=column-homogeneous)
+ * gtk_grid_set_column_homogeneous:
  * @grid: a `GtkGrid`
  * @homogeneous: %TRUE to make columns homogeneous
  *
@@ -1028,7 +1028,7 @@ gtk_grid_set_column_homogeneous (GtkGrid  *grid,
 }
 
 /**
- * gtk_grid_get_column_homogeneous: (attributes org.gtk.Method.get_property=column-homogeneous)
+ * gtk_grid_get_column_homogeneous:
  * @grid: a `GtkGrid`
  *
  * Returns whether all columns of @grid have the same width.
@@ -1046,7 +1046,7 @@ gtk_grid_get_column_homogeneous (GtkGrid *grid)
 }
 
 /**
- * gtk_grid_set_row_spacing: (attributes org.gtk.Method.set_property=row-spacing)
+ * gtk_grid_set_row_spacing:
  * @grid: a `GtkGrid`
  * @spacing: the amount of space to insert between rows
  *
@@ -1071,7 +1071,7 @@ gtk_grid_set_row_spacing (GtkGrid *grid,
 }
 
 /**
- * gtk_grid_get_row_spacing: (attributes org.gtk.Method.get_property=row-spacing)
+ * gtk_grid_get_row_spacing:
  * @grid: a `GtkGrid`
  *
  * Returns the amount of space between the rows of @grid.
@@ -1089,7 +1089,7 @@ gtk_grid_get_row_spacing (GtkGrid *grid)
 }
 
 /**
- * gtk_grid_set_column_spacing: (attributes org.gtk.Method.set_property=column-spacing)
+ * gtk_grid_set_column_spacing:
  * @grid: a `GtkGrid`
  * @spacing: the amount of space to insert between columns
  *
@@ -1114,7 +1114,7 @@ gtk_grid_set_column_spacing (GtkGrid *grid,
 }
 
 /**
- * gtk_grid_get_column_spacing: (attributes org.gtk.Method.get_property=column-spacing)
+ * gtk_grid_get_column_spacing:
  * @grid: a `GtkGrid`
  *
  * Returns the amount of space between the columns of @grid.
@@ -1179,7 +1179,7 @@ gtk_grid_get_row_baseline_position (GtkGrid      *grid,
 }
 
 /**
- * gtk_grid_set_baseline_row: (attributes org.gtk.Method.set_property=baseline-row)
+ * gtk_grid_set_baseline_row:
  * @grid: a `GtkGrid`
  * @row: the row index
  *
@@ -1207,7 +1207,7 @@ gtk_grid_set_baseline_row (GtkGrid *grid,
 }
 
 /**
- * gtk_grid_get_baseline_row: (attributes org.gtk.Method.get_property=baseline-row)
+ * gtk_grid_get_baseline_row:
  * @grid: a `GtkGrid`
  *
  * Returns which row defines the global baseline of @grid.

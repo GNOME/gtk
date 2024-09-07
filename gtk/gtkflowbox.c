@@ -531,7 +531,7 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
   class->activate = gtk_flow_box_child_activate;
 
   /**
-   * GtkFlowBoxChild:child: (attributes org.gtk.Property.get=gtk_flow_box_child_get_child org.gtk.Property.set=gtk_flow_box_child_set_child)
+   * GtkFlowBoxChild:child:
    *
    * The child widget.
    */
@@ -594,7 +594,7 @@ gtk_flow_box_child_new (void)
 }
 
 /**
- * gtk_flow_box_child_set_child: (attributes org.gtk.Method.set_property=child)
+ * gtk_flow_box_child_set_child:
  * @self: a `GtkFlowBoxChild`
  * @child: (nullable): the child widget
  *
@@ -621,7 +621,7 @@ gtk_flow_box_child_set_child (GtkFlowBoxChild *self,
 }
 
 /**
- * gtk_flow_box_child_get_child: (attributes org.gtk.Method.get_property=child)
+ * gtk_flow_box_child_get_child:
  * @self: a `GtkFlowBoxChild`
  *
  * Gets the child widget of @self.
@@ -3662,7 +3662,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
   g_object_class_override_property (object_class, PROP_ORIENTATION, "orientation");
 
   /**
-   * GtkFlowBox:selection-mode: (attributes org.gtk.Property.get=gtk_flow_box_get_selection_mode org.gtk.Property.set=gtk_flow_box_set_selection_mode)
+   * GtkFlowBox:selection-mode:
    *
    * The selection mode used by the flow box.
    */
@@ -3673,7 +3673,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:activate-on-single-click: (attributes org.gtk.Property.get=gtk_flow_box_get_activate_on_single_click org.gtk.Property.set=gtk_flow_box_set_activate_on_single_click)
+   * GtkFlowBox:activate-on-single-click:
    *
    * Determines whether children can be activated with a single
    * click, or require a double-click.
@@ -3694,7 +3694,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:homogeneous: (attributes org.gtk.Property.get=gtk_flow_box_get_homogeneous org.gtk.Property.set=gtk_flow_box_set_homogeneous)
+   * GtkFlowBox:homogeneous:
    *
    * Determines whether all children should be allocated the
    * same size.
@@ -3705,7 +3705,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                           GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:min-children-per-line: (attributes org.gtk.Property.get=gtk_flow_box_get_min_children_per_line org.gtk.Property.set=gtk_flow_box_set_min_children_per_line)
+   * GtkFlowBox:min-children-per-line:
    *
    * The minimum number of children to allocate consecutively
    * in the given orientation.
@@ -3720,7 +3720,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:max-children-per-line: (attributes org.gtk.Property.get=gtk_flow_box_get_max_children_per_line org.gtk.Property.set=gtk_flow_box_set_max_children_per_line)
+   * GtkFlowBox:max-children-per-line:
    *
    * The maximum amount of children to request space for consecutively
    * in the given orientation.
@@ -3731,7 +3731,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:row-spacing: (attributes org.gtk.Property.get=gtk_flow_box_get_row_spacing org.gtk.Property.set=gtk_flow_box_set_row_spacing)
+   * GtkFlowBox:row-spacing:
    *
    * The amount of vertical space between two children.
    */
@@ -3741,7 +3741,7 @@ gtk_flow_box_class_init (GtkFlowBoxClass *class)
                        GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkFlowBox:column-spacing: (attributes org.gtk.Property.get=gtk_flow_box_get_column_spacing org.gtk.Property.set=gtk_flow_box_set_column_spacing)
+   * GtkFlowBox:column-spacing:
    *
    * The amount of horizontal space between two children.
    */
@@ -4417,7 +4417,7 @@ gtk_flow_box_bind_model (GtkFlowBox                 *box,
 /*  Setters and getters {{{2 */
 
 /**
- * gtk_flow_box_get_homogeneous: (attributes org.gtk.Method.get_property=homogeneous)
+ * gtk_flow_box_get_homogeneous:
  * @box: a `GtkFlowBox`
  *
  * Returns whether the box is homogeneous.
@@ -4433,7 +4433,7 @@ gtk_flow_box_get_homogeneous (GtkFlowBox *box)
 }
 
 /**
- * gtk_flow_box_set_homogeneous: (attributes org.gtk.Method.set_property=homogeneous)
+ * gtk_flow_box_set_homogeneous:
  * @box: a `GtkFlowBox`
  * @homogeneous: %TRUE to create equal allotments,
  *   %FALSE for variable allotments
@@ -4459,7 +4459,7 @@ gtk_flow_box_set_homogeneous (GtkFlowBox *box,
 }
 
 /**
- * gtk_flow_box_set_row_spacing: (attributes org.gtk.Method.set_property=row-spacing)
+ * gtk_flow_box_set_row_spacing:
  * @box: a `GtkFlowBox`
  * @spacing: the spacing to use
  *
@@ -4481,7 +4481,7 @@ gtk_flow_box_set_row_spacing (GtkFlowBox *box,
 }
 
 /**
- * gtk_flow_box_get_row_spacing: (attributes org.gtk.Method.get_property=row-spacing)
+ * gtk_flow_box_get_row_spacing:
  * @box: a `GtkFlowBox`
  *
  * Gets the vertical spacing.
@@ -4497,7 +4497,7 @@ gtk_flow_box_get_row_spacing (GtkFlowBox *box)
 }
 
 /**
- * gtk_flow_box_set_column_spacing: (attributes org.gtk.Method.set_property=column-spacing)
+ * gtk_flow_box_set_column_spacing:
  * @box: a `GtkFlowBox`
  * @spacing: the spacing to use
  *
@@ -4519,7 +4519,7 @@ gtk_flow_box_set_column_spacing (GtkFlowBox *box,
 }
 
 /**
- * gtk_flow_box_get_column_spacing: (attributes org.gtk.Method.get_property=column-spacing)
+ * gtk_flow_box_get_column_spacing:
  * @box: a `GtkFlowBox`
  *
  * Gets the horizontal spacing.
@@ -4535,7 +4535,7 @@ gtk_flow_box_get_column_spacing (GtkFlowBox *box)
 }
 
 /**
- * gtk_flow_box_set_min_children_per_line: (attributes org.gtk.Method.set_property=min-children-per-line)
+ * gtk_flow_box_set_min_children_per_line:
  * @box: a `GtkFlowBox`
  * @n_children: the minimum number of children per line
  *
@@ -4558,7 +4558,7 @@ gtk_flow_box_set_min_children_per_line (GtkFlowBox *box,
 }
 
 /**
- * gtk_flow_box_get_min_children_per_line: (attributes org.gtk.Method.get_property=min-children-per-line)
+ * gtk_flow_box_get_min_children_per_line:
  * @box: a `GtkFlowBox`
  *
  * Gets the minimum number of children per line.
@@ -4574,7 +4574,7 @@ gtk_flow_box_get_min_children_per_line (GtkFlowBox *box)
 }
 
 /**
- * gtk_flow_box_set_max_children_per_line: (attributes org.gtk.Method.set_property=max-children-per-line)
+ * gtk_flow_box_set_max_children_per_line:
  * @box: a `GtkFlowBox`
  * @n_children: the maximum number of children per line
  *
@@ -4602,7 +4602,7 @@ gtk_flow_box_set_max_children_per_line (GtkFlowBox *box,
 }
 
 /**
- * gtk_flow_box_get_max_children_per_line: (attributes org.gtk.Method.get_property=max-children-per-line)
+ * gtk_flow_box_get_max_children_per_line:
  * @box: a `GtkFlowBox`
  *
  * Gets the maximum number of children per line.
@@ -4618,7 +4618,7 @@ gtk_flow_box_get_max_children_per_line (GtkFlowBox *box)
 }
 
 /**
- * gtk_flow_box_set_activate_on_single_click: (attributes org.gtk.Method.set_property=activate-on-single-click)
+ * gtk_flow_box_set_activate_on_single_click:
  * @box: a `GtkFlowBox`
  * @single: %TRUE to emit child-activated on a single click
  *
@@ -4641,7 +4641,7 @@ gtk_flow_box_set_activate_on_single_click (GtkFlowBox *box,
 }
 
 /**
- * gtk_flow_box_get_activate_on_single_click: (attributes org.gtk.Method.get_property=activate-on-single-click)
+ * gtk_flow_box_get_activate_on_single_click:
  * @box: a `GtkFlowBox`
  *
  * Returns whether children activate on single clicks.
@@ -4825,7 +4825,7 @@ gtk_flow_box_selected_foreach (GtkFlowBox            *box,
 }
 
 /**
- * gtk_flow_box_set_selection_mode: (attributes org.gtk.Method.set_property=selection-mode)
+ * gtk_flow_box_set_selection_mode:
  * @box: a `GtkFlowBox`
  * @mode: the new selection mode
  *
@@ -4862,7 +4862,7 @@ gtk_flow_box_set_selection_mode (GtkFlowBox       *box,
 }
 
 /**
- * gtk_flow_box_get_selection_mode: (attributes org.gtk.Method.get_property=selection-mode)
+ * gtk_flow_box_get_selection_mode:
  * @box: a `GtkFlowBox`
  *
  * Gets the selection mode of @box.

@@ -215,7 +215,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkFileChooserNative, gtk_file_chooser_native, GTK_TYPE
 
 
 /**
- * gtk_file_chooser_native_get_accept_label: (attributes org.gtk.Method.get_property=accept-label)
+ * gtk_file_chooser_native_get_accept_label:
  * @self: a `GtkFileChooserNative`
  *
  * Retrieves the custom label text for the accept button.
@@ -233,7 +233,7 @@ gtk_file_chooser_native_get_accept_label (GtkFileChooserNative *self)
 }
 
 /**
- * gtk_file_chooser_native_set_accept_label: (attributes org.gtk.Method.set_property=accept-label)
+ * gtk_file_chooser_native_set_accept_label:
  * @self: a `GtkFileChooserNative`
  * @accept_label: (nullable): custom label
  *
@@ -261,7 +261,7 @@ gtk_file_chooser_native_set_accept_label (GtkFileChooserNative *self,
 }
 
 /**
- * gtk_file_chooser_native_get_cancel_label: (attributes org.gtk.Method.get_property=cancel-label)
+ * gtk_file_chooser_native_get_cancel_label:
  * @self: a `GtkFileChooserNative`
  *
  * Retrieves the custom label text for the cancel button.
@@ -279,7 +279,7 @@ gtk_file_chooser_native_get_cancel_label (GtkFileChooserNative *self)
 }
 
 /**
- * gtk_file_chooser_native_set_cancel_label: (attributes org.gtk.Method.set_property=cancel-label)
+ * gtk_file_chooser_native_set_cancel_label:
  * @self: a `GtkFileChooserNative`
  * @cancel_label: (nullable): custom label
  *
@@ -786,7 +786,7 @@ gtk_file_chooser_native_class_init (GtkFileChooserNativeClass *class)
   _gtk_file_chooser_install_properties (gobject_class);
 
   /**
-   * GtkFileChooserNative:accept-label: (attributes org.gtk.Property.get=gtk_file_chooser_native_get_accept_label org.gtk.Property.set=gtk_file_chooser_native_set_accept_label)
+   * GtkFileChooserNative:accept-label:
    *
    * The text used for the label on the accept button in the dialog, or
    * %NULL to use the default text.
@@ -797,7 +797,7 @@ gtk_file_chooser_native_class_init (GtkFileChooserNativeClass *class)
                            GTK_PARAM_READWRITE);
 
   /**
-   * GtkFileChooserNative:cancel-label: (attributes org.gtk.Property.get=gtk_file_chooser_native_get_cancel_label org.gtk.Property.set=gtk_file_chooser_native_set_cancel_label)
+   * GtkFileChooserNative:cancel-label:
    *
    * The text used for the label on the cancel button in the dialog, or
    * %NULL to use the default text.

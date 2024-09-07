@@ -955,7 +955,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                   1, G_TYPE_STRING);
 
   /**
-   * GtkLevelBar:value: (attributes org.gtk.Property.get=gtk_level_bar_get_value org.gtk.Property.set=gtk_level_bar_set_value)
+   * GtkLevelBar:value:
    *
    * Determines the currently filled value of the level bar.
    */
@@ -965,7 +965,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkLevelBar:min-value: (attributes org.gtk.Property.get=gtk_level_bar_get_min_value org.gtk.Property.set=gtk_level_bar_set_min_value)
+   * GtkLevelBar:min-value:
    *
    * Determines the minimum value of the interval that can be displayed by the bar.
    */
@@ -975,7 +975,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkLevelBar:max-value: (attributes org.gtk.Property.get=gtk_level_bar_get_max_value org.gtk.Property.set=gtk_level_bar_set_max_value)
+   * GtkLevelBar:max-value:
    *
    * Determines the maximum value of the interval that can be displayed by the bar.
    */
@@ -985,7 +985,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                          G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkLevelBar:mode: (attributes org.gtk.Property.get=gtk_level_bar_get_mode org.gtk.Property.set=gtk_level_bar_set_mode)
+   * GtkLevelBar:mode:
    *
    * Determines the way `GtkLevelBar` interprets the value properties to draw the
    * level fill area.
@@ -1005,7 +1005,7 @@ gtk_level_bar_class_init (GtkLevelBarClass *klass)
                        G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkLevelBar:inverted: (attributes org.gtk.Property.get=gtk_level_bar_get_inverted org.gtk.Property.set=gtk_level_bar_set_inverted)
+   * GtkLevelBar:inverted:
    *
    * Whether the `GtkLeveBar` is inverted.
    *
@@ -1098,7 +1098,7 @@ gtk_level_bar_new_for_interval (double min_value,
 }
 
 /**
- * gtk_level_bar_get_min_value: (attributes org.gtk.Method.get_property=min-value)
+ * gtk_level_bar_get_min_value:
  * @self: a `GtkLevelBar`
  *
  * Returns the `min-value` of the `GtkLevelBar`.
@@ -1114,7 +1114,7 @@ gtk_level_bar_get_min_value (GtkLevelBar *self)
 }
 
 /**
- * gtk_level_bar_get_max_value: (attributes org.gtk.Method.get_property=max-value)
+ * gtk_level_bar_get_max_value:
  * @self: a `GtkLevelBar`
  *
  * Returns the `max-value` of the `GtkLevelBar`.
@@ -1130,7 +1130,7 @@ gtk_level_bar_get_max_value (GtkLevelBar *self)
 }
 
 /**
- * gtk_level_bar_get_value: (attributes org.gtk.Method.get_property=value)
+ * gtk_level_bar_get_value:
  * @self: a `GtkLevelBar`
  *
  * Returns the `value` of the `GtkLevelBar`.
@@ -1158,7 +1158,7 @@ gtk_level_bar_set_value_internal (GtkLevelBar *self,
 }
 
 /**
- * gtk_level_bar_set_min_value: (attributes org.gtk.Method.set_property=min-value)
+ * gtk_level_bar_set_min_value:
  * @self: a `GtkLevelBar`
  * @value: a positive value
  *
@@ -1194,7 +1194,7 @@ gtk_level_bar_set_min_value (GtkLevelBar *self,
 }
 
 /**
- * gtk_level_bar_set_max_value: (attributes org.gtk.Method.set_property=max-value)
+ * gtk_level_bar_set_max_value:
  * @self: a `GtkLevelBar`
  * @value: a positive value
  *
@@ -1231,7 +1231,7 @@ gtk_level_bar_set_max_value (GtkLevelBar *self,
 }
 
 /**
- * gtk_level_bar_set_value: (attributes org.gtk.Method.set_property=value)
+ * gtk_level_bar_set_value:
  * @self: a `GtkLevelBar`
  * @value: a value in the interval between
  *   [property@Gtk.LevelBar:min-value] and [property@Gtk.LevelBar:max-value]
@@ -1256,7 +1256,7 @@ gtk_level_bar_set_value (GtkLevelBar *self,
 }
 
 /**
- * gtk_level_bar_get_mode: (attributes org.gtk.Method.get_property=mode)
+ * gtk_level_bar_get_mode:
  * @self: a `GtkLevelBar`
  *
  * Returns the `mode` of the `GtkLevelBar`.
@@ -1272,7 +1272,7 @@ gtk_level_bar_get_mode (GtkLevelBar *self)
 }
 
 /**
- * gtk_level_bar_set_mode: (attributes org.gtk.Method.set_property=mode)
+ * gtk_level_bar_set_mode:
  * @self: a `GtkLevelBar`
  * @mode: a `GtkLevelBarMode`
  *
@@ -1298,7 +1298,7 @@ gtk_level_bar_set_mode (GtkLevelBar     *self,
 }
 
 /**
- * gtk_level_bar_get_inverted: (attributes org.gtk.Method.get_property=inverted)
+ * gtk_level_bar_get_inverted:
  * @self: a `GtkLevelBar`
  *
  * Returns whether the levelbar is inverted.
@@ -1314,7 +1314,7 @@ gtk_level_bar_get_inverted (GtkLevelBar *self)
 }
 
 /**
- * gtk_level_bar_set_inverted: (attributes org.gtk.Method.set_property=inverted)
+ * gtk_level_bar_set_inverted:
  * @self: a `GtkLevelBar`
  * @inverted: %TRUE to invert the level bar
  *

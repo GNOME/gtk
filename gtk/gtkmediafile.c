@@ -151,7 +151,7 @@ gtk_media_file_class_init (GtkMediaFileClass *class)
   gobject_class->dispose = gtk_media_file_dispose;
 
   /**
-   * GtkMediaFile:file: (attributes org.gtk.Property.get=gtk_media_file_get_file org.gtk.Property.set=gtk_media_file_set_file)
+   * GtkMediaFile:file:
    *
    * The file being played back or %NULL if not playing a file.
    */
@@ -161,7 +161,7 @@ gtk_media_file_class_init (GtkMediaFileClass *class)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaFile:input-stream: (attributes org.gtk.Property.get=gtk_media_file_get_input_stream org.gtk.Property.set=gtk_media_file_set_input_stream)
+   * GtkMediaFile:input-stream:
    *
    * The stream being played back or %NULL if not playing a stream.
    *
@@ -487,7 +487,7 @@ gtk_media_file_set_resource (GtkMediaFile *self,
 }
 
 /**
- * gtk_media_file_set_file: (attributes org.gtk.Method.set_property=file)
+ * gtk_media_file_set_file:
  * @self: a `GtkMediaFile`
  * @file: (nullable): the file to play
  *
@@ -523,7 +523,7 @@ gtk_media_file_set_file (GtkMediaFile *self,
 }
 
 /**
- * gtk_media_file_get_file: (attributes org.gtk.Method.get_property=file)
+ * gtk_media_file_get_file:
  * @self: a `GtkMediaFile`
  *
  * Returns the file that @self is currently playing from.
@@ -544,7 +544,7 @@ gtk_media_file_get_file (GtkMediaFile *self)
 }
 
 /**
- * gtk_media_file_set_input_stream: (attributes org.gtk.Method.set_property=input-stream)
+ * gtk_media_file_set_input_stream:
  * @self: a `GtkMediaFile`
  * @stream: (nullable): the stream to play from
  *
@@ -583,7 +583,7 @@ gtk_media_file_set_input_stream (GtkMediaFile *self,
 }
 
 /**
- * gtk_media_file_get_input_stream: (attributes org.gtk.Method.get_property=input-stream)
+ * gtk_media_file_get_input_stream:
  * @self: a `GtkMediaFile`
  *
  * Returns the stream that @self is currently playing from.

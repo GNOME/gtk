@@ -255,7 +255,7 @@ gtk_file_filter_class_init (GtkFileFilterClass *class)
   filter_class->match = gtk_file_filter_match;
 
   /**
-   * GtkFileFilter:name: (attributes org.gtk.Property.get=gtk_file_filter_get_name org.gtk.Property.set=gtk_file_filter_set_name)
+   * GtkFileFilter:name:
    *
    * The human-readable name of the filter.
    *
@@ -533,7 +533,7 @@ gtk_file_filter_new (void)
 }
 
 /**
- * gtk_file_filter_set_name: (attributes org.gtk.Method.set_property=name)
+ * gtk_file_filter_set_name:
  * @filter: a `GtkFileFilter`
  * @name: (nullable): the human-readable-name for the filter, or %NULL
  *   to remove any existing name.
@@ -559,7 +559,7 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
 }
 
 /**
- * gtk_file_filter_get_name: (attributes org.gtk.Method.get_property=name)
+ * gtk_file_filter_get_name:
  * @filter: a `GtkFileFilter`
  *
  * Gets the human-readable name for the filter.

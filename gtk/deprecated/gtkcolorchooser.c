@@ -55,7 +55,7 @@ static void
 gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
 {
   /**
-   * GtkColorChooser:rgba: (attributes org.gtk.Property.get=gtk_color_chooser_get_rgba org.gtk.Property.set=gtk_color_chooser_set_rgba)
+   * GtkColorChooser:rgba:
    *
    * The currently selected color, as a `GdkRGBA` struct.
    *
@@ -71,7 +71,7 @@ gtk_color_chooser_default_init (GtkColorChooserInterface *iface)
                           GTK_PARAM_READWRITE));
 
   /**
-   * GtkColorChooser:use-alpha: (attributes org.gtk.Property.get=gtk_color_chooser_get_use_alpha org.gtk.Property.set=gtk_color_chooser_set_use_alpha)
+   * GtkColorChooser:use-alpha:
    *
    * Whether colors may have alpha (translucency).
    *
@@ -123,7 +123,7 @@ _gtk_color_chooser_color_activated (GtkColorChooser *chooser,
 }
 
 /**
- * gtk_color_chooser_get_rgba: (attributes org.gtk.Method.get_property=rgba)
+ * gtk_color_chooser_get_rgba:
  * @chooser: a `GtkColorChooser`
  * @color: (out): a `GdkRGBA` to fill in with the current color
  *
@@ -141,7 +141,7 @@ gtk_color_chooser_get_rgba (GtkColorChooser *chooser,
 }
 
 /**
- * gtk_color_chooser_set_rgba: (attributes org.gtk.Method.set_property=rgba)
+ * gtk_color_chooser_set_rgba:
  * @chooser: a `GtkColorChooser`
  * @color: the new color
  *
@@ -160,7 +160,7 @@ gtk_color_chooser_set_rgba (GtkColorChooser *chooser,
 }
 
 /**
- * gtk_color_chooser_get_use_alpha: (attributes org.gtk.Method.get_property=use-alpha)
+ * gtk_color_chooser_get_use_alpha:
  * @chooser: a `GtkColorChooser`
  *
  * Returns whether the color chooser shows the alpha channel.
@@ -183,7 +183,7 @@ gtk_color_chooser_get_use_alpha (GtkColorChooser *chooser)
 }
 
 /**
- * gtk_color_chooser_set_use_alpha: (attributes org.gtk.Method.set_property=use-alpha)
+ * gtk_color_chooser_set_use_alpha:
  * @chooser: a `GtkColorChooser`
  * @use_alpha: %TRUE if color chooser should use alpha channel, %FALSE if not
  *

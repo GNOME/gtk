@@ -154,7 +154,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
   gobject_class->set_property = gtk_column_view_cell_set_property;
 
   /**
-   * GtkColumnViewCell:child: (attributes org.gtk.Property.get=gtk_column_view_cell_get_child org.gtk.Property.set=gtk_column_view_cell_set_child)
+   * GtkColumnViewCell:child:
    *
    * Widget used for display.
    *
@@ -166,7 +166,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewCell:focusable: (attributes org.gtk.Property.get=gtk_column_view_cell_get_focusable org.gtk.Property.set=gtk_column_view_cell_set_focusable)
+   * GtkColumnViewCell:focusable:
    *
    * If the item can be focused with the keyboard.
    *
@@ -178,7 +178,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewCell:item: (attributes org.gtk.Property.get=gtk_column_view_cell_get_item)
+   * GtkColumnViewCell:item:
    *
    * Displayed item.
    *
@@ -190,7 +190,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewCell:position: (attributes org.gtk.Property.get=gtk_column_view_cell_get_position)
+   * GtkColumnViewCell:position:
    *
    * Position of the item.
    *
@@ -202,7 +202,7 @@ gtk_column_view_cell_class_init (GtkColumnViewCellClass *klass)
                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkColumnViewCell:selected: (attributes org.gtk.Property.get=gtk_column_view_cell_get_selected)
+   * GtkColumnViewCell:selected:
    *
    * If the item is currently selected.
    *
@@ -245,7 +245,7 @@ gtk_column_view_cell_do_notify (GtkColumnViewCell *column_view_cell,
 }
 
 /**
- * gtk_column_view_cell_get_item: (attributes org.gtk.Method.get_property=item)
+ * gtk_column_view_cell_get_item:
  * @self: a `GtkColumnViewCell`
  *
  * Gets the model item that associated with @self.
@@ -268,7 +268,7 @@ gtk_column_view_cell_get_item (GtkColumnViewCell *self)
 }
 
 /**
- * gtk_column_view_cell_get_child: (attributes org.gtk.Method.get_property=child)
+ * gtk_column_view_cell_get_child:
  * @self: a `GtkColumnViewCell`
  *
  * Gets the child previously set via gtk_column_view_cell_set_child() or
@@ -287,7 +287,7 @@ gtk_column_view_cell_get_child (GtkColumnViewCell *self)
 }
 
 /**
- * gtk_column_view_cell_set_child: (attributes org.gtk.Method.set_property=child)
+ * gtk_column_view_cell_set_child:
  * @self: a `GtkColumnViewCell`
  * @child: (nullable): The list item's child or %NULL to unset
  *
@@ -324,7 +324,7 @@ gtk_column_view_cell_set_child (GtkColumnViewCell *self,
 }
 
 /**
- * gtk_column_view_cell_get_position: (attributes org.gtk.Method.get_property=position)
+ * gtk_column_view_cell_get_position:
  * @self: a `GtkColumnViewCell`
  *
  * Gets the position in the model that @self currently displays.
@@ -347,7 +347,7 @@ gtk_column_view_cell_get_position (GtkColumnViewCell *self)
 }
 
 /**
- * gtk_column_view_cell_get_selected: (attributes org.gtk.Method.get_property=selected)
+ * gtk_column_view_cell_get_selected:
  * @self: a `GtkColumnViewCell`
  *
  * Checks if the item is displayed as selected.
@@ -371,7 +371,7 @@ gtk_column_view_cell_get_selected (GtkColumnViewCell *self)
 }
 
 /**
- * gtk_column_view_cell_get_focusable: (attributes org.gtk.Method.get_property=focusable)
+ * gtk_column_view_cell_get_focusable:
  * @self: a `GtkColumnViewCell`
  *
  * Checks if a list item has been set to be focusable via
@@ -390,7 +390,7 @@ gtk_column_view_cell_get_focusable (GtkColumnViewCell *self)
 }
 
 /**
- * gtk_column_view_cell_set_focusable: (attributes org.gtk.Method.set_property=focusable)
+ * gtk_column_view_cell_set_focusable:
  * @self: a `GtkColumnViewCell`
  * @focusable: if the item should be focusable
  *

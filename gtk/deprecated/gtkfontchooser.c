@@ -56,7 +56,7 @@ static void
 gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
 {
   /**
-   * GtkFontChooser:font: (attributes org.gtk.Property.get=gtk_font_chooser_get_font org.gtk.Property.set=gtk_font_chooser_set_font)
+   * GtkFontChooser:font:
    *
    * The font description as a string, e.g. "Sans Italic 12".
    *
@@ -69,7 +69,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                            GTK_PARAM_READWRITE));
 
   /**
-   * GtkFontChooser:font-desc: (attributes org.gtk.Property.get=gtk_font_chooser_get_font_desc org.gtk.Property.set=gtk_font_chooser_set_font_desc)
+   * GtkFontChooser:font-desc:
    *
    * The font description as a `PangoFontDescription`.
    *
@@ -82,7 +82,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE));
 
   /**
-   * GtkFontChooser:preview-text: (attributes org.gtk.Property.get=gtk_font_chooser_get_preview_text org.gtk.Property.set=gtk_font_chooser_set_preview_text)
+   * GtkFontChooser:preview-text:
    *
    * The string with which to preview the font.
    *
@@ -95,7 +95,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE));
 
   /**
-   * GtkFontChooser:show-preview-entry: (attributes org.gtk.Property.get=gtk_font_chooser_get_show_preview_entry org.gtk.Property.set=gtk_font_chooser_set_show_preview_entry)
+   * GtkFontChooser:show-preview-entry:
    *
    * Whether to show an entry to change the preview text.
    *
@@ -108,7 +108,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkFontChooser:level: (attributes org.gtk.Property.get=gtk_font_chooser_get_level org.gtk.Property.set=gtk_font_chooser_set_level)
+   * GtkFontChooser:level:
    *
    * The level of granularity to offer for selecting fonts.
    *
@@ -124,7 +124,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
-   * GtkFontChooser:font-features: (attributes org.gtk.Property.get=gtk_font_chooser_get_font_features)
+   * GtkFontChooser:font-features:
    *
    * The selected font features.
    *
@@ -140,7 +140,7 @@ gtk_font_chooser_default_init (GtkFontChooserInterface *iface)
                           GTK_PARAM_READABLE));
 
   /**
-   * GtkFontChooser:language: (attributes org.gtk.Property.get=gtk_font_chooser_get_language org.gtk.Property.set=gtk_font_chooser_set_language)
+   * GtkFontChooser:language:
    *
    * The language for which the font features were selected.
    *
@@ -244,7 +244,7 @@ gtk_font_chooser_get_font_size (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_get_font: (attributes org.gtk.Method.get_property=font)
+ * gtk_font_chooser_get_font:
  * @fontchooser: a `GtkFontChooser`
  *
  * Gets the currently-selected font name.
@@ -278,7 +278,7 @@ gtk_font_chooser_get_font (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_set_font: (attributes org.gtk.Method.set_property=font)
+ * gtk_font_chooser_set_font:
  * @fontchooser: a `GtkFontChooser`
  * @fontname: a font name like “Helvetica 12” or “Times Bold 18”
  *
@@ -298,7 +298,7 @@ gtk_font_chooser_set_font (GtkFontChooser *fontchooser,
 }
 
 /**
- * gtk_font_chooser_get_font_desc: (attributes org.gtk.Method.get_property=font-desc)
+ * gtk_font_chooser_get_font_desc:
  * @fontchooser: a `GtkFontChooser`
  *
  * Gets the currently-selected font.
@@ -331,7 +331,7 @@ gtk_font_chooser_get_font_desc (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_set_font_desc: (attributes org.gtk.Method.set_property=font-desc)
+ * gtk_font_chooser_set_font_desc:
  * @fontchooser: a `GtkFontChooser`
  * @font_desc: a `PangoFontDescription`
  *
@@ -351,7 +351,7 @@ gtk_font_chooser_set_font_desc (GtkFontChooser             *fontchooser,
 }
 
 /**
- * gtk_font_chooser_get_preview_text: (attributes org.gtk.Method.get_property=preview-text)
+ * gtk_font_chooser_get_preview_text:
  * @fontchooser: a `GtkFontChooser`
  *
  * Gets the text displayed in the preview area.
@@ -374,7 +374,7 @@ gtk_font_chooser_get_preview_text (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_set_preview_text: (attributes org.gtk.Method.set_property=preview-text)
+ * gtk_font_chooser_set_preview_text:
  * @fontchooser: a `GtkFontChooser`
  * @text: (transfer none): the text to display in the preview area
  *
@@ -396,7 +396,7 @@ gtk_font_chooser_set_preview_text (GtkFontChooser *fontchooser,
 }
 
 /**
- * gtk_font_chooser_get_show_preview_entry: (attributes org.gtk.Method.get_property=show-preview-entry)
+ * gtk_font_chooser_get_show_preview_entry:
  * @fontchooser: a `GtkFontChooser`
  *
  * Returns whether the preview entry is shown or not.
@@ -419,7 +419,7 @@ gtk_font_chooser_get_show_preview_entry (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_set_show_preview_entry: (attributes org.gtk.Method.set_property=show-preview-entry)
+ * gtk_font_chooser_set_show_preview_entry:
  * @fontchooser: a `GtkFontChooser`
  * @show_preview_entry: whether to show the editable preview entry or not
  *
@@ -545,7 +545,7 @@ gtk_font_chooser_get_font_map (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_set_level: (attributes org.gtk.Method.set_property=level)
+ * gtk_font_chooser_set_level:
  * @fontchooser: a `GtkFontChooser`
  * @level: the desired level of granularity
  *
@@ -564,7 +564,7 @@ gtk_font_chooser_set_level (GtkFontChooser      *fontchooser,
 }
 
 /**
- * gtk_font_chooser_get_level: (attributes org.gtk.Method.get_property=level)
+ * gtk_font_chooser_get_level:
  * @fontchooser: a `GtkFontChooser`
  *
  * Returns the current level of granularity for selecting fonts.
@@ -587,7 +587,7 @@ gtk_font_chooser_get_level (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_get_font_features: (attributes org.gtk.Method.get_property=font-features)
+ * gtk_font_chooser_get_font_features:
  * @fontchooser: a `GtkFontChooser`
  *
  * Gets the currently-selected font features.
@@ -614,7 +614,7 @@ gtk_font_chooser_get_font_features (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_get_language: (attributes org.gtk.Method.get_property=language)
+ * gtk_font_chooser_get_language:
  * @fontchooser: a `GtkFontChooser`
  *
  * Gets the language that is used for font features.
@@ -637,7 +637,7 @@ gtk_font_chooser_get_language (GtkFontChooser *fontchooser)
 }
 
 /**
- * gtk_font_chooser_set_language: (attributes org.gtk.Method.set_property=language)
+ * gtk_font_chooser_set_language:
  * @fontchooser: a `GtkFontChooser`
  * @language: a language
  *

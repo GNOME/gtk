@@ -642,7 +642,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
   class->drop = gtk_drop_target_drop;
 
   /**
-   * GtkDropTarget:actions: (attributes org.gtk.Property.get=gtk_drop_target_get_actions org.gtk.Property.set=gtk_drop_target_set_actions)
+   * GtkDropTarget:actions:
    *
    * The `GdkDragActions` that this drop target supports.
    */
@@ -652,7 +652,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDropTarget:drop: (attributes org.gtk.Property.get=gtk_drop_target_get_drop) (skip)
+   * GtkDropTarget:drop:
    *
    * The `GdkDrop` that is currently being performed.
    *
@@ -664,7 +664,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                             GTK_PARAM_READABLE | G_PARAM_DEPRECATED);
 
   /**
-   * GtkDropTarget:current-drop: (attributes org.gtk.Property.get=gtk_drop_target_get_current_drop)
+   * GtkDropTarget:current-drop:
    *
    * The `GdkDrop` that is currently being performed.
    *
@@ -676,7 +676,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                             GTK_PARAM_READABLE);
 
   /**
-   * GtkDropTarget:formats: (attributes org.gtk.Property.get=gtk_drop_target_get_formats)
+   * GtkDropTarget:formats:
    *
    * The `GdkContentFormats` that determine the supported data formats.
    */
@@ -686,7 +686,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                            GTK_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY);
 
   /**
-   * GtkDropTarget:preload: (attributes org.gtk.Property.get=gtk_drop_target_get_preload org.gtk.Property.set=gtk_drop_target_set_preload)
+   * GtkDropTarget:preload:
    *
    * Whether the drop data should be preloaded when the pointer is only
    * hovering over the widget but has not been released.
@@ -713,7 +713,7 @@ gtk_drop_target_class_init (GtkDropTargetClass *class)
                              G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS | G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkDropTarget:value: (attributes org.gtk.Property.get=gtk_drop_target_get_value)
+   * GtkDropTarget:value:
    *
    * The value for this drop operation.
    *
@@ -911,7 +911,7 @@ gtk_drop_target_new (GType         type,
 }
 
 /**
- * gtk_drop_target_get_formats: (attributes org.gtk.Method.get_property=formats)
+ * gtk_drop_target_get_formats:
  * @self: a `GtkDropTarget`
  *
  * Gets the data formats that this drop target accepts.
@@ -983,7 +983,7 @@ gtk_drop_target_get_gtypes (GtkDropTarget *self,
 }
 
 /**
- * gtk_drop_target_set_actions: (attributes org.gtk.Method.set_property=actions)
+ * gtk_drop_target_set_actions:
  * @self: a `GtkDropTarget`
  * @actions: the supported actions
  *
@@ -1004,7 +1004,7 @@ gtk_drop_target_set_actions (GtkDropTarget *self,
 }
 
 /**
- * gtk_drop_target_get_actions: (attributes org.gtk.Method.get_property=actions)
+ * gtk_drop_target_get_actions:
  * @self: a `GtkDropTarget`
  *
  * Gets the actions that this drop target supports.
@@ -1020,7 +1020,7 @@ gtk_drop_target_get_actions (GtkDropTarget *self)
 }
 
 /**
- * gtk_drop_target_set_preload: (attributes org.gtk.Method.set_property=preload)
+ * gtk_drop_target_set_preload:
  * @self: a `GtkDropTarget`
  * @preload: %TRUE to preload drop data
  *
@@ -1041,7 +1041,7 @@ gtk_drop_target_set_preload (GtkDropTarget *self,
 }
 
 /**
- * gtk_drop_target_get_preload: (attributes org.gtk.Method.get_property=preload)
+ * gtk_drop_target_get_preload:
  * @self: a `GtkDropTarget`
  *
  * Gets whether data should be preloaded on hover.
@@ -1057,7 +1057,7 @@ gtk_drop_target_get_preload (GtkDropTarget *self)
 }
 
 /**
- * gtk_drop_target_get_drop: (attributes org.gtk.Method.get_property=drop)
+ * gtk_drop_target_get_drop:
  * @self: a `GtkDropTarget`
  *
  * Gets the currently handled drop operation.
@@ -1077,7 +1077,7 @@ gtk_drop_target_get_drop (GtkDropTarget *self)
 }
 
 /**
- * gtk_drop_target_get_current_drop: (attributes org.gtk.Method.get_property=current-drop)
+ * gtk_drop_target_get_current_drop:
  * @self: a `GtkDropTarget`
  *
  * Gets the currently handled drop operation.
@@ -1097,7 +1097,7 @@ gtk_drop_target_get_current_drop (GtkDropTarget *self)
 }
 
 /**
- * gtk_drop_target_get_value: (attributes org.gtk.Method.get_property=value)
+ * gtk_drop_target_get_value:
  * @self: a `GtkDropTarget`
  *
  * Gets the current drop data, as a `GValue`.

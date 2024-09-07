@@ -134,7 +134,7 @@ gtk_list_header_class_init (GtkListHeaderClass *klass)
   gobject_class->set_property = gtk_list_header_set_property;
 
   /**
-   * GtkListHeader:child: (attributes org.gtk.Property.get=gtk_list_header_get_child org.gtk.Property.set=gtk_list_header_set_child)
+   * GtkListHeader:child:
    *
    * Widget used for display.
    *
@@ -146,7 +146,7 @@ gtk_list_header_class_init (GtkListHeaderClass *klass)
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListHeader:end: (attributes org.gtk.Property.get=gtk_list_header_get_end)
+   * GtkListHeader:end:
    *
    * The first position no longer part of this section.
    *
@@ -158,7 +158,7 @@ gtk_list_header_class_init (GtkListHeaderClass *klass)
                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListHeader:item: (attributes org.gtk.Property.get=gtk_list_header_get_item)
+   * GtkListHeader:item:
    *
    * The item at the start of the section.
    *
@@ -170,7 +170,7 @@ gtk_list_header_class_init (GtkListHeaderClass *klass)
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListHeader:n-items: (attributes org.gtk.Property.get=gtk_list_header_get_n_items)
+   * GtkListHeader:n-items:
    *
    * Number of items in this section.
    *
@@ -182,7 +182,7 @@ gtk_list_header_class_init (GtkListHeaderClass *klass)
                        G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkListHeader:start: (attributes org.gtk.Property.get=gtk_list_header_get_start)
+   * GtkListHeader:start:
    *
    * First position of items in this section.
    *
@@ -227,7 +227,7 @@ gtk_list_header_do_notify (GtkListHeader *list_header,
 }
 
 /**
- * gtk_list_header_get_item: (attributes org.gtk.Method.get_property=item)
+ * gtk_list_header_get_item:
  * @self: a `GtkListHeader`
  *
  * Gets the model item at the start of the section.
@@ -252,7 +252,7 @@ gtk_list_header_get_item (GtkListHeader *self)
 }
 
 /**
- * gtk_list_header_get_child: (attributes org.gtk.Method.get_property=child)
+ * gtk_list_header_get_child:
  * @self: a `GtkListHeader`
  *
  * Gets the child previously set via gtk_list_header_set_child() or
@@ -271,7 +271,7 @@ gtk_list_header_get_child (GtkListHeader *self)
 }
 
 /**
- * gtk_list_header_set_child: (attributes org.gtk.Method.set_property=child)
+ * gtk_list_header_set_child:
  * @self: a `GtkListHeader`
  * @child: (nullable): The list item's child or %NULL to unset
  *
@@ -308,7 +308,7 @@ gtk_list_header_set_child (GtkListHeader *self,
 }
 
 /**
- * gtk_list_header_get_start: (attributes org.gtk.Method.get_property=start)
+ * gtk_list_header_get_start:
  * @self: a `GtkListHeader`
  *
  * Gets the start position in the model of the section that @self is
@@ -332,7 +332,7 @@ gtk_list_header_get_start (GtkListHeader *self)
 }
 
 /**
- * gtk_list_header_get_end: (attributes org.gtk.Method.get_property=end)
+ * gtk_list_header_get_end:
  * @self: a `GtkListHeader`
  *
  * Gets the end position in the model of the section that @self is
@@ -356,7 +356,7 @@ gtk_list_header_get_end (GtkListHeader *self)
 }
 
 /**
- * gtk_list_header_get_n_items: (attributes org.gtk.Method.get_property=n-items)
+ * gtk_list_header_get_n_items:
  * @self: a `GtkListHeader`
  *
  * Gets the the number of items in the section.

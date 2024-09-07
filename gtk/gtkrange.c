@@ -378,7 +378,7 @@ gtk_range_class_init (GtkRangeClass *class)
   g_object_class_override_property (gobject_class, PROP_ORIENTATION, "orientation");
 
   /**
-   * GtkRange:adjustment: (attributes org.gtk.Property.get=gtk_range_get_adjustment org.gtk.Property.set=gtk_range_set_adjustment)
+   * GtkRange:adjustment:
    *
    * The adjustment that is controlled by the range.
    */
@@ -388,7 +388,7 @@ gtk_range_class_init (GtkRangeClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:inverted: (attributes org.gtk.Property.get=gtk_range_get_inverted org.gtk.Property.set=gtk_range_set_inverted)
+   * GtkRange:inverted:
    *
    * If %TRUE, the direction in which the slider moves is inverted.
    */
@@ -398,7 +398,7 @@ gtk_range_class_init (GtkRangeClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:show-fill-level: (attributes org.gtk.Property.get=gtk_range_get_show_fill_level org.gtk.Property.set=gtk_range_set_show_fill_level)
+   * GtkRange:show-fill-level:
    *
    * Controls whether fill level indicator graphics are displayed
    * on the trough.
@@ -409,7 +409,7 @@ gtk_range_class_init (GtkRangeClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:restrict-to-fill-level: (attributes org.gtk.Property.get=gtk_range_get_restrict_to_fill_level org.gtk.Property.set=gtk_range_set_restrict_to_fill_level)
+   * GtkRange:restrict-to-fill-level:
    *
    * Controls whether slider movement is restricted to an
    * upper boundary set by the fill level.
@@ -420,7 +420,7 @@ gtk_range_class_init (GtkRangeClass *class)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:fill-level: (attributes org.gtk.Property.get=gtk_range_get_fill_level org.gtk.Property.set=gtk_range_set_fill_level)
+   * GtkRange:fill-level:
    *
    * The fill level (e.g. prebuffering of a network stream).
    */
@@ -431,7 +431,7 @@ gtk_range_class_init (GtkRangeClass *class)
                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkRange:round-digits: (attributes org.gtk.Property.get=gtk_range_get_round_digits org.gtk.Property.set=gtk_range_set_round_digits)
+   * GtkRange:round-digits:
    *
    * The number of digits to round the value to when
    * it changes.
@@ -635,7 +635,7 @@ gtk_range_set_orientation (GtkRange       *range,
 }
 
 /**
- * gtk_range_get_adjustment: (attributes org.gtk.Method.get_property=adjustment)
+ * gtk_range_get_adjustment:
  * @range: a `GtkRange`
  *
  * Get the adjustment which is the “model” object for `GtkRange`.
@@ -656,7 +656,7 @@ gtk_range_get_adjustment (GtkRange *range)
 }
 
 /**
- * gtk_range_set_adjustment: (attributes org.gtk.Method.set_property=adjustment)
+ * gtk_range_set_adjustment:
  * @range: a `GtkRange`
  * @adjustment: a `GtkAdjustment`
  *
@@ -792,7 +792,7 @@ update_fill_position (GtkRange *range)
 }
 
 /**
- * gtk_range_set_inverted: (attributes org.gtk.Method.set_property=inverted)
+ * gtk_range_set_inverted:
  * @range: a `GtkRange`
  * @setting: %TRUE to invert the range
  *
@@ -827,7 +827,7 @@ gtk_range_set_inverted (GtkRange *range,
 }
 
 /**
- * gtk_range_get_inverted: (attributes org.gtk.Method.get_property=inverted)
+ * gtk_range_get_inverted:
  * @range: a `GtkRange`
  *
  * Gets whether the range is inverted.
@@ -1144,7 +1144,7 @@ gtk_range_get_value (GtkRange *range)
 }
 
 /**
- * gtk_range_set_show_fill_level: (attributes org.gtk.Method.set_property=show-fill-level)
+ * gtk_range_set_show_fill_level:
  * @range: A `GtkRange`
  * @show_fill_level: Whether a fill level indicator graphics is shown.
  *
@@ -1184,7 +1184,7 @@ gtk_range_set_show_fill_level (GtkRange *range,
 }
 
 /**
- * gtk_range_get_show_fill_level: (attributes org.gtk.Method.get_property=show-fill-level)
+ * gtk_range_get_show_fill_level:
  * @range: A `GtkRange`
  *
  * Gets whether the range displays the fill level graphically.
@@ -1202,7 +1202,7 @@ gtk_range_get_show_fill_level (GtkRange *range)
 }
 
 /**
- * gtk_range_set_restrict_to_fill_level: (attributes org.gtk.Method.set_property=restrict-to-fill-level)
+ * gtk_range_set_restrict_to_fill_level:
  * @range: A `GtkRange`
  * @restrict_to_fill_level: Whether the fill level restricts slider movement.
  *
@@ -1231,7 +1231,7 @@ gtk_range_set_restrict_to_fill_level (GtkRange *range,
 }
 
 /**
- * gtk_range_get_restrict_to_fill_level: (attributes org.gtk.Method.get_property=restrict-to-fill-level)
+ * gtk_range_get_restrict_to_fill_level:
  * @range: A `GtkRange`
  *
  * Gets whether the range is restricted to the fill level.
@@ -1249,7 +1249,7 @@ gtk_range_get_restrict_to_fill_level (GtkRange *range)
 }
 
 /**
- * gtk_range_set_fill_level: (attributes org.gtk.Method.set_property=fill-level)
+ * gtk_range_set_fill_level:
  * @range: a `GtkRange`
  * @fill_level: the new position of the fill level indicator
  *
@@ -1293,7 +1293,7 @@ gtk_range_set_fill_level (GtkRange *range,
 }
 
 /**
- * gtk_range_get_fill_level: (attributes org.gtk.Method.get_property=fill-level)
+ * gtk_range_get_fill_level:
  * @range: A `GtkRange`
  *
  * Gets the current position of the fill level indicator.
@@ -2894,7 +2894,7 @@ _gtk_range_get_stop_positions (GtkRange  *range,
 }
 
 /**
- * gtk_range_set_round_digits: (attributes org.gtk.Method.set_property=round-digits)
+ * gtk_range_set_round_digits:
  * @range: a `GtkRange`
  * @round_digits: the precision in digits, or -1
  *
@@ -2920,7 +2920,7 @@ gtk_range_set_round_digits (GtkRange *range,
 }
 
 /**
- * gtk_range_get_round_digits: (attributes org.gtk.Method.get_property=round-digits)
+ * gtk_range_get_round_digits:
  * @range: a `GtkRange`
  *
  * Gets the number of digits to round the value to when

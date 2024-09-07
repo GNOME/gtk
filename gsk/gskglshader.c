@@ -450,7 +450,7 @@ gsk_gl_shader_class_init (GskGLShaderClass *klass)
   object_class->constructed = gsk_gl_shader_constructed;
 
   /**
-   * GskGLShader:source: (attributes org.gtk.Property.get=gsk_gl_shader_get_source)
+   * GskGLShader:source:
    *
    * The source code for the shader, as a `GBytes`.
    */
@@ -462,7 +462,7 @@ gsk_gl_shader_class_init (GskGLShaderClass *klass)
                         G_PARAM_STATIC_STRINGS);
 
   /**
-   * GskGLShader:resource: (attributes org.gtk.Property.get=gsk_gl_shader_get_resource)
+   * GskGLShader:resource:
    *
    * Resource containing the source code for the shader.
    *
@@ -572,7 +572,7 @@ gsk_gl_shader_compile (GskGLShader  *shader,
 
 
 /**
- * gsk_gl_shader_get_source: (attributes org.gtk.Method.get_property=source)
+ * gsk_gl_shader_get_source:
  * @shader: a `GskGLShader`
  *
  * Gets the GLSL sourcecode being used to render this shader.
@@ -592,7 +592,7 @@ gsk_gl_shader_get_source (GskGLShader *shader)
 }
 
 /**
- * gsk_gl_shader_get_resource: (attributes org.gtk.Method.get_property=resource)
+ * gsk_gl_shader_get_resource:
  * @shader: a `GskGLShader`
  *
  * Gets the resource path for the GLSL sourcecode being used
