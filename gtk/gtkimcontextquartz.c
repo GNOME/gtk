@@ -273,7 +273,7 @@ quartz_set_client_surface (GtkIMContext *context,
 
   if (widget != NULL)
     {
-      GtkNative *native = gtk_widget_get_native (widget);
+      GtkNative *native = GTK_NATIVE (gtk_widget_get_root (widget));
 
       if (native != NULL)
         qc->client_surface = gtk_native_get_surface (native);
@@ -317,7 +317,7 @@ quartz_set_cursor_location (GtkIMContext *context, GdkRectangle *area)
   if (!qc->focused)
     return;
 
-  surface_widget = GTK_WIDGET (gdk_surface_get_widget (qc->client_surface));
+  surface_widget = GTK_WIDGET (gtk_widget_get_native (qc->client_widget));
 
   if (!surface_widget)
     return;
