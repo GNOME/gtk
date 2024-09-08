@@ -170,5 +170,16 @@ GskRenderNode * gsk_text_node_new2                      (PangoFont              
                                                          const graphene_point_t *offset);
 const GdkColor *gsk_text_node_get_color2                (const GskRenderNode    *node);
 
+#define GSK_RENDER_NODE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_RENDER_NODE, GskRenderNodeClass))
+
+#define gsk_render_node_get_node_type(node) _gsk_render_node_get_node_type (node)
+
+G_GNUC_PURE static inline
+GskRenderNodeType
+_gsk_render_node_get_node_type (const GskRenderNode *node)
+{
+  return GSK_RENDER_NODE_GET_CLASS (node)->node_type;
+}
+
 G_END_DECLS
 
