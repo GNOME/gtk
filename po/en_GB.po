@@ -11,16 +11,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-08-13 03:31+0000\n"
-"PO-Revision-Date: 2024-08-14 11:26+0100\n"
-"Last-Translator: Bruce Cowan <bruce@bcowan.me.uk>\n"
+"POT-Creation-Date: 2024-08-22 00:25+0000\n"
+"PO-Revision-Date: 2024-08-22 15:28+0100\n"
+"Last-Translator: Andi Chandler <andi@gowling.com>\n"
 "Language-Team: English - United Kingdom <en@li.org>\n"
 "Language: en_GB\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Poedit 3.4.2\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -54,13 +54,15 @@ msgstr "Cannot provide contents as %s"
 msgid "The current backend does not support OpenGL"
 msgstr "The current backend does not support OpenGL"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1632
-msgid "Vulkan support disabled via GDK_DEBUG"
-msgstr "Vulkan support disabled via GDK_DEBUG"
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1633
+#| msgid "Vulkan support disabled via GDK_DEBUG"
+msgid "Vulkan support disabled via GDK_DISABLE"
+msgstr "Vulkan support disabled via GDK_DISABLE"
 
 #: gdk/gdkdisplay.c:1369
-msgid "GL support disabled via GDK_DEBUG"
-msgstr "GL support disabled via GDK_DEBUG"
+#| msgid "GL support disabled via GDK_DEBUG"
+msgid "OpenGL support disabled via GDK_DISABLE"
+msgstr "OpenGL support disabled via GDK_DISABLE"
 
 #: gdk/gdkdisplay.c:1683
 msgid "No EGL configuration available"
@@ -118,31 +120,40 @@ msgstr "No compatible formats to transfer contents."
 msgid "No GL API allowed."
 msgstr "No GL API allowed."
 
-#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:411
-#: gdk/win32/gdkglcontext-win32-wgl.c:554
-#: gdk/win32/gdkglcontext-win32-wgl.c:598 gdk/x11/gdkglcontext-glx.c:694
+#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:705
+#: gdk/win32/gdkglcontext-win32-wgl.c:848
+#: gdk/win32/gdkglcontext-win32-wgl.c:892 gdk/x11/gdkglcontext-glx.c:694
 msgid "Unable to create a GL context"
 msgstr "Unable to create a GL context"
 
-#: gdk/gdkglcontext.c:1343
-msgid "OpenGL ES disabled via GDK_DEBUG"
-msgstr "OpenGL ES disabled via GDK_DEBUG"
+#: gdk/gdkglcontext.c:1340
+#| msgid "OpenGL ES disabled via GDK_DEBUG"
+msgid "OpenGL ES API disabled via GDK_DISABLE"
+msgstr "OpenGL ES API disabled via GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1355
-msgid "OpenGL disabled via GDK_DEBUG"
-msgstr "OpenGL disabled via GDK_DEBUG"
+#: gdk/gdkglcontext.c:1352
+#| msgid "OpenGL disabled via GDK_DEBUG"
+msgid "OpenGL API disabled via GDK_DISABLE"
+msgstr "OpenGL API disabled via GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1366
+#: gdk/gdkglcontext.c:1363
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Application does not support %s API"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2164
+#.
+#: gdk/gdkglcontext.c:2163
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Trying to use %s, but %s is already in use"
+
+#: gdk/gdkglcontext.c:2174
+#, c-format
+#| msgid "Trying to use %s, but %s is already in use"
+msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
+msgstr "Trying to use %s, but it is disabled via GDK_DISABLE"
 
 #: gdk/gdktexture.c:661
 msgid "Unknown image format."
@@ -706,21 +717,21 @@ msgstr "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:345
+#: gdk/win32/gdkglcontext-win32-wgl.c:635
 msgid "No GL implementation is available"
 msgstr "No GL implementation is available"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:420
+#: gdk/win32/gdkglcontext-win32-wgl.c:714
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL version %d.%d is too low, need at least %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:438
+#: gdk/win32/gdkglcontext-win32-wgl.c:732
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL implementation cannot share GL contexts"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:718
+#: gdk/win32/gdkglcontext-win32-wgl.c:1012
 msgid "No available configurations for the given pixel format"
 msgstr "No available configurations for the given pixel format"
 
@@ -2242,7 +2253,7 @@ msgstr "A file with that name already exists"
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6234 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6223 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2765,7 +2776,7 @@ msgid "Play"
 msgstr "Play"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6235
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6224
 msgid "_OK"
 msgstr "_OK"
 
@@ -3614,12 +3625,12 @@ msgstr "Shortcuts"
 msgid "Search Results"
 msgstr "Search Results"
 
-#: gtk/gtkshortcutswindow.c:1029 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:1029 gtk/ui/gtkemojichooser.ui:350
 #: gtk/ui/gtkfilechooserwidget.ui:250
 msgid "No Results Found"
 msgstr "No Results Found"
 
-#: gtk/gtkshortcutswindow.c:1040 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1040 gtk/ui/gtkemojichooser.ui:363
 #: gtk/ui/gtkfilechooserwidget.ui:263 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "Try a different search"
@@ -3641,12 +3652,12 @@ msgstr "_Undo"
 msgid "_Redo"
 msgstr "_Redo"
 
-#: gtk/gtkwindow.c:6223
+#: gtk/gtkwindow.c:6212
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Do you want to use GTK Inspector?"
 
-#: gtk/gtkwindow.c:6225
+#: gtk/gtkwindow.c:6214
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3657,7 +3668,7 @@ msgstr ""
 "the internals of any GTK application. Using it may cause the application to "
 "break or crash."
 
-#: gtk/gtkwindow.c:6230
+#: gtk/gtkwindow.c:6219
 msgid "Don’t show this message again"
 msgstr "Don’t show this message again"
 
@@ -3823,7 +3834,6 @@ msgid "Save the current CSS"
 msgstr "Save the current CSS"
 
 #: gtk/inspector/css-editor.ui:51
-#| msgid "Show other locations"
 msgid "Show deprecations"
 msgstr "Show deprecations"
 
@@ -3845,32 +3855,32 @@ msgctxt "GL version"
 msgid "None"
 msgstr "None"
 
-#: gtk/inspector/general.c:463
+#: gtk/inspector/general.c:464
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Unknown"
 
-#: gtk/inspector/general.c:525
+#: gtk/inspector/general.c:526
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Disabled"
 
-#: gtk/inspector/general.c:526 gtk/inspector/general.c:527
+#: gtk/inspector/general.c:527 gtk/inspector/general.c:528
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Disabled"
 
-#: gtk/inspector/general.c:578
+#: gtk/inspector/general.c:579
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "None"
 
-#: gtk/inspector/general.c:579 gtk/inspector/general.c:580
+#: gtk/inspector/general.c:580 gtk/inspector/general.c:581
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "None"
 
-#: gtk/inspector/general.c:933
+#: gtk/inspector/general.c:934
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM Context is hardcoded by GTK_IM_MODULE"
 
@@ -4061,7 +4071,6 @@ msgid "Scale"
 msgstr "Scale"
 
 #: gtk/inspector/misc-info.ui:552
-#| msgid "Color Name"
 msgid "Color state"
 msgstr "Colour state"
 
@@ -4185,7 +4194,7 @@ msgstr "Source:"
 msgid "Defined At"
 msgstr "Defined At"
 
-#: gtk/inspector/recorder.c:1987
+#: gtk/inspector/recorder.c:2021
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Saving RenderNode failed"
@@ -4368,7 +4377,6 @@ msgid "Slowdown"
 msgstr "Slowdown"
 
 #: gtk/inspector/visual.ui:362
-#| msgid "GL Rendering"
 msgid "Rendering"
 msgstr "Rendering"
 
@@ -6192,52 +6200,52 @@ msgstr "(None)"
 msgid "Search…"
 msgstr "Search…"
 
-#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:239
+#: gtk/ui/gtkemojichooser.ui:70 gtk/ui/gtkemojichooser.ui:240
 msgctxt "emoji category"
 msgid "Smileys & People"
 msgstr "Smileys & People"
 
-#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:248
+#: gtk/ui/gtkemojichooser.ui:95 gtk/ui/gtkemojichooser.ui:249
 msgctxt "emoji category"
 msgid "Body & Clothing"
 msgstr "Body & Clothing"
 
-#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:257
+#: gtk/ui/gtkemojichooser.ui:120 gtk/ui/gtkemojichooser.ui:258
 msgctxt "emoji category"
 msgid "Animals & Nature"
 msgstr "Animals & Nature"
 
-#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:266
+#: gtk/ui/gtkemojichooser.ui:134 gtk/ui/gtkemojichooser.ui:267
 msgctxt "emoji category"
 msgid "Food & Drink"
 msgstr "Food & Drink"
 
-#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:275
+#: gtk/ui/gtkemojichooser.ui:148 gtk/ui/gtkemojichooser.ui:276
 msgctxt "emoji category"
 msgid "Travel & Places"
 msgstr "Travel & Places"
 
-#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:284
+#: gtk/ui/gtkemojichooser.ui:162 gtk/ui/gtkemojichooser.ui:285
 msgctxt "emoji category"
 msgid "Activities"
 msgstr "Activities"
 
-#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:293
+#: gtk/ui/gtkemojichooser.ui:176 gtk/ui/gtkemojichooser.ui:294
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Objects"
 
-#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:302
+#: gtk/ui/gtkemojichooser.ui:190 gtk/ui/gtkemojichooser.ui:303
 msgctxt "emoji category"
 msgid "Symbols"
 msgstr "Symbols"
 
-#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:311
+#: gtk/ui/gtkemojichooser.ui:204 gtk/ui/gtkemojichooser.ui:312
 msgctxt "emoji category"
 msgid "Flags"
 msgstr "Flags"
 
-#: gtk/ui/gtkemojichooser.ui:230
+#: gtk/ui/gtkemojichooser.ui:231
 msgctxt "emoji category"
 msgid "Recent"
 msgstr "Recent"
@@ -6566,28 +6574,24 @@ msgstr "Some of the settings in the dialogue conflict"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:542
 #: modules/printbackends/gtkprintbackendcups.c:5668
-#| msgid "Urgent"
 msgctxt "Print job priority"
 msgid "Urgent"
 msgstr "Urgent"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:543
 #: modules/printbackends/gtkprintbackendcups.c:5669
-#| msgid "High"
 msgctxt "Print job priority"
 msgid "High"
 msgstr "High"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:544
 #: modules/printbackends/gtkprintbackendcups.c:5670
-#| msgid "Medium"
 msgctxt "Print job priority"
 msgid "Medium"
 msgstr "Medium"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:545
 #: modules/printbackends/gtkprintbackendcups.c:5671
-#| msgid "Low"
 msgctxt "Print job priority"
 msgid "Low"
 msgstr "Low"
@@ -7778,19 +7782,6 @@ msgstr "Failed to parse '%s' as number"
 
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  benchmark    Benchmark rendering of a node\n"
-#| "  compare      Compare nodes or images\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -7912,22 +7903,18 @@ msgid "No differences.\n"
 msgstr "No differences.\n"
 
 #: tools/gtk-rendernode-tool-info.c:193
-#| msgid "Number of nodes: %u\n"
 msgid "Number of nodes:"
 msgstr "Number of nodes:"
 
 #: tools/gtk-rendernode-tool-info.c:200
-#| msgid "Depth: %u\n"
 msgid "Depth:"
 msgstr "Depth:"
 
 #: tools/gtk-rendernode-tool-info.c:203
-#| msgid "Bounds"
 msgid "Bounds:"
 msgstr "Bounds:"
 
 #: tools/gtk-rendernode-tool-info.c:204
-#| msgid "Origin: %g %g\n"
 msgid "Origin:"
 msgstr "Origin:"
 
