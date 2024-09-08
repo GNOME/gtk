@@ -100,6 +100,9 @@ bool            gsk_border_node_get_uniform_color       (const GskRenderNode    
 void            gsk_text_node_serialize_glyphs          (GskRenderNode               *self,
                                                          GString                     *str);
 
+cairo_hint_style_t
+                gsk_text_node_get_font_hint_style       (const GskRenderNode         *self) G_GNUC_PURE;
+
 GskRenderNode ** gsk_container_node_get_children        (const GskRenderNode         *node,
                                                          guint                       *n_children);
 
@@ -169,6 +172,17 @@ GskRenderNode * gsk_text_node_new2                      (PangoFont              
                                                          const GdkColor         *color,
                                                          const graphene_point_t *offset);
 const GdkColor *gsk_text_node_get_color2                (const GskRenderNode    *node);
+
+#define GSK_RENDER_NODE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_RENDER_NODE, GskRenderNodeClass))
+
+#define gsk_render_node_get_node_type(node) _gsk_render_node_get_node_type (node)
+
+G_GNUC_PURE static inline
+GskRenderNodeType
+_gsk_render_node_get_node_type (const GskRenderNode *node)
+{
+  return GSK_RENDER_NODE_GET_CLASS (node)->node_type;
+}
 
 G_END_DECLS
 

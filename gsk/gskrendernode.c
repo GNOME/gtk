@@ -60,8 +60,6 @@
  **/
 G_DEFINE_QUARK (gsk-serialization-error-quark, gsk_serialization_error)
 
-#define GSK_RENDER_NODE_GET_CLASS(obj)  (G_TYPE_INSTANCE_GET_CLASS ((obj), GSK_TYPE_RENDER_NODE, GskRenderNodeClass))
-
 
 static void
 value_render_node_init (GValue *value)
@@ -341,17 +339,10 @@ void
  * Returns: the type of the `GskRenderNode`
  */
 GskRenderNodeType
-gsk_render_node_get_node_type (const GskRenderNode *node)
+(gsk_render_node_get_node_type) (const GskRenderNode *node)
 {
   g_return_val_if_fail (GSK_IS_RENDER_NODE (node), GSK_NOT_A_RENDER_NODE);
 
-  return GSK_RENDER_NODE_GET_CLASS (node)->node_type;
-}
-
-G_GNUC_PURE static inline
-GskRenderNodeType
-_gsk_render_node_get_node_type (const GskRenderNode *node)
-{
   return GSK_RENDER_NODE_GET_CLASS (node)->node_type;
 }
 
@@ -535,11 +526,11 @@ gsk_render_node_can_diff (const GskRenderNode *node1,
   if (node1 == node2)
     return TRUE;
 
-  if (_gsk_render_node_get_node_type (node1) == _gsk_render_node_get_node_type (node2))
+  if (gsk_render_node_get_node_type (node1) == gsk_render_node_get_node_type (node2))
     return GSK_RENDER_NODE_GET_CLASS (node1)->can_diff (node1, node2);
 
-  if (_gsk_render_node_get_node_type (node1) == GSK_CONTAINER_NODE ||
-      _gsk_render_node_get_node_type (node2) == GSK_CONTAINER_NODE)
+  if (gsk_render_node_get_node_type (node1) == GSK_CONTAINER_NODE ||
+      gsk_render_node_get_node_type (node2) == GSK_CONTAINER_NODE)
     return TRUE;
 
   return FALSE;
@@ -594,15 +585,15 @@ gsk_render_node_diff (GskRenderNode  *node1,
   if (node1 == node2)
     return;
 
-  if (_gsk_render_node_get_node_type (node1) == _gsk_render_node_get_node_type (node2))
+  if (gsk_render_node_get_node_type (node1) == gsk_render_node_get_node_type (node2))
     {
       GSK_RENDER_NODE_GET_CLASS (node1)->diff (node1, node2, data);
     }
-  else if (_gsk_render_node_get_node_type (node1) == GSK_CONTAINER_NODE)
+  else if (gsk_render_node_get_node_type (node1) == GSK_CONTAINER_NODE)
     {
       gsk_container_node_diff_with (node1, node2, data);
     }
-  else if (_gsk_render_node_get_node_type (node2) == GSK_CONTAINER_NODE)
+  else if (gsk_render_node_get_node_type (node2) == GSK_CONTAINER_NODE)
     {
       gsk_container_node_diff_with (node2, node1, data);
     }

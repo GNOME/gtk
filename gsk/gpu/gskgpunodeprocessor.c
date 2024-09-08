@@ -3007,8 +3007,13 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   float align_scale_x, align_scale_y;
   float inv_align_scale_x, inv_align_scale_y;
   unsigned int flags_mask;
-  GskGpuImage *last_image;
   const float inv_pango_scale = 1.f / PANGO_SCALE;
+  cairo_hint_style_t hint_style;
+  const GdkColor *color;
+  GdkColorState *alt;
+  GskGpuColorStates color_states;
+  GdkColor color2;
+  GskGpuShaderClip node_clip;
 
   if (self->opacity < 1.0 &&
       gsk_text_node_has_color_glyphs (node))
@@ -3023,12 +3028,21 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   font = gsk_text_node_get_font (node);
   offset = *gsk_text_node_get_offset (node);
+  hint_style = gsk_text_node_get_font_hint_style (node);
+  color = gsk_text_node_get_color2 (node);
+
+  alt = gsk_gpu_color_states_find (self->ccs, color);
+  color_states = gsk_gpu_color_states_create (self->ccs, TRUE, alt, FALSE);
+  gdk_color_convert (&color2, alt, color);
+
+  node_clip = gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+
   offset.x += self->offset.x;
   offset.y += self->offset.y;
 
   scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
 
-  if (gsk_font_get_hint_style (font) != CAIRO_HINT_STYLE_NONE)
+  if (hint_style != CAIRO_HINT_STYLE_NONE)
     {
       align_scale_x = scale * 4;
       align_scale_y = scale;
@@ -3043,13 +3057,13 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   inv_align_scale_x = 1 / align_scale_x;
   inv_align_scale_y = 1 / align_scale_y;
 
-  last_image = NULL;
   for (i = 0; i < num_glyphs; i++)
     {
       GskGpuImage *image;
       graphene_rect_t glyph_bounds, glyph_tex_rect;
       graphene_point_t glyph_offset, glyph_origin;
       GskGpuGlyphLookupFlags flags;
+      GskGpuShaderClip glyph_clip;
 
       glyph_origin = GRAPHENE_POINT_INIT (offset.x + glyphs[i].geometry.x_offset * inv_pango_scale,
                                           offset.y + glyphs[i].geometry.y_offset * inv_pango_scale);
@@ -3080,12 +3094,14 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       glyph_origin = GRAPHENE_POINT_INIT (glyph_origin.x - glyph_offset.x / scale,
                                           glyph_origin.y - glyph_offset.y / scale);
 
-      if (image != last_image)
-        last_image = image;
+      if (node_clip == GSK_GPU_SHADER_CLIP_NONE)
+        glyph_clip = GSK_GPU_SHADER_CLIP_NONE;
+      else
+        glyph_clip = gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_origin, &glyph_bounds);
 
       if (glyphs[i].attr.is_color)
         gsk_gpu_texture_op (self->frame,
-                            gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_origin, &glyph_bounds),
+                            glyph_clip,
                             &glyph_origin,
                             &(GskGpuShaderImage) {
                                 image,
@@ -3094,21 +3110,23 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                 &glyph_tex_rect
                             });
       else
-        gsk_gpu_colorize_op (self->frame,
-                             gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_origin, &glyph_bounds),
-                             self->ccs,
-                             self->opacity,
-                             &glyph_origin,
-                             &(GskGpuShaderImage) {
-                                 image,
-                                 GSK_GPU_SAMPLER_DEFAULT,
-                                 &glyph_bounds,
-                                 &glyph_tex_rect
-                             },
-                             gsk_text_node_get_color2 (node));
+        gsk_gpu_colorize_op2 (self->frame,
+                              glyph_clip,
+                              color_states,
+                              self->opacity,
+                              &glyph_origin,
+                              &(GskGpuShaderImage) {
+                                  image,
+                                  GSK_GPU_SAMPLER_DEFAULT,
+                                  &glyph_bounds,
+                                  &glyph_tex_rect
+                              },
+                              &color2);
 
       offset.x += glyphs[i].geometry.width * inv_pango_scale;
     }
+
+  gdk_color_finish (&color2);
 }
 
 static void
@@ -3657,7 +3675,8 @@ static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
-  gsize i;
+  GskRenderNode **children;
+  guint n_children;
 
   if (self->opacity < 1.0 && !gsk_container_node_is_disjoint (node))
     {
@@ -3665,8 +3684,9 @@ gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  for (i = 0; i < gsk_container_node_get_n_children (node); i++)
-    gsk_gpu_node_processor_add_node (self, gsk_container_node_get_child (node, i));
+  children = gsk_container_node_get_children (node, &n_children);
+  for (guint i = 0; i < n_children; i++)
+    gsk_gpu_node_processor_add_node (self, children[i]);
 }
 
 static gboolean
@@ -3674,10 +3694,12 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
                                                  GskGpuFirstNodeInfo *info,
                                                  GskRenderNode       *node)
 {
+  GskRenderNode **children;
   graphene_rect_t opaque;
-  int i, n;
+  int i;
+  guint n;
 
-  n = gsk_container_node_get_n_children (node);
+  children = gsk_container_node_get_children (node, &n);
   if (n == 0)
     return FALSE;
 
@@ -3687,17 +3709,15 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
 
   for (i = n; i-->0; )
     {
-      if (gsk_gpu_node_processor_add_first_node (self,
-                                                 info,
-                                                 gsk_container_node_get_child (node, i)))
-          break;
+      if (gsk_gpu_node_processor_add_first_node (self, info, children[i]))
+        break;
     }
 
   if (i < 0)
     gsk_gpu_first_node_begin_rendering (self, info, NULL);
 
   for (i++; i < n; i++)
-    gsk_gpu_node_processor_add_node (self, gsk_container_node_get_child (node, i));
+    gsk_gpu_node_processor_add_node (self, children[i]);
 
   return TRUE;
 }

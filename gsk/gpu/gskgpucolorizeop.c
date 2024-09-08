@@ -50,22 +50,19 @@ static const GskGpuShaderOpClass GSK_GPU_COLORIZE_OP_CLASS = {
 };
 
 void
-gsk_gpu_colorize_op (GskGpuFrame             *frame,
-                     GskGpuShaderClip         clip,
-                     GdkColorState           *ccs,
-                     float                    opacity,
-                     const graphene_point_t  *offset,
-                     const GskGpuShaderImage *image,
-                     const GdkColor          *color)
+gsk_gpu_colorize_op2 (GskGpuFrame             *frame,
+                      GskGpuShaderClip         clip,
+                      GskGpuColorStates        color_states,
+                      float                    opacity,
+                      const graphene_point_t  *offset,
+                      const GskGpuShaderImage *image,
+                      const GdkColor          *color)
 {
   GskGpuColorizeInstance *instance;
-  GdkColorState *alt;
-
-  alt = gsk_gpu_color_states_find (ccs, color);
 
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_COLORIZE_OP_CLASS,
-                           gsk_gpu_color_states_create (ccs, TRUE, alt, FALSE),
+                           color_states,
                            0,
                            clip,
                            (GskGpuImage *[1]) { image->image },
@@ -74,5 +71,27 @@ gsk_gpu_colorize_op (GskGpuFrame             *frame,
 
   gsk_gpu_rect_to_float (image->coverage ? image->coverage : image->bounds, offset, instance->rect);
   gsk_gpu_rect_to_float (image->bounds, offset, instance->tex_rect);
-  gsk_gpu_color_to_float (color, alt, opacity, instance->color);
+  gsk_gpu_color_to_float (color, gsk_gpu_color_states_get_alt (color_states), opacity, instance->color);
+}
+
+void
+gsk_gpu_colorize_op (GskGpuFrame             *frame,
+                     GskGpuShaderClip         clip,
+                     GdkColorState           *ccs,
+                     float                    opacity,
+                     const graphene_point_t  *offset,
+                     const GskGpuShaderImage *image,
+                     const GdkColor          *color)
+{
+  GdkColorState *alt;
+  GskGpuColorStates color_states;
+  GdkColor color2;
+
+  alt = gsk_gpu_color_states_find (ccs, color);
+  color_states = gsk_gpu_color_states_create (ccs, TRUE, alt, FALSE);
+  gdk_color_convert (&color2, alt, color);
+
+  gsk_gpu_colorize_op2 (frame, clip, color_states, opacity, offset, image, &color2);
+
+  gdk_color_finish (&color2);
 }

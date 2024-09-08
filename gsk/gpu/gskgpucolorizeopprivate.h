@@ -14,6 +14,14 @@ void                    gsk_gpu_colorize_op                             (GskGpuF
                                                                          const GskGpuShaderImage        *image,
                                                                          const GdkColor                 *color);
 
+void                    gsk_gpu_colorize_op2                            (GskGpuFrame                    *frame,
+                                                                         GskGpuShaderClip                clip,
+                                                                         GskGpuColorStates               color_states,
+                                                                         float                           opacity,
+                                                                         const graphene_point_t         *offset,
+                                                                         const GskGpuShaderImage        *image,
+                                                                         const GdkColor                 *color);
+
 
 G_END_DECLS
 
