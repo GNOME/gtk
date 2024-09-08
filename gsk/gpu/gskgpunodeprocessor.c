@@ -3007,7 +3007,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   float align_scale_x, align_scale_y;
   float inv_align_scale_x, inv_align_scale_y;
   unsigned int flags_mask;
-  GskGpuImage *last_image;
   const float inv_pango_scale = 1.f / PANGO_SCALE;
   cairo_hint_style_t hint_style;
   const GdkColor *color;
@@ -3048,7 +3047,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   inv_align_scale_x = 1 / align_scale_x;
   inv_align_scale_y = 1 / align_scale_y;
 
-  last_image = NULL;
   for (i = 0; i < num_glyphs; i++)
     {
       GskGpuImage *image;
@@ -3084,9 +3082,6 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                          glyph_bounds.size.height / scale);
       glyph_origin = GRAPHENE_POINT_INIT (glyph_origin.x - glyph_offset.x / scale,
                                           glyph_origin.y - glyph_offset.y / scale);
-
-      if (image != last_image)
-        last_image = image;
 
       if (glyphs[i].attr.is_color)
         gsk_gpu_texture_op (self->frame,
