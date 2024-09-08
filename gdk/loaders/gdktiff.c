@@ -228,7 +228,7 @@ struct _FormatData {
   guint16 bits_per_sample;
   guint16 samples_per_pixel;
   guint16 sample_format;
-  guint16 alpha_samples;
+  gint16 alpha_samples;
   guint16 photometric;
 };
 
@@ -241,27 +241,27 @@ static const FormatData format_data[] = {
   [GDK_MEMORY_A8R8G8B8]                         = { GDK_MEMORY_R8G8B8A8,                          8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_RGB },
   [GDK_MEMORY_R8G8B8A8]                         = { GDK_MEMORY_R8G8B8A8,                          8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_RGB },
   [GDK_MEMORY_A8B8G8R8]                         = { GDK_MEMORY_R8G8B8A8,                          8, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_RGB },
-  [GDK_MEMORY_R8G8B8]                           = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_RGB },
-  [GDK_MEMORY_B8G8R8]                           = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_RGB },
-  [GDK_MEMORY_R8G8B8X8]                         = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_RGB },
-  [GDK_MEMORY_X8R8G8B8]                         = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_RGB },
-  [GDK_MEMORY_B8G8R8X8]                         = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_RGB },
-  [GDK_MEMORY_X8B8G8R8]                         = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_RGB },
-  [GDK_MEMORY_R16G16B16]                        = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_RGB },
+  [GDK_MEMORY_R8G8B8]                           = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_B8G8R8]                           = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_R8G8B8X8]                         = { GDK_MEMORY_R8G8B8X8,                          8, 4, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_RGB },
+  [GDK_MEMORY_X8R8G8B8]                         = { GDK_MEMORY_R8G8B8X8,                          8, 4, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_RGB },
+  [GDK_MEMORY_B8G8R8X8]                         = { GDK_MEMORY_R8G8B8X8,                          8, 4, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_RGB },
+  [GDK_MEMORY_X8B8G8R8]                         = { GDK_MEMORY_R8G8B8X8,                          8, 4, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_RGB },
+  [GDK_MEMORY_R16G16B16]                        = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
   [GDK_MEMORY_R16G16B16A16_PREMULTIPLIED]       = { GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,       16, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_ASSOCALPHA, PHOTOMETRIC_RGB },
   [GDK_MEMORY_R16G16B16A16]                     = { GDK_MEMORY_R16G16B16A16,                     16, 4, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_RGB },
-  [GDK_MEMORY_R16G16B16_FLOAT]                  = { GDK_MEMORY_R16G16B16_FLOAT,                  16, 3, SAMPLEFORMAT_IEEEFP, 0,                      PHOTOMETRIC_RGB },
+  [GDK_MEMORY_R16G16B16_FLOAT]                  = { GDK_MEMORY_R16G16B16_FLOAT,                  16, 3, SAMPLEFORMAT_IEEEFP, -1,                     PHOTOMETRIC_RGB },
   [GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] = { GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED, 16, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_ASSOCALPHA, PHOTOMETRIC_RGB },
   [GDK_MEMORY_R16G16B16A16_FLOAT]               = { GDK_MEMORY_R16G16B16A16_FLOAT,               16, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_RGB },
-  [GDK_MEMORY_R32G32B32_FLOAT]                  = { GDK_MEMORY_R32G32B32_FLOAT,                  32, 3, SAMPLEFORMAT_IEEEFP, 0,                      PHOTOMETRIC_RGB },
+  [GDK_MEMORY_R32G32B32_FLOAT]                  = { GDK_MEMORY_R32G32B32_FLOAT,                  32, 3, SAMPLEFORMAT_IEEEFP, -1,                     PHOTOMETRIC_RGB },
   [GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] = { GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED, 32, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_ASSOCALPHA, PHOTOMETRIC_RGB },
   [GDK_MEMORY_R32G32B32A32_FLOAT]               = { GDK_MEMORY_R32G32B32A32_FLOAT,               32, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_RGB },
   [GDK_MEMORY_G8A8_PREMULTIPLIED]               = { GDK_MEMORY_G8A8_PREMULTIPLIED,                8, 2, SAMPLEFORMAT_UINT,   EXTRASAMPLE_ASSOCALPHA, PHOTOMETRIC_MINISBLACK },
   [GDK_MEMORY_G8A8]                             = { GDK_MEMORY_G8A8,                              8, 2, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_MINISBLACK },
-  [GDK_MEMORY_G8]                               = { GDK_MEMORY_G8,                                8, 1, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_MINISBLACK },
+  [GDK_MEMORY_G8]                               = { GDK_MEMORY_G8,                                8, 1, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_MINISBLACK },
   [GDK_MEMORY_G16A16_PREMULTIPLIED]             = { GDK_MEMORY_G16A16_PREMULTIPLIED,             16, 2, SAMPLEFORMAT_UINT,   EXTRASAMPLE_ASSOCALPHA, PHOTOMETRIC_MINISBLACK },
   [GDK_MEMORY_G16A16]                           = { GDK_MEMORY_G16A16,                           16, 2, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_MINISBLACK },
-  [GDK_MEMORY_G16]                              = { GDK_MEMORY_G16,                              16, 1, SAMPLEFORMAT_UINT,   0,                      PHOTOMETRIC_MINISBLACK },
+  [GDK_MEMORY_G16]                              = { GDK_MEMORY_G16,                              16, 1, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_MINISBLACK },
   [GDK_MEMORY_A8]                               = { GDK_MEMORY_G8A8,                              8, 2, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_MINISBLACK },
   [GDK_MEMORY_A16]                              = { GDK_MEMORY_G16A16,                           16, 2, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_MINISBLACK },
   [GDK_MEMORY_A16_FLOAT]                        = { GDK_MEMORY_R16G16B16A16_FLOAT,               16, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_ASSOCALPHA, PHOTOMETRIC_RGB },
@@ -302,7 +302,7 @@ gdk_save_tiff (GdkTexture *texture)
   TIFFSetField (tif, TIFFTAG_SAMPLEFORMAT, fdata->sample_format);
   TIFFSetField (tif, TIFFTAG_ORIENTATION, ORIENTATION_TOPLEFT);
   TIFFSetField (tif, TIFFTAG_COMPRESSION, COMPRESSION_NONE);
-  if (fdata->alpha_samples)
+  if (fdata->alpha_samples >= 0)
     TIFFSetField (tif, TIFFTAG_EXTRASAMPLES, 1, &fdata->alpha_samples);
 
   TIFFSetField (tif, TIFFTAG_PHOTOMETRIC, fdata->photometric);
@@ -384,7 +384,7 @@ gdk_load_tiff (GBytes  *input_bytes,
   guint16 sample_format;
   guint16 orientation;
   guint32 width, height;
-  guint16 alpha_samples;
+  gint16 alpha_samples;
   GdkMemoryFormat format;
   guchar *data, *line;
   gsize stride;
@@ -421,9 +421,9 @@ gdk_load_tiff (GBytes  *input_bytes,
       if (TIFFGetField (tif, TIFFTAG_EXTRASAMPLES, &extra, &extra_types))
         alpha_samples = extra_types[0];
       else
-        alpha_samples = 0;
+        alpha_samples = -1;
 
-      if (alpha_samples != 0 && alpha_samples != EXTRASAMPLE_ASSOCALPHA && alpha_samples != EXTRASAMPLE_UNASSALPHA)
+      if (alpha_samples >= 0 && alpha_samples != EXTRASAMPLE_ASSOCALPHA && alpha_samples != EXTRASAMPLE_UNASSALPHA && alpha_samples != 0)
         {
           texture = load_fallback (tif, error);
           TIFFClose (tif);
@@ -431,7 +431,7 @@ gdk_load_tiff (GBytes  *input_bytes,
         }
     }
   else
-    alpha_samples = 0;
+    alpha_samples = -1;
 
   for (format = 0; format < G_N_ELEMENTS (format_data); format++)
     {
