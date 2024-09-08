@@ -100,6 +100,9 @@ bool            gsk_border_node_get_uniform_color       (const GskRenderNode    
 void            gsk_text_node_serialize_glyphs          (GskRenderNode               *self,
                                                          GString                     *str);
 
+cairo_hint_style_t
+                gsk_text_node_get_font_hint_style       (const GskRenderNode         *self) G_GNUC_PURE;
+
 GskRenderNode ** gsk_container_node_get_children        (const GskRenderNode         *node,
                                                          guint                       *n_children);
 

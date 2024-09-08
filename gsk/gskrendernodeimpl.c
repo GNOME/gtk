@@ -6332,6 +6332,7 @@ struct _GskTextNode
   PangoFontMap *fontmap;
   PangoFont *font;
   gboolean has_color_glyphs;
+  cairo_hint_style_t hint_style;
 
   GdkColor color;
   graphene_point_t offset;
@@ -6513,6 +6514,7 @@ gsk_text_node_new2 (PangoFont              *font,
   gdk_color_init_copy (&self->color, color);
   self->offset = *offset;
   self->has_color_glyphs = FALSE;
+  self->hint_style = gsk_font_get_hint_style (font);
 
   glyph_infos = g_malloc_n (glyphs->num_glyphs, sizeof (PangoGlyphInfo));
 
@@ -6594,6 +6596,14 @@ gsk_text_node_get_font (const GskRenderNode *node)
   const GskTextNode *self = (const GskTextNode *) node;
 
   return self->font;
+}
+
+cairo_hint_style_t
+gsk_text_node_get_font_hint_style (const GskRenderNode *node)
+{
+  const GskTextNode *self = (const GskTextNode *) node;
+
+  return self->hint_style;
 }
 
 /**

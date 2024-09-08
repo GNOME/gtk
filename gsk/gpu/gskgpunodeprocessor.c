@@ -3009,6 +3009,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   unsigned int flags_mask;
   GskGpuImage *last_image;
   const float inv_pango_scale = 1.f / PANGO_SCALE;
+  cairo_hint_style_t hint_style;
 
   if (self->opacity < 1.0 &&
       gsk_text_node_has_color_glyphs (node))
@@ -3023,12 +3024,14 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   glyphs = gsk_text_node_get_glyphs (node, NULL);
   font = gsk_text_node_get_font (node);
   offset = *gsk_text_node_get_offset (node);
+  hint_style = gsk_text_node_get_font_hint_style (node);
+
   offset.x += self->offset.x;
   offset.y += self->offset.y;
 
   scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
 
-  if (gsk_font_get_hint_style (font) != CAIRO_HINT_STYLE_NONE)
+  if (hint_style != CAIRO_HINT_STYLE_NONE)
     {
       align_scale_x = scale * 4;
       align_scale_y = scale;
