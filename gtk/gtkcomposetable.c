@@ -1605,6 +1605,7 @@ gtk_check_algorithmically (const guint *compose_buffer,
             CASE (U, 0x367);
             CASE (small_schwa, 0x1DEA);
             CASE (capital_schwa, 0x1DEA);
+            CASE (hamza, 0x654);
 #undef CASE
             default:
               g_string_append_unichar (input, gdk_keyval_to_unicode (compose_buffer[i]));

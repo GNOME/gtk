@@ -532,7 +532,7 @@ beep_surface (GdkSurface *surface)
 static inline gboolean
 is_dead_key (guint keysym)
 {
-  return GDK_KEY_dead_grave <= keysym && keysym <= GDK_KEY_dead_greek;
+  return GDK_KEY_dead_grave <= keysym && keysym <= GDK_KEY_dead_hamza;
 }
 
 static void
@@ -599,6 +599,7 @@ append_dead_key (GString *string,
     CASE (U, 0x367, 1);
     CASE (small_schwa, 0x1dea, 1);
     CASE (capital_schwa, 0x1dea, 1);
+    CASE (hamza, 0x621, 0);
 #undef CASE
     default:
       g_string_append_unichar (string, gdk_keyval_to_unicode (keysym));
