@@ -3010,6 +3010,9 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   const float inv_pango_scale = 1.f / PANGO_SCALE;
   cairo_hint_style_t hint_style;
   const GdkColor *color;
+  GdkColorState *alt;
+  GskGpuColorStates color_states;
+  GdkColor color2;
 
   if (self->opacity < 1.0 &&
       gsk_text_node_has_color_glyphs (node))
@@ -3026,6 +3029,10 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   offset = *gsk_text_node_get_offset (node);
   hint_style = gsk_text_node_get_font_hint_style (node);
   color = gsk_text_node_get_color2 (node);
+
+  alt = gsk_gpu_color_states_find (self->ccs, color);
+  color_states = gsk_gpu_color_states_create (self->ccs, TRUE, alt, FALSE);
+  gdk_color_convert (&color2, alt, color);
 
   offset.x += self->offset.x;
   offset.y += self->offset.y;
@@ -3094,21 +3101,23 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
                                 &glyph_tex_rect
                             });
       else
-        gsk_gpu_colorize_op (self->frame,
-                             gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_origin, &glyph_bounds),
-                             self->ccs,
-                             self->opacity,
-                             &glyph_origin,
-                             &(GskGpuShaderImage) {
-                                 image,
-                                 GSK_GPU_SAMPLER_DEFAULT,
-                                 &glyph_bounds,
-                                 &glyph_tex_rect
-                             },
-                             color);
+        gsk_gpu_colorize_op2 (self->frame,
+                              gsk_gpu_clip_get_shader_clip (&self->clip, &glyph_origin, &glyph_bounds),
+                              color_states,
+                              self->opacity,
+                              &glyph_origin,
+                              &(GskGpuShaderImage) {
+                                  image,
+                                  GSK_GPU_SAMPLER_DEFAULT,
+                                  &glyph_bounds,
+                                  &glyph_tex_rect
+                              },
+                              &color2);
 
       offset.x += glyphs[i].geometry.width * inv_pango_scale;
     }
+
+  gdk_color_finish (&color2);
 }
 
 static void
