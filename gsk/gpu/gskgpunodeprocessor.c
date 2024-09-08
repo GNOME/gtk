@@ -113,7 +113,12 @@
 typedef struct _GskGpuNodeProcessor GskGpuNodeProcessor;
 
 typedef enum {
-  GSK_GPU_AS_IMAGE_UNUSED,
+  /* The returned image will be sampled outside the bounds, so it is
+   * important that it returns the right values.
+   * In particular, opaque textures must ensure they return transparency
+   * and images must not be contained in an atlas.
+   */
+  GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS = (1 << 0),
 } GskGpuAsImageFlags;
 
 typedef enum {
@@ -2214,7 +2219,9 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
     return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds);
 
   if (!gdk_color_state_equal (ccs, image_cs) ||
-      gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA)
+      gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA ||
+      ((flags & GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS) &&
+       gdk_memory_format_alpha (gsk_gpu_image_get_format (image)) == GDK_MEMORY_ALPHA_OPAQUE))
     {
       image = gsk_gpu_copy_image (frame, ccs, image, image_cs, FALSE);
       gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (frame)),
@@ -2672,7 +2679,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuNodeProcessor *self,
   gsk_gpu_node_processor_get_clip_bounds (self, &clip_rect);
   graphene_rect_inset (&clip_rect, -clip_radius, -clip_radius);
   image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                    0,
+                                                    GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
                                                     &clip_rect,
                                                     child,
                                                     &tex_rect);
@@ -2711,7 +2718,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                     clip_bounds.size.height + node->bounds.size.height - child->bounds.size.height);
 
   image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                    0,
+                                                    GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS,
                                                     &clip_bounds, 
                                                     child,
                                                     &tex_rect);
