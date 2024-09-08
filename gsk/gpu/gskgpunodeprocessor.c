@@ -3657,7 +3657,8 @@ static void
 gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
-  gsize i;
+  GskRenderNode **children;
+  guint n_children;
 
   if (self->opacity < 1.0 && !gsk_container_node_is_disjoint (node))
     {
@@ -3665,8 +3666,9 @@ gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  for (i = 0; i < gsk_container_node_get_n_children (node); i++)
-    gsk_gpu_node_processor_add_node (self, gsk_container_node_get_child (node, i));
+  children = gsk_container_node_get_children (node, &n_children);
+  for (guint i = 0; i < n_children; i++)
+    gsk_gpu_node_processor_add_node (self, children[i]);
 }
 
 static gboolean
@@ -3674,10 +3676,12 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
                                                  GskGpuFirstNodeInfo *info,
                                                  GskRenderNode       *node)
 {
+  GskRenderNode **children;
   graphene_rect_t opaque;
-  int i, n;
+  int i;
+  guint n;
 
-  n = gsk_container_node_get_n_children (node);
+  children = gsk_container_node_get_children (node, &n);
   if (n == 0)
     return FALSE;
 
@@ -3687,17 +3691,15 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
 
   for (i = n; i-->0; )
     {
-      if (gsk_gpu_node_processor_add_first_node (self,
-                                                 info,
-                                                 gsk_container_node_get_child (node, i)))
-          break;
+      if (gsk_gpu_node_processor_add_first_node (self, info, children[i]))
+        break;
     }
 
   if (i < 0)
     gsk_gpu_first_node_begin_rendering (self, info, NULL);
 
   for (i++; i < n; i++)
-    gsk_gpu_node_processor_add_node (self, gsk_container_node_get_child (node, i));
+    gsk_gpu_node_processor_add_node (self, children[i]);
 
   return TRUE;
 }
