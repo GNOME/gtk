@@ -167,8 +167,8 @@ parse_command (const char **p,
 }
 
 static gboolean
-parse_string (const char **p,
-              const char  *s)
+parse_char (const char **p,
+            const char  *s)
 { 
   int len = strlen (s);
   if (strncmp (*p, s, len) != 0)
@@ -205,7 +205,7 @@ is_line (double x0, double y0,
 }
 
 static gboolean
-parse_rectangle (const char **p,
+parse_rect_path (const char **p,
                  double      *x,
                  double      *y,
                  double      *w,
@@ -215,13 +215,13 @@ parse_rectangle (const char **p,
   double w2;
 
   if (parse_coordinate_pair (p, x, y) &&
-      parse_string (p, "h") &&
+      parse_char (p, "h") &&
       parse_coordinate (p, w) &&
-      parse_string (p, "v") &&
+      parse_char (p, "v") &&
       parse_coordinate (p, h) &&
-      parse_string (p, "h") &&
+      parse_char (p, "h") &&
       parse_coordinate (p, &w2) &&
-      parse_string (p, "z") &&
+      parse_char (p, "z") &&
       w2 == -*w && *w >= 0 && *h >= 0)
     {
       skip_whitespace (p);
@@ -234,10 +234,10 @@ parse_rectangle (const char **p,
 }
 
 static gboolean
-parse_circle (const char **p,
-              double      *cx,
-              double      *cy,
-              double      *r)
+parse_circle_path (const char **p,
+                   double      *cx,
+                   double      *cy,
+                   double      *r)
 {
   const char *o = *p;
   double x0, y0, x1, y1, x2, y2, x3, y3;
@@ -246,23 +246,23 @@ parse_circle (const char **p,
   double rr;
 
   if (parse_coordinate_pair (p, &x0, &y0) &&
-      parse_string (p, "o") &&
+      parse_char (p, "o") &&
       parse_coordinate_pair (p, &x1, &y1) &&
       parse_coordinate_pair (p, &x2, &y2) &&
       parse_nonnegative_number (p, &w0) &&
-      parse_string (p, "o") &&
+      parse_char (p, "o") &&
       parse_coordinate_pair (p, &x3, &y3) &&
       parse_coordinate_pair (p, &x4, &y4) &&
       parse_nonnegative_number (p, &w1) &&
-      parse_string (p, "o") &&
+      parse_char (p, "o") &&
       parse_coordinate_pair (p, &x5, &y5) &&
       parse_coordinate_pair (p, &x6, &y6) &&
       parse_nonnegative_number (p, &w2) &&
-      parse_string (p, "o") &&
+      parse_char (p, "o") &&
       parse_coordinate_pair (p, &x7, &y7) &&
       parse_coordinate_pair (p, &x8, &y8) &&
       parse_nonnegative_number (p, &w3) &&
-      parse_string (p, "z"))
+      parse_char (p, "z"))
     {
       rr = y1;
 
@@ -292,8 +292,8 @@ parse_circle (const char **p,
 }
 
 static gboolean
-parse_rounded_rect (const char     **p,
-                    GskRoundedRect  *rr)
+parse_rounded_rect_path (const char     **p,
+                         GskRoundedRect  *rr)
 {
   const char *o = *p;
   double x0, y0, x1, y1, x2, y2, x3, y3;
@@ -302,31 +302,31 @@ parse_rounded_rect (const char     **p,
   double x12, y12, w0, w1, w2, w3;
 
   if (parse_coordinate_pair (p, &x0, &y0) &&
-      parse_string (p, "L") &&
+      parse_char (p, "L") &&
       parse_coordinate_pair (p, &x1, &y1) &&
-      parse_string (p, "O") &&
+      parse_char (p, "O") &&
       parse_coordinate_pair (p, &x2, &y2) &&
       parse_coordinate_pair (p, &x3, &y3) &&
       parse_nonnegative_number (p, &w0) &&
-      parse_string (p, "L") &&
+      parse_char (p, "L") &&
       parse_coordinate_pair (p, &x4, &y4) &&
-      parse_string (p, "O") &&
+      parse_char (p, "O") &&
       parse_coordinate_pair (p, &x5, &y5) &&
       parse_coordinate_pair (p, &x6, &y6) &&
       parse_nonnegative_number (p, &w1) &&
-      parse_string (p, "L") &&
+      parse_char (p, "L") &&
       parse_coordinate_pair (p, &x7, &y7) &&
-      parse_string (p, "O") &&
+      parse_char (p, "O") &&
       parse_coordinate_pair (p, &x8, &y8) &&
       parse_coordinate_pair (p, &x9, &y9) &&
       parse_nonnegative_number (p, &w2) &&
-      parse_string (p, "L") &&
+      parse_char (p, "L") &&
       parse_coordinate_pair (p, &x10, &y10) &&
-      parse_string (p, "O") &&
+      parse_char (p, "O") &&
       parse_coordinate_pair (p, &x11, &y11) &&
       parse_coordinate_pair (p, &x12, &y12) &&
       parse_nonnegative_number (p, &w3) &&
-      parse_string (p, "Z"))
+      parse_char (p, "Z"))
     {
       if (NEAR (x0, x12) && NEAR (y0, y12) &&
           is_rect (x11, y11, x2, y2, x5, y5, x8, y8) &&
@@ -443,7 +443,7 @@ gsk_path_parse (const char *string)
             GskRoundedRect rr;
 
             /* Look for special contours */
-            if (parse_rectangle (&p, &x1, &y1, &w, &h))
+            if (parse_rect_path (&p, &x1, &y1, &w, &h))
               {
                 gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x1, y1, w, h));
                 if (_strchr ("zZX", prev_cmd))
@@ -455,7 +455,7 @@ gsk_path_parse (const char *string)
                 x = x1;
                 y = y1;
               }
-            else if (parse_circle (&p, &x1, &y1, &r))
+            else if (parse_circle_path (&p, &x1, &y1, &r))
               {
                 gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (x1, y1), r);
 
@@ -468,7 +468,7 @@ gsk_path_parse (const char *string)
                 x = x1 + r;
                 y = y1;
               }
-            else if (parse_rounded_rect (&p, &rr))
+            else if (parse_rounded_rect_path (&p, &rr))
               {
                 gsk_path_builder_add_rounded_rect (builder, &rr);
 
