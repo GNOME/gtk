@@ -100,13 +100,13 @@
  */
 
 enum {
-  PROP_0,
-  PROP_DEFAULT_DISPLAY
+  GDK_DISPLAY_MANAGER_PROP_0,
+  GDK_DISPLAY_MANAGER_PROP_DEFAULT_DISPLAY
 };
 
 enum {
-  DISPLAY_OPENED,
-  LAST_SIGNAL
+  GDK_DISPLAY_MANAGER_DISPLAY_OPENED,
+  GDK_DISPLAY_MANAGER_LAST_SIGNAL
 };
 
 static void gdk_display_manager_set_property (GObject                *object,
@@ -118,7 +118,7 @@ static void gdk_display_manager_get_property (GObject                *object,
                                               GValue                 *value,
                                               GParamSpec             *pspec);
 
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint gdk_display_manager_signals[GDK_DISPLAY_MANAGER_LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GdkDisplayManager, gdk_display_manager, G_TYPE_OBJECT)
 
@@ -137,7 +137,7 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
    *
    * Emitted when a display is opened.
    */
-  signals[DISPLAY_OPENED] =
+  gdk_display_manager_signals[GDK_DISPLAY_MANAGER_DISPLAY_OPENED] =
     g_signal_new (g_intern_static_string ("display-opened"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
@@ -154,7 +154,7 @@ gdk_display_manager_class_init (GdkDisplayManagerClass *klass)
    * The default display.
    */
   g_object_class_install_property (object_class,
-                                   PROP_DEFAULT_DISPLAY,
+                                   GDK_DISPLAY_MANAGER_PROP_DEFAULT_DISPLAY,
                                    g_param_spec_object ("default-display", NULL, NULL,
                                                         GDK_TYPE_DISPLAY,
                                                         G_PARAM_READWRITE|G_PARAM_STATIC_STRINGS));
@@ -173,7 +173,7 @@ gdk_display_manager_set_property (GObject      *object,
 {
   switch (prop_id)
     {
-    case PROP_DEFAULT_DISPLAY:
+    case GDK_DISPLAY_MANAGER_PROP_DEFAULT_DISPLAY:
       gdk_display_manager_set_default_display (GDK_DISPLAY_MANAGER (object),
                                                g_value_get_object (value));
       break;
@@ -191,7 +191,7 @@ gdk_display_manager_get_property (GObject      *object,
 {
   switch (prop_id)
     {
-    case PROP_DEFAULT_DISPLAY:
+    case GDK_DISPLAY_MANAGER_PROP_DEFAULT_DISPLAY:
       g_value_set_object (value,
                           gdk_display_manager_get_default_display (GDK_DISPLAY_MANAGER (object)));
       break;
@@ -455,7 +455,7 @@ _gdk_display_manager_add_display (GdkDisplayManager *manager,
 
   manager->displays = g_slist_prepend (manager->displays, display);
 
-  g_signal_emit (manager, signals[DISPLAY_OPENED], 0, display);
+  g_signal_emit (manager, gdk_display_manager_signals[GDK_DISPLAY_MANAGER_DISPLAY_OPENED], 0, display);
 }
 
 /* NB: This function can be called multiple times per display. */
