@@ -70,24 +70,24 @@ struct _GdkGLTextureBuilderClass
 
 enum
 {
-  PROP_0,
-  PROP_CONTEXT,
-  PROP_FORMAT,
-  PROP_HAS_MIPMAP,
-  PROP_HEIGHT,
-  PROP_ID,
-  PROP_SYNC,
-  PROP_COLOR_STATE,
-  PROP_UPDATE_REGION,
-  PROP_UPDATE_TEXTURE,
-  PROP_WIDTH,
+  GDK_GL_TEXTURE_BUILDER_PROP_0,
+  GDK_GL_TEXTURE_BUILDER_PROP_CONTEXT,
+  GDK_GL_TEXTURE_BUILDER_PROP_FORMAT,
+  GDK_GL_TEXTURE_BUILDER_PROP_HAS_MIPMAP,
+  GDK_GL_TEXTURE_BUILDER_PROP_HEIGHT,
+  GDK_GL_TEXTURE_BUILDER_PROP_ID,
+  GDK_GL_TEXTURE_BUILDER_PROP_SYNC,
+  GDK_GL_TEXTURE_BUILDER_PROP_COLOR_STATE,
+  GDK_GL_TEXTURE_BUILDER_PROP_UPDATE_REGION,
+  GDK_GL_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE,
+  GDK_GL_TEXTURE_BUILDER_PROP_WIDTH,
 
-  N_PROPS
+  GDK_GL_TEXTURE_BUILDER_N_PROPS
 };
 
 G_DEFINE_TYPE (GdkGLTextureBuilder, gdk_gl_texture_builder, G_TYPE_OBJECT)
 
-static GParamSpec *properties[N_PROPS] = { NULL, };
+static GParamSpec *gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_N_PROPS] = { NULL, };
 
 static void
 gdk_gl_texture_builder_dispose (GObject *object)
@@ -113,43 +113,43 @@ gdk_gl_texture_builder_get_property (GObject    *object,
 
   switch (property_id)
     {
-    case PROP_CONTEXT:
+    case GDK_GL_TEXTURE_BUILDER_PROP_CONTEXT:
       g_value_set_object (value, self->context);
       break;
 
-    case PROP_FORMAT:
+    case GDK_GL_TEXTURE_BUILDER_PROP_FORMAT:
       g_value_set_enum (value, self->format);
       break;
 
-    case PROP_HAS_MIPMAP:
+    case GDK_GL_TEXTURE_BUILDER_PROP_HAS_MIPMAP:
       g_value_set_boolean (value, self->has_mipmap);
       break;
 
-    case PROP_HEIGHT:
+    case GDK_GL_TEXTURE_BUILDER_PROP_HEIGHT:
       g_value_set_int (value, self->height);
       break;
 
-    case PROP_ID:
+    case GDK_GL_TEXTURE_BUILDER_PROP_ID:
       g_value_set_uint (value, self->id);
       break;
 
-    case PROP_SYNC:
+    case GDK_GL_TEXTURE_BUILDER_PROP_SYNC:
       g_value_set_pointer (value, self->sync);
       break;
 
-    case PROP_COLOR_STATE:
+    case GDK_GL_TEXTURE_BUILDER_PROP_COLOR_STATE:
       g_value_set_boxed (value, self->color_state);
       break;
 
-    case PROP_UPDATE_REGION:
+    case GDK_GL_TEXTURE_BUILDER_PROP_UPDATE_REGION:
       g_value_set_boxed (value, self->update_region);
       break;
 
-    case PROP_UPDATE_TEXTURE:
+    case GDK_GL_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE:
       g_value_set_object (value, self->update_texture);
       break;
 
-    case PROP_WIDTH:
+    case GDK_GL_TEXTURE_BUILDER_PROP_WIDTH:
       g_value_set_int (value, self->width);
       break;
 
@@ -169,43 +169,43 @@ gdk_gl_texture_builder_set_property (GObject      *object,
 
   switch (property_id)
     {
-    case PROP_CONTEXT:
+    case GDK_GL_TEXTURE_BUILDER_PROP_CONTEXT:
       gdk_gl_texture_builder_set_context (self, g_value_get_object (value));
       break;
 
-    case PROP_FORMAT:
+    case GDK_GL_TEXTURE_BUILDER_PROP_FORMAT:
       gdk_gl_texture_builder_set_format (self, g_value_get_enum (value));
       break;
 
-    case PROP_HAS_MIPMAP:
+    case GDK_GL_TEXTURE_BUILDER_PROP_HAS_MIPMAP:
       gdk_gl_texture_builder_set_has_mipmap (self, g_value_get_boolean (value));
       break;
 
-    case PROP_HEIGHT:
+    case GDK_GL_TEXTURE_BUILDER_PROP_HEIGHT:
       gdk_gl_texture_builder_set_height (self, g_value_get_int (value));
       break;
 
-    case PROP_ID:
+    case GDK_GL_TEXTURE_BUILDER_PROP_ID:
       gdk_gl_texture_builder_set_id (self, g_value_get_uint (value));
       break;
 
-    case PROP_SYNC:
+    case GDK_GL_TEXTURE_BUILDER_PROP_SYNC:
       gdk_gl_texture_builder_set_sync (self, g_value_get_pointer (value));
       break;
 
-    case PROP_COLOR_STATE:
+    case GDK_GL_TEXTURE_BUILDER_PROP_COLOR_STATE:
       gdk_gl_texture_builder_set_color_state (self, g_value_get_boxed (value));
       break;
 
-    case PROP_UPDATE_REGION:
+    case GDK_GL_TEXTURE_BUILDER_PROP_UPDATE_REGION:
       gdk_gl_texture_builder_set_update_region (self, g_value_get_boxed (value));
       break;
 
-    case PROP_UPDATE_TEXTURE:
+    case GDK_GL_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE:
       gdk_gl_texture_builder_set_update_texture (self, g_value_get_object (value));
       break;
 
-    case PROP_WIDTH:
+    case GDK_GL_TEXTURE_BUILDER_PROP_WIDTH:
       gdk_gl_texture_builder_set_width (self, g_value_get_int (value));
       break;
 
@@ -231,7 +231,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
    *
    * Since: 4.12
    */
-  properties[PROP_CONTEXT] =
+  gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_CONTEXT] =
     g_param_spec_object ("context", NULL, NULL,
                          GDK_TYPE_GL_CONTEXT,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -243,7 +243,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
    *
    * Since: 4.12
    */
-  properties[PROP_FORMAT] =
+  gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_FORMAT] =
     g_param_spec_enum ("format", NULL, NULL,
                        GDK_TYPE_MEMORY_FORMAT,
                        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
@@ -256,7 +256,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
    *
    * Since: 4.12
    */
-  properties[PROP_HAS_MIPMAP] =
+  gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_HAS_MIPMAP] =
     g_param_spec_boolean ("has-mipmap", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -268,7 +268,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
    *
    * Since: 4.12
    */
-  properties[PROP_HEIGHT] =
+  gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_HEIGHT] =
     g_param_spec_int ("height", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -280,7 +280,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
    *
    * Since: 4.12
    */
-  properties[PROP_ID] =
+  gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_ID] =
     g_param_spec_uint ("id", NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -294,7 +294,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
    *
    * Since: 4.12
    */
-  properties[PROP_SYNC] =
+  gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_SYNC] =
     g_param_spec_pointer ("sync", NULL, NULL,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
@@ -305,7 +305,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_COLOR_STATE] =
+  gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_COLOR_STATE] =
     g_param_spec_boxed ("color-state", NULL, NULL,
                         GDK_TYPE_COLOR_STATE,
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -317,7 +317,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
    *
    * Since: 4.12
    */
-  properties[PROP_UPDATE_REGION] =
+  gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_UPDATE_REGION] =
     g_param_spec_boxed ("update-region", NULL, NULL,
                         CAIRO_GOBJECT_TYPE_REGION,
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -329,7 +329,7 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
    *
    * Since: 4.12
    */
-  properties[PROP_UPDATE_TEXTURE] =
+  gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE] =
     g_param_spec_object ("update-texture", NULL, NULL,
                          GDK_TYPE_TEXTURE,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -341,12 +341,12 @@ gdk_gl_texture_builder_class_init (GdkGLTextureBuilderClass *klass)
    *
    * Since: 4.12
    */
-  properties[PROP_WIDTH] =
+  gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_WIDTH] =
     g_param_spec_int ("width", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (gobject_class, N_PROPS, properties);
+  g_object_class_install_properties (gobject_class, GDK_GL_TEXTURE_BUILDER_N_PROPS, gdk_gl_texture_builder_properties);
 }
 
 static void
@@ -412,7 +412,7 @@ gdk_gl_texture_builder_set_context (GdkGLTextureBuilder *self,
   if (!g_set_object (&self->context, context))
     return;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_CONTEXT]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_CONTEXT]);
 }
 
 /**
@@ -456,7 +456,7 @@ gdk_gl_texture_builder_set_height (GdkGLTextureBuilder *self,
 
   self->height = height;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEIGHT]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_HEIGHT]);
 }
 
 /**
@@ -502,7 +502,7 @@ gdk_gl_texture_builder_set_id (GdkGLTextureBuilder *self,
 
   self->id = id;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ID]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_ID]);
 }
 
 /**
@@ -546,7 +546,7 @@ gdk_gl_texture_builder_set_width (GdkGLTextureBuilder *self,
 
   self->width = width;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WIDTH]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_WIDTH]);
 }
 
 /**
@@ -590,7 +590,7 @@ gdk_gl_texture_builder_set_has_mipmap (GdkGLTextureBuilder *self,
 
   self->has_mipmap = has_mipmap;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HAS_MIPMAP]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_HAS_MIPMAP]);
 }
 
 /**
@@ -638,7 +638,7 @@ gdk_gl_texture_builder_set_sync (GdkGLTextureBuilder *self,
 
   self->sync = sync;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_SYNC]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_SYNC]);
 }
 
 /**
@@ -683,7 +683,7 @@ gdk_gl_texture_builder_set_color_state (GdkGLTextureBuilder *self,
 
   g_clear_pointer (&self->color_state, gdk_color_state_unref);
   self->color_state = gdk_color_state_ref (color_state);
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR_STATE]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_COLOR_STATE]);
 }
 
 /**
@@ -739,7 +739,7 @@ gdk_gl_texture_builder_set_format (GdkGLTextureBuilder *self,
 
   self->format = format;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FORMAT]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_FORMAT]);
 }
 
 /**
@@ -781,7 +781,7 @@ gdk_gl_texture_builder_set_update_texture (GdkGLTextureBuilder *self,
   if (!g_set_object (&self->update_texture, texture))
     return;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_UPDATE_TEXTURE]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE]);
 }
 
 /**
@@ -835,7 +835,7 @@ gdk_gl_texture_builder_set_update_region (GdkGLTextureBuilder *self,
   if (region)
     self->update_region = cairo_region_reference (region);
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_UPDATE_REGION]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_gl_texture_builder_properties[GDK_GL_TEXTURE_BUILDER_PROP_UPDATE_REGION]);
 }
 
 /**
