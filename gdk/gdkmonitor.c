@@ -41,31 +41,31 @@
  */
 
 enum {
-  PROP_0,
-  PROP_DESCRIPTION,
-  PROP_DISPLAY,
-  PROP_MANUFACTURER,
-  PROP_MODEL,
-  PROP_CONNECTOR,
-  PROP_SCALE_FACTOR,
-  PROP_SCALE,
-  PROP_GEOMETRY,
-  PROP_WIDTH_MM,
-  PROP_HEIGHT_MM,
-  PROP_REFRESH_RATE,
-  PROP_SUBPIXEL_LAYOUT,
-  PROP_VALID,
-  LAST_PROP
+  GDK_MONITOR_PROP_0,
+  GDK_MONITOR_PROP_DESCRIPTION,
+  GDK_MONITOR_PROP_DISPLAY,
+  GDK_MONITOR_PROP_MANUFACTURER,
+  GDK_MONITOR_PROP_MODEL,
+  GDK_MONITOR_PROP_CONNECTOR,
+  GDK_MONITOR_PROP_SCALE_FACTOR,
+  GDK_MONITOR_PROP_SCALE,
+  GDK_MONITOR_PROP_GEOMETRY,
+  GDK_MONITOR_PROP_WIDTH_MM,
+  GDK_MONITOR_PROP_HEIGHT_MM,
+  GDK_MONITOR_PROP_REFRESH_RATE,
+  GDK_MONITOR_PROP_SUBPIXEL_LAYOUT,
+  GDK_MONITOR_PROP_VALID,
+  GDK_MONITOR_LAST_PROP
 };
 
-static GParamSpec *props[LAST_PROP] = { NULL, };
+static GParamSpec *gdk_monitor_properties[GDK_MONITOR_LAST_PROP] = { NULL, };
 
 enum {
-  INVALIDATE,
-  LAST_SIGNAL
+  GDK_MONITOR_INVALIDATE,
+  GDK_MONITOR_LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint gdk_monitor_signals[GDK_MONITOR_LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GdkMonitor, gdk_monitor, G_TYPE_OBJECT)
 
@@ -88,55 +88,55 @@ gdk_monitor_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_DESCRIPTION:
+    case GDK_MONITOR_PROP_DESCRIPTION:
       g_value_set_string (value, monitor->description);
       break;
 
-    case PROP_DISPLAY:
+    case GDK_MONITOR_PROP_DISPLAY:
       g_value_set_object (value, monitor->display);
       break;
 
-    case PROP_MANUFACTURER:
+    case GDK_MONITOR_PROP_MANUFACTURER:
       g_value_set_string (value, monitor->manufacturer);
       break;
 
-    case PROP_MODEL:
+    case GDK_MONITOR_PROP_MODEL:
       g_value_set_string (value, monitor->model);
       break;
 
-    case PROP_CONNECTOR:
+    case GDK_MONITOR_PROP_CONNECTOR:
       g_value_set_string (value, monitor->connector);
       break;
 
-    case PROP_SCALE_FACTOR:
+    case GDK_MONITOR_PROP_SCALE_FACTOR:
       g_value_set_int (value, monitor->scale_factor);
       break;
 
-    case PROP_SCALE:
+    case GDK_MONITOR_PROP_SCALE:
       g_value_set_double (value, monitor->scale);
       break;
 
-    case PROP_GEOMETRY:
+    case GDK_MONITOR_PROP_GEOMETRY:
       g_value_set_boxed (value, &monitor->geometry);
       break;
 
-    case PROP_WIDTH_MM:
+    case GDK_MONITOR_PROP_WIDTH_MM:
       g_value_set_int (value, monitor->width_mm);
       break;
 
-    case PROP_HEIGHT_MM:
+    case GDK_MONITOR_PROP_HEIGHT_MM:
       g_value_set_int (value, monitor->height_mm);
       break;
 
-    case PROP_REFRESH_RATE:
+    case GDK_MONITOR_PROP_REFRESH_RATE:
       g_value_set_int (value, monitor->refresh_rate);
       break;
 
-    case PROP_SUBPIXEL_LAYOUT:
+    case GDK_MONITOR_PROP_SUBPIXEL_LAYOUT:
       g_value_set_enum (value, monitor->subpixel_layout);
       break;
 
-    case PROP_VALID:
+    case GDK_MONITOR_PROP_VALID:
       g_value_set_boolean (value, monitor->valid);
       break;
 
@@ -155,7 +155,7 @@ gdk_monitor_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_MONITOR_PROP_DISPLAY:
       monitor->display = g_value_get_object (value);
       break;
 
@@ -193,7 +193,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * Since: 4.10
    */
-  props[PROP_DESCRIPTION] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_DESCRIPTION] =
     g_param_spec_string ("description", NULL, NULL,
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -203,7 +203,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * The `GdkDisplay` of the monitor.
    */
-  props[PROP_DISPLAY] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_DISPLAY] =
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
@@ -213,7 +213,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * The manufacturer name.
    */
-  props[PROP_MANUFACTURER] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_MANUFACTURER] =
     g_param_spec_string ("manufacturer", NULL, NULL,
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -223,7 +223,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * The model name.
    */
-  props[PROP_MODEL] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_MODEL] =
     g_param_spec_string ("model", NULL, NULL,
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -233,7 +233,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * The connector name.
    */
-  props[PROP_CONNECTOR] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_CONNECTOR] =
     g_param_spec_string ("connector", NULL, NULL,
                          NULL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -246,7 +246,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    * The scale factor is the next larger integer,
    * compared to [property@Gdk.Surface:scale].
    */
-  props[PROP_SCALE_FACTOR] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_SCALE_FACTOR] =
     g_param_spec_int ("scale-factor", NULL, NULL,
                       1, G_MAXINT,
                       1,
@@ -259,7 +259,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * Since: 4.14
    */
-  props[PROP_SCALE] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_SCALE] =
       g_param_spec_double ("scale", NULL, NULL,
                         1., G_MAXDOUBLE, 1.,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -269,7 +269,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * The geometry of the monitor.
    */
-  props[PROP_GEOMETRY] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_GEOMETRY] =
     g_param_spec_boxed ("geometry", NULL, NULL,
                         GDK_TYPE_RECTANGLE,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -279,7 +279,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * The width of the monitor, in millimeters.
    */
-  props[PROP_WIDTH_MM] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_WIDTH_MM] =
     g_param_spec_int ("width-mm", NULL, NULL,
                       0, G_MAXINT,
                       0,
@@ -290,7 +290,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * The height of the monitor, in millimeters.
    */
-  props[PROP_HEIGHT_MM] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_HEIGHT_MM] =
     g_param_spec_int ("height-mm", NULL, NULL,
                       0, G_MAXINT,
                       0,
@@ -301,7 +301,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * The refresh rate, in milli-Hertz.
    */
-  props[PROP_REFRESH_RATE] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_REFRESH_RATE] =
     g_param_spec_int ("refresh-rate", NULL, NULL,
                       0, G_MAXINT,
                       0,
@@ -312,7 +312,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * The subpixel layout.
    */
-  props[PROP_SUBPIXEL_LAYOUT] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_SUBPIXEL_LAYOUT] =
     g_param_spec_enum ("subpixel-layout", NULL, NULL,
                        GDK_TYPE_SUBPIXEL_LAYOUT,
                        GDK_SUBPIXEL_LAYOUT_UNKNOWN,
@@ -323,12 +323,12 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * Whether the object is still valid.
    */
-  props[PROP_VALID] =
+  gdk_monitor_properties[GDK_MONITOR_PROP_VALID] =
     g_param_spec_boolean ("valid", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, props);
+  g_object_class_install_properties (object_class, GDK_MONITOR_LAST_PROP, gdk_monitor_properties);
 
   /**
    * GdkMonitor::invalidate:
@@ -336,7 +336,7 @@ gdk_monitor_class_init (GdkMonitorClass *class)
    *
    * Emitted when the output represented by @monitor gets disconnected.
    */
-  signals[INVALIDATE] = g_signal_new (g_intern_static_string ("invalidate"),
+  gdk_monitor_signals[GDK_MONITOR_INVALIDATE] = g_signal_new (g_intern_static_string ("invalidate"),
                                       G_TYPE_FROM_CLASS (object_class),
                                       G_SIGNAL_RUN_FIRST,
                                       0,
@@ -692,7 +692,7 @@ gdk_monitor_invalidate (GdkMonitor *monitor)
 {
   monitor->valid = FALSE;
   g_object_notify (G_OBJECT (monitor), "valid");
-  g_signal_emit (monitor, signals[INVALIDATE], 0);
+  g_signal_emit (monitor, gdk_monitor_signals[GDK_MONITOR_INVALIDATE], 0);
 }
 
 /**
@@ -741,7 +741,7 @@ gdk_monitor_set_description (GdkMonitor *monitor,
 {
   g_free (monitor->description);
   monitor->description = g_strdup (description);
-  g_object_notify_by_pspec (G_OBJECT (monitor), props[PROP_DESCRIPTION]);
+  g_object_notify_by_pspec (G_OBJECT (monitor), gdk_monitor_properties[GDK_MONITOR_PROP_DESCRIPTION]);
 }
 
 #define MM_PER_INCH 25.4
