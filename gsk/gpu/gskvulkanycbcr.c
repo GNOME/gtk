@@ -42,10 +42,10 @@ gsk_vulkan_ycbcr_free (GskGpuCache  *cache,
 }
 
 static inline gboolean
-gsk_gpu_cached_is_old (GskGpuCache  *self,
-                       GskGpuCached *cached,
-                       gint64        cache_timeout,
-                       gint64        timestamp)
+gsk_vulkan_ycbcr_cached_is_old (GskGpuCache  *self,
+                                GskGpuCached *cached,
+                                gint64        cache_timeout,
+                                gint64        timestamp)
 {
   if (cache_timeout < 0)
     return -1;
@@ -64,7 +64,7 @@ gsk_vulkan_ycbcr_should_collect (GskGpuCache  *cache,
   if (self->ref_count > 0)
     return FALSE;
 
-  return gsk_gpu_cached_is_old (cache, cached, cache_timeout, timestamp);
+  return gsk_vulkan_ycbcr_cached_is_old (cache, cached, cache_timeout, timestamp);
 }
 
 static const GskGpuCachedClass GSK_VULKAN_YCBCR_CLASS =

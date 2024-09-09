@@ -20,8 +20,8 @@ static gboolean
 color_equal (const float *color1,
              const float *color2)
 {
-  return gdk_rgba_equal (&(GdkRGBA) { color1[0], color1[1], color1[2], color1[3] },
-                         &(GdkRGBA) { color2[0], color2[1], color2[2], color2[3] });
+  return gdk_rgba_equal ((&(GdkRGBA) { color1[0], color1[1], color1[2], color1[3] }),
+                         (&(GdkRGBA) { color2[0], color2[1], color2[2], color2[3] }));
 }
 
 static void
