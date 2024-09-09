@@ -43,12 +43,12 @@ G_DEFINE_INTERFACE (GdkToplevel, gdk_toplevel, GDK_TYPE_SURFACE)
 
 enum
 {
-  COMPUTE_SIZE,
+  GDK_TOPLEVEL_COMPUTE_SIZE,
 
-  N_SIGNALS
+  GDK_TOPLEVEL_N_SIGNALS
 };
 
-static guint signals[N_SIGNALS] = { 0 };
+static guint gdk_toplevel_signals[GDK_TOPLEVEL_N_SIGNALS] = { 0 };
 
 static void
 gdk_toplevel_default_present (GdkToplevel       *toplevel,
@@ -109,7 +109,7 @@ void
 gdk_toplevel_notify_compute_size (GdkToplevel     *toplevel,
                                   GdkToplevelSize *size)
 {
-  g_signal_emit (toplevel, signals[COMPUTE_SIZE], 0, size);
+  g_signal_emit (toplevel, gdk_toplevel_signals[GDK_TOPLEVEL_COMPUTE_SIZE], 0, size);
   gdk_toplevel_size_validate (size);
 }
 
@@ -278,7 +278,7 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
    * passed via the [struct@Gdk.ToplevelSize] object. Failing to do so
    * will result in an arbitrary size being used as a result.
    */
-  signals[COMPUTE_SIZE] =
+  gdk_toplevel_signals[GDK_TOPLEVEL_COMPUTE_SIZE] =
     g_signal_new (I_("compute-size"),
                   GDK_TYPE_TOPLEVEL,
                   G_SIGNAL_RUN_LAST,
