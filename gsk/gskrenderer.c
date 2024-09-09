@@ -45,6 +45,7 @@
 
 #include "gl/gskglrenderer.h"
 #include "gpu/gskvulkanrenderer.h"
+#include "gpu/gsknglrendererprivate.h"
 #include "gdk/gdkvulkancontextprivate.h"
 #include "gdk/gdkdisplayprivate.h"
 
@@ -90,14 +91,14 @@ typedef struct
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GskRenderer, gsk_renderer, G_TYPE_OBJECT)
 
 enum {
-  PROP_0,
-  PROP_REALIZED,
-  PROP_SURFACE,
+  GSK_RENDERER_PROP_0,
+  GSK_RENDERER_PROP_REALIZED,
+  GSK_RENDERER_PROP_SURFACE,
 
-  N_PROPS
+  GSK_RENDERER_N_PROPS
 };
 
-static GParamSpec *gsk_renderer_properties[N_PROPS];
+static GParamSpec *gsk_renderer_properties[GSK_RENDERER_N_PROPS];
 
 #define GSK_RENDERER_WARN_NOT_IMPLEMENTED_METHOD(obj,method) \
   g_critical ("Renderer of type '%s' does not implement GskRenderer::" # method, G_OBJECT_TYPE_NAME (obj))
@@ -161,11 +162,11 @@ gsk_renderer_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_REALIZED:
+    case GSK_RENDERER_PROP_REALIZED:
       g_value_set_boolean (value, priv->is_realized);
       break;
 
-    case PROP_SURFACE:
+    case GSK_RENDERER_PROP_SURFACE:
       g_value_set_object (value, priv->surface);
       break;
 
@@ -193,7 +194,7 @@ gsk_renderer_class_init (GskRendererClass *klass)
    *
    * Whether the renderer has been associated with a surface or draw context.
    */
-  gsk_renderer_properties[PROP_REALIZED] =
+  gsk_renderer_properties[GSK_RENDERER_PROP_REALIZED] =
     g_param_spec_boolean ("realized", NULL, NULL,
                           FALSE,
                           G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -203,12 +204,12 @@ gsk_renderer_class_init (GskRendererClass *klass)
    *
    * The surface associated with renderer.
    */
-  gsk_renderer_properties[PROP_SURFACE] =
+  gsk_renderer_properties[GSK_RENDERER_PROP_SURFACE] =
     g_param_spec_object ("surface", NULL, NULL,
                          GDK_TYPE_SURFACE,
                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (gobject_class, N_PROPS, gsk_renderer_properties);
+  g_object_class_install_properties (gobject_class, GSK_RENDERER_N_PROPS, gsk_renderer_properties);
 }
 
 static void
