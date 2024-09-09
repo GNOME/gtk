@@ -35,20 +35,20 @@
 #include <string.h>
 
 enum {
-  PROP_0,
-  PROP_DISPLAY,
-  LAST_PROP
+  GDK_KEYS_PROP_0,
+  GDK_KEYS_PROP_DISPLAY,
+  GDK_KEYS_LAST_PROP
 };
 
 enum {
-  DIRECTION_CHANGED,
-  KEYS_CHANGED,
-  STATE_CHANGED,
-  LAST_SIGNAL
+  GDK_KEYS_DIRECTION_CHANGED,
+  GDK_KEYS_KEYS_CHANGED,
+  GDK_KEYS_STATE_CHANGED,
+  GDK_KEYS_LAST_SIGNAL
 };
 
-static GParamSpec *props[LAST_PROP] = { NULL, };
-static guint signals[LAST_SIGNAL] = { 0 };
+static GParamSpec *gdk_keys_properties[GDK_KEYS_LAST_PROP] = { NULL, };
+static guint gdk_keys_signals[GDK_KEYS_LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GdkKeymap, gdk_keymap, G_TYPE_OBJECT)
 
@@ -62,7 +62,7 @@ gdk_keymap_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_KEYS_PROP_DISPLAY:
       g_value_set_object (value, keymap->display);
       break;
     default:
@@ -80,7 +80,7 @@ gdk_keymap_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_KEYS_PROP_DISPLAY:
       keymap->display = g_value_get_object (value);
       break;
 
@@ -127,12 +127,12 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
 
   klass->keys_changed = gdk_keymap_keys_changed;
 
-  props[PROP_DISPLAY] =
+  gdk_keys_properties[GDK_KEYS_PROP_DISPLAY] =
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, props);
+  g_object_class_install_properties (object_class, GDK_KEYS_LAST_PROP, gdk_keys_properties);
 
   /**
    * GdkKeymap::direction-changed:
@@ -142,7 +142,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    *
    * See gdk_keymap_get_direction().
    */
-  signals[DIRECTION_CHANGED] =
+  gdk_keys_signals[GDK_KEYS_DIRECTION_CHANGED] =
     g_signal_new (g_intern_static_string ("direction-changed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
@@ -159,7 +159,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    * The ::keys-changed signal is emitted when the mapping represented by
    * @keymap changes.
    */
-  signals[KEYS_CHANGED] =
+  gdk_keys_signals[GDK_KEYS_KEYS_CHANGED] =
     g_signal_new (g_intern_static_string ("keys-changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_FIRST,
@@ -177,7 +177,7 @@ gdk_keymap_class_init (GdkKeymapClass *klass)
    * keyboard changes, e.g when Caps Lock is turned on or off.
    * See gdk_keymap_get_caps_lock_state().
    */
-  signals[STATE_CHANGED] =
+  gdk_keys_signals[GDK_KEYS_STATE_CHANGED] =
     g_signal_new (g_intern_static_string ("state-changed"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
