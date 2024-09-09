@@ -142,16 +142,16 @@ struct _GdkGLContextPrivate
 };
 
 enum {
-  PROP_0,
+  GDK_GL_CONTEXT_PROP_0,
 
-  PROP_ALLOWED_APIS,
-  PROP_API,
-  PROP_SHARED_CONTEXT,
+  GDK_GL_CONTEXT_PROP_ALLOWED_APIS,
+  GDK_GL_CONTEXT_PROP_API,
+  GDK_GL_CONTEXT_PROP_SHARED_CONTEXT,
 
-  LAST_PROP
+  GDK_GL_CONTEXT_LAST_PROP
 };
 
-static GParamSpec *properties[LAST_PROP] = { NULL, };
+static GParamSpec *gdk_gl_context_properties[GDK_GL_CONTEXT_LAST_PROP] = { NULL, };
 
 /**
  * gdk_gl_error_quark:
@@ -237,11 +237,11 @@ gdk_gl_context_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_ALLOWED_APIS:
+    case GDK_GL_CONTEXT_PROP_ALLOWED_APIS:
       gdk_gl_context_set_allowed_apis (self, g_value_get_flags (value));
       break;
 
-    case PROP_SHARED_CONTEXT:
+    case GDK_GL_CONTEXT_PROP_SHARED_CONTEXT:
       g_assert (g_value_get_object (value) == NULL);
       break;
 
@@ -261,15 +261,15 @@ gdk_gl_context_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_ALLOWED_APIS:
+    case GDK_GL_CONTEXT_PROP_ALLOWED_APIS:
       g_value_set_flags (value, priv->allowed_apis);
       break;
 
-    case PROP_API:
+    case GDK_GL_CONTEXT_PROP_API:
       g_value_set_flags (value, priv->api);
       break;
 
-    case PROP_SHARED_CONTEXT:
+    case GDK_GL_CONTEXT_PROP_SHARED_CONTEXT:
       g_value_set_object (value, NULL);
       break;
 
@@ -774,7 +774,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
    * Deprecated: 4.4: Use [method@Gdk.GLContext.is_shared] to check if contexts
    *   can be shared.
    */
-  properties[PROP_SHARED_CONTEXT] =
+  gdk_gl_context_properties[GDK_GL_CONTEXT_PROP_SHARED_CONTEXT] =
     g_param_spec_object ("shared-context", NULL, NULL,
                          GDK_TYPE_GL_CONTEXT,
                          G_PARAM_READWRITE |
@@ -789,7 +789,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
    *
    * Since: 4.6
    */
-  properties[PROP_ALLOWED_APIS] =
+  gdk_gl_context_properties[GDK_GL_CONTEXT_PROP_ALLOWED_APIS] =
     g_param_spec_flags ("allowed-apis", NULL, NULL,
                         GDK_TYPE_GL_API,
                         DEFAULT_ALLOWED_APIS,
@@ -804,7 +804,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
    *
    * Since: 4.6
    */
-  properties[PROP_API] =
+  gdk_gl_context_properties[GDK_GL_CONTEXT_PROP_API] =
     g_param_spec_flags ("api", NULL, NULL,
                         GDK_TYPE_GL_API,
                         0,
@@ -816,7 +816,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
   gobject_class->get_property = gdk_gl_context_get_property;
   gobject_class->dispose = gdk_gl_context_dispose;
 
-  g_object_class_install_properties (gobject_class, LAST_PROP, properties);
+  g_object_class_install_properties (gobject_class, GDK_GL_CONTEXT_LAST_PROP, gdk_gl_context_properties);
 }
 
 static void
@@ -1277,7 +1277,7 @@ gdk_gl_context_set_allowed_apis (GdkGLContext *self,
 
   priv->allowed_apis = apis;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ALLOWED_APIS]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_gl_context_properties[GDK_GL_CONTEXT_PROP_ALLOWED_APIS]);
 }
 
 /**
@@ -1559,7 +1559,7 @@ gdk_gl_context_realize (GdkGLContext  *context,
     {
       g_assert (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (0, 0)));
 
-      g_object_notify_by_pspec (G_OBJECT (context), properties[PROP_API]);
+      g_object_notify_by_pspec (G_OBJECT (context), gdk_gl_context_properties[GDK_GL_CONTEXT_PROP_API]);
     }
 
   return priv->api;
