@@ -293,11 +293,14 @@ if gdk_backends.length() == 0
 endif
 
 libgdk = static_library('gdk',
+  override_options: [ 'unity=on', 'unity_size=10000' ],
   sources: [gdk_sources, gdk_backends_gen_headers, gdk_gen_headers],
   dependencies: gdk_deps + [libgtk_css_dep],
   link_with: [libgtk_css],
   include_directories: [confinc, gdkx11_inc, wlinc],
-  c_args: libgdk_c_args + common_cflags,
+  c_args: libgdk_c_args + common_cflags + [
+    '-Wno-error=redundant-decls',
+  ],
   link_whole: gdk_backends,
 )
 
