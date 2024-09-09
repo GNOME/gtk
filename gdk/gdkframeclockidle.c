@@ -35,13 +35,13 @@
 #include <windows.h>
 #endif
 
-#define FRAME_INTERVAL 16667 /* microseconds */
+#define GDK_FRAME_CLOCK_IDLE_FRAME_INTERVAL 16667 /* microseconds */
 
 typedef enum {
-  SMOOTH_PHASE_STATE_VALID = 0,    /* explicit, since we count on zero-init */
-  SMOOTH_PHASE_STATE_AWAIT_FIRST,
-  SMOOTH_PHASE_STATE_AWAIT_DRAWN,
-} SmoothDeltaState;
+  GDK_FRAME_CLOCK_IDLE_SMOOTH_PHASE_STATE_VALID = 0,    /* explicit, since we count on zero-init */
+  GDK_FRAME_CLOCK_IDLE_SMOOTH_PHASE_STATE_AWAIT_FIRST,
+  GDK_FRAME_CLOCK_IDLE_SMOOTH_PHASE_STATE_AWAIT_DRAWN,
+} GdkFrameClockIdleSmoothDeltaState;
 
 struct _GdkFrameClockIdlePrivate
 {
@@ -51,9 +51,9 @@ struct _GdkFrameClockIdlePrivate
   gint64 smoothed_frame_time_reported; /* Ensures we are always monotonic */
   gint64 smoothed_frame_time_phase;    /* The offset of the first reported frame time, in the current animation sequence, from the preceding vsync */
   gint64 min_next_frame_time;          /* We're not synced to vblank, so wait at least until this before next cycle to avoid busy looping */
-  SmoothDeltaState smooth_phase_state; /* The state of smoothed_frame_time_phase - is it valid, awaiting vsync etc. Thanks to zero-init, the initial value
+  GdkFrameClockIdleSmoothDeltaState smooth_phase_state; /* The state of smoothed_frame_time_phase - is it valid, awaiting vsync etc. Thanks to zero-init, the initial value
                                           of smoothed_frame_time_phase is `0`. This is valid, since we didn't get a "frame drawn" event yet. Accordingly,
-                                          the initial value of smooth_phase_state is SMOOTH_PHASE_STATE_VALID. See the comment in gdk_frame_clock_paint_idle()
+                                          the initial value of smooth_phase_state is GDK_FRAME_CLOCK_IDLE_SMOOTH_PHASE_STATE_VALID. See the comment in gdk_frame_clock_paint_idle()
                                           for details. */
 
   gint64 sleep_serial;
@@ -79,57 +79,57 @@ static gboolean gdk_frame_clock_paint_idle (void *data);
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkFrameClockIdle, gdk_frame_clock_idle, GDK_TYPE_FRAME_CLOCK)
 
-static gint64 sleep_serial;
-static gint64 sleep_source_prepare_time;
-static GSource *sleep_source;
+static gint64 gdk_frame_clock_idle_sleep_serial;
+static gint64 gdk_frame_clock_idle_sleep_source_prepare_time;
+static GSource *gdk_frame_clock_idle_sleep_source;
 
 static gboolean
-sleep_source_prepare (GSource *source,
+gdk_frame_clock_idle_sleep_source_prepare (GSource *source,
                       int     *timeout)
 {
-  sleep_source_prepare_time = g_source_get_time (source);
+  gdk_frame_clock_idle_sleep_source_prepare_time = g_source_get_time (source);
   *timeout = -1;
   return FALSE;
 }
 
 static gboolean
-sleep_source_check (GSource *source)
+gdk_frame_clock_idle_sleep_source_check (GSource *source)
 {
-  if (g_source_get_time (source) != sleep_source_prepare_time)
-    sleep_serial++;
+  if (g_source_get_time (source) != gdk_frame_clock_idle_sleep_source_prepare_time)
+    gdk_frame_clock_idle_sleep_serial++;
 
   return FALSE;
 }
 
 static gboolean
-sleep_source_dispatch (GSource     *source,
-                       GSourceFunc  callback,
-                       gpointer     user_data)
+gdk_frame_clock_idle_sleep_source_dispatch (GSource     *source,
+                                            GSourceFunc  callback,
+                                            gpointer     user_data)
 {
   return TRUE;
 }
 
-static GSourceFuncs sleep_source_funcs = {
-  sleep_source_prepare,
-  sleep_source_check,
-  sleep_source_dispatch,
-  NULL /* finalize */
-};
-
 static gint64
-get_sleep_serial (void)
+gdk_frame_clock_idle_get_sleep_serial (void)
 {
-  if (sleep_source == NULL)
-    {
-      sleep_source = g_source_new (&sleep_source_funcs, sizeof (GSource));
+  static GSourceFuncs sleep_source_funcs = {
+    gdk_frame_clock_idle_sleep_source_prepare,
+    gdk_frame_clock_idle_sleep_source_check,
+    gdk_frame_clock_idle_sleep_source_dispatch,
+    NULL /* finalize */
+  };
 
-      g_source_set_static_name (sleep_source, "[gtk] sleep serial");
-      g_source_set_priority (sleep_source, G_PRIORITY_HIGH);
-      g_source_attach (sleep_source, NULL);
-      g_source_unref (sleep_source);
+  if (gdk_frame_clock_idle_sleep_source == NULL)
+    {
+      gdk_frame_clock_idle_sleep_source = g_source_new (&sleep_source_funcs, sizeof (GSource));
+
+      g_source_set_static_name (gdk_frame_clock_idle_sleep_source, "[gtk] sleep serial");
+      g_source_set_priority (gdk_frame_clock_idle_sleep_source, G_PRIORITY_HIGH);
+      g_source_attach (gdk_frame_clock_idle_sleep_source, NULL);
+      g_source_unref (gdk_frame_clock_idle_sleep_source);
     }
 
-  return sleep_serial;
+  return gdk_frame_clock_idle_sleep_serial;
 }
 
 static void
@@ -141,7 +141,7 @@ gdk_frame_clock_idle_init (GdkFrameClockIdle *frame_clock_idle)
     gdk_frame_clock_idle_get_instance_private (frame_clock_idle);
 
   priv->freeze_count = 0;
-  priv->smoothed_frame_time_period = FRAME_INTERVAL;
+  priv->smoothed_frame_time_period = GDK_FRAME_CLOCK_IDLE_FRAME_INTERVAL;
 }
 
 static void
@@ -175,11 +175,11 @@ gdk_frame_clock_idle_dispose (GObject *object)
 /* Note: This is never called on first frame, so
  * smoothed_frame_time_base != 0 and we have a valid frame_interval. */
 static gint64
-compute_smooth_frame_time (GdkFrameClock *clock,
-                           gint64 new_frame_time,
-                           gboolean new_frame_time_is_vsync_related,
-                           gint64 smoothed_frame_time_base,
-                           gint64 frame_interval)
+gdk_frame_clock_idle_compute_smooth_frame_time (GdkFrameClock *clock,
+                                                gint64         new_frame_time,
+                                                gboolean       new_frame_time_is_vsync_related,
+                                                gint64         smoothed_frame_time_base,
+                                                gint64         frame_interval)
 {
   GdkFrameClockIdlePrivate *priv = GDK_FRAME_CLOCK_IDLE (clock)->priv;
   int frames_passed;
@@ -267,9 +267,9 @@ gdk_frame_clock_idle_get_frame_time (GdkFrameClock *clock)
 
   /* Since time is monotonic this is <= what we will pick for the next cycle, but
      more likely than not it will be equal if we're doing a constant animation. */
-  new_smoothed_time = compute_smooth_frame_time (clock, now, FALSE,
-                                                 priv->smoothed_frame_time_base,
-                                                 priv->smoothed_frame_time_period);
+  new_smoothed_time = gdk_frame_clock_idle_compute_smooth_frame_time (clock, now, FALSE,
+                                                                      priv->smoothed_frame_time_base,
+                                                                      priv->smoothed_frame_time_period);
 
   priv->smoothed_frame_time_reported = new_smoothed_time;
   return new_smoothed_time;
@@ -287,7 +287,7 @@ gdk_frame_clock_idle_is_frozen (GdkFrameClockIdle *self)
 }
 
 static inline gboolean
-should_run_flush_idle (GdkFrameClockIdle *self)
+gdk_frame_clock_idle_should_run_flush_idle (GdkFrameClockIdle *self)
 {
   GdkFrameClockIdlePrivate *priv = self->priv;
 
@@ -301,7 +301,7 @@ should_run_flush_idle (GdkFrameClockIdle *self)
  * is cancelled.
  */
 static inline gboolean
-should_run_paint_idle (GdkFrameClockIdle *self)
+gdk_frame_clock_idle_should_run_paint_idle (GdkFrameClockIdle *self)
 {
   GdkFrameClockIdlePrivate *priv = self->priv;
 
@@ -311,12 +311,12 @@ should_run_paint_idle (GdkFrameClockIdle *self)
 }
 
 static void
-maybe_start_idle (GdkFrameClockIdle *self,
-                  gboolean           caused_by_thaw)
+gdk_frame_clock_idle_maybe_start_idle (GdkFrameClockIdle *self,
+                                       gboolean           caused_by_thaw)
 {
   GdkFrameClockIdlePrivate *priv = self->priv;
 
-  if (should_run_flush_idle (self) || should_run_paint_idle (self))
+  if (gdk_frame_clock_idle_should_run_flush_idle (self) || gdk_frame_clock_idle_should_run_paint_idle (self))
     {
       guint min_interval = 0;
 
@@ -328,7 +328,7 @@ maybe_start_idle (GdkFrameClockIdle *self,
           min_interval = (min_interval_us + 500) / 1000;
         }
 
-      if (priv->flush_idle_id == 0 && should_run_flush_idle (self))
+      if (priv->flush_idle_id == 0 && gdk_frame_clock_idle_should_run_flush_idle (self))
         {
           GSource *source;
 
@@ -342,7 +342,7 @@ maybe_start_idle (GdkFrameClockIdle *self,
         }
 
       if (!priv->in_paint_idle &&
-	  priv->paint_idle_id == 0 && should_run_paint_idle (self))
+	  priv->paint_idle_id == 0 && gdk_frame_clock_idle_should_run_paint_idle (self))
         {
           priv->paint_is_thaw = caused_by_thaw;
           priv->paint_idle_id = g_timeout_add_full (GDK_PRIORITY_REDRAW,
@@ -356,17 +356,17 @@ maybe_start_idle (GdkFrameClockIdle *self,
 }
 
 static void
-maybe_stop_idle (GdkFrameClockIdle *self)
+gdk_frame_clock_idle_maybe_stop_idle (GdkFrameClockIdle *self)
 {
   GdkFrameClockIdlePrivate *priv = self->priv;
 
-  if (priv->flush_idle_id != 0 && !should_run_flush_idle (self))
+  if (priv->flush_idle_id != 0 && !gdk_frame_clock_idle_should_run_flush_idle (self))
     {
       g_source_remove (priv->flush_idle_id);
       priv->flush_idle_id = 0;
     }
 
-  if (priv->paint_idle_id != 0 && !should_run_paint_idle (self))
+  if (priv->paint_idle_id != 0 && !gdk_frame_clock_idle_should_run_paint_idle (self))
     {
       g_source_remove (priv->paint_idle_id);
       priv->paint_idle_id = 0;
@@ -456,7 +456,7 @@ gdk_frame_clock_paint_idle (void *data)
         case GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT:
           if (!gdk_frame_clock_idle_is_frozen (clock_idle))
             {
-              gint64 frame_interval = FRAME_INTERVAL;
+              gint64 frame_interval = GDK_FRAME_CLOCK_IDLE_FRAME_INTERVAL;
               GdkFrameTimings *prev_timings = gdk_frame_clock_get_current_timings (clock);
 
               if (prev_timings && prev_timings->refresh_interval)
@@ -512,14 +512,14 @@ gdk_frame_clock_paint_idle (void *data)
                * adjusted times    |       *   |       *   |       +   |       +   |       +   |...
                * phase                                      ^------^
                */
-              if (priv->smooth_phase_state == SMOOTH_PHASE_STATE_AWAIT_FIRST)
+              if (priv->smooth_phase_state == GDK_FRAME_CLOCK_IDLE_SMOOTH_PHASE_STATE_AWAIT_FIRST)
                 {
                   /* First animation cycle - usually unrelated to vsync */
                   priv->smoothed_frame_time_base = 0;
                   priv->smoothed_frame_time_phase = 0;
-                  priv->smooth_phase_state = SMOOTH_PHASE_STATE_AWAIT_DRAWN;
+                  priv->smooth_phase_state = GDK_FRAME_CLOCK_IDLE_SMOOTH_PHASE_STATE_AWAIT_DRAWN;
                 }
-              else if (priv->smooth_phase_state == SMOOTH_PHASE_STATE_AWAIT_DRAWN &&
+              else if (priv->smooth_phase_state == GDK_FRAME_CLOCK_IDLE_SMOOTH_PHASE_STATE_AWAIT_DRAWN &&
                        priv->paint_is_thaw)
                 {
                   /* First vsync-related animation cycle, we can now compute the phase. We want the phase to satisfy
@@ -527,7 +527,7 @@ gdk_frame_clock_paint_idle (void *data)
                   priv->smoothed_frame_time_phase =
                       positive_modulo (priv->smoothed_frame_time_base - priv->frame_time,
                                        frame_interval);
-                  priv->smooth_phase_state = SMOOTH_PHASE_STATE_VALID;
+                  priv->smooth_phase_state = GDK_FRAME_CLOCK_IDLE_SMOOTH_PHASE_STATE_VALID;
                 }
 
               if (priv->smoothed_frame_time_base == 0)
@@ -539,10 +539,10 @@ gdk_frame_clock_paint_idle (void *data)
                 {
                   /* compute_smooth_frame_time() ensures monotonicity */
                   priv->smoothed_frame_time_base =
-                      compute_smooth_frame_time (clock, priv->frame_time + priv->smoothed_frame_time_phase,
-                                                 priv->paint_is_thaw,
-                                                 priv->smoothed_frame_time_base,
-                                                 priv->smoothed_frame_time_period);
+                      gdk_frame_clock_idle_compute_smooth_frame_time (clock, priv->frame_time + priv->smoothed_frame_time_phase,
+                                                                      priv->paint_is_thaw,
+                                                                      priv->smoothed_frame_time_base,
+                                                                      priv->smoothed_frame_time_period);
                 }
 
               priv->smoothed_frame_time_period = frame_interval;
@@ -554,7 +554,7 @@ gdk_frame_clock_paint_idle (void *data)
 
               timings->frame_time = priv->frame_time;
               timings->smoothed_frame_time = priv->smoothed_frame_time_base;
-              timings->slept_before = priv->sleep_serial != get_sleep_serial ();
+              timings->slept_before = priv->sleep_serial != gdk_frame_clock_idle_get_sleep_serial ();
 
               priv->phase = GDK_FRAME_CLOCK_PHASE_BEFORE_PAINT;
 
@@ -688,11 +688,11 @@ gdk_frame_clock_paint_idle (void *data)
       gint64 smooth_cycle_start = priv->smoothed_frame_time_base - priv->smoothed_frame_time_phase;
       priv->min_next_frame_time = smooth_cycle_start + priv->smoothed_frame_time_period;
 
-      maybe_start_idle (clock_idle, FALSE);
+      gdk_frame_clock_idle_maybe_start_idle (clock_idle, FALSE);
     }
 
   if (!gdk_frame_clock_idle_is_frozen (clock_idle))
-    priv->sleep_serial = get_sleep_serial ();
+    priv->sleep_serial = gdk_frame_clock_idle_get_sleep_serial ();
 
   gdk_profiler_end_mark (before, "Frameclock cycle", NULL);
 
@@ -707,7 +707,7 @@ gdk_frame_clock_idle_request_phase (GdkFrameClock      *clock,
   GdkFrameClockIdlePrivate *priv = clock_idle->priv;
 
   priv->requested |= phase;
-  maybe_start_idle (clock_idle, FALSE);
+  gdk_frame_clock_idle_maybe_start_idle (clock_idle, FALSE);
 }
 
 static void
@@ -727,11 +727,11 @@ gdk_frame_clock_idle_begin_updating (GdkFrameClock *clock)
 
   if (priv->updating_count == 0)
     {
-      priv->smooth_phase_state = SMOOTH_PHASE_STATE_AWAIT_FIRST;
+      priv->smooth_phase_state = GDK_FRAME_CLOCK_IDLE_SMOOTH_PHASE_STATE_AWAIT_FIRST;
     }
 
   priv->updating_count++;
-  maybe_start_idle (clock_idle, FALSE);
+  gdk_frame_clock_idle_maybe_start_idle (clock_idle, FALSE);
 }
 
 static void
@@ -743,11 +743,11 @@ gdk_frame_clock_idle_end_updating (GdkFrameClock *clock)
   g_return_if_fail (priv->updating_count > 0);
 
   priv->updating_count--;
-  maybe_stop_idle (clock_idle);
+  gdk_frame_clock_idle_maybe_stop_idle (clock_idle);
 
   if (priv->updating_count == 0)
     {
-      priv->smooth_phase_state = SMOOTH_PHASE_STATE_VALID;
+      priv->smooth_phase_state = GDK_FRAME_CLOCK_IDLE_SMOOTH_PHASE_STATE_VALID;
     }
 
 #ifdef G_OS_WIN32
@@ -772,7 +772,7 @@ gdk_frame_clock_idle_freeze (GdkFrameClock *clock)
     }
 
   priv->freeze_count++;
-  maybe_stop_idle (clock_idle);
+  gdk_frame_clock_idle_maybe_stop_idle (clock_idle);
 }
 
 static void
@@ -786,7 +786,7 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
   priv->freeze_count--;
   if (!gdk_frame_clock_idle_is_frozen (clock_idle))
     {
-      maybe_start_idle (clock_idle, TRUE);
+      gdk_frame_clock_idle_maybe_start_idle (clock_idle, TRUE);
       /* If nothing is requested so we didn't start an idle, we need
        * to skip to the end of the state chain, since the idle won't
        * run and do it for us.
@@ -794,7 +794,7 @@ gdk_frame_clock_idle_thaw (GdkFrameClock *clock)
       if (priv->paint_idle_id == 0)
         priv->phase = GDK_FRAME_CLOCK_PHASE_NONE;
 
-      priv->sleep_serial = get_sleep_serial ();
+      priv->sleep_serial = gdk_frame_clock_idle_get_sleep_serial ();
 
       if (GDK_PROFILER_IS_RUNNING)
         {
