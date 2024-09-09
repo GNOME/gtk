@@ -80,15 +80,15 @@ gtk_snapshot_append_texture (GdkSnapshot            *snapshot,
                              const graphene_rect_t  *bounds);
 
 enum {
-  PROP_0,
-  PROP_WIDTH,
-  PROP_HEIGHT,
-  PROP_COLOR_STATE,
+  GDK_TEXTURE_PROP_0,
+  GDK_TEXTURE_PROP_WIDTH,
+  GDK_TEXTURE_PROP_HEIGHT,
+  GDK_TEXTURE_PROP_COLOR_STATE,
 
-  N_PROPS
+  GDK_TEXTURE_N_PROPS
 };
 
-static GParamSpec *properties[N_PROPS];
+static GParamSpec *gdk_texture_properties[GDK_TEXTURE_N_PROPS];
 
 static GdkTextureChain *
 gdk_texture_chain_new (void)
@@ -290,15 +290,15 @@ gdk_texture_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_WIDTH:
+    case GDK_TEXTURE_PROP_WIDTH:
       self->width = g_value_get_int (value);
       break;
 
-    case PROP_HEIGHT:
+    case GDK_TEXTURE_PROP_HEIGHT:
       self->height = g_value_get_int (value);
       break;
 
-    case PROP_COLOR_STATE:
+    case GDK_TEXTURE_PROP_COLOR_STATE:
       self->color_state = g_value_dup_boxed (value);
       g_assert (self->color_state);
       break;
@@ -319,15 +319,15 @@ gdk_texture_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_WIDTH:
+    case GDK_TEXTURE_PROP_WIDTH:
       g_value_set_int (value, self->width);
       break;
 
-    case PROP_HEIGHT:
+    case GDK_TEXTURE_PROP_HEIGHT:
       g_value_set_int (value, self->height);
       break;
 
-    case PROP_COLOR_STATE:
+    case GDK_TEXTURE_PROP_COLOR_STATE:
       g_value_set_boxed (value, self->color_state);
       break;
 
@@ -399,7 +399,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
    *
    * The width of the texture, in pixels.
    */
-  properties[PROP_WIDTH] =
+  gdk_texture_properties[GDK_TEXTURE_PROP_WIDTH] =
     g_param_spec_int ("width", NULL, NULL,
                       1,
                       G_MAXINT,
@@ -414,7 +414,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
    *
    * The height of the texture, in pixels.
    */
-  properties[PROP_HEIGHT] =
+  gdk_texture_properties[GDK_TEXTURE_PROP_HEIGHT] =
     g_param_spec_int ("height", NULL, NULL,
                       1,
                       G_MAXINT,
@@ -431,7 +431,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_COLOR_STATE] =
+  gdk_texture_properties[GDK_TEXTURE_PROP_COLOR_STATE] =
     g_param_spec_boxed ("color-state", NULL, NULL,
                         GDK_TYPE_COLOR_STATE,
                         G_PARAM_READWRITE |
@@ -439,7 +439,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
                         G_PARAM_STATIC_STRINGS |
                         G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (gobject_class, N_PROPS, properties);
+  g_object_class_install_properties (gobject_class, GDK_TEXTURE_N_PROPS, gdk_texture_properties);
 }
 
 static void
