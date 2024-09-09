@@ -49,21 +49,21 @@
  * ```
  */
 
-static void    gdk_app_launch_context_finalize    (GObject           *object);
+static void   gdk_app_launch_context_finalize    (GObject           *object);
 static char * gdk_app_launch_context_get_display_name (GAppLaunchContext *context,
                                                         GAppInfo          *info,
                                                         GList             *files);
 static char * gdk_app_launch_context_get_startup_notify_id (GAppLaunchContext *context,
                                                              GAppInfo          *info,
                                                              GList             *files);
-static void    gdk_app_launch_context_launch_failed (GAppLaunchContext *context,
-                                                     const char        *startup_notify_id);
+static void   gdk_app_launch_context_launch_failed (GAppLaunchContext *context,
+                                                    const char        *startup_notify_id);
 
 
 enum
 {
-  PROP_0,
-  PROP_DISPLAY
+  GDK_APP_LAUNCH_CONTEXT_PROP_0,
+  GDK_APP_LAUNCH_CONTEXT_PROP_DISPLAY
 };
 
 G_DEFINE_TYPE (GdkAppLaunchContext, gdk_app_launch_context, G_TYPE_APP_LAUNCH_CONTEXT)
@@ -78,7 +78,7 @@ gdk_app_launch_context_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_APP_LAUNCH_CONTEXT_PROP_DISPLAY:
       g_value_set_object (value, context->display);
       break;
     default:
@@ -96,7 +96,7 @@ gdk_app_launch_context_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_APP_LAUNCH_CONTEXT_PROP_DISPLAY:
       context->display = g_value_dup_object (value);
       break;
     default:
@@ -124,7 +124,7 @@ gdk_app_launch_context_class_init (GdkAppLaunchContextClass *klass)
    *
    * The display that the `GdkAppLaunchContext` is on.
    */
-  g_object_class_install_property (gobject_class, PROP_DISPLAY,
+  g_object_class_install_property (gobject_class, GDK_APP_LAUNCH_CONTEXT_PROP_DISPLAY,
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
