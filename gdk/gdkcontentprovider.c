@@ -47,19 +47,19 @@ struct _GdkContentProviderPrivate
 };
 
 enum {
-  PROP_0,
-  PROP_FORMATS,
-  PROP_STORABLE_FORMATS,
-  N_PROPERTIES
+  GDK_CONTENT_PROVIDER_PROP_0,
+  GDK_CONTENT_PROVIDER_PROP_FORMATS,
+  GDK_CONTENT_PROVIDER_PROP_STORABLE_FORMATS,
+  GDK_CONTENT_PROVIDER_N_PROPERTIES
 };
 
 enum {
-  CONTENT_CHANGED,
-  N_SIGNALS
+  GDK_CONTENT_PROVIDER_CONTENT_CHANGED,
+  GDK_CONTENT_PROVIDER_N_SIGNALS
 };
 
-static GParamSpec *properties[N_PROPERTIES] = { NULL, };
-static guint signals[N_SIGNALS] = { 0 };
+static GParamSpec *gdk_content_provider_properties[GDK_CONTENT_PROVIDER_N_PROPERTIES] = { NULL, };
+static guint gdk_content_provider_signals[GDK_CONTENT_PROVIDER_N_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkContentProvider, gdk_content_provider, G_TYPE_OBJECT)
 
@@ -139,11 +139,11 @@ gdk_content_provider_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_FORMATS:
+    case GDK_CONTENT_PROVIDER_PROP_FORMATS:
       g_value_take_boxed (value, gdk_content_provider_ref_formats (provider));
       break;
 
-    case PROP_STORABLE_FORMATS:
+    case GDK_CONTENT_PROVIDER_PROP_STORABLE_FORMATS:
       g_value_take_boxed (value, gdk_content_provider_ref_storable_formats (provider));
       break;
 
@@ -173,7 +173,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
    *
    * The possible formats that the provider can provide its data in.
    */
-  properties[PROP_FORMATS] =
+  gdk_content_provider_properties[GDK_CONTENT_PROVIDER_PROP_FORMATS] =
     g_param_spec_boxed ("formats", NULL, NULL,
                         GDK_TYPE_CONTENT_FORMATS,
                         G_PARAM_READABLE |
@@ -185,7 +185,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
    *
    * The subset of formats that clipboard managers should store this provider's data in.
    */
-  properties[PROP_STORABLE_FORMATS] =
+  gdk_content_provider_properties[GDK_CONTENT_PROVIDER_PROP_STORABLE_FORMATS] =
     g_param_spec_boxed ("storable-formats", NULL, NULL,
                         GDK_TYPE_CONTENT_FORMATS,
                         G_PARAM_READABLE |
@@ -197,7 +197,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
    *
    * Emitted whenever the content provided by this provider has changed.
    */
-  signals[CONTENT_CHANGED] =
+  gdk_content_provider_signals[GDK_CONTENT_PROVIDER_CONTENT_CHANGED] =
     g_signal_new (I_("content-changed"),
                   G_TYPE_FROM_CLASS (class),
                   G_SIGNAL_RUN_LAST,
@@ -205,7 +205,7 @@ gdk_content_provider_class_init (GdkContentProviderClass *class)
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
-  g_object_class_install_properties (object_class, N_PROPERTIES, properties);
+  g_object_class_install_properties (object_class, GDK_CONTENT_PROVIDER_N_PROPERTIES, gdk_content_provider_properties);
 }
 
 static void
@@ -261,9 +261,9 @@ gdk_content_provider_content_changed (GdkContentProvider *provider)
 {
   g_return_if_fail (GDK_IS_CONTENT_PROVIDER (provider));
 
-  g_signal_emit (provider, signals[CONTENT_CHANGED], 0);
+  g_signal_emit (provider, gdk_content_provider_signals[GDK_CONTENT_PROVIDER_CONTENT_CHANGED], 0);
 
-  g_object_notify_by_pspec (G_OBJECT (provider), properties[PROP_FORMATS]);
+  g_object_notify_by_pspec (G_OBJECT (provider), gdk_content_provider_properties[GDK_CONTENT_PROVIDER_PROP_FORMATS]);
 }
 
 /**
