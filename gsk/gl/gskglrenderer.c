@@ -263,8 +263,8 @@ gsk_gl_renderer_unrealize (GskRenderer *renderer)
 }
 
 static cairo_region_t *
-get_render_region (GdkSurface   *surface,
-                   GdkGLContext *context)
+gl_get_render_region (GdkSurface   *surface,
+                      GdkGLContext *context)
 {
   const cairo_region_t *damage;
   GdkRectangle whole_surface;
@@ -338,7 +338,7 @@ gsk_gl_renderer_render (GskRenderer          *renderer,
   gdk_gl_context_make_current (self->context);
 
   /* Must be called *AFTER* gdk_draw_context_begin_frame() */
-  render_region = get_render_region (surface, self->context);
+  render_region = gl_get_render_region (surface, self->context);
 
   gsk_gl_driver_begin_frame (self->driver, self->command_queue);
   job = gsk_gl_render_job_new (self->driver, &viewport, scale, render_region, 0, TRUE);

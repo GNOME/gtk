@@ -24,7 +24,7 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GskGLBuffer
+typedef struct _GskGLBuffer1
 {
   guint8 *buffer;
   gsize   buffer_pos;
@@ -32,17 +32,17 @@ typedef struct _GskGLBuffer
   guint   count;
   GLenum  target;
   gsize   element_size;
-} GskGLBuffer;
+} GskGLBuffer1;
 
-void   gsk_gl_buffer_init    (GskGLBuffer *self,
-                              GLenum       target,
-                              guint        element_size);
-void   gsk_gl_buffer_destroy (GskGLBuffer *buffer);
-GLuint gsk_gl_buffer_submit  (GskGLBuffer *buffer);
+void   gsk_gl_buffer1_init    (GskGLBuffer1 *self,
+                               GLenum        target,
+                               guint         element_size);
+void   gsk_gl_buffer1_destroy (GskGLBuffer1 *buffer);
+GLuint gsk_gl_buffer1_submit  (GskGLBuffer1 *buffer);
 
 static inline gpointer
-gsk_gl_buffer_advance (GskGLBuffer *buffer,
-                       guint         count)
+gsk_gl_buffer1_advance (GskGLBuffer1 *buffer,
+                        guint         count)
 {
   gpointer ret;
   gsize to_alloc = count * buffer->element_size;
@@ -63,15 +63,15 @@ gsk_gl_buffer_advance (GskGLBuffer *buffer,
 }
 
 static inline void
-gsk_gl_buffer_retract (GskGLBuffer *buffer,
-                       guint        count)
+gsk_gl_buffer1_retract (GskGLBuffer1 *buffer,
+                        guint         count)
 {
   buffer->buffer_pos -= count * buffer->element_size;
   buffer->count -= count;
 }
 
 static inline guint
-gsk_gl_buffer_get_offset (GskGLBuffer *buffer)
+gsk_gl_buffer1_get_offset (GskGLBuffer1 *buffer)
 {
   return buffer->count;
 }

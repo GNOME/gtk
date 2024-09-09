@@ -199,7 +199,7 @@ struct _GskGLCommandQueue
    * to the GL driver. We can also tweak this to use double buffered arrays
    * if we find that to be faster on some hardware and/or drivers.
    */
-  GskGLBuffer vertices;
+  GskGLBuffer1 vertices;
 
   /* The GskGLAttachmentState contains information about our FBO and texture
    * attachments as we process incoming operations. We snapshot them into
@@ -363,7 +363,7 @@ static inline GskGLDrawVertex *
 gsk_gl_command_queue_add_vertices (GskGLCommandQueue *self)
 {
   gsk_gl_command_queue_get_batch (self)->draw.vbo_count += GSK_GL_N_VERTICES;
-  return gsk_gl_buffer_advance (&self->vertices, GSK_GL_N_VERTICES);
+  return gsk_gl_buffer1_advance (&self->vertices, GSK_GL_N_VERTICES);
 }
 
 static inline GskGLDrawVertex *
@@ -374,7 +374,7 @@ gsk_gl_command_queue_add_n_vertices (GskGLCommandQueue *self,
    * it does *not* add the count to .draw.vbo_count as the caller is responsible
    * for that.
    */
-  return gsk_gl_buffer_advance (&self->vertices, GSK_GL_N_VERTICES * count);
+  return gsk_gl_buffer1_advance (&self->vertices, GSK_GL_N_VERTICES * count);
 }
 
 static inline void
@@ -384,7 +384,7 @@ gsk_gl_command_queue_retract_n_vertices (GskGLCommandQueue *self,
   /* Like gsk_gl_command_queue_add_n_vertices(), this does not tweak
    * the draw vbo_count.
    */
-  gsk_gl_buffer_retract (&self->vertices, GSK_GL_N_VERTICES * count);
+  gsk_gl_buffer1_retract (&self->vertices, GSK_GL_N_VERTICES * count);
 }
 
 static inline guint

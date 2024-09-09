@@ -434,7 +434,7 @@ gsk_gl_command_queue_dispose (GObject *object)
   gsk_gl_command_uniforms_clear (&self->batch_uniforms);
   gsk_gl_syncs_clear (&self->syncs);
 
-  gsk_gl_buffer_destroy (&self->vertices);
+  gsk_gl_buffer1_destroy (&self->vertices);
 
   G_OBJECT_CLASS (gsk_gl_command_queue_parent_class)->dispose (object);
 }
@@ -457,7 +457,7 @@ gsk_gl_command_queue_init (GskGLCommandQueue *self)
   gsk_gl_command_uniforms_init (&self->batch_uniforms, 2048);
   gsk_gl_syncs_init (&self->syncs, 10);
 
-  gsk_gl_buffer_init (&self->vertices, GL_ARRAY_BUFFER, sizeof (GskGLDrawVertex));
+  gsk_gl_buffer1_init (&self->vertices, GL_ARRAY_BUFFER, sizeof (GskGLDrawVertex));
 }
 
 GskGLCommandQueue *
@@ -619,7 +619,7 @@ gsk_gl_command_queue_begin_draw (GskGLCommandQueue   *self,
   batch->draw.bind_count = 0;
   batch->draw.bind_offset = self->batch_binds.len;
   batch->draw.vbo_count = 0;
-  batch->draw.vbo_offset = gsk_gl_buffer_get_offset (&self->vertices);
+  batch->draw.vbo_offset = gsk_gl_buffer1_get_offset (&self->vertices);
 
   self->fbo_max = MAX (self->fbo_max, batch->draw.framebuffer);
 
@@ -1081,7 +1081,7 @@ gsk_gl_command_queue_execute (GskGLCommandQueue    *self,
       glBindVertexArray (vao_id);
     }
 
-  vbo_id = gsk_gl_buffer_submit (&self->vertices);
+  vbo_id = gsk_gl_buffer1_submit (&self->vertices);
 
   /* 0 = position location */
   glEnableVertexAttribArray (0);

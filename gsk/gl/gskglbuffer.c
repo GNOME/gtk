@@ -29,12 +29,12 @@
  * @target: the target buffer such as %GL_ARRAY_BUFFER or %GL_UNIFORM_BUFFER
  * @element_size: the size of elements within the buffer
  *
- * Creates a new `GskGLBuffer` which can be used to deliver data to shaders
+ * Creates a new `GskGLBuffer1` which can be used to deliver data to shaders
  * within a GLSL program. You can use this to store vertices such as with
  * %GL_ARRAY_BUFFER or uniform data with %GL_UNIFORM_BUFFER.
  */
 void
-gsk_gl_buffer_init (GskGLBuffer *self,
+gsk_gl_buffer1_init (GskGLBuffer1 *self,
                     GLenum       target,
                     guint        element_size)
 {
@@ -48,7 +48,7 @@ gsk_gl_buffer_init (GskGLBuffer *self,
 }
 
 GLuint
-gsk_gl_buffer_submit (GskGLBuffer *buffer)
+gsk_gl_buffer1_submit (GskGLBuffer1 *buffer)
 {
   GLuint id;
 
@@ -63,7 +63,7 @@ gsk_gl_buffer_submit (GskGLBuffer *buffer)
 }
 
 void
-gsk_gl_buffer_destroy (GskGLBuffer *buffer)
+gsk_gl_buffer1_destroy (GskGLBuffer1 *buffer)
 {
   g_clear_pointer (&buffer->buffer, g_free);
 }

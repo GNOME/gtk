@@ -870,8 +870,8 @@ gsk_gl_render_job_transform_rounded_rect (GskGLRenderJob       *job,
 }
 
 static inline void
-rounded_rect_get_inner (const GskRoundedRect *rect,
-                        graphene_rect_t      *inner)
+gl_rounded_rect_get_inner (const GskRoundedRect *rect,
+                           graphene_rect_t      *inner)
 {
   float left = MAX (rect->corner[GSK_CORNER_TOP_LEFT].width, rect->corner[GSK_CORNER_BOTTOM_LEFT].width);
   float right = MAX (rect->corner[GSK_CORNER_TOP_RIGHT].width, rect->corner[GSK_CORNER_BOTTOM_RIGHT].width);
@@ -886,8 +886,8 @@ rounded_rect_get_inner (const GskRoundedRect *rect,
 }
 
 static inline gboolean
-interval_contains (float p1, float w1,
-                   float p2, float w2)
+gl_interval_contains (float p1, float w1,
+                      float p2, float w2)
 {
   if (p2 < p1)
     return FALSE;
@@ -938,12 +938,12 @@ gsk_gl_render_job_update_clip (GskGLRenderJob        *job,
     {
       graphene_rect_t inner;
 
-      rounded_rect_get_inner (&job->current_clip->rect, &inner);
+      gl_rounded_rect_get_inner (&job->current_clip->rect, &inner);
 
-      if (interval_contains (inner.origin.x, inner.size.width,
-                             transformed_bounds.origin.x, transformed_bounds.size.width) ||
-          interval_contains (inner.origin.y, inner.size.height,
-                             transformed_bounds.origin.y, transformed_bounds.size.height))
+      if (gl_interval_contains (inner.origin.x, inner.size.width,
+                                transformed_bounds.origin.x, transformed_bounds.size.width) ||
+          gl_interval_contains (inner.origin.y, inner.size.height,
+                                transformed_bounds.origin.y, transformed_bounds.size.height))
         rect_clip = TRUE;
     }
 
@@ -1446,7 +1446,7 @@ blur_node (GskGLRenderJob       *job,
   *max_y = job->offset_y + node->bounds.origin.y + node->bounds.size.height + half_blur_extra;
 }
 
-#define ATLAS_SIZE 512
+#define GL_ATLAS_SIZE 512
 
 static void
 get_color_node_color_as_srgb (const GskRenderNode *node,
@@ -1493,10 +1493,10 @@ gsk_gl_render_job_visit_color_node (GskGLRenderJob      *job,
            * having to choose any particular atlas texture.
            */
           offscreen.was_offscreen = FALSE;
-          offscreen.area.x = 1.f / ATLAS_SIZE;
-          offscreen.area.y = 1.f / ATLAS_SIZE;
-          offscreen.area.x2 = 2.f / ATLAS_SIZE;
-          offscreen.area.y2 = 2.f / ATLAS_SIZE;
+          offscreen.area.x = 1.f / GL_ATLAS_SIZE;
+          offscreen.area.y = 1.f / GL_ATLAS_SIZE;
+          offscreen.area.x2 = 2.f / GL_ATLAS_SIZE;
+          offscreen.area.y2 = 2.f / GL_ATLAS_SIZE;
 
           gsk_gl_render_job_draw_offscreen_with_color (job,
                                                        &node->bounds,

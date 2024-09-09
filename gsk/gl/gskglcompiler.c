@@ -427,8 +427,8 @@ gsk_gl_compiler_set_suffix_from_resource (GskGLCompiler     *self,
 }
 
 static void
-prepend_line_numbers (char    *code,
-                      GString *s)
+gl_prepend_line_numbers (char    *code,
+                         GString *s)
 {
   char *p;
   int line;
@@ -475,7 +475,7 @@ check_shader_error (int      shader_id,
   glGetShaderSource (shader_id, code_len, NULL, code);
 
   s = g_string_new ("");
-  prepend_line_numbers (code, s);
+  gl_prepend_line_numbers (code, s);
 
   g_set_error (error,
                GDK_GL_ERROR,
@@ -497,9 +497,9 @@ check_shader_error (int      shader_id,
 }
 
 static void
-print_shader_info (const char *prefix,
-                   int         shader_id,
-                   const char *name)
+gl_print_shader_info (const char *prefix,
+                      int         shader_id,
+                      const char *name)
 {
   if (GSK_DEBUG_CHECK(SHADERS))
     {
@@ -516,7 +516,7 @@ print_shader_info (const char *prefix,
           glGetShaderSource (shader_id, code_len, NULL, code);
 
           s = g_string_new (NULL);
-          prepend_line_numbers (code, s);
+          gl_prepend_line_numbers (code, s);
 
           g_message ("%s %d, %s:\n%s",
                      prefix, shader_id,
@@ -611,7 +611,7 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
       return NULL;
     }
 
-  print_shader_info ("Vertex shader", vertex_id, name);
+  gl_print_shader_info ("Vertex shader", vertex_id, name);
 
   fragment_id = glCreateShader (GL_FRAGMENT_SHADER);
   glShaderSource (fragment_id,
@@ -645,7 +645,7 @@ gsk_gl_compiler_compile (GskGLCompiler  *self,
       return NULL;
     }
 
-  print_shader_info ("Fragment shader", fragment_id, name);
+  gl_print_shader_info ("Fragment shader", fragment_id, name);
 
   program_id = glCreateProgram ();
   glAttachShader (program_id, vertex_id);
