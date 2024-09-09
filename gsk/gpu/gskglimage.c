@@ -68,6 +68,18 @@ gsk_gl_image_init (GskGLImage *self)
 {
 }
 
+static gboolean
+swizzle_is_identity (const GLint swizzle[4])
+{
+  if (swizzle[0] != GL_RED ||
+      swizzle[1] != GL_GREEN ||
+      swizzle[2] != GL_BLUE ||
+      swizzle[3] != GL_ALPHA)
+    return FALSE;
+
+  return TRUE;
+}
+
 GskGpuImage *
 gsk_gl_image_new_backbuffer (GskGLDevice    *device,
                              GdkGLContext   *context,
@@ -107,6 +119,8 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
     {
       self->gl_internal_format = gl_internal_format;
     }
+  if (!swizzle_is_identity (swizzle))
+    flags |= GSK_GPU_IMAGE_NO_BLIT;
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, format, width, height);
 
@@ -162,6 +176,8 @@ gsk_gl_image_new (GskGLDevice      *device,
     {
       self->gl_internal_format = gl_internal_format;
     }
+  if (!swizzle_is_identity (swizzle))
+    flags |= GSK_GPU_IMAGE_NO_BLIT;
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags,
@@ -184,7 +200,7 @@ gsk_gl_image_new (GskGLDevice      *device,
   /* Only apply swizzle if really needed, might not even be
    * supported if default values are set
    */
-  if (swizzle[0] != GL_RED || swizzle[1] != GL_GREEN || swizzle[2] != GL_BLUE || swizzle[3] != GL_ALPHA)
+  if (!swizzle_is_identity (swizzle))
     {
       /* Set each channel independently since GLES 3.0 doesn't support the iv method */
       glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, swizzle[0]);
@@ -231,6 +247,8 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
             (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0);
   else
     flags &= ~(GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP);
+  if (!swizzle_is_identity (swizzle))
+    flags |= GSK_GPU_IMAGE_NO_BLIT;
   
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags | extra_flags,

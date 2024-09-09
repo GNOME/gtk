@@ -172,6 +172,7 @@ compare_render_tests = [
   'shadow-offset-to-outside-clip',
   'shadow-opacity',
   'shadow-replay-nocairo',
+  'shadow-texture-formats',
   'shrink-rounded-border',
   'stroke',
   'stroke-clipped-nogl',
@@ -266,6 +267,7 @@ compare_xfails = {
     'opacity-overlapping-children': ['rotate'],
     'scaled-texture-scale': ['rotate'],
     'shadow-opacity': ['rotate'],
+    'shadow-texture-formats': ['rotate'],
     'texture-scale-nearest-vs-linear': ['rotate'],
   },
 }
