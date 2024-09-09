@@ -88,12 +88,12 @@ GdkPaintable *  gtk_snapshot_free_to_paintable          (GdkSnapshot            
 G_DEFINE_INTERFACE (GdkPaintable, gdk_paintable, G_TYPE_OBJECT)
 
 enum {
-  INVALIDATE_CONTENTS,
-  INVALIDATE_SIZE,
-  LAST_SIGNAL
+  GDK_PAINTABLE_INVALIDATE_CONTENTS,
+  GDK_PAINTABLE_INVALIDATE_SIZE,
+  GDK_PAINTABLE_LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint gdk_paintable_signals[GDK_PAINTABLE_LAST_SIGNAL] = { 0 };
 
 static void
 gdk_paintable_default_snapshot (GdkPaintable *paintable,
@@ -187,7 +187,7 @@ gdk_paintable_default_init (GdkPaintableInterface *iface)
    * Examples for such an event would be videos changing to the next frame or
    * the icon theme for an icon changing.
    */
-  signals[INVALIDATE_CONTENTS] =
+  gdk_paintable_signals[GDK_PAINTABLE_INVALIDATE_CONTENTS] =
     g_signal_new (I_("invalidate-contents"),
                   GDK_TYPE_PAINTABLE,
                   G_SIGNAL_RUN_LAST,
@@ -211,7 +211,7 @@ gdk_paintable_default_init (GdkPaintableInterface *iface)
    * Examples for such an event would be a paintable displaying
    * the contents of a toplevel surface being resized.
    */
-  signals[INVALIDATE_SIZE] =
+  gdk_paintable_signals[GDK_PAINTABLE_INVALIDATE_SIZE] =
     g_signal_new (I_("invalidate-size"),
                   GDK_TYPE_PAINTABLE,
                   G_SIGNAL_RUN_LAST,
@@ -426,7 +426,7 @@ gdk_paintable_invalidate_contents (GdkPaintable *paintable)
   g_return_if_fail (GDK_IS_PAINTABLE (paintable));
   g_return_if_fail (!(gdk_paintable_get_flags (paintable) & GDK_PAINTABLE_STATIC_CONTENTS));
 
-  g_signal_emit (paintable, signals[INVALIDATE_CONTENTS], 0);
+  g_signal_emit (paintable, gdk_paintable_signals[GDK_PAINTABLE_INVALIDATE_CONTENTS], 0);
 }
 
 /**
@@ -450,7 +450,7 @@ gdk_paintable_invalidate_size (GdkPaintable *paintable)
   g_return_if_fail (GDK_IS_PAINTABLE (paintable));
   g_return_if_fail (!(gdk_paintable_get_flags (paintable) & GDK_PAINTABLE_STATIC_SIZE));
 
-  g_signal_emit (paintable, signals[INVALIDATE_SIZE], 0);
+  g_signal_emit (paintable, gdk_paintable_signals[GDK_PAINTABLE_INVALIDATE_SIZE], 0);
 }
 
 /**
