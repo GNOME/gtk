@@ -119,24 +119,24 @@ struct _GdkDmabufTextureBuilderClass
 
 enum
 {
-  PROP_0,
-  PROP_DISPLAY,
-  PROP_WIDTH,
-  PROP_HEIGHT,
-  PROP_FOURCC,
-  PROP_MODIFIER,
-  PROP_PREMULTIPLIED,
-  PROP_N_PLANES,
-  PROP_COLOR_STATE,
-  PROP_UPDATE_REGION,
-  PROP_UPDATE_TEXTURE,
+  GDK_DMABUF_TEXTURE_BUILDER_PROP_0,
+  GDK_DMABUF_TEXTURE_BUILDER_PROP_DISPLAY,
+  GDK_DMABUF_TEXTURE_BUILDER_PROP_WIDTH,
+  GDK_DMABUF_TEXTURE_BUILDER_PROP_HEIGHT,
+  GDK_DMABUF_TEXTURE_BUILDER_PROP_FOURCC,
+  GDK_DMABUF_TEXTURE_BUILDER_PROP_MODIFIER,
+  GDK_DMABUF_TEXTURE_BUILDER_PROP_PREMULTIPLIED,
+  GDK_DMABUF_TEXTURE_BUILDER_PROP_N_PLANES,
+  GDK_DMABUF_TEXTURE_BUILDER_PROP_COLOR_STATE,
+  GDK_DMABUF_TEXTURE_BUILDER_PROP_UPDATE_REGION,
+  GDK_DMABUF_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE,
 
-  N_PROPS
+  GDK_DMABUF_TEXTURE_BUILDER_N_PROPS
 };
 
 G_DEFINE_TYPE (GdkDmabufTextureBuilder, gdk_dmabuf_texture_builder, G_TYPE_OBJECT)
 
-static GParamSpec *properties[N_PROPS] = { NULL, };
+static GParamSpec *gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_N_PROPS] = { NULL, };
 
 static void
 gdk_dmabuf_texture_builder_dispose (GObject *object)
@@ -160,43 +160,43 @@ gdk_dmabuf_texture_builder_get_property (GObject    *object,
 
   switch (property_id)
     {
-    case PROP_DISPLAY:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_DISPLAY:
       g_value_set_object (value, self->display);
       break;
 
-    case PROP_WIDTH:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_WIDTH:
       g_value_set_uint (value, self->width);
       break;
 
-    case PROP_HEIGHT:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_HEIGHT:
       g_value_set_uint (value, self->height);
       break;
 
-    case PROP_FOURCC:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_FOURCC:
       g_value_set_uint (value, self->dmabuf.fourcc);
       break;
 
-    case PROP_MODIFIER:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_MODIFIER:
       g_value_set_uint64 (value, self->dmabuf.modifier);
       break;
 
-    case PROP_PREMULTIPLIED:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_PREMULTIPLIED:
       g_value_set_boolean (value, self->premultiplied);
       break;
 
-    case PROP_N_PLANES:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_N_PLANES:
       g_value_set_uint (value, self->dmabuf.n_planes);
       break;
 
-    case PROP_COLOR_STATE:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_COLOR_STATE:
       g_value_set_boxed (value, self->color_state);
       break;
 
-    case PROP_UPDATE_REGION:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_UPDATE_REGION:
       g_value_set_boxed (value, self->update_region);
       break;
 
-    case PROP_UPDATE_TEXTURE:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE:
       g_value_set_object (value, self->update_texture);
       break;
 
@@ -216,43 +216,43 @@ gdk_dmabuf_texture_builder_set_property (GObject      *object,
 
   switch (property_id)
     {
-    case PROP_DISPLAY:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_DISPLAY:
       gdk_dmabuf_texture_builder_set_display (self, g_value_get_object (value));
       break;
 
-    case PROP_WIDTH:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_WIDTH:
       gdk_dmabuf_texture_builder_set_width (self, g_value_get_uint (value));
       break;
 
-    case PROP_HEIGHT:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_HEIGHT:
       gdk_dmabuf_texture_builder_set_height (self, g_value_get_uint (value));
       break;
 
-    case PROP_FOURCC:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_FOURCC:
       gdk_dmabuf_texture_builder_set_fourcc (self, g_value_get_uint (value));
       break;
 
-    case PROP_MODIFIER:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_MODIFIER:
       gdk_dmabuf_texture_builder_set_modifier (self, g_value_get_uint64 (value));
       break;
 
-    case PROP_PREMULTIPLIED:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_PREMULTIPLIED:
       gdk_dmabuf_texture_builder_set_premultiplied (self, g_value_get_boolean (value));
       break;
 
-    case PROP_N_PLANES:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_N_PLANES:
       gdk_dmabuf_texture_builder_set_n_planes (self, g_value_get_uint (value));
       break;
 
-    case PROP_COLOR_STATE:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_COLOR_STATE:
       gdk_dmabuf_texture_builder_set_color_state (self, g_value_get_boxed (value));
       break;
 
-    case PROP_UPDATE_REGION:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_UPDATE_REGION:
       gdk_dmabuf_texture_builder_set_update_region (self, g_value_get_boxed (value));
       break;
 
-    case PROP_UPDATE_TEXTURE:
+    case GDK_DMABUF_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE:
       gdk_dmabuf_texture_builder_set_update_texture (self, g_value_get_object (value));
       break;
 
@@ -278,7 +278,7 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
    *
    * Since: 4.14
    */
-  properties[PROP_DISPLAY] =
+  gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_DISPLAY] =
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -290,7 +290,7 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
    *
    * Since: 4.14
    */
-  properties[PROP_WIDTH] =
+  gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_WIDTH] =
     g_param_spec_uint ("width", NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -302,7 +302,7 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
    *
    * Since: 4.14
    */
-  properties[PROP_HEIGHT] =
+  gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_HEIGHT] =
     g_param_spec_uint ("height", NULL, NULL,
                        0, G_MAXUINT, 0,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -314,7 +314,7 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
    *
    * Since: 4.14
    */
-  properties[PROP_FOURCC] =
+  gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_FOURCC] =
     g_param_spec_uint ("fourcc", NULL, NULL,
                        0, 0xffffffff, 0,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -326,7 +326,7 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
    *
    * Since: 4.14
    */
-  properties[PROP_MODIFIER] =
+  gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_MODIFIER] =
     g_param_spec_uint64 ("modifier", NULL, NULL,
                          0, G_MAXUINT, 0,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -340,7 +340,7 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
    *
    * Since: 4.14
    */
-  properties[PROP_PREMULTIPLIED] =
+  gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_PREMULTIPLIED] =
     g_param_spec_boolean ("premultiplied", NULL, NULL,
                           TRUE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -350,12 +350,12 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
    *
    * The number of planes of the texture.
    *
-   * Note that you can set properties for other planes,
+   * Note that you can set gdk_dmabuf_texture_builder_properties for other planes,
    * but they will be ignored when constructing the texture.
    *
    * Since: 4.14
    */
-  properties[PROP_N_PLANES] =
+  gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_N_PLANES] =
     g_param_spec_uint ("n-planes", NULL, NULL,
                        1, GDK_DMABUF_MAX_PLANES, 1,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -367,7 +367,7 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_COLOR_STATE] =
+  gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_COLOR_STATE] =
     g_param_spec_boxed ("color-state", NULL, NULL,
                         GDK_TYPE_COLOR_STATE,
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -379,7 +379,7 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
    *
    * Since: 4.14
    */
-  properties[PROP_UPDATE_REGION] =
+  gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_UPDATE_REGION] =
     g_param_spec_boxed ("update-region", NULL, NULL,
                         CAIRO_GOBJECT_TYPE_REGION,
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -391,12 +391,12 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
    *
    * Since: 4.14
    */
-  properties[PROP_UPDATE_TEXTURE] =
+  gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE] =
     g_param_spec_object ("update-texture", NULL, NULL,
                          GDK_TYPE_TEXTURE,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (gobject_class, N_PROPS, properties);
+  g_object_class_install_properties (gobject_class, GDK_DMABUF_TEXTURE_BUILDER_N_PROPS, gdk_dmabuf_texture_builder_properties);
 }
 
 static void
@@ -467,7 +467,7 @@ gdk_dmabuf_texture_builder_set_display (GdkDmabufTextureBuilder *self,
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   if (g_set_object (&self->display, display))
-    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_DISPLAY]);
+    g_object_notify_by_pspec (G_OBJECT (self), gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_DISPLAY]);
 }
 
 /**
@@ -511,7 +511,7 @@ gdk_dmabuf_texture_builder_set_width (GdkDmabufTextureBuilder *self,
 
   self->width = width;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WIDTH]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_WIDTH]);
 }
 
 /**
@@ -555,7 +555,7 @@ gdk_dmabuf_texture_builder_set_height (GdkDmabufTextureBuilder *self,
 
   self->height = height;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEIGHT]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_HEIGHT]);
 }
 
 /**
@@ -603,7 +603,7 @@ gdk_dmabuf_texture_builder_set_fourcc (GdkDmabufTextureBuilder *self,
 
   self->dmabuf.fourcc = fourcc;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FOURCC]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_FOURCC]);
 }
 
 /**
@@ -644,7 +644,7 @@ gdk_dmabuf_texture_builder_set_modifier (GdkDmabufTextureBuilder *self,
 
   self->dmabuf.modifier = modifier;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MODIFIER]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_MODIFIER]);
 }
 
 /**
@@ -706,7 +706,7 @@ gdk_dmabuf_texture_builder_set_premultiplied (GdkDmabufTextureBuilder *self,
 
   self->premultiplied = premultiplied;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PREMULTIPLIED]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_PREMULTIPLIED]);
 }
 
 /**
@@ -730,7 +730,7 @@ gdk_dmabuf_texture_builder_set_n_planes (GdkDmabufTextureBuilder *self,
 
   self->dmabuf.n_planes = n_planes;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_N_PLANES]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_N_PLANES]);
 }
 
 /**
@@ -916,7 +916,7 @@ gdk_dmabuf_texture_builder_set_color_state (GdkDmabufTextureBuilder *self,
   if (color_state)
     gdk_color_state_ref (color_state);
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR_STATE]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_COLOR_STATE]);
 }
 
 /**
@@ -958,7 +958,7 @@ gdk_dmabuf_texture_builder_set_update_texture (GdkDmabufTextureBuilder *self,
   if (!g_set_object (&self->update_texture, texture))
     return;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_UPDATE_TEXTURE]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE]);
 }
 
 /**
@@ -1012,7 +1012,7 @@ gdk_dmabuf_texture_builder_set_update_region (GdkDmabufTextureBuilder *self,
   if (region)
     self->update_region = cairo_region_reference (region);
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_UPDATE_REGION]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_dmabuf_texture_builder_properties[GDK_DMABUF_TEXTURE_BUILDER_PROP_UPDATE_REGION]);
 }
 
 /**
