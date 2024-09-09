@@ -53,15 +53,15 @@ struct _GdkDrawContextPrivate {
 };
 
 enum {
-  PROP_0,
+  GDK_DRAW_CONTEXT_PROP_0,
 
-  PROP_DISPLAY,
-  PROP_SURFACE,
+  GDK_DRAW_CONTEXT_PROP_DISPLAY,
+  GDK_DRAW_CONTEXT_PROP_SURFACE,
 
-  LAST_PROP
+  GDK_DRAW_CONTEXT_LAST_PROP
 };
 
-static GParamSpec *pspecs[LAST_PROP] = { NULL, };
+static GParamSpec *gdk_draw_context_properties[GDK_DRAW_CONTEXT_LAST_PROP] = { NULL, };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrawContext, gdk_draw_context, G_TYPE_OBJECT)
 
@@ -103,7 +103,7 @@ gdk_draw_context_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_DRAW_CONTEXT_PROP_DISPLAY:
       if (priv->display != NULL)
         {
           g_assert (g_value_get_object (value) == NULL);
@@ -114,7 +114,7 @@ gdk_draw_context_set_property (GObject      *gobject,
         }
       break;
 
-    case PROP_SURFACE:
+    case GDK_DRAW_CONTEXT_PROP_SURFACE:
       priv->surface = g_value_dup_object (value);
       if (priv->surface)
         {
@@ -146,11 +146,11 @@ gdk_draw_context_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_DRAW_CONTEXT_PROP_DISPLAY:
       g_value_set_object (value, gdk_draw_context_get_display (context));
       break;
 
-    case PROP_SURFACE:
+    case GDK_DRAW_CONTEXT_PROP_SURFACE:
       g_value_set_object (value, priv->surface);
       break;
 
@@ -176,7 +176,7 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
    *
    * The `GdkDisplay` used to create the `GdkDrawContext`.
    */
-  pspecs[PROP_DISPLAY] =
+  gdk_draw_context_properties[GDK_DRAW_CONTEXT_PROP_DISPLAY] =
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE |
@@ -188,14 +188,14 @@ gdk_draw_context_class_init (GdkDrawContextClass *klass)
    *
    * The `GdkSurface` the context is bound to.
    */
-  pspecs[PROP_SURFACE] =
+  gdk_draw_context_properties[GDK_DRAW_CONTEXT_PROP_SURFACE] =
     g_param_spec_object ("surface", NULL, NULL,
                          GDK_TYPE_SURFACE,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (gobject_class, LAST_PROP, pspecs);
+  g_object_class_install_properties (gobject_class, GDK_DRAW_CONTEXT_LAST_PROP, gdk_draw_context_properties);
 }
 
 static guint pixels_counter;
