@@ -65,15 +65,15 @@ G_DEFINE_TYPE (GdkCicpParams, gdk_cicp_params, G_TYPE_OBJECT)
 
 enum
 {
-  PROP_COLOR_PRIMARIES = 1,
-  PROP_TRANSFER_FUNCTION,
-  PROP_MATRIX_COEFFICIENTS,
-  PROP_RANGE,
+  GDK_CICP_PARAMS_PROP_COLOR_PRIMARIES = 1,
+  GDK_CICP_PARAMS_PROP_TRANSFER_FUNCTION,
+  GDK_CICP_PARAMS_PROP_MATRIX_COEFFICIENTS,
+  GDK_CICP_PARAMS_PROP_RANGE,
 
-  N_PROPERTIES,
+  GDK_CICP_PARAMS_N_PROPERTIES,
 };
 
-static GParamSpec *properties[N_PROPERTIES] = { NULL, };
+static GParamSpec *gdk_cicp_params_properties[GDK_CICP_PARAMS_N_PROPERTIES] = { NULL, };
 
 static void
 gdk_cicp_params_init (GdkCicpParams *self)
@@ -94,19 +94,19 @@ gdk_cicp_params_get_property (GObject    *object,
 
   switch (property_id)
     {
-    case PROP_COLOR_PRIMARIES:
+    case GDK_CICP_PARAMS_PROP_COLOR_PRIMARIES:
       g_value_set_uint (value, self->cicp.color_primaries);
       break;
 
-    case PROP_TRANSFER_FUNCTION:
+    case GDK_CICP_PARAMS_PROP_TRANSFER_FUNCTION:
       g_value_set_uint (value, self->cicp.transfer_function);
       break;
 
-    case PROP_MATRIX_COEFFICIENTS:
+    case GDK_CICP_PARAMS_PROP_MATRIX_COEFFICIENTS:
       g_value_set_uint (value, self->cicp.matrix_coefficients);
       break;
 
-    case PROP_RANGE:
+    case GDK_CICP_PARAMS_PROP_RANGE:
       g_value_set_enum (value, self->cicp.range);
       break;
 
@@ -126,19 +126,19 @@ gdk_cicp_params_set_property (GObject      *object,
 
   switch (property_id)
     {
-    case PROP_COLOR_PRIMARIES:
+    case GDK_CICP_PARAMS_PROP_COLOR_PRIMARIES:
       gdk_cicp_params_set_color_primaries (self, g_value_get_uint (value));
       break;
 
-    case PROP_TRANSFER_FUNCTION:
+    case GDK_CICP_PARAMS_PROP_TRANSFER_FUNCTION:
       gdk_cicp_params_set_transfer_function (self, g_value_get_uint (value));
       break;
 
-    case PROP_MATRIX_COEFFICIENTS:
+    case GDK_CICP_PARAMS_PROP_MATRIX_COEFFICIENTS:
       gdk_cicp_params_set_matrix_coefficients (self, g_value_get_uint (value));
       break;
 
-    case PROP_RANGE:
+    case GDK_CICP_PARAMS_PROP_RANGE:
       gdk_cicp_params_set_range (self, g_value_get_enum (value));
       break;
 
@@ -172,7 +172,7 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_COLOR_PRIMARIES] =
+  gdk_cicp_params_properties[GDK_CICP_PARAMS_PROP_COLOR_PRIMARIES] =
     g_param_spec_uint ("color-primaries", NULL, NULL,
                        0, 255, 2,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -195,7 +195,7 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_TRANSFER_FUNCTION] =
+  gdk_cicp_params_properties[GDK_CICP_PARAMS_PROP_TRANSFER_FUNCTION] =
     g_param_spec_uint ("transfer-function", NULL, NULL,
                        0, 255, 2,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -212,7 +212,7 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_MATRIX_COEFFICIENTS] =
+  gdk_cicp_params_properties[GDK_CICP_PARAMS_PROP_MATRIX_COEFFICIENTS] =
     g_param_spec_uint ("matrix-coefficients", NULL, NULL,
                        0, 255, 2,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -226,13 +226,13 @@ gdk_cicp_params_class_init (GdkCicpParamsClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_RANGE] =
+  gdk_cicp_params_properties[GDK_CICP_PARAMS_PROP_RANGE] =
     g_param_spec_enum ("range", NULL, NULL,
                        GDK_TYPE_CICP_RANGE,
                        GDK_CICP_RANGE_NARROW,
                        G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, N_PROPERTIES, properties);
+  g_object_class_install_properties (object_class, GDK_CICP_PARAMS_N_PROPERTIES, gdk_cicp_params_properties);
 }
 
 /* }}} */
@@ -294,7 +294,7 @@ gdk_cicp_params_set_color_primaries (GdkCicpParams *self,
     return;
 
   self->cicp.color_primaries = color_primaries;
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR_PRIMARIES]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_cicp_params_properties[GDK_CICP_PARAMS_PROP_COLOR_PRIMARIES]);
 }
 
 /**
@@ -334,7 +334,7 @@ gdk_cicp_params_set_transfer_function (GdkCicpParams *self,
     return;
 
   self->cicp.transfer_function = transfer_function;
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_TRANSFER_FUNCTION]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_cicp_params_properties[GDK_CICP_PARAMS_PROP_TRANSFER_FUNCTION]);
 }
 
 /**
@@ -374,7 +374,7 @@ gdk_cicp_params_set_matrix_coefficients (GdkCicpParams *self,
     return;
 
   self->cicp.matrix_coefficients = matrix_coefficients;
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_MATRIX_COEFFICIENTS]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_cicp_params_properties[GDK_CICP_PARAMS_PROP_MATRIX_COEFFICIENTS]);
 }
 
 /**
@@ -414,7 +414,7 @@ gdk_cicp_params_set_range (GdkCicpParams *self,
     return;
 
   self->cicp.range = range;
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RANGE]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_cicp_params_properties[GDK_CICP_PARAMS_PROP_RANGE]);
 }
 
 /**
