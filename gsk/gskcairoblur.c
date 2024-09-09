@@ -286,8 +286,8 @@ gsk_cairo_blur_compute_pixels (double radius)
 }
 
 static gboolean
-needs_blur (float        radius,
-            GskBlurFlags blur_flags)
+cairo_needs_blur (float        radius,
+                  GskBlurFlags blur_flags)
 {
   /* Neither blurring horizontal nor vertical means no blurring at all. */
   if ((blur_flags & (GSK_BLUR_X | GSK_BLUR_Y)) == 0)
@@ -316,7 +316,7 @@ gsk_cairo_blur_start_drawing (cairo_t         *cr,
   gboolean blur_x = (blur_flags & GSK_BLUR_X) != 0;
   gboolean blur_y = (blur_flags & GSK_BLUR_Y) != 0;
 
-  if (!needs_blur (radius, blur_flags))
+  if (!cairo_needs_blur (radius, blur_flags))
     return cr;
 
   cairo_clip_extents (cr, &clip_x1, &clip_y1, &clip_x2, &clip_y2);
@@ -385,7 +385,7 @@ gsk_cairo_blur_finish_drawing (cairo_t         *cr,
   cairo_surface_t *surface;
   double x_scale;
 
-  if (!needs_blur (radius, blur_flags))
+  if (!cairo_needs_blur (radius, blur_flags))
     return cr;
 
   original_cr = cairo_get_user_data (cr, &original_cr_key);
