@@ -74,24 +74,24 @@
 
 enum
 {
-  PROP_0,
-  PROP_COMPOSITED,
-  PROP_RGBA,
-  PROP_SHADOW_WIDTH,
-  PROP_INPUT_SHAPES,
-  PROP_DMABUF_FORMATS,
-  LAST_PROP
+  GDK_DISPLAY_PROP_0,
+  GDK_DISPLAY_PROP_COMPOSITED,
+  GDK_DISPLAY_PROP_RGBA,
+  GDK_DISPLAY_PROP_SHADOW_WIDTH,
+  GDK_DISPLAY_PROP_INPUT_SHAPES,
+  GDK_DISPLAY_PROP_DMABUF_FORMATS,
+  GDK_DISPLAY_LAST_PROP
 };
 
-static GParamSpec *props[LAST_PROP] = { NULL, };
+static GParamSpec *gdk_display_properties[GDK_DISPLAY_LAST_PROP] = { NULL, };
 
 enum {
-  OPENED,
-  CLOSED,
-  SEAT_ADDED,
-  SEAT_REMOVED,
-  SETTING_CHANGED,
-  LAST_SIGNAL
+  GDK_DISPLAY_OPENED,
+  GDK_DISPLAY_CLOSED,
+  GDK_DISPLAY_SEAT_ADDED,
+  GDK_DISPLAY_SEAT_REMOVED,
+  GDK_DISPLAY_SETTING_CHANGED,
+  GDK_DISPLAY_LAST_SIGNAL
 };
 
 typedef struct _GdkDisplayPrivate GdkDisplayPrivate;
@@ -124,7 +124,7 @@ static void gdk_display_finalize    (GObject         *object);
 
 static GdkAppLaunchContext *gdk_display_real_get_app_launch_context (GdkDisplay *display);
 
-static guint signals[LAST_SIGNAL] = { 0 };
+static guint gdk_display_signals[GDK_DISPLAY_LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkDisplay, gdk_display, G_TYPE_OBJECT)
 
@@ -138,23 +138,23 @@ gdk_display_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_COMPOSITED:
+    case GDK_DISPLAY_PROP_COMPOSITED:
       g_value_set_boolean (value, gdk_display_is_composited (display));
       break;
 
-    case PROP_RGBA:
+    case GDK_DISPLAY_PROP_RGBA:
       g_value_set_boolean (value, gdk_display_is_rgba (display));
       break;
 
-    case PROP_SHADOW_WIDTH:
+    case GDK_DISPLAY_PROP_SHADOW_WIDTH:
       g_value_set_boolean (value, gdk_display_supports_shadow_width (display));
       break;
 
-    case PROP_INPUT_SHAPES:
+    case GDK_DISPLAY_PROP_INPUT_SHAPES:
       g_value_set_boolean (value, gdk_display_supports_input_shapes (display));
       break;
 
-    case PROP_DMABUF_FORMATS:
+    case GDK_DISPLAY_PROP_DMABUF_FORMATS:
       g_value_set_boxed (value, gdk_display_get_dmabuf_formats (display));
       break;
 
@@ -234,7 +234,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * %TRUE if the display properly composites the alpha channel.
    */
-  props[PROP_COMPOSITED] =
+  gdk_display_properties[GDK_DISPLAY_PROP_COMPOSITED] =
     g_param_spec_boolean ("composited", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -244,7 +244,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * %TRUE if the display supports an alpha channel.
    */
-  props[PROP_RGBA] =
+  gdk_display_properties[GDK_DISPLAY_PROP_RGBA] =
     g_param_spec_boolean ("rgba", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -256,7 +256,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * Since: 4.14
    */
-  props[PROP_SHADOW_WIDTH] =
+  gdk_display_properties[GDK_DISPLAY_PROP_SHADOW_WIDTH] =
     g_param_spec_boolean ("shadow-width", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -266,7 +266,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * %TRUE if the display supports input shapes.
    */
-  props[PROP_INPUT_SHAPES] =
+  gdk_display_properties[GDK_DISPLAY_PROP_INPUT_SHAPES] =
     g_param_spec_boolean ("input-shapes", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -278,12 +278,12 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * Since: 4.14
    */
-  props[PROP_DMABUF_FORMATS] =
+  gdk_display_properties[GDK_DISPLAY_PROP_DMABUF_FORMATS] =
     g_param_spec_boxed ("dmabuf-formats", NULL, NULL,
                         GDK_TYPE_DMABUF_FORMATS,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, props);
+  g_object_class_install_properties (object_class, GDK_DISPLAY_LAST_PROP, gdk_display_properties);
 
   /**
    * GdkDisplay::opened:
@@ -291,7 +291,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * Emitted when the connection to the windowing system for @display is opened.
    */
-  signals[OPENED] =
+  gdk_display_signals[GDK_DISPLAY_OPENED] =
     g_signal_new (g_intern_static_string ("opened"),
 		  G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
@@ -307,7 +307,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * Emitted when the connection to the windowing system for @display is closed.
    */
-  signals[CLOSED] =
+  gdk_display_signals[GDK_DISPLAY_CLOSED] =
     g_signal_new (g_intern_static_string ("closed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
@@ -325,7 +325,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * Emitted whenever a new seat is made known to the windowing system.
    */
-  signals[SEAT_ADDED] =
+  gdk_display_signals[GDK_DISPLAY_SEAT_ADDED] =
     g_signal_new (g_intern_static_string ("seat-added"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
@@ -340,7 +340,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * Emitted whenever a seat is removed by the windowing system.
    */
-  signals[SEAT_REMOVED] =
+  gdk_display_signals[GDK_DISPLAY_SEAT_REMOVED] =
     g_signal_new (g_intern_static_string ("seat-removed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
@@ -355,7 +355,7 @@ gdk_display_class_init (GdkDisplayClass *class)
    *
    * Emitted whenever a setting changes its value.
    */
-  signals[SETTING_CHANGED] =
+  gdk_display_signals[GDK_DISPLAY_SETTING_CHANGED] =
     g_signal_new (g_intern_static_string ("setting-changed"),
 		  G_OBJECT_CLASS_TYPE (object_class),
 		  G_SIGNAL_RUN_LAST,
@@ -491,7 +491,7 @@ gdk_display_close (GdkDisplay *display)
     {
       display->closed = TRUE;
 
-      g_signal_emit (display, signals[CLOSED], 0, FALSE);
+      g_signal_emit (display, gdk_display_signals[GDK_DISPLAY_CLOSED], 0, FALSE);
       g_object_run_dispose (G_OBJECT (display));
 
       g_object_unref (display);
@@ -1151,7 +1151,7 @@ gdk_display_set_input_shapes (GdkDisplay *display,
 
   priv->input_shapes = input_shapes;
 
-  g_object_notify_by_pspec (G_OBJECT (display), props[PROP_INPUT_SHAPES]);
+  g_object_notify_by_pspec (G_OBJECT (display), gdk_display_properties[GDK_DISPLAY_PROP_INPUT_SHAPES]);
 }
 
 static GdkAppLaunchContext *
@@ -2116,7 +2116,7 @@ gdk_display_set_composited (GdkDisplay *display,
 
   priv->composited = composited;
 
-  g_object_notify_by_pspec (G_OBJECT (display), props[PROP_COMPOSITED]);
+  g_object_notify_by_pspec (G_OBJECT (display), gdk_display_properties[GDK_DISPLAY_PROP_COMPOSITED]);
 }
 
 /**
@@ -2161,7 +2161,7 @@ gdk_display_set_rgba (GdkDisplay *display,
 
   priv->rgba = rgba;
 
-  g_object_notify_by_pspec (G_OBJECT (display), props[PROP_RGBA]);
+  g_object_notify_by_pspec (G_OBJECT (display), gdk_display_properties[GDK_DISPLAY_PROP_RGBA]);
 }
 
 /**
@@ -2201,7 +2201,7 @@ gdk_display_set_shadow_width (GdkDisplay *display,
 
   priv->shadow_width = shadow_width;
 
-  g_object_notify_by_pspec (G_OBJECT (display), props[PROP_SHADOW_WIDTH]);
+  g_object_notify_by_pspec (G_OBJECT (display), gdk_display_properties[GDK_DISPLAY_PROP_SHADOW_WIDTH]);
 }
 
 static void
@@ -2223,7 +2223,7 @@ gdk_display_add_seat (GdkDisplay *display,
   g_return_if_fail (GDK_IS_SEAT (seat));
 
   display->seats = g_list_append (display->seats, g_object_ref (seat));
-  g_signal_emit (display, signals[SEAT_ADDED], 0, seat);
+  g_signal_emit (display, gdk_display_signals[GDK_DISPLAY_SEAT_ADDED], 0, seat);
 
   g_signal_connect (seat, "device-removed", G_CALLBACK (device_removed_cb), display);
 }
@@ -2244,7 +2244,7 @@ gdk_display_remove_seat (GdkDisplay *display,
   if (link)
     {
       display->seats = g_list_remove_link (display->seats, link);
-      g_signal_emit (display, signals[SEAT_REMOVED], 0, seat);
+      g_signal_emit (display, gdk_display_signals[GDK_DISPLAY_SEAT_REMOVED], 0, seat);
       g_object_unref (link->data);
       g_list_free (link);
     }
@@ -2374,7 +2374,7 @@ gdk_display_get_monitor_at_surface (GdkDisplay *display,
 void
 gdk_display_emit_opened (GdkDisplay *display)
 {
-  g_signal_emit (display, signals[OPENED], 0);
+  g_signal_emit (display, gdk_display_signals[GDK_DISPLAY_OPENED], 0);
 }
 
 /**
@@ -2405,7 +2405,7 @@ void
 gdk_display_setting_changed (GdkDisplay       *display,
                              const char       *name)
 {
-  g_signal_emit (display, signals[SETTING_CHANGED], 0, name);
+  g_signal_emit (display, gdk_display_signals[GDK_DISPLAY_SETTING_CHANGED], 0, name);
 }
 
 void
