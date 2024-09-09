@@ -64,9 +64,9 @@ struct _Serializer
   GDestroyNotify                  notify;
 };
 
-GQueue serializers = G_QUEUE_INIT;
+GQueue gdk_content_serializers = G_QUEUE_INIT;
 
-static void init (void);
+static void gdk_content_serializers_init (void);
 
 #define GDK_CONTENT_SERIALIZER_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_CONTENT_SERIALIZER, GdkContentSerializerClass))
 #define GDK_IS_CONTENT_SERIALIZER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_CONTENT_SERIALIZER))
@@ -424,7 +424,7 @@ gdk_content_register_serializer (GType                    type,
   serializer->data = data;
   serializer->notify = notify;
 
-  g_queue_push_tail (&serializers, serializer);
+  g_queue_push_tail (&gdk_content_serializers, serializer);
 }
 
 static Serializer *
@@ -435,11 +435,11 @@ lookup_serializer (const char *mime_type,
 
   g_return_val_if_fail (mime_type != NULL, NULL);
 
-  init ();
+  gdk_content_serializers_init ();
 
   mime_type = g_intern_string (mime_type);
 
-  for (l = g_queue_peek_head_link (&serializers); l; l = l->next)
+  for (l = g_queue_peek_head_link (&gdk_content_serializers); l; l = l->next)
     {
       Serializer *serializer = l->data;
 
@@ -468,12 +468,12 @@ gdk_content_formats_union_serialize_gtypes (GdkContentFormats *formats)
 
   g_return_val_if_fail (formats != NULL, NULL);
 
-  init ();
+  gdk_content_serializers_init ();
 
   builder = gdk_content_formats_builder_new ();
   gdk_content_formats_builder_add_formats (builder, formats);
 
-  for (l = g_queue_peek_head_link (&serializers); l; l = l->next)
+  for (l = g_queue_peek_head_link (&gdk_content_serializers); l; l = l->next)
     {
       Serializer *serializer = l->data;
 
@@ -503,12 +503,12 @@ gdk_content_formats_union_serialize_mime_types (GdkContentFormats *formats)
 
   g_return_val_if_fail (formats != NULL, NULL);
 
-  init ();
+  gdk_content_serializers_init ();
 
   builder = gdk_content_formats_builder_new ();
   gdk_content_formats_builder_add_formats (builder, formats);
 
-  for (l = g_queue_peek_head_link (&serializers); l; l = l->next)
+  for (l = g_queue_peek_head_link (&gdk_content_serializers); l; l = l->next)
     {
       Serializer *serializer = l->data;
 
@@ -610,9 +610,9 @@ gdk_content_serialize_finish (GAsyncResult  *result,
 
 
 static void
-pixbuf_serializer_finish (GObject      *source,
-                          GAsyncResult *res,
-                          gpointer      serializer)
+gdk_content_serializer_pixbuf_finish (GObject      *source,
+                                      GAsyncResult *res,
+                                      gpointer      serializer)
 {
   GError *error = NULL;
 
@@ -623,7 +623,7 @@ pixbuf_serializer_finish (GObject      *source,
 }
 
 static void
-pixbuf_serializer (GdkContentSerializer *serializer)
+gdk_content_serializer_pixbuf (GdkContentSerializer *serializer)
 {
   const GValue *value;
   GdkPixbuf *pixbuf;
@@ -652,7 +652,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                                    gdk_content_serializer_get_output_stream (serializer),
                                    name,
                                    gdk_content_serializer_get_cancellable (serializer),
-                                   pixbuf_serializer_finish,
+                                   gdk_content_serializer_pixbuf_finish,
                                    serializer,
                                    g_str_equal (name, "png") ? "compression" : NULL, "2",
                                    NULL);
@@ -660,9 +660,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
-texture_serializer_finish (GObject      *source,
-                           GAsyncResult *res,
-                           gpointer      user_data)
+gdk_content_serializer_texture_finish (GObject      *source,
+                                       GAsyncResult *res,
+                                       gpointer      user_data)
 {
   GdkContentSerializer *serializer = GDK_CONTENT_SERIALIZER (source);
   GError *error = NULL;
@@ -674,10 +674,10 @@ texture_serializer_finish (GObject      *source,
 }
 
 static void
-serialize_texture_in_thread (GTask        *task,
-                             gpointer      source_object,
-                             gpointer      task_data,
-                             GCancellable *cancellable)
+gdk_content_serializer_texture_in_thread (GTask        *task,
+                                          gpointer      source_object,
+                                          gpointer      task_data,
+                                          GCancellable *cancellable)
 {
   GdkContentSerializer *serializer = source_object;
   const GValue *value;
@@ -718,22 +718,22 @@ serialize_texture_in_thread (GTask        *task,
 }
 
 static void
-texture_serializer (GdkContentSerializer *serializer)
+gdk_content_serializer_texture (GdkContentSerializer *serializer)
 {
   GTask *task;
 
   task = g_task_new (serializer,
                      gdk_content_serializer_get_cancellable (serializer),
-                     texture_serializer_finish,
+                     gdk_content_serializer_texture_finish,
                      NULL);
-  g_task_run_in_thread (task, serialize_texture_in_thread);
+  g_task_run_in_thread (task, gdk_content_serializer_texture_in_thread);
   g_object_unref (task);
 }
 
 static void
-string_serializer_finish (GObject      *source,
-                          GAsyncResult *result,
-                          gpointer      serializer)
+gdk_content_serializer_string_finish (GObject      *source,
+                                      GAsyncResult *result,
+                                      gpointer      serializer)
 {
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GError *error = NULL;
@@ -745,7 +745,7 @@ string_serializer_finish (GObject      *source,
 }
 
 static void
-string_serializer (GdkContentSerializer *serializer)
+gdk_content_serializer_string (GdkContentSerializer *serializer)
 {
   GOutputStream *filter;
   GCharsetConverter *converter;
@@ -775,15 +775,15 @@ string_serializer (GdkContentSerializer *serializer)
                                    strlen (text),
                                    gdk_content_serializer_get_priority (serializer),
                                    gdk_content_serializer_get_cancellable (serializer),
-                                   string_serializer_finish,
+                                   gdk_content_serializer_string_finish,
                                    serializer);
   g_object_unref (filter);
 }
 
 static void
-file_serializer_finish (GObject      *source,
-                        GAsyncResult *result,
-                        gpointer      serializer)
+gdk_content_serializer_file_finish (GObject      *source,
+                                    GAsyncResult *result,
+                                    gpointer      serializer)
 {
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GError *error = NULL;
@@ -795,7 +795,7 @@ file_serializer_finish (GObject      *source,
 }
 
 static char *
-file_get_native_uri (GFile *file)
+gdk_file_get_native_uri (GFile *file)
 {
   char *path;
 
@@ -811,7 +811,7 @@ file_get_native_uri (GFile *file)
 }
 
 static void
-file_uri_serializer (GdkContentSerializer *serializer)
+gdk_content_serializer_file_uri (GdkContentSerializer *serializer)
 {
   GFile *file;
   GString *str;
@@ -826,7 +826,7 @@ file_uri_serializer (GdkContentSerializer *serializer)
       file = g_value_get_object (gdk_content_serializer_get_value (serializer));
       if (file)
         {
-          uri = file_get_native_uri (file);
+          uri = gdk_file_get_native_uri (file);
           g_string_append (str, uri);
           g_free (uri);
         }
@@ -842,7 +842,7 @@ file_uri_serializer (GdkContentSerializer *serializer)
 
       for (l = g_value_get_boxed (value); l; l = l->next)
         {
-          uri = file_get_native_uri (l->data);
+          uri = gdk_file_get_native_uri (l->data);
           g_string_append (str, uri);
           g_free (uri);
           g_string_append (str, "\r\n");
@@ -854,13 +854,13 @@ file_uri_serializer (GdkContentSerializer *serializer)
                                    str->len,
                                    gdk_content_serializer_get_priority (serializer),
                                    gdk_content_serializer_get_cancellable (serializer),
-                                   file_serializer_finish,
+                                   gdk_content_serializer_file_finish,
                                    serializer);
   gdk_content_serializer_set_task_data (serializer, g_string_free (str, FALSE), g_free);
 }
 
 static void
-file_text_serializer (GdkContentSerializer *serializer)
+gdk_content_serializer_file_text (GdkContentSerializer *serializer)
 {
   const GValue *value;
   char *path = NULL;
@@ -906,15 +906,15 @@ file_text_serializer (GdkContentSerializer *serializer)
                                    strlen (path),
                                    gdk_content_serializer_get_priority (serializer),
                                    gdk_content_serializer_get_cancellable (serializer),
-                                   file_serializer_finish,
+                                   gdk_content_serializer_file_finish,
                                    serializer);
   gdk_content_serializer_set_task_data (serializer, path, g_free);
 }
 
 static void
-color_serializer_finish (GObject      *source,
-                         GAsyncResult *result,
-                         gpointer      serializer)
+gdk_content_serializer_color_finish (GObject      *source,
+                                     GAsyncResult *result,
+                                     gpointer      serializer)
 {
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GError *error = NULL;
@@ -926,7 +926,7 @@ color_serializer_finish (GObject      *source,
 }
 
 static void
-color_serializer (GdkContentSerializer *serializer)
+gdk_content_serializer_color (GdkContentSerializer *serializer)
 {
   const GValue *value;
   GdkRGBA *rgba;
@@ -948,13 +948,13 @@ color_serializer (GdkContentSerializer *serializer)
                                    4 * sizeof (guint16),
                                    gdk_content_serializer_get_priority (serializer),
                                    gdk_content_serializer_get_cancellable (serializer),
-                                   color_serializer_finish,
+                                   gdk_content_serializer_color_finish,
                                    serializer);
   gdk_content_serializer_set_task_data (serializer, data, g_free);
 }
 
 static void
-init (void)
+gdk_content_serializers_init (void)
 {
   static gboolean initialized = FALSE;
   GSList *formats, *f;
@@ -967,17 +967,17 @@ init (void)
 
   gdk_content_register_serializer (GDK_TYPE_TEXTURE,
                                    "image/png",
-                                   texture_serializer,
+                                   gdk_content_serializer_texture,
                                    NULL, NULL);
 
   gdk_content_register_serializer (GDK_TYPE_TEXTURE,
                                    "image/tiff",
-                                   texture_serializer,
+                                   gdk_content_serializer_texture,
                                    NULL, NULL);
 
   gdk_content_register_serializer (GDK_TYPE_TEXTURE,
                                    "image/jpeg",
-                                   texture_serializer,
+                                   gdk_content_serializer_texture,
                                    NULL, NULL);
 
   formats = gdk_pixbuf_get_formats ();
@@ -1001,12 +1001,12 @@ init (void)
               !g_str_equal (name, "jpeg"))
             gdk_content_register_serializer (GDK_TYPE_TEXTURE,
                                              *m,
-                                             pixbuf_serializer,
+                                             gdk_content_serializer_pixbuf,
                                              gdk_pixbuf_format_get_name (fmt),
                                              g_free);
           gdk_content_register_serializer (GDK_TYPE_PIXBUF,
                                            *m,
-                                           pixbuf_serializer,
+                                           gdk_content_serializer_pixbuf,
                                            gdk_pixbuf_format_get_name (fmt),
                                            g_free);
         }
@@ -1022,29 +1022,29 @@ init (void)
 
   gdk_content_register_serializer (G_TYPE_FILE,
                                    "text/uri-list",
-                                   file_uri_serializer,
+                                   gdk_content_serializer_file_uri,
                                    NULL,
                                    NULL);
   gdk_content_register_serializer (G_TYPE_FILE,
                                    "text/plain;charset=utf-8",
-                                   file_text_serializer,
+                                   gdk_content_serializer_file_text,
                                    NULL,
                                    NULL);
 
   gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
                                    "text/uri-list",
-                                   file_uri_serializer,
+                                   gdk_content_serializer_file_uri,
                                    NULL,
                                    NULL);
   gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
                                    "text/plain;charset=utf-8",
-                                   file_text_serializer,
+                                   gdk_content_serializer_file_text,
                                    NULL,
                                    NULL);
 
   gdk_content_register_serializer (G_TYPE_STRING,
                                    "text/plain;charset=utf-8",
-                                   string_serializer,
+                                   gdk_content_serializer_string,
                                    (gpointer) "utf-8",
                                    NULL);
   if (!g_get_charset (&charset))
@@ -1052,21 +1052,20 @@ init (void)
       char *mime = g_strdup_printf ("text/plain;charset=%s", charset);
       gdk_content_register_serializer (G_TYPE_STRING,
                                        mime,
-                                       string_serializer,
+                                       gdk_content_serializer_string,
                                        (gpointer) charset,
                                        NULL);
       g_free (mime);
     }
   gdk_content_register_serializer (G_TYPE_STRING,
                                    "text/plain",
-                                   string_serializer,
+                                   gdk_content_serializer_string,
                                    (gpointer) "ASCII",
                                    NULL);
 
   gdk_content_register_serializer (GDK_TYPE_RGBA,
                                    "application/x-color",
-                                   color_serializer,
+                                   gdk_content_serializer_color,
                                    NULL,
                                    NULL);
 }
-
