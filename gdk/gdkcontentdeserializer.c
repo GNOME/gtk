@@ -59,9 +59,9 @@ struct _Deserializer
   GDestroyNotify                  notify;
 };
 
-GQueue deserializers = G_QUEUE_INIT;
+GQueue gdk_content_deserializers = G_QUEUE_INIT;
 
-static void init (void);
+static void gdk_content_deserializers_init (void);
 
 #define GDK_CONTENT_DESERIALIZER_CLASS(klass)      (G_TYPE_CHECK_CLASS_CAST ((klass), GDK_TYPE_CONTENT_DESERIALIZER, GdkContentDeserializerClass))
 #define GDK_IS_CONTENT_DESERIALIZER_CLASS(klass)   (G_TYPE_CHECK_CLASS_TYPE ((klass), GDK_TYPE_CONTENT_DESERIALIZER))
@@ -418,22 +418,22 @@ gdk_content_register_deserializer (const char                *mime_type,
   deserializer->data = data;
   deserializer->notify = notify;
 
-  g_queue_push_tail (&deserializers, deserializer);
+  g_queue_push_tail (&gdk_content_deserializers, deserializer);
 }
 
 static Deserializer *
-lookup_deserializer (const char *mime_type,
-                     GType       type)
+gdk_content_deserializer_lookup (const char *mime_type,
+                                 GType       type)
 {
   GList *l;
 
   g_return_val_if_fail (mime_type != NULL, NULL);
 
-  init ();
+  gdk_content_deserializers_init ();
 
   mime_type = g_intern_string (mime_type);
 
-  for (l = g_queue_peek_head_link (&deserializers); l; l = l->next)
+  for (l = g_queue_peek_head_link (&gdk_content_deserializers); l; l = l->next)
     {
       Deserializer *deserializer = l->data;
 
@@ -462,12 +462,12 @@ gdk_content_formats_union_deserialize_gtypes (GdkContentFormats *formats)
 
   g_return_val_if_fail (formats != NULL, NULL);
 
-  init ();
+  gdk_content_deserializers_init ();
 
   builder = gdk_content_formats_builder_new ();
   gdk_content_formats_builder_add_formats (builder, formats);
 
-  for (l = g_queue_peek_head_link (&deserializers); l; l = l->next)
+  for (l = g_queue_peek_head_link (&gdk_content_deserializers); l; l = l->next)
     {
       Deserializer *deserializer = l->data;
 
@@ -497,12 +497,12 @@ gdk_content_formats_union_deserialize_mime_types (GdkContentFormats *formats)
 
   g_return_val_if_fail (formats != NULL, NULL);
 
-  init ();
+  gdk_content_deserializers_init ();
 
   builder = gdk_content_formats_builder_new ();
   gdk_content_formats_builder_add_formats (builder, formats);
 
-  for (l = g_queue_peek_head_link (&deserializers); l; l = l->next)
+  for (l = g_queue_peek_head_link (&gdk_content_deserializers); l; l = l->next)
     {
       Deserializer *deserializer = l->data;
 
@@ -558,7 +558,7 @@ gdk_content_deserialize_async (GInputStream        *stream,
   g_return_if_fail (cancellable == NULL || G_IS_CANCELLABLE (cancellable));
   g_return_if_fail (callback != NULL);
 
-  deserializer = lookup_deserializer (mime_type, type);
+  deserializer = gdk_content_deserializer_lookup (mime_type, type);
 
   gdk_content_deserializer_run (mime_type,
                                 type,
@@ -612,9 +612,9 @@ gdk_content_deserialize_finish (GAsyncResult  *result,
 /*** DESERIALIZERS ***/
 
 static void
-pixbuf_deserializer_finish (GObject      *source,
-                            GAsyncResult *res,
-                            gpointer      deserializer)
+gdk_content_deserializer_pixbuf_finish (GObject      *source,
+                                        GAsyncResult *res,
+                                        gpointer      deserializer)
 {
   GdkPixbuf *pixbuf;
   GValue *value;
@@ -647,18 +647,18 @@ pixbuf_deserializer_finish (GObject      *source,
 }
 
 static void
-pixbuf_deserializer (GdkContentDeserializer *deserializer)
+gdk_content_deserializer_pixbuf (GdkContentDeserializer *deserializer)
 {
   gdk_pixbuf_new_from_stream_async (gdk_content_deserializer_get_input_stream (deserializer),
-				    gdk_content_deserializer_get_cancellable (deserializer),
-                                    pixbuf_deserializer_finish,
+                                    gdk_content_deserializer_get_cancellable (deserializer),
+                                    gdk_content_deserializer_pixbuf_finish,
                                     deserializer);
 }
 
 static void
-texture_deserializer_finish (GObject      *source,
-                             GAsyncResult *result,
-                             gpointer      deserializer)
+gdk_content_deserializer_texture_finish (GObject      *source,
+                                         GAsyncResult *result,
+                                         gpointer      deserializer)
 {
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GBytes *bytes;
@@ -688,7 +688,7 @@ texture_deserializer_finish (GObject      *source,
 }
 
 static void
-texture_deserializer (GdkContentDeserializer *deserializer)
+gdk_content_deserializer_texture (GdkContentDeserializer *deserializer)
 {
   GOutputStream *output;
 
@@ -700,15 +700,15 @@ texture_deserializer (GdkContentDeserializer *deserializer)
                                 | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
                                 gdk_content_deserializer_get_priority (deserializer),
                                 gdk_content_deserializer_get_cancellable (deserializer),
-                                texture_deserializer_finish,
+                                gdk_content_deserializer_texture_finish,
                                 deserializer);
   g_object_unref (output);
 }
 
 static void
-string_deserializer_finish (GObject      *source,
-                            GAsyncResult *result,
-                            gpointer      deserializer)
+gdk_content_deserializer_string_finish (GObject      *source,
+                                        GAsyncResult *result,
+                                        gpointer      deserializer)
 {
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GError *error = NULL;
@@ -744,7 +744,7 @@ string_deserializer_finish (GObject      *source,
 }
 
 static void
-string_deserializer (GdkContentDeserializer *deserializer)
+gdk_content_deserializer_string (GdkContentDeserializer *deserializer)
 {
   GOutputStream *output, *filter;
   GCharsetConverter *converter;
@@ -770,15 +770,15 @@ string_deserializer (GdkContentDeserializer *deserializer)
                                 G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE,
                                 gdk_content_deserializer_get_priority (deserializer),
                                 gdk_content_deserializer_get_cancellable (deserializer),
-                                string_deserializer_finish,
+                                gdk_content_deserializer_string_finish,
                                 deserializer);
   g_object_unref (filter);
 }
 
 static void
-file_uri_deserializer_finish (GObject      *source,
-                              GAsyncResult *result,
-                              gpointer      deserializer)
+gdk_content_deserializer_file_uri_finish (GObject      *source,
+                                          GAsyncResult *result,
+                                          gpointer      deserializer)
 {
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GError *error = NULL;
@@ -828,7 +828,7 @@ file_uri_deserializer_finish (GObject      *source,
 }
 
 static void
-file_uri_deserializer (GdkContentDeserializer *deserializer)
+gdk_content_deserializer_file_uri (GdkContentDeserializer *deserializer)
 {
   GOutputStream *output;
 
@@ -839,15 +839,15 @@ file_uri_deserializer (GdkContentDeserializer *deserializer)
                                 G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE,
                                 gdk_content_deserializer_get_priority (deserializer),
                                 gdk_content_deserializer_get_cancellable (deserializer),
-                                file_uri_deserializer_finish,
+                                gdk_content_deserializer_file_uri_finish,
                                 deserializer);
   g_object_unref (output);
 }
 
 static void
-color_deserializer_finish (GObject      *source,
-                           GAsyncResult *result,
-                           gpointer      deserializer)
+gdk_content_deserializer_color_finish (GObject      *source,
+                                       GAsyncResult *result,
+                                       gpointer      deserializer)
 {
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GError *error = NULL;
@@ -883,7 +883,7 @@ color_deserializer_finish (GObject      *source,
 }
 
 static void
-color_deserializer (GdkContentDeserializer *deserializer)
+gdk_content_deserializer_color (GdkContentDeserializer *deserializer)
 {
   GOutputStream *output;
   guint16 *data;
@@ -896,13 +896,13 @@ color_deserializer (GdkContentDeserializer *deserializer)
                                 G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
                                 gdk_content_deserializer_get_priority (deserializer),
                                 gdk_content_deserializer_get_cancellable (deserializer),
-                                color_deserializer_finish,
+                                gdk_content_deserializer_color_finish,
                                 deserializer);
   g_object_unref (output);
 }
 
 static void
-init (void)
+gdk_content_deserializers_init (void)
 {
   static gboolean initialized = FALSE;
   GSList *formats, *f;
@@ -915,17 +915,17 @@ init (void)
 
   gdk_content_register_deserializer ("image/png",
                                      GDK_TYPE_TEXTURE,
-                                     texture_deserializer,
+                                     gdk_content_deserializer_texture,
                                      NULL,
                                      NULL);
   gdk_content_register_deserializer ("image/tiff",
                                      GDK_TYPE_TEXTURE,
-                                     texture_deserializer,
+                                     gdk_content_deserializer_texture,
                                      NULL,
                                      NULL);
   gdk_content_register_deserializer ("image/jpeg",
                                      GDK_TYPE_TEXTURE,
-                                     texture_deserializer,
+                                     gdk_content_deserializer_texture,
                                      NULL,
                                      NULL);
 
@@ -948,12 +948,12 @@ init (void)
               !g_str_equal (name, "tiff"))
             gdk_content_register_deserializer (*m,
                                                GDK_TYPE_TEXTURE,
-                                               pixbuf_deserializer,
+                                               gdk_content_deserializer_pixbuf,
                                                NULL,
                                                NULL);
           gdk_content_register_deserializer (*m,
                                              GDK_TYPE_PIXBUF,
-                                             pixbuf_deserializer,
+                                             gdk_content_deserializer_pixbuf,
                                              NULL,
                                              NULL);
         }
@@ -969,19 +969,19 @@ init (void)
 
   gdk_content_register_deserializer ("text/uri-list",
                                      GDK_TYPE_FILE_LIST,
-                                     file_uri_deserializer,
+                                     gdk_content_deserializer_file_uri,
                                      NULL,
                                      NULL);
 
   gdk_content_register_deserializer ("text/uri-list",
                                      G_TYPE_FILE,
-                                     file_uri_deserializer,
+                                     gdk_content_deserializer_file_uri,
                                      NULL,
                                      NULL);
 
   gdk_content_register_deserializer ("text/plain;charset=utf-8",
                                      G_TYPE_STRING,
-                                     string_deserializer,
+                                     gdk_content_deserializer_string,
                                      (gpointer) "utf-8",
                                      NULL);
   if (!g_get_charset (&charset))
@@ -990,21 +990,20 @@ init (void)
 
       gdk_content_register_deserializer (mime,
                                          G_TYPE_STRING,
-                                         string_deserializer,
+                                         gdk_content_deserializer_string,
                                          (gpointer) charset,
                                          g_free);
       g_free (mime);
     }
   gdk_content_register_deserializer ("text/plain",
                                      G_TYPE_STRING,
-                                     string_deserializer,
+                                     gdk_content_deserializer_string,
                                      (gpointer) "ASCII",
                                      NULL);
 
   gdk_content_register_deserializer ("application/x-color",
                                      GDK_TYPE_RGBA,
-                                     color_deserializer,
+                                     gdk_content_deserializer_color,
                                      NULL,
                                      NULL);
 }
-
