@@ -48,12 +48,12 @@ struct _GdkAxisInfo
 };
 
 enum {
-  CHANGED,
-  TOOL_CHANGED,
-  LAST_SIGNAL
+  GDK_DEVICE_CHANGED,
+  GDK_DEVICE_TOOL_CHANGED,
+  GDK_DEVICE_LAST_SIGNAL
 };
 
-static guint signals [LAST_SIGNAL] = { 0 };
+static guint gdk_device_signals[GDK_DEVICE_LAST_SIGNAL] = { 0 };
 
 
 static void gdk_device_finalize     (GObject      *object);
@@ -71,27 +71,27 @@ static void gdk_device_get_property (GObject      *object,
 G_DEFINE_ABSTRACT_TYPE (GdkDevice, gdk_device, G_TYPE_OBJECT)
 
 enum {
-  PROP_0,
-  PROP_DISPLAY,
-  PROP_NAME,
-  PROP_SOURCE,
-  PROP_HAS_CURSOR,
-  PROP_N_AXES,
-  PROP_VENDOR_ID,
-  PROP_PRODUCT_ID,
-  PROP_SEAT,
-  PROP_NUM_TOUCHES,
-  PROP_TOOL,
-  PROP_DIRECTION,
-  PROP_HAS_BIDI_LAYOUTS,
-  PROP_CAPS_LOCK_STATE,
-  PROP_NUM_LOCK_STATE,
-  PROP_SCROLL_LOCK_STATE,
-  PROP_MODIFIER_STATE,
-  LAST_PROP
+  GDK_DEVICE_PROP_0,
+  GDK_DEVICE_PROP_DISPLAY,
+  GDK_DEVICE_PROP_NAME,
+  GDK_DEVICE_PROP_SOURCE,
+  GDK_DEVICE_PROP_HAS_CURSOR,
+  GDK_DEVICE_PROP_N_AXES,
+  GDK_DEVICE_PROP_VENDOR_ID,
+  GDK_DEVICE_PROP_PRODUCT_ID,
+  GDK_DEVICE_PROP_SEAT,
+  GDK_DEVICE_PROP_NUM_TOUCHES,
+  GDK_DEVICE_PROP_TOOL,
+  GDK_DEVICE_PROP_DIRECTION,
+  GDK_DEVICE_PROP_HAS_BIDI_LAYOUTS,
+  GDK_DEVICE_PROP_CAPS_LOCK_STATE,
+  GDK_DEVICE_PROP_NUM_LOCK_STATE,
+  GDK_DEVICE_PROP_SCROLL_LOCK_STATE,
+  GDK_DEVICE_PROP_MODIFIER_STATE,
+  GDK_DEVICE_LAST_PROP
 };
 
-static GParamSpec *device_props[LAST_PROP] = { NULL, };
+static GParamSpec *gdk_device_properties[GDK_DEVICE_LAST_PROP] = { NULL, };
 
 static void
 gdk_device_class_init (GdkDeviceClass *klass)
@@ -108,7 +108,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * The `GdkDisplay` the `GdkDevice` pertains to.
    */
-  device_props[PROP_DISPLAY] =
+  gdk_device_properties[GDK_DEVICE_PROP_DISPLAY] =
       g_param_spec_object ("display", NULL, NULL,
                            GDK_TYPE_DISPLAY,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
@@ -118,7 +118,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * The device name.
    */
-  device_props[PROP_NAME] =
+  gdk_device_properties[GDK_DEVICE_PROP_NAME] =
       g_param_spec_string ("name", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
@@ -129,7 +129,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * Source type for the device.
    */
-  device_props[PROP_SOURCE] =
+  gdk_device_properties[GDK_DEVICE_PROP_SOURCE] =
       g_param_spec_enum ("source", NULL, NULL,
                          GDK_TYPE_INPUT_SOURCE,
                          GDK_SOURCE_MOUSE,
@@ -141,7 +141,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * Whether the device is represented by a cursor on the screen.
    */
-  device_props[PROP_HAS_CURSOR] =
+  gdk_device_properties[GDK_DEVICE_PROP_HAS_CURSOR] =
       g_param_spec_boolean ("has-cursor", NULL, NULL,
                             FALSE,
                             G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
@@ -152,7 +152,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * Number of axes in the device.
    */
-  device_props[PROP_N_AXES] =
+  gdk_device_properties[GDK_DEVICE_PROP_N_AXES] =
       g_param_spec_uint ("n-axes", NULL, NULL,
                          0, G_MAXUINT,
                          0,
@@ -165,7 +165,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * See [method@Gdk.Device.get_vendor_id].
    */
-  device_props[PROP_VENDOR_ID] =
+  gdk_device_properties[GDK_DEVICE_PROP_VENDOR_ID] =
       g_param_spec_string ("vendor-id", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
@@ -178,7 +178,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * See [method@Gdk.Device.get_product_id].
    */
-  device_props[PROP_PRODUCT_ID] =
+  gdk_device_properties[GDK_DEVICE_PROP_PRODUCT_ID] =
       g_param_spec_string ("product-id", NULL, NULL,
                            NULL,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
@@ -189,7 +189,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * `GdkSeat` of this device.
    */
-  device_props[PROP_SEAT] =
+  gdk_device_properties[GDK_DEVICE_PROP_SEAT] =
       g_param_spec_object ("seat", NULL, NULL,
                            GDK_TYPE_SEAT,
                            G_PARAM_READWRITE |
@@ -203,7 +203,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * Will be 0 if the device is not a touch device or if the number
    * of touches is unknown.
    */
-  device_props[PROP_NUM_TOUCHES] =
+  gdk_device_properties[GDK_DEVICE_PROP_NUM_TOUCHES] =
       g_param_spec_uint ("num-touches", NULL, NULL,
                          0, G_MAXUINT,
                          0,
@@ -215,7 +215,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * The `GdkDeviceTool` that is currently used with this device.
    */
-  device_props[PROP_TOOL] =
+  gdk_device_properties[GDK_DEVICE_PROP_TOOL] =
     g_param_spec_object ("tool", NULL, NULL,
                          GDK_TYPE_DEVICE_TOOL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -227,7 +227,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * This is only relevant for keyboard devices.
    */
-  device_props[PROP_DIRECTION] =
+  gdk_device_properties[GDK_DEVICE_PROP_DIRECTION] =
       g_param_spec_enum ("direction", NULL, NULL,
                          PANGO_TYPE_DIRECTION, PANGO_DIRECTION_NEUTRAL,
                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -239,7 +239,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * This is only relevant for keyboard devices.
    */
-  device_props[PROP_HAS_BIDI_LAYOUTS] =
+  gdk_device_properties[GDK_DEVICE_PROP_HAS_BIDI_LAYOUTS] =
       g_param_spec_boolean ("has-bidi-layouts", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -251,7 +251,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * This is only relevant for keyboard devices.
    */
-  device_props[PROP_CAPS_LOCK_STATE] =
+  gdk_device_properties[GDK_DEVICE_PROP_CAPS_LOCK_STATE] =
       g_param_spec_boolean ("caps-lock-state", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -263,7 +263,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * This is only relevant for keyboard devices.
    */
-  device_props[PROP_NUM_LOCK_STATE] =
+  gdk_device_properties[GDK_DEVICE_PROP_NUM_LOCK_STATE] =
       g_param_spec_boolean ("num-lock-state", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -275,7 +275,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * This is only relevant for keyboard devices.
    */
-  device_props[PROP_SCROLL_LOCK_STATE] =
+  gdk_device_properties[GDK_DEVICE_PROP_SCROLL_LOCK_STATE] =
       g_param_spec_boolean ("scroll-lock-state", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -287,13 +287,13 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * This is only relevant for keyboard devices.
    */
-  device_props[PROP_MODIFIER_STATE] =
+  gdk_device_properties[GDK_DEVICE_PROP_MODIFIER_STATE] =
       g_param_spec_flags ("modifier-state", NULL, NULL,
                           GDK_TYPE_MODIFIER_TYPE,
                           GDK_NO_MODIFIER_MASK,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, device_props);
+  g_object_class_install_properties (object_class, GDK_DEVICE_LAST_PROP, gdk_device_properties);
 
   /**
    * GdkDevice::changed:
@@ -307,7 +307,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    * that case the logical device will change to reflect the axes
    * and keys on the new physical device.
    */
-  signals[CHANGED] =
+  gdk_device_signals[GDK_DEVICE_CHANGED] =
     g_signal_new (g_intern_static_string ("changed"),
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
@@ -322,7 +322,7 @@ gdk_device_class_init (GdkDeviceClass *klass)
    *
    * Emitted on pen/eraser devices whenever tools enter or leave proximity.
    */
-  signals[TOOL_CHANGED] =
+  gdk_device_signals[GDK_DEVICE_TOOL_CHANGED] =
     g_signal_new (g_intern_static_string ("tool-changed"),
                   G_TYPE_FROM_CLASS (object_class),
                   G_SIGNAL_RUN_LAST,
@@ -389,30 +389,30 @@ gdk_device_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_DEVICE_PROP_DISPLAY:
       device->display = g_value_get_object (value);
       break;
-    case PROP_NAME:
+    case GDK_DEVICE_PROP_NAME:
       g_free (device->name);
 
       device->name = g_value_dup_string (value);
       break;
-    case PROP_SOURCE:
+    case GDK_DEVICE_PROP_SOURCE:
       device->source = g_value_get_enum (value);
       break;
-    case PROP_HAS_CURSOR:
+    case GDK_DEVICE_PROP_HAS_CURSOR:
       device->has_cursor = g_value_get_boolean (value);
       break;
-    case PROP_VENDOR_ID:
+    case GDK_DEVICE_PROP_VENDOR_ID:
       device->vendor_id = g_value_dup_string (value);
       break;
-    case PROP_PRODUCT_ID:
+    case GDK_DEVICE_PROP_PRODUCT_ID:
       device->product_id = g_value_dup_string (value);
       break;
-    case PROP_SEAT:
+    case GDK_DEVICE_PROP_SEAT:
       device->seat = g_value_get_object (value);
       break;
-    case PROP_NUM_TOUCHES:
+    case GDK_DEVICE_PROP_NUM_TOUCHES:
       device->num_touches = g_value_get_uint (value);
       break;
     default:
@@ -431,52 +431,52 @@ gdk_device_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_DEVICE_PROP_DISPLAY:
       g_value_set_object (value, device->display);
       break;
-    case PROP_NAME:
+    case GDK_DEVICE_PROP_NAME:
       g_value_set_string (value, device->name);
       break;
-    case PROP_SOURCE:
+    case GDK_DEVICE_PROP_SOURCE:
       g_value_set_enum (value, device->source);
       break;
-    case PROP_HAS_CURSOR:
+    case GDK_DEVICE_PROP_HAS_CURSOR:
       g_value_set_boolean (value, device->has_cursor);
       break;
-    case PROP_N_AXES:
+    case GDK_DEVICE_PROP_N_AXES:
       g_value_set_uint (value, device->axes->len);
       break;
-    case PROP_VENDOR_ID:
+    case GDK_DEVICE_PROP_VENDOR_ID:
       g_value_set_string (value, device->vendor_id);
       break;
-    case PROP_PRODUCT_ID:
+    case GDK_DEVICE_PROP_PRODUCT_ID:
       g_value_set_string (value, device->product_id);
       break;
-    case PROP_SEAT:
+    case GDK_DEVICE_PROP_SEAT:
       g_value_set_object (value, device->seat);
       break;
-    case PROP_NUM_TOUCHES:
+    case GDK_DEVICE_PROP_NUM_TOUCHES:
       g_value_set_uint (value, device->num_touches);
       break;
-    case PROP_TOOL:
+    case GDK_DEVICE_PROP_TOOL:
       g_value_set_object (value, device->last_tool);
       break;
-    case PROP_DIRECTION:
+    case GDK_DEVICE_PROP_DIRECTION:
       g_value_set_enum (value, gdk_device_get_direction (device));
       break;
-    case PROP_HAS_BIDI_LAYOUTS:
+    case GDK_DEVICE_PROP_HAS_BIDI_LAYOUTS:
       g_value_set_boolean (value, gdk_device_has_bidi_layouts (device));
       break;
-    case PROP_CAPS_LOCK_STATE:
+    case GDK_DEVICE_PROP_CAPS_LOCK_STATE:
       g_value_set_boolean (value, gdk_device_get_caps_lock_state (device));
       break;
-    case PROP_NUM_LOCK_STATE:
+    case GDK_DEVICE_PROP_NUM_LOCK_STATE:
       g_value_set_boolean (value, gdk_device_get_num_lock_state (device));
       break;
-    case PROP_SCROLL_LOCK_STATE:
+    case GDK_DEVICE_PROP_SCROLL_LOCK_STATE:
       g_value_set_boolean (value, gdk_device_get_scroll_lock_state (device));
       break;
-    case PROP_MODIFIER_STATE:
+    case GDK_DEVICE_PROP_MODIFIER_STATE:
       g_value_set_flags (value, gdk_device_get_modifier_state (device));
       break;
     default:
@@ -806,7 +806,7 @@ _gdk_device_reset_axes (GdkDevice *device)
   for (i = device->axes->len - 1; i >= 0; i--)
     g_array_remove_index (device->axes, i);
 
-  g_object_notify_by_pspec (G_OBJECT (device), device_props[PROP_N_AXES]);
+  g_object_notify_by_pspec (G_OBJECT (device), gdk_device_properties[GDK_DEVICE_PROP_N_AXES]);
 }
 
 guint
@@ -845,7 +845,7 @@ _gdk_device_add_axis (GdkDevice   *device,
   device->axes = g_array_append_val (device->axes, axis_info);
   pos = device->axes->len - 1;
 
-  g_object_notify_by_pspec (G_OBJECT (device), device_props[PROP_N_AXES]);
+  g_object_notify_by_pspec (G_OBJECT (device), gdk_device_properties[GDK_DEVICE_PROP_N_AXES]);
 
   return pos;
 }
@@ -1181,7 +1181,7 @@ gdk_device_update_tool (GdkDevice     *device,
   if (g_set_object (&device->last_tool, tool))
     {
       g_object_notify (G_OBJECT (device), "tool");
-      g_signal_emit (device, signals[TOOL_CHANGED], 0, tool);
+      g_signal_emit (device, gdk_device_signals[GDK_DEVICE_TOOL_CHANGED], 0, tool);
     }
 }
 
