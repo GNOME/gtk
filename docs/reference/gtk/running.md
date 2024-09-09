@@ -400,15 +400,6 @@ does not support them.
 `ycbr`
 : Do not support Ycbcr textures
 
-`descriptor-indexing`
-: Force slow descriptor set layout codepath
-
-`dynamic-indexing`
-: Hardcode small number of buffer and texture arrays
-
-`nonuniform-indexing`
-: Split draw calls to ensure uniform texture accesses
-
 `semaphore-export`
 : Disable sync of exported dmabufs
 
@@ -417,6 +408,9 @@ does not support them.
 
 `incremental-present`
 : Do not send damage regions
+
+`swapchain-maintenance`
+: Do not use advanced swapchain features
 
 The special value `all` can be used to turn on all values. The special
 value `help` can be used to obtain a list of all supported values.
