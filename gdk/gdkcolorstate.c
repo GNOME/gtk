@@ -482,7 +482,7 @@ GdkDefaultColorState gdk_default_color_states[] = {
   },
 };
 
- /* }}} */
+/* }}} */
 /* {{{ Cicp implementation */
 
 typedef struct _GdkCicpColorState GdkCicpColorState;
