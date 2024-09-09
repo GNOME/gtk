@@ -232,6 +232,7 @@ libgsk_f16c = static_library('gsk_f16c',
 )
 
 libgsk = static_library('gsk',
+  override_options: [ 'unity=on', 'unity_size=10000' ],
   sources: [
     gsk_public_sources,
     gsk_private_sources,
@@ -246,7 +247,9 @@ libgsk = static_library('gsk',
     '-DGTK_COMPILATION',
     '-DG_LOG_DOMAIN="Gsk"',
     '-DG_LOG_STRUCTURED=1',
-  ] + common_cflags,
+  ] + common_cflags + [
+    '-Wno-error=redundant-decls',
+  ],
   link_with: [ libgdk, libgsk_f16c]
 )
 
