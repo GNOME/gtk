@@ -86,25 +86,25 @@ struct _GdkSurfacePrivate
 };
 
 enum {
-  LAYOUT,
-  RENDER,
-  EVENT,
-  ENTER_MONITOR,
-  LEAVE_MONITOR,
-  LAST_SIGNAL
+  GDK_SURFACE_LAYOUT,
+  GDK_SURFACE_RENDER,
+  GDK_SURFACE_EVENT,
+  GDK_SURFACE_ENTER_MONITOR,
+  GDK_SURFACE_LEAVE_MONITOR,
+  GDK_SURFACE_LAST_SIGNAL
 };
 
 enum {
-  PROP_0,
-  PROP_CURSOR,
-  PROP_DISPLAY,
-  PROP_FRAME_CLOCK,
-  PROP_MAPPED,
-  PROP_WIDTH,
-  PROP_HEIGHT,
-  PROP_SCALE_FACTOR,
-  PROP_SCALE,
-  LAST_PROP
+  GDK_SURFACE_PROP_0,
+  GDK_SURFACE_PROP_CURSOR,
+  GDK_SURFACE_PROP_DISPLAY,
+  GDK_SURFACE_PROP_FRAME_CLOCK,
+  GDK_SURFACE_PROP_MAPPED,
+  GDK_SURFACE_PROP_WIDTH,
+  GDK_SURFACE_PROP_HEIGHT,
+  GDK_SURFACE_PROP_SCALE_FACTOR,
+  GDK_SURFACE_PROP_SCALE,
+  GDK_SURFACE_LAST_PROP
 };
 
 /* Global info */
@@ -120,15 +120,15 @@ static void gdk_surface_get_property (GObject      *object,
                                       GValue       *value,
                                       GParamSpec   *pspec);
 
-static void update_cursor               (GdkDisplay *display,
-                                         GdkDevice  *device);
+static void gdk_surface_update_cursor (GdkDisplay *display,
+                                       GdkDevice  *device);
 
 static void gdk_surface_queue_set_is_mapped (GdkSurface *surface,
                                              gboolean    is_mapped);
 
 
-static guint signals[LAST_SIGNAL] = { 0 };
-static GParamSpec *properties[LAST_PROP] = { NULL, };
+static guint gdk_surface_signals[GDK_SURFACE_LAST_SIGNAL] = { 0 };
+static GParamSpec *gdk_surface_properties[GDK_SURFACE_LAST_PROP] = { NULL, };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkSurface, gdk_surface, G_TYPE_OBJECT)
 
@@ -551,7 +551,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    *
    * The mouse pointer for the `GdkSurface`.
    */
-  properties[PROP_CURSOR] =
+  gdk_surface_properties[GDK_SURFACE_PROP_CURSOR] =
       g_param_spec_object ("cursor", NULL, NULL,
                            GDK_TYPE_CURSOR,
                            G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
@@ -561,7 +561,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    *
    * The `GdkDisplay` connection of the surface.
    */
-  properties[PROP_DISPLAY] =
+  gdk_surface_properties[GDK_SURFACE_PROP_DISPLAY] =
       g_param_spec_object ("display", NULL, NULL,
                            GDK_TYPE_DISPLAY,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
@@ -571,7 +571,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    *
    * The `GdkFrameClock` of the surface.
    */
-  properties[PROP_FRAME_CLOCK] =
+  gdk_surface_properties[GDK_SURFACE_PROP_FRAME_CLOCK] =
       g_param_spec_object ("frame-clock", NULL, NULL,
                            GDK_TYPE_FRAME_CLOCK,
                            G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
@@ -581,7 +581,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    *
    * Whether the surface is mapped.
    */
-  properties[PROP_MAPPED] =
+  gdk_surface_properties[GDK_SURFACE_PROP_MAPPED] =
       g_param_spec_boolean ("mapped", NULL, NULL,
                             FALSE,
                             G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -591,7 +591,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    *
    * The width of the surface in pixels.
    */
-  properties[PROP_WIDTH] =
+  gdk_surface_properties[GDK_SURFACE_PROP_WIDTH] =
       g_param_spec_int ("width", NULL, NULL,
                         0, G_MAXINT, 0,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -601,7 +601,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    *
    * The height of the surface, in pixels.
    */
-  properties[PROP_HEIGHT] =
+  gdk_surface_properties[GDK_SURFACE_PROP_HEIGHT] =
       g_param_spec_int ("height", NULL, NULL,
                         0, G_MAXINT, 0,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -614,7 +614,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    * The scale factor is the next larger integer,
    * compared to [property@Gdk.Surface:scale].
    */
-  properties[PROP_SCALE_FACTOR] =
+  gdk_surface_properties[GDK_SURFACE_PROP_SCALE_FACTOR] =
       g_param_spec_int ("scale-factor", NULL, NULL,
                         1, G_MAXINT, 1,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
@@ -626,12 +626,12 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    *
    * Since: 4.12
    */
-  properties[PROP_SCALE] =
+  gdk_surface_properties[GDK_SURFACE_PROP_SCALE] =
       g_param_spec_double ("scale", NULL, NULL,
                         1., G_MAXDOUBLE, 1.,
                         G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, LAST_PROP, properties);
+  g_object_class_install_properties (object_class, GDK_SURFACE_LAST_PROP, gdk_surface_properties);
 
   /**
    * GdkSurface::layout:
@@ -645,7 +645,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    * Surface size is reported in ”application pixels”, not
    * ”device pixels” (see gdk_surface_get_scale_factor()).
    */
-  signals[LAYOUT] =
+  gdk_surface_signals[GDK_SURFACE_LAYOUT] =
     g_signal_new (g_intern_static_string ("layout"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_FIRST,
@@ -657,7 +657,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   2,
                   G_TYPE_INT,
                   G_TYPE_INT);
-  g_signal_set_va_marshaller (signals[LAYOUT],
+  g_signal_set_va_marshaller (gdk_surface_signals[GDK_SURFACE_LAYOUT],
                               G_OBJECT_CLASS_TYPE (object_class),
                               _gdk_marshal_VOID__INT_INTv);
 
@@ -670,7 +670,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    *
    * Returns: %TRUE to indicate that the signal has been handled
    */
-  signals[RENDER] =
+  gdk_surface_signals[GDK_SURFACE_RENDER] =
     g_signal_new (g_intern_static_string ("render"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
@@ -681,7 +681,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   G_TYPE_BOOLEAN,
                   1,
                   CAIRO_GOBJECT_TYPE_REGION);
-  g_signal_set_va_marshaller (signals[RENDER],
+  g_signal_set_va_marshaller (gdk_surface_signals[GDK_SURFACE_RENDER],
                               G_OBJECT_CLASS_TYPE (object_class),
                               _gdk_marshal_BOOLEAN__BOXEDv);
 
@@ -694,7 +694,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    *
    * Returns: %TRUE to indicate that the event has been handled
    */
-  signals[EVENT] =
+  gdk_surface_signals[GDK_SURFACE_EVENT] =
     g_signal_new (g_intern_static_string ("event"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_LAST,
@@ -705,7 +705,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
                   G_TYPE_BOOLEAN,
                   1,
                   G_TYPE_POINTER);
-  g_signal_set_va_marshaller (signals[EVENT],
+  g_signal_set_va_marshaller (gdk_surface_signals[GDK_SURFACE_EVENT],
                               G_OBJECT_CLASS_TYPE (object_class),
                               gdk_surface_event_marshallerv);
 
@@ -716,7 +716,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    *
    * Emitted when @surface starts being present on the monitor.
    */
-  signals[ENTER_MONITOR] =
+  gdk_surface_signals[GDK_SURFACE_ENTER_MONITOR] =
     g_signal_new (g_intern_static_string ("enter-monitor"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_FIRST,
@@ -735,7 +735,7 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    *
    * Emitted when @surface stops being present on the monitor.
    */
-  signals[LEAVE_MONITOR] =
+  gdk_surface_signals[GDK_SURFACE_LEAVE_MONITOR] =
     g_signal_new (g_intern_static_string ("leave-monitor"),
                   G_OBJECT_CLASS_TYPE (object_class),
                   G_SIGNAL_RUN_FIRST,
@@ -807,18 +807,18 @@ gdk_surface_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_CURSOR:
+    case GDK_SURFACE_PROP_CURSOR:
       gdk_surface_set_cursor (surface, g_value_get_object (value));
       break;
 
-    case PROP_DISPLAY:
+    case GDK_SURFACE_PROP_DISPLAY:
       surface->display = g_value_dup_object (value);
       g_assert (surface->display != NULL);
       g_signal_connect (surface->display, "seat-removed",
                         G_CALLBACK (seat_removed_cb), surface);
       break;
 
-    case PROP_FRAME_CLOCK:
+    case GDK_SURFACE_PROP_FRAME_CLOCK:
       gdk_surface_set_frame_clock (surface, GDK_FRAME_CLOCK (g_value_get_object (value)));
       break;
 
@@ -840,35 +840,35 @@ gdk_surface_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_CURSOR:
+    case GDK_SURFACE_PROP_CURSOR:
       g_value_set_object (value, gdk_surface_get_cursor (surface));
       break;
 
-    case PROP_DISPLAY:
+    case GDK_SURFACE_PROP_DISPLAY:
       g_value_set_object (value, surface->display);
       break;
 
-    case PROP_FRAME_CLOCK:
+    case GDK_SURFACE_PROP_FRAME_CLOCK:
       g_value_set_object (value, surface->frame_clock);
       break;
 
-    case PROP_MAPPED:
+    case GDK_SURFACE_PROP_MAPPED:
       g_value_set_boolean (value, GDK_SURFACE_IS_MAPPED (surface));
       break;
 
-    case PROP_WIDTH:
+    case GDK_SURFACE_PROP_WIDTH:
       g_value_set_int (value, surface->width);
       break;
 
-    case PROP_HEIGHT:
+    case GDK_SURFACE_PROP_HEIGHT:
       g_value_set_int (value, surface->height);
       break;
 
-    case PROP_SCALE_FACTOR:
+    case GDK_SURFACE_PROP_SCALE_FACTOR:
       g_value_set_int (value, gdk_surface_get_scale_factor (surface));
       break;
 
-    case PROP_SCALE:
+    case GDK_SURFACE_PROP_SCALE:
       g_value_set_double (value, gdk_surface_get_scale (surface));
       break;
 
@@ -1023,7 +1023,7 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   if (GDK_IS_TOPLEVEL (surface))
     g_object_notify (G_OBJECT (surface), "state");
-  g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_MAPPED]);
+  g_object_notify_by_pspec (G_OBJECT (surface), gdk_surface_properties[GDK_SURFACE_PROP_MAPPED]);
 }
 
 /**
@@ -1386,7 +1386,7 @@ gdk_surface_layout_on_clock (GdkFrameClock *clock,
         return;
     }
 
-  g_signal_emit (surface, signals[LAYOUT], 0, surface->width, surface->height);
+  g_signal_emit (surface, gdk_surface_signals[GDK_SURFACE_LAYOUT], 0, surface->width, surface->height);
 }
 
 /**
@@ -1439,7 +1439,7 @@ gdk_surface_paint_on_clock (GdkFrameClock *clock,
 
       g_object_ref (surface);
 
-      g_signal_emit (surface, signals[RENDER], 0, expose_region, &handled);
+      g_signal_emit (surface, gdk_surface_signals[GDK_SURFACE_RENDER], 0, expose_region, &handled);
 
       g_object_unref (surface);
     }
@@ -1841,7 +1841,7 @@ gdk_surface_set_cursor_internal (GdkSurface *surface,
   pointer_info = _gdk_display_get_pointer_info (surface->display, device);
 
   if (surface == pointer_info->surface_under_pointer)
-    update_cursor (surface->display, device);
+    gdk_surface_update_cursor (surface->display, device);
 }
 
 /**
@@ -1919,7 +1919,7 @@ gdk_surface_set_cursor (GdkSurface *surface,
         }
 
       g_list_free (seats);
-      g_object_notify_by_pspec (G_OBJECT (surface), properties[PROP_CURSOR]);
+      g_object_notify_by_pspec (G_OBJECT (surface), gdk_surface_properties[GDK_SURFACE_PROP_CURSOR]);
     }
 }
 
@@ -2162,8 +2162,8 @@ gdk_surface_set_input_region (GdkSurface     *surface,
 }
 
 static void
-update_cursor (GdkDisplay *display,
-               GdkDevice  *device)
+gdk_surface_update_cursor (GdkDisplay *display,
+                           GdkDevice  *device)
 {
   GdkSurface *cursor_surface;
   GdkSurface *pointer_surface;
@@ -2238,7 +2238,7 @@ _gdk_display_set_surface_under_pointer (GdkDisplay *display,
   if (surface)
     {
       g_object_ref (surface);
-      update_cursor (display, device);
+      gdk_surface_update_cursor (display, device);
     }
 }
 
@@ -3080,7 +3080,7 @@ gdk_surface_handle_event (GdkEvent *event)
   if (gdk_event_get_event_type (event) == GDK_MOTION_NOTIFY)
     surface->request_motion = FALSE;
 
-  g_signal_emit (surface, signals[EVENT], 0, event, &handled);
+  g_signal_emit (surface, gdk_surface_signals[GDK_SURFACE_EVENT], 0, event, &handled);
 
   if (GDK_PROFILER_IS_RUNNING)
     add_event_mark (event, begin_time, GDK_PROFILER_CURRENT_TIME);
@@ -3189,14 +3189,14 @@ void
 gdk_surface_enter_monitor (GdkSurface *surface,
                            GdkMonitor *monitor)
 {
-  g_signal_emit (surface, signals[ENTER_MONITOR], 0, monitor);
+  g_signal_emit (surface, gdk_surface_signals[GDK_SURFACE_ENTER_MONITOR], 0, monitor);
 }
 
 void
 gdk_surface_leave_monitor (GdkSurface *surface,
                            GdkMonitor *monitor)
 {
-  g_signal_emit (surface, signals[LEAVE_MONITOR], 0, monitor);
+  g_signal_emit (surface, gdk_surface_signals[GDK_SURFACE_LEAVE_MONITOR], 0, monitor);
 }
 
 GdkSubsurface *
