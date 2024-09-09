@@ -32,13 +32,13 @@
 #include <epoxy/gl.h>
 
 /* Don't report quick (< 0.5 msec) runs */
-#define MIN_MARK_DURATION 500000
+#define GDK_MEMORY_FORMAT_MIN_MARK_DURATION 500000
 
-#define ADD_MARK(before,name,fmt,...) \
+#define GDK_MEMORY_FORMAT_ADD_MARK(before,name,fmt,...) \
   if (GDK_PROFILER_IS_RUNNING) \
     { \
       gint64 duration = GDK_PROFILER_CURRENT_TIME - before; \
-      if (duration > MIN_MARK_DURATION) \
+      if (duration > GDK_MEMORY_FORMAT_MIN_MARK_DURATION) \
         gdk_profiler_add_markf (before, duration, name, fmt, __VA_ARGS__); \
     }
 
@@ -48,9 +48,9 @@ typedef struct _GdkMemoryFormatDescription GdkMemoryFormatDescription;
 
 #define TYPED_FUNCS(name, T, R, G, B, A, bpp, scale) \
 static void \
-name ## _to_float (float        (*dest)[4], \
-                   const guchar  *src_data, \
-                   gsize          n) \
+gdk_convert_ ## name ## _to_float (float        (*dest)[4], \
+                                   const guchar  *src_data, \
+                                   gsize          n) \
 { \
   for (gsize i = 0; i < n; i++) \
     { \
@@ -63,9 +63,9 @@ name ## _to_float (float        (*dest)[4], \
 } \
 \
 static void \
-name ## _from_float (guchar       *dest_data, \
-                     const float (*src)[4], \
-                     gsize         n) \
+gdk_convert_ ## name ## _from_float (guchar       *dest_data, \
+                                     const float (*src)[4], \
+                                     gsize         n) \
 { \
   for (gsize i = 0; i < n; i++) \
     { \
@@ -79,9 +79,9 @@ name ## _from_float (guchar       *dest_data, \
 
 #define TYPED_GRAY_FUNCS(name, T, G, A, bpp, scale) \
 static void \
-name ## _to_float (float        (*dest)[4], \
-                   const guchar  *src_data, \
-                   gsize          n) \
+gdk_convert_ ## name ## _to_float (float        (*dest)[4], \
+                                   const guchar  *src_data, \
+                                   gsize          n) \
 { \
   for (gsize i = 0; i < n; i++) \
     { \
@@ -93,9 +93,9 @@ name ## _to_float (float        (*dest)[4], \
 } \
 \
 static void \
-name ## _from_float (guchar       *dest_data, \
-                     const float (*src)[4], \
-                     gsize         n) \
+gdk_convert_ ## name ## _from_float (guchar       *dest_data, \
+                                     const float (*src)[4], \
+                                     gsize         n) \
 { \
   for (gsize i = 0; i < n; i++) \
     { \
@@ -134,9 +134,9 @@ TYPED_GRAY_FUNCS (g16, guint16, 0, -1, 2, 65535)
 TYPED_GRAY_FUNCS (a16, guint16, -1, 0, 2, 65535)
 
 static void
-r16g16b16_float_to_float (float        (*dest)[4],
-                          const guchar  *src_data,
-                          gsize          n)
+gdk_convert_r16g16b16_float_to_float (float        (*dest)[4],
+                                      const guchar  *src_data,
+                                      gsize          n)
 {
   guint16 *src = (guint16 *) src_data;
   for (gsize i = 0; i < n; i++)
@@ -148,9 +148,9 @@ r16g16b16_float_to_float (float        (*dest)[4],
 }
 
 static void
-r16g16b16_float_from_float (guchar       *dest_data,
-                            const float (*src)[4],
-                            gsize         n)
+gdk_convert_r16g16b16_float_from_float (guchar       *dest_data,
+                                        const float (*src)[4],
+                                        gsize         n)
 {
   guint16 *dest = (guint16 *) dest_data;
   for (gsize i = 0; i < n; i++)
@@ -161,25 +161,25 @@ r16g16b16_float_from_float (guchar       *dest_data,
 }
 
 static void
-r16g16b16a16_float_to_float (float        (*dest)[4],
-                             const guchar  *src,
-                             gsize          n)
+gdk_convert_r16g16b16a16_float_to_float (float        (*dest)[4],
+                                         const guchar  *src,
+                                         gsize          n)
 {
   half_to_float ((const guint16 *) src, (float *) dest, 4 * n);
 }
 
 static void
-r16g16b16a16_float_from_float (guchar       *dest,
-                               const float (*src)[4],
-                               gsize         n)
+gdk_convert_r16g16b16a16_float_from_float (guchar       *dest,
+                                           const float (*src)[4],
+                                           gsize         n)
 {
   float_to_half ((const float *) src, (guint16 *) dest, 4 * n);
 }
 
 static void
-a16_float_to_float (float        (*dest)[4],
-                    const guchar  *src_data,
-                    gsize          n)
+gdk_convert_a16_float_to_float (float        (*dest)[4],
+                                const guchar  *src_data,
+                                gsize          n)
 {
   const guint16 *src = (const guint16 *) src_data;
   for (gsize i = 0; i < n; i++)
@@ -193,9 +193,9 @@ a16_float_to_float (float        (*dest)[4],
 }
 
 static void
-a16_float_from_float (guchar       *dest_data,
-                      const float (*src)[4],
-                      gsize         n)
+gdk_convert_a16_float_from_float (guchar       *dest_data,
+                                  const float (*src)[4],
+                                  gsize         n)
 {
   guint16 *dest = (guint16 *) dest_data;
   for (gsize i = 0; i < n; i++)
@@ -206,9 +206,9 @@ a16_float_from_float (guchar       *dest_data,
 }
 
 static void
-r32g32b32_float_to_float (float        (*dest)[4],
-                          const guchar  *src_data,
-                          gsize          n)
+gdk_convert_r32g32b32_float_to_float (float        (*dest)[4],
+                                      const guchar  *src_data,
+                                      gsize          n)
 {
   const float (*src)[3] = (const float (*)[3]) src_data;
   for (gsize i = 0; i < n; i++)
@@ -221,9 +221,9 @@ r32g32b32_float_to_float (float        (*dest)[4],
 }
 
 static void
-r32g32b32_float_from_float (guchar       *dest_data,
-                            const float (*src)[4],
-                            gsize         n)
+gdk_convert_r32g32b32_float_from_float (guchar       *dest_data,
+                                        const float (*src)[4],
+                                        gsize         n)
 {
   float (*dest)[3] = (float (*)[3]) dest_data;
   for (gsize i = 0; i < n; i++)
@@ -235,25 +235,25 @@ r32g32b32_float_from_float (guchar       *dest_data,
 }
 
 static void
-r32g32b32a32_float_to_float (float        (*dest)[4],
-                             const guchar  *src,
-                             gsize          n)
+gdk_convert_r32g32b32a32_float_to_float (float        (*dest)[4],
+                                         const guchar  *src,
+                                         gsize          n)
 {
   memcpy (dest, src, sizeof (float) * n * 4);
 }
 
 static void
-r32g32b32a32_float_from_float (guchar       *dest,
-                               const float (*src)[4],
-                               gsize         n)
+gdk_convert_r32g32b32a32_float_from_float (guchar       *dest,
+                                           const float (*src)[4],
+                                           gsize         n)
 {
   memcpy (dest, src, sizeof (float) * n * 4);
 }
 
 static void
-a32_float_to_float (float        (*dest)[4],
-                    const guchar  *src_data,
-                    gsize          n)
+gdk_convert_a32_float_to_float (float        (*dest)[4],
+                                const guchar  *src_data,
+                                gsize          n)
 {
   const float *src = (const float *) src_data;
   for (gsize i = 0; i < n; i++)
@@ -266,9 +266,9 @@ a32_float_to_float (float        (*dest)[4],
 }
 
 static void
-a32_float_from_float (guchar       *dest_data,
-                      const float (*src)[4],
-                      gsize         n)
+gdk_convert_a32_float_from_float (guchar       *dest_data,
+                                  const float (*src)[4],
+                                  gsize         n)
 {
   float *dest = (float *) dest_data;
   for (gsize i = 0; i < n; i++)
@@ -279,9 +279,9 @@ a32_float_from_float (guchar       *dest_data,
 
 #define PREMULTIPLY_FUNC(name, R1, G1, B1, A1, R2, G2, B2, A2) \
 static void \
-name (guchar *dest, \
-      const guchar *src, \
-      gsize n) \
+gdk_convert_ ## name (guchar *dest, \
+                      const guchar *src, \
+                      gsize n) \
 { \
   for (; n > 0; n--) \
     { \
@@ -305,9 +305,9 @@ PREMULTIPLY_FUNC(r8g8b8a8_to_a8b8g8r8_premultiplied, 0, 1, 2, 3, 3, 2, 1, 0)
 
 #define ADD_ALPHA_FUNC(name, R1, G1, B1, R2, G2, B2, A2) \
 static void \
-name (guchar *dest, \
-      const guchar *src, \
-      gsize n) \
+gdk_convert_ ## name (guchar *dest, \
+                      const guchar *src, \
+                      gsize n) \
 { \
   for (; n > 0; n--) \
     { \
@@ -481,8 +481,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ARGB8888,
 #endif
-    .to_float = b8g8r8a8_premultiplied_to_float,
-    .from_float = b8g8r8a8_premultiplied_from_float,
+    .to_float = gdk_convert_b8g8r8a8_premultiplied_to_float,
+    .from_float = gdk_convert_b8g8r8a8_premultiplied_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
@@ -514,8 +514,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_BGRA8888,
 #endif
-    .to_float = a8r8g8b8_premultiplied_to_float,
-    .from_float = a8r8g8b8_premultiplied_from_float,
+    .to_float = gdk_convert_a8r8g8b8_premultiplied_to_float,
+    .from_float = gdk_convert_a8r8g8b8_premultiplied_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
@@ -546,8 +546,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR8888,
 #endif
-    .to_float = r8g8b8a8_premultiplied_to_float,
-    .from_float = r8g8b8a8_premultiplied_from_float,
+    .to_float = gdk_convert_r8g8b8a8_premultiplied_to_float,
+    .from_float = gdk_convert_r8g8b8a8_premultiplied_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
@@ -579,8 +579,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_RGBA8888,
 #endif
-    .to_float = a8b8g8r8_premultiplied_to_float,
-    .from_float = a8b8g8r8_premultiplied_from_float,
+    .to_float = gdk_convert_a8b8g8r8_premultiplied_to_float,
+    .from_float = gdk_convert_a8b8g8r8_premultiplied_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
@@ -612,8 +612,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ARGB8888,
 #endif
-    .to_float = b8g8r8a8_to_float,
-    .from_float = b8g8r8a8_from_float,
+    .to_float = gdk_convert_b8g8r8a8_to_float,
+    .from_float = gdk_convert_b8g8r8a8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
@@ -645,8 +645,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_BGRA8888,
 #endif
-    .to_float = a8r8g8b8_to_float,
-    .from_float = a8r8g8b8_from_float,
+    .to_float = gdk_convert_a8r8g8b8_to_float,
+    .from_float = gdk_convert_a8r8g8b8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
@@ -677,8 +677,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR8888,
 #endif
-    .to_float = r8g8b8a8_to_float,
-    .from_float = r8g8b8a8_from_float,
+    .to_float = gdk_convert_r8g8b8a8_to_float,
+    .from_float = gdk_convert_r8g8b8a8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
@@ -710,8 +710,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_RGBA8888,
 #endif
-    .to_float = a8b8g8r8_to_float,
-    .from_float = a8b8g8r8_from_float,
+    .to_float = gdk_convert_a8b8g8r8_to_float,
+    .from_float = gdk_convert_a8b8g8r8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
@@ -744,8 +744,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_XRGB8888,
 #endif
-    .to_float = b8g8r8x8_to_float,
-    .from_float = b8g8r8x8_from_float,
+    .to_float = gdk_convert_b8g8r8x8_to_float,
+    .from_float = gdk_convert_b8g8r8x8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
@@ -778,8 +778,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_BGRX8888,
 #endif
-    .to_float = x8r8g8b8_to_float,
-    .from_float = x8r8g8b8_from_float,
+    .to_float = gdk_convert_x8r8g8b8_to_float,
+    .from_float = gdk_convert_x8r8g8b8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
@@ -811,8 +811,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_XBGR8888,
 #endif
-    .to_float = r8g8b8x8_to_float,
-    .from_float = r8g8b8x8_from_float,
+    .to_float = gdk_convert_r8g8b8x8_to_float,
+    .from_float = gdk_convert_r8g8b8x8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
@@ -845,8 +845,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_RGBX8888,
 #endif
-    .to_float = x8b8g8r8_to_float,
-    .from_float = x8b8g8r8_from_float,
+    .to_float = gdk_convert_x8b8g8r8_to_float,
+    .from_float = gdk_convert_x8b8g8r8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_4_nearest,
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
@@ -878,8 +878,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_BGR888,
 #endif
-    .to_float = r8g8b8_to_float,
-    .from_float = r8g8b8_from_float,
+    .to_float = gdk_convert_r8g8b8_to_float,
+    .from_float = gdk_convert_r8g8b8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_3_nearest,
     .mipmap_linear = gdk_mipmap_guint8_3_linear,
   },
@@ -912,8 +912,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_RGB888,
 #endif
-    .to_float = b8g8r8_to_float,
-    .from_float = b8g8r8_from_float,
+    .to_float = gdk_convert_b8g8r8_to_float,
+    .from_float = gdk_convert_b8g8r8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_3_nearest,
     .mipmap_linear = gdk_mipmap_guint8_3_linear,
   },
@@ -948,8 +948,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = r16g16b16_to_float,
-    .from_float = r16g16b16_from_float,
+    .to_float = gdk_convert_r16g16b16_to_float,
+    .from_float = gdk_convert_r16g16b16_from_float,
     .mipmap_nearest = gdk_mipmap_guint16_3_nearest,
     .mipmap_linear = gdk_mipmap_guint16_3_linear,
   },
@@ -983,8 +983,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR16161616,
 #endif
-    .to_float = r16g16b16a16_to_float,
-    .from_float = r16g16b16a16_from_float,
+    .to_float = gdk_convert_r16g16b16a16_to_float,
+    .from_float = gdk_convert_r16g16b16a16_from_float,
     .mipmap_nearest = gdk_mipmap_guint16_4_nearest,
     .mipmap_linear = gdk_mipmap_guint16_4_linear,
   },
@@ -1018,8 +1018,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR16161616,
 #endif
-    .to_float = r16g16b16a16_to_float,
-    .from_float = r16g16b16a16_from_float,
+    .to_float = gdk_convert_r16g16b16a16_to_float,
+    .from_float = gdk_convert_r16g16b16a16_from_float,
     .mipmap_nearest = gdk_mipmap_guint16_4_nearest,
     .mipmap_linear = gdk_mipmap_guint16_4_linear,
   },
@@ -1053,8 +1053,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = r16g16b16_float_to_float,
-    .from_float = r16g16b16_float_from_float,
+    .to_float = gdk_convert_r16g16b16_float_to_float,
+    .from_float = gdk_convert_r16g16b16_float_from_float,
     .mipmap_nearest = gdk_mipmap_half_float_3_nearest,
     .mipmap_linear = gdk_mipmap_half_float_3_linear,
   },
@@ -1087,8 +1087,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR16161616F,
 #endif
-    .to_float = r16g16b16a16_float_to_float,
-    .from_float = r16g16b16a16_float_from_float,
+    .to_float = gdk_convert_r16g16b16a16_float_to_float,
+    .from_float = gdk_convert_r16g16b16a16_float_from_float,
     .mipmap_nearest = gdk_mipmap_half_float_4_nearest,
     .mipmap_linear = gdk_mipmap_half_float_4_linear,
   },
@@ -1121,8 +1121,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_ABGR16161616F,
 #endif
-    .to_float = r16g16b16a16_float_to_float,
-    .from_float = r16g16b16a16_float_from_float,
+    .to_float = gdk_convert_r16g16b16a16_float_to_float,
+    .from_float = gdk_convert_r16g16b16a16_float_from_float,
     .mipmap_nearest = gdk_mipmap_half_float_4_nearest,
     .mipmap_linear = gdk_mipmap_half_float_4_linear,
   },
@@ -1156,8 +1156,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = r32g32b32_float_to_float,
-    .from_float = r32g32b32_float_from_float,
+    .to_float = gdk_convert_r32g32b32_float_to_float,
+    .from_float = gdk_convert_r32g32b32_float_from_float,
     .mipmap_nearest = gdk_mipmap_float_3_nearest,
     .mipmap_linear = gdk_mipmap_float_3_linear,
   },
@@ -1190,8 +1190,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = r32g32b32a32_float_to_float,
-    .from_float = r32g32b32a32_float_from_float,
+    .to_float = gdk_convert_r32g32b32a32_float_to_float,
+    .from_float = gdk_convert_r32g32b32a32_float_from_float,
     .mipmap_nearest = gdk_mipmap_float_4_nearest,
     .mipmap_linear = gdk_mipmap_float_4_linear,
   },
@@ -1224,8 +1224,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = r32g32b32a32_float_to_float,
-    .from_float = r32g32b32a32_float_from_float,
+    .to_float = gdk_convert_r32g32b32a32_float_to_float,
+    .from_float = gdk_convert_r32g32b32a32_float_from_float,
     .mipmap_nearest = gdk_mipmap_float_4_nearest,
     .mipmap_linear = gdk_mipmap_float_4_linear,
   },
@@ -1257,8 +1257,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = g8a8_premultiplied_to_float,
-    .from_float = g8a8_premultiplied_from_float,
+    .to_float = gdk_convert_g8a8_premultiplied_to_float,
+    .from_float = gdk_convert_g8a8_premultiplied_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_2_nearest,
     .mipmap_linear = gdk_mipmap_guint8_2_linear,
   },
@@ -1290,8 +1290,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = g8a8_to_float,
-    .from_float = g8a8_from_float,
+    .to_float = gdk_convert_g8a8_to_float,
+    .from_float = gdk_convert_g8a8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_2_nearest,
     .mipmap_linear = gdk_mipmap_guint8_2_linear,
   },
@@ -1323,8 +1323,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_R8,
 #endif
-    .to_float = g8_to_float,
-    .from_float = g8_from_float,
+    .to_float = gdk_convert_g8_to_float,
+    .from_float = gdk_convert_g8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_1_nearest,
     .mipmap_linear = gdk_mipmap_guint8_1_linear,
   },
@@ -1359,8 +1359,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = g16a16_premultiplied_to_float,
-    .from_float = g16a16_premultiplied_from_float,
+    .to_float = gdk_convert_g16a16_premultiplied_to_float,
+    .from_float = gdk_convert_g16a16_premultiplied_from_float,
     .mipmap_nearest = gdk_mipmap_guint16_2_nearest,
     .mipmap_linear = gdk_mipmap_guint16_2_linear,
   },
@@ -1395,8 +1395,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = g16a16_to_float,
-    .from_float = g16a16_from_float,
+    .to_float = gdk_convert_g16a16_to_float,
+    .from_float = gdk_convert_g16a16_from_float,
     .mipmap_nearest = gdk_mipmap_guint16_2_nearest,
     .mipmap_linear = gdk_mipmap_guint16_2_linear,
   },
@@ -1431,8 +1431,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = DRM_FORMAT_R16,
 #endif
-    .to_float = g16_to_float,
-    .from_float = g16_from_float,
+    .to_float = gdk_convert_g16_to_float,
+    .from_float = gdk_convert_g16_from_float,
     .mipmap_nearest = gdk_mipmap_guint16_1_nearest,
     .mipmap_linear = gdk_mipmap_guint16_1_linear,
   },
@@ -1464,8 +1464,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = a8_to_float,
-    .from_float = a8_from_float,
+    .to_float = gdk_convert_a8_to_float,
+    .from_float = gdk_convert_a8_from_float,
     .mipmap_nearest = gdk_mipmap_guint8_1_nearest,
     .mipmap_linear = gdk_mipmap_guint8_1_linear,
   },
@@ -1500,8 +1500,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = a16_to_float,
-    .from_float = a16_from_float,
+    .to_float = gdk_convert_a16_to_float,
+    .from_float = gdk_convert_a16_from_float,
     .mipmap_nearest = gdk_mipmap_guint16_1_nearest,
     .mipmap_linear = gdk_mipmap_guint16_1_linear,
   },
@@ -1535,8 +1535,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = a16_float_to_float,
-    .from_float = a16_float_from_float,
+    .to_float = gdk_convert_a16_float_to_float,
+    .from_float = gdk_convert_a16_float_from_float,
     .mipmap_nearest = gdk_mipmap_half_float_1_nearest,
     .mipmap_linear = gdk_mipmap_half_float_1_linear,
   },
@@ -1570,8 +1570,8 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #ifdef HAVE_DMABUF
     .dmabuf_fourcc = 0,
 #endif
-    .to_float = a32_float_to_float,
-    .from_float = a32_float_from_float,
+    .to_float = gdk_convert_a32_float_to_float,
+    .from_float = gdk_convert_a32_float_from_float,
     .mipmap_nearest = gdk_mipmap_float_1_nearest,
     .mipmap_linear = gdk_mipmap_float_1_linear,
   }
@@ -1986,8 +1986,8 @@ gdk_memory_format_get_name (GdkMemoryFormat format)
 }
 
 static void
-premultiply (float (*rgba)[4],
-             gsize  n)
+gdk_convert_premultiply (float (*rgba)[4],
+                         gsize  n)
 {
   for (gsize i = 0; i < n; i++)
     {
@@ -1998,8 +1998,8 @@ premultiply (float (*rgba)[4],
 }
 
 static void
-unpremultiply (float (*rgba)[4],
-               gsize   n)
+gdk_convert_unpremultiply (float (*rgba)[4],
+                           gsize   n)
 {
   for (gsize i = 0; i < n; i++)
     {
@@ -2012,57 +2012,57 @@ unpremultiply (float (*rgba)[4],
     }
 }
 
-typedef void (* FastConversionFunc) (guchar       *dest,
-                                     const guchar *src,
-                                     gsize         n);
+typedef void (* GdkFastConversionFunc) (guchar       *dest,
+                                        const guchar *src,
+                                        gsize         n);
 
-static FastConversionFunc
-get_fast_conversion_func (GdkMemoryFormat dest_format,
-                          GdkMemoryFormat src_format)
+static GdkFastConversionFunc
+gdk_convert_get_fast_conversion_func (GdkMemoryFormat dest_format,
+                                      GdkMemoryFormat src_format)
 {
   if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    return r8g8b8a8_to_r8g8b8a8_premultiplied;
+    return gdk_convert_r8g8b8a8_to_r8g8b8a8_premultiplied;
   else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    return r8g8b8a8_to_b8g8r8a8_premultiplied;
+    return gdk_convert_r8g8b8a8_to_b8g8r8a8_premultiplied;
   else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    return r8g8b8a8_to_b8g8r8a8_premultiplied;
+    return gdk_convert_r8g8b8a8_to_b8g8r8a8_premultiplied;
   else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    return r8g8b8a8_to_r8g8b8a8_premultiplied;
+    return gdk_convert_r8g8b8a8_to_r8g8b8a8_premultiplied;
   else if (src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    return r8g8b8a8_to_a8r8g8b8_premultiplied;
+    return gdk_convert_r8g8b8a8_to_a8r8g8b8_premultiplied;
   else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    return r8g8b8a8_to_a8b8g8r8_premultiplied;
+    return gdk_convert_r8g8b8a8_to_a8b8g8r8_premultiplied;
   else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    return r8g8b8_to_r8g8b8a8;
+    return gdk_convert_r8g8b8_to_r8g8b8a8;
   else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
-    return r8g8b8_to_b8g8r8a8;
+    return gdk_convert_r8g8b8_to_b8g8r8a8;
   else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    return r8g8b8_to_b8g8r8a8;
+    return gdk_convert_r8g8b8_to_b8g8r8a8;
   else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED)
-    return r8g8b8_to_r8g8b8a8;
+    return gdk_convert_r8g8b8_to_r8g8b8a8;
   else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    return r8g8b8_to_a8r8g8b8;
+    return gdk_convert_r8g8b8_to_a8r8g8b8;
   else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
-    return r8g8b8_to_a8b8g8r8;
+    return gdk_convert_r8g8b8_to_a8b8g8r8;
   else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8)
-    return r8g8b8_to_r8g8b8a8;
+    return gdk_convert_r8g8b8_to_r8g8b8a8;
   else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8)
-    return r8g8b8_to_b8g8r8a8;
+    return gdk_convert_r8g8b8_to_b8g8r8a8;
   else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_B8G8R8A8)
-    return r8g8b8_to_b8g8r8a8;
+    return gdk_convert_r8g8b8_to_b8g8r8a8;
   else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_B8G8R8A8)
-    return r8g8b8_to_r8g8b8a8;
+    return gdk_convert_r8g8b8_to_r8g8b8a8;
   else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_A8R8G8B8)
-    return r8g8b8_to_a8r8g8b8;
+    return gdk_convert_r8g8b8_to_a8r8g8b8;
   else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_A8R8G8B8)
-    return r8g8b8_to_a8b8g8r8;
+    return gdk_convert_r8g8b8_to_a8b8g8r8;
 
   return NULL;
 }
 
-typedef struct _MemoryConvert MemoryConvert;
+typedef struct _GdkMemoryConvert GdkMemoryConvert;
 
-struct _MemoryConvert
+struct _GdkMemoryConvert
 {
   guchar              *dest_data;
   gsize                dest_stride;
@@ -2081,7 +2081,7 @@ struct _MemoryConvert
 static void
 gdk_memory_convert_generic (gpointer data)
 {
-  MemoryConvert *mc = data;
+  GdkMemoryConvert *mc = data;
   const GdkMemoryFormatDescription *dest_desc = &memory_formats[mc->dest_format];
   const GdkMemoryFormatDescription *src_desc = &memory_formats[mc->src_format];
   float (*tmp)[4];
@@ -2128,7 +2128,7 @@ gdk_memory_convert_generic (gpointer data)
       src_desc->to_float (tmp, src_data, mc->width);
 
       if (needs_unpremultiply)
-        unpremultiply (tmp, mc->width);
+        gdk_convert_unpremultiply (tmp, mc->width);
 
       if (convert_func)
         convert_func (mc->src_cs, tmp, mc->width);
@@ -2137,16 +2137,16 @@ gdk_memory_convert_generic (gpointer data)
         convert_func2 (mc->dest_cs, tmp, mc->width);
 
       if (needs_premultiply)
-        premultiply (tmp, mc->width);
+        gdk_convert_premultiply (tmp, mc->width);
 
       dest_desc->from_float (dest_data, tmp, mc->width);
     }
 
   g_free (tmp);
 
-  ADD_MARK (before,
-            "Memory convert (thread)", "size %lux%lu, %lu rows",
-            mc->width, mc->height, rows);
+  GDK_MEMORY_FORMAT_ADD_MARK (before,
+                              "Memory convert (thread)", "size %lux%lu, %lu rows",
+                              mc->width, mc->height, rows);
 }
 
 void
@@ -2161,7 +2161,7 @@ gdk_memory_convert (guchar              *dest_data,
                     gsize                width,
                     gsize                height)
 {
-  MemoryConvert mc = {
+  GdkMemoryConvert mc = {
     .dest_data = dest_data,
     .dest_stride = dest_stride,
     .dest_format = dest_format,
@@ -2207,9 +2207,9 @@ gdk_memory_convert (guchar              *dest_data,
 
   if (gdk_color_state_equal (dest_cs, src_cs))
     {
-      FastConversionFunc func;
+      GdkFastConversionFunc func;
 
-      func = get_fast_conversion_func (dest_format, src_format);
+      func = gdk_convert_get_fast_conversion_func (dest_format, src_format);
 
       if (func != NULL)
         {
@@ -2228,9 +2228,9 @@ gdk_memory_convert (guchar              *dest_data,
   gdk_parallel_task_run (gdk_memory_convert_generic, &mc);
 }
 
-typedef struct _MemoryConvertColorState MemoryConvertColorState;
+typedef struct _GdkMemoryConvertColorState GdkMemoryConvertColorState;
 
-struct _MemoryConvertColorState
+struct _GdkMemoryConvertColorState
 {
   guchar *data;
   gsize stride;
@@ -2243,7 +2243,7 @@ struct _MemoryConvertColorState
   /* atomic */ int rows_done;
 };
 
-static const guchar srgb_lookup[] = {
+static const guchar gdk_convert_srgb_lookup[] = {
   0, 12, 21, 28, 33, 38, 42, 46, 49, 52, 55, 58, 61, 63, 66, 68,
   70, 73, 75, 77, 79, 81, 82, 84, 86, 88, 89, 91, 93, 94, 96, 97,
   99, 100, 102, 103, 104, 106, 107, 109, 110, 111, 112, 114, 115, 116, 117, 118,
@@ -2262,7 +2262,7 @@ static const guchar srgb_lookup[] = {
   248, 248, 249, 249, 250, 250, 251, 251, 251, 252, 252, 253, 253, 254, 254, 255
 };
 
-static const guchar srgb_inverse_lookup[] = {
+static const guchar gdk_convert_srgb_inverse_lookup[] = {
   0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1,
   1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3,
   3, 3, 4, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7,
@@ -2282,8 +2282,8 @@ static const guchar srgb_inverse_lookup[] = {
 };
 
 static void
-convert_srgb_to_srgb_linear (guchar *data,
-                             gsize   n)
+gdk_convert_srgb_to_srgb_linear (guchar *data,
+                                 gsize   n)
 {
   for (gsize i = 0; i < n; i++)
     {
@@ -2298,9 +2298,9 @@ convert_srgb_to_srgb_linear (guchar *data,
           g = (g * 255 + a / 2) / a;
           b = (b * 255 + a / 2) / a;
 
-          r = srgb_inverse_lookup[r];
-          g = srgb_inverse_lookup[g];
-          b = srgb_inverse_lookup[b];
+          r = gdk_convert_srgb_inverse_lookup[r];
+          g = gdk_convert_srgb_inverse_lookup[g];
+          b = gdk_convert_srgb_inverse_lookup[b];
 
           r = r * a + 127;
           g = g * a + 127;
@@ -2314,8 +2314,8 @@ convert_srgb_to_srgb_linear (guchar *data,
 }
 
 static void
-convert_srgb_linear_to_srgb (guchar *data,
-                             gsize   n)
+gdk_convert_srgb_linear_to_srgb (guchar *data,
+                                 gsize   n)
 {
   for (gsize i = 0; i < n; i++)
     {
@@ -2330,9 +2330,9 @@ convert_srgb_linear_to_srgb (guchar *data,
           g = (g * 255 + a / 2) / a;
           b = (b * 255 + a / 2) / a;
 
-          r = srgb_lookup[r];
-          g = srgb_lookup[g];
-          b = srgb_lookup[b];
+          r = gdk_convert_srgb_lookup[r];
+          g = gdk_convert_srgb_lookup[g];
+          b = gdk_convert_srgb_lookup[b];
 
           r = r * a + 127;
           g = g * a + 127;
@@ -2349,7 +2349,7 @@ convert_srgb_linear_to_srgb (guchar *data,
 static void
 gdk_memory_convert_color_state_srgb_to_srgb_linear (gpointer data)
 {
-  MemoryConvertColorState *mc = data;
+  GdkMemoryConvertColorState *mc = data;
   int y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
@@ -2358,18 +2358,18 @@ gdk_memory_convert_color_state_srgb_to_srgb_linear (gpointer data)
        y < mc->height;
        y = g_atomic_int_add (&mc->rows_done, 1), rows++)
     {
-      convert_srgb_to_srgb_linear (mc->data + y * mc->stride, mc->width);
+      gdk_convert_srgb_to_srgb_linear (mc->data + y * mc->stride, mc->width);
     }
 
-  ADD_MARK (before,
-            "Color state convert srgb->srgb-linear (thread)", "size %lux%lu, %lu rows",
-            mc->width, mc->height, rows);
+  GDK_MEMORY_FORMAT_ADD_MARK (before,
+                              "Color state convert srgb->srgb-linear (thread)", "size %lux%lu, %lu rows",
+                              mc->width, mc->height, rows);
 }
 
 static void
 gdk_memory_convert_color_state_srgb_linear_to_srgb (gpointer data)
 {
-  MemoryConvertColorState *mc = data;
+  GdkMemoryConvertColorState *mc = data;
   int y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
@@ -2378,18 +2378,18 @@ gdk_memory_convert_color_state_srgb_linear_to_srgb (gpointer data)
        y < mc->height;
        y = g_atomic_int_add (&mc->rows_done, 1), rows++)
     {
-      convert_srgb_linear_to_srgb (mc->data + y * mc->stride, mc->width);
+      gdk_convert_srgb_linear_to_srgb (mc->data + y * mc->stride, mc->width);
     }
 
-  ADD_MARK (before,
-            "Color state convert srgb-linear->srgb (thread)", "size %lux%lu, %lu rows",
-            mc->width, mc->height, rows);
+  GDK_MEMORY_FORMAT_ADD_MARK (before,
+                              "Color state convert srgb-linear->srgb (thread)", "size %lux%lu, %lu rows",
+                              mc->width, mc->height, rows);
 }
 
 static void
 gdk_memory_convert_color_state_generic (gpointer user_data)
 {
-  MemoryConvertColorState *mc = user_data;
+  GdkMemoryConvertColorState *mc = user_data;
   const GdkMemoryFormatDescription *desc = &memory_formats[mc->format];
   GdkFloatColorConvert convert_func = NULL;
   GdkFloatColorConvert convert_func2 = NULL;
@@ -2423,7 +2423,7 @@ gdk_memory_convert_color_state_generic (gpointer user_data)
       desc->to_float (tmp, data, mc->width);
 
       if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-        unpremultiply (tmp, mc->width);
+        gdk_convert_unpremultiply (tmp, mc->width);
 
       if (convert_func)
         convert_func (mc->src_cs, tmp, mc->width);
@@ -2432,16 +2432,16 @@ gdk_memory_convert_color_state_generic (gpointer user_data)
         convert_func2 (mc->dest_cs, tmp, mc->width);
 
       if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-        premultiply (tmp, mc->width);
+        gdk_convert_premultiply (tmp, mc->width);
 
       desc->from_float (data, tmp, mc->width);
     }
 
   g_free (tmp);
 
-  ADD_MARK (before,
-            "Color state convert (thread)", "size %lux%lu, %lu rows",
-            mc->width, mc->height, rows);
+  GDK_MEMORY_FORMAT_ADD_MARK (before,
+                              "Color state convert (thread)", "size %lux%lu, %lu rows",
+                              mc->width, mc->height, rows);
 }
 
 void
@@ -2453,7 +2453,7 @@ gdk_memory_convert_color_state (guchar          *data,
                                 gsize            width,
                                 gsize            height)
 {
-  MemoryConvertColorState mc = {
+  GdkMemoryConvertColorState mc = {
     .data = data,
     .stride = stride,
     .format = format,
@@ -2484,9 +2484,9 @@ gdk_memory_convert_color_state (guchar          *data,
     }
 }
 
-typedef struct _MipmapData MipmapData;
+typedef struct _GdkMipmapData GdkMipmapData;
 
-struct _MipmapData
+struct _GdkMipmapData
 {
   guchar          *dest;
   gsize            dest_stride;
@@ -2505,7 +2505,7 @@ struct _MipmapData
 static void
 gdk_memory_mipmap_same_format_nearest (gpointer data)
 {
-  MipmapData *mipmap = data;
+  GdkMipmapData *mipmap = data;
   const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
   gsize n, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
@@ -2526,15 +2526,15 @@ gdk_memory_mipmap_same_format_nearest (gpointer data)
                             mipmap->lod_level);
     }
 
-  ADD_MARK (before,
-            "Mipmap nearest (thread)", "size %lux%lu, lod %u, %lu rows",
-            mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
+  GDK_MEMORY_FORMAT_ADD_MARK (before,
+                              "Mipmap nearest (thread)", "size %lux%lu, lod %u, %lu rows",
+                              mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
 }
 
 static void
 gdk_memory_mipmap_same_format_linear (gpointer data)
 {
-  MipmapData *mipmap = data;
+  GdkMipmapData *mipmap = data;
   const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
   gsize n, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
@@ -2555,17 +2555,17 @@ gdk_memory_mipmap_same_format_linear (gpointer data)
                            mipmap->lod_level);
     }
 
-  ADD_MARK (before,
-            "Mipmap linear (thread)", "size %lux%lu, lod %u, %lu rows",
-            mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
+  GDK_MEMORY_FORMAT_ADD_MARK (before,
+                              "Mipmap linear (thread)", "size %lux%lu, lod %u, %lu rows",
+                              mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
 }
 
 static void
 gdk_memory_mipmap_generic (gpointer data)
 {
-  MipmapData *mipmap = data;
+  GdkMipmapData *mipmap = data;
   const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
-  FastConversionFunc func;
+  GdkFastConversionFunc func;
   gsize dest_width;
   gsize size;
   guchar *tmp;
@@ -2577,7 +2577,7 @@ gdk_memory_mipmap_generic (gpointer data)
   dest_width = (mipmap->src_width + n - 1) >> mipmap->lod_level;
   size = gdk_memory_format_bytes_per_pixel (mipmap->src_format) * dest_width;
   tmp = g_malloc (size);
-  func = get_fast_conversion_func (mipmap->dest_format, mipmap->src_format);
+  func = gdk_convert_get_fast_conversion_func (mipmap->dest_format, mipmap->src_format);
 
   for (y = g_atomic_int_add (&mipmap->rows_done, n), rows = 0;
        y < mipmap->src_height;
@@ -2606,9 +2606,9 @@ gdk_memory_mipmap_generic (gpointer data)
 
   g_free (tmp);
 
-  ADD_MARK (before,
-            "Mipmap generic (thread)", "size %lux%lu, lod %u, %lu rows",
-            mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
+  GDK_MEMORY_FORMAT_ADD_MARK (before,
+                              "Mipmap generic (thread)", "size %lux%lu, lod %u, %lu rows",
+                              mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
 }
 
 void
@@ -2623,7 +2623,7 @@ gdk_memory_mipmap (guchar          *dest,
                    guint            lod_level,
                    gboolean         linear)
 {
-  MipmapData mipmap = {
+  GdkMipmapData mipmap = {
     .dest = dest,
     .dest_stride = dest_stride,
     .dest_format = dest_format,
@@ -2651,4 +2651,3 @@ gdk_memory_mipmap (guchar          *dest,
       gdk_parallel_task_run (gdk_memory_mipmap_generic, &mipmap);
     }
 }
-
