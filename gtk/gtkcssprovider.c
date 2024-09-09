@@ -1418,18 +1418,25 @@ gtk_css_provider_load_from_path (GtkCssProvider  *css_provider,
  */
 void
 gtk_css_provider_load_from_resource (GtkCssProvider *css_provider,
-                                     const char     *resource_path)
+			             const char     *resource_path)
 {
-  GBytes *bytes;
+  GFile *file;
+  char *uri, *escaped;
 
   g_return_if_fail (GTK_IS_CSS_PROVIDER (css_provider));
   g_return_if_fail (resource_path != NULL);
 
-  bytes = g_resources_lookup_data (resource_path, G_RESOURCE_LOOKUP_FLAGS_NONE, NULL);
+  escaped = g_uri_escape_string (resource_path,
+				 G_URI_RESERVED_CHARS_ALLOWED_IN_PATH, FALSE);
+  uri = g_strconcat ("resource://", escaped, NULL);
+  g_free (escaped);
 
-  gtk_css_provider_load_from_bytes (css_provider, bytes);
+  file = g_file_new_for_uri (uri);
+  g_free (uri);
 
-  g_bytes_unref (bytes);
+  gtk_css_provider_load_from_file (css_provider, file);
+
+  g_object_unref (file);
 }
 
 char *
