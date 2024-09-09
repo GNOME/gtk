@@ -42,21 +42,21 @@ struct _GdkSeatPrivate
 };
 
 enum {
-  DEVICE_ADDED,
-  DEVICE_REMOVED,
-  TOOL_ADDED,
-  TOOL_REMOVED,
-  N_SIGNALS
+  GDK_SEAT_DEVICE_ADDED,
+  GDK_SEAT_DEVICE_REMOVED,
+  GDK_SEAT_TOOL_ADDED,
+  GDK_SEAT_TOOL_REMOVED,
+  GDK_SEAT_N_SIGNALS
 };
 
 enum {
-  PROP_0,
-  PROP_DISPLAY,
-  N_PROPS
+  GDK_SEAT_PROP_0,
+  GDK_SEAT_PROP_DISPLAY,
+  GDK_SEAT_N_PROPS
 };
 
-static guint signals[N_SIGNALS] = { 0 };
-static GParamSpec *props[N_PROPS] = { NULL };
+static guint gdk_seat_signals[GDK_SEAT_N_SIGNALS] = { 0 };
+static GParamSpec *gdk_seat_properties[GDK_SEAT_N_PROPS] = { NULL };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkSeat, gdk_seat, G_TYPE_OBJECT)
 
@@ -70,7 +70,7 @@ gdk_seat_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_SEAT_PROP_DISPLAY:
       priv->display = g_value_get_object (value);
       break;
     default:
@@ -89,7 +89,7 @@ gdk_seat_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_SEAT_PROP_DISPLAY:
       g_value_set_object (value, priv->display);
       break;
     default:
@@ -113,7 +113,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
    *
    * Emitted when a new input device is related to this seat.
    */
-  signals [DEVICE_ADDED] =
+  gdk_seat_signals [GDK_SEAT_DEVICE_ADDED] =
     g_signal_new (g_intern_static_string ("device-added"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -130,7 +130,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
    *
    * Emitted when an input device is removed (e.g. unplugged).
    */
-  signals [DEVICE_REMOVED] =
+  gdk_seat_signals [GDK_SEAT_DEVICE_REMOVED] =
     g_signal_new (g_intern_static_string ("device-removed"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -153,7 +153,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
    *
    * A same tool may be used by several devices.
    */
-  signals [TOOL_ADDED] =
+  gdk_seat_signals [GDK_SEAT_TOOL_ADDED] =
     g_signal_new (g_intern_static_string ("tool-added"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -169,7 +169,7 @@ gdk_seat_class_init (GdkSeatClass *klass)
    *
    * Emitted whenever a tool is no longer known to this @seat.
    */
-  signals [TOOL_REMOVED] =
+  gdk_seat_signals [GDK_SEAT_TOOL_REMOVED] =
     g_signal_new (g_intern_static_string ("tool-removed"),
                   G_TYPE_FROM_CLASS (klass),
                   G_SIGNAL_RUN_LAST,
@@ -183,14 +183,14 @@ gdk_seat_class_init (GdkSeatClass *klass)
    *
    * `GdkDisplay` of this seat.
    */
-  props[PROP_DISPLAY] =
+  gdk_seat_properties[GDK_SEAT_PROP_DISPLAY] =
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE |
                          G_PARAM_CONSTRUCT_ONLY |
                          G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (object_class, N_PROPS, props);
+  g_object_class_install_properties (object_class, GDK_SEAT_N_PROPS, gdk_seat_properties);
 }
 
 static void
@@ -378,7 +378,7 @@ gdk_seat_device_added (GdkSeat   *seat,
                        GdkDevice *device)
 {
   gdk_device_set_seat (device, seat);
-  g_signal_emit (seat, signals[DEVICE_ADDED], 0, device);
+  g_signal_emit (seat, gdk_seat_signals[GDK_SEAT_DEVICE_ADDED], 0, device);
 }
 
 void
@@ -386,7 +386,7 @@ gdk_seat_device_removed (GdkSeat   *seat,
                          GdkDevice *device)
 {
   gdk_device_set_seat (device, NULL);
-  g_signal_emit (seat, signals[DEVICE_REMOVED], 0, device);
+  g_signal_emit (seat, gdk_seat_signals[GDK_SEAT_DEVICE_REMOVED], 0, device);
 }
 
 /**
@@ -412,14 +412,14 @@ void
 gdk_seat_tool_added (GdkSeat       *seat,
                      GdkDeviceTool *tool)
 {
-  g_signal_emit (seat, signals[TOOL_ADDED], 0, tool);
+  g_signal_emit (seat, gdk_seat_signals[GDK_SEAT_TOOL_ADDED], 0, tool);
 }
 
 void
 gdk_seat_tool_removed (GdkSeat       *seat,
                        GdkDeviceTool *tool)
 {
-  g_signal_emit (seat, signals[TOOL_REMOVED], 0, tool);
+  g_signal_emit (seat, gdk_seat_signals[GDK_SEAT_TOOL_REMOVED], 0, tool);
 }
 
 GdkDeviceTool *
