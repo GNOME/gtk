@@ -67,21 +67,21 @@ struct _GdkClipboardPrivate
 };
 
 enum {
-  PROP_0,
-  PROP_DISPLAY,
-  PROP_FORMATS,
-  PROP_LOCAL,
-  PROP_CONTENT,
-  N_PROPERTIES
+  GDK_CLIPBOARD_PROP_0,
+  GDK_CLIPBOARD_PROP_DISPLAY,
+  GDK_CLIPBOARD_PROP_FORMATS,
+  GDK_CLIPBOARD_PROP_LOCAL,
+  GDK_CLIPBOARD_PROP_CONTENT,
+  GDK_CLIPBOARD_N_PROPERTIES
 };
 
 enum {
-  CHANGED,
-  N_SIGNALS
+  GDK_CLIPBOARD_CHANGED,
+  GDK_CLIPBOARD_N_SIGNALS
 };
 
-static GParamSpec *properties[N_PROPERTIES] = { NULL, };
-static guint signals[N_SIGNALS] = { 0 };
+static GParamSpec *gdk_clipboard_properties[GDK_CLIPBOARD_N_PROPERTIES] = { NULL, };
+static guint gdk_clipboard_signals[GDK_CLIPBOARD_N_SIGNALS] = { 0 };
 
 G_DEFINE_TYPE_WITH_PRIVATE (GdkClipboard, gdk_clipboard, G_TYPE_OBJECT)
 
@@ -96,7 +96,7 @@ gdk_clipboard_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_CLIPBOARD_PROP_DISPLAY:
       priv->display = g_value_get_object (value);
       g_assert (priv->display != NULL);
       break;
@@ -118,19 +118,19 @@ gdk_clipboard_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_DISPLAY:
+    case GDK_CLIPBOARD_PROP_DISPLAY:
       g_value_set_object (value, priv->display);
       break;
 
-    case PROP_FORMATS:
+    case GDK_CLIPBOARD_PROP_FORMATS:
       g_value_set_boxed (value, priv->formats);
       break;
 
-    case PROP_CONTENT:
+    case GDK_CLIPBOARD_PROP_CONTENT:
       g_value_set_object (value, priv->content);
       break;
 
-    case PROP_LOCAL:
+    case GDK_CLIPBOARD_PROP_LOCAL:
       g_value_set_boolean (value, priv->local);
       break;
 
@@ -169,11 +169,11 @@ gdk_clipboard_real_claim (GdkClipboard       *clipboard,
   gdk_content_formats_ref (formats);
   formats = gdk_content_formats_union_deserialize_gtypes (formats);
   priv->formats = formats;
-  g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_FORMATS]);
+  g_object_notify_by_pspec (G_OBJECT (clipboard), gdk_clipboard_properties[GDK_CLIPBOARD_PROP_FORMATS]);
   if (priv->local != local)
     {
       priv->local = local;
-      g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_LOCAL]);
+      g_object_notify_by_pspec (G_OBJECT (clipboard), gdk_clipboard_properties[GDK_CLIPBOARD_PROP_LOCAL]);
     }
 
   if (priv->content != content)
@@ -202,12 +202,12 @@ gdk_clipboard_real_claim (GdkClipboard       *clipboard,
                             clipboard);
         }
 
-      g_object_notify_by_pspec (G_OBJECT (clipboard), properties[PROP_CONTENT]);
+      g_object_notify_by_pspec (G_OBJECT (clipboard), gdk_clipboard_properties[GDK_CLIPBOARD_PROP_CONTENT]);
     }
 
   g_object_thaw_notify (G_OBJECT (clipboard));
 
-  g_signal_emit (clipboard, signals[CHANGED], 0);
+  g_signal_emit (clipboard, gdk_clipboard_signals[GDK_CLIPBOARD_CHANGED], 0);
 
   return TRUE;
 }
@@ -357,7 +357,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
    *
    * The `GdkDisplay` that the clipboard belongs to.
    */
-  properties[PROP_DISPLAY] =
+  gdk_clipboard_properties[GDK_CLIPBOARD_PROP_DISPLAY] =
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE |
@@ -370,7 +370,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
    *
    * The possible formats that the clipboard can provide its data in.
    */
-  properties[PROP_FORMATS] =
+  gdk_clipboard_properties[GDK_CLIPBOARD_PROP_FORMATS] =
     g_param_spec_boxed ("formats", NULL, NULL,
                         GDK_TYPE_CONTENT_FORMATS,
                         G_PARAM_READABLE |
@@ -382,7 +382,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
    *
    * %TRUE if the contents of the clipboard are owned by this process.
    */
-  properties[PROP_LOCAL] =
+  gdk_clipboard_properties[GDK_CLIPBOARD_PROP_LOCAL] =
     g_param_spec_boolean ("local", NULL, NULL,
                           TRUE,
                           G_PARAM_READABLE |
@@ -395,7 +395,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
    * The `GdkContentProvider` or %NULL if the clipboard is empty or contents are
    * provided otherwise.
    */
-  properties[PROP_CONTENT] =
+  gdk_clipboard_properties[GDK_CLIPBOARD_PROP_CONTENT] =
     g_param_spec_object ("content", NULL, NULL,
                          GDK_TYPE_CONTENT_PROVIDER,
                          G_PARAM_READABLE |
@@ -408,7 +408,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
    *
    * Emitted when the clipboard changes ownership.
    */
-  signals[CHANGED] =
+  gdk_clipboard_signals[GDK_CLIPBOARD_CHANGED] =
     g_signal_new (I_("changed"),
                   G_TYPE_FROM_CLASS (class),
                   G_SIGNAL_RUN_LAST,
@@ -416,7 +416,7 @@ gdk_clipboard_class_init (GdkClipboardClass *class)
                   NULL, NULL, NULL,
                   G_TYPE_NONE, 0);
 
-  g_object_class_install_properties (object_class, N_PROPERTIES, properties);
+  g_object_class_install_properties (object_class, GDK_CLIPBOARD_N_PROPERTIES, gdk_clipboard_properties);
 }
 
 static void
@@ -743,7 +743,7 @@ gdk_clipboard_read_value_got_stream (GObject      *source,
 }
 
 static void
-free_value (gpointer value)
+gdk_clipboard_free_value (gpointer value)
 {
   g_value_unset (value);
   g_free (value);
@@ -769,7 +769,7 @@ gdk_clipboard_read_value_internal (GdkClipboard        *clipboard,
   g_task_set_source_tag (task, source_tag);
   value = g_new0 (GValue, 1);
   g_value_init (value, type);
-  g_task_set_task_data (task, value, free_value);
+  g_task_set_task_data (task, value, gdk_clipboard_free_value);
 
   if (priv->local)
     {
