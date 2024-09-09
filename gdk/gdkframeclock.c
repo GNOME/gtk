@@ -65,17 +65,17 @@
  */
 
 enum {
-  FLUSH_EVENTS,
-  BEFORE_PAINT,
-  UPDATE,
-  LAYOUT,
-  PAINT,
-  AFTER_PAINT,
-  RESUME_EVENTS,
-  LAST_SIGNAL
+  GDK_FRAME_CLOCK_FLUSH_EVENTS,
+  GDK_FRAME_CLOCK_BEFORE_PAINT,
+  GDK_FRAME_CLOCK_UPDATE,
+  GDK_FRAME_CLOCK_LAYOUT,
+  GDK_FRAME_CLOCK_PAINT,
+  GDK_FRAME_CLOCK_AFTER_PAINT,
+  GDK_FRAME_CLOCK_RESUME_EVENTS,
+  GDK_FRAME_CLOCK_LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL];
+static guint gdk_frame_clock_signals[GDK_FRAME_CLOCK_LAST_SIGNAL];
 
 static guint fps_counter;
 
@@ -139,7 +139,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    *
    * Applications should not handle this signal.
    */
-  signals[FLUSH_EVENTS] =
+  gdk_frame_clock_signals[GDK_FRAME_CLOCK_FLUSH_EVENTS] =
     g_signal_new (g_intern_static_string ("flush-events"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
@@ -155,7 +155,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    *
    * Applications should generally not handle this signal.
    */
-  signals[BEFORE_PAINT] =
+  gdk_frame_clock_signals[GDK_FRAME_CLOCK_BEFORE_PAINT] =
     g_signal_new (g_intern_static_string ("before-paint"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
@@ -175,7 +175,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * [gtk_widget_add_tick_callback()](../gtk4/method.Widget.add_tick_callback.html)
    * as a more convenient interface.
    */
-  signals[UPDATE] =
+  gdk_frame_clock_signals[GDK_FRAME_CLOCK_UPDATE] =
     g_signal_new (g_intern_static_string ("update"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
@@ -193,7 +193,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * Any work to update sizes and positions of application elements
    * should be performed. GTK normally handles this internally.
    */
-  signals[LAYOUT] =
+  gdk_frame_clock_signals[GDK_FRAME_CLOCK_LAYOUT] =
     g_signal_new (g_intern_static_string ("layout"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
@@ -213,7 +213,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * [GtkWidget::snapshot](../gtk4/signal.Widget.snapshot.html) signals
    * by GTK.
    */
-  signals[PAINT] =
+  gdk_frame_clock_signals[GDK_FRAME_CLOCK_PAINT] =
     g_signal_new (g_intern_static_string ("paint"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
@@ -229,7 +229,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    *
    * Applications should generally not handle this signal.
    */
-  signals[AFTER_PAINT] =
+  gdk_frame_clock_signals[GDK_FRAME_CLOCK_AFTER_PAINT] =
     g_signal_new (g_intern_static_string ("after-paint"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
@@ -246,7 +246,7 @@ gdk_frame_clock_class_init (GdkFrameClockClass *klass)
    * This signal is handled internally by GTK to resume normal
    * event processing. Applications should not handle this signal.
    */
-  signals[RESUME_EVENTS] =
+  gdk_frame_clock_signals[GDK_FRAME_CLOCK_RESUME_EVENTS] =
     g_signal_new (g_intern_static_string ("resume-events"),
                   GDK_TYPE_FRAME_CLOCK,
                   G_SIGNAL_RUN_LAST,
@@ -693,13 +693,13 @@ gdk_frame_clock_get_refresh_info (GdkFrameClock *frame_clock,
 void
 _gdk_frame_clock_emit_flush_events (GdkFrameClock *frame_clock)
 {
-  g_signal_emit (frame_clock, signals[FLUSH_EVENTS], 0);
+  g_signal_emit (frame_clock, gdk_frame_clock_signals[GDK_FRAME_CLOCK_FLUSH_EVENTS], 0);
 }
 
 void
 _gdk_frame_clock_emit_before_paint (GdkFrameClock *frame_clock)
 {
-  g_signal_emit (frame_clock, signals[BEFORE_PAINT], 0);
+  g_signal_emit (frame_clock, gdk_frame_clock_signals[GDK_FRAME_CLOCK_BEFORE_PAINT], 0);
 }
 
 void
@@ -709,7 +709,7 @@ _gdk_frame_clock_emit_update (GdkFrameClock *frame_clock)
 
   before = GDK_PROFILER_CURRENT_TIME;
 
-  g_signal_emit (frame_clock, signals[UPDATE], 0);
+  g_signal_emit (frame_clock, gdk_frame_clock_signals[GDK_FRAME_CLOCK_UPDATE], 0);
 
   gdk_profiler_end_mark (before, "Frameclock update", NULL);
 }
@@ -721,7 +721,7 @@ _gdk_frame_clock_emit_layout (GdkFrameClock *frame_clock)
 
   before = GDK_PROFILER_CURRENT_TIME;
 
-  g_signal_emit (frame_clock, signals[LAYOUT], 0);
+  g_signal_emit (frame_clock, gdk_frame_clock_signals[GDK_FRAME_CLOCK_LAYOUT], 0);
 
   gdk_profiler_end_mark (before, "Frameclock layout", NULL);
 }
@@ -733,7 +733,7 @@ _gdk_frame_clock_emit_paint (GdkFrameClock *frame_clock)
 
   before = GDK_PROFILER_CURRENT_TIME;
 
-  g_signal_emit (frame_clock, signals[PAINT], 0);
+  g_signal_emit (frame_clock, gdk_frame_clock_signals[GDK_FRAME_CLOCK_PAINT], 0);
 
   gdk_profiler_end_mark (before, "Frameclock paint", NULL);
 }
@@ -741,13 +741,13 @@ _gdk_frame_clock_emit_paint (GdkFrameClock *frame_clock)
 void
 _gdk_frame_clock_emit_after_paint (GdkFrameClock *frame_clock)
 {
-  g_signal_emit (frame_clock, signals[AFTER_PAINT], 0);
+  g_signal_emit (frame_clock, gdk_frame_clock_signals[GDK_FRAME_CLOCK_AFTER_PAINT], 0);
 }
 
 void
 _gdk_frame_clock_emit_resume_events (GdkFrameClock *frame_clock)
 {
-  g_signal_emit (frame_clock, signals[RESUME_EVENTS], 0);
+  g_signal_emit (frame_clock, gdk_frame_clock_signals[GDK_FRAME_CLOCK_RESUME_EVENTS], 0);
 }
 
 static gint64
