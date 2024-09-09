@@ -67,22 +67,22 @@ struct _GdkMemoryTextureBuilderClass
 
 enum
 {
-  PROP_0,
-  PROP_BYTES,
-  PROP_COLOR_STATE,
-  PROP_FORMAT,
-  PROP_HEIGHT,
-  PROP_STRIDE,
-  PROP_UPDATE_REGION,
-  PROP_UPDATE_TEXTURE,
-  PROP_WIDTH,
+  GDK_MEMORY_TEXTURE_BUILDER_PROP_0,
+  GDK_MEMORY_TEXTURE_BUILDER_PROP_BYTES,
+  GDK_MEMORY_TEXTURE_BUILDER_PROP_COLOR_STATE,
+  GDK_MEMORY_TEXTURE_BUILDER_PROP_FORMAT,
+  GDK_MEMORY_TEXTURE_BUILDER_PROP_HEIGHT,
+  GDK_MEMORY_TEXTURE_BUILDER_PROP_STRIDE,
+  GDK_MEMORY_TEXTURE_BUILDER_PROP_UPDATE_REGION,
+  GDK_MEMORY_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE,
+  GDK_MEMORY_TEXTURE_BUILDER_PROP_WIDTH,
 
-  N_PROPS
+  GDK_MEMORY_TEXTURE_BUILDER_N_PROPS
 };
 
 G_DEFINE_TYPE (GdkMemoryTextureBuilder, gdk_memory_texture_builder, G_TYPE_OBJECT)
 
-static GParamSpec *properties[N_PROPS] = { NULL, };
+static GParamSpec *gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_N_PROPS] = { NULL, };
 
 static void
 gdk_memory_texture_builder_dispose (GObject *object)
@@ -108,35 +108,35 @@ gdk_memory_texture_builder_get_property (GObject    *object,
 
   switch (property_id)
     {
-    case PROP_BYTES:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_BYTES:
       g_value_set_boxed (value, self->bytes);
       break;
 
-    case PROP_COLOR_STATE:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_COLOR_STATE:
       g_value_set_boxed (value, self->color_state);
       break;
 
-    case PROP_FORMAT:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_FORMAT:
       g_value_set_enum (value, self->format);
       break;
 
-    case PROP_HEIGHT:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_HEIGHT:
       g_value_set_int (value, self->height);
       break;
 
-    case PROP_STRIDE:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_STRIDE:
       g_value_set_uint64 (value, self->stride);
       break;
 
-    case PROP_UPDATE_REGION:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_UPDATE_REGION:
       g_value_set_boxed (value, self->update_region);
       break;
 
-    case PROP_UPDATE_TEXTURE:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE:
       g_value_set_object (value, self->update_texture);
       break;
 
-    case PROP_WIDTH:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_WIDTH:
       g_value_set_int (value, self->width);
       break;
 
@@ -156,35 +156,35 @@ gdk_memory_texture_builder_set_property (GObject      *object,
 
   switch (property_id)
     {
-    case PROP_BYTES:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_BYTES:
       gdk_memory_texture_builder_set_bytes (self, g_value_get_boxed (value));
       break;
 
-    case PROP_COLOR_STATE:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_COLOR_STATE:
       gdk_memory_texture_builder_set_color_state (self, g_value_get_boxed (value));
       break;
 
-    case PROP_FORMAT:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_FORMAT:
       gdk_memory_texture_builder_set_format (self, g_value_get_enum (value));
       break;
 
-    case PROP_HEIGHT:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_HEIGHT:
       gdk_memory_texture_builder_set_height (self, g_value_get_int (value));
       break;
 
-    case PROP_STRIDE:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_STRIDE:
       gdk_memory_texture_builder_set_stride (self, g_value_get_uint64 (value));
       break;
 
-    case PROP_UPDATE_REGION:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_UPDATE_REGION:
       gdk_memory_texture_builder_set_update_region (self, g_value_get_boxed (value));
       break;
 
-    case PROP_UPDATE_TEXTURE:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE:
       gdk_memory_texture_builder_set_update_texture (self, g_value_get_object (value));
       break;
 
-    case PROP_WIDTH:
+    case GDK_MEMORY_TEXTURE_BUILDER_PROP_WIDTH:
       gdk_memory_texture_builder_set_width (self, g_value_get_int (value));
       break;
 
@@ -210,7 +210,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_BYTES] =
+  gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_BYTES] =
     g_param_spec_boxed ("bytes", NULL, NULL,
                         G_TYPE_BYTES,
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -222,7 +222,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_COLOR_STATE] =
+  gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_COLOR_STATE] =
     g_param_spec_boxed ("color-state", NULL, NULL,
                         GDK_TYPE_COLOR_STATE,
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -234,7 +234,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_FORMAT] =
+  gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_FORMAT] =
     g_param_spec_enum ("format", NULL, NULL,
                        GDK_TYPE_MEMORY_FORMAT,
                        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
@@ -247,7 +247,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_HEIGHT] =
+  gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_HEIGHT] =
     g_param_spec_int ("height", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -262,7 +262,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_STRIDE] =
+  gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_STRIDE] =
     g_param_spec_uint64 ("stride", NULL, NULL,
                          0, G_MAXUINT64, 0,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -274,7 +274,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_UPDATE_REGION] =
+  gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_UPDATE_REGION] =
     g_param_spec_boxed ("update-region", NULL, NULL,
                         CAIRO_GOBJECT_TYPE_REGION,
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -286,7 +286,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_UPDATE_TEXTURE] =
+  gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE] =
     g_param_spec_object ("update-texture", NULL, NULL,
                          GDK_TYPE_TEXTURE,
                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
@@ -298,12 +298,12 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
    *
    * Since: 4.16
    */
-  properties[PROP_WIDTH] =
+  gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_WIDTH] =
     g_param_spec_int ("width", NULL, NULL,
                       G_MININT, G_MAXINT, 0,
                       G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
-  g_object_class_install_properties (gobject_class, N_PROPS, properties);
+  g_object_class_install_properties (gobject_class, GDK_MEMORY_TEXTURE_BUILDER_N_PROPS, gdk_memory_texture_builder_properties);
 }
 
 static void
@@ -373,7 +373,7 @@ gdk_memory_texture_builder_set_bytes (GdkMemoryTextureBuilder *self,
   if (bytes)
     g_bytes_ref (bytes);
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_BYTES]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_BYTES]);
 }
 
 /**
@@ -421,7 +421,7 @@ gdk_memory_texture_builder_set_color_state (GdkMemoryTextureBuilder *self,
   if (color_state)
     gdk_color_state_ref (color_state);
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_COLOR_STATE]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_COLOR_STATE]);
 }
 
 /**
@@ -465,7 +465,7 @@ gdk_memory_texture_builder_set_height (GdkMemoryTextureBuilder *self,
 
   self->height = height;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEIGHT]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_HEIGHT]);
 }
 
 /**
@@ -509,7 +509,7 @@ gdk_memory_texture_builder_set_width (GdkMemoryTextureBuilder *self,
 
   self->width = width;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WIDTH]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_WIDTH]);
 }
 
 /**
@@ -552,7 +552,7 @@ gdk_memory_texture_builder_set_stride (GdkMemoryTextureBuilder *self,
 
   self->stride = stride;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STRIDE]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_STRIDE]);
 }
 
 /**
@@ -595,7 +595,7 @@ gdk_memory_texture_builder_set_format (GdkMemoryTextureBuilder *self,
 
   self->format = format;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FORMAT]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_FORMAT]);
 }
 
 /**
@@ -638,7 +638,7 @@ gdk_memory_texture_builder_set_update_texture (GdkMemoryTextureBuilder *self,
   if (!g_set_object (&self->update_texture, texture))
     return;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_UPDATE_TEXTURE]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_UPDATE_TEXTURE]);
 }
 
 /**
@@ -693,7 +693,7 @@ gdk_memory_texture_builder_set_update_region (GdkMemoryTextureBuilder *self,
   if (region)
     self->update_region = cairo_region_reference (region);
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_UPDATE_REGION]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_memory_texture_builder_properties[GDK_MEMORY_TEXTURE_BUILDER_PROP_UPDATE_REGION]);
 }
 
 /**
