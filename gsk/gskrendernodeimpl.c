@@ -1076,8 +1076,6 @@ gsk_conic_gradient_node_finalize (GskRenderNode *node)
   parent_class->finalize (node);
 }
 
-#define DEG_TO_RAD(x)          ((x) * (G_PI / 180.f))
-
 static void
 _cairo_mesh_pattern_set_corner_rgba (cairo_pattern_t *pattern,
                                      guint            corner_num,
@@ -1094,12 +1092,8 @@ project (double  angle,
 {
   double x, y;
 
-#ifdef HAVE_SINCOS
-  sincos (angle, &y, &x);
-#else
-  x = cos (angle);
-  y = sin (angle);
-#endif
+  gsk_sincos (angle, &y, &x);
+
   *x_out = radius * x;
   *y_out = radius * y;
 }

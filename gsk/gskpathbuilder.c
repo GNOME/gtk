@@ -27,6 +27,7 @@
 #include "gskcurveprivate.h"
 #include "gskpathpointprivate.h"
 #include "gskcontourprivate.h"
+#include "gskprivate.h"
 
 /**
  * GskPathBuilder:
@@ -1270,19 +1271,6 @@ arc_segment (GskPathBuilder *self,
                              cy + sin_phi * x3 + cos_phi * y3);
 }
 
-static inline void
-_sincos (double angle,
-         double *y,
-         double *x)
-{
-#ifdef HAVE_SINCOS
-  sincos (angle, y, x);
-#else
-  *x = cos (angle);
-  *y = sin (angle);
-#endif
-}
-
 /**
  * gsk_path_builder_svg_arc_to:
  * @self: a `GskPathBuilder`
@@ -1353,7 +1341,7 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
   y2 = y;
 
   phi = x_axis_rotation * M_PI / 180.0;
-  _sincos (phi, &sin_phi, &cos_phi);
+  gsk_sincos (phi, &sin_phi, &cos_phi);
 
   rx = fabs (rx);
   ry = fabs (ry);
@@ -1415,7 +1403,7 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
 
   n_segs = ceil (fabs (delta_theta / (M_PI_2 + 0.001)));
   d_theta = delta_theta / n_segs;
-  _sincos (theta1, &sin_th1, &cos_th1);
+  gsk_sincos (theta1, &sin_th1, &cos_th1);
 
   th_half = d_theta / 2;
   t = (8.0 / 3.0) * sin (th_half / 2) * sin (th_half / 2) / sin (th_half);
@@ -1426,7 +1414,7 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
       theta1 = theta + d_theta;
       sin_th0 = sin_th1;
       cos_th0 = cos_th1;
-      _sincos (theta1, &sin_th1, &cos_th1);
+      gsk_sincos (theta1, &sin_th1, &cos_th1);
       arc_segment (self,
                    cx, cy, rx, ry,
                    sin_phi, cos_phi,
@@ -1493,9 +1481,6 @@ angle_between (const graphene_vec2_t *t1,
 
   return angle;
 }
-
-#define RAD_TO_DEG(r) ((r)*180.f/M_PI)
-#define DEG_TO_RAD(d) ((d)*M_PI/180.f)
 
 static float
 angle_between_points (const graphene_point_t *c,

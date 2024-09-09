@@ -91,9 +91,6 @@ struct _GskCurveClass
 
 /* {{{ Utilities */
 
-#define RAD_TO_DEG(r) ((r)*180.f/M_PI)
-#define DEG_TO_RAD(d) ((d)*M_PI/180.f)
-
 static void
 get_tangent (const graphene_point_t *p0,
              const graphene_point_t *p1,
@@ -2481,19 +2478,6 @@ gsk_curve_at_length (const GskCurve *curve,
   return get_class (curve->op)->get_at_length (curve, length, epsilon);
 }
 
-static inline void
-_sincosf (float  angle,
-          float *out_s,
-          float *out_c)
-{
-#ifdef HAVE_SINCOSF
-      sincosf (angle, out_s, out_c);
-#else
-      *out_s = sinf (angle);
-      *out_c = cosf (angle);
-#endif
-}
-
 static void
 align_points (const graphene_point_t *p,
               const graphene_point_t *a,
@@ -2507,7 +2491,7 @@ align_points (const graphene_point_t *p,
 
   get_tangent (a, b, &n1);
   angle = - atan2f (graphene_vec2_get_y (&n1), graphene_vec2_get_x (&n1));
-  _sincosf (angle, &s, &c);
+  gsk_sincosf (angle, &s, &c);
 
   for (int i = 0; i < n; i++)
     {

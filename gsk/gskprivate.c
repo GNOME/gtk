@@ -142,3 +142,70 @@ gsk_font_get_hint_style (PangoFont *font)
 
   return style;
 }
+
+void
+gsk_string_append_double (GString *string,
+                          double   d)
+{
+  char buf[G_ASCII_DTOSTR_BUF_SIZE];
+
+  g_ascii_formatd (buf, G_ASCII_DTOSTR_BUF_SIZE, "%g", d);
+  g_string_append (string, buf);
+}
+
+void
+gsk_sincos (double angle,
+            double *out_s,
+            double *out_c)
+{
+#ifdef HAVE_SINCOS
+  sincos (angle, out_s, out_c);
+#else
+  *out_s = sin (angle);
+  *out_c = cos (angle);
+#endif
+}
+
+void
+gsk_sincosf (float angle,
+             float *out_s,
+             float *out_c)
+{
+#ifdef HAVE_SINCOSF
+  sincosf (angle, out_s, out_c);
+#else
+  *out_s = sinf (angle);
+  *out_c = cosf (angle);
+#endif
+}
+
+void
+gsk_sincosf_deg (float  deg,
+                 float *out_s,
+                 float *out_c)
+{
+  if (deg == 90.0)
+    {
+      *out_c = 0.0;
+      *out_s = 1.0;
+    }
+  else if (deg == 180.0)
+    {
+      *out_c = -1.0;
+      *out_s = 0.0;
+    }
+  else if (deg == 270.0)
+    {
+      *out_c = 0.0;
+      *out_s = -1.0;
+    }
+  else if (deg == 0.0)
+    {
+      *out_c = 1.0;
+      *out_s = 0.0;
+    }
+  else
+    {
+      gsk_sincosf (DEG_TO_RAD (deg), out_s, out_c);
+    }
+}

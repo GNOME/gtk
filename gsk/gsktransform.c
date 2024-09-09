@@ -426,16 +426,6 @@ gsk_matrix_transform_apply_translate (GskTransform *transform,
 }
 
 static void
-string_append_double (GString *string,
-                      double   d)
-{
-  char buf[G_ASCII_DTOSTR_BUF_SIZE];
-
-  g_ascii_formatd (buf, G_ASCII_DTOSTR_BUF_SIZE, "%g", d);
-  g_string_append (string, buf);
-}
-
-static void
 gsk_matrix_transform_print (GskTransform *transform,
                             GString      *string)
 {
@@ -447,17 +437,17 @@ gsk_matrix_transform_print (GskTransform *transform,
     {
       g_string_append (string, "matrix(");
       graphene_matrix_to_float (&self->matrix, f);
-      string_append_double (string, f[0]);
+      gsk_string_append_double (string, f[0]);
       g_string_append (string, ", ");
-      string_append_double (string, f[1]);
+      gsk_string_append_double (string, f[1]);
       g_string_append (string, ", ");
-      string_append_double (string, f[4]);
+      gsk_string_append_double (string, f[4]);
       g_string_append (string, ", ");
-      string_append_double (string, f[5]);
+      gsk_string_append_double (string, f[5]);
       g_string_append (string, ", ");
-      string_append_double (string, f[12]);
+      gsk_string_append_double (string, f[12]);
       g_string_append (string, ", ");
-      string_append_double (string, f[13]);
+      gsk_string_append_double (string, f[13]);
       g_string_append (string, ")");
     }
   else
@@ -468,7 +458,7 @@ gsk_matrix_transform_print (GskTransform *transform,
         {
           if (i > 0)
             g_string_append (string, ", ");
-          string_append_double (string, f[i]);
+          gsk_string_append_double (string, f[i]);
         }
       g_string_append (string, ")");
     }
@@ -697,13 +687,13 @@ gsk_translate_transform_print (GskTransform *transform,
   else
     g_string_append (string, "translate3d(");
 
-  string_append_double (string, self->point.x);
+  gsk_string_append_double (string, self->point.x);
   g_string_append (string, ", ");
-  string_append_double (string, self->point.y);
+  gsk_string_append_double (string, self->point.y);
   if (self->point.z != 0)
     {
       g_string_append (string, ", ");
-      string_append_double (string, self->point.z);
+      gsk_string_append_double (string, self->point.z);
     }
   g_string_append (string, ")");
 }
@@ -806,45 +796,6 @@ gsk_rotate_transform_finalize (GskTransform *self)
 {
 }
 
-static inline void
-_sincos (float  deg,
-         float *out_s,
-         float *out_c)
-{
-  if (deg == 90.0)
-    {
-      *out_c = 0.0;
-      *out_s = 1.0;
-    }
-  else if (deg == 180.0)
-    {
-      *out_c = -1.0;
-      *out_s = 0.0;
-    }
-  else if (deg == 270.0)
-    {
-      *out_c = 0.0;
-      *out_s = -1.0;
-    }
-  else if (deg == 0.0)
-    {
-      *out_c = 1.0;
-      *out_s = 0.0;
-    }
-  else
-    {
-      float angle = deg * M_PI / 180.0;
-
-#ifdef HAVE_SINCOSF
-      sincosf (angle, out_s, out_c);
-#else
-      *out_s = sinf (angle);
-      *out_c = cosf (angle);
-#endif
-
-    }
-}
-
 static void
 gsk_rotate_transform_to_matrix (GskTransform      *transform,
                                 graphene_matrix_t *out_matrix)
@@ -852,7 +803,7 @@ gsk_rotate_transform_to_matrix (GskTransform      *transform,
   GskRotateTransform *self = (GskRotateTransform *) transform;
   float c, s;
 
-  _sincos (self->angle, &s, &c);
+  gsk_sincosf_deg (self->angle, &s, &c);
 
   graphene_matrix_init_from_2d (out_matrix,
                                 c, s,
@@ -872,7 +823,7 @@ gsk_rotate_transform_apply_2d (GskTransform *transform,
   GskRotateTransform *self = (GskRotateTransform *) transform;
   float s, c, xx, xy, yx, yy;
 
-  _sincos (self->angle, &s, &c);
+  gsk_sincosf_deg (self->angle, &s, &c);
 
   xx =  c * *out_xx + s * *out_xy;
   yx =  c * *out_yx + s * *out_yy;
@@ -937,7 +888,7 @@ gsk_rotate_transform_print (GskTransform *transform,
   GskRotateTransform *self = (GskRotateTransform *) transform;
 
   g_string_append (string, "rotate(");
-  string_append_double (string, self->angle);
+  gsk_string_append_double (string, self->angle);
   g_string_append (string, ")");
 }
 
@@ -1092,10 +1043,10 @@ gsk_rotate3d_transform_print (GskTransform *transform,
   graphene_vec3_to_float (&self->axis, f);
   for (i = 0; i < 3; i++)
     {
-      string_append_double (string, f[i]);
+      gsk_string_append_double (string, f[i]);
       g_string_append (string, ", ");
     }
-  string_append_double (string, self->angle);
+  gsk_string_append_double (string, self->angle);
   g_string_append (string, ")");
 }
 
@@ -1171,9 +1122,6 @@ gsk_skew_transform_finalize (GskTransform *self)
 {
 }
 
-#define DEG_TO_RAD(x) ((x) / 180.f * G_PI)
-#define RAD_TO_DEG(x) ((x) * 180.f / G_PI)
-
 static void
 gsk_skew_transform_to_matrix (GskTransform      *transform,
                               graphene_matrix_t *out_matrix)
@@ -1229,21 +1177,21 @@ gsk_skew_transform_print (GskTransform *transform,
   if (self->skew_y == 0)
     {
       g_string_append (string, "skewX(");
-      string_append_double (string, self->skew_x);
+      gsk_string_append_double (string, self->skew_x);
       g_string_append (string, ")");
     }
   else if (self->skew_x == 0)
     {
       g_string_append (string, "skewY(");
-      string_append_double (string, self->skew_y);
+      gsk_string_append_double (string, self->skew_y);
       g_string_append (string, ")");
     }
   else
     {
       g_string_append (string, "skew(");
-      string_append_double (string, self->skew_x);
+      gsk_string_append_double (string, self->skew_x);
       g_string_append (string, ", ");
-      string_append_double (string, self->skew_y);
+      gsk_string_append_double (string, self->skew_y);
       g_string_append (string, ")");
     }
 }
@@ -1470,22 +1418,22 @@ gsk_scale_transform_print (GskTransform *transform,
   if (self->factor_z == 1.0)
     {
       g_string_append (string, "scale(");
-      string_append_double (string, self->factor_x);
+      gsk_string_append_double (string, self->factor_x);
       if (self->factor_x != self->factor_y)
         {
           g_string_append (string, ", ");
-          string_append_double (string, self->factor_y);
+          gsk_string_append_double (string, self->factor_y);
         }
       g_string_append (string, ")");
     }
   else
     {
       g_string_append (string, "scale3d(");
-      string_append_double (string, self->factor_x);
+      gsk_string_append_double (string, self->factor_x);
       g_string_append (string, ", ");
-      string_append_double (string, self->factor_y);
+      gsk_string_append_double (string, self->factor_y);
       g_string_append (string, ", ");
-      string_append_double (string, self->factor_z);
+      gsk_string_append_double (string, self->factor_z);
       g_string_append (string, ")");
     }
 }
@@ -1650,7 +1598,7 @@ gsk_perspective_transform_print (GskTransform *transform,
   GskPerspectiveTransform *self = (GskPerspectiveTransform *) transform;
 
   g_string_append (string, "perspective(");
-  string_append_double (string, self->depth);
+  gsk_string_append_double (string, self->depth);
   g_string_append (string, ")");
 }
 

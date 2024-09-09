@@ -503,7 +503,7 @@ parse_double (GtkCssParser *parser,
 
 static gboolean
 parse_positive_double (GtkCssParser *parser,
-                       Context      *context,
+                     Context      *context,
                        gpointer      out_double)
 {
   if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNED_NUMBER)
@@ -3541,27 +3541,16 @@ end_node (Printer *self)
 }
 
 static void
-string_append_double (GString *string,
-                      double   d)
-{
-  char buf[G_ASCII_DTOSTR_BUF_SIZE];
-
-  g_ascii_formatd (buf, G_ASCII_DTOSTR_BUF_SIZE, "%g", d);
-  g_string_append (string, buf);
-}
-
-
-static void
 append_rect (GString               *str,
              const graphene_rect_t *r)
 {
-  string_append_double (str, r->origin.x);
+  gsk_string_append_double (str, r->origin.x);
   g_string_append_c (str, ' ');
-  string_append_double (str, r->origin.y);
+  gsk_string_append_double (str, r->origin.y);
   g_string_append_c (str, ' ');
-  string_append_double (str, r->size.width);
+  gsk_string_append_double (str, r->size.width);
   g_string_append_c (str, ' ');
-  string_append_double (str, r->size.height);
+  gsk_string_append_double (str, r->size.height);
 }
 
 static void
@@ -3593,23 +3582,23 @@ append_rounded_rect (GString              *str,
 
       if (all_the_same)
         {
-          string_append_double (str, w);
+          gsk_string_append_double (str, w);
         }
       else if (all_square)
         {
-          string_append_double (str, r->corner[0].width);
+          gsk_string_append_double (str, r->corner[0].width);
           g_string_append_c (str, ' ');
-          string_append_double (str, r->corner[1].width);
+          gsk_string_append_double (str, r->corner[1].width);
           g_string_append_c (str, ' ');
-          string_append_double (str, r->corner[2].width);
+          gsk_string_append_double (str, r->corner[2].width);
           g_string_append_c (str, ' ');
-          string_append_double (str, r->corner[3].width);
+          gsk_string_append_double (str, r->corner[3].width);
         }
       else
         {
           for (i = 0; i < 4; i ++)
             {
-              string_append_double (str, r->corner[i].width);
+              gsk_string_append_double (str, r->corner[i].width);
               g_string_append_c (str, ' ');
             }
 
@@ -3617,11 +3606,11 @@ append_rounded_rect (GString              *str,
 
           for (i = 0; i < 3; i ++)
             {
-              string_append_double (str, r->corner[i].height);
+              gsk_string_append_double (str, r->corner[i].height);
               g_string_append_c (str, ' ');
             }
 
-          string_append_double (str, r->corner[3].height);
+          gsk_string_append_double (str, r->corner[3].height);
         }
     }
 }
@@ -3630,22 +3619,22 @@ static void
 append_point (GString                *str,
               const graphene_point_t *p)
 {
-  string_append_double (str, p->x);
+  gsk_string_append_double (str, p->x);
   g_string_append_c (str, ' ');
-  string_append_double (str, p->y);
+  gsk_string_append_double (str, p->y);
 }
 
 static void
 append_vec4 (GString               *str,
              const graphene_vec4_t *v)
 {
-  string_append_double (str, graphene_vec4_get_x (v));
+  gsk_string_append_double (str, graphene_vec4_get_x (v));
   g_string_append_c (str, ' ');
-  string_append_double (str, graphene_vec4_get_y (v));
+  gsk_string_append_double (str, graphene_vec4_get_y (v));
   g_string_append_c (str, ' ');
-  string_append_double (str, graphene_vec4_get_z (v));
+  gsk_string_append_double (str, graphene_vec4_get_z (v));
   g_string_append_c (str, ' ');
-  string_append_double (str, graphene_vec4_get_w (v));
+  gsk_string_append_double (str, graphene_vec4_get_w (v));
 }
 
 static void
@@ -3660,7 +3649,7 @@ append_float_param (Printer    *p,
 
   _indent (p);
   g_string_append_printf (p->str, "%s: ", param_name);
-  string_append_double (p->str, value);
+  gsk_string_append_double (p->str, value);
   g_string_append (p->str, ";\n");
 }
 
@@ -3699,15 +3688,15 @@ print_color (Printer        *p,
           g_string_append_printf (p->str, "color(\"%s\" ", name);
         }
 
-      string_append_double (p->str, color->r);
+      gsk_string_append_double (p->str, color->r);
       g_string_append_c (p->str, ' ');
-      string_append_double (p->str, color->g);
+      gsk_string_append_double (p->str, color->g);
       g_string_append_c (p->str, ' ');
-      string_append_double (p->str, color->b);
+      gsk_string_append_double (p->str, color->b);
       if (color->a < 1)
         {
           g_string_append (p->str, " / ");
-          string_append_double (p->str, color->a);
+          gsk_string_append_double (p->str, color->a);
         }
       g_string_append_c (p->str, ')');
     }
@@ -3872,7 +3861,7 @@ append_stops_param (Printer            *p,
       if (i > 0)
         g_string_append (p->str, ", ");
 
-      string_append_double (p->str, stops[i].offset);
+      gsk_string_append_double (p->str, stops[i].offset);
       g_string_append_c (p->str, ' ');
       gdk_rgba_print (&stops[i].color, p->str);
     }
@@ -4154,16 +4143,16 @@ gsk_text_node_serialize_glyphs (GskRenderNode *node,
         }
 
       g_string_append_printf (p, "%u ", glyphs[i].glyph);
-      string_append_double (p, (double) glyphs[i].geometry.width / PANGO_SCALE);
+      gsk_string_append_double (p, (double) glyphs[i].geometry.width / PANGO_SCALE);
       if (!glyphs[i].attr.is_cluster_start ||
           glyphs[i].attr.is_color ||
           glyphs[i].geometry.x_offset != 0 ||
           glyphs[i].geometry.y_offset != 0)
         {
           g_string_append (p, " ");
-          string_append_double (p, (double) glyphs[i].geometry.x_offset / PANGO_SCALE);
+          gsk_string_append_double (p, (double) glyphs[i].geometry.x_offset / PANGO_SCALE);
           g_string_append (p, " ");
-          string_append_double (p, (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
+          gsk_string_append_double (p, (double) glyphs[i].geometry.y_offset / PANGO_SCALE);
           if (!glyphs[i].attr.is_cluster_start)
             g_string_append (p, " same-cluster");
           if (glyphs[i].attr.is_color)
@@ -4221,11 +4210,11 @@ append_dash_param (Printer     *p,
     {
       gsize i;
 
-      string_append_double (p->str, dash[0]);
+      gsk_string_append_double (p->str, dash[0]);
       for (i = 1; i < n_dash; i++)
         {
           g_string_append_c (p->str, ' ');
-          string_append_double (p->str, dash[i]);
+          gsk_string_append_double (p->str, dash[i]);
         }
     }
 
@@ -4519,7 +4508,7 @@ render_node_print (Printer       *p,
               {
                 if (i > 0)
                   g_string_append_c (p->str, ' ');
-                string_append_double (p->str, widths[i]);
+                gsk_string_append_double (p->str, widths[i]);
               }
             g_string_append (p->str, ";\n");
           }
@@ -4546,13 +4535,13 @@ render_node_print (Printer       *p,
 
             print_color (p, &s->color);
             g_string_append_c (p->str, ' ');
-            string_append_double (p->str, s->offset.x);
+            gsk_string_append_double (p->str, s->offset.x);
             g_string_append_c (p->str, ' ');
-            string_append_double (p->str, s->offset.y);
+            gsk_string_append_double (p->str, s->offset.y);
             if (s->radius > 0)
               {
                 g_string_append_c (p->str, ' ');
-                string_append_double (p->str, s->radius);
+                gsk_string_append_double (p->str, s->radius);
               }
           }
 
@@ -4709,7 +4698,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                   case GSK_GL_UNIFORM_TYPE_FLOAT:
                     {
                       float value = gsk_gl_shader_get_arg_float (shader, args, i);
-                      string_append_double (data, value);
+                      gsk_string_append_double (data, value);
                     }
                     break;
 
@@ -4739,9 +4728,9 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                       graphene_vec2_t value;
                       gsk_gl_shader_get_arg_vec2 (shader, args, i,
                                                   &value);
-                      string_append_double (data, graphene_vec2_get_x (&value));
+                      gsk_string_append_double (data, graphene_vec2_get_x (&value));
                       g_string_append (data, " ");
-                      string_append_double (data, graphene_vec2_get_y (&value));
+                      gsk_string_append_double (data, graphene_vec2_get_y (&value));
                     }
                     break;
 
@@ -4750,11 +4739,11 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                       graphene_vec3_t value;
                       gsk_gl_shader_get_arg_vec3 (shader, args, i,
                                                   &value);
-                      string_append_double (data, graphene_vec3_get_x (&value));
+                      gsk_string_append_double (data, graphene_vec3_get_x (&value));
                       g_string_append (data, " ");
-                      string_append_double (data, graphene_vec3_get_y (&value));
+                      gsk_string_append_double (data, graphene_vec3_get_y (&value));
                       g_string_append (data, " ");
-                      string_append_double (data, graphene_vec3_get_z (&value));
+                      gsk_string_append_double (data, graphene_vec3_get_z (&value));
                     }
                     break;
 
@@ -4763,13 +4752,13 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                       graphene_vec4_t value;
                       gsk_gl_shader_get_arg_vec4 (shader, args, i,
                                                   &value);
-                      string_append_double (data, graphene_vec4_get_x (&value));
+                      gsk_string_append_double (data, graphene_vec4_get_x (&value));
                       g_string_append (data, " ");
-                      string_append_double (data, graphene_vec4_get_y (&value));
+                      gsk_string_append_double (data, graphene_vec4_get_y (&value));
                       g_string_append (data, " ");
-                      string_append_double (data, graphene_vec4_get_z (&value));
+                      gsk_string_append_double (data, graphene_vec4_get_z (&value));
                       g_string_append (data, " ");
-                      string_append_double (data, graphene_vec4_get_w (&value));
+                      gsk_string_append_double (data, graphene_vec4_get_w (&value));
                     }
                     break;
                   }

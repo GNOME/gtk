@@ -23,9 +23,8 @@
 
 #include "gskpathpointprivate.h"
 #include "gskcontourprivate.h"
+#include "gskprivate.h"
 #include "gdk/gdkprivate.h"
-
-#define RAD_TO_DEG(x)          ((x) / (G_PI / 180.f))
 
 /**
  * GskPathPoint:
