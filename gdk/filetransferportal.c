@@ -53,18 +53,18 @@ typedef struct {
   const char **files;
   int len;
   int start;
-} AddFileData;
+} FileTransferAddFileData;
 
-static void add_files (GDBusProxy  *proxy,
-                       AddFileData *afd);
+static void file_transfer_add_files (GDBusProxy              *proxy,
+                                     FileTransferAddFileData *afd);
 
 static void
-add_files_done (GObject      *object,
-                GAsyncResult *result,
-                gpointer      data)
+file_transfer_add_files_done (GObject      *object,
+                              GAsyncResult *result,
+                              gpointer      data)
 {
   GDBusProxy *proxy = G_DBUS_PROXY (object);
-  AddFileData *afd = data;
+  FileTransferAddFileData *afd = data;
   GError *error = NULL;
   GVariant *ret;
 
@@ -87,15 +87,15 @@ add_files_done (GObject      *object,
       return;
     }
 
-  add_files (proxy, afd);
+  file_transfer_add_files (proxy, afd);
 }
 
 /* We call AddFiles in chunks of 16 to avoid running into
  * the per-message fd limit of the bus.
  */
 static void
-add_files (GDBusProxy  *proxy,
-           AddFileData *afd)
+file_transfer_add_files (GDBusProxy              *proxy,
+                         FileTransferAddFileData *afd)
 {
   GUnixFDList *fd_list;
   GVariantBuilder fds, options;
@@ -154,18 +154,18 @@ add_files (GDBusProxy  *proxy,
                                        0, -1,
                                        fd_list,
                                        NULL,
-                                       add_files_done, afd);
+                                       file_transfer_add_files_done, afd);
 
   g_object_unref (fd_list);
 }
 
 static void
-start_session_done (GObject      *object,
-                    GAsyncResult *result,
-                    gpointer      data)
+file_transfer_start_session_done (GObject      *object,
+                                  GAsyncResult *result,
+                                  gpointer      data)
 {
   GDBusProxy *proxy = G_DBUS_PROXY (object);
-  AddFileData *afd = data;
+  FileTransferAddFileData *afd = data;
   GError *error = NULL;
   GVariant *ret;
   const char *key;
@@ -185,7 +185,7 @@ start_session_done (GObject      *object,
 
   g_variant_unref (ret);
 
-  add_files (proxy, afd);
+  file_transfer_add_files (proxy, afd);
 }
 
 void
@@ -195,7 +195,7 @@ file_transfer_portal_register_files (const char          **files,
                                      gpointer              data)
 {
   GTask *task;
-  AddFileData *afd;
+  FileTransferAddFileData *afd;
   GVariantBuilder options;
 
   task = g_task_new (NULL, NULL, callback, data);
@@ -208,7 +208,7 @@ file_transfer_portal_register_files (const char          **files,
       return;
     }
 
-  afd = g_new (AddFileData, 1);
+  afd = g_new (FileTransferAddFileData, 1);
   afd->task = task;
   afd->files = files;
   afd->len = g_strv_length ((char **)files);
@@ -222,7 +222,7 @@ file_transfer_portal_register_files (const char          **files,
 
   g_dbus_proxy_call (file_transfer_proxy, "StartTransfer",
                      g_variant_new ("(a{sv})", &options),
-                     0, -1, NULL, start_session_done, afd);
+                     0, -1, NULL, file_transfer_start_session_done, afd);
 }
 
 gboolean
@@ -240,9 +240,9 @@ file_transfer_portal_register_files_finish (GAsyncResult  *result,
 }
 
 static void
-retrieve_files_done (GObject      *object,
-                     GAsyncResult *result,
-                     gpointer      data)
+file_transfer_retrieve_files_done (GObject      *object,
+                                   GAsyncResult *result,
+                                   gpointer      data)
 {
   GDBusProxy *proxy = G_DBUS_PROXY (object);
   GTask *task = data;
@@ -260,7 +260,7 @@ retrieve_files_done (GObject      *object,
 
   g_variant_get (ret, "(^a&s)", &files);
 
-  g_object_set_data_full (G_OBJECT (task), "files", g_strdupv (files), (GDestroyNotify)g_strfreev);
+  g_object_set_data_full (G_OBJECT (task), "files", g_strdupv (files), (GDestroyNotify) g_strfreev);
 
   g_variant_unref (ret);
 
@@ -290,7 +290,7 @@ file_transfer_portal_retrieve_files (const char          *key,
                      "RetrieveFiles",
                      g_variant_new ("(sa{sv})", key, &options),
                      0, -1, NULL,
-                     retrieve_files_done, task);
+                     file_transfer_retrieve_files_done, task);
 }
 
 gboolean
@@ -311,9 +311,9 @@ file_transfer_portal_retrieve_files_finish (GAsyncResult   *result,
 /* serializer */
 
 static void
-file_serializer_finish (GObject      *source,
-                        GAsyncResult *result,
-                        gpointer      serializer)
+gdk_content_serializer_file_portal_finish (GObject      *source,
+                                           GAsyncResult *result,
+                                           gpointer      serializer)
 {
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GError *error = NULL;
@@ -325,9 +325,9 @@ file_serializer_finish (GObject      *source,
 }
 
 static void
-portal_ready (GObject *object,
-              GAsyncResult *result,
-              gpointer serializer)
+file_transfer_portal_ready (GObject      *object,
+                            GAsyncResult *result,
+                            gpointer      serializer)
 {
   GError *error = NULL;
   char *key;
@@ -343,13 +343,13 @@ portal_ready (GObject *object,
                                    strlen (key) + 1,
                                    gdk_content_serializer_get_priority (serializer),
                                    gdk_content_serializer_get_cancellable (serializer),
-                                   file_serializer_finish,
+                                   gdk_content_serializer_file_portal_finish,
                                    serializer);
   gdk_content_serializer_set_task_data (serializer, key, g_free);
 }
 
 static void
-portal_file_serializer (GdkContentSerializer *serializer)
+file_transfer_portal_serializer (GdkContentSerializer *serializer)
 {
   GPtrArray *files;
   const GValue *value;
@@ -403,16 +403,16 @@ portal_file_serializer (GdkContentSerializer *serializer)
     }
 
   /* this call doesn't copy the strings, so keep the array around until the registration is done */
-  file_transfer_portal_register_files ((const char **)files->pdata, TRUE, portal_ready, serializer);
-  gdk_content_serializer_set_task_data (serializer, files, (GDestroyNotify)g_ptr_array_unref);
+  file_transfer_portal_register_files ((const char **)files->pdata, TRUE, file_transfer_portal_ready, serializer);
+  gdk_content_serializer_set_task_data (serializer, files, (GDestroyNotify) g_ptr_array_unref);
 }
 
 /* deserializer */
 
 static void
-portal_finish (GObject *object,
-               GAsyncResult *result,
-               gpointer deserializer)
+file_transfer_portal_finish (GObject      *object,
+                             GAsyncResult *result,
+                             gpointer      deserializer)
 {
   char **files = NULL;
   GError *error = NULL;
@@ -452,9 +452,9 @@ portal_finish (GObject *object,
 }
 
 static void
-portal_file_deserializer_finish (GObject      *source,
-                                 GAsyncResult *result,
-                                 gpointer      deserializer)
+file_transfer_portal_deserializer_finish (GObject      *source,
+                                          GAsyncResult *result,
+                                          gpointer      deserializer)
 {
   GOutputStream *stream = G_OUTPUT_STREAM (source);
   GError *error = NULL;
@@ -487,12 +487,12 @@ portal_file_deserializer_finish (GObject      *source,
       return;
     }
 
-  file_transfer_portal_retrieve_files (key, portal_finish, deserializer);
+  file_transfer_portal_retrieve_files (key, file_transfer_portal_finish, deserializer);
   gdk_content_deserializer_set_task_data (deserializer, key, g_free);
 }
 
 static void
-portal_file_deserializer (GdkContentDeserializer *deserializer)
+file_transfer_portal_deserializer (GdkContentDeserializer *deserializer)
 {
   GOutputStream *output;
 
@@ -503,43 +503,43 @@ portal_file_deserializer (GdkContentDeserializer *deserializer)
                                 G_OUTPUT_STREAM_SPLICE_CLOSE_SOURCE | G_OUTPUT_STREAM_SPLICE_CLOSE_TARGET,
                                 gdk_content_deserializer_get_priority (deserializer),
                                 gdk_content_deserializer_get_cancellable (deserializer),
-                                portal_file_deserializer_finish,
+                                file_transfer_portal_deserializer_finish,
                                 deserializer);
   g_object_unref (output);
 }
 
 static void
-connection_closed (GDBusConnection *connection,
-                   gboolean         remote_peer_vanished,
-                   GError          *error)
+file_transfer_portal_connection_closed (GDBusConnection *connection,
+                                        gboolean         remote_peer_vanished,
+                                        GError          *error)
 {
   g_clear_object (&file_transfer_proxy);
 }
 
 static void
-finish_registration (void)
+file_transfer_portal_finish_registration (void)
 {
   gdk_content_register_serializer (G_TYPE_FILE,
                                    "application/vnd.portal.filetransfer",
-                                   portal_file_serializer,
+                                   file_transfer_portal_serializer,
                                    NULL,
                                    NULL);
 
   gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
                                    "application/vnd.portal.filetransfer",
-                                   portal_file_serializer,
+                                   file_transfer_portal_serializer,
                                    NULL,
                                    NULL);
 
   gdk_content_register_deserializer ("application/vnd.portal.filetransfer",
                                      GDK_TYPE_FILE_LIST,
-                                     portal_file_deserializer,
+                                     file_transfer_portal_deserializer,
                                      NULL,
                                      NULL);
 
   gdk_content_register_deserializer ("application/vnd.portal.filetransfer",
                                      G_TYPE_FILE,
-                                     portal_file_deserializer,
+                                     file_transfer_portal_deserializer,
                                      NULL,
                                      NULL);
 
@@ -549,35 +549,35 @@ finish_registration (void)
    */
   gdk_content_register_serializer (G_TYPE_FILE,
                                    "application/vnd.portal.files",
-                                   portal_file_serializer,
+                                   file_transfer_portal_serializer,
                                    NULL,
                                    NULL);
 
   gdk_content_register_serializer (GDK_TYPE_FILE_LIST,
                                    "application/vnd.portal.files",
-                                   portal_file_serializer,
+                                   file_transfer_portal_serializer,
                                    NULL,
                                    NULL);
 
   gdk_content_register_deserializer ("application/vnd.portal.files",
                                      GDK_TYPE_FILE_LIST,
-                                     portal_file_deserializer,
+                                     file_transfer_portal_deserializer,
                                      NULL,
                                      NULL);
 
   gdk_content_register_deserializer ("application/vnd.portal.files",
                                      G_TYPE_FILE,
-                                     portal_file_deserializer,
+                                     file_transfer_portal_deserializer,
                                      NULL,
                                      NULL);
 
   /* Free the singleton when the connection closes, important for test */
   g_signal_connect (g_dbus_proxy_get_connection (G_DBUS_PROXY (file_transfer_proxy)),
-                    "closed", G_CALLBACK (connection_closed), NULL);
+                    "closed", G_CALLBACK (file_transfer_portal_connection_closed), NULL);
 }
 
 static gboolean
-proxy_has_owner (GDBusProxy *proxy)
+file_transfer_portal_proxy_has_owner (GDBusProxy *proxy)
 {
   char *owner;
 
@@ -611,11 +611,11 @@ file_transfer_portal_register (void)
                                 NULL,
                                 NULL);
 
-      if (file_transfer_proxy && !proxy_has_owner (file_transfer_proxy))
+      if (file_transfer_proxy && !file_transfer_portal_proxy_has_owner (file_transfer_proxy))
         g_clear_object (&file_transfer_proxy);
 
       if (file_transfer_proxy)
-        finish_registration ();
+        file_transfer_portal_finish_registration ();
     }
 }
 
