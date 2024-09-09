@@ -233,10 +233,10 @@ GdkTexture *
 udmabuf_texture_from_texture (GdkTexture  *texture,
                               GError     **error)
 {
+  GdkTextureDownloader *downloader;
   guint fourcc;
   gboolean premultiplied;
-  guchar *data;
-  gsize width, height, stride;
+  gsize stride;
   GBytes *bytes;
   GdkTexture *texture2;
 
@@ -275,16 +275,14 @@ udmabuf_texture_from_texture (GdkTexture  *texture,
       return NULL;
     }
 
-  width = gdk_texture_get_width (texture);
-  height = gdk_texture_get_height (texture);
+  downloader = gdk_texture_downloader_new (texture);
+  gdk_texture_downloader_set_format (downloader, gdk_texture_get_format (texture));
+  gdk_texture_downloader_set_color_state (downloader, gdk_texture_get_color_state (texture));
+  bytes = gdk_texture_downloader_download_bytes (downloader, &stride);
+  gdk_texture_downloader_free (downloader);
 
-  stride = (width * 4 + 255) & ~255;
-  data = g_malloc (stride * height);
-
-  gdk_texture_download (texture, data, stride);
-  bytes = g_bytes_new_take (data, stride * height);
-
-  texture2 = udmabuf_texture_new (width, height,
+  texture2 = udmabuf_texture_new (gdk_texture_get_width (texture),
+                                  gdk_texture_get_height (texture),
                                   fourcc,
                                   gdk_texture_get_color_state (texture),
                                   premultiplied,
