@@ -132,9 +132,9 @@ gdk_gl_texture_run (GdkGLTexture *self,
   while (g_atomic_int_get (&invoke.spinlock) == 0);
 }
 
-typedef struct _Download Download;
+typedef struct _GdkGLTextureDownload GdkGLTextureDownload;
 
-struct _Download
+struct _GdkGLTextureDownload
 {
   GdkMemoryFormat format;
   GdkColorState *color_state;
@@ -189,7 +189,7 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
   GdkTexture *texture = GDK_TEXTURE (self);
   GdkMemoryFormat format;
   gsize expected_stride;
-  Download *download = download_;
+  GdkGLTextureDownload *download = download_;
   GLint gl_internal_format, gl_internal_srgb_format;
   GLenum gl_format, gl_type;
   GLint gl_swizzle[4];
@@ -420,7 +420,7 @@ gdk_gl_texture_download (GdkTexture      *texture,
                          gsize            stride)
 {
   GdkGLTexture *self = GDK_GL_TEXTURE (texture);
-  Download download;
+  GdkGLTextureDownload download;
 
   if (self->saved)
     {
