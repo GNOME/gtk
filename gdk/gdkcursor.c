@@ -75,12 +75,12 @@
  */
 
 enum {
-  PROP_0,
-  PROP_FALLBACK,
-  PROP_HOTSPOT_X,
-  PROP_HOTSPOT_Y,
-  PROP_NAME,
-  PROP_TEXTURE,
+  GDK_CURSOR_PROP_0,
+  GDK_CURSOR_PROP_FALLBACK,
+  GDK_CURSOR_PROP_HOTSPOT_X,
+  GDK_CURSOR_PROP_HOTSPOT_Y,
+  GDK_CURSOR_PROP_NAME,
+  GDK_CURSOR_PROP_TEXTURE,
 };
 
 G_DEFINE_TYPE (GdkCursor, gdk_cursor, G_TYPE_OBJECT)
@@ -95,19 +95,19 @@ gdk_cursor_get_property (GObject    *object,
 
   switch (prop_id)
     {
-    case PROP_FALLBACK:
+    case GDK_CURSOR_PROP_FALLBACK:
       g_value_set_object (value, cursor->fallback);
       break;
-    case PROP_HOTSPOT_X:
+    case GDK_CURSOR_PROP_HOTSPOT_X:
       g_value_set_int (value, cursor->hotspot_x);
       break;
-    case PROP_HOTSPOT_Y:
+    case GDK_CURSOR_PROP_HOTSPOT_Y:
       g_value_set_int (value, cursor->hotspot_y);
       break;
-    case PROP_NAME:
+    case GDK_CURSOR_PROP_NAME:
       g_value_set_string (value, cursor->name);
       break;
-    case PROP_TEXTURE:
+    case GDK_CURSOR_PROP_TEXTURE:
       g_value_set_object (value, cursor->texture);
       break;
     default:
@@ -126,19 +126,19 @@ gdk_cursor_set_property (GObject      *object,
 
   switch (prop_id)
     {
-    case PROP_FALLBACK:
+    case GDK_CURSOR_PROP_FALLBACK:
       cursor->fallback = g_value_dup_object (value);
       break;
-    case PROP_HOTSPOT_X:
+    case GDK_CURSOR_PROP_HOTSPOT_X:
       cursor->hotspot_x = g_value_get_int (value);
       break;
-    case PROP_HOTSPOT_Y:
+    case GDK_CURSOR_PROP_HOTSPOT_Y:
       cursor->hotspot_y = g_value_get_int (value);
       break;
-    case PROP_NAME:
+    case GDK_CURSOR_PROP_NAME:
       cursor->name = g_value_dup_string (value);
       break;
-    case PROP_TEXTURE:
+    case GDK_CURSOR_PROP_TEXTURE:
       cursor->texture = g_value_dup_object (value);
       break;
     default:
@@ -177,7 +177,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
    * Cursor to fall back to if this cursor cannot be displayed.
    */
   g_object_class_install_property (object_class,
-                                   PROP_FALLBACK,
+                                   GDK_CURSOR_PROP_FALLBACK,
                                    g_param_spec_object ("fallback", NULL, NULL,
                                                         GDK_TYPE_CURSOR,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
@@ -189,7 +189,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
    * X position of the cursor hotspot in the cursor image.
    */
   g_object_class_install_property (object_class,
-                                   PROP_HOTSPOT_X,
+                                   GDK_CURSOR_PROP_HOTSPOT_X,
                                    g_param_spec_int ("hotspot-x", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
@@ -201,7 +201,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
    * Y position of the cursor hotspot in the cursor image.
    */
   g_object_class_install_property (object_class,
-                                   PROP_HOTSPOT_Y,
+                                   GDK_CURSOR_PROP_HOTSPOT_Y,
                                    g_param_spec_int ("hotspot-y", NULL, NULL,
                                                      0, G_MAXINT, 0,
                                                      G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
@@ -215,7 +215,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
    * The name will be %NULL if the cursor was created from a texture.
    */
   g_object_class_install_property (object_class,
-                                   PROP_NAME,
+                                   GDK_CURSOR_PROP_NAME,
                                    g_param_spec_string ("name", NULL, NULL,
                                                         NULL,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
@@ -229,7 +229,7 @@ gdk_cursor_class_init (GdkCursorClass *cursor_class)
    * The texture will be %NULL if the cursor was created from a name.
    */
   g_object_class_install_property (object_class,
-                                   PROP_TEXTURE,
+                                   GDK_CURSOR_PROP_TEXTURE,
                                    g_param_spec_object ("texture", NULL, NULL,
                                                         GDK_TYPE_TEXTURE,
                                                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY |
