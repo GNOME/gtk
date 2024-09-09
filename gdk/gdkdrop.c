@@ -71,17 +71,17 @@ struct _GdkDropPrivate {
 };
 
 enum {
-  PROP_0,
-  PROP_ACTIONS,
-  PROP_DEVICE,
-  PROP_DISPLAY,
-  PROP_DRAG,
-  PROP_FORMATS,
-  PROP_SURFACE,
-  N_PROPERTIES
+  GDK_DROP_PROP_0,
+  GDK_DROP_PROP_ACTIONS,
+  GDK_DROP_PROP_DEVICE,
+  GDK_DROP_PROP_DISPLAY,
+  GDK_DROP_PROP_DRAG,
+  GDK_DROP_PROP_FORMATS,
+  GDK_DROP_PROP_SURFACE,
+  GDK_DROP_N_PROPERTIES
 };
 
-static GParamSpec *properties[N_PROPERTIES] = { NULL, };
+static GParamSpec *gdk_drop_properties[GDK_DROP_N_PROPERTIES] = { NULL, };
 
 G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GdkDrop, gdk_drop, G_TYPE_OBJECT)
 
@@ -210,29 +210,29 @@ gdk_drop_set_property (GObject      *gobject,
 
   switch (prop_id)
     {
-    case PROP_ACTIONS:
+    case GDK_DROP_PROP_ACTIONS:
       gdk_drop_set_actions (self, g_value_get_flags (value));
       break;
 
-    case PROP_DEVICE:
+    case GDK_DROP_PROP_DEVICE:
       priv->device = g_value_dup_object (value);
       g_assert (priv->device != NULL);
       if (priv->surface)
         g_assert (gdk_surface_get_display (priv->surface) == gdk_device_get_display (priv->device));
       break;
 
-    case PROP_DRAG:
+    case GDK_DROP_PROP_DRAG:
       priv->drag = g_value_dup_object (value);
       if (priv->drag)
         gdk_drop_add_formats (self, gdk_drag_get_formats (priv->drag));
       break;
 
-    case PROP_FORMATS:
+    case GDK_DROP_PROP_FORMATS:
       gdk_drop_add_formats (self, g_value_get_boxed (value));
       g_assert (priv->formats != NULL);
       break;
 
-    case PROP_SURFACE:
+    case GDK_DROP_PROP_SURFACE:
       priv->surface = g_value_dup_object (value);
       g_assert (priv->surface != NULL);
       if (priv->device)
@@ -256,27 +256,27 @@ gdk_drop_get_property (GObject    *gobject,
 
   switch (prop_id)
     {
-    case PROP_ACTIONS:
+    case GDK_DROP_PROP_ACTIONS:
       g_value_set_flags (value, priv->actions);
       break;
 
-    case PROP_DEVICE:
+    case GDK_DROP_PROP_DEVICE:
       g_value_set_object (value, priv->device);
       break;
 
-    case PROP_DISPLAY:
+    case GDK_DROP_PROP_DISPLAY:
       g_value_set_object (value, gdk_device_get_display (priv->device));
       break;
 
-    case PROP_DRAG:
+    case GDK_DROP_PROP_DRAG:
       g_value_set_object (value, priv->drag);
       break;
 
-    case PROP_FORMATS:
+    case GDK_DROP_PROP_FORMATS:
       g_value_set_boxed (value, priv->formats);
       break;
 
-    case PROP_SURFACE:
+    case GDK_DROP_PROP_SURFACE:
       g_value_set_object (value, priv->surface);
       break;
 
@@ -324,7 +324,7 @@ gdk_drop_class_init (GdkDropClass *klass)
    *
    * The possible actions for this drop
    */
-  properties[PROP_ACTIONS] =
+  gdk_drop_properties[GDK_DROP_PROP_ACTIONS] =
     g_param_spec_flags ("actions", NULL, NULL,
                          GDK_TYPE_DRAG_ACTION,
                          GDK_ACTION_ALL,
@@ -338,7 +338,7 @@ gdk_drop_class_init (GdkDropClass *klass)
    *
    * The `GdkDevice` performing the drop
    */
-  properties[PROP_DEVICE] =
+  gdk_drop_properties[GDK_DROP_PROP_DEVICE] =
     g_param_spec_object ("device", NULL, NULL,
                          GDK_TYPE_DEVICE,
                          G_PARAM_READWRITE |
@@ -351,7 +351,7 @@ gdk_drop_class_init (GdkDropClass *klass)
    *
    * The `GdkDisplay` that the drop belongs to.
    */
-  properties[PROP_DISPLAY] =
+  gdk_drop_properties[GDK_DROP_PROP_DISPLAY] =
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READABLE |
@@ -363,7 +363,7 @@ gdk_drop_class_init (GdkDropClass *klass)
    *
    * The `GdkDrag` that initiated this drop
    */
-  properties[PROP_DRAG] =
+  gdk_drop_properties[GDK_DROP_PROP_DRAG] =
     g_param_spec_object ("drag", NULL, NULL,
                          GDK_TYPE_DRAG,
                          G_PARAM_READWRITE |
@@ -376,7 +376,7 @@ gdk_drop_class_init (GdkDropClass *klass)
    *
    * The possible formats that the drop can provide its data in.
    */
-  properties[PROP_FORMATS] =
+  gdk_drop_properties[GDK_DROP_PROP_FORMATS] =
     g_param_spec_boxed ("formats", NULL, NULL,
                         GDK_TYPE_CONTENT_FORMATS,
                         G_PARAM_READWRITE |
@@ -389,7 +389,7 @@ gdk_drop_class_init (GdkDropClass *klass)
    *
    * The `GdkSurface` the drop happens on
    */
-  properties[PROP_SURFACE] =
+  gdk_drop_properties[GDK_DROP_PROP_SURFACE] =
     g_param_spec_object ("surface", NULL, NULL,
                          GDK_TYPE_SURFACE,
                          G_PARAM_READWRITE |
@@ -397,7 +397,7 @@ gdk_drop_class_init (GdkDropClass *klass)
                          G_PARAM_STATIC_STRINGS |
                          G_PARAM_EXPLICIT_NOTIFY);
 
-  g_object_class_install_properties (object_class, N_PROPERTIES, properties);
+  g_object_class_install_properties (object_class, GDK_DROP_N_PROPERTIES, gdk_drop_properties);
 }
 
 static void
@@ -524,7 +524,7 @@ gdk_drop_set_actions (GdkDrop       *self,
 
   priv->actions = actions;
 
-  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_ACTIONS]);
+  g_object_notify_by_pspec (G_OBJECT (self), gdk_drop_properties[GDK_DROP_PROP_ACTIONS]);
 }
 
 /**
@@ -764,7 +764,7 @@ gdk_drop_read_value_got_stream (GObject      *source,
 }
 
 static void
-free_value (gpointer value)
+gdk_drop_free_value (gpointer value)
 {
   g_value_unset (value);
   g_free (value);
@@ -792,7 +792,7 @@ gdk_drop_read_value_internal (GdkDrop             *self,
   g_task_set_source_tag (task, source_tag);
   value = g_new0 (GValue, 1);
   g_value_init (value, type);
-  g_task_set_task_data (task, value, free_value);
+  g_task_set_task_data (task, value, gdk_drop_free_value);
 
   if (priv->drag)
     {
