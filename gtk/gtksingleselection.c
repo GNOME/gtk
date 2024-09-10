@@ -792,7 +792,7 @@ gtk_single_selection_get_can_unselect (GtkSingleSelection *self)
  *
  * Note that setting [property@Gtk.SingleSelection:autoselect] will
  * cause unselecting to not work, so it practically makes no sense
- * to set both at the same time the same time.
+ * to set both at the same time.
  */
 void
 gtk_single_selection_set_can_unselect (GtkSingleSelection *self,
