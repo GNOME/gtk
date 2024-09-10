@@ -101,6 +101,10 @@ gdk_gl_texture_invoke_callback (gpointer data)
   context = gdk_display_get_gl_context (gdk_gl_context_get_display (invoke->self->context));
 
   previous = gdk_gl_context_get_current ();
+
+  if (previous)
+    g_object_ref (previous);
+
   gdk_gl_context_make_current (context);
 
   if (invoke->self->sync && context != invoke->self->context)
@@ -113,9 +117,14 @@ gdk_gl_texture_invoke_callback (gpointer data)
   g_atomic_int_set (&invoke->spinlock, 1);
 
   if (previous)
-    gdk_gl_context_make_current (previous);
+    {
+      gdk_gl_context_make_current (previous);
+      g_object_unref (previous);
+    }
   else
-    gdk_gl_context_clear_current ();
+    {
+      gdk_gl_context_clear_current ();
+    }
 
   return FALSE;
 }
