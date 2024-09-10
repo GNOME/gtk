@@ -467,9 +467,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   res = GDK_VK_CHECK (vkCreateSwapchainKHR, device,
                                             &(VkSwapchainCreateInfoKHR) {
                                                 .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_CREATE_INFO_KHR,
-                                                .flags =
-                                                  (gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE) ?
-                                                          VK_SWAPCHAIN_CREATE_DEFERRED_MEMORY_ALLOCATION_BIT_EXT : 0),
+                                                .pNext = NULL,
+                                                .flags = 0,
                                                 .surface = priv->surface,
                                                 .minImageCount = CLAMP (4,
                                                                         capabilities.minImageCount,
