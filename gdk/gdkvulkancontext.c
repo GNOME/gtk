@@ -272,7 +272,7 @@ gdk_vulkan_strerror (VkResult result)
 #endif
 #if VK_HEADER_VERSION >= 274
     case VK_ERROR_INVALID_VIDEO_STD_PARAMETERS_KHR:
-      return "The specified Video Std parameters do not adhere to the syntactic or semantic requirements of the used video compression standard or implementation";
+      return "The specified Video Std parameters do not adhere to the syntactic or semantic requirements of the used video compression standard or implementation. (VK_ERROR_INVALID_VIDEO_STD_PARAMETERS_KHR)";
 #endif
 #if VK_HEADER_VERSION >= 294
     case VK_PIPELINE_BINARY_MISSING_KHR:
