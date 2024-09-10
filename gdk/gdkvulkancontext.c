@@ -274,6 +274,12 @@ gdk_vulkan_strerror (VkResult result)
     case VK_ERROR_INVALID_VIDEO_STD_PARAMETERS_KHR:
       return "The specified Video Std parameters do not adhere to the syntactic or semantic requirements of the used video compression standard or implementation";
 #endif
+#if VK_HEADER_VERSION >= 294
+    case VK_PIPELINE_BINARY_MISSING_KHR:
+      return "The application attempted to create a pipeline binary by querying an internal cache, but the internal cache entry did not exist. (VK_PIPELINE_BINARY_MISSING_KHR)";
+    case VK_ERROR_NOT_ENOUGH_SPACE_KHR:
+      return "The application did not provide enough space to return all the required data. (VK_ERROR_NOT_ENOUGH_SPACE_KHR)";
+#endif
 
     case VK_RESULT_MAX_ENUM:
     default:
