@@ -4787,7 +4787,10 @@ gtk_file_chooser_widget_get_files (GtkFileChooser *chooser)
       current_folder = gtk_file_chooser_get_current_folder (chooser);
 
       if (current_folder)
-        g_list_store_append (result, current_folder);
+        {
+          g_list_store_append (result, current_folder);
+          g_object_unref (current_folder);
+        }
     }
 
   return G_LIST_MODEL (result);
