@@ -2138,19 +2138,6 @@ rewrite_element_3to4 (Element      *element,
 {
   GList *l;
 
-  l = element->children;
-  while (l)
-    {
-      GList *next = l->next;
-      Element *child = l->data;
-      if (rewrite_element_3to4 (child, data))
-        {
-          element->children = g_list_remove (element->children, child);
-          free_element (child);
-        }
-      l = next;
-    }
-
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkStack"))
     rewrite_stack (element, data);
@@ -2215,6 +2202,19 @@ rewrite_element_3to4 (Element      *element,
 
   if (g_str_equal (element->element_name, "requires"))
     rewrite_requires (element, data);
+
+  l = element->children;
+  while (l)
+    {
+      GList *next = l->next;
+      Element *child = l->data;
+      if (rewrite_element_3to4 (child, data))
+        {
+          element->children = g_list_remove (element->children, child);
+          free_element (child);
+        }
+      l = next;
+    }
 
   return FALSE;
 }
