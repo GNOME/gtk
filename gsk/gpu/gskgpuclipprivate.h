@@ -30,8 +30,6 @@ typedef enum {
   GSK_GPU_CLIP_ROUNDED
 } GskGpuClipComplexity;
 
-typedef struct _GskGpuClip GskGpuClip;
-
 struct _GskGpuClip
 {
   GskGpuClipComplexity type;
