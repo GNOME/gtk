@@ -597,6 +597,7 @@ static bool
 check_flatpak_portal_version (GDBusConnection *connection,
                               unsigned int     minimum_version)
 {
+  GVariant *child;
   GError *error = NULL;
 
   GVariant *res =
@@ -606,7 +607,7 @@ check_flatpak_portal_version (GDBusConnection *connection,
                                  "org.freedesktop.DBus.Properties",
                                  "Get",
                                  g_variant_new ("(ss)", "org.freedesktop.portal.Flatpak", "version"),
-                                 G_VARIANT_TYPE ("(u)"),
+                                 G_VARIANT_TYPE ("(v)"),
                                  G_DBUS_CALL_FLAGS_NONE,
                                  -1,
                                  NULL,
@@ -620,9 +621,11 @@ check_flatpak_portal_version (GDBusConnection *connection,
       return false;
     }
 
-  guint32 version = 0;
-  g_variant_get (res, "(u)", &version);
+  g_variant_get (res, "(v)", &child);
   g_variant_unref (res);
+
+  guint32 version = g_variant_get_uint32 (child);
+  g_variant_unref (child);
 
   GTK_DEBUG (A11Y, "Flatpak portal version: %u (required: %u)", version, minimum_version);
 
