@@ -139,8 +139,6 @@ void    _gdk_other_api_failed        (const char *where,
 
 extern LRESULT CALLBACK _gdk_win32_surface_procedure (HWND, UINT, WPARAM, LPARAM);
 
-extern GdkDisplay       *_gdk_display;
-
 /* These are thread specific, but GDK/win32 works OK only when invoked
  * from a single thread anyway.
  */

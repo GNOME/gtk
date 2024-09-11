@@ -747,7 +747,7 @@ winpointer_create_device (GdkDeviceManagerWin32 *device_manager,
   UINT32 num_cursors = 0;
   GdkAxisFlags axes_flags = 0;
 
-  seat = gdk_display_get_default_seat (_gdk_display);
+  seat = gdk_display_get_default_seat (device_manager->display);
 
   memset (pid, 0, VID_PID_CHARS + 1);
   memset (vid, 0, VID_PID_CHARS + 1);
@@ -796,7 +796,7 @@ winpointer_create_device (GdkDeviceManagerWin32 *device_manager,
     }
 
   device = g_object_new (GDK_TYPE_DEVICE_WINPOINTER,
-                         "display", _gdk_display,
+                         "display", device_manager->display,
                          "seat", seat,
                          "has-cursor", TRUE,
                          "source", source,

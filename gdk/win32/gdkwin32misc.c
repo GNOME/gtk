@@ -427,10 +427,10 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
     }
   else if (strcmp ("gtk-xft-dpi", name) == 0)
     {
-      GdkWin32Display *display = GDK_WIN32_DISPLAY (_gdk_display);
+      GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
 
-      if (display->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE &&
-          !display->has_fixed_scale)
+      if (display_win32->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE &&
+          !display_win32->has_fixed_scale)
         {
           HDC hdc = GetDC (NULL);
 
@@ -441,7 +441,7 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
 
               if (dpi >= 96)
                 {
-                  int xft_dpi = 1024 * dpi / display->surface_scale;
+                  int xft_dpi = 1024 * dpi / display_win32->surface_scale;
                   GDK_NOTE(MISC, g_print ("gdk_screen_get_setting(\"%s\") : %d\n", name, xft_dpi));
                   g_value_set_int (value, xft_dpi);
                   return TRUE;
