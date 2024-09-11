@@ -798,7 +798,8 @@ gtk_directory_list_start_monitoring (GtkDirectoryList *self)
 {
   g_assert (self->monitor == NULL);
   self->monitor = g_file_monitor_directory (self->file, G_FILE_MONITOR_WATCH_MOVES, NULL, NULL);
-  g_signal_connect (self->monitor, "changed", G_CALLBACK (directory_changed), self);
+  if (self->monitor)
+    g_signal_connect (self->monitor, "changed", G_CALLBACK (directory_changed), self);
 }
 
 static void
