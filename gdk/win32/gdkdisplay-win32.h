@@ -174,6 +174,12 @@ typedef struct
   UINT modal_timer;
 } surface_records;
 
+/* for tracking various events that go on */
+typedef struct
+{
+  int debug_indent_displaychange;
+} event_records;
+
 struct _GdkWin32Display
 {
   GdkDisplay display;
@@ -191,6 +197,7 @@ struct _GdkWin32Display
   GdkWin32CbDnDItems *cb_dnd_items;
   GdkDeviceManagerWin32 *device_manager;
   surface_records *display_surface_record;
+  event_records *event_record;
 
   dmanip_items *dmanip_items;
 

@@ -630,11 +630,12 @@ find_surface_for_mouse_event (GdkSurface *reported_surface,
 }
 
 static GdkModifierType
-build_key_event_state (BYTE *key_state)
+build_key_event_state (GdkDisplay *display,
+                       BYTE       *key_state)
 {
   GdkModifierType state;
   GdkWin32Keymap *keymap;
-  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
+  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display));
 
   state = _gdk_win32_keymap_get_mod_mask (keymap);
 
@@ -656,11 +657,11 @@ build_key_event_state (BYTE *key_state)
 }
 
 static guint8
-get_active_group (void)
+get_active_group (GdkDisplay *display)
 {
   GdkWin32Keymap *keymap;
 
-  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
+  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display));
 
   return _gdk_win32_keymap_get_active_group (keymap);
 }
@@ -1243,7 +1244,7 @@ make_crossing_event (GdkDevice *physical_device,
   GDK_NOTE (EVENTS, g_print (" mouse_surface %p -> %p",
                              mouse_surface ? GDK_SURFACE_HWND (mouse_surface) : NULL,
                              surface ? GDK_SURFACE_HWND (surface) : NULL));
-  synthesize_crossing_events (_gdk_display,
+  synthesize_crossing_events (surface != NULL ? gdk_surface_get_display (surface) : gdk_display_get_default (),
                               physical_device,
                               mouse_surface, surface,
                               GDK_CROSSING_NORMAL,
@@ -1829,7 +1830,7 @@ gdk_event_translate (MSG *msg,
         GdkWin32Keymap *win32_keymap;
         GdkTranslatedKey translated;
 
-        win32_keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (_gdk_display));
+        win32_keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display));
 
         win32_display->input_locale_items->input_locale = (HKL) msg->lParam;
         _gdk_win32_keymap_set_active_layout (win32_keymap, win32_display->input_locale_items->input_locale);
@@ -1991,8 +1992,8 @@ gdk_event_translate (MSG *msg,
                        msg->wParam == VK_SHIFT ||
                        msg->wParam == VK_MENU);
 
-        state = build_key_event_state (key_state);
-        group = get_active_group ();
+        state = build_key_event_state (display, key_state);
+        group = get_active_group (display);
 
         gdk_keymap_translate_keyboard_state ((GdkKeymap*) win32_keymap, keycode, state, group,
                                              &keyval, &effective_group, &level, &consumed);
@@ -2129,14 +2130,14 @@ gdk_event_translate (MSG *msg,
             /* Build a key press event */
             translated.keyval = gdk_unicode_to_keyval (wbuf[i]);
             translated.consumed = 0;
-            translated.layout = get_active_group ();
+            translated.layout = get_active_group (display);
             translated.level = 0;
             event = gdk_key_event_new (GDK_KEY_PRESS,
                                        surface,
                                        win32_display->device_manager->core_keyboard,
                                        _gdk_win32_get_next_tick (msg->time),
                                        0,
-                                       build_key_event_state (key_state),
+                                       build_key_event_state (display, key_state),
                                        FALSE,
                                        &translated,
                                        &translated,
@@ -2150,7 +2151,7 @@ gdk_event_translate (MSG *msg,
                                        win32_display->device_manager->core_keyboard,
                                        _gdk_win32_get_next_tick (msg->time),
                                        0,
-                                       build_key_event_state (key_state),
+                                       build_key_event_state (display, key_state),
                                        FALSE,
                                        &translated,
                                        &translated,
