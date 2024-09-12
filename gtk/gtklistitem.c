@@ -434,7 +434,7 @@ gtk_list_item_get_position (GtkListItem *self)
  *
  * Checks if the item is displayed as selected.
  *
- * The selected state is maintained by the liste widget and its model
+ * The selected state is maintained by the list widget and its model
  * and cannot be set otherwise.
  *
  * Returns: %TRUE if the item is selected.
