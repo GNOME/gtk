@@ -33,7 +33,14 @@ struct _GskGpuCached
   guint pixels;   /* For glyphs and textures, pixels. For atlases, alive pixels */
 };
 
+struct _GskGpuCachePrivate
+{
+  GHashTable *glyph_cache;
+};
+
 gpointer                gsk_gpu_cached_new                              (GskGpuCache                    *cache,
+                                                                         const GskGpuCachedClass        *class);
+gpointer                gsk_gpu_cached_new_from_current_atlas           (GskGpuCache                    *cache,
                                                                          const GskGpuCachedClass        *class);
 
 void                    gsk_gpu_cached_use                              (GskGpuCached                   *cached);

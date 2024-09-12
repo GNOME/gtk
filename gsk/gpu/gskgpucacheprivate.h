@@ -34,6 +34,12 @@ gboolean                gsk_gpu_cache_gc                                (GskGpuC
 gsize                   gsk_gpu_cache_get_dead_textures                 (GskGpuCache            *self);
 gsize                   gsk_gpu_cache_get_dead_texture_pixels           (GskGpuCache            *self);
 GskGpuImage *           gsk_gpu_cache_get_atlas_image                   (GskGpuCache            *self);
+GskGpuImage *           gsk_gpu_cache_add_atlas_image                   (GskGpuCache            *self,
+                                                                         gsize                   width,
+                                                                         gsize                   height,
+                                                                         gsize                  *out_x,
+                                                                         gsize                  *out_y);
+GskGpuCachePrivate *    gsk_gpu_cache_get_private                       (GskGpuCache            *self);
 
 GskGpuImage *           gsk_gpu_cache_lookup_texture_image              (GskGpuCache            *self,
                                                                          GdkTexture             *texture,
@@ -55,25 +61,6 @@ void                    gsk_gpu_cache_cache_tile                        (GskGpuC
                                                                          gsize                   tile_id,
                                                                          GskGpuImage            *image,
                                                                          GdkColorState          *color_state);
-
-typedef enum
-{
-  GSK_GPU_GLYPH_X_OFFSET_1 = 0x1,
-  GSK_GPU_GLYPH_X_OFFSET_2 = 0x2,
-  GSK_GPU_GLYPH_X_OFFSET_3 = 0x3,
-  GSK_GPU_GLYPH_Y_OFFSET_1 = 0x4,
-  GSK_GPU_GLYPH_Y_OFFSET_2 = 0x8,
-  GSK_GPU_GLYPH_Y_OFFSET_3 = 0xC
-} GskGpuGlyphLookupFlags;
-
-GskGpuImage *           gsk_gpu_cache_lookup_glyph_image                (GskGpuCache            *self,
-                                                                         GskGpuFrame            *frame,
-                                                                         PangoFont              *font,
-                                                                         PangoGlyph              glyph,
-                                                                         GskGpuGlyphLookupFlags  flags,
-                                                                         float                   scale,
-                                                                         graphene_rect_t        *out_bounds,
-                                                                         graphene_point_t       *out_origin);
 
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuCache, g_object_unref)

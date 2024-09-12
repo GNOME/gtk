@@ -2,18 +2,17 @@
 
 #include "gskgpucacheprivate.h"
 
+#include "gskgpucachedglyphprivate.h"
 #include "gskgpucachedprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
 #include "gskgpuimageprivate.h"
-#include "gskgpuuploadopprivate.h"
 
 #include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 #include "gdk/gdktextureprivate.h"
 
 #include "gsk/gskdebugprivate.h"
-#include "gsk/gskprivate.h"
 
 #define MAX_SLICES_PER_ATLAS 64
 
@@ -45,7 +44,6 @@ struct _GskGpuCache
   GHashTable *texture_cache;
   GHashTable *ccs_texture_caches[GDK_COLOR_STATE_N_IDS];
   GHashTable *tile_cache;
-  GHashTable *glyph_cache;
 
   GskGpuCachedAtlas *current_atlas;
 
@@ -53,7 +51,7 @@ struct _GskGpuCache
   /* atomic */ gsize dead_texture_pixels;
 };
 
-G_DEFINE_TYPE (GskGpuCache, gsk_gpu_cache, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_PRIVATE (GskGpuCache, gsk_gpu_cache, G_TYPE_OBJECT)
 
 /* {{{ Cached base class */
 
@@ -105,6 +103,15 @@ gsk_gpu_cached_new_from_atlas (GskGpuCache             *cache,
     cache->first_cached = cached;
 
   return cached;
+}
+
+gpointer
+gsk_gpu_cached_new_from_current_atlas (GskGpuCache             *cache,
+                                       const GskGpuCachedClass *class)
+{
+  return gsk_gpu_cached_new_from_atlas (cache,
+                                        class,
+                                        cache->current_atlas);
 }
 
 gpointer
@@ -302,7 +309,7 @@ gsk_gpu_cache_get_atlas_image (GskGpuCache *self)
   return self->current_atlas->image;
 }
 
-static GskGpuImage *
+GskGpuImage *
 gsk_gpu_cache_add_atlas_image (GskGpuCache      *self,
                                gsize             width,
                                gsize             height,
@@ -706,85 +713,6 @@ gsk_gpu_cache_cache_tile (GskGpuCache      *self,
 }
 
 /* }}} */
-/* {{{ CachedGlyph */
-
-struct _GskGpuCachedGlyph
-{
-  GskGpuCached parent;
-
-  PangoFont *font;
-  PangoGlyph glyph;
-  GskGpuGlyphLookupFlags flags;
-  float scale;
-
-  GskGpuImage *image;
-  graphene_rect_t bounds;
-  graphene_point_t origin;
-};
-
-static void
-gsk_gpu_cached_glyph_free (GskGpuCached *cached)
-{
-  GskGpuCachedGlyph *self = (GskGpuCachedGlyph *) cached;
-
-  g_hash_table_remove (cached->cache->glyph_cache, self);
-
-  g_object_unref (self->font);
-  g_object_unref (self->image);
-
-  g_free (self);
-}
-
-static gboolean
-gsk_gpu_cached_glyph_should_collect (GskGpuCached *cached,
-                                     gint64        cache_timeout,
-                                     gint64        timestamp)
-{
-  if (gsk_gpu_cached_is_old (cached, cache_timeout, timestamp))
-    {
-      if (cached->atlas)
-        mark_as_stale (cached, TRUE);
-      else
-        return TRUE;
-    }
-
-  /* Glyphs are only collected when their atlas is freed */
-  return FALSE;
-}
-
-static guint
-gsk_gpu_cached_glyph_hash (gconstpointer data)
-{
-  const GskGpuCachedGlyph *glyph = data;
-
-  return GPOINTER_TO_UINT (glyph->font) ^
-         glyph->glyph ^
-         (glyph->flags << 24) ^
-         ((guint) glyph->scale * PANGO_SCALE);
-}
-
-static gboolean
-gsk_gpu_cached_glyph_equal (gconstpointer v1,
-                            gconstpointer v2)
-{
-  const GskGpuCachedGlyph *glyph1 = v1;
-  const GskGpuCachedGlyph *glyph2 = v2;
-
-  return glyph1->font == glyph2->font
-      && glyph1->glyph == glyph2->glyph
-      && glyph1->flags == glyph2->flags
-      && glyph1->scale == glyph2->scale;
-}
-
-static const GskGpuCachedClass GSK_GPU_CACHED_GLYPH_CLASS =
-{
-  sizeof (GskGpuCachedGlyph),
-  "Glyph",
-  gsk_gpu_cached_glyph_free,
-  gsk_gpu_cached_glyph_should_collect
-};
-
-/* }}} */
 /* {{{ GskGpuCache */
 
 GskGpuDevice *
@@ -947,7 +875,9 @@ gsk_gpu_cache_dispose (GObject *object)
   GskGpuCache *self = GSK_GPU_CACHE (object);
 
   gsk_gpu_cache_clear_cache (self);
-  g_hash_table_unref (self->glyph_cache);
+
+  gsk_gpu_cached_glyph_finish_cache (self);
+
   g_clear_pointer (&self->tile_cache, g_hash_table_unref);
   g_hash_table_unref (self->texture_cache);
 
@@ -976,10 +906,10 @@ gsk_gpu_cache_class_init (GskGpuCacheClass *klass)
 static void
 gsk_gpu_cache_init (GskGpuCache *self)
 {
-  self->glyph_cache = g_hash_table_new (gsk_gpu_cached_glyph_hash,
-                                        gsk_gpu_cached_glyph_equal);
   self->texture_cache = g_hash_table_new (g_direct_hash,
                                           g_direct_equal);
+  
+  gsk_gpu_cached_glyph_init_cache (self);
 }
 
 GskGpuImage *
@@ -1023,105 +953,6 @@ gsk_gpu_cache_cache_texture_image (GskGpuCache   *self,
   gsk_gpu_cached_use ((GskGpuCached *) cache);
 }
 
-GskGpuImage *
-gsk_gpu_cache_lookup_glyph_image (GskGpuCache            *self,
-                                  GskGpuFrame            *frame,
-                                  PangoFont              *font,
-                                  PangoGlyph              glyph,
-                                  GskGpuGlyphLookupFlags  flags,
-                                  float                   scale,
-                                  graphene_rect_t        *out_bounds,
-                                  graphene_point_t       *out_origin)
-{
-  GskGpuCachedGlyph lookup = {
-    .font = font,
-    .glyph = glyph,
-    .flags = flags,
-    .scale = scale
-  };
-  GskGpuCachedGlyph *cache;
-  PangoRectangle ink_rect;
-  graphene_rect_t rect;
-  graphene_point_t origin;
-  GskGpuImage *image;
-  gsize atlas_x, atlas_y, padding;
-  float subpixel_x, subpixel_y;
-  PangoFont *scaled_font;
-
-  cache = g_hash_table_lookup (self->glyph_cache, &lookup);
-  if (cache)
-    {
-      gsk_gpu_cached_use ((GskGpuCached *) cache);
-
-      *out_bounds = cache->bounds;
-      *out_origin = cache->origin;
-      return cache->image;
-    }
-
-  scaled_font = gsk_reload_font (font, scale, CAIRO_HINT_METRICS_DEFAULT, CAIRO_HINT_STYLE_DEFAULT, CAIRO_ANTIALIAS_DEFAULT);
-
-  subpixel_x = (flags & 3) / 4.f;
-  subpixel_y = ((flags >> 2) & 3) / 4.f;
-  pango_font_get_glyph_extents (scaled_font, glyph, &ink_rect, NULL);
-  origin.x = floor (ink_rect.x * 1.0 / PANGO_SCALE + subpixel_x);
-  origin.y = floor (ink_rect.y * 1.0 / PANGO_SCALE + subpixel_y);
-  rect.size.width = ceil ((ink_rect.x + ink_rect.width) * 1.0 / PANGO_SCALE + subpixel_x) - origin.x;
-  rect.size.height = ceil ((ink_rect.y + ink_rect.height) * 1.0 / PANGO_SCALE + subpixel_y) - origin.y;
-  padding = 1;
-
-  image = gsk_gpu_cache_add_atlas_image (self,
-                                         rect.size.width + 2 * padding, rect.size.height + 2 * padding,
-                                         &atlas_x, &atlas_y);
-  if (image)
-    {
-      g_object_ref (image);
-      rect.origin.x = atlas_x + padding;
-      rect.origin.y = atlas_y + padding;
-      cache = gsk_gpu_cached_new_from_atlas (self, &GSK_GPU_CACHED_GLYPH_CLASS, self->current_atlas);
-    }
-  else
-    {
-      image = gsk_gpu_device_create_upload_image (self->device, FALSE, GDK_MEMORY_DEFAULT, FALSE, rect.size.width, rect.size.height),
-      rect.origin.x = 0;
-      rect.origin.y = 0;
-      padding = 0;
-      cache = gsk_gpu_cached_new (self, &GSK_GPU_CACHED_GLYPH_CLASS);
-    }
-
-  cache->font = g_object_ref (font);
-  cache->glyph = glyph;
-  cache->flags = flags;
-  cache->scale = scale;
-  cache->bounds = rect;
-  cache->image = image;
-  cache->origin = GRAPHENE_POINT_INIT (- origin.x + subpixel_x,
-                                       - origin.y + subpixel_y);
-  ((GskGpuCached *) cache)->pixels = (rect.size.width + 2 * padding) * (rect.size.height + 2 * padding);
-
-  gsk_gpu_upload_glyph_op (frame,
-                           cache->image,
-                           scaled_font,
-                           glyph,
-                           &(cairo_rectangle_int_t) {
-                               .x = rect.origin.x - padding,
-                               .y = rect.origin.y - padding,
-                               .width = rect.size.width + 2 * padding,
-                               .height = rect.size.height + 2 * padding,
-                           },
-                           &GRAPHENE_POINT_INIT (cache->origin.x + padding,
-                                                 cache->origin.y + padding));
-
-  g_hash_table_insert (self->glyph_cache, cache, cache);
-  gsk_gpu_cached_use ((GskGpuCached *) cache);
-
-  *out_bounds = cache->bounds;
-  *out_origin = cache->origin;
-
-  g_object_unref (scaled_font);
-
-  return cache->image;
-}
-
 GskGpuCache *
 gsk_gpu_cache_new (GskGpuDevice *device)
 {
@@ -1131,6 +962,12 @@ gsk_gpu_cache_new (GskGpuDevice *device)
   self->device = g_object_ref (device);
 
   return self;
+}
+
+GskGpuCachePrivate *
+gsk_gpu_cache_get_private (GskGpuCache *self)
+{
+  return gsk_gpu_cache_get_instance_private (self);
 }
 
 /* }}} */
