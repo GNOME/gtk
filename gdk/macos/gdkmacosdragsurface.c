@@ -101,6 +101,8 @@ _gdk_macos_drag_surface_constructed (GObject *object)
   [window setOpaque:NO];
   [window setBackgroundColor:[NSColor clearColor]];
   [window setDecorated:NO];
+  [window setLevel:NSStatusWindowLevel];
+  [window setIgnoresMouseEvents:YES];
 
   frame_clock = _gdk_frame_clock_idle_new ();
   gdk_surface_set_frame_clock (surface, frame_clock);
