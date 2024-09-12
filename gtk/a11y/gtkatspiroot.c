@@ -594,39 +594,63 @@ on_event_listener_deregistered (GDBusConnection *connection,
 }
 
 static bool
-check_flatpak_portal_version (GDBusConnection *connection,
-                              unsigned int     minimum_version)
+check_flatpak_portal_version (unsigned int minimum_version)
 {
-  GError *error = NULL;
+  static uint32_t flatpak_portal_version = 0;
+  static size_t initialized = 0;
 
-  GVariant *res =
-    g_dbus_connection_call_sync (connection,
-                                 "org.freedesktop.portal.Flatpak",
-                                 "/org/freedesktop/portal/Flatpak",
-                                 "org.freedesktop.DBus.Properties",
-                                 "Get",
-                                 g_variant_new ("(ss)", "org.freedesktop.portal.Flatpak", "version"),
-                                 G_VARIANT_TYPE ("(u)"),
-                                 G_DBUS_CALL_FLAGS_NONE,
-                                 -1,
-                                 NULL,
-                                 &error);
-
-  if (error != NULL)
+  if (g_once_init_enter (&initialized))
     {
-      g_warning ("Unable to retrieve the Flatpak portal version: %s",
-                 error->message);
-      g_clear_error (&error);
-      return false;
+      GDBusConnection *session_bus;
+      GError *error = NULL;
+      GVariant *child;
+      GVariant *res;
+
+      session_bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, &error);
+
+      if (error != NULL)
+        {
+          g_warning ("Unable to retrieve the session bus: %s",
+                     error->message);
+          g_clear_error (&error);
+          g_once_init_leave (&initialized, 1);
+          return false;
+        }
+
+      res =
+        g_dbus_connection_call_sync (session_bus,
+                                     "org.freedesktop.portal.Flatpak",
+                                     "/org/freedesktop/portal/Flatpak",
+                                     "org.freedesktop.DBus.Properties",
+                                     "Get",
+                                     g_variant_new ("(ss)", "org.freedesktop.portal.Flatpak", "version"),
+                                     G_VARIANT_TYPE ("(v)"),
+                                     G_DBUS_CALL_FLAGS_NONE,
+                                     -1,
+                                     NULL,
+                                     &error);
+
+      if (error != NULL)
+        {
+          g_warning ("Unable to retrieve the Flatpak portal version: %s",
+                     error->message);
+          g_clear_error (&error);
+          g_once_init_leave (&initialized, 1);
+          return false;
+        }
+
+      g_variant_get (res, "(v)", &child);
+      g_variant_unref (res);
+
+      flatpak_portal_version = g_variant_get_uint32 (child);
+      g_variant_unref (child);
+
+      g_once_init_leave (&initialized, 1);
     }
 
-  guint32 version = 0;
-  g_variant_get (res, "(u)", &version);
-  g_variant_unref (res);
+  GTK_DEBUG (A11Y, "Flatpak portal version: %u (required: %u)", flatpak_portal_version, minimum_version);
 
-  GTK_DEBUG (A11Y, "Flatpak portal version: %u (required: %u)", version, minimum_version);
-
-  return version >= minimum_version;
+  return flatpak_portal_version >= minimum_version;
 }
 
 static void
@@ -746,7 +770,7 @@ on_registration_reply (GObject      *gobject,
    * check if the version of the Flatpak portal is recent enough.
    */
   if (gdk_should_use_portal () &&
-      !check_flatpak_portal_version (self->connection, 7))
+      !check_flatpak_portal_version (7))
     {
       GTK_DEBUG (A11Y, "Sandboxed does not allow event listener registration");
       self->can_use_event_listeners = false;
