@@ -49,4 +49,23 @@ gsk_gpu_cached_is_old (GskGpuCached *cached,
     return timestamp - cached->timestamp > cache_timeout;
 }
 
+static inline void
+gsk_gpu_cached_set_stale (GskGpuCached *cached,
+                          gboolean      stale)
+{
+  if (cached->stale == stale)
+    return;
+
+  cached->stale = stale;
+
+  if (cached->atlas)
+    {
+      if (stale)
+        ((GskGpuCached *) cached->atlas)->pixels -= cached->pixels;
+      else
+        ((GskGpuCached *) cached->atlas)->pixels += cached->pixels;
+    }
+}
+
+
 G_END_DECLS

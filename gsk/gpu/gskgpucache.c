@@ -57,24 +57,6 @@ G_DEFINE_TYPE (GskGpuCache, gsk_gpu_cache, G_TYPE_OBJECT)
 
 /* {{{ Cached base class */
 
-static inline void
-mark_as_stale (GskGpuCached *cached,
-               gboolean      stale)
-{
-  if (cached->stale != stale)
-    {
-      cached->stale = stale;
-
-      if (cached->atlas)
-        {
-          if (stale)
-            ((GskGpuCached *) cached->atlas)->pixels -= cached->pixels;
-          else
-            ((GskGpuCached *) cached->atlas)->pixels += cached->pixels;
-        }
-    }
-}
-
 static void
 gsk_gpu_cached_free (GskGpuCached *cached)
 {
@@ -89,7 +71,7 @@ gsk_gpu_cached_free (GskGpuCached *cached)
   else
     self->first_cached = cached->next;
 
-  mark_as_stale (cached, TRUE);
+  gsk_gpu_cached_set_stale (cached, TRUE);
 
   cached->class->free (cached);
 }
@@ -136,7 +118,7 @@ void
 gsk_gpu_cached_use (GskGpuCached *cached)
 {
   cached->timestamp = cached->cache->timestamp;
-  mark_as_stale (cached, FALSE);
+  gsk_gpu_cached_set_stale (cached, FALSE);
 }
 
 /* }}} */
