@@ -66,8 +66,8 @@ The clock has several phases:
 - Layout
 - Paint
 
- The phases happens in this order and we will always run each
- phase through before going back to the start.
+The phases happen in this order and all phases will always run
+through before going back to the start.
 
 The Events phase is a stretch of time between each redraw where
 GTK processes input events from the user and other events
