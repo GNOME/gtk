@@ -29,7 +29,7 @@
 
 #include "gdkprivate-win32.h"
 #include "gdkdebugprivate.h"
-#include "gdkdisplayprivate.h"
+#include "gdkdisplay-win32.h"
 #include "gdkkeysyms.h"
 #include "gdkkeysprivate.h"
 #include "gdkkeys-win32.h"
@@ -77,9 +77,7 @@ struct _GdkWin32Keymap
 
 G_DEFINE_TYPE (GdkWin32Keymap, gdk_win32_keymap, GDK_TYPE_KEYMAP)
 
-guint _gdk_keymap_serial = 0;
-static GdkKeymap *default_keymap = NULL;
-
+/* forward declarations */
 static void update_keymap              (GdkWin32Keymap *gdk_keymap);
 static void clear_keyboard_layout_info (gpointer        data);
 
@@ -107,7 +105,14 @@ gdk_win32_keymap_init (GdkWin32Keymap *keymap)
   if (_gdk_win32_check_processor (GDK_WIN32_WOW64))
     keymap->gdkwin32_keymap_impl = &gdkwin32_keymap_impl_wow64;
 #endif
+}
 
+static void
+gdk_win32_keymap_constructed (GObject *object)
+{
+  GdkWin32Keymap *keymap;
+
+  keymap = GDK_WIN32_KEYMAP (object);
   update_keymap (keymap);
 }
 
@@ -583,8 +588,10 @@ update_keymap (GdkWin32Keymap *keymap)
   BOOL changed = FALSE;
   int  n_layouts;
   int  i;
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (GDK_KEYMAP (keymap)->display);
 
-  if (keymap->current_serial == _gdk_keymap_serial &&
+
+  if (keymap->current_serial == display->input_locale_items->keymap_serial &&
       keymap->layout_handles->len > 0)
     {
       return;
@@ -643,7 +650,7 @@ update_keymap (GdkWin32Keymap *keymap)
   if (changed)
     ActivateKeyboardLayout (current_layout, 0);
 
-  keymap->current_serial = _gdk_keymap_serial;
+  keymap->current_serial = display->input_locale_items->keymap_serial;
 }
 
 guint8
@@ -675,17 +682,6 @@ _gdk_win32_keymap_get_active_group (GdkWin32Keymap *keymap)
     return keymap->active_layout;
 
   return 0;
-}
-
-GdkKeymap*
-_gdk_win32_display_get_keymap (GdkDisplay *display)
-{
-  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
-
-  if (default_keymap == NULL)
-    default_keymap = g_object_new (gdk_win32_keymap_get_type (), NULL);
-
-  return default_keymap;
 }
 
 GdkModifierType
@@ -1071,6 +1067,7 @@ gdk_win32_keymap_class_init (GdkWin32KeymapClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkKeymapClass *keymap_class = GDK_KEYMAP_CLASS (klass);
 
+  object_class->constructed = gdk_win32_keymap_constructed;
   object_class->finalize = gdk_win32_keymap_finalize;
 
   keymap_class->get_direction = gdk_win32_keymap_get_direction;

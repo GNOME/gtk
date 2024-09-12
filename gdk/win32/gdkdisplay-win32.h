@@ -57,6 +57,10 @@ struct _GdkWin32InputLocaleItems
   GdkWin32ALPNSink *notifcation_sink;
   ITfSource *itf_source;
   DWORD actlangchangenotify_id;
+
+  /* keymap items */
+  GdkKeymap *default_keymap;
+  guint keymap_serial;
 };
 typedef struct _GdkWin32InputLocaleItems GdkWin32InputLocaleItems;
 
@@ -177,6 +181,12 @@ typedef struct
 /* for tracking various events that go on */
 typedef struct
 {
+  /* for tracking various mouse/wintab/winpointer events */
+  GdkSurface *mouse_surface;
+  GdkSurface *mouse_surface_ignored_leave;
+  int current_root_x;
+  int current_root_y;
+
   int debug_indent_displaychange;
 } event_records;
 

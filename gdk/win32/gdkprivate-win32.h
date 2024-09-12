@@ -143,8 +143,6 @@ extern LRESULT CALLBACK _gdk_win32_surface_procedure (HWND, UINT, WPARAM, LPARAM
  * from a single thread anyway.
  */
 
-extern guint             _gdk_keymap_serial;
-
 typedef enum {
   GDK_WIN32_MODAL_OP_NONE = 0x0,
   GDK_WIN32_MODAL_OP_SIZE = 0x1 << 0,
@@ -204,8 +202,6 @@ guint8     _gdk_win32_keymap_get_rshift_scancode (GdkWin32Keymap *keymap);
 void       _gdk_win32_keymap_set_active_layout   (GdkWin32Keymap *keymap,
                                                   HKL             hkl);
 GdkModifierType _gdk_win32_keymap_get_mod_mask   (GdkWin32Keymap *keymap);
-
-GdkKeymap *_gdk_win32_display_get_keymap (GdkDisplay *display);
 
 /* stray GdkSurfaceImplWin32 members */
 void _gdk_win32_surface_register_dnd (GdkSurface *surface);

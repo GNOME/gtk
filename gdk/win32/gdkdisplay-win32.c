@@ -701,7 +701,7 @@ _gdk_win32_display_open (const char *display_name)
       g_signal_emit_by_name (display, "opened");
 
       /* Precalculate keymap, see #6203 */
-      _gdk_win32_display_get_keymap (display);
+      gdk_display_get_keymap (display);
 
       GDK_NOTE (MISC, g_print ("... gdk_display now set up\n"));
 
@@ -855,6 +855,7 @@ gdk_win32_display_finalize (GObject *object)
   gdk_win32_display_close_dmanip_manager (GDK_DISPLAY (display_win32));
   _gdk_win32_dnd_exit ();
   gdk_win32_display_lang_notification_exit (display_win32);
+  g_clear_pointer (&display_win32->input_locale_items->default_keymap, g_object_unref);
   g_free (display_win32->input_locale_items->notifcation_sink);
   g_free (display_win32->input_locale_items);
   g_object_unref (display_win32->cb_dnd_items->clipdrop);
@@ -1698,6 +1699,19 @@ gdk_win32_display_get_clipdrop (GdkDisplay *display)
   return display_win32->cb_dnd_items->clipdrop;
 }
 
+static GdkKeymap*
+_gdk_win32_display_get_keymap (GdkDisplay *display)
+{
+  GdkWin32Display *display_win32;
+
+  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
+
+  display_win32 = GDK_WIN32_DISPLAY (display);
+  if (display_win32->input_locale_items->default_keymap == NULL)
+    display_win32->input_locale_items->default_keymap = g_object_new (GDK_TYPE_WIN32_KEYMAP, "display", display, NULL);
+
+  return display_win32->input_locale_items->default_keymap;
+}
 
 static void
 gdk_win32_display_class_init (GdkWin32DisplayClass *klass)

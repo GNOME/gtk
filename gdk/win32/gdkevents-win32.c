@@ -136,10 +136,6 @@ static GSourceFuncs event_funcs = {
 };
 
 /* TODO: Get rid of these global variables... */
-static GdkSurface *mouse_surface = NULL;
-static GdkSurface *mouse_surface_ignored_leave = NULL;
-static int current_root_x, current_root_y;
-
 static UINT got_gdk_events_message;
 static HWND modal_win32_dialog = NULL;
 
@@ -635,7 +631,7 @@ build_key_event_state (GdkDisplay *display,
 {
   GdkModifierType state;
   GdkWin32Keymap *keymap;
-  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display));
+  keymap = GDK_WIN32_KEYMAP (gdk_display_get_keymap (display));
 
   state = _gdk_win32_keymap_get_mod_mask (keymap);
 
@@ -661,7 +657,7 @@ get_active_group (GdkDisplay *display)
 {
   GdkWin32Keymap *keymap;
 
-  keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display));
+  keymap = GDK_WIN32_KEYMAP (gdk_display_get_keymap (display));
 
   return _gdk_win32_keymap_get_active_group (keymap);
 }
@@ -1241,10 +1237,13 @@ make_crossing_event (GdkDevice *physical_device,
                      POINT *screen_pt,
                      guint32 time_)
 {
+  GdkDisplay *display = surface != NULL ? gdk_surface_get_display (surface) : gdk_display_get_default ();
+
+  GdkSurface *mouse_surface = GDK_WIN32_DISPLAY (display)->event_record->mouse_surface;
   GDK_NOTE (EVENTS, g_print (" mouse_surface %p -> %p",
                              mouse_surface ? GDK_SURFACE_HWND (mouse_surface) : NULL,
                              surface ? GDK_SURFACE_HWND (surface) : NULL));
-  synthesize_crossing_events (surface != NULL ? gdk_surface_get_display (surface) : gdk_display_get_default (),
+  synthesize_crossing_events (display,
                               physical_device,
                               mouse_surface, surface,
                               GDK_CROSSING_NORMAL,
@@ -1252,7 +1251,7 @@ make_crossing_event (GdkDevice *physical_device,
                               0, /* TODO: Set right mask */
                               time_,
                               FALSE);
-  g_set_object (&mouse_surface, surface);
+  g_set_object (&GDK_WIN32_DISPLAY (display)->event_record->mouse_surface, surface);
 }
 
 /* Acquires actual client area size of the underlying native surface HWND.
@@ -1830,11 +1829,11 @@ gdk_event_translate (MSG *msg,
         GdkWin32Keymap *win32_keymap;
         GdkTranslatedKey translated;
 
-        win32_keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display));
+        win32_keymap = GDK_WIN32_KEYMAP (gdk_display_get_keymap (display));
 
         win32_display->input_locale_items->input_locale = (HKL) msg->lParam;
         _gdk_win32_keymap_set_active_layout (win32_keymap, win32_display->input_locale_items->input_locale);
-        _gdk_keymap_serial++;
+        win32_display->input_locale_items->keymap_serial++;
         GDK_NOTE (EVENTS,
                   g_print (" cs:%lu hkl:%p%s",
                            (gulong) msg->wParam,
@@ -1927,7 +1926,7 @@ gdk_event_translate (MSG *msg,
         if (GDK_SURFACE_DESTROYED (surface))
           break;
 
-        win32_keymap = GDK_WIN32_KEYMAP (_gdk_win32_display_get_keymap (display));
+        win32_keymap = GDK_WIN32_KEYMAP (gdk_display_get_keymap (display));
         impl = GDK_WIN32_SURFACE (surface);
 
         API_CALL (GetKeyboardState, (key_state));
@@ -2282,8 +2281,8 @@ gdk_event_translate (MSG *msg,
                                       0, /* TODO: Set right mask */
                                       _gdk_win32_get_next_tick (msg->time),
                                      FALSE);
-          g_set_object (&mouse_surface, new_surface);
-          mouse_surface_ignored_leave = NULL;
+          g_set_object (&win32_display->event_record->mouse_surface, new_surface);
+          win32_display->event_record->mouse_surface_ignored_leave = NULL;
         }
 
       *ret_valp = (msg->message == WM_XBUTTONUP ? TRUE : 0);
@@ -2316,32 +2315,34 @@ gdk_event_translate (MSG *msg,
 
       g_set_object (&surface, find_surface_for_mouse_event (surface, msg));
 
-      if (mouse_surface != surface)
-	{
-	  GDK_NOTE (EVENTS, g_print (" mouse_surface %p -> %p",
-				     mouse_surface ? GDK_SURFACE_HWND (mouse_surface) : NULL,
-                                     surface ? GDK_SURFACE_HWND (surface) : NULL));
-	  synthesize_crossing_events (display,
+      if (win32_display->event_record->mouse_surface != surface)
+        {
+          GdkSurface *mouse_surface = win32_display->event_record->mouse_surface;
+
+          GDK_NOTE (EVENTS, g_print (" mouse_surface %p -> %p",
+                    mouse_surface ? GDK_SURFACE_HWND (mouse_surface) : NULL,
+                    surface ? GDK_SURFACE_HWND (surface) : NULL));
+          synthesize_crossing_events (display,
                                       win32_display->device_manager->system_pointer,
                                       mouse_surface, surface,
-				      GDK_CROSSING_NORMAL,
-				      &msg->pt,
-				      0, /* TODO: Set right mask */
-				      _gdk_win32_get_next_tick (msg->time),
-				      FALSE);
-	  g_set_object (&mouse_surface, surface);
-	  mouse_surface_ignored_leave = NULL;
-	  if (surface != NULL)
-	    track_mouse_event (TME_LEAVE, GDK_SURFACE_HWND (surface));
-	}
-      else if (surface != NULL && surface == mouse_surface_ignored_leave)
-	{
-	  /* If we ignored a leave event for this surface and we're now getting
-	     input again we need to re-arm the mouse tracking, as that was
-	     cancelled by the mouseleave. */
-	  mouse_surface_ignored_leave = NULL;
+                                      GDK_CROSSING_NORMAL,
+                                     &msg->pt,
+                                      0, /* TODO: Set right mask */
+                                      _gdk_win32_get_next_tick (msg->time),
+                                      FALSE);
+          g_set_object (&win32_display->event_record->mouse_surface, surface);
+          win32_display->event_record->mouse_surface_ignored_leave = NULL;
+          if (surface != NULL)
+            track_mouse_event (TME_LEAVE, GDK_SURFACE_HWND (surface));
+        }
+      else if (surface != NULL && surface == win32_display->event_record->mouse_surface_ignored_leave)
+        {
+           /* If we ignored a leave event for this surface and we're now getting
+              input again we need to re-arm the mouse tracking, as that was
+              cancelled by the mouseleave. */
+          win32_display->event_record->mouse_surface_ignored_leave = NULL;
           track_mouse_event (TME_LEAVE, GDK_SURFACE_HWND (surface));
-	}
+        }
 
       impl = GDK_WIN32_SURFACE (surface);
 
@@ -2349,12 +2350,12 @@ gdk_event_translate (MSG *msg,
        * sends WM_MOUSEMOVE messages after a new surface is shown under
        * the mouse, even if the mouse hasn't moved. This disturbs gtk.
        */
-      if (msg->pt.x == current_root_x &&
-          msg->pt.y == current_root_y)
+      if (msg->pt.x == win32_display->event_record->current_root_x &&
+          msg->pt.y == win32_display->event_record->current_root_y)
         break;
 
-      current_root_x = msg->pt.x;
-      current_root_y = msg->pt.y;
+      win32_display->event_record->current_root_x = msg->pt.x;
+      win32_display->event_record->current_root_y = msg->pt.y;
 
       if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
         gdk_win32_surface_do_move_resize_drag (surface, msg->pt.x, msg->pt.y);
@@ -2417,16 +2418,16 @@ gdk_event_translate (MSG *msg,
 	}
 
       if (!ignore_leave)
-	synthesize_crossing_events (display,
+        synthesize_crossing_events (display,
                                     win32_display->device_manager->system_pointer,
-				    mouse_surface, new_surface,
-				    GDK_CROSSING_NORMAL,
-				    &msg->pt,
-				    0, /* TODO: Set right mask */
-				    _gdk_win32_get_next_tick (msg->time),
-				    FALSE);
-      g_set_object (&mouse_surface, new_surface);
-      mouse_surface_ignored_leave = ignore_leave ? new_surface : NULL;
+                                    win32_display->event_record->mouse_surface, new_surface,
+                                    GDK_CROSSING_NORMAL,
+                                   &msg->pt,
+                                    0, /* TODO: Set right mask */
+                                    _gdk_win32_get_next_tick (msg->time),
+                                    FALSE);
+      g_set_object (&win32_display->event_record->mouse_surface, new_surface);
+      win32_display->event_record->mouse_surface_ignored_leave = ignore_leave ? new_surface : NULL;
 
 
       return_val = TRUE;
@@ -2442,8 +2443,8 @@ gdk_event_translate (MSG *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
           pen_touch_input = TRUE;
           last_digitizer_time = msg->time;
         }
@@ -2453,7 +2454,7 @@ gdk_event_translate (MSG *msg,
           !pointer_grab->owner_events)
         g_set_object (&surface, pointer_grab->surface);
 
-      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && mouse_surface != surface)
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && win32_display->event_record->mouse_surface != surface)
         crossing_cb = make_crossing_event;
 
       gdk_winpointer_input_events (surface, crossing_cb, msg);
@@ -2472,8 +2473,8 @@ gdk_event_translate (MSG *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
           pen_touch_input = TRUE;
           last_digitizer_time = msg->time;
         }
@@ -2505,8 +2506,8 @@ gdk_event_translate (MSG *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
           pen_touch_input = TRUE;
           last_digitizer_time = msg->time;
         }
@@ -2516,14 +2517,16 @@ gdk_event_translate (MSG *msg,
           !pointer_grab->owner_events)
         g_set_object (&surface, pointer_grab->surface);
 
-      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && mouse_surface != surface)
+      if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && win32_display->event_record->mouse_surface != surface)
         crossing_cb = make_crossing_event;
 
       impl = GDK_WIN32_SURFACE (surface);
 
       if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
         {
-          gdk_win32_surface_do_move_resize_drag (surface, current_root_x, current_root_y);
+          gdk_win32_surface_do_move_resize_drag (surface,
+                                                 win32_display->event_record->current_root_x,
+                                                 win32_display->event_record->current_root_y);
         }
       else
         {
@@ -2544,15 +2547,15 @@ gdk_event_translate (MSG *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
           pen_touch_input = TRUE;
           last_digitizer_time = msg->time;
         }
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) &&
           !IS_POINTER_INCONTACT_WPARAM (msg->wParam) &&
-          mouse_surface != NULL)
+          win32_display->event_record->mouse_surface != NULL)
         {
           GdkDevice *event_device = NULL;
           guint32 event_time = 0;
@@ -2579,8 +2582,8 @@ gdk_event_translate (MSG *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
           pen_touch_input = TRUE;
           last_digitizer_time = msg->time;
         }
@@ -2609,8 +2612,8 @@ gdk_event_translate (MSG *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
           pen_touch_input = TRUE;
           last_digitizer_time = msg->time;
         }
@@ -2619,7 +2622,7 @@ gdk_event_translate (MSG *msg,
         {
           gdk_winpointer_input_events (surface, NULL, msg);
         }
-      else if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && mouse_surface != NULL)
+      else if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) && win32_display->event_record->mouse_surface != NULL)
         {
           GdkDevice *event_device = NULL;
           guint32 event_time = 0;
