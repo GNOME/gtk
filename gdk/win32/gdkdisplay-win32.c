@@ -573,7 +573,7 @@ _gdk_win32_display_open (const char *display_name)
       g_signal_emit_by_name (display, "opened");
 
       /* Precalculate keymap, see #6203 */
-      _gdk_win32_display_get_keymap (display);
+      gdk_display_get_keymap (display);
 
       GDK_NOTE (MISC, g_print ("... gdk_display now set up\n"));
 
@@ -1340,6 +1340,13 @@ gdk_win32_display_get_clipdrop (GdkDisplay *display)
   return display_win32->cb_dnd_items->clipdrop;
 }
 
+static GdkKeymap*
+_gdk_win32_display_get_keymap (GdkDisplay *display)
+{
+  g_return_val_if_fail (display == gdk_display_get_default (), NULL);
+
+  return gdk_win32_display_get_default_keymap (GDK_WIN32_DISPLAY (display));
+}
 
 static void
 gdk_win32_display_class_init (GdkWin32DisplayClass *klass)

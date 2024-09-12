@@ -48,6 +48,10 @@ struct _GdkWin32InputLocaleItems
   GdkWin32ALPNSink *notification_sink;
   ITfSource *itf_source;
   DWORD actlangchangenotify_id;
+
+  /* keymap items */
+  GdkKeymap *default_keymap;
+  guint keymap_serial;
 };
 
 static guint
@@ -234,6 +238,7 @@ gdk_win32_display_lang_notification_exit (GdkWin32Display *display)
 
   CoUninitialize ();
 
+  g_clear_pointer (&display->input_locale_items->default_keymap, g_object_unref);
   g_free (display->input_locale_items->notification_sink);
   g_free (display->input_locale_items);
 }
@@ -252,6 +257,38 @@ gdk_win32_display_input_locale_is_ime (GdkWin32Display *display)
   g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), FALSE);
 
   return display->input_locale_items->notification_sink->input_locale_is_ime;
+}
+
+GdkKeymap *
+gdk_win32_display_get_default_keymap (GdkWin32Display *display)
+{
+  g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), NULL);
+
+  if (display->input_locale_items->default_keymap == NULL)
+    {
+      display->input_locale_items->default_keymap =
+        g_object_new (GDK_TYPE_WIN32_KEYMAP,
+                      "display", display,
+                      NULL);
+    }
+
+  return display->input_locale_items->default_keymap;
+}
+
+void
+gdk_win32_display_increment_keymap_serial (GdkWin32Display *display)
+{
+  g_return_if_fail (GDK_IS_WIN32_DISPLAY (display));
+
+  display->input_locale_items->keymap_serial++;
+}
+
+guint
+gdk_win32_display_get_keymap_serial (GdkWin32Display *display)
+{
+  g_return_val_if_fail (GDK_IS_WIN32_DISPLAY (display), 0);
+
+  return display->input_locale_items->keymap_serial;
 }
 
 static char *

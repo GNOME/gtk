@@ -143,8 +143,6 @@ extern LRESULT CALLBACK _gdk_win32_surface_procedure (HWND, UINT, WPARAM, LPARAM
  * from a single thread anyway.
  */
 
-extern guint             _gdk_keymap_serial;
-
 typedef enum {
   GDK_WIN32_MODAL_OP_NONE = 0x0,
   GDK_WIN32_MODAL_OP_SIZE = 0x1 << 0,
@@ -205,8 +203,6 @@ void       _gdk_win32_keymap_set_active_layout   (GdkWin32Keymap *keymap,
                                                   HKL             hkl);
 GdkModifierType _gdk_win32_keymap_get_mod_mask   (GdkWin32Keymap *keymap);
 
-GdkKeymap *_gdk_win32_display_get_keymap (GdkDisplay *display);
-
 /* stray GdkSurfaceImplWin32 members */
 void _gdk_win32_surface_register_dnd (GdkSurface *surface);
 void _gdk_win32_surface_unregister_dnd (GdkSurface *surface);
@@ -218,15 +214,18 @@ GdkDrag *_gdk_win32_surface_drag_begin (GdkSurface         *surface,
                                         double              x_root,
                                         double              y_root);
 
-/* miscellaneous items (property setup, language notification) */
-gboolean gdk_win32_display_get_setting        (GdkDisplay *display,
-                                               const char *name,
-                                               GValue *value);
-void     gdk_win32_display_lang_notification_init (GdkWin32Display *display);
-void     gdk_win32_display_lang_notification_exit (GdkWin32Display *display);
-void     gdk_win32_display_set_input_locale       (GdkWin32Display *display,
-                                                   HKL              input_locale);
-gboolean gdk_win32_display_input_locale_is_ime    (GdkWin32Display *display);
+/* miscellaneous items (property setup, language notification, keymap serial) */
+gboolean   gdk_win32_display_get_setting             (GdkDisplay *display,
+                                                      const char *name,
+                                                      GValue *value);
+void       gdk_win32_display_lang_notification_init  (GdkWin32Display *display);
+void       gdk_win32_display_lang_notification_exit  (GdkWin32Display *display);
+void       gdk_win32_display_set_input_locale        (GdkWin32Display *display,
+                                                      HKL              input_locale);
+gboolean   gdk_win32_display_input_locale_is_ime     (GdkWin32Display *display);
+GdkKeymap *gdk_win32_display_get_default_keymap      (GdkWin32Display *display);
+void       gdk_win32_display_increment_keymap_serial (GdkWin32Display *display);
+guint      gdk_win32_display_get_keymap_serial       (GdkWin32Display *display);
 
 /* Stray GdkWin32Screen members */
 void _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen);

@@ -162,6 +162,12 @@ typedef struct
 /* for tracking various events that go on */
 typedef struct
 {
+  /* for tracking various mouse/wintab/winpointer events */
+  GdkSurface *mouse_surface;
+  GdkSurface *mouse_surface_ignored_leave;
+  int current_root_x;
+  int current_root_y;
+
   int debug_indent_displaychange;
 } event_records;
 
