@@ -70,7 +70,8 @@ typedef enum
 } GdkDragProtocol;
 
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
-BOOL _gdk_win32_get_cursor_pos (LPPOINT lpPoint);
+BOOL _gdk_win32_get_cursor_pos (GdkDisplay *display,
+                                LPPOINT     lpPoint);
 
 gboolean _gdk_win32_surface_enable_transparency (GdkSurface *surface);
 
