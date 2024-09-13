@@ -143,8 +143,6 @@ static HWND modal_win32_dialog = NULL;
 static HKL latin_locale = NULL;
 #endif
 
-static gboolean in_ime_composition = FALSE;
-
 static int debug_indent = 0;
 
 static int both_shift_pressed[2]; /* to store keycodes for shift keys */
@@ -1911,7 +1909,7 @@ gdk_event_translate (MSG *msg,
         char *composed = NULL;
 
         /* Ignore key messages intended for the IME */
-        if (msg->wParam == VK_PROCESSKEY || in_ime_composition)
+        if (msg->wParam == VK_PROCESSKEY || win32_display->event_record->in_ime_composition)
           break;
 
         /* Ignore autorepeats on modifiers */
@@ -2074,11 +2072,11 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_IME_STARTCOMPOSITION:
-      in_ime_composition = TRUE;
+      win32_display->event_record->in_ime_composition = TRUE;
       break;
 
     case WM_IME_ENDCOMPOSITION:
-      in_ime_composition = FALSE;
+      win32_display->event_record->in_ime_composition = FALSE;
       break;
 
     case WM_IME_COMPOSITION:

@@ -188,6 +188,9 @@ typedef struct
   int current_root_y;
 
   int debug_indent_displaychange;
+
+  /* for tracking whether we are using IME */
+  guint in_ime_composition : 1;
 } event_records;
 
 struct _GdkWin32Display
