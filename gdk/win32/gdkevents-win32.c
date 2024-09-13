@@ -145,8 +145,6 @@ static HKL latin_locale = NULL;
 
 static int debug_indent = 0;
 
-static int both_shift_pressed[2]; /* to store keycodes for shift keys */
-
 /* low-level keyboard hook handle */
 static HHOOK keyboard_hook = NULL;
 static UINT aerosnap_message;
@@ -2013,29 +2011,30 @@ gdk_event_translate (MSG *msg,
         if (msg->message == WM_KEYDOWN && msg->wParam == VK_SHIFT)
           {
             int pressed_shift = msg->lParam & 0xffffff; /* mask shift modifier */
-            if (both_shift_pressed[0] == 0)
-              both_shift_pressed[0] = pressed_shift;
-            else if (both_shift_pressed[0] != pressed_shift)
-              both_shift_pressed[1] = pressed_shift;
+            if (win32_display->event_record->both_shift_pressed[0] == 0)
+              win32_display->event_record->both_shift_pressed[0] = pressed_shift;
+            else if (win32_display->event_record->both_shift_pressed[0] != pressed_shift)
+              win32_display->event_record->both_shift_pressed[1] = pressed_shift;
           }
 
         if (msg->message == WM_KEYUP && msg->wParam == VK_SHIFT)
           {
-            if (both_shift_pressed[0] != 0 && both_shift_pressed[1] != 0)
+            if (win32_display->event_record->both_shift_pressed[0] != 0 &&
+                win32_display->event_record->both_shift_pressed[1] != 0)
               {
                 int tmp_retval;
                 MSG fake_release = *msg;
                 int pressed_shift = msg->lParam & 0xffffff;
 
-                if (both_shift_pressed[0] == pressed_shift)
-                  fake_release.lParam = both_shift_pressed[1];
+                if (win32_display->event_record->both_shift_pressed[0] == pressed_shift)
+                  fake_release.lParam = win32_display->event_record->both_shift_pressed[1];
                 else
-                  fake_release.lParam = both_shift_pressed[0];
+                  fake_release.lParam = win32_display->event_record->both_shift_pressed[0];
 
-                both_shift_pressed[0] = both_shift_pressed[1] = 0;
+                win32_display->event_record->both_shift_pressed[0] = win32_display->event_record->both_shift_pressed[1] = 0;
                 gdk_event_translate (&fake_release, &tmp_retval);
               }
-            both_shift_pressed[0] = both_shift_pressed[1] = 0;
+            win32_display->event_record->both_shift_pressed[0] = win32_display->event_record->both_shift_pressed[1] = 0;
           }
 
         /* Reset ALT_MASK if it is the Alt key itself */

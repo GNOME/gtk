@@ -191,6 +191,9 @@ typedef struct
 
   /* for tracking whether we are using IME */
   guint in_ime_composition : 1;
+
+  /* to store keycodes for shift keys */
+  int both_shift_pressed[2];
 } event_records;
 
 struct _GdkWin32Display
