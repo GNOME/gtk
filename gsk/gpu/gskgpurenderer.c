@@ -209,6 +209,7 @@ gsk_gpu_renderer_realize (GskRenderer  *renderer,
   GskGpuRenderer *self = GSK_GPU_RENDERER (renderer);
   GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
   GskGpuOptimizations context_optimizations;
+  G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
 
   priv->device = GSK_GPU_RENDERER_GET_CLASS (self)->get_device (display, error);
   if (priv->device == NULL)
@@ -222,6 +223,8 @@ gsk_gpu_renderer_realize (GskRenderer  *renderer,
     }
 
   priv->optimizations &= context_optimizations;
+
+  gdk_profiler_end_mark (start_time, "Realize GskGpuRenderer", NULL);
 
   return TRUE;
 }
