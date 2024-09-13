@@ -153,10 +153,6 @@ static int both_shift_pressed[2]; /* to store keycodes for shift keys */
 static HHOOK keyboard_hook = NULL;
 static UINT aerosnap_message;
 
-static gboolean pen_touch_input;
-static POINT pen_touch_cursor_position;
-static LONG last_digitizer_time;
-
 static void
 track_mouse_event (DWORD dwFlags,
 		   HWND  hwnd)
@@ -192,11 +188,14 @@ _gdk_win32_get_next_tick (gulong suggested_tick)
 }
 
 BOOL
-_gdk_win32_get_cursor_pos (LPPOINT lpPoint)
+_gdk_win32_get_cursor_pos (GdkDisplay *display,
+                           LPPOINT     lpPoint)
 {
-  if (pen_touch_input)
+  GdkDeviceManagerWin32 *manager = GDK_WIN32_DISPLAY (display)->device_manager;
+
+  if (manager->pen_touch_input)
     {
-      *lpPoint = pen_touch_cursor_position;
+      *lpPoint = manager->latest_pen_touch_position;
       return TRUE;
     }
   else
@@ -2188,7 +2187,7 @@ gdk_event_translate (MSG *msg,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
-      pen_touch_input = FALSE;
+      win32_display->device_manager->pen_touch_input = FALSE;
 
       g_set_object (&surface, find_surface_for_mouse_event (surface, msg));
       /* TODO_CSW?: there used to some synthesize and propagate */
@@ -2234,7 +2233,7 @@ gdk_event_translate (MSG *msg,
 		g_print (" (%d,%d)",
 			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
 
-      pen_touch_input = FALSE;
+      win32_display->device_manager->pen_touch_input = FALSE;
 
       g_set_object (&surface, find_surface_for_mouse_event (surface, msg));
 
@@ -2309,11 +2308,11 @@ gdk_event_translate (MSG *msg,
        *
        */
       if (win32_display->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER &&
-          ( (msg->time - last_digitizer_time) < 200 ||
-           -(msg->time - last_digitizer_time) < 200 ))
+          ( (msg->time - win32_display->device_manager->last_digitizer_time) < 200 ||
+           -(msg->time - win32_display->device_manager->last_digitizer_time) < 200 ))
         break;
 
-      pen_touch_input = FALSE;
+      win32_display->device_manager->pen_touch_input = FALSE;
 
       g_set_object (&surface, find_surface_for_mouse_event (surface, msg));
 
@@ -2394,7 +2393,7 @@ gdk_event_translate (MSG *msg,
       GDK_NOTE (EVENTS, g_print (" %d (%ld,%ld)",
 				 HIWORD (msg->wParam), msg->pt.x, msg->pt.y));
 
-      pen_touch_input = FALSE;
+      win32_display->device_manager->pen_touch_input = FALSE;
 
       new_surface = NULL;
       hwnd = WindowFromPoint (msg->pt);
@@ -2445,10 +2444,10 @@ gdk_event_translate (MSG *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          win32_display->event_record->current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          win32_display->event_record->current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
-          pen_touch_input = TRUE;
-          last_digitizer_time = msg->time;
+          win32_display->event_record->current_root_x = win32_display->device_manager->latest_pen_touch_position.x = GET_X_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_y = win32_display->device_manager->latest_pen_touch_position.y = GET_Y_LPARAM (msg->lParam);
+          win32_display->device_manager->pen_touch_input = TRUE;
+          win32_display->device_manager->last_digitizer_time = msg->time;
         }
 
       if (pointer_grab != NULL &&
@@ -2475,10 +2474,10 @@ gdk_event_translate (MSG *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          win32_display->event_record->current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          win32_display->event_record->current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
-          pen_touch_input = TRUE;
-          last_digitizer_time = msg->time;
+          win32_display->event_record->current_root_x = win32_display->device_manager->latest_pen_touch_position.x = GET_X_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_y = win32_display->device_manager->latest_pen_touch_position.y = GET_Y_LPARAM (msg->lParam);
+          win32_display->device_manager->pen_touch_input = TRUE;
+          win32_display->device_manager->last_digitizer_time = msg->time;
         }
 
       if (pointer_grab != NULL &&
@@ -2508,10 +2507,10 @@ gdk_event_translate (MSG *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          win32_display->event_record->current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          win32_display->event_record->current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
-          pen_touch_input = TRUE;
-          last_digitizer_time = msg->time;
+          win32_display->event_record->current_root_x = win32_display->device_manager->latest_pen_touch_position.x = GET_X_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_y = win32_display->device_manager->latest_pen_touch_position.y = GET_Y_LPARAM (msg->lParam);
+          win32_display->device_manager->pen_touch_input = TRUE;
+          win32_display->device_manager->last_digitizer_time = msg->time;
         }
 
       if (pointer_grab != NULL &&
@@ -2549,10 +2548,10 @@ gdk_event_translate (MSG *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          win32_display->event_record->current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          win32_display->event_record->current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
-          pen_touch_input = TRUE;
-          last_digitizer_time = msg->time;
+          win32_display->event_record->current_root_x = win32_display->device_manager->latest_pen_touch_position.x = GET_X_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_y = win32_display->device_manager->latest_pen_touch_position.y = GET_Y_LPARAM (msg->lParam);
+          win32_display->device_manager->pen_touch_input = TRUE;
+          win32_display->device_manager->last_digitizer_time = msg->time;
         }
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam) &&
@@ -2566,7 +2565,7 @@ gdk_event_translate (MSG *msg,
             {
               make_crossing_event(event_device,
                                   NULL,
-                                  &pen_touch_cursor_position,
+                                  &win32_display->device_manager->latest_pen_touch_position,
                                   event_time);
             }
         }
@@ -2584,10 +2583,10 @@ gdk_event_translate (MSG *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          win32_display->event_record->current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          win32_display->event_record->current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
-          pen_touch_input = TRUE;
-          last_digitizer_time = msg->time;
+          win32_display->event_record->current_root_x = win32_display->device_manager->latest_pen_touch_position.x = GET_X_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_y = win32_display->device_manager->latest_pen_touch_position.y = GET_Y_LPARAM (msg->lParam);
+          win32_display->device_manager->pen_touch_input = TRUE;
+          win32_display->device_manager->last_digitizer_time = msg->time;
         }
 
       if (pointer_grab != NULL &&
@@ -2614,10 +2613,10 @@ gdk_event_translate (MSG *msg,
 
       if (IS_POINTER_PRIMARY_WPARAM (msg->wParam))
         {
-          win32_display->event_record->current_root_x = pen_touch_cursor_position.x = GET_X_LPARAM (msg->lParam);
-          win32_display->event_record->current_root_y = pen_touch_cursor_position.y = GET_Y_LPARAM (msg->lParam);
-          pen_touch_input = TRUE;
-          last_digitizer_time = msg->time;
+          win32_display->event_record->current_root_x = win32_display->device_manager->latest_pen_touch_position.x = GET_X_LPARAM (msg->lParam);
+          win32_display->event_record->current_root_y = win32_display->device_manager->latest_pen_touch_position.y = GET_Y_LPARAM (msg->lParam);
+          win32_display->device_manager->pen_touch_input = TRUE;
+          win32_display->device_manager->last_digitizer_time = msg->time;
         }
 
       if (!IS_POINTER_INRANGE_WPARAM (msg->wParam))
@@ -2633,7 +2632,7 @@ gdk_event_translate (MSG *msg,
             {
               make_crossing_event(event_device,
                                   NULL,
-                                  &pen_touch_cursor_position,
+                                  &win32_display->device_manager->latest_pen_touch_position,
                                   event_time);
             }
         }

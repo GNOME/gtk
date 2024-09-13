@@ -54,10 +54,13 @@ struct _GdkDeviceManagerWin32
   /* used for wintab support */
   wintab_items *wintab_items;
 
-  /* used for winpointer support */
+  /* used for winpointer support, etc */
   HWND winpointer_notification_hwnd;
   GPtrArray *ignored_interactions;
   void *winpointer_funcs; /* GdkDeviceManagerWin32WinpointerFuncs */
+  gboolean pen_touch_input;
+  POINT latest_pen_touch_position;
+  LONG last_digitizer_time;
 };
 
 struct _GdkDeviceManagerWin32Class

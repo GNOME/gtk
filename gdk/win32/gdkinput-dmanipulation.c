@@ -200,12 +200,13 @@ DManipEventHandler_OnContentUpdated (IDirectManipulationViewportEventHandler *se
         POINT cursor = {0, 0};
         float scale;
         GdkEvent *event;
+        GdkDisplay *display = gdk_surface_get_display (self->surface);
 
         scale = transform[0];
 
         state = util_get_modifier_state ();
         time = (uint32_t) GetMessageTime ();
-        _gdk_win32_get_cursor_pos (&cursor);
+        _gdk_win32_get_cursor_pos (display, &cursor);
 
         ScreenToClient (GDK_SURFACE_HWND (self->surface), &cursor);
 
@@ -263,13 +264,14 @@ DManipEventHandler_OnViewportStatusChanged (IDirectManipulationViewportEventHand
             uint32_t time;
             POINT cursor = {0, 0};
             GdkEvent *event;
+            GdkDisplay *display = gdk_surface_get_display (self->surface);
 
             if (self->phase == GDK_TOUCHPAD_GESTURE_PHASE_BEGIN)
               break;
 
             state = util_get_modifier_state ();
             time = (uint32_t) GetMessageTime ();
-            _gdk_win32_get_cursor_pos (&cursor);
+            _gdk_win32_get_cursor_pos (display, &cursor);
 
             ScreenToClient (GDK_SURFACE_HWND (self->surface), &cursor);
 
