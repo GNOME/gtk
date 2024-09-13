@@ -7,6 +7,9 @@
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
 #include "gskgpuimageprivate.h"
+#ifdef GDK_RENDERING_VULKAN
+#include "gskvulkanycbcrprivate.h"
+#endif
 
 #include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkprofilerprivate.h"
@@ -876,6 +879,9 @@ gsk_gpu_cache_dispose (GObject *object)
 
   gsk_gpu_cache_clear_cache (self);
 
+#ifdef GDK_RENDERING_VULKAN
+  gsk_vulkan_ycbcr_finish_cache (self);
+#endif
   gsk_gpu_cached_glyph_finish_cache (self);
 
   g_clear_pointer (&self->tile_cache, g_hash_table_unref);
@@ -910,6 +916,9 @@ gsk_gpu_cache_init (GskGpuCache *self)
                                           g_direct_equal);
   
   gsk_gpu_cached_glyph_init_cache (self);
+#ifdef GDK_RENDERING_VULKAN
+  gsk_vulkan_ycbcr_init_cache (self);
+#endif
 }
 
 GskGpuImage *

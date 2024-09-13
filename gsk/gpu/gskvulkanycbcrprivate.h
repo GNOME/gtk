@@ -17,17 +17,15 @@ struct _GskVulkanYcbcrInfo
 };
 
 
-guint                           gsk_vulkan_ycbcr_info_hash                      (gconstpointer                   info);
-gboolean                        gsk_vulkan_ycbcr_info_equal                     (gconstpointer                   info1,
-                                                                                 gconstpointer                   info2);
+void                            gsk_vulkan_ycbcr_init_cache                     (GskGpuCache                    *cache);
+void                            gsk_vulkan_ycbcr_finish_cache                   (GskGpuCache                    *cache);
 
-GskVulkanYcbcr *                gsk_vulkan_ycbcr_new                            (GskVulkanDevice                *self,
+GskVulkanYcbcr *                gsk_vulkan_ycbcr_get                            (GskVulkanDevice                *self,
                                                                                  const GskVulkanYcbcrInfo       *info);
                                                                          
 GskVulkanYcbcr *                gsk_vulkan_ycbcr_ref                            (GskVulkanYcbcr                 *self);
 void                            gsk_vulkan_ycbcr_unref                          (GskVulkanYcbcr                 *self);
 
-const GskVulkanYcbcrInfo *      gsk_vulkan_ycbcr_get_info                       (GskVulkanYcbcr                 *self);
 VkSamplerYcbcrConversion        gsk_vulkan_ycbcr_get_vk_conversion              (GskVulkanYcbcr                 *self);
 VkSampler                       gsk_vulkan_ycbcr_get_vk_sampler                 (GskVulkanYcbcr                 *self);
 VkDescriptorSetLayout           gsk_vulkan_ycbcr_get_vk_descriptor_set_layout   (GskVulkanYcbcr                 *self);

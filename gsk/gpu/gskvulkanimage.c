@@ -461,13 +461,13 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
 
   if (gsk_vulkan_get_ycbcr_flags (conv, &vk_model, &vk_range) || needs_conversion)
     {
-      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
-                                                 &(GskVulkanYcbcrInfo) {
-                                                     .vk_format = vk_format,
-                                                     .vk_components = vk_components,
-                                                     .vk_ycbcr_model = vk_model,
-                                                     .vk_ycbcr_range = vk_range,
-                                                 });
+      self->ycbcr = gsk_vulkan_ycbcr_get (device,
+                                          &(GskVulkanYcbcrInfo) {
+                                              .vk_format = vk_format,
+                                              .vk_components = vk_components,
+                                              .vk_ycbcr_model = vk_model,
+                                              .vk_ycbcr_range = vk_range,
+                                          });
       gsk_vulkan_ycbcr_ref (self->ycbcr);
       vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
       flags |= GSK_GPU_IMAGE_EXTERNAL;
@@ -994,13 +994,13 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
 
   if (needs_conversion)
     {
-      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
-                                                 &(GskVulkanYcbcrInfo) {
-                                                     .vk_format = vk_format,
-                                                     .vk_components = vk_components,
-                                                     .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY,
-                                                     .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL,
-                                                 });
+      self->ycbcr = gsk_vulkan_ycbcr_get (device,
+                                          &(GskVulkanYcbcrInfo) {
+                                               .vk_format = vk_format,
+                                               .vk_components = vk_components,
+                                               .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY,
+                                               .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL,
+                                          });
       gsk_vulkan_ycbcr_ref (self->ycbcr);
       vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
     }
@@ -1144,13 +1144,13 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
 
   if (gsk_vulkan_get_ycbcr_flags (conv, &model, &range) || needs_conversion)
     {
-      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
-                                                 &(GskVulkanYcbcrInfo) {
-                                                     .vk_format = vk_format,
-                                                     .vk_components = vk_components,
-                                                     .vk_ycbcr_model = model,
-                                                     .vk_ycbcr_range = range,
-                                                 });
+      self->ycbcr = gsk_vulkan_ycbcr_get (device,
+                                          &(GskVulkanYcbcrInfo) {
+                                              .vk_format = vk_format,
+                                              .vk_components = vk_components,
+                                              .vk_ycbcr_model = model,
+                                              .vk_ycbcr_range = range,
+                                          });
       gsk_vulkan_ycbcr_ref (self->ycbcr);
       vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
     }
@@ -1665,13 +1665,13 @@ gsk_vulkan_image_new_for_d3d12resource (GskVulkanDevice *device,
 
   if (needs_conversion)
     {
-      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
-                                                  &(GskVulkanYcbcrInfo) {
-                                                      .vk_format = vk_format,
-                                                      .vk_components = vk_components,
-                                                      .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY,
-                                                      .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL,
-                                                  });
+      self->ycbcr = gsk_vulkan_ycbcr_get (device,
+                                          &(GskVulkanYcbcrInfo) {
+                                              .vk_format = vk_format,
+                                              .vk_components = vk_components,
+                                              .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY,
+                                              .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL,
+                                          });
       gsk_vulkan_ycbcr_ref (self->ycbcr);
       vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
     }
