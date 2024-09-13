@@ -1,5 +1,43 @@
-Overview of Changes in 4.16.1, xx-xx-xxxx
+Overview of Changes in 4.16.1, 09-16-2024
 =========================================
+
+* GtkFileChooser:
+ - Plug a memory leak
+
+* GtkCalendar:
+ - Avoid ending up with invalid dates
+
+* Printing:
+ - Fix initial printer selection in the print dialog
+
+* Gsk:
+ - Fix shadows for opaque textures
+ - Fix a crash in a corner case
+
+* Css:
+ - Make relative paths work again in theme files
+
+* Accessibility:
+ - Fix detection of the Flatpak portal
+
+* MacOS:
+ - Fix keyboard input in popovers
+ - Keep DND icons above regular windows
+ - Ignore events from DND icons
+
+* Translation updates
+ Basque
+ British English
+ Bulgarian
+ Czech
+ Danish
+ Georgian
+ Hungarian
+ Lithuanian
+ Portuguese
+ Spanish
+ Swedish
+
 
 Overview of Changes in 4.16.0, 09-06-2024
 =========================================
