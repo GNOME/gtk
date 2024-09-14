@@ -1076,7 +1076,10 @@ gsk_vulkan_device_find_allocator (GskVulkanDevice       *self,
       found = MIN (i, found);
 
       if ((properties.memoryTypes[i].propertyFlags & desired_flags) == desired_flags)
-        break;
+        {
+          found = i;
+          break;
+        }
   }
 
   g_assert (found < properties.memoryTypeCount);
