@@ -72,6 +72,42 @@ gsk_gpu_renderer_create_frame (GskGpuRenderer *self)
   return result;
 }
 
+static GskGpuFrame *
+gsk_gpu_renderer_get_frame (GskGpuRenderer *self)
+{
+  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
+  GskGpuFrame *earliest_frame = NULL;
+  gint64 earliest_time = G_MAXINT64;
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (priv->frames); i++)
+    {
+      gint64 timestamp;
+
+      if (priv->frames[i] == NULL)
+        {
+          priv->frames[i] = gsk_gpu_renderer_create_frame (self);
+          return priv->frames[i];
+        }
+
+      if (!gsk_gpu_frame_is_busy (priv->frames[i]))
+        return priv->frames[i];
+
+      timestamp = gsk_gpu_frame_get_timestamp (priv->frames[i]);
+      if (timestamp < earliest_time)
+        {
+          earliest_time = timestamp;
+          earliest_frame = priv->frames[i];
+        }
+    }
+
+  g_assert (earliest_frame);
+
+  gsk_gpu_frame_wait (earliest_frame);
+
+  return earliest_frame;
+}
+
 static void
 gsk_gpu_renderer_dmabuf_downloader_close (GdkDmabufDownloader *downloader)
 {
@@ -162,42 +198,6 @@ get_render_region (GskGpuRenderer *self)
     }
 
   return scaled_damage;
-}
-
-static GskGpuFrame *
-gsk_gpu_renderer_get_frame (GskGpuRenderer *self)
-{
-  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
-  GskGpuFrame *earliest_frame = NULL;
-  gint64 earliest_time = G_MAXINT64;
-  guint i;
-
-  for (i = 0; i < G_N_ELEMENTS (priv->frames); i++)
-    {
-      gint64 timestamp;
-
-      if (priv->frames[i] == NULL)
-        {
-          priv->frames[i] = gsk_gpu_renderer_create_frame (self);
-          return priv->frames[i];
-        }
-
-      if (!gsk_gpu_frame_is_busy (priv->frames[i]))
-        return priv->frames[i];
-
-      timestamp = gsk_gpu_frame_get_timestamp (priv->frames[i]);
-      if (timestamp < earliest_time)
-        {
-          earliest_time = timestamp;
-          earliest_frame = priv->frames[i];
-        }
-    }
-
-  g_assert (earliest_frame);
-
-  gsk_gpu_frame_wait (earliest_frame);
-
-  return earliest_frame;
 }
 
 static gboolean
