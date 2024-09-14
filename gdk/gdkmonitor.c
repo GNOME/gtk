@@ -649,7 +649,7 @@ void
 gdk_monitor_set_scale (GdkMonitor *monitor,
                        double      scale)
 {
-  g_return_if_fail (scale >= 1.);
+  g_return_if_fail (scale > 0.);
 
   monitor->scale_set = TRUE;
 

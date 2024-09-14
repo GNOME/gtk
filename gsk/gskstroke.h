@@ -83,5 +83,6 @@ GDK_AVAILABLE_IN_4_14
 void                    gsk_stroke_to_cairo                     (const GskStroke        *self,
                                                                  cairo_t                *cr);
 
+G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskStroke, gsk_stroke_free)
 
 G_END_DECLS
