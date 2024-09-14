@@ -152,7 +152,7 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
 
   gsk_gpu_renderer_make_current (self);
 
-  frame = gsk_gpu_renderer_create_frame (self);
+  frame = gsk_gpu_renderer_get_frame (self);
 
   gsk_gpu_frame_download_texture (frame,
                                   g_get_monotonic_time (),
@@ -162,7 +162,7 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
                                   data,
                                   stride);
 
-  g_object_unref (frame);
+  gsk_gpu_frame_wait (frame);
 }
 
 static void
@@ -310,7 +310,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                                            gsk_gpu_image_get_width (image),
                                                            gsk_gpu_image_get_height (image)
                                                        });
-          frame = gsk_gpu_renderer_create_frame (self);
+          frame = gsk_gpu_renderer_get_frame (self);
           gsk_gpu_frame_render (frame,
                                 g_get_monotonic_time (),
                                 image,
@@ -322,7 +322,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                                      image_width,
                                                      image_height),
                                 &texture);
-          g_object_unref (frame);
+          gsk_gpu_frame_wait (frame);
 
           g_assert (texture);
           gdk_texture_downloader_init (&downloader, texture);
@@ -381,7 +381,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   else
     color_state = GDK_COLOR_STATE_SRGB;
 
-  frame = gsk_gpu_renderer_create_frame (self);
+  frame = gsk_gpu_renderer_get_frame (self);
 
   clip_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                    0, 0,
@@ -399,7 +399,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
                         &rounded_viewport,
                         &texture);
 
-  g_object_unref (frame);
+  gsk_gpu_frame_wait (frame);
   g_object_unref (image);
 
   gsk_gpu_device_queue_gc (priv->device);
