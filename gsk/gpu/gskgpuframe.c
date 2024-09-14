@@ -639,6 +639,8 @@ gsk_gpu_frame_wait (GskGpuFrame *self)
     return;
 
   GSK_GPU_FRAME_GET_CLASS (self)->wait (self);
+
+  gsk_gpu_frame_cleanup (self);
 }
 
 static void
