@@ -2092,16 +2092,19 @@ gdk_memory_convert_generic (gpointer data)
   gint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
 
-  convert_func = gdk_color_state_get_convert_to (mc->src_cs, mc->dest_cs);
-
-  if (!convert_func)
-    convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, mc->src_cs);
-
-  if (!convert_func && !convert_func2)
+  if (!gdk_color_state_equal (mc->src_cs, mc->dest_cs))
     {
-      GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
-      convert_func = gdk_color_state_get_convert_to (mc->src_cs, connection);
-      convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, connection);
+      convert_func = gdk_color_state_get_convert_to (mc->src_cs, mc->dest_cs);
+
+      if (!convert_func)
+        convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, mc->src_cs);
+
+      if (!convert_func && !convert_func2)
+        {
+          GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
+          convert_func = gdk_color_state_get_convert_to (mc->src_cs, connection);
+          convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, connection);
+        }
     }
 
   if (convert_func)
