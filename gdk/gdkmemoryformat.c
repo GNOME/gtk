@@ -325,6 +325,26 @@ ADD_ALPHA_FUNC(r8g8b8_to_b8g8r8a8, 0, 1, 2, 2, 1, 0, 3)
 ADD_ALPHA_FUNC(r8g8b8_to_a8r8g8b8, 0, 1, 2, 1, 2, 3, 0)
 ADD_ALPHA_FUNC(r8g8b8_to_a8b8g8r8, 0, 1, 2, 3, 2, 1, 0)
 
+#define SWAP_FUNC(name, R, G, B, A) \
+static void \
+name (guchar *dest, \
+      const guchar *src, \
+      gsize n) \
+{ \
+  for (; n > 0; n--) \
+    { \
+      dest[0] = src[R]; \
+      dest[1] = src[G]; \
+      dest[2] = src[B]; \
+      dest[3] = src[A]; \
+      dest += 4; \
+      src += 4; \
+    } \
+}
+
+SWAP_FUNC(r8g8b8a8_to_b8g8r8a8, 2, 1, 0, 3)
+SWAP_FUNC(b8g8r8a8_to_r8g8b8a8, 2, 1, 0, 3)
+
 #define MIPMAP_FUNC(SumType, DataType, n_units) \
 static void \
 gdk_mipmap_ ## DataType ## _ ## n_units ## _nearest (guchar       *dest, \
@@ -2032,6 +2052,12 @@ get_fast_conversion_func (GdkMemoryFormat dest_format,
     return r8g8b8a8_to_a8r8g8b8_premultiplied;
   else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
     return r8g8b8a8_to_a8b8g8r8_premultiplied;
+  else if ((src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_R8G8B8A8) ||
+           (src_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED))
+    return b8g8r8a8_to_r8g8b8a8;
+  else if ((src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_B8G8R8A8) ||
+           (src_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED))
+    return r8g8b8a8_to_b8g8r8a8;
   else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
     return r8g8b8_to_r8g8b8a8;
   else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
