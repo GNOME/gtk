@@ -2118,7 +2118,29 @@ gdk_memory_convert_generic (gpointer data)
   gint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
 
-  if (!gdk_color_state_equal (mc->src_cs, mc->dest_cs))
+  if (gdk_color_state_equal (mc->src_cs, mc->dest_cs))
+    {
+      FastConversionFunc func;
+
+      func = get_fast_conversion_func (mc->dest_format, mc->src_format);
+
+      if (func != NULL)
+        {
+          n = 1;
+
+          for (y = g_atomic_int_add (&mc->rows_done, n);
+               y < mc->height;
+               y = g_atomic_int_add (&mc->rows_done, n))
+            {
+              const guchar *src_data = mc->src_data + y * mc->src_stride;
+              guchar *dest_data = mc->dest_data + y * mc->dest_stride;
+
+              func (dest_data, src_data, mc->width);
+            }
+          return;
+        }
+    }
+  else
     {
       convert_func = gdk_color_state_get_convert_to (mc->src_cs, mc->dest_cs);
 
@@ -2232,26 +2254,6 @@ gdk_memory_convert (guchar              *dest_data,
             }
         }
       return;
-    }
-
-  if (gdk_color_state_equal (dest_cs, src_cs))
-    {
-      FastConversionFunc func;
-
-      func = get_fast_conversion_func (dest_format, src_format);
-
-      if (func != NULL)
-        {
-          gsize y;
-
-          for (y = 0; y < height; y++)
-            {
-              func (dest_data, src_data, width);
-              src_data += src_stride;
-              dest_data += dest_stride;
-            }
-          return;
-        }
     }
 
   gdk_parallel_task_run (gdk_memory_convert_generic, &mc);
