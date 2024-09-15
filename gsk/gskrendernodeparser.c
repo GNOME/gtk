@@ -4862,7 +4862,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         if (surface != NULL)
           {
             array = g_byte_array_new ();
+#if CAIRO_HAS_PNG_FUNCTIONS
             cairo_surface_write_to_png_stream (surface, cairo_write_array, array);
+#endif
 
             _indent (p);
             g_string_append (p->str, "pixels: url(\"data:image/png;base64,\\\n");
