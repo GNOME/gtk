@@ -1967,10 +1967,6 @@ gdk_display_get_egl_display (GdkDisplay *self)
 #endif
 }
 
-/* To support a drm format, we must be able to import it into GL
- * using the relevant EGL extensions, and download it into a memory
- * texture, possibly doing format conversion with shaders (in GSK).
- */
 void
 gdk_display_init_dmabuf (GdkDisplay *self)
 {
@@ -1988,15 +1984,18 @@ gdk_display_init_dmabuf (GdkDisplay *self)
   if (gdk_has_feature (GDK_FEATURE_DMABUF))
     {
 #ifdef GDK_RENDERING_VULKAN
-      self->vk_downloader = gdk_vulkan_get_dmabuf_downloader (self, builder);
+      gdk_vulkan_init_dmabuf (self);
+      if (self->vk_dmabuf_formats)
+        gdk_dmabuf_formats_builder_add_formats (builder, self->vk_dmabuf_formats);
 #endif
 
 #ifdef HAVE_EGL
-      self->egl_downloader = gdk_dmabuf_get_egl_downloader (self, builder);
+      gdk_dmabuf_egl_init (self);
+      if (self->egl_dmabuf_formats)
+        gdk_dmabuf_formats_builder_add_formats (builder, self->egl_dmabuf_formats);
 #endif
 
-      gdk_dmabuf_formats_builder_add_formats (builder,
-                                              gdk_dmabuf_get_mmap_formats ());
+      gdk_dmabuf_formats_builder_add_formats (builder, gdk_dmabuf_get_mmap_formats ());
     }
 #endif
 
