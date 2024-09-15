@@ -418,15 +418,17 @@ gdk_display_dispose (GObject *object)
 {
   GdkDisplay *display = GDK_DISPLAY (object);
   GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
-  gsize i;
 
-  for (i = 0; i < G_N_ELEMENTS (display->dmabuf_downloaders); i++)
+  if (display->vk_downloader)
     {
-      if (display->dmabuf_downloaders[i] == NULL)
-        continue;
+      gdk_dmabuf_downloader_close (display->vk_downloader);
+      g_clear_object (&display->vk_downloader);
+    }
 
-      gdk_dmabuf_downloader_close (display->dmabuf_downloaders[i]);
-      g_clear_object (&display->dmabuf_downloaders[i]);
+  if (display->egl_downloader)
+    {
+      gdk_dmabuf_downloader_close (display->egl_downloader);
+      g_clear_object (&display->egl_downloader);
     }
 
   _gdk_display_manager_remove_display (gdk_display_manager_get (), display);
@@ -1965,29 +1967,6 @@ gdk_display_get_egl_display (GdkDisplay *self)
 #endif
 }
 
-#ifdef HAVE_DMABUF
-static void
-gdk_display_add_dmabuf_downloader (GdkDisplay          *display,
-                                   GdkDmabufDownloader *downloader)
-{
-  gsize i;
-
-  if (downloader == NULL)
-    return;
-
-  /* dmabuf_downloaders is NULL-terminated */
-  for (i = 0; i < G_N_ELEMENTS (display->dmabuf_downloaders) - 1; i++)
-    {
-      if (display->dmabuf_downloaders[i] == NULL)
-        break;
-    }
-
-  g_assert (i < G_N_ELEMENTS (display->dmabuf_downloaders) - 1);
-
-  display->dmabuf_downloaders[i] = downloader;
-}
-#endif
-
 /* To support a drm format, we must be able to import it into GL
  * using the relevant EGL extensions, and download it into a memory
  * texture, possibly doing format conversion with shaders (in GSK).
@@ -2009,11 +1988,11 @@ gdk_display_init_dmabuf (GdkDisplay *self)
   if (gdk_has_feature (GDK_FEATURE_DMABUF))
     {
 #ifdef GDK_RENDERING_VULKAN
-      gdk_display_add_dmabuf_downloader (self, gdk_vulkan_get_dmabuf_downloader (self, builder));
+      self->vk_downloader = gdk_vulkan_get_dmabuf_downloader (self, builder);
 #endif
 
 #ifdef HAVE_EGL
-      gdk_display_add_dmabuf_downloader (self, gdk_dmabuf_get_egl_downloader (self, builder));
+      self->egl_downloader = gdk_dmabuf_get_egl_downloader (self, builder);
 #endif
 
       gdk_dmabuf_formats_builder_add_formats (builder,
