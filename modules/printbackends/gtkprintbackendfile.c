@@ -27,10 +27,17 @@
 #include <string.h>
 
 #include <errno.h>
+
 #include <cairo.h>
+#ifdef CAIRO_HAS_PDF_SURFACE
 #include <cairo-pdf.h>
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
 #include <cairo-ps.h>
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
 #include <cairo-svg.h>
+#endif
 
 #include <glib/gi18n-lib.h>
 
@@ -60,17 +67,29 @@ struct _GtkPrintBackendFile
 
 typedef enum
 {
+#ifdef CAIRO_HAS_PDF_SURFACE
   FORMAT_PDF,
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
   FORMAT_PS,
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
   FORMAT_SVG,
+#endif
   N_FORMATS
 } OutputFormat;
 
 static const char * formats[N_FORMATS] =
 {
+#ifdef CAIRO_HAS_PDF_SURFACE
   "pdf",
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
   "ps",
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
   "svg"
+#endif
 };
 
 static GObjectClass *backend_parent_class;
@@ -220,15 +239,21 @@ output_file_from_settings (GtkPrintSettings *settings,
             {
               default:
               case N_FORMATS:
+#ifdef CAIRO_HAS_PDF_SURFACE
               case FORMAT_PDF:
                 extension = "pdf";
                 break;
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
               case FORMAT_PS:
                 extension = "ps";
                 break;
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
               case FORMAT_SVG:
                 extension = "svg";
                 break;
+#endif
             }
         }
 
@@ -325,8 +350,10 @@ file_printer_create_cairo_surface (GtkPrinter       *printer,
 {
   cairo_surface_t *surface;
   OutputFormat format;
+#ifdef CAIRO_HAS_SVG_SURFACE
   const cairo_svg_version_t *versions;
   int num_versions = 0;
+#endif
 
   format = format_from_settings (settings);
 
@@ -334,18 +361,24 @@ file_printer_create_cairo_surface (GtkPrinter       *printer,
     {
       default:
       case N_FORMATS:
+#ifdef CAIRO_HAS_PDF_SURFACE
       case FORMAT_PDF:
         surface = cairo_pdf_surface_create_for_stream (_cairo_write, cache_io, width, height);
         break;
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
       case FORMAT_PS:
         surface = cairo_ps_surface_create_for_stream (_cairo_write, cache_io, width, height);
         break;
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
       case FORMAT_SVG:
         surface = cairo_svg_surface_create_for_stream (_cairo_write, cache_io, width, height);
         cairo_svg_get_versions (&versions, &num_versions);
         if (num_versions > 0)
           cairo_svg_surface_restrict_to_version (surface, versions[num_versions - 1]);
         break;
+#endif
     }
 
   cairo_surface_set_fallback_resolution (surface,
@@ -550,15 +583,21 @@ set_printer_format_from_option_set (GtkPrinter          *printer,
 
 	  switch (i)
 	    {
+#ifdef CAIRO_HAS_PDF_SURFACE
 	      case FORMAT_PDF:
 		gtk_printer_set_accepts_pdf (printer, TRUE);
 		gtk_printer_set_accepts_ps (printer, FALSE);
 		break;
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
 	      case FORMAT_PS:
 		gtk_printer_set_accepts_pdf (printer, FALSE);
 		gtk_printer_set_accepts_ps (printer, TRUE);
 		break;
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
 	      case FORMAT_SVG:
+#endif
 	      default:
 		gtk_printer_set_accepts_pdf (printer, FALSE);
 		gtk_printer_set_accepts_ps (printer, FALSE);
@@ -660,6 +699,7 @@ file_printer_get_options (GtkPrinter           *printer,
 
   if (capabilities & (GTK_PRINT_CAPABILITY_GENERATE_PDF | GTK_PRINT_CAPABILITY_GENERATE_PS))
     {
+#ifdef CAIRO_HAS_PDF_SURFACE
       if (capabilities & GTK_PRINT_CAPABILITY_GENERATE_PDF)
         {
 	  if (format == FORMAT_PDF || format == N_FORMATS)
@@ -671,6 +711,8 @@ file_printer_get_options (GtkPrinter           *printer,
 	  display_format_names[n_formats] = _(format_names[FORMAT_PDF]);
 	  n_formats++;
 	}
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
       if (capabilities & GTK_PRINT_CAPABILITY_GENERATE_PS)
         {
 	  if (format == FORMAT_PS || format == N_FORMATS)
@@ -679,6 +721,7 @@ file_printer_get_options (GtkPrinter           *printer,
           display_format_names[n_formats] = _(format_names[FORMAT_PS]);
 	  n_formats++;
 	}
+#endif
     }
   else
     {
@@ -686,15 +729,21 @@ file_printer_get_options (GtkPrinter           *printer,
         {
           default:
           case N_FORMATS:
+#ifdef CAIRO_HAS_PDF_SURFACE
           case FORMAT_PDF:
             current_format = FORMAT_PDF;
             break;
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
           case FORMAT_PS:
             current_format = FORMAT_PS;
             break;
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
           case FORMAT_SVG:
             current_format = FORMAT_SVG;            
             break;
+#endif
         }
 
       for (n_formats = 0; n_formats < N_FORMATS; ++n_formats)
@@ -802,13 +851,19 @@ file_printer_prepare_for_print (GtkPrinter       *printer,
   format = format_from_settings (settings);
   switch (format)
     {
+#ifdef CAIRO_HAS_PDF_SURFACE
       case FORMAT_PDF:
+#endif
       case N_FORMATS:
 	gtk_print_job_set_rotate (print_job, FALSE);
         break;
       default:
+#ifdef CAIRO_HAS_PS_SURFACE
       case FORMAT_PS:
+#endif
+#ifdef CAIRO_HAS_SVG_SURFACE
       case FORMAT_SVG:
+#endif
 	gtk_print_job_set_rotate (print_job, TRUE);
         break;
     }
