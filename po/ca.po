@@ -34,8 +34,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-09-03 20:22+0000\n"
-"PO-Revision-Date: 2024-09-03 22:28+0100\n"
+"POT-Creation-Date: 2024-09-15 08:20+0000\n"
+"PO-Revision-Date: 2024-09-15 22:28+0100\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -75,11 +75,12 @@ msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp: no s'admeten paràmetres no especificats"
 
 #: gdk/gdkcolorstate.c:724
-#, c-format, 
+#, c-format
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp: la funció de transferència %u no és admesa"
 
 #: gdk/gdkcolorstate.c:754
+#, c-format
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: no s'admet el color primari %u"
 
@@ -98,7 +99,7 @@ msgstr "No es poden proporcionar continguts com a %s"
 msgid "The current backend does not support OpenGL"
 msgstr "El rerefons no és compatible OpenGL"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1633
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1668
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "S'ha desactivat el suport Vulkan mitjançant GDK_DISABLE"
 
@@ -163,9 +164,9 @@ msgstr "No hi ha cap format compatible per a transferir contingut."
 msgid "No GL API allowed."
 msgstr "No es permet l'API GL."
 
-#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:694
-#: gdk/win32/gdkglcontext-win32-wgl.c:837
-#: gdk/win32/gdkglcontext-win32-wgl.c:881 gdk/x11/gdkglcontext-glx.c:697
+#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:723
+#: gdk/win32/gdkglcontext-win32-wgl.c:866
+#: gdk/win32/gdkglcontext-win32-wgl.c:910 gdk/x11/gdkglcontext-glx.c:697
 msgid "Unable to create a GL context"
 msgstr "No s'ha pogut crear el context GL"
 
@@ -184,6 +185,7 @@ msgstr "L'aplicació no admet API de %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
+#.
 #: gdk/gdkglcontext.c:2175
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
@@ -194,10 +196,11 @@ msgstr "S'està intentant utilitzar %s, però ja s'està utilitzant %s"
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "S'està intentant utilitzar %s, però està inhabilitat via GDK_DISABLE"
 
-#: gdk/gdktexture.c:661
+#: gdk/gdktexture.c:672
 msgid "Unknown image format."
 msgstr "Format d'imatge desconegut."
 
+#.
 #. * Translators, the strings in the 'keyboard label' context are
 #. * display names for keyboard keys. Some of them have prefixes like
 #. * XF86 or ISO_ - these should be removed in the translation. Similarly,
@@ -207,6 +210,7 @@ msgstr "Format d'imatge desconegut."
 #. * XF86AudioMute - Audio mute
 #. * Scroll_lock   - Scroll lock
 #. * KP_Space      - Space (keypad)
+#.
 #: gdk/keynamesprivate.h:6861
 msgctxt "keyboard label"
 msgid "BackSpace"
@@ -587,8 +591,7 @@ msgstr "S'ha produït un error en interpretar el fitxer gràfic JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Espai de color JPEG no compatible (%d)"
 
-#: gdk/loaders/gdkjpeg.c:188 gdk/loaders/gdkpng.c:436
-#: gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:188 gdk/loaders/gdkpng.c:436 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "No hi ha prou memòria per a la mida de la imatge %ux%u"
@@ -647,8 +650,7 @@ msgstr ""
 
 #: gdk/win32/gdkclipdrop-win32.c:729
 #, c-format
-msgid ""
-"Cannot claim clipboard ownership. Another process claimed it before us."
+msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "No es pot reclamar la propietat del porta-retalls. Un altre procés l'ha "
 "reclamat abans que nosaltres."
@@ -671,37 +673,36 @@ msgstr ""
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr ""
-"No es poden establir les dades del porta-retalls. OpenClipboard() ha excedit"
-" el temps d'espera."
+"No es poden establir les dades del porta-retalls. OpenClipboard() ha excedit "
+"el temps d'espera."
 
 #: gdk/win32/gdkclipdrop-win32.c:808 gdk/win32/gdkclipdrop-win32.c:839
 #, c-format
-msgid ""
-"Cannot set clipboard data. Another process claimed clipboard ownership."
+msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
-"No es poden establir les dades del porta-retalls. Un altre procés ha demanat"
-" la propietat."
+"No es poden establir les dades del porta-retalls. Un altre procés ha demanat "
+"la propietat."
 
 #: gdk/win32/gdkclipdrop-win32.c:822
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"No es poden establir les dades del porta-retalls. OpenClipboard() ha fallat:"
-" 0x%lx."
+"No es poden establir les dades del porta-retalls. OpenClipboard() ha fallat: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:874
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
-"No es poden obtenir les dades del porta-retalls. GlobalLock(0x%p) ha fallat:"
-" 0x%lx."
+"No es poden obtenir les dades del porta-retalls. GlobalLock(0x%p) ha fallat: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:885
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
-"No es poden obtenir les dades del porta-retalls. GlobalSize(0x%p) ha fallat:"
-" 0x%lx."
+"No es poden obtenir les dades del porta-retalls. GlobalSize(0x%p) ha fallat: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:898
 #, c-format
@@ -722,16 +723,16 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
-"No es poden obtenir les dades del porta-retalls. Ha canviat la propietat del"
-" porta-retalls."
+"No es poden obtenir les dades del porta-retalls. Ha canviat la propietat del "
+"porta-retalls."
 
 #: gdk/win32/gdkclipdrop-win32.c:950
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr ""
-"No es poden obtenir les dades del porta-retalls. Les dades han canviat abans"
-" que es poguessin obtenir."
+"No es poden obtenir les dades del porta-retalls. Les dades han canviat abans "
+"que es poguessin obtenir."
 
 #: gdk/win32/gdkclipdrop-win32.c:967
 #, c-format
@@ -770,8 +771,8 @@ msgstr ""
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
-"No s'han pogut obtenir les dades DnD. No s'han pogut assignar %s bytes per a"
-" emmagatzemar les dades."
+"No s'han pogut obtenir les dades DnD. No s'han pogut assignar %s bytes per a "
+"emmagatzemar les dades."
 
 #: gdk/win32/gdkdrop-win32.c:1039
 #, c-format
@@ -798,21 +799,21 @@ msgstr ""
 "S'ha produït un error en convertir les dades W32 del format DnD 0x%x to %p "
 "(%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:624
+#: gdk/win32/gdkglcontext-win32-wgl.c:645
 msgid "No GL implementation is available"
 msgstr "No hi ha cap implementació GL disponible"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:703
+#: gdk/win32/gdkglcontext-win32-wgl.c:732
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "La versió %d.%d de WGL és massa baixa, cal com a mínim %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:721
+#: gdk/win32/gdkglcontext-win32-wgl.c:750
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "La implementació GL no pot compartir contexts GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1001
+#: gdk/win32/gdkglcontext-win32-wgl.c:1030
 msgid "No available configurations for the given pixel format"
 msgstr ""
 "No hi ha cap configuració disponible pel tipus de format de píxel donat"
@@ -898,13 +899,11 @@ msgstr "GLX no és compatible"
 msgid "Format %s not supported"
 msgstr "El format %s no és compatible"
 
-#: gdk/x11/gdktextlistconverter-x11.c:65
-#: gdk/x11/gdktextlistconverter-x11.c:105
+#: gdk/x11/gdktextlistconverter-x11.c:65 gdk/x11/gdktextlistconverter-x11.c:105
 msgid "Not enough space in destination"
 msgstr "No hi ha prou espai a la destinació"
 
-#: gdk/x11/gdktextlistconverter-x11.c:91
-#: gdk/x11/gdktextlistconverter-x11.c:195
+#: gdk/x11/gdktextlistconverter-x11.c:91 gdk/x11/gdktextlistconverter-x11.c:195
 msgid "Need complete input to do conversion"
 msgstr "Cal completar l'entrada per a fer la conversió"
 
@@ -1118,6 +1117,7 @@ msgstr "Altres aplicacions"
 
 #. This label is displayed in a treeview cell displaying
 #. * a disabled accelerator key combination.
+#.
 #: gtk/deprecated/gtkcellrendereraccel.c:294
 msgctxt "Accelerator"
 msgid "Disabled"
@@ -1126,6 +1126,7 @@ msgstr "Inhabilitat"
 #. This label is displayed in a treeview cell displaying
 #. * an accelerator key combination that is not valid according
 #. * to gtk_accelerator_valid().
+#.
 #: gtk/deprecated/gtkcellrendereraccel.c:304
 msgctxt "Accelerator"
 msgid "Invalid"
@@ -1133,6 +1134,7 @@ msgstr "No vàlid"
 
 #. This label is displayed in a treeview cell displaying an accelerator
 #. * when the cell is clicked to change the accelerator.
+#.
 #: gtk/deprecated/gtkcellrendereraccel.c:436
 #: gtk/deprecated/gtkcellrendereraccel.c:729
 msgid "New accelerator…"
@@ -1230,6 +1232,7 @@ msgstr "Volum al màxim"
 #. * as used in the tooltip, eg. "49 %".
 #. * Translate the "%d" to "%Id" if you want to use localised digits,
 #. * or otherwise translate the "%d" to "%d".
+#.
 #: gtk/deprecated/gtkvolumebutton.c:253
 #, c-format
 msgctxt "volume percentage"
@@ -1339,6 +1342,7 @@ msgstr "Dissenyat per"
 
 #. Translators: this is the license preamble; the string at the end
 #. * contains the name of the license as link text.
+#.
 #: gtk/gtkaboutdialog.c:2341
 #, c-format
 msgid ""
@@ -1352,6 +1356,7 @@ msgstr ""
 #. * that use the shift key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#.
 #: gtk/gtkaccelgroup.c:839 gtk/gtkshortcutlabel.c:101
 #: gtk/gtkshortcutlabel.c:137
 msgctxt "keyboard label"
@@ -1362,6 +1367,7 @@ msgstr "Maj"
 #. * that use the control key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#.
 #: gtk/gtkaccelgroup.c:858 gtk/gtkshortcutlabel.c:104
 #: gtk/gtkshortcutlabel.c:139
 msgctxt "keyboard label"
@@ -1372,6 +1378,7 @@ msgstr "Ctrl"
 #. * that use the alt key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#.
 #: gtk/gtkaccelgroup.c:877 gtk/gtkshortcutlabel.c:107
 #: gtk/gtkshortcutlabel.c:141
 msgctxt "keyboard label"
@@ -1382,6 +1389,7 @@ msgstr "Alt"
 #. * that use the super key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#.
 #: gtk/gtkaccelgroup.c:895 gtk/gtkshortcutlabel.c:113
 #: gtk/gtkshortcutlabel.c:143
 msgctxt "keyboard label"
@@ -1392,6 +1400,7 @@ msgstr "Súper"
 #. * that use the hyper key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#.
 #: gtk/gtkaccelgroup.c:909 gtk/gtkshortcutlabel.c:116
 #: gtk/gtkshortcutlabel.c:145
 msgctxt "keyboard label"
@@ -1402,6 +1411,7 @@ msgstr "Híper"
 #. * that use the meta key. If the text on this key isn't typically
 #. * translated on keyboards used for your language, don't translate
 #. * this.
+#.
 #: gtk/gtkaccelgroup.c:924 gtk/gtkshortcutlabel.c:110
 #: gtk/gtkshortcutlabel.c:148
 msgctxt "keyboard label"
@@ -1411,6 +1421,7 @@ msgstr "Meta"
 #. Translators: "KP" means "numeric key pad". This string will
 #. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
 #. * and therefore the translation needs to be very short.
+#.
 #: gtk/gtkaccelgroup.c:944
 msgctxt "keyboard label"
 msgid "KP"
@@ -1854,6 +1865,7 @@ msgstr "_Tanca"
 #. Translators: This is the 'reason' given when inhibiting
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
+#.
 #: gtk/gtkapplication-dbus.c:721 gtk/gtkapplication-dbus.c:763
 msgid "Reason not specified"
 msgstr "Motiu no especificat"
@@ -1890,7 +1902,8 @@ msgstr "El text pot no aparèixer dins de <%s>"
 #. Translate to calendar:week_start:0 if you want Sunday to be the
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
-#: gtk/gtkcalendar.c:666
+#.
+#: gtk/gtkcalendar.c:670
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1903,19 +1916,10 @@ msgstr "calendar:week_start:1"
 #. * further influenced by BIDI ordering. Thus, if you have a default
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
-#: gtk/gtkcalendar.c:817
+#.
+#: gtk/gtkcalendar.c:821
 msgid "calendar:MY"
 msgstr "calendar:MY"
-
-#. Translators: This dictates how the year is displayed in
-#. * gtkcalendar widget.  See strftime() manual for the format.
-#. * Use only ASCII in the translation.
-#. *
-#. * "%Y" is appropriate for most locales.
-#: gtk/gtkcalendar.c:1002
-msgctxt "calendar year format"
-msgid "%Y"
-msgstr "%Y"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1926,11 +1930,23 @@ msgstr "%Y"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1039
+#.
+#: gtk/gtkcalendar.c:1002
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
 msgstr "%d"
+
+#. Translators: This dictates how the year is displayed in
+#. * gtkcalendar widget.  See strftime() manual for the format.
+#. * Use only ASCII in the translation.
+#. *
+#. * "%Y" is appropriate for most locales.
+#.
+#: gtk/gtkcalendar.c:1106
+msgctxt "calendar year format"
+msgid "%Y"
+msgstr "%Y"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1940,7 +1956,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1104
+#: gtk/gtkcalendar.c:1152
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -2201,6 +2217,7 @@ msgstr "Personalitza"
 #. * want inches, otherwise translate to default:mm.
 #. * Do *not* translate it to "predefinito:mm", if it
 #. * it isn't default:mm or default:inch it will not work
+#.
 #: gtk/print/gtkcustompaperunixdialog.c:106
 msgid "default:mm"
 msgstr "default:mm"
@@ -2210,8 +2227,7 @@ msgid "Margins from Printer…"
 msgstr "Marges de la impressora…"
 
 #. And show the custom paper dialog
-#: gtk/print/gtkcustompaperunixdialog.c:377
-#: gtk/print/gtkprintunixdialog.c:2970
+#: gtk/print/gtkcustompaperunixdialog.c:377 gtk/print/gtkprintunixdialog.c:2975
 msgid "Manage Custom Sizes"
 msgstr "Gestioneu mides personalitzades"
 
@@ -2327,7 +2343,7 @@ msgid "A file with that name already exists"
 msgstr "Ja existeix un fitxer amb aquest nom"
 
 #: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:5014
+#: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:5017
 #: gtk/gtkfiledialog.c:840 gtk/gtkmessagedialog.c:170
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
@@ -2355,6 +2371,7 @@ msgstr "Seleccioneu quins tipus de fitxers es mostren"
 #. Translators: the first string is a path and the second string
 #. * is a hostname. Nautilus and the panel contain the same string
 #. * to translate.
+#.
 #: gtk/gtkfilechooserutils.c:364
 #, c-format
 msgid "%1$s on %2$s"
@@ -2484,7 +2501,7 @@ msgid "Home"
 msgstr "Carpeta de l'usuari"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2195 gtk/gtkfilechooserwidget.c:7436
+#: gtk/gtkfilechooserwidget.c:2195 gtk/gtkfilechooserwidget.c:7439
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "Ubicació"
@@ -2507,8 +2524,8 @@ msgstr "S'està cercant"
 msgid "Enter location or URL"
 msgstr "Introduïu una ubicació o URL"
 
-#: gtk/gtkfilechooserwidget.c:3444 gtk/gtkfilechooserwidget.c:5801
-#: gtk/gtkfilechooserwidget.c:7458
+#: gtk/gtkfilechooserwidget.c:3444 gtk/gtkfilechooserwidget.c:5804
+#: gtk/gtkfilechooserwidget.c:7461
 msgid "Modified"
 msgstr "Modificat"
 
@@ -2591,12 +2608,12 @@ msgstr "Presentació"
 msgid "Spreadsheet"
 msgstr "Full de càlcul"
 
-#: gtk/gtkfilechooserwidget.c:5006 gtk/print/gtkprintunixdialog.c:673
+#: gtk/gtkfilechooserwidget.c:5009 gtk/print/gtkprintunixdialog.c:673
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Ja existeix un fitxer amb el nom «%s». Voleu reemplaçar-lo?"
 
-#: gtk/gtkfilechooserwidget.c:5008 gtk/print/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:5011 gtk/print/gtkprintunixdialog.c:677
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
@@ -2604,47 +2621,47 @@ msgstr ""
 "El fitxer ja existeix a «%s». Si el reemplaceu en sobreescriureu el "
 "contingut."
 
-#: gtk/gtkfilechooserwidget.c:5014 gtk/print/gtkprintunixdialog.c:685
+#: gtk/gtkfilechooserwidget.c:5017 gtk/print/gtkprintunixdialog.c:685
 msgid "_Replace"
 msgstr "_Reemplaça"
 
-#: gtk/gtkfilechooserwidget.c:5169
+#: gtk/gtkfilechooserwidget.c:5172
 msgid "You do not have access to the specified folder."
 msgstr "No teniu accés el contingut de la carpeta especificada."
 
-#: gtk/gtkfilechooserwidget.c:5748
+#: gtk/gtkfilechooserwidget.c:5751
 msgid "Could not send the search request"
 msgstr "No s'ha pogut enviar la sol·licitud de cerca"
 
-#: gtk/gtkfilechooserwidget.c:6029
+#: gtk/gtkfilechooserwidget.c:6032
 msgid "Accessed"
 msgstr "Accedit"
 
-#: gtk/gtkfilechooserwidget.c:7414
+#: gtk/gtkfilechooserwidget.c:7417
 msgid "_Size"
 msgstr "_Mida"
 
-#: gtk/gtkfilechooserwidget.c:7418
+#: gtk/gtkfilechooserwidget.c:7421
 msgid "T_ype"
 msgstr "T_ipus"
 
-#: gtk/gtkfilechooserwidget.c:7422
+#: gtk/gtkfilechooserwidget.c:7425
 msgid "_Time"
 msgstr "_Data"
 
-#: gtk/gtkfilechooserwidget.c:7428 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7431 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:396 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "Nom"
 
-#: gtk/gtkfilechooserwidget.c:7445 gtk/inspector/resource-list.ui:82
+#: gtk/gtkfilechooserwidget.c:7448 gtk/inspector/resource-list.ui:82
 #: gtk/ui/gtkfontchooserwidget.ui:218 gtk/ui/gtkfontchooserwidget.ui:387
 msgid "Size"
 msgstr "Mida"
 
-#: gtk/gtkfilechooserwidget.c:7451 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7454 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "Tipus"
@@ -2807,6 +2824,7 @@ msgstr "URI no vàlid"
 #. * hours, 5 minutes, and 2 seconds. You may change ":" to
 #. * the separator that your locale uses or use "%Id" instead
 #. * of "%d" if your locale uses localized digits.
+#.
 #: gtk/gtkmediacontrols.c:100
 #, c-format
 msgctxt "long time format"
@@ -2818,6 +2836,7 @@ msgstr "%d:%02d:%02d"
 #. * hours, 5 minutes, and 2 seconds playback remaining. You may
 #. * change ":" to the separator that your locale uses or use
 #. * "%Id" instead of "%d" if your locale uses localized digits.
+#.
 #: gtk/gtkmediacontrols.c:108
 #, c-format
 msgctxt "long time format"
@@ -2829,6 +2848,7 @@ msgstr "-%d:%02d:%02d"
 #. * minutes and 2 seconds playback remaining. You may change
 #. * ":" to the separator that your locale uses or use "%Id"
 #. * instead of "%d" if your locale uses localized digits.
+#.
 #: gtk/gtkmediacontrols.c:119
 #, c-format
 msgctxt "short time format"
@@ -2840,6 +2860,7 @@ msgstr "-%d:%02d"
 #. * minutes and 2 seconds. You may change ":" to the
 #. * separator that your locale uses or use "%Id" instead of
 #. * "%d" if your locale uses localized digits.
+#.
 #: gtk/gtkmediacontrols.c:128
 #, c-format
 msgctxt "short time format"
@@ -2934,6 +2955,7 @@ msgstr "Aplicació desconeguda (PID %d)"
 #. * indeed be destroyed via the GMountOperation::abort signal... for example,
 #. * this is triggered if the user yanks the device while we are showing
 #. * the dialog...
+#.
 #: gtk/gtkmountoperation.c:1396
 #, c-format
 msgid "Unable to end process"
@@ -3135,6 +3157,7 @@ msgstr "No es pot iniciar «%s»"
 
 #. Translators: This means that unlocking an encrypted storage
 #. * device failed. %s is the name of the device.
+#.
 #: gtk/gtkplacessidebar.c:2000
 #, c-format
 msgid "Error unlocking “%s”"
@@ -3340,10 +3363,10 @@ msgstr "Xarxes"
 msgid "On This Computer"
 msgstr "En aquest ordinador"
 
-#. Translators: respectively, free and total space of the drive. The plural
-#. form
+#. Translators: respectively, free and total space of the drive. The plural form
 #. * should be based on the free space available.
 #. * i.e. 1 GB / 24 GB available.
+#.
 #: gtk/gtkplacesviewrow.c:135
 #, c-format
 msgid "%s / %s available"
@@ -3379,6 +3402,7 @@ msgstr "No està disponible"
 #. translators: this string is the default job title for print
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
+#.
 #: gtk/print/gtkprintoperation.c:252
 #, c-format
 msgid "%s job #%d"
@@ -3459,16 +3483,14 @@ msgstr "S'ha produït un error en crear la previsualització d'impressió"
 
 #: gtk/print/gtkprintoperation.c:2907
 #, c-format
-msgid ""
-"The most probable reason is that a temporary file could not be created."
+msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 "El motiu més probable és perquè no s'ha pogut crear un fitxer temporal."
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
 #: gtk/print/gtkprintoperation-portal.c:594
-#: gtk/print/gtkprintoperation-portal.c:663
-#: gtk/print/gtkprintunixdialog.c:3010
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3015
 msgid "Print"
 msgstr "Imprimeix"
 
@@ -3544,76 +3566,77 @@ msgstr "Pre_visualització"
 msgid "_Print"
 msgstr "_Imprimeix"
 
-#: gtk/print/gtkprintunixdialog.c:961
+#: gtk/print/gtkprintunixdialog.c:966
 msgid "Getting printer information failed"
 msgstr "Ha fallat l'obtenció d'informació de la impressora"
 
-#: gtk/print/gtkprintunixdialog.c:1885
+#: gtk/print/gtkprintunixdialog.c:1890
 msgid "Getting printer information…"
 msgstr "S'està obtenint informació de la impressora…"
 
 #. Translators: These strings name the possible arrangements of
-#. * multiple pages on a sheet when printing (same as in
-#. gtkprintbackendcups.c)
+#. * multiple pages on a sheet when printing (same as in gtkprintbackendcups.c)
+#.
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
-#: gtk/print/gtkprintunixdialog.c:2755
+#.
+#: gtk/print/gtkprintunixdialog.c:2760
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, top to bottom"
 msgstr "D'esquerra a dreta, de dalt a baix"
 
-#: gtk/print/gtkprintunixdialog.c:2755
+#: gtk/print/gtkprintunixdialog.c:2760
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, bottom to top"
 msgstr "D'esquerra a dreta, de baix a dalt"
 
-#: gtk/print/gtkprintunixdialog.c:2756
+#: gtk/print/gtkprintunixdialog.c:2761
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, top to bottom"
 msgstr "De dreta a esquerra, de dalt a baix"
 
-#: gtk/print/gtkprintunixdialog.c:2756
+#: gtk/print/gtkprintunixdialog.c:2761
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, bottom to top"
 msgstr "De dreta a esquerra, de baix a dalt"
 
-#: gtk/print/gtkprintunixdialog.c:2757
+#: gtk/print/gtkprintunixdialog.c:2762
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, left to right"
 msgstr "De dalt a baix, d'esquerra a dreta"
 
-#: gtk/print/gtkprintunixdialog.c:2757
+#: gtk/print/gtkprintunixdialog.c:2762
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, right to left"
 msgstr "De dalt a baix, de dreta a esquerra"
 
-#: gtk/print/gtkprintunixdialog.c:2758
+#: gtk/print/gtkprintunixdialog.c:2763
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, left to right"
 msgstr "De baix a dalt, d'esquerra a dreta"
 
-#: gtk/print/gtkprintunixdialog.c:2758
+#: gtk/print/gtkprintunixdialog.c:2763
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, right to left"
 msgstr "De baix a dalt, de dreta a esquerra"
 
-#: gtk/print/gtkprintunixdialog.c:2762 gtk/print/gtkprintunixdialog.c:2775
+#: gtk/print/gtkprintunixdialog.c:2767 gtk/print/gtkprintunixdialog.c:2780
 msgid "Page Ordering"
 msgstr "Ordenació de les pàgines"
 
-#: gtk/print/gtkprintunixdialog.c:2791
+#: gtk/print/gtkprintunixdialog.c:2796
 msgid "Left to right"
 msgstr "D'esquerra a dreta"
 
-#: gtk/print/gtkprintunixdialog.c:2792
+#: gtk/print/gtkprintunixdialog.c:2797
 msgid "Right to left"
 msgstr "De dreta a esquerra"
 
-#: gtk/print/gtkprintunixdialog.c:2804
+#: gtk/print/gtkprintunixdialog.c:2809
 msgid "Top to bottom"
 msgstr "De dalt a baix"
 
-#: gtk/print/gtkprintunixdialog.c:2805
+#: gtk/print/gtkprintunixdialog.c:2810
 msgid "Bottom to top"
 msgstr "De baix a dalt"
 
@@ -3649,6 +3672,7 @@ msgstr "Neteja l'entrada"
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
+#.
 #: gtk/gtkshortcutlabel.c:79
 msgctxt "keyboard side marker"
 msgid "L"
@@ -3658,6 +3682,7 @@ msgstr "E"
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
 #. * this string very short, ideally just a single character, since it will
 #. * be rendered as part of the key.
+#.
 #: gtk/gtkshortcutlabel.c:92
 msgctxt "keyboard side marker"
 msgid "R"
@@ -3699,21 +3724,18 @@ msgstr "Llisca a l'esquerra"
 msgid "Swipe right"
 msgstr "Llisca a la dreta"
 
-#. Translators: This is placeholder text for the search entry in the shortcuts
-#. window
+#. Translators: This is placeholder text for the search entry in the shortcuts window
 #: gtk/gtkshortcutswindow.c:894 gtk/gtkshortcutswindow.c:961
 #: gtk/gtkshortcutswindow.c:967
 msgid "Search Shortcuts"
 msgstr "Cerca les dreceres"
 
-#. Translators: This is the window title for the shortcuts window in normal
-#. mode
+#. Translators: This is the window title for the shortcuts window in normal mode
 #: gtk/gtkshortcutswindow.c:926 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "Dreceres"
 
-#. Translators: This is the window title for the shortcuts window in search
-#. mode
+#. Translators: This is the window title for the shortcuts window in search mode
 #: gtk/gtkshortcutswindow.c:931
 msgid "Search Results"
 msgstr "Resultats de cerca"
@@ -3758,8 +3780,8 @@ msgid ""
 "break or crash."
 msgstr ""
 "L'inspector del GTK és un depurador interactiu que us permet explorar i "
-"modificar qualsevol aplicació GTK internament. Podeu arribar a trencar o fer"
-" fallar l'aplicació si l'utilitzeu."
+"modificar qualsevol aplicació GTK internament. Podeu arribar a trencar o fer "
+"fallar l'aplicació si l'utilitzeu."
 
 #: gtk/gtkwindow.c:6207
 msgid "Don’t show this message again"
@@ -3906,8 +3928,8 @@ msgid ""
 "You can temporarily disable this custom CSS by clicking on the “Pause” "
 "button above."
 msgstr ""
-"Podeu inhabilitar temporalment aquest CSS personalitzat fent clic en el botó"
-" «Fes una pausa» d'aquí sobre."
+"Podeu inhabilitar temporalment aquest CSS personalitzat fent clic en el botó "
+"«Fes una pausa» d'aquí sobre."
 
 #: gtk/inspector/css-editor.c:137
 msgid "Changes are applied instantly and globally, for the whole application."
@@ -3948,32 +3970,32 @@ msgctxt "GL version"
 msgid "None"
 msgstr "Cap"
 
-#: gtk/inspector/general.c:465
+#: gtk/inspector/general.c:464
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Desconeguda"
 
-#: gtk/inspector/general.c:527
+#: gtk/inspector/general.c:526
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Inhabilitat"
 
-#: gtk/inspector/general.c:528 gtk/inspector/general.c:529
+#: gtk/inspector/general.c:527 gtk/inspector/general.c:528
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Inhabilitat"
 
-#: gtk/inspector/general.c:580
+#: gtk/inspector/general.c:579
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Cap"
 
-#: gtk/inspector/general.c:581 gtk/inspector/general.c:582
+#: gtk/inspector/general.c:580 gtk/inspector/general.c:581
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Cap"
 
-#: gtk/inspector/general.c:935
+#: gtk/inspector/general.c:934
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "El context IM està definit manualment per GTK_IM_MODULE"
 
@@ -4190,6 +4212,7 @@ msgstr "Punter: %p"
 
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
+#.
 #: gtk/inspector/prop-editor.c:827
 #, c-format
 msgid "%s with value \"%s\""
@@ -4197,6 +4220,7 @@ msgstr "%s amb valor «%s»"
 
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
+#.
 #: gtk/inspector/prop-editor.c:838
 #, c-format
 msgid "%s with type %s"
@@ -4204,6 +4228,7 @@ msgstr "%s amb tipus %s"
 
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
+#.
 #: gtk/inspector/prop-editor.c:851
 #, c-format
 msgid "%s for %s %p"
@@ -4211,6 +4236,7 @@ msgstr "%s per a %s %p"
 
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
+#.
 #: gtk/inspector/prop-editor.c:881
 #, c-format
 msgid "%s with value type %s"
@@ -4240,6 +4266,7 @@ msgstr "Columna:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
+#.
 #: gtk/inspector/prop-editor.c:1532
 #, c-format
 msgid "Action from: %p (%s)"
@@ -4491,8 +4518,8 @@ msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
-"Tinta tots els llocs on el renderitzador actual utilitza el Cairo en lloc de"
-" la GPU."
+"Tinta tots els llocs on el renderitzador actual utilitza el Cairo en lloc de "
+"la GPU."
 
 #: gtk/inspector/visual.ui:456
 msgid "Show Cairo Rendering"
@@ -6594,14 +6621,12 @@ msgstr "Imprimeix el document"
 msgid "_Now"
 msgstr "_Ara"
 
-#. this is one of the choices for the print at option in the print dialog. It
-#. also serves as the label for an entry that allows the user to enter a time.
+#. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
 #: gtk/print/ui/gtkprintunixdialog.ui:901
 msgid "A_t:"
 msgstr "_A:"
 
-#. Ability to parse the am/pm format depends on actual locale. You can remove
-#. the am/pm values below for your locale if they are not supported.
+#. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
 #: gtk/print/ui/gtkprintunixdialog.ui:903
 #: gtk/print/ui/gtkprintunixdialog.ui:905
 #: gtk/print/ui/gtkprintunixdialog.ui:921
@@ -6613,9 +6638,7 @@ msgstr ""
 "Especifiqueu el temps d'impressió,\n"
 " p. ex. 15:30, 14:15:20"
 
-#. this is one of the choices for the print at option in the print dialog. It
-#. means that the print job will not be printed until it explicitly gets
-#. 'released'.
+#. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
 #: gtk/print/ui/gtkprintunixdialog.ui:935
 msgid "On _hold"
 msgstr "_En espera"
@@ -6630,15 +6653,13 @@ msgid "Add Cover Page"
 msgstr "Afegeix una pàgina de portada"
 
 # Possiblement sigui "abans de" (josep)
-#. this is the label used for the option in the print dialog that controls the
-#. front cover page.
+#. this is the label used for the option in the print dialog that controls the front cover page.
 #: gtk/print/ui/gtkprintunixdialog.ui:980
 msgid "Be_fore:"
 msgstr "_Abans:"
 
 # Possiblement "després de" (josep)
-#. this is the label used for the option in the print dialog that controls the
-#. back cover page.
+#. this is the label used for the option in the print dialog that controls the back cover page.
 #: gtk/print/ui/gtkprintunixdialog.ui:1001
 msgid "_After:"
 msgstr "_Després:"
@@ -6657,8 +6678,7 @@ msgstr "Qualitat de la imatge"
 msgid "Color"
 msgstr "Color"
 
-#. This will appear as a tab label in the print dialog. It's a typographical
-#. term, as in "Binding and finishing"
+#. This will appear as a tab label in the print dialog. It's a typographical term, as in "Binding and finishing"
 #: gtk/print/ui/gtkprintunixdialog.ui:1118
 msgid "Finishing"
 msgstr "Finalitzat"
@@ -6698,6 +6718,7 @@ msgstr "Baixa"
 # Possiblement sigui "abans de" (josep)
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
+#.
 #: modules/printbackends/gtkprintbackendcpdb.c:567
 #: modules/printbackends/gtkprintbackendcups.c:5814
 msgctxt "printer option"
@@ -6707,6 +6728,7 @@ msgstr "Abans"
 # Possiblement "després de" (josep)
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
+#.
 #: modules/printbackends/gtkprintbackendcpdb.c:574
 #: modules/printbackends/gtkprintbackendcups.c:5829
 msgctxt "printer option"
@@ -6851,8 +6873,8 @@ msgstr ""
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr ""
-"La impressora «%s» s'ha quedat sense tinta en almenys un dels contenidors de"
-" color."
+"La impressora «%s» s'ha quedat sense tinta en almenys un dels contenidors de "
+"color."
 
 #: modules/printbackends/gtkprintbackendcups.c:2596
 #, c-format
@@ -7052,15 +7074,13 @@ msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Safata posterior"
 
-#. Translators: Output bin where one sided output is oriented in the face-up
-#. position
+#. Translators: Output bin where one sided output is oriented in the face-up position
 #: modules/printbackends/gtkprintbackendcups.c:4708
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Safata cara amunt"
 
-#. Translators: Output bin where one sided output is oriented in the face-down
-#. position
+#. Translators: Output bin where one sided output is oriented in the face-down position
 #: modules/printbackends/gtkprintbackendcups.c:4710
 msgctxt "output-bin"
 msgid "Face Down Bin"
@@ -7105,18 +7125,21 @@ msgstr "Per defecte de la impressora"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
+#.
 #: modules/printbackends/gtkprintbackendcups.c:5702
 msgid "Job Priority"
 msgstr "Prioritat de la tasca"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
+#.
 #: modules/printbackends/gtkprintbackendcups.c:5713
 msgid "Billing Info"
 msgstr "Informació de facturació"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
+#.
 #: modules/printbackends/gtkprintbackendcups.c:5737
 msgctxt "cover page"
 msgid "None"
@@ -7154,6 +7177,7 @@ msgstr "No classificat"
 
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
+#.
 #: modules/printbackends/gtkprintbackendcups.c:5755
 msgctxt "printer option"
 msgid "Pages per Sheet"
@@ -7161,6 +7185,7 @@ msgstr "Pàgines per full"
 
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
+#.
 #: modules/printbackends/gtkprintbackendcups.c:5772
 msgctxt "printer option"
 msgid "Page Ordering"
@@ -7169,6 +7194,7 @@ msgstr "Ordenació de les pàgines"
 #. Translators: this is the name of the option that controls when
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
+#.
 #: modules/printbackends/gtkprintbackendcups.c:5849
 msgctxt "printer option"
 msgid "Print at"
@@ -7177,6 +7203,7 @@ msgstr "Imprimeix a"
 # FIXME: s'ha de mirar que no sigui massa llarg
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
+#.
 #: modules/printbackends/gtkprintbackendcups.c:5860
 msgctxt "printer option"
 msgid "Print at time"
@@ -7186,6 +7213,7 @@ msgstr "Imprimeix a una hora determinada"
 #. * paper size. The two placeholders are replaced with
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
+#.
 #: modules/printbackends/gtkprintbackendcups.c:5907
 #, c-format
 msgid "Custom %s×%s"
@@ -7314,14 +7342,12 @@ msgstr ""
 "\n"
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
-#: tools/gtk-builder-tool-preview.c:180
-#: tools/gtk-builder-tool-screenshot.c:360
-#: tools/gtk-builder-tool-simplify.c:2529
-#: tools/gtk-builder-tool-validate.c:261 tools/gtk-image-tool-compare.c:43
-#: tools/gtk-image-tool-info.c:68 tools/gtk-path-tool-render.c:121
-#: tools/gtk-rendernode-tool-compare.c:67
-#: tools/gtk-rendernode-tool-extract.c:294
-#: tools/gtk-rendernode-tool-info.c:226 tools/gtk-rendernode-tool-show.c:116
+#: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
+#: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
+#: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:68
+#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-extract.c:294 tools/gtk-rendernode-tool-info.c:226
+#: tools/gtk-rendernode-tool-show.c:116
 msgid "FILE"
 msgstr "FITXER"
 
@@ -7329,8 +7355,7 @@ msgstr "FITXER"
 msgid "Print all named objects."
 msgstr "Imprimeix tots els objectes amb nom."
 
-#: tools/gtk-builder-tool-preview.c:128
-#: tools/gtk-builder-tool-screenshot.c:236
+#: tools/gtk-builder-tool-preview.c:128 tools/gtk-builder-tool-screenshot.c:236
 #, c-format
 msgid "No object with ID '%s' found\n"
 msgstr "No s'ha trobat cap objecte amb l'ID «%s»\n"
@@ -7349,15 +7374,13 @@ msgstr "No es poden previsualitzar els objectes del tipus %s\n"
 msgid "Preview only the named object"
 msgstr "Previsualitza només l'objecte amb nom"
 
-#: tools/gtk-builder-tool-preview.c:179
-#: tools/gtk-builder-tool-screenshot.c:360
+#: tools/gtk-builder-tool-preview.c:179 tools/gtk-builder-tool-screenshot.c:360
 msgid "Use style from CSS file"
 msgstr "Utilitza l'estil del fitxer CSS"
 
-#: tools/gtk-builder-tool-preview.c:187
-#: tools/gtk-builder-tool-screenshot.c:370
+#: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268
-#: tools/gtk-rendernode-tool-benchmark.c:106
+#: tools/gtk-rendernode-tool-benchmark.c:108
 #: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:123
 #, c-format
 msgid "Could not initialize windowing system\n"
@@ -7367,10 +7390,8 @@ msgstr "No s'ha pogut inicialitzar el sistema de finestres\n"
 msgid "Preview the file."
 msgstr "Previsualitza el fitxer."
 
-#: tools/gtk-builder-tool-preview.c:208
-#: tools/gtk-builder-tool-screenshot.c:391
-#: tools/gtk-builder-tool-simplify.c:2552
-#: tools/gtk-builder-tool-validate.c:287
+#: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
+#: tools/gtk-builder-tool-simplify.c:2552 tools/gtk-builder-tool-validate.c:287
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "No s'ha especificat un fitxer .ui\n"
@@ -7431,7 +7452,7 @@ msgstr "Sobreescriu el fitxer existent"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
 #: tools/gtk-image-tool-convert.c:89 tools/gtk-image-tool-relabel.c:86
-#: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:99
 #: tools/gtk-rendernode-tool-render.c:255
 msgid "FILE…"
 msgstr "FITXER…"
@@ -7534,6 +7555,7 @@ msgid "Validate the file."
 msgstr "Valida el fitxer."
 
 #: tools/gtk-image-tool.c:36
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-image-tool [COMMAND] [OPTION…] FILE…\n"
@@ -7677,7 +7699,7 @@ msgstr "Format:"
 
 #: tools/gtk-image-tool-info.c:56
 msgid "Color state:"
-msgstr "Estat del color"
+msgstr "Estat del color:"
 
 #: tools/gtk-image-tool-info.c:77
 msgid "Provide information about the image."
@@ -8108,41 +8130,40 @@ msgstr ""
 "  render       Fes una captura de pantalla del node\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-benchmark.c:96
 msgid "Add renderer to benchmark"
 msgstr "Afegeix un renderitzador a la prova de rendiment"
 
-#: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-benchmark.c:96
 #: tools/gtk-rendernode-tool-compare.c:65
 #: tools/gtk-rendernode-tool-render.c:254
 msgid "RENDERER"
 msgstr "RENDERITZADOR"
 
-#: tools/gtk-rendernode-tool-benchmark.c:95
+#: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "Number of runs with each renderer"
 msgstr "Nombre d'execucions amb cada renderitzador"
 
-#: tools/gtk-rendernode-tool-benchmark.c:95
+#: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "RUNS"
 msgstr "EXECUCIONS"
 
-#: tools/gtk-rendernode-tool-benchmark.c:96
+#: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "Don’t download result/wait for GPU to finish"
 msgstr "No baixa el resultat/espera que la GPU acabi"
 
-#: tools/gtk-rendernode-tool-benchmark.c:114
+#: tools/gtk-rendernode-tool-benchmark.c:116
 msgid "Benchmark rendering of a .node file."
 msgstr "Prova de rendiment d'un fitxer .node."
 
-#: tools/gtk-rendernode-tool-benchmark.c:127
-#: tools/gtk-rendernode-tool-extract.c:316
-#: tools/gtk-rendernode-tool-info.c:248 tools/gtk-rendernode-tool-render.c:283
-#: tools/gtk-rendernode-tool-show.c:144
+#: tools/gtk-rendernode-tool-benchmark.c:129
+#: tools/gtk-rendernode-tool-extract.c:316 tools/gtk-rendernode-tool-info.c:248
+#: tools/gtk-rendernode-tool-render.c:283 tools/gtk-rendernode-tool-show.c:144
 #, c-format
 msgid "No .node file specified\n"
 msgstr "No s'ha especificat un fitxer .node\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:133
+#: tools/gtk-rendernode-tool-benchmark.c:135
 #, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "Només es pot fer una prova de rendiment sobre un únic fitxer .node\n"
@@ -8193,15 +8214,14 @@ msgstr "Sigues detallat"
 msgid "Extract data urls from the render node."
 msgstr "Extreu els URL de dades del node de renderització."
 
-#: tools/gtk-rendernode-tool-extract.c:322
-#: tools/gtk-rendernode-tool-info.c:254
+#: tools/gtk-rendernode-tool-extract.c:322 tools/gtk-rendernode-tool-info.c:254
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Només es pot acceptar un únic fitxer .node\n"
 
 #: tools/gtk-rendernode-tool-info.c:193
 msgid "Number of nodes:"
-msgstr "Nombre de nodes: "
+msgstr "Nombre de nodes:"
 
 #: tools/gtk-rendernode-tool-info.c:200
 msgid "Depth:"
@@ -8373,4 +8393,5 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "No hi ha el fitxer índex de tema a «%s».\n"
-"Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-theme-index.\n"
+"Si realment voleu crear una memòria cau d'icones aquí, utilitzeu --ignore-"
+"theme-index.\n"
