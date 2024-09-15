@@ -115,7 +115,6 @@ gsk_vulkan_frame_setup (GskGpuFrame *frame)
   GSK_VK_CHECK (vkCreateFence, vk_device,
                                &(VkFenceCreateInfo) {
                                    .sType = VK_STRUCTURE_TYPE_FENCE_CREATE_INFO,
-                                   .flags = VK_FENCE_CREATE_SIGNALED_BIT
                                },
                                NULL,
                                &self->vk_fence);

@@ -62,6 +62,8 @@ benchmark_node (GskRenderNode *node,
           gsize stride;
 
           downloader = gdk_texture_downloader_new (texture);
+          gdk_texture_downloader_set_format (downloader, gdk_texture_get_format (texture));
+          gdk_texture_downloader_set_color_state (downloader, gdk_texture_get_color_state (texture));
           bytes = gdk_texture_downloader_download_bytes (downloader, &stride);
           g_bytes_unref (bytes);
           gdk_texture_downloader_free (downloader);

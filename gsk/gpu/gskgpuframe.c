@@ -95,9 +95,20 @@ gsk_gpu_frame_default_end (GskGpuFrame    *self,
   gdk_draw_context_end_frame_full (context);
 }
 
+static gboolean
+gsk_gpu_frame_is_clean (GskGpuFrame *self)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+
+  return gsk_gpu_ops_get_size (&priv->ops) == 0;
+}
+
 static void
 gsk_gpu_frame_cleanup (GskGpuFrame *self)
 {
+  if (gsk_gpu_frame_is_clean (self))
+    return;
+
   GSK_GPU_FRAME_GET_CLASS (self)->cleanup (self);
 }
 
@@ -615,13 +626,21 @@ gsk_gpu_frame_write_storage_buffer (GskGpuFrame  *self,
 gboolean
 gsk_gpu_frame_is_busy (GskGpuFrame *self)
 {
+  if (gsk_gpu_frame_is_clean (self))
+    return FALSE;
+
   return GSK_GPU_FRAME_GET_CLASS (self)->is_busy (self);
 }
 
 void
 gsk_gpu_frame_wait (GskGpuFrame *self)
 {
+  if (gsk_gpu_frame_is_clean (self))
+    return;
+
   GSK_GPU_FRAME_GET_CLASS (self)->wait (self);
+
+  gsk_gpu_frame_cleanup (self);
 }
 
 static void

@@ -72,6 +72,42 @@ gsk_gpu_renderer_create_frame (GskGpuRenderer *self)
   return result;
 }
 
+static GskGpuFrame *
+gsk_gpu_renderer_get_frame (GskGpuRenderer *self)
+{
+  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
+  GskGpuFrame *earliest_frame = NULL;
+  gint64 earliest_time = G_MAXINT64;
+  guint i;
+
+  for (i = 0; i < G_N_ELEMENTS (priv->frames); i++)
+    {
+      gint64 timestamp;
+
+      if (priv->frames[i] == NULL)
+        {
+          priv->frames[i] = gsk_gpu_renderer_create_frame (self);
+          return priv->frames[i];
+        }
+
+      if (!gsk_gpu_frame_is_busy (priv->frames[i]))
+        return priv->frames[i];
+
+      timestamp = gsk_gpu_frame_get_timestamp (priv->frames[i]);
+      if (timestamp < earliest_time)
+        {
+          earliest_time = timestamp;
+          earliest_frame = priv->frames[i];
+        }
+    }
+
+  g_assert (earliest_frame);
+
+  gsk_gpu_frame_wait (earliest_frame);
+
+  return earliest_frame;
+}
+
 static void
 gsk_gpu_renderer_dmabuf_downloader_close (GdkDmabufDownloader *downloader)
 {
@@ -116,7 +152,7 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
 
   gsk_gpu_renderer_make_current (self);
 
-  frame = gsk_gpu_renderer_create_frame (self);
+  frame = gsk_gpu_renderer_get_frame (self);
 
   gsk_gpu_frame_download_texture (frame,
                                   g_get_monotonic_time (),
@@ -126,7 +162,7 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
                                   data,
                                   stride);
 
-  g_object_unref (frame);
+  gsk_gpu_frame_wait (frame);
 }
 
 static void
@@ -162,42 +198,6 @@ get_render_region (GskGpuRenderer *self)
     }
 
   return scaled_damage;
-}
-
-static GskGpuFrame *
-gsk_gpu_renderer_get_frame (GskGpuRenderer *self)
-{
-  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
-  GskGpuFrame *earliest_frame = NULL;
-  gint64 earliest_time = G_MAXINT64;
-  guint i;
-
-  for (i = 0; i < G_N_ELEMENTS (priv->frames); i++)
-    {
-      gint64 timestamp;
-
-      if (priv->frames[i] == NULL)
-        {
-          priv->frames[i] = gsk_gpu_renderer_create_frame (self);
-          return priv->frames[i];
-        }
-
-      if (!gsk_gpu_frame_is_busy (priv->frames[i]))
-        return priv->frames[i];
-
-      timestamp = gsk_gpu_frame_get_timestamp (priv->frames[i]);
-      if (timestamp < earliest_time)
-        {
-          earliest_time = timestamp;
-          earliest_frame = priv->frames[i];
-        }
-    }
-
-  g_assert (earliest_frame);
-
-  gsk_gpu_frame_wait (earliest_frame);
-
-  return earliest_frame;
 }
 
 static gboolean
@@ -313,7 +313,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                                            gsk_gpu_image_get_width (image),
                                                            gsk_gpu_image_get_height (image)
                                                        });
-          frame = gsk_gpu_renderer_create_frame (self);
+          frame = gsk_gpu_renderer_get_frame (self);
           gsk_gpu_frame_render (frame,
                                 g_get_monotonic_time (),
                                 image,
@@ -325,7 +325,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                                      image_width,
                                                      image_height),
                                 &texture);
-          g_object_unref (frame);
+          gsk_gpu_frame_wait (frame);
 
           g_assert (texture);
           gdk_texture_downloader_init (&downloader, texture);
@@ -384,7 +384,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   else
     color_state = GDK_COLOR_STATE_SRGB;
 
-  frame = gsk_gpu_renderer_create_frame (self);
+  frame = gsk_gpu_renderer_get_frame (self);
 
   clip_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                    0, 0,
@@ -402,7 +402,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
                         &rounded_viewport,
                         &texture);
 
-  g_object_unref (frame);
+  gsk_gpu_frame_wait (frame);
   g_object_unref (image);
 
   gsk_gpu_device_queue_gc (priv->device);

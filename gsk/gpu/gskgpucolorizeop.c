@@ -24,6 +24,7 @@ gsk_gpu_colorize_op_print_instance (GskGpuShaderOp *shader,
 
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image (string, shader->images[0]);
+  gsk_gpu_print_rect (string, instance->tex_rect);
   gsk_gpu_print_rgba (string, instance->color);
 }
 

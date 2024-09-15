@@ -160,6 +160,45 @@ gsk_rect_coverage (const graphene_rect_t *r1,
   *res = r;
 }
 
+/**
+ * gsk_rect_snap_to_grid:
+ * @src: rectangle to snap
+ * @grid_scale: the scale of the grid
+ * @grid_offset: the offset of the grid
+ * @dest: target to snap to. Can be identical to source
+ *
+ * Snaps @src to the grid specified by the given scale
+ * and offset.
+ * Grid points to snap to will be at the given offset and
+ * then spaced apart by the inverse of the given scale,
+ * ie an offset of 0.5 and a scale of 3 will snap to
+ * (..., 0.1667, 0.5, 0.8333, 1.1667, 1.5, ...).
+ *
+ * Snapping is done by growing the rectangle.
+ *
+ * Note that floating point rounding issues might result
+ * in the snapping not being perfectly exact.
+ **/
+static inline void
+gsk_rect_snap_to_grid (const graphene_rect_t  *src,
+                       const graphene_vec2_t  *grid_scale,
+                       const graphene_point_t *grid_offset,
+                       graphene_rect_t        *dest)
+{
+  float x, y, xscale, yscale;
+
+  xscale = graphene_vec2_get_x (grid_scale);
+  yscale = graphene_vec2_get_y (grid_scale);
+
+  x = floorf ((src->origin.x + grid_offset->x) * xscale);
+  y = floorf ((src->origin.y + grid_offset->y) * yscale);
+  *dest = GRAPHENE_RECT_INIT (
+      x / xscale - grid_offset->x,
+      y / yscale - grid_offset->y,
+      (ceilf ((src->origin.x + grid_offset->x + src->size.width) * xscale) - x) / xscale,
+      (ceilf ((src->origin.y + grid_offset->y + src->size.height) * yscale) - y) / yscale);
+}
+
 static inline gboolean G_GNUC_PURE
 gsk_rect_is_empty (const graphene_rect_t *rect)
 {

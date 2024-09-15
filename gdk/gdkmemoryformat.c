@@ -325,6 +325,26 @@ ADD_ALPHA_FUNC(r8g8b8_to_b8g8r8a8, 0, 1, 2, 2, 1, 0, 3)
 ADD_ALPHA_FUNC(r8g8b8_to_a8r8g8b8, 0, 1, 2, 1, 2, 3, 0)
 ADD_ALPHA_FUNC(r8g8b8_to_a8b8g8r8, 0, 1, 2, 3, 2, 1, 0)
 
+#define SWAP_FUNC(name, R, G, B, A) \
+static void \
+name (guchar *dest, \
+      const guchar *src, \
+      gsize n) \
+{ \
+  for (; n > 0; n--) \
+    { \
+      dest[0] = src[R]; \
+      dest[1] = src[G]; \
+      dest[2] = src[B]; \
+      dest[3] = src[A]; \
+      dest += 4; \
+      src += 4; \
+    } \
+}
+
+SWAP_FUNC(r8g8b8a8_to_b8g8r8a8, 2, 1, 0, 3)
+SWAP_FUNC(b8g8r8a8_to_r8g8b8a8, 2, 1, 0, 3)
+
 #define MIPMAP_FUNC(SumType, DataType, n_units) \
 static void \
 gdk_mipmap_ ## DataType ## _ ## n_units ## _nearest (guchar       *dest, \
@@ -2032,6 +2052,12 @@ get_fast_conversion_func (GdkMemoryFormat dest_format,
     return r8g8b8a8_to_a8r8g8b8_premultiplied;
   else if (src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_A8R8G8B8_PREMULTIPLIED)
     return r8g8b8a8_to_a8b8g8r8_premultiplied;
+  else if ((src_format == GDK_MEMORY_B8G8R8A8 && dest_format == GDK_MEMORY_R8G8B8A8) ||
+           (src_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED))
+    return b8g8r8a8_to_r8g8b8a8;
+  else if ((src_format == GDK_MEMORY_R8G8B8A8 && dest_format == GDK_MEMORY_B8G8R8A8) ||
+           (src_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED && dest_format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED))
+    return r8g8b8a8_to_b8g8r8a8;
   else if (src_format == GDK_MEMORY_R8G8B8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
     return r8g8b8_to_r8g8b8a8;
   else if (src_format == GDK_MEMORY_B8G8R8 && dest_format == GDK_MEMORY_R8G8B8A8_PREMULTIPLIED)
@@ -2092,16 +2118,41 @@ gdk_memory_convert_generic (gpointer data)
   gint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
 
-  convert_func = gdk_color_state_get_convert_to (mc->src_cs, mc->dest_cs);
-
-  if (!convert_func)
-    convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, mc->src_cs);
-
-  if (!convert_func && !convert_func2)
+  if (gdk_color_state_equal (mc->src_cs, mc->dest_cs))
     {
-      GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
-      convert_func = gdk_color_state_get_convert_to (mc->src_cs, connection);
-      convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, connection);
+      FastConversionFunc func;
+
+      func = get_fast_conversion_func (mc->dest_format, mc->src_format);
+
+      if (func != NULL)
+        {
+          n = 1;
+
+          for (y = g_atomic_int_add (&mc->rows_done, n);
+               y < mc->height;
+               y = g_atomic_int_add (&mc->rows_done, n))
+            {
+              const guchar *src_data = mc->src_data + y * mc->src_stride;
+              guchar *dest_data = mc->dest_data + y * mc->dest_stride;
+
+              func (dest_data, src_data, mc->width);
+            }
+          return;
+        }
+    }
+  else
+    {
+      convert_func = gdk_color_state_get_convert_to (mc->src_cs, mc->dest_cs);
+
+      if (!convert_func)
+        convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, mc->src_cs);
+
+      if (!convert_func && !convert_func2)
+        {
+          GdkColorState *connection = GDK_COLOR_STATE_REC2100_LINEAR;
+          convert_func = gdk_color_state_get_convert_to (mc->src_cs, connection);
+          convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, connection);
+        }
     }
 
   if (convert_func)
@@ -2203,26 +2254,6 @@ gdk_memory_convert (guchar              *dest_data,
             }
         }
       return;
-    }
-
-  if (gdk_color_state_equal (dest_cs, src_cs))
-    {
-      FastConversionFunc func;
-
-      func = get_fast_conversion_func (dest_format, src_format);
-
-      if (func != NULL)
-        {
-          gsize y;
-
-          for (y = 0; y < height; y++)
-            {
-              func (dest_data, src_data, width);
-              src_data += src_stride;
-              dest_data += dest_stride;
-            }
-          return;
-        }
     }
 
   gdk_parallel_task_run (gdk_memory_convert_generic, &mc);
