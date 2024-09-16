@@ -672,6 +672,77 @@
             </child>
           </object>
         </child>
+        <child>
+          <object class="GtkCenterBox">
+            <property name="orientation">vertical</property>
+            <property name="start-widget">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkButton">
+                    <property name="valign">center</property>
+                    <property name="label" translatable="1">start 0</property>
+                    <property name="focusable">1</property>
+                    <property name="receives_default">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="valign">center</property>
+                    <property name="label" translatable="1">start 1</property>
+                    <property name="focusable">1</property>
+                    <property name="receives_default">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="valign">center</property>
+                    <property name="label" translatable="1">start 2</property>
+                    <property name="focusable">1</property>
+                    <property name="receives_default">1</property>
+                  </object>
+                </child>
+              </object>
+            </property>
+            <property name="center-widget">
+              <object class="GtkButton">
+                <property name="valign">center</property>
+                <property name="label" translatable="1">center</property>
+                <property name="focusable">1</property>
+                <property name="receives_default">1</property>
+              </object>
+            </property>
+            <property name="end-widget">
+              <object class="GtkBox">
+                <property name="orientation">vertical</property>
+                <child>
+                  <object class="GtkButton">
+                    <property name="valign">center</property>
+                    <property name="label" translatable="1">end 2</property>
+                    <property name="focusable">1</property>
+                    <property name="receives_default">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="valign">center</property>
+                    <property name="label" translatable="1">end 1</property>
+                    <property name="focusable">1</property>
+                    <property name="receives_default">1</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton">
+                    <property name="valign">center</property>
+                    <property name="label" translatable="1">end 0</property>
+                    <property name="focusable">1</property>
+                    <property name="receives_default">1</property>
+                  </object>
+                </child>
+              </object>
+            </property>
+          </object>
+        </child>
       </object>
     </property>
   </object>
