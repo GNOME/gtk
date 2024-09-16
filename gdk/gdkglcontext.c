@@ -2217,6 +2217,7 @@ gdk_gl_backend_use (GdkGLBackend backend_type)
   g_assert (the_gl_backend_type == backend_type);
 }
 
+#if defined(HAVE_EGL) && defined(HAVE_DMABUF)
 static guint
 gdk_gl_context_import_dmabuf_for_target (GdkGLContext    *self,
                                          int              width,
@@ -2224,7 +2225,6 @@ gdk_gl_context_import_dmabuf_for_target (GdkGLContext    *self,
                                          const GdkDmabuf *dmabuf,
                                          int              target)
 {
-#if defined(HAVE_EGL) && defined(HAVE_DMABUF)
   GdkDisplay *display = gdk_gl_context_get_display (self);
   EGLImage image;
   guint texture_id;
@@ -2246,10 +2246,8 @@ gdk_gl_context_import_dmabuf_for_target (GdkGLContext    *self,
   eglDestroyImageKHR (gdk_display_get_egl_display (display), image);
 
   return texture_id;
-#else
-  return 0;
-#endif
 }
+#endif
 
 guint
 gdk_gl_context_import_dmabuf (GdkGLContext    *self,
@@ -2258,10 +2256,11 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
                               const GdkDmabuf *dmabuf,
                               gboolean        *external)
 {
+#if defined(HAVE_EGL) && defined(HAVE_DMABUF)
   GdkDisplay *display = gdk_gl_context_get_display (self);
   guint texture_id;
 
-  gdk_display_init_dmabuf (display);
+  gdk_dmabuf_egl_init (display);
 
   if (gdk_dmabuf_formats_contains (display->egl_dmabuf_formats, dmabuf->fourcc, dmabuf->modifier))
     {
@@ -2352,6 +2351,9 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
       *external = target == GL_TEXTURE_EXTERNAL_OES;
       return texture_id;
     }
+#else
+  return 0;
+#endif
 }
 
 gboolean

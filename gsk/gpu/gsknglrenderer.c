@@ -9,6 +9,7 @@
 #include "gskglimageprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
+#include "gdk/gdkdmabufeglprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 
 #include <glib/gi18n-lib.h>
@@ -128,6 +129,8 @@ static GdkDmabufFormats *
 gsk_ngl_renderer_get_dmabuf_formats (GskGpuRenderer *renderer)
 {
   GdkDisplay *display = GDK_DISPLAY (gdk_draw_context_get_display (gsk_gpu_renderer_get_context (renderer)));
+
+  gdk_dmabuf_egl_init (display);
 
   return display->egl_dmabuf_formats;
 }
