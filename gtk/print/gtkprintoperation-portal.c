@@ -24,8 +24,13 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 
+#include <cairo.h>
+#ifdef CAIRO_HAS_PDF_SURFACE
 #include <cairo-pdf.h>
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
 #include <cairo-ps.h>
+#endif
 
 #include <gio/gunixfdlist.h>
 
@@ -147,6 +152,7 @@ portal_start_page (GtkPrintOperation *op,
     {
       if (type == CAIRO_SURFACE_TYPE_PS)
         {
+#ifdef CAIRO_HAS_PS_SURFACE
           cairo_ps_surface_set_size (op_portal->surface, w, h);
           cairo_ps_surface_dsc_begin_page_setup (op_portal->surface);
           switch (gtk_page_setup_get_orientation (page_setup))
@@ -164,15 +170,18 @@ portal_start_page (GtkPrintOperation *op,
               default:
                 break;
             }
+#endif
          }
       else if (type == CAIRO_SURFACE_TYPE_PDF)
         {
+#ifdef CAIRO_HAS_PDF_SURFACE
           if (!op->priv->manual_orientation)
             {
               w = gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_POINTS);
               h = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
             }
           cairo_pdf_surface_set_size (op_portal->surface, w, h);
+#endif
         }
     }
 }

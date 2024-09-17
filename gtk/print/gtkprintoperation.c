@@ -23,7 +23,10 @@
 #include <math.h>
 #include <string.h>
 
+#include <cairo.h>
+#ifdef CAIRO_HAS_PDF_SURFACE
 #include <cairo-pdf.h>
+#endif
 
 #include <glib/gi18n-lib.h>
 #include "gtkmarshalers.h"
@@ -1953,6 +1956,7 @@ create_page_setup (GtkPrintOperation *op)
   return page_setup;
 }
 
+#ifdef CAIRO_HAS_PDF_SURFACE
 static void 
 pdf_start_page (GtkPrintOperation *op,
 		GtkPrintContext   *print_context,
@@ -2063,7 +2067,7 @@ run_pdf (GtkPrintOperation  *op,
   
   return GTK_PRINT_OPERATION_RESULT_APPLY; 
 }
-
+#endif
 
 static void
 clamp_page_ranges (PrintPagesData *data)
@@ -3096,7 +3100,11 @@ gtk_print_operation_run (GtkPrintOperation        *op,
        */
       priv->is_sync = TRUE;
       g_return_val_if_fail (priv->export_filename != NULL, GTK_PRINT_OPERATION_RESULT_ERROR);
+#ifdef CAIRO_HAS_PDF_SURFACE
       result = run_pdf (op, parent, &do_print);
+#else
+      result = GTK_PRINT_OPERATION_RESULT_ERROR;
+#endif
     }
   else if (action == GTK_PRINT_OPERATION_ACTION_PREVIEW)
     {

@@ -36,8 +36,13 @@
 #include "gtkprintoperation-private.h"
 #include "gtkprintoperation-portal.h"
 
+#include <cairo.h>
+#ifdef CAIRO_HAS_PDF_SURFACE
 #include <cairo-pdf.h>
+#endif
+#ifdef CAIRO_HAS_PS_SURFACE
 #include <cairo-ps.h>
+#endif
 #include "gtkprintunixdialog.h"
 #include "gtkpagesetupunixdialog.h"
 #include "gtkprintbackendprivate.h"
@@ -90,6 +95,7 @@ unix_start_page (GtkPrintOperation *op,
     {
       if (type == CAIRO_SURFACE_TYPE_PS)
         {
+#ifdef CAIRO_HAS_PS_SURFACE
           cairo_ps_surface_set_size (op_unix->surface, w, h);
           cairo_ps_surface_dsc_begin_page_setup (op_unix->surface);
           switch (gtk_page_setup_get_orientation (page_setup))
@@ -106,15 +112,18 @@ unix_start_page (GtkPrintOperation *op,
               default:
                 break;
             }
+#endif
          }
       else if (type == CAIRO_SURFACE_TYPE_PDF)
         {
+#ifdef CAIRO_HAS_PDF_SURFACE
           if (!op->priv->manual_orientation)
             {
               w = gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_POINTS);
               h = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
             }
           cairo_pdf_surface_set_size (op_unix->surface, w, h);
+#endif
         }
     }
 }
@@ -746,6 +755,7 @@ gtk_print_operation_unix_run_dialog_async (GtkPrintOperation          *op,
     }
 }
 
+#ifdef CAIRO_HAS_PDF_SURFACE
 static cairo_status_t
 write_preview (void                *closure,
                const unsigned char *data,
@@ -817,6 +827,7 @@ gtk_print_operation_unix_create_preview_surface (GtkPrintOperation *op,
 
   return surface;
 }
+#endif
 
 static void
 gtk_print_operation_unix_preview_start_page (GtkPrintOperation *op,
@@ -838,11 +849,13 @@ gtk_print_operation_unix_resize_preview_surface (GtkPrintOperation *op,
                                                  GtkPageSetup      *page_setup,
                                                  cairo_surface_t   *surface)
 {
+#ifdef CAIRO_HAS_PDF_SURFACE
   double w, h;
 
   w = gtk_page_setup_get_paper_width (page_setup, GTK_UNIT_POINTS);
   h = gtk_page_setup_get_paper_height (page_setup, GTK_UNIT_POINTS);
   cairo_pdf_surface_set_size (surface, w, h);
+#endif
 }
 
 static GtkPrintOperationResult
@@ -1292,7 +1305,11 @@ _gtk_print_operation_platform_backend_create_preview_surface (GtkPrintOperation 
 							      double            *dpi_y,
 							      char             **target)
 {
+#ifdef CAIRO_HAS_PDF_SURFACE
   return gtk_print_operation_unix_create_preview_surface (op, page_setup, dpi_x, dpi_y, target);
+#else
+  return NULL;
+#endif
 }
 
 void
