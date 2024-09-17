@@ -117,11 +117,7 @@ gsk_gpu_frame_default_upload_texture (GskGpuFrame *self,
                                       gboolean     with_mipmap,
                                       GdkTexture  *texture)
 {
-  GskGpuImage *image;
-
-  image = gsk_gpu_upload_texture_op_try (self, with_mipmap, 0, GSK_SCALING_FILTER_NEAREST, texture);
-
-  return image;
+  return NULL;
 }
 
 static void
@@ -474,20 +470,32 @@ gsk_gpu_frame_get_last_op (GskGpuFrame *self)
   return priv->last_op;
 }
 
-GskGpuImage *
-gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
-                              gboolean      with_mipmap,
-                              GdkTexture   *texture)
+static GskGpuImage *
+gsk_gpu_frame_do_upload_texture (GskGpuFrame  *self,
+                                 gboolean      dmabuf_import,
+                                 gboolean      with_mipmap,
+                                 GdkTexture   *texture)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuImage *image;
 
   image = GSK_GPU_FRAME_GET_CLASS (self)->upload_texture (self, with_mipmap, texture);
 
+  if (image == NULL && !dmabuf_import)
+    image = gsk_gpu_upload_texture_op_try (self, with_mipmap, 0, GSK_SCALING_FILTER_NEAREST, texture);
+
   if (image)
     gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (priv->device), texture, image, NULL);
 
   return image;
+}
+
+GskGpuImage *
+gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
+                              gboolean      with_mipmap,
+                              GdkTexture   *texture)
+{
+  return gsk_gpu_frame_do_upload_texture (self, FALSE, with_mipmap, texture);
 }
 
 static GskGpuBuffer *
@@ -767,7 +775,8 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
 
   image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, NULL);
   if (image == NULL)
-    image = gsk_gpu_frame_upload_texture (self, FALSE, texture);
+    image = gsk_gpu_frame_do_upload_texture (self, TRUE, FALSE, texture);
+
   if (image == NULL)
     {
       g_critical ("Could not upload texture");
