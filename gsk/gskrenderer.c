@@ -683,7 +683,8 @@ vulkan_supported_platform (GdkSurface *surface,
       return FALSE;
     }
 
-  gdk_display_init_dmabuf (display);
+#ifdef HAVE_DMABUF
+  gdk_vulkan_init_dmabuf (display);
   if (!display->vk_dmabuf_formats ||
       gdk_dmabuf_formats_get_n_formats (display->vk_dmabuf_formats) == 0)
     {
@@ -691,6 +692,7 @@ vulkan_supported_platform (GdkSurface *surface,
         GSK_DEBUG (RENDERER, "Not using '%s': no dmabuf support", g_type_name (renderer_type));
       return FALSE;
     }
+#endif
 
   if (as_fallback)
     return TRUE;

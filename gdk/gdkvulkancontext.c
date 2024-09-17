@@ -1888,8 +1888,6 @@ gdk_display_unref_vulkan (GdkDisplay *display)
   display->vk_instance = VK_NULL_HANDLE;
 }
 
-#ifdef HAVE_DMABUF
-
 /* Hack. We don't include gsk/gsk.h here to avoid a build order problem
  * with the generated header gskenumtypes.h, so we need to hack around
  * a bit to access the gsk api we need.
@@ -1902,10 +1900,10 @@ extern gboolean        gsk_renderer_realize_for_display         (GskRenderer  *r
                                                                  GdkDisplay   *display,
                                                                  GError      **error);
 
-GdkDmabufDownloader *
-gdk_vulkan_get_dmabuf_downloader (GdkDisplay              *display,
-                                  GdkDmabufFormatsBuilder *builder)
+void
+gdk_vulkan_init_dmabuf (GdkDisplay *display)
 {
+#ifdef HAVE_DMABUF
   GdkDmabufFormatsBuilder *vulkan_builder;
   GskRenderer *renderer;
   VkDrmFormatModifierPropertiesEXT modifier_list[100];
@@ -1923,13 +1921,15 @@ gdk_vulkan_get_dmabuf_downloader (GdkDisplay              *display,
   GError *error = NULL;
   gsize i, j;
 
-  g_assert (display->vk_dmabuf_formats == NULL);
+  if (display->vk_dmabuf_formats != NULL)
+    return;
 
-  if (!gdk_display_init_vulkan (display, NULL))
-    return NULL;
-
-  if ((display->vulkan_features & GDK_VULKAN_FEATURE_DMABUF) == 0)
-    return NULL;
+  if (!gdk_has_feature (GDK_FEATURE_DMABUF) ||
+      !gdk_display_init_vulkan (display, NULL) ||
+      ((display->vulkan_features & GDK_VULKAN_FEATURE_DMABUF) == 0))
+    {
+      return;
+    }
 
   vulkan_builder = gdk_dmabuf_formats_builder_new ();
 
@@ -1963,23 +1963,20 @@ gdk_vulkan_get_dmabuf_downloader (GdkDisplay              *display,
 
   display->vk_dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (vulkan_builder);
 
-  gdk_dmabuf_formats_builder_add_formats (builder, display->vk_dmabuf_formats);
-
   renderer = gsk_vulkan_renderer_new ();
 
   if (!gsk_renderer_realize_for_display (renderer, display, &error))
     {
-      g_warning ("Failed to realize GL renderer: %s", error->message);
+      g_warning ("Failed to realize Vulkan renderer: %s", error->message);
       g_error_free (error);
       g_object_unref (renderer);
-
-      return NULL;
     }
-
-  return GDK_DMABUF_DOWNLOADER (renderer);
-}
-
+  else
+    {
+      display->vk_downloader = GDK_DMABUF_DOWNLOADER (renderer);
+    }
 #endif
+}
 
 VkShaderModule
 gdk_display_get_vk_shader_module (GdkDisplay *self,

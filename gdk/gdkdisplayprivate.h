@@ -132,7 +132,8 @@ struct _GdkDisplay
   guint have_egl_gl_colorspace : 1;
 
   GdkDmabufFormats *dmabuf_formats;
-  GdkDmabufDownloader *dmabuf_downloaders[4];
+  GdkDmabufDownloader *egl_downloader;
+  GdkDmabufDownloader *vk_downloader;
 
    /* Cached data the EGL dmabuf downloader */
   GdkDmabufFormats *egl_dmabuf_formats;

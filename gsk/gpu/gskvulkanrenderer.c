@@ -10,6 +10,7 @@
 #include "gskvulkanframeprivate.h"
 #include "gskvulkanimageprivate.h"
 
+#include "gdk/gdkvulkancontextprivate.h"
 #include "gdk/gdkdisplayprivate.h"
 #endif
 
@@ -124,9 +125,15 @@ gsk_vulkan_renderer_get_backbuffer (GskGpuRenderer *renderer)
 static GdkDmabufFormats *
 gsk_vulkan_renderer_get_dmabuf_formats (GskGpuRenderer *renderer)
 {
+#ifdef HAVE_DMABUF
   GdkDisplay *display = GDK_DISPLAY (gdk_draw_context_get_display (gsk_gpu_renderer_get_context (renderer)));
 
+  gdk_vulkan_init_dmabuf (display);
+
   return display->vk_dmabuf_formats;
+#else
+  return NULL;
+#endif
 }
 
 static void

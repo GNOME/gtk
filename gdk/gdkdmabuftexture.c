@@ -183,10 +183,8 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   GdkDisplay *display;
   GdkDmabuf dmabuf;
   GdkColorState *color_state;
-  GError *local_error = NULL;
   int width, height;
   gboolean premultiplied;
-  gsize i;
 
   display = gdk_dmabuf_texture_builder_get_display (builder);
   width = gdk_dmabuf_texture_builder_get_width (builder);
@@ -234,28 +232,28 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
                                                  : GDK_MEMORY_R8G8B8A8;
     }
 
-  if (!gdk_dmabuf_formats_contains (gdk_dmabuf_get_mmap_formats (), dmabuf.fourcc, dmabuf.modifier))
+  if (display->egl_downloader)
     {
-      for (i = 0; display->dmabuf_downloaders[i] != NULL; i++)
-        {
-          if (local_error && g_error_matches (local_error, GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT))
-            g_clear_error (&local_error);
+      if (gdk_dmabuf_downloader_supports (display->egl_downloader, self, error))
+        self->downloader = g_object_ref (display->egl_downloader);
+    }
 
-          if (gdk_dmabuf_downloader_supports (display->dmabuf_downloaders[i],
-                                              self,
-                                              local_error ? NULL : &local_error))
-            {
-              self->downloader = g_object_ref (display->dmabuf_downloaders[i]);
-              break;
-            }
-        }
+  if (!self->downloader && display->vk_downloader)
+    {
+      g_clear_error (error);
+      if (gdk_dmabuf_downloader_supports (display->vk_downloader, self, error))
+        self->downloader = g_object_ref (display->vk_downloader);
+    }
 
-      if (self->downloader == NULL)
+  if (!self->downloader)
+    {
+      if (!gdk_dmabuf_formats_contains (gdk_dmabuf_get_mmap_formats (), dmabuf.fourcc, dmabuf.modifier))
         {
-          g_propagate_error (error, local_error);
           g_object_unref (self);
           return NULL;
         }
+
+      g_clear_error (error);
     }
 
   GDK_DISPLAY_DEBUG (display, DMABUF,
