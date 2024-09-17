@@ -139,7 +139,7 @@ gsk_gpu_renderer_dmabuf_downloader_supports (GdkDmabufDownloader  *downloader,
   return TRUE;
 }
 
-static void
+static gboolean
 gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
                                              GdkDmabufTexture    *texture,
                                              GdkMemoryFormat      format,
@@ -149,6 +149,9 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
 {
   GskGpuRenderer *self = GSK_GPU_RENDERER (downloader);
   GskGpuFrame *frame;
+
+  if (!gsk_gpu_renderer_dmabuf_downloader_supports (downloader, texture, NULL))
+    return FALSE;
 
   gsk_gpu_renderer_make_current (self);
 
@@ -163,6 +166,8 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
                                   stride);
 
   gsk_gpu_frame_wait (frame);
+
+  return TRUE;
 }
 
 static void
