@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-09-03 20:22+0000\n"
-"PO-Revision-Date: 2024-09-04 16:26+0200\n"
+"POT-Creation-Date: 2024-09-17 05:42+0000\n"
+"PO-Revision-Date: 2024-09-17 17:21+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -76,7 +76,7 @@ msgstr "Ni mogoče določiti vsebine kot %s."
 msgid "The current backend does not support OpenGL"
 msgstr "Trenutno zagnan ozadnji program ne podpira OpenGL"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1633
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1668
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Podpora Vulkan je onemogočena z GDK_DISABLE"
 
@@ -142,9 +142,9 @@ msgstr "Ni skladnih zapisov za prenos vsebine."
 msgid "No GL API allowed."
 msgstr "API GL ni dovoljen."
 
-#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:694
-#: gdk/win32/gdkglcontext-win32-wgl.c:837
-#: gdk/win32/gdkglcontext-win32-wgl.c:881 gdk/x11/gdkglcontext-glx.c:697
+#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:723
+#: gdk/win32/gdkglcontext-win32-wgl.c:866
+#: gdk/win32/gdkglcontext-win32-wgl.c:910 gdk/x11/gdkglcontext-glx.c:697
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
@@ -174,7 +174,7 @@ msgstr "Podana je zahteva za uporabo %s, a je %s že v uporabi."
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "Poskus uporabe %s, vendar je onemogočeno prek GDK_DISABLE"
 
-#: gdk/gdktexture.c:661
+#: gdk/gdktexture.c:672
 msgid "Unknown image format."
 msgstr "Neznan zapis slike."
 
@@ -768,21 +768,21 @@ msgstr ""
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Pretvarjanje podatkov DnD za zapis W32 0x%x to %p (%s) je spodletelo."
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:624
+#: gdk/win32/gdkglcontext-win32-wgl.c:645
 msgid "No GL implementation is available"
 msgstr "Okolje GL ni na voljo"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:703
+#: gdk/win32/gdkglcontext-win32-wgl.c:732
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Različica WGL %d.%d je prestara, zahtevana je različica vsaj %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:721
+#: gdk/win32/gdkglcontext-win32-wgl.c:750
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Izvedba GL ne more uporabiti vsebine GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1001
+#: gdk/win32/gdkglcontext-win32-wgl.c:1030
 msgid "No available configurations for the given pixel format"
 msgstr "Ni navedenih nastavitev za podan točkovni zapis"
 
@@ -1867,7 +1867,7 @@ msgstr "Besedilo se ne sme pojaviti znotraj <%s>"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:666
+#: gtk/gtkcalendar.c:670
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1881,20 +1881,9 @@ msgstr "calendar:week_start:0"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:817
+#: gtk/gtkcalendar.c:821
 msgid "calendar:MY"
 msgstr "calendar:MY"
-
-#. Translators: This dictates how the year is displayed in
-#. * gtkcalendar widget.  See strftime() manual for the format.
-#. * Use only ASCII in the translation.
-#. *
-#. * "%Y" is appropriate for most locales.
-#.
-#: gtk/gtkcalendar.c:1002
-msgctxt "calendar year format"
-msgid "%Y"
-msgstr "%Y"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1906,11 +1895,22 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1039
+#: gtk/gtkcalendar.c:1002
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
 msgstr "%d"
+
+#. Translators: This dictates how the year is displayed in
+#. * gtkcalendar widget.  See strftime() manual for the format.
+#. * Use only ASCII in the translation.
+#. *
+#. * "%Y" is appropriate for most locales.
+#.
+#: gtk/gtkcalendar.c:1106
+msgctxt "calendar year format"
+msgid "%Y"
+msgstr "%Y"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1920,7 +1920,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1104
+#: gtk/gtkcalendar.c:1152
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -2189,7 +2189,7 @@ msgid "Margins from Printer…"
 msgstr "Robovi pri tiskalniku …"
 
 #. And show the custom paper dialog
-#: gtk/print/gtkcustompaperunixdialog.c:377 gtk/print/gtkprintunixdialog.c:2970
+#: gtk/print/gtkcustompaperunixdialog.c:377 gtk/print/gtkprintunixdialog.c:2975
 msgid "Manage Custom Sizes"
 msgstr "Upravljanje poljubnih velikosti"
 
@@ -2305,7 +2305,7 @@ msgid "A file with that name already exists"
 msgstr "Datoteka s tem imenom že obstaja."
 
 #: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:5014
+#: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:5017
 #: gtk/gtkfiledialog.c:840 gtk/gtkmessagedialog.c:170
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
@@ -2461,7 +2461,7 @@ msgid "Home"
 msgstr "Osebna mapa"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2195 gtk/gtkfilechooserwidget.c:7436
+#: gtk/gtkfilechooserwidget.c:2195 gtk/gtkfilechooserwidget.c:7439
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "Mesto"
@@ -2484,8 +2484,8 @@ msgstr "Poteka iskanje"
 msgid "Enter location or URL"
 msgstr "Vpišite mesto ali naslov URL"
 
-#: gtk/gtkfilechooserwidget.c:3444 gtk/gtkfilechooserwidget.c:5801
-#: gtk/gtkfilechooserwidget.c:7458
+#: gtk/gtkfilechooserwidget.c:3444 gtk/gtkfilechooserwidget.c:5804
+#: gtk/gtkfilechooserwidget.c:7461
 msgid "Modified"
 msgstr "Spremenjeno"
 
@@ -2568,58 +2568,58 @@ msgstr "Predstavitev"
 msgid "Spreadsheet"
 msgstr "Preglednica"
 
-#: gtk/gtkfilechooserwidget.c:5006 gtk/print/gtkprintunixdialog.c:673
+#: gtk/gtkfilechooserwidget.c:5009 gtk/print/gtkprintunixdialog.c:673
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Datoteka z imenom »%s« že obstaja. Ali jo želite zamenjati?"
 
-#: gtk/gtkfilechooserwidget.c:5008 gtk/print/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:5011 gtk/print/gtkprintunixdialog.c:677
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "Datoteka že obstaja v »%s«. Z zamenjavo bo njena vsebina izgubljena."
 
-#: gtk/gtkfilechooserwidget.c:5014 gtk/print/gtkprintunixdialog.c:685
+#: gtk/gtkfilechooserwidget.c:5017 gtk/print/gtkprintunixdialog.c:685
 msgid "_Replace"
 msgstr "_Zamenjaj"
 
-#: gtk/gtkfilechooserwidget.c:5169
+#: gtk/gtkfilechooserwidget.c:5172
 msgid "You do not have access to the specified folder."
 msgstr "Ni ustreznih dovoljenj za dostop do navedene mape."
 
-#: gtk/gtkfilechooserwidget.c:5748
+#: gtk/gtkfilechooserwidget.c:5751
 msgid "Could not send the search request"
 msgstr "Zahteve po iskanju ni mogoče poslati"
 
-#: gtk/gtkfilechooserwidget.c:6029
+#: gtk/gtkfilechooserwidget.c:6032
 msgid "Accessed"
 msgstr "Dostopano"
 
-#: gtk/gtkfilechooserwidget.c:7414
+#: gtk/gtkfilechooserwidget.c:7417
 msgid "_Size"
 msgstr "_Velikost"
 
-#: gtk/gtkfilechooserwidget.c:7418
+#: gtk/gtkfilechooserwidget.c:7421
 msgid "T_ype"
 msgstr "_Vrsta"
 
-#: gtk/gtkfilechooserwidget.c:7422
+#: gtk/gtkfilechooserwidget.c:7425
 msgid "_Time"
 msgstr "_Čas"
 
-#: gtk/gtkfilechooserwidget.c:7428 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7431 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:396 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "Ime"
 
-#: gtk/gtkfilechooserwidget.c:7445 gtk/inspector/resource-list.ui:82
+#: gtk/gtkfilechooserwidget.c:7448 gtk/inspector/resource-list.ui:82
 #: gtk/ui/gtkfontchooserwidget.ui:218 gtk/ui/gtkfontchooserwidget.ui:387
 msgid "Size"
 msgstr "Velikost"
 
-#: gtk/gtkfilechooserwidget.c:7451 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7454 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "Vrsta"
@@ -3435,7 +3435,7 @@ msgstr "Najverjetnejši razlog je, da začasne datoteke ni mogoče ustvariti"
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
 #: gtk/print/gtkprintoperation-portal.c:594
-#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3010
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3015
 msgid "Print"
 msgstr "Natisni"
 
@@ -3510,11 +3510,11 @@ msgstr "_Predogled"
 msgid "_Print"
 msgstr "_Natisni"
 
-#: gtk/print/gtkprintunixdialog.c:961
+#: gtk/print/gtkprintunixdialog.c:966
 msgid "Getting printer information failed"
 msgstr "Pridobivanje podatkov tiskalnika ni uspelo"
 
-#: gtk/print/gtkprintunixdialog.c:1885
+#: gtk/print/gtkprintunixdialog.c:1890
 msgid "Getting printer information…"
 msgstr "Pridobivanje podatkov tiskalnika …"
 
@@ -3524,63 +3524,63 @@ msgstr "Pridobivanje podatkov tiskalnika …"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/print/gtkprintunixdialog.c:2755
+#: gtk/print/gtkprintunixdialog.c:2760
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, top to bottom"
 msgstr "Z leve proti desni, od zgoraj navzdol"
 
-#: gtk/print/gtkprintunixdialog.c:2755
+#: gtk/print/gtkprintunixdialog.c:2760
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, bottom to top"
 msgstr "Z leve proti desni, od spodaj navzgor"
 
-#: gtk/print/gtkprintunixdialog.c:2756
+#: gtk/print/gtkprintunixdialog.c:2761
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, top to bottom"
 msgstr "Z desne proti levi, od zgoraj navzdol"
 
-#: gtk/print/gtkprintunixdialog.c:2756
+#: gtk/print/gtkprintunixdialog.c:2761
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, bottom to top"
 msgstr "Z desne proti levi, od spodaj navzgor"
 
-#: gtk/print/gtkprintunixdialog.c:2757
+#: gtk/print/gtkprintunixdialog.c:2762
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, left to right"
 msgstr "Od zgoraj navzdol, z leve proti desni"
 
-#: gtk/print/gtkprintunixdialog.c:2757
+#: gtk/print/gtkprintunixdialog.c:2762
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, right to left"
 msgstr "Od zgoraj navzdol, z desne proti levi"
 
-#: gtk/print/gtkprintunixdialog.c:2758
+#: gtk/print/gtkprintunixdialog.c:2763
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, left to right"
 msgstr "Od spodaj navzgor, z leve proti desni"
 
-#: gtk/print/gtkprintunixdialog.c:2758
+#: gtk/print/gtkprintunixdialog.c:2763
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, right to left"
 msgstr "Od spodaj navzgor, z desne proti levi"
 
-#: gtk/print/gtkprintunixdialog.c:2762 gtk/print/gtkprintunixdialog.c:2775
+#: gtk/print/gtkprintunixdialog.c:2767 gtk/print/gtkprintunixdialog.c:2780
 msgid "Page Ordering"
 msgstr "Vrstni red strani"
 
-#: gtk/print/gtkprintunixdialog.c:2791
+#: gtk/print/gtkprintunixdialog.c:2796
 msgid "Left to right"
 msgstr "Z leve proti desni"
 
-#: gtk/print/gtkprintunixdialog.c:2792
+#: gtk/print/gtkprintunixdialog.c:2797
 msgid "Right to left"
 msgstr "Z desne proti levi"
 
-#: gtk/print/gtkprintunixdialog.c:2804
+#: gtk/print/gtkprintunixdialog.c:2809
 msgid "Top to bottom"
 msgstr "Od zgoraj navzdol"
 
-#: gtk/print/gtkprintunixdialog.c:2805
+#: gtk/print/gtkprintunixdialog.c:2810
 msgid "Bottom to top"
 msgstr "Od spodaj navzgor"
 
@@ -3914,32 +3914,32 @@ msgctxt "GL version"
 msgid "None"
 msgstr "Brez"
 
-#: gtk/inspector/general.c:465
+#: gtk/inspector/general.c:464
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: gtk/inspector/general.c:527
+#: gtk/inspector/general.c:526
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: gtk/inspector/general.c:528 gtk/inspector/general.c:529
+#: gtk/inspector/general.c:527 gtk/inspector/general.c:528
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: gtk/inspector/general.c:580
+#: gtk/inspector/general.c:579
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Neopredeljeno"
 
-#: gtk/inspector/general.c:581 gtk/inspector/general.c:582
+#: gtk/inspector/general.c:580 gtk/inspector/general.c:581
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Neopredeljeno"
 
-#: gtk/inspector/general.c:935
+#: gtk/inspector/general.c:934
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Vsebina IM je določena z vrednostjo GTK_IM_MODULE"
 
@@ -7272,7 +7272,7 @@ msgstr ""
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
-#: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
+#: tools/gtk-builder-tool-simplify.c:2623 tools/gtk-builder-tool-validate.c:261
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:68
 #: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
 #: tools/gtk-rendernode-tool-extract.c:294 tools/gtk-rendernode-tool-info.c:226
@@ -7309,7 +7309,7 @@ msgstr "Uporabi slog iz datoteke CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268
-#: tools/gtk-rendernode-tool-benchmark.c:106
+#: tools/gtk-rendernode-tool-benchmark.c:108
 #: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:123
 #, c-format
 msgid "Could not initialize windowing system\n"
@@ -7320,7 +7320,7 @@ msgid "Preview the file."
 msgstr "Predogled vsebine datoteke."
 
 #: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
-#: tools/gtk-builder-tool-simplify.c:2552 tools/gtk-builder-tool-validate.c:287
+#: tools/gtk-builder-tool-simplify.c:2646 tools/gtk-builder-tool-validate.c:287
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Ni določene datoeke .ui\n"
@@ -7380,7 +7380,7 @@ msgstr "Prepiši obstoječo datoteko"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
 #: tools/gtk-image-tool-convert.c:89 tools/gtk-image-tool-relabel.c:86
-#: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:99
 #: tools/gtk-rendernode-tool-render.c:255
 msgid "FILE…"
 msgstr "DATOTEKA …"
@@ -7419,48 +7419,53 @@ msgstr "Lastnost celice %s ne obstaja"
 msgid "Layout property %s not found"
 msgstr "Lastnosti postavitve %s  ni mogoče najti"
 
-#: tools/gtk-builder-tool-simplify.c:1397
+#: tools/gtk-builder-tool-simplify.c:1400
 #, c-format
 msgid "%s only accepts three children"
 msgstr "%s sprejme samo tri podrejene predmete"
 
-#: tools/gtk-builder-tool-simplify.c:2455
+#: tools/gtk-builder-tool-simplify.c:1773
+#, c-format
+msgid "%s only accepts one center child"
+msgstr "%s sprejme samo en sredinski podrejeni predmet"
+
+#: tools/gtk-builder-tool-simplify.c:2549
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "Ni mogoče naložiti »%s«: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2466
-#: tools/gtk-builder-tool-simplify.c:2472
-#: tools/gtk-builder-tool-simplify.c:2478
+#: tools/gtk-builder-tool-simplify.c:2560
+#: tools/gtk-builder-tool-simplify.c:2566
+#: tools/gtk-builder-tool-simplify.c:2572
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr ""
 "Ni mogoče razčleniti »%s«: %s\n"
 "\n"
 
-#: tools/gtk-builder-tool-simplify.c:2504
+#: tools/gtk-builder-tool-simplify.c:2598
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Datoteke »%s« ni mogoče prebrati: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2510
+#: tools/gtk-builder-tool-simplify.c:2604
 #, c-format
 msgid "Failed to write “%s”: “%s”\n"
 msgstr "Datoteke »%s« ni mogoče zapisati: »%s«\n"
 
-#: tools/gtk-builder-tool-simplify.c:2527
+#: tools/gtk-builder-tool-simplify.c:2621
 msgid "Replace the file"
 msgstr "Zamenjaj datoteko"
 
-#: tools/gtk-builder-tool-simplify.c:2528
+#: tools/gtk-builder-tool-simplify.c:2622
 msgid "Convert from GTK 3 to GTK 4"
 msgstr "Pretvori iz GTK 3 v GTK 4"
 
-#: tools/gtk-builder-tool-simplify.c:2539
+#: tools/gtk-builder-tool-simplify.c:2633
 msgid "Simplify the file."
 msgstr "Poenostavi datoteko."
 
-#: tools/gtk-builder-tool-simplify.c:2558
+#: tools/gtk-builder-tool-simplify.c:2652
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Poenostaviti je mogoče le eno datoteko .ui brez zastavice --replace\n"
@@ -8061,40 +8066,40 @@ msgstr ""
 "  render       Izdela zaslonsko sliko vozlišča\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-benchmark.c:96
 msgid "Add renderer to benchmark"
 msgstr "Dodaj izrisovalnik v preizkušanje"
 
-#: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-benchmark.c:96
 #: tools/gtk-rendernode-tool-compare.c:65
 #: tools/gtk-rendernode-tool-render.c:254
 msgid "RENDERER"
 msgstr "IZRISOVALNIK"
 
-#: tools/gtk-rendernode-tool-benchmark.c:95
+#: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "Number of runs with each renderer"
 msgstr "Število ponovitev z vsakim izrisovalnikom"
 
-#: tools/gtk-rendernode-tool-benchmark.c:95
+#: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "RUNS"
 msgstr "PONOVITVE"
 
-#: tools/gtk-rendernode-tool-benchmark.c:96
+#: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "Don’t download result/wait for GPU to finish"
 msgstr "Ne prenašaj rezultatov/čakaj na zaključek dela GPE"
 
-#: tools/gtk-rendernode-tool-benchmark.c:114
+#: tools/gtk-rendernode-tool-benchmark.c:116
 msgid "Benchmark rendering of a .node file."
 msgstr "Preizkusno izrisovanje datoteke .node."
 
-#: tools/gtk-rendernode-tool-benchmark.c:127
+#: tools/gtk-rendernode-tool-benchmark.c:129
 #: tools/gtk-rendernode-tool-extract.c:316 tools/gtk-rendernode-tool-info.c:248
 #: tools/gtk-rendernode-tool-render.c:283 tools/gtk-rendernode-tool-show.c:144
 #, c-format
 msgid "No .node file specified\n"
 msgstr "Ni določene nobene datoteke .node\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:133
+#: tools/gtk-rendernode-tool-benchmark.c:135
 #, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "Preizkušati je mogoče le eno datoteko .node\n"
