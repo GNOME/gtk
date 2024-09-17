@@ -2082,6 +2082,13 @@ typedef struct
   GdkEvent    *trigger_event;
 } PopupInfo;
 
+static void
+_gtk_menu_item_popup_info_destroy (PopupInfo *info)
+{
+  g_clear_pointer (&info->trigger_event, gdk_event_free);
+  g_slice_free (PopupInfo, info);
+}
+
 static gint
 gtk_menu_item_popup_timeout (gpointer data)
 {
@@ -2104,9 +2111,6 @@ gtk_menu_item_popup_timeout (gpointer data)
     }
 
   priv->timer = 0;
-
-  g_clear_pointer (&info->trigger_event, gdk_event_free);
-  g_slice_free (PopupInfo, info);
 
   return FALSE;
 }
@@ -2148,9 +2152,11 @@ _gtk_menu_item_popup_submenu (GtkWidget *widget,
           info->menu_item = menu_item;
           info->trigger_event = gtk_get_current_event ();
 
-          priv->timer = gdk_threads_add_timeout (popup_delay,
-                                                 gtk_menu_item_popup_timeout,
-                                                 info);
+          priv->timer = gdk_threads_add_timeout_full (G_PRIORITY_DEFAULT,
+                                                      popup_delay,
+                                                      gtk_menu_item_popup_timeout,
+                                                      info,
+                                                      (GDestroyNotify) _gtk_menu_item_popup_info_destroy);
           g_source_set_name_by_id (priv->timer, "[gtk+] gtk_menu_item_popup_timeout");
 
           return;
