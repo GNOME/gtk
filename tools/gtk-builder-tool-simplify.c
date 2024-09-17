@@ -1381,6 +1381,9 @@ rewrite_start_center_end_children (Element      *element,
     {
       Element *child = l->data;
 
+      if (!g_str_equal (child->element_name, "child"))
+        continue;
+
       if (has_attribute (child, "type", "start"))
         start_child = child;
       else if (has_attribute (child, "type", "center"))
@@ -1588,10 +1591,33 @@ write_box_prop (Element *element,
   return element;
 }
 
+static Element *
+rewrite_start_end_box_children (Element *element,
+                                const char *type,
+                                GtkOrientation orientation,
+                                GList *children)
+{
+  Element *child;
+  Element *object;
+
+  child = add_element (element, "child");
+  set_attribute_value (child, "type", type);
+
+  object = add_element (child, "object");
+  set_attribute_value (object, "class", "GtkBox");
+  if (orientation == GTK_ORIENTATION_VERTICAL)
+    write_box_prop (NULL, object, "orientation", "vertical");
+  object->children = g_list_concat (object->children, children);
+
+  return child;
+}
+
 static void
 rewrite_box (Element *element,
              MyParserData *data)
 {
+  GList *start_children = NULL, *end_children = NULL, *other_children = NULL;
+  Element *center_child = NULL;
   GList *l, *ll;
   GtkOrientation orientation = GTK_ORIENTATION_HORIZONTAL;
 
@@ -1628,6 +1654,9 @@ rewrite_box (Element *element,
         {
           Element *object = NULL;
           Element *packing = NULL;
+
+          GtkPackType pack_type = GTK_PACK_START;
+          gint position = G_MAXINT;
 
           for (ll = child->children; ll; ll = ll->next)
             {
@@ -1693,6 +1722,30 @@ rewrite_box (Element *element,
                                                               NULL))
                         fill = g_value_get_boolean (&value);
                     }
+
+                  if (has_attribute (elt, "name", "position"))
+                    {
+                      GValue value = G_VALUE_INIT;
+
+                      if (gtk_builder_value_from_string_type (data->builder,
+                                                              G_TYPE_INT,
+                                                              elt->data,
+                                                              &value,
+                                                              NULL))
+                        position = g_value_get_int (&value);
+                    }
+
+                  if (has_attribute (elt, "name", "pack-type"))
+                    {
+                      GValue value = G_VALUE_INIT;
+
+                      if (gtk_builder_value_from_string_type (data->builder,
+                                                              GTK_TYPE_PACK_TYPE,
+                                                              elt->data,
+                                                              &value,
+                                                              NULL))
+                        pack_type = g_value_get_enum (&value);
+                    }
                 }
 
               if (orientation == GTK_ORIENTATION_HORIZONTAL)
@@ -1713,8 +1766,49 @@ rewrite_box (Element *element,
               child->children = g_list_remove (child->children, packing);
               free_element (packing);
             }
+
+          if (has_attribute (child, "type", "center"))
+            {
+              if (center_child != NULL)
+                g_warning (_ ("%s only accepts one center child"), get_class_name (element));
+              center_child = child;
+            }
+          else if (pack_type == GTK_PACK_START)
+            start_children = g_list_insert (start_children, child, position);
+          else
+            end_children = g_list_insert (end_children, child, position);
+        }
+      else
+        other_children = g_list_append (other_children, child);
+    }
+
+  end_children = g_list_reverse (end_children);
+
+  if (center_child || end_children)
+    {
+      set_attribute_value (element, "class", "GtkCenterBox");
+
+      l = NULL;
+      if (start_children)
+        {
+          Element *child = rewrite_start_end_box_children (element, "start", orientation, start_children);
+          l = g_list_append (l, child);
+        }
+
+      if (center_child)
+        l = g_list_append (l, center_child);
+
+      if (end_children)
+        {
+          Element *child = rewrite_start_end_box_children (element, "end", orientation, end_children);
+          l = g_list_append (l, child);
         }
     }
+  else
+    l = start_children;
+
+  g_list_free (element->children);
+  element->children = g_list_concat (other_children, l);
 }
 
 static void
@@ -2138,19 +2232,6 @@ rewrite_element_3to4 (Element      *element,
 {
   GList *l;
 
-  l = element->children;
-  while (l)
-    {
-      GList *next = l->next;
-      Element *child = l->data;
-      if (rewrite_element_3to4 (child, data))
-        {
-          element->children = g_list_remove (element->children, child);
-          free_element (child);
-        }
-      l = next;
-    }
-
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkStack"))
     rewrite_stack (element, data);
@@ -2215,6 +2296,19 @@ rewrite_element_3to4 (Element      *element,
 
   if (g_str_equal (element->element_name, "requires"))
     rewrite_requires (element, data);
+
+  l = element->children;
+  while (l)
+    {
+      GList *next = l->next;
+      Element *child = l->data;
+      if (rewrite_element_3to4 (child, data))
+        {
+          element->children = g_list_remove (element->children, child);
+          free_element (child);
+        }
+      l = next;
+    }
 
   return FALSE;
 }

@@ -131,6 +131,10 @@
                       <object class="GtkBox" id="box2">
                         <property name="valign">center</property>
                         <property name="orientation">vertical</property>
+                        <layout>
+                          <property name="column">1</property>
+                          <property name="row">0</property>
+                        </layout>
                         <child>
                           <object class="GtkLabel" id="result_label">
                             <property name="valign">start</property>
@@ -164,10 +168,6 @@
                             <property name="wrap">1</property>
                           </object>
                         </child>
-                        <layout>
-                          <property name="column">1</property>
-                          <property name="row">0</property>
-                        </layout>
                       </object>
                     </child>
                   </object>
