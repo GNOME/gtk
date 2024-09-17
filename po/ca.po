@@ -34,8 +34,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-09-15 08:20+0000\n"
-"PO-Revision-Date: 2024-09-15 22:28+0100\n"
+"POT-Creation-Date: 2024-09-17 05:42+0000\n"
+"PO-Revision-Date: 2024-09-17 12:26+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -43,7 +43,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Poedit 2.4.2\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -7343,7 +7343,7 @@ msgstr ""
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
-#: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
+#: tools/gtk-builder-tool-simplify.c:2623 tools/gtk-builder-tool-validate.c:261
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:68
 #: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
 #: tools/gtk-rendernode-tool-extract.c:294 tools/gtk-rendernode-tool-info.c:226
@@ -7391,7 +7391,7 @@ msgid "Preview the file."
 msgstr "Previsualitza el fitxer."
 
 #: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
-#: tools/gtk-builder-tool-simplify.c:2552 tools/gtk-builder-tool-validate.c:287
+#: tools/gtk-builder-tool-simplify.c:2646 tools/gtk-builder-tool-validate.c:287
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "No s'ha especificat un fitxer .ui\n"
@@ -7492,46 +7492,51 @@ msgstr "No s'ha trobat la propietat de cel·la %s"
 msgid "Layout property %s not found"
 msgstr "No s'ha trobat la propietat de disposició %s"
 
-#: tools/gtk-builder-tool-simplify.c:1397
+#: tools/gtk-builder-tool-simplify.c:1400
 #, c-format
 msgid "%s only accepts three children"
 msgstr "%s només accepta tres fills"
 
-#: tools/gtk-builder-tool-simplify.c:2455
+#: tools/gtk-builder-tool-simplify.c:1773
+#, c-format
+msgid "%s only accepts one center child"
+msgstr "%s només accepta un fill central"
+
+#: tools/gtk-builder-tool-simplify.c:2549
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "No es pot carregar «%s»: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2466
-#: tools/gtk-builder-tool-simplify.c:2472
-#: tools/gtk-builder-tool-simplify.c:2478
+#: tools/gtk-builder-tool-simplify.c:2560
+#: tools/gtk-builder-tool-simplify.c:2566
+#: tools/gtk-builder-tool-simplify.c:2572
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "No es pot analitzar «%s»: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2504
+#: tools/gtk-builder-tool-simplify.c:2598
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "No s'ha pogut llegir «%s»: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2510
+#: tools/gtk-builder-tool-simplify.c:2604
 #, c-format
 msgid "Failed to write “%s”: “%s”\n"
 msgstr "No s'ha pogut escriure «%s»: «%s»\n"
 
-#: tools/gtk-builder-tool-simplify.c:2527
+#: tools/gtk-builder-tool-simplify.c:2621
 msgid "Replace the file"
 msgstr "Reemplaça el fitxer"
 
-#: tools/gtk-builder-tool-simplify.c:2528
+#: tools/gtk-builder-tool-simplify.c:2622
 msgid "Convert from GTK 3 to GTK 4"
 msgstr "Converteix de GTK 3 a GTK 4"
 
-#: tools/gtk-builder-tool-simplify.c:2539
+#: tools/gtk-builder-tool-simplify.c:2633
 msgid "Simplify the file."
 msgstr "Simplifica el fitxer."
 
-#: tools/gtk-builder-tool-simplify.c:2558
+#: tools/gtk-builder-tool-simplify.c:2652
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Només es pot simplificar un únic fitxer .ui sense --replace\n"
