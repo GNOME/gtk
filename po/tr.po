@@ -3,11 +3,11 @@
 # Copyright (C) 2008-2024 gtk's COPYRIGHT HOLDER
 # This file is distributed under the same licence as the gtk package.
 #
-# Arman Aksoy <armish@linux-sevenler.de, 2003.
-# Ömer Fadıl USTA <omer_fad@hotmail.com>,2002.
-# Nilgün Belma Bugüner <nilgun@fide.org>, 2001, 2002.
 # Fatih Demir <kabalak@gtranslator.org>, 1999-2001.
 # Görkem Cetin <gorkem@gelecek.com.tr>, 2001.
+# Nilgün Belma Bugüner <nilgun@fide.org>, 2001, 2002.
+# Ömer Fadıl USTA <omer_fad@hotmail.com>,2002.
+# Arman Aksoy <armish@linux-sevenler.de, 2003.
 # Baris Cicek <baris@teamforce.name.tr>, 2006, 2007, 2008, 2009.
 # Simge Sezgin <simgesezgin88@gmail.com>, 2015.
 # Necdet Yücel <necdetyucel@gmail.com>, 2015.
@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-09-03 20:22+0000\n"
-"PO-Revision-Date: 2024-09-05 21:02+0300\n"
+"POT-Creation-Date: 2024-09-17 05:42+0000\n"
+"PO-Revision-Date: 2024-09-18 08:00+0300\n"
 "Last-Translator: Emin Tufan Çetin <etcetin@gmail.com>\n"
 "Language-Team: Türkçe <takim@gnome.org.tr>\n"
 "Language: tr\n"
@@ -42,15 +42,11 @@ msgstr "Broadway ekran türü desteklenmiyor: %s"
 msgid "This clipboard cannot store data."
 msgstr "Bu pano veri depolayamaz."
 
-#: gdk/gdkclipboard.c:287
-#: gdk/gdkclipboard.c:781
-#: gdk/gdkclipboard.c:1072
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:781 gdk/gdkclipboard.c:1072
 msgid "Cannot read from empty clipboard."
 msgstr "Boş panodan okunamaz."
 
-#: gdk/gdkclipboard.c:318
-#: gdk/gdkclipboard.c:1122
-#: gdk/gdkdrag.c:606
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1122 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Pano içeriklerini aktarmak için uyumlu biçim yok."
 
@@ -74,8 +70,7 @@ msgstr "cicp: %u aktarım biçimi desteklenmiyor"
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: %u renk birincilleri desteklenmiyor"
 
-#: gdk/gdkcontentprovider.c:106
-#: gdk/gdkcontentproviderimpl.c:313
+#: gdk/gdkcontentprovider.c:106 gdk/gdkcontentproviderimpl.c:313
 #: gdk/gdkcontentproviderimpl.c:532
 #, c-format
 msgid "Cannot provide contents as “%s”"
@@ -86,13 +81,11 @@ msgstr "İçerikler “%s” olarak sağlanamıyor"
 msgid "Cannot provide contents as %s"
 msgstr "İçerikler %s olarak sağlanamıyor"
 
-#: gdk/gdkdisplay.c:176
-#: gdk/gdkglcontext.c:472
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:472
 msgid "The current backend does not support OpenGL"
 msgstr "Şimdiki arka uç OpenGL’i desteklemiyor"
 
-#: gdk/gdkdisplay.c:1315
-#: gdk/gdkvulkancontext.c:1633
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1668
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Vulkan desteği GDK_DISABLE yoluyla devre dışı bırakıldı"
 
@@ -152,16 +145,13 @@ msgstr "Diğer uygulamalardan sürükle ve bırak desteklenmemektedir."
 msgid "No compatible formats to transfer contents."
 msgstr "İçerikleri aktarmak için uyumlu biçim yok."
 
-#: gdk/gdkglcontext.c:432
-#: gdk/x11/gdkglcontext-glx.c:651
+#: gdk/gdkglcontext.c:432 gdk/x11/gdkglcontext-glx.c:651
 msgid "No GL API allowed."
 msgstr "İzin verilen GP API yok."
 
-#: gdk/gdkglcontext.c:455
-#: gdk/win32/gdkglcontext-win32-wgl.c:694
-#: gdk/win32/gdkglcontext-win32-wgl.c:837
-#: gdk/win32/gdkglcontext-win32-wgl.c:881
-#: gdk/x11/gdkglcontext-glx.c:697
+#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:723
+#: gdk/win32/gdkglcontext-win32-wgl.c:866
+#: gdk/win32/gdkglcontext-win32-wgl.c:910 gdk/x11/gdkglcontext-glx.c:697
 msgid "Unable to create a GL context"
 msgstr "GL bağlamı oluşturulamadı"
 
@@ -189,9 +179,11 @@ msgstr "%s kullanılmaya çalışılıyor ancak şu anda %s kullanılıyor"
 #: gdk/gdkglcontext.c:2186
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
-msgstr "%s kullanılmaya çalışılıyor ancak GDK_DISABLE aracılığıyla devre dışı bırakıldı"
+msgstr ""
+"%s kullanılmaya çalışılıyor ancak GDK_DISABLE aracılığıyla devre dışı "
+"bırakıldı"
 
-#: gdk/gdktexture.c:661
+#: gdk/gdktexture.c:672
 msgid "Unknown image format."
 msgstr "Bilinmeyen resim biçimi."
 
@@ -271,14 +263,12 @@ msgctxt "keyboard label"
 msgid "Down"
 msgstr "Aşağı"
 
-#: gdk/keynamesprivate.h:6874
-#: gtk/gtkshortcutlabel.c:217
+#: gdk/keynamesprivate.h:6874 gtk/gtkshortcutlabel.c:217
 msgctxt "keyboard label"
 msgid "Page_Up"
 msgstr "Page Up"
 
-#: gdk/keynamesprivate.h:6875
-#: gtk/gtkshortcutlabel.c:220
+#: gdk/keynamesprivate.h:6875 gtk/gtkshortcutlabel.c:220
 msgctxt "keyboard label"
 msgid "Page_Down"
 msgstr "Page Down"
@@ -584,9 +574,7 @@ msgstr "JPEG resim dosyası yorumlanırken hata (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Desteklenmeyen JPEG renk uzayı (%d)"
 
-#: gdk/loaders/gdkjpeg.c:188
-#: gdk/loaders/gdkpng.c:436
-#: gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:188 gdk/loaders/gdkpng.c:436 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "%ux%u resim boyutu için yeterli bellek yok"
@@ -624,14 +612,10 @@ msgstr "TIFF verisi yüklenemedi"
 msgid "Reading data failed at row %d"
 msgstr "Veri okunurken %d. satırda hata"
 
-#: gdk/macos/gdkmacospasteboard.c:211
-#: gdk/wayland/gdkclipboard-wayland.c:238
-#: gdk/wayland/gdkdrop-wayland.c:205
-#: gdk/wayland/gdkprimary-wayland.c:337
-#: gdk/win32/gdkdrop-win32.c:1018
-#: gdk/win32/gdkdrop-win32.c:1067
-#: gdk/x11/gdkclipboard-x11.c:799
-#: gdk/x11/gdkdrop-x11.c:235
+#: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:238
+#: gdk/wayland/gdkdrop-wayland.c:205 gdk/wayland/gdkprimary-wayland.c:337
+#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1067
+#: gdk/x11/gdkclipboard-x11.c:799 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "Uyumlu aktarım biçimi bulunamadı"
 
@@ -643,7 +627,8 @@ msgstr "'%s' mime türü içeriklerinin kodu çözülemedi"
 #: gdk/win32/gdkclipdrop-win32.c:719
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
-msgstr "Pano sahipliği istemi yapılamıyor. OpenClipboard() zaman aşımına uğradı."
+msgstr ""
+"Pano sahipliği istemi yapılamıyor. OpenClipboard() zaman aşımına uğradı."
 
 #: gdk/win32/gdkclipdrop-win32.c:729
 #, c-format
@@ -665,11 +650,11 @@ msgstr "Pano sahipliği istemi yapılamıyor. EmptyClipboard() başarısız: 0x%
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr "Pano verisi belirlenemiyor. OpenClipboard() zaman aşımına uğradı."
 
-#: gdk/win32/gdkclipdrop-win32.c:808
-#: gdk/win32/gdkclipdrop-win32.c:839
+#: gdk/win32/gdkclipdrop-win32.c:808 gdk/win32/gdkclipdrop-win32.c:839
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
-msgstr "Pano verisi belirlenemiyor. Başka süreç pano sahipliği isteminde bulundu."
+msgstr ""
+"Pano verisi belirlenemiyor. Başka süreç pano sahipliği isteminde bulundu."
 
 #: gdk/win32/gdkclipdrop-win32.c:822
 #, c-format
@@ -688,7 +673,8 @@ msgstr "Pano verisi alınamıyor. GlobalSize(0x%p) başarısız: 0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:898
 #, c-format
-msgid "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
+msgid ""
+"Cannot get clipboard data. Failed to allocate %s bytes to store the data."
 msgstr "Pano verisi alınamıyor. %s bayt, veriyi depolamak için ayrılamadı."
 
 #: gdk/win32/gdkclipdrop-win32.c:930
@@ -703,7 +689,8 @@ msgstr "Pano verisi alınamıyor. Pano sahipliği değişti."
 
 #: gdk/win32/gdkclipdrop-win32.c:950
 #, c-format
-msgid "Cannot get clipboard data. Clipboard data changed before we could get it."
+msgid ""
+"Cannot get clipboard data. Clipboard data changed before we could get it."
 msgstr "Pano verisi alınamıyor. Pano verisi biz almadan önce değişti."
 
 #: gdk/win32/gdkclipdrop-win32.c:967
@@ -756,21 +743,21 @@ msgstr "IDataObject_GetData (0x%x) başarısız, 0x%lx döndürüyor"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "W32 biçimli 0x%x DnD verisi, %p hedefine dönüştürülemedi (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:624
+#: gdk/win32/gdkglcontext-win32-wgl.c:645
 msgid "No GL implementation is available"
 msgstr "Kullanılabilir GL uygulaması yok"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:703
+#: gdk/win32/gdkglcontext-win32-wgl.c:732
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL sürümü %d.%d çok düşük, en az %d.%d gerekiyor"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:721
+#: gdk/win32/gdkglcontext-win32-wgl.c:750
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL uygulaması GL bağlamlarını paylaşamaz"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1001
+#: gdk/win32/gdkglcontext-win32-wgl.c:1030
 msgid "No available configurations for the given pixel format"
 msgstr "Verilen piksel biçimi için kullanılabilir yapılandırma yok"
 
@@ -849,13 +836,11 @@ msgstr "GLX desteklenmiyor"
 msgid "Format %s not supported"
 msgstr "%s biçimi desteklenmiyor"
 
-#: gdk/x11/gdktextlistconverter-x11.c:65
-#: gdk/x11/gdktextlistconverter-x11.c:105
+#: gdk/x11/gdktextlistconverter-x11.c:65 gdk/x11/gdktextlistconverter-x11.c:105
 msgid "Not enough space in destination"
 msgstr "Hedefte yeterli alan yok"
 
-#: gdk/x11/gdktextlistconverter-x11.c:91
-#: gdk/x11/gdktextlistconverter-x11.c:195
+#: gdk/x11/gdktextlistconverter-x11.c:91 gdk/x11/gdktextlistconverter-x11.c:195
 msgid "Need complete input to do conversion"
 msgstr "Dönüştürülme için girdinin tamamlanması gerekir"
 
@@ -917,10 +902,8 @@ msgctxt "accessibility"
 msgid "Selects the color"
 msgstr "Rengi seçer"
 
-#: gtk/a11y/gtkatspiaction.c:379
-#: gtk/a11y/gtkatspiaction.c:439
-#: gtk/a11y/gtkatspiaction.c:495
-#: gtk/a11y/gtkatspiaction.c:603
+#: gtk/a11y/gtkatspiaction.c:379 gtk/a11y/gtkatspiaction.c:439
+#: gtk/a11y/gtkatspiaction.c:495 gtk/a11y/gtkatspiaction.c:603
 #: gtk/a11y/gtkatspiaction.c:690
 msgctxt "accessibility"
 msgid "Activate"
@@ -946,8 +929,7 @@ msgctxt "accessibility"
 msgid "Activates the expander"
 msgstr "Genişleticiyi etkinleştirir"
 
-#: gtk/a11y/gtkatspiaction.c:496
-#: gtk/a11y/gtkatspiaction.c:604
+#: gtk/a11y/gtkatspiaction.c:496 gtk/a11y/gtkatspiaction.c:604
 #: gtk/a11y/gtkatspiaction.c:691
 msgctxt "accessibility"
 msgid "Activates the entry"
@@ -993,8 +975,7 @@ msgctxt "accessibility"
 msgid "Clears the contents of the entry"
 msgstr "Girdinin içeriklerini temizler"
 
-#: gtk/a11y/gtkatspiroot.c:263
-#: gtk/gtkaccessible.c:869
+#: gtk/a11y/gtkatspiroot.c:263 gtk/gtkaccessible.c:869
 msgctxt "accessibility"
 msgid "application"
 msgstr "uygulama"
@@ -1103,21 +1084,18 @@ msgctxt "progress bar label"
 msgid "%d %%"
 msgstr "%% %d"
 
-#: gtk/deprecated/gtkcolorbutton.c:183
-#: gtk/deprecated/gtkcolorbutton.c:314
+#: gtk/deprecated/gtkcolorbutton.c:183 gtk/deprecated/gtkcolorbutton.c:314
 #: gtk/gtkcolordialog.c:409
 msgid "Pick a Color"
 msgstr "Renk Seç"
 
-#: gtk/deprecated/gtkcolorbutton.c:505
-#: gtk/gtkcolorchooserwidget.c:321
+#: gtk/deprecated/gtkcolorbutton.c:505 gtk/gtkcolorchooserwidget.c:321
 #: gtk/gtkcolordialogbutton.c:335
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%, Alpha %d%%"
 msgstr "Kırmızı %%%d, Yeşil %%%d, Mavi %%%d, Alfa %%%d"
 
-#: gtk/deprecated/gtkcolorbutton.c:511
-#: gtk/gtkcolorchooserwidget.c:327
+#: gtk/deprecated/gtkcolorbutton.c:511 gtk/gtkcolorchooserwidget.c:327
 #: gtk/gtkcolordialogbutton.c:341
 #, c-format
 msgid "Red %d%%, Green %d%%, Blue %d%%"
@@ -1127,32 +1105,26 @@ msgstr "Kırmızı %%%d, Yeşil %%%d, Mavi %%%d"
 msgid "Sans 12"
 msgstr "Sans 12"
 
-#: gtk/deprecated/gtkfontbutton.c:507
-#: gtk/deprecated/gtkfontbutton.c:624
+#: gtk/deprecated/gtkfontbutton.c:507 gtk/deprecated/gtkfontbutton.c:624
 #: gtk/gtkfontdialog.c:594
 msgid "Pick a Font"
 msgstr "Yazı Tipi Seç"
 
-#: gtk/deprecated/gtkfontbutton.c:600
-#: gtk/gtkfilechooserwidget.c:3847
-#: gtk/gtkfontdialogbutton.c:126
-#: gtk/inspector/visual.ui:285
+#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3847
+#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:285
 msgid "Font"
 msgstr "Yazı Tipi"
 
-#: gtk/deprecated/gtkfontbutton.c:1155
-#: gtk/gtkfontdialogbutton.c:652
+#: gtk/deprecated/gtkfontbutton.c:1155 gtk/gtkfontdialogbutton.c:652
 msgctxt "font"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/deprecated/gtklockbutton.c:294
-#: gtk/ui/gtklockbutton.ui:20
+#: gtk/deprecated/gtklockbutton.c:294 gtk/ui/gtklockbutton.ui:20
 msgid "Lock"
 msgstr "Kilitle"
 
-#: gtk/deprecated/gtklockbutton.c:308
-#: gtk/ui/gtklockbutton.ui:26
+#: gtk/deprecated/gtklockbutton.c:308 gtk/ui/gtklockbutton.ui:26
 msgid "Unlock"
 msgstr "Kilidi Kaldır"
 
@@ -1203,8 +1175,7 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%% %d"
 
-#: gtk/gtkaboutdialog.c:125
-#: gtk/ui/gtkaboutdialog.ui:173
+#: gtk/gtkaboutdialog.c:125 gtk/ui/gtkaboutdialog.ui:173
 msgid "License"
 msgstr "Lisans"
 
@@ -1284,8 +1255,7 @@ msgstr "BSD Zero-Clause Lisansı"
 msgid "Website"
 msgstr "Web sitesi"
 
-#: gtk/gtkaboutdialog.c:1064
-#: gtk/ui/gtkapplication-quartz.ui:6
+#: gtk/gtkaboutdialog.c:1064 gtk/ui/gtkapplication-quartz.ui:6
 #, c-format
 msgid "About %s"
 msgstr "%s Hakkında"
@@ -1323,8 +1293,7 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:839
-#: gtk/gtkshortcutlabel.c:101
+#: gtk/gtkaccelgroup.c:839 gtk/gtkshortcutlabel.c:101
 #: gtk/gtkshortcutlabel.c:137
 msgctxt "keyboard label"
 msgid "Shift"
@@ -1335,8 +1304,7 @@ msgstr "Shift"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:858
-#: gtk/gtkshortcutlabel.c:104
+#: gtk/gtkaccelgroup.c:858 gtk/gtkshortcutlabel.c:104
 #: gtk/gtkshortcutlabel.c:139
 msgctxt "keyboard label"
 msgid "Ctrl"
@@ -1347,8 +1315,7 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:877
-#: gtk/gtkshortcutlabel.c:107
+#: gtk/gtkaccelgroup.c:877 gtk/gtkshortcutlabel.c:107
 #: gtk/gtkshortcutlabel.c:141
 msgctxt "keyboard label"
 msgid "Alt"
@@ -1359,8 +1326,7 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:895
-#: gtk/gtkshortcutlabel.c:113
+#: gtk/gtkaccelgroup.c:895 gtk/gtkshortcutlabel.c:113
 #: gtk/gtkshortcutlabel.c:143
 msgctxt "keyboard label"
 msgid "Super"
@@ -1371,8 +1337,7 @@ msgstr "Super"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:909
-#: gtk/gtkshortcutlabel.c:116
+#: gtk/gtkaccelgroup.c:909 gtk/gtkshortcutlabel.c:116
 #: gtk/gtkshortcutlabel.c:145
 msgctxt "keyboard label"
 msgid "Hyper"
@@ -1383,8 +1348,7 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccelgroup.c:924
-#: gtk/gtkshortcutlabel.c:110
+#: gtk/gtkaccelgroup.c:924 gtk/gtkshortcutlabel.c:110
 #: gtk/gtkshortcutlabel.c:148
 msgctxt "keyboard label"
 msgid "Meta"
@@ -1404,8 +1368,7 @@ msgctxt "keyboard label"
 msgid "Space"
 msgstr "Boşluk"
 
-#: gtk/gtkaccelgroup.c:954
-#: gtk/gtkshortcutlabel.c:176
+#: gtk/gtkaccelgroup.c:954 gtk/gtkshortcutlabel.c:176
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "Ters Bölü"
@@ -1830,10 +1793,8 @@ msgctxt "accessibility"
 msgid "terminal"
 msgstr "uçbirim"
 
-#: gtk/gtkalertdialog.c:667
-#: gtk/print/gtkcustompaperunixdialog.c:322
-#: gtk/gtkmessagedialog.c:166
-#: gtk/ui/gtkassistant.ui:40
+#: gtk/gtkalertdialog.c:667 gtk/print/gtkcustompaperunixdialog.c:322
+#: gtk/gtkmessagedialog.c:166 gtk/ui/gtkassistant.ui:40
 msgid "_Close"
 msgstr "_Kapat"
 
@@ -1841,8 +1802,7 @@ msgstr "_Kapat"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:721
-#: gtk/gtkapplication-dbus.c:763
+#: gtk/gtkapplication-dbus.c:721 gtk/gtkapplication-dbus.c:763
 msgid "Reason not specified"
 msgstr "Neden belirtilmedi"
 
@@ -1879,7 +1839,7 @@ msgstr "<%s> içinde metin bulunamaz"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:666
+#: gtk/gtkcalendar.c:670
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:1"
 
@@ -1893,20 +1853,9 @@ msgstr "calendar:week_start:1"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:817
+#: gtk/gtkcalendar.c:821
 msgid "calendar:MY"
 msgstr "calendar:MY"
-
-#. Translators: This dictates how the year is displayed in
-#. * gtkcalendar widget.  See strftime() manual for the format.
-#. * Use only ASCII in the translation.
-#. *
-#. * "%Y" is appropriate for most locales.
-#.
-#: gtk/gtkcalendar.c:1002
-msgctxt "calendar year format"
-msgid "%Y"
-msgstr "%Y"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1918,11 +1867,22 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1039
+#: gtk/gtkcalendar.c:1002
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
 msgstr "%d"
+
+#. Translators: This dictates how the year is displayed in
+#. * gtkcalendar widget.  See strftime() manual for the format.
+#. * Use only ASCII in the translation.
+#. *
+#. * "%Y" is appropriate for most locales.
+#.
+#: gtk/gtkcalendar.c:1106
+msgctxt "calendar year format"
+msgid "%Y"
+msgstr "%Y"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1932,14 +1892,13 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1104
+#: gtk/gtkcalendar.c:1152
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
 msgstr "%d"
 
-#: gtk/gtkcolorchooserwidget.c:384
-#: gtk/gtkcoloreditor.c:171
+#: gtk/gtkcolorchooserwidget.c:384 gtk/gtkcoloreditor.c:171
 #, c-format
 msgid "Color: %s"
 msgstr "Renk: %s"
@@ -2202,8 +2161,7 @@ msgid "Margins from Printer…"
 msgstr "Yazıcıdan Gelen Kenar Boşlukları…"
 
 #. And show the custom paper dialog
-#: gtk/print/gtkcustompaperunixdialog.c:377
-#: gtk/print/gtkprintunixdialog.c:2970
+#: gtk/print/gtkcustompaperunixdialog.c:377 gtk/print/gtkprintunixdialog.c:2975
 msgid "Manage Custom Sizes"
 msgstr "Özel Boyutları Yönet"
 
@@ -2318,42 +2276,29 @@ msgstr "Bu adda klasör zaten var"
 msgid "A file with that name already exists"
 msgstr "Bu adda dosya zaten var"
 
-#: gtk/gtkfilechoosernative.c:520
-#: gtk/gtkfilechoosernative.c:600
-#: gtk/gtkfilechooserwidget.c:1213
-#: gtk/gtkfilechooserwidget.c:5014
-#: gtk/gtkfiledialog.c:840
-#: gtk/gtkmessagedialog.c:170
-#: gtk/gtkmessagedialog.c:179
-#: gtk/gtkmountoperation.c:608
-#: gtk/print/gtkpagesetupunixdialog.c:282
-#: gtk/print/gtkprintbackend.c:638
-#: gtk/print/gtkprintunixdialog.c:682
-#: gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6211
-#: gtk/ui/gtkappchooserdialog.ui:48
-#: gtk/ui/gtkassistant.ui:52
-#: gtk/ui/gtkcolorchooserdialog.ui:36
+#: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
+#: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:5017
+#: gtk/gtkfiledialog.c:840 gtk/gtkmessagedialog.c:170
+#: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
+#: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
+#: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
+#: gtk/gtkwindow.c:6211 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
 msgstr "İ_ptal"
 
-#: gtk/gtkfilechoosernative.c:521
-#: gtk/gtkfilechoosernative.c:594
-#: gtk/gtkfiledialog.c:812
-#: gtk/gtkplacessidebar.c:3149
-#: gtk/gtkplacessidebar.c:3234
-#: gtk/gtkplacesview.c:1645
+#: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
+#: gtk/gtkfiledialog.c:812 gtk/gtkplacessidebar.c:3149
+#: gtk/gtkplacessidebar.c:3234 gtk/gtkplacesview.c:1645
 msgid "_Open"
 msgstr "_Aç"
 
-#: gtk/gtkfilechoosernative.c:594
-#: gtk/gtkfiledialog.c:817
+#: gtk/gtkfilechoosernative.c:594 gtk/gtkfiledialog.c:817
 msgid "_Save"
 msgstr "_Kaydet"
 
-#: gtk/gtkfilechoosernativequartz.c:348
-#: gtk/ui/gtkfilechooserwidget.ui:299
+#: gtk/gtkfilechoosernativequartz.c:348 gtk/ui/gtkfilechooserwidget.ui:299
 msgid "Select which types of files are shown"
 msgstr "Hangi türdeki dosyaların gösterileceğini seç"
 
@@ -2424,11 +2369,8 @@ msgstr "“%s”i kalıcı olarak silmek istediğinizden emin misiniz?"
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Eğer bir öge silerseniz kalıcı olarak kaybolur."
 
-#: gtk/gtkfilechooserwidget.c:1213
-#: gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5883
-#: gtk/gtktext.c:6334
-#: gtk/gtktextview.c:9237
+#: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1815
+#: gtk/gtklabel.c:5883 gtk/gtktext.c:6334 gtk/gtktextview.c:9237
 msgid "_Delete"
 msgstr "_Sil"
 
@@ -2440,8 +2382,7 @@ msgstr "Dosya yeniden adlandırılamadı"
 msgid "Could not select file"
 msgstr "Dosya seçilemedi"
 
-#: gtk/gtkfilechooserwidget.c:1726
-#: gtk/ui/gtkfilechooserwidget.ui:66
+#: gtk/gtkfilechooserwidget.c:1726 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
 msgstr "Izgara Görünümü"
 
@@ -2465,10 +2406,8 @@ msgstr "Konumu _Kopyala"
 msgid "_Add to Bookmarks"
 msgstr "Yer İmlerine _Ekle"
 
-#: gtk/gtkfilechooserwidget.c:1811
-#: gtk/gtkplacessidebar.c:2312
-#: gtk/gtkplacessidebar.c:3270
-#: gtk/ui/gtkfilechooserwidget.ui:421
+#: gtk/gtkfilechooserwidget.c:1811 gtk/gtkplacessidebar.c:2312
+#: gtk/gtkplacessidebar.c:3270 gtk/ui/gtkfilechooserwidget.ui:421
 msgid "_Rename"
 msgstr "_Yeniden Adlandır"
 
@@ -2484,22 +2423,18 @@ msgstr "_Gizli Dosyaları Göster"
 msgid "Sort _Folders Before Files"
 msgstr "_Klasörleri Dosyalardan Önce Sırala"
 
-#: gtk/gtkfilechooserwidget.c:1955
-#: gtk/gtkfilechooserwidget.c:1985
+#: gtk/gtkfilechooserwidget.c:1955 gtk/gtkfilechooserwidget.c:1985
 #: gtk/gtkfilechooserwidget.c:3890
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
-#: gtk/gtkfilechooserwidget.c:2040
-#: gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:2040 gtk/gtkplacessidebar.c:1025
 msgid "Home"
 msgstr "Başlangıç"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2195
-#: gtk/gtkfilechooserwidget.c:7436
-#: gtk/inspector/css-node-tree.ui:76
-#: gtk/print/ui/gtkprintunixdialog.ui:111
+#: gtk/gtkfilechooserwidget.c:2195 gtk/gtkfilechooserwidget.c:7439
+#: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "Konum"
 
@@ -2508,8 +2443,7 @@ msgstr "Konum"
 msgid "_Name:"
 msgstr "_Ad:"
 
-#: gtk/gtkfilechooserwidget.c:2859
-#: gtk/gtkfilechooserwidget.c:2873
+#: gtk/gtkfilechooserwidget.c:2859 gtk/gtkfilechooserwidget.c:2873
 #, c-format
 msgid "Searching in %s"
 msgstr "%s içinde arama"
@@ -2522,9 +2456,8 @@ msgstr "Arama"
 msgid "Enter location or URL"
 msgstr "Konum ya da URL gir"
 
-#: gtk/gtkfilechooserwidget.c:3444
-#: gtk/gtkfilechooserwidget.c:5801
-#: gtk/gtkfilechooserwidget.c:7458
+#: gtk/gtkfilechooserwidget.c:3444 gtk/gtkfilechooserwidget.c:5804
+#: gtk/gtkfilechooserwidget.c:7461
 msgid "Modified"
 msgstr "Değiştirilmiş"
 
@@ -2538,13 +2471,11 @@ msgid "Could not read the contents of the folder"
 msgstr "Klasörün içeriği okunamadı"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:3784
-#: gtk/gtkfilechooserwidget.c:3828
+#: gtk/gtkfilechooserwidget.c:3784 gtk/gtkfilechooserwidget.c:3828
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:3786
-#: gtk/gtkfilechooserwidget.c:3830
+#: gtk/gtkfilechooserwidget.c:3786 gtk/gtkfilechooserwidget.c:3830
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
@@ -2561,8 +2492,7 @@ msgstr "%-e %b"
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
-#: gtk/gtkfilechooserwidget.c:3845
-#: gtk/gtkfilechooserwidget.c:3853
+#: gtk/gtkfilechooserwidget.c:3845 gtk/gtkfilechooserwidget.c:3853
 msgid "Program"
 msgstr "Program"
 
@@ -2570,8 +2500,7 @@ msgstr "Program"
 msgid "Audio"
 msgstr "Ses"
 
-#: gtk/gtkfilechooserwidget.c:3848
-#: gtk/gtkfilefilter.c:1013
+#: gtk/gtkfilechooserwidget.c:3848 gtk/gtkfilefilter.c:1013
 msgid "Image"
 msgstr "Resim"
 
@@ -2583,8 +2512,7 @@ msgstr "Arşiv"
 msgid "Markup"
 msgstr "Biçimleme (Markup)"
 
-#: gtk/gtkfilechooserwidget.c:3851
-#: gtk/gtkfilechooserwidget.c:3852
+#: gtk/gtkfilechooserwidget.c:3851 gtk/gtkfilechooserwidget.c:3852
 msgid "Text"
 msgstr "Metin"
 
@@ -2612,69 +2540,62 @@ msgstr "Sunum"
 msgid "Spreadsheet"
 msgstr "Çizelge"
 
-#: gtk/gtkfilechooserwidget.c:5006
-#: gtk/print/gtkprintunixdialog.c:673
+#: gtk/gtkfilechooserwidget.c:5009 gtk/print/gtkprintunixdialog.c:673
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
-msgstr "“%s” adında dosya zaten var.  Var olan dosya ile değiştirmek ister misiniz?"
+msgstr ""
+"“%s” adında dosya zaten var.  Var olan dosya ile değiştirmek ister misiniz?"
 
-#: gtk/gtkfilechooserwidget.c:5008
-#: gtk/print/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:5011 gtk/print/gtkprintunixdialog.c:677
 #, c-format
-msgid "The file already exists in “%s”.  Replacing it will overwrite its contents."
-msgstr "“%s” içinde dosya zaten var.  Değiştirilerek dosya içeriğinin üzerine yazılacak."
+msgid ""
+"The file already exists in “%s”.  Replacing it will overwrite its contents."
+msgstr ""
+"“%s” içinde dosya zaten var.  Değiştirilerek dosya içeriğinin üzerine "
+"yazılacak."
 
-#: gtk/gtkfilechooserwidget.c:5014
-#: gtk/print/gtkprintunixdialog.c:685
+#: gtk/gtkfilechooserwidget.c:5017 gtk/print/gtkprintunixdialog.c:685
 msgid "_Replace"
 msgstr "_Yerine Koy"
 
-#: gtk/gtkfilechooserwidget.c:5169
+#: gtk/gtkfilechooserwidget.c:5172
 msgid "You do not have access to the specified folder."
 msgstr "Belirtilen klasöre erişiminiz yok."
 
-#: gtk/gtkfilechooserwidget.c:5748
+#: gtk/gtkfilechooserwidget.c:5751
 msgid "Could not send the search request"
 msgstr "Arama isteği gönderilemedi"
 
-#: gtk/gtkfilechooserwidget.c:6029
+#: gtk/gtkfilechooserwidget.c:6032
 msgid "Accessed"
 msgstr "Erişildi"
 
-#: gtk/gtkfilechooserwidget.c:7414
+#: gtk/gtkfilechooserwidget.c:7417
 msgid "_Size"
 msgstr "_Boyut"
 
-#: gtk/gtkfilechooserwidget.c:7418
+#: gtk/gtkfilechooserwidget.c:7421
 msgid "T_ype"
 msgstr "_Tür"
 
-#: gtk/gtkfilechooserwidget.c:7422
+#: gtk/gtkfilechooserwidget.c:7425
 msgid "_Time"
 msgstr "_Zaman"
 
-#: gtk/gtkfilechooserwidget.c:7428
-#: gtk/gtkplacessidebar.c:2306
-#: gtk/inspector/a11y.ui:43
-#: gtk/inspector/actions.ui:18
-#: gtk/inspector/css-node-tree.ui:22
-#: gtk/inspector/prop-list.ui:24
-#: gtk/ui/gtkfilechooserwidget.ui:396
-#: gtk/print/ui/gtkprintunixdialog.ui:80
+#: gtk/gtkfilechooserwidget.c:7431 gtk/gtkplacessidebar.c:2306
+#: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
+#: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
+#: gtk/ui/gtkfilechooserwidget.ui:396 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "Ad"
 
-#: gtk/gtkfilechooserwidget.c:7445
-#: gtk/inspector/resource-list.ui:82
-#: gtk/ui/gtkfontchooserwidget.ui:218
-#: gtk/ui/gtkfontchooserwidget.ui:387
+#: gtk/gtkfilechooserwidget.c:7448 gtk/inspector/resource-list.ui:82
+#: gtk/ui/gtkfontchooserwidget.ui:218 gtk/ui/gtkfontchooserwidget.ui:387
 msgid "Size"
 msgstr "Boyut"
 
-#: gtk/gtkfilechooserwidget.c:7451
-#: gtk/inspector/misc-info.ui:57
-#: gtk/inspector/prop-list.ui:35
-#: gtk/inspector/statistics.ui:36
+#: gtk/gtkfilechooserwidget.c:7454 gtk/inspector/misc-info.ui:57
+#: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "Tür"
 
@@ -2690,10 +2611,8 @@ msgstr "Dosya Seç"
 msgid "Save a File"
 msgstr "Dosya Kaydet"
 
-#: gtk/gtkfiledialog.c:822
-#: gtk/ui/gtkappchooserdialog.ui:53
-#: gtk/ui/gtkcolorchooserdialog.ui:41
-#: gtk/ui/gtkfontchooserdialog.ui:32
+#: gtk/gtkfiledialog.c:822 gtk/ui/gtkappchooserdialog.ui:53
+#: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:32
 msgid "_Select"
 msgstr "_Seç"
 
@@ -2709,8 +2628,7 @@ msgstr "Klasör Seç"
 msgid "Unspecified"
 msgstr "Belirsiz"
 
-#: gtk/gtkfontchooserdialog.c:192
-#: gtk/gtkfontchooserdialog.c:195
+#: gtk/gtkfontchooserdialog.c:192 gtk/gtkfontchooserdialog.c:195
 msgid "Change Font Features"
 msgstr "Yazı Tipi Özelliklerini Değiştir"
 
@@ -2785,8 +2703,7 @@ msgstr "Karakter Değişkeleri"
 msgid "OpenGL context creation failed"
 msgstr "OpenGL içerik oluşturulması başarısız oldu"
 
-#: gtk/deprecated/gtkinfobar.c:498
-#: gtk/gtkwindowcontrols.c:357
+#: gtk/deprecated/gtkinfobar.c:498 gtk/gtkwindowcontrols.c:357
 #: gtk/gtkwindowhandle.c:250
 msgid "Close"
 msgstr "Kapat"
@@ -2795,27 +2712,19 @@ msgstr "Kapat"
 msgid "Close the infobar"
 msgstr "Bilgi çubuğunu kapat"
 
-#: gtk/gtklabel.c:5880
-#: gtk/gtktext.c:6322
-#: gtk/gtktextview.c:9225
+#: gtk/gtklabel.c:5880 gtk/gtktext.c:6322 gtk/gtktextview.c:9225
 msgid "Cu_t"
 msgstr "Ke_s"
 
-#: gtk/gtklabel.c:5881
-#: gtk/gtktext.c:6326
-#: gtk/gtktextview.c:9229
+#: gtk/gtklabel.c:5881 gtk/gtktext.c:6326 gtk/gtktextview.c:9229
 msgid "_Copy"
 msgstr "_Kopyala"
 
-#: gtk/gtklabel.c:5882
-#: gtk/gtktext.c:6330
-#: gtk/gtktextview.c:9233
+#: gtk/gtklabel.c:5882 gtk/gtktext.c:6330 gtk/gtktextview.c:9233
 msgid "_Paste"
 msgstr "_Yapıştır"
 
-#: gtk/gtklabel.c:5888
-#: gtk/gtktext.c:6343
-#: gtk/gtktextview.c:9258
+#: gtk/gtklabel.c:5888 gtk/gtktext.c:6343 gtk/gtktextview.c:9258
 msgid "Select _All"
 msgstr "_Tümünü Seç"
 
@@ -2827,9 +2736,7 @@ msgstr "Bağlantı _Aç"
 msgid "Copy _Link Address"
 msgstr "_Bağlantı Adresini Kopyala"
 
-#: gtk/gtklabel.c:5941
-#: gtk/gtktext.c:2851
-#: gtk/gtktextview.c:9307
+#: gtk/gtklabel.c:5941 gtk/gtktext.c:2851 gtk/gtktextview.c:9307
 msgid "Context menu"
 msgstr "Bağlamsal menü"
 
@@ -2894,16 +2801,13 @@ msgctxt "media controls tooltip"
 msgid "Stop"
 msgstr "Durdur"
 
-#: gtk/gtkmediacontrols.c:417
-#: gtk/ui/gtkmediacontrols.ui:28
+#: gtk/gtkmediacontrols.c:417 gtk/ui/gtkmediacontrols.ui:28
 msgctxt "media controls tooltip"
 msgid "Play"
 msgstr "Oynat"
 
-#: gtk/gtkmessagedialog.c:162
-#: gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639
-#: gtk/gtkwindow.c:6212
+#: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6212
 msgid "_OK"
 msgstr "_Tamam"
 
@@ -3033,25 +2937,21 @@ msgstr "Önceki sekme"
 msgid "Next tab"
 msgstr "Sonraki sekme"
 
-#: gtk/gtknotebook.c:4424
-#: gtk/gtknotebook.c:6634
+#: gtk/gtknotebook.c:4424 gtk/gtknotebook.c:6634
 #, c-format
 msgid "Page %u"
 msgstr "%u. Sayfa"
 
-#: gtk/print/gtkpagesetup.c:611
-#: gtk/print/gtkpapersize.c:942
+#: gtk/print/gtkpagesetup.c:611 gtk/print/gtkpapersize.c:942
 #: gtk/print/gtkpapersize.c:982
 msgid "Not a valid page setup file"
 msgstr "Geçerli bir sayfa ayar dosyası değil"
 
-#: gtk/print/gtkpagesetupunixdialog.c:198
-#: gtk/print/gtkprintunixdialog.c:768
+#: gtk/print/gtkpagesetupunixdialog.c:198 gtk/print/gtkprintunixdialog.c:768
 msgid "Manage Custom Sizes…"
 msgstr "Özel Boyutları Yönet…"
 
-#: gtk/print/gtkpagesetupunixdialog.c:283
-#: gtk/ui/gtkassistant.ui:98
+#: gtk/print/gtkpagesetupunixdialog.c:283 gtk/ui/gtkassistant.ui:98
 msgid "_Apply"
 msgstr "_Uygula"
 
@@ -3089,8 +2989,7 @@ msgstr "Sayfa Ayarı"
 msgid "Hide Text"
 msgstr "Metni Gizle"
 
-#: gtk/gtkpasswordentry.c:173
-#: gtk/gtkpasswordentry.c:624
+#: gtk/gtkpasswordentry.c:173 gtk/gtkpasswordentry.c:624
 msgid "Show Text"
 msgstr "Metni Göster"
 
@@ -3152,8 +3051,7 @@ msgstr "Çöp"
 msgid "Open the trash"
 msgstr "Çöpü aç"
 
-#: gtk/gtkplacessidebar.c:1181
-#: gtk/gtkplacessidebar.c:1209
+#: gtk/gtkplacessidebar.c:1181 gtk/gtkplacessidebar.c:1209
 #: gtk/gtkplacessidebar.c:1409
 #, c-format
 msgid "Mount and open “%s”"
@@ -3179,8 +3077,7 @@ msgstr "Diğer Konumlar"
 msgid "Show other locations"
 msgstr "Diğer konumları göster"
 
-#: gtk/gtkplacessidebar.c:1964
-#: gtk/gtkplacessidebar.c:2984
+#: gtk/gtkplacessidebar.c:1964 gtk/gtkplacessidebar.c:2984
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "“%s” başlatılamadı"
@@ -3217,8 +3114,7 @@ msgstr "“%s” durdurulamadı"
 msgid "Unable to eject “%s”"
 msgstr "“%s” çıkartılamadı"
 
-#: gtk/gtkplacessidebar.c:2759
-#: gtk/gtkplacessidebar.c:2788
+#: gtk/gtkplacessidebar.c:2759 gtk/gtkplacessidebar.c:2788
 #, c-format
 msgid "Unable to eject %s"
 msgstr "%s çıkartılamadı"
@@ -3228,14 +3124,12 @@ msgstr "%s çıkartılamadı"
 msgid "Unable to poll “%s” for media changes"
 msgstr "Ortam değişiklikleri için “%s” sorgulanamadı"
 
-#: gtk/gtkplacessidebar.c:3155
-#: gtk/gtkplacessidebar.c:3242
+#: gtk/gtkplacessidebar.c:3155 gtk/gtkplacessidebar.c:3242
 #: gtk/gtkplacesview.c:1649
 msgid "Open in New _Tab"
 msgstr "Yeni _Sekmede Aç"
 
-#: gtk/gtkplacessidebar.c:3161
-#: gtk/gtkplacessidebar.c:3251
+#: gtk/gtkplacessidebar.c:3161 gtk/gtkplacessidebar.c:3251
 #: gtk/gtkplacesview.c:1654
 msgid "Open in New _Window"
 msgstr "Yeni _Pencerede Aç"
@@ -3248,13 +3142,11 @@ msgstr "Yer İmi _Ekle"
 msgid "_Remove"
 msgstr "_Kaldır"
 
-#: gtk/gtkplacessidebar.c:3282
-#: gtk/gtkplacesview.c:1679
+#: gtk/gtkplacessidebar.c:3282 gtk/gtkplacesview.c:1679
 msgid "_Mount"
 msgstr "_Bağla"
 
-#: gtk/gtkplacessidebar.c:3291
-#: gtk/gtkplacesview.c:1668
+#: gtk/gtkplacessidebar.c:3291 gtk/gtkplacesview.c:1668
 msgid "_Unmount"
 msgstr "_Bağı Kaldır"
 
@@ -3306,8 +3198,7 @@ msgstr "Çoklu-disk Aygıtını _Durdur"
 msgid "_Lock Device"
 msgstr "Aygıtı _Kilitle"
 
-#: gtk/gtkplacessidebar.c:3827
-#: gtk/gtkplacesview.c:1089
+#: gtk/gtkplacessidebar.c:3827 gtk/gtkplacesview.c:1089
 msgid "Computer"
 msgstr "Bilgisayar"
 
@@ -3320,14 +3211,12 @@ msgid "No network locations found"
 msgstr "Hiçbir ağ konumu bulunamadı"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1196
-#: gtk/gtkplacesview.c:1293
+#: gtk/gtkplacesview.c:1196 gtk/gtkplacesview.c:1293
 msgid "Unable to access location"
 msgstr "Konuma erişilemedi"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1214
-#: gtk/ui/gtkplacesview.ui:250
+#: gtk/gtkplacesview.c:1214 gtk/ui/gtkplacesview.ui:250
 msgid "Con_nect"
 msgstr "Ba_ğlan"
 
@@ -3392,13 +3281,11 @@ msgstr "_Bağlan"
 msgid "Unable to get remote server location"
 msgstr "Uzak sunucu konumu alınamadı"
 
-#: gtk/gtkplacesview.c:2038
-#: gtk/gtkplacesview.c:2047
+#: gtk/gtkplacesview.c:2038 gtk/gtkplacesview.c:2047
 msgid "Networks"
 msgstr "Ağlar"
 
-#: gtk/gtkplacesview.c:2038
-#: gtk/gtkplacesview.c:2047
+#: gtk/gtkplacesview.c:2038 gtk/gtkplacesview.c:2047
 msgid "On This Computer"
 msgstr "Bu Bilgisayarda"
 
@@ -3416,8 +3303,7 @@ msgstr[0] "%s / %s kullanılabilir"
 msgid "Disconnect"
 msgstr "Bağlantıyı Kes"
 
-#: gtk/gtkplacesviewrow.c:471
-#: gtk/ui/gtkplacesviewrow.ui:53
+#: gtk/gtkplacesviewrow.c:471 gtk/ui/gtkplacesviewrow.ui:53
 #: gtk/ui/gtksidebarrow.ui:54
 msgid "Unmount"
 msgstr "Bağı Kaldır"
@@ -3497,8 +3383,7 @@ msgstr "Hata ile tamamlandı"
 msgid "Preparing %d"
 msgstr "%d hazırlanıyor"
 
-#: gtk/print/gtkprintoperation.c:2252
-#: gtk/print/gtkprintoperation.c:2871
+#: gtk/print/gtkprintoperation.c:2252 gtk/print/gtkprintoperation.c:2871
 #, c-format
 msgid "Preparing"
 msgstr "Hazırlanıyor"
@@ -3521,8 +3406,7 @@ msgstr "En olası nedeni geçici dosyanın oluşturulamamasıdır."
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
 #: gtk/print/gtkprintoperation-portal.c:594
-#: gtk/print/gtkprintoperation-portal.c:663
-#: gtk/print/gtkprintunixdialog.c:3010
+#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3015
 msgid "Print"
 msgstr "Yazdır"
 
@@ -3597,11 +3481,11 @@ msgstr "Ön İzl_e"
 msgid "_Print"
 msgstr "_Yazdır"
 
-#: gtk/print/gtkprintunixdialog.c:961
+#: gtk/print/gtkprintunixdialog.c:966
 msgid "Getting printer information failed"
 msgstr "Yazıcı bilgileri alınamadı"
 
-#: gtk/print/gtkprintunixdialog.c:1885
+#: gtk/print/gtkprintunixdialog.c:1890
 msgid "Getting printer information…"
 msgstr "Yazıcı bilgileri alınıyor…"
 
@@ -3611,64 +3495,63 @@ msgstr "Yazıcı bilgileri alınıyor…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/print/gtkprintunixdialog.c:2755
+#: gtk/print/gtkprintunixdialog.c:2760
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, top to bottom"
 msgstr "Soldan sağa, yukarıdan aşağıya"
 
-#: gtk/print/gtkprintunixdialog.c:2755
+#: gtk/print/gtkprintunixdialog.c:2760
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, bottom to top"
 msgstr "Soldan sağa, aşağıdan yukarıya"
 
-#: gtk/print/gtkprintunixdialog.c:2756
+#: gtk/print/gtkprintunixdialog.c:2761
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, top to bottom"
 msgstr "Sağdan sola, yukarıdan aşağıya"
 
-#: gtk/print/gtkprintunixdialog.c:2756
+#: gtk/print/gtkprintunixdialog.c:2761
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, bottom to top"
 msgstr "Sağdan sola, aşağıdan yukarıya"
 
-#: gtk/print/gtkprintunixdialog.c:2757
+#: gtk/print/gtkprintunixdialog.c:2762
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, left to right"
 msgstr "Yukarıdan aşağıya, soldan sağa"
 
-#: gtk/print/gtkprintunixdialog.c:2757
+#: gtk/print/gtkprintunixdialog.c:2762
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, right to left"
 msgstr "Yukarıdan aşağıya, sağdan sola"
 
-#: gtk/print/gtkprintunixdialog.c:2758
+#: gtk/print/gtkprintunixdialog.c:2763
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, left to right"
 msgstr "Aşağıdan yukarıya, soldan sağ"
 
-#: gtk/print/gtkprintunixdialog.c:2758
+#: gtk/print/gtkprintunixdialog.c:2763
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, right to left"
 msgstr "Aşağıdan yukarıya, sağdan sola"
 
-#: gtk/print/gtkprintunixdialog.c:2762
-#: gtk/print/gtkprintunixdialog.c:2775
+#: gtk/print/gtkprintunixdialog.c:2767 gtk/print/gtkprintunixdialog.c:2780
 msgid "Page Ordering"
 msgstr "Sayfa Sıralaması"
 
-#: gtk/print/gtkprintunixdialog.c:2791
+#: gtk/print/gtkprintunixdialog.c:2796
 msgid "Left to right"
 msgstr "Soldan sağa"
 
-#: gtk/print/gtkprintunixdialog.c:2792
+#: gtk/print/gtkprintunixdialog.c:2797
 msgid "Right to left"
 msgstr "Sağdan sola"
 
-#: gtk/print/gtkprintunixdialog.c:2804
+#: gtk/print/gtkprintunixdialog.c:2809
 msgid "Top to bottom"
 msgstr "Yukarıdan aşağıya"
 
-#: gtk/print/gtkprintunixdialog.c:2805
+#: gtk/print/gtkprintunixdialog.c:2810
 msgid "Bottom to top"
 msgstr "Aşağıdan yukarıya"
 
@@ -3678,12 +3561,9 @@ msgctxt "progress bar label"
 msgid "%.0f %%"
 msgstr "%% %.0f"
 
-#: gtk/gtkrecentmanager.c:1030
-#: gtk/gtkrecentmanager.c:1043
-#: gtk/gtkrecentmanager.c:1181
-#: gtk/gtkrecentmanager.c:1191
-#: gtk/gtkrecentmanager.c:1241
-#: gtk/gtkrecentmanager.c:1250
+#: gtk/gtkrecentmanager.c:1030 gtk/gtkrecentmanager.c:1043
+#: gtk/gtkrecentmanager.c:1181 gtk/gtkrecentmanager.c:1191
+#: gtk/gtkrecentmanager.c:1241 gtk/gtkrecentmanager.c:1250
 #, c-format
 msgid "Unable to find an item with URI “%s”"
 msgstr "“%s” URIʼli öge bulunamadı"
@@ -3759,15 +3639,13 @@ msgid "Swipe right"
 msgstr "Sağa kaydır"
 
 #. Translators: This is placeholder text for the search entry in the shortcuts window
-#: gtk/gtkshortcutswindow.c:894
-#: gtk/gtkshortcutswindow.c:961
+#: gtk/gtkshortcutswindow.c:894 gtk/gtkshortcutswindow.c:961
 #: gtk/gtkshortcutswindow.c:967
 msgid "Search Shortcuts"
 msgstr "Kısayolları Ara"
 
 #. Translators: This is the window title for the shortcuts window in normal mode
-#: gtk/gtkshortcutswindow.c:926
-#: gtk/inspector/window.ui:498
+#: gtk/gtkshortcutswindow.c:926 gtk/inspector/window.ui:498
 msgid "Shortcuts"
 msgstr "Kısayollar"
 
@@ -3776,16 +3654,13 @@ msgstr "Kısayollar"
 msgid "Search Results"
 msgstr "Arama Sonuçları"
 
-#: gtk/gtkshortcutswindow.c:1029
-#: gtk/ui/gtkemojichooser.ui:350
+#: gtk/gtkshortcutswindow.c:1029 gtk/ui/gtkemojichooser.ui:350
 #: gtk/ui/gtkfilechooserwidget.ui:250
 msgid "No Results Found"
 msgstr "Hiçbir Sonuç Bulunamadı"
 
-#: gtk/gtkshortcutswindow.c:1040
-#: gtk/ui/gtkemojichooser.ui:363
-#: gtk/ui/gtkfilechooserwidget.ui:263
-#: gtk/ui/gtkplacesview.ui:218
+#: gtk/gtkshortcutswindow.c:1040 gtk/ui/gtkemojichooser.ui:363
+#: gtk/ui/gtkfilechooserwidget.ui:263 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "Başka arama deneyin"
 
@@ -3794,8 +3669,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Kenar Çubuğu"
 
-#: gtk/gtktext.c:6348
-#: gtk/gtktextview.c:9263
+#: gtk/gtktext.c:6348 gtk/gtktextview.c:9263
 msgid "Insert _Emoji"
 msgstr "_Emoji Ekle"
 
@@ -3814,15 +3688,20 @@ msgstr "GTK Denetleyicisi kullanmak istiyor musunuz?"
 
 #: gtk/gtkwindow.c:6202
 #, c-format
-msgid "GTK Inspector is an interactive debugger that lets you explore and modify the internals of any GTK application. Using it may cause the application to break or crash."
-msgstr "GTK Denetleyicisi, dahili GTK uygulamalarını değiştirmeye ve araştırmaya izin veren etkileşimli hata ayıklayıcıdır. Bunun kullanılması uygulamanın kesilmesine ya da çökmesine neden olabilir."
+msgid ""
+"GTK Inspector is an interactive debugger that lets you explore and modify "
+"the internals of any GTK application. Using it may cause the application to "
+"break or crash."
+msgstr ""
+"GTK Denetleyicisi, dahili GTK uygulamalarını değiştirmeye ve araştırmaya "
+"izin veren etkileşimli hata ayıklayıcıdır. Bunun kullanılması uygulamanın "
+"kesilmesine ya da çökmesine neden olabilir."
 
 #: gtk/gtkwindow.c:6207
 msgid "Don’t show this message again"
 msgstr "Bu iletiyi yeniden gösterme"
 
-#: gtk/gtkwindowcontrols.c:309
-#: gtk/gtkwindowhandle.c:234
+#: gtk/gtkwindowcontrols.c:309 gtk/gtkwindowhandle.c:234
 msgid "Minimize"
 msgstr "Simge durumuna küçült"
 
@@ -3830,8 +3709,7 @@ msgstr "Simge durumuna küçült"
 msgid "Minimize the window"
 msgstr "Pencereyi küçüt"
 
-#: gtk/gtkwindowcontrols.c:335
-#: gtk/gtkwindowhandle.c:240
+#: gtk/gtkwindowcontrols.c:335 gtk/gtkwindowhandle.c:240
 msgid "Maximize"
 msgstr "Ekranı Kapla"
 
@@ -3855,8 +3733,7 @@ msgstr "Rol"
 msgid "Description"
 msgstr "Açıklama"
 
-#: gtk/inspector/a11y.ui:99
-#: gtk/inspector/misc-info.ui:296
+#: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
 #: tools/gtk-path-tool-info.c:132
 msgid "Bounds"
 msgstr "Sınırlar"
@@ -3869,12 +3746,9 @@ msgstr "Nesne Yolu"
 msgid "Attribute"
 msgstr "Öznitelik"
 
-#: gtk/inspector/a11y.ui:176
-#: gtk/inspector/css-node-tree.ui:70
-#: gtk/inspector/prop-list.ui:57
-#: gtk/inspector/recorder.ui:149
-#: gtk/inspector/recorder.ui:192
-#: gtk/inspector/strv-editor.c:73
+#: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:149
+#: gtk/inspector/recorder.ui:192 gtk/inspector/strv-editor.c:73
 msgid "Value"
 msgstr "Değer"
 
@@ -3894,14 +3768,12 @@ msgstr "Etkin"
 msgid "Parameter Type"
 msgstr "Parametre Türü"
 
-#: gtk/inspector/actions.ui:53
-#: gtk/inspector/css-node-tree.ui:41
+#: gtk/inspector/actions.ui:53 gtk/inspector/css-node-tree.ui:41
 #: gtk/inspector/misc-info.ui:108
 msgid "State"
 msgstr "Durum"
 
-#: gtk/inspector/clipboard.c:211
-#: gtk/inspector/misc-info.ui:245
+#: gtk/inspector/clipboard.c:211 gtk/inspector/misc-info.ui:245
 msgid "Show"
 msgstr "Göster"
 
@@ -3914,14 +3786,12 @@ msgctxt "clipboard"
 msgid "empty"
 msgstr "boş"
 
-#: gtk/inspector/clipboard.c:283
-#: gtk/inspector/clipboard.c:325
+#: gtk/inspector/clipboard.c:283 gtk/inspector/clipboard.c:325
 msgctxt "clipboard"
 msgid "local"
 msgstr "yerel"
 
-#: gtk/inspector/clipboard.c:285
-#: gtk/inspector/clipboard.c:327
+#: gtk/inspector/clipboard.c:285 gtk/inspector/clipboard.c:327
 msgctxt "clipboard"
 msgid "remote"
 msgstr "uzak"
@@ -3930,8 +3800,7 @@ msgstr "uzak"
 msgid "Drag and hold here"
 msgstr "Sürükle ve buraya tut"
 
-#: gtk/inspector/clipboard.ui:71
-#: gtk/inspector/window.ui:574
+#: gtk/inspector/clipboard.ui:71 gtk/inspector/window.ui:574
 msgid "Clipboard"
 msgstr "Pano"
 
@@ -3969,12 +3838,17 @@ msgid "You can type here any CSS rule recognized by GTK."
 msgstr "Burada GTK tarafından tanınan CSS kuralları yazabilirsiniz."
 
 #: gtk/inspector/css-editor.c:136
-msgid "You can temporarily disable this custom CSS by clicking on the “Pause” button above."
-msgstr "Bu özel CSSʼi yukarıdaki “Duraklat” düğmesine tıklayarak geçici olarak devre dışı bırakabilirsiniz."
+msgid ""
+"You can temporarily disable this custom CSS by clicking on the “Pause” "
+"button above."
+msgstr ""
+"Bu özel CSSʼi yukarıdaki “Duraklat” düğmesine tıklayarak geçici olarak devre "
+"dışı bırakabilirsiniz."
 
 #: gtk/inspector/css-editor.c:137
 msgid "Changes are applied instantly and globally, for the whole application."
-msgstr "Değişiklikler tüm uygulamalar için doğrudan ve küresel olarak uygulandı."
+msgstr ""
+"Değişiklikler tüm uygulamalar için doğrudan ve küresel olarak uygulandı."
 
 #: gtk/inspector/css-editor.c:236
 #, c-format
@@ -3993,8 +3867,7 @@ msgstr "Geçerli CSSʼleri kaydet"
 msgid "Show deprecations"
 msgstr "Kullanımdan kaldırmaları göster"
 
-#: gtk/inspector/css-node-tree.ui:28
-#: tools/gtk-builder-tool-preview.c:178
+#: gtk/inspector/css-node-tree.ui:28 tools/gtk-builder-tool-preview.c:178
 #: tools/gtk-builder-tool-screenshot.c:359
 msgid "ID"
 msgstr "Kimlik"
@@ -4012,34 +3885,32 @@ msgctxt "GL version"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/inspector/general.c:465
+#: gtk/inspector/general.c:464
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
-#: gtk/inspector/general.c:527
+#: gtk/inspector/general.c:526
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Devre Dışı"
 
-#: gtk/inspector/general.c:528
-#: gtk/inspector/general.c:529
+#: gtk/inspector/general.c:527 gtk/inspector/general.c:528
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Devre Dışı"
 
-#: gtk/inspector/general.c:580
+#: gtk/inspector/general.c:579
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/inspector/general.c:581
-#: gtk/inspector/general.c:582
+#: gtk/inspector/general.c:580 gtk/inspector/general.c:581
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Hiçbiri"
 
-#: gtk/inspector/general.c:935
+#: gtk/inspector/general.c:934
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM Bağlamı GTK_IM_MODULE tarafından kodlanmış"
 
@@ -4075,8 +3946,7 @@ msgstr "Uygulama Kimliği"
 msgid "Resource Path"
 msgstr "Kaynak Yolu"
 
-#: gtk/inspector/general.ui:261
-#: gtk/ui/gtkplacesview.ui:67
+#: gtk/inspector/general.ui:261 gtk/ui/gtkplacesview.ui:67
 msgid "Prefix"
 msgstr "Ön Ek"
 
@@ -4124,8 +3994,7 @@ msgstr "GL_VERSION"
 msgid "GL_SHADING_LANGUAGE_VERSION"
 msgstr "GL_SHADING_LANGUAGE_VERSION"
 
-#: gtk/inspector/general.ui:813
-#: gtk/inspector/general.ui:929
+#: gtk/inspector/general.ui:813 gtk/inspector/general.ui:929
 msgid "Extensions"
 msgstr "Uzantılar"
 
@@ -4149,8 +4018,7 @@ msgstr "Adsız bölüm"
 msgid "Label"
 msgstr "Etiket"
 
-#: gtk/inspector/menu.ui:31
-#: gtk/inspector/shortcuts.ui:23
+#: gtk/inspector/menu.ui:31 gtk/inspector/shortcuts.ui:23
 msgid "Action"
 msgstr "Eylem"
 
@@ -4202,12 +4070,9 @@ msgstr "Taban Çizgisi"
 msgid "Surface"
 msgstr "Yüzey"
 
-#: gtk/inspector/misc-info.ui:365
-#: gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435
-#: gtk/inspector/prop-editor.c:1153
-#: gtk/inspector/prop-editor.c:1536
-#: gtk/inspector/window.ui:396
+#: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1153
+#: gtk/inspector/prop-editor.c:1536 gtk/inspector/window.ui:396
 msgid "Properties"
 msgstr "Özellikler"
 
@@ -4231,8 +4096,7 @@ msgstr "Çerçeve Sayısı"
 msgid "Frame Rate"
 msgstr "Çerçeve Oranı"
 
-#: gtk/inspector/misc-info.ui:527
-#: gtk/inspector/visual.ui:315
+#: gtk/inspector/misc-info.ui:527 gtk/inspector/visual.ui:315
 msgid "Scale"
 msgstr "Ölçekle"
 
@@ -4393,8 +4257,7 @@ msgstr "Seçilen düğümü kaydet"
 msgid "Copy to clipboard"
 msgstr "Panoya kopyala"
 
-#: gtk/inspector/recorder.ui:144
-#: gtk/inspector/recorder.ui:187
+#: gtk/inspector/recorder.ui:144 gtk/inspector/recorder.ui:187
 msgid "Property"
 msgstr "Özellikler"
 
@@ -4414,8 +4277,7 @@ msgstr "Ad:"
 msgid "Type:"
 msgstr "Tür:"
 
-#: gtk/inspector/resource-list.ui:164
-#: tools/gtk-image-tool-info.c:54
+#: gtk/inspector/resource-list.ui:164 tools/gtk-image-tool-info.c:54
 msgid "Size:"
 msgstr "Boyut:"
 
@@ -4500,8 +4362,7 @@ msgstr "Hiyerarşi"
 msgid "Implements"
 msgstr "Sağladıkları"
 
-#: gtk/inspector/visual.c:690
-#: gtk/inspector/visual.c:708
+#: gtk/inspector/visual.c:690 gtk/inspector/visual.c:708
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Tema GTK_THEME ile kodlanmış"
 
@@ -4568,8 +4429,12 @@ msgid "Show Graphic Updates"
 msgstr "Grafik Güncellemeleri Göster"
 
 #: gtk/inspector/visual.ui:450
-msgid "Tints all the places where the current renderer uses Cairo instead of the GPU."
-msgstr "Geçerli gerçekleyicinin Ekran Kartı yerine Cairo kullandığı tüm yerleri renklendirir."
+msgid ""
+"Tints all the places where the current renderer uses Cairo instead of the "
+"GPU."
+msgstr ""
+"Geçerli gerçekleyicinin Ekran Kartı yerine Cairo kullandığı tüm yerleri "
+"renklendirir."
 
 #: gtk/inspector/visual.ui:456
 msgid "Show Cairo Rendering"
@@ -4619,8 +4484,7 @@ msgstr "Denetleyiciyi İncele"
 msgid "Select an Object"
 msgstr "Nesne Seç"
 
-#: gtk/inspector/window.ui:42
-#: gtk/inspector/window.ui:107
+#: gtk/inspector/window.ui:42 gtk/inspector/window.ui:107
 msgid "Show Details"
 msgstr "Ayrıntıları Göster"
 
@@ -4672,8 +4536,7 @@ msgstr "Sonraki kardeş"
 msgid "Miscellaneous"
 msgstr "Diğer"
 
-#: gtk/inspector/window.ui:407
-#: gtk/print/ui/gtkprintunixdialog.ui:451
+#: gtk/inspector/window.ui:407 gtk/print/ui/gtkprintunixdialog.ui:451
 msgid "Layout"
 msgstr "Düzen"
 
@@ -4685,8 +4548,7 @@ msgstr "CSS Düğümleri"
 msgid "Size Groups"
 msgstr "Boyut Kümeleri"
 
-#: gtk/inspector/window.ui:438
-#: gtk/inspector/window.ui:447
+#: gtk/inspector/window.ui:438 gtk/inspector/window.ui:447
 msgid "Data"
 msgstr "Veri"
 
@@ -6320,8 +6182,7 @@ msgstr "_Sonraki"
 msgid "Select a Color"
 msgstr "Renk Seç"
 
-#: gtk/ui/gtkcoloreditor.ui:43
-#: gtk/ui/gtkcoloreditor.ui:53
+#: gtk/ui/gtkcoloreditor.ui:43 gtk/ui/gtkcoloreditor.ui:53
 msgid "Pick a color from the screen"
 msgstr "Ekrandan renk seç"
 
@@ -6369,56 +6230,47 @@ msgstr "(Yok)"
 msgid "Search…"
 msgstr "Arama…"
 
-#: gtk/ui/gtkemojichooser.ui:70
-#: gtk/ui/gtkemojichooser.ui:240
+#: gtk/ui/gtkemojichooser.ui:70 gtk/ui/gtkemojichooser.ui:240
 msgctxt "emoji category"
 msgid "Smileys & People"
 msgstr "Gülen Yüzler ve İnsanlar"
 
-#: gtk/ui/gtkemojichooser.ui:95
-#: gtk/ui/gtkemojichooser.ui:249
+#: gtk/ui/gtkemojichooser.ui:95 gtk/ui/gtkemojichooser.ui:249
 msgctxt "emoji category"
 msgid "Body & Clothing"
 msgstr "Vücut ve Giyim"
 
-#: gtk/ui/gtkemojichooser.ui:120
-#: gtk/ui/gtkemojichooser.ui:258
+#: gtk/ui/gtkemojichooser.ui:120 gtk/ui/gtkemojichooser.ui:258
 msgctxt "emoji category"
 msgid "Animals & Nature"
 msgstr "Hayvanlar ve Doğa"
 
-#: gtk/ui/gtkemojichooser.ui:134
-#: gtk/ui/gtkemojichooser.ui:267
+#: gtk/ui/gtkemojichooser.ui:134 gtk/ui/gtkemojichooser.ui:267
 msgctxt "emoji category"
 msgid "Food & Drink"
 msgstr "Yeme ve İçme"
 
-#: gtk/ui/gtkemojichooser.ui:148
-#: gtk/ui/gtkemojichooser.ui:276
+#: gtk/ui/gtkemojichooser.ui:148 gtk/ui/gtkemojichooser.ui:276
 msgctxt "emoji category"
 msgid "Travel & Places"
 msgstr "Seyahat ve Yerler"
 
-#: gtk/ui/gtkemojichooser.ui:162
-#: gtk/ui/gtkemojichooser.ui:285
+#: gtk/ui/gtkemojichooser.ui:162 gtk/ui/gtkemojichooser.ui:285
 msgctxt "emoji category"
 msgid "Activities"
 msgstr "Etkinlikler"
 
-#: gtk/ui/gtkemojichooser.ui:176
-#: gtk/ui/gtkemojichooser.ui:294
+#: gtk/ui/gtkemojichooser.ui:176 gtk/ui/gtkemojichooser.ui:294
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Nesneler"
 
-#: gtk/ui/gtkemojichooser.ui:190
-#: gtk/ui/gtkemojichooser.ui:303
+#: gtk/ui/gtkemojichooser.ui:190 gtk/ui/gtkemojichooser.ui:303
 msgctxt "emoji category"
 msgid "Symbols"
 msgstr "Simgeler"
 
-#: gtk/ui/gtkemojichooser.ui:204
-#: gtk/ui/gtkemojichooser.ui:312
+#: gtk/ui/gtkemojichooser.ui:204 gtk/ui/gtkemojichooser.ui:312
 msgctxt "emoji category"
 msgid "Flags"
 msgstr "Bayraklar"
@@ -6468,10 +6320,8 @@ msgstr "Eş aralıklı"
 msgid "Language"
 msgstr "Dil"
 
-#: gtk/ui/gtkfontchooserwidget.ui:199
-#: gtk/ui/gtkfontchooserwidget.ui:201
-#: gtk/ui/gtkfontchooserwidget.ui:354
-#: gtk/ui/gtkfontchooserwidget.ui:358
+#: gtk/ui/gtkfontchooserwidget.ui:199 gtk/ui/gtkfontchooserwidget.ui:201
+#: gtk/ui/gtkfontchooserwidget.ui:354 gtk/ui/gtkfontchooserwidget.ui:358
 msgid "Preview Font"
 msgstr "Yazı Tipi Ön İzle"
 
@@ -6527,8 +6377,10 @@ msgid "Server Addresses"
 msgstr "Sunucu Adresleri"
 
 #: gtk/ui/gtkplacesview.ui:28
-msgid "Server addresses are made up of a protocol prefix and an address. Examples:"
-msgstr "Sunucu adresleri, iletişim kuralı ön ekinden ve adresten oluşur. Örneğin:"
+msgid ""
+"Server addresses are made up of a protocol prefix and an address. Examples:"
+msgstr ""
+"Sunucu adresleri, iletişim kuralı ön ekinden ve adresten oluşur. Örneğin:"
 
 #: gtk/ui/gtkplacesview.ui:54
 msgid "Available Protocols"
@@ -6831,7 +6683,8 @@ msgstr "Parola:"
 #: modules/printbackends/gtkprintbackendcups.c:1471
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
-msgstr "“%s” belgesini %s yazıcısında yazdırmak için kimlik doğrulama gereklidir"
+msgstr ""
+"“%s” belgesini %s yazıcısında yazdırmak için kimlik doğrulama gereklidir"
 
 #: modules/printbackends/gtkprintbackendcups.c:1183
 #, c-format
@@ -7343,14 +7196,12 @@ msgstr "Hata ayıklama çıktısı oluştur"
 msgid "Invalid size %s\n"
 msgstr "Geçersiz boyut %s\n"
 
-#: tools/encodesymbolic.c:107
-#: tools/encodesymbolic.c:116
+#: tools/encodesymbolic.c:107 tools/encodesymbolic.c:116
 #, c-format
 msgid "Can’t load file: %s\n"
 msgstr "Dosya yüklenemedi: %s\n"
 
-#: tools/encodesymbolic.c:144
-#: tools/encodesymbolic.c:162
+#: tools/encodesymbolic.c:144 tools/encodesymbolic.c:162
 #, c-format
 msgid "Can’t save file %s: %s\n"
 msgstr "%s dosyası kaydedilemedi: %s\n"
@@ -7391,18 +7242,12 @@ msgstr ""
 "  screenshot   Dosyanın ekran görüntüsünü al\n"
 "\n"
 
-#: tools/gtk-builder-tool-enumerate.c:56
-#: tools/gtk-builder-tool-preview.c:179
-#: tools/gtk-builder-tool-preview.c:180
-#: tools/gtk-builder-tool-screenshot.c:360
-#: tools/gtk-builder-tool-simplify.c:2529
-#: tools/gtk-builder-tool-validate.c:261
-#: tools/gtk-image-tool-compare.c:43
-#: tools/gtk-image-tool-info.c:68
-#: tools/gtk-path-tool-render.c:121
-#: tools/gtk-rendernode-tool-compare.c:67
-#: tools/gtk-rendernode-tool-extract.c:294
-#: tools/gtk-rendernode-tool-info.c:226
+#: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
+#: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
+#: tools/gtk-builder-tool-simplify.c:2623 tools/gtk-builder-tool-validate.c:261
+#: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:68
+#: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-rendernode-tool-extract.c:294 tools/gtk-rendernode-tool-info.c:226
 #: tools/gtk-rendernode-tool-show.c:116
 msgid "FILE"
 msgstr "DOSYA"
@@ -7411,8 +7256,7 @@ msgstr "DOSYA"
 msgid "Print all named objects."
 msgstr "Tüm adlandırılan nesneleri yazdır."
 
-#: tools/gtk-builder-tool-preview.c:128
-#: tools/gtk-builder-tool-screenshot.c:236
+#: tools/gtk-builder-tool-preview.c:128 tools/gtk-builder-tool-screenshot.c:236
 #, c-format
 msgid "No object with ID '%s' found\n"
 msgstr "'%s' kimlikli nesne bulunamadı\n"
@@ -7431,17 +7275,14 @@ msgstr "%s türünün nesneleri ön izlenemez\n"
 msgid "Preview only the named object"
 msgstr "Yalnızca adlandırılan nesneyi ön izle"
 
-#: tools/gtk-builder-tool-preview.c:179
-#: tools/gtk-builder-tool-screenshot.c:360
+#: tools/gtk-builder-tool-preview.c:179 tools/gtk-builder-tool-screenshot.c:360
 msgid "Use style from CSS file"
 msgstr "CSS dosyasından biçem kullan"
 
-#: tools/gtk-builder-tool-preview.c:187
-#: tools/gtk-builder-tool-screenshot.c:370
+#: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268
-#: tools/gtk-rendernode-tool-benchmark.c:106
-#: tools/gtk-rendernode-tool-render.c:262
-#: tools/gtk-rendernode-tool-show.c:123
+#: tools/gtk-rendernode-tool-benchmark.c:108
+#: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:123
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Pencereleme sistemi ilklendirilemedi\n"
@@ -7450,10 +7291,8 @@ msgstr "Pencereleme sistemi ilklendirilemedi\n"
 msgid "Preview the file."
 msgstr "Dosyayı ön izle."
 
-#: tools/gtk-builder-tool-preview.c:208
-#: tools/gtk-builder-tool-screenshot.c:391
-#: tools/gtk-builder-tool-simplify.c:2552
-#: tools/gtk-builder-tool-validate.c:287
+#: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
+#: tools/gtk-builder-tool-simplify.c:2646 tools/gtk-builder-tool-validate.c:287
 #, c-format
 msgid "No .ui file specified\n"
 msgstr ".ui dosyası belirtilmedi\n"
@@ -7512,12 +7351,9 @@ msgstr "Png yerine düğüm dosyası olarak kaydet"
 msgid "Overwrite existing file"
 msgstr "Var olan dosyanın üstüne yaz"
 
-#: tools/gtk-builder-tool-screenshot.c:363
-#: tools/gtk-image-tool-compare.c:46
-#: tools/gtk-image-tool-convert.c:89
-#: tools/gtk-image-tool-relabel.c:86
-#: tools/gtk-image-tool-show.c:119
-#: tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
+#: tools/gtk-image-tool-convert.c:89 tools/gtk-image-tool-relabel.c:86
+#: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:99
 #: tools/gtk-rendernode-tool-render.c:255
 msgid "FILE…"
 msgstr "DOSYA…"
@@ -7529,7 +7365,8 @@ msgstr "Bir .ui dosyasını resme gerçekle."
 #: tools/gtk-builder-tool-screenshot.c:397
 #, c-format
 msgid "Can only render a single .ui file to a single output file\n"
-msgstr "Yalnızca tek bir .ui dosyasını tek bir çıktı dosyasına gerçekleyebilir\n"
+msgstr ""
+"Yalnızca tek bir .ui dosyasını tek bir çıktı dosyasına gerçekleyebilir\n"
 
 #: tools/gtk-builder-tool-simplify.c:444
 #, c-format
@@ -7556,47 +7393,52 @@ msgstr "%s hücre özelliği bulunamadı"
 msgid "Layout property %s not found"
 msgstr "%s düzen özelliği bulunamadı"
 
-#: tools/gtk-builder-tool-simplify.c:1397
+#: tools/gtk-builder-tool-simplify.c:1400
 #, c-format
 msgid "%s only accepts three children"
 msgstr "%s yalnız üç çocuğu onaylıyor"
 
-#: tools/gtk-builder-tool-simplify.c:2455
+#: tools/gtk-builder-tool-simplify.c:1773
+#, c-format
+msgid "%s only accepts one center child"
+msgstr "%s yalnız bir orta çocuk onaylıyor"
+
+#: tools/gtk-builder-tool-simplify.c:2549
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "“%s” yüklenemedi: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2466
-#: tools/gtk-builder-tool-simplify.c:2472
-#: tools/gtk-builder-tool-simplify.c:2478
+#: tools/gtk-builder-tool-simplify.c:2560
+#: tools/gtk-builder-tool-simplify.c:2566
+#: tools/gtk-builder-tool-simplify.c:2572
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr "“%s” ayrıştırılamadı: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2504
+#: tools/gtk-builder-tool-simplify.c:2598
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "“%s” okunamadı: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2510
+#: tools/gtk-builder-tool-simplify.c:2604
 #, c-format
 msgid "Failed to write “%s”: “%s”\n"
 msgstr "“%s” yazılamadı: “%s”\n"
 
-#: tools/gtk-builder-tool-simplify.c:2527
+#: tools/gtk-builder-tool-simplify.c:2621
 msgid "Replace the file"
 msgstr "Dosyayı değiştir"
 
-#: tools/gtk-builder-tool-simplify.c:2528
+#: tools/gtk-builder-tool-simplify.c:2622
 msgid "Convert from GTK 3 to GTK 4"
 msgstr "GTK 3’ten GTK 4’e dönüştür"
 
-#: tools/gtk-builder-tool-simplify.c:2539
+#: tools/gtk-builder-tool-simplify.c:2633
 msgid "Simplify the file."
 msgstr "Dosyayı yalınlaştır."
 
 # Buradaki --replace yi çevirmedim, çevrilmesi gerekiyor mu bilemedim.
-#: tools/gtk-builder-tool-simplify.c:2558
+#: tools/gtk-builder-tool-simplify.c:2652
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "--replace olmadan yalnızca tek bir .ui dosyasını basitleştirebilir\n"
@@ -7648,8 +7490,7 @@ msgstr ""
 "  show         Görüntüyü göster\n"
 "\n"
 
-#: tools/gtk-image-tool-compare.c:43
-#: tools/gtk-rendernode-tool-compare.c:67
+#: tools/gtk-image-tool-compare.c:43 tools/gtk-rendernode-tool-compare.c:67
 msgid "Output file"
 msgstr "Çıktı dosyası"
 
@@ -7657,13 +7498,10 @@ msgstr "Çıktı dosyası"
 msgid "Compare two images"
 msgstr "İki görüntüyü karşılaştır"
 
-#: tools/gtk-image-tool-compare.c:70
-#: tools/gtk-image-tool-convert.c:113
-#: tools/gtk-image-tool-info.c:90
-#: tools/gtk-image-tool-relabel.c:109
+#: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:113
+#: tools/gtk-image-tool-info.c:90 tools/gtk-image-tool-relabel.c:109
 #: tools/gtk-image-tool-show.c:141
 #, c-format
-#| msgid "No .ui file specified\n"
 msgid "No image file specified\n"
 msgstr "Görüntü dosyası belirtilmedi\n"
 
@@ -7672,32 +7510,27 @@ msgstr "Görüntü dosyası belirtilmedi\n"
 msgid "Can only accept two image files\n"
 msgstr "Yalnızca iki görüntü dosyası kabul edebilir\n"
 
-#: tools/gtk-image-tool-compare.c:85
-#: tools/gtk-rendernode-tool-compare.c:111
+#: tools/gtk-image-tool-compare.c:85 tools/gtk-rendernode-tool-compare.c:111
 #, c-format
 msgid "Failed to load %s: %s\n"
 msgstr "%s yüklenemedi: %s\n"
 
-#: tools/gtk-image-tool-compare.c:96
-#: tools/gtk-rendernode-tool-compare.c:122
+#: tools/gtk-image-tool-compare.c:96 tools/gtk-rendernode-tool-compare.c:122
 #, c-format
 msgid "Could not save diff image to %s\n"
 msgstr "Fark görüntüsü %s dosyasına kaydedilemedi\n"
 
-#: tools/gtk-image-tool-compare.c:106
-#: tools/gtk-rendernode-tool-compare.c:132
+#: tools/gtk-image-tool-compare.c:106 tools/gtk-rendernode-tool-compare.c:132
 #, c-format
 msgid "Differences witten to %s.\n"
 msgstr "Farklılıklar %s dosyasına yazıldı.\n"
 
-#: tools/gtk-image-tool-compare.c:108
-#: tools/gtk-rendernode-tool-compare.c:134
+#: tools/gtk-image-tool-compare.c:108 tools/gtk-rendernode-tool-compare.c:134
 #, c-format
 msgid "The images are different.\n"
 msgstr "Görüntüler farklı.\n"
 
-#: tools/gtk-image-tool-compare.c:111
-#: tools/gtk-rendernode-tool-compare.c:137
+#: tools/gtk-image-tool-compare.c:111 tools/gtk-rendernode-tool-compare.c:137
 #, c-format
 msgid "No differences.\n"
 msgstr "Fark yok.\n"
@@ -7710,23 +7543,19 @@ msgstr "Kullanılacak biçim"
 msgid "FORMAT"
 msgstr "BİÇİM"
 
-#: tools/gtk-image-tool-convert.c:87
-#: tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:87 tools/gtk-image-tool-relabel.c:84
 msgid "Color state to use"
 msgstr "Kullanılacak renk durumu"
 
-#: tools/gtk-image-tool-convert.c:87
-#: tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:87 tools/gtk-image-tool-relabel.c:84
 msgid "COLORSTATE"
 msgstr "RENKDURUMU"
 
-#: tools/gtk-image-tool-convert.c:88
-#: tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:88 tools/gtk-image-tool-relabel.c:85
 msgid "Color state to use, as cicp tuple"
 msgstr "Kullanılacak renk durumu, cicp demeti olarak"
 
-#: tools/gtk-image-tool-convert.c:88
-#: tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:88 tools/gtk-image-tool-relabel.c:85
 msgid "CICP"
 msgstr "CICP"
 
@@ -7734,11 +7563,11 @@ msgstr "CICP"
 msgid "Convert the image to a different format or color state."
 msgstr "Görseli başka biçime ya da renk durumuna dönüştür."
 
-#: tools/gtk-image-tool-convert.c:119
-#: tools/gtk-image-tool-relabel.c:115
+#: tools/gtk-image-tool-convert.c:119 tools/gtk-image-tool-relabel.c:115
 #, c-format
 msgid "Can only accept a single image file and output file\n"
-msgstr "Yalnızca tek bir görüntü dosyası ve tek bir çıktı dosyası kabul edilir\n"
+msgstr ""
+"Yalnızca tek bir görüntü dosyası ve tek bir çıktı dosyası kabul edilir\n"
 
 #: tools/gtk-image-tool-convert.c:133
 #, c-format
@@ -7762,14 +7591,12 @@ msgstr ""
 "Olası değerler:\n"
 "  %s\n"
 
-#: tools/gtk-image-tool-convert.c:160
-#: tools/gtk-image-tool-relabel.c:140
+#: tools/gtk-image-tool-convert.c:160 tools/gtk-image-tool-relabel.c:140
 #, c-format
 msgid "Can't specify both --color-state and --cicp\n"
 msgstr "--color-state ve --cicp aynı anda belirtilemez\n"
 
-#: tools/gtk-image-tool-convert.c:168
-#: tools/gtk-image-tool-relabel.c:148
+#: tools/gtk-image-tool-convert.c:168 tools/gtk-image-tool-relabel.c:148
 #, c-format
 msgid "Not a supported cicp tuple: %s\n"
 msgstr "Desteklenmeyen cicp demeti: %s\n"
@@ -7804,8 +7631,7 @@ msgstr ""
 "Renk durumu değil: %s\n"
 "Olası değerler: %s\n"
 
-#: tools/gtk-image-tool-show.c:117
-#: tools/gtk-rendernode-tool-show.c:115
+#: tools/gtk-image-tool-show.c:117 tools/gtk-rendernode-tool-show.c:115
 msgid "Don't add a titlebar"
 msgstr "Başlık çubuğu ekleme"
 
@@ -7843,8 +7669,7 @@ msgstr ""
 msgid "Error parsing commandline options: %s\n"
 msgstr "Komut satırı seçeneklerini ayrıştırırken hata: %s\n"
 
-#: tools/gtk-launch.c:90
-#: tools/gtk-launch.c:111
+#: tools/gtk-launch.c:90 tools/gtk-launch.c:111
 #, c-format
 msgid "Try “%s --help” for more information."
 msgstr "Daha çok bilgi için “%s --help” komutunu deneyin."
@@ -7859,7 +7684,8 @@ msgstr "%s: eksik uygulama adı"
 #: tools/gtk-launch.c:137
 #, c-format
 msgid "Creating AppInfo from id not supported on non unix operating systems"
-msgstr "Kimlikten AppInfo oluşturma Unix olmayan işletim sistemlerinde desteklenmiyor"
+msgstr ""
+"Kimlikten AppInfo oluşturma Unix olmayan işletim sistemlerinde desteklenmiyor"
 
 #. Translators: the first %s is the program name, the second one
 #. is the application name.
@@ -7918,12 +7744,9 @@ msgstr "Kübik Bézier eğrilerine izin ver"
 msgid "Allow conic Bézier curves"
 msgstr "Konik Bézier eğrilerine izin ver"
 
-#: tools/gtk-path-tool-decompose.c:87
-#: tools/gtk-path-tool-info.c:88
-#: tools/gtk-path-tool-render.c:125
-#: tools/gtk-path-tool-restrict.c:38
-#: tools/gtk-path-tool-reverse.c:34
-#: tools/gtk-path-tool-show.c:147
+#: tools/gtk-path-tool-decompose.c:87 tools/gtk-path-tool-info.c:88
+#: tools/gtk-path-tool-render.c:125 tools/gtk-path-tool-restrict.c:38
+#: tools/gtk-path-tool-reverse.c:34 tools/gtk-path-tool-show.c:147
 msgid "PATH"
 msgstr "YOL"
 
@@ -7931,15 +7754,12 @@ msgstr "YOL"
 msgid "Decompose a path."
 msgstr "Yol ayrıştır."
 
-#: tools/gtk-path-tool-decompose.c:112
-#: tools/gtk-path-tool-info.c:113
-#: tools/gtk-path-tool-restrict.c:64
-#: tools/gtk-path-tool-reverse.c:58
+#: tools/gtk-path-tool-decompose.c:112 tools/gtk-path-tool-info.c:113
+#: tools/gtk-path-tool-restrict.c:64 tools/gtk-path-tool-reverse.c:58
 msgid "No paths given."
 msgstr "Yol verilmedi."
 
-#: tools/gtk-path-tool-decompose.c:140
-#: tools/gtk-path-tool-restrict.c:94
+#: tools/gtk-path-tool-decompose.c:140 tools/gtk-path-tool-restrict.c:94
 #: tools/gtk-path-tool-reverse.c:78
 msgid "That didn't work out."
 msgstr "Bu çalışmadı."
@@ -7990,23 +7810,19 @@ msgstr "%d kübik"
 msgid "%d conics"
 msgstr "%d konik"
 
-#: tools/gtk-path-tool-render.c:117
-#: tools/gtk-path-tool-show.c:140
+#: tools/gtk-path-tool-render.c:117 tools/gtk-path-tool-show.c:140
 msgid "Fill the path (the default)"
 msgstr "Yolu doldur (öntanımlı)"
 
-#: tools/gtk-path-tool-render.c:118
-#: tools/gtk-path-tool-show.c:141
+#: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:141
 msgid "Stroke the path"
 msgstr "Yolu darbele"
 
-#: tools/gtk-path-tool-render.c:119
-#: tools/gtk-path-tool-show.c:142
+#: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
 msgid "Show path points"
 msgstr "Yol noktalarını göster"
 
-#: tools/gtk-path-tool-render.c:120
-#: tools/gtk-path-tool-show.c:143
+#: tools/gtk-path-tool-render.c:120 tools/gtk-path-tool-show.c:143
 msgid "Show control points"
 msgstr "Denetim noktalarını göster"
 
@@ -8014,84 +7830,63 @@ msgstr "Denetim noktalarını göster"
 msgid "The output file"
 msgstr "Çıktı dosyası"
 
-#: tools/gtk-path-tool-render.c:122
-#: tools/gtk-path-tool-show.c:144
+#: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-show.c:144
 msgid "Foreground color"
 msgstr "Ön alan rengi"
 
-#: tools/gtk-path-tool-render.c:122
-#: tools/gtk-path-tool-render.c:123
-#: tools/gtk-path-tool-render.c:124
-#: tools/gtk-path-tool-show.c:144
-#: tools/gtk-path-tool-show.c:145
-#: tools/gtk-path-tool-show.c:146
+#: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-render.c:123
+#: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:144
+#: tools/gtk-path-tool-show.c:145 tools/gtk-path-tool-show.c:146
 msgid "COLOR"
 msgstr "RENK"
 
-#: tools/gtk-path-tool-render.c:123
-#: tools/gtk-path-tool-show.c:145
+#: tools/gtk-path-tool-render.c:123 tools/gtk-path-tool-show.c:145
 msgid "Background color"
 msgstr "Arka plan rengi"
 
-#: tools/gtk-path-tool-render.c:124
-#: tools/gtk-path-tool-show.c:146
+#: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
 msgid "Point color"
 msgstr "Nokta rengi"
 
-#: tools/gtk-path-tool-render.c:129
-#: tools/gtk-path-tool-show.c:151
+#: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-show.c:151
 msgid "Fill rule (winding, even-odd)"
 msgstr "Doldurma kuralı (sarma, çift-tek)"
 
-#: tools/gtk-path-tool-render.c:129
-#: tools/gtk-path-tool-render.c:133
-#: tools/gtk-path-tool-render.c:134
-#: tools/gtk-path-tool-render.c:135
-#: tools/gtk-path-tool-render.c:136
-#: tools/gtk-path-tool-render.c:137
-#: tools/gtk-path-tool-render.c:138
-#: tools/gtk-path-tool-show.c:151
-#: tools/gtk-path-tool-show.c:155
-#: tools/gtk-path-tool-show.c:156
-#: tools/gtk-path-tool-show.c:157
-#: tools/gtk-path-tool-show.c:158
-#: tools/gtk-path-tool-show.c:159
-#: tools/gtk-path-tool-show.c:160
+#: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-render.c:133
+#: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-render.c:135
+#: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-render.c:137
+#: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:151
+#: tools/gtk-path-tool-show.c:155 tools/gtk-path-tool-show.c:156
+#: tools/gtk-path-tool-show.c:157 tools/gtk-path-tool-show.c:158
+#: tools/gtk-path-tool-show.c:159 tools/gtk-path-tool-show.c:160
 msgid "VALUE"
 msgstr "DEĞER"
 
-#: tools/gtk-path-tool-render.c:133
-#: tools/gtk-path-tool-show.c:155
+#: tools/gtk-path-tool-render.c:133 tools/gtk-path-tool-show.c:155
 msgid "Line width (number)"
 msgstr "Çizgi genişliği (sayı)"
 
-#: tools/gtk-path-tool-render.c:134
-#: tools/gtk-path-tool-show.c:156
+#: tools/gtk-path-tool-render.c:134 tools/gtk-path-tool-show.c:156
 msgid "Line cap (butt, round, square)"
 msgstr "Çizgi ucu (uç, yuvarlak, kare)"
 
-#: tools/gtk-path-tool-render.c:135
-#: tools/gtk-path-tool-show.c:157
+#: tools/gtk-path-tool-render.c:135 tools/gtk-path-tool-show.c:157
 msgid "Line join (miter, miter-clip, round, bevel, arcs)"
 msgstr "Çizgi birleşimi (gönye, gönye yakalama, yuvarlak, eğim, yay)"
 
-#: tools/gtk-path-tool-render.c:136
-#: tools/gtk-path-tool-show.c:158
+#: tools/gtk-path-tool-render.c:136 tools/gtk-path-tool-show.c:158
 msgid "Miter limit (number)"
 msgstr "Gönye sınırı (sayı)"
 
-#: tools/gtk-path-tool-render.c:137
-#: tools/gtk-path-tool-show.c:159
+#: tools/gtk-path-tool-render.c:137 tools/gtk-path-tool-show.c:159
 msgid "Dash pattern (comma-separated numbers)"
 msgstr "Tire örüntüsü (virgülle ayrılmış sayılar)"
 
-#: tools/gtk-path-tool-render.c:138
-#: tools/gtk-path-tool-show.c:160
+#: tools/gtk-path-tool-render.c:138 tools/gtk-path-tool-show.c:160
 msgid "Dash offset (number)"
 msgstr "Tire konumu (sayı)"
 
-#: tools/gtk-path-tool-render.c:161
-#: tools/gtk-path-tool-show.c:172
+#: tools/gtk-path-tool-render.c:161 tools/gtk-path-tool-show.c:172
 msgid "Could not initialize windowing system"
 msgstr "Pencereleme sistemi ilklendirilemedi"
 
@@ -8099,28 +7894,23 @@ msgstr "Pencereleme sistemi ilklendirilemedi"
 msgid "Render the path to a png image."
 msgstr "Yolu png resmine gerçekle."
 
-#: tools/gtk-path-tool-render.c:173
-#: tools/gtk-path-tool-show.c:183
+#: tools/gtk-path-tool-render.c:173 tools/gtk-path-tool-show.c:183
 msgid "Options related to filling"
 msgstr "Doldurmayla ilgili seçenekler"
 
-#: tools/gtk-path-tool-render.c:174
-#: tools/gtk-path-tool-show.c:184
+#: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
 msgid "Show help for fill options"
 msgstr "Doldurma seçenekleri için yardım göster"
 
-#: tools/gtk-path-tool-render.c:181
-#: tools/gtk-path-tool-show.c:191
+#: tools/gtk-path-tool-render.c:181 tools/gtk-path-tool-show.c:191
 msgid "Options related to stroking"
 msgstr "Darbelemeyle ilgili seçenekler"
 
-#: tools/gtk-path-tool-render.c:182
-#: tools/gtk-path-tool-show.c:192
+#: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
 msgid "Show help for stroke options"
 msgstr "Darbeleme seçenekleri için yardım göster"
 
-#: tools/gtk-path-tool-render.c:199
-#: tools/gtk-path-tool-show.c:209
+#: tools/gtk-path-tool-render.c:199 tools/gtk-path-tool-show.c:209
 msgid "No path specified"
 msgstr "Yol belirtilmedi"
 
@@ -8129,18 +7919,15 @@ msgstr "Yol belirtilmedi"
 msgid "Can only render a single path"
 msgstr "Yalnızca tek bir yol gerçeklenebilir"
 
-#: tools/gtk-path-tool-render.c:250
-#: tools/gtk-path-tool-show.c:221
+#: tools/gtk-path-tool-render.c:250 tools/gtk-path-tool-show.c:221
 msgid "fill rule"
 msgstr "doldurma kuralı"
 
-#: tools/gtk-path-tool-render.c:255
-#: tools/gtk-path-tool-show.c:226
+#: tools/gtk-path-tool-render.c:255 tools/gtk-path-tool-show.c:226
 msgid "line cap"
 msgstr "çizgi ucu"
 
-#: tools/gtk-path-tool-render.c:256
-#: tools/gtk-path-tool-show.c:227
+#: tools/gtk-path-tool-render.c:256 tools/gtk-path-tool-show.c:227
 msgid "line join"
 msgstr "çizgi birleşimi"
 
@@ -8158,8 +7945,7 @@ msgstr "Çıktı şuna yazıldı: '%s'."
 msgid "Beginning of segment"
 msgstr "Bölüm başlangıcı"
 
-#: tools/gtk-path-tool-restrict.c:36
-#: tools/gtk-path-tool-restrict.c:37
+#: tools/gtk-path-tool-restrict.c:36 tools/gtk-path-tool-restrict.c:37
 msgid "LENGTH"
 msgstr "UZUNLUK"
 
@@ -8175,8 +7961,7 @@ msgstr "Yolu bölüme kısıtla."
 msgid "Reverse a path."
 msgstr "Yolu ters çevir."
 
-#: tools/gtk-path-tool-show.c:46
-#: tools/gtk-path-tool-show.c:88
+#: tools/gtk-path-tool-show.c:46 tools/gtk-path-tool-show.c:88
 msgid "Path Preview"
 msgstr "Yol Ön İzlemesi"
 
@@ -8254,42 +8039,40 @@ msgstr ""
 "  render       Düğümün ekran görüntüsünü al\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-benchmark.c:96
 msgid "Add renderer to benchmark"
 msgstr "Gerçekleyiciyi kıyaslamaya ekle"
 
-#: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-benchmark.c:96
 #: tools/gtk-rendernode-tool-compare.c:65
 #: tools/gtk-rendernode-tool-render.c:254
 msgid "RENDERER"
 msgstr "GERÇEKLEYİCİ"
 
-#: tools/gtk-rendernode-tool-benchmark.c:95
+#: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "Number of runs with each renderer"
 msgstr "Her gerçekleyici ile çalıştırma sayısı"
 
-#: tools/gtk-rendernode-tool-benchmark.c:95
+#: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "RUNS"
 msgstr "ÇALIŞTIRMALAR"
 
-#: tools/gtk-rendernode-tool-benchmark.c:96
+#: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "Don’t download result/wait for GPU to finish"
 msgstr "Sonucu indirme/Ekran kartının bitirmesini bekle"
 
-#: tools/gtk-rendernode-tool-benchmark.c:114
+#: tools/gtk-rendernode-tool-benchmark.c:116
 msgid "Benchmark rendering of a .node file."
 msgstr "Bir .node dosyasının gerçeklemesini kıyasla."
 
-#: tools/gtk-rendernode-tool-benchmark.c:127
-#: tools/gtk-rendernode-tool-extract.c:316
-#: tools/gtk-rendernode-tool-info.c:248
-#: tools/gtk-rendernode-tool-render.c:283
-#: tools/gtk-rendernode-tool-show.c:144
+#: tools/gtk-rendernode-tool-benchmark.c:129
+#: tools/gtk-rendernode-tool-extract.c:316 tools/gtk-rendernode-tool-info.c:248
+#: tools/gtk-rendernode-tool-render.c:283 tools/gtk-rendernode-tool-show.c:144
 #, c-format
 msgid "No .node file specified\n"
 msgstr ".node dosyası belirtilmedi\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:133
+#: tools/gtk-rendernode-tool-benchmark.c:135
 #, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "Yalnızca tek bir .node dosyasını kıyaslayabilir\n"
@@ -8340,8 +8123,7 @@ msgstr "Ayrıntılı ol"
 msgid "Extract data urls from the render node."
 msgstr "Gerçekleme düğümünden veri url’lerini çıkar."
 
-#: tools/gtk-rendernode-tool-extract.c:322
-#: tools/gtk-rendernode-tool-info.c:254
+#: tools/gtk-rendernode-tool-extract.c:322 tools/gtk-rendernode-tool-info.c:254
 #, c-format
 msgid "Can only accept a single .node file\n"
 msgstr "Yalnızca tek bir .node dosyasını kabul edebilir\n"
@@ -8362,8 +8144,7 @@ msgstr "Sınırlar:"
 msgid "Origin:"
 msgstr "Köken:"
 
-#: tools/gtk-rendernode-tool-info.c:208
-#: tools/gtk-rendernode-tool-info.c:214
+#: tools/gtk-rendernode-tool-info.c:208 tools/gtk-rendernode-tool-info.c:214
 msgid "Opaque part:"
 msgstr "Mat bölüm:"
 
@@ -8393,7 +8174,8 @@ msgstr "Bir .node dosyasını resme gerçekle."
 #: tools/gtk-rendernode-tool-render.c:289
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
-msgstr "Yalnızca tek bir .node dosyasını tek bir çıktı dosyasına gerçekleyebilir\n"
+msgstr ""
+"Yalnızca tek bir .node dosyasını tek bir çıktı dosyasına gerçekleyebilir\n"
 
 #: tools/gtk-rendernode-tool-show.c:131
 msgid "Show the render node."
@@ -8439,8 +8221,7 @@ msgstr "Başlık yeniden yazılamadı\n"
 msgid "Failed to open file %s : %s\n"
 msgstr "%s dosyası açılamadı: %s\n"
 
-#: tools/updateiconcache.c:1513
-#: tools/updateiconcache.c:1543
+#: tools/updateiconcache.c:1513 tools/updateiconcache.c:1543
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "Önbellek dosyası yazılamadı: %s\n"
@@ -8520,5 +8301,5 @@ msgid ""
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "“%s” içinde tema dizin dosyası yok.\n"
-"Eğer burada gerçekten bir simge önbelleği oluşturmak istiyorsanız, --ignore-theme-indexʼi kullanın.\n"
-
+"Eğer burada gerçekten bir simge önbelleği oluşturmak istiyorsanız, --ignore-"
+"theme-indexʼi kullanın.\n"
