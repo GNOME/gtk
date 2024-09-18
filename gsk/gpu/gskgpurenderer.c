@@ -157,13 +157,16 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
 
   frame = gsk_gpu_renderer_get_frame (self);
 
-  gsk_gpu_frame_download_texture (frame,
-                                  g_get_monotonic_time (),
-                                  GDK_TEXTURE (texture),
-                                  format,
-                                  color_state,
-                                  data,
-                                  stride);
+  if (!gsk_gpu_frame_download_texture (frame,
+                                       g_get_monotonic_time (),
+                                       GDK_TEXTURE (texture),
+                                       format,
+                                       color_state,
+                                       data,
+                                       stride))
+    {
+      return FALSE;
+    }
 
   gsk_gpu_frame_wait (frame);
 

@@ -723,7 +723,7 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
   gsk_gpu_frame_submit (self, pass_type);
 }
 
-void
+gboolean
 gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                                 gint64           timestamp,
                                 GdkTexture      *texture,
@@ -751,10 +751,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
         image = gsk_gpu_frame_do_upload_texture (self, TRUE, FALSE, texture);
 
       if (image == NULL)
-        {
-          g_critical ("Could not upload texture");
-          return;
-        }
+        return FALSE;
 
       image_cs = gdk_texture_get_color_state (texture);
     }
@@ -773,9 +770,8 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                                                         image_cs);
       if (converted == NULL)
         {
-          g_critical ("Conversion into readable format failed");
           g_object_unref (image);
-          return;
+          return FALSE;
         }
       g_object_unref (image);
       image = converted;
@@ -792,4 +788,6 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
 
   gsk_gpu_frame_submit (self, GSK_RENDER_PASS_EXPORT);
   g_object_unref (image);
+
+  return TRUE;
 }
