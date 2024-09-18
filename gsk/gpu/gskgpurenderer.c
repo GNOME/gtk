@@ -163,6 +163,7 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
   GskGpuRenderer *self = GSK_GPU_RENDERER (downloader);
   GskGpuFrame *frame;
   gpointer previous;
+  gboolean retval = FALSE;
 
   previous = gsk_gpu_renderer_save_current (self);
 
@@ -170,27 +171,30 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
 
   frame = gsk_gpu_renderer_get_frame (self);
 
-  gsk_gpu_frame_download_texture (frame,
-                                  g_get_monotonic_time (),
-                                  GDK_TEXTURE (texture),
-                                  format,
-                                  color_state,
-                                  data,
-                                  stride);
+  if (gsk_gpu_frame_download_texture (frame,
+                                      g_get_monotonic_time (),
+                                      GDK_TEXTURE (texture),
+                                      format,
+                                      color_state,
+                                      data,
+                                      stride))
+    {
+      retval = TRUE;
 
-  GDK_DISPLAY_DEBUG (gdk_dmabuf_texture_get_display (texture), DMABUF,
-                     "Used %s for downloading %dx%d dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
-                     G_OBJECT_TYPE_NAME (downloader),
-                     gdk_texture_get_width (GDK_TEXTURE (texture)),
-                     gdk_texture_get_height (GDK_TEXTURE (texture)),
-                     (char *)&(gdk_dmabuf_texture_get_dmabuf (texture)->fourcc),
-                     gdk_dmabuf_texture_get_dmabuf (texture)->modifier);
+      GDK_DISPLAY_DEBUG (gdk_dmabuf_texture_get_display (texture), DMABUF,
+                         "Used %s for downloading %dx%d dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
+                         G_OBJECT_TYPE_NAME (downloader),
+                         gdk_texture_get_width (GDK_TEXTURE (texture)),
+                         gdk_texture_get_height (GDK_TEXTURE (texture)),
+                         (char *)&(gdk_dmabuf_texture_get_dmabuf (texture)->fourcc),
+                         gdk_dmabuf_texture_get_dmabuf (texture)->modifier);
 
-  gsk_gpu_frame_wait (frame);
+      gsk_gpu_frame_wait (frame);
+    }
 
   gsk_gpu_renderer_restore_current (self, previous);
 
-  return TRUE;
+  return retval;
 }
 
 static void
