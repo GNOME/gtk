@@ -155,6 +155,8 @@ struct _GtkListBox
   GtkListBoxCreateWidgetFunc create_widget_func;
   gpointer create_widget_func_data;
   GDestroyNotify create_widget_func_data_destroy;
+
+  GtkListTabBehavior tab_behavior;
 };
 
 struct _GtkListBoxClass
@@ -214,6 +216,7 @@ enum {
   PROP_ACTIVATE_ON_SINGLE_CLICK,
   PROP_ACCEPT_UNPAIRED_RELEASE,
   PROP_SHOW_SEPARATORS,
+  PROP_TAB_BEHAVIOR,
   LAST_PROPERTY
 };
 
@@ -405,6 +408,9 @@ gtk_list_box_get_property (GObject    *obj,
     case PROP_SHOW_SEPARATORS:
       g_value_set_boolean (value, box->show_separators);
       break;
+    case PROP_TAB_BEHAVIOR:
+      g_value_set_enum (value, box->tab_behavior);
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
       break;
@@ -432,6 +438,9 @@ gtk_list_box_set_property (GObject      *obj,
       break;
     case PROP_SHOW_SEPARATORS:
       gtk_list_box_set_show_separators (box, g_value_get_boolean (value));
+      break;
+    case PROP_TAB_BEHAVIOR:
+      gtk_list_box_set_tab_behavior (box, g_value_get_enum (value));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (obj, property_id, pspec);
@@ -546,6 +555,17 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
     g_param_spec_boolean ("show-separators", NULL, NULL,
                           FALSE,
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+                          /**
+                           * GtkListBox:tab-behavior:
+                           * 
+                           * Behavior of the <kbd>Tab</kbd> key
+                           */
+                          properties[PROP_TAB_BEHAVIOR] =
+                            g_param_spec_enum ("tab-behavior", NULL, NULL,
+                                               GTK_TYPE_LIST_TAB_BEHAVIOR,
+                                               GTK_LIST_TAB_ALL,
+                                               G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (object_class, LAST_PROPERTY, properties);
 
@@ -2022,7 +2042,7 @@ gtk_list_box_focus (GtkWidget        *widget,
       if (gtk_widget_child_focus (focus_child, direction))
         return TRUE;
 
-      if (direction == GTK_DIR_UP || direction == GTK_DIR_TAB_BACKWARD)
+      if (direction == GTK_DIR_UP || (direction == GTK_DIR_TAB_BACKWARD && box->tab_behavior == GTK_LIST_TAB_ALL))
         {
           if (GTK_IS_LIST_BOX_ROW (focus_child))
             {
@@ -2052,7 +2072,7 @@ gtk_list_box_focus (GtkWidget        *widget,
               i = gtk_list_box_get_previous_visible (box, i);
             }
         }
-      else if (direction == GTK_DIR_DOWN || direction == GTK_DIR_TAB_FORWARD)
+      else if (direction == GTK_DIR_DOWN || (direction == GTK_DIR_TAB_FORWARD && box->tab_behavior == GTK_LIST_TAB_ALL))
         {
           if (GTK_IS_LIST_BOX_ROW (focus_child))
             i = gtk_list_box_get_next_visible (box, ROW_PRIV (GTK_LIST_BOX_ROW (focus_child))->iter);
@@ -3869,4 +3889,44 @@ gtk_list_box_get_show_separators (GtkListBox *box)
   g_return_val_if_fail (GTK_IS_LIST_BOX (box), FALSE);
 
   return box->show_separators;
+}
+
+/**
+ * gtk_list_box_set_tab_behavior:
+ * @box: a `GtkListBox`
+ * @tab_behavior: the tab behavior
+ * 
+ * Sets the behavior of the <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> keys.
+ *
+ * Since: 4.18
+ */
+void
+gtk_list_box_set_tab_behavior (GtkListBox       *box,
+                               GtkListTabBehavior tab_behavior)
+{
+  g_return_if_fail (GTK_IS_LIST_BOX (box));
+
+  if (box->tab_behavior == tab_behavior)
+    return;
+
+  box->tab_behavior = tab_behavior;
+
+  g_object_notify_by_pspec (G_OBJECT (box), properties[PROP_TAB_BEHAVIOR]);
+}
+
+/**
+ * gtk_list_box_get_tab_behavior:
+ * @box: a `GtkListBox`
+ *
+ * Returns the behavior of the <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> keys.
+ *
+ * Returns: the tab behavior
+ * Since: 4.18
+ */
+GtkListTabBehavior
+gtk_list_box_get_tab_behavior (GtkListBox *box)
+{
+  g_return_val_if_fail (GTK_IS_LIST_BOX (box), GTK_LIST_TAB_ALL);
+
+  return box->tab_behavior;
 }
