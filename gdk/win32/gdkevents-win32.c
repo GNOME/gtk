@@ -143,12 +143,6 @@ static HWND modal_win32_dialog = NULL;
 static HKL latin_locale = NULL;
 #endif
 
-/* TODO: Get rid of these global variables... */
-
-/* low-level keyboard hook handle */
-static HHOOK keyboard_hook = NULL;
-static UINT aerosnap_message;
-
 static void
 track_mouse_event (DWORD dwFlags,
 		   HWND  hwnd)
@@ -356,8 +350,14 @@ low_level_keystroke_handler (WPARAM           message,
               g_win32_check_windows_version (6, 4, 0, G_WIN32_OS_ANY))
             combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
 
-	  if (combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
-            PostMessage (GDK_SURFACE_HWND (toplevel), aerosnap_message, (WPARAM) combo, 0);
+      if (combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
+        {
+          GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (toplevel));
+
+          PostMessage (GDK_SURFACE_HWND (toplevel),
+                       display->event_record->aerosnap_message,
+                       (WPARAM) combo, 0);
+        }
 	}
 
   if (message == WM_KEYDOWN)
@@ -404,11 +404,11 @@ low_level_keyboard_proc (int    code,
 }
 
 static void
-set_up_low_level_keyboard_hook (void)
+set_up_low_level_keyboard_hook (GdkDisplay *display)
 {
   HHOOK hook_handle;
 
-  if (keyboard_hook != NULL)
+  if (GDK_WIN32_DISPLAY (display)->event_record->aerosnap_keyboard_hook != NULL)
     return;
 
   hook_handle = SetWindowsHookEx (WH_KEYBOARD_LL,
@@ -416,11 +416,11 @@ set_up_low_level_keyboard_hook (void)
                                   this_module (), 0);
 
   if (hook_handle != NULL)
-    keyboard_hook = hook_handle;
+    GDK_WIN32_DISPLAY (display)->event_record->aerosnap_keyboard_hook = hook_handle;
   else
     WIN32_API_FAILED ("SetWindowsHookEx");
 
-  aerosnap_message = RegisterWindowMessage (L"GDK_WIN32_AEROSNAP_MESSAGE");
+  GDK_WIN32_DISPLAY (display)->event_record->aerosnap_message = RegisterWindowMessage (L"GDK_WIN32_AEROSNAP_MESSAGE");
 }
 
 void
@@ -533,7 +533,7 @@ _gdk_events_init (GdkDisplay *display)
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
 
-  set_up_low_level_keyboard_hook ();
+  set_up_low_level_keyboard_hook (display);
 }
 
 gboolean
@@ -1828,7 +1828,7 @@ gdk_event_translate (MSG *msg,
    */
 #define return GOTO_DONE_INSTEAD
 
-  if (msg->message == aerosnap_message)
+  if (msg->message == win32_display->event_record->aerosnap_message)
     _gdk_win32_surface_handle_aerosnap (surface,
                                        (GdkWin32AeroSnapCombo) msg->wParam);
 
