@@ -135,7 +135,7 @@ static GSourceFuncs event_funcs = {
   NULL
 };
 
-/* TODO: Get rid of these global variables... */
+/* TODO: pending removal, pending gtkprintoperation-win32 rewrite */
 static UINT got_gdk_events_message;
 static HWND modal_win32_dialog = NULL;
 
@@ -143,7 +143,7 @@ static HWND modal_win32_dialog = NULL;
 static HKL latin_locale = NULL;
 #endif
 
-static int debug_indent = 0;
+/* TODO: Get rid of these global variables... */
 
 /* low-level keyboard hook handle */
 static HHOOK keyboard_hook = NULL;
@@ -279,17 +279,29 @@ _gdk_win32_surface_procedure (HWND   hwnd,
                              LPARAM lparam)
 {
   LRESULT retval;
+  GdkWin32Display *display = NULL;
+  GdkSurface *surface = NULL;
+
+  if (message != WM_CREATE && message != WM_NCCREATE)
+    surface = GDK_SURFACE (GetWindowLongPtr (hwnd, GWLP_USERDATA));
+
+  if (surface != NULL)
+    display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
+  else
+    display = GDK_WIN32_DISPLAY (gdk_display_get_default ());
+
+  display->event_record->debug_indent_surface_events = display->event_record->debug_indent_surface_events;
 
   GDK_NOTE (EVENTS, g_print ("%s%*s%s %p %#" G_GINTPTR_MODIFIER "x %#" G_GINTPTR_MODIFIER "x",
-			     (debug_indent > 0 ? "\n" : ""),
-			     debug_indent, "",
+			     (display->event_record->debug_indent_surface_events > 0 ? "\n" : ""),
+			     display->event_record->debug_indent_surface_events, "",
 			     _gdk_win32_message_to_string (message), hwnd,
 			     wparam, lparam));
-  debug_indent += 2;
+  display->event_record->debug_indent_surface_events += 2;
   retval = inner_hwnd_procedure (hwnd, message, wparam, lparam);
-  debug_indent -= 2;
+  display->event_record->debug_indent_surface_events -= 2;
 
-  GDK_NOTE (EVENTS, g_print (" => %" G_GINT64_FORMAT "%s", (gint64) retval, (debug_indent == 0 ? "\n" : "")));
+  GDK_NOTE (EVENTS, g_print (" => %" G_GINT64_FORMAT "%s", (gint64) retval, (display->event_record->debug_indent_surface_events == 0 ? "\n" : "")));
 
   return retval;
 }
@@ -729,6 +741,9 @@ _gdk_win32_print_event (GdkEvent *event)
   GdkCrossingMode mode;
   GdkNotifyType detail;
   GdkScrollDirection direction;
+  GdkSurface *surface = gdk_event_get_surface (event);
+  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (gdk_event_get_surface (event)));
+  int debug_indent = display->event_record->debug_indent_surface_events;
 
   g_print ("%s%*s===> ", (debug_indent > 0 ? "\n" : ""), debug_indent, "");
   switch (gdk_event_get_event_type (event))
