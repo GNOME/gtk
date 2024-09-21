@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+.HEAD.he\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-09-03 20:22+0000\n"
-"PO-Revision-Date: 2024-09-05 15:43+0300\n"
+"POT-Creation-Date: 2024-09-19 01:06+0000\n"
+"PO-Revision-Date: 2024-09-21 22:39+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: Hebrew <yoseforb@gmail.com>\n"
 "Language: he\n"
@@ -54,13 +54,11 @@ msgstr "cicp: אין תמיכה במשתנים שלא צוינו"
 
 #: gdk/gdkcolorstate.c:724
 #, c-format
-#| msgid "Compressed icons are not supported"
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp: פונקציית ההעברה %u לא נתמכת"
 
 #: gdk/gdkcolorstate.c:754
 #, c-format
-#| msgid "Format %s not supported"
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: יסודות הצבע %u לא נתמכים"
 
@@ -79,31 +77,31 @@ msgstr "לא ניתן לספק תוכן בתור %s"
 msgid "The current backend does not support OpenGL"
 msgstr "המנשק הנוכחי אינו תומך ב־‏OpenGL"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1633
+#: gdk/gdkdisplay.c:1317 gdk/gdkvulkancontext.c:1668
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "התמיכה ב־Vulkan מושבתת דרך GDK_DISABLE"
 
-#: gdk/gdkdisplay.c:1369
+#: gdk/gdkdisplay.c:1371
 msgid "OpenGL support disabled via GDK_DISABLE"
 msgstr "התמיכה ב־OpenGL הושבתה דרך GDK_DISABLE"
 
-#: gdk/gdkdisplay.c:1683
+#: gdk/gdkdisplay.c:1685
 msgid "No EGL configuration available"
 msgstr "אין תצורת EGL זמינה"
 
-#: gdk/gdkdisplay.c:1691
+#: gdk/gdkdisplay.c:1693
 msgid "Failed to get EGL configurations"
 msgstr "קבלת תצורות EGL נכשלה"
 
-#: gdk/gdkdisplay.c:1721
+#: gdk/gdkdisplay.c:1723
 msgid "No EGL configuration with required features found"
 msgstr "לא נמצאה תצורת EGL עם היכולות הנדרשות"
 
-#: gdk/gdkdisplay.c:1728
+#: gdk/gdkdisplay.c:1730
 msgid "No perfect EGL configuration found"
 msgstr "לא נמצאה תצורת EGL מושלמת"
 
-#: gdk/gdkdisplay.c:1770
+#: gdk/gdkdisplay.c:1772
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -112,23 +110,23 @@ msgstr[1] "למימוש ה־EGL חסרות שתי הרחבות: %1$s"
 msgstr[2] "למימוש ה־EGL חסרות %2$d הרחבות: %1$s"
 msgstr[3] "למימוש ה־EGL חסרות %2$d הרחבות: %1$s"
 
-#: gdk/gdkdisplay.c:1819
+#: gdk/gdkdisplay.c:1821
 msgid "libEGL not available in this sandbox"
 msgstr "libEGL אינו זמין בארגז חול זה"
 
-#: gdk/gdkdisplay.c:1820
+#: gdk/gdkdisplay.c:1822
 msgid "libEGL not available"
 msgstr "‫libEGL לא זמין"
 
-#: gdk/gdkdisplay.c:1830
+#: gdk/gdkdisplay.c:1832
 msgid "Failed to create EGL display"
 msgstr "יצירת תצוגת EGL נכשלה"
 
-#: gdk/gdkdisplay.c:1839
+#: gdk/gdkdisplay.c:1841
 msgid "Could not initialize EGL display"
 msgstr "לא ניתן להפעיל תצוגת EGL"
 
-#: gdk/gdkdisplay.c:1849
+#: gdk/gdkdisplay.c:1851
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "גרסת ה־EGL‏ %d.%d ישנה מדי. GTK דורש %d.%d"
@@ -145,8 +143,8 @@ msgstr "אין תצורות תואמות להעברת תכנים."
 msgid "No GL API allowed."
 msgstr "אין GL API מאופשר."
 
-#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:694
-#: gdk/win32/gdkglcontext-win32-wgl.c:837 gdk/win32/gdkglcontext-win32-wgl.c:881
+#: gdk/gdkglcontext.c:455 gdk/win32/gdkglcontext-win32-wgl.c:723
+#: gdk/win32/gdkglcontext-win32-wgl.c:866 gdk/win32/gdkglcontext-win32-wgl.c:910
 #: gdk/x11/gdkglcontext-glx.c:697
 msgid "Unable to create a GL context"
 msgstr "Unable to create a GL context"
@@ -177,7 +175,7 @@ msgstr "מתבצע ניסיון להשתמש ב־%s אך %s כבר בשימוש"
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "מתבצע ניסיון להשתמש ב־%s, אך הוא מושבת על ידי GDK_DISABLE"
 
-#: gdk/gdktexture.c:661
+#: gdk/gdktexture.c:672
 msgid "Unknown image format."
 msgstr "תצורת התמונה אינה מוכרת."
 
@@ -739,21 +737,21 @@ msgstr "IDataObject_GetData (0x%x) נכשלה, הוחזר 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:624
+#: gdk/win32/gdkglcontext-win32-wgl.c:645
 msgid "No GL implementation is available"
 msgstr "אין מימוש GL זמין"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:703
+#: gdk/win32/gdkglcontext-win32-wgl.c:732
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "גרסת ה־WGL‏ %d.%d ישנה מדי. צריך לפחות %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:721
+#: gdk/win32/gdkglcontext-win32-wgl.c:750
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "מימוש GL לא יכול לשתף הקשרי GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1001
+#: gdk/win32/gdkglcontext-win32-wgl.c:1030
 msgid "No available configurations for the given pixel format"
 msgstr "לא סופקו הגדרות לתצורת הפיקסלים שסופקה"
 
@@ -866,7 +864,7 @@ msgstr "מימוש זה של GLES %d.%d לא תומך בנתוני קודקוד�
 msgid "OpenGL ES 3.0 is not supported by this renderer."
 msgstr "אין תמיכה ב־OpenGL ES 3.0 במנגנון העיבוד הזה."
 
-#: gsk/gpu/gsknglrenderer.c:68
+#: gsk/gpu/gsknglrenderer.c:69
 msgid "OpenGL 3.3 required"
 msgstr "צריך OpenGL 3.3"
 
@@ -1885,7 +1883,7 @@ msgstr "ייתכן שהטקסט לא יופיע בתוך <%s>"
 #. * first day of the week to calendar:week_start:1 if you want Monday
 #. * to be the first day of the week, and so on.
 #.
-#: gtk/gtkcalendar.c:666
+#: gtk/gtkcalendar.c:670
 msgid "calendar:week_start:0"
 msgstr "calendar:week_start:0"
 
@@ -1899,20 +1897,9 @@ msgstr "calendar:week_start:0"
 #. * text direction of RTL and specify "calendar:YM", then the year
 #. * will appear to the right of the month.
 #.
-#: gtk/gtkcalendar.c:817
+#: gtk/gtkcalendar.c:821
 msgid "calendar:MY"
 msgstr "calendar:YM"
-
-#. Translators: This dictates how the year is displayed in
-#. * gtkcalendar widget.  See strftime() manual for the format.
-#. * Use only ASCII in the translation.
-#. *
-#. * "%Y" is appropriate for most locales.
-#.
-#: gtk/gtkcalendar.c:1002
-msgctxt "calendar year format"
-msgid "%Y"
-msgstr "%Y"
 
 #. Translators: this defines whether the day numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1924,11 +1911,22 @@ msgstr "%Y"
 #. * digits. That needs support from your system and locale definition
 #. * too.
 #.
-#: gtk/gtkcalendar.c:1039
+#: gtk/gtkcalendar.c:1002
 #, c-format
 msgctxt "calendar:day:digits"
 msgid "%d"
 msgstr "%d"
+
+#. Translators: This dictates how the year is displayed in
+#. * gtkcalendar widget.  See strftime() manual for the format.
+#. * Use only ASCII in the translation.
+#. *
+#. * "%Y" is appropriate for most locales.
+#.
+#: gtk/gtkcalendar.c:1106
+msgctxt "calendar year format"
+msgid "%Y"
+msgstr "%Y"
 
 #. Translators: this defines whether the week numbers should use
 #. * localized digits or the ones used in English (0123...).
@@ -1938,7 +1936,7 @@ msgstr "%d"
 #. * Note that translating this doesn't guarantee that you get localized
 #. * digits. That needs support from your system and locale definition
 #. * too.
-#: gtk/gtkcalendar.c:1104
+#: gtk/gtkcalendar.c:1152
 #, c-format
 msgctxt "calendar:week:digits"
 msgid "%d"
@@ -2207,7 +2205,7 @@ msgid "Margins from Printer…"
 msgstr "שוליים מהמדפסת…"
 
 #. And show the custom paper dialog
-#: gtk/print/gtkcustompaperunixdialog.c:377 gtk/print/gtkprintunixdialog.c:2970
+#: gtk/print/gtkcustompaperunixdialog.c:377 gtk/print/gtkprintunixdialog.c:2975
 msgid "Manage Custom Sizes"
 msgstr "ניהול גדלים מותאמים"
 
@@ -2323,7 +2321,7 @@ msgid "A file with that name already exists"
 msgstr "קובץ בשם זה כבר קיים"
 
 #: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:5014
+#: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:5017
 #: gtk/gtkfiledialog.c:840 gtk/gtkmessagedialog.c:170 gtk/gtkmessagedialog.c:179
 #: gtk/gtkmountoperation.c:608 gtk/print/gtkpagesetupunixdialog.c:282
 #: gtk/print/gtkprintbackend.c:638 gtk/print/gtkprintunixdialog.c:682
@@ -2479,7 +2477,7 @@ msgid "Home"
 msgstr "תיקיית הבית"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2195 gtk/gtkfilechooserwidget.c:7436
+#: gtk/gtkfilechooserwidget.c:2195 gtk/gtkfilechooserwidget.c:7439
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "מיקום"
@@ -2502,8 +2500,8 @@ msgstr "בחיפוש"
 msgid "Enter location or URL"
 msgstr "הזנת מיקום או כתובת"
 
-#: gtk/gtkfilechooserwidget.c:3444 gtk/gtkfilechooserwidget.c:5801
-#: gtk/gtkfilechooserwidget.c:7458
+#: gtk/gtkfilechooserwidget.c:3444 gtk/gtkfilechooserwidget.c:5804
+#: gtk/gtkfilechooserwidget.c:7461
 msgid "Modified"
 msgstr "שונה"
 
@@ -2586,58 +2584,58 @@ msgstr "_כיווניות:מצגת"
 msgid "Spreadsheet"
 msgstr "גליון נתונים"
 
-#: gtk/gtkfilechooserwidget.c:5006 gtk/print/gtkprintunixdialog.c:673
+#: gtk/gtkfilechooserwidget.c:5009 gtk/print/gtkprintunixdialog.c:673
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "כבר קיים קובץ בשם „%s“. האם להחליפו?"
 
-#: gtk/gtkfilechooserwidget.c:5008 gtk/print/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:5011 gtk/print/gtkprintunixdialog.c:677
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr "הקובץ כבר קיים תחת „%s“. החלפתו תגרום לאיבוד תוכנו."
 
-#: gtk/gtkfilechooserwidget.c:5014 gtk/print/gtkprintunixdialog.c:685
+#: gtk/gtkfilechooserwidget.c:5017 gtk/print/gtkprintunixdialog.c:685
 msgid "_Replace"
 msgstr "ה_חלפה"
 
-#: gtk/gtkfilechooserwidget.c:5169
+#: gtk/gtkfilechooserwidget.c:5172
 msgid "You do not have access to the specified folder."
 msgstr "אין לך גישה לתיקייה המסוימת."
 
-#: gtk/gtkfilechooserwidget.c:5748
+#: gtk/gtkfilechooserwidget.c:5751
 msgid "Could not send the search request"
 msgstr "לא ניתן לשלוח את בקשת החיפוש"
 
-#: gtk/gtkfilechooserwidget.c:6029
+#: gtk/gtkfilechooserwidget.c:6032
 msgid "Accessed"
 msgstr "נצפה לאחרונה"
 
-#: gtk/gtkfilechooserwidget.c:7414
+#: gtk/gtkfilechooserwidget.c:7417
 msgid "_Size"
 msgstr "_גודל"
 
-#: gtk/gtkfilechooserwidget.c:7418
+#: gtk/gtkfilechooserwidget.c:7421
 msgid "T_ype"
 msgstr "_סוג"
 
-#: gtk/gtkfilechooserwidget.c:7422
+#: gtk/gtkfilechooserwidget.c:7425
 msgid "_Time"
 msgstr "_זמן"
 
-#: gtk/gtkfilechooserwidget.c:7428 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7431 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:396 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "שם"
 
-#: gtk/gtkfilechooserwidget.c:7445 gtk/inspector/resource-list.ui:82
+#: gtk/gtkfilechooserwidget.c:7448 gtk/inspector/resource-list.ui:82
 #: gtk/ui/gtkfontchooserwidget.ui:218 gtk/ui/gtkfontchooserwidget.ui:387
 msgid "Size"
 msgstr "גודל"
 
-#: gtk/gtkfilechooserwidget.c:7451 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7454 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "סוג"
@@ -3380,89 +3378,89 @@ msgstr "לא זמין"
 #. * jobs. %s gets replaced by the application name, %d gets replaced
 #. * by the job number.
 #.
-#: gtk/print/gtkprintoperation.c:252
+#: gtk/print/gtkprintoperation.c:255
 #, c-format
 msgid "%s job #%d"
 msgstr "משימת %s מס׳ %d"
 
-#: gtk/print/gtkprintoperation.c:1699
+#: gtk/print/gtkprintoperation.c:1702
 msgctxt "print operation status"
 msgid "Initial state"
 msgstr "מצב התחלתי"
 
-#: gtk/print/gtkprintoperation.c:1700
+#: gtk/print/gtkprintoperation.c:1703
 msgctxt "print operation status"
 msgid "Preparing to print"
 msgstr "בהכנה להדפסה"
 
-#: gtk/print/gtkprintoperation.c:1701
+#: gtk/print/gtkprintoperation.c:1704
 msgctxt "print operation status"
 msgid "Generating data"
 msgstr "נוצרים נתונים"
 
-#: gtk/print/gtkprintoperation.c:1702
+#: gtk/print/gtkprintoperation.c:1705
 msgctxt "print operation status"
 msgid "Sending data"
 msgstr "נשלחים נתונים"
 
-#: gtk/print/gtkprintoperation.c:1703
+#: gtk/print/gtkprintoperation.c:1706
 msgctxt "print operation status"
 msgid "Waiting"
 msgstr "בהמתנה"
 
-#: gtk/print/gtkprintoperation.c:1704
+#: gtk/print/gtkprintoperation.c:1707
 msgctxt "print operation status"
 msgid "Blocking on issue"
 msgstr "חסימה עקב תקלה"
 
-#: gtk/print/gtkprintoperation.c:1705
+#: gtk/print/gtkprintoperation.c:1708
 msgctxt "print operation status"
 msgid "Printing"
 msgstr "בהדפסה"
 
-#: gtk/print/gtkprintoperation.c:1706
+#: gtk/print/gtkprintoperation.c:1709
 msgctxt "print operation status"
 msgid "Finished"
 msgstr "הסתיים"
 
-#: gtk/print/gtkprintoperation.c:1707
+#: gtk/print/gtkprintoperation.c:1710
 msgctxt "print operation status"
 msgid "Finished with error"
 msgstr "הסתיים עם שגיאה"
 
-#: gtk/print/gtkprintoperation.c:2250
+#: gtk/print/gtkprintoperation.c:2254
 #, c-format
 msgid "Preparing %d"
 msgstr "בהכנה %d"
 
-#: gtk/print/gtkprintoperation.c:2252 gtk/print/gtkprintoperation.c:2871
+#: gtk/print/gtkprintoperation.c:2256 gtk/print/gtkprintoperation.c:2875
 #, c-format
 msgid "Preparing"
 msgstr "בהכנה"
 
-#: gtk/print/gtkprintoperation.c:2255
+#: gtk/print/gtkprintoperation.c:2259
 #, c-format
 msgid "Printing %d"
 msgstr "%d בהדפסה"
 
-#: gtk/print/gtkprintoperation.c:2904
+#: gtk/print/gtkprintoperation.c:2908
 #, c-format
 msgid "Error creating print preview"
 msgstr "שגיאה ביצירת תצוגה מקדימה"
 
-#: gtk/print/gtkprintoperation.c:2907
+#: gtk/print/gtkprintoperation.c:2911
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
 msgstr "הסיבה ההגיונית ביותר שבגללה לא ניתן היה ליצור קובץ זמני."
 
 #. window
-#: gtk/print/gtkprintoperation-portal.c:264
-#: gtk/print/gtkprintoperation-portal.c:594
-#: gtk/print/gtkprintoperation-portal.c:663 gtk/print/gtkprintunixdialog.c:3010
+#: gtk/print/gtkprintoperation-portal.c:273
+#: gtk/print/gtkprintoperation-portal.c:603
+#: gtk/print/gtkprintoperation-portal.c:672 gtk/print/gtkprintunixdialog.c:3015
 msgid "Print"
 msgstr "הדפסה"
 
-#: gtk/print/gtkprintoperation-unix.c:481
+#: gtk/print/gtkprintoperation-unix.c:490
 #: gtk/print/gtkprintoperation-win32.c:1505
 msgid "Application"
 msgstr "יישום"
@@ -3533,11 +3531,11 @@ msgstr "_תצוגה מקדימה"
 msgid "_Print"
 msgstr "ה_דפסה"
 
-#: gtk/print/gtkprintunixdialog.c:961
+#: gtk/print/gtkprintunixdialog.c:966
 msgid "Getting printer information failed"
 msgstr "קבלת נתוני המדפסת נכשלה"
 
-#: gtk/print/gtkprintunixdialog.c:1885
+#: gtk/print/gtkprintunixdialog.c:1890
 msgid "Getting printer information…"
 msgstr "נתוני המדפסת מתקבלים…"
 
@@ -3547,63 +3545,63 @@ msgstr "נתוני המדפסת מתקבלים…"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/print/gtkprintunixdialog.c:2755
+#: gtk/print/gtkprintunixdialog.c:2760
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, top to bottom"
 msgstr "שמאל לימין, מלמעלה למטה"
 
-#: gtk/print/gtkprintunixdialog.c:2755
+#: gtk/print/gtkprintunixdialog.c:2760
 #: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, bottom to top"
 msgstr "שמאל לימין, מלמטה למעלה"
 
-#: gtk/print/gtkprintunixdialog.c:2756
+#: gtk/print/gtkprintunixdialog.c:2761
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, top to bottom"
 msgstr "ימין לשמאל, מלמעלה למטה"
 
-#: gtk/print/gtkprintunixdialog.c:2756
+#: gtk/print/gtkprintunixdialog.c:2761
 #: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, bottom to top"
 msgstr "ימין לשמאל, מלמטה למעלה"
 
-#: gtk/print/gtkprintunixdialog.c:2757
+#: gtk/print/gtkprintunixdialog.c:2762
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, left to right"
 msgstr "מלמעלה למטה, משמאל לימין"
 
-#: gtk/print/gtkprintunixdialog.c:2757
+#: gtk/print/gtkprintunixdialog.c:2762
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, right to left"
 msgstr "מלמעלה למטה, מימין לשמאל"
 
-#: gtk/print/gtkprintunixdialog.c:2758
+#: gtk/print/gtkprintunixdialog.c:2763
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, left to right"
 msgstr "מלמטה למעלה, משמאל לימין"
 
-#: gtk/print/gtkprintunixdialog.c:2758
+#: gtk/print/gtkprintunixdialog.c:2763
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, right to left"
 msgstr "מלמטה למעלה, מימין לשמאל"
 
-#: gtk/print/gtkprintunixdialog.c:2762 gtk/print/gtkprintunixdialog.c:2775
+#: gtk/print/gtkprintunixdialog.c:2767 gtk/print/gtkprintunixdialog.c:2780
 msgid "Page Ordering"
 msgstr "סדר דפים"
 
-#: gtk/print/gtkprintunixdialog.c:2791
+#: gtk/print/gtkprintunixdialog.c:2796
 msgid "Left to right"
 msgstr "שמאל לימין"
 
-#: gtk/print/gtkprintunixdialog.c:2792
+#: gtk/print/gtkprintunixdialog.c:2797
 msgid "Right to left"
 msgstr "ימין לשמאל"
 
-#: gtk/print/gtkprintunixdialog.c:2804
+#: gtk/print/gtkprintunixdialog.c:2809
 msgid "Top to bottom"
 msgstr "מלמעלה למטה"
 
-#: gtk/print/gtkprintunixdialog.c:2805
+#: gtk/print/gtkprintunixdialog.c:2810
 msgid "Bottom to top"
 msgstr "מלמטה למעלה"
 
@@ -3934,32 +3932,32 @@ msgctxt "GL version"
 msgid "None"
 msgstr "ללא"
 
-#: gtk/inspector/general.c:465
+#: gtk/inspector/general.c:464
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "לא ידוע"
 
-#: gtk/inspector/general.c:527
+#: gtk/inspector/general.c:526
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "מושבת"
 
-#: gtk/inspector/general.c:528 gtk/inspector/general.c:529
+#: gtk/inspector/general.c:527 gtk/inspector/general.c:528
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "מושבת"
 
-#: gtk/inspector/general.c:580
+#: gtk/inspector/general.c:579
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "ללא"
 
-#: gtk/inspector/general.c:581 gtk/inspector/general.c:582
+#: gtk/inspector/general.c:580 gtk/inspector/general.c:581
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "ללא"
 
-#: gtk/inspector/general.c:935
+#: gtk/inspector/general.c:934
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "‏IM Context קשיחה בקוד על ידי GTK_IM_MODULE"
 
@@ -7181,37 +7179,37 @@ msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "לא זמין"
 
-#: modules/printbackends/gtkprintbackendfile.c:238
+#: modules/printbackends/gtkprintbackendfile.c:263
 msgid "output"
 msgstr "פלט"
 
-#: modules/printbackends/gtkprintbackendfile.c:510
+#: modules/printbackends/gtkprintbackendfile.c:543
 msgid "Print to File"
 msgstr "הדפסה לקובץ"
 
-#: modules/printbackends/gtkprintbackendfile.c:636
+#: modules/printbackends/gtkprintbackendfile.c:675
 msgid "PDF"
 msgstr "PDF"
 
-#: modules/printbackends/gtkprintbackendfile.c:636
+#: modules/printbackends/gtkprintbackendfile.c:675
 msgid "PostScript"
 msgstr "PostScript"
 
-#: modules/printbackends/gtkprintbackendfile.c:636
+#: modules/printbackends/gtkprintbackendfile.c:675
 msgid "SVG"
 msgstr "SVG"
 
-#: modules/printbackends/gtkprintbackendfile.c:649
+#: modules/printbackends/gtkprintbackendfile.c:688
 msgid "Pages per _sheet:"
 msgstr "מספר העמודים ב_גיליון:"
 
 # hebrew note: "תיקייה" is "folder", but there is no better word for
 # "directory"
-#: modules/printbackends/gtkprintbackendfile.c:709
+#: modules/printbackends/gtkprintbackendfile.c:758
 msgid "File"
 msgstr "קובץ"
 
-#: modules/printbackends/gtkprintbackendfile.c:719
+#: modules/printbackends/gtkprintbackendfile.c:768
 msgid "_Output format"
 msgstr "_תצורת הפלט"
 
@@ -7292,7 +7290,7 @@ msgstr ""
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
-#: tools/gtk-builder-tool-simplify.c:2529 tools/gtk-builder-tool-validate.c:261
+#: tools/gtk-builder-tool-simplify.c:2623 tools/gtk-builder-tool-validate.c:261
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:68
 #: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
 #: tools/gtk-rendernode-tool-extract.c:294 tools/gtk-rendernode-tool-info.c:226
@@ -7329,7 +7327,7 @@ msgstr "להשתמש בסגנון מקובץ CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268
-#: tools/gtk-rendernode-tool-benchmark.c:106
+#: tools/gtk-rendernode-tool-benchmark.c:108
 #: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:123
 #, c-format
 msgid "Could not initialize windowing system\n"
@@ -7340,7 +7338,7 @@ msgid "Preview the file."
 msgstr "הצגה מקדימה של הקובץ."
 
 #: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
-#: tools/gtk-builder-tool-simplify.c:2552 tools/gtk-builder-tool-validate.c:287
+#: tools/gtk-builder-tool-simplify.c:2646 tools/gtk-builder-tool-validate.c:287
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "לא צוין קובץ ‎.ui\n"
@@ -7400,7 +7398,7 @@ msgstr "שכתוב קובץ קיים"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
 #: tools/gtk-image-tool-convert.c:89 tools/gtk-image-tool-relabel.c:86
-#: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:97
+#: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:99
 #: tools/gtk-rendernode-tool-render.c:255
 msgid "FILE…"
 msgstr "FILE…"
@@ -7439,51 +7437,56 @@ msgstr "מאפיין התא %s לא נמצא"
 msgid "Layout property %s not found"
 msgstr "מאפיין הפריסה %s לא נמצא"
 
-#: tools/gtk-builder-tool-simplify.c:1397
+#: tools/gtk-builder-tool-simplify.c:1400
 #, c-format
 msgid "%s only accepts three children"
 msgstr "%s מקבל שלושה צאצאים בלבד"
 
-#: tools/gtk-builder-tool-simplify.c:2455
+#: tools/gtk-builder-tool-simplify.c:1773
+#, c-format
+msgid "%s only accepts one center child"
+msgstr "%s מקבל צאצא אמצעי אחד בלבד"
+
+#: tools/gtk-builder-tool-simplify.c:2549
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr ""
 "לא ניתן לטעון את „%s”: %s\n"
 "‬\n"
 
-#: tools/gtk-builder-tool-simplify.c:2466 tools/gtk-builder-tool-simplify.c:2472
-#: tools/gtk-builder-tool-simplify.c:2478
+#: tools/gtk-builder-tool-simplify.c:2560 tools/gtk-builder-tool-simplify.c:2566
+#: tools/gtk-builder-tool-simplify.c:2572
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr ""
 "לא ניתן לפענח את „%s”: %s\n"
 "‬\n"
 
-#: tools/gtk-builder-tool-simplify.c:2504
+#: tools/gtk-builder-tool-simplify.c:2598
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr ""
 "הקריאה של „%s” נכשלה: %s\n"
 "‬\n"
 
-#: tools/gtk-builder-tool-simplify.c:2510
+#: tools/gtk-builder-tool-simplify.c:2604
 #, c-format
 msgid "Failed to write “%s”: “%s”\n"
 msgstr "הכתיבה של %s נכשלה: „%s”\n"
 
-#: tools/gtk-builder-tool-simplify.c:2527
+#: tools/gtk-builder-tool-simplify.c:2621
 msgid "Replace the file"
 msgstr "החלפת הקובץ"
 
-#: tools/gtk-builder-tool-simplify.c:2528
+#: tools/gtk-builder-tool-simplify.c:2622
 msgid "Convert from GTK 3 to GTK 4"
 msgstr "המרה מ־GTK 3 ל־GTK 4"
 
-#: tools/gtk-builder-tool-simplify.c:2539
+#: tools/gtk-builder-tool-simplify.c:2633
 msgid "Simplify the file."
 msgstr "פישוט הקובץ."
 
-#: tools/gtk-builder-tool-simplify.c:2558
+#: tools/gtk-builder-tool-simplify.c:2652
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Can only simplify a single .ui file without --replace\n"
@@ -8081,39 +8084,39 @@ msgstr ""
 "  render       צילום הצומת\n"
 "\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-benchmark.c:96
 msgid "Add renderer to benchmark"
 msgstr "הוספת מנגנון עיבוד למדידת ביצועים"
 
-#: tools/gtk-rendernode-tool-benchmark.c:94
+#: tools/gtk-rendernode-tool-benchmark.c:96
 #: tools/gtk-rendernode-tool-compare.c:65 tools/gtk-rendernode-tool-render.c:254
 msgid "RENDERER"
 msgstr "מעבד תצוגה"
 
-#: tools/gtk-rendernode-tool-benchmark.c:95
+#: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "Number of runs with each renderer"
 msgstr "מספר ההרצות עם כל מנגנון עיבוד"
 
-#: tools/gtk-rendernode-tool-benchmark.c:95
+#: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "RUNS"
 msgstr "הרצות"
 
-#: tools/gtk-rendernode-tool-benchmark.c:96
+#: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "Don’t download result/wait for GPU to finish"
 msgstr "לא להוריד תוצאות/להמתין לסיום המעבד הגרפי"
 
-#: tools/gtk-rendernode-tool-benchmark.c:114
+#: tools/gtk-rendernode-tool-benchmark.c:116
 msgid "Benchmark rendering of a .node file."
 msgstr "מדידת ביצועים על עיבוד קובץ ‎.node."
 
-#: tools/gtk-rendernode-tool-benchmark.c:127
+#: tools/gtk-rendernode-tool-benchmark.c:129
 #: tools/gtk-rendernode-tool-extract.c:316 tools/gtk-rendernode-tool-info.c:248
 #: tools/gtk-rendernode-tool-render.c:283 tools/gtk-rendernode-tool-show.c:144
 #, c-format
 msgid "No .node file specified\n"
 msgstr "לא צוין קובץ ‎.node\n"
 
-#: tools/gtk-rendernode-tool-benchmark.c:133
+#: tools/gtk-rendernode-tool-benchmark.c:135
 #, c-format
 msgid "Can only benchmark a single .node file\n"
 msgstr "יכול למדוד ביצועים רק לקובץ ‎.node בודד\n"
