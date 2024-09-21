@@ -1387,8 +1387,6 @@ get_layout_location (GtkLabel  *self,
 
   pango_layout_get_pixel_extents (self->layout, NULL, &logical);
   x = floor ((xalign * (widget_width - logical.width)) - logical.x);
-  if (x < 0)
-    x = 0.f;
 
   baseline = gtk_widget_get_baseline (widget);
   if (baseline != -1)
