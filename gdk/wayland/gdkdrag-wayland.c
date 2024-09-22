@@ -250,8 +250,13 @@ data_source_send (void                  *data,
                      "%p: data source send request for %s on fd %d\n",
                      source, mime_type, fd);
 
-  //mime_type = gdk_intern_mime_type (mime_type);
-  mime_type = g_intern_string (mime_type);
+  mime_type = gdk_intern_mime_type (mime_type);
+  if (!mime_type)
+    {
+      close (fd);
+      return;
+    }
+
   stream = g_unix_output_stream_new (fd, TRUE);
 
   gdk_drag_write_async (drag,

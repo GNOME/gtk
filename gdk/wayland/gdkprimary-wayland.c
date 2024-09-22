@@ -227,6 +227,12 @@ gdk_wayland_primary_data_source_send (void                                   *da
                      source, mime_type, fd);
 
   mime_type = gdk_intern_mime_type (mime_type);
+  if (!mime_type)
+    {
+      close (fd);
+      return;
+    }
+
   stream = g_unix_output_stream_new (fd, TRUE);
 
   gdk_clipboard_write_async (GDK_CLIPBOARD (cb),
