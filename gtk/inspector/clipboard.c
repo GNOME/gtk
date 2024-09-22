@@ -242,18 +242,26 @@ add_content_type_row (GtkInspectorClipboard *self,
 }
 
 static void
+clear_formats (GtkInspectorClipboard *self,
+               GtkListBox            *list)
+{
+  GtkListBoxRow *row;
+
+  while ((row = gtk_list_box_get_row_at_index (list, 1)))
+    gtk_list_box_remove (list, GTK_WIDGET (row));
+}
+
+static void
 init_formats (GtkInspectorClipboard *self,
               GtkListBox            *list,
               GdkContentFormats     *formats,
               GObject               *data_source)
 {
-  GtkListBoxRow *row;
   const char * const *mime_types;
   const GType *gtypes;
   gsize i, n;
 
-  while ((row = gtk_list_box_get_row_at_index (list, 1)))
-    gtk_list_box_remove (list, GTK_WIDGET (row));
+  clear_formats (self, list);
 
   gtypes = gdk_content_formats_get_gtypes (formats, &n);
   for (i = 0; i < n; i++)
@@ -312,12 +320,23 @@ primary_notify (GdkClipboard          *clipboard,
 }
 
 static void
+drop_done (gpointer data,
+           GObject *object)
+{
+  GtkInspectorClipboard *self = data;
+
+  clear_formats (self, GTK_LIST_BOX (self->dnd_formats));
+}
+
+static void
 on_drop_enter (GtkDropControllerMotion *motion,
                double                   x,
                double                   y,
                GtkInspectorClipboard   *self)
 {
   GdkDrop *drop = gtk_drop_controller_motion_get_drop (motion);
+
+  g_object_weak_ref (G_OBJECT (drop), drop_done, self);
 
   init_formats (self, GTK_LIST_BOX (self->dnd_formats), gdk_drop_get_formats (drop), G_OBJECT (drop));
 
