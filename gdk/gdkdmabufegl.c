@@ -229,6 +229,7 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
 typedef struct _GskRenderer GskRenderer;
 
 extern GskRenderer *   gsk_gl_renderer_new                      (void);
+extern GskRenderer *   gsk_ngl_renderer_new                     (void);
 extern gboolean        gsk_renderer_realize_for_display         (GskRenderer  *renderer,
                                                                  GdkDisplay   *display,
                                                                  GError      **error);
@@ -272,7 +273,7 @@ gdk_dmabuf_egl_init (GdkDisplay *display)
       return;
     }
 
-  renderer = gsk_gl_renderer_new ();
+  renderer = gsk_ngl_renderer_new ();
 
   if (!gsk_renderer_realize_for_display (renderer, display, &error))
     {
