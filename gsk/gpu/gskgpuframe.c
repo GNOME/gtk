@@ -11,13 +11,19 @@
 #include "gskgpuopprivate.h"
 #include "gskgpurendererprivate.h"
 #include "gskgpuuploadopprivate.h"
+#include "gskgpurenderpassopprivate.h"
+#include "gskgputextureopprivate.h"
+#include "gskgpuconvertopprivate.h"
+#include "gskgpuconvertcicpopprivate.h"
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
+#include "gskrendernodeprivate.h"
 
 #include "gdk/gdkdmabufdownloaderprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
+#include "gdk/gdktextureprivate.h"
 
 #define DEFAULT_VERTEX_BUFFER_SIZE 128 * 1024
 
@@ -761,6 +767,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuImage *image;
+  GdkColorState *texture_color_state;
 
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
@@ -776,6 +783,14 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
 
   gsk_gpu_frame_cleanup (self);
 
+  texture_color_state = gdk_texture_get_color_state (texture);
+
+  if (format != gdk_texture_get_format (texture) ||
+      !gdk_color_state_equal (color_state, texture_color_state))
+    {
+      image = gsk_gpu_copy_image (self, color_state, image, texture_color_state, FALSE);
+    }
+
   gsk_gpu_download_op (self,
                        image,
                        FALSE,
@@ -788,5 +803,6 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                        }, sizeof (Download)));
 
   gsk_gpu_frame_submit (self, GSK_RENDER_PASS_EXPORT);
+
   g_object_unref (image);
 }
