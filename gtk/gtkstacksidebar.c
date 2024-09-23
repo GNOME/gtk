@@ -64,6 +64,7 @@ struct _GtkStackSidebar
   GtkListBox *list;
   GtkStack *stack;
   GtkSelectionModel *pages;
+  /* HashTable<ref GtkStackPage, GtkListBoxRow> */
   GHashTable *rows;
 };
 
@@ -162,7 +163,7 @@ gtk_stack_sidebar_init (GtkStackSidebar *self)
 
   gtk_widget_add_css_class (GTK_WIDGET (self), "sidebar");
 
-  self->rows = g_hash_table_new (NULL, NULL);
+  self->rows = g_hash_table_new_full (NULL, NULL, g_object_unref, NULL);
 }
 
 static void
@@ -239,7 +240,7 @@ add_child (guint            position,
 
   g_signal_connect (page, "notify", G_CALLBACK (on_page_updated), self);
 
-  g_hash_table_insert (self->rows, page, row);
+  g_hash_table_insert (self->rows, g_object_ref (page), row);
 
   g_object_unref (page);
 }
@@ -264,9 +265,10 @@ clear_sidebar (GtkStackSidebar *self)
   g_hash_table_iter_init (&iter, self->rows);
   while (g_hash_table_iter_next (&iter, (gpointer *)&page, (gpointer *)&row))
     {
-      gtk_list_box_remove (GTK_LIST_BOX (self->list), row);
-      g_hash_table_iter_remove (&iter);
       g_signal_handlers_disconnect_by_func (page, on_page_updated, self);
+      gtk_list_box_remove (GTK_LIST_BOX (self->list), row);
+      /* This will unref page, but it is safe now: */
+      g_hash_table_iter_remove (&iter);
     }
 }
 
