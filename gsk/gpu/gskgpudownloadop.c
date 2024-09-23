@@ -358,9 +358,6 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
                                                 gsk_gl_texture_data_free,
                                                 data);
 
-  gsk_gpu_image_toggle_ref_texture (self->image, self->texture);
-  gsk_gl_image_steal_texture_ownership (GSK_GL_IMAGE (self->image));
-
   g_object_unref (builder);
 
   return op->next;
