@@ -46,7 +46,7 @@ gsk_gl_image_finalize (GObject *object)
   if (self->texture_id && self->framebuffer_id)
     glDeleteFramebuffers (1, &self->framebuffer_id);
 
-  if (gsk_gpu_image_get_flags (GSK_GPU_IMAGE (self)) & GSK_GPU_IMAGE_TOGGLE_REF)
+  if (self->owns_texture)
     glDeleteTextures (1, &self->texture_id);
 
   G_OBJECT_CLASS (gsk_gl_image_parent_class)->finalize (object);
