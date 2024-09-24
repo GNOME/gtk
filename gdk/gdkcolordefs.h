@@ -20,6 +20,9 @@
  * and tests, and must not include other headers.
  */
 
+#include <glib.h>
+#include <math.h>
+
 static inline int
 sign (float v)
 {
