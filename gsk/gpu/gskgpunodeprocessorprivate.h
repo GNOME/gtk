@@ -13,10 +13,4 @@ void                    gsk_gpu_node_processor_process                  (GskGpuF
                                                                          const graphene_rect_t          *viewport,
                                                                          GskRenderPassType               pass_type);
 
-GskGpuImage * gsk_gpu_copy_image (GskGpuFrame   *frame,
-                                  GdkColorState *ccs,
-                                  GskGpuImage   *image,
-                                  GdkColorState *image_cs,
-                                  gboolean       prepare_mipmap);
-
 G_END_DECLS
