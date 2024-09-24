@@ -1,5 +1,42 @@
-Overview of Changes in 4.16.2, xx-xx-xxxx
+Overview of Changes in 4.16.2, 09-25-2024
 =========================================
+
+* GtkLabel:
+ - Fix centered text in RTL
+
+* Gsk:
+ - Speed up some Vulkan operations
+ - Improve startup speed by avoiding initialization
+   of GL and Vulkan in most cases
+ - Reduce critials at startup to warnings
+ - Fix a crash on startup with some Vulkan drivers
+ - Fix a big texture leak in NGL
+
+* Gdk:
+ - Speed up memory format conversions
+
+* Wayland:
+ - Be more careful with mimetypes during DND or copy-paste
+
+* Tools:
+ - builder-tool: Improve conversion of boxes
+
+* Translation updates:
+ Brazilian Portuguese
+ Bulgarian
+ Catalan
+ Chinese (China)
+ Georgian
+ German
+ Hebrew
+ Indonesian
+ Persian
+ Polish
+ Portuguese
+ Slovenian
+ Spanish
+ Turkish
+ Ukrainian
 
 
 Overview of Changes in 4.16.1, 09-16-2024
