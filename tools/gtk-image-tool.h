@@ -1,5 +1,6 @@
-
 #pragma once
+
+#include <gdk/gdk.h>
 
 void do_compare     (int *argc, const char ***argv);
 void do_convert     (int *argc, const char ***argv);

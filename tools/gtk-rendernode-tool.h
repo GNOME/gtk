@@ -1,5 +1,6 @@
-
 #pragma once
+
+#include <gsk/gsk.h>
 
 void do_benchmark   (int *argc, const char ***argv);
 void do_compare     (int *argc, const char ***argv);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <gsk/gsk.h>
+
 void do_info      (int *argc, const char ***argv);
 void do_decompose (int *argc, const char ***argv);
 void do_restrict  (int *argc, const char ***argv);
