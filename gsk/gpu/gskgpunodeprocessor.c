@@ -683,7 +683,7 @@ gsk_gpu_get_node_as_image_via_offscreen (GskGpuFrame           *frame,
 }
 
 /*
- * gsk_gpu_node_copy_image:
+ * gsk_gpu_copy_image:
  * @frame: The frame the image will be copied in
  * @ccs: color state the copy will be in
  * @image: (transfer full): The image to copy
@@ -695,7 +695,7 @@ gsk_gpu_get_node_as_image_via_offscreen (GskGpuFrame           *frame,
  *
  * Returns: (transfer full): The copy of the image.
  **/
-static GskGpuImage *
+GskGpuImage *
 gsk_gpu_copy_image (GskGpuFrame   *frame,
                     GdkColorState *ccs,
                     GskGpuImage   *image,
