@@ -70,5 +70,9 @@ GDK_AVAILABLE_IN_ALL
 const char *    gtk_string_list_get_string      (GtkStringList         *self,
                                                  guint                  position);
 
+GDK_AVAILABLE_IN_4_18
+guint           gtk_string_list_find            (GtkStringList         *self,
+                                                 const char            *string);
+
 G_END_DECLS
 
