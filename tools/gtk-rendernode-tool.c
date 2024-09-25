@@ -99,8 +99,6 @@ main (int argc, const char *argv[])
 
   gtk_init_check ();
 
-  gtk_test_register_all_types ();
-
   if (argc < 2)
     usage ();
 
