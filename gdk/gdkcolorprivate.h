@@ -79,8 +79,8 @@ void              gdk_color_init_from_rgba      (GdkColor               *self,
                                                  const GdkRGBA          *rgba);
 void              gdk_color_finish              (GdkColor               *self);
 
-gboolean          gdk_color_equal               (const GdkColor         *color1,
-                                                 const GdkColor         *color2);
+gboolean          gdk_color_equal               (const GdkColor         *self,
+                                                 const GdkColor         *other);
 gboolean          gdk_color_is_clear            (const GdkColor         *self);
 gboolean          gdk_color_is_opaque           (const GdkColor         *self);
 

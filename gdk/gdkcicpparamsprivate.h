@@ -79,6 +79,6 @@ gdk_cicp_equivalent (const GdkCicp *p1,
   return gdk_cicp_equal (&n1, &n2);
 }
 
-const GdkCicp * gdk_cicp_params_get_cicp (GdkCicpParams *params);
+const GdkCicp * gdk_cicp_params_get_cicp (GdkCicpParams *self);
 
 GdkCicpParams * gdk_cicp_params_new_for_cicp (const GdkCicp  *cicp);
