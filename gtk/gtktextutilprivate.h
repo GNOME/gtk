@@ -24,9 +24,9 @@
 
 #pragma once
 
-G_BEGIN_DECLS
-
 #include "gtktextbuffer.h"
+
+G_BEGIN_DECLS
 
 /* This is a private uninstalled header shared between
  * GtkTextView and GtkEntry
