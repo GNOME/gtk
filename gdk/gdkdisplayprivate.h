@@ -240,15 +240,15 @@ GdkVulkanContext *  gdk_display_create_vulkan_context (GdkDisplay       *self,
                                                        GdkSurface       *surface,
                                                        GError          **error);
 
-GdkGLContext *      gdk_display_get_gl_context        (GdkDisplay       *display);
+GdkGLContext *      gdk_display_get_gl_context        (GdkDisplay       *self);
 
-gboolean            gdk_display_init_egl              (GdkDisplay       *display,
+gboolean            gdk_display_init_egl              (GdkDisplay       *self,
                                                        int /*EGLenum*/   platform,
                                                        gpointer          native_display,
                                                        gboolean          allow_any,
                                                        GError          **error);
-gpointer            gdk_display_get_egl_display       (GdkDisplay       *display);
-gpointer            gdk_display_get_egl_config        (GdkDisplay       *display,
+gpointer            gdk_display_get_egl_display       (GdkDisplay       *self);
+gpointer            gdk_display_get_egl_config        (GdkDisplay       *self,
                                                        GdkMemoryDepth    depth);
 
 void                gdk_display_set_rgba              (GdkDisplay       *display,
@@ -289,7 +289,7 @@ void gdk_display_set_double_click_time     (GdkDisplay   *display,
 void gdk_display_set_double_click_distance (GdkDisplay   *display,
                                             guint         distance);
 void gdk_display_set_cursor_theme          (GdkDisplay   *display,
-                                            const char   *theme,
+                                            const char   *name,
                                             int           size);
 
 G_END_DECLS

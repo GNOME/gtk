@@ -25,11 +25,11 @@ struct _GdkDmabufDownloaderInterface
                                                                  gsize                           stride);
 };
 
-void                    gdk_dmabuf_downloader_close             (GdkDmabufDownloader            *downloader);
-gboolean                gdk_dmabuf_downloader_supports          (GdkDmabufDownloader            *downloader,
+void                    gdk_dmabuf_downloader_close             (GdkDmabufDownloader            *self);
+gboolean                gdk_dmabuf_downloader_supports          (GdkDmabufDownloader            *self,
                                                                  GdkDmabufTexture               *texture,
                                                                  GError                        **error);
-void                    gdk_dmabuf_downloader_download          (GdkDmabufDownloader            *downloader,
+void                    gdk_dmabuf_downloader_download          (GdkDmabufDownloader            *self,
                                                                  GdkDmabufTexture               *texture,
                                                                  GdkMemoryFormat                 format,
                                                                  GdkColorState                  *color_state,
