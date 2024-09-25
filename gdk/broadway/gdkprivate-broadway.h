@@ -56,7 +56,7 @@ void     _gdk_broadway_surface_translate          (GdkSurface *surface,
                                                    int        dx,
                                                    int        dy);
 gboolean _gdk_broadway_moveresize_handle_event    (GdkDisplay *display,
-                                                   BroadwayInputMsg *msg);
+                                                   BroadwayInputMsg *event);
 gboolean _gdk_broadway_moveresize_configure_done  (GdkDisplay *display,
                                                    GdkSurface  *surface);
 void     _gdk_broadway_roundtrip_notify           (GdkSurface  *surface,
