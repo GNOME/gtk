@@ -560,6 +560,8 @@ gtk_list_box_class_init (GtkListBoxClass *klass)
                            * GtkListBox:tab-behavior:
                            * 
                            * Behavior of the <kbd>Tab</kbd> key
+                           *
+                           * Since: 4.18 
                            */
                           properties[PROP_TAB_BEHAVIOR] =
                             g_param_spec_enum ("tab-behavior", NULL, NULL,
@@ -3894,22 +3896,22 @@ gtk_list_box_get_show_separators (GtkListBox *box)
 /**
  * gtk_list_box_set_tab_behavior:
  * @box: a `GtkListBox`
- * @tab_behavior: the tab behavior
+ * @behavior: the tab behavior
  * 
  * Sets the behavior of the <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> keys.
  *
  * Since: 4.18
  */
 void
-gtk_list_box_set_tab_behavior (GtkListBox       *box,
-                               GtkListTabBehavior tab_behavior)
+gtk_list_box_set_tab_behavior (GtkListBox         *box,
+                               GtkListTabBehavior  behavior)
 {
   g_return_if_fail (GTK_IS_LIST_BOX (box));
 
-  if (box->tab_behavior == tab_behavior)
+  if (box->tab_behavior == behavior)
     return;
 
-  box->tab_behavior = tab_behavior;
+  box->tab_behavior = behavior;
 
   g_object_notify_by_pspec (G_OBJECT (box), properties[PROP_TAB_BEHAVIOR]);
 }
@@ -3921,6 +3923,7 @@ gtk_list_box_set_tab_behavior (GtkListBox       *box,
  * Returns the behavior of the <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> keys.
  *
  * Returns: the tab behavior
+ * 
  * Since: 4.18
  */
 GtkListTabBehavior
