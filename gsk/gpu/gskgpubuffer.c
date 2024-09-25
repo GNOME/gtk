@@ -52,11 +52,11 @@ gsk_gpu_buffer_map (GskGpuBuffer *self)
 
 void
 gsk_gpu_buffer_unmap (GskGpuBuffer *self,
-                      gsize         size)
+                      gsize         used)
 {
-  GSK_GPU_BUFFER_GET_CLASS (self)->unmap (self, size);
+  GSK_GPU_BUFFER_GET_CLASS (self)->unmap (self, used);
 
-  profiler_buffer_uploads += size;
+  profiler_buffer_uploads += used;
   gdk_profiler_set_int_counter (profiler_buffer_uploads_id, profiler_buffer_uploads);
 }
 

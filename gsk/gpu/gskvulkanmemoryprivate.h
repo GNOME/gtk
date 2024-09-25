@@ -44,8 +44,8 @@ static inline void      gsk_vulkan_free                                 (GskVulk
                                                                          GskVulkanAllocation            *alloc);
 
 static inline GskVulkanAllocator *
-                        gsk_vulkan_allocator_ref                        (GskVulkanAllocator             *allocator);
-static inline void      gsk_vulkan_allocator_unref                      (GskVulkanAllocator             *allocator);
+                        gsk_vulkan_allocator_ref                        (GskVulkanAllocator             *self);
+static inline void      gsk_vulkan_allocator_unref                      (GskVulkanAllocator             *self);
 
 GskVulkanAllocator *    gsk_vulkan_direct_allocator_new                 (VkDevice                        device,
                                                                          uint32_t                        vk_type_index,
