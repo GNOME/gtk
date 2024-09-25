@@ -190,50 +190,53 @@ gdk_gl_texture_find_format (GdkGLContext    *context,
   return FALSE;
 }
 
-static inline void
-gdk_gl_texture_do_download (GdkGLTexture *self,
-                            GdkGLContext *context,
-                            gpointer      download_)
+static void
+gdk_gl_context_download (GdkGLContext    *context,
+                         GLuint           tex_id,
+                         GdkMemoryFormat  tex_format,
+                         GdkColorState   *tex_color_state,
+                         guchar          *dest_data,
+                         gsize            dest_stride,
+                         GdkMemoryFormat  dest_format,
+                         GdkColorState   *dest_color_state,
+                         gsize            width,
+                         gsize            height)
 {
-  GdkTexture *texture = GDK_TEXTURE (self);
-  GdkMemoryFormat format;
   gsize expected_stride;
-  Download *download = download_;
   GLint gl_internal_format, gl_internal_srgb_format;
   GLenum gl_format, gl_type;
   GLint gl_swizzle[4];
 
-  format = gdk_texture_get_format (texture),
-  expected_stride = texture->width * gdk_memory_format_bytes_per_pixel (download->format);
+  expected_stride = width * gdk_memory_format_bytes_per_pixel (dest_format);
 
   if (!gdk_gl_context_get_use_es (context) &&
-      ((gdk_gl_context_get_format_flags (context, format) & GDK_GL_FORMAT_USABLE) == GDK_GL_FORMAT_USABLE))
+      ((gdk_gl_context_get_format_flags (context, tex_format) & GDK_GL_FORMAT_USABLE) == GDK_GL_FORMAT_USABLE))
     {
-      gdk_memory_format_gl_format (format,
+      gdk_memory_format_gl_format (tex_format,
                                    gdk_gl_context_get_use_es (context),
                                    &gl_internal_format, &gl_internal_srgb_format,
                                    &gl_format, &gl_type, gl_swizzle);
-      if (download->stride == expected_stride &&
-          download->format == format)
+      if (dest_stride == expected_stride &&
+          dest_format == tex_format)
         {
           glGetTexImage (GL_TEXTURE_2D,
                          0,
                          gl_format,
                          gl_type,
-                         download->data);
+                         dest_data);
 
-          gdk_memory_convert_color_state (download->data,
-                                          download->stride,
-                                          download->format,
-                                          download->color_state,
-                                          texture->color_state,
-                                          texture->width,
-                                          texture->height);
+          gdk_memory_convert_color_state (dest_data,
+                                          dest_stride,
+                                          dest_format,
+                                          dest_color_state,
+                                          tex_color_state,
+                                          width,
+                                          height);
         }
       else
         {
-          gsize stride = texture->width * gdk_memory_format_bytes_per_pixel (format);
-          guchar *pixels = g_malloc_n (stride, texture->height);
+          gsize stride = width * gdk_memory_format_bytes_per_pixel (tex_format);
+          guchar *pixels = g_malloc_n (stride, height);
 
           glPixelStorei (GL_PACK_ALIGNMENT, 1);
           glGetTexImage (GL_TEXTURE_2D,
@@ -242,16 +245,16 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
                          gl_type,
                          pixels);
 
-          gdk_memory_convert (download->data,
-                              download->stride,
-                              download->format,
-                              download->color_state,
+          gdk_memory_convert (dest_data,
+                              dest_stride,
+                              dest_format,
+                              dest_color_state,
                               pixels,
                               stride,
-                              format,
-                              texture->color_state,
-                              texture->width,
-                              texture->height);
+                              tex_format,
+                              tex_color_state,
+                              width,
+                              height);
 
           g_free (pixels);
         }
@@ -264,21 +267,21 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
 
       glGenFramebuffers (1, &fbo);
       glBindFramebuffer (GL_FRAMEBUFFER, fbo);
-      glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->id, 0);
+      glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_id, 0);
       if (gdk_gl_context_check_version (context, "4.3", "3.1"))
         {
           GLint read_format, read_type;
           glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &read_format);
           glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_TYPE, &read_type);
-          if (gdk_gl_texture_find_format (context, gdk_memory_format_alpha (format), read_format, read_type, &actual_format))
+          if (gdk_gl_texture_find_format (context, gdk_memory_format_alpha (tex_format), read_format, read_type, &actual_format))
             {
               gl_read_format = read_format;
               gl_read_type = read_type;
             }
           else
             {
-              actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (format, FALSE));
-              if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
+              actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (tex_format, FALSE));
+              if (gdk_memory_format_alpha (tex_format) == GDK_MEMORY_ALPHA_STRAIGHT)
                 actual_format = gdk_memory_format_get_straight (actual_format);
 
               gdk_memory_format_gl_format (actual_format,
@@ -289,8 +292,8 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
         }
       else
         {
-          actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (format, FALSE));
-          if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
+          actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (tex_format, FALSE));
+          if (gdk_memory_format_alpha (tex_format) == GDK_MEMORY_ALPHA_STRAIGHT)
             actual_format = gdk_memory_format_get_straight (actual_format);
 
           gdk_memory_format_gl_format (actual_format,
@@ -299,32 +302,32 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
                                        &gl_read_format, &gl_read_type, gl_swizzle);
         }
 
-      if (download->format == actual_format &&
-          (download->stride == expected_stride))
+      if (dest_format == actual_format &&
+          (dest_stride == expected_stride))
         {
           glReadPixels (0, 0,
-                        texture->width, texture->height,
+                        width, height,
                         gl_read_format,
                         gl_read_type,
-                        download->data);
+                        dest_data);
 
-          gdk_memory_convert_color_state (download->data,
-                                          download->stride,
-                                          download->format,
-                                          download->color_state,
-                                          texture->color_state,
-                                          texture->width,
-                                          texture->height);
+          gdk_memory_convert_color_state (dest_data,
+                                          dest_stride,
+                                          dest_format,
+                                          dest_color_state,
+                                          tex_color_state,
+                                          width,
+                                          height);
         }
       else
         {
           gsize actual_bpp = gdk_memory_format_bytes_per_pixel (actual_format);
-          gsize stride = actual_bpp * texture->width;
-          guchar *pixels = g_malloc_n (stride, texture->height);
+          gsize stride = actual_bpp * width;
+          guchar *pixels = g_malloc_n (stride, height);
 
           glPixelStorei (GL_PACK_ALIGNMENT, 1);
           glReadPixels (0, 0,
-                        texture->width, texture->height,
+                        width, height,
                         gl_read_format,
                         gl_read_type,
                         pixels);
@@ -333,30 +336,30 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
 
           if (gl_read_format == GL_RGBA &&
               gl_read_type == GL_UNSIGNED_BYTE &&
-              (format == GDK_MEMORY_G8A8 ||
-               format == GDK_MEMORY_G8A8_PREMULTIPLIED ||
-               format == GDK_MEMORY_G8 ||
-               format == GDK_MEMORY_A8))
+              (tex_format == GDK_MEMORY_G8A8 ||
+               tex_format == GDK_MEMORY_G8A8_PREMULTIPLIED ||
+               tex_format == GDK_MEMORY_G8 ||
+               tex_format == GDK_MEMORY_A8))
             {
-              for (unsigned int y = 0; y < texture->height; y++)
+              for (unsigned int y = 0; y < height; y++)
                 {
-                  for (unsigned int x = 0; x < texture->width; x++)
+                  for (unsigned int x = 0; x < width; x++)
                     {
                       guchar *data = &pixels[y * stride + x * actual_bpp];
-                      if (format == GDK_MEMORY_G8A8 ||
-                          format == GDK_MEMORY_G8A8_PREMULTIPLIED)
+                      if (tex_format == GDK_MEMORY_G8A8 ||
+                          tex_format == GDK_MEMORY_G8A8_PREMULTIPLIED)
                         {
                           data[3] = data[1];
                           data[1] = data[0];
                           data[2] = data[0];
                         }
-                      else if (format == GDK_MEMORY_G8)
+                      else if (tex_format == GDK_MEMORY_G8)
                         {
                           data[1] = data[0];
                           data[2] = data[0];
                           data[3] = 0xff;
                         }
-                      else if (format == GDK_MEMORY_A8)
+                      else if (tex_format == GDK_MEMORY_A8)
                         {
                           data[3] = data[0];
                           data[0] = 0;
@@ -369,30 +372,30 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
 
           if (gl_read_format == GL_RGBA &&
               gl_read_type == GL_UNSIGNED_SHORT &&
-              (format == GDK_MEMORY_G16A16 ||
-               format == GDK_MEMORY_G16A16_PREMULTIPLIED ||
-               format == GDK_MEMORY_G16 ||
-               format == GDK_MEMORY_A16))
+              (tex_format == GDK_MEMORY_G16A16 ||
+               tex_format == GDK_MEMORY_G16A16_PREMULTIPLIED ||
+               tex_format == GDK_MEMORY_G16 ||
+               tex_format == GDK_MEMORY_A16))
             {
-              for (unsigned int y = 0; y < texture->height; y++)
+              for (unsigned int y = 0; y < height; y++)
                 {
-                  for (unsigned int x = 0; x < texture->width; x++)
+                  for (unsigned int x = 0; x < width; x++)
                     {
                       guint16 *data = (guint16 *) &pixels[y * stride + x * actual_bpp];
-                      if (format == GDK_MEMORY_G16A16 ||
-                          format == GDK_MEMORY_G16A16_PREMULTIPLIED)
+                      if (tex_format == GDK_MEMORY_G16A16 ||
+                          tex_format == GDK_MEMORY_G16A16_PREMULTIPLIED)
                         {
                           data[3] = data[1];
                           data[1] = data[0];
                           data[2] = data[0];
                         }
-                      else if (format == GDK_MEMORY_G16)
+                      else if (tex_format == GDK_MEMORY_G16)
                         {
                           data[1] = data[0];
                           data[2] = data[0];
                           data[3] = 0xffff;
                         }
-                      else if (format == GDK_MEMORY_A16)
+                      else if (tex_format == GDK_MEMORY_A16)
                         {
                           data[3] = data[0];
                           data[0] = 0;
@@ -403,16 +406,16 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
                 }
             }
 
-          gdk_memory_convert (download->data,
-                              download->stride,
-                              download->format,
-                              download->color_state,
+          gdk_memory_convert (dest_data,
+                              dest_stride,
+                              dest_format,
+                              dest_color_state,
                               pixels,
                               stride,
                               actual_format,
-                              texture->color_state,
-                              texture->width,
-                              texture->height);
+                              tex_color_state,
+                              width,
+                              height);
 
           g_free (pixels);
         }
@@ -421,6 +424,26 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
     }
 }
 
+static void
+gdk_gl_texture_do_download (GdkGLTexture *self,
+                            GdkGLContext *context,
+                            gpointer      download_)
+{
+  GdkTexture *texture = GDK_TEXTURE (self);
+  Download *download = download_;
+
+  gdk_gl_context_download (context,
+                           gdk_gl_texture_get_id (self),
+                           gdk_texture_get_format (texture),
+                           gdk_texture_get_color_state (texture),
+                           download->data,
+                           download->stride,
+                           download->format,
+                           download->color_state,
+                           gdk_texture_get_width (texture),
+                           gdk_texture_get_height (texture));
+}
+                            
 static void
 gdk_gl_texture_download (GdkTexture      *texture,
                          GdkMemoryFormat  format,
