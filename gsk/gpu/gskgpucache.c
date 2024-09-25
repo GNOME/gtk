@@ -490,6 +490,10 @@ gsk_gpu_cached_texture_new (GskGpuCache   *cache,
   GskGpuCachedTexture *self;
   GHashTable *texture_cache;
 
+  texture_cache = gsk_gpu_cache_get_texture_hash_table (cache, color_state);
+  if (texture_cache == NULL)
+    return NULL;
+
   /* First, move any existing renderdata */
   self = gdk_texture_get_render_data (texture, cache);
   if (self)
@@ -521,8 +525,6 @@ gsk_gpu_cached_texture_new (GskGpuCache   *cache,
     {
       g_object_weak_ref (G_OBJECT (texture), (GWeakNotify) gsk_gpu_cached_texture_destroy_cb, self);
 
-      texture_cache = gsk_gpu_cache_get_texture_hash_table (cache, self->color_state);
-      g_assert (texture_cache != NULL);
       g_hash_table_insert (texture_cache, texture, self);
     }
 
@@ -1049,7 +1051,8 @@ gsk_gpu_cache_cache_texture_image (GskGpuCache   *self,
   GskGpuCachedTexture *cache;
 
   cache = gsk_gpu_cached_texture_new (self, texture, image, color_state);
-  g_return_if_fail (cache != NULL);
+  if (cache == NULL)
+    return;
 
   gsk_gpu_cached_use (self, (GskGpuCached *) cache);
 }
