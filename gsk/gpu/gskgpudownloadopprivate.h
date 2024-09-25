@@ -4,15 +4,17 @@
 
 G_BEGIN_DECLS
 
-typedef void            (* GskGpuDownloadFunc)                          (gpointer                        user_data,
-                                                                         GdkTexture                     *texture);
-
 void                    gsk_gpu_download_op                             (GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *image,
                                                                          GdkColorState                  *color_state,
-                                                                         gboolean                        allow_dmabuf,
-                                                                         GskGpuDownloadFunc              func,
-                                                                         gpointer                        user_data);
+                                                                         GdkTexture                    **out_texture);
+void                    gsk_gpu_download_into_op                        (GskGpuFrame                    *frame,
+                                                                         GskGpuImage                    *image,
+                                                                         GdkColorState                  *image_color_state,
+                                                                         GdkMemoryFormat                 format,
+                                                                         GdkColorState                  *color_state,
+                                                                         guchar                         *data,
+                                                                         gsize                           stride);
 
 G_END_DECLS
 
