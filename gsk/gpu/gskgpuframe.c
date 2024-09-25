@@ -733,26 +733,37 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                                 gsize            stride)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  GdkColorState *image_cs;
   GskGpuImage *image;
 
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
-  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, NULL);
-  if (image == NULL)
-    image = gsk_gpu_frame_do_upload_texture (self, TRUE, FALSE, texture);
-
-  if (image == NULL)
+  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, color_state);
+  if (image != NULL)
     {
-      g_critical ("Could not upload texture");
-      return;
+      image_cs = color_state;
+    }
+  else
+    {
+      image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, NULL);
+      if (image == NULL)
+        image = gsk_gpu_frame_do_upload_texture (self, TRUE, FALSE, texture);
+
+      if (image == NULL)
+        {
+          g_critical ("Could not upload texture");
+          return;
+        }
+
+      image_cs = gdk_texture_get_color_state (texture);
     }
 
   gsk_gpu_frame_cleanup (self);
 
   gsk_gpu_download_into_op (self,
                             image,
-                            gdk_texture_get_color_state (texture),
+                            image_cs,
                             format,
                             color_state,
                             data,
