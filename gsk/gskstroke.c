@@ -423,7 +423,7 @@ gsk_stroke_set_dash (GskStroke   *self,
 
   self->dash_length = dash_length;
   g_free (self->dash);
-  self->dash = g_memdup (dash, sizeof (gfloat) * n_dash);
+  self->dash = g_memdup2 (dash, sizeof (gfloat) * n_dash);
   self->n_dash = n_dash;
 }
 

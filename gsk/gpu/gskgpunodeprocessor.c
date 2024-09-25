@@ -3422,7 +3422,7 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
                                         &self->scale,
                                         &clip_bounds,
                                         gsk_gpu_node_processor_fill_path,
-                                        g_memdup (&(FillData) {
+                                        g_memdup2 (&(FillData) {
                                             .path = gsk_path_ref (gsk_fill_node_get_path (node)),
                                             .color = color,
                                             .fill_rule = gsk_fill_node_get_fill_rule (node)
@@ -3525,7 +3525,7 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
                                         &self->scale,
                                         &clip_bounds,
                                         gsk_gpu_node_processor_stroke_path,
-                                        g_memdup (&(StrokeData) {
+                                        g_memdup2 (&(StrokeData) {
                                             .path = gsk_path_ref (gsk_stroke_node_get_path (node)),
                                             .color = color,
                                             .stroke = GSK_STROKE_INIT_COPY (gsk_stroke_node_get_stroke (node))
