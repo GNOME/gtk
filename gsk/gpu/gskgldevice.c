@@ -69,15 +69,16 @@ gl_program_key_equal (gconstpointer a,
 static GskGpuImage *
 gsk_gl_device_create_offscreen_image (GskGpuDevice   *device,
                                       gboolean        with_mipmap,
-                                      GdkMemoryDepth  depth,
+                                      GdkMemoryFormat format,
+                                      gboolean        is_srgb,
                                       gsize           width,
                                       gsize           height)
 {
   GskGLDevice *self = GSK_GL_DEVICE (device);
 
   return gsk_gl_image_new (self,
-                           gdk_memory_depth_get_format (depth),
-                           gdk_memory_depth_is_srgb (depth),
+                           format,
+                           is_srgb,
                            GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_FILTERABLE,
                            width,
                            height);

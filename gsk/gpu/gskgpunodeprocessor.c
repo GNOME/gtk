@@ -306,7 +306,8 @@ gsk_gpu_node_processor_init_draw (GskGpuNodeProcessor   *self,
 
   image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                  FALSE,
-                                                 depth,
+                                                 gdk_memory_depth_get_format (depth),
+                                                 gdk_memory_depth_is_srgb (depth),
                                                  area.width, area.height);
   if (image == NULL)
     return NULL;
@@ -635,16 +636,20 @@ gsk_gpu_node_processor_create_offscreen (GskGpuFrame           *frame,
 {
   GskGpuImage *image;
   cairo_rectangle_int_t area;
+  GdkMemoryDepth depth;
 
   area.x = 0;
   area.y = 0;
   area.width = MAX (1, ceilf (graphene_vec2_get_x (scale) * viewport->size.width - EPSILON));
   area.height = MAX (1, ceilf (graphene_vec2_get_y (scale) * viewport->size.height - EPSILON));
 
+  depth = gdk_memory_depth_merge (gdk_color_state_get_depth (ccs),
+                                  gsk_render_node_get_preferred_depth (node));
+
   image = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                  FALSE,
-                                                 gdk_memory_depth_merge (gdk_color_state_get_depth (ccs),
-                                                                         gsk_render_node_get_preferred_depth (node)),
+                                                 gdk_memory_depth_get_format (depth),
+                                                 gdk_memory_depth_is_srgb (depth),
                                                  area.width, area.height);
   if (image == NULL)
     return NULL;
@@ -716,7 +721,8 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
 
   copy = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                 prepare_mipmap,
-                                                depth,
+                                                gdk_memory_depth_get_format (depth),
+                                                gdk_memory_depth_is_srgb (depth),
                                                 width, height);
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_BLIT) &&

@@ -198,7 +198,8 @@ gsk_vulkan_device_create_vk_pipeline_layout (GskVulkanDevice       *self,
 static GskGpuImage *
 gsk_vulkan_device_create_offscreen_image (GskGpuDevice   *device,
                                           gboolean        with_mipmap,
-                                          GdkMemoryDepth  depth,
+                                          GdkMemoryFormat format,
+                                          gboolean        is_srgb,
                                           gsize           width,
                                           gsize           height)
 {
@@ -206,8 +207,8 @@ gsk_vulkan_device_create_offscreen_image (GskGpuDevice   *device,
 
   return gsk_vulkan_image_new_for_offscreen (self,
                                              with_mipmap,
-                                             gdk_memory_depth_get_format (depth),
-                                             gdk_memory_depth_is_srgb (depth),
+                                             format,
+                                             is_srgb,
                                              width,
                                              height);
 }
