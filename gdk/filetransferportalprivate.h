@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include <gio/gio.h>
 
 void     file_transfer_portal_register              (void);
 

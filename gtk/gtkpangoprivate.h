@@ -57,7 +57,7 @@ gtk_pango_attribute_start_element (GtkBuildableParseContext  *context,
 
 const char *pango_wrap_mode_to_string (PangoWrapMode mode);
 const char *pango_underline_to_string (PangoUnderline underline);
-const char *pango_overline_to_string (PangoOverline underline);
+const char *pango_overline_to_string (PangoOverline overline);
 const char *pango_stretch_to_string (PangoStretch stretch);
 const char *pango_style_to_string (PangoStyle style);
 const char *pango_variant_to_string (PangoVariant variant);

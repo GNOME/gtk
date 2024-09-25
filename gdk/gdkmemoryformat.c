@@ -2479,8 +2479,8 @@ void
 gdk_memory_convert_color_state (guchar          *data,
                                 gsize            stride,
                                 GdkMemoryFormat  format,
-                                GdkColorState   *src_cs,
-                                GdkColorState   *dest_cs,
+                                GdkColorState   *src_color_state,
+                                GdkColorState   *dest_color_state,
                                 gsize            width,
                                 gsize            height)
 {
@@ -2488,24 +2488,24 @@ gdk_memory_convert_color_state (guchar          *data,
     .data = data,
     .stride = stride,
     .format = format,
-    .src_cs = src_cs,
-    .dest_cs = dest_cs,
+    .src_cs = src_color_state,
+    .dest_cs = dest_color_state,
     .width = width,
     .height = height,
   };
 
-  if (gdk_color_state_equal (src_cs, dest_cs))
+  if (gdk_color_state_equal (src_color_state, dest_color_state))
     return;
 
   if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
-      src_cs == GDK_COLOR_STATE_SRGB &&
-      dest_cs == GDK_COLOR_STATE_SRGB_LINEAR)
+      src_color_state == GDK_COLOR_STATE_SRGB &&
+      dest_color_state == GDK_COLOR_STATE_SRGB_LINEAR)
     {
       gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_to_srgb_linear, &mc);
     }
   else if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
-           src_cs == GDK_COLOR_STATE_SRGB_LINEAR &&
-           dest_cs == GDK_COLOR_STATE_SRGB)
+           src_color_state == GDK_COLOR_STATE_SRGB_LINEAR &&
+           dest_color_state == GDK_COLOR_STATE_SRGB)
     {
       gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_linear_to_srgb, &mc);
     }

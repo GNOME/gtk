@@ -276,7 +276,7 @@ gtk_font_plane_class_init (GtkFontPlaneClass *class)
 
 GtkWidget *
 gtk_font_plane_new (GtkAdjustment *weight_adj,
-                     GtkAdjustment *width_adj)
+                    GtkAdjustment *width_adj)
 {
   return g_object_new (GTK_TYPE_FONT_PLANE,
                        "weight-adjustment", weight_adj,

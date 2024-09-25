@@ -133,16 +133,16 @@ void                    gdk_gl_context_set_version              (GdkGLContext   
                                                                  const GdkGLVersion     *version);
 void                    gdk_gl_context_set_is_legacy            (GdkGLContext           *context,
                                                                  gboolean                is_legacy);
-gboolean                gdk_gl_context_check_gl_version         (GdkGLContext           *context,
+gboolean                gdk_gl_context_check_gl_version         (GdkGLContext           *self,
                                                                  const GdkGLVersion     *gl_version,
                                                                  const GdkGLVersion     *gles_version);
 
 static inline gboolean
-gdk_gl_context_check_version (GdkGLContext *context,
+gdk_gl_context_check_version (GdkGLContext *self,
                               const char   *gl_version,
                               const char   *gles_version)
 {
-  return gdk_gl_context_check_gl_version (context,
+  return gdk_gl_context_check_gl_version (self,
                                           gl_version ? &GDK_GL_VERSION_STRING (gl_version) : NULL,
                                           gles_version ? &GDK_GL_VERSION_STRING (gles_version) : NULL);
 }

@@ -117,7 +117,7 @@ struct _GdkDeviceClass
 };
 
 void  _gdk_device_set_associated_device (GdkDevice *device,
-                                         GdkDevice *relative);
+                                         GdkDevice *associated);
 
 void  _gdk_device_reset_axes (GdkDevice   *device);
 guint _gdk_device_add_axis   (GdkDevice   *device,

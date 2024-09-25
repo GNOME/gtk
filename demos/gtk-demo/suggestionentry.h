@@ -43,7 +43,7 @@ GtkListItemFactory *
                 suggestion_entry_get_factory        (SuggestionEntry     *self);
 
 void            suggestion_entry_set_use_filter     (SuggestionEntry     *self,
-                                                     gboolean             use_ilter);
+                                                     gboolean             use_filter);
 gboolean        suggestion_entry_get_use_filter     (SuggestionEntry     *self);
 
 void            suggestion_entry_set_expression     (SuggestionEntry     *self,

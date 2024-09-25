@@ -511,9 +511,9 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
  *   Use `GskRenderNode` and `GskRenderer`.
  */
 const cairo_region_t *
-_gdk_draw_context_get_frame_region (GdkDrawContext *context)
+_gdk_draw_context_get_frame_region (GdkDrawContext *self)
 {
-  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
 
   return priv->frame_region;
 }
