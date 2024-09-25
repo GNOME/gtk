@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include "gdkcolorprivate.h"
+
 #include "gdkcolorstateprivate.h"
 
 
