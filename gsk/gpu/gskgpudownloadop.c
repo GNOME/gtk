@@ -77,6 +77,76 @@ gsk_gpu_download_op_print (GskGpuOp    *op,
 
 #ifdef GDK_RENDERING_VULKAN
 
+static GskGpuBuffer *
+gsk_gpu_download_vk_start (GskGpuFrame           *frame,
+                           GskVulkanCommandState *state,
+                           GskGpuImage           *image)
+{
+  gsize width, height, stride;
+  GskGpuBuffer *buffer;
+
+  width = gsk_gpu_image_get_width (image);
+  height = gsk_gpu_image_get_height (image);
+  stride = width * gdk_memory_format_bytes_per_pixel (gsk_gpu_image_get_format (image));
+  buffer = gsk_vulkan_buffer_new_read (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                       height * stride);
+
+  gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (image),
+                               state->semaphores,
+                               state->vk_command_buffer,
+                               VK_PIPELINE_STAGE_TRANSFER_BIT,
+                               VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                               VK_ACCESS_TRANSFER_READ_BIT);
+
+  vkCmdCopyImageToBuffer (state->vk_command_buffer,
+                          gsk_vulkan_image_get_vk_image (GSK_VULKAN_IMAGE (image)),
+                          VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
+                          gsk_vulkan_buffer_get_vk_buffer (GSK_VULKAN_BUFFER (buffer)),
+                          1,
+                          (VkBufferImageCopy[1]) {
+                               {
+                                   .bufferOffset = 0,
+                                   .bufferRowLength = width,
+                                   .bufferImageHeight = height,
+                                   .imageSubresource = {
+                                       .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
+                                       .mipLevel = 0,
+                                       .baseArrayLayer = 0,
+                                       .layerCount = 1
+                                   },
+                                   .imageOffset = {
+                                       .x = 0,
+                                       .y = 0,
+                                       .z = 0
+                                   },
+                                   .imageExtent = {
+                                       .width = width,
+                                       .height = height,
+                                       .depth = 1
+                                   }
+                               }
+                          });
+
+  vkCmdPipelineBarrier (state->vk_command_buffer,
+                        VK_PIPELINE_STAGE_TRANSFER_BIT,
+                        VK_PIPELINE_STAGE_HOST_BIT,
+                        0,
+                        0, NULL,
+                        1, &(VkBufferMemoryBarrier) {
+                            .sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
+                            .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
+                            .dstAccessMask = VK_ACCESS_HOST_READ_BIT,
+                            .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                            .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
+                            .buffer = gsk_vulkan_buffer_get_vk_buffer (GSK_VULKAN_BUFFER (buffer)),
+                            .offset = 0,
+                            .size = VK_WHOLE_SIZE,
+                        },
+                        0, NULL);
+
+  return buffer;
+}
+
 #ifdef HAVE_DMABUF
 /* The code needs to run here because vkGetSemaphoreFdKHR() may
  * only be called after the semaphore has been submitted via
@@ -184,65 +254,7 @@ gsk_gpu_download_op_vk_command (GskGpuOp              *op,
     }
 #endif
 
-  width = gsk_gpu_image_get_width (self->image);
-  height = gsk_gpu_image_get_height (self->image);
-  stride = width * gdk_memory_format_bytes_per_pixel (gsk_gpu_image_get_format (self->image));
-  self->buffer = gsk_vulkan_buffer_new_read (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                             height * stride);
-
-  gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (self->image),
-                               state->semaphores,
-                               state->vk_command_buffer,
-                               VK_PIPELINE_STAGE_TRANSFER_BIT,
-                               VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                               VK_ACCESS_TRANSFER_READ_BIT);
-
-  vkCmdCopyImageToBuffer (state->vk_command_buffer,
-                          gsk_vulkan_image_get_vk_image (GSK_VULKAN_IMAGE (self->image)),
-                          VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
-                          gsk_vulkan_buffer_get_vk_buffer (GSK_VULKAN_BUFFER (self->buffer)),
-                          1,
-                          (VkBufferImageCopy[1]) {
-                               {
-                                   .bufferOffset = 0,
-                                   .bufferRowLength = width,
-                                   .bufferImageHeight = height,
-                                   .imageSubresource = {
-                                       .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                       .mipLevel = 0,
-                                       .baseArrayLayer = 0,
-                                       .layerCount = 1
-                                   },
-                                   .imageOffset = {
-                                       .x = 0,
-                                       .y = 0,
-                                       .z = 0
-                                   },
-                                   .imageExtent = {
-                                       .width = width,
-                                       .height = height,
-                                       .depth = 1
-                                   }
-                               }
-                          });
-
-  vkCmdPipelineBarrier (state->vk_command_buffer,
-                        VK_PIPELINE_STAGE_TRANSFER_BIT,
-                        VK_PIPELINE_STAGE_HOST_BIT,
-                        0,
-                        0, NULL,
-                        1, &(VkBufferMemoryBarrier) {
-                            .sType = VK_STRUCTURE_TYPE_BUFFER_MEMORY_BARRIER,
-                            .srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT,
-                            .dstAccessMask = VK_ACCESS_HOST_READ_BIT,
-                            .srcQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                            .dstQueueFamilyIndex = VK_QUEUE_FAMILY_IGNORED,
-                            .buffer = gsk_vulkan_buffer_get_vk_buffer (GSK_VULKAN_BUFFER (self->buffer)),
-                            .offset = 0,
-                            .size = VK_WHOLE_SIZE,
-                        },
-                        0, NULL);
-
+  self->buffer = gsk_gpu_download_vk_start (frame, state, self->image);
   self->create_func = gsk_gpu_download_op_vk_create;
 
   return op->next;
