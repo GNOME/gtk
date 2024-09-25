@@ -450,9 +450,9 @@ pango_stretch_to_string (PangoStretch stretch)
 }
 
 const char *
-pango_underline_to_string (PangoUnderline value)
+pango_underline_to_string (PangoUnderline underline)
 {
-  switch (value)
+  switch (underline)
     {
     case PANGO_UNDERLINE_NONE:
       return "none";
@@ -473,9 +473,9 @@ pango_underline_to_string (PangoUnderline value)
 }
 
 const char *
-pango_overline_to_string (PangoOverline value)
+pango_overline_to_string (PangoOverline overline)
 {
-  switch (value)
+  switch (overline)
     {
     case PANGO_OVERLINE_NONE:
       return "none";
