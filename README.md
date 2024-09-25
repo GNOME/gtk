@@ -136,8 +136,12 @@ In the bug report please include:
 
    - which version of GTK you are using
    - what operating system and version
+   - what windowing system (X11 or Wayland)
+   - what graphics driver / mesa version
    - for Linux, which distribution
    - if you built GTK, the list of options used to configure the build
+
+  Most of this information can be found in the GTK inspector.
 
   And anything else you think is relevant.
 
