@@ -559,7 +559,7 @@ main (int argc, char **argv)
 
   for (i = 0; i < G_N_ELEMENTS (functions); i++)
     {
-      if (!g_pattern_match_string (matcher, functions[i].name))
+      if (!g_pattern_spec_match_string (matcher, functions[i].name))
         continue;
 
       node = functions[i].func (n);
