@@ -1060,16 +1060,9 @@ gdk_gl_context_get_matching_version (GdkGLContext *context,
   g_return_if_fail (GDK_IS_GL_CONTEXT (context));
 
   if (api == GDK_GL_API_GL)
-    {
-      if (legacy)
-        min_version = GDK_GL_MIN_GL_LEGACY_VERSION;
-      else
-        min_version = GDK_GL_MIN_GL_VERSION;
-    }
+    min_version = GDK_GL_MIN_GL_VERSION;
   else
-    {
-      min_version = GDK_GL_MIN_GLES_VERSION;
-    }
+    min_version = GDK_GL_MIN_GLES_VERSION;
 
   if (gdk_gl_version_greater_equal (&priv->required, &min_version))
     *out_version = priv->required;
