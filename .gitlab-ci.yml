@@ -68,7 +68,6 @@ style-check-diff:
         - "${CI_PROJECT_DIR}/_build/report-x11.xml"
         - "${CI_PROJECT_DIR}/_build/report-wayland.xml"
         - "${CI_PROJECT_DIR}/_build/report-wayland_gl.xml"
-        - "${CI_PROJECT_DIR}/_build/report-wayland_gles2.xml"
         - "${CI_PROJECT_DIR}/_build/report-broadway.xml"
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
@@ -135,8 +134,6 @@ release-build:
     - PKG_CONFIG_PATH=${CI_PROJECT_DIR}/_install/lib64/pkgconfig:${CI_PROJECT_DIR}/_install/share/pkgconfig meson setup _build_hello examples/hello
     - LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64 meson compile -C _build_hello
     - .gitlab-ci/run-tests.sh _build wayland gtk
-    # only repeat test runs that are likely affected by test setups
-    - .gitlab-ci/run-tests.sh _build wayland_gles2 gtk:gdk,gtk:gsk-gl
 
 fedora-clang:
   extends: .build-fedora-default
