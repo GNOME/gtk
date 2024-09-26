@@ -1,4 +1,0 @@
-[Test]
-Exec=/bin/sh -c "env GTK_A11Y=test G_ENABLE_DIAGNOSTIC=0 TEST_DATA_DIR=@testexecdir@/@test@-data @testexecdir@/@test@"
-Type=session
-Output=TAP
