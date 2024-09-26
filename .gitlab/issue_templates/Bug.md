@@ -34,7 +34,9 @@
 <!--
  - Which version of GTK you are using
  - What operating system and version
-  - For Linux, which distribution
+ - What windowing system (X11 or Wayland)
+ - What graphics driver / mesa version
+ - For Linux, which distribution
  - If you built GTK yourself, the list of options used to configure the build
 -->
 

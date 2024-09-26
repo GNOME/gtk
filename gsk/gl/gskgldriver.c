@@ -711,7 +711,7 @@ gsk_gl_driver_cache_texture (GskGLDriver         *self,
     {
       GskTextureKey *k;
 
-      k = g_memdup (key, sizeof *key);
+      k = g_memdup2 (key, sizeof *key);
 
       g_assert (!g_hash_table_contains (self->texture_id_to_key, GUINT_TO_POINTER (texture_id)));
       g_hash_table_insert (self->key_to_texture_id, k, GUINT_TO_POINTER (texture_id));

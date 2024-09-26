@@ -42,7 +42,7 @@ struct _GskStroke
     .line_cap = _stroke->line_cap, \
     .line_join = _stroke->line_join, \
     .miter_limit = _stroke->miter_limit, \
-    .dash = g_memdup (_stroke->dash, _stroke->n_dash * sizeof (float)), \
+    .dash = g_memdup2 (_stroke->dash, _stroke->n_dash * sizeof (float)), \
     .n_dash = _stroke->n_dash, \
     .dash_length = _stroke->dash_length, \
     .dash_offset = _stroke->dash_offset, \

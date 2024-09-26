@@ -567,7 +567,7 @@ gsk_gl_device_use_program (GskGLDevice               *self,
       return;
     }
   
-  g_hash_table_insert (self->gl_programs, g_memdup (&key, sizeof (GLProgramKey)), GUINT_TO_POINTER (program_id));
+  g_hash_table_insert (self->gl_programs, g_memdup2 (&key, sizeof (GLProgramKey)), GUINT_TO_POINTER (program_id));
 
   glUseProgram (program_id);
 

@@ -389,7 +389,7 @@ create_image_desc (GdkWaylandColor *color,
     }
   else
     {
-      xx_image_description_v4_add_listener (desc, &cs_image_desc_listener, g_memdup (&data, sizeof data));
+      xx_image_description_v4_add_listener (desc, &cs_image_desc_listener, g_memdup2 (&data, sizeof data));
     }
 }
 

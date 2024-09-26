@@ -780,7 +780,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                        image,
                        FALSE,
                        do_download,
-                       g_memdup (&(Download) {
+                       g_memdup2 (&(Download) {
                            .format = format,
                            .color_state = color_state,
                            .data = data,

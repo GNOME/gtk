@@ -266,7 +266,7 @@ get_gl_texture_wl_buffer (GdkWaylandSubsurface *self,
                                gdk_texture_get_width (texture),
                                gdk_texture_get_height (texture),
                                &gl_buffer_listener,
-                               g_memdup (&gldata, sizeof (gldata)));
+                               g_memdup2 (&gldata, sizeof (gldata)));
 }
 
 static struct wl_buffer *
