@@ -106,7 +106,6 @@
 static const GdkDebugKey gdk_gl_feature_keys[] = {
   { "debug", GDK_GL_FEATURE_DEBUG, "GL_KHR_debug" },
   { "unpack-subimage", GDK_GL_FEATURE_UNPACK_SUBIMAGE, "GL_EXT_unpack_subimage" },
-  { "half-float", GDK_GL_FEATURE_VERTEX_HALF_FLOAT, "GL_OES_vertex_half_float" },
   { "base-instance", GDK_GL_FEATURE_BASE_INSTANCE, "GL_ARB_base_instance" },
   { "buffer-storage", GDK_GL_FEATURE_BUFFER_STORAGE, "GL_EXT_buffer_storage" },
 };
@@ -1699,10 +1698,6 @@ gdk_gl_context_check_features (GdkGLContext *context)
 
   if (epoxy_has_gl_extension ("GL_KHR_debug"))
     features |= GDK_GL_FEATURE_DEBUG;
-
-  if (gdk_gl_context_check_version (context, "3.0", "3.0") ||
-      epoxy_has_gl_extension ("GL_OES_vertex_half_float"))
-    features |= GDK_GL_FEATURE_VERTEX_HALF_FLOAT;
 
   if (gdk_gl_context_check_version (context, "4.2", "9.9") ||
       epoxy_has_gl_extension ("GL_EXT_base_instance") ||
