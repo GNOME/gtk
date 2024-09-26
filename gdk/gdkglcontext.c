@@ -105,7 +105,6 @@
 
 static const GdkDebugKey gdk_gl_feature_keys[] = {
   { "debug", GDK_GL_FEATURE_DEBUG, "GL_KHR_debug" },
-  { "unpack-subimage", GDK_GL_FEATURE_UNPACK_SUBIMAGE, "GL_EXT_unpack_subimage" },
   { "base-instance", GDK_GL_FEATURE_BASE_INSTANCE, "GL_ARB_base_instance" },
   { "buffer-storage", GDK_GL_FEATURE_BUFFER_STORAGE, "GL_EXT_buffer_storage" },
 };
@@ -1682,19 +1681,7 @@ gdk_gl_version_init_epoxy (GdkGLVersion *version)
 static GdkGLFeatures
 gdk_gl_context_check_features (GdkGLContext *context)
 {
-  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkGLFeatures features = 0;
-
-  if (gdk_gl_context_get_use_es (context))
-    {
-      if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)) ||
-          epoxy_has_gl_extension ("GL_EXT_unpack_subimage"))
-        features |= GDK_GL_FEATURE_UNPACK_SUBIMAGE;
-    }
-  else
-    {
-      features |= GDK_GL_FEATURE_UNPACK_SUBIMAGE;
-    }
 
   if (epoxy_has_gl_extension ("GL_KHR_debug"))
     features |= GDK_GL_FEATURE_DEBUG;
