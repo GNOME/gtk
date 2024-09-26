@@ -1592,38 +1592,35 @@ gdk_gl_context_init_memory_flags (GdkGLContext *self)
   priv->memory_flags[GDK_MEMORY_G8A8] = GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
 #endif
 
-  if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)))
+  /* GLES 3.0.6 spec, table 3.13 */
+  priv->memory_flags[GDK_MEMORY_G8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+  priv->memory_flags[GDK_MEMORY_A8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+  priv->memory_flags[GDK_MEMORY_G8A8_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+  priv->memory_flags[GDK_MEMORY_G8A8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+  priv->memory_flags[GDK_MEMORY_R8G8B8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+  priv->memory_flags[GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+  priv->memory_flags[GDK_MEMORY_R8G8B8A8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+  priv->memory_flags[GDK_MEMORY_R8G8B8X8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+  priv->memory_flags[GDK_MEMORY_R16G16B16_FLOAT] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
+  priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
+  priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
+  priv->memory_flags[GDK_MEMORY_A16_FLOAT] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
+  priv->memory_flags[GDK_MEMORY_R32G32B32_FLOAT] |= GDK_GL_FORMAT_USABLE;
+  priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE;
+  priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT] |= GDK_GL_FORMAT_USABLE;
+  priv->memory_flags[GDK_MEMORY_A32_FLOAT] |= GDK_GL_FORMAT_USABLE;
+
+  /* no changes in GLES 3.1 spec, table 8.13 */
+
+  if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 2)))
     {
-      /* GLES 3.0.6 spec, table 3.13 */
-      priv->memory_flags[GDK_MEMORY_G8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_A8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_G8A8_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_G8A8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_R8G8B8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_R8G8B8A8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_R8G8B8X8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_R16G16B16_FLOAT] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_A16_FLOAT] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
-      priv->memory_flags[GDK_MEMORY_R32G32B32_FLOAT] |= GDK_GL_FORMAT_USABLE;
-      priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE;
-      priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT] |= GDK_GL_FORMAT_USABLE;
-      priv->memory_flags[GDK_MEMORY_A32_FLOAT] |= GDK_GL_FORMAT_USABLE;
-
-      /* no changes in GLES 3.1 spec, table 8.13 */
-
-      if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 2)))
-        {
-          /* GLES 3.2 spec, table 8.10 */
-          priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_RENDERABLE;
-          priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT] |= GDK_GL_FORMAT_RENDERABLE;
-          priv->memory_flags[GDK_MEMORY_A16_FLOAT] |= GDK_GL_FORMAT_RENDERABLE;
-          priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_RENDERABLE;
-          priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT] |= GDK_GL_FORMAT_RENDERABLE;
-          priv->memory_flags[GDK_MEMORY_A32_FLOAT] |= GDK_GL_FORMAT_RENDERABLE;
-        }
+      /* GLES 3.2 spec, table 8.10 */
+      priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_RENDERABLE;
+      priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT] |= GDK_GL_FORMAT_RENDERABLE;
+      priv->memory_flags[GDK_MEMORY_A16_FLOAT] |= GDK_GL_FORMAT_RENDERABLE;
+      priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] |= GDK_GL_FORMAT_RENDERABLE;
+      priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT] |= GDK_GL_FORMAT_RENDERABLE;
+      priv->memory_flags[GDK_MEMORY_A32_FLOAT] |= GDK_GL_FORMAT_RENDERABLE;
     }
 
   if (epoxy_has_gl_extension ("GL_OES_rgb8_rgba8"))
@@ -1631,64 +1628,55 @@ gdk_gl_context_init_memory_flags (GdkGLContext *self)
       priv->memory_flags[GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
       priv->memory_flags[GDK_MEMORY_R8G8B8A8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
       priv->memory_flags[GDK_MEMORY_R8G8B8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-      if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)))
-        priv->memory_flags[GDK_MEMORY_R8G8B8X8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_R8G8B8X8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
     }
   if (epoxy_has_gl_extension ("GL_EXT_abgr"))
     {
       priv->memory_flags[GDK_MEMORY_A8B8G8R8_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
       priv->memory_flags[GDK_MEMORY_A8B8G8R8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-      if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)))
-        priv->memory_flags[GDK_MEMORY_X8B8G8R8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_X8B8G8R8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
     }
   if (epoxy_has_gl_extension ("GL_EXT_texture_format_BGRA8888"))
     {
       priv->memory_flags[GDK_MEMORY_B8G8R8A8_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
       priv->memory_flags[GDK_MEMORY_B8G8R8A8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-      if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)))
-        priv->memory_flags[GDK_MEMORY_B8G8R8X8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_B8G8R8X8] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
     }
 
-  /* Technically, those extensions are supported on GLES2.
-   * However, GTK uses the wrong format/type pairs with them, so we don't enable them.
-   */
-  if (gdk_gl_version_greater_equal (&priv->gl_version, &GDK_GL_VERSION_INIT (3, 0)))
+  if (epoxy_has_gl_extension ("GL_EXT_texture_norm16"))
     {
-      if (epoxy_has_gl_extension ("GL_EXT_texture_norm16"))
-        {
-          priv->memory_flags[GDK_MEMORY_R16G16B16A16_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_R16G16B16A16] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_R16G16B16] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_G16A16_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_G16A16] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_G16] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_A16] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
-        }
-      if (epoxy_has_gl_extension ("GL_OES_texture_half_float"))
-        {
-          GdkGLMemoryFlags flags = GDK_GL_FORMAT_USABLE;
-          if (epoxy_has_gl_extension ("GL_EXT_color_buffer_half_float"))
-            flags |= GDK_GL_FORMAT_RENDERABLE;
-          if (epoxy_has_gl_extension ("GL_OES_texture_half_float_linear"))
-            flags |= GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] |= flags;
-          priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT] |= flags;
-          /* disabled for now, see https://gitlab.freedesktop.org/mesa/mesa/-/issues/10378 */
-          priv->memory_flags[GDK_MEMORY_R16G16B16_FLOAT] |= flags & ~GDK_GL_FORMAT_RENDERABLE;
-          priv->memory_flags[GDK_MEMORY_A16_FLOAT] |= flags;
-        }
-      if (epoxy_has_gl_extension ("GL_OES_texture_float"))
-        {
-          GdkGLMemoryFlags flags = GDK_GL_FORMAT_USABLE;
-          if (epoxy_has_gl_extension ("GL_EXT_color_buffer_float"))
-            flags |= GDK_GL_FORMAT_RENDERABLE;
-          if (epoxy_has_gl_extension ("GL_OES_texture_float_linear"))
-            flags |= GDK_GL_FORMAT_FILTERABLE;
-          priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] |= flags;
-          priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT] |= flags;
-          priv->memory_flags[GDK_MEMORY_R32G32B32_FLOAT] |= flags & ~GDK_GL_FORMAT_RENDERABLE;
-          priv->memory_flags[GDK_MEMORY_A32_FLOAT] |= flags;
-        }
+      priv->memory_flags[GDK_MEMORY_R16G16B16A16_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_R16G16B16A16] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_R16G16B16] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_G16A16_PREMULTIPLIED] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_G16A16] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_G16] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_A16] |= GDK_GL_FORMAT_USABLE | GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE;
+    }
+  if (epoxy_has_gl_extension ("GL_OES_texture_half_float"))
+    {
+      GdkGLMemoryFlags flags = GDK_GL_FORMAT_USABLE;
+      if (epoxy_has_gl_extension ("GL_EXT_color_buffer_half_float"))
+        flags |= GDK_GL_FORMAT_RENDERABLE;
+      if (epoxy_has_gl_extension ("GL_OES_texture_half_float_linear"))
+        flags |= GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] |= flags;
+      priv->memory_flags[GDK_MEMORY_R16G16B16A16_FLOAT] |= flags;
+      /* disabled for now, see https://gitlab.freedesktop.org/mesa/mesa/-/issues/10378 */
+      priv->memory_flags[GDK_MEMORY_R16G16B16_FLOAT] |= flags & ~GDK_GL_FORMAT_RENDERABLE;
+      priv->memory_flags[GDK_MEMORY_A16_FLOAT] |= flags;
+    }
+  if (epoxy_has_gl_extension ("GL_OES_texture_float"))
+    {
+      GdkGLMemoryFlags flags = GDK_GL_FORMAT_USABLE;
+      if (epoxy_has_gl_extension ("GL_EXT_color_buffer_float"))
+        flags |= GDK_GL_FORMAT_RENDERABLE;
+      if (epoxy_has_gl_extension ("GL_OES_texture_float_linear"))
+        flags |= GDK_GL_FORMAT_FILTERABLE;
+      priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] |= flags;
+      priv->memory_flags[GDK_MEMORY_R32G32B32A32_FLOAT] |= flags;
+      priv->memory_flags[GDK_MEMORY_R32G32B32_FLOAT] |= flags & ~GDK_GL_FORMAT_RENDERABLE;
+      priv->memory_flags[GDK_MEMORY_A32_FLOAT] |= flags;
     }
 }
 
