@@ -179,10 +179,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   id = make_gl_texture (context, surface);
 
-  if (gdk_gl_context_has_feature (context, GDK_GL_FEATURE_SYNC))
-    sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
-  else
-    sync = NULL;
+  sync = glFenceSync (GL_SYNC_GPU_COMMANDS_COMPLETE, 0);
 
   update_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) { 10, 10, 32, 32 });
 

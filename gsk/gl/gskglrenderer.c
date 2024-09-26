@@ -183,7 +183,6 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
   GskGLDriver *driver = NULL;
   gboolean ret = FALSE;
   gboolean debug_shaders = FALSE;
-  GdkGLAPI api;
 
   if (self->context != NULL)
     return TRUE;
@@ -199,24 +198,6 @@ gsk_gl_renderer_realize (GskRenderer  *renderer,
 
   if (!gdk_gl_context_realize (context, error))
     goto failure;
-
-  api = gdk_gl_context_get_api (context);
-  if (api == GDK_GL_API_GLES)
-    {
-      gdk_gl_context_make_current (context);
-
-      if (!gdk_gl_context_has_feature (context, GDK_GL_FEATURE_VERTEX_HALF_FLOAT))
-        {
-          int major, minor;
-
-          gdk_gl_context_get_version (context, &major, &minor);
-          g_set_error (error,
-                       GDK_GL_ERROR, GDK_GL_ERROR_NOT_AVAILABLE,
-                       _("This GLES %d.%d implementation does not support half-float vertex data"),
-                       major, minor);
-          goto failure;
-        }
-    }
 
   if (GSK_RENDERER_DEBUG_CHECK (GSK_RENDERER (self), SHADERS))
     debug_shaders = TRUE;

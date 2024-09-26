@@ -82,7 +82,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
   cairo_surface_t *image;
   guint framebuffer;
   int alpha_size = 0;
-  int major, minor, version;
   gboolean es_use_bgra = FALSE;
 
   paint_context = gdk_surface_get_paint_gl_context (surface, NULL);
@@ -117,16 +116,6 @@ gdk_cairo_draw_from_gl (cairo_t              *cr,
       g_warning ("Unsupported gl source type %d\n", source_type);
       return;
     }
-
-  gdk_gl_context_get_version (paint_context, &major, &minor);
-  version = major * 100 + minor;
-
-  /* TODO: Use glTexSubImage2D() and do a row-by-row copy to replace
-   * the GL_UNPACK_ROW_LENGTH support
-   */
-  if (gdk_gl_context_get_use_es (paint_context) &&
-      !(version >= 300 || gdk_gl_context_has_feature (paint_context, GDK_GL_FEATURE_UNPACK_SUBIMAGE)))
-    return;
 
   /* TODO: avoid reading back non-required data due to dest clip */
   image = cairo_surface_create_similar_image (cairo_get_target (cr),

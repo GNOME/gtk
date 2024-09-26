@@ -33,13 +33,9 @@ G_BEGIN_DECLS
 
 /* Minimum OpenGL versions supported by GTK.
  * Backends should make sure to never create a context of a previous version.
- *
- * The macros refer to OpenGL; OpenGL with OPENGL_COMPATIBILITY_PROFILE_BIT as
- * OPENGL_PROFILE_MASK; and OpenGL ES respectively
  */
-#define GDK_GL_MIN_GL_VERSION GDK_GL_VERSION_INIT (3, 2)
-#define GDK_GL_MIN_GL_LEGACY_VERSION GDK_GL_VERSION_INIT (3, 0)
-#define GDK_GL_MIN_GLES_VERSION GDK_GL_VERSION_INIT (2, 0)
+#define GDK_GL_MIN_GL_VERSION GDK_GL_VERSION_INIT (3, 3)
+#define GDK_GL_MIN_GLES_VERSION GDK_GL_VERSION_INIT (3, 0)
 
 typedef struct _GdkGLVersion GdkGLVersion;
 
@@ -60,9 +56,6 @@ static const GdkGLVersion supported_gl_versions[] = {
   GDK_GL_VERSION_INIT (4, 1),
   GDK_GL_VERSION_INIT (4, 0),
   GDK_GL_VERSION_INIT (3, 3),
-  GDK_GL_VERSION_INIT (3, 2),
-  GDK_GL_VERSION_INIT (3, 1),
-  GDK_GL_VERSION_INIT (3, 0),
 
   GDK_GL_VERSION_INIT (0, 0)
 };
@@ -71,7 +64,6 @@ static const GdkGLVersion supported_gles_versions[] = {
   GDK_GL_VERSION_INIT (3, 2),
   GDK_GL_VERSION_INIT (3, 1),
   GDK_GL_VERSION_INIT (3, 0),
-  GDK_GL_VERSION_INIT (2, 0),
 
   GDK_GL_VERSION_INIT (0, 0)
 };
