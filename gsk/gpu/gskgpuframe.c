@@ -761,6 +761,27 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
 
   gsk_gpu_frame_cleanup (self);
 
+  if (gsk_gpu_image_get_format (image) != format ||
+      image_cs != color_state)
+    {
+      GskGpuImage *converted;
+
+      converted = gsk_gpu_node_processor_convert_image (self,
+                                                        format,
+                                                        color_state,
+                                                        image,
+                                                        image_cs);
+      if (converted == NULL)
+        {
+          g_critical ("Conversion into readable format failed");
+          g_object_unref (image);
+          return;
+        }
+      g_object_unref (image);
+      image = converted;
+      image_cs = color_state;
+    }
+
   gsk_gpu_download_into_op (self,
                             image,
                             image_cs,
