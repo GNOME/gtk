@@ -203,7 +203,7 @@ test_app_new (void)
 
   test_app = g_object_new (test_app_get_type (),
                            "application-id", "org.gtk.testlist4",
-                           "flags", G_APPLICATION_FLAGS_NONE,
+                           "flags", G_APPLICATION_DEFAULT_FLAGS,
                            NULL);
 
   return test_app;
