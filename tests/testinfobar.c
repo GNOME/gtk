@@ -102,7 +102,7 @@ main (int   argc,
   int result;
 
   application = gtk_application_new ("org.gtk.test.infobar",
-                                     G_APPLICATION_FLAGS_NONE);
+                                     G_APPLICATION_DEFAULT_FLAGS);
   g_signal_connect (application, "activate", G_CALLBACK (on_activate), NULL);
 
   result = g_application_run (G_APPLICATION (application), argc, argv);
