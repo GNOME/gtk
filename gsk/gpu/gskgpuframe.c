@@ -117,11 +117,7 @@ gsk_gpu_frame_default_upload_texture (GskGpuFrame *self,
                                       gboolean     with_mipmap,
                                       GdkTexture  *texture)
 {
-  GskGpuImage *image;
-
-  image = gsk_gpu_upload_texture_op_try (self, with_mipmap, 0, GSK_SCALING_FILTER_NEAREST, texture);
-
-  return image;
+  return NULL;
 }
 
 static void
@@ -474,20 +470,32 @@ gsk_gpu_frame_get_last_op (GskGpuFrame *self)
   return priv->last_op;
 }
 
-GskGpuImage *
-gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
-                              gboolean      with_mipmap,
-                              GdkTexture   *texture)
+static GskGpuImage *
+gsk_gpu_frame_do_upload_texture (GskGpuFrame  *self,
+                                 gboolean      dmabuf_import,
+                                 gboolean      with_mipmap,
+                                 GdkTexture   *texture)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuImage *image;
 
   image = GSK_GPU_FRAME_GET_CLASS (self)->upload_texture (self, with_mipmap, texture);
 
+  if (image == NULL && !dmabuf_import)
+    image = gsk_gpu_upload_texture_op_try (self, with_mipmap, 0, GSK_SCALING_FILTER_NEAREST, texture);
+
   if (image)
     gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (priv->device), texture, image, NULL);
 
   return image;
+}
+
+GskGpuImage *
+gsk_gpu_frame_upload_texture (GskGpuFrame  *self,
+                              gboolean      with_mipmap,
+                              GdkTexture   *texture)
+{
+  return gsk_gpu_frame_do_upload_texture (self, FALSE, with_mipmap, texture);
 }
 
 static GskGpuBuffer *
@@ -644,15 +652,6 @@ gsk_gpu_frame_wait (GskGpuFrame *self)
 }
 
 static void
-copy_texture (gpointer    user_data,
-              GdkTexture *texture)
-{
-  GdkTexture **target = (GdkTexture **) user_data;
-
-  *target = g_object_ref (texture);
-}
-
-static void
 gsk_gpu_frame_record (GskGpuFrame            *self,
                       gint64                  timestamp,
                       GskGpuImage            *target,
@@ -671,7 +670,7 @@ gsk_gpu_frame_record (GskGpuFrame            *self,
   gsk_gpu_node_processor_process (self, target, target_color_state, clip, node, viewport, pass_type);
 
   if (texture)
-    gsk_gpu_download_op (self, target, TRUE, copy_texture, texture);
+    gsk_gpu_download_op (self, target, target_color_state, texture);
 }
 
 static void
@@ -724,32 +723,6 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
   gsk_gpu_frame_submit (self, pass_type);
 }
 
-typedef struct _Download Download;
-
-struct _Download
-{
-  GdkMemoryFormat format;
-  GdkColorState *color_state;
-  guchar *data;
-  gsize stride;
-};
-
-static void
-do_download (gpointer    user_data,
-             GdkTexture *texture)
-{
-  Download *download = user_data;
-  GdkTextureDownloader downloader;
-
-  gdk_texture_downloader_init (&downloader, texture);
-  gdk_texture_downloader_set_format (&downloader, download->format);
-  gdk_texture_downloader_set_color_state (&downloader, download->color_state);
-  gdk_texture_downloader_download_into (&downloader, download->data, download->stride);
-  gdk_texture_downloader_finish (&downloader);
-
-  g_free (download);
-}
-
 void
 gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                                 gint64           timestamp,
@@ -760,32 +733,62 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                                 gsize            stride)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  GdkColorState *image_cs;
   GskGpuImage *image;
 
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
-  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, NULL);
-  if (image == NULL)
-    image = gsk_gpu_frame_upload_texture (self, FALSE, texture);
-  if (image == NULL)
+  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, color_state);
+  if (image != NULL)
     {
-      g_critical ("Could not upload texture");
-      return;
+      image_cs = color_state;
+    }
+  else
+    {
+      image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, NULL);
+      if (image == NULL)
+        image = gsk_gpu_frame_do_upload_texture (self, TRUE, FALSE, texture);
+
+      if (image == NULL)
+        {
+          g_critical ("Could not upload texture");
+          return;
+        }
+
+      image_cs = gdk_texture_get_color_state (texture);
     }
 
   gsk_gpu_frame_cleanup (self);
 
-  gsk_gpu_download_op (self,
-                       image,
-                       FALSE,
-                       do_download,
-                       g_memdup2 (&(Download) {
-                           .format = format,
-                           .color_state = color_state,
-                           .data = data,
-                           .stride = stride
-                       }, sizeof (Download)));
+  if (gsk_gpu_image_get_format (image) != format ||
+      image_cs != color_state)
+    {
+      GskGpuImage *converted;
+
+      converted = gsk_gpu_node_processor_convert_image (self,
+                                                        format,
+                                                        color_state,
+                                                        image,
+                                                        image_cs);
+      if (converted == NULL)
+        {
+          g_critical ("Conversion into readable format failed");
+          g_object_unref (image);
+          return;
+        }
+      g_object_unref (image);
+      image = converted;
+      image_cs = color_state;
+    }
+
+  gsk_gpu_download_into_op (self,
+                            image,
+                            image_cs,
+                            format,
+                            color_state,
+                            data,
+                            stride);
 
   gsk_gpu_frame_submit (self, GSK_RENDER_PASS_EXPORT);
   g_object_unref (image);

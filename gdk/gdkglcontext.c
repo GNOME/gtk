@@ -2428,3 +2428,277 @@ out:
   return FALSE;
 #endif
 }
+
+static gboolean
+gdk_gl_context_find_format (GdkGLContext    *self,
+                            GdkMemoryAlpha   alpha,
+                            GLint            gl_format,
+                            GLint            gl_type,
+                            GdkMemoryFormat *out_format)
+{
+  GdkMemoryFormat format;
+
+  for (format = 0; format < GDK_MEMORY_N_FORMATS; format++)
+    {
+      GLint q_internal_format, q_internal_srgb_format;
+      GLenum q_format, q_type;
+      GLint q_swizzle[4];
+
+      if (gdk_memory_format_alpha (format) != alpha)
+        continue;
+
+      if (!(gdk_gl_context_get_format_flags (self, format) & GDK_GL_FORMAT_RENDERABLE))
+        continue;
+
+      gdk_memory_format_gl_format (format,
+                                   gdk_gl_context_get_use_es (self),
+                                   &q_internal_format,
+                                   &q_internal_srgb_format,
+                                   &q_format,
+                                   &q_type,
+                                   q_swizzle);
+
+      if (q_format != gl_format || q_type != gl_type)
+        continue;
+
+      *out_format = format;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+void
+gdk_gl_context_download (GdkGLContext    *self,
+                         GLuint           tex_id,
+                         GdkMemoryFormat  tex_format,
+                         GdkColorState   *tex_color_state,
+                         guchar          *dest_data,
+                         gsize            dest_stride,
+                         GdkMemoryFormat  dest_format,
+                         GdkColorState   *dest_color_state,
+                         gsize            width,
+                         gsize            height)
+{
+  gsize expected_stride;
+  GLint gl_internal_format, gl_internal_srgb_format;
+  GLenum gl_format, gl_type;
+  GLint gl_swizzle[4];
+
+  expected_stride = width * gdk_memory_format_bytes_per_pixel (dest_format);
+
+  if (!gdk_gl_context_get_use_es (self) &&
+      ((gdk_gl_context_get_format_flags (self, tex_format) & GDK_GL_FORMAT_USABLE) == GDK_GL_FORMAT_USABLE))
+    {
+      gdk_memory_format_gl_format (tex_format,
+                                   gdk_gl_context_get_use_es (self),
+                                   &gl_internal_format, &gl_internal_srgb_format,
+                                   &gl_format, &gl_type, gl_swizzle);
+      if (dest_stride == expected_stride &&
+          dest_format == tex_format)
+        {
+          glGetTexImage (GL_TEXTURE_2D,
+                         0,
+                         gl_format,
+                         gl_type,
+                         dest_data);
+
+          gdk_memory_convert_color_state (dest_data,
+                                          dest_stride,
+                                          dest_format,
+                                          dest_color_state,
+                                          tex_color_state,
+                                          width,
+                                          height);
+        }
+      else
+        {
+          gsize stride = width * gdk_memory_format_bytes_per_pixel (tex_format);
+          guchar *pixels = g_malloc_n (stride, height);
+
+          glPixelStorei (GL_PACK_ALIGNMENT, 1);
+          glGetTexImage (GL_TEXTURE_2D,
+                         0,
+                         gl_format,
+                         gl_type,
+                         pixels);
+
+          gdk_memory_convert (dest_data,
+                              dest_stride,
+                              dest_format,
+                              dest_color_state,
+                              pixels,
+                              stride,
+                              tex_format,
+                              tex_color_state,
+                              width,
+                              height);
+
+          g_free (pixels);
+        }
+    }
+  else
+    {
+      GdkMemoryFormat actual_format;
+      GLenum gl_read_format, gl_read_type;
+      GLuint fbo;
+
+      glGenFramebuffers (1, &fbo);
+      glBindFramebuffer (GL_FRAMEBUFFER, fbo);
+      glFramebufferTexture2D (GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tex_id, 0);
+      if (gdk_gl_context_check_version (self, "4.3", "3.1"))
+        {
+          GLint read_format, read_type;
+          glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_FORMAT, &read_format);
+          glGetFramebufferParameteriv (GL_FRAMEBUFFER, GL_IMPLEMENTATION_COLOR_READ_TYPE, &read_type);
+          if (gdk_gl_context_find_format (self, gdk_memory_format_alpha (tex_format), read_format, read_type, &actual_format))
+            {
+              gl_read_format = read_format;
+              gl_read_type = read_type;
+            }
+          else
+            {
+              actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (tex_format, FALSE));
+              if (gdk_memory_format_alpha (tex_format) == GDK_MEMORY_ALPHA_STRAIGHT)
+                actual_format = gdk_memory_format_get_straight (actual_format);
+
+              gdk_memory_format_gl_format (actual_format,
+                                           gdk_gl_context_get_use_es (self),
+                                           &gl_internal_format, &gl_internal_srgb_format,
+                                           &gl_read_format, &gl_read_type, gl_swizzle);
+            }
+        }
+      else
+        {
+          actual_format = gdk_memory_depth_get_format (gdk_memory_format_get_depth (tex_format, FALSE));
+          if (gdk_memory_format_alpha (tex_format) == GDK_MEMORY_ALPHA_STRAIGHT)
+            actual_format = gdk_memory_format_get_straight (actual_format);
+
+          gdk_memory_format_gl_format (actual_format,
+                                       gdk_gl_context_get_use_es (self),
+                                       &gl_internal_format, &gl_internal_srgb_format,
+                                       &gl_read_format, &gl_read_type, gl_swizzle);
+        }
+
+      if (dest_format == actual_format &&
+          (dest_stride == expected_stride))
+        {
+          glReadPixels (0, 0,
+                        width, height,
+                        gl_read_format,
+                        gl_read_type,
+                        dest_data);
+
+          gdk_memory_convert_color_state (dest_data,
+                                          dest_stride,
+                                          dest_format,
+                                          dest_color_state,
+                                          tex_color_state,
+                                          width,
+                                          height);
+        }
+      else
+        {
+          gsize actual_bpp = gdk_memory_format_bytes_per_pixel (actual_format);
+          gsize stride = actual_bpp * width;
+          guchar *pixels = g_malloc_n (stride, height);
+
+          glPixelStorei (GL_PACK_ALIGNMENT, 1);
+          glReadPixels (0, 0,
+                        width, height,
+                        gl_read_format,
+                        gl_read_type,
+                        pixels);
+
+          /* Fix up gles inadequacies */
+
+          if (gl_read_format == GL_RGBA &&
+              gl_read_type == GL_UNSIGNED_BYTE &&
+              (tex_format == GDK_MEMORY_G8A8 ||
+               tex_format == GDK_MEMORY_G8A8_PREMULTIPLIED ||
+               tex_format == GDK_MEMORY_G8 ||
+               tex_format == GDK_MEMORY_A8))
+            {
+              for (unsigned int y = 0; y < height; y++)
+                {
+                  for (unsigned int x = 0; x < width; x++)
+                    {
+                      guchar *data = &pixels[y * stride + x * actual_bpp];
+                      if (tex_format == GDK_MEMORY_G8A8 ||
+                          tex_format == GDK_MEMORY_G8A8_PREMULTIPLIED)
+                        {
+                          data[3] = data[1];
+                          data[1] = data[0];
+                          data[2] = data[0];
+                        }
+                      else if (tex_format == GDK_MEMORY_G8)
+                        {
+                          data[1] = data[0];
+                          data[2] = data[0];
+                          data[3] = 0xff;
+                        }
+                      else if (tex_format == GDK_MEMORY_A8)
+                        {
+                          data[3] = data[0];
+                          data[0] = 0;
+                          data[1] = 0;
+                          data[2] = 0;
+                        }
+                    }
+                }
+            }
+
+          if (gl_read_format == GL_RGBA &&
+              gl_read_type == GL_UNSIGNED_SHORT &&
+              (tex_format == GDK_MEMORY_G16A16 ||
+               tex_format == GDK_MEMORY_G16A16_PREMULTIPLIED ||
+               tex_format == GDK_MEMORY_G16 ||
+               tex_format == GDK_MEMORY_A16))
+            {
+              for (unsigned int y = 0; y < height; y++)
+                {
+                  for (unsigned int x = 0; x < width; x++)
+                    {
+                      guint16 *data = (guint16 *) &pixels[y * stride + x * actual_bpp];
+                      if (tex_format == GDK_MEMORY_G16A16 ||
+                          tex_format == GDK_MEMORY_G16A16_PREMULTIPLIED)
+                        {
+                          data[3] = data[1];
+                          data[1] = data[0];
+                          data[2] = data[0];
+                        }
+                      else if (tex_format == GDK_MEMORY_G16)
+                        {
+                          data[1] = data[0];
+                          data[2] = data[0];
+                          data[3] = 0xffff;
+                        }
+                      else if (tex_format == GDK_MEMORY_A16)
+                        {
+                          data[3] = data[0];
+                          data[0] = 0;
+                          data[1] = 0;
+                          data[2] = 0;
+                        }
+                    }
+                }
+            }
+
+          gdk_memory_convert (dest_data,
+                              dest_stride,
+                              dest_format,
+                              dest_color_state,
+                              pixels,
+                              stride,
+                              actual_format,
+                              tex_color_state,
+                              width,
+                              height);
+
+          g_free (pixels);
+        }
+      glBindFramebuffer (GL_FRAMEBUFFER, 0);
+      glDeleteFramebuffers (1, &fbo);
+    }
+}
+

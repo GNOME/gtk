@@ -178,6 +178,17 @@ gboolean                gdk_gl_context_has_vertex_arrays        (GdkGLContext   
 
 double                  gdk_gl_context_get_scale                (GdkGLContext    *self);
 
+void                    gdk_gl_context_download                 (GdkGLContext    *self,
+                                                                 GLuint           tex_id,
+                                                                 GdkMemoryFormat  tex_format,
+                                                                 GdkColorState   *tex_color_state,
+                                                                 guchar          *dest_data,
+                                                                 gsize            dest_stride,
+                                                                 GdkMemoryFormat  dest_format,
+                                                                 GdkColorState   *dest_color_state,
+                                                                 gsize            width,
+                                                                 gsize            height);
+
 guint                   gdk_gl_context_import_dmabuf            (GdkGLContext    *self,
                                                                  int              width,
                                                                  int              height,

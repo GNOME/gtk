@@ -26,7 +26,8 @@ struct _GskGpuDeviceClass
 
   GskGpuImage *         (* create_offscreen_image)                      (GskGpuDevice           *self,
                                                                          gboolean                with_mipmap,
-                                                                         GdkMemoryDepth          depth,
+                                                                         GdkMemoryFormat         format,
+                                                                         gboolean                is_srgb,
                                                                          gsize                   width,
                                                                          gsize                   height);
   GskGpuImage *         (* create_atlas_image)                          (GskGpuDevice           *self,
@@ -61,7 +62,8 @@ gsize                   gsk_gpu_device_get_tile_size                    (GskGpuD
 
 GskGpuImage *           gsk_gpu_device_create_offscreen_image           (GskGpuDevice           *self,
                                                                          gboolean                with_mipmap,
-                                                                         GdkMemoryDepth          depth,
+                                                                         GdkMemoryFormat         format,
+                                                                         gboolean                is_srgb,
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskGpuImage *           gsk_gpu_device_create_atlas_image               (GskGpuDevice           *self,

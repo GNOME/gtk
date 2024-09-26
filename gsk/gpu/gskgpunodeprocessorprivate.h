@@ -12,5 +12,10 @@ void                    gsk_gpu_node_processor_process                  (GskGpuF
                                                                          GskRenderNode                  *node,
                                                                          const graphene_rect_t          *viewport,
                                                                          GskRenderPassType               pass_type);
+GskGpuImage *           gsk_gpu_node_processor_convert_image            (GskGpuFrame                    *frame,
+                                                                         GdkMemoryFormat                 target_format,
+                                                                         GdkColorState                  *target_color_state,
+                                                                         GskGpuImage                    *image,
+                                                                         GdkColorState                  *image_color_state);
 
 G_END_DECLS

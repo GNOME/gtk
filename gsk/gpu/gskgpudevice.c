@@ -246,14 +246,33 @@ gsk_gpu_device_get_tile_size (GskGpuDevice *self)
   return priv->tile_size;
 }
 
+/**
+ * gsk_gpu_device_create_offscreen_image:
+ * @self: the device to create the offscreen in
+ * @with_mipmap: whether to allocate memory for mipmap levels
+ * @format: the desired format
+ * @is_srgb: if the format should be srgb
+ * @width: width of the image
+ * @height: height of the image
+ *
+ * Creates an image suitable for offscreen rendering. Note that the format
+ * is a hint and the device may choose a different format if the desired
+ * format is not be renderable on the device.
+ * 
+ * If width/height is too large or the device is out of memory, NULL may
+ * be returned.
+ *
+ * Returns: (nullable): The created image or NULL on error.
+ **/
 GskGpuImage *
-gsk_gpu_device_create_offscreen_image (GskGpuDevice   *self,
-                                       gboolean        with_mipmap,
-                                       GdkMemoryDepth  depth,
-                                       gsize           width,
-                                       gsize           height)
+gsk_gpu_device_create_offscreen_image (GskGpuDevice    *self,
+                                       gboolean         with_mipmap,
+                                       GdkMemoryFormat  format,
+                                       gboolean         is_srgb,
+                                       gsize            width,
+                                       gsize            height)
 {
-  return GSK_GPU_DEVICE_GET_CLASS (self)->create_offscreen_image (self, with_mipmap, depth, width, height);
+  return GSK_GPU_DEVICE_GET_CLASS (self)->create_offscreen_image (self, with_mipmap, format, is_srgb, width, height);
 }
 
 GskGpuImage *
