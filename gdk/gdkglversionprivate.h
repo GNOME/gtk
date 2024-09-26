@@ -39,7 +39,7 @@ G_BEGIN_DECLS
  */
 #define GDK_GL_MIN_GL_VERSION GDK_GL_VERSION_INIT (3, 2)
 #define GDK_GL_MIN_GL_LEGACY_VERSION GDK_GL_VERSION_INIT (3, 0)
-#define GDK_GL_MIN_GLES_VERSION GDK_GL_VERSION_INIT (2, 0)
+#define GDK_GL_MIN_GLES_VERSION GDK_GL_VERSION_INIT (3, 0)
 
 typedef struct _GdkGLVersion GdkGLVersion;
 
@@ -71,7 +71,6 @@ static const GdkGLVersion supported_gles_versions[] = {
   GDK_GL_VERSION_INIT (3, 2),
   GDK_GL_VERSION_INIT (3, 1),
   GDK_GL_VERSION_INIT (3, 0),
-  GDK_GL_VERSION_INIT (2, 0),
 
   GDK_GL_VERSION_INIT (0, 0)
 };
