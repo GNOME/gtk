@@ -43,6 +43,7 @@
 #include "gdksurface-wayland.h"
 #include "gdksurfaceprivate.h"
 #include "gdkdeviceprivate.h"
+#include "gdkdevice-wayland-private.h"
 #include "gdkkeysprivate.h"
 #include "gdkprivate-wayland.h"
 #include "gdkcairocontext-wayland.h"
@@ -1160,6 +1161,7 @@ _gdk_wayland_display_set_cursor_theme (GdkDisplay *display,
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY(display);
   struct wl_cursor_theme *theme;
+  GList *seats;
 
   g_assert (display_wayland);
   g_assert (display_wayland->shm);
@@ -1189,6 +1191,15 @@ _gdk_wayland_display_set_cursor_theme (GdkDisplay *display,
     g_free (display_wayland->cursor_theme_name);
   display_wayland->cursor_theme_name = g_strdup (name);
   display_wayland->cursor_theme_size = size;
+
+ seats = gdk_display_list_seats (display);
+ for (GList *l = seats; l; l = l->next)
+   {
+     GdkSeat *seat = l->data;
+
+     gdk_wayland_device_update_surface_cursor (gdk_seat_get_pointer (seat));
+   }
+ g_list_free (seats);
 }
 
 struct wl_cursor_theme *
