@@ -51,9 +51,6 @@ gsk_ngl_renderer_create_context (GskGpuRenderer       *renderer,
 
   context = gdk_gl_context_new (display, surface, surface != NULL);
 
-  /* GLES 2 is not supported */
-  gdk_gl_context_set_required_version (context, 3, 0);
-
   if (!gdk_gl_context_realize (context, error))
     {
       g_object_unref (context);
