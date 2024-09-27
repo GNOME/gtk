@@ -41,7 +41,7 @@ case "${setup}" in
     export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
 
     dbus-run-session -- \
-      weston --backend=headless-backend.so --socket=wayland-5 --idle-time=0 -- \
+      mutter --headless --wayland --no-x11 --virtual-monitor 1024x768 -- \
           meson test -C ${builddir} \
                 --quiet \
                 --timeout-multiplier "${multiplier}" \
