@@ -760,15 +760,16 @@ init_settings (GdkScreen *screen)
           goto fallback;
         }
 
-      if (g_variant_n_children (ret) == 0)
+      g_variant_get (ret, "(a{sa{sv}})", &iter);
+
+      if (g_variant_iter_n_children (iter) == 0)
         {
           g_debug ("Received no portal settings");
+          g_clear_pointer (&iter, g_variant_iter_free);
           g_clear_pointer (&ret, g_variant_unref);
 
           goto fallback;
         }
-
-      g_variant_get (ret, "(a{sa{sv}})", &iter);
 
       while (g_variant_iter_loop (iter, "{s@a{sv}}", &schema, &val))
         {
