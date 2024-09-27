@@ -59,7 +59,7 @@ wl_cursor_theme_destroy(struct wl_cursor_theme *theme);
 struct wl_cursor *
 wl_cursor_theme_get_cursor(struct wl_cursor_theme *theme,
 			   const char *name,
-                           unsigned int scale);
+                           float scale);
 
 struct wl_buffer *
 wl_cursor_image_get_buffer(struct wl_cursor_image *image);
