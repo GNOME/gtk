@@ -287,6 +287,7 @@ gtk_gst_media_file_open (GtkMediaFile *media_file)
   else
     {
       /* It's an input stream */
+      g_error ("Input Streams are currently not supported. Please pass a File based MediaFile.");
       g_assert_not_reached ();
     }
 
