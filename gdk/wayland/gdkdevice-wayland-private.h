@@ -62,7 +62,6 @@ struct _GdkWaylandPointerData {
   uint32_t grab_time;
 
   struct wl_surface *pointer_surface;
-  struct wp_viewport *pointer_surface_viewport;
   guint cursor_is_default: 1;
   GdkCursor *cursor;
   guint cursor_timeout_id;

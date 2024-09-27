@@ -208,34 +208,21 @@ wl_cursor_destroy(struct wl_cursor *cursor)
 static struct wl_cursor *
 wl_cursor_create_from_xcursor_images(struct wl_cursor_theme *theme,
                                      const char *name,
-                                     unsigned int size,
-                                     unsigned int scale)
+                                     unsigned int size)
 {
         char *path;
         XcursorImages *images;
         struct wl_cursor *cursor;
 	struct cursor_image *image;
 	int i, nbytes;
-        unsigned int load_size;
-        int load_scale = 1;
-
-        load_size = size * scale;
 
         path = g_strconcat (theme->path, "/", name, NULL);
-        images = xcursor_load_images (path, load_size);
+        images = xcursor_load_images (path, size);
 
         if (!images)
           {
             g_free (path);
             return NULL;
-          }
-
-        if (images->images[0]->width != load_size ||
-            images->images[0]->height != load_size)
-          {
-	        xcursor_images_destroy (images);
-                images = xcursor_load_images (path, size);
-                load_scale = scale;
           }
 
         g_free (path);
@@ -255,7 +242,7 @@ wl_cursor_create_from_xcursor_images(struct wl_cursor_theme *theme,
 	}
 
 	cursor->name = strdup(name);
-        cursor->size = load_size;
+        cursor->size = images->images[0]->size;
 
 	for (i = 0; i < images->nimage; i++) {
 		image = malloc(sizeof *image);
@@ -265,10 +252,10 @@ wl_cursor_create_from_xcursor_images(struct wl_cursor_theme *theme,
 		image->theme = theme;
 		image->buffer = NULL;
 
-		image->image.width = images->images[i]->width * load_scale;
-		image->image.height = images->images[i]->height * load_scale;
-		image->image.hotspot_x = images->images[i]->xhot * load_scale;
-		image->image.hotspot_y = images->images[i]->yhot * load_scale;
+		image->image.width = images->images[i]->width;
+		image->image.height = images->images[i]->height;
+		image->image.hotspot_x = images->images[i]->xhot;
+		image->image.hotspot_y = images->images[i]->yhot;
 		image->image.delay = images->images[i]->delay;
 
 		nbytes = image->image.width * image->image.height * 4;
@@ -278,24 +265,9 @@ wl_cursor_create_from_xcursor_images(struct wl_cursor_theme *theme,
 			break;
 		}
 
-                if (load_scale == 1) {
-		    /* copy pixels to shm pool */
-                    memcpy(theme->pool->data + image->offset,
-                           images->images[i]->pixels, nbytes);
-                }
-                else {
-                    /* scale image up while copying it */
-                    for (int y = 0; y < image->image.height; y++) {
-                        char *p = theme->pool->data + image->offset + y * image->image.width * 4;
-                        char *q = ((char *)images->images[i]->pixels) + (y / load_scale) * images->images[i]->width * 4;
-                        for (int x = 0; x < image->image.width; x++) {
-                            p[4 * x] = q[4 * (x/load_scale)];
-                            p[4 * x + 1] = q[4 * (x/load_scale) + 1];
-                            p[4 * x + 2] = q[4 * (x/load_scale) + 2];
-                            p[4 * x + 3] = q[4 * (x/load_scale) + 3];
-                        }
-                    }
-                }
+		/* copy pixels to shm pool */
+                memcpy(theme->pool->data + image->offset,
+                       images->images[i]->pixels, nbytes);
 		cursor->images[i] = (struct wl_cursor_image *) image;
 	}
 	cursor->image_count = i;
@@ -316,12 +288,11 @@ wl_cursor_create_from_xcursor_images(struct wl_cursor_theme *theme,
 static void
 load_cursor(struct wl_cursor_theme *theme,
             const char             *name,
-            unsigned int            size,
-            unsigned int            scale)
+            unsigned int            size)
 {
 	struct wl_cursor *cursor;
 
-        cursor = wl_cursor_create_from_xcursor_images(theme, name, size, scale);
+        cursor = wl_cursor_create_from_xcursor_images(theme, name, size);
 
 	if (cursor) {
 		theme->cursor_count++;
@@ -405,12 +376,12 @@ wl_cursor_theme_destroy(struct wl_cursor_theme *theme)
 struct wl_cursor *
 wl_cursor_theme_get_cursor(struct wl_cursor_theme *theme,
 			   const char *name,
-                           unsigned int scale)
+                           float scale)
 {
 	unsigned int i;
         unsigned int size;
 
-        size = theme->size * scale;
+        size = ceil (theme->size * scale);
 
 	for (i = 0; i < theme->cursor_count; i++) {
                 if (size == theme->cursors[i]->size &&
@@ -418,11 +389,10 @@ wl_cursor_theme_get_cursor(struct wl_cursor_theme *theme,
 		        return theme->cursors[i];
         }
 
-        load_cursor (theme, name, theme->size, scale);
+        load_cursor (theme, name, size);
 
         if (i < theme->cursor_count) {
-                if (size == theme->cursors[i]->size &&
-                    strcmp (name, theme->cursors[theme->cursor_count - 1]->name) == 0)
+                if (strcmp (name, theme->cursors[theme->cursor_count - 1]->name) == 0)
                         return theme->cursors[theme->cursor_count - 1];
         }
 
