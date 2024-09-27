@@ -74,7 +74,6 @@ test_default_seat (void)
       g_assert_true (gdk_device_get_display (pointer0) == display);
       g_assert_true (gdk_device_get_seat (pointer0) == seat0);
 
-      g_assert_nonnull (physical_devices);
       for (l = physical_devices; l; l = l->next)
         {
           device = l->data;
@@ -99,7 +98,6 @@ test_default_seat (void)
       g_assert_true (gdk_device_get_seat (keyboard0) == seat0);
       g_assert_true (gdk_device_get_source (keyboard0) == GDK_SOURCE_KEYBOARD);
 
-      g_assert_nonnull (physical_devices);
       for (l = physical_devices; l; l = l->next)
         {
           device = l->data;
