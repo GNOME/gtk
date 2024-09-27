@@ -3202,6 +3202,8 @@ static void
 gtk_label_set_text_internal (GtkLabel *self,
                              char     *str)
 {
+  GtkAccessibleRole role;
+
   if (g_strcmp0 (self->text, str) == 0)
     {
       g_free (str);
@@ -3211,10 +3213,15 @@ gtk_label_set_text_internal (GtkLabel *self,
   g_free (self->text);
   self->text = str;
 
-  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
-                                  GTK_ACCESSIBLE_PROPERTY_LABEL,
-                                  self->text,
-                                  -1);
+  role = gtk_accessible_get_accessible_role (GTK_ACCESSIBLE (self));
+
+  if (gtk_accessible_role_get_naming (role) != GTK_ACCESSIBLE_NAME_PROHIBITED)
+    {
+      gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL,
+                                      self->text,
+                                      -1);
+    }
 
   gtk_label_select_region_index (self, 0, 0);
 }
