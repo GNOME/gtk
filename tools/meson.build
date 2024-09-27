@@ -1,7 +1,7 @@
 # Installed tools
 
 extra_update_icon_cache_objs = []
-if win32_enabled
+if win32_enabled and host_machine.cpu_family() == 'x86'
   gen_uac_manifest = find_program('generate-uac-manifest.py')
 
   uac_exe_pkg = 'gtk4'
@@ -11,7 +11,7 @@ if win32_enabled
   # compile_resources doesn't like to consume targets with multiple outputs,
   # and the xxx.exe.manifest and xxx.rc are tied together
   uac_rc = custom_target(
-    'tools/@0@.rc'.format(uac_exe_name),
+    '@0@.rc'.format(uac_exe_name),
     output: ['@0@.rc'.format(uac_exe_name)],
     command: [gen_uac_manifest,
               '-p=@0@'.format(uac_exe_pkg),
