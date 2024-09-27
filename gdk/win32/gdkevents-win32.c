@@ -1746,6 +1746,50 @@ gdk_win32_event_handle_filters (GdkDisplay *display,
   return FALSE;
 }
 
+typedef enum
+{
+  GDK_WIN32_SURFACE_NOT_FOUND,
+  GDK_WIN32_SURFACE_FOUND,
+  GDK_WIN32_SURFACE_CREATED,
+  GDK_WIN32_SURFACE_EXITED,
+} surface_status;
+
+static GdkSurface*
+gdk_win32_display_find_surface (GdkDisplay     *display,
+                                MSG            *msg,
+                                surface_status *status)
+{
+  GdkSurface *surface = NULL;
+
+  g_return_val_if_fail (status != NULL, NULL);
+  surface = gdk_win32_display_handle_table_lookup_ (display, msg->hwnd);
+
+  if (surface == NULL)
+    {
+      switch (msg->message)
+        {
+        case WM_CREATE:
+          surface = (UNALIGNED GdkSurface*) (((LPCREATESTRUCTW) msg->lParam)->lpCreateParams);
+          GDK_SURFACE_HWND (surface) = msg->hwnd;
+          *status = GDK_WIN32_SURFACE_CREATED;
+          break;
+
+        case WM_QUIT: /* handle WM_QUIT here? */
+          GDK_NOTE (EVENTS, g_print (" %d", (int) msg->wParam));
+          *status = GDK_WIN32_SURFACE_EXITED;
+          break;
+
+        default:
+          GDK_NOTE (EVENTS, g_print (" (no GdkSurface)"));
+          *status = GDK_WIN32_SURFACE_NOT_FOUND;
+        }
+    }
+  else
+    *status = GDK_WIN32_SURFACE_FOUND;
+
+  return surface;
+}
+
 static gboolean
 gdk_event_translate (MSG *msg,
 		     int *ret_valp)
@@ -1764,6 +1808,7 @@ gdk_event_translate (MSG *msg,
   GdkSurface *surface = NULL;
   GdkWin32Surface *impl;
   GdkWin32Display *win32_display;
+  surface_status surface_status = GDK_WIN32_SURFACE_NOT_FOUND;
 
   GdkSurface *new_surface;
 
@@ -1785,9 +1830,14 @@ gdk_event_translate (MSG *msg,
   if (gdk_win32_event_handle_filters (display, msg, ret_valp))
     return TRUE;
 
-  surface = gdk_win32_display_handle_table_lookup_ (display, msg->hwnd);
+  surface = gdk_win32_display_find_surface (display, msg, &surface_status);
 
-  if (surface == NULL)
+  /*
+   * If we can't find the surface by the HWND that is recorded in our GdkDisplay,
+   * or we just created the GdkSurface via WM_CREATE, return FALSE; or if we are
+   * exiting the program, exit with the wParam of our MSG as the status code.
+   */
+  if (surface == NULL || surface_status == GDK_WIN32_SURFACE_CREATED)
     {
       /* XXX Handle WM_QUIT here ? */
       if (msg->message == WM_QUIT)
