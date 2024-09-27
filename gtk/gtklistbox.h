@@ -274,6 +274,12 @@ void           gtk_list_box_set_show_separators          (GtkListBox            
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_list_box_get_show_separators          (GtkListBox                   *box);
 
+GDK_AVAILABLE_IN_4_18
+void               gtk_list_box_set_tab_behavior (GtkListBox         *box,
+                                                  GtkListTabBehavior  behavior);
+GDK_AVAILABLE_IN_4_18
+GtkListTabBehavior gtk_list_box_get_tab_behavior (GtkListBox         *box);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkListBox, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkListBoxRow, g_object_unref)
 
