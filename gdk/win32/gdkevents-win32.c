@@ -1730,6 +1730,23 @@ _gdk_win32_surface_fill_min_max_info (GdkSurface *surface,
 			     GDK_BUTTON5_MASK)
 
 static gboolean
+gdk_win32_event_handle_filters (GdkDisplay *display,
+                                MSG        *msg,
+                                int        *ret_valp)
+{
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+
+  if (display_win32->filters)
+    {
+      if (apply_message_filters (display, msg, ret_valp, &display_win32->filters) ==
+          GDK_WIN32_MESSAGE_FILTER_REMOVE)
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+static gboolean
 gdk_event_translate (MSG *msg,
 		     int *ret_valp)
 {
@@ -1765,14 +1782,8 @@ gdk_event_translate (MSG *msg,
   display = gdk_display_get_default ();
   win32_display = GDK_WIN32_DISPLAY (display);
 
-  if (win32_display->filters)
-    {
-      /* Apply display filters */
-      GdkWin32MessageFilterReturn result = apply_message_filters (display, msg, ret_valp, &win32_display->filters);
-
-      if (result == GDK_WIN32_MESSAGE_FILTER_REMOVE)
-	return TRUE;
-    }
+  if (gdk_win32_event_handle_filters (display, msg, ret_valp))
+    return TRUE;
 
   surface = gdk_win32_display_handle_table_lookup_ (display, msg->hwnd);
 
