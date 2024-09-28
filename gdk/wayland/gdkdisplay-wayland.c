@@ -1221,7 +1221,7 @@ _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
   if (gdk_screen_get_setting (display_wayland->screen, "gtk-cursor-theme-size", &v))
     size = g_value_get_int (&v);
   else
-    size = 32;
+    size = 24;
   g_value_unset (&v);
 
   g_value_init (&v, G_TYPE_STRING);
