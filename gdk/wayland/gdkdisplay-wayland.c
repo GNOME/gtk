@@ -2005,6 +2005,7 @@ init_settings (GdkDisplay *display)
           g_debug ("Received no portal settings");
           g_clear_pointer (&iter, g_variant_iter_free);
           g_clear_pointer (&ret, g_variant_unref);
+          g_clear_object (&display_wayland->settings_portal);
 
           goto fallback;
         }
