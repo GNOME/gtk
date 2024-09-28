@@ -121,7 +121,8 @@ struct wl_buffer *_gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
                                                   int               *hotspot_x,
                                                   int               *hotspot_y,
                                                   int               *w,
-                                                  int               *h);
+                                                  int               *h,
+                                                  double            *scale);
 guint      _gdk_wayland_cursor_get_next_image_index (GdkWaylandDisplay *display,
                                                      GdkCursor         *cursor,
                                                      guint              scale,
