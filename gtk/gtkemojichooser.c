@@ -436,17 +436,6 @@ emoji_activated (GtkFlowBox      *box,
   GVariant *item;
   gunichar modifier;
 
-  if (should_close (chooser))
-    gtk_popover_popdown (GTK_POPOVER (chooser));
-  else
-    {
-      GtkWidget *popover;
-
-      popover = gtk_widget_get_ancestor (GTK_WIDGET (box), GTK_TYPE_POPOVER);
-      if (popover != GTK_WIDGET (chooser))
-        gtk_popover_popdown (GTK_POPOVER (popover));
-    }
-
   label = gtk_flow_box_child_get_child (child);
   text = g_strdup (gtk_label_get_label (GTK_LABEL (label)));
 
@@ -457,6 +446,17 @@ emoji_activated (GtkFlowBox      *box,
 
   g_signal_emit (data, signals[EMOJI_PICKED], 0, text);
   g_free (text);
+
+  if (should_close (chooser))
+    gtk_popover_popdown (GTK_POPOVER (chooser));
+  else
+    {
+      GtkWidget *popover;
+
+      popover = gtk_widget_get_ancestor (GTK_WIDGET (box), GTK_TYPE_POPOVER);
+      if (popover != GTK_WIDGET (chooser))
+        gtk_popover_popdown (GTK_POPOVER (popover));
+    }
 }
 
 static gboolean
