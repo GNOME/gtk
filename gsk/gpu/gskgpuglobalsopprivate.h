@@ -7,14 +7,16 @@
 
 G_BEGIN_DECLS
 
-typedef struct _GskGpuGlobalsInstance GskGpuGlobalsInstance;
-
 struct _GskGpuGlobalsInstance
 {
   float mvp[16];
   float clip[12];
   float scale[2];
+  float padding[2];
 };
+
+/* GPUs often want 32bit alignment */
+G_STATIC_ASSERT (sizeof (GskGpuGlobalsInstance) % 32 == 0);
 
 void                    gsk_gpu_globals_op                              (GskGpuFrame                    *frame,
                                                                          const graphene_vec2_t          *scale,

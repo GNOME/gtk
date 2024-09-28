@@ -17,7 +17,6 @@ struct _GskGLFrame
 {
   GskGpuFrame parent_instance;
 
-  GLuint globals_buffer_id;
   guint next_texture_slot;
   GLsync sync;
 
@@ -143,6 +142,17 @@ gsk_gl_frame_create_vertex_buffer (GskGpuFrame *frame,
 }
 
 static GskGpuBuffer *
+gsk_gl_frame_create_globals_buffer (GskGpuFrame *frame,
+                                    gsize        size)
+{
+  if (gdk_gl_context_has_feature (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+                                  GDK_GL_FEATURE_BUFFER_STORAGE))
+    return gsk_gl_mapped_buffer_new (GL_UNIFORM_BUFFER, size);
+  else
+    return gsk_gl_copied_buffer_new (GL_UNIFORM_BUFFER, size);
+}
+
+static GskGpuBuffer *
 gsk_gl_frame_create_storage_buffer (GskGpuFrame *frame,
                                     gsize        size)
 {
@@ -166,12 +176,14 @@ static void
 gsk_gl_frame_submit (GskGpuFrame       *frame,
                      GskRenderPassType  pass_type,
                      GskGpuBuffer      *vertex_buffer,
+                     GskGpuBuffer      *globals_buffer,
                      GskGpuOp          *op)
 {
   GskGLFrame *self = GSK_GL_FRAME (frame);
   GskGLCommandState state = {
     /* rest is 0 */
-    .current_samplers = { GSK_GPU_SAMPLER_N_SAMPLERS, GSK_GPU_SAMPLER_N_SAMPLERS }
+    .current_samplers = { GSK_GPU_SAMPLER_N_SAMPLERS, GSK_GPU_SAMPLER_N_SAMPLERS },
+    .globals = globals_buffer,
   };
 
   glEnable (GL_SCISSOR_TEST);
@@ -181,12 +193,6 @@ gsk_gl_frame_submit (GskGpuFrame       *frame,
 
   if (vertex_buffer)
     gsk_gl_buffer_bind (GSK_GL_BUFFER (vertex_buffer));
-
-  gsk_gl_frame_bind_globals (self);
-  glBufferData (GL_UNIFORM_BUFFER,
-                sizeof (GskGpuGlobalsInstance),
-                NULL,
-                GL_STREAM_DRAW);
 
   while (op)
     {
@@ -202,8 +208,6 @@ gsk_gl_frame_finalize (GObject *object)
   GskGLFrame *self = GSK_GL_FRAME (object);
 
   g_hash_table_unref (self->vaos);
-  if (self->globals_buffer_id != 0)
-    glDeleteBuffers (1, &self->globals_buffer_id);
 
   G_OBJECT_CLASS (gsk_gl_frame_parent_class)->finalize (object);
 }
@@ -219,6 +223,7 @@ gsk_gl_frame_class_init (GskGLFrameClass *klass)
   gpu_frame_class->cleanup = gsk_gl_frame_cleanup;
   gpu_frame_class->upload_texture = gsk_gl_frame_upload_texture;
   gpu_frame_class->create_vertex_buffer = gsk_gl_frame_create_vertex_buffer;
+  gpu_frame_class->create_globals_buffer = gsk_gl_frame_create_globals_buffer;
   gpu_frame_class->create_storage_buffer = gsk_gl_frame_create_storage_buffer;
   gpu_frame_class->write_texture_vertex_data = gsk_gl_frame_write_texture_vertex_data;
   gpu_frame_class->submit = gsk_gl_frame_submit;
@@ -264,14 +269,5 @@ gsk_gl_frame_use_program (GskGLFrame                *self,
   op_class->setup_vao (0);
 
   g_hash_table_insert (self->vaos, (gpointer) op_class, GUINT_TO_POINTER (vao));
-}
-
-void
-gsk_gl_frame_bind_globals (GskGLFrame *self)
-{
-  if (self->globals_buffer_id == 0)
-    glGenBuffers (1, &self->globals_buffer_id);
-
-  glBindBufferBase (GL_UNIFORM_BUFFER, 0, self->globals_buffer_id);
 }
 

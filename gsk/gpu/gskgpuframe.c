@@ -6,6 +6,7 @@
 #include "gskgpucacheprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpudownloadopprivate.h"
+#include "gskgpuglobalsopprivate.h"
 #include "gskgpuimageprivate.h"
 #include "gskgpunodeprocessorprivate.h"
 #include "gskgpuopprivate.h"
@@ -23,6 +24,8 @@
 
 /* GL_MAX_UNIFORM_BLOCK_SIZE is at 16384 */
 #define DEFAULT_STORAGE_BUFFER_SIZE 16 * 1024 * 64
+
+#define DEFAULT_N_GLOBALS (16384 / sizeof (GskGpuGlobalsInstance))
 
 #define GDK_ARRAY_NAME gsk_gpu_ops
 #define GDK_ARRAY_TYPE_NAME GskGpuOps
@@ -47,6 +50,9 @@ struct _GskGpuFramePrivate
   GskGpuBuffer *vertex_buffer;
   guchar *vertex_buffer_data;
   gsize vertex_buffer_used;
+  GskGpuBuffer *globals_buffer;
+  GskGpuGlobalsInstance *globals_buffer_data;
+  gsize n_globals;
   GskGpuBuffer *storage_buffer;
   guchar *storage_buffer_data;
   gsize storage_buffer_used;
@@ -65,6 +71,8 @@ gsk_gpu_frame_default_cleanup (GskGpuFrame *self)
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   GskGpuOp *op;
   gsize i;
+
+  priv->n_globals = 0;
 
   for (i = 0; i < gsk_gpu_ops_get_size (&priv->ops); i += op->op_class->size)
     {
@@ -139,6 +147,7 @@ gsk_gpu_frame_finalize (GObject *object)
   gsk_gpu_ops_clear (&priv->ops);
 
   g_clear_object (&priv->vertex_buffer);
+  g_clear_object (&priv->globals_buffer);
   g_clear_object (&priv->storage_buffer);
 
   g_object_unref (priv->device);
@@ -506,6 +515,13 @@ gsk_gpu_frame_create_vertex_buffer (GskGpuFrame *self,
 }
 
 static GskGpuBuffer *
+gsk_gpu_frame_create_globals_buffer (GskGpuFrame *self,
+                                     gsize        size)
+{
+  return GSK_GPU_FRAME_GET_CLASS (self)->create_globals_buffer (self, size);
+}
+
+static GskGpuBuffer *
 gsk_gpu_frame_create_storage_buffer (GskGpuFrame *self,
                                      gsize        size)
 {
@@ -558,6 +574,48 @@ gsk_gpu_frame_reserve_vertex_data (GskGpuFrame *self,
   priv->vertex_buffer_used = size_needed;
 
   return size_needed - size;
+}
+
+gsize
+gsk_gpu_frame_add_globals (GskGpuFrame                 *self,
+                           const GskGpuGlobalsInstance *globals)
+{
+  GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  gsize size_needed, result;
+
+  if (priv->globals_buffer == NULL)
+    {
+      priv->globals_buffer = gsk_gpu_frame_create_globals_buffer (self, sizeof (GskGpuGlobalsInstance) * DEFAULT_N_GLOBALS);
+      if (priv->globals_buffer == NULL)
+        return 0;
+    }
+  if (priv->globals_buffer_data == NULL)
+    priv->globals_buffer_data = (GskGpuGlobalsInstance *) gsk_gpu_buffer_map (priv->globals_buffer);
+
+  size_needed = sizeof (GskGpuGlobalsInstance) * (priv->n_globals + 1);
+
+  if (gsk_gpu_buffer_get_size (priv->globals_buffer) < size_needed)
+    {
+      gsize old_size = gsk_gpu_buffer_get_size (priv->globals_buffer);
+      GskGpuBuffer *new_buffer = gsk_gpu_frame_create_globals_buffer (self, old_size * 2);
+      GskGpuGlobalsInstance *new_data = (GskGpuGlobalsInstance *) gsk_gpu_buffer_map (new_buffer);
+
+      if (priv->globals_buffer_data)
+        {
+          memcpy (new_data, priv->globals_buffer_data, old_size);
+          gsk_gpu_buffer_unmap (priv->globals_buffer, old_size);
+        }
+      g_object_unref (priv->globals_buffer);
+      priv->globals_buffer = new_buffer;
+      priv->globals_buffer_data = new_data;
+    }
+
+  result = priv->n_globals;
+
+  priv->globals_buffer_data[priv->n_globals] = *globals;
+  priv->n_globals++;
+
+  return result;
 }
 
 guchar *
@@ -691,6 +749,12 @@ gsk_gpu_frame_submit (GskGpuFrame       *self,
       priv->vertex_buffer_used = 0;
     }
 
+  if (priv->globals_buffer)
+    {
+      gsk_gpu_buffer_unmap (priv->globals_buffer, sizeof (GskGpuGlobalsInstance) * priv->n_globals);
+      priv->globals_buffer_data = NULL;
+    }
+
   if (priv->storage_buffer_data)
     {
       gsk_gpu_buffer_unmap (priv->storage_buffer, priv->storage_buffer_used);
@@ -701,6 +765,7 @@ gsk_gpu_frame_submit (GskGpuFrame       *self,
   GSK_GPU_FRAME_GET_CLASS (self)->submit (self,
                                           pass_type,
                                           priv->vertex_buffer,
+                                          priv->globals_buffer,
                                           priv->first_op);
 }
 

@@ -230,6 +230,13 @@ gsk_vulkan_frame_create_vertex_buffer (GskGpuFrame *frame,
 }
 
 static GskGpuBuffer *
+gsk_vulkan_frame_create_globals_buffer (GskGpuFrame *frame,
+                                        gsize        size)
+{
+  return NULL;
+}
+
+static GskGpuBuffer *
 gsk_vulkan_frame_create_storage_buffer (GskGpuFrame *frame,
                                         gsize        size)
 {
@@ -249,6 +256,7 @@ static void
 gsk_vulkan_frame_submit (GskGpuFrame       *frame,
                          GskRenderPassType  pass_type,
                          GskGpuBuffer      *vertex_buffer,
+                         GskGpuBuffer      *globals_buffer,
                          GskGpuOp          *op)
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
@@ -351,6 +359,7 @@ gsk_vulkan_frame_class_init (GskVulkanFrameClass *klass)
   gpu_frame_class->begin = gsk_vulkan_frame_begin;
   gpu_frame_class->upload_texture = gsk_vulkan_frame_upload_texture;
   gpu_frame_class->create_vertex_buffer = gsk_vulkan_frame_create_vertex_buffer;
+  gpu_frame_class->create_globals_buffer = gsk_vulkan_frame_create_globals_buffer;
   gpu_frame_class->create_storage_buffer = gsk_vulkan_frame_create_storage_buffer;
   gpu_frame_class->write_texture_vertex_data = gsk_vulkan_frame_write_texture_vertex_data;
   gpu_frame_class->submit = gsk_vulkan_frame_submit;

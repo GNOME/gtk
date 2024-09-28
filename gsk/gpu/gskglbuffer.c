@@ -63,10 +63,16 @@ gsk_gl_buffer_bind (GskGLBuffer *self)
 }
 
 void
-gsk_gl_buffer_bind_base (GskGLBuffer *self,
-                         GLuint       index)
+gsk_gl_buffer_bind_range (GskGLBuffer *self,
+                          GLuint       index,
+                          GLintptr     offset,
+                          GLsizeiptr   size)
 {
-  glBindBufferBase (self->target, index, self->buffer_id);
+  glBindBufferRange (self->target,
+                     index,
+                     self->buffer_id,
+                     offset,
+                     size);
 }
 
 static void
