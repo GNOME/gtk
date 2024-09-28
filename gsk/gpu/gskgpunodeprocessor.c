@@ -532,7 +532,7 @@ gsk_gpu_node_processor_get_clip_bounds (GskGpuNodeProcessor *self,
     {
       if (!gsk_rect_intersection (&scissor, &self->clip.rect.bounds, out_bounds))
         {
-          g_warning ("Clipping is broken, everything is clipped, but we didn't early-exit.\n");
+          g_warning ("Clipping is broken, everything is clipped, but we didn't early-exit.");
           *out_bounds = self->clip.rect.bounds;
         }
     }
