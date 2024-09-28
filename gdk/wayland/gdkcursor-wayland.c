@@ -160,7 +160,8 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
                                 int               *hotspot_x,
                                 int               *hotspot_y,
                                 int               *width,
-                                int               *height)
+                                int               *height,
+                                double            *scale)
 {
   GdkTexture *texture;
 
@@ -172,6 +173,7 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
         {
           *hotspot_x = *hotspot_y = 0;
           *width = *height = 0;
+          *scale = 1;
           return NULL;
         }
 
@@ -194,10 +196,12 @@ _gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
 
           image = c->images[image_index];
 
-          *width = image->width;
-          *height = image->height;
-          *hotspot_x = image->hotspot_x;
-          *hotspot_y = image->hotspot_y;
+          *scale = c->size / (double) display->cursor_theme_size;
+
+          *width = image->width / *scale;
+          *height = image->height / *scale;
+          *hotspot_x = image->hotspot_x / *scale;
+          *hotspot_y = image->hotspot_y / *scale;
 
           return wl_cursor_image_get_buffer (image);
         }
@@ -231,6 +235,7 @@ from_texture:
       *hotspot_y = gdk_cursor_get_hotspot_y (cursor);
       *width = gdk_texture_get_width (texture);
       *height = gdk_texture_get_height (texture);
+      *scale = 1;
 
       cairo_surface_reference (surface);
       buffer = _gdk_wayland_shm_surface_get_wl_buffer (surface);
@@ -242,6 +247,8 @@ from_texture:
     }
   else
     {
+      *scale = desired_scale;
+
       texture = gdk_cursor_get_texture_for_size (cursor,
                                                  display->cursor_theme_size,
                                                  desired_scale,
@@ -281,7 +288,8 @@ from_texture:
                                              desired_scale,
                                              image_index,
                                              hotspot_x, hotspot_y,
-                                             width, height);
+                                             width, height,
+                                             scale);
     }
   else
     {

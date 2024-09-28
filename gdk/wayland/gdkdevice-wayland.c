@@ -261,6 +261,7 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
     gdk_wayland_device_get_pointer (wayland_device);
   struct wl_buffer *buffer;
   int x, y, w, h;
+  double scale;
   guint next_image_index, next_image_delay;
   gboolean retval = G_SOURCE_REMOVE;
   GdkWaylandTabletData *tablet;
@@ -273,7 +274,8 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
                                                pointer->cursor,
                                                pointer->current_output_scale,
                                                pointer->cursor_image_index,
-                                               &x, &y, &w, &h);
+                                               &x, &y, &w, &h,
+                                               &scale);
     }
   else
     {
@@ -310,6 +312,15 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
   if (buffer)
     {
       wl_surface_attach (pointer->pointer_surface, buffer, 0, 0);
+      if (pointer->pointer_surface_viewport)
+        {
+          wp_viewport_set_source (pointer->pointer_surface_viewport,
+                                  wl_fixed_from_int (0),
+                                  wl_fixed_from_int (0),
+                                  wl_fixed_from_double (w * scale),
+                                  wl_fixed_from_double (h * scale));
+          wp_viewport_set_destination (pointer->pointer_surface_viewport, w, h);
+        }
       wl_surface_damage (pointer->pointer_surface,  0, 0, w, h);
       wl_surface_commit (pointer->pointer_surface);
     }

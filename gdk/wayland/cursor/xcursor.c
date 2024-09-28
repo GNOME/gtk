@@ -402,6 +402,38 @@ _XcursorFindBestSize (XcursorFileHeader *fileHeader,
 	if (fileHeader->tocs[n].type != XCURSOR_IMAGE_TYPE)
 	    continue;
 	thisSize = fileHeader->tocs[n].subtype;
+	if (thisSize == size)
+        {
+            bestSize = size;
+	    nsizes++;
+        }
+    }
+
+    if (bestSize)
+        goto done;
+
+    for (n = 0; n < fileHeader->ntoc; n++)
+    {
+	if (fileHeader->tocs[n].type != XCURSOR_IMAGE_TYPE)
+	    continue;
+	thisSize = fileHeader->tocs[n].subtype;
+	if (thisSize == 2 * size)
+        {
+            bestSize = 2 * size;
+	    nsizes++;
+        }
+    }
+
+    if (bestSize)
+        goto done;
+
+    for (n = 0; n < fileHeader->ntoc; n++)
+    {
+	if (fileHeader->tocs[n].type != XCURSOR_IMAGE_TYPE)
+	    continue;
+	thisSize = fileHeader->tocs[n].subtype;
+        if (thisSize < size)
+            continue;
 	if (!bestSize || dist (thisSize, size) < dist (bestSize, size))
 	{
 	    bestSize = thisSize;
@@ -410,6 +442,25 @@ _XcursorFindBestSize (XcursorFileHeader *fileHeader,
 	else if (thisSize == bestSize)
 	    nsizes++;
     }
+
+    if (bestSize)
+        goto done;
+
+    for (n = 0; n < fileHeader->ntoc; n++)
+    {
+	if (fileHeader->tocs[n].type != XCURSOR_IMAGE_TYPE)
+	    continue;
+	thisSize = fileHeader->tocs[n].subtype;
+	if (!bestSize || dist (thisSize, size) < dist (bestSize, size))
+	{
+	    bestSize = thisSize;
+	    nsizes = 1;
+	}
+	else if (thisSize == bestSize)
+	    nsizes++;
+    }
+
+done:
     *nsizesp = nsizes;
     return bestSize;
 }
