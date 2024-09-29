@@ -14,9 +14,6 @@ struct _GdkDmabufDownloaderInterface
   GTypeInterface g_iface;
 
   void                  (* close)                               (GdkDmabufDownloader            *downloader);
-  gboolean              (* supports)                            (GdkDmabufDownloader            *downloader,
-                                                                 GdkDmabufTexture               *texture,
-                                                                 GError                        **error);
   gboolean              (* download)                            (GdkDmabufDownloader            *downloader,
                                                                  GdkDmabufTexture               *texture,
                                                                  GdkMemoryFormat                 format,
@@ -26,9 +23,6 @@ struct _GdkDmabufDownloaderInterface
 };
 
 void                    gdk_dmabuf_downloader_close             (GdkDmabufDownloader            *self);
-gboolean                gdk_dmabuf_downloader_supports          (GdkDmabufDownloader            *self,
-                                                                 GdkDmabufTexture               *texture,
-                                                                 GError                        **error);
 gboolean                gdk_dmabuf_downloader_download          (GdkDmabufDownloader            *downloader,
                                                                  GdkDmabufTexture               *texture,
                                                                  GdkMemoryFormat                 format,

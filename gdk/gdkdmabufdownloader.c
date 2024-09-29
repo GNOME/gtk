@@ -19,19 +19,6 @@ gdk_dmabuf_downloader_close (GdkDmabufDownloader *self)
 }
 
 gboolean
-gdk_dmabuf_downloader_supports (GdkDmabufDownloader  *self,
-                                GdkDmabufTexture     *texture,
-                                GError              **error)
-{
-  GdkDmabufDownloaderInterface *iface;
-
-  g_return_val_if_fail (GDK_IS_DMABUF_DOWNLOADER (self), FALSE);
-
-  iface = GDK_DMABUF_DOWNLOADER_GET_IFACE (self);
-  return iface->supports (self, texture, error);
-}
-
-gboolean
 gdk_dmabuf_downloader_download (GdkDmabufDownloader *self,
                                 GdkDmabufTexture    *texture,
                                 GdkMemoryFormat      format,
