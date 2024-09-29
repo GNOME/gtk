@@ -1405,6 +1405,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 {
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   uint32_t i, j, k;
+  const char *env_var = "GDK_VULKAN_DEVICE";
   const char *override;
   gboolean list_devices;
   int first, last;
@@ -1435,26 +1436,35 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   if (skip_features & GDK_VULKAN_FEATURE_YCBCR)
     skip_features |= GDK_VULKAN_FEATURE_DMABUF;
 
-  override = g_getenv ("GDK_VULKAN_DEVICE");
+  override = g_getenv (env_var);
   list_devices = FALSE;
   if (override)
     {
-      if (g_strcmp0 (override, "list") == 0)
+      if (g_strcmp0 (override, "help") == 0)
+        {
+          fprintf (stderr,
+                   "%s overrides the choice of Vulkan device.\n\n", env_var);
+          fprintf (stderr, "Supported %s values:\n", env_var);
+          fprintf (stderr, "  N       Use the N-th device\n");
+          fprintf (stderr, "  list    List available devices\n");
+          fprintf (stderr, "  help    Print this help\n");
+        }
+      else if (g_strcmp0 (override, "list") == 0)
         list_devices = TRUE;
       else
         {
-          gint64 device_idx;
+          guint64 device_idx;
           GError *error2 = NULL;
 
-          if (!g_ascii_string_to_signed (override, 10, 0, G_MAXINT, &device_idx, &error2))
+          if (!g_ascii_string_to_unsigned (override, 10, 0, G_MAXINT, &device_idx, &error2))
             {
-              g_warning ("Failed to parse %s: %s", "GDK_VULKAN_DEVICE", error2->message);
+              fprintf (stderr, "Failed to parse %s: %s\n", env_var, error2->message);
+              fprintf (stderr, "Try %s=help\n", env_var);
               g_error_free (error2);
               device_idx = -1;
             }
-
-          if (device_idx < 0 || device_idx >= n_devices)
-            g_warning ("%s value out of range, ignoring", "GDK_VULKAN_DEVICE");
+          else if (device_idx < 0 || device_idx >= n_devices)
+            fprintf (stderr, "%s value out of range, ignoring\n", env_var);
           else
             {
               first = device_idx;
