@@ -158,7 +158,6 @@ static void
 gsk_gl_renderer_dmabuf_downloader_init (GdkDmabufDownloaderInterface *iface)
 {
   iface->close = gsk_gl_renderer_dmabuf_downloader_close;
-  iface->supports = gsk_gl_renderer_dmabuf_downloader_supports;
   iface->download = gsk_gl_renderer_dmabuf_downloader_download;
 }
 
