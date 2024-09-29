@@ -1039,6 +1039,19 @@ gsk_gpu_node_processor_add_node_clipped (GskGpuNodeProcessor   *self,
     }
   else
     {
+      graphene_rect_t scissored_clip;
+
+      if (gsk_gpu_node_processor_rect_device_to_clip (self,
+                                                      &GSK_RECT_INIT_CAIRO (&self->scissor),
+                                                      &scissored_clip))
+        {
+          if (!gsk_rect_intersection (&scissored_clip, &clip, &clip))
+            {
+              gsk_gpu_clip_init_copy (&self->clip, &old_clip);
+              return;
+            }
+        }
+
       if (!gsk_gpu_clip_intersect_rect (&self->clip, &old_clip, &clip))
         {
           GskGpuImage *image;
