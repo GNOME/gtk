@@ -767,6 +767,7 @@ init_settings (GdkScreen *screen)
           g_debug ("Received no portal settings");
           g_clear_pointer (&iter, g_variant_iter_free);
           g_clear_pointer (&ret, g_variant_unref);
+          g_clear_object (&screen_wayland->settings_portal);
 
           goto fallback;
         }
