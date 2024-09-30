@@ -27,7 +27,7 @@ void                        gdk_dmabuf_close_fds                (GdkDmabuf      
 #ifdef HAVE_DMABUF
 
 GdkDmabufFormats *          gdk_dmabuf_get_mmap_formats         (void) G_GNUC_CONST;
-void                        gdk_dmabuf_download_mmap            (GdkTexture                     *texture,
+gboolean                    gdk_dmabuf_download_mmap            (GdkTexture                     *texture,
                                                                  GdkMemoryFormat                 format,
                                                                  GdkColorState                  *color_state,
                                                                  guchar                         *data,
