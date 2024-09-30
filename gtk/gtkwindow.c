@@ -6342,7 +6342,7 @@ unprefix_handle (const char *handle)
   if (g_str_has_prefix (handle, "wayland:"))
     return handle + strlen ("wayland:");
   else if (g_str_has_prefix (handle, "x11:"))
-    return handle + strlen ("x1!:");
+    return handle + strlen ("x11:");
   else
     return handle;
 }
