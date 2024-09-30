@@ -147,16 +147,6 @@ gsk_ngl_renderer_get_scale (GskGpuRenderer *self)
   return gdk_gl_context_get_scale (GDK_GL_CONTEXT (context));
 }
 
-static GdkDmabufFormats *
-gsk_ngl_renderer_get_dmabuf_formats (GskGpuRenderer *renderer)
-{
-  GdkDisplay *display = GDK_DISPLAY (gdk_draw_context_get_display (gsk_gpu_renderer_get_context (renderer)));
-
-  gdk_dmabuf_egl_init (display);
-
-  return display->egl_dmabuf_formats;
-}
-
 static void
 gsk_ngl_renderer_unrealize (GskRenderer *renderer)
 {
@@ -184,7 +174,6 @@ gsk_ngl_renderer_class_init (GskNglRendererClass *klass)
   gpu_renderer_class->restore_current = gsk_ngl_renderer_restore_current;
   gpu_renderer_class->get_backbuffer = gsk_ngl_renderer_get_backbuffer;
   gpu_renderer_class->get_scale = gsk_ngl_renderer_get_scale;
-  gpu_renderer_class->get_dmabuf_formats = gsk_ngl_renderer_get_dmabuf_formats;
 
   renderer_class->unrealize = gsk_ngl_renderer_unrealize;
 }

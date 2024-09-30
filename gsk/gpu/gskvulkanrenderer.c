@@ -134,20 +134,6 @@ gsk_vulkan_renderer_get_backbuffer (GskGpuRenderer *renderer)
   return self->targets[gdk_vulkan_context_get_draw_index (context)];
 }
 
-static GdkDmabufFormats *
-gsk_vulkan_renderer_get_dmabuf_formats (GskGpuRenderer *renderer)
-{
-#ifdef HAVE_DMABUF
-  GdkDisplay *display = GDK_DISPLAY (gdk_draw_context_get_display (gsk_gpu_renderer_get_context (renderer)));
-
-  gdk_vulkan_init_dmabuf (display);
-
-  return display->vk_dmabuf_formats;
-#else
-  return NULL;
-#endif
-}
-
 static void
 gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
 {
@@ -177,7 +163,6 @@ gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
   gpu_renderer_class->save_current = gsk_vulkan_renderer_save_current;
   gpu_renderer_class->restore_current = gsk_vulkan_renderer_restore_current;
   gpu_renderer_class->get_backbuffer = gsk_vulkan_renderer_get_backbuffer;
-  gpu_renderer_class->get_dmabuf_formats = gsk_vulkan_renderer_get_dmabuf_formats;
 
   renderer_class->unrealize = gsk_vulkan_renderer_unrealize;
 #endif
