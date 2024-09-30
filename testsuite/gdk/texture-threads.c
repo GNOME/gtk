@@ -64,7 +64,7 @@ texture_threads (void)
   GError *error = NULL;
 
   /* 1. Get a GL renderer */
-  gl_renderer = gsk_gl_renderer_new ();
+  gl_renderer = gsk_ngl_renderer_new ();
   if (!gsk_renderer_realize_for_display (gl_renderer, gdk_display_get_default (), &error))
     {
       g_test_skip (error->message);
