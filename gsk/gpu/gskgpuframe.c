@@ -17,6 +17,7 @@
 #include "gskrendererprivate.h"
 
 #include "gdk/gdkdmabufdownloaderprivate.h"
+#include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
 
@@ -806,6 +807,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                                 gsize            stride)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
+  const GdkDmabuf *dmabuf;
   GdkColorState *image_cs;
   GskGpuImage *image;
 
@@ -826,10 +828,11 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
     }
 
   image_cs = gdk_texture_get_color_state (texture);
+  dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
 
   gsk_gpu_frame_cleanup (self);
 
-  if (gsk_gpu_image_get_format (image) != format ||
+  if (gdk_memory_format_get_dmabuf_fourcc (gsk_gpu_image_get_format (image)) != dmabuf->fourcc ||
       image_cs != color_state)
     {
       GskGpuImage *converted;
