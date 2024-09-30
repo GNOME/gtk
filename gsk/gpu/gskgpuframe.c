@@ -788,6 +788,14 @@ gsk_gpu_frame_render (GskGpuFrame            *self,
   gsk_gpu_frame_submit (self, pass_type);
 }
 
+static gboolean
+image_is_uploaded (GskGpuImage *image)
+{
+  /* If we explicitly uploaded an image, we don't need the toggle ref to
+   * keep the texture alive, because uploaded images are copies. */
+  return (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_TOGGLE_REF) == 0;
+}
+
 void
 gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                                 gint64           timestamp,
@@ -804,25 +812,20 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
   priv->timestamp = timestamp;
   gsk_gpu_cache_set_time (gsk_gpu_device_get_cache (priv->device), timestamp);
 
-  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, color_state);
-  if (image != NULL)
-    {
-      image_cs = color_state;
-    }
-  else
-    {
-      image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, NULL);
-      if (image == NULL)
-        image = gsk_gpu_frame_do_upload_texture (self, TRUE, FALSE, texture);
+  image = gsk_gpu_cache_lookup_texture_image (gsk_gpu_device_get_cache (priv->device), texture, NULL);
+  if (image && image_is_uploaded (image))
+    image = NULL;
 
-      if (image == NULL)
-        {
-          g_critical ("Could not upload texture");
-          return;
-        }
+  if (image == NULL)
+    image = gsk_gpu_frame_do_upload_texture (self, TRUE, FALSE, texture);
 
-      image_cs = gdk_texture_get_color_state (texture);
+  if (image == NULL)
+    {
+      g_critical ("Could not upload texture");
+      return;
     }
+
+  image_cs = gdk_texture_get_color_state (texture);
 
   gsk_gpu_frame_cleanup (self);
 
