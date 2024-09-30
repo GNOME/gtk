@@ -6381,6 +6381,9 @@ gtk_window_export_handle (GtkWindow               *window,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   ExportHandleData *data;
 
+  if (G_UNLIKELY (!priv->surface))
+    return FALSE;
+
   data = g_new (ExportHandleData, 1);
   data->window = window;
   data->callback = callback;
@@ -6397,7 +6400,8 @@ gtk_window_unexport_handle (GtkWindow  *window,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
 
-  gdk_toplevel_unexport_handle (GDK_TOPLEVEL (priv->surface), unprefix_handle (handle));
+  if (G_LIKELY (priv->surface))
+    gdk_toplevel_unexport_handle (GDK_TOPLEVEL (priv->surface), unprefix_handle (handle));
 }
 
 static GtkPointerFocus *
