@@ -61,8 +61,8 @@ gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
   eglQueryDmaBufFormatsEXT (egl_display, num_fourccs, fourccs, &num_fourccs);
 
   n_mods = 80;
-  modifiers = g_new (guint64, n_mods);
-  external_only = g_new (unsigned int, n_mods);
+  modifiers = g_new0 (guint64, n_mods);
+  external_only = g_new0 (unsigned int, n_mods);
 
   for (int i = 0; i < num_fourccs; i++)
     {
