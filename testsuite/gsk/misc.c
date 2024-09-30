@@ -149,40 +149,6 @@ test_container_disjoint (void)
   gsk_render_node_unref (nodes[1]);
 }
 
-const char shader1[] =
-"uniform float progress;\n"
-"uniform sampler2D u_texture1;\n"
-"uniform sampler2D u_texture2;\n"
-""
-"vec4 getFromColor (vec2 uv) {\n"
-"  return GskTexture(u_texture1, uv);\n"
-"}\n"
-"\n"
-"vec4 getToColor (vec2 uv) {\n"
-"  return GskTexture(u_texture2, uv);\n"
-"}\n"
-"\n"
-"// author: bobylito\n"
-"// license: MIT\n"
-"const float SQRT_2 = 1.414213562373;\n"
-"uniform float dots;// = 20.0;\n"
-"uniform vec2 center; //= vec2(0, 0);\n"
-"\n"
-"uniform int test1;\n"
-"uniform bool test2;\n"
-"uniform vec3 test3;\n"
-"uniform vec4 test4;\n"
-"\n"
-"vec4 transition(vec2 uv) {\n"
-"  bool nextImage = distance(fract(uv * dots), vec2(0.5, 0.5)) < ( progress / distance(uv, center));\n"
-"  return nextImage ? getToColor(uv) : getFromColor(uv);\n"
-"}\n"
-"\n"
-"void mainImage(out vec4 fragColor, in vec2 fragCoord, in vec2 resolution, in vec2 uv)\n"
-"{\n"
-"  fragColor = transition(uv);\n"
-"}\n";
-
 static void
 test_renderer (GskRenderer *renderer)
 {
@@ -191,10 +157,6 @@ test_renderer (GskRenderer *renderer)
   GdkSurface *surface;
   gboolean res;
   GError *error = NULL;
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  GskGLShader *shader;
-G_GNUC_END_IGNORE_DEPRECATIONS
-  GBytes *bytes;
 
   g_assert (GSK_IS_RENDERER (renderer));
 
@@ -220,24 +182,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   g_assert_true (gsk_renderer_is_realized (renderer));
   g_assert_true (gsk_renderer_get_surface (renderer) == surface);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  bytes = g_bytes_new_static (shader1, sizeof (shader1));
-  shader = gsk_gl_shader_new_from_bytes (bytes);
-  g_bytes_unref (bytes);
-  res = gsk_gl_shader_compile (shader, renderer, &error);
-  if (GSK_IS_GL_RENDERER (renderer))
-    {
-      g_assert_no_error (error);
-      g_assert_true (res);
-    }
-  else
-    {
-      g_assert_false (res);
-      g_assert_error (error, G_IO_ERROR, G_IO_ERROR_NOT_SUPPORTED);
-      g_clear_error (&error);
-    }
-G_GNUC_END_IGNORE_DEPRECATIONS
-
   gsk_renderer_unrealize (renderer);
 
   g_assert_false (gsk_renderer_is_realized (renderer));
@@ -259,16 +203,30 @@ test_cairo_renderer (void)
 }
 
 static void
-test_gl_renderer (void)
+test_ngl_renderer (void)
 {
 #ifdef GDK_RENDERING_GL
   GskRenderer *renderer;
 
-  renderer = gsk_gl_renderer_new ();
+  renderer = gsk_ngl_renderer_new ();
   test_renderer (renderer);
   g_clear_object (&renderer);
 #else
   g_test_skip ("no GL support");
+#endif
+}
+
+static void
+test_vulkan_renderer (void)
+{
+#ifdef GDK_RENDERING_VULKAN
+  GskRenderer *renderer;
+
+  renderer = gsk_vulkan_renderer_new ();
+  test_renderer (renderer);
+  g_clear_object (&renderer);
+#else
+  g_test_skip ("no Vulkan support");
 #endif
 }
 
@@ -284,7 +242,8 @@ main (int argc, char *argv[])
   g_test_add_func ("/rendernode/conic-gradient/angle", test_conic_gradient_angle);
   g_test_add_func ("/rendernode/container/disjoint", test_container_disjoint);
   g_test_add_func ("/renderer/cairo", test_cairo_renderer);
-  g_test_add_func ("/renderer/gl", test_gl_renderer);
+  g_test_add_func ("/renderer/ngl", test_ngl_renderer);
+  g_test_add_func ("/renderer/vulkan", test_vulkan_renderer);
 
   return g_test_run ();
 }
