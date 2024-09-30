@@ -9,7 +9,6 @@
 
 #include "gtkfishbowl.h"
 #include "gtkgears.h"
-#include "gskshaderpaintable.h"
 
 #include "nodewidget.h"
 #include "graphwidget.h"
@@ -152,46 +151,6 @@ create_switch (void)
   return w;
 }
 
-static gboolean
-update_paintable (GtkWidget     *widget,
-                  GdkFrameClock *frame_clock,
-                  gpointer       user_data)
-{
-  GskShaderPaintable *paintable;
-  gint64 frame_time;
-
-  paintable = GSK_SHADER_PAINTABLE (gtk_picture_get_paintable (GTK_PICTURE (widget)));
-  frame_time = gdk_frame_clock_get_frame_time (frame_clock);
-  gsk_shader_paintable_update_time (paintable, 0, frame_time);
-
-  return G_SOURCE_CONTINUE;
-}
-
-static GtkWidget *
-create_cogs (void)
-{
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  GtkWidget *picture;
-  static GskGLShader *cog_shader = NULL;
-  GdkPaintable *paintable;
-
- if (cog_shader == NULL)
-    cog_shader = gsk_gl_shader_new_from_resource ("/gltransition/cogs2.glsl");
-  paintable = gsk_shader_paintable_new (g_object_ref (cog_shader), NULL);
-  picture = gtk_picture_new_for_paintable (paintable);
-  gtk_widget_set_size_request (picture, 150, 75);
-  gtk_widget_add_tick_callback (picture, update_paintable, NULL, NULL);
-
-  return picture;
-G_GNUC_END_IGNORE_DEPRECATIONS
-}
-
-static gboolean
-check_cogs (GtkFishbowl *fb)
-{
-  return GSK_IS_GL_RENDERER (gtk_native_get_renderer (gtk_widget_get_native (GTK_WIDGET (fb))));
-}
-
 static void
 mapped (GtkWidget *w)
 {
@@ -241,7 +200,6 @@ static const struct {
   { "Gears",      create_gears,          NULL },
   { "Switch",     create_switch,         NULL },
   { "Menubutton", create_menu_button,    NULL },
-  { "Shader",     create_cogs,           check_cogs },
   { "Tiger",      create_tiger,          NULL },
   { "Graph",      create_graph,          NULL },
 };
