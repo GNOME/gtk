@@ -270,17 +270,20 @@ attribs_fini (attribs_t *attribs)
 #define attribs_add_static_array(attribs, array) \
   do attribs_add_bulk (attribs, array, G_N_ELEMENTS (array)); while (0)
 
-static int
-find_pixel_format_with_defined_swap_flag (HDC  hdc,
-                                          int  formats[],
-                                          UINT count)
+static bool
+find_pixel_format_with_defined_swap_method (HDC   hdc,
+                                            int   formats[],
+                                            UINT  count,
+                                            UINT *index,
+                                            int  *swap_method)
 {
+  SetLastError (0);
+
   for (UINT i = 0; i < count; i++)
     {
       int query = WGL_SWAP_METHOD_ARB;
       int value = WGL_SWAP_UNDEFINED_ARB;
 
-      SetLastError (0);
       if (!wglGetPixelFormatAttribivARB (hdc, formats[i], 0, 1, &query, &value))
         {
           WIN32_API_FAILED ("wglGetPixelFormatAttribivARB");
@@ -288,10 +291,15 @@ find_pixel_format_with_defined_swap_flag (HDC  hdc,
         }
 
       if (value != WGL_SWAP_UNDEFINED_ARB)
-        return formats[i];
+        {
+          *index = i;
+          *swap_method = value;
+
+          return true;
+        }
     }
 
-  return 0;
+  return false;
 }
 
 static int
@@ -337,6 +345,8 @@ choose_pixel_format_arb_attribs (GdkWin32Display *display_win32,
   UINT count = 0;
   int format = 0;
   int saved = 0;
+  UINT index = 0;
+  int swap_method = WGL_SWAP_UNDEFINED_ARB;
 
 #define EXT_CALL(api, args) \
   do {                                               \
@@ -357,7 +367,7 @@ choose_pixel_format_arb_attribs (GdkWin32Display *display_win32,
 
   attribs_add_static_array (&attribs, attribs_base);
 
-  if (display_win32->wgl_support_gdi)
+  if (display_win32->wgl_quirks->force_gdi_compatibility)
     attribs_add (&attribs, WGL_SUPPORT_GDI_ARB, GL_TRUE);
 
   attribs_commit (&attribs);
@@ -383,26 +393,40 @@ choose_pixel_format_arb_attribs (GdkWin32Display *display_win32,
 
   /* Do we have a defined swap method? */
 
-  format = find_pixel_format_with_defined_swap_flag (hdc, formats, count);
-  if (format > 0)
-    goto done;
+  if (find_pixel_format_with_defined_swap_method (hdc, formats, count, &index, &swap_method))
+    {
+      if (!display_win32->wgl_quirks->disallow_swap_exchange || swap_method != WGL_SWAP_EXCHANGE_ARB)
+        {
+          format = formats[index];
+          goto done;
+        }
+    }
 
   /* Nope, but we can try to ask for it explicitly */
 
-  const int swap_methods[] = {
-    WGL_SWAP_EXCHANGE_ARB,
+  const int swap_methods[] = 
+  {
+    (display_win32->wgl_quirks->disallow_swap_exchange) ? 0 : WGL_SWAP_EXCHANGE_ARB,
     WGL_SWAP_COPY_ARB,
   };
   for (size_t i = 0; i < G_N_ELEMENTS (swap_methods); i++)
     {
+      if (swap_methods[i] == 0)
+        continue;
+
       attribs_add (&attribs, WGL_SWAP_METHOD_ARB, swap_methods[i]);
 
       EXT_CALL (wglChoosePixelFormatARB, (hdc, attribs_data (&attribs), NULL,
                                           G_N_ELEMENTS (formats), formats,
                                           &count));
-      format = find_pixel_format_with_defined_swap_flag (hdc, formats, count);
-      if (format > 0)
-        goto done;
+      if (find_pixel_format_with_defined_swap_method (hdc, formats, count, &index, &swap_method))
+        {
+          if (!display_win32->wgl_quirks->disallow_swap_exchange || swap_method != WGL_SWAP_EXCHANGE_ARB)
+            {
+              format = formats[index];
+              goto done;
+            }
+        }
 
       attribs_reset (&attribs);
     }
@@ -420,10 +444,9 @@ done:
 }
 
 static int
-get_distance (PIXELFORMATDESCRIPTOR *pfd)
+get_distance (PIXELFORMATDESCRIPTOR *pfd,
+              DWORD                  swap_flags)
 {
-  const DWORD swap_flags = PFD_SWAP_COPY | PFD_SWAP_EXCHANGE;
-
   int is_double_buffered = (pfd->dwFlags & PFD_DOUBLEBUFFER) != 0;
   int is_swap_defined = (pfd->dwFlags & swap_flags) != 0;
   int is_mono = (pfd->dwFlags & PFD_STEREO) == 0;
@@ -438,7 +461,7 @@ get_distance (PIXELFORMATDESCRIPTOR *pfd)
          memory_distance;
 }
 
-/* ChoosePixelFormat ignored some fields and flags, which makes it
+/* ChoosePixelFormat ignores some fields and flags, which makes it
  * less useful for GTK. In particular, it ignores the PFD_SWAP flags,
  * which are very important for GUI toolkits. Here we implement an
  * analog function which is tied to the needs of GTK.
@@ -455,7 +478,9 @@ choose_pixel_format_opengl32 (GdkWin32Display *display_win32,
                            PFD_GENERIC_ACCELERATED;
   const DWORD required_flags = PFD_DRAW_TO_WINDOW |
                                PFD_SUPPORT_OPENGL |
-                               (display_win32->wgl_support_gdi ? PFD_SUPPORT_GDI : 0);
+                               (display_win32->wgl_quirks->force_gdi_compatibility ? PFD_SUPPORT_GDI : 0);
+  const DWORD best_swap_flags = PFD_SWAP_COPY |
+                                (display_win32->wgl_quirks->disallow_swap_exchange ? 0 : PFD_SWAP_EXCHANGE);
 
   struct {
     int index;
@@ -481,7 +506,7 @@ choose_pixel_format_opengl32 (GdkWin32Display *display_win32,
            pfd.cBlueBits != 8 || pfd.cAlphaBits != 8))
         continue;
 
-      current.distance = get_distance (&pfd);
+      current.distance = get_distance (&pfd, best_swap_flags);
 
       if (best.index == 0 || current.distance < best.distance)
         best = current;
@@ -606,6 +631,14 @@ check_driver_is_d3d12 (void)
          g_ascii_strncasecmp (renderer, "D3D12", strlen ("D3D12")) == 0;
 }
 
+static bool
+check_vendor_is_nvidia (void)
+{
+  const char *vendor = (const char *) glGetString (GL_VENDOR);
+
+  return g_ascii_strncasecmp (vendor, "NVIDIA", strlen ("NVIDIA")) == 0;
+}
+
 GdkGLContext *
 gdk_win32_display_init_wgl (GdkDisplay  *display,
                             GError     **error)
@@ -617,6 +650,9 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
 
   if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, error))
     return NULL;
+
+  g_assert (display_win32->wgl_quirks == NULL);
+  display_win32->wgl_quirks = g_new0 (struct wgl_quirks, 1);
 
   /* acquire and cache dummy Window (HWND & HDC) and
    * dummy GL Context, it is used to query functions
@@ -658,7 +694,8 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
   display_win32->hasGlWINSwapHint =
     epoxy_has_gl_extension ("GL_WIN_swap_hint");
 
-  display_win32->wgl_support_gdi = check_driver_is_d3d12();
+  display_win32->wgl_quirks->force_gdi_compatibility = check_driver_is_d3d12 ();
+  display_win32->wgl_quirks->disallow_swap_exchange = check_vendor_is_nvidia ();
 
   context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL,
                           "display", display,
@@ -677,7 +714,8 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
     GDK_NOTE (OPENGL, g_print ("WGL API version %d.%d found\n"
                          " - Vendor: %s\n"
                          " - Renderer: %s\n"
-                         " - GDI compatibility required: %s\n"
+                         " - Quirks / force GDI compatiblity: %s\n"
+                         " - Quirks / disallow swap exchange: %s\n"
                          " - Checked extensions:\n"
                          "\t* WGL_ARB_pixel_format: %s\n"
                          "\t* WGL_ARB_create_context: %s\n"
@@ -687,7 +725,8 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                          major, minor,
                          glGetString (GL_VENDOR),
                          glGetString (GL_RENDERER),
-                         display_win32->wgl_support_gdi ? "yes" : "no",
+                         display_win32->wgl_quirks->force_gdi_compatibility ? "enabled" : "disabled",
+                         display_win32->wgl_quirks->disallow_swap_exchange ? "enabled" : "disabled",
                          display_win32->hasWglARBPixelFormat ? "yes" : "no",
                          display_win32->hasWglARBCreateContext ? "yes" : "no",
                          display_win32->hasWglEXTSwapControl ? "yes" : "no",
@@ -1095,16 +1134,15 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
             {
               context_wgl->double_buffered = (query_values[0] == GL_TRUE);
 
+              context_wgl->swap_method = SWAP_METHOD_UNDEFINED;
               switch (query_values[1])
                 {
                 case WGL_SWAP_COPY_ARB:
                   context_wgl->swap_method = SWAP_METHOD_COPY;
                   break;
                 case WGL_SWAP_EXCHANGE_ARB:
-                  context_wgl->swap_method = SWAP_METHOD_EXCHANGE;
-                  break;
-                default:
-                  context_wgl->swap_method = SWAP_METHOD_UNDEFINED;
+                  if (!display_win32->wgl_quirks->disallow_swap_exchange)
+                    context_wgl->swap_method = SWAP_METHOD_EXCHANGE;
                   break;
                 }
             }
@@ -1119,7 +1157,7 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
 
               if (pfd.dwFlags & PFD_SWAP_COPY)
                 context_wgl->swap_method = SWAP_METHOD_COPY;
-              else if (pfd.dwFlags & PFD_SWAP_EXCHANGE)
+              else if ((pfd.dwFlags & PFD_SWAP_EXCHANGE) && !display_win32->wgl_quirks->disallow_swap_exchange)
                 context_wgl->swap_method = SWAP_METHOD_EXCHANGE;
               else
                 context_wgl->swap_method = SWAP_METHOD_UNDEFINED;
