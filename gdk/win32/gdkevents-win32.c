@@ -1505,8 +1505,18 @@ handle_dpi_changed (GdkSurface *surface,
     gdk_win32_surface_resize (surface, surface->width, surface->height);
 }
 
+typedef enum
+{
+  GDK_WIN32_MOUSE_BUTTON_NONE = 0,
+  GDK_WIN32_MOUSE_BUTTON_LEFT,
+  GDK_WIN32_MOUSE_BUTTON_MIDDLE,
+  GDK_WIN32_MOUSE_BUTTON_RIGHT,
+  GDK_WIN32_MOUSE_BUTTON_X_1,
+  GDK_WIN32_MOUSE_BUTTON_X_2,
+} GdkWin32MouseButton;
+
 static void
-generate_button_event (GdkEventType  type,
+generate_button_event_1 (GdkEventType  type,
                        int           button,
                        GdkSurface   *surface,
                        MSG          *msg)
@@ -1539,6 +1549,42 @@ generate_button_event (GdkEventType  type,
                                 NULL);
 
   _gdk_win32_append_event (event);
+}
+
+static GdkEvent *
+generate_button_event (GdkEventType  type,
+                       int           button,
+                       GdkSurface   *surface,
+                       MSG          *msg)
+{
+  GdkEvent *event;
+  GdkDeviceManagerWin32 *device_manager;
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+  double x, y;
+
+  if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->pointer_device_items->input_ignore_core > 0)
+    return NULL;
+
+  device_manager = GDK_DEVICE_MANAGER_WIN32 (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->device_manager);
+
+  x = (double) GET_X_LPARAM (msg->lParam) / impl->surface_scale;
+  y = (double) GET_Y_LPARAM (msg->lParam) / impl->surface_scale;
+
+  _gdk_device_virtual_set_active (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->device_manager->core_pointer,
+                                  GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->device_manager->system_pointer);
+
+  event = gdk_button_event_new (type,
+                                surface,
+                                device_manager->core_pointer,
+                                NULL,
+                                _gdk_win32_get_next_tick (msg->time),
+                                build_pointer_event_state (msg),
+                                button,
+                                x,
+                                y,
+                                NULL);
+
+  return event;
 }
 
 static gboolean
@@ -1794,7 +1840,7 @@ static GdkEvent *
 gdk_win32_handle_keyboard_event (GdkDisplay *display,
                                  GdkSurface *surface,
                                  MSG        *msg,
-                                 gboolean   *ret_valp)
+                                 gboolean   *return_val)
 {
   GdkEvent *event = NULL;
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
@@ -2038,12 +2084,12 @@ gdk_win32_handle_keyboard_event (GdkDisplay *display,
                                  composed);
 
       g_free (composed);
-      *ret_valp = TRUE;
+      *return_val = TRUE;
       break;
 
     case WM_SYSCHAR:
       if (msg->wParam != VK_SPACE)
-        *ret_valp = TRUE;
+        *return_val = TRUE;
 
       break;
 
@@ -2127,7 +2173,166 @@ gdk_win32_handle_keyboard_event (GdkDisplay *display,
           _gdk_win32_append_event (ime_composition_event);
         }
 
-      *ret_valp = TRUE;
+      *return_val = TRUE;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return event;
+}
+
+static GdkWin32MouseButton
+acquire_gdk_mouse_button_from_message (MSG *msg)
+{
+  GdkWin32MouseButton button = GDK_WIN32_MOUSE_BUTTON_NONE;
+
+  switch (msg->message)
+    {
+    case WM_XBUTTONDOWN:
+    case WM_XBUTTONUP:
+      button = HIWORD (msg->wParam) == XBUTTON1 ? GDK_WIN32_MOUSE_BUTTON_X_1 : GDK_WIN32_MOUSE_BUTTON_X_2;
+      break;
+
+    case WM_LBUTTONDOWN:
+    case WM_LBUTTONUP:
+      button = GDK_WIN32_MOUSE_BUTTON_LEFT;
+      break;
+
+    case WM_MBUTTONDOWN:
+    case WM_MBUTTONUP:
+      button = GDK_WIN32_MOUSE_BUTTON_MIDDLE;
+      break;
+
+    case WM_RBUTTONDOWN:
+    case WM_RBUTTONUP:
+      button = GDK_WIN32_MOUSE_BUTTON_RIGHT;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return button;
+}
+
+static GdkEvent *
+gdk_win32_handle_pointing_device_event (GdkDisplay *display,
+                                        GdkSurface *surface,
+                                        MSG        *msg,
+                                        gboolean   *return_val, /* return value for gdk_event_translate() */
+                                        gboolean   *ret_valp) /* return value for gdk_event_translate() to propogate */
+{
+  GdkEvent *event = NULL;
+  gboolean ignore_leave;
+  GdkWin32MouseButton button;
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+  GdkDeviceGrabInfo *pointer_grab =
+    _gdk_display_get_last_device_grab (display, display_win32->device_manager->core_pointer);
+
+  /* for mouse button up events */
+  gboolean release_implicit_grab = FALSE;
+  GdkSurface *prev_surface = NULL;
+  GdkWin32Surface *impl;
+  RECT rect;
+
+  switch (msg->message)
+    {
+    case WM_LBUTTONDOWN:
+    case WM_MBUTTONDOWN:
+    case WM_RBUTTONDOWN:
+    case WM_XBUTTONDOWN:
+      button = acquire_gdk_mouse_button_from_message (msg);
+
+      GDK_NOTE (EVENTS,
+                g_print (" (%d,%d)",
+                GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
+
+      display_win32->device_manager->pen_touch_input = FALSE;
+
+      g_set_object (&surface, find_surface_for_mouse_event (surface, msg));
+
+      /* TODO_CSW?: there used to some synthesize and propagate */
+      if (GDK_SURFACE_DESTROYED (surface))
+        break;
+
+      if (pointer_grab == NULL)
+        SetCapture (GDK_SURFACE_HWND (surface));
+
+      event = generate_button_event (GDK_BUTTON_PRESS, button, surface, msg);
+
+      *ret_valp = (msg->message == WM_XBUTTONDOWN ? TRUE : 0);
+      *return_val = TRUE;
+      break;
+
+    case WM_LBUTTONUP:
+    case WM_MBUTTONUP:
+    case WM_RBUTTONUP:
+    case WM_XBUTTONUP:
+      button = acquire_gdk_mouse_button_from_message (msg);
+
+      GDK_NOTE (EVENTS,
+                g_print (" (%d,%d)",
+                GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
+
+      display_win32->device_manager->pen_touch_input = FALSE;
+
+      g_set_object (&surface, find_surface_for_mouse_event (surface, msg));
+
+      if (pointer_grab != NULL && pointer_grab->implicit)
+        {
+          int state = build_pointer_event_state (msg);
+
+          /* We keep the implicit grab until no buttons at all are held down */
+          if ((state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
+            {
+              release_implicit_grab = TRUE;
+              prev_surface = pointer_grab->surface;
+            }
+        }
+
+      _gdk_win32_append_event (generate_button_event (GDK_BUTTON_RELEASE, button, surface, msg));
+
+      impl = GDK_WIN32_SURFACE (surface);
+
+      /* End a drag op when the same button that started it is released */
+      if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE &&
+          impl->drag_move_resize_context.button == button)
+        gdk_win32_surface_end_move_resize_drag (surface);
+
+      if (release_implicit_grab)
+        {
+          GdkSurface *new_surface = NULL;
+          HWND hwnd;
+
+          ReleaseCapture ();
+
+          hwnd = WindowFromPoint (msg->pt);
+          if (hwnd != NULL)
+            {
+              POINT client_pt = msg->pt;
+
+              ScreenToClient (hwnd, &client_pt);
+              GetClientRect (hwnd, &rect);
+              if (PtInRect (&rect, client_pt))
+                new_surface = gdk_win32_display_handle_table_lookup_ (display, hwnd);
+            }
+
+          synthesize_crossing_events (display,
+                                      display_win32->device_manager->system_pointer,
+                                      prev_surface, new_surface,
+                                      GDK_CROSSING_UNGRAB,
+                                      &msg->pt,
+                                      0, /* TODO: Set right mask */
+                                      _gdk_win32_get_next_tick (msg->time),
+                                     FALSE);
+          g_set_object (&display_win32->event_record->mouse_surface, new_surface);
+          display_win32->event_record->mouse_surface_ignored_leave = NULL;
+        }
+
+      *ret_valp = (msg->message == WM_XBUTTONUP ? TRUE : 0);
+      *return_val = TRUE;
       break;
 
     default:
@@ -2243,131 +2448,20 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_LBUTTONDOWN:
-      button = 1;
-      goto buttondown0;
-
     case WM_MBUTTONDOWN:
-      button = 2;
-      goto buttondown0;
-
     case WM_RBUTTONDOWN:
-      button = 3;
-      goto buttondown0;
-
     case WM_XBUTTONDOWN:
-      if (HIWORD (msg->wParam) == XBUTTON1)
-	button = 4;
-      else
-	button = 5;
-
-    buttondown0:
-      GDK_NOTE (EVENTS,
-		g_print (" (%d,%d)",
-			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
-
-      win32_display->device_manager->pen_touch_input = FALSE;
-
-      g_set_object (&surface, find_surface_for_mouse_event (surface, msg));
-      /* TODO_CSW?: there used to some synthesize and propagate */
-      if (GDK_SURFACE_DESTROYED (surface))
-	break;
-
-      if (pointer_grab == NULL)
-	{
-	  SetCapture (GDK_SURFACE_HWND (surface));
-	}
-
-      generate_button_event (GDK_BUTTON_PRESS, button,
-			     surface, msg);
-
-      *ret_valp = (msg->message == WM_XBUTTONDOWN ? TRUE : 0);
-      return_val = TRUE;
-      break;
-
     case WM_LBUTTONUP:
-      button = 1;
-      goto buttonup0;
-
     case WM_MBUTTONUP:
-      button = 2;
-      goto buttonup0;
-
     case WM_RBUTTONUP:
-      button = 3;
-      goto buttonup0;
-
     case WM_XBUTTONUP:
-      if (HIWORD (msg->wParam) == XBUTTON1)
-	button = 4;
-      else
-	button = 5;
+      event = gdk_win32_handle_pointing_device_event (display, surface, msg, &return_val, ret_valp);
 
-    buttonup0:
-    {
-      gboolean release_implicit_grab = FALSE;
-      GdkSurface *prev_surface = NULL;
+      if (event != NULL)
+        _gdk_win32_append_event (event);
 
-      GDK_NOTE (EVENTS,
-		g_print (" (%d,%d)",
-			 GET_X_LPARAM (msg->lParam), GET_Y_LPARAM (msg->lParam)));
-
-      win32_display->device_manager->pen_touch_input = FALSE;
-
-      g_set_object (&surface, find_surface_for_mouse_event (surface, msg));
-
-      if (pointer_grab != NULL && pointer_grab->implicit)
-        {
-          int state = build_pointer_event_state (msg);
-
-          /* We keep the implicit grab until no buttons at all are held down */
-          if ((state & GDK_ANY_BUTTON_MASK & ~(GDK_BUTTON1_MASK << (button - 1))) == 0)
-            {
-              release_implicit_grab = TRUE;
-              prev_surface = pointer_grab->surface;
-            }
-        }
-
-      generate_button_event (GDK_BUTTON_RELEASE, button, surface, msg);
-
-      impl = GDK_WIN32_SURFACE (surface);
-
-      /* End a drag op when the same button that started it is released */
-      if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE &&
-          impl->drag_move_resize_context.button == button)
-        gdk_win32_surface_end_move_resize_drag (surface);
-
-      if (release_implicit_grab)
-        {
-          ReleaseCapture ();
-
-          new_surface = NULL;
-          hwnd = WindowFromPoint (msg->pt);
-          if (hwnd != NULL)
-            {
-              POINT client_pt = msg->pt;
-
-              ScreenToClient (hwnd, &client_pt);
-              GetClientRect (hwnd, &rect);
-              if (PtInRect (&rect, client_pt))
-                new_surface = gdk_win32_display_handle_table_lookup_ (display, hwnd);
-            }
-
-          synthesize_crossing_events (display,
-                                      win32_display->device_manager->system_pointer,
-                                      prev_surface, new_surface,
-                                      GDK_CROSSING_UNGRAB,
-                                      &msg->pt,
-                                      0, /* TODO: Set right mask */
-                                      _gdk_win32_get_next_tick (msg->time),
-                                     FALSE);
-          g_set_object (&win32_display->event_record->mouse_surface, new_surface);
-          win32_display->event_record->mouse_surface_ignored_leave = NULL;
-        }
-
-      *ret_valp = (msg->message == WM_XBUTTONUP ? TRUE : 0);
-      return_val = TRUE;
       break;
-    }
+
 
     case WM_MOUSEMOVE:
       GDK_NOTE (EVENTS,
