@@ -213,7 +213,6 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
       GDK_DISPLAY_DEBUG (display, DMABUF,
                          "Creating EGLImage for dmabuf failed: %#x",
                          eglGetError ());
-      return 0;
     }
 
   return image;
