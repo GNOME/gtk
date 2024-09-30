@@ -11,6 +11,7 @@ typedef struct _GskGpuClip              GskGpuClip;
 typedef guint32                         GskGpuColorStates;
 typedef struct _GskGpuDevice            GskGpuDevice;
 typedef struct _GskGpuFrame             GskGpuFrame;
+typedef struct _GskGpuGlobalsInstance   GskGpuGlobalsInstance;
 typedef struct _GskGpuImage             GskGpuImage;
 typedef struct _GskGpuOp                GskGpuOp;
 typedef struct _GskGpuOpClass           GskGpuOpClass;

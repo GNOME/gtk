@@ -29,6 +29,7 @@ struct _GskGLCommandState
     GskGpuColorStates color_states;
     guint32 variation;
   } current_program;
+  GskGpuBuffer *globals;
   GskGpuImage *current_images[2];
   GskGpuSampler current_samplers[2];
 };

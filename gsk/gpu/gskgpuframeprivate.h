@@ -39,6 +39,8 @@ struct _GskGpuFrameClass
                                                                          GdkTexture             *texture);
   GskGpuBuffer *        (* create_vertex_buffer)                        (GskGpuFrame            *self,
                                                                          gsize                   size);
+  GskGpuBuffer *        (* create_globals_buffer)                       (GskGpuFrame            *self,
+                                                                         gsize                   size);
   GskGpuBuffer *        (* create_storage_buffer)                       (GskGpuFrame            *self,
                                                                          gsize                   size);
   void                  (* write_texture_vertex_data)                   (GskGpuFrame            *self,
@@ -49,6 +51,7 @@ struct _GskGpuFrameClass
   void                  (* submit)                                      (GskGpuFrame            *self,
                                                                          GskRenderPassType       pass_type,
                                                                          GskGpuBuffer           *vertex_buffer,
+                                                                         GskGpuBuffer           *globals_buffer,
                                                                          GskGpuOp               *op);
 };
 
@@ -92,6 +95,8 @@ void                    gsk_gpu_frame_write_texture_vertex_data         (GskGpuF
                                                                          GskGpuImage           **images,
                                                                          GskGpuSampler          *samplers,
                                                                          gsize                   n_images);
+gsize                   gsk_gpu_frame_add_globals                       (GskGpuFrame            *self,
+                                                                         const GskGpuGlobalsInstance *globals);
 GskGpuBuffer *          gsk_gpu_frame_write_storage_buffer              (GskGpuFrame            *self,
                                                                          const guchar           *data,
                                                                          gsize                   size,
