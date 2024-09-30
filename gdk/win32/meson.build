@@ -13,6 +13,7 @@ gdk_win32_public_sources = files([
 ])
 
 gdk_win32_sources = gdk_win32_public_sources + files([
+  'apisets.c',
   'gdkcairocontext-win32.c',
   'gdkclipboard-win32.c',
   'gdkclipdrop-win32.c',
@@ -34,6 +35,7 @@ gdk_win32_sources = gdk_win32_public_sources + files([
   'gdkwin32cursor.h',
   'gdkwin32display.h',
   'gdkwin32keys.h',
+  'procedures.c',
 ])
 
 gdk_win32_public_headers = files([

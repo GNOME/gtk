@@ -288,4 +288,3 @@ this_module (void)
 {
   return (HMODULE) &__ImageBase;
 }
-

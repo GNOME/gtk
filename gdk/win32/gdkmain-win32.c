@@ -38,6 +38,14 @@
 #include <windows.h>
 #include <wintab.h>
 #include <imm.h>
+#include <shlwapi.h> /* for DLLVERSIONINFO */
+
+#include "gdkmain-win32.h"
+#include "apisets.h"
+#include "procedures.h"
+
+#include <stdarg.h>
+#include <stdbool.h>
 
 /* Whether GDK initialized COM */
 gboolean
@@ -104,6 +112,361 @@ gdk_win32_ensure_ole (void)
     }
 
   return ole_initialized;
+}
+
+struct invoke_context
+{
+  void (*callback)(void*);
+  void *user_data;
+  va_list setup_funcs;
+};
+
+typedef void (*invoke_setup_func_t)(invoke_context_t *);
+
+#define gdk_win32_invoke_finish(context) \
+do                                            \
+  {                                           \
+    context->callback (context->user_data);   \
+  }                                           \
+while (0)
+
+#define gdk_win32_invoke_continue(context) \
+do                                                                     \
+  {                                                                    \
+    invoke_setup_func_t setup_func;                                    \
+    setup_func = va_arg ((context)->setup_funcs, invoke_setup_func_t); \
+                                                                       \
+    if (setup_func)                                                    \
+      setup_func (context);                                            \
+    else                                                               \
+      gdk_win32_invoke_finish (context);                               \
+  }                                                                    \
+while (0)
+
+/** gdk_win32_invoke_callback:
+ *
+ * Invoke a callback with a list of prepare functions setting
+ * up the necessary context (thread error mode, activation context,
+ * etc.)
+ *
+ * Prepare functions are called recursively, so it's possible to
+ * use Structured Exception Handling for cleanup even in case of
+ * exceptions.
+ *
+ * Note: diverging control-flow via signals / structured exceptions
+ * is not supported, but it's good practice to cleanup some things
+ * on exceptions for the sake of error handling or debugging.
+ */
+void
+gdk_win32_invoke_callback (void (*callback)(void *arg),
+                           void *user_data,
+                           ...)
+{
+  invoke_context_t context = {
+    callback, user_data,
+  };
+
+  va_start (context.setup_funcs, user_data);
+  gdk_win32_invoke_continue ((&context));
+  va_end (context.setup_funcs);
+}
+
+/** gdk_win32_with_loader_error_mode:
+ *
+ * Setup function that sets the error mode to prevent interactive
+ * mesage boxes from the loader. To be used with gdk_win32_invoke_callback()
+ */
+void
+gdk_win32_with_loader_error_mode (invoke_context_t *context)
+{
+  /* It seems that both SEM_NOOPENFILEERRORBOX, SEM_FAILCRITICALERRORS
+   * are relevant for DLL loading:
+   *
+   *  -> https://devblogs.microsoft.com/oldnewthing/20240208-00/?p=109374
+   *  -> https://www.betaarchive.com/wiki/index.php?title=Microsoft_KB_Archive/111610
+   *
+   * Now, it could be that SEM_NOOPENFILEERRORBOX is not needed anymore
+   * on modern Windows, but let's just be safe */
+  const DWORD error_mode = SEM_FAILCRITICALERRORS |
+                           SEM_NOOPENFILEERRORBOX;
+  const DWORD original_error_mode = GetThreadErrorMode ();
+
+  SEH_TRY
+    {
+      SetThreadErrorMode (original_error_mode | error_mode, NULL);
+      gdk_win32_invoke_continue (context);
+    }
+  SEH_FINALLY
+    {
+      SetThreadErrorMode (original_error_mode, NULL);
+    }
+}
+
+static HANDLE
+get_activation_context (void)
+{
+  static HANDLE handle_activation_context = NULL;
+  static GOnce once = G_ONCE_INIT;
+
+  if (g_once_init_enter (&handle_activation_context))
+    {
+      ACTCTX actctx = {0};
+      HANDLE handle;
+
+      actctx.cbSize = sizeof (actctx);
+      actctx.dwFlags = ACTCTX_FLAG_HMODULE_VALID |
+                       ACTCTX_FLAG_RESOURCE_NAME_VALID;
+      actctx.hModule = this_module_handle ();
+#ifndef GTK_STATIC_COMPILATION
+      actctx.lpResourceName = MAKEINTRESOURCE (ISOLATIONAWARE_MANIFEST_RESOURCE_ID);
+#else
+      actctx.lpResourceName = L"GTK_MANIFEST";
+#endif
+
+      handle = CreateActCtx (&actctx);
+      if (handle == INVALID_HANDLE_VALUE)
+        WIN32_API_FAILED ("CreateActCtx");
+
+      g_once_init_leave (&handle_activation_context, handle);
+    }
+
+  return handle_activation_context;
+}
+
+/** gdk_win32_with_activation_context:
+ *
+ * Setup function that activates the GTK's activation context.
+ * To be used with gdk_win32_invoke_callback().
+ */
+void
+gdk_win32_with_activation_context (invoke_context_t *context)
+{
+  HANDLE handle_activation_context = get_activation_context ();
+  bool activated = false;
+  ULONG_PTR cookie = 0;
+
+  SEH_TRY
+    {
+      if (handle_activation_context != INVALID_HANDLE_VALUE)
+        {
+          if (!ActivateActCtx (handle_activation_context, &cookie))
+            WIN32_API_FAILED ("ActivateActCtx");
+          else
+            activated = true;
+        }
+
+      gdk_win32_invoke_continue (context);
+    }
+  SEH_FINALLY
+    {
+      if (activated)
+        {
+          if (!DeactivateActCtx (0, cookie) &&
+              !SEH_ABNORMAL_TERMINATION ())
+            {
+              WIN32_API_FAILED ("DeactivateActCtx");
+            }
+        }
+    }
+}
+
+#ifdef ISOLATION_AWARE_ENABLED
+#  ifndef GTK_STATIC_COMPILATION
+#    warning "Defining ISOLATION_AWARE_ENABLED is not needed. GTK implements manual activation context handling"
+#  else
+#    error "Cannot build with ISOLATION_AWARE_ENABLED. GTK implements manual activation context handling"
+#  endif
+#endif
+
+/* TODO:
+ *
+ * Free the activation context on unload (ReleaseActCtx)
+ * Perhaps call ZombifyActCtx if a debugger is present
+ */
+
+
+/** gdk_win32_check_app_packaged:
+ *
+ * Check if the app is running with identity.
+ *
+ * Even if the app was installed with package identity (e.g with MSIX),
+ * example using MSIX), it may still be launched in classic mode;
+ * that happens, for example, if the user launches the exe from
+ * File Explorer, or when using CreateProcess(). Package identity
+ * is applied only when the app is activated by the system.
+ */
+bool
+gdk_win32_check_app_packaged (void)
+{
+  UINT32 wchars_count = 0;
+  LONG code;
+
+  if (!ptrGetCurrentPackageFullName)
+    return false;
+
+  code = ptrGetCurrentPackageFullName (&wchars_count, NULL);
+  if (code == APPMODEL_ERROR_NO_PACKAGE)
+    return false;
+  else if (code == ERROR_SUCCESS || code == ERROR_INSUFFICIENT_BUFFER)
+    return true;
+
+  WIN32_API_FAILED_WITH_CODE ("GetCurrentPackageFullName", code);
+  return false;
+}
+
+/** gdk_win32_check_app_container:
+ *
+ * Check if running sandboxed in an app container
+ */
+bool
+gdk_win32_check_app_container (void)
+{
+  HANDLE token_handle = NULL;
+  DWORD is_app_container = 0;
+  DWORD size = sizeof (is_app_container);
+  bool result = false;
+
+  /* Since Windows 8: use GetCurrentProcessToken() and remove the call to CloseHandle() */
+
+  if (!OpenProcessToken (GetCurrentProcess (), TOKEN_QUERY, &token_handle))
+    {
+      WIN32_API_FAILED ("OpenProcessToken");
+      return false;
+    }
+
+  if (!GetTokenInformation (token_handle, TokenIsAppContainer, &is_app_container, size, &size))
+    WIN32_API_FAILED ("GetTokenInformation");
+  else if (size > 0)
+    result = !!is_app_container;
+
+  CloseHandle (token_handle);
+
+  return result;
+}
+
+/** gdk_win32_check_high_integrity:
+ *
+ * Check if the app is running with high integrity
+ *
+ * Code based on:
+ * https://devblogs.microsoft.com/oldnewthing/20221017-00/?p=107291
+ * https://github.com/microsoft/WindowsAppSDK/blob/main/dev/Common/Security.IntegrityLevel.h
+ */
+bool
+gdk_win32_check_high_integrity (void)
+{
+  HANDLE token_handle = NULL;
+  TOKEN_MANDATORY_LABEL integrity_level;
+  DWORD size = sizeof (integrity_level);
+  bool result = false;
+
+  /* Since Windows 8: use GetCurrentProcessToken() and remove the call to CloseHandle() */
+
+  if (!OpenProcessToken (GetCurrentProcess (), TOKEN_QUERY, &token_handle))
+    {
+      WIN32_API_FAILED ("OpenProcessToken");
+      return false;
+    }
+
+  memset (&integrity_level, 0, sizeof (integrity_level));
+
+  if (!GetTokenInformation (token_handle, TokenIntegrityLevel, &integrity_level, size, &size))
+    WIN32_API_FAILED ("GetTokenInformation");
+  else if (size > 0 && IsValidSid (integrity_level.Label.Sid))
+    {
+      UCHAR subauthority_count = *GetSidSubAuthorityCount (integrity_level.Label.Sid);
+      if (subauthority_count > 0)
+        {
+          DWORD level = *GetSidSubAuthority (integrity_level.Label.Sid, subauthority_count - 1);
+          result = (level >= SECURITY_MANDATORY_HIGH_RID);
+        }
+    }
+
+  CloseHandle (token_handle);
+
+  return result;
+}
+
+/** gdk_win32_check_manually_elevated:
+ *
+ * Code based on:
+ * https://devblogs.microsoft.com/oldnewthing/20241003-00/?p=110336
+ */
+bool
+gdk_win32_check_manually_elevated (void)
+{
+  HANDLE token_handle = NULL;
+  TOKEN_ELEVATION_TYPE elevation_type = TokenElevationTypeDefault;
+  DWORD size = sizeof (elevation_type);
+  bool result = false;
+
+  /* Since Windows 8: use GetCurrentProcessToken() and remove the call to CloseHandle() */
+
+  if (!OpenProcessToken (GetCurrentProcess (), TOKEN_QUERY, &token_handle))
+    {
+      WIN32_API_FAILED ("OpenProcessToken");
+      return false;
+    }
+
+  if (!GetTokenInformation (token_handle, TokenElevationType, &elevation_type, size, &size))
+    WIN32_API_FAILED ("GetTokenInformation");
+  else if (size > 0)
+    result = (elevation_type == TokenElevationTypeFull);
+
+  CloseHandle (token_handle);
+
+  return result;
+}
+
+static int
+get_comctl32_version (HMODULE module_handle)
+{
+  DLLGETVERSIONPROC ptrDllGetVersion;
+  DLLVERSIONINFO info = {0};
+  HRESULT hr = E_FAIL;
+  int result = 0;
+
+  ptrDllGetVersion = (DLLGETVERSIONPROC) GetProcAddress (module_handle, "DllGetVersion");
+  if (!ptrDllGetVersion)
+    return 1;
+
+  // TODO: Add support for DLLVERSIONINFO2
+  // TODO: This won't work in app containers, probably
+
+  info.cbSize = sizeof (info);
+  hr = ptrDllGetVersion (&info);
+  if (FAILED (hr))
+    HR_LOG ("DllGetVersion", hr);
+  else
+    result = ;
+
+  return result;
+}
+
+/** gdk_win32_get_comctl32_version:
+ *
+ * Get the major version of the Common Controls library. Note that
+ * common controls may not be present on modern Windows editions
+ * (Core, Hololens, etc.)
+ *
+ * Returns: TODO
+ */
+int
+gdk_win32_get_comctl32_version (void)
+{
+  struct api_set *api_set;
+  struct module *module;
+  HMODULE module_handle;
+
+  api_set *api_set = gdk_win32_get_api_set (API_SET_EXT_WIN_SHELL_INIT);
+  if (api_set)
+    return get_comctl32_version (api_set->module_handle);
+
+  module = gdk_win32_get_module (MODULE_COMCTL32);
+  if (module)
+    return get_comctl32_version (module->module_handle);
+
+  return 0;
 }
 
 void
