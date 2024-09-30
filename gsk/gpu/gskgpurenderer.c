@@ -128,31 +128,6 @@ gsk_gpu_renderer_dmabuf_downloader_close (GdkDmabufDownloader *downloader)
 }
 
 static gboolean
-gsk_gpu_renderer_dmabuf_downloader_supports (GdkDmabufDownloader  *downloader,
-                                             GdkDmabufTexture     *texture,
-                                             GError              **error)
-{
-  GskGpuRenderer *self = GSK_GPU_RENDERER (downloader);
-  const GdkDmabuf *dmabuf;
-  GdkDmabufFormats *formats;
-
-  dmabuf = gdk_dmabuf_texture_get_dmabuf (texture);
-
-  formats = GSK_GPU_RENDERER_GET_CLASS (self)->get_dmabuf_formats (self);
-
-  if (!gdk_dmabuf_formats_contains (formats, dmabuf->fourcc, dmabuf->modifier))
-    {
-      g_set_error (error,
-                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf format: %.4s:%#" G_GINT64_MODIFIER "x",
-                   (char *) &dmabuf->fourcc, dmabuf->modifier);
-      return FALSE;
-    }
-
-  return TRUE;
-}
-
-static void
 gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
                                              GdkDmabufTexture    *texture,
                                              GdkMemoryFormat      format,
@@ -163,30 +138,44 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
   GskGpuRenderer *self = GSK_GPU_RENDERER (downloader);
   GskGpuFrame *frame;
   gpointer previous;
+  gboolean retval = FALSE;
 
   previous = gsk_gpu_renderer_save_current (self);
+
   gsk_gpu_renderer_make_current (self);
 
   frame = gsk_gpu_renderer_get_frame (self);
 
-  gsk_gpu_frame_download_texture (frame,
-                                  g_get_monotonic_time (),
-                                  GDK_TEXTURE (texture),
-                                  format,
-                                  color_state,
-                                  data,
-                                  stride);
+  if (gsk_gpu_frame_download_texture (frame,
+                                      g_get_monotonic_time (),
+                                      GDK_TEXTURE (texture),
+                                      format,
+                                      color_state,
+                                      data,
+                                      stride))
+    {
+      retval = TRUE;
 
-  gsk_gpu_frame_wait (frame);
+      GDK_DISPLAY_DEBUG (gdk_dmabuf_texture_get_display (texture), DMABUF,
+                         "Used %s for downloading %dx%d dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
+                         G_OBJECT_TYPE_NAME (downloader),
+                         gdk_texture_get_width (GDK_TEXTURE (texture)),
+                         gdk_texture_get_height (GDK_TEXTURE (texture)),
+                         (char *)&(gdk_dmabuf_texture_get_dmabuf (texture)->fourcc),
+                         gdk_dmabuf_texture_get_dmabuf (texture)->modifier);
+
+      gsk_gpu_frame_wait (frame);
+    }
 
   gsk_gpu_renderer_restore_current (self, previous);
+
+  return retval;
 }
 
 static void
 gsk_gpu_renderer_dmabuf_downloader_init (GdkDmabufDownloaderInterface *iface)
 {
   iface->close = gsk_gpu_renderer_dmabuf_downloader_close;
-  iface->supports = gsk_gpu_renderer_dmabuf_downloader_supports;
   iface->download = gsk_gpu_renderer_dmabuf_downloader_download;
 }
 

@@ -40,7 +40,6 @@ struct _GskGpuRendererClass
   GskGpuImage *         (* get_backbuffer)                              (GskGpuRenderer         *self);
 
   double                (* get_scale)                                   (GskGpuRenderer         *self);
-  GdkDmabufFormats *    (* get_dmabuf_formats)                          (GskGpuRenderer         *self);
 };
 
 GdkDrawContext *        gsk_gpu_renderer_get_context                    (GskGpuRenderer         *self);
