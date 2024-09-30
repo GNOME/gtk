@@ -925,7 +925,7 @@ export_image_response_cb (GObject      *source,
       GdkTexture *texture;
       GskRenderer *renderer;
 
-      renderer = gsk_gl_renderer_new ();
+      renderer = gsk_ngl_renderer_new ();
       if (!gsk_renderer_realize_for_display (renderer, gdk_display_get_default (), NULL))
         {
           g_object_unref (renderer);
