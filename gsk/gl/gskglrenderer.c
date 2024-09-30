@@ -116,6 +116,8 @@ gsk_gl_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader_,
   GskRenderNode *node;
 
   previous = gdk_gl_context_get_current ();
+  if (previous)
+    g_object_ref (previous);
 
   width = gdk_texture_get_width (GDK_TEXTURE (texture));
   height = gdk_texture_get_height (GDK_TEXTURE (texture));
@@ -133,7 +135,10 @@ gsk_gl_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader_,
   g_object_unref (native);
 
   if (previous)
-    gdk_gl_context_make_current (previous);
+    {
+      gdk_gl_context_make_current (previous);
+      g_object_unref (previous);
+    }
   else
     gdk_gl_context_clear_current ();
 }

@@ -111,6 +111,18 @@ gsk_vulkan_renderer_make_current (GskGpuRenderer *renderer)
 {
 }
 
+static gpointer
+gsk_vulkan_renderer_save_current (GskGpuRenderer *renderer)
+{
+  return NULL;
+}
+
+static void
+gsk_vulkan_renderer_restore_current (GskGpuRenderer *renderer,
+                                     gpointer        current)
+{
+}
+
 static GskGpuImage *
 gsk_vulkan_renderer_get_backbuffer (GskGpuRenderer *renderer)
 {
@@ -162,6 +174,8 @@ gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
   gpu_renderer_class->get_device = gsk_vulkan_device_get_for_display;
   gpu_renderer_class->create_context = gsk_vulkan_renderer_create_context;
   gpu_renderer_class->make_current = gsk_vulkan_renderer_make_current;
+  gpu_renderer_class->save_current = gsk_vulkan_renderer_save_current;
+  gpu_renderer_class->restore_current = gsk_vulkan_renderer_restore_current;
   gpu_renderer_class->get_backbuffer = gsk_vulkan_renderer_get_backbuffer;
   gpu_renderer_class->get_dmabuf_formats = gsk_vulkan_renderer_get_dmabuf_formats;
 

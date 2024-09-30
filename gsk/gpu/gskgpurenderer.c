@@ -58,6 +58,19 @@ gsk_gpu_renderer_make_current (GskGpuRenderer *self)
   GSK_GPU_RENDERER_GET_CLASS (self)->make_current (self);
 }
 
+static gpointer
+gsk_gpu_renderer_save_current (GskGpuRenderer *self)
+{
+  return GSK_GPU_RENDERER_GET_CLASS (self)->save_current (self);
+}
+
+static void
+gsk_gpu_renderer_restore_current (GskGpuRenderer *self,
+                                  gpointer        current)
+{
+  GSK_GPU_RENDERER_GET_CLASS (self)->restore_current (self, current);
+}
+
 static GskGpuFrame *
 gsk_gpu_renderer_create_frame (GskGpuRenderer *self)
 {
@@ -149,7 +162,9 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
 {
   GskGpuRenderer *self = GSK_GPU_RENDERER (downloader);
   GskGpuFrame *frame;
+  gpointer previous;
 
+  previous = gsk_gpu_renderer_save_current (self);
   gsk_gpu_renderer_make_current (self);
 
   frame = gsk_gpu_renderer_get_frame (self);
@@ -163,6 +178,8 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
                                   stride);
 
   gsk_gpu_frame_wait (frame);
+
+  gsk_gpu_renderer_restore_current (self, previous);
 }
 
 static void
