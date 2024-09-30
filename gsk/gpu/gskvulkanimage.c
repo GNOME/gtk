@@ -1131,7 +1131,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                 &vk_components,
                                 vk_conversion);
 
-  GDK_DEBUG (DMABUF, "Vulkan uploaded %zux%zu %.4s::%016llx %sdmabuf",
+  GDK_DEBUG (DMABUF, "Vulkan uploaded %zux%zu %.4s:%016llx %sdmabuf",
              width, height,
              (char *) &dmabuf->fourcc, (unsigned long long) dmabuf->modifier,
              is_yuv ? "YUV " : "");
