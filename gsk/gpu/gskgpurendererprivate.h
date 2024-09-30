@@ -34,6 +34,9 @@ struct _GskGpuRendererClass
                                                                          GError                **error);
 
   void                  (* make_current)                                (GskGpuRenderer         *self);
+  gpointer              (* save_current)                                (GskGpuRenderer         *self);
+  void                  (* restore_current)                             (GskGpuRenderer         *self,
+                                                                         gpointer                current);
   GskGpuImage *         (* get_backbuffer)                              (GskGpuRenderer         *self);
 
   double                (* get_scale)                                   (GskGpuRenderer         *self);

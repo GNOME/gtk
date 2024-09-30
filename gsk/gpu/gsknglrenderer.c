@@ -79,6 +79,31 @@ gsk_ngl_renderer_make_current (GskGpuRenderer *renderer)
   gdk_gl_context_make_current (GDK_GL_CONTEXT (gsk_gpu_renderer_get_context (renderer)));
 }
 
+static gpointer
+gsk_ngl_renderer_save_current (GskGpuRenderer *renderer)
+{
+  GdkGLContext *current;
+
+  current = gdk_gl_context_get_current ();
+  if (current)
+    g_object_ref (current);
+
+  return current;
+}
+
+static void
+gsk_ngl_renderer_restore_current (GskGpuRenderer *renderer,
+                                  gpointer        current)
+{
+  if (current)
+    {
+      gdk_gl_context_make_current (current);
+      g_object_unref (current);
+    }
+  else
+    gdk_gl_context_clear_current ();
+}
+
 static void
 gsk_ngl_renderer_free_backbuffer (GskNglRenderer *self)
 {
@@ -155,6 +180,8 @@ gsk_ngl_renderer_class_init (GskNglRendererClass *klass)
   gpu_renderer_class->get_device = gsk_gl_device_get_for_display;
   gpu_renderer_class->create_context = gsk_ngl_renderer_create_context;
   gpu_renderer_class->make_current = gsk_ngl_renderer_make_current;
+  gpu_renderer_class->save_current = gsk_ngl_renderer_save_current;
+  gpu_renderer_class->restore_current = gsk_ngl_renderer_restore_current;
   gpu_renderer_class->get_backbuffer = gsk_ngl_renderer_get_backbuffer;
   gpu_renderer_class->get_scale = gsk_ngl_renderer_get_scale;
   gpu_renderer_class->get_dmabuf_formats = gsk_ngl_renderer_get_dmabuf_formats;
