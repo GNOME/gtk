@@ -1,29 +1,3 @@
-gsk_private_gl_shaders = [
-  'gl/resources/preamble.glsl',
-  'gl/resources/preamble.fs.glsl',
-  'gl/resources/preamble.vs.glsl',
-  'gl/resources/border.glsl',
-  'gl/resources/blit.glsl',
-  'gl/resources/coloring.glsl',
-  'gl/resources/color.glsl',
-  'gl/resources/linear_gradient.glsl',
-  'gl/resources/radial_gradient.glsl',
-  'gl/resources/conic_gradient.glsl',
-  'gl/resources/color_matrix.glsl',
-  'gl/resources/blur.glsl',
-  'gl/resources/inset_shadow.glsl',
-  'gl/resources/outset_shadow.glsl',
-  'gl/resources/unblurred_outset_shadow.glsl',
-  'gl/resources/cross_fade.glsl',
-  'gl/resources/blend.glsl',
-  'gl/resources/repeat.glsl',
-  'gl/resources/custom.glsl',
-  'gl/resources/filled_border.glsl',
-  'gl/resources/mask.glsl',
-  'gl/resources/external.glsl',
-  'gl/resources/premultiply.glsl',
-]
-
 gsk_public_sources = files([
   'gskcairorenderer.c',
   'gskdiff.c',
@@ -41,7 +15,6 @@ gsk_public_sources = files([
   'gskroundedrect.c',
   'gskstroke.c',
   'gsktransform.c',
-  'gl/gskglrenderer.c',
   'gpu/gsknglrenderer.c',
   'gpu/gskvulkanrenderer.c',
 ])
@@ -53,22 +26,8 @@ gsk_private_sources = files([
   'gskdebug.c',
   'gskprivate.c',
   'gskprofiler.c',
-  'gl/gskglattachmentstate.c',
-  'gl/gskglbuffer.c',
-  'gl/gskglcommandqueue.c',
-  'gl/gskglcompiler.c',
-  'gl/gskgldriver.c',
-  'gl/gskglglyphlibrary.c',
-  'gl/gskgliconlibrary.c',
-  'gl/gskglprogram.c',
-  'gl/gskglrenderjob.c',
-  'gl/gskglshadowlibrary.c',
-  'gl/gskgltexturelibrary.c',
-  'gl/gskgluniformstate.c',
-  'gl/gskgltexture.c',
-  'gl/gskglprofiler.c',
-  'gl/stb_rect_pack.c',
   'gl/fp16.c',
+  'gl/gskglrenderer.c',
   'gpu/gskglbuffer.c',
   'gpu/gskgldevice.c',
   'gpu/gskglframe.c',
@@ -136,8 +95,6 @@ install_headers(gsk_public_headers, 'gsk.h', subdir: 'gtk-4.0/gsk')
 gsk_public_gl_headers = files([
   'gl/gskglrenderer.h',
 ])
-install_headers(gsk_public_gl_headers, subdir: 'gtk-4.0/gsk/gl')
-gsk_public_headers += gsk_public_gl_headers
 
 gsk_public_gpu_headers = files([
   'gpu/gskvulkanrenderer.h'
@@ -182,7 +139,6 @@ gsk_resources_xml = custom_target(output: 'gsk.resources.xml',
   command: [
     find_program('gen-gsk-gresources-xml.py'),
     '@OUTPUT@',
-    gsk_private_gl_shaders,
     gsk_private_vulkan_compiled_shaders,
     gsk_private_vulkan_shaders,
     gsk_private_gpu_gl_shaders,

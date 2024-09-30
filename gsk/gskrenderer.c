@@ -514,9 +514,6 @@ get_renderer_for_name (const char *renderer_name)
 #endif
   else if (g_ascii_strcasecmp (renderer_name, "cairo") == 0)
     return GSK_TYPE_CAIRO_RENDERER;
-  else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0 ||
-           g_ascii_strcasecmp (renderer_name, "gl") == 0)
-    return GSK_TYPE_GL_RENDERER;
   else if (g_ascii_strcasecmp (renderer_name, "ngl") == 0)
     return gsk_ngl_renderer_get_type ();
 #ifdef GDK_RENDERING_VULKAN
