@@ -177,6 +177,14 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
                                   data,
                                   stride);
 
+  GDK_DISPLAY_DEBUG (gdk_dmabuf_texture_get_display (texture), DMABUF,
+                     "Used %s for downloading %dx%d dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
+                     G_OBJECT_TYPE_NAME (downloader),
+                     gdk_texture_get_width (GDK_TEXTURE (texture)),
+                     gdk_texture_get_height (GDK_TEXTURE (texture)),
+                     (char *)&(gdk_dmabuf_texture_get_dmabuf (texture)->fourcc),
+                     gdk_dmabuf_texture_get_dmabuf (texture)->modifier);
+
   gsk_gpu_frame_wait (frame);
 
   gsk_gpu_renderer_restore_current (self, previous);
