@@ -161,7 +161,7 @@ gsk_rect_coverage (const graphene_rect_t *r1,
 }
 
 /**
- * gsk_rect_snap_to_grid:
+ * gsk_rect_snap_to_grid_grow:
  * @src: rectangle to snap
  * @grid_scale: the scale of the grid
  * @grid_offset: the offset of the grid
@@ -178,14 +178,12 @@ gsk_rect_coverage (const graphene_rect_t *r1,
  *
  * Note that floating point rounding issues might result
  * in the snapping not being perfectly exact.
- * 
- * Returns false if the resulting rect has zero width/height
  **/
-static inline gboolean G_GNUC_WARN_UNUSED_RESULT
-gsk_rect_snap_to_grid (const graphene_rect_t  *src,
-                       const graphene_vec2_t  *grid_scale,
-                       const graphene_point_t *grid_offset,
-                       graphene_rect_t        *dest)
+static inline void
+gsk_rect_snap_to_grid_grow (const graphene_rect_t  *src,
+                            const graphene_vec2_t  *grid_scale,
+                            const graphene_point_t *grid_offset,
+                            graphene_rect_t        *dest)
 {
   float x, y, xscale, yscale;
 
@@ -199,11 +197,26 @@ gsk_rect_snap_to_grid (const graphene_rect_t  *src,
       y / yscale - grid_offset->y,
       (ceilf ((src->origin.x + grid_offset->x + src->size.width) * xscale) - x) / xscale,
       (ceilf ((src->origin.y + grid_offset->y + src->size.height) * yscale) - y) / yscale);
+}
 
-  if (dest->size.width <= 0.0 || dest->size.height <= 0.0)
-    return FALSE;
+static inline void
+gsk_rect_snap_to_grid_shrink (const graphene_rect_t  *src,
+                              const graphene_vec2_t  *grid_scale,
+                              const graphene_point_t *grid_offset,
+                              graphene_rect_t        *dest)
+{
+  float x, y, xscale, yscale;
 
-  return TRUE;
+  xscale = graphene_vec2_get_x (grid_scale);
+  yscale = graphene_vec2_get_y (grid_scale);
+
+  x = ceilf ((src->origin.x + grid_offset->x) * xscale);
+  y = ceilf ((src->origin.y + grid_offset->y) * yscale);
+  *dest = GRAPHENE_RECT_INIT (
+      x / xscale - grid_offset->x,
+      y / yscale - grid_offset->y,
+      (floorf ((src->origin.x + grid_offset->x + src->size.width) * xscale) - x) / xscale,
+      (floorf ((src->origin.y + grid_offset->y + src->size.height) * yscale) - y) / yscale);
 }
 
 static inline gboolean G_GNUC_PURE

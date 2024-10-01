@@ -582,8 +582,7 @@ gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (GskGpuNodeProcessor *s
   if (!gsk_rect_intersection (&tmp, &node->bounds, out_bounds))
     return FALSE;
 
-  if (!gsk_rect_snap_to_grid (out_bounds, &self->scale, &self->offset, out_bounds))
-    return FALSE;
+  gsk_rect_snap_to_grid_grow (out_bounds, &self->scale, &self->offset, out_bounds);
 
   return TRUE;
 }
@@ -861,8 +860,8 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
           if (!gsk_rect_intersection (clip_bounds, &node->bounds, &clip))
             return NULL;
         }
-      if (!gsk_rect_snap_to_grid (&clip, &self->scale, &self->offset, &clip))
-        return NULL;
+
+      gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &clip);
     }
 
   return gsk_gpu_get_node_as_image (self->frame,
@@ -901,8 +900,7 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   if (!gsk_rect_intersection (rect, &clip_rect, &intermediate_rect))
     return;
 
-  if (!gsk_rect_snap_to_grid (&intermediate_rect, &self->scale, &self->offset, &intermediate_rect))
-    return;
+  gsk_rect_snap_to_grid_grow (&intermediate_rect, &self->scale, &self->offset, &intermediate_rect);
 
   intermediate = gsk_gpu_node_processor_init_draw (&other,
                                                    self->frame,
@@ -2158,8 +2156,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
       if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip))
         return;
 
-      if (!gsk_rect_snap_to_grid (&clip, &self->scale, &self->offset, &rounded_clip))
-        return;
+      gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &rounded_clip);
 
       image = gsk_gpu_get_texture_tiles_as_image (self->frame,
                                                   self->ccs,
@@ -2327,15 +2324,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
 
       gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
       /* first round to pixel boundaries, so we make sure the full pixels are covered */
-      if (!gsk_rect_snap_to_grid (&clip_bounds, &self->scale, &self->offset, &clip_bounds))
-        {
-          if (image)
-            {
-              gdk_color_state_unref (image_cs);
-              g_object_unref (image);
-            }
-          return;
-        }
+      gsk_rect_snap_to_grid_grow (&clip_bounds, &self->scale, &self->offset, &clip_bounds);
       /* then expand by half a pixel so that pixels needed for eventual linear
        * filtering are available */
       graphene_rect_inset (&clip_bounds, -0.5, -0.5);

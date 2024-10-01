@@ -205,13 +205,14 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
       return g_object_ref (cache->image);
     }
 
-  if (!gsk_path_get_bounds (path, &viewport) ||
-      !gsk_rect_snap_to_grid (&viewport,
+  if (!gsk_path_get_bounds (path, &viewport))
+    return NULL;
+
+  gsk_rect_snap_to_grid_grow (&viewport,
                               scale,
                               &GRAPHENE_POINT_INIT ((float) fx / (sx * SUBPIXEL_SCALE_X), 
                                                     (float) fy / (sy * SUBPIXEL_SCALE_Y)),
-                              &viewport))
-    return NULL;
+                              &viewport);
 
   padding = 1;
   /* Should already be integers because of snap_to_grid() above, but round just to be sure */
