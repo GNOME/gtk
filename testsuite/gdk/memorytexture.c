@@ -8,14 +8,14 @@
 #define N 10
 
 static GdkGLContext *gl_context = NULL;
-static GskRenderer *ngl_renderer = NULL;
+static GskRenderer *gl_renderer = NULL;
 static GskRenderer *vulkan_renderer = NULL;
 
 typedef enum {
   TEXTURE_METHOD_LOCAL,
   TEXTURE_METHOD_GL_NATIVE,
-  TEXTURE_METHOD_NGL,
-  TEXTURE_METHOD_NGL_RELEASED,
+  TEXTURE_METHOD_GL,
+  TEXTURE_METHOD_GL_RELEASED,
   TEXTURE_METHOD_VULKAN,
   TEXTURE_METHOD_PNG,
   TEXTURE_METHOD_PNG_PIXBUF,
@@ -207,7 +207,7 @@ upload_to_gl_native (GdkTexture *texture)
       return result;
     }
 
-  return upload_to_renderer (texture, ngl_renderer);
+  return upload_to_renderer (texture, gl_renderer);
 }
 
 static GdkTexture *
@@ -234,12 +234,12 @@ create_texture (GdkMemoryFormat  format,
       texture = upload_to_gl_native (texture);
       break;
 
-    case TEXTURE_METHOD_NGL:
-      texture = upload_to_renderer (texture, ngl_renderer);
+    case TEXTURE_METHOD_GL:
+      texture = upload_to_renderer (texture, gl_renderer);
       break;
 
-    case TEXTURE_METHOD_NGL_RELEASED:
-      texture = upload_to_renderer (texture, ngl_renderer);
+    case TEXTURE_METHOD_GL_RELEASED:
+      texture = upload_to_renderer (texture, gl_renderer);
       if (GDK_IS_GL_TEXTURE (texture))
         gdk_gl_texture_release (GDK_GL_TEXTURE (texture));
       break;
@@ -329,8 +329,8 @@ texture_method_is_accurate (TextureMethod method)
       return TRUE;
 
     case TEXTURE_METHOD_GL_NATIVE:
-    case TEXTURE_METHOD_NGL:
-    case TEXTURE_METHOD_NGL_RELEASED:
+    case TEXTURE_METHOD_GL:
+    case TEXTURE_METHOD_GL_RELEASED:
     case TEXTURE_METHOD_VULKAN:
     case TEXTURE_METHOD_PNG:
     case TEXTURE_METHOD_PNG_PIXBUF:
@@ -433,9 +433,9 @@ should_skip_download_test (GdkMemoryFormat format,
     case TEXTURE_METHOD_TIFF:
       return FALSE;
 
-    case TEXTURE_METHOD_NGL:
-    case TEXTURE_METHOD_NGL_RELEASED:
-      if (ngl_renderer == NULL)
+    case TEXTURE_METHOD_GL:
+    case TEXTURE_METHOD_GL_RELEASED:
+      if (gl_renderer == NULL)
         {
           g_test_skip ("NGL renderer is not supported");
           return TRUE;
@@ -491,7 +491,7 @@ test_download (gconstpointer data,
           !gdk_memory_format_is_premultiplied (format) &&
           gdk_memory_format_has_alpha (format) &&
           (method == TEXTURE_METHOD_GL_NATIVE || method == TEXTURE_METHOD_VULKAN ||
-           method == TEXTURE_METHOD_NGL || method == TEXTURE_METHOD_NGL_RELEASED))
+           method == TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED))
         color = (GdkRGBA) { 0, 0, 0, 0 };
 
       expected = create_texture (format, TEXTURE_METHOD_LOCAL, width, height, &color);
@@ -623,8 +623,8 @@ add_test (const char    *name,
           const char *method_names[N_TEXTURE_METHODS] = {
             [TEXTURE_METHOD_LOCAL] = "local",
             [TEXTURE_METHOD_GL_NATIVE] = "gl-native",
-            [TEXTURE_METHOD_NGL] = "ngl",
-            [TEXTURE_METHOD_NGL_RELEASED] = "ngl-released",
+            [TEXTURE_METHOD_GL] = "gl",
+            [TEXTURE_METHOD_GL_RELEASED] = "gl-released",
             [TEXTURE_METHOD_VULKAN] = "vulkan",
             [TEXTURE_METHOD_PNG] = "png",
             [TEXTURE_METHOD_PNG_PIXBUF] = "png-pixbuf",
@@ -685,10 +685,10 @@ main (int argc, char *argv[])
       g_clear_object (&gl_context);
     }
 
-  ngl_renderer = gsk_ngl_renderer_new ();
-  if (!gsk_renderer_realize_for_display (ngl_renderer, display, NULL))
+  gl_renderer = gsk_ngl_renderer_new ();
+  if (!gsk_renderer_realize_for_display (gl_renderer, display, NULL))
     {
-      g_clear_object (&ngl_renderer);
+      g_clear_object (&gl_renderer);
     }
 
   vulkan_renderer = gsk_vulkan_renderer_new ();
@@ -706,10 +706,10 @@ main (int argc, char *argv[])
       g_clear_object (&vulkan_renderer);
     }
 #endif
-  if (ngl_renderer)
+  if (gl_renderer)
     {
-      gsk_renderer_unrealize (ngl_renderer);
-      g_clear_object (&ngl_renderer);
+      gsk_renderer_unrealize (gl_renderer);
+      g_clear_object (&gl_renderer);
     }
   gdk_gl_context_clear_current ();
 
