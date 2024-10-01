@@ -459,18 +459,6 @@ replay_create_test (GskRenderNode *node,
   /* Check that the node didn't grow.  */
   if (!graphene_rect_contains_rect (&node_bounds, &result_bounds))
     g_test_fail_printf ("Node bounds grew");
-  else if (!graphene_rect_equal (&node_bounds, &result_bounds))
-    {
-      GskRenderNode *nodes[2];
-
-      /* Add a transparent color node to pad the bounds */
-      nodes[0] = gsk_color_node_new (&(GdkRGBA) { 0,0,0,0 },
-                                     &node_bounds);
-      nodes[1] = result;
-      result = gsk_container_node_new (nodes, 2);
-      gsk_render_node_unref (nodes[0]);
-      gsk_render_node_unref (nodes[1]);
-    }
 
   return result;
 }
@@ -517,20 +505,18 @@ clip_create_reference (GskRenderer   *renderer,
 {
   const cairo_rectangle_int_t *int_clip = data;
   GskRenderNode *texture_node, *reference_node;
-  graphene_rect_t clip_rect;
+  graphene_rect_t texture_bounds, clip_rect;
   GdkTexture *result;
 
   gsk_rect_from_cairo (&clip_rect, int_clip);
+  texture_bounds = GRAPHENE_RECT_INIT (0,
+                                       0,
+                                       gdk_texture_get_width (texture),
+                                       gdk_texture_get_height (texture));
 
-  texture_node = gsk_texture_node_new (texture,
-                                       &GRAPHENE_RECT_INIT (
-                                         0,
-                                         0,
-                                         gdk_texture_get_width (texture),
-                                         gdk_texture_get_height (texture)
-                                       ));
+  texture_node = gsk_texture_node_new (texture, &texture_bounds);
   reference_node = gsk_clip_node_new (texture_node, &clip_rect);
-  result = gsk_renderer_render_texture (renderer, reference_node, NULL);
+  result = gsk_renderer_render_texture (renderer, reference_node, &texture_bounds);
 
   gsk_render_node_unref (reference_node);
   gsk_render_node_unref (texture_node);
@@ -583,11 +569,17 @@ colorflip_create_reference (GskRenderer   *renderer,
   return result;
 }
 
+typedef enum
+{
+  KEEP_BOUNDS = (1 << 0),
+} TestFlags;
+
 typedef struct _TestSetup TestSetup;
 struct _TestSetup
 {
   const char *name;
   const char *description;
+  TestFlags flags;
   gpointer        (* setup)            (GskRenderNode *node);
   void            (* free)             (gpointer       data);
   GskRenderNode * (* create_test)      (GskRenderNode *node,
@@ -631,12 +623,14 @@ static const TestSetup test_setups[] = {
   {
     .name = "replay",
     .description = "Do replay test",
+    .flags = KEEP_BOUNDS,
     .create_test = replay_create_test,
     .create_reference = NULL,
   },
   {
     .name = "clip",
     .description = "Do clip test",
+    .flags = KEEP_BOUNDS,
     .setup = clip_setup,
     .free = g_free,
     .create_test = clip_create_test,
@@ -659,7 +653,16 @@ run_single_test (const TestSetup *setup,
 {
   GskRenderNode *test;
   GdkTexture *reference, *rendered, *diff;
+  graphene_rect_t test_bounds, *render_bounds;
   gpointer test_data;
+
+  if (setup->flags & KEEP_BOUNDS)
+    {
+      gsk_render_node_get_bounds (org_test, &test_bounds);
+      render_bounds = &test_bounds;
+    }
+  else
+    render_bounds = NULL;
 
   if (setup->setup)
     test_data = setup->setup (org_test);
@@ -674,7 +677,7 @@ run_single_test (const TestSetup *setup,
   else
     test = gsk_render_node_ref (org_test);
 
-  rendered = gsk_renderer_render_texture (renderer, test, NULL);
+  rendered = gsk_renderer_render_texture (renderer, test, render_bounds);
   save_image (rendered, file_name, setup->name, ".out.png");
 
   if (setup->create_reference)
