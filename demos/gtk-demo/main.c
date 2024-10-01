@@ -832,9 +832,6 @@ static gboolean
 demo_can_run (GtkWidget  *window,
               const char *name)
 {
-  if (name != NULL && strcmp (name, "gltransition") == 0)
-    return GSK_IS_GL_RENDERER (gtk_native_get_renderer (GTK_NATIVE (window)));
-
   return TRUE;
 }
 
