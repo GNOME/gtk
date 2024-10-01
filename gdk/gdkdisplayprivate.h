@@ -137,7 +137,7 @@ struct _GdkDisplay
 
    /* Cached data the EGL dmabuf downloader */
   GdkDmabufFormats *egl_dmabuf_formats;
-  GdkDmabufFormats *egl_external_formats;
+  GdkDmabufFormats *egl_internal_formats;
 };
 
 struct _GdkDisplayClass
