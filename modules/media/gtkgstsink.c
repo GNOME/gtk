@@ -459,6 +459,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
                                                   gst_buffer_ref (buffer),
                                                   &error);
       g_object_unref (builder);
+
       if (!texture)
         GST_ERROR_OBJECT (self, "Failed to create dmabuf texture: %s", error->message);
 
@@ -516,6 +517,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       gdk_memory_texture_builder_set_stride (builder, frame->info.stride[0]);
 
       texture = gdk_memory_texture_builder_build (builder);
+      g_object_unref (builder);
       g_bytes_unref (bytes);
 
       *pixel_aspect_ratio = ((double) frame->info.par_n) / ((double) frame->info.par_d);
