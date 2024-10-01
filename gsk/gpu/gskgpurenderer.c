@@ -32,6 +32,7 @@ static const GdkDebugKey gsk_gpu_optimization_keys[] = {
   { "mipmap",    GSK_GPU_OPTIMIZE_MIPMAP,            "Avoid creating mipmaps" },
   { "to-image",  GSK_GPU_OPTIMIZE_TO_IMAGE,          "Don't fast-path creation of images for nodes" },
   { "occlusion", GSK_GPU_OPTIMIZE_OCCLUSION_CULLING, "Disable occlusion culling via opaque node tracking" },
+  { "repeat",    GSK_GPU_OPTIMIZE_REPEAT,            "Repeat drawing operations instead of using offscreen and GL_REPEAT" },
 };
 
 typedef struct _GskGpuRendererPrivate GskGpuRendererPrivate;
