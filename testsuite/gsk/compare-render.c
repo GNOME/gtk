@@ -505,20 +505,18 @@ clip_create_reference (GskRenderer   *renderer,
 {
   const cairo_rectangle_int_t *int_clip = data;
   GskRenderNode *texture_node, *reference_node;
-  graphene_rect_t clip_rect;
+  graphene_rect_t texture_bounds, clip_rect;
   GdkTexture *result;
 
   gsk_rect_from_cairo (&clip_rect, int_clip);
+  texture_bounds = GRAPHENE_RECT_INIT (0,
+                                       0,
+                                       gdk_texture_get_width (texture),
+                                       gdk_texture_get_height (texture));
 
-  texture_node = gsk_texture_node_new (texture,
-                                       &GRAPHENE_RECT_INIT (
-                                         0,
-                                         0,
-                                         gdk_texture_get_width (texture),
-                                         gdk_texture_get_height (texture)
-                                       ));
+  texture_node = gsk_texture_node_new (texture, &texture_bounds);
   reference_node = gsk_clip_node_new (texture_node, &clip_rect);
-  result = gsk_renderer_render_texture (renderer, reference_node, NULL);
+  result = gsk_renderer_render_texture (renderer, reference_node, &texture_bounds);
 
   gsk_render_node_unref (reference_node);
   gsk_render_node_unref (texture_node);
@@ -632,6 +630,7 @@ static const TestSetup test_setups[] = {
   {
     .name = "clip",
     .description = "Do clip test",
+    .flags = KEEP_BOUNDS,
     .setup = clip_setup,
     .free = g_free,
     .create_test = clip_create_test,
