@@ -838,6 +838,7 @@ get_color2_texture (const GdkColor *color)
 
   texture = gdk_memory_texture_builder_build (builder);
 
+  g_object_unref (builder);
   g_bytes_unref (bytes);
 
   return texture;
