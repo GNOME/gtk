@@ -18,6 +18,7 @@ typedef enum {
   TEXTURE_METHOD_GL_RELEASED,
   TEXTURE_METHOD_GL_NATIVE,
   TEXTURE_METHOD_NGL,
+  TEXTURE_METHOD_NGL_RELEASED,
   TEXTURE_METHOD_VULKAN,
   TEXTURE_METHOD_PNG,
   TEXTURE_METHOD_PNG_PIXBUF,
@@ -250,6 +251,12 @@ create_texture (GdkMemoryFormat  format,
       texture = upload_to_renderer (texture, ngl_renderer);
       break;
 
+    case TEXTURE_METHOD_NGL_RELEASED:
+      texture = upload_to_renderer (texture, ngl_renderer);
+      if (GDK_IS_GL_TEXTURE (texture))
+        gdk_gl_texture_release (GDK_GL_TEXTURE (texture));
+      break;
+
     case TEXTURE_METHOD_VULKAN:
       texture = upload_to_renderer (texture, vulkan_renderer);
       break;
@@ -338,6 +345,7 @@ texture_method_is_accurate (TextureMethod method)
     case TEXTURE_METHOD_GL_RELEASED:
     case TEXTURE_METHOD_GL_NATIVE:
     case TEXTURE_METHOD_NGL:
+    case TEXTURE_METHOD_NGL_RELEASED:
     case TEXTURE_METHOD_VULKAN:
     case TEXTURE_METHOD_PNG:
     case TEXTURE_METHOD_PNG_PIXBUF:
@@ -441,6 +449,7 @@ should_skip_download_test (GdkMemoryFormat format,
       return FALSE;
 
     case TEXTURE_METHOD_NGL:
+    case TEXTURE_METHOD_NGL_RELEASED:
       if (ngl_renderer == NULL)
         {
           g_test_skip ("NGL renderer is not supported");
@@ -507,7 +516,7 @@ test_download (gconstpointer data,
           gdk_memory_format_has_alpha (format) &&
           (method == TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED ||
            method == TEXTURE_METHOD_GL_NATIVE || method == TEXTURE_METHOD_VULKAN ||
-           method == TEXTURE_METHOD_NGL))
+           method == TEXTURE_METHOD_NGL || method == TEXTURE_METHOD_NGL_RELEASED))
         color = (GdkRGBA) { 0, 0, 0, 0 };
 
       expected = create_texture (format, TEXTURE_METHOD_LOCAL, width, height, &color);
@@ -642,6 +651,7 @@ add_test (const char    *name,
             [TEXTURE_METHOD_GL_RELEASED] = "gl-released",
             [TEXTURE_METHOD_GL_NATIVE] = "gl-native",
             [TEXTURE_METHOD_NGL] = "ngl",
+            [TEXTURE_METHOD_NGL_RELEASED] = "ngl-released",
             [TEXTURE_METHOD_VULKAN] = "vulkan",
             [TEXTURE_METHOD_PNG] = "png",
             [TEXTURE_METHOD_PNG_PIXBUF] = "png-pixbuf",
