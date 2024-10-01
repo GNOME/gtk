@@ -645,6 +645,15 @@ get_renderer_for_gl (GdkSurface *surface)
   return gsk_ngl_renderer_get_type ();
 }
 
+static GType
+get_renderer_for_gl_fallback (GdkSurface *surface)
+{
+  if (!gl_supported_platform (surface, gsk_ngl_renderer_get_type (), TRUE))
+    return G_TYPE_INVALID;
+
+  return gsk_ngl_renderer_get_type ();
+}
+
 #ifdef GDK_RENDERING_VULKAN
 static gboolean
 vulkan_supported_platform (GdkSurface *surface,
@@ -734,6 +743,7 @@ static struct {
 #ifdef GDK_RENDERING_VULKAN
   { get_renderer_for_vulkan_fallback },
 #endif
+  { get_renderer_for_gl_fallback },
   { get_renderer_fallback },
 };
 
