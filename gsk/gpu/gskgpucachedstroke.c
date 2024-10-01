@@ -218,11 +218,11 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
     }
 
   if (!gsk_path_get_stroke_bounds (path, stroke, &viewport) ||
-      !gsk_rect_snap_to_grid (&viewport,
-                              scale,
-                              &GRAPHENE_POINT_INIT ((float) fx / (sx * SUBPIXEL_SCALE_X), 
-                                                    (float) fy / (sy * SUBPIXEL_SCALE_Y)),
-                              &viewport))
+      !gsk_rect_snap_to_grid_grow (&viewport,
+                                   scale,
+                                   &GRAPHENE_POINT_INIT ((float) fx / (sx * SUBPIXEL_SCALE_X), 
+                                                         (float) fy / (sy * SUBPIXEL_SCALE_Y)),
+                                   &viewport))
     return NULL;
 
   padding = 1;

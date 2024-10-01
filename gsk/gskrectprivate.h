@@ -232,7 +232,7 @@ gsk_rect_subtract (const graphene_rect_t *m,
 }
 
 /**
- * gsk_rect_snap_to_grid:
+ * gsk_rect_snap_to_grid_grow:
  * @src: rectangle to snap
  * @grid_scale: the scale of the grid
  * @grid_offset: the offset of the grid
@@ -250,13 +250,13 @@ gsk_rect_subtract (const graphene_rect_t *m,
  * Note that floating point rounding issues might result
  * in the snapping not being perfectly exact.
  * 
- * Returns false if the resulting rect has zero width/height
+ * Returns: false if the resulting rect has zero width/height
  **/
 static inline gboolean G_GNUC_WARN_UNUSED_RESULT
-gsk_rect_snap_to_grid (const graphene_rect_t  *src,
-                       const graphene_vec2_t  *grid_scale,
-                       const graphene_point_t *grid_offset,
-                       graphene_rect_t        *dest)
+gsk_rect_snap_to_grid_grow (const graphene_rect_t  *src,
+                            const graphene_vec2_t  *grid_scale,
+                            const graphene_point_t *grid_offset,
+                            graphene_rect_t        *dest)
 {
   float x, y, xscale, yscale;
 

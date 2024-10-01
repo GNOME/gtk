@@ -273,7 +273,7 @@ gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (GskGpuRenderPass *self
   if (!gsk_rect_intersection (&tmp, &node->bounds, out_bounds))
     return FALSE;
 
-  if (!gsk_rect_snap_to_grid (out_bounds, &self->scale, &self->offset, out_bounds))
+  if (!gsk_rect_snap_to_grid_grow (out_bounds, &self->scale, &self->offset, out_bounds))
     return FALSE;
 
   return TRUE;
@@ -567,7 +567,7 @@ gsk_gpu_node_processor_get_node_as_image_untracked (GskGpuRenderPass   *self,
           if (!gsk_rect_intersection (clip_bounds, &node->bounds, &clip))
             return NULL;
         }
-      if (!gsk_rect_snap_to_grid (&clip, &self->scale, &self->offset, &clip))
+      if (!gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &clip))
         return NULL;
     }
 
@@ -650,7 +650,7 @@ gsk_gpu_node_processor_blur_op (GskGpuRenderPass       *self,
   if (!gsk_rect_intersection (rect, &clip_rect, &intermediate_rect))
     return;
 
-  if (!gsk_rect_snap_to_grid (&intermediate_rect, &self->scale, &self->offset, &intermediate_rect))
+  if (!gsk_rect_snap_to_grid_grow (&intermediate_rect, &self->scale, &self->offset, &intermediate_rect))
     return;
 
   other = gsk_gpu_node_processor_new_draw (self->frame,
@@ -1240,7 +1240,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuRenderPass *self,
       if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip))
         return;
 
-      if (!gsk_rect_snap_to_grid (&clip, &self->scale, &self->offset, &rounded_clip))
+      if (!gsk_rect_snap_to_grid_grow (&clip, &self->scale, &self->offset, &rounded_clip))
         return;
 
       image = gsk_gpu_get_texture_tiles_as_image (self->frame,
@@ -1381,7 +1381,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuRenderPass *self,
         return;
 
       /* first round to pixel boundaries, so we make sure the full pixels are covered */
-      if (!gsk_rect_snap_to_grid (&clip_bounds, &self->scale, &self->offset, &clip_bounds))
+      if (!gsk_rect_snap_to_grid_grow (&clip_bounds, &self->scale, &self->offset, &clip_bounds))
         {
           if (image)
             {
