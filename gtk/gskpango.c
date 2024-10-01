@@ -211,7 +211,7 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
 
   gtk_snapshot_push_repeat (crenderer->snapshot,
                             &GRAPHENE_RECT_INIT (xx, yy, ww, hh),
-                            NULL);
+                            &GRAPHENE_RECT_INIT (xx, yy, 1.5 * hh, hh));
 
   gsk_rounded_rect_init_from_rect (&dot,
                                    &GRAPHENE_RECT_INIT (xx, yy, hh, hh),
@@ -220,9 +220,6 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
   gtk_snapshot_push_rounded_clip (crenderer->snapshot, &dot);
   gtk_snapshot_append_color2 (crenderer->snapshot, &color, &dot.bounds);
   gtk_snapshot_pop (crenderer->snapshot);
-  gtk_snapshot_append_color2 (crenderer->snapshot,
-                              &GDK_COLOR_SRGB (0, 0, 0, 0),
-                              &GRAPHENE_RECT_INIT (xx, yy, 1.5 * hh, hh));
 
   gdk_color_finish (&color);
 
