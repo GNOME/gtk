@@ -81,23 +81,6 @@
 
 #include <stdint.h>
 
-#define GDK_MOD2_MASK (1 << 4)
-
-#ifndef XBUTTON1
-#define XBUTTON1 1
-#define XBUTTON2 2
-#endif
-
-#ifndef VK_XBUTTON1
-#define VK_XBUTTON1 5
-#define VK_XBUTTON2 6
-#endif
-
-#ifndef MK_XBUTTON1
-#define MK_XBUTTON1 32
-#define MK_XBUTTON2 64
-#endif
-
 /* Undefined flags: */
 #define SWP_NOCLIENTSIZE 0x0800
 #define SWP_NOCLIENTMOVE 0x1000
@@ -722,7 +705,6 @@ print_event_state (guint state)
   CASE (LOCK);
   CASE (CONTROL);
   CASE (ALT);
-  CASE (MOD2);
   CASE (BUTTON1);
   CASE (BUTTON2);
   CASE (BUTTON3);

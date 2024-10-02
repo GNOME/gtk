@@ -22,24 +22,6 @@
 
 G_BEGIN_DECLS
 
-#ifndef START_PAGE_GENERAL
-#define START_PAGE_GENERAL 0xffffffff
-#endif
-
-#ifndef PD_RESULT_CANCEL
-#define PD_RESULT_CANCEL  0
-#define PD_RESULT_PRINT  1
-#define PD_RESULT_APPLY  2
-#endif
-
-#ifndef PD_NOCURRENTPAGE
-#define PD_NOCURRENTPAGE  0x00800000
-#endif
-
-#ifndef PD_CURRENTPAGE
-#define PD_CURRENTPAGE  0x00400000
-#endif
-
 typedef struct {
   char *driver;
   char *device;
