@@ -13,7 +13,7 @@ static GtkWidget *window = NULL;
 static GtkWidget *scrolledwindow;
 static int selected;
 
-#define N_WIDGET_TYPES 8
+#define N_WIDGET_TYPES 9
 
 
 static int hincrement = 5;
@@ -73,30 +73,77 @@ populate_icons (void)
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), grid);
 }
 
-static char *content;
-static gsize content_len;
-
 extern void fontify (const char *format, GtkTextBuffer *buffer);
 
+enum {
+  PLAIN_TEXT,
+  HIGHLIGHTED_TEXT,
+  UNDERLINED_TEXT,
+};
+
 static void
-populate_text (gboolean highlight)
+underlinify (GtkTextBuffer *buffer)
+{
+  GtkTextTagTable *tags;
+  GtkTextTag *tag[3];
+  GtkTextIter start, end;
+
+  tags = gtk_text_buffer_get_tag_table (buffer);
+  tag[0] = gtk_text_tag_new ("error");
+  tag[1] = gtk_text_tag_new ("strikeout");
+  tag[2] = gtk_text_tag_new ("double");
+  g_object_set (tag[0], "underline", PANGO_UNDERLINE_ERROR, NULL);
+  g_object_set (tag[1], "strikethrough", TRUE, NULL);
+  g_object_set (tag[2],
+                "underline", PANGO_UNDERLINE_DOUBLE,
+                "underline-rgba", &(GdkRGBA){0., 1., 1., 1. },
+                NULL);
+  gtk_text_tag_table_add (tags, tag[0]);
+  gtk_text_tag_table_add (tags, tag[1]);
+  gtk_text_tag_table_add (tags, tag[2]);
+
+  gtk_text_buffer_get_start_iter (buffer, &end);
+
+  while (TRUE)
+    {
+      gtk_text_iter_forward_word_end (&end);
+      start = end;
+      gtk_text_iter_backward_word_start (&start);
+      gtk_text_buffer_apply_tag (buffer, tag[g_random_int_range (0, 3)], &start, &end);
+      if (!gtk_text_iter_forward_word_ends (&end, 3))
+        break;
+    }
+}
+
+static void
+populate_text (const char *resource, int kind)
 {
   GtkWidget *textview;
   GtkTextBuffer *buffer;
+  char *content;
+  gsize content_len;
+  GBytes *bytes;
 
-  if (!content)
-    {
-      GBytes *bytes;
-
-      bytes = g_resources_lookup_data ("/sources/font_features.c", 0, NULL);
-      content = g_bytes_unref_to_data (bytes, &content_len);
-    }
+  bytes = g_resources_lookup_data (resource, 0, NULL);
+  content = g_bytes_unref_to_data (bytes, &content_len);
 
   buffer = gtk_text_buffer_new (NULL);
   gtk_text_buffer_set_text (buffer, content, (int)content_len);
 
-  if (highlight)
-    fontify ("c", buffer);
+  switch (kind)
+    {
+    case HIGHLIGHTED_TEXT:
+      fontify ("c", buffer);
+      break;
+
+    case UNDERLINED_TEXT:
+      underlinify (buffer);
+      break;
+
+    case PLAIN_TEXT:
+    default:
+      break;
+    }
 
   textview = gtk_text_view_new ();
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (textview), buffer);
@@ -154,14 +201,6 @@ static void
 populate_image (void)
 {
   GtkWidget *image;
-
-  if (!content)
-    {
-      GBytes *bytes;
-
-      bytes = g_resources_lookup_data ("/sources/font_features.c", 0, NULL);
-      content = g_bytes_unref_to_data (bytes, &content_len);
-    }
 
   image = gtk_picture_new_for_resource ("/sliding_puzzle/portland-rose.jpg");
   gtk_picture_set_can_shrink (GTK_PICTURE (image), FALSE);
@@ -255,35 +294,40 @@ set_widget_type (int type)
 
     case 1:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling plain text");
-      populate_text (FALSE);
+      populate_text ("/sources/font_features.c", PLAIN_TEXT);
       break;
 
     case 2:
-      gtk_window_set_title (GTK_WINDOW (window), "Scrolling complex text");
-      populate_text (TRUE);
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling colored text");
+      populate_text ("/sources/font_features.c", HIGHLIGHTED_TEXT);
       break;
 
     case 3:
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling text with underlines");
+      populate_text ("/org/gtk/Demo4/Moby-Dick.txt", UNDERLINED_TEXT);
+      break;
+
+    case 4:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling text with Emoji");
       populate_emoji_text ();
       break;
 
-    case 4:
+    case 5:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling a big image");
       populate_image ();
       break;
 
-    case 5:
+    case 6:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling a list");
       populate_list ();
       break;
 
-    case 6:
+    case 7:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling a columned list");
       populate_list2 ();
       break;
 
-    case 7:
+    case 8:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling a grid");
       populate_grid ();
       break;
