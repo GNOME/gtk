@@ -754,6 +754,7 @@ gtk_print_output_stream_set_print_done (GtkPrintOutputStream *stream,
 typedef struct
 {
   GtkWindow *exported_window;
+  char *exported_window_handle;
   char *portal_handle;
   unsigned int response_signal_id;
   unsigned int token;
@@ -778,6 +779,9 @@ print_task_data_free (gpointer data)
   PrintTaskData *ptd = data;
 
   g_free (ptd->portal_handle);
+  if (ptd->exported_window && ptd->exported_window_handle)
+    gtk_window_unexport_handle (ptd->exported_window, ptd->exported_window_handle);
+  g_clear_pointer (&ptd->exported_window_handle, g_free);
   g_clear_object (&ptd->exported_window);
   if (ptd->fds[0] != -1)
     close (ptd->fds[0]);
@@ -872,8 +876,12 @@ cleanup_portal_call_data (GTask *task)
       ptd->response_signal_id = 0;
     }
 
+  if (ptd->exported_window && ptd->exported_window_handle)
+    gtk_window_unexport_handle (ptd->exported_window, ptd->exported_window_handle);
+
   g_clear_pointer (&ptd->portal_handle, g_free);
   g_clear_object (&ptd->exported_window);
+  g_clear_pointer (&ptd->exported_window_handle, g_free);
 }
 
 /* }}} */
@@ -1015,6 +1023,12 @@ setup_window_handle_exported (GtkWindow  *window,
 
   g_assert (ptd->portal_handle == NULL);
   ptd->portal_handle = gtk_get_portal_request_path (connection, &handle_token);
+
+  if (window)
+    {
+      ptd->exported_window = g_object_ref (window);
+      ptd->exported_window_handle = g_strdup (window_handle);
+    }
 
   g_assert (ptd->response_signal_id == 0);
   ptd->response_signal_id =
@@ -1213,7 +1227,10 @@ print_window_handle_exported (GtkWindow  *window,
   int idx;
 
   if (window)
-    ptd->exported_window = g_object_ref (window);
+    {
+      ptd->exported_window = g_object_ref (window);
+      ptd->exported_window_handle = g_strdup (window_handle);
+    }
 
   g_assert (ptd->fds[0] != -1);
 
