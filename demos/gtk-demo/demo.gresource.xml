@@ -441,6 +441,7 @@
     <file>portland-rose-thumbnail.png</file>
     <file>large-image-thumbnail.png</file>
     <file compressed="true">large-image.png</file>
+    <file compressed="true">Moby-Dick.txt</file>
   </gresource>
   <gresource prefix="/org/gtk/Demo4/gtk">
     <file preprocess="xml-stripblanks">help-overlay.ui</file>
