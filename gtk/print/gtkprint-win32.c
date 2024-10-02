@@ -16,16 +16,6 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef _MSC_VER
-#ifndef _WIN32_WINNT
-/* Vista or newer */
-#define _WIN32_WINNT 0x0600
-#endif
-#ifndef WINVER
-#define WINVER _WIN32_WINNT
-#endif
-#endif
-
 #include "config.h"
 #include "gtkprint-win32.h"
 
