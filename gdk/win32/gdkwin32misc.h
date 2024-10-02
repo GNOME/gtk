@@ -31,9 +31,6 @@
 
 #include <gdk/gdk.h>
 
-#ifndef STRICT
-#define STRICT			/* We want strict type checks */
-#endif
 #include <windows.h>
 #include <commctrl.h>
 

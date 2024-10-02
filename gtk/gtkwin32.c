@@ -28,10 +28,8 @@
 
 #include "gtkprivate.h"
 
-#define STRICT
 #include <windows.h>
 #include <commctrl.h>
-#undef STRICT
 
 extern IMAGE_DOS_HEADER __ImageBase;
 
