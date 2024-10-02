@@ -512,6 +512,17 @@ gtk_at_context_get_accessible_parent (GtkATContext *self)
 
 static GtkATContext * get_parent_context (GtkATContext *self);
 
+static inline void
+maybe_realize_context (GtkATContext *self)
+{
+  GtkATContext *parent_context = get_parent_context (self);
+
+  if (parent_context && parent_context->realized)
+    gtk_at_context_realize (self);
+
+  g_clear_object (&parent_context);
+}
+
 /*< private >
  * gtk_at_context_set_accessible_parent:
  * @self: a `GtkAtContext`
@@ -534,15 +545,10 @@ gtk_at_context_set_accessible_parent (GtkATContext *self,
       self->accessible_parent = parent;
       if (self->accessible_parent != NULL)
         {
-          GtkATContext *parent_context = NULL;
-
           g_object_add_weak_pointer (G_OBJECT (self->accessible_parent),
                                      (gpointer *) &self->accessible_parent);
 
-          parent_context = get_parent_context (self);
-          if (parent_context && parent_context->realized)
-            gtk_at_context_realize (self);
-          g_clear_object (&parent_context);
+          maybe_realize_context (self);
         }
     }
 }
