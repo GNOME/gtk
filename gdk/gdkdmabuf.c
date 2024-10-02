@@ -2068,7 +2068,7 @@ gdk_dmabuf_get_mmap_formats (void)
             continue;
 
           GDK_DEBUG (DMABUF,
-                     "mmap dmabuf format %.4s:%#0" G_GINT64_MODIFIER "x",
+                     "mmap advertises dmabuf format %.4s::%016" G_GINT64_MODIFIER "x",
                      (char *) &supported_formats[i].fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
 
           gdk_dmabuf_formats_builder_add_format (builder,

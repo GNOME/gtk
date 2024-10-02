@@ -1911,19 +1911,20 @@ gdk_vulkan_init_dmabuf (GdkDisplay *display)
       g_warn_if_fail (modifier_props.drmFormatModifierCount < sizeof (modifier_list));
       for (j = 0; j < modifier_props.drmFormatModifierCount; j++)
         {
+          gboolean advertise = modifier_list[j].drmFormatModifier != DRM_FORMAT_MOD_LINEAR;
+
           GDK_DISPLAY_DEBUG (display, DMABUF,
-                             "Vulkan supports dmabuf format %.4s::%016llx with %u planes and features 0x%x",
+                             "Vulkan %s dmabuf format %.4s::%016"G_GINT64_MODIFIER"x with %u planes and features 0x%x",
+                             advertise ? "advertises" : "supports",
                              (char *) &fourcc,
-                             (long long unsigned) modifier_list[j].drmFormatModifier,
+                             modifier_list[j].drmFormatModifier,
                              modifier_list[j].drmFormatModifierPlaneCount,
                              modifier_list[j].drmFormatModifierTilingFeatures);
 
-          if (modifier_list[j].drmFormatModifier == DRM_FORMAT_MOD_LINEAR)
-            continue;
-
-          gdk_dmabuf_formats_builder_add_format (vulkan_builder,
-                                                 fourcc,
-                                                 modifier_list[j].drmFormatModifier);
+          if (advertise)
+            gdk_dmabuf_formats_builder_add_format (vulkan_builder,
+                                                   fourcc,
+                                                   modifier_list[j].drmFormatModifier);
         }
     }
 
