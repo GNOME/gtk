@@ -2002,7 +2002,7 @@ gdk_display_init_dmabuf (GdkDisplay *self)
   self->dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
 
   GDK_DISPLAY_DEBUG (self, DMABUF,
-                     "Initialized support for %zu dmabuf formats",
+                     "Initialization finished. Advertising %zu dmabuf formats",
                      gdk_dmabuf_formats_get_n_formats (self->dmabuf_formats));
 }
 
