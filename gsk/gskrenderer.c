@@ -675,13 +675,15 @@ vulkan_supported_platform (GdkSurface *surface,
       return FALSE;
     }
 
+  if (as_fallback)
+    return TRUE;
+
   vkGetPhysicalDeviceProperties (display->vk_physical_device, &props);
 
   if (props.deviceType == VK_PHYSICAL_DEVICE_TYPE_CPU)
     {
-      GSK_DEBUG (RENDERER, "Not using '%s'%s: device is CPU",
-                 g_type_name (renderer_type),
-                 as_fallback ? " as fallback" : "");
+      GSK_DEBUG (RENDERER, "Not using '%s': device is CPU",
+                 g_type_name (renderer_type));
       return FALSE;
     }
 
@@ -690,15 +692,11 @@ vulkan_supported_platform (GdkSurface *surface,
   if (!display->vk_dmabuf_formats ||
       gdk_dmabuf_formats_get_n_formats (display->vk_dmabuf_formats) == 0)
     {
-      GSK_DEBUG (RENDERER, "Not using '%s'%s: no dmabuf support",
-                 g_type_name (renderer_type),
-                 as_fallback ? " as fallback" : "");
+      GSK_DEBUG (RENDERER, "Not using '%s': no dmabuf support",
+                 g_type_name (renderer_type));
       return FALSE;
     }
 #endif
-
-  if (as_fallback)
-    return TRUE;
 
 #ifdef GDK_WINDOWING_WAYLAND
   if (GDK_IS_WAYLAND_DISPLAY (gdk_surface_get_display (surface)))

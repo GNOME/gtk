@@ -1405,10 +1405,6 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 {
   G_GNUC_UNUSED gint64 start_time = GDK_PROFILER_CURRENT_TIME;
   uint32_t i, j, k;
-  const char *env_var = "GDK_VULKAN_DEVICE";
-  const char *override;
-  gboolean list_devices;
-  int first, last;
   GdkVulkanFeatures skip_features;
 
   uint32_t n_devices = 0;
@@ -1426,9 +1422,6 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   devices = g_newa (VkPhysicalDevice, n_devices);
   GDK_VK_CHECK(vkEnumeratePhysicalDevices, display->vk_instance, &n_devices, devices);
 
-  first = 0;
-  last = n_devices;
-
   skip_features = gdk_parse_debug_var ("GDK_VULKAN_DISABLE",
       "GDK_VULKAN_DISABLE can be set to a list of Vulkan features to disable.\n",
       gsk_vulkan_feature_keys,
@@ -1436,44 +1429,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   if (skip_features & GDK_VULKAN_FEATURE_YCBCR)
     skip_features |= GDK_VULKAN_FEATURE_DMABUF;
 
-  override = g_getenv (env_var);
-  list_devices = FALSE;
-  if (override)
-    {
-      if (g_strcmp0 (override, "help") == 0)
-        {
-          fprintf (stderr,
-                   "%s overrides the choice of Vulkan device.\n\n", env_var);
-          fprintf (stderr, "Supported %s values:\n", env_var);
-          fprintf (stderr, "  N       Use the N-th device\n");
-          fprintf (stderr, "  list    List available devices\n");
-          fprintf (stderr, "  help    Print this help\n");
-        }
-      else if (g_strcmp0 (override, "list") == 0)
-        list_devices = TRUE;
-      else
-        {
-          guint64 device_idx;
-          GError *error2 = NULL;
-
-          if (!g_ascii_string_to_unsigned (override, 10, 0, G_MAXINT, &device_idx, &error2))
-            {
-              fprintf (stderr, "Failed to parse %s: %s\n", env_var, error2->message);
-              fprintf (stderr, "Try %s=help\n", env_var);
-              g_error_free (error2);
-              device_idx = -1;
-            }
-          else if (device_idx < 0 || device_idx >= n_devices)
-            fprintf (stderr, "%s value out of range, ignoring\n", env_var);
-          else
-            {
-              first = device_idx;
-              last = first + 1;
-            }
-        }
-    }
-
-  if (list_devices || GDK_DISPLAY_DEBUG_CHECK (display, VULKAN))
+  if (GDK_DISPLAY_DEBUG_CHECK (display, VULKAN))
     {
       for (i = 0; i < n_devices; i++)
         {
@@ -1524,7 +1480,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
         }
     }
 
-  for (i = first; i < last; i++)
+  for (i = 0; i < n_devices; i++)
     {
       GdkVulkanFeatures features, device_features;
       uint32_t n_queue_props;
@@ -1540,7 +1496,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
         {
           if (queue_props[j].queueFlags & VK_QUEUE_GRAPHICS_BIT)
             {
-              VkPhysicalDeviceSwapchainMaintenance1FeaturesEXT swapchain_maintenance1_features = { 
+              VkPhysicalDeviceSwapchainMaintenance1FeaturesEXT swapchain_maintenance1_features = {
                 .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_SWAPCHAIN_MAINTENANCE_1_FEATURES_EXT,
                 .swapchainMaintenance1 = VK_TRUE,
               };
