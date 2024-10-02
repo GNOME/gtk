@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <object class="GtkWindow" id="window">
-    <property name="resizable">0</property>
+    <property name="resizable">1</property>
     <property name="default-width">500</property>
     <property name="default-height">500</property>
     <child type="titlebar">
