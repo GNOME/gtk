@@ -59,6 +59,7 @@ enum {
   PROP_0,
   PROP_PAINTABLE,
   PROP_GL_CONTEXT,
+  PROP_DISPLAY,
 
   N_PROPS,
 };
@@ -207,10 +208,9 @@ gtk_gst_sink_get_caps (GstBaseSink *bsink,
   GstCaps *tmp;
   GstCaps *result;
 
-  if (self->gst_context)
+  if (self->gdk_display)
     {
-      GdkDisplay *display = gdk_gl_context_get_display (self->gdk_context);
-      GdkDmabufFormats *formats = gdk_display_get_dmabuf_formats (display);
+      GdkDmabufFormats *formats = gdk_display_get_dmabuf_formats (self->gdk_display);
 
       tmp = gst_pad_get_pad_template_caps (GST_BASE_SINK_PAD (bsink));
       tmp = gst_caps_make_writable (tmp);
@@ -299,9 +299,6 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
   gboolean need_pool;
   GstVideoInfo info;
 
-  if (!self->gst_context)
-    return FALSE;
-
   gst_query_parse_allocation (query, &caps, &need_pool);
 
   if (caps == NULL)
@@ -315,6 +312,9 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
       gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, 0);
       return TRUE;
     }
+
+  if (!self->gst_context)
+    return FALSE;
 
   if (!gst_caps_features_contains (gst_caps_get_features (caps, 0), GST_CAPS_FEATURE_MEMORY_GL_MEMORY))
     return FALSE;
@@ -418,11 +418,10 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       g_clear_pointer (&frame, g_free);
 
       g_return_val_if_fail (vmeta, NULL);
-      g_return_val_if_fail (self->gdk_context, NULL);
       g_return_val_if_fail (self->drm_info.drm_fourcc != DRM_FORMAT_INVALID, NULL);
 
       builder = gdk_dmabuf_texture_builder_new ();
-      gdk_dmabuf_texture_builder_set_display (builder, gdk_gl_context_get_display (self->gdk_context));
+      gdk_dmabuf_texture_builder_set_display (builder, self->gdk_display);
       gdk_dmabuf_texture_builder_set_fourcc (builder, self->drm_info.drm_fourcc);
       gdk_dmabuf_texture_builder_set_modifier (builder, self->drm_info.drm_modifier);
       gdk_dmabuf_texture_builder_set_width (builder, vmeta->width);
@@ -766,6 +765,10 @@ gtk_gst_sink_set_property (GObject      *object,
         g_clear_object (&self->gdk_context);
       break;
 
+    case PROP_DISPLAY:
+      self->gdk_display = g_value_dup_object (value);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -785,8 +788,13 @@ gtk_gst_sink_get_property (GObject    *object,
     case PROP_PAINTABLE:
       g_value_set_object (value, self->paintable);
       break;
+
     case PROP_GL_CONTEXT:
       g_value_set_object (value, self->gdk_context);
+      break;
+
+    case PROP_DISPLAY:
+      g_value_set_object (value, self->gdk_display);
       break;
 
     default:
@@ -805,6 +813,7 @@ gtk_gst_sink_dispose (GObject *object)
   g_clear_object (&self->gst_gdk_context);
   g_clear_object (&self->gst_display);
   g_clear_object (&self->gdk_context);
+  g_clear_object (&self->gdk_display);
 
   G_OBJECT_CLASS (gtk_gst_sink_parent_class)->dispose (object);
 }
@@ -847,6 +856,11 @@ gtk_gst_sink_class_init (GtkGstSinkClass * klass)
   properties[PROP_GL_CONTEXT] =
     g_param_spec_object ("gl-context", NULL, NULL,
                          GDK_TYPE_GL_CONTEXT,
+                         G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_DISPLAY] =
+    g_param_spec_object ("display", NULL, NULL,
+                         GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
