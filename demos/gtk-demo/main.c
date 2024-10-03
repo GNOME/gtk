@@ -156,11 +156,6 @@ gtk_demo_run (GtkDemo   *self,
   if (result == NULL)
     return FALSE;
 
-  if (GTK_IS_WINDOW (result))
-    {
-      gtk_window_set_transient_for (GTK_WINDOW (result), GTK_WINDOW (window));
-      gtk_window_set_modal (GTK_WINDOW (result), TRUE);
-    }
   return TRUE;
 }
 
