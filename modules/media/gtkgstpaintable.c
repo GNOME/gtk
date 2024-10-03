@@ -137,7 +137,10 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
   GdkGLContext *ctx;
   GdkDisplay *display;
 
-  display = self->surface ? gdk_surface_get_display (self->surface) : NULL;
+  if (self->surface)
+    display = gdk_surface_get_display (self->surface);
+  else
+    display = gdk_display_get_default ();
 
   sink = g_object_new (GTK_TYPE_GST_SINK,
                        "paintable", self,
