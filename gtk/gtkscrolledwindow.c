@@ -1844,19 +1844,30 @@ gtk_scrolled_window_measure (GtkWidget      *widget,
    * Now add to the requisition any additional space for surrounding scrollbars
    * and the special scrollable border.
    */
-  if (policy_may_be_visible (priv->hscrollbar_policy))
+  if (orientation == GTK_ORIENTATION_HORIZONTAL && policy_may_be_visible (priv->hscrollbar_policy))
     {
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        {
-          int min_scrollbar_width, nat_scrollbar_width;
+      int min_scrollbar_width, nat_scrollbar_width;
 
-          gtk_widget_measure (priv->hscrollbar, GTK_ORIENTATION_HORIZONTAL, -1,
-                              &min_scrollbar_width, &nat_scrollbar_width,
-                              NULL, NULL);
-          minimum_req = MAX (minimum_req, min_scrollbar_width + sborder.left + sborder.right);
-          natural_req = MAX (natural_req, nat_scrollbar_width + sborder.left + sborder.right);
-        }
-      else if (!priv->use_indicators && priv->hscrollbar_policy == GTK_POLICY_ALWAYS)
+      gtk_widget_measure (priv->hscrollbar, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &min_scrollbar_width, &nat_scrollbar_width,
+                          NULL, NULL);
+      minimum_req = MAX (minimum_req, min_scrollbar_width + sborder.left + sborder.right);
+      natural_req = MAX (natural_req, nat_scrollbar_width + sborder.left + sborder.right);
+    }
+  else if (orientation == GTK_ORIENTATION_VERTICAL && policy_may_be_visible (priv->vscrollbar_policy))
+    {
+      int min_scrollbar_height, nat_scrollbar_height;
+
+      gtk_widget_measure (priv->vscrollbar, GTK_ORIENTATION_VERTICAL, -1,
+                          &min_scrollbar_height, &nat_scrollbar_height,
+                          NULL, NULL);
+      minimum_req = MAX (minimum_req, min_scrollbar_height + sborder.top + sborder.bottom);
+      natural_req = MAX (natural_req, nat_scrollbar_height + sborder.top + sborder.bottom);
+    }
+
+  if (!priv->use_indicators)
+    {
+      if (orientation == GTK_ORIENTATION_VERTICAL && priv->hscrollbar_policy == GTK_POLICY_ALWAYS)
         {
           int min_scrollbar_height, nat_scrollbar_height;
 
@@ -1867,21 +1878,7 @@ gtk_scrolled_window_measure (GtkWidget      *widget,
           minimum_req += min_scrollbar_height;
           natural_req += nat_scrollbar_height;
         }
-    }
-
-  if (policy_may_be_visible (priv->vscrollbar_policy))
-    {
-      if (orientation == GTK_ORIENTATION_VERTICAL)
-        {
-          int min_scrollbar_height, nat_scrollbar_height;
-
-          gtk_widget_measure (priv->vscrollbar, GTK_ORIENTATION_VERTICAL, -1,
-                              &min_scrollbar_height, &nat_scrollbar_height,
-                              NULL, NULL);
-          minimum_req = MAX (minimum_req, min_scrollbar_height + sborder.top + sborder.bottom);
-          natural_req = MAX (natural_req, nat_scrollbar_height + sborder.top + sborder.bottom);
-        }
-      else if (!priv->use_indicators && priv->vscrollbar_policy == GTK_POLICY_ALWAYS)
+      else if (orientation == GTK_ORIENTATION_HORIZONTAL && priv->vscrollbar_policy == GTK_POLICY_ALWAYS)
         {
           int min_scrollbar_width, nat_scrollbar_width;
 
