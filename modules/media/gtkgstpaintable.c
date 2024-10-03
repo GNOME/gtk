@@ -37,6 +37,7 @@ struct _GtkGstPaintable
   graphene_rect_t viewport;
 
   GdkGLContext *context;
+  GdkSurface *surface;
 };
 
 struct _GtkGstPaintableClass
@@ -134,10 +135,14 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
   GtkGstPaintable *self = GTK_GST_PAINTABLE (renderer);
   GstElement *sink;
   GdkGLContext *ctx;
+  GdkDisplay *display;
+
+  display = self->surface ? gdk_surface_get_display (self->surface) : NULL;
 
   sink = g_object_new (GTK_TYPE_GST_SINK,
                        "paintable", self,
                        "gl-context", self->context,
+                       "display", display,
                        NULL);
 
   if (self->context != NULL)
@@ -164,6 +169,7 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
           g_object_unref (sink);
           sink = g_object_new (GTK_TYPE_GST_SINK,
                                "paintable", self,
+                               "display", display,
                                NULL);
         }
 
@@ -218,8 +224,10 @@ gtk_gst_paintable_realize (GtkGstPaintable *self,
 {
   GError *error = NULL;
 
-  if (self->context)
+  if (self->surface)
     return;
+
+  self->surface = surface;
 
   self->context = gdk_surface_create_gl_context (surface, &error);
   if (self->context == NULL)
@@ -246,11 +254,12 @@ gtk_gst_paintable_unrealize (GtkGstPaintable *self,
    * - track how often we were realized with that surface
    * - track alternate surfaces
    */
-  if (self->context == NULL)
-    return;
 
-  if (gdk_gl_context_get_surface (self->context) == surface)
-    g_clear_object (&self->context);
+  if (self->surface == surface)
+    {
+      g_clear_object (&self->context);
+      self->surface = NULL;
+    }
 }
 
 static void
