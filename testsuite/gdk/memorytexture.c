@@ -685,7 +685,7 @@ main (int argc, char *argv[])
       g_clear_object (&gl_context);
     }
 
-  gl_renderer = gsk_ngl_renderer_new ();
+  gl_renderer = gsk_gl_renderer_new ();
   if (!gsk_renderer_realize_for_display (gl_renderer, display, NULL))
     {
       g_clear_object (&gl_renderer);

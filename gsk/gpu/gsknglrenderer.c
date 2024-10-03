@@ -195,3 +195,5 @@ gsk_ngl_renderer_new (void)
 {
   return g_object_new (GSK_TYPE_NGL_RENDERER, NULL);
 }
+
+

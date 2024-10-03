@@ -925,7 +925,7 @@ export_image_response_cb (GObject      *source,
       GdkTexture *texture;
       GskRenderer *renderer;
 
-      renderer = gsk_ngl_renderer_new ();
+      renderer = gsk_gl_renderer_new ();
       if (!gsk_renderer_realize_for_display (renderer, gdk_display_get_default (), NULL))
         {
           g_object_unref (renderer);
@@ -1234,9 +1234,6 @@ node_editor_window_realize (GtkWidget *widget)
   node_editor_window_add_renderer (self,
                                    gsk_gl_renderer_new (),
                                    "OpenGL");
-  node_editor_window_add_renderer (self,
-                                   gsk_ngl_renderer_new (),
-                                   "NGL");
 #ifdef GDK_RENDERING_VULKAN
   node_editor_window_add_renderer (self,
                                    gsk_vulkan_renderer_new (),

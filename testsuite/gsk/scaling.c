@@ -10,13 +10,6 @@ struct {
   GskRenderer * (*create_func) (void);
   GskRenderer *renderer;
 } renderers[] = {
-#if 0
-  /* The GL renderer is broken, no idea why. It's suppsoed to work. */
-  {
-    "gl",
-    gsk_gl_renderer_new,
-  },
-#endif
   {
     "cairo",
     gsk_cairo_renderer_new,
@@ -26,8 +19,8 @@ struct {
     gsk_vulkan_renderer_new,
   },
   {
-    "ngl",
-    gsk_ngl_renderer_new,
+    "gl",
+    gsk_gl_renderer_new,
   },
 };
 
