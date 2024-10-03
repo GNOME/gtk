@@ -134,7 +134,7 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
 {
   GtkGstPaintable *self = GTK_GST_PAINTABLE (renderer);
   GstElement *sink;
-  GdkGLContext *ctx;
+  GdkGLContext *ctx = NULL;
   GdkDisplay *display;
 
   if (self->surface)
@@ -148,20 +148,21 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
                        "display", display,
                        NULL);
 
-  if (self->context != NULL)
-    g_object_get (GTK_GST_SINK (sink), "gl-context", &ctx, NULL);
+  g_object_get (GTK_GST_SINK (sink), "gl-context", &ctx, NULL);
 
-  if (self->context != NULL && ctx != NULL)
+  if (ctx != NULL)
     {
-      GstElement *glsinkbin = gst_element_factory_make ("glsinkbin", NULL);
+      GstElement *glsinkbin;
 
-      if (!glsinkbin)
-        return NULL;
+      glsinkbin = gst_element_factory_make ("glsinkbin", NULL);
 
-      g_object_set (glsinkbin, "sink", sink, NULL);
+      if (glsinkbin)
+        g_object_set (glsinkbin, "sink", sink, NULL);
+
+      g_object_unref (sink);
+      sink = glsinkbin;
+
       g_object_unref (ctx);
-
-      return glsinkbin;
     }
   else
     {
@@ -175,9 +176,9 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
                                "display", display,
                                NULL);
         }
-
-      return sink;
     }
+
+  return sink;
 }
 
 static void
