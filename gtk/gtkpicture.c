@@ -808,6 +808,20 @@ gtk_picture_set_pixbuf (GtkPicture *self,
     g_object_unref (texture);
 }
 
+static gboolean
+paintable_size_equal (GdkPaintable *one,
+                      GdkPaintable *two)
+{
+  if (one == NULL)
+    return two == NULL;
+  else if (two == NULL)
+    return FALSE;
+
+  return gdk_paintable_get_intrinsic_width (one) == gdk_paintable_get_intrinsic_width (two) &&
+         gdk_paintable_get_intrinsic_height (one) == gdk_paintable_get_intrinsic_height (two) &&
+         gdk_paintable_get_intrinsic_aspect_ratio (one) == gdk_paintable_get_intrinsic_aspect_ratio (two);
+}
+
 /**
  * gtk_picture_set_paintable:
  * @self: a `GtkPicture`
@@ -823,6 +837,8 @@ void
 gtk_picture_set_paintable (GtkPicture   *self,
                            GdkPaintable *paintable)
 {
+  gboolean size_changed;
+
   g_return_if_fail (GTK_IS_PICTURE (self));
   g_return_if_fail (paintable == NULL || GDK_IS_PAINTABLE (paintable));
 
@@ -834,6 +850,8 @@ gtk_picture_set_paintable (GtkPicture   *self,
   if (paintable)
     g_object_ref (paintable);
 
+  size_changed = !paintable_size_equal (self->paintable, paintable);
+ 
   gtk_picture_clear_paintable (self);
 
   self->paintable = paintable;
@@ -855,7 +873,8 @@ gtk_picture_set_paintable (GtkPicture   *self,
                           self);
     }
 
-  gtk_widget_queue_resize (GTK_WIDGET (self));
+  if (size_changed)
+    gtk_widget_queue_resize (GTK_WIDGET (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PAINTABLE]);
 
