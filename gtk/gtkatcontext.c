@@ -512,6 +512,34 @@ gtk_at_context_get_accessible_parent (GtkATContext *self)
 
 static GtkATContext * get_parent_context (GtkATContext *self);
 
+static inline void
+maybe_realize_context (GtkATContext *self)
+{
+  GtkAccessible *accessible_parent;
+  GtkATContext *parent_context;
+
+  parent_context = get_parent_context (self);
+
+  if (!GTK_IS_WIDGET (self->accessible) || (parent_context && parent_context->realized))
+    gtk_at_context_realize (self);
+
+  g_clear_object (&parent_context);
+
+  accessible_parent = self->accessible_parent;
+  while (accessible_parent && !GTK_IS_WIDGET (accessible_parent))
+    {
+      parent_context = gtk_accessible_get_at_context (accessible_parent);
+
+      if (!parent_context)
+        break;
+
+      gtk_at_context_realize (parent_context);
+      accessible_parent = parent_context->accessible_parent;
+
+      g_clear_object (&parent_context);
+    }
+}
+
 /*< private >
  * gtk_at_context_set_accessible_parent:
  * @self: a `GtkAtContext`
@@ -534,15 +562,10 @@ gtk_at_context_set_accessible_parent (GtkATContext *self,
       self->accessible_parent = parent;
       if (self->accessible_parent != NULL)
         {
-          GtkATContext *parent_context = NULL;
-
           g_object_add_weak_pointer (G_OBJECT (self->accessible_parent),
                                      (gpointer *) &self->accessible_parent);
 
-          parent_context = get_parent_context (self);
-          if (parent_context && parent_context->realized)
-            gtk_at_context_realize (self);
-          g_clear_object (&parent_context);
+          maybe_realize_context (self);
         }
     }
 }
