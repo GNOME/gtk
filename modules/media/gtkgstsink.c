@@ -59,6 +59,7 @@ enum {
   PROP_0,
   PROP_PAINTABLE,
   PROP_GL_CONTEXT,
+  PROP_USES_GL,
   PROP_DISPLAY,
 
   N_PROPS,
@@ -779,6 +780,7 @@ gtk_gst_sink_set_property (GObject      *object,
       self->gdk_context = g_value_dup_object (value);
       if (self->gdk_context != NULL && !gtk_gst_sink_initialize_gl (self))
         g_clear_object (&self->gdk_context);
+      self->uses_gl = self->gdk_context != NULL;
       break;
 
     case PROP_DISPLAY:
@@ -811,6 +813,10 @@ gtk_gst_sink_get_property (GObject    *object,
 
     case PROP_DISPLAY:
       g_value_set_object (value, self->gdk_display);
+      break;
+
+    case PROP_USES_GL:
+      g_value_set_boolean (value, self->uses_gl);
       break;
 
     default:
@@ -878,6 +884,11 @@ gtk_gst_sink_class_init (GtkGstSinkClass * klass)
     g_param_spec_object ("display", NULL, NULL,
                          GDK_TYPE_DISPLAY,
                          G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  properties[PROP_USES_GL] =
+    g_param_spec_boolean ("uses-gl", NULL, NULL,
+                          TRUE,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
   g_object_class_install_properties (gobject_class, N_PROPS, properties);
 

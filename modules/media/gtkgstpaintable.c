@@ -134,7 +134,7 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
 {
   GtkGstPaintable *self = GTK_GST_PAINTABLE (renderer);
   GstElement *sink;
-  GdkGLContext *ctx = NULL;
+  gboolean uses_gl;
   GdkDisplay *display;
 
   if (self->surface)
@@ -148,21 +148,19 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
                        "display", display,
                        NULL);
 
-  g_object_get (GTK_GST_SINK (sink), "gl-context", &ctx, NULL);
+  g_object_get (GTK_GST_SINK (sink), "uses-gl", &uses_gl, NULL);
 
-  if (ctx != NULL)
+  if (uses_gl)
     {
       GstElement *glsinkbin;
 
       glsinkbin = gst_element_factory_make ("glsinkbin", NULL);
 
       if (glsinkbin)
-        g_object_set (glsinkbin, "sink", sink, NULL);
-
-      g_object_unref (sink);
-      sink = glsinkbin;
-
-      g_object_unref (ctx);
+        {
+          g_object_set (glsinkbin, "sink", sink, NULL);
+          sink = glsinkbin;
+        }
     }
   else
     {
