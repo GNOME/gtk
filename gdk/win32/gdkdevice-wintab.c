@@ -55,16 +55,16 @@ get_current_mask (void)
 }
 
 static void
-gdk_device_wintab_set_surface_cursor (GdkDevice *device,
-                                     GdkSurface *window,
-                                     GdkCursor *cursor)
+gdk_device_wintab_set_surface_cursor (GdkDevice  *device,
+                                      GdkSurface *surface,
+                                      GdkCursor  *cursor)
 {
 }
 
 void
 gdk_device_wintab_query_state (GdkDevice        *device,
-                               GdkSurface       *window,
-                               GdkSurface      **child_window,
+                               GdkSurface       *surface,
+                               GdkSurface      **child_surface,
                                double           *win_x,
                                double           *win_y,
                                GdkModifierType  *mask)
@@ -75,10 +75,10 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   int scale;
 
   device_wintab = GDK_DEVICE_WINTAB (device);
-  if (window)
+  if (surface)
     {
-      scale = GDK_WIN32_SURFACE (window)->surface_scale;
-      hwnd = GDK_SURFACE_HWND (window);
+      scale = GDK_WIN32_SURFACE (surface)->surface_scale;
+      hwnd = GDK_SURFACE_HWND (surface);
     }
   else
     {
@@ -99,14 +99,14 @@ gdk_device_wintab_query_state (GdkDevice        *device,
   if (win_y)
     *win_y = point.y / scale;
 
-  if (hwnd && child_window)
+  if (hwnd && child_surface)
     {
       hwndc = ChildWindowFromPoint (hwnd, point);
 
       if (hwndc && hwndc != hwnd)
-        *child_window = gdk_win32_handle_table_lookup_ (hwndc);
+        *child_surface = gdk_win32_handle_table_lookup_ (hwndc);
       else
-        *child_window = NULL; /* Direct child unknown to gdk */
+        *child_surface = NULL; /* Direct child unknown to gdk */
     }
 
   if (mask)
@@ -123,10 +123,10 @@ gdk_device_wintab_query_state (GdkDevice        *device,
 
 static GdkGrabStatus
 gdk_device_wintab_grab (GdkDevice    *device,
-                        GdkSurface    *window,
+                        GdkSurface   *surface,
                         gboolean      owner_events,
                         GdkEventMask  event_mask,
-                        GdkSurface    *confine_to,
+                        GdkSurface   *confine_to,
                         GdkCursor    *cursor,
                         guint32       time_)
 {
@@ -150,7 +150,7 @@ gdk_device_wintab_surface_at_position (GdkDevice       *device,
 
 void
 _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
-                                   GdkSurface       *window,
+                                   GdkSurface      *surface,
                                    double          *axes,
                                    double          *x,
                                    double          *y)
@@ -162,7 +162,7 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
   int i;
 
   device = GDK_DEVICE (device_wintab);
-  impl_surface = window;
+  impl_surface = surface;
   temp_x = temp_y = 0;
 
   gdk_surface_get_origin (impl_surface, &root_x, &root_y);
@@ -181,12 +181,12 @@ _gdk_device_wintab_translate_axes (GdkDeviceWintab *device_wintab,
               HMONITOR hmonitor;
               MONITORINFO minfo = {sizeof (MONITORINFO),};
 
-              hmonitor = MonitorFromWindow (GDK_SURFACE_HWND (window),
+              hmonitor = MonitorFromWindow (GDK_SURFACE_HWND (surface),
                                             MONITOR_DEFAULTTONEAREST);
               GetMonitorInfo (hmonitor, &minfo);
 
               /* XXX: the dimensions from minfo may need to be scaled for HiDPI usage */
-              _gdk_device_translate_screen_coord (device, window,
+              _gdk_device_translate_screen_coord (device, surface,
                                                   root_x, root_y,
                                                   minfo.rcWork.right - minfo.rcWork.left,
                                                   minfo.rcWork.bottom - minfo.rcWork.top,

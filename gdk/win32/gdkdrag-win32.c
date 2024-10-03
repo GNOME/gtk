@@ -46,10 +46,10 @@
  *
  * Source drag context, IDropSource and IDataObject for it are created
  * (almost) simultaneously, whereas target drag context and IDropTarget
- * are separated in time - IDropTarget is created when a window is made
+ * are separated in time - IDropTarget is created when a surface is made
  * to accept drops, while target drag context is created when a dragging
- * cursor enters the window and is destroyed when that cursor leaves
- * the window.
+ * cursor enters the surface and is destroyed when that cursor leaves
+ * the surface.
  *
  * There's a mismatch between data types supported by W32 (W32 formats)
  * and by GTK (GDK contentformats).
@@ -130,7 +130,7 @@
  * How managed DnD works:
  * GTK widget detects a drag gesture and calls
  * S: gdk_drag_begin_from_point() -> backend:drag_begin()
- * which creates the source drag context and the drag window,
+ * which creates the source drag context and the drag surface,
  * and grabs the pointing device. GDK layer adds the context
  * to a list of currently-active contexts.
  *
@@ -151,15 +151,15 @@
  * mouse movement.
  * Drag context handles it by calling a bunch of functions to
  * determine the state of the drag actions from the keys being
- * pressed, finding the drag window (another backend function
+ * pressed, finding the drag surface (another backend function
  * routed through GDK layer) and finally calls
  * S: gdk_drag_motion -> backend:drag_motion()
  * to notify the backend (i.e. itself) that the drag cursor
  * moved.
- * The response to that is to move the drag window and
+ * The response to that is to move the drag surface and
  * do various bookkeeping.
  * W32: OLE2 protocol does nothing (other than moving the
- * drag window) in response to this, as all the functions
+ * drag surface) in response to this, as all the functions
  * that GDK could perform here are already handled by the
  * OS driving the DnD process via DoDragDrop() call.
  *
@@ -726,7 +726,7 @@ gdk_win32_drag_init (GdkWin32Drag *drag)
             _win32_main_thread == g_thread_self ());
 
   drag->handle_events = TRUE;
-  drag->dest_window = INVALID_HANDLE_VALUE;
+  drag->dest_hwnd = INVALID_HANDLE_VALUE;
 
   GDK_NOTE (DND, g_print ("gdk_win32_drag_init %p\n", drag));
 }
@@ -806,11 +806,11 @@ gdk_drag_new (GdkDisplay         *display,
 static enum_formats *enum_formats_new (GArray *formats);
 
 /* Finds a GdkDrag object that corresponds to a DnD operation
- * which is currently targeting the dest_window
+ * which is currently targeting the dest_hwnd
  * Does not give a reference.
  */
 GdkDrag *
-_gdk_win32_find_drag_for_dest_window (HWND dest_window)
+_gdk_win32_find_drag_for_dest_hwnd (HWND dest_hwnd)
 {
   GHashTableIter               iter;
   GdkWin32Drag                *drag_win32;
@@ -820,7 +820,7 @@ _gdk_win32_find_drag_for_dest_window (HWND dest_window)
   g_hash_table_iter_init (&iter, clipdrop->active_source_drags);
 
   while (g_hash_table_iter_next (&iter, (gpointer *) &drag_win32, (gpointer *) &ddd))
-    if (ddd->src_context->dest_window_handle == dest_window)
+    if (ddd->src_context->dest_window_handle == dest_hwnd)
       return GDK_DRAG (drag_win32);
 
   return NULL;
@@ -867,7 +867,7 @@ notify_dnd_enter (gpointer user_data)
   GdkWin32DnDEnterLeaveNotify *notify = (GdkWin32DnDEnterLeaveNotify *) user_data;
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (notify->opaque_context);
 
-  drag_win32->dest_window = notify->target_window_handle;
+  drag_win32->dest_hwnd = notify->target_window_handle;
 
   g_free (notify);
 
@@ -880,10 +880,10 @@ notify_dnd_leave (gpointer user_data)
   GdkWin32DnDEnterLeaveNotify *notify = (GdkWin32DnDEnterLeaveNotify *) user_data;
   GdkWin32Drag *drag_win32 = GDK_WIN32_DRAG (notify->opaque_context);
 
-  if (notify->target_window_handle != drag_win32->dest_window)
-    g_warning ("DnD leave says that the window handle is 0x%p, but drag has 0x%p", notify->target_window_handle, drag_win32->dest_window);
+  if (notify->target_window_handle != drag_win32->dest_hwnd)
+    g_warning ("DnD leave says that the window handle is 0x%p, but drag has 0x%p", notify->target_window_handle, drag_win32->dest_hwnd);
 
-  drag_win32->dest_window = INVALID_HANDLE_VALUE;
+  drag_win32->dest_hwnd = INVALID_HANDLE_VALUE;
 
   g_free (notify);
 
@@ -1901,7 +1901,7 @@ gdk_win32_drag_drop_done (GdkDrag  *drag,
   anim->frame_clock = gdk_surface_get_frame_clock (drag_win32->drag_surface);
   anim->start_time = gdk_frame_clock_get_frame_time (anim->frame_clock);
 
-  GDK_NOTE (DND, g_print ("gdk_win32_drag_drop_done: animate the drag window from %d : %d to %d : %d\n",
+  GDK_NOTE (DND, g_print ("gdk_win32_drag_drop_done: animate the drag surface from %d : %d to %d : %d\n",
                           drag_win32->util_data.last_x, drag_win32->util_data.last_y,
                           drag_win32->start_x, drag_win32->start_y));
 
@@ -2082,7 +2082,7 @@ gdk_dnd_handle_key_event (GdkDrag  *drag,
         case GDK_KEY_KP_Enter:
         case GDK_KEY_KP_Space:
           if ((gdk_drag_get_selected_action (drag) != 0) &&
-              (drag_win32->dest_window != INVALID_HANDLE_VALUE))
+              (drag_win32->dest_hwnd != INVALID_HANDLE_VALUE))
             {
               g_signal_emit_by_name (drag, "drop-performed");
             }
@@ -2139,7 +2139,7 @@ gdk_dnd_handle_grab_broken_event (GdkDrag  *drag,
   GDK_NOTE (DND, g_print ("gdk_dnd_handle_grab_broken_event: 0x%p\n", drag));
 
   /* Don't cancel if we break the implicit grab from the initial button_press.
-   * Also, don't cancel if we re-grab on the widget or on our grab window, for
+   * Also, don't cancel if we re-grab on the widget or on our grab surface, for
    * example, when changing the drag cursor.
    */
   if (/* FIXME: event->implicit || */

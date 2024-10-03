@@ -89,7 +89,7 @@ texts (strings) or textures (GdkPixbufs) this way.
 
 On Windows:
 Clipboard is opened by OpenClipboard(), emptied by EmptyClipboard() (which also
-makes the window the clipboard owner), data is put into it by SetClipboardData().
+makes the HWND the clipboard owner), data is put into it by SetClipboardData().
 Clipboard is closed with CloseClipboard().
 If SetClipboardData() is given a NULL data value, the owner will later
 receive WM_RENDERFORMAT message, in response to which it must call
@@ -239,7 +239,7 @@ on all the clipboards it owns. This creates multiple write stream (one for each
 format being stored), each backed by a HGLOBAL memory object. Once all memory
 objects are written, the backend queues a store operation, passing along
 all these HGLOBAL objects. The clipboard thread processes that by sending
-WM_RENDERALLFORMATS to the window, then signals the task that it's done.
+WM_RENDERALLFORMATS to the surface HWND, then signals the task that it's done.
 
 When clipboard owner changes, the old owner receives WM_DESTROYCLIPBOARD message,
 the clipboard thread schedules a call to gdk_clipboard_claim_remote()
@@ -390,10 +390,10 @@ typedef struct _GdkWin32ClipboardThread GdkWin32ClipboardThread;
 
 struct _GdkWin32ClipboardThread
 {
-  /* A hidden window that owns our clipboard
+  /* A hidden HWND that owns our clipboard
    * and receives clipboard-related messages.
    */
-  HWND         clipboard_window;
+  HWND         clipboard_hwnd;
 
   /* We receive instructions from the main thread in this queue */
   GAsyncQueue *input_queue;
@@ -483,11 +483,11 @@ _gdk_win32_format_uses_hdata (UINT w32format)
 
 /* This function is called in the main thread */
 static gboolean
-clipboard_window_created (gpointer user_data)
+clipboard_hwnd_created (gpointer user_data)
 {
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
 
-  clipdrop->clipboard_window = (HWND) user_data;
+  clipdrop->clipboard_hwnd = (HWND) user_data;
 
   return G_SOURCE_REMOVE;
 }
@@ -730,7 +730,7 @@ process_advertise (GdkWin32ClipboardThreadAdvertise *adv)
       return FALSE;
     }
 
-  error_code = try_open_clipboard (adv->unset ? NULL : clipboard_thread_data->clipboard_window);
+  error_code = try_open_clipboard (adv->unset ? NULL : clipboard_thread_data->clipboard_hwnd);
 
   if (error_code == ERROR_ACCESS_DENIED)
     return TRUE;
@@ -809,7 +809,7 @@ process_store (GdkWin32ClipboardThreadStore *store)
       return FALSE;
     }
 
-  error_code = try_open_clipboard (clipboard_thread_data->clipboard_window);
+  error_code = try_open_clipboard (clipboard_thread_data->clipboard_hwnd);
 
   if (error_code == ERROR_ACCESS_DENIED)
     return TRUE;
@@ -831,7 +831,7 @@ process_store (GdkWin32ClipboardThreadStore *store)
    * that we already own, otherwise we're just killing stuff that some other
    * process put in there, which is not nice.
    */
-  if (GetClipboardOwner () != clipboard_thread_data->clipboard_window)
+  if (GetClipboardOwner () != clipboard_thread_data->clipboard_hwnd)
     {
       send_response (store->parent.item_type,
                      store->parent.opaque_task,
@@ -952,7 +952,7 @@ process_retrieve (GdkWin32ClipboardThreadRetrieve *retr)
     }
 
   if (clipboard_thread_data->clipboard_opened_for == INVALID_HANDLE_VALUE)
-    error_code = try_open_clipboard (clipboard_thread_data->clipboard_window);
+    error_code = try_open_clipboard (clipboard_thread_data->clipboard_hwnd);
   else
     error_code = try_open_clipboard (clipboard_thread_data->clipboard_opened_for);
 
@@ -1119,7 +1119,7 @@ discard_render (GdkWin32ClipboardThreadRender *render,
 }
 
 static LRESULT
-inner_clipboard_window_procedure (HWND   hwnd,
+inner_clipboard_hwnd_procedure (HWND   hwnd,
                                   UINT   message,
                                   WPARAM wparam,
                                   LPARAM lparam)
@@ -1139,7 +1139,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
 
       if (queue_is_empty && clipboard_thread_data->wakeup_timer)
         {
-          API_CALL (KillTimer, (clipboard_thread_data->clipboard_window, clipboard_thread_data->wakeup_timer));
+          API_CALL (KillTimer, (clipboard_thread_data->clipboard_hwnd, clipboard_thread_data->wakeup_timer));
           clipboard_thread_data->wakeup_timer = 0;
         }
 
@@ -1159,11 +1159,11 @@ inner_clipboard_window_procedure (HWND   hwnd,
           clipboard_thread_data->wakeup_timer != 0)
         return 0;
 
-      if (SetTimer (clipboard_thread_data->clipboard_window, 1, 1000, NULL))
+      if (SetTimer (clipboard_thread_data->clipboard_hwnd, 1, 1000, NULL))
         clipboard_thread_data->wakeup_timer = 1;
       else
-        g_critical ("Failed to set a timer for the clipboard window 0x%p: %lu",
-                    clipboard_thread_data->clipboard_window,
+        g_critical ("Failed to set a timer for the clipboard HWND 0x%p: %lu",
+                    clipboard_thread_data->clipboard_hwnd,
                     GetLastError ());
     }
 
@@ -1235,7 +1235,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
             clipboard_thread_data->stored_hwnd_owner = hwnd_owner;
             clipboard_thread_data->owner_change_time = g_get_monotonic_time ();
 
-            if (hwnd_owner != clipboard_thread_data->clipboard_window)
+            if (hwnd_owner != clipboard_thread_data->clipboard_hwnd)
               {
                 if (clipboard_thread_data->cached_advertisement)
                   g_array_free (clipboard_thread_data->cached_advertisement, TRUE);
@@ -1243,9 +1243,9 @@ inner_clipboard_window_procedure (HWND   hwnd,
                 clipboard_thread_data->cached_advertisement = NULL;
               }
 
-            API_CALL (PostMessage, (clipboard_thread_data->clipboard_window, thread_wakeup_message, 0, 0));
+            API_CALL (PostMessage, (clipboard_thread_data->clipboard_hwnd, thread_wakeup_message, 0, 0));
 
-            if (hwnd_owner != clipboard_thread_data->clipboard_window)
+            if (hwnd_owner != clipboard_thread_data->clipboard_hwnd)
               g_idle_add_full (G_PRIORITY_DEFAULT, clipboard_owner_changed, NULL, NULL);
           }
 
@@ -1383,7 +1383,7 @@ inner_clipboard_window_procedure (HWND   hwnd,
 }
 
 LRESULT CALLBACK
-_clipboard_window_procedure (HWND   hwnd,
+_clipboard_hwnd_procedure (HWND   hwnd,
                              UINT   message,
                              WPARAM wparam,
                              LPARAM lparam)
@@ -1392,7 +1392,7 @@ _clipboard_window_procedure (HWND   hwnd,
 
   GDK_NOTE (EVENTS, g_print ("clipboard thread %s %p",
 			     _gdk_win32_message_to_string (message), hwnd));
-  retval = inner_clipboard_window_procedure (hwnd, message, wparam, lparam);
+  retval = inner_clipboard_hwnd_procedure (hwnd, message, wparam, lparam);
 
   GDK_NOTE (EVENTS, g_print (" => %" G_GINT64_FORMAT "\n", (gint64) retval));
 
@@ -1400,7 +1400,7 @@ _clipboard_window_procedure (HWND   hwnd,
 }
 
 /*
- * Creates a hidden window and add a clipboard listener
+ * Creates a hidden HWND and add a clipboard listener
  */
 static gboolean
 register_clipboard_notification ()
@@ -1409,7 +1409,7 @@ register_clipboard_notification ()
   ATOM klass;
 
   wclass.lpszClassName = L"GdkClipboardNotification";
-  wclass.lpfnWndProc = _clipboard_window_procedure;
+  wclass.lpfnWndProc = _clipboard_hwnd_procedure;
   wclass.hInstance = this_module ();
   wclass.cbWndExtra = sizeof (GdkWin32ClipboardThread *);
 
@@ -1417,23 +1417,23 @@ register_clipboard_notification ()
   if (!klass)
     return FALSE;
 
-  clipboard_thread_data->clipboard_window = CreateWindow (MAKEINTRESOURCE (klass),
+  clipboard_thread_data->clipboard_hwnd = CreateWindow (MAKEINTRESOURCE (klass),
                                                 NULL, WS_POPUP,
                                                 0, 0, 0, 0, NULL, NULL,
                                                 this_module (), NULL);
 
-  if (clipboard_thread_data->clipboard_window == NULL)
+  if (clipboard_thread_data->clipboard_hwnd == NULL)
     goto failed;
 
   SetLastError (0);
 
-  if (AddClipboardFormatListener (clipboard_thread_data->clipboard_window) == FALSE)
+  if (AddClipboardFormatListener (clipboard_thread_data->clipboard_hwnd) == FALSE)
     {
-      DestroyWindow (clipboard_thread_data->clipboard_window);
+      DestroyWindow (clipboard_thread_data->clipboard_hwnd);
       goto failed;
     }
 
-  g_idle_add_full (G_PRIORITY_DEFAULT, clipboard_window_created, (gpointer) clipboard_thread_data->clipboard_window, NULL);
+  g_idle_add_full (G_PRIORITY_DEFAULT, clipboard_hwnd_created, (gpointer) clipboard_thread_data->clipboard_hwnd, NULL);
 
   return TRUE;
 
@@ -1472,8 +1472,8 @@ _gdk_win32_clipboard_thread_main (gpointer data)
     }
 
   /* Just in case, as this should only happen when we shut down */
-  DestroyWindow (clipboard_thread_data->clipboard_window);
-  CloseHandle (clipboard_thread_data->clipboard_window);
+  DestroyWindow (clipboard_thread_data->clipboard_hwnd);
+  CloseHandle (clipboard_thread_data->clipboard_hwnd);
   g_async_queue_unref (queue);
   g_clear_pointer (&clipboard_thread_data, g_free);
 
@@ -2756,7 +2756,7 @@ _gdk_win32_advertise_clipboard_contentformats (GTask             *task,
   gsize mime_types_len;
   gsize i;
 
-  g_assert (clipdrop->clipboard_window != NULL);
+  g_assert (clipdrop->clipboard_hwnd != NULL);
 
   adv->parent.item_type = GDK_WIN32_CLIPBOARD_THREAD_QUEUE_ITEM_ADVERTISE;
   adv->parent.start_time = g_get_monotonic_time ();
@@ -2779,7 +2779,7 @@ _gdk_win32_advertise_clipboard_contentformats (GTask             *task,
     }
 
   g_async_queue_push (clipdrop->clipboard_open_thread_queue, adv);
-  API_CALL (PostMessage, (clipdrop->clipboard_window, thread_wakeup_message, 0, 0));
+  API_CALL (PostMessage, (clipdrop->clipboard_hwnd, thread_wakeup_message, 0, 0));
 
   return;
 }
@@ -2794,7 +2794,7 @@ _gdk_win32_retrieve_clipboard_contentformats (GTask             *task,
   gsize mime_types_len;
   gsize i;
 
-  g_assert (clipdrop->clipboard_window != NULL);
+  g_assert (clipdrop->clipboard_hwnd != NULL);
 
   retr->parent.item_type = GDK_WIN32_CLIPBOARD_THREAD_QUEUE_ITEM_RETRIEVE;
   retr->parent.start_time = g_get_monotonic_time ();
@@ -2809,7 +2809,7 @@ _gdk_win32_retrieve_clipboard_contentformats (GTask             *task,
     _gdk_win32_add_contentformat_to_pairs (mime_types[i], retr->pairs);
 
   g_async_queue_push (clipdrop->clipboard_open_thread_queue, retr);
-  API_CALL (PostMessage, (clipdrop->clipboard_window, thread_wakeup_message, 0, 0));
+  API_CALL (PostMessage, (clipdrop->clipboard_hwnd, thread_wakeup_message, 0, 0));
 
   return;
 }
@@ -2890,7 +2890,7 @@ clipboard_store_hdata_ready (GObject      *clipboard,
   store->elements = prep->elements;
 
   g_async_queue_push (clipdrop->clipboard_open_thread_queue, store);
-  API_CALL (PostMessage, (clipdrop->clipboard_window, thread_wakeup_message, 0, 0));
+  API_CALL (PostMessage, (clipdrop->clipboard_hwnd, thread_wakeup_message, 0, 0));
 
   g_free (prep);
 }
@@ -2907,7 +2907,7 @@ _gdk_win32_store_clipboard_contentformats (GdkClipboard      *cb,
   GdkWin32Clipdrop *clipdrop = _gdk_win32_clipdrop_get ();
   GdkWin32ClipboardStorePrep *prep;
 
-  g_assert (clipdrop->clipboard_window != NULL);
+  g_assert (clipdrop->clipboard_hwnd != NULL);
 
   mime_types = gdk_content_formats_get_mime_types (contentformats, &n_mime_types);
 
