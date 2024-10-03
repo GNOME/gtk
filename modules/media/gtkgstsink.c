@@ -69,20 +69,25 @@ GST_DEBUG_CATEGORY (gtk_debug_gst_sink);
 
 #define FORMATS "{ BGRA, ARGB, RGBA, ABGR, RGB, BGR }"
 
-#define NOGL_CAPS GST_VIDEO_CAPS_MAKE (FORMATS)
+#define MEMORY_TEXTURE_CAPS GST_VIDEO_CAPS_MAKE (FORMATS)
+
+#define GL_TEXTURE_CAPS \
+                     "video/x-raw(" GST_CAPS_FEATURE_MEMORY_GL_MEMORY "), " \
+                     "format = (string) RGBA, " \
+                     "width = " GST_VIDEO_SIZE_RANGE ", " \
+                     "height = " GST_VIDEO_SIZE_RANGE ", " \
+                     "framerate = " GST_VIDEO_FPS_RANGE ", " \
+                     "texture-target = (string) 2D"
+
+#define DMABUF_TEXTURE_CAPS GST_VIDEO_DMA_DRM_CAPS_MAKE
 
 static GstStaticPadTemplate gtk_gst_sink_template =
 GST_STATIC_PAD_TEMPLATE ("sink",
     GST_PAD_SINK,
     GST_PAD_ALWAYS,
-    GST_STATIC_CAPS (GST_VIDEO_DMA_DRM_CAPS_MAKE "; "
-                     "video/x-raw(" GST_CAPS_FEATURE_MEMORY_GL_MEMORY "), "
-                     "format = (string) RGBA, "
-                     "width = " GST_VIDEO_SIZE_RANGE ", "
-                     "height = " GST_VIDEO_SIZE_RANGE ", "
-                     "framerate = " GST_VIDEO_FPS_RANGE ", "
-                     "texture-target = (string) 2D"
-                     "; " NOGL_CAPS)
+    GST_STATIC_CAPS(DMABUF_TEXTURE_CAPS "; "
+                    GL_TEXTURE_CAPS "; "
+                    MEMORY_TEXTURE_CAPS)
     );
 
 #undef GST_VIDEO_DMA_DRM_CAPS_MAKE_STR
@@ -205,21 +210,31 @@ gtk_gst_sink_get_caps (GstBaseSink *bsink,
                        GstCaps     *filter)
 {
   GtkGstSink *self = GTK_GST_SINK (bsink);
-  GstCaps *tmp;
-  GstCaps *result;
+  GstCaps *tmp, *result;
+
+  result = gst_caps_new_empty ();
 
   if (self->gdk_display)
     {
       GdkDmabufFormats *formats = gdk_display_get_dmabuf_formats (self->gdk_display);
 
-      tmp = gst_pad_get_pad_template_caps (GST_BASE_SINK_PAD (bsink));
-      tmp = gst_caps_make_writable (tmp);
-      add_drm_formats_and_modifiers (tmp, formats);
+      if (formats)
+        {
+          tmp = gst_caps_from_string (DMABUF_TEXTURE_CAPS);
+          add_drm_formats_and_modifiers (tmp, formats);
+          gst_caps_append (result, tmp);
+        }
     }
-  else
+
+  if (self->gdk_context)
     {
-      tmp = gst_caps_from_string (NOGL_CAPS);
+      tmp = gst_caps_from_string (GL_TEXTURE_CAPS);
+      gst_caps_append (result, tmp);
     }
+
+  tmp = gst_caps_from_string (MEMORY_TEXTURE_CAPS);
+  gst_caps_append (result, tmp);
+
   GST_DEBUG_OBJECT (self, "advertising own caps %" GST_PTR_FORMAT, tmp);
 
   if (filter)
