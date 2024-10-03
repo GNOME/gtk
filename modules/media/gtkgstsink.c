@@ -313,50 +313,49 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
       return TRUE;
     }
 
-  if (!self->gst_context)
-    return FALSE;
-
-  if (!gst_caps_features_contains (gst_caps_get_features (caps, 0), GST_CAPS_FEATURE_MEMORY_GL_MEMORY))
-    return FALSE;
-
-  if (!gst_video_info_from_caps (&info, caps))
+  if (gst_caps_features_contains (gst_caps_get_features (caps, 0), GST_CAPS_FEATURE_MEMORY_GL_MEMORY))
     {
-      GST_DEBUG_OBJECT (self, "invalid caps specified");
-      return FALSE;
-    }
-
-  /* the normal size of a frame */
-  size = info.size;
-
-  if (need_pool)
-    {
-      GST_DEBUG_OBJECT (self, "create new pool");
-      pool = gst_gl_buffer_pool_new (self->gst_context);
-
-      config = gst_buffer_pool_get_config (pool);
-      gst_buffer_pool_config_set_params (config, caps, size, 0, 0);
-      gst_buffer_pool_config_add_option (config, GST_BUFFER_POOL_OPTION_GL_SYNC_META);
-
-      if (!gst_buffer_pool_set_config (pool, config))
+      if (!gst_video_info_from_caps (&info, caps))
         {
-          GST_DEBUG_OBJECT (bsink, "failed setting config");
-          gst_object_unref (pool);
+          GST_DEBUG_OBJECT (self, "invalid caps specified");
           return FALSE;
         }
+
+      /* the normal size of a frame */
+      size = info.size;
+
+      if (need_pool)
+        {
+          GST_DEBUG_OBJECT (self, "create new pool");
+          pool = gst_gl_buffer_pool_new (self->gst_context);
+
+          config = gst_buffer_pool_get_config (pool);
+          gst_buffer_pool_config_set_params (config, caps, size, 0, 0);
+          gst_buffer_pool_config_add_option (config, GST_BUFFER_POOL_OPTION_GL_SYNC_META);
+
+          if (!gst_buffer_pool_set_config (pool, config))
+            {
+              GST_DEBUG_OBJECT (bsink, "failed setting config");
+              gst_object_unref (pool);
+              return FALSE;
+            }
+        }
+
+      /* we need at least 2 buffer because we hold on to the last one */
+      gst_query_add_allocation_pool (query, pool, size, 2, 0);
+      if (pool)
+        gst_object_unref (pool);
+
+      /* we also support various metadata */
+      gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, 0);
+
+      if (self->gst_context->gl_vtable->FenceSync)
+        gst_query_add_allocation_meta (query, GST_GL_SYNC_META_API_TYPE, 0);
+
+      return TRUE;
     }
 
-  /* we need at least 2 buffer because we hold on to the last one */
-  gst_query_add_allocation_pool (query, pool, size, 2, 0);
-  if (pool)
-    gst_object_unref (pool);
-
-  /* we also support various metadata */
-  gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, 0);
-
-  if (self->gst_context->gl_vtable->FenceSync)
-    gst_query_add_allocation_meta (query, GST_GL_SYNC_META_API_TYPE, 0);
-
-  return TRUE;
+  return FALSE;
 }
 
 static GdkMemoryFormat
