@@ -216,6 +216,72 @@ filechooser_quartz_data_free (FileChooserQuartzData *data)
 - (void)setAccessoryViewDisclosed:(BOOL)val;
 @end
 
+typedef struct {
+  NSString *title;
+  SEL action;
+  NSString *key;
+} NativeEditMenuEntry;
+
+/* replace_app_menu
+ *
+ * Replace the menu bar, but retain the first (app) menu.
+ */
+static void
+replace_main_menu(NSMenu *menu)
+{
+  NSMenu *current_menu = [NSApp mainMenu];
+  NSMenuItem* app_menu = [[current_menu itemAtIndex:0] retain];
+
+  [current_menu removeItemAtIndex:0];
+  [menu insertItem:app_menu atIndex:0];
+  [app_menu release];
+  [NSApp setMainMenu:menu];
+}
+
+static NSMenu*
+create_edit_menu (void)
+{
+  NativeEditMenuEntry edit_menu_entries[] = {
+    {@"Undo", @selector(undo:), @"z"},
+    {@"Redo", @selector(redo:), @"Z"},
+    {nil, nil, nil},
+    {@"Cut", @selector(cut:), @"x"},
+    {@"Copy", @selector(copy:), @"c"},
+    {@"Paste", @selector(paste:), @"v"},
+    {@"Delete", @selector(delete:), @"\x7F"},
+    {nil, nil, nil},
+    {@"Select All", @selector(selectAll:), @"a"},
+  };
+
+  NSMenu *menu = [[NSMenu alloc] initWithTitle:@""];
+  NSMenuItem *edit_menu_item = [[NSMenuItem alloc] initWithTitle:@"Edit" action:nil keyEquivalent:@""];
+  NSMenu* edit_menu = [[NSMenu alloc] initWithTitle:@"Edit"];
+
+  [menu addItem:edit_menu_item];
+  [edit_menu_item setSubmenu:edit_menu];
+  [edit_menu_item release];
+
+  for (int i = 0; i < G_N_ELEMENTS (edit_menu_entries); i++)
+    {
+      if (edit_menu_entries[i].title == nil)
+        {
+            [edit_menu addItem:[NSMenuItem separatorItem]];
+        }
+      else
+        {
+          NSMenuItem* item = [[NSMenuItem alloc] initWithTitle:edit_menu_entries[i].title
+                                                        action:edit_menu_entries[i].action
+                                                keyEquivalent:edit_menu_entries[i].key];
+          [edit_menu addItem:item];
+          [item release];
+        }
+    }
+
+  [edit_menu release];
+
+  return menu;
+}
+
 static gboolean
 filechooser_quartz_launch (FileChooserQuartzData *data)
 {
@@ -354,8 +420,18 @@ filechooser_quartz_launch (FileChooserQuartzData *data)
     }
   data->response = GTK_RESPONSE_CANCEL;
 
+  // Update macOS menu bar, so we can provide shortcuts for copy/paste/etc.
+  NSMenu *original_menu = [[NSApp mainMenu] retain];
+  NSMenu *native_menu = create_edit_menu();
+
+  replace_main_menu (native_menu);
+  [native_menu release];
 
   void (^handler)(NSInteger ret) = ^(NSInteger result) {
+
+    // Reset macOS menu bar
+    replace_main_menu (original_menu);
+    [original_menu release];
 
     if (result == NSModalResponseOK)
       {
