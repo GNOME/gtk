@@ -49,12 +49,14 @@ struct _GtkGstSink
   GstVideoInfo         v_info;
   GstVideoInfoDmaDrm   drm_info;
 
-  GtkGstPaintable *    paintable;
-  GdkGLContext *       gdk_context;
-  GstGLDisplay *       gst_display;
-  GstGLContext *       gst_gdk_context;
-  GstGLContext *       gst_context;
-  GdkColorState *      color_state;
+  GtkGstPaintable     *paintable;
+  GdkDisplay          *gdk_display;
+  GdkGLContext        *gdk_context;
+  GstGLDisplay        *gst_display;
+  GstGLContext        *gst_gdk_context;
+  GstGLContext        *gst_context;
+  GdkColorState       *color_state;
+  gboolean             uses_gl;
 };
 
 struct _GtkGstSinkClass
