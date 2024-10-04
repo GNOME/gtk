@@ -36,7 +36,7 @@ struct _GtkGstPaintable
   double pixel_aspect_ratio;
   graphene_rect_t viewport;
 
-  GdkGLContext *context;
+  GdkSurface *surface;
 };
 
 struct _GtkGstPaintableClass
@@ -133,42 +133,66 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
 {
   GtkGstPaintable *self = GTK_GST_PAINTABLE (renderer);
   GstElement *sink;
-  GdkGLContext *ctx;
+  gboolean uses_gl;
+  GdkDisplay *display;
+  GdkGLContext *context;
+  GError *error = NULL;
+
+  if (self->surface)
+    display = gdk_surface_get_display (self->surface);
+  else
+    display = gdk_display_get_default ();
+
+  context = gdk_surface_create_gl_context (self->surface, &error);
+  if (context == NULL)
+    {
+      GST_INFO ("failed to create GDK GL context: %s", error->message);
+      g_error_free (error);
+    }
+  else if (!gdk_gl_context_realize (context, &error))
+    {
+      GST_INFO ("failed to realize GDK GL context: %s", error->message);
+      g_clear_object (&context);
+      g_error_free (error);
+    }
 
   sink = g_object_new (GTK_TYPE_GST_SINK,
                        "paintable", self,
-                       "gl-context", self->context,
+                       "gl-context", context,
+                       "display", display,
                        NULL);
 
-  if (self->context != NULL)
-    g_object_get (GTK_GST_SINK (sink), "gl-context", &ctx, NULL);
+  g_object_get (GTK_GST_SINK (sink), "uses-gl", &uses_gl, NULL);
 
-  if (self->context != NULL && ctx != NULL)
+  if (uses_gl)
     {
-      GstElement *glsinkbin = gst_element_factory_make ("glsinkbin", NULL);
+      GstElement *glsinkbin;
 
-      if (!glsinkbin)
-        return NULL;
+      glsinkbin = gst_element_factory_make ("glsinkbin", NULL);
 
-      g_object_set (glsinkbin, "sink", sink, NULL);
-      g_object_unref (ctx);
-
-      return glsinkbin;
+      if (glsinkbin)
+        {
+          g_object_set (glsinkbin, "sink", sink, NULL);
+          sink = glsinkbin;
+        }
     }
   else
     {
-      if (self->context != NULL)
+      if (context != NULL)
         {
           g_warning ("GstGL context creation failed, falling back to non-GL playback");
 
           g_object_unref (sink);
           sink = g_object_new (GTK_TYPE_GST_SINK,
                                "paintable", self,
+                               "display", display,
                                NULL);
         }
-
-      return sink;
     }
+
+  g_clear_object (&context);
+
+  return sink;
 }
 
 static void
@@ -216,26 +240,10 @@ void
 gtk_gst_paintable_realize (GtkGstPaintable *self,
                            GdkSurface      *surface)
 {
-  GError *error = NULL;
-
-  if (self->context)
+  if (self->surface)
     return;
 
-  self->context = gdk_surface_create_gl_context (surface, &error);
-  if (self->context == NULL)
-    {
-      GST_INFO ("failed to create GDK GL context: %s", error->message);
-      g_error_free (error);
-      return;
-    }
-
-  if (!gdk_gl_context_realize (self->context, &error))
-    {
-      GST_INFO ("failed to realize GDK GL context: %s", error->message);
-      g_clear_object (&self->context);
-      g_error_free (error);
-      return;
-    }
+  self->surface = surface;
 }
 
 void
@@ -246,11 +254,9 @@ gtk_gst_paintable_unrealize (GtkGstPaintable *self,
    * - track how often we were realized with that surface
    * - track alternate surfaces
    */
-  if (self->context == NULL)
-    return;
 
-  if (gdk_gl_context_get_surface (self->context) == surface)
-    g_clear_object (&self->context);
+  if (self->surface == surface)
+    self->surface = NULL;
 }
 
 static void
