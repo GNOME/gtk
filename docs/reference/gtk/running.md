@@ -474,6 +474,8 @@ disable certain optimizations of the "ngl" and "vulkan" renderer.
 `occlusion`
 : Disable occlusion culling via opacity tracking
 
+`repeat`
+: Repeat drawing operations instead of using offscreen and GL_REPEAT
 
 The special value `all` can be used to turn on all values. The special
 value `help` can be used to obtain a list of all supported values.
