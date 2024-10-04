@@ -100,6 +100,7 @@ compare_render_tests = [
   'inset-shadow-multiple',
   'invalid-transform',
   'issue-3615',
+  'linear-gradient-interpolation-nogl-nocairo',
   'linear-gradient-3d-nocairo',
   'linear-gradient-nonorthogonal-scale-nogl',
   'linear-gradient-premultiplied-nocairo',

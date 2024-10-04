@@ -1,0 +1,19 @@
+color-matrix {
+  matrix: matrix3d(255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 255, 0, 0, 0, 0, 1);
+  child: blend {
+    mode: difference;
+    bottom: linear-gradient {
+      bounds: 0 0 50 50;
+      start: 0 -25;
+      end: 0 75;
+      stops: 0 rgb(255,0,0), 1 rgb(255,255,0);
+    }
+    top: linear-gradient {
+      bounds: 0 0 50 50;
+      start: 0 -25;
+      end: 0 75;
+      stops: 0 rgb(255,0,0), 1 rgb(255,255,0);
+      interpolation: srgb-linear;
+    }
+  }
+}
