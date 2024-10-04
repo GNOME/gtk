@@ -143,7 +143,7 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
   else
     display = gdk_display_get_default ();
 
-  context = gdk_surface_create_gl_context (self->surface, &error);
+  context = gdk_display_create_gl_context (display, &error);
   if (context == NULL)
     {
       GST_INFO ("failed to create GDK GL context: %s", error->message);
