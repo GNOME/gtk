@@ -1,8 +1,33 @@
-Overview of Changes in 4.16.3, xx-xx-xxxx
+Overview of Changes in 4.16.3, 04-10-2024
 =========================================
 
+* GtkScrolledWindow
+ - Fix criticals in size allocation code
 
-Overview of Changes in 4.16.2, 09-25-2024
+* GtkFileChooser
+ - Fix a crash in the portal code
+
+* GtkPicture
+ - Avoid unnecessary resizes
+
+* GtkVideo
+ - Make dmabufs work without GL
+
+* Accessibility:
+ - Always realized non-widget accessibles
+
+* Wayland:
+ - Improve settings portal handling
+ - Improve fallback for cursor themes
+ - Sync default values for settings with schema defaults
+
+* Translation updates:
+ Brazilian Portuguese
+ Galician
+ Swedish
+
+
+Overview of Changes in 4.16.2, 25-09-2024
 =========================================
 
 * GtkLabel:
@@ -43,7 +68,7 @@ Overview of Changes in 4.16.2, 09-25-2024
  Ukrainian
 
 
-Overview of Changes in 4.16.1, 09-16-2024
+Overview of Changes in 4.16.1, 16-09-2024
 =========================================
 
 * GtkFileChooser:
@@ -84,7 +109,7 @@ Overview of Changes in 4.16.1, 09-16-2024
  Swedish
 
 
-Overview of Changes in 4.16.0, 09-06-2024
+Overview of Changes in 4.16.0, 06-09-2024
 =========================================
 
 Note: This release changes the default GSK renderer to be Vulkan,
@@ -182,7 +207,7 @@ with the new renderers.
  Ukrainian
 
 
-Overview of Changes in 4.15.6, 08-26-2024
+Overview of Changes in 4.15.6, 26-08-2024
 =========================================
 
 * GtkCheckButton:
