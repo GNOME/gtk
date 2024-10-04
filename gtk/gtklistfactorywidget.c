@@ -191,10 +191,12 @@ gtk_list_factory_widget_update (GtkListItemBase *base,
 
   if (priv->object)
     {
+      gpointer old_item = gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self));
+
       gtk_list_item_factory_update (priv->factory,
                                     priv->object,
-                                    gtk_list_item_base_get_item (GTK_LIST_ITEM_BASE (self)) != NULL,
-                                    item != NULL,
+                                    item != old_item && old_item != NULL,
+                                    item != old_item && item != NULL,
                                     gtk_list_factory_widget_update_func,
                                     &update);
     }
