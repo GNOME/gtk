@@ -1935,6 +1935,36 @@ rewrite_scale (Element      *element,
     }
 }
 
+static Element *
+write_separator_prop (Element *element,
+                      Element *parent,
+                      const char *name,
+                      const char *value)
+{
+
+  if (element)
+    g_free (element->data);
+  else
+    {
+      element = add_element (parent, "property");
+      set_attribute_value (element, "name", name);
+    }
+  element->data = g_strdup (value);
+
+  return element;
+}
+
+static void
+rewrite_separator (Element *element,
+                   MyParserData *data)
+{
+  if (g_str_equal (get_class_name (element), "GtkVSeparator"))
+    write_separator_prop (NULL, element, "orientation", "vertical");
+
+  if (!g_str_equal (get_class_name (element), "GtkSeparator"))
+    set_attribute_value (element, "class", "GtkSeparator");
+}
+
 static void
 rewrite_requires (Element      *element,
                   MyParserData *data)
@@ -2286,6 +2316,11 @@ rewrite_element_3to4 (Element      *element,
   if (element_is_object_or_template (element) &&
       g_str_equal (get_class_name (element), "GtkScale"))
     rewrite_scale (element, data);
+
+  if (element_is_object_or_template (element) &&
+      (g_str_equal (get_class_name (element), "GtkHSeparator") ||
+       g_str_equal (get_class_name (element), "GtkVSeparator")))
+    rewrite_separator(element, data);
 
   if (g_str_equal (element->element_name, "property"))
     maybe_rename_property (element, data);

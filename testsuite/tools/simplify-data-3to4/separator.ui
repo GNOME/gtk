@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkVSeparator">
+    <property name="visible">True</property>
+  </object>
+  <object class="GtkHSeparator">
+    <property name="visible">True</property>
+  </object>
+</interface>
