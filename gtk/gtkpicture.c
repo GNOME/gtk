@@ -875,6 +875,8 @@ gtk_picture_set_paintable (GtkPicture   *self,
 
   if (size_changed)
     gtk_widget_queue_resize (GTK_WIDGET (self));
+  else
+    gtk_widget_queue_draw (GTK_WIDGET (self));
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_PAINTABLE]);
 
