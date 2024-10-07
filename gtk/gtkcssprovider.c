@@ -1267,9 +1267,9 @@ gtk_css_provider_load_internal (GtkCssProvider *self,
 
   if (GDK_PROFILER_IS_RUNNING)
     {
-      char *uri = g_file_get_uri (file);
+      const char *uri G_GNUC_UNUSED;
+      uri = file ? g_file_peek_path (file) : NULL;
       gdk_profiler_end_mark (before, "CSS theme load", uri);
-      g_free (uri);
     }
 }
 
