@@ -3206,8 +3206,7 @@ gsk_gpu_node_processor_repeat_tile (GskGpuNodeProcessor    *self,
                                               - y * child_bounds->size.height));
   if (!gsk_rect_intersection (&offset_rect, child_bounds, &clipped_child_bounds))
     {
-      /* The math has gone wrong probably, someone should look at this. */
-      g_warn_if_reached ();
+      /* rounding error hits again */
       return;
     }
 
