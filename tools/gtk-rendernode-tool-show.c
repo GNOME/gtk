@@ -52,29 +52,78 @@ quit_cb (GtkWidget *widget,
   g_main_context_wakeup (NULL);
 }
 
-static void
-show_file (const char *filename,
-           gboolean    decorated)
+typedef struct
 {
   GskRenderNode *node;
+  gsize next_tick;
+} TickData;
+
+static int
+next_frame (GtkWidget     *picture,
+            GdkFrameClock *frame_clock,
+            gpointer       user_data)
+{
+  TickData *tick = user_data;
+  GtkSnapshot *snapshot;
+  GskRenderNode *current_node;
   graphene_rect_t node_bounds;
   GdkPaintable *paintable;
+
+  gsk_render_node_get_bounds (tick->node, &node_bounds);
+  current_node = gsk_container_node_get_child (tick->node, tick->next_tick);
+
+  snapshot = gtk_snapshot_new ();
+  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- node_bounds.origin.x, - node_bounds.origin.y));
+  gtk_snapshot_append_node (snapshot, current_node);
+  paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
+  gtk_picture_set_paintable (GTK_PICTURE (picture), paintable);
+  g_object_unref (paintable);
+
+  tick->next_tick++;
+  tick->next_tick %= gsk_container_node_get_n_children (tick->node);
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+show_file (const char *filename,
+           gboolean    video,
+           gboolean    decorated)
+{
+  TickData tick_data;
+  GskRenderNode *node;
+  graphene_rect_t node_bounds;
   GtkWidget *sw;
   GtkWidget *handle;
   GtkWidget *window;
   gboolean done = FALSE;
-  GtkSnapshot *snapshot;
   GtkWidget *picture;
 
   node = load_node_file (filename);
   gsk_render_node_get_bounds (node, &node_bounds);
 
-  snapshot = gtk_snapshot_new ();
-  gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- node_bounds.origin.x, - node_bounds.origin.y));
-  gtk_snapshot_append_node (snapshot, node);
-  paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
+  if (video && gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE)
+    {
+      tick_data.node = node;
+      tick_data.next_tick = 0;
 
-  picture = gtk_picture_new_for_paintable (paintable);
+      picture = gtk_picture_new ();
+      gtk_widget_add_tick_callback (picture, next_frame, &tick_data, NULL);
+    }
+  else
+    {
+      GdkPaintable *paintable;
+      GtkSnapshot *snapshot;
+
+      snapshot = gtk_snapshot_new ();
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- node_bounds.origin.x, - node_bounds.origin.y));
+      gtk_snapshot_append_node (snapshot, node);
+      paintable = gtk_snapshot_free_to_paintable (snapshot, NULL);
+
+      picture = gtk_picture_new_for_paintable (paintable);
+      g_object_unref (paintable);
+    }
+
   gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
   gtk_picture_set_content_fit (GTK_PICTURE (picture), GTK_CONTENT_FIT_SCALE_DOWN);
 
@@ -100,7 +149,6 @@ show_file (const char *filename,
   while (!done)
     g_main_context_iteration (NULL, TRUE);
 
-  g_clear_object (&paintable);
   g_clear_pointer (&node, gsk_render_node_unref);
 }
 
@@ -111,8 +159,10 @@ do_show (int          *argc,
   GOptionContext *context;
   char **filenames = NULL;
   gboolean decorated = TRUE;
+  gboolean video = FALSE;
   const GOptionEntry entries[] = {
     { "undecorated", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &decorated, N_("Don't add a titlebar"), NULL },
+    { "video", 0, 0, G_OPTION_ARG_NONE, &video, N_("Treat file as video"), NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
     { NULL, }
   };
@@ -151,7 +201,7 @@ do_show (int          *argc,
       exit (1);
     }
 
-  show_file (filenames[0], decorated);
+  show_file (filenames[0], video, decorated);
 
   g_strfreev (filenames);
 }
