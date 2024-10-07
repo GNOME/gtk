@@ -41,6 +41,13 @@
                 <property name="icon-name">function-linear-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Highlight event sequences</property>
                 <property name="active" bind-source="GtkInspectorRecorder" bind-property="highlight-sequences" bind-flags="bidirectional|sync-create"/>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton">
+                <property name="icon-name">document-save-as-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Save nodes as video</property>
+                <signal name="clicked" handler="recording_save_video"/>
                 <property name="halign">start</property>
                 <property name="hexpand">1</property>
               </object>

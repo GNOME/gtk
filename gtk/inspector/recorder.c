@@ -1992,6 +1992,100 @@ render_node_list_selection_changed (GtkListBox           *list,
   g_object_unref (paintable);
 }
 
+static GskRenderNode *
+gtk_inspector_recorder_get_node_video (GtkInspectorRecorder *self)
+{
+  GskRenderNode *result;
+  GPtrArray *array;
+  gsize i;
+
+  array = g_ptr_array_new ();
+
+  for (i = 0; i < g_list_model_get_n_items (self->recordings); i++)
+    {
+      GtkInspectorRecording *recording = g_list_model_get_item (self->recordings, i);
+
+      if (GTK_INSPECTOR_IS_RENDER_RECORDING (recording))
+        g_ptr_array_add (array, gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (recording)));
+
+      g_object_unref (recording);
+    }
+
+  if (array->len > 0)
+    result = gsk_container_node_new ((GskRenderNode **) array->pdata, array->len);
+  else
+    result = NULL;
+
+  g_ptr_array_free (array, TRUE);
+
+  return result;
+}
+
+static void
+recording_save_video_response (GObject      *source,
+                               GAsyncResult *result,
+                               gpointer      node)
+{
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GFile *file;
+  GError *error = NULL;
+
+  file = gtk_file_dialog_save_finish (dialog, result, &error);
+  if (file)
+    {
+      GBytes *bytes = gsk_render_node_serialize (node);
+
+      if (!g_file_replace_contents (file,
+                                    g_bytes_get_data (bytes, NULL),
+                                    g_bytes_get_size (bytes),
+                                    NULL,
+                                    FALSE,
+                                    0,
+                                    NULL,
+                                    NULL,
+                                    &error))
+        {
+          GtkAlertDialog *alert;
+
+          alert = gtk_alert_dialog_new (_("Saving RenderNode failed"));
+          gtk_alert_dialog_set_detail (alert, error->message);
+          gtk_alert_dialog_show (alert, GTK_WINDOW (gtk_window_get_transient_for (GTK_WINDOW (dialog))));
+          g_object_unref (alert);
+          g_error_free (error);
+        }
+
+      g_bytes_unref (bytes);
+      g_object_unref (file);
+    }
+  else
+    {
+      g_print ("Error saving nodes: %s\n", error->message);
+      g_error_free (error);
+    }
+
+  gsk_render_node_unref (node);
+}
+
+static void
+recording_save_video (GtkButton            *button,
+                      GtkInspectorRecorder *self)
+{
+  GtkFileDialog *dialog;
+  GskRenderNode *video;
+
+  video = gtk_inspector_recorder_get_node_video (self);
+  if (video == NULL)
+    return;
+
+  dialog = gtk_file_dialog_new ();
+  gtk_file_dialog_set_initial_name (dialog, "recording.vnode");
+  gtk_file_dialog_save (dialog,
+                        GTK_WINDOW (gtk_widget_get_root (GTK_WIDGET (self))),
+                        NULL,
+                        recording_save_video_response, video);
+  g_object_unref (dialog);
+}
+
 static void
 render_node_save_response (GObject *source,
                            GAsyncResult *result,
@@ -2366,6 +2460,7 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
 
   gtk_widget_class_bind_template_callback (widget_class, recordings_clear_all);
   gtk_widget_class_bind_template_callback (widget_class, recording_selected);
+  gtk_widget_class_bind_template_callback (widget_class, recording_save_video);
   gtk_widget_class_bind_template_callback (widget_class, render_node_save);
   gtk_widget_class_bind_template_callback (widget_class, render_node_clip);
   //gtk_widget_class_bind_template_callback (widget_class, node_property_activated);
