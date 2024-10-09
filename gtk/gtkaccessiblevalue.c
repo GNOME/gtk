@@ -905,7 +905,7 @@ static const GtkAccessibleCollect collect_rels[] = {
   [GTK_ACCESSIBLE_RELATION_SET_SIZE] = {
     .value = GTK_ACCESSIBLE_RELATION_SET_SIZE,
     .ctype = GTK_ACCESSIBLE_COLLECT_INTEGER,
-    .name = "posinset"
+    .name = "setsize"
   },
 };
 
