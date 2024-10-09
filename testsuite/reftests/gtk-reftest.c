@@ -469,7 +469,7 @@ log_writer (GLogLevelFlags   log_level,
             gsize            n_fields,
             gpointer         user_data)
 {
-#ifndef G_OS_WIN32
+#if !defined (G_OS_WIN32) && !defined (__ANDROID__)
   if (log_level & G_LOG_LEVEL_CRITICAL)
     {
       void *buffer[1024];

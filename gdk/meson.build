@@ -184,6 +184,7 @@ gdkmarshal_h = gdk_marshalers[1]
 
 gdkconfig_cdata = configuration_data()
 gdkconfig_cdata.set('GDK_WINDOWING_X11', x11_enabled)
+gdkconfig_cdata.set('GDK_WINDOWING_ANDROID', android_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_WAYLAND', wayland_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_WIN32', win32_enabled)
 gdkconfig_cdata.set('GDK_WINDOWING_BROADWAY', broadway_enabled)
@@ -275,7 +276,7 @@ libgdk_c_args = [
 
 gdk_backends = []
 gdk_backends_gen_headers = []  # non-public generated headers
-foreach backend : ['broadway', 'wayland', 'win32', 'x11', 'macos']
+foreach backend : ['android', 'broadway', 'wayland', 'win32', 'x11', 'macos']
   if get_variable('@0@_enabled'.format(backend))
     subdir(backend)
     gdk_deps += get_variable('gdk_@0@_deps'.format(backend))

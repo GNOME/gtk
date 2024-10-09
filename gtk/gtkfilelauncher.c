@@ -31,6 +31,16 @@
 #include "gtkshowwin32.h"
 #endif
 
+#ifdef GDK_WINDOWING_ANDROID
+#include "gtknative.h"
+
+#include "android/gdkandroidcontentfile.h"
+#include "android/gdkandroidtoplevel.h"
+
+#include "android/gdkandroidinit-private.h"
+#include "android/gdkandroidutils-private.h"
+#endif // GDK_WINDOWING_ANDROID
+
 /**
  * GtkFileLauncher:
  *
@@ -342,6 +352,7 @@ gtk_file_launcher_set_writable (GtkFileLauncher *self,
 /* }}} */
 /* {{{ Async implementation */
 
+#ifndef GDK_WINDOWING_ANDROID
 #ifndef G_OS_WIN32
 static void
 open_done (GObject      *source,
@@ -456,7 +467,63 @@ show_uri_done (GObject      *source,
   g_object_unref (task);
 }
 G_GNUC_END_IGNORE_DEPRECATIONS
+#endif // not GDK_WINDOWING_ANDROID
 
+#ifdef GDK_WINDOWING_ANDROID
+static gboolean
+gtk_show_file_android (GFile               *file,
+                       GdkAndroidToplevel  *toplevel,
+                       gboolean             writable,
+                       gboolean             always_ask,
+                       GError             **error)
+{
+  JNIEnv *env = gdk_android_get_env ();
+
+  (*env)->PushLocalFrame (env, 7);
+
+  jobject uri;
+  if (GDK_IS_ANDROID_CONTENT_FILE (file))
+    uri = gdk_android_content_file_get_uri_object ((GdkAndroidContentFile *)file);
+  else
+    {
+      gchar *curi = g_file_get_uri (file);
+      uri = (*env)->CallStaticObjectMethod (env, gdk_android_get_java_cache ()->a_uri.klass,
+                                            gdk_android_get_java_cache ()->a_uri.parse,
+                                            gdk_android_utf8_to_java (uri));
+      g_free (curi);
+      if (gdk_android_check_exception (error))
+        {
+          (*env)->PopLocalFrame (env, NULL);
+          return FALSE;
+        }
+    }
+
+  jobject intent = (*env)->NewObject (env, gdk_android_get_java_cache ()->a_intent.klass,
+                                      gdk_android_get_java_cache ()->a_intent.constructor_action,
+                                      writable ?
+                                        gdk_android_get_java_cache ()->a_intent.action_edit :
+                                        gdk_android_get_java_cache ()->a_intent.action_view);
+  (*env)->CallObjectMethod (env, intent,
+                            gdk_android_get_java_cache ()->a_intent.set_data_norm,
+                            uri);
+
+  jint flags = gdk_android_get_java_cache ()->a_intent.flag_grant_read_perm;
+  if (writable)
+    flags |= gdk_android_get_java_cache ()->a_intent.flag_grant_write_perm;
+  (*env)->CallObjectMethod (env, intent,
+                            gdk_android_get_java_cache ()->a_intent.add_flags,
+                            flags);
+
+  if (always_ask)
+    intent = (*env)->CallStaticObjectMethod (env, gdk_android_get_java_cache ()->a_intent.klass,
+                                             gdk_android_get_java_cache ()->a_intent.create_chooser,
+                                             intent, NULL);
+
+  gboolean launched = gdk_android_toplevel_launch_activity (toplevel, intent, error);
+  (*env)->PopLocalFrame (env, NULL);
+  return launched;
+}
+#endif // GDK_WINDOWING_ANDROID
  /* }}} */
 /* {{{ Async API */
 
@@ -483,7 +550,7 @@ gtk_file_launcher_launch (GtkFileLauncher     *self,
                           gpointer             user_data)
 {
   GTask *task;
-#ifndef G_OS_WIN32
+#if !defined (G_OS_WIN32) && !defined (GDK_WINDOWING_ANDROID)
   GdkDisplay *display;
 #endif
 
@@ -502,7 +569,19 @@ gtk_file_launcher_launch (GtkFileLauncher     *self,
       return;
     }
 
-#ifndef G_OS_WIN32
+#if defined (G_OS_WIN32)
+  char *path = g_file_get_path (self->file);
+  gtk_show_uri_win32 (parent, path, self->always_ask, cancellable, show_uri_done, task);
+  g_free (path);
+#elif defined (GDK_WINDOWING_ANDROID)
+  GError *err = NULL;
+  GdkAndroidToplevel* toplevel = GDK_ANDROID_TOPLEVEL (gtk_native_get_surface (GTK_NATIVE (parent)));
+  if (gtk_show_file_android (self->file, toplevel, self->writable, self->always_ask, &err))
+    g_task_return_boolean (task, TRUE);
+  else
+    g_task_return_error (task, err);
+  g_object_unref (task);
+#else
   if (parent)
     display = gtk_widget_get_display (GTK_WIDGET (parent));
   else
@@ -530,10 +609,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
       g_free (uri);
     }
-#else /* G_OS_WIN32 */
-  char *path = g_file_get_path (self->file);
-  gtk_show_uri_win32 (parent, path, self->always_ask, cancellable, show_uri_done, task);
-  g_free (path);
 #endif
 }
 
@@ -611,6 +686,12 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
       return;
     }
 
+#ifdef GDK_WINDOWING_ANDROID
+  g_task_return_new_error (task,
+                           GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
+                           "Operation not supported");
+  g_object_unref (task);
+#else
 #ifndef G_OS_WIN32
   if (gtk_openuri_portal_is_available ())
     {
@@ -619,7 +700,7 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
       gtk_openuri_portal_open_async (self->file, TRUE, flags, parent, cancellable, open_done, task);
     }
   else
-#endif
+#endif // not G_OS_WIN32
     {
       char *uri = g_file_get_uri (self->file);
 
@@ -627,6 +708,7 @@ gtk_file_launcher_open_containing_folder (GtkFileLauncher     *self,
 
       g_free (uri);
     }
+#endif // not GDK_WINDOWING_ANDROID
 }
 
 /**

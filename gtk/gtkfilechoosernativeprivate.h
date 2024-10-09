@@ -60,6 +60,9 @@ void gtk_file_chooser_native_win32_hide (GtkFileChooserNative *self);
 gboolean gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self);
 void gtk_file_chooser_native_quartz_hide (GtkFileChooserNative *self);
 
+gboolean gtk_file_chooser_native_android_show (GtkFileChooserNative *self);
+void gtk_file_chooser_native_android_hide (GtkFileChooserNative *self);
+
 gboolean gtk_file_chooser_native_portal_show (GtkFileChooserNative *self);
 void gtk_file_chooser_native_portal_hide (GtkFileChooserNative *self);
 

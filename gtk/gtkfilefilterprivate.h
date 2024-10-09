@@ -25,6 +25,10 @@
 #import <Foundation/Foundation.h>
 #endif
 
+#ifdef GDK_WINDOWING_ANDROID
+#include <jni.h>
+#endif
+
 G_BEGIN_DECLS
 
 char ** _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter);
@@ -33,6 +37,9 @@ char ** _gtk_file_filter_get_as_patterns (GtkFileFilter      *filter);
 NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter);
 #endif
 
+#ifdef GDK_WINDOWING_ANDROID
+void _gtk_file_filter_store_types_in_list (GtkFileFilter *filter, jobject list);
+#endif
 
 G_END_DECLS
 

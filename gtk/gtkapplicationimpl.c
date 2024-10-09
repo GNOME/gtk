@@ -33,6 +33,10 @@
 #include <gdk/macos/gdkmacos.h>
 #endif
 
+#ifdef GDK_WINDOWING_ANDROID
+#include <gdk/android/gdkandroid.h>
+#endif
+
 G_DEFINE_TYPE (GtkApplicationImpl, gtk_application_impl, G_TYPE_OBJECT)
 
 static void
@@ -175,6 +179,11 @@ gtk_application_impl_new (GtkApplication *application,
 #ifdef GDK_WINDOWING_MACOS
   if (GDK_IS_MACOS_DISPLAY (display))
     impl_type = gtk_application_impl_quartz_get_type ();
+#endif
+
+#ifdef GDK_WINDOWING_ANDROID
+  if (GDK_IS_ANDROID_DISPLAY (display))
+    impl_type = gtk_application_impl_android_get_type ();
 #endif
 
   impl = g_object_new (impl_type, NULL);

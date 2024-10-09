@@ -794,8 +794,9 @@ file_serializer_finish (GObject      *source,
     gdk_content_serializer_return_success (serializer);
 }
 
+
 static const char *
-file_force_uri_schemas[] = { "http", "https" };
+file_force_uri_schemas[] = { "content", "http", "https" };
 static char *
 file_get_native_uri (GFile *file)
 {
@@ -804,7 +805,7 @@ file_get_native_uri (GFile *file)
   /*
    * We want to convert URIs to file:// URIs, so other applications
    * that do not use GIO/GVFS can read text/uri-list from the clipboard.
-   * 
+   *
    * But we don't want to do that for URIs that are widely understood,
    * so for lack of better APIs, we whitelist those.
    */
