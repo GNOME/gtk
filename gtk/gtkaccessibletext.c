@@ -68,8 +68,8 @@ gtk_accessible_text_default_get_default_attributes (GtkAccessibleText   *self,
                                                     char              ***attribute_names,
                                                     char              ***attribute_values)
 {
-  *attribute_names = NULL;
-  *attribute_values = NULL;
+  *attribute_names = g_new0 (char *, 1);
+  *attribute_values = g_new0 (char *, 1);
 }
 
 static void
@@ -289,10 +289,7 @@ gtk_accessible_text_get_attributes (GtkAccessibleText        *self,
  * - a name, typically in the form of a reverse DNS identifier
  * - a value
  *
- * If this function returns true, `n_attributes` will be set to a value
- * greater than or equal to one, @ranges will be set to a newly
- * allocated array of [struct#Gtk.AccessibleTextRange] which should
- * be freed with g_free(), @attribute_names and @attribute_values
+ * If this function returns true, @attribute_names and @attribute_values
  * will be set to string arrays that should be freed with g_strfreev().
  *
  * Since: 4.14
