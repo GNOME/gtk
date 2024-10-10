@@ -26,6 +26,7 @@
 #include <io.h>
 
 #include "gdk.h"
+#include "gdkmain-win32.h"
 #include "gdkdebugprivate.h"
 #include "gdkkeysyms.h"
 #include <glib/gi18n-lib.h>
@@ -38,6 +39,8 @@
 #include <windows.h>
 #include <wintab.h>
 #include <imm.h>
+
+#include <stdbool.h>
 
 /* Whether GDK initialized COM */
 gboolean
@@ -104,6 +107,110 @@ gdk_win32_ensure_ole (void)
     }
 
   return ole_initialized;
+}
+
+/** gdk_win32_check_app_container:
+ *
+ * Check if running sandboxed in an app container
+ */
+bool
+gdk_win32_check_app_container (void)
+{
+  HANDLE token_handle = NULL;
+  DWORD is_app_container = 0;
+  DWORD size = sizeof (is_app_container);
+  bool result = false;
+
+  /* Since Windows 8: use GetCurrentProcessToken() and remove the call to CloseHandle() */
+
+  if (!OpenProcessToken (GetCurrentProcess (), TOKEN_QUERY, &token_handle))
+    {
+      WIN32_API_FAILED ("OpenProcessToken");
+      return false;
+    }
+
+  if (!GetTokenInformation (token_handle, TokenIsAppContainer, &is_app_container, size, &size))
+    WIN32_API_FAILED ("GetTokenInformation");
+  else if (size > 0)
+    result = !!is_app_container;
+
+  CloseHandle (token_handle);
+
+  return result;
+}
+
+/** gdk_win32_check_high_integrity:
+ *
+ * Check if the app is running with high integrity
+ *
+ * Code based on:
+ * https://devblogs.microsoft.com/oldnewthing/20221017-00/?p=107291
+ * https://github.com/microsoft/WindowsAppSDK/blob/main/dev/Common/Security.IntegrityLevel.h
+ */
+bool
+gdk_win32_check_high_integrity (void)
+{
+  HANDLE token_handle = NULL;
+  TOKEN_MANDATORY_LABEL integrity_level;
+  DWORD size = sizeof (integrity_level);
+  bool result = false;
+
+  /* Since Windows 8: use GetCurrentProcessToken() and remove the call to CloseHandle() */
+
+  if (!OpenProcessToken (GetCurrentProcess (), TOKEN_QUERY, &token_handle))
+    {
+      WIN32_API_FAILED ("OpenProcessToken");
+      return false;
+    }
+
+  memset (&integrity_level, 0, sizeof (integrity_level));
+
+  if (!GetTokenInformation (token_handle, TokenIntegrityLevel, &integrity_level, size, &size))
+    WIN32_API_FAILED ("GetTokenInformation");
+  else if (size > 0 && IsValidSid (integrity_level.Label.Sid))
+    {
+      UCHAR subauthority_count = *GetSidSubAuthorityCount (integrity_level.Label.Sid);
+      if (subauthority_count > 0)
+        {
+          DWORD level = *GetSidSubAuthority (integrity_level.Label.Sid, subauthority_count - 1);
+          result = (level >= SECURITY_MANDATORY_HIGH_RID);
+        }
+    }
+
+  CloseHandle (token_handle);
+
+  return result;
+}
+
+/** gdk_win32_check_manually_elevated:
+ *
+ * Code based on:
+ * https://devblogs.microsoft.com/oldnewthing/20241003-00/?p=110336
+ */
+bool
+gdk_win32_check_manually_elevated (void)
+{
+  HANDLE token_handle = NULL;
+  TOKEN_ELEVATION_TYPE elevation_type = TokenElevationTypeDefault;
+  DWORD size = sizeof (elevation_type);
+  bool result = false;
+
+  /* Since Windows 8: use GetCurrentProcessToken() and remove the call to CloseHandle() */
+
+  if (!OpenProcessToken (GetCurrentProcess (), TOKEN_QUERY, &token_handle))
+    {
+      WIN32_API_FAILED ("OpenProcessToken");
+      return false;
+    }
+
+  if (!GetTokenInformation (token_handle, TokenElevationType, &elevation_type, size, &size))
+    WIN32_API_FAILED ("GetTokenInformation");
+  else if (size > 0)
+    result = (elevation_type == TokenElevationTypeFull);
+
+  CloseHandle (token_handle);
+
+  return result;
 }
 
 void
