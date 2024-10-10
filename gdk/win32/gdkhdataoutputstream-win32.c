@@ -37,6 +37,7 @@ typedef struct _GdkWin32HDataOutputStreamPrivate  GdkWin32HDataOutputStreamPriva
 struct _GdkWin32HDataOutputStreamPrivate
 {
   HANDLE                     handle;
+  GdkWin32Clipdrop          *clipdrop;
   guchar                    *data;
   gsize                      data_allocated_size;
   gsize                      data_length;
@@ -204,12 +205,13 @@ gdk_win32_hdata_output_stream_close (GOutputStream  *output_stream,
           return FALSE;
         }
 
-      if (!_gdk_win32_transmute_contentformat (priv->pair.contentformat,
-                                               priv->pair.w32format,
-                                               priv->data,
-                                               priv->data_length,
-                                               &transmuted_data,
-                                               &transmuted_data_length))
+      if (!gdk_win32_clipdrop_transmute_contentformat (priv->clipdrop,
+                                                       priv->pair.contentformat,
+                                                       priv->pair.w32format,
+                                                       priv->data,
+                                                       priv->data_length,
+                                                      &transmuted_data,
+                                                      &transmuted_data_length))
         {
           g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
                        _("Failed to transmute %zu bytes of data from %s to %u"),
@@ -343,7 +345,8 @@ gdk_win32_hdata_output_stream_init (GdkWin32HDataOutputStream *stream)
 }
 
 GOutputStream *
-gdk_win32_hdata_output_stream_new (GdkWin32ContentFormatPair  *pair,
+gdk_win32_hdata_output_stream_new (GdkWin32Clipdrop           *clipdrop,
+                                   GdkWin32ContentFormatPair  *pair,
                                    GError                    **error)
 {
   GdkWin32HDataOutputStream *stream;
@@ -369,6 +372,7 @@ gdk_win32_hdata_output_stream_new (GdkWin32ContentFormatPair  *pair,
 
   stream = g_object_new (GDK_TYPE_WIN32_HDATA_OUTPUT_STREAM, NULL);
   priv = gdk_win32_hdata_output_stream_get_instance_private (stream);
+  priv->clipdrop = clipdrop;
   priv->pair = *pair;
 
   if (hmem)

@@ -75,10 +75,6 @@ static void gdk_win32_surface_maximize (GdkSurface *surface);
 static void gdk_win32_surface_unmaximize (GdkSurface *surface);
 static void gdk_win32_surface_minimize (GdkSurface *surface);
 
-/* TODO: get rid of these global variables */
-static gpointer parent_class = NULL;
-static GSList *modal_surface_stack = NULL;
-
 typedef struct _FullscreenInfo FullscreenInfo;
 
 struct _FullscreenInfo
@@ -171,7 +167,7 @@ gdk_surface_win32_dispose (GObject *object)
 
   g_clear_object (&surface->cursor);
 
-  G_OBJECT_CLASS (parent_class)->dispose (object);
+  G_OBJECT_CLASS (gdk_win32_surface_parent_class)->dispose (object);
 }
 
 
@@ -186,7 +182,8 @@ gdk_surface_win32_finalize (GObject *object)
 
   if (!GDK_SURFACE_DESTROYED (surface))
     {
-      gdk_win32_handle_table_remove (surface->handle);
+      gdk_win32_display_handle_table_remove (gdk_surface_get_display (GDK_SURFACE (surface)),
+                                             surface->handle);
     }
 
   g_clear_pointer (&surface->snap_stash, g_free);
@@ -209,7 +206,7 @@ gdk_surface_win32_finalize (GObject *object)
   g_assert (surface->transient_owner == NULL);
   g_assert (surface->transient_children == NULL);
 
-  G_OBJECT_CLASS (parent_class)->finalize (object);
+  G_OBJECT_CLASS (gdk_win32_surface_parent_class)->finalize (object);
 }
 
 void
@@ -518,7 +515,7 @@ gdk_win32_surface_constructed (GObject *object)
    * on the bitness of the OS. That pointer is still unique,
    * so this works out in the end.
    */
-  gdk_win32_handle_table_insert (&GDK_SURFACE_HWND (impl), impl);
+  gdk_win32_display_handle_table_insert (display, &GDK_SURFACE_HWND (impl), impl);
 
   g_free (wtitle);
 
@@ -544,7 +541,7 @@ gdk_win32_surface_constructed (GObject *object)
   impl->hdc = GetDC (impl->handle);
   impl->inhibit_configure = TRUE;
 
-  G_OBJECT_CLASS (parent_class)->constructed (object);
+  G_OBJECT_CLASS (gdk_win32_surface_parent_class)->constructed (object);
 }
 
 static void
@@ -606,7 +603,8 @@ gdk_win32_surface_destroy_notify (GdkSurface *surface)
       _gdk_surface_destroy (surface, TRUE);
     }
 
-  gdk_win32_handle_table_remove (GDK_SURFACE_HWND (surface));
+  gdk_win32_display_handle_table_remove (gdk_surface_get_display (surface),
+                                         GDK_SURFACE_HWND (surface));
   g_object_unref (surface);
 }
 
@@ -989,7 +987,7 @@ gdk_win32_surface_move_resize_internal (GdkSurface *surface,
 {
   /* We ignore changes to the surface being moved or resized by the
      user, as we don't want to fight the user */
-  if (GDK_SURFACE_HWND (surface) == _modal_move_resize_hwnd)
+  if (GDK_SURFACE_HWND (surface) == GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_move_resize_hwnd)
     goto out;
 
   if (with_move && (width < 0 && height < 0))
@@ -1400,10 +1398,12 @@ gdk_win32_surface_set_transient_for (GdkSurface *surface,
     WIN32_API_FAILED ("SetWindowLongPtr");
 }
 
+#define MODAL_SURFACE_STACK(s) GDK_WIN32_DISPLAY (gdk_surface_get_display (s))->display_surface_record->modal_surface_stack
+
 static void
 gdk_win32_push_modal_surface (GdkSurface *surface)
 {
-  modal_surface_stack = g_slist_prepend (modal_surface_stack, surface);
+  MODAL_SURFACE_STACK (surface) = g_slist_prepend (MODAL_SURFACE_STACK (surface), surface);
 }
 
 static void
@@ -1415,15 +1415,15 @@ gdk_win32_remove_modal_surface (GdkSurface *surface)
 
   /* It's possible to be NULL here if someone sets the modal hint of the surface
    * to FALSE before a modal surface stack has ever been created. */
-  if (modal_surface_stack == NULL)
+  if (MODAL_SURFACE_STACK (surface) == NULL)
     return;
 
   /* Find the requested surface in the stack and remove it.  Yeah, I realize this
    * means we're not a 'real stack', strictly speaking.  Sue me. :) */
-  tmp = g_slist_find (modal_surface_stack, surface);
+  tmp = g_slist_find (MODAL_SURFACE_STACK (surface), surface);
   if (tmp != NULL)
     {
-      modal_surface_stack = g_slist_delete_link (modal_surface_stack, tmp);
+      MODAL_SURFACE_STACK (surface) = g_slist_delete_link (MODAL_SURFACE_STACK (surface), tmp);
     }
 }
 
@@ -1433,7 +1433,7 @@ _gdk_modal_blocked (GdkSurface *surface)
   GSList *l;
   gboolean found_any = FALSE;
 
-  for (l = modal_surface_stack; l != NULL; l = l->next)
+  for (l = MODAL_SURFACE_STACK (surface); l != NULL; l = l->next)
     {
       GdkSurface *modal = l->data;
 
@@ -1451,8 +1451,11 @@ GdkSurface *
 _gdk_modal_current (void)
 {
   GSList *l;
+  GdkDisplay *display = gdk_display_get_default ();
 
-  for (l = modal_surface_stack; l != NULL; l = l->next)
+  for (l = GDK_WIN32_DISPLAY (display)->display_surface_record->modal_surface_stack;
+       l != NULL;
+       l = l->next)
     {
       GdkSurface *modal = l->data;
 
@@ -4134,7 +4137,7 @@ gdk_win32_surface_lookup_for_display (GdkDisplay *display,
 {
   g_return_val_if_fail (display == gdk_display_get_default (), NULL);
 
-  return (GdkSurface*) gdk_win32_handle_table_lookup_ (anid);
+  return (GdkSurface*) gdk_win32_display_handle_table_lookup_ (display, anid);
 }
 
 /**
@@ -4518,8 +4521,6 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GdkSurfaceClass *impl_class = GDK_SURFACE_CLASS (klass);
-
-  parent_class = g_type_class_peek_parent (klass);
 
   object_class->constructed = gdk_win32_surface_constructed;
   object_class->dispose = gdk_surface_win32_dispose;

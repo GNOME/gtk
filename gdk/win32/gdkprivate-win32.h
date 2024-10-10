@@ -70,15 +70,20 @@ typedef enum
 } GdkDragProtocol;
 
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
-BOOL _gdk_win32_get_cursor_pos (LPPOINT lpPoint);
+BOOL _gdk_win32_get_cursor_pos (GdkDisplay *display,
+                                LPPOINT     lpPoint);
 
 gboolean _gdk_win32_surface_enable_transparency (GdkSurface *surface);
 
 void _gdk_win32_dnd_exit (void);
 
-void     gdk_win32_handle_table_insert  (HANDLE   *handle,
-                                         gpointer data);
-void     gdk_win32_handle_table_remove  (HANDLE handle);
+void     gdk_win32_display_handle_table_insert  (GdkDisplay *display,
+                                                 HANDLE     *handle,
+                                                 gpointer    data);
+void     gdk_win32_display_handle_table_remove  (GdkDisplay *display,
+                                                 HANDLE      handle);
+gpointer      gdk_win32_display_handle_table_lookup_ (GdkDisplay *display,
+                                                      HWND        handle);
 
 cairo_region_t *_gdk_win32_hrgn_to_region    (HRGN  hrgn,
                                               guint scale);
@@ -135,25 +140,9 @@ void    _gdk_other_api_failed        (const char *where,
 
 extern LRESULT CALLBACK _gdk_win32_surface_procedure (HWND, UINT, WPARAM, LPARAM);
 
-extern GdkDisplay       *_gdk_display;
-
-extern GdkDeviceManagerWin32 *_gdk_device_manager;
-
-extern int               _gdk_input_ignore_core;
-
 /* These are thread specific, but GDK/win32 works OK only when invoked
  * from a single thread anyway.
  */
-extern HKL               _gdk_input_locale;
-extern gboolean          _gdk_input_locale_is_ime;
-
-extern guint             _gdk_keymap_serial;
-
-/* The singleton clipdrop object pointer */
-extern GdkWin32Clipdrop *_win32_clipdrop;
-
-/* Used to identify the main thread */
-extern GThread          *_win32_main_thread;
 
 typedef enum {
   GDK_WIN32_MODAL_OP_NONE = 0x0,
@@ -164,14 +153,6 @@ typedef enum {
 } GdkWin32ModalOpKind;
 
 #define GDK_WIN32_MODAL_OP_SIZEMOVE_MASK (GDK_WIN32_MODAL_OP_SIZE | GDK_WIN32_MODAL_OP_MOVE)
-
-/* Non-zero while a modal sizing, moving, or dnd operation is in progress */
-extern GdkWin32ModalOpKind _modal_operation_in_progress;
-
-extern HWND             _modal_move_resize_hwnd;
-
-void  _gdk_win32_begin_modal_call (GdkWin32ModalOpKind kind);
-void  _gdk_win32_end_modal_call (GdkWin32ModalOpKind kind);
 
 void _gdk_win32_display_init_cursors (GdkWin32Display     *display);
 void _gdk_win32_display_finalize_cursors (GdkWin32Display *display);
@@ -223,8 +204,6 @@ void       _gdk_win32_keymap_set_active_layout   (GdkWin32Keymap *keymap,
                                                   HKL             hkl);
 GdkModifierType _gdk_win32_keymap_get_mod_mask   (GdkWin32Keymap *keymap);
 
-GdkKeymap *_gdk_win32_display_get_keymap (GdkDisplay *display);
-
 /* stray GdkSurfaceImplWin32 members */
 void _gdk_win32_surface_register_dnd (GdkSurface *surface);
 void _gdk_win32_surface_unregister_dnd (GdkSurface *surface);
@@ -236,8 +215,20 @@ GdkDrag *_gdk_win32_surface_drag_begin (GdkSurface         *surface,
                                         double              x_root,
                                         double              y_root);
 
+/* miscellaneous items (property setup, language notification, keymap serial) */
+gboolean   gdk_win32_display_get_setting             (GdkDisplay *display,
+                                                      const char *name,
+                                                      GValue *value);
+void       gdk_win32_display_lang_notification_init  (GdkWin32Display *display);
+void       gdk_win32_display_lang_notification_exit  (GdkWin32Display *display);
+void       gdk_win32_display_set_input_locale        (GdkWin32Display *display,
+                                                      HKL              input_locale);
+gboolean   gdk_win32_display_input_locale_is_ime     (GdkWin32Display *display);
+GdkKeymap *gdk_win32_display_get_default_keymap      (GdkWin32Display *display);
+void       gdk_win32_display_increment_keymap_serial (GdkWin32Display *display);
+guint      gdk_win32_display_get_keymap_serial       (GdkWin32Display *display);
+
 /* Stray GdkWin32Screen members */
-gboolean _gdk_win32_get_setting (const char *name, GValue *value);
 void _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen);
 
 /* Distributed display manager implementation */
@@ -289,8 +280,6 @@ GdkPixbuf    *gdk_win32_icon_to_pixbuf_libgtk_only (HICON hicon,
                                                     double *x_hot,
                                                     double *y_hot);
 void          gdk_win32_set_modal_dialog_libgtk_only (HWND hwnd);
-
-gpointer      gdk_win32_handle_table_lookup_       (HWND handle);
 
 extern IMAGE_DOS_HEADER __ImageBase;
 

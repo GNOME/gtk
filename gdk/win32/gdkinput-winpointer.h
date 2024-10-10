@@ -19,7 +19,7 @@
 
 #include "winpointer.h"
 
-gboolean gdk_winpointer_initialize (void);
+gboolean gdk_winpointer_initialize (GdkDeviceManagerWin32 *device_manager);
 
 void gdk_winpointer_initialize_surface (GdkSurface *surface);
 void gdk_winpointer_finalize_surface (GdkSurface *surface);
@@ -30,12 +30,15 @@ typedef void
                  POINT *screen_pt,
                  guint32 time_);
 
-gboolean gdk_winpointer_should_forward_message (MSG *msg);
+gboolean gdk_winpointer_should_forward_message (GdkDeviceManagerWin32 *device_manager,
+                                                MSG                   *msg);
 void     gdk_winpointer_input_events (GdkSurface *surface,
                                       crossing_cb_t crossing_cb,
                                       MSG *msg);
-gboolean gdk_winpointer_get_message_info (MSG *msg,
-                                          GdkDevice **device,
-                                          guint32 *time_);
-void     gdk_winpointer_interaction_ended (MSG *msg);
+gboolean gdk_winpointer_get_message_info (MSG              *msg,
+                                          GdkDevice       **device,
+                                          GdkWin32Display  *display_win32,
+                                          guint32          *time_);
+void     gdk_winpointer_interaction_ended (GdkDeviceManagerWin32 *device_manager,
+                                           MSG                   *msg);
 

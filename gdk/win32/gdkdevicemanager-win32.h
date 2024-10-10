@@ -28,6 +28,7 @@ G_BEGIN_DECLS
 
 typedef struct _GdkDeviceManagerWin32 GdkDeviceManagerWin32;
 typedef struct _GdkDeviceManagerWin32Class GdkDeviceManagerWin32Class;
+typedef struct _wintab_items wintab_items;
 
 struct _GdkDeviceManagerWin32
 {
@@ -43,11 +44,23 @@ struct _GdkDeviceManagerWin32
   GList *winpointer_devices;
   GList *wintab_devices;
 
+
   /* Bumped up every time a wintab device enters the proximity
    * of our context (WT_PROXIMITY). Bumped down when we either
    * receive a WT_PACKET, or a WT_CSRCHANGE.
    */
   int dev_entered_proximity;
+
+  /* used for wintab support */
+  wintab_items *wintab_items;
+
+  /* used for winpointer support, etc */
+  HWND winpointer_notification_hwnd;
+  GPtrArray *ignored_interactions;
+  void *winpointer_funcs; /* GdkDeviceManagerWin32WinpointerFuncs */
+  gboolean pen_touch_input;
+  POINT latest_pen_touch_position;
+  LONG last_digitizer_time;
 };
 
 struct _GdkDeviceManagerWin32Class
@@ -57,10 +70,10 @@ struct _GdkDeviceManagerWin32Class
 
 GType gdk_device_manager_win32_get_type (void) G_GNUC_CONST;
 
-void     _gdk_wintab_set_tablet_active (void);
-GdkEvent * gdk_wintab_make_event      (GdkDisplay *display,
-                                       MSG        *msg,
-                                       GdkSurface *surface);
+void     _gdk_wintab_set_tablet_active (GdkDeviceManagerWin32 *device_manager);
+GdkEvent *gdk_wintab_make_event        (GdkDisplay            *display,
+                                        MSG                   *msg,
+                                        GdkSurface            *surface);
 
 G_END_DECLS
 

@@ -23,12 +23,36 @@
 
 #include "gdkwin32screen.h"
 #include "gdkwin32cursor.h"
+#include "gdkprivate-win32.h"
  
 #include "gdkglversionprivate.h"
+
+/* Used for active language or text service change notifications */
+#define COBJMACROS
+#include <msctf.h>
 
 #ifdef HAVE_EGL
 # include <epoxy/egl.h>
 #endif
+
+struct _GdkWin32PointerDeviceItems
+{
+  /* Input Core items */
+  int input_ignore_core;
+};
+
+typedef struct _GdkWin32PointerDeviceItems GdkWin32PointerDeviceItems;
+
+typedef struct _GdkWin32InputLocaleItems GdkWin32InputLocaleItems;
+
+struct _GdkWin32CbDnDItems
+{
+  /* used to identify the main thread for this GdkWin32Display */
+  GThread *display_main_thread;
+
+  GdkWin32Clipdrop *clipdrop;
+};
+typedef struct _GdkWin32CbDnDItems GdkWin32CbDnDItems;
 
 /* Define values used to set DPI-awareness */
 typedef enum _GdkWin32ProcessDpiAwareness {
@@ -113,6 +137,52 @@ typedef struct
   HGLRC hglrc;
 } GdkWin32GLDummyContextWGL;
 
+/* for Direct Manipulation support */
+typedef struct
+{
+  /* this is an IDirectManipulationManager object */
+  void *manager;
+
+  /* GetPointerType (UINT32 pointerId, POINTER_INPUT_TYPE *pointerType) function pointer */
+  void *getPointerType;
+} dmanip_items;
+
+/* for surface tracking items (modal, HWNDs used, etc) */
+typedef struct
+{
+  GHashTable *handle_ht;
+  GSList *modal_surface_stack;
+  HWND modal_move_resize_hwnd;
+
+  /* Non-zero while a modal sizing, moving, or dnd operation is in progress */
+  GdkWin32ModalOpKind modal_operation_in_progress;
+  UINT modal_timer;
+} surface_records;
+
+/* for tracking various events that go on */
+typedef struct
+{
+  /* for tracking various mouse/wintab/winpointer events */
+  GdkSurface *mouse_surface;
+  GdkSurface *mouse_surface_ignored_leave;
+  int current_root_x;
+  int current_root_y;
+
+  int debug_indent_displaychange;
+  int debug_indent_surface_events;
+
+  /* for tracking whether we are using IME */
+  guint in_ime_composition : 1;
+
+  /* to store keycodes for shift keys */
+  int both_shift_pressed[2];
+
+  /* AeroSnap emulation event handling */
+  /* low-level keyboard hook handle */
+  HHOOK aerosnap_keyboard_hook;
+  UINT aerosnap_message;
+} event_records;
+
 struct _GdkWin32Display
 {
   GdkDisplay display;
@@ -125,11 +195,18 @@ struct _GdkWin32Display
 
   HWND hwnd;
 
+  GListModel *monitors;
+  GdkWin32InputLocaleItems *input_locale_items;
+  GdkWin32PointerDeviceItems *pointer_device_items;
+  GdkWin32CbDnDItems *cb_dnd_items;
+  GdkDeviceManagerWin32 *device_manager;
+  surface_records *display_surface_record;
+  event_records *event_record;
+
+  dmanip_items *dmanip_items;
+
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;
-
-  GListModel *monitors;
-
   guint hasWglARBCreateContext : 1;
   guint hasWglEXTSwapControl : 1;
   guint hasWglOMLSyncControl : 1;
@@ -188,9 +265,11 @@ GPtrArray *_gdk_win32_display_get_monitor_list (GdkWin32Display *display);
 
 void        gdk_win32_display_check_composited (GdkWin32Display *display);
 
-guint      gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
-                                                       GdkSurface      *surface,
-                                                       HMONITOR         hmonitor);
+guint      gdk_win32_display_get_monitor_scale_factor  (GdkWin32Display *display_win32,
+                                                        GdkSurface      *surface,
+                                                        HMONITOR         hmonitor);
+
+GdkWin32Clipdrop *gdk_win32_display_get_clipdrop       (GdkDisplay *display);
 
 typedef struct _GdkWin32MessageFilter GdkWin32MessageFilter;
 

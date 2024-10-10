@@ -29,6 +29,7 @@
 struct _GdkWin32Screen
 {
   GObject parent_instance;
+  GdkDisplay *display;
 
   int width, height;
   int surface_scale;
@@ -41,12 +42,20 @@ struct _GdkWin32ScreenClass
 
 G_DEFINE_TYPE (GdkWin32Screen, gdk_win32_screen, G_TYPE_OBJECT)
 
+enum {
+  PROP_0,
+  PROP_DISPLAY,
+  LAST_PROP
+};
+
+static GParamSpec *screen_props[LAST_PROP] = { NULL, };
+
 static void
 init_root_window_size (GdkWin32Screen *screen)
 {
   GdkRectangle result = { 0, };
   int i;
-  GdkDisplay *display = _gdk_display;
+  GdkDisplay *display = screen->display;
   GListModel *monitors;
   GdkMonitor *monitor;
 
@@ -73,7 +82,7 @@ init_root_window (GdkWin32Screen *screen_win32)
 
   init_root_window_size (screen_win32);
 
-  win32_display = GDK_WIN32_DISPLAY (_gdk_display);
+  win32_display = GDK_WIN32_DISPLAY (screen_win32->display);
 
   if (win32_display->dpi_aware_type != PROCESS_DPI_UNAWARE)
     screen_win32->surface_scale = gdk_win32_display_get_monitor_scale_factor (win32_display,
@@ -86,14 +95,21 @@ init_root_window (GdkWin32Screen *screen_win32)
 static void
 gdk_win32_screen_init (GdkWin32Screen *win32_screen)
 {
-  _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
-  init_root_window (win32_screen);
+}
+
+static void
+gdk_win32_screen_constructed (GObject *object)
+{
+  GdkWin32Screen *screen = GDK_WIN32_SCREEN (object);
+
+  _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (screen->display));
+  init_root_window (screen);
 }
 
 void
 _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen)
 {
-  _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (_gdk_display));
+  _gdk_win32_display_init_monitors (GDK_WIN32_DISPLAY (screen->display));
   init_root_window_size (screen);
 }
 
@@ -104,9 +120,57 @@ gdk_win32_screen_finalize (GObject *object)
 }
 
 static void
+gdk_win32_screen_get_property (GObject    *object,
+                               guint       prop_id,
+                               GValue     *value,
+                               GParamSpec *pspec)
+{
+  GdkWin32Screen *screen  = GDK_WIN32_SCREEN (object);
+
+  switch (prop_id)
+    {
+    case PROP_DISPLAY:
+      g_value_set_object (value, screen->display);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gdk_win32_screen_set_property (GObject      *object,
+                               guint         prop_id,
+                               const GValue *value,
+                               GParamSpec   *pspec)
+{
+  GdkWin32Screen *screen = GDK_WIN32_SCREEN (object);
+
+  switch (prop_id)
+    {
+    case PROP_DISPLAY:
+      screen->display = g_value_get_object (value);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
 gdk_win32_screen_class_init (GdkWin32ScreenClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructed = gdk_win32_screen_constructed;
+  object_class->set_property = gdk_win32_screen_set_property;
+  object_class->get_property = gdk_win32_screen_get_property;
   object_class->finalize = gdk_win32_screen_finalize;
+
+  screen_props[PROP_DISPLAY] =
+      g_param_spec_object ("display", NULL, NULL,
+                           GDK_TYPE_DISPLAY,
+                           G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS);
+
+  g_object_class_install_properties (object_class, LAST_PROP, screen_props);
 }
