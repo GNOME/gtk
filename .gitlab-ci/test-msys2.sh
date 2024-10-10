@@ -2,12 +2,6 @@
 
 set -e
 
-if [[ "$MSYSTEM" == "MINGW32" ]]; then
-    export MSYS2_ARCH="i686"
-else
-    export MSYS2_ARCH="x86_64"
-fi
-
 # Update everything
 pacman --noconfirm -Suy
 
@@ -15,27 +9,27 @@ pacman --noconfirm -Suy
 pacman --noconfirm -S --needed \
     base-devel \
     git \
-    mingw-w64-$MSYS2_ARCH-cc \
-    mingw-w64-$MSYS2_ARCH-ccache \
-    mingw-w64-$MSYS2_ARCH-pkgconf \
-    mingw-w64-$MSYS2_ARCH-gobject-introspection \
-    mingw-w64-$MSYS2_ARCH-meson \
-    mingw-w64-$MSYS2_ARCH-adwaita-icon-theme \
-    mingw-w64-$MSYS2_ARCH-atk \
-    mingw-w64-$MSYS2_ARCH-cairo \
-    mingw-w64-$MSYS2_ARCH-gdk-pixbuf2 \
-    mingw-w64-$MSYS2_ARCH-glib2 \
-    mingw-w64-$MSYS2_ARCH-graphene \
-    mingw-w64-$MSYS2_ARCH-json-glib \
-    mingw-w64-$MSYS2_ARCH-libepoxy \
-    mingw-w64-$MSYS2_ARCH-pango \
-    mingw-w64-$MSYS2_ARCH-fribidi \
-    mingw-w64-$MSYS2_ARCH-gst-plugins-bad-libs \
-    mingw-w64-$MSYS2_ARCH-shared-mime-info \
-    mingw-w64-$MSYS2_ARCH-python-gobject \
-    mingw-w64-$MSYS2_ARCH-shaderc \
-    mingw-w64-$MSYS2_ARCH-vulkan \
-    mingw-w64-$MSYS2_ARCH-vulkan-headers
+    ${MINGW_PACKAGE_PREFIX}-cc \
+    ${MINGW_PACKAGE_PREFIX}-ccache \
+    ${MINGW_PACKAGE_PREFIX}-pkgconf \
+    ${MINGW_PACKAGE_PREFIX}-gobject-introspection \
+    ${MINGW_PACKAGE_PREFIX}-meson \
+    ${MINGW_PACKAGE_PREFIX}-adwaita-icon-theme \
+    ${MINGW_PACKAGE_PREFIX}-atk \
+    ${MINGW_PACKAGE_PREFIX}-cairo \
+    ${MINGW_PACKAGE_PREFIX}-gdk-pixbuf2 \
+    ${MINGW_PACKAGE_PREFIX}-glib2 \
+    ${MINGW_PACKAGE_PREFIX}-graphene \
+    ${MINGW_PACKAGE_PREFIX}-json-glib \
+    ${MINGW_PACKAGE_PREFIX}-libepoxy \
+    ${MINGW_PACKAGE_PREFIX}-pango \
+    ${MINGW_PACKAGE_PREFIX}-fribidi \
+    ${MINGW_PACKAGE_PREFIX}-gst-plugins-bad-libs \
+    ${MINGW_PACKAGE_PREFIX}-shared-mime-info \
+    ${MINGW_PACKAGE_PREFIX}-python-gobject \
+    ${MINGW_PACKAGE_PREFIX}-shaderc \
+    ${MINGW_PACKAGE_PREFIX}-vulkan \
+    ${MINGW_PACKAGE_PREFIX}-vulkan-headers
 
 mkdir -p _ccache
 export CCACHE_BASEDIR="$(pwd)"

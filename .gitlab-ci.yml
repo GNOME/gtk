@@ -198,11 +198,11 @@ fedora-mingw64:
       - subprojects/libepoxy/
       - subprojects/pango/
 
-msys2-mingw64:
+msys2-ucrt64:
   extends: .mingw-defaults
   needs: []
   variables:
-    MSYSTEM: "MINGW64"
+    MSYSTEM: "UCRT64"
     CHERE_INVOKING: "yes"
   artifacts:
     when: always
