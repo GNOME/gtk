@@ -31,9 +31,6 @@
 
 #include <gdk/gdk.h>
 
-#ifndef STRICT
-#define STRICT			/* We want strict type checks */
-#endif
 #include <windows.h>
 #include <commctrl.h>
 
@@ -49,23 +46,6 @@ G_BEGIN_DECLS
 #define GDK_SURFACE_HWND(d) (gdk_win32_surface_get_handle (d))
 
 #endif /* INSIDE_GDK_WIN32 */
-
-/* These need to be here so gtkstatusicon.c can pick them up if needed. */
-#ifndef WM_XBUTTONDOWN
-#define WM_XBUTTONDOWN 0x020B
-#endif
-#ifndef WM_XBUTTONUP
-#define WM_XBUTTONUP 0x020C
-#endif
-#ifndef GET_XBUTTON_WPARAM
-#define GET_XBUTTON_WPARAM(w) (HIWORD(w))
-#endif
-#ifndef XBUTTON1
-#define XBUTTON1 1
-#endif
-#ifndef XBUTTON2
-#define XBUTTON2 2
-#endif
 
 GDK_DEPRECATED_IN_4_8_FOR(GDK_IS_WIN32_SURFACE)
 gboolean      gdk_win32_surface_is_win32 (GdkSurface *surface);

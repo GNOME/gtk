@@ -40,16 +40,7 @@
 #include "gtk/deprecated/gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
-/* avoid warning */
-#ifdef STRICT
-# undef STRICT
-# include <pango/pangowin32.h>
-# ifndef STRICT
-#   define STRICT 1
-# endif
-#else /* STRICT */
-#   include <pango/pangowin32.h>
-#endif /* STRICT */
+#include <pango/pangowin32.h>
 
 /* Determines what happens when focus is lost while preedit is in process. */
 typedef enum {

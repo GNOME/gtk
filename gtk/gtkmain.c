@@ -43,9 +43,7 @@
 #include <sys/types.h>          /* For uid_t, gid_t */
 
 #ifdef G_OS_WIN32
-#define STRICT
 #include <windows.h>
-#undef STRICT
 #endif
 
 #include <hb-glib.h>

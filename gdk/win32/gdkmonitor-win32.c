@@ -124,10 +124,6 @@ typedef LONG
 typedef LONG
 (WINAPI *funcDisplayConfigGetDeviceInfo) (DISPLAYCONFIG_DEVICE_INFO_HEADER* requestPacket);
 
-#ifndef MONITORINFOF_PRIMARY
-#define MONITORINFOF_PRIMARY 1
-#endif
-
 #define G_GUID_FORMAT "%08lX-%04X-%04X-%02X%02X-%02X%02X%02X%02X%02X%02X"
 #define g_format_guid(guid) (guid)->Data1, \
                             (guid)->Data2, \
