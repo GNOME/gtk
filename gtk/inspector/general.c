@@ -469,7 +469,7 @@ init_gl (GtkInspectorGeneral *gen)
   gdk_gl_context_make_current (context);
   gdk_gl_context_get_version (context, &major, &minor);
   s = g_strdup_printf ("%s %u.%u",
-                       gdk_gl_context_get_use_es (context) ? "GLES " : "OpenGL ", 
+                       gdk_gl_context_get_use_es (context) ? "GLES " : "OpenGL ",
                        major, minor);
   gtk_label_set_text (GTK_LABEL (gen->gl_version), s);
   g_free (s);
@@ -952,7 +952,6 @@ add_tool (GtkInspectorGeneral *gen,
   GdkAxisFlags axes;
   GString *str;
   char *val;
-  int i;
   GEnumClass *eclass;
   GEnumValue *evalue;
   GFlagsClass *fclass;
@@ -970,15 +969,12 @@ add_tool (GtkInspectorGeneral *gen,
   fclass = g_type_class_ref (GDK_TYPE_AXIS_FLAGS);
   str = g_string_new ("");
   axes = gdk_device_tool_get_axes (tool);
-  for (i = GDK_AXIS_X; i < GDK_AXIS_LAST; i++)
+  while ((fvalue = g_flags_get_first_value (fclass, axes)))
     {
-      if ((axes & (1 << i)) != 0)
-        {
-          fvalue = g_flags_get_first_value (fclass, i);
-          if (str->len > 0)
-            g_string_append (str, ", ");
-          g_string_append (str, fvalue->value_nick);
-        }
+      if (str->len > 0)
+        g_string_append (str, ", ");
+      g_string_append (str, fvalue->value_nick);
+      axes &= ~fvalue->value;
     }
   g_type_class_unref (fclass);
 
