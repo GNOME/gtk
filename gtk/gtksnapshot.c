@@ -2571,7 +2571,7 @@ gtk_snapshot_append_linear_gradient2 (GtkSnapshot             *snapshot,
   graphene_rect_t real_bounds;
   float scale_x, scale_y, dx, dy;
   const GdkColor *first_color;
-  gboolean need_gradient = FALSE;
+  gboolean need_gradient = TRUE;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (start_point != NULL);
@@ -2585,13 +2585,17 @@ gtk_snapshot_append_linear_gradient2 (GtkSnapshot             *snapshot,
                                          &dx, &dy);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
 
-  first_color = &stops[0].color;
-  for (gsize i = 1; i < n_stops; i ++)
+  if (hue_interpolation != GSK_HUE_INTERPOLATION_LONGER)
     {
-      if (!gdk_color_equal (first_color, &stops[i].color))
+      need_gradient = FALSE;
+      first_color = &stops[0].color;
+      for (gsize i = 1; i < n_stops; i ++)
         {
-          need_gradient = TRUE;
-          break;
+          if (!gdk_color_equal (first_color, &stops[i].color))
+            {
+              need_gradient = TRUE;
+              break;
+            }
         }
     }
 
@@ -2685,7 +2689,7 @@ gtk_snapshot_append_repeating_linear_gradient2 (GtkSnapshot             *snapsho
   GskRenderNode *node;
   graphene_rect_t real_bounds;
   float scale_x, scale_y, dx, dy;
-  gboolean need_gradient = FALSE;
+  gboolean need_gradient = TRUE;
   const GdkColor *first_color;
 
   g_return_if_fail (snapshot != NULL);
@@ -2697,13 +2701,17 @@ gtk_snapshot_append_repeating_linear_gradient2 (GtkSnapshot             *snapsho
   gtk_snapshot_ensure_affine (snapshot, &scale_x, &scale_y, &dx, &dy);
   gtk_graphene_rect_scale_affine (bounds, scale_x, scale_y, dx, dy, &real_bounds);
 
-  first_color = &stops[0].color;
-  for (gsize i = 1; i < n_stops; i ++)
+  if (hue_interpolation != GSK_HUE_INTERPOLATION_LONGER)
     {
-      if (!gdk_color_equal (first_color, &stops[i].color))
+      need_gradient = FALSE;
+      first_color = &stops[0].color;
+      for (gsize i = 1; i < n_stops; i ++)
         {
-          need_gradient = TRUE;
-          break;
+          if (!gdk_color_equal (first_color, &stops[i].color))
+            {
+              need_gradient = TRUE;
+              break;
+            }
         }
     }
 
@@ -2800,7 +2808,7 @@ gtk_snapshot_append_conic_gradient2 (GtkSnapshot             *snapshot,
   graphene_rect_t real_bounds;
   float dx, dy;
   const GdkColor *first_color;
-  gboolean need_gradient = FALSE;
+  gboolean need_gradient = TRUE;
   int i;
 
   g_return_if_fail (snapshot != NULL);
@@ -2811,13 +2819,17 @@ gtk_snapshot_append_conic_gradient2 (GtkSnapshot             *snapshot,
   gtk_snapshot_ensure_translate (snapshot, &dx, &dy);
   graphene_rect_offset_r (bounds, dx, dy, &real_bounds);
 
-  first_color = &stops[0].color;
-  for (i = 1; i < n_stops; i ++)
+  if (hue_interpolation != GSK_HUE_INTERPOLATION_LONGER)
     {
-      if (!gdk_color_equal (first_color, &stops[i].color))
+      need_gradient = FALSE;
+      first_color = &stops[0].color;
+      for (i = 1; i < n_stops; i ++)
         {
-          need_gradient = TRUE;
-          break;
+          if (!gdk_color_equal (first_color, &stops[i].color))
+            {
+              need_gradient = TRUE;
+              break;
+            }
         }
     }
 

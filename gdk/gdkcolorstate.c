@@ -172,6 +172,18 @@ gdk_color_state_get_rec2100_linear (void)
   return GDK_COLOR_STATE_REC2100_LINEAR;
 }
 
+GdkColorState *
+gdk_color_state_get_oklab (void)
+{
+  return GDK_COLOR_STATE_OKLAB;
+}
+
+GdkColorState *
+gdk_color_state_get_oklch (void)
+{
+  return GDK_COLOR_STATE_OKLCH;
+}
+
 /**
  * gdk_color_state_equal:
  * @self: a `GdkColorState`
@@ -223,56 +235,171 @@ gdk_color_state_create_cicp_params (GdkColorState *self)
 /* {{{ Conversion functions */
 
 typedef float (* GdkTransferFunc) (float v);
+typedef void  (* GdkConvertFunc)  (GdkColorState *self,
+                                   float          values[4]);
 typedef const float GdkColorMatrix[9];
 
 #define IDENTITY ((float*)0)
 #define NONE ((GdkTransferFunc)0)
 
-#define TRANSFORM(name, eotf, matrix, oetf) \
+#define CONVERT_FUNC(name) \
 static void \
-name (GdkColorState  *self, \
-      float         (*values)[4], \
-      gsize           n_values) \
+gdk_convert_ ## name (GdkColorState  *self, \
+                      float         (*values)[4], \
+                      gsize           n_values) \
 { \
   for (gsize i = 0; i < n_values; i++) \
     { \
-      if (eotf != NONE) \
-        { \
-          values[i][0] = eotf (values[i][0]); \
-          values[i][1] = eotf (values[i][1]); \
-          values[i][2] = eotf (values[i][2]); \
-        } \
-      if (matrix != IDENTITY) \
-        { \
-          float res[3]; \
-          res[0] = matrix[0] * values[i][0] + matrix[1] * values[i][1] + matrix[2] * values[i][2]; \
-          res[1] = matrix[3] * values[i][0] + matrix[4] * values[i][1] + matrix[5] * values[i][2]; \
-          res[2] = matrix[6] * values[i][0] + matrix[7] * values[i][1] + matrix[8] * values[i][2]; \
-          values[i][0] = res[0]; \
-          values[i][1] = res[1]; \
-          values[i][2] = res[2]; \
-        } \
-      if (oetf != NONE) \
-        { \
-          values[i][0] = oetf (values[i][0]); \
-          values[i][1] = oetf (values[i][1]); \
-          values[i][2] = oetf (values[i][2]); \
-        } \
+      name (self, values[i]); \
     } \
 }
 
-TRANSFORM(gdk_default_srgb_to_srgb_linear,           srgb_eotf, IDENTITY,        NONE);
-TRANSFORM(gdk_default_srgb_linear_to_srgb,           NONE,      IDENTITY,        srgb_oetf)
-TRANSFORM(gdk_default_rec2100_pq_to_rec2100_linear,  pq_eotf,   IDENTITY,        NONE)
-TRANSFORM(gdk_default_rec2100_linear_to_rec2100_pq,  NONE,      IDENTITY,        pq_oetf)
-TRANSFORM(gdk_default_srgb_linear_to_rec2100_linear, NONE,      srgb_to_rec2020, NONE)
-TRANSFORM(gdk_default_rec2100_linear_to_srgb_linear, NONE,      rec2020_to_srgb, NONE)
-TRANSFORM(gdk_default_srgb_to_rec2100_linear,        srgb_eotf, srgb_to_rec2020, NONE)
-TRANSFORM(gdk_default_rec2100_pq_to_srgb_linear,     pq_eotf,   rec2020_to_srgb, NONE)
-TRANSFORM(gdk_default_srgb_linear_to_rec2100_pq,     NONE,      srgb_to_rec2020, pq_oetf)
-TRANSFORM(gdk_default_rec2100_linear_to_srgb,        NONE,      rec2020_to_srgb, srgb_oetf)
-TRANSFORM(gdk_default_srgb_to_rec2100_pq,            srgb_eotf, srgb_to_rec2020, pq_oetf)
-TRANSFORM(gdk_default_rec2100_pq_to_srgb,            pq_eotf,   rec2020_to_srgb, srgb_oetf)
+#define TRANSFORM(name, eotf, matrix, nonlinear, matrix2, oetf) \
+static inline void \
+name (GdkColorState  *self, \
+      float           values[4]) \
+{ \
+  if (eotf != NONE) \
+    { \
+      values[0] = eotf (values[0]); \
+      values[1] = eotf (values[1]); \
+      values[2] = eotf (values[2]); \
+    } \
+  if (matrix != IDENTITY) \
+    { \
+      float res[3]; \
+      res[0] = matrix[0] * values[0] + matrix[1] * values[1] + matrix[2] * values[2]; \
+      res[1] = matrix[3] * values[0] + matrix[4] * values[1] + matrix[5] * values[2]; \
+      res[2] = matrix[6] * values[0] + matrix[7] * values[1] + matrix[8] * values[2]; \
+      values[0] = res[0]; \
+      values[1] = res[1]; \
+      values[2] = res[2]; \
+    } \
+  if (nonlinear != NONE) \
+    { \
+      values[0] = nonlinear (values[0]); \
+      values[1] = nonlinear (values[1]); \
+      values[2] = nonlinear (values[2]); \
+    } \
+  if (matrix2 != IDENTITY) \
+    { \
+      float res[3]; \
+      res[0] = matrix2[0] * values[0] + matrix2[1] * values[1] + matrix2[2] * values[2]; \
+      res[1] = matrix2[3] * values[0] + matrix2[4] * values[1] + matrix2[5] * values[2]; \
+      res[2] = matrix2[6] * values[0] + matrix2[7] * values[1] + matrix2[8] * values[2]; \
+      values[0] = res[0]; \
+      values[1] = res[1]; \
+      values[2] = res[2]; \
+    } \
+  if (oetf != NONE) \
+    { \
+      values[0] = oetf (values[0]); \
+      values[1] = oetf (values[1]); \
+      values[2] = oetf (values[2]); \
+    } \
+} \
+CONVERT_FUNC (name)
+
+#define TRANSFORM_PAIR(name, func1, func2) \
+static inline void \
+name (GdkColorState *self, \
+      float          values[4]) \
+{ \
+  func1 (self, values); \
+  func2 (self, values); \
+} \
+CONVERT_FUNC (name)
+
+TRANSFORM(srgb_to_srgb_linear,           srgb_eotf, IDENTITY,        NONE, IDENTITY, NONE)
+TRANSFORM(srgb_linear_to_srgb,           NONE,      IDENTITY,        NONE, IDENTITY, srgb_oetf)
+TRANSFORM(rec2100_pq_to_rec2100_linear,  pq_eotf,   IDENTITY,        NONE, IDENTITY, NONE)
+TRANSFORM(rec2100_linear_to_rec2100_pq,  NONE,      IDENTITY,        NONE, IDENTITY, pq_oetf)
+TRANSFORM(srgb_linear_to_rec2100_linear, NONE,      srgb_to_rec2020, NONE, IDENTITY, NONE)
+TRANSFORM(rec2100_linear_to_srgb_linear, NONE,      rec2020_to_srgb, NONE, IDENTITY, NONE)
+TRANSFORM(srgb_to_rec2100_linear,        srgb_eotf, srgb_to_rec2020, NONE, IDENTITY, NONE)
+TRANSFORM(rec2100_pq_to_srgb_linear,     pq_eotf,   rec2020_to_srgb, NONE, IDENTITY, NONE)
+TRANSFORM(srgb_linear_to_rec2100_pq,     NONE,      srgb_to_rec2020, NONE, IDENTITY, pq_oetf)
+TRANSFORM(rec2100_linear_to_srgb,        NONE,      rec2020_to_srgb, NONE, IDENTITY, srgb_oetf)
+TRANSFORM(srgb_to_rec2100_pq,            srgb_eotf, srgb_to_rec2020, NONE, IDENTITY, pq_oetf)
+TRANSFORM(rec2100_pq_to_srgb,            pq_eotf,   rec2020_to_srgb, NONE, IDENTITY, srgb_oetf)
+
+TRANSFORM(oklab_to_srgb_linear,          NONE,      oklab_to_lms,    from_oklab_nl, lms_to_srgb,    NONE)
+TRANSFORM(oklab_to_srgb,                 NONE,      oklab_to_lms,    from_oklab_nl, lms_to_srgb,    srgb_oetf)
+TRANSFORM(oklab_to_rec2100_linear,       NONE,      oklab_to_lms,    from_oklab_nl, lms_to_rec2020, NONE)
+TRANSFORM(oklab_to_rec2100_pq,           NONE,      oklab_to_lms,    from_oklab_nl, lms_to_rec2020, pq_oetf)
+TRANSFORM(srgb_linear_to_oklab,          NONE,      srgb_to_lms,     to_oklab_nl,   lms_to_oklab,   NONE)
+TRANSFORM(srgb_to_oklab,                 srgb_eotf, srgb_to_lms,     to_oklab_nl,   lms_to_oklab,   NONE)
+TRANSFORM(rec2100_linear_to_oklab,       NONE,      rec2020_to_lms,  to_oklab_nl,   lms_to_oklab,   NONE)
+TRANSFORM(rec2100_pq_to_oklab,           pq_eotf,   rec2020_to_lms,  to_oklab_nl,   lms_to_oklab,   NONE)
+
+#define DEG_TO_RAD(x) ((x) * G_PI / 180)
+#define RAD_TO_DEG(x) ((x) * 180 / G_PI)
+
+static inline void
+_sincosf (float  angle,
+          float *out_s,
+          float *out_c)
+{
+#ifdef HAVE_SINCOSF
+  sincosf (angle, out_s, out_c);
+#else
+  *out_s = sinf (angle);
+  *out_c = cosf (angle);
+#endif
+}
+
+static void
+oklch_to_oklab (GdkColorState *self,
+                float          values[4])
+{
+  float L, C, H, a, b;
+
+  L = values[0];
+  C = values[1];
+  H = values[2];
+
+  _sincosf (DEG_TO_RAD (H), &b, &a);
+  a *= C;
+  b *= C;
+
+  values[0] = L;
+  values[1] = a;
+  values[2] = b;
+}
+
+static void
+oklab_to_oklch (GdkColorState *self,
+                float          values[4])
+{
+  float L, a, b, C, H;
+
+  L = values[0];
+  a = values[1];
+  b = values[2];
+
+  C = hypotf (a, b);
+  H = RAD_TO_DEG (atan2 (b, a));
+
+  H = fmod (H, 360);
+  if (H < 0)
+    H += 360;
+
+  values[0] = L;
+  values[1] = C;
+  values[2] = H;
+}
+
+CONVERT_FUNC (oklch_to_oklab)
+CONVERT_FUNC (oklab_to_oklch)
+
+TRANSFORM_PAIR (srgb_to_oklch,           srgb_to_oklab,           oklab_to_oklch)
+TRANSFORM_PAIR (srgb_linear_to_oklch,    srgb_linear_to_oklab,    oklab_to_oklch)
+TRANSFORM_PAIR (rec2100_pq_to_oklch,     rec2100_pq_to_oklab,     oklab_to_oklch)
+TRANSFORM_PAIR (rec2100_linear_to_oklch, rec2100_linear_to_oklab, oklab_to_oklch)
+TRANSFORM_PAIR (oklch_to_srgb,           oklch_to_oklab,          oklab_to_srgb)
+TRANSFORM_PAIR (oklch_to_srgb_linear,    oklch_to_oklab,          oklab_to_srgb_linear)
+TRANSFORM_PAIR (oklch_to_rec2100_pq,     oklch_to_oklab,          oklab_to_rec2100_pq)
+TRANSFORM_PAIR (oklch_to_rec2100_linear, oklch_to_oklab,          oklab_to_rec2100_pq)
 
 /* }}} */
 /* {{{ Default implementation */
@@ -327,6 +454,9 @@ static const GdkCicp *
 gdk_default_color_state_get_cicp (GdkColorState *color_state)
 {
   GdkDefaultColorState *self = (GdkDefaultColorState *) color_state;
+
+  if (self->cicp.color_primaries == 0)
+    return NULL;
 
   return &self->cicp;
 }
@@ -419,9 +549,11 @@ GdkDefaultColorState gdk_default_color_states[] = {
     .name = "srgb",
     .no_srgb = GDK_COLOR_STATE_SRGB_LINEAR,
     .convert_to = {
-      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_srgb_to_srgb_linear,
-      [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_default_srgb_to_rec2100_pq,
-      [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_srgb_to_rec2100_linear,
+      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_convert_srgb_to_srgb_linear,
+      [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_convert_srgb_to_rec2100_pq,
+      [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_convert_srgb_to_rec2100_linear,
+      [GDK_COLOR_STATE_ID_OKLAB] = gdk_convert_srgb_to_oklab,
+      [GDK_COLOR_STATE_ID_OKLCH] = gdk_convert_srgb_to_oklch,
     },
     .clamp = gdk_color_state_clamp_0_1,
     .cicp = { 1, 13, 0, 1 },
@@ -437,9 +569,11 @@ GdkDefaultColorState gdk_default_color_states[] = {
     .name = "srgb-linear",
     .no_srgb = NULL,
     .convert_to = {
-      [GDK_COLOR_STATE_ID_SRGB] = gdk_default_srgb_linear_to_srgb,
-      [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_default_srgb_linear_to_rec2100_pq,
-      [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_srgb_linear_to_rec2100_linear,
+      [GDK_COLOR_STATE_ID_SRGB] = gdk_convert_srgb_linear_to_srgb,
+      [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_convert_srgb_linear_to_rec2100_pq,
+      [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_convert_srgb_linear_to_rec2100_linear,
+      [GDK_COLOR_STATE_ID_OKLAB] = gdk_convert_srgb_linear_to_oklab,
+      [GDK_COLOR_STATE_ID_OKLCH] = gdk_convert_srgb_linear_to_oklch,
     },
     .clamp = gdk_color_state_clamp_0_1,
     .cicp = { 1, 8, 0, 1 },
@@ -455,9 +589,11 @@ GdkDefaultColorState gdk_default_color_states[] = {
     .name = "rec2100-pq",
     .no_srgb = NULL,
     .convert_to = {
-      [GDK_COLOR_STATE_ID_SRGB] = gdk_default_rec2100_pq_to_srgb,
-      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_rec2100_pq_to_srgb_linear,
-      [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_default_rec2100_pq_to_rec2100_linear,
+      [GDK_COLOR_STATE_ID_SRGB] = gdk_convert_rec2100_pq_to_srgb,
+      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_convert_rec2100_pq_to_srgb_linear,
+      [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_convert_rec2100_pq_to_rec2100_linear,
+      [GDK_COLOR_STATE_ID_OKLAB] = gdk_convert_rec2100_pq_to_oklab,
+      [GDK_COLOR_STATE_ID_OKLCH] = gdk_convert_rec2100_pq_to_oklch,
     },
     .clamp = gdk_color_state_clamp_0_1,
     .cicp = { 9, 16, 0, 1 },
@@ -473,16 +609,54 @@ GdkDefaultColorState gdk_default_color_states[] = {
     .name = "rec2100-linear",
     .no_srgb = NULL,
     .convert_to = {
-      [GDK_COLOR_STATE_ID_SRGB] = gdk_default_rec2100_linear_to_srgb,
-      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_default_rec2100_linear_to_srgb_linear,
-      [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_default_rec2100_linear_to_rec2100_pq,
+      [GDK_COLOR_STATE_ID_SRGB] = gdk_convert_rec2100_linear_to_srgb,
+      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_convert_rec2100_linear_to_srgb_linear,
+      [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_convert_rec2100_linear_to_rec2100_pq,
+      [GDK_COLOR_STATE_ID_OKLAB] = gdk_convert_rec2100_linear_to_oklab,
+      [GDK_COLOR_STATE_ID_OKLCH] = gdk_convert_rec2100_linear_to_oklch,
     },
     .clamp = gdk_color_state_clamp_unbounded,
     .cicp = { 9, 8, 0, 1 },
   },
+  [GDK_COLOR_STATE_ID_OKLAB] = {
+    .parent = {
+      .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
+      .ref_count = 0,
+      .depth = GDK_MEMORY_FLOAT16,
+      .rendering_color_state = GDK_COLOR_STATE_SRGB,
+    },
+    .name = "oklab",
+    .no_srgb = NULL,
+    .convert_to = {
+      [GDK_COLOR_STATE_ID_SRGB] = gdk_convert_oklab_to_srgb,
+      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_convert_oklab_to_srgb_linear,
+      [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_convert_oklab_to_rec2100_pq,
+      [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_convert_oklab_to_rec2100_linear,
+      [GDK_COLOR_STATE_ID_OKLCH] = gdk_convert_oklab_to_oklch,
+    },
+    .cicp = { 0, 0, 0, 0 },
+  },
+  [GDK_COLOR_STATE_ID_OKLCH] = {
+    .parent = {
+      .klass = &GDK_DEFAULT_COLOR_STATE_CLASS,
+      .ref_count = 0,
+      .depth = GDK_MEMORY_FLOAT16,
+      .rendering_color_state = GDK_COLOR_STATE_SRGB,
+    },
+    .name = "oklch",
+    .no_srgb = NULL,
+    .convert_to = {
+      [GDK_COLOR_STATE_ID_SRGB] = gdk_convert_oklch_to_srgb,
+      [GDK_COLOR_STATE_ID_SRGB_LINEAR] = gdk_convert_oklch_to_srgb_linear,
+      [GDK_COLOR_STATE_ID_REC2100_PQ] = gdk_convert_oklch_to_rec2100_pq,
+      [GDK_COLOR_STATE_ID_REC2100_LINEAR] = gdk_convert_oklch_to_rec2100_linear,
+      [GDK_COLOR_STATE_ID_OKLAB] = gdk_convert_oklch_to_oklab,
+    },
+    .cicp = { 0, 0, 0, 0 },
+  },
 };
 
- /* }}} */
+/* }}} */
 /* {{{ Cicp implementation */
 
 typedef struct _GdkCicpColorState GdkCicpColorState;
@@ -509,16 +683,21 @@ struct _GdkCicpColorState
 
 #define cicp ((GdkCicpColorState *)self)
 
-TRANSFORM(gdk_cicp_to_srgb,             cicp->eotf,  cicp->to_srgb,      srgb_oetf)
-TRANSFORM(gdk_cicp_to_srgb_linear,      cicp->eotf,  cicp->to_srgb,      NONE)
-TRANSFORM(gdk_cicp_to_rec2100_pq,       cicp->eotf,  cicp->to_rec2020,   pq_oetf)
-TRANSFORM(gdk_cicp_to_rec2100_linear,   cicp->eotf,  cicp->to_rec2020,   NONE)
-TRANSFORM(gdk_cicp_from_srgb,           srgb_eotf,   cicp->from_srgb,    cicp->oetf)
-TRANSFORM(gdk_cicp_from_srgb_linear,    NONE,        cicp->from_srgb,    cicp->oetf)
-TRANSFORM(gdk_cicp_from_rec2100_pq,     pq_eotf,     cicp->from_rec2020, cicp->oetf)
-TRANSFORM(gdk_cicp_from_rec2100_linear, NONE,        cicp->from_rec2020, cicp->oetf)
+TRANSFORM(cicp_to_srgb,             cicp->eotf,  cicp->to_srgb,      NONE, IDENTITY, srgb_oetf)
+TRANSFORM(cicp_to_srgb_linear,      cicp->eotf,  cicp->to_srgb,      NONE, IDENTITY, NONE)
+TRANSFORM(cicp_to_rec2100_pq,       cicp->eotf,  cicp->to_rec2020,   NONE, IDENTITY, pq_oetf)
+TRANSFORM(cicp_to_rec2100_linear,   cicp->eotf,  cicp->to_rec2020,   NONE, IDENTITY, NONE)
+TRANSFORM(cicp_from_srgb,           srgb_eotf,   cicp->from_srgb,    NONE, IDENTITY, cicp->oetf)
+TRANSFORM(cicp_from_srgb_linear,    NONE,        cicp->from_srgb,    NONE, IDENTITY, cicp->oetf)
+TRANSFORM(cicp_from_rec2100_pq,     pq_eotf,     cicp->from_rec2020, NONE, IDENTITY, cicp->oetf)
+TRANSFORM(cicp_from_rec2100_linear, NONE,        cicp->from_rec2020, NONE, IDENTITY, cicp->oetf)
 
 #undef cicp
+
+TRANSFORM_PAIR (cicp_to_oklab,   cicp_to_srgb_linear,  srgb_linear_to_oklab)
+TRANSFORM_PAIR (cicp_from_oklab, oklab_to_srgb_linear, cicp_from_srgb_linear)
+TRANSFORM_PAIR (cicp_to_oklch,   cicp_to_srgb_linear,  srgb_linear_to_oklch)
+TRANSFORM_PAIR (cicp_from_oklch, oklch_to_srgb_linear, cicp_from_srgb_linear)
 
 /* }}} */
 /* {{{ Vfuncs */
@@ -572,13 +751,17 @@ gdk_cicp_color_state_get_convert_to (GdkColorState *self,
   switch (GDK_DEFAULT_COLOR_STATE_ID (target))
     {
     case GDK_COLOR_STATE_ID_SRGB:
-      return gdk_cicp_to_srgb;
+      return gdk_convert_cicp_to_srgb;
     case GDK_COLOR_STATE_ID_SRGB_LINEAR:
-      return gdk_cicp_to_srgb_linear;
+      return gdk_convert_cicp_to_srgb_linear;
     case GDK_COLOR_STATE_ID_REC2100_PQ:
-      return gdk_cicp_to_rec2100_pq;
+      return gdk_convert_cicp_to_rec2100_pq;
     case GDK_COLOR_STATE_ID_REC2100_LINEAR:
-      return gdk_cicp_to_rec2100_linear;
+      return gdk_convert_cicp_to_rec2100_linear;
+    case GDK_COLOR_STATE_ID_OKLAB:
+      return gdk_convert_cicp_to_oklab;
+    case GDK_COLOR_STATE_ID_OKLCH:
+      return gdk_convert_cicp_to_oklch;
 
     case GDK_COLOR_STATE_N_IDS:
     default:
@@ -598,13 +781,17 @@ gdk_cicp_color_state_get_convert_from (GdkColorState *self,
   switch (GDK_DEFAULT_COLOR_STATE_ID (source))
     {
     case GDK_COLOR_STATE_ID_SRGB:
-      return gdk_cicp_from_srgb;
+      return gdk_convert_cicp_from_srgb;
     case GDK_COLOR_STATE_ID_SRGB_LINEAR:
-      return gdk_cicp_from_srgb_linear;
+      return gdk_convert_cicp_from_srgb_linear;
     case GDK_COLOR_STATE_ID_REC2100_PQ:
-      return gdk_cicp_from_rec2100_pq;
+      return gdk_convert_cicp_from_rec2100_pq;
     case GDK_COLOR_STATE_ID_REC2100_LINEAR:
-      return gdk_cicp_from_rec2100_linear;
+      return gdk_convert_cicp_from_rec2100_linear;
+    case GDK_COLOR_STATE_ID_OKLAB:
+      return gdk_convert_cicp_from_oklab;
+    case GDK_COLOR_STATE_ID_OKLCH:
+      return gdk_convert_cicp_from_oklch;
 
     case GDK_COLOR_STATE_N_IDS:
     default:

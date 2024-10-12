@@ -111,6 +111,54 @@ const mat3 rec2020_from_srgb = mat3(
   0.043303, 0.011360, 0.895380
 );
 
+const mat3 oklab_to_lms = mat3(
+  1.0,           1.0,           1.0,
+  0.3963377774, -0.1055613458, -0.0894841775,
+  0.2158037573, -0.0638541728, -1.2914855480
+);
+
+const mat3 lms_to_srgb = mat3(
+  4.0767416621, -1.2684380046, -0.0041960863,
+ -3.3077115913,  2.6097574011, -0.7034186147,
+  0.2309699292, -0.3413193965,  1.7076147010
+);
+
+const mat3 srgb_to_lms = mat3(
+  0.4122214708, 0.2119034982, 0.0883024619,
+  0.5363325363, 0.6806995451, 0.2817188376,
+  0.0514459929, 0.1073969566, 0.6299787005
+);
+
+const mat3 lms_to_oklab = mat3(
+  0.2104542553,  1.9779984951,  0.0259040371,
+  0.7936177850, -2.4285922050,  0.7827717662,
+ -0.0040720468,  0.4505937099, -0.8086757660
+);
+
+vec3
+oklab_to_srgb_linear (vec3 color)
+{
+  vec3 lms = oklab_to_lms * color;
+
+  lms = vec3 (pow (lms.r, 3.0),
+              pow (lms.g, 3.0),
+              pow (lms.b, 3.0));
+
+  return lms_to_srgb * lms;
+}
+
+vec3
+srgb_linear_to_oklab (vec3 color)
+{
+  vec3 lms = srgb_to_lms * color;
+
+  lms = vec3 (pow (lms.r, 1.0/3.0),
+              pow (lms.g, 1.0/3.0),
+              pow (lms.b, 1.0/3.0));
+
+  return lms_to_oklab * lms;
+}
+
 vec3
 apply_eotf (vec3 color,
             uint cs)
@@ -130,6 +178,9 @@ apply_eotf (vec3 color,
     case GDK_COLOR_STATE_ID_SRGB_LINEAR:
     case GDK_COLOR_STATE_ID_REC2100_LINEAR:
       return color;
+
+    case GDK_COLOR_STATE_ID_OKLAB:
+      return oklab_to_srgb_linear (color);
 
     default:
       return vec3(1.0, 0.0, 0.8);
@@ -155,6 +206,9 @@ apply_oetf (vec3 color,
     case GDK_COLOR_STATE_ID_SRGB_LINEAR:
     case GDK_COLOR_STATE_ID_REC2100_LINEAR:
       return color;
+
+    case GDK_COLOR_STATE_ID_OKLAB:
+      return srgb_linear_to_oklab (color);
 
     default:
       return vec3(0.0, 1.0, 0.8);
@@ -183,8 +237,69 @@ linear_color_space (uint cs)
     case GDK_COLOR_STATE_ID_SRGB_LINEAR:    return GDK_COLOR_STATE_ID_SRGB_LINEAR;
     case GDK_COLOR_STATE_ID_REC2100_PQ:     return GDK_COLOR_STATE_ID_REC2100_LINEAR;
     case GDK_COLOR_STATE_ID_REC2100_LINEAR: return GDK_COLOR_STATE_ID_REC2100_LINEAR;
+    case GDK_COLOR_STATE_ID_OKLAB:          return GDK_COLOR_STATE_ID_SRGB_LINEAR;
+    case GDK_COLOR_STATE_ID_OKLCH:          return GDK_COLOR_STATE_ID_SRGB_LINEAR;
     default:                                return 0u;
   };
+}
+
+uint
+rectangular_color_space (uint cs)
+{
+  if (cs == GDK_COLOR_STATE_ID_OKLCH)
+    return GDK_COLOR_STATE_ID_OKLAB;
+  else
+    return cs;
+}
+
+#define M_PI 3.14159265358979323846
+#define RAD_TO_DEG(x) ((x)*180.0/M_PI)
+#define DEG_TO_RAD(x) ((x)*M_PI/180.0)
+
+float
+normalize_hue (float h)
+{
+  while (h < 0.0)
+    h += 360.0;
+  while (h > 360.0)
+    h -= 360.0;
+  return h;
+}
+
+vec3
+oklch_to_oklab (vec3 color)
+{
+  color.z = normalize_hue (color.z);
+
+  return vec3 (color.x,
+               color.y * cos (DEG_TO_RAD (color.z)),
+               color.y * sin (DEG_TO_RAD (color.z)));
+}
+
+vec3
+oklab_to_oklch (vec3 color)
+{
+  return vec3 (color.x,
+               length (color.yz),
+               RAD_TO_DEG (atan (color.z, color.y)));
+}
+
+vec3
+to_rect (vec3 color, uint from)
+{
+  if (from == GDK_COLOR_STATE_ID_OKLCH)
+    return oklch_to_oklab (color);
+  else
+    return vec3(1, 0, 0.5);
+}
+
+vec3
+to_polar (vec3 color, uint to)
+{
+  if (to == GDK_COLOR_STATE_ID_OKLCH)
+    return oklab_to_oklch (color);
+  else
+    return vec3(1, 0, 0.5);
 }
 
 vec4
@@ -199,17 +314,25 @@ convert_color (vec4 color,
 
   if (from != to)
     {
-      uint from_linear = linear_color_space (from);
-      uint to_linear = linear_color_space (to);
+      uint from_rectangular = rectangular_color_space (from);
+      uint to_rectangular = rectangular_color_space (to);
+      uint from_linear = linear_color_space (from_rectangular);
+      uint to_linear = linear_color_space (to_rectangular);
 
-      if (from_linear != from)
-        color.rgb = apply_eotf (color.rgb, from);
+      if (from_rectangular != from)
+        color.rgb = to_rect (color.rgb, from);
+
+      if (from_linear != from_rectangular)
+        color.rgb = apply_eotf (color.rgb, from_rectangular);
 
       if (from_linear != to_linear)
         color.rgb = convert_linear (color.rgb, from_linear, to_linear);
 
-      if (to_linear != to)
-        color.rgb = apply_oetf (color.rgb, to);
+      if (to_linear != to_rectangular)
+        color.rgb = apply_oetf (color.rgb, to_rectangular);
+
+      if (to_rectangular != to)
+        color.rgb = to_polar (color.rgb, to);
     }
 
   if (to_premul && (!from_premul || from != to))
