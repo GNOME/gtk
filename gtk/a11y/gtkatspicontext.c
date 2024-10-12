@@ -858,19 +858,18 @@ emit_property_changed (GtkAtSpiContext *self,
                        const char      *name,
                        GVariant        *value)
 {
-  if (self->connection == NULL || !gtk_at_spi_root_has_event_listeners (self->root))
-    return;
-
   GVariant *value_owned = g_variant_ref_sink (value);
 
-  g_dbus_connection_emit_signal (self->connection,
-                                 NULL,
-                                 self->context_path,
-                                 "org.a11y.atspi.Event.Object",
-                                 "PropertyChange",
-                                 g_variant_new ("(siiva{sv})",
-                                                name, 0, 0, value_owned, NULL),
-                                 NULL);
+  if (self->connection != NULL && gtk_at_spi_root_has_event_listeners (self->root))
+    g_dbus_connection_emit_signal (self->connection,
+                                   NULL,
+                                   self->context_path,
+                                   "org.a11y.atspi.Event.Object",
+                                   "PropertyChange",
+                                   g_variant_new ("(siiva{sv})",
+                                                  name, 0, 0, value_owned, NULL),
+                                   NULL);
+
   g_variant_unref (value_owned);
 }
 
