@@ -23,6 +23,7 @@
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtkcsstypesprivate.h"
 #include "gdk/gdkcolorprivate.h"
+#include "gsk/gskrendernodeprivate.h"
 
 G_BEGIN_DECLS
 
@@ -106,6 +107,8 @@ void gtk_css_color_space_get_coord_range (GtkCssColorSpace  color_space,
                                           float            *lower,
                                           float            *upper);
 
+GdkColorState *gtk_css_color_space_get_color_state (GtkCssColorSpace color_space);
+
 gboolean gtk_css_color_interpolation_method_can_parse (GtkCssParser *parser);
 
 gboolean gtk_css_color_interpolation_method_parse (GtkCssParser           *parser,
@@ -115,6 +118,8 @@ gboolean gtk_css_color_interpolation_method_parse (GtkCssParser           *parse
 void gtk_css_color_interpolation_method_print (GtkCssColorSpace        in,
                                                GtkCssHueInterpolation  interp,
                                                GString                *string);
+
+GskHueInterpolation gtk_css_hue_interpolation_to_hue_interpolation (GtkCssHueInterpolation interp);
 
 static inline gboolean
 gtk_css_color_is_clear (const GtkCssColor *color)

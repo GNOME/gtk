@@ -27,6 +27,7 @@
 #include "gtkcssnumbervalueprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkcssprovider.h"
+#include "gtksnapshotprivate.h"
 
 G_DEFINE_TYPE (GtkCssImageLinear, _gtk_css_image_linear, GTK_TYPE_CSS_IMAGE)
 
@@ -140,7 +141,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
                                double       height)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
-  GskColorStop *stops;
+  GskColorStop2 *stops;
   double angle; /* actual angle of the gradient line in degrees */
   double x, y; /* coordinates of start point */
   double length; /* distance in pixels for 100% */
@@ -192,13 +193,15 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
            * get the color of the last color stop
            */
           const GtkCssImageLinearColorStop *stop = &linear->color_stops[linear->n_stops - 1];
-          const GdkRGBA *color;
+          GdkColor color;
 
-          color = gtk_css_color_value_get_rgba (stop->color);
+          gtk_css_color_to_color (gtk_css_color_value_get_color (stop->color), &color);
 
-          gtk_snapshot_append_color (snapshot,
-                                     color,
-                                     &GRAPHENE_RECT_INIT (0, 0, width, height));
+          gtk_snapshot_append_color2 (snapshot,
+                                      &color,
+                                      &GRAPHENE_RECT_INIT (0, 0, width, height));
+
+          gdk_color_finish (&color);
           return;
         }
     }
@@ -210,7 +213,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
 
   offset = start;
   last = -1;
-  stops = g_newa (GskColorStop, linear->n_stops);
+  stops = g_newa (GskColorStop2, linear->n_stops);
 
   for (i = 0; i < linear->n_stops; i++)
     {
@@ -240,7 +243,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
 
           offset += step;
 
-          stops[last].color = *gtk_css_color_value_get_rgba (stop->color);
+          gtk_css_color_to_color (gtk_css_color_value_get_color (stop->color), &stops[last].color);
 
           stops[last].offset = (offset - start) / (end - start);
         }
@@ -253,25 +256,26 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
 
   if (linear->repeating)
-    {
-      gtk_snapshot_append_repeating_linear_gradient (
-          snapshot,
-          &GRAPHENE_RECT_INIT (0, 0, width, height),
-          &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
-          &GRAPHENE_POINT_INIT (width / 2 + x * (end - 0.5),   height / 2 + y * (end - 0.5)),
-          stops,
-          linear->n_stops);
-    }
+    gtk_snapshot_append_repeating_linear_gradient2 (
+        snapshot,
+        &GRAPHENE_RECT_INIT (0, 0, width, height),
+        &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
+        &GRAPHENE_POINT_INIT (width / 2 + x * (end - 0.5),   height / 2 + y * (end - 0.5)),
+        gtk_css_color_space_get_color_state (linear->color_space),
+        gtk_css_hue_interpolation_to_hue_interpolation (linear->hue_interp),
+        stops, linear->n_stops);
   else
-    {
-      gtk_snapshot_append_linear_gradient (
-          snapshot,
-          &GRAPHENE_RECT_INIT (0, 0, width, height),
-          &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
-          &GRAPHENE_POINT_INIT (width / 2 + x * (end - 0.5),   height / 2 + y * (end - 0.5)),
-          stops,
-          linear->n_stops);
-    }
+    gtk_snapshot_append_linear_gradient2 (
+        snapshot,
+        &GRAPHENE_RECT_INIT (0, 0, width, height),
+        &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
+        &GRAPHENE_POINT_INIT (width / 2 + x * (end - 0.5),   height / 2 + y * (end - 0.5)),
+        gtk_css_color_space_get_color_state (linear->color_space),
+        gtk_css_hue_interpolation_to_hue_interpolation (linear->hue_interp),
+        stops, linear->n_stops);
+
+  for (i = 0; i < linear->n_stops; i++)
+    gdk_color_finish (&stops[i].color);
 }
 
 static guint
