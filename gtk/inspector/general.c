@@ -697,8 +697,8 @@ add_wayland_protocols (GdkDisplay          *display,
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->viewporter);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->presentation);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->single_pixel_buffer);
-      if (d->color)
-        append_wayland_protocol_row (gen, gdk_wayland_color_get_color_manager (d->color));
+      append_wayland_protocol_row (gen, d->color ? gdk_wayland_color_get_color_manager (d->color) : NULL);
+      append_wayland_protocol_row (gen, (struct wl_proxy *)d->system_bell);
     }
 }
 #endif

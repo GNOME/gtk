@@ -548,6 +548,12 @@ gdk_registry_handle_global (void               *data,
                           &wp_single_pixel_buffer_manager_v1_interface,
                           MIN (version, 1));
     }
+  else if (strcmp (interface, xdg_system_bell_v1_interface.name) == 0)
+    {
+      display_wayland->system_bell =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &xdg_system_bell_v1_interface, 1);
+    }
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));
@@ -768,6 +774,7 @@ gdk_wayland_display_dispose (GObject *object)
   g_clear_pointer (&display_wayland->linux_dmabuf, zwp_linux_dmabuf_v1_destroy);
   g_clear_pointer (&display_wayland->dmabuf_formats_info, dmabuf_formats_info_free);
   g_clear_pointer (&display_wayland->color, gdk_wayland_color_free);
+  g_clear_pointer (&display_wayland->system_bell, xdg_system_bell_v1_destroy);
 
   g_clear_pointer (&display_wayland->shm, wl_shm_destroy);
   g_clear_pointer (&display_wayland->wl_registry, wl_registry_destroy);
@@ -814,23 +821,32 @@ gdk_wayland_display_get_name (GdkDisplay *display)
 
 void
 gdk_wayland_display_system_bell (GdkDisplay *display,
-                                 GdkSurface  *window)
+                                 GdkSurface *surface)
 {
   GdkWaylandDisplay *display_wayland;
-  struct gtk_surface1 *gtk_surface;
+  struct gtk_surface1 *gtk_surface = NULL;
+  struct wl_surface *wl_surface = NULL;
   gint64 now_ms;
 
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
-  if (!display_wayland->gtk_shell)
+  if (!display_wayland->gtk_shell &&
+      !display_wayland->system_bell)
     return;
 
-  if (window && GDK_IS_WAYLAND_TOPLEVEL (window))
-    gtk_surface = gdk_wayland_toplevel_get_gtk_surface (GDK_WAYLAND_TOPLEVEL (window));
-  else
-    gtk_surface = NULL;
+  if (surface)
+    {
+      if (GDK_IS_WAYLAND_TOPLEVEL (surface))
+        {
+          GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
+
+          gtk_surface = gdk_wayland_toplevel_get_gtk_surface (toplevel);
+        }
+
+      wl_surface = gdk_wayland_surface_get_wl_surface (surface);
+    }
 
   now_ms = g_get_monotonic_time () / 1000;
   if (now_ms - display_wayland->last_bell_time_ms < MIN_SYSTEM_BELL_DELAY_MS)
@@ -838,7 +854,10 @@ gdk_wayland_display_system_bell (GdkDisplay *display,
 
   display_wayland->last_bell_time_ms = now_ms;
 
-  gtk_shell1_system_bell (display_wayland->gtk_shell, gtk_surface);
+  if (display_wayland->system_bell)
+    xdg_system_bell_v1_ring (display_wayland->system_bell, wl_surface);
+  else
+    gtk_shell1_system_bell (display_wayland->gtk_shell, gtk_surface);
 }
 
 static void
