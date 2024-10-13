@@ -698,6 +698,19 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
         {
           GError *error = NULL;
 
+          if (acquire_result == VK_SUBOPTIMAL_KHR)
+            {
+              const VkPipelineStageFlags mask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+              VkSubmitInfo submit_info = {};
+              submit_info.sType = VK_STRUCTURE_TYPE_SUBMIT_INFO;
+              submit_info.waitSemaphoreCount = 1;
+              submit_info.pWaitSemaphores = &priv->draw_semaphore;
+              submit_info.pWaitDstStageMask = &mask;
+
+              vkQueueSubmit (gdk_vulkan_context_get_queue (context),
+                             1, &submit_info, VK_NULL_HANDLE);
+            }
+
           if (gdk_vulkan_context_check_swapchain (context, &error))
             continue;
 
