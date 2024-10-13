@@ -151,6 +151,11 @@ proto_sources = [
     'stability': 'private',
     'version': 4,
   },
+  {
+    'name': 'xdg-system-bell',
+    'stability': 'private',
+    'version': 1,
+  },
 ]
 
 gdk_wayland_gen_headers = []

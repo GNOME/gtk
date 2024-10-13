@@ -469,7 +469,7 @@ init_gl (GtkInspectorGeneral *gen)
   gdk_gl_context_make_current (context);
   gdk_gl_context_get_version (context, &major, &minor);
   s = g_strdup_printf ("%s %u.%u",
-                       gdk_gl_context_get_use_es (context) ? "GLES " : "OpenGL ", 
+                       gdk_gl_context_get_use_es (context) ? "GLES " : "OpenGL ",
                        major, minor);
   gtk_label_set_text (GTK_LABEL (gen->gl_version), s);
   g_free (s);
@@ -697,8 +697,8 @@ add_wayland_protocols (GdkDisplay          *display,
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->viewporter);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->presentation);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->single_pixel_buffer);
-      if (d->color)
-        append_wayland_protocol_row (gen, gdk_wayland_color_get_color_manager (d->color));
+      append_wayland_protocol_row (gen, d->color ? gdk_wayland_color_get_color_manager (d->color) : NULL);
+      append_wayland_protocol_row (gen, (struct wl_proxy *)d->system_bell);
     }
 }
 #endif
