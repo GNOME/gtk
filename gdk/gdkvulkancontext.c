@@ -566,11 +566,19 @@ physical_device_supports_extension (VkPhysicalDevice  device,
 {
   VkExtensionProperties *extensions;
   uint32_t n_device_extensions;
+  static gboolean first = TRUE;
 
   GDK_VK_CHECK (vkEnumerateDeviceExtensionProperties, device, NULL, &n_device_extensions, NULL);
 
   extensions = g_newa (VkExtensionProperties, n_device_extensions);
   GDK_VK_CHECK (vkEnumerateDeviceExtensionProperties, device, NULL, &n_device_extensions, extensions);
+
+  if (first)
+    {
+      first = FALSE;
+      for (uint32_t i = 0; i < n_device_extensions; i++)
+        g_print ("%s\n", extensions[i].extensionName);
+    }
 
   for (uint32_t i = 0; i < n_device_extensions; i++)
     {
@@ -712,6 +720,22 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
                              },
                              VK_NULL_HANDLE);
               vkQueueWaitIdle (gdk_vulkan_context_get_queue (context));
+
+              if (gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
+                {
+                  PFN_vkReleaseSwapchainImagesEXT vkReleaseSwapchainImagesEXT;
+
+                  vkReleaseSwapchainImagesEXT = (PFN_vkReleaseSwapchainImagesEXT) vkGetDeviceProcAddr (gdk_vulkan_context_get_device (context), "vkReleaseSwapchainImagesEXT");
+
+                  vkReleaseSwapchainImagesEXT (gdk_vulkan_context_get_device (context),
+                                            &(VkReleaseSwapchainImagesInfoEXT) {
+                                              .sType = VK_STRUCTURE_TYPE_RELEASE_SWAPCHAIN_IMAGES_INFO_EXT,
+                                              .pNext = NULL,
+                                              .swapchain = priv->swapchain,
+                                              .imageIndexCount = 1,
+                                              .pImageIndices = &priv->draw_index,
+                                            });
+                }
             }
 
           if (gdk_vulkan_context_check_swapchain (context, &error))
