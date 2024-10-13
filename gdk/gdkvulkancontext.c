@@ -419,6 +419,10 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   VkDevice device;
   guint i;
 
+  GDK_DEBUG (VULKAN, "(Re)creating the swapchain for surface of size %dx%d",
+             gdk_surface_get_width (surface),
+             gdk_surface_get_height (surface));
+
   device = gdk_vulkan_context_get_device (context);
 
   /*
@@ -456,6 +460,10 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 
   GDK_DEBUG (VULKAN, "Using surface present mode %s",
              surface_present_mode_to_string (present_mode));
+  GDK_DEBUG (VULKAN, "Using extent %dx%d",
+             capabilities.currentExtent.width,
+             capabilities.currentExtent.height);
+
 
   /*
    * Per https://www.khronos.org/registry/vulkan/specs/1.0-wsi_extensions/xhtml/vkspec.html#VkSurfaceCapabilitiesKHR
@@ -468,6 +476,10 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 
       capabilities.currentExtent.width = MAX (1, (int) ceil (gdk_surface_get_width (surface) * scale));
       capabilities.currentExtent.height = MAX (1, (int) ceil (gdk_surface_get_height (surface) * scale));
+
+      GDK_DEBUG (VULKAN, "Effective extent %dx%d",
+                 capabilities.currentExtent.width,
+                 capabilities.currentExtent.height);
     }
 
   res = GDK_VK_CHECK (vkCreateSwapchainKHR, device,
@@ -685,8 +697,6 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
           (acquire_result == VK_SUBOPTIMAL_KHR))
         {
           GError *error = NULL;
-
-          GDK_DEBUG (VULKAN, "Recreating the swapchain");
 
           if (gdk_vulkan_context_check_swapchain (context, &error))
             continue;
