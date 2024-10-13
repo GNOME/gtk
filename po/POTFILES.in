@@ -68,7 +68,6 @@ gtk/css/gtkcssdataurl.c
 gtk/deprecated/gtkappchooserbutton.c
 gtk/deprecated/gtkappchooser.c
 gtk/deprecated/gtkappchooserdialog.c
-gtk/deprecated/gtkappchooserwidget.c
 gtk/deprecated/gtkassistant.c
 gtk/deprecated/gtkcellareabox.c
 gtk/deprecated/gtkcellarea.c
@@ -118,6 +117,7 @@ gtk/gtkactionbar.c
 gtk/gtkactionmuxer.c
 gtk/gtkadjustment.c
 gtk/gtkalertdialog.c
+gtk/gtkappchooserwidget.c
 gtk/gtkapplication.c
 gtk/gtkapplication-dbus.c
 gtk/gtkapplication-quartz.c

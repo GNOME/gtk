@@ -41,7 +41,7 @@
 #include <gtk/gtkalertdialog.h>
 #include <gtk/deprecated/gtkappchooser.h>
 #include <gtk/deprecated/gtkappchooserdialog.h>
-#include <gtk/deprecated/gtkappchooserwidget.h>
+#include <gtk/gtkappchooserwidget.h>
 #include <gtk/deprecated/gtkappchooserbutton.h>
 #include <gtk/gtkapplication.h>
 #include <gtk/gtkapplicationwindow.h>
