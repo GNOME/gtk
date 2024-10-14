@@ -419,6 +419,10 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   VkDevice device;
   guint i;
 
+  GDK_DEBUG (VULKAN, "(Re)creating the swapchain for surface of size %dx%d",
+             gdk_surface_get_width (surface),
+             gdk_surface_get_height (surface));
+
   device = gdk_vulkan_context_get_device (context);
 
   /*
@@ -456,6 +460,10 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 
   GDK_DEBUG (VULKAN, "Using surface present mode %s",
              surface_present_mode_to_string (present_mode));
+  GDK_DEBUG (VULKAN, "Using extent %dx%d",
+             capabilities.currentExtent.width,
+             capabilities.currentExtent.height);
+
 
   /*
    * Per https://www.khronos.org/registry/vulkan/specs/1.0-wsi_extensions/xhtml/vkspec.html#VkSurfaceCapabilitiesKHR
@@ -468,6 +476,10 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 
       capabilities.currentExtent.width = MAX (1, (int) ceil (gdk_surface_get_width (surface) * scale));
       capabilities.currentExtent.height = MAX (1, (int) ceil (gdk_surface_get_height (surface) * scale));
+
+      GDK_DEBUG (VULKAN, "Effective extent %dx%d",
+                 capabilities.currentExtent.width,
+                 capabilities.currentExtent.height);
     }
 
   res = GDK_VK_CHECK (vkCreateSwapchainKHR, device,
@@ -554,11 +566,19 @@ physical_device_supports_extension (VkPhysicalDevice  device,
 {
   VkExtensionProperties *extensions;
   uint32_t n_device_extensions;
+  static gboolean first = TRUE;
 
   GDK_VK_CHECK (vkEnumerateDeviceExtensionProperties, device, NULL, &n_device_extensions, NULL);
 
   extensions = g_newa (VkExtensionProperties, n_device_extensions);
   GDK_VK_CHECK (vkEnumerateDeviceExtensionProperties, device, NULL, &n_device_extensions, extensions);
+
+  if (first)
+    {
+      first = FALSE;
+      for (uint32_t i = 0; i < n_device_extensions; i++)
+        g_print ("%s\n", extensions[i].extensionName);
+    }
 
   for (uint32_t i = 0; i < n_device_extensions; i++)
     {
@@ -686,7 +706,37 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
         {
           GError *error = NULL;
 
-          GDK_DEBUG (VULKAN, "Recreating the swapchain");
+          if (acquire_result == VK_SUBOPTIMAL_KHR)
+            {
+              const VkPipelineStageFlags mask = VK_PIPELINE_STAGE_BOTTOM_OF_PIPE_BIT;
+
+              vkQueueSubmit (gdk_vulkan_context_get_queue (context),
+                             1,
+                             &(VkSubmitInfo) {
+                               .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
+                               .waitSemaphoreCount = 1,
+                               .pWaitSemaphores = &priv->draw_semaphore,
+                               .pWaitDstStageMask = &mask,
+                             },
+                             VK_NULL_HANDLE);
+              vkQueueWaitIdle (gdk_vulkan_context_get_queue (context));
+
+              if (gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
+                {
+                  PFN_vkReleaseSwapchainImagesEXT vkReleaseSwapchainImagesEXT;
+
+                  vkReleaseSwapchainImagesEXT = (PFN_vkReleaseSwapchainImagesEXT) vkGetDeviceProcAddr (gdk_vulkan_context_get_device (context), "vkReleaseSwapchainImagesEXT");
+
+                  vkReleaseSwapchainImagesEXT (gdk_vulkan_context_get_device (context),
+                                            &(VkReleaseSwapchainImagesInfoEXT) {
+                                              .sType = VK_STRUCTURE_TYPE_RELEASE_SWAPCHAIN_IMAGES_INFO_EXT,
+                                              .pNext = NULL,
+                                              .swapchain = priv->swapchain,
+                                              .imageIndexCount = 1,
+                                              .pImageIndices = &priv->draw_index,
+                                            });
+                }
+            }
 
           if (gdk_vulkan_context_check_swapchain (context, &error))
             continue;
