@@ -3547,8 +3547,9 @@ avahi_service_browser_new_cb (GObject      *source_object,
        * The creation of ServiceBrowser fails with G_IO_ERROR_DBUS_ERROR
        * if Avahi is disabled.
        */
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_DBUS_ERROR) &&
-          !g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
+      if (g_error_matches (error, G_IO_ERROR, G_IO_ERROR_DBUS_ERROR))
+        g_debug ("%s #%d: %s", g_quark_to_string (error->domain), error->code, error->message);
+      else if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
         g_warning ("%s", error->message);
       g_error_free (error);
     }
