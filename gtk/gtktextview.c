@@ -1791,16 +1791,16 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   add_move_binding (widget_class, GDK_KEY_KP_Left, GDK_ALT_MASK,
                     GTK_MOVEMENT_WORDS, -1);
 
-  add_move_binding (widget_class, GDK_KEY_Right, GDK_ALT_MASK,
+  add_move_binding (widget_class, GDK_KEY_Right, GDK_META_MASK,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
 
-  add_move_binding (widget_class, GDK_KEY_Left, GDK_ALT_MASK,
+  add_move_binding (widget_class, GDK_KEY_Left, GDK_META_MASK,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
-  add_move_binding (widget_class, GDK_KEY_KP_Right, GDK_ALT_MASK,
+  add_move_binding (widget_class, GDK_KEY_KP_Right, GDK_META_MASK,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, 1);
 
-  add_move_binding (widget_class, GDK_KEY_KP_Left, GDK_ALT_MASK,
+  add_move_binding (widget_class, GDK_KEY_KP_Left, GDK_META_MASK,
                     GTK_MOVEMENT_DISPLAY_LINE_ENDS, -1);
 
   add_move_binding (widget_class, GDK_KEY_Up, GDK_META_MASK,
