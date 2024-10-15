@@ -256,6 +256,8 @@ listview_handle_method (GDBusConnection       *connection,
            child;
            child = gtk_widget_get_next_sibling (child))
         {
+          if (!GTK_IS_LIST_ITEM_BASE (child))
+            continue;
           if (gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (child)))
             {
               if (idx == 0)
@@ -288,6 +290,8 @@ listview_handle_method (GDBusConnection       *connection,
            child;
            child = gtk_widget_get_next_sibling (child))
         {
+          if (!GTK_IS_LIST_ITEM_BASE (child))
+            continue;
           if (idx == 0)
             break;
           idx--;
@@ -320,6 +324,8 @@ listview_handle_method (GDBusConnection       *connection,
            child;
            child = gtk_widget_get_next_sibling (child))
         {
+          if (!GTK_IS_LIST_ITEM_BASE (child))
+            continue;
           if (idx == 0)
             break;
           idx--;
@@ -353,6 +359,8 @@ listview_handle_method (GDBusConnection       *connection,
            child;
            child = gtk_widget_get_next_sibling (child))
         {
+          if (!GTK_IS_LIST_ITEM_BASE (child))
+            continue;
           if (gtk_list_item_base_get_selected (GTK_LIST_ITEM_BASE (child)))
             {
               if (idx == 0)
@@ -388,6 +396,8 @@ listview_handle_method (GDBusConnection       *connection,
            child;
            child = gtk_widget_get_next_sibling (child))
         {
+          if (!GTK_IS_LIST_ITEM_BASE (child))
+            continue;
           if (idx == 0)
             break;
           idx--;

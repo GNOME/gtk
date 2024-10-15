@@ -196,10 +196,5 @@
                 }
             ]
         }
-    ],
-    "build-options" : {
-        "env" : {
-            "GSK_RENDERER" : "opengl"
-        }
-    }
+    ]
 }
