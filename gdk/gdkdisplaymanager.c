@@ -332,6 +332,8 @@ gdk_display_manager_get_default_display (GdkDisplayManager *manager)
 GdkDisplay *
 gdk_display_get_default (void)
 {
+  gdk_ensure_initialized ();
+
   return gdk_display_manager_get_default_display (gdk_display_manager_get ());
 }
 
