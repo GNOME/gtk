@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-10-05 13:38+0000\n"
-"PO-Revision-Date: 2024-10-05 20:36+0200\n"
+"POT-Creation-Date: 2024-10-14 14:29+0000\n"
+"PO-Revision-Date: 2024-10-15 21:29+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -41,22 +41,22 @@ msgstr "Ni mogoče brati iz praznega odložišča."
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Ni skladnih zapisov za prenos vsebine odložišča."
 
-#: gdk/gdkcolorstate.c:668
+#: gdk/gdkcolorstate.c:855
 #, c-format
 msgid "cicp: Narrow range or YUV not supported"
 msgstr "cicp: Ozek obseg ali YUV ni podprt"
 
-#: gdk/gdkcolorstate.c:678
+#: gdk/gdkcolorstate.c:865
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp: nedoločeni parametri niso podprti"
 
-#: gdk/gdkcolorstate.c:724
+#: gdk/gdkcolorstate.c:911
 #, c-format
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp: funkcija prenosa %u ni podprta"
 
-#: gdk/gdkcolorstate.c:754
+#: gdk/gdkcolorstate.c:941
 #, c-format
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: Primarne barve %u niso podprte"
@@ -142,9 +142,9 @@ msgstr "Ni skladnih zapisov za prenos vsebine."
 msgid "No GL API allowed."
 msgstr "API GL ni dovoljen."
 
-#: gdk/gdkglcontext.c:452 gdk/win32/gdkglcontext-win32-wgl.c:723
-#: gdk/win32/gdkglcontext-win32-wgl.c:866
-#: gdk/win32/gdkglcontext-win32-wgl.c:910 gdk/x11/gdkglcontext-glx.c:697
+#: gdk/gdkglcontext.c:452 gdk/win32/gdkglcontext-win32-wgl.c:762
+#: gdk/win32/gdkglcontext-win32-wgl.c:905
+#: gdk/win32/gdkglcontext-win32-wgl.c:949 gdk/x11/gdkglcontext-glx.c:697
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
@@ -605,7 +605,7 @@ msgstr "Ni mogoče pridobiti podatkov v vrstici %d"
 
 #: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:244
 #: gdk/wayland/gdkdrop-wayland.c:205 gdk/wayland/gdkprimary-wayland.c:343
-#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1067
+#: gdk/win32/gdkdrop-win32.c:1019 gdk/win32/gdkdrop-win32.c:1068
 #: gdk/x11/gdkclipboard-x11.c:799 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "Ni najdenega skladnega zapisa za prenos."
@@ -615,69 +615,69 @@ msgstr "Ni najdenega skladnega zapisa za prenos."
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Odkodiranje vsebine vrste mime »%s« je spodletelo."
 
-#: gdk/win32/gdkclipdrop-win32.c:719
+#: gdk/win32/gdkclipdrop-win32.c:710
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
 "Ni mogoče pridobiti nadzora nad odložiščem. Ukaz OpenClipboard() je časovno "
 "potekel."
 
-#: gdk/win32/gdkclipdrop-win32.c:729
+#: gdk/win32/gdkclipdrop-win32.c:720
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Ni mogoče pridobiti nadzora nad odložiščem. Drug program je prej pridobil "
 "dostop."
 
-#: gdk/win32/gdkclipdrop-win32.c:743
+#: gdk/win32/gdkclipdrop-win32.c:734
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti nadzora nad odložiščem. Ukaz OpenClipboard() je "
 "spodletel: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:755
+#: gdk/win32/gdkclipdrop-win32.c:746
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti nadzora nad odložiščem. Ukaz EmptyClipboard() je "
 "spodletel: 0x%lx"
 
-#: gdk/win32/gdkclipdrop-win32.c:798
+#: gdk/win32/gdkclipdrop-win32.c:790
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je časovno "
 "potekel."
 
-#: gdk/win32/gdkclipdrop-win32.c:808 gdk/win32/gdkclipdrop-win32.c:839
+#: gdk/win32/gdkclipdrop-win32.c:800 gdk/win32/gdkclipdrop-win32.c:831
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Ni mogoče določiti podatkov odložišča. Drug program je prej pridobil dostop."
 
-#: gdk/win32/gdkclipdrop-win32.c:822
+#: gdk/win32/gdkclipdrop-win32.c:814
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
 "%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:874
+#: gdk/win32/gdkclipdrop-win32.c:866
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz GlobalLock(0x%p) je spodletel: "
 "0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:885
+#: gdk/win32/gdkclipdrop-win32.c:877
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz GlobalSize(0x%p) je spodletel: "
 "0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:898
+#: gdk/win32/gdkclipdrop-win32.c:890
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
@@ -685,21 +685,21 @@ msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Dodeljevanje %s bajtov v skladišče "
 "podatkov je spodletelo."
 
-#: gdk/win32/gdkclipdrop-win32.c:930
+#: gdk/win32/gdkclipdrop-win32.c:923
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je časovno "
 "potekel."
 
-#: gdk/win32/gdkclipdrop-win32.c:940
+#: gdk/win32/gdkclipdrop-win32.c:933
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Lastništvo nad odložiščem je "
 "spremenjeno."
 
-#: gdk/win32/gdkclipdrop-win32.c:950
+#: gdk/win32/gdkclipdrop-win32.c:943
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
@@ -707,116 +707,116 @@ msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Podatki so se spremenili, preden jih "
 "je bilo mogoče pridobiti."
 
-#: gdk/win32/gdkclipdrop-win32.c:967
+#: gdk/win32/gdkclipdrop-win32.c:960
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
 "%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:992
+#: gdk/win32/gdkclipdrop-win32.c:985
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ni najdenega skladnega zapisa za "
 "prenos."
 
-#: gdk/win32/gdkclipdrop-win32.c:1002
+#: gdk/win32/gdkclipdrop-win32.c:995
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz GetClipboardData() je "
 "spodletel: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:949
+#: gdk/win32/gdkdrop-win32.c:950
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov DnD. Ukaz GlobalLock(0x%p) je spodletel: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:958
+#: gdk/win32/gdkdrop-win32.c:959
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov DnD. Ukaz GlobalSize(0x%p) je spodletel: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:969
+#: gdk/win32/gdkdrop-win32.c:970
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Ni mogoče pridobiti podatkov DnD. Dodeljevanje %s bajtov v skladišče "
 "podatkov je spodletelo."
 
-#: gdk/win32/gdkdrop-win32.c:1039
+#: gdk/win32/gdkdrop-win32.c:1040
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "Površina GDK 0x%p ni vpisana kot ciljno mesto"
 
-#: gdk/win32/gdkdrop-win32.c:1047
+#: gdk/win32/gdkdrop-win32.c:1048
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Ciljni zapis vsebine 0x%p je brez podatkov predmeta"
 
-#: gdk/win32/gdkdrop-win32.c:1087
+#: gdk/win32/gdkdrop-win32.c:1088
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr ""
 "Ukaz IDataObject_GetData (0x%x) je spodletel; opravilo bo vrnjeno na 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1121
+#: gdk/win32/gdkdrop-win32.c:1127
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Pretvarjanje podatkov DnD za zapis W32 0x%x to %p (%s) je spodletelo."
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:645
+#: gdk/win32/gdkglcontext-win32-wgl.c:681
 msgid "No GL implementation is available"
 msgstr "Okolje GL ni na voljo"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:732
+#: gdk/win32/gdkglcontext-win32-wgl.c:771
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Različica WGL %d.%d je prestara, zahtevana je različica vsaj %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:750
+#: gdk/win32/gdkglcontext-win32-wgl.c:789
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Izvedba GL ne more uporabiti vsebine GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1030
+#: gdk/win32/gdkglcontext-win32-wgl.c:1069
 msgid "No available configurations for the given pixel format"
 msgstr "Ni navedenih nastavitev za podan točkovni zapis"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:63
+#: gdk/win32/gdkhdataoutputstream-win32.c:64
 msgid "writing a closed stream"
 msgstr "zapisovanje zapretega pretoka"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:85
+#: gdk/win32/gdkhdataoutputstream-win32.c:86
 msgid "g_try_realloc () failed"
 msgstr "Izvedba g_try_realloc () je spodletela"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:93
-#: gdk/win32/gdkhdataoutputstream-win32.c:231
+#: gdk/win32/gdkhdataoutputstream-win32.c:94
+#: gdk/win32/gdkhdataoutputstream-win32.c:233
 msgid "GlobalReAlloc() failed: "
 msgstr "Izvedba GlobalReAlloc() je spodletela: "
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:105
+#: gdk/win32/gdkhdataoutputstream-win32.c:106
 msgid "Ran out of buffer space (buffer size is fixed)"
 msgstr "Zmanjkalo je prostora v medpomnilniku (velikost je stalna)"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:203
+#: gdk/win32/gdkhdataoutputstream-win32.c:204
 msgid "Can’t transmute a single handle"
 msgstr "Ni mogoče pretvoriti enojnega ročnika"
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:215
+#: gdk/win32/gdkhdataoutputstream-win32.c:217
 #, c-format
 msgid "Failed to transmute %zu bytes of data from %s to %u"
 msgstr "Pretvarjanje %zu bajtov podatkov iz %s v %u je spodletelo."
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:250
+#: gdk/win32/gdkhdataoutputstream-win32.c:252
 msgid "GlobalLock() failed: "
 msgstr "Izvedba GlobalLock() je spodletela: "
 
-#: gdk/win32/gdkhdataoutputstream-win32.c:364
+#: gdk/win32/gdkhdataoutputstream-win32.c:367
 msgid "GlobalAlloc() failed: "
 msgstr "Izvedba GlobalAlloc() je spodletela: "
 
@@ -3435,65 +3435,65 @@ msgid "Print"
 msgstr "Natisni"
 
 #: gtk/print/gtkprintoperation-unix.c:490
-#: gtk/print/gtkprintoperation-win32.c:1505
+#: gtk/print/gtkprintoperation-win32.c:1495
 msgid "Application"
 msgstr "Program"
 
-#: gtk/print/gtkprintoperation-win32.c:636
+#: gtk/print/gtkprintoperation-win32.c:626
 msgid "Printer offline"
 msgstr "Tiskalnik je izključen"
 
-#: gtk/print/gtkprintoperation-win32.c:638
+#: gtk/print/gtkprintoperation-win32.c:628
 msgid "Out of paper"
 msgstr "Brez papirja"
 
 #. Translators: this is a printer status.
-#: gtk/print/gtkprintoperation-win32.c:640
+#: gtk/print/gtkprintoperation-win32.c:630
 #: modules/printbackends/gtkprintbackendcpdb.c:1533
 #: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused"
 msgstr "Premor"
 
-#: gtk/print/gtkprintoperation-win32.c:642
+#: gtk/print/gtkprintoperation-win32.c:632
 msgid "Need user intervention"
 msgstr "Zahtevano je posredovanje uporabnika"
 
-#: gtk/print/gtkprintoperation-win32.c:749
+#: gtk/print/gtkprintoperation-win32.c:739
 msgid "Custom size"
 msgstr "Velikost po meri"
 
-#: gtk/print/gtkprintoperation-win32.c:1597
+#: gtk/print/gtkprintoperation-win32.c:1587
 msgid "No printer found"
 msgstr "Ni najdenega tiskalnika"
 
-#: gtk/print/gtkprintoperation-win32.c:1624
+#: gtk/print/gtkprintoperation-win32.c:1614
 msgid "Invalid argument to CreateDC"
 msgstr "Neveljaven argument za CreateDC"
 
-#: gtk/print/gtkprintoperation-win32.c:1660
-#: gtk/print/gtkprintoperation-win32.c:1906
+#: gtk/print/gtkprintoperation-win32.c:1650
+#: gtk/print/gtkprintoperation-win32.c:1896
 msgid "Error from StartDoc"
 msgstr "Napaka iz StartDoc"
 
-#: gtk/print/gtkprintoperation-win32.c:1761
-#: gtk/print/gtkprintoperation-win32.c:1784
-#: gtk/print/gtkprintoperation-win32.c:1832
+#: gtk/print/gtkprintoperation-win32.c:1751
+#: gtk/print/gtkprintoperation-win32.c:1774
+#: gtk/print/gtkprintoperation-win32.c:1822
 msgid "Not enough free memory"
 msgstr "Ni dovolj prostega pomnilnika"
 
-#: gtk/print/gtkprintoperation-win32.c:1837
+#: gtk/print/gtkprintoperation-win32.c:1827
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Neveljaven argument za PrintDlgEx"
 
-#: gtk/print/gtkprintoperation-win32.c:1842
+#: gtk/print/gtkprintoperation-win32.c:1832
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Neveljaven kazalec na PrintDlgEx"
 
-#: gtk/print/gtkprintoperation-win32.c:1847
+#: gtk/print/gtkprintoperation-win32.c:1837
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Neveljavna ročica za PrintDlgEx"
 
-#: gtk/print/gtkprintoperation-win32.c:1852
+#: gtk/print/gtkprintoperation-win32.c:1842
 msgid "Unspecified error"
 msgstr "Nedoločena napaka"
 
@@ -3904,37 +3904,37 @@ msgstr "Razredi slogov"
 msgid "CSS Property"
 msgstr "Lastnosti CSS"
 
-#: gtk/inspector/general.c:372
+#: gtk/inspector/general.c:374
 msgctxt "GL version"
 msgid "None"
 msgstr "Brez"
 
-#: gtk/inspector/general.c:464
+#: gtk/inspector/general.c:466
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: gtk/inspector/general.c:526
+#: gtk/inspector/general.c:582
 msgctxt "Vulkan device"
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: gtk/inspector/general.c:527 gtk/inspector/general.c:528
+#: gtk/inspector/general.c:583 gtk/inspector/general.c:584
 msgctxt "Vulkan version"
 msgid "Disabled"
 msgstr "Onemogočeno"
 
-#: gtk/inspector/general.c:579
+#: gtk/inspector/general.c:648
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Neopredeljeno"
 
-#: gtk/inspector/general.c:580 gtk/inspector/general.c:581
+#: gtk/inspector/general.c:649 gtk/inspector/general.c:650
 msgctxt "Vulkan version"
 msgid "None"
 msgstr "Neopredeljeno"
 
-#: gtk/inspector/general.c:934
+#: gtk/inspector/general.c:1003
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Vsebina IM je določena z vrednostjo GTK_IM_MODULE"
 
@@ -4018,7 +4018,7 @@ msgstr "GL_VERSION"
 msgid "GL_SHADING_LANGUAGE_VERSION"
 msgstr "GL_SHADING_LANGUAGE_VERSION"
 
-#: gtk/inspector/general.ui:813 gtk/inspector/general.ui:929
+#: gtk/inspector/general.ui:813 gtk/inspector/general.ui:954
 msgid "Extensions"
 msgstr "Razširitve"
 
@@ -4033,6 +4033,10 @@ msgstr "Različica vmesnika Vulkan API"
 #: gtk/inspector/general.ui:903
 msgid "Vulkan driver version"
 msgstr "Različica gonilnika Vulkan"
+
+#: gtk/inspector/general.ui:929
+msgid "Layers"
+msgstr "Plasti"
 
 #: gtk/inspector/menu.c:264
 msgid "Unnamed section"
@@ -4248,7 +4252,7 @@ msgstr "Vir:"
 msgid "Defined At"
 msgstr "Določeno pri"
 
-#: gtk/inspector/recorder.c:2022
+#: gtk/inspector/recorder.c:2036
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Shranjevanje izrisovanja vozlišča je spodletelo"
@@ -7267,7 +7271,7 @@ msgstr ""
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
-#: tools/gtk-builder-tool-simplify.c:2623 tools/gtk-builder-tool-validate.c:261
+#: tools/gtk-builder-tool-simplify.c:2658 tools/gtk-builder-tool-validate.c:261
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-image-tool-info.c:79
 #: tools/gtk-path-tool-render.c:121 tools/gtk-rendernode-tool-compare.c:67
 #: tools/gtk-rendernode-tool-extract.c:294 tools/gtk-rendernode-tool-info.c:226
@@ -7315,7 +7319,7 @@ msgid "Preview the file."
 msgstr "Predogled vsebine datoteke."
 
 #: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
-#: tools/gtk-builder-tool-simplify.c:2646 tools/gtk-builder-tool-validate.c:287
+#: tools/gtk-builder-tool-simplify.c:2681 tools/gtk-builder-tool-validate.c:287
 #, c-format
 msgid "No .ui file specified\n"
 msgstr "Ni določene datoeke .ui\n"
@@ -7424,43 +7428,43 @@ msgstr "%s sprejme samo tri podrejene predmete"
 msgid "%s only accepts one center child"
 msgstr "%s sprejme samo en sredinski podrejeni predmet"
 
-#: tools/gtk-builder-tool-simplify.c:2549
+#: tools/gtk-builder-tool-simplify.c:2584
 #, c-format
 msgid "Can’t load “%s”: %s\n"
 msgstr "Ni mogoče naložiti »%s«: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2560
-#: tools/gtk-builder-tool-simplify.c:2566
-#: tools/gtk-builder-tool-simplify.c:2572
+#: tools/gtk-builder-tool-simplify.c:2595
+#: tools/gtk-builder-tool-simplify.c:2601
+#: tools/gtk-builder-tool-simplify.c:2607
 #, c-format
 msgid "Can’t parse “%s”: %s\n"
 msgstr ""
 "Ni mogoče razčleniti »%s«: %s\n"
 "\n"
 
-#: tools/gtk-builder-tool-simplify.c:2598
+#: tools/gtk-builder-tool-simplify.c:2633
 #, c-format
 msgid "Failed to read “%s”: %s\n"
 msgstr "Datoteke »%s« ni mogoče prebrati: %s\n"
 
-#: tools/gtk-builder-tool-simplify.c:2604
+#: tools/gtk-builder-tool-simplify.c:2639
 #, c-format
 msgid "Failed to write “%s”: “%s”\n"
 msgstr "Datoteke »%s« ni mogoče zapisati: »%s«\n"
 
-#: tools/gtk-builder-tool-simplify.c:2621
+#: tools/gtk-builder-tool-simplify.c:2656
 msgid "Replace the file"
 msgstr "Zamenjaj datoteko"
 
-#: tools/gtk-builder-tool-simplify.c:2622
+#: tools/gtk-builder-tool-simplify.c:2657
 msgid "Convert from GTK 3 to GTK 4"
 msgstr "Pretvori iz GTK 3 v GTK 4"
 
-#: tools/gtk-builder-tool-simplify.c:2633
+#: tools/gtk-builder-tool-simplify.c:2668
 msgid "Simplify the file."
 msgstr "Poenostavi datoteko."
 
-#: tools/gtk-builder-tool-simplify.c:2652
+#: tools/gtk-builder-tool-simplify.c:2687
 #, c-format
 msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Poenostaviti je mogoče le eno datoteko .ui brez zastavice --replace\n"
