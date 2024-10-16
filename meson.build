@@ -428,7 +428,10 @@ gi_dep            = dependency('gobject-introspection-1.0', version: introspecti
                                required: get_option('introspection').enabled() and
                                          get_option('build-tests'))
 gstplayer_dep     = dependency('gstreamer-player-1.0', version: gstreamer_req,
-                               required: get_option('media-gstreamer'))
+                               required: get_option('media-gstreamer'),
+                               default_options: [
+                                 'python=disabled',
+                               ])
 gstgl_dep         = dependency('gstreamer-gl-1.0', version: gstreamer_req,
                                required: get_option('media-gstreamer'))
 gstallocators_dep = dependency('gstreamer-allocators-1.0', version: gstreamer_req,
