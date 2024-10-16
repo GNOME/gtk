@@ -368,6 +368,9 @@ ensure_fallback_style (void)
   GdkDisplay *display;
   GtkCssProvider *provider;
 
+  if (!gtk_is_initialized ())
+    return;
+
   display = gdk_display_get_default ();
   if (!display)
     return;
