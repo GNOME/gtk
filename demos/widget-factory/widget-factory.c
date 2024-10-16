@@ -294,15 +294,6 @@ activate_about (GSimpleAction *action,
   GtkApplication *app = user_data;
   GtkWindow *window;
   GtkWidget *button;
-  const char *authors[] = {
-    "Andrea Cimitan",
-    "Cosimo Cecchi",
-    NULL
-  };
-  const char *maintainers[] = {
-    "The GTK Team",
-    NULL
-  };
   char *version;
   char *os_name;
   char *os_version;
@@ -347,18 +338,18 @@ activate_about (GSimpleAction *action,
                                          ? "GTK Widget Factory (Development)"
                                          : "GTK Widget Factory",
                          "version", version,
-                         "copyright", "© 1997—2021 The GTK Team",
+                         "copyright", "© 1997—2024 The GTK Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK themes and widgets",
-                         "authors", authors,
+                         "authors", (const char *[]) { "Andrea Cimitan", "Cosimo Cecchi", NULL },
                          "logo-icon-name", "org.gtk.WidgetFactory4",
                          "title", "About GTK Widget Factory",
                          "system-information", s->str,
                          NULL);
 
   gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
-                                       _("Maintained by"), maintainers);
+                                       _("Maintained by"), (const char *[]) { "The GTK Team", NULL });
 
   gtk_window_present (GTK_WINDOW (dialog));
 

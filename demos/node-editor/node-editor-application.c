@@ -112,7 +112,7 @@ activate_about (GSimpleAction *action,
                                          ? "GTK Node Editor (Development)"
                                          : "GTK Node Editor",
                          "version", version,
-                         "copyright", "© 2019—2021 The GTK Team",
+                         "copyright", "© 2019—2024 The GTK Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
                          "comments", "Program to test GTK rendering",
@@ -121,8 +121,12 @@ activate_about (GSimpleAction *action,
                          "title", "About GTK Node Editor",
                          "system-information", s->str,
                          NULL);
-    gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
-                                         "Artwork by", (const char *[]) { "Jakub Steiner", NULL });
+
+  gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
+                                       "Artwork by", (const char *[]) { "Jakub Steiner", NULL });
+  gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
+                                       "Maintained by", (const char *[]) { "The GTK Team", NULL });
+
 
   gtk_window_present (GTK_WINDOW (dialog));
 

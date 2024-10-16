@@ -576,18 +576,6 @@ activate_about (GSimpleAction *action,
   int i;
   char *os_name;
   char *os_version;
-  const char *authors[] = {
-    "Alexander Larsson",
-    NULL
-  };
-  const char *artists[] = {
-    "Jakub Steiner",
-    NULL
-  };
-  const char *maintainers[] = {
-    "The GTK Team",
-    NULL
-  };
   GtkWidget *dialog;
 
   os_name = g_get_os_info (G_OS_INFO_KEY_NAME);
@@ -631,19 +619,21 @@ activate_about (GSimpleAction *action,
                                          ? "GTK Print Editor (Development)"
                                          : "GTK Print Editor",
                          "version", version,
-                         "copyright", "© 2006-2021 Red Hat, Inc",
+                         "copyright", "© 2006-2024 Red Hat, Inc",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK printing",
-                         "authors", authors,
+                         "authors", (const char *[]) { "Alexander Larsson", NULL },
                          "logo-icon-name", "org.gtk.PrintEditor4",
                          "title", "About GTK Print Editor",
                          "system-information", sysinfo->str,
                          NULL);
+
   gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
-                                       _("Artwork by"), artists);
+                                       _("Artwork by"), (const char *[]) { "Jakub Steiner", NULL });
+
   gtk_about_dialog_add_credit_section (GTK_ABOUT_DIALOG (dialog),
-                                       _("Maintained by"), maintainers);
+                                       _("Maintained by"), (const char *[]) { "The GTK Team", NULL });
 
   gtk_window_present (GTK_WINDOW (dialog));
 
