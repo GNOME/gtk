@@ -2239,4 +2239,4 @@ gtk_css_color_value_get_coord (const GtkCssValue *color,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

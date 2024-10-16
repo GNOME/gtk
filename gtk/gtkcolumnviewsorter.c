@@ -588,4 +588,4 @@ gtk_column_view_sorter_get_nth_sort_column (GtkColumnViewSorter *self,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

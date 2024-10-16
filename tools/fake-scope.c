@@ -210,4 +210,4 @@ fake_scope_get_callbacks (FakeScope *self)
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

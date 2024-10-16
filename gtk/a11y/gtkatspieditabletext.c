@@ -356,4 +356,4 @@ gtk_atspi_get_editable_text_vtable (GtkAccessible *accessible)
   return NULL;
 }
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

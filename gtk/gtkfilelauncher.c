@@ -647,4 +647,5 @@ gtk_file_launcher_open_containing_folder_finish (GtkFileLauncher  *self,
 }
 
 /* }}} */
-/* vim:set foldmethod=marker expandtab: */
+
+/* vim:set foldmethod=marker: */

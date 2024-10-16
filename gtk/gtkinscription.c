@@ -1533,4 +1533,4 @@ gtk_inscription_accessible_text_init (GtkAccessibleTextInterface *iface)
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

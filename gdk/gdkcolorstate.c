@@ -1045,4 +1045,4 @@ gdk_color_state_clamp (GdkColorState *self,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

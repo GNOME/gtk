@@ -826,4 +826,4 @@ gsk_path_foreach_with_tolerance (GskPath             *self,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

@@ -955,4 +955,4 @@ gtk_font_dialog_choose_font_and_features_finish (GtkFontDialog         *self,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

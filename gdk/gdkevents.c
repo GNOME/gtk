@@ -3444,4 +3444,4 @@ gdk_grab_broken_event_get_implicit (GdkEvent *event)
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

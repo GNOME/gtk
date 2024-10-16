@@ -773,4 +773,4 @@ gtk_alert_dialog_show (GtkAlertDialog *self,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

@@ -1011,4 +1011,4 @@ gtk_atspi_get_action_vtable (GtkAccessible *accessible)
   return NULL;
 }
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

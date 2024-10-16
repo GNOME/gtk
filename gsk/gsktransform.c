@@ -2808,4 +2808,4 @@ gsk_matrix_transform_bounds (const graphene_matrix_t *m,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

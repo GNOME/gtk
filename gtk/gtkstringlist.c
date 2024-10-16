@@ -733,4 +733,5 @@ gtk_string_list_find (GtkStringList *self,
 }
 
 /* }}} */
-/* vim:set foldmethod=marker expandtab: */
+
+/* vim:set foldmethod=marker: */

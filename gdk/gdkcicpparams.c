@@ -478,4 +478,4 @@ gdk_cicp_params_get_cicp (GdkCicpParams *self)
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

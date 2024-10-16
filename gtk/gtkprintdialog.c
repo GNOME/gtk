@@ -1788,4 +1788,4 @@ gtk_print_dialog_print_file_finish (GtkPrintDialog  *self,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

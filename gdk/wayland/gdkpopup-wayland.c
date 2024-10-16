@@ -1485,4 +1485,4 @@ _gdk_wayland_surface_set_grab_seat (GdkSurface *surface,
 }
 
 /* }}} */
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

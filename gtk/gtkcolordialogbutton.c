@@ -560,4 +560,4 @@ gtk_color_dialog_button_set_rgba (GtkColorDialogButton *self,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

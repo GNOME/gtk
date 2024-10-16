@@ -1089,4 +1089,4 @@ gtk_font_dialog_button_get_use_size (GtkFontDialogButton *self)
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

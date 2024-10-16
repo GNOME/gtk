@@ -922,4 +922,4 @@ gdk_paintable_new_from_file_scaled (GFile  *file,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

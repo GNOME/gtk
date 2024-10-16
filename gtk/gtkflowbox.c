@@ -717,7 +717,7 @@ gtk_flow_box_child_changed (GtkFlowBoxChild *child)
   gtk_flow_box_apply_filter (box, child);
 }
 
-/* G tkFlowBox  {{{1 */
+/* GtkFlowBox  {{{1 */
 
  /* Constants {{{2 */
 
@@ -5067,4 +5067,4 @@ gtk_flow_box_invalidate_sort (GtkFlowBox *box)
     }
 }
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

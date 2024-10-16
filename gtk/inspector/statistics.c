@@ -897,4 +897,4 @@ gtk_inspector_statistics_class_init (GtkInspectorStatisticsClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, search_changed);
 }
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

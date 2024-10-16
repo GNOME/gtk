@@ -2018,4 +2018,4 @@ gtk_at_spi_context_get_child_count (GtkAtSpiContext *self)
 }
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

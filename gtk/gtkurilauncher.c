@@ -345,4 +345,5 @@ gtk_uri_launcher_launch_finish (GtkUriLauncher  *self,
 }
 
 /* }}} */
-/* vim:set foldmethod=marker expandtab: */
+
+/* vim:set foldmethod=marker: */

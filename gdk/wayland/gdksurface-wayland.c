@@ -1482,4 +1482,4 @@ gdk_wayland_surface_get_wl_surface (GdkSurface *surface)
 }
 
 /* }}}} */
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

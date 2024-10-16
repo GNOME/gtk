@@ -1080,4 +1080,4 @@ gtk_atspi_disconnect_text_signals (GtkAccessible *accessible)
   g_object_set_data (G_OBJECT (accessible), "accessible-text-data", NULL);
 }
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */
