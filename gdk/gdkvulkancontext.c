@@ -1660,9 +1660,9 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                 {
                   GDK_DISPLAY_DEBUG (display, VULKAN, "    %s: %s",
                                      gdk_vulkan_feature_keys[i].key,
-                                     (features & gdk_vulkan_feature_keys[i].value) ? "YES" :
+                                     (features & gdk_vulkan_feature_keys[i].value) ? "✓" :
                                      ((skip_features & gdk_vulkan_feature_keys[i].value) ? "disabled via env var" :
-                                      (((device_features & gdk_vulkan_feature_keys[i].value) == 0) ? "not supported" :
+                                      (((device_features & gdk_vulkan_feature_keys[i].value) == 0) ? "✗" :
                                        "Hum, what? This should not happen.")));
                 }
 

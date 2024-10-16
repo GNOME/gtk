@@ -385,8 +385,6 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   if (ctx == EGL_NO_CONTEXT)
     return 0;
 
-  GDK_DISPLAY_DEBUG (display, OPENGL, "Created EGL context[%p]", ctx);
-
   priv->egl_context = ctx;
   gdk_gl_context_set_version (context, &supported_versions[j]);
   gdk_gl_context_set_is_legacy (context, legacy);
@@ -1795,22 +1793,20 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
     {
       int i, max_texture_size;
       glGetIntegerv (GL_MAX_TEXTURE_SIZE, &max_texture_size);
-      gdk_debug_message ("%s version: %d.%d (%s)\n"
-                         "* GLSL version: %s\n"
-                         "* Max texture size: %d\n",
+      gdk_debug_message ("%s version: %d.%d (%s)",
                          gdk_gl_context_get_use_es (context) ? "OpenGL ES" : "OpenGL",
                          gdk_gl_version_get_major (&priv->gl_version), gdk_gl_version_get_minor (&priv->gl_version),
-                         priv->is_legacy ? "legacy" : "core",
-                         glGetString (GL_SHADING_LANGUAGE_VERSION),
-                         max_texture_size);
+                         priv->is_legacy ? "legacy" : "core");
+      gdk_debug_message ("GLSL version: %s", glGetString (GL_SHADING_LANGUAGE_VERSION));
+      gdk_debug_message ("Max texture size: %d", max_texture_size);
       gdk_debug_message ("Enabled features (use GDK_GL_DISABLE env var to disable):");
       for (i = 0; i < G_N_ELEMENTS (gdk_gl_feature_keys); i++)
         {
           gdk_debug_message ("    %s: %s",
                              gdk_gl_feature_keys[i].key,
-                             (priv->features & gdk_gl_feature_keys[i].value) ? "YES" :
+                             (priv->features & gdk_gl_feature_keys[i].value) ? "✓" :
                              ((disabled_features & gdk_gl_feature_keys[i].value) ? "disabled via env var" :
-                             (((supported_features & gdk_gl_feature_keys[i].value) == 0) ? "not supported" :
+                             (((supported_features & gdk_gl_feature_keys[i].value) == 0) ? "✗" :
                              "Hum, what? This should not happen.")));
         }
     }
