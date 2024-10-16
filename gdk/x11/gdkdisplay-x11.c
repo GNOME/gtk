@@ -1432,6 +1432,8 @@ gdk_x11_display_open (const char *display_name)
   gboolean rgba;
   gboolean composited;
 
+  gdk_ensure_initialized ();
+
   XInitThreads ();
 
   xdisplay = XOpenDisplay (display_name);

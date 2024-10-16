@@ -366,6 +366,8 @@ gdk_display_open_default (void)
 {
   GdkDisplay *display;
 
+  gdk_ensure_initialized ();
+
   display = gdk_display_get_default ();
 
   if (!display)
