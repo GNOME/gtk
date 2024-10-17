@@ -171,7 +171,7 @@
  */
 
 /* Kinetic scrolling */
-#define MAX_OVERSHOOT_DISTANCE 100
+#define MAX_OVERSHOOT_DISTANCE(adj) (floor(gtk_adjustment_get_page_size(adj)/2.))
 #define DECELERATION_FRICTION 4
 #define OVERSHOOT_FRICTION 20
 #define VELOCITY_ACCUMULATION_FLOOR 0.33
@@ -1927,6 +1927,8 @@ gtk_scrolled_window_snapshot_overshoot (GtkScrolledWindow *scrolled_window,
   int overshoot_x, overshoot_y;
   GtkCssStyle *style;
   GdkRectangle rect;
+  GtkAdjustment *hadj;
+  GtkAdjustment *vadj;
   GtkCssBoxes boxes;
 
   if (!_gtk_scrolled_window_get_overshoot (scrolled_window, &overshoot_x, &overshoot_y))
@@ -1934,8 +1936,11 @@ gtk_scrolled_window_snapshot_overshoot (GtkScrolledWindow *scrolled_window,
 
   gtk_scrolled_window_inner_allocation (scrolled_window, &rect);
 
-  overshoot_x = CLAMP (overshoot_x, - MAX_OVERSHOOT_DISTANCE, MAX_OVERSHOOT_DISTANCE);
-  overshoot_y = CLAMP (overshoot_y, - MAX_OVERSHOOT_DISTANCE, MAX_OVERSHOOT_DISTANCE);
+  hadj = gtk_scrolled_window_get_hadjustment (scrolled_window);
+  vadj = gtk_scrolled_window_get_vadjustment (scrolled_window);
+
+  overshoot_x = CLAMP (overshoot_x, - MAX_OVERSHOOT_DISTANCE(hadj), MAX_OVERSHOOT_DISTANCE(hadj));
+  overshoot_y = CLAMP (overshoot_y, - MAX_OVERSHOOT_DISTANCE(vadj), MAX_OVERSHOOT_DISTANCE(vadj));
 
   if (overshoot_x > 0)
     {
@@ -2832,13 +2837,35 @@ gtk_scrolled_window_snapshot (GtkWidget   *widget,
 {
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
+  gboolean has_overshoot;
+  int overshoot_x;
+  int overshoot_y;
 
   if (priv->hscrollbar_visible &&
       priv->vscrollbar_visible &&
       !priv->use_indicators)
     gtk_scrolled_window_snapshot_scrollbars_junction (scrolled_window, snapshot);
 
+  has_overshoot = _gtk_scrolled_window_get_overshoot (scrolled_window, &overshoot_x, &overshoot_y);
+
+  if (has_overshoot)
+    {
+      GtkAllocation alloc;
+
+      gtk_scrolled_window_inner_allocation (scrolled_window, &alloc);
+
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT (alloc.x, alloc.y, alloc.width, alloc.height));
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-overshoot_x, -overshoot_y));
+    }
+
   GTK_WIDGET_CLASS (gtk_scrolled_window_parent_class)->snapshot (widget, snapshot);
+
+  if (has_overshoot)
+    {
+      gtk_snapshot_pop (snapshot);
+      gtk_snapshot_restore (snapshot);
+    }
 
   gtk_scrolled_window_snapshot_undershoot (scrolled_window, snapshot);
   gtk_scrolled_window_snapshot_overshoot (scrolled_window, snapshot);
@@ -3215,9 +3242,9 @@ _gtk_scrolled_window_set_adjustment_value (GtkScrolledWindow *scrolled_window,
   GtkPositionType edge_pos;
   gboolean vertical;
 
-  lower = gtk_adjustment_get_lower (adjustment) - MAX_OVERSHOOT_DISTANCE;
+  lower = gtk_adjustment_get_lower (adjustment) - MAX_OVERSHOOT_DISTANCE(adjustment);
   upper = gtk_adjustment_get_upper (adjustment) -
-    gtk_adjustment_get_page_size (adjustment) + MAX_OVERSHOOT_DISTANCE;
+    gtk_adjustment_get_page_size (adjustment) + MAX_OVERSHOOT_DISTANCE(adjustment);
 
   if (adjustment == gtk_scrollbar_get_adjustment (GTK_SCROLLBAR (priv->hscrollbar)))
     vertical = FALSE;
@@ -3374,7 +3401,7 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
             gtk_kinetic_scrolling_new (current_time,
                                        lower,
                                        upper,
-                                       MAX_OVERSHOOT_DISTANCE,
+                                       MAX_OVERSHOOT_DISTANCE(hadjustment),
                                        DECELERATION_FRICTION,
                                        OVERSHOOT_FRICTION,
                                        priv->unclamped_hadj_value,
@@ -3402,7 +3429,7 @@ gtk_scrolled_window_start_deceleration (GtkScrolledWindow *scrolled_window)
             gtk_kinetic_scrolling_new (current_time,
                                        lower,
                                        upper,
-                                       MAX_OVERSHOOT_DISTANCE,
+                                       MAX_OVERSHOOT_DISTANCE(vadjustment),
                                        DECELERATION_FRICTION,
                                        OVERSHOOT_FRICTION,
                                        priv->unclamped_vadj_value,
