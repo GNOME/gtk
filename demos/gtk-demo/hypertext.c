@@ -264,7 +264,7 @@ released_cb (GtkGestureClick *gesture,
 {
   GtkTextIter start, end, iter;
   GtkTextBuffer *buffer;
-  int tx, ty;
+  GtkTextUnit tx, ty;
 
   if (gtk_gesture_single_get_button (GTK_GESTURE_SINGLE (gesture)) > 1)
     return;
@@ -290,7 +290,7 @@ motion_cb (GtkEventControllerMotion *controller,
            double                    y,
            GtkTextView              *text_view)
 {
-  int tx, ty;
+  GtkTextUnit tx, ty;
 
   gtk_text_view_window_to_buffer_coords (text_view,
                                          GTK_TEXT_WINDOW_WIDGET,

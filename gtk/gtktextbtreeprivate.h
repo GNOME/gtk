@@ -40,6 +40,7 @@
 #include <gtk/gtktextchild.h>
 #include <gtk/gtktextsegmentprivate.h>
 #include <gtk/gtktextiter.h>
+#include <gtk/gtktexttypes.h>
 
 G_BEGIN_DECLS
 
@@ -78,8 +79,8 @@ void _gtk_text_btree_unregister_child_anchor (GtkTextChildAnchor *anchor);
 /* View stuff */
 GtkTextLine *_gtk_text_btree_find_line_by_y    (GtkTextBTree      *tree,
                                                 gpointer           view_id,
-                                                int                ypixel,
-                                                int               *line_top_y);
+                                                GtkTextUnit        ypixel,
+                                                GtkTextUnit       *line_top_y);
 int          _gtk_text_btree_find_line_top     (GtkTextBTree      *tree,
                                                 GtkTextLine       *line,
                                                 gpointer           view_id);
@@ -93,16 +94,16 @@ void         _gtk_text_btree_invalidate_region (GtkTextBTree      *tree,
                                                 gboolean           cursors_only);
 void         _gtk_text_btree_get_view_size     (GtkTextBTree      *tree,
                                                 gpointer           view_id,
-                                                int               *width,
-                                                int               *height);
+                                                GtkTextUnit       *width,
+                                                GtkTextUnit       *height);
 gboolean     _gtk_text_btree_is_valid          (GtkTextBTree      *tree,
                                                 gpointer           view_id);
 gboolean     _gtk_text_btree_validate          (GtkTextBTree      *tree,
                                                 gpointer           view_id,
                                                 int                max_pixels,
-                                                int               *y,
-                                                int               *old_height,
-                                                int               *new_height);
+                                                GtkTextUnit       *y,
+                                                GtkTextUnit       *old_height,
+                                                GtkTextUnit       *new_height);
 void         _gtk_text_btree_validate_line     (GtkTextBTree      *tree,
                                                 GtkTextLine       *line,
                                                 gpointer           view_id);

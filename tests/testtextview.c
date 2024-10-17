@@ -147,7 +147,7 @@ static void
 snapshot_background (GtkWidget   *widget,
                      GtkSnapshot *snapshot)
 {
-  GdkRectangle visible_rect;
+  GtkTextRectangle visible_rect;
 
   gtk_text_view_get_visible_rect (GTK_TEXT_VIEW (widget), &visible_rect);
 

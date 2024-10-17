@@ -79,6 +79,7 @@
 
 #include <gtk/gtk.h>
 #include <gtk/gtktextattributesprivate.h>
+#include <gtk/gtktexttypes.h>
 
 G_BEGIN_DECLS
 
@@ -106,11 +107,11 @@ struct _GtkTextLayout
 
   /* width of the display area on-screen,
    * i.e. pixels we should wrap to fit inside. */
-  int screen_width;
+  GtkTextUnit screen_width;
 
   /* width/height of the total logical area being laid out */
-  int width;
-  int height;
+  GtkTextUnit width;
+  GtkTextUnit height;
 
   int left_padding;
   int right_padding;
@@ -189,13 +190,13 @@ struct _GtkTextLineDisplay
 
   GtkTextDirection direction;
 
-  int width;                   /* Width of layout */
-  int total_width;             /* width - margins, if no width set on layout, if width set on layout, -1 */
-  int height;
+  GtkTextUnit width;                   /* Width of layout */
+  GtkTextUnit total_width;             /* width - margins, if no width set on layout, if width set on layout, -1 */
+  GtkTextUnit height;
   /* Amount layout is shifted from left edge - this is the left margin
    * plus any other factors, such as alignment or indentation.
    */
-  int x_offset;
+  GtkTextUnit x_offset;
   int left_margin;
   int right_margin;
   int top_margin;
@@ -204,7 +205,7 @@ struct _GtkTextLineDisplay
 
   GtkTextLine *line;
 
-  GdkRectangle block_cursor;
+  GtkTextRectangle block_cursor;
 
   guint cursors_invalid : 1;
   guint has_block_cursor : 1;
@@ -240,7 +241,7 @@ void               gtk_text_layout_set_keyboard_direction (GtkTextLayout     *la
 void               gtk_text_layout_default_style_changed (GtkTextLayout     *layout);
 
 void gtk_text_layout_set_screen_width       (GtkTextLayout     *layout,
-                                             int                width);
+                                             GtkTextUnit        width);
 void gtk_text_layout_set_preedit_string     (GtkTextLayout     *layout,
  					     const char        *preedit_string,
  					     PangoAttrList     *preedit_attrs,
@@ -251,8 +252,8 @@ void     gtk_text_layout_set_cursor_visible (GtkTextLayout     *layout,
 gboolean gtk_text_layout_get_cursor_visible (GtkTextLayout     *layout);
 
 void    gtk_text_layout_get_size  (GtkTextLayout  *layout,
-                                   int            *width,
-                                   int            *height);
+                                   GtkTextUnit    *width,
+                                   GtkTextUnit    *height);
 
 void gtk_text_layout_wrap_loop_start (GtkTextLayout *layout);
 void gtk_text_layout_wrap_loop_end   (GtkTextLayout *layout);
@@ -269,17 +270,17 @@ int                 gtk_text_line_display_compare     (const GtkTextLineDisplay 
 
 void gtk_text_layout_get_line_at_y     (GtkTextLayout     *layout,
                                         GtkTextIter       *target_iter,
-                                        int                y,
-                                        int               *line_top);
+                                        GtkTextUnit        y,
+                                        GtkTextUnit       *line_top);
 gboolean gtk_text_layout_get_iter_at_pixel (GtkTextLayout     *layout,
                                             GtkTextIter       *iter,
-                                            int                x,
-                                            int                y);
+                                            GtkTextUnit        x,
+                                            GtkTextUnit        y);
 gboolean gtk_text_layout_get_iter_at_position (GtkTextLayout     *layout,
                                                GtkTextIter       *iter,
-                                               int               *trailing,
-                                               int                x,
-                                               int                y);
+                                               GtkTextUnit       *trailing,
+                                               GtkTextUnit        x,
+                                               GtkTextUnit        y);
 void gtk_text_layout_invalidate        (GtkTextLayout     *layout,
                                         const GtkTextIter *start,
                                         const GtkTextIter *end);
@@ -294,8 +295,8 @@ void gtk_text_layout_free_line_data    (GtkTextLayout     *layout,
 gboolean gtk_text_layout_is_valid        (GtkTextLayout *layout);
 void     gtk_text_layout_validate_yrange (GtkTextLayout *layout,
                                           GtkTextIter   *anchor_line,
-                                          int            y0_,
-                                          int            y1_);
+                                          GtkTextUnit    y0_,
+                                          GtkTextUnit    y1_);
 void     gtk_text_layout_validate        (GtkTextLayout *layout,
                                           int            max_pixels);
 
@@ -303,24 +304,24 @@ GtkTextLineData* gtk_text_layout_wrap  (GtkTextLayout   *layout,
                                         GtkTextLine     *line,
                                         GtkTextLineData *line_data);
 void     gtk_text_layout_changed              (GtkTextLayout     *layout,
-                                               int                y,
-                                               int                old_height,
-                                               int                new_height);
+                                               GtkTextUnit        y,
+                                               GtkTextUnit        old_height,
+                                               GtkTextUnit        new_height);
 void     gtk_text_layout_cursors_changed      (GtkTextLayout     *layout,
-                                               int                y,
-                                               int                old_height,
-                                               int                new_height);
+                                               GtkTextUnit        y,
+                                               GtkTextUnit        old_height,
+                                               GtkTextUnit        new_height);
 void     gtk_text_layout_get_iter_location    (GtkTextLayout     *layout,
                                                const GtkTextIter *iter,
-                                               GdkRectangle      *rect);
+                                               GtkTextRectangle      *rect);
 void     gtk_text_layout_get_line_yrange      (GtkTextLayout     *layout,
                                                const GtkTextIter *iter,
-                                               int               *y,
-                                               int               *height);
+                                               GtkTextUnit       *y,
+                                               GtkTextUnit       *height);
 void     gtk_text_layout_get_cursor_locations (GtkTextLayout     *layout,
                                                GtkTextIter       *iter,
-                                               GdkRectangle      *strong_pos,
-                                               GdkRectangle      *weak_pos);
+                                               GtkTextRectangle      *strong_pos,
+                                               GtkTextRectangle      *weak_pos);
 GtkTextLineDisplay *gtk_text_layout_create_display (GtkTextLayout *layout,
                                                     GtkTextLine   *line,
                                                     gboolean       size_only);
@@ -330,11 +331,11 @@ void     gtk_text_layout_update_display_cursors (GtkTextLayout      *layout,
 void     gtk_text_layout_update_children        (GtkTextLayout      *layout,
                                                  GtkTextLineDisplay *display);
 gboolean _gtk_text_layout_get_block_cursor    (GtkTextLayout     *layout,
-					       GdkRectangle      *pos);
+					       GtkTextRectangle      *pos);
 gboolean gtk_text_layout_clamp_iter_to_vrange (GtkTextLayout     *layout,
                                                GtkTextIter       *iter,
-                                               int                top,
-                                               int                bottom);
+                                               GtkTextUnit        top,
+                                               GtkTextUnit        bottom);
 
 gboolean gtk_text_layout_move_iter_to_line_end      (GtkTextLayout *layout,
                                                      GtkTextIter   *iter,
@@ -345,7 +346,7 @@ gboolean gtk_text_layout_move_iter_to_next_line     (GtkTextLayout *layout,
                                                      GtkTextIter   *iter);
 void     gtk_text_layout_move_iter_to_x             (GtkTextLayout *layout,
                                                      GtkTextIter   *iter,
-                                                     int            x);
+                                                     GtkTextUnit    x);
 gboolean gtk_text_layout_move_iter_visually         (GtkTextLayout *layout,
                                                      GtkTextIter   *iter,
                                                      int            count);
@@ -372,12 +373,12 @@ void gtk_text_anchored_child_set_layout     (GtkWidget          *child,
 
 void gtk_text_layout_spew (GtkTextLayout *layout);
 
-void gtk_text_layout_snapshot (GtkTextLayout        *layout,
-                               GtkWidget            *widget,
-                               GtkSnapshot          *snapshot,
-                               const GdkRectangle   *clip,
-                               gboolean              selection_style_changed,
-                               float                 cursor_alpha);
+void gtk_text_layout_snapshot (GtkTextLayout          *layout,
+                               GtkWidget              *widget,
+                               GtkSnapshot            *snapshot,
+                               const GtkTextRectangle *clip,
+                               gboolean                selection_style_changed,
+                               float                   cursor_alpha);
 
 void gtk_text_layout_set_mru_size (GtkTextLayout *layout,
                                    guint          mru_size);

@@ -31,6 +31,7 @@
 #include <gtk/gtkwidget.h>
 #include <gtk/gtkimcontext.h>
 #include <gtk/gtktextbuffer.h>
+#include <gtk/gtktexttypes.h>
 
 G_BEGIN_DECLS
 
@@ -218,7 +219,7 @@ gboolean       gtk_text_view_place_cursor_onscreen (GtkTextView   *text_view);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_text_view_get_visible_rect      (GtkTextView   *text_view,
-                                                    GdkRectangle  *visible_rect);
+                                                    GtkTextRectangle  *visible_rect);
 GDK_AVAILABLE_IN_ALL
 void           gtk_text_view_set_cursor_visible    (GtkTextView   *text_view,
                                                     gboolean       setting);
@@ -231,49 +232,49 @@ void           gtk_text_view_reset_cursor_blink    (GtkTextView   *text_view);
 GDK_AVAILABLE_IN_ALL
 void           gtk_text_view_get_cursor_locations  (GtkTextView       *text_view,
                                                     const GtkTextIter *iter,
-                                                    GdkRectangle      *strong,
-                                                    GdkRectangle      *weak);
+                                                    GtkTextRectangle      *strong,
+                                                    GtkTextRectangle      *weak);
 GDK_AVAILABLE_IN_ALL
 void           gtk_text_view_get_iter_location     (GtkTextView   *text_view,
                                                     const GtkTextIter *iter,
-                                                    GdkRectangle  *location);
+                                                    GtkTextRectangle  *location);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_text_view_get_iter_at_location  (GtkTextView   *text_view,
                                                     GtkTextIter   *iter,
-                                                    int            x,
-                                                    int            y);
+                                                    GtkTextUnit    x,
+                                                    GtkTextUnit    y);
 GDK_AVAILABLE_IN_ALL
 gboolean       gtk_text_view_get_iter_at_position  (GtkTextView   *text_view,
                                                     GtkTextIter   *iter,
-						    int           *trailing,
-                                                    int            x,
-                                                    int            y);
+                                                    GtkTextUnit   *trailing,
+                                                    GtkTextUnit    x,
+                                                    GtkTextUnit    y);
 GDK_AVAILABLE_IN_ALL
 void           gtk_text_view_get_line_yrange       (GtkTextView       *text_view,
                                                     const GtkTextIter *iter,
-                                                    int               *y,
-                                                    int               *height);
+                                                    GtkTextUnit       *y,
+                                                    GtkTextUnit       *height);
 
 GDK_AVAILABLE_IN_ALL
 void           gtk_text_view_get_line_at_y         (GtkTextView       *text_view,
                                                     GtkTextIter       *target_iter,
-                                                    int                y,
-                                                    int               *line_top);
+                                                    GtkTextUnit        y,
+                                                    GtkTextUnit       *line_top);
 
 GDK_AVAILABLE_IN_ALL
 void gtk_text_view_buffer_to_window_coords (GtkTextView       *text_view,
                                             GtkTextWindowType  win,
-                                            int                buffer_x,
-                                            int                buffer_y,
-                                            int               *window_x,
-                                            int               *window_y);
+                                            GtkTextUnit        buffer_x,
+                                            GtkTextUnit        buffer_y,
+                                            GtkTextUnit       *window_x,
+                                            GtkTextUnit       *window_y);
 GDK_AVAILABLE_IN_ALL
 void gtk_text_view_window_to_buffer_coords (GtkTextView       *text_view,
                                             GtkTextWindowType  win,
-                                            int                window_x,
-                                            int                window_y,
-                                            int               *buffer_x,
-                                            int               *buffer_y);
+                                            GtkTextUnit        window_x,
+                                            GtkTextUnit        window_y,
+                                            GtkTextUnit       *buffer_x,
+                                            GtkTextUnit       *buffer_y);
 
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_view_forward_display_line           (GtkTextView       *text_view,

@@ -187,6 +187,8 @@
 #define SCREEN_WIDTH(widget) text_window_get_width (GTK_TEXT_VIEW (widget)->priv->text_window)
 #define SCREEN_HEIGHT(widget) text_window_get_height (GTK_TEXT_VIEW (widget)->priv->text_window)
 
+#define RECT_TO_GDK(r) (GdkRectangle){(r)->x,(r)->y,(r)->width,(r)->height}
+
 #define SPACE_FOR_CURSOR 1
 
 typedef struct _GtkTextWindow GtkTextWindow;
@@ -208,8 +210,8 @@ struct _GtkTextViewPrivate
   guint im_spot_idle;
   char *im_module;
 
-  int dnd_x;
-  int dnd_y;
+  GtkTextUnit dnd_x;
+  GtkTextUnit dnd_y;
 
   GtkTextHandle *text_handles[TEXT_HANDLE_N_HANDLES];
   GtkWidget *selection_bubble;
@@ -235,16 +237,16 @@ struct _GtkTextViewPrivate
   /* X offset between widget coordinates and buffer coordinates
    * taking left_padding in account
    */
-  int xoffset;
+  GtkTextUnit xoffset;
 
   /* Y offset between widget coordinates and buffer coordinates
    * taking top_padding and top_margin in account
    */
-  int yoffset;
+  GtkTextUnit yoffset;
 
   /* Width and height of the buffer */
-  int width;
-  int height;
+  GtkTextUnit width;
+  GtkTextUnit height;
 
   /* The virtual cursor position is normally the same as the
    * actual (strong) cursor position, except in two circumstances:
@@ -259,7 +261,7 @@ struct _GtkTextViewPrivate
   int virtual_cursor_y;   /* -1 means use actual cursor position */
 
   GtkTextMark *first_para_mark; /* Mark at the beginning of the first onscreen paragraph */
-  int first_para_pixels;       /* Offset of top of screen in the first onscreen paragraph */
+  GtkTextUnit first_para_pixels;       /* Offset of top of screen in the first onscreen paragraph */
 
   guint64 blink_start_time;
   guint blink_tick;
@@ -551,8 +553,8 @@ static gboolean gtk_text_view_end_selection_drag     (GtkTextView        *text_v
 static void     gtk_text_view_start_selection_dnd    (GtkTextView        *text_view,
                                                       const GtkTextIter  *iter,
                                                       GdkEvent           *event,
-                                                      int                 x,
-                                                      int                 y);
+                                                      GtkTextUnit         x,
+                                                      GtkTextUnit         y);
 static void     gtk_text_view_check_cursor_blink     (GtkTextView        *text_view);
 static void     gtk_text_view_pend_cursor_blink      (GtkTextView        *text_view);
 static void     gtk_text_view_stop_cursor_blink      (GtkTextView        *text_view);
@@ -602,11 +604,11 @@ static void gtk_text_view_buffer_notify_undo     (GtkTextBuffer     *buffer,
                                                   GtkTextView       *view);
 static void gtk_text_view_get_virtual_cursor_pos (GtkTextView       *text_view,
                                                   GtkTextIter       *cursor,
-                                                  int               *x,
-                                                  int               *y);
+                                                  GtkTextUnit       *x,
+                                                  GtkTextUnit       *y);
 static void gtk_text_view_set_virtual_cursor_pos (GtkTextView       *text_view,
-                                                  int                x,
-                                                  int                y);
+                                                  GtkTextUnit        x,
+                                                  GtkTextUnit        y);
 
 static void gtk_text_view_do_popup               (GtkTextView       *text_view,
 						  GdkEvent          *event);
@@ -762,6 +764,45 @@ check_scroll (double offset, GtkAdjustment *adjustment)
     return TRUE;
 
   return FALSE;
+}
+
+static gboolean
+rectangle_intersect (GtkTextRectangle *src1,
+                     GtkTextRectangle *src2,
+                     GtkTextRectangle *dest)
+{
+  GtkTextUnit dest_x, dest_y;
+  GtkTextUnit dest_x2, dest_y2;
+  int return_val;
+
+  g_return_val_if_fail (src1 != NULL, FALSE);
+  g_return_val_if_fail (src2 != NULL, FALSE);
+
+  return_val = FALSE;
+
+  dest_x = MAX (src1->x, src2->x);
+  dest_y = MAX (src1->y, src2->y);
+  dest_x2 = MIN (src1->x + src1->width, src2->x + src2->width);
+  dest_y2 = MIN (src1->y + src1->height, src2->y + src2->height);
+
+  if (dest_x2 > dest_x && dest_y2 > dest_y)
+    {
+      if (dest)
+        {
+          dest->x = dest_x;
+          dest->y = dest_y;
+          dest->width = dest_x2 - dest_x;
+          dest->height = dest_y2 - dest_y;
+        }
+      return_val = TRUE;
+    }
+  else if (dest)
+    {
+      dest->width = 0;
+      dest->height = 0;
+    }
+
+  return return_val;
 }
 
 static int
@@ -2472,8 +2513,8 @@ gtk_text_view_get_buffer (GtkTextView *text_view)
 void
 gtk_text_view_get_cursor_locations (GtkTextView       *text_view,
                                     const GtkTextIter *iter,
-                                    GdkRectangle      *strong,
-                                    GdkRectangle      *weak)
+                                    GtkTextRectangle      *strong,
+                                    GtkTextRectangle      *weak)
 {
   GtkTextIter insert;
 
@@ -2512,8 +2553,8 @@ gtk_text_view_get_cursor_locations (GtkTextView       *text_view,
 gboolean
 gtk_text_view_get_iter_at_location (GtkTextView *text_view,
                                     GtkTextIter *iter,
-                                    int          x,
-                                    int          y)
+                                    GtkTextUnit  x,
+                                    GtkTextUnit  y)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
@@ -2550,9 +2591,9 @@ gtk_text_view_get_iter_at_location (GtkTextView *text_view,
 gboolean
 gtk_text_view_get_iter_at_position (GtkTextView *text_view,
                                     GtkTextIter *iter,
-                                    int         *trailing,
-                                    int          x,
-                                    int          y)
+                                    GtkTextUnit *trailing,
+                                    GtkTextUnit  x,
+                                    GtkTextUnit  y)
 {
   g_return_val_if_fail (GTK_IS_TEXT_VIEW (text_view), FALSE);
   g_return_val_if_fail (iter != NULL, FALSE);
@@ -2577,7 +2618,7 @@ gtk_text_view_get_iter_at_position (GtkTextView *text_view,
 void
 gtk_text_view_get_iter_location (GtkTextView       *text_view,
                                  const GtkTextIter *iter,
-                                 GdkRectangle      *location)
+                                 GtkTextRectangle  *location)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (gtk_text_iter_get_buffer (iter) == get_buffer (text_view));
@@ -2603,8 +2644,8 @@ gtk_text_view_get_iter_location (GtkTextView       *text_view,
 void
 gtk_text_view_get_line_yrange (GtkTextView       *text_view,
                                const GtkTextIter *iter,
-                               int               *y,
-                               int               *height)
+                               GtkTextUnit       *y,
+                               GtkTextUnit       *height)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
   g_return_if_fail (gtk_text_iter_get_buffer (iter) == get_buffer (text_view));
@@ -2635,8 +2676,8 @@ gtk_text_view_get_line_yrange (GtkTextView       *text_view,
 void
 gtk_text_view_get_line_at_y (GtkTextView *text_view,
                              GtkTextIter *target_iter,
-                             int          y,
-                             int         *line_top)
+                             GtkTextUnit  y,
+                             GtkTextUnit *line_top)
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
@@ -2667,25 +2708,25 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   GtkTextViewPrivate *priv = text_view->priv;
   GtkWidget *widget;
 
-  GdkRectangle cursor;
-  int cursor_bottom;
-  int cursor_right;
+  GtkTextRectangle cursor;
+  GtkTextUnit cursor_bottom;
+  GtkTextUnit cursor_right;
 
-  GdkRectangle screen;
-  GdkRectangle screen_dest;
+  GtkTextRectangle screen;
+  GtkTextRectangle screen_dest;
 
-  int screen_inner_left;
-  int screen_inner_right;
-  int screen_inner_top;
-  int screen_inner_bottom;
+  GtkTextUnit screen_inner_left;
+  GtkTextUnit screen_inner_right;
+  GtkTextUnit screen_inner_top;
+  GtkTextUnit screen_inner_bottom;
 
-  int border_xoffset = 0;
-  int border_yoffset = 0;
-  int within_margin_xoffset;
-  int within_margin_yoffset;
+  GtkTextUnit border_xoffset = 0;
+  GtkTextUnit border_yoffset = 0;
+  GtkTextUnit within_margin_xoffset;
+  GtkTextUnit within_margin_yoffset;
 
-  int buffer_bottom;
-  int buffer_right;
+  GtkTextUnit buffer_bottom;
+  GtkTextUnit buffer_right;
 
   gboolean retval = FALSE;
 
@@ -2823,7 +2864,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
 
   if (use_align)
     {
-      int cursor_x_alignment_offset;
+      GtkTextUnit cursor_x_alignment_offset;
 
       cursor_x_alignment_offset = (cursor.width * xalign) - (screen_dest.width * xalign);
       screen_dest.x = cursor.x + cursor_x_alignment_offset - within_margin_xoffset;
@@ -2966,7 +3007,7 @@ gtk_text_view_queue_scroll (GtkTextView   *text_view,
 static gboolean
 gtk_text_view_flush_scroll (GtkTextView *text_view)
 {
-  int height;
+  GtkTextUnit height;
   GtkTextIter iter;
   GtkTextPendingScroll *scroll;
   gboolean retval;
@@ -3026,7 +3067,7 @@ static void
 gtk_text_view_update_adjustments (GtkTextView *text_view)
 {
   GtkTextViewPrivate *priv;
-  int width = 0, height = 0;
+  GtkTextUnit width = 0, height = 0;
 
   DV(g_print(">Updating adjustments ("G_STRLOC")\n"));
 
@@ -3063,7 +3104,7 @@ gtk_text_view_update_layout_width (GtkTextView *text_view)
 static void
 gtk_text_view_update_im_spot_location (GtkTextView *text_view)
 {
-  GdkRectangle area;
+  GtkTextRectangle area;
 
   if (text_view->priv->layout == NULL)
     return;
@@ -3078,7 +3119,7 @@ gtk_text_view_update_im_spot_location (GtkTextView *text_view)
    */
   area.width = 0;
 
-  gtk_im_context_set_cursor_location (text_view->priv->im_context, &area);
+  gtk_im_context_set_cursor_location (text_view->priv->im_context, &RECT_TO_GDK (&area));
 }
 
 static gboolean
@@ -3205,7 +3246,7 @@ gtk_text_view_scroll_mark_onscreen (GtkTextView *text_view,
 static gboolean
 clamp_iter_onscreen (GtkTextView *text_view, GtkTextIter *iter)
 {
-  GdkRectangle visible_rect;
+  GtkTextRectangle visible_rect;
   gtk_text_view_get_visible_rect (text_view, &visible_rect);
 
   return gtk_text_layout_clamp_iter_to_vrange (text_view->priv->layout, iter,
@@ -3255,8 +3296,8 @@ gtk_text_view_move_mark_onscreen (GtkTextView *text_view,
  * [method@Gtk.TextView.buffer_to_window_coords].
  */
 void
-gtk_text_view_get_visible_rect (GtkTextView  *text_view,
-                                GdkRectangle *visible_rect)
+gtk_text_view_get_visible_rect (GtkTextView      *text_view,
+                                GtkTextRectangle *visible_rect)
 {
   GtkWidget *widget;
 
@@ -3271,11 +3312,11 @@ gtk_text_view_get_visible_rect (GtkTextView  *text_view,
       visible_rect->width = SCREEN_WIDTH (widget);
       visible_rect->height = SCREEN_HEIGHT (widget);
 
-      DV(g_print(" visible rect: %d,%d %d x %d\n",
-                 visible_rect->x,
-                 visible_rect->y,
-                 visible_rect->width,
-                 visible_rect->height));
+      g_print(" visible rect: %lf,%lf %lf x %lf\n",
+              visible_rect->x,
+              visible_rect->y,
+              visible_rect->width,
+              visible_rect->height);
     }
 }
 
@@ -4489,7 +4530,7 @@ gtk_text_view_compute_child_allocation (GtkTextView         *text_view,
                                         int                  gutter_width,
                                         int                  gutter_height)
 {
-  int buffer_y;
+  GtkTextUnit buffer_y;
   GtkTextIter iter;
   GtkRequisition req;
 
@@ -5070,14 +5111,17 @@ invalidated_handler (GtkTextLayout *layout,
 
 static void
 changed_handler (GtkTextLayout     *layout,
-                 int                start_y,
-                 int                old_height,
-                 int                new_height,
+                 GtkTextUnit        start_y,
+                 GtkTextUnit        old_height,
+                 GtkTextUnit        new_height,
                  gpointer           data)
 {
   GtkTextView *text_view;
   GtkTextViewPrivate *priv;
   GtkWidget *widget;
+
+  g_assert (GTK_IS_TEXT_LAYOUT (layout));
+  g_assert (GTK_IS_TEXT_VIEW (data));
 
   text_view = GTK_TEXT_VIEW (data);
   priv = text_view->priv;
@@ -5096,8 +5140,8 @@ changed_handler (GtkTextLayout     *layout,
     {
       const GList *iter;
       GtkTextIter first;
-      int new_first_para_top;
-      int old_first_para_top;
+      GtkTextUnit new_first_para_top;
+      GtkTextUnit old_first_para_top;
       int x_offset = 0;
       int y_offset = 0;
 
@@ -5354,8 +5398,8 @@ gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view)
 
 static void
 _text_window_to_widget_coords (GtkTextView *text_view,
-                               int         *x,
-                               int         *y)
+                               GtkTextUnit *x,
+                               GtkTextUnit *y)
 {
   GtkTextViewPrivate *priv = text_view->priv;
 
@@ -5365,8 +5409,8 @@ _text_window_to_widget_coords (GtkTextView *text_view,
 
 static void
 _widget_to_text_surface_coords (GtkTextView *text_view,
-                               int         *x,
-                               int         *y)
+                                GtkTextUnit *x,
+                                GtkTextUnit *y)
 {
   GtkTextViewPrivate *priv = text_view->priv;
 
@@ -5380,8 +5424,8 @@ gtk_text_view_set_handle_position (GtkTextView   *text_view,
                                    GtkTextIter   *iter)
 {
   GtkTextViewPrivate *priv;
-  GdkRectangle rect;
-  int x, y;
+  GtkTextRectangle rect;
+  GtkTextUnit x, y;
 
   priv = text_view->priv;
   gtk_text_view_get_cursor_locations (text_view, iter, &rect, NULL);
@@ -5409,7 +5453,7 @@ gtk_text_view_set_handle_position (GtkTextView   *text_view,
       rect.y = CLAMP (y, 0, SCREEN_HEIGHT (text_view));
       _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
 
-      gtk_text_handle_set_position (handle, &rect);
+      gtk_text_handle_set_position (handle, &RECT_TO_GDK (&rect));
 
       if (gtk_text_iter_get_attributes (iter, &attributes))
         dir = attributes.direction;
@@ -5421,11 +5465,11 @@ gtk_text_view_set_handle_position (GtkTextView   *text_view,
 static void
 gtk_text_view_show_magnifier (GtkTextView *text_view,
                               GtkTextIter *iter,
-                              int          x,
-                              int          y)
+                              GtkTextUnit  x,
+                              GtkTextUnit  y)
 {
-  cairo_rectangle_int_t rect;
   GtkTextViewPrivate *priv;
+  GtkTextRectangle rect;
   GtkRequisition req;
 
 #define N_LINES 1
@@ -5434,8 +5478,7 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
   _gtk_text_view_ensure_magnifier (text_view);
 
   /* Set size/content depending on iter rect */
-  gtk_text_view_get_iter_location (text_view, iter,
-                                   (GdkRectangle *) &rect);
+  gtk_text_view_get_iter_location (text_view, iter, &rect);
   rect.x = x + priv->xoffset;
   gtk_text_view_buffer_to_window_coords (text_view, GTK_TEXT_WINDOW_TEXT,
                                          rect.x, rect.y, &rect.x, &rect.y);
@@ -5451,7 +5494,14 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
   rect.x = CLAMP (rect.x, 0, gtk_widget_get_width (GTK_WIDGET (text_view)));
   rect.y += rect.height / 4;
   rect.height -= rect.height / 4;
-  gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover), &rect);
+
+  gtk_popover_set_pointing_to (GTK_POPOVER (priv->magnifier_popover),
+                               &(GdkRectangle) {
+                                 rect.x,
+                                 rect.y,
+                                 rect.width,
+                                 rect.height
+                               });
 
   gtk_popover_popup (GTK_POPOVER (priv->magnifier_popover));
 
@@ -5460,13 +5510,14 @@ gtk_text_view_show_magnifier (GtkTextView *text_view,
 
 static void
 gtk_text_view_handle_dragged (GtkTextHandle *handle,
-                              int            x,
-                              int            y,
+                              int            handle_x,
+                              int            handle_y,
                               GtkTextView   *text_view)
 {
   GtkTextViewPrivate *priv;
   GtkTextIter cursor, bound, iter, *old_iter;
   GtkTextBuffer *buffer;
+  GtkTextUnit x = handle_x, y = handle_y;
 
   priv = text_view->priv;
   buffer = get_buffer (text_view);
@@ -5722,12 +5773,12 @@ static gboolean
 get_iter_from_gesture (GtkTextView *text_view,
                        GtkGesture  *gesture,
                        GtkTextIter *iter,
-                       int         *x,
-                       int         *y)
+                       GtkTextUnit *x,
+                       GtkTextUnit *y)
 {
   GdkEventSequence *sequence;
   GtkTextViewPrivate *priv;
-  int xcoord, ycoord;
+  GtkTextUnit xcoord, ycoord;
   double px, py;
 
   priv = text_view->priv;
@@ -6057,7 +6108,7 @@ gtk_text_view_paint (GtkWidget   *widget,
   gtk_text_layout_snapshot (priv->layout,
                             widget,
                             snapshot,
-                            &(GdkRectangle) {
+                            &(GtkTextRectangle) {
                               priv->xoffset,
                               priv->yoffset,
                               gtk_widget_get_width (widget),
@@ -6536,7 +6587,7 @@ gtk_text_view_move_cursor (GtkTextView     *text_view,
   GtkTextIter insert;
   GtkTextIter newplace;
   gboolean cancel_selection = FALSE;
-  int cursor_x_pos = 0;
+  GtkTextUnit cursor_x_pos = 0;
   GtkDirectionType leave_direction = -1;
 
   priv = text_view->priv;
@@ -6850,14 +6901,14 @@ gtk_text_view_scroll_pages (GtkTextView *text_view,
 {
   GtkTextViewPrivate *priv;
   GtkAdjustment *adjustment;
-  int cursor_x_pos, cursor_y_pos;
+  GtkTextUnit cursor_x_pos, cursor_y_pos;
   GtkTextMark *insert_mark;
   GtkTextIter old_insert;
   GtkTextIter new_insert;
   GtkTextIter anchor;
   double newval;
   double oldval;
-  int y0, y1;
+  GtkTextUnit y0, y1;
 
   priv = text_view->priv;
 
@@ -6943,13 +6994,13 @@ gtk_text_view_scroll_hpages (GtkTextView *text_view,
 {
   GtkTextViewPrivate *priv;
   GtkAdjustment *adjustment;
-  int cursor_x_pos, cursor_y_pos;
+  GtkTextUnit cursor_x_pos, cursor_y_pos;
   GtkTextMark *insert_mark;
   GtkTextIter old_insert;
   GtkTextIter new_insert;
   double newval;
   double oldval;
-  int y, height;
+  GtkTextUnit y, height;
 
   priv = text_view->priv;
 
@@ -7660,10 +7711,10 @@ selection_data_free (SelectionData *data)
 static gboolean
 drag_gesture_get_text_surface_coords (GtkGestureDrag *gesture,
                                       GtkTextView    *text_view,
-                                      int            *start_x,
-                                      int            *start_y,
-                                      int            *x,
-                                      int            *y)
+                                      GtkTextUnit    *start_x,
+                                      GtkTextUnit    *start_y,
+                                      GtkTextUnit    *x,
+                                      GtkTextUnit    *y)
 {
   double sx, sy, ox, oy;
 
@@ -7688,7 +7739,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
                                    double          offset_y,
                                    GtkTextView    *text_view)
 {
-  int start_x, start_y, x, y;
+  GtkTextUnit start_x, start_y, x, y;
   GdkEventSequence *sequence;
   gboolean is_touchscreen;
   GdkEvent *event;
@@ -7724,7 +7775,7 @@ gtk_text_view_drag_gesture_update (GtkGestureDrag *gesture,
           if (!is_touchscreen)
             {
               GtkTextIter iter;
-              int buffer_x, buffer_y;
+              GtkTextUnit buffer_x, buffer_y;
 
               gtk_text_view_window_to_buffer_coords (text_view,
                                                      GTK_TEXT_WINDOW_TEXT,
@@ -7817,7 +7868,7 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
                                 GtkTextView    *text_view)
 {
   gboolean is_touchscreen, clicked_in_selection;
-  int start_x, start_y, x, y;
+  GtkTextUnit start_x, start_y, x, y;
   GdkEventSequence *sequence;
   GtkTextViewPrivate *priv;
   GdkEvent *event;
@@ -8386,8 +8437,8 @@ static void
 gtk_text_view_start_selection_dnd (GtkTextView       *text_view,
                                    const GtkTextIter *iter,
                                    GdkEvent          *event,
-                                   int                x,
-                                   int                y)
+                                   GtkTextUnit        x,
+                                   GtkTextUnit        y)
 {
   GtkWidget *widget = GTK_WIDGET (text_view);
   GtkTextBuffer *buffer = gtk_text_view_get_buffer (text_view);
@@ -8449,7 +8500,7 @@ gtk_text_view_drag_motion (GtkDropTarget *dest,
   GtkTextIter newplace;
   GtkTextIter start;
   GtkTextIter end;
-  int bx, by;
+  GtkTextUnit bx, by;
   gboolean can_accept = FALSE;
 
   gtk_text_view_window_to_buffer_coords (text_view,
@@ -8610,7 +8661,7 @@ gtk_text_view_set_vadjustment_values (GtkTextView *text_view)
   GtkTextViewPrivate *priv;
   GtkTextIter first_para;
   int screen_height;
-  int y;
+  GtkTextUnit y;
   double old_value;
   double new_value;
   double new_upper;
@@ -8648,9 +8699,9 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
 {
   GtkTextViewPrivate *priv;
   GtkTextIter iter;
-  int line_top;
-  int dx = 0;
-  int dy = 0;
+  GtkTextUnit line_top;
+  GtkTextUnit dx = 0;
+  GtkTextUnit dy = 0;
 
   priv = text_view->priv;
 
@@ -8666,12 +8717,12 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
 
   if (adjustment == priv->hadjustment)
     {
-      dx = priv->xoffset - (int)gtk_adjustment_get_value (adjustment);
-      priv->xoffset = (int)gtk_adjustment_get_value (adjustment) - priv->left_padding;
+      dx = priv->xoffset - gtk_adjustment_get_value (adjustment);
+      priv->xoffset = gtk_adjustment_get_value (adjustment) - priv->left_padding;
     }
   else if (adjustment == priv->vadjustment)
     {
-      dy = priv->yoffset - (int)gtk_adjustment_get_value (adjustment) + priv->top_margin ;
+      dy = priv->yoffset - gtk_adjustment_get_value (adjustment) + priv->top_margin ;
       priv->yoffset -= dy;
 
       if (priv->layout)
@@ -9006,12 +9057,12 @@ gtk_text_view_mark_set_handler (GtkTextBuffer     *buffer,
 static void
 gtk_text_view_get_virtual_cursor_pos (GtkTextView *text_view,
                                       GtkTextIter *cursor,
-                                      int         *x,
-                                      int         *y)
+                                      GtkTextUnit *x,
+                                      GtkTextUnit *y)
 {
   GtkTextViewPrivate *priv;
   GtkTextIter insert;
-  GdkRectangle pos;
+  GtkTextRectangle pos;
 
   priv = text_view->priv;
 
@@ -9044,10 +9095,10 @@ gtk_text_view_get_virtual_cursor_pos (GtkTextView *text_view,
 
 static void
 gtk_text_view_set_virtual_cursor_pos (GtkTextView *text_view,
-                                      int          x,
-                                      int          y)
+                                      GtkTextUnit  x,
+                                      GtkTextUnit  y)
 {
-  GdkRectangle pos;
+  GtkTextRectangle pos;
 
   if (!text_view->priv->layout)
     return;
@@ -9314,7 +9365,7 @@ gtk_text_view_do_popup (GtkTextView *text_view,
     {
       GdkDevice *device;
       GdkSeat *seat;
-      GdkRectangle rect = { 0, 0, 1, 1 };
+      GtkTextRectangle rect = { 0, 0, 1, 1 };
 
       device = gdk_event_get_device (trigger_event);
       seat = gdk_event_get_seat (trigger_event);
@@ -9344,14 +9395,14 @@ gtk_text_view_do_popup (GtkTextView *text_view,
           rect.y = p.y;
         }
 
-      gtk_popover_set_pointing_to (GTK_POPOVER (priv->popup_menu), &rect);
+      gtk_popover_set_pointing_to (GTK_POPOVER (priv->popup_menu), &RECT_TO_GDK (&rect));
     }
   else
     {
       GtkTextBuffer *buffer;
       GtkTextIter iter;
-      GdkRectangle iter_location;
-      GdkRectangle visible_rect;
+      GtkTextRectangle iter_location;
+      GtkTextRectangle visible_rect;
       gboolean is_visible;
 
       buffer = get_buffer (text_view);
@@ -9374,7 +9425,7 @@ gtk_text_view_do_popup (GtkTextView *text_view,
                                                  &iter_location.x,
                                                  &iter_location.y);
 
-          gtk_popover_set_pointing_to (GTK_POPOVER (priv->popup_menu), &iter_location);
+          gtk_popover_set_pointing_to (GTK_POPOVER (priv->popup_menu), &RECT_TO_GDK (&iter_location));
         }
     }
 
@@ -9391,12 +9442,12 @@ gtk_text_view_popup_menu (GtkWidget  *widget,
 
 static void
 gtk_text_view_get_selection_rect (GtkTextView           *text_view,
-				  cairo_rectangle_int_t *rect)
+                                  cairo_rectangle_int_t *rect)
 {
-  cairo_rectangle_int_t rect_cursor, rect_bound;
+  GtkTextRectangle rect_cursor, rect_bound;
   GtkTextIter cursor, bound;
   GtkTextBuffer *buffer;
-  int x1, y1, x2, y2;
+  GtkTextUnit x1, y1, x2, y2;
 
   buffer = get_buffer (text_view);
   gtk_text_buffer_get_iter_at_mark (buffer, &cursor,
@@ -9507,6 +9558,7 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   GtkWidget *box;
   GtkWidget *toolbar;
   GMenuModel *model;
+  GtkTextUnit inout_x, inout_y;
   int i;
 
   gtk_text_view_update_clipboard_actions (text_view);
@@ -9544,10 +9596,13 @@ gtk_text_view_selection_bubble_popup_show (gpointer user_data)
   rect.x -= priv->xoffset;
   rect.y -= priv->yoffset;
 
-  _text_window_to_widget_coords (text_view, &rect.x, &rect.y);
+  inout_x = rect.x;
+  inout_y = rect.y;
 
-  rect.x -= 5;
-  rect.y -= 5;
+  _text_window_to_widget_coords (text_view, &inout_x, &inout_y);
+
+  rect.x = inout_x - 5;
+  rect.y = inout_y - 5;
   rect.width += 10;
   rect.height += 10;
 
@@ -9712,10 +9767,10 @@ text_window_get_height (GtkTextWindow *win)
 void
 gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
                                        GtkTextWindowType win,
-                                       int               buffer_x,
-                                       int               buffer_y,
-                                       int              *window_x,
-                                       int              *window_y)
+                                       GtkTextUnit       buffer_x,
+                                       GtkTextUnit       buffer_y,
+                                       GtkTextUnit      *window_x,
+                                       GtkTextUnit      *window_y)
 {
   GtkTextViewPrivate *priv = text_view->priv;
 
@@ -9776,10 +9831,10 @@ gtk_text_view_buffer_to_window_coords (GtkTextView      *text_view,
 void
 gtk_text_view_window_to_buffer_coords (GtkTextView      *text_view,
                                        GtkTextWindowType win,
-                                       int               window_x,
-                                       int               window_y,
-                                       int              *buffer_x,
-                                       int              *buffer_y)
+                                       GtkTextUnit       window_x,
+                                       GtkTextUnit       window_y,
+                                       GtkTextUnit      *buffer_x,
+                                       GtkTextUnit      *buffer_y)
 {
   GtkTextViewPrivate *priv = text_view->priv;
 
@@ -10328,8 +10383,8 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
 {
   GtkWidget *chooser;
   GtkTextIter iter;
-  GdkRectangle rect;
-  GdkRectangle rect2;
+  GtkTextRectangle rect;
+  GtkTextRectangle rect2;
   GtkTextBuffer *buffer;
 
   if (gtk_widget_get_ancestor (GTK_WIDGET (text_view), GTK_TYPE_EMOJI_CHOOSER) != NULL)
@@ -10351,7 +10406,7 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
   gtk_text_buffer_get_iter_at_mark (buffer, &iter,
                                     gtk_text_buffer_get_insert (buffer));
 
-  gtk_text_view_get_iter_location (text_view, &iter, (GdkRectangle *) &rect);
+  gtk_text_view_get_iter_location (text_view, &iter, &rect);
 
   rect.width = MAX (rect.width, 1);
   rect.height = MAX (rect.height, 1);
@@ -10364,7 +10419,7 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
                                          rect2.x, rect2.y, &rect2.x, &rect2.y);
   _text_window_to_widget_coords (text_view, &rect2.x, &rect2.y);
 
-  if (!gdk_rectangle_intersect (&rect2, &rect, &rect))
+  if (!rectangle_intersect (&rect2, &rect, &rect))
     {
       rect.x = rect2.width / 2;
       rect.y = rect2.height / 2;
@@ -10372,7 +10427,7 @@ gtk_text_view_insert_emoji (GtkTextView *text_view)
       rect.height = 0;
     }
 
-  gtk_popover_set_pointing_to (GTK_POPOVER (chooser), &rect);
+  gtk_popover_set_pointing_to (GTK_POPOVER (chooser), &RECT_TO_GDK (&rect));
 
   gtk_popover_popup (GTK_POPOVER (chooser));
 }
@@ -10827,6 +10882,20 @@ gtk_text_view_accessible_text_get_default_attributes (GtkAccessibleText   *self,
   g_hash_table_unref (attrs);
 }
 
+static void
+union_region_rect (cairo_region_t         *region,
+                   const GtkTextRectangle *rect)
+{
+  const cairo_rectangle_int_t r = {
+    rect->x,
+    rect->y,
+    rect->width,
+    rect->height
+  };
+
+  cairo_region_union_rectangle (region, &r);
+}
+
 static gboolean
 gtk_text_view_accessible_text_get_extents (GtkAccessibleText *self,
                                            unsigned int       start,
@@ -10836,7 +10905,9 @@ gtk_text_view_accessible_text_get_extents (GtkAccessibleText *self,
   GtkTextBuffer *buffer;
   GtkTextIter start_iter, end_iter;
   cairo_region_t *region;
-  GdkRectangle rect;
+  GtkTextRectangle rect;
+  cairo_rectangle_int_t r;
+  GtkTextUnit x, y;
 
   buffer = get_buffer (GTK_TEXT_VIEW (self));
   gtk_text_buffer_get_iter_at_offset (buffer, &start_iter, start);
@@ -10846,31 +10917,31 @@ gtk_text_view_accessible_text_get_extents (GtkAccessibleText *self,
   do
     {
       gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &start_iter, &rect);
-      cairo_region_union_rectangle (region, &rect);
+      union_region_rect (region, &rect);
 
       gtk_text_iter_forward_to_line_end (&start_iter);
       gtk_text_iter_order (&start_iter, &end_iter);
 
       gtk_text_view_get_iter_location (GTK_TEXT_VIEW (self), &end_iter, &rect);
-      cairo_region_union_rectangle (region, &rect);
+      union_region_rect (region, &rect);
 
       gtk_text_iter_forward_line (&start_iter);
     }
   while (gtk_text_iter_compare (&start_iter, &end_iter) < 0);
 
-  cairo_region_get_extents (region, &rect);
+  cairo_region_get_extents (region, &r);
   cairo_region_destroy (region);
 
   gtk_text_view_buffer_to_window_coords (GTK_TEXT_VIEW (self),
                                          GTK_TEXT_WINDOW_TEXT,
-                                         rect.x, rect.y,
-                                         &rect.x, &rect.y);
-  _text_window_to_widget_coords (GTK_TEXT_VIEW (self), &rect.x, &rect.y);
+                                         r.x, r.y,
+                                         &x, &y);
+  _text_window_to_widget_coords (GTK_TEXT_VIEW (self), &x, &y);
 
-  extents->origin.x = rect.x;
-  extents->origin.y = rect.y;
-  extents->size.width = rect.width;
-  extents->size.height = rect.height;
+  extents->origin.x = x;
+  extents->origin.y = y;
+  extents->size.width = r.width;
+  extents->size.height = r.height;
 
   return TRUE;
 }
@@ -10881,7 +10952,7 @@ gtk_text_view_accessible_text_get_offset (GtkAccessibleText      *self,
                                           unsigned int           *offset)
 {
   GtkTextView *text_view = GTK_TEXT_VIEW (self);
-  int x, y;
+  GtkTextUnit x, y;
   GtkTextIter iter;
 
   x = point->x;
