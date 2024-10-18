@@ -256,7 +256,7 @@ _get_keyboard_layout_file (const char *layout_name)
                           KEY_QUERY_VALUE, &hkey);
   if (status != ERROR_SUCCESS)
     {
-      g_warning("Could not open registry key '%s'. Error code: %d",
+      g_printerr("Could not open registry key '%s'. Error code: %d",
                 kbdKeyPath, (int)status);
       goto fail1;
     }
@@ -266,7 +266,7 @@ _get_keyboard_layout_file (const char *layout_name)
                              &file_name_len);
   if (status != ERROR_SUCCESS)
     {
-      g_warning("Could not query registry key '%s\\Layout File'. Error code: %d",
+      g_printerr("Could not query registry key '%s\\Layout File'. Error code: %d",
                 kbdKeyPath, (int)status);
       goto fail2;
     }
@@ -274,7 +274,7 @@ _get_keyboard_layout_file (const char *layout_name)
   dir_len = GetSystemDirectoryA (0, 0); /* includes \0 */
   if (dir_len == 0)
     {
-      g_warning("GetSystemDirectoryA failed. Error: %d", (int)GetLastError());
+      g_printerr("GetSystemDirectoryA failed. Error: %d", (int)GetLastError());
       goto fail2;
     }
 
