@@ -210,11 +210,13 @@ msys2-ucrt64:
   variables:
     MSYSTEM: "UCRT64"
     CHERE_INVOKING: "yes"
+    G_DEBUGGER: 'gdb.exe -batch -ex "set logging enabled on" -ex "attach %p" -ex "signal-event %e" -ex "c" -ex "thread apply all bt full" -ex "k"'
   artifacts:
     when: always
     expose_as: 'Windows_DLL_MSYS2_64_bit_toolchain'
     paths:
       - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
+      - "${CI_PROJECT_DIR}/_build/gdb.txt"
 
 macos:
   rules:
