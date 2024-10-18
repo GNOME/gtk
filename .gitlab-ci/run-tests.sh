@@ -88,6 +88,26 @@ case "${setup}" in
     kill ${server}
     ;;
 
+  win32*)
+    meson test -C ${builddir} \
+          --quiet \
+          --timeout-multiplier "${multiplier}" \
+          --num-processes "${n_processes}" \
+          --maxfail "${max_fail}" \
+          --print-errorlogs \
+          --setup=${setup} \
+          --suite=${suite//,/ --suite=} \
+          --no-suite=failing \
+          --no-suite=${setup}_failing \
+          --no-suite=flaky \
+          --no-suite=headless \
+          --no-suite=gsk-compare-gl \
+          --no-suite=gsk-compare-ngl \
+          --no-suite=gsk-compare-vulkan \
+          --no-suite=gsk-compare-broadway
+    exit_code=$?
+    ;;
+
   *)
     echo "Failed to add ${setup} to .gitlab-ci/run-tests.sh"
     exit 1

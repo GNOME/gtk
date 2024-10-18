@@ -67,6 +67,7 @@ style-check-diff:
         - "${CI_PROJECT_DIR}/_build/report-x11.xml"
         - "${CI_PROJECT_DIR}/_build/report-wayland.xml"
         - "${CI_PROJECT_DIR}/_build/report-wayland_gl.xml"
+        - "${CI_PROJECT_DIR}/_build/report-win32.xml"
         - "${CI_PROJECT_DIR}/_build/report-broadway.xml"
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths:
@@ -81,6 +82,8 @@ style-check-diff:
       - "${CI_PROJECT_DIR}/_build/testsuite/css/output/*/*.syscap"
       - "${CI_PROJECT_DIR}/_build/testsuite/headless/*/*.log"
       - "${CI_PROJECT_DIR}/_build_hello/meson-logs"
+      # somewhat hacky to add this here, but avoids yaml madness
+      - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
 
 .build-fedora-default:
   image: $FEDORA_IMAGE
@@ -194,6 +197,7 @@ fedora-mingw64:
   script:
     - C:\msys64\usr\bin\pacman --noconfirm -Syyuu
     - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/test-msys2.sh"
+    - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/run-tests.sh _build win32 gtk"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -205,16 +209,13 @@ fedora-mingw64:
       - subprojects/pango/
 
 msys2-ucrt64:
-  extends: .mingw-defaults
+  extends:
+    - .test-runner
+    - .mingw-defaults
   needs: []
   variables:
     MSYSTEM: "UCRT64"
     CHERE_INVOKING: "yes"
-  artifacts:
-    when: always
-    expose_as: 'Windows_DLL_MSYS2_64_bit_toolchain'
-    paths:
-      - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
 
 macos:
   rules:
