@@ -214,7 +214,6 @@ struct _GdkWin32Display
   guint hasGlWINSwapHint : 1;
 
   struct wgl_quirks {
-    guint force_gdi_compatibility : 1;
     guint disallow_swap_exchange : 1;
   } *wgl_quirks;
 
