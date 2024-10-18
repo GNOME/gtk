@@ -195,6 +195,7 @@ style-check-diff:
         - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-wayland.junit.xml"
         - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-wayland_gl.junit.xml"
         - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-wayland_minimal.junit.xml"
+        - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-win32.junit.xml"
         - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-broadway.junit.xml"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
@@ -208,7 +209,9 @@ style-check-diff:
       - "${CI_PROJECT_DIR}/_build_hello/meson-logs"
       - "${CI_PROJECT_DIR}/_build/gtk/GdkX11-4.0.gir"
       - "${CI_PROJECT_DIR}/_build/gtk/GdkWayland-4.0.gir"
+      - "${CI_PROJECT_DIR}/_build/gtk/GdkWin32-4.0.gir"
       - "${CI_PROJECT_DIR}/_build/meson-dist/*.tar.xz"
+      - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
 
 .build-fedora-default:
   extends:
@@ -316,6 +319,7 @@ fedora-mingw64:
   script:
     - C:\msys64\usr\bin\pacman --noconfirm -Syyuu
     - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/test-msys2.sh"
+    - C:\msys64\usr\bin\bash -lc "bash -x ./.gitlab-ci/run-tests.sh _build win32 gtk"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -327,17 +331,13 @@ fedora-mingw64:
       - subprojects/pango/
 
 msys2-ucrt64:
-  extends: .mingw-defaults
+  extends:
+    - .test-runner
+    - .mingw-defaults
   needs: []
   variables:
     MSYSTEM: "UCRT64"
     CHERE_INVOKING: "yes"
-  artifacts:
-    when: always
-    expose_as: 'Windows_DLL_MSYS2_64_bit_toolchain'
-    paths:
-      - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
-      - "${CI_PROJECT_DIR}/_build/gtk/GdkWin32-4.0.gir"
 
 macos-arm64:
   allow_failure: true
