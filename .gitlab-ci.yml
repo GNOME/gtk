@@ -338,6 +338,7 @@ msys2-ucrt64:
   variables:
     MSYSTEM: "UCRT64"
     CHERE_INVOKING: "yes"
+    MESON_TEST_MAX_FAIL: 10
 
 macos-arm64:
   allow_failure: true
