@@ -367,10 +367,9 @@ choose_pixel_format_arb_attribs (GdkWin32Display *display_win32,
 
   attribs_add_static_array (&attribs, attribs_base);
 
-  if (display_win32->wgl_quirks->force_gdi_compatibility)
-    attribs_add (&attribs, WGL_SUPPORT_GDI_ARB, GL_TRUE);
-
   attribs_commit (&attribs);
+
+  attribs_add (&attribs, WGL_SUPPORT_GDI_ARB, GL_TRUE);
 
   attribs_add_static_array (&attribs, attribs_ancillary_buffers);
 
@@ -395,7 +394,7 @@ choose_pixel_format_arb_attribs (GdkWin32Display *display_win32,
 
   if (find_pixel_format_with_defined_swap_method (hdc, formats, count, &index, &swap_method))
     {
-      if (!display_win32->wgl_quirks->disallow_swap_exchange || swap_method != WGL_SWAP_EXCHANGE_ARB)
+      if (!display_win32->wgl_quirks.disallow_swap_exchange || swap_method != WGL_SWAP_EXCHANGE_ARB)
         {
           format = formats[index];
           goto done;
@@ -406,7 +405,7 @@ choose_pixel_format_arb_attribs (GdkWin32Display *display_win32,
 
   const int swap_methods[] = 
   {
-    (display_win32->wgl_quirks->disallow_swap_exchange) ? 0 : WGL_SWAP_EXCHANGE_ARB,
+    (display_win32->wgl_quirks.disallow_swap_exchange) ? 0 : WGL_SWAP_EXCHANGE_ARB,
     WGL_SWAP_COPY_ARB,
   };
   for (size_t i = 0; i < G_N_ELEMENTS (swap_methods); i++)
@@ -421,7 +420,7 @@ choose_pixel_format_arb_attribs (GdkWin32Display *display_win32,
                                           &count));
       if (find_pixel_format_with_defined_swap_method (hdc, formats, count, &index, &swap_method))
         {
-          if (!display_win32->wgl_quirks->disallow_swap_exchange || swap_method != WGL_SWAP_EXCHANGE_ARB)
+          if (!display_win32->wgl_quirks.disallow_swap_exchange || swap_method != WGL_SWAP_EXCHANGE_ARB)
             {
               format = formats[index];
               goto done;
@@ -450,13 +449,16 @@ get_distance (PIXELFORMATDESCRIPTOR *pfd,
   int is_double_buffered = (pfd->dwFlags & PFD_DOUBLEBUFFER) != 0;
   int is_swap_defined = (pfd->dwFlags & swap_flags) != 0;
   int is_mono = (pfd->dwFlags & PFD_STEREO) == 0;
+  int is_transparent = (pfd->dwFlags & PFD_SUPPORT_GDI) != 0;
   int ancillary_bits = pfd->cStencilBits + pfd->cDepthBits + pfd->cAccumBits;
 
+  int opacity_distance = !is_transparent * 5000;
   int quality_distance = !is_double_buffered * 1000;
   int performance_distance = !is_swap_defined * 200;
   int memory_distance = !is_mono + ancillary_bits;
 
-  return quality_distance +
+  return opacity_distance +
+         quality_distance +
          performance_distance +
          memory_distance;
 }
@@ -477,10 +479,9 @@ choose_pixel_format_opengl32 (GdkWin32Display *display_win32,
   const DWORD skip_flags = PFD_GENERIC_FORMAT |
                            PFD_GENERIC_ACCELERATED;
   const DWORD required_flags = PFD_DRAW_TO_WINDOW |
-                               PFD_SUPPORT_OPENGL |
-                               (display_win32->wgl_quirks->force_gdi_compatibility ? PFD_SUPPORT_GDI : 0);
+                               PFD_SUPPORT_OPENGL;
   const DWORD best_swap_flags = PFD_SWAP_COPY |
-                                (display_win32->wgl_quirks->disallow_swap_exchange ? 0 : PFD_SWAP_EXCHANGE);
+                                (display_win32->wgl_quirks.disallow_swap_exchange ? 0 : PFD_SWAP_EXCHANGE);
 
   struct {
     int index;
@@ -620,18 +621,6 @@ create_dummy_gl_window (void)
 }
 
 static bool
-check_driver_is_d3d12 (void)
-{
-  const char *vendor = (const char *) glGetString (GL_VENDOR);
-  const char *renderer = (const char *) glGetString (GL_RENDERER);
-
-  return vendor != NULL &&
-         g_ascii_strncasecmp (vendor, "MICROSOFT", strlen ("MICROSOFT")) == 0 &&
-         renderer != NULL &&
-         g_ascii_strncasecmp (renderer, "D3D12", strlen ("D3D12")) == 0;
-}
-
-static bool
 check_vendor_is_nvidia (void)
 {
   const char *vendor = (const char *) glGetString (GL_VENDOR);
@@ -651,9 +640,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
   if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, error))
     return NULL;
 
-  g_assert (display_win32->wgl_quirks == NULL);
-  display_win32->wgl_quirks = g_new0 (struct wgl_quirks, 1);
-
+  
   /* acquire and cache dummy Window (HWND & HDC) and
    * dummy GL Context, it is used to query functions
    * and used for other stuff as well
@@ -694,8 +681,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
   display_win32->hasGlWINSwapHint =
     epoxy_has_gl_extension ("GL_WIN_swap_hint");
 
-  display_win32->wgl_quirks->force_gdi_compatibility = check_driver_is_d3d12 ();
-  display_win32->wgl_quirks->disallow_swap_exchange = check_vendor_is_nvidia ();
+  display_win32->wgl_quirks.disallow_swap_exchange = check_vendor_is_nvidia ();
 
   context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL,
                           "display", display,
@@ -714,7 +700,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
     GDK_NOTE (OPENGL, g_print ("WGL API version %d.%d found\n"
                          " - Vendor: %s\n"
                          " - Renderer: %s\n"
-                         " - Quirks / force GDI compatiblity: %s\n"
                          " - Quirks / disallow swap exchange: %s\n"
                          " - Checked extensions:\n"
                          "\t* WGL_ARB_pixel_format: %s\n"
@@ -725,8 +710,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                          major, minor,
                          glGetString (GL_VENDOR),
                          glGetString (GL_RENDERER),
-                         display_win32->wgl_quirks->force_gdi_compatibility ? "enabled" : "disabled",
-                         display_win32->wgl_quirks->disallow_swap_exchange ? "enabled" : "disabled",
+                         display_win32->wgl_quirks.disallow_swap_exchange ? "enabled" : "disabled",
                          display_win32->hasWglARBPixelFormat ? "yes" : "no",
                          display_win32->hasWglARBCreateContext ? "yes" : "no",
                          display_win32->hasWglEXTSwapControl ? "yes" : "no",
@@ -1141,7 +1125,7 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
                   context_wgl->swap_method = SWAP_METHOD_COPY;
                   break;
                 case WGL_SWAP_EXCHANGE_ARB:
-                  if (!display_win32->wgl_quirks->disallow_swap_exchange)
+                  if (!display_win32->wgl_quirks.disallow_swap_exchange)
                     context_wgl->swap_method = SWAP_METHOD_EXCHANGE;
                   break;
                 }
@@ -1157,7 +1141,7 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
 
               if (pfd.dwFlags & PFD_SWAP_COPY)
                 context_wgl->swap_method = SWAP_METHOD_COPY;
-              else if ((pfd.dwFlags & PFD_SWAP_EXCHANGE) && !display_win32->wgl_quirks->disallow_swap_exchange)
+              else if ((pfd.dwFlags & PFD_SWAP_EXCHANGE) && !display_win32->wgl_quirks.disallow_swap_exchange)
                 context_wgl->swap_method = SWAP_METHOD_EXCHANGE;
               else
                 context_wgl->swap_method = SWAP_METHOD_UNDEFINED;
