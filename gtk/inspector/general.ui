@@ -816,33 +816,54 @@
                           </object>
                         </property>
                         <child>
-                          <object class="GtkListView">
+                          <object class="GtkBox">
                             <property name="margin-top">20</property>
-                            <property name="margin-top">20</property>
-                            <style>
-                              <class name="rich-list"/>
-                            </style>
-                            <property name="model">
-                              <object class="GtkNoSelection">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkSearchEntry" id="gl_extensions_searchentry"/>
+                            </child>
+                            <child>
+                              <object class="GtkListView">
+                                <style>
+                                  <class name="rich-list"/>
+                                </style>
                                 <property name="model">
-                                  <object class="GtkSortListModel">
-                                    <property name="sorter">
-                                      <object class="GtkStringSorter">
-                                        <property name='expression'>
-                                          <lookup name='string' type='GtkStringObject' />
+                                  <object class="GtkNoSelection">
+                                    <property name="model">
+                                      <object class="GtkFilterListModel">
+                                        <property name="filter">
+                                          <object class="GtkStringFilter">
+                                            <property name="expression">
+                                              <lookup name='string' type='GtkStringObject' />
+                                            </property>
+                                            <binding name="search">
+                                              <lookup name="text" type="GtkSearchEntry">
+                                                gl_extensions_searchentry
+                                              </lookup>
+                                            </binding>
+                                          </object>
+                                        </property>
+                                        <property name="model">
+                                          <object class="GtkSortListModel">
+                                            <property name="sorter">
+                                              <object class="GtkStringSorter">
+                                                <property name='expression'>
+                                                  <lookup name='string' type='GtkStringObject' />
+                                                </property>
+                                              </object>
+                                            </property>
+                                            <property name="model">
+                                              <object class="GtkStringList" id="gl_extensions_list" />
+                                            </property>
+                                          </object>
                                         </property>
                                       </object>
                                     </property>
-                                    <property name="model">
-                                      <object class="GtkStringList" id="gl_extensions_list" />
-                                    </property>
                                   </object>
                                 </property>
-                              </object>
-                            </property>
-                            <property name="factory">
-                              <object class="GtkBuilderListItemFactory">
-                                <property name="bytes"><![CDATA[
+                                <property name="factory">
+                                  <object class="GtkBuilderListItemFactory">
+                                    <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class='GtkListItem'>
@@ -858,9 +879,11 @@
     </property>
   </template>
 </interface>
-                                ]]></property>
+                                    ]]></property>
+                                  </object>
+                                </property>
                               </object>
-                            </property>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -880,33 +903,54 @@
                           </object>
                         </property>
                         <child>
-                          <object class="GtkListView">
+                          <object class="GtkBox">
                             <property name="margin-top">20</property>
-                            <property name="margin-top">20</property>
-                            <style>
-                              <class name="rich-list"/>
-                            </style>
-                            <property name="model">
-                              <object class="GtkNoSelection">
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkSearchEntry" id="egl_extensions_searchentry"/>
+                            </child>
+                            <child>
+                              <object class="GtkListView">
+                                <style>
+                                  <class name="rich-list"/>
+                                </style>
                                 <property name="model">
-                                  <object class="GtkSortListModel">
-                                    <property name="sorter">
-                                      <object class="GtkStringSorter">
-                                        <property name='expression'>
-                                          <lookup name='string' type='GtkStringObject' />
+                                  <object class="GtkNoSelection">
+                                    <property name="model">
+                                      <object class="GtkFilterListModel">
+                                        <property name="filter">
+                                          <object class="GtkStringFilter">
+                                            <property name="expression">
+                                              <lookup name='string' type='GtkStringObject' />
+                                            </property>
+                                            <binding name="search">
+                                              <lookup name="text" type="GtkSearchEntry">
+                                                egl_extensions_searchentry
+                                              </lookup>
+                                            </binding>
+                                          </object>
+                                        </property>
+                                        <property name="model">
+                                          <object class="GtkSortListModel">
+                                            <property name="sorter">
+                                              <object class="GtkStringSorter">
+                                                <property name='expression'>
+                                                  <lookup name='string' type='GtkStringObject' />
+                                                </property>
+                                              </object>
+                                            </property>
+                                            <property name="model">
+                                              <object class="GtkStringList" id="egl_extensions_list" />
+                                            </property>
+                                          </object>
                                         </property>
                                       </object>
                                     </property>
-                                    <property name="model">
-                                      <object class="GtkStringList" id="egl_extensions_list" />
-                                    </property>
                                   </object>
                                 </property>
-                              </object>
-                            </property>
-                            <property name="factory">
-                              <object class="GtkBuilderListItemFactory">
-                                <property name="bytes"><![CDATA[
+                                <property name="factory">
+                                  <object class="GtkBuilderListItemFactory">
+                                    <property name="bytes"><![CDATA[
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class='GtkListItem'>
@@ -922,9 +966,11 @@
     </property>
   </template>
 </interface>
-                                ]]></property>
+                                    ]]></property>
+                                  </object>
+                                </property>
                               </object>
-                            </property>
+                            </child>
                           </object>
                         </child>
                       </object>
