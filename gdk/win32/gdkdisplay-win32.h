@@ -213,9 +213,9 @@ struct _GdkWin32Display
   guint hasWglARBPixelFormat : 1;
   guint hasGlWINSwapHint : 1;
 
-  struct wgl_quirks {
+  struct {
     guint disallow_swap_exchange : 1;
-  } *wgl_quirks;
+  } wgl_quirks;
 
 #ifdef HAVE_EGL
   guint hasEglKHRCreateContext : 1;
