@@ -59,8 +59,7 @@ style-check-diff:
   script:
     - .gitlab-ci/run-style-check-diff.sh
 
-.build-fedora-default:
-  image: $FEDORA_IMAGE
+.test-runner:
   artifacts:
     when: always
     reports:
@@ -82,13 +81,18 @@ style-check-diff:
       - "${CI_PROJECT_DIR}/_build/testsuite/css/output/*/*.syscap"
       - "${CI_PROJECT_DIR}/_build/testsuite/headless/*/*.log"
       - "${CI_PROJECT_DIR}/_build_hello/meson-logs"
+
+.build-fedora-default:
+  image: $FEDORA_IMAGE
   cache:
     key: "$CI_JOB_NAME"
     paths:
       - _ccache/
 
 fedora-x86_64:
-  extends: .build-fedora-default
+  extends: 
+    - .test-runner
+    - .build-fedora-default
   stage: build
   needs: []
   variables:
@@ -110,7 +114,9 @@ fedora-x86_64:
     - .gitlab-ci/run-tests.sh _build wayland_gl gtk:gdk,gtk:gsk-gl
 
 release-build:
-  extends: .build-fedora-default
+  extends: 
+    - .test-runner
+    - .build-fedora-default
   stage: build
   needs: []
   variables:
@@ -391,7 +397,9 @@ static-scan:
 # Run tests with the address sanitizer. We need to turn off introspection
 # and f16c, since they are incompatible with asan
 asan-build:
-  extends: .build-fedora-default
+  extends: 
+    - .test-runner
+    - .build-fedora-default
   tags: [ asan ]
   stage: analysis
   needs: []
