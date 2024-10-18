@@ -59,19 +59,6 @@ style-check-diff:
   script:
     - .gitlab-ci/run-style-check-diff.sh
 
-.test-runner-paths: &test_runner_paths
-  - "${CI_PROJECT_DIR}/_build/meson-logs"
-  - "${CI_PROJECT_DIR}/_build/report*.xml"
-  - "${CI_PROJECT_DIR}/_build/report*.html"
-  - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*/*.png"
-  - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*/*.node"
-  - "${CI_PROJECT_DIR}/_build/testsuite/tools/output/*/*"
-  - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*/*.png"
-  - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*/*.node"
-  - "${CI_PROJECT_DIR}/_build/testsuite/css/output/*/*.syscap"
-  - "${CI_PROJECT_DIR}/_build/testsuite/headless/*/*.log"
-  - "${CI_PROJECT_DIR}/_build_hello/meson-logs"
-
 .test-runner:
   artifacts:
     when: always
@@ -84,7 +71,18 @@ style-check-diff:
         - "${CI_PROJECT_DIR}/_build/report-broadway.xml"
     name: "gtk-${CI_COMMIT_REF_NAME}"
     paths: 
-      - *test_runner_paths
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/report*.xml"
+      - "${CI_PROJECT_DIR}/_build/report*.html"
+      - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*/*.png"
+      - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*/*.node"
+      - "${CI_PROJECT_DIR}/_build/testsuite/tools/output/*/*"
+      - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*/*.png"
+      - "${CI_PROJECT_DIR}/_build/testsuite/gsk/compare/*/*/*.node"
+      - "${CI_PROJECT_DIR}/_build/testsuite/css/output/*/*.syscap"
+      - "${CI_PROJECT_DIR}/_build/testsuite/headless/*/*.log"
+      - "${CI_PROJECT_DIR}/_build_hello/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
     
 .build-fedora-default:
   image: $FEDORA_IMAGE
@@ -217,15 +215,7 @@ msys2-ucrt64:
   variables:
     MSYSTEM: "UCRT64"
     CHERE_INVOKING: "yes"
-    G_DEBUGGER: 'gdb.exe -batch -ex "set logging enabled on" -ex "attach %p" -ex "signal-event %e" -ex "c" -ex "thread apply all bt full" -ex "k"'
     MESON_TEST_MAX_FAIL: 10
-  artifacts:
-    when: always
-    expose_as: 'Windows_DLL_MSYS2_64_bit_toolchain'
-    paths:
-      - *test_runner_paths
-      - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
-      - "${CI_PROJECT_DIR}/_build/gdb.txt"
 
 macos:
   rules:
