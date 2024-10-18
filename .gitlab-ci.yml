@@ -215,6 +215,7 @@ msys2-ucrt64:
     MSYSTEM: "UCRT64"
     CHERE_INVOKING: "yes"
     G_DEBUGGER: 'gdb.exe -batch -ex "set logging enabled on" -ex "attach %p" -ex "signal-event %e" -ex "c" -ex "thread apply all bt full" -ex "k"'
+    MESON_TEST_MAX_FAIL: 10
   artifacts:
     when: always
     expose_as: 'Windows_DLL_MSYS2_64_bit_toolchain'
