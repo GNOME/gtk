@@ -7,7 +7,7 @@ project('gtk', 'c',
           # https://github.com/mesonbuild/meson/issues/2289
           'c_std=gnu99',
         ],
-        meson_version : '>= 0.63.0',
+        meson_version : '>= 1.2.0',
         license: 'LGPL-2.1-or-later')
 
 # keep these numbers in sync with wrap files where there exist
@@ -428,7 +428,10 @@ gi_dep            = dependency('gobject-introspection-1.0', version: introspecti
                                required: get_option('introspection').enabled() and
                                          get_option('build-tests'))
 gstplayer_dep     = dependency('gstreamer-player-1.0', version: gstreamer_req,
-                               required: get_option('media-gstreamer'))
+                               required: get_option('media-gstreamer'),
+                               default_options: [
+                                 'python=disabled',
+                               ])
 gstgl_dep         = dependency('gstreamer-gl-1.0', version: gstreamer_req,
                                required: get_option('media-gstreamer'))
 gstallocators_dep = dependency('gstreamer-allocators-1.0', version: gstreamer_req,
@@ -922,6 +925,10 @@ endif
 subdir('po')
 
 subdir('docs/reference')
+
+devenv = environment()
+devenv.set('GTK_PATH', meson.current_build_dir() / 'modules')
+meson.add_devenv(devenv)
 
 if not meson.is_cross_build()
   gnome.post_install(

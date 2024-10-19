@@ -1,2 +1,4 @@
 /subprojects/*/
 .flatpak-builder/
+.vscode/
+subprojects/*.wrap
