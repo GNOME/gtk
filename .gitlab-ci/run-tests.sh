@@ -94,7 +94,6 @@ case "${setup}" in
           --timeout-multiplier "${multiplier}" \
           --num-processes "${n_processes}" \
           --maxfail "${max_fail}" \
-          --wrapper "gdb -batch -x ..\.gitlab-ci\gdb-wrapper.gdb --args" \
           --print-errorlogs \
           --setup=${setup} \
           --suite=${suite//,/ --suite=} \
