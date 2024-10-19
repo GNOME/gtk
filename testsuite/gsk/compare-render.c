@@ -831,7 +831,7 @@ main (int argc, char **argv)
   if (argc <= 2)
     test->png_file = file_replace_extension (test->node_file, ".node", ".png");
   else
-    test->png_file = g_strdup (argv[2]);
+    test->png_file = g_canonicalize_filename (argv[2], NULL);
 
   g_test_add_vtable (test->node_file,
                      0,
