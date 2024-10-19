@@ -501,6 +501,9 @@ if have_egl
 endif
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
 cdata.set('HAVE_PANGOFT', pangoft_dep.found())
+if win32_enabled
+  cdata.set('HAVE_PANGOWIN32', pangowin32_dep.found())
+endif
 
 wayland_pkgs = []
 if wayland_enabled
