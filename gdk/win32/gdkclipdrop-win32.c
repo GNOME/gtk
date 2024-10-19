@@ -1454,22 +1454,22 @@ failed:
 static gpointer
 _gdk_win32_clipboard_thread_main (gpointer data)
 {
+  GdkWin32Clipdrop *self = data;
   MSG msg;
-  clipdrop_thread_items *items = (clipdrop_thread_items*) data;
-  GAsyncQueue *queue = items->queue;
-  GAsyncQueue *render_queue = (GAsyncQueue *) g_async_queue_pop (queue);
+  GAsyncQueue *queue = self->clipboard_open_thread_queue;
+  GAsyncQueue *render_queue = self->clipboard_render_queue;
+  
+  g_assert (self->clipboard_thread_items == NULL);
 
-  g_assert (items->clipdrop->clipboard_thread_items == NULL);
+  self->clipboard_thread_items = g_new0 (GdkWin32ClipboardThread, 1);
+  CLIPDROP_CB_THREAD_MEMBER (self, input_queue) = queue;
+  CLIPDROP_CB_THREAD_MEMBER (self, render_queue) = render_queue;
+  CLIPDROP_CB_THREAD_MEMBER (self, clipboard_opened_for) = INVALID_HANDLE_VALUE;
 
-  items->clipdrop->clipboard_thread_items = g_new0 (GdkWin32ClipboardThread, 1);
-  CLIPDROP_CB_THREAD_MEMBER (items->clipdrop, input_queue) = queue;
-  CLIPDROP_CB_THREAD_MEMBER (items->clipdrop, render_queue) = render_queue;
-  CLIPDROP_CB_THREAD_MEMBER (items->clipdrop, clipboard_opened_for) = INVALID_HANDLE_VALUE;
-
-  if (!register_clipboard_notification (items->clipdrop))
+  if (!register_clipboard_notification (self))
     {
       g_async_queue_unref (queue);
-      g_clear_pointer (&items->clipdrop->clipboard_thread_items, g_free);
+      g_clear_pointer (&self->clipboard_thread_items, g_free);
 
       return NULL;
     }
@@ -1481,10 +1481,9 @@ _gdk_win32_clipboard_thread_main (gpointer data)
     }
 
   /* Just in case, as this should only happen when we shut down */
-  DestroyWindow (CLIPDROP_CB_THREAD_MEMBER (items->clipdrop, clipboard_hwnd));
-  CloseHandle (CLIPDROP_CB_THREAD_MEMBER (items->clipdrop, clipboard_hwnd));
-  g_async_queue_unref (queue);
-  g_clear_pointer (&items->clipdrop->clipboard_thread_items, g_free);
+  DestroyWindow (CLIPDROP_CB_THREAD_MEMBER (self, clipboard_hwnd));
+  CloseHandle (CLIPDROP_CB_THREAD_MEMBER (self, clipboard_hwnd));
+  g_clear_pointer (&self->clipboard_thread_items, g_free);
 
   return NULL;
 }
@@ -1521,8 +1520,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   GArray             *comp;
   GdkWin32ContentFormatPair fmt;
   HMODULE                   user32;
-  clipdrop_thread_items cb_items, dnd_items;
-
+ 
   win32_clipdrop->thread_wakeup_message = RegisterWindowMessage (L"GDK_WORKER_THREAD_WEAKEUP");
 
   user32 = LoadLibrary (L"user32.dll");
@@ -1810,22 +1808,14 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
 
   win32_clipdrop->clipboard_open_thread_queue = g_async_queue_new ();
   win32_clipdrop->clipboard_render_queue = g_async_queue_new ();
-  /* Out of sheer laziness, we just push the extra queue through the
-   * main queue, instead of allocating a struct with two queue
-   * pointers and then passing *that* to the thread.
-   */
-  g_async_queue_push (win32_clipdrop->clipboard_open_thread_queue, g_async_queue_ref (win32_clipdrop->clipboard_render_queue));
-  cb_items.clipdrop = dnd_items.clipdrop = win32_clipdrop;
-  cb_items.queue = g_async_queue_ref (win32_clipdrop->clipboard_open_thread_queue);
   win32_clipdrop->clipboard_open_thread = g_thread_new ("GDK Win32 Clipboard Thread",
                                                         _gdk_win32_clipboard_thread_main,
-                                                       &cb_items);
+                                                        win32_clipdrop);
 
   win32_clipdrop->dnd_queue = g_async_queue_new ();
-  dnd_items.queue = g_async_queue_ref (win32_clipdrop->dnd_queue);
   win32_clipdrop->dnd_thread = g_thread_new ("GDK Win32 DnD Thread",
                                              _gdk_win32_dnd_thread_main,
-                                            &dnd_items);
+                                             win32_clipdrop);
   win32_clipdrop->dnd_thread_id = GPOINTER_TO_UINT (g_async_queue_pop (win32_clipdrop->dnd_queue));
 }
 
