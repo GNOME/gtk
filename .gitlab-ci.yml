@@ -216,6 +216,7 @@ msys2-ucrt64:
   variables:
     MSYSTEM: "UCRT64"
     CHERE_INVOKING: "yes"
+    MESON_TEST_MAX_PROCESSES: 2
     MESON_TEST_MAX_FAIL: 10
   
 macos:
