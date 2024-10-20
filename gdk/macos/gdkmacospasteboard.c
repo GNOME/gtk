@@ -24,6 +24,7 @@
 #include "gdkdragprivate.h"
 #include "gdkmacospasteboard-private.h"
 #include "gdkmacosutils-private.h"
+#include "gdkdebugprivate.h"
 
 enum {
   TYPE_STRING,
@@ -39,6 +40,8 @@ enum {
 #define PTYPE(k) (get_pasteboard_type(TYPE_##k))
 
 static NSPasteboardType pasteboard_types[TYPE_LAST];
+
+static const char* gtk_uti_prefix = "org.gtk.mime.";
 
 static NSPasteboardType
 get_pasteboard_type (int type)
@@ -93,9 +96,24 @@ _gdk_macos_pasteboard_from_ns_type (NSPasteboardType type)
 
   G_GNUC_END_IGNORE_DEPRECATIONS;
 
+  if (g_str_has_prefix ([type UTF8String], gtk_uti_prefix))
+    {
+      GString *mime = g_string_new ([type UTF8String]);
+      g_string_replace (mime, gtk_uti_prefix, "", 1);
+      g_string_replace (mime, "--", "/", 0);
+
+      GDK_DEBUG (DND, "Received custom UTI %s, mime-type: %s", [type UTF8String], mime->str);
+
+      // TODO: fix memory leak
+      return g_string_free (mime, FALSE);
+    }
+
   return NULL;
 }
 
+/* 
+ * Returned value should be released.
+ */
 NSPasteboardType
 _gdk_macos_pasteboard_to_ns_type (const char       *mime_type,
                                   NSPasteboardType *alternate)
@@ -103,30 +121,45 @@ _gdk_macos_pasteboard_to_ns_type (const char       *mime_type,
   if (alternate)
     *alternate = NULL;
 
-  if (g_strcmp0 (mime_type, "text/plain;charset=utf-8") == 0)
+  if (g_strcmp0 (mime_type, "text/plain") == 0 ||
+      g_strcmp0 (mime_type, "text/plain;charset=utf-8") == 0)
     {
-      return PTYPE(STRING);
+      return [PTYPE(STRING) retain];
     }
   else if (g_strcmp0 (mime_type, "text/uri-list") == 0)
     {
       if (alternate)
-        *alternate = PTYPE(URL);
-      return PTYPE(FILE_URL);
+        *alternate = [PTYPE(URL) retain];
+      return [PTYPE(FILE_URL) retain];
     }
   else if (g_strcmp0 (mime_type, "application/x-color") == 0)
     {
-      return PTYPE(COLOR);
+      return [PTYPE(COLOR) retain];
     }
   else if (g_strcmp0 (mime_type, "image/tiff") == 0)
     {
-      return PTYPE(TIFF);
+      return [PTYPE(TIFF) retain];
     }
   else if (g_strcmp0 (mime_type, "image/png") == 0)
     {
-      return PTYPE(PNG);
+      return [PTYPE(PNG) retain];
     }
+  else
+    {
+      GString *uti = g_string_sized_new (128);
+      NSString *nsuti;
 
-  return nil;
+      g_string_append (uti, gtk_uti_prefix);
+      g_string_append (uti, mime_type);
+      g_string_replace (uti, "/", "--", 0);
+
+      GDK_DEBUG (DND, "Created custom UTI %s", uti->str);
+
+      nsuti = [NSString stringWithUTF8String: uti->str];
+      g_string_free (uti, TRUE);
+
+      return nsuti;
+    }
 }
 
 static void
@@ -383,6 +416,7 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
           [ret addObject:type];
           if (alternate)
             [ret addObject:alternate];
+          [type release];
         }
     }
 
