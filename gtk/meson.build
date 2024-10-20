@@ -882,7 +882,7 @@ gtk_use_wayland_or_x11_c_sources = files([
 ])
 
 gtk_dbus_src = gnome.gdbus_codegen('gtkdbusgenerated',
-  'gtkdbusinterfaces.xml',
+  sources:'gtkdbusinterfaces.xml',
   interface_prefix: 'org.Gtk.',
   namespace: '_Gtk',
 )
