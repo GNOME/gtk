@@ -51,11 +51,11 @@ m {
 }
 
 n {
-  color: color-mix(in oklch shorter hue, red, blue);
+  color: color-mix(in oklch shorter hue, oklch(1 0 0), oklch(0 1 0));
 }
 
 o {
-  color: color-mix(in oklab, red, blue);
+  color: color-mix(in oklab, oklab(1 0 0), oklab(0 1 0));
 }
 
 p {
