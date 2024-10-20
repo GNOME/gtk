@@ -205,7 +205,8 @@ Other libraries, such as libadwaita, may provide replacements as well.
 
 ## gtk_show_uri is being replaced
 
-Instead of `gtk_show_uri()`, you should use [class@Gtk.UriLauncher]or [class@Gtk.FileLauncher].
+Instead of `gtk_show_uri()`, you should use [class@Gtk.UriLauncher]
+or [class@Gtk.FileLauncher].
 
 ## GtkStatusbar is going away
 
