@@ -6,7 +6,7 @@ static void
 test_normalize (GskRenderNode *node1,
                 GskRenderNode *node2)
 {
-  GskRenderer *renderer = gsk_ngl_renderer_new ();
+  GskRenderer *renderer = gsk_cairo_renderer_new ();
   graphene_rect_t bounds1, bounds2;
   GdkTexture *texture1, *texture2, *diff;
   GError *error = NULL;
