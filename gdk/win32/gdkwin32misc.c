@@ -27,6 +27,7 @@
 #include "gdkprivate-win32.h"
 #include "gdkdisplay-win32.h"
 
+#undef STRICT
 #include <pango/pangowin32.h>
 
 struct _GdkWin32ALPNSink

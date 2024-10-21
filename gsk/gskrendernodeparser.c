@@ -56,6 +56,7 @@
 #include <pango/pangofc-fontmap.h>
 #endif
 #ifdef HAVE_PANGOWIN32
+#undef STRICT
 #include <pango/pangowin32.h>
 #endif
 
