@@ -264,7 +264,7 @@ enum {
 /* Signals */
 enum
 {
-  INPUT,
+  INPUT_,
   OUTPUT,
   VALUE_CHANGED,
   ACTIVATE,
@@ -499,7 +499,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
    * Returns: %TRUE for a successful conversion, %FALSE if the input
    *   was not handled, and %GTK_INPUT_ERROR if the conversion failed.
    */
-  spinbutton_signals[INPUT] =
+  spinbutton_signals[INPUT_] =
     g_signal_new (I_("input"),
                   G_TYPE_FROM_CLASS (gobject_class),
                   G_SIGNAL_RUN_LAST,
@@ -508,7 +508,7 @@ gtk_spin_button_class_init (GtkSpinButtonClass *class)
                   _gtk_marshal_INT__POINTER,
                   G_TYPE_INT, 1,
                   G_TYPE_POINTER);
-  g_signal_set_va_marshaller (spinbutton_signals[INPUT],
+  g_signal_set_va_marshaller (spinbutton_signals[INPUT_],
                               G_TYPE_FROM_CLASS (gobject_class),
                               _gtk_marshal_INT__POINTERv);
 
@@ -2541,7 +2541,7 @@ gtk_spin_button_update (GtkSpinButton *spin_button)
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
   return_val = FALSE;
-  g_signal_emit (spin_button, spinbutton_signals[INPUT], 0, &val, &return_val);
+  g_signal_emit (spin_button, spinbutton_signals[INPUT_], 0, &val, &return_val);
   if (return_val == FALSE)
     {
       return_val = gtk_spin_button_default_input (spin_button, &val);
