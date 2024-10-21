@@ -828,7 +828,7 @@ call_password_proxy_cb (GObject      *source,
 {
   _GtkMountOperationHandler *proxy = _GTK_MOUNT_OPERATION_HANDLER (source);
   GMountOperation *op = user_data;
-  GMountOperationResult result;
+  guint result;
   GVariant *result_details;
   GVariantIter iter;
   const char *key;
@@ -983,7 +983,7 @@ call_question_proxy_cb (GObject      *source,
 {
   _GtkMountOperationHandler *proxy = _GTK_MOUNT_OPERATION_HANDLER (source);
   GMountOperation *op = user_data;
-  GMountOperationResult result;
+  guint result;
   GVariant *result_details;
   GVariantIter iter;
   const char *key;
@@ -1566,7 +1566,7 @@ call_processes_proxy_cb (GObject     *source,
 {
   _GtkMountOperationHandler *proxy = _GTK_MOUNT_OPERATION_HANDLER (source);
   GMountOperation *op = user_data;
-  GMountOperationResult result;
+  guint result;
   GVariant *result_details;
   GVariantIter iter;
   const char *key;
