@@ -714,7 +714,7 @@ gtk_shortcuts_section_reflow_groups (GtkShortcutsSection *self)
 
           if (n_rows - height == 0)
             break;
-          if (ABS (n_rows - n) < ABS ((n_rows - height) - (n + height)))
+          if (n_rows - n < 2 * height)
             break;
 
           n_rows -= height;
