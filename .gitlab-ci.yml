@@ -274,7 +274,7 @@ vs2017-x64:
     - win32-ps
   needs: []
   script:
-    - .gitlab-ci/test-msvc.bat
+    - .gitlab-ci/test-msvc.bat ${COMMON_MESON_FLAGS}
   artifacts:
     when: always
     paths:

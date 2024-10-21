@@ -4,9 +4,8 @@
 call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliary\Build\vcvarsall.bat" x64
 @echo on
 
-:: FIXME: make warnings fatal
 pip3 install --upgrade --user meson~=1.2 || goto :error
-meson setup -Dbackend_max_links=1 -Ddebug=false -Dmedia-gstreamer=disabled -Dvulkan=disabled _build || goto :error
+meson setup -Dbackend_max_links=1 -Ddebug=false -Dmedia-gstreamer=disabled -Dvulkan=disabled %~1 _build || goto :error
 ninja -C _build || goto :error
 
 goto :EOF
