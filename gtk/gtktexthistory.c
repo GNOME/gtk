@@ -1194,7 +1194,7 @@ gtk_text_history_text_deleted (GtkTextHistory *self,
   action->u.delete.end = end;
   action->u.delete.selection.insert = self->selection.insert;
   action->u.delete.selection.bound = self->selection.bound;
-  istring_set (&action->u.delete.istr, text, len, ABS (end - begin));
+  istring_set (&action->u.delete.istr, text, len, MAX (end, begin) - MIN (end, begin));
 
   gtk_text_history_push (self, action);
 }
