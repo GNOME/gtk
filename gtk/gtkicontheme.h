@@ -48,8 +48,16 @@ typedef struct _GtkIconTheme      GtkIconTheme;
  *
  * Used to specify options for gtk_icon_theme_lookup_icon().
  */
+/**
+ * GTK_ICON_LOOKUP_NONE:
+ *
+ * Perform a regular lookup.
+ *
+ * Since: 4.18
+ */
 typedef enum
 {
+  GTK_ICON_LOOKUP_NONE GDK_AVAILABLE_ENUMERATOR_IN_4_18 = 0,
   GTK_ICON_LOOKUP_FORCE_REGULAR  = 1 << 0,
   GTK_ICON_LOOKUP_FORCE_SYMBOLIC = 1 << 1,
   GTK_ICON_LOOKUP_PRELOAD        = 1 << 2,
