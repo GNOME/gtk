@@ -73,7 +73,7 @@ function_exists (const char *function_name)
   if (g_module_symbol (module, function_name, &func) && func)
     return TRUE;
 
-  for (i = 0; i < G_N_ELEMENTS(exceptions); i++)
+  for (i = 0; i < G_N_ELEMENTS (exceptions); i++)
     {
       if (g_str_equal (function_name, exceptions[i].expected))
         {
@@ -320,9 +320,6 @@ main (int argc, char **argv)
   const GType *all_types;
   guint n_types = 0, i;
   int result;
-
-  /* These must be set before before gtk_test_init */
-  g_setenv ("GSETTINGS_BACKEND", "memory", TRUE);
 
   /* initialize test program */
   gtk_test_init (&argc, &argv);
