@@ -846,7 +846,7 @@ typedef struct
 {
   guint n_items;
   guint n_stale;
-} CacheData;
+} GskGpuCacheData;
 
 static void
 print_cache_stats (GskGpuCache *self)
@@ -860,10 +860,10 @@ print_cache_stats (GskGpuCache *self)
 
   for (cached = self->first_cached; cached != NULL; cached = cached->next)
     {
-      CacheData *cache_data = g_hash_table_lookup (classes, cached->class);
+      GskGpuCacheData *cache_data = g_hash_table_lookup (classes, cached->class);
       if (cache_data == NULL)
         {
-          cache_data = g_new0 (CacheData, 1);
+          cache_data = g_new0 (GskGpuCacheData, 1);
           g_hash_table_insert (classes, (gpointer) cached->class, cache_data);
         }
       cache_data->n_items++;
@@ -892,7 +892,7 @@ print_cache_stats (GskGpuCache *self)
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
       const GskGpuCachedClass *class = key;
-      const CacheData *cache_data = value;
+      const GskGpuCacheData *cache_data = value;
 
       g_string_append_printf (message, "\n  %s:%*s%5u (%u stale)", class->name, 12 - MIN (12, (int) strlen (class->name)), "", cache_data->n_items, cache_data->n_stale);
 
