@@ -811,7 +811,7 @@ tag_pair_equal (gconstpointer a, gconstpointer b)
 }
 
 
-static GtkOrdering
+static int
 script_sort (const void *item1,
              const void *item2,
              void       *data)
