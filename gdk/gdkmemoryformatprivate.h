@@ -22,6 +22,11 @@
 #include "gdkenums.h"
 #include "gdktypes.h"
 
+/* epoxy needs this, see https://github.com/anholt/libepoxy/issues/299 */
+#ifdef GDK_WINDOWING_WIN32
+#include <windows.h>
+#endif
+
 #include <epoxy/gl.h>
 
 #ifdef GDK_RENDERING_VULKAN
