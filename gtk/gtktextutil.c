@@ -286,7 +286,12 @@ gtk_text_util_create_rich_drag_icon (GtkWidget     *widget,
       gtk_css_style_snapshot_background (&boxes, snapshot);
     }
 
-  gtk_text_layout_snapshot (layout, widget, snapshot, &(GdkRectangle) { 0, 0, layout_width, layout_height }, FALSE, 1.0);
+  gtk_text_layout_snapshot (layout,
+                            widget,
+                            snapshot,
+                            &GRAPHENE_RECT_INIT (0, 0, layout_width, layout_height),
+                            FALSE,
+                            1.0);
 
   g_object_unref (layout);
   g_object_unref (new_buffer);
