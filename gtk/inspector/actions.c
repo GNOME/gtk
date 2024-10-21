@@ -463,7 +463,7 @@ gtk_inspector_actions_observer_iface_init (GtkActionObserverInterface *iface)
 }
 
 static void
-connect (GtkInspectorActions *sl)
+gtk_inspector_actions_connect (GtkInspectorActions *sl)
 {
   if (G_IS_ACTION_GROUP (sl->object))
     {
@@ -494,7 +494,7 @@ connect (GtkInspectorActions *sl)
 }
 
 static void
-disconnect (GtkInspectorActions *sl)
+gtk_inspector_actions_disconnect (GtkInspectorActions *sl)
 {
   if (G_IS_ACTION_GROUP (sl->object))
     {
@@ -533,7 +533,7 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
   gtk_stack_page_set_visible (page, FALSE);
 
   if (sl->object)
-    disconnect (sl);
+    gtk_inspector_actions_disconnect (sl);
 
   g_set_object (&sl->object, object);
 
@@ -542,7 +542,7 @@ gtk_inspector_actions_set_object (GtkInspectorActions *sl,
   gtk_stack_page_set_visible (page, loaded);
 
   if (sl->object)
-    connect (sl);
+    gtk_inspector_actions_connect (sl);
 }
 
 static void
@@ -623,7 +623,7 @@ dispose (GObject *object)
   GtkInspectorActions *sl = GTK_INSPECTOR_ACTIONS (object);
 
   if (sl->object)
-    disconnect (sl);
+    gtk_inspector_actions_disconnect (sl);
 
   g_clear_object (&sl->sorted);
   g_clear_object (&sl->actions);
