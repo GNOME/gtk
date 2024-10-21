@@ -40,7 +40,7 @@
         __dvalue == 0.5 ? "medium" : \
           __dvalue > 0 && __dvalue < 1 ? "fractional" : \
             "random")
-#define MATCH_ANY_VALUE         ((void*) 0xf1874c23)
+#define MATCH_ANY_VALUE         ((void*) (gsize) 0xf1874c23)
 
 /* --- ignored property names --- */
 typedef struct {
@@ -54,19 +54,19 @@ list_ignore_properties (gboolean buglist)
   /* currently untestable properties */
   static const IgnoreProperty ignore_properties[] = {
     { "GtkWidget",              "parent",               NULL, },                        /* needs working parent widget */
-    { "GtkWidget",              "has-default",          (void*) TRUE, },                /* conflicts with toplevel-less widgets */
-    { "GtkWidget",              "display",              (void*) MATCH_ANY_VALUE },
+    { "GtkWidget",              "has-default",          (void*) (gsize) TRUE, },                /* conflicts with toplevel-less widgets */
+    { "GtkWidget",              "display",              (void*) (gsize) MATCH_ANY_VALUE },
     { "GtkCellView",            "background",           (void*) "", },                  /* "" is not a valid background color */
     { "GtkFileChooserWidget",   "select-multiple",      (void*) 0x1 },                  /* property conflicts */
-    { "GtkFileChooserDialog",   "select-multiple",      (void*) MATCH_ANY_VALUE },      /* property disabled */
-    { "GtkTextView",            "overwrite",            (void*) MATCH_ANY_VALUE },      /* needs text buffer */
-    { "GtkTreeView",            "expander-column",      (void*) MATCH_ANY_VALUE },      /* assertion list != NULL */
-    { "GtkWindow",              "display",              (void*) MATCH_ANY_VALUE },
+    { "GtkFileChooserDialog",   "select-multiple",      (void*) (gsize) MATCH_ANY_VALUE },      /* property disabled */
+    { "GtkTextView",            "overwrite",            (void*) (gsize) MATCH_ANY_VALUE },      /* needs text buffer */
+    { "GtkTreeView",            "expander-column",      (void*) (gsize) MATCH_ANY_VALUE },      /* assertion list != NULL */
+    { "GtkWindow",              "display",              (void*) (gsize) MATCH_ANY_VALUE },
     { NULL, NULL, NULL }
   };
   /* properties suspected to be Gdk/Gtk+ bugs */
   static const IgnoreProperty bug_properties[] = {
-    { "GtkComboBox",            "active",               (void*) MATCH_ANY_VALUE },      /* FIXME: triggers NULL model bug */
+    { "GtkComboBox",            "active",               (void*) (gsize) MATCH_ANY_VALUE },      /* FIXME: triggers NULL model bug */
     { NULL, NULL, NULL }
   };
   if (buglist)
