@@ -53,24 +53,11 @@
 #include <gdk/gdk.h>
 #include "gdk/gdkdebugprivate.h"
 
-#ifdef GDK_WINDOWING_X11
-#include <gdk/x11/gdkx.h>
-#endif
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/wayland/gdkwayland.h>
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gskbroadwayrenderer.h"
-#endif
-#ifdef GDK_WINDOWING_MACOS
-#include <gdk/macos/gdkmacos.h>
-#endif
-#ifdef GDK_WINDOWING_WIN32
-#include <gdk/win32/gdkwin32.h>
-
-/* Remove these lines when OpenGL/ES 2.0 shader is ready */
-#include "win32/gdkprivate-win32.h"
-#include "win32/gdkdisplay-win32.h"
 #endif
 
 typedef struct
