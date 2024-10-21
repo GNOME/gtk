@@ -299,4 +299,4 @@ do_validate (int *argc, const char ***argv)
   g_strfreev (filenames);
 }
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

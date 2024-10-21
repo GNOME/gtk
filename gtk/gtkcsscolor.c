@@ -1269,4 +1269,5 @@ gtk_css_hue_interpolation_to_hue_interpolation (GtkCssHueInterpolation interp)
 }
 
 /* }}} */
-/* vim:set foldmethod=marker expandtab: */
+
+/* vim:set foldmethod=marker: */

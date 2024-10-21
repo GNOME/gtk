@@ -35,7 +35,7 @@
 #include <math.h>
 
 #ifdef GDK_RENDERING_VULKAN
-static const GdkDebugKey gsk_vulkan_feature_keys[] = {
+static const GdkDebugKey gdk_vulkan_feature_keys[] = {
   { "dmabuf", GDK_VULKAN_FEATURE_DMABUF, "Never import Dmabufs" },
   { "ycbcr", GDK_VULKAN_FEATURE_YCBCR, "Do not support Ycbcr textures (also disables dmabufs)" },
   { "semaphore-export", GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT, "Disable sync of exported dmabufs" },
@@ -1474,8 +1474,8 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
   skip_features = gdk_parse_debug_var ("GDK_VULKAN_DISABLE",
       "GDK_VULKAN_DISABLE can be set to a list of Vulkan features to disable.\n",
-      gsk_vulkan_feature_keys,
-      G_N_ELEMENTS (gsk_vulkan_feature_keys));
+      gdk_vulkan_feature_keys,
+      G_N_ELEMENTS (gdk_vulkan_feature_keys));
   if (skip_features & GDK_VULKAN_FEATURE_YCBCR)
     skip_features |= GDK_VULKAN_FEATURE_DMABUF;
 
@@ -1622,13 +1622,13 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
               display->vulkan_features = features;
 
               GDK_DISPLAY_DEBUG (display, VULKAN, "Enabled features (use GDK_VULKAN_DISABLE env var to disable):");
-              for (i = 0; i < G_N_ELEMENTS (gsk_vulkan_feature_keys); i++)
+              for (i = 0; i < G_N_ELEMENTS (gdk_vulkan_feature_keys); i++)
                 {
                   GDK_DISPLAY_DEBUG (display, VULKAN, "    %s: %s",
-                                     gsk_vulkan_feature_keys[i].key,
-                                     (features & gsk_vulkan_feature_keys[i].value) ? "YES" :
-                                     ((skip_features & gsk_vulkan_feature_keys[i].value) ? "disabled via env var" :
-                                      (((device_features & gsk_vulkan_feature_keys[i].value) == 0) ? "not supported" :
+                                     gdk_vulkan_feature_keys[i].key,
+                                     (features & gdk_vulkan_feature_keys[i].value) ? "✓" :
+                                     ((skip_features & gdk_vulkan_feature_keys[i].value) ? "disabled via env var" :
+                                      (((device_features & gdk_vulkan_feature_keys[i].value) == 0) ? "✗" :
                                        "Hum, what? This should not happen.")));
                 }
 

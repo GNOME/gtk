@@ -1311,4 +1311,4 @@ gtk_file_dialog_set_accept_label (GtkFileDialog *self,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

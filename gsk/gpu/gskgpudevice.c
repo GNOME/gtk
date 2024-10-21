@@ -310,4 +310,4 @@ gsk_gpu_device_make_current (GskGpuDevice *self)
 }
 
 /* }}} */
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

@@ -298,4 +298,4 @@ gdk_save_jpeg (GdkTexture *texture)
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

@@ -7762,4 +7762,4 @@ gtk_text_accessible_text_init (GtkAccessibleTextInterface *iface)
   iface->get_offset = gtk_text_accessible_text_get_offset;
 }
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

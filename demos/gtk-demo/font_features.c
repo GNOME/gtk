@@ -1869,4 +1869,4 @@ do_font_features (GtkWidget *do_widget)
   return window;
 }
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

@@ -9149,4 +9149,4 @@ gsk_render_node_init_types (void)
     }
 }
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

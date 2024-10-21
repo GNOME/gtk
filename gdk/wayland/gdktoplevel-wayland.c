@@ -2765,4 +2765,4 @@ gdk_wayland_toplevel_set_transient_for_exported (GdkToplevel *toplevel,
 }
 
 /* }}} */
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

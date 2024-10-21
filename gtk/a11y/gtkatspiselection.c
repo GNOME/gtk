@@ -1229,5 +1229,5 @@ gtk_atspi_disconnect_selection_signals (GtkAccessible *accessible)
     }
 }
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */
 

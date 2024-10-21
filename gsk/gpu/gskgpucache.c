@@ -1177,4 +1177,4 @@ gsk_gpu_cache_new (GskGpuDevice *device)
 }
 
 /* }}} */
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

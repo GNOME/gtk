@@ -2640,4 +2640,4 @@ gsk_curve_get_cusps (const GskCurve *curve,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

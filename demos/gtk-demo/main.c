@@ -165,10 +165,6 @@ activate_about (GSimpleAction *action,
                 gpointer       user_data)
 {
   GtkApplication *app = user_data;
-  const char *authors[] = {
-    "The GTK Team",
-    NULL
-  };
   char *version;
   char *os_name;
   char *os_version;
@@ -206,11 +202,11 @@ activate_about (GSimpleAction *action,
                                          ? "GTK Demo (Development)"
                                          : "GTK Demo",
                          "version", version,
-                         "copyright", "© 1997—2021 The GTK Team",
+                         "copyright", "© 1997—2024 The GTK Team",
                          "license-type", GTK_LICENSE_LGPL_2_1,
                          "website", "http://www.gtk.org",
                          "comments", "Program to demonstrate GTK widgets",
-                         "authors", authors,
+                         "authors", (const char *[]) { "The GTK Team", NULL },
                          "logo-icon-name", "org.gtk.Demo4",
                          "title", "About GTK Demo",
                          "system-information", s->str,

@@ -56,7 +56,7 @@ gtk_micro_version = gtk_version.split('.')[2].to_int()
 # If new API is added during a stable cycle, reset to 0
 gtk_interface_age = gtk_minor_version.is_odd() ? 0 : gtk_micro_version
 
-add_project_arguments('-DGTK_VERSION="@0@"'.format(meson.project_version()), language: 'c')
+add_project_arguments('-DGTK_VERSION="@0@"'.format(gtk_version), language: 'c')
 
 add_project_arguments('-D_GNU_SOURCE', language: 'c')
 

@@ -820,4 +820,4 @@ error:
   return NULL;
 }
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

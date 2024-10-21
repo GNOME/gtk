@@ -938,4 +938,4 @@ gtk_inspector_css_node_tree_set_display (GtkInspectorCssNodeTree *cnt,
   g_free (theme_name);
 }
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

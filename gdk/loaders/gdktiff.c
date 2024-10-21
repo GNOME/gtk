@@ -512,4 +512,4 @@ gdk_load_tiff (GBytes  *input_bytes,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

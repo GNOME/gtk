@@ -172,12 +172,35 @@ gdk_color_state_get_rec2100_linear (void)
   return GDK_COLOR_STATE_REC2100_LINEAR;
 }
 
+/**
+ * gdk_color_state_get_oklab:
+ *
+ * Returns the color state object representing the oklab color space.
+ *
+ * This is a perceptually uniform color state.
+ *
+ * Returns: the color state object for oklab
+ *
+ * Since: 4.18
+ */
 GdkColorState *
 gdk_color_state_get_oklab (void)
 {
   return GDK_COLOR_STATE_OKLAB;
 }
 
+/**
+ * gdk_color_state_get_oklch:
+ *
+ * Returns the color state object representing the oklch color space.
+ *
+ * This is the polar variant of oklab, in which the hue is encoded as
+ * a polar coordinate.
+ *
+ * Returns: the color state object for oklch
+ *
+ * Since: 4.18
+ */
 GdkColorState *
 gdk_color_state_get_oklch (void)
 {
@@ -1045,4 +1068,4 @@ gdk_color_state_clamp (GdkColorState *self,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */

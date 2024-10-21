@@ -2697,5 +2697,4 @@ gtk_inspector_recorder_set_selected_sequence (GtkInspectorRecorder *recorder,
   g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_SELECTED_SEQUENCE]);
 }
 
-/* vim:set foldmethod=marker expandtab: */
-
+/* vim:set foldmethod=marker: */

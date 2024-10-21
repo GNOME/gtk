@@ -2651,4 +2651,4 @@ gsk_contour_get_distance (const GskContour   *self,
 
 /* }}} */
 
-/* vim:set foldmethod=marker expandtab: */
+/* vim:set foldmethod=marker: */
