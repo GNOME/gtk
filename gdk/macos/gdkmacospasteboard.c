@@ -391,7 +391,7 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
   /* Default to an url type (think gobject://internal)
    * to support internal, GType-based DnD.
    */
-  if (n_mime_types == 0)
+  if ([ret count] == 0)
     {
       GdkContentFormats *formats;
       gsize n_gtypes;
