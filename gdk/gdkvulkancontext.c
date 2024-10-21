@@ -577,7 +577,7 @@ physical_device_supports_extension (VkPhysicalDevice  device,
     {
       first = FALSE;
       for (uint32_t i = 0; i < n_device_extensions; i++)
-        g_print ("%s\n", extensions[i].extensionName);
+        GDK_DEBUG (VULKAN, "%s", extensions[i].extensionName);
     }
 
   for (uint32_t i = 0; i < n_device_extensions; i++)
