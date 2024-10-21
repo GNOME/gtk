@@ -34,6 +34,8 @@ test_set_default (void)
   d = gdk_display_manager_get_default_display (manager);
   name = gdk_display_get_name (d);
   d2 = gdk_display_manager_open_display (manager, name);
+  g_assert_true (d != d2);
+
   g_object_set (manager, "default-display", d2, NULL);
 
   d = gdk_display_manager_get_default_display (manager);
@@ -54,7 +56,7 @@ main (int argc, char *argv[])
   (g_test_init) (&argc, &argv, NULL);
 
   /* Open default display */
-  gdk_display_open (NULL);
+  gtk_init ();
 
   g_test_add_func ("/display/basic", test_display_basic);
   g_test_add_func ("/displaymanager/basic", test_basic);
