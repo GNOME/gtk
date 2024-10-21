@@ -28,6 +28,7 @@
 #include "gdkdisplaymanagerprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkkeysprivate.h"
+#include "gdkprivate.h"
 #include <glib/gi18n-lib.h>
 
 #ifdef GDK_WINDOWING_X11
@@ -294,6 +295,8 @@ gdk_display_manager_get (void)
 {
   static GdkDisplayManager *manager = NULL;
 
+  gdk_ensure_initialized ();
+
   if (manager == NULL)
     manager = g_object_new (GDK_TYPE_DISPLAY_MANAGER, NULL);
 
@@ -329,6 +332,8 @@ gdk_display_manager_get_default_display (GdkDisplayManager *manager)
 GdkDisplay *
 gdk_display_get_default (void)
 {
+  gdk_ensure_initialized ();
+
   return gdk_display_manager_get_default_display (gdk_display_manager_get ());
 }
 

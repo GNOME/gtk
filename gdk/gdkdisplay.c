@@ -1198,8 +1198,9 @@ gdk_display_get_app_launch_context (GdkDisplay *display)
 GdkDisplay *
 gdk_display_open (const char *display_name)
 {
-  return gdk_display_manager_open_display (gdk_display_manager_get (),
-                                           display_name);
+  gdk_ensure_initialized ();
+
+  return gdk_display_manager_open_display (gdk_display_manager_get (), display_name);
 }
 
 gulong

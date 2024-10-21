@@ -1924,10 +1924,10 @@ test_serialize_wrap_mode (void)
 int
 main (int argc, char** argv)
 {
-  /* First, we turn on btree debugging. */
-  gtk_set_debug_flags (gtk_get_debug_flags () | GTK_DEBUG_TEXT);
-
   gtk_test_init (&argc, &argv);
+
+  /* Turn on btree debugging */
+  gtk_set_debug_flags (gtk_get_debug_flags () | GTK_DEBUG_TEXT);
 
   g_test_add_func ("/TextBuffer/UTF8 unknown char", test_utf8);
   g_test_add_func ("/TextBuffer/Line separator", test_line_separator);

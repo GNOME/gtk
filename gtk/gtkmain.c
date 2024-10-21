@@ -629,18 +629,19 @@ gtk_init_check (void)
  * gtk_init:
  *
  * Call this function before using any other GTK functions in your GUI
- * applications. It will initialize everything needed to operate the
- * toolkit.
+ * applications.
+ *
+ * It will initialize everything needed to operate the toolkit. In particular,
+ * it will open the default display (see [func@Gdk.Display.get_default]).
  *
  * If you are using `GtkApplication`, you usually don't have to call this
  * function; the `GApplication::startup` handler does it for you. Though,
  * if you are using GApplication methods that will be invoked before `startup`,
  * such as `local_command_line`, you may need to initialize stuff explicitly.
  *
- * This function will terminate your program if it was unable to
- * initialize the windowing system for some reason. If you want
- * your program to fall back to a textual interface, call
- * [func@Gtk.init_check] instead.
+ * This function will terminate your program if it was unable to initialize
+ * the windowing system for some reason. If you want your program to fall back
+ * to a textual interface, call [func@Gtk.init_check] instead.
  *
  * GTK calls `signal (SIGPIPE, SIG_IGN)` during initialization, to ignore
  * SIGPIPE signals, since these are almost never wanted in graphical
