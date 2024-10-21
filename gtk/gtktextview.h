@@ -219,6 +219,10 @@ gboolean       gtk_text_view_place_cursor_onscreen (GtkTextView   *text_view);
 GDK_AVAILABLE_IN_ALL
 void           gtk_text_view_get_visible_rect      (GtkTextView   *text_view,
                                                     GdkRectangle  *visible_rect);
+GDK_AVAILABLE_IN_4_18
+void           gtk_text_view_get_visible_offset    (GtkTextView   *text_view,
+                                                    double        *x_offset,
+                                                    double        *y_offset);
 GDK_AVAILABLE_IN_ALL
 void           gtk_text_view_set_cursor_visible    (GtkTextView   *text_view,
                                                     gboolean       setting);
