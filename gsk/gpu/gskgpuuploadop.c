@@ -665,7 +665,7 @@ void
 gsk_gpu_upload_glyph_op (GskGpuFrame                 *frame,
                          GskGpuImage                 *image,
                          PangoFont                   *font,
-                         const PangoGlyph             glyph,
+                         PangoGlyph                   glyph,
                          const cairo_rectangle_int_t *area,
                          const graphene_point_t      *origin)
 {

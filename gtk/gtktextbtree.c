@@ -1606,9 +1606,6 @@ _gtk_text_btree_remove_view (GtkTextBTree *tree,
 
   gtk_text_btree_node_remove_view (view, tree->root_node, view_id);
 
-  view->layout = (gpointer) 0xdeadbeef;
-  view->view_id = (gpointer) 0xdeadbeef;
-
   g_free (view);
 }
 

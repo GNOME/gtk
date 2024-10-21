@@ -21,6 +21,10 @@
 #pragma once
 
 #ifndef DONT_INCLUDE_LIBEPOXY
+#ifdef GDK_WINDOWING_WIN32
+/* epoxy needs this, see https://github.com/anholt/libepoxy/issues/299 */
+#include <windows.h>
+#endif
 #include <epoxy/gl.h>
 #include <epoxy/wgl.h>
 

@@ -40,6 +40,7 @@
 #include "gtk/deprecated/gtkstylecontextprivate.h"
 #include "gtkwidgetprivate.h"
 
+#undef STRICT
 #include <pango/pangowin32.h>
 
 /* Determines what happens when focus is lost while preedit is in process. */

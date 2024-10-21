@@ -1,6 +1,6 @@
 /* example-start calendar calendar.c */
 /*
- * Copyright (C) 1998 Cesar Miquel, Shawn T. Amundson, Mattias Grönlund
+ * Copyright (C) 1998 Cesar Miquel, Shawn T. Amundson, Mattias GrÃ¶nlund
  * Copyright (C) 2000 Tony Gale
  *
  * This library is free software; you can redistribute it and/or modify

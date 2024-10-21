@@ -267,6 +267,14 @@ if cc.get_id() == 'msvc'
     '-D_USE_MATH_DEFINES',
     required_debug_cflags
   ]
+  # Extra warning flags and those that should be disabled because they are too common or
+  # break features.
+  test_cflags += [
+    '/wd4068', # unknown pragma, triggers for all gcc/clang pragmas
+    '/wd4116', # breaks G_ALIGNOF()
+    '/wd4090', # VC2017 is way too aggressive with this
+  ]
+  
   msvc_supported_cflags = cc.get_supported_arguments(test_cflags)
   if debug
     required_cflags += required_debug_cflags
@@ -339,6 +347,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     'write-strings',
   ]
 
+  
   if get_option('buildtype').startswith('debug')
     foreach warning: extra_warnings
       test_cflags += '-Werror=@0@'.format(warning)
@@ -501,6 +510,10 @@ if have_egl
 endif
 cdata.set('HAVE_HARFBUZZ', harfbuzz_dep.found())
 cdata.set('HAVE_PANGOFT', pangoft_dep.found())
+if win32_enabled
+  cdata.set('HAVE_PANGOWIN32', pangowin32_dep.found())
+  cdata.set('CONST_VTABLE', 1)
+endif
 
 wayland_pkgs = []
 if wayland_enabled

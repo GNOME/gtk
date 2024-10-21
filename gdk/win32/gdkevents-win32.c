@@ -1780,19 +1780,19 @@ gdk_event_translate (MSG *msg,
     {
       /* XXX Handle WM_QUIT here ? */
       if (msg->message == WM_QUIT)
-	{
-	  GDK_NOTE (EVENTS, g_print (" %d", (int) msg->wParam));
-	  exit (msg->wParam);
-	}
+	      {
+	        GDK_NOTE (EVENTS, g_print (" %d", (int) msg->wParam));
+	        exit (msg->wParam);
+	      }
       else if (msg->message == WM_CREATE)
-	{
-	  surface = (UNALIGNED GdkSurface*) (((LPCREATESTRUCTW) msg->lParam)->lpCreateParams);
-	  GDK_SURFACE_HWND (surface) = msg->hwnd;
-	}
+	      {
+	        surface = (GdkSurface*) (((LPCREATESTRUCTW) msg->lParam)->lpCreateParams);
+      	  GDK_SURFACE_HWND (surface) = msg->hwnd;
+	      }
       else
-	{
-	  GDK_NOTE (EVENTS, g_print (" (no GdkSurface)"));
-	}
+	      {
+	        GDK_NOTE (EVENTS, g_print (" (no GdkSurface)"));
+	      }
       return FALSE;
     }
 
@@ -2302,8 +2302,8 @@ gdk_event_translate (MSG *msg,
        *
        */
       if (win32_display->tablet_input_api == GDK_WIN32_TABLET_INPUT_API_WINPOINTER &&
-          ( (msg->time - win32_display->device_manager->last_digitizer_time) < 200 ||
-           -(msg->time - win32_display->device_manager->last_digitizer_time) < 200 ))
+          ((msg->time - win32_display->device_manager->last_digitizer_time) < 200 ||
+           (win32_display->device_manager->last_digitizer_time - msg->time) < 200 ))
         break;
 
       win32_display->device_manager->pen_touch_input = FALSE;

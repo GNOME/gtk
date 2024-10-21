@@ -75,16 +75,6 @@ gtk_tree_rbnode_new (GtkTreeRBTree *tree,
 static void
 gtk_tree_rbnode_free (GtkTreeRBNode *node)
 {
-  if (GTK_DEBUG_CHECK (TREE))
-    {
-      node->left = (gpointer) 0xdeadbeef;
-      node->right = (gpointer) 0xdeadbeef;
-      node->parent = (gpointer) 0xdeadbeef;
-      node->total_count = 56789;
-      node->offset = 56789;
-      node->count = 56789;
-      node->flags = 0;
-    }
   g_slice_free (GtkTreeRBNode, node);
 }
 
@@ -1178,7 +1168,7 @@ gtk_tree_rbtree_remove_node (GtkTreeRBTree *tree,
 
   /* We need to clean up the validity of the tree.
    */
-  gtk_rbnode_adjust (tree, y, -1, -y_total_count, -y_height);
+  gtk_rbnode_adjust (tree, y, -1, -(int) y_total_count, -y_height);
 
   if (GTK_TREE_RBNODE_GET_COLOR (y) == GTK_TREE_RBNODE_BLACK)
     gtk_tree_rbtree_remove_node_fixup (tree, x, y->parent);

@@ -25,6 +25,7 @@
 #define INCPTR(x) ((gpointer) ((char *) (x) + WIDTH))
 #define DECPTR(x) ((gpointer) ((char *) (x) - WIDTH))
 #define ELEM(a, i) ((char *) (a) + (i) * WIDTH)
+#define ELEM_REV(a, i) ELEM(a, 0 - (i))
 #define LEN(n) ((n) * WIDTH)
 
 #define CONCAT(x, y) gtk_tim_sort_ ## x ## _ ## y
@@ -296,7 +297,7 @@ gtk_tim_sort(gallop_left) (GtkTimSort *self,
       const gsize max_ofs = hint + 1;
       gsize tmp;
       while (ofs < max_ofs
-             && gtk_tim_sort_compare (self, key, ELEM (hintp, -ofs)) <= 0)
+             && gtk_tim_sort_compare (self, key, ELEM_REV (hintp, ofs)) <= 0)
         {
           last_ofs = ofs;
           ofs = (ofs << 1) + 1;                 /* no need to check for overflow */
@@ -363,7 +364,7 @@ gtk_tim_sort(gallop_right) (GtkTimSort *self,
       gsize max_ofs = hint + 1;
       gsize tmp;
       while (ofs < max_ofs
-             && gtk_tim_sort_compare (self, key, ELEM (hintp, -ofs)) < 0)
+             && gtk_tim_sort_compare (self, key, ELEM_REV (hintp, ofs)) < 0)
         {
           last_ofs = ofs;
           ofs = (ofs << 1) + 1;                 /* no need to check for overflow */
@@ -622,13 +623,13 @@ gtk_tim_sort(merge_hi) (GtkTimSort *self,
   cursor1 = DECPTR (cursor1);
   if (--len1 == 0)
     {
-      memcpy (ELEM (dest, -(len2 - 1)), tmp, LEN (len2));        /* POP: can't overlap */
+      memcpy (ELEM_REV (dest, (len2 - 1)), tmp, LEN (len2));        /* POP: can't overlap */
       return;
     }
   if (len2 == 1)
     {
-      dest = ELEM (dest, -len1);
-      cursor1 = ELEM (cursor1, -len1);
+      dest = ELEM_REV (dest, len1);
+      cursor1 = ELEM_REV (cursor1, len1);
       memmove (ELEM (dest, 1), ELEM (cursor1, 1), LEN (len1));       /* POP: overlaps */
       /* a[dest] = tmp[cursor2]; */
       ASSIGN (dest, cursor2);
@@ -684,8 +685,8 @@ gtk_tim_sort(merge_hi) (GtkTimSort *self,
           count1 = len1 - gtk_tim_sort(gallop_right) (self, cursor2, base1, len1, len1 - 1);
           if (count1 != 0)
             {
-              dest = ELEM (dest, -count1);
-              cursor1 = ELEM (cursor1, -count1);
+              dest = ELEM_REV (dest, count1);
+              cursor1 = ELEM_REV (cursor1, count1);
               len1 -= count1;
               memmove (INCPTR (dest), INCPTR (cursor1),
                        LEN (count1));                /* POP: might overlap */
@@ -701,8 +702,8 @@ gtk_tim_sort(merge_hi) (GtkTimSort *self,
           count2 = len2 - gtk_tim_sort(gallop_left) (self, cursor1, tmp, len2, len2 - 1);
           if (count2 != 0)
             {
-              dest = ELEM (dest, -count2);
-              cursor2 = ELEM (cursor2, -count2);
+              dest = ELEM_REV (dest, count2);
+              cursor2 = ELEM_REV (cursor2, count2);
               len2 -= count2;
               memcpy (INCPTR (dest), INCPTR (cursor2), LEN (count2));               /* POP: can't overlap */
               if (len2 <= 1)                    /* len2 == 1 || len2 == 0 */
@@ -725,8 +726,8 @@ outer:
   if (len2 == 1)
     {
       g_assert (len1 > 0);
-      dest = ELEM (dest, -len1);
-      cursor1 = ELEM (cursor1, -len1);
+      dest = ELEM_REV (dest, len1);
+      cursor1 = ELEM_REV (cursor1, len1);
       memmove (INCPTR (dest), INCPTR (cursor1), LEN (len1));       /* POP: might overlap */
       /* a[dest] = tmp[cursor2];  // Move first elt of run2 to front of merge */
       ASSIGN (dest, cursor2);
@@ -740,7 +741,7 @@ outer:
     {
       g_assert (len1 == 0);
       g_assert (len2 > 0);
-      memcpy (ELEM (dest, -(len2 - 1)), tmp, LEN (len2));        /* POP: can't overlap */
+      memcpy (ELEM_REV (dest, (len2 - 1)), tmp, LEN (len2));        /* POP: can't overlap */
     }
 }
 
@@ -802,7 +803,7 @@ gtk_tim_sort(merge_at) (GtkTimSort    *self,
           gtk_tim_sort(merge_lo) (self, base1, self->max_merge_size, base2, len2);
           gtk_tim_sort_set_change (out_change, base1, self->max_merge_size + len2);
           self->run[i].len -= self->max_merge_size;
-          self->run[i + 1].base = ELEM (self->run[i + 1].base, - self->max_merge_size);
+          self->run[i + 1].base = ELEM_REV (self->run[i + 1].base, self->max_merge_size);
           self->run[i + 1].len += self->max_merge_size;
           g_assert (ELEM (self->run[i].base, self->run[i].len) == self->run[i + 1].base);
           return;

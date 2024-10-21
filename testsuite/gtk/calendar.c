@@ -28,7 +28,7 @@ test_calendar_select_day (void)
 
   cal = gtk_calendar_new ();
 
-  tz = g_time_zone_new_identifier ("Europe/Brussels");
+  tz = g_time_zone_new_offset (2 * 60 * 60);
   g_assert_nonnull (tz);
   dt = g_date_time_new (tz, 1970, 3, 1, 0, 0, 0);
   g_assert_nonnull (dt);

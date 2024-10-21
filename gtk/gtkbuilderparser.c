@@ -913,11 +913,13 @@ parse_property (ParserData   *data,
 
   if (bind_flags_str)
     {
-      if (!_gtk_builder_flags_from_string (G_TYPE_BINDING_FLAGS, bind_flags_str, &bind_flags, error))
+      guint flags;
+      if (!_gtk_builder_flags_from_string (G_TYPE_BINDING_FLAGS, bind_flags_str, &flags, error))
         {
           _gtk_builder_prefix_error (data->builder, &data->ctx, error);
           return;
         }
+      bind_flags = flags;
     }
 
   gtk_buildable_parse_context_get_position (&data->ctx, &line, &col);

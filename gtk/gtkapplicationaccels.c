@@ -119,7 +119,8 @@ gtk_application_accels_set_accels_for_action (GtkApplicationAccels *accels,
   for (i = 0; accelerators[i]; i++)
     {
       GtkShortcutTrigger *new_trigger;
-      guint key, modifier;
+      guint key;
+      GdkModifierType modifier;
 
       if (!gtk_accelerator_parse (accelerators[i], &key, &modifier))
         {
@@ -267,7 +268,8 @@ gtk_application_accels_get_actions_for_accel (GtkApplicationAccels *accels,
                                               const char           *accel)
 {
   GPtrArray *result;
-  guint key, modifiers;
+  guint key;
+  GdkModifierType modifiers;
   guint i;
 
   if (!gtk_accelerator_parse (accel, &key, &modifiers))

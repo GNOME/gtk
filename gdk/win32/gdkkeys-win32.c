@@ -254,11 +254,15 @@ _get_keyboard_layout_file (const char *layout_name)
 
   status = RegOpenKeyExA (HKEY_LOCAL_MACHINE, (LPCSTR) kbdKeyPath, 0,
                           KEY_QUERY_VALUE, &hkey);
-  if (status != ERROR_SUCCESS)
+  if (status == ERROR_FILE_NOT_FOUND)
+    {
+      return NULL;
+    }
+  else if (status != ERROR_SUCCESS)
     {
       g_warning("Could not open registry key '%s'. Error code: %d",
                 kbdKeyPath, (int)status);
-      goto fail1;
+      return NULL;
     }
 
   /* Get sizes */
@@ -268,14 +272,14 @@ _get_keyboard_layout_file (const char *layout_name)
     {
       g_warning("Could not query registry key '%s\\Layout File'. Error code: %d",
                 kbdKeyPath, (int)status);
-      goto fail2;
+      goto fail_close_key;
     }
 
   dir_len = GetSystemDirectoryA (0, 0); /* includes \0 */
   if (dir_len == 0)
     {
       g_warning("GetSystemDirectoryA failed. Error: %d", (int)GetLastError());
-      goto fail2;
+      goto fail_close_key;
     }
 
   /* Allocate buffer */
@@ -284,7 +288,7 @@ _get_keyboard_layout_file (const char *layout_name)
 
   /* Append system directory. The -1 is because dir_len includes \0 */
   if (GetSystemDirectoryA (&result[0], dir_len) != dir_len - 1)
-    goto fail3;
+    goto fail_free_result;
 
   /* Append directory separator */
   result[dir_len - 1] = '\\';
@@ -293,20 +297,17 @@ _get_keyboard_layout_file (const char *layout_name)
   status = RegQueryValueExA (hkey, "Layout File", 0, &var_type,
                              (LPBYTE) &result[dir_len], &file_name_len);
   if (status != ERROR_SUCCESS)
-    {
-      goto fail3;
-    }
+    goto fail_free_result;
 
   result[dir_len + file_name_len] = '\0';
 
   RegCloseKey (hkey);
   return result;
 
-fail3:
+fail_free_result:
   g_free (result);
-fail2:
+fail_close_key:
   RegCloseKey (hkey);
-fail1:
   return NULL;
 }
 

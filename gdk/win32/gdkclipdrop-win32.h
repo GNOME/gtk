@@ -113,15 +113,6 @@ typedef enum _GdkWin32CFIndex GdkWin32CFIndex;
 typedef struct _GdkWin32Clipdrop GdkWin32Clipdrop;
 typedef struct _GdkWin32ClipdropClass GdkWin32ClipdropClass;
 
-/* this is shared with gdkdrag-win32.c as well */
-struct _clipdrop_thread_items
-{
-  GdkWin32Clipdrop *clipdrop;
-  GAsyncQueue *queue;
-};
-
-typedef struct _clipdrop_thread_items clipdrop_thread_items;
-
 typedef BOOL (WINAPI * GetUpdatedClipboardFormatsFunc)(
   _Out_ PUINT lpuiFormats,
   _In_  UINT  cFormats,

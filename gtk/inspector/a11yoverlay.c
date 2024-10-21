@@ -48,9 +48,9 @@ G_DEFINE_TYPE (GtkA11yOverlay, gtk_a11y_overlay, GTK_TYPE_INSPECTOR_OVERLAY)
 
 typedef enum
 {
-  SEVERITY_GOOD,
-  SEVERITY_RECOMMENDATION,
-  SEVERITY_ERROR
+  FIX_SEVERITY_GOOD,
+  FIX_SEVERITY_RECOMMENDATION,
+  FIX_SEVERITY_ERROR
 } FixSeverity;
 
 typedef enum
@@ -132,7 +132,7 @@ check_accessibility_errors (GtkATContext       *context,
   if (gtk_accessible_role_is_abstract (role))
     {
       *hint = g_strdup_printf ("%s is an abstract role", role_name);
-      return SEVERITY_ERROR;
+      return FIX_SEVERITY_ERROR;
     }
 
   /* Check for name and description */
@@ -142,12 +142,12 @@ check_accessibility_errors (GtkATContext       *context,
   switch (gtk_accessible_role_get_naming (role))
     {
     case GTK_ACCESSIBLE_NAME_ALLOWED:
-      return SEVERITY_GOOD;
+      return FIX_SEVERITY_GOOD;
 
     case GTK_ACCESSIBLE_NAME_REQUIRED:
       if (label_set)
         {
-          return SEVERITY_GOOD;
+          return FIX_SEVERITY_GOOD;
         }
       else
         {
@@ -160,18 +160,18 @@ check_accessibility_errors (GtkATContext       *context,
                   g_free (name);
                   *hint = g_strdup_printf ("%s must have text content or label", role_name);
 
-                  return SEVERITY_ERROR;
+                  return FIX_SEVERITY_ERROR;
                 }
               else
                 {
-                  return SEVERITY_GOOD;
+                  return FIX_SEVERITY_GOOD;
                 }
             }
           else
             {
               *hint = g_strdup_printf ("%s must have label", role_name);
 
-              return SEVERITY_ERROR;
+              return FIX_SEVERITY_ERROR;
             }
         }
       break;
@@ -181,37 +181,37 @@ check_accessibility_errors (GtkATContext       *context,
         {
           *hint = g_strdup_printf ("%s can't have label", role_name);
 
-          return SEVERITY_ERROR;
+          return FIX_SEVERITY_ERROR;
         }
       else
         {
-          return SEVERITY_GOOD;
+          return FIX_SEVERITY_GOOD;
         }
       break;
 
     case GTK_ACCESSIBLE_NAME_RECOMMENDED:
       if (label_set)
         {
-          return SEVERITY_GOOD;
+          return FIX_SEVERITY_GOOD;
         }
       else
         {
           *hint = g_strdup_printf ("label recommended for %s", role_name);
 
-          return SEVERITY_RECOMMENDATION;
+          return FIX_SEVERITY_RECOMMENDATION;
         }
       break;
 
     case GTK_ACCESSIBLE_NAME_NOT_RECOMMENDED:
       if (!label_set)
         {
-          return SEVERITY_GOOD;
+          return FIX_SEVERITY_GOOD;
         }
       else
         {
           *hint = g_strdup_printf ("label not recommended for %s", role_name);
 
-          return SEVERITY_RECOMMENDATION;
+          return FIX_SEVERITY_RECOMMENDATION;
         }
       break;
 
@@ -234,7 +234,7 @@ check_accessibility_errors (GtkATContext       *context,
               if (!gtk_at_context_has_accessible_state (context, required_attributes[i].id))
                 {
                   *hint = g_strdup_printf ("%s must have state %s", role_name, g_enum_get_value (states, required_attributes[i].id)->value_nick);
-                  return SEVERITY_ERROR;
+                  return FIX_SEVERITY_ERROR;
                 }
               break;
 
@@ -242,7 +242,7 @@ check_accessibility_errors (GtkATContext       *context,
               if (!gtk_at_context_has_accessible_property (context, required_attributes[i].id))
                 {
                   *hint = g_strdup_printf ("%s must have property %s", role_name, g_enum_get_value (properties, required_attributes[i].id)->value_nick);
-                  return SEVERITY_ERROR;
+                  return FIX_SEVERITY_ERROR;
                 }
               break;
 
@@ -250,7 +250,7 @@ check_accessibility_errors (GtkATContext       *context,
               if (!gtk_at_context_has_accessible_relation (context, required_attributes[i].id))
                 {
                   *hint = g_strdup_printf ("%s must have relation %s", role_name, g_enum_get_value (relations, required_attributes[i].id)->value_nick);
-                  return SEVERITY_ERROR;
+                  return FIX_SEVERITY_ERROR;
                 }
               break;
 
@@ -304,10 +304,10 @@ check_accessibility_errors (GtkATContext       *context,
 
       g_string_free (s, TRUE);
 
-      return SEVERITY_ERROR;
+      return FIX_SEVERITY_ERROR;
     }
 
-  return SEVERITY_GOOD;
+  return FIX_SEVERITY_GOOD;
 }
 
 static FixSeverity
@@ -342,7 +342,7 @@ recurse_child_widgets (GtkA11yOverlay *self,
 
   severity = check_widget_accessibility_errors (widget, self->context, &hint);
 
-  if (severity != SEVERITY_GOOD)
+  if (severity != FIX_SEVERITY_GOOD)
     {
       int width, height;
       GdkRGBA color;
@@ -350,7 +350,7 @@ recurse_child_widgets (GtkA11yOverlay *self,
       width = gtk_widget_get_width (widget);
       height = gtk_widget_get_height (widget);
 
-      if (severity == SEVERITY_ERROR)
+      if (severity == FIX_SEVERITY_ERROR)
         color = self->error_color;
       else
         color = self->recommend_color;
