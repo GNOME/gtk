@@ -98,6 +98,7 @@ gtk_kinetic_scrolling_new (gint64 frame_time,
   data->upper = upper;
   data->decel_friction = decel_friction;
   data->overshoot_friction = overshoot_friction;
+  data->overshoot_width = overshoot_width;
   if (initial_position < lower)
     {
       gtk_kinetic_scrolling_init_overshoot (data,
@@ -211,14 +212,15 @@ gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
 
     case GTK_KINETIC_SCROLLING_PHASE_OVERSHOOTING:
       {
+        double half_overshoot_width = data->overshoot_width / 2.;
         double exp_part, pos;
 
         exp_part = exp (-data->overshoot_friction / 2 * t);
         pos = exp_part * (data->c1 + data->c2 * t);
 
-        if (pos < data->lower - 50 || pos > data->upper + 50)
+        if (pos < data->lower - half_overshoot_width || pos > data->upper + half_overshoot_width)
           {
-            pos = CLAMP (pos, data->lower - 50, data->upper + 50);
+            pos = CLAMP (pos, data->lower - half_overshoot_width, data->upper + half_overshoot_width);
             gtk_kinetic_scrolling_init_overshoot (data, frame_time, data->equilibrium_position, pos, 0);
           }
         else
