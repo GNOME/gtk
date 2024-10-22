@@ -717,6 +717,8 @@ main (int argc, char **argv)
   int status;
   const char *accels[] = { "F11", NULL };
 
+  gtk_init ();
+
   bloat_pad = bloat_pad_new ();
 
   gtk_application_set_accels_for_action (GTK_APPLICATION (bloat_pad),
