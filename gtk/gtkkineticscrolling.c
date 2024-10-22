@@ -70,18 +70,20 @@ struct _GtkKineticScrolling
   double c2;
   double equilibrium_position;
 
-  double t;
+  gint64 t;
   double position;
   double velocity;
 };
 
 static void gtk_kinetic_scrolling_init_overshoot (GtkKineticScrolling *data,
+                                                  gint64               frame_time,
                                                   double               equilibrium_position,
                                                   double               initial_position,
                                                   double               initial_velocity);
 
 GtkKineticScrolling *
-gtk_kinetic_scrolling_new (double lower,
+gtk_kinetic_scrolling_new (gint64 frame_time,
+                           double lower,
                            double upper,
                            double overshoot_width,
                            double decel_friction,
@@ -96,16 +98,18 @@ gtk_kinetic_scrolling_new (double lower,
   data->upper = upper;
   data->decel_friction = decel_friction;
   data->overshoot_friction = overshoot_friction;
-  if(initial_position < lower)
+  if (initial_position < lower)
     {
       gtk_kinetic_scrolling_init_overshoot (data,
+                                            frame_time,
                                             lower,
                                             initial_position,
                                             initial_velocity);
     }
-  else if(initial_position > upper)
+  else if (initial_position > upper)
     {
       gtk_kinetic_scrolling_init_overshoot (data,
+                                            frame_time,
                                             upper,
                                             initial_position,
                                             initial_velocity);
@@ -115,9 +119,9 @@ gtk_kinetic_scrolling_new (double lower,
       data->phase = GTK_KINETIC_SCROLLING_PHASE_DECELERATING;
       data->c1 = initial_velocity / decel_friction + initial_position;
       data->c2 = -initial_velocity / decel_friction;
-      data->t = 0;
       data->position = initial_position;
       data->velocity = initial_velocity;
+      data->t = frame_time;
     }
 
   return data;
@@ -160,6 +164,7 @@ gtk_kinetic_scrolling_free (GtkKineticScrolling *kinetic)
 
 static void
 gtk_kinetic_scrolling_init_overshoot (GtkKineticScrolling *data,
+                                      gint64               frame_time,
                                       double               equilibrium_position,
                                       double               initial_position,
                                       double               initial_velocity)
@@ -168,36 +173,36 @@ gtk_kinetic_scrolling_init_overshoot (GtkKineticScrolling *data,
   data->equilibrium_position = equilibrium_position;
   data->c1 = initial_position - equilibrium_position;
   data->c2 = initial_velocity + data->overshoot_friction / 2 * data->c1;
-  data->t = 0;
+  data->t = frame_time;
 }
 
 gboolean
 gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
-                            double               time_delta,
+                            gint64               frame_time,
                             double              *position,
                             double              *velocity)
 {
-  switch(data->phase)
+  double t = (frame_time - data->t) / (double)G_USEC_PER_SEC;
+
+  switch (data->phase)
     {
     case GTK_KINETIC_SCROLLING_PHASE_DECELERATING:
       {
         double exp_part;
 
-        data->t += time_delta;
-
-        exp_part = exp (-data->decel_friction * data->t);
+        exp_part = exp (-data->decel_friction * t);
         data->position = data->c1 + data->c2 * exp_part;
         data->velocity = -data->decel_friction * data->c2 * exp_part;
 
-        if(data->position < data->lower)
+        if (data->position < data->lower)
           {
-            gtk_kinetic_scrolling_init_overshoot(data,data->lower,data->position,data->velocity);
+            gtk_kinetic_scrolling_init_overshoot (data, frame_time, data->lower, data->position, data->velocity);
           }
         else if (data->position > data->upper)
           {
-            gtk_kinetic_scrolling_init_overshoot(data, data->upper, data->position, data->velocity);
+            gtk_kinetic_scrolling_init_overshoot (data, frame_time, data->upper, data->position, data->velocity);
           }
-        else if (fabs(data->velocity) < 0.1)
+        else if (fabs (data->velocity) < 0.1)
           {
             gtk_kinetic_scrolling_stop (data);
           }
@@ -208,21 +213,20 @@ gtk_kinetic_scrolling_tick (GtkKineticScrolling *data,
       {
         double exp_part, pos;
 
-        data->t += time_delta;
-        exp_part = exp(-data->overshoot_friction / 2 * data->t);
-        pos = exp_part * (data->c1 + data->c2 * data->t);
+        exp_part = exp (-data->overshoot_friction / 2 * t);
+        pos = exp_part * (data->c1 + data->c2 * t);
 
         if (pos < data->lower - 50 || pos > data->upper + 50)
           {
             pos = CLAMP (pos, data->lower - 50, data->upper + 50);
-            gtk_kinetic_scrolling_init_overshoot (data, data->equilibrium_position, pos, 0);
+            gtk_kinetic_scrolling_init_overshoot (data, frame_time, data->equilibrium_position, pos, 0);
           }
         else
           data->velocity = data->c2 * exp_part - data->overshoot_friction / 2 * pos;
 
         data->position = pos + data->equilibrium_position;
 
-        if(fabs (pos) < 0.1)
+        if (fabs (pos) < 0.1)
           {
             data->phase = GTK_KINETIC_SCROLLING_PHASE_FINISHED;
             data->position = data->equilibrium_position;
