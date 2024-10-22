@@ -122,7 +122,12 @@ gtk_layout_manager_real_get_request_mode (GtkLayoutManager *manager,
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
-      GtkSizeRequestMode res = gtk_widget_get_request_mode (child);
+      GtkSizeRequestMode res;
+
+      if (!gtk_widget_should_layout (child))
+        continue;
+
+      res = gtk_widget_get_request_mode (child);
 
       switch (res)
         {
