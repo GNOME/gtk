@@ -1146,6 +1146,8 @@ main (int argc, char **argv)
   };
   int i;
 
+  gtk_init ();
+
   app = gtk_application_new ("org.gtk.Demo4", G_APPLICATION_NON_UNIQUE|G_APPLICATION_HANDLES_COMMAND_LINE);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
