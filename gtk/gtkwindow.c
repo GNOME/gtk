@@ -4085,52 +4085,96 @@ update_realized_window_properties (GtkWindow *window)
 static void
 gtk_window_compute_min_size (GtkWidget      *window,
                              GtkOrientation  orientation,
-                             double          ideal_ratio,
+                             int             current_width,
+                             int             current_height,
                              int            *min_width,
                              int            *min_height)
 {
-  int start, end, mid, other;
-  double ratio;
+  double current_ratio = (double) current_width / current_height;
+  int start_width, end_width, start_height, end_height;
 
-  /* start = min width, end = min width for min height (ie max width) */
-  gtk_widget_measure (window, orientation, -1, &start, NULL, NULL, NULL);
-  gtk_widget_measure (window, OPPOSITE_ORIENTATION (orientation), start, &other, NULL, NULL, NULL);
-  if ((double) start / other >= ideal_ratio)
+  /*
+   * We'd want to do
+   *     gtk_widget_measure (window, orientation, current_height,
+   *                         &start_width, NULL, NULL, NULL);
+   * to find the smallest acceptable width for the 'start_width' bound
+   * here; but it could be expensive to measure the whole window against
+   * its preferred mode.  Instead, since we're doing a binary search
+   * anyway, start with the overall minimum width, and reject widths
+   * that would require a larger height in the loop below.
+   */
+  gtk_widget_measure (window, orientation, -1, &start_width, NULL, NULL, NULL);
+  gtk_widget_measure (window, OPPOSITE_ORIENTATION (orientation),
+                      start_width, &start_height, NULL, NULL, NULL);
+  end_width = current_width;
+  gtk_widget_measure (window, OPPOSITE_ORIENTATION (orientation),
+                      current_width, &end_height, NULL, NULL, NULL);
+
+  if (end_height == current_height)
     {
-      *min_width = start;
-      *min_height = other;
+      /* The current height is the minimum height for this width.  Don't
+       * run the search, just find the minimum width for this height. */
+      *min_height = current_height;
+      gtk_widget_measure (window, orientation, current_height,
+                          min_width, NULL, NULL, NULL);
       return;
     }
-  gtk_widget_measure (window, OPPOSITE_ORIENTATION (orientation), -1, &other, NULL, NULL, NULL);
-  gtk_widget_measure (window, orientation, other, &end, NULL, NULL, NULL);
-  if ((double) end / other <= ideal_ratio)
-    {
-      *min_width = end;
-      *min_height = other;
-      return;
-    }
 
-  while (start < end)
+  /* The width we're looking for is always between start_width and
+   * end_width, inclusive.  We stop the search either when we discover
+   * equal heights at both ends, or when there are just two options left
+   * on either sides of the current ratio.
+   */
+  while (start_height > end_height && start_width + 1 < end_width)
     {
-      mid = (start + end) / 2;
+      int mid_width, mid_height;
+      double mid_ratio;
 
-      gtk_widget_measure (window, OPPOSITE_ORIENTATION (orientation), mid, &other, NULL, NULL, NULL);
-      ratio = (double) mid / other;
-      if(ratio == ideal_ratio)
+      mid_width = (start_width + end_width) / 2;
+      gtk_widget_measure (window, OPPOSITE_ORIENTATION (orientation),
+                          mid_width, &mid_height, NULL, NULL, NULL);
+
+      mid_ratio = (double) mid_width / mid_height;
+      if (mid_ratio == current_ratio)
         {
-          *min_width = mid;
-          *min_height = other;
+          *min_width = mid_width;
+          *min_height = mid_height;
           return;
         }
-      else if (ratio < ideal_ratio)
-        start = mid + 1;
+      else if (mid_ratio < current_ratio)
+        {
+          /* This includes the case where mid_height > current_height */
+          start_width = mid_width;
+          start_height = mid_height;
+        }
       else
-        end = mid - 1;
+        {
+          end_width = mid_width;
+          end_height = mid_height;
+        }
     }
 
-  gtk_widget_measure (window, orientation, other, &start, NULL, NULL, NULL);
-  *min_width = start;
-  *min_height = other;
+  /* Between the 'start' and 'end' points, whose widths could either be
+   * the same or differ by one, pick 'end' because it's guaranteed
+   * to be <= 'current' for both width and height, while 'start' may
+   * have a larger height.
+   */
+
+  *min_height = end_height;
+
+  if (start_height > end_height)
+    {
+      /* Must have broken out of the loop because we saw start_width and
+       * end_width differ by exactly one.  This means end_width must be
+       * the minimum width for end_height, so no need to measure the
+       * widget here again, against its preferred size request mode.
+       */
+      g_assert (start_width + 1 == end_width);
+      *min_width = end_width;
+    }
+  else
+    gtk_widget_measure (window, orientation, end_height,
+                        min_width, NULL, NULL, NULL);
 }
 
 static void
@@ -4168,7 +4212,9 @@ gtk_window_compute_default_size (GtkWindow *window,
         cur_width = natural;
       *width = MAX (minimum, MIN (max_width, cur_width));
 
-      gtk_window_compute_min_size (widget, GTK_ORIENTATION_VERTICAL, (double) *height / *width, min_height, min_width);
+      gtk_window_compute_min_size (widget, GTK_ORIENTATION_VERTICAL,
+                                   *height, *width,
+                                   min_height, min_width);
     }
   else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
     {
@@ -4193,7 +4239,9 @@ gtk_window_compute_default_size (GtkWindow *window,
       *height = MAX (minimum, MIN (max_height, cur_height));
 
       if (request_mode != GTK_SIZE_REQUEST_CONSTANT_SIZE)
-        gtk_window_compute_min_size (widget, GTK_ORIENTATION_HORIZONTAL, (double) *width / *height, min_width, min_height);
+        gtk_window_compute_min_size (widget, GTK_ORIENTATION_HORIZONTAL,
+                                     *width, *height,
+                                     min_width, min_height);
     }
 }
 
