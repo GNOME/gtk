@@ -291,16 +291,6 @@ gtk_text_layout_new (void)
   return g_object_new (GTK_TYPE_TEXT_LAYOUT, NULL);
 }
 
-static void
-free_style_cache (GtkTextLayout *text_layout)
-{
-  if (text_layout->one_style_cache)
-    {
-      gtk_text_attributes_unref (text_layout->one_style_cache);
-      text_layout->one_style_cache = NULL;
-    }
-}
-
 /*
  * gtk_text_layout_set_buffer:
  * @buffer: (nullable):
@@ -314,8 +304,6 @@ gtk_text_layout_set_buffer (GtkTextLayout *layout,
 
   if (layout->buffer == buffer)
     return;
-
-  free_style_cache (layout);
 
   if (layout->buffer)
     {
@@ -515,7 +503,6 @@ gtk_text_layout_set_screen_width (GtkTextLayout *layout, int width)
 {
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
   g_return_if_fail (width >= 0);
-  g_return_if_fail (layout->wrap_loop_count == 0);
 
   if (layout->screen_width == width)
     return;
@@ -674,43 +661,6 @@ gtk_text_layout_cursors_changed (GtkTextLayout *layout,
 }
 
 static void
-invalidate_cached_style (GtkTextLayout *layout)
-{
-  free_style_cache (layout);
-}
-
-/* These should be called around a loop which wraps a CONTIGUOUS bunch
- * of display lines. If the lines aren’t contiguous you can’t call
- * these.
- */
-void
-gtk_text_layout_wrap_loop_start (GtkTextLayout *layout)
-{
-  g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
-  g_return_if_fail (layout->one_style_cache == NULL);
-
-  layout->wrap_loop_count += 1;
-}
-
-void
-gtk_text_layout_wrap_loop_end (GtkTextLayout *layout)
-{
-  g_return_if_fail (layout->wrap_loop_count > 0);
-
-  layout->wrap_loop_count -= 1;
-
-  if (layout->wrap_loop_count == 0)
-    {
-      /* We cache a some stuff if we're iterating over some lines wrapping
-       * them. This cleans it up.
-       */
-      /* Nuke our cached style */
-      invalidate_cached_style (layout);
-      g_assert (layout->one_style_cache == NULL);
-    }
-}
-
-static void
 gtk_text_layout_invalidate_all (GtkTextLayout *layout)
 {
   GtkTextIter start;
@@ -790,7 +740,6 @@ gtk_text_layout_invalidate (GtkTextLayout     *layout,
   GtkTextLine *last_line;
 
   g_return_if_fail (GTK_IS_TEXT_LAYOUT (layout));
-  g_return_if_fail (layout->wrap_loop_count == 0);
 
   /* Because we may be invalidating a mark, it's entirely possible
    * that gtk_text_iter_equal (start, end) in which case we
@@ -1089,51 +1038,24 @@ gtk_text_layout_wrap (GtkTextLayout   *layout,
 
 /* If you get the style with get_style () you need to call
    release_style () to free it. */
-static GtkTextAttributes*
+static GtkTextAttributes *
 get_style (GtkTextLayout *layout,
-	   GPtrArray     *tags)
+           GPtrArray     *tags)
 {
   GtkTextAttributes *style;
 
-  /* If we have the one-style cache, then it means
-     that we haven't seen a toggle since we filled in the
-     one-style cache.
-  */
-  if (layout->one_style_cache != NULL)
-    {
-      gtk_text_attributes_ref (layout->one_style_cache);
-      return layout->one_style_cache;
-    }
-
-  g_assert (layout->one_style_cache == NULL);
-
   /* No tags, use default style */
   if (tags == NULL || tags->len == 0)
-    {
-      /* One ref for the return value, one ref for the
-         layout->one_style_cache reference */
-      gtk_text_attributes_ref (layout->default_style);
-      gtk_text_attributes_ref (layout->default_style);
-      layout->one_style_cache = layout->default_style;
-
-      return layout->default_style;
-    }
+    return gtk_text_attributes_ref (layout->default_style);
 
   style = gtk_text_attributes_new ();
 
-  gtk_text_attributes_copy_values (layout->default_style,
-                                   style);
+  gtk_text_attributes_copy_values (layout->default_style, style);
 
   _gtk_text_attributes_fill_from_tags (style, tags);
 
   g_assert (style->refcount == 1);
 
-  /* Leave this style as the last one seen */
-  g_assert (layout->one_style_cache == NULL);
-  gtk_text_attributes_ref (style); /* ref held by layout->one_style_cache */
-  layout->one_style_cache = style;
-
-  /* Returning yet another refcount */
   return style;
 }
 
@@ -1176,8 +1098,6 @@ totally_invisible_line (GtkTextLayout *layout,
       if (seg->byte_count <= 0 &&
           seg->type == &gtk_text_toggle_on_type)
         {
-          invalidate_cached_style (layout);
-
           /* Bail out if an elision-unsetting tag begins */
           if (seg->body.toggle.info->tag->priv->invisible_set &&
               !seg->body.toggle.info->tag->priv->values->invisible)
@@ -1185,8 +1105,6 @@ totally_invisible_line (GtkTextLayout *layout,
         }
       else if (seg->type == &gtk_text_toggle_off_type)
         {
-          invalidate_cached_style (layout);
-
           /* Bail out if an elision-setting tag ends */
           if (seg->body.toggle.info->tag->priv->invisible_set &&
               seg->body.toggle.info->tag->priv->values->invisible)
@@ -2487,9 +2405,6 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
       else if (seg->type == &gtk_text_toggle_on_type ||
                seg->type == &gtk_text_toggle_off_type)
         {
-          /* Style may have changed, drop our
-             current cached style */
-          invalidate_cached_style (layout);
           /* Add the tag only after we have seen some non-toggle non-mark segment,
            * otherwise the tag is already accounted for by _gtk_text_btree_get_tags(). */
           if (!initial_toggle_segments)
@@ -2620,10 +2535,6 @@ gtk_text_layout_create_display (GtkTextLayout *layout,
           break;
         }
     }
-
-  /* Free this if we aren't in a loop */
-  if (layout->wrap_loop_count == 0)
-    invalidate_cached_style (layout);
 
   g_free (text);
   pango_attr_list_unref (attrs);
@@ -4188,8 +4099,6 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
       draw_selection_text = FALSE;
     }
 
-  gtk_text_layout_wrap_loop_start (layout);
-
   for (GtkTextLine *line = first_line;
        line != NULL;
        line = _gtk_text_line_next_excluding_last (line))
@@ -4317,8 +4226,6 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
       if (line == last_line)
         break;
     }
-
-  gtk_text_layout_wrap_loop_end (layout);
 
   if (cursor_snapshot)
     {
