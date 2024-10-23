@@ -473,6 +473,78 @@ distribute_remaining_size (GtkRequestedSize *sizes,
   if (total_size <= available)
     return;
 
+  if (n_sizes == 2 &&
+      preferred_measure_orientation (sizes[0].data) == OPPOSITE_ORIENTATION (orientation) &&
+      preferred_measure_orientation (sizes[1].data) == OPPOSITE_ORIENTATION (orientation))
+    {
+      int child0_min, child1_min;
+      int best_above = -1;
+      int best_below = -1;
+      int best;
+
+      gtk_widget_measure (sizes[0].data,
+                          orientation,
+                          -1,
+                          &child0_min, NULL,
+                          NULL, NULL);
+      gtk_widget_measure (sizes[1].data,
+                          orientation,
+                          -1,
+                          &child1_min, NULL,
+                          NULL, NULL);
+      min = child0_min;
+      max = available - child1_min + 1;
+      g_assert (min < max);
+
+      while (min < max)
+        {
+          int test = (min + max) / 2;
+
+          gtk_widget_measure (sizes[0].data,
+                              OPPOSITE_ORIENTATION (orientation),
+                              test,
+                              &child0_min, NULL,
+                              NULL, NULL);
+          gtk_widget_measure (sizes[1].data,
+                              OPPOSITE_ORIENTATION (orientation),
+                              available - test,
+                              &child1_min, NULL,
+                              NULL, NULL);
+
+          if (child0_min <= *min_opposite && child1_min <= *min_opposite)
+            return;
+
+          if (child0_min == child1_min)
+            {
+              /* We cannot improve both at the same time, so this
+               * is our final answer.  */
+              best_above = best_below = child0_min;
+              break;
+            }
+          else if (child0_min >= child1_min)
+            {
+              best_above = child0_min;
+              /* Try to give the first child more space.  */
+              min = test + 1;
+            }
+          else
+            {
+              best_below = child1_min;
+              /* Try to give the second child more space.  */
+              max = test;
+            }
+        }
+
+        if ((best_above <= best_below && best_above != -1) || best_below == -1)
+          best = best_above;
+        else
+          best = best_below;
+        g_assert (best != -1);
+
+        *min_opposite = MAX (*min_opposite, best);
+        return;
+    }
+
   min = *min_opposite;
   max = MAX_ALLOWED_SIZE;
   /* total_size > available happens when we last ran for values too big,
