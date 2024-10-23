@@ -1,6 +1,86 @@
 Overview of Changes in 4.17.0, xx-xx-xxxx
 =========================================
 
+* GtkScrolledWindow
+ - Fix criticals in size allocation code
+
+* GtkFileChooser
+ - Fix a crash in the portal code
+
+* GtkPicture
+ - Avoid unnecessary resizes
+
+* GtkVideo
+ - Make dmabufs work without GL
+
+* GtkListBox:
+ - Add a tab-behavior property to influence keynav
+
+* GtkEmojiChooser:
+ - Fix problems with insertion and selection
+
+* GtkStringList:
+ - Add gtk_string_list_find
+
+* Accessibility:
+ - Always realize non-widget accessibles, to help webkit
+ - Fix list view selection implementation
+
+* Gstreamer:
+ - Make dmabufs works without GL
+
+* Gdk:
+ - Add OKLAB and OKLCH color states
+ - GL: Drop support for GLES 2 and GL < 3.3
+ - GL: Use the ngl dmabuf downloader instead of the GL downloader
+ - Vulkan: Drop the GDK_VULKAN_DEVICE env var. Use MESA_VK_DEVICE_SELECT instead
+ - Vulkan: Use the swapchain maintenance extension to release swap images
+ - Forbid opening displays before gtk_init()
+
+* Gsk:
+ - Many improvements to the dmabuf downloaders
+ - ngl: Avoid glBufferSubData for globals, speeding up llvmpipe
+ - Renderer selection will no longer consider the GL renderer
+ - Allow Vulkan software rendering as fallback
+ - Support gradient interpolation in different color states
+
+* Wayland:
+ - Improve settings portal handling
+ - Improve fallback for cursor themes
+ - Make cursor theme changes apply immediately
+ - Use a viewporter for cursor image scaling
+ - Improve cursor size handling
+ - Use the system bell protocol if available
+ - Fix possible deadlock with high-priority sources triggering Wayland roundtrips
+
+* Windows:
+ - Improve the backend code
+ - Fix some problems with WGL on NVidia
+ - Many testsuite fixes for Windows compatibility
+
+* Macos:
+ - Fix crashes when dragging libadwaita TabView tabs
+
+* Tools and demos
+ - gtk4-demo: Make demos standalone
+ - gtk4-demo: Drop GL shader demos
+ - gtk4-demo: Improve scrolling benchmarks
+ - gtk4-builder-tool: Improve separator handling
+ - gtk4-image-tool: Better color state support
+
+* Build:
+ - Don't set GSK_RENDERER in our flatpaks
+ - Require meson 1.2
+
+* Translation updates
+ Belarusian
+ Brazilian Portuguese
+ British English
+ Galician
+ Romanian
+ Slovenian
+ Swedish
+
 
 Overview of Changes in 4.16.2, 09-25-2024
 =========================================
