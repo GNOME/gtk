@@ -22,6 +22,12 @@ Overview of Changes in 4.17.0, xx-xx-xxxx
 * GtkStringList:
  - Add gtk_string_list_find
 
+* GtkTextView:
+ - Vertical and horizontal positioning of the textview is now quantized
+   to the nearest device pixel. This should improve the perceived smoothness
+   of scrolling with fractional scaling and font hinting.
+ - In incorrect re-use of cached styling was fixed
+
 * Accessibility:
  - Always realize non-widget accessibles, to help webkit
  - Fix list view selection implementation
