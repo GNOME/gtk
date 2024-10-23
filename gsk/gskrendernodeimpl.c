@@ -1740,15 +1740,18 @@ gsk_border_node_new (const GskRoundedRect *outline,
                      const float           border_width[4],
                      const GdkRGBA         border_color[4])
 {
+  GskRenderNode *node;
   GdkColor color[4];
 
   for (int i = 0; i < 4; i++)
     gdk_color_init_from_rgba (&color[i], &border_color[i]);
 
-  return gsk_border_node_new2 (outline, border_width, color);
+  node = gsk_border_node_new2 (outline, border_width, color);
 
   for (int i = 0; i < 4; i++)
     gdk_color_finish (&color[i]);
+
+  return node;
 }
 
 /*< private >

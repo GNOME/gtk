@@ -124,7 +124,7 @@ gdk_content_provider_new_for_value (const GValue *value)
   content = g_object_new (GDK_TYPE_CONTENT_PROVIDER_VALUE, NULL);
   g_value_init (&content->value, G_VALUE_TYPE (value));
   g_value_copy (value, &content->value);
-  
+
   return GDK_CONTENT_PROVIDER (content);
 }
 
@@ -409,7 +409,7 @@ gdk_content_provider_union_init (GdkContentProviderUnion *self)
  * ```c
  * gdk_content_provider_new_union ((GdkContentProvider *[2]) {
  *                                   gdk_content_provider_new_typed (G_TYPE_FILE, file),
- *                                   gdk_content_provider_new_typed (G_TYPE_TEXTURE, texture)
+ *                                   gdk_content_provider_new_typed (GDK_TYPE_TEXTURE, texture)
  *                                 }, 2);
  * ```
  *
@@ -594,7 +594,7 @@ gdk_content_provider_new_for_bytes (const char *mime_type,
   content = g_object_new (GDK_TYPE_CONTENT_PROVIDER_BYTES, NULL);
   content->mime_type = g_intern_string (mime_type);
   content->bytes = g_bytes_ref (bytes);
-  
+
   return GDK_CONTENT_PROVIDER (content);
 }
 
