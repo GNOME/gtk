@@ -962,6 +962,8 @@ devmode_from_settings (GtkPrintSettings *settings,
   const char *extras_base64;
   gsize extras_len;
   const char *val;
+  gunichar2 *device_name;
+  glong device_name_len;
 
   /* If we already provided a valid hDevMode, don't initialize a new one; just lock the one we have */
   if (hDevMode)
@@ -986,8 +988,9 @@ devmode_from_settings (GtkPrintSettings *settings,
       devmode->dmSpecVersion = DM_SPECVERSION;
       devmode->dmSize = sizeof (DEVMODEW);
   
-      gunichar2 *device_name = g_utf8_to_utf16 (gtk_print_settings_get (settings, "win32-devmode-name"), -1, NULL, NULL, NULL);
-      memcpy (devmode->dmDeviceName, device_name, CCHDEVICENAME);
+      device_name = g_utf8_to_utf16 (gtk_print_settings_get (settings, "win32-devmode-name"), -1, NULL, &device_name_len, NULL);
+      if (device_name && device_name_len)
+        memcpy (devmode->dmDeviceName, device_name, MIN (device_name_len, CCHDEVICENAME) * sizeof (gunichar2));
       g_free (device_name);
 
 
