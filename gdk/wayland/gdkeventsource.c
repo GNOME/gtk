@@ -33,8 +33,8 @@ typedef struct _GdkWaylandEventSource {
 } GdkWaylandEventSource;
 
 static gboolean
-gdk_event_source_prepare (GSource *base,
-                          int     *timeout)
+gdk_wayland_event_source_prepare (GSource *base,
+                                  int     *timeout)
 {
   GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
   GdkWaylandDisplay *display = (GdkWaylandDisplay *) source->display;
@@ -55,7 +55,7 @@ gdk_event_source_prepare (GSource *base,
 
   /* wl_display_prepare_read() needs to be balanced with either
    * wl_display_read_events() or wl_display_cancel_read()
-   * (in gdk_event_source_check() */
+   * (in gdk_wayland_event_source_check() */
   if (source->reading)
     return FALSE;
 
@@ -92,7 +92,7 @@ gdk_event_source_prepare (GSource *base,
 }
 
 static gboolean
-gdk_event_source_check (GSource *base)
+gdk_wayland_event_source_check (GSource *base)
 {
   GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
   GdkWaylandDisplay *display_wayland = (GdkWaylandDisplay *) source->display;
@@ -127,9 +127,9 @@ gdk_event_source_check (GSource *base)
 }
 
 static gboolean
-gdk_event_source_dispatch (GSource     *base,
-			   GSourceFunc  callback,
-			   gpointer     data)
+gdk_wayland_event_source_dispatch (GSource     *base,
+                                   GSourceFunc  callback,
+                                   gpointer     data)
 {
   GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
   GdkDisplay *display = source->display;
@@ -148,7 +148,7 @@ gdk_event_source_dispatch (GSource     *base,
 }
 
 static void
-gdk_event_source_finalize (GSource *base)
+gdk_wayland_event_source_finalize (GSource *base)
 {
   GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
   GdkWaylandDisplay *display = (GdkWaylandDisplay *) source->display;
@@ -158,11 +158,11 @@ gdk_event_source_finalize (GSource *base)
   source->reading = FALSE;
 }
 
-static GSourceFuncs wl_glib_source_funcs = {
-  gdk_event_source_prepare,
-  gdk_event_source_check,
-  gdk_event_source_dispatch,
-  gdk_event_source_finalize
+static GSourceFuncs gdk_wayland_event_source_funcs = {
+  gdk_wayland_event_source_prepare,
+  gdk_wayland_event_source_check,
+  gdk_wayland_event_source_dispatch,
+  gdk_wayland_event_source_finalize
 };
 
 void
@@ -180,23 +180,23 @@ GSource *
 _gdk_wayland_display_event_source_new (GdkDisplay *display)
 {
   GSource *source;
-  GdkWaylandEventSource *wl_source;
+  GdkWaylandEventSource *event_source;
   GdkWaylandDisplay *display_wayland;
   char *name;
 
-  source = g_source_new (&wl_glib_source_funcs,
+  source = g_source_new (&gdk_wayland_event_source_funcs,
 			 sizeof (GdkWaylandEventSource));
   name = g_strdup_printf ("GDK Wayland Event source (%s)",
                           gdk_display_get_name (display));
   g_source_set_name (source, name);
   g_free (name);
-  wl_source = (GdkWaylandEventSource *) source;
+  event_source = (GdkWaylandEventSource *) source;
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
-  wl_source->display = display;
-  wl_source->pfd.fd = wl_display_get_fd (display_wayland->wl_display);
-  wl_source->pfd.events = G_IO_IN | G_IO_ERR | G_IO_HUP;
-  g_source_add_poll (source, &wl_source->pfd);
+  event_source->display = display;
+  event_source->pfd.fd = wl_display_get_fd (display_wayland->wl_display);
+  event_source->pfd.events = G_IO_IN | G_IO_ERR | G_IO_HUP;
+  g_source_add_poll (source, &event_source->pfd);
 
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
   g_source_set_can_recurse (source, TRUE);
