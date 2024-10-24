@@ -175,23 +175,23 @@ _gdk_wayland_display_deliver_event (GdkDisplay *display,
                             _gdk_display_get_next_serial (display));
 }
 
-GSource *
-_gdk_wayland_display_event_source_new (GdkDisplay *display)
+void
+gdk_wayland_display_install_gsource (GdkWaylandDisplay *display_wayland)
 {
+  GdkDisplay *display = GDK_DISPLAY (display_wayland);
   GSource *source;
   GdkWaylandEventSource *event_source;
-  GdkWaylandDisplay *display_wayland;
   char *name;
 
   source = g_source_new (&gdk_wayland_event_source_funcs,
 			 sizeof (GdkWaylandEventSource));
+  display_wayland->event_source = source;
+  event_source = (GdkWaylandEventSource *) source;
   name = g_strdup_printf ("GDK Wayland Event source (%s)",
                           gdk_display_get_name (display));
   g_source_set_name (source, name);
   g_free (name);
-  event_source = (GdkWaylandEventSource *) source;
 
-  display_wayland = GDK_WAYLAND_DISPLAY (display);
   event_source->display = display;
   event_source->pfd.fd = wl_display_get_fd (display_wayland->wl_display);
   event_source->pfd.events = G_IO_IN | G_IO_ERR | G_IO_HUP;
@@ -200,8 +200,17 @@ _gdk_wayland_display_event_source_new (GdkDisplay *display)
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
+}
 
-  return source;
+void
+gdk_wayland_display_uninstall_gsource (GdkWaylandDisplay *display_wayland)
+{
+  if (display_wayland->event_source)
+    {
+      g_source_destroy (display_wayland->event_source);
+      g_source_unref (display_wayland->event_source);
+      display_wayland->event_source = NULL;
+    }
 }
 
 void
