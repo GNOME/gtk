@@ -1850,12 +1850,6 @@ gdk_x11_display_flush (GdkDisplay *display)
     XFlush (GDK_DISPLAY_XDISPLAY (display));
 }
 
-static gboolean
-gdk_x11_display_has_pending (GdkDisplay *display)
-{
-  return XPending (GDK_DISPLAY_XDISPLAY (display));
-}
-
 /**
  * gdk_x11_display_get_default_group:
  * @display: (type GdkX11Display): a `GdkDisplay`
@@ -3058,7 +3052,6 @@ gdk_x11_display_class_init (GdkX11DisplayClass * class)
   display_class->sync = gdk_x11_display_sync;
   display_class->flush = gdk_x11_display_flush;
   display_class->make_default = gdk_x11_display_make_default;
-  display_class->has_pending = gdk_x11_display_has_pending;
   display_class->queue_events = _gdk_x11_display_queue_events;
   display_class->get_app_launch_context = _gdk_x11_display_get_app_launch_context;
 

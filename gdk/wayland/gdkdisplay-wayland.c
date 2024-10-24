@@ -881,12 +881,6 @@ gdk_wayland_display_make_default (GdkDisplay *display)
     display_wayland->startup_notification_id = g_strdup (startup_id);
 }
 
-static gboolean
-gdk_wayland_display_has_pending (GdkDisplay *display)
-{
-  return FALSE;
-}
-
 static gulong
 gdk_wayland_display_get_next_serial (GdkDisplay *display)
 {
@@ -1053,7 +1047,6 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->sync = gdk_wayland_display_sync;
   display_class->flush = gdk_wayland_display_flush;
   display_class->make_default = gdk_wayland_display_make_default;
-  display_class->has_pending = gdk_wayland_display_has_pending;
   display_class->queue_events = _gdk_wayland_display_queue_events;
   display_class->get_app_launch_context = _gdk_wayland_display_get_app_launch_context;
   display_class->get_next_serial = gdk_wayland_display_get_next_serial;
