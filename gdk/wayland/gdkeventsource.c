@@ -29,6 +29,7 @@ typedef struct _GdkWaylandEventSource {
   GPollFD pfd;
   uint32_t mask;
   GdkDisplay *display;
+  gboolean reading;
 } GdkWaylandEventSource;
 
 static gboolean
@@ -52,11 +53,15 @@ gdk_event_source_prepare (GSource *base,
   if (_gdk_event_queue_find_first (source->display) != NULL)
     return TRUE;
 
+  /* wl_display_prepare_read() needs to be balanced with either
+   * wl_display_read_events() or wl_display_cancel_read()
+   * (in gdk_event_source_check() */
+  if (source->reading)
+    return FALSE;
+
   /* if prepare_read() returns non-zero, there are events to be dispatched */
   if (wl_display_prepare_read (display->wl_display) != 0)
     return TRUE;
-
-  wl_display_cancel_read (display->wl_display);
 
   /* We need to check whether there are pending events on the surface queues as well,
    * but we also need to make sure to only have one active "read" in the end,
@@ -68,10 +73,14 @@ gdk_event_source_prepare (GSource *base,
       struct wl_event_queue *queue = l->data;
 
       if (wl_display_prepare_read_queue (display->wl_display, queue) != 0)
-        return TRUE;
-
+        {
+          wl_display_cancel_read (display->wl_display);
+          return TRUE;
+        }
       wl_display_cancel_read (display->wl_display);
     }
+
+  source->reading = TRUE;
 
   if (wl_display_flush (display->wl_display) < 0)
     {
@@ -89,17 +98,28 @@ gdk_event_source_check (GSource *base)
   GdkWaylandDisplay *display_wayland = (GdkWaylandDisplay *) source->display;
 
   if (source->display->event_pause_count > 0)
-    return _gdk_event_queue_find_first (source->display) != NULL;
+    {
+      if (source->reading)
+        wl_display_cancel_read (display_wayland->wl_display);
+      source->reading = FALSE;
+
+      return _gdk_event_queue_find_first (source->display) != NULL;
+    }
 
   /* read the events from the wayland fd into their respective queues if we have data */
-  if (source->pfd.revents & G_IO_IN &&
-      wl_display_prepare_read (display_wayland->wl_display) == 0)
+  if (source->reading)
     {
-      if (wl_display_read_events (display_wayland->wl_display) < 0)
+      if (source->pfd.revents & G_IO_IN)
         {
-          g_message ("Error reading events from display: %s", g_strerror (errno));
-          _exit (1);
+          if (wl_display_read_events (display_wayland->wl_display) < 0)
+            {
+              g_message ("Error reading events from display: %s", g_strerror (errno));
+              _exit (1);
+            }
         }
+      else
+        wl_display_cancel_read (display_wayland->wl_display);
+      source->reading = FALSE;
     }
 
   return _gdk_event_queue_find_first (source->display) != NULL ||
@@ -130,6 +150,12 @@ gdk_event_source_dispatch (GSource     *base,
 static void
 gdk_event_source_finalize (GSource *base)
 {
+  GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
+  GdkWaylandDisplay *display = (GdkWaylandDisplay *) source->display;
+
+  if (source->reading)
+    wl_display_cancel_read (display->wl_display);
+  source->reading = FALSE;
 }
 
 static GSourceFuncs wl_glib_source_funcs = {
