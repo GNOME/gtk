@@ -630,7 +630,7 @@ _gdk_wayland_display_open (const char *display_name)
   display = g_object_new (GDK_TYPE_WAYLAND_DISPLAY, NULL);
   display_wayland = GDK_WAYLAND_DISPLAY (display);
   display_wayland->wl_display = wl_display;
-  gdk_wayland_display_install_gsource (display_wayland);
+  gdk_wayland_display_install_gsources (display_wayland);
 
   init_settings (display);
 
@@ -731,7 +731,7 @@ gdk_wayland_display_dispose (GObject *object)
 
   g_list_free_full (display_wayland->toplevels, destroy_toplevel);
 
-  gdk_wayland_display_uninstall_gsource (display_wayland);
+  gdk_wayland_display_uninstall_gsources (display_wayland);
 
   g_list_free_full (display_wayland->async_roundtrips, (GDestroyNotify) wl_callback_destroy);
 

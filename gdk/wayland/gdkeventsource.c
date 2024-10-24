@@ -24,33 +24,106 @@
 #include <unistd.h>
 #include <errno.h>
 
-typedef struct _GdkWaylandEventSource {
+typedef struct _GdkWaylandEventSource GdkWaylandEventSource;
+typedef struct _GdkWaylandPollSource GdkWaylandPollSource;
+
+struct _GdkWaylandEventSource
+{
+  GSource source;
+  GdkWaylandDisplay *display;
+};
+
+struct _GdkWaylandPollSource
+{
   GSource source;
   GPollFD pfd;
-  GdkDisplay *display;
-  gboolean reading;
-} GdkWaylandEventSource;
+  GdkWaylandDisplay *display;
+  guint reading : 1;
+  guint can_dispatch : 1;
+};
+
+/* If we should try wl_display_dispatch_pending() before
+ * polling the Wayland fd
+ */
+static gboolean
+gdk_wayland_display_can_dispatch (GdkWaylandDisplay *display_wayland)
+{
+  GdkWaylandPollSource *poll_source = (GdkWaylandPollSource *) display_wayland->poll_source;
+
+  return poll_source->can_dispatch;
+}
+
+/* If we still have events to process and don't need to poll */
+static gboolean
+gdk_wayland_display_has_events_pending (GdkWaylandDisplay *display_wayland)
+{
+  return gdk_wayland_display_can_dispatch (display_wayland) ||
+         _gdk_event_queue_find_first (GDK_DISPLAY (display_wayland)) != NULL;
+}
 
 static gboolean
 gdk_wayland_event_source_prepare (GSource *base,
                                   int     *timeout)
 {
   GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
+
+  *timeout = -1;
+
+  return gdk_wayland_display_has_events_pending (source->display);
+}
+
+static gboolean
+gdk_wayland_event_source_check (GSource *base)
+{
+  GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
+
+  return gdk_wayland_display_has_events_pending (source->display);
+}
+
+static gboolean
+gdk_wayland_event_source_dispatch (GSource     *base,
+                                   GSourceFunc  callback,
+                                   gpointer     data)
+{
+  GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
+  GdkEvent *event;
+
+  event = gdk_display_get_event (GDK_DISPLAY (source->display));
+
+  if (event)
+    {
+      _gdk_event_emit (event);
+
+      gdk_event_unref (event);
+    }
+
+  return G_SOURCE_CONTINUE;
+}
+
+static void
+gdk_wayland_event_source_finalize (GSource *base)
+{
+}
+
+static GSourceFuncs gdk_wayland_event_source_funcs = {
+  gdk_wayland_event_source_prepare,
+  gdk_wayland_event_source_check,
+  gdk_wayland_event_source_dispatch,
+  gdk_wayland_event_source_finalize
+};
+
+static gboolean
+gdk_wayland_poll_source_prepare (GSource *base,
+                                 int     *timeout)
+{
+  GdkWaylandPollSource *source = (GdkWaylandPollSource *) base;
   GdkWaylandDisplay *display = (GdkWaylandDisplay *) source->display;
   GList *l;
 
   *timeout = -1;
 
-  if (source->display->event_pause_count > 0)
-    return _gdk_event_queue_find_first (source->display) != NULL;
-
-  /* We have to add/remove the GPollFD if we want to update our
-   * poll event mask dynamically.  Instead, let's just flush all
-   * write on idle instead, which is what this amounts to.
-   */
-
-  if (_gdk_event_queue_find_first (source->display) != NULL)
-    return TRUE;
+  if (gdk_wayland_display_has_events_pending (source->display))
+    return FALSE;
 
   /* wl_display_prepare_read() needs to be balanced with either
    * wl_display_read_events() or wl_display_cancel_read()
@@ -60,7 +133,10 @@ gdk_wayland_event_source_prepare (GSource *base,
 
   /* if prepare_read() returns non-zero, there are events to be dispatched */
   if (wl_display_prepare_read (display->wl_display) != 0)
-    return TRUE;
+    {
+      source->can_dispatch = TRUE;
+      return TRUE;
+    }
 
   /* We need to check whether there are pending events on the surface queues as well,
    * but we also need to make sure to only have one active "read" in the end,
@@ -73,6 +149,8 @@ gdk_wayland_event_source_prepare (GSource *base,
 
       if (wl_display_prepare_read_queue (display->wl_display, queue) != 0)
         {
+          source->can_dispatch = TRUE;
+          /* cancel the read from before the for loop */
           wl_display_cancel_read (display->wl_display);
           return TRUE;
         }
@@ -91,23 +169,19 @@ gdk_wayland_event_source_prepare (GSource *base,
 }
 
 static gboolean
-gdk_wayland_event_source_check (GSource *base)
+gdk_wayland_poll_source_check (GSource *base)
 {
-  GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
+  GdkWaylandPollSource *source = (GdkWaylandPollSource *) base;
   GdkWaylandDisplay *display_wayland = (GdkWaylandDisplay *) source->display;
-
-  if (source->display->event_pause_count > 0)
-    {
-      if (source->reading)
-        wl_display_cancel_read (display_wayland->wl_display);
-      source->reading = FALSE;
-
-      return _gdk_event_queue_find_first (source->display) != NULL;
-    }
 
   /* read the events from the wayland fd into their respective queues if we have data */
   if (source->reading)
     {
+      if (source->pfd.revents & (G_IO_ERR | G_IO_HUP))
+        {
+          g_message ("Lost connection to Wayland compositor.");
+          _exit (1);
+        }
       if (source->pfd.revents & G_IO_IN)
         {
           if (wl_display_read_events (display_wayland->wl_display) < 0)
@@ -115,53 +189,40 @@ gdk_wayland_event_source_check (GSource *base)
               g_message ("Error reading events from display: %s", g_strerror (errno));
               _exit (1);
             }
+          source->pfd.revents = 0;
+          source->can_dispatch = TRUE;
         }
       else
         wl_display_cancel_read (display_wayland->wl_display);
       source->reading = FALSE;
     }
 
-  return _gdk_event_queue_find_first (source->display) != NULL ||
-    source->pfd.revents;
+  return FALSE;
 }
 
 static gboolean
-gdk_wayland_event_source_dispatch (GSource     *base,
-                                   GSourceFunc  callback,
-                                   gpointer     data)
+gdk_wayland_poll_source_dispatch (GSource     *base,
+                                  GSourceFunc  callback,
+                                  gpointer     data)
 {
-  GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
-  GdkDisplay *display = source->display;
-  GdkEvent *event;
-
-  event = gdk_display_get_event (display);
-
-  if (event)
-    {
-      _gdk_event_emit (event);
-
-      gdk_event_unref (event);
-    }
-
-  return TRUE;
+  return G_SOURCE_CONTINUE;
 }
 
 static void
-gdk_wayland_event_source_finalize (GSource *base)
+gdk_wayland_poll_source_finalize (GSource *base)
 {
-  GdkWaylandEventSource *source = (GdkWaylandEventSource *) base;
-  GdkWaylandDisplay *display = (GdkWaylandDisplay *) source->display;
+  GdkWaylandPollSource *source = (GdkWaylandPollSource *) base;
 
   if (source->reading)
-    wl_display_cancel_read (display->wl_display);
+    wl_display_cancel_read (source->display->wl_display);
   source->reading = FALSE;
 }
 
-static GSourceFuncs gdk_wayland_event_source_funcs = {
-  gdk_wayland_event_source_prepare,
-  gdk_wayland_event_source_check,
-  gdk_wayland_event_source_dispatch,
-  gdk_wayland_event_source_finalize
+static GSourceFuncs gdk_wayland_poll_source_funcs = {
+  gdk_wayland_poll_source_prepare,
+  gdk_wayland_poll_source_check,
+  gdk_wayland_poll_source_dispatch,
+  gdk_wayland_poll_source_finalize
 };
 
 void
@@ -176,13 +237,15 @@ _gdk_wayland_display_deliver_event (GdkDisplay *display,
 }
 
 void
-gdk_wayland_display_install_gsource (GdkWaylandDisplay *display_wayland)
+gdk_wayland_display_install_gsources (GdkWaylandDisplay *display_wayland)
 {
   GdkDisplay *display = GDK_DISPLAY (display_wayland);
   GSource *source;
   GdkWaylandEventSource *event_source;
+  GdkWaylandPollSource *poll_source;
   char *name;
 
+  /* SOURCE 1 */
   source = g_source_new (&gdk_wayland_event_source_funcs,
 			 sizeof (GdkWaylandEventSource));
   display_wayland->event_source = source;
@@ -192,18 +255,40 @@ gdk_wayland_display_install_gsource (GdkWaylandDisplay *display_wayland)
   g_source_set_name (source, name);
   g_free (name);
 
-  event_source->display = display;
-  event_source->pfd.fd = wl_display_get_fd (display_wayland->wl_display);
-  event_source->pfd.events = G_IO_IN | G_IO_ERR | G_IO_HUP;
-  g_source_add_poll (source, &event_source->pfd);
+  event_source->display = display_wayland;
 
   g_source_set_priority (source, GDK_PRIORITY_EVENTS);
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
+  
+  /* SOURCE 2 */
+  source = g_source_new (&gdk_wayland_poll_source_funcs,
+			 sizeof (GdkWaylandPollSource));
+  display_wayland->poll_source = source;
+  poll_source = (GdkWaylandPollSource *) source;
+  name = g_strdup_printf ("GDK Wayland Poll source (%s)",
+                          gdk_display_get_name (display));
+  g_source_set_name (source, name);
+  g_free (name);
+
+  poll_source->display = display_wayland;
+  poll_source->pfd.fd = wl_display_get_fd (display_wayland->wl_display);
+  poll_source->pfd.events = G_IO_IN | G_IO_ERR | G_IO_HUP;
+  g_source_add_poll (source, &poll_source->pfd);
+
+  /* We must guarantee to ALWAYS be called and called FIRST after
+   * every poll - or rather: after every prepare().
+   * Any other source might call Wayland functions and in turn
+   * block while waiting for us.
+   * And GSource has no after_pool() vfunc, check() is not guaranteed
+   * to be called.
+   */
+  g_source_set_priority (source, G_MININT);
+  g_source_attach (source, NULL);
 }
 
 void
-gdk_wayland_display_uninstall_gsource (GdkWaylandDisplay *display_wayland)
+gdk_wayland_display_uninstall_gsources (GdkWaylandDisplay *display_wayland)
 {
   if (display_wayland->event_source)
     {
@@ -211,17 +296,20 @@ gdk_wayland_display_uninstall_gsource (GdkWaylandDisplay *display_wayland)
       g_source_unref (display_wayland->event_source);
       display_wayland->event_source = NULL;
     }
+  if (display_wayland->poll_source)
+    {
+      g_source_destroy (display_wayland->poll_source);
+      g_source_unref (display_wayland->poll_source);
+      display_wayland->poll_source = NULL;
+    }
 }
 
 void
 _gdk_wayland_display_queue_events (GdkDisplay *display)
 {
-  GdkWaylandDisplay *display_wayland;
-  GdkWaylandEventSource *source;
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+  GdkWaylandPollSource *poll_source;
   GList *l;
-
-  display_wayland = GDK_WAYLAND_DISPLAY (display);
-  source = (GdkWaylandEventSource *) display_wayland->event_source;
 
   if (wl_display_dispatch_pending (display_wayland->wl_display) < 0)
     {
@@ -242,10 +330,6 @@ _gdk_wayland_display_queue_events (GdkDisplay *display)
         }
     }
 
-  if (source->pfd.revents & (G_IO_ERR | G_IO_HUP))
-    {
-      g_message ("Lost connection to Wayland compositor.");
-      _exit (1);
-    }
-  source->pfd.revents = 0;
+  poll_source = (GdkWaylandPollSource *) display_wayland->poll_source;
+  poll_source->can_dispatch = FALSE;
 }
