@@ -27,7 +27,6 @@
 typedef struct _GdkWaylandEventSource {
   GSource source;
   GPollFD pfd;
-  uint32_t mask;
   GdkDisplay *display;
   gboolean reading;
 } GdkWaylandEventSource;
