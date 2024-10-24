@@ -146,6 +146,7 @@ struct _GdkWaylandDisplay
   GHashTable *cursor_surface_cache;
 
   GSource *event_source;
+  GSource *poll_source;
 
   uint32_t server_decoration_mode;
 
