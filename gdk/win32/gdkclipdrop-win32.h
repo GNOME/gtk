@@ -163,6 +163,12 @@ struct _GdkWin32Clipdrop
    */
   GThread          *clipboard_open_thread;
 
+  /* The main loop run in the clipboard thread.
+   * When we want to communicate with the thread, we just add
+   * tasks to it via this context.
+   */
+  GMainContext     *clipboard_main_context;
+
   /* Our primary means of communicating with the thread.
    * The communication is one-way only - the thread replies
    * by just queueing functions to be called in the main

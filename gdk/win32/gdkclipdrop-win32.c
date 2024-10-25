@@ -283,6 +283,7 @@ Otherwise it's similar to how the clipboard works. Only the DnD server
 #include "gdkhdataoutputstream-win32.h"
 #include "gdkwin32dnd.h"
 #include "gdkwin32dnd-private.h"
+#include "gdkwin32messagesourceprivate.h"
 #include "gdkwin32.h"
 
 #include "gdk/gdkdebugprivate.h"
@@ -1458,8 +1459,14 @@ _gdk_win32_clipboard_thread_main (gpointer data)
   MSG msg;
   GAsyncQueue *queue = self->clipboard_open_thread_queue;
   GAsyncQueue *render_queue = self->clipboard_render_queue;
+  guint message_source_id;
+  GMainLoop *loop;
   
   g_assert (self->clipboard_thread_items == NULL);
+  g_assert (self->clipboard_main_context != NULL);
+
+  g_main_context_push_thread_default (self->clipboard_main_context);
+  message_source_id = gdk_win32_message_source_add (self->clipboard_main_context);
 
   self->clipboard_thread_items = g_new0 (GdkWin32ClipboardThread, 1);
   CLIPDROP_CB_THREAD_MEMBER (self, input_queue) = queue;
@@ -1474,16 +1481,17 @@ _gdk_win32_clipboard_thread_main (gpointer data)
       return NULL;
     }
 
-  while (GetMessage (&msg, NULL, 0, 0))
-    {
-      TranslateMessage (&msg); 
-      DispatchMessage (&msg); 
-    }
+  loop = g_main_loop_new (self->clipboard_main_context, TRUE);
+  g_main_loop_run (loop);
+  g_main_loop_unref (loop);
 
   /* Just in case, as this should only happen when we shut down */
   DestroyWindow (CLIPDROP_CB_THREAD_MEMBER (self, clipboard_hwnd));
   CloseHandle (CLIPDROP_CB_THREAD_MEMBER (self, clipboard_hwnd));
   g_clear_pointer (&self->clipboard_thread_items, g_free);
+
+  g_source_remove (message_source_id);
+  g_main_context_pop_thread_default (self->clipboard_main_context);
 
   return NULL;
 }
@@ -1808,6 +1816,7 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
 
   win32_clipdrop->clipboard_open_thread_queue = g_async_queue_new ();
   win32_clipdrop->clipboard_render_queue = g_async_queue_new ();
+  win32_clipdrop->clipboard_main_context = g_main_context_new ();
   win32_clipdrop->clipboard_open_thread = g_thread_new ("GDK Win32 Clipboard Thread",
                                                         _gdk_win32_clipboard_thread_main,
                                                         win32_clipdrop);
