@@ -391,6 +391,9 @@ set_up_low_level_keyboard_hook (GdkDisplay *display)
 {
   HHOOK hook_handle;
 
+  if (!gdk_has_feature (GDK_FEATURE_AEROSNAP))
+    return;
+
   if (GDK_WIN32_DISPLAY (display)->event_record->aerosnap_keyboard_hook != NULL)
     return;
 
