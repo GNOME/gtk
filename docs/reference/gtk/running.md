@@ -358,6 +358,9 @@ disable certain features.
 `color-mgmt`
 : Disable color management
 
+`aerosnap`
+: Disable Aerosnap support on Windows
+
 ### `GDK_GL_DISABLE`
 
 This variable can be set to a list of values, which cause GDK to
