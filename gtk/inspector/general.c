@@ -38,6 +38,8 @@
 #include "gdk/gdkdebugprivate.h"
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkmonitorprivate.h"
+#include "gdk/gdkglcontextprivate.h"
+#include "gdk/gdkvulkancontextprivate.h"
 
 #include "profile_conf.h"
 
@@ -115,6 +117,7 @@ struct _GtkInspectorGeneral
   GtkWidget *gl_error;
   GtkWidget *gl_error_row;
   GtkWidget *gl_version;
+  GtkWidget *gl_version_row;
   GtkWidget *gl_vendor;
   GtkWidget *gl_vendor_row;
   GtkWidget *gl_renderer;
@@ -125,7 +128,11 @@ struct _GtkInspectorGeneral
   GtkWidget *glsl_version_row;
   GtkWidget *vk_device;
   GtkWidget *vk_api_version;
+  GtkWidget *vk_api_version_row;
   GtkWidget *vk_driver_version;
+  GtkWidget *vk_driver_version_row;
+  GtkWidget *vk_error;
+  GtkWidget *vk_error_row;
   GtkWidget *app_id_box;
   GtkWidget *app_id;
   GtkWidget *resource_path;
@@ -362,11 +369,11 @@ init_gl (GtkInspectorGeneral *gen)
 
   if (!gdk_display_prepare_gl (gen->display, &error))
     {
-      gtk_label_set_text (GTK_LABEL (gen->gl_version), C_("GL version", "None"));
+      gtk_label_set_text (GTK_LABEL (gen->gl_renderer), C_("GL renderer", "None"));
       gtk_widget_set_visible (gen->gl_error_row, TRUE);
+      gtk_widget_set_visible (gen->gl_version_row, FALSE);
       gtk_widget_set_visible (gen->gl_backend_version_row, FALSE);
       gtk_widget_set_visible (gen->gl_backend_vendor_row, FALSE);
-      gtk_widget_set_visible (gen->gl_renderer_row, FALSE);
       gtk_widget_set_visible (gen->gl_vendor_row, FALSE);
       gtk_widget_set_visible (gen->gl_full_version_row, FALSE);
       gtk_widget_set_visible (gen->glsl_version_row, FALSE);
@@ -520,55 +527,61 @@ static void
 init_vulkan (GtkInspectorGeneral *gen)
 {
 #ifdef GDK_RENDERING_VULKAN
-  if (!gdk_has_feature (GDK_FEATURE_VULKAN))
+  VkPhysicalDevice vk_device;
+  VkPhysicalDeviceProperties props;
+  char *device_name;
+  char *api_version;
+  char *driver_version;
+  const char *types[] = { "other", "integrated GPU", "discrete GPU", "virtual GPU", "CPU" };
+  GError *error = NULL;
+
+  if (!gdk_display_init_vulkan (gen->display, &error))
     {
-      gtk_label_set_text (GTK_LABEL (gen->vk_device), C_("Vulkan device", "Disabled"));
-      gtk_label_set_text (GTK_LABEL (gen->vk_api_version), C_("Vulkan version", "Disabled"));
-      gtk_label_set_text (GTK_LABEL (gen->vk_driver_version), C_("Vulkan version", "Disabled"));
+      gtk_label_set_text (GTK_LABEL (gen->vk_device), C_("Vulkan device", "None"));
+      gtk_widget_set_visible (gen->vk_error_row, TRUE);
+      gtk_label_set_text (GTK_LABEL (gen->vk_error), error->message);
+      g_error_free (error);
+
+      gtk_widget_set_visible (gen->vk_api_version_row, FALSE);
+      gtk_widget_set_visible (gen->vk_driver_version_row, FALSE);
+      gtk_widget_set_visible (gen->vulkan_layers_row, FALSE);
+      gtk_widget_set_visible (gen->vulkan_extensions_row, FALSE);
       return;
     }
 
-  if (gen->display->vk_device)
-    {
-      VkPhysicalDevice vk_device;
-      VkPhysicalDeviceProperties props;
-      char *device_name;
-      char *api_version;
-      char *driver_version;
-      const char *types[] = { "other", "integrated GPU", "discrete GPU", "virtual GPU", "CPU" };
+  vk_device = gen->display->vk_physical_device;
+  vkGetPhysicalDeviceProperties (vk_device, &props);
 
-      vk_device = gen->display->vk_physical_device;
-      vkGetPhysicalDeviceProperties (vk_device, &props);
+  device_name = g_strdup_printf ("%s (%s)", props.deviceName, types[props.deviceType]);
+  api_version = g_strdup_printf ("%d.%d.%d",
+                                 VK_VERSION_MAJOR (props.apiVersion),
+                                 VK_VERSION_MINOR (props.apiVersion),
+                                 VK_VERSION_PATCH (props.apiVersion));
+  driver_version = g_strdup_printf ("%d.%d.%d",
+                                    VK_VERSION_MAJOR (props.driverVersion),
+                                    VK_VERSION_MINOR (props.driverVersion),
+                                    VK_VERSION_PATCH (props.driverVersion));
 
-      device_name = g_strdup_printf ("%s (%s)", props.deviceName, types[props.deviceType]);
-      api_version = g_strdup_printf ("%d.%d.%d",
-                                     VK_VERSION_MAJOR (props.apiVersion),
-                                     VK_VERSION_MINOR (props.apiVersion),
-                                     VK_VERSION_PATCH (props.apiVersion));
-      driver_version = g_strdup_printf ("%d.%d.%d",
-                                        VK_VERSION_MAJOR (props.driverVersion),
-                                        VK_VERSION_MINOR (props.driverVersion),
-                                        VK_VERSION_PATCH (props.driverVersion));
+  gtk_label_set_text (GTK_LABEL (gen->vk_device), device_name);
+  gtk_label_set_text (GTK_LABEL (gen->vk_api_version), api_version);
+  gtk_label_set_text (GTK_LABEL (gen->vk_driver_version), driver_version);
 
-      gtk_label_set_text (GTK_LABEL (gen->vk_device), device_name);
-      gtk_label_set_text (GTK_LABEL (gen->vk_api_version), api_version);
-      gtk_label_set_text (GTK_LABEL (gen->vk_driver_version), driver_version);
+  g_free (device_name);
+  g_free (api_version);
+  g_free (driver_version);
 
-      g_free (device_name);
-      g_free (api_version);
-      g_free (driver_version);
+  add_instance_extensions (gen->vulkan_extensions_list);
+  add_device_extensions (gen->display->vk_physical_device, gen->vulkan_extensions_list);
+  add_layers (gen->vulkan_layers_list);
 
-      add_instance_extensions (gen->vulkan_extensions_list);
-      add_device_extensions (gen->display->vk_physical_device, gen->vulkan_extensions_list);
-      add_layers (gen->vulkan_layers_list);
-    }
-  else
+  gdk_display_unref_vulkan (gen->display);
+#else
+  gtk_label_set_text (GTK_LABEL (gen->vk_device), C_("Vulkan device", "None"));
+  gtk_widget_set_visible (gen->vk_api_version_row, FALSE);
+  gtk_widget_set_visible (gen->vk_driver_version_row, FALSE);
+  gtk_widget_set_visible (gen->vulkan_layers_row, FALSE);
+  gtk_widget_set_visible (gen->vulkan_extensions_row, FALSE);
 #endif
-    {
-      gtk_label_set_text (GTK_LABEL (gen->vk_device), C_("Vulkan device", "None"));
-      gtk_label_set_text (GTK_LABEL (gen->vk_api_version), C_("Vulkan version", "None"));
-      gtk_label_set_text (GTK_LABEL (gen->vk_driver_version), C_("Vulkan version", "None"));
-    }
 }
 
 static void
@@ -1270,6 +1283,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_error);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_error_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_version);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_version_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_backend_version);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_backend_version_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_backend_vendor);
@@ -1284,7 +1298,11 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, glsl_version_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_device);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_api_version);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_api_version_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_driver_version);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_driver_version_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_error);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vk_error_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, app_id_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, app_id);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, resource_path);
