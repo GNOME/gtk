@@ -1082,13 +1082,56 @@
                           </object>
                         </property>
                         <child>
-                          <object class="GtkListBox" id="vulkan_layers_box">
+                          <object class="GtkBox">
                             <property name="margin-top">20</property>
-                            <property name="selection-mode">none</property>
-                            <property name="halign">center</property>
-                            <style>
-                              <class name="rich-list"/>
-                            </style>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkListView">
+                                <style>
+                                  <class name="rich-list"/>
+                                </style>
+                                <property name="model">
+                                  <object class="GtkNoSelection">
+                                    <property name="model">
+                                      <object class="GtkSortListModel">
+                                        <property name="sorter">
+                                          <object class="GtkStringSorter">
+                                            <property name='expression'>
+                                              <lookup name='string' type='GtkStringObject' />
+                                            </property>
+                                          </object>
+                                        </property>
+                                        <property name="model">
+                                          <object class="GtkStringList" id="vulkan_layers_list" />
+                                        </property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </property>
+                                <property name="factory">
+                                  <object class="GtkBuilderListItemFactory">
+                                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class='GtkListItem'>
+    <property name='activatable'>0</property>
+    <property name='child'>
+      <object class='GtkInscription'>
+        <property name='xalign'>0</property>
+        <binding name='text'>
+          <lookup name='string' type='GtkStringObject'>
+            <lookup name='item'>GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                    ]]></property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -1100,20 +1143,83 @@
                     <property name="activatable">0</property>
                     <child>
                       <object class="GtkExpander">
+                        <property name="valign">center</property>
                         <property name="label-widget">
                           <object class="GtkLabel">
-                            <property name="label" translatable="yes">Extensions</property>
+                            <property name="label" translatable="yes">Vulkan Extensions</property>
                             <property name="margin-start">10</property>
                           </object>
                         </property>
                         <child>
-                          <object class="GtkListBox" id="vulkan_extensions_box">
+                          <object class="GtkBox">
                             <property name="margin-top">20</property>
-                            <property name="selection-mode">none</property>
-                            <property name="halign">center</property>
-                            <style>
-                              <class name="rich-list"/>
-                            </style>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkSearchEntry" id="vulkan_extensions_searchentry"/>
+                            </child>
+                            <child>
+                              <object class="GtkListView">
+                                <style>
+                                  <class name="rich-list"/>
+                                </style>
+                                <property name="model">
+                                  <object class="GtkNoSelection">
+                                    <property name="model">
+                                      <object class="GtkFilterListModel">
+                                        <property name="filter">
+                                          <object class="GtkStringFilter">
+                                            <property name="expression">
+                                              <lookup name='string' type='GtkStringObject' />
+                                            </property>
+                                            <binding name="search">
+                                              <lookup name="text" type="GtkSearchEntry">
+                                                vulkan_extensions_searchentry
+                                              </lookup>
+                                            </binding>
+                                          </object>
+                                        </property>
+                                        <property name="model">
+                                          <object class="GtkSortListModel">
+                                            <property name="sorter">
+                                              <object class="GtkStringSorter">
+                                                <property name='expression'>
+                                                  <lookup name='string' type='GtkStringObject' />
+                                                </property>
+                                              </object>
+                                            </property>
+                                            <property name="model">
+                                              <object class="GtkStringList" id="vulkan_extensions_list" />
+                                            </property>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </property>
+                                <property name="factory">
+                                  <object class="GtkBuilderListItemFactory">
+                                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class='GtkListItem'>
+    <property name='activatable'>0</property>
+    <property name='child'>
+      <object class='GtkInscription'>
+        <property name='xalign'>0</property>
+        <binding name='text'>
+          <lookup name='string' type='GtkStringObject'>
+            <lookup name='item'>GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                    ]]></property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>

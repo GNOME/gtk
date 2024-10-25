@@ -98,9 +98,9 @@ struct _GtkInspectorGeneral
   GtkStringList *egl_extensions_list;
   GtkWidget *vulkan_box;
   GtkWidget *vulkan_extensions_row;
-  GtkWidget *vulkan_extensions_box;
+  GtkStringList *vulkan_extensions_list;
   GtkWidget *vulkan_layers_row;
-  GtkWidget *vulkan_layers_box;
+  GtkStringList *vulkan_layers_list;
   GtkWidget *device_box;
   GtkWidget *gtk_version;
   GtkWidget *gdk_backend;
@@ -470,93 +470,49 @@ init_gl (GtkInspectorGeneral *gen)
 
 #ifdef GDK_RENDERING_VULKAN
 static void
-add_instance_extensions (GtkInspectorGeneral *gen,
-                         ...)
+add_instance_extensions (GtkStringList *list)
 {
   uint32_t i;
   uint32_t n_extensions;
   VkExtensionProperties *extensions;
-  va_list args;
-  const char *name;
 
   vkEnumerateInstanceExtensionProperties (NULL, &n_extensions, NULL);
   extensions = g_newa (VkExtensionProperties, n_extensions);
   vkEnumerateInstanceExtensionProperties (NULL, &n_extensions, extensions);
 
-  va_start (args, gen);
-
-  while ((name = va_arg (args, const char *)) != NULL)
-    {
-      for (i = 0; i < n_extensions; i++)
-        {
-          if (g_str_equal (extensions[i].extensionName, name))
-            break;
-        }
-
-      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_extensions_box), name, i < n_extensions, 0);
-    }
-
-  va_end (args);
+  for (i = 0; i < n_extensions; i++)
+    gtk_string_list_append (list, extensions[i].extensionName);
 }
 
 static void
-add_device_extensions (GtkInspectorGeneral *gen,
-                       ...)
+add_device_extensions (VkPhysicalDevice  device,
+                       GtkStringList    *list)
 {
   uint32_t i;
   uint32_t n_extensions;
   VkExtensionProperties *extensions;
-  va_list args;
-  const char *name;
 
-  vkEnumerateDeviceExtensionProperties (gen->display->vk_physical_device, NULL, &n_extensions, NULL);
+  vkEnumerateDeviceExtensionProperties (device, NULL, &n_extensions, NULL);
   extensions = g_newa (VkExtensionProperties, n_extensions);
-  vkEnumerateDeviceExtensionProperties (gen->display->vk_physical_device, NULL, &n_extensions, extensions);
+  vkEnumerateDeviceExtensionProperties (device, NULL, &n_extensions, extensions);
 
-  va_start (args, gen);
-
-  while ((name = va_arg (args, const char *)) != NULL)
-    {
-      for (i = 0; i < n_extensions; i++)
-        {
-          if (g_str_equal (extensions[i].extensionName, name))
-            break;
-        }
-
-      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_extensions_box), name, i < n_extensions, 0);
-    }
-
-  va_end (args);
+  for (i = 0; i < n_extensions; i++)
+    gtk_string_list_append (list, extensions[i].extensionName);
 }
 
-static gboolean
-add_layers (GtkInspectorGeneral *gen,
-            ...)
+static void
+add_layers (GtkStringList *list)
 {
   uint32_t i;
   uint32_t n_layers;
   VkLayerProperties *layers;
-  va_list args;
-  const char *name;
 
   vkEnumerateInstanceLayerProperties (&n_layers, NULL);
   layers = g_newa (VkLayerProperties, n_layers);
   vkEnumerateInstanceLayerProperties (&n_layers, layers);
 
-  va_start (args, gen);
-
-  while ((name = va_arg (args, const char *)) != NULL)
-    {
-      for (i = 0; i < n_layers; i++)
-        {
-          if (g_str_equal (layers[i].layerName, "VK_LAYER_KHRONOS_validation"))
-            break;
-        }
-
-      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_layers_box), name, i < n_layers, 0);
-    }
-
-  return FALSE;
+  for (i = 0; i < n_layers; i++)
+    gtk_string_list_append (list, layers[i].layerName);
 }
 #endif
 
@@ -602,32 +558,9 @@ init_vulkan (GtkInspectorGeneral *gen)
       g_free (api_version);
       g_free (driver_version);
 
-      add_instance_extensions (gen,
-                               VK_KHR_SURFACE_EXTENSION_NAME,
-                               "VK_KHR_xlib_surface",
-                               "VK_KHR_wayland_surface",
-                               VK_EXT_SURFACE_MAINTENANCE_1_EXTENSION_NAME,
-                               VK_EXT_DEBUG_REPORT_EXTENSION_NAME,
-                               VK_KHR_EXTERNAL_MEMORY_CAPABILITIES_EXTENSION_NAME,
-                               VK_KHR_EXTERNAL_SEMAPHORE_CAPABILITIES_EXTENSION_NAME,
-                               VK_KHR_GET_SURFACE_CAPABILITIES_2_EXTENSION_NAME,
-                               VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME,
-                               NULL);
-
-      add_device_extensions (gen,
-                             VK_KHR_SWAPCHAIN_EXTENSION_NAME,
-                             VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME,
-                             VK_KHR_EXTERNAL_MEMORY_FD_EXTENSION_NAME,
-                             VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME,
-                             VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME,
-                             VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME,
-                             VK_KHR_INCREMENTAL_PRESENT_EXTENSION_NAME,
-                             VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME,
-                             NULL);
-
-      add_layers (gen,
-                  "VK_LAYER_KHRONOS_validation",
-                  NULL);
+      add_instance_extensions (gen->vulkan_extensions_list);
+      add_device_extensions (gen->display->vk_physical_device, gen->vulkan_extensions_list);
+      add_layers (gen->vulkan_layers_list);
     }
   else
 #endif
@@ -1325,9 +1258,9 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, egl_extensions_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_extensions_row);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_extensions_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_extensions_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_layers_row);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_layers_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_layers_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gtk_version);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gdk_backend);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gsk_renderer);
