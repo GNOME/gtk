@@ -2940,6 +2940,7 @@ check_autohide (GdkEvent *event)
         {
           event_surface = gdk_event_get_surface (event);
           if (event_surface->autohide &&
+              evtype != GDK_TOUCH_BEGIN &&
               !event_surface->has_pointer)
             event_surface = NULL;
 

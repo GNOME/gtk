@@ -1021,7 +1021,6 @@ add_tool (GtkInspectorGeneral *gen,
   GdkAxisFlags axes;
   GString *str;
   char *val;
-  int i;
   GEnumClass *eclass;
   GEnumValue *evalue;
   GFlagsClass *fclass;
@@ -1039,15 +1038,12 @@ add_tool (GtkInspectorGeneral *gen,
   fclass = g_type_class_ref (GDK_TYPE_AXIS_FLAGS);
   str = g_string_new ("");
   axes = gdk_device_tool_get_axes (tool);
-  for (i = GDK_AXIS_X; i < GDK_AXIS_LAST; i++)
+  while ((fvalue = g_flags_get_first_value (fclass, axes)))
     {
-      if ((axes & (1 << i)) != 0)
-        {
-          fvalue = g_flags_get_first_value (fclass, i);
-          if (str->len > 0)
-            g_string_append (str, ", ");
-          g_string_append (str, fvalue->value_nick);
-        }
+      if (str->len > 0)
+        g_string_append (str, ", ");
+      g_string_append (str, fvalue->value_nick);
+      axes &= ~fvalue->value;
     }
   g_type_class_unref (fclass);
 
