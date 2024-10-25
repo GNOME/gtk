@@ -62,7 +62,8 @@ gdk_win32_clipboard_request_contentformats (GdkWin32Clipboard *cb)
   UINT w32_formats_len = 0;
   UINT w32_formats_allocated;
   gsize i;
-  GArray *formatpairs;
+  GdkContentFormatsBuilder *builder;
+  GdkContentFormats *formats;
   GdkWin32Clipdrop *clipdrop = gdk_win32_clipboard_get_clipdrop (GDK_CLIPBOARD (cb));
   DWORD error_code;
 
@@ -89,46 +90,21 @@ gdk_win32_clipboard_request_contentformats (GdkWin32Clipboard *cb)
       return NULL;
     }
 
-  formatpairs = g_array_sized_new (FALSE,
-                                   FALSE,
-                                   sizeof (GdkWin32ContentFormatPair),
-                                   MIN (w32_formats_len, w32_formats_allocated));
+  builder = gdk_content_formats_builder_new ();
 
   for (i = 0; i < MIN (w32_formats_len, w32_formats_allocated); i++)
-    gdk_win32_clipdrop_add_win32_format_to_pairs (clipdrop, w32_formats[i], formatpairs, NULL);
+    gdk_win32_clipdrop_add_win32_format_to_pairs (clipdrop, w32_formats[i], NULL, builder);
 
   g_free (w32_formats);
+  formats = gdk_content_formats_builder_free_to_formats (builder);
 
   GDK_NOTE (DND, {
-      g_print ("... ");
-      for (i = 0; i < formatpairs->len; i++)
-        {
-          const char *mime_type = (const char *) g_array_index (formatpairs, GdkWin32ContentFormatPair, i).contentformat;
-
-          g_print ("%s", mime_type);
-          if (i < formatpairs->len - 1)
-            g_print (", ");
-        }
-      g_print ("\n");
+      char *s = gdk_content_formats_to_string (formats);
+      g_print ("... %s\n", s);
+      g_free (s);
     });
 
-  if (formatpairs->len > 0)
-    {
-      GdkContentFormatsBuilder *builder = gdk_content_formats_builder_new ();
-
-      for (i = 0; i < formatpairs->len; i++)
-        gdk_content_formats_builder_add_mime_type (builder, g_array_index (formatpairs, GdkWin32ContentFormatPair, i).contentformat);
-
-      g_array_free (formatpairs, TRUE);
-
-      return gdk_content_formats_builder_free_to_formats (builder);
-    }
-  else
-    {
-      g_array_free (formatpairs, TRUE);
-
-      return NULL;
-    }
+  return formats;
 }
 
 void
