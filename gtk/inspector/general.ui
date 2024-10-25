@@ -584,7 +584,65 @@
                   <class name="boxed-list"/>
                 </style>
                 <child>
-                  <object class="GtkListBoxRow">
+                  <object class="GtkListBoxRow" id="gl_renderer_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="gl_renderer_label">
+                            <property name="label" translatable="yes">GL Renderer</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="gl_renderer">
+                            <property name="selectable">1</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="wrap">1</property>
+                            <property name="wrap-mode">word-char</property>
+                            <property name="justify">right</property>
+                            <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow" id="gl_vendor_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="gl_vendor_label">
+                            <property name="label" translatable="yes">GL Vendor</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="gl_vendor">
+                            <property name="selectable">1</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="wrap">1</property>
+                            <property name="wrap-mode">word-char</property>
+                            <property name="justify">right</property>
+                            <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow" id="gl_version_row">
                     <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
@@ -599,6 +657,33 @@
                         </child>
                         <child>
                           <object class="GtkLabel" id="gl_version">
+                            <property name="selectable">1</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow" id="gl_backend_vendor_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="gl_backend_vendor_label">
+                            <property name="label" translatable="yes">GL Backend Vendor</property>
+                            <property name="halign">start</property>
+                            <property name="valign">baseline</property>
+                            <property name="xalign">0.0</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkLabel" id="gl_backend_vendor">
                             <property name="selectable">1</property>
                             <property name="halign">end</property>
                             <property name="valign">baseline</property>
@@ -661,91 +746,6 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkListBoxRow" id="gl_backend_vendor_row">
-                    <property name="activatable">0</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="spacing">40</property>
-                        <child>
-                          <object class="GtkLabel" id="gl_backend_vendor_label">
-                            <property name="label" translatable="yes">GL Backend Vendor</property>
-                            <property name="halign">start</property>
-                            <property name="valign">baseline</property>
-                            <property name="xalign">0.0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="gl_backend_vendor">
-                            <property name="selectable">1</property>
-                            <property name="halign">end</property>
-                            <property name="valign">baseline</property>
-                            <property name="ellipsize">end</property>
-                            <property name="hexpand">1</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkListBoxRow" id="gl_vendor_row">
-                    <property name="activatable">0</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="spacing">40</property>
-                        <child>
-                          <object class="GtkLabel" id="gl_vendor_label">
-                            <property name="label" translatable="yes">GL_VENDOR</property>
-                            <property name="halign">start</property>
-                            <property name="valign">baseline</property>
-                            <property name="xalign">0.0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="gl_vendor">
-                            <property name="selectable">1</property>
-                            <property name="halign">end</property>
-                            <property name="valign">baseline</property>
-                            <property name="wrap">1</property>
-                            <property name="wrap-mode">word-char</property>
-                            <property name="justify">right</property>
-                            <property name="hexpand">1</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkListBoxRow" id="gl_renderer_row">
-                    <property name="activatable">0</property>
-                    <child>
-                      <object class="GtkBox">
-                        <property name="spacing">40</property>
-                        <child>
-                          <object class="GtkLabel" id="gl_renderer_label">
-                            <property name="label" translatable="yes">GL_RENDERER</property>
-                            <property name="halign">start</property>
-                            <property name="valign">baseline</property>
-                            <property name="xalign">0.0</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkLabel" id="gl_renderer">
-                            <property name="selectable">1</property>
-                            <property name="halign">end</property>
-                            <property name="valign">baseline</property>
-                            <property name="wrap">1</property>
-                            <property name="wrap-mode">word-char</property>
-                            <property name="justify">right</property>
-                            <property name="hexpand">1</property>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
                   <object class="GtkListBoxRow" id="gl_full_version_row">
                     <property name="activatable">0</property>
                     <child>
@@ -753,7 +753,7 @@
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel" id="gl_full_version_label">
-                            <property name="label" translatable="yes">GL_VERSION</property>
+                            <property name="label" translatable="yes">GL Full Version</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
@@ -782,7 +782,7 @@
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel" id="glsl_version_label">
-                            <property name="label" translatable="yes">GL_SHADING_LANGUAGE_VERSION</property>
+                            <property name="label" translatable="yes">GLSL Version</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
@@ -808,17 +808,193 @@
                     <property name="activatable">0</property>
                     <child>
                       <object class="GtkExpander">
+                        <property name="valign">center</property>
                         <property name="label-widget">
                           <object class="GtkLabel">
-                            <property name="label" translatable="yes">Extensions</property>
+                            <property name="label" translatable="yes">GL Extensions</property>
                             <property name="margin-start">10</property>
                           </object>
                         </property>
                         <child>
-                          <object class="GtkListBox" id="gl_extensions_box">
+                          <object class="GtkBox">
+                            <property name="margin-top">20</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkSearchEntry" id="gl_extensions_searchentry"/>
+                            </child>
+                            <child>
+                              <object class="GtkListView">
+                                <style>
+                                  <class name="rich-list"/>
+                                </style>
+                                <property name="model">
+                                  <object class="GtkNoSelection">
+                                    <property name="model">
+                                      <object class="GtkFilterListModel">
+                                        <property name="filter">
+                                          <object class="GtkStringFilter">
+                                            <property name="expression">
+                                              <lookup name='string' type='GtkStringObject' />
+                                            </property>
+                                            <binding name="search">
+                                              <lookup name="text" type="GtkSearchEntry">
+                                                gl_extensions_searchentry
+                                              </lookup>
+                                            </binding>
+                                          </object>
+                                        </property>
+                                        <property name="model">
+                                          <object class="GtkSortListModel">
+                                            <property name="sorter">
+                                              <object class="GtkStringSorter">
+                                                <property name='expression'>
+                                                  <lookup name='string' type='GtkStringObject' />
+                                                </property>
+                                              </object>
+                                            </property>
+                                            <property name="model">
+                                              <object class="GtkStringList" id="gl_extensions_list" />
+                                            </property>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </property>
+                                <property name="factory">
+                                  <object class="GtkBuilderListItemFactory">
+                                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class='GtkListItem'>
+    <property name='activatable'>0</property>
+    <property name='child'>
+      <object class='GtkInscription'>
+        <property name='xalign'>0</property>
+        <binding name='text'>
+          <lookup name='string' type='GtkStringObject'>
+            <lookup name='item'>GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                    ]]></property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow" id="egl_extensions_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkExpander">
+                        <property name="valign">center</property>
+                        <property name="label-widget">
+                          <object class="GtkLabel" id="egl_extensions_row_name">
+                            <property name="label" translatable="yes">EGL Extensions</property>
+                            <property name="margin-start">10</property>
+                          </object>
+                        </property>
+                        <child>
+                          <object class="GtkBox">
+                            <property name="margin-top">20</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkSearchEntry" id="egl_extensions_searchentry"/>
+                            </child>
+                            <child>
+                              <object class="GtkListView">
+                                <style>
+                                  <class name="rich-list"/>
+                                </style>
+                                <property name="model">
+                                  <object class="GtkNoSelection">
+                                    <property name="model">
+                                      <object class="GtkFilterListModel">
+                                        <property name="filter">
+                                          <object class="GtkStringFilter">
+                                            <property name="expression">
+                                              <lookup name='string' type='GtkStringObject' />
+                                            </property>
+                                            <binding name="search">
+                                              <lookup name="text" type="GtkSearchEntry">
+                                                egl_extensions_searchentry
+                                              </lookup>
+                                            </binding>
+                                          </object>
+                                        </property>
+                                        <property name="model">
+                                          <object class="GtkSortListModel">
+                                            <property name="sorter">
+                                              <object class="GtkStringSorter">
+                                                <property name='expression'>
+                                                  <lookup name='string' type='GtkStringObject' />
+                                                </property>
+                                              </object>
+                                            </property>
+                                            <property name="model">
+                                              <object class="GtkStringList" id="egl_extensions_list" />
+                                            </property>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </property>
+                                <property name="factory">
+                                  <object class="GtkBuilderListItemFactory">
+                                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class='GtkListItem'>
+    <property name='activatable'>0</property>
+    <property name='child'>
+      <object class='GtkInscription'>
+        <property name='xalign'>0</property>
+        <binding name='text'>
+          <lookup name='string' type='GtkStringObject'>
+            <lookup name='item'>GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                    ]]></property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow" id="gl_features_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkExpander">
+                        <property name="label-widget">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Features</property>
+                            <property name="margin-start">10</property>
+                          </object>
+                        </property>
+                        <child>
+                          <object class="GtkListBox" id="gl_features_box">
                             <property name="margin-top">20</property>
                             <property name="selection-mode">none</property>
-                            <property name="halign">center</property>
+                            <property name="halign">fill</property>
                             <style>
                               <class name="rich-list"/>
                             </style>
@@ -866,14 +1042,14 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkListBoxRow">
+                  <object class="GtkListBoxRow" id="vk_api_version_row">
                     <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel" id="vk_api_version_label">
-                            <property name="label" translatable="yes">Vulkan API version</property>
+                            <property name="label" translatable="yes">Vulkan API Version</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
@@ -893,14 +1069,14 @@
                   </object>
                 </child>
                 <child>
-                  <object class="GtkListBoxRow">
+                  <object class="GtkListBoxRow" id="vk_driver_version_row">
                     <property name="activatable">0</property>
                     <child>
                       <object class="GtkBox">
                         <property name="spacing">40</property>
                         <child>
                           <object class="GtkLabel" id="vk_driver_version_label">
-                            <property name="label" translatable="yes">Vulkan driver version</property>
+                            <property name="label" translatable="yes">Vulkan Driver Version</property>
                             <property name="halign">start</property>
                             <property name="valign">baseline</property>
                             <property name="xalign">0.0</property>
@@ -920,6 +1096,29 @@
                   </object>
                 </child>
                 <child>
+                  <object class="GtkListBoxRow" id="vk_error_row">
+                    <property name="activatable">0</property>
+                    <property name="visible">0</property>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="spacing">40</property>
+                        <child>
+                          <object class="GtkLabel" id="vk_error">
+                            <property name="selectable">1</property>
+                            <property name="halign">end</property>
+                            <property name="valign">baseline</property>
+                            <property name="ellipsize">end</property>
+                            <property name="hexpand">1</property>
+                            <style>
+                              <class name="error"/>
+                            </style>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkListBoxRow" id="vulkan_layers_row">
                     <property name="activatable">0</property>
                     <child>
@@ -931,13 +1130,56 @@
                           </object>
                         </property>
                         <child>
-                          <object class="GtkListBox" id="vulkan_layers_box">
+                          <object class="GtkBox">
                             <property name="margin-top">20</property>
-                            <property name="selection-mode">none</property>
-                            <property name="halign">center</property>
-                            <style>
-                              <class name="rich-list"/>
-                            </style>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkListView">
+                                <style>
+                                  <class name="rich-list"/>
+                                </style>
+                                <property name="model">
+                                  <object class="GtkNoSelection">
+                                    <property name="model">
+                                      <object class="GtkSortListModel">
+                                        <property name="sorter">
+                                          <object class="GtkStringSorter">
+                                            <property name='expression'>
+                                              <lookup name='string' type='GtkStringObject' />
+                                            </property>
+                                          </object>
+                                        </property>
+                                        <property name="model">
+                                          <object class="GtkStringList" id="vulkan_layers_list" />
+                                        </property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </property>
+                                <property name="factory">
+                                  <object class="GtkBuilderListItemFactory">
+                                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class='GtkListItem'>
+    <property name='activatable'>0</property>
+    <property name='child'>
+      <object class='GtkInscription'>
+        <property name='xalign'>0</property>
+        <binding name='text'>
+          <lookup name='string' type='GtkStringObject'>
+            <lookup name='item'>GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                    ]]></property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -949,17 +1191,105 @@
                     <property name="activatable">0</property>
                     <child>
                       <object class="GtkExpander">
+                        <property name="valign">center</property>
                         <property name="label-widget">
                           <object class="GtkLabel">
-                            <property name="label" translatable="yes">Extensions</property>
+                            <property name="label" translatable="yes">Vulkan Extensions</property>
                             <property name="margin-start">10</property>
                           </object>
                         </property>
                         <child>
-                          <object class="GtkListBox" id="vulkan_extensions_box">
+                          <object class="GtkBox">
+                            <property name="margin-top">20</property>
+                            <property name="orientation">vertical</property>
+                            <child>
+                              <object class="GtkSearchEntry" id="vulkan_extensions_searchentry"/>
+                            </child>
+                            <child>
+                              <object class="GtkListView">
+                                <style>
+                                  <class name="rich-list"/>
+                                </style>
+                                <property name="model">
+                                  <object class="GtkNoSelection">
+                                    <property name="model">
+                                      <object class="GtkFilterListModel">
+                                        <property name="filter">
+                                          <object class="GtkStringFilter">
+                                            <property name="expression">
+                                              <lookup name='string' type='GtkStringObject' />
+                                            </property>
+                                            <binding name="search">
+                                              <lookup name="text" type="GtkSearchEntry">
+                                                vulkan_extensions_searchentry
+                                              </lookup>
+                                            </binding>
+                                          </object>
+                                        </property>
+                                        <property name="model">
+                                          <object class="GtkSortListModel">
+                                            <property name="sorter">
+                                              <object class="GtkStringSorter">
+                                                <property name='expression'>
+                                                  <lookup name='string' type='GtkStringObject' />
+                                                </property>
+                                              </object>
+                                            </property>
+                                            <property name="model">
+                                              <object class="GtkStringList" id="vulkan_extensions_list" />
+                                            </property>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </property>
+                                <property name="factory">
+                                  <object class="GtkBuilderListItemFactory">
+                                    <property name="bytes"><![CDATA[
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class='GtkListItem'>
+    <property name='activatable'>0</property>
+    <property name='child'>
+      <object class='GtkInscription'>
+        <property name='xalign'>0</property>
+        <binding name='text'>
+          <lookup name='string' type='GtkStringObject'>
+            <lookup name='item'>GtkListItem</lookup>
+          </lookup>
+        </binding>
+      </object>
+    </property>
+  </template>
+</interface>
+                                    ]]></property>
+                                  </object>
+                                </property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkListBoxRow" id="vulkan_features_row">
+                    <property name="activatable">0</property>
+                    <child>
+                      <object class="GtkExpander">
+                        <property name="label-widget">
+                          <object class="GtkLabel">
+                            <property name="label" translatable="yes">Features</property>
+                            <property name="margin-start">10</property>
+                          </object>
+                        </property>
+                        <child>
+                          <object class="GtkListBox" id="vulkan_features_box">
                             <property name="margin-top">20</property>
                             <property name="selection-mode">none</property>
-                            <property name="halign">center</property>
+                            <property name="halign">fill</property>
                             <style>
                               <class name="rich-list"/>
                             </style>

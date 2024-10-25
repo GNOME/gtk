@@ -24,6 +24,7 @@
 #include "gdkdrawcontextprivate.h"
 #include "gdkglversionprivate.h"
 #include "gdkdmabufprivate.h"
+#include "gdkdebugprivate.h"
 
 G_BEGIN_DECLS
 
@@ -32,6 +33,10 @@ typedef enum {
   GDK_GL_FEATURE_BASE_INSTANCE              = 1 << 1,
   GDK_GL_FEATURE_BUFFER_STORAGE             = 1 << 2,
 } GdkGLFeatures;
+
+#define GDK_GL_N_FEATURES 3
+
+extern const GdkDebugKey gdk_gl_feature_keys[];
 
 typedef enum {
   GDK_GL_NONE = 0,

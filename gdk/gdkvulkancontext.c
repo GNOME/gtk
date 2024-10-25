@@ -35,7 +35,7 @@
 #include <math.h>
 
 #ifdef GDK_RENDERING_VULKAN
-static const GdkDebugKey gdk_vulkan_feature_keys[] = {
+const GdkDebugKey gdk_vulkan_feature_keys[] = {
   { "dmabuf", GDK_VULKAN_FEATURE_DMABUF, "Never import Dmabufs" },
   { "ycbcr", GDK_VULKAN_FEATURE_YCBCR, "Do not support Ycbcr textures (also disables dmabufs)" },
   { "semaphore-export", GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT, "Disable sync of exported dmabufs" },

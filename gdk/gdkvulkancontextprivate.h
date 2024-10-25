@@ -117,4 +117,3 @@ gdk_display_ref_vulkan (GdkDisplay  *display,
 #endif /* !GDK_RENDERING_VULKAN */
 
 G_END_DECLS
-

@@ -103,7 +103,7 @@
 
 #define DEFAULT_ALLOWED_APIS GDK_GL_API_GL | GDK_GL_API_GLES
 
-static const GdkDebugKey gdk_gl_feature_keys[] = {
+const GdkDebugKey gdk_gl_feature_keys[] = {
   { "debug", GDK_GL_FEATURE_DEBUG, "GL_KHR_debug" },
   { "base-instance", GDK_GL_FEATURE_BASE_INSTANCE, "GL_ARB_base_instance" },
   { "buffer-storage", GDK_GL_FEATURE_BUFFER_STORAGE, "GL_EXT_buffer_storage" },
