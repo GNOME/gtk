@@ -409,12 +409,6 @@ struct _GdkWin32ClipboardThread
    */
   HWND         clipboard_opened_for;
 
-  /* We can't peek the queue or "unpop" queue items,
-   * so the items that we can't act upon (yet) got
-   * to be stored *somewhere*.
-   */
-  GList       *dequeued_items;
-
   /* Wakeup timer id (1 if timer is set, 0 otherwise) */
   UINT         wakeup_timer;
 
@@ -1034,31 +1028,6 @@ process_clipboard_queue (GdkWin32Clipdrop *clipdrop)
   gboolean try_again;
   GList *p_next;
 
-  for (p = CLIPDROP_CB_THREAD_MEMBER (clipdrop, dequeued_items), p_next = NULL; p; p = p_next)
-    {
-      placeholder = (GdkWin32ClipboardThreadQueueItem *) p->data;
-      p_next = p->next;
-
-      switch (placeholder->item_type)
-        {
-        case GDK_WIN32_CLIPBOARD_THREAD_QUEUE_ITEM_ADVERTISE:
-          try_again = process_advertise (clipdrop, (GdkWin32ClipboardThreadAdvertise *) placeholder);
-          break;
-        case GDK_WIN32_CLIPBOARD_THREAD_QUEUE_ITEM_RETRIEVE:
-          try_again = process_retrieve (clipdrop, (GdkWin32ClipboardThreadRetrieve *) placeholder);
-          break;
-        case GDK_WIN32_CLIPBOARD_THREAD_QUEUE_ITEM_STORE:
-          try_again = process_store (clipdrop, (GdkWin32ClipboardThreadStore *) placeholder);
-          break;
-        }
-
-      if (try_again)
-        return FALSE;
-
-      CLIPDROP_CB_THREAD_MEMBER (clipdrop, dequeued_items) = g_list_delete_link (CLIPDROP_CB_THREAD_MEMBER (clipdrop, dequeued_items), p);
-      free_queue_item (placeholder);
-    }
-
   while ((placeholder = g_async_queue_try_pop (CLIPDROP_CB_THREAD_MEMBER (clipdrop, input_queue))) != NULL)
     {
       switch (placeholder->item_type)
@@ -1080,7 +1049,7 @@ process_clipboard_queue (GdkWin32Clipdrop *clipdrop)
           continue;
         }
 
-      CLIPDROP_CB_THREAD_MEMBER (clipdrop, dequeued_items) = g_list_append (CLIPDROP_CB_THREAD_MEMBER (clipdrop, dequeued_items), placeholder);
+      g_async_queue_push_front (CLIPDROP_CB_THREAD_MEMBER (clipdrop, input_queue), placeholder);
 
       return FALSE;
     }
