@@ -1107,9 +1107,9 @@ discard_render (GdkWin32ClipboardThreadRender *render,
 
 static LRESULT
 inner_clipboard_hwnd_procedure (HWND   hwnd,
-                                  UINT   message,
-                                  WPARAM wparam,
-                                  LPARAM lparam)
+                                UINT   message,
+                                WPARAM wparam,
+                                LPARAM lparam)
 {
   GdkWin32Clipdrop *clipdrop = NULL;
 
@@ -1383,11 +1383,11 @@ inner_clipboard_hwnd_procedure (HWND   hwnd,
     }
 }
 
-LRESULT CALLBACK
-_clipboard_hwnd_procedure (HWND   hwnd,
-                             UINT   message,
-                             WPARAM wparam,
-                             LPARAM lparam)
+static LRESULT CALLBACK
+clipboard_hwnd_procedure (HWND   hwnd,
+                          UINT   message,
+                          WPARAM wparam,
+                          LPARAM lparam)
 {
   LRESULT retval;
 
@@ -1410,7 +1410,7 @@ register_clipboard_notification (GdkWin32Clipdrop *clipdrop)
   ATOM klass;
 
   wclass.lpszClassName = L"GdkClipboardNotification";
-  wclass.lpfnWndProc = _clipboard_hwnd_procedure;
+  wclass.lpfnWndProc = clipboard_hwnd_procedure;
   wclass.hInstance = this_module ();
   wclass.cbWndExtra = sizeof (GdkWin32ClipboardThread *);
 
@@ -1520,13 +1520,8 @@ gdk_win32_clipdrop_init (GdkWin32Clipdrop *win32_clipdrop)
   int                 i;
   GArray             *comp;
   GdkWin32ContentFormatPair fmt;
-  HMODULE                   user32;
- 
+  
   win32_clipdrop->thread_wakeup_message = RegisterWindowMessage (L"GDK_WORKER_THREAD_WEAKEUP");
-
-  user32 = LoadLibrary (L"user32.dll");
-  win32_clipdrop->GetUpdatedClipboardFormats = (GetUpdatedClipboardFormatsFunc) GetProcAddress (user32, "GetUpdatedClipboardFormats");
-  FreeLibrary (user32);
 
   atoms = g_array_sized_new (FALSE, TRUE, sizeof (const char *), GDK_WIN32_ATOM_INDEX_LAST);
   g_array_set_size (atoms, GDK_WIN32_ATOM_INDEX_LAST);

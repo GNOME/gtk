@@ -67,7 +67,7 @@ gdk_win32_clipboard_request_contentformats (GdkWin32Clipboard *cb)
   DWORD error_code;
 
   SetLastError (0);
-  success = clipdrop->GetUpdatedClipboardFormats (NULL, 0, &w32_formats_allocated);
+  success = GetUpdatedClipboardFormats (NULL, 0, &w32_formats_allocated);
   error_code = GetLastError ();
 
   if (!success && error_code != ERROR_INSUFFICIENT_BUFFER)
@@ -79,7 +79,7 @@ gdk_win32_clipboard_request_contentformats (GdkWin32Clipboard *cb)
   w32_formats = g_new0 (UINT, w32_formats_allocated);
 
   SetLastError (0);
-  success = clipdrop->GetUpdatedClipboardFormats (w32_formats, w32_formats_allocated, &w32_formats_len);
+  success = GetUpdatedClipboardFormats (w32_formats, w32_formats_allocated, &w32_formats_len);
   error_code = GetLastError ();
 
   if (!success)
