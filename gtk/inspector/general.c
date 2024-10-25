@@ -379,10 +379,10 @@ init_gl (GtkInspectorGeneral *gen)
 
   gdk_gl_context_make_current (gdk_display_get_gl_context (gen->display));
 
-  glGetIntegerv(GL_NUM_EXTENSIONS, &num_extensions);
+  glGetIntegerv (GL_NUM_EXTENSIONS, &num_extensions);
   for (i = 0; i < num_extensions; i++)
     {
-      const char *gl_ext = (const char *)glGetStringi(GL_EXTENSIONS, i);
+      const char *gl_ext = (const char *) glGetStringi (GL_EXTENSIONS, i);
       if (!gl_ext)
         break;
       gtk_string_list_append (GTK_STRING_LIST (gen->gl_extensions_list), gl_ext);
