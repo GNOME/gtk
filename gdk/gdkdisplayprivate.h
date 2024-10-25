@@ -51,6 +51,12 @@ typedef enum {
   GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE      = 1 << 5,
 } GdkVulkanFeatures;
 
+#define GDK_VULKAN_N_FEATURES 6
+
+#ifdef GDK_RENDERING_VULKAN
+extern const GdkDebugKey gdk_vulkan_feature_keys[];
+#endif
+
 /* Tracks information about the device grab on this display */
 typedef struct
 {
