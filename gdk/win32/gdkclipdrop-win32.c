@@ -425,9 +425,6 @@ struct _GdkWin32ClipboardThread
    * Contains GdkWin32ClipboardThreadRender structs.
    */
   GAsyncQueue *render_queue; 
-
-  /* Set to TRUE when we're calling EmptyClipboard () */
-  gboolean     ignore_destroy_clipboard;
 };
 
 typedef struct _GdkWin32ClipboardThreadResponse GdkWin32ClipboardThreadResponse;
@@ -736,10 +733,8 @@ process_advertise (GdkWin32Clipdrop                 *clipdrop,
       return FALSE;
     }
 
-  CLIPDROP_CB_THREAD_MEMBER (clipdrop, ignore_destroy_clipboard) = TRUE;
   if (!EmptyClipboard ())
     {
-      CLIPDROP_CB_THREAD_MEMBER (clipdrop, ignore_destroy_clipboard) = FALSE;
       error_code = GetLastError ();
       send_response (adv->parent.item_type,
                      adv->parent.opaque_task,
@@ -747,8 +742,6 @@ process_advertise (GdkWin32Clipdrop                 *clipdrop,
                                   _("Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."), error_code));
       return FALSE;
     }
-
-  CLIPDROP_CB_THREAD_MEMBER (clipdrop, ignore_destroy_clipboard) = FALSE;
 
   if (adv->unset)
     return FALSE;
