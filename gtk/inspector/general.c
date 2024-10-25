@@ -93,12 +93,16 @@ struct _GtkInspectorGeneral
   GtkWidget *display_extensions_box;
   GtkWidget *monitor_box;
   GtkWidget *gl_box;
+  GtkWidget *gl_features_row;
+  GtkWidget *gl_features_box;
   GtkWidget *gl_extensions_row;
   GtkStringList *gl_extensions_list;
   GtkWidget *egl_extensions_row;
   GtkWidget *egl_extensions_row_name;
   GtkStringList *egl_extensions_list;
   GtkWidget *vulkan_box;
+  GtkWidget *vulkan_features_row;
+  GtkWidget *vulkan_features_box;
   GtkWidget *vulkan_extensions_row;
   GtkStringList *vulkan_extensions_list;
   GtkWidget *vulkan_layers_row;
@@ -312,6 +316,22 @@ add_label_row (GtkInspectorGeneral *gen,
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 }
 
+static void
+add_gl_features (GtkInspectorGeneral *gen)
+{
+  GdkGLContext *context;
+
+  context = gdk_display_get_gl_context (gen->display);
+
+  for (int i = 0; i < GDK_GL_N_FEATURES; i++)
+    {
+      add_check_row (gen, GTK_LIST_BOX (gen->gl_features_box),
+                     gdk_gl_feature_keys[i].key,
+                     gdk_gl_context_has_feature (context, gdk_gl_feature_keys[i].value),
+                     0);
+    }
+}
+
 /* unused on some setup, like Mac */
 static void G_GNUC_UNUSED
 append_extensions (GtkStringList *list,
@@ -377,6 +397,7 @@ init_gl (GtkInspectorGeneral *gen)
       gtk_widget_set_visible (gen->gl_vendor_row, FALSE);
       gtk_widget_set_visible (gen->gl_full_version_row, FALSE);
       gtk_widget_set_visible (gen->glsl_version_row, FALSE);
+      gtk_widget_set_visible (gen->gl_features_row, FALSE);
       gtk_widget_set_visible (gen->gl_extensions_row, FALSE);
       gtk_widget_set_visible (gen->egl_extensions_row, FALSE);
       gtk_label_set_text (GTK_LABEL (gen->gl_error), error->message);
@@ -473,9 +494,30 @@ init_gl (GtkInspectorGeneral *gen)
   gtk_label_set_text (GTK_LABEL (gen->gl_renderer), (const char *) glGetString (GL_RENDERER));
   gtk_label_set_text (GTK_LABEL (gen->gl_full_version), (const char *) glGetString (GL_VERSION));
   gtk_label_set_text (GTK_LABEL (gen->glsl_version), (const char *) glGetString (GL_SHADING_LANGUAGE_VERSION));
+
+  add_gl_features (gen);
 }
 
 #ifdef GDK_RENDERING_VULKAN
+static gboolean
+gdk_vulkan_has_feature (GdkDisplay        *display,
+                        GdkVulkanFeatures  feature)
+{
+  return (display->vulkan_features & feature) ? TRUE : FALSE;
+}
+
+static void
+add_vulkan_features (GtkInspectorGeneral *gen)
+{
+  for (int i = 0; i < GDK_VULKAN_N_FEATURES; i++)
+    {
+      add_check_row (gen, GTK_LIST_BOX (gen->vulkan_features_box),
+                     gdk_vulkan_feature_keys[i].key,
+                     gdk_vulkan_has_feature (gen->display, gdk_vulkan_feature_keys[i].value),
+                     0);
+    }
+}
+
 static void
 add_instance_extensions (GtkStringList *list)
 {
@@ -544,6 +586,7 @@ init_vulkan (GtkInspectorGeneral *gen)
 
       gtk_widget_set_visible (gen->vk_api_version_row, FALSE);
       gtk_widget_set_visible (gen->vk_driver_version_row, FALSE);
+      gtk_widget_set_visible (gen->vulkan_features_row, FALSE);
       gtk_widget_set_visible (gen->vulkan_layers_row, FALSE);
       gtk_widget_set_visible (gen->vulkan_extensions_row, FALSE);
       return;
@@ -570,6 +613,7 @@ init_vulkan (GtkInspectorGeneral *gen)
   g_free (api_version);
   g_free (driver_version);
 
+  add_vulkan_features (gen);
   add_instance_extensions (gen->vulkan_extensions_list);
   add_device_extensions (gen->display->vk_physical_device, gen->vulkan_extensions_list);
   add_layers (gen->vulkan_layers_list);
@@ -1264,12 +1308,16 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_extensions_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, monitor_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_features_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_features_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_extensions_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_extensions_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, egl_extensions_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, egl_extensions_row_name);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, egl_extensions_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_features_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_features_box);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_extensions_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_extensions_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_layers_row);
