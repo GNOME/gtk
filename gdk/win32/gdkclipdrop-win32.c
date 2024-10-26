@@ -2724,6 +2724,14 @@ _gdk_win32_add_contentformat_to_pairs (GdkWin32Clipdrop *clip_drop,
   return added_count;
 }
 
+static void
+gdk_win32_clipdrop_run_in_clipboard_thread (GdkWin32Clipdrop                 *self,
+                                            GdkWin32ClipboardThreadQueueItem *item)
+{
+  g_async_queue_push (self->clipboard_open_thread_queue, item);
+  API_CALL (PostMessage, (self->clipboard_hwnd, self->thread_wakeup_message, 0, 0));
+}
+
 void
 _gdk_win32_advertise_clipboard_contentformats (GdkClipboard      *cb,
                                                GTask             *task,
@@ -2757,10 +2765,7 @@ _gdk_win32_advertise_clipboard_contentformats (GdkClipboard      *cb,
         _gdk_win32_add_contentformat_to_pairs (clipdrop, mime_types[i], adv->pairs);
     }
 
-  g_async_queue_push (clipdrop->clipboard_open_thread_queue, adv);
-  API_CALL (PostMessage, (clipdrop->clipboard_hwnd, clipdrop->thread_wakeup_message, 0, 0));
-
-  return;
+  gdk_win32_clipdrop_run_in_clipboard_thread (clipdrop, &adv->parent);
 }
 
 void
@@ -2788,10 +2793,7 @@ _gdk_win32_retrieve_clipboard_contentformats (GdkClipboard      *cb,
   for (i = 0; i < mime_types_len; i++)
     _gdk_win32_add_contentformat_to_pairs (clipdrop, mime_types[i], retr->pairs);
 
-  g_async_queue_push (clipdrop->clipboard_open_thread_queue, retr);
-  API_CALL (PostMessage, (clipdrop->clipboard_hwnd, clipdrop->thread_wakeup_message, 0, 0));
-
-  return;
+  gdk_win32_clipdrop_run_in_clipboard_thread (clipdrop, &retr->parent);
 }
 
 typedef struct _GdkWin32ClipboardHDataPrepAndStream GdkWin32ClipboardHDataPrepAndStream;
@@ -2869,8 +2871,7 @@ clipboard_store_hdata_ready (GObject      *clipboard,
   store->parent.opaque_task = prep->store_task;
   store->elements = prep->elements;
 
-  g_async_queue_push (clipdrop->clipboard_open_thread_queue, store);
-  API_CALL (PostMessage, (clipdrop->clipboard_hwnd, clipdrop->thread_wakeup_message, 0, 0));
+  gdk_win32_clipdrop_run_in_clipboard_thread (clipdrop, &store->parent);
 
   g_free (prep);
 }
