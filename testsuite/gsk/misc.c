@@ -172,7 +172,7 @@ test_renderer (GskRenderer *renderer)
 
   g_assert_null (gsk_renderer_get_surface (renderer));
 
-  surface = gdk_surface_new_toplevel (display);
+  surface = gdk_surface_new_toplevel (display ? display : gdk_display_get_default ());
 
   res = gsk_renderer_realize (renderer, surface, &error);
 
@@ -189,7 +189,8 @@ test_renderer (GskRenderer *renderer)
 
   gdk_surface_destroy (surface);
 
-  gdk_display_close (display);
+  if (display)
+    gdk_display_close (display);
 }
 
 static void
