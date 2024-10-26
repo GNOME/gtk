@@ -157,15 +157,6 @@ _gdk_macos_pasteboard_load_formats (NSPasteboard *pasteboard)
   return load_offer_formats (pasteboard);
 }
 
-static GInputStream *
-create_stream_from_nsdata (NSData *data)
-{
-  const guint8 *bytes = [data bytes];
-  gsize len = [data length];
-
-  return g_memory_input_stream_new_from_data (g_memdup2 (bytes, len), len, g_free);
-}
-
 void
 _gdk_macos_pasteboard_read_async (GObject             *object,
                                   NSPasteboard        *pasteboard,
@@ -181,6 +172,7 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
   const char *mime_type;
   GInputStream *stream = NULL;
   GTask *task = NULL;
+  NSString *uti;
 
   g_assert (G_IS_OBJECT (object));
   g_assert (pasteboard != NULL);
@@ -264,16 +256,19 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
                                                     sizeof color,
                                                     g_free);
     }
-  else if (mime_type != NULL)
+  else if ((uti = _gdk_macos_pasteboard_to_ns_type (mime_type, NULL)))
     {
-      NSString *uti;
+      NSData *data = [pasteboard dataForType:uti];
 
-      if ((uti = _gdk_macos_pasteboard_to_ns_type (mime_type, NULL)))
+      if (data != NULL)
         {
-          NSData *data = [pasteboard dataForType:uti];
-          stream = create_stream_from_nsdata (data);
-          [uti release];
+          const guint8 *bytes = [data bytes];
+          gsize len = [data length];
+
+          stream = g_memory_input_stream_new_from_data (g_memdup2 (bytes, len), len, g_free);
         }
+
+      [uti release];
     }
 
   if (stream != NULL)
