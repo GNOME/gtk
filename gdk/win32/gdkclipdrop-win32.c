@@ -409,9 +409,6 @@ struct _GdkWin32ClipboardThread
    */
   HWND         clipboard_opened_for;
 
-  /* Wakeup timer id (1 if timer is set, 0 otherwise) */
-  UINT         wakeup_timer;
-
   /* The formats that the main thread claims to provide */
   GArray      *cached_advertisement; /* of GdkWin32ContentFormatPair */
 
@@ -1019,8 +1016,9 @@ process_retrieve (GdkWin32Clipdrop                *clipdrop,
 }
 
 static gboolean
-process_clipboard_queue (GdkWin32Clipdrop *clipdrop)
+process_clipboard_queue (gpointer data)
 {
+  GdkWin32Clipdrop *clipdrop = data;
   GdkWin32ClipboardThreadQueueItem *placeholder;
   GList *p;
   gboolean try_again;
@@ -1041,18 +1039,30 @@ process_clipboard_queue (GdkWin32Clipdrop *clipdrop)
           break;
         }
 
-      if (!try_again)
+      if (try_again)
         {
-          free_queue_item (placeholder);
-          continue;
+          GSource *source;
+
+          g_async_queue_push_front (CLIPDROP_CB_THREAD_MEMBER (clipdrop, input_queue), placeholder);
+      
+          source = g_timeout_source_new (1000);
+          g_source_set_priority (source, G_PRIORITY_DEFAULT);
+          g_source_set_callback (source, process_clipboard_queue, clipdrop, NULL);
+          g_source_attach (source, clipdrop->clipboard_main_context);
+          g_source_unref (source);
+          break;
         }
 
-      g_async_queue_push_front (CLIPDROP_CB_THREAD_MEMBER (clipdrop, input_queue), placeholder);
-
-      return FALSE;
+      free_queue_item (placeholder);
     }
 
-  return TRUE;
+  if (CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_opened_for) != INVALID_HANDLE_VALUE)
+    {
+      API_CALL (CloseClipboard, ());
+      CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_opened_for) = INVALID_HANDLE_VALUE;
+    }
+
+  return G_SOURCE_REMOVE;
 }
 
 static void
@@ -1091,49 +1101,6 @@ inner_clipboard_hwnd_procedure (HWND   hwnd,
     return DefWindowProcW (hwnd, message, wparam, lparam);
   else
     clipdrop = (GdkWin32Clipdrop *) GetWindowLongPtr (hwnd, GWLP_USERDATA);
-
-  if (message == clipdrop->thread_wakeup_message ||
-      message == WM_TIMER)
-    {
-      gboolean queue_is_empty = FALSE;
-
-      if (clipdrop->clipboard_thread_items == NULL)
-        {
-          g_warning ("Clipboard thread got an actionable message with no thread data");
-          return DefWindowProcW (hwnd, message, wparam, lparam);
-        }
-
-      queue_is_empty = process_clipboard_queue (clipdrop);
-
-      if (queue_is_empty && CLIPDROP_CB_THREAD_MEMBER (clipdrop, wakeup_timer))
-        {
-          API_CALL (KillTimer, (CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd), CLIPDROP_CB_THREAD_MEMBER (clipdrop, wakeup_timer)));
-          CLIPDROP_CB_THREAD_MEMBER (clipdrop, wakeup_timer) = 0;
-        }
-
-      /* Close the clipboard after each queue run, if it's open.
-       * It would be wrong to keep it open, even if we would
-       * need it again a second later.
-       * queue_is_empty == FALSE implies that the clipboard
-       * is closed already, but it's better to be sure.
-       */
-      if (CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_opened_for) != INVALID_HANDLE_VALUE)
-        {
-          API_CALL (CloseClipboard, ());
-          CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_opened_for) = INVALID_HANDLE_VALUE;
-        }
-
-      if (queue_is_empty ||
-          CLIPDROP_CB_THREAD_MEMBER (clipdrop, wakeup_timer) != 0)
-        return 0;
-
-      if (SetTimer (CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd), 1, 1000, NULL))
-        CLIPDROP_CB_THREAD_MEMBER (clipdrop, wakeup_timer) = 1;
-      else
-        g_critical ("Failed to set a timer for the clipboard HWND 0x%p: %lu",
-                    CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd),
-                    GetLastError ());
-    }
 
   switch (message)
     {
@@ -1211,7 +1178,7 @@ inner_clipboard_hwnd_procedure (HWND   hwnd,
                 CLIPDROP_CB_THREAD_MEMBER (clipdrop, cached_advertisement) = NULL;
               }
 
-            API_CALL (PostMessage, (CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd), clipdrop->thread_wakeup_message, 0, 0));
+            process_clipboard_queue (clipdrop);
 
             if (hwnd_owner != CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd))
               g_idle_add_full (G_PRIORITY_DEFAULT, clipboard_owner_changed, NULL, NULL);
@@ -2728,8 +2695,23 @@ static void
 gdk_win32_clipdrop_run_in_clipboard_thread (GdkWin32Clipdrop                 *self,
                                             GdkWin32ClipboardThreadQueueItem *item)
 {
-  g_async_queue_push (self->clipboard_open_thread_queue, item);
-  API_CALL (PostMessage, (self->clipboard_hwnd, self->thread_wakeup_message, 0, 0));
+  gboolean was_empty;
+  
+  g_async_queue_lock (self->clipboard_open_thread_queue);
+  was_empty = g_async_queue_length_unlocked (self->clipboard_open_thread_queue) == 0;
+  g_async_queue_push_unlocked (self->clipboard_open_thread_queue, item);
+  g_async_queue_unlock (self->clipboard_open_thread_queue);
+
+  if (was_empty)
+    {
+      GSource *source;
+
+      source = g_idle_source_new ();
+      g_source_set_priority (source, G_PRIORITY_DEFAULT);
+      g_source_set_callback (source, process_clipboard_queue, self, NULL);
+      g_source_attach (source, self->clipboard_main_context);
+      g_source_unref (source);
+    }
 }
 
 void
