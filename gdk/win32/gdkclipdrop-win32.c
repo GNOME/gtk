@@ -456,18 +456,6 @@ _gdk_win32_format_uses_hdata (UINT w32format)
     }
 }
 
-
-/* This function is called in the main thread */
-static gboolean
-clipboard_hwnd_created (gpointer user_data)
-{
-  GdkWin32Clipdrop *clipdrop = gdk_win32_display_get_clipdrop (gdk_display_get_default ());
-
-  clipdrop->clipboard_hwnd = (HWND) user_data;
-
-  return G_SOURCE_REMOVE;
-}
-
 /* This function is called in the main thread */
 static gboolean
 clipboard_owner_changed (gpointer user_data)
@@ -1368,8 +1356,6 @@ register_clipboard_notification (GdkWin32Clipdrop *clipdrop)
       DestroyWindow (CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd));
       goto failed;
     }
-
-  g_idle_add_full (G_PRIORITY_DEFAULT, clipboard_hwnd_created, (gpointer) CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd), NULL);
 
   return TRUE;
 
@@ -2725,8 +2711,6 @@ _gdk_win32_advertise_clipboard_contentformats (GdkClipboard      *cb,
   gsize mime_types_len;
   gsize i;
 
-  g_assert (clipdrop->clipboard_hwnd != NULL);
-
   adv->parent.item_type = GDK_WIN32_CLIPBOARD_THREAD_QUEUE_ITEM_ADVERTISE;
   adv->parent.start_time = g_get_monotonic_time ();
   adv->parent.end_time = adv->parent.start_time + CLIPBOARD_OPERATION_TIMEOUT;
@@ -2760,8 +2744,6 @@ _gdk_win32_retrieve_clipboard_contentformats (GdkClipboard      *cb,
   const char * const *mime_types;
   gsize mime_types_len;
   gsize i;
-
-  g_assert (clipdrop->clipboard_hwnd != NULL);
 
   retr->parent.item_type = GDK_WIN32_CLIPBOARD_THREAD_QUEUE_ITEM_RETRIEVE;
   retr->parent.start_time = g_get_monotonic_time ();
@@ -2869,8 +2851,6 @@ _gdk_win32_store_clipboard_contentformats (GdkClipboard      *cb,
   gsize i;
   GdkWin32Clipdrop *clipdrop = gdk_win32_display_get_clipdrop (gdk_clipboard_get_display (cb));
   GdkWin32ClipboardStorePrep *prep;
-
-  g_assert (clipdrop->clipboard_hwnd != NULL);
 
   mime_types = gdk_content_formats_get_mime_types (contentformats, &n_mime_types);
 

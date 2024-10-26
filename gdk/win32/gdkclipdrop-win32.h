@@ -169,13 +169,6 @@ struct _GdkWin32Clipdrop
    */
   GAsyncQueue      *clipboard_render_queue;
 
-  /* Window handle for the clipboard surface that we
-   * receive from the clipboard thread. We use that
-   * to wake up the clipboard surface main loop by
-   * posting a message to it.
-   */
-  HWND              clipboard_hwnd;
-
   /* The thread that calls DoDragDrop (), which would
    * normally block our main thread, as it runs its own
    * Windows message loop.
