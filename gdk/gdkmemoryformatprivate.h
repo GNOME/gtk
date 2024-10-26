@@ -25,6 +25,7 @@
 /* epoxy needs this, see https://github.com/anholt/libepoxy/issues/299 */
 #ifdef GDK_WINDOWING_WIN32
 #include <windows.h>
+#include <dxgiformat.h>
 #endif
 
 #include <epoxy/gl.h>
@@ -94,6 +95,14 @@ VkFormat                gdk_memory_format_vk_srgb_format    (GdkMemoryFormat    
 VkFormat                gdk_memory_format_vk_rgba_format    (GdkMemoryFormat             format,
                                                              GdkMemoryFormat            *out_rgba_format,
                                                              VkComponentMapping         *out_swizzle);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+DXGI_FORMAT             gdk_memory_format_dxgi_format       (GdkMemoryFormat             format,
+                                                             UINT                       *out_shader_4_component_mapping);
+DXGI_FORMAT             gdk_memory_format_dxgi_srgb_format  (GdkMemoryFormat             format);
+DXGI_FORMAT             gdk_memory_format_dxgi_rgba_format  (GdkMemoryFormat             format,
+                                                             GdkMemoryFormat            *out_rgba_format,
+                                                             UINT                       *out_shader_4_component_mapping);
 #endif
 guint32                 gdk_memory_format_get_dmabuf_fourcc (GdkMemoryFormat             format);
 const char *            gdk_memory_format_get_name          (GdkMemoryFormat             format);
