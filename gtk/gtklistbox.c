@@ -31,6 +31,7 @@
 #include "gtkscrollable.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtksizerequest.h"
 
 #include <float.h>
 #include <math.h>
@@ -2553,10 +2554,6 @@ gtk_list_box_compute_expand (GtkWidget *widget,
 
   *hexpand_p = hexpand;
   *vexpand_p = vexpand;
-
-  /* We don't expand vertically beyond the minimum size */
-  if (*vexpand_p)
-    *vexpand_p = FALSE;
 }
 
 static GtkSizeRequestMode
@@ -2699,7 +2696,13 @@ gtk_list_box_size_allocate (GtkWidget *widget,
   GtkAllocation header_allocation;
   GtkListBoxRow *row;
   GSequenceIter *iter;
-  int child_min;
+  int child_min, child_nat;
+  int total_min = 0, total_nat = 0;
+  gboolean allocate_min = FALSE, allocate_nat = FALSE;
+  GtkRequestedSize *sizes = NULL;
+  int i = 0;
+  int n_vexpand_children = 0;
+  int extra_height = height;
 
 
   child_allocation.x = 0;
@@ -2729,6 +2732,88 @@ gtk_list_box_size_allocate (GtkWidget *widget,
     {
       row = g_sequence_get (iter);
       if (!row_is_visible (row))
+        continue;
+
+      if (ROW_PRIV (row)->header != NULL)
+        {
+          gtk_widget_measure (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL,
+                              width, &child_min, &child_nat, NULL, NULL);
+          total_min += child_min;
+          total_nat += child_nat;
+          i++;
+
+          if (gtk_widget_compute_expand (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL))
+            n_vexpand_children++;
+        }
+
+      gtk_widget_measure (GTK_WIDGET (row), GTK_ORIENTATION_VERTICAL,
+                          width, &child_min, &child_nat, NULL, NULL);
+      total_min += child_min;
+      total_nat += child_nat;
+      i++;
+
+      if (gtk_widget_compute_expand (GTK_WIDGET (row), GTK_ORIENTATION_VERTICAL))
+        n_vexpand_children++;
+    }
+
+  /* We're most likely to be allocated either our minimum or natural
+   * height, even more so when we're placed inside a GtkScrolledWindow &
+   * GtkViewport. Detect these cases and skip the logic for distributing
+   * sizes.
+   */
+  if (height == total_min)
+    {
+      allocate_min = TRUE;
+      extra_height = 0;
+      goto do_allocate;
+    }
+  else if (height >= total_nat)
+    {
+      allocate_nat = TRUE;
+      extra_height = height - total_nat;
+      goto do_allocate;
+    }
+
+  extra_height = height - total_min;
+  sizes = g_new (GtkRequestedSize, i);
+  i = 0;
+
+  for (iter = g_sequence_get_begin_iter (box->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      row = g_sequence_get (iter);
+      if (!row_is_visible (row))
+        continue;
+
+      if (ROW_PRIV (row)->header != NULL)
+        {
+          gtk_widget_measure (ROW_PRIV (row)->header,
+                              GTK_ORIENTATION_VERTICAL, width,
+                              &sizes[i].minimum_size,
+                              &sizes[i].natural_size,
+                              NULL, NULL);
+          i++;
+        }
+
+      gtk_widget_measure (GTK_WIDGET (row),
+                          GTK_ORIENTATION_VERTICAL, width,
+                          &sizes[i].minimum_size,
+                          &sizes[i].natural_size,
+                          NULL, NULL);
+      i++;
+    }
+
+  extra_height = gtk_distribute_natural_allocation (extra_height, i, sizes);
+
+do_allocate:
+  i = 0;
+  for (iter = g_sequence_get_begin_iter (box->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      row = g_sequence_get (iter);
+      if (!row_is_visible (row))
         {
           ROW_PRIV (row)->y = child_allocation.y;
           ROW_PRIV (row)->height = 0;
@@ -2737,28 +2822,51 @@ gtk_list_box_size_allocate (GtkWidget *widget,
 
       if (ROW_PRIV (row)->header != NULL)
         {
-          gtk_widget_measure (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL,
-                              width,
-                              &child_min, NULL, NULL, NULL);
-          header_allocation.height = child_min;
+          if (allocate_min || allocate_nat)
+            gtk_widget_measure (ROW_PRIV (row)->header,
+                                GTK_ORIENTATION_VERTICAL, width,
+                                &child_min, &child_nat,
+                                NULL, NULL);
+          if (allocate_min)
+            header_allocation.height = child_min;
+          else if (allocate_nat)
+            header_allocation.height = child_nat;
+          else
+            header_allocation.height = sizes[i].minimum_size;
+
+          if (gtk_widget_compute_expand (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL))
+            header_allocation.height += extra_height / n_vexpand_children;
           header_allocation.y = child_allocation.y;
           gtk_widget_size_allocate (ROW_PRIV (row)->header,
                                     &header_allocation,
                                     -1);
-          child_allocation.y += child_min;
+          child_allocation.y += header_allocation.height;
+          i++;
         }
 
+      if (allocate_min || allocate_nat)
+        gtk_widget_measure (GTK_WIDGET (row),
+                            GTK_ORIENTATION_VERTICAL, width,
+                            &child_min, &child_nat,
+                            NULL, NULL);
+      if (allocate_min)
+        child_allocation.height = child_min;
+      else if (allocate_nat)
+        child_allocation.height = child_nat;
+      else
+        child_allocation.height = sizes[i].minimum_size;
+
+      if (gtk_widget_compute_expand (GTK_WIDGET (row), GTK_ORIENTATION_VERTICAL))
+        child_allocation.height += extra_height / n_vexpand_children;
+
       ROW_PRIV (row)->y = child_allocation.y;
-
-      gtk_widget_measure (GTK_WIDGET (row), GTK_ORIENTATION_VERTICAL,
-                          child_allocation.width,
-                          &child_min, NULL, NULL, NULL);
-      child_allocation.height = child_min;
-
       ROW_PRIV (row)->height = child_allocation.height;
       gtk_widget_size_allocate (GTK_WIDGET (row), &child_allocation, -1);
-      child_allocation.y += child_min;
+      child_allocation.y += child_allocation.height;
+      i++;
     }
+
+  g_free (sizes);
 }
 
 /**
