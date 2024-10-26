@@ -24,6 +24,7 @@
 #include "gdkdragprivate.h"
 #include "gdkmacospasteboard-private.h"
 #include "gdkmacosutils-private.h"
+#include "gdkdebugprivate.h"
 
 enum {
   TYPE_STRING,
@@ -71,22 +72,21 @@ get_pasteboard_type (int type)
 const char *
 _gdk_macos_pasteboard_from_ns_type (NSPasteboardType type)
 {
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  gchar * mime_type;
 
-  if ([type isEqualToString:PTYPE(STRING)] ||
-      [type isEqualToString:PTYPE(PBOARD)])
-    return g_intern_string ("text/plain;charset=utf-8");
-  else if ([type isEqualToString:PTYPE(URL)] ||
-           [type isEqualToString:PTYPE(FILE_URL)])
+  if ([type isEqualToString:PTYPE(URL)] ||
+      [type isEqualToString:PTYPE(FILE_URL)])
     return g_intern_string ("text/uri-list");
   else if ([type isEqualToString:PTYPE(COLOR)])
     return g_intern_string ("application/x-color");
-  else if ([type isEqualToString:PTYPE(TIFF)])
-    return g_intern_string ("image/tiff");
-  else if ([type isEqualToString:PTYPE(PNG)])
-    return g_intern_string ("image/png");
+  else if ((mime_type = g_content_type_get_mime_type ([type UTF8String])))
+    {
+      const gchar *intern = g_intern_string (mime_type);
+      GDK_DEBUG (DND, "From UTI %s to mime-type %s", [type UTF8String], mime_type);
+      g_free (mime_type);
 
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+      return intern;
+    }
 
   return NULL;
 }
@@ -95,30 +95,26 @@ NSPasteboardType
 _gdk_macos_pasteboard_to_ns_type (const char       *mime_type,
                                   NSPasteboardType *alternate)
 {
+  gchar *uti_str;
+
   if (alternate)
     *alternate = NULL;
 
-  if (g_strcmp0 (mime_type, "text/plain;charset=utf-8") == 0)
-    {
-      return PTYPE(STRING);
-    }
-  else if (g_strcmp0 (mime_type, "text/uri-list") == 0)
+  if (g_strcmp0 (mime_type, "text/uri-list") == 0)
     {
       if (alternate)
         *alternate = PTYPE(URL);
-      return PTYPE(FILE_URL);
+      return [PTYPE(FILE_URL) retain];
     }
   else if (g_strcmp0 (mime_type, "application/x-color") == 0)
+    return [PTYPE(COLOR) retain];
+  else if ((uti_str = g_content_type_from_mime_type (mime_type)))
     {
-      return PTYPE(COLOR);
-    }
-  else if (g_strcmp0 (mime_type, "image/tiff") == 0)
-    {
-      return PTYPE(TIFF);
-    }
-  else if (g_strcmp0 (mime_type, "image/png") == 0)
-    {
-      return PTYPE(PNG);
+      NSString *uti = [[NSString alloc] initWithUTF8String:uti_str];
+      GDK_DEBUG (DND, "From mime-type %s to UTI %s", mime_type, uti_str);
+      g_free (uti_str);
+
+      return uti;
     }
 
   return nil;
@@ -223,7 +219,7 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
     {
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
-      if ([[pasteboard types] containsObject:PTYPE(FILE_URL)])
+      if ([[pasteboard types] containsObject:NSPasteboardTypeFileURL])
         {
           GString *str = g_string_new (NULL);
           NSArray *files = [pasteboard propertyListForType:NSFilenamesPboardType];
@@ -268,15 +264,16 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
                                                     sizeof color,
                                                     g_free);
     }
-  else if (strcmp (mime_type, "image/tiff") == 0)
+  else if (mime_type != NULL)
     {
-      NSData *data = [pasteboard dataForType:PTYPE(TIFF)];
-      stream = create_stream_from_nsdata (data);
-    }
-  else if (strcmp (mime_type, "image/png") == 0)
-    {
-      NSData *data = [pasteboard dataForType:PTYPE(PNG)];
-      stream = create_stream_from_nsdata (data);
+      NSString *uti;
+
+      if ((uti = _gdk_macos_pasteboard_to_ns_type (mime_type, NULL)))
+        {
+          NSData *data = [pasteboard dataForType:uti];
+          stream = create_stream_from_nsdata (data);
+          [uti release];
+        }
     }
 
   if (stream != NULL)
@@ -320,6 +317,8 @@ _gdk_macos_pasteboard_read_finish (GObject       *object,
 void
 _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
 {
+  // TODO: how can GTK tell us what drag types expected?
+  // As long as this code is in place our drag functionality will be limited.
   [window registerForDraggedTypes:[NSArray arrayWithObjects:PTYPE(STRING),
                                                             PTYPE(PBOARD),
                                                             PTYPE(URL),
@@ -376,6 +375,7 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
       if ((type = _gdk_macos_pasteboard_to_ns_type (mime_type, &alternate)))
         {
           [ret addObject:type];
+          [type release];
           if (alternate)
             [ret addObject:alternate];
         }
@@ -395,7 +395,7 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
       gdk_content_formats_get_gtypes (formats, &n_gtypes);
 
       if (n_gtypes)
-        [ret addObject:PTYPE(URL)];
+        [ret addObject:@"org.gtk.internal"];
 
       gdk_content_formats_unref (formats);
     }
