@@ -128,9 +128,9 @@ GtkStateFlags           gtk_css_node_get_state          (GtkCssNode            *
 void                    gtk_css_node_set_classes        (GtkCssNode            *cssnode,
                                                          const char           **classes);
 char **                 gtk_css_node_get_classes        (GtkCssNode            *cssnode);
-void                    gtk_css_node_add_class          (GtkCssNode            *cssnode,
+gboolean                gtk_css_node_add_class          (GtkCssNode            *cssnode,
                                                          GQuark                 style_class);
-void                    gtk_css_node_remove_class       (GtkCssNode            *cssnode,
+gboolean                gtk_css_node_remove_class       (GtkCssNode            *cssnode,
                                                          GQuark                 style_class);
 gboolean                gtk_css_node_has_class          (GtkCssNode            *cssnode,
                                                          GQuark                 style_class) G_GNUC_PURE;
