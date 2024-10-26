@@ -1203,7 +1203,7 @@ gtk_css_node_get_classes (GtkCssNode *cssnode)
   return result;
 }
 
-void
+gboolean
 gtk_css_node_add_class (GtkCssNode *cssnode,
                         GQuark      style_class)
 {
@@ -1211,10 +1211,13 @@ gtk_css_node_add_class (GtkCssNode *cssnode,
     {
       gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_CLASS);
       g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_CLASSES]);
+      return TRUE;
     }
+
+  return FALSE;
 }
 
-void
+gboolean
 gtk_css_node_remove_class (GtkCssNode *cssnode,
                            GQuark      style_class)
 {
@@ -1222,7 +1225,10 @@ gtk_css_node_remove_class (GtkCssNode *cssnode,
     {
       gtk_css_node_invalidate (cssnode, GTK_CSS_CHANGE_CLASS);
       g_object_notify_by_pspec (G_OBJECT (cssnode), cssnode_properties[PROP_CLASSES]);
+      return TRUE;
     }
+
+  return FALSE;
 }
 
 gboolean

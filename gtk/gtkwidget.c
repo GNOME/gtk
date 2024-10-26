@@ -13053,8 +13053,8 @@ gtk_widget_add_css_class (GtkWidget  *widget,
   g_return_if_fail (css_class[0] != '\0');
   g_return_if_fail (css_class[0] != '.');
 
-  gtk_css_node_add_class (priv->cssnode, g_quark_from_string (css_class));
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CSS_CLASSES]);
+  if (gtk_css_node_add_class (priv->cssnode, g_quark_from_string (css_class)))
+    g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CSS_CLASSES]);
 }
 
 /**
@@ -13083,8 +13083,8 @@ gtk_widget_remove_css_class (GtkWidget  *widget,
   if (!class_quark)
     return;
 
-  gtk_css_node_remove_class (priv->cssnode, class_quark);
-  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CSS_CLASSES]);
+  if (gtk_css_node_remove_class (priv->cssnode, class_quark))
+    g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_CSS_CLASSES]);
 }
 
 /**
