@@ -934,8 +934,6 @@ process_retrieve (GdkWin32Clipdrop                *clipdrop,
 
   if (CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_opened_for) == INVALID_HANDLE_VALUE)
     error_code = try_open_clipboard (clipdrop, CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd));
-  else
-    error_code = try_open_clipboard (clipdrop, CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_opened_for));
 
   if (error_code == ERROR_ACCESS_DENIED)
     return TRUE;
