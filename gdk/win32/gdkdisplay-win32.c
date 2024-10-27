@@ -527,18 +527,16 @@ _gdk_win32_display_open (const char *display_name)
 
   GDK_NOTE (MISC, g_print ("gdk_display_open: %s\n", (display_name ? display_name : "NULL")));
 
-  if (display_name == NULL || g_ascii_strcasecmp (display_name, gdk_display_get_name (display)) == 0)
+  if (display != NULL)
     {
-      if (display != NULL)
-        {
-          GDK_NOTE (MISC, g_print ("... return existing gdkdisplay\n"));
-          return display;
-        }
+      GDK_NOTE (MISC, g_print ("... Display is already open\n"));
+      return NULL;
     }
-  else
+
+  if (display_name != NULL)
     {
       /* we don't really support multiple GdkDisplay's on Windows at this point */
-      GDK_NOTE (MISC, g_print ("... return NULL\n"));
+      GDK_NOTE (MISC, g_print ("... win32 does not support named displays, but given name was \"%s\"\n", display_name));
       return NULL;
     }
 
