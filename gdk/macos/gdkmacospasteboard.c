@@ -313,14 +313,8 @@ void
 _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
 {
   // TODO: how can GTK tell us what drag types expected?
-  // As long as this code is in place our drag functionality will be limited.
-  [window registerForDraggedTypes:[NSArray arrayWithObjects:PTYPE(STRING),
-                                                            PTYPE(PBOARD),
-                                                            PTYPE(URL),
-                                                            PTYPE(FILE_URL),
-                                                            PTYPE(COLOR),
-                                                            PTYPE(TIFF),
-                                                            PTYPE(PNG),
+  // Now the app will accept everything.
+  [window registerForDraggedTypes:[NSArray arrayWithObjects:@"public.item",
                                                             nil]];
 }
 
