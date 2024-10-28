@@ -272,6 +272,7 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
   // TODO: how can GTK tell us what drag types expected?
   // Now the app will accept everything.
   [window registerForDraggedTypes:[NSArray arrayWithObjects:@"public.item",
+                                                            @"org.gtk.internal",
                                                             nil]];
 }
 
