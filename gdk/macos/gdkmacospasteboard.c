@@ -26,58 +26,15 @@
 #include "gdkmacosutils-private.h"
 #include "gdkdebugprivate.h"
 
-enum {
-  TYPE_STRING,
-  TYPE_PBOARD,
-  TYPE_URL,
-  TYPE_FILE_URL,
-  TYPE_COLOR,
-  TYPE_TIFF,
-  TYPE_PNG,
-  TYPE_LAST
-};
-
-#define PTYPE(k) (get_pasteboard_type(TYPE_##k))
-
-static NSPasteboardType pasteboard_types[TYPE_LAST];
-
-static NSPasteboardType
-get_pasteboard_type (int type)
-{
-  static gsize initialized = FALSE;
-
-  g_assert (type >= 0);
-  g_assert (type < TYPE_LAST);
-
-  if (g_once_init_enter (&initialized))
-    {
-      pasteboard_types[TYPE_PNG] = NSPasteboardTypePNG;
-      pasteboard_types[TYPE_STRING] = NSPasteboardTypeString;
-      pasteboard_types[TYPE_TIFF] = NSPasteboardTypeTIFF;
-      pasteboard_types[TYPE_COLOR] = NSPasteboardTypeColor;
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      pasteboard_types[TYPE_PBOARD] = NSStringPboardType;
-      G_GNUC_END_IGNORE_DEPRECATIONS
-
-      pasteboard_types[TYPE_URL] = NSPasteboardTypeURL;
-      pasteboard_types[TYPE_FILE_URL] = NSPasteboardTypeFileURL;
-
-      g_once_init_leave (&initialized, TRUE);
-    }
-
-  return pasteboard_types[type];
-}
-
 const char *
 _gdk_macos_pasteboard_from_ns_type (NSPasteboardType type)
 {
   gchar * mime_type;
 
-  if ([type isEqualToString:PTYPE(URL)] ||
-      [type isEqualToString:PTYPE(FILE_URL)])
+  if ([type isEqualToString:NSPasteboardTypeURL] ||
+      [type isEqualToString:NSPasteboardTypeFileURL])
     return g_intern_string ("text/uri-list");
-  else if ([type isEqualToString:PTYPE(COLOR)])
+  else if ([type isEqualToString:NSPasteboardTypeColor])
     return g_intern_string ("application/x-color");
   else if ((mime_type = g_content_type_get_mime_type ([type UTF8String])))
     {
@@ -103,11 +60,11 @@ _gdk_macos_pasteboard_to_ns_type (const char       *mime_type,
   if (g_strcmp0 (mime_type, "text/uri-list") == 0)
     {
       if (alternate)
-        *alternate = PTYPE(URL);
-      return [PTYPE(FILE_URL) retain];
+        *alternate = NSPasteboardTypeURL;
+      return [NSPasteboardTypeFileURL retain];
     }
   else if (g_strcmp0 (mime_type, "application/x-color") == 0)
-    return [PTYPE(COLOR) retain];
+    return [NSPasteboardTypeColor retain];
   else if ((uti_str = g_content_type_from_mime_type (mime_type)))
     {
       NSString *uti = [[NSString alloc] initWithUTF8String:uti_str];
