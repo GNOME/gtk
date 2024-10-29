@@ -146,11 +146,8 @@ collect_states (GtkAtSpiContext    *self,
   set_atspi_state (&states, ATSPI_STATE_VISIBLE);
   set_atspi_state (&states, ATSPI_STATE_SHOWING);
 
-  if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_APPLICATION)
-    {
-      if (gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE))
-        set_atspi_state (&states, ATSPI_STATE_ACTIVE);
-    }
+  if (gtk_accessible_get_platform_state (accessible, GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE))
+    set_atspi_state (&states, ATSPI_STATE_ACTIVE);
 
   if (ctx->accessible_role == GTK_ACCESSIBLE_ROLE_TEXT_BOX ||
       ctx->accessible_role == GTK_ACCESSIBLE_ROLE_SEARCH_BOX ||
