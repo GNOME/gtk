@@ -889,14 +889,15 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
 
   selection = G_LIST_MODEL (gtk_single_selection_new (NULL));
   gtk_single_selection_set_autoselect (GTK_SINGLE_SELECTION (selection), FALSE);
-  g_signal_connect (selection, "items-changed", G_CALLBACK (printer_added_cb), dialog);
-  g_signal_connect_swapped (selection, "notify::selected", G_CALLBACK (selected_printer_changed), dialog);
 
   gtk_single_selection_set_model (GTK_SINGLE_SELECTION (selection), filtered);
 
   g_object_unref (filtered);
 
   gtk_column_view_set_model (GTK_COLUMN_VIEW (dialog->printer_list), GTK_SELECTION_MODEL (selection));
+
+  g_signal_connect (selection, "items-changed", G_CALLBACK (printer_added_cb), dialog);
+  g_signal_connect_swapped (selection, "notify::selected", G_CALLBACK (selected_printer_changed), dialog);
 
   g_object_unref (selection);
 
