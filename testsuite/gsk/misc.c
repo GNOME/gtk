@@ -155,7 +155,6 @@ test_renderer (GskRenderer *renderer)
   GdkDisplay *display;
   gboolean realized;
   GdkSurface *surface;
-  gboolean res;
   GError *error = NULL;
 
   g_assert (GSK_IS_RENDERER (renderer));
@@ -172,24 +171,30 @@ test_renderer (GskRenderer *renderer)
 
   g_assert_null (gsk_renderer_get_surface (renderer));
 
-  surface = gdk_surface_new_toplevel (display);
+  surface = gdk_surface_new_toplevel (display ? display : gdk_display_get_default ());
 
-  res = gsk_renderer_realize (renderer, surface, &error);
+  if (!gsk_renderer_realize (renderer, surface, &error))
+    {
+      g_test_skip_printf ("%s not available: %s", G_OBJECT_TYPE_NAME (renderer), error->message);
+    }
+  else
+    {
+      g_assert_no_error (error);
 
-  g_assert_no_error (error);
-  g_assert_true (res);
+      g_assert_true (gsk_renderer_is_realized (renderer));
+      g_assert_true (gsk_renderer_get_surface (renderer) == surface);
 
-  g_assert_true (gsk_renderer_is_realized (renderer));
-  g_assert_true (gsk_renderer_get_surface (renderer) == surface);
-
-  gsk_renderer_unrealize (renderer);
+      gsk_renderer_unrealize (renderer);
+    }
 
   g_assert_false (gsk_renderer_is_realized (renderer));
   g_assert_null (gsk_renderer_get_surface (renderer));
 
   gdk_surface_destroy (surface);
 
-  gdk_display_close (display);
+  if (display)
+    gdk_display_close (display);
+
 }
 
 static void
