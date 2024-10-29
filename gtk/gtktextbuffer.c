@@ -371,7 +371,9 @@ gtk_text_buffer_deserialize_text_plain (GdkContentDeserializer *deserializer)
                       buffer);
 
   /* validates the stream */
-  converter = g_charset_converter_new ("utf-8", "utf-8", &error);
+  converter = g_charset_converter_new ("utf-8",
+                                       gdk_content_deserializer_get_user_data (deserializer),
+                                       &error);
   if (converter == NULL)
     {
       gdk_content_deserializer_return_error (deserializer, error);
@@ -414,6 +416,23 @@ gtk_text_buffer_serialize_text_plain (GdkContentSerializer *serializer)
   GtkTextBuffer *buffer;
   GtkTextIter start, end;
   char *str;
+  GOutputStream *filter;
+  GCharsetConverter *converter;
+  GError *error = NULL;
+
+  converter = g_charset_converter_new (gdk_content_serializer_get_user_data (serializer),
+                                       "utf-8",
+                                       &error);
+  if (converter == NULL)
+    {
+      gdk_content_serializer_return_error (serializer, error);
+      return;
+    }
+  g_charset_converter_set_use_fallback (converter, TRUE);
+
+  filter = g_converter_output_stream_new (gdk_content_serializer_get_output_stream (serializer),
+                                          G_CONVERTER (converter));
+  g_object_unref (converter);
 
   buffer = g_value_get_object (gdk_content_serializer_get_value (serializer));
 
@@ -427,28 +446,57 @@ gtk_text_buffer_serialize_text_plain (GdkContentSerializer *serializer)
     }
   gdk_content_serializer_set_task_data (serializer, str, g_free);
 
-  g_output_stream_write_all_async (gdk_content_serializer_get_output_stream (serializer),
+  g_output_stream_write_all_async (filter,
                                    str,
                                    strlen (str),
                                    gdk_content_serializer_get_priority (serializer),
                                    gdk_content_serializer_get_cancellable (serializer),
                                    gtk_text_buffer_serialize_text_plain_finish,
                                    serializer);
+  g_object_unref (filter);
 }
 
 static void
 gtk_text_buffer_register_serializers (void)
 {
+  const char *charset;
+
   gdk_content_register_deserializer ("text/plain;charset=utf-8",
                                      GTK_TYPE_TEXT_BUFFER,
                                      gtk_text_buffer_deserialize_text_plain,
-                                     NULL,
+                                     (gpointer) "utf-8",
                                      NULL);
   gdk_content_register_serializer (GTK_TYPE_TEXT_BUFFER,
                                    "text/plain;charset=utf-8",
                                    gtk_text_buffer_serialize_text_plain,
-                                   NULL,
+                                   (gpointer) "utf-8",
                                    NULL);
+  gdk_content_register_deserializer ("text/plain",
+                                     GTK_TYPE_TEXT_BUFFER,
+                                     gtk_text_buffer_deserialize_text_plain,
+                                     (gpointer) "ASCII",
+                                     NULL);
+  gdk_content_register_serializer (GTK_TYPE_TEXT_BUFFER,
+                                   "text/plain",
+                                   gtk_text_buffer_serialize_text_plain,
+                                   (gpointer) "ASCII",
+                                   NULL);
+  if (!g_get_charset (&charset))
+    {
+      char *mime = g_strdup_printf ("text/plain;charset=%s", charset);
+      gdk_content_register_serializer (GTK_TYPE_TEXT_BUFFER,
+                                       mime,
+                                       gtk_text_buffer_serialize_text_plain,
+                                       (gpointer) charset,
+                                       NULL);
+      gdk_content_register_deserializer (mime,
+                                         GTK_TYPE_TEXT_BUFFER,
+                                         gtk_text_buffer_deserialize_text_plain,
+                                         (gpointer) charset,
+                                         NULL);
+      g_free (mime);
+    }
+
 }
 
 static void
