@@ -161,19 +161,25 @@ run (out vec2 pos)
 float
 bt709_eotf (float v)
 {
-  if (abs (v) < 0.081)
+  const float a = 1.099;
+  const float d = 0.0812;
+
+  if (abs (v) < d)
     return v / 4.5;
   else
-    return sign (v) * pow ((abs (v) + 0.099) / 1.099, 1.0/0.45);
+    return sign (v) * pow ((abs (v) + (a - 1.0)) / a, 1.0 / 0.45);
 }
 
 float
 bt709_oetf (float v)
 {
-  if (abs (v) < 0.081)
+  const float a = 1.099;
+  const float b = 0.018;
+
+  if (abs (v) < b)
     return v * 4.5;
   else
-    return 1.099 * sign (v) * (pow (abs (v), 0.45) - 0.099);
+    return sign (v) * (a * pow (abs (v), 0.45) - (a - 1.0));
 }
 
 float
