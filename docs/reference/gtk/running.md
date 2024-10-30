@@ -214,6 +214,9 @@ print out different types of debugging information.
 `dmabuf`
 : Information about dmabuf handling (Linux-only)
 
+`d3d12`
+: Information about Direct3D12 (Windows-only)
+
 `offload`
 : Information about subsurfaces and graphics offload (Wayland-only)
 
