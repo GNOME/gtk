@@ -115,11 +115,25 @@ os_linux  = false
 os_win32  = false
 os_darwin = false
 
+cc = meson.get_compiler('c')
+
 # Some windowing system backends depend on the platform we're
 # building for, so we need to ensure they are disabled; in other
 # cases, they are the only windowing system available, so we need
 # to ensure they are enabled
 if host_machine.system() == 'darwin'
+
+  if not cc.compiles('''
+    #include <Availability.h>
+    #if __MAC_OS_X_VERSION_MIN_REQUIRED < 101500L
+    # error message "Minimal macOS SDK version not met"
+    #endif
+    ''',
+    name: 'macOS SDK version >= 10.15',
+  )
+    error('macOS SDK 10.15 or newer is required to build GTK')
+  endif
+
   os_darwin = true
 elif host_machine.system() == 'windows'
   os_win32 = true
@@ -152,8 +166,6 @@ gtk_bindir = join_paths(gtk_prefix, get_option('bindir'))
 gtk_applicationsdir = join_paths(gtk_datadir, 'applications')
 gtk_schemasdir = join_paths(gtk_datadir, 'glib-2.0/schemas')
 gtk_appdatadir = join_paths(gtk_datadir, 'metainfo')
-
-cc = meson.get_compiler('c')
 
 cdata = configuration_data()
 cdata.set_quoted('PACKAGE_VERSION', meson.project_version())
