@@ -647,7 +647,7 @@ gdk_gl_texture_builder_set_sync (GdkGLTextureBuilder *self,
  *
  * Gets the color state previously set via gdk_gl_texture_builder_set_color_state().
  *
- * Returns: the color state
+ * Returns: (transfer none): the color state
  *
  * Since: 4.16
  */

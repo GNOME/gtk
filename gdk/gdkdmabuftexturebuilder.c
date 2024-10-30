@@ -375,7 +375,7 @@ gdk_dmabuf_texture_builder_class_init (GdkDmabufTextureBuilderClass *klass)
   /**
    * GdkDmabufTextureBuilder:update-region:
    *
-   * The update region for [property@Gdk.GLTextureBuilder:update-texture].
+   * The update region for [property@Gdk.DmabufTextureBuilder:update-texture].
    *
    * Since: 4.14
    */
@@ -496,7 +496,7 @@ gdk_dmabuf_texture_builder_get_width (GdkDmabufTextureBuilder *self)
  *
  * Sets the width of the texture.
  *
- * The width must be set before calling [method@Gdk.GLTextureBuilder.build].
+ * The width must be set before calling [method@Gdk.DmabufTextureBuilder.build].
  *
  * Since: 4.14
  */
@@ -540,7 +540,7 @@ gdk_dmabuf_texture_builder_get_height (GdkDmabufTextureBuilder *self)
  *
  * Sets the height of the texture.
  *
- * The height must be set before calling [method@Gdk.GLTextureBuilder.build].
+ * The height must be set before calling [method@Gdk.DmabufTextureBuilder.build].
  *
  * Since: 4.14
  */
@@ -588,7 +588,7 @@ gdk_dmabuf_texture_builder_get_fourcc (GdkDmabufTextureBuilder *self)
  *
  * The format is specified as a fourcc code.
  *
- * The format must be set before calling [method@Gdk.GLTextureBuilder.build].
+ * The format must be set before calling [method@Gdk.DmabufTextureBuilder.build].
  *
  * Since: 4.14
  */
@@ -807,7 +807,7 @@ gdk_dmabuf_texture_builder_get_stride (GdkDmabufTextureBuilder *self,
  *
  * Sets the stride for a plane.
  *
- * The stride must be set for all planes before calling [method@Gdk.GLTextureBuilder.build].
+ * The stride must be set for all planes before calling [method@Gdk.DmabufTextureBuilder.build].
  *
  * Since: 4.14
  */
@@ -876,7 +876,7 @@ gdk_dmabuf_texture_builder_set_offset (GdkDmabufTextureBuilder *self,
  *
  * Gets the color state previously set via gdk_dmabuf_texture_builder_set_color_state().
  *
- * Returns: (nullable): the color state
+ * Returns: (nullable) (transfer none): the color state
  *
  * Since: 4.16
  */
