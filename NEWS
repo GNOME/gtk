@@ -1,6 +1,34 @@
 Overview of Changes in 4.16.4, xx-xx-xxxx
 =========================================
 
+* GtkTextView:
+ - Fix some missing CSS invalidation
+ - Handle charsets in clipboard datatypes
+
+* GtkApplication:
+ - Respect GDK_DEBUG=no-portals
+
+* Printing:
+ - Avoid warnings for avahi errors
+ - Fix a segfault in the print dialog setup code
+
+* Accessibility:
+ - Handle NULL values in more places
+
+* Gdk:
+ - vulkan: Fix validation errors
+ - Fix 32bit build for the jpeg loader
+
+* Wayland:
+ - Fix a possible deadlock with high-priority sources
+   triggering Wayland roundtrips
+
+* Translation updates
+ Belarusian
+ British English
+ Latvian
+ Romanian
+
 
 Overview of Changes in 4.16.3, 04-10-2024
 =========================================
