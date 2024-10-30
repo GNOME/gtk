@@ -17,6 +17,7 @@ pacman --noconfirm -S --needed \
     ${MINGW_PACKAGE_PREFIX}-adwaita-icon-theme \
     ${MINGW_PACKAGE_PREFIX}-atk \
     ${MINGW_PACKAGE_PREFIX}-cairo \
+    ${MINGW_PACKAGE_PREFIX}-directx-headers \
     ${MINGW_PACKAGE_PREFIX}-gdk-pixbuf2 \
     ${MINGW_PACKAGE_PREFIX}-glib2 \
     ${MINGW_PACKAGE_PREFIX}-graphene \
