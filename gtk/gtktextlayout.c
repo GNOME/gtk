@@ -4011,12 +4011,12 @@ snapshot_shape (PangoAttrShape         *attr,
 }
 
 void
-gtk_text_layout_snapshot (GtkTextLayout      *layout,
-                          GtkWidget          *widget,
-                          GtkSnapshot        *snapshot,
-                          const GdkRectangle *clip,
-                          gboolean            selection_style_changed,
-                          float               cursor_alpha)
+gtk_text_layout_snapshot (GtkTextLayout         *layout,
+                          GtkWidget             *widget,
+                          GtkSnapshot           *snapshot,
+                          const graphene_rect_t *clip,
+                          gboolean               selection_style_changed,
+                          float                  cursor_alpha)
 {
   GtkTextLayoutPrivate *priv;
   GskPangoRenderer *crenderer;
@@ -4041,16 +4041,16 @@ gtk_text_layout_snapshot (GtkTextLayout      *layout,
 
   priv = GTK_TEXT_LAYOUT_GET_PRIVATE (layout);
 
-  if (clip->height <= 0)
+  if (clip->size.height <= 0)
     return;
 
   btree = _gtk_text_buffer_get_btree (layout->buffer);
 
-  first_line = _gtk_text_btree_find_line_by_y (btree, layout, clip->y, &offset_y);
+  first_line = _gtk_text_btree_find_line_by_y (btree, layout, clip->origin.y, &offset_y);
   if (first_line == NULL)
     return;
 
-  last_line = _gtk_text_btree_find_line_by_y (btree, layout, clip->y + clip->height - 1, NULL);
+  last_line = _gtk_text_btree_find_line_by_y (btree, layout, clip->origin.y + clip->size.height - 1, NULL);
   if (last_line == NULL)
     last_line = _gtk_text_btree_get_end_iter_line (btree);
 
