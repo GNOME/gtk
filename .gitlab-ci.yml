@@ -218,7 +218,7 @@ macos:
       when: never
     - if: $RUNNER == "macosintel"
       variables:
-        SDKROOT: /opt/sdks/MacOSX10.13.4.sdk
+        SDKROOT: /opt/sdks/MacOSX10.15.6.sdk
         NINJA_PKG: $CI_API_V4_URL/projects/30745/packages/generic/ninja_macos/v1.11.1.1+9/ninja-1.11.1.1-cp38-cp38-macosx_11_0_x86_64.whl
       when: manual
       allow_failure: true
