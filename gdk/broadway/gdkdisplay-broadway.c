@@ -257,12 +257,6 @@ gdk_broadway_display_flush (GdkDisplay *display)
   _gdk_broadway_server_flush (broadway_display->server);
 }
 
-static gboolean
-gdk_broadway_display_has_pending (GdkDisplay *display)
-{
-  return FALSE;
-}
-
 static void
 gdk_broadway_display_dispose (GObject *object)
 {
@@ -485,7 +479,6 @@ gdk_broadway_display_class_init (GdkBroadwayDisplayClass * class)
   display_class->beep = gdk_broadway_display_beep;
   display_class->sync = gdk_broadway_display_sync;
   display_class->flush = gdk_broadway_display_flush;
-  display_class->has_pending = gdk_broadway_display_has_pending;
   display_class->queue_events = _gdk_broadway_display_queue_events;
 
   display_class->get_next_serial = gdk_broadway_display_get_next_serial;

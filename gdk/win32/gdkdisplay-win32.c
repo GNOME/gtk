@@ -1288,7 +1288,6 @@ gdk_win32_display_class_init (GdkWin32DisplayClass *klass)
   display_class->beep = gdk_win32_display_beep;
   display_class->sync = gdk_win32_display_sync;
   display_class->flush = gdk_win32_display_flush;
-  display_class->has_pending = _gdk_win32_display_has_pending;
   display_class->queue_events = _gdk_win32_display_queue_events;
 
   //? display_class->get_app_launch_context = _gdk_win32_display_get_app_launch_context;

@@ -87,12 +87,12 @@ typedef enum
 /**
  * GdkModifierType:
  * @GDK_SHIFT_MASK: the Shift key.
- * @GDK_LOCK_MASK: a Lock key (depending on the modifier mapping of the
- *  X server this may either be CapsLock or ShiftLock).
+ * @GDK_LOCK_MASK: a Lock key (depending on the Windowing System configuration,
+ *    this may either be <kbd>CapsLock</kbd> or <kbd>ShiftLock</kbd>).
  * @GDK_CONTROL_MASK: the Control key.
- * @GDK_ALT_MASK: the fourth modifier key (it depends on the modifier
- *  mapping of the X server which key is interpreted as this modifier, but
- *  normally it is the Alt key).
+ * @GDK_ALT_MASK: the fourth modifier key (it depends on the Windowing System
+ *    configuration which key is interpreted as this modifier, but normally it
+ *    is the <kbd>Alt</kbd> key).
  * @GDK_BUTTON1_MASK: the first mouse button.
  * @GDK_BUTTON2_MASK: the second mouse button.
  * @GDK_BUTTON3_MASK: the third mouse button.
@@ -109,7 +109,7 @@ typedef enum
  * Apple, CapsLock or ShiftLock.
  *
  * Note that GDK may add internal values to events which include values outside
- * of this enumeration. Your code should preserve and ignore them.  You can use
+ * of this enumeration. Your code should preserve and ignore them. You can use
  * %GDK_MODIFIER_MASK to remove all private values.
  */
 typedef enum

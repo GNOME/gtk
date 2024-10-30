@@ -42,6 +42,12 @@
 #define siglongjmp longjmp
 #endif
 
+#define JPEG_MEM_DEST_USES_SIZE_T                                 \
+  (!(LIBJPEG_TURBO_VERSION_NUMBER) &&                             \
+   (((JPEG_LIB_VERSION) > 90) ||                                  \
+    ((JPEG_LIB_VERSION) == 90 && (JPEG_LIB_VERSION_MAJOR) > 9) || \
+    ((JPEG_LIB_VERSION) == 90 && (JPEG_LIB_VERSION_MAJOR) == 9 && (JPEG_LIB_VERSION_MINOR) > 3)))
+
 struct error_handler_data {
         struct jpeg_error_mgr pub;
         sigjmp_buf setjmp_buffer;
@@ -231,7 +237,11 @@ gdk_save_jpeg (GdkTexture *texture)
   struct error_handler_data jerr;
   struct jpeg_error_mgr err;
   guchar *data = NULL;
+#if JPEG_MEM_DEST_USES_SIZE_T
+  gsize size = 0;
+#else
   gulong size = 0;
+#endif
   guchar *input = NULL;
   GdkTextureDownloader downloader;
   GBytes *texbytes = NULL;

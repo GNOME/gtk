@@ -270,13 +270,6 @@ gdk_macos_display_get_next_serial (GdkDisplay *display)
   return ++serial;
 }
 
-static gboolean
-gdk_macos_display_has_pending (GdkDisplay *display)
-{
-  return _gdk_event_queue_find_first (display) ||
-         _gdk_macos_event_source_check_pending ();
-}
-
 static void
 gdk_macos_display_notify_startup_complete (GdkDisplay  *display,
                                            const char *startup_notification_id)
@@ -611,7 +604,6 @@ gdk_macos_display_class_init (GdkMacosDisplayClass *klass)
   display_class->get_next_serial = gdk_macos_display_get_next_serial;
   display_class->get_name = gdk_macos_display_get_name;
   display_class->get_setting = gdk_macos_display_get_setting;
-  display_class->has_pending = gdk_macos_display_has_pending;
   display_class->init_gl = gdk_macos_display_init_gl;
   display_class->notify_startup_complete = gdk_macos_display_notify_startup_complete;
   display_class->queue_events = gdk_macos_display_queue_events;

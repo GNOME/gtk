@@ -184,7 +184,8 @@ void gdk_wayland_device_unset_touch_grab (GdkDevice        *device,
                                           GdkEventSequence *sequence);
 
 void     _gdk_wayland_display_deliver_event (GdkDisplay *display, GdkEvent *event);
-GSource *_gdk_wayland_display_event_source_new (GdkDisplay *display);
+void     gdk_wayland_display_install_gsources (GdkWaylandDisplay *display_wayland);
+void     gdk_wayland_display_uninstall_gsources (GdkWaylandDisplay *display_wayland);
 void     _gdk_wayland_display_queue_events (GdkDisplay *display);
 
 GdkAppLaunchContext *_gdk_wayland_display_get_app_launch_context (GdkDisplay *display);

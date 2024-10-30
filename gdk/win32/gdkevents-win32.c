@@ -535,14 +535,6 @@ _gdk_events_init (GdkDisplay *display)
   set_up_low_level_keyboard_hook ();
 }
 
-gboolean
-_gdk_win32_display_has_pending (GdkDisplay *display)
-{
-  return (_gdk_event_queue_find_first (display) ||
-	  (modal_win32_dialog == NULL &&
-	   GetQueueStatus (QS_ALLINPUT) != 0));
-}
-
 #if 0 /* Unused, but might be useful to re-introduce in some debugging output? */
 
 static char *
