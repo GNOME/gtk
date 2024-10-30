@@ -59,13 +59,8 @@ get_pasteboard_type (int type)
       pasteboard_types[TYPE_PBOARD] = NSStringPboardType;
       G_GNUC_END_IGNORE_DEPRECATIONS
 
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_13_AND_LATER
       pasteboard_types[TYPE_URL] = NSPasteboardTypeURL;
       pasteboard_types[TYPE_FILE_URL] = NSPasteboardTypeFileURL;
-#else
-      pasteboard_types[TYPE_URL] = [[NSString alloc] initWithUTF8String:"public.url"];
-      pasteboard_types[TYPE_FILE_URL] = [[NSString alloc] initWithUTF8String:"public.file-url"];
-#endif
 
       g_once_init_leave (&initialized, TRUE);
     }

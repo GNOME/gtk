@@ -111,13 +111,11 @@ icon_loaded (GObject      *object,
   GdkPixbuf *pixbuf;
   int scale = 1;
 
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
-       /* we need a run-time check for the backingScaleFactor selector because we
-        * may be compiling on a 10.7 framework, but targeting a 10.6 one
-        */
-      if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)])
-        scale = roundf ([[NSScreen mainScreen] backingScaleFactor]);
-#endif
+  /* we need a run-time check for the backingScaleFactor selector because we
+   * may be compiling on a 10.7 framework, but targeting a 10.6 one
+   */
+  if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)])
+    scale = roundf ([[NSScreen mainScreen] backingScaleFactor]);
 
   pixbuf = gtk_icon_load_symbolic_finish (icon, result, NULL, &error);
 
@@ -297,13 +295,12 @@ icon_loaded (GObject      *object,
 
       theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
 
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_7_AND_LATER
        /* we need a run-time check for the backingScaleFactor selector because we
         * may be compiling on a 10.7 framework, but targeting a 10.6 one
         */
       if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)])
         scale = roundf ([[NSScreen mainScreen] backingScaleFactor]);
-#endif
+
       icon = gtk_icon_theme_lookup_by_gicon (theme, icon, ICON_SIZE, scale, 0);
 
       if (icon != NULL)
