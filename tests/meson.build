@@ -138,6 +138,12 @@ if os_linux
   ]
 endif
 
+if os_win32
+  gtk_tests += [
+    ['testd3d12', ['testd3d12.c', 'gtkclipper.c']],
+  ]
+endif
+
 if x11_enabled
   gtk_tests += [['testerrors']]
 endif
