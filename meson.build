@@ -99,7 +99,7 @@ gtk_api_version = '4.0'
 module_suffix = []
 # GModule requires file extension to be .so, not .dylib on Mac.
 # https://gitlab.gnome.org/GNOME/glib/issues/520
-if ['darwin', 'ios'].contains(host_machine.system())
+if host_machine.system() == 'darwin'
   module_suffix = 'so'
 endif
 
