@@ -1,7 +1,7 @@
 [wrap-git]
 directory=gstreamer
 url=https://gitlab.freedesktop.org/gstreamer/gstreamer.git
-revision=1.24
+revision=main
 depth=1
 
 [provide]
