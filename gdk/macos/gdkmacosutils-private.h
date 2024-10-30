@@ -43,31 +43,13 @@ static inline NSPoint
 convert_nspoint_from_screen (NSWindow *window,
                              NSPoint   point)
 {
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_15_AND_LATER
   return [window convertPointFromScreen:point];
-#else
-  /* Apple documentation claims that convertPointFromScreen is available
-   * on 10.12+. However, that doesn't seem to be the case when using it.
-   * Instead, we'll just use it on modern 10.15 systems and fallback to
-   * converting using rects on older systems.
-   */
-  return [window convertRectFromScreen:NSMakeRect (point.x, point.y, 0, 0)].origin;
-#endif
 }
 
 static inline NSPoint
 convert_nspoint_to_screen (NSWindow *window,
                            NSPoint   point)
 {
-#ifdef AVAILABLE_MAC_OS_X_VERSION_10_15_AND_LATER
   return [window convertPointToScreen:point];
-#else
-  /* Apple documentation claims that convertPointToScreen is available
-   * on 10.12+. However, that doesn't seem to be the case when using it.
-   * Instead, we'll just use it on modern 10.15 systems and fallback to
-   * converting using rects on older systems.
-   */
-  return [window convertRectToScreen:NSMakeRect (point.x, point.y, 0, 0)].origin;
-#endif
 }
 
