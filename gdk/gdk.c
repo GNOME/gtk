@@ -132,6 +132,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "selection",       GDK_DEBUG_SELECTION, "Information about selections" },
   { "clipboard",       GDK_DEBUG_CLIPBOARD, "Information about clipboards" },
   { "dmabuf",          GDK_DEBUG_DMABUF, "Information about dmabuf buffers" },
+  { "d3d12",           GDK_DEBUG_D3D12, "Information about Direct3D12" },
   { "offload",         GDK_DEBUG_OFFLOAD, "Information about subsurfaces and graphics offload" },
 
   { "linear",          GDK_DEBUG_LINEAR, "Enable linear rendering" },
