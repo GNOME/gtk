@@ -53,11 +53,18 @@ if have_egl
   gdk_win32_sources += ['gdkglcontext-win32-egl.c']
 endif
 
+d3d12_dep = [
+  cc.find_library('d3d12'),
+  cc.find_library('dxgi'),
+  dependency('DirectX-Headers', version: '>= 1.611'),
+]
+
 gdk_win32_deps = [
   pangowin32_dep, # FIXME
   cc.find_library('hid'),
   cc.find_library('opengl32'),
   cc.find_library('shcore'),
+  d3d12_dep,
 ]
 
 libgdk_win32 = static_library('gdk-win32',
