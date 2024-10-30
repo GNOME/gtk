@@ -37,20 +37,21 @@ typedef enum {
   GDK_DEBUG_SELECTION       = 1 <<  9,
   GDK_DEBUG_CLIPBOARD       = 1 << 10,
   GDK_DEBUG_DMABUF          = 1 << 11,
-  GDK_DEBUG_OFFLOAD         = 1 << 12,
+  GDK_DEBUG_D3D12           = 1 << 12,
+  GDK_DEBUG_OFFLOAD         = 1 << 13,
 
   /* flags below are influencing behavior */
-  GDK_DEBUG_LINEAR          = 1 << 13,
-  GDK_DEBUG_HDR             = 1 << 14,
-  GDK_DEBUG_PORTALS         = 1 << 15,
-  GDK_DEBUG_NO_PORTALS      = 1 << 16,
-  GDK_DEBUG_GL_NO_FRACTIONAL= 1 << 17,
-  GDK_DEBUG_FORCE_OFFLOAD   = 1 << 18,
-  GDK_DEBUG_GL_PREFER_GL    = 1 << 19,
-  GDK_DEBUG_GL_DEBUG        = 1 << 20,
-  GDK_DEBUG_DEFAULT_SETTINGS= 1 << 21,
-  GDK_DEBUG_HIGH_DEPTH      = 1 << 22,
-  GDK_DEBUG_NO_VSYNC        = 1 << 23,
+  GDK_DEBUG_LINEAR          = 1 << 14,
+  GDK_DEBUG_HDR             = 1 << 15,
+  GDK_DEBUG_PORTALS         = 1 << 16,
+  GDK_DEBUG_NO_PORTALS      = 1 << 17,
+  GDK_DEBUG_GL_NO_FRACTIONAL= 1 << 18,
+  GDK_DEBUG_FORCE_OFFLOAD   = 1 << 19,
+  GDK_DEBUG_GL_PREFER_GL    = 1 << 20,
+  GDK_DEBUG_GL_DEBUG        = 1 << 21,
+  GDK_DEBUG_DEFAULT_SETTINGS= 1 << 22,
+  GDK_DEBUG_HIGH_DEPTH      = 1 << 23,
+  GDK_DEBUG_NO_VSYNC        = 1 << 24,
 } GdkDebugFlags;
 
 typedef enum {
