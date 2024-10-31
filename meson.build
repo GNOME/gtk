@@ -435,7 +435,7 @@ endif
 
 pangocairo_dep    = dependency('pangocairo', version: pango_req)
 pixbuf_dep        = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
-                               default_options: ['png=enabled', 'jpeg=enabled', 'builtin_loaders=png,jpeg', 'man=false'])
+                               default_options: ['png=enabled', 'jpeg=enabled', 'gif=enabled', 'builtin_loaders=all', 'man=false'])
 png_dep           = dependency('libpng', 'png')
 tiff_dep          = dependency('libtiff-4', 'tiff')
 jpeg_dep          = dependency('libjpeg', 'jpeg')

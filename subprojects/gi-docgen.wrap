@@ -7,3 +7,4 @@ depth = 1
 
 [provide]
 program_names = gi-docgen
+gi-docgen = dummy_dep
