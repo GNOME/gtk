@@ -95,6 +95,29 @@ gboolean   _gdk_modal_blocked       (GdkSurface *surface);
 gboolean gdk_win32_ensure_com (void);
 gboolean gdk_win32_ensure_ole (void);
 
+/*
+ * gdk_win32_com_clear:
+ * @com_ptr: pointer to a COM object pointer
+ * 
+ * Clears a reference to a COM object.
+ * 
+ * `com_ptr` must not be `NULL`.
+ * 
+ * If the reference is `NULL` then this function does nothing.
+ * Otherwise, the reference count of the object is decreased
+ * and the pointer is set to NULL.
+ * 
+ * Think of this function like g_clear_object() but for COM objects.
+ */
+#define gdk_win32_com_clear(com_ptr) \
+G_STMT_START {\
+  if (*(com_ptr)) \
+    { \
+      (*(com_ptr))->lpVtbl->Release (*(com_ptr)); \
+      *(com_ptr) = NULL; \
+    } \
+}G_STMT_END
+
 void   _gdk_win32_print_dc             (HDC          hdc);
 
 char *_gdk_win32_surface_state_to_string (GdkToplevelState state);
