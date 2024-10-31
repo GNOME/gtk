@@ -23,9 +23,12 @@
 #include "gdkcolorstateprivate.h"
 #include "gdkd3d12texturebuilder.h"
 #include "gdkdxgiformatprivate.h"
+#include "gdkglcontextprivate.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdkprivate-win32.h"
 #include "gdktextureprivate.h"
+
+#include <epoxy/gl.h>
 
 /**
  * GdkD3D12Texture:
@@ -408,4 +411,91 @@ out:
 
   G_UNLOCK (handle_creation);
   return result;
+}
+
+/*
+ * gdk_d3d12_texture_import_gl:
+ * @self: texture to import into GL
+ * @context: GL context to use for the import. The context
+ *   must be the current context.
+ * @out_mem_id: (out): out result for the memory object
+ *   created during the import. See GL_EXT_memory_object_win32
+ *   for details.
+ * 
+ * Imports the given D3D12 texture into the given OpenGL
+ * context.
+ * 
+ * This function binds `GL_TEXTURE_2D` during the import.
+ * 
+ * Returns: The newly created texture or 0 on failure.
+ */
+guint
+gdk_d3d12_texture_import_gl (GdkD3D12Texture *self,
+                             GdkGLContext    *context,
+                             guint           *out_mem_id)
+{
+  GdkTexture *texture = GDK_TEXTURE (self);
+  GLuint tex_id, mem_id;
+  D3D12_RESOURCE_DESC desc;
+  HANDLE handle;
+  GLenum gl_internal_format;
+  GLenum gl_error;
+
+  /* We assume that the context is current, the caller needs to juggle that */
+  g_assert (gdk_gl_context_get_current () == context);
+
+  if (!gdk_gl_context_has_feature (context, GDK_GL_FEATURE_EXTERNAL_OBJECTS_WIN32))
+    {
+      GDK_DEBUG (D3D12, "Not importing %ux%u texture, EXT_external_objects_win32 is not supported",
+                 texture->width, texture->height);
+      return 0;
+    }
+
+  ID3D12Resource_GetDesc (self->resource, &desc);
+
+  gl_internal_format = gdk_dxgi_format_get_gl_format (desc.Format);
+  if (gl_internal_format == 0)
+    {
+      GDK_DEBUG (D3D12, "Not importing %ux%u texture, no matching GL format for DGI format %u",
+                 texture->width, texture->height,
+                 desc.Format);
+      return 0;
+    }
+
+  handle = gdk_d3d12_texture_get_resource_handle (self);
+  if (!handle)
+    return 0;
+
+  GDK_DEBUG (D3D12, "Attempting to import %ux%u texture",
+             texture->width, texture->height);
+
+  glCreateMemoryObjectsEXT (1, &mem_id);
+  glImportMemoryWin32HandleEXT (mem_id,
+                                0,
+                                GL_HANDLE_TYPE_D3D12_RESOURCE_EXT,
+                                handle);
+
+  glGenTextures (1, &tex_id);
+  glBindTexture (GL_TEXTURE_2D, tex_id);
+  glTexStorageMem2DEXT (GL_TEXTURE_2D,
+                        desc.MipLevels,
+                        gl_internal_format,
+                        desc.Width,
+                        desc.Height,
+                        mem_id,
+                        0);
+
+  gl_error = glGetError ();
+  if (gl_error != GL_NO_ERROR)
+    {
+      GDK_DEBUG (D3D12, "Failed to import %ux%u texture, got GL error %u",
+                 texture->width, texture->height,
+                 gl_error);
+      glDeleteTextures (1, &tex_id);
+      return 0;
+    }
+
+  *out_mem_id = mem_id;
+
+  return tex_id;
 }
