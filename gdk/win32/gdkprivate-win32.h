@@ -53,8 +53,6 @@
 #define GDK_DEBUG_EVENTS_OR_INPUT (GDK_DEBUG_EVENTS|GDK_DEBUG_INPUT)
 #define GDK_DEBUG_MISC_OR_EVENTS (GDK_DEBUG_MISC|GDK_DEBUG_EVENTS)
 
-GdkWin32Screen *GDK_SURFACE_SCREEN(GObject *win);
-
 /* Use this for hWndInsertAfter (2nd argument to SetWindowPos()) if
  * SWP_NOZORDER flag is used. Otherwise it's unobvious why a particular
  * argument is used. Using NULL is misleading, because
