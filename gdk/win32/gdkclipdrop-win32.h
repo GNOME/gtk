@@ -113,12 +113,6 @@ typedef enum _GdkWin32CFIndex GdkWin32CFIndex;
 typedef struct _GdkWin32Clipdrop GdkWin32Clipdrop;
 typedef struct _GdkWin32ClipdropClass GdkWin32ClipdropClass;
 
-typedef BOOL (WINAPI * GetUpdatedClipboardFormatsFunc)(
-  _Out_ PUINT lpuiFormats,
-  _In_  UINT  cFormats,
-  _Out_ PUINT pcFormatsOut
-);
-
 /* This object is just a sink to hold all the clipboard- and dnd-related data
  * that otherwise would be in global variables.
  */
@@ -147,14 +141,6 @@ struct _GdkWin32Clipdrop
   /* A format-keyed hash table of GArrays of GdkAtoms describing compatibility contentformats for a w32format */
   GHashTable       *compatibility_contentformats;
 
-  /* By all rights we should be able to just use this function
-   * normally, as our target platform is Vista-or-later.
-   * This pointer is manually retrieved only to allow
-   * GTK to be compiled with old MinGW versions, which
-   * don't have GetUpdatedClipboardFormats in the import libs.
-   */
-  GetUpdatedClipboardFormatsFunc GetUpdatedClipboardFormats;
-
   /* The thread that tries to open the clipboard and then
    * do stuff with it. Since clipboard opening can
    * fail, we split the code into a thread, and let
@@ -162,6 +148,12 @@ struct _GdkWin32Clipdrop
    * the operation times out.
    */
   GThread          *clipboard_open_thread;
+
+  /* The main loop run in the clipboard thread.
+   * When we want to communicate with the thread, we just add
+   * tasks to it via this context.
+   */
+  GMainContext     *clipboard_main_context;
 
   /* Our primary means of communicating with the thread.
    * The communication is one-way only - the thread replies
@@ -176,13 +168,6 @@ struct _GdkWin32Clipdrop
    * to render the data.
    */
   GAsyncQueue      *clipboard_render_queue;
-
-  /* Window handle for the clipboard surface that we
-   * receive from the clipboard thread. We use that
-   * to wake up the clipboard surface main loop by
-   * posting a message to it.
-   */
-  HWND              clipboard_hwnd;
 
   /* The thread that calls DoDragDrop (), which would
    * normally block our main thread, as it runs its own

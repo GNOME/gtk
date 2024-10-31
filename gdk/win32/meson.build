@@ -33,6 +33,7 @@ gdk_win32_sources = gdk_win32_public_sources + files([
   'gdkvulkancontext-win32.c',
   'gdkwin32cursor.h',
   'gdkwin32display.h',
+  'gdkwin32messagesource.c',
   'gdkwin32keys.h',
 ])
 
