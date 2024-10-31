@@ -89,6 +89,7 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
           image = gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                 texture,
                                                 gdk_gl_texture_get_id (gl_texture),
+                                                0,
                                                 FALSE,
                                                 gdk_gl_texture_has_mipmap (gl_texture) ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) : 0);
          
@@ -115,6 +116,7 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
           return gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                texture,
                                                tex_id,
+                                               0,
                                                TRUE,
                                                (external ? GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT : 0));
         }
