@@ -465,6 +465,13 @@ gstgl_dep         = dependency('gstreamer-gl-1.0', version: gstreamer_req,
                                required: get_option('media-gstreamer'))
 gstallocators_dep = dependency('gstreamer-allocators-1.0', version: gstreamer_req,
                                required: get_option('media-gstreamer'))
+if os_win32
+  gstd3d12_dep    = dependency('gstreamer-d3d12-1.0', version: gstreamer_req,
+                                   required: get_option('media-gstreamer'))
+else
+  gstd3d12_dep = dependency('', required: false)
+endif
+
 
 fontconfig_dep = [] # only used in x11 backend
 
