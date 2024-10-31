@@ -107,6 +107,8 @@ const GdkDebugKey gdk_gl_feature_keys[] = {
   { "debug", GDK_GL_FEATURE_DEBUG, "GL_KHR_debug" },
   { "base-instance", GDK_GL_FEATURE_BASE_INSTANCE, "GL_ARB_base_instance" },
   { "buffer-storage", GDK_GL_FEATURE_BUFFER_STORAGE, "GL_EXT_buffer_storage" },
+  { "external-objects", GDK_GL_FEATURE_EXTERNAL_OBJECTS, "GL_EXT_memory_object and GL_EXT_semaphore"},
+  { "external-objects-win32", GDK_GL_FEATURE_EXTERNAL_OBJECTS_WIN32, "GL_EXT_memory_object_win32 and GL_EXT_semaphore_win32" },
 };
 
 typedef struct _GdkGLContextPrivate GdkGLContextPrivate;
@@ -1694,6 +1696,16 @@ gdk_gl_context_check_features (GdkGLContext *context)
       epoxy_has_gl_extension ("GL_ARB_buffer_storage"))
     features |= GDK_GL_FEATURE_BUFFER_STORAGE;
 
+  if (epoxy_has_gl_extension ("GL_EXT_memory_object") &&
+      epoxy_has_gl_extension ("GL_EXT_semaphore"))
+    {
+      features |= GDK_GL_FEATURE_EXTERNAL_OBJECTS;
+
+      if (epoxy_has_gl_extension ("GL_EXT_memory_object_win32") &&
+          epoxy_has_gl_extension ("GL_EXT_semaphore_win32"))
+        features |= GDK_GL_FEATURE_EXTERNAL_OBJECTS_WIN32;
+    }
+
   return features;
 }
 
@@ -1735,6 +1747,10 @@ gdk_gl_context_check_extensions (GdkGLContext *context)
       "certain OpenGL extensions.\n",
       gdk_gl_feature_keys,
       G_N_ELEMENTS (gdk_gl_feature_keys));
+
+  /* handle feature dependencies */
+  if (disabled_features & GDK_GL_FEATURE_EXTERNAL_OBJECTS)
+    disabled_features |= GDK_GL_FEATURE_EXTERNAL_OBJECTS_WIN32;
 
   priv->features = supported_features & ~disabled_features;
 
