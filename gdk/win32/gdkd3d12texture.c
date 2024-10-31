@@ -45,6 +45,7 @@ struct _GdkD3D12Texture
   GdkTexture parent_instance;
 
   ID3D12Resource *resource;
+  HANDLE resource_handle;
 
   GDestroyNotify destroy;
   gpointer data;
@@ -70,6 +71,15 @@ static void
 gdk_d3d12_texture_dispose (GObject *object)
 {
   GdkD3D12Texture *self = GDK_D3D12_TEXTURE (object);
+
+  if (self->resource_handle)
+    {
+      if (G_UNLIKELY (!CloseHandle (self->resource_handle)))
+        {
+          g_warning ("Failed to close handle: %s", g_win32_error_message (GetLastError ()));
+        }
+      self->resource_handle = NULL;
+    }
 
   gdk_win32_com_clear (&self->resource);
 
@@ -344,4 +354,58 @@ gdk_d3d12_texture_new_from_builder (GdkD3D12TextureBuilder *builder,
                        "d3d12 support disabled at compile-time.");
   return NULL;
 #endif
+}
+
+G_LOCK_DEFINE_STATIC(handle_creation);
+  
+HANDLE
+gdk_d3d12_texture_get_resource_handle (GdkD3D12Texture *self)
+{
+  ID3D12Device *device = NULL;
+  D3D12_HEAP_FLAGS heap_flags;
+  HANDLE result;
+  HRESULT hr;
+  
+  result = g_atomic_pointer_get (&self->resource_handle);
+  if (result)
+    return result;
+  
+  G_LOCK (handle_creation);
+
+  result = g_atomic_pointer_get (&self->resource_handle);
+  if (result)
+    goto out;
+
+  if (FAILED (ID3D12Resource_GetHeapProperties (self->resource, NULL, &heap_flags)) || 
+      (heap_flags & D3D12_HEAP_FLAG_SHARED == 0))
+    {
+      GDK_DEBUG (D3D12, "Cannot export handle, heap is not shared");
+      goto out;
+    }
+
+  if (FAILED (ID3D12Resource_GetDevice (self->resource,
+                                        &IID_ID3D12Device,
+                                        (void **) &device)))
+    goto out;
+
+  hr = ID3D12Device_CreateSharedHandle (device,
+                                        (ID3D12DeviceChild *)self->resource,
+                                        NULL,
+                                        GENERIC_ALL,
+                                        NULL,
+                                        &result);
+  if (FAILED (hr))
+    {
+      GDK_DEBUG (D3D12, "Failed to create shared handle for texture: %s",
+                 g_win32_error_message (hr));
+      goto out;
+    }
+
+  g_atomic_pointer_set (&self->resource_handle, result);
+
+out:
+  gdk_win32_com_clear (&device);
+
+  G_UNLOCK (handle_creation);
+  return result;
 }
