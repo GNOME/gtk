@@ -8,7 +8,7 @@ extra_c_args += common_cflags
 if gstplayer_dep.found() and gstgl_dep.found() and gstallocators_dep.found()
   media_backends += 'gstreamer'
   cdata.set('HAVE_GSTREAMER', 1)
-  media_gst_deps = [ libm, libgtk_dep, gstplayer_dep, gstgl_dep, gstallocators_dep ]
+  media_gst_deps = [ libm, libgtk_dep, gstplayer_dep, gstgl_dep, gstallocators_dep, gstd3d12_dep ]
 
   shared_module('media-gstreamer',
     sources: [
