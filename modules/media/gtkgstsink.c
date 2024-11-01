@@ -219,7 +219,7 @@ gtk_gst_sink_get_caps (GstBaseSink *bsink,
     {
       GdkDmabufFormats *formats = gdk_display_get_dmabuf_formats (self->gdk_display);
 
-      if (formats)
+      if (formats && gdk_dmabuf_formats_get_n_formats (formats) > 0)
         {
           tmp = gst_caps_from_string (DMABUF_TEXTURE_CAPS);
           add_drm_formats_and_modifiers (tmp, formats);
