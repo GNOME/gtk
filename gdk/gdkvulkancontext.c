@@ -566,7 +566,6 @@ physical_device_supports_extension (VkPhysicalDevice  device,
 {
   VkExtensionProperties *extensions;
   uint32_t n_device_extensions;
-  static gboolean first = TRUE;
 
   GDK_VK_CHECK (vkEnumerateDeviceExtensionProperties, device, NULL, &n_device_extensions, NULL);
 
