@@ -1,0 +1,42 @@
+/* establish proper bounds for the node */
+color {
+  bounds: 0 0 200 200;
+  color: black;
+}
+
+/* ensure the scissor is set */
+clip {
+  clip: 0 0 100 100;
+  /* Create a cip that does not intersect the scissor
+   * and will be taken verbatim.
+   * We now have a scissor and a clip that overlap,
+   * but neither contains the other
+   */
+  child: rounded-clip {
+    clip: 90.5 90.5 100 100 / 20;
+    child: container {
+      /* Guarantee the rounded-clip's bounds match
+       * its clip bounds.
+       */
+      color {
+        bounds: 0 0 200 200;
+        color: black;
+      }
+      /* Clip by a region that has these characteristics:
+       * 1. It does not intersect with the scissor above
+       * 2. It is not pixel-aligned, so it can't be
+       *    represented with a scissor.
+       * Code should properly detect (1).
+       */
+      clip {
+        clip: 100 100 55.5 55.5;
+        /* Draw a child that triggers "Clipping is broken" */
+        child: linear-gradient {
+          bounds: 0 0 200 200;
+          stops: 0 red, 0.1 green, 0.2 red, 0.3 blue, 0.4 yellow,
+                 0.5 blue, 0.6 white, 0.7 purple, 0.8 pink, 0.9 orange, 1.0 red;
+        }
+      }
+    }
+  }
+}
