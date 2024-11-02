@@ -31,6 +31,9 @@
 
 #ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
+#ifdef GDK_WINDOWING_WIN32
+#include <vulkan/vulkan_win32.h>
+#endif
 #endif
 
 G_BEGIN_DECLS
