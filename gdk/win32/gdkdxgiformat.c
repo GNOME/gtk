@@ -25,6 +25,9 @@ struct _GdkDXGIFormatTable
   GdkMemoryFormat memory_format_premultiplied;
   guint is_yuv :1;
   GLenum internal_format;
+#ifdef GDK_RENDERING_VULKAN
+  VkFormat vk_format;
+#endif
   GdkDXGIConvertFunc convert_func;
 };
 
@@ -61,6 +64,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32G32B32A32_TYPELESS] = {
@@ -68,6 +74,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32G32B32A32_FLOAT] = {
@@ -75,6 +84,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
     .is_yuv = FALSE,
     .internal_format = GL_RGBA32F,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_R32G32B32A32_SFLOAT,
+#endif
     .convert_func = default_convert_func
   },
   [DXGI_FORMAT_R32G32B32A32_UINT] = {
@@ -82,6 +94,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32G32B32A32_SINT] = {
@@ -89,6 +104,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32G32B32_TYPELESS] = {
@@ -96,6 +114,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32G32B32_FLOAT] = {
@@ -103,6 +124,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32G32B32_UINT] = {
@@ -110,6 +134,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32G32B32_SINT] = {
@@ -117,6 +144,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16G16B16A16_TYPELESS] = {
@@ -124,6 +154,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16G16B16A16_FLOAT] = {
@@ -131,6 +164,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
     .is_yuv = FALSE,
     .internal_format = GL_RGBA16F,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_R16G16B16A16_SFLOAT,
+#endif
     .convert_func = default_convert_func
   },
   [DXGI_FORMAT_R16G16B16A16_UNORM] = {
@@ -138,6 +174,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
     .is_yuv = FALSE,
     .internal_format = GL_RGBA16,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_R16G16B16A16_UNORM,
+#endif
     .convert_func = default_convert_func,
   },
   [DXGI_FORMAT_R16G16B16A16_UINT] = {
@@ -145,6 +184,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16G16B16A16_SNORM] = {
@@ -152,6 +194,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16G16B16A16_SINT] = {
@@ -159,6 +204,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32G32_TYPELESS] = {
@@ -166,6 +214,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32G32_FLOAT] = {
@@ -173,6 +224,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32G32_UINT] = {
@@ -180,6 +234,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32G32_SINT] = {
@@ -187,6 +244,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32G8X24_TYPELESS] = {
@@ -194,6 +254,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_D32_FLOAT_S8X24_UINT] = {
@@ -201,6 +264,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32_FLOAT_X8X24_TYPELESS] = {
@@ -208,6 +274,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_X32_TYPELESS_G8X24_UINT] = {
@@ -215,6 +284,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R10G10B10A2_TYPELESS] = {
@@ -222,6 +294,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R10G10B10A2_UNORM] = {
@@ -229,6 +304,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R10G10B10A2_UINT] = {
@@ -236,6 +314,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R11G11B10_FLOAT] = {
@@ -243,6 +324,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8G8B8A8_TYPELESS] = {
@@ -250,6 +334,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8G8B8A8_UNORM] = {
@@ -257,6 +344,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
     .is_yuv = FALSE,
     .internal_format = GL_RGBA8,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_R8G8B8A8_UNORM,
+#endif
     .convert_func = default_convert_func
   },
   [DXGI_FORMAT_R8G8B8A8_UNORM_SRGB] = {
@@ -264,6 +354,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8G8B8A8_UINT] = {
@@ -271,6 +364,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8G8B8A8_SNORM] = {
@@ -278,6 +374,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8G8B8A8_SINT] = {
@@ -285,6 +384,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16G16_TYPELESS] = {
@@ -292,6 +394,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16G16_FLOAT] = {
@@ -299,6 +404,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16G16_UNORM] = {
@@ -306,6 +414,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16G16_UINT] = {
@@ -313,6 +424,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16G16_SNORM] = {
@@ -320,6 +434,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16G16_SINT] = {
@@ -327,6 +444,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32_TYPELESS] = {
@@ -334,6 +454,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_D32_FLOAT] = {
@@ -341,6 +464,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32_FLOAT] = {
@@ -348,6 +474,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32_UINT] = {
@@ -355,6 +484,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R32_SINT] = {
@@ -362,6 +494,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R24G8_TYPELESS] = {
@@ -369,6 +504,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_D24_UNORM_S8_UINT] = {
@@ -376,6 +514,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R24_UNORM_X8_TYPELESS] = {
@@ -383,6 +524,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_X24_TYPELESS_G8_UINT] = {
@@ -390,6 +534,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8G8_TYPELESS] = {
@@ -397,6 +544,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8G8_UNORM] = {
@@ -404,6 +554,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8G8_UINT] = {
@@ -411,6 +564,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8G8_SNORM] = {
@@ -418,6 +574,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8G8_SINT] = {
@@ -425,6 +584,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16_TYPELESS] = {
@@ -432,6 +594,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16_FLOAT] = {
@@ -439,6 +604,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_D16_UNORM] = {
@@ -446,6 +614,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16_UNORM] = {
@@ -453,6 +624,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16_UINT] = {
@@ -460,6 +634,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16_SNORM] = {
@@ -467,6 +644,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R16_SINT] = {
@@ -474,6 +654,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8_TYPELESS] = {
@@ -481,6 +664,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8_UNORM] = {
@@ -488,6 +674,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8_UINT] = {
@@ -495,6 +684,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8_SNORM] = {
@@ -502,6 +694,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8_SINT] = {
@@ -509,6 +704,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_A8_UNORM] = {
@@ -516,6 +714,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R1_UNORM] = {
@@ -523,6 +724,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R9G9B9E5_SHAREDEXP] = {
@@ -530,6 +734,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_R8G8_B8G8_UNORM] = {
@@ -537,6 +744,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_G8R8_G8B8_UNORM] = {
@@ -544,6 +754,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC1_TYPELESS] = {
@@ -551,6 +764,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC1_UNORM] = {
@@ -558,6 +774,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC1_UNORM_SRGB] = {
@@ -565,6 +784,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC2_TYPELESS] = {
@@ -572,6 +794,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC2_UNORM] = {
@@ -579,6 +804,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC2_UNORM_SRGB] = {
@@ -586,6 +814,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC3_TYPELESS] = {
@@ -593,6 +824,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC3_UNORM] = {
@@ -600,6 +834,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC3_UNORM_SRGB] = {
@@ -607,6 +844,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC4_TYPELESS] = {
@@ -614,6 +854,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC4_UNORM] = {
@@ -621,6 +864,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC4_SNORM] = {
@@ -628,6 +874,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC5_TYPELESS] = {
@@ -635,6 +884,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC5_UNORM] = {
@@ -642,6 +894,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC5_SNORM] = {
@@ -649,6 +904,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_B5G6R5_UNORM] = {
@@ -656,6 +914,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_B5G5R5A1_UNORM] = {
@@ -663,6 +924,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_B8G8R8A8_UNORM] = {
@@ -670,6 +934,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
     .is_yuv = FALSE,
     .internal_format = GL_BGRA8_EXT,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_B8G8R8A8_UNORM,
+#endif
     .convert_func = default_convert_func
   },
   [DXGI_FORMAT_B8G8R8X8_UNORM] = {
@@ -677,6 +944,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_B8G8R8X8,
     .is_yuv = FALSE,
     .internal_format = GL_BGRA8_EXT,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_B8G8R8A8_UNORM,
+#endif
     .convert_func = default_convert_func
   },
   [DXGI_FORMAT_R10G10B10_XR_BIAS_A2_UNORM] = {
@@ -684,6 +954,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_B8G8R8A8_TYPELESS] = {
@@ -691,6 +964,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_B8G8R8A8_UNORM_SRGB] = {
@@ -698,6 +974,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_B8G8R8X8_TYPELESS] = {
@@ -705,6 +984,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_B8G8R8X8_UNORM_SRGB] = {
@@ -712,6 +994,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC6H_TYPELESS] = {
@@ -719,6 +1004,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC6H_UF16] = {
@@ -726,6 +1014,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC6H_SF16] = {
@@ -733,6 +1024,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC7_TYPELESS] = {
@@ -740,6 +1034,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC7_UNORM] = {
@@ -747,6 +1044,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_BC7_UNORM_SRGB] = {
@@ -754,6 +1054,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_AYUV] = {
@@ -761,6 +1064,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_Y410] = {
@@ -768,6 +1074,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_Y416] = {
@@ -775,6 +1084,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_NV12] = {
@@ -782,6 +1094,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_P010] = {
@@ -789,6 +1104,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_R16G16B16,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_P016] = {
@@ -796,6 +1114,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_420_OPAQUE] = {
@@ -803,6 +1124,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_YUY2] = {
@@ -810,6 +1134,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_Y210] = {
@@ -817,6 +1144,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_Y216] = {
@@ -824,6 +1154,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_NV11] = {
@@ -831,6 +1164,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_AI44] = {
@@ -838,6 +1174,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_IA44] = {
@@ -845,6 +1184,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_P8] = {
@@ -852,6 +1194,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_A8P8] = {
@@ -859,6 +1204,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_B4G4R4A4_UNORM] = {
@@ -866,6 +1214,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_P208] = {
@@ -873,6 +1224,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_V208] = {
@@ -880,6 +1234,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
   [DXGI_FORMAT_V408] = {
@@ -887,6 +1244,9 @@ static const GdkDXGIFormatTable format_table[] = {
     .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
     .is_yuv = FALSE,
     .internal_format = 0,
+#ifdef GDK_RENDERING_VULKAN
+    .vk_format = VK_FORMAT_UNDEFINED,
+#endif
     .convert_func = NULL
   },
 };
@@ -937,6 +1297,24 @@ gdk_dxgi_format_is_yuv (DXGI_FORMAT dxgi_format)
   return format_table[dxgi_format].is_yuv;
 }
 
+#ifdef GDK_RENDERING_VULKAN
+/* returns VK_FORMAT_UNDEFINED on error */
+VkFormat
+gdk_dxgi_format_get_vk_format (DXGI_FORMAT         dxgi_format,
+                               VkComponentMapping *out_swizzle)
+{
+  VkComponentMapping components = { VK_COMPONENT_SWIZZLE_R, VK_COMPONENT_SWIZZLE_G, VK_COMPONENT_SWIZZLE_B, VK_COMPONENT_SWIZZLE_A };
+
+  if (dxgi_format >= G_N_ELEMENTS (format_table))
+    return VK_FORMAT_UNDEFINED;
+
+  if (out_swizzle)
+    *out_swizzle = components;
+
+  return format_table[dxgi_format].vk_format;
+}
+#endif
+
 void
 gdk_dxgi_format_convert (DXGI_FORMAT      src_format,
                          gboolean         src_premultiplied,
@@ -958,4 +1336,3 @@ gdk_dxgi_format_convert (DXGI_FORMAT      src_format,
                                          dest_data, dest_stride, dest_color_state,
                                          width, height);
 }
-  

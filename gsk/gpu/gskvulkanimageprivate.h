@@ -5,6 +5,10 @@
 
 #include "gdk/gdkdmabufprivate.h"
 
+#ifdef GDK_WINDOWING_WIN32
+#include <gdk/win32/gdkwin32.h>
+#endif
+
 G_BEGIN_DECLS
 
 #define GSK_TYPE_VULKAN_IMAGE (gsk_vulkan_image_get_type ())
@@ -46,6 +50,12 @@ GskGpuImage *           gsk_vulkan_image_new_for_dmabuf                 (GskVulk
                                                                          gboolean                premultiplied);
 GdkTexture *            gsk_vulkan_image_to_dmabuf_texture              (GskVulkanImage         *self,
                                                                          GdkColorState          *color_state);
+#endif
+#ifdef GDK_WINDOWING_WIN32
+GskGpuImage *           gsk_vulkan_image_new_for_d3d12resource          (GskVulkanDevice        *device,
+                                                                         ID3D12Resource         *resource,
+                                                                         HANDLE                  resource_handle,
+                                                                         gboolean                premultiplied);
 #endif
 
 guchar *                gsk_vulkan_image_get_data                       (GskVulkanImage         *self,
