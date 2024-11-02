@@ -11,6 +11,7 @@ GdkTexture *            gdk_d3d12_texture_new_from_builder              (GdkD3D1
                                                                          gpointer                data,
                                                                          GError                **error);
 
+ID3D12Resource *        gdk_d3d12_texture_get_resource                  (GdkD3D12Texture        *self);
 HANDLE                  gdk_d3d12_texture_get_resource_handle           (GdkD3D12Texture        *self);
 
 guint                   gdk_d3d12_texture_import_gl                     (GdkD3D12Texture        *self,
