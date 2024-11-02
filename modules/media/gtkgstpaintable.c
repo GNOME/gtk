@@ -28,6 +28,10 @@
 
 #include <math.h>
 
+#ifdef GDK_WINDOWING_WIN32
+#include <gdk/win32/gdkwin32.h>
+#endif
+
 struct _GtkGstPaintable
 {
   GObject parent_instance;
@@ -238,6 +242,30 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
 
   g_object_get (GTK_GST_SINK (sink), "uses-gl", &uses_gl, NULL);
 
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_WIN32_DISPLAY (display))
+    {
+      GstElement *bin, *convert;
+      GstPad *pad, *ghostpad;
+      gboolean res = TRUE;
+      
+      convert = gst_element_factory_make ("d3d12convert", NULL);
+      if (convert)
+      {
+        bin = gst_bin_new ("d3d12sinkbin");
+        res &= gst_bin_add (GST_BIN (bin), convert);
+        res &= gst_bin_add (GST_BIN (bin), sink);
+        res &= gst_element_link_pads (convert, "src", sink, "sink");
+        pad = gst_element_get_static_pad (convert, "sink");
+        ghostpad = gst_ghost_pad_new ("sink", pad);
+        gst_element_add_pad (bin, ghostpad);
+        gst_object_unref (pad);
+        g_assert (res);
+        sink = bin;
+      }
+    }
+  else
+#endif
   if (uses_gl)
     {
       GstElement *glsinkbin;
