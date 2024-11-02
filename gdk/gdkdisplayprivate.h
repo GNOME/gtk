@@ -47,11 +47,12 @@ typedef struct _GdkDisplayClass GdkDisplayClass;
 
 typedef enum {
   GDK_VULKAN_FEATURE_DMABUF                     = 1 << 0,
-  GDK_VULKAN_FEATURE_YCBCR                      = 1 << 1,
-  GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT           = 1 << 2,
-  GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT           = 1 << 3,
-  GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT        = 1 << 4,
-  GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE      = 1 << 5,
+  GDK_VULKAN_FEATURE_WIN32                      = 1 << 1,
+  GDK_VULKAN_FEATURE_YCBCR                      = 1 << 2,
+  GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT           = 1 << 3,
+  GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT           = 1 << 4,
+  GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT        = 1 << 5,
+  GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE      = 1 << 6,
 } GdkVulkanFeatures;
 
 #define GDK_VULKAN_N_FEATURES 6
