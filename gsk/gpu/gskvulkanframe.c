@@ -11,6 +11,10 @@
 #include "gdk/gdkglcontextprivate.h"
 #include "gdk/gdkgltextureprivate.h"
 
+#ifdef GDK_WINDOWING_WIN32
+#include "gdk/win32/gdkd3d12textureprivate.h"
+#endif
+
 #define GDK_ARRAY_NAME gsk_semaphores
 #define GDK_ARRAY_TYPE_NAME GskSemaphores
 #define GDK_ARRAY_ELEMENT_TYPE VkSemaphore
@@ -219,6 +223,23 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
                                                gdk_texture_get_height (texture),
                                                gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
                                                gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
+      if (image)
+        {
+          gsk_gpu_image_toggle_ref_texture (image, texture);
+          return image;
+        }
+    }
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_D3D12_TEXTURE (texture))
+    {
+      GdkD3D12Texture *d3d_texture = GDK_D3D12_TEXTURE (texture);
+      GskGpuImage *image;
+
+      image = gsk_vulkan_image_new_for_d3d12resource (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                      gdk_d3d12_texture_get_resource (d3d_texture),
+                                                      gdk_d3d12_texture_get_resource_handle (d3d_texture),
+                                                      gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_STRAIGHT);
       if (image)
         {
           gsk_gpu_image_toggle_ref_texture (image, texture);
