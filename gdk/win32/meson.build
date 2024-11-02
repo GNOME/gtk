@@ -21,6 +21,7 @@ gdk_win32_sources = gdk_win32_public_sources + files([
   'gdkdevice-win32.c',
   'gdkdevice-winpointer.c',
   'gdkdevice-wintab.c',
+  'gdkdxgiformat.c',
   'gdkdrop-win32.c',
   'gdkglcontext-win32-wgl-private.c',
   'gdkhdataoutputstream-win32.c',
