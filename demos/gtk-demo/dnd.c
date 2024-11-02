@@ -579,6 +579,8 @@ released_cb (GtkGesture *gesture,
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   child = gtk_widget_pick (widget, x, y, 0);
+  if (!child)
+    return;
   item = (CanvasItem *)gtk_widget_get_ancestor (child, canvas_item_get_type ());
   if (!item)
     return;
