@@ -355,7 +355,43 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
 #ifdef GDK_WINDOWING_WIN32
   if (gst_caps_features_contains (gst_caps_get_features (caps, 0), GST_CAPS_FEATURE_MEMORY_D3D12_MEMORY))
     {
-      gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, NULL);
+      GstD3D12Device *device;
+      
+      if (!gst_video_info_from_caps (&info, caps))
+        {
+          GST_DEBUG_OBJECT (self, "invalid caps specified");
+          return FALSE;
+        }
+
+      /* the normal size of a frame */
+      size = info.size;
+
+      if (need_pool &&
+          (device = gst_d3d12_device_new (0)))
+        {
+          pool = gst_d3d12_buffer_pool_new (device);
+  
+          config = gst_buffer_pool_get_config (pool);
+          gst_buffer_pool_config_set_params (config, caps, size, 2, 0);
+          gst_buffer_pool_config_add_option (config, GST_BUFFER_POOL_OPTION_VIDEO_META);
+
+          g_clear_object (&device);
+
+          if (!gst_buffer_pool_set_config (pool, config))
+            {
+              GST_DEBUG_OBJECT (bsink, "failed setting config");
+              gst_object_unref (pool);
+              return FALSE;
+            }          
+        }
+
+      /* we need at least 2 buffer because we hold on to the last one */
+      gst_query_add_allocation_pool (query, pool, size, 2, 0);
+      g_clear_object (&pool);
+
+      /* we also support various metadata */
+      gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, 0);
+
       return TRUE;
     }
 #endif
@@ -396,8 +432,7 @@ gtk_gst_sink_propose_allocation (GstBaseSink *bsink,
 
       /* we need at least 2 buffer because we hold on to the last one */
       gst_query_add_allocation_pool (query, pool, size, 2, 0);
-      if (pool)
-        gst_object_unref (pool);
+      g_clear_object (&pool);
 
       /* we also support various metadata */
       gst_query_add_allocation_meta (query, GST_VIDEO_META_API_TYPE, 0);
