@@ -1090,24 +1090,24 @@ static const GdkDXGIFormatTable format_table[] = {
     .convert_func = NULL
   },
   [DXGI_FORMAT_NV12] = {
-    .memory_format_straight = GDK_MEMORY_N_FORMATS,
-    .memory_format_premultiplied = GDK_MEMORY_N_FORMATS,
-    .is_yuv = FALSE,
+    .memory_format_straight = GDK_MEMORY_R8G8B8,
+    .memory_format_premultiplied = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .internal_format = 0,
 #ifdef GDK_RENDERING_VULKAN
-    .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_format = VK_FORMAT_G8_B8R8_2PLANE_420_UNORM,
 #endif
-    .convert_func = NULL
+    .convert_func = default_convert_func
   },
   [DXGI_FORMAT_P010] = {
     .memory_format_straight = GDK_MEMORY_R16G16B16,
     .memory_format_premultiplied = GDK_MEMORY_R16G16B16,
-    .is_yuv = FALSE,
+    .is_yuv = TRUE,
     .internal_format = 0,
 #ifdef GDK_RENDERING_VULKAN
-    .vk_format = VK_FORMAT_UNDEFINED,
+    .vk_format = VK_FORMAT_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16,
 #endif
-    .convert_func = NULL
+    .convert_func = default_convert_func,
   },
   [DXGI_FORMAT_P016] = {
     .memory_format_straight = GDK_MEMORY_N_FORMATS,
