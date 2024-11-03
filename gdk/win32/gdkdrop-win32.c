@@ -36,9 +36,6 @@
 #define INITGUID
 #endif
 
-/* For C-style COM wrapper macros */
-#define COBJMACROS
-
 #include "gdkdropprivate.h"
 
 #include "gdkdrag.h"

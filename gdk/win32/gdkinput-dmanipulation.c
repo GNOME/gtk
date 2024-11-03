@@ -28,7 +28,6 @@
 #endif
 #define WINVER 0x0603
 #define _WIN32_WINNT 0x0603
-#define COBJMACROS
 #include "config.h"
 
 #include <gdk/gdk.h>

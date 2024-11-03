@@ -19,8 +19,6 @@
 
 #include "config.h"
 
-#define COBJMACROS
-
 #include "gtkfilechoosernativeprivate.h"
 #include "gtknativedialogprivate.h"
 

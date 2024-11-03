@@ -267,9 +267,6 @@ Otherwise it's similar to how the clipboard works. Only the DnD server
 #include <string.h>
 #include <stdlib.h>
 
-/* For C-style COM wrapper macros */
-#define COBJMACROS
-
 /* for CIDA */
 #include <shlobj.h>
 

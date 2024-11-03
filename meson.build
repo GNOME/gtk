@@ -63,6 +63,7 @@ add_project_arguments('-D_GNU_SOURCE', language: 'c')
 if host_machine.system() == 'windows'
   add_project_arguments(['-DUNICODE',
                          '-D_UNICODE',
+                         '-DCOBJMACROS',
                          '-D_WIN32_WINNT=_WIN32_WINNT_WIN7'], language: 'c')
 endif
 

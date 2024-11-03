@@ -192,9 +192,6 @@
 #define INITGUID
 #endif
 
-/* For C-style COM wrapper macros */
-#define COBJMACROS
-
 #include "gdkdrag.h"
 #include "gdkprivate-win32.h"
 #include "gdkwin32.h"
