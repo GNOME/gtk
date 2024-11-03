@@ -477,7 +477,10 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       g_object_unref (builder);
 
       if (!texture)
-        GST_ERROR_OBJECT (self, "Failed to create dmabuf texture: %s", error->message);
+        {
+          GST_ERROR_OBJECT (self, "Failed to create dmabuf texture: %s", error->message);
+          g_error_free (error);
+        }
 
       *pixel_aspect_ratio = ((double) GST_VIDEO_INFO_PAR_N (&self->v_info) /
                              (double) GST_VIDEO_INFO_PAR_D (&self->v_info));
