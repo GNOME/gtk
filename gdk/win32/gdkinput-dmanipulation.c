@@ -37,6 +37,7 @@
 #include "gdkdevice-virtual.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-win32.h"
+#include "gdkprivate-win32.h"
 #include "gdkeventsprivate.h"
 #include "gdkseatdefaultprivate.h"
 #include "gdkinput-dmanipulation.h"
@@ -359,7 +360,7 @@ reset_viewport (IDirectManipulationViewport *viewport)
   HR_CHECK_GOTO (hr, failed);
 
 failed:
-  IUnknown_Release (content);
+  gdk_win32_com_clear (&content);
 }
 
 static void
@@ -391,8 +392,7 @@ gdk_win32_display_close_dmanip_manager (GdkDisplay *display)
     {
       IDirectManipulationManager *manager = GDK_DISPLAY_GET_DMANIP_MANAGER (display);
 
-      if (manager != NULL)
-        IUnknown_Release (manager);
+      gdk_win32_com_clear (&manager);
 
       g_clear_pointer (&GDK_WIN32_DISPLAY (display)->dmanip_items, g_free);
     }
@@ -451,8 +451,7 @@ create_viewport (GdkSurface *surface,
   return;
 
 failed:
-  if (handler)
-    IUnknown_Release (handler);
+  gdk_win32_com_clear (&handler);
 
   close_viewport (pViewport);
 }
