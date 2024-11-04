@@ -4,7 +4,8 @@ compare_render = executable('compare-render',
   c_args: common_cflags + ['-DGTK_COMPILATION'],
 )
 
-node_parser = executable('node-parser', 'node-parser.c',
+node_parser = executable('node-parser', 
+  [ 'node-parser.c', '../testutils.c' ],
   dependencies: libgtk_dep,
   c_args: common_cflags,
 )
