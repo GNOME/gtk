@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-24 12:06+0000\n"
-"PO-Revision-Date: 2024-04-28 15:13+0330\n"
+"POT-Creation-Date: 2024-09-29 13:26+0000\n"
+"PO-Revision-Date: 2024-11-04 13:20+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <translate@ifsug.org>\n"
 "Language: fa\n"
@@ -19,7 +19,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.4.4\n"
 
 #: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
 #: gdk/gdkglcontext.c:320 gdk/gdkseat.c:202 gdk/gdkseat.c:203
@@ -779,11 +779,11 @@ msgstr "این که موارد باید با شماره نشان داده شون
 
 #: gtk/deprecated/gtkstatusicon.c:234 gtk/gtkimage.c:256
 msgid "Pixbuf"
-msgstr "میانیگر پیکسل"
+msgstr "میانیگر تصدانه"
 
 #: gtk/deprecated/gtkstatusicon.c:235 gtk/gtkimage.c:257
 msgid "A GdkPixbuf to display"
-msgstr "میانیگر پیکسل برای نمایش"
+msgstr "میانیگر تصدانه برای نمایش"
 
 #: gtk/deprecated/gtkstatusicon.c:242 gtk/gtkimage.c:270
 #: gtk/gtkrecentmanager.c:289
@@ -1073,7 +1073,7 @@ msgstr "اندازهٔ نقشک"
 
 #: gtk/deprecated/gtktrayicon-x11.c:179
 msgid "The pixel size that icons should be forced to, or zero"
-msgstr "اندازهٔ پیکسلی که نقشک باید به آن اجبار شود. یا صفر"
+msgstr "اندازهٔ تصدانه‌ای که نقشک باید به آن اجبار شود. یا صفر"
 
 #: gtk/deprecated/gtkuimanager.c:463 gtk/gtkcombobox.c:1010
 msgid "Add tearoffs to menus"
@@ -1510,7 +1510,7 @@ msgstr "لایه‌گذاری سربرگ"
 
 #: gtk/gtkassistant.c:541
 msgid "Number of pixels around the header."
-msgstr "تعداد پیکسل‌ها دور سرایند."
+msgstr "تعداد تصدانه‌ها دور سرایند."
 
 #: gtk/gtkassistant.c:556
 msgid "Content Padding"
@@ -1518,7 +1518,7 @@ msgstr "فاصله‌دهی محتوا"
 
 #: gtk/gtkassistant.c:557
 msgid "Number of pixels around the content pages."
-msgstr "تعداد پیکسل‌ها دور صفحه‌های محتوا."
+msgstr "تعداد تصدانه‌ها دور صفحه‌های محتوا."
 
 #: gtk/gtkassistant.c:573
 msgid "Page type"
@@ -1791,7 +1791,7 @@ msgstr "فاصله‌گذاری تصویر"
 
 #: gtk/gtkbutton.c:627
 msgid "Spacing in pixels between the image and label"
-msgstr "فاصله‌گذاری بین تصویر و برچسب به پیکسل"
+msgstr "فاصله‌گذاری بین تصویر و برچسب به تصدانه"
 
 # naashenaakhte, naashenaas, naama'loom, naamoshakhkhas
 #: gtk/gtkcalendar.c:398
@@ -3355,7 +3355,7 @@ msgstr ""
 
 #: gtk/gtkentry.c:1137
 msgid "Secondary pixbuf"
-msgstr "میانگیر پیکسل ثانویه"
+msgstr "میانگیر تصدانهٔ ثانویه"
 
 #: gtk/gtkentry.c:1138
 msgid "Secondary pixbuf for the entry"
@@ -3857,11 +3857,11 @@ msgstr "برچسب لغو"
 msgid "The label on the cancel button"
 msgstr "برچسب دکمهٔ لغو"
 
-#: gtk/gtkfilechooserwidget.c:8674 gtk/gtkfilechooserwidget.c:8675
+#: gtk/gtkfilechooserwidget.c:8675 gtk/gtkfilechooserwidget.c:8676
 msgid "Search mode"
 msgstr "حالت جست‌وجو"
 
-#: gtk/gtkfilechooserwidget.c:8681 gtk/gtkfilechooserwidget.c:8682
+#: gtk/gtkfilechooserwidget.c:8682 gtk/gtkfilechooserwidget.c:8683
 #: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:592
 msgid "Subtitle"
 msgstr "زیرنویس"
@@ -4049,15 +4049,15 @@ msgstr ""
 msgid "A widget to display in place of the usual frame label"
 msgstr ""
 
-#: gtk/gtkgesture.c:879
+#: gtk/gtkgesture.c:888
 msgid "Number of points"
 msgstr "تعداد نقطه‌ها"
 
-#: gtk/gtkgesture.c:880
+#: gtk/gtkgesture.c:889
 msgid "Number of points needed to trigger the gesture"
 msgstr "تعداد نقطه‌های تحریک شدهٔ مورد نیاز برای ژست"
 
-#: gtk/gtkgesture.c:896 gtk/gtkgesture.c:897
+#: gtk/gtkgesture.c:905 gtk/gtkgesture.c:906
 msgid "GdkWindow to receive events about"
 msgstr ""
 
@@ -7998,7 +7998,7 @@ msgstr "حاشیهٔ بالا"
 
 #: gtk/gtktextview.c:906
 msgid "Height of the top margin in pixels"
-msgstr "بلندای حاشیهٔ بالایی به پیکسل"
+msgstr "بلندای حاشیهٔ بالایی به تصدانه"
 
 #: gtk/gtktextview.c:926
 msgid "Bottom Margin"
@@ -8006,7 +8006,7 @@ msgstr "حاشیهٔ پایینی"
 
 #: gtk/gtktextview.c:927
 msgid "Height of the bottom margin in pixels"
-msgstr "بلندای حاشیهٔ پایینی به پیکسل"
+msgstr "بلندای حاشیهٔ پایینی به تصدانه"
 
 #: gtk/gtktextview.c:950
 msgid "Cursor Visible"
@@ -8184,7 +8184,7 @@ msgstr "فاصله‌گذاری نقشک"
 
 #: gtk/gtktoolbutton.c:312
 msgid "Spacing in pixels between the icon and label"
-msgstr "فاصله‌گذاری بین نقشک و برچسب به پیکسل"
+msgstr "فاصله‌گذاری بین نقشک و برچسب به تصدانه"
 
 #: gtk/gtktoolitem.c:194
 msgid ""
