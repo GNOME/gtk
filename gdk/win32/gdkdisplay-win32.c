@@ -664,17 +664,11 @@ gdk_win32_display_beep (GdkDisplay *display)
 static void
 gdk_win32_display_flush (GdkDisplay * display)
 {
-  g_return_if_fail (display == gdk_display_get_default());
-
-  GdiFlush ();
 }
 
 static void
 gdk_win32_display_sync (GdkDisplay * display)
 {
-  g_return_if_fail (display == gdk_display_get_default());
-
-  GdiFlush ();
 }
 
 static void
