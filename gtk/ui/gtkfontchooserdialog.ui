@@ -2,6 +2,8 @@
 <interface domain="gtk40">
   <template class="GtkFontChooserDialog" parent="GtkDialog">
     <property name="title" translatable="yes">Select Font</property>
+    <property name="default-width" translatable="yes">400</property>
+    <property name="default-height" translatable="yes">500</property>
     <style>
       <class name="fontchooser"/>
     </style>
