@@ -25,7 +25,7 @@ for t in ${TESTS[*]}; do
 
   cd $OLDPWD
 
-  if diff -u "$expected" "$result" > "$diff"; then
+  if diff --strip-trailing-cr -u "$expected" "$result" > "$diff"; then
     echo "ok $I $name"
     rm "$diff"
   else

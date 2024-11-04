@@ -22,7 +22,7 @@ for t in ${TESTS[*]}; do
 
   $GTK_BUILDER_TOOL simplify $t 2>/dev/null >$result
 
-  if diff -u "$expected" "$result" > "$diff"; then
+  if diff --strip-trailing-cr -u "$expected" "$result" > "$diff"; then
     echo "ok $I $name"
     rm "$diff"
   else
@@ -35,7 +35,7 @@ for t in ${TESTS[*]}; do
   cp $t $result2
   $GTK_BUILDER_TOOL simplify --replace $result2 2>/dev/null
 
-  if diff -u "$expected" "$result2" > "$diff"; then
+  if diff --strip-trailing-cr -u "$expected" "$result2" > "$diff"; then
     echo "ok $I $name (--replace)"
     rm "$diff"
   else
