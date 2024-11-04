@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-10-25 11:40+0000\n"
-"PO-Revision-Date: 2024-10-25 18:19+0200\n"
+"POT-Creation-Date: 2024-11-04 02:54+0000\n"
+"PO-Revision-Date: 2024-11-04 18:38+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -603,81 +603,81 @@ msgstr "Ni mogoče naložiti podatkov slike TIFF"
 msgid "Reading data failed at row %d"
 msgstr "Ni mogoče pridobiti podatkov v vrstici %d"
 
-#: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:244
+#: gdk/macos/gdkmacospasteboard.c:206 gdk/wayland/gdkclipboard-wayland.c:244
 #: gdk/wayland/gdkdrop-wayland.c:205 gdk/wayland/gdkprimary-wayland.c:343
 #: gdk/win32/gdkdrop-win32.c:1019 gdk/win32/gdkdrop-win32.c:1068
 #: gdk/x11/gdkclipboard-x11.c:799 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "Ni najdenega skladnega zapisa za prenos."
 
-#: gdk/macos/gdkmacospasteboard.c:297
+#: gdk/macos/gdkmacospasteboard.c:292
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Odkodiranje vsebine vrste mime »%s« je spodletelo."
 
-#: gdk/win32/gdkclipdrop-win32.c:710
+#: gdk/win32/gdkclipdrop-win32.c:687
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
 "Ni mogoče pridobiti nadzora nad odložiščem. Ukaz OpenClipboard() je časovno "
 "potekel."
 
-#: gdk/win32/gdkclipdrop-win32.c:720
+#: gdk/win32/gdkclipdrop-win32.c:697
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Ni mogoče pridobiti nadzora nad odložiščem. Drug program je prej pridobil "
 "dostop."
 
-#: gdk/win32/gdkclipdrop-win32.c:734
+#: gdk/win32/gdkclipdrop-win32.c:711
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti nadzora nad odložiščem. Ukaz OpenClipboard() je "
 "spodletel: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:746
+#: gdk/win32/gdkclipdrop-win32.c:721
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti nadzora nad odložiščem. Ukaz EmptyClipboard() je "
 "spodletel: 0x%lx"
 
-#: gdk/win32/gdkclipdrop-win32.c:790
+#: gdk/win32/gdkclipdrop-win32.c:763
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je časovno "
 "potekel."
 
-#: gdk/win32/gdkclipdrop-win32.c:800 gdk/win32/gdkclipdrop-win32.c:831
+#: gdk/win32/gdkclipdrop-win32.c:773 gdk/win32/gdkclipdrop-win32.c:804
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Ni mogoče določiti podatkov odložišča. Drug program je prej pridobil dostop."
 
-#: gdk/win32/gdkclipdrop-win32.c:814
+#: gdk/win32/gdkclipdrop-win32.c:787
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
 "%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:866
+#: gdk/win32/gdkclipdrop-win32.c:839
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz GlobalLock(0x%p) je spodletel: "
 "0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:877
+#: gdk/win32/gdkclipdrop-win32.c:850
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz GlobalSize(0x%p) je spodletel: "
 "0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:890
+#: gdk/win32/gdkclipdrop-win32.c:863
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
@@ -685,21 +685,21 @@ msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Dodeljevanje %s bajtov v skladišče "
 "podatkov je spodletelo."
 
-#: gdk/win32/gdkclipdrop-win32.c:923
+#: gdk/win32/gdkclipdrop-win32.c:896
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je časovno "
 "potekel."
 
-#: gdk/win32/gdkclipdrop-win32.c:933
+#: gdk/win32/gdkclipdrop-win32.c:906
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Lastništvo nad odložiščem je "
 "spremenjeno."
 
-#: gdk/win32/gdkclipdrop-win32.c:943
+#: gdk/win32/gdkclipdrop-win32.c:916
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
@@ -707,21 +707,21 @@ msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Podatki so se spremenili, preden jih "
 "je bilo mogoče pridobiti."
 
-#: gdk/win32/gdkclipdrop-win32.c:960
+#: gdk/win32/gdkclipdrop-win32.c:931
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
 "%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:985
+#: gdk/win32/gdkclipdrop-win32.c:956
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ni najdenega skladnega zapisa za "
 "prenos."
 
-#: gdk/win32/gdkclipdrop-win32.c:995
+#: gdk/win32/gdkclipdrop-win32.c:966
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
@@ -1825,7 +1825,7 @@ msgstr "_Zapri"
 #. * suspend or screen locking, and the caller hasn't specified
 #. * a reason.
 #.
-#: gtk/gtkapplication-dbus.c:721 gtk/gtkapplication-dbus.c:763
+#: gtk/gtkapplication-dbus.c:724 gtk/gtkapplication-dbus.c:766
 msgid "Reason not specified"
 msgstr "Vzrok ni naveden"
 
@@ -2184,7 +2184,7 @@ msgid "Margins from Printer…"
 msgstr "Robovi pri tiskalniku …"
 
 #. And show the custom paper dialog
-#: gtk/print/gtkcustompaperunixdialog.c:377 gtk/print/gtkprintunixdialog.c:2978
+#: gtk/print/gtkcustompaperunixdialog.c:377 gtk/print/gtkprintunixdialog.c:2979
 msgid "Manage Custom Sizes"
 msgstr "Upravljanje poljubnih velikosti"
 
@@ -2307,7 +2307,7 @@ msgstr "Datoteka s tem imenom že obstaja."
 #: gtk/print/gtkprintunixdialog.c:685 gtk/print/gtkprintunixdialog.c:842
 #: gtk/gtkwindow.c:6211 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
-#: gtk/ui/gtkfontchooserdialog.ui:27
+#: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
 msgstr "_Prekliči"
 
@@ -2393,7 +2393,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "V primeru, da predmet izbrišete, bo trajno izgubljen."
 
 #: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5888 gtk/gtktext.c:6334 gtk/gtktextview.c:9237
+#: gtk/gtklabel.c:5888 gtk/gtktext.c:6334 gtk/gtktextview.c:9280
 msgid "_Delete"
 msgstr "_Izbriši"
 
@@ -2610,7 +2610,7 @@ msgid "Name"
 msgstr "Ime"
 
 #: gtk/gtkfilechooserwidget.c:7448 gtk/inspector/resource-list.ui:82
-#: gtk/ui/gtkfontchooserwidget.ui:218 gtk/ui/gtkfontchooserwidget.ui:387
+#: gtk/ui/gtkfontchooserwidget.ui:216 gtk/ui/gtkfontchooserwidget.ui:385
 msgid "Size"
 msgstr "Velikost"
 
@@ -2632,7 +2632,7 @@ msgid "Save a File"
 msgstr "Shrani datoteko"
 
 #: gtk/gtkfiledialog.c:822 gtk/ui/gtkappchooserdialog.ui:53
-#: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:32
+#: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:34
 msgid "_Select"
 msgstr "_Izberi"
 
@@ -2687,35 +2687,35 @@ msgctxt "Font feature value"
 msgid "Enable"
 msgstr "Omogoči"
 
-#: gtk/gtkfontchooserwidget.c:2403
+#: gtk/gtkfontchooserwidget.c:2404
 msgid "Default"
 msgstr "Privzeto"
 
-#: gtk/gtkfontchooserwidget.c:2465
+#: gtk/gtkfontchooserwidget.c:2466
 msgid "Ligatures"
 msgstr "Ligature"
 
-#: gtk/gtkfontchooserwidget.c:2466
+#: gtk/gtkfontchooserwidget.c:2467
 msgid "Letter Case"
 msgstr "Črke"
 
-#: gtk/gtkfontchooserwidget.c:2467
+#: gtk/gtkfontchooserwidget.c:2468
 msgid "Number Case"
 msgstr "Številke"
 
-#: gtk/gtkfontchooserwidget.c:2468
+#: gtk/gtkfontchooserwidget.c:2469
 msgid "Number Spacing"
 msgstr "Številski razmiki"
 
-#: gtk/gtkfontchooserwidget.c:2469
+#: gtk/gtkfontchooserwidget.c:2470
 msgid "Fractions"
 msgstr "Ulomki"
 
-#: gtk/gtkfontchooserwidget.c:2470
+#: gtk/gtkfontchooserwidget.c:2471
 msgid "Style Variations"
 msgstr "Različice sloga"
 
-#: gtk/gtkfontchooserwidget.c:2472
+#: gtk/gtkfontchooserwidget.c:2473
 msgid "Character Variations"
 msgstr "Različice znakov"
 
@@ -2732,19 +2732,19 @@ msgstr "Zapri"
 msgid "Close the infobar"
 msgstr "Zapri vrstico podrobnosti"
 
-#: gtk/gtklabel.c:5885 gtk/gtktext.c:6322 gtk/gtktextview.c:9225
+#: gtk/gtklabel.c:5885 gtk/gtktext.c:6322 gtk/gtktextview.c:9268
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtklabel.c:5886 gtk/gtktext.c:6326 gtk/gtktextview.c:9229
+#: gtk/gtklabel.c:5886 gtk/gtktext.c:6326 gtk/gtktextview.c:9272
 msgid "_Copy"
 msgstr "_Kopiraj"
 
-#: gtk/gtklabel.c:5887 gtk/gtktext.c:6330 gtk/gtktextview.c:9233
+#: gtk/gtklabel.c:5887 gtk/gtktext.c:6330 gtk/gtktextview.c:9276
 msgid "_Paste"
 msgstr "Pr_ilepi"
 
-#: gtk/gtklabel.c:5893 gtk/gtktext.c:6343 gtk/gtktextview.c:9258
+#: gtk/gtklabel.c:5893 gtk/gtktext.c:6343 gtk/gtktextview.c:9301
 msgid "Select _All"
 msgstr "Izberi _vse"
 
@@ -2756,7 +2756,7 @@ msgstr "_Odpri povezavo"
 msgid "Copy _Link Address"
 msgstr "Kopiraj _naslov povezave"
 
-#: gtk/gtklabel.c:5946 gtk/gtktext.c:2851 gtk/gtktextview.c:9307
+#: gtk/gtklabel.c:5946 gtk/gtktext.c:2851 gtk/gtktextview.c:9350
 msgid "Context menu"
 msgstr "Vsebinski meni"
 
@@ -3430,12 +3430,12 @@ msgstr "Najverjetnejši razlog je, da začasne datoteke ni mogoče ustvariti"
 #. window
 #: gtk/print/gtkprintoperation-portal.c:273
 #: gtk/print/gtkprintoperation-portal.c:603
-#: gtk/print/gtkprintoperation-portal.c:672 gtk/print/gtkprintunixdialog.c:3018
+#: gtk/print/gtkprintoperation-portal.c:672 gtk/print/gtkprintunixdialog.c:3019
 msgid "Print"
 msgstr "Natisni"
 
 #: gtk/print/gtkprintoperation-unix.c:490
-#: gtk/print/gtkprintoperation-win32.c:1495
+#: gtk/print/gtkprintoperation-win32.c:1498
 msgid "Application"
 msgstr "Program"
 
@@ -3462,38 +3462,38 @@ msgstr "Zahtevano je posredovanje uporabnika"
 msgid "Custom size"
 msgstr "Velikost po meri"
 
-#: gtk/print/gtkprintoperation-win32.c:1587
+#: gtk/print/gtkprintoperation-win32.c:1590
 msgid "No printer found"
 msgstr "Ni najdenega tiskalnika"
 
-#: gtk/print/gtkprintoperation-win32.c:1614
+#: gtk/print/gtkprintoperation-win32.c:1617
 msgid "Invalid argument to CreateDC"
 msgstr "Neveljaven argument za CreateDC"
 
-#: gtk/print/gtkprintoperation-win32.c:1650
-#: gtk/print/gtkprintoperation-win32.c:1896
+#: gtk/print/gtkprintoperation-win32.c:1653
+#: gtk/print/gtkprintoperation-win32.c:1899
 msgid "Error from StartDoc"
 msgstr "Napaka iz StartDoc"
 
-#: gtk/print/gtkprintoperation-win32.c:1751
-#: gtk/print/gtkprintoperation-win32.c:1774
-#: gtk/print/gtkprintoperation-win32.c:1822
+#: gtk/print/gtkprintoperation-win32.c:1754
+#: gtk/print/gtkprintoperation-win32.c:1777
+#: gtk/print/gtkprintoperation-win32.c:1825
 msgid "Not enough free memory"
 msgstr "Ni dovolj prostega pomnilnika"
 
-#: gtk/print/gtkprintoperation-win32.c:1827
+#: gtk/print/gtkprintoperation-win32.c:1830
 msgid "Invalid argument to PrintDlgEx"
 msgstr "Neveljaven argument za PrintDlgEx"
 
-#: gtk/print/gtkprintoperation-win32.c:1832
+#: gtk/print/gtkprintoperation-win32.c:1835
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "Neveljaven kazalec na PrintDlgEx"
 
-#: gtk/print/gtkprintoperation-win32.c:1837
+#: gtk/print/gtkprintoperation-win32.c:1840
 msgid "Invalid handle to PrintDlgEx"
 msgstr "Neveljavna ročica za PrintDlgEx"
 
-#: gtk/print/gtkprintoperation-win32.c:1842
+#: gtk/print/gtkprintoperation-win32.c:1845
 msgid "Unspecified error"
 msgstr "Nedoločena napaka"
 
@@ -3505,11 +3505,11 @@ msgstr "_Predogled"
 msgid "_Print"
 msgstr "_Natisni"
 
-#: gtk/print/gtkprintunixdialog.c:969
+#: gtk/print/gtkprintunixdialog.c:970
 msgid "Getting printer information failed"
 msgstr "Pridobivanje podatkov tiskalnika ni uspelo"
 
-#: gtk/print/gtkprintunixdialog.c:1893
+#: gtk/print/gtkprintunixdialog.c:1894
 msgid "Getting printer information…"
 msgstr "Pridobivanje podatkov tiskalnika …"
 
@@ -3519,63 +3519,63 @@ msgstr "Pridobivanje podatkov tiskalnika …"
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/print/gtkprintunixdialog.c:2763
+#: gtk/print/gtkprintunixdialog.c:2764
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Left to right, top to bottom"
 msgstr "Z leve proti desni, od zgoraj navzdol"
 
-#: gtk/print/gtkprintunixdialog.c:2763
+#: gtk/print/gtkprintunixdialog.c:2764
 #: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Left to right, bottom to top"
 msgstr "Z leve proti desni, od spodaj navzgor"
 
-#: gtk/print/gtkprintunixdialog.c:2764
+#: gtk/print/gtkprintunixdialog.c:2765
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Right to left, top to bottom"
 msgstr "Z desne proti levi, od zgoraj navzdol"
 
-#: gtk/print/gtkprintunixdialog.c:2764
+#: gtk/print/gtkprintunixdialog.c:2765
 #: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Right to left, bottom to top"
 msgstr "Z desne proti levi, od spodaj navzgor"
 
-#: gtk/print/gtkprintunixdialog.c:2765
+#: gtk/print/gtkprintunixdialog.c:2766
 #: modules/printbackends/gtkprintbackendcups.c:5681
 msgid "Top to bottom, left to right"
 msgstr "Od zgoraj navzdol, z leve proti desni"
 
-#: gtk/print/gtkprintunixdialog.c:2765
+#: gtk/print/gtkprintunixdialog.c:2766
 #: modules/printbackends/gtkprintbackendcups.c:5681
 msgid "Top to bottom, right to left"
 msgstr "Od zgoraj navzdol, z desne proti levi"
 
-#: gtk/print/gtkprintunixdialog.c:2766
+#: gtk/print/gtkprintunixdialog.c:2767
 #: modules/printbackends/gtkprintbackendcups.c:5682
 msgid "Bottom to top, left to right"
 msgstr "Od spodaj navzgor, z leve proti desni"
 
-#: gtk/print/gtkprintunixdialog.c:2766
+#: gtk/print/gtkprintunixdialog.c:2767
 #: modules/printbackends/gtkprintbackendcups.c:5682
 msgid "Bottom to top, right to left"
 msgstr "Od spodaj navzgor, z desne proti levi"
 
-#: gtk/print/gtkprintunixdialog.c:2770 gtk/print/gtkprintunixdialog.c:2783
+#: gtk/print/gtkprintunixdialog.c:2771 gtk/print/gtkprintunixdialog.c:2784
 msgid "Page Ordering"
 msgstr "Vrstni red strani"
 
-#: gtk/print/gtkprintunixdialog.c:2799
+#: gtk/print/gtkprintunixdialog.c:2800
 msgid "Left to right"
 msgstr "Z leve proti desni"
 
-#: gtk/print/gtkprintunixdialog.c:2800
+#: gtk/print/gtkprintunixdialog.c:2801
 msgid "Right to left"
 msgstr "Z desne proti levi"
 
-#: gtk/print/gtkprintunixdialog.c:2812
+#: gtk/print/gtkprintunixdialog.c:2813
 msgid "Top to bottom"
 msgstr "Od zgoraj navzdol"
 
-#: gtk/print/gtkprintunixdialog.c:2813
+#: gtk/print/gtkprintunixdialog.c:2814
 msgid "Bottom to top"
 msgstr "Od spodaj navzgor"
 
@@ -3695,15 +3695,15 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Stranska vrstica"
 
-#: gtk/gtktext.c:6348 gtk/gtktextview.c:9263
+#: gtk/gtktext.c:6348 gtk/gtktextview.c:9306
 msgid "Insert _Emoji"
 msgstr "Vstavi izrazno _ikono"
 
-#: gtk/gtktextview.c:9245
+#: gtk/gtktextview.c:9288
 msgid "_Undo"
 msgstr "_Razveljavi"
 
-#: gtk/gtktextview.c:9249
+#: gtk/gtktextview.c:9292
 msgid "_Redo"
 msgstr "_Ponovno uveljavi"
 
@@ -6325,6 +6325,14 @@ msgstr "_Ustvari"
 msgid "Select Font"
 msgstr "Izbor pisave"
 
+#: gtk/ui/gtkfontchooserdialog.ui:5
+msgid "400"
+msgstr "400"
+
+#: gtk/ui/gtkfontchooserdialog.ui:6
+msgid "500"
+msgstr "500"
+
 #: gtk/ui/gtkfontchooserwidget.ui:66
 msgid "Search font name"
 msgstr "Poišči pisavo po imenu"
@@ -6345,12 +6353,12 @@ msgstr "Pisava s stalno širino"
 msgid "Language"
 msgstr "Jezik"
 
-#: gtk/ui/gtkfontchooserwidget.ui:199 gtk/ui/gtkfontchooserwidget.ui:201
-#: gtk/ui/gtkfontchooserwidget.ui:354 gtk/ui/gtkfontchooserwidget.ui:358
+#: gtk/ui/gtkfontchooserwidget.ui:197 gtk/ui/gtkfontchooserwidget.ui:199
+#: gtk/ui/gtkfontchooserwidget.ui:352 gtk/ui/gtkfontchooserwidget.ui:356
 msgid "Preview Font"
 msgstr "Predogled pisave"
 
-#: gtk/ui/gtkfontchooserwidget.ui:297
+#: gtk/ui/gtkfontchooserwidget.ui:295
 msgid "No Fonts Found"
 msgstr "Ni najdenih pisav"
 
