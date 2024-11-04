@@ -42,7 +42,7 @@ diff_with_file (const char  *file1,
   diff_cmd = g_find_program_in_path ("diff");
   if (diff_cmd)
     {
-      const char *command[] = { diff_cmd, "-u", file1, NULL, NULL };
+      const char *command[] = { diff_cmd, "--strip-trailing-cr", "-u", file1, NULL, NULL };
 
       if (len < 0)
         len = strlen (text);

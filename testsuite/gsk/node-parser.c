@@ -75,7 +75,7 @@ diff_with_file (const char  *file1,
   process = g_subprocess_new (G_SUBPROCESS_FLAGS_STDIN_PIPE
                               | G_SUBPROCESS_FLAGS_STDOUT_PIPE,
                               error,
-                              "diff", "-u", file1, "-", NULL);
+                              "diff", "--strip-trailing-cr", "-u", file1, "-", NULL);
   if (process == NULL)
     return NULL;
 
