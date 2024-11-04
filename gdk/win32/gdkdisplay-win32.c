@@ -656,9 +656,7 @@ gdk_win32_display_get_name (GdkDisplay *display)
 static void
 gdk_win32_display_beep (GdkDisplay *display)
 {
-  g_return_if_fail (display == gdk_display_get_default());
-  if (!MessageBeep (-1))
-    Beep(1000, 50);
+  MessageBeep ((UINT)-1);
 }
 
 static void
