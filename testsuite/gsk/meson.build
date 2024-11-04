@@ -489,7 +489,8 @@ endforeach
 
 # offload does not work outside of linux
 if os_linux
-  offload = executable('offload', 'offload.c', 'gskrendernodeattach.c',
+  offload = executable('offload',
+    [ 'offload.c', 'gskrendernodeattach.c', '../testutils.c' ],
     dependencies : libgtk_static_dep,
     c_args: common_cflags + [ '-DGTK_COMPILATION=1' ],
   )
