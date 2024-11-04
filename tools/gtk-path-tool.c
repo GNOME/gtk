@@ -45,7 +45,7 @@ usage (void)
              "  render       Render the path as an image\n"
              "  info         Print information about the path\n"
              "\n"));
-  exit (1);
+  exit (0);
 }
 
 static GLogWriterOutput
