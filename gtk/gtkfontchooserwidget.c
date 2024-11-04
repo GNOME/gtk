@@ -2190,6 +2190,7 @@ update_feature_example (GtkFontChooserWidget *fontchooser,
 
           gtk_label_set_text (GTK_LABEL (item->example), text);
           gtk_label_set_attributes (GTK_LABEL (item->example), attrs);
+          gtk_label_set_ellipsize (GTK_LABEL (item->example), PANGO_ELLIPSIZE_END);
 
           g_free (text);
           pango_attr_list_unref (attrs);
