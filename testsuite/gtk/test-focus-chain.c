@@ -256,7 +256,7 @@ load_ui_file (GFile *ui_file,
 
   dir = get_dir_for_file (ref_path);
   output = generate_focus_chain (window, dir);
-  diff = diff_with_file (ref_path, output, -1, &error);
+  diff = diff_string_with_file (ref_path, output, -1, &error);
   g_assert_no_error (error);
 
   if (diff && diff[0])
