@@ -45,7 +45,7 @@ usage (void)
              "  relabel      Change the color state of the image without conversion\n"
              "  show         Show the image\n"
              "\n"));
-  exit (1);
+  exit (0);
 }
 
 static GLogWriterOutput
