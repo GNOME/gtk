@@ -3078,7 +3078,12 @@ gdk_event_translate (MSG *msg,
 
       /* Call modal timer immediate so that we repaint faster after a resize. */
       if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
-	modal_timer_proc (0,0,0,0);
+        {
+          modal_timer_proc (msg->hwnd,
+                            msg->message,
+                            (UINT_PTR)surface,
+                            msg->time);
+        }
 
       /* Claim as handled, so that WM_SIZE and WM_MOVE are avoided */
       return_val = TRUE;
