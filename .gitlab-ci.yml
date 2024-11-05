@@ -62,18 +62,16 @@ style-check-diff:
 .build-fedora-default:
   image: $FEDORA_IMAGE
   artifacts:
+    name: "gtk-${CI_COMMIT_REF_NAME}"
     when: always
     reports:
       junit:
-        - "${CI_PROJECT_DIR}/_build/report-x11.xml"
-        - "${CI_PROJECT_DIR}/_build/report-wayland.xml"
-        - "${CI_PROJECT_DIR}/_build/report-wayland_gl.xml"
-        - "${CI_PROJECT_DIR}/_build/report-broadway.xml"
-    name: "gtk-${CI_COMMIT_REF_NAME}"
+        - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-x11.junit.xml"
+        - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-wayland.junit.xml"
+        - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-wayland_gl.junit.xml"
+        - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-broadway.junit.xml"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
-      - "${CI_PROJECT_DIR}/_build/report*.xml"
-      - "${CI_PROJECT_DIR}/_build/report*.html"
       - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*/*.png"
       - "${CI_PROJECT_DIR}/_build/testsuite/reftests/output/*/*.node"
       - "${CI_PROJECT_DIR}/_build/testsuite/tools/output/*/*"
