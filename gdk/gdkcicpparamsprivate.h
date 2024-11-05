@@ -2,6 +2,8 @@
 
 #include "gdkcicpparams.h"
 
+G_BEGIN_DECLS
+
 typedef struct _GdkCicp GdkCicp;
 
 struct _GdkCicp
@@ -82,3 +84,5 @@ gdk_cicp_equivalent (const GdkCicp *p1,
 const GdkCicp * gdk_cicp_params_get_cicp (GdkCicpParams *self);
 
 GdkCicpParams * gdk_cicp_params_new_for_cicp (const GdkCicp  *cicp);
+
+G_END_DECLS

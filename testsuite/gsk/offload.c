@@ -29,6 +29,8 @@
 #include <gsk/gskoffloadprivate.h>
 #include "gskrendernodeattach.h"
 
+#include "../testutils.h"
+
 static char *
 test_get_sibling_file (const char *node_file,
                        const char *old_ext,
@@ -50,26 +52,6 @@ test_get_sibling_file (const char *node_file,
     }
 
   return g_string_free (file, FALSE);
-}
-
-static GBytes *
-diff_with_file (const char  *file1,
-                GBytes      *input,
-                GError     **error)
-{
-  char *buffer;
-  gsize len;
-  static const char msg[] = "The output is not as expected";
-
-  g_file_get_contents (file1, &buffer, &len, NULL);
-  if (strcmp (buffer, (char *) g_bytes_get_data (input, NULL)) == 0)
-    {
-      g_free (buffer);
-      return NULL;
-    }
-
-  g_free (buffer);
-  return g_bytes_new_static (msg, strlen (msg) + 1);
 }
 
 static void
@@ -225,7 +207,7 @@ collect_offload_info (GdkSurface *surface,
                                 info->was_offloaded ? "was offloaded, " : "");
     }
 
-  bytes = g_bytes_new (s->str, s->len + 1);
+  bytes = g_bytes_new (s->str, s->len);
 
   g_string_free (s, TRUE);
 
@@ -364,11 +346,11 @@ parse_node_file (GFile *file, const char *generate)
   GdkSubsurface *subsurface;
   GskOffload *offload;
   GskRenderNode *node, *tmp;
-  GBytes *offload_state, *diff;
+  GBytes *offload_state;
   GError *error = NULL;
   gboolean result = TRUE;
   cairo_region_t *clip, *region;
-  char *path;
+  char *path, *diff;
   GskRenderNode *node2;
   const char *generate_values[] = { "offload", "offload2", "diff", NULL };
 
@@ -391,7 +373,7 @@ parse_node_file (GFile *file, const char *generate)
 
   if (gdk_surface_get_scale (surface) != 1.0)
     {
-      g_print ("Offload tests don't work with fractional scales\n");
+      g_print ("Offload tests don't work with scale != 1.0\n");
       exit (77);
     }
 
@@ -425,20 +407,20 @@ parse_node_file (GFile *file, const char *generate)
   if (reference_file == NULL)
     return FALSE;
 
-  diff = diff_with_file (reference_file, offload_state, &error);
+  diff = diff_bytes_with_file (reference_file, offload_state, &error);
   g_assert_no_error (error);
-  if (diff && g_bytes_get_size (diff) > 0)
+  if (diff)
     {
       char *basename = g_path_get_basename (reference_file);
       g_print ("Resulting file doesn't match reference (%s):\n%s\n",
                basename,
-               (const char *) g_bytes_get_data (diff, NULL));
+               diff);
       g_free (basename);
       result = FALSE;
     }
 
   g_clear_pointer (&offload_state, g_bytes_unref);
-  g_clear_pointer (&diff, g_bytes_unref);
+  g_clear_pointer (&diff, g_free);
   g_clear_pointer (&reference_file, g_free);
 
   path = test_get_sibling_file (g_file_peek_path (file), ".node", ".node2");
@@ -464,20 +446,20 @@ parse_node_file (GFile *file, const char *generate)
       if (reference_file == NULL)
         return FALSE;
 
-      diff = diff_with_file (reference_file, offload_state, &error);
+      diff = diff_bytes_with_file (reference_file, offload_state, &error);
       g_assert_no_error (error);
-      if (diff && g_bytes_get_size (diff) > 0)
+      if (diff)
         {
           char *basename = g_path_get_basename (reference_file);
           g_print ("Resulting file doesn't match reference (%s):\n%s\n",
                    basename,
-                   (const char *) g_bytes_get_data (diff, NULL));
+                   diff);
           g_free (basename);
           result = FALSE;
         }
 
       g_clear_pointer (&offload_state, g_bytes_unref);
-      g_clear_pointer (&diff, g_bytes_unref);
+      g_clear_pointer (&diff, g_free);
       g_clear_pointer (&reference_file, g_free);
 
       gsk_render_node_diff (node, node2, &(GskDiffData) { clip, surface });

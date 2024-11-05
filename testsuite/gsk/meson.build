@@ -4,7 +4,8 @@ compare_render = executable('compare-render',
   c_args: common_cflags + ['-DGTK_COMPILATION'],
 )
 
-node_parser = executable('node-parser', 'node-parser.c',
+node_parser = executable('node-parser', 
+  [ 'node-parser.c', '../testutils.c' ],
   dependencies: libgtk_dep,
   c_args: common_cflags,
 )
@@ -488,7 +489,8 @@ endforeach
 
 # offload does not work outside of linux
 if os_linux
-  offload = executable('offload', 'offload.c', 'gskrendernodeattach.c',
+  offload = executable('offload',
+    [ 'offload.c', 'gskrendernodeattach.c', '../testutils.c' ],
     dependencies : libgtk_static_dep,
     c_args: common_cflags + [ '-DGTK_COMPILATION=1' ],
   )
@@ -568,8 +570,8 @@ internal_tests = [
   [ 'boundingbox'],
   [ 'curve', [ ], [ 'flaky' ]],
   [ 'curve-special-cases' ],
-  [ 'diff' ],
   [ 'half-float' ],
+  [ 'not-diff' ],
   [ 'misc'],
   [ 'path-private' ],
   [ 'rounded-rect'],

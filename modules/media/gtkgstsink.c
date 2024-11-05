@@ -219,7 +219,7 @@ gtk_gst_sink_get_caps (GstBaseSink *bsink,
     {
       GdkDmabufFormats *formats = gdk_display_get_dmabuf_formats (self->gdk_display);
 
-      if (formats)
+      if (formats && gdk_dmabuf_formats_get_n_formats (formats) > 0)
         {
           tmp = gst_caps_from_string (DMABUF_TEXTURE_CAPS);
           add_drm_formats_and_modifiers (tmp, formats);
@@ -415,6 +415,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
                                   graphene_rect_t *viewport)
 {
   GstVideoFrame *frame = g_new (GstVideoFrame, 1);
+  GstMemory *mem;
   GdkTexture *texture;
 
   viewport->origin.x = 0;
@@ -422,7 +423,9 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
   viewport->size.width = GST_VIDEO_INFO_WIDTH (&self->v_info);
   viewport->size.height = GST_VIDEO_INFO_HEIGHT (&self->v_info);
 
-  if (gst_is_dmabuf_memory (gst_buffer_peek_memory (buffer, 0)))
+  mem = gst_buffer_peek_memory (buffer, 0);
+
+  if (gst_is_dmabuf_memory (mem))
     {
       GdkDmabufTextureBuilder *builder = NULL;
       const GstVideoMeta *vmeta = gst_buffer_get_video_meta (buffer);
@@ -446,7 +449,6 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
 
       for (i = 0; i < vmeta->n_planes; i++)
         {
-          GstMemory *mem;
           guint mem_idx, length;
           gsize skip;
 
@@ -475,12 +477,15 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       g_object_unref (builder);
 
       if (!texture)
-        GST_ERROR_OBJECT (self, "Failed to create dmabuf texture: %s", error->message);
+        {
+          GST_ERROR_OBJECT (self, "Failed to create dmabuf texture: %s", error->message);
+          g_error_free (error);
+        }
 
       *pixel_aspect_ratio = ((double) GST_VIDEO_INFO_PAR_N (&self->v_info) /
                              (double) GST_VIDEO_INFO_PAR_D (&self->v_info));
     }
-  else if (self->gdk_context &&
+  else if (gst_is_gl_memory (mem) &&
            gst_video_frame_map (frame, &self->v_info, buffer, GST_MAP_READ | GST_MAP_GL))
     {
       GstGLSyncMeta *sync_meta;

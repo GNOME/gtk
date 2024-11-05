@@ -99,7 +99,7 @@ load_ui_file (GFile *file, gboolean generate)
 
   reference_file = test_get_reference_file (ui_file);
 
-  diff = diff_with_file (reference_file, output, -1, &error);
+  diff = diff_string_with_file (reference_file, output, -1, &error);
   g_assert_no_error (error);
 
   if (diff && diff[0])

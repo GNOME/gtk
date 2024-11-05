@@ -28,7 +28,6 @@
 #include "gdkglversionprivate.h"
 
 /* Used for active language or text service change notifications */
-#define COBJMACROS
 #include <msctf.h>
 
 #ifdef HAVE_EGL

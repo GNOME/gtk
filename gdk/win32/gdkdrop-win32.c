@@ -36,9 +36,6 @@
 #define INITGUID
 #endif
 
-/* For C-style COM wrapper macros */
-#define COBJMACROS
-
 #include "gdkdropprivate.h"
 
 #include "gdkdrag.h"
@@ -303,8 +300,7 @@ query_object_formats (GdkDisplay   *display,
       hr = IEnumFORMATETC_Next (pfmt, 1, &fmt, NULL);
     }
 
-  if (pfmt)
-    IEnumFORMATETC_Release (pfmt);
+  gdk_win32_com_clear (&pfmt);
 
   result_formats = gdk_content_formats_builder_free_to_formats (builder);
 
@@ -314,8 +310,7 @@ query_object_formats (GdkDisplay   *display,
 static void
 set_data_object (LPDATAOBJECT *location, LPDATAOBJECT data_object)
 {
-  if (*location != NULL)
-    IDataObject_Release (*location);
+  gdk_win32_com_clear (location);
 
   *location = data_object;
 

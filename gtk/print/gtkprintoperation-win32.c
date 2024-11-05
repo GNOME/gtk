@@ -16,8 +16,8 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#define COBJMACROS
 #include "config.h"
+
 #include <math.h>
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>

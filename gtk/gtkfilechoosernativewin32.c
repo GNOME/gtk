@@ -19,8 +19,6 @@
 
 #include "config.h"
 
-#define COBJMACROS
-
 #include "gtkfilechoosernativeprivate.h"
 #include "gtknativedialogprivate.h"
 
@@ -333,10 +331,9 @@ filechooser_win32_thread_data_free (FilechooserWin32ThreadData *data)
       g_array_free (data->choices_selections, TRUE);
       data->choices_selections = NULL;
     }
-  g_object_unref (data->shortcut_files);
+  g_clear_object (&data->shortcut_files);
   g_slist_free_full (data->files, g_object_unref);
-  if (data->self)
-    g_object_unref (data->self);
+  g_clear_object (&data->self);
   g_free (data->accept_label);
   g_free (data->cancel_label);
   g_free (data->title);

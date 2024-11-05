@@ -146,7 +146,7 @@ parse_css_file (GFile *file, gboolean generate)
 
   reference_file = test_get_reference_file (css_file);
 
-  diff = diff_with_file (reference_file, css, -1, &error);
+  diff = diff_string_with_file (reference_file, css, -1, &error);
   g_assert_no_error (error);
 
   if (diff && diff[0])
@@ -161,7 +161,7 @@ parse_css_file (GFile *file, gboolean generate)
 
   if (errors_file)
     {
-      diff = diff_with_file (errors_file, errors->str, errors->len, &error);
+      diff = diff_string_with_file (errors_file, errors->str, errors->len, &error);
       g_assert_no_error (error);
 
       if (diff && diff[0])

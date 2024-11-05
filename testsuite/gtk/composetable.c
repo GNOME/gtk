@@ -107,7 +107,7 @@ compose_table_compare (gconstpointer data)
   table = gtk_compose_table_parse (file, NULL);
   output = gtk_compose_table_print (table);
 
-  diff = diff_with_file (expected, output, -1, &error);
+  diff = diff_string_with_file (expected, output, -1, &error);
   g_assert_no_error (error);
 
   if (diff && diff[0])

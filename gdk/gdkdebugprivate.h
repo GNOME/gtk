@@ -120,3 +120,4 @@ guint gdk_parse_debug_var (const char        *variable,
                            const GdkDebugKey *keys,
                            guint              nkeys);
 
+G_END_DECLS
