@@ -95,13 +95,6 @@ esac
 
 cd ${builddir}
 
-$srcdir/.gitlab-ci/meson-junit-report.py \
-            --project-name=gtk \
-            --backend="${setup}" \
-            --job-id="${CI_JOB_NAME}" \
-            --output="report-${setup}.xml" \
-            "meson-logs/testlog-${setup}.json"
-
 $srcdir/.gitlab-ci/meson-html-report.py \
             --project-name=gtk \
             --backend="${setup}" \
