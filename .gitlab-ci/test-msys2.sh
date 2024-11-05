@@ -43,6 +43,7 @@ ccache --show-stats
 export CCACHE_DISABLE=true
 meson setup \
     ${COMMON_MESON_CFLAGS} \
+    --force-fallback-for=harfbuzz,pango \
     -Dx11-backend=false \
     -Dwayland-backend=false \
     -Dwin32-backend=true \

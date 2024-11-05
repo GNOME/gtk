@@ -2,7 +2,7 @@
 directory = harfbuzz
 url = https://github.com/harfbuzz/harfbuzz.git
 push-url = git@github.com:harfbuzz/harfbuzz.git
-revision = 8.4.0
+revision = main
 depth = 1
 
 [provide]
