@@ -40,6 +40,7 @@ ccache --zero-stats
 ccache --show-stats
 export CCACHE_DISABLE=true
 meson setup \
+    --force-fallback-for pango \
     -Dx11-backend=false \
     -Dwayland-backend=false \
     -Dwin32-backend=true \
