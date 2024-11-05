@@ -260,7 +260,7 @@ gtk_application_set_window_icon (GtkApplication *application)
   default_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
   appid = g_application_get_application_id (G_APPLICATION (application));
 
-  if (!gtk_icon_theme_has_icon (default_theme, appid))
+  if (appid == NULL || !gtk_icon_theme_has_icon (default_theme, appid))
     return;
 
   gtk_window_set_default_icon_name (appid);
