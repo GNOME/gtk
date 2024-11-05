@@ -93,14 +93,4 @@ case "${setup}" in
 
 esac
 
-cd ${builddir}
-
-$srcdir/.gitlab-ci/meson-html-report.py \
-            --project-name=gtk \
-            --backend="${setup}" \
-            --job-id="${CI_JOB_NAME}" \
-            --reftest-output-dir="testsuite/reftests/output/${setup}" \
-            --output="report-${setup}.html" \
-            "meson-logs/testlog-${setup}.json"
-
 exit $exit_code
