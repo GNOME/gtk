@@ -64,11 +64,10 @@ typedef enum {
   GDK_FEATURE_DMABUF           = 1 << 7,
   GDK_FEATURE_OFFLOAD          = 1 << 8,
   GDK_FEATURE_COLOR_MANAGEMENT = 1 << 9,
-  GDK_FEATURE_AEROSNAP         = 1 << 10,
-  GDK_FEATURE_THREADS          = 1 << 11,
+  GDK_FEATURE_THREADS          = 1 << 10,
 } GdkFeatures;
 
-#define GDK_ALL_FEATURES ((1 << 12) - 1)
+#define GDK_ALL_FEATURES ((1 << 11) - 1)
 
 extern guint _gdk_debug_flags;
 
