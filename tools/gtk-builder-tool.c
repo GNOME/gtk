@@ -46,7 +46,7 @@ usage (void)
              "  render       Take a screenshot of the file\n"
              "  screenshot   Take a screenshot of the file\n"
              "\n"));
-  exit (1);
+  exit (0);
 }
 
 static GLogWriterOutput

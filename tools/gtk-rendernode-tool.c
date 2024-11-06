@@ -45,7 +45,7 @@ usage (void)
              "  show         Show the node\n"
              "  render       Take a screenshot of the node\n"
              "\n"));
-  exit (1);
+  exit (0);
 }
 
 static GLogWriterOutput
