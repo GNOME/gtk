@@ -525,15 +525,21 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
   if (gst_is_d3d12_memory (mem) &&
       gst_video_frame_map (frame, &self->v_info, buffer, GST_MAP_READ_D3D12))
     {
+      GstD3D12Memory *dmem = GST_D3D12_MEMORY_CAST (mem);
       GdkD3D12TextureBuilder *builder;
+      ID3D12Fence *fence;
+      guint64 fence_wait;
       GError *error = NULL;
       int i;
 
-      /* XXX: Remove once fences land */
-      gst_d3d12_memory_sync (GST_D3D12_MEMORY_CAST (mem));
-
       builder = gdk_d3d12_texture_builder_new ();
-      gdk_d3d12_texture_builder_set_resource (builder, gst_d3d12_memory_get_resource_handle (GST_D3D12_MEMORY_CAST (mem)));
+      gdk_d3d12_texture_builder_set_resource (builder, gst_d3d12_memory_get_resource_handle (dmem));
+      if (gst_d3d12_memory_get_fence (dmem, &fence, &fence_wait))
+        {
+          gdk_d3d12_texture_builder_set_fence (builder, fence);
+          ID3D12Fence_Release (fence);
+          gdk_d3d12_texture_builder_set_fence_wait (builder, fence_wait);          
+        }
       gdk_d3d12_texture_builder_set_color_state (builder, self->color_state);
 
       texture = gdk_d3d12_texture_builder_build (builder,
