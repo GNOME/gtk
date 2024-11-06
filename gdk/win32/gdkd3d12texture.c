@@ -49,6 +49,9 @@ struct _GdkD3D12Texture
 
   ID3D12Resource *resource;
   HANDLE resource_handle;
+  ID3D12Fence *fence;
+  HANDLE fence_handle;
+  guint64 fence_wait;
 
   GDestroyNotify destroy;
   gpointer data;
@@ -75,18 +78,27 @@ gdk_d3d12_texture_dispose (GObject *object)
 {
   GdkD3D12Texture *self = GDK_D3D12_TEXTURE (object);
 
+  if (self->fence_handle)
+    {
+      if (G_UNLIKELY (!CloseHandle (self->fence_handle)))
+        {
+          g_warning ("Failed to fence handle: %s", g_win32_error_message (GetLastError ()));
+        }
+      self->fence_handle = NULL;
+    }
   if (self->resource_handle)
     {
       if (G_UNLIKELY (!CloseHandle (self->resource_handle)))
         {
-          g_warning ("Failed to close handle: %s", g_win32_error_message (GetLastError ()));
+          g_warning ("Failed to close resource handle: %s", g_win32_error_message (GetLastError ()));
         }
       self->resource_handle = NULL;
     }
 
+  gdk_win32_com_clear (&self->fence);
   gdk_win32_com_clear (&self->resource);
 
-  if (self->destroy)
+    if (self->destroy)
     {
       self->destroy (self->data);
       self->destroy = NULL;
@@ -222,6 +234,10 @@ gdk_d3d12_texture_download (GdkTexture      *texture,
                                                }),
                                                NULL);
   hr_return_if_fail (ID3D12GraphicsCommandList_Close (commands));
+
+  if (self->fence)
+    ID3D12CommandQueue_Wait (queue, self->fence, self->fence_wait);
+
   ID3D12CommandQueue_ExecuteCommandLists (queue, 1, (ID3D12CommandList **) &commands);
 
 #define FENCE_SIGNAL 1
@@ -285,10 +301,12 @@ gdk_d3d12_texture_new_from_builder (GdkD3D12TextureBuilder *builder,
   GdkColorState *color_state;
   GdkMemoryFormat format;
   ID3D12Resource *resource;
+  ID3D12Fence *fence;
   D3D12_RESOURCE_DESC desc;
   gboolean premultiplied;
 
   resource = gdk_d3d12_texture_builder_get_resource (builder);
+  fence = gdk_d3d12_texture_builder_get_fence (builder);
   premultiplied = gdk_d3d12_texture_builder_get_premultiplied (builder);
   ID3D12Resource_GetDesc (resource, &desc);
   
@@ -325,6 +343,12 @@ gdk_d3d12_texture_new_from_builder (GdkD3D12TextureBuilder *builder,
   GDK_TEXTURE (self)->format = format;
   ID3D12Resource_AddRef (resource);
   self->resource = resource;
+  if (fence)
+    {
+      ID3D12Fence_AddRef (fence);
+      self->fence = fence;      
+      self->fence_wait = gdk_d3d12_texture_builder_get_fence_wait (builder);
+    }
 
   GDK_DEBUG (D3D12,
              "Creating %ux%u D3D12 texture, format %u",
