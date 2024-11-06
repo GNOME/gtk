@@ -33,6 +33,8 @@ struct _GdkD3D12TextureBuilder
   GObject parent_instance;
 
   ID3D12Resource *resource;
+  ID3D12Fence *fence;
+  guint64 fence_wait;
 
   GdkColorState *color_state;
   gboolean premultiplied;
@@ -69,6 +71,8 @@ enum
 {
   PROP_0,
   PROP_COLOR_STATE,
+  PROP_FENCE,
+  PROP_FENCE_WAIT,
   PROP_RESOURCE,
   PROP_PREMULTIPLIED,
   PROP_UPDATE_REGION,
@@ -91,6 +95,7 @@ gdk_d3d12_texture_builder_dispose (GObject *object)
   g_clear_pointer (&self->color_state, gdk_color_state_unref);
 
   gdk_win32_com_clear (&self->resource);
+  gdk_win32_com_clear (&self->fence);
 
   G_OBJECT_CLASS (gdk_d3d12_texture_builder_parent_class)->dispose (object);
 }
@@ -107,6 +112,14 @@ gdk_d3d12_texture_builder_get_property (GObject    *object,
     {
     case PROP_COLOR_STATE:
       g_value_set_boxed (value, self->color_state);
+      break;
+
+    case PROP_FENCE:
+      g_value_set_pointer (value, self->fence);
+      break;
+
+    case PROP_FENCE_WAIT:
+      g_value_set_uint64 (value, self->fence_wait);
       break;
 
     case PROP_PREMULTIPLIED:
@@ -143,6 +156,14 @@ gdk_d3d12_texture_builder_set_property (GObject      *object,
     {
     case PROP_COLOR_STATE:
       gdk_d3d12_texture_builder_set_color_state (self, g_value_get_boxed (value));
+      break;
+
+    case PROP_FENCE:
+      gdk_d3d12_texture_builder_set_fence (self, g_value_get_pointer (value));
+      break;
+
+    case PROP_FENCE_WAIT:
+      gdk_d3d12_texture_builder_set_fence_wait (self, g_value_get_uint64 (value));
       break;
 
     case PROP_PREMULTIPLIED:
@@ -187,6 +208,29 @@ gdk_d3d12_texture_builder_class_init (GdkD3D12TextureBuilderClass *klass)
     g_param_spec_boxed ("color-state", NULL, NULL,
                         GDK_TYPE_COLOR_STATE,
                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkD3D12TextureBuilder:fence:
+   *
+   * The optional `ID3D12Fence` to wait on before using the resource.
+   *
+   * Since: 4.18
+   */
+  properties[PROP_FENCE] =
+    g_param_spec_pointer ("fence", NULL, NULL,
+                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkD3D12TextureBuilder:fence-wait:
+   *
+   * The value the fence should wait on
+   *
+   * Since: 4.18
+   */
+  properties[PROP_FENCE_WAIT] =
+    g_param_spec_uint64 ("fence-wait", NULL, NULL,
+                         0, G_MAXUINT64, 0,
+                         G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GdkD3D12TextureBuilder:premultiplied:
@@ -306,6 +350,97 @@ gdk_d3d12_texture_builder_set_resource (GdkD3D12TextureBuilder *self,
   self->resource = resource;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_RESOURCE]);
+}
+
+/**
+ * gdk_d3d12_texture_builder_get_fence:
+ * @self: a `GdkD3D12TextureBuilder`
+ *
+ * Returns the fence that this texture builder is
+ * associated with.
+ *
+ * Returns: (nullable) (transfer none): the fence
+ *
+ * Since: 4.18
+ */
+ID3D12Fence *
+gdk_d3d12_texture_builder_get_fence (GdkD3D12TextureBuilder *self)
+{
+  g_return_val_if_fail (GDK_IS_D3D12_TEXTURE_BUILDER (self), NULL);
+
+  return self->fence;
+}
+
+/**
+ * gdk_d3d12_texture_builder_set_fence:
+ * @self: a `GdkD3D12TextureBuilder`
+ * @fence: the fence
+ *
+ * Sets the fence that this texture builder is going to construct
+ * a texture for.
+ *
+ * Since: 4.18
+ */
+void
+gdk_d3d12_texture_builder_set_fence (GdkD3D12TextureBuilder *self,
+                                     ID3D12Fence            *fence)
+{
+  g_return_if_fail (GDK_IS_D3D12_TEXTURE_BUILDER (self));
+
+  if (self->fence == fence)
+    return;
+  
+  if (fence)
+    ID3D12Fence_AddRef (fence);
+  gdk_win32_com_clear (&self->fence);
+  self->fence = fence;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FENCE]);
+}
+
+/**
+ * gdk_d3d12_texture_builder_get_fence_wait:
+ * @self: a `GdkD3D12TextureBuilder`
+ *
+ * Returns the value that GTK should wait for on the fence
+ * before using the resource.
+ *
+ * Returns: the fence wait value
+ *
+ * Since: 4.18
+ */
+guint64
+gdk_d3d12_texture_builder_get_fence_wait (GdkD3D12TextureBuilder *self)
+{
+  g_return_val_if_fail (GDK_IS_D3D12_TEXTURE_BUILDER (self), 0);
+
+  return self->fence_wait;
+}
+
+/**
+ * gdk_d3d12_texture_builder_set_fence_wait:
+ * @self: a `GdkD3D12TextureBuilder`
+ * @fence_wait: the value to wait on
+ *
+ * Sets the value that GTK should wait on on the given fence before using the
+ * resource.
+ * 
+ * When no fence is set, this value has no effect.
+ *
+ * Since: 4.18
+ */
+void
+gdk_d3d12_texture_builder_set_fence_wait (GdkD3D12TextureBuilder *self,
+                                          guint64                 fence_wait)
+{
+  g_return_if_fail (GDK_IS_D3D12_TEXTURE_BUILDER (self));
+
+  if (self->fence_wait == fence_wait)
+    return;
+  
+  self->fence_wait = fence_wait;
+
+  g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FENCE_WAIT]);
 }
 
 /**

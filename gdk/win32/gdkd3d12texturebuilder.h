@@ -43,7 +43,19 @@ ID3D12Resource *         gdk_d3d12_texture_builder_get_resource         (GdkD3D1
 GDK_AVAILABLE_IN_4_18
 void                     gdk_d3d12_texture_builder_set_resource         (GdkD3D12TextureBuilder *self,
                                                                          ID3D12Resource         *resource);
-                                                                          
+
+GDK_AVAILABLE_IN_4_18
+ID3D12Fence *            gdk_d3d12_texture_builder_get_fence            (GdkD3D12TextureBuilder *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_18
+void                     gdk_d3d12_texture_builder_set_fence            (GdkD3D12TextureBuilder *self,
+                                                                         ID3D12Fence            *fence);
+
+GDK_AVAILABLE_IN_4_18
+guint64                  gdk_d3d12_texture_builder_get_fence_wait       (GdkD3D12TextureBuilder *self) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_18 
+void                     gdk_d3d12_texture_builder_set_fence_wait       (GdkD3D12TextureBuilder *self,
+                                                                         guint64                 fence_wait);
+
 GDK_AVAILABLE_IN_4_18
 gboolean                 gdk_d3d12_texture_builder_get_premultiplied    (GdkD3D12TextureBuilder *self) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_18
