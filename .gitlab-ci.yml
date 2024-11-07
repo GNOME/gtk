@@ -264,7 +264,7 @@ macos:
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
-vs2017-x64:
+vs2019-x64:
   # TODO: Uncomment this when ready to merge.
   # rules:
   #   - if: $CI_PROJECT_NAMESPACE == "GNOME"
