@@ -443,6 +443,66 @@ out:
   return result;
 }
 
+ID3D12Fence *
+gdk_d3d12_texture_get_fence (GdkD3D12Texture *self)
+{
+  return self->fence;
+}
+
+HANDLE
+gdk_d3d12_texture_get_fence_handle (GdkD3D12Texture *self)
+{
+  ID3D12Device *device = NULL;
+  D3D12_HEAP_FLAGS heap_flags;
+  HANDLE result;
+  HRESULT hr;
+  
+  if (self->fence == NULL)
+    return NULL;
+
+  result = g_atomic_pointer_get (&self->fence_handle);
+  if (result)
+    return result;
+  
+  G_LOCK (handle_creation);
+
+  result = g_atomic_pointer_get (&self->fence_handle);
+  if (result)
+    goto out;
+
+  if (FAILED (ID3D12Fence_GetDevice (self->fence,
+                                     &IID_ID3D12Device,
+                                     (void **) &device)))
+    goto out;
+
+  hr = ID3D12Device_CreateSharedHandle (device,
+                                        (ID3D12DeviceChild *) self->fence,
+                                        NULL,
+                                        GENERIC_ALL,
+                                        NULL,
+                                        &result);
+  if (FAILED (hr))
+    {
+      GDK_DEBUG (D3D12, "Failed to create shared handle for fence: %s",
+                 g_win32_error_message (hr));
+      goto out;
+    }
+
+  g_atomic_pointer_set (&self->fence_handle, result);
+
+out:
+  gdk_win32_com_clear (&device);
+
+  G_UNLOCK (handle_creation);
+  return result;
+}
+
+guint64
+gdk_d3d12_texture_get_fence_wait (GdkD3D12Texture *self)
+{
+  return self->fence_wait;
+}
+
 /*
  * gdk_d3d12_texture_import_gl:
  * @self: texture to import into GL
