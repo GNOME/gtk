@@ -34,6 +34,7 @@ struct _GskVulkanImage
   VkImageView vk_framebuffer_image_view;
   GskVulkanYcbcr *ycbcr;
   VkSemaphore vk_semaphore;
+  uint64_t vk_semaphore_wait;
   struct {
     VkDescriptorSet vk_descriptor_set;
     gsize pool_id;
@@ -1503,7 +1504,10 @@ gsk_vulkan_image_transition (GskVulkanImage       *self,
   if (self->vk_pipeline_stage == VK_IMAGE_LAYOUT_GENERAL &&
       self->vk_semaphore)
     {
-      gsk_vulkan_semaphores_add_wait (semaphores, self->vk_semaphore, stage);
+      gsk_vulkan_semaphores_add_wait (semaphores, 
+                                      self->vk_semaphore,
+                                      self->vk_semaphore_wait,
+                                      stage);
     }
 
   vkCmdPipelineBarrier (command_buffer,
