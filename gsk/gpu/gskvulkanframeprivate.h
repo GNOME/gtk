@@ -14,6 +14,7 @@ VkFence                 gsk_vulkan_frame_get_vk_fence                   (GskVulk
 
 void                    gsk_vulkan_semaphores_add_wait                  (GskVulkanSemaphores    *self,
                                                                          VkSemaphore             semaphore,
+                                                                         uint64_t                semaphore_wait,
                                                                          VkPipelineStageFlags    stage);
 void                    gsk_vulkan_semaphores_add_signal                (GskVulkanSemaphores    *self,
                                                                          VkSemaphore             semaphore);
