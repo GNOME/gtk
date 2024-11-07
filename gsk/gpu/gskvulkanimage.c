@@ -1302,6 +1302,9 @@ GskGpuImage *
 gsk_vulkan_image_new_for_d3d12resource (GskVulkanDevice *device,
                                         ID3D12Resource  *resource,
                                         HANDLE           resource_handle,
+                                        ID3D12Fence     *fence,
+                                        HANDLE           fence_handle,
+                                        guint64          fence_wait,
                                         gboolean         premultiplied)
 {
   GskVulkanImage *self;
@@ -1466,6 +1469,32 @@ gsk_vulkan_image_new_for_d3d12resource (GskVulkanDevice *device,
                                         .memory = self->allocation.vk_memory,
                                         .memoryOffset = self->allocation.offset,
                                     });
+
+  if (gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_WIN32_SEMAPHORE) && fence)
+    {
+      PFN_vkImportSemaphoreWin32HandleKHR func_vkImportSemaphoreWin32HandleKHR;
+      func_vkImportSemaphoreWin32HandleKHR = (PFN_vkImportSemaphoreWin32HandleKHR) vkGetDeviceProcAddr (vk_device, "vkImportSemaphoreWin32HandleKHR");
+
+      GSK_VK_CHECK (vkCreateSemaphore, vk_device,
+                                        &(VkSemaphoreCreateInfo) {
+                                            .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+                                            .pNext = &(VkSemaphoreTypeCreateInfo) {
+                                                .sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO,
+                                                .semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE,
+                                            },
+                                        },
+                                        NULL,
+                                        &self->vk_semaphore);
+
+      GSK_VK_CHECK (func_vkImportSemaphoreWin32HandleKHR, vk_device,
+                                                          &(VkImportSemaphoreWin32HandleInfoKHR) {
+                                                              .sType = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR,
+                                                              .handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT,
+                                                              .semaphore = self->vk_semaphore,
+                                                              .handle = fence_handle,
+                                                          });
+      self->vk_semaphore_wait = fence_wait;
+    }
 
   if (is_yuv)
     {
