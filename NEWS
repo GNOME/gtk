@@ -1,4 +1,4 @@
-Overview of Changes in 4.17.0, xx-xx-xxxx
+Overview of Changes in 4.17.0, 06-11-2024
 =========================================
 
 * GtkScrolledWindow
@@ -6,6 +6,9 @@ Overview of Changes in 4.17.0, xx-xx-xxxx
 
 * GtkFileChooser
  - Fix a crash in the portal code
+
+* GtkFontChoser
+ - Make the dialog more shrinkable
 
 * GtkPicture
  - Avoid unnecessary resizes
@@ -22,15 +25,26 @@ Overview of Changes in 4.17.0, xx-xx-xxxx
 * GtkStringList:
  - Add gtk_string_list_find
 
+* GtkApplication:
+ - Respect GDK_DEBUG=no-portals
+ - Set default window icon from app ID
+
 * GtkTextView:
  - Vertical and horizontal positioning of the textview is now quantized
    to the nearest device pixel. This should improve the perceived smoothness
    of scrolling with fractional scaling and font hinting.
  - Incorrect re-use of cached styling was fixed
+ - Fix some missing CSS invalidation
+ - Handle charsets in clipboard datatypes
+
+* Printing:
+ - Avoid warnings for avahi errors
+ - Fix a segfault in the print dialog setup code
 
 * Accessibility:
  - Always realize non-widget accessibles, to help webkit
  - Fix list view selection implementation
+ - Handle NULL values in more places
 
 * Gstreamer:
  - Make dmabufs works without GL
@@ -57,15 +71,22 @@ Overview of Changes in 4.17.0, xx-xx-xxxx
  - Use a viewporter for cursor image scaling
  - Improve cursor size handling
  - Use the system bell protocol if available
- - Fix possible deadlock with high-priority sources triggering Wayland roundtrips
+ - Fix possible deadlock with high-priority sources triggering roundtrips
 
 * Windows:
  - Improve the backend code
  - Fix some problems with WGL on NVidia
  - Many testsuite fixes for Windows compatibility
+ - Make all pixbuf loaders builtin in the gdk-pixbuf subproject
+ - Add GDK_DISABLE=aerosnap to disable aerosnap
+ - Improve clipboard handling
+ - Fix behavior or gdk_display_open() on Windows
+ - Numerous papercut fixes
+ - Require Windows 10
 
 * Macos:
  - Fix crashes when dragging libadwaita TabView tabs
+ - Require macOS 10.15
 
 * Tools and demos
  - gtk4-demo: Make demos standalone
@@ -83,6 +104,7 @@ Overview of Changes in 4.17.0, xx-xx-xxxx
  Brazilian Portuguese
  British English
  Galician
+ Lithuanian
  Romanian
  Slovenian
  Swedish
