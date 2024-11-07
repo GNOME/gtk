@@ -55,6 +55,9 @@ GdkTexture *            gsk_vulkan_image_to_dmabuf_texture              (GskVulk
 GskGpuImage *           gsk_vulkan_image_new_for_d3d12resource          (GskVulkanDevice        *device,
                                                                          ID3D12Resource         *resource,
                                                                          HANDLE                  resource_handle,
+                                                                         ID3D12Fence            *fence,
+                                                                         HANDLE                  fence_handle,
+                                                                         guint64                 fence_wait,
                                                                          gboolean                premultiplied);
 #endif
 
