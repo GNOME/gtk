@@ -39,6 +39,7 @@ const GdkDebugKey gdk_vulkan_feature_keys[] = {
   { "dmabuf", GDK_VULKAN_FEATURE_DMABUF, "Never import Dmabufs" },
   { "win32", GDK_VULKAN_FEATURE_WIN32, "Never import Windows resources" },
   { "ycbcr", GDK_VULKAN_FEATURE_YCBCR, "Do not support Ycbcr textures (also disables dmabufs)" },
+  { "timeline-semaphore", GDK_VULKAN_FEATURE_TIMELINE_SEMAPHORE, "Disable timeline semaphore support (disables Windows sync)"},
   { "semaphore-export", GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT, "Disable sync of exported dmabufs" },
   { "semaphore-import", GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT, "Disable sync of imported dmabufs" },
   { "incremental-present", GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT, "Do not send damage regions" },
@@ -657,6 +658,9 @@ physical_device_check_features (VkPhysicalDevice device)
       physical_device_supports_extension (device, VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME) &&
       physical_device_supports_extension (device, VK_EXT_EXTERNAL_MEMORY_DMA_BUF_EXTENSION_NAME))
     features |= GDK_VULKAN_FEATURE_DMABUF;
+
+  if (physical_device_supports_extension (device, VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME))
+    features |= GDK_VULKAN_FEATURE_TIMELINE_SEMAPHORE;
 
 #ifdef GDK_WINDOWING_WIN32
   if (physical_device_supports_extension (device, VK_KHR_EXTERNAL_MEMORY_WIN32_EXTENSION_NAME))
@@ -1620,6 +1624,11 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                   g_ptr_array_add (device_extensions, (gpointer) VK_EXT_IMAGE_DRM_FORMAT_MODIFIER_EXTENSION_NAME);
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_IMAGE_FORMAT_LIST_EXTENSION_NAME);
                 }
+              if (features & GDK_VULKAN_FEATURE_TIMELINE_SEMAPHORE)
+                {
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_TIMELINE_SEMAPHORE_EXTENSION_NAME);
+                }
 #ifdef GDK_WINDOWING_WIN32
               if (features & GDK_VULKAN_FEATURE_WIN32)
                 {
@@ -1630,6 +1639,8 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 #endif
               if (features & (GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT | GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT))
                 {
+                  if (!(features & GDK_VULKAN_FEATURE_TIMELINE_SEMAPHORE))
+                    g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_EXTENSION_NAME);
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_EXTERNAL_SEMAPHORE_FD_EXTENSION_NAME);
                 }
               if (features & GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT)
