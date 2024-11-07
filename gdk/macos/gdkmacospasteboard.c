@@ -29,13 +29,19 @@
 const char *
 _gdk_macos_pasteboard_from_ns_type (NSPasteboardType type)
 {
-  gchar * mime_type;
+  gchar *mime_type;
 
   if ([type isEqualToString:NSPasteboardTypeURL] ||
       [type isEqualToString:NSPasteboardTypeFileURL])
-    return g_intern_string ("text/uri-list");
+    {
+      GDK_DEBUG (DND, "From UTI %s to mime-type text/uri-list", [type UTF8String]);
+      return g_intern_string ("text/uri-list");
+    }
   else if ([type isEqualToString:NSPasteboardTypeColor])
-    return g_intern_string ("application/x-color");
+    {
+      GDK_DEBUG (DND, "From UTI %s to mime-type application/x-color", [type UTF8String]);
+      return g_intern_string ("application/x-color");
+    }
   else if ((mime_type = g_content_type_get_mime_type ([type UTF8String])))
     {
       const gchar *intern = g_intern_string (mime_type);
@@ -61,10 +67,14 @@ _gdk_macos_pasteboard_to_ns_type (const char       *mime_type,
     {
       if (alternate)
         *alternate = NSPasteboardTypeURL;
+      GDK_DEBUG (DND, "From mime-type %s to UTI public.file-url and public.url", mime_type);
       return [NSPasteboardTypeFileURL retain];
     }
   else if (g_strcmp0 (mime_type, "application/x-color") == 0)
-    return [NSPasteboardTypeColor retain];
+    {
+      GDK_DEBUG (DND, "From mime-type %s to UTI %s", mime_type, [NSPasteboardTypeColor UTF8String]);
+      return [NSPasteboardTypeColor retain];
+    }
   else if ((uti_str = g_content_type_from_mime_type (mime_type)))
     {
       NSString *uti = [[NSString alloc] initWithUTF8String:uti_str];
@@ -227,6 +237,10 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
 
       [uti release];
     }
+  else
+    {
+      GDK_DEBUG (DND, "No stream for mime-type %s", mime_type);
+    }
 
   if (stream != NULL)
     {
@@ -330,9 +344,7 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
 
   gdk_content_formats_unref (serializable);
 
-  /* Default to an url type (think gobject://internal)
-   * to support internal, GType-based DnD.
-   */
+  /* Support internal, GType-based DnD. */
   if ([ret count] == 0)
     {
       GdkContentFormats *formats;
@@ -397,15 +409,33 @@ on_data_ready_cb (GObject      *object,
   if (ret)
     {
       gsize size;
-      gpointer bytes;
 
       g_output_stream_close (G_OUTPUT_STREAM (wr->stream), NULL, NULL);
 
       size = g_memory_output_stream_get_data_size (wr->stream);
-      bytes = g_memory_output_stream_steal_data (wr->stream);
-      data = [[NSData alloc] initWithBytesNoCopy:bytes
-                                          length:size
-                                     deallocator:^(void *alloc, NSUInteger length) { g_free (alloc); }];
+
+      if (size == 8 && [wr->type isEqualToString:NSPasteboardTypeColor])
+        {
+          guint16 *color;
+          NSError *nserror = nil;
+
+          color = (guint16 *)g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (wr->stream));
+          NSColor *nscolor = [[NSColor colorWithRed:color[0] / 65535.0
+                                              green:color[1] / 65535.0
+                                               blue:color[2] / 65535.0
+                                              alpha:color[3] / 65535.0]
+                              colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
+          data = [NSKeyedArchiver archivedDataWithRootObject:nscolor requiringSecureCoding:YES error: &nserror];
+          if (error)
+            g_warning ("Encoding color failed");
+        }
+      else
+        {
+          gpointer bytes = g_memory_output_stream_steal_data (wr->stream);
+          data = [[NSData alloc] initWithBytesNoCopy:bytes
+                                              length:size
+                                        deallocator:^(void *alloc, NSUInteger length) { g_free (alloc); }];
+        }
     }
   else
     {
