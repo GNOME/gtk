@@ -239,6 +239,9 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
       image = gsk_vulkan_image_new_for_d3d12resource (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                       gdk_d3d12_texture_get_resource (d3d_texture),
                                                       gdk_d3d12_texture_get_resource_handle (d3d_texture),
+                                                      gdk_d3d12_texture_get_fence (d3d_texture),
+                                                      gdk_d3d12_texture_get_fence_handle (d3d_texture),
+                                                      gdk_d3d12_texture_get_fence_wait (d3d_texture),
                                                       gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_STRAIGHT);
       if (image)
         {
