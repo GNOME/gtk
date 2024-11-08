@@ -1032,16 +1032,20 @@ gsk_vulkan_device_get_vk_pipeline (GskVulkanDevice           *self,
   return vk_pipeline;
 }
 
-static GskVulkanAllocator *
+GskVulkanAllocator *
 gsk_vulkan_device_get_allocator (GskVulkanDevice    *self,
-                                 gsize               index,
-                                 const VkMemoryType *type)
+                                 gsize               index)
 {
   if (self->allocators[index] == NULL)
     {
+      VkPhysicalDeviceMemoryProperties properties;
+
+      vkGetPhysicalDeviceMemoryProperties (gsk_vulkan_device_get_vk_physical_device (self),
+                                           &properties);
+
       self->allocators[index] = gsk_vulkan_direct_allocator_new (gsk_vulkan_device_get_vk_device (self),
                                                                  index,
-                                                                 type);
+                                                                 &properties.memoryTypes[index]);
       self->allocators[index] = gsk_vulkan_buddy_allocator_new (self->allocators[index],
                                                                 1024 * 1024);
       //allocators[index] = gsk_vulkan_stats_allocator_new (allocators[index]);
@@ -1052,11 +1056,11 @@ gsk_vulkan_device_get_allocator (GskVulkanDevice    *self,
 
 /* following code found in
  * https://registry.khronos.org/vulkan/specs/1.3-extensions/man/html/VkPhysicalDeviceMemoryProperties.html */
-GskVulkanAllocator *
-gsk_vulkan_device_find_allocator (GskVulkanDevice       *self,
-                                  uint32_t               allowed_types,
-                                  VkMemoryPropertyFlags  required_flags,
-                                  VkMemoryPropertyFlags  desired_flags)
+ gsize
+ gsk_vulkan_device_find_allocator (GskVulkanDevice        *self,
+                                   uint32_t                allowed_types,
+                                   VkMemoryPropertyFlags   required_flags,
+                                   VkMemoryPropertyFlags   desired_flags)
 {
   VkPhysicalDeviceMemoryProperties properties;
   uint32_t i, found;
@@ -1084,7 +1088,7 @@ gsk_vulkan_device_find_allocator (GskVulkanDevice       *self,
 
   g_assert (found < properties.memoryTypeCount);
 
-  return gsk_vulkan_allocator_ref (gsk_vulkan_device_get_allocator (self, found, &properties.memoryTypes[found]));
+  return found;
 }
 
 GskVulkanAllocator *
