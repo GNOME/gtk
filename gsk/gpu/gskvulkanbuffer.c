@@ -74,6 +74,7 @@ gsk_vulkan_buffer_new_internal (GskVulkanDevice   *device,
 {
   VkMemoryRequirements requirements;
   GskVulkanBuffer *self;
+  gsize memory_index;
 
   self = g_object_new (GSK_TYPE_VULKAN_BUFFER, NULL);
 
@@ -94,11 +95,14 @@ gsk_vulkan_buffer_new_internal (GskVulkanDevice   *device,
                                  self->vk_buffer,
                                  &requirements);
   
-  self->allocator = gsk_vulkan_device_find_allocator (device,
-                                                      requirements.memoryTypeBits,
-                                                      GSK_VULKAN_MEMORY_MAPPABLE,
-                                                      GSK_VULKAN_MEMORY_MAPPABLE |
-                                                      VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+  memory_index = gsk_vulkan_device_find_allocator (device,
+                                                   requirements.memoryTypeBits,
+                                                   GSK_VULKAN_MEMORY_MAPPABLE,
+                                                   GSK_VULKAN_MEMORY_MAPPABLE |
+                                                   VK_MEMORY_PROPERTY_HOST_CACHED_BIT);
+  self->allocator = gsk_vulkan_device_get_allocator (device, memory_index);
+  gsk_vulkan_allocator_ref (self->allocator);
+
   gsk_vulkan_alloc (self->allocator,
                     requirements.size,
                     requirements.alignment,
