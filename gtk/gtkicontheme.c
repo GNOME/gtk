@@ -2277,9 +2277,13 @@ real_choose_icon (GtkIconTheme      *self,
           gdk_debug_message ("No icon found in %s (or fallbacks) for: %s", self->current_theme, s);
           g_free (s);
         }
-      icon = icon_paintable_new ("image-missing", size, scale);
-      icon->filename = g_strdup (IMAGE_MISSING_RESOURCE_PATH);
-      icon->is_resource = TRUE;
+      
+      return real_choose_icon (self,
+                               (const char*[2]) { "image-missing", NULL },
+                               size,
+                               scale,
+                               flags,
+                               non_blocking);
     }
 
  out:
