@@ -268,6 +268,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   GskGpuImageFlags flags;
   VkFormat vk_format, vk_srgb_format;
   VkComponentMapping vk_components;
+  gsize memory_index;
 
   g_assert (width > 0 && height > 0);
 
@@ -389,10 +390,13 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                 self->vk_image,
                                 &requirements);
 
-  self->allocator = gsk_vulkan_device_find_allocator (device,
-                                                      requirements.memoryTypeBits,
-                                                      0,
-                                                      tiling == VK_IMAGE_TILING_LINEAR ? GSK_VULKAN_MEMORY_MAPPABLE : 0);
+  memory_index = gsk_vulkan_device_find_allocator (device,
+                                                   requirements.memoryTypeBits,
+                                                   0,
+                                                   tiling == VK_IMAGE_TILING_LINEAR ? GSK_VULKAN_MEMORY_MAPPABLE : 0);
+  self->allocator = gsk_vulkan_device_get_allocator (device, memory_index);
+  gsk_vulkan_allocator_ref (self->allocator);
+
   gsk_vulkan_alloc (self->allocator,
                     requirements.size,
                     requirements.alignment,
@@ -679,6 +683,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   VkFormat vk_format, vk_srgb_format;
   VkComponentMapping vk_components;
   VkMemoryRequirements requirements;
+  gsize memory_index;
   GskVulkanImage *self;
   VkResult res;
   gsize n_modifiers;
@@ -812,6 +817,10 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                                 self->vk_image,
                                 &requirements);
 
+  memory_index = gsk_vulkan_device_find_allocator (device,
+                                                   requirements.memoryTypeBits,
+                                                   0,
+                                                   VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
   self->allocator = gsk_vulkan_device_get_external_allocator (device);
   gsk_vulkan_allocator_ref (self->allocator);
 
@@ -824,7 +833,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                                   &(VkMemoryAllocateInfo) {
                                       .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
                                       .allocationSize = requirements.size,
-                                      .memoryTypeIndex = g_bit_nth_lsf (requirements.memoryTypeBits, -1),
+                                      .memoryTypeIndex = memory_index,
                                       .pNext = &(VkExportMemoryAllocateInfo) {
                                           .sType = VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO,
                                           .handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
@@ -997,6 +1006,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
       VkMemoryRequirements2 requirements = {
           .sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2,
       };
+      gsize memory_index;
 
       GSK_VK_CHECK (func_vkGetMemoryFdPropertiesKHR, vk_device,
                                                      VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
@@ -1040,6 +1050,10 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
             }
         }
 
+      memory_index = gsk_vulkan_device_find_allocator (device,
+                                                       fd_props.memoryTypeBits,
+                                                       0,
+                                                       VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
       gsk_vulkan_alloc (self->allocator,
                         requirements.memoryRequirements.size,
                         requirements.memoryRequirements.alignment,
@@ -1048,7 +1062,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                       &(VkMemoryAllocateInfo) {
                                           .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
                                           .allocationSize = requirements.memoryRequirements.size,
-                                          .memoryTypeIndex = g_bit_nth_lsf (fd_props.memoryTypeBits, -1),
+                                          .memoryTypeIndex = memory_index,
                                           .pNext = &(VkImportMemoryFdInfoKHR) {
                                               .sType = VK_STRUCTURE_TYPE_IMPORT_MEMORY_FD_INFO_KHR,
                                               .handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
