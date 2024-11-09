@@ -22,7 +22,9 @@
 
 #include "gtkapplicationprivate.h"
 #include "gtkbuilder.h"
+#include "gtknative.h"
 #import <Cocoa/Cocoa.h>
+#include <gdk/macos/GdkMacosWindow.h>
 
 typedef struct
 {
@@ -126,7 +128,34 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 }
 @end
 
-/* these exist only for accel handling */
+static void
+gtk_application_impl_quartz_set_default_accels (GtkApplicationImpl *impl)
+{
+  const char *pref_accel[] = {"<Meta>comma", NULL};
+  const char *hide_others_accel[] = {"<Meta><Alt>h", NULL};
+  const char *hide_accel[] = {"<Meta>h", NULL};
+  const char *quit_accel[] = {"<Meta>q", NULL};
+  const char *undo_accel[] = {"<Meta>z", NULL};
+  const char *redo_accel[] = {"<Meta><Shift>z", NULL};
+  const char *cut_accel[] = {"<Meta>x", NULL};
+  const char *copy_accel[] = {"<Meta>c", NULL};
+  const char *paste_accel[] = {"<Meta>v", NULL};
+  const char *delete_accel[] = {"Delete", NULL};
+  const char *select_all_accel[] = {"<Meta>a", NULL};
+
+  gtk_application_set_accels_for_action (impl->application, "app.preferences", pref_accel);
+  gtk_application_set_accels_for_action (impl->application, "gtkinternal.hide-others", hide_others_accel);
+  gtk_application_set_accels_for_action (impl->application, "gtkinternal.hide", hide_accel);
+  gtk_application_set_accels_for_action (impl->application, "app.quit", quit_accel);
+  gtk_application_set_accels_for_action (impl->application, "text.undo", undo_accel);
+  gtk_application_set_accels_for_action (impl->application, "text.redo", redo_accel);
+  gtk_application_set_accels_for_action (impl->application, "clipboard.cut", cut_accel);
+  gtk_application_set_accels_for_action (impl->application, "clipboard.copy", copy_accel);
+  gtk_application_set_accels_for_action (impl->application, "clipboard.paste", paste_accel);
+  gtk_application_set_accels_for_action (impl->application, "selection.delete", delete_accel);
+  gtk_application_set_accels_for_action (impl->application, "selection.select-all", select_all_accel);
+}
+
 static void
 gtk_application_impl_quartz_hide (GSimpleAction *action,
                                   GVariant      *parameter,
@@ -186,10 +215,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
   GSimpleActionGroup *gtkinternal;
-  const char *pref_accel[] = {"<Meta>comma", NULL};
-  const char *hide_others_accel[] = {"<Meta><Alt>h", NULL};
-  const char *hide_accel[] = {"<Meta>h", NULL};
-  const char *quit_accel[] = {"<Meta>q", NULL};
+  GMenuModel *menubar;
 
   if (register_session)
     {
@@ -200,11 +226,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   quartz->muxer = gtk_action_muxer_new (NULL);
   gtk_action_muxer_set_parent (quartz->muxer, gtk_application_get_action_muxer (impl->application));
 
-  /* Add the default accels */
-  gtk_application_set_accels_for_action (impl->application, "app.preferences", pref_accel);
-  gtk_application_set_accels_for_action (impl->application, "gtkinternal.hide-others", hide_others_accel);
-  gtk_application_set_accels_for_action (impl->application, "gtkinternal.hide", hide_accel);
-  gtk_application_set_accels_for_action (impl->application, "app.quit", quit_accel);
+  gtk_application_impl_quartz_set_default_accels (impl);
 
   /* and put code behind the 'special' accels */
   gtkinternal = g_simple_action_group_new ();
@@ -231,7 +253,19 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   gtk_application_impl_quartz_set_app_menu (impl, quartz->standard_app_menu);
 
   /* This may or may not add an item to 'combined' */
-  gtk_application_impl_set_menubar (impl, gtk_application_get_menubar (impl->application));
+  menubar = gtk_application_get_menubar (impl->application);
+  if (menubar == NULL)
+    {
+      GtkBuilder *builder;
+
+      /* Provide a fallback menu, so keyboard shortcuts work in native windows too.
+       */
+      builder = gtk_builder_new_from_resource ("/org/gtk/libgtk/ui/gtkapplication-quartz.ui");
+      menubar = G_MENU_MODEL (g_object_ref (gtk_builder_get_object (builder, "default-menu")));
+      g_object_unref (builder);
+    }
+
+  gtk_application_impl_set_menubar (impl, menubar);
 
   /* OK.  Now put it in the menu. */
   gtk_application_impl_quartz_setup_menu (G_MENU_MODEL (quartz->combined), quartz->muxer);

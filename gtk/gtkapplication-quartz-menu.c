@@ -194,6 +194,34 @@ icon_loaded (GObject      *object,
           [NSApp setServicesMenu:[self submenu]];
           [self setTarget:self];
         }
+      else if (special && g_str_equal (special, "undo"))
+        {
+          [self setAction:@selector(undo:)];
+        }
+      else if (special && g_str_equal (special, "redo"))
+        {
+          [self setAction:@selector(redo:)];
+        }
+      else if (special && g_str_equal (special, "cut"))
+        {
+          [self setAction:@selector(cut:)];
+        }
+      else if (special && g_str_equal (special, "copy"))
+        {
+          [self setAction:@selector(copy:)];
+        }
+      else if (special && g_str_equal (special, "paste"))
+        {
+          [self setAction:@selector(paste:)];
+        }
+      else if (special && g_str_equal (special, "delete"))
+        {
+          [self setAction:@selector(delete:)];
+        }
+      else if (special && g_str_equal (special, "select-all"))
+        {
+          [self setAction:@selector(selectAll:)];
+        }
       else
         [self setTarget:self];
 
