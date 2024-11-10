@@ -52,9 +52,6 @@
 #include <cairo-gobject.h>
 #include <pango/pangocairo.h>
 
-#ifdef HAVE_PANGOFT
-#include <pango/pangofc-fontmap.h>
-#endif
 #ifdef HAVE_PANGOWIN32
 #undef STRICT
 #include <pango/pangowin32.h>
@@ -1138,7 +1135,6 @@ create_ascii_glyphs (PangoFont *font)
   return result;
 }
 
-#ifdef HAVE_PANGOFT
 static void
 delete_file (gpointer data)
 {
@@ -1147,7 +1143,6 @@ delete_file (gpointer data)
   g_remove (path);
   g_free (path);
 }
-#endif
 
 static void
 ensure_fontmap (Context *context)
@@ -1157,21 +1152,9 @@ ensure_fontmap (Context *context)
 
   context->fontmap = pango_cairo_font_map_new ();
 
-#ifdef HAVE_PANGOFT
-  if (PANGO_IS_FC_FONT_MAP (context->fontmap))
-    {
-      FcConfig *config;
-      GPtrArray *files;
-
-      config = FcConfigCreate ();
-      pango_fc_font_map_set_config (PANGO_FC_FONT_MAP (context->fontmap), config);
-      FcConfigDestroy (config);
-
-      files = g_ptr_array_new_with_free_func (delete_file);
-
-      g_object_set_data_full (G_OBJECT (context->fontmap), "font-files", files, (GDestroyNotify) g_ptr_array_unref);
-    }
-#endif
+  g_object_set_data_full (G_OBJECT (context->fontmap), "font-files",
+                          g_ptr_array_new_with_free_func (delete_file),
+                          (GDestroyNotify) g_ptr_array_unref);
 }
 
 static gboolean
@@ -1181,49 +1164,17 @@ add_font_from_file (Context     *context,
 {
   ensure_fontmap (context);
 
-#ifdef HAVE_PANGOFT
-  if (PANGO_IS_FC_FONT_MAP (context->fontmap))
+  if (pango_font_map_add_font_file (context->fontmap, path, error))
     {
-      FcConfig *config;
       GPtrArray *files;
-
-      config = pango_fc_font_map_get_config (PANGO_FC_FONT_MAP (context->fontmap));
-
-      if (!FcConfigAppFontAddFile (config, (FcChar8 *) path))
-        {
-          g_set_error (error,
-                       GTK_CSS_PARSER_ERROR,
-                       GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
-                       "Failed to load font");
-          return FALSE;
-        }
 
       files = (GPtrArray *) g_object_get_data (G_OBJECT (context->fontmap), "font-files");
       g_ptr_array_add (files, g_strdup (path));
-
-      pango_fc_font_map_config_changed (PANGO_FC_FONT_MAP (context->fontmap));
-
       return TRUE;
     }
   else
-#endif
-#ifdef HAVE_PANGOWIN32
-  if (g_type_is_a (G_OBJECT_TYPE (context->fontmap), g_type_from_name ("PangoWin32FontMap")))
-    {
-      gboolean result;
-
-      result = pango_win32_font_map_add_font_file (context->fontmap, path, error);
-      g_remove (path);
-      return result;
-    }
-  else
-#endif
     {
       g_remove (path);
-      g_set_error (error,
-                   GTK_CSS_PARSER_ERROR,
-                   GTK_CSS_PARSER_ERROR_FAILED,
-                   "Custom fonts are not implemented for %s", G_OBJECT_TYPE_NAME (context->fontmap));
       return FALSE;
     }
 }
