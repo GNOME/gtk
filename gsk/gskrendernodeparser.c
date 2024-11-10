@@ -2638,11 +2638,11 @@ unpack_glyphs (PangoFont        *font,
         }
       else
         {
-          PangoRectangle ink_rect;
+          PangoRectangle rect;
 
-          pango_font_get_glyph_extents (font, gi->glyph, &ink_rect, NULL);
+          pango_font_get_glyph_extents (font, gi->glyph, NULL, &rect);
 
-          gi->geometry.width = ink_rect.width;
+          gi->geometry.width = rect.width;
         }
     }
 
