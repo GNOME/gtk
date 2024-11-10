@@ -105,8 +105,9 @@ static gboolean
 gdk_dmabuf_texture_invoke_callback (gpointer data)
 {
   Download *download = data;
-  GdkDisplay *display = download->texture->display;
+  //GdkDisplay *display = download->texture->display;
 
+#if 0
   if (display->egl_downloader &&
       gdk_dmabuf_downloader_download (display->egl_downloader,
                                       download->texture,
@@ -127,8 +128,9 @@ gdk_dmabuf_texture_invoke_callback (gpointer data)
     {
       /* Successfully downloaded using Vulkan */
     }
+#endif
 #ifdef HAVE_DMABUF
-  else if (gdk_dmabuf_download_mmap (GDK_TEXTURE (download->texture),
+  if (gdk_dmabuf_download_mmap (GDK_TEXTURE (download->texture),
                                      download->format,
                                      download->color_state,
                                      download->data,
