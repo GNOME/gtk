@@ -928,11 +928,9 @@ gdk_dmabuf_export_sync_file (int     dmabuf_fd,
  *
  * Things we do here:
  *
- * 1. Disallow any dmabuf format that we do not know.
+ * 1. Ignore non-linear modifiers.
  *
- * 2. Ignore non-linear modifiers.
- *
- * 3. Try and fix various inconsistencies between V4L and Mesa
+ * 2. Try and fix various inconsistencies between V4L and Mesa
  *    for linear modifiers, like the e.g. single-plane NV12.
  *
  * *** WARNING ***
@@ -951,25 +949,12 @@ gdk_dmabuf_sanitize (GdkDmabuf        *dest,
                      const GdkDmabuf  *src,
                      GError          **error)
 {
-  const GdkDrmFormatInfo *info;
-
   if (src->n_planes > GDK_DMABUF_MAX_PLANES)
     {
       g_set_error (error,
                    GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
                    "GTK only support dmabufs with %u planes, not %u",
                    GDK_DMABUF_MAX_PLANES, src->n_planes);
-      return FALSE;
-    }
-
-  info = get_drm_format_info (src->fourcc);
-
-  if (info == NULL)
-    {
-      g_set_error (error,
-                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf format %.4s",
-                   (char *) &src->fourcc);
       return FALSE;
     }
 
