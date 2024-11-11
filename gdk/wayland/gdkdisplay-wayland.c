@@ -2032,7 +2032,7 @@ init_settings (GdkDisplay *display)
               if (entry)
                 {
                   char *a = g_variant_print (v, FALSE);
-                  g_debug ("Using portal setting for %s %s: %s\n", schema_str, key, a);
+                  g_debug ("Using portal setting for %s %s: %s", schema_str, key, a);
                   g_free (a);
                   entry->valid = TRUE;
                   apply_portal_setting (entry, v, display);
