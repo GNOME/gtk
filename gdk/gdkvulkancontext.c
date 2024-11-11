@@ -1940,10 +1940,15 @@ gdk_vulkan_init_dmabuf (GdkDisplay *display)
   if (display->vk_dmabuf_formats != NULL)
     return;
 
-  if (!gdk_has_feature (GDK_FEATURE_DMABUF) ||
-      !gdk_display_init_vulkan (display, NULL) ||
-      ((display->vulkan_features & GDK_VULKAN_FEATURE_DMABUF) == 0))
+  if (!gdk_has_feature (GDK_FEATURE_DMABUF))
+    return;
+
+  if (!gdk_display_init_vulkan (display, NULL))
+    return;
+
+  if ((display->vulkan_features & GDK_VULKAN_FEATURE_DMABUF) == 0)
     {
+      gdk_display_unref_vulkan (display);
       return;
     }
 
