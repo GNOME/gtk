@@ -577,7 +577,7 @@ init_vulkan (GtkInspectorGeneral *gen)
   const char *types[] = { "other", "integrated GPU", "discrete GPU", "virtual GPU", "CPU" };
   GError *error = NULL;
 
-  if (!gdk_display_init_vulkan (gen->display, &error))
+  if (!gdk_display_prepare_vulkan (gen->display, &error))
     {
       gtk_label_set_text (GTK_LABEL (gen->vk_device), C_("Vulkan device", "None"));
       gtk_widget_set_visible (gen->vk_error_row, TRUE);
@@ -617,8 +617,6 @@ init_vulkan (GtkInspectorGeneral *gen)
   add_instance_extensions (gen->vulkan_extensions_list);
   add_device_extensions (gen->display->vk_physical_device, gen->vulkan_extensions_list);
   add_layers (gen->vulkan_layers_list);
-
-  gdk_display_unref_vulkan (gen->display);
 #else
   gtk_label_set_text (GTK_LABEL (gen->vk_device), C_("Vulkan device", "None"));
   gtk_widget_set_visible (gen->vk_api_version_row, FALSE);

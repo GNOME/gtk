@@ -653,7 +653,7 @@ vulkan_supported_platform (GdkSurface *surface,
   VkPhysicalDeviceProperties props;
   GError *error = NULL;
 
-  if (!gdk_display_init_vulkan (display, &error))
+  if (!gdk_display_prepare_vulkan (display, &error))
     {
       GSK_DEBUG (RENDERER, "Not using Vulkan%s: %s",
                  as_fallback ? " as fallback" : "",

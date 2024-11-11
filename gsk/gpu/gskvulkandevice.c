@@ -343,8 +343,6 @@ gsk_vulkan_device_finalize (GObject *object)
     g_clear_pointer (&self->allocators[i], gsk_vulkan_allocator_unref);
   g_clear_pointer (&self->external_allocator, gsk_vulkan_allocator_unref);
 
-  gdk_display_unref_vulkan (display);
-
   G_OBJECT_CLASS (gsk_vulkan_device_parent_class)->finalize (object);
 }
 
@@ -422,7 +420,7 @@ gsk_vulkan_device_get_for_display (GdkDisplay  *display,
   if (self)
     return GSK_GPU_DEVICE (g_object_ref (self));
 
-  if (!gdk_display_init_vulkan (display, error))
+  if (!gdk_display_prepare_vulkan (display, error))
     return NULL;
 
   self = g_object_new (GSK_TYPE_VULKAN_DEVICE, NULL);
