@@ -61,12 +61,5 @@ gboolean                    gdk_dmabuf_fourcc_is_yuv            (guint32        
 gboolean                    gdk_dmabuf_get_memory_format        (guint32                         fourcc,
                                                                  gboolean                        premultiplied,
                                                                  GdkMemoryFormat                *out_format);
-#ifdef GDK_RENDERING_VULKAN
-gboolean                    gdk_dmabuf_vk_get_nth               (gsize                           n,
-                                                                 guint32                        *fourcc,
-                                                                 VkFormat                       *vk_format);
-VkFormat                    gdk_dmabuf_get_vk_format            (guint32                         fourcc,
-                                                                 VkComponentMapping             *out_components);
-#endif
 
 #endif

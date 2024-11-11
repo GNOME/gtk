@@ -1899,12 +1899,13 @@ extern gboolean        gsk_renderer_realize_for_display         (GskRenderer  *r
                                                                  GdkDisplay   *display,
                                                                  GError      **error);
 
-void
-gdk_vulkan_init_dmabuf (GdkDisplay *display)
-{
 #ifdef HAVE_DMABUF
-  GdkDmabufFormatsBuilder *vulkan_builder;
-  GskRenderer *renderer;
+static void
+gdk_vulkan_context_add_dmabuf_format (GdkDisplay              *display,
+                                      VkFormat                 vk_format,
+                                      guint32                  fourcc,
+                                      GdkDmabufFormatsBuilder *builder)
+{
   VkDrmFormatModifierPropertiesEXT modifier_list[100];
   VkDrmFormatModifierPropertiesListEXT modifier_props = {
     .sType = VK_STRUCTURE_TYPE_DRM_FORMAT_MODIFIER_PROPERTIES_LIST_EXT,
@@ -1915,10 +1916,46 @@ gdk_vulkan_init_dmabuf (GdkDisplay *display)
     .sType = VK_STRUCTURE_TYPE_FORMAT_PROPERTIES_2,
     .pNext = &modifier_props,
   };
-  VkFormat vk_format;
+  gsize i;
+
+  if (vk_format == VK_FORMAT_UNDEFINED || fourcc == 0)
+    return;
+
+  modifier_props.drmFormatModifierCount = G_N_ELEMENTS (modifier_list);
+  vkGetPhysicalDeviceFormatProperties2 (display->vk_physical_device,
+                                        vk_format,
+                                        &props);
+  g_warn_if_fail (modifier_props.drmFormatModifierCount < G_N_ELEMENTS (modifier_list));
+  for (i = 0; i < modifier_props.drmFormatModifierCount; i++)
+    {
+      gboolean advertise = modifier_list[i].drmFormatModifier != DRM_FORMAT_MOD_LINEAR;
+
+      GDK_DISPLAY_DEBUG (display, DMABUF,
+                         "Vulkan %s dmabuf format %.4s::%016"G_GINT64_MODIFIER"x with %u planes and features 0x%x",
+                         advertise ? "advertises" : "supports",
+                         (char *) &fourcc,
+                         modifier_list[i].drmFormatModifier,
+                         modifier_list[i].drmFormatModifierPlaneCount,
+                         modifier_list[i].drmFormatModifierTilingFeatures);
+
+      if (advertise)
+        gdk_dmabuf_formats_builder_add_format (builder,
+                                               fourcc,
+                                               modifier_list[i].drmFormatModifier);
+    }
+}
+#endif
+
+void
+gdk_vulkan_init_dmabuf (GdkDisplay *display)
+{
+#ifdef HAVE_DMABUF
+  GdkDmabufFormatsBuilder *vulkan_builder;
+  GskRenderer *renderer;
   guint32 fourcc;
   GError *error = NULL;
-  gsize i, j;
+  gsize i;
+  VkFormat vk_format;
 
   if (display->vk_dmabuf_formats != NULL)
     return;
@@ -1930,33 +1967,11 @@ gdk_vulkan_init_dmabuf (GdkDisplay *display)
 
   vulkan_builder = gdk_dmabuf_formats_builder_new ();
 
-  for (i = 0; gdk_dmabuf_vk_get_nth (i, &fourcc, &vk_format); i++)
+  for (i = 0; i < GDK_MEMORY_N_FORMATS; i++)
     {
-      if (vk_format == VK_FORMAT_UNDEFINED)
-        continue;
-
-      modifier_props.drmFormatModifierCount = G_N_ELEMENTS (modifier_list);
-      vkGetPhysicalDeviceFormatProperties2 (display->vk_physical_device,
-                                            vk_format,
-                                            &props);
-      g_warn_if_fail (modifier_props.drmFormatModifierCount < G_N_ELEMENTS (modifier_list));
-      for (j = 0; j < modifier_props.drmFormatModifierCount; j++)
-        {
-          gboolean advertise = modifier_list[j].drmFormatModifier != DRM_FORMAT_MOD_LINEAR;
-
-          GDK_DISPLAY_DEBUG (display, DMABUF,
-                             "Vulkan %s dmabuf format %.4s::%016"G_GINT64_MODIFIER"x with %u planes and features 0x%x",
-                             advertise ? "advertises" : "supports",
-                             (char *) &fourcc,
-                             modifier_list[j].drmFormatModifier,
-                             modifier_list[j].drmFormatModifierPlaneCount,
-                             modifier_list[j].drmFormatModifierTilingFeatures);
-
-          if (advertise)
-            gdk_dmabuf_formats_builder_add_format (vulkan_builder,
-                                                   fourcc,
-                                                   modifier_list[j].drmFormatModifier);
-        }
+      vk_format = gdk_memory_format_vk_format (i, NULL, NULL);
+      fourcc = gdk_memory_format_get_dmabuf_rgb_fourcc (i);
+      gdk_vulkan_context_add_dmabuf_format (display, vk_format, fourcc, vulkan_builder);
     }
 
   display->vk_dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (vulkan_builder);
