@@ -49,7 +49,7 @@ G_DEFINE_TYPE (GdkMacosMonitor, gdk_macos_monitor, GDK_TYPE_MONITOR)
 /**
  * gdk_macos_monitor_get_workarea:
  * @monitor: a `GdkMonitor`
- * @workarea: (out): a `GdkRectangle` to be filled with the monitor workarea
+ * @geometry: (out): a `GdkRectangle` to be filled with the monitor geometry
  *
  * Retrieves the size and position of the “work area” on a monitor
  * within the display coordinate space.
