@@ -734,6 +734,25 @@ gdk_data_format_get_dmabuf_fourcc (GdkDataFormat format)
   return data_formats[format].dmabuf_fourcc;
 }
 
+gboolean
+gdk_data_format_find_by_dmabuf_fourcc (guint32        fourcc,
+                                       GdkDataFormat *out_format)
+{
+  gsize i;
+
+  for (i = 0; i < G_N_ELEMENTS (data_formats); i++)
+    {
+      if (data_formats[i].dmabuf_fourcc == fourcc)
+        {
+          *out_format = i;
+          return TRUE;
+        }
+    }
+
+  *out_format = GDK_DATA_N_FORMATS;
+  return FALSE;
+}
+
 #ifdef GDK_RENDERING_VULKAN
 VkFormat
 gdk_data_format_vk_format (GdkDataFormat       format,

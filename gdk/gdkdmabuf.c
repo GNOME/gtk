@@ -38,7 +38,6 @@ struct _GdkDrmFormatInfo
 {
   guint32 fourcc;
   GdkMemoryFormat memory_format;
-  GdkDataFormat data_format;
   gboolean is_yuv;
   void (* download) (guchar          *dst_data,
                      gsize            dst_stride,
@@ -148,9 +147,7 @@ download_data_format (guchar          *dst_data,
                       const guchar    *src_data[GDK_DMABUF_MAX_PLANES],
                       gsize            sizes[GDK_DMABUF_MAX_PLANES])
 {
-  const GdkDrmFormatInfo *info = get_drm_format_info (dmabuf->fourcc);
   GdkDataBuffer buffer = {
-    .format = info->data_format,
     .width = width,
     .height = height,
     .planes = {
@@ -160,6 +157,11 @@ download_data_format (guchar          *dst_data,
       { src_data[3] + dmabuf->planes[3].offset, dmabuf->planes[3].stride }
     },
   };
+
+  if (!gdk_data_format_find_by_dmabuf_fourcc (dmabuf->fourcc, &buffer.format))
+    {
+      g_assert_not_reached ();
+    }
 
   gdk_data_convert (&buffer,
                     dst_data,

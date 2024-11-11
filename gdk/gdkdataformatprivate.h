@@ -69,6 +69,8 @@ gsize                   gdk_data_format_alignment                       (GdkData
 gsize                   gdk_data_format_block_width                     (GdkDataFormat               format) G_GNUC_CONST;
 gsize                   gdk_data_format_block_height                    (GdkDataFormat               format) G_GNUC_CONST;
 
+gboolean                gdk_data_format_find_by_dmabuf_fourcc           (guint32                     fourcc,
+                                                                         GdkDataFormat              *out_format);
 guint32                 gdk_data_format_get_dmabuf_fourcc               (GdkDataFormat               format) G_GNUC_CONST;
 
 #ifdef GDK_RENDERING_VULKAN
