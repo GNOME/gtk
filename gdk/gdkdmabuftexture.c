@@ -238,12 +238,11 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
     }
   else
     {
-      GDK_DISPLAY_DEBUG (display, DMABUF,
-                         "Falling back to generic RGBA for dmabuf format %.4s",
-                         (char *) &dmabuf.fourcc);
-      format = premultiplied ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED
-                             : GDK_MEMORY_R8G8B8A8;
-      is_yuv = FALSE;
+      g_set_error (error,
+                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "Unsupported dmabuf format %.4s",
+                   (char *) &dmabuf.fourcc);
+      return NULL;
     }
 
   gdk_display_init_dmabuf (display);
