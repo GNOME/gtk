@@ -263,6 +263,7 @@ macos:
     when: always
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
+      - "${CI_PROJECT_DIR}/_build/gtk/GdkMacos-4.0.gir"
 
 vs2019-x64:
   # TODO: Uncomment this when ready to merge.
