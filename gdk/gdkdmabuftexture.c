@@ -223,6 +223,15 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 
   gdk_display_init_dmabuf (display);
 
+  if (!gdk_dmabuf_formats_contains (display->dmabuf_formats, dmabuf.fourcc, dmabuf.modifier))
+    {
+      g_set_error (error,
+                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "Unsupported dmabuf format: %.4s:%#" G_GINT64_MODIFIER "x",
+                   (char *) &dmabuf.fourcc, dmabuf.modifier);
+      return NULL;
+    }
+
   color_state = gdk_dmabuf_texture_builder_get_color_state (builder);
   if (color_state == NULL)
     {
@@ -253,16 +262,6 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
                          (char *) &dmabuf.fourcc);
       GDK_TEXTURE (self)->format = premultiplied ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED
                                                  : GDK_MEMORY_R8G8B8A8;
-    }
-
-  if (!gdk_dmabuf_formats_contains (display->dmabuf_formats, dmabuf.fourcc, dmabuf.modifier))
-    {
-      g_set_error (error,
-                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
-                   "Unsupported dmabuf format: %.4s:%#" G_GINT64_MODIFIER "x",
-                   (char *) &dmabuf.fourcc, dmabuf.modifier);
-      g_object_unref (self);
-      return NULL;
     }
 
   GDK_DISPLAY_DEBUG (display, DMABUF,
