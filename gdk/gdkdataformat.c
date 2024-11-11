@@ -10,6 +10,7 @@ struct _GdkDataFormatDescription
 {
   const char *name;
   GdkMemoryFormat conversion;
+  gboolean is_yuv;
   gsize n_planes;
   gsize alignment;
   gsize block_size[2];
@@ -341,6 +342,57 @@ CONVERT_YUYV_FUNC (yvyu, 0, 3, 1)
 CONVERT_YUYV_FUNC (uyvy, 1, 0, 2)
 CONVERT_YUYV_FUNC (vyuy, 1, 2, 0)
 
+static inline void
+gdk_convert_3_1 (guchar       *dst_data,
+                 gsize         dst_stride,
+                 gsize         width,
+                 gsize         height,
+                 const guchar *xrgb_data,
+                 gsize         xrgb_stride,
+                 const guchar *a_data,
+                 gsize         a_stride,
+                 gsize         a_index)
+{
+  gsize x, y;
+
+  for (y = 0; y < height; y++)
+    {
+      for (x = 0; x < width; x++)
+        {
+          dst_data[4 * x + 0] = xrgb_data[4 * x + 0];
+          dst_data[4 * x + 1] = xrgb_data[4 * x + 1];
+          dst_data[4 * x + 2] = xrgb_data[4 * x + 2];
+          dst_data[4 * x + 3] = xrgb_data[4 * x + 3];
+          dst_data[4 * x + a_index] = a_data[x];
+        }
+      dst_data += dst_stride;
+      xrgb_data += xrgb_stride;
+      a_data += a_stride;
+    }
+}
+
+#define CONVERT_3_1_FUNC(name, a_index) \
+static void \
+gdk_convert_ ## name (const GdkDataBuffer *self, \
+                      guchar              *dst_data, \
+                      gsize                dst_stride) \
+{ \
+  gdk_convert_3_1 (dst_data, \
+                   dst_stride, \
+                   self->width, \
+                   self->height, \
+                   self->planes[0].data, \
+                   self->planes[0].stride, \
+                   self->planes[1].data, \
+                   self->planes[1].stride, \
+                   a_index); \
+}
+
+CONVERT_3_1_FUNC (xrgb8_a8, 0)
+CONVERT_3_1_FUNC (xbgr8_a8, 0)
+CONVERT_3_1_FUNC (rgbx8_a8, 3)
+CONVERT_3_1_FUNC (bgrx8_a8, 3)
+
 #define VULKAN_SWIZZLE(_R, _G, _B, _A) { VK_COMPONENT_SWIZZLE_ ## _R, VK_COMPONENT_SWIZZLE_ ## _G, VK_COMPONENT_SWIZZLE_ ## _B, VK_COMPONENT_SWIZZLE_ ## _A }
 #define VULKAN_DEFAULT_SWIZZLE VULKAN_SWIZZLE (R, G, B, A)
 
@@ -348,6 +400,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_NV12] = {
     .name = "NV12",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 2 },
@@ -363,6 +416,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_NV21] = {
     .name = "NV21",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 2 },
@@ -378,6 +432,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_NV16] = {
     .name = "NV16",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -393,6 +448,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_NV61] = {
     .name = "NV61",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -408,6 +464,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_NV24] = {
     .name = "NV24",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 1, 1 },
@@ -423,6 +480,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_NV42] = {
     .name = "NV42",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 1, 1 },
@@ -438,6 +496,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_P010] = {
     .name = "P010",
     .conversion = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 2 },
@@ -453,6 +512,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_P012] = {
     .name = "P012",
     .conversion = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 2 },
@@ -468,6 +528,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_P016] = {
     .name = "P016",
     .conversion = GDK_MEMORY_R16G16B16,
+    .is_yuv = TRUE,
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 2 },
@@ -483,6 +544,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YUV410] = {
     .name = "YUV410",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 4, 4 },
@@ -498,6 +560,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YVU410] = {
     .name = "YVU410",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 4, 4 },
@@ -513,6 +576,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YUV411] = {
     .name = "YUV411",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 4, 1 },
@@ -528,6 +592,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YVU411] = {
     .name = "YVU411",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 4, 1 },
@@ -543,6 +608,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YUV420] = {
     .name = "YUV420",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 2, 2 },
@@ -558,6 +624,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YVU420] = {
     .name = "YVU420",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 2, 2 },
@@ -573,6 +640,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YUV422] = {
     .name = "YUV422",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -588,6 +656,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YVU422] = {
     .name = "YVU422",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -603,6 +672,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YUV444] = {
     .name = "YUV444",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 1, 1 },
@@ -618,6 +688,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YVU444] = {
     .name = "YVU444",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 1, 1 },
@@ -633,6 +704,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YUYV] = {
     .name = "YUYV",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -648,6 +720,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YVYU] = {
     .name = "YVYU",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -663,6 +736,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_UYVY] = {
     .name = "UYVY",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -678,6 +752,7 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_VYUY] = {
     .name = "VYUY",
     .conversion = GDK_MEMORY_R8G8B8,
+    .is_yuv = TRUE,
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -689,6 +764,70 @@ GdkDataFormatDescription data_formats[] = {
     },
 #endif
     .convert = gdk_convert_vyuy,
+  },
+  [GDK_DATA_RGBX8_A8] = {
+    .name = "GDK_DATA_RGBX8_A8",
+    .conversion = GDK_MEMORY_R8G8B8A8,
+    .is_yuv = FALSE,
+    .n_planes = 1,
+    .alignment = 4,
+    .block_size = { 1, 1 },
+    .dmabuf_fourcc = DRM_FORMAT_RGBX8888_A8,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+    .convert = gdk_convert_rgbx8_a8,
+  },
+  [GDK_DATA_BGRX8_A8] = {
+    .name = "GDK_DATA_BGRX8_A8",
+    .conversion = GDK_MEMORY_B8G8R8A8,
+    .is_yuv = FALSE,
+    .n_planes = 1,
+    .alignment = 4,
+    .block_size = { 1, 1 },
+    .dmabuf_fourcc = DRM_FORMAT_BGRX8888_A8,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+    .convert = gdk_convert_bgrx8_a8,
+  },
+  [GDK_DATA_XRGB8_A8] = {
+    .name = "GDK_DATA_XRGB8_A8",
+    .conversion = GDK_MEMORY_A8R8G8B8,
+    .is_yuv = FALSE,
+    .n_planes = 1,
+    .alignment = 4,
+    .block_size = { 1, 1 },
+    .dmabuf_fourcc = DRM_FORMAT_XRGB8888_A8,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+    .convert = gdk_convert_xrgb8_a8,
+  },
+  [GDK_DATA_XBGR8_A8] = {
+    .name = "GDK_DATA_XBGR8_A8",
+    .conversion = GDK_MEMORY_A8B8G8R8,
+    .is_yuv = FALSE,
+    .n_planes = 1,
+    .alignment = 4,
+    .block_size = { 1, 1 },
+    .dmabuf_fourcc = DRM_FORMAT_XBGR8888_A8,
+#ifdef GDK_RENDERING_VULKAN
+    .vk = {
+        .format = VK_FORMAT_UNDEFINED,
+        .swizzle = VULKAN_DEFAULT_SWIZZLE,
+    },
+#endif
+    .convert = gdk_convert_xbgr8_a8,
   },
 };
 
@@ -731,7 +870,7 @@ gdk_data_format_block_height (GdkDataFormat format)
 gboolean
 gdk_data_format_is_yuv (GdkDataFormat format)
 {
-  return TRUE;
+  return data_formats[format].is_yuv;
 }
 
 guint32
