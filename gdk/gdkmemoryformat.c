@@ -1971,6 +1971,31 @@ gdk_memory_format_vk_rgba_format (GdkMemoryFormat     format,
 }
 #endif
 
+gboolean
+gdk_memory_format_find_by_dmabuf_fourcc (guint32          fourcc,
+                                         gboolean         premultiplied,
+                                         GdkMemoryFormat *out_format)
+{
+#ifdef HAVE_DMABUF
+  gsize i;
+
+  for (i = 0; i < G_N_ELEMENTS (memory_formats); i++)
+    {
+      if (memory_formats[i].dmabuf_fourcc == fourcc)
+        {
+          if (premultiplied)
+            *out_format = memory_formats[i].premultiplied;
+          else
+            *out_format = memory_formats[i].straight;
+          return TRUE;
+        }
+    }
+#endif
+
+  *out_format = GDK_MEMORY_N_FORMATS;
+  return FALSE;
+}
+
 /*
  * gdk_memory_format_get_dmabuf_fourcc:
  * @format: The memory format

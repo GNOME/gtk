@@ -728,6 +728,12 @@ gdk_data_format_block_height (GdkDataFormat format)
   return data_formats[format].block_size[1];
 }
 
+gboolean
+gdk_data_format_is_yuv (GdkDataFormat format)
+{
+  return TRUE;
+}
+
 guint32
 gdk_data_format_get_dmabuf_fourcc (GdkDataFormat format)
 {

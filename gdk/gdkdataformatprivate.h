@@ -65,9 +65,9 @@ const char *            gdk_data_format_get_name                        (GdkData
 GdkMemoryFormat         gdk_data_format_get_conversion                  (GdkDataFormat               format) G_GNUC_CONST;
 gsize                   gdk_data_format_n_planes                        (GdkDataFormat               format) G_GNUC_CONST;
 gsize                   gdk_data_format_alignment                       (GdkDataFormat               format) G_GNUC_CONST;
-
 gsize                   gdk_data_format_block_width                     (GdkDataFormat               format) G_GNUC_CONST;
 gsize                   gdk_data_format_block_height                    (GdkDataFormat               format) G_GNUC_CONST;
+gboolean                gdk_data_format_is_yuv                          (GdkDataFormat               format) G_GNUC_CONST;
 
 gboolean                gdk_data_format_find_by_dmabuf_fourcc           (guint32                     fourcc,
                                                                          GdkDataFormat              *out_format);
