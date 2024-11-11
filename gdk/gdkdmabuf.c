@@ -36,8 +36,6 @@ typedef struct _GdkDrmFormatInfo GdkDrmFormatInfo;
 struct _GdkDrmFormatInfo
 {
   guint32 fourcc;
-  GdkMemoryFormat memory_format;
-  gboolean is_yuv;
   void (* download) (guchar          *dst_data,
                      gsize            dst_stride,
                      GdkMemoryFormat  dst_format,
@@ -476,755 +474,509 @@ static const GdkDrmFormatInfo supported_formats[] = {
   /* palette formats?! */
   {
     .fourcc = DRM_FORMAT_C1,
-    .memory_format = GDK_MEMORY_,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_C2,
-    .memory_format = GDK_MEMORY_,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_C4,
-    .memory_format = GDK_MEMORY_,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_C8,
-    .memory_format = GDK_MEMORY_,
-    .is_yuv = FALSE,
     .download = NULL,
   },
 #endif
   /* darkness */
   {
     .fourcc = DRM_FORMAT_D1,
-    .memory_format = GDK_MEMORY_G8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_D2,
-    .memory_format = GDK_MEMORY_G8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_D4,
-    .memory_format = GDK_MEMORY_G8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_D8,
-    .memory_format = GDK_MEMORY_G8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   /* red only - we treat this as gray */
   {
     .fourcc = DRM_FORMAT_R1,
-    .memory_format = GDK_MEMORY_G8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_R2,
-    .memory_format = GDK_MEMORY_G8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_R4,
-    .memory_format = GDK_MEMORY_G8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_R8,
-    .memory_format = GDK_MEMORY_G8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_R10,
-    .memory_format = GDK_MEMORY_G16,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_R12,
-    .memory_format = GDK_MEMORY_G16,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_R16,
-    .memory_format = GDK_MEMORY_G16,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   /* 2 channels - FIXME: Should this be gray + alpha? */
   {
     .fourcc = DRM_FORMAT_RG88,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_GR88,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_RG1616,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_GR1616,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   /* <8bit per channel RGB(A) */
   {
     .fourcc = DRM_FORMAT_RGB332,
-    .memory_format = GDK_MEMORY_B8G8R8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_BGR233,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XRGB4444,
-    .memory_format = GDK_MEMORY_B8G8R8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XBGR4444,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_RGBX4444,
-    .memory_format = GDK_MEMORY_B8G8R8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_BGRX4444,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_ARGB4444,
-    .memory_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_ABGR4444,
-    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_RGBA4444,
-    .memory_format = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_BGRA4444,
-    .memory_format = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XRGB1555,
-    .memory_format = GDK_MEMORY_B8G8R8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XBGR1555,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_RGBX5551,
-    .memory_format = GDK_MEMORY_B8G8R8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_BGRX5551,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_ARGB1555,
-    .memory_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_ABGR1555,
-    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_RGBA5551,
-    .memory_format = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_BGRA5551,
-    .memory_format = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_RGB565,
-    .memory_format = GDK_MEMORY_B8G8R8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_BGR565,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   /* 8bit RGB */
   {
     .fourcc = DRM_FORMAT_RGB888,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = FALSE,
     .download = download_memcpy,
   },
   {
     .fourcc = DRM_FORMAT_BGR888,
-    .memory_format = GDK_MEMORY_B8G8R8,
-    .is_yuv = FALSE,
     .download = download_memcpy,
   },
   /* 8bit RGBA */
   {
     .fourcc = DRM_FORMAT_BGRA8888,
-    .memory_format = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = download_memcpy,
   },
   {
     .fourcc = DRM_FORMAT_ABGR8888,
-    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = download_memcpy,
   },
   {
     .fourcc = DRM_FORMAT_ARGB8888,
-    .memory_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = download_memcpy,
   },
   {
     .fourcc = DRM_FORMAT_RGBA8888,
-    .memory_format = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = download_memcpy,
   },
   {
     .fourcc = DRM_FORMAT_BGRX8888,
-    .memory_format = GDK_MEMORY_X8R8G8B8,
-    .is_yuv = FALSE,
     .download = download_memcpy,
   },
   {
     .fourcc = DRM_FORMAT_XBGR8888,
-    .memory_format = GDK_MEMORY_R8G8B8X8,
-    .is_yuv = FALSE,
     .download = download_memcpy,
   },
   {
     .fourcc = DRM_FORMAT_XRGB8888,
-    .memory_format = GDK_MEMORY_B8G8R8X8,
-    .is_yuv = FALSE,
     .download = download_memcpy,
   },
   {
     .fourcc = DRM_FORMAT_RGBX8888,
-    .memory_format = GDK_MEMORY_X8B8G8R8,
-    .is_yuv = FALSE,
     .download = download_memcpy,
   },
   /* 10bit RGB(A) */
   {
     .fourcc = DRM_FORMAT_XRGB2101010,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XBGR2101010,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_RGBX1010102,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_BGRX1010102,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_ARGB2101010,
-    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_ABGR2101010,
-    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_RGBA1010102,
-    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_BGRA1010102,
-    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   /* 16bit RGB(A) */
   {
     .fourcc = DRM_FORMAT_XRGB16161616,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XBGR16161616,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_ARGB16161616,
-    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_ABGR16161616,
-    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XRGB16161616F,
-    .memory_format = GDK_MEMORY_R16G16B16_FLOAT,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XBGR16161616F,
-    .memory_format = GDK_MEMORY_R16G16B16_FLOAT,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_ARGB16161616F,
-    .memory_format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_ABGR16161616F,
-    .memory_format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = download_memcpy,
   },
   {
     .fourcc = DRM_FORMAT_AXBXGXRX106106106106,
-    .memory_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   /* 1-plane YUV formats */
   {
     .fourcc = DRM_FORMAT_YUYV,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuyv,
   },
   {
     .fourcc = DRM_FORMAT_YVYU,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuyv,
   },
   {
     .fourcc = DRM_FORMAT_VYUY,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuyv,
   },
   {
     .fourcc = DRM_FORMAT_UYVY,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuyv,
   },
   {
     .fourcc = DRM_FORMAT_AYUV,
-    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_AVUY8888,
-    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XYUV8888,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XVUY8888,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_VUY888,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_VUY101010,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_Y210,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_Y212,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_Y216,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_Y410,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_Y412,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_Y416,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XVYU2101010,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XVYU12_16161616,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_XVYU16161616,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   /* tiled YUV */
   {
     .fourcc = DRM_FORMAT_Y0L0,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_X0L0,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_Y0L2,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_X0L2,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   /* non-linear YUV */
   {
     .fourcc = DRM_FORMAT_YUV420_8BIT,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_YUV420_10BIT,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   /* 2 plane RGB + A */
   {
     .fourcc = DRM_FORMAT_BGRX8888_A8,
-    .memory_format = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = download_memcpy_3_1,
   },
   {
     .fourcc = DRM_FORMAT_RGBX8888_A8,
-    .memory_format = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = download_memcpy_3_1,
   },
   {
     .fourcc = DRM_FORMAT_XBGR8888_A8,
-    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = download_memcpy_3_1,
   },
   {
     .fourcc = DRM_FORMAT_XRGB8888_A8,
-    .memory_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = download_memcpy_3_1,
   },
   {
     .fourcc = DRM_FORMAT_RGB888_A8,
-    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_BGR888_A8,
-    .memory_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_RGB565_A8,
-    .memory_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_BGR565_A8,
-    .memory_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
-    .is_yuv = FALSE,
     .download = NULL,
   },
   /* 2-plane YUV formats */
   {
     .fourcc = DRM_FORMAT_NV12,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_nv12,
   },
   {
     .fourcc = DRM_FORMAT_NV21,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_nv12,
   },
   {
     .fourcc = DRM_FORMAT_NV16,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_nv12,
   },
   {
     .fourcc = DRM_FORMAT_NV61,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_nv12,
   },
   {
     .fourcc = DRM_FORMAT_NV24,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_nv12,
   },
   {
     .fourcc = DRM_FORMAT_NV42,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_nv12,
   },
   {
     .fourcc = DRM_FORMAT_NV15,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_P210,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_P010,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = download_p010,
   },
   {
     .fourcc = DRM_FORMAT_P012,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = download_p010,
   },
   {
     .fourcc = DRM_FORMAT_P016,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = download_p010,
   },
   {
     .fourcc = DRM_FORMAT_P030,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   /* 3-plane YUV */
   {
     .fourcc = DRM_FORMAT_Q410,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_Q401,
-    .memory_format = GDK_MEMORY_R16G16B16,
-    .is_yuv = TRUE,
     .download = NULL,
   },
   {
     .fourcc = DRM_FORMAT_YUV410,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuv_3,
   },
   {
     .fourcc = DRM_FORMAT_YVU410,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuv_3,
   },
   {
     .fourcc = DRM_FORMAT_YUV411,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuv_3,
   },
   {
     .fourcc = DRM_FORMAT_YVU411,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuv_3,
   },
   {
     .fourcc = DRM_FORMAT_YUV420,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuv_3,
   },
   {
     .fourcc = DRM_FORMAT_YVU420,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuv_3,
   },
   {
     .fourcc = DRM_FORMAT_YUV422,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuv_3,
   },
   {
     .fourcc = DRM_FORMAT_YVU422,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuv_3,
   },
   {
     .fourcc = DRM_FORMAT_YUV444,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuv_3,
   },
   {
     .fourcc = DRM_FORMAT_YVU444,
-    .memory_format = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .download = download_yuv_3,
   },
 };
@@ -1239,37 +991,6 @@ get_drm_format_info (guint32 fourcc)
     }
 
   return NULL;
-}
-
-gboolean
-gdk_dmabuf_fourcc_is_yuv (guint32   fourcc,
-                          gboolean *is_yuv)
-{
-  const GdkDrmFormatInfo *info = get_drm_format_info (fourcc);
-
-  if (info == NULL)
-    return FALSE;
-
-  *is_yuv = info->is_yuv;
-  return TRUE;
-}
-
-gboolean
-gdk_dmabuf_get_memory_format (guint32          fourcc,
-                              gboolean         premultiplied,
-                              GdkMemoryFormat *out_format)
-{
-  const GdkDrmFormatInfo *info = get_drm_format_info (fourcc);
-
-  if (info == NULL)
-    return FALSE;
-
-  if (premultiplied)
-    *out_format = gdk_memory_format_get_premultiplied (info->memory_format);
-  else
-    *out_format = gdk_memory_format_get_straight (info->memory_format);
-
-  return TRUE;
 }
 
 GdkDmabufFormats *
