@@ -21,6 +21,7 @@
 #include "gdkdmabuftextureprivate.h"
 
 #include "gdkcolorstateprivate.h"
+#include "gdkdataformatprivate.h"
 #include "gdkdisplayprivate.h"
 #include "gdkdmabufdownloaderprivate.h"
 #include "gdkdmabufformatsbuilderprivate.h"
@@ -210,6 +211,9 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   GdkColorState *color_state;
   int width, height;
   gboolean premultiplied;
+  GdkMemoryFormat format;
+  GdkDataFormat data_format;
+  gboolean is_yuv;
 
   display = gdk_dmabuf_texture_builder_get_display (builder);
   width = gdk_dmabuf_texture_builder_get_width (builder);
@@ -222,6 +226,25 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
                             gdk_dmabuf_texture_builder_get_dmabuf (builder),
                             error))
     return NULL;
+
+  if (gdk_memory_format_find_by_dmabuf_fourcc (dmabuf.fourcc, premultiplied, &format))
+    {
+      is_yuv = FALSE;
+    }
+  else if (gdk_data_format_find_by_dmabuf_fourcc (dmabuf.fourcc, &data_format))
+    {
+      format = gdk_data_format_get_conversion (data_format);
+      is_yuv = gdk_data_format_is_yuv (data_format);
+    }
+  else
+    {
+      GDK_DISPLAY_DEBUG (display, DMABUF,
+                         "Falling back to generic RGBA for dmabuf format %.4s",
+                         (char *) &dmabuf.fourcc);
+      format = premultiplied ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED
+                             : GDK_MEMORY_R8G8B8A8;
+      is_yuv = FALSE;
+    }
 
   gdk_display_init_dmabuf (display);
 
@@ -237,9 +260,7 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   color_state = gdk_dmabuf_texture_builder_get_color_state (builder);
   if (color_state == NULL)
     {
-      gboolean is_yuv;
-
-      if (gdk_dmabuf_fourcc_is_yuv (dmabuf.fourcc, &is_yuv) && is_yuv)
+      if (is_yuv)
         {
           g_warning_once ("FIXME: Implement the proper colorstate for YUV dmabufs");
           color_state = gdk_color_state_get_srgb ();
@@ -255,16 +276,8 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
                        NULL);
 
   g_set_object (&self->display, display);
+  GDK_TEXTURE (self)->format = format;
   self->dmabuf = dmabuf;
-
-  if (!gdk_dmabuf_get_memory_format (dmabuf.fourcc, premultiplied, &(GDK_TEXTURE (self)->format)))
-    {
-      GDK_DISPLAY_DEBUG (display, DMABUF,
-                         "Falling back to generic RGBA for dmabuf format %.4s",
-                         (char *) &dmabuf.fourcc);
-      GDK_TEXTURE (self)->format = premultiplied ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED
-                                                 : GDK_MEMORY_R8G8B8A8;
-    }
 
   GDK_DISPLAY_DEBUG (display, DMABUF,
                      "Creating dmabuf texture, format %.4s:%#" G_GINT64_MODIFIER "x, %s%u planes, memory format %u",
