@@ -3,26 +3,26 @@
 # This file is distributed under the same license as the gtk package.
 # Translators:
 # Данило Шеган <dsegan@gmx.net>, 2004–2005.
-# Милош Поповић <gpopac@gmail.com>, 2010–2017.
 # Марко М. Костић (Marko M. Kostić) <marko.m.kostic@gmail.com>, 2015.
 # Мирослав Николић <miroslavnikolic@rocketmail.com>, 2011–20-2024.
+# Милош Поповић <gpopac@gmail.com>, 2010–20-2024.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.14\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-11-01 19:50+0000\n"
-"PO-Revision-Date: 2024-11-07 19:03+0100\n"
-"Last-Translator: Марко М. Костић <marko.m.kostic@gmail.com>\n"
-"Language-Team: Serbian <српски <gnome-sr@googlegroups.org>>\n"
+"POT-Creation-Date: 2024-11-07 18:03+0000\n"
+"PO-Revision-Date: 2024-11-11 14:13+0100\n"
+"Last-Translator: Милош Поповић <gpopac@gmail.com>\n"
+"Language-Team: Serbian <Serbian <gnome-sr@googlegroups.com>>\n"
 "Language: sr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=n==1? 3 : n%10==1 && n%100!=11 ? 0 : "
-"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2\n"
 "X-Project-Style: gnome\n"
-"X-Generator: Poedit 3.4.4\n"
+"X-Generator: Gtranslator 46.1\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -52,16 +52,14 @@ msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp: ненаведени параметри нису подржани"
 
 #: gdk/gdkcolorstate.c:724
-#, fuzzy, c-format
-#| msgid "Format %s not supported"
+#, c-format
 msgid "cicp: Transfer function %u not supported"
-msgstr "Формат „%s“ није подржан"
+msgstr "cicp: није подржаја функција преноса „%u“"
 
 #: gdk/gdkcolorstate.c:754
-#, fuzzy, c-format
-#| msgid "Format %s not supported"
+#, c-format
 msgid "cicp: Color primaries %u not supported"
-msgstr "Формат „%s“ није подржан"
+msgstr "cicp: нису подржане основне боје „%u“"
 
 #: gdk/gdkcontentprovider.c:106 gdk/gdkcontentproviderimpl.c:313
 #: gdk/gdkcontentproviderimpl.c:532
@@ -79,16 +77,12 @@ msgid "The current backend does not support OpenGL"
 msgstr "Текући позадинац не подржава ОупенГЛ"
 
 #: gdk/gdkdisplay.c:1317 gdk/gdkvulkancontext.c:1710
-#, fuzzy
-#| msgid "Vulkan support disabled via GDK_DEBUG"
 msgid "Vulkan support disabled via GDK_DISABLE"
-msgstr "Подршка за Вулкан је онемогућена са „GDK_DEBUG“"
+msgstr "Подршка за Вулкан је онемогућена са „GDK_DISABLE“"
 
 #: gdk/gdkdisplay.c:1371
-#, fuzzy
-#| msgid "GL support disabled via GDK_DEBUG"
 msgid "OpenGL support disabled via GDK_DISABLE"
-msgstr "Подршка за ГЛ је онемогућена са „GDK_DEBUG“"
+msgstr "Подршка за OypenГЛ је онемогућена са „GDK_DISABLE“"
 
 #: gdk/gdkdisplay.c:1685
 msgid "No EGL configuration available"
@@ -155,16 +149,12 @@ msgid "Unable to create a GL context"
 msgstr "Не могу да направим ГЛ садржај"
 
 #: gdk/gdkglcontext.c:1338
-#, fuzzy
-#| msgid "OpenGL ES disabled via GDK_DEBUG"
 msgid "OpenGL ES API disabled via GDK_DISABLE"
-msgstr "Све осим ОупенГЛЕС-а је искључено преко „GDK_DEBUG“"
+msgstr "ОупенГЛ ЕС АПИ је онемогућен преко „GDK_DISABLE“"
 
 #: gdk/gdkglcontext.c:1350
-#, fuzzy
-#| msgid "OpenGL disabled via GDK_DEBUG"
 msgid "OpenGL API disabled via GDK_DISABLE"
-msgstr "Подршка за ОупенГЛ је онемогућена преко „GDK_DEBUG“"
+msgstr "ОупенГЛ АПИ је онемогућен преко „GDK_DISABLE“"
 
 #: gdk/gdkglcontext.c:1361
 #, c-format
@@ -180,10 +170,9 @@ msgid "Trying to use %s, but %s is already in use"
 msgstr "Покушавам да користим „%s“, али је „%s“ већ у употреби"
 
 #: gdk/gdkglcontext.c:2182
-#, fuzzy, c-format
-#| msgid "Trying to use %s, but %s is already in use"
+#, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
-msgstr "Покушавам да користим „%s“, али је „%s“ већ у употреби"
+msgstr "Покушавам да користим „%s“, али је онемогућен преко „GDK_DISABLE“"
 
 #: gdk/gdktexture.c:672
 msgid "Unknown image format."
@@ -7454,10 +7443,9 @@ msgid "%s only accepts three children"
 msgstr "%s прихвата само три нижа елемента"
 
 #: tools/gtk-builder-tool-simplify.c:1773
-#, fuzzy, c-format
-#| msgid "%s only accepts three children"
+#, c-format
 msgid "%s only accepts one center child"
-msgstr "%s прихвата само три нижа елемента"
+msgstr "%s прихвата само један нижи елемент на средини"
 
 #: tools/gtk-builder-tool-simplify.c:2549
 #, c-format
@@ -7517,20 +7505,7 @@ msgid "Validate the file."
 msgstr "Потврди датотеку."
 
 #: tools/gtk-image-tool.c:36
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  benchmark    Benchmark rendering of a node\n"
-#| "  compare      Compare nodes or images\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-image-tool [COMMAND] [OPTION…] FILE…\n"
@@ -7546,16 +7521,16 @@ msgid ""
 "\n"
 msgstr ""
 "Коришћење:\n"
-"  gtk4-rendernode-tool [НАРЕДБА] [ОПЦИЈА…] ДАТОТЕКА\n"
+"  gtk4-image-tool [НАРЕДБА] [ОПЦИЈА…] ДАТОТЕКА…\n"
 "\n"
-"Обавља разне задатке на чворовима Гтк цртача.\n"
+"Обавља разне задатке на сликама.\n"
 "\n"
 "Наредбе:\n"
-"  benchmark  Прати учинак исцртавања чвора\n"
-"  compare      Упореди чворове или слике\n"
-"  info               Обезбеђује податке о чвору\n"
-"  show            Приказује чвор\n"
-"  render          Прави снимак екрана чвора\n"
+"  compare      Приказује разлике између две слике\n"
+"  convert      Претвара слику у други формат или стање боја\n"
+"  info         Приказује опште податке о слици\n"
+"  relabel      Мења стање боја слике без претварања у други формат\n"
+"  show         Приказује слику\n"
 "\n"
 
 #: tools/gtk-image-tool-compare.c:43 tools/gtk-rendernode-tool-compare.c:67
@@ -7569,16 +7544,14 @@ msgstr "Упореди две слике"
 #: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:113
 #: tools/gtk-image-tool-info.c:90 tools/gtk-image-tool-relabel.c:109
 #: tools/gtk-image-tool-show.c:141
-#, fuzzy, c-format
-#| msgid "No .ui file specified\n"
+#, c-format
 msgid "No image file specified\n"
-msgstr "Није наведена „.ui“ датотека\n"
+msgstr "Није одређена датотека са сликом\n"
 
 #: tools/gtk-image-tool-compare.c:76
-#, fuzzy, c-format
-#| msgid "Can only accept a single .node file\n"
+#, c-format
 msgid "Can only accept two image files\n"
-msgstr "Може да прихвати само једну .node датотеку\n"
+msgstr "Може да прихвати само две датотеке са сликом\n"
 
 #: tools/gtk-image-tool-compare.c:85 tools/gtk-rendernode-tool-compare.c:111
 #, c-format
@@ -7606,10 +7579,8 @@ msgid "No differences.\n"
 msgstr "Нема разлике.\n"
 
 #: tools/gtk-image-tool-convert.c:86
-#, fuzzy
-#| msgid "_Format for:"
 msgid "Format to use"
-msgstr "_Формат за:"
+msgstr "Формат за коришћење"
 
 #: tools/gtk-image-tool-convert.c:86
 msgid "FORMAT"
@@ -7620,10 +7591,8 @@ msgid "Color state to use"
 msgstr "Стање боје за коришћење"
 
 #: tools/gtk-image-tool-convert.c:87 tools/gtk-image-tool-relabel.c:84
-#, fuzzy
-#| msgid "COLOR"
 msgid "COLORSTATE"
-msgstr "БОЈА"
+msgstr "СТАЊЕ_БОЈА"
 
 #: tools/gtk-image-tool-convert.c:88 tools/gtk-image-tool-relabel.c:85
 msgid "Color state to use, as cicp tuple"
@@ -7638,10 +7607,9 @@ msgid "Convert the image to a different format or color state."
 msgstr "Претвори слику у други формат или стање боје."
 
 #: tools/gtk-image-tool-convert.c:119 tools/gtk-image-tool-relabel.c:115
-#, fuzzy, c-format
-#| msgid "Can only render a single .ui file to a single output file\n"
+#, c-format
 msgid "Can only accept a single image file and output file\n"
-msgstr "Могу да исцртам само једну .ui датотеку у једну излазну датотеку\n"
+msgstr "Може да прихвати само једну датотеку са сликом и излазну датотеку\n"
 
 #: tools/gtk-image-tool-convert.c:133
 #, c-format
@@ -7661,16 +7629,19 @@ msgid ""
 "Possible values:\n"
 "  %s\n"
 msgstr ""
+"Није стање боја: %s\n"
+"Могуће вредности:\n"
+"  %s\n"
 
 #: tools/gtk-image-tool-convert.c:160 tools/gtk-image-tool-relabel.c:140
 #, c-format
 msgid "Can't specify both --color-state and --cicp\n"
-msgstr ""
+msgstr "Не можете да одредите и --color-state и --cicp\n"
 
 #: tools/gtk-image-tool-convert.c:168 tools/gtk-image-tool-relabel.c:148
 #, c-format
 msgid "Not a supported cicp tuple: %s\n"
-msgstr ""
+msgstr "Није подржан cicp типл: %s\n"
 
 #: tools/gtk-image-tool-info.c:55
 msgid "Format:"
@@ -7681,20 +7652,17 @@ msgid "Color state:"
 msgstr "Стање боје:"
 
 #: tools/gtk-image-tool-info.c:77
-#, fuzzy
-#| msgid "Provide information about the render node."
 msgid "Provide information about the image."
-msgstr "Обезбеђује податке о чвору цртача."
+msgstr "Обезбеђује податке о слици."
 
 #: tools/gtk-image-tool-info.c:96
-#, fuzzy, c-format
-#| msgid "Can only accept a single .node file\n"
+#, c-format
 msgid "Can only accept a single image file\n"
-msgstr "Може да прихвати само једну .node датотеку\n"
+msgstr "Може да прихвати само једну датотеку са сликом\n"
 
 #: tools/gtk-image-tool-relabel.c:96
 msgid "Change the color state of the image without conversion."
-msgstr ""
+msgstr "Мења стање боја слике без њеног претварања у други формат."
 
 #: tools/gtk-image-tool-relabel.c:130
 #, c-format
@@ -7702,6 +7670,8 @@ msgid ""
 "Not a color state: %s\n"
 "Possible values: %s\n"
 msgstr ""
+"Није стање боје: %s\n"
+"Могуће вредности: %s\n"
 
 #: tools/gtk-image-tool-show.c:117 tools/gtk-rendernode-tool-show.c:115
 msgid "Don't add a titlebar"
@@ -7709,12 +7679,12 @@ msgstr "Без траке за наслов"
 
 #: tools/gtk-image-tool-show.c:128
 msgid "Show one or more images."
-msgstr ""
+msgstr "Прикажи једну или више слика."
 
 #: tools/gtk-image-tool-utils.c:234
 #, c-format
 msgid "cicp must be 4 numbers, separated by /\n"
-msgstr ""
+msgstr "cicp мора да садржи 4 броја раздвојена са „/“\n"
 
 #: tools/gtk-launch.c:40
 msgid "Show program version"
@@ -8082,20 +8052,7 @@ msgid "Failed to parse '%s' as number"
 msgstr "Не могу да рашчланим „%s“ као број"
 
 #: tools/gtk-rendernode-tool.c:35
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Perform various tasks on GTK render nodes.\n"
-#| "\n"
-#| "Commands:\n"
-#| "  benchmark    Benchmark rendering of a node\n"
-#| "  compare      Compare nodes or images\n"
-#| "  info         Provide information about the node\n"
-#| "  show         Show the node\n"
-#| "  render       Take a screenshot of the node\n"
-#| "\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-rendernode-tool [COMMAND] [OPTION…] FILE\n"
@@ -8117,11 +8074,12 @@ msgstr ""
 "Обавља разне задатке на чворовима Гтк цртача.\n"
 "\n"
 "Наредбе:\n"
-"  benchmark  Прати учинак исцртавања чвора\n"
+"  benchmark    Прати учинак исцртавања чвора\n"
 "  compare      Упореди чворове или слике\n"
-"  info               Обезбеђује податке о чвору\n"
-"  show            Приказује чвор\n"
-"  render          Прави снимак екрана чвора\n"
+"  extract      Извлачи урл адресе са подацима\n"
+"  info         Обезбеђује податке о чвору\n"
+"  show         Приказује чвор\n"
+"  render       Прави снимак екрана чвора\n"
 "\n"
 
 #: tools/gtk-rendernode-tool-benchmark.c:96
@@ -8188,16 +8146,13 @@ msgstr "Не могу да направим цртач: %s\n"
 
 #: tools/gtk-rendernode-tool-extract.c:73
 #: tools/gtk-rendernode-tool-extract.c:149
-#, fuzzy, c-format
-#| msgid "Failed to write header\n"
+#, c-format
 msgid "Failed to write %s\n"
-msgstr "Нисам успео да запишем заглавље\n"
+msgstr "Не могу да упишем %s\n"
 
 #: tools/gtk-rendernode-tool-extract.c:292
-#, fuzzy
-#| msgid "Renderer to use"
 msgid "Directory to use"
-msgstr "Цртач који се користи"
+msgstr "Директоријум за коришћење"
 
 #: tools/gtk-rendernode-tool-extract.c:292
 msgid "DIRECTORY"
@@ -8208,10 +8163,8 @@ msgid "Be verbose"
 msgstr "Опширнији испис"
 
 #: tools/gtk-rendernode-tool-extract.c:303
-#, fuzzy
-#| msgid "Show the render node."
 msgid "Extract data urls from the render node."
-msgstr "Приказује исцртани чвор."
+msgstr "Извлачи адресе података из чвора цртача."
 
 #: tools/gtk-rendernode-tool-extract.c:322 tools/gtk-rendernode-tool-info.c:254
 #, c-format
@@ -8219,32 +8172,24 @@ msgid "Can only accept a single .node file\n"
 msgstr "Може да прихвати само једну .node датотеку\n"
 
 #: tools/gtk-rendernode-tool-info.c:193
-#, fuzzy
-#| msgid "Number of nodes: %u\n"
 msgid "Number of nodes:"
-msgstr "Број чворова: %u\n"
+msgstr "Број чворова:"
 
 #: tools/gtk-rendernode-tool-info.c:200
-#, fuzzy
-#| msgid "Depth: %u\n"
 msgid "Depth:"
-msgstr "Дубина: %u\n"
+msgstr "Дубина:"
 
 #: tools/gtk-rendernode-tool-info.c:203
-#, fuzzy
-#| msgid "Bounds"
 msgid "Bounds:"
-msgstr "Границе"
+msgstr "Границе:"
 
 #: tools/gtk-rendernode-tool-info.c:204
-#, fuzzy
-#| msgid "Origin: %g %g\n"
 msgid "Origin:"
-msgstr "Почетак: %g %g\n"
+msgstr "Почетак:"
 
 #: tools/gtk-rendernode-tool-info.c:208 tools/gtk-rendernode-tool-info.c:214
 msgid "Opaque part:"
-msgstr ""
+msgstr "Непровидни део:"
 
 #: tools/gtk-rendernode-tool-info.c:235
 msgid "Provide information about the render node."
