@@ -8,6 +8,7 @@
 #include "gskvulkanycbcrprivate.h"
 
 #include "gdk/gdkdisplayprivate.h"
+#include "gdk/gdkdataformatprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkvulkancontextprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
@@ -896,6 +897,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
   int fd;
   VkResult res;
   GdkMemoryFormat format;
+  GdkDataFormat data_format;
   GskGpuImageFlags flags;
   gboolean is_yuv, needs_conversion;
 
@@ -905,26 +907,31 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
       return NULL;
     }
 
-  if (!gdk_dmabuf_get_memory_format (dmabuf->fourcc, premultiplied, &format))
+  if (gdk_memory_format_find_by_dmabuf_fourcc (dmabuf->fourcc, premultiplied, &format))
     {
-      /* We should never get dmabufs with fourccs we've never checked we support */
-      g_return_val_if_reached (NULL);
+      vk_format = gdk_memory_format_vk_format (format, &vk_components, &needs_conversion);
+      is_yuv = FALSE;
+    }
+  else if (gdk_data_format_find_by_dmabuf_fourcc (dmabuf->fourcc, &data_format))
+    {
+      format = gdk_data_format_get_conversion (data_format);
+      vk_format = gdk_data_format_vk_format (data_format, &vk_components);
+      is_yuv = gdk_data_format_is_yuv (data_format);
+      needs_conversion = is_yuv;
+    }
+  else
+    {
+      vk_format = VK_FORMAT_UNDEFINED;
     }
 
-  vk_device = gsk_vulkan_device_get_vk_device (device);
-  func_vkGetMemoryFdPropertiesKHR = (PFN_vkGetMemoryFdPropertiesKHR) vkGetDeviceProcAddr (vk_device, "vkGetMemoryFdPropertiesKHR");
-
-  vk_format = gdk_dmabuf_get_vk_format (dmabuf->fourcc, &vk_components);
   if (vk_format == VK_FORMAT_UNDEFINED)
     {
       GDK_DEBUG (DMABUF, "GTK's Vulkan doesn't support fourcc %.4s", (char *) &dmabuf->fourcc);
       return NULL;
     }
-  if (!gdk_dmabuf_fourcc_is_yuv (dmabuf->fourcc, &is_yuv))
-    {
-      g_assert_not_reached ();
-    }
-  needs_conversion = is_yuv;
+
+  vk_device = gsk_vulkan_device_get_vk_device (device);
+  func_vkGetMemoryFdPropertiesKHR = (PFN_vkGetMemoryFdPropertiesKHR) vkGetDeviceProcAddr (vk_device, "vkGetMemoryFdPropertiesKHR");
 
   /* FIXME: Add support for disjoint images */
   if (gdk_dmabuf_is_disjoint (dmabuf))
