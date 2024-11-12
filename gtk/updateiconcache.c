@@ -1719,6 +1719,7 @@ main (int argc, char **argv)
   g_option_context_add_main_entries (context, args, GETTEXT_PACKAGE);
 
   g_option_context_parse (context, &argc, &argv, NULL);
+  g_option_context_free (context);
 
   path = argv[1];
 #ifdef G_OS_WIN32
