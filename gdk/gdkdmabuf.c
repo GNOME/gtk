@@ -672,22 +672,17 @@ gdk_dmabuf_do_download_mmap (GdkTexture *texture,
                              guchar     *data,
                              gsize       stride)
 {
-  const GdkDrmFormatInfo *info;
   const GdkDmabuf *dmabuf;
   const guchar *src_data[GDK_DMABUF_MAX_PLANES];
   gsize sizes[GDK_DMABUF_MAX_PLANES];
   gsize needs_unmap[GDK_DMABUF_MAX_PLANES] = { FALSE, };
   gsize i, j;
   gboolean retval = FALSE;
+  GdkDataFormat data_format;
 
   dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
 
   if (dmabuf->modifier != DRM_FORMAT_MOD_LINEAR)
-    return FALSE;
-
-  info = get_drm_format_info (dmabuf->fourcc);
-
-  if (!info || !info->download)
     return FALSE;
 
   for (i = 0; i < dmabuf->n_planes; i++)
@@ -725,16 +720,37 @@ gdk_dmabuf_do_download_mmap (GdkTexture *texture,
       needs_unmap[i] = TRUE;
     }
 
-  info->download (data,
-                  stride,
-                  gdk_texture_get_format (texture),
-                  gdk_texture_get_width (texture),
-                  gdk_texture_get_height (texture),
-                  dmabuf,
-                  src_data,
-                  sizes);
-
-  retval = TRUE;
+  if (gdk_memory_format_find_by_dmabuf_fourcc (dmabuf->fourcc, FALSE, (GdkMemoryFormat[1]) { 0 }))
+    {
+      gdk_memory_convert (data,
+                          stride,
+                          gdk_texture_get_format (texture),
+                          gdk_texture_get_color_state (texture),
+                          src_data[0] + dmabuf->planes[0].offset,
+                          dmabuf->planes[0].stride,
+                          gdk_texture_get_format (texture),
+                          gdk_texture_get_color_state (texture),
+                          gdk_texture_get_width (texture),
+                          gdk_texture_get_height (texture));
+      retval = TRUE;
+    }
+  else if (gdk_data_format_find_by_dmabuf_fourcc (dmabuf->fourcc, &data_format))
+    {
+      gdk_data_convert (&(GdkDataBuffer) {
+                            .format = data_format,
+                            .width = gdk_texture_get_width (texture),
+                            .height = gdk_texture_get_height (texture),
+                            .planes = {
+                                { src_data[0] + dmabuf->planes[0].offset, dmabuf->planes[0].stride },
+                                { src_data[1] + dmabuf->planes[1].offset, dmabuf->planes[1].stride },
+                                { src_data[2] + dmabuf->planes[2].offset, dmabuf->planes[2].stride },
+                                { src_data[3] + dmabuf->planes[3].offset, dmabuf->planes[3].stride }
+                            },
+                        },
+                        data,
+                        stride);
+      retval = TRUE;
+    }
 
   GDK_DISPLAY_DEBUG (gdk_dmabuf_texture_get_display (GDK_DMABUF_TEXTURE (texture)), DMABUF,
                      "Used mmap for downloading %dx%d dmabuf (format %.4s:%#" G_GINT64_MODIFIER "x)",
