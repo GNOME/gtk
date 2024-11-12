@@ -438,11 +438,10 @@ gdk_display_dispose (GObject *object)
   g_clear_pointer (&display->egl_dmabuf_formats, gdk_dmabuf_formats_unref);
   g_clear_pointer (&display->egl_internal_formats, gdk_dmabuf_formats_unref);
 #ifdef GDK_RENDERING_VULKAN
-  if (display->vk_dmabuf_formats)
-    {
-      gdk_display_unref_vulkan (display);
-      g_assert (display->vk_dmabuf_formats == NULL);
-    }
+  if (display->vk_instance)
+    gdk_display_destroy_vulkan_instance (display);
+  g_assert (display->vk_dmabuf_formats == NULL);
+  g_clear_error (&display->vulkan_error);
 #endif
 
   g_clear_object (&priv->gl_context);
@@ -1284,6 +1283,53 @@ gdk_display_get_keymap (GdkDisplay *display)
   g_return_val_if_fail (GDK_IS_DISPLAY (display), NULL);
 
   return GDK_DISPLAY_GET_CLASS (display)->get_keymap (display);
+}
+
+/*< private >
+ * gdk_display_prepare_vulkan:
+ * @self: a `GdkDisplay`
+ * @error: return location for a `GError`
+ *
+ * Checks that Vulkan is available for @self and ensures that it is
+ * properly initialized.
+ *
+ * When this fails, an @error will be set describing the error and this
+ * function returns %FALSE.
+ *
+ * Note that even if this function succeeds, creating a `GdkVulkanContext`
+ * may still fail.
+ *
+ * This function is idempotent. Calling it multiple times will just
+ * return the same value or error.
+ *
+ * You never need to call this function, GDK will call it automatically
+ * as needed.
+ *
+ * Returns: %TRUE if the display supports Vulkan
+ */
+gboolean
+gdk_display_prepare_vulkan (GdkDisplay  *self,
+                            GError     **error)
+{
+  g_return_val_if_fail (GDK_IS_DISPLAY (self), FALSE);
+  g_return_val_if_fail (error == NULL || *error == NULL, FALSE);
+
+#ifdef GDK_RENDERING_VULKAN
+  if (!self->vk_instance && !self->vulkan_error)
+    gdk_display_create_vulkan_instance (self, &self->vulkan_error);
+
+  if (self->vk_instance == NULL)
+    {
+      if (error)
+        *error = g_error_copy (self->vulkan_error);
+    }
+
+  return self->vk_instance != NULL;
+#else
+  g_set_error (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_UNSUPPORTED,
+               "GTK was built without Vulkan support");
+  return FALSE;
+#endif
 }
 
 /*<private>

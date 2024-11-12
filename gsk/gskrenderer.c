@@ -653,7 +653,16 @@ vulkan_supported_platform (GdkSurface *surface,
   VkPhysicalDeviceProperties props;
   GError *error = NULL;
 
-  if (!gdk_display_init_vulkan (display, &error))
+#ifdef GDK_WINDOWING_WAYLAND
+  if (!GDK_IS_WAYLAND_DISPLAY (gdk_surface_get_display (surface)) && !as_fallback)
+    {
+      GSK_DEBUG (RENDERER, "Not using '%s': platform is not Wayland",
+                 g_type_name (renderer_type));
+      return FALSE;
+    }
+#endif
+
+  if (!gdk_display_prepare_vulkan (display, &error))
     {
       GSK_DEBUG (RENDERER, "Not using Vulkan%s: %s",
                  as_fallback ? " as fallback" : "",
@@ -685,15 +694,7 @@ vulkan_supported_platform (GdkSurface *surface,
     }
 #endif
 
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gdk_surface_get_display (surface)))
-    return TRUE;
-#endif
-
-  GSK_DEBUG (RENDERER, "Not using '%s': platform is not Wayland",
-             g_type_name (renderer_type));
-
-  return FALSE;
+  return TRUE;
 }
 
 static GType

@@ -367,7 +367,6 @@ gdk_vulkan_context_dispose (GObject *gobject)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (gobject);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-  GdkDisplay *display;
   VkDevice device;
   guint i;
 
@@ -396,11 +395,6 @@ gdk_vulkan_context_dispose (GObject *gobject)
                            NULL);
       priv->surface = VK_NULL_HANDLE;
     }
-
-  /* display will be unset in gdk_draw_context_dispose() */
-  display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
-  if (display && priv->vulkan_ref)
-    gdk_display_unref_vulkan (display);
 
   G_OBJECT_CLASS (gdk_vulkan_context_parent_class)->dispose (gobject);
 }
@@ -887,8 +881,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   VkBool32 supported;
   uint32_t i;
 
-  priv->vulkan_ref = gdk_display_init_vulkan (display, error);
-  if (!priv->vulkan_ref)
+  if (!gdk_display_prepare_vulkan (display, error))
     return FALSE;
 
   if (surface == NULL)
@@ -1668,7 +1661,7 @@ gdk_vulkan_debug_report (VkDebugReportFlagsEXT      flags,
   return VK_FALSE;
 }
 
-static gboolean
+gboolean
 gdk_display_create_vulkan_instance (GdkDisplay  *display,
                                     GError     **error)
 {
@@ -1677,6 +1670,8 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   GPtrArray *used_extensions;
   gboolean have_debug_report = FALSE;
   VkResult res;
+
+  g_assert (display->vk_instance == NULL);
 
   if (!gdk_has_feature (GDK_FEATURE_VULKAN))
     {
@@ -1804,66 +1799,16 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   return TRUE;
 }
 
-/*
- * gdk_display_init_vulkan:
- * @display: a display
- * @error: A potential error message
- *
- * Initializes Vulkan and returns an error on failure.
- *
- * If Vulkan is already initialized, this function returns
- * %TRUE and increases the refcount of the existing instance.
- *
- * You need to gdk_display_unref_vulkan() to close it again.
- *
- * Returns: %TRUE if Vulkan is initialized.
- **/
-gboolean
-gdk_display_init_vulkan (GdkDisplay *display,
-                         GError     **error)
-{
-  if (display->vulkan_refcount == 0)
-    {
-      if (!gdk_display_create_vulkan_instance (display, error))
-        return FALSE;
-    }
-
-  display->vulkan_refcount++;
-
-  return TRUE;
-}
-
-/*
- * gdk_display_ref_vulkan:
- * @display: a GdkDisplay
- *
- * Increases the refcount of an existing Vulkan instance.
- *
- * This function must not be called if Vulkan may not be initialized
- * yet, call gdk_display_init_vulkan() in that case.
- **/
 void
-gdk_display_ref_vulkan (GdkDisplay *display)
-{
-  g_assert (display->vulkan_refcount > 0);
-
-  display->vulkan_refcount++;
-}
-
-void
-gdk_display_unref_vulkan (GdkDisplay *display)
+gdk_display_destroy_vulkan_instance (GdkDisplay *display)
 {
   GHashTableIter iter;
   gpointer key, value;
 
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-  g_return_if_fail (display->vulkan_refcount > 0);
+  g_assert (GDK_IS_DISPLAY (display));
+  g_assert (display->vk_instance != NULL);
 
-  display->vulkan_refcount--;
-  if (display->vulkan_refcount > 0)
-    return;
-
-  GDK_DEBUG (VULKAN, "Closing Vulkan instance");
+  GDK_DEBUG (VULKAN, "Destroy Vulkan instance");
   display->vulkan_features = 0;
   g_clear_pointer (&display->vk_dmabuf_formats, gdk_dmabuf_formats_unref);
   g_hash_table_iter_init (&iter, display->vk_shader_modules);
@@ -1941,11 +1886,9 @@ gdk_vulkan_init_dmabuf (GdkDisplay *display)
     return;
 
   if (!gdk_has_feature (GDK_FEATURE_DMABUF) ||
-      !gdk_display_init_vulkan (display, NULL) ||
-      ((display->vulkan_features & GDK_VULKAN_FEATURE_DMABUF) == 0))
-    {
-      return;
-    }
+      !gdk_display_prepare_vulkan (display, NULL) ||
+      (display->vulkan_features & GDK_VULKAN_FEATURE_DMABUF) == 0)
+    return;
 
   vulkan_builder = gdk_dmabuf_formats_builder_new ();
 
