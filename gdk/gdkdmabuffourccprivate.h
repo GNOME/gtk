@@ -10,8 +10,8 @@
 #endif
 
 #ifndef fourcc_code
-#define fourcc_code(a, b, c, d) ((__u32)(a) | ((__u32)(b) << 8) | \
-				 ((__u32)(c) << 16) | ((__u32)(d) << 24))
+#define fourcc_code(a, b, c, d) ((guint32)(a) | ((guint32)(b) << 8) | \
+				 ((guint32)(c) << 16) | ((guint32)(d) << 24))
 #endif
 
 #ifndef DRM_FORMAT_INVALID
