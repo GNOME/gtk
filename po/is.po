@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+.master.is\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2024-11-11 13:14+0000\n"
-"PO-Revision-Date: 2024-11-13 16:00+0000\n"
+"PO-Revision-Date: 2024-11-13 16:04+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -75,16 +75,14 @@ msgid "The current backend does not support OpenGL"
 msgstr "Þessi bakendi styður ekki OpenGL"
 
 #: gdk/gdkdisplay.c:1317 gdk/gdkvulkancontext.c:1710
-#, fuzzy
 #| msgid "Vulkan support disabled via GDK_DEBUG"
 msgid "Vulkan support disabled via GDK_DISABLE"
-msgstr "Vulkan-stuðningur gerður óvirkur með GDK_DEBUG"
+msgstr "Vulkan-stuðningur gerður óvirkur með GDK_DISABLE"
 
 #: gdk/gdkdisplay.c:1371
-#, fuzzy
 #| msgid "GL support disabled via GDK_DEBUG"
 msgid "OpenGL support disabled via GDK_DISABLE"
-msgstr "GL stuðningur gerður óvirkur með GDK_DEBUG"
+msgstr "OpenGL stuðningur gerður óvirkur með GDK_DISABLE"
 
 #: gdk/gdkdisplay.c:1685
 msgid "No EGL configuration available"
@@ -149,16 +147,14 @@ msgid "Unable to create a GL context"
 msgstr "Gat ekki búið til GL-umhverfi"
 
 #: gdk/gdkglcontext.c:1338
-#, fuzzy
 #| msgid "Anything but OpenGL ES disabled via GDK_DEBUG"
 msgid "OpenGL ES API disabled via GDK_DISABLE"
-msgstr "Allt nema OpenGL ES óvirkt með GDK_DEBUG"
+msgstr "OpenGL ES API gert óvirkt með GDK_DISABLE"
 
 #: gdk/gdkglcontext.c:1350
-#, fuzzy
 #| msgid "GL support disabled via GDK_DEBUG"
 msgid "OpenGL API disabled via GDK_DISABLE"
-msgstr "GL stuðningur gerður óvirkur með GDK_DEBUG"
+msgstr "OpenGL API gert óvirkt með GDK_DISABLE"
 
 #: gdk/gdkglcontext.c:1361
 #, c-format
@@ -174,10 +170,10 @@ msgid "Trying to use %s, but %s is already in use"
 msgstr "Reyni að nota %s, en %s er þegar í notkun"
 
 #: gdk/gdkglcontext.c:2182
-#, fuzzy, c-format
+#, c-format
 #| msgid "Trying to use %s, but %s is already in use"
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
-msgstr "Reyni að nota %s, en %s er þegar í notkun"
+msgstr "Reyni að nota %s, en er gert óvirkt með GDK_DISABLE"
 
 #: gdk/gdktexture.c:672
 msgid "Unknown image format."
@@ -3901,10 +3897,9 @@ msgid "Save the current CSS"
 msgstr "Vista núverandi CSS"
 
 #: gtk/inspector/css-editor.ui:51
-#, fuzzy
 #| msgid "Show other locations"
 msgid "Show deprecations"
-msgstr "Sýna aðrar staðsetningar"
+msgstr "Sýna úreldingar"
 
 #: gtk/inspector/css-node-tree.ui:28 tools/gtk-builder-tool-preview.c:178
 #: tools/gtk-builder-tool-screenshot.c:359
