@@ -63,6 +63,7 @@
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 #include "presentation-time-client-protocol.h"
 #include "xx-color-management-v4-client-protocol.h"
+#include "xdg-toplevel-tag-v1-client-protocol.h"
 
 #include "wm-button-layout-translation.h"
 
@@ -554,6 +555,12 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry, id,
                           &xdg_system_bell_v1_interface, 1);
     }
+  else if (strcmp (interface, xdg_toplevel_tag_manager_v1_interface.name) == 0)
+    {
+      display_wayland->xdg_toplevel_tag =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &xdg_toplevel_tag_manager_v1_interface, 1);
+    }
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));
@@ -770,6 +777,7 @@ gdk_wayland_display_dispose (GObject *object)
   g_clear_pointer (&display_wayland->dmabuf_formats_info, dmabuf_formats_info_free);
   g_clear_pointer (&display_wayland->color, gdk_wayland_color_free);
   g_clear_pointer (&display_wayland->system_bell, xdg_system_bell_v1_destroy);
+  g_clear_pointer (&display_wayland->xdg_toplevel_tag, xdg_toplevel_tag_manager_v1_destroy);
 
   g_clear_pointer (&display_wayland->shm, wl_shm_destroy);
   g_clear_pointer (&display_wayland->wl_registry, wl_registry_destroy);

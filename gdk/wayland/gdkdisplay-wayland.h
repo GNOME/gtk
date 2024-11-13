@@ -126,6 +126,7 @@ struct _GdkWaylandDisplay
   struct wp_viewporter *viewporter;
   struct wp_presentation *presentation;
   struct wp_single_pixel_buffer_manager_v1 *single_pixel_buffer;
+  struct xdg_toplevel_tag_manager_v1 *xdg_toplevel_tag;
   GdkWaylandColor *color;
 
   GList *async_roundtrips;

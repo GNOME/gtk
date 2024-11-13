@@ -38,6 +38,7 @@
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
 #include <wayland/xdg-dialog-v1-client-protocol.h>
+#include "xdg-toplevel-tag-v1-client-protocol.h"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -1257,7 +1258,7 @@ gdk_wayland_toplevel_set_transient_for (GdkWaylandToplevel *toplevel,
 
 #define LAST_PROP 1
 
-static void 
+static void
 gdk_wayland_toplevel_set_decorated (GdkWaylandToplevel *self,
                                     gboolean            decorated)
 {
@@ -2478,6 +2479,50 @@ gdk_wayland_toplevel_set_application_id (GdkToplevel *toplevel,
     default:
       g_assert_not_reached ();
     }
+}
+
+
+/**
+ * gdk_wayland_toplevel_set_tag:
+ * @toplevel: (type GdkWaylandToplevel): a `GdkToplevel` to set the tag for
+ * @tag: A preferably human-readable tag
+ *
+ * Set a tag to the toplevel allowing to uniquely identify it from the compositor
+ * side.
+ *
+ * The tag along with the application ID can be used to create a unique identifier
+ * per app / window.
+ *
+ * The tag may be shown to the user in UI, so it's preferable for
+ * it to be human readable. Suitable tags would for example be
+ * “main window”, “settings”, “e-mail composer” or similar.
+ *
+ * The tag does not need to be unique across applications.
+
+ * Returns: whether the tag was set.
+ *
+ * Since: 4.18
+ */
+gboolean
+gdk_wayland_toplevel_set_tag (GdkToplevel *toplevel,
+                              const char  *tag)
+{
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+  GdkSurface *surface = GDK_SURFACE (toplevel);
+  GdkDisplay *display = gdk_surface_get_display (surface);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (!display_wayland->xdg_toplevel_tag)
+    {
+      g_warning ("Server is missing xdg_toplevel_tag support");
+      return FALSE;
+    }
+
+  xdg_toplevel_tag_manager_v1_set_toplevel_tag (display_wayland->xdg_toplevel_tag,
+                                                wayland_toplevel->display_server.xdg_toplevel,
+                                                tag);
+
+  return TRUE;
 }
 
 gboolean
