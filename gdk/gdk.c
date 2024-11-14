@@ -139,6 +139,7 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings" },
   { "high-depth",      GDK_DEBUG_HIGH_DEPTH, "Use high bit depth rendering if possible" },
   { "no-vsync",        GDK_DEBUG_NO_VSYNC, "Repaint instantly (uses 100% CPU with animations)" },
+  { "color-mgmt",      GDK_DEBUG_COLOR_MANAGEMENT, "Enable color management" },
 };
 
 static const GdkDebugKey gdk_feature_keys[] = {
@@ -151,7 +152,6 @@ static const GdkDebugKey gdk_feature_keys[] = {
   { "vulkan",     GDK_FEATURE_VULKAN,           "Disable Vulkan support" },
   { "dmabuf",     GDK_FEATURE_DMABUF,           "Disable dmabuf support" },
   { "offload",    GDK_FEATURE_OFFLOAD,          "Disable graphics offload" },
-  { "color-mgmt", GDK_FEATURE_COLOR_MANAGEMENT, "Disable color management" },
 };
 
 

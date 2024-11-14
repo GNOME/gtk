@@ -248,6 +248,9 @@ A number of options affect behavior instead of logging:
 `no-vsync`
 : Repaint instantly (uses 100% CPU with animations)
 
+`color-mgmt`
+: Enable color management
+
 The special value `all` can be used to turn on all debug options. The special
 value `help` can be used to obtain a list of all supported debug options.
 
@@ -354,9 +357,6 @@ disable certain features.
 
 `offload`
 : Disable graphics offload to subsurfaces
-
-`color-mgmt`
-: Disable color management
 
 ### `GDK_GL_DISABLE`
 
