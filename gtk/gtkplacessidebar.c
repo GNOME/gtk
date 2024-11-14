@@ -3793,6 +3793,7 @@ gtk_places_sidebar_init (GtkPlacesSidebar *sidebar)
                               list_box_sort_func, NULL, NULL);
   gtk_list_box_set_selection_mode (GTK_LIST_BOX (sidebar->list_box), GTK_SELECTION_SINGLE);
   gtk_list_box_set_activate_on_single_click (GTK_LIST_BOX (sidebar->list_box), TRUE);
+  gtk_list_box_set_tab_behavior (GTK_LIST_BOX (sidebar->list_box), GTK_LIST_TAB_ITEM);
 
   g_signal_connect (sidebar->list_box, "row-activated",
                     G_CALLBACK (on_row_activated), sidebar);
