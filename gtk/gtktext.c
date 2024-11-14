@@ -291,6 +291,7 @@ struct _GtkTextPrivate
   guint         propagate_text_width    : 1;
   guint         text_handles_enabled    : 1;
   guint         enable_undo             : 1;
+  guint         emoji_chooser_open      : 1;
 };
 
 struct _GtkTextPasswordHint
@@ -3459,7 +3460,7 @@ gtk_text_grab_focus (GtkWidget *widget)
   if (!GTK_WIDGET_CLASS (gtk_text_parent_class)->grab_focus (GTK_WIDGET (self)))
     return FALSE;
 
-  if (priv->editable && !priv->in_click && !prev_focus_was_child)
+  if (priv->editable && !priv->in_click && !prev_focus_was_child && !priv->emoji_chooser_open)
     {
       g_object_get (gtk_widget_get_settings (widget),
                     "gtk-entry-select-on-focus",
@@ -7184,6 +7185,15 @@ gtk_text_get_tabs (GtkText *self)
 }
 
 static void
+emoji_chooser_closed (GtkWidget *chooser,
+                      GtkText   *text)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (text);
+
+  priv->emoji_chooser_open = 1;
+}
+
+static void
 emoji_picked (GtkEmojiChooser *chooser,
               const char      *text,
               GtkText         *self)
@@ -7208,6 +7218,7 @@ emoji_picked (GtkEmojiChooser *chooser,
 static void
 gtk_text_insert_emoji (GtkText *self)
 {
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
   GtkWidget *chooser;
 
   if (gtk_widget_get_ancestor (GTK_WIDGET (self), GTK_TYPE_EMOJI_CHOOSER) != NULL)
@@ -7221,10 +7232,11 @@ gtk_text_insert_emoji (GtkText *self)
 
       gtk_widget_set_parent (chooser, GTK_WIDGET (self));
       g_signal_connect (chooser, "emoji-picked", G_CALLBACK (emoji_picked), self);
-      g_signal_connect_swapped (chooser, "hide", G_CALLBACK (gtk_text_grab_focus_without_selecting), self);
+      g_signal_connect_swapped (chooser, "hide", G_CALLBACK (emoji_chooser_closed), self);
     }
 
   gtk_popover_popup (GTK_POPOVER (chooser));
+  priv->emoji_chooser_open = 1;
 }
 
 static void
