@@ -88,6 +88,10 @@
  * displays the shortcuts window, associate the item with the action
  * `win.show-help-overlay`.
  *
+ * `GtkApplication` will also automatically set the application id as the
+ * default window icon. Use [func@Gtk.Window.set_default_icon_name] or
+ * [property@Gtk.Window:icon-name] to override that behavior.
+ *
  * ## A simple application
  *
  * [A simple example](https://gitlab.gnome.org/GNOME/gtk/tree/main/examples/bp/bloatpad.c)
@@ -244,6 +248,23 @@ gtk_application_load_resources (GtkApplication *application)
   }
 }
 
+static void
+gtk_application_set_window_icon (GtkApplication *application)
+{
+  GtkIconTheme *default_theme;
+  const char *appid;
+
+  if (gtk_window_get_default_icon_name () != NULL)
+    return;
+
+  default_theme = gtk_icon_theme_get_for_display (gdk_display_get_default ());
+  appid = g_application_get_application_id (G_APPLICATION (application));
+
+  if (appid == NULL || !gtk_icon_theme_has_icon (default_theme, appid))
+    return;
+
+  gtk_window_set_default_icon_name (appid);
+}
 
 static void
 gtk_application_startup (GApplication *g_application)
@@ -267,6 +288,7 @@ gtk_application_startup (GApplication *g_application)
   gtk_application_impl_startup (priv->impl, priv->register_session);
 
   gtk_application_load_resources (application);
+  gtk_application_set_window_icon (application);
 
   gdk_profiler_end_mark (before, "Application startup", NULL);
 }
