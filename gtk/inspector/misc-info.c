@@ -183,8 +183,13 @@ update_allocation (GtkWidget            *w,
   char *size_label;
   GEnumClass *class;
   GEnumValue *value;
+  GtkWidget *target;
 
-  if (!gtk_widget_compute_bounds (w, gtk_widget_get_parent (w), &bounds))
+  target = gtk_widget_get_parent (w);
+  if (target == NULL)
+    target = w;
+
+  if (!gtk_widget_compute_bounds (w, target, &bounds))
     graphene_rect_init (&bounds, 0, 0, 0, 0);
 
   size_label = g_strdup_printf ("%g × %g +%g +%g",
