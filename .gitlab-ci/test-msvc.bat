@@ -5,7 +5,7 @@ call "C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\VC\Auxiliar
 @echo on
 
 :: FIXME: make warnings fatal
-pip3 install --upgrade --user meson~=0.64 || goto :error
+pip3 install --upgrade --user meson~=1.3.0 || goto :error
 meson setup -Dbackend_max_links=1 -Ddebug=false -Dmedia-gstreamer=disabled -Dvulkan=disabled _build || goto :error
 ninja -C _build || goto :error
 

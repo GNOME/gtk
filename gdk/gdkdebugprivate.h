@@ -51,6 +51,7 @@ typedef enum {
   GDK_DEBUG_DEFAULT_SETTINGS= 1 << 21,
   GDK_DEBUG_HIGH_DEPTH      = 1 << 22,
   GDK_DEBUG_NO_VSYNC        = 1 << 23,
+  GDK_DEBUG_COLOR_MANAGEMENT= 1 << 24,
 } GdkDebugFlags;
 
 typedef enum {
@@ -63,7 +64,6 @@ typedef enum {
   GDK_FEATURE_VULKAN           = 1 << 6,
   GDK_FEATURE_DMABUF           = 1 << 7,
   GDK_FEATURE_OFFLOAD          = 1 << 8,
-  GDK_FEATURE_COLOR_MANAGEMENT = 1 << 9,
 } GdkFeatures;
 
 #define GDK_ALL_FEATURES ((1 << 10) - 1)
