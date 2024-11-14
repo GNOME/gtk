@@ -928,6 +928,10 @@ preferred_changed (GdkWaylandColorSurface *color,
 {
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (data);
 
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (GDK_SURFACE (self)), EVENTS,
+                     "preferred color state, surface %p color state %s",
+                     self, gdk_color_state_get_name (color_state));
+
   gdk_surface_set_color_state (GDK_SURFACE (self), color_state);
 
   self->color_state_changed = TRUE;
