@@ -590,6 +590,7 @@ populate_servers (GtkPlacesView *view)
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
       gtk_button_set_has_frame (GTK_BUTTON (button), FALSE);
       gtk_widget_add_css_class (button, "sidebar-button");
+      gtk_widget_set_tooltip_text (button, _("Remove server"));
       gtk_grid_attach (GTK_GRID (grid), button, 1, 0, 1, 2);
 
       gtk_list_box_row_set_child (GTK_LIST_BOX_ROW (row), grid);
