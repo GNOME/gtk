@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: gtk+.master.is\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2024-11-11 13:14+0000\n"
-"PO-Revision-Date: 2024-11-13 16:04+0000\n"
+"PO-Revision-Date: 2024-11-15 15:23+0000\n"
 "Last-Translator: Sveinn í Felli <sv1@fellsnet.is>\n"
 "Language-Team: Icelandic\n"
 "Language: is\n"
@@ -138,7 +138,7 @@ msgstr "Engin samhæfð snið fundust til að flytja efni."
 
 #: gdk/gdkglcontext.c:430 gdk/x11/gdkglcontext-glx.c:651
 msgid "No GL API allowed."
-msgstr ""
+msgstr "Ekkert GL API leyft."
 
 #: gdk/gdkglcontext.c:453 gdk/win32/gdkglcontext-win32-wgl.c:762
 #: gdk/win32/gdkglcontext-win32-wgl.c:905
@@ -587,10 +587,10 @@ msgid "Unsupported color type %u in png image"
 msgstr "Óstudd %u litategund í png mynd"
 
 #: gdk/loaders/gdkpng.c:421
-#, fuzzy, c-format
+#, c-format
 #| msgid "Not enough memory for image size %ux%u"
 msgid "Image stride too large for image size %ux%u"
-msgstr "Ekki nægilegt minni fyrir mynd af stærðinni %ux%u"
+msgstr "Skrefun myndar og stór fyrir mynd af stærðinni %ux%u"
 
 #: gdk/loaders/gdktiff.c:358
 msgid "Failed to load RGB data from TIFF file"
@@ -739,15 +739,15 @@ msgid "No GL implementation is available"
 msgstr "Engin GL-uppsetning tiltæk"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:771
-#, fuzzy, c-format
+#, c-format
 #| msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgid "WGL version %d.%d is too low, need at least %d.%d"
-msgstr "EGL útgáfa %d.%d er of gömul. GTK krefst %d.%d"
+msgstr "WGL-útgáfan %d.%d er of gömul, þarf útgáfu a.m.k. %d.%d"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:789
 #, c-format
 msgid "GL implementation cannot share GL contexts"
-msgstr ""
+msgstr "GL-uppsetning má ekki deila GL-samhengi"
 
 #: gdk/win32/gdkglcontext-win32-wgl.c:1069
 msgid "No available configurations for the given pixel format"
@@ -810,7 +810,7 @@ msgstr "Klippispjaldsstjóri gat ekki geymt valið."
 
 #: gdk/x11/gdkclipboard-x11.c:649
 msgid "Cannot store clipboard. No clipboard manager is active."
-msgstr ""
+msgstr "Get ekki geymt klippispjald. Engin klippispjaldsstýring er virk."
 
 #: gdk/x11/gdkglcontext-glx.c:817
 msgid "No GLX configurations available"
@@ -863,7 +863,7 @@ msgstr ""
 
 #: gsk/gpu/gsknglrenderer.c:69
 msgid "OpenGL 3.3 required"
-msgstr ""
+msgstr "OpenGL 3.3 nauðsynlegt"
 
 #: gtk/a11y/gtkatspiaction.c:239
 msgctxt "accessibility"
@@ -1436,12 +1436,12 @@ msgstr "skjal"
 #: gtk/gtkaccessible.c:803
 msgctxt "accessibility"
 msgid "feed"
-msgstr ""
+msgstr "streymi"
 
 #: gtk/gtkaccessible.c:804
 msgctxt "accessibility"
 msgid "form"
-msgstr ""
+msgstr "form"
 
 #: gtk/gtkaccessible.c:805
 msgctxt "accessibility"
@@ -1461,7 +1461,7 @@ msgstr ""
 #: gtk/gtkaccessible.c:808
 msgctxt "accessibility"
 msgid "group"
-msgstr ""
+msgstr "hópur"
 
 #: gtk/gtkaccessible.c:809
 msgctxt "accessibility"
@@ -1476,7 +1476,7 @@ msgstr "mynd"
 #: gtk/gtkaccessible.c:811
 msgctxt "accessibility"
 msgid "input"
-msgstr ""
+msgstr "inntak"
 
 #: gtk/gtkaccessible.c:812
 msgctxt "accessibility"
@@ -1531,12 +1531,12 @@ msgstr "valstrengur"
 #: gtk/gtkaccessible.c:822
 msgctxt "accessibility"
 msgid "math"
-msgstr ""
+msgstr "stærðfræði"
 
 #: gtk/gtkaccessible.c:823
 msgctxt "accessibility"
 msgid "meter"
-msgstr ""
+msgstr "metri"
 
 #: gtk/gtkaccessible.c:824
 msgctxt "accessibility"
@@ -1556,12 +1556,12 @@ msgstr "valmyndaratriði"
 #: gtk/gtkaccessible.c:827
 msgctxt "accessibility"
 msgid "menu item checkbox"
-msgstr ""
+msgstr "gátreitur valmyndaratriðis"
 
 #: gtk/gtkaccessible.c:828
 msgctxt "accessibility"
 msgid "menu item radio"
-msgstr ""
+msgstr "valreitur valmyndaratriðis"
 
 #: gtk/gtkaccessible.c:829
 msgctxt "accessibility"
@@ -1611,7 +1611,7 @@ msgstr "svið"
 #: gtk/gtkaccessible.c:838
 msgctxt "accessibility"
 msgid "region"
-msgstr ""
+msgstr "svæði"
 
 #: gtk/gtkaccessible.c:839
 msgctxt "accessibility"
@@ -1706,7 +1706,7 @@ msgstr "flipalisti"
 #: gtk/gtkaccessible.c:857
 msgctxt "accessibility"
 msgid "tab panel"
-msgstr ""
+msgstr "flipaspjald"
 
 #: gtk/gtkaccessible.c:858
 msgctxt "accessibility"
@@ -1766,12 +1766,12 @@ msgstr "víxlhnappur"
 #: gtk/gtkaccessible.c:870
 msgctxt "accessibility"
 msgid "paragraph"
-msgstr ""
+msgstr "málsgrein"
 
 #: gtk/gtkaccessible.c:871
 msgctxt "accessibility"
 msgid "block quote"
-msgstr ""
+msgstr "tilvitnun"
 
 #: gtk/gtkaccessible.c:872
 #| msgctxt "sizegroup mode"
@@ -4276,15 +4276,15 @@ msgstr "Skrá ramma"
 
 #: gtk/inspector/recorder.ui:27
 msgid "Clear recorded frames"
-msgstr ""
+msgstr "Hreinsa skráða ramma"
 
 #: gtk/inspector/recorder.ui:34
 msgid "Add debug nodes"
-msgstr ""
+msgstr "Bæta við villuleitarliðum"
 
 #: gtk/inspector/recorder.ui:42
 msgid "Highlight event sequences"
-msgstr ""
+msgstr "Áherslulita atvikaraðir"
 
 #: gtk/inspector/recorder.ui:51
 msgid "Use a dark background"
@@ -4292,7 +4292,7 @@ msgstr "Nota dökkan bakgrunn"
 
 #: gtk/inspector/recorder.ui:59
 msgid "Save selected node"
-msgstr ""
+msgstr "Vista valinn lið"
 
 #: gtk/inspector/recorder.ui:67
 msgid "Copy to clipboard"
@@ -4517,10 +4517,9 @@ msgid "Show Accessibility warnings"
 msgstr "Birta aðvaranir fyrir auðveldað aðgengi"
 
 #: gtk/inspector/visual.ui:681
-#, fuzzy
 #| msgid "Show Graphic Updates"
 msgid "Show Graphics Offload"
-msgstr "Birta uppfærslur myndefnis"
+msgstr "Birta afhendingu (offload) myndefnis"
 
 #: gtk/inspector/visual.ui:713
 msgid "Inspect Inspector"
@@ -4556,7 +4555,7 @@ msgstr "Víxla hliðarspjaldi af/á"
 
 #: gtk/inspector/window.ui:253
 msgid "Refresh action state"
-msgstr ""
+msgstr "Endurlesa stöðu aðgerðar"
 
 #: gtk/inspector/window.ui:327
 msgid "Previous object"
@@ -4572,7 +4571,7 @@ msgstr "Fyrra með sama forvera"
 
 #: gtk/inspector/window.ui:347
 msgid "List Position"
-msgstr ""
+msgstr "Staða lista"
 
 #: gtk/inspector/window.ui:356
 msgid "Next sibling"
@@ -4588,7 +4587,7 @@ msgstr "Framsetning"
 
 #: gtk/inspector/window.ui:418
 msgid "CSS Nodes"
-msgstr "CSS liðir"
+msgstr "CSS-liðir"
 
 #: gtk/inspector/window.ui:429
 msgid "Size Groups"
@@ -7325,10 +7324,10 @@ msgstr "Nota stíl úr CSS-skrá"
 #: tools/gtk-builder-tool-validate.c:268
 #: tools/gtk-rendernode-tool-benchmark.c:108
 #: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:123
-#, fuzzy, c-format
+#, c-format
 #| msgid "Could not initialize EGL display"
 msgid "Could not initialize windowing system\n"
-msgstr "Gat ekki frumstillt EGL-skjá"
+msgstr "Gat ekki frumstillt gluggakerfi\n"
 
 #  create the text entry widget
 #: tools/gtk-builder-tool-preview.c:195
@@ -7342,10 +7341,10 @@ msgid "No .ui file specified\n"
 msgstr "Engin .ui-skrá tilgreind\n"
 
 #: tools/gtk-builder-tool-preview.c:214
-#, fuzzy, c-format
+#, c-format
 #| msgid "Can only simplify a single .ui file without --replace\n"
 msgid "Can only preview a single .ui file\n"
-msgstr "Get aðeins einfaldað eina .ui skrá án --replace\n"
+msgstr "Get aðeins forskoðað eina .ui skrá\n"
 
 #: tools/gtk-builder-tool-screenshot.c:238
 #, c-format
@@ -7409,10 +7408,10 @@ msgid "Render a .ui file to an image."
 msgstr ""
 
 #: tools/gtk-builder-tool-screenshot.c:397
-#, fuzzy, c-format
+#, c-format
 #| msgid "Can only simplify a single .ui file without --replace\n"
 msgid "Can only render a single .ui file to a single output file\n"
-msgstr "Get aðeins einfaldað eina .ui skrá án --replace\n"
+msgstr "Get aðeins myndgert eina .ui skrá yfir í staka frálagsskrá\n"
 
 #: tools/gtk-builder-tool-simplify.c:444
 #, c-format
@@ -7420,28 +7419,28 @@ msgid "%s:%d: Couldn’t parse value for property '%s': %s\n"
 msgstr "%s:%d: Gat ekki þáttað gildið fyrir eigindið '%s': %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:658
-#, fuzzy, c-format
+#, c-format
 #| msgid "Cell property %s::%s not found\n"
 msgid "Property %s not found"
-msgstr "Eiginleiki reitsins %s::%s fannst ekki\n"
+msgstr "Eiginleikinn %s fannst ekki"
 
 #: tools/gtk-builder-tool-simplify.c:661
-#, fuzzy, c-format
+#, c-format
 #| msgid "Packing property %s::%s not found\n"
 msgid "Packing property %s not found"
-msgstr "Pökkunareiginleikinn %s::%s fannst ekki\n"
+msgstr "Pökkunareiginleikinn %s fannst ekki"
 
 #: tools/gtk-builder-tool-simplify.c:664
-#, fuzzy, c-format
+#, c-format
 #| msgid "Cell property %s::%s not found\n"
 msgid "Cell property %s not found"
-msgstr "Eiginleiki reitsins %s::%s fannst ekki\n"
+msgstr "Eiginleiki reitsins %s fannst ekki"
 
 #: tools/gtk-builder-tool-simplify.c:667
-#, fuzzy, c-format
+#, c-format
 #| msgid "Cell property %s::%s not found\n"
 msgid "Layout property %s not found"
-msgstr "Eiginleiki reitsins %s::%s fannst ekki\n"
+msgstr "Eiginleiki framsetningar %s fannst ekki"
 
 #: tools/gtk-builder-tool-simplify.c:1400
 #, c-format
@@ -7494,10 +7493,10 @@ msgid "Can only simplify a single .ui file without --replace\n"
 msgstr "Get aðeins einfaldað eina .ui skrá án --replace\n"
 
 #: tools/gtk-builder-tool-validate.c:45
-#, fuzzy, c-format
+#, c-format
 #| msgid "Failed to open file %s : %s\n"
 msgid "Failed to lookup template parent type %s\n"
-msgstr "Mistókst að opna skrá %s: %s\n"
+msgstr "Mistókst að fletta upp yfirtegund sniðmáts: %s\n"
 
 #: tools/gtk-builder-tool-validate.c:123
 msgid "Deprecated types:\n"
@@ -7576,7 +7575,7 @@ msgstr ""
 #: tools/gtk-image-tool-compare.c:111 tools/gtk-rendernode-tool-compare.c:137
 #, c-format
 msgid "No differences.\n"
-msgstr ""
+msgstr "Enginn munur.\n"
 
 #: tools/gtk-image-tool-convert.c:86
 #| msgid "_Format for:"
@@ -7609,10 +7608,10 @@ msgid "Convert the image to a different format or color state."
 msgstr ""
 
 #: tools/gtk-image-tool-convert.c:119 tools/gtk-image-tool-relabel.c:115
-#, fuzzy, c-format
+#, c-format
 #| msgid "Can only simplify a single .ui file without --replace\n"
 msgid "Can only accept a single image file and output file\n"
-msgstr "Get aðeins einfaldað eina .ui skrá án --replace\n"
+msgstr "Get aðeins samþykkt staka myndskrá og frálagsskrá\n"
 
 #: tools/gtk-image-tool-convert.c:133
 #, c-format
@@ -7655,10 +7654,10 @@ msgid "Provide information about the image."
 msgstr ""
 
 #: tools/gtk-image-tool-info.c:96
-#, fuzzy, c-format
+#, c-format
 #| msgid "Can only simplify a single .ui file without --replace\n"
 msgid "Can only accept a single image file\n"
-msgstr "Get aðeins einfaldað eina .ui skrá án --replace\n"
+msgstr "Get aðeins samþykkt staka myndskrá\n"
 
 #: tools/gtk-image-tool-relabel.c:96
 msgid "Change the color state of the image without conversion."
@@ -7673,7 +7672,7 @@ msgstr ""
 
 #: tools/gtk-image-tool-show.c:117 tools/gtk-rendernode-tool-show.c:115
 msgid "Don't add a titlebar"
-msgstr ""
+msgstr "Ekki bæta við titilrönd"
 
 #: tools/gtk-image-tool-show.c:128
 msgid "Show one or more images."
@@ -7846,19 +7845,17 @@ msgstr ""
 
 #: tools/gtk-path-tool-render.c:118 tools/gtk-path-tool-show.c:141
 msgid "Stroke the path"
-msgstr ""
+msgstr "Strjúka eftir ferli"
 
 #: tools/gtk-path-tool-render.c:119 tools/gtk-path-tool-show.c:142
-#, fuzzy
 #| msgid "Show other locations"
 msgid "Show path points"
-msgstr "Sýna aðrar staðsetningar"
+msgstr "Birta punkta ferils"
 
 #: tools/gtk-path-tool-render.c:120 tools/gtk-path-tool-show.c:143
-#, fuzzy
 #| msgid "Show other locations"
 msgid "Show control points"
-msgstr "Sýna aðrar staðsetningar"
+msgstr "Sýna stýripunkta"
 
 #: tools/gtk-path-tool-render.c:121
 msgid "The output file"
@@ -7866,7 +7863,7 @@ msgstr ""
 
 #: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-show.c:144
 msgid "Foreground color"
-msgstr ""
+msgstr "Forgrunnslitur"
 
 #: tools/gtk-path-tool-render.c:122 tools/gtk-path-tool-render.c:123
 #: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:144
@@ -7877,13 +7874,12 @@ msgstr "LITUR"
 
 #: tools/gtk-path-tool-render.c:123 tools/gtk-path-tool-show.c:145
 msgid "Background color"
-msgstr ""
+msgstr "Bakgrunnslitur"
 
 #: tools/gtk-path-tool-render.c:124 tools/gtk-path-tool-show.c:146
-#, fuzzy
 #| msgid "Custom color"
 msgid "Point color"
-msgstr "Sérsniðinn litur"
+msgstr "Litur punkts"
 
 #: tools/gtk-path-tool-render.c:129 tools/gtk-path-tool-show.c:151
 msgid "Fill rule (winding, even-odd)"
@@ -7924,36 +7920,32 @@ msgid "Dash offset (number)"
 msgstr ""
 
 #: tools/gtk-path-tool-render.c:161 tools/gtk-path-tool-show.c:172
-#, fuzzy
 #| msgid "Could not initialize EGL display"
 msgid "Could not initialize windowing system"
-msgstr "Gat ekki frumstillt EGL-skjá"
+msgstr "Gat ekki frumstillt gluggakerfi"
 
 #: tools/gtk-path-tool-render.c:168
-#, fuzzy
 #| msgid "Unsupported depth %u in png image"
 msgid "Render the path to a png image."
-msgstr "Óstudd %u litadýpt í png mynd"
+msgstr "Myndgera slóðina á PNG-mynd."
 
 #: tools/gtk-path-tool-render.c:173 tools/gtk-path-tool-show.c:183
 msgid "Options related to filling"
 msgstr ""
 
 #: tools/gtk-path-tool-render.c:174 tools/gtk-path-tool-show.c:184
-#, fuzzy
 #| msgid "Show other locations"
 msgid "Show help for fill options"
-msgstr "Sýna aðrar staðsetningar"
+msgstr "Birta hjálp um valkosti fyllingar"
 
 #: tools/gtk-path-tool-render.c:181 tools/gtk-path-tool-show.c:191
 msgid "Options related to stroking"
 msgstr ""
 
 #: tools/gtk-path-tool-render.c:182 tools/gtk-path-tool-show.c:192
-#, fuzzy
 #| msgid "Show other locations"
 msgid "Show help for stroke options"
-msgstr "Sýna aðrar staðsetningar"
+msgstr "Birta hjálp um valkosti stroka"
 
 #: tools/gtk-path-tool-render.c:199 tools/gtk-path-tool-show.c:209
 #| msgid "Reason not specified"
@@ -8023,44 +8015,44 @@ msgid "Can only show a single path"
 msgstr ""
 
 #: tools/gtk-path-tool-utils.c:58
-#, fuzzy, c-format
+#, c-format
 #| msgid "Failed to read “%s”: %s\n"
 msgid "Failed to read from standard input: %s\n"
-msgstr "Gat ekki lesið “%s”: %s\n"
+msgstr "Mistókst að lesa úr staðalinntaki: %s\n"
 
 #: tools/gtk-path-tool-utils.c:64
-#, fuzzy, c-format
+#, c-format
 #| msgid "Error parsing commandline options: %s\n"
 msgid "Error reading from standard input: %s\n"
-msgstr "Villa við þáttun skipanalínu: %s\n"
+msgstr "Villa við að lesa úr staðalinntaki: %s\n"
 
 #: tools/gtk-path-tool-utils.c:83
-#, fuzzy, c-format
+#, c-format
 #| msgid "Failed to write hash table\n"
 msgid "Failed to parse '%s' as path.\n"
-msgstr "Mistókst að búa til tætitöflu\n"
+msgstr "Mistókst að þátta '%s' sem slóð.\n"
 
 #: tools/gtk-path-tool-utils.c:109
-#, fuzzy, c-format
+#, c-format
 #| msgid "Failed to open file %s : %s\n"
 msgid "Failed to parse '%s' as %s."
-msgstr "Mistókst að opna skrá %s: %s\n"
+msgstr "Mistókst að þátta '%s' sem %s."
 
 #: tools/gtk-path-tool-utils.c:111
 msgid "Possible values: "
 msgstr ""
 
 #: tools/gtk-path-tool-utils.c:135
-#, fuzzy, c-format
+#, c-format
 #| msgid "Could not rename %s to %s: %s\n"
 msgid "Could not parse '%s' as color"
-msgstr "Gat ekki breytt nafninu á %s í %s: %s\n"
+msgstr "Mistókst að þátta '%s' sem lit"
 
 #: tools/gtk-path-tool-utils.c:163
-#, fuzzy, c-format
+#, c-format
 #| msgid "Failed to write hash table\n"
 msgid "Failed to parse '%s' as number"
-msgstr "Mistókst að búa til tætitöflu\n"
+msgstr "Mistókst að þátta '%s' sem tölu"
 
 #: tools/gtk-rendernode-tool.c:35
 #, c-format
@@ -8088,15 +8080,15 @@ msgstr ""
 #: tools/gtk-rendernode-tool-compare.c:65
 #: tools/gtk-rendernode-tool-render.c:254
 msgid "RENDERER"
-msgstr ""
+msgstr "MYNDGERÐ"
 
 #: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "Number of runs with each renderer"
-msgstr ""
+msgstr "Fjöldi umferða með hverju myndgerðarkerfi"
 
 #: tools/gtk-rendernode-tool-benchmark.c:97
 msgid "RUNS"
-msgstr ""
+msgstr "UMFERÐIR"
 
 #: tools/gtk-rendernode-tool-benchmark.c:98
 msgid "Don’t download result/wait for GPU to finish"
@@ -8131,12 +8123,12 @@ msgstr "SKRÁ1 SKRÁ2"
 
 #: tools/gtk-rendernode-tool-compare.c:82
 msgid "Compare .node or .png files."
-msgstr ""
+msgstr "Bera saman .node eða .png skrár."
 
 #: tools/gtk-rendernode-tool-compare.c:95
 #, c-format
 msgid "Must specify two files\n"
-msgstr ""
+msgstr "Hér verður að tilgreina tvær skrár\n"
 
 #: tools/gtk-rendernode-tool-compare.c:102
 #: tools/gtk-rendernode-tool-render.c:209
@@ -8154,7 +8146,7 @@ msgstr "Mistókst að skrifa %s\n"
 
 #: tools/gtk-rendernode-tool-extract.c:292
 msgid "Directory to use"
-msgstr ""
+msgstr "Mappa sem á að nota"
 
 #: tools/gtk-rendernode-tool-extract.c:292
 msgid "DIRECTORY"
@@ -8162,7 +8154,7 @@ msgstr "MAPPA"
 
 #: tools/gtk-rendernode-tool-extract.c:293
 msgid "Be verbose"
-msgstr ""
+msgstr "Vera ítarlegri"
 
 #: tools/gtk-rendernode-tool-extract.c:303
 msgid "Extract data urls from the render node."
@@ -8176,11 +8168,11 @@ msgstr "Get aðeins samþykkt staka .node-skrá\n"
 
 #: tools/gtk-rendernode-tool-info.c:193
 msgid "Number of nodes:"
-msgstr ""
+msgstr "Fjöldi liða:"
 
 #: tools/gtk-rendernode-tool-info.c:200
 msgid "Depth:"
-msgstr ""
+msgstr "Dýpt:"
 
 #: tools/gtk-rendernode-tool-info.c:203
 #| msgctxt "OpenType layout"
@@ -8190,7 +8182,7 @@ msgstr "Mörk:"
 
 #: tools/gtk-rendernode-tool-info.c:204
 msgid "Origin:"
-msgstr ""
+msgstr "Uppruni:"
 
 #: tools/gtk-rendernode-tool-info.c:208 tools/gtk-rendernode-tool-info.c:214
 msgid "Opaque part:"
@@ -8206,6 +8198,8 @@ msgid ""
 "File %s exists.\n"
 "If you want to overwrite, specify the filename.\n"
 msgstr ""
+"Skráin %s er þegar til.\n"
+"Ef þú vilt skrifa yfir hana skaltu tilgreina skráarheitið.\n"
 
 #: tools/gtk-rendernode-tool-render.c:184
 #: tools/gtk-rendernode-tool-render.c:196
@@ -10440,4 +10434,5 @@ msgstr ""
 
 #~ msgid "_Location:"
 #~ msgstr "_Staðsetning:"
+
 
