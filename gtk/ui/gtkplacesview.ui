@@ -275,6 +275,7 @@
                 <property name="direction">0</property>
                 <property name="popover">recent_servers_popover</property>
                 <property name="icon-name">pan-down-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Show recent servers</property>
                 <style>
                   <class name="server-list-button"/>
                 </style>
