@@ -92,7 +92,7 @@ test_print_and_parse (void)
       string_before = gdk_content_formats_to_string (before);
 
       parsed = gdk_content_formats_parse (string_before);
-      g_assert (parsed);
+      g_assert_nonnull (parsed);
       assert_formats_equal (before, parsed);
 
       string_parsed = gdk_content_formats_to_string (parsed);
