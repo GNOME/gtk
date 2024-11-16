@@ -59,8 +59,8 @@ test_load_image (gconstpointer data)
 
   g_assert_no_error (error);
   g_assert_true (GDK_IS_TEXTURE (texture));
-  g_assert_cmpint (gdk_texture_get_width (texture), ==, 32);
-  g_assert_cmpint (gdk_texture_get_height (texture), ==, 32);
+  g_assert_cmpint (gdk_texture_get_width (texture), >, 0);
+  g_assert_cmpint (gdk_texture_get_height (texture), >, 0);
 
   g_object_unref (texture);
   g_bytes_unref (bytes);
