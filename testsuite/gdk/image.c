@@ -153,7 +153,7 @@ main (int argc, char *argv[])
   while ((name = g_dir_read_name (dir)) != NULL)
    {
      char *test = g_strconcat ("/image/load/", name, NULL);
-     g_test_add_data_func (test, name, test_load_image);
+     g_test_add_data_func_full (test, g_strdup (name), test_load_image, g_free);
      g_free (test);
    }
 
@@ -165,7 +165,7 @@ main (int argc, char *argv[])
   while ((name = g_dir_read_name (dir)) != NULL)
    {
      char *test = g_strconcat ("/image/fail/", name, NULL);
-     g_test_add_data_func (test, name, test_load_image_fail);
+     g_test_add_data_func_full (test, g_strdup (name), test_load_image_fail, g_free);
      g_free (test);
    }
 
