@@ -157,6 +157,8 @@ main (int argc, char *argv[])
      g_free (test);
    }
 
+  g_dir_close (dir);
+
   path = g_test_build_filename (G_TEST_DIST, "bad-image-data", NULL);
   dir = g_dir_open (path, 0, &error);
   g_assert_no_error (error);
@@ -168,6 +170,8 @@ main (int argc, char *argv[])
      g_test_add_data_func_full (test, g_strdup (name), test_load_image_fail, g_free);
      g_free (test);
    }
+
+  g_dir_close (dir);
 
   g_test_add_data_func ("/image/save/image.png", "image.png", test_save_image);
   g_test_add_data_func ("/image/save/image.tiff", "image.tiff", test_save_image);
