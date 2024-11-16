@@ -34,7 +34,9 @@ test_dmabuf_no_gpu (void)
                                  gdk_color_state_get_srgb (),
                                  FALSE,
                                  bytes,
-                                 UDMABUF_STRIDE_ALIGN,
+                                 1,
+                                 (gsize[1]) { UDMABUF_STRIDE_ALIGN },
+                                 (gsize[1]) { 0 },
                                  &error);
   g_assert_no_error (error);
 

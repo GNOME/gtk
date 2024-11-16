@@ -12,7 +12,9 @@ GdkTexture *    udmabuf_texture_new             (gsize           width,
                                                  GdkColorState  *color_state,
                                                  gboolean        premultiplied,
                                                  GBytes         *bytes,
-                                                 gsize           stride,
+                                                 gsize           n_planes,
+                                                 gsize          *strides,
+                                                 gsize          *offsets,
                                                  GError        **error);
 
 GdkTexture *    udmabuf_texture_from_texture    (GdkTexture     *texture,
