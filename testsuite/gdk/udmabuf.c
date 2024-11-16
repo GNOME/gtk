@@ -170,17 +170,22 @@ udmabuf_texture_new (gsize           width,
                      GdkColorState  *color_state,
                      gboolean        premultiplied,
                      GBytes         *bytes,
-                     gsize           stride,
+                     gsize           n_planes,
+                     gsize          *strides,
+                     gsize          *offsets,
                      GError        **error)
 {
   GdkDmabufTextureBuilder *builder;
   GdkTexture *texture;
   UDmabuf *udmabuf;
   gconstpointer data;
-  gsize size;
+  gsize i, size;
 
   /* Many graphics cards need this and Mesa tries to align its own buffers this way */
-  g_assert (stride % UDMABUF_STRIDE_ALIGN == 0);
+  for (i = 0; i < n_planes; i++)
+    {
+      g_assert (strides[i] % UDMABUF_STRIDE_ALIGN == 0);
+    }
 
   data = g_bytes_get_data (bytes, &size);
 
@@ -199,10 +204,13 @@ udmabuf_texture_new (gsize           width,
   gdk_dmabuf_texture_builder_set_modifier (builder, 0);
   gdk_dmabuf_texture_builder_set_color_state (builder, color_state);
   gdk_dmabuf_texture_builder_set_premultiplied (builder, premultiplied);
-  gdk_dmabuf_texture_builder_set_n_planes (builder, 1);
-  gdk_dmabuf_texture_builder_set_fd (builder, 0, udmabuf->dmabuf_fd);
-  gdk_dmabuf_texture_builder_set_stride (builder, 0, stride);
-  gdk_dmabuf_texture_builder_set_offset (builder, 0, 0);
+  gdk_dmabuf_texture_builder_set_n_planes (builder, n_planes);
+  for (i = 0; i < n_planes; i++)
+    {
+      gdk_dmabuf_texture_builder_set_fd (builder, i, udmabuf->dmabuf_fd);
+      gdk_dmabuf_texture_builder_set_stride (builder, i, strides[i]);
+      gdk_dmabuf_texture_builder_set_offset (builder, i, offsets[i]);
+    }
 
   texture = gdk_dmabuf_texture_builder_build (builder, udmabuf_free, udmabuf, error);
 
@@ -220,7 +228,9 @@ udmabuf_texture_new (gsize           width,
                      GdkColorState  *color_state,
                      gboolean        premultiplied,
                      GBytes         *bytes,
-                     gsize           stride,
+                     gsize           n_planes,
+                     gsize          *strides,
+                     gsize          *offsets,
                      GError        **error)
 {
   g_set_error (error,
@@ -296,7 +306,10 @@ udmabuf_texture_from_texture (GdkTexture  *texture,
                                   fourcc,
                                   gdk_texture_get_color_state (texture),
                                   premultiplied,
-                                  bytes, stride,
+                                  bytes,
+                                  1,
+                                  (gsize[1]) { stride },
+                                  (gsize[1]) { 0 },
                                   error);
   g_bytes_unref (bytes);
 
