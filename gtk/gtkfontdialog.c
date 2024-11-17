@@ -31,10 +31,8 @@
 /**
  * GtkFontDialog:
  *
- * A `GtkFontDialog` object collects the arguments that
- * are needed to present a font chooser dialog to the
- * user, such as a title for the dialog and whether it
- * should be modal.
+ * Collects the arguments that are needed to present a font chooser dialog
+ * to the user, such as a title for the dialog and whether it should be modal.
  *
  * The dialog is shown with the [method@Gtk.FontDialog.choose_font]
  * function or its variants.
@@ -215,7 +213,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
   /**
    * GtkFontDialog:font-map:
    *
-   * Sets a custom font map to select fonts from.
+   * A custom font map to select fonts from.
    *
    * A custom font map can be used to present application-specific
    * fonts instead of or in addition to the normal system fonts.
@@ -230,8 +228,7 @@ gtk_font_dialog_class_init (GtkFontDialogClass *class)
   /**
    * GtkFontDialog:filter:
    *
-   * Sets a filter to restrict what fonts are shown
-   * in the font chooser dialog.
+   * A filter to restrict what fonts are shown in the font chooser dialog.
    *
    * Since: 4.10
    */
@@ -266,10 +263,9 @@ gtk_font_dialog_new (void)
 
 /**
  * gtk_font_dialog_get_title:
- * @self: a `GtkFontDialog`
+ * @self: a font dialog
  *
- * Returns the title that will be shown on the
- * font chooser dialog.
+ * Returns the title that will be shown on the font chooser dialog.
  *
  * Returns: the title
  *
@@ -285,11 +281,10 @@ gtk_font_dialog_get_title (GtkFontDialog *self)
 
 /**
  * gtk_font_dialog_set_title:
- * @self: a `GtkFontDialog`
+ * @self: a font dialog
  * @title: the new title
  *
- * Sets the title that will be shown on the
- * font chooser dialog.
+ * Sets the title that will be shown on the font chooser dialog.
  *
  * Since: 4.10
  */
@@ -314,13 +309,12 @@ gtk_font_dialog_set_title (GtkFontDialog *self,
 
 /**
  * gtk_font_dialog_get_modal:
- * @self: a `GtkFontDialog`
+ * @self: a font dialog
  *
- * Returns whether the font chooser dialog
- * blocks interaction with the parent window
- * while it is presented.
+ * Returns whether the font chooser dialog blocks interaction
+ * with the parent window while it is presented.
  *
- * Returns: `TRUE` if the font chooser dialog is modal
+ * Returns: true if the font chooser dialog is modal
  *
  * Since: 4.10
  */
@@ -334,12 +328,11 @@ gtk_font_dialog_get_modal (GtkFontDialog *self)
 
 /**
  * gtk_font_dialog_set_modal:
- * @self: a `GtkFontDialog`
+ * @self: a font dialog
  * @modal: the new value
  *
- * Sets whether the font chooser dialog
- * blocks interaction with the parent window
- * while it is presented.
+ * Sets whether the font chooser dialog blocks interaction
+ * with the parent window while it is presented.
  *
  * Since: 4.10
  */
@@ -359,7 +352,7 @@ gtk_font_dialog_set_modal (GtkFontDialog *self,
 
 /**
  * gtk_font_dialog_get_language:
- * @self: a `GtkFontDialog`
+ * @self: a font dialog
  *
  * Returns the language for which font features are applied.
  *
@@ -377,7 +370,7 @@ gtk_font_dialog_get_language (GtkFontDialog *self)
 
 /**
  * gtk_font_dialog_set_language:
- * @self: a `GtkFontDialog`
+ * @self: a font dialog
  * @language: the language for font features
  *
  * Sets the language for which font features are applied.
@@ -400,7 +393,7 @@ gtk_font_dialog_set_language (GtkFontDialog *self,
 
 /**
  * gtk_font_dialog_get_font_map:
- * @self: a `GtkFontDialog`
+ * @self: a font dialog
  *
  * Returns the fontmap from which fonts are selected,
  * or `NULL` for the default fontmap.
@@ -419,7 +412,7 @@ gtk_font_dialog_get_font_map (GtkFontDialog *self)
 
 /**
  * gtk_font_dialog_set_font_map:
- * @self: a `GtkFontDialog`
+ * @self: a font dialog
  * @fontmap: (nullable): the fontmap
  *
  * Sets the fontmap from which fonts are selected.
@@ -440,7 +433,7 @@ gtk_font_dialog_set_font_map (GtkFontDialog *self,
 
 /**
  * gtk_font_dialog_get_filter:
- * @self: a `GtkFontDialog`
+ * @self: a font dialog
  *
  * Returns the filter that decides which fonts to display
  * in the font chooser dialog.
@@ -458,13 +451,13 @@ gtk_font_dialog_get_filter (GtkFontDialog *self)
 }
 /**
  * gtk_font_dialog_set_filter:
- * @self: a `GtkFontDialog`
- * @filter: (nullable): a `GtkFilter`
+ * @self: a font dialog
+ * @filter: (nullable): the filter
  *
  * Adds a filter that decides which fonts to display
  * in the font chooser dialog.
  *
- * The `GtkFilter` must be able to handle both `PangoFontFamily`
+ * The filter must be able to handle both `PangoFontFamily`
  * and `PangoFontFace` objects.
  *
  * Since: 4.10
@@ -615,16 +608,17 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
 /**
  * gtk_font_dialog_choose_family:
- * @self: a `GtkFontDialog`
- * @parent: (nullable): the parent `GtkWindow`
+ * @self: a font dialog
+ * @parent: (nullable): the parent window
  * @initial_value: (nullable): the initial value
- * @cancellable: (nullable): a `GCancellable` to cancel the operation
+ * @cancellable: (nullable): a cancellable to cancel the operation
  * @callback: (scope async) (closure user_data): a callback to call when the
  *   operation is complete
  * @user_data: data to pass to @callback
  *
- * This function initiates a font selection operation by
- * presenting a dialog to the user for selecting a font family.
+ * Presents a font chooser dialog to the user.
+ *
+ * The font chooser dialog will be set up for selecting a font family.
  *
  * Since: 4.10
  */
@@ -668,12 +662,11 @@ gtk_font_dialog_choose_family (GtkFontDialog        *self,
 
 /**
  * gtk_font_dialog_choose_family_finish:
- * @self: a `GtkFontDialog`
- * @result: a `GAsyncResult`
+ * @self: a font dialog
+ * @result: the result
  * @error: return location for a [enum@Gtk.DialogError] error
  *
- * Finishes the [method@Gtk.FontDialog.choose_family] call
- * and returns the resulting family.
+ * Finishes the [method@Gtk.FontDialog.choose_family] call.
  *
  * This function never returns an error. If the operation is
  * not finished successfully, the value passed as @initial_value
@@ -700,17 +693,19 @@ gtk_font_dialog_choose_family_finish (GtkFontDialog  *self,
 
 /**
  * gtk_font_dialog_choose_face:
- * @self: a `GtkFontDialog`
- * @parent: (nullable): the parent `GtkWindow`
+ * @self: a font dialog
+ * @parent: (nullable): the parent window
  * @initial_value: (nullable): the initial value
- * @cancellable: (nullable): a `GCancellable` to cancel the operation
+ * @cancellable: (nullable): a cancellable to cancel the operation
  * @callback: (scope async) (closure user_data): a callback to call when the
  *   operation is complete
  * @user_data: data to pass to @callback
  *
- * This function initiates a font selection operation by
- * presenting a dialog to the user for selecting a font face
- * (i.e. a font family and style, but not a specific font size).
+ * Presents a font chooser dialog to the user.
+ *
+ * The font chooser dialog will be set up for selecting a font face.
+ *
+ * A font face represents a font family and style, but no specific font size.
  *
  * Since: 4.10
  */
@@ -752,12 +747,11 @@ gtk_font_dialog_choose_face (GtkFontDialog       *self,
 
 /**
  * gtk_font_dialog_choose_face_finish:
- * @self: a `GtkFontDialog`
- * @result: a `GAsyncResult`
+ * @self: a font dialog
+ * @result: the result
  * @error: return location for a [enum@Gtk.DialogError] error
  *
- * Finishes the [method@Gtk.FontDialog.choose_face] call
- * and returns the resulting font face.
+ * Finishes the [method@Gtk.FontDialog.choose_face] call.
  *
  * Returns: (nullable) (transfer full): the selected font face
  *
@@ -780,16 +774,17 @@ gtk_font_dialog_choose_face_finish (GtkFontDialog  *self,
 
 /**
  * gtk_font_dialog_choose_font:
- * @self: a `GtkFontDialog`
- * @parent: (nullable): the parent `GtkWindow`
+ * @self: a font dialog
+ * @parent: (nullable): the parent window
  * @initial_value: (nullable): the font to select initially
- * @cancellable: (nullable): a `GCancellable` to cancel the operation
+ * @cancellable: (nullable): a cancellable to cancel the operation
  * @callback: (scope async) (closure user_data): a callback to call when the
  *   operation is complete
  * @user_data: data to pass to @callback
  *
- * This function initiates a font selection operation by
- * presenting a dialog to the user for selecting a font.
+ * Presents a font chooser dialog to the user.
+ *
+ * The font chooser dialog will be set up for selecting a font.
  *
  * If you want to let the user select font features as well,
  * use [method@Gtk.FontDialog.choose_font_and_features] instead.
@@ -830,12 +825,11 @@ gtk_font_dialog_choose_font (GtkFontDialog        *self,
 
 /**
  * gtk_font_dialog_choose_font_finish:
- * @self: a `GtkFontDialog`
- * @result: a `GAsyncResult`
+ * @self: a font dialog
+ * @result: the result
  * @error: return location for a [enum@Gtk.DialogError] error
  *
- * Finishes the [method@Gtk.FontDialog.choose_font] call
- * and returns the resulting font description.
+ * Finishes the [method@Gtk.FontDialog.choose_font] call.
  *
  * Returns: (nullable) (transfer full): the selected font
  *
@@ -858,17 +852,18 @@ gtk_font_dialog_choose_font_finish (GtkFontDialog  *self,
 
 /**
  * gtk_font_dialog_choose_font_and_features:
- * @self: a `GtkFontDialog`
- * @parent: (nullable): the parent `GtkWindow`
+ * @self: a font dialog
+ * @parent: (nullable): the parent window
  * @initial_value: (nullable): the font to select initially
- * @cancellable: (nullable): a `GCancellable` to cancel the operation
+ * @cancellable: (nullable): a cancellable to cancel the operation
  * @callback: (scope async) (closure user_data): a callback to call when the
  *   operation is complete
  * @user_data: data to pass to @callback
  *
- * This function initiates a font selection operation by
- * presenting a dialog to the user for selecting a font and
- * font features.
+ * Presents a font chooser dialog to the user.
+ *
+ * The font chooser dialog will be set up for selecting a font
+ * and specify features for the selected font.
  *
  * Font features affect how the font is rendered, for example
  * enabling glyph variants or ligatures.
@@ -910,18 +905,19 @@ gtk_font_dialog_choose_font_and_features (GtkFontDialog        *self,
 
 /**
  * gtk_font_dialog_choose_font_and_features_finish:
- * @self: a `GtkFontDialog`
- * @result: a `GAsyncResult`
+ * @self: a font dialog
+ * @result: the result
  * @font_desc: (out): return location for font description
  * @font_features: (out): return location for font features
  * @language: (out): return location for the language
  * @error: return location for a [enum@Gtk.DialogError] error
  *
- * Finishes the [method@Gtk.FontDialog.choose_font_and_features]
- * call and returns the resulting font description and font features.
+ * Finishes the [method@Gtk.FontDialog.choose_font_and_features] call.
  *
- * Returns: `TRUE` if a font was selected. Otherwise `FALSE` is returned
- *   and @error is set
+ * The selected font and features are returned in @font_desc and
+ * @font_features.
+ *
+ * Returns: true if a font was selected
  *
  * Since: 4.10
  */
