@@ -21,6 +21,9 @@ struct _GdkDataFormatDescription
     VkComponentMapping swizzle;
   } vk;
 #endif
+  void                  (* read_line)                       (const GdkDataBuffer        *self,
+                                                             gsize                       y,
+                                                             guchar                     *dst_data);
   void                  (* convert)                         (const GdkDataBuffer        *self,
                                                              guchar                     *dst_data,
                                                              gsize                       dst_stride);
