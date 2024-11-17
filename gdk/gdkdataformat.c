@@ -140,72 +140,46 @@ set_rgb_values16 (guint16 rgb[3],
 }
 
 static inline void
-gdk_convert_p010_like (guint16       *dst_data,
-                       gsize          dst_stride,
-                       gsize          width,
-                       gsize          height,
-                       const guint16 *y_data,
-                       gsize          y_stride,
-                       const guint16 *uv_data,
-                       gsize          uv_stride,
-                       gsize          bits_used,
-                       gboolean       uv_swapped,
-                       gsize          x_subsample,
-                       gsize          y_subsample)
+gdk_data_read_p010_like (guint16       *dst_data,
+                         gsize          width,
+                         const guint16 *y_data,
+                         const guint16 *uv_data,
+                         gsize          bits_used,
+                         gboolean       uv_swapped,
+                         gsize          x_subsample)
 {
-  gsize x, y;
-  guint16 mask;
+  gsize x;
+  guint16 mask, tmp;
 
   mask = 0xFFFF << (16 - bits_used);
 
-  for (y = 0; y < height; y += y_subsample)
+  for (x = 0; x < width; x++)
     {
-      for (x = 0; x < width; x += x_subsample)
-        {
-          gint64 r, g, b;
-          gsize xs, ys;
-          guint16 u, v;
-
-          u = uv_data[x / x_subsample * 2 + (uv_swapped ? 1 : 0)];
-          u = (u & mask) | (u >> bits_used);
-          v = uv_data[x / x_subsample * 2 + (uv_swapped ? 0 : 1)];
-          v = (v & mask) | (v >> bits_used);
-          get_uv_values16 (&itu601_narrow, u, v, &r, &g, &b);
-
-          for (ys = 0; ys < y_subsample && y + ys < height; ys++)
-            for (xs = 0; xs < x_subsample && x + xs < width; xs++)
-              {
-                guint16 y_ = y_data[x + xs + y_stride * ys];
-                y_ = (y_ & mask) | (y_ >> bits_used);
-                set_rgb_values16 (&dst_data[3 * (x + xs) + dst_stride * ys], y_, r, g, b);
-              }
-        }
-      dst_data += y_subsample * dst_stride;
-      y_data += y_subsample * y_stride;
-      uv_data += uv_stride;
+      tmp = y_data[x];
+      dst_data[3 * x + 0] = (tmp & mask) | (tmp >> bits_used);
+      tmp = uv_data[x / x_subsample * 2 + (uv_swapped ? 1 : 0)];
+      dst_data[3 * x + 1] = (tmp & mask) | (tmp >> bits_used);
+      tmp = uv_data[x / x_subsample * 2 + (uv_swapped ? 0 : 1)];
+      dst_data[3 * x + 2] = (tmp & mask) | (tmp >> bits_used);
     }
 }
 
-#define CONVERT_P010_FUNC(name, bits_used, uv_swapped, x_subsample, y_subsample) \
+#define READ_P010_FUNC(name, bits_used, uv_swapped, x_subsample, y_subsample) \
 static void \
-gdk_convert_ ## name (const GdkDataBuffer *self, \
-                      guchar              *dst_data, \
-                      gsize                dst_stride) \
+gdk_data_read_ ## name (const GdkDataBuffer *self, \
+                        gsize                y, \
+                        guchar              *dst_data) \
 { \
-  gdk_convert_p010_like ((guint16 *) dst_data, \
-                         dst_stride / 2, \
-                         self->width, \
-                         self->height, \
-                         (guint16 *) self->planes[0].data, \
-                         self->planes[0].stride / 2, \
-                         (guint16 *) self->planes[1].data, \
-                         self->planes[1].stride / 2, \
-                         bits_used, uv_swapped, x_subsample, y_subsample); \
+  gdk_data_read_p010_like ((guint16 *) dst_data, \
+                           self->width, \
+                           (guint16 *) (self->planes[0].data + y * self->planes[0].stride), \
+                           (guint16 *) (self->planes[1].data + y / y_subsample * self->planes[1].stride), \
+                           bits_used, uv_swapped, x_subsample); \
 }
 
-CONVERT_P010_FUNC (p010, 10, FALSE, 2, 2)
-CONVERT_P010_FUNC (p012, 12, FALSE, 2, 2)
-CONVERT_P010_FUNC (p016, 16, FALSE, 2, 2)
+READ_P010_FUNC (p010, 10, FALSE, 2, 2)
+READ_P010_FUNC (p012, 12, FALSE, 2, 2)
+READ_P010_FUNC (p016, 16, FALSE, 2, 2)
 
 static inline void
 gdk_convert_3_plane (guchar       *dst_data,
@@ -379,6 +353,9 @@ CONVERT_3_1_FUNC (bgrx8_a8, 3)
 static void             gdk_data_convert_generic_rgb8       (const GdkDataBuffer        *self,
                                                              guchar                     *dst_data,
                                                              gsize                       dst_stride);
+static void             gdk_data_convert_generic_rgb16      (const GdkDataBuffer        *self,
+                                                             guchar                     *dst_data,
+                                                             gsize                       dst_stride);
 
 GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_NV12] = {
@@ -497,7 +474,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_p010,
+    .convert = gdk_data_convert_generic_rgb16,
+    .read_line = gdk_data_read_p010,
   },
   [GDK_DATA_P012] = {
     .name = "P012",
@@ -513,7 +491,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_p012,
+    .convert = gdk_data_convert_generic_rgb16,
+    .read_line = gdk_data_read_p012,
   },
   [GDK_DATA_P016] = {
     .name = "P016",
@@ -529,7 +508,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_p016,
+    .convert = gdk_data_convert_generic_rgb16,
+    .read_line = gdk_data_read_p016,
   },
   [GDK_DATA_YUV410] = {
     .name = "YUV410",
@@ -850,6 +830,38 @@ gdk_data_convert_generic_rgb8 (const GdkDataBuffer *self,
       data_formats[self->format].read_line (self, y, dst);
       if (data_formats[self->format].is_yuv)
         yuv2rgb_line_rgb8 (dst, self->width);
+    }
+}
+
+static void
+yuv2rgb_line_rgb16 (guint16 *data,
+                    gsize    width)
+{
+  gsize i;
+  gint64 r, g, b;
+
+  for (i = 0; i < width; i++)
+    {
+      get_uv_values16 (&itu601_narrow, data[1], data[2], &r, &g, &b);
+      set_rgb_values16 (data, data[0], r, g, b);
+      data += 3;
+    }
+}
+
+static void
+gdk_data_convert_generic_rgb16 (const GdkDataBuffer *self,
+                                guchar              *dst_data,
+                                gsize                dst_stride)
+{
+  gsize y;
+
+  for (y = 0; y < self->height; y++)
+    {
+      guint8 *dst = dst_data + y * dst_stride;
+
+      data_formats[self->format].read_line (self, y, dst);
+      if (data_formats[self->format].is_yuv)
+        yuv2rgb_line_rgb16 ((guint16 *) dst, self->width);
     }
 }
 
