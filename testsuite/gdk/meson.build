@@ -14,6 +14,9 @@ tests = [
   { 'name': 'contentformats' },
   { 'name': 'contentserializer' },
   { 'name': 'cursor' },
+  { 'name': 'dataformat', 'sources': [ 'udmabuf.c', '../../gdk/gdkdataformat.c', '../reftests/reftest-compare.c' ],
+                          'suites': [ 'needs-udmabuf' ],
+                          'cflags': [ '-DGTK_COMPILATION' ] },
   { 'name': 'displaymanager' },
   { 'name': 'glcontext' },
   { 'name': 'keysyms' },
@@ -48,7 +51,7 @@ foreach t : tests
   test_name = t.get('name')
   test_exe = executable(test_name,
     sources: [ '@0@.c'.format(test_name) ] + t.get('sources', []),
-    c_args: common_cflags,
+    c_args: common_cflags + t.get('cflags', []),
     dependencies: libgtk_dep,
     install: false,
   )
