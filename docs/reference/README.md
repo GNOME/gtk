@@ -65,6 +65,9 @@ for which the source is in .md files in docs/reference/gtk.
 
 ## Style guide
 
+In-depth recommendations for documentation style can be found in the
+[GNOME developer documentation](https://developer.gnome.org/documentation/guidelines/devel-docs.html) guide. The following provides a summary to get you started.
+
 Like the [coding style][coding], these rules try to formalize the existing
 documentation style; in general, you should only ever modify existing code
 that does not match the rules if you're already changing that code for
