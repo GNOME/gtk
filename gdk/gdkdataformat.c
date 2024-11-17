@@ -21,6 +21,9 @@ struct _GdkDataFormatDescription
     VkComponentMapping swizzle;
   } vk;
 #endif
+  void                  (* read_line)                       (const GdkDataBuffer        *self,
+                                                             gsize                       y,
+                                                             guchar                     *dst_data);
   void                  (* convert)                         (const GdkDataBuffer        *self,
                                                              guchar                     *dst_data,
                                                              gsize                       dst_stride);
@@ -70,65 +73,42 @@ set_rgb_values (guint8 rgb[3],
 }
 
 static inline void
-gdk_convert_nv12_like (guchar       *dst_data,
-                       gsize         dst_stride,
-                       gsize         width,
-                       gsize         height,
-                       const guchar *y_data,
-                       gsize         y_stride,
-                       const guchar *uv_data,
-                       gsize         uv_stride,
-                       gboolean      uv_swapped,
-                       gsize         x_subsample,
-                       gsize         y_subsample)
+gdk_data_read_nv12_like (guchar       *dst_data,
+                         gsize         width,
+                         const guchar *y_data,
+                         const guchar *uv_data,
+                         gboolean      uv_swapped,
+                         gsize         x_subsample)
 {
-  gsize x, y;
+  gsize x;
 
-  for (y = 0; y < height; y += y_subsample)
+  for (x = 0; x < width; x++)
     {
-      for (x = 0; x < width; x += x_subsample)
-        {
-          int r, g, b;
-          gsize xs, ys;
-
-          get_uv_values (&itu601_narrow,
-                         uv_data[x / x_subsample * 2 + (uv_swapped ? 1 : 0)], 
-                         uv_data[x / x_subsample * 2 + (uv_swapped ? 0 : 1)],
-                         &r, &g, &b);
-
-          for (ys = 0; ys < y_subsample && y + ys < height; ys++)
-            for (xs = 0; xs < x_subsample && x + xs < width; xs++)
-              set_rgb_values (&dst_data[3 * (x + xs) + dst_stride * ys], y_data[x + xs + y_stride * ys], r, g, b);
-        }
-      dst_data += y_subsample * dst_stride;
-      y_data += y_subsample * y_stride;
-      uv_data += uv_stride;
+      dst_data[3 * x + 0] = y_data[x];
+      dst_data[3 * x + 1] = uv_data[x / x_subsample * 2 + (uv_swapped ? 1 : 0)];
+      dst_data[3 * x + 2] = uv_data[x / x_subsample * 2 + (uv_swapped ? 0 : 1)];
     }
 }
 
-#define CONVERT_NV12_FUNC(name, uv_swapped, x_subsample, y_subsample) \
+#define READ_NV12_FUNC(name, uv_swapped, x_subsample, y_subsample) \
 static void \
-gdk_convert_ ## name (const GdkDataBuffer *self, \
-                      guchar              *dst_data, \
-                      gsize                dst_stride) \
-{ \
-  gdk_convert_nv12_like (dst_data, \
-                         dst_stride, \
-                         self->width, \
-                         self->height, \
-                         self->planes[0].data, \
-                         self->planes[0].stride, \
-                         self->planes[1].data, \
-                         self->planes[1].stride, \
-                         uv_swapped, x_subsample, y_subsample); \
+gdk_data_read_ ## name (const GdkDataBuffer *self, \
+                        gsize                y, \
+                        guchar              *dst_data) \
+{\
+  gdk_data_read_nv12_like (dst_data, \
+                           self->width, \
+                           self->planes[0].data + (y * self->planes[0].stride), \
+                           self->planes[1].data + (y / y_subsample * self->planes[1].stride), \
+                           uv_swapped, x_subsample); \
 }
 
-CONVERT_NV12_FUNC (nv12, FALSE, 2, 2)
-CONVERT_NV12_FUNC (nv21, TRUE, 2, 2)
-CONVERT_NV12_FUNC (nv16, FALSE, 2, 1)
-CONVERT_NV12_FUNC (nv61, TRUE, 2, 1)
-CONVERT_NV12_FUNC (nv24, FALSE, 1, 1)
-CONVERT_NV12_FUNC (nv42, TRUE, 1, 1)
+READ_NV12_FUNC (nv12, FALSE, 2, 2)
+READ_NV12_FUNC (nv21, TRUE, 2, 2)
+READ_NV12_FUNC (nv16, FALSE, 2, 1)
+READ_NV12_FUNC (nv61, TRUE, 2, 1)
+READ_NV12_FUNC (nv24, FALSE, 1, 1)
+READ_NV12_FUNC (nv42, TRUE, 1, 1)
 
 static inline void
 get_uv_values16 (const YUVCoefficients *coeffs,
@@ -396,6 +376,10 @@ CONVERT_3_1_FUNC (bgrx8_a8, 3)
 #define VULKAN_SWIZZLE(_R, _G, _B, _A) { VK_COMPONENT_SWIZZLE_ ## _R, VK_COMPONENT_SWIZZLE_ ## _G, VK_COMPONENT_SWIZZLE_ ## _B, VK_COMPONENT_SWIZZLE_ ## _A }
 #define VULKAN_DEFAULT_SWIZZLE VULKAN_SWIZZLE (R, G, B, A)
 
+static void             gdk_data_convert_generic_rgb8       (const GdkDataBuffer        *self,
+                                                             guchar                     *dst_data,
+                                                             gsize                       dst_stride);
+
 GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_NV12] = {
     .name = "NV12",
@@ -411,7 +395,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_nv12,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_nv12,
   },
   [GDK_DATA_NV21] = {
     .name = "NV21",
@@ -427,7 +412,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_SWIZZLE (B, G, R, A),
     },
 #endif
-    .convert = gdk_convert_nv21,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_nv21,
   },
   [GDK_DATA_NV16] = {
     .name = "NV16",
@@ -443,7 +429,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_nv16,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_nv16,
   },
   [GDK_DATA_NV61] = {
     .name = "NV61",
@@ -459,7 +446,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_SWIZZLE (B, G, R, A),
     },
 #endif
-    .convert = gdk_convert_nv61,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_nv61,
   },
   [GDK_DATA_NV24] = {
     .name = "NV24",
@@ -475,7 +463,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_nv24,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_nv24,
   },
   [GDK_DATA_NV42] = {
     .name = "NV42",
@@ -491,7 +480,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_SWIZZLE (B, G, R, A),
     },
 #endif
-    .convert = gdk_convert_nv42,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_nv42,
   },
   [GDK_DATA_P010] = {
     .name = "P010",
@@ -830,6 +820,38 @@ GdkDataFormatDescription data_formats[] = {
     .convert = gdk_convert_xbgr8_a8,
   },
 };
+
+static void
+yuv2rgb_line_rgb8 (guchar *data,
+                   gsize   width)
+{
+  gsize i;
+  int r, g, b;
+
+  for (i = 0; i < width; i++)
+    {
+      get_uv_values (&itu601_narrow, data[1], data[2], &r, &g, &b);
+      set_rgb_values (data, data[0], r, g, b);
+      data += 3;
+    }
+}
+
+static void
+gdk_data_convert_generic_rgb8 (const GdkDataBuffer *self,
+                               guchar              *dst_data,
+                               gsize                dst_stride)
+{
+  gsize y;
+
+  for (y = 0; y < self->height; y++)
+    {
+      guchar *dst = dst_data + (y * dst_stride);
+
+      data_formats[self->format].read_line (self, y, dst);
+      if (data_formats[self->format].is_yuv)
+        yuv2rgb_line_rgb8 (dst, self->width);
+    }
+}
 
 const char *
 gdk_data_format_get_name (GdkDataFormat format)
