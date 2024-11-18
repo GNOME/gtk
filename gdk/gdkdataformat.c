@@ -228,53 +228,42 @@ READ_3_PLANE_FUNC (yuv444, FALSE, 1, 1)
 READ_3_PLANE_FUNC (yvu444, TRUE, 1, 1)
 
 static inline void
-gdk_convert_yuyv_like (guchar       *dst_data,
-                       gsize         dst_stride,
-                       gsize         width,
-                       gsize         height,
-                       const guchar *src_data,
-                       gsize         src_stride,
-                       gsize         y_index,
-                       gsize         u_index,
-                       gsize         v_index)
+gdk_data_read_yuyv_like (guchar       *dst_data,
+                         gsize         width,
+                         const guchar *src_data,
+                         gsize         y_index,
+                         gsize         u_index,
+                         gsize         v_index)
 {
-  gsize x, y;
+  gsize x;
 
-  for (y = 0; y < height; y ++)
+  for (x = 0; x < width / 2; x++)
     {
-      for (x = 0; x < width; x += 2)
-        {
-          int r, g, b;
-
-          get_uv_values (&itu601_narrow, src_data[2 * x + u_index], src_data[2 * x + v_index], &r, &g, &b);
-          set_rgb_values (&dst_data[3 * x], src_data[2 * x + y_index], r, g, b);
-          if (x + 1 < width)
-            set_rgb_values (&dst_data[3 * (x + 1)], src_data[2 * x + y_index + 2], r, g, b);
-        }
-      dst_data += dst_stride;
-      src_data += src_stride;
+      dst_data[6 * x + 0] = src_data[4 * x + y_index];
+      dst_data[6 * x + 1] = src_data[4 * x + u_index];
+      dst_data[6 * x + 2] = src_data[4 * x + v_index];
+      dst_data[6 * x + 3] = src_data[4 * x + y_index + 2];
+      dst_data[6 * x + 4] = src_data[4 * x + u_index];
+      dst_data[6 * x + 5] = src_data[4 * x + v_index];
     }
 }
 
-#define CONVERT_YUYV_FUNC(name, y_index, u_index, v_index) \
+#define READ_YUYV_FUNC(name, y_index, u_index, v_index) \
 static void \
-gdk_convert_ ## name (const GdkDataBuffer *self, \
-                      guchar              *dst_data, \
-                      gsize                dst_stride) \
+gdk_data_read_ ## name (const GdkDataBuffer *self, \
+                        gsize                y, \
+                        guchar              *dst_data) \
 { \
-  gdk_convert_yuyv_like (dst_data, \
-                         dst_stride, \
-                         self->width, \
-                         self->height, \
-                         self->planes[0].data, \
-                         self->planes[0].stride, \
-                         y_index, u_index, v_index); \
+  gdk_data_read_yuyv_like (dst_data, \
+                           self->width, \
+                           self->planes[0].data + (y * self->planes[0].stride), \
+                           y_index, u_index, v_index); \
 }
 
-CONVERT_YUYV_FUNC (yuyv, 0, 1, 3)
-CONVERT_YUYV_FUNC (yvyu, 0, 3, 1)
-CONVERT_YUYV_FUNC (uyvy, 1, 0, 2)
-CONVERT_YUYV_FUNC (vyuy, 1, 2, 0)
+READ_YUYV_FUNC (yuyv, 0, 1, 3)
+READ_YUYV_FUNC (yvyu, 0, 3, 1)
+READ_YUYV_FUNC (uyvy, 1, 0, 2)
+READ_YUYV_FUNC (vyuy, 1, 2, 0)
 
 static inline void
 gdk_convert_3_1 (guchar       *dst_data,
@@ -675,7 +664,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_yuyv,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_yuyv,
   },
   [GDK_DATA_YVYU] = {
     .name = "YVYU",
@@ -691,7 +681,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_SWIZZLE (B, G, R, A),
     },
 #endif
-    .convert = gdk_convert_yvyu,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_yvyu,
   },
   [GDK_DATA_UYVY] = {
     .name = "UYVY",
@@ -707,7 +698,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_uyvy,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_uyvy,
   },
   [GDK_DATA_VYUY] = {
     .name = "VYUY",
@@ -723,7 +715,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_SWIZZLE (B, G, R, A),
     },
 #endif
-    .convert = gdk_convert_vyuy,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_vyuy,
   },
   [GDK_DATA_RGBX8_A8] = {
     .name = "GDK_DATA_RGBX8_A8",
