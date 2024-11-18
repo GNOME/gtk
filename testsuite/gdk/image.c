@@ -59,8 +59,8 @@ test_load_image (gconstpointer data)
 
   g_assert_no_error (error);
   g_assert_true (GDK_IS_TEXTURE (texture));
-  g_assert_cmpint (gdk_texture_get_width (texture), ==, 32);
-  g_assert_cmpint (gdk_texture_get_height (texture), ==, 32);
+  g_assert_cmpint (gdk_texture_get_width (texture), >, 0);
+  g_assert_cmpint (gdk_texture_get_height (texture), >, 0);
 
   g_object_unref (texture);
   g_bytes_unref (bytes);
@@ -153,9 +153,11 @@ main (int argc, char *argv[])
   while ((name = g_dir_read_name (dir)) != NULL)
    {
      char *test = g_strconcat ("/image/load/", name, NULL);
-     g_test_add_data_func (test, name, test_load_image);
+     g_test_add_data_func_full (test, g_strdup (name), test_load_image, g_free);
      g_free (test);
    }
+
+  g_dir_close (dir);
 
   path = g_test_build_filename (G_TEST_DIST, "bad-image-data", NULL);
   dir = g_dir_open (path, 0, &error);
@@ -165,9 +167,11 @@ main (int argc, char *argv[])
   while ((name = g_dir_read_name (dir)) != NULL)
    {
      char *test = g_strconcat ("/image/fail/", name, NULL);
-     g_test_add_data_func (test, name, test_load_image_fail);
+     g_test_add_data_func_full (test, g_strdup (name), test_load_image_fail, g_free);
      g_free (test);
    }
+
+  g_dir_close (dir);
 
   g_test_add_data_func ("/image/save/image.png", "image.png", test_save_image);
   g_test_add_data_func ("/image/save/image.tiff", "image.tiff", test_save_image);

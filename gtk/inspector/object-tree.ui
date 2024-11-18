@@ -36,7 +36,6 @@
     </child>
     <child>
       <object class="GtkScrolledWindow">
-        <property name="hscrollbar-policy">never</property>
         <property name="hexpand">1</property>
         <property name="vexpand">1</property>
         <child>
@@ -49,6 +48,7 @@
               <object class="GtkColumnViewColumn">
                 <property name="title">Type</property>
                 <property name="expand">1</property>
+                <property name="resizable">1</property>
                 <property name="factory">
                   <object class="GtkSignalListItemFactory">
                     <signal name="setup" handler="setup_type_cb"/>
@@ -62,6 +62,7 @@
               <object class="GtkColumnViewColumn">
                 <property name="title">Name</property>
                 <property name="expand">1</property>
+                <property name="resizable">1</property>
                 <property name="factory">
                   <object class="GtkSignalListItemFactory">
                     <signal name="setup" handler="setup_name_cb"/>
@@ -74,6 +75,7 @@
               <object class="GtkColumnViewColumn">
                 <property name="title">Label</property>
                 <property name="expand">1</property>
+                <property name="resizable">1</property>
                 <property name="factory">
                   <object class="GtkSignalListItemFactory">
                     <signal name="setup" handler="setup_label_cb"/>
