@@ -40,7 +40,7 @@ GDK_AVAILABLE_IN_ALL
 void  gdk_macos_monitor_get_geometry (GdkMonitor   *self,
                                       GdkRectangle *geometry);
 GDK_AVAILABLE_IN_ALL
-void  gdk_macos_monitor_get_workarea (GdkMonitor   *self,
+void  gdk_macos_monitor_get_workarea (GdkMonitor   *monitor,
                                       GdkRectangle *geometry);
 
 G_END_DECLS
