@@ -182,70 +182,50 @@ READ_P010_FUNC (p012, 12, FALSE, 2, 2)
 READ_P010_FUNC (p016, 16, FALSE, 2, 2)
 
 static inline void
-gdk_convert_3_plane (guchar       *dst_data,
-                     gsize         dst_stride,
-                     gsize         width,
-                     gsize         height,
-                     const guchar *y_data,
-                     gsize         y_stride,
-                     const guchar *u_data,
-                     gsize         u_stride,
-                     const guchar *v_data,
-                     gsize         v_stride,
-                     gsize         x_subsample,
-                     gsize         y_subsample)
+gdk_data_read_3_plane (guchar       *dst_data,
+                       gsize         width,
+                       const guchar *y_data,
+                       const guchar *u_data,
+                       const guchar *v_data,
+                       gsize         x_subsample)
 {
-  gsize x, y;
+  gsize x;
 
-  for (y = 0; y < height; y += y_subsample)
+  for (x = 0; x < width; x++)
     {
-      for (x = 0; x < width; x += x_subsample)
-        {
-          int r, g, b;
-          gsize xs, ys;
-
-          get_uv_values (&itu601_narrow, u_data[x / x_subsample], v_data[x / x_subsample], &r, &g, &b);
-
-          for (ys = 0; ys < y_subsample && y + ys < height; ys++)
-            for (xs = 0; xs < x_subsample && x + xs < width; xs++)
-              set_rgb_values (&dst_data[3 * (x + xs) + dst_stride * ys], y_data[x + xs + y_stride * ys], r, g, b);
-        }
-      dst_data += y_subsample * dst_stride;
-      y_data += y_subsample * y_stride;
-      u_data += u_stride;
-      v_data += v_stride;
+      dst_data[3 * x + 0] = y_data[x];
+      dst_data[3 * x + 1] = u_data[x / x_subsample];
+      dst_data[3 * x + 2] = v_data[x / x_subsample];
     }
 }
 
-#define CONVERT_3_PLANE_FUNC(name, uv_swapped, x_subsample, y_subsample) \
+#define READ_3_PLANE_FUNC(name, uv_swapped, x_subsample, y_subsample) \
 static void \
-gdk_convert_ ## name (const GdkDataBuffer *self, \
-                      guchar              *dst_data, \
-                      gsize                dst_stride) \
-{ \
-  gdk_convert_3_plane (dst_data, \
-                       dst_stride, \
-                       self->width, \
-                       self->height, \
-                       self->planes[0].data, \
-                       self->planes[0].stride, \
-                       self->planes[uv_swapped ? 2 : 1].data, \
-                       self->planes[uv_swapped ? 2 : 1].stride, \
-                       self->planes[uv_swapped ? 1 : 2].data, \
-                       self->planes[uv_swapped ? 1 : 2].stride, \
-                       x_subsample, y_subsample); \
+gdk_data_read_ ## name (const GdkDataBuffer *self, \
+                        gsize                y, \
+                        guchar              *dst_data) \
+{\
+  gsize u = uv_swapped ? 2 : 1; \
+  gsize v = uv_swapped ? 1 : 2; \
+  gdk_data_read_3_plane (dst_data, \
+                         self->width, \
+                         self->planes[0].data + (y * self->planes[0].stride), \
+                         self->planes[u].data + (y / y_subsample * self->planes[u].stride), \
+                         self->planes[v].data + (y / y_subsample * self->planes[v].stride), \
+                         x_subsample); \
 }
 
-CONVERT_3_PLANE_FUNC (yuv410, FALSE, 4, 4)
-CONVERT_3_PLANE_FUNC (yvu410, TRUE, 4, 4)
-CONVERT_3_PLANE_FUNC (yuv411, FALSE, 4, 1)
-CONVERT_3_PLANE_FUNC (yvu411, TRUE, 4, 1)
-CONVERT_3_PLANE_FUNC (yuv420, FALSE, 2, 2)
-CONVERT_3_PLANE_FUNC (yvu420, TRUE, 2, 2)
-CONVERT_3_PLANE_FUNC (yuv422, FALSE, 2, 1)
-CONVERT_3_PLANE_FUNC (yvu422, TRUE, 2, 1)
-CONVERT_3_PLANE_FUNC (yuv444, FALSE, 1, 1)
-CONVERT_3_PLANE_FUNC (yvu444, TRUE, 1, 1)
+
+READ_3_PLANE_FUNC (yuv410, FALSE, 4, 4)
+READ_3_PLANE_FUNC (yvu410, TRUE, 4, 4)
+READ_3_PLANE_FUNC (yuv411, FALSE, 4, 1)
+READ_3_PLANE_FUNC (yvu411, TRUE, 4, 1)
+READ_3_PLANE_FUNC (yuv420, FALSE, 2, 2)
+READ_3_PLANE_FUNC (yvu420, TRUE, 2, 2)
+READ_3_PLANE_FUNC (yuv422, FALSE, 2, 1)
+READ_3_PLANE_FUNC (yvu422, TRUE, 2, 1)
+READ_3_PLANE_FUNC (yuv444, FALSE, 1, 1)
+READ_3_PLANE_FUNC (yvu444, TRUE, 1, 1)
 
 static inline void
 gdk_convert_yuyv_like (guchar       *dst_data,
@@ -525,7 +505,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_yuv410,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_yuv410,
   },
   [GDK_DATA_YVU410] = {
     .name = "YVU410",
@@ -541,7 +522,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_yvu410,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_yvu410,
   },
   [GDK_DATA_YUV411] = {
     .name = "YUV411",
@@ -557,7 +539,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_yuv411,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_yuv411,
   },
   [GDK_DATA_YVU411] = {
     .name = "YVU411",
@@ -573,7 +556,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_yvu411,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_yvu411,
   },
   [GDK_DATA_YUV420] = {
     .name = "YUV420",
@@ -589,7 +573,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_yuv420,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_yuv420,
   },
   [GDK_DATA_YVU420] = {
     .name = "YVU420",
@@ -605,7 +590,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_SWIZZLE (B, G, R, A),
     },
 #endif
-    .convert = gdk_convert_yvu420,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_yvu420,
   },
   [GDK_DATA_YUV422] = {
     .name = "YUV422",
@@ -621,7 +607,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_yuv422,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_yuv422,
   },
   [GDK_DATA_YVU422] = {
     .name = "YVU422",
@@ -637,7 +624,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_SWIZZLE (B, G, R, A),
     },
 #endif
-    .convert = gdk_convert_yvu422,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_yvu422,
   },
   [GDK_DATA_YUV444] = {
     .name = "YUV444",
@@ -653,7 +641,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_yuv444,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_yuv444,
   },
   [GDK_DATA_YVU444] = {
     .name = "YVU444",
@@ -669,7 +658,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_SWIZZLE (B, G, R, A),
     },
 #endif
-    .convert = gdk_convert_yvu444,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_yvu444,
   },
   [GDK_DATA_YUYV] = {
     .name = "YUYV",
