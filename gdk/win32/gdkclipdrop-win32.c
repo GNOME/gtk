@@ -2270,6 +2270,26 @@ transmute_cf_dib_to_image_bmp (const guchar    *data,
   BITMAPV5HEADER *bV5;
   guchar *p;
   guint i;
+  guint palette_number_of_colors = 0;
+
+  /* Image has a palette if format is BI_RGB (0) and
+   * bits per pixel is between 1 and 8.
+   * If the image has a palette,
+   * number of colors in the palette is either bi->biClrUsed,
+   * or if that is zero, use 1 << bi->biBitCount instead.
+   */
+  if (bi->biCompression == BI_RGB &&
+      bi->biBitCount >= 1 &&
+      bi->biBitCount <= 8 &&
+      bi->biClrUsed >= 0 &&
+      bi->biClrUsed <= 256)
+    {
+      palette_number_of_colors = bi->biClrUsed;
+      if (palette_number_of_colors == 0)
+        {
+          palette_number_of_colors = 1 << bi->biBitCount;
+        }
+    }
 
   if (bi->biSize == sizeof (BITMAPINFOHEADER) &&
       bi->biPlanes == 1 &&
@@ -2330,7 +2350,7 @@ transmute_cf_dib_to_image_bmp (const guchar    *data,
     {
       bf->bfOffBits = (sizeof (BITMAPFILEHEADER) +
 		       bi->biSize +
-		       bi->biClrUsed * sizeof (RGBQUAD));
+                       palette_number_of_colors  * sizeof (RGBQUAD));
 
       if (bi->biCompression == BI_BITFIELDS && bi->biBitCount >= 16)
         {
