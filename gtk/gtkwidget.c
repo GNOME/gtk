@@ -3984,7 +3984,11 @@ gtk_widget_allocate (GtkWidget    *widget,
   if (!GTK_IS_SCROLLABLE (widget))
     {
       int min;
-      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, width, &min, NULL, NULL, NULL);
+      GtkSizeRequestMode mode = gtk_widget_get_request_mode (widget);
+
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
+                          (mode != GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT) ? width : -1,
+                          &min, NULL, NULL, NULL);
       if (min > height)
         {
           g_critical ("Allocation height too small. Tried to allocate %dx%d, but %s %p needs "
@@ -3993,7 +3997,9 @@ gtk_widget_allocate (GtkWidget    *widget,
                       gtk_widget_get_name (widget), widget,
                       width, min);
         }
-      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, height, &min, NULL, NULL, NULL);
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
+                          (mode != GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH) ? height : -1,
+                          &min, NULL, NULL, NULL);
       if (min > width)
         {
           g_critical ("Allocation width too small. Tried to allocate %dx%d, but %s %p needs "
