@@ -36,13 +36,13 @@
 /**
  * GtkMultiFilter:
  *
- * `GtkMultiFilter` is the base class for filters that combine multiple filters.
+ * Base class for filters that combine multiple filters.
  */
 
 /**
  * GtkAnyFilter:
  *
- * `GtkAnyFilter` matches an item when at least one of its filters matches.
+ * Matches an item when at least one of its filters matches.
  *
  * To add filters to a `GtkAnyFilter`, use [method@Gtk.MultiFilter.append].
  */
@@ -50,7 +50,7 @@
 /**
  * GtkEveryFilter:
  *
- * `GtkEveryFilter` matches an item when each of its filters matches.
+ * Matches an item when each of its filters matches.
  *
  * To add filters to a `GtkEveryFilter`, use [method@Gtk.MultiFilter.append].
  */
@@ -200,10 +200,12 @@ gtk_multi_filter_class_init (GtkMultiFilterClass *class)
   /**
    * GtkMultiFilter:item-type:
    *
-   * The type of items. See [method@Gio.ListModel.get_item_type].
+   * The type of items.
+   *
+   * See [method@Gio.ListModel.get_item_type].
    *
    * Since: 4.8
-   **/
+   */
   properties[PROP_ITEM_TYPE] =
     g_param_spec_gtype ("item-type", NULL, NULL,
                         GTK_TYPE_FILTER,
@@ -212,10 +214,12 @@ gtk_multi_filter_class_init (GtkMultiFilterClass *class)
   /**
    * GtkMultiFilter:n-items:
    *
-   * The number of items. See [method@Gio.ListModel.get_n_items].
+   * The number of items.
+   *
+   * See [method@Gio.ListModel.get_n_items].
    *
    * Since: 4.8
-   **/
+   */
   properties[PROP_N_ITEMS] =
     g_param_spec_uint ("n-items", NULL, NULL,
                        0, G_MAXUINT, 0,
@@ -232,10 +236,10 @@ gtk_multi_filter_init (GtkMultiFilter *self)
 
 /**
  * gtk_multi_filter_append:
- * @self: a `GtkMultiFilter`
- * @filter: (transfer full): A new filter to use
+ * @self: a multi filter
+ * @filter: (transfer full): a filter to add
  *
- * Adds a @filter to @self to use for matching.
+ * Adds a filter.
  */
 void
 gtk_multi_filter_append (GtkMultiFilter *self,
@@ -255,14 +259,13 @@ gtk_multi_filter_append (GtkMultiFilter *self,
 
 /**
  * gtk_multi_filter_remove:
- * @self: a `GtkMultiFilter`
+ * @self: a multi filter
  * @position: position of filter to remove
  *
- * Removes the filter at the given @position from the list of filters used
- * by @self.
+ * Removes a filter.
  *
- * If @position is larger than the number of filters, nothing happens and
- * the function returns.
+ * If @position is larger than the number of filters,
+ * nothing happens.
  **/
 void
 gtk_multi_filter_remove (GtkMultiFilter *self,

@@ -27,12 +27,11 @@
 /**
  * GtkFilter:
  *
- * A `GtkFilter` object describes the filtering to be performed by a
- * [class@Gtk.FilterListModel].
+ * Describes the filtering to be performed by a [class@Gtk.FilterListModel].
  *
  * The model will use the filter to determine if it should include items
  * or not by calling [method@Gtk.Filter.match] for each item and only
- * keeping the ones that the function returns %TRUE for.
+ * keeping the ones that the function returns true for.
  *
  * Filters may change what items they match through their lifetime. In that
  * case, they will emit the [signal@Gtk.Filter::changed] signal to notify
@@ -81,7 +80,7 @@ gtk_filter_class_init (GtkFilterClass *class)
 
   /**
    * GtkFilter::changed:
-   * @self: The `GtkFilter`
+   * @self: the filter
    * @change: how the filter changed
    *
    * Emitted whenever the filter changed.
@@ -116,13 +115,12 @@ gtk_filter_init (GtkFilter *self)
 
 /**
  * gtk_filter_match:
- * @self: a `GtkFilter`
+ * @self: a filter
  * @item: (type GObject) (transfer none): The item to check
  *
  * Checks if the given @item is matched by the filter or not.
  *
- * Returns: %TRUE if the filter matches the item and a filter model should
- *   keep it, %FALSE if not.
+ * Returns: true if the filter matches the item
  */
 gboolean
 gtk_filter_match (GtkFilter *self,
@@ -136,16 +134,16 @@ gtk_filter_match (GtkFilter *self,
 
 /**
  * gtk_filter_get_strictness:
- * @self: a `GtkFilter`
+ * @self: a filter
  *
- * Gets the known strictness of @filters.
+ * Gets the known strictness of a filter.
  *
- * If the strictness is not known, %GTK_FILTER_MATCH_SOME is returned.
+ * If the strictness is not known, [enum@Gtk.FilterMatch.some] is returned.
  *
  * This value may change after emission of the [signal@Gtk.Filter::changed]
  * signal.
  *
- * This function is meant purely for optimization purposes, filters can
+ * This function is meant purely for optimization purposes. Filters can
  * choose to omit implementing it, but `GtkFilterListModel` uses it.
  *
  * Returns: the strictness of @self
@@ -160,8 +158,8 @@ gtk_filter_get_strictness (GtkFilter *self)
 
 /**
  * gtk_filter_changed:
- * @self: a `GtkFilter`
- * @change: How the filter changed
+ * @self: a filter
+ * @change: how the filter changed
  *
  * Notifies all users of the filter that it has changed.
  *
@@ -184,4 +182,3 @@ gtk_filter_changed (GtkFilter       *self,
 
   g_signal_emit (self, signals[CHANGED], 0, change);
 }
-
