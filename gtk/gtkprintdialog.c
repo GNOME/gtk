@@ -825,7 +825,7 @@ static gboolean
 ensure_portal_proxy (GtkPrintDialog  *self,
                      GError         **error)
 {
-  if (gdk_display_get_debug_flags (NULL) & GDK_DEBUG_NO_PORTALS)
+  if (!gdk_should_use_portal ())
     return FALSE;
 
   if (!self->portal)
