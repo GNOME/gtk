@@ -6032,3 +6032,31 @@ _gtk_text_iter_check (const GtkTextIter *iter)
   if (_gtk_text_line_is_last (real->line, real->tree))
     g_error ("Iterator was on last line (past the end iterator)");
 }
+
+gboolean
+gtk_text_iter_forward_visible_char (GtkTextIter *iter)
+{
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  while (gtk_text_iter_forward_char (iter))
+    {
+      if (!_gtk_text_btree_char_is_invisible (iter))
+        return TRUE;
+    }
+
+  return FALSE;
+}
+
+gboolean
+gtk_text_iter_backward_visible_char (GtkTextIter *iter)
+{
+  g_return_val_if_fail (iter != NULL, FALSE);
+
+  while (gtk_text_iter_backward_char (iter))
+    {
+      if (!_gtk_text_btree_char_is_invisible (iter))
+        return TRUE;
+    }
+
+  return FALSE;
+}

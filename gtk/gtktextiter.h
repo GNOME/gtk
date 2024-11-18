@@ -307,6 +307,11 @@ GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_iter_backward_cursor_positions (GtkTextIter *iter,
                                                   int          count);
 
+GDK_AVAILABLE_IN_4_18
+gboolean gtk_text_iter_forward_visible_char              (GtkTextIter *iter);
+GDK_AVAILABLE_IN_4_18
+gboolean gtk_text_iter_backward_visible_char             (GtkTextIter *iter);
+
 GDK_AVAILABLE_IN_ALL
 gboolean gtk_text_iter_forward_visible_cursor_position   (GtkTextIter *iter);
 GDK_AVAILABLE_IN_ALL
