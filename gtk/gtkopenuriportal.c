@@ -66,8 +66,7 @@ init_openuri_portal (void)
               g_warning ("Cannot create OpenURI portal proxy: %s", error->message);
               g_error_free (error);
             }
-
-          if (gtk_xdp_open_uri_get_version (openuri) < 3)
+          else if (gtk_xdp_open_uri_get_version (openuri) < 3)
             {
               g_warning ("Not a supported version of the OpenURI portal: %u", gtk_xdp_open_uri_get_version (openuri));
               g_clear_object (&openuri);
