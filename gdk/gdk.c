@@ -403,19 +403,75 @@ gdk_running_in_sandbox (void)
   return g_file_test ("/.flatpak-info", G_FILE_TEST_EXISTS);
 }
 
-gboolean
-gdk_should_use_portal (void)
-{
-  if (gdk_display_get_debug_flags (NULL) & GDK_DEBUG_PORTALS)
-    return TRUE;
+#define PORTAL_BUS_NAME "org.freedesktop.portal.Desktop"
+#define PORTAL_OBJECT_PATH "/org/freedesktop/portal/desktop"
 
-  if (gdk_display_get_debug_flags (NULL) & GDK_DEBUG_NO_PORTALS)
+/* Here we decide whether we should use a given portal or not.
+ * - If the GDK_DEBUG flags are set, they always win
+ * - If we are in a sandbox, we always want to use portals
+ * - Otherwise, we want to use the portal if it is available
+ *
+ * The upshot is: if this functions return true and using the
+ * portal fails, we should treat it as an error, not fall back
+ * to something else.
+ */
+gboolean
+gdk_display_should_use_portal (GdkDisplay *display,
+                               const char *portal_interface,
+                               guint       min_version)
+{
+  GDBusConnection *bus = NULL;
+  GDBusProxy *proxy = NULL;
+  char *owner = NULL;
+  GVariant *ret = NULL;
+  gboolean result = FALSE;
+
+  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_NO_PORTALS)
     return FALSE;
+
+  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_PORTALS)
+    return TRUE;
 
   if (gdk_running_in_sandbox ())
     return TRUE;
 
-  return FALSE;
+  bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
+  if (bus == NULL)
+    goto done;
+
+  proxy = g_dbus_proxy_new_sync (bus,
+                                 G_DBUS_PROXY_FLAGS_NONE,
+                                 NULL,
+                                 PORTAL_BUS_NAME,
+                                 PORTAL_OBJECT_PATH,
+                                 portal_interface,
+                                 NULL,
+                                 NULL);
+
+  if (proxy == NULL)
+    goto done;
+
+  owner = g_dbus_proxy_get_name_owner (proxy);
+  if (owner == NULL)
+    goto done;
+
+  ret = g_dbus_proxy_get_cached_property (proxy, "version");
+
+  if (!ret)
+    goto done;
+
+  if (min_version == 0)
+    result = TRUE;
+  else
+    result = g_variant_get_uint32 (ret) >= min_version;
+
+done:
+  g_clear_object (&bus);
+  g_clear_object (&proxy);
+  g_clear_pointer (&owner, g_free);
+  g_clear_pointer (&ret, g_variant_unref);
+
+  return result;
 }
 
 PangoDirection

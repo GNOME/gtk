@@ -823,9 +823,17 @@ send_close (GTask *task)
 
 static gboolean
 ensure_portal_proxy (GtkPrintDialog  *self,
+                     GtkWindow       *parent,
                      GError         **error)
 {
-  if (!gdk_should_use_portal ())
+  GdkDisplay *display;
+
+  if (parent)
+    display = gtk_widget_get_display (GTK_WIDGET (parent));
+  else
+    display = gdk_display_get_default ();
+
+  if (!gdk_display_should_use_portal (display, PORTAL_PRINT_INTERFACE, 0))
     return FALSE;
 
   if (!self->portal)
@@ -1481,7 +1489,7 @@ gtk_print_dialog_setup (GtkPrintDialog       *self,
   if (cancellable)
     g_signal_connect (cancellable, "cancelled", G_CALLBACK (cancelled_cb), task);
 
-  if (!ensure_portal_proxy (self, &error))
+  if (!ensure_portal_proxy (self, parent, &error))
     {
       GtkPrintUnixDialog *window;
 
@@ -1592,7 +1600,7 @@ gtk_print_dialog_print (GtkPrintDialog       *self,
   if (cancellable)
     g_signal_connect (cancellable, "cancelled", G_CALLBACK (cancelled_cb), task);
 
-  if (!ensure_portal_proxy (self, &error))
+  if (!ensure_portal_proxy (self, parent, &error))
     {
       if (setup == NULL || gtk_print_setup_get_printer (setup) == NULL)
         {
@@ -1726,7 +1734,7 @@ gtk_print_dialog_print_file (GtkPrintDialog       *self,
  if (cancellable)
     g_signal_connect (cancellable, "cancelled", G_CALLBACK (cancelled_cb), task);
 
-  if (!ensure_portal_proxy (self, &error))
+  if (!ensure_portal_proxy (self, parent, &error))
     {
       if (setup == NULL || gtk_print_setup_get_printer (setup) == NULL)
         {

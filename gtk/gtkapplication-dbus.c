@@ -333,7 +333,7 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
   dbus->object_path = g_application_get_dbus_object_path (G_APPLICATION (impl->application));
   dbus->unique_name = g_dbus_connection_get_unique_name (dbus->session);
 
-  if (gdk_should_use_portal ())
+  if (gdk_display_should_use_portal (impl->display, PORTAL_INHIBIT_INTERFACE, 0))
     {
       g_debug ("Not using session manager");
       goto out;
@@ -507,12 +507,16 @@ gtk_application_impl_dbus_startup (GtkApplicationImpl *impl,
     }
 
   if (!same_bus)
-    g_object_set (gtk_settings_get_default (),
-                  "gtk-shell-shows-app-menu", FALSE,
-                  "gtk-shell-shows-menubar", FALSE,
-                  NULL);
+    {
+      g_object_set (gtk_settings_get_default (),
+                    "gtk-shell-shows-app-menu", FALSE,
+                    "gtk-shell-shows-menubar", FALSE,
+                    NULL);
+    }
 
-  if (dbus->sm_proxy == NULL && dbus->session != NULL && gdk_should_use_portal ())
+  if (dbus->sm_proxy == NULL &&
+      dbus->session != NULL &&
+      gdk_display_should_use_portal (impl->display, PORTAL_INHIBIT_INTERFACE, 0))
     {
       dbus->inhibit_proxy = gtk_application_get_proxy_if_service_present (dbus->session,
                                                                           G_DBUS_PROXY_FLAGS_NONE,

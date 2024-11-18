@@ -477,8 +477,16 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self,
   GDBusConnection *connection;
   GtkFileChooserAction action;
   const char *method_name;
+  GdkDisplay *display;
 
-  if (!gdk_should_use_portal ())
+  transient_for = gtk_native_dialog_get_transient_for (GTK_NATIVE_DIALOG (self));
+
+  if (transient_for)
+    display = gtk_widget_get_display (GTK_WIDGET (transient_for));
+  else
+    display = gdk_display_get_default ();
+
+  if (!gdk_display_should_use_portal (display, PORTAL_FILECHOOSER_INTERFACE, 3))
     return FALSE;
 
   connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
@@ -492,14 +500,7 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self,
   else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
     method_name = "SaveFile";
   else if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    {
-      if (gtk_get_portal_interface_version (connection, "org.freedesktop.portal.FileChooser") < 3)
-        {
-          g_warning ("GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER is not supported by GtkFileChooserNativePortal because portal is too old");
-          return FALSE;
-        }
-      method_name = "OpenFile";
-    }
+    method_name = "OpenFile";
   else
     {
       g_warning ("GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER is not supported by GtkFileChooserNativePortal");
@@ -518,7 +519,6 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self,
 
   self->mode_data = data;
 
-  transient_for = gtk_native_dialog_get_transient_for (GTK_NATIVE_DIALOG (self));
   if (transient_for != NULL && gtk_widget_is_visible (GTK_WIDGET (transient_for)))
     {
       if (!gtk_window_export_handle (transient_for,
