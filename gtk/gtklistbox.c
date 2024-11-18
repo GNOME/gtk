@@ -2562,7 +2562,31 @@ gtk_list_box_compute_expand (GtkWidget *widget,
 static GtkSizeRequestMode
 gtk_list_box_get_request_mode (GtkWidget *widget)
 {
-  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+  GtkListBox *box = GTK_LIST_BOX (widget);
+  GSequenceIter *iter;
+  GtkListBoxRow *row;
+
+  if (box->placeholder && gtk_widget_get_child_visible (box->placeholder))
+    return gtk_widget_get_request_mode (box->placeholder);
+
+  /* Return constant-size, unless any of the children do hfw (or wfh) */
+
+  for (iter = g_sequence_get_begin_iter (box->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      row = g_sequence_get (iter);
+      if (!row_is_visible (row))
+        continue;
+
+      if (ROW_PRIV (row)->header != NULL &&
+          gtk_widget_get_request_mode (ROW_PRIV (row)->header) != GTK_SIZE_REQUEST_CONSTANT_SIZE)
+        return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+      if (gtk_widget_get_request_mode (GTK_WIDGET (row)) != GTK_SIZE_REQUEST_CONSTANT_SIZE)
+        return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+    }
+
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
 static void
