@@ -804,7 +804,6 @@ create_file_chooser (GtkFileDialog        *self,
   GtkFileChooserNative *chooser;
   const char *default_accept_label, *accept;
   const char *default_title, *title;
-  GdkDisplay *display G_GNUC_UNUSED;
 
   switch (action)
     {
@@ -838,16 +837,6 @@ create_file_chooser (GtkFileDialog        *self,
     accept = default_accept_label;
 
   chooser = gtk_file_chooser_native_new (title, parent, action, accept, _("_Cancel"));
-
-  if (parent)
-    display = gtk_widget_get_display (GTK_WIDGET (parent));
-  else
-    display = gdk_display_get_default ();
-
-  if (GDK_DISPLAY_DEBUG_CHECK (display, NO_PORTALS))
-    gtk_file_chooser_native_set_use_portal (chooser, FALSE);
-  else
-    gtk_file_chooser_native_set_use_portal (chooser, TRUE);
 
   gtk_native_dialog_set_modal (GTK_NATIVE_DIALOG (chooser), self->modal);
   gtk_file_chooser_set_select_multiple (GTK_FILE_CHOOSER (chooser), select_multiple);
