@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-11-04 02:54+0000\n"
-"PO-Revision-Date: 2024-11-04 18:38+0100\n"
+"POT-Creation-Date: 2024-11-15 15:51+0000\n"
+"PO-Revision-Date: 2024-11-18 21:15+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -76,31 +76,31 @@ msgstr "Ni mogoče določiti vsebine kot %s."
 msgid "The current backend does not support OpenGL"
 msgstr "Trenutno zagnan ozadnji program ne podpira OpenGL"
 
-#: gdk/gdkdisplay.c:1318 gdk/gdkvulkancontext.c:1684
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1679
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Podpora Vulkan je onemogočena z GDK_DISABLE"
 
-#: gdk/gdkdisplay.c:1372
+#: gdk/gdkdisplay.c:1418
 msgid "OpenGL support disabled via GDK_DISABLE"
 msgstr "Podpora OpenGL je onemogočena z GDK_DISABLE"
 
-#: gdk/gdkdisplay.c:1686
+#: gdk/gdkdisplay.c:1732
 msgid "No EGL configuration available"
 msgstr "Nastavitve EGL niso na voljo"
 
-#: gdk/gdkdisplay.c:1694
+#: gdk/gdkdisplay.c:1740
 msgid "Failed to get EGL configurations"
 msgstr "Pridobivanje nastavitev EGL je sodletelo"
 
-#: gdk/gdkdisplay.c:1724
+#: gdk/gdkdisplay.c:1770
 msgid "No EGL configuration with required features found"
 msgstr "Ni mogoče najti nastavitev EGL za zahtevane možnosti"
 
-#: gdk/gdkdisplay.c:1731
+#: gdk/gdkdisplay.c:1777
 msgid "No perfect EGL configuration found"
 msgstr "Nastavitve EGL ni mogoče najti"
 
-#: gdk/gdkdisplay.c:1773
+#: gdk/gdkdisplay.c:1819
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -109,23 +109,23 @@ msgstr[1] "Vstavku EGL manjka %2$d razširitev: %1$s"
 msgstr[2] "Vstavku EGL manjkata %2$d razširitvi: %1$s"
 msgstr[3] "Vstavku EGL manjkajo %2$d razširitve: %1$s"
 
-#: gdk/gdkdisplay.c:1822
+#: gdk/gdkdisplay.c:1868
 msgid "libEGL not available in this sandbox"
 msgstr "Sandbox ne podpira knjižnice libEGL"
 
-#: gdk/gdkdisplay.c:1823
+#: gdk/gdkdisplay.c:1869
 msgid "libEGL not available"
 msgstr "Knjižnica libEL ni na voljo"
 
-#: gdk/gdkdisplay.c:1833
+#: gdk/gdkdisplay.c:1879
 msgid "Failed to create EGL display"
 msgstr "Ustvarjanje zaslona EGL je sodletelo"
 
-#: gdk/gdkdisplay.c:1842
+#: gdk/gdkdisplay.c:1888
 msgid "Could not initialize EGL display"
 msgstr "Ni mogoče začeti zaslona EGL"
 
-#: gdk/gdkdisplay.c:1852
+#: gdk/gdkdisplay.c:1898
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "Različica EGL %d.%d je prestara, Oklje GTK zahteva različico %d.%d"
@@ -605,7 +605,7 @@ msgstr "Ni mogoče pridobiti podatkov v vrstici %d"
 
 #: gdk/macos/gdkmacospasteboard.c:206 gdk/wayland/gdkclipboard-wayland.c:244
 #: gdk/wayland/gdkdrop-wayland.c:205 gdk/wayland/gdkprimary-wayland.c:343
-#: gdk/win32/gdkdrop-win32.c:1019 gdk/win32/gdkdrop-win32.c:1068
+#: gdk/win32/gdkdrop-win32.c:1014 gdk/win32/gdkdrop-win32.c:1063
 #: gdk/x11/gdkclipboard-x11.c:799 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "Ni najdenega skladnega zapisa za prenos."
@@ -615,69 +615,69 @@ msgstr "Ni najdenega skladnega zapisa za prenos."
 msgid "Failed to decode contents with mime-type of '%s'"
 msgstr "Odkodiranje vsebine vrste mime »%s« je spodletelo."
 
-#: gdk/win32/gdkclipdrop-win32.c:687
+#: gdk/win32/gdkclipdrop-win32.c:684
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() timed out."
 msgstr ""
 "Ni mogoče pridobiti nadzora nad odložiščem. Ukaz OpenClipboard() je časovno "
 "potekel."
 
-#: gdk/win32/gdkclipdrop-win32.c:697
+#: gdk/win32/gdkclipdrop-win32.c:694
 #, c-format
 msgid "Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Ni mogoče pridobiti nadzora nad odložiščem. Drug program je prej pridobil "
 "dostop."
 
-#: gdk/win32/gdkclipdrop-win32.c:711
+#: gdk/win32/gdkclipdrop-win32.c:708
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti nadzora nad odložiščem. Ukaz OpenClipboard() je "
 "spodletel: 0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:721
+#: gdk/win32/gdkclipdrop-win32.c:718
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti nadzora nad odložiščem. Ukaz EmptyClipboard() je "
 "spodletel: 0x%lx"
 
-#: gdk/win32/gdkclipdrop-win32.c:763
+#: gdk/win32/gdkclipdrop-win32.c:760
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je časovno "
 "potekel."
 
-#: gdk/win32/gdkclipdrop-win32.c:773 gdk/win32/gdkclipdrop-win32.c:804
+#: gdk/win32/gdkclipdrop-win32.c:770 gdk/win32/gdkclipdrop-win32.c:801
 #, c-format
 msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Ni mogoče določiti podatkov odložišča. Drug program je prej pridobil dostop."
 
-#: gdk/win32/gdkclipdrop-win32.c:787
+#: gdk/win32/gdkclipdrop-win32.c:784
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
 "%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:839
+#: gdk/win32/gdkclipdrop-win32.c:836
 #, c-format
 msgid "Cannot get clipboard data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz GlobalLock(0x%p) je spodletel: "
 "0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:850
+#: gdk/win32/gdkclipdrop-win32.c:847
 #, c-format
 msgid "Cannot get clipboard data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz GlobalSize(0x%p) je spodletel: "
 "0x%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:863
+#: gdk/win32/gdkclipdrop-win32.c:860
 #, c-format
 msgid ""
 "Cannot get clipboard data. Failed to allocate %s bytes to store the data."
@@ -685,21 +685,21 @@ msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Dodeljevanje %s bajtov v skladišče "
 "podatkov je spodletelo."
 
-#: gdk/win32/gdkclipdrop-win32.c:896
+#: gdk/win32/gdkclipdrop-win32.c:893
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() timed out."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je časovno "
 "potekel."
 
-#: gdk/win32/gdkclipdrop-win32.c:906
+#: gdk/win32/gdkclipdrop-win32.c:903
 #, c-format
 msgid "Cannot get clipboard data. Clipboard ownership changed."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Lastništvo nad odložiščem je "
 "spremenjeno."
 
-#: gdk/win32/gdkclipdrop-win32.c:916
+#: gdk/win32/gdkclipdrop-win32.c:913
 #, c-format
 msgid ""
 "Cannot get clipboard data. Clipboard data changed before we could get it."
@@ -707,63 +707,63 @@ msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Podatki so se spremenili, preden jih "
 "je bilo mogoče pridobiti."
 
-#: gdk/win32/gdkclipdrop-win32.c:931
+#: gdk/win32/gdkclipdrop-win32.c:928
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
 "%lx."
 
-#: gdk/win32/gdkclipdrop-win32.c:956
+#: gdk/win32/gdkclipdrop-win32.c:953
 #, c-format
 msgid "Cannot get clipboard data. No compatible transfer format found."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ni najdenega skladnega zapisa za "
 "prenos."
 
-#: gdk/win32/gdkclipdrop-win32.c:966
+#: gdk/win32/gdkclipdrop-win32.c:963
 #, c-format
 msgid "Cannot get clipboard data. GetClipboardData() failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov odložišča. Ukaz GetClipboardData() je "
 "spodletel: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:950
+#: gdk/win32/gdkdrop-win32.c:945
 #, c-format
 msgid "Cannot get DnD data. GlobalLock(0x%p) failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov DnD. Ukaz GlobalLock(0x%p) je spodletel: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:959
+#: gdk/win32/gdkdrop-win32.c:954
 #, c-format
 msgid "Cannot get DnD data. GlobalSize(0x%p) failed: 0x%lx."
 msgstr ""
 "Ni mogoče pridobiti podatkov DnD. Ukaz GlobalSize(0x%p) je spodletel: 0x%lx."
 
-#: gdk/win32/gdkdrop-win32.c:970
+#: gdk/win32/gdkdrop-win32.c:965
 #, c-format
 msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Ni mogoče pridobiti podatkov DnD. Dodeljevanje %s bajtov v skladišče "
 "podatkov je spodletelo."
 
-#: gdk/win32/gdkdrop-win32.c:1040
+#: gdk/win32/gdkdrop-win32.c:1035
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "Površina GDK 0x%p ni vpisana kot ciljno mesto"
 
-#: gdk/win32/gdkdrop-win32.c:1048
+#: gdk/win32/gdkdrop-win32.c:1043
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Ciljni zapis vsebine 0x%p je brez podatkov predmeta"
 
-#: gdk/win32/gdkdrop-win32.c:1088
+#: gdk/win32/gdkdrop-win32.c:1083
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr ""
 "Ukaz IDataObject_GetData (0x%x) je spodletel; opravilo bo vrnjeno na 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1127
+#: gdk/win32/gdkdrop-win32.c:1122
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Pretvarjanje podatkov DnD za zapis W32 0x%x to %p (%s) je spodletelo."
@@ -2313,7 +2313,7 @@ msgstr "_Prekliči"
 
 #: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
 #: gtk/gtkfiledialog.c:812 gtk/gtkplacessidebar.c:3149
-#: gtk/gtkplacessidebar.c:3234 gtk/gtkplacesview.c:1645
+#: gtk/gtkplacessidebar.c:3234 gtk/gtkplacesview.c:1646
 msgid "_Open"
 msgstr "_Odpri"
 
@@ -2393,7 +2393,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "V primeru, da predmet izbrišete, bo trajno izgubljen."
 
 #: gtk/gtkfilechooserwidget.c:1213 gtk/gtkfilechooserwidget.c:1815
-#: gtk/gtklabel.c:5888 gtk/gtktext.c:6334 gtk/gtktextview.c:9280
+#: gtk/gtklabel.c:5888 gtk/gtktext.c:6335 gtk/gtktextview.c:9280
 msgid "_Delete"
 msgstr "_Izbriši"
 
@@ -2732,19 +2732,19 @@ msgstr "Zapri"
 msgid "Close the infobar"
 msgstr "Zapri vrstico podrobnosti"
 
-#: gtk/gtklabel.c:5885 gtk/gtktext.c:6322 gtk/gtktextview.c:9268
+#: gtk/gtklabel.c:5885 gtk/gtktext.c:6323 gtk/gtktextview.c:9268
 msgid "Cu_t"
 msgstr "Iz_reži"
 
-#: gtk/gtklabel.c:5886 gtk/gtktext.c:6326 gtk/gtktextview.c:9272
+#: gtk/gtklabel.c:5886 gtk/gtktext.c:6327 gtk/gtktextview.c:9272
 msgid "_Copy"
 msgstr "_Kopiraj"
 
-#: gtk/gtklabel.c:5887 gtk/gtktext.c:6330 gtk/gtktextview.c:9276
+#: gtk/gtklabel.c:5887 gtk/gtktext.c:6331 gtk/gtktextview.c:9276
 msgid "_Paste"
 msgstr "Pr_ilepi"
 
-#: gtk/gtklabel.c:5893 gtk/gtktext.c:6343 gtk/gtktextview.c:9301
+#: gtk/gtklabel.c:5893 gtk/gtktext.c:6344 gtk/gtktextview.c:9301
 msgid "Select _All"
 msgstr "Izberi _vse"
 
@@ -2756,7 +2756,7 @@ msgstr "_Odpri povezavo"
 msgid "Copy _Link Address"
 msgstr "Kopiraj _naslov povezave"
 
-#: gtk/gtklabel.c:5946 gtk/gtktext.c:2851 gtk/gtktextview.c:9350
+#: gtk/gtklabel.c:5946 gtk/gtktext.c:2852 gtk/gtktextview.c:9350
 msgid "Context menu"
 msgstr "Vsebinski meni"
 
@@ -3146,12 +3146,12 @@ msgid "Unable to poll “%s” for media changes"
 msgstr "Ni mogoče preveriti »%s« za spremembe nosilca"
 
 #: gtk/gtkplacessidebar.c:3155 gtk/gtkplacessidebar.c:3242
-#: gtk/gtkplacesview.c:1649
+#: gtk/gtkplacesview.c:1650
 msgid "Open in New _Tab"
 msgstr "Odpri v novem _zavihku"
 
 #: gtk/gtkplacessidebar.c:3161 gtk/gtkplacessidebar.c:3251
-#: gtk/gtkplacesview.c:1654
+#: gtk/gtkplacesview.c:1655
 msgid "Open in New _Window"
 msgstr "Odpri v novem _oknu"
 
@@ -3163,11 +3163,11 @@ msgstr "_Dodaj zaznamek"
 msgid "_Remove"
 msgstr "_Odstrani"
 
-#: gtk/gtkplacessidebar.c:3282 gtk/gtkplacesview.c:1679
+#: gtk/gtkplacessidebar.c:3282 gtk/gtkplacesview.c:1680
 msgid "_Mount"
 msgstr "_Priklopi"
 
-#: gtk/gtkplacessidebar.c:3291 gtk/gtkplacesview.c:1668
+#: gtk/gtkplacessidebar.c:3291 gtk/gtkplacesview.c:1669
 msgid "_Unmount"
 msgstr "_Odklopi"
 
@@ -3219,94 +3219,98 @@ msgstr "_Zaustavi več-diskovno napravo"
 msgid "_Lock Device"
 msgstr "_Zakleni napravo"
 
-#: gtk/gtkplacessidebar.c:3827 gtk/gtkplacesview.c:1089
+#: gtk/gtkplacessidebar.c:3827 gtk/gtkplacesview.c:1090
 msgid "Computer"
 msgstr "Računalnik"
 
-#: gtk/gtkplacesview.c:875
+#: gtk/gtkplacesview.c:593
+msgid "Remove server"
+msgstr "Odstrani strežnik"
+
+#: gtk/gtkplacesview.c:876
 msgid "Searching for network locations"
 msgstr "Iskanje omrežnih mest"
 
-#: gtk/gtkplacesview.c:882
+#: gtk/gtkplacesview.c:883
 msgid "No network locations found"
 msgstr "Ni omrežnih mest"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1196 gtk/gtkplacesview.c:1293
+#: gtk/gtkplacesview.c:1197 gtk/gtkplacesview.c:1294
 msgid "Unable to access location"
 msgstr "Dostop do mesta ni mogoč"
 
 #. Restore from Cancel to Connect
-#: gtk/gtkplacesview.c:1214 gtk/ui/gtkplacesview.ui:250
+#: gtk/gtkplacesview.c:1215 gtk/ui/gtkplacesview.ui:250
 msgid "Con_nect"
 msgstr "_Poveži"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1353
+#: gtk/gtkplacesview.c:1354
 msgid "Unable to unmount volume"
 msgstr "Ni mogoče priklopiti nosilca"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1445
+#: gtk/gtkplacesview.c:1446
 msgid "Cance_l"
 msgstr "_Prekliči"
 
-#: gtk/gtkplacesview.c:1592
+#: gtk/gtkplacesview.c:1593
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
-#: gtk/gtkplacesview.c:1598
+#: gtk/gtkplacesview.c:1599
 msgid "File Transfer Protocol"
 msgstr "Protokol prenosa datotek FTP"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1600
+#: gtk/gtkplacesview.c:1601
 msgid "ftp:// or ftps://"
 msgstr "ftp:// ali ftps://"
 
-#: gtk/gtkplacesview.c:1606
+#: gtk/gtkplacesview.c:1607
 msgid "Network File System"
 msgstr "Omrežni datotečni sistem"
 
-#: gtk/gtkplacesview.c:1612
+#: gtk/gtkplacesview.c:1613
 msgid "Samba"
 msgstr "Samba"
 
-#: gtk/gtkplacesview.c:1618
+#: gtk/gtkplacesview.c:1619
 msgid "SSH File Transfer Protocol"
 msgstr "Protokol prenosa datotek SSH"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1620
+#: gtk/gtkplacesview.c:1621
 msgid "sftp:// or ssh://"
 msgstr "sftp:// ali ssh://"
 
-#: gtk/gtkplacesview.c:1626
+#: gtk/gtkplacesview.c:1627
 msgid "WebDAV"
 msgstr "WebDAV"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1628
+#: gtk/gtkplacesview.c:1629
 msgid "dav:// or davs://"
 msgstr "dav:// ali davs://"
 
-#: gtk/gtkplacesview.c:1663
+#: gtk/gtkplacesview.c:1664
 msgid "_Disconnect"
 msgstr "_Prekini povezavo"
 
-#: gtk/gtkplacesview.c:1674
+#: gtk/gtkplacesview.c:1675
 msgid "_Connect"
 msgstr "_Poveži"
 
-#: gtk/gtkplacesview.c:1894
+#: gtk/gtkplacesview.c:1895
 msgid "Unable to get remote server location"
 msgstr "Oddaljenega mesta strežnika ni mogoče najti"
 
-#: gtk/gtkplacesview.c:2038 gtk/gtkplacesview.c:2047
+#: gtk/gtkplacesview.c:2039 gtk/gtkplacesview.c:2048
 msgid "Networks"
 msgstr "Omrežja"
 
-#: gtk/gtkplacesview.c:2038 gtk/gtkplacesview.c:2047
+#: gtk/gtkplacesview.c:2039 gtk/gtkplacesview.c:2048
 msgid "On This Computer"
 msgstr "Na tem računalniku"
 
@@ -3695,7 +3699,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Stranska vrstica"
 
-#: gtk/gtktext.c:6348 gtk/gtktextview.c:9306
+#: gtk/gtktext.c:6349 gtk/gtktextview.c:9306
 msgid "Insert _Emoji"
 msgstr "Vstavi izrazno _ikono"
 
@@ -3914,12 +3918,12 @@ msgctxt "GL version"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: gtk/inspector/general.c:582 gtk/inspector/general.c:623
+#: gtk/inspector/general.c:582 gtk/inspector/general.c:621
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Neopredeljeno"
 
-#: gtk/inspector/general.c:980
+#: gtk/inspector/general.c:978
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Vsebina IM je določena z vrednostjo GTK_IM_MODULE"
 
@@ -6325,14 +6329,6 @@ msgstr "_Ustvari"
 msgid "Select Font"
 msgstr "Izbor pisave"
 
-#: gtk/ui/gtkfontchooserdialog.ui:5
-msgid "400"
-msgstr "400"
-
-#: gtk/ui/gtkfontchooserdialog.ui:6
-msgid "500"
-msgstr "500"
-
 #: gtk/ui/gtkfontchooserwidget.ui:66
 msgid "Search font name"
 msgstr "Poišči pisavo po imenu"
@@ -6439,6 +6435,10 @@ msgstr "Poveži s _strežnikom"
 #: gtk/ui/gtkplacesview.ui:265
 msgid "Enter server address…"
 msgstr "Vpis naslova strežnika …"
+
+#: gtk/ui/gtkplacesview.ui:278
+msgid "Show recent servers"
+msgstr "Pokaži nedavne strežnike"
 
 #. this is the header for the printer status column in the print dialog
 #: gtk/print/ui/gtkprintunixdialog.ui:142
@@ -8316,22 +8316,22 @@ msgstr "Izključi podrobni izpis"
 msgid "Validate existing icon cache"
 msgstr "Preveri veljavnost obstoječega predpomnilnika ikon"
 
-#: tools/updateiconcache.c:1724
+#: tools/updateiconcache.c:1725
 #, c-format
 msgid "File not found: %s\n"
 msgstr "Datoteke ni mogoče najti: %s\n"
 
-#: tools/updateiconcache.c:1730
+#: tools/updateiconcache.c:1731
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "Ni veljaven predpomnilnik ikon: %s\n"
 
-#: tools/updateiconcache.c:1743
+#: tools/updateiconcache.c:1744
 #, c-format
 msgid "No theme index file.\n"
 msgstr "Ni datoteke kazala teme.\n"
 
-#: tools/updateiconcache.c:1747
+#: tools/updateiconcache.c:1748
 #, c-format
 msgid ""
 "No theme index file in “%s”.\n"
