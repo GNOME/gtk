@@ -2657,7 +2657,7 @@ gtk_list_box_measure (GtkWidget     *widget,
 
       if (box->placeholder && gtk_widget_get_child_visible (box->placeholder))
         gtk_widget_measure (box->placeholder, orientation, for_size,
-                            minimum, NULL,
+                            minimum, natural,
                             NULL, NULL);
 
       for (iter = g_sequence_get_begin_iter (box->children);
@@ -2665,7 +2665,7 @@ gtk_list_box_measure (GtkWidget     *widget,
            iter = g_sequence_iter_next (iter))
         {
           GtkListBoxRow *row;
-          int row_min = 0;
+          int row_min = 0, row_nat = 0;
 
           row = g_sequence_get (iter);
           if (!row_is_visible (row))
@@ -2674,21 +2674,17 @@ gtk_list_box_measure (GtkWidget     *widget,
           if (ROW_PRIV (row)->header != NULL)
             {
               gtk_widget_measure (ROW_PRIV (row)->header, orientation, for_size,
-                                  &row_min, NULL,
+                                  &row_min, &row_nat,
                                   NULL, NULL);
               *minimum += row_min;
+              *natural += row_nat;
             }
           gtk_widget_measure (GTK_WIDGET (row), orientation, for_size,
-                              &row_min, NULL,
+                              &row_min, &row_nat,
                               NULL, NULL);
           *minimum += row_min;
+          *natural += row_nat;
         }
-
-      /* We always allocate the minimum height, since handling expanding rows
-       * is way too costly, and unlikely to be used, as lists are generally put
-       * inside a scrolling window anyway.
-       */
-      *natural = *minimum;
     }
 }
 
