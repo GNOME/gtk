@@ -157,55 +157,41 @@ READ_YUYV_FUNC (uyvy, 1, 0, 2)
 READ_YUYV_FUNC (vyuy, 1, 2, 0)
 
 static inline void
-gdk_convert_3_1 (guchar       *dst_data,
-                 gsize         dst_stride,
-                 gsize         width,
-                 gsize         height,
-                 const guchar *xrgb_data,
-                 gsize         xrgb_stride,
-                 const guchar *a_data,
-                 gsize         a_stride,
-                 gsize         a_index)
+gdk_data_read_3_1 (guchar       *dst_data,
+                   gsize         width,
+                   const guchar *xrgb_data,
+                   const guchar *a_data,
+                   gsize         a_index)
 {
-  gsize x, y;
+  gsize x;
 
-  for (y = 0; y < height; y++)
+  for (x = 0; x < width; x++)
     {
-      for (x = 0; x < width; x++)
-        {
-          dst_data[4 * x + 0] = xrgb_data[4 * x + 0];
-          dst_data[4 * x + 1] = xrgb_data[4 * x + 1];
-          dst_data[4 * x + 2] = xrgb_data[4 * x + 2];
-          dst_data[4 * x + 3] = xrgb_data[4 * x + 3];
-          dst_data[4 * x + a_index] = a_data[x];
-        }
-      dst_data += dst_stride;
-      xrgb_data += xrgb_stride;
-      a_data += a_stride;
+      dst_data[4 * x + 0] = xrgb_data[4 * x + 0];
+      dst_data[4 * x + 1] = xrgb_data[4 * x + 1];
+      dst_data[4 * x + 2] = xrgb_data[4 * x + 2];
+      dst_data[4 * x + 3] = xrgb_data[4 * x + 3];
+      dst_data[4 * x + a_index] = a_data[x];
     }
 }
 
-#define CONVERT_3_1_FUNC(name, a_index) \
+#define READ_3_1_FUNC(name, a_index) \
 static void \
-gdk_convert_ ## name (const GdkDataBuffer *self, \
-                      guchar              *dst_data, \
-                      gsize                dst_stride) \
+gdk_data_read_ ## name (const GdkDataBuffer *self, \
+                        gsize                y, \
+                        guchar              *dst_data) \
 { \
-  gdk_convert_3_1 (dst_data, \
-                   dst_stride, \
-                   self->width, \
-                   self->height, \
-                   self->planes[0].data, \
-                   self->planes[0].stride, \
-                   self->planes[1].data, \
-                   self->planes[1].stride, \
-                   a_index); \
+  gdk_data_read_3_1 (dst_data, \
+                     self->width, \
+                     self->planes[0].data + (y * self->planes[0].stride), \
+                     self->planes[1].data + (y * self->planes[1].stride), \
+                     a_index); \
 }
 
-CONVERT_3_1_FUNC (xrgb8_a8, 0)
-CONVERT_3_1_FUNC (xbgr8_a8, 0)
-CONVERT_3_1_FUNC (rgbx8_a8, 3)
-CONVERT_3_1_FUNC (bgrx8_a8, 3)
+READ_3_1_FUNC (xrgb8_a8, 0)
+READ_3_1_FUNC (xbgr8_a8, 0)
+READ_3_1_FUNC (rgbx8_a8, 3)
+READ_3_1_FUNC (bgrx8_a8, 3)
 
 #define VULKAN_SWIZZLE(_R, _G, _B, _A) { VK_COMPONENT_SWIZZLE_ ## _R, VK_COMPONENT_SWIZZLE_ ## _G, VK_COMPONENT_SWIZZLE_ ## _B, VK_COMPONENT_SWIZZLE_ ## _A }
 #define VULKAN_DEFAULT_SWIZZLE VULKAN_SWIZZLE (R, G, B, A)
@@ -467,7 +453,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_rgbx8_a8,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_rgbx8_a8,
   },
   [GDK_DATA_BGRX8_A8] = {
     .name = "GDK_DATA_BGRX8_A8",
@@ -483,7 +470,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_bgrx8_a8,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_bgrx8_a8,
   },
   [GDK_DATA_XRGB8_A8] = {
     .name = "GDK_DATA_XRGB8_A8",
@@ -499,7 +487,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_xrgb8_a8,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_xrgb8_a8,
   },
   [GDK_DATA_XBGR8_A8] = {
     .name = "GDK_DATA_XBGR8_A8",
@@ -515,7 +504,8 @@ GdkDataFormatDescription data_formats[] = {
         .swizzle = VULKAN_DEFAULT_SWIZZLE,
     },
 #endif
-    .convert = gdk_convert_xbgr8_a8,
+    .convert = gdk_data_convert_generic_rgb8,
+    .read_line = gdk_data_read_xbgr8_a8,
   },
 };
 
