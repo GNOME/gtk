@@ -22,6 +22,7 @@
 #include "gtkfilechoosernativeprivate.h"
 #include "gtknativedialogprivate.h"
 
+#include <glib/gi18n-lib.h>
 #include "gtkprivate.h"
 #include "deprecated/gtkdialog.h"
 #include "gtkfilechooserprivate.h"
@@ -34,6 +35,7 @@
 #include "gtkmain.h"
 #include "gtkfilefilterprivate.h"
 #include "gtkwindowprivate.h"
+#include "gtkalertdialog.h"
 
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
@@ -54,7 +56,6 @@ typedef struct {
 
   char *exported_handle;
   GtkWindow *exported_window;
-  PortalErrorHandler error_handler;
 } FilechooserPortalData;
 
 
@@ -234,9 +235,9 @@ send_close (FilechooserPortalData *data)
 }
 
 static void
-open_file_msg_cb (GObject *source_object,
+open_file_msg_cb (GObject      *source_object,
                   GAsyncResult *res,
-                  gpointer user_data)
+                  gpointer      user_data)
 {
   FilechooserPortalData *data = user_data;
   GtkFileChooserNative *self = data->self;
@@ -251,12 +252,13 @@ open_file_msg_cb (GObject *source_object,
 
   if (reply == NULL)
     {
-      if (!data->hidden && data->error_handler)
+      if (!data->hidden)
         {
-          data->error_handler (self);
           filechooser_portal_data_free (data);
           self->mode_data = NULL;
         }
+
+      /* FIXME: Show an error dialog here ? */
       g_error_free (error);
       return;
     }
@@ -469,8 +471,7 @@ window_handle_exported (GtkWindow  *window,
 }
 
 gboolean
-gtk_file_chooser_native_portal_show (GtkFileChooserNative *self,
-                                     PortalErrorHandler    error_handler)
+gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
 {
   FilechooserPortalData *data;
   GtkWindow *transient_for;
@@ -489,9 +490,21 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self,
   if (!gdk_display_should_use_portal (display, PORTAL_FILECHOOSER_INTERFACE, 3))
     return FALSE;
 
+  /* From here on out, we want to return TRUE, since we should use the portal,
+   * or fail.
+   */
+
   connection = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
   if (connection == NULL)
-    return FALSE;
+    {
+      GtkAlertDialog *alert;
+
+      alert = gtk_alert_dialog_new (_("The session bus is not available"));
+      gtk_alert_dialog_show (alert, transient_for);
+      g_object_unref (alert);
+
+      return TRUE;
+    }
 
   action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self));
 
@@ -503,14 +516,18 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self,
     method_name = "OpenFile";
   else
     {
-      g_warning ("GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER is not supported by GtkFileChooserNativePortal");
-      return FALSE;
+      GtkAlertDialog *alert;
+
+      alert = gtk_alert_dialog_new (_("The create-folder action is not supported with portals"));
+      gtk_alert_dialog_show (alert, transient_for);
+      g_object_unref (alert);
+
+      return TRUE;
     }
 
   data = g_new0 (FilechooserPortalData, 1);
   data->self = g_object_ref (self);
   data->connection = connection;
-  data->error_handler = error_handler;
 
   data->method_name = method_name;
 
@@ -546,8 +563,8 @@ gtk_file_chooser_native_portal_hide (GtkFileChooserNative *self)
 {
   FilechooserPortalData *data = self->mode_data;
 
-  /* This is always set while dialog visible */
-  g_assert (data != NULL);
+  if (data == NULL)
+    return;
 
   data->hidden = TRUE;
 

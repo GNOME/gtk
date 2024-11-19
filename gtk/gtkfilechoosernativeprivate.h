@@ -60,9 +60,7 @@ void gtk_file_chooser_native_win32_hide (GtkFileChooserNative *self);
 gboolean gtk_file_chooser_native_quartz_show (GtkFileChooserNative *self);
 void gtk_file_chooser_native_quartz_hide (GtkFileChooserNative *self);
 
-typedef void (* PortalErrorHandler) (GtkFileChooserNative *self);
-gboolean gtk_file_chooser_native_portal_show (GtkFileChooserNative *self,
-                                              PortalErrorHandler    error_handler);
+gboolean gtk_file_chooser_native_portal_show (GtkFileChooserNative *self);
 void gtk_file_chooser_native_portal_hide (GtkFileChooserNative *self);
 
 G_END_DECLS
