@@ -27,6 +27,7 @@
 #include "gdkcontentserializer.h"
 #include "gdkcontentdeserializer.h"
 #include "gdkdebugprivate.h"
+#include "gdkprivate.h"
 
 #include <gio/gio.h>
 
@@ -600,16 +601,17 @@ file_transfer_portal_register (void)
     {
       called = TRUE;
 
-      file_transfer_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
-                                G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
-                                | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
-                                | G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
-                                NULL,
-                                "org.freedesktop.portal.Documents",
-                                "/org/freedesktop/portal/documents",
-                                "org.freedesktop.portal.FileTransfer",
-                                NULL,
-                                NULL);
+      if (gdk_should_use_portal ())
+        file_transfer_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
+                                  G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
+                                  | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
+                                  | G_DBUS_PROXY_FLAGS_DO_NOT_AUTO_START,
+                                  NULL,
+                                  "org.freedesktop.portal.Documents",
+                                  "/org/freedesktop/portal/documents",
+                                  "org.freedesktop.portal.FileTransfer",
+                                  NULL,
+                                  NULL);
 
       if (file_transfer_proxy && !proxy_has_owner (file_transfer_proxy))
         g_clear_object (&file_transfer_proxy);
