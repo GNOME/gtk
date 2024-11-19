@@ -339,8 +339,7 @@ gtk_at_spi_emit_children_changed (GDBusConnection         *connection,
                                   const char              *path,
                                   GtkAccessibleChildState  state,
                                   int                      idx,
-                                  GVariant                *child_ref,
-                                  GVariant                *sender_ref)
+                                  GVariant                *child_ref)
 {
   const char *change;
 
@@ -364,7 +363,7 @@ gtk_at_spi_emit_children_changed (GDBusConnection         *connection,
                                  path,
                                  "org.a11y.atspi.Event.Object",
                                  "ChildrenChanged",
-                                 g_variant_new ("(siiv@(so))", change, idx, 0, child_ref, sender_ref),
+                                 g_variant_new ("(siiva{sv})", change, idx, 0, child_ref, NULL),
                                  NULL);
 }
 
