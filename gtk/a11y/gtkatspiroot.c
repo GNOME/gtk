@@ -484,7 +484,6 @@ gtk_at_spi_root_child_changed (GtkAtSpiRoot             *self,
                                     self->root_path,
                                     state,
                                     idx,
-                                    gtk_at_spi_root_to_ref (self),
                                     window_ref);
 }
 

@@ -36,8 +36,7 @@ gtk_at_spi_emit_children_changed (GDBusConnection         *connection,
                                   const char              *path,
                                   GtkAccessibleChildState  state,
                                   int                      idx,
-                                  GVariant                *child_ref,
-                                  GVariant                *sender_ref);
+                                  GVariant                *child_ref);
 
 void
 gtk_at_spi_translate_coordinates_to_accessible (GtkAccessible  *accessible,

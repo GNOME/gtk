@@ -902,15 +902,13 @@ emit_children_changed (GtkAtSpiContext         *self,
       !gtk_at_spi_root_has_event_listeners (self->root))
     return;
 
-  GVariant *context_ref = gtk_at_spi_context_to_ref (self);
   GVariant *child_ref = gtk_at_spi_context_to_ref (child_context);
 
   gtk_at_spi_emit_children_changed (self->connection,
                                     self->context_path,
                                     state,
                                     idx,
-                                    child_ref,
-                                    context_ref);
+                                    child_ref);
 }
 
 static void
