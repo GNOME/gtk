@@ -564,7 +564,8 @@ static void     gtk_text_view_commit_handler               (GtkIMContext  *conte
 							    const char    *str,
 							    GtkTextView   *text_view);
 static void     gtk_text_view_commit_text                  (GtkTextView   *text_view,
-                                                            const char    *text);
+                                                            const char    *text,
+                                                            guint32        timestamp);
 static void     gtk_text_view_preedit_start_handler        (GtkIMContext  *context,
                                                             GtkTextView   *text_view);
 static void     gtk_text_view_preedit_changed_handler      (GtkIMContext  *context,
@@ -5350,38 +5351,23 @@ gtk_text_view_state_flags_changed (GtkWidget     *widget,
 }
 
 static void
-gtk_text_view_obscure_mouse_cursor (GtkTextView *text_view)
+gtk_text_view_obscure_mouse_cursor (GtkTextView *text_view,
+                                    guint32      timestamp)
 {
-  GdkDisplay *display;
-  GdkSeat *seat;
-  GdkDevice *device;
-
   if (text_view->priv->mouse_cursor_obscured)
     return;
 
   gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "none");
 
-  display = gtk_widget_get_display (GTK_WIDGET (text_view));
-  seat = gdk_display_get_default_seat (display);
-  device = gdk_seat_get_pointer (seat);
-
-  text_view->priv->obscured_cursor_timestamp = gdk_device_get_timestamp (device);
+  text_view->priv->obscured_cursor_timestamp = timestamp;
   text_view->priv->mouse_cursor_obscured = TRUE;
 }
 
 static void
-gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view)
+gtk_text_view_unobscure_mouse_cursor (GtkTextView *text_view, guint32 timestamp)
 {
-  GdkDisplay *display;
-  GdkSeat *seat;
-  GdkDevice *device;
-
-  display = gtk_widget_get_display (GTK_WIDGET (text_view));
-  seat = gdk_display_get_default_seat (display);
-  device = gdk_seat_get_pointer (seat);
-
   if (text_view->priv->mouse_cursor_obscured &&
-      gdk_device_get_timestamp (device) != text_view->priv->obscured_cursor_timestamp)
+      timestamp > text_view->priv->obscured_cursor_timestamp)
     {
       gtk_widget_set_cursor_from_name (GTK_WIDGET (text_view), "text");
       text_view->priv->mouse_cursor_obscured = FALSE;
@@ -5691,6 +5677,7 @@ gtk_text_view_key_controller_key_pressed (GtkEventControllerKey *controller,
 {
   GtkTextViewPrivate *priv;
   gboolean retval = FALSE;
+  guint32 timestamp;
 
   priv = text_view->priv;
 
@@ -5699,6 +5686,8 @@ gtk_text_view_key_controller_key_pressed (GtkEventControllerKey *controller,
 
   /* Make sure input method knows where it is */
   flush_update_im_spot_location (text_view);
+
+  timestamp = gtk_event_controller_get_current_event_time (GTK_EVENT_CONTROLLER (controller));
 
   /* use overall editability not can_insert, more predictable for users */
 
@@ -5711,7 +5700,7 @@ gtk_text_view_key_controller_key_pressed (GtkEventControllerKey *controller,
        * editable
        */
       gtk_text_view_reset_im_context (text_view);
-      gtk_text_view_commit_text (text_view, "\n");
+      gtk_text_view_commit_text (text_view, "\n", timestamp);
       retval = TRUE;
     }
   /* Pass through Tab as literal tab, unless Control is held down */
@@ -5726,7 +5715,7 @@ gtk_text_view_key_controller_key_pressed (GtkEventControllerKey *controller,
       if (priv->accepts_tab && priv->editable)
 	{
 	  gtk_text_view_reset_im_context (text_view);
-	  gtk_text_view_commit_text (text_view, "\t");
+	  gtk_text_view_commit_text (text_view, "\t", timestamp);
 	}
       else
 	g_signal_emit_by_name (text_view, "move-focus",
@@ -6061,7 +6050,9 @@ gtk_text_view_motion (GtkEventController *controller,
                       double              y,
                       gpointer            user_data)
 {
-  gtk_text_view_unobscure_mouse_cursor (GTK_TEXT_VIEW (user_data));
+  guint32 timestamp = gtk_event_controller_get_current_event_time (controller);
+
+  gtk_text_view_unobscure_mouse_cursor (GTK_TEXT_VIEW (user_data), timestamp);
 }
 
 static void
@@ -7862,14 +7853,16 @@ gtk_text_view_drag_gesture_end (GtkGestureDrag *gesture,
   GtkTextViewPrivate *priv;
   GdkEvent *event;
   GdkDevice *device;
+  guint32 timestamp = GDK_CURRENT_TIME;
 
   priv = text_view->priv;
   sequence = gtk_gesture_single_get_current_sequence (GTK_GESTURE_SINGLE (gesture));
+  timestamp = gtk_event_controller_get_current_event_time (GTK_EVENT_CONTROLLER (gesture));
 
   clicked_in_selection =
     g_object_get_qdata (G_OBJECT (gesture), quark_text_selection_data) == NULL;
   g_object_set_qdata (G_OBJECT (gesture), quark_text_selection_data, NULL);
-  gtk_text_view_unobscure_mouse_cursor (text_view);
+  gtk_text_view_unobscure_mouse_cursor (text_view, timestamp);
 
   if (priv->scroll_timeout != 0)
     {
@@ -8794,14 +8787,25 @@ gtk_text_view_commit_handler (GtkIMContext  *context,
                               const char    *str,
                               GtkTextView   *text_view)
 {
-  gtk_text_view_commit_text (text_view, str);
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *device;
+  guint32 timestamp;
+
+  display = gtk_widget_get_display (GTK_WIDGET (text_view));
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_pointer (seat);
+  timestamp = gdk_device_get_timestamp (device);
+
+  gtk_text_view_commit_text (text_view, str, timestamp);
   gtk_text_view_reset_blink_time (text_view);
   gtk_text_view_pend_cursor_blink (text_view);
 }
 
 static void
 gtk_text_view_commit_text (GtkTextView   *text_view,
-                           const char    *str)
+                           const char    *str,
+                           guint32        timestamp)
 {
   GtkTextViewPrivate *priv;
   gboolean had_selection;
@@ -8810,7 +8814,7 @@ gtk_text_view_commit_text (GtkTextView   *text_view,
 
   priv = text_view->priv;
 
-  gtk_text_view_obscure_mouse_cursor (text_view);
+  gtk_text_view_obscure_mouse_cursor (text_view, timestamp);
   gtk_text_buffer_begin_user_action (get_buffer (text_view));
 
   had_selection = gtk_text_buffer_get_selection_bounds (get_buffer (text_view), &begin, &end);
@@ -8884,10 +8888,19 @@ gtk_text_view_preedit_changed_handler (GtkIMContext *context,
   PangoAttrList *attrs;
   int cursor_pos;
   GtkTextIter iter;
+  GdkDisplay *display;
+  GdkSeat *seat;
+  GdkDevice *device;
+  guint32 timestamp;
+
+  display = gtk_widget_get_display (GTK_WIDGET (text_view));
+  seat = gdk_display_get_default_seat (display);
+  device = gdk_seat_get_pointer (seat);
+  timestamp = gdk_device_get_timestamp (device);
 
   priv = text_view->priv;
 
-  gtk_text_view_obscure_mouse_cursor (text_view);
+  gtk_text_view_obscure_mouse_cursor (text_view, timestamp);
   gtk_text_buffer_get_iter_at_mark (priv->buffer, &iter,
 				    gtk_text_buffer_get_insert (priv->buffer));
 
