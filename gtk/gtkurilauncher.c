@@ -24,7 +24,7 @@
 #include "gtkdialogerror.h"
 #include "gtkopenuriportal.h"
 #include "deprecated/gtkshow.h"
-#include "gdk/gdkprivate.h"
+#include "gtkprivate.h"
 #include <glib/gi18n-lib.h>
 
 /**
@@ -280,6 +280,9 @@ gtk_uri_launcher_launch (GtkUriLauncher      *self,
                          gpointer             user_data)
 {
   GTask *task;
+#ifndef G_OS_WIN32
+  GdkDisplay *display;
+#endif
   GError *error = NULL;
 
   g_return_if_fail (GTK_IS_URI_LAUNCHER (self));
@@ -308,7 +311,12 @@ gtk_uri_launcher_launch (GtkUriLauncher      *self,
     }
 
 #ifndef G_OS_WIN32
-  if (gdk_should_use_portal () && gtk_openuri_portal_is_available ())
+  if (parent)
+    display = gtk_widget_get_display (GTK_WIDGET (parent));
+  else
+    display = gdk_display_get_default ();
+
+  if (gdk_display_should_use_portal (display, PORTAL_OPENURI_INTERFACE, 3))
     {
       gtk_openuri_portal_open_uri_async (self->uri, parent, cancellable, open_done, task);
     }

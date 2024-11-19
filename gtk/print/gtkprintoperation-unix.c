@@ -1268,7 +1268,14 @@ _gtk_print_operation_platform_backend_run_dialog (GtkPrintOperation *op,
                                                   GtkWindow         *parent,
                                                   gboolean          *do_print)
 {
-  if (gdk_should_use_portal ())
+  GdkDisplay *display;
+
+  if (parent)
+    display = gtk_widget_get_display (GTK_WIDGET (parent));
+  else
+    display = gdk_display_get_default ();
+
+  if (gdk_display_should_use_portal (display, PORTAL_PRINT_INTERFACE, 0))
     return gtk_print_operation_portal_run_dialog (op, show_dialog, parent, do_print);
   else
     return gtk_print_operation_unix_run_dialog (op, show_dialog, parent, do_print);
@@ -1280,7 +1287,14 @@ _gtk_print_operation_platform_backend_run_dialog_async (GtkPrintOperation       
                                                         GtkWindow                  *parent,
                                                         GtkPrintOperationPrintFunc  print_cb)
 {
-  if (gdk_should_use_portal ())
+  GdkDisplay *display;
+
+  if (parent)
+    display = gtk_widget_get_display (GTK_WIDGET (parent));
+  else
+    display = gdk_display_get_default ();
+
+  if (gdk_display_should_use_portal (display, PORTAL_PRINT_INTERFACE, 0))
     gtk_print_operation_portal_run_dialog_async (op, show_dialog, parent, print_cb);
   else
     gtk_print_operation_unix_run_dialog_async (op, show_dialog, parent, print_cb);
@@ -1292,7 +1306,14 @@ _gtk_print_operation_platform_backend_launch_preview (GtkPrintOperation *op,
                                                       GtkWindow         *parent,
                                                       const char        *filename)
 {
-  if (gdk_should_use_portal ())
+  GdkDisplay *display;
+
+  if (parent)
+    display = gtk_widget_get_display (GTK_WIDGET (parent));
+  else
+    display = gdk_display_get_default ();
+
+  if (gdk_display_should_use_portal (display, PORTAL_PRINT_INTERFACE, 0))
     gtk_print_operation_portal_launch_preview (op, surface, parent, filename);
   else
     gtk_print_operation_unix_launch_preview (op, surface, parent, filename);

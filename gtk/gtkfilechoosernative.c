@@ -561,13 +561,6 @@ gtk_file_chooser_native_new (const char           *title,
   return result;
 }
 
-void
-gtk_file_chooser_native_set_use_portal (GtkFileChooserNative *self,
-                                        gboolean              use_portal)
-{
-  self->use_portal = use_portal;
-}
-
 static void
 dialog_response_cb (GtkDialog *dialog,
                     int response_id,
@@ -711,13 +704,6 @@ gtk_file_chooser_native_get_files (GtkFileChooser *chooser)
 }
 
 static void
-portal_error_handler (GtkFileChooserNative *self)
-{
-  self->mode = MODE_FALLBACK;
-  show_dialog (self);
-}
-
-static void
 gtk_file_chooser_native_show (GtkNativeDialog *native)
 {
   GtkFileChooserNative *self = GTK_FILE_CHOOSER_NATIVE (native);
@@ -735,7 +721,7 @@ gtk_file_chooser_native_show (GtkNativeDialog *native)
 #endif
 
   if (self->mode == MODE_FALLBACK &&
-      gtk_file_chooser_native_portal_show (self, portal_error_handler))
+      gtk_file_chooser_native_portal_show (self))
     self->mode = MODE_PORTAL;
 
   if (self->mode == MODE_FALLBACK)

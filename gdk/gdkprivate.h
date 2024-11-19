@@ -14,7 +14,9 @@ G_STMT_START { \
 } G_STMT_END
 
 gboolean gdk_running_in_sandbox (void);
-gboolean gdk_should_use_portal (void);
+gboolean gdk_display_should_use_portal (GdkDisplay *display,
+                                        const char *portal_interface,
+                                        guint       min_version);
 
 const char *   gdk_get_startup_notification_id (void);
 
