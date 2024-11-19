@@ -426,11 +426,19 @@ gdk_display_should_use_portal (GdkDisplay *display,
   GVariant *ret = NULL;
   gboolean result = FALSE;
 
+  if (display == NULL)
+    display = gdk_display_get_default ();
+
+  g_assert (display != NULL);
+
   if (gdk_display_get_debug_flags (display) & GDK_DEBUG_NO_PORTALS)
     return FALSE;
 
   if (gdk_display_get_debug_flags (display) & GDK_DEBUG_PORTALS)
     return TRUE;
+
+  if (gdk_display_get_no_portals (display))
+    return FALSE;
 
   if (gdk_running_in_sandbox ())
     return TRUE;
