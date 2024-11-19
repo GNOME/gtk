@@ -24,6 +24,7 @@
 #include "gtkdialogerror.h"
 #include "gtkopenuriportal.h"
 #include "deprecated/gtkshow.h"
+#include "gdk/gdkprivate.h"
 #include <glib/gi18n-lib.h>
 
 #ifdef G_OS_WIN32
@@ -498,7 +499,8 @@ gtk_file_launcher_launch (GtkFileLauncher     *self,
     }
 
 #ifndef G_OS_WIN32
-  if (gtk_openuri_portal_is_available ())
+  if (gdk_should_use_portal () &&
+      gtk_openuri_portal_is_available ())
     {
       GtkOpenuriFlags flags = 0;
 
