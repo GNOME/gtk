@@ -146,6 +146,7 @@ gtk_private_sources = files([
   'gtkstyleanimation.c',
   'gtkstylecascade.c',
   'gtkstyleproperty.c',
+  'gtktextencoding.c',
   'gtktexthistory.c',
   'gtktextviewchild.c',
   'timsort/gtktimsort.c',
