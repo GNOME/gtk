@@ -156,5 +156,31 @@ GListModel *     gtk_file_dialog_select_multiple_folders_finish
                                                       GAsyncResult         *result,
                                                       GError              **error);
 
+GDK_AVAILABLE_IN_4_18
+void             gtk_file_dialog_open_text_file      (GtkFileDialog        *self,
+                                                      GtkWindow            *parent,
+                                                      GCancellable         *cancellable,
+                                                      GAsyncReadyCallback   callback,
+                                                      gpointer              user_data);
+
+GDK_AVAILABLE_IN_4_18
+GFile *          gtk_file_dialog_open_text_file_finish (GtkFileDialog        *self,
+                                                        GAsyncResult         *result,
+                                                        const char          **encoding,
+                                                        GError              **error);
+
+GDK_AVAILABLE_IN_4_18
+void             gtk_file_dialog_save_text_file      (GtkFileDialog        *self,
+                                                      GtkWindow            *parent,
+                                                      GCancellable         *cancellable,
+                                                      GAsyncReadyCallback   callback,
+                                                      gpointer              user_data);
+
+GDK_AVAILABLE_IN_4_18
+GFile *          gtk_file_dialog_save_text_file_finish (GtkFileDialog        *self,
+                                                        GAsyncResult         *result,
+                                                        const char          **encoding,
+                                                        const char          **line_ending,
+                                                        GError              **error);
 
 G_END_DECLS
