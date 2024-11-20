@@ -1,4 +1,4 @@
-Overview of Changes in 4.16.6, xx-xx-xxxx
+Overview of Changes in 4.16.6, 20-11-2024
 =========================================
 
 To prevent issues when using GTK under kwin, this release
@@ -13,6 +13,10 @@ it, set GDK_DEBUG=color-mgmt.
 
 * GtkFontChooser:
  - Make the dialog more shrinkable
+
+* macOS:
+ - Use correct modifier keys for GtkTextView and GtkLabel
+   shortcuts
 
 * Translation updates
  Icelandic
