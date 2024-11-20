@@ -87,6 +87,10 @@ handle_value_get_property (GDBusConnection  *connection,
         }
     }
 
+  /* Special-case Text, as it's not a double */
+  if (g_strcmp0 (property_name, "Text") == 0)
+    return g_variant_new_string ("");
+
   /* Special-case MinimumIncrement as it does not have an ARIA counterpart */
   if (g_strcmp0 (property_name, "MinimumIncrement") == 0)
     return g_variant_new_double (0.0);
