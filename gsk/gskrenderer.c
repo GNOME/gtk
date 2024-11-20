@@ -533,14 +533,14 @@ get_renderer_for_name (const char *renderer_name)
 #else
       g_print ("  broadway - Disabled during GTK build\n");
 #endif
-      g_print ("   cairo - Use the Cairo fallback renderer\n");
-      g_print ("     ngl - Use the OpenGL renderer\n");
+      g_print ("     cairo - Use the Cairo fallback renderer\n");
+      g_print ("       ngl - Use the OpenGL renderer\n");
 #ifdef GDK_RENDERING_VULKAN
-      g_print ("  vulkan - Use the Vulkan renderer\n");
+      g_print ("    vulkan - Use the Vulkan renderer\n");
 #else
-      g_print ("  vulkan - Disabled during GTK build\n");
+      g_print ("    vulkan - Disabled during GTK build\n");
 #endif
-      g_print ("    help - Print this help\n\n");
+      g_print ("      help - Print this help\n\n");
       g_print ("Other arguments will cause a warning and be ignored.\n");
     }
   else
