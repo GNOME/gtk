@@ -326,6 +326,8 @@
                 <property name="name">empty</property>
                 <property name="child">
                   <object class="GtkGrid">
+                    <property name="margin-top">18</property>
+                    <property name="margin-bottom">18</property>
                     <property name="row-spacing">12</property>
                     <property name="halign">3</property>
                     <property name="valign">3</property>
