@@ -26,7 +26,6 @@ variables:
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true"
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled -Dbuild-testsuite=true -Dintrospection=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
-  MESON_TEST_MAX_PROCESSES: 8
   FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v52"
 
 workflow:
@@ -398,8 +397,6 @@ asan-build:
   tags: [ asan ]
   stage: analysis
   needs: []
-  variables:
-    MESON_TEST_MAX_PROCESSES: 4
   script:
     - export PATH="$HOME/.local/bin:$PATH"
     - CC=clang meson setup
