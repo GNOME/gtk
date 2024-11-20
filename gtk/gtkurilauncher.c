@@ -30,8 +30,7 @@
 /**
  * GtkUriLauncher:
  *
- * A `GtkUriLauncher` object collects the arguments that are needed to open a uri
- * with an application.
+ * Collects the arguments that are needed to open a uri with an application.
  *
  * Depending on system configuration, user preferences and available APIs, this
  * may or may not show an app chooser dialog or launch the default application
@@ -168,7 +167,7 @@ gtk_uri_launcher_new (const char *uri)
 
 /**
  * gtk_uri_launcher_get_uri:
- * @self: a `GtkUriLauncher`
+ * @self: an uri launcher
  *
  * Gets the uri that will be opened.
  *
@@ -186,7 +185,7 @@ gtk_uri_launcher_get_uri (GtkUriLauncher *self)
 
 /**
  * gtk_uri_launcher_set_uri:
- * @self: a `GtkUriLauncher`
+ * @self: an uri launcher
  * @uri: (nullable): the uri
  *
  * Sets the uri that will be opened.
@@ -259,14 +258,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
 /**
  * gtk_uri_launcher_launch:
- * @self: a `GtkUriLauncher`
- * @parent: (nullable): the parent `GtkWindow`
- * @cancellable: (nullable): a `GCancellable` to cancel the operation
+ * @self: an uri launcher
+ * @parent: (nullable): the parent window
+ * @cancellable: (nullable): a cancellable to cancel the operation
  * @callback: (scope async) (closure user_data): a callback to call when the
  *   operation is complete
  * @user_data: data to pass to @callback
  *
- * Launch an application to open the uri.
+ * Launches an application to open the uri.
  *
  * This may present an app chooser dialog to the user.
  *
@@ -331,15 +330,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
 /**
  * gtk_uri_launcher_launch_finish:
- * @self: a `GtkUriLauncher`
- * @result: a `GAsyncResult`
+ * @self: an uri launcher
+ * @result: the result
  * @error: return location for a [enum@Gtk.DialogError] or [enum@Gio.Error] error
  *
  * Finishes the [method@Gtk.UriLauncher.launch] call and
  * returns the result.
  *
- * Returns: `TRUE` if an application was launched,
- *     or `FALSE` and @error is set
+ * Returns: true if an application was launched
  *
  * Since: 4.10
  */
