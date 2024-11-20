@@ -462,17 +462,20 @@ gdk_content_formats_union_deserialize_gtypes (GdkContentFormats *formats)
 
   g_return_val_if_fail (formats != NULL, NULL);
 
-  init ();
-
   builder = gdk_content_formats_builder_new ();
   gdk_content_formats_builder_add_formats (builder, formats);
 
-  for (l = g_queue_peek_head_link (&deserializers); l; l = l->next)
+  if (!gdk_content_formats_is_empty (formats))
     {
-      Deserializer *deserializer = l->data;
+      init ();
 
-      if (gdk_content_formats_contain_mime_type (formats, deserializer->mime_type))
-        gdk_content_formats_builder_add_gtype (builder, deserializer->type);
+      for (l = g_queue_peek_head_link (&deserializers); l; l = l->next)
+        {
+          Deserializer *deserializer = l->data;
+
+          if (gdk_content_formats_contain_mime_type (formats, deserializer->mime_type))
+            gdk_content_formats_builder_add_gtype (builder, deserializer->type);
+        }
     }
 
   gdk_content_formats_unref (formats);
@@ -497,17 +500,20 @@ gdk_content_formats_union_deserialize_mime_types (GdkContentFormats *formats)
 
   g_return_val_if_fail (formats != NULL, NULL);
 
-  init ();
-
   builder = gdk_content_formats_builder_new ();
   gdk_content_formats_builder_add_formats (builder, formats);
 
-  for (l = g_queue_peek_head_link (&deserializers); l; l = l->next)
+  if (!gdk_content_formats_is_empty (formats))
     {
-      Deserializer *deserializer = l->data;
+      init ();
 
-      if (gdk_content_formats_contain_gtype (formats, deserializer->type))
-        gdk_content_formats_builder_add_mime_type (builder, deserializer->mime_type);
+      for (l = g_queue_peek_head_link (&deserializers); l; l = l->next)
+        {
+          Deserializer *deserializer = l->data;
+
+          if (gdk_content_formats_contain_gtype (formats, deserializer->type))
+            gdk_content_formats_builder_add_mime_type (builder, deserializer->mime_type);
+        }
     }
 
   gdk_content_formats_unref (formats);

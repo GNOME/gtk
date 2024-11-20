@@ -14,7 +14,9 @@ GDK backends use some additional environment variables.
 
 Note that environment variables are generally used for debugging
 purposes. They are not guaranteed to be API stable, and should not
-be used for end-user configuration and customization.
+be used for end-user configuration and customization. If you feel the
+need to set one of them programmatically, you should probably ask for
+an API to do what you want, instead.
 
 ### `GTK_DEBUG`
 

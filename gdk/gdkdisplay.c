@@ -114,6 +114,7 @@ struct _GdkDisplayPrivate {
   guint composited : 1;
   guint shadow_width: 1;
   guint input_shapes : 1;
+  guint no_portals : 1;
 
   GdkDebugFlags debug_flags;
 };
@@ -2580,4 +2581,37 @@ gdk_display_translate_key (GdkDisplay      *display,
                                               effective_group,
                                               level,
                                               consumed);
+}
+
+/**
+ * gdk_display_set_no_portals:
+ * @display: a display
+ *
+ * Instructs GTK to never use portals for windows on the display.
+ *
+ * This is equivalent to setting `GDK_DEBUG=no-portals` in the
+ * environment.
+ *
+ * It should only be used in portal implementations, not in apps.
+ * Calling it inside a flatpak sandbox will break GTK functionality.
+ *
+ * Since: 4.18
+ */
+void
+gdk_display_set_no_portals (GdkDisplay *display)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
+  if (gdk_running_in_sandbox ())
+    g_warning ("Disabling portals inside a flatpak sandbox will break GTK functionality");
+
+  priv->no_portals = 1;
+}
+
+gboolean
+gdk_display_get_no_portals (GdkDisplay *display)
+{
+  GdkDisplayPrivate *priv = gdk_display_get_instance_private (display);
+
+  return priv->no_portals ? TRUE : FALSE;
 }

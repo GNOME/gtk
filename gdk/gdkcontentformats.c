@@ -572,6 +572,24 @@ gdk_content_formats_get_mime_types (const GdkContentFormats *formats,
 }
 
 /**
+ * gdk_content_formats_is_empty:
+ * @formats: content formats
+ *
+ * Returns whether the content formats contain any formats.
+ *
+ * Returns: true if @formats contains no mime types and no GTypes
+ *
+ * Since: 4.18
+ */
+gboolean
+gdk_content_formats_is_empty (GdkContentFormats *formats)
+{
+  return formats->n_mime_types == 0 && formats->n_gtypes == 0;
+}
+
+/* {{{ GdkContentFormatsBuilder */
+
+/*
  * GdkContentFormatsBuilder:
  *
  * A `GdkContentFormatsBuilder` is an auxiliary struct used to create
@@ -825,6 +843,7 @@ gdk_content_formats_builder_add_mime_type (GdkContentFormatsBuilder *builder,
   builder->n_mime_types++;
 }
 
+/* }}} */
 /* {{{ GdkFileList */
 
 /* We're using GdkFileList* and GSList* interchangeably, counting on the
@@ -912,3 +931,5 @@ gdk_file_list_new_from_array (GFile **files,
 }
 
 /* }}} */
+
+/* vim:set foldmethod=marker: */
