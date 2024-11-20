@@ -715,13 +715,17 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
           g_print ("Supported arguments for GTK_A11Y environment variable:\n");
 #ifdef HAVE_ACCESSKIT
           g_print ("   accesskit - Use the AccessKit accessibility backend\n");
+#else
+          g_print ("   accesskit - Disabled during GTK build\n");
 #endif
 #if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
           g_print ("       atspi - Use the AT-SPI accessibility backend\n");
+#else
+          g_print ("       atspi - Not available on this platform\n");
 #endif
           g_print ("        test - Use the test accessibility backend\n");
-          g_print ("    none - Disable the accessibility backend\n");
-          g_print ("    help - Print this help\n\n");
+          g_print ("        none - Disable the accessibility backend\n");
+          g_print ("        help - Print this help\n\n");
           g_print ("Other arguments will cause a warning and be ignored.\n");
 
           gtk_a11y_env = "0";
