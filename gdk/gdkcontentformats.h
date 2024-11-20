@@ -76,6 +76,9 @@ GDK_AVAILABLE_IN_ALL
 gboolean                gdk_content_formats_contain_mime_type   (const GdkContentFormats        *formats,
                                                                  const char                     *mime_type);
 
+GDK_AVAILABLE_IN_4_18
+gboolean gdk_content_formats_is_empty                           (GdkContentFormats              *formats);
+
 #define GDK_TYPE_CONTENT_FORMATS_BUILDER (gdk_content_formats_builder_get_type ())
 
 typedef struct _GdkContentFormatsBuilder GdkContentFormatsBuilder;
@@ -102,6 +105,7 @@ void                    gdk_content_formats_builder_add_mime_type(GdkContentForm
 GDK_AVAILABLE_IN_ALL
 void                    gdk_content_formats_builder_add_gtype   (GdkContentFormatsBuilder       *builder,
                                                                  GType                           type);
+
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkContentFormats, gdk_content_formats_unref)
 
