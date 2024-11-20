@@ -502,7 +502,10 @@ gtk_revealer_size_allocate (GtkWidget *widget,
       else if (ceil (min * hscale) == width)
         child_width = min;
       else
-        child_width = floor (width / hscale);
+        {
+          double d = floor (width / hscale);
+          child_width = MIN (d, G_MAXINT);
+        }
       child_height = height;
     }
   else if (vscale < 1.0)
@@ -515,7 +518,10 @@ gtk_revealer_size_allocate (GtkWidget *widget,
       else if (ceil (min * vscale) == height)
         child_height = min;
       else
-        child_height = floor (height / vscale);
+        {
+          double d = floor (height / vscale);
+          child_height = MIN (d, G_MAXINT);
+        }
     }
   else
     {
@@ -743,33 +749,37 @@ gtk_revealer_measure (GtkWidget      *widget,
                       int            *natural_baseline)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
-  double scale;
+  double scale, opposite_scale;
 
-  scale = get_child_size_scale (revealer, OPPOSITE_ORIENTATION (orientation));
-
-  if (for_size >= 0)
+  if (revealer->child == NULL || !_gtk_widget_get_visible (revealer->child))
     {
-      if (scale == 0)
-        return;
-      else
-        for_size = MIN (G_MAXINT, ceil (for_size / scale));
-    }
-
-  if (revealer->child != NULL && _gtk_widget_get_visible (revealer->child))
-    {
-      gtk_widget_measure (revealer->child,
-                          orientation,
-                          for_size,
-                          minimum, natural,
-                          NULL, NULL);
-    }
-  else
-    {
-      *minimum = 0;
-      *natural = 0;
+      *minimum = *natural = 0;
+      return;
     }
 
   scale = get_child_size_scale (revealer, orientation);
+  opposite_scale = get_child_size_scale (revealer, OPPOSITE_ORIENTATION (orientation));
+  if (scale == 0)
+    {
+      *minimum = *natural = 0;
+      return;
+    }
+  else if (opposite_scale == 0)
+    {
+      for_size = -1;
+    }
+  else if (for_size >= 0)
+    {
+      double d = floor (for_size / opposite_scale);
+      for_size = MIN (G_MAXINT, d);
+    }
+
+  gtk_widget_measure (revealer->child,
+                      orientation,
+                      for_size,
+                      minimum, natural,
+                      NULL, NULL);
+
   *minimum = ceil (*minimum * scale);
   *natural = ceil (*natural * scale);
 }
