@@ -155,9 +155,9 @@
  *   as false values)
  * - enumeration types (can be specified by their full C identifier their short
  *   name used when registering the enumeration type, or their integer value)
- * - flag types (can be specified by their C identifier, short name, integer
- *   value, and optionally combined with “|” for bitwise OR, e.g.
- *   “GTK_INPUT_HINT_EMOJI|GTK_INPUT_HINT_LOWERCASE”, or “emoji|lowercase”)
+ * - flag types (can be specified by their C identifier or short name,
+ *   optionally combined with “|” for bitwise OR, or a single integer value
+ *   e.g., “GTK_INPUT_HINT_EMOJI|GTK_INPUT_HINT_LOWERCASE”, or “emoji|lowercase” or 520).
  * - colors (in a format understood by [method@Gdk.RGBA.parse])
  * - `GVariant` (can be specified in the format understood by
  *    [func@GLib.Variant.parse])
