@@ -118,6 +118,35 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
       SizeRequestX **cached_sizes = cache->requests_x;
       SizeRequestX  *cached_size;
 
+#ifdef G_ENABLE_DEBUG
+      if (cache->flags[GTK_ORIENTATION_HORIZONTAL].cached_size_valid &&
+          minimum_size < cache->cached_size_x.minimum_size)
+        g_warning ("Widget reports min width of %d for height of %d, but overall min width of %d",
+                   minimum_size, for_size, cache->cached_size_x.minimum_size);
+
+      for (i = 0; i < cache->flags[GTK_ORIENTATION_VERTICAL].n_cached_requests; i++)
+        {
+          if (cache->requests_y[i]->upper_for_size >= minimum_size &&
+              cache->requests_y[i]->cached_size.minimum_size > for_size)
+            {
+              g_warning ("Widget reports min width of %d for height of %d, but min height of %d for width of %d",
+                         minimum_size, for_size,
+                         cache->requests_y[i]->cached_size.minimum_size,
+                         cache->requests_y[i]->upper_for_size);
+              break;
+            }
+          else if (cache->requests_y[i]->lower_for_size < minimum_size &&
+                   cache->requests_y[i]->cached_size.minimum_size <= for_size)
+            {
+              g_warning ("Widget reports min width of %d for height of %d, but min height of %d for width of %d",
+                         minimum_size, for_size,
+                         cache->requests_y[i]->cached_size.minimum_size,
+                         cache->requests_y[i]->lower_for_size);
+              break;
+            }
+        }
+#endif
+
       for (i = 0; i < n_sizes; i++)
 	{
 	  if (cached_sizes[i]->cached_size.minimum_size == minimum_size &&
@@ -159,6 +188,35 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
     {
       SizeRequestY **cached_sizes = cache->requests_y;
       SizeRequestY  *cached_size;
+
+#ifdef G_ENABLE_DEBUG
+      if (cache->flags[GTK_ORIENTATION_VERTICAL].cached_size_valid &&
+          minimum_size < cache->cached_size_y.minimum_size)
+        g_warning ("Widget reports min height of %d for width of %d, but overall min height of %d",
+                   minimum_size, for_size, cache->cached_size_x.minimum_size);
+
+      for (i = 0; i < cache->flags[GTK_ORIENTATION_HORIZONTAL].n_cached_requests; i++)
+        {
+          if (cache->requests_x[i]->upper_for_size >= minimum_size &&
+              cache->requests_x[i]->cached_size.minimum_size > for_size)
+            {
+              g_warning ("Widget reports min height of %d for width of %d, but min width of %d for height of %d",
+                         minimum_size, for_size,
+                         cache->requests_x[i]->cached_size.minimum_size,
+                         cache->requests_x[i]->upper_for_size);
+              break;
+            }
+          else if (cache->requests_x[i]->lower_for_size < minimum_size &&
+                   cache->requests_x[i]->cached_size.minimum_size <= for_size)
+            {
+              g_warning ("Widget reports min height of %d for width of %d, but min width of %d for height of %d",
+                         minimum_size, for_size,
+                         cache->requests_x[i]->cached_size.minimum_size,
+                         cache->requests_x[i]->lower_for_size);
+              break;
+            }
+        }
+#endif
 
       for (i = 0; i < n_sizes; i++)
 	{
