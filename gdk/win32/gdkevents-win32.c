@@ -2673,6 +2673,53 @@ handle_pointing_device_event (GdkDisplay *display,
 }
 
 static gboolean
+handle_wm_setcursor (GdkDisplay *display,
+                     GdkSurface *surface,
+                     MSG        *msg,
+                     int        *ret_valp)
+{
+  gboolean return_val = FALSE;
+  GdkDeviceGrabInfo *pointer_grab = NULL;
+  GdkSurface *grab_surface = NULL;
+
+  GDK_NOTE (EVENTS, g_print (" %#x %#x", LOWORD (msg->lParam), HIWORD (msg->lParam)));
+
+  pointer_grab = _gdk_display_get_last_device_grab (display,
+                                                    GDK_WIN32_DISPLAY (display)->device_manager->core_pointer);
+
+  if (pointer_grab != NULL)
+    grab_surface = pointer_grab->surface;
+
+  if (grab_surface == NULL && LOWORD (msg->lParam) != HTCLIENT)
+    return FALSE;
+
+  if (grab_surface != NULL && !GDK_SURFACE_DESTROYED (grab_surface))
+    {
+      GdkWin32Display *win32_grab_display = GDK_WIN32_DISPLAY (gdk_surface_get_display (grab_surface));
+
+      if (win32_grab_display->grab_cursor != NULL)
+        {
+          GDK_NOTE (EVENTS, g_print (" (grab SetCursor(%p)", gdk_win32_hcursor_get_handle (win32_grab_display->grab_cursor)));
+          SetCursor (gdk_win32_hcursor_get_handle (win32_grab_display->grab_cursor));
+          return_val = TRUE;
+          *ret_valp = TRUE;
+        }
+    }
+
+  if (!return_val &&
+      !GDK_SURFACE_DESTROYED (surface) &&
+      GDK_WIN32_SURFACE (surface)->cursor != NULL)
+    {
+      GDK_NOTE (EVENTS, g_print (" (surface SetCursor(%p)", gdk_win32_hcursor_get_handle (GDK_WIN32_SURFACE (surface)->cursor)));
+      SetCursor (gdk_win32_hcursor_get_handle (GDK_WIN32_SURFACE (surface)->cursor));
+      return_val = TRUE;
+      *ret_valp = TRUE;
+    }
+
+  return return_val;
+}
+
+static gboolean
 gdk_event_translate (MSG *msg,
 		     int *ret_valp)
 {
@@ -2936,42 +2983,7 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_SETCURSOR:
-      GDK_NOTE (EVENTS, g_print (" %#x %#x",
-				 LOWORD (msg->lParam), HIWORD (msg->lParam)));
-
-      if (pointer_grab != NULL)
-        grab_surface = pointer_grab->surface;
-
-      if (grab_surface == NULL && LOWORD (msg->lParam) != HTCLIENT)
-	break;
-
-      return_val = FALSE;
-
-      if (grab_surface != NULL &&
-          !GDK_SURFACE_DESTROYED (grab_surface))
-        {
-          win32_display = GDK_WIN32_DISPLAY (gdk_surface_get_display (grab_surface));
-
-          if (win32_display->grab_cursor != NULL)
-            {
-              GDK_NOTE (EVENTS, g_print (" (grab SetCursor(%p)", gdk_win32_hcursor_get_handle (win32_display->grab_cursor)));
-              SetCursor (gdk_win32_hcursor_get_handle (win32_display->grab_cursor));
-              return_val = TRUE;
-              *ret_valp = TRUE;
-            }
-        }
-
-      if (!return_val &&
-          !GDK_SURFACE_DESTROYED (surface) &&
-          GDK_WIN32_SURFACE (surface)->cursor != NULL)
-        {
-          win32_display = GDK_WIN32_DISPLAY (gdk_surface_get_display (surface));
-          GDK_NOTE (EVENTS, g_print (" (surface SetCursor(%p)", gdk_win32_hcursor_get_handle (GDK_WIN32_SURFACE (surface)->cursor)));
-          SetCursor (gdk_win32_hcursor_get_handle (GDK_WIN32_SURFACE (surface)->cursor));
-          return_val = TRUE;
-          *ret_valp = TRUE;
-        }
-
+      return_val = handle_wm_setcursor (display, surface, msg, ret_valp);
       break;
 
     case WM_SYSMENU:
