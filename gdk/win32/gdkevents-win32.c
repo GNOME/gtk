@@ -1365,11 +1365,8 @@ modal_timer_proc (HWND     hwnd,
 		  DWORD    time)
 {
   int arbitrary_limit = 10;
-  GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (GDK_SURFACE (id)));
 
-  while (display->display_surface_record->modal_operation_in_progress != GDK_WIN32_MODAL_OP_NONE &&
-	 g_main_context_pending (NULL) &&
-	 arbitrary_limit--)
+  while (g_main_context_pending (NULL) && arbitrary_limit--)
     g_main_context_iteration (NULL, FALSE);
 }
 
