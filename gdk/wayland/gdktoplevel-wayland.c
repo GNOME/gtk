@@ -2484,22 +2484,20 @@ gdk_wayland_toplevel_set_application_id (GdkToplevel *toplevel,
 
 /**
  * gdk_wayland_toplevel_set_tag:
- * @toplevel: (type GdkWaylandToplevel): a `GdkToplevel` to set the tag for
- * @tag: A preferably human-readable tag
+ * @toplevel: (type GdkWaylandToplevel): a toplevel to set the tag on
+ * @tag: a preferably human-readable tag
  *
- * Set a tag to the toplevel allowing to uniquely identify it from the compositor
- * side.
+ * Sets a tag on the toplevel allowing the compositor to classify it.
  *
- * The tag along with the application ID can be used to create a unique identifier
- * per app / window.
+ * Tags should be short, UTF-8 encoded strings.
  *
- * The tag may be shown to the user in UI, so it's preferable for
+ * The tag may be shown to the user in a UI, so it's preferable for
  * it to be human readable. Suitable tags would for example be
  * “main window”, “settings”, “e-mail composer” or similar.
  *
  * The tag does not need to be unique across applications.
-
- * Returns: whether the tag was set.
+ *
+ * Returns: whether the tag was set
  *
  * Since: 4.18
  */
@@ -2514,7 +2512,6 @@ gdk_wayland_toplevel_set_tag (GdkToplevel *toplevel,
 
   if (!display_wayland->xdg_toplevel_tag)
     {
-      g_warning ("Server is missing xdg_toplevel_tag support");
       return FALSE;
     }
 
