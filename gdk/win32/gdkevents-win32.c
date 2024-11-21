@@ -2911,12 +2911,11 @@ gdk_event_translate (MSG *msg,
       G_GNUC_FALLTHROUGH;
 
     case WM_SETFOCUS:
-      if (keyboard_grab != NULL &&
-	  !keyboard_grab->owner_events)
-	break;
+      if (keyboard_grab != NULL && !keyboard_grab->owner_events)
+        break;
 
       if (GDK_SURFACE_DESTROYED (surface))
-	break;
+        break;
 
       generate_focus_event (win32_display->device_manager, surface, (msg->message == WM_SETFOCUS));
       return_val = TRUE;
@@ -2926,7 +2925,7 @@ gdk_event_translate (MSG *msg,
       GDK_NOTE (EVENTS, g_print (" %p", (HANDLE) msg->wParam));
 
       if (GDK_SURFACE_DESTROYED (surface))
-	break;
+        break;
 
       return_val = TRUE;
       *ret_valp = 1;
