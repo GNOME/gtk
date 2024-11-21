@@ -428,7 +428,7 @@ gdk_cicp_params_set_range (GdkCicpParams *self,
  * supported by GTK. In that case, `NULL` is returned, and @error is set
  * with an error message that can be presented to the user.
  *
- * Returns: (transfer full) (nullable): A newly allocated `GdkColorState`
+ * Returns: (transfer full): A newly allocated `GdkColorState`
  *
  * Since: 4.16
  */
