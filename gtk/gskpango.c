@@ -207,6 +207,13 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
   ww = (double)width / PANGO_SCALE;
   hh = (double)height / PANGO_SCALE;
 
+  /* Pango sets the height of error underlines to be 3 * underline thickness.
+   * That is appropriate for the traditional zigzag pattern, but our balls
+   * get just too big with that, so scale things down to 1.3 * underline
+   * thickness, which looks good, experimentally.
+   */
+  hh = hh * 1.3 / 3.0;
+
   get_color (crenderer, PANGO_RENDER_PART_UNDERLINE, &color);
 
   gtk_snapshot_push_repeat (crenderer->snapshot,
