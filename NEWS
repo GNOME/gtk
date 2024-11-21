@@ -1,6 +1,38 @@
 Overview of Changes in 4.17.1, xx-xx-xxxx
 =========================================
 
+This release switches our portal support from opt-in to opt-out.
+We will use portals by default, unless you set GDK_DEBUG=no-portals.
+And we will *always* use portals in flatpaks.
+
+* GtkText:
+ - Avoid selecting inserted Emoji
+
+* GtkPlacesView:
+ - Improve accessibility
+
+* Accessibility:
+ - Fix DBus signature of ChildrenChanged
+
+* Vulkan:
+ - Streamline Vulkan setup
+
+* Windows:
+ - Fix pasting certain bitmaps
+
+* Documentation:
+ - Revise and modernize some docs
+
+* Debugging:
+ - Inspector: Show surfaces and renderers in the tree
+ - Inspector: Make the object tree resizable
+
+* Translation updates
+ Icelandic
+ Serbian
+ Slovenian
+
+
 Overview of Changes in 4.17.0, 06-11-2024
 =========================================
 
