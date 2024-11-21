@@ -2724,11 +2724,9 @@ gdk_event_translate (MSG *msg,
 		     int *ret_valp)
 {
   RECT rect;
-  POINT point;
   MINMAXINFO *mmi;
   HWND hwnd;
   WINDOWPOS *hwndpos;
-  gboolean ignore_leave;
 
   GdkEvent *event;
 
@@ -2737,15 +2735,8 @@ gdk_event_translate (MSG *msg,
   GdkWin32Surface *impl;
   GdkWin32Display *win32_display;
 
-  GdkSurface *new_surface;
-
   GdkDeviceGrabInfo *keyboard_grab = NULL;
   GdkDeviceGrabInfo *pointer_grab = NULL;
-  GdkSurface *grab_surface = NULL;
-
-  crossing_cb_t crossing_cb = NULL;
-
-  int button;
 
   gboolean return_val = FALSE;
   gboolean goto_done = FALSE;
