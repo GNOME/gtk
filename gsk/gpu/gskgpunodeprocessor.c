@@ -2482,16 +2482,10 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
   graphene_rect_t bounds;
   gsize i, j;
   GskGpuImage *image;
-  GdkColorState *target;
-
-  if (GDK_IS_DEFAULT_COLOR_STATE (ics))
-    target = self->ccs;
-  else
-    target = ics;
 
   if (n_stops < 8 && GDK_IS_DEFAULT_COLOR_STATE (ics))
     {
-      func (self, target, node, stops, n_stops);
+      func (self, self->ccs, node, stops, n_stops);
       return;
     }
 
@@ -2501,7 +2495,7 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
 
   image = gsk_gpu_node_processor_init_draw (&other,
                                             self->frame,
-                                            self->ccs,
+                                            ics,
                                             gdk_memory_depth_merge (gdk_color_state_get_depth (self->ccs),
                                                                     gsk_render_node_get_preferred_depth (node)),
                                             &self->scale,
@@ -2547,43 +2541,17 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
           j++;
         }
 
-      func (&other, target, node, real_stops, j);
+      func (&other, NULL, node, real_stops, j);
     }
 
   gsk_gpu_node_processor_finish_draw (&other, image);
 
-  if (GDK_IS_DEFAULT_COLOR_STATE (ics))
-    {
-      gsk_gpu_texture_op (self->frame,
-                          gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
-                          &self->offset,
-                          &(GskGpuShaderImage) {
-                            image,
-                            GSK_GPU_SAMPLER_DEFAULT,
-                            &node->bounds,
-                            &bounds
-                          });
-    }
-  else
-    {
-      const GdkCicp *cicp = gdk_color_state_get_cicp (ics);
-
-      g_assert (cicp != NULL);
-
-      gsk_gpu_convert_from_cicp_op (self->frame,
-                                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
-                                    cicp,
-                                    gsk_gpu_color_states_create_cicp (self->ccs, TRUE, TRUE),
-                                    1,
-                                    TRUE,
-                                    &self->offset,
-                                    &(GskGpuShaderImage) {
-                                      image,
-                                      GSK_GPU_SAMPLER_DEFAULT,
-                                      &node->bounds,
-                                      &bounds
-                                    });
-    }
+  gsk_gpu_node_processor_image_op (self,
+                                   image,
+                                   ics,
+                                   GSK_GPU_SAMPLER_DEFAULT,
+                                   &node->bounds,
+                                   &bounds);
 
   g_object_unref (image);
 }
