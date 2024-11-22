@@ -737,7 +737,7 @@ update_node_ordering (GtkSpinButton *spin_button)
 
   if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      if (gtk_widget_get_direction (GTK_WIDGET (spin_button)) == GTK_TEXT_DIR_LTR)
+      if (gtk_widget_get_default_direction () == GTK_TEXT_DIR_LTR)
         {
           down_button_pos = 1;
           up_button_pos = -1;
@@ -861,6 +861,11 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
                     G_CALLBACK (swipe_gesture_begin), spin_button);
   g_signal_connect (priv->swipe_gesture, "update",
                     G_CALLBACK (swipe_gesture_update), spin_button);
+
+  /* Numeric entries should be LTR even on RTL languages.
+   * See: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/4629#note_1431995
+   */
+  gtk_widget_set_direction (GTK_WIDGET (spin_button), GTK_TEXT_DIR_LTR);
 }
 
 static void
