@@ -50,14 +50,18 @@ struct _GdkVulkanContextClass
   GdkDrawContextClass parent_class;
 
 #ifdef GDK_RENDERING_VULKAN
-  VkResult     (* create_surface)       (GdkVulkanContext       *context,
-                                         VkSurfaceKHR           *surface);
+  VkResult              (* create_surface)                              (GdkVulkanContext      *context,
+                                                                         VkSurfaceKHR          *surface);
+  void                  (* get_image_size)                              (GdkVulkanContext      *context,
+                                                                         uint32_t              *out_width,
+                                                                         uint32_t              *out_height);
+
 #endif
 };
 
 #ifdef GDK_RENDERING_VULKAN
 
-const char *            gdk_vulkan_strerror                         (VkResult           result);
+const char *            gdk_vulkan_strerror                             (VkResult               result);
 
 static inline VkResult
 gdk_vulkan_handle_result (VkResult    res,

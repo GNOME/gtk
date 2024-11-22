@@ -405,6 +405,15 @@ gdk_vulkan_context_dispose (GObject *gobject)
   G_OBJECT_CLASS (gdk_vulkan_context_parent_class)->dispose (gobject);
 }
 
+static void
+gdk_vulkan_context_get_image_size (GdkVulkanContext *context,
+                                   VkExtent2D       *size)
+{
+  GDK_VULKAN_CONTEXT_GET_CLASS (context)->get_image_size (context,
+                                                          &size->width,
+                                                          &size->height);
+}
+
 static gboolean
 gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                     GError           **error)
@@ -464,7 +473,6 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
              capabilities.currentExtent.width,
              capabilities.currentExtent.height);
 
-
   /*
    * Per https://www.khronos.org/registry/vulkan/specs/1.0-wsi_extensions/xhtml/vkspec.html#VkSurfaceCapabilitiesKHR
    * the current extent may assume a special value, meaning that the extent should assume whatever
@@ -472,10 +480,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
    */
   if (capabilities.currentExtent.width == -1 || capabilities.currentExtent.height == -1)
     {
-      double scale = gdk_surface_get_scale (surface);
-
-      capabilities.currentExtent.width = MAX (1, (int) ceil (gdk_surface_get_width (surface) * scale));
-      capabilities.currentExtent.height = MAX (1, (int) ceil (gdk_surface_get_height (surface) * scale));
+      gdk_vulkan_context_get_image_size (context, &capabilities.currentExtent);
 
       GDK_DEBUG (VULKAN, "Effective extent %dx%d",
                  capabilities.currentExtent.width,
@@ -831,6 +836,20 @@ gdk_vulkan_context_surface_resized (GdkDrawContext *draw_context)
 }
 
 static void
+gdk_vulkan_context_get_default_image_size (GdkVulkanContext *context,
+                                           uint32_t         *width,
+                                           uint32_t         *height)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
+  double scale;
+
+  scale = gdk_surface_get_scale (surface);
+
+  *width = MAX (1, (uint32_t) ceil (gdk_surface_get_width (surface) * scale));
+  *height = MAX (1, (uint32_t) ceil (gdk_surface_get_height (surface) * scale));
+}
+
+static void
 gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -841,6 +860,8 @@ gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
   draw_context_class->begin_frame = gdk_vulkan_context_begin_frame;
   draw_context_class->end_frame = gdk_vulkan_context_end_frame;
   draw_context_class->surface_resized = gdk_vulkan_context_surface_resized;
+
+  klass->get_image_size = gdk_vulkan_context_get_default_image_size;
 
   /**
    * GdkVulkanContext::images-updated:
