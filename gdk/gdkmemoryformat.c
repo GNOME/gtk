@@ -2196,8 +2196,24 @@ gdk_memory_convert_generic (gpointer data)
   g_free (tmp);
 
   ADD_MARK (before,
-            "Memory convert (thread)", "size %lux%lu, %lu rows",
+            "Memory convert", "thread %p, size %lux%lu, %lu rows",
+            g_thread_self (),
             mc->width, mc->height, rows);
+}
+
+static void
+gdk_memory_task_run (GdkTaskFunc task_func,
+                     gpointer    task_data,
+                     gsize       width,
+                     gsize       height)
+{
+  if (width * height < 400)
+    {
+      task_func (task_data);
+      return;
+    }
+
+  gdk_parallel_task_run (task_func, task_data);
 }
 
 void
@@ -2256,7 +2272,7 @@ gdk_memory_convert (guchar              *dest_data,
       return;
     }
 
-  gdk_parallel_task_run (gdk_memory_convert_generic, &mc);
+  gdk_memory_task_run (gdk_memory_convert_generic, &mc, width, height);
 }
 
 typedef struct _MemoryConvertColorState MemoryConvertColorState;
@@ -2501,17 +2517,17 @@ gdk_memory_convert_color_state (guchar          *data,
       src_color_state == GDK_COLOR_STATE_SRGB &&
       dest_color_state == GDK_COLOR_STATE_SRGB_LINEAR)
     {
-      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_to_srgb_linear, &mc);
+      gdk_memory_task_run (gdk_memory_convert_color_state_srgb_to_srgb_linear, &mc, width, height);
     }
   else if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
            src_color_state == GDK_COLOR_STATE_SRGB_LINEAR &&
            dest_color_state == GDK_COLOR_STATE_SRGB)
     {
-      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_linear_to_srgb, &mc);
+      gdk_memory_task_run (gdk_memory_convert_color_state_srgb_linear_to_srgb, &mc, width, height);
     }
   else
     {
-      gdk_parallel_task_run (gdk_memory_convert_color_state_generic, &mc);
+      gdk_memory_task_run (gdk_memory_convert_color_state_generic, &mc, width, height);
     }
 }
 
@@ -2673,13 +2689,13 @@ gdk_memory_mipmap (guchar          *dest,
   if (dest_format == src_format)
     {
       if (linear)
-        gdk_parallel_task_run (gdk_memory_mipmap_same_format_linear, &mipmap);
+        gdk_memory_task_run (gdk_memory_mipmap_same_format_linear, &mipmap, src_width, src_height);
       else
-        gdk_parallel_task_run (gdk_memory_mipmap_same_format_nearest, &mipmap);
+        gdk_memory_task_run (gdk_memory_mipmap_same_format_nearest, &mipmap, src_width, src_height);
     }
   else
     {
-      gdk_parallel_task_run (gdk_memory_mipmap_generic, &mipmap);
+      gdk_memory_task_run (gdk_memory_mipmap_generic, &mipmap, src_width, src_height);
     }
 }
 
