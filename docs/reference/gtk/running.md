@@ -363,6 +363,9 @@ disable certain features.
 `aerosnap`
 : Disable Aerosnap support on Windows
 
+`parallelize`
+: Disabled threaded memory format conversions
+
 ### `GDK_GL_DISABLE`
 
 This variable can be set to a list of values, which cause GDK to
