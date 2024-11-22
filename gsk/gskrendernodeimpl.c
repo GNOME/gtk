@@ -7906,7 +7906,7 @@ apply_luminance_to_pattern (cairo_pattern_t *pattern,
   cairo_surface_t *surface, *image_surface;
   guchar *data;
   gsize x, y, width, height, stride;
-  int red, green, blue, alpha, luminance;
+  guint red, green, blue, alpha, luminance;
   guint32* pixel_data;
 
   cairo_pattern_get_surface (pattern, &surface);
