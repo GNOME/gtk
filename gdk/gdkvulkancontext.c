@@ -420,6 +420,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
   VkSwapchainKHR new_swapchain;
   VkResult res;
   VkDevice device;
+  VkExtent2D size;
   guint i;
 
   GDK_DEBUG (VULKAN, "(Re)creating the swapchain for surface of size %dx%d",
@@ -463,9 +464,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
 
   GDK_DEBUG (VULKAN, "Using surface present mode %s",
              surface_present_mode_to_string (present_mode));
-  GDK_DEBUG (VULKAN, "Using extent %dx%d",
-             capabilities.currentExtent.width,
-             capabilities.currentExtent.height);
+
+  gdk_vulkan_context_get_image_size (context, &size);
 
   /*
    * Per https://www.khronos.org/registry/vulkan/specs/1.0-wsi_extensions/xhtml/vkspec.html#VkSurfaceCapabilitiesKHR
@@ -474,11 +474,34 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
    */
   if (capabilities.currentExtent.width == -1 || capabilities.currentExtent.height == -1)
     {
-      gdk_vulkan_context_get_image_size (context, &capabilities.currentExtent);
+      GDK_DEBUG (VULKAN, "GTK selecting swapchain size as %ux%u",
+                 (guint) size.width, (guint) size.height);
+    }
+  else if (capabilities.currentExtent.width == size.width &&
+           capabilities.currentExtent.height == size.height)
+    {
+      GDK_DEBUG (VULKAN, "Vulkan and GTK agree on size as %ux%u",
+                 (guint) size.width, (guint) size.height);
+    }
+  else
+    {
+      GDK_DEBUG (VULKAN, "Vulkan %ux%u and GTK %ux%u disagree on size, using GTK's",
+                 (guint) capabilities.currentExtent.width, (guint) capabilities.currentExtent.height,
+                 (guint) size.width, (guint) size.height);
+    }
 
-      GDK_DEBUG (VULKAN, "Effective extent %dx%d",
-                 capabilities.currentExtent.width,
-                 capabilities.currentExtent.height);
+  if (capabilities.minImageExtent.width > size.width ||
+      capabilities.minImageExtent.height > size.height ||
+      capabilities.maxImageExtent.width < size.width ||
+      capabilities.maxImageExtent.height < size.height)
+    {
+      /* Should this be a g_warning()? */
+      GDK_DEBUG (VULKAN, "Clamping size %ux%u to fit into min %ux%u, max %ux%u",
+                 (guint) size.width, (guint) size.height,
+                 (guint) capabilities.minImageExtent.width, (guint) capabilities.minImageExtent.height,
+                 (guint) capabilities.maxImageExtent.width, (guint) capabilities.maxImageExtent.height);
+      size.width = CLAMP (size.width, capabilities.minImageExtent.width, capabilities.maxImageExtent.width);
+      size.height = CLAMP (size.height, capabilities.minImageExtent.height, capabilities.maxImageExtent.height);
     }
 
   res = GDK_VK_CHECK (vkCreateSwapchainKHR, device,
@@ -492,7 +515,7 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                                                         capabilities.maxImageCount ? capabilities.maxImageCount : G_MAXUINT32),
                                                 .imageFormat = priv->formats[priv->current_depth].vk_format.format,
                                                 .imageColorSpace = priv->formats[priv->current_depth].vk_format.colorSpace,
-                                                .imageExtent = capabilities.currentExtent,
+                                                .imageExtent = size,
                                                 .imageArrayLayers = 1,
                                                 .imageUsage = VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT,
                                                 .imageSharingMode = VK_SHARING_MODE_EXCLUSIVE,
