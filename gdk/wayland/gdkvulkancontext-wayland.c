@@ -53,6 +53,18 @@ gdk_wayland_vulkan_context_create_surface (GdkVulkanContext *context,
 }
 
 static void
+gdk_wayland_vulkan_context_get_image_size (GdkVulkanContext *context,
+                                           uint32_t         *width,
+                                           uint32_t         *height)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  *width = gdk_fractional_scale_scale (&impl->scale, surface->width),
+  *height = gdk_fractional_scale_scale (&impl->scale, surface->height);
+}
+
+static void
 gdk_vulkan_context_wayland_end_frame (GdkDrawContext *context,
                                       cairo_region_t *painted)
 {
@@ -87,6 +99,8 @@ gdk_wayland_vulkan_context_class_init (GdkWaylandVulkanContextClass *klass)
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
 
   vulkan_context_class->create_surface = gdk_wayland_vulkan_context_create_surface;
+  vulkan_context_class->get_image_size = gdk_wayland_vulkan_context_get_image_size;
+
   draw_context_class->end_frame = gdk_vulkan_context_wayland_end_frame;
   draw_context_class->empty_frame = gdk_vulkan_context_wayland_empty_frame;
 }
