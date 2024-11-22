@@ -2751,6 +2751,38 @@ handle_wm_setcursor (GdkDisplay *display,
   return return_val;
 }
 
+
+/*
+ * Handle messages when Window (aka system/control) menu commands are used, or when the maximize,
+ * minimize, restore or close buttons are clicked upon
+ */
+static void
+handle_wm_syscommand (GdkSurface *surface,
+                      MSG        *msg)
+{
+  GdkWin32Surface *impl;
+
+  /* From: https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand?redirectedfrom=MSDN
+   * To obtain the correct result when testing the value of wParam,
+   * an application must combine the value 0xFFF0 with the wParam value by using the bitwise AND operator. */
+  switch (msg->wParam & 0xFFF0)
+	{
+    case SC_MINIMIZE:
+    case SC_RESTORE:
+      do_show_surface (surface, msg->wParam == SC_MINIMIZE ? TRUE : FALSE);
+
+      if (msg->wParam == SC_RESTORE)
+        _gdk_win32_surface_invalidate_egl_framebuffer (surface);
+
+      break;
+
+    case SC_MAXIMIZE:
+      impl = GDK_WIN32_SURFACE (surface);
+      impl->maximizing = TRUE;
+      break;
+	}
+}
+
 static gboolean
 gdk_event_translate (MSG *msg,
 		     int *ret_valp)
@@ -3019,26 +3051,12 @@ gdk_event_translate (MSG *msg,
 
       break;
 
+    /*
+     * Handle messages when Window (aka system/control) menu commands are used,
+     * or when the maximize, minimize, restore or close buttons are clicked upon
+     */
     case WM_SYSCOMMAND:
-      /* From: https://learn.microsoft.com/en-us/windows/win32/menurc/wm-syscommand?redirectedfrom=MSDN
-       * To obtain the correct result when testing the value of wParam,
-       * an application must combine the value 0xFFF0 with the wParam value by using the bitwise AND operator. */
-      switch (msg->wParam & 0xFFF0)
-	{
-	case SC_MINIMIZE:
-	case SC_RESTORE:
-          do_show_surface (surface, msg->wParam == SC_MINIMIZE ? TRUE : FALSE);
-
-          if (msg->wParam == SC_RESTORE)
-            _gdk_win32_surface_invalidate_egl_framebuffer (surface);
-
-	  break;
-        case SC_MAXIMIZE:
-          impl = GDK_WIN32_SURFACE (surface);
-          impl->maximizing = TRUE;
-	  break;
-	}
-
+      handle_wm_syscommand (surface, msg);
       break;
 
     case WM_ENTERSIZEMOVE:
