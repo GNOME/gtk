@@ -4750,32 +4750,10 @@ gtk_text_create_layout (GtkText  *self,
 
       if (pango_dir == PANGO_DIRECTION_NEUTRAL)
         {
-          if (gtk_widget_has_focus (widget))
-            {
-              GdkDisplay *display;
-              GdkSeat *seat;
-              GdkDevice *keyboard = NULL;
-              PangoDirection direction = PANGO_DIRECTION_LTR;
-
-              display = gtk_widget_get_display (widget);
-              seat = gdk_display_get_default_seat (display);
-              if (seat)
-                keyboard = gdk_seat_get_keyboard (seat);
-              if (keyboard)
-                direction = gdk_device_get_direction (keyboard);
-
-              if (direction == PANGO_DIRECTION_RTL)
-                pango_dir = PANGO_DIRECTION_RTL;
-              else
-                pango_dir = PANGO_DIRECTION_LTR;
-            }
+          if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+            pango_dir = PANGO_DIRECTION_RTL;
           else
-            {
-              if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-                pango_dir = PANGO_DIRECTION_RTL;
-              else
-                pango_dir = PANGO_DIRECTION_LTR;
-            }
+            pango_dir = PANGO_DIRECTION_LTR;
         }
 
       pango_context_set_base_dir (gtk_widget_get_pango_context (widget), pango_dir);
