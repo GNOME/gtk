@@ -2672,6 +2672,38 @@ handle_pointing_device_event (GdkDisplay *display,
   return return_val;
 }
 
+/* WM_KILLFOCUS and WM_SETFOCUS */
+static gboolean
+handle_focus_change (GdkDisplay *display,
+                     GdkSurface *surface,
+                     MSG        *msg)
+{
+  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
+  gboolean return_val = FALSE;
+  GdkDeviceGrabInfo *keyboard_grab = NULL;
+
+  keyboard_grab = _gdk_display_get_last_device_grab (display,
+                                                     win32_display->device_manager->core_keyboard);
+  if (msg->message == WM_KILLFOCUS &&
+	  keyboard_grab != NULL &&
+      !GDK_SURFACE_DESTROYED (keyboard_grab->surface) &&
+	  (win32_display->display_surface_record->modal_operation_in_progress & GDK_WIN32_MODAL_OP_DND) == 0)
+	{
+	  generate_grab_broken_event (win32_display->device_manager, keyboard_grab->surface, TRUE, NULL);
+	}
+
+  if (keyboard_grab != NULL && !keyboard_grab->owner_events)
+    return FALSE;
+
+  if (GDK_SURFACE_DESTROYED (surface))
+    return FALSE;
+
+  generate_focus_event (win32_display->device_manager, surface, msg->message == WM_SETFOCUS);
+  return_val = TRUE;
+
+  return return_val;
+}
+
 static gboolean
 handle_wm_setcursor (GdkDisplay *display,
                      GdkSurface *surface,
@@ -2939,24 +2971,10 @@ gdk_event_translate (MSG *msg,
       return_val = handle_pointing_device_event (display, surface, msg, ret_valp);
       break;
 
+    /* these generate a GDK_FOCUS_CHANGE event */
     case WM_KILLFOCUS:
-      if (keyboard_grab != NULL &&
-	  !GDK_SURFACE_DESTROYED (keyboard_grab->surface) &&
-	  (win32_display->display_surface_record->modal_operation_in_progress & GDK_WIN32_MODAL_OP_DND) == 0)
-	{
-	  generate_grab_broken_event (win32_display->device_manager, keyboard_grab->surface, TRUE, NULL);
-	}
-      G_GNUC_FALLTHROUGH;
-
     case WM_SETFOCUS:
-      if (keyboard_grab != NULL && !keyboard_grab->owner_events)
-        break;
-
-      if (GDK_SURFACE_DESTROYED (surface))
-        break;
-
-      generate_focus_event (win32_display->device_manager, surface, (msg->message == WM_SETFOCUS));
-      return_val = TRUE;
+      return_val = handle_focus_change (display, surface, msg);
       break;
 
     case WM_ERASEBKGND:
