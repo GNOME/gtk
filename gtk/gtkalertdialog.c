@@ -29,8 +29,7 @@
 /**
  * GtkAlertDialog:
  *
- * A `GtkAlertDialog` object collects the arguments that
- * are needed to present a message to the user.
+ * Collects the arguments that are needed to present a message to the user.
  *
  * The message is shown with the [method@Gtk.AlertDialog.choose]
  * function.
@@ -226,7 +225,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
    * Labels for buttons to show in the alert.
    *
    * The labels should be translated and may contain
-   * a _ to indicate the mnemonic character.
+   * a `_` character to indicate the mnemonic character.
    *
    * If this property is not set, then a 'Close' button is
    * automatically created.
@@ -241,8 +240,8 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
   /**
    * GtkAlertDialog:cancel-button:
    *
-   * This property determines what happens when the Escape key is
-   * pressed while the alert is shown.
+   * Determines what happens when the <kbd>Escape</kbd> key is pressed
+   * while the alert is shown.
    *
    * If this property holds the index of a button in [property@Gtk.AlertDialog:buttons],
    * then pressing Escape is treated as if that button was pressed. If it is -1
@@ -261,8 +260,8 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
   /**
    * GtkAlertDialog:default-button:
    *
-   * This property determines what happens when the Return key is
-   * pressed while the alert is shown.
+   * Determines what happens when the <kbd>Return</kbd> key is pressed
+   * while the alert is shown.
    *
    * If this property holds the index of a button in [property@Gtk.AlertDialog:buttons],
    * then pressing Return is treated as if that button was pressed. If it is -1
@@ -286,7 +285,7 @@ gtk_alert_dialog_class_init (GtkAlertDialogClass *class)
 
 /**
  * gtk_alert_dialog_new:
- * @format: printf()-style format string
+ * @format: `printf()`-style format string
  * @...: arguments for @format
  *
  * Creates a new `GtkAlertDialog` object.
@@ -323,12 +322,12 @@ gtk_alert_dialog_new (const char *format,
 
 /**
  * gtk_alert_dialog_get_modal:
- * @self: a `GtkAlertDialog`
+ * @self: an alert dialog
  *
  * Returns whether the alert blocks interaction
  * with the parent window while it is presented.
  *
- * Returns: `TRUE` if the alert is modal
+ * Returns: true if the alert is modal
  *
  * Since: 4.10
  */
@@ -342,7 +341,7 @@ gtk_alert_dialog_get_modal (GtkAlertDialog *self)
 
 /**
  * gtk_alert_dialog_set_modal:
- * @self: a `GtkAlertDialog`
+ * @self: an alert dialog
  * @modal: the new value
  *
  * Sets whether the alert blocks interaction
@@ -366,7 +365,7 @@ gtk_alert_dialog_set_modal (GtkAlertDialog *self,
 
 /**
  * gtk_alert_dialog_get_message:
- * @self: a `GtkAlertDialog`
+ * @self: an alert dialog
  *
  * Returns the message that will be shown in the alert.
  *
@@ -384,7 +383,7 @@ gtk_alert_dialog_get_message (GtkAlertDialog *self)
 
 /**
  * gtk_alert_dialog_set_message:
- * @self: a `GtkAlertDialog`
+ * @self: an alert dialog
  * @message: the new message
  *
  * Sets the message that will be shown in the alert.
@@ -412,7 +411,7 @@ gtk_alert_dialog_set_message (GtkAlertDialog *self,
 
 /**
  * gtk_alert_dialog_get_detail:
- * @self: a `GtkAlertDialog`
+ * @self: an alert dialog
  *
  * Returns the detail text that will be shown in the alert.
  *
@@ -430,7 +429,7 @@ gtk_alert_dialog_get_detail (GtkAlertDialog *self)
 
 /**
  * gtk_alert_dialog_set_detail:
- * @self: a `GtkAlertDialog`
+ * @self: an alert dialog
  * @detail: the new detail text
  *
  * Sets the detail text that will be shown in the alert.
@@ -458,7 +457,7 @@ gtk_alert_dialog_set_detail (GtkAlertDialog *self,
 
 /**
  * gtk_alert_dialog_get_buttons:
- * @self: a `GtkAlertDialog`
+ * @self: an alert dialog
  *
  * Returns the button labels for the alert.
  *
@@ -476,7 +475,7 @@ gtk_alert_dialog_get_buttons (GtkAlertDialog *self)
 
 /**
  * gtk_alert_dialog_set_buttons:
- * @self: a `GtkAlertDialog`
+ * @self: an alert dialog
  * @labels: (array zero-terminated=1): the new button labels
  *
  * Sets the button labels for the alert.
@@ -498,7 +497,7 @@ gtk_alert_dialog_set_buttons (GtkAlertDialog     *self,
 
 /**
  * gtk_alert_dialog_get_cancel_button:
- * @self: a `GtkAlertDialog`
+ * @self: an alert dialog
  *
  * Returns the index of the cancel button.
  *
@@ -516,7 +515,7 @@ gtk_alert_dialog_get_cancel_button (GtkAlertDialog *self)
 
 /**
  * gtk_alert_dialog_set_cancel_button:
- * @self: a `GtkAlertDialog`
+ * @self: an alert dialog
  * @button: the new cancel button
  *
  * Sets the index of the cancel button.
@@ -541,7 +540,7 @@ gtk_alert_dialog_set_cancel_button (GtkAlertDialog *self,
 
 /**
  * gtk_alert_dialog_get_default_button:
- * @self: a `GtkAlertDialog`
+ * @self: an alert dialog
  *
  * Returns the index of the default button.
  *
@@ -559,7 +558,7 @@ gtk_alert_dialog_get_default_button (GtkAlertDialog *self)
 
 /**
  * gtk_alert_dialog_set_default_button:
- * @self: a `GtkAlertDialog`
+ * @self: an alert dialog
  * @button: the new default button
  *
  * Sets the index of the default button.
@@ -678,14 +677,14 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
 /**
  * gtk_alert_dialog_choose:
- * @self: a `GtkAlertDialog`
- * @parent: (nullable): the parent `GtkWindow`
- * @cancellable: (nullable): a `GCancellable` to cancel the operation
+ * @self: an alert dialog
+ * @parent: (nullable): the parent window
+ * @cancellable: (nullable): a cancellable to cancel the operation
  * @callback: (nullable) (scope async) (closure user_data): a callback to call
  *   when the operation is complete
  * @user_data: data to pass to @callback
  *
- * This function shows the alert to the user.
+ * Shows the alert to the user.
  *
  * It is ok to pass `NULL` for the callback if the alert
  * does not have more than one button. A simpler API for
@@ -721,12 +720,11 @@ gtk_alert_dialog_choose (GtkAlertDialog      *self,
 
 /**
  * gtk_alert_dialog_choose_finish:
- * @self: a `GtkAlertDialog`
- * @result: a `GAsyncResult`
+ * @self: an alert dialog
+ * @result: the result
  * @error: return location for a [enum@Gtk.DialogError] error
  *
- * Finishes the [method@Gtk.AlertDialog.choose] call
- * and returns the index of the button that was clicked.
+ * Finishes the [method@Gtk.AlertDialog.choose] call.
  *
  * Returns: the index of the button that was clicked, or -1 if
  *   the dialog was cancelled and [property@Gtk.AlertDialog:cancel-button]
@@ -751,16 +749,17 @@ gtk_alert_dialog_choose_finish (GtkAlertDialog  *self,
 
 /**
  * gtk_alert_dialog_show:
- * @self: a `GtkAlertDialog`
- * @parent: (nullable): the parent `GtkWindow`
+ * @self: an alert dialog
+ * @parent: (nullable): the parent window
  *
- * Show the alert to the user.
+ * Shows the alert to the user.
  *
- * This function is a simple version of [method@Gtk.AlertDialog.choose]
+ * This function is a simpler version of [method@Gtk.AlertDialog.choose]
  * intended for dialogs with a single button.
- * If you want to cancel the dialog or if the alert has more than one button,
- * you should use that function instead and provide it with a #GCancellable or
- * callback respectively.
+ *
+ * If you want to cancel the dialog or if the alert has more than one
+ * button, you should use that function instead and provide it with a
+ * [class@Gio.Cancellable] and callback respectively.
  *
  * Since: 4.10
  */

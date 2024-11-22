@@ -29,15 +29,15 @@ G_BEGIN_DECLS
 
 /**
  * GtkCustomFilterFunc:
- * @item: (type GObject): The item to be matched
+ * @item: (type GObject): the item to be matched
  * @user_data: user data
  *
  * User function that is called to determine if the @item should be matched.
  *
- * If the filter matches the item, this function must return %TRUE. If the
- * item should be filtered out, %FALSE must be returned.
+ * If the filter matches the item, this function must return true.
+ * If the item should be filtered out, false must be returned.
  *
- * Returns: %TRUE to keep the item around
+ * Returns: true to keep the item around
  */
 typedef gboolean (* GtkCustomFilterFunc) (gpointer item, gpointer user_data);
 

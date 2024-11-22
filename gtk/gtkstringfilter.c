@@ -26,10 +26,9 @@
 /**
  * GtkStringFilter:
  *
- * `GtkStringFilter` determines whether to include items by comparing
- * strings to a fixed search term.
+ * Determines whether to include items by comparing strings to a fixed search term.
  *
- * The strings are obtained from the items by evaluating a `GtkExpression`
+ * The strings are obtained from the items by evaluating an expression
  * set with [method@Gtk.StringFilter.set_expression], and they are
  * compared against a search term set with [method@Gtk.StringFilter.set_search].
  *
@@ -249,7 +248,8 @@ gtk_string_filter_class_init (GtkStringFilterClass *class)
   /**
    * GtkStringFilter:expression: (type GtkExpression)
    *
-   * The expression to evaluate on item to get a string to compare with.
+   * The expression to evaluate on each item to get a
+   * string to compare with.
    */
   properties[PROP_EXPRESSION] =
     gtk_param_spec_expression ("expression", NULL, NULL,
@@ -299,7 +299,7 @@ gtk_string_filter_init (GtkStringFilter *self)
 
 /**
  * gtk_string_filter_new:
- * @expression: (transfer full) (nullable): The expression to evaluate
+ * @expression: (transfer full) (nullable): the expression to evaluate
  *
  * Creates a new string filter.
  *
@@ -324,11 +324,11 @@ gtk_string_filter_new (GtkExpression *expression)
 
 /**
  * gtk_string_filter_get_search:
- * @self: a `GtkStringFilter`
+ * @self: a string filter
  *
  * Gets the search term.
  *
- * Returns: (nullable) (transfer none): The search term
+ * Returns: (nullable) (transfer none): the search term
  **/
 const char *
 gtk_string_filter_get_search (GtkStringFilter *self)
@@ -340,9 +340,8 @@ gtk_string_filter_get_search (GtkStringFilter *self)
 
 /**
  * gtk_string_filter_set_search:
- * @self: a `GtkStringFilter`
- * @search: (transfer none) (nullable): The string to search for
- *   or %NULL to clear the search
+ * @self: a string filter
+ * @search: (transfer none) (nullable): the string to search for
  *
  * Sets the string to search for.
  */
@@ -381,12 +380,12 @@ gtk_string_filter_set_search (GtkStringFilter *self,
 
 /**
  * gtk_string_filter_get_expression:
- * @self: a `GtkStringFilter`
+ * @self: a string filter
  *
  * Gets the expression that the string filter uses to
  * obtain strings from items.
  *
- * Returns: (transfer none) (nullable): a `GtkExpression`
+ * Returns: (transfer none) (nullable): the expression 
  */
 GtkExpression *
 gtk_string_filter_get_expression (GtkStringFilter *self)
@@ -398,13 +397,13 @@ gtk_string_filter_get_expression (GtkStringFilter *self)
 
 /**
  * gtk_string_filter_set_expression:
- * @self: a `GtkStringFilter`
- * @expression: (nullable): a `GtkExpression`
+ * @self: a string filter
+ * @expression: (nullable): the expression
  *
  * Sets the expression that the string filter uses to
  * obtain strings from items.
  *
- * The expression must have a value type of %G_TYPE_STRING.
+ * The expression must have a value type of `G_TYPE_STRING`.
  */
 void
 gtk_string_filter_set_expression (GtkStringFilter *self,
@@ -427,11 +426,11 @@ gtk_string_filter_set_expression (GtkStringFilter *self,
 
 /**
  * gtk_string_filter_get_ignore_case:
- * @self: a `GtkStringFilter`
+ * @self: a string filter
  *
  * Returns whether the filter ignores case differences.
  *
- * Returns: %TRUE if the filter ignores case
+ * Returns: true if the filter ignores case
  */
 gboolean
 gtk_string_filter_get_ignore_case (GtkStringFilter *self)
@@ -443,8 +442,8 @@ gtk_string_filter_get_ignore_case (GtkStringFilter *self)
 
 /**
  * gtk_string_filter_set_ignore_case:
- * @self: a `GtkStringFilter`
- * @ignore_case: %TRUE to ignore case
+ * @self: a string filter
+ * @ignore_case: true to ignore case
  *
  * Sets whether the filter ignores case differences.
  */
@@ -471,7 +470,7 @@ gtk_string_filter_set_ignore_case (GtkStringFilter *self,
 
 /**
  * gtk_string_filter_get_match_mode:
- * @self: a `GtkStringFilter`
+ * @self: a string filter
  *
  * Returns the match mode that the filter is using.
  *
@@ -487,7 +486,7 @@ gtk_string_filter_get_match_mode (GtkStringFilter *self)
 
 /**
  * gtk_string_filter_set_match_mode:
- * @self: a `GtkStringFilter`
+ * @self: a string filter
  * @mode: the new match mode
  *
  * Sets the match mode for the filter.

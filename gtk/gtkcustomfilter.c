@@ -26,7 +26,7 @@
 /**
  * GtkCustomFilter:
  *
- * `GtkCustomFilter` determines whether to include items with a callback.
+ * Determines whether to include items with a callback.
  */
 struct _GtkCustomFilter
 {
@@ -96,13 +96,12 @@ gtk_custom_filter_init (GtkCustomFilter *self)
  * @user_data: (nullable): user data to pass to @match_func
  * @user_destroy: destroy notify for @user_data
  *
- * Creates a new filter using the given @match_func to filter
- * items.
+ * Creates a new filter using the given function to filter items.
  *
- * If @match_func is %NULL, the filter matches all items.
+ * If @match_func is `NULL`, the filter matches all items.
  *
  * If the filter func changes its filtering behavior,
- * gtk_filter_changed() needs to be called.
+ * [method@Gtk.Filter.changed] needs to be called.
  *
  * Returns: a new `GtkCustomFilter`
  **/
@@ -122,20 +121,20 @@ gtk_custom_filter_new (GtkCustomFilterFunc match_func,
 
 /**
  * gtk_custom_filter_set_filter_func:
- * @self: a `GtkCustomFilter`
+ * @self: a custom filter
  * @match_func: (nullable): function to filter items
  * @user_data: (nullable): user data to pass to @match_func
  * @user_destroy: destroy notify for @user_data
  *
  * Sets the function used for filtering items.
  *
- * If @match_func is %NULL, the filter matches all items.
+ * If @match_func is `NULL`, the filter matches all items.
  *
  * If the filter func changes its filtering behavior,
- * gtk_filter_changed() needs to be called.
+ * [method@Gtk.Filter.changed] needs to be called.
  *
- * If a previous function was set, its @user_destroy will be
- * called now.
+ * If a previous function was set, its @user_destroy
+ * will be called.
  */
 void
 gtk_custom_filter_set_filter_func (GtkCustomFilter     *self,

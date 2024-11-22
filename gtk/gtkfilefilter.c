@@ -19,10 +19,10 @@
 /**
  * GtkFileFilter:
  *
- * `GtkFileFilter` filters files by name or mime type.
+ * Filters files by name or mime type.
  *
  * `GtkFileFilter` can be used to restrict the files being shown in a
- * `GtkFileChooser`. Files can be filtered based on their name (with
+ * file chooser. Files can be filtered based on their name (with
  * [method@Gtk.FileFilter.add_pattern] or [method@Gtk.FileFilter.add_suffix])
  * or on their mime type (with [method@Gtk.FileFilter.add_mime_type]).
  *
@@ -32,8 +32,8 @@
  * text/plain. Note that `GtkFileFilter` allows wildcards for the
  * subtype of a mime type, so you can e.g. filter for image/\*.
  *
- * Normally, file filters are used by adding them to a `GtkFileChooser`
- * (see [method@Gtk.FileChooser.add_filter]), but it is also possible to
+ * Normally, file filters are used by adding them to a file chooser
+ * (see [method@Gtk.FileDialog.set_filters]), but it is also possible to
  * manually use a file filter on any [class@Gtk.FilterListModel] containing
  * `GFileInfo` objects.
  *
@@ -259,8 +259,8 @@ gtk_file_filter_class_init (GtkFileFilterClass *class)
    *
    * The human-readable name of the filter.
    *
-   * This is the string that will be displayed in the file chooser
-   * user interface if there is a selectable list of filters.
+   * This is the string that will be displayed in the user interface
+   * if there is a selectable list of filters.
    */
   props[PROP_NAME] =
       g_param_spec_string ("name", NULL, NULL,
@@ -534,13 +534,12 @@ gtk_file_filter_new (void)
 
 /**
  * gtk_file_filter_set_name:
- * @filter: a `GtkFileFilter`
- * @name: (nullable): the human-readable-name for the filter, or %NULL
- *   to remove any existing name.
+ * @filter: a file filter
+ * @name: (nullable): the human-readable name for the filter
  *
  * Sets a human-readable name of the filter.
  *
- * This is the string that will be displayed in the file chooser
+ * This is the string that will be displayed in the user interface
  * if there is a selectable list of filters.
  */
 void
@@ -560,13 +559,13 @@ gtk_file_filter_set_name (GtkFileFilter *filter,
 
 /**
  * gtk_file_filter_get_name:
- * @filter: a `GtkFileFilter`
+ * @filter: a file filter
  *
  * Gets the human-readable name for the filter.
  *
  * See [method@Gtk.FileFilter.set_name].
  *
- * Returns: (nullable): The human-readable name of the filter
+ * Returns: (nullable): the human-readable name of the filter
  */
 const char *
 gtk_file_filter_get_name (GtkFileFilter *filter)
@@ -607,10 +606,10 @@ file_filter_add_attribute (GtkFileFilter *filter,
 
 /**
  * gtk_file_filter_add_mime_type:
- * @filter: A `GtkFileFilter`
+ * @filter: A file filter
  * @mime_type: name of a MIME type
  *
- * Adds a rule allowing a given mime type to @filter.
+ * Adds a rule allowing a given mime type.
  */
 void
 gtk_file_filter_add_mime_type (GtkFileFilter *filter,
@@ -632,10 +631,10 @@ gtk_file_filter_add_mime_type (GtkFileFilter *filter,
 
 /**
  * gtk_file_filter_add_pattern:
- * @filter: a `GtkFileFilter`
- * @pattern: a shell style glob
+ * @filter: a file filter
+ * @pattern: a shell style glob pattern
  *
- * Adds a rule allowing a shell style glob to a filter.
+ * Adds a rule allowing a shell style glob pattern.
  *
  * Note that it depends on the platform whether pattern
  * matching ignores case or not. On Windows, it does, on
@@ -660,13 +659,12 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
 
 /**
  * gtk_file_filter_add_suffix:
- * @filter: a `GtkFileFilter`
+ * @filter: a file filter
  * @suffix: filename suffix to match
  *
  * Adds a suffix match rule to a filter.
  *
- * This is similar to adding a match for the pattern
- * "*.@suffix".
+ * This is similar to adding a match for the pattern "*.@suffix".
  *
  * In contrast to pattern matches, suffix matches
  * are *always* case-insensitive.
@@ -692,10 +690,9 @@ gtk_file_filter_add_suffix (GtkFileFilter *filter,
 
 /**
  * gtk_file_filter_add_pixbuf_formats:
- * @filter: a `GtkFileFilter`
+ * @filter: a file filter
  *
- * Adds a rule allowing image files in the formats supported
- * by GdkPixbuf.
+ * Adds a rule allowing image files in the formats supported by `GdkPixbuf`.
  *
  * This is equivalent to calling [method@Gtk.FileFilter.add_mime_type]
  * for all the supported mime types.
@@ -739,14 +736,13 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
 
 /**
  * gtk_file_filter_get_attributes:
- * @filter: a `GtkFileFilter`
+ * @filter: a file filter
  *
  * Gets the attributes that need to be filled in for the `GFileInfo`
  * passed to this filter.
  *
  * This function will not typically be used by applications;
- * it is intended principally for use in the implementation
- * of `GtkFileChooser`.
+ * it is intended for use in file chooser implementation.
  *
  * Returns: (transfer none): the attributes
  */
@@ -956,7 +952,7 @@ gtk_file_filter_match (GtkFilter *filter,
 
 /**
  * gtk_file_filter_to_gvariant:
- * @filter: a `GtkFileFilter`
+ * @filter: a file filter
  *
  * Serialize a file filter to an `a{sv}` variant.
  *

@@ -89,8 +89,7 @@
  *
  * The base class for all widgets.
  *
- * `GtkWidget` is the base class all widgets in GTK derive from. It manages the
- * widget lifecycle, layout, states and style.
+ * It manages the widget lifecycle, layout, states and style.
  *
  * ### Height-for-width Geometry Management
  *
@@ -1650,7 +1649,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::destroy:
-   * @object: the object which emitted the signal
+   * @object: the widget which emitted the signal
    *
    * Signals that all holders of a reference to the widget should release
    * the reference that they hold.
@@ -1670,7 +1669,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::show:
-   * @widget: the object which emitted the signal
+   * @widget: the widget which emitted the signal
    *
    * Emitted when @widget is shown.
    */
@@ -1685,7 +1684,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::hide:
-   * @widget: the object which emitted the signal
+   * @widget: the widget which emitted the signal
    *
    * Emitted when @widget is hidden.
    */
@@ -1700,7 +1699,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::map:
-   * @widget: the object which emitted the signal
+   * @widget: the widget which emitted the signal
    *
    * Emitted when @widget is going to be mapped.
    *
@@ -1723,7 +1722,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::unmap:
-   * @widget: the object which emitted the signal
+   * @widget: the widget which emitted the signal
    *
    * Emitted when @widget is going to be unmapped.
    *
@@ -1744,7 +1743,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::realize:
-   * @widget: the object which emitted the signal
+   * @widget: the widget which emitted the signal
    *
    * Emitted when @widget is associated with a `GdkSurface`.
    *
@@ -1762,7 +1761,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::unrealize:
-   * @widget: the object which emitted the signal
+   * @widget: the widget which emitted the signal
    *
    * Emitted when the `GdkSurface` associated with @widget is destroyed.
    *
@@ -1780,7 +1779,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::state-flags-changed:
-   * @widget: the object which emitted the signal
+   * @widget: the widget which emitted the signal
    * @flags: the previous state flags
    *
    * Emitted when the widget state changes.
@@ -1799,7 +1798,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::direction-changed:
-   * @widget: the object which emitted the signal
+   * @widget: the widget which emitted the signal
    * @previous_direction: the previous text direction
    *
    * Emitted when the text direction of a widget changes.
@@ -1816,7 +1815,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::mnemonic-activate:
-   * @widget: the object which emitted the signal
+   * @widget: the widget which emitted the signal
    * @group_cycling: true if there are other widgets with the same mnemonic
    *
    * Emitted when a widget is activated via a mnemonic.
@@ -1842,7 +1841,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::move-focus:
-   * @widget: the object which emitted the signal
+   * @widget: the widget which emitted the signal
    * @direction: the direction of the focus move
    *
    * Emitted when the focus is moved.
@@ -1865,7 +1864,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::keynav-failed:
-   * @widget: the object which emitted the signal
+   * @widget: the widget which emitted the signal
    * @direction: the direction of movement
    *
    * Emitted if keyboard navigation fails.
@@ -1891,7 +1890,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
 
   /**
    * GtkWidget::query-tooltip:
-   * @widget: the object which emitted the signal
+   * @widget: the widget which emitted the signal
    * @x: the x coordinate of the cursor position in widget coordinates
    * @y: the y coordinate of the cursor position in widget coordinates
    * @keyboard_mode: true if the tooltip was triggered using the keyboard
