@@ -406,6 +406,14 @@ gdk_running_in_sandbox (void)
 #define PORTAL_BUS_NAME "org.freedesktop.portal.Desktop"
 #define PORTAL_OBJECT_PATH "/org/freedesktop/portal/desktop"
 
+static gboolean portals_disabled;
+
+void
+gdk_disable_portals (void)
+{
+  portals_disabled = TRUE;
+}
+
 /* Here we decide whether we should use a given portal or not.
  * - If the GDK_DEBUG flags are set, they always win
  * - If we are in a sandbox, we always want to use portals
@@ -426,9 +434,6 @@ gdk_display_should_use_portal (GdkDisplay *display,
   GVariant *ret = NULL;
   gboolean result = FALSE;
 
-  if (display == NULL)
-    display = gdk_display_get_default ();
-
   g_assert (display != NULL);
 
   if (gdk_display_get_debug_flags (display) & GDK_DEBUG_NO_PORTALS)
@@ -437,7 +442,7 @@ gdk_display_should_use_portal (GdkDisplay *display,
   if (gdk_display_get_debug_flags (display) & GDK_DEBUG_PORTALS)
     return TRUE;
 
-  if (gdk_display_get_no_portals (display))
+  if (portals_disabled)
     return FALSE;
 
   if (gdk_running_in_sandbox ())

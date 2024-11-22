@@ -299,7 +299,5 @@ void gdk_display_set_cursor_theme          (GdkDisplay   *display,
                                             const char   *name,
                                             int           size);
 
-gboolean gdk_display_get_no_portals        (GdkDisplay   *display);
-
 G_END_DECLS
 

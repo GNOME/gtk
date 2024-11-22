@@ -264,6 +264,26 @@ gtk_disable_setlocale (void)
   do_setlocale = FALSE;
 }
 
+/**
+ * gtk_disable_portals:
+ *
+ * Prevents GTK from using portals.
+ *
+ * This is equivalent to setting `GDK_DEBUG=no-portals` in the environment.
+ *
+ * This should only be used in portal implementations, apps must not call it.
+ *
+ * Since: 4.18
+ */
+void
+gtk_disable_portals (void)
+{
+  if (pre_initialized)
+    g_warning ("gtk_disable_portals() must be called before gtk_init()");
+
+  gdk_disable_portals ();
+}
+
 #ifdef G_PLATFORM_WIN32
 #undef gtk_init_check
 #endif
