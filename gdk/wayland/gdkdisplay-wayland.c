@@ -1142,7 +1142,7 @@ get_cursor_theme (GdkWaylandDisplay *display_wayland,
     return get_cursor_theme (display_wayland, "default", size);
 
   /* This may fall back to builtin cursors */
-  return wl_cursor_theme_create ("/usr/share/icons/default/cursors", size, display_wayland->shm);
+  return wl_cursor_theme_create ("/usr/share/icons/Adwaita/cursors", size, display_wayland->shm);
 }
 
 /**
