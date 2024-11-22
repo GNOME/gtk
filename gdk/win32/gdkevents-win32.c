@@ -2783,6 +2783,60 @@ handle_wm_syscommand (GdkSurface *surface,
 	}
 }
 
+static void
+handle_resize_move (GdkSurface *surface,
+                    MSG        *msg)
+{
+  GdkWin32Surface *impl;
+
+  switch (msg->message)
+    {
+    /*
+     * Handle messages when Window (aka system/control) menu commands are used,
+     * or when the maximize, minimize, restore or close buttons are clicked upon
+     */
+    case WM_SYSCOMMAND:
+      handle_wm_syscommand (surface, msg);
+      break;
+
+    case WM_ENTERSIZEMOVE:
+      GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_move_resize_hwnd = msg->hwnd;
+      _gdk_win32_begin_modal_call (surface, GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
+      break;
+
+    case WM_EXITSIZEMOVE:
+      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress &
+          GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
+        {
+          GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_move_resize_hwnd = NULL;
+          _gdk_win32_end_modal_call (surface, GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
+        }
+      break;
+
+    case WM_CAPTURECHANGED:
+      /*
+       * Sometimes we don't get WM_EXITSIZEMOVE, for instance when you
+       * select move/size in the menu and then click somewhere without
+       * moving/resizing. We work around this using WM_CAPTURECHANGED.
+       */
+      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
+        {
+	      GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_move_resize_hwnd = NULL;
+	      _gdk_win32_end_modal_call (surface, GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
+	    }
+
+
+      impl = GDK_WIN32_SURFACE (surface);
+      if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
+        gdk_win32_surface_end_move_resize_drag (surface);
+      break;
+
+    default:
+      g_warning ("Maybe this was reached because this is not a window resize or move event, nor WM_CAPTURECHANGED and WM_SYSCOMMAND");
+      g_assert_not_reached ();
+    }
+}
+
 static gboolean
 gdk_event_translate (MSG *msg,
 		     int *ret_valp)
@@ -3051,72 +3105,11 @@ gdk_event_translate (MSG *msg,
 
       break;
 
-    /*
-     * Handle messages when Window (aka system/control) menu commands are used,
-     * or when the maximize, minimize, restore or close buttons are clicked upon
-     */
+    /* Handle resize/move messages, including WM_SYSCOMMAND and WM_CAPTURECHANGED (in lieu of WM_EXITSIZEMOVE) */
     case WM_SYSCOMMAND:
-      handle_wm_syscommand (surface, msg);
-      break;
-
     case WM_ENTERSIZEMOVE:
-      GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_move_resize_hwnd = msg->hwnd;
-      _gdk_win32_begin_modal_call (surface, GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
-      break;
-
-    case WM_EXITSIZEMOVE:
-      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress &
-          GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
-	{
-	  GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_move_resize_hwnd = NULL;
-	  _gdk_win32_end_modal_call (surface, GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
-	}
-      break;
-
-    case WM_ENTERMENULOOP:
-      _gdk_win32_begin_modal_call (surface, GDK_WIN32_MODAL_OP_MENU);
-      break;
-
-    case WM_EXITMENULOOP:
-      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress &
-          GDK_WIN32_MODAL_OP_MENU)
-	_gdk_win32_end_modal_call (surface, GDK_WIN32_MODAL_OP_MENU);
-      break;
-
-      break;
-
-    /*
-     * Handle WM_CANCELMODE and do nothing in response to it when DnD is
-     * active. Otherwise pass it to DefWindowProc, which will call ReleaseCapture()
-     * on our behalf.
-     * This prevents us from losing mouse capture when alt-tabbing during DnD
-     * (this includes the feature of Windows Explorer where dragging stuff over
-     * a window button in the taskbar causes that surface to receive focus, i.e.
-     * keyboardless alt-tabbing).
-     */
-    case WM_CANCELMODE:
-      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress &
-          GDK_WIN32_MODAL_OP_DND)
-        {
-          return_val = TRUE;
-          *ret_valp = 0;
-        }
-      break;
-
     case WM_CAPTURECHANGED:
-      /* Sometimes we don't get WM_EXITSIZEMOVE, for instance when you
-	 select move/size in the menu and then click somewhere without
-	 moving/resizing. We work around this using WM_CAPTURECHANGED. */
-      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)
-	{
-	  GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_move_resize_hwnd = NULL;
-	  _gdk_win32_end_modal_call (surface, GDK_WIN32_MODAL_OP_SIZEMOVE_MASK);
-	}
-
-
-      impl = GDK_WIN32_SURFACE (surface);
-      if (impl->drag_move_resize_context.op != GDK_WIN32_DRAGOP_NONE)
-        gdk_win32_surface_end_move_resize_drag (surface);
+	  handle_resize_move (surface, msg);
       break;
 
     case WM_WINDOWPOSCHANGING:
@@ -3323,6 +3316,36 @@ gdk_event_translate (MSG *msg,
           return_val = TRUE;
         }
 
+      break;
+
+    case WM_ENTERMENULOOP:
+      _gdk_win32_begin_modal_call (surface, GDK_WIN32_MODAL_OP_MENU);
+      break;
+
+    case WM_EXITMENULOOP:
+      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress &
+          GDK_WIN32_MODAL_OP_MENU)
+	_gdk_win32_end_modal_call (surface, GDK_WIN32_MODAL_OP_MENU);
+      break;
+
+      break;
+
+    /*
+     * Handle WM_CANCELMODE and do nothing in response to it when DnD is
+     * active. Otherwise pass it to DefWindowProc, which will call ReleaseCapture()
+     * on our behalf.
+     * This prevents us from losing mouse capture when alt-tabbing during DnD
+     * (this includes the feature of Windows Explorer where dragging stuff over
+     * a window button in the taskbar causes that surface to receive focus, i.e.
+     * keyboardless alt-tabbing).
+     */
+    case WM_CANCELMODE:
+      if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress &
+          GDK_WIN32_MODAL_OP_DND)
+        {
+          return_val = TRUE;
+          *ret_valp = 0;
+        }
       break;
 
     case WM_CLOSE:
