@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "gdkparalleltaskprivate.h"
+#include "gdkdebugprivate.h"
 
 typedef struct _TaskData TaskData;
 
@@ -59,6 +60,12 @@ gdk_parallel_task_run (GdkTaskFunc task_func,
     .task_data = task_data,
   };
   int i, n_tasks;
+
+  if (!gdk_has_feature (GDK_FEATURE_PARALLELIZE))
+    {
+      task_func (task_data);
+      return;
+    }
 
   if (g_once_init_enter (&pool))
     {
