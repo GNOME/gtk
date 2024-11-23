@@ -24,69 +24,32 @@
 #include "gdkdragprivate.h"
 #include "gdkmacospasteboard-private.h"
 #include "gdkmacosutils-private.h"
-
-enum {
-  TYPE_STRING,
-  TYPE_PBOARD,
-  TYPE_URL,
-  TYPE_FILE_URL,
-  TYPE_COLOR,
-  TYPE_TIFF,
-  TYPE_PNG,
-  TYPE_LAST
-};
-
-#define PTYPE(k) (get_pasteboard_type(TYPE_##k))
-
-static NSPasteboardType pasteboard_types[TYPE_LAST];
-
-static NSPasteboardType
-get_pasteboard_type (int type)
-{
-  static gsize initialized = FALSE;
-
-  g_assert (type >= 0);
-  g_assert (type < TYPE_LAST);
-
-  if (g_once_init_enter (&initialized))
-    {
-      pasteboard_types[TYPE_PNG] = NSPasteboardTypePNG;
-      pasteboard_types[TYPE_STRING] = NSPasteboardTypeString;
-      pasteboard_types[TYPE_TIFF] = NSPasteboardTypeTIFF;
-      pasteboard_types[TYPE_COLOR] = NSPasteboardTypeColor;
-
-      G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      pasteboard_types[TYPE_PBOARD] = NSStringPboardType;
-      G_GNUC_END_IGNORE_DEPRECATIONS
-
-      pasteboard_types[TYPE_URL] = NSPasteboardTypeURL;
-      pasteboard_types[TYPE_FILE_URL] = NSPasteboardTypeFileURL;
-
-      g_once_init_leave (&initialized, TRUE);
-    }
-
-  return pasteboard_types[type];
-}
+#include "gdkdebugprivate.h"
 
 const char *
 _gdk_macos_pasteboard_from_ns_type (NSPasteboardType type)
 {
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
+  gchar *mime_type;
 
-  if ([type isEqualToString:PTYPE(STRING)] ||
-      [type isEqualToString:PTYPE(PBOARD)])
-    return g_intern_string ("text/plain;charset=utf-8");
-  else if ([type isEqualToString:PTYPE(URL)] ||
-           [type isEqualToString:PTYPE(FILE_URL)])
-    return g_intern_string ("text/uri-list");
-  else if ([type isEqualToString:PTYPE(COLOR)])
-    return g_intern_string ("application/x-color");
-  else if ([type isEqualToString:PTYPE(TIFF)])
-    return g_intern_string ("image/tiff");
-  else if ([type isEqualToString:PTYPE(PNG)])
-    return g_intern_string ("image/png");
+  if ([type isEqualToString:NSPasteboardTypeURL] ||
+      [type isEqualToString:NSPasteboardTypeFileURL])
+    {
+      GDK_DEBUG (DND, "From UTI %s to mime-type text/uri-list", [type UTF8String]);
+      return g_intern_string ("text/uri-list");
+    }
+  else if ([type isEqualToString:NSPasteboardTypeColor])
+    {
+      GDK_DEBUG (DND, "From UTI %s to mime-type application/x-color", [type UTF8String]);
+      return g_intern_string ("application/x-color");
+    }
+  else if ((mime_type = g_content_type_get_mime_type ([type UTF8String])))
+    {
+      const gchar *intern = g_intern_string (mime_type);
+      GDK_DEBUG (DND, "From UTI %s to mime-type %s", [type UTF8String], mime_type);
+      g_free (mime_type);
 
-  G_GNUC_END_IGNORE_DEPRECATIONS;
+      return intern;
+    }
 
   return NULL;
 }
@@ -95,30 +58,30 @@ NSPasteboardType
 _gdk_macos_pasteboard_to_ns_type (const char       *mime_type,
                                   NSPasteboardType *alternate)
 {
+  gchar *uti_str;
+
   if (alternate)
     *alternate = NULL;
 
-  if (g_strcmp0 (mime_type, "text/plain;charset=utf-8") == 0)
-    {
-      return PTYPE(STRING);
-    }
-  else if (g_strcmp0 (mime_type, "text/uri-list") == 0)
+  if (g_strcmp0 (mime_type, "text/uri-list") == 0)
     {
       if (alternate)
-        *alternate = PTYPE(URL);
-      return PTYPE(FILE_URL);
+        *alternate = NSPasteboardTypeURL;
+      GDK_DEBUG (DND, "From mime-type %s to UTI public.file-url and public.url", mime_type);
+      return [NSPasteboardTypeFileURL retain];
     }
   else if (g_strcmp0 (mime_type, "application/x-color") == 0)
     {
-      return PTYPE(COLOR);
+      GDK_DEBUG (DND, "From mime-type %s to UTI %s", mime_type, [NSPasteboardTypeColor UTF8String]);
+      return [NSPasteboardTypeColor retain];
     }
-  else if (g_strcmp0 (mime_type, "image/tiff") == 0)
+  else if ((uti_str = g_content_type_from_mime_type (mime_type)))
     {
-      return PTYPE(TIFF);
-    }
-  else if (g_strcmp0 (mime_type, "image/png") == 0)
-    {
-      return PTYPE(PNG);
+      NSString *uti = [[NSString alloc] initWithUTF8String:uti_str];
+      GDK_DEBUG (DND, "From mime-type %s to UTI %s", mime_type, uti_str);
+      g_free (uti_str);
+
+      return uti;
     }
 
   return nil;
@@ -161,15 +124,6 @@ _gdk_macos_pasteboard_load_formats (NSPasteboard *pasteboard)
   return load_offer_formats (pasteboard);
 }
 
-static GInputStream *
-create_stream_from_nsdata (NSData *data)
-{
-  const guint8 *bytes = [data bytes];
-  gsize len = [data length];
-
-  return g_memory_input_stream_new_from_data (g_memdup2 (bytes, len), len, g_free);
-}
-
 void
 _gdk_macos_pasteboard_read_async (GObject             *object,
                                   NSPasteboard        *pasteboard,
@@ -185,6 +139,7 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
   const char *mime_type;
   GInputStream *stream = NULL;
   GTask *task = NULL;
+  NSString *uti;
 
   g_assert (G_IS_OBJECT (object));
   g_assert (pasteboard != NULL);
@@ -223,7 +178,7 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
     {
       G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
 
-      if ([[pasteboard types] containsObject:PTYPE(FILE_URL)])
+      if ([[pasteboard types] containsObject:NSPasteboardTypeFileURL])
         {
           GString *str = g_string_new (NULL);
           NSArray *files = [pasteboard propertyListForType:NSFilenamesPboardType];
@@ -268,15 +223,23 @@ _gdk_macos_pasteboard_read_async (GObject             *object,
                                                     sizeof color,
                                                     g_free);
     }
-  else if (strcmp (mime_type, "image/tiff") == 0)
+  else if ((uti = _gdk_macos_pasteboard_to_ns_type (mime_type, NULL)))
     {
-      NSData *data = [pasteboard dataForType:PTYPE(TIFF)];
-      stream = create_stream_from_nsdata (data);
+      NSData *data = [pasteboard dataForType:uti];
+
+      if (data != NULL)
+        {
+          const guint8 *bytes = [data bytes];
+          gsize len = [data length];
+
+          stream = g_memory_input_stream_new_from_data (g_memdup2 (bytes, len), len, g_free);
+        }
+
+      [uti release];
     }
-  else if (strcmp (mime_type, "image/png") == 0)
+  else
     {
-      NSData *data = [pasteboard dataForType:PTYPE(PNG)];
-      stream = create_stream_from_nsdata (data);
+      GDK_DEBUG (DND, "No stream for mime-type %s", mime_type);
     }
 
   if (stream != NULL)
@@ -320,13 +283,10 @@ _gdk_macos_pasteboard_read_finish (GObject       *object,
 void
 _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
 {
-  [window registerForDraggedTypes:[NSArray arrayWithObjects:PTYPE(STRING),
-                                                            PTYPE(PBOARD),
-                                                            PTYPE(URL),
-                                                            PTYPE(FILE_URL),
-                                                            PTYPE(COLOR),
-                                                            PTYPE(TIFF),
-                                                            PTYPE(PNG),
+  // TODO: how can GTK tell us what drag types expected?
+  // Now the app will accept everything.
+  [window registerForDraggedTypes:[NSArray arrayWithObjects:@"public.item",
+                                                            @"org.gtk.internal",
                                                             nil]];
 }
 
@@ -376,6 +336,7 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
       if ((type = _gdk_macos_pasteboard_to_ns_type (mime_type, &alternate)))
         {
           [ret addObject:type];
+          [type release];
           if (alternate)
             [ret addObject:alternate];
         }
@@ -383,9 +344,7 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
 
   gdk_content_formats_unref (serializable);
 
-  /* Default to an url type (think gobject://internal)
-   * to support internal, GType-based DnD.
-   */
+  /* Support internal, GType-based DnD. */
   if ([ret count] == 0)
     {
       GdkContentFormats *formats;
@@ -395,7 +354,7 @@ _gdk_macos_pasteboard_register_drag_types (NSWindow *window)
       gdk_content_formats_get_gtypes (formats, &n_gtypes);
 
       if (n_gtypes)
-        [ret addObject:PTYPE(URL)];
+        [ret addObject:@"org.gtk.internal"];
 
       gdk_content_formats_unref (formats);
     }
@@ -450,15 +409,33 @@ on_data_ready_cb (GObject      *object,
   if (ret)
     {
       gsize size;
-      gpointer bytes;
 
       g_output_stream_close (G_OUTPUT_STREAM (wr->stream), NULL, NULL);
 
       size = g_memory_output_stream_get_data_size (wr->stream);
-      bytes = g_memory_output_stream_steal_data (wr->stream);
-      data = [[NSData alloc] initWithBytesNoCopy:bytes
-                                          length:size
-                                     deallocator:^(void *alloc, NSUInteger length) { g_free (alloc); }];
+
+      if (size == 8 && [wr->type isEqualToString:NSPasteboardTypeColor])
+        {
+          guint16 *color;
+          NSError *nserror = nil;
+
+          color = (guint16 *)g_memory_output_stream_steal_data (G_MEMORY_OUTPUT_STREAM (wr->stream));
+          NSColor *nscolor = [[NSColor colorWithRed:color[0] / 65535.0
+                                              green:color[1] / 65535.0
+                                               blue:color[2] / 65535.0
+                                              alpha:color[3] / 65535.0]
+                              colorUsingColorSpace:[NSColorSpace genericRGBColorSpace]];
+          data = [NSKeyedArchiver archivedDataWithRootObject:nscolor requiringSecureCoding:YES error: &nserror];
+          if (error)
+            g_warning ("Encoding color failed");
+        }
+      else
+        {
+          gpointer bytes = g_memory_output_stream_steal_data (wr->stream);
+          data = [[NSData alloc] initWithBytesNoCopy:bytes
+                                              length:size
+                                        deallocator:^(void *alloc, NSUInteger length) { g_free (alloc); }];
+        }
     }
   else
     {
