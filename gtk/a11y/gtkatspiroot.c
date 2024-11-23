@@ -504,7 +504,6 @@ on_event_listener_registered (GDBusConnection *connection,
     {
       char *sender = NULL;
       char *event_name = NULL;
-      char **event_types = NULL;
       unsigned int *count;
 
       if (self->event_listeners == NULL)
@@ -512,7 +511,7 @@ on_event_listener_registered (GDBusConnection *connection,
                                                        g_free,
                                                        g_free);
 
-      g_variant_get (parameters, "(ssas)", &sender, &event_name, &event_types);
+      g_variant_get (parameters, "(ssas)", &sender, &event_name, NULL);
 
       count = g_hash_table_lookup (self->event_listeners, sender);
       if (count == NULL)
@@ -535,7 +534,6 @@ on_event_listener_registered (GDBusConnection *connection,
         }
 
       g_free (event_name);
-      g_strfreev (event_types);
     }
 }
 
