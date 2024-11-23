@@ -986,7 +986,7 @@
                       <object class="GtkExpander">
                         <property name="label-widget">
                           <object class="GtkLabel">
-                            <property name="label" translatable="yes">Features</property>
+                            <property name="label" translatable="yes">GL Features</property>
                             <property name="margin-start">10</property>
                           </object>
                         </property>
@@ -1125,7 +1125,7 @@
                       <object class="GtkExpander">
                         <property name="label-widget">
                           <object class="GtkLabel">
-                            <property name="label" translatable="yes">Layers</property>
+                            <property name="label" translatable="yes">Vulkan Layers</property>
                             <property name="margin-start">10</property>
                           </object>
                         </property>
@@ -1281,7 +1281,7 @@
                       <object class="GtkExpander">
                         <property name="label-widget">
                           <object class="GtkLabel">
-                            <property name="label" translatable="yes">Features</property>
+                            <property name="label" translatable="yes">Vulkan Features</property>
                             <property name="margin-start">10</property>
                           </object>
                         </property>
