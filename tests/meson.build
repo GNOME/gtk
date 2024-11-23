@@ -123,6 +123,7 @@ gtk_tests = [
   ['testzoom'],
   ['testdatatable', ['frame-stats.c', 'variable.c']],
   ['testfiledialog'],
+  ['parallel', [], [ libgtk_static_dep ] ],
 ]
 
 if os_unix
@@ -152,6 +153,6 @@ foreach t: gtk_tests
     sources: test_srcs,
     include_directories: [confinc, gdkinc],
     c_args: test_args + common_cflags,
-    dependencies: [libgtk_dep, libm],
+    dependencies: [libgtk_dep, libm] + t.get(2,[]),
   )
 endforeach
