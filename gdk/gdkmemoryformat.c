@@ -2100,6 +2100,7 @@ struct _MemoryConvert
   GdkColorState       *src_cs;
   gsize                width;
   gsize                height;
+  gsize                chunk_size;
 
   /* atomic */ int     rows_done;
 };
@@ -2114,7 +2115,7 @@ gdk_memory_convert_generic (gpointer data)
   GdkFloatColorConvert convert_func = NULL;
   GdkFloatColorConvert convert_func2 = NULL;
   gboolean needs_premultiply, needs_unpremultiply;
-  gsize y0, y, n;
+  gsize y0, y;
   gint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
 
@@ -2126,13 +2127,11 @@ gdk_memory_convert_generic (gpointer data)
 
       if (func != NULL)
         {
-          n = MAX (1, 1024 / mc->width);
-
-          for (y0 = g_atomic_int_add (&mc->rows_done, n), rows = 0;
+          for (y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size), rows = 0;
                y0 < mc->height;
-               y0 = g_atomic_int_add (&mc->rows_done, n))
+               y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size))
             {
-              for (y = y0; y < MIN (y0 + n, mc->height); y++, rows++)
+              for (y = y0; y < MIN (y0 + mc->chunk_size, mc->height); y++, rows++)
                 {
                   const guchar *src_data = mc->src_data + y * mc->src_stride;
                   guchar *dest_data = mc->dest_data + y * mc->dest_stride;
@@ -2175,13 +2174,12 @@ gdk_memory_convert_generic (gpointer data)
     }
 
   tmp = g_malloc (sizeof (*tmp) * mc->width);
-  n = MAX (1, 1024 / mc->width);
 
-  for (y0 = g_atomic_int_add (&mc->rows_done, n), rows = 0;
+  for (y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size), rows = 0;
        y0 < mc->height;
-       y0 = g_atomic_int_add (&mc->rows_done, n))
+       y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size))
     {
-      for (y = y0; y < MIN (y0 + n, mc->height); y++, rows++)
+      for (y = y0; y < MIN (y0 + mc->chunk_size, mc->height); y++, rows++)
         {
           const guchar *src_data = mc->src_data + y * mc->src_stride;
           guchar *dest_data = mc->dest_data + y * mc->dest_stride;
@@ -2234,7 +2232,10 @@ gdk_memory_convert (guchar              *dest_data,
     .src_cs = src_cs,
     .width = width,
     .height = height,
+    .chunk_size = MAX (1, 512 / width),
   };
+
+  guint n_tasks;
 
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
@@ -2267,7 +2268,9 @@ gdk_memory_convert (guchar              *dest_data,
       return;
     }
 
-  gdk_parallel_task_run (gdk_memory_convert_generic, &mc, G_MAXUINT);
+  n_tasks = (mc.height + mc.chunk_size - 1) / mc.chunk_size;
+
+  gdk_parallel_task_run (gdk_memory_convert_generic, &mc, n_tasks);
 }
 
 typedef struct _MemoryConvertColorState MemoryConvertColorState;
