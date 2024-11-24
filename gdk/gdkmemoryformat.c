@@ -2267,7 +2267,7 @@ gdk_memory_convert (guchar              *dest_data,
       return;
     }
 
-  gdk_parallel_task_run (gdk_memory_convert_generic, &mc);
+  gdk_parallel_task_run (gdk_memory_convert_generic, &mc, G_MAXUINT);
 }
 
 typedef struct _MemoryConvertColorState MemoryConvertColorState;
@@ -2512,17 +2512,17 @@ gdk_memory_convert_color_state (guchar          *data,
       src_color_state == GDK_COLOR_STATE_SRGB &&
       dest_color_state == GDK_COLOR_STATE_SRGB_LINEAR)
     {
-      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_to_srgb_linear, &mc);
+      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_to_srgb_linear, &mc, G_MAXUINT);
     }
   else if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
            src_color_state == GDK_COLOR_STATE_SRGB_LINEAR &&
            dest_color_state == GDK_COLOR_STATE_SRGB)
     {
-      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_linear_to_srgb, &mc);
+      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_linear_to_srgb, &mc, G_MAXUINT);
     }
   else
     {
-      gdk_parallel_task_run (gdk_memory_convert_color_state_generic, &mc);
+      gdk_parallel_task_run (gdk_memory_convert_color_state_generic, &mc, G_MAXUINT);
     }
 }
 
@@ -2684,13 +2684,13 @@ gdk_memory_mipmap (guchar          *dest,
   if (dest_format == src_format)
     {
       if (linear)
-        gdk_parallel_task_run (gdk_memory_mipmap_same_format_linear, &mipmap);
+        gdk_parallel_task_run (gdk_memory_mipmap_same_format_linear, &mipmap, G_MAXUINT);
       else
-        gdk_parallel_task_run (gdk_memory_mipmap_same_format_nearest, &mipmap);
+        gdk_parallel_task_run (gdk_memory_mipmap_same_format_nearest, &mipmap, G_MAXUINT);
     }
   else
     {
-      gdk_parallel_task_run (gdk_memory_mipmap_generic, &mipmap);
+      gdk_parallel_task_run (gdk_memory_mipmap_generic, &mipmap, G_MAXUINT);
     }
 }
 

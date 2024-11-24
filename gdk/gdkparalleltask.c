@@ -46,13 +46,15 @@ gdk_parallel_task_thread_func (gpointer data,
  * gdk_parallel_task_run:
  * @task_func: the function to spawn
  * @task_data: data to pass to the function
+ * @max_tasks: maximum number of tasks to spawn
  *
  * Spawns the given function in many threads.
  * Once all functions have exited, this function returns.
  **/
 void
 gdk_parallel_task_run (GdkTaskFunc task_func,
-                       gpointer    task_data)
+                       gpointer    task_data,
+                       guint       max_tasks)
 {
   static GThreadPool *pool;
   TaskData task = {
@@ -61,7 +63,7 @@ gdk_parallel_task_run (GdkTaskFunc task_func,
   };
   int i, n_tasks;
 
-  if (!gdk_has_feature (GDK_FEATURE_THREADS))
+  if (max_tasks == 1 || !gdk_has_feature (GDK_FEATURE_THREADS))
     {
       task_func (task_data);
       return;
@@ -79,7 +81,7 @@ gdk_parallel_task_run (GdkTaskFunc task_func,
       g_once_init_leave (&pool, the_pool);
     }
 
-  n_tasks = g_get_num_processors ();
+  n_tasks = MIN (max_tasks, g_get_num_processors ());
   task.n_running_tasks = n_tasks;
   /* Start with 1 because we run 1 task ourselves */
   for (i = 1; i < n_tasks; i++)
