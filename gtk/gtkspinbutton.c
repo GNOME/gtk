@@ -1154,6 +1154,11 @@ gtk_spin_button_init (GtkSpinButton *spin_button)
   g_signal_connect (controller, "leave",
                     G_CALLBACK (key_controller_focus_out), spin_button);
   gtk_widget_add_controller (GTK_WIDGET (spin_button), controller);
+
+  /* Numeric entries should be LTR even on RTL languages.
+   * See: https://gitlab.gnome.org/GNOME/gtk/-/merge_requests/4629#note_1431995
+   */
+  gtk_widget_set_direction (spin_button->entry, GTK_TEXT_DIR_LTR);
 }
 
 static void
