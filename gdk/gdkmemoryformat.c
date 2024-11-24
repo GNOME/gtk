@@ -2114,7 +2114,7 @@ gdk_memory_convert_generic (gpointer data)
   GdkFloatColorConvert convert_func = NULL;
   GdkFloatColorConvert convert_func2 = NULL;
   gboolean needs_premultiply, needs_unpremultiply;
-  gsize y, n;
+  gsize y0, y, n;
   gint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
 
@@ -2126,17 +2126,25 @@ gdk_memory_convert_generic (gpointer data)
 
       if (func != NULL)
         {
-          n = 1;
+          n = MAX (1, 1024 / mc->width);
 
-          for (y = g_atomic_int_add (&mc->rows_done, n);
-               y < mc->height;
-               y = g_atomic_int_add (&mc->rows_done, n))
+          for (y0 = g_atomic_int_add (&mc->rows_done, n), rows = 0;
+               y0 < mc->height;
+               y0 = g_atomic_int_add (&mc->rows_done, n))
             {
-              const guchar *src_data = mc->src_data + y * mc->src_stride;
-              guchar *dest_data = mc->dest_data + y * mc->dest_stride;
+              for (y = y0; y < MIN (y0 + n, mc->height); y++, rows++)
+                {
+                  const guchar *src_data = mc->src_data + y * mc->src_stride;
+                  guchar *dest_data = mc->dest_data + y * mc->dest_stride;
 
-              func (dest_data, src_data, mc->width);
+                  func (dest_data, src_data, mc->width);
+                }
             }
+
+          ADD_MARK (before,
+                    "Memory convert", "thread %p, size %lux%lu, %lu rows",
+                    g_thread_self (),
+                    mc->width, mc->height, rows);
           return;
         }
     }
@@ -2167,30 +2175,33 @@ gdk_memory_convert_generic (gpointer data)
     }
 
   tmp = g_malloc (sizeof (*tmp) * mc->width);
-  n = 1;
+  n = MAX (1, 1024 / mc->width);
 
-  for (y = g_atomic_int_add (&mc->rows_done, n), rows = 0;
-       y < mc->height;
-       y = g_atomic_int_add (&mc->rows_done, n), rows++)
+  for (y0 = g_atomic_int_add (&mc->rows_done, n), rows = 0;
+       y0 < mc->height;
+       y0 = g_atomic_int_add (&mc->rows_done, n))
     {
-      const guchar *src_data = mc->src_data + y * mc->src_stride;
-      guchar *dest_data = mc->dest_data + y * mc->dest_stride;
+      for (y = y0; y < MIN (y0 + n, mc->height); y++, rows++)
+        {
+          const guchar *src_data = mc->src_data + y * mc->src_stride;
+          guchar *dest_data = mc->dest_data + y * mc->dest_stride;
 
-      src_desc->to_float (tmp, src_data, mc->width);
+          src_desc->to_float (tmp, src_data, mc->width);
 
-      if (needs_unpremultiply)
-        unpremultiply (tmp, mc->width);
+          if (needs_unpremultiply)
+            unpremultiply (tmp, mc->width);
 
-      if (convert_func)
-        convert_func (mc->src_cs, tmp, mc->width);
+          if (convert_func)
+            convert_func (mc->src_cs, tmp, mc->width);
 
-      if (convert_func2)
-        convert_func2 (mc->dest_cs, tmp, mc->width);
+          if (convert_func2)
+            convert_func2 (mc->dest_cs, tmp, mc->width);
 
-      if (needs_premultiply)
-        premultiply (tmp, mc->width);
+          if (needs_premultiply)
+            premultiply (tmp, mc->width);
 
-      dest_desc->from_float (dest_data, tmp, mc->width);
+          dest_desc->from_float (dest_data, tmp, mc->width);
+        }
     }
 
   g_free (tmp);
