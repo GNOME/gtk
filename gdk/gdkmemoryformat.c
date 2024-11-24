@@ -2690,19 +2690,24 @@ gdk_memory_mipmap (guchar          *dest,
     .linear = linear,
     .rows_done = 0,
   };
+  gsize chunk_size;
+  guint n_tasks;
 
   g_assert (lod_level > 0);
+
+  chunk_size = MAX (1, 512 / src_width),
+  n_tasks = (src_height + chunk_size - 1) / chunk_size;
 
   if (dest_format == src_format)
     {
       if (linear)
-        gdk_parallel_task_run (gdk_memory_mipmap_same_format_linear, &mipmap, G_MAXUINT);
+        gdk_parallel_task_run (gdk_memory_mipmap_same_format_linear, &mipmap, n_tasks);
       else
-        gdk_parallel_task_run (gdk_memory_mipmap_same_format_nearest, &mipmap, G_MAXUINT);
+        gdk_parallel_task_run (gdk_memory_mipmap_same_format_nearest, &mipmap, n_tasks);
     }
   else
     {
-      gdk_parallel_task_run (gdk_memory_mipmap_generic, &mipmap, G_MAXUINT);
+      gdk_parallel_task_run (gdk_memory_mipmap_generic, &mipmap, n_tasks);
     }
 }
 
