@@ -378,7 +378,7 @@ static const Action color_swatch_actions[] = {
     .name = "activate",
     .localized_name = NC_("accessibility", "Activate"),
     .description = NC_("accessibility", "Activates the color"),
-    .keybinding = "<VoidSymbol>",
+    .keybinding = "",
     .activate = color_swatch_activate,
     .is_enabled = color_swatch_is_enabled,
   },
@@ -386,7 +386,7 @@ static const Action color_swatch_actions[] = {
     .name = "customize",
     .localized_name = NC_("accessibility", "Customize"),
     .description = NC_("accessibility", "Customizes the color"),
-    .keybinding = "<VoidSymbol>",
+    .keybinding = "",
     .activate = color_swatch_customize,
     .is_enabled = color_swatch_is_enabled,
   },
@@ -502,7 +502,7 @@ static const Action entry_actions[] = {
     .name = "activate-primary-icon",
     .localized_name = NC_("accessibility", "Activate primary icon"),
     .description = NC_("accessibility", "Activates the primary icon of the entry"),
-    .keybinding = "<VoidSymbol>",
+    .keybinding = "",
     .is_enabled = is_primary_icon_enabled,
     .activate = activate_primary_icon,
   },
@@ -510,7 +510,7 @@ static const Action entry_actions[] = {
     .name = "activate-secondary-icon",
     .localized_name = NC_("accessibility", "Activate secondary icon"),
     .description = NC_("accessibility", "Activates the secondary icon of the entry"),
-    .keybinding = "<VoidSymbol>",
+    .keybinding = "",
     .is_enabled = is_secondary_icon_enabled,
     .activate = activate_secondary_icon,
   },
@@ -610,7 +610,7 @@ static const Action password_entry_actions[] = {
     .name = "peek",
     .localized_name = NC_("accessibility", "Peek"),
     .description = NC_("accessibility", "Shows the contents of the password entry"),
-    .keybinding = "<VoidSymbol>",
+    .keybinding = "",
     .is_enabled = is_peek_enabled,
     .activate = activate_peek,
   },
@@ -697,7 +697,7 @@ static const Action search_entry_actions[] = {
     .name = "clear",
     .localized_name = NC_("accessibility", "Clear"),
     .description = NC_("accessibility", "Clears the contents of the entry"),
-    .keybinding = "<VoidSymbol>",
+    .keybinding = "",
     .is_enabled = is_clear_enabled,
     .activate = activate_clear,
   },
@@ -801,7 +801,7 @@ add_muxer_actions (GtkActionMuxer   *muxer,
       g_variant_builder_add (builder, "(sss)",
                              actions[i],
                              actions[i],
-                             "<VoidSymbol>");
+                             "");
     }
 }
 
@@ -924,7 +924,7 @@ widget_handle_method (GDBusConnection       *connection,
       const char *action = get_action_at_index (muxer, actions, n_actions, action_idx);
 
       if (action != NULL && gtk_widget_is_sensitive (widget))
-        g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", "<VoidSymbol>"));
+        g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", ""));
       else
         g_dbus_method_invocation_return_error (invocation,
                                                G_IO_ERROR,
