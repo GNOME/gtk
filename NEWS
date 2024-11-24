@@ -1,5 +1,13 @@
-Overview of Changes in 4.16.7, xx-xx-xxxx
+Overview of Changes in 4.16.7, 23-11-2024
 =========================================
+
+* Text:
+ - Reduce the size of error underlines
+
+* Accessibility:
+ - Fix a wrong return value type
+ - Fix an invalid free call
+
 
 Overview of Changes in 4.16.6, 20-11-2024
 =========================================
