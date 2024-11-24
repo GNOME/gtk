@@ -26,7 +26,8 @@ G_BEGIN_DECLS
 typedef void (* GdkTaskFunc) (gpointer user_data);
 
 void                    gdk_parallel_task_run               (GdkTaskFunc                 task_func,
-                                                             gpointer                    task_data);
+                                                             gpointer                    task_data,
+                                                             guint                       max_tasks);
 
 G_END_DECLS
 

@@ -2100,6 +2100,7 @@ struct _MemoryConvert
   GdkColorState       *src_cs;
   gsize                width;
   gsize                height;
+  gsize                chunk_size;
 
   /* atomic */ int     rows_done;
 };
@@ -2114,7 +2115,7 @@ gdk_memory_convert_generic (gpointer data)
   GdkFloatColorConvert convert_func = NULL;
   GdkFloatColorConvert convert_func2 = NULL;
   gboolean needs_premultiply, needs_unpremultiply;
-  gsize y, n;
+  gsize y0, y;
   gint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
 
@@ -2126,17 +2127,23 @@ gdk_memory_convert_generic (gpointer data)
 
       if (func != NULL)
         {
-          n = 1;
-
-          for (y = g_atomic_int_add (&mc->rows_done, n);
-               y < mc->height;
-               y = g_atomic_int_add (&mc->rows_done, n))
+          for (y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size), rows = 0;
+               y0 < mc->height;
+               y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size))
             {
-              const guchar *src_data = mc->src_data + y * mc->src_stride;
-              guchar *dest_data = mc->dest_data + y * mc->dest_stride;
+              for (y = y0; y < MIN (y0 + mc->chunk_size, mc->height); y++, rows++)
+                {
+                  const guchar *src_data = mc->src_data + y * mc->src_stride;
+                  guchar *dest_data = mc->dest_data + y * mc->dest_stride;
 
-              func (dest_data, src_data, mc->width);
+                  func (dest_data, src_data, mc->width);
+                }
             }
+
+          ADD_MARK (before,
+                    "Memory convert", "thread %p, size %lux%lu, %lu rows",
+                    g_thread_self (),
+                    mc->width, mc->height, rows);
           return;
         }
     }
@@ -2167,30 +2174,32 @@ gdk_memory_convert_generic (gpointer data)
     }
 
   tmp = g_malloc (sizeof (*tmp) * mc->width);
-  n = 1;
 
-  for (y = g_atomic_int_add (&mc->rows_done, n), rows = 0;
-       y < mc->height;
-       y = g_atomic_int_add (&mc->rows_done, n), rows++)
+  for (y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size), rows = 0;
+       y0 < mc->height;
+       y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size))
     {
-      const guchar *src_data = mc->src_data + y * mc->src_stride;
-      guchar *dest_data = mc->dest_data + y * mc->dest_stride;
+      for (y = y0; y < MIN (y0 + mc->chunk_size, mc->height); y++, rows++)
+        {
+          const guchar *src_data = mc->src_data + y * mc->src_stride;
+          guchar *dest_data = mc->dest_data + y * mc->dest_stride;
 
-      src_desc->to_float (tmp, src_data, mc->width);
+          src_desc->to_float (tmp, src_data, mc->width);
 
-      if (needs_unpremultiply)
-        unpremultiply (tmp, mc->width);
+          if (needs_unpremultiply)
+            unpremultiply (tmp, mc->width);
 
-      if (convert_func)
-        convert_func (mc->src_cs, tmp, mc->width);
+          if (convert_func)
+            convert_func (mc->src_cs, tmp, mc->width);
 
-      if (convert_func2)
-        convert_func2 (mc->dest_cs, tmp, mc->width);
+          if (convert_func2)
+            convert_func2 (mc->dest_cs, tmp, mc->width);
 
-      if (needs_premultiply)
-        premultiply (tmp, mc->width);
+          if (needs_premultiply)
+            premultiply (tmp, mc->width);
 
-      dest_desc->from_float (dest_data, tmp, mc->width);
+          dest_desc->from_float (dest_data, tmp, mc->width);
+        }
     }
 
   g_free (tmp);
@@ -2223,7 +2232,10 @@ gdk_memory_convert (guchar              *dest_data,
     .src_cs = src_cs,
     .width = width,
     .height = height,
+    .chunk_size = MAX (1, 512 / width),
   };
+
+  guint n_tasks;
 
   g_assert (dest_format < GDK_MEMORY_N_FORMATS);
   g_assert (src_format < GDK_MEMORY_N_FORMATS);
@@ -2256,7 +2268,9 @@ gdk_memory_convert (guchar              *dest_data,
       return;
     }
 
-  gdk_parallel_task_run (gdk_memory_convert_generic, &mc);
+  n_tasks = (mc.height + mc.chunk_size - 1) / mc.chunk_size;
+
+  gdk_parallel_task_run (gdk_memory_convert_generic, &mc, n_tasks);
 }
 
 typedef struct _MemoryConvertColorState MemoryConvertColorState;
@@ -2501,17 +2515,17 @@ gdk_memory_convert_color_state (guchar          *data,
       src_color_state == GDK_COLOR_STATE_SRGB &&
       dest_color_state == GDK_COLOR_STATE_SRGB_LINEAR)
     {
-      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_to_srgb_linear, &mc);
+      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_to_srgb_linear, &mc, G_MAXUINT);
     }
   else if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
            src_color_state == GDK_COLOR_STATE_SRGB_LINEAR &&
            dest_color_state == GDK_COLOR_STATE_SRGB)
     {
-      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_linear_to_srgb, &mc);
+      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_linear_to_srgb, &mc, G_MAXUINT);
     }
   else
     {
-      gdk_parallel_task_run (gdk_memory_convert_color_state_generic, &mc);
+      gdk_parallel_task_run (gdk_memory_convert_color_state_generic, &mc, G_MAXUINT);
     }
 }
 
@@ -2673,13 +2687,13 @@ gdk_memory_mipmap (guchar          *dest,
   if (dest_format == src_format)
     {
       if (linear)
-        gdk_parallel_task_run (gdk_memory_mipmap_same_format_linear, &mipmap);
+        gdk_parallel_task_run (gdk_memory_mipmap_same_format_linear, &mipmap, G_MAXUINT);
       else
-        gdk_parallel_task_run (gdk_memory_mipmap_same_format_nearest, &mipmap);
+        gdk_parallel_task_run (gdk_memory_mipmap_same_format_nearest, &mipmap, G_MAXUINT);
     }
   else
     {
-      gdk_parallel_task_run (gdk_memory_mipmap_generic, &mipmap);
+      gdk_parallel_task_run (gdk_memory_mipmap_generic, &mipmap, G_MAXUINT);
     }
 }
 

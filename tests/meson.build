@@ -128,6 +128,7 @@ gtk_tests = [
 if os_unix
   gtk_tests += [
     ['testfontchooserdialog'],
+    ['parallel', [], [ libgtk_static_dep, libm ] ],
   ]
 endif
 
@@ -148,10 +149,14 @@ test_args = ['-DGTK_SRCDIR="@0@"'.format(meson.current_source_dir())]
 foreach t: gtk_tests
   test_name = t.get(0)
   test_srcs = ['@0@.c'.format(test_name), t.get(1, [])]
+  test_libs = t.get(2,[])
+  if test_libs == []
+    test_libs = [ libgtk_dep, libm ]
+  endif
   executable(test_name,
     sources: test_srcs,
     include_directories: [confinc, gdkinc],
     c_args: test_args + common_cflags,
-    dependencies: [libgtk_dep, libm],
+    dependencies: test_libs,
   )
 endforeach
