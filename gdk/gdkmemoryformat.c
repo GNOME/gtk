@@ -2141,8 +2141,7 @@ gdk_memory_convert_generic (gpointer data)
             }
 
           ADD_MARK (before,
-                    "Memory convert", "thread %p, size %lux%lu, %lu rows",
-                    g_thread_self (),
+                    "Memory convert (thread)", "size %lux%lu, %lu rows",
                     mc->width, mc->height, rows);
           return;
         }
@@ -2284,6 +2283,7 @@ struct _MemoryConvertColorState
   GdkColorState *dest_cs;
   gsize width;
   gsize height;
+  gsize chunk_size;
 
   /* atomic */ int rows_done;
 };
@@ -2395,15 +2395,16 @@ static void
 gdk_memory_convert_color_state_srgb_to_srgb_linear (gpointer data)
 {
   MemoryConvertColorState *mc = data;
-  int y;
+  gsize y0, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
 
-  for (y = g_atomic_int_add (&mc->rows_done, 1), rows = 0;
-       y < mc->height;
-       y = g_atomic_int_add (&mc->rows_done, 1), rows++)
+  for (y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size), rows = 0;
+       y0 < mc->height;
+       y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size))
     {
-      convert_srgb_to_srgb_linear (mc->data + y * mc->stride, mc->width);
+      for (y = y0; y < MIN (y0 + mc->chunk_size, mc->height); y++, rows++)
+        convert_srgb_to_srgb_linear (mc->data + y * mc->stride, mc->width);
     }
 
   ADD_MARK (before,
@@ -2415,15 +2416,16 @@ static void
 gdk_memory_convert_color_state_srgb_linear_to_srgb (gpointer data)
 {
   MemoryConvertColorState *mc = data;
-  int y;
+  gsize y0, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
 
-  for (y = g_atomic_int_add (&mc->rows_done, 1), rows = 0;
-       y < mc->height;
-       y = g_atomic_int_add (&mc->rows_done, 1), rows++)
+  for (y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size), rows = 0;
+       y0 < mc->height;
+       y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size))
     {
-      convert_srgb_linear_to_srgb (mc->data + y * mc->stride, mc->width);
+      for (y = y0; y < MIN (y0 + mc->chunk_size, mc->height); y++, rows++)
+        convert_srgb_linear_to_srgb (mc->data + y * mc->stride, mc->width);
     }
 
   ADD_MARK (before,
@@ -2439,7 +2441,7 @@ gdk_memory_convert_color_state_generic (gpointer user_data)
   GdkFloatColorConvert convert_func = NULL;
   GdkFloatColorConvert convert_func2 = NULL;
   float (*tmp)[4];
-  int y;
+  gsize y0, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
 
@@ -2459,27 +2461,30 @@ gdk_memory_convert_color_state_generic (gpointer user_data)
 
   tmp = g_malloc (sizeof (*tmp) * mc->width);
 
-  for (y = g_atomic_int_add (&mc->rows_done, 1), rows = 0;
-       y < mc->height;
-       y = g_atomic_int_add (&mc->rows_done, 1), rows++)
+  for (y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size), rows = 0;
+       y0 < mc->height;
+       y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size))
     {
-      guchar *data = mc->data + y * mc->stride;
+      for (y = y0; y < MIN (y0 + mc->chunk_size, mc->height); y++, rows++)
+        {
+          guchar *data = mc->data + y * mc->stride;
 
-      desc->to_float (tmp, data, mc->width);
+          desc->to_float (tmp, data, mc->width);
 
-      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-        unpremultiply (tmp, mc->width);
+          if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+            unpremultiply (tmp, mc->width);
 
-      if (convert_func)
-        convert_func (mc->src_cs, tmp, mc->width);
+          if (convert_func)
+            convert_func (mc->src_cs, tmp, mc->width);
 
-      if (convert_func2)
-        convert_func2 (mc->dest_cs, tmp, mc->width);
+          if (convert_func2)
+            convert_func2 (mc->dest_cs, tmp, mc->width);
 
-      if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-        premultiply (tmp, mc->width);
+          if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
+            premultiply (tmp, mc->width);
 
-      desc->from_float (data, tmp, mc->width);
+          desc->from_float (data, tmp, mc->width);
+        }
     }
 
   g_free (tmp);
@@ -2506,26 +2511,30 @@ gdk_memory_convert_color_state (guchar          *data,
     .dest_cs = dest_color_state,
     .width = width,
     .height = height,
+    .chunk_size = MAX (1, 512 / width),
   };
+  guint n_tasks;
 
   if (gdk_color_state_equal (src_color_state, dest_color_state))
     return;
+
+  n_tasks = (mc.height + mc.chunk_size - 1) / mc.chunk_size;
 
   if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
       src_color_state == GDK_COLOR_STATE_SRGB &&
       dest_color_state == GDK_COLOR_STATE_SRGB_LINEAR)
     {
-      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_to_srgb_linear, &mc, G_MAXUINT);
+      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_to_srgb_linear, &mc, n_tasks);
     }
   else if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
            src_color_state == GDK_COLOR_STATE_SRGB_LINEAR &&
            dest_color_state == GDK_COLOR_STATE_SRGB)
     {
-      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_linear_to_srgb, &mc, G_MAXUINT);
+      gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_linear_to_srgb, &mc, n_tasks);
     }
   else
     {
-      gdk_parallel_task_run (gdk_memory_convert_color_state_generic, &mc, G_MAXUINT);
+      gdk_parallel_task_run (gdk_memory_convert_color_state_generic, &mc, n_tasks);
     }
 }
 
@@ -2681,19 +2690,24 @@ gdk_memory_mipmap (guchar          *dest,
     .linear = linear,
     .rows_done = 0,
   };
+  gsize chunk_size;
+  guint n_tasks;
 
   g_assert (lod_level > 0);
+
+  chunk_size = MAX (1, 512 / src_width),
+  n_tasks = (src_height + chunk_size - 1) / chunk_size;
 
   if (dest_format == src_format)
     {
       if (linear)
-        gdk_parallel_task_run (gdk_memory_mipmap_same_format_linear, &mipmap, G_MAXUINT);
+        gdk_parallel_task_run (gdk_memory_mipmap_same_format_linear, &mipmap, n_tasks);
       else
-        gdk_parallel_task_run (gdk_memory_mipmap_same_format_nearest, &mipmap, G_MAXUINT);
+        gdk_parallel_task_run (gdk_memory_mipmap_same_format_nearest, &mipmap, n_tasks);
     }
   else
     {
-      gdk_parallel_task_run (gdk_memory_mipmap_generic, &mipmap, G_MAXUINT);
+      gdk_parallel_task_run (gdk_memory_mipmap_generic, &mipmap, n_tasks);
     }
 }
 
