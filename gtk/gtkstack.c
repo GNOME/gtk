@@ -2328,8 +2328,29 @@ gtk_stack_compute_expand (GtkWidget *widget,
 static GtkSizeRequestMode
 gtk_stack_get_request_mode (GtkWidget *widget)
 {
+  GtkStack *stack = GTK_STACK (widget);
+  GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkWidget *w;
   int wfh = 0, hfw = 0;
+
+  if (!priv->homogeneous[GTK_ORIENTATION_VERTICAL] &&
+      !priv->homogeneous[GTK_ORIENTATION_HORIZONTAL])
+    {
+      GtkSizeRequestMode lv_mode;
+
+      /* Only the visible child, and perhaps the last visible child
+       * during a transition, matter.  Attempt to return constant-size
+       * when we can.  */
+      if (priv->last_visible_child)
+        lv_mode = gtk_widget_get_request_mode (priv->last_visible_child->widget);
+      else
+        lv_mode = GTK_SIZE_REQUEST_CONSTANT_SIZE;
+
+      if (lv_mode == GTK_SIZE_REQUEST_CONSTANT_SIZE && priv->visible_child)
+        return gtk_widget_get_request_mode (priv->visible_child->widget);
+      else
+        return lv_mode;
+    }
 
   for (w = gtk_widget_get_first_child (widget);
        w != NULL;
