@@ -38,6 +38,9 @@
  - What graphics driver / mesa version
  - For Linux, which distribution
  - If you built GTK yourself, the list of options used to configure the build
+
+ The GTK Inspector has a "Copy to clipboard as gitlab markup" button that
+ produces a helpful summary containing most of this information (and more).
 -->
 
 ## Additional information
