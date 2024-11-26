@@ -292,167 +292,98 @@
                       </object>
                     </child>
                     <child>
-                      <object class="GtkListBoxRow">
+                      <object class="GtkListBoxRow" id="environment_row">
                         <property name="activatable">0</property>
                         <child>
-                          <object class="GtkBox">
-                            <property name="spacing">40</property>
-                            <child>
-                              <object class="GtkLabel" id="xdg_data_home_label">
-                                <property name="label">XDG_DATA_HOME</property>
-                                <property name="halign">start</property>
-                                <property name="valign">baseline</property>
-                                <property name="xalign">0.0</property>
+                          <object class="GtkExpander">
+                            <property name="valign">center</property>
+                            <property name="label-widget">
+                              <object class="GtkLabel">
+                                <property name="label" translatable="yes">Environment</property>
+                                <property name="margin-start">10</property>
                               </object>
-                            </child>
+                            </property>
                             <child>
-                              <object class="GtkLabel" id="xdg_data_home">
-                                <property name="selectable">1</property>
-                                <property name="halign">end</property>
-                                <property name="valign">baseline</property>
-                                <property name="ellipsize">end</property>
-                                <property name="hexpand">1</property>
+                              <object class="GtkBox">
+                                <property name="margin-top">20</property>
+                                <property name="orientation">vertical</property>
+                                <child>
+                                  <object class="GtkListView">
+                                    <style>
+                                      <class name="rich-list"/>
+                                    </style>
+                                    <property name="model">
+                                      <object class="GtkNoSelection">
+                                        <property name="model">
+                                          <object class="GtkSortListModel">
+                                            <property name="sorter">
+                                              <object class="GtkStringSorter">
+                                                <property name='expression'>
+                                                  <lookup name='id' type='GtkStringPair' />
+                                                </property>
+                                              </object>
+                                            </property>
+                                            <property name="model">
+                                              <object class="GListStore" id="environment_list" />
+                                            </property>
+                                          </object>
+                                        </property>
+                                      </object>
+                                    </property>
+                                    <property name="factory">
+                                      <object class="GtkBuilderListItemFactory">
+                                        <property name="bytes"><![CDATA[
+    <?xml version="1.0" encoding="UTF-8"?>
+    <interface>
+      <template class='GtkListItem'>
+        <property name='activatable'>0</property>
+        <property name='child'>
+          <object class='GtkBox'>
+            <property name='orientation'>horizontal</property>
+            <property name='spacing'>40</property>
+            <child>
+              <object class='GtkLabel'>
+                <property name='halign'>start</property>
+                <property name='valign'>baseline</property>
+                <property name='xalign'>0</property>
+                <binding name='label'>
+                  <lookup name='id' type='GtkStringPair'>
+                    <lookup name='item'>GtkListItem</lookup>
+                  </lookup>
+                </binding>
+              </object>
+            </child>
+            <child>
+              <object class='GtkLabel'>
+                <property name='selectable'>1</property>
+                <property name='halign'>end</property>
+                <property name='valign'>baseline</property>
+                <property name='ellipsize'>end</property>
+                <property name='hexpand'>1</property>
+                <property name='attributes'>0 -1 family Monospace, 0 -1 fallback false</property>
+                <binding name='label'>
+                  <lookup name='string' type='GtkStringPair'>
+                    <lookup name='item'>GtkListItem</lookup>
+                  </lookup>
+                </binding>
+              </object>
+            </child>
+          </object>
+        </property>
+      </template>
+    </interface>
+                                        ]]></property>
+                                      </object>
+                                    </property>
+                                  </object>
+                                </child>
                               </object>
                             </child>
                           </object>
                         </child>
                       </object>
                     </child>
-                    <child>
-                      <object class="GtkListBoxRow">
-                        <property name="activatable">0</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="spacing">40</property>
-                            <child>
-                              <object class="GtkLabel" id="xdg_data_dirs_label">
-                                <property name="label">XDG_DATA_DIRS</property>
-                                <property name="halign">start</property>
-                                <property name="valign">baseline</property>
-                                <property name="xalign">0.0</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="xdg_data_dirs">
-                                <property name="selectable">1</property>
-                                <property name="halign">end</property>
-                                <property name="valign">baseline</property>
-                                <property name="ellipsize">end</property>
-                                <property name="hexpand">1</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBoxRow">
-                        <property name="activatable">0</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="spacing">40</property>
-                            <child>
-                              <object class="GtkLabel" id="gtk_path_label">
-                                <property name="label">GTK_PATH</property>
-                                <property name="halign">start</property>
-                                <property name="valign">baseline</property>
-                                <property name="xalign">0.0</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="gtk_path">
-                                <property name="selectable">1</property>
-                                <property name="halign">end</property>
-                                <property name="valign">baseline</property>
-                                <property name="ellipsize">end</property>
-                                <property name="hexpand">1</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBoxRow">
-                        <property name="activatable">0</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="spacing">40</property>
-                            <child>
-                              <object class="GtkLabel" id="gtk_exe_prefix_label">
-                                <property name="label">GTK_EXE_PREFIX</property>
-                                <property name="halign">start</property>
-                                <property name="valign">baseline</property>
-                                <property name="xalign">0.0</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="gtk_exe_prefix">
-                                <property name="selectable">1</property>
-                                <property name="halign">end</property>
-                                <property name="valign">baseline</property>
-                                <property name="ellipsize">end</property>
-                                <property name="hexpand">1</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBoxRow">
-                        <property name="activatable">0</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="spacing">40</property>
-                            <child>
-                              <object class="GtkLabel" id="gtk_data_prefix_label">
-                                <property name="label">GTK_DATA_PREFIX</property>
-                                <property name="halign">start</property>
-                                <property name="valign">baseline</property>
-                                <property name="xalign">0.0</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="gtk_data_prefix">
-                                <property name="selectable">1</property>
-                                <property name="halign">end</property>
-                                <property name="valign">baseline</property>
-                                <property name="ellipsize">end</property>
-                                <property name="hexpand">1</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="GtkListBoxRow">
-                        <property name="activatable">0</property>
-                        <child>
-                          <object class="GtkBox">
-                            <property name="spacing">40</property>
-                            <child>
-                              <object class="GtkLabel" id="gsettings_schema_dir_label">
-                                <property name="label">GSETTINGS_SCHEMA_DIR</property>
-                                <property name="halign">start</property>
-                                <property name="valign">baseline</property>
-                                <property name="xalign">0.0</property>
-                              </object>
-                            </child>
-                            <child>
-                              <object class="GtkLabel" id="gsettings_schema_dir">
-                                <property name="selectable">1</property>
-                                <property name="halign">end</property>
-                                <property name="valign">baseline</property>
-                                <property name="ellipsize">end</property>
-                                <property name="hexpand">1</property>
-                              </object>
-                            </child>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
+
                   </object>
                 </child>
                 <child>

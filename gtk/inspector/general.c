@@ -34,6 +34,7 @@
 #include "gtkbinlayout.h"
 #include "gtkmediafileprivate.h"
 #include "gtkimmoduleprivate.h"
+#include "gtkstringpairprivate.h"
 
 #include "gdk/gdkdebugprivate.h"
 #include "gdk/gdkdisplayprivate.h"
@@ -143,12 +144,8 @@ struct _GtkInspectorGeneral
   GtkWidget *app_id;
   GtkWidget *resource_path;
   GtkWidget *prefix;
-  GtkWidget *xdg_data_home;
-  GtkWidget *xdg_data_dirs;
-  GtkWidget *gtk_path;
-  GtkWidget *gtk_exe_prefix;
-  GtkWidget *gtk_data_prefix;
-  GtkWidget *gsettings_schema_dir;
+  GtkWidget *environment_row;
+  GListStore *environment_list;
   GtkWidget *display_name;
   GtkWidget *display_rgba;
   GtkWidget *display_composited;
@@ -1042,63 +1039,107 @@ dump_vulkan (GdkDisplay *display,
 }
 
 /* }}} */
-/* {{{ Paths */
+/* {{{ Environment */
 
-static void
-set_path_label (GtkWidget   *w,
-                const char *var)
-{
-  const char *v;
-
-  v = g_getenv (var);
-  if (v != NULL)
-    {
-      set_monospace_font (w);
-      gtk_label_set_text (GTK_LABEL (w), v);
-    }
-  else
-    {
-       GtkWidget *r;
-       r = gtk_widget_get_ancestor (w, GTK_TYPE_LIST_BOX_ROW);
-       gtk_widget_set_visible (r, FALSE);
-    }
-}
+static const char *env_list[] = {
+  "AT_SPI_BUS_ADDRESS",
+  "BROADWAY_DISPLAY",
+  "DESKTOP_AUTOSTART_ID",
+  "DISPLAY",
+  "GDK_BACKEND",
+  "GDK_DEBUG",
+  "GDK_DISABLE",
+  "GDK_GL_DISABLE",
+  "GDK_SCALE",
+  "GDK_SYNCHRONIZE",
+  "GDK_VULKAN_DISABLE",
+  "GDK_WIN32_CAIRO_DB",
+  "GDK_WIN32_DISABLE_HIDPI",
+  "GDK_WIN32_PER_MONITOR_HIDPI",
+  "GDK_WIN32_TABLET_INPUT_API",
+  "GOBJECT_DEBUG",
+  "GSETINGS_SCHEMA_DIR",
+  "GSK_CACHE_TIMEOUT",
+  "GSK_DEBUG",
+  "GSK_GPU_DISABLE",
+  "GSK_MAX_TEXTURE_SIZE",
+  "GSK_RENDERER",
+  "GSK_SUBSET_FONTS",
+  "GTK_A11Y",
+  "GTK_CSD",
+  "GTK_CSS_DEBUG",
+  "GTK_DATA_PREFIX",
+  "GTK_DEBUG",
+  "GTK_DEBUG_AUTO_QUIT",
+  "GTK_EXE_PREFIX",
+  "GTK_IM_MODULE",
+  "GTK_INSPECTOR_DISPLAY",
+  "GTK_INSPECTOR_RENDERER",
+  "GTK_MEDIA",
+  "GTK_PATH",
+  "GTK_RTL",
+  "GTK_SLOWDOWN",
+  "GTK_THEME",
+  "GTK_WIDGET_ASSERT_COMPONENTS",
+  "LANG",
+  "LANGUAGE",
+  "LC_ALL",
+  "LC_CTYPE",
+  "LPDEST",
+  "PANGOCAIRO_BACKEND",
+  "PANGO_LANGUAGE",
+  "PRINTER",
+  "SECMEM_FORCE_FALLBACK",
+  "WAYLAND_DISPLAY",
+  "XDG_DATA_HOME",
+  "XDG_DATA_DIRS",
+  "XDG_RUNTIME_DIR",
+};
 
 static void
 init_env (GtkInspectorGeneral *gen)
 {
   set_monospace_font (gen->prefix);
   gtk_label_set_text (GTK_LABEL (gen->prefix), _gtk_get_data_prefix ());
-  set_path_label (gen->xdg_data_home, "XDG_DATA_HOME");
-  set_path_label (gen->xdg_data_dirs, "XDG_DATA_DIRS");
-  set_path_label (gen->gtk_path, "GTK_PATH");
-  set_path_label (gen->gtk_exe_prefix, "GTK_EXE_PREFIX");
-  set_path_label (gen->gtk_data_prefix, "GTK_DATA_PREFIX");
-  set_path_label (gen->gsettings_schema_dir, "GSETTINGS_SCHEMA_DIR");
-}
 
-static void
-add_env (GString    *s,
-         const char *var)
-{
-  const char *val = g_getenv (var);
+  for (guint i = 0; i < G_N_ELEMENTS (env_list); i++)
+    {
+      const char *val = g_getenv (env_list[i]);
 
-  if (!val)
-    return;
-
-  g_string_append_printf (s, "| %s | %s |\n", var, val);
+      if (val)
+        {
+          GtkStringPair *pair = gtk_string_pair_new (env_list[i], val);
+          g_list_store_append (gen->environment_list, pair);
+          g_object_unref (pair);
+        }
+    }
 }
 
 static void
 dump_env (GdkDisplay *display,
           GString    *s)
 {
-  add_env (s, "XDG_DATA_HOME");
-  add_env (s, "XDG_DATA_DIRS");
-  add_env (s, "GTK_PATH");
-  add_env (s, "GTK_EXE_PREFIX");
-  add_env (s, "GTK_DATA_PREFIX");
-  add_env (s, "GSETTINGS_SCHEMA_DIR");
+  GString *env = g_string_new ("");
+  guint count = 0;
+
+  g_string_append_printf (s, "| Prefix | %s |\n", _gtk_get_data_prefix ());
+
+  for (guint i = 0; i < G_N_ELEMENTS (env_list); i++)
+    {
+      const char *val = g_getenv (env_list[i]);
+
+      if (val)
+        {
+          count++;
+          g_string_append_printf (env, "%s%s=%s", i > 0 ? "<br>" : "", env_list[i], val);
+        }
+    }
+
+  g_string_append_printf (s, "| Environment| <details><summary>%u relevant variables</summary>", count);
+  g_string_append (s, env->str);
+  g_string_append (s, "</details> |\n");
+
+  g_string_free (env, TRUE);
 }
 
 /* }}} */
@@ -1947,6 +1988,8 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  g_type_ensure (GTK_TYPE_STRING_PAIR);
+
   object_class->constructed = gtk_inspector_general_constructed;
   object_class->dispose = gtk_inspector_general_dispose;
 
@@ -2007,12 +2050,8 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, app_id);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, resource_path);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, prefix);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, xdg_data_home);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, xdg_data_dirs);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gtk_path);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gtk_exe_prefix);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gtk_data_prefix);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gsettings_schema_dir);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, environment_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, environment_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_name);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_composited);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_rgba);
