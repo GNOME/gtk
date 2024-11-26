@@ -1707,7 +1707,7 @@ gtk_list_base_apply_rubberband_selection (GtkListBase *self,
   model = gtk_list_item_manager_get_model (priv->item_manager);
   if (model != NULL)
     {
-      GtkBitset *selected, *mask;
+      GtkBitset *selected, *mask, *result;
       GdkRectangle rect;
       GtkBitset *rubberband_selection;
 
@@ -1760,8 +1760,14 @@ gtk_list_base_apply_rubberband_selection (GtkListBase *self,
 
       gtk_selection_model_set_selection (model, selected, mask);
 
+      result = gtk_selection_model_get_selection (model);
+
+      if (gtk_bitset_get_size (result) == 1)
+        gtk_list_base_grab_focus_on_item (self, gtk_bitset_get_minimum (result), TRUE, FALSE, FALSE);
+
       gtk_bitset_unref (selected);
       gtk_bitset_unref (mask);
+      gtk_bitset_unref (result);
       gtk_bitset_unref (rubberband_selection);
     }
 }
