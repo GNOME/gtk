@@ -142,6 +142,7 @@ gtk_private_sources = files([
   'gtksecurememory.c',
   'gtksizerequestcache.c',
   'gtksortkeys.c',
+  'gtkstringpair.c',
   'gtkstyleanimation.c',
   'gtkstylecascade.c',
   'gtkstyleproperty.c',
