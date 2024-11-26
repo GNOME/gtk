@@ -93,6 +93,7 @@
 #include "gtkmultisorter.h"
 #include "gtkcolumnviewsorter.h"
 #include "gtkexpression.h"
+#include "gtkactionbar.h"
 
 #ifndef G_OS_WIN32
 #include "gtkopenuriportal.h"
@@ -6833,6 +6834,8 @@ captured_key (GtkEventControllerKey *controller,
 {
   GtkFileChooserWidget *impl = data;
   gboolean handled;
+  GtkWidget *focus;
+  GtkWidget *ancestor;
 
   if (impl->operation_mode == OPERATION_MODE_SEARCH ||
       impl->operation_mode == OPERATION_MODE_ENTER_LOCATION ||
@@ -6843,10 +6846,14 @@ captured_key (GtkEventControllerKey *controller,
   if (keyval == GDK_KEY_slash || keyval == GDK_KEY_asciitilde || keyval == GDK_KEY_period)
     return GDK_EVENT_PROPAGATE;
 
+  focus = gtk_root_get_focus (gtk_widget_get_root (GTK_WIDGET (impl)));
+
+  ancestor = gtk_widget_get_ancestor (focus, GTK_TYPE_ACTION_BAR);
+  if (ancestor && gtk_widget_is_ancestor (ancestor, impl->places_view))
+    return GDK_EVENT_PROPAGATE;
+
   if (impl->location_entry)
     {
-      GtkWidget *focus = gtk_root_get_focus (gtk_widget_get_root (GTK_WIDGET (impl)));
-
       if (focus && gtk_widget_is_ancestor (focus, impl->location_entry))
         return GDK_EVENT_PROPAGATE;
     }
