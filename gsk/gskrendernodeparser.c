@@ -1731,7 +1731,10 @@ parse_hue_interpolation (GtkCssParser *parser,
   else if (gtk_css_parser_try_ident (parser, "decreasing"))
     interpolation = GSK_HUE_INTERPOLATION_DECREASING;
   else
-    return FALSE;
+    {
+      gtk_css_parser_error_value (parser, "Unknown value for hue interpolation");
+      return FALSE;
+    }
 
   *((GskHueInterpolation *)out_value) = interpolation;
   return TRUE;
