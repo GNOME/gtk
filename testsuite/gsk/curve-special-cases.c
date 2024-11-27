@@ -97,7 +97,7 @@ pathop_cb (GskPathOperation        op,
 {
   GskCurve *curve = user_data;
 
-  g_assert (op != GSK_PATH_CLOSE);
+  g_assert_true (op != GSK_PATH_CLOSE);
 
   if (op == GSK_PATH_MOVE)
     return TRUE;

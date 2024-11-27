@@ -157,7 +157,7 @@ test_renderer (GskRenderer *renderer)
   GdkSurface *surface;
   GError *error = NULL;
 
-  g_assert (GSK_IS_RENDERER (renderer));
+  g_assert_true (GSK_IS_RENDERER (renderer));
 
   display = gdk_display_open (NULL);
 

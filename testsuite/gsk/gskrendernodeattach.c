@@ -190,7 +190,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       {
         GdkSubsurface *subsurface;
 
-        g_assert (gsk_subsurface_node_get_subsurface (node) == NULL);
+        g_assert_null (gsk_subsurface_node_get_subsurface (node));
 
         if (*idx == -1)
           subsurface = gdk_surface_create_subsurface (surface);
