@@ -3360,7 +3360,8 @@ printer_init_check_color_state (Printer       *printer,
 {
   gpointer name;
 
-  if (GDK_IS_DEFAULT_COLOR_STATE (cs))
+  if (GDK_IS_DEFAULT_COLOR_STATE (cs) ||
+      GDK_IS_BUILTIN_COLOR_STATE (cs))
     return;
 
   if (!g_hash_table_lookup_extended (printer->named_color_states, cs, NULL, &name))
@@ -3804,7 +3805,8 @@ static void
 print_color_state (Printer       *p,
                    GdkColorState *color_state)
 {
-  if (GDK_IS_DEFAULT_COLOR_STATE (color_state))
+  if (GDK_IS_DEFAULT_COLOR_STATE (color_state) ||
+      GDK_IS_BUILTIN_COLOR_STATE (color_state))
     {
       g_string_append (p->str, gdk_color_state_get_name (color_state));
     }

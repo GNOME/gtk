@@ -15,8 +15,9 @@
 #include "gskgpucolormatrixopprivate.h"
 #include "gskgpucoloropprivate.h"
 #include "gskgpuconicgradientopprivate.h"
-#include "gskgpuconvertopprivate.h"
+#include "gskgpuconvertbuiltinopprivate.h"
 #include "gskgpuconvertcicpopprivate.h"
+#include "gskgpuconvertopprivate.h"
 #include "gskgpucrossfadeopprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
@@ -574,7 +575,22 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
 
   straight_alpha = gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA;
 
-  if (!GDK_IS_DEFAULT_COLOR_STATE (image_color_state))
+  if (GDK_IS_BUILTIN_COLOR_STATE (image_color_state))
+    {
+      gsk_gpu_convert_from_builtin_op (self->frame,
+                                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                                       self->ccs,
+                                       image_color_state,
+                                       self->opacity,
+                                       &self->offset,
+                                       &(GskGpuShaderImage) {
+                                         image,
+                                         sampler,
+                                         rect,
+                                         tex_rect
+                                       });
+    }
+  else if (!GDK_IS_DEFAULT_COLOR_STATE (image_color_state))
     {
       const GdkCicp *cicp = gdk_color_state_get_cicp (image_color_state);
 
@@ -4304,7 +4320,23 @@ gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
 {
   gsk_gpu_node_processor_sync_globals (self, 0);
 
-  if (!GDK_IS_DEFAULT_COLOR_STATE (self->ccs))
+  if (GDK_IS_BUILTIN_COLOR_STATE (self->ccs))
+    {
+      gsk_gpu_convert_to_builtin_op (self->frame,
+                                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
+                                     self->ccs,
+                                     TRUE,
+                                     image_color_state,
+                                     self->opacity,
+                                     &self->offset,
+                                     &(GskGpuShaderImage) {
+                                         image,
+                                         GSK_GPU_SAMPLER_DEFAULT,
+                                         rect,
+                                         tex_rect
+                                     });
+    }
+  else if (!GDK_IS_DEFAULT_COLOR_STATE (self->ccs))
     {
       const GdkCicp *cicp = gdk_color_state_get_cicp (self->ccs);
 
