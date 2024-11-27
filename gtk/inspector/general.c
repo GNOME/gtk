@@ -34,6 +34,7 @@
 #include "gtkbinlayout.h"
 #include "gtkmediafileprivate.h"
 #include "gtkimmoduleprivate.h"
+#include "gtkstringpairprivate.h"
 
 #include "gdk/gdkdebugprivate.h"
 #include "gdk/gdkdisplayprivate.h"
@@ -79,6 +80,8 @@
 #ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
 #endif
+
+static void gtk_inspector_general_clip (GtkButton *button, GtkInspectorGeneral *gen);
 
 struct _GtkInspectorGeneral
 {
@@ -141,12 +144,8 @@ struct _GtkInspectorGeneral
   GtkWidget *app_id;
   GtkWidget *resource_path;
   GtkWidget *prefix;
-  GtkWidget *xdg_data_home;
-  GtkWidget *xdg_data_dirs;
-  GtkWidget *gtk_path;
-  GtkWidget *gtk_exe_prefix;
-  GtkWidget *gtk_data_prefix;
-  GtkWidget *gsettings_schema_dir;
+  GtkWidget *environment_row;
+  GListStore *environment_list;
   GtkWidget *display_name;
   GtkWidget *display_rgba;
   GtkWidget *display_composited;
@@ -161,89 +160,15 @@ typedef struct _GtkInspectorGeneralClass
 
 G_DEFINE_TYPE (GtkInspectorGeneral, gtk_inspector_general, GTK_TYPE_WIDGET)
 
-static void
-init_version (GtkInspectorGeneral *gen)
-{
-  const char *backend;
-  GdkSurface *surface;
-  GskRenderer *gsk_renderer;
-  const char *renderer;
+/* Note that all the information collection functions come in two variants:
+ * init_foo() and dump_foo(). The former updates the widgets of the inspector
+ * page, the latter creates a markdown dump, to copy-pasted into a gitlab
+ * issue.
+ *
+ * Please keep the two in sync when making changes.
+ */
 
-#ifdef GDK_WINDOWING_X11
-  if (GDK_IS_X11_DISPLAY (gen->display))
-    backend = "X11";
-  else
-#endif
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DISPLAY (gen->display))
-    backend = "Wayland";
-  else
-#endif
-#ifdef GDK_WINDOWING_BROADWAY
-  if (GDK_IS_BROADWAY_DISPLAY (gen->display))
-    backend = "Broadway";
-  else
-#endif
-#ifdef GDK_WINDOWING_WIN32
-  if (GDK_IS_WIN32_DISPLAY (gen->display))
-    backend = "Windows";
-  else
-#endif
-#ifdef GDK_WINDOWING_MACOS
-  if (GDK_IS_MACOS_DISPLAY (gen->display))
-    backend = "MacOS";
-  else
-#endif
-    backend = "Unknown";
-
-  surface = gdk_surface_new_toplevel (gen->display);
-  gsk_renderer = gsk_renderer_new_for_surface (surface);
-  if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskVulkanRenderer") == 0)
-    renderer = "Vulkan";
-  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskGLRenderer") == 0)
-    renderer = "GL";
-  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskCairoRenderer") == 0)
-    renderer = "Cairo";
-  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskNglRenderer") == 0)
-    renderer = "GL (new)";
-  else
-    renderer = "Unknown";
-
-  gsk_renderer_unrealize (gsk_renderer);
-  g_object_unref (gsk_renderer);
-  gdk_surface_destroy (surface);
-
-  if (g_strcmp0 (PROFILE, "devel") == 0)
-    {
-      char *version = g_strdup_printf ("%s-%s", GTK_VERSION, VCS_TAG);
-      gtk_label_set_text (GTK_LABEL (gen->gtk_version), version);
-      g_free (version);
-    }
-  else
-    {
-      gtk_label_set_text (GTK_LABEL (gen->gtk_version), GTK_VERSION);
-    }
-  gtk_label_set_text (GTK_LABEL (gen->gdk_backend), backend);
-  gtk_label_set_text (GTK_LABEL (gen->gsk_renderer), renderer);
-}
-
-static void
-init_app_id (GtkInspectorGeneral *gen)
-{
-  GApplication *app;
-
-  app = g_application_get_default ();
-  if (!app)
-    {
-      gtk_widget_set_visible (gen->app_id_box, FALSE);
-      return;
-    }
-
-  gtk_label_set_text (GTK_LABEL (gen->app_id),
-                      g_application_get_application_id (app));
-  gtk_label_set_text (GTK_LABEL (gen->resource_path),
-                      g_application_get_resource_base_path (app));
-}
+/* {{{ Utilities */
 
 static G_GNUC_UNUSED void
 add_check_row (GtkInspectorGeneral *gen,
@@ -315,6 +240,263 @@ add_label_row (GtkInspectorGeneral *gen,
   gtk_widget_set_hexpand (box, FALSE);
   gtk_list_box_insert (GTK_LIST_BOX (list), row, -1);
 }
+
+static void
+set_monospace_font (GtkWidget *w)
+{
+  PangoAttrList *attrs;
+
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_fallback_new (FALSE));
+  pango_attr_list_insert (attrs, pango_attr_family_new ("Monospace"));
+  gtk_label_set_attributes (GTK_LABEL (w), attrs);
+  pango_attr_list_unref (attrs);
+}
+
+/* }}} */
+/* {{{ Version */
+
+static const char *
+get_display_kind (GdkDisplay *display)
+{
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (display))
+    return "X11";
+  else
+#endif
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    return "Wayland";
+  else
+#endif
+#ifdef GDK_WINDOWING_BROADWAY
+  if (GDK_IS_BROADWAY_DISPLAY (display))
+    return "Broadway";
+  else
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_WIN32_DISPLAY (display))
+    return "Windows";
+  else
+#endif
+#ifdef GDK_WINDOWING_MACOS
+  if (GDK_IS_MACOS_DISPLAY (display))
+    return "MacOS";
+  else
+#endif
+    return "Unknown";
+}
+
+static const char *
+get_renderer_kind (GdkDisplay *display)
+{
+  GdkSurface *surface;
+  GskRenderer *gsk_renderer;
+  const char *renderer;
+
+  surface = gdk_surface_new_toplevel (display);
+  gsk_renderer = gsk_renderer_new_for_surface (surface);
+
+  if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskVulkanRenderer") == 0)
+    renderer = "Vulkan";
+  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskGLRenderer") == 0)
+    renderer = "GL";
+  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskCairoRenderer") == 0)
+    renderer = "Cairo";
+  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskNglRenderer") == 0)
+    renderer = "GL (new)";
+  else
+    renderer = "Unknown";
+
+  gsk_renderer_unrealize (gsk_renderer);
+  g_object_unref (gsk_renderer);
+  gdk_surface_destroy (surface);
+
+  return renderer;
+}
+
+static char *
+get_version_string (void)
+{
+  if (g_strcmp0 (PROFILE, "devel") == 0)
+    return g_strdup_printf ("%s-%s", GTK_VERSION, VCS_TAG);
+  else
+    return g_strdup (GTK_VERSION);
+}
+
+static void
+init_version (GtkInspectorGeneral *gen)
+{
+  char *version;
+
+  version = get_version_string ();
+  gtk_label_set_text (GTK_LABEL (gen->gtk_version), version);
+  g_free (version);
+
+  gtk_label_set_text (GTK_LABEL (gen->gdk_backend), get_display_kind (gen->display));
+  gtk_label_set_text (GTK_LABEL (gen->gsk_renderer), get_renderer_kind (gen->display));
+}
+
+static void
+dump_version (GdkDisplay *display,
+              GString    *string)
+{
+  char *version;
+
+  version = get_version_string ();
+  g_string_append_printf (string, "| GTK Version | %s |\n", version);
+  g_free (version);
+  g_string_append_printf (string, "| GDK Backend | %s |\n", get_display_kind (display));
+  g_string_append_printf (string, "| GSK Renderer | %s |\n", get_renderer_kind (display));
+}
+
+/* }}} */
+/* {{{ Pango */
+
+static const char *
+get_fontmap_kind (void)
+{
+  PangoFontMap *fontmap;
+  const char *type;
+
+  fontmap = pango_cairo_font_map_get_default ();
+  type = G_OBJECT_TYPE_NAME (fontmap);
+
+  if (strcmp (type, "PangoCairoFcFontMap") == 0)
+    return "fontconfig";
+  else if (strcmp (type, "PangoCairoCoreTextFontMap") == 0)
+    return "coretext";
+  else if (strcmp (type, "PangoCairoWin32FontMap") == 0)
+    return  "win32";
+  else
+    return type;
+}
+
+static void
+init_pango (GtkInspectorGeneral *gen)
+{
+  gtk_label_set_label (GTK_LABEL (gen->pango_fontmap), get_fontmap_kind ());
+}
+
+static void
+dump_pango (GdkDisplay *display,
+            GString    *string)
+{
+  g_string_append_printf (string, "| Pango Fontmap | %s |\n", get_fontmap_kind ());
+}
+
+/* }}} */
+/* {{{ Media */
+
+static const char *
+get_media_backend_kind (void)
+{
+  GIOExtension *e;
+
+  e = gtk_media_file_get_extension ();
+  return g_io_extension_get_name (e);
+}
+
+static void
+init_media (GtkInspectorGeneral *gen)
+{
+  gtk_label_set_label (GTK_LABEL (gen->media_backend), get_media_backend_kind ());
+}
+
+static void
+dump_media (GdkDisplay *display,
+            GString    *string)
+{
+  g_string_append_printf (string, "| Media Backend | %s |\n", get_media_backend_kind ());
+}
+
+/* }}} */
+/* {{{ Input Method */
+
+static void
+im_module_changed (GtkSettings         *settings,
+                   GParamSpec          *pspec,
+                   GtkInspectorGeneral *gen)
+{
+  if (!gen->display)
+    return;
+
+  gtk_label_set_label (GTK_LABEL (gen->im_module),
+                       _gtk_im_module_get_default_context_id (gen->display));
+}
+
+static const char *
+get_im_module_kind (GdkDisplay *display)
+{
+  return _gtk_im_module_get_default_context_id (display);
+}
+
+static void
+init_im_module (GtkInspectorGeneral *gen)
+{
+  GtkSettings *settings = gtk_settings_get_for_display (gen->display);
+
+  gtk_label_set_label (GTK_LABEL (gen->im_module), get_im_module_kind (gen->display));
+
+  if (g_getenv ("GTK_IM_MODULE") != NULL)
+    {
+      /* This can't update if GTK_IM_MODULE envvar is set */
+      gtk_widget_set_tooltip_text (gen->im_module,
+                                   _("IM Context is hardcoded by GTK_IM_MODULE"));
+      gtk_widget_set_sensitive (gen->im_module, FALSE);
+      return;
+    }
+
+  g_signal_connect_object (settings,
+                           "notify::gtk-im-module",
+                           G_CALLBACK (im_module_changed),
+                           gen, 0);
+}
+
+static void
+dump_im_module (GdkDisplay *display,
+                GString    *string)
+{
+  g_string_append_printf (string, "| Input Method | %s |\n", get_im_module_kind (display));
+}
+
+/* }}} */
+/* {{{ Application data */
+
+static void
+init_app_id (GtkInspectorGeneral *gen)
+{
+  GApplication *app;
+
+  app = g_application_get_default ();
+  if (!app)
+    {
+      gtk_widget_set_visible (gen->app_id_box, FALSE);
+      return;
+    }
+
+  gtk_label_set_text (GTK_LABEL (gen->app_id),
+                      g_application_get_application_id (app));
+  gtk_label_set_text (GTK_LABEL (gen->resource_path),
+                      g_application_get_resource_base_path (app));
+}
+
+static void
+dump_app_id (GdkDisplay *display,
+             GString    *string)
+{
+  GApplication *app;
+
+  app = g_application_get_default ();
+  if (!app)
+    return;
+
+  g_string_append_printf (string, "| Application ID | %s |\n", g_application_get_application_id (app));
+  g_string_append_printf (string, "| Resource Path | %s |\n", g_application_get_resource_base_path (app));
+}
+
+/* }}} */
+/* {{{ GL */
 
 static void
 add_gl_features (GtkInspectorGeneral *gen)
@@ -498,6 +680,151 @@ init_gl (GtkInspectorGeneral *gen)
   add_gl_features (gen);
 }
 
+static void
+dump_gl (GdkDisplay *display,
+         GString    *string)
+{
+  GdkGLContext *context;
+  GError *error = NULL;
+  int major, minor;
+  int num_extensions;
+  char *s;
+  GString *ext;
+
+  if (!gdk_display_prepare_gl (display, &error))
+    {
+      g_string_append (string, "| GL Renderer | None |\n");
+      g_string_append_printf (string, "| | %s |\n", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  gdk_gl_context_make_current (gdk_display_get_gl_context (display));
+
+  ext = g_string_new ("");
+
+#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND) || (defined(GDK_WINDOWING_WIN32) && defined(GDK_WIN32_ENABLE_EGL))
+  EGLDisplay egl_display = get_egl_display (display);
+  if (egl_display)
+    {
+      char *version;
+      guint count;
+      char *prefix;
+
+      version = g_strconcat ("EGL ", eglQueryString (egl_display, EGL_VERSION), NULL);
+      g_string_append_printf (string, "| GL Backend Version | %s |\n", version);
+      g_free (version);
+
+      g_string_append_printf (string, "| GL Backend Vendor | %s |\n", eglQueryString (egl_display, EGL_VENDOR));
+
+      g_string_assign (ext, eglQueryString (egl_display, EGL_EXTENSIONS));
+      count = g_string_replace (ext, " ", "<br>", 0);
+      prefix = g_strdup_printf ("| EGL Extensions | <details><summary>%u Extensions</summary>", count + 1);
+      g_string_prepend (ext, prefix);
+      g_string_append (ext, "</details> |\n");
+      g_free (prefix);
+    }
+  else
+#endif
+#ifdef GDK_WINDOWING_X11
+  if (GDK_IS_X11_DISPLAY (display))
+    {
+      Display *dpy = GDK_DISPLAY_XDISPLAY (display);
+      int error_base, event_base, screen;
+      char *version;
+      guint count;
+      char *prefix;
+
+      if (!glXQueryExtension (dpy, &error_base, &event_base))
+        return;
+
+      version = g_strconcat ("GLX ", glXGetClientString (dpy, GLX_VERSION), NULL);
+      g_string_append_printf (string, "| GL Backend Version | %s |\n", version);
+      g_free (version);
+
+      g_string_append_printf (string, "| GL Backend Vendor | %s |\n", glXGetClientString (dpy, GLX_VENDOR));
+
+      screen = XScreenNumberOfScreen (gdk_x11_display_get_xscreen (display));
+      g_string_assign (ext, glXQueryExtensionsString (dpy, screen));
+      count = g_string_replace (ext, " ", "<br>", 0);
+      prefix = g_strdup_printf ("| GLX Extensions | <details><summary>%u Extensions</summary>", count + 1);
+      g_string_prepend (ext, prefix);
+      g_string_append (ext, "</details> |\n");
+      g_free (prefix);
+    }
+  else
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_WIN32_DISPLAY (display) &&
+      gdk_gl_backend_can_be_used (GDK_GL_WGL, NULL))
+    {
+      PFNWGLGETEXTENSIONSSTRINGARBPROC wglGetExtensionsStringARB;
+
+      g_string_append (string, "| GL Backend Vendor | Microsoft WGL |\n");
+
+      wglGetExtensionsStringARB = (PFNWGLGETEXTENSIONSSTRINGARBPROC) wglGetProcAddress("wglGetExtensionsStringARB");
+
+      if (wglGetExtensionsStringARB)
+        {
+          guint count;
+          char *prefix;
+
+          g_string_assign (ext, wglGetExtensionsStringARB (wglGetCurrentDC ()));
+          count = g_string_replace (ext, " ", "<br>", 0);
+          prefix = g_strdup_printf ("| WGL Extensions | <details><summary>%u Extensions</summary>", count + 1);
+          g_string_prepend (ext, prefix);
+          g_string_append (ext, "</details> |\n");
+          g_free (prefix);
+        }
+      else
+        {
+          g_string_append (ext, "| WGL Extensions | None |\n");
+        }
+    }
+  else
+#endif
+    {
+      g_string_append (string, "| GL Backend Version | Unknown |\n");
+    }
+
+  context = gdk_display_get_gl_context (display);
+  gdk_gl_context_make_current (context);
+  gdk_gl_context_get_version (context, &major, &minor);
+  s = g_strdup_printf ("%s %u.%u",
+                       gdk_gl_context_get_use_es (context) ? "GLES " : "OpenGL ",
+                       major, minor);
+  g_string_append_printf (string, "| GL Version | %s |\n", s);
+  g_free (s);
+  g_string_append_printf (string, "| GL Vendor | %s |\n", (const char *) glGetString (GL_VENDOR));
+  g_string_append_printf (string, "| GL Renderer | %s |\n", (const char *) glGetString (GL_RENDERER));
+  g_string_append_printf (string, "| GL Full Version | %s |\n", (const char *) glGetString (GL_VERSION));
+  g_string_append_printf (string, "| GLSL Version | %s |\n", (const char *) glGetString (GL_SHADING_LANGUAGE_VERSION));
+
+  glGetIntegerv (GL_NUM_EXTENSIONS, &num_extensions);
+  g_string_append_printf (string, "| GL Extensions | <details><summary>%d Extensions</summary>", num_extensions);
+  for (int i = 0; i < num_extensions; i++)
+    {
+      const char *gl_ext = (const char *) glGetStringi (GL_EXTENSIONS, i);
+      if (gl_ext)
+        g_string_append_printf (string, "%s%s", i > 0 ? "<br>" : "", gl_ext);
+    }
+  g_string_append (string, "</details> |\n");
+
+  g_string_append (string, ext->str);
+  g_string_free (ext, TRUE);
+
+  g_string_append (string, "| Features | ");
+  for (int i = 0; i < GDK_GL_N_FEATURES; i++)
+    {
+      if (gdk_gl_context_has_feature (context, gdk_gl_feature_keys[i].value))
+        g_string_append_printf (string, "%s%s", i > 0 ? "<br>" : "", gdk_gl_feature_keys[i].key);
+    }
+  g_string_append (string, " |\n");
+}
+
+/* }}} */
+/* {{{ Vulkan */
+
 #ifdef GDK_RENDERING_VULKAN
 static gboolean
 gdk_vulkan_has_feature (GdkDisplay        *display,
@@ -627,49 +954,196 @@ init_vulkan (GtkInspectorGeneral *gen)
 }
 
 static void
-set_monospace_font (GtkWidget *w)
+dump_vulkan (GdkDisplay *display,
+             GString    *string)
 {
-  PangoAttrList *attrs;
+#ifdef GDK_RENDERING_VULKAN
+  VkPhysicalDevice vk_device;
+  VkPhysicalDeviceProperties props;
+  char *device_name;
+  char *api_version;
+  char *driver_version;
+  const char *types[] = { "other", "integrated GPU", "discrete GPU", "virtual GPU", "CPU" };
+  GError *error = NULL;
+  uint32_t n_layers;
+  VkLayerProperties *layers;
+  uint32_t n_instance_extensions;
+  uint32_t n_device_extensions;
+  VkExtensionProperties *instance_extensions;
+  VkExtensionProperties *device_extensions;
 
-  attrs = pango_attr_list_new ();
-  pango_attr_list_insert (attrs, pango_attr_fallback_new (FALSE));
-  pango_attr_list_insert (attrs, pango_attr_family_new ("Monospace"));
-  gtk_label_set_attributes (GTK_LABEL (w), attrs);
-  pango_attr_list_unref (attrs);
+  if (!gdk_display_prepare_vulkan (display, &error))
+    {
+      g_string_append (string, "| Vulkan Device | None |\n");
+      g_string_append_printf (string, "| | %s |\n", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  vk_device = display->vk_physical_device;
+  vkGetPhysicalDeviceProperties (vk_device, &props);
+
+  device_name = g_strdup_printf ("%s (%s)", props.deviceName, types[props.deviceType]);
+  api_version = g_strdup_printf ("%d.%d.%d",
+                                 VK_VERSION_MAJOR (props.apiVersion),
+                                 VK_VERSION_MINOR (props.apiVersion),
+                                 VK_VERSION_PATCH (props.apiVersion));
+  driver_version = g_strdup_printf ("%d.%d.%d",
+                                    VK_VERSION_MAJOR (props.driverVersion),
+                                    VK_VERSION_MINOR (props.driverVersion),
+                                    VK_VERSION_PATCH (props.driverVersion));
+
+  g_string_append_printf (string, "| Vulkan Device | %s |\n", device_name);
+  g_string_append_printf (string, "| Vulkan API Version | %s |\n", api_version);
+  g_string_append_printf (string, "| Vulkan Driver Version | %s |\n", driver_version);
+
+  g_free (device_name);
+  g_free (api_version);
+  g_free (driver_version);
+
+  vkEnumerateInstanceLayerProperties (&n_layers, NULL);
+  layers = g_newa (VkLayerProperties, n_layers);
+  vkEnumerateInstanceLayerProperties (&n_layers, layers);
+
+  g_string_append (string, "| Layers | ");
+  for (uint32_t i = 0; i < n_layers; i++)
+    g_string_append_printf (string, "%s%s", i > 0 ? "<br>" : "", layers[i].layerName);
+  g_string_append (string, " |\n");
+
+  vkEnumerateInstanceExtensionProperties (NULL, &n_instance_extensions, NULL);
+  instance_extensions = g_newa (VkExtensionProperties, n_instance_extensions);
+  vkEnumerateInstanceExtensionProperties (NULL, &n_instance_extensions, instance_extensions);
+
+  vkEnumerateDeviceExtensionProperties (vk_device, NULL, &n_device_extensions, NULL);
+  device_extensions = g_newa (VkExtensionProperties, n_device_extensions);
+  vkEnumerateDeviceExtensionProperties (vk_device, NULL, &n_device_extensions, device_extensions);
+
+  g_string_append_printf (string, "| Vulkan Extensions | <details><summary>%u Extensions</summary>", n_instance_extensions + n_device_extensions);
+
+  for (uint32_t i = 0; i < n_instance_extensions; i++)
+    g_string_append_printf (string, "%s%s", i > 0 ? "<br>" : "", instance_extensions[i].extensionName);
+
+  for (uint32_t i = 0; i < n_device_extensions; i++)
+    g_string_append_printf (string, "%s%s", i > 0 ? "<br>" : "", device_extensions[i].extensionName);
+
+  g_string_append (string, "</details> |\n");
+
+  g_string_append (string, "| Features | ");
+  for (int i = 0; i < GDK_VULKAN_N_FEATURES; i++)
+    {
+      if (gdk_vulkan_has_feature (display, gdk_vulkan_feature_keys[i].value))
+        g_string_append_printf (string, "%s%s", i > 0 ? "<br>" : "", gdk_vulkan_feature_keys[i].key);
+    }
+  g_string_append (string, " |\n");
+#endif
 }
 
-static void
-set_path_label (GtkWidget   *w,
-                const char *var)
-{
-  const char *v;
+/* }}} */
+/* {{{ Environment */
 
-  v = g_getenv (var);
-  if (v != NULL)
-    {
-      set_monospace_font (w);
-      gtk_label_set_text (GTK_LABEL (w), v);
-    }
-  else
-    {
-       GtkWidget *r;
-       r = gtk_widget_get_ancestor (w, GTK_TYPE_LIST_BOX_ROW);
-       gtk_widget_set_visible (r, FALSE);
-    }
-}
+static const char *env_list[] = {
+  "AT_SPI_BUS_ADDRESS",
+  "BROADWAY_DISPLAY",
+  "DESKTOP_AUTOSTART_ID",
+  "DISPLAY",
+  "GDK_BACKEND",
+  "GDK_DEBUG",
+  "GDK_DISABLE",
+  "GDK_GL_DISABLE",
+  "GDK_SCALE",
+  "GDK_SYNCHRONIZE",
+  "GDK_VULKAN_DISABLE",
+  "GDK_WIN32_CAIRO_DB",
+  "GDK_WIN32_DISABLE_HIDPI",
+  "GDK_WIN32_PER_MONITOR_HIDPI",
+  "GDK_WIN32_TABLET_INPUT_API",
+  "GOBJECT_DEBUG",
+  "GSETINGS_SCHEMA_DIR",
+  "GSK_CACHE_TIMEOUT",
+  "GSK_DEBUG",
+  "GSK_GPU_DISABLE",
+  "GSK_MAX_TEXTURE_SIZE",
+  "GSK_RENDERER",
+  "GSK_SUBSET_FONTS",
+  "GTK_A11Y",
+  "GTK_CSD",
+  "GTK_CSS_DEBUG",
+  "GTK_DATA_PREFIX",
+  "GTK_DEBUG",
+  "GTK_DEBUG_AUTO_QUIT",
+  "GTK_EXE_PREFIX",
+  "GTK_IM_MODULE",
+  "GTK_INSPECTOR_DISPLAY",
+  "GTK_INSPECTOR_RENDERER",
+  "GTK_MEDIA",
+  "GTK_PATH",
+  "GTK_RTL",
+  "GTK_SLOWDOWN",
+  "GTK_THEME",
+  "GTK_WIDGET_ASSERT_COMPONENTS",
+  "LANG",
+  "LANGUAGE",
+  "LC_ALL",
+  "LC_CTYPE",
+  "LPDEST",
+  "PANGOCAIRO_BACKEND",
+  "PANGO_LANGUAGE",
+  "PRINTER",
+  "SECMEM_FORCE_FALLBACK",
+  "WAYLAND_DISPLAY",
+  "XDG_DATA_HOME",
+  "XDG_DATA_DIRS",
+  "XDG_RUNTIME_DIR",
+};
 
 static void
 init_env (GtkInspectorGeneral *gen)
 {
   set_monospace_font (gen->prefix);
   gtk_label_set_text (GTK_LABEL (gen->prefix), _gtk_get_data_prefix ());
-  set_path_label (gen->xdg_data_home, "XDG_DATA_HOME");
-  set_path_label (gen->xdg_data_dirs, "XDG_DATA_DIRS");
-  set_path_label (gen->gtk_path, "GTK_PATH");
-  set_path_label (gen->gtk_exe_prefix, "GTK_EXE_PREFIX");
-  set_path_label (gen->gtk_data_prefix, "GTK_DATA_PREFIX");
-  set_path_label (gen->gsettings_schema_dir, "GSETTINGS_SCHEMA_DIR");
+
+  for (guint i = 0; i < G_N_ELEMENTS (env_list); i++)
+    {
+      const char *val = g_getenv (env_list[i]);
+
+      if (val)
+        {
+          GtkStringPair *pair = gtk_string_pair_new (env_list[i], val);
+          g_list_store_append (gen->environment_list, pair);
+          g_object_unref (pair);
+        }
+    }
 }
+
+static void
+dump_env (GdkDisplay *display,
+          GString    *s)
+{
+  GString *env = g_string_new ("");
+  guint count = 0;
+
+  g_string_append_printf (s, "| Prefix | %s |\n", _gtk_get_data_prefix ());
+
+  for (guint i = 0; i < G_N_ELEMENTS (env_list); i++)
+    {
+      const char *val = g_getenv (env_list[i]);
+
+      if (val)
+        {
+          count++;
+          g_string_append_printf (env, "%s%s=%s", i > 0 ? "<br>" : "", env_list[i], val);
+        }
+    }
+
+  g_string_append_printf (s, "| Environment| <details><summary>%u relevant variables</summary>", count);
+  g_string_append (s, env->str);
+  g_string_append (s, "</details> |\n");
+
+  g_string_free (env, TRUE);
+}
+
+/* }}} */
+/* {{{ Display */
 
 static const char *
 translate_subpixel_layout (GdkSubpixelLayout subpixel)
@@ -710,6 +1184,21 @@ append_wayland_protocol_row (GtkInspectorGeneral *gen,
 }
 
 static void
+append_wayland_protocol (GString         *string,
+                         struct wl_proxy *proxy,
+                         guint           *count)
+{
+  if (proxy == NULL)
+    return;
+
+  g_string_append_printf (string, "%s%s (%u)",
+                          *count == 0 ? "" : "<br>",
+                          wl_proxy_get_class (proxy),
+                          wl_proxy_get_version (proxy));
+  (*count)++;
+}
+
+static void
 add_wayland_protocols (GdkDisplay          *display,
                        GtkInspectorGeneral *gen)
 {
@@ -743,6 +1232,50 @@ add_wayland_protocols (GdkDisplay          *display,
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->single_pixel_buffer);
       append_wayland_protocol_row (gen, d->color ? gdk_wayland_color_get_color_manager (d->color) : NULL);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->system_bell);
+    }
+}
+
+static void
+dump_wayland_protocols (GdkDisplay *display,
+                        GString    *string)
+{
+  if (GDK_IS_WAYLAND_DISPLAY (display))
+    {
+      GdkWaylandDisplay *d = (GdkWaylandDisplay *) display;
+      GString *ext = g_string_new ("");
+      guint count = 0;
+
+      g_string_append (string, "| Protocols | <details><summary>");
+
+      append_wayland_protocol (ext, (struct wl_proxy *)d->compositor, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->shm, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->linux_dmabuf, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_wm_base, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->zxdg_shell_v6, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->gtk_shell, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->data_device_manager, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->subcompositor, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->pointer_gestures, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->primary_selection_manager, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->tablet_manager, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_exporter, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_exporter_v2, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_importer, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_importer_v2, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->keyboard_shortcuts_inhibit, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->server_decoration_manager, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_output_manager, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->idle_inhibit_manager, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_activation, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->fractional_scale, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->viewporter, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->presentation, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->single_pixel_buffer, &count);
+      append_wayland_protocol (ext, d->color ? gdk_wayland_color_get_color_manager (d->color) : NULL, &count);
+      append_wayland_protocol (ext, (struct wl_proxy *)d->system_bell, &count);
+
+      g_string_append_printf (string, "%u Protocols</summary>%s</details> |\n", count, ext->str);
+      g_string_free (ext, TRUE);
     }
 }
 #endif
@@ -794,6 +1327,37 @@ populate_display (GdkDisplay *display, GtkInspectorGeneral *gen)
   gtk_widget_set_visible (gen->display_extensions_row,
                           gtk_widget_get_first_child (gen->display_extensions_box) != NULL);
 }
+
+static void
+populate_display_notify_cb (GdkDisplay          *display,
+                            GParamSpec          *pspec,
+                            GtkInspectorGeneral *gen)
+{
+  populate_display (display, gen);
+}
+
+static void
+init_display (GtkInspectorGeneral *gen)
+{
+  g_signal_connect (gen->display, "notify", G_CALLBACK (populate_display_notify_cb), gen);
+
+  populate_display (gen->display, gen);
+}
+
+static void
+dump_display (GdkDisplay *display,
+              GString    *string)
+{
+  g_string_append_printf (string, "| Display | %s |\n", gdk_display_get_name (display));
+  g_string_append_printf (string, "| RGBA Visual | %s |\n", gdk_display_is_rgba (display) ? "✓" : "✗");
+  g_string_append_printf (string, "| Composited | %s |\n", gdk_display_is_composited (display) ? "✓" : "✗");
+#ifdef GDK_WINDOWING_WAYLAND
+  dump_wayland_protocols (display, string);
+#endif
+}
+
+/* }}} */
+/* {{{ Monitors */
 
 static void
 add_monitor (GtkInspectorGeneral *gen,
@@ -871,6 +1435,74 @@ add_monitor (GtkInspectorGeneral *gen,
 }
 
 static void
+dump_monitor (GdkMonitor *monitor,
+              guint       i,
+              GString    *string)
+{
+  const char *manufacturer;
+  const char *model;
+  char *value;
+  GdkRectangle rect;
+  double scale;
+  char *scale_str = NULL;
+
+  manufacturer = gdk_monitor_get_manufacturer (monitor);
+  model = gdk_monitor_get_model (monitor);
+  value = g_strdup_printf ("%s%s%s",
+                           manufacturer ? manufacturer : "",
+                           manufacturer || model ? " " : "",
+                           model ? model : "");
+  g_string_append_printf (string, "| Monitor %u | %s |\n", i, value);
+  g_free (value);
+
+  g_string_append_printf (string, "| Description | %s |\n", gdk_monitor_get_description (monitor));
+  g_string_append_printf (string, "| Connector | %s |\n", gdk_monitor_get_connector (monitor));
+
+  gdk_monitor_get_geometry (monitor, &rect);
+  scale = gdk_monitor_get_scale (monitor);
+  if (scale != 1.0)
+    scale_str = g_strdup_printf (" @ %.2f", scale);
+
+  value = g_strdup_printf ("%d × %d%s at %d, %d",
+                           rect.width, rect.height,
+                           scale_str ? scale_str : "",
+                           rect.x, rect.y);
+  g_string_append_printf (string, "| Geometry | %s |\n", value);
+  g_free (value);
+  g_free (scale_str);
+
+  value = g_strdup_printf ("%d × %d",
+                           (int) (rect.width * scale),
+                           (int) (rect.height * scale));
+  g_string_append_printf (string, "| Pixels | %s |\n", value);
+  g_free (value);
+
+  value = g_strdup_printf ("%d × %d mm²",
+                           gdk_monitor_get_width_mm (monitor),
+                           gdk_monitor_get_height_mm (monitor));
+  g_string_append_printf (string, "| Size | %s |\n", value);
+  g_free (value);
+
+  value = g_strdup_printf ("%.1f dpi", gdk_monitor_get_dpi (monitor));
+  g_string_append_printf (string, "| Resolution | %s |\n", value);
+  g_free (value);
+
+  if (gdk_monitor_get_refresh_rate (monitor) != 0)
+    {
+      value = g_strdup_printf ("%.2f Hz",
+                               0.001 * gdk_monitor_get_refresh_rate (monitor));
+      g_string_append_printf (string, "| Refresh Rate | %s |\n", value);
+      g_free (value);
+    }
+
+  if (gdk_monitor_get_subpixel_layout (monitor) != GDK_SUBPIXEL_LAYOUT_UNKNOWN)
+    {
+      g_string_append_printf (string, "| Subpixel Layout | %s |\n",
+                              translate_subpixel_layout (gdk_monitor_get_subpixel_layout (monitor)));
+    }
+}
+
+static void
 populate_monitors (GdkDisplay          *display,
                    GtkInspectorGeneral *gen)
 {
@@ -891,11 +1523,19 @@ populate_monitors (GdkDisplay          *display,
 }
 
 static void
-populate_display_notify_cb (GdkDisplay          *display,
-                            GParamSpec          *pspec,
-                            GtkInspectorGeneral *gen)
+dump_monitors (GdkDisplay *display,
+               GString    *string)
 {
-  populate_display (display, gen);
+  GListModel *list;
+
+  list = gdk_display_get_monitors (display);
+
+  for (guint i = 0; i < g_list_model_get_n_items (list); i++)
+    {
+      GdkMonitor *monitor = g_list_model_get_item (list, i);
+      dump_monitor (monitor, i, string);
+      g_object_unref (monitor);
+    }
 }
 
 static void
@@ -909,83 +1549,16 @@ monitors_changed_cb (GListModel          *monitors,
 }
 
 static void
-init_display (GtkInspectorGeneral *gen)
+init_monitors (GtkInspectorGeneral *gen)
 {
-  g_signal_connect (gen->display, "notify", G_CALLBACK (populate_display_notify_cb), gen);
   g_signal_connect (gdk_display_get_monitors (gen->display), "items-changed",
                     G_CALLBACK (monitors_changed_cb), gen);
 
-  populate_display (gen->display, gen);
   populate_monitors (gen->display, gen);
 }
 
-static void
-init_pango (GtkInspectorGeneral *gen)
-{
-  PangoFontMap *fontmap;
-  const char *type;
-  const char *name;
-
-  fontmap = pango_cairo_font_map_get_default ();
-  type = G_OBJECT_TYPE_NAME (fontmap);
-  if (strcmp (type, "PangoCairoFcFontMap") == 0)
-    name = "fontconfig";
-  else if (strcmp (type, "PangoCairoCoreTextFontMap") == 0)
-    name = "coretext";
-  else if (strcmp (type, "PangoCairoWin32FontMap") == 0)
-    name = "win32";
-  else
-    name = type;
-
-  gtk_label_set_label (GTK_LABEL (gen->pango_fontmap), name);
-}
-
-static void
-init_media (GtkInspectorGeneral *gen)
-{
-  GIOExtension *e;
-  const char *name;
-
-  e = gtk_media_file_get_extension ();
-  name = g_io_extension_get_name (e);
-  gtk_label_set_label (GTK_LABEL (gen->media_backend), name);
-}
-
-static void
-im_module_changed (GtkSettings         *settings,
-                   GParamSpec          *pspec,
-                   GtkInspectorGeneral *gen)
-{
-  if (!gen->display)
-    return;
-
-  gtk_label_set_label (GTK_LABEL (gen->im_module),
-                       _gtk_im_module_get_default_context_id (gen->display));
-}
-
-static void
-init_im_module (GtkInspectorGeneral *gen)
-{
-  GtkSettings *settings = gtk_settings_get_for_display (gen->display);
-  const char *default_context_id = _gtk_im_module_get_default_context_id (gen->display);
-
-  gtk_label_set_label (GTK_LABEL (gen->im_module), default_context_id);
-
-  if (g_getenv ("GTK_IM_MODULE") != NULL)
-    {
-      /* This can't update if GTK_IM_MODULE envvar is set */
-      gtk_widget_set_tooltip_text (gen->im_module,
-                                   _("IM Context is hardcoded by GTK_IM_MODULE"));
-      gtk_widget_set_sensitive (gen->im_module, FALSE);
-      return;
-    }
-
-  g_signal_connect_object (settings,
-                           "notify::gtk-im-module",
-                           G_CALLBACK (im_module_changed),
-                           gen, 0);
-}
-
+/* }}} */
+/* {{{ Seats */
 
 static void populate_seats (GtkInspectorGeneral *gen);
 
@@ -1024,6 +1597,45 @@ add_tool (GtkInspectorGeneral *gen,
 
   if (str->len > 0)
     add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Axes", str->str, 20);
+
+  g_string_free (str, TRUE);
+}
+
+static void
+dump_tool (GdkDeviceTool *tool,
+           GString       *string)
+{
+  GdkAxisFlags axes;
+  GString *str;
+  char *val;
+  GEnumClass *eclass;
+  GEnumValue *evalue;
+  GFlagsClass *fclass;
+  GFlagsValue *fvalue;
+
+  val = g_strdup_printf ("Serial %" G_GUINT64_FORMAT, gdk_device_tool_get_serial (tool));
+  g_string_append_printf (string, "| Tool | %s |\n", val);
+  g_free (val);
+
+  eclass = g_type_class_ref (GDK_TYPE_DEVICE_TOOL_TYPE);
+  evalue = g_enum_get_value (eclass, gdk_device_tool_get_tool_type (tool));
+  g_string_append_printf (string, "| Type | %s |\n", evalue->value_nick);
+  g_type_class_unref (eclass);
+
+  fclass = g_type_class_ref (GDK_TYPE_AXIS_FLAGS);
+  str = g_string_new ("");
+  axes = gdk_device_tool_get_axes (tool);
+  while ((fvalue = g_flags_get_first_value (fclass, axes)))
+    {
+      if (str->len > 0)
+        g_string_append (str, "<br>");
+      g_string_append (str, fvalue->value_nick);
+      axes &= ~fvalue->value;
+    }
+  g_type_class_unref (fclass);
+
+  if (str->len > 0)
+    g_string_append_printf (string, "| Axes | %s |\n", str->str);
 
   g_string_free (str, TRUE);
 }
@@ -1069,6 +1681,49 @@ add_device (GtkInspectorGeneral *gen,
         }
 
       add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Layouts", s->str, 20);
+      g_string_free (s, TRUE);
+    }
+#endif
+
+  g_type_class_unref (class);
+}
+
+static void
+dump_device (GdkDevice *device,
+             GString   *string)
+{
+  const char *name;
+  guint n_touches;
+  GEnumClass *class;
+  GEnumValue *value;
+
+  name = gdk_device_get_name (device);
+
+  class = g_type_class_ref (GDK_TYPE_INPUT_SOURCE);
+  value = g_enum_get_value (class, gdk_device_get_source (device));
+
+  g_string_append_printf (string, "| %s | %s |\n", name, value->value_nick);
+
+  g_object_get (device, "num-touches", &n_touches, NULL);
+  if (n_touches > 0)
+    g_string_append_printf (string, "| Touches | %d |\n", n_touches);
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DEVICE (device) &&
+      gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+    {
+      struct xkb_keymap *keymap = gdk_wayland_device_get_xkb_keymap (device);
+      GString *s;
+
+      s = g_string_new ("");
+      for (int i = 0; i < xkb_keymap_num_layouts (keymap); i++)
+        {
+          if (s->len > 0)
+            g_string_append (s, "<br>");
+          g_string_append (s, xkb_keymap_layout_get_name (keymap, i));
+        }
+
+       g_string_append_printf (string, "| Layouts | %s |\n", s->str);
       g_string_free (s, TRUE);
     }
 #endif
@@ -1149,6 +1804,33 @@ add_seat (GtkInspectorGeneral *gen,
 }
 
 static void
+dump_seat (GdkSeat *seat,
+           int      i,
+           GString *string)
+{
+  char *caps;
+  GList *list, *l;
+
+  caps = get_seat_capabilities (seat);
+  g_string_append_printf (string, "| Seat %d | %s |\n", i, caps);
+  g_free (caps);
+
+  list = gdk_seat_get_devices (seat, GDK_SEAT_CAPABILITY_ALL);
+
+  for (l = list; l; l = l->next)
+    dump_device (GDK_DEVICE (l->data), string);
+
+  g_list_free (list);
+
+  list = gdk_seat_get_tools (seat);
+
+  for (l = list; l; l = l->next)
+    dump_tool (l->data, string);
+
+  g_list_free (list);
+}
+
+static void
 disconnect_seat (GtkInspectorGeneral *gen,
                  GdkSeat             *seat)
 {
@@ -1174,6 +1856,21 @@ populate_seats (GtkInspectorGeneral *gen)
 }
 
 static void
+dump_seats (GdkDisplay *display,
+            GString    *string)
+{
+  GList *list, *l;
+  int i;
+
+  list = gdk_display_list_seats (display);
+
+  for (l = list, i = 0; l; l = l->next, i++)
+    dump_seat (GDK_SEAT (l->data), i, string);
+
+  g_list_free (list);
+}
+
+static void
 seat_added (GdkDisplay          *display,
             GdkSeat             *seat,
             GtkInspectorGeneral *gen)
@@ -1191,13 +1888,15 @@ seat_removed (GdkDisplay          *display,
 }
 
 static void
-init_device (GtkInspectorGeneral *gen)
+init_seats (GtkInspectorGeneral *gen)
 {
   g_signal_connect (gen->display, "seat-added", G_CALLBACK (seat_added), gen);
   g_signal_connect (gen->display, "seat-removed", G_CALLBACK (seat_removed), gen);
 
   populate_seats (gen);
 }
+
+ /* }}} */
 
 static void
 gtk_inspector_general_init (GtkInspectorGeneral *gen)
@@ -1289,6 +1988,8 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
+  g_type_ensure (GTK_TYPE_STRING_PAIR);
+
   object_class->constructed = gtk_inspector_general_constructed;
   object_class->dispose = gtk_inspector_general_dispose;
 
@@ -1349,16 +2050,14 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, app_id);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, resource_path);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, prefix);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, xdg_data_home);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, xdg_data_dirs);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gtk_path);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gtk_exe_prefix);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gtk_data_prefix);
-  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gsettings_schema_dir);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, environment_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, environment_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_name);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_composited);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_rgba);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, device_box);
+
+  gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_general_clip);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
@@ -1370,15 +2069,55 @@ gtk_inspector_general_set_display (GtkInspectorGeneral *gen,
   gen->display = display;
 
   init_version (gen);
-  init_env (gen);
-  init_app_id (gen);
-  init_display (gen);
   init_pango (gen);
   init_media (gen);
+  init_im_module (gen);
+  init_app_id (gen);
+  init_env (gen);
+  init_display (gen);
+  init_monitors (gen);
+  init_seats (gen);
   init_gl (gen);
   init_vulkan (gen);
-  init_device (gen);
-  init_im_module (gen);
 }
 
-// vim: set et sw=2 ts=2:
+static char *
+generate_dump (GdkDisplay *display)
+{
+  GString *string;
+
+  string = g_string_new ("");
+  g_string_append (string, "| Name | Value |\n");
+  g_string_append (string, "| - | - |\n");
+
+  dump_version (display, string);
+  dump_pango (display, string);
+  dump_media (display, string);
+  dump_im_module (display, string);
+  dump_app_id (display, string);
+  dump_env (display, string);
+  dump_display (display, string);
+  dump_monitors (display, string);
+  dump_seats (display, string);
+  dump_gl (display, string);
+  dump_vulkan (display, string);
+
+  return g_string_free (string, FALSE);
+}
+
+static void
+gtk_inspector_general_clip (GtkButton           *button,
+                            GtkInspectorGeneral *gen)
+{
+  char *text;
+  GdkClipboard *clipboard;
+
+  text = generate_dump (gen->display);
+
+  clipboard = gtk_widget_get_clipboard (GTK_WIDGET (gen));
+  gdk_clipboard_set_text (clipboard, text);
+
+  g_free (text);
+}
+
+/* vim:set foldmethod=marker: */
