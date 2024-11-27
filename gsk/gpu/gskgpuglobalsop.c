@@ -67,10 +67,13 @@ gsk_gpu_globals_op_gl_command (GskGpuOp          *op,
                                GskGLCommandState *state)
 {
   GskGpuGlobalsOp *self = (GskGpuGlobalsOp *) op;
+  gsize globals_size;
+
+  globals_size = gsk_gpu_device_get_globals_aligned_size (gsk_gpu_frame_get_device (frame));
 
   gsk_gl_buffer_bind_range (GSK_GL_BUFFER (state->globals),
                             0,
-                            self->id * sizeof (GskGpuGlobalsInstance),
+                            self->id * globals_size,
                             sizeof (GskGpuGlobalsInstance));
 
   return op->next;

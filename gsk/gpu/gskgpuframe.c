@@ -25,8 +25,7 @@
 
 /* GL_MAX_UNIFORM_BLOCK_SIZE is at 16384 */
 #define DEFAULT_STORAGE_BUFFER_SIZE 16 * 1024 * 64
-
-#define DEFAULT_N_GLOBALS (16384 / sizeof (GskGpuGlobalsInstance))
+#define DEFAULT_N_GLOBALS_SIZE 16384
 
 #define GDK_ARRAY_NAME gsk_gpu_ops
 #define GDK_ARRAY_TYPE_NAME GskGpuOps
@@ -52,7 +51,7 @@ struct _GskGpuFramePrivate
   guchar *vertex_buffer_data;
   gsize vertex_buffer_used;
   GskGpuBuffer *globals_buffer;
-  GskGpuGlobalsInstance *globals_buffer_data;
+  guchar *globals_buffer_data;
   gsize n_globals;
   GskGpuBuffer *storage_buffer;
   guchar *storage_buffer_data;
@@ -582,24 +581,26 @@ gsk_gpu_frame_add_globals (GskGpuFrame                 *self,
                            const GskGpuGlobalsInstance *globals)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
-  gsize size_needed, result;
+  gsize size_needed, globals_size, result;
+
+  globals_size = gsk_gpu_device_get_globals_aligned_size (priv->device);
 
   if (priv->globals_buffer == NULL)
     {
-      priv->globals_buffer = gsk_gpu_frame_create_globals_buffer (self, sizeof (GskGpuGlobalsInstance) * DEFAULT_N_GLOBALS);
+      priv->globals_buffer = gsk_gpu_frame_create_globals_buffer (self, DEFAULT_N_GLOBALS_SIZE);
       if (priv->globals_buffer == NULL)
         return 0;
     }
   if (priv->globals_buffer_data == NULL)
-    priv->globals_buffer_data = (GskGpuGlobalsInstance *) gsk_gpu_buffer_map (priv->globals_buffer);
+    priv->globals_buffer_data = gsk_gpu_buffer_map (priv->globals_buffer);
 
-  size_needed = sizeof (GskGpuGlobalsInstance) * (priv->n_globals + 1);
+  size_needed = globals_size * (priv->n_globals + 1);
 
   if (gsk_gpu_buffer_get_size (priv->globals_buffer) < size_needed)
     {
       gsize old_size = gsk_gpu_buffer_get_size (priv->globals_buffer);
       GskGpuBuffer *new_buffer = gsk_gpu_frame_create_globals_buffer (self, old_size * 2);
-      GskGpuGlobalsInstance *new_data = (GskGpuGlobalsInstance *) gsk_gpu_buffer_map (new_buffer);
+      guchar *new_data = gsk_gpu_buffer_map (new_buffer);
 
       if (priv->globals_buffer_data)
         {
@@ -613,7 +614,7 @@ gsk_gpu_frame_add_globals (GskGpuFrame                 *self,
 
   result = priv->n_globals;
 
-  priv->globals_buffer_data[priv->n_globals] = *globals;
+  *((GskGpuGlobalsInstance *) (priv->globals_buffer_data + priv->n_globals * globals_size)) = *globals;
   priv->n_globals++;
 
   return result;
