@@ -390,7 +390,7 @@ check_ascending (GtkSorter  *sorter,
       gpointer item1 = g_list_model_get_item (model, i);
       gpointer item2 = g_list_model_get_item (model, i + 1);
 
-      g_assert (gtk_sorter_compare (sorter, item1, item2) != GTK_ORDERING_LARGER);
+      g_assert_true (gtk_sorter_compare (sorter, item1, item2) != GTK_ORDERING_LARGER);
 
       g_object_unref (item1);
       g_object_unref (item2);

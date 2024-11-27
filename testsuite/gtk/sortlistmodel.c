@@ -67,7 +67,7 @@ section_model_to_string (GListModel *model)
   while (i < g_list_model_get_n_items (model))
     {
       gtk_section_model_get_section (GTK_SECTION_MODEL (model), i, &s, &e);
-      g_assert (s == i);
+      g_assert_true (s == i);
 
       if (i > 0)
         g_string_append (string, " ");

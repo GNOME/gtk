@@ -2924,12 +2924,12 @@ builder_object_get_file_property (GtkBuilder  *builder, const gchar *object_id)
   GObject *obj = gtk_builder_get_object (builder, object_id);
   GFile *value = NULL;
 
-  g_assert (obj);
+  g_assert_nonnull (obj);
 
-  g_object_get(obj, "file", &value, NULL);
-  g_assert (value);
+  g_object_get (obj, "file", &value, NULL);
+  g_assert_nonnull (value);
 
-  g_assert (g_type_is_a (G_OBJECT_TYPE (value), G_TYPE_FILE));
+  g_assert_true (g_type_is_a (G_OBJECT_TYPE (value), G_TYPE_FILE));
 
   return value;
 }
@@ -2956,24 +2956,24 @@ test_picture (void)
 
   file_path = builder_object_get_file_property (builder, "relative_path");
   path = g_file_get_path (file_path);
-  g_assert (path);
+  g_assert_nonnull (path);
 
   /* Check path is absolute */
-  g_assert (g_path_is_absolute (path));
+  g_assert_true (g_path_is_absolute (path));
 
   /* Check contents can be loaded */
-  g_assert (g_file_load_contents (file_path, NULL, &contents, NULL, NULL, NULL));
+  g_assert_true (g_file_load_contents (file_path, NULL, &contents, NULL, NULL, NULL));
   g_free (contents);
 
   file_uri = builder_object_get_file_property (builder, "relative_uri");
   uri = g_file_get_uri (file_uri);
-  g_assert (uri);
+  g_assert_nonnull (uri);
 
   /* Check uri is absolute */
-  g_assert (g_str_has_prefix (uri, "file://"));
-  g_assert (g_path_is_absolute (uri + strlen("file://")));
+  g_assert_true (g_str_has_prefix (uri, "file://"));
+  g_assert_true (g_path_is_absolute (uri + strlen("file://")));
 
-  g_assert (g_file_load_contents (file_uri, NULL, &contents, NULL, NULL, NULL));
+  g_assert_true (g_file_load_contents (file_uri, NULL, &contents, NULL, NULL, NULL));
   g_free (contents);
 
   g_object_unref (builder);
