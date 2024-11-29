@@ -13,11 +13,17 @@ typedef enum
   GDK_COLOR_STATE_ID_SRGB_LINEAR,
   GDK_COLOR_STATE_ID_REC2100_PQ,
   GDK_COLOR_STATE_ID_REC2100_LINEAR,
-  GDK_COLOR_STATE_ID_OKLAB,
-  GDK_COLOR_STATE_ID_OKLCH,
 
   GDK_COLOR_STATE_N_IDS
 } GdkColorStateId;
+
+typedef enum
+{
+  GDK_BUILTIN_COLOR_STATE_ID_OKLAB,
+  GDK_BUILTIN_COLOR_STATE_ID_OKLCH,
+
+  GDK_BUILTIN_COLOR_STATE_N_IDS
+} GdkBuiltinColorStateId;
 
 typedef struct _GdkColorStateClass GdkColorStateClass;
 
@@ -69,18 +75,33 @@ struct _GdkDefaultColorState
   GdkCicp cicp;
 };
 
+typedef struct _GdkBuiltinColorState GdkBuiltinColorState;
+
+struct _GdkBuiltinColorState
+{
+  GdkColorState parent;
+
+  const char *name;
+  GdkFloatColorConvert convert_to[GDK_COLOR_STATE_N_IDS];
+  GdkFloatColorConvert convert_from[GDK_COLOR_STATE_N_IDS];
+};
+
 extern GdkDefaultColorState gdk_default_color_states[GDK_COLOR_STATE_N_IDS];
+extern GdkBuiltinColorState gdk_builtin_color_states[GDK_BUILTIN_COLOR_STATE_N_IDS];
 
 #define GDK_COLOR_STATE_SRGB           ((GdkColorState *) &gdk_default_color_states[GDK_COLOR_STATE_ID_SRGB])
 #define GDK_COLOR_STATE_SRGB_LINEAR    ((GdkColorState *) &gdk_default_color_states[GDK_COLOR_STATE_ID_SRGB_LINEAR])
 #define GDK_COLOR_STATE_REC2100_PQ     ((GdkColorState *) &gdk_default_color_states[GDK_COLOR_STATE_ID_REC2100_PQ])
 #define GDK_COLOR_STATE_REC2100_LINEAR ((GdkColorState *) &gdk_default_color_states[GDK_COLOR_STATE_ID_REC2100_LINEAR])
-#define GDK_COLOR_STATE_OKLAB          ((GdkColorState *) &gdk_default_color_states[GDK_COLOR_STATE_ID_OKLAB])
-#define GDK_COLOR_STATE_OKLCH          ((GdkColorState *) &gdk_default_color_states[GDK_COLOR_STATE_ID_OKLCH])
+#define GDK_COLOR_STATE_OKLAB          ((GdkColorState *) &gdk_builtin_color_states[GDK_BUILTIN_COLOR_STATE_ID_OKLAB])
+#define GDK_COLOR_STATE_OKLCH          ((GdkColorState *) &gdk_builtin_color_states[GDK_BUILTIN_COLOR_STATE_ID_OKLCH])
 
 #define GDK_IS_DEFAULT_COLOR_STATE(c) ((GdkDefaultColorState *) (c) >= &gdk_default_color_states[0] && \
                                        (GdkDefaultColorState *) (c) < &gdk_default_color_states[GDK_COLOR_STATE_N_IDS])
 #define GDK_DEFAULT_COLOR_STATE_ID(c) ((GdkColorStateId) (((GdkDefaultColorState *) c) - gdk_default_color_states))
+#define GDK_IS_BUILTIN_COLOR_STATE(c) ((GdkBuiltinColorState *) (c) >= &gdk_builtin_color_states[0] && \
+                                       (GdkBuiltinColorState *) (c) < &gdk_builtin_color_states[GDK_BUILTIN_COLOR_STATE_N_IDS])
+#define GDK_BUILTIN_COLOR_STATE_ID(c) ((GdkBuiltinColorStateId) (((GdkBuiltinColorState *) c) - gdk_builtin_color_states))
 
 const char *    gdk_color_state_get_name                (GdkColorState          *self);
 GdkColorState * gdk_color_state_get_no_srgb_tf          (GdkColorState          *self);
@@ -123,7 +144,8 @@ gdk_color_state_get_by_id (GdkColorStateId id)
 static inline GdkColorState *
 _gdk_color_state_ref (GdkColorState *self)
 {
-  if (GDK_IS_DEFAULT_COLOR_STATE (self))
+  if (GDK_IS_DEFAULT_COLOR_STATE (self) ||
+      GDK_IS_BUILTIN_COLOR_STATE (self))
     return self;
 
   g_atomic_ref_count_inc (&self->ref_count);
@@ -135,7 +157,8 @@ _gdk_color_state_ref (GdkColorState *self)
 static inline void
 _gdk_color_state_unref (GdkColorState *self)
 {
-  if (GDK_IS_DEFAULT_COLOR_STATE (self))
+  if (GDK_IS_DEFAULT_COLOR_STATE (self) ||
+      GDK_IS_BUILTIN_COLOR_STATE (self))
     return;
 
   if (g_atomic_ref_count_dec (&self->ref_count))

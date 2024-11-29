@@ -74,7 +74,8 @@ gsk_gpu_conic_gradient_op (GskGpuFrame            *frame,
    */
   gsk_gpu_shader_op_alloc (frame,
                            &GSK_GPU_CONIC_GRADIENT_OP_CLASS,
-                           gsk_gpu_color_states_create (ccs, TRUE, ics, TRUE),
+                           ccs ? gsk_gpu_color_states_create (ccs, TRUE, ics, TRUE)
+                               : gsk_gpu_color_states_create_equal (TRUE, TRUE),
                            (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_GRADIENTS) ? VARIATION_SUPERSAMPLING : 0),
                            clip,
                            NULL,
