@@ -71,11 +71,12 @@ gsize                   gdk_data_format_n_planes                        (GdkData
 gsize                   gdk_data_format_alignment                       (GdkDataFormat               format) G_GNUC_CONST;
 gsize                   gdk_data_format_block_width                     (GdkDataFormat               format) G_GNUC_CONST;
 gsize                   gdk_data_format_block_height                    (GdkDataFormat               format) G_GNUC_CONST;
-gboolean                gdk_data_format_is_yuv                          (GdkDataFormat               format) G_GNUC_CONST;
 
 gboolean                gdk_data_format_find_by_dmabuf_fourcc           (guint32                     fourcc,
-                                                                         GdkDataFormat              *out_format);
-guint32                 gdk_data_format_get_dmabuf_fourcc               (GdkDataFormat               format) G_GNUC_CONST;
+                                                                         GdkDataFormat              *out_format,
+                                                                         gboolean                   *out_is_yuv);
+guint32                 gdk_data_format_get_dmabuf_rgb_fourcc           (GdkDataFormat               format) G_GNUC_CONST;
+guint32                 gdk_data_format_get_dmabuf_yuv_fourcc           (GdkDataFormat               format) G_GNUC_CONST;
 
 #ifdef GDK_RENDERING_VULKAN
 VkFormat                gdk_data_format_vk_format                       (GdkDataFormat               format,

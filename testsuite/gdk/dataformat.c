@@ -176,9 +176,12 @@ udmabuf_texture_new_for_data (GBytes              *bytes,
                               GdkColorState       *color_state,
                               GError             **error)
 {
-  guint32 fourcc = gdk_data_format_get_dmabuf_fourcc (buffer->format);
+  guint32 fourcc;
   const guchar *data = g_bytes_get_data (bytes, NULL);
 
+  fourcc = gdk_data_format_get_dmabuf_rgb_fourcc (buffer->format);
+  if (fourcc == 0)
+    fourcc = gdk_data_format_get_dmabuf_yuv_fourcc (buffer->format);
   if (fourcc == 0)
     {
       return NULL;

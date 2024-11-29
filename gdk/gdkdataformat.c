@@ -14,7 +14,10 @@ struct _GdkDataFormatDescription
   gsize n_planes;
   gsize alignment;
   gsize block_size[2];
-  guint32 dmabuf_fourcc;
+  struct {
+    guint32 rgb_fourcc;
+    guint32 yuv_fourcc;
+  } dmabuf;
 #ifdef GDK_RENDERING_VULKAN
   struct {
     VkFormat format;
@@ -320,7 +323,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 2 },
-    .dmabuf_fourcc = DRM_FORMAT_NV12,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_NV12,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8_B8R8_2PLANE_420_UNORM,
@@ -337,7 +343,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 2 },
-    .dmabuf_fourcc = DRM_FORMAT_NV21,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_NV21,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8_B8R8_2PLANE_420_UNORM,
@@ -354,7 +363,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_NV16,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_NV16,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8_B8R8_2PLANE_422_UNORM,
@@ -371,7 +383,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_NV61,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_NV61,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8_B8R8_2PLANE_422_UNORM,
@@ -388,7 +403,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 1, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_NV24,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_NV24,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8_B8R8_2PLANE_444_UNORM,
@@ -405,7 +423,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 1, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_NV42,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_NV42,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8_B8R8_2PLANE_444_UNORM,
@@ -422,7 +443,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 2 },
-    .dmabuf_fourcc = DRM_FORMAT_P010,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_P010,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G10X6_B10X6R10X6_2PLANE_420_UNORM_3PACK16,
@@ -439,7 +463,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 2 },
-    .dmabuf_fourcc = DRM_FORMAT_P012,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_P012,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G12X4_B12X4R12X4_2PLANE_420_UNORM_3PACK16,
@@ -456,7 +483,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 2,
     .alignment = 4,
     .block_size = { 2, 2 },
-    .dmabuf_fourcc = DRM_FORMAT_P016,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_P016,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G16_B16R16_2PLANE_420_UNORM,
@@ -473,7 +503,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 4, 4 },
-    .dmabuf_fourcc = DRM_FORMAT_YUV410,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YUV410,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_UNDEFINED,
@@ -490,7 +523,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 4, 4 },
-    .dmabuf_fourcc = DRM_FORMAT_YVU410,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YVU410,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_UNDEFINED,
@@ -507,7 +543,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 4, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_YUV411,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YUV411,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_UNDEFINED,
@@ -524,7 +563,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 4, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_YVU411,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YVU411,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_UNDEFINED,
@@ -541,7 +583,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 2, 2 },
-    .dmabuf_fourcc = DRM_FORMAT_YUV420,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YUV420,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM,
@@ -558,7 +603,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 2, 2 },
-    .dmabuf_fourcc = DRM_FORMAT_YVU420,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YVU420,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8_B8_R8_3PLANE_420_UNORM,
@@ -575,7 +623,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 2, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_YUV422,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YUV422,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM,
@@ -592,7 +643,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 2, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_YVU422,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YVU422,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM,
@@ -609,7 +663,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 1, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_YUV444,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YUV444,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM,
@@ -626,7 +683,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 1, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_YVU444,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YVU444,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8_B8_R8_3PLANE_422_UNORM,
@@ -643,7 +703,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 2, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_YUYV,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YUYV,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8B8G8R8_422_UNORM,
@@ -660,7 +723,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 2, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_YVYU,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YVYU,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_G8B8G8R8_422_UNORM,
@@ -677,7 +743,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 2, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_UYVY,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_UYVY,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_B8G8R8G8_422_UNORM,
@@ -694,7 +763,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 2, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_VYUY,
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_VYUY,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_B8G8R8G8_422_UNORM,
@@ -711,7 +783,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 1, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_RGBX8888_A8,
+    .dmabuf = {
+        .rgb_fourcc = DRM_FORMAT_RGBX8888_A8,
+        .yuv_fourcc = 0,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_UNDEFINED,
@@ -728,7 +803,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 1, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_BGRX8888_A8,
+    .dmabuf = {
+        .rgb_fourcc = DRM_FORMAT_BGRX8888_A8,
+        .yuv_fourcc = 0,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_UNDEFINED,
@@ -745,7 +823,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 1, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_XRGB8888_A8,
+    .dmabuf = {
+        .rgb_fourcc = DRM_FORMAT_XRGB8888_A8,
+        .yuv_fourcc = 0,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_UNDEFINED,
@@ -762,7 +843,10 @@ GdkDataFormatDescription data_formats[] = {
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 1, 1 },
-    .dmabuf_fourcc = DRM_FORMAT_XBGR8888_A8,
+    .dmabuf = {
+        .rgb_fourcc = DRM_FORMAT_XBGR8888_A8,
+        .yuv_fourcc = 0,
+    },
 #ifdef GDK_RENDERING_VULKAN
     .vk = {
         .format = VK_FORMAT_UNDEFINED,
@@ -874,29 +958,39 @@ gdk_data_format_block_height (GdkDataFormat format)
   return data_formats[format].block_size[1];
 }
 
-gboolean
-gdk_data_format_is_yuv (GdkDataFormat format)
+guint32
+gdk_data_format_get_dmabuf_rgb_fourcc (GdkDataFormat format)
 {
-  return data_formats[format].is_yuv;
+  return data_formats[format].dmabuf.rgb_fourcc;
 }
 
 guint32
-gdk_data_format_get_dmabuf_fourcc (GdkDataFormat format)
+gdk_data_format_get_dmabuf_yuv_fourcc (GdkDataFormat format)
 {
-  return data_formats[format].dmabuf_fourcc;
+  return data_formats[format].dmabuf.yuv_fourcc;
 }
 
 gboolean
 gdk_data_format_find_by_dmabuf_fourcc (guint32        fourcc,
-                                       GdkDataFormat *out_format)
+                                       GdkDataFormat *out_format,
+                                       gboolean      *out_is_yuv)
 {
   gsize i;
 
+  g_assert (fourcc != 0);
+
   for (i = 0; i < G_N_ELEMENTS (data_formats); i++)
     {
-      if (data_formats[i].dmabuf_fourcc == fourcc)
+      if (data_formats[i].dmabuf.rgb_fourcc == fourcc)
         {
           *out_format = i;
+          *out_is_yuv = FALSE;
+          return TRUE;
+        }
+      if (data_formats[i].dmabuf.yuv_fourcc == fourcc)
+        {
+          *out_format = i;
+          *out_is_yuv = TRUE;
           return TRUE;
         }
     }

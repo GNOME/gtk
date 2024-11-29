@@ -231,10 +231,9 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
     {
       is_yuv = FALSE;
     }
-  else if (gdk_data_format_find_by_dmabuf_fourcc (dmabuf.fourcc, &data_format))
+  else if (gdk_data_format_find_by_dmabuf_fourcc (dmabuf.fourcc, &data_format, &is_yuv))
     {
       format = gdk_data_format_get_conversion (data_format);
-      is_yuv = gdk_data_format_is_yuv (data_format);
     }
   else
     {
