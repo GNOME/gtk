@@ -59,15 +59,22 @@ gdk_dmabuf_get_mmap_formats (void)
         }
       for (i = 0; i < GDK_DATA_N_FORMATS; i++)
         {
-          fourcc = gdk_data_format_get_dmabuf_fourcc (i);
-          if (fourcc == 0)
-            continue;
-
-          GDK_DEBUG (DMABUF,
-                     "mmap advertises dmabuf format %.4s::%016" G_GINT64_MODIFIER "x",
-                     (char *) &fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
-
-          gdk_dmabuf_formats_builder_add_format (builder, fourcc, DRM_FORMAT_MOD_LINEAR);
+          fourcc = gdk_data_format_get_dmabuf_rgb_fourcc (i);
+          if (fourcc != 0)
+            {
+              GDK_DEBUG (DMABUF,
+                         "mmap advertises dmabuf format %.4s::%016" G_GINT64_MODIFIER "x as RGB",
+                         (char *) &fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
+              gdk_dmabuf_formats_builder_add_format (builder, fourcc, DRM_FORMAT_MOD_LINEAR);
+            }
+          fourcc = gdk_data_format_get_dmabuf_yuv_fourcc (i);
+          if (fourcc != 0)
+            {
+              GDK_DEBUG (DMABUF,
+                         "mmap advertises dmabuf format %.4s::%016" G_GINT64_MODIFIER "x as YUV",
+                         (char *) &fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
+              gdk_dmabuf_formats_builder_add_format (builder, fourcc, DRM_FORMAT_MOD_LINEAR);
+            }
         }
 
       formats = gdk_dmabuf_formats_builder_free_to_formats (builder);
@@ -141,6 +148,7 @@ gdk_dmabuf_do_download_mmap (GdkTexture *texture,
   gsize i, j;
   gboolean retval = FALSE;
   GdkDataFormat data_format;
+  gboolean unused;
 
   dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
 
@@ -181,7 +189,7 @@ gdk_dmabuf_do_download_mmap (GdkTexture *texture,
                           gdk_texture_get_height (texture));
       retval = TRUE;
     }
-  else if (gdk_data_format_find_by_dmabuf_fourcc (dmabuf->fourcc, &data_format))
+  else if (gdk_data_format_find_by_dmabuf_fourcc (dmabuf->fourcc, &data_format, &unused))
     {
       gdk_data_convert (&(GdkDataBuffer) {
                             .format = data_format,

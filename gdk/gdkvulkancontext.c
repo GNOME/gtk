@@ -1975,7 +1975,9 @@ gdk_vulkan_init_dmabuf (GdkDisplay *display)
   for (i = 0; i < GDK_DATA_N_FORMATS; i++)
     {
       vk_format = gdk_data_format_vk_format (i, NULL);
-      fourcc = gdk_data_format_get_dmabuf_fourcc (i);
+      fourcc = gdk_data_format_get_dmabuf_rgb_fourcc (i);
+      gdk_vulkan_context_add_dmabuf_format (display, vk_format, fourcc, vulkan_builder);
+      fourcc = gdk_data_format_get_dmabuf_yuv_fourcc (i);
       gdk_vulkan_context_add_dmabuf_format (display, vk_format, fourcc, vulkan_builder);
     }
 

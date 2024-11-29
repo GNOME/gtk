@@ -912,11 +912,10 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
       vk_format = gdk_memory_format_vk_format (format, &vk_components, &needs_conversion);
       is_yuv = FALSE;
     }
-  else if (gdk_data_format_find_by_dmabuf_fourcc (dmabuf->fourcc, &data_format))
+  else if (gdk_data_format_find_by_dmabuf_fourcc (dmabuf->fourcc, &data_format, &is_yuv))
     {
       format = gdk_data_format_get_conversion (data_format);
       vk_format = gdk_data_format_vk_format (data_format, &vk_components);
-      is_yuv = gdk_data_format_is_yuv (data_format);
       needs_conversion = is_yuv;
     }
   else
