@@ -10,7 +10,6 @@ struct _GdkDataFormatDescription
 {
   const char *name;
   GdkMemoryFormat conversion;
-  gboolean is_yuv;
   gsize n_planes;
   gsize alignment;
   gsize block_size[2];
@@ -31,49 +30,6 @@ struct _GdkDataFormatDescription
                                                              guchar                     *dst_data,
                                                              gsize                       dst_stride);
 };
-
-typedef struct _YUVCoefficients YUVCoefficients;
-
-struct _YUVCoefficients
-{
-  int v_to_r;
-  int u_to_g;
-  int v_to_g;
-  int u_to_b;
-};
-
-/* multiplied by 65536 */
-static const YUVCoefficients itu601_narrow = { 104597, -25675, -53279, 132201 };
-//static const YUVCoefficients itu601_wide = { 74711, -25864, -38050, 133176 };
-
-static inline void
-get_uv_values (const YUVCoefficients *coeffs,
-               guint8                 u,
-               guint8                 v,
-               int                   *out_r,
-               int                   *out_g,
-               int                   *out_b)
-{
-  int u2 = (int) u - 127;
-  int v2 = (int) v - 127;
-  *out_r = coeffs->v_to_r * v2;
-  *out_g = coeffs->u_to_g * u2 + coeffs->v_to_g * v2;
-  *out_b = coeffs->u_to_b * u2;
-}
-
-static inline void
-set_rgb_values (guint8 rgb[3],
-                guint8 y,
-                int    r,
-                int    g,
-                int    b)
-{
-  int y2 = y * 65536;
-
-  rgb[0] = CLAMP ((y2 + r) >> 16, 0, 255);
-  rgb[1] = CLAMP ((y2 + g) >> 16, 0, 255);
-  rgb[2] = CLAMP ((y2 + b) >> 16, 0, 255);
-}
 
 static inline void
 gdk_data_read_3_plane (guchar       *dst_data,
@@ -207,7 +163,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YUV410] = {
     .name = "YUV410",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 4, 4 },
@@ -227,7 +182,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YVU410] = {
     .name = "YVU410",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 4, 4 },
@@ -247,7 +201,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YUV411] = {
     .name = "YUV411",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 4, 1 },
@@ -267,7 +220,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YVU411] = {
     .name = "YVU411",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 4, 1 },
@@ -287,7 +239,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YUV420] = {
     .name = "YUV420",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 2, 2 },
@@ -307,7 +258,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YVU420] = {
     .name = "YVU420",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 2, 2 },
@@ -327,7 +277,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YUV422] = {
     .name = "YUV422",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -347,7 +296,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YVU422] = {
     .name = "YVU422",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -367,7 +315,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YUV444] = {
     .name = "YUV444",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 1, 1 },
@@ -387,7 +334,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YVU444] = {
     .name = "YVU444",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 3,
     .alignment = 4,
     .block_size = { 1, 1 },
@@ -407,7 +353,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YUYV] = {
     .name = "YUYV",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -427,7 +372,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_YVYU] = {
     .name = "YVYU",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -447,7 +391,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_UYVY] = {
     .name = "UYVY",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -467,7 +410,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_VYUY] = {
     .name = "VYUY",
     .conversion = GDK_MEMORY_R8G8B8,
-    .is_yuv = TRUE,
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 2, 1 },
@@ -487,7 +429,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_RGBX8_A8] = {
     .name = "GDK_DATA_RGBX8_A8",
     .conversion = GDK_MEMORY_R8G8B8A8,
-    .is_yuv = FALSE,
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 1, 1 },
@@ -507,7 +448,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_BGRX8_A8] = {
     .name = "GDK_DATA_BGRX8_A8",
     .conversion = GDK_MEMORY_B8G8R8A8,
-    .is_yuv = FALSE,
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 1, 1 },
@@ -527,7 +467,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_XRGB8_A8] = {
     .name = "GDK_DATA_XRGB8_A8",
     .conversion = GDK_MEMORY_A8R8G8B8,
-    .is_yuv = FALSE,
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 1, 1 },
@@ -547,7 +486,6 @@ GdkDataFormatDescription data_formats[] = {
   [GDK_DATA_XBGR8_A8] = {
     .name = "GDK_DATA_XBGR8_A8",
     .conversion = GDK_MEMORY_A8B8G8R8,
-    .is_yuv = FALSE,
     .n_planes = 1,
     .alignment = 4,
     .block_size = { 1, 1 },
@@ -567,21 +505,6 @@ GdkDataFormatDescription data_formats[] = {
 };
 
 static void
-yuv2rgb_line_rgb8 (guchar *data,
-                   gsize   width)
-{
-  gsize i;
-  int r, g, b;
-
-  for (i = 0; i < width; i++)
-    {
-      get_uv_values (&itu601_narrow, data[1], data[2], &r, &g, &b);
-      set_rgb_values (data, data[0], r, g, b);
-      data += 3;
-    }
-}
-
-static void
 gdk_data_convert_generic_rgb8 (const GdkDataBuffer *self,
                                guchar              *dst_data,
                                gsize                dst_stride)
@@ -593,8 +516,6 @@ gdk_data_convert_generic_rgb8 (const GdkDataBuffer *self,
       guchar *dst = dst_data + (y * dst_stride);
 
       data_formats[self->format].read_line (self, y, dst);
-      if (data_formats[self->format].is_yuv)
-        yuv2rgb_line_rgb8 (dst, self->width);
     }
 }
 

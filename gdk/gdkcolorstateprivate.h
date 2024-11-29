@@ -95,6 +95,7 @@ extern GdkBuiltinColorState gdk_builtin_color_states[GDK_BUILTIN_COLOR_STATE_N_I
 #define GDK_COLOR_STATE_REC2100_LINEAR ((GdkColorState *) &gdk_default_color_states[GDK_COLOR_STATE_ID_REC2100_LINEAR])
 #define GDK_COLOR_STATE_OKLAB          ((GdkColorState *) &gdk_builtin_color_states[GDK_BUILTIN_COLOR_STATE_ID_OKLAB])
 #define GDK_COLOR_STATE_OKLCH          ((GdkColorState *) &gdk_builtin_color_states[GDK_BUILTIN_COLOR_STATE_ID_OKLCH])
+#define GDK_COLOR_STATE_YUV            (gdk_color_state_yuv ())
 
 #define GDK_IS_DEFAULT_COLOR_STATE(c) ((GdkDefaultColorState *) (c) >= &gdk_default_color_states[0] && \
                                        (GdkDefaultColorState *) (c) < &gdk_default_color_states[GDK_COLOR_STATE_N_IDS])
@@ -103,6 +104,7 @@ extern GdkBuiltinColorState gdk_builtin_color_states[GDK_BUILTIN_COLOR_STATE_N_I
                                        (GdkBuiltinColorState *) (c) < &gdk_builtin_color_states[GDK_BUILTIN_COLOR_STATE_N_IDS])
 #define GDK_BUILTIN_COLOR_STATE_ID(c) ((GdkBuiltinColorStateId) (((GdkBuiltinColorState *) c) - gdk_builtin_color_states))
 
+GdkColorState * gdk_color_state_yuv                     (void);
 const char *    gdk_color_state_get_name                (GdkColorState          *self);
 GdkColorState * gdk_color_state_get_no_srgb_tf          (GdkColorState          *self);
 

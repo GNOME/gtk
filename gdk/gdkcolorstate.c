@@ -1274,6 +1274,24 @@ gdk_color_state_clamp (GdkColorState *self,
   self->klass->clamp (self, src, dest);
 }
 
+GdkColorState *
+gdk_color_state_yuv (void)
+{
+  static GdkColorState *yuv_cs;
+
+  if (g_once_init_enter_pointer (&yuv_cs))
+    {
+      GdkColorState *cs;
+
+      cs = gdk_color_state_new_for_cicp (&(GdkCicp) { 1, 13, 6, 0 }, NULL);
+      g_assert (cs);
+
+      g_once_init_leave_pointer (&yuv_cs, cs);
+    }
+
+  return yuv_cs;
+}
+
 /* }}} */
 
 /* vim:set foldmethod=marker: */
