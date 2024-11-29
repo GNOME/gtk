@@ -407,7 +407,8 @@ gsk_vulkan_device_setup (GskVulkanDevice *self,
   gsk_gpu_device_setup (GSK_GPU_DEVICE (self),
                         display,
                         vk_props.properties.limits.maxImageDimension2D,
-                        GSK_GPU_DEVICE_DEFAULT_TILE_SIZE);
+                        GSK_GPU_DEVICE_DEFAULT_TILE_SIZE,
+                        vk_props.properties.limits.minUniformBufferOffsetAlignment);
 }
 
 GskGpuDevice *

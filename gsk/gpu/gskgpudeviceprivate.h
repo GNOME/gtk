@@ -52,13 +52,15 @@ GType                   gsk_gpu_device_get_type                         (void) G
 void                    gsk_gpu_device_setup                            (GskGpuDevice           *self,
                                                                          GdkDisplay             *display,
                                                                          gsize                   max_image_size,
-                                                                         gsize                   tile_size);
+                                                                         gsize                   tile_size,
+                                                                         gsize                   globals_alignment);
 void                    gsk_gpu_device_maybe_gc                         (GskGpuDevice           *self);
 void                    gsk_gpu_device_queue_gc                         (GskGpuDevice           *self);
 GdkDisplay *            gsk_gpu_device_get_display                      (GskGpuDevice           *self);
 GskGpuCache *           gsk_gpu_device_get_cache                        (GskGpuDevice           *self);
 gsize                   gsk_gpu_device_get_max_image_size               (GskGpuDevice           *self);
 gsize                   gsk_gpu_device_get_tile_size                    (GskGpuDevice           *self);
+gsize                   gsk_gpu_device_get_globals_aligned_size         (GskGpuDevice           *self);
 
 GskGpuImage *           gsk_gpu_device_create_offscreen_image           (GskGpuDevice           *self,
                                                                          gboolean                with_mipmap,
