@@ -251,12 +251,9 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   if (color_state == NULL)
     {
       if (is_yuv)
-        {
-          g_warning_once ("FIXME: Implement the proper colorstate for YUV dmabufs");
-          color_state = gdk_color_state_get_srgb ();
-        }
+        color_state = GDK_COLOR_STATE_YUV;
       else
-        color_state = gdk_color_state_get_srgb ();
+        color_state = GDK_COLOR_STATE_SRGB;
     }
 
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
