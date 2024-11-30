@@ -116,6 +116,7 @@ x11_enabled      = get_option('x11-backend')
 wayland_enabled  = get_option('wayland-backend')
 broadway_enabled = get_option('broadway-backend')
 macos_enabled    = get_option('macos-backend')
+drm_enabled      = get_option('drm-backend')
 win32_enabled    = get_option('win32-backend')
 android_enabled  = get_option('android-backend')
 vulkan_enabled   = get_option('vulkan')
@@ -953,7 +954,7 @@ gsk_packages = [ 'graphene-gobject-1.0 @0@'.format(graphene_req) ]
 gtk_packages = [ 'gio-2.0 @0@'.format(glib_req) ]
 
 enabled_backends = []
-foreach backend: [ 'android', 'broadway', 'macos', 'wayland', 'win32', 'x11', ]
+foreach backend: [ 'android', 'broadway', 'macos', 'wayland', 'win32', 'x11', 'drm' ]
   if get_variable('@0@_enabled'.format(backend))
     enabled_backends += backend
   endif

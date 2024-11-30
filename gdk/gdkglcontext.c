@@ -401,7 +401,7 @@ gdk_gl_context_create_egl_context (GdkGLContext *context,
   return api;
 }
 
-static GdkGLAPI
+GdkGLAPI
 gdk_gl_context_realize_egl (GdkGLContext  *context,
                             GError       **error)
 {
@@ -740,8 +740,11 @@ gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
     }
   context->old_updated_area[0] = cairo_region_copy (region);
 
-  cairo_region_union (region, damage);
-  cairo_region_destroy (damage);
+  if (damage != NULL)
+    {
+      cairo_region_union (region, damage);
+      cairo_region_destroy (damage);
+    }
 
   gdk_draw_context_get_buffer_size (draw_context, &ww, &wh);
 

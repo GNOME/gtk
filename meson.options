@@ -34,6 +34,11 @@ option('android-backend',
        value: true,
        description : 'Enable the Android gdk backend (only when building on Android)')
 
+option('drm-backend',
+       type: 'boolean',
+       value: true,
+       description : 'Enable the drm gdk backend')
+
 # Media backends
 # For distros: GTK guarantees support for WebM video (VP8 and VP9), so a supported build
 # should provide that.
