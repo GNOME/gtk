@@ -108,6 +108,7 @@ x11_enabled      = get_option('x11-backend')
 wayland_enabled  = get_option('wayland-backend')
 broadway_enabled = get_option('broadway-backend')
 macos_enabled    = get_option('macos-backend')
+drm_enabled      = get_option('drm-backend')
 win32_enabled    = get_option('win32-backend')
 vulkan_enabled   = get_option('vulkan')
 

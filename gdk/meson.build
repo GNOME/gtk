@@ -275,7 +275,7 @@ libgdk_c_args = [
 
 gdk_backends = []
 gdk_backends_gen_headers = []  # non-public generated headers
-foreach backend : ['broadway', 'wayland', 'win32', 'x11', 'macos']
+foreach backend : ['broadway', 'wayland', 'win32', 'x11', 'macos', 'drm']
   if get_variable('@0@_enabled'.format(backend))
     subdir(backend)
     gdk_deps += get_variable('gdk_@0@_deps'.format(backend))
