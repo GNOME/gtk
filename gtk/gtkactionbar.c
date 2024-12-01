@@ -34,11 +34,11 @@
 /**
  * GtkActionBar:
  *
- * `GtkActionBar` is designed to present contextual actions.
+ * Designed to present contextual actions.
  *
  * ![An example GtkActionBar](action-bar.png)
  *
- * It is expected to be displayed below the content and expand
+ * `GtkActionBar` is expected to be displayed below the content and expand
  * horizontally to fill the area.
  *
  * It allows placing children at the start or the end. In addition, it
@@ -242,11 +242,11 @@ gtk_action_bar_buildable_interface_init (GtkBuildableIface *iface)
 
 /**
  * gtk_action_bar_pack_start:
- * @action_bar: A `GtkActionBar`
- * @child: the `GtkWidget` to be added to @action_bar
+ * @action_bar: an action bar
+ * @child: the widget to be added
  *
- * Adds @child to @action_bar, packed with reference to the
- * start of the @action_bar.
+ * Adds a child to the action, packed with reference to the
+ * start of the action bar.
  */
 void
 gtk_action_bar_pack_start (GtkActionBar *action_bar,
@@ -257,11 +257,11 @@ gtk_action_bar_pack_start (GtkActionBar *action_bar,
 
 /**
  * gtk_action_bar_pack_end:
- * @action_bar: A `GtkActionBar`
- * @child: the `GtkWidget` to be added to @action_bar
+ * @action_bar: an action bar
+ * @child: the widget to be added
  *
- * Adds @child to @action_bar, packed with reference to the
- * end of the @action_bar.
+ * Adds a child to the action bar, packed with reference to the
+ * end of the action bar.
  */
 void
 gtk_action_bar_pack_end (GtkActionBar *action_bar,
@@ -272,10 +272,10 @@ gtk_action_bar_pack_end (GtkActionBar *action_bar,
 
 /**
  * gtk_action_bar_remove:
- * @action_bar: a `GtkActionBar`
- * @child: the `GtkWidget` to be removed
+ * @action_bar: an action bar
+ * @child: the widget to be removed
  *
- * Removes a child from @action_bar.
+ * Removes a child from the action bar.
  */
 void
 gtk_action_bar_remove (GtkActionBar *action_bar,
@@ -294,10 +294,10 @@ gtk_action_bar_remove (GtkActionBar *action_bar,
 
 /**
  * gtk_action_bar_set_center_widget:
- * @action_bar: a `GtkActionBar`
+ * @action_bar: an action bar
  * @center_widget: (nullable): a widget to use for the center
  *
- * Sets the center widget for the `GtkActionBar`.
+ * Sets the center widget for the action bar.
  */
 void
 gtk_action_bar_set_center_widget (GtkActionBar *action_bar,
@@ -308,11 +308,11 @@ gtk_action_bar_set_center_widget (GtkActionBar *action_bar,
 
 /**
  * gtk_action_bar_get_center_widget:
- * @action_bar: a `GtkActionBar`
+ * @action_bar: an action bsar
  *
  * Retrieves the center bar widget of the bar.
  *
- * Returns: (transfer none) (nullable): the center `GtkWidget`
+ * Returns: (transfer none) (nullable): the center widget
  */
 GtkWidget *
 gtk_action_bar_get_center_widget (GtkActionBar *action_bar)
@@ -325,7 +325,7 @@ gtk_action_bar_get_center_widget (GtkActionBar *action_bar)
 /**
  * gtk_action_bar_new:
  *
- * Creates a new `GtkActionBar` widget.
+ * Creates a new action bar widget.
  *
  * Returns: a new `GtkActionBar`
  */
@@ -337,12 +337,12 @@ gtk_action_bar_new (void)
 
 /**
  * gtk_action_bar_set_revealed:
- * @action_bar: a `GtkActionBar`
- * @revealed: The new value of the property
+ * @action_bar: an action bar
+ * @revealed: the new value for the property
  *
  * Reveals or conceals the content of the action bar.
  *
- * Note: this does not show or hide @action_bar in the
+ * Note: this does not show or hide the action bar in the
  * [property@Gtk.Widget:visible] sense, so revealing has
  * no effect if the action bar is hidden.
  */
@@ -361,7 +361,7 @@ gtk_action_bar_set_revealed (GtkActionBar *action_bar,
 
 /**
  * gtk_action_bar_get_revealed:
- * @action_bar: a `GtkActionBar`
+ * @action_bar: an action bar
  *
  * Gets whether the contents of the action bar are revealed.
  *
