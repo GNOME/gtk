@@ -3751,7 +3751,7 @@ gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
 {
   GskRenderNode **children;
-  guint n_children;
+  guint i, n_children;
 
   if (self->opacity < 1.0 && !gsk_container_node_is_disjoint (node))
     {
@@ -3760,7 +3760,23 @@ gsk_gpu_node_processor_add_container_node (GskGpuNodeProcessor *self,
     }
 
   children = gsk_container_node_get_children (node, &n_children);
-  for (guint i = 0; i < n_children; i++)
+
+  if (node->fully_opaque && !gsk_container_node_is_disjoint (node) && n_children > 0)
+    {
+      graphene_rect_t opaque;
+
+      /* Try to find a child that fully covers the container node */
+      for (i = n_children - 1; i > 0; i--)
+        {
+          if (gsk_render_node_get_opaque_rect (children[i], &opaque) &&
+              gsk_rect_equal (&opaque, &node->bounds))
+            break;
+        }
+    }
+  else
+    i = 0;
+
+  for (; i < n_children; i++)
     gsk_gpu_node_processor_add_node (self, children[i]);
 }
 
