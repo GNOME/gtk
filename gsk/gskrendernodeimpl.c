@@ -4604,6 +4604,7 @@ gsk_container_node_new (GskRenderNode **children,
         }
 
       node->offscreen_for_opacity = node->offscreen_for_opacity || !self->disjoint;
+      node->fully_opaque = have_opaque && graphene_rect_equal (&node->bounds, &self->opaque);
       node->is_hdr = is_hdr;
    }
 
