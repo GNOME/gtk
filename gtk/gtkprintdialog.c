@@ -1765,7 +1765,6 @@ gtk_print_dialog_print_file (GtkPrintDialog       *self,
 
   if (!gdk_display_should_use_portal (display, PORTAL_PRINT_INTERFACE, 0))
     {
-      g_print ("Should not use portal. Ok\n");
       if (setup == NULL || gtk_print_setup_get_printer (setup) == NULL)
         {
           GtkPrintUnixDialog *window;
@@ -1784,7 +1783,6 @@ gtk_print_dialog_print_file (GtkPrintDialog       *self,
     }
   else if (!ensure_portal_proxy (self, parent, &error))
     {
-      g_print ("Should use portal. But no proxy\n");
       g_task_return_new_error (task,
                                GTK_DIALOG_ERROR, GTK_DIALOG_ERROR_FAILED,
                                "The print portal is not available: %s", error->message);
@@ -1793,7 +1791,6 @@ gtk_print_dialog_print_file (GtkPrintDialog       *self,
     }
   else
     {
-      g_print ("Using portal. Ok\n");
       if (parent &&
           gtk_widget_is_visible (GTK_WIDGET (parent)) &&
           gtk_window_export_handle (parent, print_window_handle_exported, task))
