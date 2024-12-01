@@ -43,19 +43,18 @@
 /**
  * GtkApplication:
  *
- * `GtkApplication` is a high-level API for writing applications.
+ * A high-level API for writing applications.
  *
- * It supports many aspects of writing a GTK application in a convenient
- * fashion, without enforcing a one-size-fits-all model.
+ * `GtkApplication` supports many aspects of writing a GTK application
+ * in a convenient fashion, without enforcing a one-size-fits-all model.
  *
- * Currently, `GtkApplication` handles GTK initialization, application
- * uniqueness, session management, provides some basic scriptability and
- * desktop shell integration by exporting actions and menus and manages a
- * list of toplevel windows whose life-cycle is automatically tied to the
- * life-cycle of your application.
+ * Currently, it handles GTK initialization, application uniqueness, session
+ * management, provides some basic scriptability and desktop shell integration
+ * by exporting actions and menus and manages a list of toplevel windows whose
+ * life-cycle is automatically tied to the life-cycle of your application.
  *
- * While `GtkApplication` works fine with plain [class@Gtk.Window]s, it is
- * recommended to use it together with [class@Gtk.ApplicationWindow].
+ * While `GtkApplication` works fine with plain [class@Gtk.Window]s,
+ * it is recommended to use it together with [class@Gtk.ApplicationWindow].
  *
  * ## Automatic resources
  *
@@ -550,11 +549,12 @@ gtk_application_class_init (GtkApplicationClass *class)
 
   /**
    * GtkApplication::window-added:
-   * @application: the `GtkApplication` which emitted the signal
-   * @window: the newly-added [class@Gtk.Window]
+   * @application: the application which emitted the signal
+   * @window: the newly-added window
    *
-   * Emitted when a [class@Gtk.Window] is added to `application` through
-   * [method@Gtk.Application.add_window].
+   * Emitted when a window is added to an application.
+   *
+   * See [method@Gtk.Application.add_window].
    */
   gtk_application_signals[WINDOW_ADDED] =
     g_signal_new (I_("window-added"), GTK_TYPE_APPLICATION, G_SIGNAL_RUN_FIRST,
@@ -565,10 +565,10 @@ gtk_application_class_init (GtkApplicationClass *class)
 
   /**
    * GtkApplication::window-removed:
-   * @application: the `GtkApplication` which emitted the signal
-   * @window: the [class@Gtk.Window] that is being removed
+   * @application: the application which emitted the signal
+   * @window: the window that is being removed
    *
-   * Emitted when a [class@Gtk.Window] is removed from `application`.
+   * Emitted when a window is removed from an application.
    *
    * This can happen as a side-effect of the window being destroyed
    * or explicitly through [method@Gtk.Application.remove_window].
@@ -582,13 +582,13 @@ gtk_application_class_init (GtkApplicationClass *class)
 
   /**
    * GtkApplication::query-end:
-   * @application: the `GtkApplication` which emitted the signal
+   * @application: the application which emitted the signal
    *
    * Emitted when the session manager is about to end the session.
    *
    * This signal is only emitted if [property@Gtk.Application:register-session]
-   * is `TRUE`. Applications can connect to this signal and call
-   * [method@Gtk.Application.inhibit] with `GTK_APPLICATION_INHIBIT_LOGOUT`
+   * is true. Applications can connect to this signal and call
+   * [method@Gtk.Application.inhibit] with [flags@Gtk.ApplicationInhibitFlags.logout]
    * to delay the end of the session until state has been saved.
    */
   gtk_application_signals[QUERY_END] =
@@ -601,7 +601,7 @@ gtk_application_class_init (GtkApplicationClass *class)
   /**
    * GtkApplication:register-session:
    *
-   * Set this property to `TRUE` to register with the session manager.
+   * Set this property to true to register with the session manager.
    *
    * This will make GTK track the session state (such as the
    * [property@Gtk.Application:screensaver-active] property).
@@ -614,11 +614,11 @@ gtk_application_class_init (GtkApplicationClass *class)
   /**
    * GtkApplication:screensaver-active:
    *
-   * This property is `TRUE` if GTK believes that the screensaver is
-   * currently active.
+   * This property is true if GTK believes that the screensaver
+   * is currently active.
    *
    * GTK only tracks session state (including this) when
-   * [property@Gtk.Application:register-session] is set to %TRUE.
+   * [property@Gtk.Application:register-session] is set to true.
    *
    * Tracking the screensaver state is currently only supported on
    * Linux.
@@ -631,7 +631,7 @@ gtk_application_class_init (GtkApplicationClass *class)
   /**
    * GtkApplication:menubar:
    *
-   * The `GMenuModel` to be used for the application's menu bar.
+   * The menu model to be used for the application's menu bar.
    */
   gtk_application_props[PROP_MENUBAR] =
     g_param_spec_object ("menubar", NULL, NULL,
@@ -656,21 +656,21 @@ gtk_application_class_init (GtkApplicationClass *class)
  * @application_id: (nullable): The application ID
  * @flags: the application flags
  *
- * Creates a new `GtkApplication` instance.
+ * Creates a new application instance.
  *
  * When using `GtkApplication`, it is not necessary to call [func@Gtk.init]
  * manually. It is called as soon as the application gets registered as
  * the primary instance.
  *
  * Concretely, [func@Gtk.init] is called in the default handler for the
- * `GApplication::startup` signal. Therefore, `GtkApplication` subclasses should
- * always chain up in their `GApplication::startup` handler before using any GTK
- * API.
+ * `GApplication::tartup` signal. Therefore, `GtkApplication` subclasses
+ * should always chain up in their [vfunc@GIO.Application.startup] handler
+ * before using any GTK API.
  *
  * Note that commandline arguments are not passed to [func@Gtk.init].
  *
- * If `application_id` is not %NULL, then it must be valid. See
- * `g_application_id_is_valid()`.
+ * If `application_id` is not `NULL`, then it must be valid. See
+ * [func@Gio.Application.id_is_valid].
  *
  * If no application ID is given then some features (most notably application
  * uniqueness) will be disabled.
@@ -691,24 +691,23 @@ gtk_application_new (const char        *application_id,
 
 /**
  * gtk_application_add_window:
- * @application: a `GtkApplication`
- * @window: a `GtkWindow`
+ * @application: an application
+ * @window: a window
  *
- * Adds a window to `application`.
+ * Adds a window to the application.
  *
- * This call can only happen after the `application` has started;
+ * This call can only happen after the application has started;
  * typically, you should add new application windows in response
- * to the emission of the `GApplication::activate` signal.
+ * to the emission of the [signal@GIO.Application::activate] signal.
  *
  * This call is equivalent to setting the [property@Gtk.Window:application]
- * property of `window` to `application`.
+ * property of the window to @application.
  *
  * Normally, the connection between the application and the window
  * will remain until the window is destroyed, but you can explicitly
  * remove it with [method@Gtk.Application.remove_window].
  *
- * GTK will keep the `application` running as long as it has
- * any windows.
+ * GTK will keep the application running as long as it has any windows.
  **/
 void
 gtk_application_add_window (GtkApplication *application,
@@ -733,17 +732,17 @@ gtk_application_add_window (GtkApplication *application,
 
 /**
  * gtk_application_remove_window:
- * @application: a `GtkApplication`
- * @window: a `GtkWindow`
+ * @application: an pplication
+ * @window: a window
  *
- * Remove a window from `application`.
+ * Remove a window from the application.
  *
- * If `window` belongs to `application` then this call is equivalent to
- * setting the [property@Gtk.Window:application] property of `window` to
- * `NULL`.
+ * If the window belongs to the application then this call is
+ * equivalent to setting the [property@Gtk.Window:application]
+ * property of the window to `NULL`.
  *
  * The application may stop running as a result of a call to this
- * function, if `window` was the last window of the `application`.
+ * function, if the window was the last window of the application.
  **/
 void
 gtk_application_remove_window (GtkApplication *application,
@@ -761,9 +760,9 @@ gtk_application_remove_window (GtkApplication *application,
 
 /**
  * gtk_application_get_windows:
- * @application: a `GtkApplication`
+ * @application: an application
  *
- * Gets a list of the [class@Gtk.Window] instances associated with `application`.
+ * Gets a list of the window associated with the application.
  *
  * The list is sorted by most recently focused window, such that the first
  * element is the currently focused window. (Useful for choosing a parent
@@ -773,8 +772,7 @@ gtk_application_remove_window (GtkApplication *application,
  * only remain valid until the next focus change or window creation or
  * deletion.
  *
- * Returns: (element-type GtkWindow) (transfer none): a `GList` of `GtkWindow`
- *   instances
+ * Returns: (element-type GtkWindow) (transfer none): the list of windows
  **/
 GList *
 gtk_application_get_windows (GtkApplication *application)
@@ -788,15 +786,15 @@ gtk_application_get_windows (GtkApplication *application)
 
 /**
  * gtk_application_get_window_by_id:
- * @application: a `GtkApplication`
+ * @application: an application`
  * @id: an identifier number
  *
- * Returns the [class@Gtk.ApplicationWindow] with the given ID.
+ * Returns the window with the given ID.
  *
  * The ID of a `GtkApplicationWindow` can be retrieved with
  * [method@Gtk.ApplicationWindow.get_id].
  *
- * Returns: (nullable) (transfer none): the window for the given `id`
+ * Returns: (nullable) (transfer none): the window for the given ID
  */
 GtkWindow *
 gtk_application_get_window_by_id (GtkApplication *application,
@@ -819,14 +817,14 @@ gtk_application_get_window_by_id (GtkApplication *application,
 
 /**
  * gtk_application_get_active_window:
- * @application: a `GtkApplication`
+ * @application: an application
  *
  * Gets the “active” window for the application.
  *
- * The active window is the one that was most recently focused (within
- * the application).  This window may not have the focus at the moment
- * if another application has it — this is just the most
- * recently-focused window within this application.
+ * The active window is the one that was most recently focused
+ * (within the application). This window may not have the focus
+ * at the moment if another application has it — this is just
+ * the most recently-focused window within this application.
  *
  * Returns: (transfer none) (nullable): the active window
  **/
@@ -852,19 +850,19 @@ gtk_application_update_accels (GtkApplication *application)
 
 /**
  * gtk_application_set_menubar:
- * @application: a `GtkApplication`
- * @menubar: (nullable): a `GMenuModel`
+ * @application: an application
+ * @menubar: (nullable): a menu model
  *
- * Sets or unsets the menubar for windows of `application`.
+ * Sets or unsets the menubar for windows of the application.
  *
  * This is a menubar in the traditional sense.
  *
  * This can only be done in the primary instance of the application,
- * after it has been registered. `GApplication::startup` is a good place
- * to call this.
+ * after it has been registered. [vfunc@GIO.Application.startup] is
+ * a good place to call this.
  *
  * Depending on the desktop environment, this may appear at the top of
- * each window, or at the top of the screen.  In some environments, if
+ * each window, or at the top of the screen. In some environments, if
  * both the application menu and the menubar are set, the application
  * menu will be presented as if it were the first item of the menubar.
  * Other environments treat the two as completely separate — for example,
@@ -895,12 +893,11 @@ gtk_application_set_menubar (GtkApplication *application,
 
 /**
  * gtk_application_get_menubar:
- * @application: a `GtkApplication`
+ * @application: an application
  *
- * Returns the menu model that has been set with
- * [method@Gtk.Application.set_menubar].
+ * Returns the menu model for the menu bar of the application.
  *
- * Returns: (nullable) (transfer none): the menubar for windows of `application`
+ * Returns: (nullable) (transfer none): the menubar for windows of the application
  */
 GMenuModel *
 gtk_application_get_menubar (GtkApplication *application)
@@ -929,13 +926,13 @@ gtk_application_get_menubar (GtkApplication *application)
 
 /**
  * gtk_application_inhibit:
- * @application: the `GtkApplication`
- * @window: (nullable): a `GtkWindow`
+ * @application: the application
+ * @window: (nullable): a window
  * @flags: what types of actions should be inhibited
  * @reason: (nullable): a short, human-readable string that explains
  *   why these operations are inhibited
  *
- * Inform the session manager that certain types of actions should be
+ * Informs the session manager that certain types of actions should be
  * inhibited.
  *
  * This is not guaranteed to work on all platforms and for all types of
@@ -943,7 +940,7 @@ gtk_application_get_menubar (GtkApplication *application)
  *
  * Applications should invoke this method when they begin an operation
  * that should not be interrupted, such as creating a CD or DVD. The
- * types of actions that may be blocked are specified by the `flags`
+ * types of actions that may be blocked are specified by the @flags
  * parameter. When the application completes the operation it should
  * call [method@Gtk.Application.uninhibit] to remove the inhibitor. Note
  * that an application can have multiple inhibitors, and all of them must
@@ -954,15 +951,18 @@ gtk_application_get_menubar (GtkApplication *application)
  * the action. In most cases, users will be given the option to force
  * the action to take place.
  *
- * The `reason` message should be short and to the point.
+ * The @reason message should be short and to the point.
  *
- * If `window` is given, the session manager may point the user to
+ * If a window is given, the session manager may point the user to
  * this window to find out more about why the action is inhibited.
  *
- * Returns: A non-zero cookie that is used to uniquely identify this
- *   request. It should be used as an argument to [method@Gtk.Application.uninhibit]
- *   in order to remove the request. If the platform does not support
- *   inhibiting or the request failed for some reason, 0 is returned.
+ * The cookie tha tis returned by this function  should be used as an
+ * argument to [method@Gtk.Application.uninhibit] in order to remove
+ * the request.
+ *
+ * Returns: A non-zero cookie that is used to uniquely identify this, or
+ *   0 if the platform does not support inhibiting or the request failed
+ *   for some reason
  */
 guint
 gtk_application_inhibit (GtkApplication             *application,
@@ -981,7 +981,7 @@ gtk_application_inhibit (GtkApplication             *application,
 
 /**
  * gtk_application_uninhibit:
- * @application: the `GtkApplication`
+ * @application: the application
  * @cookie: a cookie that was returned by [method@Gtk.Application.inhibit]
  *
  * Removes an inhibitor that has been previously established.
@@ -1027,7 +1027,7 @@ gtk_application_get_application_accels (GtkApplication *application)
 
 /**
  * gtk_application_list_action_descriptions:
- * @application: a `GtkApplication`
+ * @application: an application
  *
  * Lists the detailed action names which have associated accelerators.
  *
@@ -1047,7 +1047,7 @@ gtk_application_list_action_descriptions (GtkApplication *application)
 
 /**
  * gtk_application_set_accels_for_action:
- * @application: a `GtkApplication`
+ * @application: an application
  * @detailed_action_name: a detailed action name, specifying an action
  *   and target to associate accelerators with
  * @accels: (array zero-terminated=1): a list of accelerators in the format
@@ -1056,14 +1056,14 @@ gtk_application_list_action_descriptions (GtkApplication *application)
  * Sets zero or more keyboard accelerators that will trigger the
  * given action.
  *
- * The first item in `accels` will be the primary accelerator, which may be
- * displayed in the UI.
+ * The first item in @accels will be the primary accelerator,
+ * which may be displayed in the UI.
  *
- * To remove all accelerators for an action, use an empty, zero-terminated
- * array for `accels`.
+ * To remove all accelerators for an action, use an empty,
+ * zero-terminated array for @accels.
  *
- * For the `detailed_action_name`, see `g_action_parse_detailed_name()` and
- * `g_action_print_detailed_name()`.
+ * For the @detailed_action_name, see [func@Gio.Action.parse_detailed_name]
+ * and [Gio.Action.print_detailed_name].
  */
 void
 gtk_application_set_accels_for_action (GtkApplication      *application,
@@ -1090,7 +1090,7 @@ gtk_application_set_accels_for_action (GtkApplication      *application,
 
 /**
  * gtk_application_get_accels_for_action:
- * @application: a `GtkApplication`
+ * @application: an application
  * @detailed_action_name: a detailed action name, specifying an action
  *   and target to obtain accelerators for
  *
@@ -1098,7 +1098,7 @@ gtk_application_set_accels_for_action (GtkApplication      *application,
  * the given action.
  *
  * Returns: (transfer full) (array zero-terminated=1) (element-type utf8):
- *   accelerators for `detailed_action_name`
+ *   accelerators for @detailed_action_name
  */
 char **
 gtk_application_get_accels_for_action (GtkApplication *application,
@@ -1115,10 +1115,10 @@ gtk_application_get_accels_for_action (GtkApplication *application,
 
 /**
  * gtk_application_get_actions_for_accel:
- * @application: a `GtkApplication`
+ * @application: a application
  * @accel: an accelerator that can be parsed by [func@Gtk.accelerator_parse]
  *
- * Returns the list of actions (possibly empty) that `accel` maps to.
+ * Returns the list of actions (possibly empty) that the accelerator maps to.
  *
  * Each item in the list is a detailed action name in the usual form.
  *
@@ -1136,7 +1136,7 @@ gtk_application_get_accels_for_action (GtkApplication *application,
  *
  * If you are unsure, check it with [func@Gtk.accelerator_parse] first.
  *
- * Returns: (transfer full): a %NULL-terminated array of actions for `accel`
+ * Returns: (transfer full): actions for @accel
  */
 char **
 gtk_application_get_actions_for_accel (GtkApplication *application,
@@ -1192,8 +1192,8 @@ gtk_application_handle_window_map (GtkApplication *application,
 
 /**
  * gtk_application_get_menu_by_id:
- * @application: a `GtkApplication`
- * @id: the id of the menu to look up
+ * @application: an application
+ * @id: the ID of the menu to look up
  *
  * Gets a menu from automatically loaded resources.
  *
@@ -1201,7 +1201,7 @@ gtk_application_handle_window_map (GtkApplication *application,
  * for more information.
  *
  * Returns: (nullable) (transfer none): Gets the menu with the
- *   given id from the automatically loaded resources
+ *   given ID from the automatically loaded resources
  */
 GMenu *
 gtk_application_get_menu_by_id (GtkApplication *application,
