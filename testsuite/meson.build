@@ -14,7 +14,7 @@ common_env = [
   'GTK_CSD=1',
   'G_ENABLE_DIAGNOSTIC=0',
   'GSETTINGS_SCHEMA_DIR=@0@'.format(gtk_schema_build_dir),
-  'GDK_DEBUG=default-settings',
+  'GDK_DEBUG=default-settings,no-portals',
   'GTK_DEBUG=css',
 ]
 exclude_unstable = ['flaky', 'failing']
