@@ -146,7 +146,7 @@ lum (vec3 c)
 vec3
 clip_color (vec3 c)
 {
-  float l = lum (c);
+  float l = clamp (lum (c), 0.0, 1.0);
   float n = min (c.r, min (c.g, c.b));
   float x = max (c.r, max (c.g, c.b));
   if (n < 0.0) c = l + (((c - l) * l) / (l - n));
