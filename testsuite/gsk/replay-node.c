@@ -539,6 +539,6 @@ replay_node (GskRenderNode *node, GtkSnapshot *snapshot)
     case GSK_SUBSURFACE_NODE:
     case GSK_NOT_A_RENDER_NODE:
     default:
-      g_assert (FALSE);
+      g_assert_not_reached ();
     }
 }
