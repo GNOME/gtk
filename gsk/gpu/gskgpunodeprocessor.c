@@ -120,6 +120,11 @@ typedef enum {
    * and images must not be contained in an atlas.
    */
   GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS = (1 << 0),
+  /* The returned image needs to be the exact size of the given clip
+   * rect, for example because it will be repeated.
+   * In detail: out_bounds must equal clip_bounds
+   */
+  GSK_GPU_AS_IMAGE_EXACT_SIZE = (1 << 1),
 } GskGpuAsImageFlags;
 
 typedef enum {
@@ -820,17 +825,27 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
 {
   graphene_rect_t clip;
 
-  if (clip_bounds == NULL)
+  if (flags & GSK_GPU_AS_IMAGE_EXACT_SIZE)
     {
-      if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip))
-        return NULL;
+      if (clip_bounds == NULL)
+        clip = node->bounds;
+      else
+        clip = *clip_bounds;
     }
   else
     {
-      if (!gsk_rect_intersection (clip_bounds, &node->bounds, &clip))
-        return NULL;
+      if (clip_bounds == NULL)
+        {
+          if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip))
+            return NULL;
+        }
+      else
+        {
+          if (!gsk_rect_intersection (clip_bounds, &node->bounds, &clip))
+            return NULL;
+        }
+      gsk_rect_snap_to_grid (&clip, &self->scale, &self->offset, &clip);
     }
-  gsk_rect_snap_to_grid (&clip, &self->scale, &self->offset, &clip);
 
   return gsk_gpu_get_node_as_image (self->frame,
                                     flags,
@@ -2214,6 +2229,10 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
   GskGpuImage *image;
   gboolean should_mipmap;
 
+  if ((flags & GSK_GPU_AS_IMAGE_EXACT_SIZE) &&
+      !gsk_rect_equal (clip_bounds, &node->bounds))
+    return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds);
+
   should_mipmap = texture_node_should_mipmap (node, frame, scale);
   image = gsk_gpu_lookup_texture (frame, ccs, texture, FALSE, &image_cs);
 
@@ -3250,13 +3269,11 @@ gsk_gpu_node_processor_repeat_tile (GskGpuNodeProcessor    *self,
       return;
     }
 
-  GSK_DEBUG (FALLBACK, "Offscreening node '%s' for tiling", g_type_name_from_instance ((GTypeInstance *) child));
-  image = gsk_gpu_node_processor_create_offscreen (self->frame,
-                                                   self->ccs,
-                                                   &self->scale,
-                                                   &clipped_child_bounds,
-                                                   child);
-
+  image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                    GSK_GPU_AS_IMAGE_EXACT_SIZE,
+                                                    &clipped_child_bounds,
+                                                    child,
+                                                    &clipped_child_bounds);
   g_return_if_fail (image);
 
   gsk_gpu_texture_op (self->frame,
