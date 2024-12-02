@@ -14,7 +14,7 @@ project('gtk', 'c',
 glib_req           = '>= 2.76.0'
 introspection_req  = '>= 1.76.0' # keep this in sync with glib
 pango_req          = '>= 1.52.0' # keep this in sync with .gitlab-ci/test-msys.sh
-harfbuzz_req       = '>= 2.6.0'
+harfbuzz_req       = '>= 8.4.0'
 fribidi_req        = '>= 1.0.6'
 cairo_req          = '>= 1.18.0'
 gdk_pixbuf_req     = '>= 2.30.0'
