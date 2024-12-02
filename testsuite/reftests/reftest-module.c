@@ -86,7 +86,9 @@ reftest_module_new (const char *directory,
 
   g_return_val_if_fail (module_name != NULL, NULL);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   full_path = g_module_build_path (directory, module_name);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   result = reftest_module_find_existing (full_path);
   if (result)
