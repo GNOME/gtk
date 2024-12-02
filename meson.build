@@ -32,8 +32,14 @@ fs = import('fs')
 gnome = import('gnome')
 pkg_config = import('pkgconfig')
 
-add_project_arguments('-DG_LOG_USE_STRUCTURED=1', language: 'c')
-add_project_arguments('-DGLIB_DISABLE_DEPRECATION_WARNINGS', language: 'c')
+# Keep in sync with glib_req
+add_project_arguments([
+    '-DG_LOG_USE_STRUCTURED=1',
+    '-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_76',
+    '-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_76',
+  ],
+  language: 'c'
+)
 
 # Making releases:
 #  1. new development cycle:
