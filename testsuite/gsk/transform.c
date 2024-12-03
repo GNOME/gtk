@@ -1032,6 +1032,53 @@ test_to_dihedral (void)
   g_assert_cmpfloat (sy, ==, 3.0);
   g_assert_cmpfloat (dx, ==, 10.0);
   g_assert_cmpfloat (dy, ==, 5.0);
+
+  transform = gsk_transform_dihedral (gsk_transform_scale (gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (10.0, 5.0)), 2.0, 3.0), GDK_DIHEDRAL_FLIPPED_90);
+  gsk_transform_to_dihedral (transform, &dihedral, &sx, &sy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  g_assert_true (dihedral == GDK_DIHEDRAL_FLIPPED_90);
+  g_assert_cmpfloat (sx, ==, 2.0);
+  g_assert_cmpfloat (sy, ==, 3.0);
+  g_assert_cmpfloat (dx, ==, 10.0);
+  g_assert_cmpfloat (dy, ==, 5.0);
+}
+
+static void
+test_dihedral_matrix (void)
+{
+  for (int i = 0; i <= GDK_DIHEDRAL_FLIPPED_270; i++)
+    {
+      float f[16] = { 1, 0, 0, 0,
+                      0, 1, 0, 0,
+                      0, 0, 1, 0,
+                      0, 0, 0, 1 };
+      float m[16] = { 1, 0, 0, 0,
+                      0, 1, 0, 0,
+                      0, 0, 1, 0,
+                      0, 0, 0, 1 };
+      graphene_matrix_t matrix;
+      graphene_matrix_t test;
+
+      GskTransform *transform = gsk_transform_dihedral (NULL, (GdkDihedral) i);
+      gsk_transform_to_2d (transform,
+                           &f[4 * 0 + 0], &f[4 * 0 + 1],
+                           &f[4 * 1 + 0], &f[4 * 1 + 1],
+                           &f[4 * 3 + 0], &f[4 * 3 + 1]);
+      graphene_matrix_init_from_float (&test, f);
+
+      /* Note that the xy/yx arguments are fliped in gdk_dihedral_get_mat2,
+       * compared to gsk_transform_to_2d
+       */
+      gdk_dihedral_get_mat2 ((GdkDihedral) i,
+                             &m[4 * 0 + 0], &m[4 * 1 + 0],
+                             &m[4 * 0 + 1], &m[4 * 1 + 1]);
+      graphene_matrix_init_from_float (&matrix, m);
+
+      graphene_assert_fuzzy_matrix_equal (&matrix, &test, EPSILON);
+
+      gsk_transform_unref (transform);
+    }
 }
 
 int
@@ -1060,6 +1107,7 @@ main (int   argc,
   g_test_add_func ("/transform/matrix", test_matrix_transform);
   g_test_add_func ("/transform/matrix/roundtrip", test_matrix_roundtrip);
   g_test_add_func ("/transform/to-dihedral", test_to_dihedral);
+  g_test_add_func ("/transform/dihedral-matrix", test_dihedral_matrix);
 
   return g_test_run ();
 }
