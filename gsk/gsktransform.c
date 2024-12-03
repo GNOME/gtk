@@ -2050,7 +2050,7 @@ gsk_transform_to_affine (GskTransform *self,
 /*<private>
  * gsk_transform_to_dihedral:
  * @self: a `GskTransform`
- * @out_dihedral: (out): return location for the 
+ * @out_dihedral: (out): return location for the dihedral transform
  * @out_scale_x: (out): return location for the scale
  *   factor in the x direction
  * @out_scale_y: (out): return location for the scale
@@ -2060,19 +2060,23 @@ gsk_transform_to_affine (GskTransform *self,
  * @out_dy: (out): return location for the translation
  *   in the y direction
  *
- * Converts a `GskTransform` to 2D affine transformation factors.
+ * Converts a `GskTransform` to 2D dihedral transformation factors.
  *
  * To recreate an equivalent transform from the factors returned
  * by this function, use
  *
- *     gsk_transform_scale (gsk_transform_translate (NULL,
- *                                                   &GRAPHENE_POINT_T (dx, dy)),
- *                          sx, sy)
+ *     gsk_transform_dihedral (
+ *         gsk_transform_scale (
+ *             gsk_transform_translate (
+ *                 NULL,
+ *                 &GRAPHENE_POINT_T (dx, dy)),
+ *             sx, sy),
+ *         dihedral)
  *
- * @self must be a 2D affine transformation. If you are not
+ * @self must be a 2D dihedral transformation. If you are not
  * sure, use
  *
- *     gsk_transform_get_category() >= %GSK_TRANSFORM_CATEGORY_2D_AFFINE
+ *     gsk_transform_get_fine_category() >= %GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL
  *
  * to check.
  */
