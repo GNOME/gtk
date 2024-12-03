@@ -899,7 +899,7 @@ gsk_rotate_transform_apply_dihedral (GskTransform *transform,
   dihedral = (int) self->angle / 90;
   g_assert (dihedral >= GDK_DIHEDRAL_NORMAL && dihedral < GDK_DIHEDRAL_FLIPPED);
 
-  *out_dihedral = gdk_dihedral_combine (dihedral, *out_dihedral);
+  *out_dihedral = gdk_dihedral_combine (*out_dihedral, dihedral);
 }
 
 static GskTransform *
@@ -1410,7 +1410,7 @@ gsk_scale_transform_apply_dihedral (GskTransform *transform,
       else
         dihedral = GDK_DIHEDRAL_180;
     }
-  *out_dihedral = gdk_dihedral_combine (dihedral, *out_dihedral);
+  *out_dihedral = gdk_dihedral_combine (*out_dihedral, dihedral);
   *out_scale_x *= fabs (xx * self->factor_x + xy * self->factor_y);
   *out_scale_y *= fabs (yx * self->factor_x + yy * self->factor_y);
 }
