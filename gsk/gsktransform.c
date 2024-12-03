@@ -2109,6 +2109,34 @@ gsk_transform_to_dihedral (GskTransform *self,
                                          out_dx, out_dy);
 }
 
+/*< private >
+ * gsk_transform_dihedral:
+ * @next: (nullable) (transfer full): the next transform
+ * @dihedral: dihedral tansform to apply
+ *
+ * Applies a dihedral transform to @next.
+ *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
+ *
+ * Returns: (nullable): The new transform
+ **/
+GskTransform *
+gsk_transform_dihedral (GskTransform *next,
+                        GdkDihedral   dihedral)
+{
+  int rotate = dihedral & 3;
+  int flip = dihedral & 4;
+
+  if (flip)
+    next = gsk_transform_scale (next, -1.0, 1.0);
+
+  if (rotate)
+    next = gsk_transform_rotate (next, rotate * 90.0f);
+
+  return next;
+}
+
 /**
  * gsk_transform_to_translate:
  * @self: a `GskTransform`
