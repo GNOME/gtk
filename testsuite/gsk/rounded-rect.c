@@ -402,6 +402,74 @@ test_intersect (void)
     }
 }
 
+static void
+test_dihedral (void)
+{
+  struct {
+    GdkDihedral dihedral;
+    GskRoundedRect in;
+    GskRoundedRect expected;
+  } test[] = {
+    {
+      GDK_DIHEDRAL_NORMAL,
+      ROUNDED_RECT_INIT_UNIFORM(0, 0, 100, 100, 1, 2, 3, 4),
+      ROUNDED_RECT_INIT_UNIFORM(0, 0, 100, 100, 1, 2, 3, 4),
+    },
+    {
+      GDK_DIHEDRAL_90,
+      ROUNDED_RECT_INIT_UNIFORM(0, 0, 100, 100, 1, 2, 3, 4),
+      ROUNDED_RECT_INIT_UNIFORM(-100, 0, 100, 100, 2, 3, 4, 1),
+    },
+    {
+      GDK_DIHEDRAL_180,
+      ROUNDED_RECT_INIT_UNIFORM(0, 0, 100, 100, 1, 2, 3, 4),
+      ROUNDED_RECT_INIT_UNIFORM(-100, -100, 100, 100, 3, 4, 1, 2),
+    },
+    {
+      GDK_DIHEDRAL_270,
+      ROUNDED_RECT_INIT_UNIFORM(0, 0, 100, 100, 1, 2, 3, 4),
+      ROUNDED_RECT_INIT_UNIFORM(0, -100, 100, 100, 4, 1, 2, 3),
+    },
+    {
+      GDK_DIHEDRAL_FLIPPED,
+      ROUNDED_RECT_INIT_UNIFORM(0, 0, 100, 100, 1, 2, 3, 4),
+      ROUNDED_RECT_INIT_UNIFORM(-100, 0, 100, 100, 2, 1, 4, 3),
+    },
+    {
+      GDK_DIHEDRAL_FLIPPED_90,
+      ROUNDED_RECT_INIT_UNIFORM(0, 0, 100, 100, 1, 2, 3, 4),
+      ROUNDED_RECT_INIT_UNIFORM(0, 0, 100, 100, 1, 4, 3, 2),
+    },
+    {
+      GDK_DIHEDRAL_FLIPPED_180,
+      ROUNDED_RECT_INIT_UNIFORM(0, 0, 100, 100, 1, 2, 3, 4),
+      ROUNDED_RECT_INIT_UNIFORM(0, -100, 100, 100, 4, 3, 2, 1),
+    },
+    {
+      GDK_DIHEDRAL_FLIPPED_270,
+      ROUNDED_RECT_INIT_UNIFORM(0, 0, 100, 100, 1, 2, 3, 4),
+      ROUNDED_RECT_INIT_UNIFORM(-100, -100, 100, 100, 3, 2, 1, 4),
+    },
+  };
+
+  for (gsize i = 0; i < G_N_ELEMENTS (test); i++)
+    {
+      GskRoundedRect out;
+
+      if (g_test_verbose ())
+        g_test_message ("dihedral test %zu", i);
+
+      gsk_rounded_rect_dihedral (&out, &test[i].in, test[i].dihedral);
+      if (!gsk_rounded_rect_equal (&out, &test[i].expected))
+        {
+          char *b = gsk_rounded_rect_to_string (&out);
+          char *expected = gsk_rounded_rect_to_string (&test[i].expected);
+          g_print ("expected: %s\ngot: %s\n", expected, b);
+        }
+      g_assert_true (gsk_rounded_rect_equal (&out, &test[i].expected));
+    }
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -415,6 +483,7 @@ main (int   argc,
   g_test_add_func ("/rounded-rect/to-float", test_to_float);
   g_test_add_func ("/rounded-rect/intersect-with-rect", test_intersect_with_rect);
   g_test_add_func ("/rounded-rect/intersect", test_intersect);
+  g_test_add_func ("/rounded-rect/dihedral", test_dihedral);
 
   return g_test_run ();
 }
