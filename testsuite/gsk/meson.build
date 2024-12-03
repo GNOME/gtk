@@ -534,7 +534,6 @@ endif
 
 tests = [
   [ 'normalize', [ 'normalize.c', '../reftests/reftest-compare.c' ] ],
-  [ 'transform' ],
   [ 'shader' ],
   [ 'opaque' ],
   [ 'path', [ 'path-utils.c' ], [ 'flaky'] ],
@@ -576,6 +575,7 @@ internal_tests = [
   [ 'misc'],
   [ 'path-private' ],
   [ 'rounded-rect'],
+  [ 'transform' ],
 ]
 
 foreach t : internal_tests
