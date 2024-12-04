@@ -909,6 +909,18 @@ test_rotate_transform (void)
   gsk_transform_unref (t1);
   gsk_transform_unref (t2);
   gsk_transform_unref (t3);
+
+  t1 = gsk_transform_rotate (NULL, 180);
+  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_2D);
+  t1 = gsk_transform_rotate (t1, 180);
+  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_IDENTITY);
+  g_assert_null (t1);
+
+  t1 = gsk_transform_rotate (NULL, 360);
+  g_assert_null (t1);
+
+  t1 = gsk_transform_rotate (NULL, -360);
+  g_assert_null (t1);
 }
 
 static void

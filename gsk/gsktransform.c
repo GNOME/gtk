@@ -1003,6 +1003,7 @@ gsk_transform_rotate (GskTransform *next,
 {
   GskRotateTransform *result;
 
+  angle = normalize_angle (angle);
   if (angle == 0.0f)
     return next;
 
@@ -1019,7 +1020,7 @@ gsk_transform_rotate (GskTransform *next,
                                                     : GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL,
                                 next);
 
-  result->angle = normalize_angle (angle);
+  result->angle = angle;
 
   return &result->parent;
 }
@@ -1137,17 +1138,18 @@ gsk_transform_rotate_3d (GskTransform          *next,
 {
   GskRotate3dTransform *result;
 
-  if (graphene_vec3_get_x (axis) == 0.0 && graphene_vec3_get_y (axis) == 0.0)
-    return gsk_transform_rotate (next, angle);
-
+  angle = normalize_angle (angle);
   if (angle == 0.0f)
     return next;
+
+  if (graphene_vec3_get_x (axis) == 0.0 && graphene_vec3_get_y (axis) == 0.0)
+    return gsk_transform_rotate (next, angle);
 
   result = gsk_transform_alloc (&GSK_ROTATE3D_TRANSFORM_CLASS,
                                 GSK_FINE_TRANSFORM_CATEGORY_3D,
                                 next);
 
-  result->angle = normalize_angle (angle);
+  result->angle = angle;
   graphene_vec3_init_from_vec3 (&result->axis, axis);
 
   return &result->parent;
