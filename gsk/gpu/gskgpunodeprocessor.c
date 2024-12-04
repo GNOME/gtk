@@ -472,6 +472,7 @@ gsk_gpu_node_processor_rect_device_to_clip (GskGpuNodeProcessor   *self,
     case GSK_FINE_TRANSFORM_CATEGORY_2D_TRANSLATE:
       {
         GskTransform *inverse = gsk_transform_invert (gsk_transform_ref (self->modelview));
+        g_return_val_if_fail (inverse != NULL, FALSE);
         gsk_transform_transform_bounds (inverse, src, &transformed);
         gsk_transform_unref (inverse);
         src = &transformed;
