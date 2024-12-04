@@ -2228,8 +2228,7 @@ gdk_gl_context_import_dmabuf_for_target (GdkGLContext    *self,
   image = gdk_dmabuf_egl_create_image (display,
                                        width,
                                        height,
-                                       dmabuf,
-                                       target);
+                                       dmabuf);
   if (image == EGL_NO_IMAGE)
     return 0;
 
