@@ -2170,37 +2170,6 @@ gdk_gl_backend_use (GdkGLBackend backend_type)
   g_assert (the_gl_backend_type == backend_type);
 }
 
-#if defined(HAVE_EGL) && defined(HAVE_DMABUF)
-static guint
-gdk_gl_context_import_dmabuf_for_target (GdkGLContext    *self,
-                                         int              width,
-                                         int              height,
-                                         const GdkDmabuf *dmabuf,
-                                         int              target)
-{
-  GdkDisplay *display = gdk_gl_context_get_display (self);
-  EGLImage image;
-  guint texture_id;
-
-  image = gdk_dmabuf_egl_create_image (display,
-                                       width,
-                                       height,
-                                       dmabuf);
-  if (image == EGL_NO_IMAGE)
-    return 0;
-
-  glGenTextures (1, &texture_id);
-  glBindTexture (target, texture_id);
-  glEGLImageTargetTexture2DOES (target, image);
-  glTexParameteri (target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri (target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-  eglDestroyImageKHR (gdk_display_get_egl_display (display), image);
-
-  return texture_id;
-}
-#endif
-
 guint
 gdk_gl_context_import_dmabuf (GdkGLContext    *self,
                               int              width,
@@ -2210,6 +2179,7 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
 {
 #if defined(HAVE_EGL) && defined(HAVE_DMABUF)
   GdkDisplay *display = gdk_gl_context_get_display (self);
+  EGLImage image;
   guint texture_id;
   int target;
 
@@ -2230,11 +2200,11 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
         target = GL_TEXTURE_2D;
     }
 
-  texture_id = gdk_gl_context_import_dmabuf_for_target (self,
-                                                        width, height,
-                                                        dmabuf,
-                                                        target);
-  if (texture_id == 0)
+  image = gdk_dmabuf_egl_create_image (display,
+                                       width,
+                                       height,
+                                       dmabuf);
+  if (image == EGL_NO_IMAGE)
     {
       GDK_DISPLAY_DEBUG (display, DMABUF,
                          "Import of %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf failed",
@@ -2242,6 +2212,14 @@ gdk_gl_context_import_dmabuf (GdkGLContext    *self,
                          (char *) &dmabuf->fourcc, dmabuf->modifier);
       return 0;
     }
+
+  glGenTextures (1, &texture_id);
+  glBindTexture (target, texture_id);
+  glEGLImageTargetTexture2DOES (target, image);
+  glTexParameteri (target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+  eglDestroyImageKHR (gdk_display_get_egl_display (display), image);
 
   GDK_DISPLAY_DEBUG (display, DMABUF,
                      "Imported %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf as %s texture",
