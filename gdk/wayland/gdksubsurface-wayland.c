@@ -317,6 +317,14 @@ get_sp_buffer (GdkWaylandSubsurface *self)
   return buffer;
 }
 
+/* Note: The GdkDihedral transforms are *inverses* of the corresponding
+ * wl_output_transform transforms.
+ *
+ * This is intentional: The GdkDihedral is the transform we want the
+ * compositor to apply. set_buffer_transform is about *already transformed*
+ * content. By telling the compositor that the content is already transformed
+ * by the inverse of the GdkDihedral, we get it to apply the transform we want.
+ */
 static inline enum wl_output_transform
 gdk_texture_transform_to_wl (GdkDihedral transform)
 {
