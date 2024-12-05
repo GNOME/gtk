@@ -74,8 +74,8 @@ GdkDihedral
 gdk_dihedral_combine (GdkDihedral first,
                       GdkDihedral second)
 {
-  return ((first & 4) ^ (second & 4)) |
-         ((((first & 3) * (((second & 4) >> 1) + 1)) + second) & 3);
+  return ((second & 4) ^ (first & 4)) |
+         ((((second & 3) * (((first & 4) >> 1) + 1)) + first) & 3);
 }
 
 /*< private >
