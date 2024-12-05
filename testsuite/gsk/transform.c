@@ -1085,6 +1085,66 @@ test_dihedral_matrix (void)
     }
 }
 
+static void
+test_fine_category (void)
+{
+  GskTransform *transform;
+
+  g_test_summary ("Tests that we get the fine categories of dihedral transforms right");
+
+  transform = gsk_transform_rotate (NULL, 90);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_rotate (NULL, 180);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_rotate (NULL, 270);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (NULL, -1, 1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (NULL, 1, -1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (NULL, -1, -1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 90), -1, 1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 180), -1, 1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 270), -1, 1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 360), -1, 1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 450), -1, 1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_rotate (NULL, -450);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_dihedral (NULL, GDK_DIHEDRAL_FLIPPED_90);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+}
+
 int
 main (int   argc,
       char *argv[])
@@ -1113,6 +1173,7 @@ main (int   argc,
   g_test_add_func ("/transform/matrix/roundtrip", test_matrix_roundtrip);
   g_test_add_func ("/transform/to-dihedral", test_to_dihedral);
   g_test_add_func ("/transform/dihedral-matrix", test_dihedral_matrix);
+  g_test_add_func ("/transform/fine-category", test_fine_category);
 
   return g_test_run ();
 }
