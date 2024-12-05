@@ -21,6 +21,33 @@
 
 G_BEGIN_DECLS
 
+/*< private >
+ * GdkDihedral:
+ * @GDK_DIHEDRAL_NORMAL: Identity,
+ *   equivalent to the CSS transform "none"
+ * @GDK_DIHEDRAL_90: Clockwise rotation by 90°,
+ *   equivalent to the CSS transform "rotate(90deg)"
+ * @GDK_DIHEDRAL_180: Clockwise rotation by 180°,
+ *   equivalent to the CSS transform "rotate(180deg)"
+ * @GDK_DIHEDRAL_270: Clockwise rotation by 270°,
+ *   equivalent to the CSS transform "rotate(270deg)"
+ * @GDK_DIHEDRAL_FLIPPED: Horizontal flip,
+ *   equivalent to the CSS transform "scale(-1, 1)"
+ * @GDK_DIHEDRAL_FLIPPED_90: Clockwise 90° rotation, followed by a horizontal flip,
+ *   equivalent to the CSS transform "rotate(90deg) scale(-1, 1)"
+ * @GDK_DIHEDRAL_FLIPPED_180: Clockwise 180° rotation, followed by a horizontal flip,
+ *   equivalent to the CSS transform "rotate(180deg) scale(-1, 1)"
+ * @GDK_DIHEDRAL_FLIPPED_270: Clockwise 270° rotation, followed by a horizontal flip,
+ *   equivalent to the CSS transform "rotate(270deg) scale(-1, 1)"
+ *
+ * The transforms that make up the symmetry group of the square,
+ * also known as D₄.
+ *
+ * Note that this enumeration is intentionally set up to encode the *inverses*
+ * of the corresponding wl_output_transform values. E.g. `WL_OUTPUT_TRANSFORM_FLIPPED_90`
+ * is defined as a horizontal flip, followed by a 90° counterclockwise rotation, which
+ * is the inverse of @GDK_DIHEDRAL_FLIPPED_90.
+ */
 typedef enum {
   GDK_DIHEDRAL_NORMAL,
   GDK_DIHEDRAL_90,
