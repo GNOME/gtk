@@ -21,6 +21,20 @@
 
 G_BEGIN_DECLS
 
+/*< private >
+ * GdkDihedral:
+ * @GDK_DIHEDRAL_NORMAL: Identity
+ * @GDK_DIHEDRAL_90: Rotation by 90°
+ * @GDK_DIHEDRAL_180: Rotation by 180°
+ * @GDK_DIHEDRAL_270: Rotation by 270°
+ * @GDK_DIHEDRAL_FLIPPED: Horizontal flip
+ * @GDK_DIHEDRAL_FLIPPED_90: Horizontal flip, followed by 90° rotation
+ * @GDK_DIHEDRAL_FLIPPED_180: Horizontal flip, followed by 180° rotation
+ * @GDK_DIHEDRAL_FLIPPED_270: Horizontal flip, followed by 270° rotation
+ *
+ * The transforms that make up the symmetry group of the square,
+ * also known as D₄.
+ */
 typedef enum {
   GDK_DIHEDRAL_NORMAL,
   GDK_DIHEDRAL_90,
