@@ -268,7 +268,10 @@ gdk_dmabuf_egl_init (GdkDisplay *display)
   if (!retval)
     {
       if (previous)
-        gdk_gl_context_make_current (previous);
+        {
+          gdk_gl_context_make_current (previous);
+          g_object_unref (previous);
+        }
       return;
     }
 
@@ -280,8 +283,10 @@ gdk_dmabuf_egl_init (GdkDisplay *display)
       g_error_free (error);
       g_object_unref (renderer);
       if (previous)
-        gdk_gl_context_make_current (previous);
-
+        {
+          gdk_gl_context_make_current (previous);
+          g_object_unref (previous);
+        }
       return;
     }
 
