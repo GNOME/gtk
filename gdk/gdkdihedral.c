@@ -32,16 +32,16 @@ gdk_dihedral_get_mat2 (GdkDihedral  transform,
       {  0.0,  1.0 }
     },
     [GDK_DIHEDRAL_FLIPPED_90] = {
-      {  0.0, -1.0 },
-      { -1.0,  0.0 }
+      {  0.0,  1.0 },
+      {  1.0,  0.0 }
     },
     [GDK_DIHEDRAL_FLIPPED_180] = {
       {  1.0,  0.0 },
       {  0.0, -1.0 }
     },
     [GDK_DIHEDRAL_FLIPPED_270] = {
-      {  0.0,  1.0 },
-      {  1.0,  0.0 }
+      {  0.0, -1.0 },
+      { -1.0,  0.0 }
     },
   };
 
