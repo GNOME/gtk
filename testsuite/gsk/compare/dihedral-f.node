@@ -1,0 +1,42 @@
+container "node1" {
+  color "node2" {
+    bounds: -15 -25 30 10;
+    color: rgb(0,0,0);
+  }
+  color "node3" {
+    bounds: -15 -15 10 40;
+    color: rgb(0,0,0);
+  }
+  color "node4" {
+    bounds: -5 -5 10 10;
+    color: rgb(0,0,0);
+  }
+}
+transform {
+  transform: translate(60, 0) rotate(90);
+  child: "node1";
+}
+transform {
+  transform: translate(120, 0) rotate(180);
+  child: "node1";
+}
+transform {
+  transform: translate(180, 0) rotate(270);
+  child: "node1";
+}
+transform {
+  transform: translate(0, 60) scale(-1, 1);
+  child: "node1";
+}
+transform {
+  transform: translate(60, 60) scale(-1, 1) rotate(90);
+  child: "node1";
+}
+transform {
+  transform: translate(120, 60) scale(-1, 1) rotate(180);
+  child: "node1";
+}
+transform {
+  transform: translate(180, 60) scale(-1, 1) rotate(270);
+  child: "node1";
+}

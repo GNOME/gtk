@@ -290,7 +290,7 @@ gsk_matrix_transform_to_matrix (GskTransform      *transform,
   graphene_matrix_init_from_matrix (out_matrix, &self->matrix);
 }
 
-static void 
+static void
 gsk_matrix_transform_apply_2d (GskTransform *transform,
                                float        *out_xx,
                                float        *out_yx,
@@ -1390,11 +1390,20 @@ gsk_scale_transform_apply_dihedral (GskTransform *transform,
 {
   GskScaleTransform *self = (GskScaleTransform *) transform;
   GdkDihedral dihedral;
-  float xx, xy, yx, yy;
+  float scale_x, scale_y;
 
   g_assert (self->factor_z == 1.0);
 
-  gdk_dihedral_get_mat2 (*out_dihedral, &xx, &xy, &yx, &yy);
+  if (gdk_dihedral_swaps_xy (*out_dihedral))
+    {
+      scale_x = fabs (self->factor_y);
+      scale_y = fabs (self->factor_x);
+    }
+  else
+    {
+      scale_x = fabs (self->factor_x);
+      scale_y = fabs (self->factor_y);
+    }
 
   if (self->factor_x >= 0)
     {
@@ -1410,9 +1419,10 @@ gsk_scale_transform_apply_dihedral (GskTransform *transform,
       else
         dihedral = GDK_DIHEDRAL_180;
     }
+
   *out_dihedral = gdk_dihedral_combine (dihedral, *out_dihedral);
-  *out_scale_x *= fabs (xx * self->factor_x + xy * self->factor_y);
-  *out_scale_y *= fabs (yx * self->factor_x + yy * self->factor_y);
+  *out_scale_x *= scale_x;
+  *out_scale_y *= scale_y;
 }
 
 static void
@@ -2052,7 +2062,7 @@ gsk_transform_to_affine (GskTransform *self,
 /*<private>
  * gsk_transform_to_dihedral:
  * @self: a `GskTransform`
- * @out_dihedral: (out): return location for the 
+ * @out_dihedral: (out): return location for the dihedral transform
  * @out_scale_x: (out): return location for the scale
  *   factor in the x direction
  * @out_scale_y: (out): return location for the scale
@@ -2062,19 +2072,23 @@ gsk_transform_to_affine (GskTransform *self,
  * @out_dy: (out): return location for the translation
  *   in the y direction
  *
- * Converts a `GskTransform` to 2D affine transformation factors.
+ * Converts a `GskTransform` to 2D dihedral transformation factors.
  *
  * To recreate an equivalent transform from the factors returned
  * by this function, use
  *
- *     gsk_transform_scale (gsk_transform_translate (NULL,
- *                                                   &GRAPHENE_POINT_T (dx, dy)),
- *                          sx, sy)
+ *     gsk_transform_dihedral (
+ *         gsk_transform_scale (
+ *             gsk_transform_translate (
+ *                 NULL,
+ *                 &GRAPHENE_POINT_T (dx, dy)),
+ *             sx, sy),
+ *         dihedral)
  *
- * @self must be a 2D affine transformation. If you are not
+ * @self must be a 2D dihedral transformation. If you are not
  * sure, use
  *
- *     gsk_transform_get_category() >= %GSK_TRANSFORM_CATEGORY_2D_AFFINE
+ *     gsk_transform_get_fine_category() >= %GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL
  *
  * to check.
  */
@@ -2107,6 +2121,34 @@ gsk_transform_to_dihedral (GskTransform *self,
                                          out_dihedral,
                                          out_scale_x, out_scale_y,
                                          out_dx, out_dy);
+}
+
+/*< private >
+ * gsk_transform_dihedral:
+ * @next: (nullable) (transfer full): the next transform
+ * @dihedral: dihedral tansform to apply
+ *
+ * Applies a dihedral transform to @next.
+ *
+ * This function consumes @next. Use [method@Gsk.Transform.ref] first
+ * if you want to keep it around.
+ *
+ * Returns: (nullable): The new transform
+ **/
+GskTransform *
+gsk_transform_dihedral (GskTransform *next,
+                        GdkDihedral   dihedral)
+{
+  int rotate = dihedral & 3;
+  int flip = dihedral & 4;
+
+  if (flip)
+    next = gsk_transform_scale (next, -1.0, 1.0);
+
+  if (rotate)
+    next = gsk_transform_rotate (next, rotate * 90.0f);
+
+  return next;
 }
 
 /**
