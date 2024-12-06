@@ -18,8 +18,8 @@
 /**
  * GskRenderer:
  *
- * `GskRenderer` is a class that renders a scene graph defined via a
- * tree of [class@Gsk.RenderNode] instances.
+ * A class that renders a scene graph defined via a tree of
+ * [class@Gsk.RenderNode] instances.
  *
  * Typically you will use a `GskRenderer` instance to repeatedly call
  * [method@Gsk.Renderer.render] to update the contents of its associated
@@ -209,13 +209,13 @@ gsk_renderer_init (GskRenderer *self)
 
 /**
  * gsk_renderer_get_surface:
- * @renderer: a `GskRenderer`
+ * @renderer: a renderer
  *
- * Retrieves the `GdkSurface` set using gsk_enderer_realize().
+ * Retrieves the surface that the renderer is associated with.
  *
- * If the renderer has not been realized yet, %NULL will be returned.
+ * If the renderer has not been realized yet, `NULL` will be returned.
  *
- * Returns: (transfer none) (nullable): a `GdkSurface`
+ * Returns: (transfer none) (nullable): the surface
  */
 GdkSurface *
 gsk_renderer_get_surface (GskRenderer *renderer)
@@ -229,11 +229,11 @@ gsk_renderer_get_surface (GskRenderer *renderer)
 
 /**
  * gsk_renderer_is_realized: (get-property realized)
- * @renderer: a `GskRenderer`
+ * @renderer: a renderer
  *
- * Checks whether the @renderer is realized or not.
+ * Checks whether the renderer is realized or not.
  *
- * Returns: %TRUE if the `GskRenderer` was realized, and %FALSE otherwise
+ * Returns: true if the renderer was realized, false otherwise
  */
 gboolean
 gsk_renderer_is_realized (GskRenderer *renderer)
@@ -273,22 +273,21 @@ gsk_renderer_do_realize (GskRenderer  *renderer,
 
 /**
  * gsk_renderer_realize:
- * @renderer: a `GskRenderer`
- * @surface: (nullable): the `GdkSurface` renderer will be used on
+ * @renderer: a renderer
+ * @surface: (nullable): the surface that renderer will be used on
  * @error: return location for an error
  *
- * Creates the resources needed by the @renderer to render the scene
- * graph.
+ * Creates the resources needed by the renderer.
  *
  * Since GTK 4.6, the surface may be `NULL`, which allows using
- * renderers without having to create a surface.
- * Since GTK 4.14, it is recommended to use [method@Gsk.Renderer.realize_for_display]
- * instead.
+ * renderers without having to create a surface. Since GTK 4.14,
+ * it is recommended to use [method@Gsk.Renderer.realize_for_display]
+ * for this case.
  *
- * Note that it is mandatory to call [method@Gsk.Renderer.unrealize] before
- * destroying the renderer.
+ * Note that it is mandatory to call [method@Gsk.Renderer.unrealize]
+ * before destroying the renderer.
  *
- * Returns: Whether the renderer was successfully realized
+ * Returns: whether the renderer was successfully realized
  */
 gboolean
 gsk_renderer_realize (GskRenderer  *renderer,
@@ -318,17 +317,16 @@ gsk_renderer_realize (GskRenderer  *renderer,
 
 /**
  * gsk_renderer_realize_for_display:
- * @renderer: a `GskRenderer`
- * @display: the `GdkDisplay` renderer will be used on
+ * @renderer: a renderer
+ * @display: the display that the renderer will be used on
  * @error: return location for an error
  *
- * Creates the resources needed by the @renderer to render the scene
- * graph.
+ * Creates the resources needed by the renderer.
  *
- * Note that it is mandatory to call [method@Gsk.Renderer.unrealize] before
- * destroying the renderer.
+ * Note that it is mandatory to call [method@Gsk.Renderer.unrealize]
+ * before destroying the renderer.
  *
- * Returns: Whether the renderer was successfully realized
+ * Returns: whether the renderer was successfully realized
  *
  * Since: 4.14
  */
@@ -347,9 +345,9 @@ gsk_renderer_realize_for_display (GskRenderer  *renderer,
 
 /**
  * gsk_renderer_unrealize:
- * @renderer: a `GskRenderer`
+ * @renderer: a renderer
  *
- * Releases all the resources created by gsk_renderer_realize().
+ * Releases all the resources created by [method@Gsk.Renderer.realize].
  */
 void
 gsk_renderer_unrealize (GskRenderer *renderer)
@@ -378,20 +376,20 @@ gsk_renderer_unrealize (GskRenderer *renderer)
 
 /**
  * gsk_renderer_render_texture:
- * @renderer: a realized `GskRenderer`
- * @root: a `GskRenderNode`
- * @viewport: (nullable): the section to draw or %NULL to use @root's bounds
+ * @renderer: a realized renderer
+ * @root: the render node to render
+ * @viewport: (nullable): the section to draw or `NULL` to use @root's bounds
  *
- * Renders the scene graph, described by a tree of `GskRenderNode` instances,
- * to a `GdkTexture`.
+ * Renders a scene graph, described by a tree of `GskRenderNode` instances,
+ * to a texture.
  *
- * The @renderer will acquire a reference on the `GskRenderNode` tree while
+ * The renderer will acquire a reference on the `GskRenderNode` tree while
  * the rendering is in progress.
  *
  * If you want to apply any transformations to @root, you should put it into a
  * transform node and pass that node instead.
  *
- * Returns: (transfer full): a `GdkTexture` with the rendered contents of @root.
+ * Returns: (transfer full): a texture with the rendered contents of @root
  */
 GdkTexture *
 gsk_renderer_render_texture (GskRenderer           *renderer,
@@ -421,13 +419,13 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
 
 /**
  * gsk_renderer_render:
- * @renderer: a realized `GskRenderer`
- * @root: a `GskRenderNode`
- * @region: (nullable): the `cairo_region_t` that must be redrawn or %NULL
- *   for the whole window
+ * @renderer: a realized renderer
+ * @root: the render node to render
+ * @region: (nullable): the `cairo_region_t` that must be redrawn or `NULL`
+ *   for the whole surface
  *
  * Renders the scene graph, described by a tree of `GskRenderNode` instances
- * to the renderer's surface,  ensuring that the given @region gets redrawn.
+ * to the renderer's surface, ensuring that the given region gets redrawn.
  *
  * If the renderer has no associated surface, this function does nothing.
  *
@@ -436,7 +434,7 @@ gsk_renderer_render_texture (GskRenderer           *renderer,
  * free to not redraw any pixel outside of @region if they can guarantee that
  * it didn't change.
  *
- * The @renderer will acquire a reference on the `GskRenderNode` tree while
+ * The renderer will acquire a reference on the `GskRenderNode` tree while
  * the rendering is in progress.
  */
 void
@@ -489,7 +487,7 @@ gsk_renderer_render (GskRenderer          *renderer,
 
 /*< private >
  * gsk_renderer_get_profiler:
- * @renderer: a `GskRenderer`
+ * @renderer: a renderer
  *
  * Retrieves a pointer to the `GskProfiler` instance of the renderer.
  *
@@ -741,9 +739,9 @@ static struct {
 
 /**
  * gsk_renderer_new_for_surface:
- * @surface: a `GdkSurface`
+ * @surface: a surface
  *
- * Creates an appropriate `GskRenderer` instance for the given @surface.
+ * Creates an appropriate `GskRenderer` instance for the given surface.
  *
  * If the `GSK_RENDERER` environment variable is set, GSK will
  * try that renderer first, before trying the backend-specific
@@ -751,7 +749,7 @@ static struct {
  *
  * The renderer will be realized before it is returned.
  *
- * Returns: (transfer full) (nullable): a `GskRenderer`
+ * Returns: (transfer full) (nullable): the realized renderer
  */
 GskRenderer *
 gsk_renderer_new_for_surface (GdkSurface *surface)
@@ -814,4 +812,3 @@ gsk_renderer_set_debug_flags (GskRenderer   *renderer,
 
   priv->debug_flags = flags;
 }
-
