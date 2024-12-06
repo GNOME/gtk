@@ -1388,11 +1388,20 @@ gsk_scale_transform_apply_dihedral (GskTransform *transform,
 {
   GskScaleTransform *self = (GskScaleTransform *) transform;
   GdkDihedral dihedral;
-  float xx, xy, yx, yy;
+  float scale_x, scale_y;
 
   g_assert (self->factor_z == 1.0);
 
-  gdk_dihedral_get_mat2 (*out_dihedral, &xx, &xy, &yx, &yy);
+  if (gdk_dihedral_swaps_xy (*out_dihedral))
+    {
+      scale_x = fabs (self->factor_y);
+      scale_y = fabs (self->factor_x);
+    }
+  else
+    {
+      scale_x = fabs (self->factor_x);
+      scale_y = fabs (self->factor_y);
+    }
 
   if (self->factor_x >= 0)
     {
@@ -1408,9 +1417,10 @@ gsk_scale_transform_apply_dihedral (GskTransform *transform,
       else
         dihedral = GDK_DIHEDRAL_180;
     }
+
   *out_dihedral = gdk_dihedral_combine (dihedral, *out_dihedral);
-  *out_scale_x *= fabs (xx * self->factor_x + xy * self->factor_y);
-  *out_scale_y *= fabs (yx * self->factor_x + yy * self->factor_y);
+  *out_scale_x *= scale_x;
+  *out_scale_y *= scale_y;
 }
 
 static void
