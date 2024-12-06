@@ -1,5 +1,64 @@
-Overview of Changes in 4.17.1, xx-xx-xxxx
+Overview of Changes in 4.17.2, xx-xx-xxxx
 =========================================
+
+Overview of Changes in 4.17.1, 06-12-2024
+=========================================
+
+This release switches our portal support from opt-in to opt-out.
+We will use portals by default, unless you set GDK_DEBUG=no-portals.
+And we will *always* use portals in flatpaks.
+
+* Text rendering:
+ - Make error underlines smaller
+
+* GtkText:
+ - Avoid selecting inserted Emoji
+
+* GtkPlacesView:
+ - Improve accessibility
+
+* GtkFileChooser:
+ - Fix a case where search was stealing focus
+
+* GtkEmojiChooser:
+ - Update to CLDR 46 / Unicode 16
+
+* Accessibility:
+ - Fix DBus signature of ChildrenChanged
+
+* GDK:
+ - Don't recycle threads too aggressively
+ - Add GDK_DISABLE=threads to disable threaded operations
+ - Improve parallelization for small tasks
+
+* GSK:
+ - Make occlusion checking more effective
+ - Clip luminosity when clipping colors (avoiding masking artifacts)
+ - Fix problems with dihedral transforms
+
+* Vulkan:
+ - Streamline Vulkan setup
+ - Fix blurry rendering at certain scale/size combinations
+
+* OpenGL:
+ - Conform to buffer offset alignment requirements
+
+* Windows:
+ - Fix pasting certain bitmaps
+
+* Documentation:
+ - Revise and modernize some docs
+
+* Debugging:
+ - Inspector: Show surfaces and renderers in the tree
+ - Inspector: Make the object tree resizable
+ - Inspector: Add a "Copy for gitlab" button
+
+* Translation updates
+ Icelandic
+ Serbian
+ Slovenian
+
 
 Overview of Changes in 4.17.0, 06-11-2024
 =========================================

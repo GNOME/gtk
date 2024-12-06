@@ -52,6 +52,12 @@
  * endeavor.
  */
 
+/**
+ * GdkContentFormatsBuilder:
+ *
+ * Auxiliary object to create a `GdkContentFormats`.
+ */
+
 #include "config.h"
 
 #include "gdkcontentformats.h"
