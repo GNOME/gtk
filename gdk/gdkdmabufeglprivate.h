@@ -10,8 +10,7 @@
 EGLImage                    gdk_dmabuf_egl_create_image         (GdkDisplay                     *display,
                                                                  int                             width,
                                                                  int                             height,
-                                                                 const GdkDmabuf                *dmabuf,
-                                                                 int                             target);
+                                                                 const GdkDmabuf                *dmabuf);
 
 #endif  /* HAVE_DMABUF && HAVE_EGL */
 

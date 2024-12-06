@@ -141,8 +141,7 @@ EGLImage
 gdk_dmabuf_egl_create_image (GdkDisplay      *display,
                              int              width,
                              int              height,
-                             const GdkDmabuf *dmabuf,
-                             int              target)
+                             const GdkDmabuf *dmabuf)
 {
   EGLDisplay egl_display = gdk_display_get_egl_display (display);
   EGLint attribs[64];
@@ -152,7 +151,6 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
   g_return_val_if_fail (width > 0, 0);
   g_return_val_if_fail (height > 0, 0);
   g_return_val_if_fail (1 <= dmabuf->n_planes && dmabuf->n_planes <= 4, 0);
-  g_return_val_if_fail (target == GL_TEXTURE_2D || target == GL_TEXTURE_EXTERNAL_OES, 0);
 
   if (egl_display == EGL_NO_DISPLAY || !display->have_egl_dma_buf_import)
     {
@@ -271,7 +269,10 @@ gdk_dmabuf_egl_init (GdkDisplay *display)
   if (!retval)
     {
       if (previous)
-        gdk_gl_context_make_current (previous);
+        {
+          gdk_gl_context_make_current (previous);
+          g_object_unref (previous);
+        }
       return;
     }
 
@@ -283,8 +284,10 @@ gdk_dmabuf_egl_init (GdkDisplay *display)
       g_error_free (error);
       g_object_unref (renderer);
       if (previous)
-        gdk_gl_context_make_current (previous);
-
+        {
+          gdk_gl_context_make_current (previous);
+          g_object_unref (previous);
+        }
       return;
     }
 
