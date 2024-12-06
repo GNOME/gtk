@@ -1394,22 +1394,6 @@ gsk_gpu_node_processor_add_first_rounded_clip_node (GskGpuNodeProcessor *self,
                                                         gsk_rounded_clip_node_get_child (node));
 }
 
-static GskTransform *
-gsk_transform_dihedral (GskTransform *transform,
-                        GdkDihedral   dihedral)
-{
-  int rotate = dihedral & 3;
-  int flip = dihedral & 4;
-
-  if (flip)
-      transform = gsk_transform_scale (transform, -1.0, 1.0);
-
-  if (rotate)
-      transform = gsk_transform_rotate (transform, rotate * 90.0f);
-
-  return transform;
-}
-
 static void
 gsk_gpu_node_processor_add_transform_node (GskGpuNodeProcessor *self,
                                            GskRenderNode       *node)
