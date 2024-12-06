@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include <gtk/gtk.h>
+#include "gsk/gsktransformprivate.h"
 
 #define EPSILON (1.f / 1024 / 32) /* 2^-15 */
 
@@ -410,37 +411,6 @@ test_print_parse (void)
   ret = gsk_transform_parse ("rotate(45);", &parsed);
   g_assert_false (ret);
   g_assert_null (parsed);
-}
-
-static void
-gsk_matrix_transform_rect (const graphene_matrix_t *m,
-                           const graphene_rect_t   *r,
-                           graphene_quad_t         *res)
-{
-  graphene_point_t ret[4];
-  graphene_rect_t rr;
-
-  graphene_rect_normalize_r (r, &rr);
-
-#define TRANSFORM_POINT(matrix, rect, corner, out_p)   do {\
-  graphene_vec4_t __s; \
-  graphene_point_t __p; \
-  float w; \
-  graphene_rect_get_ ## corner (rect, &__p); \
-  graphene_vec4_init (&__s, __p.x, __p.y, 0.f, 1.f); \
-  graphene_matrix_transform_vec4 (matrix, &__s, &__s); \
-  w = graphene_vec4_get_w (&__s); \
-  out_p.x = graphene_vec4_get_x (&__s) / w; \
-  out_p.y = graphene_vec4_get_y (&__s) / w;           } while (0)
-
-  TRANSFORM_POINT (m, &rr, top_left, ret[0]);
-  TRANSFORM_POINT (m, &rr, top_right, ret[1]);
-  TRANSFORM_POINT (m, &rr, bottom_right, ret[2]);
-  TRANSFORM_POINT (m, &rr, bottom_left, ret[3]);
-
-#undef TRANSFORM_POINT
-
-  graphene_quad_init (res, &ret[0], &ret[1], &ret[2], &ret[3]);
 }
 
 /* This is an auxiliary function used in the GL renderer to
@@ -994,11 +964,181 @@ test_matrix_roundtrip (void)
   g_free (str);
 }
 
+static void
+test_to_dihedral (void)
+{
+  GskTransform *transform;
+  GdkDihedral dihedral;
+  float sx, sy, dx, dy;
+
+  g_test_summary ("Tests that gsk_transform_to_dihedral gives the expected results on a various transforms");
+
+  transform = gsk_transform_scale (NULL, 10.0, 5.0);
+  gsk_transform_to_dihedral (transform, &dihedral, &sx, &sy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  g_assert_true (dihedral == GDK_DIHEDRAL_NORMAL);
+  g_assert_cmpfloat (sx, ==, 10.0);
+  g_assert_cmpfloat (sy, ==, 5.0);
+  g_assert_cmpfloat (dx, ==, 0.0);
+  g_assert_cmpfloat (dy, ==, 0.0);
+
+  transform = gsk_transform_rotate (gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (10.0, 5.0)), 90);
+  gsk_transform_to_dihedral (transform, &dihedral, &sx, &sy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  g_assert_true (dihedral == GDK_DIHEDRAL_90);
+  g_assert_cmpfloat (sx, ==, 1.0);
+  g_assert_cmpfloat (sy, ==, 1.0);
+  g_assert_cmpfloat (dx, ==, 10.0);
+  g_assert_cmpfloat (dy, ==, 5.0);
+
+  transform = gsk_transform_scale (gsk_transform_translate (gsk_transform_scale (NULL, 2.0, 3.0), &GRAPHENE_POINT_INIT (10.0, 5.0)), -1, 1);
+  gsk_transform_to_dihedral (transform, &dihedral, &sx, &sy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  g_assert_true (dihedral == GDK_DIHEDRAL_FLIPPED);
+  g_assert_cmpfloat (sx, ==, 2.0);
+  g_assert_cmpfloat (sy, ==, 3.0);
+  g_assert_cmpfloat (dx, ==, 2.0 * 10.0);
+  g_assert_cmpfloat (dy, ==, 3.0 * 5.0);
+
+  transform = gsk_transform_rotate (gsk_transform_rotate (gsk_transform_scale (gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (10.0, 5.0)), 2.0, 3.0), 90), 90);
+  gsk_transform_to_dihedral (transform, &dihedral, &sx, &sy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  g_assert_true (dihedral == GDK_DIHEDRAL_180);
+  g_assert_cmpfloat (sx, ==, 2.0);
+  g_assert_cmpfloat (sy, ==, 3.0);
+  g_assert_cmpfloat (dx, ==, 10.0);
+  g_assert_cmpfloat (dy, ==, 5.0);
+
+  transform = gsk_transform_rotate (gsk_transform_scale (gsk_transform_scale (gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (10.0, 5.0)), 2.0, 3.0), -1, 1), 90);
+  gsk_transform_to_dihedral (transform, &dihedral, &sx, &sy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  g_assert_true (dihedral == GDK_DIHEDRAL_FLIPPED_90);
+  g_assert_cmpfloat (sx, ==, 2.0);
+  g_assert_cmpfloat (sy, ==, 3.0);
+  g_assert_cmpfloat (dx, ==, 10.0);
+  g_assert_cmpfloat (dy, ==, 5.0);
+
+  transform = gsk_transform_dihedral (gsk_transform_scale (gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (10.0, 5.0)), 2.0, 3.0), GDK_DIHEDRAL_FLIPPED_90);
+  gsk_transform_to_dihedral (transform, &dihedral, &sx, &sy, &dx, &dy);
+  gsk_transform_unref (transform);
+
+  g_assert_true (dihedral == GDK_DIHEDRAL_FLIPPED_90);
+  g_assert_cmpfloat (sx, ==, 2.0);
+  g_assert_cmpfloat (sy, ==, 3.0);
+  g_assert_cmpfloat (dx, ==, 10.0);
+  g_assert_cmpfloat (dy, ==, 5.0);
+}
+
+static void
+test_dihedral_matrix (void)
+{
+  g_test_summary ("Tests that gsk_transform_to_2d and gdk_dihedral_get_mat2 agree");
+
+  for (int i = 0; i <= GDK_DIHEDRAL_FLIPPED_270; i++)
+    {
+      float f[16] = { 1, 0, 0, 0,
+                      0, 1, 0, 0,
+                      0, 0, 1, 0,
+                      0, 0, 0, 1 };
+      float m[16] = { 1, 0, 0, 0,
+                      0, 1, 0, 0,
+                      0, 0, 1, 0,
+                      0, 0, 0, 1 };
+      graphene_matrix_t matrix;
+      graphene_matrix_t test;
+
+      GskTransform *transform = gsk_transform_dihedral (NULL, (GdkDihedral) i);
+      gsk_transform_to_2d (transform,
+                           &f[4 * 0 + 0], &f[4 * 0 + 1],
+                           &f[4 * 1 + 0], &f[4 * 1 + 1],
+                           &f[4 * 3 + 0], &f[4 * 3 + 1]);
+      graphene_matrix_init_from_float (&test, f);
+
+      /* Note that the xy/yx arguments are flipped in gdk_dihedral_get_mat2,
+       * compared to gsk_transform_to_2d
+       */
+      gdk_dihedral_get_mat2 ((GdkDihedral) i,
+                             &m[4 * 0 + 0], &m[4 * 1 + 0],
+                             &m[4 * 0 + 1], &m[4 * 1 + 1]);
+      graphene_matrix_init_from_float (&matrix, m);
+
+      graphene_assert_fuzzy_matrix_equal (&matrix, &test, EPSILON);
+
+      gsk_transform_unref (transform);
+    }
+}
+
+static void
+test_fine_category (void)
+{
+  GskTransform *transform;
+
+  g_test_summary ("Tests that we get the fine categories of dihedral transforms right");
+
+  transform = gsk_transform_rotate (NULL, 90);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_rotate (NULL, 180);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_rotate (NULL, 270);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (NULL, -1, 1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (NULL, 1, -1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (NULL, -1, -1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 90), -1, 1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 180), -1, 1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 270), -1, 1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 360), -1, 1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_scale (gsk_transform_rotate (NULL, 450), -1, 1);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_rotate (NULL, -450);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+
+  transform = gsk_transform_dihedral (NULL, GDK_DIHEDRAL_FLIPPED_90);
+  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  gsk_transform_unref (transform);
+}
+
 int
 main (int   argc,
       char *argv[])
 {
   gtk_test_init (&argc, &argv, NULL);
+  g_test_set_nonfatal_assertions ();
 
   g_test_add_func ("/transform/conversions/simple", test_conversions_simple);
   g_test_add_func ("/transform/conversions/transformed", test_conversions_transformed);
@@ -1019,6 +1159,9 @@ main (int   argc,
   g_test_add_func ("/transform/rotate3d", test_rotate3d_transform);
   g_test_add_func ("/transform/matrix", test_matrix_transform);
   g_test_add_func ("/transform/matrix/roundtrip", test_matrix_roundtrip);
+  g_test_add_func ("/transform/to-dihedral", test_to_dihedral);
+  g_test_add_func ("/transform/dihedral-matrix", test_dihedral_matrix);
+  g_test_add_func ("/transform/fine-category", test_fine_category);
 
   return g_test_run ();
 }

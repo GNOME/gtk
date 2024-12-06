@@ -321,30 +321,50 @@ gsk_rounded_rect_scale_affine (GskRoundedRect       *dest,
     }
 }
 
+/* The permutation of corners that is induced
+ * by the dihedral transform.
+ */
+static GskCorner
+gsk_corner_dihedral (GskCorner   corner,
+                     GdkDihedral dihedral)
+{
+  static const GskCorner p[8][4] = {
+    [GDK_DIHEDRAL_NORMAL]      = { 0, 1, 2, 3 },
+    [GDK_DIHEDRAL_90]          = { 3, 0, 1, 2 },
+    [GDK_DIHEDRAL_180]         = { 2, 3, 0, 1 },
+    [GDK_DIHEDRAL_270]         = { 1, 2, 3, 0 },
+    [GDK_DIHEDRAL_FLIPPED]     = { 1, 0, 3, 2 },
+    [GDK_DIHEDRAL_FLIPPED_90]  = { 0, 3, 2, 1 },
+    [GDK_DIHEDRAL_FLIPPED_180] = { 3, 2, 1, 0 },
+    [GDK_DIHEDRAL_FLIPPED_270] = { 2, 1, 0, 3 },
+  };
+
+  return p[dihedral][corner];
+}
+
 void
 gsk_rounded_rect_dihedral (GskRoundedRect       *dest,
                            const GskRoundedRect *src,
                            GdkDihedral           dihedral)
 {
-  guint flip = (dihedral & 2) + (dihedral >> 2);
-  guint i;
-
   gsk_rect_dihedral (&src->bounds, dihedral, &dest->bounds);
 
   if (gdk_dihedral_swaps_xy (dihedral))
     {
-      for (i = 0; i < 4; i++)
+      for (guint i = 0; i < 4; i++)
         {
-          dest->corner[i].width = src->corner[((i + 1) & 3) ^ flip].width;
-          dest->corner[i].height = src->corner[((i + 1) & 3) ^ flip].height;
+          GskCorner c = gsk_corner_dihedral ((GskCorner)i, dihedral);
+          dest->corner[i].width = src->corner[c].height;
+          dest->corner[i].height = src->corner[c].width;
         }
     }
   else
     {
-      for (i = 0; i < 4; i++)
+      for (guint i = 0; i < 4; i++)
         {
-          dest->corner[i].width = src->corner[i ^ flip].height;
-          dest->corner[i].height = src->corner[i ^ flip].width;
+          GskCorner c = gsk_corner_dihedral ((GskCorner)i, dihedral);
+          dest->corner[i].width = src->corner[c].width;
+          dest->corner[i].height = src->corner[c].height;
         }
     }
 }

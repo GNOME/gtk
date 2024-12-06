@@ -58,6 +58,7 @@ compare_render_tests = [
   'cross-fade-in-rotate',
   'css-background-nogl',
   'dihedral',
+  'dihedral-f',
   'empty-blend',
   'empty-blur',
   'empty-border',
@@ -540,7 +541,6 @@ endif
 
 tests = [
   [ 'normalize', [ 'normalize.c', '../reftests/reftest-compare.c' ] ],
-  [ 'transform' ],
   [ 'shader' ],
   [ 'opaque' ],
   [ 'path', [ 'path-utils.c' ], [ 'flaky'] ],
@@ -582,6 +582,7 @@ internal_tests = [
   [ 'misc'],
   [ 'path-private' ],
   [ 'rounded-rect'],
+  [ 'transform' ],
 ]
 
 foreach t : internal_tests
