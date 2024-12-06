@@ -679,7 +679,7 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
    *
    * See [method@Gtk.Application.set_menubar].
    *
-   * If flse, the window will not display a menubar, regardless
+   * If false, the window will not display a menubar, regardless
    * of whether the desktop shell is showing it or not.
    */
   gtk_application_window_properties[PROP_SHOW_MENUBAR] =
