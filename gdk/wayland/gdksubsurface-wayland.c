@@ -661,15 +661,19 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
       if (buffer)
         {
           wl_surface_attach (self->surface, buffer, 0, 0);
-          wl_surface_damage_buffer (self->surface,
-                                    0, 0,
-                                    gdk_texture_get_width (texture),
-                                    gdk_texture_get_height (texture));
 
           if (self->color && color_state_changed)
             gdk_wayland_color_surface_set_color_state (self->color, gdk_texture_get_color_state (texture));
 
           needs_commit = TRUE;
+        }
+      
+      if (buffer || transform_changed)
+        {
+          wl_surface_damage_buffer (self->surface,
+                                    0, 0,
+                                    gdk_texture_get_width (texture),
+                                    gdk_texture_get_height (texture));
         }
 
       if (has_background)
