@@ -256,9 +256,6 @@ void _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen);
 GdkDisplay *_gdk_win32_display_open (const char *display_name);
 void _gdk_win32_append_event (GdkEvent *event);
 
-void     _gdk_win32_surface_handle_aerosnap      (GdkSurface            *surface,
-                                                  GdkWin32AeroSnapCombo combo);
-
 gboolean gdk_win32_get_surface_hwnd_rect        (GdkSurface  *surface,
                                                  RECT       *rect);
 void     _gdk_win32_do_emit_configure_event     (GdkSurface  *surface,

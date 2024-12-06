@@ -52,36 +52,6 @@ typedef enum
   GDK_DECOR_MAXIMIZE    = 1 << 6
 } GdkWMDecoration;
 
-enum _GdkWin32AeroSnapCombo
-{
-  GDK_WIN32_AEROSNAP_COMBO_NOTHING = 0,
-  GDK_WIN32_AEROSNAP_COMBO_UP,
-  GDK_WIN32_AEROSNAP_COMBO_DOWN,
-  GDK_WIN32_AEROSNAP_COMBO_LEFT,
-  GDK_WIN32_AEROSNAP_COMBO_RIGHT,
-  /* Same order as non-shift variants. We use it to do things like:
-   * AEROSNAP_UP + 4 = AEROSNAP_SHIFTUP
-   */
-  GDK_WIN32_AEROSNAP_COMBO_SHIFTUP,
-  GDK_WIN32_AEROSNAP_COMBO_SHIFTDOWN,
-  GDK_WIN32_AEROSNAP_COMBO_SHIFTLEFT,
-  GDK_WIN32_AEROSNAP_COMBO_SHIFTRIGHT
-};
-
-typedef enum _GdkWin32AeroSnapCombo GdkWin32AeroSnapCombo;
-
-enum _GdkWin32AeroSnapState
-{
-  GDK_WIN32_AEROSNAP_STATE_UNDETERMINED = 0,
-  GDK_WIN32_AEROSNAP_STATE_HALFLEFT,
-  GDK_WIN32_AEROSNAP_STATE_HALFRIGHT,
-  GDK_WIN32_AEROSNAP_STATE_FULLUP,
-  /* Maximize state is only used by edge-snap */
-  GDK_WIN32_AEROSNAP_STATE_MAXIMIZE
-};
-
-typedef enum _GdkWin32AeroSnapState GdkWin32AeroSnapState;
-
 struct _GdkRectangleDouble
 {
   double x;
@@ -209,20 +179,6 @@ struct _GdkW32DragMoveResizeContext
    * (passing from one edge region into another doesn't count).
    */
   gboolean           revealed;
-
-  /* Arrays of GdkRectangle pairs, describing the areas of the virtual
-   * desktop that trigger various AeroSnap window transformations
-   * Coordinates are GDK screen coordinates.
-   */
-  GArray            *halfleft_regions;
-  GArray            *halfright_regions;
-  GArray            *maximize_regions;
-  GArray            *fullup_regions;
-
-  /* Current pointer position will result in this kind of snapping,
-   * if the drag op is finished.
-   */
-  GdkWin32AeroSnapState current_snap;
 };
 
 typedef struct _GdkW32DragMoveResizeContext GdkW32DragMoveResizeContext;
@@ -284,22 +240,6 @@ struct _GdkWin32Surface
   HDC hdc;
 
   GdkW32DragMoveResizeContext drag_move_resize_context;
-
-  /* Remembers where the surface was snapped.
-   * Some snap operations change their meaning if
-   * the surface is already snapped.
-   */
-  GdkWin32AeroSnapState snap_state;
-
-  /* Remembers surface position before it was snapped.
-   * This is used to unsnap it.
-   * Position and size are percentages of the workarea
-   * of the monitor on which the surface was before it was snapped.
-   */
-  GdkRectangleDouble *snap_stash;
-
-  /* Also remember the same position, but in absolute form. */
-  GdkRectangle *snap_stash_int;
 
   /* Enable all decorations? */
   gboolean decorate_all;

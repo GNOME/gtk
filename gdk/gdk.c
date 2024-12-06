@@ -158,10 +158,8 @@ static const GdkDebugKey gdk_feature_keys[] = {
   { "dmabuf",     GDK_FEATURE_DMABUF,           "Disable dmabuf support" },
   { "offload",    GDK_FEATURE_OFFLOAD,          "Disable graphics offload" },
   { "color-mgmt", GDK_FEATURE_COLOR_MANAGEMENT, "Disable color management" },
-  { "aerosnap",   GDK_FEATURE_AEROSNAP,         "Disable Aerosnap support on Windows" },
   { "threads",    GDK_FEATURE_THREADS,          "Disable threads where possible" },
 };
-
 
 static GdkFeatures gdk_features;
 

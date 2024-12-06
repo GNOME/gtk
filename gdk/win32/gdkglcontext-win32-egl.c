@@ -98,7 +98,7 @@ gdk_win32_gl_context_egl_end_frame (GdkDrawContext *draw_context,
       GdkRectangle rect = {0, 0, gdk_surface_get_width (surface), gdk_surface_get_height (surface)};
 
       /* We need to do gdk_window_invalidate_rect() so that we don't get glitches after maximizing or
-       *  restoring or using aerosnap
+       *  restoring
        */
       gdk_surface_invalidate_rect (surface, &rect);
       reset_egl_force_redraw (surface);

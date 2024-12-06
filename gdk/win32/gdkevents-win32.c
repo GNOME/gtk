@@ -283,132 +283,6 @@ _gdk_win32_surface_procedure (HWND   hwnd,
   return retval;
 }
 
-static LRESULT
-low_level_keystroke_handler (WPARAM           message,
-                             KBDLLHOOKSTRUCT *kbdhook,
-                             GdkSurface      *surface)
-{
-  GdkSurface *toplevel = surface;
-  static DWORD last_keydown = 0;
-
-  if (message == WM_KEYDOWN &&
-      !GDK_SURFACE_DESTROYED (toplevel) &&
-      _gdk_win32_surface_lacks_wm_decorations (toplevel) && /* For CSD only */
-      last_keydown != kbdhook->vkCode &&
-      ((GetKeyState (VK_LWIN) & 0x8000) ||
-      (GetKeyState (VK_RWIN) & 0x8000)))
-	{
-	  GdkWin32AeroSnapCombo combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
-	  gboolean lshiftdown = GetKeyState (VK_LSHIFT) & 0x8000;
-          gboolean rshiftdown = GetKeyState (VK_RSHIFT) & 0x8000;
-          gboolean oneshiftdown = (lshiftdown || rshiftdown) && !(lshiftdown && rshiftdown);
-          gboolean maximized = gdk_toplevel_get_state (GDK_TOPLEVEL (toplevel)) & GDK_TOPLEVEL_STATE_MAXIMIZED;
-
-	  switch (kbdhook->vkCode)
-	    {
-	    case VK_UP:
-	      combo = GDK_WIN32_AEROSNAP_COMBO_UP;
-	      break;
-	    case VK_DOWN:
-	      combo = GDK_WIN32_AEROSNAP_COMBO_DOWN;
-	      break;
-	    case VK_LEFT:
-	      combo = GDK_WIN32_AEROSNAP_COMBO_LEFT;
-	      break;
-	    case VK_RIGHT:
-	      combo = GDK_WIN32_AEROSNAP_COMBO_RIGHT;
-	      break;
-	    }
-
-	  if (oneshiftdown && combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
-	    combo += 4;
-
-	  /* These are the only combos that Windows WM does handle for us */
-	  if (combo == GDK_WIN32_AEROSNAP_COMBO_SHIFTLEFT ||
-              combo == GDK_WIN32_AEROSNAP_COMBO_SHIFTRIGHT)
-            combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
-
-          /* On Windows 10 the WM will handle this specific combo */
-          if (combo == GDK_WIN32_AEROSNAP_COMBO_DOWN && maximized &&
-              g_win32_check_windows_version (6, 4, 0, G_WIN32_OS_ANY))
-            combo = GDK_WIN32_AEROSNAP_COMBO_NOTHING;
-
-      if (combo != GDK_WIN32_AEROSNAP_COMBO_NOTHING)
-        {
-          GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (toplevel));
-
-          PostMessage (GDK_SURFACE_HWND (toplevel),
-                       display->event_record->aerosnap_message,
-                       (WPARAM) combo, 0);
-        }
-	}
-
-  if (message == WM_KEYDOWN)
-    last_keydown = kbdhook->vkCode;
-  else if (message == WM_KEYUP && last_keydown == kbdhook->vkCode)
-    last_keydown = 0;
-
-  return 0;
-}
-
-static LRESULT CALLBACK
-low_level_keyboard_proc (int    code,
-                         WPARAM wParam,
-                         LPARAM lParam)
-{
-  KBDLLHOOKSTRUCT *kbdhook;
-  HWND kbd_focus_owner;
-  GdkSurface *gdk_kbd_focus_owner;
-  LRESULT chain;
-
-  do
-  {
-    if (code < 0)
-      break;
-
-    kbd_focus_owner = GetFocus ();
-
-    if (kbd_focus_owner == NULL)
-      break;
-
-    gdk_kbd_focus_owner = gdk_win32_display_handle_table_lookup_ (NULL, kbd_focus_owner);
-
-    if (gdk_kbd_focus_owner == NULL)
-      break;
-
-    kbdhook = (KBDLLHOOKSTRUCT *) lParam;
-    chain = low_level_keystroke_handler (wParam, kbdhook, gdk_kbd_focus_owner);
-
-    if (chain != 0)
-      return chain;
-  } while (FALSE);
-
-  return CallNextHookEx (0, code, wParam, lParam);
-}
-
-static void
-set_up_low_level_keyboard_hook (GdkDisplay *display)
-{
-  HHOOK hook_handle;
-
-  if (!gdk_has_feature (GDK_FEATURE_AEROSNAP))
-    return;
-
-  if (GDK_WIN32_DISPLAY (display)->event_record->aerosnap_keyboard_hook != NULL)
-    return;
-
-  hook_handle = SetWindowsHookEx (WH_KEYBOARD_LL,
-                                  (HOOKPROC) low_level_keyboard_proc,
-                                  this_module (), 0);
-
-  if (hook_handle != NULL)
-    GDK_WIN32_DISPLAY (display)->event_record->aerosnap_keyboard_hook = hook_handle;
-  else
-    WIN32_API_FAILED ("SetWindowsHookEx");
-
-  GDK_WIN32_DISPLAY (display)->event_record->aerosnap_message = RegisterWindowMessage (L"GDK_WIN32_AEROSNAP_MESSAGE");
-}
-
 void
 _gdk_events_init (GdkDisplay *display)
 {
@@ -518,8 +392,6 @@ _gdk_events_init (GdkDisplay *display)
   g_source_add_poll (source, &event_source->event_poll_fd);
   g_source_set_can_recurse (source, TRUE);
   g_source_attach (source, NULL);
-
-  set_up_low_level_keyboard_hook (display);
 }
 
 #if 0 /* Unused, but might be useful to re-introduce in some debugging output? */
@@ -1801,10 +1673,6 @@ gdk_event_translate (MSG *msg,
    * #define return to a syntax error...
    */
 #define return GOTO_DONE_INSTEAD
-
-  if (msg->message == win32_display->event_record->aerosnap_message)
-    _gdk_win32_surface_handle_aerosnap (surface,
-                                       (GdkWin32AeroSnapCombo) msg->wParam);
 
   switch (msg->message)
     {
