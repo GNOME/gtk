@@ -31,8 +31,7 @@
 /**
  * GskPathBuilder:
  *
- * `GskPathBuilder` is an auxiliary object for constructing
- * `GskPath` objects.
+ * An auxiliary object for constructing `GskPath` objects.
  *
  * A path is constructed like this:
  *
@@ -123,14 +122,14 @@ gsk_path_builder_new (void)
 
 /**
  * gsk_path_builder_ref:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  *
  * Acquires a reference on the given builder.
  *
  * This function is intended primarily for language bindings.
  * `GskPathBuilder` objects should not be kept around.
  *
- * Returns: (transfer none): the given `GskPathBuilder` with
+ * Returns: (transfer none): the given path builder with
  *   its reference count increased
  *
  * Since: 4.14
@@ -217,7 +216,7 @@ gsk_path_builder_clear (GskPathBuilder *self)
 
 /**
  * gsk_path_builder_unref:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  *
  * Releases a reference on the given builder.
  *
@@ -242,12 +241,12 @@ gsk_path_builder_unref (GskPathBuilder *self)
 
 /**
  * gsk_path_builder_free_to_path: (skip)
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  *
- * Creates a new `GskPath` from the current state of the
- * given builder, and unrefs the @builder instance.
+ * Creates a new path from the current state of the
+ * builder, and unrefs the builder.
  *
- * Returns: (transfer full): the newly created `GskPath`
+ * Returns: (transfer full): the newly created path
  *   with all the contours added to the builder
  *
  * Since: 4.14
@@ -268,9 +267,9 @@ gsk_path_builder_free_to_path (GskPathBuilder *self)
 
 /**
  * gsk_path_builder_to_path:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  *
- * Creates a new `GskPath` from the given builder.
+ * Creates a new path from the given builder.
  *
  * The given `GskPathBuilder` is reset once this function returns;
  * you cannot call this function multiple times on the same builder
@@ -279,7 +278,7 @@ gsk_path_builder_free_to_path (GskPathBuilder *self)
  * This function is intended primarily for language bindings.
  * C code should use [method@Gsk.PathBuilder.free_to_path].
  *
- * Returns: (transfer full): the newly created `GskPath`
+ * Returns: (transfer full): the newly created path
  *   with all the contours added to the builder
  *
  * Since: 4.14
@@ -313,7 +312,7 @@ gsk_path_builder_add_contour (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_get_current_point:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  *
  * Gets the current point.
  *
@@ -324,7 +323,7 @@ gsk_path_builder_add_contour (GskPathBuilder *self,
  * to `0, 0`. Note that this is different from cairo, which starts
  * out without a current point.
  *
- * Returns: (transfer none): The current point
+ * Returns: (transfer none): the current point
  *
  * Since: 4.14
  */
@@ -338,7 +337,7 @@ gsk_path_builder_get_current_point (GskPathBuilder *self)
 
 /**
  * gsk_path_builder_add_path:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @path: (transfer none): the path to append
  *
  * Appends all of @path to the builder.
@@ -362,7 +361,7 @@ gsk_path_builder_add_path (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_add_reverse_path:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @path: (transfer none): the path to append
  *
  * Appends all of @path to the builder, in reverse order.
@@ -386,7 +385,7 @@ gsk_path_builder_add_reverse_path (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_add_cairo_path:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @path: a path
  *
  * Adds a Cairo path to the builder.
@@ -444,10 +443,10 @@ gsk_path_builder_add_cairo_path (GskPathBuilder     *self,
 
 /**
  * gsk_path_builder_add_rect:
- * @self: A `GskPathBuilder`
- * @rect: The rectangle to create a path for
+ * @self: a path builder
+ * @rect: the rectangle to create a path for
  *
- * Adds @rect as a new contour to the path built by the builder.
+ * Adds a rectangle as a new contour.
  *
  * The path is going around the rectangle in clockwise direction.
  *
@@ -471,10 +470,10 @@ gsk_path_builder_add_rect (GskPathBuilder        *self,
 
 /**
  * gsk_path_builder_add_rounded_rect:
- * @self: a #GskPathBuilder
+ * @self: a path builder
  * @rect: the rounded rect
  *
- * Adds @rect as a new contour to the path built in @self.
+ * Adds a rounded rectangle as a new contour.
  *
  * The path is going around the rectangle in clockwise direction.
  *
@@ -492,11 +491,11 @@ gsk_path_builder_add_rounded_rect (GskPathBuilder       *self,
 
 /**
  * gsk_path_builder_add_circle:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @center: the center of the circle
  * @radius: the radius of the circle
  *
- * Adds a circle with the @center and @radius.
+ * Adds a circle as a new contour.
  *
  * The path is going around the circle in clockwise direction.
  *
@@ -518,7 +517,7 @@ gsk_path_builder_add_circle (GskPathBuilder         *self,
 
 /**
  * gsk_path_builder_move_to:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @x: x coordinate
  * @y: y coordinate
  *
@@ -546,7 +545,7 @@ gsk_path_builder_move_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_rel_move_to:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @x: x offset
  * @y: y offset
  *
@@ -571,7 +570,7 @@ gsk_path_builder_rel_move_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_line_to:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @x: x coordinate
  * @y: y coordinate
  *
@@ -606,7 +605,7 @@ gsk_path_builder_line_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_rel_line_to:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @x: x offset
  * @y: y offset
  *
@@ -665,7 +664,7 @@ collinear (const graphene_point_t *p,
 
 /**
  * gsk_path_builder_quad_to:
- * @self: a #GskPathBuilder
+ * @self: a path builder
  * @x1: x coordinate of control point
  * @y1: y coordinate of control point
  * @x2: x coordinate of the end of the curve
@@ -737,7 +736,7 @@ gsk_path_builder_quad_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_rel_quad_to:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @x1: x offset of control point
  * @y1: y offset of control point
  * @x2: x offset of the end of the curve
@@ -802,7 +801,7 @@ bounding_box_corner_between (const GskBoundingBox   *bb,
 
 /**
  * gsk_path_builder_cubic_to:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @x1: x coordinate of first control point
  * @y1: y coordinate of first control point
  * @x2: x coordinate of second control point
@@ -966,7 +965,7 @@ gsk_path_builder_cubic_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_rel_cubic_to:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @x1: x offset of first control point
  * @y1: y offset of first control point
  * @x2: x offset of second control point
@@ -1006,7 +1005,7 @@ gsk_path_builder_rel_cubic_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_conic_to:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @x1: x coordinate of control point
  * @y1: y coordinate of control point
  * @x2: x coordinate of the end of the curve
@@ -1100,7 +1099,7 @@ gsk_path_builder_conic_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_rel_conic_to:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @x1: x offset of control point
  * @y1: y offset of control point
  * @x2: x offset of the end of the curve
@@ -1138,7 +1137,7 @@ gsk_path_builder_rel_conic_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_arc_to:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @x1: x coordinate of first control point
  * @y1: y coordinate of first control point
  * @x2: x coordinate of second control point
@@ -1175,7 +1174,7 @@ gsk_path_builder_arc_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_rel_arc_to:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  * @x1: x coordinate of first control point
  * @y1: y coordinate of first control point
  * @x2: x coordinate of second control point
@@ -1208,7 +1207,7 @@ gsk_path_builder_rel_arc_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_close:
- * @self: a `GskPathBuilder`
+ * @self: a path builder
  *
  * Ends the current contour with a line back to the start point.
  *
@@ -1285,14 +1284,14 @@ _sincos (double angle,
 
 /**
  * gsk_path_builder_svg_arc_to:
- * @self: a `GskPathBuilder`
- * @rx: X radius
- * @ry: Y radius
+ * @self: a path builder
+ * @rx: x radius
+ * @ry: y radius
  * @x_axis_rotation: the rotation of the ellipsis
  * @large_arc: whether to add the large arc
  * @positive_sweep: whether to sweep in the positive direction
- * @x: the X coordinate of the endpoint
- * @y: the Y coordinate of the endpoint
+ * @x: x coordinate of the endpoint
+ * @y: y coordinate of the endpoint
  *
  * Implements arc-to according to the SVG spec.
  *
@@ -1438,14 +1437,14 @@ gsk_path_builder_svg_arc_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_rel_svg_arc_to:
- * @self: a `GskPathBuilder`
- * @rx: X radius
- * @ry: Y radius
+ * @self: a path builder
+ * @rx: x radius
+ * @ry: y radius
  * @x_axis_rotation: the rotation of the ellipsis
  * @large_arc: whether to add the large arc
  * @positive_sweep: whether to sweep in the positive direction
- * @x: the X coordinate of the endpoint
- * @y: the Y coordinate of the endpoint
+ * @x: x coordinate of the endpoint
+ * @y: y coordinate of the endpoint
  *
  * Implements arc-to according to the SVG spec.
  *
@@ -1512,12 +1511,12 @@ angle_between_points (const graphene_point_t *c,
 
 /**
  * gsk_path_builder_html_arc_to:
- * @self: a `GskPathBuilder`
- * @x1: X coordinate of first control point
- * @y1: Y coordinate of first control point
- * @x2: X coordinate of second control point
- * @y2: Y coordinate of second control point
- * @radius: Radius of the circle
+ * @self: a path builder
+ * @x1: x coordinate of first control point
+ * @y1: y coordinate of first control point
+ * @x2: x coordinate of second control point
+ * @y2: y coordinate of second control point
+ * @radius: radius of the circle
  *
  * Implements arc-to according to the HTML Canvas spec.
  *
@@ -1577,12 +1576,12 @@ gsk_path_builder_html_arc_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_rel_html_arc_to:
- * @self: a `GskPathBuilder`
- * @x1: X coordinate of first control point
- * @y1: Y coordinate of first control point
- * @x2: X coordinate of second control point
- * @y2: Y coordinate of second control point
- * @radius: Radius of the circle
+ * @self: a path builder
+ * @x1: x coordinate of first control point
+ * @y1: y coordinate of first control point
+ * @x2: x coordinate of second control point
+ * @y2: y coordinate of second control point
+ * @radius: radius of the circle
  *
  * Implements arc-to according to the HTML Canvas spec.
  *
@@ -1610,7 +1609,7 @@ gsk_path_builder_rel_html_arc_to (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_add_layout:
- * @self: a #GskPathBuilder
+ * @self: a path builder
  * @layout: the pango layout to add
  *
  * Adds the outlines for the glyphs in @layout to the builder.
@@ -1640,12 +1639,12 @@ gsk_path_builder_add_layout (GskPathBuilder *self,
 
 /**
  * gsk_path_builder_add_segment:
- * @self: a `GskPathBuilder`
- * @path: the `GskPath` to take the segment to
+ * @self: a path builder
+ * @path: the path to take the segment to
  * @start: the point on @path to start at
  * @end: the point on @path to end at
  *
- * Adds to @self the segment of @path from @start to @end.
+ * Adds a segment of a path to the builder.
  *
  * If @start is equal to or after @end, the path will first add the
  * segment from @start to the end of the path, and then add the segment
