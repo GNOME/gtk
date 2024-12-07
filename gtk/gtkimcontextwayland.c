@@ -34,6 +34,7 @@ typedef struct _GtkIMContextWaylandClass GtkIMContextWaylandClass;
 
 struct _GtkIMContextWaylandGlobal
 {
+  GdkDisplay *gdk_display;
   struct wl_display *display;
   struct wl_registry *registry;
   uint32_t text_input_manager_wl_id;
@@ -687,7 +688,7 @@ registry_handle_global (void               *data,
                         uint32_t            version)
 {
   GtkIMContextWaylandGlobal *global = data;
-  GdkSeat *seat = gdk_display_get_default_seat (gdk_display_get_default ());
+  GdkSeat *seat = gdk_display_get_default_seat (global->gdk_display);
 
   if (strcmp (interface, "zwp_text_input_manager_v3") == 0)
     {
@@ -741,6 +742,7 @@ gtk_im_context_wayland_global_get (GdkDisplay *display)
     return global;
 
   global = g_new0 (GtkIMContextWaylandGlobal, 1);
+  global->gdk_display = display;
   global->display = gdk_wayland_display_get_wl_display (display);
   global->registry = wl_display_get_registry (global->display);
 
