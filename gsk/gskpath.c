@@ -29,8 +29,7 @@
 /**
  * GskPath:
  *
- * A `GskPath` describes lines and curves that are more complex
- * than simple rectangles.
+ * Describes lines and curves that are more complex than simple rectangles.
  *
  * Paths can used for rendering (filling or stroking) and for animations
  * (e.g. as trajectories).
@@ -139,11 +138,11 @@ gsk_path_get_n_contours (const GskPath *self)
 
 /**
  * gsk_path_ref:
- * @self: a `GskPath`
+ * @self: a path
  *
- * Increases the reference count of a `GskPath` by one.
+ * Increases the reference count of a path by one.
  *
- * Returns: the passed in `GskPath`.
+ * Returns: the passed in `GskPath`
  *
  * Since: 4.14
  */
@@ -159,9 +158,9 @@ gsk_path_ref (GskPath *self)
 
 /**
  * gsk_path_unref:
- * @self: a `GskPath`
+ * @self: a path
  *
- * Decreases the reference count of a `GskPath` by one.
+ * Decreases the reference count of a path by one.
  *
  * If the resulting reference count is zero, frees the path.
  *
@@ -182,11 +181,10 @@ gsk_path_unref (GskPath *self)
 
 /**
  * gsk_path_print:
- * @self: a `GskPath`
- * @string:  The string to print into
+ * @self: a path
+ * @string: the string to print into
  *
- * Converts @self into a human-readable string representation suitable
- * for printing.
+ * Converts the path into a human-readable representation.
  *
  * The string is compatible with (a superset of)
  * [SVG path syntax](https://www.w3.org/TR/SVG11/paths.html#PathData),
@@ -213,9 +211,9 @@ gsk_path_print (GskPath *self,
 
 /**
  * gsk_path_to_string:
- * @self: a `GskPath`
+ * @self: a path
  *
- * Converts the path into a string that is suitable for printing.
+ * Converts the path into a human-readable string.
  *
  * You can use this function in a debugger to get a quick overview
  * of the path.
@@ -223,7 +221,7 @@ gsk_path_print (GskPath *self,
  * This is a wrapper around [method@Gsk.Path.print], see that function
  * for details.
  *
- * Returns: A new string for @self
+ * Returns: a new string for @self
  *
  * Since: 4.14
  */
@@ -278,11 +276,10 @@ gsk_path_to_cairo_add_op (GskPathOperation        op,
 
 /**
  * gsk_path_to_cairo:
- * @self: a `GskPath`
+ * @self: a path
  * @cr: a cairo context
  *
- * Appends the given @path to the given cairo context for drawing
- * with Cairo.
+ * Appends the path to a cairo context for drawing with Cairo.
  *
  * This may cause some suboptimal conversions to be performed as
  * Cairo does not support all features of `GskPath`.
@@ -308,11 +305,11 @@ gsk_path_to_cairo (GskPath *self,
 
 /**
  * gsk_path_is_empty:
- * @self: a `GskPath`
+ * @self: a path
  *
  * Checks if the path is empty, i.e. contains no lines or curves.
  *
- * Returns: `TRUE` if the path is empty
+ * Returns: true if the path is empty
  *
  * Since: 4.14
  */
@@ -326,12 +323,11 @@ gsk_path_is_empty (GskPath *self)
 
 /**
  * gsk_path_is_closed:
- * @self: a `GskPath`
+ * @self: a path
  *
- * Returns if the path represents a single closed
- * contour.
+ * Returns if the path represents a single closed contour.
  *
- * Returns: `TRUE` if the path is closed
+ * Returns: true if the path is closed
  *
  * Since: 4.14
  */
@@ -349,8 +345,8 @@ gsk_path_is_closed (GskPath *self)
 
 /**
  * gsk_path_get_bounds:
- * @self: a `GskPath`
- * @bounds: (out caller-allocates): the bounds of the given path
+ * @self: a path
+ * @bounds: (out caller-allocates): return location for the bounds
  *
  * Computes the bounds of the given path.
  *
@@ -362,13 +358,13 @@ gsk_path_is_closed (GskPath *self)
  * This can happen when the path only describes a point or an
  * axis-aligned line.
  *
- * If the path is empty, `FALSE` is returned and @bounds are set to
+ * If the path is empty, false is returned and @bounds are set to
  * graphene_rect_zero(). This is different from the case where the path
  * is a single point at the origin, where the @bounds will also be set to
- * the zero rectangle but `TRUE` will be returned.
+ * the zero rectangle but true will be returned.
  *
- * Returns: `TRUE` if the path has bounds, `FALSE` if the path is known
- *   to be empty and have no bounds.
+ * Returns: true if the path has bounds, false if the path is known
+ *   to be empty and have no bounds
  *
  * Since: 4.14
  */
@@ -404,19 +400,19 @@ gsk_path_get_bounds (GskPath         *self,
 
 /**
  * gsk_path_get_stroke_bounds:
- * @self: a #GtkPath
+ * @self: a path
  * @stroke: stroke parameters
  * @bounds: (out caller-allocates): the bounds to fill in
  *
  * Computes the bounds for stroking the given path with the
- * parameters in @stroke.
+ * given parameters.
  *
  * The returned bounds may be larger than necessary, because this
  * function aims to be fast, not accurate. The bounds are guaranteed
  * to contain the area affected by the stroke, including protrusions
  * like miters.
  *
- * Returns: `TRUE` if the path has bounds, `FALSE` if the path is known
+ * Returns: true if the path has bounds, false if the path is known
  *   to be empty and have no bounds.
  *
  * Since: 4.14
@@ -454,18 +450,16 @@ gsk_path_get_stroke_bounds (GskPath         *self,
 
 /**
  * gsk_path_in_fill:
- * @self: a `GskPath`
+ * @self: a path
  * @point: the point to test
  * @fill_rule: the fill rule to follow
  *
- * Returns whether the given point is inside the area
- * that would be affected if the path was filled according
- * to @fill_rule.
+ * Returns whether a point is inside the fill area of a path.
  *
  * Note that this function assumes that filling a contour
  * implicitly closes it.
  *
- * Returns: `TRUE` if @point is inside
+ * Returns: true if @point is inside
  *
  * Since: 4.14
  */
@@ -492,15 +486,15 @@ gsk_path_in_fill (GskPath                *self,
 
 /**
  * gsk_path_get_start_point:
- * @self: a `GskPath`
+ * @self: a path
  * @result: (out caller-allocates): return location for point
  *
  * Gets the start point of the path.
  *
- * An empty path has no points, so `FALSE`
+ * An empty path has no points, so false
  * is returned in this case.
  *
- * Returns: `TRUE` if @result was filled
+ * Returns: true if @result was filled
  *
  * Since: 4.14
  */
@@ -527,15 +521,15 @@ gsk_path_get_start_point (GskPath      *self,
 
 /**
  * gsk_path_get_end_point:
- * @self: a `GskPath`
+ * @self: a path
  * @result: (out caller-allocates): return location for point
  *
  * Gets the end point of the path.
  *
- * An empty path has no points, so `FALSE`
+ * An empty path has no points, so false
  * is returned in this case.
  *
- * Returns: `TRUE` if @result was filled
+ * Returns: true if @result was filled
  *
  * Since: 4.14
  */
@@ -558,20 +552,19 @@ gsk_path_get_end_point (GskPath      *self,
 
 /**
  * gsk_path_get_closest_point:
- * @self: a `GskPath`
+ * @self: a path
  * @point: the point
  * @threshold: maximum allowed distance
  * @result: (out caller-allocates): return location for the closest point
  * @distance: (out) (optional): return location for the distance
  *
- * Computes the closest point on the path to the given point
- * and sets the @result to it.
+ * Computes the closest point on the path to the given point.
  *
  * If there is no point closer than the given threshold,
- * `FALSE` is returned.
+ * false is returned.
  *
- * Returns: `TRUE` if @point was set to the closest point
- *   on @self, `FALSE` if no point is closer than @threshold
+ * Returns: true if @point was set to the closest point
+ *   on @self, false if no point is closer than @threshold
  *
  * Since: 4.14
  */
@@ -615,9 +608,8 @@ gsk_path_get_closest_point (GskPath                *self,
 
 /**
  * gsk_path_foreach:
- * @self: a `GskPath`
- * @flags: flags to pass to the foreach function. See [flags@Gsk.PathForeachFlags]
- *   for details about flags
+ * @self: a path
+ * @flags: flags to pass to the foreach function
  * @func: (scope call) (closure user_data): the function to call for operations
  * @user_data: (nullable): user data passed to @func
  *
@@ -635,7 +627,7 @@ gsk_path_get_closest_point (GskPath                *self,
  * - When the @flags disallow certain operations, it provides
  *   an approximation of the path using just the allowed operations.
  *
- * Returns: `FALSE` if @func returned FALSE`, `TRUE` otherwise.
+ * Returns: false if @func returned false, true otherwise.
  *
  * Since: 4.14
  */

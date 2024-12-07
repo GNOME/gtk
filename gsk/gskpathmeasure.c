@@ -29,8 +29,8 @@
 /**
  * GskPathMeasure:
  *
- * `GskPathMeasure` is an object that allows measurements
- * on `GskPath`s such as determining the length of the path.
+ * An object that allows measurements on paths such as determining
+ * the length of the path.
  *
  * Many measuring operations require sampling the path length
  * at intermediate points. Therefore, a `GskPathMeasure` has
@@ -128,7 +128,7 @@ gsk_path_measure_new_with_tolerance (GskPath *path,
 
 /**
  * gsk_path_measure_ref:
- * @self: a `GskPathMeasure`
+ * @self: a path measure
  *
  * Increases the reference count of a `GskPathMeasure` by one.
  *
@@ -148,7 +148,7 @@ gsk_path_measure_ref (GskPathMeasure *self)
 
 /**
  * gsk_path_measure_unref:
- * @self: a `GskPathMeasure`
+ * @self: a path measure
  *
  * Decreases the reference count of a `GskPathMeasure` by one.
  *
@@ -180,7 +180,7 @@ gsk_path_measure_unref (GskPathMeasure *self)
 
 /**
  * gsk_path_measure_get_path:
- * @self: a `GskPathMeasure`
+ * @self: a path measure
  *
  * Returns the path that the measure was created for.
  *
@@ -196,7 +196,7 @@ gsk_path_measure_get_path (GskPathMeasure *self)
 
 /**
  * gsk_path_measure_get_tolerance:
- * @self: a `GskPathMeasure`
+ * @self: a path measure
  *
  * Returns the tolerance that the measure was created with.
  *
@@ -212,13 +212,13 @@ gsk_path_measure_get_tolerance (GskPathMeasure *self)
 
 /**
  * gsk_path_measure_get_length:
- * @self: a `GskPathMeasure`
+ * @self: a path measure
  *
  * Gets the length of the path being measured.
  *
  * The length is cached, so this function does not do any work.
  *
- * Returns: The length of the path measured by @self
+ * Returns: the length of the path measured by @self
  *
  * Since: 4.14
  */
@@ -242,15 +242,15 @@ gsk_path_measure_clamp_distance (GskPathMeasure *self,
 
 /**
  * gsk_path_measure_get_point:
- * @self: a `GskPathMeasure`
+ * @self: a path measure
  * @distance: the distance
- * @result: (out caller-allocates): return location for the result
+ * @result: (out caller-allocates): return location for the point
  *
- * Sets @result to the point at the given distance into the path.
+ * Gets the point at the given distance into the path.
  *
- * An empty path has no points, so `FALSE` is returned in that case.
+ * An empty path has no points, so false is returned in that case.
  *
- * Returns: `TRUE` if @result was set
+ * Returns: true if @result was set
  *
  * Since: 4.14
  */
@@ -295,11 +295,11 @@ gsk_path_measure_get_point (GskPathMeasure *self,
 
 /**
  * gsk_path_point_get_distance:
- * @point: a `GskPathPoint on the path
- * @measure: a `GskPathMeasure` for the path
+ * @point: a point on the path
+ * @measure: a path measure for the path
  *
  * Returns the distance from the beginning of the path
- * to @point.
+ * to the point.
  *
  * Returns: the distance of @point
  *

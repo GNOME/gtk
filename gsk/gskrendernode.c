@@ -272,7 +272,7 @@ gsk_render_node_type_register_static (const char     *node_name,
 
 /*< private >
  * gsk_render_node_alloc:
- * @node_type: the `GskRenderNode`Type to instantiate
+ * @node_type: the `GskRenderNode` type to instantiate
  *
  * Instantiates a new `GskRenderNode` for the given @node_type.
  *
@@ -290,11 +290,11 @@ gsk_render_node_alloc (GskRenderNodeType node_type)
 
 /**
  * gsk_render_node_ref:
- * @node: a `GskRenderNode`
+ * @node: a render node
  *
  * Acquires a reference on the given `GskRenderNode`.
  *
- * Returns: (transfer full): the `GskRenderNode` with an additional reference
+ * Returns: (transfer full): the render node with an additional reference
  */
 GskRenderNode *
 (gsk_render_node_ref) (GskRenderNode *node)
@@ -314,7 +314,7 @@ _gsk_render_node_unref (GskRenderNode *node)
 
 /**
  * gsk_render_node_unref:
- * @node: (transfer full): a `GskRenderNode`
+ * @node: (transfer full): a render node
  *
  * Releases a reference on the given `GskRenderNode`.
  *
@@ -332,11 +332,11 @@ void
 
 /**
  * gsk_render_node_get_node_type:
- * @node: a `GskRenderNode`
+ * @node: a render node
  *
- * Returns the type of the @node.
+ * Returns the type of the render node.
  *
- * Returns: the type of the `GskRenderNode`
+ * Returns: the type of @node
  */
 GskRenderNodeType
 (gsk_render_node_get_node_type) (const GskRenderNode *node)
@@ -348,7 +348,7 @@ GskRenderNodeType
 
 /**
  * gsk_render_node_get_bounds:
- * @node: a `GskRenderNode`
+ * @node: a render node
  * @bounds: (out caller-allocates): return location for the boundaries
  *
  * Retrieves the boundaries of the @node.
@@ -429,13 +429,13 @@ gsk_render_node_draw_with_color_state (GskRenderNode *node,
 
 /**
  * gsk_render_node_draw:
- * @node: a `GskRenderNode`
+ * @node: a render node
  * @cr: cairo context to draw to
  *
- * Draw the contents of @node to the given cairo context.
+ * Draws the contents of a render node on a cairo context.
  *
  * Typically, you'll use this function to implement fallback rendering
- * of `GskRenderNode`s on an intermediate Cairo context, instead of using
+ * of render nodes on an intermediate Cairo context, instead of using
  * the drawing context associated to a [class@Gdk.Surface]'s rendering buffer.
  *
  * For advanced nodes that cannot be supported using Cairo, in particular
@@ -454,16 +454,15 @@ gsk_render_node_draw (GskRenderNode *node,
 
 /*
  * gsk_render_node_draw_fallback:
- * @node: a `GskRenderNode`
+ * @node: a render node
  * @cr: cairo context to draw to
  *
- * Like gsk_render_node_draw(), but will overlay an error pattern if
- * GSK_DEBUG=cairo is enabled.
+ * Like [method@Gsk.RenderNode.draw], but will overlay an error pattern
+ * if `GSK_DEBUG=cairo` is enabled.
  *
- * This has 2 purposes:
- * 1. It allows detecting fallbacks in GPU renderers.
- * 2. Application code can use it to detect where it is using Cairo
- *    drawing.
+ * This has two purposes:
+ * 1. It allows detecting fallbacks in GPU renderers
+ * 2. Application code can use it to detect where it is using Cairo drawing
  *
  * So use this function whenever either of those cases should be detected.
  */
@@ -506,18 +505,18 @@ gsk_render_node_draw_fallback (GskRenderNode *node,
 
 /*
  * gsk_render_node_can_diff:
- * @node1: a `GskRenderNode`
- * @node2: the `GskRenderNode` to compare with
+ * @node1: a render node
+ * @node2: the render onde to compare with
  *
  * Checks if two render nodes can be expected to be compared via
- * gsk_render_node_diff().
+ * [method@Gsk.RenderNode.diff].
  *
  * The node diffing algorithm uses this function to match up similar
  * nodes to compare when trying to minimize the resulting region.
  *
- * Nodes of different type always return %FALSE here.
+ * Nodes of different type always return false here.
  *
- * Returns: %TRUE if @node1 and @node2 can be expected to be compared
+ * Returns: true if @node1 and @node2 can be expected to be compared
  **/
 gboolean
 gsk_render_node_can_diff (const GskRenderNode *node1,
@@ -561,11 +560,11 @@ gsk_render_node_diff_impossible (GskRenderNode  *node1,
 
 /**
  * gsk_render_node_diff:
- * @node1: a `GskRenderNode`
- * @node2: the `GskRenderNode` to compare with
- * @data: the diff data to use
+ * @node1: a render node
+ * @node2: the render node to compare with
+ * @data: diff data to use
  *
- * Compares @node1 and @node2 trying to compute the minimal region of changes.
+ * Compares two nodes, trying to compute the minimal region of changes.
  *
  * In the worst case, this is the union of the bounds of @node1 and @node2.
  *
@@ -605,7 +604,7 @@ gsk_render_node_diff (GskRenderNode  *node1,
 
 /**
  * gsk_render_node_get_opaque_rect:
- * @self: a `GskRenderNode`
+ * @self: a render node
  * @out_opaque: (out): return location for the opaque rect
  *
  * Gets an opaque rectangle inside the node that GTK can determine to
@@ -617,7 +616,7 @@ gsk_render_node_diff (GskRenderNode  *node1,
  *
  * The rectangle will be fully contained in the bounds of the node.
  *
- * Returns: %TRUE if part or all of the rendernode is opaque, %FALSE if no
+ * Returns: true if part or all of the rendernode is opaque, false if no
  *   opaque region could be found.
  *
  * Since: 4.16
@@ -640,9 +639,9 @@ gsk_render_node_get_opaque_rect (GskRenderNode   *self,
 
 /**
  * gsk_render_node_write_to_file:
- * @node: a `GskRenderNode`
- * @filename: (type filename): the file to save it to.
- * @error: Return location for a potential error
+ * @node: a render node
+ * @filename: (type filename): the file to save it to
+ * @error: return location for an error
  *
  * This function is equivalent to calling [method@Gsk.RenderNode.serialize]
  * followed by [func@GLib.file_set_contents].
@@ -652,7 +651,7 @@ gsk_render_node_get_opaque_rect (GskRenderNode   *self,
  * It is mostly intended for use inside a debugger to quickly dump a render
  * node to a file for later inspection.
  *
- * Returns: %TRUE if saving was successful
+ * Returns: true if saving was successful
  **/
 gboolean
 gsk_render_node_write_to_file (GskRenderNode *node,
@@ -679,14 +678,14 @@ gsk_render_node_write_to_file (GskRenderNode *node,
 /**
  * gsk_render_node_deserialize:
  * @bytes: the bytes containing the data
- * @error_func: (nullable) (scope call) (closure user_data): Callback on parsing errors
+ * @error_func: (nullable) (scope call) (closure user_data): callback on parsing errors
  * @user_data: user_data for @error_func
  *
  * Loads data previously created via [method@Gsk.RenderNode.serialize].
  *
  * For a discussion of the supported format, see that function.
  *
- * Returns: (nullable) (transfer full): a new `GskRenderNode`
+ * Returns: (nullable) (transfer full): a new render node
  */
 GskRenderNode *
 gsk_render_node_deserialize (GBytes            *bytes,
@@ -703,11 +702,12 @@ gsk_render_node_deserialize (GBytes            *bytes,
 /**
  * gsk_value_set_render_node:
  * @value: a [struct@GObject.Value] initialized with type `GSK_TYPE_RENDER_NODE`
- * @node: a `GskRenderNode`
+ * @node: a render node
  *
- * Stores the given `GskRenderNode` inside `value`.
+ * Stores the given render node inside a `GValue`.
  *
- * The [struct@GObject.Value] will acquire a reference to the `node`.
+ * The [struct@GObject.Value] will acquire a reference
+ * to the render node.
  *
  * Since: 4.6
  */
@@ -739,11 +739,12 @@ gsk_value_set_render_node (GValue        *value,
 /**
  * gsk_value_take_render_node:
  * @value: a [struct@GObject.Value] initialized with type `GSK_TYPE_RENDER_NODE`
- * @node: (transfer full) (nullable): a `GskRenderNode`
+ * @node: (transfer full) (nullable): a render node
  *
- * Stores the given `GskRenderNode` inside `value`.
+ * Stores the given render node inside a `GValue`.
  *
- * This function transfers the ownership of the `node` to the `GValue`.
+ * This function transfers the ownership of the
+ * render node to the `GValue`.
  *
  * Since: 4.6
  */
@@ -776,9 +777,9 @@ gsk_value_take_render_node (GValue        *value,
  * gsk_value_get_render_node:
  * @value: a `GValue` initialized with type `GSK_TYPE_RENDER_NODE`
  *
- * Retrieves the `GskRenderNode` stored inside the given `value`.
+ * Retrieves the render node stored inside a `GValue`.
  *
- * Returns: (transfer none) (nullable): a `GskRenderNode`
+ * Returns: (transfer none) (nullable): the render node
  *
  * Since: 4.6
  */
@@ -794,10 +795,10 @@ gsk_value_get_render_node (const GValue *value)
  * gsk_value_dup_render_node:
  * @value: a [struct@GObject.Value] initialized with type `GSK_TYPE_RENDER_NODE`
  *
- * Retrieves the `GskRenderNode` stored inside the given `value`, and acquires
- * a reference to it.
+ * Retrieves the render node stored inside a `GValue`,
+ * and acquires a reference to it.
  *
- * Returns: (transfer full) (nullable): a `GskRenderNode`
+ * Returns: (transfer full) (nullable): the render node
  *
  * Since: 4.6
  */
