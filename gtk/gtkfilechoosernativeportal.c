@@ -307,7 +307,7 @@ get_filters (GtkFileChooser *self)
   for (i = 0; i < n; i++)
     {
       GtkFileFilter *filter = g_list_model_get_item (filters, i);
-      g_variant_builder_add (&builder, "@(sa(us))", gtk_file_filter_to_gvariant (filter));
+      g_variant_builder_add_value (&builder, gtk_file_filter_to_gvariant (filter));
       g_object_unref (filter);
     }
   g_object_unref (filters);
@@ -346,8 +346,7 @@ serialize_choices (GtkFileChooserNative *self)
     {
       GtkFileChooserNativeChoice *choice = l->data;
 
-      g_variant_builder_add (&builder, "@(ssa(ss)s)",
-                             gtk_file_chooser_native_choice_to_variant (choice));
+      g_variant_builder_add_value (&builder, gtk_file_chooser_native_choice_to_variant (choice));
     }
 
   return g_variant_builder_end (&builder);
