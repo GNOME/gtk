@@ -679,6 +679,10 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
           gtk_widget_set_halign (title, GTK_ALIGN_START);
           g_object_bind_property (item, "label", title, "label", G_BINDING_SYNC_CREATE);
           gtk_box_append (GTK_BOX (box->item_box), title);
+          gtk_accessible_update_relation (GTK_ACCESSIBLE (box),
+                                          GTK_ACCESSIBLE_RELATION_LABELLED_BY,
+                                          title,
+                                          NULL, -1);
         }
 
       item_box = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
@@ -713,6 +717,10 @@ gtk_menu_section_box_new_section (GtkMenuTrackerItem *item,
       gtk_label_set_xalign (GTK_LABEL (title), 0.0);
       gtk_widget_add_css_class (title, "title");
       gtk_box_append (GTK_BOX (box->separator), title);
+      gtk_accessible_update_relation (GTK_ACCESSIBLE (box),
+                                      GTK_ACCESSIBLE_RELATION_LABELLED_BY,
+                                      title,
+                                      NULL, -1);
     }
   else
     {
