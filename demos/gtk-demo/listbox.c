@@ -195,7 +195,7 @@ gtk_message_row_update (GtkMessageRow *row)
   if (priv->message->resent_by)
     gtk_button_set_label (GTK_BUTTON (priv->resent_by_button), priv->message->resent_by);
 
-  if (strcmp (priv->message->sender_nick, "@GTKtoolkit") == 0)
+  if (strcmp (priv->message->sender_nick, "GTKtoolkit") == 0)
     gtk_image_set_from_icon_name (priv->avatar_image, "org.gtk.Demo4");
   else
     gtk_image_set_from_paintable (priv->avatar_image, GDK_PAINTABLE (avatar_texture_other));

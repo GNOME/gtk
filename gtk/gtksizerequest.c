@@ -718,7 +718,7 @@ gtk_distribute_natural_allocation (int               extra_space,
 
   g_return_val_if_fail (extra_space >= 0, 0);
 
-  if (n_requested_sizes == 0)
+  if (n_requested_sizes == 0 || extra_space == 0)
     return extra_space;
 
   spreading = g_newa (guint, n_requested_sizes);
