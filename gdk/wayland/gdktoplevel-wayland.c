@@ -1402,6 +1402,8 @@ gdk_wayland_toplevel_finalize (GObject *object)
 
   display_wayland->toplevels = g_list_remove (display_wayland->toplevels, self);
 
+  unset_transient_for_exported (self);
+
   g_free (self->application.application_id);
   g_free (self->application.app_menu_path);
   g_free (self->application.menubar_path);
