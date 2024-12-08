@@ -11,7 +11,7 @@ project('gtk', 'c',
         license: 'LGPL-2.1-or-later')
 
 # keep these numbers in sync with wrap files where there exist
-glib_req           = '>= 2.76.0'
+glib_req           = '>= 2.80.0'
 introspection_req  = '>= 1.76.0' # keep this in sync with glib
 pango_req          = '>= 1.52.0' # keep this in sync with .gitlab-ci/test-msys.sh
 harfbuzz_req       = '>= 2.6.0'
@@ -35,8 +35,8 @@ pkg_config = import('pkgconfig')
 # Keep in sync with glib_req
 add_project_arguments([
     '-DG_LOG_USE_STRUCTURED=1',
-    '-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_76',
-    '-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_76',
+    '-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_80',
+    '-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_80',
   ],
   language: 'c'
 )
