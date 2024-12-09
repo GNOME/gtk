@@ -732,7 +732,7 @@ gtk_application_add_window (GtkApplication *application,
 
 /**
  * gtk_application_remove_window:
- * @application: an pplication
+ * @application: an application
  * @window: a window
  *
  * Remove a window from the application.
