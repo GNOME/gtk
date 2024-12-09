@@ -1,6 +1,10 @@
 include:
   - project: 'gnome/citemplates'
     file: 'flatpak/flatpak_ci_initiative.yml'
+  - project: 'Infrastructure/gnome-release-service-ci-templates'
+    file: 'meson-dist.yml'
+  - project: 'Infrastructure/gnome-release-service-ci-templates'
+    file: 'release-module.yml'
 
 stages:
   - check
@@ -10,6 +14,7 @@ stages:
   - flatpak
   - publish
   - deploy
+  - release
 
 .cache-paths: &cache-paths
   paths:
@@ -453,7 +458,7 @@ reference:
       - _reference
 
 publish-docs:
-  image: fedora:latest
+  image: $FEDORA_IMAGE
   stage: publish
   interruptible: false
   needs: ['reference']
@@ -462,3 +467,17 @@ publish-docs:
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
 
+release-build:
+  image: $FEDORA_IMAGE
+  stage: build
+  extends: .meson-dist
+  rules:
+    - if: $CI_COMMIT_TAG
+
+release-dist:
+  stage: release
+  variables:
+    TARBALL_ARTIFACT_PATH: build/meson-dist/$CI_PROJECT_NAME-$CI_COMMIT_TAG.tar.xz
+  extends: .release-module
+  rules:
+    - if: $CI_COMMIT_TAG
