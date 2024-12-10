@@ -1,8 +1,10 @@
 include:
   - project: 'gnome/citemplates'
     file: 'flatpak/flatpak_ci_initiative.yml'
-  - project: 'Infrastructure/gnome-release-service-ci-templates'
-    file: 'release-module.yml'
+  - component:  gitlab.gnome.org/GNOME/citemplates/release-service@master
+    inputs:
+      dist-job-name: "release-build"
+      tarball-artifact-path: "_build/meson-dist/$CI_PROJECT_NAME-$CI_COMMIT_TAG.tar.xz"
 
 stages:
   - check
@@ -84,6 +86,7 @@ style-check-diff:
       - "${CI_PROJECT_DIR}/_build_hello/meson-logs"
       - "${CI_PROJECT_DIR}/_build/gtk/GdkX11-4.0.gir"
       - "${CI_PROJECT_DIR}/_build/gtk/GdkWayland-4.0.gir"
+      - "${CI_PROJECT_DIR}/_build/meson-dist/*.tar.xz"
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -123,6 +126,7 @@ release-build:
     # don't use catch by default, since it causes sporadic test failures
     # - export PATH="$HOME/.local/bin:${CI_PROJECT_DIR}/_install/bin:$PATH"
     # - .gitlab-ci/install-meson-project.sh --prefix ${CI_PROJECT_DIR}/_install https://gitlab.gnome.org/jadahl/catch.git main
+    - git config --global --add safe.directory $CI_PROJECT_DIR
     - meson subprojects download
     - meson subprojects update --reset
     - meson setup
@@ -137,6 +141,7 @@ release-build:
     - PKG_CONFIG_PATH=${CI_PROJECT_DIR}/_install/lib64/pkgconfig:${CI_PROJECT_DIR}/_install/share/pkgconfig meson setup _build_hello examples/hello
     - LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64 meson compile -C _build_hello
     - .gitlab-ci/run-tests.sh _build wayland gtk
+    - meson dist -C _build --include-subprojects --no-tests
 
 fedora-clang:
   extends: .build-fedora-default
@@ -464,31 +469,3 @@ publish-docs:
     - "curl -X POST -F token=${PAGES_TRIGGER_TOKEN} -F ref=docs-gtk-org https://gitlab.gnome.org/api/v4/projects/665/trigger/pipeline"
   rules:
     - if: $CI_COMMIT_REF_NAME == "main"
-
-test-dist:
-  image: $FEDORA_IMAGE
-  stage: build
-  variables:
-    EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
-  script:
-    - git config --global --add safe.directory $CI_PROJECT_DIR
-    - meson setup ${COMMON_MESON_FLAGS} ${BACKEND_FLAGS} ${EXTRA_MESON_FLAGS} _build
-    - meson compile -C _build
-    - meson dist -C _build --include-subprojects --no-tests
-  artifacts:
-    name: "${env:CI_JOB_NAME}-${env:CI_COMMIT_REF_NAME}"
-    when: always
-    paths:
-      - "${CI_PROJECT_DIR}/_build/meson-logs"
-      - "${CI_PROJECT_DIR}/_build/meson-dist/*.tar.xz"
-
-release-dist:
-  stage: release
-  needs:
-    - job: "release-build"
-      artifacts: true
-  variables:
-    TARBALL_ARTIFACT_PATH: build/meson-dist/$CI_PROJECT_NAME-$CI_COMMIT_TAG.tar.xz
-  extends: .release-module
-  rules:
-    - if: $CI_COMMIT_TAG
