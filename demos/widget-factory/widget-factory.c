@@ -2492,33 +2492,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
-print_version (void)
-{
-  g_print ("gtk4-widget-factory %s%s%s\n",
-           PACKAGE_VERSION,
-           g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
-           g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "");
-}
-
-static int
-local_options (GApplication *app,
-               GVariantDict *options,
-               gpointer      data)
-{
-  gboolean version = FALSE;
-
-  g_variant_dict_lookup (options, "version", "b", &version);
-
-  if (version)
-    {
-      print_version ();
-      return 0;
-    }
-
-  return -1;
-}
-
-static void
 activate_action (GSimpleAction *action,
                  GVariant      *parameter,
                  gpointer       user_data)
@@ -2606,8 +2579,15 @@ main (int argc, char *argv[])
     { "radio-x-disabled", NULL, "s", "'x'", NULL },
   };
   int status;
+  char version[80];
 
   app = gtk_application_new ("org.gtk.WidgetFactory4", G_APPLICATION_NON_UNIQUE);
+
+  g_snprintf (version, sizeof (version), "%s%s%s\n",
+              PACKAGE_VERSION,
+              g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
+              g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "");
+  g_application_set_version (G_APPLICATION (app), version);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
@@ -2623,12 +2603,9 @@ main (int argc, char *argv[])
 
   g_signal_connect (app, "activate", G_CALLBACK (activate), NULL);
 
-  g_application_add_main_option (G_APPLICATION (app), "version", 0, 0, G_OPTION_ARG_NONE, "Show program version", NULL);
-
   if (g_getenv ("GTK_DEBUG_AUTO_QUIT"))
     g_timeout_add (500, quit_timeout, NULL);
 
-  g_signal_connect (app, "handle-local-options", G_CALLBACK (local_options), NULL);
   status = g_application_run (G_APPLICATION (app), argc, argv);
   g_object_unref (app);
 
