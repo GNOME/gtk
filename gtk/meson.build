@@ -1216,7 +1216,8 @@ if build_gir
     gtk_dep_sources += gdk_win32_gir
   endif
 
-  if macos_enabled
+# This doesn't build
+  if false and macos_enabled
     gdk_macos_gir = gnome.generate_gir(libgtk,
       sources: gdk_macos_public_headers + gdk_macos_sources,
       namespace: 'GdkMacos',
