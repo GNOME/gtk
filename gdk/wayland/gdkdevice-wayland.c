@@ -1174,6 +1174,9 @@ data_device_enter (void                  *data,
   GdkWindow *dest_window, *dnd_owner;
   GdkAtom selection;
 
+  if (!surface)
+    return;
+
   dest_window = wl_surface_get_user_data (surface);
 
   if (!GDK_IS_WINDOW (dest_window))
