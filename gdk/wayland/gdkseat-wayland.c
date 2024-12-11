@@ -347,6 +347,9 @@ data_device_enter (void                  *data,
   GdkContentFormats *formats;
   GdkDevice *device;
 
+  if (!surface)
+    return;
+
   dest_surface = wl_surface_get_user_data (surface);
 
   if (!GDK_IS_SURFACE (dest_surface))
