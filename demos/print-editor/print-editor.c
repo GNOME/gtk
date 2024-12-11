@@ -861,6 +861,7 @@ main (int argc, char **argv)
 {
   GtkApplication *app;
   GError *error = NULL;
+  char version[80];
 
   gtk_init ();
 
@@ -880,6 +881,13 @@ main (int argc, char **argv)
   }
 
   app = gtk_application_new ("org.gtk.PrintEditor4", G_APPLICATION_HANDLES_OPEN);
+
+  g_snprintf (version, sizeof (version), "%s%s%s\n",
+              PACKAGE_VERSION,
+              g_strcmp0 (PROFILE, "devel") == 0 ? "-" : "",
+              g_strcmp0 (PROFILE, "devel") == 0 ? VCS_TAG : "");
+
+  g_application_set_version (G_APPLICATION (app), version);
 
   g_action_map_add_action_entries (G_ACTION_MAP (app),
                                    app_entries, G_N_ELEMENTS (app_entries),
