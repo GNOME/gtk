@@ -2116,12 +2116,40 @@ gtk_flow_box_measure (GtkWidget      *widget,
 
           if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              /* Return the minimum width */
+              /* Binary search :( */
+              int min, max;
+              int min_height, nat_height;
+
               gtk_flow_box_measure (widget,
                                     GTK_ORIENTATION_HORIZONTAL,
                                     -1,
                                     &min_width, &nat_width,
                                     NULL, NULL);
+              min = min_width;
+              max = G_MAXINT;
+
+              while (min < max)
+                {
+                  int test;
+
+                  if (max != G_MAXINT)
+                    test = (min + max) / 2;
+                  else if (min == min_width)
+                    test = min;
+                  else
+                    test = min * 2;
+
+                  gtk_flow_box_measure (widget, GTK_ORIENTATION_VERTICAL,
+                                        test, &min_height, &nat_height,
+                                        NULL, NULL);
+                  if (min_height > for_size)
+                    min = test + 1;
+                  else
+                    max = test;
+                }
+              /* TODO: calculate natural size properly */
+              min_width = min;
+              nat_width = MAX (min, nat_width);
             }
           else /* GTK_ORIENTATION_VERTICAL */
             {
