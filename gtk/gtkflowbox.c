@@ -2037,36 +2037,23 @@ gtk_flow_box_measure (GtkWidget      *widget,
                   /* When not homogeneous; horizontally oriented boxes
                    * need enough width for the widest row
                    */
-                  if (min_items == 1)
-                    {
-                      get_max_item_size (box,
-                                         GTK_ORIENTATION_HORIZONTAL,
-                                         &min_item_width,
-                                         &nat_item_width);
+                  int min_line_length, nat_line_length;
 
-                      min_width += min_item_width;
-                      nat_width += nat_item_width;
-                    }
-                  else
-                    {
-                      int min_line_length, nat_line_length;
+                  get_largest_aligned_line_length (box,
+                                                   GTK_ORIENTATION_HORIZONTAL,
+                                                   min_items,
+                                                   &min_line_length,
+                                                   &nat_line_length);
 
-                      get_largest_aligned_line_length (box,
-                                                       GTK_ORIENTATION_HORIZONTAL,
-                                                       min_items,
-                                                       &min_line_length,
-                                                       &nat_line_length);
+                  if (nat_items > min_items)
+                    get_largest_aligned_line_length (box,
+                                                     GTK_ORIENTATION_HORIZONTAL,
+                                                     nat_items,
+                                                     NULL,
+                                                     &nat_line_length);
 
-                      if (nat_items > min_items)
-                        get_largest_aligned_line_length (box,
-                                                         GTK_ORIENTATION_HORIZONTAL,
-                                                         nat_items,
-                                                         NULL,
-                                                         &nat_line_length);
-
-                      min_width += min_line_length;
-                      nat_width += nat_line_length;
-                    }
+                  min_width += min_line_length;
+                  nat_width += nat_line_length;
                 }
               else /* In homogeneous mode; horizontally oriented boxes
                     * give the same width to all children */
