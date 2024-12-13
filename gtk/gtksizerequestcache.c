@@ -193,7 +193,7 @@ _gtk_size_request_cache_commit (SizeRequestCache *cache,
       if (cache->flags[GTK_ORIENTATION_VERTICAL].cached_size_valid &&
           minimum_size < cache->cached_size_y.minimum_size)
         g_warning ("Widget reports min height of %d for width of %d, but overall min height of %d",
-                   minimum_size, for_size, cache->cached_size_x.minimum_size);
+                   minimum_size, for_size, cache->cached_size_y.minimum_size);
 
       for (i = 0; i < cache->flags[GTK_ORIENTATION_HORIZONTAL].n_cached_requests; i++)
         {
