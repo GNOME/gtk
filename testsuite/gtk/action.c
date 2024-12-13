@@ -651,6 +651,7 @@ test_introspection (void)
     const char *property;
   } expected[] = {
     { GTK_TYPE_TEXT, "misc.toggle-visibility", NULL, "visibility" },
+    { GTK_TYPE_TEXT, "misc.toggle-direction", NULL, NULL },
     { GTK_TYPE_TEXT, "misc.insert-emoji", NULL, NULL },
     { GTK_TYPE_TEXT, "selection.select-all", NULL, NULL },
     { GTK_TYPE_TEXT, "selection.delete", NULL, NULL },

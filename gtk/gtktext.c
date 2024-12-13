@@ -114,6 +114,8 @@
  * - <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes the last modification.
  * - <kbd>Ctrl</kbd>+<kbd>Y</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd>
  *   redoes the last undone modification.
+ * - <kbd>Ctrl</kbd>+<kbd>Shift</kbd> sets the text direction. The left
+ *   keys set it to LTR, and the right keys set it to RTL.
  *
  * Additionally, the following signals have default keybindings:
  *
@@ -138,6 +140,7 @@
  * - `menu.popup` opens the context menu.
  * - `misc.insert-emoji` opens the Emoji chooser.
  * - `misc.toggle-visibility` toggles the `GtkText`:visibility property.
+ * - `misc.toggle-direction` toggles the text direction.
  * - `selection.delete` deletes the current selection.
  * - `selection.select-all` selects all of the widgets content.
  * - `text.redo` redoes the last change to the contents.
@@ -631,6 +634,9 @@ static void gtk_text_activate_selection_delete       (GtkWidget  *widget,
                                                       const char *action_name,
                                                       GVariant   *parameter);
 static void gtk_text_activate_selection_select_all   (GtkWidget  *widget,
+                                                      const char *action_name,
+                                                      GVariant   *parameter);
+static void gtk_text_activate_misc_toggle_direction  (GtkWidget  *widget,
                                                       const char *action_name,
                                                       GVariant   *parameter);
 static void gtk_text_activate_misc_insert_emoji      (GtkWidget  *widget,
@@ -1342,6 +1348,14 @@ gtk_text_class_init (GtkTextClass *class)
                                    gtk_text_activate_misc_insert_emoji);
 
   /**
+   * GtkText|misc.toggle-direction:
+   *
+   * Toggles the text direction.
+   */
+  gtk_widget_class_install_action (widget_class, "misc.toggle-direction", NULL,
+                                   gtk_text_activate_misc_toggle_direction);
+
+  /**
    * GtkText|misc.toggle-visibility:
    *
    * Toggles the `GtkText`:visibility property.
@@ -1382,6 +1396,11 @@ gtk_text_class_init (GtkTextClass *class)
   gtk_widget_class_add_binding_action (widget_class,
                                        GDK_KEY_Menu, 0,
                                        "menu.popup",
+                                       NULL);
+
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_t, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
+                                       "misc.toggle-direction",
                                        NULL);
 
   /* Moving the insertion point */
@@ -6240,6 +6259,25 @@ gtk_text_activate_misc_insert_emoji (GtkWidget  *widget,
 }
 
 static void
+gtk_text_activate_misc_toggle_direction (GtkWidget  *widget,
+                                         const char *action_name,
+                                         GVariant   *parameter)
+{
+  GtkText *self = GTK_TEXT (widget);
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    gtk_widget_set_direction (widget, GTK_TEXT_DIR_LTR);
+  else
+    gtk_widget_set_direction (widget, GTK_TEXT_DIR_RTL);
+
+  update_resolved_dir (self);
+
+  if (priv->cached_layout)
+    pango_layout_context_changed (priv->cached_layout);
+}
+
+static void
 gtk_text_update_clipboard_actions (GtkText *self)
 {
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
@@ -6315,6 +6353,11 @@ gtk_text_get_menu_model (GtkText *self)
 
   item = g_menu_item_new (_("Select _All"), "selection.select-all");
   g_menu_item_set_attribute (item, "touch-icon", "s", "edit-select-all-symbolic");
+  g_menu_append_item (section, item);
+  g_object_unref (item);
+
+  item = g_menu_item_new (_("Change di_rection"), "misc.toggle-direction");
+  g_menu_item_set_attribute (item, "hidden-when", "s", "action-disabled");
   g_menu_append_item (section, item);
   g_object_unref (item);
 
