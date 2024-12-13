@@ -133,6 +133,7 @@ static void
 gtk_widget_query_size_for_orientation (GtkWidget        *widget,
                                        GtkOrientation    orientation,
                                        int               for_size,
+                                       const GtkBorder  *inset,
                                        int              *minimum,
                                        int              *natural,
                                        int              *minimum_baseline,
@@ -160,13 +161,16 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
   if (cache->request_mode == GTK_SIZE_REQUEST_CONSTANT_SIZE)
     for_size = -1;
 
-  found_in_cache = _gtk_size_request_cache_lookup (cache,
-                                                   orientation,
-                                                   for_size,
-                                                   &min_size,
-                                                   &nat_size,
-                                                   &min_baseline,
-                                                   &nat_baseline);
+  if (inset->top == 0 && inset->bottom == 0 && inset->left == 0 && inset->right == 0) // TODO
+    found_in_cache = _gtk_size_request_cache_lookup (cache,
+                                                     orientation,
+                                                     for_size,
+                                                     &min_size,
+                                                     &nat_size,
+                                                     &min_baseline,
+                                                     &nat_baseline);
+  else
+    found_in_cache = FALSE;
 
   if (!found_in_cache)
     {
@@ -181,6 +185,12 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
       int css_extra_for_size;
       int css_extra_size;
       int widget_margins_for_size;
+      int inset_size = 0;
+      int inset_for_size = 0;
+      GtkInsetMode inset_mode;
+      GtkBorder effective_inset;
+
+      inset_mode = gtk_widget_get_inset_mode (widget);
 
       style = gtk_css_node_get_style (gtk_widget_get_css_node (widget));
       get_box_margin (style, &margin);
@@ -196,6 +206,12 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           css_min_size = get_number_ceil (style->size->min_width);
           css_min_for_size = get_number_ceil (style->size->min_height);
           widget_margins_for_size = widget->priv->margin.top + widget->priv->margin.bottom;
+
+          if (inset_mode == GTK_INSET_PAD)
+            {
+              inset_size = inset->left + inset->right;
+              inset_for_size = inset->top + inset->bottom;
+            }
         }
       else
         {
@@ -204,6 +220,22 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           css_min_size = get_number_ceil (style->size->min_height);
           css_min_for_size = get_number_ceil (style->size->min_width);
           widget_margins_for_size = widget->priv->margin.left + widget->priv->margin.right;
+
+          if (inset_mode == GTK_INSET_PAD)
+            {
+              inset_size = inset->top + inset->bottom;
+              inset_for_size = inset->left + inset->right;
+            }
+        }
+
+      if (inset_mode == GTK_INSET_PAD)
+        {
+          effective_inset.top = effective_inset.bottom = 0;
+          effective_inset.left = effective_inset.right = 0;
+        }
+      else
+        {
+          effective_inset = *inset;
         }
 
       GtkLayoutManager *layout_manager = gtk_widget_get_layout_manager (widget);
@@ -213,10 +245,10 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           if (for_size < 0)
             {
               push_recursion_check (widget, orientation);
-              gtk_layout_manager_measure (layout_manager, widget,
-                                          orientation, -1,
-                                          &reported_min_size, &reported_nat_size,
-                                          &min_baseline, &nat_baseline);
+              gtk_layout_manager_measure_with_inset (layout_manager, widget,
+                                                     orientation, -1, &effective_inset,
+                                                     &reported_min_size, &reported_nat_size,
+                                                     &min_baseline, &nat_baseline);
               pop_recursion_check (widget, orientation);
             }
           else
@@ -227,10 +259,11 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 
               /* Pull the minimum for_size from the cache as it's needed to adjust
                * the proposed 'for_size' */
-              gtk_layout_manager_measure (layout_manager, widget,
-                                          OPPOSITE_ORIENTATION (orientation), -1,
-                                          &minimum_for_size, &natural_for_size,
-                                          NULL, NULL);
+              gtk_layout_manager_measure_with_inset (layout_manager, widget,
+                                                     OPPOSITE_ORIENTATION (orientation),
+                                                     -1, &effective_inset,
+                                                     &minimum_for_size, &natural_for_size,
+                                                     NULL, NULL);
 
               if (minimum_for_size < css_min_for_size)
                 minimum_for_size = css_min_for_size;
@@ -240,15 +273,16 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 
               adjusted_for_size = for_size - widget_margins_for_size;
               adjusted_for_size -= css_extra_for_size;
+              adjusted_for_size -= inset_for_size;
               if (adjusted_for_size < 0)
                 adjusted_for_size = minimum_for_size;
 
               push_recursion_check (widget, orientation);
-              gtk_layout_manager_measure (layout_manager, widget,
-                                          orientation,
-                                          adjusted_for_size,
-                                          &reported_min_size, &reported_nat_size,
-                                          &min_baseline, &nat_baseline);
+              gtk_layout_manager_measure_with_inset (layout_manager, widget,
+                                                     orientation,
+                                                     adjusted_for_size, &effective_inset,
+                                                     &reported_min_size, &reported_nat_size,
+                                                     &min_baseline, &nat_baseline);
               pop_recursion_check (widget, orientation);
             }
         }
@@ -257,9 +291,20 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
           if (for_size < 0)
             {
               push_recursion_check (widget, orientation);
-              widget_class->measure (widget, orientation, -1,
-                                     &reported_min_size, &reported_nat_size,
-                                     &min_baseline, &nat_baseline);
+
+              if (widget_class->measure_with_inset)
+                {
+                  widget_class->measure_with_inset (widget, orientation, -1, &effective_inset,
+                                                    &reported_min_size, &reported_nat_size,
+                                                    &min_baseline, &nat_baseline);
+                }
+              else
+                {
+                  widget_class->measure (widget, orientation, -1,
+                                         &reported_min_size, &reported_nat_size,
+                                         &min_baseline, &nat_baseline);
+                }
+
               pop_recursion_check (widget, orientation);
             }
           else
@@ -270,8 +315,9 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 
               /* Pull the minimum for_size from the cache as it's needed to adjust
                * the proposed 'for_size' */
-              gtk_widget_measure (widget, OPPOSITE_ORIENTATION (orientation), -1,
-                                  &minimum_for_size, &natural_for_size, NULL, NULL);
+              gtk_widget_measure_with_inset (widget, OPPOSITE_ORIENTATION (orientation), -1,
+                                             &effective_inset,
+                                             &minimum_for_size, &natural_for_size, NULL, NULL);
 
               if (minimum_for_size < css_min_for_size)
                 minimum_for_size = css_min_for_size;
@@ -281,21 +327,36 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
 
               adjusted_for_size = for_size - widget_margins_for_size;
               adjusted_for_size -= css_extra_for_size;
+              adjusted_for_size -= inset_for_size;
               if (adjusted_for_size < 0)
                 adjusted_for_size = minimum_for_size;
 
               push_recursion_check (widget, orientation);
-              widget_class->measure (widget,
-                                     orientation,
-                                     adjusted_for_size,
-                                     &reported_min_size, &reported_nat_size,
-                                     &min_baseline, &nat_baseline);
+
+              if (widget_class->measure_with_inset)
+                {
+                  widget_class->measure_with_inset (widget,
+                                                    orientation,
+                                                    adjusted_for_size,
+                                                    &effective_inset,
+                                                    &reported_min_size, &reported_nat_size,
+                                                    &min_baseline, &nat_baseline);
+                }
+              else
+                {
+                  widget_class->measure (widget,
+                                         orientation,
+                                         adjusted_for_size,
+                                         &reported_min_size, &reported_nat_size,
+                                         &min_baseline, &nat_baseline);
+                }
+
               pop_recursion_check (widget, orientation);
             }
         }
 
-      min_size = MAX (0, MAX (reported_min_size, css_min_size)) + css_extra_size;
-      nat_size = MAX (0, MAX (reported_nat_size, css_min_size)) + css_extra_size;
+      min_size = MAX (0, MAX (reported_min_size, css_min_size)) + css_extra_size + inset_size;
+      nat_size = MAX (0, MAX (reported_nat_size, css_min_size)) + css_extra_size + inset_size;
 
       if (G_UNLIKELY (min_size > nat_size))
         {
@@ -483,6 +544,30 @@ gtk_widget_measure (GtkWidget        *widget,
                     int              *minimum_baseline,
                     int              *natural_baseline)
 {
+  GtkBorder inset;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (for_size >= -1);
+  g_return_if_fail (orientation == GTK_ORIENTATION_HORIZONTAL ||
+                    orientation == GTK_ORIENTATION_VERTICAL);
+
+  inset.top = inset.bottom = inset.left = inset.right = 0;
+
+  gtk_widget_measure_with_inset (widget, orientation, for_size, &inset,
+                                 minimum, natural,
+                                 minimum_baseline, natural_baseline);
+}
+
+void
+gtk_widget_measure_with_inset (GtkWidget       *widget,
+                               GtkOrientation   orientation,
+                               int              for_size,
+                               const GtkBorder *inset,
+                               int             *minimum,
+                               int             *natural,
+                               int             *minimum_baseline,
+                               int             *natural_baseline)
+{
   g_return_if_fail (GTK_IS_WIDGET (widget));
   g_return_if_fail (for_size >= -1);
   g_return_if_fail (orientation == GTK_ORIENTATION_HORIZONTAL ||
@@ -515,7 +600,8 @@ gtk_widget_measure (GtkWidget        *widget,
 
   if (G_LIKELY (!_gtk_widget_get_sizegroups (widget)))
     {
-      gtk_widget_query_size_for_orientation (widget, orientation, for_size, minimum, natural,
+      gtk_widget_query_size_for_orientation (widget, orientation, for_size, inset,
+                                             minimum, natural,
                                              minimum_baseline, natural_baseline);
     }
   else
@@ -533,7 +619,7 @@ gtk_widget_measure (GtkWidget        *widget,
           GtkWidget *tmp_widget = key;
           int min_dimension, nat_dimension;
 
-          gtk_widget_query_size_for_orientation (tmp_widget, orientation, for_size,
+          gtk_widget_query_size_for_orientation (tmp_widget, orientation, for_size, inset,
                                                  &min_dimension, &nat_dimension, NULL, NULL);
 
           min_result = MAX (min_result, min_dimension);

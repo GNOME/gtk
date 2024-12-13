@@ -41,14 +41,15 @@ struct _GtkBinLayout
 G_DEFINE_TYPE (GtkBinLayout, gtk_bin_layout, GTK_TYPE_LAYOUT_MANAGER)
 
 static void
-gtk_bin_layout_measure (GtkLayoutManager *layout_manager,
-                        GtkWidget        *widget,
-                        GtkOrientation    orientation,
-                        int               for_size,
-                        int              *minimum,
-                        int              *natural,
-                        int              *minimum_baseline,
-                        int              *natural_baseline)
+gtk_bin_layout_measure_with_inset (GtkLayoutManager *layout_manager,
+                                   GtkWidget        *widget,
+                                   GtkOrientation    orientation,
+                                   int               for_size,
+                                   const GtkBorder  *inset,
+                                   int              *minimum,
+                                   int              *natural,
+                                   int              *minimum_baseline,
+                                   int              *natural_baseline)
 {
   GtkWidget *child;
 
@@ -63,9 +64,9 @@ gtk_bin_layout_measure (GtkLayoutManager *layout_manager,
           int child_min_baseline = -1;
           int child_nat_baseline = -1;
 
-          gtk_widget_measure (child, orientation, for_size,
-                              &child_min, &child_nat,
-                              &child_min_baseline, &child_nat_baseline);
+          gtk_widget_measure_with_inset (child, orientation, for_size, inset,
+                                         &child_min, &child_nat,
+                                         &child_min_baseline, &child_nat_baseline);
 
           *minimum = MAX (*minimum, child_min);
           *natural = MAX (*natural, child_nat);
@@ -86,13 +87,16 @@ gtk_bin_layout_allocate (GtkLayoutManager *layout_manager,
                          int               baseline)
 {
   GtkWidget *child;
+  GtkBorder inset;
+
+  gtk_widget_get_inset (widget, &inset);
 
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
     {
       if (child && gtk_widget_should_layout (child))
-        gtk_widget_allocate (child, width, height, baseline, NULL);
+        gtk_widget_allocate_with_inset (child, width, height, baseline, NULL, &inset);
     }
 }
 static void
@@ -100,7 +104,7 @@ gtk_bin_layout_class_init (GtkBinLayoutClass *klass)
 {
   GtkLayoutManagerClass *layout_manager_class = GTK_LAYOUT_MANAGER_CLASS (klass);
 
-  layout_manager_class->measure = gtk_bin_layout_measure;
+  layout_manager_class->measure_with_inset = gtk_bin_layout_measure_with_inset;
   layout_manager_class->allocate = gtk_bin_layout_allocate;
 }
 

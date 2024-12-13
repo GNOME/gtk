@@ -759,13 +759,14 @@ static void     gtk_stack_size_allocate                  (GtkWidget     *widget,
                                                           int            baseline);
 static void     gtk_stack_snapshot                       (GtkWidget     *widget,
                                                           GtkSnapshot   *snapshot);
-static void     gtk_stack_measure                        (GtkWidget      *widget,
-                                                          GtkOrientation  orientation,
-                                                          int             for_size,
-                                                          int            *minimum,
-                                                          int            *natural,
-                                                          int            *minimum_baseline,
-                                                          int            *natural_baseline);
+static void     gtk_stack_measure_with_inset             (GtkWidget      *widget,
+                                                          GtkOrientation   orientation,
+                                                          int              for_size,
+                                                          const GtkBorder *inset,
+                                                          int             *minimum,
+                                                          int             *natural,
+                                                          int             *minimum_baseline,
+                                                          int             *natural_baseline);
 static void     gtk_stack_dispose                        (GObject       *obj);
 static void     gtk_stack_finalize                       (GObject       *obj);
 static void     gtk_stack_get_property                   (GObject       *object,
@@ -958,7 +959,7 @@ gtk_stack_class_init (GtkStackClass *klass)
 
   widget_class->size_allocate = gtk_stack_size_allocate;
   widget_class->snapshot = gtk_stack_snapshot;
-  widget_class->measure = gtk_stack_measure;
+  widget_class->measure_with_inset = gtk_stack_measure_with_inset;
   widget_class->compute_expand = gtk_stack_compute_expand;
   widget_class->get_request_mode = gtk_stack_get_request_mode;
 
@@ -2662,23 +2663,26 @@ gtk_stack_size_allocate (GtkWidget *widget,
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkAllocation child_allocation;
+  GtkBorder inset;
+
+  gtk_widget_get_inset (widget, &inset);
 
   if (priv->last_visible_child)
     {
       int child_width, child_height;
       int min, nat;
 
-      gtk_widget_measure (priv->last_visible_child->widget, GTK_ORIENTATION_HORIZONTAL,
-                          -1,
-                          &min, &nat, NULL, NULL);
+      gtk_widget_measure_with_inset (priv->last_visible_child->widget, GTK_ORIENTATION_HORIZONTAL,
+                                     -1, &inset,
+                                     &min, &nat, NULL, NULL);
       child_width = MAX (min, width);
-      gtk_widget_measure (priv->last_visible_child->widget, GTK_ORIENTATION_VERTICAL,
-                          child_width,
-                          &min, &nat, NULL, NULL);
+      gtk_widget_measure_with_inset (priv->last_visible_child->widget, GTK_ORIENTATION_VERTICAL,
+                                     child_width, &inset,
+                                     &min, &nat, NULL, NULL);
       child_height = MAX (min, height);
 
-      gtk_widget_size_allocate (priv->last_visible_child->widget,
-                                &(GtkAllocation) { 0, 0, child_width, child_height }, -1);
+      gtk_widget_allocate_with_inset (priv->last_visible_child->widget,
+                                      child_width, child_height, -1, NULL, &inset);
     }
 
   child_allocation.x = get_bin_window_x (stack);
@@ -2691,12 +2695,12 @@ gtk_stack_size_allocate (GtkWidget *widget,
       int min_width;
       int min_height;
 
-      gtk_widget_measure (priv->visible_child->widget, GTK_ORIENTATION_HORIZONTAL,
-                          height, &min_width, NULL, NULL, NULL);
+      gtk_widget_measure_with_inset (priv->visible_child->widget, GTK_ORIENTATION_HORIZONTAL,
+                                     height, &inset, &min_width, NULL, NULL, NULL);
       child_allocation.width = MAX (child_allocation.width, min_width);
 
-      gtk_widget_measure (priv->visible_child->widget, GTK_ORIENTATION_VERTICAL,
-                          child_allocation.width, &min_height, NULL, NULL, NULL);
+      gtk_widget_measure_with_inset (priv->visible_child->widget, GTK_ORIENTATION_VERTICAL,
+                                     child_allocation.width, &inset, &min_height, NULL, NULL, NULL);
       child_allocation.height = MAX (child_allocation.height, min_height);
 
       if (child_allocation.width > width)
@@ -2719,19 +2723,26 @@ gtk_stack_size_allocate (GtkWidget *widget,
             child_allocation.y = (height - child_allocation.height);
         }
 
-      gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation, -1);
+      gtk_widget_allocate_with_inset (priv->visible_child->widget,
+                                      child_allocation.width,
+                                      child_allocation.height,
+                                      -1,
+                                      gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (child_allocation.x,
+                                                                                           child_allocation.y)),
+                                      &inset);
     }
 }
 
 #define LERP(a, b, t) ((a) + (((b) - (a)) * (1.0 - (t))))
 static void
-gtk_stack_measure (GtkWidget      *widget,
-                   GtkOrientation  orientation,
-                   int             for_size,
-                   int            *minimum,
-                   int            *natural,
-                   int            *minimum_baseline,
-                   int            *natural_baseline)
+gtk_stack_measure_with_inset (GtkWidget       *widget,
+                              GtkOrientation   orientation,
+                              int              for_size,
+                              const GtkBorder *inset,
+                              int             *minimum,
+                              int             *natural,
+                              int             *minimum_baseline,
+                              int             *natural_baseline)
 {
   GtkStack *stack = GTK_STACK (widget);
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
@@ -2758,12 +2769,12 @@ gtk_stack_measure (GtkWidget      *widget,
             {
               int min_for_size;
 
-              gtk_widget_measure (child, OPPOSITE_ORIENTATION (orientation), -1, &min_for_size, NULL, NULL, NULL);
+              gtk_widget_measure_with_inset (child, OPPOSITE_ORIENTATION (orientation), -1, inset, &min_for_size, NULL, NULL, NULL);
 
-              gtk_widget_measure (child, orientation, MAX (min_for_size, for_size), &child_min, &child_nat, NULL, NULL);
+              gtk_widget_measure_with_inset (child, orientation, MAX (min_for_size, for_size), inset, &child_min, &child_nat, NULL, NULL);
             }
           else
-            gtk_widget_measure (child, orientation, for_size, &child_min, &child_nat, NULL, NULL);
+            gtk_widget_measure_with_inset (child, orientation, for_size, inset, &child_min, &child_nat, NULL, NULL);
 
           *minimum = MAX (*minimum, child_min);
           *natural = MAX (*natural, child_nat);
@@ -2795,6 +2806,8 @@ gtk_stack_init (GtkStack *stack)
   priv->transition_duration = 200;
   priv->transition_type = GTK_STACK_TRANSITION_TYPE_NONE;
   priv->children = g_ptr_array_new();
+
+  gtk_widget_set_inset_mode (GTK_WIDGET (stack), GTK_INSET_EXTEND);
 }
 
 /**

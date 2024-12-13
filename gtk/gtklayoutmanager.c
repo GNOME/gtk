@@ -326,6 +326,30 @@ gtk_layout_manager_measure (GtkLayoutManager *manager,
                             int              *minimum_baseline,
                             int              *natural_baseline)
 {
+  GtkBorder inset;
+
+  g_return_if_fail (GTK_IS_LAYOUT_MANAGER (manager));
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  inset.top = inset.bottom = inset.left = inset.right = 0;
+
+  gtk_layout_manager_measure_with_inset (manager, widget, orientation,
+                                         for_size, &inset,
+                                         minimum, natural,
+                                         minimum_baseline, natural_baseline);
+}
+
+void
+gtk_layout_manager_measure_with_inset (GtkLayoutManager *manager,
+                                       GtkWidget        *widget,
+                                       GtkOrientation    orientation,
+                                       int               for_size,
+                                       const GtkBorder  *inset,
+                                       int              *minimum,
+                                       int              *natural,
+                                       int              *minimum_baseline,
+                                       int              *natural_baseline)
+{
   GtkLayoutManagerClass *klass;
   int min_size = 0;
   int nat_size = 0;
@@ -338,10 +362,21 @@ gtk_layout_manager_measure (GtkLayoutManager *manager,
 
   klass = GTK_LAYOUT_MANAGER_GET_CLASS (manager);
 
-  klass->measure (manager, widget, orientation,
-                  for_size,
-                  &min_size, &nat_size,
-                  &min_baseline, &nat_baseline);
+  if (klass->measure_with_inset)
+    {
+      klass->measure_with_inset (manager, widget, orientation,
+                                 for_size, inset,
+                                 &min_size, &nat_size,
+                                 &min_baseline, &nat_baseline);
+
+    }
+  else
+    {
+      klass->measure (manager, widget, orientation,
+                      for_size,
+                      &min_size, &nat_size,
+                      &min_baseline, &nat_baseline);
+    }
 
   if (minimum)
     *minimum = min_size;

@@ -30,6 +30,7 @@
 
 #include <gdk/gdk.h>
 #include <gsk/gsk.h>
+#include <gtk/gtkborder.h>
 #include <gtk/gtkenums.h>
 #include <gtk/gtkshortcut.h>
 #include <gtk/gtkshortcutaction.h>
@@ -258,11 +259,20 @@ struct _GtkWidgetClass
                                                 double     x,
                                                 double     y);
 
+  void         (* measure_with_inset)          (GtkWidget       *widget,
+                                                GtkOrientation   orientation,
+                                                int              for_size,
+                                                const GtkBorder *inset,
+                                                int             *minimum,
+                                                int             *natural,
+                                                int             *minimum_baseline,
+                                                int             *natural_baseline);
+
   /*< private >*/
 
   GtkWidgetClassPrivate *priv;
 
-  gpointer padding[8];
+  gpointer padding[7];
 };
 
 
@@ -303,6 +313,13 @@ void       gtk_widget_allocate            (GtkWidget               *widget,
                                            int                      height,
                                            int                      baseline,
                                            GskTransform            *transform);
+GDK_AVAILABLE_IN_4_18
+void       gtk_widget_allocate_with_inset (GtkWidget               *widget,
+                                           int                      width,
+                                           int                      height,
+                                           int                      baseline,
+                                           GskTransform            *transform,
+                                           const GtkBorder         *inset);
 
 GDK_AVAILABLE_IN_ALL
 GtkSizeRequestMode  gtk_widget_get_request_mode               (GtkWidget      *widget);
@@ -314,6 +331,15 @@ void gtk_widget_measure (GtkWidget      *widget,
                          int            *natural,
                          int            *minimum_baseline,
                          int            *natural_baseline);
+GDK_AVAILABLE_IN_4_18
+void gtk_widget_measure_with_inset (GtkWidget       *widget,
+                                    GtkOrientation   orientation,
+                                    int              for_size,
+                                    const GtkBorder *inset,
+                                    int             *minimum,
+                                    int             *natural,
+                                    int             *minimum_baseline,
+                                    int             *natural_baseline);
 GDK_AVAILABLE_IN_ALL
 void                gtk_widget_get_preferred_size             (GtkWidget      *widget,
                                                                GtkRequisition *minimum_size,
@@ -504,6 +530,9 @@ int                   gtk_widget_get_baseline           (GtkWidget     *widget);
 GDK_AVAILABLE_IN_ALL
 int                   gtk_widget_get_size               (GtkWidget     *widget,
                                                          GtkOrientation orientation);
+GDK_AVAILABLE_IN_4_18
+void                  gtk_widget_get_inset              (GtkWidget     *widget,
+                                                         GtkBorder     *inset);
 
 GDK_AVAILABLE_IN_ALL
 gboolean   gtk_widget_child_focus         (GtkWidget           *widget,
@@ -605,6 +634,11 @@ int      gtk_widget_get_margin_bottom (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 void     gtk_widget_set_margin_bottom (GtkWidget *widget,
                                        int        margin);
+GDK_AVAILABLE_IN_ALL
+GtkInsetMode gtk_widget_get_inset_mode (GtkWidget *widget);
+GDK_AVAILABLE_IN_ALL
+void         gtk_widget_set_inset_mode (GtkWidget    *widget,
+                                        GtkInsetMode  inset_mode);
 
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_widget_is_ancestor     (GtkWidget      *widget,

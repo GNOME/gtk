@@ -112,13 +112,14 @@ static void gtk_revealer_size_allocate (GtkWidget     *widget,
                                         int            width,
                                         int            height,
                                         int            baseline);
-static void gtk_revealer_measure (GtkWidget      *widget,
-                                  GtkOrientation  orientation,
-                                  int             for_size,
-                                  int            *minimum,
-                                  int            *natural,
-                                  int            *minimum_baseline,
-                                  int            *natural_baseline);
+static void gtk_revealer_measure_with_inset (GtkWidget       *widget,
+                                             GtkOrientation   orientation,
+                                             int              for_size,
+                                             const GtkBorder *inset,
+                                             int             *minimum,
+                                             int             *natural,
+                                             int             *minimum_baseline,
+                                             int             *natural_baseline);
 
 static void     gtk_revealer_set_position (GtkRevealer *revealer,
                                            double       pos);
@@ -160,6 +161,7 @@ gtk_revealer_init (GtkRevealer *revealer)
   revealer->target_pos = 0.0;
 
   gtk_widget_set_overflow (GTK_WIDGET (revealer), GTK_OVERFLOW_HIDDEN);
+  gtk_widget_set_inset_mode (GTK_WIDGET (revealer), GTK_INSET_EXTEND);
 }
 
 static void
@@ -304,7 +306,7 @@ gtk_revealer_class_init (GtkRevealerClass *klass)
 
   widget_class->unmap = gtk_revealer_unmap;
   widget_class->size_allocate = gtk_revealer_size_allocate;
-  widget_class->measure = gtk_revealer_measure;
+  widget_class->measure_with_inset = gtk_revealer_measure_with_inset;
   widget_class->compute_expand = gtk_revealer_compute_expand;
   widget_class->get_request_mode = gtk_revealer_get_request_mode;
 
@@ -448,13 +450,16 @@ gtk_revealer_size_allocate (GtkWidget *widget,
   GskTransform *transform;
   double hscale, vscale;
   int child_width, child_height;
+  GtkBorder inset;
 
   if (revealer->child == NULL || !gtk_widget_get_visible (revealer->child))
     return;
 
+  gtk_widget_get_inset (widget, &inset);
+
   if (revealer->current_pos >= 1.0)
     {
-      gtk_widget_allocate (revealer->child, width, height, baseline, NULL);
+      gtk_widget_allocate_with_inset (revealer->child, width, height, baseline, NULL, &inset);
       return;
     }
 
@@ -496,7 +501,7 @@ gtk_revealer_size_allocate (GtkWidget *widget,
     {
       int min, nat;
       g_assert (vscale == 1.0);
-      gtk_widget_measure (revealer->child, GTK_ORIENTATION_HORIZONTAL, height, &min, &nat, NULL, NULL);
+      gtk_widget_measure_with_inset (revealer->child, GTK_ORIENTATION_HORIZONTAL, height, &inset, &min, &nat, NULL, NULL);
       if (ceil (nat * hscale) == width)
         child_width = nat;
       else if (ceil (min * hscale) == width)
@@ -509,7 +514,7 @@ gtk_revealer_size_allocate (GtkWidget *widget,
     {
       int min, nat;
       child_width = width;
-      gtk_widget_measure (revealer->child, GTK_ORIENTATION_VERTICAL, width, &min, &nat, NULL, NULL);
+      gtk_widget_measure_with_inset (revealer->child, GTK_ORIENTATION_VERTICAL, width, &inset, &min, &nat, NULL, NULL);
       if (ceil (nat * vscale) == height)
         child_height = nat;
       else if (ceil (min * vscale) == height)
@@ -570,7 +575,7 @@ gtk_revealer_size_allocate (GtkWidget *widget,
       break;
     }
 
-  gtk_widget_allocate (revealer->child, child_width, child_height, -1, transform);
+  gtk_widget_allocate_with_inset (revealer->child, child_width, child_height, -1, transform, &inset);
 }
 
 static void
@@ -734,13 +739,14 @@ gtk_revealer_get_child_revealed (GtkRevealer *revealer)
 }
 
 static void
-gtk_revealer_measure (GtkWidget      *widget,
-                      GtkOrientation  orientation,
-                      int             for_size,
-                      int            *minimum,
-                      int            *natural,
-                      int            *minimum_baseline,
-                      int            *natural_baseline)
+gtk_revealer_measure_with_inset (GtkWidget       *widget,
+                                 GtkOrientation   orientation,
+                                 int              for_size,
+                                 const GtkBorder *inset,
+                                 int             *minimum,
+                                 int             *natural,
+                                 int             *minimum_baseline,
+                                 int             *natural_baseline)
 {
   GtkRevealer *revealer = GTK_REVEALER (widget);
   double scale;
@@ -757,11 +763,12 @@ gtk_revealer_measure (GtkWidget      *widget,
 
   if (revealer->child != NULL && _gtk_widget_get_visible (revealer->child))
     {
-      gtk_widget_measure (revealer->child,
-                          orientation,
-                          for_size,
-                          minimum, natural,
-                          NULL, NULL);
+      gtk_widget_measure_with_inset (revealer->child,
+                                     orientation,
+                                     for_size,
+                                     inset,
+                                     minimum, natural,
+                                     NULL, NULL);
     }
   else
     {

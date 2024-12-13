@@ -118,6 +118,8 @@ struct _GtkWidgetPrivate
   int width_request;
   int height_request;
 
+  GtkInsetMode inset_mode;
+
   /* Animations and other things to update on clock ticks */
   guint clock_tick_id;
   guint8 n_active;
@@ -155,11 +157,13 @@ struct _GtkWidgetPrivate
   int allocated_width;
   int allocated_height;
   int allocated_baseline;
+  GtkBorder allocated_inset;
 
   int width;
   int height;
   int baseline;
   GskTransform *transform;
+  GtkBorder inset;
 
   /* The widget's requested sizes */
   SizeRequestCache requests;

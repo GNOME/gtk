@@ -66,6 +66,8 @@ struct _GtkInspectorMiscInfo
   GtkWidget *bounds;
   GtkWidget *baseline_row;
   GtkWidget *baseline;
+  GtkWidget *inset_row;
+  GtkWidget *inset;
   GtkWidget *surface_row;
   GtkWidget *surface;
   GtkWidget *surface_button;
@@ -180,10 +182,11 @@ update_allocation (GtkWidget            *w,
                    GtkInspectorMiscInfo *sl)
 {
   graphene_rect_t bounds;
-  char *size_label;
+  char *size_label, *inset_label;
   GEnumClass *class;
   GEnumValue *value;
   GtkWidget *target;
+  GtkBorder inset;
 
   target = gtk_widget_get_parent (w);
   if (target == NULL)
@@ -202,6 +205,11 @@ update_allocation (GtkWidget            *w,
   size_label = g_strdup_printf ("%d", gtk_widget_get_baseline (w));
   gtk_label_set_label (GTK_LABEL (sl->baseline), size_label);
   g_free (size_label);
+
+  gtk_widget_get_inset (w, &inset);
+  inset_label = g_strdup_printf ("↓%d ↑%d →%d ←%d", inset.top, inset.bottom, inset.left, inset.right);
+  gtk_label_set_label (GTK_LABEL (sl->inset), inset_label);
+  g_free (inset_label);
 
   class = G_ENUM_CLASS (g_type_class_ref (GTK_TYPE_SIZE_REQUEST_MODE));
   value = g_enum_get_value (class, gtk_widget_get_request_mode (w));
@@ -518,6 +526,7 @@ gtk_inspector_misc_info_set_object (GtkInspectorMiscInfo *sl,
   gtk_widget_set_visible (sl->request_mode_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->bounds_row, GTK_IS_WIDGET (object));
   gtk_widget_set_visible (sl->baseline_row, GTK_IS_WIDGET (object));
+  gtk_widget_set_visible (sl->inset_row, GTK_IS_WIDGET (object));
   /* Don't autoshow, it may be slow, we have a button for this */
   if (!GTK_IS_WIDGET (object))
     gtk_widget_set_visible (sl->measure_row, FALSE);
@@ -630,6 +639,8 @@ gtk_inspector_misc_info_class_init (GtkInspectorMiscInfoClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, bounds);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, baseline_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, baseline);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, inset_row);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, inset);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, surface_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, surface);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorMiscInfo, surface_button);

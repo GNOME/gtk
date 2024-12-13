@@ -164,6 +164,8 @@ gtk_stack_sidebar_init (GtkStackSidebar *self)
   gtk_widget_add_css_class (GTK_WIDGET (self), "sidebar");
 
   self->rows = g_hash_table_new_full (NULL, NULL, g_object_unref, NULL);
+
+  gtk_widget_set_inset_mode (GTK_WIDGET (self), GTK_INSET_EXTEND);
 }
 
 static void

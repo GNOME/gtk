@@ -209,6 +209,8 @@ gtk_action_bar_init (GtkActionBar *self)
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (self->center_box), self->end_box);
 
   gtk_revealer_set_child (GTK_REVEALER (self->revealer), self->center_box);
+
+  gtk_widget_set_inset_mode (GTK_WIDGET (self), GTK_INSET_EXTEND);
 }
 
 static GtkBuildableIface *parent_buildable_iface;

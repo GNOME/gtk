@@ -92,6 +92,21 @@ typedef enum
 } GtkAlign;
 
 /**
+ * GtkInsetMode:
+ * @GTK_INSET_PAD: TODO
+ * @GTK_INSET_EXTEND: TODO
+ *
+ * TODO
+ *
+ * Since: 4.18
+ */
+typedef enum
+{
+  GTK_INSET_PAD,
+  GTK_INSET_EXTEND,
+} GtkInsetMode;
+
+/**
  * GtkArrowType:
  * @GTK_ARROW_UP: Represents an upward pointing arrow.
  * @GTK_ARROW_DOWN: Represents a downward pointing arrow.

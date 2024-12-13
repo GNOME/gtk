@@ -4571,8 +4571,19 @@ gtk_window_size_allocate (GtkWidget *widget,
 
   _gtk_window_set_allocation (window, width, height, &child_allocation);
 
-  if (child && gtk_widget_get_visible (child))
-    gtk_widget_size_allocate (child, &child_allocation, -1);
+  if (child && gtk_widget_get_visible (child)) {
+    GtkBorder inset;
+
+    inset.left = child_allocation.x;
+    inset.top = child_allocation.y;
+    inset.right = width - (child_allocation.x + child_allocation.width);
+    inset.bottom = height - (child_allocation.y + child_allocation.height);
+
+    inset.top += 32;
+    inset.bottom += 18;
+
+    gtk_widget_allocate_with_inset (child, width, height, -1, NULL, &inset);
+  }
 
   gtk_tooltip_maybe_allocate (GTK_NATIVE (widget));
 }
@@ -6979,3 +6990,4 @@ gtk_window_get_handle_menubar_accel (GtkWindow *window)
 
   return phase == GTK_PHASE_CAPTURE;
 }
+

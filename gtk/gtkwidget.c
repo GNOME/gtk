@@ -544,6 +544,7 @@ enum {
   PROP_VEXPAND,
   PROP_HEXPAND_SET,
   PROP_VEXPAND_SET,
+  PROP_INSET_MODE,
   PROP_SCALE_FACTOR,
   PROP_CSS_NAME,
   PROP_CSS_CLASSES,
@@ -1017,6 +1018,9 @@ gtk_widget_set_property (GObject      *object,
     case PROP_VEXPAND_SET:
       gtk_widget_set_vexpand_set (widget, g_value_get_boolean (value));
       break;
+    case PROP_INSET_MODE:
+      gtk_widget_set_inset_mode (widget, g_value_get_enum (value));
+      break;
     case PROP_OPACITY:
       gtk_widget_set_opacity (widget, g_value_get_double (value));
       break;
@@ -1147,6 +1151,9 @@ gtk_widget_get_property (GObject    *object,
       break;
     case PROP_VEXPAND_SET:
       g_value_set_boolean (value, gtk_widget_get_vexpand_set (widget));
+      break;
+    case PROP_INSET_MODE:
+      g_value_set_enum (value, gtk_widget_get_inset_mode (widget));
       break;
     case PROP_OPACITY:
       g_value_set_double (value, gtk_widget_get_opacity (widget));
@@ -1570,6 +1577,19 @@ gtk_widget_class_init (GtkWidgetClass *klass)
       g_param_spec_boolean ("vexpand-set", NULL, NULL,
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkWidget:inset-mode:
+   *
+   * TODO
+   *
+   * Since: 4.18
+   */
+  widget_props[PROP_INSET_MODE] =
+      g_param_spec_enum ("inset-mode", NULL, NULL,
+                         GTK_TYPE_INSET_MODE,
+                         GTK_INSET_PAD,
+                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWidget:opacity:
@@ -2359,6 +2379,7 @@ gtk_widget_init (GTypeInstance *instance, gpointer g_class)
 
   priv->halign = GTK_ALIGN_FILL;
   priv->valign = GTK_ALIGN_FILL;
+  priv->inset_mode = GTK_INSET_PAD;
 
   /* Note that we intentionally set this to an abstract role here.
    * See gtk_widget_get_accessible_role() for where it gets overridden
@@ -3851,11 +3872,13 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
       (priv->valign != GTK_ALIGN_FILL &&
        gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH))
     {
-      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
-                          allocation->height + priv->margin.top + priv->margin.bottom,
+      gtk_widget_measure_with_inset (widget, GTK_ORIENTATION_HORIZONTAL,
+                                     allocation->height + priv->margin.top + priv->margin.bottom,
+                                     &priv->allocated_inset,
                           &min_width, NULL, NULL, NULL);
-      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
+      gtk_widget_measure_with_inset (widget, GTK_ORIENTATION_HORIZONTAL,
                           -1,
+                                     &priv->allocated_inset,
                           NULL, &natural_width, NULL, NULL);
       natural_width = MAX (min_width, natural_width);
       adjust_for_align (effective_align (priv->halign, _gtk_widget_get_direction (widget)),
@@ -3863,8 +3886,9 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                         &allocation->x,
                         &allocation->width,
                         -1, baseline);
-      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
+      gtk_widget_measure_with_inset (widget, GTK_ORIENTATION_VERTICAL,
                           allocation->width + priv->margin.left + priv->margin.right,
+                                     &priv->allocated_inset,
                           NULL, &natural_height, NULL, &nat_baseline);
       adjust_for_align (priv->valign,
                         natural_height - priv->margin.top - priv->margin.bottom,
@@ -3875,11 +3899,13 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
     }
   else
     {
-      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
+      gtk_widget_measure_with_inset (widget, GTK_ORIENTATION_VERTICAL,
                           allocation->width + priv->margin.left + priv->margin.right,
+                                     &priv->allocated_inset,
                           &min_height, NULL, NULL, NULL);
-      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL,
+      gtk_widget_measure_with_inset (widget, GTK_ORIENTATION_VERTICAL,
                           -1,
+                                     &priv->allocated_inset,
                           NULL, &natural_height, NULL, &nat_baseline);
       natural_height = MAX (min_height, natural_height);
       adjust_for_align (priv->valign,
@@ -3888,8 +3914,9 @@ gtk_widget_adjust_size_allocation (GtkWidget     *widget,
                         &allocation->height,
                         nat_baseline > -1 ? nat_baseline - priv->margin.top : -1,
                         baseline);
-      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL,
+      gtk_widget_measure_with_inset (widget, GTK_ORIENTATION_HORIZONTAL,
                           allocation->height + priv->margin.top + priv->margin.bottom,
+                                     &priv->allocated_inset,
                           &min_width, &natural_width, NULL, NULL);
       adjust_for_align (effective_align (priv->halign, _gtk_widget_get_direction (widget)),
                         natural_width - priv->margin.left - priv->margin.right,
@@ -3953,6 +3980,21 @@ gtk_widget_allocate (GtkWidget    *widget,
                      int           height,
                      int           baseline,
                      GskTransform *transform)
+{
+  GtkBorder inset = { 0, };
+
+  inset.top = inset.bottom = inset.left = inset.right = 0;
+
+  gtk_widget_allocate_with_inset (widget, width, height, baseline, transform, &inset);
+}
+
+void
+gtk_widget_allocate_with_inset (GtkWidget       *widget,
+                                int              width,
+                                int              height,
+                                int              baseline,
+                                GskTransform    *transform,
+                                const GtkBorder *inset)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GdkRectangle adjusted;
@@ -4018,6 +4060,7 @@ gtk_widget_allocate (GtkWidget    *widget,
   priv->allocated_width = width;
   priv->allocated_height = height;
   priv->allocated_baseline = baseline;
+  priv->allocated_inset = *inset;
 
   if (_gtk_widget_get_direction (widget) == GTK_TEXT_DIR_LTR)
     adjusted.x = priv->margin.left;
@@ -4040,6 +4083,22 @@ gtk_widget_allocate (GtkWidget    *widget,
 
       adjusted.width = 0;
       adjusted.height = 0;
+    }
+
+  if (priv->inset_mode == GTK_INSET_EXTEND)
+    {
+      priv->inset = *inset;
+    }
+  else
+    {
+      adjusted.x += inset->left;
+      adjusted.y += inset->top;
+      adjusted.width -= inset->left + inset->right;
+      adjusted.height -= inset->top + inset->bottom;
+      priv->inset.top = 0;
+      priv->inset.bottom = 0;
+      priv->inset.left = 0;
+      priv->inset.right = 0;
     }
 
   style = gtk_css_node_get_style (priv->cssnode);
@@ -8550,6 +8609,53 @@ gtk_widget_set_vexpand_set (GtkWidget      *widget,
   gtk_widget_set_expand_set (widget, GTK_ORIENTATION_VERTICAL, set);
 }
 
+/**
+ * gtk_widget_get_inset_mode:
+ * @widget: a widget
+ *
+ * TODO
+ *
+ * Returns: TODO
+ *
+ * Since: 4.18
+ */
+GtkInsetMode
+gtk_widget_get_inset_mode (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), GTK_INSET_PAD);
+
+  return priv->inset_mode;
+}
+
+/**
+ * gtk_widget_set_inset_mode:
+ * @widget: the widget
+ * @inset_mode: TODO
+ *
+ * TODO
+ *
+ * Since: 4.18
+ */
+void
+gtk_widget_set_inset_mode (GtkWidget    *widget,
+                           GtkInsetMode  inset_mode)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+  g_return_if_fail (inset_mode <= GTK_INSET_EXTEND);
+
+  if (inset_mode == priv->inset_mode)
+    return;
+
+  priv->inset_mode = inset_mode;
+  gtk_widget_queue_resize (widget);
+
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_INSET_MODE]);
+}
+
 /*
  * GtkAccessible implementation
  */
@@ -10848,11 +10954,12 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
    */
   if (priv->alloc_needed)
     {
-      gtk_widget_allocate (widget,
-                           priv->allocated_width,
-                           priv->allocated_height,
-                           priv->allocated_baseline,
-                           gsk_transform_ref (priv->allocated_transform));
+      gtk_widget_allocate_with_inset (widget,
+                                      priv->allocated_width,
+                                      priv->allocated_height,
+                                      priv->allocated_baseline,
+                                      gsk_transform_ref (priv->allocated_transform),
+                                      &priv->allocated_inset);
     }
   else
     {
@@ -13208,6 +13315,26 @@ gtk_widget_get_color (GtkWidget *widget,
 
   style = gtk_css_node_get_style (priv->cssnode);
   *color = *gtk_css_color_value_get_rgba (style->used->color);
+}
+
+/**
+ * gtk_widget_get_inset:
+ * @widget: a widget
+ * @inset: (out caller-allocates): return location for the results
+ *
+ * TODO
+ *
+ * Since: 4.18
+ */
+void
+gtk_widget_get_inset (GtkWidget *widget,
+                      GtkBorder *inset)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  *inset = priv->inset;
 }
 
 /*< private >

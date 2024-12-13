@@ -374,6 +374,7 @@ gtk_overlay_class_init (GtkOverlayClass *klass)
 static void
 gtk_overlay_init (GtkOverlay *overlay)
 {
+  gtk_widget_set_inset_mode (GTK_WIDGET (overlay), GTK_INSET_EXTEND);
 }
 
 static GtkBuildableIface *parent_buildable_iface;

@@ -19,6 +19,7 @@
 #pragma once
 
 #include <gsk/gsk.h>
+#include <gtk/gtkborder.h>
 #include <gtk/gtktypes.h>
 #include <gtk/gtkwidget.h>
 #include <gtk/gtklayoutchild.h>
@@ -94,8 +95,18 @@ struct _GtkLayoutManagerClass
   void               (* root)                (GtkLayoutManager *manager);
   void               (* unroot)              (GtkLayoutManager *manager);
 
+  void               (* measure_with_inset)  (GtkLayoutManager *manager,
+                                              GtkWidget        *widget,
+                                              GtkOrientation    orientation,
+                                              int               for_size,
+                                              const GtkBorder  *inset,
+                                              int              *minimum,
+                                              int              *natural,
+                                              int              *minimum_baseline,
+                                              int              *natural_baseline);
+
   /*< private >*/
-  gpointer _padding[16];
+  gpointer _padding[15];
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -103,6 +114,16 @@ void                    gtk_layout_manager_measure              (GtkLayoutManage
                                                                  GtkWidget        *widget,
                                                                  GtkOrientation    orientation,
                                                                  int               for_size,
+                                                                 int              *minimum,
+                                                                 int              *natural,
+                                                                 int              *minimum_baseline,
+                                                                 int              *natural_baseline);
+GDK_AVAILABLE_IN_4_18
+void                    gtk_layout_manager_measure_with_inset   (GtkLayoutManager *manager,
+                                                                 GtkWidget        *widget,
+                                                                 GtkOrientation    orientation,
+                                                                 int               for_size,
+                                                                 const GtkBorder  *inset,
                                                                  int              *minimum,
                                                                  int              *natural,
                                                                  int              *minimum_baseline,

@@ -565,6 +565,8 @@ gtk_window_handle_init (GtkWindowHandle *self)
   g_signal_connect (self->drag_gesture, "drag-update",
                     G_CALLBACK (drag_gesture_update_cb), self);
   gtk_widget_add_controller (GTK_WIDGET (self), GTK_EVENT_CONTROLLER (self->drag_gesture));
+
+  gtk_widget_set_inset_mode (GTK_WIDGET (self), GTK_INSET_EXTEND);
 }
 
 static GtkBuildableIface *parent_buildable_iface;

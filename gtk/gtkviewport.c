@@ -179,22 +179,24 @@ viewport_set_adjustment_values (GtkViewport    *viewport,
 }
 
 static void
-gtk_viewport_measure (GtkWidget      *widget,
-                      GtkOrientation  orientation,
-                      int             for_size,
-                      int            *minimum,
-                      int            *natural,
-                      int            *minimum_baseline,
-                      int            *natural_baseline)
+gtk_viewport_measure_with_inset (GtkWidget       *widget,
+                                 GtkOrientation   orientation,
+                                 int              for_size,
+                                 const GtkBorder *inset,
+                                 int             *minimum,
+                                 int             *natural,
+                                 int             *minimum_baseline,
+                                 int             *natural_baseline)
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
 
   if (viewport->child)
-    gtk_widget_measure (viewport->child,
-                        orientation,
-                        for_size,
-                        minimum, natural,
-                        NULL, NULL);
+    gtk_widget_measure_with_inset (viewport->child,
+                                   orientation,
+                                   for_size,
+                                   inset,
+                                   minimum, natural,
+                                   NULL, NULL);
 }
 
 static void
@@ -299,7 +301,7 @@ gtk_viewport_class_init (GtkViewportClass *class)
   gobject_class->get_property = gtk_viewport_get_property;
 
   widget_class->size_allocate = gtk_viewport_size_allocate;
-  widget_class->measure = gtk_viewport_measure;
+  widget_class->measure_with_inset = gtk_viewport_measure_with_inset;
   widget_class->root = gtk_viewport_root;
   widget_class->unroot = gtk_viewport_unroot;
   widget_class->compute_expand = gtk_viewport_compute_expand;
@@ -435,6 +437,8 @@ gtk_viewport_init (GtkViewport *viewport)
   viewport_set_adjustment (viewport, GTK_ORIENTATION_VERTICAL, NULL);
 
   viewport->scroll_to_focus = TRUE;
+
+  gtk_widget_set_inset_mode (widget, GTK_INSET_EXTEND);
 }
 
 /**
@@ -494,6 +498,9 @@ gtk_viewport_size_allocate (GtkWidget *widget,
 {
   GtkViewport *viewport = GTK_VIEWPORT (widget);
   int child_size[2];
+  GtkBorder inset;
+
+  gtk_widget_get_inset (widget, &inset);
 
   g_object_freeze_notify (G_OBJECT (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]));
   g_object_freeze_notify (G_OBJECT (viewport->adjustment[GTK_ORIENTATION_VERTICAL]));
@@ -512,19 +519,19 @@ gtk_viewport_size_allocate (GtkWidget *widget,
         orientation = GTK_ORIENTATION_HORIZONTAL;
       opposite = OPPOSITE_ORIENTATION (orientation);
 
-      gtk_widget_measure (viewport->child,
-                          orientation, -1,
-                          &min, &nat,
-                          NULL, NULL);
+      gtk_widget_measure_with_inset (viewport->child,
+                                     orientation, -1, &inset,
+                                     &min, &nat,
+                                     NULL, NULL);
       if (viewport->scroll_policy[orientation] == GTK_SCROLL_MINIMUM)
         child_size[orientation] = MAX (child_size[orientation], min);
       else
         child_size[orientation] = MAX (child_size[orientation], nat);
 
-      gtk_widget_measure (viewport->child,
-                          opposite, child_size[orientation],
-                          &min, &nat,
-                          NULL, NULL);
+      gtk_widget_measure_with_inset (viewport->child,
+                                     opposite, child_size[orientation], &inset,
+                                     &min, &nat,
+                                     NULL, NULL);
       if (viewport->scroll_policy[opposite] == GTK_SCROLL_MINIMUM)
         child_size[opposite] = MAX (child_size[opposite], min);
       else
@@ -536,14 +543,15 @@ gtk_viewport_size_allocate (GtkWidget *widget,
 
   if (viewport->child && gtk_widget_get_visible (viewport->child))
     {
-      GtkAllocation child_allocation;
+      int x = - gtk_adjustment_get_value (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]);
+      int y = - gtk_adjustment_get_value (viewport->adjustment[GTK_ORIENTATION_VERTICAL]);
 
-      child_allocation.width = child_size[GTK_ORIENTATION_HORIZONTAL];
-      child_allocation.height = child_size[GTK_ORIENTATION_VERTICAL];
-      child_allocation.x = - gtk_adjustment_get_value (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]);
-      child_allocation.y = - gtk_adjustment_get_value (viewport->adjustment[GTK_ORIENTATION_VERTICAL]);
-
-      gtk_widget_size_allocate (viewport->child, &child_allocation, -1);
+      gtk_widget_allocate_with_inset (viewport->child,
+                                      child_size[GTK_ORIENTATION_HORIZONTAL],
+                                      child_size[GTK_ORIENTATION_VERTICAL],
+                                      -1,
+                                      gsk_transform_translate (NULL, &GRAPHENE_POINT_INIT (x, y)),
+                                      &inset);
     }
 
   g_object_thaw_notify (G_OBJECT (viewport->adjustment[GTK_ORIENTATION_HORIZONTAL]));

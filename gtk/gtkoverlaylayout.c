@@ -413,12 +413,13 @@ gtk_overlay_layout_allocate (GtkLayoutManager *layout_manager,
 {
   GtkWidget *child;
   GtkWidget *main_widget;
+  GtkBorder inset;
+
+  gtk_widget_get_inset (GTK_WIDGET (widget), &inset);
 
   main_widget = gtk_overlay_get_child (GTK_OVERLAY (widget));
   if (main_widget && gtk_widget_get_visible (main_widget))
-    gtk_widget_size_allocate (main_widget,
-                              &(GtkAllocation) { 0, 0, width, height },
-                              -1);
+    gtk_widget_allocate_with_inset (main_widget, width, height, -1, NULL, &inset);
 
   for (child = _gtk_widget_get_first_child (widget);
        child != NULL;
