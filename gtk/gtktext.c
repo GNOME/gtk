@@ -4697,6 +4697,17 @@ gtk_text_recompute (GtkText *self)
   gtk_text_update_handles (self);
 }
 
+static void
+update_resolved_dir (GtkText *self)
+{
+  GtkTextPrivate *priv = gtk_text_get_instance_private (self);
+
+  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+    priv->resolved_dir = PANGO_DIRECTION_RTL;
+  else
+    priv->resolved_dir = PANGO_DIRECTION_LTR;
+}
+
 static PangoLayout *
 gtk_text_create_layout (GtkText  *self,
                         gboolean  include_preedit)
@@ -4743,49 +4754,10 @@ gtk_text_create_layout (GtkText  *self,
     }
   else
     {
-      PangoDirection pango_dir;
-
-      if (gtk_text_get_display_mode (self) == DISPLAY_NORMAL)
-        pango_dir = gdk_find_base_dir (display_text, n_bytes);
-      else
-        pango_dir = PANGO_DIRECTION_NEUTRAL;
-
-      if (pango_dir == PANGO_DIRECTION_NEUTRAL)
-        {
-          if (gtk_widget_has_focus (widget))
-            {
-              GdkDisplay *display;
-              GdkSeat *seat;
-              GdkDevice *keyboard = NULL;
-              PangoDirection direction = PANGO_DIRECTION_LTR;
-
-              display = gtk_widget_get_display (widget);
-              seat = gdk_display_get_default_seat (display);
-              if (seat)
-                keyboard = gdk_seat_get_keyboard (seat);
-              if (keyboard)
-                direction = gdk_device_get_direction (keyboard);
-
-              if (direction == PANGO_DIRECTION_RTL)
-                pango_dir = PANGO_DIRECTION_RTL;
-              else
-                pango_dir = PANGO_DIRECTION_LTR;
-            }
-          else
-            {
-              if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-                pango_dir = PANGO_DIRECTION_RTL;
-              else
-                pango_dir = PANGO_DIRECTION_LTR;
-            }
-        }
-
-      pango_context_set_base_dir (gtk_widget_get_pango_context (widget), pango_dir);
-
-      priv->resolved_dir = pango_dir;
-
       pango_layout_set_text (layout, display_text, n_bytes);
     }
+
+  update_resolved_dir (self);
 
   pango_layout_set_attributes (layout, tmp_attrs);
 
