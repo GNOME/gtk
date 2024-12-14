@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow">
+    <property name="decorated">0</property>
+    <child>
+      <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Lorem ipsum dolor sit amet, consectetur adipisci elit</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkPicture">
+            <property name="paintable">green-200x200.png</property>
+            <property name="can-shrink">0</property>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

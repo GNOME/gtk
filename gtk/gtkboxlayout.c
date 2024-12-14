@@ -390,33 +390,44 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
  */
 #define MAX_ALLOWED_SIZE (1 << 20)
 
-static int
+/*
+ * Distribute the available size among inconstant-size children in order
+ * to find the minimum size required in the opposite direction. On entry,
+ * (*min_opposite) contains the already known lower bound on the minimum
+ * size in the opposite orientation; update it with the found result.
+ */
+static void
 distribute_remaining_size (GtkRequestedSize *sizes,
                            gsize             n_sizes,
                            GtkOrientation    orientation,
                            int               available,
-                           int               min,
-                           int               max)
+                           int              *min_opposite)
 {
-  int total_size = 0;
+  int min, max;
+  int child_min, total_size;
   gsize i;
 
   if (n_sizes == 0)
-    return available;
+    return;
 
+  /* Fast path: check if the minimum size we have is already enough
+   * to fit all inconstant children into the available space.
+   */
+  total_size = 0;
   for (i = 0; i < n_sizes; i++)
     {
       gtk_widget_measure (sizes[i].data,
                           orientation,
-                          min,
-                          &sizes[i].minimum_size, &sizes[i].natural_size,
+                          *min_opposite,
+                          &child_min, NULL,
                           NULL, NULL);
-      total_size += sizes[i].minimum_size;
+      total_size += child_min;
     }
-
   if (total_size <= available)
-    return available - total_size;
+    return;
 
+  min = *min_opposite;
+  max = MAX_ALLOWED_SIZE;
   /* total_size > available happens when we last ran for values too big,
    * rerun for the correct value min == max in that case */
   while (min < max || total_size > available)
@@ -428,18 +439,18 @@ distribute_remaining_size (GtkRequestedSize *sizes,
           /* sanity check! */
           for (i = 0; i < n_sizes; i++)
             {
-              int check_min, check_nat;
+              int check_min;
               gtk_widget_measure (sizes[i].data,
                                   orientation,
                                   MAX_ALLOWED_SIZE,
-                                  &sizes[i].minimum_size, &sizes[i].natural_size,
+                                  &child_min, NULL,
                                   NULL, NULL);
               gtk_widget_measure (sizes[i].data,
                                   orientation,
                                   -1,
-                                  &check_min, &check_nat,
+                                  &check_min, NULL,
                                   NULL, NULL);
-              if (check_min < sizes[i].minimum_size)
+              if (check_min < child_min)
                 {
                   g_critical ("%s %p reports a minimum %s of %u, but minimum %s for %s of %u is %u. Expect overlapping widgets.",
                               G_OBJECT_TYPE_NAME (sizes[i].data), sizes[i].data,
@@ -447,13 +458,10 @@ distribute_remaining_size (GtkRequestedSize *sizes,
                               check_min,
                               orientation == GTK_ORIENTATION_HORIZONTAL ? "width" : "height",
                               orientation == GTK_ORIENTATION_HORIZONTAL ? "height" : "width",
-                              MAX_ALLOWED_SIZE, sizes[i].minimum_size);
-                  sizes[i].minimum_size = check_min;
-                  sizes[i].natural_size = check_nat;
+                              MAX_ALLOWED_SIZE, child_min);
                 }
-              total_size += sizes[i].minimum_size;
             }
-          return MAX (0, available - total_size);
+          return;
         }
 
       if (max == MAX_ALLOWED_SIZE)
@@ -467,9 +475,9 @@ distribute_remaining_size (GtkRequestedSize *sizes,
           gtk_widget_measure (sizes[i].data,
                               orientation,
                               test,
-                              &sizes[i].minimum_size, &sizes[i].natural_size,
+                              &child_min, NULL,
                               NULL, NULL);
-          total_size += sizes[i].minimum_size;
+          total_size += child_min;
         }
 
       if (total_size > available)
@@ -477,8 +485,8 @@ distribute_remaining_size (GtkRequestedSize *sizes,
       else
         max = test;
     }
-    
-  return available - total_size;
+
+  *min_opposite = min;
 }
 
 static void
@@ -560,7 +568,7 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
     }
   else
     {
-      int min_size = 0, child_min_size;
+      int min_size = 0, extra_space = available;
       int n_inconstant = 0;
 
       /* Retrieve desired size for visible children */
@@ -571,48 +579,53 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
           if (!gtk_widget_should_layout (child))
             continue;
 
+          gtk_widget_measure (child,
+                              OPPOSITE_ORIENTATION (self->orientation),
+                              -1,
+                              &child_minimum, NULL,
+                              NULL, NULL);
+          min_size = MAX (min_size, child_minimum);
+          gtk_widget_measure (child,
+                              self->orientation,
+                              -1,
+                              &child_minimum, &child_natural,
+                              NULL, NULL);
+          extra_space -= child_minimum;
+          g_assert (available >= child_minimum);
+
           if (gtk_widget_get_request_mode (child) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
             {
-              gtk_widget_measure (child,
-                                  self->orientation,
-                                  -1,
-                                  &sizes[i].minimum_size, &sizes[i].natural_size,
-                                  NULL, NULL);
               sizes[i].data = child;
-              g_assert (available >= sizes[i].minimum_size);
-              available -= sizes[i].minimum_size;
+              sizes[i].minimum_size = child_minimum;
+              sizes[i].natural_size = child_natural;
+              available -= child_minimum;
               i++;
             }
           else
             {
-              gtk_widget_measure (child,
-                                  OPPOSITE_ORIENTATION (self->orientation),
-                                  -1,
-                                  &child_min_size, NULL,
-                                  NULL, NULL);
-              min_size = MAX (min_size, child_min_size);
               n_inconstant++;
               sizes[nvis_children - n_inconstant].data = child;
+              sizes[nvis_children - n_inconstant].minimum_size = child_minimum;
+              sizes[nvis_children - n_inconstant].natural_size = child_natural;
             }
         }
 
-      available = distribute_remaining_size (sizes + nvis_children - n_inconstant,
-                                             n_inconstant,
-                                             self->orientation,
-                                             available,
-                                             min_size,
-                                             MAX_ALLOWED_SIZE);
+      distribute_remaining_size (sizes + nvis_children - n_inconstant,
+                                 n_inconstant,
+                                 self->orientation,
+                                 available,
+                                 &min_size);
 
       /* Bring children up to size first */
-      available = gtk_distribute_natural_allocation (available, nvis_children, sizes);
+      extra_space = gtk_distribute_natural_allocation (extra_space, nvis_children, sizes);
 
       /* Calculate space which hasn't distributed yet,
        * and is available for expanding children.
        */
       if (nexpand_children > 0)
         {
-          size_given_to_child = available / nexpand_children;
-          n_extra_widgets = available % nexpand_children;
+          size_given_to_child = extra_space / nexpand_children;
+          n_extra_widgets = extra_space % nexpand_children;
         }
       else
         {
@@ -658,7 +671,6 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
                               child_size,
                               &child_minimum, &child_natural,
                               &child_minimum_baseline, &child_natural_baseline);
-          computed_minimum = MAX (computed_minimum, child_minimum);
           computed_natural = MAX (computed_natural, child_natural);
 
           if (self->orientation == GTK_ORIENTATION_HORIZONTAL && child_minimum_baseline > -1)
@@ -674,6 +686,7 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
               computed_natural_above = MAX (computed_natural_above, child_natural_baseline);
             }
         }
+      computed_minimum = min_size;
     }
 
   if (have_baseline && self->orientation == GTK_ORIENTATION_HORIZONTAL)
