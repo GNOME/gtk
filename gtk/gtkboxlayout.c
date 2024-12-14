@@ -503,7 +503,7 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
   int child_minimum_baseline, child_natural_baseline;
   int n_extra_widgets = 0;
   int spacing;
-  gboolean have_baseline = FALSE;
+  gboolean have_baseline = FALSE, align_baseline = FALSE;
 
   count_expand_children (widget, self->orientation, &nvis_children, &nexpand_children);
 
@@ -541,27 +541,20 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
                               child_size,
                               &child_minimum, &child_natural,
                               &child_minimum_baseline, &child_natural_baseline);
+          computed_minimum = MAX (computed_minimum, child_minimum);
+          computed_natural = MAX (computed_natural, child_natural);
 
-          if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
+          if (self->orientation == GTK_ORIENTATION_HORIZONTAL && child_minimum_baseline > -1)
             {
-              if (child_minimum_baseline > -1)
-                {
-                  have_baseline = TRUE;
-                  computed_minimum_below = MAX (computed_minimum_below, child_minimum - child_minimum_baseline);
-                  computed_natural_below = MAX (computed_natural_below, child_natural - child_natural_baseline);
-                  computed_minimum_above = MAX (computed_minimum_above, child_minimum_baseline);
-                  computed_natural_above = MAX (computed_natural_above, child_natural_baseline);
-                }
-              else
-                {
-                  computed_minimum = MAX (computed_minimum, child_minimum);
-                  computed_natural = MAX (computed_natural, child_natural);
-                }
-            }
-          else
-            {
-              computed_minimum = MAX (computed_minimum, child_minimum);
-              computed_natural = MAX (computed_natural, child_natural);
+              have_baseline = TRUE;
+              if (gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE_FILL ||
+                  gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE_CENTER)
+                align_baseline = TRUE;
+
+              computed_minimum_below = MAX (computed_minimum_below, child_minimum - child_minimum_baseline);
+              computed_natural_below = MAX (computed_natural_below, child_natural - child_natural_baseline);
+              computed_minimum_above = MAX (computed_minimum_above, child_minimum_baseline);
+              computed_natural_above = MAX (computed_natural_above, child_natural_baseline);
             }
         }
     }
@@ -665,59 +658,53 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
                               child_size,
                               &child_minimum, &child_natural,
                               &child_minimum_baseline, &child_natural_baseline);
+          computed_minimum = MAX (computed_minimum, child_minimum);
+          computed_natural = MAX (computed_natural, child_natural);
 
-          if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
+          if (self->orientation == GTK_ORIENTATION_HORIZONTAL && child_minimum_baseline > -1)
             {
-              if (child_minimum_baseline > -1)
-                {
-                  have_baseline = TRUE;
-                  computed_minimum_below = MAX (computed_minimum_below, child_minimum - child_minimum_baseline);
-                  computed_natural_below = MAX (computed_natural_below, child_natural - child_natural_baseline);
-                  computed_minimum_above = MAX (computed_minimum_above, child_minimum_baseline);
-                  computed_natural_above = MAX (computed_natural_above, child_natural_baseline);
-                }
-              else
-                {
-                  computed_minimum = MAX (computed_minimum, child_minimum);
-                  computed_natural = MAX (computed_natural, child_natural);
-                }
-            }
-          else
-            {
-              computed_minimum = MAX (computed_minimum, child_minimum);
-              computed_natural = MAX (computed_natural, child_natural);
+              have_baseline = TRUE;
+              if (gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE_FILL ||
+                  gtk_widget_get_valign (child) == GTK_ALIGN_BASELINE_CENTER)
+                align_baseline = TRUE;
+
+              computed_minimum_below = MAX (computed_minimum_below, child_minimum - child_minimum_baseline);
+              computed_natural_below = MAX (computed_natural_below, child_natural - child_natural_baseline);
+              computed_minimum_above = MAX (computed_minimum_above, child_minimum_baseline);
+              computed_natural_above = MAX (computed_natural_above, child_natural_baseline);
             }
         }
     }
 
-  if (have_baseline)
+  if (have_baseline && self->orientation == GTK_ORIENTATION_HORIZONTAL)
     {
-      if (self->orientation == GTK_ORIENTATION_HORIZONTAL)
+      if (align_baseline)
         {
           computed_minimum = MAX (computed_minimum, computed_minimum_below + computed_minimum_above);
           computed_natural = MAX (computed_natural, computed_natural_below + computed_natural_above);
-          switch (self->baseline_position)
-            {
-            case GTK_BASELINE_POSITION_TOP:
-              computed_minimum_baseline = computed_minimum_above;
-              computed_natural_baseline = computed_natural_above;
-            break;
-            case GTK_BASELINE_POSITION_CENTER:
-              computed_minimum_baseline = computed_minimum_above + MAX((computed_minimum - (computed_minimum_above + computed_minimum_below)) / 2, 0);
-              computed_natural_baseline = computed_natural_above + MAX((computed_natural - (computed_natural_above + computed_natural_below)) / 2, 0);
-              break;
-            case GTK_BASELINE_POSITION_BOTTOM:
-              computed_minimum_baseline = computed_minimum - computed_minimum_below;
-              computed_natural_baseline = computed_natural - computed_natural_below;
-              break;
-            default:
-              break;
-            }
+        }
+
+      switch (self->baseline_position)
+        {
+        case GTK_BASELINE_POSITION_TOP:
+          computed_minimum_baseline = computed_minimum_above;
+          computed_natural_baseline = computed_natural_above;
+          break;
+        case GTK_BASELINE_POSITION_CENTER:
+          computed_minimum_baseline = computed_minimum_above + MAX((computed_minimum - (computed_minimum_above + computed_minimum_below)) / 2, 0);
+          computed_natural_baseline = computed_natural_above + MAX((computed_natural - (computed_natural_above + computed_natural_below)) / 2, 0);
+          break;
+        case GTK_BASELINE_POSITION_BOTTOM:
+          computed_minimum_baseline = computed_minimum - computed_minimum_below;
+          computed_natural_baseline = computed_natural - computed_natural_below;
+          break;
+        default:
+          break;
         }
     }
 
   *minimum = computed_minimum;
-  *natural = MAX (computed_natural, computed_natural_below + computed_natural_above);
+  *natural = computed_natural;
   *min_baseline = computed_minimum_baseline;
   *nat_baseline = computed_natural_baseline;
 }
