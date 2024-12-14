@@ -151,6 +151,8 @@
  * ├── undershoot.left
  * ├── undershoot.right
  * ├── [selection]
+ * ├── [cursor-handle[.top]
+ * ├── [cursor-handle.bottom]
  * ├── [block-cursor]
  * ├── [cursor-handle[.top/.bottom][.insertion-cursor]]
  * ╰── [window.popup]
@@ -1031,7 +1033,7 @@ gtk_text_class_init (GtkTextClass *class)
 
   /**
    * GtkText::activate:
-   * @self: The text widget which emitted the signal
+   * @self: the text widget which emitted the signal
    *
    * Emitted when the user hits the <kbd>Enter</kbd> key.
    *
@@ -1062,8 +1064,8 @@ gtk_text_class_init (GtkTextClass *class)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * Applications should not connect to it, but may emit it with
-   * g_signal_emit_by_name() if they need to control the cursor
-   * programmatically.
+   * [func@GObject.signal_emit_by_name] if they need to control
+   * the cursor programmatically.
    *
    * The default bindings for this signal come in two variants,
    * the variant with the <kbd>Shift</kbd> modifier extends the
@@ -1230,7 +1232,7 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText::toggle-overwrite:
    * @self: the text widget which emitted the signal
    *
-   * Emitted to toggle the overwrite mode of the `GtkText`.
+   * Emitted to toggle the overwrite mode.
    *
    * This is a [keybinding signal](class.SignalAction.html).
    *
@@ -1270,7 +1272,7 @@ gtk_text_class_init (GtkTextClass *class)
    * GtkText::insert-emoji:
    * @self: the text widget which emitted the signal
    *
-   * Emitted to present the Emoji chooser for the widget.
+   * Emitted to present the Emoji chooser.
    *
    * This is a [keybinding signal](class.SignalAction.html).
    *
@@ -5625,7 +5627,7 @@ gtk_text_new (void)
 
 /**
  * gtk_text_new_with_buffer:
- * @buffer: the buffer to use for the new `GtkText`.
+ * @buffer: the buffer to use
  *
  * Creates a new `GtkText` with the specified buffer.
  *
@@ -5940,8 +5942,7 @@ gtk_text_get_invisible_char (GtkText *self)
  *
  * Unsets the invisible char.
  *
- * After calling this, the default invisible
- * char is used again.
+ * After calling this, the default invisible char is used again.
  */
 void
 gtk_text_unset_invisible_char (GtkText *self)
@@ -6989,8 +6990,8 @@ gtk_text_get_placeholder_text (GtkText *self)
  *
  * Sets the input purpose of the text widget.
  *
- * This can be used by on-screen keyboards and other
- * input methods to adjust their behaviour.
+ * The input purpose can be used by on-screen keyboards
+ * and other input methods to adjust their behaviour.
  */
 void
 gtk_text_set_input_purpose (GtkText         *self,
@@ -7425,7 +7426,7 @@ gtk_text_get_truncate_multiline (GtkText *self)
  * @strong: (out) (optional): location to store the strong cursor position
  * @weak: (out) (optional): location to store the weak cursor position
  *
- * Determine the positions of the strong and weak cursors for a
+ * Determines the positions of the strong and weak cursors for a
  * given character position.
  *
  * The position of each cursor is stored as a zero-width rectangle.
