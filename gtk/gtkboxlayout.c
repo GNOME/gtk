@@ -841,6 +841,8 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
   int minimum_above, natural_above;
   int minimum_below, natural_below;
   gboolean have_baseline;
+  gboolean constant_min_same_as_nat = TRUE;
+  int n_inconstant = 0;
   int extra_space;
   int children_minimum_size = 0;
   int size_given_to_child;
@@ -869,6 +871,8 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
   minimum_below = natural_below = 0;
 
   /* Retrieve desired size for visible children. */
+
+  /* First, measure constant-size children. */
   for (i = 0, child = _gtk_widget_get_first_child (widget);
        child != NULL;
        child = _gtk_widget_get_next_sibling (child))
@@ -876,15 +880,55 @@ gtk_box_layout_allocate (GtkLayoutManager *layout_manager,
       if (!gtk_widget_should_layout (child))
         continue;
 
-      gtk_widget_measure (child,
-                          self->orientation,
-                          self->orientation == GTK_ORIENTATION_HORIZONTAL ? height : width,
-                          &sizes[i].minimum_size, &sizes[i].natural_size,
-                          NULL, NULL);
+      if (gtk_widget_get_request_mode (child) == GTK_SIZE_REQUEST_CONSTANT_SIZE)
+        {
+          gtk_widget_measure (child, self->orientation, -1,
+                              &sizes[i].minimum_size, &sizes[i].natural_size,
+                              NULL, NULL);
 
-      children_minimum_size += sizes[i].minimum_size;
+          children_minimum_size += sizes[i].minimum_size;
+          if (sizes[i].minimum_size != sizes[i].natural_size)
+            constant_min_same_as_nat = FALSE;
+        }
+      else
+        n_inconstant++;
 
       sizes[i].data = child;
+      i++;
+    }
+
+  /* Now, measure inconstant-size children. */
+  for (i = 0, child = _gtk_widget_get_first_child (widget);
+       n_inconstant != 0 && child != NULL;
+       child = _gtk_widget_get_next_sibling (child))
+    {
+      if (!gtk_widget_should_layout (child))
+        continue;
+
+      if (gtk_widget_get_request_mode (child) != GTK_SIZE_REQUEST_CONSTANT_SIZE)
+        {
+          if (!self->homogeneous && n_inconstant == 1 &&
+              nexpand_children == 1 && constant_min_same_as_nat &&
+              gtk_widget_compute_expand (child, self->orientation))
+            {
+              /* Give all the remaining size to the sole inconstant child,
+               * while avoiding measuring it -- potentially against its
+               * preferred size request mode.  */
+              sizes[i].minimum_size = extra_space - children_minimum_size;
+              sizes[i].natural_size = sizes[i].minimum_size;
+              children_minimum_size = extra_space;
+              break;
+            }
+          else
+            {
+              gtk_widget_measure (child, self->orientation,
+                                 self->orientation == GTK_ORIENTATION_HORIZONTAL ? height : width,
+                                 &sizes[i].minimum_size, &sizes[i].natural_size,
+                                 NULL, NULL);
+
+              children_minimum_size += sizes[i].minimum_size;
+            }
+        }
 
       i++;
     }
