@@ -610,14 +610,33 @@ gtk_box_layout_compute_opposite_size_for_size (GtkBoxLayout *self,
             }
         }
 
-      distribute_remaining_size (sizes + nvis_children - n_inconstant,
-                                 n_inconstant,
-                                 self->orientation,
-                                 available,
-                                 &min_size);
+      if (extra_space == 0)
+        {
+          /* Fast path: assign minimum sizes to all children */
+          for (i = 0; i < n_inconstant; i++)
+            {
+              GtkRequestedSize size = sizes[nvis_children - n_inconstant + i];
+              gtk_widget_measure (size.data,
+                                  OPPOSITE_ORIENTATION (self->orientation),
+                                  size.minimum_size,
+                                  &child_minimum, NULL,
+                                  NULL, NULL);
+              min_size = MAX (min_size, child_minimum);
+            }
+        }
+      else
+        {
+          distribute_remaining_size (sizes + nvis_children - n_inconstant,
+                                     n_inconstant,
+                                     self->orientation,
+                                     available,
+                                     &min_size);
 
-      /* Bring children up to size first */
-      extra_space = gtk_distribute_natural_allocation (extra_space, nvis_children, sizes);
+          /* Bring children up to size first */
+          extra_space = gtk_distribute_natural_allocation (extra_space,
+                                                           nvis_children,
+                                                           sizes);
+        }
 
       /* Calculate space which hasn't distributed yet,
        * and is available for expanding children.
