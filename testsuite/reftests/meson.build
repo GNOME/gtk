@@ -596,6 +596,8 @@ testdata = [
   'wrap-margin-align-critical.ui',
   'wrapping-in-boxes-in-boxes.ref.ui',
   'wrapping-in-boxes-in-boxes.ui',
+  'wrapping-label-in-nested-boxes.ref.ui',
+  'wrapping-label-in-nested-boxes.ui',
 ]
 
 xfails = [

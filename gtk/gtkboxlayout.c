@@ -384,6 +384,22 @@ gtk_box_layout_compute_opposite_size (GtkBoxLayout *self,
     }
 }
 
+static inline GtkOrientation
+preferred_measure_orientation (GtkWidget *child)
+{
+  switch (gtk_widget_get_request_mode (child))
+    {
+    case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
+      return GTK_ORIENTATION_VERTICAL;
+    case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
+      return GTK_ORIENTATION_HORIZONTAL;
+
+    case GTK_SIZE_REQUEST_CONSTANT_SIZE:
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 /* if widgets haven't reached their min opposite size at this
  * huge value, things went massively wrong and we need to bail to not
  * cause an infinite loop.
@@ -409,6 +425,37 @@ distribute_remaining_size (GtkRequestedSize *sizes,
 
   if (n_sizes == 0)
     return;
+
+  /* Fast path: for a single child, just measure the required minimum
+   * size directly.
+   */
+  if (n_sizes == 1)
+    {
+      /* Even faster code path: if we are about to measure the single
+       * child against its preferred size request mode, check if we
+       * already happen to have the required size by measuring in the
+       * other orientation.  This is a variant of the generic fast path
+       * below.
+       */
+      if (preferred_measure_orientation (sizes[0].data) == orientation)
+        {
+          gtk_widget_measure (sizes[0].data,
+                              orientation,
+                              *min_opposite,
+                              &child_min, NULL,
+                              NULL, NULL);
+          if (child_min <= available)
+            return;
+        }
+
+      gtk_widget_measure (sizes[0].data,
+                          OPPOSITE_ORIENTATION (orientation),
+                          available,
+                          &child_min, NULL,
+                          NULL, NULL);
+      *min_opposite = MAX (*min_opposite, child_min);
+      return;
+    }
 
   /* Fast path: check if the minimum size we have is already enough
    * to fit all inconstant children into the available space.
