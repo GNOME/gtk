@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow" id="window1">
+    <property name="decorated">0</property>
+    <child>
+      <object class="GtkGrid">
+        <child>
+          <object class="GtkLabel">
+            <property name="label">Longer text here</property>
+            <layout>
+              <property name="row">0</property>
+              <property name="column">0</property>
+              <property name="column-span">3</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-top">3</property>
+            <property name="margin-bottom">3</property>
+            <property name="margin-start">3</property>
+            <property name="margin-end">3</property>
+            <property name="label">lorem</property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-top">3</property>
+            <property name="margin-bottom">3</property>
+            <property name="margin-start">3</property>
+            <property name="margin-end">3</property>
+            <property name="label">ipsum</property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-top">3</property>
+            <property name="margin-bottom">3</property>
+            <property name="margin-start">3</property>
+            <property name="margin-end">3</property>
+            <property name="label">dolor</property>
+            <layout>
+              <property name="row">1</property>
+              <property name="column">2</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-top">3</property>
+            <property name="margin-bottom">3</property>
+            <property name="margin-start">3</property>
+            <property name="margin-end">3</property>
+            <property name="label">sit</property>
+            <layout>
+              <property name="row">2</property>
+              <property name="column">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel">
+            <property name="margin-top">3</property>
+            <property name="margin-bottom">3</property>
+            <property name="margin-start">3</property>
+            <property name="margin-end">3</property>
+            <property name="label">amet</property>
+            <layout>
+              <property name="row">2</property>
+              <property name="column">1</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>

@@ -306,6 +306,8 @@ testdata = [
   'fixed-widget-stacking.ui',
   'flipping-icons.ref.ui',
   'flipping-icons.ui',
+  'flowbox-basics.ref.ui',
+  'flowbox-basics.ui',
   'font-sizes-names.css',
   'font-sizes-names.ref.ui',
   'font-sizes-names.ui',
