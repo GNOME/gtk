@@ -416,18 +416,6 @@ gtk_flow_box_child_activate (GtkFlowBoxChild *child)
 
 /* Size allocation {{{3 */
 
-static GtkSizeRequestMode
-gtk_flow_box_child_get_request_mode (GtkWidget *widget)
-{
-  GtkFlowBox *box;
-
-  box = gtk_flow_box_child_get_box (GTK_FLOW_BOX_CHILD (widget));
-  if (box)
-    return gtk_widget_get_request_mode (GTK_WIDGET (box));
-  else
-    return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
-}
-
 static void
 gtk_flow_box_child_dispose (GObject *object)
 {
@@ -524,7 +512,6 @@ gtk_flow_box_child_class_init (GtkFlowBoxChildClass *class)
   object_class->set_property = gtk_flow_box_child_set_property;
 
   widget_class->root = gtk_flow_box_child_root;
-  widget_class->get_request_mode = gtk_flow_box_child_get_request_mode;
   widget_class->compute_expand = gtk_flow_box_child_compute_expand;
   widget_class->focus = gtk_flow_box_child_focus;
 
@@ -1923,9 +1910,31 @@ static GtkSizeRequestMode
 gtk_flow_box_get_request_mode (GtkWidget *widget)
 {
   GtkFlowBox *box = GTK_FLOW_BOX (widget);
+  GtkWidget *visible_child = NULL;
+  GSequenceIter *iter;
 
-  return (BOX_PRIV (box)->orientation == GTK_ORIENTATION_HORIZONTAL) ?
-    GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH : GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
+  for (iter = g_sequence_get_begin_iter (BOX_PRIV (box)->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      GtkWidget *child;
+
+      child = g_sequence_get (iter);
+      if (!child_is_visible (child))
+        continue;
+
+      if (!visible_child)
+        visible_child = child;
+      else
+        /* Multiple visible children */
+        return (BOX_PRIV (box)->orientation == GTK_ORIENTATION_HORIZONTAL) ?
+                GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH : GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
+    }
+
+  if (visible_child)
+    return gtk_widget_get_request_mode (visible_child);
+
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
 /* Gets the largest minimum and natural length of
@@ -2028,36 +2037,23 @@ gtk_flow_box_measure (GtkWidget      *widget,
                   /* When not homogeneous; horizontally oriented boxes
                    * need enough width for the widest row
                    */
-                  if (min_items == 1)
-                    {
-                      get_max_item_size (box,
-                                         GTK_ORIENTATION_HORIZONTAL,
-                                         &min_item_width,
-                                         &nat_item_width);
+                  int min_line_length, nat_line_length;
 
-                      min_width += min_item_width;
-                      nat_width += nat_item_width;
-                    }
-                  else
-                    {
-                      int min_line_length, nat_line_length;
+                  get_largest_aligned_line_length (box,
+                                                   GTK_ORIENTATION_HORIZONTAL,
+                                                   min_items,
+                                                   &min_line_length,
+                                                   &nat_line_length);
 
-                      get_largest_aligned_line_length (box,
-                                                       GTK_ORIENTATION_HORIZONTAL,
-                                                       min_items,
-                                                       &min_line_length,
-                                                       &nat_line_length);
+                  if (nat_items > min_items)
+                    get_largest_aligned_line_length (box,
+                                                     GTK_ORIENTATION_HORIZONTAL,
+                                                     nat_items,
+                                                     NULL,
+                                                     &nat_line_length);
 
-                      if (nat_items > min_items)
-                        get_largest_aligned_line_length (box,
-                                                         GTK_ORIENTATION_HORIZONTAL,
-                                                         nat_items,
-                                                         NULL,
-                                                         &nat_line_length);
-
-                      min_width += min_line_length;
-                      nat_width += nat_line_length;
-                    }
+                  min_width += min_line_length;
+                  nat_width += nat_line_length;
                 }
               else /* In homogeneous mode; horizontally oriented boxes
                     * give the same width to all children */
@@ -2107,12 +2103,40 @@ gtk_flow_box_measure (GtkWidget      *widget,
 
           if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              /* Return the minimum width */
+              /* Binary search :( */
+              int min, max;
+              int min_height, nat_height;
+
               gtk_flow_box_measure (widget,
                                     GTK_ORIENTATION_HORIZONTAL,
                                     -1,
                                     &min_width, &nat_width,
                                     NULL, NULL);
+              min = min_width;
+              max = G_MAXINT;
+
+              while (min < max)
+                {
+                  int test;
+
+                  if (max != G_MAXINT)
+                    test = (min + max) / 2;
+                  else if (min == min_width)
+                    test = min;
+                  else
+                    test = min * 2;
+
+                  gtk_flow_box_measure (widget, GTK_ORIENTATION_VERTICAL,
+                                        test, &min_height, &nat_height,
+                                        NULL, NULL);
+                  if (min_height > for_size)
+                    min = test + 1;
+                  else
+                    max = test;
+                }
+              /* TODO: calculate natural size properly */
+              min_width = min;
+              nat_width = MAX (min, nat_width);
             }
           else /* GTK_ORIENTATION_VERTICAL */
             {
@@ -2267,18 +2291,17 @@ gtk_flow_box_measure (GtkWidget      *widget,
 
           if (priv->orientation == GTK_ORIENTATION_HORIZONTAL)
             {
-              /* Return the height for the minimum width */
-              int min_width;
-              int dummy;
+              /* Return the height for the natural width */
+              int nat_width, dummy;
 
               gtk_flow_box_measure (widget,
                                     GTK_ORIENTATION_HORIZONTAL,
                                     -1,
-                                    &min_width, &dummy,
-                                   NULL, NULL);
+                                    &dummy, &nat_width,
+                                    NULL, NULL);
               gtk_flow_box_measure (widget,
                                     GTK_ORIENTATION_VERTICAL,
-                                    min_width,
+                                    nat_width,
                                     &min_height, &nat_height,
                                     NULL, NULL);
             }
