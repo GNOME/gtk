@@ -32,6 +32,7 @@ variables:
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled -Dbuild-testsuite=true -Dintrospection=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
   FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v52"
+  ANDROID_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/android:v2"
 
 workflow:
   rules:
@@ -310,6 +311,38 @@ vs2019-x64:
   variables:
   script:
     - .gitlab-ci/test-msvc.bat ${COMMON_MESON_FLAGS}
+  artifacts:
+    when: always
+    paths:
+      - "${CI_PROJECT_DIR}/_build/meson-logs"
+
+android:
+  image: $ANDROID_IMAGE
+  stage: build
+  parallel:
+    matrix:
+      - ARCH: [ "aarch64", "x86_64" ]
+  needs: []
+  variables:
+    EXTRA_MESON_FLAGS: "-Dgperf:werror=false"
+    BACKEND_FLAGS: "-Dandroid-backend=true"
+    FEATURE_FLAGS: "-Dmedia-gstreamer=disabled"
+  before_script:
+    - .gitlab-ci/show-info-linux.sh
+    # We aren't actually using pixiewood here, we just make get the ${ARCH}.cross, android.cross and fontconfig.wrap files.
+    - git clone https://github.com/sp1ritCS/gtk-android-builder.git pixiewood
+    - cp -f pixiewood/prepare/wraps/fontconfig/fontconfig.wrap subprojects/
+  script:
+    - meson setup
+            --cross-file "${ANDROID_HOME}/toolchain.cross"
+            --cross-file "pixiewood/prepare/arch/$ARCH.cross"
+            --cross-file "pixiewood/prepare/android.cross"
+            ${COMMON_MESON_FLAGS}
+            ${EXTRA_MESON_FLAGS}
+            ${BACKEND_FLAGS}
+            ${FEATURE_FLAGS}
+            _build
+    - meson compile -C _build
   artifacts:
     when: always
     paths:
