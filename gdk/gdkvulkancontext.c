@@ -1681,7 +1681,7 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
   return FALSE;
 }
 
-static VkBool32 VKAPI_CALL
+static VKAPI_ATTR VkBool32 VKAPI_CALL
 gdk_vulkan_debug_report (VkDebugReportFlagsEXT      flags,
                          VkDebugReportObjectTypeEXT objectType,
                          uint64_t                   object,
