@@ -37,7 +37,7 @@
 /**
  * GtkHeaderBar:
  *
- * `GtkHeaderBar` is a widget for creating custom title bars for windows.
+ * A widget for creating custom title bars for windows.
  *
  * ![An example GtkHeaderBar](headerbar.png)
  *
@@ -107,7 +107,7 @@
  *
  * # Accessibility
  *
- * `GtkHeaderBar` uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
+ * `GtkHeaderBar` uses the [enum@Gtk.AccessibleRole.group] role.
  */
 
 #define MIN_TITLE_CHARS 5
@@ -282,19 +282,19 @@ construct_title_label (GtkHeaderBar *bar)
 
 /**
  * gtk_header_bar_set_title_widget:
- * @bar: a `GtkHeaderBar`
+ * @bar: a header bar
  * @title_widget: (nullable): a widget to use for a title
  *
- * Sets the title for the `GtkHeaderBar`.
+ * Sets the title for the header bar.
  *
- * When set to %NULL, the headerbar will display the title of
+ * When set to `NULL`, the headerbar will display the title of
  * the window it is contained in.
  *
  * The title should help a user identify the current view.
  * To achieve the same style as the builtin title, use the
  * “title” style class.
  *
- * You should set the title widget to %NULL, for the window
+ * You should set the title widget to `NULL`, for the window
  * title label to be visible again.
  */
 void
@@ -330,13 +330,13 @@ gtk_header_bar_set_title_widget (GtkHeaderBar *bar,
 
 /**
  * gtk_header_bar_get_title_widget:
- * @bar: a `GtkHeaderBar`
+ * @bar: a header bar
  *
- * Retrieves the title widget of the header.
+ * Retrieves the title widget of the header bar.
  *
  * See [method@Gtk.HeaderBar.set_title_widget].
  *
- * Returns: (nullable) (transfer none): the title widget of the header
+ * Returns: (nullable) (transfer none): the title widget
  */
 GtkWidget *
 gtk_header_bar_get_title_widget (GtkHeaderBar *bar)
@@ -474,10 +474,10 @@ gtk_header_bar_pack (GtkHeaderBar *bar,
 
 /**
  * gtk_header_bar_remove:
- * @bar: a `GtkHeaderBar`
+ * @bar: a header bar
  * @child: the child to remove
  *
- * Removes a child from the `GtkHeaderBar`.
+ * Removes a child from the header bar.
  *
  * The child must have been added with
  * [method@Gtk.HeaderBar.pack_start],
@@ -662,11 +662,10 @@ gtk_header_bar_buildable_init (GtkBuildableIface *iface)
 
 /**
  * gtk_header_bar_pack_start:
- * @bar: A `GtkHeaderBar`
- * @child: the `GtkWidget` to be added to @bar
+ * @bar: A header bar
+ * @child: the widget to be added to @bar
  *
- * Adds @child to @bar, packed with reference to the
- * start of the @bar.
+ * Adds a child to the header bar, packed with reference to the start.
  */
 void
 gtk_header_bar_pack_start (GtkHeaderBar *bar,
@@ -677,11 +676,10 @@ gtk_header_bar_pack_start (GtkHeaderBar *bar,
 
 /**
  * gtk_header_bar_pack_end:
- * @bar: A `GtkHeaderBar`
- * @child: the `GtkWidget` to be added to @bar
+ * @bar: A header bar
+ * @child: the widget to be added to @bar
  *
- * Adds @child to @bar, packed with reference to the
- * end of the @bar.
+ * Adds a child to the header bar, packed with reference to the end.
  */
 void
 gtk_header_bar_pack_end (GtkHeaderBar *bar,
@@ -705,12 +703,12 @@ gtk_header_bar_new (void)
 
 /**
  * gtk_header_bar_get_show_title_buttons:
- * @bar: a `GtkHeaderBar`
+ * @bar: a header bar
  *
  * Returns whether this header bar shows the standard window
  * title buttons.
  *
- * Returns: %TRUE if title buttons are shown
+ * Returns: true if title buttons are shown
  */
 gboolean
 gtk_header_bar_get_show_title_buttons (GtkHeaderBar *bar)
@@ -722,8 +720,8 @@ gtk_header_bar_get_show_title_buttons (GtkHeaderBar *bar)
 
 /**
  * gtk_header_bar_set_show_title_buttons:
- * @bar: a `GtkHeaderBar`
- * @setting: %TRUE to show standard title buttons
+ * @bar: a header bar
+ * @setting: true to show standard title buttons
  *
  * Sets whether this header bar shows the standard window
  * title buttons.
@@ -763,8 +761,8 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
 
 /**
  * gtk_header_bar_set_decoration_layout:
- * @bar: a `GtkHeaderBar`
- * @layout: (nullable): a decoration layout, or %NULL to unset the layout
+ * @bar: a header bar
+ * @layout: (nullable): a decoration layout
  *
  * Sets the decoration layout for this header bar.
  *
@@ -798,9 +796,9 @@ gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
 
 /**
  * gtk_header_bar_get_decoration_layout:
- * @bar: a `GtkHeaderBar`
+ * @bar: a header bar
  *
- * Gets the decoration layout of the `GtkHeaderBar`.
+ * Gets the decoration layout of the header bar.
  *
  * Returns: (nullable): the decoration layout
  */
