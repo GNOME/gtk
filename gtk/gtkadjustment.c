@@ -32,7 +32,7 @@
 /**
  * GtkAdjustment:
  *
- * `GtkAdjustment` is a model for a numeric value.
+ * A model for a numeric value.
  *
  * The `GtkAdjustment` has an associated lower and upper bound.
  * It also contains step and page increments, and a page size.
@@ -207,7 +207,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 
   /**
    * GtkAdjustment::changed:
-   * @adjustment: the object which received the signal
+   * @adjustment: the adjustment which emitted the signal
    *
    * Emitted when one or more of the `GtkAdjustment` properties have been
    * changed.
@@ -226,7 +226,7 @@ gtk_adjustment_class_init (GtkAdjustmentClass *class)
 
   /**
    * GtkAdjustment::value-changed:
-   * @adjustment: the object which received the signal
+   * @adjustment: the adjustment which emitted the signal
    *
    * Emitted when the value has been changed.
    */
@@ -400,11 +400,11 @@ gtk_adjustment_new (double value,
 
 /**
  * gtk_adjustment_get_value:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  *
  * Gets the current value of the adjustment.
  *
- * Returns: The current value of the adjustment
+ * Returns: the current value
  */
 double
 gtk_adjustment_get_value (GtkAdjustment *adjustment)
@@ -536,7 +536,7 @@ gtk_adjustment_set_value_internal (GtkAdjustment *adjustment,
 
 /**
  * gtk_adjustment_set_value:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  * @value: the new value
  *
  * Sets the `GtkAdjustment` value.
@@ -569,11 +569,11 @@ gtk_adjustment_animate_to_value (GtkAdjustment *adjustment,
 
 /**
  * gtk_adjustment_get_lower:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  *
  * Retrieves the minimum value of the adjustment.
  *
- * Returns: The current minimum value of the adjustment
+ * Returns: the minimum value
  **/
 double
 gtk_adjustment_get_lower (GtkAdjustment *adjustment)
@@ -587,7 +587,7 @@ gtk_adjustment_get_lower (GtkAdjustment *adjustment)
 
 /**
  * gtk_adjustment_set_lower:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  * @lower: the new minimum value
  *
  * Sets the minimum value of the adjustment.
@@ -621,11 +621,11 @@ gtk_adjustment_set_lower (GtkAdjustment *adjustment,
 
 /**
  * gtk_adjustment_get_upper:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  *
  * Retrieves the maximum value of the adjustment.
  *
- * Returns: The current maximum value of the adjustment
+ * Returns: the maximum value
  */
 double
 gtk_adjustment_get_upper (GtkAdjustment *adjustment)
@@ -639,7 +639,7 @@ gtk_adjustment_get_upper (GtkAdjustment *adjustment)
 
 /**
  * gtk_adjustment_set_upper:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  * @upper: the new maximum value
  *
  * Sets the maximum value of the adjustment.
@@ -668,11 +668,11 @@ gtk_adjustment_set_upper (GtkAdjustment *adjustment,
 
 /**
  * gtk_adjustment_get_step_increment:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  *
  * Retrieves the step increment of the adjustment.
  *
- * Returns: The current step increment of the adjustment.
+ * Returns: the step increment
  */
 double
 gtk_adjustment_get_step_increment (GtkAdjustment *adjustment)
@@ -686,7 +686,7 @@ gtk_adjustment_get_step_increment (GtkAdjustment *adjustment)
 
 /**
  * gtk_adjustment_set_step_increment:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  * @step_increment: the new step increment
  *
  * Sets the step increment of the adjustment.
@@ -712,11 +712,11 @@ gtk_adjustment_set_step_increment (GtkAdjustment *adjustment,
 
 /**
  * gtk_adjustment_get_page_increment:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  *
  * Retrieves the page increment of the adjustment.
  *
- * Returns: The current page increment of the adjustment
+ * Returns: the page increment
  **/
 double
 gtk_adjustment_get_page_increment (GtkAdjustment *adjustment)
@@ -730,7 +730,7 @@ gtk_adjustment_get_page_increment (GtkAdjustment *adjustment)
 
 /**
  * gtk_adjustment_set_page_increment:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  * @page_increment: the new page increment
  *
  * Sets the page increment of the adjustment.
@@ -756,11 +756,11 @@ gtk_adjustment_set_page_increment (GtkAdjustment *adjustment,
 
 /**
  * gtk_adjustment_get_page_size:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  *
  * Retrieves the page size of the adjustment.
  *
- * Returns: The current page size of the adjustment
+ * Returns: the page size
  **/
 double
 gtk_adjustment_get_page_size (GtkAdjustment *adjustment)
@@ -774,7 +774,7 @@ gtk_adjustment_get_page_size (GtkAdjustment *adjustment)
 
 /**
  * gtk_adjustment_set_page_size:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  * @page_size: the new page size
  *
  * Sets the page size of the adjustment.
@@ -800,7 +800,7 @@ gtk_adjustment_set_page_size (GtkAdjustment *adjustment,
 
 /**
  * gtk_adjustment_configure:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  * @value: the new value
  * @lower: the new minimum value
  * @upper: the new maximum value
@@ -858,12 +858,12 @@ gtk_adjustment_configure (GtkAdjustment *adjustment,
 
 /**
  * gtk_adjustment_clamp_page:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  * @lower: the lower value
  * @upper: the upper value
  *
- * Updates the value property to ensure that the range
- * between @lower and @upper is in the current page.
+ * Updates the value of the adjustment to ensure that the
+ * given range is contained in the current page.
  *
  * The current page goes from `value` to `value` + `page-size`.
  * If the range is larger than the page size, then only the
@@ -904,11 +904,11 @@ gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
 
 /**
  * gtk_adjustment_get_minimum_increment:
- * @adjustment: a `GtkAdjustment`
+ * @adjustment: an adjustment
  *
  * Gets the smaller of step increment and page increment.
  *
- * Returns: the minimum increment of @adjustment
+ * Returns: the minimum increment
  */
 double
 gtk_adjustment_get_minimum_increment (GtkAdjustment *adjustment)

@@ -21,7 +21,7 @@
 /**
  * GtkCenterBox:
  *
- * `GtkCenterBox` arranges three children in a row, keeping the middle child
+ * Arranges three children in a row, keeping the middle child
  * centered as well as possible.
  *
  * ![An example GtkCenterBox](centerbox.png)
@@ -52,9 +52,10 @@
  *
  * # Accessibility
  *
- * Until GTK 4.10, `GtkCenterBox` used the `GTK_ACCESSIBLE_ROLE_GROUP` role.
+ * Until GTK 4.10, `GtkCenterBox` used the [enum@Gtk.AccessibleRole.group] role.
  *
- * Starting from GTK 4.12, `GtkCenterBox` uses the `GTK_ACCESSIBLE_ROLE_GENERIC` role.
+ * Starting from GTK 4.12, `GtkCenterBox` uses the [enum@Gtk.AccessibleRole.generic]
+ * role.
  */
 
 #include "config.h"
@@ -263,7 +264,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
    *
    * In vertical orientation, the start position is at the top.
    * In horizontal orientation, the start position is at the leading
-   * edge wrt. to the text direction.
+   * edge with respect to the text direction.
    *
    * Since: 4.10
    */
@@ -291,7 +292,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
    *
    * In vertical orientation, the end position is at the bottom.
    * In horizontal orientation, the end position is at the trailing
-   * edge wrt. to the text direction.
+   * edge with respect to the text direction.
    *
    * Since: 4.10
    */
@@ -309,7 +310,7 @@ gtk_center_box_class_init (GtkCenterBoxClass *klass)
    * natural widths, the start and end widgets start shrinking and the
    * center child keeps natural width until they reach minimum width.
    *
-   * If set to `FALSE`, start and end widgets keep natural width and the
+   * If false, start and end widgets keep natural width and the
    * center widget starts shrinking instead.
    *
    * Since: 4.12
@@ -339,7 +340,7 @@ gtk_center_box_init (GtkCenterBox *self)
  *
  * Creates a new `GtkCenterBox`.
  *
- * Returns: the new `GtkCenterBox`.
+ * Returns: the new `GtkCenterBox`
  */
 GtkWidget *
 gtk_center_box_new (void)
@@ -349,12 +350,12 @@ gtk_center_box_new (void)
 
 /**
  * gtk_center_box_set_start_widget:
- * @self: a `GtkCenterBox`
+ * @self: a center box
  * @child: (nullable): the new start widget
  *
  * Sets the start widget.
  *
- * To remove the existing start widget, pass %NULL.
+ * To remove the existing start widget, pass `NULL`.
  */
 void
 gtk_center_box_set_start_widget (GtkCenterBox *self,
@@ -383,12 +384,12 @@ gtk_center_box_set_start_widget (GtkCenterBox *self,
 
 /**
  * gtk_center_box_set_center_widget:
- * @self: a `GtkCenterBox`
+ * @self: a center box
  * @child: (nullable): the new center widget
  *
  * Sets the center widget.
  *
- * To remove the existing center widget, pass %NULL.
+ * To remove the existing center widget, pass `NULL`.
  */
 void
 gtk_center_box_set_center_widget (GtkCenterBox *self,
@@ -417,12 +418,12 @@ gtk_center_box_set_center_widget (GtkCenterBox *self,
 
 /**
  * gtk_center_box_set_end_widget:
- * @self: a `GtkCenterBox`
+ * @self: a center box
  * @child: (nullable): the new end widget
  *
  * Sets the end widget.
  *
- * To remove the existing end widget, pass %NULL.
+ * To remove the existing end widget, pass `NULL`.
  */
 void
 gtk_center_box_set_end_widget (GtkCenterBox *self,
@@ -451,11 +452,11 @@ gtk_center_box_set_end_widget (GtkCenterBox *self,
 
 /**
  * gtk_center_box_get_start_widget:
- * @self: a `GtkCenterBox`
+ * @self: a center box
  *
- * Gets the start widget, or %NULL if there is none.
+ * Gets the start widget.
  *
- * Returns: (transfer none) (nullable): the start widget.
+ * Returns: (transfer none) (nullable): the start widget
  */
 GtkWidget *
 gtk_center_box_get_start_widget (GtkCenterBox *self)
@@ -465,11 +466,11 @@ gtk_center_box_get_start_widget (GtkCenterBox *self)
 
 /**
  * gtk_center_box_get_center_widget:
- * @self: a `GtkCenterBox`
+ * @self: a center box
  *
- * Gets the center widget, or %NULL if there is none.
+ * Gets the center widget.
  *
- * Returns: (transfer none) (nullable): the center widget.
+ * Returns: (transfer none) (nullable): the center widget
  */
 GtkWidget *
 gtk_center_box_get_center_widget (GtkCenterBox *self)
@@ -479,11 +480,11 @@ gtk_center_box_get_center_widget (GtkCenterBox *self)
 
 /**
  * gtk_center_box_get_end_widget:
- * @self: a `GtkCenterBox`
+ * @self: a center box
  *
- * Gets the end widget, or %NULL if there is none.
+ * Gets the end widget.
  *
- * Returns: (transfer none) (nullable): the end widget.
+ * Returns: (transfer none) (nullable): the end widget
  */
 GtkWidget *
 gtk_center_box_get_end_widget (GtkCenterBox *self)
@@ -493,16 +494,16 @@ gtk_center_box_get_end_widget (GtkCenterBox *self)
 
 /**
  * gtk_center_box_set_baseline_position:
- * @self: a `GtkCenterBox`
- * @position: a `GtkBaselinePosition`
+ * @self: a center box
+ * @position: the baseline position
  *
  * Sets the baseline position of a center box.
  *
  * This affects only horizontal boxes with at least one baseline
  * aligned child. If there is more vertical space available than
  * requested, and the baseline is not allocated by the parent then
- * @position is used to allocate the baseline wrt. the extra space
- * available.
+ * @position is used to allocate the baseline with respect to the
+ * extra space available.
  */
 void
 gtk_center_box_set_baseline_position (GtkCenterBox        *self,
@@ -525,9 +526,11 @@ gtk_center_box_set_baseline_position (GtkCenterBox        *self,
 
 /**
  * gtk_center_box_get_baseline_position:
- * @self: a `GtkCenterBox`
+ * @self: a center box
  *
- * Gets the value set by gtk_center_box_set_baseline_position().
+ * Gets the baseline position of the center box.
+ *
+ * See [method@Gtk.CenterBox.set_baseline_position].
  *
  * Returns: the baseline position
  */
@@ -545,7 +548,7 @@ gtk_center_box_get_baseline_position (GtkCenterBox *self)
 
 /**
  * gtk_center_box_set_shrink_center_last:
- * @self: a `GtkCenterBox`
+ * @self: a cener box
  * @shrink_center_last: whether to shrink the center widget after others
  *
  * Sets whether to shrink the center widget after other children.
@@ -554,8 +557,8 @@ gtk_center_box_get_baseline_position (GtkCenterBox *self)
  * natural widths, the start and end widgets start shrinking and the
  * center child keeps natural width until they reach minimum width.
  *
- * If set to `FALSE`, start and end widgets keep natural width and the
- * center widget starts shrinking instead.
+ * If @shrink_center_last is false, start and end widgets keep natural
+ * width and the center widget starts shrinking instead.
  *
  * Since: 4.12
  */
@@ -582,9 +585,9 @@ gtk_center_box_set_shrink_center_last (GtkCenterBox *self,
 
 /**
  * gtk_center_box_get_shrink_center_last:
- * @self: a `GtkCenterBox`
+ * @self: a center box
  *
- * Gets whether @self shrinks the center widget after other children.
+ * Gets whether the center widget shrinks after other children.
  *
  * Returns: whether to shrink the center widget after others
  *

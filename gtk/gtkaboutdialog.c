@@ -58,8 +58,7 @@
 /**
  * GtkAboutDialog:
  *
- * The `GtkAboutDialog` offers a simple way to display information about
- * a program.
+ * A simple way to display information about a program.
  *
  * The shown information includes the programs' logo, name, copyright,
  * website and license. It is also possible to give credits to the authors,
@@ -79,14 +78,14 @@
  * `Edgar Allan Poe <edgar@poe.com>`. To specify a website with a title,
  * use a string like `GTK team https://www.gtk.org`.
  *
- * To make constructing a `GtkAboutDialog` as convenient as possible, you can
+ * To make constructing an about dialog as convenient as possible, you can
  * use the function [func@Gtk.show_about_dialog] which constructs and shows
  * a dialog and keeps it around so that it can be shown again.
  *
  * Note that GTK sets a default title of `_("About %s")` on the dialog
  * window (where `%s` is replaced by the name of the application, but in
  * order to ensure proper translation of the title, applications should
- * set the title property explicitly when constructing a `GtkAboutDialog`,
+ * set the title property explicitly when constructing an about dialog,
  * as shown in the following example:
  *
  * ```c
@@ -359,7 +358,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
 
   /**
    * GtkAboutDialog::activate-link:
-   * @label: The object on which the signal was emitted
+   * @label: the about dialog which emitted the signal
    * @uri: the URI that is activated
    *
    * Emitted every time a URL is activated.
@@ -387,7 +386,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * The name of the program.
    *
    * If this is not set, it defaults to the value returned by
-   * `g_get_application_name()`.
+   * [func@GLib.get_application_name].
    */
   props[PROP_NAME] =
     g_param_spec_string ("program-name", NULL, NULL,
@@ -440,7 +439,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    *
    * When setting this property to a non-`NULL` value, the
    * [property@Gtk.AboutDialog:license-type] property is set to
-   * `GTK_LICENSE_CUSTOM` as a side effect.
+   * [enum@Gtk.License.custom] as a side effect.
    *
    * The text may contain links in this format `<http://www.some.place/>`
    * and email references in the form `<mail-to@some.body>`, and these will
@@ -478,15 +477,15 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
    * and link the user to the appropriate online resource for the license
    * text.
    *
-   * If `GTK_LICENSE_UNKNOWN` is used, the link used will be the same
+   * If [enum@Gtk.License.unknown] is used, the link used will be the same
    * specified in the [property@Gtk.AboutDialog:website] property.
    *
-   * If `GTK_LICENSE_CUSTOM` is used, the current contents of the
+   * If [enum@Gtk.License.custom] is used, the current contents of the
    * [property@Gtk.AboutDialog:license] property are used.
    *
    * For any other [enum@Gtk.License] value, the contents of the
-   * [property@Gtk.AboutDialog:license] property are also set by this property as
-   * a side effect.
+   * [property@Gtk.AboutDialog:license] property are also set by
+   * this property as a side effect.
    */
   props[PROP_LICENSE_TYPE] =
     g_param_spec_enum ("license-type", NULL, NULL,
@@ -519,7 +518,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   /**
    * GtkAboutDialog:authors:
    *
-   * The authors of the program, as a `NULL`-terminated array of strings.
+   * The authors of the program.
    *
    * Each string may contain email addresses and URLs, which will be displayed
    * as links, see the introduction for more details.
@@ -532,7 +531,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   /**
    * GtkAboutDialog:documenters:
    *
-   * The people documenting the program, as a `NULL`-terminated array of strings.
+   * The people documenting the program.
    *
    * Each string may contain email addresses and URLs, which will be displayed
    * as links, see the introduction for more details.
@@ -545,8 +544,7 @@ gtk_about_dialog_class_init (GtkAboutDialogClass *klass)
   /**
    * GtkAboutDialog:artists:
    *
-   * The people who contributed artwork to the program, as a `NULL`-terminated
-   * array of strings.
+   * The people who contributed artwork to the program.
    *
    * Each string may contain email addresses and URLs, which will be displayed
    * as links.
@@ -1042,11 +1040,11 @@ update_website (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_get_program_name:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the program name displayed in the about dialog.
  *
- * Returns: (nullable): The program name
+ * Returns: (nullable): the program name
  */
 const char *
 gtk_about_dialog_get_program_name (GtkAboutDialog *about)
@@ -1077,7 +1075,7 @@ update_name_version (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_program_name:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @name: (nullable): the program name
  *
  * Sets the name to display in the about dialog.
@@ -1105,7 +1103,7 @@ gtk_about_dialog_set_program_name (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_version:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the version string.
  *
@@ -1121,7 +1119,7 @@ gtk_about_dialog_get_version (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_version:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @version: (nullable): the version string
  *
  * Sets the version string to display in the about dialog.
@@ -1145,7 +1143,7 @@ gtk_about_dialog_set_version (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_copyright:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the copyright string.
  *
@@ -1161,7 +1159,7 @@ gtk_about_dialog_get_copyright (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_copyright:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @copyright: (nullable): the copyright string
  *
  * Sets the copyright string to display in the about dialog.
@@ -1194,7 +1192,7 @@ gtk_about_dialog_set_copyright (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_comments:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the comments string.
  *
@@ -1210,7 +1208,7 @@ gtk_about_dialog_get_comments (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_comments:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @comments: (nullable): a comments string
  *
  * Sets the comments string to display in the about dialog.
@@ -1244,7 +1242,7 @@ gtk_about_dialog_set_comments (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_license:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the license information.
  *
@@ -1260,7 +1258,7 @@ gtk_about_dialog_get_license (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_license:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @license: (nullable): the license information
  *
  * Sets the license information to be displayed in the
@@ -1299,7 +1297,7 @@ gtk_about_dialog_set_license (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_system_information:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the system information that is shown in the about dialog.
  *
@@ -1315,7 +1313,7 @@ gtk_about_dialog_get_system_information (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_system_information:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @system_information: (nullable): system information
  *
  * Sets the system information to be displayed in the about
@@ -1341,7 +1339,7 @@ gtk_about_dialog_set_system_information (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_wrap_license:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns whether the license text in the about dialog is
  * automatically wrapped.
@@ -1358,7 +1356,7 @@ gtk_about_dialog_get_wrap_license (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_wrap_license:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @wrap_license: whether to wrap the license
  *
  * Sets whether the license text in the about dialog should be
@@ -1382,7 +1380,7 @@ gtk_about_dialog_set_wrap_license (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_website:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the website URL.
  *
@@ -1398,7 +1396,7 @@ gtk_about_dialog_get_website (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_website:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @website: (nullable): a URL string starting with `http://`
  *
  * Sets the URL to use for the website link.
@@ -1422,7 +1420,7 @@ gtk_about_dialog_set_website (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_website_label:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the label used for the website link.
  *
@@ -1438,7 +1436,7 @@ gtk_about_dialog_get_website_label (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_website_label:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @website_label: the label used for the website link
  *
  * Sets the label to be used for the website link.
@@ -1462,7 +1460,7 @@ gtk_about_dialog_set_website_label (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_authors:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the names of the authors which are displayed
  * in the credits page.
@@ -1480,7 +1478,7 @@ gtk_about_dialog_get_authors (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_authors:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @authors: (array zero-terminated=1): the authors of the application
  *
  * Sets the names of the authors which are displayed
@@ -1505,7 +1503,7 @@ gtk_about_dialog_set_authors (GtkAboutDialog  *about,
 
 /**
  * gtk_about_dialog_get_documenters:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the name of the documenters which are displayed
  * in the credits page.
@@ -1523,7 +1521,7 @@ gtk_about_dialog_get_documenters (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_documenters:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @documenters: (array zero-terminated=1): the authors of the documentation
  *   of the application
  *
@@ -1549,7 +1547,7 @@ gtk_about_dialog_set_documenters (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_artists:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the names of the artists which are displayed
  * in the credits page.
@@ -1567,7 +1565,7 @@ gtk_about_dialog_get_artists (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_artists:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @artists: (array zero-terminated=1): the authors of the artwork
  *   of the application
  *
@@ -1593,7 +1591,7 @@ gtk_about_dialog_set_artists (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_translator_credits:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the translator credits string which is displayed
  * in the credits page.
@@ -1610,7 +1608,7 @@ gtk_about_dialog_get_translator_credits (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_translator_credits:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @translator_credits: (nullable): the translator credits
  *
  * Sets the translator credits string which is displayed in
@@ -1651,7 +1649,7 @@ gtk_about_dialog_set_translator_credits (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_logo:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the paintable displayed as logo in the about dialog.
  *
@@ -1672,7 +1670,7 @@ gtk_about_dialog_get_logo (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_logo:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @logo: (nullable): a `GdkPaintable`
  *
  * Sets the logo in the about dialog.
@@ -1698,7 +1696,7 @@ gtk_about_dialog_set_logo (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_logo_icon_name:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Returns the icon name displayed as logo in the about dialog.
  *
@@ -1718,7 +1716,7 @@ gtk_about_dialog_get_logo_icon_name (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_set_logo_icon_name:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @icon_name: (nullable): an icon name
  *
  * Sets the icon name to be displayed as logo in the about dialog.
@@ -2297,11 +2295,11 @@ gtk_show_about_dialog (GtkWindow   *parent,
 
 /**
  * gtk_about_dialog_set_license_type:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  * @license_type: the type of license
  *
- * Sets the license of the application showing the about dialog from a
- * list of known licenses.
+ * Sets the license of the application showing the about dialog
+ * from a list of known licenses.
  *
  * This function overrides the license set using
  * [method@Gtk.AboutDialog.set_license].
@@ -2363,7 +2361,7 @@ gtk_about_dialog_set_license_type (GtkAboutDialog *about,
 
 /**
  * gtk_about_dialog_get_license_type:
- * @about: a `GtkAboutDialog`
+ * @about: an about dialog
  *
  * Retrieves the license type.
  *
@@ -2379,9 +2377,9 @@ gtk_about_dialog_get_license_type (GtkAboutDialog *about)
 
 /**
  * gtk_about_dialog_add_credit_section:
- * @about: A `GtkAboutDialog`
+ * @about: an about dialog
  * @section_name: The name of the section
- * @people: (array zero-terminated=1): The people who belong to that section
+ * @people: (array zero-terminated=1): the people who belong to that section
  *
  * Creates a new section in the "Credits" page.
  */
