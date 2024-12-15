@@ -47,6 +47,6 @@ main (int argc, char *argv[])
           elapsed += g_get_monotonic_time () - before;
         }
 
-      g_print ("%lu, %lu, %lu, %f\n", width, height, width * height, ((double)(elapsed / rounds)) / 1000.0);
+      g_print ("%zu, %zu, %zu, %f\n", width, height, width * height, ((double)(elapsed / rounds)) / 1000.0);
     }
 }
