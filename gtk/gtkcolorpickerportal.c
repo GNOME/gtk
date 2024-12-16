@@ -53,6 +53,14 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
   GVariant *ret;
   guint version = 0;
 
+  if (!gdk_display_should_use_portal (gdk_display_get_default (), PORTAL_SCREENSHOT_INTERFACE, 2))
+    {
+      g_debug ("Should not use portal %s", PORTAL_SCREENSHOT_INTERFACE);
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "Should not use portal %s", PORTAL_SCREENSHOT_INTERFACE);
+      return FALSE;
+    }
+
   picker->portal_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                                         G_DBUS_PROXY_FLAGS_NONE,
                                                         NULL,
@@ -73,6 +81,8 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
     {
       g_debug ("%s not provided", PORTAL_SCREENSHOT_INTERFACE);
       g_clear_object (&picker->portal_proxy);
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "%s not provided", PORTAL_SCREENSHOT_INTERFACE);
       return FALSE;
     }
   g_free (owner);
@@ -88,6 +98,8 @@ gtk_color_picker_portal_initable_init (GInitable     *initable,
     {
       g_debug ("Screenshot portal version: %u", version);
       g_clear_object (&picker->portal_proxy);
+      g_set_error (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "Screenshot portal version: %u", version);
       return FALSE;
     }
 
