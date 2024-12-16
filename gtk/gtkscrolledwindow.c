@@ -556,10 +556,23 @@ gtk_scrolled_window_get_request_mode (GtkWidget *widget)
   GtkScrolledWindow *scrolled_window = GTK_SCROLLED_WINDOW (widget);
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
 
-  if (priv->child)
-    return gtk_widget_get_request_mode (priv->child);
-  else
+  if (!priv->child || !gtk_widget_get_visible (priv->child))
     return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+
+  /* In many cases, we can actually get away with reporting constant-size,
+   * so try to do that unless our reported size actually depends on the
+   * child's size *and* the for_size we pass to the child depends on the
+   * for_size passed to us.
+   */
+  if ((priv->hscrollbar_policy == GTK_POLICY_NEVER &&
+       priv->vscrollbar_policy == GTK_POLICY_NEVER) ||
+      (priv->hscrollbar_policy == GTK_POLICY_NEVER &&
+       priv->propagate_natural_height) ||
+      (priv->vscrollbar_policy == GTK_POLICY_NEVER &&
+       priv->propagate_natural_width))
+    return gtk_widget_get_request_mode (priv->child);
+
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
 }
 
 static void
