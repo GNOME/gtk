@@ -1767,21 +1767,28 @@ gtk_scrolled_window_measure (GtkWidget      *widget,
   GtkScrolledWindowPrivate *priv = gtk_scrolled_window_get_instance_private (scrolled_window);
   int minimum_req = 0, natural_req = 0;
   GtkBorder sborder = { 0 };
+  gboolean need_child_size = FALSE;
 
   if (priv->child)
     gtk_scrollable_get_border (GTK_SCROLLABLE (priv->child), &sborder);
 
   /*
-   * First collect the child requisition
+   * First collect the child requisition, if we want to.
    */
-  if (priv->child && gtk_widget_get_visible (priv->child))
+  if (orientation == GTK_ORIENTATION_VERTICAL)
+    need_child_size = priv->propagate_natural_height || priv->vscrollbar_policy == GTK_POLICY_NEVER;
+  else
+    need_child_size = priv->propagate_natural_width || priv->hscrollbar_policy == GTK_POLICY_NEVER;
+
+  if (priv->child && gtk_widget_get_visible (priv->child) && need_child_size)
     {
       int min_child_size, nat_child_size;
       int child_for_size = -1;
 
       /* We can pass on the requested size if we have a scrollbar policy that prevents scrolling in that direction */
-      if ((orientation == GTK_ORIENTATION_VERTICAL && priv->hscrollbar_policy == GTK_POLICY_NEVER)
-          || (orientation == GTK_ORIENTATION_HORIZONTAL && priv->vscrollbar_policy == GTK_POLICY_NEVER))
+      if (for_size != -1 &&
+          ((orientation == GTK_ORIENTATION_VERTICAL && priv->hscrollbar_policy == GTK_POLICY_NEVER)
+           || (orientation == GTK_ORIENTATION_HORIZONTAL && priv->vscrollbar_policy == GTK_POLICY_NEVER)))
         {
           child_for_size = for_size;
 
@@ -1848,6 +1855,13 @@ gtk_scrolled_window_measure (GtkWidget      *widget,
               natural_req = CLAMP (natural_req, min, max);
             }
         }
+    }
+  else
+    {
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        minimum_req = MAX (0, priv->min_content_width);
+      else
+        minimum_req = MAX (0, priv->min_content_height);
     }
 
   /* Ensure we make requests with natural size >= minimum size */
