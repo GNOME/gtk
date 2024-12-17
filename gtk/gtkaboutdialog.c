@@ -1009,7 +1009,7 @@ update_website (GtkAboutDialog *about)
 
   if (about->website_url)
     {
-      char *markup;
+      char *markup, *tooltip;
 
       if (about->website_text)
         {
@@ -1028,6 +1028,10 @@ update_website (GtkAboutDialog *about)
 
       gtk_label_set_markup (GTK_LABEL (about->website_label), markup);
       g_free (markup);
+
+      tooltip = g_uri_unescape_string (about->website_url, NULL);
+      gtk_widget_set_tooltip_text (about->website_label, tooltip);
+      g_free (tooltip);
     }
   else
     {
@@ -1035,6 +1039,8 @@ update_website (GtkAboutDialog *about)
         gtk_label_set_text (GTK_LABEL (about->website_label), about->website_text);
       else
         gtk_widget_set_visible (about->website_label, FALSE);
+
+      gtk_widget_set_tooltip_text (about->website_label, NULL);
     }
 }
 
