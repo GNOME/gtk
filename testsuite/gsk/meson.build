@@ -523,7 +523,7 @@ if os_linux
           'GTK_A11Y=test',
           'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
           'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
-          'GDK_DEBUG=force-offload',
+          'GDK_DEBUG=force-offload:default-settings:no-portals',
         ],
         protocol: 'exitcode',
         suite: ['gsk', 'offload'],
