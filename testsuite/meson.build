@@ -55,7 +55,7 @@ foreach setup : setups
       name,
       env: env + ['TEST_OUTPUT_SUBDIR=@0@'.format(name)],
       exclude_suites: exclude_unstable + exclude,
-      is_default: setup.get('is_default', false),
+      is_default: setup.get('is_default', false) and not meson.is_subproject(),
       exe_wrapper: test_wrappers,
     )
 
