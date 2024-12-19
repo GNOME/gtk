@@ -305,7 +305,7 @@ test_data = [
   'link-coloring.css',
   'link-coloring.ref.ui',
   'link-coloring.ui',
-  'marble.xpm',
+  'marble.png',
   'messagedialog-secondarytext.ui',
   'messagedialog-secondarytext.ref.ui',
   'misc-alignment.css',
