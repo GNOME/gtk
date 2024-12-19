@@ -1,4 +1,4 @@
-#'gtk/po-properties/
+# gtk/po-properties/
 # Slovenian translation of gtk+-properties.
 # Copyright (C) 1999-2011 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+-properties package.
