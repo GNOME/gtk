@@ -85,7 +85,7 @@ option('f16c',
 option('accesskit',
        type: 'feature',
        value: 'disabled',
-       description: 'Enabled the AccessKit backend for accessibility')
+       description: 'Enable the AccessKit backend for accessibility')
 
 # Introspection
 
