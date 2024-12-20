@@ -686,7 +686,7 @@ gtk_accesskit_context_get_id (GtkAccessKitContext *self)
 }
 
 static void
-set_bounds (GtkAccessible *accessible, accesskit_node_builder *builder)
+set_bounds (GtkAccessible *accessible, accesskit_node *node)
 {
   int x, y, width, height;
 
@@ -705,18 +705,18 @@ set_bounds (GtkAccessible *accessible, accesskit_node_builder *builder)
         }
 
       transform = accesskit_affine_translate (p);
-      accesskit_node_builder_set_transform (builder, transform);
-      accesskit_node_builder_set_bounds (builder, bounds);
+      accesskit_node_set_transform (node, transform);
+      accesskit_node_set_bounds (node, bounds);
     }
 }
 
-typedef void (*AccessKitFlagSetter) (accesskit_node_builder *);
+typedef void (*AccessKitFlagSetter) (accesskit_node *);
 
 static gboolean
-set_flag_from_state (GtkATContext           *ctx,
-                     GtkAccessibleState      state,
-                     AccessKitFlagSetter     setter,
-                     accesskit_node_builder *builder)
+set_flag_from_state (GtkATContext        *ctx,
+                     GtkAccessibleState   state,
+                     AccessKitFlagSetter  setter,
+                     accesskit_node      *node)
 {
   if (gtk_at_context_has_accessible_state (ctx, state))
     {
@@ -725,7 +725,7 @@ set_flag_from_state (GtkATContext           *ctx,
       value = gtk_at_context_get_accessible_state (ctx, state);
       if (gtk_boolean_accessible_value_get (value))
         {
-          setter (builder);
+          setter (node);
           return TRUE;
         }
     }
@@ -734,10 +734,10 @@ set_flag_from_state (GtkATContext           *ctx,
 }
 
 static gboolean
-set_flag_from_property (GtkATContext           *ctx,
-                        GtkAccessibleProperty   property,
-                        AccessKitFlagSetter     setter,
-                        accesskit_node_builder *builder)
+set_flag_from_property (GtkATContext          *ctx,
+                        GtkAccessibleProperty  property,
+                        AccessKitFlagSetter    setter,
+                        accesskit_node        *node)
 {
   if (gtk_at_context_has_accessible_property (ctx, property))
     {
@@ -746,7 +746,7 @@ set_flag_from_property (GtkATContext           *ctx,
       value = gtk_at_context_get_accessible_property (ctx, property);
       if (gtk_boolean_accessible_value_get (value))
         {
-          setter (builder);
+          setter (node);
           return TRUE;
         }
     }
@@ -754,20 +754,20 @@ set_flag_from_property (GtkATContext           *ctx,
   return FALSE;
 }
 
-typedef void (*AccessKitOptionalFlagSetter) (accesskit_node_builder *, bool);
+typedef void (*AccessKitOptionalFlagSetter) (accesskit_node *, bool);
 
 static gboolean
-set_optional_flag_from_state (GtkATContext               *ctx,
-                              GtkAccessibleState          state,
-                              AccessKitOptionalFlagSetter setter,
-                              accesskit_node_builder     *builder)
+set_optional_flag_from_state (GtkATContext                *ctx,
+                              GtkAccessibleState           state,
+                              AccessKitOptionalFlagSetter  setter,
+                              accesskit_node              *node)
 {
   if (gtk_at_context_has_accessible_state (ctx, state))
     {
       GtkAccessibleValue *value;
 
       value = gtk_at_context_get_accessible_state (ctx, state);
-      setter (builder, gtk_boolean_accessible_value_get (value));
+      setter (node, gtk_boolean_accessible_value_get (value));
       return TRUE;
     }
 
@@ -775,9 +775,9 @@ set_optional_flag_from_state (GtkATContext               *ctx,
 }
 
 static gboolean
-set_toggled (GtkATContext           *ctx,
-             GtkAccessibleState      state,
-             accesskit_node_builder *builder)
+set_toggled (GtkATContext       *ctx,
+             GtkAccessibleState  state,
+             accesskit_node     *node)
 {
   if (gtk_at_context_has_accessible_state (ctx, state))
     {
@@ -802,20 +802,20 @@ set_toggled (GtkATContext           *ctx,
           break;
         }
 
-      accesskit_node_builder_set_toggled (builder, toggled);
+      accesskit_node_set_toggled (node, toggled);
       return TRUE;
     }
 
   return FALSE;
 }
 
-typedef void (*AccessKitStringSetter) (accesskit_node_builder *, const char *);
+typedef void (*AccessKitStringSetter) (accesskit_node *, const char *);
 
 static gboolean
-set_string_property (GtkATContext           *ctx,
-                     GtkAccessibleProperty   property,
-                     AccessKitStringSetter   setter,
-                     accesskit_node_builder *builder)
+set_string_property (GtkATContext          *ctx,
+                     GtkAccessibleProperty  property,
+                     AccessKitStringSetter  setter,
+                     accesskit_node        *node)
 {
   if (gtk_at_context_has_accessible_property (ctx, property))
     {
@@ -826,7 +826,7 @@ set_string_property (GtkATContext           *ctx,
       str = gtk_string_accessible_value_get (value);
       if (str)
         {
-          setter (builder, str);
+          setter (node, str);
           return TRUE;
         }
     }
@@ -835,10 +835,10 @@ set_string_property (GtkATContext           *ctx,
 }
 
 static gboolean
-set_string_from_relation (GtkATContext           *ctx,
-                          GtkAccessibleRelation   relation,
-                          AccessKitStringSetter   setter,
-                          accesskit_node_builder *builder)
+set_string_from_relation (GtkATContext          *ctx,
+                          GtkAccessibleRelation  relation,
+                          AccessKitStringSetter  setter,
+                          accesskit_node        *node)
 {
   if (gtk_at_context_has_accessible_relation (ctx, relation))
     {
@@ -849,7 +849,7 @@ set_string_from_relation (GtkATContext           *ctx,
       str = gtk_string_accessible_value_get (value);
       if (str)
         {
-          setter (builder, str);
+          setter (node, str);
           return TRUE;
         }
     }
@@ -857,20 +857,20 @@ set_string_from_relation (GtkATContext           *ctx,
   return FALSE;
 }
 
-typedef void (*AccessKitSizeSetter) (accesskit_node_builder *, size_t);
+typedef void (*AccessKitSizeSetter) (accesskit_node *, size_t);
 
 static gboolean
-set_size_from_property (GtkATContext           *ctx,
-                        GtkAccessibleProperty   property,
-                        AccessKitSizeSetter     setter,
-                        accesskit_node_builder *builder)
+set_size_from_property (GtkATContext          *ctx,
+                        GtkAccessibleProperty  property,
+                        AccessKitSizeSetter    setter,
+                        accesskit_node        *node)
 {
   if (gtk_at_context_has_accessible_property (ctx, property))
     {
       GtkAccessibleValue *value;
 
       value = gtk_at_context_get_accessible_property (ctx, property);
-      setter (builder, gtk_int_accessible_value_get (value));
+      setter (node, gtk_int_accessible_value_get (value));
       return TRUE;
     }
 
@@ -878,50 +878,50 @@ set_size_from_property (GtkATContext           *ctx,
 }
 
 static gboolean
-set_size_from_relation (GtkATContext           *ctx,
-                        GtkAccessibleRelation   relation,
-                        AccessKitSizeSetter     setter,
-                        accesskit_node_builder *builder)
+set_size_from_relation (GtkATContext          *ctx,
+                        GtkAccessibleRelation  relation,
+                        AccessKitSizeSetter    setter,
+                        accesskit_node        *node)
 {
   if (gtk_at_context_has_accessible_relation (ctx, relation))
     {
       GtkAccessibleValue *value;
 
       value = gtk_at_context_get_accessible_relation (ctx, relation);
-      setter (builder, gtk_int_accessible_value_get (value));
+      setter (node, gtk_int_accessible_value_get (value));
       return TRUE;
     }
 
   return FALSE;
 }
 
-typedef void (*AccessKitDoubleSetter) (accesskit_node_builder *, double);
+typedef void (*AccessKitDoubleSetter) (accesskit_node *, double);
 
 static gboolean
-set_double_property (GtkATContext           *ctx,
-                     GtkAccessibleProperty   property,
-                     AccessKitDoubleSetter   setter,
-                     accesskit_node_builder *builder)
+set_double_property (GtkATContext          *ctx,
+                     GtkAccessibleProperty  property,
+                     AccessKitDoubleSetter  setter,
+                     accesskit_node        *node)
 {
   if (gtk_at_context_has_accessible_property (ctx, property))
     {
       GtkAccessibleValue *value;
 
       value = gtk_at_context_get_accessible_property (ctx, property);
-      setter (builder, gtk_number_accessible_value_get (value));
+      setter (node, gtk_number_accessible_value_get (value));
       return TRUE;
     }
 
   return FALSE;
 }
 
-typedef void (*AccessKitNodeIdSetter) (accesskit_node_builder *, accesskit_node_id);
+typedef void (*AccessKitNodeIdSetter) (accesskit_node *, accesskit_node_id);
 
 static gboolean
-set_single_relation (GtkATContext           *ctx,
-                    GtkAccessibleRelation   relation,
-                    AccessKitNodeIdSetter   setter,
-                    accesskit_node_builder *builder)
+set_single_relation (GtkATContext          *ctx,
+                    GtkAccessibleRelation  relation,
+                    AccessKitNodeIdSetter  setter,
+                    accesskit_node        *node)
 {
   if (gtk_at_context_has_accessible_relation (ctx, relation))
     {
@@ -936,7 +936,7 @@ set_single_relation (GtkATContext           *ctx,
           GtkATContext *target_ctx = gtk_accessible_get_at_context (target);
 
           gtk_at_context_realize (target_ctx);
-          setter (builder, GTK_ACCESSKIT_CONTEXT (target_ctx)->id);
+          setter (node, GTK_ACCESSKIT_CONTEXT (target_ctx)->id);
           g_object_unref (target_ctx);
 
           return TRUE;
@@ -946,13 +946,13 @@ set_single_relation (GtkATContext           *ctx,
   return FALSE;
 }
 
-typedef void (*AccessKitNodeIdPusher) (accesskit_node_builder *, accesskit_node_id);
+typedef void (*AccessKitNodeIdPusher) (accesskit_node *, accesskit_node_id);
 
 static gboolean
-set_multi_relation (GtkATContext           *ctx,
-                    GtkAccessibleRelation   relation,
-                    AccessKitNodeIdPusher   pusher,
-                    accesskit_node_builder *builder)
+set_multi_relation (GtkATContext          *ctx,
+                    GtkAccessibleRelation  relation,
+                    AccessKitNodeIdPusher  pusher,
+                    accesskit_node        *node)
 {
   if (gtk_at_context_has_accessible_relation (ctx, relation))
     {
@@ -970,7 +970,7 @@ set_multi_relation (GtkATContext           *ctx,
             gtk_accessible_get_at_context (GTK_ACCESSIBLE (l->data));
 
           gtk_at_context_realize (target_ctx);
-          pusher (builder, GTK_ACCESSKIT_CONTEXT (target_ctx)->id);
+          pusher (node, GTK_ACCESSKIT_CONTEXT (target_ctx)->id);
           g_object_unref (target_ctx);
         }
 
@@ -981,10 +981,10 @@ set_multi_relation (GtkATContext           *ctx,
 }
 
 static void
-set_bounds_from_pango (accesskit_node_builder *builder,
-                       PangoRectangle         *pango_rect,
-                       double                  offset_x,
-                       double                  offset_y)
+set_bounds_from_pango (accesskit_node *node,
+                       PangoRectangle *pango_rect,
+                       double          offset_x,
+                       double          offset_y)
 {
   accesskit_rect rect;
 
@@ -992,7 +992,7 @@ set_bounds_from_pango (accesskit_node_builder *builder,
   rect.y0 = offset_y + (double)(pango_rect->y) / PANGO_SCALE;
   rect.x1 = offset_x + (double)(pango_rect->x + pango_rect->width) / PANGO_SCALE;
   rect.y1 = offset_y + (double)(pango_rect->y + pango_rect->height) / PANGO_SCALE;
-  accesskit_node_builder_set_bounds (builder, rect);
+  accesskit_node_set_bounds (node, rect);
 }
 
 static accesskit_node_id
@@ -1006,11 +1006,9 @@ static void
 add_run_node (GtkAccessKitTextLayout *layout,
               accesskit_tree_update  *update,
               gint                    start_index,
-              accesskit_node_builder *builder)
+              accesskit_node         *node)
 {
   accesskit_node_id id = run_node_id (layout, start_index);
-  accesskit_node *node = accesskit_node_builder_build (builder);
-
   accesskit_tree_update_push_node (update, id, node);
   g_array_append_val (layout->children, id);
 }
@@ -1101,8 +1099,8 @@ add_text_layout_inner (GtkAccessKitTextLayout *layout,
                     &(g_array_index (line_runs, GtkAccessKitRunInfo, i));
                   PangoLayoutRun *run = run_info->run;
                   PangoItem *item = run->item;
-                  accesskit_node_builder *builder =
-                    accesskit_node_builder_new (ACCESSKIT_ROLE_INLINE_TEXT_BOX);
+                  accesskit_node *node =
+                    accesskit_node_new (ACCESSKIT_ROLE_TEXT_RUN);
                   guint node_text_byte_count;
                   gchar *node_text;
                   accesskit_text_direction dir;
@@ -1126,11 +1124,10 @@ add_text_layout_inner (GtkAccessKitTextLayout *layout,
                     {
                       accesskit_node_id id =
                         run_node_id (layout, prev_run_usv_offset);
-                      accesskit_node_builder_set_previous_on_line (builder, id);
+                      accesskit_node_set_previous_on_line (node, id);
                     }
 
-                  set_bounds_from_pango (builder, &run_info->extents, offset_x,
-                                         offset_y);
+                  set_bounds_from_pango (node, &run_info->extents, offset_x, offset_y);
 
                   if (i == (line_runs->len - 1))
                     node_text_byte_count =
@@ -1149,7 +1146,7 @@ add_text_layout_inner (GtkAccessKitTextLayout *layout,
                       node_text = new_text;
                     }
 
-                  accesskit_node_builder_set_value (builder, node_text);
+                  accesskit_node_set_value (node, node_text);
 
                   /* The following logic for determining the run's direction
                      is copied from update_run in pango-layout.c. */
@@ -1157,7 +1154,7 @@ add_text_layout_inner (GtkAccessKitTextLayout *layout,
                     dir = ACCESSKIT_TEXT_DIRECTION_LEFT_TO_RIGHT;
                   else
                     dir = ACCESSKIT_TEXT_DIRECTION_RIGHT_TO_LEFT;
-                  accesskit_node_builder_set_text_direction (builder, dir);
+                  accesskit_node_set_text_direction (node, dir);
 
                   /* TODO: attributes, once the AccessKit backends support them */
 
@@ -1223,30 +1220,30 @@ add_text_layout_inner (GtkAccessKitTextLayout *layout,
                       g_array_append_val (word_lengths, word_len);
                     }
 
-                  accesskit_node_builder_set_character_lengths (builder,
-                                                                char_lengths->len,
-                                                                (uint8_t *) char_lengths->data);
+                  accesskit_node_set_character_lengths (node,
+                                                        char_lengths->len,
+                                                        (uint8_t *) char_lengths->data);
                   g_array_unref (char_lengths);
-                  accesskit_node_builder_set_word_lengths (builder,
-                                                           word_lengths->len,
-                                                           (uint8_t *) word_lengths->data);
+                  accesskit_node_set_word_lengths (node,
+                                                   word_lengths->len,
+                                                   (uint8_t *) word_lengths->data);
                   g_array_unref (word_lengths);
-                  accesskit_node_builder_set_character_positions (builder,
-                                                                  char_positions->len,
-                                                                  (float *) char_positions->data);
+                  accesskit_node_set_character_positions (node,
+                                                          char_positions->len,
+                                                          (float *) char_positions->data);
                   g_array_unref (char_positions);
-                  accesskit_node_builder_set_character_widths (builder,
-                                                               char_widths->len,
-                                                               (float *) char_widths->data);
+                  accesskit_node_set_character_widths (node,
+                                                       char_widths->len,
+                                                       (float *) char_widths->data);
                   g_array_unref (char_widths);
 
                   if (i < (line_runs->len - 1))
                     {
                       accesskit_node_id id = run_node_id (layout, usv_offset);
-                      accesskit_node_builder_set_next_on_line (builder, id);
+                      accesskit_node_set_next_on_line (node, id);
                     }
 
-                  add_run_node (layout, update, run_start_usv_offset, builder);
+                  add_run_node (layout, update, run_start_usv_offset, node);
                   prev_run_usv_offset = run_start_usv_offset;
                   g_free (node_text);
                   g_free (log_widths);
@@ -1256,8 +1253,8 @@ add_text_layout_inner (GtkAccessKitTextLayout *layout,
             }
           else
             {
-              accesskit_node_builder *builder =
-                accesskit_node_builder_new (ACCESSKIT_ROLE_INLINE_TEXT_BOX);
+              accesskit_node *node =
+                accesskit_node_new (ACCESSKIT_ROLE_TEXT_RUN);
               uint8_t char_len = line_end_byte_offset - line->start_index;
               gchar *line_text = g_strndup (text + line->start_index, char_len);
               accesskit_text_direction dir;
@@ -1266,7 +1263,7 @@ add_text_layout_inner (GtkAccessKitTextLayout *layout,
 
               g_assert (byte_offset == line->start_index);
 
-              set_bounds_from_pango (builder, &extents, offset_x, offset_y);
+              set_bounds_from_pango (node, &extents, offset_x, offset_y);
 
               if (!next_line && end_delimiter)
                 {
@@ -1276,7 +1273,7 @@ add_text_layout_inner (GtkAccessKitTextLayout *layout,
                   line_text = new_text;
                 }
               char_count = char_len ? 1 : 0;
-              accesskit_node_builder_set_value (builder, line_text);
+              accesskit_node_set_value (node, line_text);
 
               switch (pango_layout_line_get_resolved_direction (line))
                 {
@@ -1294,18 +1291,14 @@ add_text_layout_inner (GtkAccessKitTextLayout *layout,
                   dir = ACCESSKIT_TEXT_DIRECTION_LEFT_TO_RIGHT;
                   break;
                 }
-              accesskit_node_builder_set_text_direction (builder, dir);
+              accesskit_node_set_text_direction (node, dir);
 
-              accesskit_node_builder_set_character_lengths (builder, char_count,
-                                                            &char_len);
-              accesskit_node_builder_set_word_lengths (builder, 1,
-                                                       &char_count);
-              accesskit_node_builder_set_character_positions (builder, char_count,
-                                                              &coord);
-              accesskit_node_builder_set_character_widths (builder, char_count,
-                                                           &coord);
+              accesskit_node_set_character_lengths (node, char_count, &char_len);
+              accesskit_node_set_word_lengths (node, 1, &char_count);
+              accesskit_node_set_character_positions (node, char_count, &coord);
+              accesskit_node_set_character_widths (node, char_count, &coord);
 
-              add_run_node (layout, update, usv_offset, builder);
+              add_run_node (layout, update, usv_offset, node);
               byte_offset += char_len;
               usv_offset += g_utf8_strlen (line_text, char_len);
               g_free (line_text);
@@ -1326,7 +1319,7 @@ add_text_layout_inner (GtkAccessKitTextLayout *layout,
 static void
 add_text_layout (GtkAccessKitTextLayout *layout,
                  accesskit_tree_update  *update,
-                 accesskit_node_builder *parent_builder,
+                 accesskit_node         *parent_node,
                  PangoLayout            *pango_layout,
                  const char             *end_delimiter,
                  double                  offset_x,
@@ -1339,17 +1332,16 @@ add_text_layout (GtkAccessKitTextLayout *layout,
   if (!layout->children || offset_x != layout->offset_x ||
       offset_y != layout->offset_y)
     {
-      accesskit_node_builder *container_builder =
-        accesskit_node_builder_new (ACCESSKIT_ROLE_GENERIC_CONTAINER);
+      accesskit_node *container_node =
+        accesskit_node_new (ACCESSKIT_ROLE_GENERIC_CONTAINER);
       accesskit_vec2 p = {offset_x, offset_y};
-      accesskit_node *container;
 
       layout->offset_x = offset_x;
       layout->offset_y = offset_y;
 
       if (offset_x || offset_y)
-        accesskit_node_builder_set_transform (container_builder,
-                                              accesskit_affine_translate (p));
+        accesskit_node_set_transform (container_node,
+                                      accesskit_affine_translate (p));
 
       if (!layout->children)
         {
@@ -1359,30 +1351,29 @@ add_text_layout (GtkAccessKitTextLayout *layout,
                                  inner_offset_x, inner_offset_y);
         }
 
-      accesskit_node_builder_set_children (container_builder,
-                                           layout->children->len,
-                                           (accesskit_node_id *)
-                                           layout->children->data);
+      accesskit_node_set_children (container_node,
+                                   layout->children->len,
+                                   (accesskit_node_id *)
+                                   layout->children->data);
 
-      container = accesskit_node_builder_build (container_builder);
-      accesskit_tree_update_push_node (update, layout->id, container);
+      accesskit_tree_update_push_node (update, layout->id, container_node);
     }
 
-  accesskit_node_builder_push_child (parent_builder, layout->id);
+  accesskit_node_push_child (parent_node, layout->id);
 }
 
 static void
-add_single_text_layout (GtkAccessKitContext    *self,
-                        accesskit_tree_update  *update,
-                        accesskit_node_builder *parent_builder,
-                        PangoLayout            *pango_layout,
-                        double                  offset_x,
-                        double                  offset_y)
+add_single_text_layout (GtkAccessKitContext   *self,
+                        accesskit_tree_update *update,
+                        accesskit_node        *parent_node,
+                        PangoLayout           *pango_layout,
+                        double                 offset_x,
+                        double                 offset_y)
 {
   if (!self->single_text_layout.id)
     self->single_text_layout.id = gtk_accesskit_root_new_id (self->root);
 
-  add_text_layout (&self->single_text_layout, update, parent_builder,
+  add_text_layout (&self->single_text_layout, update, parent_node,
                    pango_layout, NULL, offset_x, offset_y, 0.0, 0.0);
 }
 
@@ -1482,27 +1473,22 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
 {
   GtkATContext *ctx = GTK_AT_CONTEXT (self);
   accesskit_role role = accesskit_role_for_context (ctx);
-  accesskit_node_builder *builder = accesskit_node_builder_new (role);
+  accesskit_node *node = accesskit_node_new (role);
   GtkAccessible *accessible = gtk_at_context_get_accessible (ctx);
   GtkAccessible *child = gtk_accessible_get_first_accessible_child (accessible);
 
   if (gtk_accessible_get_platform_state (accessible,
                                          GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE))
-    accesskit_node_builder_add_action (builder, ACCESSKIT_ACTION_FOCUS);
+    accesskit_node_add_action (node, ACCESSKIT_ACTION_FOCUS);
 
-  if (GTK_IS_EDITABLE (accessible) ||
-      GTK_IS_TEXT_VIEW (accessible))
-    accesskit_node_builder_set_default_action_verb (builder,
-                                                    ACCESSKIT_DEFAULT_ACTION_VERB_FOCUS);
-  else if (GTK_IS_BUTTON (accessible) ||
-           GTK_IS_MODEL_BUTTON (accessible) ||
-           GTK_IS_SWITCH (accessible) ||
-           GTK_IS_EXPANDER (accessible))
-    accesskit_node_builder_set_default_action_verb (builder,
-                                                    ACCESSKIT_DEFAULT_ACTION_VERB_CLICK);
+  if (GTK_IS_BUTTON (accessible) ||
+      GTK_IS_MODEL_BUTTON (accessible) ||
+      GTK_IS_SWITCH (accessible) ||
+      GTK_IS_EXPANDER (accessible))
+    accesskit_node_add_action (node, ACCESSKIT_ACTION_CLICK);
   /* TODO: other actions */
 
-  set_bounds (accessible, builder);
+  set_bounds (accessible, node);
 
   while (child)
     {
@@ -1511,28 +1497,29 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       GtkAccessible *next = gtk_accessible_get_next_accessible_sibling (child);
 
       g_assert (gtk_at_context_is_realized (child_ctx));
-      accesskit_node_builder_push_child (builder, child_accesskit_ctx->id);
+      accesskit_node_push_child (node, child_accesskit_ctx->id);
       g_object_unref (child_ctx);
       g_object_unref (child);
       child = next;
     }
 
   set_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_BUSY,
-                       accesskit_node_builder_set_busy, builder);
+                       accesskit_node_set_busy, node);
   set_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_DISABLED,
-                       accesskit_node_builder_set_disabled, builder);
+                       accesskit_node_set_disabled, node);
   set_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_HIDDEN,
-                       accesskit_node_builder_set_hidden, builder);
+                       accesskit_node_set_hidden, node);
   set_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_VISITED,
-                       accesskit_node_builder_set_visited, builder);
+                       accesskit_node_set_visited, node);
 
   set_optional_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_EXPANDED,
-                                accesskit_node_builder_set_expanded, builder);
+                                accesskit_node_set_expanded, node);
   set_optional_flag_from_state (ctx, GTK_ACCESSIBLE_STATE_SELECTED,
-                                accesskit_node_builder_set_selected, builder);
+                                accesskit_node_set_selected, node);
 
-  if (!set_toggled (ctx, GTK_ACCESSIBLE_STATE_CHECKED, builder))
-    set_toggled (ctx, GTK_ACCESSIBLE_STATE_PRESSED, builder);
+  if (!set_toggled (ctx, GTK_ACCESSIBLE_STATE_CHECKED, node))
+    set_toggled (ctx, GTK_ACCESSIBLE_STATE_PRESSED, node);
+
 
   if (gtk_at_context_has_accessible_state (ctx, GTK_ACCESSIBLE_STATE_INVALID))
     {
@@ -1543,15 +1530,15 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       switch (gtk_invalid_accessible_value_get (value))
         {
         case GTK_ACCESSIBLE_INVALID_TRUE:
-          accesskit_node_builder_set_invalid (builder, ACCESSKIT_INVALID_TRUE);
+          accesskit_node_set_invalid (node, ACCESSKIT_INVALID_TRUE);
           break;
 
         case GTK_ACCESSIBLE_INVALID_GRAMMAR:
-          accesskit_node_builder_set_invalid (builder, ACCESSKIT_INVALID_GRAMMAR);
+          accesskit_node_set_invalid (node, ACCESSKIT_INVALID_GRAMMAR);
           break;
 
         case GTK_ACCESSIBLE_INVALID_SPELLING:
-          accesskit_node_builder_set_invalid (builder, ACCESSKIT_INVALID_SPELLING);
+          accesskit_node_set_invalid (node, ACCESSKIT_INVALID_SPELLING);
           break;
 
         case GTK_ACCESSIBLE_INVALID_FALSE:
@@ -1561,36 +1548,36 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
     }
 
   set_flag_from_property (ctx, GTK_ACCESSIBLE_PROPERTY_MODAL,
-                          accesskit_node_builder_set_modal, builder);
+                          accesskit_node_set_modal, node);
   set_flag_from_property (ctx, GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE,
-                          accesskit_node_builder_set_multiselectable, builder);
+                          accesskit_node_set_multiselectable, node);
   set_flag_from_property (ctx, GTK_ACCESSIBLE_PROPERTY_READ_ONLY,
-                          accesskit_node_builder_set_read_only, builder);
+                          accesskit_node_set_read_only, node);
   set_flag_from_property (ctx, GTK_ACCESSIBLE_PROPERTY_REQUIRED,
-                          accesskit_node_builder_set_required, builder);
+                          accesskit_node_set_required, node);
 
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_DESCRIPTION,
-                       accesskit_node_builder_set_description, builder);
+                       accesskit_node_set_description, node);
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS,
-                       accesskit_node_builder_set_keyboard_shortcut, builder);
+                       accesskit_node_set_keyboard_shortcut, node);
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_LABEL,
-                       accesskit_node_builder_set_name, builder);
+                       accesskit_node_set_label, node);
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER,
-                       accesskit_node_builder_set_placeholder, builder);
+                       accesskit_node_set_placeholder, node);
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION,
-                       accesskit_node_builder_set_role_description, builder);
+                       accesskit_node_set_role_description, node);
   set_string_property (ctx, GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT,
-                       accesskit_node_builder_set_value, builder);
+                       accesskit_node_set_value, node);
 
   set_size_from_property (ctx, GTK_ACCESSIBLE_PROPERTY_LEVEL,
-                          accesskit_node_builder_set_level, builder);
+                          accesskit_node_set_level, node);
 
   set_double_property (ctx, GTK_ACCESSIBLE_PROPERTY_VALUE_MAX,
-                       accesskit_node_builder_set_max_numeric_value, builder);
+                       accesskit_node_set_max_numeric_value, node);
   set_double_property (ctx, GTK_ACCESSIBLE_PROPERTY_VALUE_MIN,
-                       accesskit_node_builder_set_min_numeric_value, builder);
+                       accesskit_node_set_min_numeric_value, node);
   set_double_property (ctx, GTK_ACCESSIBLE_PROPERTY_VALUE_NOW,
-                       accesskit_node_builder_set_numeric_value, builder);
+                       accesskit_node_set_numeric_value, node);
 
   if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE))
     {
@@ -1601,15 +1588,15 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       switch (gtk_autocomplete_accessible_value_get (value))
         {
         case GTK_ACCESSIBLE_AUTOCOMPLETE_INLINE:
-          accesskit_node_builder_set_auto_complete (builder, ACCESSKIT_AUTO_COMPLETE_INLINE);
+          accesskit_node_set_auto_complete (node, ACCESSKIT_AUTO_COMPLETE_INLINE);
           break;
 
         case GTK_ACCESSIBLE_AUTOCOMPLETE_LIST:
-          accesskit_node_builder_set_auto_complete (builder, ACCESSKIT_AUTO_COMPLETE_LIST);
+          accesskit_node_set_auto_complete (node, ACCESSKIT_AUTO_COMPLETE_LIST);
           break;
 
         case GTK_ACCESSIBLE_AUTOCOMPLETE_BOTH:
-          accesskit_node_builder_set_auto_complete (builder, ACCESSKIT_AUTO_COMPLETE_BOTH);
+          accesskit_node_set_auto_complete (node, ACCESSKIT_AUTO_COMPLETE_BOTH);
           break;
 
         case GTK_ACCESSIBLE_AUTOCOMPLETE_NONE:
@@ -1624,7 +1611,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
 
       value = gtk_at_context_get_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_HAS_POPUP);
       if (gtk_boolean_accessible_value_get (value))
-        accesskit_node_builder_set_has_popup(builder, ACCESSKIT_HAS_POPUP_TRUE);
+        accesskit_node_set_has_popup(node, ACCESSKIT_HAS_POPUP_TRUE);
     }
 
   if (gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_ORIENTATION))
@@ -1636,11 +1623,11 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       switch (gtk_orientation_accessible_value_get (value))
         {
         case GTK_ORIENTATION_HORIZONTAL:
-          accesskit_node_builder_set_orientation (builder, ACCESSKIT_ORIENTATION_HORIZONTAL);
+          accesskit_node_set_orientation (node, ACCESSKIT_ORIENTATION_HORIZONTAL);
           break;
 
         case GTK_ORIENTATION_VERTICAL:
-          accesskit_node_builder_set_orientation (builder, ACCESSKIT_ORIENTATION_VERTICAL);
+          accesskit_node_set_orientation (node, ACCESSKIT_ORIENTATION_VERTICAL);
           break;
 
         default:
@@ -1657,15 +1644,15 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       switch (gtk_sort_accessible_value_get (value))
         {
         case GTK_ACCESSIBLE_SORT_ASCENDING:
-          accesskit_node_builder_set_sort_direction (builder, ACCESSKIT_SORT_DIRECTION_ASCENDING);
+          accesskit_node_set_sort_direction (node, ACCESSKIT_SORT_DIRECTION_ASCENDING);
           break;
 
         case GTK_ACCESSIBLE_SORT_DESCENDING:
-          accesskit_node_builder_set_sort_direction (builder, ACCESSKIT_SORT_DIRECTION_DESCENDING);
+          accesskit_node_set_sort_direction (node, ACCESSKIT_SORT_DIRECTION_DESCENDING);
           break;
 
         case GTK_ACCESSIBLE_SORT_OTHER:
-          accesskit_node_builder_set_sort_direction (builder, ACCESSKIT_SORT_DIRECTION_OTHER);
+          accesskit_node_set_sort_direction (node, ACCESSKIT_SORT_DIRECTION_OTHER);
           break;
 
         case GTK_ACCESSIBLE_SORT_NONE:
@@ -1675,47 +1662,46 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
     }
 
   set_single_relation (ctx, GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT,
-                       accesskit_node_builder_set_active_descendant, builder);
+                       accesskit_node_set_active_descendant, node);
   set_single_relation (ctx, GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE,
-                       accesskit_node_builder_set_error_message, builder);
+                       accesskit_node_set_error_message, node);
 
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_CONTROLS,
-                      accesskit_node_builder_push_controlled, builder);
+                      accesskit_node_push_controlled, node);
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_DESCRIBED_BY,
-                      accesskit_node_builder_push_described_by, builder);
+                      accesskit_node_push_described_by, node);
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_DETAILS,
-                      accesskit_node_builder_push_detail, builder);
+                      accesskit_node_push_detail, node);
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_FLOW_TO,
-                      accesskit_node_builder_push_flow_to, builder);
+                      accesskit_node_push_flow_to, node);
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_LABELLED_BY,
-                      accesskit_node_builder_push_labelled_by, builder);
+                      accesskit_node_push_labelled_by, node);
   set_multi_relation (ctx, GTK_ACCESSIBLE_RELATION_OWNS,
-                      accesskit_node_builder_push_owned, builder);
+                      accesskit_node_push_owned, node);
 
   set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_COL_COUNT,
-                          accesskit_node_builder_set_column_count, builder);
+                          accesskit_node_set_column_count, node);
   set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_COL_INDEX,
-                          accesskit_node_builder_set_column_index, builder);
+                          accesskit_node_set_column_index, node);
   set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_COL_SPAN,
-                          accesskit_node_builder_set_column_span, builder);
+                          accesskit_node_set_column_span, node);
   set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_POS_IN_SET,
-                          accesskit_node_builder_set_position_in_set, builder);
+                          accesskit_node_set_position_in_set, node);
   set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_ROW_COUNT,
-                          accesskit_node_builder_set_row_count, builder);
+                          accesskit_node_set_row_count, node);
   set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_ROW_INDEX,
-                          accesskit_node_builder_set_row_index, builder);
+                          accesskit_node_set_row_index, node);
   set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_ROW_SPAN,
-                          accesskit_node_builder_set_row_span, builder);
+                          accesskit_node_set_row_span, node);
   set_size_from_relation (ctx, GTK_ACCESSIBLE_RELATION_SET_SIZE,
-                          accesskit_node_builder_set_size_of_set, builder);
+                          accesskit_node_set_size_of_set, node);
 
   set_string_from_relation (ctx, GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT,
-                            accesskit_node_builder_set_column_index_text, builder);
+                            accesskit_node_set_column_index_text, node);
   set_string_from_relation (ctx, GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT,
-                            accesskit_node_builder_set_row_index_text, builder);
+                            accesskit_node_set_row_index_text, node);
 
-  accesskit_node_builder_set_class_name (builder,
-                                         g_type_name (G_TYPE_FROM_INSTANCE (accessible)));
+  accesskit_node_set_class_name (node, g_type_name (G_TYPE_FROM_INSTANCE (accessible)));
 
   if (!(gtk_at_context_has_accessible_property (ctx, GTK_ACCESSIBLE_PROPERTY_LABEL) ||
         gtk_at_context_has_accessible_relation (ctx, GTK_ACCESSIBLE_RELATION_LABELLED_BY)))
@@ -1726,7 +1712,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
         {
           tooltip_text = gtk_widget_get_tooltip_text (GTK_WIDGET (accessible));
           if (tooltip_text)
-            accesskit_node_builder_set_name (builder, tooltip_text);
+            accesskit_node_set_label (node, tooltip_text);
         }
       else
         tooltip_text = NULL;
@@ -1737,8 +1723,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
           GtkATContext *parent_ctx = gtk_accessible_get_at_context (parent);
 
           gtk_at_context_realize (parent_ctx);
-          accesskit_node_builder_push_labelled_by (builder,
-                                                   GTK_ACCESSKIT_CONTEXT (parent_ctx)->id);
+          accesskit_node_push_labelled_by (node, GTK_ACCESSKIT_CONTEXT (parent_ctx)->id);
           g_object_unref (parent_ctx);
           g_object_unref (parent);
         }
@@ -1751,7 +1736,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       float x, y;
 
       gtk_label_get_layout_location (label, &x, &y);
-      add_single_text_layout (self, update, builder, layout, x, y);
+      add_single_text_layout (self, update, node, layout, x, y);
     }
   else if (GTK_IS_INSCRIPTION (accessible))
     {
@@ -1760,7 +1745,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       float x, y;
 
       gtk_inscription_get_layout_location (inscription, &x, &y);
-      add_single_text_layout (self, update, builder, layout, x, y);
+      add_single_text_layout (self, update, node, layout, x, y);
     }
   else if (GTK_IS_TEXT (accessible))
     {
@@ -1769,7 +1754,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
       int x, y;
 
       gtk_text_get_layout_offsets (text, &x, &y);
-      add_single_text_layout (self, update, builder, layout, x, y);
+      add_single_text_layout (self, update, node, layout, x, y);
     }
   else if (GTK_IS_TEXT_VIEW (accessible))
     {
@@ -1847,7 +1832,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
                                                  &widget_offset_x,
                                                  &widget_offset_y);
 
-          add_text_layout (line_layout, update, builder, pango_layout,
+          add_text_layout (line_layout, update, node, pango_layout,
                            end_delimiter, widget_offset_x, widget_offset_y,
                            inner_offset_x, inner_offset_y);
 
@@ -1872,9 +1857,8 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
                                        &selection.anchor);
       text_view_mark_to_text_position (self, text_view, focus_mark,
                                        &selection.focus);
-      accesskit_node_builder_set_text_selection (builder, selection);
-      accesskit_node_builder_add_action (builder,
-                                         ACCESSKIT_ACTION_SET_TEXT_SELECTION);
+      accesskit_node_set_text_selection (node, selection);
+      accesskit_node_add_action (node, ACCESSKIT_ACTION_SET_TEXT_SELECTION);
     }
   else if (GTK_IS_LABEL (accessible))
     {
@@ -1891,9 +1875,8 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
                                        anchor, &selection.anchor);
           usv_offset_to_text_position (&self->single_text_layout, layout,
                                        focus, &selection.focus);
-          accesskit_node_builder_set_text_selection (builder, selection);
-          accesskit_node_builder_add_action (builder,
-                                             ACCESSKIT_ACTION_SET_TEXT_SELECTION);
+          accesskit_node_set_text_selection (node, selection);
+          accesskit_node_add_action (node, ACCESSKIT_ACTION_SET_TEXT_SELECTION);
         }
     }
   else if (GTK_IS_EDITABLE (accessible) &&
@@ -1917,9 +1900,8 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
                                        layout, start, &selection.anchor);
           usv_offset_to_text_position (&text_accesskit_ctx->single_text_layout,
                                        layout, end, &selection.focus);
-          accesskit_node_builder_set_text_selection (builder, selection);
-          accesskit_node_builder_add_action (builder,
-                                             ACCESSKIT_ACTION_SET_TEXT_SELECTION);
+          accesskit_node_set_text_selection (node, selection);
+          accesskit_node_add_action (node, ACCESSKIT_ACTION_SET_TEXT_SELECTION);
 
           g_object_unref (text_ctx);
         }
@@ -1927,8 +1909,7 @@ gtk_accesskit_context_add_to_update (GtkAccessKitContext   *self,
 
   /* TODO: other text widget types */
 
-  accesskit_tree_update_push_node (update, self->id,
-                                   accesskit_node_builder_build (builder));
+  accesskit_tree_update_push_node (update, self->id, node);
 }
 
 void
@@ -2017,7 +1998,7 @@ gtk_accesskit_context_do_action (GtkAccessKitContext            *self,
 
   switch (request->action)
   {
-  case ACCESSKIT_ACTION_DEFAULT:
+  case ACCESSKIT_ACTION_CLICK:
     if (!GTK_IS_WIDGET (accessible))
       return;
     widget = GTK_WIDGET (accessible);
