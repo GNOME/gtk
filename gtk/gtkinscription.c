@@ -417,7 +417,7 @@ gtk_inscription_measure (GtkWidget      *widget,
     *natural_baseline = PANGO_PIXELS_CEIL (*natural_baseline);
 }
 
-static void
+void
 gtk_inscription_get_layout_location (GtkInscription *self,
                                      float          *x_out,
                                      float          *y_out)

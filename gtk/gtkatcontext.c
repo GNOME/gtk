@@ -49,6 +49,9 @@
 #include "gtkscalebutton.h"
 #include "print/gtkprinteroptionwidgetprivate.h"
 
+#ifdef HAVE_ACCESSKIT
+#include "a11y/gtkaccesskitcontextprivate.h"
+#endif
 #if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
 #include "a11y/gtkatspicontextprivate.h"
 #endif
@@ -673,6 +676,9 @@ static const struct {
 #if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)
   { "AT-SPI", "atspi", gtk_at_spi_create_context },
 #endif
+#ifdef HAVE_ACCESSKIT
+  { "AccessKit", "accesskit", gtk_accesskit_create_context },
+#endif
   { "Test", "test", gtk_test_at_context_new },
 };
 
@@ -707,13 +713,19 @@ gtk_at_context_create (GtkAccessibleRole  accessible_role,
       if (g_ascii_strcasecmp (gtk_a11y_env, "help") == 0)
         {
           g_print ("Supported arguments for GTK_A11Y environment variable:\n");
-
-#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
-          g_print ("   atspi - Use the AT-SPI accessibility backend\n");
+#ifdef HAVE_ACCESSKIT
+          g_print ("   accesskit - Use the AccessKit accessibility backend\n");
+#else
+          g_print ("   accesskit - Disabled during GTK build\n");
 #endif
-          g_print ("    test - Use the test accessibility backend\n");
-          g_print ("    none - Disable the accessibility backend\n");
-          g_print ("    help - Print this help\n\n");
+#if defined(GDK_WINDOWING_X11) || defined(GDK_WINDOWING_WAYLAND)
+          g_print ("       atspi - Use the AT-SPI accessibility backend\n");
+#else
+          g_print ("       atspi - Not available on this platform\n");
+#endif
+          g_print ("        test - Use the test accessibility backend\n");
+          g_print ("        none - Disable the accessibility backend\n");
+          g_print ("        help - Print this help\n\n");
           g_print ("Other arguments will cause a warning and be ignored.\n");
 
           gtk_a11y_env = "0";
@@ -1215,8 +1227,8 @@ gtk_accessible_role_get_naming (GtkAccessibleRole role)
   return (GtkAccessibleNaming) (naming[role] & ~(NAME_FROM_AUTHOR|NAME_FROM_CONTENT));
 }
 
-static gboolean
-is_nested_button (GtkATContext *self)
+gboolean
+gtk_at_context_is_nested_button (GtkATContext *self)
 {
   GtkAccessible *accessible;
   GtkWidget *widget, *parent;
@@ -1464,11 +1476,11 @@ gboolean              check_duplicates)
    * ui file and carries all the a11y attributes, but the
    * focus ends up on the toggle button.
    */
-  if (is_nested_button (self))
+  if (gtk_at_context_is_nested_button (self))
     {
       parent = get_parent_context (self);
       self = parent;
-      if (is_nested_button (self))
+      if (gtk_at_context_is_nested_button (self))
         {
           parent = get_parent_context (parent);
           g_object_unref (self);

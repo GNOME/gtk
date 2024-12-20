@@ -82,6 +82,11 @@ option('f16c',
        value: 'enabled',
        description: 'Enable F16C fast paths (requires F16C)')
 
+option('accesskit',
+       type: 'feature',
+       value: 'disabled',
+       description: 'Enabled the AccessKit backend for accessibility')
+
 # Introspection
 
 option('introspection',

@@ -450,6 +450,14 @@ gdk_wayland_surface_commit (GdkSurface *surface)
 }
 
 void
+gdk_wayland_surface_force_next_commit (GdkSurface *surface)
+{
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
+
+  impl->has_pending_subsurface_commits = TRUE;
+}
+
+void
 gdk_wayland_surface_notify_committed (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);

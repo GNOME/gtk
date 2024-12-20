@@ -693,6 +693,10 @@ cloudproviders_dep = dependency('cloudproviders',
   ])
 cdata.set('HAVE_CLOUDPROVIDERS', cloudproviders_dep.found())
 
+accesskit_dep = dependency('accesskit-c-0.12', required: get_option('accesskit').enabled())
+
+cdata.set('HAVE_ACCESSKIT', accesskit_dep.found())
+
 # libsysprof-capture support
 if not get_option('sysprof').disabled()
   libsysprof_capture_dep = dependency('sysprof-capture-4', version: sysprof_req,
@@ -995,6 +999,7 @@ summary('Cloud support', cloudproviders_dep.found(), section: 'Features')
 summary('Sysprof support', libsysprof_capture_dep.found(), section: 'Features')
 summary('Colord support', colord_dep.found(), section: 'Features')
 summary('Tracker support', tracker3_dep.found(), section: 'Features')
+summary('AccessKit support', accesskit_dep.found(), section: 'Features')
 
 summary('Compiler', cc.get_id(), section: 'Toolchain')
 summary('Linker', cc.get_linker_id(), section: 'Toolchain')

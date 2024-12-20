@@ -220,4 +220,7 @@ gtk_at_context_update_text_contents (GtkATContext *self,
                                      unsigned int start,
                                      unsigned int end);
 
+gboolean
+gtk_at_context_is_nested_button (GtkATContext *self);
+
 G_END_DECLS

@@ -1362,10 +1362,10 @@ gtk_label_measure (GtkWidget      *widget,
     *natural_baseline = PANGO_PIXELS_CEIL (*natural_baseline);
 }
 
-static void
-get_layout_location (GtkLabel  *self,
-                     float     *xp,
-                     float     *yp)
+void
+gtk_label_get_layout_location (GtkLabel  *self,
+                               float     *xp,
+                               float     *yp)
 {
   GtkWidget *widget = GTK_WIDGET (self);
   const int widget_width = gtk_widget_get_width (widget);
@@ -1377,6 +1377,8 @@ get_layout_location (GtkLabel  *self,
 
   g_assert (xp);
   g_assert (yp);
+
+  gtk_label_ensure_layout (self);
 
   xalign = self->xalign;
 
@@ -1442,7 +1444,7 @@ gtk_label_snapshot (GtkWidget   *widget,
 
   gtk_label_ensure_layout (self);
 
-  get_layout_location (self, &lx, &ly);
+  gtk_label_get_layout_location (self, &lx, &ly);
 
   gtk_css_boxes_init (&boxes, widget);
   gtk_css_style_snapshot_layout (&boxes, snapshot, lx, ly, self->layout);
@@ -1763,7 +1765,7 @@ get_layout_index (GtkLabel *self,
   *index = 0;
 
   gtk_label_ensure_layout (self);
-  get_layout_location (self, &lx, &ly);
+  gtk_label_get_layout_location (self, &lx, &ly);
 
   /* Translate x/y to layout position */
   x -= lx;
@@ -5441,8 +5443,7 @@ gtk_label_get_layout_offsets (GtkLabel *self,
   float local_x, local_y;
   g_return_if_fail (GTK_IS_LABEL (self));
 
-  gtk_label_ensure_layout (self);
-  get_layout_location (self, &local_x, &local_y);
+  gtk_label_get_layout_location (self, &local_x, &local_y);
 
   if (x)
     *x = (int) local_x;
@@ -6363,7 +6364,7 @@ gtk_label_accessible_text_get_extents (GtkAccessibleText *self,
 
   layout = label->layout;
   text = label->text;
-  get_layout_location (label, &lx, &ly);
+  gtk_label_get_layout_location (label, &lx, &ly);
 
   range[0] = g_utf8_pointer_to_offset (text, text + start);
   range[1] = g_utf8_pointer_to_offset (text, text + end);

@@ -20,6 +20,7 @@
 
 #include "gtktextview.h"
 #include "gtktextattributesprivate.h"
+#include "gtktextlayoutprivate.h"
 #include "gtkcssnodeprivate.h"
 
 G_BEGIN_DECLS
@@ -38,6 +39,9 @@ GHashTable *    gtk_text_view_get_attributes_run        (GtkTextView *self,
                                                          int         *end);
 void            gtk_text_view_add_default_attributes    (GtkTextView *view,
                                                          GHashTable  *attributes);
+
+GtkTextLayout *
+gtk_text_view_get_layout (GtkTextView *text_view);
 
 G_END_DECLS
 

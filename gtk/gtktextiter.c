@@ -5708,6 +5708,21 @@ _gtk_text_btree_get_iter_at_line      (GtkTextBTree   *tree,
   check_invariants (iter);
 }
 
+void
+_gtk_text_btree_get_iter_at_line_ptr_char (GtkTextBTree   *tree,
+                                           GtkTextIter    *iter,
+                                           GtkTextLine    *line,
+                                           int             char_offset)
+{
+  g_return_if_fail (iter != NULL);
+  g_return_if_fail (tree != NULL);
+  g_return_if_fail (line != NULL);
+
+  iter_init_from_char_offset (iter, tree, line, char_offset);
+
+  check_invariants (iter);
+}
+
 gboolean
 _gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree   *tree,
                                           GtkTextIter    *iter,

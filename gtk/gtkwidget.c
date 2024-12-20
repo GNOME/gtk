@@ -71,6 +71,9 @@
 #include "gtktestatcontextprivate.h"
 
 #include "inspector/window.h"
+#ifdef HAVE_ACCESSKIT
+#include "a11y/gtkaccesskitcontextprivate.h"
+#endif
 
 #include "gdk/gdkeventsprivate.h"
 #include "gdk/gdkprofilerprivate.h"
@@ -12077,6 +12080,9 @@ gtk_widget_render (GtkWidget            *widget,
                    const cairo_region_t *region)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+#ifdef HAVE_ACCESSKIT
+  GtkATContext *at_ctx;
+#endif
   GtkSnapshot *snapshot;
   GskRenderer *renderer;
   GskRenderNode *root;
@@ -12089,6 +12095,13 @@ gtk_widget_render (GtkWidget            *widget,
 
   if (!GTK_IS_NATIVE (widget))
     return;
+
+#ifdef HAVE_ACCESSKIT
+  at_ctx = gtk_accessible_get_at_context (GTK_ACCESSIBLE (widget));
+  if (GTK_IS_ACCESSKIT_CONTEXT (at_ctx))
+    gtk_accesskit_context_update_tree (GTK_ACCESSKIT_CONTEXT (at_ctx));
+  g_object_unref (at_ctx);
+#endif
 
   renderer = gtk_native_get_renderer (GTK_NATIVE (widget));
   if (renderer == NULL)

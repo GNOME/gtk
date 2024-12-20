@@ -168,6 +168,10 @@ void     _gtk_text_btree_get_iter_at_line         (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
                                                    GtkTextLine        *line,
                                                    int                 byte_offset);
+void     _gtk_text_btree_get_iter_at_line_ptr_char (GtkTextBTree       *tree,
+                                                    GtkTextIter        *iter,
+                                                    GtkTextLine        *line,
+                                                    int                 char_offset);
 gboolean _gtk_text_btree_get_iter_at_first_toggle (GtkTextBTree       *tree,
                                                    GtkTextIter        *iter,
                                                    GtkTextTag         *tag);
