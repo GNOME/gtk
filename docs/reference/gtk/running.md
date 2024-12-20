@@ -526,6 +526,9 @@ library you are using:
 `atspi`
 : Selects the AT-SPI accessibility backend
 
+`accesskit`
+: Selects the AccessKit accessibility backend
+
 `test`
 : Selects the test backend
 
