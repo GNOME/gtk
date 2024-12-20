@@ -265,6 +265,12 @@ support in the file chooser.
 This option controls whether GTK should use colord for color
 calibration support in the cups print backend.
 
+### `accesskit`
+
+This option controls whether GTK should include the AccessKit backend
+for accessibility. This backend supports Windows and macOS. It requires
+the accesskit-c bindings.
+
 ### `documentation`, `man-pages` and `screenshots`
 
 The *gi-docgen* package is used to generate the reference documentation
