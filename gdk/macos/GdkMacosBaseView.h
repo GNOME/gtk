@@ -44,4 +44,6 @@
 -(void)setOpaqueRegion:(cairo_region_t *)region;
 -(void)setInputArea:(const cairo_rectangle_int_t *)area;
 
+-(void)_selectAll:(id)sender;
+
 @end

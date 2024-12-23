@@ -21,10 +21,11 @@
 #include "config.h"
 
 #include "gtkapplicationprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkbuilder.h"
 #include "gtknative.h"
 #import <Cocoa/Cocoa.h>
-#include <gdk/macos/GdkMacosWindow.h>
+#import <gdk/macos/GdkMacosBaseView.h>
 
 typedef struct
 {
@@ -429,3 +430,125 @@ gtk_application_impl_quartz_class_init (GtkApplicationImplClass *class)
 
   gobject_class->finalize = gtk_application_impl_quartz_finalize;
 }
+
+static GtkWidget*
+gtk_application_impl_quartz_find_focus_widget (GdkMacosBaseView *view)
+{
+  GListModel *top_levels = gtk_window_get_toplevels ();
+
+  for (guint i = 0; i < g_list_model_get_n_items (top_levels); i++)
+    {
+      GtkWindow *window = (GtkWindow *) g_list_model_get_item (top_levels, i);
+      if (gtk_native_get_surface (GTK_NATIVE (window)) == (GdkSurface *) [view gdkSurface])
+        return gtk_window_get_focus (window);
+    }
+
+  return NULL;
+}
+
+
+@interface GdkMacosBaseView (GdkMacosViewEditOperations)
+
+- (void) undo:(id)sender;
+- (void) redo:(id)sender;
+
+- (void) cut:(id)sender;
+- (void) copy:(id)sender;
+- (void) paste:(id)sender;
+
+- (void) delete:(id)sender;
+- (void) selectAll:(id)sender;
+
+- (BOOL) validateMenuItem:(NSMenuItem *) menuItem;
+@end
+
+
+@implementation GdkMacosBaseView (GdkMacosViewEditOperations)
+
+- (void)undo:(id)sender
+{
+  GtkWidget *focus_widget = gtk_application_impl_quartz_find_focus_widget (self);
+  if (focus_widget != NULL)
+    gtk_widget_activate_action (focus_widget, "text.undo", NULL);
+}
+
+- (void)redo:(id)sender
+{
+  GtkWidget *focus_widget = gtk_application_impl_quartz_find_focus_widget (self);
+  if (focus_widget != NULL)
+    gtk_widget_activate_action (focus_widget, "text.redo", NULL);
+}
+
+- (void)cut:(id)sender
+{
+  GtkWidget *focus_widget = gtk_application_impl_quartz_find_focus_widget (self);
+  if (focus_widget != NULL)
+    gtk_widget_activate_action (focus_widget, "clipboard.cut", NULL);
+}
+
+- (void)copy:(id)sender
+{
+  GtkWidget *focus_widget = gtk_application_impl_quartz_find_focus_widget (self);
+  if (focus_widget != NULL)
+    gtk_widget_activate_action (focus_widget, "clipboard.copy", NULL);
+}
+
+- (void)paste:(id)sender
+{
+  GtkWidget *focus_widget = gtk_application_impl_quartz_find_focus_widget (self);
+  if (focus_widget != NULL)
+    gtk_widget_activate_action (focus_widget, "clipboard.paste", NULL);
+}
+
+- (void)delete:(id)sender
+{
+  GtkWidget *focus_widget = gtk_application_impl_quartz_find_focus_widget (self);
+  if (focus_widget != NULL)
+    gtk_widget_activate_action (focus_widget, "selection.delete", NULL);
+}
+
+- (void)selectAll:(id)sender
+{
+  GtkWidget *focus_widget = gtk_application_impl_quartz_find_focus_widget (self);
+  [self _selectAll:sender];
+
+  if (focus_widget != NULL)
+    gtk_widget_activate_action (focus_widget, "selection.select-all", NULL);
+}
+
+- (BOOL) validateMenuItem:(NSMenuItem *) menuItem
+{
+  GtkWidget *focus_widget = gtk_application_impl_quartz_find_focus_widget (self);
+  gboolean enabled = FALSE;
+  if (focus_widget != NULL && gtk_widget_get_sensitive (focus_widget))
+    {
+      const char *action_name = [self actionSelectorToGtkActionName:[menuItem action]];
+      GtkActionMuxer *muxer =  _gtk_widget_get_action_muxer (focus_widget, FALSE);
+      if (action_name == NULL || muxer == NULL)
+        return NO;
+
+      if (gtk_action_muxer_query_action (muxer, action_name, &enabled, NULL, NULL, NULL, NULL))
+        return enabled ? YES : NO;
+    }
+  return NO;
+}
+
+- (const char*)actionSelectorToGtkActionName:(SEL)selector
+{
+  if (selector == @selector(undo:))
+    return "text.undo";
+  else if (selector == @selector(redo:))
+    return "text.redo";
+  else if (selector == @selector(cut:))
+    return "clipboard.cut";
+  else if (selector == @selector(copy:))
+    return "clipboard.copy";
+  else if (selector == @selector(paste:))
+    return "clipboard.paste";
+  else if (selector == @selector(delete:))
+    return "selection.delete";
+  else if (selector == @selector(selectAll:))
+    return "selection.select-all";
+  return NULL;
+}
+@end

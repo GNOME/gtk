@@ -678,6 +678,11 @@
 
 -(void)selectAll:(id)sender
 {
+  [self _selectAll:sender];
+}
+
+-(void)_selectAll:(id)sender
+{
   GDK_DEBUG (EVENTS, "selectAll");
 
   g_object_set_data (G_OBJECT ([self gdkSurface]),
