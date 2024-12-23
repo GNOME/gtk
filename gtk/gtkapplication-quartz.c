@@ -21,10 +21,12 @@
 #include "config.h"
 
 #include "gtkapplicationprivate.h"
+#include "gtkwidgetprivate.h"
 #include "gtkbuilder.h"
 #include "gtknative.h"
 #import <Cocoa/Cocoa.h>
-#include <gdk/macos/GdkMacosWindow.h>
+#import <gdk/macos/GdkMacosView.h>
+#import <gdk/macos/GdkMacosWindow.h>
 
 typedef struct
 {
@@ -125,6 +127,121 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app
 {
   return YES;
+}
+@end
+
+@interface GtkMacosContentView : GdkMacosView
+
+- (void) undo:(id)sender;
+- (void) redo:(id)sender;
+
+- (void) cut:(id)sender;
+- (void) copy:(id)sender;
+- (void) paste:(id)sender;
+
+- (void) delete:(id)sender;
+- (void) selectAll:(id)sender;
+
+- (BOOL) validateMenuItem:(NSMenuItem *) menuItem;
+@end
+
+@implementation GtkMacosContentView
+
+- (void)undo:(id)sender
+{
+  [self maybeActivateAction:"text.undo"];
+}
+
+- (void)redo:(id)sender
+{
+  [self maybeActivateAction:"text.redo"];
+}
+
+- (void)cut:(id)sender
+{
+  [self maybeActivateAction:"clipboard.cut"];
+}
+
+- (void)copy:(id)sender
+{
+  [self maybeActivateAction:"clipboard.copy"];
+}
+
+- (void)paste:(id)sender
+{
+  [self maybeActivateAction:"clipboard.paste"];
+}
+
+- (void)delete:(id)sender
+{
+  [self maybeActivateAction:"selection.delete"];
+}
+
+- (void)selectAll:(id)sender
+{
+  [super selectAll:sender];
+  [self maybeActivateAction:"selection.select-all"];
+}
+
+- (BOOL) validateMenuItem:(NSMenuItem *) menuItem
+{
+  GtkWidget *focus_widget = [self findFocusWidget];
+  if (focus_widget != NULL && gtk_widget_get_sensitive (focus_widget))
+    {
+      const char *action_name = [self actionSelectorToGtkActionName:[menuItem action]];
+      gboolean enabled = FALSE;
+      GtkActionMuxer *muxer =  _gtk_widget_get_action_muxer (focus_widget, FALSE);
+
+      if (action_name == NULL || muxer == NULL)
+        return NO;
+
+      if (gtk_action_muxer_query_action (muxer, action_name, &enabled, NULL, NULL, NULL, NULL))
+        return enabled ? YES : NO;
+    }
+  return NO;
+}
+
+-(void)maybeActivateAction:(const char*)actionName
+{
+  GtkWidget *focus_widget = [self findFocusWidget];
+  if (focus_widget != NULL)
+    gtk_widget_activate_action (focus_widget, actionName, NULL);
+}
+
+-(GtkWidget *)findFocusWidget
+{
+  GListModel *toplevels = gtk_window_get_toplevels ();
+
+  for (guint i = 0; i < g_list_model_get_n_items (toplevels); i++)
+    {
+      GtkWindow *window = (GtkWindow *) g_list_model_get_item (toplevels, i);
+
+      if (gtk_native_get_surface (GTK_NATIVE (window)) == (GdkSurface *) [self gdkSurface])
+        return gtk_window_get_focus (window);
+    }
+    return NULL;
+}
+
+- (const char*)actionSelectorToGtkActionName:(SEL)selector
+{
+  /* This mapping is the inverse of [GNSMenuItem initWithTrackerItem:],
+   * defined in gtk/gtkapplication-quartz-menu.c.
+   */
+  if (selector == @selector(undo:))
+    return "text.undo";
+  else if (selector == @selector(redo:))
+    return "text.redo";
+  else if (selector == @selector(cut:))
+    return "clipboard.cut";
+  else if (selector == @selector(copy:))
+    return "clipboard.copy";
+  else if (selector == @selector(paste:))
+    return "clipboard.paste";
+  else if (selector == @selector(delete:))
+    return "selection.delete";
+  else if (selector == @selector(selectAll:))
+    return "selection.select-all";
+  return NULL;
 }
 @end
 
@@ -428,4 +545,6 @@ gtk_application_impl_quartz_class_init (GtkApplicationImplClass *class)
   class->uninhibit = gtk_application_impl_quartz_uninhibit;
 
   gobject_class->finalize = gtk_application_impl_quartz_finalize;
+
+  [GdkMacosWindow setContentViewClass:[GtkMacosContentView class]];
 }
