@@ -171,6 +171,7 @@ icon_loaded (GObject      *object,
 
   if (self != nil)
     {
+      const char *action_name = gtk_menu_tracker_item_get_action_name (aTrackerItem);
       const char *special = gtk_menu_tracker_item_get_special (aTrackerItem);
 
       if (special && g_str_equal (special, "hide-this"))
@@ -194,34 +195,20 @@ icon_loaded (GObject      *object,
           [NSApp setServicesMenu:[self submenu]];
           [self setTarget:self];
         }
-      else if (special && g_str_equal (special, "undo"))
-        {
-          [self setAction:@selector(undo:)];
-        }
-      else if (special && g_str_equal (special, "redo"))
-        {
-          [self setAction:@selector(redo:)];
-        }
-      else if (special && g_str_equal (special, "cut"))
-        {
-          [self setAction:@selector(cut:)];
-        }
-      else if (special && g_str_equal (special, "copy"))
-        {
-          [self setAction:@selector(copy:)];
-        }
-      else if (special && g_str_equal (special, "paste"))
-        {
-          [self setAction:@selector(paste:)];
-        }
-      else if (special && g_str_equal (special, "delete"))
-        {
-          [self setAction:@selector(delete:)];
-        }
-      else if (special && g_str_equal (special, "select-all"))
-        {
-          [self setAction:@selector(selectAll:)];
-        }
+      else if (action_name && g_str_equal (action_name, "text.undo"))
+        [self setAction:@selector(undo:)];
+      else if (action_name && g_str_equal (action_name, "text.redo"))
+        [self setAction:@selector(redo:)];
+      else if (action_name && g_str_equal (action_name, "clipboard.cut"))
+        [self setAction:@selector(cut:)];
+      else if (action_name && g_str_equal (action_name, "clipboard.copy"))
+        [self setAction:@selector(copy:)];
+      else if (action_name && g_str_equal (action_name, "clipboard.paste"))
+        [self setAction:@selector(paste:)];
+      else if (action_name && g_str_equal (action_name, "selection.delete"))
+        [self setAction:@selector(delete:)];
+      else if (action_name && g_str_equal (action_name, "selection.select-all"))
+        [self setAction:@selector(selectAll:)];
       else
         [self setTarget:self];
 
