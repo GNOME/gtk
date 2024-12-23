@@ -56,3 +56,21 @@ backend built into GDK. For Wayland, the symbol is `GDK_WINDOWING_MACOS`.
 The run time check is performed by looking at the type of the
 [class@Gdk.Display] object. For Wayland, the display objects will be of type
 `GdkMacosDisplay`.
+
+## Menus
+
+By default a GTK app shows an app menu and an edit menu.
+To make menu actions work well with native windows, such as a file dialog,
+the most common edit commands are treated special:
+
+* `text.undo`
+* `text.redo`
+* `clipboard.cut`
+* `clipboard.copy`
+* `clipboard.paste`
+* `selection.delete`
+* `selection.select-all`
+
+Those actions map to their respective macOS counterparts.
+The actions are enabled in GTK if the action is available on the focused widget
+and is enabled.

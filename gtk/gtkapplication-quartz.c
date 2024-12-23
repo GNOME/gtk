@@ -132,6 +132,13 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 
 @interface GtkMacosContentView : GdkMacosView
 
+/* In some cases GTK pops up a native window, such as when opening or
+ * saving a file. We map common actions such as undo, copy, paste, etc.
+ * to selectors, so these actions can be activated in a native window.
+ * As a concequence, we also need to implement them on our own view,
+ * and activate the action to the focused widget.
+ */
+
 - (void) undo:(id)sender;
 - (void) redo:(id)sender;
 
