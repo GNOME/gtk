@@ -738,6 +738,16 @@ gtk_menu_tracker_item_get_accel (GtkMenuTrackerItem *self)
 }
 
 const char *
+gtk_menu_tracker_item_get_action_name (GtkMenuTrackerItem *self)
+{
+
+  if (!self->action_and_target)
+    return NULL;
+
+  return strrchr (self->action_and_target, '|') + 1;
+}
+
+const char *
 gtk_menu_tracker_item_get_special (GtkMenuTrackerItem *self)
 {
   const char *special = NULL;

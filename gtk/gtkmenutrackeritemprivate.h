@@ -48,6 +48,8 @@ GtkMenuTrackerItem *   _gtk_menu_tracker_item_new                       (GtkActi
                                                                          const char          *action_namespace,
                                                                          gboolean             is_separator);
 
+const char *           gtk_menu_tracker_item_get_action_name           (GtkMenuTrackerItem *self);
+
 const char *           gtk_menu_tracker_item_get_special               (GtkMenuTrackerItem *self);
 
 const char *           gtk_menu_tracker_item_get_custom                (GtkMenuTrackerItem *self);
