@@ -16,6 +16,8 @@ if not exist %HOMEPATH%\.cargo\bin\rustup.exe %MSYS2_BINDIR%\wget https://static
 if exist %HOMEPATH%\.cargo\bin\rustup.exe %HOMEPATH%\.cargo\bin\rustup update
 if not exist %HOMEPATH%\.cargo\bin\rustup.exe rustup-init -y --default-toolchain=stable-%RUST_HOST% --default-host=%RUST_HOST%
 
+@set PATH=%PATH%;%HOMEPATH%\.cargo\bin
+
 pip3 install --upgrade --user meson~=1.2 || goto :error
 meson setup -Dbackend_max_links=1 -Ddebug=false -Dmedia-gstreamer=disabled -Dvulkan=disabled %~1 _build || goto :error
 ninja -C _build || goto :error
