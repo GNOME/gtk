@@ -664,7 +664,14 @@ gtk_file_filter_add_pattern (GtkFileFilter *filter,
  *
  * Adds a suffix match rule to a filter.
  *
- * This is similar to adding a match for the pattern "*.@suffix".
+ * This is similar to adding a match for the pattern "*.@suffix"
+ *
+ * An exaple to filter files with the suffix ".sub":
+ * ```c
+ * gtk_file_filter_add_suffix (filter, "sub");
+ * ```
+ *
+ * Filters with multiple dots are allowed.
  *
  * In contrast to pattern matches, suffix matches
  * are *always* case-insensitive.
