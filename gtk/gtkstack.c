@@ -2757,7 +2757,27 @@ gtk_stack_size_allocate (GtkWidget *widget,
     }
 }
 
-#define LERP(a, b, t) ((a) + (((b) - (a)) * (1.0 - (t))))
+static inline double
+lerp (int    a,
+      int    b,
+      double progress)
+{
+  return a * (1.0 - progress) + b * progress;
+}
+
+/*
+ * Given lerp (a, b, progress) -> r, find b. In other words: we know what size
+ * we're interpolating *from*, the current size, and the current interpolation
+ * progress; guess which size we're interpolating *to*.
+ */
+static inline double
+inverse_lerp (int    a,
+              int    r,
+              double progress)
+{
+  return (r - a * (1.0 - progress)) / progress;
+}
+
 static void
 gtk_stack_measure (GtkWidget      *widget,
                    GtkOrientation  orientation,
@@ -2771,8 +2791,52 @@ gtk_stack_measure (GtkWidget      *widget,
   GtkStackPrivate *priv = gtk_stack_get_instance_private (stack);
   GtkStackPage *child_info;
   GtkWidget *child;
-  int child_min, child_nat;
   guint idx;
+  int child_min, child_nat, child_for_size;
+  int last_size, last_opposite_size;
+  double t;
+
+  if (priv->interpolate_size && priv->last_visible_child)
+    {
+      t = gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE);
+
+      if (orientation == GTK_ORIENTATION_HORIZONTAL)
+        {
+          last_size = priv->last_visible_widget_width;
+          last_opposite_size = priv->last_visible_widget_height;
+        }
+      else
+        {
+          last_size = priv->last_visible_widget_height;
+          last_opposite_size = priv->last_visible_widget_width;
+        }
+
+      /* Work out which for_size we want to pass for measuring our children */
+      if (for_size == -1 || for_size == last_opposite_size ||
+          priv->homogeneous[OPPOSITE_ORIENTATION(orientation)])
+        child_for_size = for_size;
+      else if (t <= 0.0)
+        /* We're going to return last_size anyway */
+        child_for_size = -1;
+      else
+        {
+          double d = inverse_lerp (last_opposite_size, for_size, t);
+          /* inverse_lerp is numerically unstable due to its use of floating-
+           * point division, potentially by a very small value when progress is
+           * close to zero. So we sanity check the return value.
+           */
+          if (isnan (d) || isinf (d) || d < 0 || d >= G_MAXINT)
+            child_for_size = -1;
+          else
+            child_for_size = floor (d);
+        }
+    }
+  else
+    {
+      t = 1.0;
+      last_size = 0;
+      child_for_size = for_size;
+    }
 
   *minimum = 0;
   *natural = 0;
@@ -2785,37 +2849,46 @@ gtk_stack_measure (GtkWidget      *widget,
       if (!priv->homogeneous[orientation] &&
           priv->visible_child != child_info)
         continue;
+      if (!gtk_widget_get_visible (child))
+        continue;
 
-      if (gtk_widget_get_visible (child))
+      if (!priv->homogeneous[OPPOSITE_ORIENTATION(orientation)] && priv->visible_child != child_info)
         {
-          if (!priv->homogeneous[OPPOSITE_ORIENTATION(orientation)] && priv->visible_child != child_info)
-            {
-              int min_for_size;
+          int measure_for_size;
 
-              gtk_widget_measure (child, OPPOSITE_ORIENTATION (orientation), -1, &min_for_size, NULL, NULL, NULL);
-
-              gtk_widget_measure (child, orientation, MAX (min_for_size, for_size), &child_min, &child_nat, NULL, NULL);
-            }
+          /* Make sure to measure at least for the minimum size */
+          if (child_for_size == -1)
+            measure_for_size = -1;
           else
-            gtk_widget_measure (child, orientation, for_size, &child_min, &child_nat, NULL, NULL);
+            {
+              gtk_widget_measure (child, OPPOSITE_ORIENTATION (orientation),
+                                  -1,
+                                  &measure_for_size, NULL,
+                                  NULL, NULL);
+              measure_for_size = MAX (measure_for_size, child_for_size);
+            }
 
-          *minimum = MAX (*minimum, child_min);
-          *natural = MAX (*natural, child_nat);
+          gtk_widget_measure (child, orientation,
+                              measure_for_size,
+                              &child_min, &child_nat,
+                              NULL, NULL);
         }
-    }
-
-  if (priv->last_visible_child != NULL && !priv->homogeneous[orientation])
-    {
-      double t = priv->interpolate_size ? gtk_progress_tracker_get_ease_out_cubic (&priv->tracker, FALSE) : 1.0;
-      int last_size;
-
-      if (orientation == GTK_ORIENTATION_HORIZONTAL)
-        last_size = priv->last_visible_widget_width;
       else
-        last_size = priv->last_visible_widget_height;
+        gtk_widget_measure (child, orientation,
+                            child_for_size,
+                            &child_min, &child_nat,
+                            NULL, NULL);
 
-      *minimum = LERP (*minimum, last_size, t);
-      *natural = LERP (*natural, last_size, t);
+      *minimum = MAX (*minimum, child_min);
+      *natural = MAX (*natural, child_nat);
+  }
+
+  if (priv->last_visible_child != NULL &&
+      priv->interpolate_size &&
+      !priv->homogeneous[orientation])
+    {
+      *minimum = ceil (lerp (last_size, *minimum, t));
+      *natural = ceil (lerp (last_size, *natural, t));
     }
 }
 
