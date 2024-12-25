@@ -21,12 +21,11 @@
 #include "config.h"
 
 #include "gtkapplicationprivate.h"
-#include "gtkwidgetprivate.h"
 #include "gtkbuilder.h"
 #include "gtknative.h"
-#import <Cocoa/Cocoa.h>
 #import <gdk/macos/GdkMacosView.h>
 #import <gdk/macos/GdkMacosWindow.h>
+#import "gtkapplication-quartz-private.h"
 
 typedef struct
 {
@@ -130,7 +129,7 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 }
 @end
 
-@interface GtkMacosContentView : GdkMacosView
+@interface GtkMacosContentView : GdkMacosView<NSMenuItemValidation>
 
 /* In some cases GTK pops up a native window, such as when opening or
  * saving a file. We map common actions such as undo, copy, paste, etc.
@@ -148,108 +147,61 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 
 - (void) delete:(id)sender;
 - (void) selectAll:(id)sender;
-
-- (BOOL) validateMenuItem:(NSMenuItem *) menuItem;
 @end
 
 @implementation GtkMacosContentView
 
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+  if ([menuItem isKindOfClass:[GNSMenuItem class]])
+    return [((GNSMenuItem *) menuItem) validateMenuItem:menuItem];
+  return NO;
+}
+
 - (void)undo:(id)sender
 {
-  [self maybeActivateAction:"text.undo"];
+  [self maybeActivateAction:"text.undo" sender:sender];
 }
 
 - (void)redo:(id)sender
 {
-  [self maybeActivateAction:"text.redo"];
+  [self maybeActivateAction:"text.redo" sender:sender];
 }
 
 - (void)cut:(id)sender
 {
-  [self maybeActivateAction:"clipboard.cut"];
+  [self maybeActivateAction:"clipboard.cut" sender:sender];
 }
 
 - (void)copy:(id)sender
 {
-  [self maybeActivateAction:"clipboard.copy"];
+  [self maybeActivateAction:"clipboard.copy" sender:sender];
 }
 
 - (void)paste:(id)sender
 {
-  [self maybeActivateAction:"clipboard.paste"];
+  [self maybeActivateAction:"clipboard.paste" sender:sender];
 }
 
 - (void)delete:(id)sender
 {
-  [self maybeActivateAction:"selection.delete"];
+  [self maybeActivateAction:"selection.delete" sender:sender];
 }
 
 - (void)selectAll:(id)sender
 {
   [super selectAll:sender];
-  [self maybeActivateAction:"selection.select-all"];
+  [self maybeActivateAction:"selection.select-all" sender:sender];
 }
 
-- (BOOL) validateMenuItem:(NSMenuItem *) menuItem
+-(void)maybeActivateAction:(const char*)actionName sender:(id)sender
 {
-  GtkWidget *focus_widget = [self findFocusWidget];
-  if (focus_widget != NULL && gtk_widget_get_sensitive (focus_widget))
-    {
-      const char *action_name = [self actionSelectorToGtkActionName:[menuItem action]];
-      gboolean enabled = FALSE;
-      GtkActionMuxer *muxer =  _gtk_widget_get_action_muxer (focus_widget, FALSE);
-
-      if (action_name == NULL || muxer == NULL)
-        return NO;
-
-      if (gtk_action_muxer_query_action (muxer, action_name, &enabled, NULL, NULL, NULL, NULL))
-        return enabled ? YES : NO;
-    }
-  return NO;
+  if ([sender isKindOfClass:[GNSMenuItem class]])
+    [((GNSMenuItem *) sender) didSelectItem:sender];
+  else
+    g_warning ("%s: sender %s is not a GNSMenuItem", actionName, [[sender description] UTF8String]);
 }
 
--(void)maybeActivateAction:(const char*)actionName
-{
-  GtkWidget *focus_widget = [self findFocusWidget];
-  if (focus_widget != NULL)
-    gtk_widget_activate_action (focus_widget, actionName, NULL);
-}
-
--(GtkWidget *)findFocusWidget
-{
-  GListModel *toplevels = gtk_window_get_toplevels ();
-
-  for (guint i = 0; i < g_list_model_get_n_items (toplevels); i++)
-    {
-      GtkWindow *window = (GtkWindow *) g_list_model_get_item (toplevels, i);
-
-      if (gtk_native_get_surface (GTK_NATIVE (window)) == (GdkSurface *) [self gdkSurface])
-        return gtk_window_get_focus (window);
-    }
-    return NULL;
-}
-
-- (const char*)actionSelectorToGtkActionName:(SEL)selector
-{
-  /* This mapping is the inverse of [GNSMenuItem initWithTrackerItem:],
-   * defined in gtk/gtkapplication-quartz-menu.c.
-   */
-  if (selector == @selector(undo:))
-    return "text.undo";
-  else if (selector == @selector(redo:))
-    return "text.redo";
-  else if (selector == @selector(cut:))
-    return "clipboard.cut";
-  else if (selector == @selector(copy:))
-    return "clipboard.copy";
-  else if (selector == @selector(paste:))
-    return "clipboard.paste";
-  else if (selector == @selector(delete:))
-    return "selection.delete";
-  else if (selector == @selector(selectAll:))
-    return "selection.select-all";
-  return NULL;
-}
 @end
 
 static void
