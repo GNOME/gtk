@@ -2299,6 +2299,9 @@ gtk_spin_button_set_numeric (GtkSpinButton *spin_button,
       gtk_text_set_input_hints (GTK_TEXT (spin_button->entry),
                                 numeric ? GTK_INPUT_HINT_NO_EMOJI : GTK_INPUT_HINT_NONE);
 
+      if (numeric)
+        gtk_widget_set_direction (spin_button->entry, GTK_TEXT_DIR_LTR);
+
       g_object_notify_by_pspec (G_OBJECT (spin_button), spinbutton_props[PROP_NUMERIC]);
     }
 }
