@@ -216,7 +216,14 @@ node_editor_application_startup (GApplication *app)
 static void
 node_editor_application_activate (GApplication *app)
 {
+  GList *list;
   NodeEditorWindow *win;
+
+  if ((list = gtk_application_get_windows (GTK_APPLICATION (app))) != NULL)
+    {
+      gtk_window_present (GTK_WINDOW (list->data));
+      return;
+    }
 
   win = node_editor_window_new (NODE_EDITOR_APPLICATION (app));
 
