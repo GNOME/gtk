@@ -296,6 +296,7 @@ vs2019-x64:
   tags:
     - win32-ps
   needs: []
+  variables:
   script:
     - .gitlab-ci/test-msvc.bat ${COMMON_MESON_FLAGS}
   artifacts:
