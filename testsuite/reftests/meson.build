@@ -153,6 +153,10 @@ testdata = [
   'border-style.ui',
   'boxlayout-invisible-child.ref.ui',
   'boxlayout-invisible-child.ui',
+  'box-opposite-natural-size1.ref.ui',
+  'box-opposite-natural-size1.ui',
+  'box-opposite-natural-size2.ref.ui',
+  'box-opposite-natural-size2.ui',
   'box-pseudo-classes.css',
   'box-pseudo-classes.ref.ui',
   'box-pseudo-classes.ui',
@@ -592,6 +596,8 @@ testdata = [
   'wrap-margin-align-critical.ui',
   'wrapping-in-boxes-in-boxes.ref.ui',
   'wrapping-in-boxes-in-boxes.ui',
+  'wrapping-label-in-nested-boxes.ref.ui',
+  'wrapping-label-in-nested-boxes.ui',
 ]
 
 xfails = [

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkWindow">
+    <property name="default-width">512</property>
+    <property name="decorated">false</property>
+
+    <child>
+      <object class="GtkLabel">
+        <property name="label">Lorem ipsum odor amet, consectetuer adipiscing elit. Condimentum per metus
+commodo hendrerit tempor. Faucibus euismod senectus fames litora sem
+curabitur sapien. Gravida euismod dis tempor etiam ac duis conubia. Pharetra
+natoque laoreet dolor duis, taciti sapien senectus. Dictum nunc mattis
+condimentum libero praesent tristique. Cubilia erat ornare donec vivamus; eu
+dignissim. Tempor senectus potenti rhoncus eu fusce cras.</property>
+      </object>
+    </child>
+  </object>
+</interface>
