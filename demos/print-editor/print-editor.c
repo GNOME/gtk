@@ -779,9 +779,16 @@ startup (GApplication *app)
 static void
 activate (GApplication *app)
 {
+  GList *list;
   GtkWidget *box;
   GtkWidget *sw;
   GtkWidget *contents;
+
+  if ((list = gtk_application_get_windows (GTK_APPLICATION (app))) != NULL)
+    {
+      gtk_window_present (GTK_WINDOW (list->data));
+      return;
+    }
 
   main_window = gtk_application_window_new (GTK_APPLICATION (app));
 

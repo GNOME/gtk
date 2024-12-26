@@ -2126,6 +2126,7 @@ load_texture_in_thread (GtkWidget  *picture,
 static void
 activate (GApplication *app)
 {
+  GList *list;
   GtkBuilder *builder;
   GtkBuilderScope *scope;
   GtkWindow *window;
@@ -2184,6 +2185,12 @@ activate (GApplication *app)
   GtkEventController *controller;
 
   g_type_ensure (my_text_view_get_type ());
+
+  if ((list = gtk_application_get_windows (GTK_APPLICATION (app))) != NULL)
+    {
+      gtk_window_present (GTK_WINDOW (list->data));
+      return;
+    }
 
   provider = gtk_css_provider_new ();
   gtk_css_provider_load_from_resource (provider, "/org/gtk/WidgetFactory4/widget-factory.css");
