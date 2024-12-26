@@ -80,7 +80,7 @@
  * ![](clocks-shortcuts.png)
  *
  * This example shows a `GtkShortcutsWindow` that has been configured to show only
- * the shortcuts relevant to the "stopwatch" view.
+ * the shortcuts relevant to the “Stopwatch” view.
  *
  * The .ui file for this example can be found [here](https://gitlab.gnome.org/GNOME/gtk/tree/main/demos/gtk-demo/shortcuts-clocks.ui).
  *
@@ -88,8 +88,8 @@
  *
  * ![](builder-shortcuts.png)
  *
- * This example shows a `GtkShortcutsWindow` with two sections, "Editor Shortcuts"
- * and "Terminal Shortcuts".
+ * This example shows a `GtkShortcutsWindow` with two sections, “Editor Shortcuts”
+ * and “Terminal Shortcuts”.
  *
  * The .ui file for this example can be found [here](https://gitlab.gnome.org/GNOME/gtk/tree/main/demos/gtk-demo/shortcuts-builder.ui).
  *
