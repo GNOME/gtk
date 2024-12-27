@@ -179,8 +179,6 @@ icon_loaded (GObject      *object,
         [self setAction:@selector(copy:)];
       else if (action_name && g_str_equal (action_name, "clipboard.paste"))
         [self setAction:@selector(paste:)];
-      else if (action_name && g_str_equal (action_name, "selection.delete"))
-        [self setAction:@selector(delete:)];
       else if (action_name && g_str_equal (action_name, "selection.select-all"))
         [self setAction:@selector(selectAll:)];
       else

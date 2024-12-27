@@ -145,7 +145,6 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 - (void) copy:(id)sender;
 - (void) paste:(id)sender;
 
-- (void) delete:(id)sender;
 - (void) selectAll:(id)sender;
 @end
 
@@ -183,11 +182,6 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
   [self maybeActivateAction:"clipboard.paste" sender:sender];
 }
 
-- (void)delete:(id)sender
-{
-  [self maybeActivateAction:"selection.delete" sender:sender];
-}
-
 - (void)selectAll:(id)sender
 {
   [super selectAll:sender];
@@ -216,7 +210,6 @@ gtk_application_impl_quartz_set_default_accels (GtkApplicationImpl *impl)
   const char *cut_accel[] = {"<Meta>x", NULL};
   const char *copy_accel[] = {"<Meta>c", NULL};
   const char *paste_accel[] = {"<Meta>v", NULL};
-  const char *delete_accel[] = {"Delete", NULL};
   const char *select_all_accel[] = {"<Meta>a", NULL};
 
   gtk_application_set_accels_for_action (impl->application, "app.preferences", pref_accel);
@@ -228,7 +221,6 @@ gtk_application_impl_quartz_set_default_accels (GtkApplicationImpl *impl)
   gtk_application_set_accels_for_action (impl->application, "clipboard.cut", cut_accel);
   gtk_application_set_accels_for_action (impl->application, "clipboard.copy", copy_accel);
   gtk_application_set_accels_for_action (impl->application, "clipboard.paste", paste_accel);
-  gtk_application_set_accels_for_action (impl->application, "selection.delete", delete_accel);
   gtk_application_set_accels_for_action (impl->application, "selection.select-all", select_all_accel);
 }
 

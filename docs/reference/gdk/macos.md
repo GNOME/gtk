@@ -68,7 +68,6 @@ the most common edit commands are treated special:
 * `clipboard.cut`
 * `clipboard.copy`
 * `clipboard.paste`
-* `selection.delete`
 * `selection.select-all`
 
 Those actions map to their respective macOS counterparts.

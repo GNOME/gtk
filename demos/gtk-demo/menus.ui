@@ -58,10 +58,6 @@
           <attribute name="action">clipboard.paste</attribute>
         </item>
         <item>
-          <attribute name="label" translatable="yes">Delete</attribute>
-          <attribute name="action">selection.delete</attribute>
-        </item>
-        <item>
           <attribute name="label" translatable="yes">Select All</attribute>
           <attribute name="action">selection.select-all</attribute>
         </item>
