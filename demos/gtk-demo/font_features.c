@@ -994,8 +994,6 @@ update_features (void)
   pango_font = get_pango_font ();
   hb_font = pango_font_get_hb_font (pango_font);
 
-  g_print ("language %s\n", selected->langname);
-
   if (hb_font)
     {
       hb_tag_t tables[2] = { HB_OT_TAG_GSUB, HB_OT_TAG_GPOS };
