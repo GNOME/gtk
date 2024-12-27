@@ -1,5 +1,72 @@
-Overview of Changes in 4.17.2, xx-xx-xxxx
+Overview of Changes in 4.17.2, 26-12-2024
 =========================================
+
+* GtkWindow:
+ - Rework computing the minimum size
+
+* GtkPicture:
+ - Fix measuring with content-fit = scale-down
+
+* GtkStack:
+ - Report constant size request mode in more cases
+ - Avoid measuring children aginst preferred request mode
+ - Fix measuring during size interpolation
+
+* GtkFlowBox:
+ - Improve size request mode reporting
+ - Fix measuring minimum height
+ - Fix measuring natural width
+ - Implement hfw vai binary search
+
+* GtkScrolledWindow:
+ - Report constant size request mode in more cases
+ - Skip measuring children if we can
+
+* GtkBox:
+ - Don't always reserve height for baseline alignment
+ - Rework natural opposite size-for-size computation
+ - Add fast paths for some cases of measurement and allocation
+
+* GtkLayoutManager:
+ - Skip invisible children for request mode determination
+ - Prefer hfw, all things being equal
+
+* GtkColorPicker:
+ - Respect GDK_DEBUG=no-portals
+
+* GtkEntry:
+ - Stop guessing text direction from keyboard layout
+ - Add a shortcut and context menu item to change text direction
+
+* GtkSpinButton:
+ - Make numeric spin buttons always LTR
+
+* GtkAboutDialog:
+ - Small UI improvements
+
+* Accessibility:
+ - Add an AccessKit backend. Use -Daccesskit=enabled to build it
+   and GTK_A11Y=accesskit to use it
+
+* Windows:
+ - Drop the AeroSnap emulation
+
+* Wayland:
+ - Always clear exported surface IDs on finalize
+ - Use the correct display for imcontext
+
+* Vulkan:
+ - Make GdkVulkanContext work with Android armv7
+
+* Build:
+ - Require GLib 2.80
+ - Require harfbuzz 8.4
+ - Require pango 1.55
+ - Require C11
+
+* Translation update:
+ Russian
+
 
 Overview of Changes in 4.17.1, 06-12-2024
 =========================================
