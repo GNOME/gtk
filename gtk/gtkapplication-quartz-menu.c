@@ -373,7 +373,7 @@ icon_loaded (GObject      *object,
       GtkActionMuxer *muxer =  _gtk_widget_get_action_muxer (focus_widget, FALSE);
 
       if (action_name == NULL || muxer == NULL)
-        return NO;
+        return gtk_menu_tracker_item_get_sensitive (trackerItem) ? YES : NO;
 
       if (gtk_action_muxer_query_action (muxer, action_name, &enabled, NULL, NULL, NULL, NULL))
         return enabled ? YES : NO;
