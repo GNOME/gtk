@@ -17,6 +17,9 @@ gtk_accessible_text_default_get_contents (GtkAccessibleText *self,
                                           unsigned int start,
                                           unsigned int end)
 {
+  g_warning ("GtkAccessibleText::get_contents not implemented for %s",
+             G_OBJECT_TYPE_NAME (self));
+
   return NULL;
 }
 
@@ -27,6 +30,9 @@ gtk_accessible_text_default_get_contents_at (GtkAccessibleText            *self,
                                              unsigned int                 *start,
                                              unsigned int                 *end)
 {
+  g_warning ("GtkAccessibleText::get_contents_at not implemented for %s",
+             G_OBJECT_TYPE_NAME (self));
+
   if (start != NULL)
     *start = 0;
   if (end != NULL)
