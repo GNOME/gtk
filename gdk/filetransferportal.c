@@ -260,9 +260,9 @@ retrieve_files_done (GObject      *object,
       return;
     }
 
-  g_variant_get (ret, "(^a&s)", &files);
+  g_variant_get (ret, "(^as)", &files);
 
-  g_object_set_data_full (G_OBJECT (task), "files", g_strdupv (files), (GDestroyNotify)g_strfreev);
+  g_object_set_data_full (G_OBJECT (task), "files", files, (GDestroyNotify)g_strfreev);
 
   g_variant_unref (ret);
 
