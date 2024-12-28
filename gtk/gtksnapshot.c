@@ -2492,6 +2492,11 @@ gtk_snapshot_append_text2 (GtkSnapshot      *snapshot,
   GskRenderNode *node;
   float dx, dy;
 
+  g_return_if_fail (snapshot != NULL);
+  g_return_if_fail (PANGO_IS_FONT (font));
+  g_return_if_fail (glyphs != NULL);
+  g_return_if_fail (color != NULL);
+
   gtk_snapshot_ensure_translate (snapshot, &dx, &dy);
 
   node = gsk_text_node_new2 (font,
