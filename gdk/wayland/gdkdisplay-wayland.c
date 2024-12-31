@@ -2361,14 +2361,6 @@ subpixel_to_string (int layout)
 }
 
 static void
-update_scale (GdkDisplay *display)
-{
-  g_list_foreach (gdk_wayland_display_get_toplevel_surfaces (display),
-                  (GFunc)gdk_wayland_surface_update_scale,
-                  NULL);
-}
-
-static void
 gdk_wayland_display_init_xdg_output (GdkWaylandDisplay *self)
 {
   guint i, n;
@@ -2464,8 +2456,6 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
 
   monitor->wl_output_done = FALSE;
   monitor->xdg_output_done = FALSE;
-
-  update_scale (GDK_MONITOR (monitor)->display);
 }
 
 static void
@@ -2740,7 +2730,6 @@ gdk_wayland_display_remove_output (GdkWaylandDisplay *self,
         {
           g_list_store_remove (self->monitors, i);
           gdk_monitor_invalidate (GDK_MONITOR (monitor));
-          update_scale (GDK_DISPLAY (self));
           g_object_unref (monitor);
           break;
         }

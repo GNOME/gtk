@@ -490,43 +490,6 @@ on_frame_clock_after_paint (GdkFrameClock *clock,
 }
 
 void
-gdk_wayland_surface_update_scale (GdkSurface *surface)
-{
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
-  guint32 scale;
-  GSList *l;
-
-  /* We can't set the scale on this surface */
-  if (!impl->display_server.wl_surface ||
-      wl_surface_get_version (impl->display_server.wl_surface) < WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
-    return;
-
-  /* scale is tracked by the fractional scale extension */
-  if (impl->display_server.fractional_scale)
-    return;
-
-  if (!impl->display_server.outputs)
-    return;
-
-  scale = 1;
-  for (l = impl->display_server.outputs; l != NULL; l = l->next)
-    {
-      struct wl_output *output = l->data;
-      uint32_t output_scale;
-
-      output_scale = gdk_wayland_display_get_output_scale (display_wayland,
-                                                           output);
-      scale = MAX (scale, output_scale);
-    }
-
-  /* Notify app that scale changed */
-  gdk_wayland_surface_update_size (surface,
-                                   surface->width, surface->height,
-                                   &GDK_FRACTIONAL_SCALE_INIT_INT (scale));
-}
-
-void
 gdk_wayland_surface_attach_image (GdkSurface           *surface,
                                   cairo_surface_t      *cairo_surface,
                                   const cairo_region_t *damage)
@@ -839,7 +802,7 @@ gdk_wayland_surface_fractional_scale_preferred_scale_cb (void *data,
 {
   GdkWaylandSurface *self = GDK_WAYLAND_SURFACE (data);
   GdkSurface *surface = GDK_SURFACE (self);
-  
+
   /* Notify app that scale changed */
   gdk_wayland_surface_update_size (surface,
                                    surface->width, surface->height,
@@ -870,8 +833,6 @@ surface_enter (void              *data,
 
   impl->display_server.outputs = g_slist_prepend (impl->display_server.outputs, output);
 
-  gdk_wayland_surface_update_scale (surface);
-
   monitor = gdk_wayland_display_get_monitor_for_output (display, output);
   gdk_surface_enter_monitor (surface, monitor);
 }
@@ -890,9 +851,6 @@ surface_leave (void              *data,
                      "surface leave, surface %p output %p", surface, output);
 
   impl->display_server.outputs = g_slist_remove (impl->display_server.outputs, output);
-
-  if (impl->display_server.outputs)
-    gdk_wayland_surface_update_scale (surface);
 
   monitor = gdk_wayland_display_get_monitor_for_output (display, output);
   gdk_surface_leave_monitor (surface, monitor);
