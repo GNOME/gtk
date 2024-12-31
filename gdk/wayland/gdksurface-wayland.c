@@ -862,10 +862,19 @@ surface_preferred_buffer_scale (void              *data,
                                 int32_t            factor)
 {
   GdkSurface *surface = GDK_SURFACE (data);
+  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
   GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
                      "preferred buffer scale, surface %p scale %d",
                      surface, factor);
+
+  if (impl->display_server.fractional_scale != NULL)
+    return;
+
+  /* Notify app that scale changed */
+  gdk_wayland_surface_update_size (surface,
+                                   surface->width, surface->height,
+                                   &GDK_FRACTIONAL_SCALE_INIT_INT (factor));
 }
 
 static void
