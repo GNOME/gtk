@@ -232,9 +232,6 @@ A number of options affect behavior instead of logging:
 `gl-prefer-gl`
 : Prefer OpenGL over OpenGL ES. This was the default behavior before GTK 4.14.
 
-`vulkan-validate`
-: Load the Vulkan validation layer, if available
-
 `default-settings`
 : Force default values for xsettings
 
