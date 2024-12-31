@@ -94,7 +94,6 @@ G_DEFINE_TYPE (GdkWaylandSeat, gdk_wayland_seat, GDK_TYPE_SEAT)
 static void init_pointer_data (GdkWaylandPointerData *pointer_data,
                                GdkDisplay            *display_wayland,
                                GdkDevice             *logical_device);
-static void pointer_surface_update_scale (GdkDevice *device);
 
 #define GDK_SLOT_TO_EVENT_SEQUENCE(s) ((GdkEventSequence *) GUINT_TO_POINTER((s) + 1))
 #define GDK_EVENT_SEQUENCE_TO_SLOT(s) (GPOINTER_TO_UINT(s) - 1)
@@ -2810,11 +2809,6 @@ tablet_tool_handle_proximity_in (void                      *data,
                                    tablet->pointer_info.time);
   gdk_wayland_tablet_set_frame_event (tablet, event);
 
-  tablet->pointer_info.pointer_surface_outputs =
-    g_slist_append (tablet->pointer_info.pointer_surface_outputs,
-                    gdk_wayland_surface_get_wl_output (surface));
-  pointer_surface_update_scale (tablet->logical_device);
-
   GDK_SEAT_DEBUG (tablet->seat, EVENTS,
                   "proximity in, seat %p surface %p tool %d",
                   tablet->seat, tablet->pointer_info.focus,
@@ -2845,11 +2839,6 @@ tablet_tool_handle_proximity_out (void                      *data,
 
   gdk_wayland_seat_stop_cursor_animation (GDK_WAYLAND_SEAT (tool->seat),
                                           &tablet->pointer_info);
-
-  tablet->pointer_info.pointer_surface_outputs =
-    g_slist_remove (tablet->pointer_info.pointer_surface_outputs,
-                    gdk_wayland_surface_get_wl_output (tablet->pointer_info.focus));
-  pointer_surface_update_scale (tablet->logical_device);
 
   g_object_unref (tablet->pointer_info.focus);
   tablet->pointer_info.focus = NULL;
@@ -3761,53 +3750,6 @@ init_devices (GdkWaylandSeat *seat)
 }
 
 static void
-pointer_surface_update_scale (GdkDevice *device)
-{
-  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
-  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
-  GdkWaylandPointerData *pointer =
-    gdk_wayland_device_get_pointer (wayland_device);
-  double scale;
-  GSList *l;
-
-  if (wl_surface_get_version (pointer->pointer_surface) < WL_SURFACE_SET_BUFFER_SCALE_SINCE_VERSION)
-    {
-      /* We can't set the scale on this surface */
-      return;
-    }
-
-  if (!pointer->pointer_surface_outputs)
-    return;
-
-  scale = 1;
-  for (l = pointer->pointer_surface_outputs; l != NULL; l = l->next)
-    {
-      GdkMonitor *monitor = gdk_wayland_display_get_monitor_for_output (seat->display, l->data);
-      scale = MAX (scale, gdk_monitor_get_scale (monitor));
-    }
-
-  if (pointer->current_output_scale == scale)
-    return;
-  pointer->current_output_scale = scale;
-
-  gdk_wayland_device_update_surface_cursor (device);
-}
-
-void
-gdk_wayland_seat_update_cursor_scale (GdkWaylandSeat *seat)
-{
-  GList *l;
-
-  pointer_surface_update_scale (seat->logical_pointer);
-
-  for (l = seat->tablets; l; l = l->next)
-    {
-      GdkWaylandTabletData *tablet = l->data;
-      pointer_surface_update_scale (tablet->logical_device);
-    }
-}
-
-static void
 pointer_surface_enter (void              *data,
                        struct wl_surface *wl_surface,
                        struct wl_output  *output)
@@ -3815,26 +3757,10 @@ pointer_surface_enter (void              *data,
 {
   GdkDevice *device = data;
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
-  GdkWaylandTabletData *tablet;
 
   GDK_SEAT_DEBUG (seat, EVENTS,
                   "pointer surface of seat %p entered output %p",
                   seat, output);
-
-  tablet = gdk_wayland_seat_find_tablet (seat, device);
-
-  if (tablet)
-    {
-      tablet->pointer_info.pointer_surface_outputs =
-        g_slist_append (tablet->pointer_info.pointer_surface_outputs, output);
-    }
-  else
-    {
-      seat->pointer_info.pointer_surface_outputs =
-        g_slist_append (seat->pointer_info.pointer_surface_outputs, output);
-    }
-
-  pointer_surface_update_scale (device);
 }
 
 static void
@@ -3844,26 +3770,10 @@ pointer_surface_leave (void              *data,
 {
   GdkDevice *device = data;
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
-  GdkWaylandTabletData *tablet;
 
   GDK_SEAT_DEBUG (seat, EVENTS,
                   "pointer surface of seat %p left output %p",
                   seat, output);
-
-  tablet = gdk_wayland_seat_find_tablet (seat, device);
-
-  if (tablet)
-    {
-      tablet->pointer_info.pointer_surface_outputs =
-        g_slist_remove (tablet->pointer_info.pointer_surface_outputs, output);
-    }
-  else
-    {
-      seat->pointer_info.pointer_surface_outputs =
-        g_slist_remove (seat->pointer_info.pointer_surface_outputs, output);
-    }
-
-  pointer_surface_update_scale (device);
 }
 
 static void
@@ -3871,6 +3781,14 @@ pointer_surface_preferred_buffer_scale (void              *data,
                                         struct wl_surface *wl_surface,
                                         int32_t            factor)
 {
+  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (data);
+  GdkWaylandPointerData *pointer = gdk_wayland_device_get_pointer (wayland_device);
+
+  if (pointer->fractional_scale != NULL)
+    return;
+
+  pointer->preferred_scale = GDK_FRACTIONAL_SCALE_INIT_INT (factor);
+  gdk_wayland_device_update_surface_cursor (GDK_DEVICE (wayland_device));
 }
 
 static void
@@ -3888,13 +3806,29 @@ static const struct wl_surface_listener pointer_surface_listener = {
 };
 
 static void
+pointer_surface_fractional_scale_preferred_scale_cb (void *data,
+                                                     struct wp_fractional_scale_v1 *fractional_scale,
+                                                     uint32_t scale)
+{
+  GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (data);
+  GdkWaylandPointerData *pointer = gdk_wayland_device_get_pointer (wayland_device);
+
+  pointer->preferred_scale = GDK_FRACTIONAL_SCALE_INIT (scale);
+  gdk_wayland_device_update_surface_cursor (GDK_DEVICE (wayland_device));
+}
+
+static const struct wp_fractional_scale_v1_listener fractional_scale_listener = {
+  pointer_surface_fractional_scale_preferred_scale_cb,
+};
+
+static void
 gdk_wayland_pointer_data_finalize (GdkWaylandPointerData *pointer)
 {
   g_clear_object (&pointer->focus);
   g_clear_object (&pointer->cursor);
   wl_surface_destroy (pointer->pointer_surface);
-  g_slist_free (pointer->pointer_surface_outputs);
   g_clear_pointer (&pointer->pointer_surface_viewport, wp_viewport_destroy);
+  g_clear_pointer (&pointer->fractional_scale, wp_fractional_scale_v1_destroy);
 }
 
 static void
@@ -4255,7 +4189,6 @@ init_pointer_data (GdkWaylandPointerData *pointer_data,
 
   display_wayland = GDK_WAYLAND_DISPLAY (display);
 
-  pointer_data->current_output_scale = 1;
   pointer_data->pointer_surface =
     wl_compositor_create_surface (display_wayland->compositor);
   wl_surface_add_listener (pointer_data->pointer_surface,
@@ -4263,6 +4196,16 @@ init_pointer_data (GdkWaylandPointerData *pointer_data,
                            logical_device);
   if (display_wayland->viewporter)
     pointer_data->pointer_surface_viewport = wp_viewporter_get_viewport (display_wayland->viewporter, pointer_data->pointer_surface);
+
+  pointer_data->preferred_scale = GDK_FRACTIONAL_SCALE_INIT_INT (1);
+  if (display_wayland->fractional_scale)
+    {
+      pointer_data->fractional_scale =
+          wp_fractional_scale_manager_v1_get_fractional_scale (display_wayland->fractional_scale,
+                                                               pointer_data->pointer_surface);
+      wp_fractional_scale_v1_add_listener (pointer_data->fractional_scale,
+                                           &fractional_scale_listener, logical_device);
+    }
 }
 
 void

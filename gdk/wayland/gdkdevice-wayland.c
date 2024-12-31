@@ -261,18 +261,20 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
     gdk_wayland_device_get_pointer (wayland_device);
   struct wl_buffer *buffer;
   int x, y, w, h;
-  double scale;
+  double preferred_scale, scale;
   guint next_image_index, next_image_delay;
   gboolean retval = G_SOURCE_REMOVE;
   GdkWaylandTabletData *tablet;
 
   tablet = gdk_wayland_seat_find_tablet (seat, device);
 
+  preferred_scale = gdk_fractional_scale_to_double (&pointer->preferred_scale);
+
   if (pointer->cursor)
     {
       buffer = _gdk_wayland_cursor_get_buffer (GDK_WAYLAND_DISPLAY (seat->display),
                                                pointer->cursor,
-                                               pointer->current_output_scale,
+                                               preferred_scale,
                                                pointer->cursor_image_index,
                                                &x, &y, &w, &h,
                                                &scale);
@@ -333,7 +335,7 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
   next_image_index =
     _gdk_wayland_cursor_get_next_image_index (GDK_WAYLAND_DISPLAY (seat->display),
                                               pointer->cursor,
-                                              pointer->current_output_scale,
+                                              preferred_scale,
                                               pointer->cursor_image_index,
                                               &next_image_delay);
 
