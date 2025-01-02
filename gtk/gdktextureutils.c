@@ -636,7 +636,9 @@ gdk_texture_new_from_stream_with_fg (GInputStream  *stream,
   if (pixbuf)
     {
       *only_fg = pixbuf_is_only_fg (pixbuf);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (pixbuf);
     }
 
@@ -659,7 +661,9 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
   if (pixbuf)
     {
       *only_fg = pixbuf_is_only_fg (pixbuf);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (pixbuf);
     }
 
@@ -681,7 +685,9 @@ gdk_texture_new_from_resource_at_scale (const char    *path,
   if (pixbuf)
     {
       *only_fg = pixbuf_is_only_fg (pixbuf);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (pixbuf);
     }
 
@@ -706,7 +712,9 @@ gdk_texture_new_from_filename_symbolic (const char    *filename,
   if (pixbuf)
     {
       *only_fg = pixbuf_is_only_fg (pixbuf);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (pixbuf);
     }
 
@@ -734,7 +742,9 @@ gdk_texture_new_from_resource_symbolic (const char  *path,
   if (pixbuf)
     {
       *only_fg = pixbuf_is_only_fg (pixbuf);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (pixbuf);
     }
 
@@ -757,7 +767,9 @@ gtk_load_symbolic_texture_from_file (GFile *file)
   if (pixbuf == NULL)
     return NULL;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
   g_object_unref (pixbuf);
 
   return texture;
@@ -778,7 +790,9 @@ gdk_texture_new_from_file_symbolic (GFile       *file,
   if (pixbuf)
     {
       *only_fg = pixbuf_is_only_fg (pixbuf);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (pixbuf);
     }
 
@@ -849,7 +863,9 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
       if (!success)
         return NULL;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_loader_get_pixbuf (loader));
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (loader);
 
       if (loader_data.scale != 1.0)

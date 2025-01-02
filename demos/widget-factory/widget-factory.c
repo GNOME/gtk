@@ -1233,7 +1233,9 @@ background_loaded_cb (GObject      *source,
       return;
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
   add_background (bd->flowbox, bd->filename, texture, FALSE);
 
   g_object_unref (texture);
@@ -1283,7 +1285,9 @@ populate_flowbox (GtkWidget *flowbox)
     {
       filename = g_strconcat ("/org/gtk/WidgetFactory4/", resources[i], NULL);
       pixbuf = gdk_pixbuf_new_from_resource_at_scale (filename, 110, 110, TRUE, NULL);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
       add_background (flowbox, filename, texture, TRUE);
       g_object_unref (texture);
       g_object_unref (pixbuf);

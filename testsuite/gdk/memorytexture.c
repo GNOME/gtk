@@ -272,7 +272,9 @@ create_texture (GdkMemoryFormat  format,
         pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
         g_object_unref (stream);
         g_assert_nonnull (pixbuf);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
         texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
         g_assert_nonnull (texture);
         g_object_unref (pixbuf);
         g_bytes_unref (bytes);
@@ -303,7 +305,9 @@ create_texture (GdkMemoryFormat  format,
         pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
         g_object_unref (stream);
         g_assert_nonnull (pixbuf);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
         texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
         g_assert_nonnull (texture);
         g_object_unref (pixbuf);
         g_bytes_unref (bytes);

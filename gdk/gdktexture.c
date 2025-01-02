@@ -531,6 +531,8 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
  * while loading a big image.
  *
  * Returns: a new `GdkTexture`
+ *
+ * Deprecated: 4.18: Use e.g. libglycin, which can load many image formats into GdkTexture
  */
 GdkTexture *
 gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
@@ -688,7 +690,9 @@ gdk_texture_new_from_bytes_pixbuf (GBytes  *bytes,
   if (pixbuf == NULL)
     return NULL;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
   g_object_unref (pixbuf);
 
   return texture;

@@ -460,7 +460,9 @@ scaled_from_pixdata (guchar *pixdata,
       dest = src;
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   ret = gdk_texture_new_for_pixbuf (dest);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   g_object_unref (dest);
 
