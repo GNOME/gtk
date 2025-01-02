@@ -556,10 +556,12 @@ gtk_picture_new_for_pixbuf (GdkPixbuf *pixbuf)
 
   g_return_val_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf), NULL);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (pixbuf)
     paintable = GDK_PAINTABLE (gdk_texture_new_for_pixbuf (pixbuf));
   else
     paintable = NULL;
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   result = gtk_picture_new_for_paintable (paintable);
 
@@ -813,10 +815,12 @@ gtk_picture_set_pixbuf (GtkPicture *self,
   g_return_if_fail (GTK_IS_PICTURE (self));
   g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (pixbuf)
     texture = gdk_texture_new_for_pixbuf (pixbuf);
   else
     texture = NULL;
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_picture_set_paintable (self, GDK_PAINTABLE (texture));
 

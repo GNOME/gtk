@@ -41,7 +41,9 @@ progressive_prepared_callback (GdkPixbufLoader *loader,
    */
   gdk_pixbuf_fill (pixbuf, 0xaaaaaaff);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_picture_set_paintable (GTK_PICTURE (picture), GDK_PAINTABLE (texture));
   g_object_unref (texture);
 }
@@ -57,7 +59,9 @@ progressive_updated_callback (GdkPixbufLoader *loader,
   GtkWidget *picture = GTK_WIDGET (data);
   GdkTexture *texture;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_loader_get_pixbuf (loader));
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_picture_set_paintable (GTK_PICTURE (picture), GDK_PAINTABLE (texture));
   g_object_unref (texture);
 }

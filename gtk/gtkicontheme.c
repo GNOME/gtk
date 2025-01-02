@@ -4080,7 +4080,9 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
   else if (GDK_IS_PIXBUF (gicon))
     {
       paintable = icon_paintable_new (NULL, size, scale);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       paintable->texture = gdk_texture_new_for_pixbuf (GDK_PIXBUF (gicon));
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else if (G_IS_FILE_ICON (gicon))
     {

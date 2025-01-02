@@ -303,7 +303,9 @@ retry:
       cairo_surface_destroy (surface);
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   texture = gdk_texture_new_for_pixbuf (pixbuf2);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_picture_set_paintable (GTK_PICTURE (image), GDK_PAINTABLE (texture));
   g_object_unref (pixbuf2);
   g_object_unref (texture);

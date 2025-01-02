@@ -731,10 +731,12 @@ gtk_image_set_from_pixbuf (GtkImage  *image,
   g_return_if_fail (GTK_IS_IMAGE (image));
   g_return_if_fail (pixbuf == NULL || GDK_IS_PIXBUF (pixbuf));
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (pixbuf)
     texture = gdk_texture_new_for_pixbuf (pixbuf);
   else
     texture = NULL;
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gtk_image_set_from_paintable (image, GDK_PAINTABLE (texture));
 
