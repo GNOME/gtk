@@ -20,12 +20,13 @@ test_cursor_named (void)
 static void
 test_cursor_texture (void)
 {
-  GdkPixbuf *pixbuf;
+  GBytes *bytes;
   GdkTexture *texture;
   GdkCursor *cursor;
 
-  pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8, 32, 32);
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
+  bytes = g_bytes_new_take (g_malloc (32 * 32 * 4), 32 * 32 * 4);
+  texture = gdk_memory_texture_new (32, 32, GDK_MEMORY_DEFAULT, bytes, 32 * 4);
+
   cursor = gdk_cursor_new_from_texture (texture, 1, 2, NULL);
 
   g_assert_null (gdk_cursor_get_name (cursor));
@@ -36,7 +37,7 @@ test_cursor_texture (void)
 
   g_object_unref (cursor);
   g_object_unref (texture);
-  g_object_unref (pixbuf);
+  g_bytes_unref (bytes);
 }
 
 static void
