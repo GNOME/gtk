@@ -2094,7 +2094,7 @@ update_feature_example (GtkFontChooserWidget *fontchooser,
   const char *number_spacing[] = { "xxns", "pnum", "tnum", NULL };
   const char *fraction[] = { "xxnf", "frac", "afrc", NULL };
   const char *char_variants[] = {
-    "zero", "nalt",
+    "zero", "sinf", "nalt",
     "swsh", "cswh", "calt", "falt", "hist", "salt", "jalt", "titl", "rand",
     "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08", "ss09", "ss10",
     "ss11", "ss12", "ss13", "ss14", "ss15", "ss16", "ss17", "ss18", "ss19", "ss20",
@@ -2149,6 +2149,8 @@ update_feature_example (GtkFontChooserWidget *fontchooser,
         input = g_strdup ("AaBbCc…");
       else if (strcmp (item->name, "zero") == 0)
         input = g_strdup ("0");
+      else if (strcmp (item->name, "sinf") == 0)
+        input = g_strdup ("H2O");
       else
         input = find_affected_text (fontchooser, item->tag, hb_font, script_tag, lang_tag, 10);
 
@@ -2442,8 +2444,9 @@ gtk_font_chooser_widget_populate_features (GtkFontChooserWidget *fontchooser)
   const char *number_case[] = { "xxnc", "lnum", "onum" };
   const char *number_spacing[] = { "xxns", "pnum", "tnum" };
   const char *fractions[] = { "xxnf", "frac", "afrc" };
+  const char *numeric_extras[] = { "zero", "sinf" };
   const char *style_variants[] = {
-    "zero", "cswh", "calt", "falt", "hist", "jalt", "titl", "rand",
+    "cswh", "calt", "falt", "hist", "jalt", "titl", "rand",
     "ss01", "ss02", "ss03", "ss04", "ss05", "ss06", "ss07", "ss08", "ss09", "ss10",
     "ss11", "ss12", "ss13", "ss14", "ss15", "ss16", "ss17", "ss18", "ss19", "ss20",
   };
@@ -2467,6 +2470,7 @@ gtk_font_chooser_widget_populate_features (GtkFontChooserWidget *fontchooser)
   add_check_group (fontchooser, _("Letter Case"), letter_case, G_N_ELEMENTS (letter_case));
   add_radio_group (fontchooser, _("Number Case"), number_case, G_N_ELEMENTS (number_case));
   add_radio_group (fontchooser, _("Number Spacing"), number_spacing, G_N_ELEMENTS (number_spacing));
+  add_check_group (fontchooser, _("Numeric Extras"), numeric_extras, G_N_ELEMENTS (numeric_extras));
   add_radio_group (fontchooser, _("Fractions"), fractions, G_N_ELEMENTS (fractions));
   add_check_group (fontchooser, _("Style Variations"), style_variants, G_N_ELEMENTS (style_variants));
   add_enum_group (fontchooser, NULL, style_variants2, G_N_ELEMENTS (style_variants2));
