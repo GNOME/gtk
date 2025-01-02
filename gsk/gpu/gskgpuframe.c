@@ -753,7 +753,9 @@ gsk_gpu_frame_submit (GskGpuFrame       *self,
 
   if (priv->globals_buffer)
     {
-      gsk_gpu_buffer_unmap (priv->globals_buffer, sizeof (GskGpuGlobalsInstance) * priv->n_globals);
+      gsize globals_size = gsk_gpu_device_get_globals_aligned_size (gsk_gpu_frame_get_device (self));
+
+      gsk_gpu_buffer_unmap (priv->globals_buffer, globals_size * priv->n_globals);
       priv->globals_buffer_data = NULL;
     }
 
