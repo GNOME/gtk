@@ -132,6 +132,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  *
  * The pattern has an extend mode of %CAIRO_EXTEND_NONE and is aligned
  * so that the origin of @pixbuf is @pixbuf_x, @pixbuf_y.
+ *
+ * Deprecated: 4.18: Use cairo_set_source_surface() and gdk_texture_download()
  */
 void
 gdk_cairo_set_source_pixbuf (cairo_t         *cr,
