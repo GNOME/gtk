@@ -33,8 +33,6 @@ struct _GdkWaylandSeatClass
   GdkSeatClass parent_class;
 };
 
-void gdk_wayland_seat_update_cursor_scale (GdkWaylandSeat *seat);
-
 void gdk_wayland_seat_clear_touchpoints (GdkWaylandSeat *seat,
                                          GdkSurface     *surface);
 

@@ -222,7 +222,5 @@ void gdk_wayland_surface_inhibit_shortcuts (GdkSurface *surface,
 void gdk_wayland_surface_restore_shortcuts (GdkSurface *surface,
                                            GdkSeat   *gdk_seat);
 
-void gdk_wayland_surface_update_scale (GdkSurface *surface);
-
 GdkModifierType gdk_wayland_keymap_get_gdk_modifiers (GdkKeymap *keymap,
                                                       guint32    mods);

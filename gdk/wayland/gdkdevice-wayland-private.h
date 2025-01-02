@@ -2,6 +2,7 @@
 
 #include "gdkwaylanddevice.h"
 #include "gdkwaylandseat.h"
+#include "gdkprivate-wayland.h"
 
 #include <gdk/gdkdeviceprivate.h>
 #include <gdk/gdkkeysprivate.h>
@@ -70,8 +71,8 @@ struct _GdkWaylandPointerData {
   guint cursor_image_delay;
   guint touchpad_event_sequence;
 
-  double current_output_scale;
-  GSList *pointer_surface_outputs;
+  GdkFractionalScale preferred_scale;
+  struct wp_fractional_scale_v1 *fractional_scale;
 
   /* Accumulated event data for a pointer frame */
   GdkWaylandPointerFrameData frame;
