@@ -50,6 +50,7 @@ in this Software without prior written authorization from The Open Group.
 
 #include <X11/Xlibint.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 typedef struct _ChildInfoChildState ChildInfoChildState;
 typedef struct _ChildInfoState ChildInfoState;

@@ -1757,6 +1757,9 @@ gtk_at_spi_context_init (GtkAtSpiContext *self)
 /* }}} */
 /* {{{ Bus address discovery */
 #ifdef GDK_WINDOWING_X11
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static char *
 get_bus_address_x11 (GdkDisplay *display)
 {
@@ -1785,6 +1788,9 @@ get_bus_address_x11 (GdkDisplay *display)
 
   return address;
 }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 #endif
 
 #if defined(GDK_WINDOWING_WAYLAND) || defined(GDK_WINDOWING_X11)

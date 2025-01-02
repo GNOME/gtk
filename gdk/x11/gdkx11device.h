@@ -25,7 +25,7 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 int   gdk_x11_device_get_id  (GdkDevice *device);
 
 G_END_DECLS

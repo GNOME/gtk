@@ -29,7 +29,7 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 GdkDevice * gdk_x11_device_manager_lookup (GdkX11DeviceManagerXI2 *device_manager,
                                            int                     device_id);
 

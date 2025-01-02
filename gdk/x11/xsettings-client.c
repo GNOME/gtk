@@ -38,6 +38,8 @@
 #include <X11/Xlib.h>
 #include <X11/Xmd.h>		/* For CARD16 */
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef enum
 {
   GDK_SETTING_ACTION_NEW,

@@ -37,6 +37,8 @@
 
 #include <epoxy/glx.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 G_DEFINE_ABSTRACT_TYPE (GdkX11GLContext, gdk_x11_gl_context, GDK_TYPE_GL_CONTEXT)
 
 static void

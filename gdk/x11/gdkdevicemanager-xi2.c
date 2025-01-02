@@ -39,6 +39,8 @@
 
 #include <string.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static const char notify_modes[][19] = {
   "NotifyNormal",
   "NotifyGrab",

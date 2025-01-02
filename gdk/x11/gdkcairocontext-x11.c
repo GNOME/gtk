@@ -29,6 +29,8 @@
 
 #include <X11/Xlib.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 G_DEFINE_TYPE (GdkX11CairoContext, gdk_x11_cairo_context, GDK_TYPE_CAIRO_CONTEXT)
 
 static cairo_surface_t *

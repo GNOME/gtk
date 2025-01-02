@@ -4419,24 +4419,27 @@ gtk_window_realize (GtkWidget *widget)
   gdk_toplevel_set_deletable (GDK_TOPLEVEL (surface), priv->deletable);
   gdk_toplevel_set_modal (GDK_TOPLEVEL (surface), priv->modal);
 
+#ifdef GDK_WINDOWING_X11
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   if (priv->startup_id)
     {
-#ifdef GDK_WINDOWING_X11
       if (GDK_IS_X11_SURFACE (surface))
         {
           guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
           if (timestamp != GDK_CURRENT_TIME)
             gdk_x11_surface_set_user_time (surface, timestamp);
         }
-#endif
     }
 
-#ifdef GDK_WINDOWING_X11
   if (priv->initial_timestamp != GDK_CURRENT_TIME)
     {
       if (GDK_IS_X11_SURFACE (surface))
         gdk_x11_surface_set_user_time (surface, priv->initial_timestamp);
     }
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 #endif
 
   update_realized_window_properties (window);
@@ -5288,12 +5291,18 @@ _gtk_window_present (GtkWindow *window,
       if (timestamp == GDK_CURRENT_TIME)
         {
 #ifdef GDK_WINDOWING_X11
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
           if (GDK_IS_X11_SURFACE (priv->surface))
             {
               GdkDisplay *display = gtk_widget_get_display (widget);
               timestamp = gdk_x11_display_get_user_time (display);
             }
           else
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 #endif
             timestamp = gtk_get_current_event_time ();
         }
@@ -5349,8 +5358,14 @@ gtk_window_set_startup_id (GtkWindow   *window,
       guint32 timestamp = extract_time_from_startup_id (priv->startup_id);
 
 #ifdef GDK_WINDOWING_X11
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
       if (timestamp != GDK_CURRENT_TIME && GDK_IS_X11_SURFACE (priv->surface))
         gdk_x11_surface_set_user_time (priv->surface, timestamp);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 #endif
 
       /* Here we differentiate real and "fake" startup notification IDs,
@@ -5825,9 +5840,14 @@ gtk_window_set_theme_variant (GtkWindow *window)
                 "gtk-application-prefer-dark-theme", &dark_theme_requested,
                 NULL);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   if (GDK_IS_X11_SURFACE (priv->surface))
     gdk_x11_surface_set_theme_variant (priv->surface,
                                        dark_theme_requested ? "dark" : NULL);
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 #endif
 }
 

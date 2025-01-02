@@ -35,6 +35,8 @@
 
 #include <math.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct _ScrollValuator ScrollValuator;
 
 struct _ScrollValuator

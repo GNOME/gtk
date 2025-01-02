@@ -29,6 +29,8 @@
 #include "gdkx11property.h"
 #include "gdkx11surface.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct GdkX11SelectionInputStreamPrivate  GdkX11SelectionInputStreamPrivate;
 
 struct GdkX11SelectionInputStreamPrivate {

@@ -31,6 +31,8 @@
 
 G_DEFINE_TYPE (GdkX11VulkanContext, gdk_x11_vulkan_context, GDK_TYPE_VULKAN_CONTEXT)
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static VkResult
 gdk_x11_vulkan_context_create_surface (GdkVulkanContext *context,
                                        VkSurfaceKHR     *surface)

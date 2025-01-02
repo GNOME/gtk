@@ -621,6 +621,9 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
   gdk_gl_context_make_current (self->gdk_context);
 
 #ifdef HAVE_GST_X11_SUPPORT
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   if (GDK_IS_X11_DISPLAY (display))
     {
       gpointer display_ptr;
@@ -658,6 +661,9 @@ gtk_gst_sink_initialize_gl (GtkGstSink *self)
         }
     }
   else
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 #endif
 #ifdef HAVE_GST_WAYLAND_SUPPORT
   if (GDK_IS_WAYLAND_DISPLAY (display))

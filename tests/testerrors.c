@@ -21,6 +21,8 @@
 #include <gtk/gtk.h>
 #include "x11/gdkx.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 test_error_trapping (GdkDisplay *gdk_display)
 {

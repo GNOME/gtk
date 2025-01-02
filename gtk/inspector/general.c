@@ -548,9 +548,11 @@ get_egl_display (GdkDisplay *display)
   else
 #endif
 #ifdef GDK_WINDOWING_X11
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (GDK_IS_X11_DISPLAY (display))
     return gdk_x11_display_get_egl_display (display);
   else
+G_GNUC_END_IGNORE_DEPRECATIONS
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (GDK_IS_WIN32_DISPLAY (display))
@@ -617,6 +619,9 @@ init_gl (GtkInspectorGeneral *gen)
   else
 #endif
 #ifdef GDK_WINDOWING_X11
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   if (GDK_IS_X11_DISPLAY (gen->display))
     {
       Display *dpy = GDK_DISPLAY_XDISPLAY (gen->display);
@@ -631,11 +636,16 @@ init_gl (GtkInspectorGeneral *gen)
       g_free (version);
       gtk_label_set_text (GTK_LABEL (gen->gl_backend_vendor), glXGetClientString (dpy, GLX_VENDOR));
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       screen = XScreenNumberOfScreen (gdk_x11_display_get_xscreen (gen->display));
+G_GNUC_END_IGNORE_DEPRECATIONS
       gtk_label_set_text (GTK_LABEL (gen->egl_extensions_row_name), "GLX extensions");
       append_extensions (gen->egl_extensions_list, glXQueryExtensionsString (dpy, screen));
     }
   else
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (GDK_IS_WIN32_DISPLAY (gen->display) &&
@@ -728,6 +738,9 @@ dump_gl (GdkDisplay *display,
   else
 #endif
 #ifdef GDK_WINDOWING_X11
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
   if (GDK_IS_X11_DISPLAY (display))
     {
       Display *dpy = GDK_DISPLAY_XDISPLAY (display);
@@ -745,7 +758,9 @@ dump_gl (GdkDisplay *display,
 
       g_string_append_printf (string, "| GL Backend Vendor | %s |\n", glXGetClientString (dpy, GLX_VENDOR));
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       screen = XScreenNumberOfScreen (gdk_x11_display_get_xscreen (display));
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_string_assign (ext, glXQueryExtensionsString (dpy, screen));
       count = g_string_replace (ext, " ", "<br>", 0);
       prefix = g_strdup_printf ("| GLX Extensions | <details><summary>%u Extensions</summary>", count + 1);
@@ -754,6 +769,9 @@ dump_gl (GdkDisplay *display,
       g_free (prefix);
     }
   else
+
+G_GNUC_END_IGNORE_DEPRECATIONS
+
 #endif
 #ifdef GDK_WINDOWING_WIN32
   if (GDK_IS_WIN32_DISPLAY (display) &&

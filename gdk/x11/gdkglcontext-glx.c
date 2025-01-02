@@ -30,6 +30,8 @@
 
 #include <epoxy/glx.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 struct _GdkX11GLContextGLX
 {
   GdkX11GLContext parent_instance;
@@ -919,6 +921,8 @@ gdk_x11_display_create_glx_config (GdkX11Display  *self,
  * Retrieves the version of the GLX implementation.
  *
  * Returns: %TRUE if GLX is available
+ *
+ * Deprecated: 4.18
  */
 gboolean
 gdk_x11_display_get_glx_version (GdkDisplay *display,

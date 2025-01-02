@@ -35,30 +35,30 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 int      gdk_x11_display_text_property_to_text_list (GdkDisplay   *display,
                                                      const char   *encoding,
                                                      int           format,
                                                      const guchar *text,
                                                      int           length,
                                                      char       ***list);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void     gdk_x11_free_text_list                     (char        **list);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 int      gdk_x11_display_string_to_compound_text    (GdkDisplay   *display,
                                                      const char   *str,
                                                      const char  **encoding,
                                                      int          *format,
                                                      guchar      **ctext,
                                                      int          *length);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 gboolean gdk_x11_display_utf8_to_compound_text      (GdkDisplay   *display,
                                                      const char   *str,
                                                      const char  **encoding,
                                                      int          *format,
                                                      guchar      **ctext,
                                                      int          *length);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void     gdk_x11_free_compound_text                 (guchar       *ctext);
 
 G_END_DECLS

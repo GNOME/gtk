@@ -47,6 +47,8 @@
 
 #include <string.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #define GDK_TYPE_X11_DROP (gdk_x11_drop_get_type())
 G_DECLARE_FINAL_TYPE (GdkX11Drop, gdk_x11_drop, GDK, X11_DROP, GdkDrop)
 

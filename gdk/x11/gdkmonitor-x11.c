@@ -27,6 +27,7 @@
 #include "gdkdisplayprivate.h"
 #include "gdkprivate-x11.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 G_DEFINE_TYPE (GdkX11Monitor, gdk_x11_monitor, GDK_TYPE_MONITOR)
 
@@ -71,6 +72,8 @@ gdk_monitor_has_fullscreen_window (GdkMonitor *monitor)
  *
  * The returned geometry is in ”application pixels”, not in ”device pixels”
  * (see [method@Gdk.Monitor.get_scale_factor]).
+ *
+ * Deprecated: 4.18
  */
 void
 gdk_x11_monitor_get_workarea (GdkMonitor   *monitor,
@@ -121,6 +124,8 @@ gdk_x11_monitor_class_init (GdkX11MonitorClass *class)
  * Returns the XID of the Output corresponding to @monitor.
  *
  * Returns: the XID of @monitor
+ *
+ * Deprecated: 4.18
  */
 XID
 gdk_x11_monitor_get_output (GdkMonitor *monitor)

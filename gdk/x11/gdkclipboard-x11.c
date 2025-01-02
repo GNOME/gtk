@@ -35,6 +35,8 @@
 #include <X11/extensions/Xfixes.h>
 #endif
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 #define IDLE_ABORT_TIME 30 /* seconds */
 
 typedef struct _GdkX11ClipboardClass GdkX11ClipboardClass;

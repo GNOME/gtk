@@ -255,6 +255,8 @@ struct _GdkBackend {
   GdkDisplay * (* open_display) (const char *name);
 };
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static GdkBackend gdk_backends[] = {
 #ifdef GDK_WINDOWING_MACOS
   { "macos",   _gdk_macos_display_open },
@@ -274,6 +276,8 @@ static GdkBackend gdk_backends[] = {
   /* NULL-terminating this array so we can use commas above */
   { NULL, NULL }
 };
+
+G_GNUC_END_IGNORE_DEPRECATIONS
 
 /**
  * gdk_display_manager_get:
