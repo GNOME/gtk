@@ -139,12 +139,12 @@ release-build:
             _build
     - meson compile -C _build
     - meson install -C _build
+    - meson dist -C _build --include-subprojects --no-tests
     - PKG_CONFIG_PATH=${CI_PROJECT_DIR}/_install/lib64/pkgconfig:${CI_PROJECT_DIR}/_install/share/pkgconfig meson setup _build_hello examples/hello
     - LD_LIBRARY_PATH=${CI_PROJECT_DIR}/_install/lib64 meson compile -C _build_hello
     - .gitlab-ci/run-tests.sh _build wayland gtk
     # only repeat test runs that are likely affected by test setups
     - .gitlab-ci/run-tests.sh _build wayland_gles2 gtk:gdk,gtk:gsk-gl
-    - meson dist -C _build --include-subprojects --no-tests
 
 fedora-clang:
   extends: .build-fedora-default
