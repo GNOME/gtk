@@ -467,7 +467,7 @@ static void     gtk_text_copy_clipboard     (GtkText         *self);
 static void     gtk_text_paste_clipboard    (GtkText         *self);
 static void     gtk_text_toggle_overwrite   (GtkText         *self);
 static void     gtk_text_insert_emoji       (GtkText         *self);
-static void     gtk_text_select_all         (GtkText         *self);
+static gboolean gtk_text_select_all         (GtkText         *self);
 static void     gtk_text_real_activate      (GtkText         *self);
 
 static void     direction_changed           (GdkDevice       *keyboard,
@@ -4450,10 +4450,11 @@ gtk_text_toggle_overwrite (GtkText *self)
   gtk_widget_queue_draw (GTK_WIDGET (self));
 }
 
-static void
+static gboolean
 gtk_text_select_all (GtkText *self)
 {
   gtk_text_select_line (self);
+  return TRUE;
 }
 
 static void
@@ -6253,7 +6254,7 @@ gtk_text_activate_selection_select_all (GtkWidget  *widget,
                                         GVariant   *parameter)
 {
   GtkText *self = GTK_TEXT (widget);
-  gtk_text_select_all (self);
+  gtk_text_select_line (self);
 }
 
 static void
