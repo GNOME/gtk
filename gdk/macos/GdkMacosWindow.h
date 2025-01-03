@@ -52,6 +52,8 @@
   BOOL             inFullscreenTransition;
 }
 
++(void)setContentViewClass:(Class)newViewClass;
+
 -(void)beginManualMove;
 -(void)beginManualResize:(GdkSurfaceEdge)edge;
 -(void)hide;

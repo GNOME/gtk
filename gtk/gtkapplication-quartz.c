@@ -22,7 +22,10 @@
 
 #include "gtkapplicationprivate.h"
 #include "gtkbuilder.h"
-#import <Cocoa/Cocoa.h>
+#include "gtknative.h"
+#import <gdk/macos/GdkMacosView.h>
+#import <gdk/macos/GdkMacosWindow.h>
+#import "gtkapplication-quartz-private.h"
 
 typedef struct
 {
@@ -126,7 +129,101 @@ G_DEFINE_TYPE (GtkApplicationImplQuartz, gtk_application_impl_quartz, GTK_TYPE_A
 }
 @end
 
-/* these exist only for accel handling */
+@interface GtkMacosContentView : GdkMacosView<NSMenuItemValidation>
+
+/* In some cases GTK pops up a native window, such as when opening or
+ * saving a file. We map common actions such as undo, copy, paste, etc.
+ * to selectors, so these actions can be activated in a native window.
+ * As a concequence, we also need to implement them on our own view,
+ * and activate the action to the focused widget.
+ */
+
+- (void) undo:(id)sender;
+- (void) redo:(id)sender;
+
+- (void) cut:(id)sender;
+- (void) copy:(id)sender;
+- (void) paste:(id)sender;
+
+- (void) selectAll:(id)sender;
+@end
+
+@implementation GtkMacosContentView
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+  if ([menuItem isKindOfClass:[GNSMenuItem class]])
+    return [((GNSMenuItem *) menuItem) validateMenuItem:menuItem];
+  return NO;
+}
+
+- (void)undo:(id)sender
+{
+  [self maybeActivateAction:"text.undo" sender:sender];
+}
+
+- (void)redo:(id)sender
+{
+  [self maybeActivateAction:"text.redo" sender:sender];
+}
+
+- (void)cut:(id)sender
+{
+  [self maybeActivateAction:"clipboard.cut" sender:sender];
+}
+
+- (void)copy:(id)sender
+{
+  [self maybeActivateAction:"clipboard.copy" sender:sender];
+}
+
+- (void)paste:(id)sender
+{
+  [self maybeActivateAction:"clipboard.paste" sender:sender];
+}
+
+- (void)selectAll:(id)sender
+{
+  [super selectAll:sender];
+  [self maybeActivateAction:"selection.select-all" sender:sender];
+}
+
+-(void)maybeActivateAction:(const char*)actionName sender:(id)sender
+{
+  if ([sender isKindOfClass:[GNSMenuItem class]])
+    [((GNSMenuItem *) sender) didSelectItem:sender];
+  else
+    g_warning ("%s: sender %s is not a GNSMenuItem", actionName, [[sender description] UTF8String]);
+}
+
+@end
+
+static void
+gtk_application_impl_quartz_set_default_accels (GtkApplicationImpl *impl)
+{
+  const char *pref_accel[] = {"<Meta>comma", NULL};
+  const char *hide_others_accel[] = {"<Meta><Alt>h", NULL};
+  const char *hide_accel[] = {"<Meta>h", NULL};
+  const char *quit_accel[] = {"<Meta>q", NULL};
+  const char *undo_accel[] = {"<Meta>z", NULL};
+  const char *redo_accel[] = {"<Meta><Shift>z", NULL};
+  const char *cut_accel[] = {"<Meta>x", NULL};
+  const char *copy_accel[] = {"<Meta>c", NULL};
+  const char *paste_accel[] = {"<Meta>v", NULL};
+  const char *select_all_accel[] = {"<Meta>a", NULL};
+
+  gtk_application_set_accels_for_action (impl->application, "app.preferences", pref_accel);
+  gtk_application_set_accels_for_action (impl->application, "gtkinternal.hide-others", hide_others_accel);
+  gtk_application_set_accels_for_action (impl->application, "gtkinternal.hide", hide_accel);
+  gtk_application_set_accels_for_action (impl->application, "app.quit", quit_accel);
+  gtk_application_set_accels_for_action (impl->application, "text.undo", undo_accel);
+  gtk_application_set_accels_for_action (impl->application, "text.redo", redo_accel);
+  gtk_application_set_accels_for_action (impl->application, "clipboard.cut", cut_accel);
+  gtk_application_set_accels_for_action (impl->application, "clipboard.copy", copy_accel);
+  gtk_application_set_accels_for_action (impl->application, "clipboard.paste", paste_accel);
+  gtk_application_set_accels_for_action (impl->application, "selection.select-all", select_all_accel);
+}
+
 static void
 gtk_application_impl_quartz_hide (GSimpleAction *action,
                                   GVariant      *parameter,
@@ -186,10 +283,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
 {
   GtkApplicationImplQuartz *quartz = (GtkApplicationImplQuartz *) impl;
   GSimpleActionGroup *gtkinternal;
-  const char *pref_accel[] = {"<Meta>comma", NULL};
-  const char *hide_others_accel[] = {"<Meta><Alt>h", NULL};
-  const char *hide_accel[] = {"<Meta>h", NULL};
-  const char *quit_accel[] = {"<Meta>q", NULL};
+  GMenuModel *menubar;
 
   if (register_session)
     {
@@ -200,11 +294,7 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   quartz->muxer = gtk_action_muxer_new (NULL);
   gtk_action_muxer_set_parent (quartz->muxer, gtk_application_get_action_muxer (impl->application));
 
-  /* Add the default accels */
-  gtk_application_set_accels_for_action (impl->application, "app.preferences", pref_accel);
-  gtk_application_set_accels_for_action (impl->application, "gtkinternal.hide-others", hide_others_accel);
-  gtk_application_set_accels_for_action (impl->application, "gtkinternal.hide", hide_accel);
-  gtk_application_set_accels_for_action (impl->application, "app.quit", quit_accel);
+  gtk_application_impl_quartz_set_default_accels (impl);
 
   /* and put code behind the 'special' accels */
   gtkinternal = g_simple_action_group_new ();
@@ -231,7 +321,19 @@ gtk_application_impl_quartz_startup (GtkApplicationImpl *impl,
   gtk_application_impl_quartz_set_app_menu (impl, quartz->standard_app_menu);
 
   /* This may or may not add an item to 'combined' */
-  gtk_application_impl_set_menubar (impl, gtk_application_get_menubar (impl->application));
+  menubar = gtk_application_get_menubar (impl->application);
+  if (menubar == NULL)
+    {
+      GtkBuilder *builder;
+
+      /* Provide a fallback menu, so keyboard shortcuts work in native windows too.
+       */
+      builder = gtk_builder_new_from_resource ("/org/gtk/libgtk/ui/gtkapplication-quartz.ui");
+      menubar = G_MENU_MODEL (g_object_ref (gtk_builder_get_object (builder, "default-menu")));
+      g_object_unref (builder);
+    }
+
+  gtk_application_impl_set_menubar (impl, menubar);
 
   /* OK.  Now put it in the menu. */
   gtk_application_impl_quartz_setup_menu (G_MENU_MODEL (quartz->combined), quartz->muxer);
@@ -394,4 +496,6 @@ gtk_application_impl_quartz_class_init (GtkApplicationImplClass *class)
   class->uninhibit = gtk_application_impl_quartz_uninhibit;
 
   gobject_class->finalize = gtk_application_impl_quartz_finalize;
+
+  [GdkMacosWindow setContentViewClass:[GtkMacosContentView class]];
 }

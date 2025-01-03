@@ -21,15 +21,15 @@
 #include "config.h"
 
 #include "gtkapplicationprivate.h"
-#include "gtkmenutrackerprivate.h"
 #include "gtkicontheme.h"
 #include "gtkquartz.h"
 #include "gtkprivate.h"
+#include "gtkwidgetprivate.h"
 
 #include <gdk/macos/gdkmacos.h>
 #include <gdk/macos/gdkmacoskeymap-private.h>
 
-#import <Cocoa/Cocoa.h>
+#import "gtkapplication-quartz-private.h"
 
 #define ICON_SIZE 16
 
@@ -52,27 +52,6 @@
 @interface NSMenuItem (GtkMenuTrackerItem)
 
 + (id)menuItemForTrackerItem:(GtkMenuTrackerItem *)trackerItem;
-
-@end
-
-@interface GNSMenuItem : NSMenuItem
-{
-  GtkMenuTrackerItem *trackerItem;
-  gulong trackerItemChangedHandler;
-  GCancellable *cancellable;
-  BOOL isSpecial;
-}
-
-- (id)initWithTrackerItem:(GtkMenuTrackerItem *)aTrackerItem;
-
-- (void)didChangeLabel;
-- (void)didChangeIcon;
-- (void)didChangeVisible;
-- (void)didChangeToggled;
-- (void)didChangeAccel;
-
-- (void)didSelectItem:(id)sender;
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem;
 
 @end
 
@@ -158,11 +137,6 @@ icon_loaded (GObject      *object,
 
 @implementation GNSMenuItem
 
-- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
-{
-  return gtk_menu_tracker_item_get_sensitive (trackerItem) ? YES : NO;
-}
-
 - (id)initWithTrackerItem:(GtkMenuTrackerItem *)aTrackerItem
 {
   self = [super initWithTitle:@""
@@ -171,6 +145,7 @@ icon_loaded (GObject      *object,
 
   if (self != nil)
     {
+      const char *action_name = gtk_menu_tracker_item_get_action_name (aTrackerItem);
       const char *special = gtk_menu_tracker_item_get_special (aTrackerItem);
 
       if (special && g_str_equal (special, "hide-this"))
@@ -194,6 +169,18 @@ icon_loaded (GObject      *object,
           [NSApp setServicesMenu:[self submenu]];
           [self setTarget:self];
         }
+      else if (action_name && g_str_equal (action_name, "text.undo"))
+        [self setAction:@selector(undo:)];
+      else if (action_name && g_str_equal (action_name, "text.redo"))
+        [self setAction:@selector(redo:)];
+      else if (action_name && g_str_equal (action_name, "clipboard.cut"))
+        [self setAction:@selector(cut:)];
+      else if (action_name && g_str_equal (action_name, "clipboard.copy"))
+        [self setAction:@selector(copy:)];
+      else if (action_name && g_str_equal (action_name, "clipboard.paste"))
+        [self setAction:@selector(paste:)];
+      else if (action_name && g_str_equal (action_name, "selection.select-all"))
+        [self setAction:@selector(selectAll:)];
       else
         [self setTarget:self];
 
@@ -365,7 +352,47 @@ icon_loaded (GObject      *object,
 
 - (void)didSelectItem:(id)sender
 {
-  gtk_menu_tracker_item_activated (trackerItem);
+  /* Mimic macOS' behavior of traversing the reponder chain. */
+  GtkWidget *focus_widget = [self findFocusWidget];
+  const char *action_name = gtk_menu_tracker_item_get_action_name (trackerItem);
+
+  if (focus_widget != NULL && action_name != NULL)
+    gtk_widget_activate_action (focus_widget, action_name, NULL);
+  else
+    gtk_menu_tracker_item_activated (trackerItem);
+}
+
+- (BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+  /* Mimic macOS' behavior of traversing the reponder chain. */
+  GtkWidget *focus_widget = [self findFocusWidget];
+  if (focus_widget != NULL && gtk_widget_get_sensitive (focus_widget))
+    {
+      const char *action_name = gtk_menu_tracker_item_get_action_name (trackerItem);
+      gboolean enabled = FALSE;
+      GtkActionMuxer *muxer =  _gtk_widget_get_action_muxer (focus_widget, FALSE);
+
+      if (action_name == NULL || muxer == NULL)
+        return gtk_menu_tracker_item_get_sensitive (trackerItem) ? YES : NO;
+
+      if (gtk_action_muxer_query_action (muxer, action_name, &enabled, NULL, NULL, NULL, NULL))
+        return enabled ? YES : NO;
+    }
+  return gtk_menu_tracker_item_get_sensitive (trackerItem) ? YES : NO;
+}
+
+-(GtkWidget *)findFocusWidget
+{
+  GApplication *app = g_application_get_default ();
+  GtkWindow *window;
+
+  if (!GTK_IS_APPLICATION (app))
+    return NULL;
+
+  window = gtk_application_get_active_window (GTK_APPLICATION (app));
+  if (window != NULL)
+    return gtk_window_get_focus (window);
+  return NULL;
 }
 
 @end
