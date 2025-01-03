@@ -3178,6 +3178,16 @@ levelbar {
  * Print dialog *
 *****************/
 window.dialog.print {
+  page-thumbnail {
+    background: white;
+    color: #2e3436;
+    border: 1px solid $borders_color;
+
+    label {
+      color: #2e3436;
+    }
+  }
+
   drawing {
     color: $fg_color;
     background: none;
