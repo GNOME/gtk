@@ -1,5 +1,28 @@
-Overview of Changes in 4.16.8, xx-xx-xxxx
+Overview of Changes in 4.16.9, 03-01-2025
 =========================================
+
+Switch to the new release process
+
+Overview of Changes in 4.16.8, 03-01-2025
+=========================================
+
+* GtkFileChooser:
+ - Fix a focus problem with the server entry
+
+* GtkEmojiChooser:
+ - Update to CLDR 46 / Unicode 16
+
+* GtkAboutDialog:
+ - Small improvements
+
+* Wayland:
+ - Fix some Vulkan sizing corner cases
+ - Fix problems with rotated, offloaded images
+ - Fix a few crashes
+
+* Demos:
+ - Don't create extra windows for D-Bus activation
+
 
 Overview of Changes in 4.16.7, 23-11-2024
 =========================================
