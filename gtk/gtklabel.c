@@ -2062,10 +2062,11 @@ gtk_label_activate_clipboard_copy (GtkWidget  *widget,
   g_signal_emit_by_name (widget, "copy-clipboard");
 }
 
-static void
+static gboolean
 gtk_label_select_all (GtkLabel *self)
 {
   gtk_label_select_region_index (self, 0, strlen (self->text));
+  return gtk_label_get_selectable (self);
 }
 
 static void
