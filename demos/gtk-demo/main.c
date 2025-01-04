@@ -27,6 +27,10 @@
 
 #include "profile_conf.h"
 
+#ifdef GDK_WINDOWING_MACOS
+#include <gdk/macos/gdkmacos.h>
+#endif
+
 static GtkWidget *info_view;
 static GtkWidget *source_view;
 
@@ -1002,6 +1006,15 @@ activate (GApplication *app)
 
   selection_cb (selection, NULL, NULL);
   g_object_unref (selection);
+
+#ifdef GDK_WINDOWING_MACOS
+  if (GDK_IS_MACOS_DISPLAY (gdk_display_get_default ()))
+    {
+      /* On macOS, we want to use the native titlebar */
+      GtkHeaderBar *headerbar = GTK_HEADER_BAR (gtk_builder_get_object (builder, "headerbar"));
+      gtk_header_bar_set_decoration_layout (headerbar, "native,close,minimize,maximize:");
+    }
+#endif
 
   gtk_window_present (GTK_WINDOW (window));
 
