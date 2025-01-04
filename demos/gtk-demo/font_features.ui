@@ -285,7 +285,7 @@
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <child type="label">
+                        <property name="label-widget">
                           <object class="GtkLabel">
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">OpenType Features</property>
@@ -295,8 +295,8 @@
                               <class name="title-4"/>
                             </style>
                           </object>
-                        </child>
-                        <child>
+                        </property>
+                        <property name="child">
                           <object class="GtkBox" id="feature_list">
                             <property name="orientation">vertical</property>
                             <child>
@@ -307,12 +307,12 @@
                               </object>
                             </child>
                           </object>
-                        </child>
+                        </property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <child type="label">
+                        <property name="label-widget">
                           <object class="GtkLabel" id="variations_heading">
                             <property name="label" translatable="yes">Variation Axes</property>
                             <property name="xalign">0</property>
@@ -322,13 +322,13 @@
                               <class name="title-4"/>
                             </style>
                           </object>
-                        </child>
-                        <child>
+                        </property>
+                        <property name="child">
                           <object class="GtkGrid" id="variations_grid">
                             <property name="column-spacing">10</property>
                             <property name="row-spacing">10</property>
                           </object>
-                        </child>
+                        </property>
                       </object>
                     </child>
                   </object>

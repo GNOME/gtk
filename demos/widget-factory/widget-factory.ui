@@ -2057,7 +2057,7 @@ microphone-sensitivity-medium-symbolic</property>
                             <child>
                               <object class="GtkExpander" id="expander1">
                                 <property name="expanded">1</property>
-                                <child>
+                                <property name="child">
                                   <object class="GtkBox">
                                     <property name="orientation">1</property>
                                     <child>
@@ -2108,12 +2108,12 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                   </object>
-                                </child>
-                                <child type="label">
+                                </property>
+                                <property name="label-widget">
                                   <object class="GtkLabel" id="label19">
                                     <property name="label" translatable="1">Expander</property>
                                   </object>
-                                </child>
+                                </property>
                               </object>
                             </child>
                             <child>
@@ -3251,17 +3251,17 @@ bad things might happen.</property>
         </child>
         <child>
           <object class="GtkExpander">
-            <child type="label">
+            <property name="label-widget">
               <object class="GtkLabel">
                 <property name="label">Extra Info</property>
               </object>
-            </child>
-            <child>
+            </property>
+            <property name="child">
               <object class="GtkEntry" id="extra_info_entry">
                 <property name="placeholder-text">Tell me anything…</property>
                 <property name="progress-fraction">0.2</property>
               </object>
-            </child>
+            </property>
             <layout>
               <property name="column">1</property>
               <property name="row">2</property>
