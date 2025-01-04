@@ -1436,7 +1436,7 @@ print_response_cb (GtkPrintUnixDialog *window,
 #endif /* HAVE_GIO_UNIX */
 
 /* }}} */
- /* {{{ Async API */
+/* {{{ Async API */
 
 /**
  * gtk_print_dialog_setup:
