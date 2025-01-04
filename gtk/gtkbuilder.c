@@ -3383,3 +3383,27 @@ _gtk_builder_lookup_failed (GtkBuilder  *builder,
 
   return FALSE;
 }
+
+void
+gtk_buildable_child_deprecation_warning (GtkBuildable *buildable,
+                                         GtkBuilder   *builder,
+                                         const char   *type,
+                                         const char   *prop)
+{
+  if (type)
+    GTK_DEBUG (BUILDER, "<child type=\"%s\"> in %s is deprecated, just set the %s property",
+               type, G_OBJECT_TYPE_NAME (buildable), prop);
+  else
+    GTK_DEBUG (BUILDER, "<child> in %s is deprecated, just set the %s property",
+               G_OBJECT_TYPE_NAME (buildable), prop);
+}
+
+void
+gtk_buildable_tag_deprecation_warning (GtkBuildable *buildable,
+                                       GtkBuilder   *builder,
+                                       const char   *tag,
+                                       const char   *prop)
+{
+  GTK_DEBUG (BUILDER, "<%s> in %s is deprecated, just set the %s property",
+             tag, G_OBJECT_TYPE_NAME (buildable), prop);
+}
