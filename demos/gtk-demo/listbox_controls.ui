@@ -12,7 +12,7 @@
         <property name="child">
           <object class="GtkViewport">
             <property name="scroll-to-focus">1</property>
-            <child>
+            <property name="child">
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <property name="margin-start">60</property>
@@ -276,7 +276,7 @@
                   </object>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
         </property>
       </object>
