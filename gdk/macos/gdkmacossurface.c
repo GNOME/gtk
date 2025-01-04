@@ -633,6 +633,41 @@ gdk_macos_surface_get_native_window (GdkMacosSurface *self)
   return _gdk_macos_surface_get_native (self);
 }
 
+gboolean
+gdk_macos_surface_show_window_controls (GdkMacosSurface *self,
+                                        gboolean         show)
+{
+  g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), FALSE);
+  g_return_val_if_fail (self->window != NULL, FALSE);
+
+  [[self->window standardWindowButton:NSWindowCloseButton] setHidden:!show];
+  [[self->window standardWindowButton:NSWindowMiniaturizeButton] setHidden:!show];
+  [[self->window standardWindowButton:NSWindowZoomButton] setHidden:!show];
+
+  return TRUE;
+}
+
+void
+gdk_macos_surface_enable_window_controls (GdkMacosSurface *self,
+                                          gboolean         close,
+                                          gboolean         minimize,
+                                          gboolean         maximize)
+{
+  g_return_if_fail (GDK_IS_MACOS_SURFACE (self));
+  g_return_if_fail (self->window != NULL);
+
+  [[self->window standardWindowButton:NSWindowCloseButton] setEnabled:close];
+  [[self->window standardWindowButton:NSWindowMiniaturizeButton] setEnabled:minimize];
+  [[self->window standardWindowButton:NSWindowZoomButton] setEnabled:maximize];
+}
+
+void
+gdk_macos_surface_set_window_controls_height (GdkMacosSurface *self,
+                                              int              height)
+{
+  [self->window setWindowControlsHeight:height];
+}
+
 void
 _gdk_macos_surface_set_geometry_hints (GdkMacosSurface   *self,
                                        const GdkGeometry *geometry,
