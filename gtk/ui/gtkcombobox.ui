@@ -9,7 +9,7 @@
         <child>
           <object class="GtkToggleButton" id="button">
             <signal name="toggled" handler="gtk_combo_box_button_toggled" swapped="no"/>
-            <child>
+            <property name="child">
               <object class="GtkBox">
                 <child>
                   <object class="GtkBuiltinIcon" id="arrow">
@@ -17,7 +17,7 @@
                   </object>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
         </child>
       </object>

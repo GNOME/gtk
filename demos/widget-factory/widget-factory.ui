@@ -2274,7 +2274,7 @@ microphone-sensitivity-medium-symbolic</property>
                                       <class name="image-button"/>
                                       <class name="destructive-action"/>
                                     </style>
-                                    <child>
+                                    <property name="child">
                                       <object class="GtkBox">
                                         <property name="spacing">6</property>
                                         <property name="valign">center</property>
@@ -2293,7 +2293,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           </object>
                                         </child>
                                       </object>
-                                    </child>
+                                    </property>
                                   </object>
                                 </child>
                                 <child>

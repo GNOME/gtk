@@ -42,7 +42,7 @@
                 <property name="receives-default">1</property>
                 <property name="valign">baseline</property>
                 <property name="has-frame">0</property>
-                <child>
+                <property name="child">
                   <object class="GtkLabel" id="source_name">
                     <property name="valign">baseline</property>
                     <property name="label" translatable="0">Username</property>
@@ -50,7 +50,7 @@
                       <attribute name="weight" value="bold"></attribute>
                     </attributes>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>

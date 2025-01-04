@@ -103,9 +103,7 @@
                               <property name="label">Photo Drag Source</property>
                             </accessibility>
                             <property name="active">1</property>
-                            <child>
-                            </child>
-                            <child>
+                            <property name="child">
                               <object class="GtkImage">
                                 <accessibility>
                                   <property name="label">Portland Rose Photo</property>
@@ -115,7 +113,7 @@
                                 </style>
                                 <property name="paintable">resource:///transparent/portland-rose.jpg</property>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                         <child>
@@ -129,7 +127,7 @@
                                 <signal name="prepare" handler="drag_prepare"/>
                               </object>
                             </child>
-                            <child>
+                            <property name="child">
                               <object class="GtkImage">
                                 <accessibility>
                                   <property name="label">Floppy Buddy Icon</property>
@@ -139,7 +137,7 @@
                                 </style>
                                 <property name="paintable">resource:///images/floppybuddy.gif</property>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                         <child>
@@ -153,7 +151,7 @@
                                 <signal name="prepare" handler="drag_prepare"/>
                               </object>
                             </child>
-                            <child>
+                            <property name="child">
                               <object class="GtkImage">
                                 <accessibility>
                                   <property name="label">gtk-demo logo</property>
@@ -163,7 +161,7 @@
                                 </style>
                                 <property name="paintable">resource:///images/org.gtk.Demo4.svg</property>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                       </object>

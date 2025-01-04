@@ -9,7 +9,7 @@
     <child>
       <object class="GtkToggleButton" id="button">
         <signal name="toggled" handler="button_toggled"/>
-        <child>
+        <property name="child">
           <object class="GtkBox">
             <property name="can-focus">0</property>
             <child>
@@ -47,7 +47,7 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
     </child>
     <child>
