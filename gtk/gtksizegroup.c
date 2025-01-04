@@ -150,17 +150,20 @@ G_DEFINE_TYPE_WITH_CODE (GtkSizeGroup, gtk_size_group, G_TYPE_OBJECT,
 						gtk_size_group_buildable_init))
 
 static void
-add_widget_to_closure (GHashTable *widgets,
+add_widget_to_closure (GHashTable *peers,
+                       GHashTable *peers_for_both,
                        GHashTable *groups,
                        GtkWidget  *widget,
 		       int         orientation)
 {
   GSList *tmp_groups, *tmp_widgets;
 
-  if (g_hash_table_lookup (widgets, widget))
+  if (g_hash_table_lookup (peers, widget))
     return;
 
-  g_hash_table_add (widgets, widget);
+  g_hash_table_add (peers, widget);
+  if (peers_for_both)
+    g_hash_table_add (peers_for_both, widget);
 
   for (tmp_groups = _gtk_widget_get_sizegroups (widget); tmp_groups; tmp_groups = tmp_groups->next)
     {
@@ -176,24 +179,26 @@ add_widget_to_closure (GHashTable *widgets,
       g_hash_table_add (groups, tmp_group);
 
       for (tmp_widgets = tmp_priv->widgets; tmp_widgets; tmp_widgets = tmp_widgets->next)
-        add_widget_to_closure (widgets, groups, tmp_widgets->data, orientation);
+        add_widget_to_closure (peers, tmp_priv->mode == GTK_SIZE_GROUP_BOTH ? peers_for_both : NULL,
+                               groups, tmp_widgets->data, orientation);
     }
 }
 
-GHashTable *
+void
 _gtk_size_group_get_widget_peers (GtkWidget      *for_widget,
-                                  GtkOrientation  orientation)
+                                  GtkOrientation  orientation,
+                                  GHashTable    **peers,
+                                  GHashTable    **peers_for_both)
 {
-  GHashTable *widgets, *groups;
+  GHashTable *groups;
 
-  widgets = g_hash_table_new (NULL, NULL);
+  *peers = g_hash_table_new (NULL, NULL);
+  *peers_for_both = g_hash_table_new (NULL, NULL);
   groups = g_hash_table_new (NULL, NULL);
 
-  add_widget_to_closure (widgets, groups, for_widget, orientation);
+  add_widget_to_closure (*peers, *peers_for_both, groups, for_widget, orientation);
 
   g_hash_table_unref (groups);
-
-  return widgets;
 }
 
 static void

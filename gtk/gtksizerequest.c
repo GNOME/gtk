@@ -526,14 +526,15 @@ gtk_widget_measure (GtkWidget        *widget,
     }
   else
     {
-      GHashTable *widgets;
+      GHashTable *peers, *peers_for_both;
       GHashTableIter iter;
       gpointer key;
       int min_result = 0, nat_result = 0;
 
-      widgets = _gtk_size_group_get_widget_peers (widget, orientation);
+      _gtk_size_group_get_widget_peers (widget, orientation,
+                                        &peers, &peers_for_both);
 
-      g_hash_table_iter_init (&iter, widgets);
+      g_hash_table_iter_init (&iter, peers);
       while (g_hash_table_iter_next (&iter, &key, NULL))
         {
           GtkWidget *tmp_widget = key;
@@ -546,7 +547,8 @@ gtk_widget_measure (GtkWidget        *widget,
           nat_result = MAX (nat_result, nat_dimension);
         }
 
-      g_hash_table_destroy (widgets);
+      g_hash_table_destroy (peers);
+      g_hash_table_destroy (peers_for_both);
 
       /* Baselines make no sense with sizegroups really */
       if (minimum_baseline)
