@@ -178,7 +178,7 @@
                                       <object class="GtkScrolledWindow" id="browse_files_swin">
                                         <property name="hscrollbar-policy">2</property>
                                         <property name="vexpand">1</property>
-                                        <child>
+                                        <property name="child">
                                           <object class="GtkColumnView" id="browse_files_column_view">
                                             <style>
                                               <class name="complex"/>
@@ -191,7 +191,7 @@
                                             <signal name="activate" handler="browse_files_view_row_activated_cb" swapped="no"/>
                                             <signal name="keynav-failed" handler="browse_files_view_keynav_failed_cb"/>
                                           </object>
-                                        </child>
+                                        </property>
                                       </object>
                                     </child>
                                     <child>

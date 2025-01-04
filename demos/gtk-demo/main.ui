@@ -82,7 +82,7 @@
                 <property name="hscrollbar-policy">never</property>
                 <property name="propagate-natural-width">1</property>
                 <property name="vexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkListView" id="listview">
                     <style>
                       <class name="navigation-sidebar"/>
@@ -98,7 +98,7 @@
                       <relation name="controls">notebook</relation>
                     </accessibility>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
           </object>
@@ -115,7 +115,7 @@
                 <property name="tab-expand">1</property>
                 <property name="child">
                   <object class="GtkScrolledWindow">
-                    <child>
+                    <property name="child">
                       <object class="GtkTextView" id="info-textview">
                         <property name="left-margin">20</property>
                         <property name="right-margin">20</property>
@@ -132,7 +132,7 @@
                           <property name="description" translatable="yes">A description of the demo</property>
                         </accessibility>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </property>
                 <property name="tab">
@@ -149,7 +149,7 @@
                 <property name="tab-expand">1</property>
                 <property name="child">
                   <object class="GtkScrolledWindow" id="source-scrolledwindow">
-                    <child>
+                    <property name="child">
                       <object class="GtkTextView" id="source-textview">
                         <property name="left-margin">20</property>
                         <property name="right-margin">20</property>
@@ -166,7 +166,7 @@
                           <property name="description" translatable="yes">The source code of the demo</property>
                         </accessibility>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </property>
                 <property name="tab">

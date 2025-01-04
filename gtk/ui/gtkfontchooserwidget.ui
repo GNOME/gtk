@@ -114,9 +114,9 @@
                                       <object class="GtkScrolledWindow">
                                         <property name="min-content-height">200</property>
                                         <property name="hscrollbar-policy">2</property>
-                                        <child>
+                                        <property name="child">
                                           <object class="GtkListView" id="language_list"/>
-                                        </child>
+                                        </property>
                                       </object>
                                     </property>
                                   </object>
@@ -148,7 +148,7 @@
                                 <property name="vexpand">1</property>
                                 <property name="hscrollbar-policy">2</property>
                                 <property name="has-frame">1</property>
-                                <child>
+                                <property name="child">
                                   <object class="GtkListView" id="family_face_list">
                                     <property name="model">selection</property>
                                     <signal name="activate" handler="row_activated_cb" swapped="no"/>
@@ -184,7 +184,7 @@
                                       </object>
                                     </property>
                                   </object>
-                                </child>
+                                </property>
                                 <layout>
                                   <property name="column">0</property>
                                   <property name="row">1</property>
@@ -365,7 +365,7 @@
                     <style>
                       <class name="view"/>
                     </style>
-                    <child>
+                    <property name="child">
                       <object class="GtkBox">
                         <property name="orientation">1</property>
                         <property name="spacing">12</property>
@@ -431,7 +431,7 @@
                           </object>
                         </child>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </child>
               </object>

@@ -138,7 +138,7 @@
                     <property name="has-frame">1</property>
                     <property name="min-content-width">250</property>
                     <property name="min-content-height">200</property>
-                    <child>
+                    <property name="child">
                       <object class="GtkViewport">
                         <child>
                           <object class="GtkListBox" id="recent_servers_listbox">
@@ -147,7 +147,7 @@
                           </object>
                         </child>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </child>
               </object>
@@ -170,7 +170,7 @@
               <object class="GtkScrolledWindow">
                 <property name="hexpand">1</property>
                 <property name="vexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkViewport">
                     <child>
                       <object class="GtkListBox" id="listbox">
@@ -179,7 +179,7 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </property>
           </object>

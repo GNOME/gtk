@@ -29,6 +29,7 @@
 #include "gtkadjustment.h"
 #include "gtkadjustmentprivate.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkdragsourceprivate.h"
 #include "gtkeventcontrollermotion.h"
 #include "gtkeventcontrollerscroll.h"
@@ -417,9 +418,14 @@ gtk_scrolled_window_buildable_add_child (GtkBuildable *buildable,
                                          const char   *type)
 {
   if (GTK_IS_WIDGET (child))
-    gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW(buildable), GTK_WIDGET (child));
+    {
+      gtk_buildable_child_deprecation_warning (buildable, builder, NULL, "child");
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (buildable), GTK_WIDGET (child));
+    }
   else
-    parent_buildable_iface->add_child (buildable, builder, child, type);
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
 }
 
 static void

@@ -9,7 +9,7 @@
         <property name="min-content-height">200</property>
         <property name="hexpand">0</property>
         <property name="vexpand">1</property>
-        <child>
+        <property name="child">
           <object class="GtkViewport">
             <property name="scroll-to-focus">1</property>
             <child>
@@ -278,7 +278,7 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
     </child>
   </object>

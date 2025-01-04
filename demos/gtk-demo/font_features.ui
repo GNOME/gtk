@@ -47,7 +47,7 @@
         <child>
           <object class="GtkScrolledWindow">
             <property name="hscrollbar-policy">never</property>
-            <child>
+            <property name="child">
               <object class="GtkViewport">
                 <child>
                   <object class="GtkBox">
@@ -337,7 +337,7 @@
                   <class name="view"/>
                 </style>
               </object>
-            </child>
+            </property>
           </object>
         </child>
         <child>
@@ -359,7 +359,7 @@
                 <style>
                   <class name="font_features_background"/>
                 </style>
-                <child>
+                <property name="child">
                   <object class="GtkStack" id="stack">
                     <child>
                       <object class="GtkStackPage">
@@ -401,7 +401,7 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>

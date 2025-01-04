@@ -261,7 +261,7 @@
             <property name="propagate-natural-height">1</property>
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>
-            <child>
+            <property name="child">
               <object class="GtkPicture" id="image">
                 <accessibility>
                   <property name="label">Font rendering example</property>
@@ -270,7 +270,7 @@
                 <property name="valign">center</property>
                 <property name="can-shrink">0</property>
               </object>
-            </child>
+            </property>
           </object>
         </child>
       </object>

@@ -35,7 +35,7 @@
         </child>
         <child>
           <object class="GtkScrolledWindow">
-            <child>
+            <property name="child">
               <object class="GtkListView" id="listview">
                 <property name="vexpand">1</property>
                 <style>
@@ -121,7 +121,7 @@
                   </object>
                 </property>
               </object>
-            </child>
+            </property>
           </object>
         </child>
       </object>

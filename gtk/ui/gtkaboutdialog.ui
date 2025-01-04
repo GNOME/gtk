@@ -136,7 +136,7 @@
                             <property name="hscrollbar-policy">2</property>
                             <property name="has-frame">1</property>
                             <property name="vexpand">1</property>
-                            <child>
+                            <property name="child">
                               <object class="GtkViewport" id="viewport1">
                                 <style>
                                   <class name="view"/>
@@ -159,7 +159,7 @@
                                   </object>
                                 </child>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                       </object>
@@ -180,7 +180,7 @@
                             <property name="hscrollbar-policy">2</property>
                             <property name="has-frame">1</property>
                             <property name="vexpand">1</property>
-                            <child>
+                            <property name="child">
                               <object class="GtkTextView" id="license_view">
                                 <property name="editable">0</property>
                                 <property name="left-margin">5</property>
@@ -207,7 +207,7 @@
                                   </object>
                                 </child>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                       </object>
@@ -228,7 +228,7 @@
                             <property name="hscrollbar-policy">2</property>
                             <property name="has-frame">1</property>
                             <property name="vexpand">1</property>
-                            <child>
+                            <property name="child">
                               <object class="GtkTextView" id="system_view">
                                 <property name="editable">0</property>
                                 <property name="left-margin">5</property>
@@ -255,7 +255,7 @@
                                   </object>
                                 </child>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                       </object>

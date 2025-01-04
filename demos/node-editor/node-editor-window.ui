@@ -241,7 +241,7 @@ You can turn it back on in the menu.
                 <property name="hscrollbar-policy">never</property>
                 <property name="hexpand">1</property>
                 <property name="vexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkTextView" id="text_view">
                     <property name="wrap-mode">word</property>
                     <property name="monospace">1</property>
@@ -262,7 +262,7 @@ You can turn it back on in the menu.
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </property>
             <property name="end-child">
@@ -273,7 +273,7 @@ You can turn it back on in the menu.
                     <property name="vexpand">1</property>
                     <property name="min-content-height">100</property>
                     <property name="min-content-width">100</property>
-                    <child>
+                    <property name="child">
                       <object class="GtkViewport">
                         <child>
                           <object class="GtkPicture" id="picture">
@@ -296,17 +296,17 @@ You can turn it back on in the menu.
                           </object>
                         </child>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </child>
                 <child>
                   <object class="GtkScrolledWindow">
                     <property name="hscrollbar-policy">never</property>
-                    <child>
+                    <property name="child">
                       <object class="GtkListBox" id="renderer_listbox">
                         <property name="selection-mode">none</property>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </child>
               </object>
