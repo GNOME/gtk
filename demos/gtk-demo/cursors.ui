@@ -660,7 +660,7 @@
             <property name="halign">center</property>
             <child>
               <object class="GtkFrame">
-                <child>
+                <property name="child">
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
                     <style>
@@ -846,13 +846,13 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
               <object class="GtkFrame">
                 <property name="hexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
                     <style>
@@ -1159,13 +1159,13 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
               <object class="GtkFrame">
                 <property name="hexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
                     <style>
@@ -1412,13 +1412,13 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
               <object class="GtkFrame">
                 <property name="hexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
                     <style>
@@ -1845,13 +1845,13 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
               <object class="GtkFrame">
                 <property name="hexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
                     <style>
@@ -2758,13 +2758,13 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
               <object class="GtkFrame">
                 <property name="hexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
                     <style>
@@ -2891,7 +2891,7 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
           </object>

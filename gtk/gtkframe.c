@@ -31,6 +31,7 @@
 #include "gtkbuildable.h"
 #include "gtkwidgetprivate.h"
 #include "gtklabel.h"
+#include "gtkbuilderprivate.h"
 
 /**
  * GtkFrame:
@@ -227,11 +228,19 @@ gtk_frame_buildable_add_child (GtkBuildable *buildable,
                                const char   *type)
 {
   if (type && strcmp (type, "label") == 0)
-    gtk_frame_set_label_widget (GTK_FRAME (buildable), GTK_WIDGET (child));
+    {
+      gtk_buildable_child_deprecation_warning (buildable, builder, "label", "label-widget");
+      gtk_frame_set_label_widget (GTK_FRAME (buildable), GTK_WIDGET (child));
+    }
   else if (GTK_IS_WIDGET (child))
-    gtk_frame_set_child (GTK_FRAME (buildable), GTK_WIDGET (child));
+    {
+      gtk_buildable_child_deprecation_warning (buildable, builder, NULL, "child");
+      gtk_frame_set_child (GTK_FRAME (buildable), GTK_WIDGET (child));
+    }
   else
-    parent_buildable_iface->add_child (buildable, builder, child, type);
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
 }
 
 static void

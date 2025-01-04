@@ -1048,24 +1048,24 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <property name="hexpand">1</property>
                             <child>
                               <object class="GtkFrame">
-                                <child>
+                                <property name="child">
                                   <object class="GtkVideo">
                                     <property name="autoplay">1</property>
                                     <property name="loop">1</property>
                                     <property name="file">resource:///org/gtk/WidgetFactory4/gtk-logo.webm</property>
                                   </object>
-                                </child>
+                                </property>
                               </object>
                             </child>
                             <child>
                               <object class="GtkFrame">
-                                <child type="label">
+                                <property name="label-widget">
                                   <object class="GtkLabel" id="label1">
                                     <property name="label" translatable="1">&lt;b&gt;Text Styles&lt;/b&gt;</property>
                                     <property name="use-markup">1</property>
                                   </object>
-                                </child>
-                                <child>
+                                </property>
+                                <property name="child">
                                   <object class="GtkScrolledWindow">
                                     <property name="vexpand">1</property>
                                     <property name="hscrollbar-policy">2</property>
@@ -1150,7 +1150,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                       </object>
                                     </child>
                                   </object>
-                                </child>
+                                </property>
                               </object>
                             </child>
                           </object>
@@ -1508,7 +1508,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                             <style>
                               <class name="app-notification"/>
                             </style>
-                            <child>
+                            <property name="child">
                               <object class="GtkBox" id="page2box">
                                 <property name="spacing">20</property>
                                 <property name="margin-start">10</property>
@@ -1536,7 +1536,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                   </object>
                                 </child>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                       </object>
@@ -1611,7 +1611,7 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkFrame" id="page2frame1">
-                                <child>
+                                <property name="child">
                                   <object class="GtkBox">
                                     <property name="orientation">1</property>
                                     <child>
@@ -1674,7 +1674,7 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                   </object>
-                                </child>
+                                </property>
                               </object>
                             </child>
                             <child>
@@ -1885,7 +1885,7 @@ microphone-sensitivity-medium-symbolic</property>
                             <property name="spacing">10</property>
                             <child>
                               <object class="GtkFrame" id="page2frame2">
-                                <child>
+                                <property name="child">
                                   <object class="GtkBox">
                                     <property name="orientation">1</property>
                                     <child>
@@ -1982,7 +1982,7 @@ microphone-sensitivity-medium-symbolic</property>
                                       <object class="GtkStatusbar" id="statusbar"/>
                                     </child>
                                   </object>
-                                </child>
+                                </property>
                               </object>
                             </child>
                             <child>
@@ -1996,7 +1996,7 @@ microphone-sensitivity-medium-symbolic</property>
                                       <object class="GtkFrame" id="panedframe1">
                                         <property name="hexpand">1</property>
                                         <property name="vexpand">1</property>
-                                        <child>
+                                        <property name="child">
                                           <object class="GtkPaned">
                                             <style>
                                               <class name="view"/>
@@ -2012,14 +2012,14 @@ microphone-sensitivity-medium-symbolic</property>
                                               </object>
                                             </child>
                                           </object>
-                                        </child>
+                                        </property>
                                       </object>
                                     </child>
                                     <child>
                                       <object class="GtkFrame" id="panedframe2">
                                         <property name="hexpand">1</property>
                                         <property name="vexpand">1</property>
-                                        <child>
+                                        <property name="child">
                                           <object class="GtkPaned">
                                             <property name="orientation">1</property>
                                             <style>
@@ -2036,7 +2036,7 @@ microphone-sensitivity-medium-symbolic</property>
                                               </object>
                                             </child>
                                           </object>
-                                        </child>
+                                        </property>
                                       </object>
                                     </child>
                                   </object>
@@ -2345,7 +2345,7 @@ microphone-sensitivity-medium-symbolic</property>
                         </child>
                         <child>
                           <object class="GtkFrame">
-                            <child>
+                            <property name="child">
                               <object class="GtkBox">
                                 <child>
                                   <object class="GtkStackSidebar">
@@ -2556,7 +2556,7 @@ microphone-sensitivity-medium-symbolic</property>
                                   </object>
                                 </child>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                         <child>
@@ -2704,7 +2704,7 @@ microphone-sensitivity-medium-symbolic</property>
                             </child>
                             <child>
                               <object class="GtkFrame" id="osd_frame">
-                                <child>
+                                <property name="child">
                                   <object class="GtkPaned">
                                     <property name="wide-handle">1</property>
                                     <child>
@@ -2807,7 +2807,7 @@ microphone-sensitivity-medium-symbolic</property>
                                       </object>
                                     </child>
                                   </object>
-                                </child>
+                                </property>
                                 <child>
                                   <object class="GtkGestureClick">
                                     <signal name="pressed" handler="osd_frame_pressed" object="osd_frame" swapped="no"/>
