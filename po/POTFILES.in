@@ -303,11 +303,11 @@ gtk/gtksettings.c
 gtk/gtkshortcutaction.c
 gtk/gtkshortcut.c
 gtk/gtkshortcutcontroller.c
-gtk/gtkshortcutlabel.c
-gtk/gtkshortcutsgroup.c
-gtk/gtkshortcutssection.c
-gtk/gtkshortcutsshortcut.c
-gtk/gtkshortcutswindow.c
+gtk/deprecated/gtkshortcutlabel.c
+gtk/deprecated/gtkshortcutsgroup.c
+gtk/deprecated/gtkshortcutssection.c
+gtk/deprecated/gtkshortcutsshortcut.c
+gtk/deprecated/gtkshortcutswindow.c
 gtk/gtkshortcuttrigger.c
 gtk/gtksidebarrow.c
 gtk/gtksignallistitemfactory.c

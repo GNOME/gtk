@@ -26,7 +26,7 @@
 #include "gtkwindowprivate.h"
 #include "gtkpopovermenubar.h"
 #include "gtksettings.h"
-#include "gtkshortcutswindowprivate.h"
+#include "deprecated/gtkshortcutswindowprivate.h"
 #include "gtktooltipprivate.h"
 
 #include <glib/gi18n-lib.h>

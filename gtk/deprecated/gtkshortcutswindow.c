@@ -43,6 +43,8 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkShortcutsWindow:
  *
@@ -359,6 +361,8 @@ section_notify_cb (GObject    *section,
  * window manages its children internally.
  *
  * Since: 4.14
+ *
+ * Deprecated: 4.18
  */
 void
 gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,

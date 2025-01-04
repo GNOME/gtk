@@ -1,4 +1,4 @@
-/* gtkshortcutswindow.h
+/* gtkshortcutsgroupprivate.h
  *
  * Copyright (C) 2015 Christian Hergert <christian@hergert.me>
  *
@@ -22,25 +22,24 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gtk/gtkwindow.h>
-#include <gtk/gtkshortcutssection.h>
+#include <gdk/gdk.h>
+#include <gtk/deprecated/gtkshortcutsshortcut.h>
 
 G_BEGIN_DECLS
 
-#define GTK_TYPE_SHORTCUTS_WINDOW            (gtk_shortcuts_window_get_type ())
-#define GTK_SHORTCUTS_WINDOW(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SHORTCUTS_WINDOW, GtkShortcutsWindow))
-#define GTK_IS_SHORTCUTS_WINDOW(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SHORTCUTS_WINDOW))
+#define GTK_TYPE_SHORTCUTS_GROUP            (gtk_shortcuts_group_get_type ())
+#define GTK_SHORTCUTS_GROUP(obj)            (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_SHORTCUTS_GROUP, GtkShortcutsGroup))
+#define GTK_IS_SHORTCUTS_GROUP(obj)         (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_SHORTCUTS_GROUP))
 
-typedef struct _GtkShortcutsWindow GtkShortcutsWindow;
+typedef struct _GtkShortcutsGroup         GtkShortcutsGroup;
+typedef struct _GtkShortcutsGroupClass    GtkShortcutsGroupClass;
 
 GDK_AVAILABLE_IN_ALL
-GType gtk_shortcuts_window_get_type (void) G_GNUC_CONST;
+GType gtk_shortcuts_group_get_type (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_4_14
-void gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
-                                       GtkShortcutsSection *section);
-
-G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkShortcutsWindow, g_object_unref)
+GDK_DEPRECATED_IN_4_18
+void gtk_shortcuts_group_add_shortcut (GtkShortcutsGroup    *self,
+                                       GtkShortcutsShortcut *shortcut);
 
 G_END_DECLS
 

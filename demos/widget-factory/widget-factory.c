@@ -823,9 +823,11 @@ page_changed_cb (GtkWidget *stack, GParamSpec *pspec, gpointer data)
   name = gtk_stack_get_visible_child_name (GTK_STACK (stack));
 
   window = gtk_widget_get_ancestor (stack, GTK_TYPE_APPLICATION_WINDOW);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   g_object_set (gtk_application_window_get_help_overlay (GTK_APPLICATION_WINDOW (window)),
                 "view-name", name,
                 NULL);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (g_str_equal (name, "page1"))
     current_page = 1;
