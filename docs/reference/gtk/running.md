@@ -32,6 +32,9 @@ print out different types of debugging information.
 `builder-objects`
 : Unused GtkBuilder objects
 
+`css`
+: Deprecated CSS features
+
 `geometry`
 : Size allocation
 
