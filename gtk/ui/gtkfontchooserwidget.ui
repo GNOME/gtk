@@ -79,7 +79,7 @@
                         <property name="tooltip-text" translatable="yes">Filters</property>
                         <property name="popover">
                           <object class="GtkPopover">
-                            <child>
+                            <property name="child">
                               <object class="GtkBox">
                                 <property name="orientation">1</property>
                                 <property name="spacing">6</property>
@@ -122,7 +122,7 @@
                                   </object>
                                 </child>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </property>
                       </object>

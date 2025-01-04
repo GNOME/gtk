@@ -3196,7 +3196,7 @@ bad things might happen.</property>
     </action-widgets>
   </object>
   <object class="GtkPopover" id="open_popover">
-    <child>
+    <property name="child">
       <object class="GtkGrid">
         <property name="margin-start">10</property>
         <property name="margin-end">10</property>
@@ -3296,7 +3296,7 @@ bad things might happen.</property>
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
   <object class="GtkSizeGroup">
     <property name="mode">2</property>
@@ -3320,23 +3320,23 @@ bad things might happen.</property>
   </object>
   <object class="GtkPopover" id="notebook_info_popover">
     <property name="autohide">0</property>
-    <child>
+    <property name="child">
       <object class="GtkLabel">
         <property name="label">No updates at this time</property>
       </object>
-    </child>
+    </property>
   </object>
   <object class="GtkPopover" id="notebook_info_popover3">
     <property name="autohide">0</property>
-    <child>
+    <property name="child">
       <object class="GtkLabel">
         <property name="label">You&apos;re in too deep!</property>
       </object>
-    </child>
+    </property>
   </object>
   <object class="GtkPopover" id="notebook_info_popover2">
     <property name="autohide">0</property>
-    <child>
+    <property name="child">
       <object class="GtkBox">
         <child>
           <object class="GtkLabel">
@@ -3355,7 +3355,7 @@ bad things might happen.</property>
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
   <menu id="new_style_menu_model">
     <section>

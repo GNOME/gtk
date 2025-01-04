@@ -15,7 +15,7 @@
     <style>
       <class name="scale-popup"/>
     </style>
-    <child>
+    <property name="child">
       <object class="GtkBox" id="box">
         <property name="orientation">1</property>
         <property name="margin-start">4</property>
@@ -53,6 +53,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

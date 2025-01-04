@@ -4,7 +4,7 @@
     <style>
       <class name="emoji-picker"/>
     </style>
-    <child>
+    <property name="child">
       <object class="GtkBox" id="box">
         <property name="orientation">1</property>
         <child>
@@ -379,6 +379,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </template>
 </interface>

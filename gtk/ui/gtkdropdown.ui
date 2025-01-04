@@ -59,7 +59,7 @@
         <style>
           <class name="menu"/>
         </style>
-        <child>
+        <property name="child">
           <object class="GtkBox">
             <property name="orientation">1</property>
             <child>
@@ -94,7 +94,7 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
     </child>
   </template>

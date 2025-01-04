@@ -2,7 +2,7 @@
 <interface domain="gtk40">
   <object class="GtkPopover" id="server_adresses_popover">
     <property name="position">2</property>
-    <child>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">1</property>
         <property name="spacing">6</property>
@@ -78,10 +78,10 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
   <object class="GtkPopover" id="recent_servers_popover">
-    <child>
+    <property name="child">
       <object class="GtkStack" id="recent_servers_stack">
         <child>
           <object class="GtkStackPage">
@@ -155,7 +155,7 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
   <template class="GtkPlacesView" parent="GtkBox">
     <property name="orientation">1</property>

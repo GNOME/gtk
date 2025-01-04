@@ -33,7 +33,7 @@
     </section>
   </menu>
   <object class="GtkPopover" id="testcase_popover">
-    <child>
+    <property name="child">
       <object class="GtkGrid">
         <property name="column-spacing">12</property>
         <property name="row-spacing">12</property>
@@ -102,7 +102,7 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
   <template class="NodeEditorWindow" parent="GtkApplicationWindow">
     <property name="title" translatable="yes">GTK Node Editor</property>
