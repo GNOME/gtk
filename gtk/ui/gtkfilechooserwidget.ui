@@ -248,10 +248,7 @@
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="label" translatable="yes">No Results Found</property>
-                                        <attributes>
-                                          <attribute name="weight" value="bold"></attribute>
-                                          <attribute name="scale" value="1.44"></attribute>
-                                        </attributes>
+                                        <property name="attributes">0 -1 weight bold, 0 -1 scale 1.44</property>
                                         <layout>
                                           <property name="column">0</property>
                                           <property name="row">1</property>
@@ -334,9 +331,7 @@
             <property name="label" translatable="yes">Folder Name</property>
             <property name="halign">1</property>
             <property name="mnemonic-widget">new_folder_name_entry</property>
-            <attributes>
-              <attribute name="weight" value="bold"></attribute>
-            </attributes>
+            <property name="attributes">0 -1 weight bold</property>
             <layout>
               <property name="column-span">2</property>
             </layout>
@@ -396,9 +391,7 @@
             <property name="label" translatable="yes">Name</property>
             <property name="halign">1</property>
             <property name="mnemonic-widget">rename_file_name_entry</property>
-            <attributes>
-              <attribute name="weight" value="bold"></attribute>
-            </attributes>
+            <property name="attributes">0 -1 weight bold</property>
             <layout>
               <property name="column-span">2</property>
             </layout>
@@ -488,9 +481,7 @@
                 <property name="wrap-mode">word-char</property>
                 <property name="ellipsize">middle</property>
                 <property name="justify">center</property>
-                <attributes>
-                  <attribute name="insert-hyphens" value="false"></attribute>
-                </attributes>
+                <property name="attributes">0 -1 insert-hyphens false</property>
                 <binding name="label">
                   <closure type="gchararray" function="column_view_get_file_display_name">
                     <lookup name="item">GtkListItem</lookup>

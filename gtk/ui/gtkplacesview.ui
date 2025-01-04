@@ -14,9 +14,7 @@
           <object class="GtkLabel">
             <property name="hexpand">1</property>
             <property name="label" translatable="yes">Server Addresses</property>
-            <attributes>
-              <attribute name="weight" value="bold"></attribute>
-            </attributes>
+            <property name="attributes">0 -1 weight bold</property>
             <style>
               <class name="dim-label"/>
             </style>
@@ -53,9 +51,7 @@
                 <property name="hexpand">1</property>
                 <property name="label" translatable="yes">Available Protocols</property>
                 <property name="xalign">0</property>
-                <attributes>
-                  <attribute name="weight" value="bold"></attribute>
-                </attributes>
+                <property name="attributes">0 -1 weight bold</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="row">0</property>
@@ -66,9 +62,7 @@
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Prefix</property>
                 <property name="xalign">0</property>
-                <attributes>
-                  <attribute name="weight" value="bold"></attribute>
-                </attributes>
+                <property name="attributes">0 -1 weight bold</property>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">0</property>
@@ -127,9 +121,7 @@
                 <child>
                   <object class="GtkLabel">
                     <property name="label" translatable="yes">Recent Servers</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"></attribute>
-                    </attributes>
+                    <property name="attributes">0 -1 weight bold</property>
                   </object>
                 </child>
                 <child>
@@ -207,10 +199,7 @@
                 <child>
                   <object class="GtkLabel">
                     <property name="label" translatable="yes">No results found</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"></attribute>
-                      <attribute name="scale" value="1.44"></attribute>
-                    </attributes>
+                    <property name="attributes">0 -1 weight bold, 0 -1 scale 1.44</property>
                   </object>
                 </child>
                 <child>
@@ -240,9 +229,7 @@
             <property name="label" translatable="yes">Connect to _Server</property>
             <property name="mnemonic-widget">address_entry</property>
             <property name="use-underline">1</property>
-            <attributes>
-              <attribute name="weight" value="bold"></attribute>
-            </attributes>
+            <property name="attributes">0 -1 weight bold</property>
           </object>
         </child>
         <child type="end">

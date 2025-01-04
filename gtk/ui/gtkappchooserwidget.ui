@@ -101,9 +101,7 @@
                 <property name="halign">3</property>
                 <property name="valign">3</property>
                 <property name="wrap">1</property>
-                <attributes>
-                  <attribute name="scale" value="1.2"></attribute>
-                </attributes>
+                <property name="attributes">0 -1 scale 1.2</property>
                 <style>
                   <class name="dim-label"/>
                 </style>

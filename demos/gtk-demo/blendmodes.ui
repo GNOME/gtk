@@ -313,9 +313,7 @@ Blended picture</property>
                       <object class="GtkLabel">
                         <property name="label" translatable="yes">Blended picture</property>
                         <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"></attribute>
-                        </attributes>
+                        <property name="attributes">0 -1 weight bold</property>
                         <layout>
                           <property name="column">1</property>
                           <property name="row">2</property>

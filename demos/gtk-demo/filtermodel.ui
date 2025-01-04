@@ -41,9 +41,7 @@
           <object class="GtkLabel" id="label1">
             <property name="label" translatable="yes">Original</property>
             <property name="xalign">0</property>
-            <attributes>
-              <attribute name="weight" value="bold"></attribute>
-            </attributes>
+            <property name="attributes">0 -1 weight bold</property>
             <layout>
               <property name="column">0</property>
               <property name="row">0</property>
@@ -136,9 +134,7 @@
           <object class="GtkLabel" id="label2">
             <property name="label" translatable="yes">Computed Columns</property>
             <property name="xalign">0</property>
-            <attributes>
-              <attribute name="weight" value="bold"></attribute>
-            </attributes>
+            <property name="attributes">0 -1 weight bold</property>
             <layout>
               <property name="column">1</property>
               <property name="row">0</property>
@@ -149,9 +145,7 @@
           <object class="GtkLabel" id="label3">
             <property name="label" translatable="yes">Filtered</property>
             <property name="xalign">0</property>
-            <attributes>
-              <attribute name="weight" value="bold"></attribute>
-            </attributes>
+            <property name="attributes">0 -1 weight bold</property>
             <layout>
               <property name="column">0</property>
               <property name="row">2</property>

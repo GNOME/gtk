@@ -46,9 +46,7 @@
                   <object class="GtkLabel" id="source_name">
                     <property name="valign">baseline</property>
                     <property name="label" translatable="0">Username</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"></attribute>
-                    </attributes>
+                    <property name="attributes">0 -1 weight bold</property>
                   </object>
                 </property>
               </object>
