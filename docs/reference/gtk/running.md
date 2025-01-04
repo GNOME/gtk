@@ -26,8 +26,8 @@ print out different types of debugging information.
 `actions`
 : Actions and menu models
 
-`builder`
-: GtkBuilder support
+`builder-trace`
+: Trace GtkBuilder operation
 
 `builder-objects`
 : Unused GtkBuilder objects

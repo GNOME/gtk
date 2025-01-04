@@ -91,7 +91,7 @@ typedef enum {
   GTK_DEBUG_GEOMETRY        = 1 <<  4,
   GTK_DEBUG_ICONTHEME       = 1 <<  5,
   GTK_DEBUG_PRINTING        = 1 <<  6,
-  GTK_DEBUG_BUILDER         = 1 <<  7,
+  GTK_DEBUG_BUILDER_TRACE   = 1 <<  7,
   GTK_DEBUG_SIZE_REQUEST    = 1 <<  8,
   GTK_DEBUG_NO_CSS_CACHE    = 1 <<  9,
   GTK_DEBUG_INTERACTIVE     = 1 << 10,

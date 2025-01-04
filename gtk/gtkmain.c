@@ -190,7 +190,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "text", GTK_DEBUG_TEXT, "Information about GtkTextView" },
   { "tree", GTK_DEBUG_TREE, "Information about GtkTreeView" },
   { "layout", GTK_DEBUG_LAYOUT, "Information from layout managers" },
-  { "builder", GTK_DEBUG_BUILDER, "Trace GtkBuilder operation" },
+  { "builder-trace", GTK_DEBUG_BUILDER_TRACE, "Trace GtkBuilder operation" },
   { "builder-objects", GTK_DEBUG_BUILDER_OBJECTS, "Log unused GtkBuilder objects" },
   { "no-css-cache", GTK_DEBUG_NO_CSS_CACHE, "Disable style property cache" },
   { "interactive", GTK_DEBUG_INTERACTIVE, "Enable the GTK inspector" },
