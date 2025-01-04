@@ -5,21 +5,21 @@
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">Minesweeper</property>
     <child type="titlebar">
-      <object class="GtkHeaderBar" id="">
-        <child>
+      <object class="GtkHeaderBar">
+        <child type="start">
           <object class="GtkButton">
             <property name="label">New Game</property>
             <signal name="clicked" handler="minesweeper_new_game_cb" object="game" swapped="no"/>
           </object>
         </child>
-        <child type="title">
+        <property name="title-widget">
           <object class="GtkImage">
             <property name="icon-name">trophy-gold</property>
             <binding name="visible">
               <lookup name="win">game</lookup>
             </binding>
           </object>
-        </child>
+        </property>
       </object>
     </child>
     <child>

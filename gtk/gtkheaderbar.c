@@ -31,6 +31,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkwindowcontrols.h"
 #include "gtkwindowhandle.h"
+#include "gtkbuilderprivate.h"
 
 #include <string.h>
 
@@ -641,15 +642,26 @@ gtk_header_bar_buildable_add_child (GtkBuildable *buildable,
                                     const char   *type)
 {
   if (g_strcmp0 (type, "title") == 0)
-    gtk_header_bar_set_title_widget (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
+    {
+      gtk_buildable_child_deprecation_warning (buildable, builder, "title", "title-widget");
+      gtk_header_bar_set_title_widget (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
+    }
   else if (g_strcmp0 (type, "start") == 0)
-    gtk_header_bar_pack_start (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
+    {
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
+    }
   else if (g_strcmp0 (type, "end") == 0)
-    gtk_header_bar_pack_end (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
+    {
+      gtk_header_bar_pack_end (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
+    }
   else if (type == NULL && GTK_IS_WIDGET (child))
-    gtk_header_bar_pack_start (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
+    {
+      gtk_header_bar_pack_start (GTK_HEADER_BAR (buildable), GTK_WIDGET (child));
+    }
   else
-    parent_buildable_iface->add_child (buildable, builder, child, type);
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
 }
 
 static void

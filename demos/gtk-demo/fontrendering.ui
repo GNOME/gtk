@@ -5,7 +5,7 @@
     <property name="default-height">768</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
-        <child type="title">
+        <property name="title-widget">
           <object class="GtkBox">
             <property name="halign">center</property>
             <property name="valign">center</property>
@@ -25,7 +25,7 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
     </child>
     <child>

@@ -433,11 +433,11 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
     <property name="title">GTK Widget Factory</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar1">
-        <child type="title">
+        <property name="title-widget">
           <object class="GtkStackSwitcher" id="stack_switcher">
             <property name="stack">toplevel_stack</property>
           </object>
-        </child>
+        </property>
         <child type="end">
           <object class="GtkMenuButton" id="gear_menu_button">
             <property name="valign">3</property>

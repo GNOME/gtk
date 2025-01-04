@@ -21,7 +21,7 @@
     <property name="default-height">600</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
-        <child>
+        <child type="start">
           <object class="GtkButton">
             <property name="valign">center</property>
             <property name="action-name">win.run</property>
@@ -29,7 +29,7 @@
             <property name="label" translatable="yes">Run</property>
           </object>
         </child>
-        <child>
+        <child type="start">
           <object class="GtkToggleButton">
             <property name="icon-name">edit-find-symbolic</property>
             <property name="valign">center</property>

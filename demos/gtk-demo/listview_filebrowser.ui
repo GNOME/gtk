@@ -178,7 +178,7 @@
     <property name="default-height">400</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="">
-        <child>
+        <child type="start">
           <object class="GtkButton">
             <property name="icon-name">go-up-symbolic</property>
             <signal name="clicked" handler="filebrowser_up_clicked_cb" object="dirlist" swapped="no"/>

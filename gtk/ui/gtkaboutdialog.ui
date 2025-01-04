@@ -7,7 +7,7 @@
     </style>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="headerbar1">
-        <child type="title">
+        <property name="title-widget">
           <object class="GtkStackSwitcher" id="stack_switcher">
             <property name="visible">0</property>
             <property name="stack">stack</property>
@@ -15,7 +15,7 @@
               <property name="label" translatable="1">Pages</property>
             </accessibility>
           </object>
-        </child>
+        </property>
       </object>
     </child>
     <child>

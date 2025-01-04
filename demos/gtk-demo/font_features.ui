@@ -30,7 +30,7 @@
     <property name="title">Font Explorer</property>
     <child type="titlebar">
       <object class="GtkHeaderBar">
-        <child>
+        <child type="start">
           <object class="GtkButton" id="reset">
             <property name="receives-default">1</property>
             <property name="tooltip-text">Reset</property>
