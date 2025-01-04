@@ -12,7 +12,7 @@
         <style>
           <class name="sidebar-revealer"/>
         </style>
-        <child>
+        <property name="child">
           <object class="GtkBox">
             <child>
               <object class="GtkImage" id="start_icon_widget">
@@ -67,7 +67,7 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
     </property>
   </template>

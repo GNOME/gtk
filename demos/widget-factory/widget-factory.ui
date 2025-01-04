@@ -1503,7 +1503,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         <property name="transition-type">9</property>
                         <property name="halign">3</property>
                         <property name="valign">1</property>
-                        <child>
+                        <property name="child">
                           <object class="GtkFrame" id="page2frame">
                             <style>
                               <class name="app-notification"/>
@@ -1538,7 +1538,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               </object>
                             </property>
                           </object>
-                        </child>
+                        </property>
                       </object>
                     </child>
                     <child>

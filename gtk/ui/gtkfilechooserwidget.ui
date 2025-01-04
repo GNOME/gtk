@@ -32,7 +32,7 @@
                     <child>
                       <object class="GtkRevealer" id="browse_header_revealer">
                         <property name="hexpand">1</property>
-                        <child>
+                        <property name="child">
                           <object class="GtkBox">
                             <property name="name">pathbarbox</property>
                             <property name="orientation">1</property>
@@ -153,7 +153,7 @@
                               </object>
                             </child>
                           </object>
-                        </child>
+                        </property>
                       </object>
                     </child>
                     <child>

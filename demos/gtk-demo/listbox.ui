@@ -175,7 +175,7 @@
         </child>
         <child>
           <object class="GtkRevealer" id="details_revealer">
-            <child>
+            <property name="child">
               <object class="GtkBox" id="box5">
                 <property name="orientation">vertical</property>
                 <child>
@@ -222,7 +222,7 @@ FAVORITES</property>
                   </object>
                 </child>
               </object>
-            </child>
+            </property>
             <layout>
               <property name="column">1</property>
               <property name="row">4</property>
