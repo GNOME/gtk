@@ -2001,16 +2001,16 @@ microphone-sensitivity-medium-symbolic</property>
                                             <style>
                                               <class name="view"/>
                                             </style>
-                                            <child>
+                                            <property name="start-child">
                                               <object class="GtkLabel">
                                                 <property name="label">Left</property>
                                               </object>
-                                            </child>
-                                            <child>
+                                            </property>
+                                            <property name="end-child">
                                               <object class="GtkLabel">
                                                 <property name="label">Right</property>
                                               </object>
-                                            </child>
+                                            </property>
                                           </object>
                                         </property>
                                       </object>
@@ -2025,16 +2025,16 @@ microphone-sensitivity-medium-symbolic</property>
                                             <style>
                                               <class name="view"/>
                                             </style>
-                                            <child>
+                                            <property name="start-child">
                                               <object class="GtkLabel">
                                                 <property name="label">Top</property>
                                               </object>
-                                            </child>
-                                            <child>
+                                            </property>
+                                            <property name="end-child">
                                               <object class="GtkLabel">
                                                 <property name="label">Bottom</property>
                                               </object>
-                                            </child>
+                                            </property>
                                           </object>
                                         </property>
                                       </object>
@@ -2707,7 +2707,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 <property name="child">
                                   <object class="GtkPaned">
                                     <property name="wide-handle">1</property>
-                                    <child>
+                                    <property name="start-child">
                                       <object class="GtkNotebook">
                                         <property name="show-border">0</property>
                                         <child type="action-end">
@@ -2786,8 +2786,8 @@ microphone-sensitivity-medium-symbolic</property>
                                           </object>
                                         </child>
                                       </object>
-                                    </child>
-                                    <child>
+                                    </property>
+                                    <property name="end-child">
                                       <object class="GtkNotebook">
                                         <property name="show-border">0</property>
                                         <child>
@@ -2805,7 +2805,7 @@ microphone-sensitivity-medium-symbolic</property>
                                           </object>
                                         </child>
                                       </object>
-                                    </child>
+                                    </property>
                                   </object>
                                 </property>
                                 <child>

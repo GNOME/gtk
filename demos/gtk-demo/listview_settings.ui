@@ -16,7 +16,7 @@
     <child>
       <object class="GtkPaned">
         <property name="position">300</property>
-        <child>
+        <property name="start-child">
           <object class="GtkScrolledWindow">
             <child>
               <object class="GtkListView" id="listview">
@@ -55,8 +55,8 @@
               </object>
             </child>
           </object>
-        </child>
-        <child>
+        </property>
+        <property name="end-child">
           <object class="GtkBox">
             <property name="orientation">vertical</property>
             <child>
@@ -260,7 +260,7 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
     </child>
   </object>
