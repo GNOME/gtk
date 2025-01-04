@@ -149,6 +149,9 @@ validate_template (const char *filename,
   GError *error = NULL;
   gboolean ret;
 
+  if (deprecations)
+    gtk_set_debug_flags (gtk_get_debug_flags () | GTK_DEBUG_BUILDER);
+
   builder = gtk_builder_new ();
   scope = fake_scope_new ();
   gtk_builder_set_scope (builder, GTK_BUILDER_SCOPE (scope));
@@ -221,6 +224,9 @@ validate_file (const char *filename,
   gboolean ret;
   char *class_name = NULL;
   char *parent_name = NULL;
+
+  if (deprecations)
+    gtk_set_debug_flags (gtk_get_debug_flags () | GTK_DEBUG_BUILDER);
 
   builder = gtk_builder_new ();
   scope = fake_scope_new ();
