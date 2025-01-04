@@ -57,6 +57,7 @@
 #include "gtkdragsourceprivate.h"
 #include "gtkdragicon.h"
 #include "gtkwidgetpaintable.h"
+#include "gtkbuilderprivate.h"
 
 #include <cairo-gobject.h>
 #include <string.h>
@@ -362,6 +363,8 @@ gtk_entry_buildable_custom_tag_start (GtkBuildable       *buildable,
   if (strcmp (tagname, "attributes") == 0)
     {
       GtkPangoAttributeParserData *parser_data;
+
+      gtk_buildable_tag_deprecation_warning (buildable, builder, "attributes", "attributes");
 
       parser_data = g_new0 (GtkPangoAttributeParserData, 1);
       parser_data->builder = g_object_ref (builder);
