@@ -130,12 +130,10 @@
                     <property name="valign">center</property>
                     <property name="model">
                       <object class="GtkStringList">
-                        <items>
-                          <item translatable="yes">None</item>
-                          <item translatable="yes">Slight</item>
-                          <item translatable="yes">Medium</item>
-                          <item translatable="yes">Full</item>
-                        </items>
+                        <property name="strings" translatable="yes" comment="these items must be separated by newlines">None
+Slight
+Medium
+Full</property>
                       </object>
                     </property>
                   </object>

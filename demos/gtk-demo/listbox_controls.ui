@@ -231,12 +231,10 @@
                                   <property name="valign">center</property>
                                   <property name="model">
                                     <object class="GtkStringList">
-                                      <items>
-                                        <item>Choice 1</item>
-                                        <item>Choice 2</item>
-                                        <item>Choice 3</item>
-                                        <item>Choice 4</item>
-                                      </items>
+                                      <property name="strings">Choice 1
+Choice 2
+Choice 3
+Choice 4</property>
                                     </object>
                                   </property>
                                 </object>
