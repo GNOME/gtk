@@ -111,7 +111,7 @@
                                         <property name="margin-end">6</property>
                                         <property name="margin-top">6</property>
                                         <property name="margin-bottom">6</property>
-                                        <child type="center">
+                                        <property name="center-widget">
                                           <object class="GtkSearchEntry" id="search_entry">
                                             <property name="width-chars">45</property>
                                             <property name="hexpand">1</property>
@@ -122,8 +122,8 @@
                                             <signal name="search-changed" handler="search_entry_activate_cb" swapped="yes"/>
                                             <signal name="stop-search" handler="search_entry_stop_cb" swapped="yes"/>
                                           </object>
-                                        </child>
-                                        <child type="end">
+                                        </property>
+                                        <property name="end-widget">
                                           <object class="GtkBox">
                                             <property name="spacing">6</property>
 
@@ -145,7 +145,7 @@
                                               </object>
                                             </child>
                                           </object>
-                                        </child>
+                                        </property>
                                       </object>
                                     </property>
                                   </object>

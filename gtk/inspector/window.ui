@@ -220,7 +220,7 @@
                             <property name="orientation">vertical</property>
                             <child>
                               <object class="GtkCenterBox">
-                                <child type="start">
+                                <property name="start-widget">
                                   <object class="GtkBox">
                                     <style>
                                       <class name="toolbar"/>
@@ -277,8 +277,8 @@
                                       </object>
                                     </child>
                                   </object>
-                                </child>
-                                <child type="center">
+                                </property>
+                                <property name="center-widget">
                                   <object class="GtkStack" id="object_center_stack">
                                     <property name="transition-type">crossfade</property>
                                     <property name="hexpand">1</property>
@@ -315,8 +315,8 @@
                                       </object>
                                     </child>
                                   </object>
-                                </child>
-                                <child type="end">
+                                </property>
+                                <property name="end-widget">
                                   <object class="GtkBox">
                                     <style>
                                       <class name="toolbar"/>
@@ -358,7 +358,7 @@
                                       </object>
                                     </child>
                                   </object>
-                                </child>
+                                </property>
                               </object>
                             </child>
                             <child>
