@@ -442,6 +442,8 @@ gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
 
   if (strcmp (tagname, "mime-types") == 0)
     {
+      gtk_buildable_tag_deprecation_warning (buildable,builder, "mime-types", "mime-types");
+
       data = g_new0 (SubParserData, 1);
       data->string = g_string_new ("");
       data->type = PARSE_MIME_TYPES;
@@ -453,6 +455,8 @@ gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
     }
   else if (strcmp (tagname, "patterns") == 0)
     {
+      gtk_buildable_tag_deprecation_warning (buildable,builder, "patterns", "patterns");
+
       data = g_new0 (SubParserData, 1);
       data->string = g_string_new ("");
       data->type = PARSE_PATTERNS;
@@ -464,6 +468,8 @@ gtk_file_filter_buildable_custom_tag_start (GtkBuildable       *buildable,
     }
   else if (strcmp (tagname, "suffixes") == 0)
     {
+      gtk_buildable_tag_deprecation_warning (buildable,builder, "suffixes", "suffixes");
+
       data = g_new0 (SubParserData, 1);
       data->string = g_string_new ("");
       data->type = PARSE_SUFFIXES;
