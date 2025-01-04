@@ -537,14 +537,19 @@ gtk_widget_measure (GtkWidget        *widget,
       g_hash_table_iter_init (&iter, peers);
       while (g_hash_table_iter_next (&iter, &key, NULL))
         {
-          GtkWidget *tmp_widget = key;
-          int min_dimension, nat_dimension;
+          GtkWidget *peer_widget = key;
+          int peer_for_size, peer_min, peer_nat;
 
-          gtk_widget_query_size_for_orientation (tmp_widget, orientation, for_size,
-                                                 &min_dimension, &nat_dimension, NULL, NULL);
+          if (g_hash_table_lookup (peers_for_both, peer_widget))
+            peer_for_size = for_size;
+          else
+            peer_for_size = -1;
 
-          min_result = MAX (min_result, min_dimension);
-          nat_result = MAX (nat_result, nat_dimension);
+          gtk_widget_query_size_for_orientation (peer_widget, orientation, peer_for_size,
+                                                 &peer_min, &peer_nat, NULL, NULL);
+
+          min_result = MAX (min_result, peer_min);
+          nat_result = MAX (nat_result, peer_nat);
         }
 
       g_hash_table_destroy (peers);
