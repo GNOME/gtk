@@ -67,6 +67,7 @@
 -(BOOL)trackManualMove;
 -(BOOL)trackManualResize;
 -(void)setDecorated:(BOOL)decorated;
+-(void)setWindowControlsHeight:(CGFloat)height;
 -(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage;
 -(BOOL)needsMouseDownQuirk;
 -(BOOL)inFullscreenTransition;

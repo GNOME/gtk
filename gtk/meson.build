@@ -689,6 +689,7 @@ if macos_enabled
     'gtkfilechoosernativequartz.c',
     'gtkimcontextquartz.c',
     'gtkquartz.c',
+    'gtkwindowbuttonsquartz.c',
   ])
 
   gtk_cargs += ['-xobjective-c']  # FIXME? maybe add_languages() instead?

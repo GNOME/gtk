@@ -42,6 +42,14 @@
 #include "gdkmonitorprivate.h"
 #include "gdksurfaceprivate.h"
 
+@interface NSWindow()
+/* Expose the private titlebarHeight property, so we can set
+ * the titlebar height to match the height of a GTK header bar.
+ */
+@property CGFloat titlebarHeight;
+
+@end
+
 @implementation GdkMacosWindow
 
 static Class _contentViewClass = nil;
@@ -790,6 +798,12 @@ static Class _contentViewClass = nil;
   [[self standardWindowButton:NSWindowZoomButton] setHidden:!decorated];
 
   [self setStyleMask:style_mask];
+}
+
+-(void)setWindowControlsHeight:(CGFloat)height;
+{
+  [self setTitlebarHeight:height];
+  [[self contentView] setNeedsLayout:YES];
 }
 
 -(GdkMacosSurface *)gdkSurface
