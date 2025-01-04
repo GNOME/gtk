@@ -386,9 +386,11 @@ gtk_application_window_added (GtkApplication *application,
 
           builder = gtk_builder_new_from_resource (priv->help_overlay_path);
           help_overlay = GTK_WIDGET (gtk_builder_get_object (builder, "help_overlay"));
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
           if (GTK_IS_SHORTCUTS_WINDOW (help_overlay))
             gtk_application_window_set_help_overlay (GTK_APPLICATION_WINDOW (window),
                                                      GTK_SHORTCUTS_WINDOW (help_overlay));
+G_GNUC_END_IGNORE_DEPRECATIONS
           g_object_unref (builder);
         }
     }

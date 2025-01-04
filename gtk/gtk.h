@@ -239,12 +239,12 @@
 #include <gtk/gtkshortcut.h>
 #include <gtk/gtkshortcutaction.h>
 #include <gtk/gtkshortcutcontroller.h>
-#include <gtk/gtkshortcutlabel.h>
 #include <gtk/gtkshortcutmanager.h>
-#include <gtk/gtkshortcutsgroup.h>
-#include <gtk/gtkshortcutssection.h>
-#include <gtk/gtkshortcutsshortcut.h>
-#include <gtk/gtkshortcutswindow.h>
+#include <gtk/deprecated/gtkshortcutlabel.h>
+#include <gtk/deprecated/gtkshortcutsgroup.h>
+#include <gtk/deprecated/gtkshortcutssection.h>
+#include <gtk/deprecated/gtkshortcutsshortcut.h>
+#include <gtk/deprecated/gtkshortcutswindow.h>
 #include <gtk/gtkshortcuttrigger.h>
 #include <gtk/deprecated/gtkshow.h>
 #include <gtk/gtksignallistitemfactory.h>

@@ -37,6 +37,8 @@
 #include "gtkcenterbox.h"
 #include <glib/gi18n-lib.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkShortcutsSection:
  *
@@ -496,6 +498,8 @@ gtk_shortcuts_section_set_max_height (GtkShortcutsSection *self,
  * `GtkShortcutsSection` manages its children internally.
  *
  * Since: 4.14
+ *
+ * Deprecated: 4.18
  */
 void
 gtk_shortcuts_section_add_group (GtkShortcutsSection *self,

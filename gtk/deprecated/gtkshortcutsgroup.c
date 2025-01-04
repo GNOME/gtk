@@ -29,6 +29,8 @@
 #include "gtksizegroup.h"
 #include "gtkaccessible.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkShortcutsGroup:
  *
@@ -381,6 +383,8 @@ gtk_shortcuts_group_init (GtkShortcutsGroup *self)
  * appropriate as `GtkShortcutsGroup` manages its children internally.
  *
  * Since: 4.14
+ *
+ * Deprecated: 4.18
  */
 void
 gtk_shortcuts_group_add_shortcut (GtkShortcutsGroup    *self,

@@ -31,6 +31,8 @@
 #include "gtksizegroup.h"
 #include "gtktypebuiltins.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /**
  * GtkShortcutsShortcut:
  *
