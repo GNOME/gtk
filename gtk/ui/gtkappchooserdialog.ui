@@ -11,12 +11,12 @@
         <property name="spacing">2</property>
         <child>
           <object class="GtkSearchBar" id="search_bar">
-            <child>
+            <property name="child">
               <object class="GtkSearchEntry" id="search_entry">
                 <property name="hexpand">1</property>
                 <property name="max-width-chars">40</property>
               </object>
-            </child>
+            </property>
           </object>
         </child>
         <child internal-child="action_area">

@@ -26,11 +26,11 @@
           <object class="GtkSearchBar">
             <property name="search-mode-enabled" bind-source="search_button" bind-property="active" bind-flags="bidirectional"/>
             <signal name="notify::search-mode-enabled" handler="search_enabled" object="entry"/>
-            <child>
+            <property name="child">
               <object class="GtkSearchEntry" id="entry">
                 <signal name="stop-search" handler="stop_search"/>
               </object>
-            </child>
+            </property>
           </object>
         </child>
         <child>

@@ -1941,9 +1941,9 @@ microphone-sensitivity-medium-symbolic</property>
                                     </child>
                                     <child>
                                       <object class="GtkSearchBar" id="searchbar">
-                                        <child>
+                                        <property name="child">
                                           <object class="GtkSearchEntry"/>
-                                        </child>
+                                        </property>
                                       </object>
                                     </child>
                                     <child>
