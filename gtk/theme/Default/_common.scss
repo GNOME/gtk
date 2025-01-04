@@ -3188,18 +3188,11 @@ window.dialog.print {
     }
   }
 
-  drawing {
+  .drawing {
     color: $fg_color;
     background: none;
     border: none;
     padding: 0;
-
-    paper {
-      background: white;
-      color: #2e3436;
-      border: 1px solid $borders_color;
-    }
-
   }
 
   .dialog-action-box { margin: 12px; }

@@ -765,6 +765,7 @@
                             <child>
                               <object class="GtkDrawingArea" id="page_layout_preview">
                                 <property name="accessible-role">img</property>
+                                <property name="css-classes">drawing</property>
                                 <accessibility>
                                   <property name="label" translatable="1">Page layout preview</property>
                                 </accessibility>

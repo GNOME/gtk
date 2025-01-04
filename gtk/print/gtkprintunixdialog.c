@@ -29,9 +29,6 @@
 
 #include "gtkmarshalers.h"
 #include "deprecated/gtkdialogprivate.h"
-#include "gtkrenderbackgroundprivate.h"
-#include "gtkrenderborderprivate.h"
-#include "gtkcsscolorvalueprivate.h"
 
 #include "gtkprintunixdialog.h"
 
@@ -325,8 +322,6 @@ struct _GtkPrintUnixDialog
   char *format_for_printer;
 
   int current_page;
-  GtkCssNode *collate_paper_node;
-  GtkCssNode *page_layout_paper_node;
 };
 
 struct _GtkPrintUnixDialogClass
@@ -909,17 +904,6 @@ gtk_print_unix_dialog_init (GtkPrintUnixDialog *dialog)
   gtk_drawing_area_set_draw_func (GTK_DRAWING_AREA (dialog->page_layout_preview),
                                   draw_page,
                                   dialog, NULL);
-  gtk_css_node_set_name (gtk_widget_get_css_node (dialog->page_layout_preview), g_quark_from_static_string ("drawing"));
-
-  dialog->collate_paper_node = gtk_css_node_new();
-  gtk_css_node_set_name (dialog->collate_paper_node, g_quark_from_static_string ("paper"));
-  g_object_unref (dialog->collate_paper_node);
-
-  dialog->page_layout_paper_node = gtk_css_node_new();
-  gtk_css_node_set_name (dialog->page_layout_paper_node, g_quark_from_static_string ("paper"));
-  gtk_css_node_set_parent (dialog->page_layout_paper_node,
-                           gtk_widget_get_css_node (dialog->page_layout_preview));
-  g_object_unref (dialog->page_layout_paper_node);
 }
 
 static void
@@ -2324,7 +2308,6 @@ draw_page (GtkDrawingArea *da,
 {
   GtkWidget *widget = GTK_WIDGET (da);
   GtkPrintUnixDialog *dialog = GTK_PRINT_UNIX_DIALOG (data);
-  GtkCssStyle *style;
   double ratio;
   int w, h, tmp;
   int pages_x, pages_y, i, x, y, layout_w, layout_h;
@@ -2344,9 +2327,6 @@ draw_page (GtkDrawingArea *da,
   double pos_x, pos_y;
   int pages_per_sheet;
   gboolean ltr = TRUE;
-  GtkSnapshot *snapshot;
-  GtkCssBoxes boxes;
-  GskRenderNode *node;
 
   orientation = gtk_page_setup_get_orientation (dialog->page_setup);
   landscape =
@@ -2433,28 +2413,18 @@ draw_page (GtkDrawingArea *da,
       pages_y = tmp;
     }
 
-  style = gtk_css_node_get_style (dialog->page_layout_paper_node);
-  color = *gtk_css_color_value_get_rgba (style->used->color);
+  gtk_widget_get_color (dialog->page_a1, &color);
 
   pos_x = (width - w) / 2;
   pos_y = (height - h) / 2 - 10;
   cairo_translate (cr, pos_x, pos_y);
 
-  snapshot = gtk_snapshot_new ();
-  gtk_css_boxes_init_border_box (&boxes,
-                                 gtk_css_node_get_style (dialog->page_layout_paper_node),
-                                 1, 1, w, h);
-  gtk_css_style_snapshot_background (&boxes, snapshot);
-  gtk_css_style_snapshot_border (&boxes, snapshot);
-
-  node = gtk_snapshot_free_to_node (snapshot);
-  if (node)
-    {
-      gsk_render_node_draw (node, cr);
-      gsk_render_node_unref (node);
-    }
-
+  cairo_rectangle (cr, 1, 1, w, h);
+  cairo_set_source_rgba (cr, 1, 1, 1, 1);
+  cairo_fill_preserve (cr);
+  cairo_set_source_rgba (cr, 0.5, 0.5, 0.5, 0.5);
   cairo_set_line_width (cr, 1.0);
+  cairo_stroke (cr);
 
   i = 1;
 
