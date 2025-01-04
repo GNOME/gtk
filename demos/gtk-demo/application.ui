@@ -5,7 +5,7 @@
     <property name="default-width">200</property>
     <property name="default-height">200</property>
     <property name="icon-name">document-open</property>
-    <child>
+    <property name="child">
       <object class="GtkGrid">
         <child>
           <object class="GtkBox">
@@ -90,7 +90,7 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </template>
   <menu id="toolmenu">
     <item>

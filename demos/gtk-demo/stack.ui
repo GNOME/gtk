@@ -3,7 +3,7 @@
   <object class="GtkWindow" id="window1">
     <property name="title" translatable="yes">Stack</property>
     <property name="resizable">0</property>
-    <child>
+    <property name="child">
       <object class="GtkGrid">
         <child>
           <object class="GtkStackSwitcher">
@@ -65,6 +65,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

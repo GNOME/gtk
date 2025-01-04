@@ -4,7 +4,7 @@
     <property name="default-width">300</property>
     <property name="default-height">300</property>
     <property name="title">Revealer</property>
-    <child>
+    <property name="child">
       <object class="GtkGrid">
         <property name="halign">center</property>
         <property name="valign">center</property>
@@ -151,6 +151,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

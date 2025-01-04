@@ -90,7 +90,7 @@
     <property name="default-height">250</property>
     <property name="default-width">440</property>
     <property name="title" translatable="yes">Builder</property>
-    <child>
+    <property name="child">
       <object class="GtkBox" id="vbox1">
         <property name="orientation">vertical</property>
         <child>
@@ -217,6 +217,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

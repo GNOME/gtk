@@ -4,7 +4,7 @@
     <property name="title" translatable="yes">Help</property>
     <property name="default-width">920</property>
     <property name="default-height">600</property>
-    <child>
+    <property name="child">
       <object class="GtkScrolledWindow">
         <property name="child">
           <object class="GtkTextView" id="text_view">
@@ -20,6 +20,6 @@
           </object>
         </property>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

@@ -431,7 +431,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
   </object>
   <object class="GtkApplicationWindow" id="window">
     <property name="title">GTK Widget Factory</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar" id="headerbar1">
         <property name="title-widget">
           <object class="GtkStackSwitcher" id="stack_switcher">
@@ -464,8 +464,8 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
           </object>
         </child>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkBox" id="box1">
         <property name="orientation">1</property>
         <property name="margin-start">10</property>
@@ -2944,7 +2944,7 @@ microphone-sensitivity-medium-symbolic</property>
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
   <object class="GtkMessageDialog" id="info_dialog">
     <property name="transient-for">window</property>

@@ -10,7 +10,7 @@
     <property name="title" translatable="yes">Settings</property>
     <property name="default-width">640</property>
     <property name="default-height">480</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar">
         <child type="end">
           <object class="GtkToggleButton" id="search_button">
@@ -18,8 +18,8 @@
           </object>
         </child>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
@@ -125,6 +125,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

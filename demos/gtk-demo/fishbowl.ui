@@ -4,7 +4,7 @@
     <property name="title" translatable="yes">Fishbowl</property>
     <property name="default-width">400</property>
     <property name="default-height">400</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar" id="">
         <child type="start">
           <object class="GtkBox">
@@ -44,14 +44,14 @@
           </object>
         </child>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkFishbowl" id="bowl">
         <property name="visible">True</property>
         <property name="overflow">hidden</property>
         <property name="animating">True</property>
         <property name="benchmark" bind-source="changes_allow" bind-property="active" bind-flags="invert-boolean | sync-create"/>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

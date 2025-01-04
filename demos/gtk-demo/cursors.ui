@@ -644,7 +644,7 @@
     <property name="default-width">300</property>
     <property name="default-height">300</property>
     <property name="title">Cursors</property>
-    <child>
+    <property name="child">
       <object class="GtkScrolledWindow">
         <property name="hscrollbar-policy">never</property>
         <property name="propagate-natural-height">1</property>
@@ -2897,6 +2897,6 @@
           </object>
         </property>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

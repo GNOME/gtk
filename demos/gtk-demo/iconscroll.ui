@@ -4,7 +4,7 @@
     <property name="resizable">1</property>
     <property name="default-width">500</property>
     <property name="default-height">500</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar">
         <child type="start">
           <object class="GtkBox">
@@ -31,8 +31,8 @@
           </object>
         </child>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkScrolledWindow" id="scrolledwindow">
         <property name="hscrollbar-policy">never</property>
         <property name="hadjustment">
@@ -42,6 +42,6 @@
           <object class="GtkAdjustment" id="vadjustment"/>
         </property>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

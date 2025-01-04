@@ -10,7 +10,7 @@
   <template class="GtkInspectorWindow" parent="GtkWindow">
     <property name="default-height">500</property>
     <property name="default-width">800</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar">
         <child>
           <object class="GtkStack" id="button_stack">
@@ -190,8 +190,8 @@
           </object>
         </child>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkStack" id="top_stack">
         <child>
           <object class="GtkStackPage">
@@ -623,6 +623,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </template>
 </interface>

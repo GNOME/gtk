@@ -7,7 +7,7 @@
     <accessibility>
       <relation name="described-by">label</relation>
     </accessibility>
-    <child>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="margin-start">12</property>
@@ -353,6 +353,6 @@ Folder</property>
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

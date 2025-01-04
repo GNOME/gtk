@@ -2,7 +2,7 @@
 <interface>
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">Text along a Path</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar">
         <child type="end">
           <object class="GtkToggleButton" id="edit-toggle">
@@ -10,8 +10,8 @@
           </object>
         </child>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
@@ -33,6 +33,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

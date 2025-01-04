@@ -19,7 +19,7 @@
   <object class="GtkApplicationWindow" id="window">
     <property name="default-width">800</property>
     <property name="default-height">600</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
         <child type="start">
           <object class="GtkButton">
@@ -52,8 +52,8 @@
           </object>
         </child>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkBox">
         <child>
           <object class="GtkBox">
@@ -179,6 +179,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

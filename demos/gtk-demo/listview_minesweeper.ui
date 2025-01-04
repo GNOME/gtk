@@ -4,7 +4,7 @@
   </object>
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">Minesweeper</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar">
         <child type="start">
           <object class="GtkButton">
@@ -21,8 +21,8 @@
           </object>
         </property>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkGridView" id="view">
         <property name="model">
           <object class="GtkNoSelection">
@@ -43,6 +43,6 @@
         </property>
         <signal name="activate" handler="minesweeper_cell_clicked_cb" object="game" swapped="no"/>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

@@ -5,7 +5,7 @@
     <style>
       <class name="aboutdialog"/>
     </style>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar" id="headerbar1">
         <property name="title-widget">
           <object class="GtkStackSwitcher" id="stack_switcher">
@@ -17,8 +17,8 @@
           </object>
         </property>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">1</property>
         <property name="spacing">2</property>
@@ -267,6 +267,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </template>
 </interface>

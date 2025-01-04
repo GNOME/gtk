@@ -3,7 +3,7 @@
   <object class="GtkWindow" id="window">
     <property name="default-width">1024</property>
     <property name="default-height">768</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar">
         <property name="title-widget">
           <object class="GtkBox">
@@ -27,8 +27,8 @@
           </object>
         </property>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
@@ -272,6 +272,6 @@ Full</property>
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>
