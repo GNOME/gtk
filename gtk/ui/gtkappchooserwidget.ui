@@ -20,7 +20,7 @@
   <template class="GtkAppChooserWidget" parent="GtkWidget">
     <child>
       <object class="GtkOverlay" id="overlay">
-        <child>
+        <property name="child">
           <object class="GtkScrolledWindow" id="scrolled_window">
             <property name="width-request">400</property>
             <property name="height-request">300</property>
@@ -75,7 +75,7 @@
               </object>
             </property>
           </object>
-        </child>
+        </property>
         <child type="overlay">
           <object class="GtkBox" id="no_apps">
             <property name="visible">0</property>

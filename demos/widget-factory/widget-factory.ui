@@ -1541,7 +1541,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                         </property>
                       </object>
                     </child>
-                    <child>
+                    <property name="child">
                       <object class="GtkBox">
                         <property name="spacing">10</property>
                         <child>
@@ -2143,7 +2143,7 @@ microphone-sensitivity-medium-symbolic</property>
                           </object>
                         </child>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </property>
               </object>
@@ -2702,7 +2702,7 @@ microphone-sensitivity-medium-symbolic</property>
                                 </child>
                               </object>
                             </child>
-                            <child>
+                            <property name="child">
                               <object class="GtkFrame" id="osd_frame">
                                 <property name="child">
                                   <object class="GtkPaned">
@@ -2814,7 +2814,7 @@ microphone-sensitivity-medium-symbolic</property>
                                   </object>
                                 </child>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                       </object>

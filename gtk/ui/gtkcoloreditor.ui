@@ -29,7 +29,7 @@
     <child>
       <object class="GtkOverlay" id="overlay">
         <signal name="get-child-position" handler="get_child_position" swapped="no"/>
-        <child>
+        <property name="child">
           <object class="GtkGrid" id="grid">
             <property name="margin-start">30</property>
             <property name="margin-end">30</property>
@@ -135,7 +135,7 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
     </child>
   </template>

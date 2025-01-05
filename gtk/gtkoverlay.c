@@ -24,6 +24,7 @@
 
 #include "gtkoverlaylayout.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkmarshalers.h"
 #include "gtkprivate.h"
 #include "gtkscrolledwindow.h"
@@ -387,11 +388,18 @@ gtk_overlay_buildable_add_child (GtkBuildable *buildable,
   if (GTK_IS_WIDGET (child))
     {
       if (type && strcmp (type, "overlay") == 0)
-        gtk_overlay_add_overlay (GTK_OVERLAY (buildable), GTK_WIDGET (child));
+        {
+          gtk_overlay_add_overlay (GTK_OVERLAY (buildable), GTK_WIDGET (child));
+        }
       else if (!type)
-        gtk_overlay_set_child (GTK_OVERLAY (buildable), GTK_WIDGET (child));
+        {
+          gtk_buildable_child_deprecation_warning (buildable, builder, NULL, "child");
+          gtk_overlay_set_child (GTK_OVERLAY (buildable), GTK_WIDGET (child));
+        }
       else
-        GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+        {
+          GTK_BUILDER_WARN_INVALID_CHILD_TYPE (buildable, type);
+        }
     }
   else
     {
