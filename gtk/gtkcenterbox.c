@@ -64,6 +64,7 @@
 #include "gtkwidgetprivate.h"
 #include "gtkorientable.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtksizerequest.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
@@ -113,13 +114,24 @@ gtk_center_box_buildable_add_child (GtkBuildable  *buildable,
                                     const char    *type)
 {
   if (g_strcmp0 (type, "start") == 0)
-    gtk_center_box_set_start_widget (GTK_CENTER_BOX (buildable), GTK_WIDGET (child));
+    {
+      gtk_buildable_child_deprecation_warning (buildable, builder, "start", "start-widget");
+      gtk_center_box_set_start_widget (GTK_CENTER_BOX (buildable), GTK_WIDGET (child));
+    }
   else if (g_strcmp0 (type, "center") == 0)
-    gtk_center_box_set_center_widget (GTK_CENTER_BOX (buildable), GTK_WIDGET (child));
+    {
+      gtk_buildable_child_deprecation_warning (buildable, builder, "center", "center-widget");
+      gtk_center_box_set_center_widget (GTK_CENTER_BOX (buildable), GTK_WIDGET (child));
+    }
   else if (g_strcmp0 (type, "end") == 0)
-    gtk_center_box_set_end_widget (GTK_CENTER_BOX (buildable), GTK_WIDGET (child));
+    {
+      gtk_buildable_child_deprecation_warning (buildable, builder, "end", "end-widget");
+      gtk_center_box_set_end_widget (GTK_CENTER_BOX (buildable), GTK_WIDGET (child));
+    }
   else
-    parent_buildable_iface->add_child (buildable, builder, child, type);
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
 }
 
 static void

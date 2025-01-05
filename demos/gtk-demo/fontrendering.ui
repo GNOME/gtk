@@ -3,9 +3,9 @@
   <object class="GtkWindow" id="window">
     <property name="default-width">1024</property>
     <property name="default-height">768</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar">
-        <child type="title">
+        <property name="title-widget">
           <object class="GtkBox">
             <property name="halign">center</property>
             <property name="valign">center</property>
@@ -25,10 +25,10 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
@@ -130,12 +130,10 @@
                     <property name="valign">center</property>
                     <property name="model">
                       <object class="GtkStringList">
-                        <items>
-                          <item translatable="yes">None</item>
-                          <item translatable="yes">Slight</item>
-                          <item translatable="yes">Medium</item>
-                          <item translatable="yes">Full</item>
-                        </items>
+                        <property name="strings" translatable="yes" comment="these items must be separated by newlines">None
+Slight
+Medium
+Full</property>
                       </object>
                     </property>
                   </object>
@@ -261,7 +259,7 @@
             <property name="propagate-natural-height">1</property>
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>
-            <child>
+            <property name="child">
               <object class="GtkPicture" id="image">
                 <accessibility>
                   <property name="label">Font rendering example</property>
@@ -270,10 +268,10 @@
                 <property name="valign">center</property>
                 <property name="can-shrink">0</property>
               </object>
-            </child>
+            </property>
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

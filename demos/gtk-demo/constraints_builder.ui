@@ -3,7 +3,7 @@
   <object class="GtkWindow" id="window1">
     <property name="title" translatable="yes">Constraints — Builder</property>
     <property name="default-width">260</property>
-    <child>
+    <property name="child">
       <object class="ConstraintsGrid">
         <property name="halign">fill</property>
         <property name="valign">fill</property>
@@ -455,6 +455,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

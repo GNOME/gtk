@@ -27,10 +27,16 @@ print out different types of debugging information.
 : Actions and menu models
 
 `builder`
-: GtkBuilder support
+: Deprecated GtkBuilder features
+
+`builder-trace`
+: Trace GtkBuilder operation
 
 `builder-objects`
 : Unused GtkBuilder objects
+
+`css`
+: Deprecated CSS features
 
 `geometry`
 : Size allocation

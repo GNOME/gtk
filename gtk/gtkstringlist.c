@@ -363,6 +363,8 @@ gtk_string_list_buildable_custom_tag_start (GtkBuildable       *buildable,
     {
       ItemParserData *data;
 
+      gtk_buildable_tag_deprecation_warning (buildable, builder, "items", "strings");
+
       data = g_new0 (ItemParserData, 1);
       data->builder = g_object_ref (builder);
       data->list = g_object_ref (GTK_STRING_LIST (buildable));

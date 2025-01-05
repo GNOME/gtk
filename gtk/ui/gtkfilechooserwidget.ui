@@ -32,7 +32,7 @@
                     <child>
                       <object class="GtkRevealer" id="browse_header_revealer">
                         <property name="hexpand">1</property>
-                        <child>
+                        <property name="child">
                           <object class="GtkBox">
                             <property name="name">pathbarbox</property>
                             <property name="orientation">1</property>
@@ -111,7 +111,7 @@
                                         <property name="margin-end">6</property>
                                         <property name="margin-top">6</property>
                                         <property name="margin-bottom">6</property>
-                                        <child type="center">
+                                        <property name="center-widget">
                                           <object class="GtkSearchEntry" id="search_entry">
                                             <property name="width-chars">45</property>
                                             <property name="hexpand">1</property>
@@ -122,8 +122,8 @@
                                             <signal name="search-changed" handler="search_entry_activate_cb" swapped="yes"/>
                                             <signal name="stop-search" handler="search_entry_stop_cb" swapped="yes"/>
                                           </object>
-                                        </child>
-                                        <child type="end">
+                                        </property>
+                                        <property name="end-widget">
                                           <object class="GtkBox">
                                             <property name="spacing">6</property>
 
@@ -145,7 +145,7 @@
                                               </object>
                                             </child>
                                           </object>
-                                        </child>
+                                        </property>
                                       </object>
                                     </property>
                                   </object>
@@ -153,7 +153,7 @@
                               </object>
                             </child>
                           </object>
-                        </child>
+                        </property>
                       </object>
                     </child>
                     <child>
@@ -178,7 +178,7 @@
                                       <object class="GtkScrolledWindow" id="browse_files_swin">
                                         <property name="hscrollbar-policy">2</property>
                                         <property name="vexpand">1</property>
-                                        <child>
+                                        <property name="child">
                                           <object class="GtkColumnView" id="browse_files_column_view">
                                             <style>
                                               <class name="complex"/>
@@ -191,7 +191,7 @@
                                             <signal name="activate" handler="browse_files_view_row_activated_cb" swapped="no"/>
                                             <signal name="keynav-failed" handler="browse_files_view_keynav_failed_cb"/>
                                           </object>
-                                        </child>
+                                        </property>
                                       </object>
                                     </child>
                                     <child>
@@ -248,10 +248,7 @@
                                     <child>
                                       <object class="GtkLabel">
                                         <property name="label" translatable="yes">No Results Found</property>
-                                        <attributes>
-                                          <attribute name="weight" value="bold"></attribute>
-                                          <attribute name="scale" value="1.44"></attribute>
-                                        </attributes>
+                                        <property name="attributes">0 -1 weight bold, 0 -1 scale 1.44</property>
                                         <layout>
                                           <property name="column">0</property>
                                           <property name="row">1</property>
@@ -321,7 +318,7 @@
   </object>
   <object class="GtkPopover" id="new_folder_popover">
     <signal name="notify::visible" handler="new_folder_popover_active"/>
-    <child>
+    <property name="child">
       <object class="GtkGrid">
         <property name="margin-start">10</property>
         <property name="margin-end">10</property>
@@ -334,9 +331,7 @@
             <property name="label" translatable="yes">Folder Name</property>
             <property name="halign">1</property>
             <property name="mnemonic-widget">new_folder_name_entry</property>
-            <attributes>
-              <attribute name="weight" value="bold"></attribute>
-            </attributes>
+            <property name="attributes">0 -1 weight bold</property>
             <layout>
               <property name="column-span">2</property>
             </layout>
@@ -379,11 +374,11 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
   <object class="GtkPopover" id="rename_file_popover">
     <signal name="closed" handler="rename_file_end"/>
-    <child>
+    <property name="child">
       <object class="GtkGrid">
         <property name="margin-start">10</property>
         <property name="margin-end">10</property>
@@ -396,9 +391,7 @@
             <property name="label" translatable="yes">Name</property>
             <property name="halign">1</property>
             <property name="mnemonic-widget">rename_file_name_entry</property>
-            <attributes>
-              <attribute name="weight" value="bold"></attribute>
-            </attributes>
+            <property name="attributes">0 -1 weight bold</property>
             <layout>
               <property name="column-span">2</property>
             </layout>
@@ -440,7 +433,7 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
   <object class="GtkGridView" id="browse_files_grid_view">
     <signal name="activate" handler="browse_files_view_row_activated_cb" swapped="no"/>
@@ -488,9 +481,7 @@
                 <property name="wrap-mode">word-char</property>
                 <property name="ellipsize">middle</property>
                 <property name="justify">center</property>
-                <attributes>
-                  <attribute name="insert-hyphens" value="false"></attribute>
-                </attributes>
+                <property name="attributes">0 -1 insert-hyphens false</property>
                 <binding name="label">
                   <closure type="gchararray" function="column_view_get_file_display_name">
                     <lookup name="item">GtkListItem</lookup>

@@ -2,7 +2,7 @@
 <interface>
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">Text along a Path</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar">
         <child type="end">
           <object class="GtkToggleButton" id="edit-toggle">
@@ -10,18 +10,18 @@
           </object>
         </child>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkRevealer">
             <property name="reveal-child" bind-source="edit-toggle" bind-property="active" bind-flags="sync-create"></property>
-            <child>
+            <property name="child">
               <object class="GtkEntry" id="text">
                 <property name="text">Through the looking glass</property>
               </object>
-            </child>
+            </property>
           </object>
         </child>
         <child>
@@ -33,6 +33,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

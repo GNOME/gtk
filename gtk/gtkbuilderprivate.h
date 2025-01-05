@@ -297,3 +297,11 @@ GObject *_gtk_builder_lookup_object       (GtkBuilder                *builder,
 gboolean _gtk_builder_lookup_failed       (GtkBuilder                *builder,
                                            GError                   **error);
 
+void     gtk_buildable_child_deprecation_warning (GtkBuildable *buildable,
+                                                  GtkBuilder   *builder,
+                                                  const char   *type,
+                                                  const char   *prop);
+void     gtk_buildable_tag_deprecation_warning   (GtkBuildable *buildable,
+                                                  GtkBuilder   *builder,
+                                                  const char   *tag,
+                                                  const char   *prop);

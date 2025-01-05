@@ -19,9 +19,9 @@
   <object class="GtkApplicationWindow" id="window">
     <property name="default-width">800</property>
     <property name="default-height">600</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
-        <child>
+        <child type="start">
           <object class="GtkButton">
             <property name="valign">center</property>
             <property name="action-name">win.run</property>
@@ -29,7 +29,7 @@
             <property name="label" translatable="yes">Run</property>
           </object>
         </child>
-        <child>
+        <child type="start">
           <object class="GtkToggleButton">
             <property name="icon-name">edit-find-symbolic</property>
             <property name="valign">center</property>
@@ -52,8 +52,8 @@
           </object>
         </child>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkBox">
         <child>
           <object class="GtkBox">
@@ -64,14 +64,14 @@
                   <relation name="labelled-by">search-entry</relation>
                 </accessibility>
                 <property name="key-capture-widget">window</property>
-                <child>
+                <property name="child">
                   <object class="GtkSearchEntry" id="search-entry">
                     <accessibility>
                       <property name="label" translatable="yes">Search</property>
                       <relation name="controls">listview</relation>
                     </accessibility>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
@@ -82,7 +82,7 @@
                 <property name="hscrollbar-policy">never</property>
                 <property name="propagate-natural-width">1</property>
                 <property name="vexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkListView" id="listview">
                     <style>
                       <class name="navigation-sidebar"/>
@@ -98,7 +98,7 @@
                       <relation name="controls">notebook</relation>
                     </accessibility>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
           </object>
@@ -115,7 +115,7 @@
                 <property name="tab-expand">1</property>
                 <property name="child">
                   <object class="GtkScrolledWindow">
-                    <child>
+                    <property name="child">
                       <object class="GtkTextView" id="info-textview">
                         <property name="left-margin">20</property>
                         <property name="right-margin">20</property>
@@ -132,7 +132,7 @@
                           <property name="description" translatable="yes">A description of the demo</property>
                         </accessibility>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </property>
                 <property name="tab">
@@ -149,7 +149,7 @@
                 <property name="tab-expand">1</property>
                 <property name="child">
                   <object class="GtkScrolledWindow" id="source-scrolledwindow">
-                    <child>
+                    <property name="child">
                       <object class="GtkTextView" id="source-textview">
                         <property name="left-margin">20</property>
                         <property name="right-margin">20</property>
@@ -166,7 +166,7 @@
                           <property name="description" translatable="yes">The source code of the demo</property>
                         </accessibility>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </property>
                 <property name="tab">
@@ -179,6 +179,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

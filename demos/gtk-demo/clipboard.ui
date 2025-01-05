@@ -7,7 +7,7 @@
     <accessibility>
       <relation name="described-by">label</relation>
     </accessibility>
-    <child>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="margin-start">12</property>
@@ -33,13 +33,11 @@
                 <property name="valign">center</property>
                 <property name="model">
                   <object class="GtkStringList">
-                    <items>
-                      <item>Text</item>
-                      <item>Color</item>
-                      <item>Image</item>
-                      <item>File</item>
-                      <item>Folder</item>
-                    </items>
+                    <property name="strings">Text
+Color
+Image
+File
+Folder</property>
                   </object>
                 </property>
               </object>
@@ -103,9 +101,7 @@
                               <property name="label">Photo Drag Source</property>
                             </accessibility>
                             <property name="active">1</property>
-                            <child>
-                            </child>
-                            <child>
+                            <property name="child">
                               <object class="GtkImage">
                                 <accessibility>
                                   <property name="label">Portland Rose Photo</property>
@@ -115,7 +111,7 @@
                                 </style>
                                 <property name="paintable">resource:///transparent/portland-rose.jpg</property>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                         <child>
@@ -129,7 +125,7 @@
                                 <signal name="prepare" handler="drag_prepare"/>
                               </object>
                             </child>
-                            <child>
+                            <property name="child">
                               <object class="GtkImage">
                                 <accessibility>
                                   <property name="label">Floppy Buddy Icon</property>
@@ -139,7 +135,7 @@
                                 </style>
                                 <property name="paintable">resource:///images/floppybuddy.gif</property>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                         <child>
@@ -153,7 +149,7 @@
                                 <signal name="prepare" handler="drag_prepare"/>
                               </object>
                             </child>
-                            <child>
+                            <property name="child">
                               <object class="GtkImage">
                                 <accessibility>
                                   <property name="label">gtk-demo logo</property>
@@ -163,7 +159,7 @@
                                 </style>
                                 <property name="paintable">resource:///images/org.gtk.Demo4.svg</property>
                               </object>
-                            </child>
+                            </property>
                           </object>
                         </child>
                       </object>
@@ -357,6 +353,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

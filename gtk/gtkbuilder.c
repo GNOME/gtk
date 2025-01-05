@@ -805,8 +805,8 @@ gtk_builder_get_internal_child (GtkBuilder   *builder,
       if (!info)
         break;
 
-      GTK_DEBUG (BUILDER, "Trying to get internal child %s from %s",
-                          childname, object_get_id (info->object));
+      GTK_DEBUG (BUILDER_TRACE, "Trying to get internal child %s from %s",
+                                childname, object_get_id (info->object));
 
       if (GTK_IS_BUILDABLE (info->object))
           obj = gtk_buildable_get_internal_child (GTK_BUILDABLE (info->object),
@@ -1011,7 +1011,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
       if (G_IS_INITIALLY_UNOWNED (obj))
         g_object_ref_sink (obj);
 
-      GTK_DEBUG (BUILDER, "created %s of type %s", info->id, g_type_name (info->type));
+      GTK_DEBUG (BUILDER_TRACE, "created %s of type %s", info->id, g_type_name (info->type));
     }
   object_properties_destroy (&construct_parameters);
 
@@ -1037,7 +1037,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
               const GValue *value = object_properties_get_value (&parameters, i);
 
               iface->set_buildable_property (buildable, builder, name, value);
-              if (GTK_DEBUG_CHECK (BUILDER))
+              if (GTK_DEBUG_CHECK (BUILDER_TRACE))
                 {
                   char *str = g_strdup_value_contents (value);
                   g_message ("set %s: %s = %s", info->id, name, str);
@@ -1051,7 +1051,7 @@ _gtk_builder_construct (GtkBuilder  *builder,
                          parameters.names->len,
                          (const char **) parameters.names->pdata,
                          (GValue *) parameters.values->data);
-          if (GTK_DEBUG_CHECK (BUILDER))
+          if (GTK_DEBUG_CHECK (BUILDER_TRACE))
             {
               for (i = 0; i < parameters.names->len; i++)
                 {
@@ -1117,7 +1117,7 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
               const char *name = object_properties_get_name (&parameters, i);
               const GValue *value = object_properties_get_value (&parameters, i);
               iface->set_buildable_property (buildable, builder, name, value);
-              if (GTK_DEBUG_CHECK (BUILDER))
+              if (GTK_DEBUG_CHECK (BUILDER_TRACE))
                 {
                   char *str = g_strdup_value_contents (value);
                   g_message ("set %s: %s = %s", info->id, name, str);
@@ -1131,7 +1131,7 @@ _gtk_builder_apply_properties (GtkBuilder  *builder,
                          parameters.names->len,
                          (const char **) parameters.names->pdata,
                          (GValue *) parameters.values->data);
-          if (GTK_DEBUG_CHECK (BUILDER))
+          if (GTK_DEBUG_CHECK (BUILDER_TRACE))
             {
               for (i = 0; i < parameters.names->len; i++)
                 {
@@ -1177,7 +1177,7 @@ _gtk_builder_add (GtkBuilder *builder,
 
   parent = ((ObjectInfo*)child_info->parent)->object;
 
-  GTK_DEBUG (BUILDER, "adding %s to %s", object_get_id (object), object_get_id (parent));
+  GTK_DEBUG (BUILDER_TRACE, "adding %s to %s", object_get_id (object), object_get_id (parent));
 
   if (G_IS_LIST_STORE (parent))
     {
@@ -3382,4 +3382,28 @@ _gtk_builder_lookup_failed (GtkBuilder  *builder,
     }
 
   return FALSE;
+}
+
+void
+gtk_buildable_child_deprecation_warning (GtkBuildable *buildable,
+                                         GtkBuilder   *builder,
+                                         const char   *type,
+                                         const char   *prop)
+{
+  if (type)
+    GTK_DEBUG (BUILDER, "<child type=\"%s\"> in %s is deprecated, just set the %s property",
+               type, G_OBJECT_TYPE_NAME (buildable), prop);
+  else
+    GTK_DEBUG (BUILDER, "<child> in %s is deprecated, just set the %s property",
+               G_OBJECT_TYPE_NAME (buildable), prop);
+}
+
+void
+gtk_buildable_tag_deprecation_warning (GtkBuildable *buildable,
+                                       GtkBuilder   *builder,
+                                       const char   *tag,
+                                       const char   *prop)
+{
+  GTK_DEBUG (BUILDER, "<%s> in %s is deprecated, just set the %s property",
+             tag, G_OBJECT_TYPE_NAME (buildable), prop);
 }

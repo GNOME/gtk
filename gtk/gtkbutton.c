@@ -79,6 +79,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkshortcuttrigger.h"
+#include "gtkbuilderprivate.h"
 
 #include <string.h>
 
@@ -628,9 +629,14 @@ gtk_button_buildable_add_child (GtkBuildable *buildable,
                                 const char   *type)
 {
   if (GTK_IS_WIDGET (child))
-    gtk_button_set_child (GTK_BUTTON (buildable), GTK_WIDGET (child));
+    {
+      gtk_buildable_child_deprecation_warning (buildable, builder, NULL, "child");
+      gtk_button_set_child (GTK_BUTTON (buildable), GTK_WIDGET (child));
+    }
   else
-    parent_buildable_iface->add_child (buildable, builder, child, type);
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
 }
 
 static void

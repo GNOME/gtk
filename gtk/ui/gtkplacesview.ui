@@ -2,7 +2,7 @@
 <interface domain="gtk40">
   <object class="GtkPopover" id="server_adresses_popover">
     <property name="position">2</property>
-    <child>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">1</property>
         <property name="spacing">6</property>
@@ -14,9 +14,7 @@
           <object class="GtkLabel">
             <property name="hexpand">1</property>
             <property name="label" translatable="yes">Server Addresses</property>
-            <attributes>
-              <attribute name="weight" value="bold"></attribute>
-            </attributes>
+            <property name="attributes">0 -1 weight bold</property>
             <style>
               <class name="dim-label"/>
             </style>
@@ -53,9 +51,7 @@
                 <property name="hexpand">1</property>
                 <property name="label" translatable="yes">Available Protocols</property>
                 <property name="xalign">0</property>
-                <attributes>
-                  <attribute name="weight" value="bold"></attribute>
-                </attributes>
+                <property name="attributes">0 -1 weight bold</property>
                 <layout>
                   <property name="column">0</property>
                   <property name="row">0</property>
@@ -66,9 +62,7 @@
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Prefix</property>
                 <property name="xalign">0</property>
-                <attributes>
-                  <attribute name="weight" value="bold"></attribute>
-                </attributes>
+                <property name="attributes">0 -1 weight bold</property>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">0</property>
@@ -78,10 +72,10 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
   <object class="GtkPopover" id="recent_servers_popover">
-    <child>
+    <property name="child">
       <object class="GtkStack" id="recent_servers_stack">
         <child>
           <object class="GtkStackPage">
@@ -127,9 +121,7 @@
                 <child>
                   <object class="GtkLabel">
                     <property name="label" translatable="yes">Recent Servers</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"></attribute>
-                    </attributes>
+                    <property name="attributes">0 -1 weight bold</property>
                   </object>
                 </child>
                 <child>
@@ -138,7 +130,7 @@
                     <property name="has-frame">1</property>
                     <property name="min-content-width">250</property>
                     <property name="min-content-height">200</property>
-                    <child>
+                    <property name="child">
                       <object class="GtkViewport">
                         <child>
                           <object class="GtkListBox" id="recent_servers_listbox">
@@ -147,7 +139,7 @@
                           </object>
                         </child>
                       </object>
-                    </child>
+                    </property>
                   </object>
                 </child>
               </object>
@@ -155,7 +147,7 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
   <template class="GtkPlacesView" parent="GtkBox">
     <property name="orientation">1</property>
@@ -170,7 +162,7 @@
               <object class="GtkScrolledWindow">
                 <property name="hexpand">1</property>
                 <property name="vexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkViewport">
                     <child>
                       <object class="GtkListBox" id="listbox">
@@ -179,7 +171,7 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </property>
           </object>
@@ -207,10 +199,7 @@
                 <child>
                   <object class="GtkLabel">
                     <property name="label" translatable="yes">No results found</property>
-                    <attributes>
-                      <attribute name="weight" value="bold"></attribute>
-                      <attribute name="scale" value="1.44"></attribute>
-                    </attributes>
+                    <property name="attributes">0 -1 weight bold, 0 -1 scale 1.44</property>
                   </object>
                 </child>
                 <child>
@@ -240,9 +229,7 @@
             <property name="label" translatable="yes">Connect to _Server</property>
             <property name="mnemonic-widget">address_entry</property>
             <property name="use-underline">1</property>
-            <attributes>
-              <attribute name="weight" value="bold"></attribute>
-            </attributes>
+            <property name="attributes">0 -1 weight bold</property>
           </object>
         </child>
         <child type="end">

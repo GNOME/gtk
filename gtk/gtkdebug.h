@@ -91,7 +91,7 @@ typedef enum {
   GTK_DEBUG_GEOMETRY        = 1 <<  4,
   GTK_DEBUG_ICONTHEME       = 1 <<  5,
   GTK_DEBUG_PRINTING        = 1 <<  6,
-  GTK_DEBUG_BUILDER         = 1 <<  7,
+  GTK_DEBUG_BUILDER_TRACE   = 1 <<  7,
   GTK_DEBUG_SIZE_REQUEST    = 1 <<  8,
   GTK_DEBUG_NO_CSS_CACHE    = 1 <<  9,
   GTK_DEBUG_INTERACTIVE     = 1 << 10,
@@ -104,6 +104,7 @@ typedef enum {
   GTK_DEBUG_ICONFALLBACK    = 1 << 18,
   GTK_DEBUG_INVERT_TEXT_DIR = 1 << 19,
   GTK_DEBUG_CSS             = 1 << 20,
+  GTK_DEBUG_BUILDER         = 1 << 21,
 } GtkDebugFlags;
 
 /**

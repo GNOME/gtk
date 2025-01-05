@@ -21,7 +21,7 @@
   <object class="GtkWindow" id="window1">
     <property name="title" translatable="yes">Scales</property>
     <property name="resizable">0</property>
-    <child>
+    <property name="child">
       <object class="GtkGrid" id="grid1">
         <property name="row-spacing">10</property>
         <property name="column-spacing">10</property>
@@ -111,6 +111,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

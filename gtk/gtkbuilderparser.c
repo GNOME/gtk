@@ -647,8 +647,8 @@ parse_object (GtkBuildableParseContext  *context,
         {
           data->requested_object_level = data->cur_object_level;
 
-          GTK_DEBUG (BUILDER, "requested object \"%s\" found at level %d",
-                              object_id, data->requested_object_level);
+          GTK_DEBUG (BUILDER_TRACE, "requested object \"%s\" found at level %d",
+                                    object_id, data->requested_object_level);
 
           data->inside_requested_object = TRUE;
         }
@@ -1765,7 +1765,7 @@ start_element (GtkBuildableParseContext  *context,
 {
   ParserData *data = (ParserData*)user_data;
 
-  if (GTK_DEBUG_CHECK (BUILDER))
+  if (GTK_DEBUG_CHECK (BUILDER_TRACE))
     {
       GString *tags = g_string_new ("");
       int i;
@@ -1855,7 +1855,7 @@ end_element (GtkBuildableParseContext  *context,
 {
   ParserData *data = (ParserData*)user_data;
 
-  GTK_DEBUG (BUILDER, "</%s>", element_name);
+  GTK_DEBUG (BUILDER_TRACE, "</%s>", element_name);
 
   if (data->subparser && data->subparser->start)
     {
@@ -1937,8 +1937,8 @@ end_element (GtkBuildableParseContext  *context,
       if (data->requested_objects && data->inside_requested_object &&
           (data->cur_object_level == data->requested_object_level))
         {
-          GTK_DEBUG (BUILDER, "requested object end found at level %d",
-                              data->requested_object_level);
+          GTK_DEBUG (BUILDER_TRACE, "requested object end found at level %d",
+                                    data->requested_object_level);
 
           data->inside_requested_object = FALSE;
         }

@@ -4,9 +4,9 @@
     <property name="resizable">1</property>
     <property name="default-width">500</property>
     <property name="default-height">500</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar">
-        <child>
+        <child type="start">
           <object class="GtkBox">
             <style>
               <class name="linked"/>
@@ -27,14 +27,12 @@
         </child>
         <child type="end">
           <object class="GtkLabel" id="fps_label">
-            <attributes>
-              <attribute name="font-features" value="tnum=1"/>
-            </attributes>
+            <property name="attributes">0 -1 font-features "tnum=1"</property>
           </object>
         </child>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkScrolledWindow" id="scrolledwindow">
         <property name="hscrollbar-policy">never</property>
         <property name="hadjustment">
@@ -44,6 +42,6 @@
           <object class="GtkAdjustment" id="vadjustment"/>
         </property>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

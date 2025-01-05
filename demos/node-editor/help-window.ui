@@ -4,9 +4,9 @@
     <property name="title" translatable="yes">Help</property>
     <property name="default-width">920</property>
     <property name="default-height">600</property>
-    <child>
+    <property name="child">
       <object class="GtkScrolledWindow">
-        <child>
+        <property name="child">
           <object class="GtkTextView" id="text_view">
             <property name="wrap-mode">word</property>
             <property name="left-margin">20</property>
@@ -18,8 +18,8 @@
               <object class="GtkTextBuffer" id="buffer"/>
             </property>
           </object>
-        </child>
+        </property>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

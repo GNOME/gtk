@@ -38,6 +38,7 @@
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 
 #include <math.h>
 
@@ -819,18 +820,21 @@ gtk_paned_buildable_add_child (GtkBuildable *buildable,
 
   if (g_strcmp0 (type, "start") == 0)
     {
+      gtk_buildable_child_deprecation_warning (buildable, builder, "start", "start-child");
       gtk_paned_set_start_child (self, GTK_WIDGET (child));
       gtk_paned_set_resize_start_child (self, FALSE);
       gtk_paned_set_shrink_start_child (self, TRUE);
     }
   else if (g_strcmp0 (type, "end") == 0)
     {
+      gtk_buildable_child_deprecation_warning (buildable, builder, "end", "end-child");
       gtk_paned_set_end_child (self, GTK_WIDGET (child));
       gtk_paned_set_resize_end_child (self, TRUE);
       gtk_paned_set_shrink_end_child (self, TRUE);
     }
   else if (type == NULL && GTK_IS_WIDGET (child))
     {
+      gtk_buildable_child_deprecation_warning (buildable, builder, NULL, "start-child or end-child");
       if (self->start_child == NULL)
         {
           gtk_paned_set_start_child (self, GTK_WIDGET (child));

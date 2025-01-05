@@ -28,9 +28,9 @@
     <property name="default-width">600</property>
     <property name="default-height">500</property>
     <property name="title">Font Explorer</property>
-    <child type="titlebar">
+    <property name="titlebar">
       <object class="GtkHeaderBar">
-        <child>
+        <child type="start">
           <object class="GtkButton" id="reset">
             <property name="receives-default">1</property>
             <property name="tooltip-text">Reset</property>
@@ -41,15 +41,15 @@
           </object>
         </child>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkBox">
         <child>
           <object class="GtkScrolledWindow">
             <property name="hscrollbar-policy">never</property>
-            <child>
+            <property name="child">
               <object class="GtkViewport">
-                <child>
+                <property name="child">
                   <object class="GtkBox">
                     <property name="margin-start">10</property>
                     <property name="margin-end">10</property>
@@ -285,7 +285,7 @@
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <child type="label">
+                        <property name="label-widget">
                           <object class="GtkLabel">
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">OpenType Features</property>
@@ -295,8 +295,8 @@
                               <class name="title-4"/>
                             </style>
                           </object>
-                        </child>
-                        <child>
+                        </property>
+                        <property name="child">
                           <object class="GtkBox" id="feature_list">
                             <property name="orientation">vertical</property>
                             <child>
@@ -307,12 +307,12 @@
                               </object>
                             </child>
                           </object>
-                        </child>
+                        </property>
                       </object>
                     </child>
                     <child>
                       <object class="GtkExpander">
-                        <child type="label">
+                        <property name="label-widget">
                           <object class="GtkLabel" id="variations_heading">
                             <property name="label" translatable="yes">Variation Axes</property>
                             <property name="xalign">0</property>
@@ -322,22 +322,22 @@
                               <class name="title-4"/>
                             </style>
                           </object>
-                        </child>
-                        <child>
+                        </property>
+                        <property name="child">
                           <object class="GtkGrid" id="variations_grid">
                             <property name="column-spacing">10</property>
                             <property name="row-spacing">10</property>
                           </object>
-                        </child>
+                        </property>
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
                 <style>
                   <class name="view"/>
                 </style>
               </object>
-            </child>
+            </property>
           </object>
         </child>
         <child>
@@ -359,7 +359,7 @@
                 <style>
                   <class name="font_features_background"/>
                 </style>
-                <child>
+                <property name="child">
                   <object class="GtkStack" id="stack">
                     <child>
                       <object class="GtkStackPage">
@@ -401,7 +401,7 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
@@ -493,6 +493,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

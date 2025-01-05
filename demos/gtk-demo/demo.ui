@@ -90,7 +90,7 @@
     <property name="default-height">250</property>
     <property name="default-width">440</property>
     <property name="title" translatable="yes">Builder</property>
-    <child>
+    <property name="child">
       <object class="GtkBox" id="vbox1">
         <property name="orientation">vertical</property>
         <child>
@@ -166,7 +166,7 @@
             <property name="has-frame">1</property>
             <property name="hexpand">1</property>
             <property name="vexpand">1</property>
-            <child>
+            <property name="child">
               <object class="GtkTreeView" id="treeview1">
                 <property name="model">liststore1</property>
                 <property name="tooltip-column">3</property>
@@ -204,7 +204,7 @@
                   </object>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
         </child>
         <child>
@@ -217,6 +217,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

@@ -5,7 +5,7 @@
     <property name="title">CSS Blend Modes</property>
     <property name="default-width">400</property>
     <property name="default-height">300</property>
-    <child>
+    <property name="child">
       <object class="GtkGrid">
         <property name="margin-start">12</property>
         <property name="margin-end">12</property>
@@ -313,9 +313,7 @@ Blended picture</property>
                       <object class="GtkLabel">
                         <property name="label" translatable="yes">Blended picture</property>
                         <property name="xalign">0</property>
-                        <attributes>
-                          <attribute name="weight" value="bold"></attribute>
-                        </attributes>
+                        <property name="attributes">0 -1 weight bold</property>
                         <layout>
                           <property name="column">1</property>
                           <property name="row">2</property>
@@ -333,7 +331,7 @@ Blended picture</property>
           </object>
         </child>
       </object>
-    </child>
-    <child type="titlebar"/>
+    </property>
+    <property name="titlebar"/>
   </object>
 </interface>

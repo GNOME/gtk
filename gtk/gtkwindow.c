@@ -30,6 +30,7 @@
 #include "gtkapplicationprivate.h"
 #include "gtkbox.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkcheckbutton.h"
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkdroptargetasync.h"
@@ -2003,11 +2004,19 @@ gtk_window_buildable_add_child (GtkBuildable *buildable,
                                 const char   *type)
 {
   if (type && strcmp (type, "titlebar") == 0)
-    gtk_window_set_titlebar (GTK_WINDOW (buildable), GTK_WIDGET (child));
+    {
+      gtk_buildable_child_deprecation_warning (buildable, builder, "titlebar", "titlebar");
+      gtk_window_set_titlebar (GTK_WINDOW (buildable), GTK_WIDGET (child));
+    }
   else if (GTK_IS_WIDGET (child))
-    gtk_window_set_child (GTK_WINDOW (buildable), GTK_WIDGET (child));
+    {
+      gtk_buildable_child_deprecation_warning (buildable, builder, NULL, "child");
+      gtk_window_set_child (GTK_WINDOW (buildable), GTK_WIDGET (child));
+    }
   else
-    parent_buildable_iface->add_child (buildable, builder, child, type);
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
 }
 
 static void

@@ -23,6 +23,7 @@
 #include "gtkbinlayout.h"
 #include "gtkbox.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkdragsourceprivate.h"
 #include "gtkgestureclick.h"
 #include "gtkgesturedrag.h"
@@ -576,9 +577,14 @@ gtk_window_handle_buildable_add_child (GtkBuildable *buildable,
                                        const char   *type)
 {
   if (GTK_IS_WIDGET (child))
-    gtk_window_handle_set_child (GTK_WINDOW_HANDLE (buildable), GTK_WIDGET (child));
+    {
+      gtk_buildable_child_deprecation_warning (buildable, builder, NULL, "child");
+      gtk_window_handle_set_child (GTK_WINDOW_HANDLE (buildable), GTK_WIDGET (child));
+    }
   else
-    parent_buildable_iface->add_child (buildable, builder, child, type);
+    {
+      parent_buildable_iface->add_child (buildable, builder, child, type);
+    }
 }
 
 static void

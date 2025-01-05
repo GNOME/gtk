@@ -14,7 +14,7 @@
             <signal name="clicked" handler="gtk_inspector_general_clip"/>
           </object>
         </child>
-        <child>
+        <property name="child">
           <object class="GtkScrolledWindow" id="swin">
             <property name="vexpand">1</property>
             <property name="hscrollbar-policy">never</property>
@@ -1249,7 +1249,7 @@
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
     </child>
   </template>

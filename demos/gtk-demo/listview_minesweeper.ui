@@ -4,25 +4,25 @@
   </object>
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">Minesweeper</property>
-    <child type="titlebar">
-      <object class="GtkHeaderBar" id="">
-        <child>
+    <property name="titlebar">
+      <object class="GtkHeaderBar">
+        <child type="start">
           <object class="GtkButton">
             <property name="label">New Game</property>
             <signal name="clicked" handler="minesweeper_new_game_cb" object="game" swapped="no"/>
           </object>
         </child>
-        <child type="title">
+        <property name="title-widget">
           <object class="GtkImage">
             <property name="icon-name">trophy-gold</property>
             <binding name="visible">
               <lookup name="win">game</lookup>
             </binding>
           </object>
-        </child>
+        </property>
       </object>
-    </child>
-    <child>
+    </property>
+    <property name="child">
       <object class="GtkGridView" id="view">
         <property name="model">
           <object class="GtkNoSelection">
@@ -43,6 +43,6 @@
         </property>
         <signal name="activate" handler="minesweeper_cell_clicked_cb" object="game" swapped="no"/>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

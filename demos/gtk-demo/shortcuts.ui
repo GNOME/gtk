@@ -2,7 +2,7 @@
 <interface>
   <object class="GtkWindow" id="window1">
     <property name="title" translatable="yes">Shortcuts</property>
-    <child>
+    <property name="child">
       <object class="GtkBox">
         <property name="orientation">vertical</property>
         <property name="margin-start">50</property>
@@ -53,6 +53,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

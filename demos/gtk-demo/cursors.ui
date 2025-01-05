@@ -644,12 +644,12 @@
     <property name="default-width">300</property>
     <property name="default-height">300</property>
     <property name="title">Cursors</property>
-    <child>
+    <property name="child">
       <object class="GtkScrolledWindow">
         <property name="hscrollbar-policy">never</property>
         <property name="propagate-natural-height">1</property>
         <property name="hexpand">1</property>
-        <child>
+        <property name="child">
           <object class="GtkBox">
             <property name="orientation">vertical</property>
             <property name="margin-start">60</property>
@@ -660,7 +660,7 @@
             <property name="halign">center</property>
             <child>
               <object class="GtkFrame">
-                <child>
+                <property name="child">
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
                     <style>
@@ -846,13 +846,13 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
               <object class="GtkFrame">
                 <property name="hexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
                     <style>
@@ -1159,13 +1159,13 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
               <object class="GtkFrame">
                 <property name="hexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
                     <style>
@@ -1412,13 +1412,13 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
               <object class="GtkFrame">
                 <property name="hexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
                     <style>
@@ -1845,13 +1845,13 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
               <object class="GtkFrame">
                 <property name="hexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
                     <style>
@@ -2758,13 +2758,13 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
             <child>
               <object class="GtkFrame">
                 <property name="hexpand">1</property>
-                <child>
+                <property name="child">
                   <object class="GtkListBox">
                     <property name="selection-mode">none</property>
                     <style>
@@ -2891,12 +2891,12 @@
                       </object>
                     </child>
                   </object>
-                </child>
+                </property>
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

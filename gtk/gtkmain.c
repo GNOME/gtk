@@ -190,7 +190,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "text", GTK_DEBUG_TEXT, "Information about GtkTextView" },
   { "tree", GTK_DEBUG_TREE, "Information about GtkTreeView" },
   { "layout", GTK_DEBUG_LAYOUT, "Information from layout managers" },
-  { "builder", GTK_DEBUG_BUILDER, "Trace GtkBuilder operation" },
+  { "builder-trace", GTK_DEBUG_BUILDER_TRACE, "Trace GtkBuilder operation" },
   { "builder-objects", GTK_DEBUG_BUILDER_OBJECTS, "Log unused GtkBuilder objects" },
   { "no-css-cache", GTK_DEBUG_NO_CSS_CACHE, "Disable style property cache" },
   { "interactive", GTK_DEBUG_INTERACTIVE, "Enable the GTK inspector" },
@@ -199,6 +199,7 @@ static const GdkDebugKey gtk_debug_keys[] = {
   { "iconfallback", GTK_DEBUG_ICONFALLBACK, "Information about icon fallback" },
   { "invert-text-dir", GTK_DEBUG_INVERT_TEXT_DIR, "Invert the default text direction" },
   { "css", GTK_DEBUG_CSS, "Information about deprecated CSS features" },
+  { "builder", GTK_DEBUG_BUILDER, "Information about deprecated GtkBuilder features" },
 };
 
 /* This checks to see if the process is running suid or sgid

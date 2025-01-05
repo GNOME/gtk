@@ -4,7 +4,7 @@
     <property name="default-width">300</property>
     <property name="default-height">300</property>
     <property name="title">Revealer</property>
-    <child>
+    <property name="child">
       <object class="GtkGrid">
         <property name="halign">center</property>
         <property name="valign">center</property>
@@ -12,12 +12,12 @@
           <object class="GtkRevealer" id="revealer0">
             <property name="transition-duration">2000</property>
             <property name="transition-type">crossfade</property>
-            <child>
+            <property name="child">
               <object class="GtkImage">
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">large</property>
               </object>
-            </child>
+            </property>
             <layout>
               <property name="column">2</property>
               <property name="row">2</property>
@@ -28,12 +28,12 @@
           <object class="GtkRevealer" id="revealer1">
             <property name="transition-duration">2000</property>
             <property name="transition-type">slide-up</property>
-            <child>
+            <property name="child">
               <object class="GtkImage">
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">large</property>
               </object>
-            </child>
+            </property>
             <layout>
               <property name="column">2</property>
               <property name="row">1</property>
@@ -44,12 +44,12 @@
           <object class="GtkRevealer" id="revealer2">
             <property name="transition-duration">2000</property>
             <property name="transition-type">slide-right</property>
-            <child>
+            <property name="child">
               <object class="GtkImage">
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">large</property>
               </object>
-            </child>
+            </property>
             <layout>
               <property name="column">3</property>
               <property name="row">2</property>
@@ -59,11 +59,11 @@
         <child>
           <object class="GtkRevealer" id="revealer3">
             <property name="transition-duration">2000</property>
-            <child>
+            <property name="child">
               <object class="GtkImage">
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">large</property>
-              </object>
+              </property>
             </child>
             <layout>
               <property name="column">2</property>
@@ -75,12 +75,12 @@
           <object class="GtkRevealer" id="revealer4">
             <property name="transition-duration">2000</property>
             <property name="transition-type">slide-left</property>
-            <child>
+            <property name="child">
               <object class="GtkImage">
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">large</property>
               </object>
-            </child>
+            </property>
             <layout>
               <property name="column">1</property>
               <property name="row">2</property>
@@ -91,12 +91,12 @@
           <object class="GtkRevealer" id="revealer5">
             <property name="transition-duration">2000</property>
             <property name="transition-type">slide-up</property>
-            <child>
+            <property name="child">
               <object class="GtkImage">
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">large</property>
               </object>
-            </child>
+            </property>
             <layout>
               <property name="column">2</property>
               <property name="row">0</property>
@@ -107,12 +107,12 @@
           <object class="GtkRevealer" id="revealer6">
             <property name="transition-duration">2000</property>
             <property name="transition-type">slide-right</property>
-            <child>
+            <property name="child">
               <object class="GtkImage">
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">large</property>
               </object>
-            </child>
+            </property>
             <layout>
               <property name="column">4</property>
               <property name="row">2</property>
@@ -122,12 +122,12 @@
         <child>
           <object class="GtkRevealer" id="revealer7">
             <property name="transition-duration">2000</property>
-            <child>
+            <property name="child">
               <object class="GtkImage">
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">large</property>
               </object>
-            </child>
+            </property>
             <layout>
               <property name="column">2</property>
               <property name="row">4</property>
@@ -138,12 +138,12 @@
           <object class="GtkRevealer" id="revealer8">
             <property name="transition-duration">2000</property>
             <property name="transition-type">slide-left</property>
-            <child>
+            <property name="child">
               <object class="GtkImage">
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">large</property>
               </object>
-            </child>
+            </property>
             <layout>
               <property name="column">0</property>
               <property name="row">2</property>
@@ -151,6 +151,6 @@
           </object>
         </child>
       </object>
-    </child>
+    </property>
   </object>
 </interface>

@@ -180,10 +180,8 @@
                                 <signal name="notify::selected" handler="direction_changed"/>
                                 <property name="model">
                                   <object class="GtkStringList">
-                                    <items>
-                                      <item translatable="yes">Left-to-Right</item>
-                                      <item translatable="yes">Right-to-Left</item>
-                                    </items>
+                                    <property name="strings" translatable="yes" comment="these two strings must be separated by a newline">Left-to-Right
+Right-to-Left</property>
                                   </object>
                                 </property>
                               </object>
@@ -373,10 +371,8 @@
                                 <signal name="notify::selected" handler="font_rendering_changed"/>
                                 <property name="model">
                                   <object class="GtkStringList">
-                                    <items>
-                                      <item translatable="yes" context="Font rendering">Automatic</item>
-                                      <item translatable="yes" context="Font rendering">Manual</item>
-                                    </items>
+                                    <property name="strings" translatable="yes" context="Font rendering" comment="these two strings must be separated by a newline">Automatic
+Manual</property>
                                   </object>
                                 </property>
                               </object>

@@ -28,6 +28,7 @@
 
 #include "gtkaccessibletextprivate.h"
 #include "gtkbuildable.h"
+#include "gtkbuilderprivate.h"
 #include "gtkcsscolorvalueprivate.h"
 #include "gtkdragsourceprivate.h"
 #include "gtkdragicon.h"
@@ -701,6 +702,8 @@ gtk_label_buildable_custom_tag_start (GtkBuildable       *buildable,
   if (strcmp (tagname, "attributes") == 0)
     {
       GtkPangoAttributeParserData *parser_data;
+
+      gtk_buildable_tag_deprecation_warning (buildable, builder, "attributes", "attributes");
 
       parser_data = g_new0 (GtkPangoAttributeParserData, 1);
       parser_data->builder = g_object_ref (builder);

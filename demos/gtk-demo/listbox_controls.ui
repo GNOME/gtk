@@ -3,16 +3,16 @@
   <object class="GtkWindow" id="window">
     <property name="title" translatable="yes">List Box — Controls</property>
     <property name="default-height">400</property>
-    <child>
+    <property name="child">
       <object class="GtkScrolledWindow">
         <property name="hscrollbar-policy">never</property>
         <property name="min-content-height">200</property>
         <property name="hexpand">0</property>
         <property name="vexpand">1</property>
-        <child>
+        <property name="child">
           <object class="GtkViewport">
             <property name="scroll-to-focus">1</property>
-            <child>
+            <property name="child">
               <object class="GtkBox">
                 <property name="orientation">vertical</property>
                 <property name="margin-start">60</property>
@@ -231,12 +231,10 @@
                                   <property name="valign">center</property>
                                   <property name="model">
                                     <object class="GtkStringList">
-                                      <items>
-                                        <item>Choice 1</item>
-                                        <item>Choice 2</item>
-                                        <item>Choice 3</item>
-                                        <item>Choice 4</item>
-                                      </items>
+                                      <property name="strings">Choice 1
+Choice 2
+Choice 3
+Choice 4</property>
                                     </object>
                                   </property>
                                 </object>
@@ -276,11 +274,11 @@
                   </object>
                 </child>
               </object>
-            </child>
+            </property>
           </object>
-        </child>
+        </property>
       </object>
-    </child>
+    </property>
   </object>
   <object class="GtkSizeGroup">
     <property name="mode">horizontal</property>

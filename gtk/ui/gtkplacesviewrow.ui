@@ -51,11 +51,11 @@
                     <property name="halign">3</property>
                     <property name="valign">3</property>
                     <property name="tooltip-text" translatable="yes">Unmount</property>
-                    <child>
+                    <property name="child">
                       <object class="GtkImage" id="eject_icon">
                         <property name="icon-name">media-eject-symbolic</property>
                       </object>
-                    </child>
+                    </property>
                     <style>
                       <class name="image-button"/>
                       <class name="sidebar-button"/>
