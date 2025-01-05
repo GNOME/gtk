@@ -25,6 +25,7 @@ gdk_macos_sources = gdk_macos_public_sources + files([
   'gdkmacospasteboard.c',
   'gdkmacospopupsurface.c',
   'gdkmacostoplevelsurface.c',
+  'gdkmacosvulkancontext.c',
   'GdkMacosBaseView.c',
   'GdkMacosLayer.c',
   'GdkMacosTile.c',
@@ -40,6 +41,7 @@ gdk_macos_public_headers = files([
   'gdkmacosmonitor.h',
   'gdkmacosseat.h',
   'gdkmacossurface.h',
+  'gdkmacosvulkancontext.h',
 ])
 
 install_headers(gdk_macos_public_headers, 'gdkmacos.h', subdir: 'gtk-4.0/gdk/macos/')

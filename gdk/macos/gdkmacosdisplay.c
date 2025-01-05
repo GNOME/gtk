@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#define VK_USE_PLATFORM_METAL_EXT
+
 #include <AppKit/AppKit.h>
 
 #import "GdkMacosWindow.h"
@@ -41,6 +43,7 @@
 #include "gdkmacossurface-private.h"
 #include "gdkmacostoplevelsurface-private.h"
 #include "gdkmacosutils-private.h"
+#include "gdkmacosvulkancontext.h"
 
 G_DEFINE_TYPE (GdkMacosDisplay, gdk_macos_display, GDK_TYPE_DISPLAY)
 
@@ -595,6 +598,11 @@ gdk_macos_display_class_init (GdkMacosDisplayClass *klass)
   display_class->toplevel_type = GDK_TYPE_MACOS_TOPLEVEL_SURFACE;
   display_class->popup_type = GDK_TYPE_MACOS_POPUP_SURFACE;
   display_class->cairo_context_type = GDK_TYPE_MACOS_CAIRO_CONTEXT;
+
+#ifdef GDK_RENDERING_VULKAN
+  display_class->vk_context_type = GDK_TYPE_MACOS_VULKAN_CONTEXT;
+  display_class->vk_extension_name = VK_EXT_METAL_SURFACE_EXTENSION_NAME;
+#endif
 
   display_class->beep = gdk_macos_display_beep;
   display_class->flush = gdk_macos_display_flush;
