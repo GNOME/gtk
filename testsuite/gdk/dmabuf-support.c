@@ -7,7 +7,7 @@
 static void
 test_dmabuf_no_gpu (void)
 {
-  guchar buffer[4];
+  guchar buffer[UDMABUF_STRIDE_ALIGN];
   GdkTexture *texture;
   GError *error = NULL;
   GdkTextureDownloader *downloader;
@@ -27,14 +27,14 @@ test_dmabuf_no_gpu (void)
   buffer[2] = 0;
   buffer[3] = 255;
 
-  bytes = g_bytes_new_static (buffer, 4);
+  bytes = g_bytes_new_static (buffer, G_N_ELEMENTS(buffer));
 
   texture = udmabuf_texture_new (1, 1,
                                  DRM_FORMAT_RGBA8888,
                                  gdk_color_state_get_srgb (),
                                  FALSE,
                                  bytes,
-                                 4,
+                                 UDMABUF_STRIDE_ALIGN,
                                  &error);
   g_assert_no_error (error);
 
