@@ -19,6 +19,8 @@
 
 #pragma once
 
+#define __GDKMACOS_H_INSIDE__
+
 #include <gdk/gdk.h>
 
 #include "gdkmacosdevice.h"
@@ -28,3 +30,4 @@
 #include "gdkmacosmonitor.h"
 #include "gdkmacossurface.h"
 
+#undef __GDKMACOS_H_INSIDE__
