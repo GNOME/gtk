@@ -20,7 +20,12 @@
 
 #include "config.h"
 
-#include <CoreGraphics/CoreGraphics.h>
+#include "gdkconfig.h"
+
+#import <CoreGraphics/CoreGraphics.h>
+#ifdef GDK_RENDERING_VULKAN
+#import <QuartzCore/CAMetalLayer.h>
+#endif
 
 #import "GdkMacosLayer.h"
 #import "GdkMacosView.h"
@@ -32,14 +37,35 @@
 {
   if ((self = [super initWithFrame:frame]))
     {
+#ifdef GDK_RENDERING_VULKAN
+      CALayer *layer = [CAMetalLayer layer];
+      [layer setOpaque:NO];
+#else
       GdkMacosLayer *layer = [GdkMacosLayer layer];
 
       [self setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawNever];
+#endif
+      CGSize viewScale = [self convertSizeToBacking: CGSizeMake(1.0, 1.0)];
+      layer.contentsScale = MIN(viewScale.width, viewScale.height);
       [self setLayer:layer];
       [self setWantsLayer:YES];
     }
 
   return self;
+}
+
+/**
+ * If this view moves to a screen that has a different resolution scale (eg. Standard <=> Retina),
+ * update the contentsScale of the layer, which will trigger a Vulkan VK_SUBOPTIMAL_KHR result, which
+ * causes the  to replace the swapchain, in order to optimize rendering for the new resolution.
+ */
+-(BOOL)layer:(CALayer *)layer shouldInheritContentsScale:(CGFloat)newScale fromWindow:(NSWindow *)window
+{
+	if (newScale == layer.contentsScale)
+    return NO;
+
+	layer.contentsScale = newScale;
+	return YES;
 }
 
 -(BOOL)isFlipped
@@ -78,6 +104,10 @@
 
 -(void)setOpaqueRegion:(const cairo_region_t *)opaqueRegion
 {
+  /* No-op for Vulkan/Metal layer */
+  if (![[self layer] isKindOfClass: [GdkMacosLayer class]])
+    return;
+
   [(GdkMacosLayer *)[self layer] setOpaqueRegion:opaqueRegion];
 }
 
@@ -88,6 +118,10 @@
 
 -(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage
 {
+  /* No-op for Vulkan/Metal layer */
+  if (![[self layer] isKindOfClass: [GdkMacosLayer class]])
+    return;
+
   if (self->_nextFrameDirty)
     {
       self->_nextFrameDirty = FALSE;
