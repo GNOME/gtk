@@ -180,6 +180,9 @@ udmabuf_texture_new (gsize           width,
   gconstpointer data;
   gsize size;
 
+  /* Many graphics cards need this and Mesa tries to align its own buffers this way */
+  g_assert (stride % UDMABUF_STRIDE_ALIGN == 0);
+
   data = g_bytes_get_data (bytes, &size);
 
   udmabuf = udmabuf_allocate (size, error);
@@ -236,7 +239,8 @@ udmabuf_texture_from_texture (GdkTexture  *texture,
   GdkTextureDownloader *downloader;
   guint fourcc;
   gboolean premultiplied;
-  gsize stride;
+  guchar *data;
+  gsize width, height, stride;
   GBytes *bytes;
   GdkTexture *texture2;
 
@@ -275,11 +279,18 @@ udmabuf_texture_from_texture (GdkTexture  *texture,
       return NULL;
     }
 
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+  stride = (width * 4 + (UDMABUF_STRIDE_ALIGN - 1)) & ~(UDMABUF_STRIDE_ALIGN - 1);
+  data = g_malloc_n(stride, height);
+
   downloader = gdk_texture_downloader_new (texture);
   gdk_texture_downloader_set_format (downloader, gdk_texture_get_format (texture));
   gdk_texture_downloader_set_color_state (downloader, gdk_texture_get_color_state (texture));
-  bytes = gdk_texture_downloader_download_bytes (downloader, &stride);
+  gdk_texture_downloader_download_into (downloader, data, stride);
   gdk_texture_downloader_free (downloader);
+
+  bytes = g_bytes_new_take(data, stride * height);
 
   texture2 = udmabuf_texture_new (gdk_texture_get_width (texture),
                                   gdk_texture_get_height (texture),
