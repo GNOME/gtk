@@ -1645,6 +1645,18 @@ gtk_text_class_init (GtkTextClass *class)
                                        "paste-clipboard",
                                        NULL);
 #endif
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Cut, GDK_NO_MODIFIER_MASK,
+                                       "cut-clipboard",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Copy, GDK_NO_MODIFIER_MASK,
+                                       "copy-clipboard",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Paste, GDK_NO_MODIFIER_MASK,
+                                       "paste-clipboard",
+                                       NULL);
 
   /* Overwrite */
   gtk_widget_class_add_binding_signal (widget_class,
@@ -1685,6 +1697,12 @@ gtk_text_class_init (GtkTextClass *class)
                                        GDK_KEY_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                        "text.redo", NULL);
 #endif
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_Undo, GDK_NO_MODIFIER_MASK,
+                                       "text.undo", NULL);
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_Redo, GDK_NO_MODIFIER_MASK,
+                                       "text.redo", NULL);
 
   gtk_widget_class_set_css_name (widget_class, I_("text"));
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_NONE);

@@ -1974,6 +1974,18 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                        "paste-clipboard",
                                        NULL);
 #endif
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Cut, GDK_NO_MODIFIER_MASK,
+                                       "cut-clipboard",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Copy, GDK_NO_MODIFIER_MASK,
+                                       "copy-clipboard",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Paste, GDK_NO_MODIFIER_MASK,
+                                       "paste-clipboard",
+                                       NULL);
 
   /* Undo/Redo */
 #ifdef __APPLE__
@@ -1994,6 +2006,12 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
                                        GDK_KEY_z, GDK_CONTROL_MASK | GDK_SHIFT_MASK,
                                        "text.redo", NULL);
 #endif
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_Undo, GDK_NO_MODIFIER_MASK,
+                                       "text.undo", NULL);
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_Redo, GDK_NO_MODIFIER_MASK,
+                                       "text.redo", NULL);
 
   /* Overwrite */
   gtk_widget_class_add_binding_signal (widget_class,
