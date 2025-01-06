@@ -38,9 +38,9 @@ create_cairo_surface_for_surface (GdkSurface *surface)
   cairo_surface_t *cairo_surface;
   Visual *visual;
   int scale;
-    
+
   display = gdk_surface_get_display (surface);
-  scale = gdk_surface_get_scale_factor (surface);
+  scale = (int) ceil (gdk_surface_get_scale (surface));
 
   visual = gdk_x11_display_get_window_visual (GDK_X11_DISPLAY (display));
   cairo_surface = cairo_xlib_surface_create (gdk_x11_display_get_xdisplay (display),

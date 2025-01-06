@@ -24,6 +24,8 @@
 #include "gdktextureprivate.h"
 #include "gdkprivate-broadway.h"
 
+#include <math.h>
+
 G_DEFINE_TYPE (GdkBroadwayCairoContext, gdk_broadway_cairo_context, GDK_TYPE_CAIRO_CONTEXT)
 
 static void
@@ -47,7 +49,7 @@ gdk_broadway_cairo_context_begin_frame (GdkDrawContext  *draw_context,
 
   width = gdk_surface_get_width (surface);
   height = gdk_surface_get_height (surface);
-  scale = gdk_surface_get_scale_factor (surface);
+  scale = (int) ceil (gdk_surface_get_scale (surface));
   self->paint_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                                     width * scale, height * scale);
   cairo_surface_set_device_scale (self->paint_surface, scale, scale);

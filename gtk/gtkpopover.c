@@ -1410,7 +1410,7 @@ gtk_popover_update_shape (GtkPopover *popover)
 
       width = gdk_surface_get_width (priv->surface);
       height = gdk_surface_get_height (priv->surface);
-      scale = gdk_surface_get_scale_factor (priv->surface);
+      scale = (int) ceil (gdk_surface_get_scale (priv->surface));
 
       cairo_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width * scale, height * scale);
       cairo_surface_set_device_scale (cairo_surface, scale, scale);

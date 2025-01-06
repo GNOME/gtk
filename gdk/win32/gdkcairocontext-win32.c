@@ -29,6 +29,8 @@
 
 #include <windows.h>
 
+#include <math.h>
+
 G_DEFINE_TYPE (GdkWin32CairoContext, gdk_win32_cairo_context, GDK_TYPE_CAIRO_CONTEXT)
 
 static cairo_surface_t *
@@ -66,7 +68,7 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext  *draw_context,
   RECT queued_hwnd_rect;
 
   surface = gdk_draw_context_get_surface (draw_context);
-  scale = gdk_surface_get_scale_factor (surface);
+  scale = (int) ceil (gdk_surface_get_scale (surface));
 
   queued_hwnd_rect = gdk_win32_surface_handle_queued_move_resize (draw_context);
 

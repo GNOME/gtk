@@ -30,6 +30,8 @@
 #include "gdkmacoscairocontext-private.h"
 #include "gdkmacossurface-private.h"
 
+#include <math.h>
+
 struct _GdkMacosCairoContext
 {
   GdkCairoContext parent_instance;
@@ -222,7 +224,7 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext  *draw_context,
 
           if (!cairo_region_is_empty (copy))
             {
-              int scale = gdk_surface_get_scale_factor (GDK_SURFACE (surface));
+              int scale = (int) ceil (gdk_surface_get_scale (GDK_SURFACE (surface)));
 
               _gdk_macos_buffer_read_lock (surface->front);
               copy_surface_data (surface->front, buffer, copy, scale);

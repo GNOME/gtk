@@ -1109,7 +1109,7 @@ _gdk_macos_surface_get_buffer (GdkMacosSurface *self)
        * handles opaque regions for the compositor, so using 3-byte/24-bit is
        * not a necessary optimization.
        */
-      double scale = gdk_surface_get_scale_factor (GDK_SURFACE (self));
+      double scale = ceil (gdk_surface_get_scale (GDK_SURFACE (self)));
       guint width = GDK_SURFACE (self)->width * scale;
       guint height = GDK_SURFACE (self)->height * scale;
 

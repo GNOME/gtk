@@ -613,11 +613,13 @@ gdk_surface_class_init (GdkSurfaceClass *klass)
    *
    * The scale factor is the next larger integer,
    * compared to [property@Gdk.Surface:scale].
+   *
+   * Deprecated: 4.18: Use the scale property
    */
   properties[PROP_SCALE_FACTOR] =
       g_param_spec_int ("scale-factor", NULL, NULL,
                         1, G_MAXINT, 1,
-                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS | G_PARAM_DEPRECATED);
 
   /**
    * GdkSurface:scale:
@@ -865,7 +867,7 @@ gdk_surface_get_property (GObject    *object,
       break;
 
     case PROP_SCALE_FACTOR:
-      g_value_set_int (value, gdk_surface_get_scale_factor (surface));
+      g_value_set_int (value, (int) ceil (gdk_surface_get_scale (surface)));
       break;
 
     case PROP_SCALE:
@@ -2396,7 +2398,7 @@ gdk_surface_create_similar_surface (GdkSurface      *surface,
 
   g_return_val_if_fail (GDK_IS_SURFACE (surface), NULL);
 
-  scale = gdk_surface_get_scale_factor (surface);
+  scale = (int) ceil (gdk_surface_get_scale (surface));
 
   similar_surface = cairo_image_surface_create (content == CAIRO_CONTENT_COLOR ? CAIRO_FORMAT_RGB24 :
                                                 content == CAIRO_CONTENT_ALPHA ? CAIRO_FORMAT_A8 : CAIRO_FORMAT_ARGB32,
@@ -2625,6 +2627,8 @@ gdk_surface_get_frame_clock (GdkSurface *surface)
  * The scale factor may change during the lifetime of the surface.
  *
  * Returns: the scale factor
+ *
+ * Deprecated: 4.18: Use gdk_surface_get_scale() instead
  */
 int
 gdk_surface_get_scale_factor (GdkSurface *surface)

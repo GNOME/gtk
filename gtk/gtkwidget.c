@@ -6994,7 +6994,7 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
       GdkSurface *surface = gtk_widget_get_surface (widget);
 
       if (surface)
-        return gdk_surface_get_scale_factor (surface);
+        return (int) ceil (gdk_surface_get_scale (surface));
     }
 
   root = (GtkWidget *)_gtk_widget_get_root (widget);

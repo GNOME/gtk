@@ -93,7 +93,7 @@ gboolean gdk_surface_translate_coordinates (GdkSurface *from,
                                             double     *x,
                                             double     *y);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18_FOR(gdk_surface_get_scale)
 int           gdk_surface_get_scale_factor  (GdkSurface     *surface);
 
 GDK_AVAILABLE_IN_4_12
