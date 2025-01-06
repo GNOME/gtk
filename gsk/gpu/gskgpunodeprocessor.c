@@ -2720,7 +2720,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                &(GskGpuShaderImage) {
                                    image,
                                    GSK_GPU_SAMPLER_TRANSPARENT,
-                                   &child->bounds,
+                                   &tex_rect,
                                    &tex_rect,
                                },
                                &shadow->color);
@@ -2748,7 +2748,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                       &(GskGpuShaderImage) {
                           image,
                           GSK_GPU_SAMPLER_DEFAULT,
-                          &child->bounds,
+                          &tex_rect,
                           &tex_rect,
                       });
 
