@@ -75,6 +75,7 @@
 #include "a11y/gtkaccesskitcontextprivate.h"
 #endif
 
+#include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkeventsprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 #include "gdk/gdkmonitorprivate.h"
@@ -6983,38 +6984,18 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 int
 gtk_widget_get_scale_factor (GtkWidget *widget)
 {
-  GtkWidget *root;
+  GdkSurface *surface;
   GdkDisplay *display;
-  GdkMonitor *monitor;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 1);
 
-  if (_gtk_widget_get_realized (widget))
-    {
-      GdkSurface *surface = gtk_widget_get_surface (widget);
+  surface = gtk_widget_get_surface (widget);
+  if (surface)
+    return gdk_surface_get_scale_factor (surface);
 
-      if (surface)
-        return gdk_surface_get_scale_factor (surface);
-    }
-
-  root = (GtkWidget *)_gtk_widget_get_root (widget);
-  if (root && root != widget)
-    return gtk_widget_get_scale_factor (root);
-
-  /* else fall back to something that is more likely to be right than
-   * just returning 1:
-   */
   display = _gtk_widget_get_display (widget);
   if (display)
-    {
-      monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
-      if (monitor)
-        {
-          int result = gdk_monitor_get_scale_factor (monitor);
-          g_object_unref (monitor);
-          return result;
-        }
-    }
+    return gdk_display_guess_scale_factor (display);
 
   return 1;
 }
