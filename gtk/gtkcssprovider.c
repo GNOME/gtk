@@ -1539,7 +1539,10 @@ _gtk_css_find_theme (const char *name,
   /* Next look in the user's home directory */
   path = _gtk_css_find_theme_dir (g_get_home_dir (), ".themes", name, file);
   if (path)
-    return path;
+    {
+      GTK_DEBUG (CSS, "Loading custom CSS from $HOME/.themes/ is deprecated");
+      return path;
+    }
 
   /* Look in system data directories */
   dirs = g_get_system_data_dirs ();
