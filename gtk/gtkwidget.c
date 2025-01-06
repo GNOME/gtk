@@ -6984,8 +6984,6 @@ int
 gtk_widget_get_scale_factor (GtkWidget *widget)
 {
   GtkWidget *root;
-  GdkDisplay *display;
-  GdkMonitor *monitor;
 
   g_return_val_if_fail (GTK_IS_WIDGET (widget), 1);
 
@@ -7000,21 +6998,6 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
   root = (GtkWidget *)_gtk_widget_get_root (widget);
   if (root && root != widget)
     return gtk_widget_get_scale_factor (root);
-
-  /* else fall back to something that is more likely to be right than
-   * just returning 1:
-   */
-  display = _gtk_widget_get_display (widget);
-  if (display)
-    {
-      monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
-      if (monitor)
-        {
-          int result = (int) ceil (gdk_monitor_get_scale (monitor));
-          g_object_unref (monitor);
-          return result;
-        }
-    }
 
   return 1;
 }
