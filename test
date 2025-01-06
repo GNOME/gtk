@@ -1,8 +1,0 @@
-<interface>
-  <object class="GtkExpander">
-    <child type="label">
-      <object class="GtkLabel">
-      </object>
-    </child>
-  </object>
-</interface>
