@@ -766,8 +766,8 @@ test_scale_transform (void)
   t1 = gsk_transform_scale (NULL, 4, 9);
   t2 = gsk_transform_scale (gsk_transform_scale (NULL, 2, 3), 2, 3);
 
-  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_2D_AFFINE);
-  g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_2D_AFFINE);
+  g_assert_cmpint (gsk_transform_get_category (t1), ==, GSK_TRANSFORM_CATEGORY_2D_AFFINE);
+  g_assert_cmpint (gsk_transform_get_category (t2), ==, GSK_TRANSFORM_CATEGORY_2D_AFFINE);
   g_assert_true (gsk_transform_equal (t1, t2));
 
   string = gsk_transform_to_string (t1);
@@ -794,8 +794,8 @@ test_skew_transform (void)
   t3 = gsk_transform_skew (NULL, 0, -30);
   t4 = gsk_transform_skew (NULL, 30, 0);
 
-  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_2D);
-  g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_cmpint (gsk_transform_get_category (t1), ==, GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_cmpint (gsk_transform_get_category (t2), ==, GSK_TRANSFORM_CATEGORY_2D);
   g_assert_false (gsk_transform_equal (t1, t2));
 
   t2 = gsk_transform_invert (t2);
@@ -823,7 +823,7 @@ test_skew_transform (void)
   gsk_transform_unref (x);
 
   t3 = gsk_transform_transform (t3, t4);
-  g_assert_true (gsk_transform_get_category (t3) == GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_cmpint (gsk_transform_get_category (t3), ==, GSK_TRANSFORM_CATEGORY_2D);
 
   gsk_transform_unref (t1);
   gsk_transform_unref (t2);
@@ -839,8 +839,8 @@ test_perspective_transform (void)
   t1 = gsk_transform_perspective (NULL, 1000);
   t2 = gsk_transform_perspective (NULL, 300);
 
-  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_ANY);
-  g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_ANY);
+  g_assert_cmpint (gsk_transform_get_category (t1), ==, GSK_TRANSFORM_CATEGORY_ANY);
+  g_assert_cmpint (gsk_transform_get_category (t2), ==, GSK_TRANSFORM_CATEGORY_ANY);
   g_assert_false (gsk_transform_equal (t1, t2));
 
   t2 = gsk_transform_perspective (t2, 700);
@@ -860,8 +860,8 @@ test_rotate_transform (void)
   t1 = gsk_transform_rotate (NULL, 60);
   t2 = gsk_transform_rotate (NULL, 20);
 
-  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_2D);
-  g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_cmpint (gsk_transform_get_category (t1), ==, GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_cmpint (gsk_transform_get_category (t2), ==, GSK_TRANSFORM_CATEGORY_2D);
   g_assert_false (gsk_transform_equal (t1, t2));
 
   t2 = gsk_transform_rotate (t2, 40);
@@ -873,7 +873,7 @@ test_rotate_transform (void)
 
   gsk_transform_unref (t2);
   t2 = gsk_transform_rotate_3d (NULL, -60, graphene_vec3_init (&vec, 0, 0, 1));
-  g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_cmpint (gsk_transform_get_category (t2), ==, GSK_TRANSFORM_CATEGORY_2D);
   g_assert_true (gsk_transform_equal (t1, t2));
 
   gsk_transform_unref (t1);
@@ -881,9 +881,9 @@ test_rotate_transform (void)
   gsk_transform_unref (t3);
 
   t1 = gsk_transform_rotate (NULL, 180);
-  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_cmpint (gsk_transform_get_category (t1), ==, GSK_TRANSFORM_CATEGORY_2D);
   t1 = gsk_transform_rotate (t1, 180);
-  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_IDENTITY);
+  g_assert_cmpint (gsk_transform_get_category (t1), ==, GSK_TRANSFORM_CATEGORY_IDENTITY);
   g_assert_null (t1);
 
   t1 = gsk_transform_rotate (NULL, 360);
@@ -902,8 +902,8 @@ test_rotate3d_transform (void)
   t1 = gsk_transform_rotate_3d (NULL, 60, graphene_vec3_init (&vec, 1, 2, 3));
   t2 = gsk_transform_rotate_3d (NULL, -60, graphene_vec3_init (&vec, 1, 2, 3));
 
-  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_3D);
-  g_assert_true (gsk_transform_get_category (t2) == GSK_TRANSFORM_CATEGORY_3D);
+  g_assert_cmpint (gsk_transform_get_category (t1), ==, GSK_TRANSFORM_CATEGORY_3D);
+  g_assert_cmpint (gsk_transform_get_category (t2), ==, GSK_TRANSFORM_CATEGORY_3D);
   g_assert_false (gsk_transform_equal (t1, t2));
 
   t2 = gsk_transform_invert (t2);
@@ -922,7 +922,7 @@ test_matrix_transform (void)
 
   if (!gsk_transform_parse ("matrix(2, 0, 0, 3, 1, -1)", &t1))
     g_assert_not_reached ();
-  g_assert_true (gsk_transform_get_category (t1) == GSK_TRANSFORM_CATEGORY_2D);
+  g_assert_cmpint (gsk_transform_get_category (t1), ==, GSK_TRANSFORM_CATEGORY_2D);
 
   gsk_transform_to_2d (t1, &xx, &yx, &xy, &yy, &dx, &dy);
   g_assert_cmpfloat (xx, ==, 2.f);
@@ -1093,55 +1093,55 @@ test_fine_category (void)
   g_test_summary ("Tests that we get the fine categories of dihedral transforms right");
 
   transform = gsk_transform_rotate (NULL, 90);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
   gsk_transform_unref (transform);
 
   transform = gsk_transform_rotate (NULL, 180);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
   gsk_transform_unref (transform);
 
   transform = gsk_transform_rotate (NULL, 270);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
   gsk_transform_unref (transform);
 
   transform = gsk_transform_scale (NULL, -1, 1);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
   gsk_transform_unref (transform);
 
   transform = gsk_transform_scale (NULL, 1, -1);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
   gsk_transform_unref (transform);
 
   transform = gsk_transform_scale (NULL, -1, -1);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
   gsk_transform_unref (transform);
 
   transform = gsk_transform_scale (gsk_transform_rotate (NULL, 90), -1, 1);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
   gsk_transform_unref (transform);
 
   transform = gsk_transform_scale (gsk_transform_rotate (NULL, 180), -1, 1);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
   gsk_transform_unref (transform);
 
   transform = gsk_transform_scale (gsk_transform_rotate (NULL, 270), -1, 1);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
   gsk_transform_unref (transform);
 
   transform = gsk_transform_scale (gsk_transform_rotate (NULL, 360), -1, 1);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_NEGATIVE_AFFINE);
   gsk_transform_unref (transform);
 
   transform = gsk_transform_scale (gsk_transform_rotate (NULL, 450), -1, 1);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
   gsk_transform_unref (transform);
 
   transform = gsk_transform_rotate (NULL, -450);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
   gsk_transform_unref (transform);
 
   transform = gsk_transform_dihedral (NULL, GDK_DIHEDRAL_FLIPPED_90);
-  g_assert_true (gsk_transform_get_fine_category (transform) == GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
+  g_assert_cmpint (gsk_transform_get_fine_category (transform), ==, GSK_FINE_TRANSFORM_CATEGORY_2D_DIHEDRAL);
   gsk_transform_unref (transform);
 }
 
