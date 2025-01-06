@@ -173,7 +173,7 @@ gtk_native_realize (GtkNative *self)
                                               G_CALLBACK (surface_layout_cb),
                                               self);
 
-  priv->scale_changed_handler_id = g_signal_connect (surface, "notify::scale-factor",
+  priv->scale_changed_handler_id = g_signal_connect (surface, "notify::scale",
                                                      G_CALLBACK (scale_changed_cb),
                                                      self);
 
