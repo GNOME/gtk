@@ -2751,19 +2751,6 @@ gdk_wayland_display_get_output_refresh_rate (GdkWaylandDisplay *display_wayland,
   return 0;
 }
 
-guint32
-gdk_wayland_display_get_output_scale (GdkWaylandDisplay *display_wayland,
-				      struct wl_output  *output)
-{
-  GdkWaylandMonitor *monitor;
-
-  monitor = get_monitor_for_output (display_wayland, output);
-  if (monitor != NULL)
-    return gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
-
-  return 0;
-}
-
 /**
  * gdk_wayland_display_query_registry:
  * @display: (type GdkWaylandDisplay): a `GdkDisplay`
