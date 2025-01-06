@@ -597,7 +597,9 @@ gtk_image_set_from_file (GtkImage    *image,
       return;
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   scale_factor = gtk_widget_get_scale_factor (GTK_WIDGET (image));
+G_GNUC_END_IGNORE_DEPRECATIONS
   paintable = gdk_paintable_new_from_filename_scaled (filename, scale_factor);
 
   if (paintable == NULL)
@@ -681,7 +683,9 @@ gtk_image_set_from_resource (GtkImage   *image,
     }
   else
     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       scale_factor = gtk_widget_get_scale_factor (GTK_WIDGET (image));
+G_GNUC_END_IGNORE_DEPRECATIONS
       paintable = gdk_paintable_new_from_resource_scaled (resource_path, scale_factor);
     }
 

@@ -501,7 +501,9 @@ gtk_gl_area_allocate_buffers (GtkGLArea *area)
   if (priv->context == NULL)
     return;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   scale = gtk_widget_get_scale_factor (widget);
+G_GNUC_END_IGNORE_DEPRECATIONS
   width = gtk_widget_get_width (widget) * scale;
   height = gtk_widget_get_height (widget) * scale;
 
@@ -532,7 +534,9 @@ gtk_gl_area_allocate_texture (GtkGLArea *area)
 
   g_assert (priv->texture->gl_texture == NULL);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   scale = gtk_widget_get_scale_factor (widget);
+G_GNUC_END_IGNORE_DEPRECATIONS
   width = gtk_widget_get_width (widget) * scale;
   height = gtk_widget_get_height (widget) * scale;
 
@@ -752,7 +756,9 @@ gtk_gl_area_snapshot (GtkWidget   *widget,
   int w, h, scale;
   GLenum status;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   scale = gtk_widget_get_scale_factor (widget);
+G_GNUC_END_IGNORE_DEPRECATIONS
   w = gtk_widget_get_width (widget) * scale;
   h = gtk_widget_get_height (widget) * scale;
 

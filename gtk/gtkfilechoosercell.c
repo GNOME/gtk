@@ -130,7 +130,9 @@ drag_prepare_cb (GtkDragSource *source,
   if (!selection)
     return NULL;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   scale = gtk_widget_get_scale_factor (GTK_WIDGET (self));
+G_GNUC_END_IGNORE_DEPRECATIONS
   icon_theme = gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (self)));
 
   icon = _gtk_file_info_get_icon (self->item, ICON_SIZE, scale, icon_theme);

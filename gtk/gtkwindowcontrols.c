@@ -156,7 +156,11 @@ get_default_icon (GtkWidget *widget)
 {
   GdkDisplay *display = gtk_widget_get_display (widget);
   GtkIconPaintable *info;
-  int scale = gtk_widget_get_scale_factor (widget);
+  int scale;
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  scale = gtk_widget_get_scale_factor (widget);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (display),
                                      gtk_window_get_default_icon_name (),

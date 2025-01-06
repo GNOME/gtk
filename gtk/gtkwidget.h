@@ -537,7 +537,7 @@ GDK_AVAILABLE_IN_ALL
 GtkWidget*   gtk_widget_get_ancestor    (GtkWidget      *widget,
                                          GType           widget_type);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18_FOR(gdk_surface_get_scale)
 int           gtk_widget_get_scale_factor (GtkWidget *widget);
 GDK_AVAILABLE_IN_ALL
 GdkDisplay *  gtk_widget_get_display     (GtkWidget *widget);

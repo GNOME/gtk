@@ -66,6 +66,7 @@ render_orange_glonly (GtkWidget    *glarea,
   /* On GLES, this should now fail due to incomplete framebuffer and
    * leave us with the green contents we've drawn above.
    * Or we are on GL, everything works perfectly, and we now get orange. */
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   glBlitFramebuffer (0, 0,
                      width / 4, height / 4,
                      0, 0,
@@ -73,6 +74,7 @@ render_orange_glonly (GtkWidget    *glarea,
                      gtk_widget_get_height (glarea) * gtk_widget_get_scale_factor (glarea),
                      GL_COLOR_BUFFER_BIT,
                      GL_LINEAR);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   glDeleteFramebuffers (1, &fb_id);
   glDeleteTextures (1, &tex_id);

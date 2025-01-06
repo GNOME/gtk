@@ -1732,7 +1732,9 @@ gtk_window_init (GtkWindow *window)
 
   gtk_widget_add_css_class (widget, "background");
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   priv->scale = gtk_widget_get_scale_factor (widget);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   target = gtk_drop_target_async_new (gdk_content_formats_new ((const char*[1]) { "application/x-rootwindow-drop" }, 1),
                                       GDK_ACTION_MOVE);
@@ -4018,7 +4020,9 @@ check_scale_changed (GtkWindow *window)
   int old_scale;
 
   old_scale = priv->scale;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   priv->scale = gtk_widget_get_scale_factor (widget);
+G_GNUC_END_IGNORE_DEPRECATIONS
   if (old_scale != priv->scale)
     _gtk_widget_scale_changed (widget);
 }

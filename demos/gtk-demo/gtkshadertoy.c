@@ -130,7 +130,8 @@ drag_begin_cb (GtkGestureDrag *drag,
   GtkShadertoy *shadertoy = GTK_SHADERTOY (user_data);
   GtkShadertoyPrivate *priv = gtk_shadertoy_get_instance_private (shadertoy);
   int height = gtk_widget_get_height (GTK_WIDGET (shadertoy));
-  int scale = gtk_widget_get_scale_factor (GTK_WIDGET (shadertoy));
+  GdkSurface *surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (shadertoy)));
+  int scale = (int) ceil (gdk_surface_get_scale (surface));
 
  priv->mouse[0] = x * scale;
  priv->mouse[1] = (height - y) * scale;
@@ -148,7 +149,8 @@ drag_update_cb (GtkGestureDrag *drag,
   GtkShadertoyPrivate *priv = gtk_shadertoy_get_instance_private (shadertoy);
   int width = gtk_widget_get_width (GTK_WIDGET (shadertoy));
   int height = gtk_widget_get_height (GTK_WIDGET (shadertoy));
-  int scale = gtk_widget_get_scale_factor (GTK_WIDGET (shadertoy));
+  GdkSurface *surface = gtk_native_get_surface (gtk_widget_get_native (GTK_WIDGET (shadertoy)));
+  int scale = (int) ceil (gdk_surface_get_scale (surface));
   double x, y;
 
   gtk_gesture_drag_get_start_point (drag, &x, &y);

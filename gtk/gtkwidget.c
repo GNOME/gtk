@@ -1157,7 +1157,9 @@ gtk_widget_get_property (GObject    *object,
       g_value_set_enum (value, gtk_widget_get_overflow (widget));
       break;
     case PROP_SCALE_FACTOR:
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       g_value_set_int (value, gtk_widget_get_scale_factor (widget));
+G_GNUC_END_IGNORE_DEPRECATIONS
       break;
     case PROP_CSS_NAME:
       g_value_set_string (value, gtk_widget_get_css_name (widget));
@@ -1602,12 +1604,14 @@ gtk_widget_class_init (GtkWidgetClass *klass)
    * GtkWidget:scale-factor:
    *
    * The scale factor of the widget.
+   *
+   * Deprecated: 4.18: Use gdk_surface_get_scale() instead
    */
   widget_props[PROP_SCALE_FACTOR] =
       g_param_spec_int ("scale-factor", NULL, NULL,
                         1, G_MAXINT,
                         1,
-                        GTK_PARAM_READABLE);
+                        GTK_PARAM_READABLE|G_PARAM_DEPRECATED);
 
   /**
    * GtkWidget:css-name:
@@ -5710,7 +5714,9 @@ gtk_widget_update_state_flags (GtkWidget     *widget,
     {
       GtkStateData data;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       data.old_scale_factor = gtk_widget_get_scale_factor (widget);
+G_GNUC_END_IGNORE_DEPRECATIONS
       data.flags_to_set = flags_to_set;
       data.flags_to_unset = flags_to_unset;
 
@@ -6011,7 +6017,9 @@ gtk_widget_set_sensitive (GtkWidget *widget,
     {
       GtkStateData data;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       data.old_scale_factor = gtk_widget_get_scale_factor (widget);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       if (sensitive)
         {
@@ -6105,7 +6113,9 @@ gtk_widget_reposition_after (GtkWidget *widget,
       return;
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   data.old_scale_factor = gtk_widget_get_scale_factor (widget);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   if (priv->parent == NULL)
     g_object_ref_sink (widget);
@@ -6979,6 +6989,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * to get the fractional scale value.
  *
  * Returns: the scale factor for @widget
+ *
+ * Deprecated: 4.18: Use gdk_surface_get_scale() instead
  */
 int
 gtk_widget_get_scale_factor (GtkWidget *widget)
@@ -6996,8 +7008,10 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
     }
 
   root = (GtkWidget *)_gtk_widget_get_root (widget);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (root && root != widget)
     return gtk_widget_get_scale_factor (root);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   return 1;
 }
@@ -8064,7 +8078,11 @@ gtk_widget_propagate_state (GtkWidget          *widget,
   GtkStateFlags new_flags, old_flags = priv->state_flags;
   GtkStateData child_data;
   GtkWidget *child;
-  int new_scale_factor = gtk_widget_get_scale_factor (widget);
+  int new_scale_factor;
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  new_scale_factor = gtk_widget_get_scale_factor (widget);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   priv->state_flags |= data->flags_to_set;
   priv->state_flags &= ~(data->flags_to_unset);

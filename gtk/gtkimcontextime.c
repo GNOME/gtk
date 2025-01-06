@@ -669,7 +669,7 @@ gtk_im_context_ime_set_cursor_location (GtkIMContext *context,
   if (!himc)
     return;
 
-  scale = gdk_surface_get_scale_factor (context_ime->client_surface);
+  scale = (int) ceil (gdk_surface_get_scale (context_ime->client_surface));
 
   cf.dwStyle = CFS_POINT;
   cf.ptCurrentPos.x = context_ime->cursor_location.x * scale;

@@ -111,8 +111,11 @@ gtk_css_widget_node_get_style_provider (GtkCssNode *node)
   if (context)
     return gtk_style_context_get_style_provider (context);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   cascade = _gtk_settings_get_style_cascade (gtk_widget_get_settings (widget_node->widget),
                                              gtk_widget_get_scale_factor (widget_node->widget));
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   return GTK_STYLE_PROVIDER (cascade);
 }
 
