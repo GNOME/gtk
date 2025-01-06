@@ -153,16 +153,20 @@
  * - booleans (strings like “TRUE”, “t”, “yes”, “y”, “1” are interpreted
  *   as true values, strings like “FALSE”, “f”, “no”, “n”, “0” are interpreted
  *   as false values)
+ * - string lists (separated by newlines)
  * - enumeration types (can be specified by their full C identifier their short
  *   name used when registering the enumeration type, or their integer value)
  * - flag types (can be specified by their C identifier or short name,
  *   optionally combined with “|” for bitwise OR, or a single integer value
  *   e.g., “GTK_INPUT_HINT_EMOJI|GTK_INPUT_HINT_LOWERCASE”, or “emoji|lowercase” or 520).
- * - colors (in a format understood by [method@Gdk.RGBA.parse])
- * - `GVariant` (can be specified in the format understood by
- *    [func@GLib.Variant.parse])
- * - pixbufs (can be specified as an object id, a resource path or a filename of an image file to load relative to the Builder file or the CWD if [method@Gtk.Builder.add_from_string] was used)
- * - GFile (like pixbufs, can be specified as an object id, a URI or a filename of a file to load relative to the Builder file or the CWD if [method@Gtk.Builder.add_from_string] was used)
+ * - colors (in the format understood by [method@Gdk.RGBA.parse])
+ * - transforms (in the format understood by [func@Gsk.Transform.parse])
+ * - Pango attribute lists (in the format understood by [method@Pango.AttrList.to_string])
+ * - Pango tab arrays (in the format understood by [method@Pango.TabArray.to_string])
+ * - Pango font descriptions (in the format understood by [func@Pango.FontDescription.from_string])
+ * - `GVariant` (in the format understood by [func@GLib.Variant.parse])
+ * - textures (can be specified as an object id, a resource path or a filename of an image file to load relative to the Builder file or the CWD if [method@Gtk.Builder.add_from_string] was used)
+ * - GFile (like textures, can be specified as an object id, a URI or a filename of a file to load relative to the Builder file or the CWD if [method@Gtk.Builder.add_from_string] was used)
  *
  * Objects can be referred to by their name and by default refer to
  * objects declared in the local XML fragment and objects exposed via
@@ -2500,13 +2504,53 @@ gtk_builder_value_from_string_type (GtkBuilder   *builder,
 
           attrs = pango_attr_list_from_string (string);
           if (attrs)
-            g_value_take_boxed (value, attrs);
+            {
+              g_value_take_boxed (value, attrs);
+            }
           else
             {
               g_set_error (error,
                            GTK_BUILDER_ERROR,
                            GTK_BUILDER_ERROR_INVALID_VALUE,
                            "Could not parse PangoAttrList '%s'",
+                           string);
+              ret = FALSE;
+            }
+        }
+      else if (G_VALUE_HOLDS (value, PANGO_TYPE_TAB_ARRAY))
+        {
+          PangoTabArray *tabs;
+
+          tabs = pango_tab_array_from_string (string);
+          if (tabs)
+            {
+              g_value_take_boxed (value, tabs);
+            }
+          else
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not parse PangoTabArray '%s'",
+                           string);
+              ret = FALSE;
+            }
+        }
+      else if (G_VALUE_HOLDS (value, PANGO_TYPE_FONT_DESCRIPTION))
+        {
+          PangoFontDescription *desc;
+
+          desc = pango_font_description_from_string (string);
+          if (desc)
+            {
+              g_value_take_boxed (value, desc);
+            }
+          else
+            {
+              g_set_error (error,
+                           GTK_BUILDER_ERROR,
+                           GTK_BUILDER_ERROR_INVALID_VALUE,
+                           "Could not parse PangoFontDescription '%s'",
                            string);
               ret = FALSE;
             }
