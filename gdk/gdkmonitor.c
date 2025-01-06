@@ -487,6 +487,8 @@ gdk_monitor_get_model (GdkMonitor *monitor)
  * where it is better to use [method@Gdk.Surface.get_scale_factor] instead.
  *
  * Returns: the scale factor
+ *
+ * Deprecated: 4.18: Use gdk_monitor_get_scale() instead
  */
 int
 gdk_monitor_get_scale_factor (GdkMonitor *monitor)

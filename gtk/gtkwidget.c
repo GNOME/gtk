@@ -7010,7 +7010,7 @@ gtk_widget_get_scale_factor (GtkWidget *widget)
       monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
       if (monitor)
         {
-          int result = gdk_monitor_get_scale_factor (monitor);
+          int result = (int) ceil (gdk_monitor_get_scale (monitor));
           g_object_unref (monitor);
           return result;
         }

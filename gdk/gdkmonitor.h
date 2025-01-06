@@ -75,7 +75,7 @@ GDK_AVAILABLE_IN_ALL
 const char *      gdk_monitor_get_model           (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_ALL
 const char *      gdk_monitor_get_connector       (GdkMonitor   *monitor);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18_FOR(gdk_monitor_get_scale)
 int               gdk_monitor_get_scale_factor    (GdkMonitor   *monitor);
 GDK_AVAILABLE_IN_4_14
 double            gdk_monitor_get_scale           (GdkMonitor   *monitor);

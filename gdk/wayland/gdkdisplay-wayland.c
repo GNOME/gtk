@@ -2434,7 +2434,11 @@ apply_monitor_change (GdkWaylandMonitor *monitor)
 
   if (needs_scaling)
     {
-      int scale_factor = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
+      int scale_factor;
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+      scale_factor = gdk_monitor_get_scale_factor (GDK_MONITOR (monitor));
+G_GNUC_END_IGNORE_DEPRECATIONS
 
       logical_geometry.y /= scale_factor;
       logical_geometry.x /= scale_factor;
