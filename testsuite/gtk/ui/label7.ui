@@ -1,0 +1,7 @@
+<!-- test all valid label attributes -->
+<interface>
+  <object class="GtkLabel">
+    <property name="attributes">0 -1 weight 666, 0 -1 family Cantarell</property>
+    <property name="tabs">left:10px right:20px center:30px decimal:40px</property>
+  </object>
+</interface>
