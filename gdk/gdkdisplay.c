@@ -2581,3 +2581,19 @@ gdk_display_translate_key (GdkDisplay      *display,
                                               level,
                                               consumed);
 }
+
+int
+gdk_display_guess_scale_factor (GdkDisplay *display)
+{
+  GdkMonitor *monitor;
+
+  monitor = g_list_model_get_item (gdk_display_get_monitors (display), 0);
+  if (monitor)
+    {
+      int result = gdk_monitor_get_scale_factor (monitor);
+      g_object_unref (monitor);
+      return result;
+    }
+
+  return 1;
+}

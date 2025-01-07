@@ -299,5 +299,7 @@ void gdk_display_set_cursor_theme          (GdkDisplay   *display,
                                             const char   *name,
                                             int           size);
 
+int gdk_display_guess_scale_factor         (GdkDisplay   *display);
+
 G_END_DECLS
 
