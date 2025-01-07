@@ -476,10 +476,6 @@ static void     gtk_text_insert_emoji       (GtkText         *self);
 static gboolean gtk_text_select_all         (GtkText         *self);
 static void     gtk_text_real_activate      (GtkText         *self);
 
-static void     direction_changed           (GdkDevice       *keyboard,
-                                             GParamSpec      *pspec,
-                                             GtkText         *self);
-
 /* IM Context Callbacks
  */
 static void     gtk_text_commit_cb               (GtkIMContext *context,
@@ -2147,8 +2143,6 @@ gtk_text_dispose (GObject *object)
 {
   GtkText *self = GTK_TEXT (object);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkSeat *seat;
-  GdkDevice *keyboard = NULL;
   GtkWidget *chooser;
 
   priv->current_pos = priv->selection_bound = 0;
@@ -2175,12 +2169,6 @@ gtk_text_dispose (GObject *object)
   chooser = g_object_get_data (object, "gtk-emoji-chooser");
   if (chooser)
     gtk_widget_unparent (chooser);
-
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (GTK_WIDGET (object)));
-  if (seat)
-    keyboard = gdk_seat_get_keyboard (seat);
-  if (keyboard)
-    g_signal_handlers_disconnect_by_func (keyboard, direction_changed, self);
 
   g_clear_pointer (&priv->selection_bubble, gtk_widget_unparent);
   g_clear_pointer (&priv->popup_menu, gtk_widget_unparent);
@@ -3442,21 +3430,11 @@ gtk_text_focus_changed (GtkEventControllerFocus *controller,
 {
   GtkText *self = GTK_TEXT (widget);
   GtkTextPrivate *priv = gtk_text_get_instance_private (self);
-  GdkSeat *seat = NULL;
-  GdkDevice *keyboard = NULL;
-
-  seat = gdk_display_get_default_seat (gtk_widget_get_display (widget));
-  if (seat)
-    keyboard = gdk_seat_get_keyboard (seat);
 
   gtk_widget_queue_draw (widget);
 
   if (gtk_event_controller_focus_is_focus (controller))
     {
-      if (keyboard)
-        g_signal_connect (keyboard, "notify::direction",
-                          G_CALLBACK (direction_changed), self);
-
       gtk_text_im_set_focus_in (self);
       gtk_text_reset_blink_time (self);
       gtk_text_check_cursor_blink (self);
@@ -3468,9 +3446,6 @@ gtk_text_focus_changed (GtkEventControllerFocus *controller,
 
       priv->text_handles_enabled = FALSE;
       gtk_text_update_handles (self);
-
-      if (keyboard)
-        g_signal_handlers_disconnect_by_func (keyboard, direction_changed, self);
 
       if (priv->editable)
         {
@@ -4504,14 +4479,6 @@ gtk_text_real_activate (GtkText *self)
 
   if (priv->activates_default)
     gtk_widget_activate_default (GTK_WIDGET (self));
-}
-
-static void
-direction_changed (GdkDevice  *device,
-                   GParamSpec *pspec,
-                   GtkText    *self)
-{
-  gtk_text_recompute (self);
 }
 
 /* IM Context Callbacks
