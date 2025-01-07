@@ -1732,8 +1732,6 @@ gtk_window_init (GtkWindow *window)
 
   gtk_widget_add_css_class (widget, "background");
 
-  priv->scale = gtk_widget_get_scale_factor (widget);
-
   target = gtk_drop_target_async_new (gdk_content_formats_new ((const char*[1]) { "application/x-rootwindow-drop" }, 1),
                                       GDK_ACTION_MOVE);
   g_signal_connect (target, "drop", G_CALLBACK (gtk_window_accept_rootwindow_drop), NULL);
@@ -3311,10 +3309,13 @@ icon_list_from_theme (GtkWindow   *window,
   GdkTexture *texture;
   int *sizes;
   int i;
+  int scale;
 
   icon_theme = gtk_icon_theme_get_for_display (priv->display);
 
   sizes = gtk_icon_theme_get_icon_sizes (icon_theme, name);
+
+  scale = gtk_widget_get_scale_factor (GTK_WIDGET (window));
 
   list = NULL;
   for (i = 0; sizes[i]; i++)
@@ -3326,12 +3327,12 @@ icon_list_from_theme (GtkWindow   *window,
        */
       if (sizes[i] == -1)
         info = gtk_icon_theme_lookup_icon (icon_theme, name, NULL,
-                                           48, priv->scale,
+                                           48, scale,
                                            gtk_widget_get_direction (GTK_WIDGET (window)),
                                            0);
       else
         info = gtk_icon_theme_lookup_icon (icon_theme, name, NULL,
-                                           sizes[i], priv->scale,
+                                           sizes[i], scale,
                                            gtk_widget_get_direction (GTK_WIDGET (window)),
                                            0);
 
@@ -3390,9 +3391,9 @@ GdkPaintable *
 gtk_window_get_icon_for_size (GtkWindow *window,
                               int        size)
 {
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   const char *name;
   GtkIconPaintable *info;
+  int scale;
 
   name = gtk_window_get_icon_name (window);
 
@@ -3401,8 +3402,10 @@ gtk_window_get_icon_for_size (GtkWindow *window,
   if (!name)
     return NULL;
 
+  scale = gtk_widget_get_scale_factor (GTK_WIDGET (window));
+
   info = gtk_icon_theme_lookup_icon (gtk_icon_theme_get_for_display (gtk_widget_get_display (GTK_WIDGET (window))),
-                                     name, NULL, size, priv->scale,
+                                     name, NULL, size, scale,
                                      gtk_widget_get_direction (GTK_WIDGET (window)),
                                      0);
   if (info == NULL)
@@ -4011,19 +4014,6 @@ gtk_window_unmap (GtkWidget *widget)
 }
 
 static void
-check_scale_changed (GtkWindow *window)
-{
-  GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
-  GtkWidget *widget = GTK_WIDGET (window);
-  int old_scale;
-
-  old_scale = priv->scale;
-  priv->scale = gtk_widget_get_scale_factor (widget);
-  if (old_scale != priv->scale)
-    _gtk_widget_scale_changed (widget);
-}
-
-static void
 get_shadow_width (GtkWindow *window,
                   GtkBorder *shadow_width)
 {
@@ -4333,6 +4323,9 @@ gtk_window_realize (GtkWidget *widget)
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GdkSurface *surface;
   GdkFrameClock *frame_clock;
+  int old_scale;
+
+  old_scale = gtk_widget_get_scale_factor (widget);
 
   /* Create default title bar */
   if (!priv->client_decorated && gtk_window_should_use_csd (window))
@@ -4416,10 +4409,10 @@ gtk_window_realize (GtkWidget *widget)
   if (priv->application)
     gtk_application_handle_window_realize (priv->application, window);
 
-  /* Icons */
   gtk_window_realize_icon (window);
 
-  check_scale_changed (window);
+  if (old_scale != gtk_widget_get_scale_factor (widget))
+    _gtk_widget_scale_changed (widget);
 
   gtk_native_realize (GTK_NATIVE (window));
 }
@@ -4722,8 +4715,6 @@ surface_size_changed (GtkWidget *widget,
                       int        height)
 {
   GtkWindow *window = GTK_WINDOW (widget);
-
-  check_scale_changed (GTK_WINDOW (widget));
 
   if (should_remember_size (window))
     {
@@ -5739,12 +5730,15 @@ gtk_window_set_display (GtkWindow  *window,
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   GtkWidget *widget;
   gboolean was_mapped;
+  int old_scale;
 
   g_return_if_fail (GTK_IS_WINDOW (window));
   g_return_if_fail (GDK_IS_DISPLAY (display));
 
   if (display == priv->display)
     return;
+
+  old_scale = gtk_widget_get_scale_factor (GTK_WIDGET (window));
 
   /* reset initial_fullscreen_monitor since they are relative to the screen */
   unset_fullscreen_monitor (window);
@@ -5779,7 +5773,8 @@ gtk_window_set_display (GtkWindow  *window,
   if (was_mapped)
     gtk_widget_map (widget);
 
-  check_scale_changed (window);
+  if (old_scale != gtk_widget_get_scale_factor (GTK_WIDGET (window)))
+    _gtk_widget_scale_changed (GTK_WIDGET (window));
 
   gtk_widget_system_setting_changed (GTK_WIDGET (window), GTK_SYSTEM_SETTING_DISPLAY);
 }
