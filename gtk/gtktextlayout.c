@@ -4112,6 +4112,7 @@ gtk_text_layout_snapshot (GtkTextLayout         *layout,
       if (line_display->height > 0)
         {
           g_assert (line_display->layout != NULL);
+          g_assert (!line_display->cursors_invalid);
 
           if (have_selection)
             {
