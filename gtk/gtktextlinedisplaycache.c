@@ -330,10 +330,13 @@ gtk_text_line_display_cache_get (GtkTextLineDisplayCache *cache,
                                  gboolean                 size_only)
 {
   GtkTextLineDisplay *display;
+  GtkTextLine *cursor_line;
 
   g_assert (cache != NULL);
   g_assert (layout != NULL);
   g_assert (line != NULL);
+
+  cursor_line = cache->cursor_line;
 
   display = g_hash_table_lookup (cache->line_to_display, line);
 
@@ -344,6 +347,9 @@ gtk_text_line_display_cache_get (GtkTextLineDisplayCache *cache,
           STAT_INC (cache->hits);
 
           if (!size_only && display->line == cache->cursor_line)
+            gtk_text_layout_update_display_cursors (layout, display->line, display);
+
+          if (!size_only && display->cursors_invalid)
             gtk_text_layout_update_display_cursors (layout, display->line, display);
 
           if (!size_only && display->has_children)
@@ -374,6 +380,11 @@ gtk_text_line_display_cache_get (GtkTextLineDisplayCache *cache,
 
   if (!size_only)
     {
+      /* Reestablish cache->cursor_line, in case it was cleared by
+       * gtk_text_line_display_cache_invalidate_display() above.
+       */
+      cache->cursor_line = cursor_line;
+
       if (line == cache->cursor_line)
         gtk_text_layout_update_display_cursors (layout, line, display);
 
