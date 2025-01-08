@@ -1,0 +1,15 @@
+color {
+  bounds: 0 0 15 30;
+  color: gray;
+}
+shadow {
+  shadows: maroon 0 10;
+  child: color {
+    bounds: 2.6 0 10 10;
+    color: maroon;
+  }
+}
+color {
+  bounds: 2.6 20 10 10;
+  color: maroon;
+}
