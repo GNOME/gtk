@@ -137,6 +137,7 @@ struct _GtkSettings
   char *font_family;
   cairo_font_options_t *font_options;
   char *font_variations;
+  char *font_features;
 };
 
 struct _GtkSettingsClass
@@ -1013,6 +1014,7 @@ gtk_settings_finalize (GObject *object)
 
   g_free (settings->font_family);
   g_free (settings->font_variations);
+  g_free (settings->font_features);
 
   g_object_unref (settings->theme_provider);
 
@@ -1248,6 +1250,17 @@ settings_update_font_values (GtkSettings *settings)
   else
     {
       settings->font_variations = NULL;
+    }
+
+  g_free (settings->font_features);
+  if (desc != NULL &&
+      (pango_font_description_get_set_fields (desc) & PANGO_FONT_MASK_FEATURES) != 0)
+    {
+      settings->font_features = g_strdup (pango_font_description_get_features (desc));
+    }
+  else
+    {
+      settings->font_features = NULL;
     }
 
   if (desc)
@@ -2027,4 +2040,12 @@ gtk_settings_get_font_variations (GtkSettings *settings)
   settings_update_font_name (settings);
 
   return settings->font_variations;
+}
+
+const char *
+gtk_settings_get_font_features (GtkSettings *settings)
+{
+  settings_update_font_name (settings);
+
+  return settings->font_features;
 }
