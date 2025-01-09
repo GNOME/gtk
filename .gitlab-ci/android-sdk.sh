@@ -22,8 +22,8 @@
 set -e
 set -x
 
-if [ -z $ANDROID_HOME ]; then
-    echo "ANDROID_HOME env var must be set!"
+if [ -z $ANDROID_HOME -o -z $ANDROID_SDKVER ]; then
+    echo "ANDROID_HOME and ANDROID_SDKVER env var must be set!"
     exit 1
 fi
 
@@ -40,8 +40,7 @@ cat <<EOF >> ${HOME}/.android/sites-settings.cfg
 @disabled@https\://dl.google.com/android/repository/sys-img/google_apis/sys-img.xml=disabled
 EOF
 
-ANDROID_SDKMAJOR="34"
-ANDROID_SDKVER="${ANDROID_SDKMAJOR}.0.0"
+ANDROID_SDKMAJOR=`echo ${ANDROID_SDKVER} | awk -F '.' '{print $1}'`
 ANDROID_NDKVER="27.2.12479018"
 
 # accepted licenses
