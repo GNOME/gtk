@@ -245,6 +245,52 @@ gtk_css_font_variations_value_parse (GtkCssParser *parser)
   return result;
 }
 
+GtkCssValue *
+gtk_css_font_variations_value_from_string (const char *variations)
+{
+  GtkCssValue *result, *coord;
+  char **vals = NULL;
+  char **parts = NULL;
+  char *endp = NULL;
+
+  result = gtk_css_font_variations_value_new_empty ();
+
+  vals = g_strsplit (variations, ",", -1);
+
+  for (int i = 0; vals[i]; i++)
+    {
+      double num;
+
+      parts = g_strsplit (vals[i], "=", 2);
+
+      if (parts[0] == NULL || parts[1] == NULL)
+        goto empty;
+
+      if (!is_valid_opentype_tag (parts[0]))
+        goto empty;
+
+      num = g_ascii_strtod (parts[1], &endp);
+      if (*endp != '\0')
+        goto empty;
+
+      coord = gtk_css_number_value_new (num, GTK_CSS_NUMBER);
+      gtk_css_font_variations_value_add_axis (result, parts[0], coord);
+
+      g_strfreev (parts);
+    }
+
+  g_strfreev (vals);
+
+  return result;
+
+empty:
+  g_strfreev (parts);
+  g_strfreev (vals);
+  gtk_css_value_unref (result);
+
+  return gtk_css_font_variations_value_new_default ();
+}
+
 char *
 gtk_css_font_variations_value_get_variations (GtkCssValue *value)
 {
