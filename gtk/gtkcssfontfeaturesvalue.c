@@ -251,6 +251,51 @@ gtk_css_font_features_value_parse (GtkCssParser *parser)
   return result;
 }
 
+GtkCssValue *
+gtk_css_font_features_value_from_string (const char *features)
+{
+  GtkCssValue *result;
+  char **vals = NULL;
+  char **parts = NULL;
+  char *endp = NULL;
+
+  result = gtk_css_font_features_value_new_empty ();
+
+  vals = g_strsplit (features, ",", -1);
+
+  for (int i = 0; vals[i]; i++)
+    {
+      double num;
+
+      parts = g_strsplit (vals[i], "=", 2);
+
+      if (parts[0] == NULL || parts[1] == NULL)
+        goto empty;
+
+      if (!is_valid_opentype_tag (parts[0]))
+        goto empty;
+
+      num = (int) g_ascii_strtoull (parts[1], &endp, 10);
+      if (*endp != '\0')
+        goto empty;
+
+      gtk_css_font_features_value_add_feature (result, parts[0], num);
+
+      g_strfreev (parts);
+    }
+
+  g_strfreev (vals);
+
+  return result;
+
+empty:
+  g_strfreev (parts);
+  g_strfreev (vals);
+  gtk_css_value_unref (result);
+
+  return gtk_css_font_features_value_new_default ();
+}
+
 char *
 gtk_css_font_features_value_get_features (GtkCssValue *value)
 {

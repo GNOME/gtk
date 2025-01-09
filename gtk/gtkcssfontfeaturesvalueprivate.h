@@ -30,6 +30,8 @@ GtkCssValue *   gtk_css_font_features_value_new_default  (void);
 
 GtkCssValue *   gtk_css_font_features_value_parse        (GtkCssParser *parser);
 
+GtkCssValue *   gtk_css_font_features_value_from_string  (const char   *features);
+
 char *          gtk_css_font_features_value_get_features (GtkCssValue  *value);
 
 G_END_DECLS
