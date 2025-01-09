@@ -11,10 +11,16 @@ project('gtk', 'c',
         meson_version : '>= 1.2.0',
         license: 'LGPL-2.1-or-later')
 
+glib_major_req = 2
+glib_minor_req = 80
+
+pango_major_req = 1
+pango_minor_req = 56
+
 # keep these numbers in sync with wrap files where there exist
-glib_req           = '>= 2.80.0'
-introspection_req  = '>= 1.80.0' # keep this in sync with glib
-pango_req          = '>= 1.55.0' # keep this in sync with .gitlab-ci/test-msys.sh
+glib_req           = '>= @0@.@1@'.format(glib_major_req, glib_minor_req)
+introspection_req  = '>= 1.@0@.0'.format(glib_minor_req)
+pango_req          = '>= @0@.@1@'.format(pango_major_req, pango_minor_req)
 harfbuzz_req       = '>= 8.4.0'
 fribidi_req        = '>= 1.0.6'
 cairo_req          = '>= 1.18.0'
@@ -33,11 +39,12 @@ fs = import('fs')
 gnome = import('gnome')
 pkg_config = import('pkgconfig')
 
-# Keep in sync with glib_req
 add_project_arguments([
     '-DG_LOG_USE_STRUCTURED=1',
-    '-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_2_80',
-    '-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_80',
+    '-DGLIB_VERSION_MIN_REQUIRED=GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req),
+    '-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_@0@_@1@'.format(glib_major_req, glib_minor_req),
+    '-DPANGO_VERSION_MIN_REQUIRED=G_ENCODE_VERSION(@0@,@1@)'.format(pango_major_req, pango_minor_req),
+    '-DPANGO_VERSION_MAX_ALLOWED=G_ENCODE_VERSION(@0@,@1@)'.format(pango_major_req, pango_minor_req),
   ],
   language: 'c'
 )
