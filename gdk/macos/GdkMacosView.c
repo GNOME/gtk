@@ -37,16 +37,9 @@
 {
   if ((self = [super initWithFrame:frame]))
     {
-#ifdef GDK_RENDERING_VULKAN
-      CALayer *layer = [CAMetalLayer layer];
-      [layer setOpaque:NO];
-#else
       GdkMacosLayer *layer = [GdkMacosLayer layer];
 
       [self setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawNever];
-#endif
-      CGSize viewScale = [self convertSizeToBacking: CGSizeMake(1.0, 1.0)];
-      layer.contentsScale = MIN(viewScale.width, viewScale.height);
       [self setLayer:layer];
       [self setWantsLayer:YES];
     }
