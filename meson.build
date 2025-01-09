@@ -14,7 +14,7 @@ project('gtk', 'c',
 # keep these numbers in sync with wrap files where there exist
 glib_req           = '>= 2.80.0'
 introspection_req  = '>= 1.80.0' # keep this in sync with glib
-pango_req          = '>= 1.55.0' # keep this in sync with .gitlab-ci/test-msys.sh
+pango_req          = '>= 1.56.0' # keep this in sync with .gitlab-ci/test-msys.sh
 harfbuzz_req       = '>= 8.4.0'
 fribidi_req        = '>= 1.0.6'
 cairo_req          = '>= 1.18.0'
