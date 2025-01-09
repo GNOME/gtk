@@ -25,6 +25,7 @@
 #include "gtkcssstylepropertyprivate.h"
 #include "gtksettingsprivate.h"
 #include "gtkstyleproviderprivate.h"
+#include "gtkcssfontvariationsvalueprivate.h"
 
 struct _GtkCssValue {
   GTK_CSS_VALUE_BASE
@@ -63,6 +64,12 @@ gtk_css_value_initial_compute (GtkCssValue          *value,
       settings = gtk_style_provider_get_settings (context->provider);
       if (settings && gtk_settings_get_font_family (settings) != NULL)
         return _gtk_css_array_value_new (_gtk_css_string_value_new (gtk_settings_get_font_family (settings)));
+      break;
+
+    case GTK_CSS_PROPERTY_FONT_VARIATION_SETTINGS:
+      settings = gtk_style_provider_get_settings (context->provider);
+      if (settings && gtk_settings_get_font_variations (settings) != NULL)
+        return gtk_css_font_variations_value_from_string (gtk_settings_get_font_variations (settings));
       break;
 
     default:
