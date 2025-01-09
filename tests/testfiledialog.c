@@ -27,6 +27,32 @@ open_done (GObject *source,
 }
 
 static void
+open_text_done (GObject *source,
+                GAsyncResult *result,
+                gpointer data)
+{
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GFile *file;
+  const char *encoding;
+  GError *error = NULL;
+
+  file = gtk_file_dialog_open_text_file_finish (dialog, result, &encoding, &error);
+  if (!file)
+    {
+      g_print ("Error: %s %d %s\n", g_quark_to_string (error->domain), error->code, error->message);
+      g_error_free (error);
+    }
+  else
+    {
+      g_print ("%s\n", g_file_peek_path (file));
+      g_print ("Encoding: %s\n", encoding);
+      g_object_unref (file);
+    }
+
+  done = TRUE;
+}
+
+static void
 select_done (GObject *source,
              GAsyncResult *result,
              gpointer data)
@@ -68,6 +94,41 @@ save_done (GObject *source,
   else
     {
       g_print ("%s\n", g_file_peek_path (file));
+      g_object_unref (file);
+    }
+
+  done = TRUE;
+}
+
+static void
+save_text_done (GObject *source,
+                GAsyncResult *result,
+                gpointer data)
+{
+  GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
+  GFile *file;
+  const char *encoding;
+  const char *line_ending;
+  GError *error = NULL;
+
+  file = gtk_file_dialog_save_text_file_finish (dialog, result, &encoding, &line_ending, &error);
+  if (!file)
+    {
+      g_print ("Error: %s %d %s\n", g_quark_to_string (error->domain), error->code, error->message);
+      g_error_free (error);
+    }
+  else
+    {
+      g_print ("%s\n", g_file_peek_path (file));
+      g_print ("Encoding: %s\n", encoding);
+      if (strcmp (line_ending, "\n") == 0)
+        g_print ("Line ending: \\n\n");
+      else if (strcmp (line_ending, "\r\n") == 0)
+        g_print ("Line ending: \\r\\n\n");
+      else if (strcmp (line_ending, "\r") == 0)
+        g_print ("Line ending: \\r\n");
+      else
+        g_print ("Line ending: %s\n", line_ending);
       g_object_unref (file);
     }
 
@@ -142,6 +203,33 @@ cancel_dialog (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
+static void
+add_text_filters (GtkFileDialog *dialog)
+{
+  GListStore *filters;
+  GtkFileFilter *text_files;
+  GtkFileFilter *all_files;
+
+  filters = g_list_store_new (GTK_TYPE_FILTER);
+
+  text_files = gtk_file_filter_new ();
+  gtk_file_filter_set_name (text_files, "Text files");
+  gtk_file_filter_add_mime_type (text_files, "text/*");
+  g_list_store_append (filters, text_files);
+
+  all_files = gtk_file_filter_new ();
+  gtk_file_filter_set_name (all_files, "All files");
+  gtk_file_filter_add_mime_type (all_files, "*");
+  g_list_store_append (filters, all_files);
+
+  gtk_file_dialog_set_filters (dialog, G_LIST_MODEL (filters));
+  gtk_file_dialog_set_default_filter (dialog, text_files);
+
+  g_object_unref (text_files);
+  g_object_unref (all_files);
+  g_object_unref (filters);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -214,11 +302,21 @@ main (int argc, char *argv[])
     }
   else if (strcmp (action, "open") == 0)
     gtk_file_dialog_open (dialog, NULL, cancellable, open_done, NULL);
+  else if (strcmp (action, "open-text") == 0)
+    {
+      add_text_filters (dialog);
+      gtk_file_dialog_open_text_file (dialog, NULL, cancellable, open_text_done, NULL);
+    }
   else if (g_pattern_match_simple ("select?folder", action) &&
            strchr ("-_", action[strlen ("select")]))
     gtk_file_dialog_select_folder (dialog, NULL, cancellable, select_done, NULL);
   else if (strcmp (action, "save") == 0)
     gtk_file_dialog_save (dialog, NULL, cancellable, save_done, NULL);
+  else if (strcmp (action, "save-text") == 0)
+    {
+      add_text_filters (dialog);
+      gtk_file_dialog_save_text_file (dialog, NULL, cancellable, save_text_done, NULL);
+    }
   else if (g_pattern_match_simple ("open?multiple", action) &&
            strchr ("-_", action[strlen ("open")]))
     gtk_file_dialog_open_multiple (dialog, NULL, cancellable, open_multiple_done, NULL);
@@ -228,7 +326,7 @@ main (int argc, char *argv[])
   else
     {
       g_print ("invalid action: %s\n", action);
-      g_print ("one of open, select-folder, save, open-multiple, select-multiple\n");
+      g_print ("one of open, open-text, select-folder, save, save-text, open-multiple, select-multiple\n");
       exit (1);
     }
 
