@@ -505,9 +505,11 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                                 .pNext = NULL,
                                                 .flags = 0,
                                                 .surface = priv->surface,
+#ifndef __APPLE__
                                                 .minImageCount = CLAMP (4,
                                                                         capabilities.minImageCount,
                                                                         capabilities.maxImageCount ? capabilities.maxImageCount : G_MAXUINT32),
+#endif
                                                 .imageFormat = priv->formats[priv->current_depth].vk_format.format,
                                                 .imageColorSpace = priv->formats[priv->current_depth].vk_format.colorSpace,
                                                 .imageExtent = size,

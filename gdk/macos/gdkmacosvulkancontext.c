@@ -52,13 +52,16 @@ gdk_macos_vulkan_context_create_surface (GdkVulkanContext *context,
   NSView *view = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (gdk_surface));
   VkMetalSurfaceCreateInfoEXT info;
   VkResult result;
+  CAMetalLayer *layer;
 
-  g_assert ([[view layer] isKindOfClass:[CAMetalLayer class]]);
+  layer = [CAMetalLayer layer];
+  [layer setOpaque:NO];
+  [view setLayer:layer];
 
   info.sType = VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT;
   info.pNext = NULL;
   info.flags = 0;
-  info.pLayer = (CAMetalLayer *)[view layer];
+  info.pLayer = layer;
 
   result = GDK_VK_CHECK (vkCreateMetalSurfaceEXT,
                          gdk_vulkan_context_get_instance (context),
