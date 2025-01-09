@@ -434,7 +434,9 @@ gtk_settings_class_init (GtkSettingsClass *class)
    *
    * The default font to use.
    *
-   * GTK uses the family name and size from this string.
+   * This string must be parseable by [func@Pango.FontDescription.from_string].
+   *
+   * GTK uses the family name, size, variations and features from the value.
    */
   pspecs[PROP_FONT_NAME] = g_param_spec_string ("gtk-font-name", NULL, NULL,
                                                 "Sans 10",
