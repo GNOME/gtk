@@ -1,4 +1,4 @@
-FROM fedora:40
+FROM fedora:41
 
 RUN dnf -y install \
     adwaita-icon-theme \
@@ -92,6 +92,7 @@ RUN dnf -y install \
     redhat-rpm-config \
     sassc \
     vulkan-devel \
+    vulkan-validation-layers \
     wayland-devel \
     wayland-protocols-devel \
     weston \
