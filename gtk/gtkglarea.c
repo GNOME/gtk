@@ -1028,8 +1028,8 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
   /**
    * GtkGLArea::resize:
    * @area: the `GtkGLArea` that emitted the signal
-   * @width: the width of the viewport
-   * @height: the height of the viewport
+   * @viewport_width: the width of the viewport, in physical pixels
+   * @viewport_height: the height of the viewport, in physical pixels
    *
    * Emitted once when the widget is realized, and then each time the widget
    * is changed while realized.
@@ -1040,6 +1040,14 @@ gtk_gl_area_class_init (GtkGLAreaClass *klass)
    *
    * The GL context for the area is guaranteed to be current when this signal
    * is emitted.
+   *
+   * The size of the viewport is expressed in physical pixels, derived from
+   * the widget's size and scaling factor:
+   *
+   * ```
+   * viewport_width = widget.width × widget.scale_factor
+   * viewport_height = widget.height × widget.scale_factor
+   * ```
    *
    * The default handler sets up the GL viewport.
    */
