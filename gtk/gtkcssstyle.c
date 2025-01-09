@@ -861,7 +861,19 @@ gtk_css_style_get_pango_font (GtkCssStyle *style)
   v = style->font->font_variation_settings;
   str = gtk_css_font_variations_value_get_variations (v);
   if (str)
-    pango_font_description_set_variations (description, str);
+    {
+      PangoFontMask to_unset = 0;
+
+      if (strstr (str, "wght"))
+        to_unset |= PANGO_FONT_MASK_WEIGHT;
+      if (strstr (str, "wdth"))
+        to_unset |= PANGO_FONT_MASK_STRETCH;
+      if (strstr (str, "slnt"))
+        to_unset |= PANGO_FONT_MASK_STYLE;
+
+      pango_font_description_unset_fields (description, to_unset);
+      pango_font_description_set_variations (description, str);
+    }
   g_free (str);
 
   return description;
