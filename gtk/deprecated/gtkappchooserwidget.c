@@ -360,9 +360,9 @@ gtk_app_chooser_sort_func (GtkTreeModel *model,
   if (!a_recommended)
     {
       a_casefold = a_name != NULL ?
-        g_utf8_casefold (a_name, -1) : NULL;
+        g_utf8_collate_key (a_name, -1) : NULL;
       b_casefold = b_name != NULL ?
-        g_utf8_casefold (b_name, -1) : NULL;
+        g_utf8_collate_key (b_name, -1) : NULL;
 
       retval = g_strcmp0 (a_casefold, b_casefold);
 
