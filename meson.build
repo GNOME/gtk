@@ -191,27 +191,13 @@ cdata.set_quoted('GTK_SYSCONFDIR', gtk_sysconfdir)
 cdata.set_quoted('GETTEXT_PACKAGE', 'gtk40')
 
 check_headers = [
-  'crt/externs.h',
   'dev/evdev/input.h',
-  'dlfcn.h',
   'ftw.h',
-  'inttypes.h',
   'linux/input.h',
   'linux/memfd.h',
-  'locale.h',
-  'memory.h',
-  'stdint.h',
-  'stdlib.h',
-  'string.h',
-  'strings.h',
   'sys/mman.h',
-  'sys/param.h',
-  'sys/stat.h',
-  'sys/sysinfo.h',
   'sys/sysmacros.h',
-  'sys/systeminfo.h',
   'sys/time.h',
-  'sys/types.h',
   'unistd.h',
 ]
 
@@ -867,10 +853,10 @@ subdir('gdk')
 subdir('gsk')
 subdir('gtk')
 subdir('modules')
+subdir('tools')
 if get_option('build-demos')
   subdir('demos')
 endif
-subdir('tools')
 if get_option('build-tests')
   subdir('tests')
 endif
