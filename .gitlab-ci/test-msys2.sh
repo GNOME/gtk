@@ -22,7 +22,6 @@ pacman --noconfirm -S --needed \
     ${MINGW_PACKAGE_PREFIX}-graphene \
     ${MINGW_PACKAGE_PREFIX}-json-glib \
     ${MINGW_PACKAGE_PREFIX}-libepoxy \
-    ${MINGW_PACKAGE_PREFIX}-pango \
     ${MINGW_PACKAGE_PREFIX}-fribidi \
     ${MINGW_PACKAGE_PREFIX}-gst-plugins-bad-libs \
     ${MINGW_PACKAGE_PREFIX}-shared-mime-info \
