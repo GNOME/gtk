@@ -149,6 +149,7 @@ struct _GtkInspectorGeneral
   GtkWidget *display_name;
   GtkWidget *display_rgba;
   GtkWidget *display_composited;
+  GtkWidget *overlay;
 
   GdkDisplay *display;
 };
@@ -2056,6 +2057,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_composited);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, display_rgba);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, device_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, overlay);
 
   gtk_widget_class_bind_template_callback (widget_class, gtk_inspector_general_clip);
 
