@@ -49,6 +49,7 @@
 
 #include "gdksurface-wayland-private.h"
 #include "gdktoplevel-wayland-private.h"
+#include "gdksubsurface-wayland-private.h"
 
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
 
@@ -1414,6 +1415,8 @@ gdk_wayland_toplevel_finalize (GObject *object)
   g_free (self->title);
   g_clear_pointer (&self->shortcuts_inhibitors, g_hash_table_unref);
 
+  g_clear_pointer (&self->idle_inhibitor, zwp_idle_inhibitor_v1_destroy);
+
   G_OBJECT_CLASS (gdk_wayland_toplevel_parent_class)->finalize (object);
 }
 
@@ -2501,7 +2504,14 @@ gdk_wayland_toplevel_inhibit_idle (GdkToplevel *toplevel)
       wayland_toplevel->idle_inhibitor =
           zwp_idle_inhibit_manager_v1_create_inhibitor (display_wayland->idle_inhibit_manager,
                                                         gdk_wayland_surface_get_wl_surface (GDK_SURFACE (wayland_toplevel)));
+
+      for (gsize i = 0; i < gdk_surface_get_n_subsurfaces (GDK_SURFACE (toplevel)); i++)
+        {
+          GdkSubsurface *subsurface = gdk_surface_get_subsurface (GDK_SURFACE (toplevel), i);
+          gdk_wayland_subsurface_inhibit_idle (subsurface);
+        }
     }
+
   ++wayland_toplevel->idle_inhibitor_refcount;
 
   return TRUE;
@@ -2522,6 +2532,12 @@ gdk_wayland_toplevel_uninhibit_idle (GdkToplevel *toplevel)
     {
       g_clear_pointer (&wayland_toplevel->idle_inhibitor,
                        zwp_idle_inhibitor_v1_destroy);
+
+      for (gsize i = 0; i < gdk_surface_get_n_subsurfaces (GDK_SURFACE (toplevel)); i++)
+        {
+          GdkSubsurface *subsurface = gdk_surface_get_subsurface (GDK_SURFACE (toplevel), i);
+          gdk_wayland_subsurface_uninhibit_idle (subsurface);
+        }
     }
 }
 
