@@ -5299,9 +5299,7 @@ gtk_text_direction_to_string (GtkTextDirection direction)
 const char *
 gtk_wrap_mode_to_string (GtkWrapMode wrap_mode)
 {
-  /* Keep these in sync with pango_wrap_mode_to_string(); note that
-   * here we have an extra case for NONE.
-   */
+  /* Keep these in sync with pango_wrap_mode_to_string() */
   switch (wrap_mode)
     {
     case GTK_WRAP_NONE:
