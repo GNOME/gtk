@@ -29,6 +29,7 @@ RUN apt-get -y update && apt-get -y upgrade && apt-get -y install --no-install-r
  && apt-get -y clean
 
 ENV ANDROID_HOME /opt/android/
+ENV ANDROID_SDKVER 35.0.0
 COPY android-sdk.sh .
 RUN ./android-sdk.sh
 
