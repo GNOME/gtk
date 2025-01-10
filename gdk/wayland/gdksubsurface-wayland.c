@@ -54,6 +54,7 @@ gdk_wayland_subsurface_finalize (GObject *object)
   g_clear_pointer (&self->bg_viewport, wp_viewport_destroy);
   g_clear_pointer (&self->bg_subsurface, wl_subsurface_destroy);
   g_clear_pointer (&self->bg_surface, wl_surface_destroy);
+  g_clear_pointer (&self->idle_inhibitor, zwp_idle_inhibitor_v1_destroy);
 
   G_OBJECT_CLASS (gdk_wayland_subsurface_parent_class)->finalize (object);
 }
@@ -945,3 +946,27 @@ gdk_wayland_surface_create_subsurface (GdkSurface *surface)
   return GDK_SUBSURFACE (sub);
 }
 
+gboolean
+gdk_wayland_subsurface_inhibit_idle (GdkSubsurface *subsurface)
+{
+  GdkWaylandSubsurface *sub = GDK_WAYLAND_SUBSURFACE (subsurface);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (subsurface->parent));
+
+  if (!display_wayland->idle_inhibit_manager)
+    return FALSE;
+
+  if (!sub->idle_inhibitor)
+    sub->idle_inhibitor =
+      zwp_idle_inhibit_manager_v1_create_inhibitor (display_wayland->idle_inhibit_manager,
+                                                    sub->surface);
+
+  return TRUE;
+}
+
+void
+gdk_wayland_subsurface_uninhibit_idle (GdkSubsurface *subsurface)
+{
+  GdkWaylandSubsurface *sub = GDK_WAYLAND_SUBSURFACE (subsurface);
+
+  g_clear_pointer (&sub->idle_inhibitor, zwp_idle_inhibitor_v1_destroy);
+}
