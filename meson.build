@@ -854,6 +854,8 @@ subdir('gsk')
 subdir('gtk')
 subdir('modules')
 subdir('tools')
+subdir('po')
+subdir('docs/reference')
 if get_option('build-demos')
   subdir('demos')
 endif
@@ -952,9 +954,6 @@ if os_unix
   meson.override_dependency('gtk4-unix-print', libgtk_dep)
 endif
 
-subdir('po')
-
-subdir('docs/reference')
 
 devenv = environment()
 devenv.set('GTK_PATH', meson.current_build_dir() / 'modules')
