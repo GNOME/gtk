@@ -182,6 +182,7 @@ gtk/gtkfilechooserdialog.c
 gtk/gtkfilechooserentry.c
 gtk/gtkfilechoosererrorstack.c
 gtk/gtkfilechoosernative.c
+gtk/gtkfilechoosernativeportal.c
 gtk/gtkfilechoosernativequartz.c
 gtk/gtkfilechooserutils.c
 gtk/gtkfilechooserwidget.c
@@ -283,6 +284,7 @@ gtk/print/gtkprintoperationpreview.c
 gtk/print/gtkprintoperation-unix.c
 gtk/print/gtkprintoperation-win32.c
 gtk/print/gtkprintunixdialog.c
+gtk/gtkprintdialog.c
 gtk/gtkprogressbar.c
 gtk/gtkpropertylookuplistmodel.c
 gtk/gtkrange.c
@@ -330,6 +332,7 @@ gtk/gtkswitch.c
 gtk/gtktextbuffer.c
 gtk/gtktext.c
 gtk/gtktextchild.c
+gtk/gtktextencoding.c
 gtk/gtktexthandle.c
 gtk/gtktextiter.c
 gtk/gtktextlayout.c
