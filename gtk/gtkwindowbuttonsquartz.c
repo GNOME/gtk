@@ -197,6 +197,31 @@ gtk_window_buttons_quartz_size_allocate (GtkWidget *widget,
 }
 
 static void
+gtk_window_buttons_quartz_state_flags_changed (GtkWidget* widget,
+                                               GtkStateFlags previous_state_flags)
+{
+  GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (widget);
+  GtkNative *native = GTK_NATIVE (gtk_widget_get_root (widget));
+  GdkSurface *surface;
+
+  if (native != NULL && (surface = gtk_native_get_surface (native)) != NULL)
+    {
+      if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_INSENSITIVE)
+        gdk_macos_surface_enable_window_controls (GDK_MACOS_SURFACE (surface),
+                                                  FALSE,
+                                                  FALSE,
+                                                  FALSE);
+      else
+        gdk_macos_surface_enable_window_controls (GDK_MACOS_SURFACE (surface),
+                                                  self->close,
+                                                  self->minimize,
+                                                  self->maximize);
+    }
+
+  GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->state_flags_changed (widget, previous_state_flags);
+}
+
+static void
 gtk_window_buttons_quartz_class_init (GtkWindowButtonsQuartzClass *class)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
@@ -209,6 +234,7 @@ gtk_window_buttons_quartz_class_init (GtkWindowButtonsQuartzClass *class)
   widget_class->size_allocate = gtk_window_buttons_quartz_size_allocate;
   widget_class->realize = gtk_window_buttons_quartz_realize;
   widget_class->unrealize = gtk_window_buttons_quartz_unrealize;
+  widget_class->state_flags_changed = gtk_window_buttons_quartz_state_flags_changed;
 
   props[PROP_CLOSE] =
       g_param_spec_boolean ("close", NULL, NULL,
