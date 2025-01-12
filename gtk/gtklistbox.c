@@ -323,9 +323,9 @@ static void gtk_list_box_click_unpaired_release (GtkGestureClick  *gesture,
 static void gtk_list_box_click_gesture_stopped  (GtkGestureClick  *gesture,
                                                  GtkListBox       *box);
 
-static void gtk_list_box_update_row_styles (GtkListBox    *box);
-static void gtk_list_box_update_row_style  (GtkListBox    *box,
+static void gtk_list_box_update_row        (GtkListBox    *box,
                                             GtkListBoxRow *row);
+static void gtk_list_box_update_rows       (GtkListBox    *box);
 
 static void                 gtk_list_box_bound_model_changed            (GListModel          *list,
                                                                          guint                position,
@@ -1226,7 +1226,7 @@ gtk_list_box_set_selection_mode (GtkListBox       *box,
 
   box->selection_mode = mode;
 
-  gtk_list_box_update_row_styles (box);
+  gtk_list_box_update_rows (box);
 
   gtk_accessible_update_property (GTK_ACCESSIBLE (box),
                                   GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE, mode == GTK_SELECTION_MULTIPLE,
@@ -2829,7 +2829,7 @@ gtk_list_box_insert (GtkListBox *box,
   if (ROW_PRIV (row)->visible)
     list_box_add_visible_rows (box, 1);
   gtk_list_box_apply_filter (box, row);
-  gtk_list_box_update_row_style (box, row);
+  gtk_list_box_update_row (box, row);
   if (gtk_widget_get_visible (GTK_WIDGET (box)))
     {
       gtk_list_box_update_header (box, ROW_PRIV (row)->iter);
@@ -3205,13 +3205,12 @@ static void
 gtk_list_box_row_root (GtkWidget *widget)
 {
   GtkListBoxRow *row = GTK_LIST_BOX_ROW (widget);
+  GtkListBox *box;
 
   GTK_WIDGET_CLASS (gtk_list_box_row_parent_class)->root (widget);
 
-  if (ROW_PRIV (row)->selectable)
-    gtk_accessible_update_state (GTK_ACCESSIBLE (row),
-                                 GTK_ACCESSIBLE_STATE_SELECTED, ROW_PRIV (row)->selected,
-                                 -1);
+  box = gtk_list_box_row_get_box (row);
+  gtk_list_box_update_row (box, row);
 }
 
 /**
@@ -3338,9 +3337,16 @@ gtk_list_box_row_is_selected (GtkListBoxRow *row)
   return ROW_PRIV (row)->selected;
 }
 
+/*< private >
+ * gtk_list_box_update_row:
+ * @box: the list box
+ * @row: the row
+ *
+ * Update the visual and accessible representation of a row.
+ */
 static void
-gtk_list_box_update_row_style (GtkListBox    *box,
-                               GtkListBoxRow *row)
+gtk_list_box_update_row (GtkListBox    *box,
+                         GtkListBoxRow *row)
 {
   gboolean can_select;
 
@@ -3354,20 +3360,27 @@ gtk_list_box_update_row_style (GtkListBox    *box,
     gtk_widget_add_css_class (GTK_WIDGET (row), "activatable");
   else
     gtk_widget_remove_css_class (GTK_WIDGET (row), "activatable");
+
+  if (ROW_PRIV (row)->selectable && can_select)
+    gtk_accessible_update_state (GTK_ACCESSIBLE (row),
+                                 GTK_ACCESSIBLE_STATE_SELECTED, ROW_PRIV (row)->selected,
+                                 -1);
+  else
+    gtk_accessible_reset_state (GTK_ACCESSIBLE (row),
+                                GTK_ACCESSIBLE_STATE_SELECTED);
 }
 
 static void
-gtk_list_box_update_row_styles (GtkListBox *box)
+gtk_list_box_update_rows (GtkListBox *box)
 {
   GSequenceIter *iter;
-  GtkListBoxRow *row;
 
   for (iter = g_sequence_get_begin_iter (box->children);
        !g_sequence_iter_is_end (iter);
        iter = g_sequence_iter_next (iter))
     {
-      row = g_sequence_get (iter);
-      gtk_list_box_update_row_style (box, row);
+      GtkListBoxRow *row = g_sequence_get (iter);
+      gtk_list_box_update_row (box, row);
     }
 }
 
@@ -3390,7 +3403,7 @@ gtk_list_box_row_set_activatable (GtkListBoxRow *row,
     {
       ROW_PRIV (row)->activatable = activatable;
 
-      gtk_list_box_update_row_style (gtk_list_box_row_get_box (row), row);
+      gtk_list_box_update_row (gtk_list_box_row_get_box (row), row);
       g_object_notify_by_pspec (G_OBJECT (row), row_properties[ROW_PROP_ACTIVATABLE]);
     }
 }
@@ -3433,15 +3446,7 @@ gtk_list_box_row_set_selectable (GtkListBoxRow *row,
 
       ROW_PRIV (row)->selectable = selectable;
 
-      if (selectable)
-        gtk_accessible_update_state (GTK_ACCESSIBLE (row),
-                                     GTK_ACCESSIBLE_STATE_SELECTED, FALSE,
-                                     -1);
-      else
-        gtk_accessible_reset_state (GTK_ACCESSIBLE (row),
-                                    GTK_ACCESSIBLE_STATE_SELECTED);
-
-      gtk_list_box_update_row_style (gtk_list_box_row_get_box (row), row);
+      gtk_list_box_update_row (gtk_list_box_row_get_box (row), row);
 
       g_object_notify_by_pspec (G_OBJECT (row), row_properties[ROW_PROP_SELECTABLE]);
     }
