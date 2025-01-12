@@ -644,14 +644,17 @@ scan_directory (const gchar *base_path,
 	  directories = scan_directory (base_path, subsubdir, files,
 					directories, depth + 1);
 	  g_free (subsubdir);
+	  g_free (path);
 
 	  continue;
 	}
 
       /* ignore images in the toplevel directory */
       if (subdir == NULL)
-        continue;
-
+        {
+          g_free (path);
+          continue;
+        }
       retval = g_file_test (path, G_FILE_TEST_IS_REGULAR);
       if (retval)
 	{
@@ -665,7 +668,10 @@ scan_directory (const gchar *base_path,
 	    flags |= HAS_ICON_FILE;
 
 	  if (flags == 0)
-	    continue;
+	    {
+	      g_free (path);
+	      continue;
+	    }
 
 	  basename = g_strdup (name);
 	  dot = strrchr (basename, '.');
