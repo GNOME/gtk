@@ -1,5 +1,5 @@
 /* GTK - The GIMP Toolkit
- * gtksizegroup.c: 
+ * gtksizegroup.c:
  * Copyright (C) 2001 Red Hat Software
  *
  * This library is free software; you can redistribute it and/or
@@ -33,49 +33,89 @@
  *
  * `GtkSizeGroup` groups widgets together so they all request the same size.
  *
- * This is typically useful when you want a column of widgets to have the
- * same size, but you can’t use a `GtkGrid`.
+ * This is typically useful when you want a column of widgets to have
+ * the same size, but you can’t use a [class@Gtk.Grid] or [class@Gtk.Box].
  *
  * In detail, the size requested for each widget in a `GtkSizeGroup` is
  * the maximum of the sizes that would have been requested for each
- * widget in the size group if they were not in the size group. The mode
- * of the size group (see [method@Gtk.SizeGroup.set_mode]) determines whether
- * this applies to the horizontal size, the vertical size, or both sizes.
+ * widget in the size group if they were not in the size group. The
+ * [mode][method@Gtk.SizeGroup.set_mode] of the size group determines
+ * whether this applies to the horizontal size, the vertical size, or
+ * both sizes.
  *
  * Note that size groups only affect the amount of space requested, not
  * the size that the widgets finally receive. If you want the widgets in
  * a `GtkSizeGroup` to actually be the same size, you need to pack them in
- * such a way that they get the size they request and not more.
+ * such a way that they get the size they request and not more. In
+ * particular it doesn't make a lot of sense to set
+ * [the expand flags][method@Gtk.Widget.set_hexpand] on the widgets that
+ * are members of a size group.
  *
  * `GtkSizeGroup` objects are referenced by each widget in the size group,
  * so once you have added all widgets to a `GtkSizeGroup`, you can drop
- * the initial reference to the size group with g_object_unref(). If the
- * widgets in the size group are subsequently destroyed, then they will
- * be removed from the size group and drop their references on the size
- * group; when all widgets have been removed, the size group will be
- * freed.
+ * the initial reference to the size group with
+ * [method@GObject.Object.unref]. If the widgets in the size group are
+ * subsequently destroyed, then they will be removed from the size group
+ * and drop their references on the size group; when all widgets have been
+ * removed, the size group will be freed.
  *
  * Widgets can be part of multiple size groups; GTK will compute the
- * horizontal size of a widget from the horizontal requisition of all
- * widgets that can be reached from the widget by a chain of size groups
- * of type %GTK_SIZE_GROUP_HORIZONTAL or %GTK_SIZE_GROUP_BOTH, and the
- * vertical size from the vertical requisition of all widgets that can be
- * reached from the widget by a chain of size groups of type
- * %GTK_SIZE_GROUP_VERTICAL or %GTK_SIZE_GROUP_BOTH.
+ * horizontal size of a widget from the horizontal requisition of all widgets
+ * that can be reached from the widget by a chain of size groups with mode
+ * [enum@Gtk.SizeGroupMode.HORIZONTAL] or [enum@Gtk.SizeGroupMode.BOTH], and
+ * the vertical size from the vertical requisition of all widgets that can be
+ * reached from the widget by a chain of size groups with mode
+ * [enum@Gtk.SizeGroupMode.VERTICAL] or [enum@Gtk.SizeGroupMode.BOTH].
  *
- * Note that only non-contextual sizes of every widget are ever consulted
- * by size groups (since size groups have no knowledge of what size a widget
- * will be allocated in one dimension, it cannot derive how much height
- * a widget will receive for a given width). When grouping widgets that
- * trade height for width in mode %GTK_SIZE_GROUP_VERTICAL or %GTK_SIZE_GROUP_BOTH:
- * the height for the minimum width will be the requested height for all
- * widgets in the group. The same is of course true when horizontally grouping
- * width for height widgets.
+ * # Size groups and trading height-for-width
  *
- * Widgets that trade height-for-width should set a reasonably large minimum
- * width by way of [property@Gtk.Label:width-chars] for instance. Widgets with
- * static sizes as well as widgets that grow (such as ellipsizing text) need no
- * such considerations.
+ * ::: warning
+ *     Generally, size groups don't interact well with widgets that
+ *     trade height for width (or width for height), such as wrappable
+ *     labels. Avoid using size groups with such widgets.
+ *
+ * A size group with mode [enum@Gtk.SizeGroupMode.HORIZONTAL] or
+ * [enum@Gtk.SizeGroupMode.VERTICAL] only consults non-contextual sizes
+ * of widgets other than the one being measured, since it has no
+ * knowledge of what size a widget will get allocated in the other
+ * orientation. This can lead to widgets in a group actually requesting
+ * different contextual sizes, contrary to the purpose of
+ * `GtkSizeGroup`.
+ *
+ * In contrast, a size group with mode [enum@Gtk.SizeGroupMode.BOTH] can
+ * properly propagate the available size in the opposite orientation
+ * when measuring widgets in the group, which results in consistent and
+ * accurate measurements.
+ *
+ * In case some mechanism other than a size group is already used to
+ * ensure that widgets in a group all get the same size in one
+ * orientation (for example, some common ancestor is known to allocate
+ * the same width to all its children), and the size group is only
+ * really needed to also make the widgets request the same size in the
+ * other orientation, it is beneficial to still set the group's mode to
+ * [enum@Gtk.SizeGroupMode.BOTH]. This lets the group assume and count
+ * on sizes of the widgets in the former orientation being the same,
+ * which enables it to propagate the available size as described above.
+ *
+ * # Alternatives to size groups
+ *
+ * Size groups have many limitations, such as only influencing size
+ * requests but not allocations, and poor height-for-width support. When
+ * possible, prefer using dedicated mechanisms that can properly ensure
+ * that the widgets get the same size.
+ *
+ * Various container widgets and layout managers support a homogeneous
+ * layout mode, where they will explicitly give the same size to their
+ * children (see [property@Gtk.Box:homogeneous]). Using homogeneous mode
+ * can also have large performance benefits compared to either the same
+ * container in non-homogeneous mode, or to size groups.
+ *
+ * [class@Gtk.Grid] can be used to position widgets into rows and
+ * columns. Members of each column will have the same width among them;
+ * likewise, members of each row will have the same height. On top of
+ * that, the heights can be made equal between all rows with
+ * [property@Gtk.Grid:row-homogeneous], and the widths can be made equal
+ * between all columns with [property@Gtk.Grid:column-homogeneous].
  *
  * # GtkSizeGroup as GtkBuildable
  *
@@ -150,17 +190,20 @@ G_DEFINE_TYPE_WITH_CODE (GtkSizeGroup, gtk_size_group, G_TYPE_OBJECT,
 						gtk_size_group_buildable_init))
 
 static void
-add_widget_to_closure (GHashTable *widgets,
+add_widget_to_closure (GHashTable *peers,
+                       GHashTable *peers_for_both,
                        GHashTable *groups,
                        GtkWidget  *widget,
 		       int         orientation)
 {
   GSList *tmp_groups, *tmp_widgets;
 
-  if (g_hash_table_lookup (widgets, widget))
+  if (g_hash_table_lookup (peers, widget))
     return;
 
-  g_hash_table_add (widgets, widget);
+  g_hash_table_add (peers, widget);
+  if (peers_for_both)
+    g_hash_table_add (peers_for_both, widget);
 
   for (tmp_groups = _gtk_widget_get_sizegroups (widget); tmp_groups; tmp_groups = tmp_groups->next)
     {
@@ -176,24 +219,26 @@ add_widget_to_closure (GHashTable *widgets,
       g_hash_table_add (groups, tmp_group);
 
       for (tmp_widgets = tmp_priv->widgets; tmp_widgets; tmp_widgets = tmp_widgets->next)
-        add_widget_to_closure (widgets, groups, tmp_widgets->data, orientation);
+        add_widget_to_closure (peers, tmp_priv->mode == GTK_SIZE_GROUP_BOTH ? peers_for_both : NULL,
+                               groups, tmp_widgets->data, orientation);
     }
 }
 
-GHashTable *
+void
 _gtk_size_group_get_widget_peers (GtkWidget      *for_widget,
-                                  GtkOrientation  orientation)
+                                  GtkOrientation  orientation,
+                                  GHashTable    **peers,
+                                  GHashTable    **peers_for_both)
 {
-  GHashTable *widgets, *groups;
+  GHashTable *groups;
 
-  widgets = g_hash_table_new (NULL, NULL);
+  *peers = g_hash_table_new (NULL, NULL);
+  *peers_for_both = g_hash_table_new (NULL, NULL);
   groups = g_hash_table_new (NULL, NULL);
 
-  add_widget_to_closure (widgets, groups, for_widget, orientation);
+  add_widget_to_closure (*peers, *peers_for_both, groups, for_widget, orientation);
 
   g_hash_table_unref (groups);
-
-  return widgets;
 }
 
 static void

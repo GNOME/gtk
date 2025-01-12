@@ -526,27 +526,34 @@ gtk_widget_measure (GtkWidget        *widget,
     }
   else
     {
-      GHashTable *widgets;
+      GHashTable *peers, *peers_for_both;
       GHashTableIter iter;
       gpointer key;
       int min_result = 0, nat_result = 0;
 
-      widgets = _gtk_size_group_get_widget_peers (widget, orientation);
+      _gtk_size_group_get_widget_peers (widget, orientation,
+                                        &peers, &peers_for_both);
 
-      g_hash_table_iter_init (&iter, widgets);
+      g_hash_table_iter_init (&iter, peers);
       while (g_hash_table_iter_next (&iter, &key, NULL))
         {
-          GtkWidget *tmp_widget = key;
-          int min_dimension, nat_dimension;
+          GtkWidget *peer_widget = key;
+          int peer_for_size, peer_min, peer_nat;
 
-          gtk_widget_query_size_for_orientation (tmp_widget, orientation, for_size,
-                                                 &min_dimension, &nat_dimension, NULL, NULL);
+          if (g_hash_table_lookup (peers_for_both, peer_widget))
+            peer_for_size = for_size;
+          else
+            peer_for_size = -1;
 
-          min_result = MAX (min_result, min_dimension);
-          nat_result = MAX (nat_result, nat_dimension);
+          gtk_widget_query_size_for_orientation (peer_widget, orientation, peer_for_size,
+                                                 &peer_min, &peer_nat, NULL, NULL);
+
+          min_result = MAX (min_result, peer_min);
+          nat_result = MAX (nat_result, peer_nat);
         }
 
-      g_hash_table_destroy (widgets);
+      g_hash_table_destroy (peers);
+      g_hash_table_destroy (peers_for_both);
 
       /* Baselines make no sense with sizegroups really */
       if (minimum_baseline)
@@ -588,6 +595,58 @@ gtk_widget_get_request_mode (GtkWidget *widget)
     {
       cache->request_mode = fetch_request_mode (widget);
       cache->request_mode_valid = TRUE;
+    }
+
+  /* Constant-size widgets in a size group with GTK_SIZE_GROUP_BOTH mode
+   * cannot just report constant-size, since their size request as seen
+   * by the parent may depend on the available size in the other
+   * orientation. So look at our peers and pick a common request mode
+   * among them.
+   */
+  if (cache->request_mode == GTK_SIZE_REQUEST_CONSTANT_SIZE &&
+      G_UNLIKELY (_gtk_widget_get_sizegroups (widget)))
+    {
+      GHashTable *peers, *peers_for_both;
+      GHashTableIter iter;
+      gpointer key;
+      int wfh = 0, hfw = 0;
+
+      _gtk_size_group_get_widget_peers (widget, GTK_ORIENTATION_VERTICAL,
+                                        &peers, &peers_for_both);
+      g_hash_table_destroy (peers);
+      g_hash_table_iter_init (&iter, peers_for_both);
+      while (g_hash_table_iter_next (&iter, &key, NULL))
+        {
+          GtkWidget *peer_widget = key;
+          SizeRequestCache *peer_cache;
+
+          peer_cache = _gtk_widget_peek_request_cache (peer_widget);
+          if (G_UNLIKELY (!peer_cache->request_mode_valid))
+            {
+              peer_cache->request_mode = fetch_request_mode (peer_widget);
+              peer_cache->request_mode_valid = TRUE;
+            }
+
+          switch (peer_cache->request_mode)
+            {
+            case GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT:
+              wfh++;
+              break;
+            case GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH:
+              hfw++;
+              break;
+            case GTK_SIZE_REQUEST_CONSTANT_SIZE:
+            default:
+              break;
+            }
+        }
+      g_hash_table_destroy (peers_for_both);
+
+      if (hfw == 0 && wfh == 0)
+        return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+      if (wfh > hfw)
+        return GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT;
+      return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
     }
 
   return cache->request_mode;
