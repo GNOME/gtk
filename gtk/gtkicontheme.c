@@ -654,10 +654,20 @@ icon_key_equal (gconstpointer _a,
 
 /****************** Icon cache ***********************
  *
- * The icon cache, this spans both GtkIconTheme and GtkIcon, so the locking is
- * a bit tricky. Never do block with the lock held, and never do any
- * callouts to other code. In particular, don't call theme or finalizers
- * because that will take the lock when removing from the icon cache.
+ * The icon cache, this spans both GtkIconTheme and GtkIconPaintable,
+ * so the locking is a bit tricky. Never do block with the lock held,
+ * and never do any callouts to other code. In particular, don't call
+ * theme or finalizers, because that will take the lock when removing
+ * from the icon cache.
+ */
+
+/* The LRU cache is a short list of GtkIconPaintables that are kept
+ * alive even though their IconInfo would otherwise have been freed,
+ * so that we can avoid reloading these constantly.
+ *
+ * We put paintables on the lru list when we get a cache hit. Once
+ * they fall off the lru list, finalizing the paintable will remove
+ * the icon from the cache.
  */
 
 /* This is called with icon_cache lock held so must not take any locks */

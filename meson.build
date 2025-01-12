@@ -19,7 +19,6 @@ pango_minor_req = 56
 
 # keep these numbers in sync with wrap files where there exist
 glib_req           = '>= @0@.@1@'.format(glib_major_req, glib_minor_req)
-introspection_req  = '>= 1.@0@.0'.format(glib_minor_req)
 pango_req          = '>= @0@.@1@'.format(pango_major_req, pango_minor_req)
 harfbuzz_req       = '>= 8.4.0'
 fribidi_req        = '>= 1.0.6'
@@ -446,9 +445,6 @@ xkbdep            = dependency('xkbcommon', version: xkbcommon_req, required: wa
 graphene_dep      = dependency('graphene-gobject-1.0', version: graphene_req,
                                default_options: ['tests=false', 'gobject_types=true'])
 iso_codes_dep     = dependency('iso-codes', required: false)
-gi_dep            = dependency('gobject-introspection-1.0', version: introspection_req,
-                               required: get_option('introspection').enabled() and
-                                         get_option('build-tests'))
 gstplayer_dep     = dependency('gstreamer-player-1.0', version: gstreamer_req,
                                required: get_option('media-gstreamer'),
                                default_options: [
@@ -854,6 +850,8 @@ subdir('gsk')
 subdir('gtk')
 subdir('modules')
 subdir('tools')
+subdir('po')
+subdir('docs/reference')
 if get_option('build-demos')
   subdir('demos')
 endif
@@ -952,9 +950,6 @@ if os_unix
   meson.override_dependency('gtk4-unix-print', libgtk_dep)
 endif
 
-subdir('po')
-
-subdir('docs/reference')
 
 devenv = environment()
 devenv.set('GTK_PATH', meson.current_build_dir() / 'modules')
