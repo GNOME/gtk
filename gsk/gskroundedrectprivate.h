@@ -75,6 +75,10 @@ GskRoundedRectIntersection gsk_rounded_rect_intersection          (const GskRoun
                                                                    const GskRoundedRect     *b,
                                                                    GskRoundedRect           *result);
 
+gboolean gsk_rounded_rect_corner_box_contains_point (const GskRoundedRect   *self,
+                                                     GskCorner               corner,
+                                                     const graphene_point_t *point);
+
 
 G_END_DECLS
 

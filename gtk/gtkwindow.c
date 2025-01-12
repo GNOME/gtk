@@ -70,6 +70,8 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdktoplevelprivate.h"
 
+#include "gsk/gskroundedrectprivate.h"
+
 #include <cairo-gobject.h>
 #include <errno.h>
 #include <graphene.h>
@@ -1440,6 +1442,9 @@ get_edge_for_coordinates (GtkWindow *window,
   GtkCssBoxes css_boxes;
   const graphene_rect_t *border_rect;
   float left, top;
+  const GskRoundedRect *border;
+  graphene_point_t p;
+  int resize_handle_size;
 
 #define edge_or_minus_one(edge) ((supports_edge_constraints && (priv->edge_constraints & constraints_for_edge (edge)) != constraints_for_edge (edge)) ? -1 : edge)
 
@@ -1455,7 +1460,15 @@ get_edge_for_coordinates (GtkWindow *window,
     return -1;
 
   gtk_css_boxes_init (&css_boxes, GTK_WIDGET (window));
+  border = gtk_css_boxes_get_content_box (&css_boxes);
   border_rect = gtk_css_boxes_get_content_rect (&css_boxes);
+
+  resize_handle_size = RESIZE_HANDLE_CORNER_SIZE;
+  for (int i = 0 ; i < 4; i++)
+    {
+      resize_handle_size = MAX (resize_handle_size, border->corner[i].width);
+      resize_handle_size = MAX (resize_handle_size, border->corner[i].height);
+    }
 
   get_box_border (gtk_css_node_get_style (gtk_widget_get_css_node (GTK_WIDGET (window))),
                   &handle_size);
@@ -1478,10 +1491,10 @@ get_edge_for_coordinates (GtkWindow *window,
 
   if (x < left && x >= left - handle_size.left)
     {
-      if (y < top + RESIZE_HANDLE_CORNER_SIZE && y >= top - handle_size.top)
+      if (y < top + resize_handle_size && y >= top - handle_size.top)
         return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_WEST);
 
-      if (y > top + border_rect->size.height - RESIZE_HANDLE_CORNER_SIZE &&
+      if (y > top + border_rect->size.height - resize_handle_size &&
           y <= top + border_rect->size.height + handle_size.bottom)
         return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_WEST);
 
@@ -1490,10 +1503,10 @@ get_edge_for_coordinates (GtkWindow *window,
   else if (x > left + border_rect->size.width &&
            x <= left + border_rect->size.width + handle_size.right)
     {
-      if (y < top + RESIZE_HANDLE_CORNER_SIZE && y >= top - handle_size.top)
+      if (y < top + resize_handle_size  && y >= top - handle_size.top)
         return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_EAST);
 
-      if (y > top + border_rect->size.height - RESIZE_HANDLE_CORNER_SIZE &&
+      if (y > top + border_rect->size.height - resize_handle_size &&
           y <= top + border_rect->size.height + handle_size.bottom)
         return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_EAST);
 
@@ -1501,10 +1514,10 @@ get_edge_for_coordinates (GtkWindow *window,
     }
   else if (y < top && y >= top - handle_size.top)
     {
-      if (x < left + RESIZE_HANDLE_CORNER_SIZE && x >= left - handle_size.left)
+      if (x < left + resize_handle_size && x >= left - handle_size.left)
         return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_WEST);
 
-      if (x > left + border_rect->size.width - RESIZE_HANDLE_CORNER_SIZE &&
+      if (x > left + border_rect->size.width - resize_handle_size &&
           x <= left + border_rect->size.width + handle_size.right)
         return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_EAST);
 
@@ -1513,14 +1526,30 @@ get_edge_for_coordinates (GtkWindow *window,
   else if (y > top + border_rect->size.height &&
            y <= top + border_rect->size.height + handle_size.bottom)
     {
-      if (x < left + RESIZE_HANDLE_CORNER_SIZE && x >= left - handle_size.left)
+      if (x < left + resize_handle_size && x >= left - handle_size.left)
         return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_WEST);
 
-      if (x > left + border_rect->size.width - RESIZE_HANDLE_CORNER_SIZE &&
+      if (x > left + border_rect->size.width - resize_handle_size &&
           x <= left + border_rect->size.width + handle_size.right)
         return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_EAST);
 
       return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH);
+    }
+
+  p = GRAPHENE_POINT_INIT (x,y );
+  if (!gsk_rounded_rect_contains_point (border, &p))
+    {
+      if (gsk_rounded_rect_corner_box_contains_point (border, GSK_CORNER_TOP_LEFT, &p))
+        return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_WEST);
+
+      if (gsk_rounded_rect_corner_box_contains_point (border, GSK_CORNER_TOP_RIGHT, &p))
+        return edge_or_minus_one (GDK_SURFACE_EDGE_NORTH_EAST);
+
+      if (gsk_rounded_rect_corner_box_contains_point (border, GSK_CORNER_BOTTOM_RIGHT, &p))
+        return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_EAST);
+
+      if (gsk_rounded_rect_corner_box_contains_point (border, GSK_CORNER_BOTTOM_LEFT, &p))
+        return edge_or_minus_one (GDK_SURFACE_EDGE_SOUTH_WEST);
     }
 
   return -1;

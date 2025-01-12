@@ -1075,3 +1075,47 @@ gsk_rounded_rect_get_largest_cover (const GskRoundedRect  *self,
     *result = high;
 }
 
+/*< private >
+ * gsk_rounded_rect_corner_box_contains_point:
+ * @self: a rounded rectangle
+ * @corner: the corner
+ * @point: the point
+ *
+ * Returns whether @point is inside the rectangle defining
+ * the quarter ellipses of the given corner.
+ *
+ * Returns: true if @point is inside the @corner's box
+ */
+gboolean
+gsk_rounded_rect_corner_box_contains_point (const GskRoundedRect   *self,
+                                            GskCorner               corner,
+                                            const graphene_point_t *point)
+{
+  graphene_rect_t rect;
+
+  graphene_size_init_from_size (&rect.size, &self->corner[corner]);
+
+  switch (corner)
+    {
+    case GSK_CORNER_TOP_LEFT:
+      rect.origin.x = self->bounds.origin.x;
+      rect.origin.y = self->bounds.origin.y;
+      break;
+    case GSK_CORNER_TOP_RIGHT:
+      rect.origin.x = self->bounds.origin.x + self->bounds.size.width - self->corner[corner].width;
+      rect.origin.y = self->bounds.origin.y;
+      break;
+    case GSK_CORNER_BOTTOM_RIGHT:
+      rect.origin.x = self->bounds.origin.x + self->bounds.size.width - self->corner[corner].width;
+      rect.origin.y = self->bounds.origin.y + self->bounds.size.height - self->corner[corner].height;
+      break;
+    case GSK_CORNER_BOTTOM_LEFT:
+      rect.origin.x = self->bounds.origin.x;
+      rect.origin.y = self->bounds.origin.y + self->bounds.size.height - self->corner[corner].height;
+      break;
+    default:
+      g_assert_not_reached ();
+    }
+
+  return graphene_rect_contains_point (&rect, point);
+}
