@@ -19,6 +19,8 @@
 
 #include "config.h"
 
+#import <AppKit/AppKit.h>
+#include <math.h>
 #include <gdk/macos/gdkmacossurface.h>
 #include "gtkprivate.h"
 #include "gtknative.h"
@@ -53,7 +55,6 @@ struct _GtkWindowButtonsQuartz
 {
   GtkWidget parent_instance;
 
-  // NSButton *native_button;
   gboolean close;
   gboolean minimize;
   gboolean maximize;
@@ -117,21 +118,6 @@ gtk_window_buttons_quartz_set_property (GObject      *object,
 }
 
 static void
-update_native_window_buttons_height (GtkWidget *widget)
-{
-  GtkNative *native = GTK_NATIVE (gtk_widget_get_root (widget));
-  GdkSurface *surface = gtk_native_get_surface (native);
-
-  if (GDK_IS_MACOS_SURFACE (surface))
-    {
-      int height = gtk_widget_get_height (widget);
-
-      if (height > 0)
-        gdk_macos_surface_set_window_controls_height (GDK_MACOS_SURFACE (surface), height);
-    }
-}
-
-static void
 gtk_window_buttons_quartz_realize (GtkWidget *widget)
 {
   GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (widget);
@@ -143,14 +129,18 @@ gtk_window_buttons_quartz_realize (GtkWidget *widget)
   native = GTK_NATIVE (gtk_widget_get_root (widget));
   surface = gtk_native_get_surface (native);
 
-  if (GDK_IS_MACOS_SURFACE (surface) &&
-      gdk_macos_surface_show_window_controls (GDK_MACOS_SURFACE (surface), TRUE))
+  if (!GDK_IS_MACOS_SURFACE (surface))
+    {
+      g_critical ("Cannot show GtkWindowButtonsQuartz on a non-macos surface");
+      return;
+    }
+
+  if (gdk_macos_surface_show_window_controls (GDK_MACOS_SURFACE (surface), TRUE))
     {
       gdk_macos_surface_enable_window_controls (GDK_MACOS_SURFACE (surface),
                                                 self->close,
                                                 self->minimize,
                                                 self->maximize);
-      return;
     }
 }
 
@@ -166,6 +156,33 @@ gtk_window_buttons_quartz_unrealize (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->unrealize (widget);
 }
 
+/* initial_window_buttons_bounds:
+ *
+ * Record the bounding box of the window buttons once.
+ * This way we always know the original bounding box
+ * of the window decorations.
+ */
+static void
+initial_window_buttons_bounds (NSWindow *window, NSRect *out_bounds)
+{
+  static NSRect bounds = { 0 };
+
+  if (NSIsEmptyRect(bounds))
+    {
+      NSButton* button;
+
+      button = [window standardWindowButton:NSWindowCloseButton];
+      bounds = NSUnionRect(bounds, [button frame]);
+
+      button = [window standardWindowButton:NSWindowMiniaturizeButton];
+      bounds = NSUnionRect(bounds, [button frame]);
+
+      button = [window standardWindowButton:NSWindowZoomButton];
+      bounds = NSUnionRect(bounds, [button frame]);
+    }
+    *out_bounds = bounds;
+}
+
 static void
 gtk_window_buttons_quartz_measure (GtkWidget      *widget,
                                    GtkOrientation  orientation,
@@ -175,14 +192,20 @@ gtk_window_buttons_quartz_measure (GtkWidget      *widget,
                                    int            *minimum_baseline,
                                    int            *natural_baseline)
 {
+  GtkNative *native = GTK_NATIVE (gtk_widget_get_root (widget));
+  GdkSurface *surface = gtk_native_get_surface (native);
+  NSWindow *window = (NSWindow*) gdk_macos_surface_get_native_window (GDK_MACOS_SURFACE (surface));
+  NSRect bounds;
+
+  if (window == NULL)
+    return;
+
+  initial_window_buttons_bounds (window, &bounds);
+
   if (orientation == GTK_ORIENTATION_VERTICAL)
-    {
-      *minimum = *natural = 28;
-    }
+    *minimum = *natural = ceil(bounds.size.height);
   else if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      *minimum = *natural = 60;
-    }
+    *minimum = *natural = ceil(bounds.size.width);
 }
 
 static void
@@ -191,9 +214,12 @@ gtk_window_buttons_quartz_size_allocate (GtkWidget *widget,
                                          int        height,
                                          int        baseline)
 {
+  GtkNative *native = GTK_NATIVE (gtk_widget_get_root (widget));
+  GdkSurface *surface = gtk_native_get_surface (native);
+
   GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->size_allocate (widget, width, height, baseline);
 
-  update_native_window_buttons_height (widget);
+  gdk_macos_surface_set_window_controls_height (GDK_MACOS_SURFACE (surface), height);
 }
 
 static void
