@@ -1265,6 +1265,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                                 <property name="child">
                                   <object class="GtkPicture" id="notebook_sunset">
                                     <property name="content-fit">cover</property>
+                                    <property name="alternative-text">Sunset on the pond</property>
                                     <child>
                                       <object class="GtkDragSource">
                                         <signal name="prepare" handler="on_picture_drag_prepare" swapped="no"/>
@@ -1290,6 +1291,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkNotebookPage">
                                 <property name="child">
                                   <object class="GtkPicture" id="notebook_nyc">
+                                    <property name="alternative-text">New York from above</property>
                                     <child>
                                       <object class="GtkDragSource">
                                         <signal name="prepare" handler="on_picture_drag_prepare" swapped="no"/>
@@ -1315,6 +1317,7 @@ Suspendisse feugiat quam quis dolor accumsan cursus.</property>
                               <object class="GtkNotebookPage">
                                 <property name="child">
                                   <object class="GtkPicture" id="notebook_beach">
+                                    <property name="alternative-text">Rodeo beach</property>
                                     <child>
                                       <object class="GtkDragSource">
                                         <signal name="prepare" handler="on_picture_drag_prepare" swapped="no"/>
