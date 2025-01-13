@@ -564,6 +564,14 @@ handle_accessible_method (GDBusConnection       *connection,
                                  "rowindextext", gtk_string_accessible_value_get (value));
         }
 
+      if (gtk_at_context_has_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS))
+        {
+          GtkAccessibleValue *value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self),
+                                                                              GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS);
+          g_variant_builder_add (&builder, "{ss}",
+                                 "keyshortcuts", gtk_string_accessible_value_get (value));
+        }
+
       g_variant_builder_close (&builder);
 
       g_dbus_method_invocation_return_value (invocation, g_variant_builder_end (&builder));
