@@ -80,3 +80,33 @@ associated with them (e.g. the pointer position), such positions are expressed i
 To translate from surface to widget coordinates, you have to apply the offset from the
 top left corner of the surface to the top left corner of the topmost widget, which can
 be obtained with [method@Gtk.Native.get_surface_transform].
+
+## Scaling
+
+GTK is used on screens with wildly different resolutions, from fairly low dpi
+monitors to high dpi phone screens. In order to keep applications working across
+a broad range of resolutions, many operating systems have decoupled *application
+units* from *device pixels*. What this means is that applications can define
+their UI in units that do not directly correspond to physical pixels on the
+screen.
+
+To render the UI on a monitor, a *scale* is applied - one application unit may
+correspond to 1, 2, or even 1.5 or 1.75 physical pixels. In traditional hi-dpi
+systems, the scale factor is always an integer. Modern systems also allow
+fractional scales. GTK supports this concept with the [property@Gdk.Surface:scale]
+and [property@Gdk.Surface:scale-factor] properties. The scale property is a
+(possibly fractional) scale, the scale-factor property is the next larger
+integer.
+
+All sizes in GTK (e.g. the widget sizes that are negotiated during size
+allocation, with [vfunc@Gtk.Widget.measure] and [vfunc@Gtk.Widget.size_allocate]
+are in *widget units*. Widget units are the result of the transformations applied
+recursively by parent widgets. Widgets can be scaled, rotated or otherwise
+3D-transformed, so in general there is no simple relationship between widget
+units and device pixels. If applications want to control that relationship in
+detail, they need to make sure to use such transformations in a predictable way.
+
+In practice, the transformations between parent and child widgets are simple
+translations most of the time, so that widget units are the same as application
+units, and therefore, it is good enough to just scale content by
+[property@Gdk.Surface:scale].
