@@ -3112,6 +3112,28 @@ label_mnemonic_widget_weak_notify (gpointer      data,
   g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_MNEMONIC_WIDGET]);
 }
 
+static void
+gtk_label_update_mnemonic_keyval (GtkLabel *self)
+{
+  if (self->mnemonic_widget)
+    {
+      if (self->mnemonic_keyval != GDK_KEY_VoidSymbol)
+        {
+          char *key_binding = gtk_accelerator_name (self->mnemonic_keyval, GDK_ALT_MASK);
+
+          gtk_accessible_update_property (GTK_ACCESSIBLE (self->mnemonic_widget),
+                                          GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS, key_binding,
+                                          -1);
+          g_free (key_binding);
+        }
+      else
+        {
+          gtk_accessible_reset_property (GTK_ACCESSIBLE (self->mnemonic_widget),
+                                         GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS);
+        }
+    }
+}
+
 /**
  * gtk_label_set_mnemonic_widget:
  * @self: a label
@@ -3159,6 +3181,7 @@ gtk_label_set_mnemonic_widget (GtkLabel  *self,
                          label_mnemonic_widget_weak_notify,
                          self);
       gtk_widget_add_mnemonic_label (self->mnemonic_widget, GTK_WIDGET (self));
+      gtk_label_update_mnemonic_keyval (self);
     }
 
   g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_MNEMONIC_WIDGET]);
@@ -3315,6 +3338,7 @@ gtk_label_recalculate (GtkLabel *self)
   if (keyval != self->mnemonic_keyval)
     {
       gtk_label_setup_mnemonic (self);
+      gtk_label_update_mnemonic_keyval (self);
       g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_MNEMONIC_KEYVAL]);
     }
 
