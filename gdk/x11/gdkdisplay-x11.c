@@ -113,6 +113,8 @@ static void gdk_internal_connection_watch (Display  *display,
 					   gboolean  opening,
 					   XPointer *watch_data);
 
+static void update_shadow_width (GdkDisplay *display);
+
 typedef struct _GdkEventTypeX11 GdkEventTypeX11;
 
 struct _GdkEventTypeX11
@@ -668,6 +670,7 @@ gdk_x11_display_translate_event (GdkEventTranslator *translator,
           g_free (x11_screen->window_manager_name);
           x11_screen->window_manager_name = g_strdup ("unknown");
 
+          update_shadow_width (display);
           /* careful, reentrancy */
           _gdk_x11_screen_window_manager_changed (x11_screen);
 
@@ -1428,9 +1431,6 @@ gdk_x11_display_open (const char *display_name)
   int ignore;
   int maj, min;
   char *cm_name;
-  gboolean frame_extents;
-  gboolean rgba;
-  gboolean composited;
 
   gdk_ensure_initialized ();
 
@@ -1650,16 +1650,26 @@ gdk_x11_display_open (const char *display_name)
                                                   gdk_x11_get_xatom_by_name_for_display (display, cm_name)) != None);
   g_free (cm_name);
 
+  update_shadow_width (display);
+
+  gdk_display_emit_opened (display);
+
+  return display;
+}
+
+static void
+update_shadow_width (GdkDisplay *display)
+{
+  gboolean frame_extents;
+  gboolean rgba;
+  gboolean composited;
+
   frame_extents = gdk_x11_screen_supports_net_wm_hint (gdk_x11_display_get_screen (display),
                                                        g_intern_static_string ("_GTK_FRAME_EXTENTS"));
   rgba = gdk_display_is_rgba (display);
   composited = gdk_display_is_composited (display);
 
   gdk_display_set_shadow_width (display, frame_extents && rgba && composited);
-
-  gdk_display_emit_opened (display);
-
-  return display;
 }
 
 /**
