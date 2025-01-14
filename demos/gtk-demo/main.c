@@ -1003,6 +1003,8 @@ activate (GApplication *app)
   selection_cb (selection, NULL, NULL);
   g_object_unref (selection);
 
+  gtk_window_present (GTK_WINDOW (window));
+
   g_object_unref (builder);
 }
 
@@ -1094,11 +1096,10 @@ out:
       demo = (func) (window);
 
       gtk_window_set_transient_for (GTK_WINDOW (demo), GTK_WINDOW (window));
+      gtk_widget_set_visible (window, FALSE);
 
       g_signal_connect_swapped (G_OBJECT (demo), "destroy", G_CALLBACK (g_application_quit), app);
     }
-  else
-    gtk_window_present (GTK_WINDOW (window));
 
   if (autoquit)
     g_timeout_add_seconds (1, auto_quit, app);
