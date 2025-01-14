@@ -129,6 +129,20 @@
                 <property name="halign">start</property>
                 <property name="valign">baseline</property>
                 <signal name="state-set" handler="mode_switch_state_set" object="level_scale" swapped="no"/>
+                <accessibility>
+                  <property name="key-shortcuts">Control+M</property>
+                </accessibility>
+                <child>
+                  <object class="GtkShortcutController">
+                    <property name="scope">managed</property>
+                    <child>
+                      <object class="GtkShortcut">
+                        <property name="trigger">&lt;Control&gt;M</property>
+                        <property name="action">activate</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
                 <layout>
                   <property name="column">1</property>
                   <property name="row">3</property>
