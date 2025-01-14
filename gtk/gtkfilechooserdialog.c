@@ -476,6 +476,11 @@ setup_search (GtkFileChooserDialog *dialog)
       gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
       gtk_button_set_icon_name (GTK_BUTTON (button), "edit-find-symbolic");
 
+      gtk_accessible_update_property (GTK_ACCESSIBLE (button),
+                                      GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS, "Alt+S Control+F Find",
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, _("Search"),
+                                      -1);
+
       header = gtk_dialog_get_header_bar (GTK_DIALOG (dialog));
       gtk_header_bar_pack_end (GTK_HEADER_BAR (header), button);
 
