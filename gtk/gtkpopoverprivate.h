@@ -23,7 +23,5 @@ G_BEGIN_DECLS
 
 GtkWidget *gtk_popover_get_contents_widget (GtkPopover *popover);
 
-void       gtk_popover_disable_auto_mnemonics (GtkPopover *popover);
-
 G_END_DECLS
 
