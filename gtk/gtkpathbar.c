@@ -536,6 +536,10 @@ gtk_path_bar_update_button_appearance (GtkPathBar *path_bar,
   gtk_widget_remove_css_class (button_data->button, "text-button");
   gtk_widget_remove_css_class (button_data->button, "image-button");
 
+  gtk_accessible_update_property (GTK_ACCESSIBLE (button_data->button),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, dir_name,
+                                  -1);
+
   if (button_data->label != NULL)
     {
       gtk_label_set_text (GTK_LABEL (button_data->label), dir_name);
