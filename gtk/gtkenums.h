@@ -1594,7 +1594,10 @@ typedef enum {
  *    by an element.
  * @GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS: Indicates keyboard shortcuts that an
  *    author has implemented to activate or give focus to an element. Value type:
- *    string
+ *    string. The format of the value is a space-separated list of shortcuts, with
+ *    each shortcut consisting of one or more modifiers (`Control`, `Alt` or `Shift`),
+ *    followed by a non-modifier key, all separated by `+`.
+ *    Examples: `F2`, `Alt-F`, `Control+Shift+N`
  * @GTK_ACCESSIBLE_PROPERTY_LABEL: Defines a string value that labels the current
  *    element. Value type: string
  * @GTK_ACCESSIBLE_PROPERTY_LEVEL: Defines the hierarchical level of an element

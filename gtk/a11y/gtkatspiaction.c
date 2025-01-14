@@ -38,6 +38,7 @@
 #include "gtksearchentry.h"
 #include "gtkswitch.h"
 #include "gtkwidgetprivate.h"
+#include "gtklabel.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -53,6 +54,34 @@ struct _Action
   gboolean (* is_enabled) (GtkAtSpiContext *context);
   gboolean (* activate) (GtkAtSpiContext *context);
 };
+
+static char *
+get_keybinding (GtkAtSpiContext *self)
+{
+  const char *mnemonic = "";
+  const char *shortcut = "";
+
+  if (gtk_at_context_has_accessible_relation (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_RELATION_LABELLED_BY))
+    {
+      GtkAccessibleValue *value = gtk_at_context_get_accessible_relation (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_RELATION_LABELLED_BY);
+      GList *l = gtk_reference_list_accessible_value_get (value);
+      GtkAccessible *accessible = l->data;
+      if (GTK_IS_LABEL (accessible))
+        {
+          guint keyval = gtk_label_get_mnemonic_keyval (GTK_LABEL (accessible));
+          if (keyval != GDK_KEY_VoidSymbol)
+            mnemonic = gdk_keyval_name (gdk_keyval_to_upper (keyval));
+        }
+    }
+
+  if (gtk_at_context_has_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS))
+    {
+      GtkAccessibleValue *value = gtk_at_context_get_accessible_property (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS);
+      shortcut = gtk_string_accessible_value_get (value);
+    }
+
+  return g_strdup_printf ("%s;;%s", mnemonic, shortcut);
+}
 
 static void
 action_handle_method (GtkAtSpiContext        *self,
@@ -127,14 +156,24 @@ action_handle_method (GtkAtSpiContext        *self,
 
       g_variant_get (parameters, "(i)", &idx);
 
-      if (idx >= 0 && idx < n_actions)
-        g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", actions[idx].keybinding));
+      if (idx == 0) /* default action */
+        {
+          char *keybinding = get_keybinding (self);
+          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", keybinding));
+          g_free (keybinding);
+        }
+      else if (idx > 0 && idx < n_actions)
+        {
+          g_dbus_method_invocation_return_value (invocation, g_variant_new ("(s)", actions[idx].keybinding));
+        }
       else
-        g_dbus_method_invocation_return_error (invocation,
-                                               G_IO_ERROR,
-                                               G_IO_ERROR_INVALID_ARGUMENT,
-                                               "Unknown action %d",
-                                               idx);
+        {
+          g_dbus_method_invocation_return_error (invocation,
+                                                 G_IO_ERROR,
+                                                 G_IO_ERROR_INVALID_ARGUMENT,
+                                                 "Unknown action %d",
+                                                 idx);
+        }
     }
   else if (g_strcmp0 (method_name, "GetActions") == 0)
     {
@@ -143,14 +182,20 @@ action_handle_method (GtkAtSpiContext        *self,
       for (int i = 0; i < n_actions; i++)
         {
           const Action *action = &actions[i];
+          char *keybinding = NULL;
 
           if (action->is_enabled != NULL && !action->is_enabled (self))
             continue;
 
+          if (i == 0)
+            keybinding = get_keybinding (self);
+
           g_variant_builder_add (&builder, "(sss)",
                                  g_dpgettext2 (GETTEXT_PACKAGE, "accessibility", action->localized_name),
                                  g_dpgettext2 (GETTEXT_PACKAGE, "accessibility", action->description),
-                                 action->keybinding);
+                                 i == 0 ? keybinding : action->keybinding);
+
+          g_free (keybinding);
         }
 
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a(sss))", &builder));
@@ -233,12 +278,13 @@ action_handle_get_property (GtkAtSpiContext  *self,
 }
 
 /* {{{ GtkButton */
+
 static Action button_actions[] = {
   {
     .name = "click",
     .localized_name = NC_("accessibility", "Click"),
     .description = NC_("accessibility", "Clicks the button"),
-    .keybinding = "<Space>",
+    .keybinding = ";;Space",
   },
 };
 
@@ -289,7 +335,7 @@ static const Action switch_actions[] = {
     .name = "toggle",
     .localized_name = NC_("accessibility", "Toggle"),
     .description = NC_("accessibility", "Toggles the switch"),
-    .keybinding = "<Space>",
+    .keybinding = ";;Space",
   },
 };
 
@@ -334,6 +380,7 @@ static const GDBusInterfaceVTable switch_action_vtable = {
 
 /* }}} */
 /* {{{ GtkColorSwatch */
+
 static gboolean
 color_swatch_select (GtkAtSpiContext *self)
 {
@@ -370,7 +417,7 @@ static const Action color_swatch_actions[] = {
     .name = "select",
     .localized_name = NC_("accessibility", "Select"),
     .description = NC_("accessibility", "Selects the color"),
-    .keybinding = "<Return>",
+    .keybinding = ";;Return",
     .activate = color_swatch_select,
     .is_enabled = color_swatch_is_enabled,
   },
@@ -430,15 +477,16 @@ static const GDBusInterfaceVTable color_swatch_action_vtable = {
   color_swatch_handle_get_property,
   NULL,
 };
+
 /* }}} */
-/* {{{ GtkExpander */
+ /* {{{ GtkExpander */
 
 static const Action expander_actions[] = {
   {
     .name = "activate",
     .localized_name = NC_("accessibility", "Activate"),
     .description = NC_("accessibility", "Activates the expander"),
-    .keybinding = "<Space>",
+    .keybinding = ";;Space",
   },
 };
 
@@ -494,7 +542,7 @@ static const Action entry_actions[] = {
     .name = "activate",
     .localized_name = NC_("accessibility", "Activate"),
     .description = NC_("accessibility", "Activates the entry"),
-    .keybinding = "<Return>",
+    .keybinding = ";;Return",
     .is_enabled = NULL,
     .activate = NULL,
   },
@@ -602,7 +650,7 @@ static const Action password_entry_actions[] = {
     .name = "activate",
     .localized_name = NC_("accessibility", "Activate"),
     .description = NC_("accessibility", "Activates the entry"),
-    .keybinding = "<Return>",
+    .keybinding = ";;Return",
     .is_enabled = NULL,
     .activate = NULL,
   },
@@ -689,7 +737,7 @@ static const Action search_entry_actions[] = {
     .name = "activate",
     .localized_name = NC_("accessibility", "Activate"),
     .description = NC_("accessibility", "Activates the entry"),
-    .keybinding = "<Return>",
+    .keybinding = ";;Return",
     .is_enabled = NULL,
     .activate = NULL,
   },
@@ -765,7 +813,9 @@ static const GDBusInterfaceVTable search_entry_action_vtable = {
   search_entry_handle_get_property,
   NULL,
 };
+
 /* }}} */
+/* {{{ GtkWidget */
 
 static gboolean
 is_valid_action (GtkActionMuxer *muxer,
@@ -986,6 +1036,8 @@ static const GDBusInterfaceVTable widget_action_vtable = {
   widget_handle_get_property,
   NULL,
 };
+
+/* }}} */
 
 const GDBusInterfaceVTable *
 gtk_atspi_get_action_vtable (GtkAccessible *accessible)
