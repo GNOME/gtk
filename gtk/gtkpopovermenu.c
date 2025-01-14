@@ -355,7 +355,6 @@ gtk_popover_menu_init (GtkPopoverMenu *popover)
     }
   g_free (controllers);
 
-  gtk_popover_disable_auto_mnemonics (GTK_POPOVER (popover));
   gtk_popover_set_cascade_popdown (GTK_POPOVER (popover), TRUE);
 }
 
