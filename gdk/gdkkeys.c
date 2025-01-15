@@ -395,6 +395,48 @@ gdk_keymap_get_modifier_state (GdkKeymap *keymap)
 }
 
 /*< private >
+ * gdk_keymap_get_active_layout_index:
+ * @keymap: a `GdkKeymap`
+ *
+ * Returns the index of the active layout.
+ *
+ * If there is no valid active layout, this function will return -1;
+ *
+ * Returns: The layout index of the active layout or -1.
+ */
+gint
+gdk_keymap_get_active_layout_index (GdkKeymap *keymap)
+{
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), -1);
+
+  if (GDK_KEYMAP_GET_CLASS (keymap)->get_active_layout_index)
+    return GDK_KEYMAP_GET_CLASS (keymap)->get_active_layout_index (keymap);
+
+  return -1;
+}
+
+
+/*< private >
+ * gdk_keymap_get_layout_names:
+ * @keymap: a `GdkKeymap`
+ *
+ * Returns the layouts as a %NULL-terminated array of strings.
+ *
+ * Returns: (transfer full) (nullable) (array zero-terminated=1):
+ *   %NULL-terminated array of strings of layouts,
+ */
+gchar **
+gdk_keymap_get_layout_names (GdkKeymap *keymap)
+{
+  g_return_val_if_fail (GDK_IS_KEYMAP (keymap), NULL);
+
+  if (GDK_KEYMAP_GET_CLASS (keymap)->get_layout_names)
+    return GDK_KEYMAP_GET_CLASS (keymap)->get_layout_names (keymap);
+
+  return NULL;
+}
+
+/*< private >
  * gdk_keymap_get_entries_for_keyval:
  * @keymap: a `GdkKeymap`
  * @keyval: a keyval, such as %GDK_KEY_a, %GDK_KEY_Up, %GDK_KEY_Return, etc.
