@@ -274,10 +274,10 @@ update_window_buttons (GtkWindowControls *self)
 #ifdef GDK_WINDOWING_MACOS
   if (self->side == GTK_PACK_START && g_strv_contains ((const gchar **) tokens, "native"))
     {
-      GtkWidget *buttons = g_object_new (GTK_TYPE_WINDOW_BUTTONS_QUARTZ, 
-                                         "close", g_strv_contains (tokens, "close"),
-                                         "minimize", g_strv_contains (tokens, "minimize"),
-                                         "maximize", g_strv_contains (tokens, "maximize"),
+      GtkWidget *buttons = g_object_new (GTK_TYPE_WINDOW_BUTTONS_QUARTZ,
+                                         "close", g_strv_contains ((const char * const *) tokens, "close"),
+                                         "minimize", g_strv_contains ((const char * const *) tokens, "minimize"),
+                                         "maximize", g_strv_contains ((const char * const *) tokens, "maximize"),
                                          NULL);
       gtk_widget_set_parent (buttons, GTK_WIDGET (self));
       empty = FALSE;
