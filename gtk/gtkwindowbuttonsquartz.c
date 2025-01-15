@@ -26,6 +26,14 @@
 #include "gtknative.h"
 #include "gtkwindowbuttonsquartzprivate.h"
 
+@interface NSWindow()
+/* Expose the private titlebarHeight property, so we can set
+ * the titlebar height to match the height of a GTK header bar.
+ */
+@property CGFloat titlebarHeight;
+
+@end
+
 enum
 {
   PROP_0,
@@ -117,14 +125,63 @@ gtk_window_buttons_quartz_set_property (GObject      *object,
     }
 }
 
-/* window_buttons_bounds:
+
+static gboolean
+show_window_controls (NSWindow *window,
+                      gboolean  show)
+{
+  g_return_val_if_fail (window != NULL, FALSE);
+
+  /* By assigning a toolbar, the window controls are moved a bit more inwards,
+   * In line with how toolbars look in macOS apps.
+   */
+  if (show)
+    {
+      NSToolbar *toolbar = [[NSToolbar alloc] init];
+      [window setToolbar:toolbar];
+      [toolbar release];
+    }
+  else
+    [window setToolbar:nil];
+
+  [[window standardWindowButton:NSWindowCloseButton] setHidden:!show];
+  [[window standardWindowButton:NSWindowMiniaturizeButton] setHidden:!show];
+  [[window standardWindowButton:NSWindowZoomButton] setHidden:!show];
+
+  return TRUE;
+}
+
+static void
+enable_window_controls (NSWindow *window,
+                        gboolean  close,
+                        gboolean  minimize,
+                        gboolean  maximize)
+{
+  g_return_if_fail (window != NULL);
+
+  [[window standardWindowButton:NSWindowCloseButton] setEnabled:close];
+  [[window standardWindowButton:NSWindowMiniaturizeButton] setEnabled:minimize];
+  [[window standardWindowButton:NSWindowZoomButton] setEnabled:maximize];
+}
+
+static void
+set_window_controls_height (NSWindow *window,
+                            int       height)
+{
+  g_return_if_fail (window != NULL);
+
+  [window setTitlebarHeight:height];
+  [[window contentView] setNeedsLayout:YES];
+}
+
+/* window_controls_bounds:
  *
  * Record the bounding box of the window buttons once.
  * This way we always know the original bounding box
  * of the window decorations.
  */
 static void
-window_buttons_bounds (NSWindow *window, NSRect *out_bounds)
+window_controls_bounds (NSWindow *window, NSRect *out_bounds)
 {
   NSRect bounds = NSZeroRect;
   NSButton* button;
@@ -144,6 +201,7 @@ gtk_window_buttons_quartz_realize (GtkWidget *widget)
   GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (widget);
   GtkNative *native;
   GdkSurface *surface;
+  NSWindow *window;
 
   GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->realize (widget);
 
@@ -156,17 +214,18 @@ gtk_window_buttons_quartz_realize (GtkWidget *widget)
       return;
     }
 
-  if (gdk_macos_surface_show_window_controls (GDK_MACOS_SURFACE (surface), TRUE))
+  window = (NSWindow*) gdk_macos_surface_get_native_window (GDK_MACOS_SURFACE (surface));
+
+  if (show_window_controls (window, TRUE))
     {
-      NSWindow *window = (NSWindow*) gdk_macos_surface_get_native_window (GDK_MACOS_SURFACE (surface));
       NSRect bounds;
 
-      gdk_macos_surface_enable_window_controls (GDK_MACOS_SURFACE (surface),
-                                                self->close,
-                                                self->minimize,
-                                                self->maximize);
+      enable_window_controls (window,
+                              self->close,
+                              self->minimize,
+                              self->maximize);
 
-      window_buttons_bounds (window, &bounds);
+      window_controls_bounds (window, &bounds);
       gtk_widget_set_size_request (widget, bounds.origin.x + bounds.size.width, bounds.size.height);
     }
 }
@@ -178,7 +237,10 @@ gtk_window_buttons_quartz_unrealize (GtkWidget *widget)
   GdkSurface *surface = gtk_native_get_surface (native);
 
   if (GDK_IS_MACOS_SURFACE (surface))
-    gdk_macos_surface_show_window_controls (GDK_MACOS_SURFACE (surface), FALSE);
+    {
+      NSWindow *window = (NSWindow*) gdk_macos_surface_get_native_window (GDK_MACOS_SURFACE (surface));
+      show_window_controls (window, FALSE);
+    }
 
   GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->unrealize (widget);
 }
@@ -200,7 +262,7 @@ gtk_window_buttons_quartz_measure (GtkWidget      *widget,
   if (window == NULL)
     return;
 
-  window_buttons_bounds (window, &bounds);
+  window_controls_bounds (window, &bounds);
 
   if (orientation == GTK_ORIENTATION_VERTICAL)
     *minimum = *natural = ceil(bounds.size.height);
@@ -216,10 +278,11 @@ gtk_window_buttons_quartz_size_allocate (GtkWidget *widget,
 {
   GtkNative *native = GTK_NATIVE (gtk_widget_get_root (widget));
   GdkSurface *surface = gtk_native_get_surface (native);
+  NSWindow *window = (NSWindow*) gdk_macos_surface_get_native_window (GDK_MACOS_SURFACE (surface));
 
   GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->size_allocate (widget, width, height, baseline);
 
-  gdk_macos_surface_set_window_controls_height (GDK_MACOS_SURFACE (surface), height);
+  set_window_controls_height (window, height);
 }
 
 static void
@@ -232,16 +295,15 @@ gtk_window_buttons_quartz_state_flags_changed (GtkWidget* widget,
 
   if (native != NULL && (surface = gtk_native_get_surface (native)) != NULL)
     {
+      NSWindow *window = (NSWindow*) gdk_macos_surface_get_native_window (GDK_MACOS_SURFACE (surface));
+
+      if (window == NULL)
+        return;
+
       if (gtk_widget_get_state_flags (widget) & GTK_STATE_FLAG_INSENSITIVE)
-        gdk_macos_surface_enable_window_controls (GDK_MACOS_SURFACE (surface),
-                                                  FALSE,
-                                                  FALSE,
-                                                  FALSE);
+        enable_window_controls (window, FALSE, FALSE, FALSE);
       else
-        gdk_macos_surface_enable_window_controls (GDK_MACOS_SURFACE (surface),
-                                                  self->close,
-                                                  self->minimize,
-                                                  self->maximize);
+        enable_window_controls (window, self->close, self->minimize, self->maximize);
     }
 
   GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->state_flags_changed (widget, previous_state_flags);
