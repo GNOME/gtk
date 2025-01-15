@@ -124,6 +124,11 @@ GdkSurface *        gdk_device_get_surface_at_position  (GdkDevice *device,
 GDK_AVAILABLE_IN_4_2
 guint32             gdk_device_get_timestamp            (GdkDevice *device);
 
+GDK_AVAILABLE_IN_4_18
+gint                gdk_device_get_active_layout_index  (GdkDevice *device);
+GDK_AVAILABLE_IN_4_18
+gchar **            gdk_device_get_layout_names         (GdkDevice *device);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkDevice, g_object_unref)
 
 G_END_DECLS
