@@ -33,6 +33,10 @@
 #include "gtkwindowhandle.h"
 #include "gtkbuilderprivate.h"
 
+#ifdef GDK_WINDOWING_MACOS
+#include "gtkwindowbuttonsquartzprivate.h"
+#endif
+
 #include <string.h>
 
 /**
@@ -131,6 +135,7 @@ struct _GtkHeaderBar
   char *decoration_layout;
 
   guint show_title_buttons : 1;
+  guint use_native_controls : 1;
   guint track_default_decoration : 1;
 };
 
@@ -146,6 +151,7 @@ enum {
   PROP_TITLE_WIDGET,
   PROP_SHOW_TITLE_BUTTONS,
   PROP_DECORATION_LAYOUT,
+  PROP_USE_NATIVE_CONTROLS,
   LAST_PROP
 };
 
@@ -158,29 +164,69 @@ G_DEFINE_TYPE_WITH_CODE (GtkHeaderBar, gtk_header_bar, GTK_TYPE_WIDGET,
                                                 gtk_header_bar_buildable_init));
 
 static void
-create_window_controls (GtkHeaderBar *bar)
+remove_window_controls (GtkHeaderBar *bar)
+{
+  if (bar->start_box && bar->start_window_controls)
+    {
+      gtk_box_remove (GTK_BOX (bar->start_box), bar->start_window_controls);
+      bar->start_window_controls = NULL;
+#ifdef GDK_WINDOWING_MACOS
+      gtk_widget_remove_css_class (GTK_WIDGET (bar), "native-controls-quartz");
+#endif
+    }
+
+  if (bar->end_box && bar->end_window_controls)
+    {
+      gtk_box_remove (GTK_BOX (bar->end_box), bar->end_window_controls);
+      bar->end_window_controls = NULL;
+    }
+}
+
+static void
+update_window_controls (GtkHeaderBar *bar)
 {
   GtkWidget *controls;
 
-  controls = gtk_window_controls_new (GTK_PACK_START);
-  g_object_bind_property (bar, "decoration-layout",
-                          controls, "decoration-layout",
-                          G_BINDING_SYNC_CREATE);
-  g_object_bind_property (controls, "empty",
-                          controls, "visible",
-                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
-  gtk_box_prepend (GTK_BOX (bar->start_box), controls);
-  bar->start_window_controls = controls;
+  remove_window_controls (bar);
 
-  controls = gtk_window_controls_new (GTK_PACK_END);
-  g_object_bind_property (bar, "decoration-layout",
-                          controls, "decoration-layout",
-                          G_BINDING_SYNC_CREATE);
-  g_object_bind_property (controls, "empty",
-                          controls, "visible",
-                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
-  gtk_box_append (GTK_BOX (bar->end_box), controls);
-  bar->end_window_controls = controls;
+#ifdef GDK_WINDOWING_MACOS
+  if (bar->show_title_buttons && bar->use_native_controls)
+    {
+      controls = g_object_new (GTK_TYPE_WINDOW_BUTTONS_QUARTZ, NULL);
+      g_object_bind_property (bar, "decoration-layout",
+                              controls, "decoration-layout",
+                              G_BINDING_SYNC_CREATE);
+      gtk_box_prepend (GTK_BOX (bar->start_box), controls);
+      bar->start_window_controls = controls;
+
+      gtk_widget_add_css_class (GTK_WIDGET (bar), "native-controls-quartz");
+
+      return;
+    }
+#endif
+
+  if (bar->show_title_buttons)
+    {
+      controls = gtk_window_controls_new (GTK_PACK_START);
+      g_object_bind_property (bar, "decoration-layout",
+                              controls, "decoration-layout",
+                              G_BINDING_SYNC_CREATE);
+      g_object_bind_property (controls, "empty",
+                              controls, "visible",
+                              G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+      gtk_box_prepend (GTK_BOX (bar->start_box), controls);
+      bar->start_window_controls = controls;
+
+      controls = gtk_window_controls_new (GTK_PACK_END);
+      g_object_bind_property (bar, "decoration-layout",
+                              controls, "decoration-layout",
+                              G_BINDING_SYNC_CREATE);
+      g_object_bind_property (controls, "empty",
+                              controls, "visible",
+                              G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+      gtk_box_append (GTK_BOX (bar->end_box), controls);
+      bar->end_window_controls = controls;
+    }
 }
 
 static void
@@ -419,6 +465,10 @@ gtk_header_bar_get_property (GObject    *object,
       g_value_set_string (value, gtk_header_bar_get_decoration_layout (bar));
       break;
 
+    case PROP_USE_NATIVE_CONTROLS:
+      g_value_set_boolean (value, gtk_header_bar_get_use_native_controls (bar));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -445,6 +495,10 @@ gtk_header_bar_set_property (GObject      *object,
 
     case PROP_DECORATION_LAYOUT:
       gtk_header_bar_set_decoration_layout (bar, g_value_get_string (value));
+      break;
+
+    case PROP_USE_NATIVE_CONTROLS:
+      gtk_header_bar_set_use_native_controls (bar, g_value_get_boolean (value));
       break;
 
     default:
@@ -601,6 +655,21 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                            NULL,
                            GTK_PARAM_READWRITE);
 
+  /**
+   * GtkHeaderBar:use-native-controls:
+   *
+   * Whether to show platform native close/minimize/maximize buttons.
+   *
+   * For macOS, the [property@Gtk.HeaderBar:decoration-layout] property
+   * can be used to enable/disable controls.
+   *
+   * On Linux, this option has no effect.
+   */
+  header_bar_props[PROP_USE_NATIVE_CONTROLS] =
+      g_param_spec_boolean ("use-native-controls", NULL, NULL,
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, LAST_PROP, header_bar_props);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
@@ -614,6 +683,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   bar->title_widget = NULL;
   bar->decoration_layout = NULL;
   bar->show_title_buttons = TRUE;
+  bar->use_native_controls = FALSE;
 
   bar->handle = gtk_window_handle_new ();
   gtk_widget_set_parent (bar->handle, GTK_WIDGET (bar));
@@ -630,7 +700,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (bar->center_box), bar->end_box);
 
   construct_title_label (bar);
-  create_window_controls (bar);
+  update_window_controls (bar);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
@@ -751,22 +821,7 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
 
   bar->show_title_buttons = setting;
 
-  if (setting)
-    create_window_controls (bar);
-  else
-    {
-      if (bar->start_box && bar->start_window_controls)
-        {
-          gtk_box_remove (GTK_BOX (bar->start_box), bar->start_window_controls);
-          bar->start_window_controls = NULL;
-        }
-
-      if (bar->end_box && bar->end_window_controls)
-        {
-          gtk_box_remove (GTK_BOX (bar->end_box), bar->end_window_controls);
-          bar->end_window_controls = NULL;
-        }
-    }
+  update_window_controls (bar);
 
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_SHOW_TITLE_BUTTONS]);
 }
@@ -820,4 +875,47 @@ gtk_header_bar_get_decoration_layout (GtkHeaderBar *bar)
   g_return_val_if_fail (GTK_IS_HEADER_BAR (bar), NULL);
 
   return bar->decoration_layout;
+}
+
+/**
+ * gtk_header_bar_get_use_native_controls:
+ * @bar: a header bar
+ *
+ * Returns whether this header bar shows platform
+ * native window controls.
+ *
+ * Returns: true if native window controls are shown
+ */
+gboolean
+gtk_header_bar_get_use_native_controls (GtkHeaderBar *bar)
+{
+  return bar->use_native_controls;
+}
+
+/**
+ * gtk_header_bar_set_use_native_controls:
+ * @bar: a header bar
+ * @setting: true to show native window controls
+ *
+ * Sets whether this header bar shows native window controls.
+ *
+ * This option shows the "stoplight" buttons on macOS.
+ * For Linux, this option has no effect.
+ */
+void
+gtk_header_bar_set_use_native_controls (GtkHeaderBar *bar,
+                                         gboolean      setting)
+{
+  g_return_if_fail (GTK_IS_HEADER_BAR (bar));
+
+  setting = setting != FALSE;
+
+  if (bar->use_native_controls == setting)
+    return;
+
+  bar->use_native_controls = setting;
+
+  update_window_controls (bar);
+
+  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_USE_NATIVE_CONTROLS]);
 }

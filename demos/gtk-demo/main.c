@@ -1012,7 +1012,7 @@ activate (GApplication *app)
     {
       /* On macOS, we want to use the native titlebar */
       GtkHeaderBar *headerbar = GTK_HEADER_BAR (gtk_builder_get_object (builder, "headerbar"));
-      gtk_header_bar_set_decoration_layout (headerbar, "native,close,minimize,maximize:");
+      gtk_header_bar_set_use_native_controls (headerbar, TRUE);
     }
 #endif
 

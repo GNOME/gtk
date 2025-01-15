@@ -37,9 +37,7 @@
 enum
 {
   PROP_0,
-  PROP_CLOSE,
-  PROP_MINIMIZE,
-  PROP_MAXIMIZE,
+  PROP_DECORATION_LAYOUT,
   NUM_PROPERTIES
 };
 
@@ -49,6 +47,7 @@ static GParamSpec *props[NUM_PROPERTIES] = { NULL, };
  * GtkWindowButtonsQuartz:
  *
  * This class provides macOS native window buttons for close/minimize/maximize.
+ * 
  * The buttons can be set by adding "native" to the `decoration-layout` of
  * GtkWindowControls or GtkHeader.
  *
@@ -66,6 +65,8 @@ struct _GtkWindowButtonsQuartz
   gboolean close;
   gboolean minimize;
   gboolean maximize;
+
+  char *decoration_layout;
 };
 
 struct _GtkWindowButtonsQuartzClass
@@ -74,56 +75,6 @@ struct _GtkWindowButtonsQuartzClass
 };
 
 G_DEFINE_TYPE (GtkWindowButtonsQuartz, gtk_window_buttons_quartz, GTK_TYPE_WIDGET)
-
-static void
-gtk_window_buttons_quartz_get_property (GObject     *object,
-			                                  guint        prop_id,
-			                                  GValue      *value,
-			                                  GParamSpec  *pspec)
-{
-  GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (object);
-
-  switch (prop_id)
-    {
-    case PROP_CLOSE:
-      g_value_set_boolean (value, self->close);
-      break;
-    case PROP_MINIMIZE:
-      g_value_set_boolean (value, self->minimize);
-      break;
-    case PROP_MAXIMIZE:
-      g_value_set_boolean (value, self->maximize);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
-
-static void
-gtk_window_buttons_quartz_set_property (GObject      *object,
-			                                  guint         prop_id,
-			                                  const GValue *value,
-			                                  GParamSpec   *pspec)
-{
-  GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (object);
-
-  switch (prop_id)
-    {
-    case PROP_CLOSE:
-      self->close = g_value_get_boolean (value);
-      break;
-    case PROP_MINIMIZE:
-      self->minimize = g_value_get_boolean (value);
-      break;
-    case PROP_MAXIMIZE:
-      self->maximize = g_value_get_boolean (value);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
-      break;
-    }
-}
 
 
 static gboolean
@@ -174,12 +125,6 @@ set_window_controls_height (NSWindow *window,
   [[window contentView] setNeedsLayout:YES];
 }
 
-/* window_controls_bounds:
- *
- * Record the bounding box of the window buttons once.
- * This way we always know the original bounding box
- * of the window decorations.
- */
 static void
 window_controls_bounds (NSWindow *window, NSRect *out_bounds)
 {
@@ -193,6 +138,99 @@ window_controls_bounds (NSWindow *window, NSRect *out_bounds)
   bounds = NSUnionRect(bounds, [button frame]);
 
   *out_bounds = bounds;
+}
+
+static NSWindow*
+native_window (GtkWidget *widget)
+{
+  GtkNative *native = GTK_NATIVE (gtk_widget_get_root (widget));
+  GdkSurface *surface = gtk_native_get_surface (native);
+
+  if (GDK_IS_MACOS_SURFACE (surface))
+    return (NSWindow*) gdk_macos_surface_get_native_window (GDK_MACOS_SURFACE (surface));
+
+  return NULL;
+}
+
+static void
+update_window_controls_from_decoration_layout (GtkWindowButtonsQuartz *self)
+{
+  char **tokens;
+
+  if (self->decoration_layout)
+    tokens = g_strsplit_set (self->decoration_layout, ",:", -1);
+  else
+    {
+      char *layout_desc;
+      g_object_get (gtk_widget_get_settings (GTK_WIDGET (self)),
+                    "gtk-decoration-layout", &layout_desc,
+                    NULL);
+      tokens = g_strsplit_set (layout_desc, ",:", -1);
+
+      g_free (layout_desc);
+    }
+
+  self->close = g_strv_contains ((const char * const *) tokens, "close");
+  self->minimize = g_strv_contains ((const char * const *) tokens, "minimize");
+  self->maximize = g_strv_contains ((const char * const *) tokens, "maximize");
+
+  g_strfreev (tokens);
+
+  enable_window_controls (native_window (GTK_WIDGET (self)),
+                          self->close,
+                          self->minimize,
+                          self->maximize);
+}
+
+static void
+gtk_window_buttons_quartz_finalize (GObject *object)
+{
+  GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (object);
+
+  g_clear_pointer (&self->decoration_layout, g_free);
+
+  G_OBJECT_CLASS (gtk_window_buttons_quartz_parent_class)->finalize (object);
+}
+
+static void
+gtk_window_buttons_quartz_get_property (GObject     *object,
+                                        guint        prop_id,
+                                        GValue      *value,
+                                        GParamSpec  *pspec)
+{
+  GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (object);
+
+  switch (prop_id)
+    {
+    case PROP_DECORATION_LAYOUT:
+      g_value_set_string (value, self->decoration_layout);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
+}
+
+static void
+gtk_window_buttons_quartz_set_property (GObject      *object,
+                                        guint         prop_id,
+                                        const GValue *value,
+                                        GParamSpec   *pspec)
+{
+  GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (object);
+
+  switch (prop_id)
+    {
+    case PROP_DECORATION_LAYOUT:
+      g_free (self->decoration_layout);
+      self->decoration_layout = g_strdup (g_value_get_string (value));
+
+      update_window_controls_from_decoration_layout (self);
+      break;
+    default:
+      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
+      break;
+    }
 }
 
 static void
@@ -315,6 +353,7 @@ gtk_window_buttons_quartz_class_init (GtkWindowButtonsQuartzClass *class)
   GObjectClass *gobject_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
+  gobject_class->finalize = gtk_window_buttons_quartz_finalize;
   gobject_class->get_property = gtk_window_buttons_quartz_get_property;
   gobject_class->set_property = gtk_window_buttons_quartz_set_property;
 
@@ -324,18 +363,18 @@ gtk_window_buttons_quartz_class_init (GtkWindowButtonsQuartzClass *class)
   widget_class->unrealize = gtk_window_buttons_quartz_unrealize;
   widget_class->state_flags_changed = gtk_window_buttons_quartz_state_flags_changed;
 
-  props[PROP_CLOSE] =
-      g_param_spec_boolean ("close", NULL, NULL,
-                            TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY);
-  props[PROP_MINIMIZE] =
-      g_param_spec_boolean ("minimize", NULL, NULL,
-                            TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY);
-  props[PROP_MAXIMIZE] =
-      g_param_spec_boolean ("maximize", NULL, NULL,
-                            TRUE,
-                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT_ONLY);
+  /**
+   * GtkWindowButtonsQuartz:decoration-layout:
+   *
+   * The decoration layout for window buttons.
+   *
+   * If this property is not set, the
+   * [property@Gtk.Settings:gtk-decoration-layout] setting is used.
+   */
+  props[PROP_DECORATION_LAYOUT] =
+      g_param_spec_string ("decoration-layout", NULL, NULL,
+                           NULL,
+                           GTK_PARAM_READWRITE);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, props);
 
@@ -345,6 +384,10 @@ gtk_window_buttons_quartz_class_init (GtkWindowButtonsQuartzClass *class)
 }
 
 static void
-gtk_window_buttons_quartz_init (GtkWindowButtonsQuartz *buttons)
+gtk_window_buttons_quartz_init (GtkWindowButtonsQuartz *self)
 {
+  self->close = TRUE;
+  self->minimize = TRUE;
+  self->maximize = TRUE;
+  self->decoration_layout = NULL;
 }

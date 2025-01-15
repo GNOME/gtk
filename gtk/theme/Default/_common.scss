@@ -1587,6 +1587,10 @@ headerbar {
       }
     }
   }
+
+  &.native-controls-quartz {
+    padding-left: 0;
+  }
 }
 
 headerbar {

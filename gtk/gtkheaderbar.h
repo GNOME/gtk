@@ -66,6 +66,13 @@ void         gtk_header_bar_set_decoration_layout (GtkHeaderBar *bar,
 GDK_AVAILABLE_IN_ALL
 const char *gtk_header_bar_get_decoration_layout (GtkHeaderBar *bar);
 
+GDK_AVAILABLE_IN_4_18
+gboolean     gtk_header_bar_get_use_native_controls (GtkHeaderBar *bar);
+
+GDK_AVAILABLE_IN_4_18
+void         gtk_header_bar_set_use_native_controls (GtkHeaderBar *bar,
+                                                     gboolean      setting);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkHeaderBar, g_object_unref)
 
 G_END_DECLS

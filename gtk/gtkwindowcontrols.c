@@ -32,10 +32,6 @@
 #include "gtktypebuiltins.h"
 #include "gtkwindowprivate.h"
 
-#ifdef GDK_WINDOWING_MACOS
-#include "gtkwindowbuttonsquartzprivate.h"
-#endif
-
 /**
  * GtkWindowControls:
  *
@@ -271,20 +267,6 @@ update_window_buttons (GtkWindowControls *self)
 
   tokens = g_strsplit (layout, ",", -1);
 
-#ifdef GDK_WINDOWING_MACOS
-  if (self->side == GTK_PACK_START && g_strv_contains ((const gchar **) tokens, "native"))
-    {
-      GtkWidget *buttons = g_object_new (GTK_TYPE_WINDOW_BUTTONS_QUARTZ,
-                                         "close", g_strv_contains ((const char * const *) tokens, "close"),
-                                         "minimize", g_strv_contains ((const char * const *) tokens, "minimize"),
-                                         "maximize", g_strv_contains ((const char * const *) tokens, "maximize"),
-                                         NULL);
-      gtk_widget_set_parent (buttons, GTK_WIDGET (self));
-      empty = FALSE;
-      goto out;
-    }
-#endif
-
   for (i = 0; tokens[i]; i++)
     {
       GtkWidget *button = NULL;
@@ -384,8 +366,6 @@ update_window_buttons (GtkWindowControls *self)
           empty = FALSE;
         }
     }
-
-out:
   g_free (layout);
   g_strfreev (tokens);
 
