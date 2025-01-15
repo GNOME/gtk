@@ -46,6 +46,15 @@
 #include "gdkmacosutils-private.h"
 #include "gdkmacostoplevelsurface-private.h"
 
+@interface NSWindow()
+/* Expose the private titlebarHeight property, so we can set
+ * the titlebar height to match the height of a GTK header bar.
+ */
+@property CGFloat titlebarHeight;
+
+@end
+
+
 G_DEFINE_ABSTRACT_TYPE (GdkMacosSurface, gdk_macos_surface, GDK_TYPE_SURFACE)
 
 enum {
@@ -640,6 +649,18 @@ gdk_macos_surface_show_window_controls (GdkMacosSurface *self,
   g_return_val_if_fail (GDK_IS_MACOS_SURFACE (self), FALSE);
   g_return_val_if_fail (self->window != NULL, FALSE);
 
+  /* By assigning a toolbar, the window controls are moved a bit more inwards,
+   * In line with how toolbars look in macOS apps.
+   */
+  if (show)
+    {
+      NSToolbar *toolbar = [[NSToolbar alloc] init];
+      [self->window setToolbar:toolbar];
+      [toolbar release];
+    }
+  else
+    [self->window setToolbar:nil];
+
   [[self->window standardWindowButton:NSWindowCloseButton] setHidden:!show];
   [[self->window standardWindowButton:NSWindowMiniaturizeButton] setHidden:!show];
   [[self->window standardWindowButton:NSWindowZoomButton] setHidden:!show];
@@ -665,7 +686,8 @@ void
 gdk_macos_surface_set_window_controls_height (GdkMacosSurface *self,
                                               int              height)
 {
-  [self->window setWindowControlsHeight:height];
+  [self->window setTitlebarHeight:height];
+  [[self->window contentView] setNeedsLayout:YES];
 }
 
 void
