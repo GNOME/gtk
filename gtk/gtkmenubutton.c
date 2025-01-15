@@ -745,15 +745,15 @@ update_sensitivity (GtkMenuButton *self)
 
   gtk_widget_set_sensitive (self->button, has_popup);
 
-  gtk_accessible_update_property (GTK_ACCESSIBLE (self),
+  gtk_accessible_update_property (GTK_ACCESSIBLE (self->button),
                                   GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, has_popup,
                                   -1);
   if (self->popover != NULL)
-    gtk_accessible_update_relation (GTK_ACCESSIBLE (self),
+    gtk_accessible_update_relation (GTK_ACCESSIBLE (self->button),
                                     GTK_ACCESSIBLE_RELATION_CONTROLS, self->popover, NULL,
                                     -1);
   else
-    gtk_accessible_reset_relation (GTK_ACCESSIBLE (self),
+    gtk_accessible_reset_relation (GTK_ACCESSIBLE (self->button),
                                    GTK_ACCESSIBLE_RELATION_CONTROLS);
 }
 
