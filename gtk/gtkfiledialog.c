@@ -972,15 +972,21 @@ finish_multiple_files_op (GtkFileDialog  *self,
                           GError        **error)
 {
   TaskResult *res;
-  GListModel *files;
 
   res = g_task_propagate_pointer (task, error);
 
-  files = G_LIST_MODEL (g_object_ref (res->files));
+  if (res)
+    {
+      GListModel *files;
 
-  task_result_free (res);
+      files = G_LIST_MODEL (g_object_ref (res->files));
 
-  return files;
+      task_result_free (res);
+
+      return files;
+    }
+
+  return NULL;
 }
 
 /* }}} */
