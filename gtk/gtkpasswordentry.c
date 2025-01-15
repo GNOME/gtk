@@ -229,10 +229,6 @@ gtk_password_entry_init (GtkPasswordEntry *entry)
 
   /* Transfer ownership to the GtkText widget */
   g_object_unref (buffer);
-
-  gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
-                                  GTK_ACCESSIBLE_PROPERTY_HAS_POPUP, TRUE,
-                                  -1);
 }
 
 static void
