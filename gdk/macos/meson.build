@@ -1,4 +1,14 @@
-gdk_macos_sources = files([
+gdk_macos_public_sources = files([
+  'gdkmacosdevice.c',
+  'gdkmacosdisplay.c',
+  'gdkmacosglcontext.c',
+  'gdkmacoskeymap.c',
+  'gdkmacosmonitor.c',
+  'gdkmacosseat.c',
+  'gdkmacossurface.c',
+])
+
+gdk_macos_sources = gdk_macos_public_sources + files([
   'edgesnapping.c',
 
   'gdkdisplaylinksource.c',
@@ -6,8 +16,6 @@ gdk_macos_sources = files([
   'gdkmacoscairocontext.c',
   'gdkmacosclipboard.c',
   'gdkmacoscursor.c',
-  'gdkmacosdevice.c',
-  'gdkmacosdisplay.c',
   'gdkmacosdisplay-feedback.c',
   'gdkmacosdisplay-settings.c',
   'gdkmacosdisplay-translate.c',
@@ -15,14 +23,9 @@ gdk_macos_sources = files([
   'gdkmacosdrag.c',
   'gdkmacosdrop.c',
   'gdkmacosdragsurface.c',
-  'gdkmacosglcontext.c',
   'gdkmacoseventsource.c',
-  'gdkmacoskeymap.c',
-  'gdkmacosmonitor.c',
   'gdkmacospasteboard.c',
   'gdkmacospopupsurface.c',
-  'gdkmacosseat.c',
-  'gdkmacossurface.c',
   'gdkmacostoplevelsurface.c',
   'GdkMacosBaseView.c',
   'GdkMacosLayer.c',
