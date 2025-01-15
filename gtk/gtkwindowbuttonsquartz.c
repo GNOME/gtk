@@ -117,6 +117,27 @@ gtk_window_buttons_quartz_set_property (GObject      *object,
     }
 }
 
+/* window_buttons_bounds:
+ *
+ * Record the bounding box of the window buttons once.
+ * This way we always know the original bounding box
+ * of the window decorations.
+ */
+static void
+window_buttons_bounds (NSWindow *window, NSRect *out_bounds)
+{
+  NSRect bounds = NSZeroRect;
+  NSButton* button;
+
+  button = [window standardWindowButton:NSWindowCloseButton];
+  bounds = NSUnionRect(bounds, [button frame]);
+
+  button = [window standardWindowButton:NSWindowZoomButton];
+  bounds = NSUnionRect(bounds, [button frame]);
+
+  *out_bounds = bounds;
+}
+
 static void
 gtk_window_buttons_quartz_realize (GtkWidget *widget)
 {
@@ -137,10 +158,16 @@ gtk_window_buttons_quartz_realize (GtkWidget *widget)
 
   if (gdk_macos_surface_show_window_controls (GDK_MACOS_SURFACE (surface), TRUE))
     {
+      NSWindow *window = (NSWindow*) gdk_macos_surface_get_native_window (GDK_MACOS_SURFACE (surface));
+      NSRect bounds;
+
       gdk_macos_surface_enable_window_controls (GDK_MACOS_SURFACE (surface),
                                                 self->close,
                                                 self->minimize,
                                                 self->maximize);
+
+      window_buttons_bounds (window, &bounds);
+      gtk_widget_set_size_request (widget, bounds.origin.x + bounds.size.width, bounds.size.height);
     }
 }
 
@@ -154,33 +181,6 @@ gtk_window_buttons_quartz_unrealize (GtkWidget *widget)
     gdk_macos_surface_show_window_controls (GDK_MACOS_SURFACE (surface), FALSE);
 
   GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->unrealize (widget);
-}
-
-/* initial_window_buttons_bounds:
- *
- * Record the bounding box of the window buttons once.
- * This way we always know the original bounding box
- * of the window decorations.
- */
-static void
-initial_window_buttons_bounds (NSWindow *window, NSRect *out_bounds)
-{
-  static NSRect bounds = { 0 };
-
-  if (NSIsEmptyRect(bounds))
-    {
-      NSButton* button;
-
-      button = [window standardWindowButton:NSWindowCloseButton];
-      bounds = NSUnionRect(bounds, [button frame]);
-
-      button = [window standardWindowButton:NSWindowMiniaturizeButton];
-      bounds = NSUnionRect(bounds, [button frame]);
-
-      button = [window standardWindowButton:NSWindowZoomButton];
-      bounds = NSUnionRect(bounds, [button frame]);
-    }
-    *out_bounds = bounds;
 }
 
 static void
@@ -200,12 +200,12 @@ gtk_window_buttons_quartz_measure (GtkWidget      *widget,
   if (window == NULL)
     return;
 
-  initial_window_buttons_bounds (window, &bounds);
+  window_buttons_bounds (window, &bounds);
 
   if (orientation == GTK_ORIENTATION_VERTICAL)
     *minimum = *natural = ceil(bounds.size.height);
   else if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    *minimum = *natural = ceil(bounds.size.width);
+    *minimum = *natural = ceil(bounds.origin.x + bounds.size.width);
 }
 
 static void
