@@ -1,3 +1,84 @@
+Overview of Changes in 4.17.3, 16-01-2025
+=========================================
+
+* GtkText:
+ - Consume Ctrl-A
+ - Handle Cut', Copy, Paste, Undo, and Redo keys
+ - Improve a11y representation
+
+* GtkLabel:
+ - Consume Ctrl-A when we handle it
+ - Pass mnemonics to a11y
+
+* GtkTextView:
+ - Handle Cut, Copy, Paste, Undo, and Redo keys
+ - Fix disappearing carets after focus changes
+
+* GtkFileChooser:
+ - Handle Find keys
+ - Set a11y label on Search button
+ - Set a11y labels on pathbar buttons
+ - Pass key-shortcuts for the "New folder" button
+
+* GtkAppChooser:
+ - Fix sorting
+
+* GtkListBox:
+ - Improve a11y representation
+
+* GtkColumnView:
+ - Fix column dnd in right-to-left context
+
+* GtkWindow:
+ - Make resize corners gapless with rounded corners
+
+* GtkPopoverMenu:
+ - Show mnemonics on Alt press
+
+* GtkMenuButton:
+ - Improve a11y representation
+
+* GtkFileDialog:
+ - Fix a crash
+ - Add more text file api variants
+
+* GtkSizeGroup:
+ - Improve consistency measurements and allocations
+
+* GtkBuilder:
+ - Parse tab arrays and font descriptions in Pango syntax
+
+* Wayland:
+ - Rely on scale events for pointer surfaces
+ - Make idle inhibit work with fullscreen subsurfaces
+
+* Accessibility:
+ - Implement GetKeyBinding properly for actions
+ - Set key-shortcuts attribute
+ - Fix state change notification for some states
+ - Set application ID attribute
+
+* MacOS:
+ - Make the NGL renderer work again
+
+* GSK:
+ - Don't double-clip edges for shadows
+
+* Demos:
+ - widget-factory: Set alternative text on pictures
+ - gtk-demo: Allow to run as a service
+
+* Deprecations:
+ - GtkShortcutsWindow
+ - Loading themes from ~/.themes
+ - <child> in ui files where child properties exist
+
+* Translation updates:
+ Brazilian Portuguese
+ Georgian
+ Turkish
+
+
 Overview of Changes in 4.17.2, 26-12-2024
 =========================================
 
