@@ -967,9 +967,10 @@ finish_file_op (GtkFileDialog   *self,
 }
 
 static GListModel *
-finish_multiple_files_op (GtkFileDialog  *self,
-                          GTask          *task,
-                          GError        **error)
+finish_multiple_files_op (GtkFileDialog   *self,
+                          GTask           *task,
+                          char          ***choices,
+                          GError         **error)
 {
   TaskResult *res;
 
@@ -980,6 +981,9 @@ finish_multiple_files_op (GtkFileDialog  *self,
       GListModel *files;
 
       files = G_LIST_MODEL (g_object_ref (res->files));
+
+      if (choices)
+        *choices = g_strdupv (res->choices);
 
       task_result_free (res);
 
@@ -1269,7 +1273,7 @@ gtk_file_dialog_open_multiple_finish (GtkFileDialog   *self,
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_open_multiple, NULL);
 
-  return finish_multiple_files_op (self, G_TASK (result), error);
+  return finish_multiple_files_op (self, G_TASK (result), NULL, error);
 }
 
 /**
@@ -1342,7 +1346,7 @@ gtk_file_dialog_select_multiple_folders_finish (GtkFileDialog   *self,
   g_return_val_if_fail (g_task_is_valid (result, self), NULL);
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_select_multiple_folders, NULL);
 
-  return finish_multiple_files_op (self, G_TASK (result), error);
+  return finish_multiple_files_op (self, G_TASK (result), NULL, error);
 }
 
 /* }}} */
@@ -1462,6 +1466,118 @@ gtk_file_dialog_open_text_file_finish (GtkFileDialog  *self,
 }
 
 /**
+ * gtk_file_dialog_open_multiple_text_files:
+ * @self: a file dialog
+ * @parent: (nullable): the parent window
+ * @cancellable: (nullable): a cancellable to cancel the operation
+ * @callback: (scope async) (closure user_data): a callback to call when the
+ *   operation is complete
+ * @user_data: data to pass to @callback
+ *
+ * Presents a file chooser dialog to the user.
+ *
+ * The file chooser dialog will be set up to select multiple files.
+ *
+ * The file chooser dialog will initially be opened in the directory
+ * [property@Gtk.FileDialog:initial-folder].
+ *
+ * In contrast to [method@Gtk.FileDialog.open], this function
+ * lets the user select the text encoding for the files, if possible.
+ *
+ * The @callback will be called when the dialog is dismissed.
+ *
+ * Since: 4.18
+ */
+void
+gtk_file_dialog_open_multiple_text_files (GtkFileDialog       *self,
+                                          GtkWindow           *parent,
+                                          GCancellable        *cancellable,
+                                          GAsyncReadyCallback  callback,
+                                          gpointer             user_data)
+{
+  GtkFileChooserNative *chooser;
+  GTask *task;
+  char **names;
+  char **labels;
+  const char **choices;
+
+  g_return_if_fail (GTK_IS_FILE_DIALOG (self));
+
+  chooser = create_file_chooser (self, parent, GTK_FILE_CHOOSER_ACTION_OPEN, TRUE);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  names = gtk_text_encoding_get_names ();
+  labels = gtk_text_encoding_get_labels ();
+  gtk_file_chooser_add_choice (GTK_FILE_CHOOSER (chooser),
+                               "encoding", _("Encoding"),
+                               (const char **) names,
+                               (const char **) labels);
+  gtk_file_chooser_set_choice (GTK_FILE_CHOOSER (chooser),
+                               "encoding", "automatic");
+  g_free (names);
+  g_free (labels);
+G_GNUC_END_IGNORE_DEPRECATIONS
+
+  choices = g_new0 (const char *, 2);
+  choices[0] = "encoding";
+  g_object_set_data_full (G_OBJECT (chooser), "choices", choices, g_free);
+
+  task = g_task_new (self, cancellable, callback, user_data);
+  g_task_set_check_cancellable (task, FALSE);
+  g_task_set_source_tag (task, gtk_file_dialog_open_multiple_text_files);
+  g_task_set_task_data (task, chooser, g_object_unref);
+
+  if (cancellable)
+    g_signal_connect (cancellable, "cancelled", G_CALLBACK (cancelled_cb), task);
+
+  g_signal_connect (chooser, "response", G_CALLBACK (dialog_response), task);
+
+  gtk_native_dialog_show (GTK_NATIVE_DIALOG (chooser));
+}
+
+/**
+ * gtk_file_dialog_open_multiple_text_files_finish:
+ * @self: a file dialog
+ * @result: the result
+ * @encoding: (out): return location for the text encoding to use
+ * @error: return location for a [enum@Gtk.DialogError] error
+ *
+ * Finishes the [method@Gtk.FileDialog.open] call.
+ *
+ * Returns: (nullable) (transfer full): the files that were selected,
+ *   as a list model of [iface@Gio.File]
+ *
+ * Since: 4.18
+ */
+GListModel *
+gtk_file_dialog_open_multiple_text_files_finish (GtkFileDialog   *self,
+                                                 GAsyncResult    *result,
+                                                 const char     **encoding,
+                                                 GError         **error)
+{
+  char **choices = NULL;
+  GListModel *files;
+
+  g_return_val_if_fail (GTK_IS_FILE_DIALOG (self), NULL);
+  g_return_val_if_fail (g_task_is_valid (result, self), NULL);
+  g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_file_dialog_open_multiple_text_files, NULL);
+
+  files = finish_multiple_files_op (self, G_TASK (result), &choices, error);
+
+  if (choices)
+    {
+      *encoding = gtk_text_encoding_from_name (choices[0]);
+      g_strfreev (choices);
+    }
+  else
+    {
+      *encoding = NULL;
+    }
+
+  return files;
+}
+
+/**
  * gtk_file_dialog_save_text_file:
  * @self: a `GtkFileDialog`
  * @parent: (nullable): the parent `GtkWindow`
@@ -1517,7 +1633,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                                (const char **) names,
                                (const char **) labels);
   gtk_file_chooser_set_choice (GTK_FILE_CHOOSER (chooser),
-                               "line_ending", "");
+                               "line_ending", "as-is");
 
   g_free (names);
   g_free (labels);

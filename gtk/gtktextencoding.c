@@ -154,15 +154,16 @@ gtk_text_encoding_from_name (const char *name)
 }
 
 typedef struct {
+  const char *line_ending;
   const char *name;
   const char *label;
 } GtkLineEndingItem;
 
 static GtkLineEndingItem gtk_line_endings[] = {
-  { "",     NC_("Line ending name", "Unchanged") },
-  { "\n",   NC_("Line ending name", "Unix/Linux") },
-  { "\r\n", NC_("Line ending name", "Windows") },
-  { "\r",   NC_("Line ending name", "Mac OS Classic") },
+  { "",     "as-is",   NC_("Line ending name", "Unchanged") },
+  { "\n",   "unix",    NC_("Line ending name", "Unix/Linux") },
+  { "\r\n", "windows", NC_("Line ending name", "Windows") },
+  { "\r",   "mac",     NC_("Line ending name", "Mac OS Classic") },
 };
 
 char **
@@ -204,7 +205,7 @@ gtk_line_ending_from_name (const char *name)
   for (guint i = 0; i < G_N_ELEMENTS (gtk_line_endings); i++)
     {
       if (strcmp (name, gtk_line_endings[i].name) == 0)
-        return gtk_line_endings[i].name;
+        return gtk_line_endings[i].line_ending;
     }
 
   return NULL;

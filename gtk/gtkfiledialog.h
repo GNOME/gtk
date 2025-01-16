@@ -170,6 +170,22 @@ GFile *          gtk_file_dialog_open_text_file_finish (GtkFileDialog        *se
                                                         GError              **error);
 
 GDK_AVAILABLE_IN_4_18
+void             gtk_file_dialog_open_multiple_text_files
+                                                     (GtkFileDialog        *self,
+                                                      GtkWindow            *parent,
+                                                      GCancellable         *cancellable,
+                                                      GAsyncReadyCallback   callback,
+                                                      gpointer              user_data);
+
+GDK_AVAILABLE_IN_4_18
+GListModel *     gtk_file_dialog_open_multiple_text_files_finish
+                                                     (GtkFileDialog        *self,
+                                                      GAsyncResult         *result,
+                                                      const char          **encoding,
+                                                      GError              **error);
+
+
+GDK_AVAILABLE_IN_4_18
 void             gtk_file_dialog_save_text_file      (GtkFileDialog        *self,
                                                       GtkWindow            *parent,
                                                       GCancellable         *cancellable,
