@@ -1633,7 +1633,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                                (const char **) names,
                                (const char **) labels);
   gtk_file_chooser_set_choice (GTK_FILE_CHOOSER (chooser),
-                               "line_ending", "");
+                               "line_ending", "as-is");
 
   g_free (names);
   g_free (labels);
