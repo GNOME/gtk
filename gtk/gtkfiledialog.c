@@ -1422,7 +1422,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * gtk_file_dialog_open_text_file_finish:
  * @self: a `GtkFileDialog`
  * @result: a `GAsyncResult`
- * @encoding: (out): return location for the text encoding to use
+ * @encoding: (out) (transfer none): return location for the text encoding to use
  * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FileDialog.open_text_file] call
@@ -1539,7 +1539,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * gtk_file_dialog_open_multiple_text_files_finish:
  * @self: a file dialog
  * @result: the result
- * @encoding: (out): return location for the text encoding to use
+ * @encoding: (out) (transfer none): return location for the text encoding to use
  * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FileDialog.open] call.
@@ -1662,8 +1662,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * gtk_file_dialog_save_text_file_finish:
  * @self: a `GtkFileDialog`
  * @result: a `GAsyncResult`
- * @encoding: (out): return location for the text encoding to use
- * @line_ending: (out): return location for the line endings to use
+ * @encoding: (out) (transfer none): return location for the text encoding to use
+ * @line_ending: (out) (transfer none): return location for the line endings to use
  * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FileDialog.save_text_file] call
