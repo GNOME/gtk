@@ -87,7 +87,7 @@
                 <lookup name="item">GtkListItem</lookup>
               </lookup>
             </binding>
-            <signal name="notify::label" handler="item_value_changed"/>
+            <signal name="notify::text" handler="item_value_changed"/>
           </object>
         </child>
       </object>
