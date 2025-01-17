@@ -96,6 +96,8 @@ struct xkb_state *_gdk_wayland_keymap_get_xkb_state (GdkKeymap *keymap);
 struct xkb_keymap *_gdk_wayland_keymap_get_xkb_keymap (GdkKeymap *keymap);
 gboolean           _gdk_wayland_keymap_key_is_modifier (GdkKeymap *keymap,
                                                         guint      keycode);
+int        _gdk_wayland_keymap_get_active_layout_index (GdkKeymap *keymap);
+char **    _gdk_wayland_keymap_get_layout_names (GdkKeymap *keymap);
 
 void       _gdk_wayland_display_init_cursors (GdkWaylandDisplay *display);
 void       _gdk_wayland_display_finalize_cursors (GdkWaylandDisplay *display);

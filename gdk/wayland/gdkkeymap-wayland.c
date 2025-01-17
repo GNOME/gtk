@@ -364,6 +364,48 @@ gdk_wayland_keymap_get_modifier_state (GdkKeymap *keymap)
   return get_gdk_modifiers (xkb_keymap, mods);
 }
 
+static int
+gdk_wayland_keymap_get_active_layout_index (GdkKeymap *keymap)
+{
+  struct xkb_keymap *xkb_keymap;
+  struct xkb_state *xkb_state;
+
+  xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
+  xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
+
+  for (int i = 0; i < xkb_keymap_num_layouts (xkb_keymap); i++)
+    {
+      if (xkb_state_layout_index_is_active (xkb_state, i, XKB_STATE_LAYOUT_EFFECTIVE))
+        return i;
+    }
+
+  return -1;
+}
+
+static char **
+gdk_wayland_keymap_get_layout_names (GdkKeymap *keymap)
+{
+  struct xkb_keymap *xkb_keymap;
+  GStrvBuilder *names_builder;
+  char **layout_names;
+  int num_layouts;
+
+  xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
+  num_layouts = xkb_keymap_num_layouts (xkb_keymap);
+  names_builder = g_strv_builder_new ();
+
+  for (int i = 0; i < num_layouts; i++)
+    {
+      const char *layout_name = xkb_keymap_layout_get_name (xkb_keymap, i);
+      g_strv_builder_add (names_builder, layout_name ? layout_name : "");
+    }
+
+  layout_names = g_strv_builder_end (names_builder);
+  g_strv_builder_unref (names_builder);
+
+  return layout_names;
+}
+
 static void
 _gdk_wayland_keymap_class_init (GdkWaylandKeymapClass *klass)
 {
@@ -382,6 +424,8 @@ _gdk_wayland_keymap_class_init (GdkWaylandKeymapClass *klass)
   keymap_class->lookup_key = gdk_wayland_keymap_lookup_key;
   keymap_class->translate_keyboard_state = gdk_wayland_keymap_translate_keyboard_state;
   keymap_class->get_modifier_state = gdk_wayland_keymap_get_modifier_state;
+  keymap_class->get_active_layout_index = gdk_wayland_keymap_get_active_layout_index;
+  keymap_class->get_layout_names = gdk_wayland_keymap_get_layout_names;
 }
 
 static void

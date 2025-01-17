@@ -1057,34 +1057,6 @@ pointer_handle_axis_value120 (void              *data,
                   get_axis_name (axis), value, seat);
 }
 
-static int
-get_active_layout (GdkKeymap *keymap)
-{
-  struct xkb_keymap *xkb_keymap;
-  struct xkb_state *xkb_state;
-
-  xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
-  xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
-
-  for (int i = 0; i < xkb_keymap_num_layouts (xkb_keymap); i++)
-    {
-      if (xkb_state_layout_index_is_active (xkb_state, i, XKB_STATE_LAYOUT_EFFECTIVE))
-        return i;
-    }
-
-  return -1;
-}
-
-static const char *
-get_active_layout_name (GdkKeymap *keymap)
-{
-  struct xkb_keymap *xkb_keymap;
-
-  xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (keymap);
-
-  return xkb_keymap_layout_get_name (xkb_keymap, get_active_layout (keymap));
-}
-
 static void
 keyboard_handle_keymap (void               *data,
                         struct wl_keyboard *keyboard,
@@ -1099,6 +1071,8 @@ keyboard_handle_keymap (void               *data,
   gboolean num_lock;
   gboolean scroll_lock;
   GdkModifierType modifiers;
+  int layout_index;
+  GStrv old_layout_names, new_layout_names;
 
   direction = gdk_keymap_get_direction (seat->keymap);
   bidi = gdk_keymap_have_bidi_layouts (seat->keymap);
@@ -1106,26 +1080,30 @@ keyboard_handle_keymap (void               *data,
   num_lock = gdk_keymap_get_num_lock_state (seat->keymap);
   scroll_lock = gdk_keymap_get_scroll_lock_state (seat->keymap);
   modifiers = gdk_keymap_get_modifier_state (seat->keymap);
+  layout_index = gdk_keymap_get_active_layout_index (seat->keymap);
+  old_layout_names = gdk_keymap_get_layout_names (seat->keymap);
 
   _gdk_wayland_keymap_update_from_fd (seat->keymap, format, fd, size);
 
-  if (GDK_DISPLAY_DEBUG_CHECK (seat->keymap->display, INPUT))
+  new_layout_names = gdk_keymap_get_layout_names (seat->keymap);
+  if (new_layout_names)
     {
-      GString *s = g_string_new ("");
-      struct xkb_keymap *xkb_keymap = _gdk_wayland_keymap_get_xkb_keymap (seat->keymap);
-      struct xkb_state *xkb_state = _gdk_wayland_keymap_get_xkb_state (seat->keymap);
-      for (int i = 0; i < xkb_keymap_num_layouts (xkb_keymap); i++)
+      if (GDK_DISPLAY_DEBUG_CHECK (seat->keymap->display, INPUT))
         {
-          if (s->len > 0)
-            g_string_append (s, ", ");
-          if (xkb_state_layout_index_is_active (xkb_state, i, XKB_STATE_LAYOUT_EFFECTIVE))
-            g_string_append (s, "*");
-          g_string_append (s, xkb_keymap_layout_get_name (xkb_keymap, i));
+          int n_layouts = g_strv_length (new_layout_names);
+          GString *s = g_string_new ("");
+          for (int i = 0; i < n_layouts; i++)
+            {
+              if (s->len > 0)
+                g_string_append (s, ", ");
+              if (i == layout_index)
+                g_string_append (s, "*");
+              g_string_append (s, new_layout_names[i]);
+            }
+          gdk_debug_message ("layouts: %s", s->str);
+          g_string_free (s, TRUE);
         }
-      gdk_debug_message ("layouts: %s", s->str);
-      g_string_free (s, TRUE);
     }
-
   g_signal_emit_by_name (seat->keymap, "keys-changed");
   g_signal_emit_by_name (seat->keymap, "state-changed");
   if (direction != gdk_keymap_get_direction (seat->keymap))
@@ -1143,6 +1121,15 @@ keyboard_handle_keymap (void               *data,
     g_object_notify (G_OBJECT (seat->logical_keyboard), "scroll-lock-state");
   if (modifiers != gdk_keymap_get_modifier_state (seat->keymap))
     g_object_notify (G_OBJECT (seat->logical_keyboard), "modifier-state");
+  if (layout_index != gdk_keymap_get_active_layout_index (seat->keymap))
+      g_object_notify (G_OBJECT (seat->logical_keyboard), "active-layout-index");
+  if (!g_strv_equal ((const gchar * const *) old_layout_names,
+                     (const gchar * const *) new_layout_names))
+      g_object_notify (G_OBJECT (seat->logical_keyboard), "layout-names");
+
+  g_strfreev (old_layout_names);
+  g_strfreev (new_layout_names);
+
 }
 
 static void
@@ -1464,7 +1451,8 @@ keyboard_handle_modifiers (void               *data,
   gboolean num_lock;
   gboolean scroll_lock;
   GdkModifierType modifiers;
-  int layout;
+  int layout_index;
+  GStrv old_layout_names, new_layout_names;
 
   keymap = seat->keymap;
   xkb_state = _gdk_wayland_keymap_get_xkb_state (keymap);
@@ -1475,7 +1463,8 @@ keyboard_handle_modifiers (void               *data,
   num_lock = gdk_keymap_get_num_lock_state (keymap);
   scroll_lock = gdk_keymap_get_scroll_lock_state (keymap);
   modifiers = gdk_keymap_get_modifier_state (keymap);
-  layout = get_active_layout (keymap);
+  layout_index = gdk_keymap_get_active_layout_index (keymap);
+  old_layout_names = gdk_keymap_get_layout_names (keymap);
 
   /* Note: the docs for xkb_state_update mask state that all parameters
    * must be passed, or we may end up with an 'incoherent' state. But the
@@ -1496,12 +1485,17 @@ keyboard_handle_modifiers (void               *data,
 
   seat->key_modifiers = gdk_keymap_get_modifier_state (keymap);
 
+  new_layout_names = gdk_keymap_get_layout_names (keymap);
+
   g_signal_emit_by_name (keymap, "state-changed");
-  if (layout != get_active_layout (keymap))
+  if (layout_index != gdk_keymap_get_active_layout_index (keymap))
     {
-      GDK_DISPLAY_DEBUG (keymap->display, INPUT, "active layout now: %s", get_active_layout_name (keymap));
+      layout_index = gdk_keymap_get_active_layout_index (keymap);
+      GDK_DISPLAY_DEBUG (keymap->display, INPUT, "active layout now: %s",
+                         new_layout_names[layout_index]);
 
       g_signal_emit_by_name (keymap, "keys-changed");
+      g_object_notify (G_OBJECT (seat->logical_keyboard), "active-layout-index");
     }
   if (direction != gdk_keymap_get_direction (keymap))
     {
@@ -1518,6 +1512,12 @@ keyboard_handle_modifiers (void               *data,
     g_object_notify (G_OBJECT (seat->logical_keyboard), "scroll-lock-state");
   if (modifiers != gdk_keymap_get_modifier_state (keymap))
     g_object_notify (G_OBJECT (seat->logical_keyboard), "modifier-state");
+  if (!g_strv_equal ((const gchar * const *) old_layout_names,
+                     (const gchar * const *) new_layout_names))
+    g_object_notify (G_OBJECT (seat->logical_keyboard), "layout-names");
+
+  g_strfreev (old_layout_names);
+  g_strfreev (new_layout_names);
 }
 
 static void

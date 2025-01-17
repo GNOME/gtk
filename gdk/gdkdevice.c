@@ -88,6 +88,9 @@ enum {
   PROP_NUM_LOCK_STATE,
   PROP_SCROLL_LOCK_STATE,
   PROP_MODIFIER_STATE,
+  PROP_LAYOUT_NAMES,
+  PROP_ACTIVE_LAYOUT_INDEX,
+
   LAST_PROP
 };
 
@@ -293,6 +296,36 @@ gdk_device_class_init (GdkDeviceClass *klass)
                           GDK_NO_MODIFIER_MASK,
                           G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
 
+  /**
+   * GdkDevice:active-layout-index:
+   *
+   * The index of the keyboard active layout of a `GdkDevice`.
+   *
+   * Will be -1 if there is no valid active layout.
+   *
+   * This is only relevant for keyboard devices.
+   *
+   * Since: 4.18
+   */
+  device_props[PROP_ACTIVE_LAYOUT_INDEX] =
+      g_param_spec_int ("active-layout-index", NULL, NULL,
+                        -1, G_MAXINT, 0,
+                        G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
+  /**
+   * GdkDevice:layout-names:
+   *
+   * The names of the keyboard layouts of a `GdkDevice`.
+   *
+   * This is only relevant for keyboard devices.
+   *
+   * Since: 4.18
+   */
+  device_props[PROP_LAYOUT_NAMES] =
+      g_param_spec_boxed ("layout-names", NULL, NULL,
+                          G_TYPE_STRV,
+                          G_PARAM_READABLE | G_PARAM_STATIC_STRINGS);
+
   g_object_class_install_properties (object_class, LAST_PROP, device_props);
 
   /**
@@ -479,6 +512,13 @@ gdk_device_get_property (GObject    *object,
     case PROP_MODIFIER_STATE:
       g_value_set_flags (value, gdk_device_get_modifier_state (device));
       break;
+    case PROP_ACTIVE_LAYOUT_INDEX:
+      g_value_set_int (value, gdk_device_get_active_layout_index (device));
+      break;
+    case PROP_LAYOUT_NAMES:
+      g_value_set_boxed (value, gdk_device_get_layout_names (device));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1299,6 +1339,56 @@ gdk_device_get_modifier_state (GdkDevice *device)
     return gdk_keymap_get_modifier_state (keymap);
 
   return 0;
+}
+
+/**
+ * gdk_device_get_active_layout_index:
+ * @device: a `GdkDevice`
+ *
+ * Retrieves the index of the active layout of the keyboard.
+ *
+ * If there is no valid active layout for the `GdkDevice`, this function will
+ * return -1;
+ *
+ * This is only relevant for keyboard devices.
+ *
+ * Returns: The layout index of the active layout or -1.
+ *
+ * Since: 4.18
+ */
+gint
+gdk_device_get_active_layout_index (GdkDevice *device)
+{
+  GdkKeymap *keymap = gdk_display_get_keymap (device->display);
+
+  if (device->source == GDK_SOURCE_KEYBOARD)
+    return gdk_keymap_get_active_layout_index (keymap);
+
+  return -1;
+}
+
+/**
+ * gdk_device_get_layout_names:
+ * @device: a `GdkDevice`
+ *
+ * Retrieves the names of the layouts of the keyboard.
+ *
+ * This is only relevant for keyboard devices.
+ *
+ * Returns: (transfer full) (nullable) (array zero-terminated=1):
+ *   %NULL-terminated array of strings of layouts,
+ *
+ * Since: 4.18
+ */
+char **
+gdk_device_get_layout_names (GdkDevice *device)
+{
+  GdkKeymap *keymap = gdk_display_get_keymap (device->display);
+
+  if (device->source == GDK_SOURCE_KEYBOARD)
+    return gdk_keymap_get_layout_names (keymap);
+
+  return NULL;
 }
 
 /**
