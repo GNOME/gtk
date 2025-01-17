@@ -667,6 +667,8 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
    * can be used to enable/disable controls.
    *
    * On Linux, this option has no effect.
+   *
+   * See also [Using GTK on Apple macOS](osx.html?native-window-controls).
    */
   header_bar_props[PROP_USE_NATIVE_CONTROLS] =
       g_param_spec_boolean ("use-native-controls", NULL, NULL,
@@ -904,6 +906,8 @@ gtk_header_bar_get_use_native_controls (GtkHeaderBar *bar)
  *
  * This option shows the "stoplight" buttons on macOS.
  * For Linux, this option has no effect.
+ *
+ * See also [Using GTK on Apple macOS](osx.html?native-window-controls).
  */
 void
 gtk_header_bar_set_use_native_controls (GtkHeaderBar *bar,
