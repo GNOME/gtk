@@ -14,9 +14,9 @@
 #include "settings-key.h"
 
 static void
-item_value_changed (GtkEditableLabel  *label,
-                    GParamSpec        *pspec,
-                    GtkColumnViewCell *cell)
+item_value_changed (GtkEntry    *entry,
+                    GParamSpec  *pspec,
+                    GtkListItem *item)
 {
   SettingsKey *self;
   GSettingsSchemaKey *key;
@@ -27,9 +27,9 @@ item_value_changed (GtkEditableLabel  *label,
   const char *name;
   char *value;
 
-  text = gtk_editable_get_text (GTK_EDITABLE (label));
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
 
-  self = gtk_column_view_cell_get_item (cell);
+  self = gtk_list_item_get_item (item);
   key = settings_key_get_key (self);
 
   type = g_settings_schema_key_get_value_type (key);
@@ -54,10 +54,10 @@ item_value_changed (GtkEditableLabel  *label,
   return;
 
 revert:
-  gtk_widget_error_bell (GTK_WIDGET (label));
+  gtk_widget_error_bell (GTK_WIDGET (entry));
 
   g_object_get (self, "value", &value, NULL);
-  gtk_editable_set_text (GTK_EDITABLE (label), value);
+  gtk_editable_set_text (GTK_EDITABLE (entry), value);
   g_free (value);
 }
 

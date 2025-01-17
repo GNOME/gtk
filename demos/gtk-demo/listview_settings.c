@@ -30,6 +30,9 @@ item_value_changed (GtkEditableLabel  *label,
   const char *name;
   char *value;
 
+  if (gtk_editable_label_get_editing (label))
+    return;
+
   text = gtk_editable_get_text (GTK_EDITABLE (label));
 
   self = gtk_column_view_cell_get_item (cell);
