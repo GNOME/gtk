@@ -419,12 +419,11 @@ show_portal_file_chooser (GtkFileChooserNative *self,
     }
   if (self->current_file)
     {
-      char *path;
+      const char *path;
 
-      path = g_file_get_path (GTK_FILE_CHOOSER_NATIVE (self)->current_file);
+      path = g_file_peek_path (GTK_FILE_CHOOSER_NATIVE (self)->current_file);
       g_variant_builder_add (&opt_builder, "{sv}", "current_file",
                              g_variant_new_bytestring (path));
-      g_free (path);
     }
 
   if (self->choices)
@@ -475,7 +474,6 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
   FilechooserPortalData *data;
   GtkWindow *transient_for;
   GDBusConnection *connection;
-  GtkFileChooserAction action;
   const char *method_name;
   GdkDisplay *display;
 
@@ -505,23 +503,19 @@ gtk_file_chooser_native_portal_show (GtkFileChooserNative *self)
       return TRUE;
     }
 
-  action = gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self));
-
-  if (action == GTK_FILE_CHOOSER_ACTION_OPEN)
-    method_name = "OpenFile";
-  else if (action == GTK_FILE_CHOOSER_ACTION_SAVE)
-    method_name = "SaveFile";
-  else if (action == GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER)
-    method_name = "OpenFile";
-  else
+  switch (gtk_file_chooser_get_action (GTK_FILE_CHOOSER (self)))
     {
-      GtkAlertDialog *alert;
-
-      alert = gtk_alert_dialog_new (_("The create-folder action is not supported with portals"));
-      gtk_alert_dialog_show (alert, transient_for);
-      g_object_unref (alert);
-
-      return TRUE;
+    case GTK_FILE_CHOOSER_ACTION_OPEN:
+      method_name = "OpenFile";
+      break;
+    case GTK_FILE_CHOOSER_ACTION_SAVE:
+      method_name = "SaveFile";
+      break;
+    case GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER:
+      method_name = "OpenFile";
+      break;
+    default:
+      g_assert_not_reached ();
     }
 
   data = g_new0 (FilechooserPortalData, 1);
