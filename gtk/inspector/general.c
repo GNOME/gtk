@@ -1666,25 +1666,28 @@ add_device (GtkInspectorGeneral *gen,
       g_free (text);
     }
 
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DEVICE (device) &&
-      gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
-      struct xkb_keymap *keymap = gdk_wayland_device_get_xkb_keymap (device);
+      char **layout_names;
+      int n_layouts, active_layout;
       GString *s;
 
+      layout_names = gdk_device_get_layout_names (device);
+      active_layout = gdk_device_get_active_layout_index (device);
+      n_layouts = g_strv_length (layout_names);
       s = g_string_new ("");
-      for (int i = 0; i < xkb_keymap_num_layouts (keymap); i++)
+      for (int i = 0; i < n_layouts; i++)
         {
           if (s->len > 0)
             g_string_append (s, ", ");
-          g_string_append (s, xkb_keymap_layout_get_name (keymap, i));
+          g_string_append (s, layout_names[i]);
+          if (i == active_layout)
+            g_string_append (s, "*");
         }
 
       add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Layouts", s->str, 20);
       g_string_free (s, TRUE);
     }
-#endif
 
   g_type_class_unref (class);
 }
@@ -1709,25 +1712,28 @@ dump_device (GdkDevice *device,
   if (n_touches > 0)
     g_string_append_printf (string, "| Touches | %d |\n", n_touches);
 
-#ifdef GDK_WINDOWING_WAYLAND
-  if (GDK_IS_WAYLAND_DEVICE (device) &&
-      gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
+  if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
-      struct xkb_keymap *keymap = gdk_wayland_device_get_xkb_keymap (device);
+      char **layout_names;
+      int n_layouts, active_layout;
       GString *s;
 
+      layout_names = gdk_device_get_layout_names (device);
+      active_layout = gdk_device_get_active_layout_index (device);
+      n_layouts = g_strv_length (layout_names);
       s = g_string_new ("");
-      for (int i = 0; i < xkb_keymap_num_layouts (keymap); i++)
+      for (int i = 0; i < n_layouts; i++)
         {
           if (s->len > 0)
             g_string_append (s, "<br>");
-          g_string_append (s, xkb_keymap_layout_get_name (keymap, i));
+          g_string_append (s, layout_names[i]);
+          if (i == active_layout)
+            g_string_append (s, "*");
         }
 
        g_string_append_printf (string, "| Layouts | %s |\n", s->str);
-      g_string_free (s, TRUE);
+       g_string_free (s, TRUE);
     }
-#endif
 
   g_type_class_unref (class);
 }
