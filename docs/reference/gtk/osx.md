@@ -29,7 +29,31 @@ and is enabled.
 
 To extend the macOS system menu, add application and window actions to the
 application with [`Application.set_accels_for_action()`](method.Application.set_accels_for_action.html).
+The menubar can be configured via [`Application.set_menubar()`](method.Application.set_menubar.html).
 Those actions can then be activated from the menu.
+
+## Native window controls
+
+By default, GTK applications use common window decorators (close/minimize/maximize) on all platforms.
+They show as grey rounded buttons on the top-right corner of the window.
+
+Since GTK 4.18, [`GtkHeaderBar`](class.HeaderBar.html) has the option to use native window controls.
+The controls are positioned in their normal place: the top-left corner.
+This feature can be enabled by setting the property [`use-native-controls`](property.HeaderBar.use-native-controls.html) to `TRUE` on a `GtkHeaderBar`.
+The property [`decoration-layout`](property.HeaderBar.decoration-layout.html) can be used to
+enable/disable buttons. 
+
+![The GTK demo application with macOS native window controls](macos-window-controls.png)
+
+Native window controls are an opt-in feature. If you want a more macOS native experience for your app,
+it's up to you to make sure all windows have native controls. You'll need to pay special attention in case of split header bars, since only the leftmost header bar should support the native window controls.
+
+Window decorators only work for normal, toplevel windows.
+
+::: important
+    Native window controls are drawn on top of the window, and are not controlled by GTK.
+    It's up to you, the application developer, to make sure the header bar that "contain" the
+    native window controls, and occupy the space below the window controls.
 
 ## Content types
 
