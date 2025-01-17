@@ -25,6 +25,7 @@
 #include "gtkcheckmenuitemprivate.h"
 #include "gtkimage.h"
 #include "gtkbox.h"
+#include "gtksettings.h"
 
 struct _GtkModelMenuItem
 {
@@ -198,11 +199,16 @@ gtk_model_menu_item_set_icon (GtkModelMenuItem *item,
   if (icon != NULL)
     {
       GtkWidget *image;
+      GtkSettings *settings;
 
       image = gtk_image_new_from_gicon (icon, GTK_ICON_SIZE_MENU);
       gtk_image_set_pixel_size (GTK_IMAGE (image), 16);
       gtk_box_pack_start (GTK_BOX (child), image, FALSE, FALSE, 0);
-      gtk_widget_show (image);
+
+      settings = gtk_settings_get_default ();
+      g_object_bind_property (settings, "gtk-menu-images",
+                              image, "visible",
+                              G_BINDING_SYNC_CREATE);
     }
 
   g_object_notify (G_OBJECT (item), "icon");
