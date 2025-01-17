@@ -21,6 +21,7 @@
     <property name="default-height">600</property>
     <property name="titlebar">
       <object class="GtkHeaderBar" id="headerbar">
+        <property name="use-native-controls">1</property>
         <child type="start">
           <object class="GtkButton">
             <property name="valign">center</property>
