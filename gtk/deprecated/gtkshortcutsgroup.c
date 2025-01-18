@@ -50,6 +50,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * If you need to add a shortcut programmatically, use
  * [method@Gtk.ShortcutsGroup.add_shortcut].
+ *
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 
 struct _GtkShortcutsGroup
@@ -283,6 +285,8 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    * GtkShortcutsGroup:title:
    *
    * The title for this group of shortcuts.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL,
@@ -298,6 +302,8 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    * property does not match the view of this group.
    *
    * Set this to %NULL to make the group always visible.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_VIEW] =
     g_param_spec_string ("view", NULL, NULL,
@@ -310,6 +316,8 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    * The size group for the accelerator portion of shortcuts in this group.
    *
    * This is used internally by GTK, and must not be modified by applications.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_ACCEL_SIZE_GROUP] =
     g_param_spec_object ("accel-size-group", NULL, NULL,
@@ -322,6 +330,8 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    * The size group for the textual portion of shortcuts in this group.
    *
    * This is used internally by GTK, and must not be modified by applications.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_TITLE_SIZE_GROUP] =
     g_param_spec_object ("title-size-group", NULL, NULL,
@@ -334,6 +344,8 @@ gtk_shortcuts_group_class_init (GtkShortcutsGroupClass *klass)
    * A rough measure for the number of lines in this group.
    *
    * This is used internally by GTK, and is not useful for applications.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_HEIGHT] =
     g_param_spec_uint ("height", NULL, NULL,
@@ -384,7 +396,7 @@ gtk_shortcuts_group_init (GtkShortcutsGroup *self)
  *
  * Since: 4.14
  *
- * Deprecated: 4.18
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 void
 gtk_shortcuts_group_add_shortcut (GtkShortcutsGroup    *self,

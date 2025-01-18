@@ -40,6 +40,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * with a short text.
  *
  * This widget is only meant to be used with `GtkShortcutsWindow`.
+ *
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 
 struct _GtkShortcutsShortcut
@@ -574,6 +576,8 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    *
    * Note that `<`, `>` and `&` need to be escaped as `&lt;`, `&gt`; and `&amp`; when used
    * in .ui files.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_ACCELERATOR] =
     g_param_spec_string ("accelerator", NULL, NULL,
@@ -589,6 +593,8 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * is set to %GTK_SHORTCUT_GESTURE.
    *
    * For the other predefined gesture types, GTK provides an icon on its own.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_ICON] =
     g_param_spec_object ("icon", NULL, NULL,
@@ -599,6 +605,8 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * GtkShortcutsShortcut:icon-set:
    *
    * %TRUE if an icon has been set.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_ICON_SET] =
     g_param_spec_boolean ("icon-set", NULL, NULL,
@@ -612,6 +620,8 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * this object.
    *
    * This should be a short string that can fit in a single line.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL,
@@ -626,6 +636,8 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * This is typically used for gestures and should be a short, one-line
    * text that describes the gesture itself. For the predefined gesture
    * types, GTK provides a subtitle on its own.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_SUBTITLE] =
     g_param_spec_string ("subtitle", NULL, NULL,
@@ -636,6 +648,8 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * GtkShortcutsShortcut:subtitle-set:
    *
    * %TRUE if a subtitle has been set.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_SUBTITLE_SET] =
     g_param_spec_boolean ("subtitle-set", NULL, NULL,
@@ -648,6 +662,8 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * The size group for the accelerator portion of this shortcut.
    *
    * This is used internally by GTK, and must not be modified by applications.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_ACCEL_SIZE_GROUP] =
     g_param_spec_object ("accel-size-group", NULL, NULL,
@@ -660,6 +676,8 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * The size group for the textual portion of this shortcut.
    *
    * This is used internally by GTK, and must not be modified by applications.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_TITLE_SIZE_GROUP] =
     g_param_spec_object ("title-size-group", NULL, NULL,
@@ -673,6 +691,8 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    *
    * If the shortcut is used regardless of the text direction,
    * set this property to %GTK_TEXT_DIR_NONE.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_DIRECTION] =
     g_param_spec_enum ("direction", NULL, NULL,
@@ -684,6 +704,8 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * GtkShortcutsShortcut:shortcut-type:
    *
    * The type of shortcut that is represented.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_SHORTCUT_TYPE] =
     g_param_spec_enum ("shortcut-type", NULL, NULL,
@@ -700,6 +722,8 @@ gtk_shortcuts_shortcut_class_init (GtkShortcutsShortcutClass *klass)
    * then GTK will use the accelerators that are associated with the
    * action via [method@Gtk.Application.set_accels_for_action], and
    * setting [property@Gtk.ShortcutsShortcut:accelerator] is not necessary.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_ACTION_NAME] =
     g_param_spec_string ("action-name", NULL, NULL,

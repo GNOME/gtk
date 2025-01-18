@@ -801,6 +801,8 @@ show_help_overlay (GSimpleAction *action,
  * `win.show-help-overlay` to present it.
  *
  * The window takes responsibility for destroying the help overlay.
+ *
+ * Deprecated: 4.18: `GtkShortcutsWindow` will be removed in GTK 5
  */
 void
 gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
@@ -844,6 +846,8 @@ gtk_application_window_set_help_overlay (GtkApplicationWindow *window,
  *
  * Returns: (transfer none) (nullable): the help overlay associated
  *   with the window
+ *
+ * Deprecated: 4.18: `GtkShortcutsWindow` will be removed in GTK 5
  */
 GtkShortcutsWindow *
 gtk_application_window_get_help_overlay (GtkApplicationWindow *window)

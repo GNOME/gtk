@@ -72,6 +72,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * The following signals have default keybindings:
  *
  * - [signal@Gtk.ShortcutsSection::change-current-page]
+ *
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 
 struct _GtkShortcutsSection
@@ -308,6 +310,8 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    *
    * Setting the [property@Gtk.ShortcutsWindow:section-name] property
    * to this string will make this section shown in the `GtkShortcutsWindow`.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_SECTION_NAME] =
     g_param_spec_string ("section-name", NULL, NULL,
@@ -324,6 +328,8 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    * Applications are expected to use the
    * [property@Gtk.ShortcutsWindow:view-name] property
    * for this purpose.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_VIEW_NAME] =
     g_param_spec_string ("view-name", NULL, NULL,
@@ -338,6 +344,8 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    *
    * If there is only one section, you don't need to set a title,
    * since the section selector will not be shown in this case.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_TITLE] =
     g_param_spec_string ("title", NULL, NULL,
@@ -352,6 +360,8 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    * This property can be used to influence how the groups in this
    * section are distributed across pages and columns. The default
    * value of 15 should work in most cases.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_MAX_HEIGHT] =
     g_param_spec_uint ("max-height", NULL, NULL,
@@ -372,6 +382,8 @@ gtk_shortcuts_section_class_init (GtkShortcutsSectionClass *klass)
    * <kbd>Ctrl</kbd>+<kbd>PgDn</kbd>, <kbd>PgDn</kbd>.
    *
    * Returns: whether the page was changed
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   signals[CHANGE_CURRENT_PAGE] =
     g_signal_new (I_("change-current-page"),
@@ -499,7 +511,7 @@ gtk_shortcuts_section_set_max_height (GtkShortcutsSection *self,
  *
  * Since: 4.14
  *
- * Deprecated: 4.18
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 void
 gtk_shortcuts_section_add_group (GtkShortcutsSection *self,
