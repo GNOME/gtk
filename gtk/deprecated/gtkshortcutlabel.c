@@ -32,6 +32,8 @@
  * `GtkShortcutLabel` displays a single keyboard shortcut or gesture.
  *
  * The main use case for `GtkShortcutLabel` is inside a [class@Gtk.ShortcutsWindow].
+ *
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 
 struct _GtkShortcutLabel
@@ -504,6 +506,8 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
    *
    * See [property@Gtk.ShortcutsShortcut:accelerator]
    * for the accepted syntax.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_ACCELERATOR] =
     g_param_spec_string ("accelerator", NULL, NULL,
@@ -514,6 +518,8 @@ gtk_shortcut_label_class_init (GtkShortcutLabelClass *klass)
    * GtkShortcutLabel:disabled-text:
    *
    * The text that is displayed when no accelerator is set.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_DISABLED_TEXT] =
     g_param_spec_string ("disabled-text", NULL, NULL,
@@ -541,6 +547,8 @@ gtk_shortcut_label_init (GtkShortcutLabel *self)
  * Creates a new `GtkShortcutLabel` with @accelerator set.
  *
  * Returns: a newly-allocated `GtkShortcutLabel`
+ *
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 GtkWidget *
 gtk_shortcut_label_new (const char *accelerator)
@@ -557,6 +565,8 @@ gtk_shortcut_label_new (const char *accelerator)
  * Retrieves the current accelerator of @self.
  *
  * Returns: (transfer none)(nullable): the current accelerator.
+ *
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 const char *
 gtk_shortcut_label_get_accelerator (GtkShortcutLabel *self)
@@ -572,6 +582,8 @@ gtk_shortcut_label_get_accelerator (GtkShortcutLabel *self)
  * @accelerator: the new accelerator
  *
  * Sets the accelerator to be displayed by @self.
+ *
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 void
 gtk_shortcut_label_set_accelerator (GtkShortcutLabel *self,
@@ -596,6 +608,8 @@ gtk_shortcut_label_set_accelerator (GtkShortcutLabel *self,
  *
  * Returns: (transfer none)(nullable): the current text displayed when no
  * accelerator is set.
+ *
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 const char *
 gtk_shortcut_label_get_disabled_text (GtkShortcutLabel *self)
@@ -611,6 +625,8 @@ gtk_shortcut_label_get_disabled_text (GtkShortcutLabel *self)
  * @disabled_text: the text to be displayed when no accelerator is set
  *
  * Sets the text to be displayed by @self when no accelerator is set.
+ *
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 void
 gtk_shortcut_label_set_disabled_text (GtkShortcutLabel *self,

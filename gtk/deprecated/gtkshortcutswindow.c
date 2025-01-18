@@ -106,6 +106,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * `GtkShortcutsWindow` has a single CSS node with the name `window` and style
  * class `.shortcuts`.
+ *
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 
 struct _GtkShortcutsWindow
@@ -362,7 +364,7 @@ section_notify_cb (GObject    *section,
  *
  * Since: 4.14
  *
- * Deprecated: 4.18
+ * Deprecated: 4.18: This widget will be removed in GTK 5
  */
 void
 gtk_shortcuts_window_add_section (GtkShortcutsWindow  *self,
@@ -787,6 +789,8 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
    *
    * This should be the section-name of one of the `GtkShortcutsSection`
    * objects that are in this shortcuts window.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_SECTION_NAME] =
     g_param_spec_string ("section-name", NULL, NULL,
@@ -803,6 +807,8 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
    * are inside this shortcuts window.
    *
    * Set this to %NULL to show all groups.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   properties[PROP_VIEW_NAME] =
     g_param_spec_string ("view-name", NULL, NULL,
@@ -819,6 +825,8 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default binding for this signal is the <kbd>Escape</kbd> key.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   signals[CLOSE] = g_signal_new (I_("close"),
                                  G_TYPE_FROM_CLASS (klass),
@@ -836,6 +844,8 @@ gtk_shortcuts_window_class_init (GtkShortcutsWindowClass *klass)
    * This is a [keybinding signal](class.SignalAction.html).
    *
    * The default binding for this signal is <kbd>Control</kbd>+<kbd>F</kbd>.
+   *
+   * Deprecated: 4.18: This widget will be removed in GTK 5
    */
   signals[SEARCH] = g_signal_new (I_("search"),
                                  G_TYPE_FROM_CLASS (klass),
