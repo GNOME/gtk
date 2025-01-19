@@ -208,12 +208,12 @@ test_cairo_renderer (void)
 }
 
 static void
-test_ngl_renderer (void)
+test_gl_renderer (void)
 {
 #ifdef GDK_RENDERING_GL
   GskRenderer *renderer;
 
-  renderer = gsk_ngl_renderer_new ();
+  renderer = gsk_gl_renderer_new ();
   test_renderer (renderer);
   g_clear_object (&renderer);
 #else
@@ -247,7 +247,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/rendernode/conic-gradient/angle", test_conic_gradient_angle);
   g_test_add_func ("/rendernode/container/disjoint", test_container_disjoint);
   g_test_add_func ("/renderer/cairo", test_cairo_renderer);
-  g_test_add_func ("/renderer/ngl", test_ngl_renderer);
+  g_test_add_func ("/renderer/gl", test_gl_renderer);
   g_test_add_func ("/renderer/vulkan", test_vulkan_renderer);
 
   return g_test_run ();

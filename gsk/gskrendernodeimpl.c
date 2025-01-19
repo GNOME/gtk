@@ -24,7 +24,6 @@
 #include "gskcairorenderer.h"
 #include "gskdebugprivate.h"
 #include "gskdiffprivate.h"
-#include "gl/gskglrenderer.h"
 #include "gskpathprivate.h"
 #include "gskrectprivate.h"
 #include "gskrendererprivate.h"
@@ -32,6 +31,7 @@
 #include "gskstrokeprivate.h"
 #include "gsktransformprivate.h"
 #include "gskprivate.h"
+#include "gpu/gskglrenderer.h"
 
 #include "gdk/gdkcairoprivate.h"
 #include "gdk/gdkcolorstateprivate.h"
@@ -9010,7 +9010,7 @@ gsk_render_node_png_serializer (GdkContentSerializer *serializer)
 
   node = gsk_value_get_render_node (gdk_content_serializer_get_value (serializer));
 
-  renderer = gsk_ngl_renderer_new ();
+  renderer = gsk_gl_renderer_new ();
   if (!gsk_renderer_realize (renderer, NULL, NULL))
     {
       g_object_unref (renderer);

@@ -43,7 +43,7 @@
 
 #include "gskenumtypes.h"
 
-#include "gl/gskglrenderer.h"
+#include "gpu/gskglrenderer.h"
 #include "gpu/gskvulkanrenderer.h"
 #include "gdk/gdkvulkancontextprivate.h"
 #include "gdk/gdkdisplayprivate.h"
@@ -514,32 +514,39 @@ get_renderer_for_name (const char *renderer_name)
 #endif
   else if (g_ascii_strcasecmp (renderer_name, "cairo") == 0)
     return GSK_TYPE_CAIRO_RENDERER;
-  else if (g_ascii_strcasecmp (renderer_name, "opengl") == 0 ||
-           g_ascii_strcasecmp (renderer_name, "gl") == 0)
+  else if (g_ascii_strcasecmp (renderer_name, "ngl") == 0 ||
+           g_ascii_strcasecmp (renderer_name, "opengl") == 0)
     return GSK_TYPE_GL_RENDERER;
-  else if (g_ascii_strcasecmp (renderer_name, "ngl") == 0)
-    return gsk_ngl_renderer_get_type ();
+  else if (g_ascii_strcasecmp (renderer_name, "gl") == 0)
+    {
+      g_warning ("The old GL renderer has been removed. Try GSK_RENDERER=help");
+      return GSK_TYPE_GL_RENDERER;
+    }
 #ifdef GDK_RENDERING_VULKAN
   else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
     return GSK_TYPE_VULKAN_RENDERER;
 #endif
   else if (g_ascii_strcasecmp (renderer_name, "help") == 0)
     {
-      g_print ("Supported arguments for GSK_RENDERER environment variable:\n");
+      fprintf (stderr, "Supported arguments for GSK_RENDERER environment variable:\n");
 #ifdef GDK_WINDOWING_BROADWAY
-      g_print ("  broadway - Use the Broadway specific renderer\n");
+      fprintf (stderr, "  broadway - Use the Broadway specific renderer\n");
 #else
-      g_print ("  broadway - Disabled during GTK build\n");
+      fprintf (stderr, "  broadway - Disabled during GTK build\n");
 #endif
-      g_print ("     cairo - Use the Cairo fallback renderer\n");
-      g_print ("       ngl - Use the OpenGL renderer\n");
+      fprintf (stderr, "     cairo - Use the Cairo fallback renderer\n");
+      fprintf (stderr, "    opengl - Use the OpenGL renderer\n");
+      fprintf (stderr, "       ngl - Use the OpenGL renderer\n");
+      fprintf (stderr, "        gl - Use the OpenGL renderer\n");
 #ifdef GDK_RENDERING_VULKAN
-      g_print ("    vulkan - Use the Vulkan renderer\n");
+      fprintf (stderr, "    vulkan - Use the Vulkan renderer\n");
 #else
-      g_print ("    vulkan - Disabled during GTK build\n");
+      fprintf (stderr, "    vulkan - Disabled during GTK build\n");
 #endif
-      g_print ("      help - Print this help\n\n");
-      g_print ("Other arguments will cause a warning and be ignored.\n");
+      fprintf (stderr, "      help - Print this help\n\n");
+      fprintf (stderr, "The old OpenGL renderer has been removed in GTK 4.18, so using\n");
+      fprintf (stderr, "GSK_RENDERER=gl will cause a warning and use the new OpenGL renderer.\n\n");
+      fprintf (stderr, "Other arguments will cause a warning and be ignored.\n");
     }
   else
     {
@@ -626,19 +633,19 @@ gl_supported_platform (GdkSurface *surface,
 static GType
 get_renderer_for_gl (GdkSurface *surface)
 {
-  if (!gl_supported_platform (surface, gsk_ngl_renderer_get_type (), FALSE))
+  if (!gl_supported_platform (surface, GSK_TYPE_GL_RENDERER, FALSE))
     return G_TYPE_INVALID;
 
-  return gsk_ngl_renderer_get_type ();
+  return GSK_TYPE_GL_RENDERER;
 }
 
 static GType
 get_renderer_for_gl_fallback (GdkSurface *surface)
 {
-  if (!gl_supported_platform (surface, gsk_ngl_renderer_get_type (), TRUE))
+  if (!gl_supported_platform (surface, GSK_TYPE_GL_RENDERER, TRUE))
     return G_TYPE_INVALID;
 
-  return gsk_ngl_renderer_get_type ();
+  return GSK_TYPE_GL_RENDERER;
 }
 
 #ifdef GDK_RENDERING_VULKAN
