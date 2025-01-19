@@ -353,18 +353,22 @@ gtk_adjustment_dispatch_properties_changed (GObject     *object,
 }
 
 static double
+gtk_adjustment_get_bounded_upper (GtkAdjustment *self)
+{
+  GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (self);
+
+  /* The real upper value is upper - page_size and not below the lower value. */
+  return MAX (priv->lower, priv->upper - priv->page_size);
+}
+
+static double
 gtk_adjustment_sanitize_value (GtkAdjustment *self,
                                double         value)
 {
   GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (self);
+  gdouble upper = gtk_adjustment_get_bounded_upper (self);
 
-  /* don't use CLAMP() so we don't end up below lower if upper - page_size
-   * is smaller than lower
-   */
-  value = MIN (value, priv->upper - priv->page_size);
-  value = MAX (value, priv->lower);
-
-  return value;
+  return CLAMP (value, priv->lower, upper);
 }
 
 /**
