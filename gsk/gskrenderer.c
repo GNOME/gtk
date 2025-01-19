@@ -514,8 +514,14 @@ get_renderer_for_name (const char *renderer_name)
 #endif
   else if (g_ascii_strcasecmp (renderer_name, "cairo") == 0)
     return GSK_TYPE_CAIRO_RENDERER;
-  else if (g_ascii_strcasecmp (renderer_name, "ngl") == 0)
+  else if (g_ascii_strcasecmp (renderer_name, "ngl") == 0 ||
+           g_ascii_strcasecmp (renderer_name, "opengl") == 0)
     return GSK_TYPE_GL_RENDERER;
+  else if (g_ascii_strcasecmp (renderer_name, "gl") == 0)
+    {
+      g_warning ("The old GL renderer has been removed. Try GSK_RENDERER=help");
+      return GSK_TYPE_GL_RENDERER;
+    }
 #ifdef GDK_RENDERING_VULKAN
   else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
     return GSK_TYPE_VULKAN_RENDERER;
@@ -529,13 +535,17 @@ get_renderer_for_name (const char *renderer_name)
       fprintf (stderr, "  broadway - Disabled during GTK build\n");
 #endif
       fprintf (stderr, "     cairo - Use the Cairo fallback renderer\n");
+      fprintf (stderr, "    opengl - Use the OpenGL renderer\n");
       fprintf (stderr, "       ngl - Use the OpenGL renderer\n");
+      fprintf (stderr, "        gl - Use the OpenGL renderer\n");
 #ifdef GDK_RENDERING_VULKAN
       fprintf (stderr, "    vulkan - Use the Vulkan renderer\n");
 #else
       fprintf (stderr, "    vulkan - Disabled during GTK build\n");
 #endif
       fprintf (stderr, "      help - Print this help\n\n");
+      fprintf (stderr, "The old OpenGL renderer has been removed in GTK 4.18, so using\n");
+      fprintf (stderr, "GSK_RENDERER=gl will cause a warning and use the new OpenGL renderer.\n\n");
       fprintf (stderr, "Other arguments will cause a warning and be ignored.\n");
     }
   else
