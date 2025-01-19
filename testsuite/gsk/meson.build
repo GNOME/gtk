@@ -255,17 +255,6 @@ compare_xfails = {
     'rounded-clip-with-huge-bounds-nogl': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
     'big-checkerboard': ['clip'], # 6444
   },
-  'gl': {
-    # 6525
-    'container-single-child-offscreen-for-opacity': ['rotate'],
-    'cross-fade-in-opacity': ['rotate'],
-    'mask-modes-in-opacity': ['rotate'],
-    'opacity-overlapping-children': ['rotate'],
-    'scaled-texture-scale': ['rotate'],
-    'shadow-opacity': ['rotate'],
-    'shadow-texture-formats': ['rotate'],
-    'texture-scale-nearest-vs-linear': ['rotate'],
-  },
 }
 
 foreach renderer : renderers
