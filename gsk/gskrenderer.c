@@ -522,21 +522,21 @@ get_renderer_for_name (const char *renderer_name)
 #endif
   else if (g_ascii_strcasecmp (renderer_name, "help") == 0)
     {
-      g_print ("Supported arguments for GSK_RENDERER environment variable:\n");
+      fprintf (stderr, "Supported arguments for GSK_RENDERER environment variable:\n");
 #ifdef GDK_WINDOWING_BROADWAY
-      g_print ("  broadway - Use the Broadway specific renderer\n");
+      fprintf (stderr, "  broadway - Use the Broadway specific renderer\n");
 #else
-      g_print ("  broadway - Disabled during GTK build\n");
+      fprintf (stderr, "  broadway - Disabled during GTK build\n");
 #endif
-      g_print ("     cairo - Use the Cairo fallback renderer\n");
-      g_print ("       ngl - Use the OpenGL renderer\n");
+      fprintf (stderr, "     cairo - Use the Cairo fallback renderer\n");
+      fprintf (stderr, "       ngl - Use the OpenGL renderer\n");
 #ifdef GDK_RENDERING_VULKAN
-      g_print ("    vulkan - Use the Vulkan renderer\n");
+      fprintf (stderr, "    vulkan - Use the Vulkan renderer\n");
 #else
-      g_print ("    vulkan - Disabled during GTK build\n");
+      fprintf (stderr, "    vulkan - Disabled during GTK build\n");
 #endif
-      g_print ("      help - Print this help\n\n");
-      g_print ("Other arguments will cause a warning and be ignored.\n");
+      fprintf (stderr, "      help - Print this help\n\n");
+      fprintf (stderr, "Other arguments will cause a warning and be ignored.\n");
     }
   else
     {
