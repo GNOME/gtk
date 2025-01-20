@@ -1940,7 +1940,7 @@ files_list_restrict_key_presses (GtkEventControllerKey *controller,
 
 static char *
 get_file_date (GtkFileChooserWidget *impl,
-                           GFileInfo        *info)
+               GFileInfo            *info)
 {
   glong time;
 
@@ -3721,34 +3721,6 @@ stop_loading_and_clear_list_model (GtkFileChooserWidget *impl,
     set_current_model (impl, NULL);
 }
 
-/* Replace 'target' with 'replacement' in the input string. */
-static char *
-string_replace (const char *input,
-                const char *target,
-                const char *replacement)
-{
-  char **pieces;
-  char *output;
-
-  pieces = g_strsplit (input, target, -1);
-  output = g_strjoinv (replacement, pieces);
-  g_strfreev (pieces);
-
-  return output;
-}
-
-static void
-replace_ratio (char **str)
-{
-  if (g_get_charset (NULL))
-    {
-      char *ret;
-      ret = string_replace (*str, ":", "\xE2\x80\x8E∶");
-      g_free (*str);
-      *str = ret;
-    }
-}
-
 static char *
 my_g_format_date_for_display (GtkFileChooserWidget *impl,
                               glong                 secs)
@@ -3805,7 +3777,6 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
     }
 
   date_str = g_date_time_format (time, format);
-  replace_ratio (&date_str);
 
   g_date_time_unref (now);
   g_date_time_unref (now_date);
@@ -3831,7 +3802,6 @@ my_g_format_time_for_display (GtkFileChooserWidget *impl,
     format = _("%l:%M %p");
 
   date_str = g_date_time_format (time, format);
-  replace_ratio (&date_str);
 
   g_date_time_unref (time);
 
