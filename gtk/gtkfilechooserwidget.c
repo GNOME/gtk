@@ -4832,34 +4832,6 @@ stop_loading_and_clear_list_model (GtkFileChooserWidget *impl,
     gtk_tree_view_set_model (GTK_TREE_VIEW (priv->browse_files_tree_view), NULL);
 }
 
-/* Replace 'target' with 'replacement' in the input string. */
-static gchar *
-string_replace (const gchar *input,
-                const gchar *target,
-                const gchar *replacement)
-{
-  gchar **pieces;
-  gchar *output;
-
-  pieces = g_strsplit (input, target, -1);
-  output = g_strjoinv (replacement, pieces);
-  g_strfreev (pieces);
-
-  return output;
-}
-
-static void
-replace_ratio (gchar **str)
-{
-  if (g_get_charset (NULL))
-    {
-      gchar *ret;
-      ret = string_replace (*str, ":", "\xE2\x80\x8E∶");
-      g_free (*str);
-      *str = ret;
-    }
-}
-
 static char *
 my_g_format_date_for_display (GtkFileChooserWidget *impl,
                               glong                 secs)
@@ -4918,7 +4890,6 @@ my_g_format_date_for_display (GtkFileChooserWidget *impl,
     }
 
   date_str = g_date_time_format (time, format);
-  replace_ratio (&date_str);
 
   g_date_time_unref (now);
   g_date_time_unref (now_date);
@@ -4949,7 +4920,6 @@ my_g_format_time_for_display (GtkFileChooserWidget *impl,
     format = _("%l:%M %p");
 
   date_str = g_date_time_format (time, format);
-  replace_ratio (&date_str);
 
   g_date_time_unref (time);
 
