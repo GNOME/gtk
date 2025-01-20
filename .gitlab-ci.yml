@@ -218,7 +218,7 @@ msys2-ucrt64:
       - "${CI_PROJECT_DIR}/_build/gtkdll.tar.gz"
       - "${CI_PROJECT_DIR}/_build/gtk/GdkWin32-4.0.gir"
 
-macos:
+macos-arm64:
   rules:
     # Do not run in forks as the runner is not available there.
     # (except for dehesselle who maintains the runner)
@@ -228,30 +228,36 @@ macos:
     - macosarm
   needs: []
   variables:
-    EXTRA_MESON_FLAGS: ""
     BACKEND_FLAGS: "-Dx11-backend=false -Dbroadway-backend=true"
-    FEATURE_FLAGS: "-Dmedia-gstreamer=disabled -Dintrospection=enabled -Dgobject-introspection:werror=false"
-    TMPDIR: /Users/Shared/work/tmp
-    PIP_CACHE_DIR: /Users/Shared/build/cache
+    FEATURE_FLAGS: "-Daccesskit=enabled -Dgobject-introspection:werror=false -Dintrospection=enabled -Dmedia-gstreamer=disabled"
+    EXTRA_MESON_FLAGS: ""
+    # additional settings
+    CARGO_HOME: $CI_PROJECT_DIR/.cargo
+    PIP_CACHE_DIR: /Users/Shared/work/cache
     PIPENV_CACHE_DIR: $PIP_CACHE_DIR
+    PKG_CONFIG_PATH: $CI_PROJECT_DIR/.venv/lib/pkgconfig
     PYTHONPYCACHEPREFIX: $PIP_CACHE_DIR
     SDKROOT: /opt/sdks/MacOSX11.3.sdk
+    TMPDIR: /Users/Shared/work/tmp
   before_script:
     - .gitlab-ci/show-info-macos.sh
-    - python3 -m venv .venv
-    # Building the introspection feature requires pkg-config and bison.
+    # Setup the virtual environment with 'meson' and 'ninja'.
+    - |
+      python3 -m venv .venv
+      source .venv/bin/activate
+      pip3 install meson==1.4.0 ninja==1.11.1.1
+    # The introspection feature requires 'pkg-config' and 'bison'.
     - curl -L $CI_API_V4_URL/projects/30437/packages/generic/pkgconfig/v0.29.2+10/pkg-config-0.29.2+10_$(uname -m).tar.xz | tar -C .venv -xJ
     - curl -L $CI_API_V4_URL/projects/30438/packages/generic/bison/v3.8.2+3/bison-3.8.2+3_$(uname -m).tar.xz | tar -C .venv -xJ
-    - source .venv/bin/activate
-    - pip3 install meson==1.4.0 ninja==1.11.1.1
-    # GLib requires packaging.
+    # The AccessKit feature requires Rust.
+    - ln -s /opt/rustup/toolchains/1.84.0-aarch64-apple-darwin/bin/* .venv/bin
+    # The GLib subproject requires 'packaging'.
     - pip3 install packaging==24.2
-    # The following dance is to work around the circular dependency of glib and gobject-introspection,
-    # and mesons inability to handle it for subprojects.
-    - export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${CI_PROJECT_DIR}/.venv/lib/pkgconfig:${CI_PROJECT_DIR}/.venv/share/pkgconfig
+    # Meson cannot handle circular dependencies in subprojects, so we have to build GLib and
+    # GObject Introspection ourselves.
     - |
       git clone --depth 1 https://gitlab.gnome.org/gnome/glib.git
-      meson setup -Dprefix=${CI_PROJECT_DIR}/.venv -Dtests=false -Dintrospection=disabled _glib_build glib
+      meson setup -Dprefix=${CI_PROJECT_DIR}/.venv -Dintrospection=disabled -Dtests=false _glib_build glib
       meson compile -C_glib_build
       meson install -C_glib_build
     - |
@@ -263,9 +269,6 @@ macos:
       meson configure -Dintrospection=enabled _glib_build
       meson compile -C_glib_build
       meson install -C_glib_build
-    # We're not setting up ccache here on purpose as it accelerates the build
-    # so much that it triggers race conditions in the gobject-introspection
-    # subproject.
   script:
     - meson setup
             ${COMMON_MESON_FLAGS}
