@@ -1,6 +1,21 @@
 Overview of Changes in 4.17.4, xx-xx-xxxx
 =========================================
 
+* GtkFileChooser:
+ - Stop replacing : (colon) with U+2236 (ratio)
+
+* GDK:
+ - Add a way to retrieve keyboard layout information
+
+* GSK
+ - Drop the old GL renderer
+
+* Demos:
+ - gtk-demo: Make settings demos work
+
+* Translation updates:
+ Slovenian
+
 
 Overview of Changes in 4.17.3, 16-01-2025
 =========================================
