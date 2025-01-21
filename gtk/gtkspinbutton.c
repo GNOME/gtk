@@ -33,7 +33,7 @@
 
 #include "gtkaccessibleprivate.h"
 #include "gtkaccessiblerange.h"
-#include "gtkadjustment.h"
+#include "gtkadjustmentprivate.h"
 #include "gtkbutton.h"
 #include "gtkbuttonprivate.h"
 #include "gtkeditable.h"
@@ -2221,7 +2221,9 @@ gtk_spin_button_set_value (GtkSpinButton *spin_button,
 {
   g_return_if_fail (GTK_IS_SPIN_BUTTON (spin_button));
 
-  if (fabs (value - gtk_adjustment_get_value (spin_button->adjustment)) > EPSILON)
+  if (fabs (value - gtk_adjustment_get_value (spin_button->adjustment)) > EPSILON ||
+      value < gtk_adjustment_get_lower (spin_button->adjustment) ||
+      value > gtk_adjustment_get_bounded_upper (spin_button->adjustment))
     gtk_adjustment_set_value (spin_button->adjustment, value);
   else
     {

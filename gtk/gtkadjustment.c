@@ -352,7 +352,7 @@ gtk_adjustment_dispatch_properties_changed (GObject     *object,
     }
 }
 
-static double
+double
 gtk_adjustment_get_bounded_upper (GtkAdjustment *self)
 {
   GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (self);
