@@ -308,7 +308,7 @@ gtk_at_context_class_init (GtkATContextClass *klass)
 }
 
 #define N_PROPERTIES    (GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT + 1)
-#define N_RELATIONS     (GTK_ACCESSIBLE_RELATION_SET_SIZE + 1)
+#define N_RELATIONS     (GTK_ACCESSIBLE_RELATION_FLOW_FROM + 1)
 #define N_STATES        (GTK_ACCESSIBLE_STATE_SELECTED + 1)
 
 static const char *property_attrs[] = {
@@ -371,6 +371,12 @@ static const char *relation_attrs[] = {
   [GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT]      = "rowindextext",
   [GTK_ACCESSIBLE_RELATION_ROW_SPAN]            = "rowspan",
   [GTK_ACCESSIBLE_RELATION_SET_SIZE]            = "setsize",
+  [GTK_ACCESSIBLE_RELATION_LABEL_FOR]           = "labelfor",
+  [GTK_ACCESSIBLE_RELATION_DESCRIPTION_FOR]     = "descriptionfor",
+  [GTK_ACCESSIBLE_RELATION_CONTROLLED_BY]       = "controlledby",
+  [GTK_ACCESSIBLE_RELATION_DETAILS_FOR]         = "detailsfor",
+  [GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE_FOR]   = "errormessagefor",
+  [GTK_ACCESSIBLE_RELATION_FLOW_FROM]           = "flowfrom",
 };
 
 /*< private >
@@ -385,7 +391,7 @@ const char *
 gtk_accessible_relation_get_attribute_name (GtkAccessibleRelation relation)
 {
   g_return_val_if_fail (relation >= GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT &&
-                        relation <= GTK_ACCESSIBLE_RELATION_SET_SIZE,
+                        relation <= GTK_ACCESSIBLE_RELATION_FLOW_FROM,
                         "<none>");
 
   return relation_attrs[relation];
@@ -1013,6 +1019,91 @@ gtk_at_context_get_accessible_property (GtkATContext          *self,
   return gtk_accessible_attribute_set_get_value (self->properties, property);
 }
 
+static void
+append_to_accessible_relation (GtkATContext          *self,
+                                              GtkAccessibleRelation  relation,
+                                              GtkAccessible         *accessible)
+{
+  g_return_if_fail (GTK_IS_AT_CONTEXT (self));
+  GtkAccessibleValue * target_value;
+
+  if (gtk_accessible_attribute_set_contains (self->relations, relation))
+    target_value = gtk_accessible_attribute_set_get_value (self->relations, relation);
+  else
+    {
+      target_value = gtk_reference_list_accessible_value_new (NULL);
+      gtk_accessible_attribute_set_add (self->relations, relation, target_value);
+    }
+  gtk_reference_list_accessible_value_append (target_value, accessible);
+
+  self->updated_relations |= (1 << relation);
+}
+
+static void
+remove_from_accessible_relation (GtkATContext          *self,
+                                 GtkAccessibleRelation  relation,
+                                 GtkAccessible         *accessible)
+{
+  g_return_if_fail (GTK_IS_AT_CONTEXT (self));
+  GtkAccessibleValue * target_value;
+
+  if (!gtk_accessible_attribute_set_contains (self->relations, relation))
+    return;
+
+  target_value = gtk_accessible_attribute_set_get_value (self->relations, relation);
+  gtk_reference_list_accessible_value_remove (target_value, accessible);
+
+  self->updated_relations |= (1 << relation);
+}
+
+static void
+update_reverse_relation (GtkATContext *self, GtkAccessibleRelation relation, GtkAccessibleValue *value)
+{
+  struct {
+    GtkAccessibleRelation rel;
+    GtkAccessibleRelation reverse_rel;
+  } reverse_rels_map[] = {
+    { GTK_ACCESSIBLE_RELATION_LABELLED_BY, GTK_ACCESSIBLE_RELATION_LABEL_FOR },
+    { GTK_ACCESSIBLE_RELATION_DESCRIBED_BY, GTK_ACCESSIBLE_RELATION_DESCRIPTION_FOR },
+    { GTK_ACCESSIBLE_RELATION_CONTROLS, GTK_ACCESSIBLE_RELATION_CONTROLLED_BY },
+    { GTK_ACCESSIBLE_RELATION_DETAILS, GTK_ACCESSIBLE_RELATION_DETAILS_FOR },
+    { GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE, GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE_FOR },
+    { GTK_ACCESSIBLE_RELATION_FLOW_TO, GTK_ACCESSIBLE_RELATION_FLOW_FROM },
+  };
+
+  GList *l;
+  GtkATContext *related_context;
+  for (int i = 0; i < G_N_ELEMENTS (reverse_rels_map); i++)
+    {
+      if (relation == reverse_rels_map[i].rel)
+        {
+          if (value)
+            {
+              for (l = gtk_reference_list_accessible_value_get (value); l; l = l->next)
+                {
+                  related_context = gtk_accessible_get_at_context (l->data);
+                  append_to_accessible_relation (related_context, reverse_rels_map[i].reverse_rel, self->accessible);
+                  g_clear_object (&related_context);
+                }
+            }
+          else
+            {
+              if (gtk_accessible_attribute_set_contains (self->relations, relation))
+                {
+                  GtkAccessibleValue *val = gtk_accessible_attribute_set_get_value (self->relations, relation);
+                  for (l = gtk_reference_list_accessible_value_get (val); l; l = l->next)
+                    {
+                      related_context = gtk_accessible_get_at_context (l->data);
+                      remove_from_accessible_relation (related_context, reverse_rels_map[i].reverse_rel, self->accessible);
+                      g_clear_object (&related_context);
+                    }
+                }
+            }
+          break;
+        }
+    }
+}
+
 /*< private >
  * gtk_at_context_set_accessible_relation:
  * @self: a `GtkATContext`
@@ -1035,6 +1126,11 @@ gtk_at_context_set_accessible_relation (GtkATContext          *self,
 
   gboolean res = FALSE;
 
+  /* We update the reverse relation first, so we can still access
+  * the current value if we're removing it.
+  */
+  update_reverse_relation (self, relation, value);
+
   if (value != NULL)
     res = gtk_accessible_attribute_set_add (self->relations, relation, value);
   else
@@ -1042,6 +1138,7 @@ gtk_at_context_set_accessible_relation (GtkATContext          *self,
 
   if (res)
     self->updated_relations |= (1 << relation);
+
 }
 
 /*< private >

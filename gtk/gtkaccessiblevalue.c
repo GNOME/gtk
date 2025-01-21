@@ -589,6 +589,32 @@ gtk_reference_list_accessible_value_get (const GtkAccessibleValue *value)
   return self->refs;
 }
 
+void
+gtk_reference_list_accessible_value_append (GtkAccessibleValue *value,
+                                            GtkAccessible      *ref)
+{
+  GtkReferenceListAccessibleValue *self = (GtkReferenceListAccessibleValue *) value;
+
+  g_return_if_fail (value != NULL);
+  g_return_if_fail (value->value_class == &GTK_REFERENCE_LIST_ACCESSIBLE_VALUE);
+
+  self->refs = g_list_append (self->refs, ref);
+
+  g_object_weak_ref (G_OBJECT (ref), remove_weak_ref_from_list, self);
+}
+
+void
+gtk_reference_list_accessible_value_remove (GtkAccessibleValue *value,
+                                            GtkAccessible      *ref)
+{
+  GtkReferenceListAccessibleValue *self = (GtkReferenceListAccessibleValue *) value;
+
+  g_return_if_fail (value != NULL);
+  g_return_if_fail (value->value_class == &GTK_REFERENCE_LIST_ACCESSIBLE_VALUE);
+
+  g_object_weak_unref (G_OBJECT (ref), remove_weak_ref_from_list, self);
+}
+
 /* }}} */
 
 /* {{{ Collection API */
@@ -906,6 +932,36 @@ static const GtkAccessibleCollect collect_rels[] = {
     .value = GTK_ACCESSIBLE_RELATION_SET_SIZE,
     .ctype = GTK_ACCESSIBLE_COLLECT_INTEGER,
     .name = "setsize"
+  },
+  [GTK_ACCESSIBLE_RELATION_LABEL_FOR] = {
+    .value = GTK_ACCESSIBLE_RELATION_LABEL_FOR,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE_LIST,
+    .name = "labelfor"
+  },
+  [GTK_ACCESSIBLE_RELATION_DESCRIPTION_FOR] = {
+    .value = GTK_ACCESSIBLE_RELATION_DESCRIPTION_FOR,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE_LIST,
+    .name = "descriptionfor"
+  },
+  [GTK_ACCESSIBLE_RELATION_CONTROLLED_BY] = {
+    .value = GTK_ACCESSIBLE_RELATION_CONTROLLED_BY,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE_LIST,
+    .name = "controlledby"
+  },
+  [GTK_ACCESSIBLE_RELATION_DETAILS_FOR] = {
+    .value = GTK_ACCESSIBLE_RELATION_DETAILS_FOR,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE_LIST,
+    .name = "detailsfor"
+  },
+  [GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE_FOR] = {
+    .value = GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE_FOR,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE_LIST,
+    .name = "errormessagefor"
+  },
+  [GTK_ACCESSIBLE_RELATION_FLOW_FROM] = {
+    .value = GTK_ACCESSIBLE_RELATION_FLOW_FROM,
+    .ctype = GTK_ACCESSIBLE_COLLECT_REFERENCE_LIST,
+    .name = "flowfrom"
   },
 };
 
@@ -1819,18 +1875,24 @@ gtk_accessible_value_get_default_for_relation (GtkAccessibleRelation relation)
 {
   const GtkAccessibleCollect *cstate = &collect_rels[relation];
 
-  g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_SET_SIZE, NULL);
+  g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_FLOW_FROM, NULL);
 
   switch (cstate->value)
     {
     /* References */
     case GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT:
     case GTK_ACCESSIBLE_RELATION_CONTROLS:
+    case GTK_ACCESSIBLE_RELATION_CONTROLLED_BY:
     case GTK_ACCESSIBLE_RELATION_DESCRIBED_BY:
+    case GTK_ACCESSIBLE_RELATION_DESCRIPTION_FOR:
     case GTK_ACCESSIBLE_RELATION_DETAILS:
+    case GTK_ACCESSIBLE_RELATION_DETAILS_FOR:
     case GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE:
+    case GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE_FOR:
+    case GTK_ACCESSIBLE_RELATION_FLOW_FROM:
     case GTK_ACCESSIBLE_RELATION_FLOW_TO:
     case GTK_ACCESSIBLE_RELATION_LABELLED_BY:
+    case GTK_ACCESSIBLE_RELATION_LABEL_FOR:
     case GTK_ACCESSIBLE_RELATION_OWNS:
       return gtk_undefined_accessible_value_new ();
 
@@ -1881,7 +1943,7 @@ gtk_accessible_value_collect_for_relation (GtkAccessibleRelation   relation,
 {
   const GtkAccessibleCollect *cstate = &collect_rels[relation];
 
-  g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_SET_SIZE, NULL);
+  g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_FLOW_FROM, NULL);
 
   return gtk_accessible_value_collect_valist (cstate, error, args);
 }
@@ -1909,8 +1971,8 @@ gtk_accessible_value_collect_for_relation_value (GtkAccessibleRelation   relatio
 {
   const GtkAccessibleCollect *cstate = &collect_rels[relation];
 
-  g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_SET_SIZE, NULL);
- 
+  g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_FLOW_FROM, NULL);
+
   return gtk_accessible_value_collect_value (cstate, value, error);
 }
 
@@ -1922,7 +1984,7 @@ gtk_accessible_value_parse_for_relation (GtkAccessibleRelation   relation,
 {
   const GtkAccessibleCollect *cstate = &collect_rels[relation];
 
-  g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_SET_SIZE, NULL);
+  g_return_val_if_fail (relation <= GTK_ACCESSIBLE_RELATION_FLOW_FROM, NULL);
 
   return gtk_accessible_value_parse (cstate, str, len, error);
 }
@@ -1943,7 +2005,7 @@ gtk_accessible_relation_init_value (GtkAccessibleRelation  relation,
 {
   const GtkAccessibleCollect *cstate = &collect_rels[relation];
 
-  g_return_if_fail (relation <= GTK_ACCESSIBLE_RELATION_SET_SIZE);
+  g_return_if_fail (relation <= GTK_ACCESSIBLE_RELATION_FLOW_FROM);
 
   gtk_accessible_attribute_init_value (cstate, value);
 }
