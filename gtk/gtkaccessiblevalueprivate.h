@@ -151,6 +151,10 @@ GtkAccessible *                 gtk_reference_accessible_value_get      (const G
 
 GtkAccessibleValue *            gtk_reference_list_accessible_value_new (GList                    *value);
 GList *                         gtk_reference_list_accessible_value_get (const GtkAccessibleValue *value);
+void                            gtk_reference_list_accessible_value_append (GtkAccessibleValue *value,
+                                                                            GtkAccessible      *reference);
+void                            gtk_reference_list_accessible_value_remove (GtkAccessibleValue *value,
+                                                                            GtkAccessible      *reference);
 
 /* Token values */
 GtkAccessibleValue *            gtk_invalid_accessible_value_new        (GtkAccessibleInvalidState value);
