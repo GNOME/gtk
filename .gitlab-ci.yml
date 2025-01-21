@@ -92,17 +92,37 @@ style-check-diff:
     paths:
       - _ccache/
 
+meson-subprojects:
+  stage: build
+  needs: []
+  image: $FEDORA_IMAGE
+  script:
+    - export PATH="$HOME/.local/bin:$PATH"
+    # DNS issues can cause this to fail
+    - meson subprojects download || exit 137
+    - meson subprojects update --reset || exit 137
+  retry:
+    max: 2
+    exit_codes: 137
+  artifacts:
+    name: "gtk-subprojects-${CI_COMMIT_REF_NAME}"
+    when: always
+    paths:
+      - "${CI_PROJECT_DIR}/subprojects"
+  cache:
+    key: "$CI_JOB_NAME"
+    paths:
+      - subprojects/
+
 fedora-x86_64:
   extends: .build-fedora-default
   stage: build
-  needs: []
+  needs: ["meson-subprojects"]
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
-    - meson subprojects download
-    - meson subprojects update --reset
     - meson setup
             ${COMMON_MESON_FLAGS}
             ${EXTRA_MESON_FLAGS}
@@ -146,15 +166,13 @@ release-build:
 fedora-clang:
   extends: .build-fedora-default
   stage: build
-  needs: []
+  needs: ["meson-subprojects"]
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
     - export CC=clang
-    - meson subprojects download
-    - meson subprojects update --reset
     - meson setup
             ${COMMON_MESON_FLAGS}
             ${EXTRA_MESON_FLAGS}
@@ -166,7 +184,7 @@ fedora-clang:
 fedora-mingw64:
   extends: .build-fedora-default
   stage: build
-  needs: []
+  needs: ["meson-subprojects"]
   before_script:
     - sudo dnf install -y
             mingw64-filesystem
@@ -183,8 +201,6 @@ fedora-mingw64:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
     - pip3 install --user meson~=1.0
-    - meson subprojects download
-    - meson subprojects update --reset
     - meson -Dintrospection=disabled -Dgraphene:introspection=disabled _build
     - meson compile -C _build
 
