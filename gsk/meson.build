@@ -102,8 +102,6 @@ gsk_public_gpu_headers = files([
 install_headers(gsk_public_gpu_headers, subdir: 'gtk-4.0/gsk/gpu')
 gsk_public_headers += gsk_public_gpu_headers
 
-gsk_public_headers += files([ 'gl/gskglrenderer.h' ])
-
 if get_variable('broadway_enabled')
   gsk_public_broadway_headers = files([
     'broadway/gskbroadwayrenderer.h'
