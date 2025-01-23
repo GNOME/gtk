@@ -141,7 +141,10 @@ canonical_boolean_value (MyParserData *data,
   gboolean b = FALSE;
 
   if (gtk_builder_value_from_string_type (data->builder, G_TYPE_BOOLEAN, string, &value, NULL))
-    b = g_value_get_boolean (&value);
+    {
+      b = g_value_get_boolean (&value);
+      g_value_unset (&value);
+    }
 
   return b ? "1" : "0";
 }
@@ -629,13 +632,18 @@ canonical_enum_value (MyParserData *data,
 
   if (gtk_builder_value_from_string_type (data->builder, type, string, &value, NULL))
     {
+      char *strval;
       GEnumClass *eclass = g_type_class_ref (type);
       GEnumValue *evalue = g_enum_get_value (eclass, g_value_get_enum (&value));
 
       if (evalue)
-        return g_strdup (evalue->value_nick);
+        strval = g_strdup (evalue->value_nick);
       else
-        return g_strdup_printf ("%d", g_value_get_enum (&value));
+        strval = g_strdup_printf ("%d", g_value_get_enum (&value));
+
+      g_type_class_unref (eclass);
+      g_value_unset (&value);
+      return strval;
     }
 
   return NULL;
@@ -1642,7 +1650,10 @@ rewrite_box (Element *element,
                                                       child->data,
                                                       &value,
                                                       NULL))
-                orientation = g_value_get_enum (&value);
+                {
+                  orientation = g_value_get_enum (&value);
+                  g_value_unset (&value);
+                }
             }
         }
     }
@@ -1708,7 +1719,10 @@ rewrite_box (Element *element,
                                                               elt->data,
                                                               &value,
                                                               NULL))
-                        expand = g_value_get_boolean (&value);
+                        {
+                          expand = g_value_get_boolean (&value);
+                          g_value_unset (&value);
+                        }
                     }
 
                   if (has_attribute (elt, "name", "fill"))
@@ -1720,7 +1734,10 @@ rewrite_box (Element *element,
                                                               elt->data,
                                                               &value,
                                                               NULL))
-                        fill = g_value_get_boolean (&value);
+                        {
+                          fill = g_value_get_boolean (&value);
+                          g_value_unset (&value);
+                        }
                     }
 
                   if (has_attribute (elt, "name", "position"))
@@ -1732,7 +1749,10 @@ rewrite_box (Element *element,
                                                               elt->data,
                                                               &value,
                                                               NULL))
-                        position = g_value_get_int (&value);
+                        {
+                          position = g_value_get_int (&value);
+                          g_value_unset (&value);
+                        }
                     }
 
                   if (has_attribute (elt, "name", "pack-type"))
@@ -1744,7 +1764,10 @@ rewrite_box (Element *element,
                                                               elt->data,
                                                               &value,
                                                               NULL))
-                        pack_type = g_value_get_enum (&value);
+                        {
+                          pack_type = g_value_get_enum (&value);
+                          g_value_unset (&value);
+                        }
                     }
                 }
 
@@ -2156,12 +2179,18 @@ rewrite_fixed (Element      *element,
                   if (has_attribute (elt2, "name", "x"))
                     {
                       if (gtk_builder_value_from_string_type (data->builder, G_TYPE_INT, elt2->data, &value, NULL))
-                        x = g_value_get_int (&value);
+                        {
+                          x = g_value_get_int (&value);
+                          g_value_unset (&value);
+                        }
                     }
                   else if (has_attribute (elt2, "name", "y"))
                     {
                       if (gtk_builder_value_from_string_type (data->builder, G_TYPE_INT, elt2->data, &value, NULL))
-                        y = g_value_get_int (&value);
+                        {
+                          y = g_value_get_int (&value);
+                          g_value_unset (&value);
+                        }
                     }
                 }
 
@@ -2560,6 +2589,7 @@ simplify_file (const char *filename,
 {
   GMarkupParseContext *context;
   char *buffer;
+  gsize buffer_len;
   MyParserData data;
   GError *error = NULL;
 
@@ -2571,7 +2601,13 @@ simplify_file (const char *filename,
   if (replace)
     {
       int fd;
-      fd = g_file_open_tmp ("gtk-builder-tool-XXXXXX", &data.output_filename, NULL);
+      fd = g_file_open_tmp ("gtk-builder-tool-XXXXXX", &data.output_filename, &error);
+      if (fd < 0) {
+        g_printerr (_("Unable to create temporary file: %s\n"), error->message);
+        g_error_free (error);
+        return FALSE;
+      }
+
       data.output = fdopen (fd, "w");
     }
   else
@@ -2579,9 +2615,10 @@ simplify_file (const char *filename,
       data.output = stdout;
     }
 
-  if (!g_file_get_contents (filename, &buffer, NULL, &error))
+  if (!g_file_get_contents (filename, &buffer, &buffer_len, &error))
     {
       g_printerr (_("Can’t load “%s”: %s\n"), filename, error->message);
+      g_error_free (error);
       return FALSE;
     }
 
@@ -2590,18 +2627,25 @@ simplify_file (const char *filename,
   data.value = g_string_new ("");
 
   context = g_markup_parse_context_new (&parser, G_MARKUP_TREAT_CDATA_AS_TEXT, &data, NULL);
-  if (!g_markup_parse_context_parse (context, buffer, -1, &error))
+  if (!g_markup_parse_context_parse (context, buffer, buffer_len, &error))
     {
       g_printerr (_("Can’t parse “%s”: %s\n"), filename, error->message);
+      g_error_free (error);
+      g_free (buffer);
       return FALSE;
     }
+
+  g_free (buffer);
 
   if (!g_markup_parse_context_end_parse (context, &error))
     {
       g_printerr (_("Can’t parse “%s”: %s\n"), filename, error->message);
+      g_error_free (error);
+      g_markup_parse_context_free (context);
       return FALSE;
     }
 
+  g_markup_parse_context_free (context);
   if (data.root == NULL)
     {
       g_printerr (_("Can’t parse “%s”: %s\n"), filename, "");
@@ -2631,16 +2675,23 @@ simplify_file (const char *filename,
       if (!g_file_get_contents (data.output_filename, &content, &length, &error))
         {
           g_printerr (_("Failed to read “%s”: %s\n"), data.output_filename, error->message);
+          g_error_free (error);
           return FALSE;
         }
 
       if (!g_file_set_contents (data.input_filename, content, length, &error))
         {
           g_printerr (_("Failed to write “%s”: “%s”\n"), data.input_filename, error->message);
+          g_error_free (error);
+          g_free (content);
           return FALSE;
         }
+
+      g_free (content);
+      g_free (data.output_filename);
     }
 
+  g_string_free (data.value, TRUE);
   return TRUE;
 }
 
@@ -2670,6 +2721,7 @@ do_simplify (int          *argc,
   if (!g_option_context_parse (context, argc, (char ***)argv, &error))
     {
       g_printerr ("%s\n", error->message);
+      g_option_context_free (context);
       g_error_free (error);
       exit (1);
     }
