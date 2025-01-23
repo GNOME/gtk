@@ -1256,7 +1256,7 @@ gtk_at_spi_context_platform_change (GtkATContext                *ctx,
       /* Orca tracks the window:activate and window:deactivate events on top
        * levels to decide whether to track other AT-SPI events
        */
-      if (gtk_accessible_get_accessible_role (accessible) == GTK_ACCESSIBLE_ROLE_APPLICATION)
+      if (gtk_accessible_get_accessible_role (accessible) == GTK_ACCESSIBLE_ROLE_WINDOW)
         {
           if (state)
             emit_window_event (self, "activate");
