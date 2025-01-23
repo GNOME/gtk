@@ -48,6 +48,13 @@ GDK_AVAILABLE_IN_ALL
 void         gtk_window_controls_set_decoration_layout (GtkWindowControls *self,
                                                         const char        *layout);
 
+GDK_AVAILABLE_IN_4_18
+gboolean     gtk_window_controls_get_use_native_controls (GtkWindowControls *self);
+
+GDK_AVAILABLE_IN_4_18
+void         gtk_window_controls_set_use_native_controls (GtkWindowControls *self,
+                                                          gboolean           setting);
+
 GDK_AVAILABLE_IN_ALL
 gboolean     gtk_window_controls_get_empty             (GtkWindowControls *self);
 
