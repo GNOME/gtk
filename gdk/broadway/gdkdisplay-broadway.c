@@ -338,6 +338,7 @@ gdk_broadway_display_hide_keyboard (GdkBroadwayDisplay *display)
  * response to later user configuration changes.
  *
  * Since: 4.4
+ * Deprecated: 4.18: The Broadway backend will be removed in GTK 5
  */
 void
 gdk_broadway_display_set_surface_scale (GdkDisplay *display,
@@ -365,6 +366,7 @@ gdk_broadway_display_set_surface_scale (GdkDisplay *display,
  * Returns: the scale for surfaces
  *
  * Since: 4.4
+ * Deprecated: 4.18: The Broadway backend will be removed in GTK 5
  */
 int
 gdk_broadway_display_get_surface_scale (GdkDisplay *display)
