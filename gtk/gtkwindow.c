@@ -3988,6 +3988,10 @@ gtk_window_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
   gdk_surface_hide (priv->surface);
 
+  gtk_accessible_update_state (GTK_ACCESSIBLE (window),
+                               GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
+                               -1);
+
   gtk_widget_unrealize_at_context (widget);
 
   if (priv->title_box != NULL)
@@ -6781,9 +6785,6 @@ gtk_window_destroy (GtkWindow *window)
   gtk_tooltip_unset_surface (GTK_NATIVE (window));
 
   gtk_window_hide (GTK_WIDGET (window));
-  gtk_accessible_update_state (GTK_ACCESSIBLE (window),
-                               GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
-                               -1);
 
   g_list_store_remove (toplevel_list, i);
 
