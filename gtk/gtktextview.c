@@ -3689,7 +3689,6 @@ gtk_text_view_set_left_margin (GtkTextView *text_view,
 
   if (priv->left_margin != left_margin)
     {
-      priv->left_margin = left_margin;
       priv->left_margin = left_margin + priv->left_padding;
 
       if (priv->layout && priv->layout->default_style)
@@ -3742,7 +3741,6 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
 
   if (priv->right_margin != right_margin)
     {
-      priv->right_margin = right_margin;
       priv->right_margin = right_margin + priv->right_padding;
 
       if (priv->layout && priv->layout->default_style)
@@ -3795,7 +3793,6 @@ gtk_text_view_set_top_margin (GtkTextView *text_view,
     {
       priv->yoffset += priv->top_margin - top_margin;
 
-      priv->top_margin = top_margin;
       priv->top_margin = top_margin + priv->top_padding;
 
       if (priv->layout && priv->layout->default_style)
@@ -3843,7 +3840,6 @@ gtk_text_view_set_bottom_margin (GtkTextView *text_view,
 
   if (priv->bottom_margin != bottom_margin)
     {
-      priv->bottom_margin = bottom_margin;
       priv->bottom_margin = bottom_margin + priv->bottom_padding;
 
       if (priv->layout && priv->layout->default_style)
