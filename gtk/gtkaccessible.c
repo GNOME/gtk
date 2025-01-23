@@ -162,7 +162,7 @@ gtk_accessible_set_accessible_parent (GtkAccessible *self,
 {
   g_return_if_fail (GTK_IS_ACCESSIBLE (self));
   g_return_if_fail (parent == NULL || GTK_IS_ACCESSIBLE (parent));
-  g_return_if_fail (next_sibling == NULL || GTK_IS_ACCESSIBLE (parent));
+  g_return_if_fail (next_sibling == NULL || GTK_IS_ACCESSIBLE (next_sibling));
 
   GtkATContext *context;
 

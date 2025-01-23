@@ -236,7 +236,7 @@ gtk_text_attributes_unref (GtkTextAttributes *values)
 	gdk_rgba_free (values->appearance.underline_rgba);
 
       if (values->appearance.overline_rgba)
-	gdk_rgba_free (values->appearance.underline_rgba);
+	gdk_rgba_free (values->appearance.overline_rgba);
 
       if (values->appearance.strikethrough_rgba)
 	gdk_rgba_free (values->appearance.strikethrough_rgba);
