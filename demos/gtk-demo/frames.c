@@ -154,6 +154,8 @@ do_frames (GtkWidget *do_widget)
       id = g_timeout_add (500, update_fps_label, label);
       g_object_set_data_full (G_OBJECT (label), "tick_cb",
                               GUINT_TO_POINTER (id), remove_id);
+
+      g_object_unref (builder);
     }
 
   if (!gtk_widget_get_visible (window))
