@@ -458,6 +458,12 @@ You might also find the git-stripspace utility helpful which acts as a
 filter to remove trailing whitespace as well as initial, final, and
 duplicate blank lines.
 
+### Naming
+
+Keep in mind that identifiers in most languages cannot start with numbers,
+and language bindings often construct identifiers by stripping the prefix,
+so an enum value named `GDK_2BUTTON_PRESS` is problematic.
+
 ### Headers
 
 Headers are special, for GTK, in that they don't have to obey the
