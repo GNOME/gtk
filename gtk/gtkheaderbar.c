@@ -33,10 +33,6 @@
 #include "gtkwindowhandle.h"
 #include "gtkbuilderprivate.h"
 
-#ifdef GDK_WINDOWING_MACOS
-#include "gtkwindowbuttonsquartzprivate.h"
-#endif
-
 #include <string.h>
 
 /**
@@ -164,69 +160,35 @@ G_DEFINE_TYPE_WITH_CODE (GtkHeaderBar, gtk_header_bar, GTK_TYPE_WIDGET,
                                                 gtk_header_bar_buildable_init));
 
 static void
-remove_window_controls (GtkHeaderBar *bar)
-{
-  if (bar->start_box && bar->start_window_controls)
-    {
-      gtk_box_remove (GTK_BOX (bar->start_box), bar->start_window_controls);
-      bar->start_window_controls = NULL;
-#ifdef GDK_WINDOWING_MACOS
-      gtk_widget_remove_css_class (GTK_WIDGET (bar), "native-controls-quartz");
-#endif
-    }
-
-  if (bar->end_box && bar->end_window_controls)
-    {
-      gtk_box_remove (GTK_BOX (bar->end_box), bar->end_window_controls);
-      bar->end_window_controls = NULL;
-    }
-}
-
-static void
-update_window_controls (GtkHeaderBar *bar)
+create_window_controls (GtkHeaderBar *bar)
 {
   GtkWidget *controls;
 
-  remove_window_controls (bar);
+  controls = gtk_window_controls_new (GTK_PACK_START);
+  g_object_bind_property (bar, "decoration-layout",
+                          controls, "decoration-layout",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (bar, "use-native-controls",
+                          controls, "use-native-controls",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (controls, "empty",
+                          controls, "visible",
+                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+  gtk_box_prepend (GTK_BOX (bar->start_box), controls);
+  bar->start_window_controls = controls;
 
-#ifdef GDK_WINDOWING_MACOS
-  if (bar->show_title_buttons && bar->use_native_controls)
-    {
-      controls = g_object_new (GTK_TYPE_WINDOW_BUTTONS_QUARTZ, NULL);
-      g_object_bind_property (bar, "decoration-layout",
-                              controls, "decoration-layout",
-                              G_BINDING_SYNC_CREATE);
-      gtk_box_prepend (GTK_BOX (bar->start_box), controls);
-      bar->start_window_controls = controls;
-
-      gtk_widget_add_css_class (GTK_WIDGET (bar), "native-controls-quartz");
-
-      return;
-    }
-#endif
-
-  if (bar->show_title_buttons)
-    {
-      controls = gtk_window_controls_new (GTK_PACK_START);
-      g_object_bind_property (bar, "decoration-layout",
-                              controls, "decoration-layout",
-                              G_BINDING_SYNC_CREATE);
-      g_object_bind_property (controls, "empty",
-                              controls, "visible",
-                              G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
-      gtk_box_prepend (GTK_BOX (bar->start_box), controls);
-      bar->start_window_controls = controls;
-
-      controls = gtk_window_controls_new (GTK_PACK_END);
-      g_object_bind_property (bar, "decoration-layout",
-                              controls, "decoration-layout",
-                              G_BINDING_SYNC_CREATE);
-      g_object_bind_property (controls, "empty",
-                              controls, "visible",
-                              G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
-      gtk_box_append (GTK_BOX (bar->end_box), controls);
-      bar->end_window_controls = controls;
-    }
+  controls = gtk_window_controls_new (GTK_PACK_END);
+  g_object_bind_property (bar, "decoration-layout",
+                          controls, "decoration-layout",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (bar, "use-native-controls",
+                          controls, "use-native-controls",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (controls, "empty",
+                          controls, "visible",
+                          G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+  gtk_box_append (GTK_BOX (bar->end_box), controls);
+  bar->end_window_controls = controls;
 }
 
 static void
@@ -702,7 +664,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   gtk_center_box_set_end_widget (GTK_CENTER_BOX (bar->center_box), bar->end_box);
 
   construct_title_label (bar);
-  update_window_controls (bar);
+  create_window_controls (bar);
 }
 
 static GtkBuildableIface *parent_buildable_iface;
@@ -823,7 +785,22 @@ gtk_header_bar_set_show_title_buttons (GtkHeaderBar *bar,
 
   bar->show_title_buttons = setting;
 
-  update_window_controls (bar);
+  if (setting)
+    create_window_controls (bar);
+  else
+    {
+      if (bar->start_box && bar->start_window_controls)
+        {
+          gtk_box_remove (GTK_BOX (bar->start_box), bar->start_window_controls);
+          bar->start_window_controls = NULL;
+        }
+
+      if (bar->end_box && bar->end_window_controls)
+        {
+          gtk_box_remove (GTK_BOX (bar->end_box), bar->end_window_controls);
+          bar->end_window_controls = NULL;
+        }
+    }
 
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_SHOW_TITLE_BUTTONS]);
 }
@@ -918,8 +895,6 @@ gtk_header_bar_set_use_native_controls (GtkHeaderBar *bar,
     return;
 
   bar->use_native_controls = setting;
-
-  update_window_controls (bar);
 
   g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_USE_NATIVE_CONTROLS]);
 }

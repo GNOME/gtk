@@ -32,6 +32,10 @@
 #include "gtktypebuiltins.h"
 #include "gtkwindowprivate.h"
 
+#ifdef GDK_WINDOWING_MACOS
+#include "gtkwindowbuttonsquartzprivate.h"
+#endif
+
 /**
  * GtkWindowControls:
  *
@@ -93,6 +97,7 @@ struct _GtkWindowControls {
   GtkPackType side;
   char *decoration_layout;
 
+  gboolean use_native_controls;
   gboolean empty;
 };
 
@@ -100,6 +105,7 @@ enum {
   PROP_0,
   PROP_SIDE,
   PROP_DECORATION_LAYOUT,
+  PROP_USE_NATIVE_CONTROLS,
   PROP_EMPTY,
   LAST_PROP
 };
@@ -248,6 +254,31 @@ update_window_buttons (GtkWindowControls *self)
     }
 
   clear_controls (self);
+
+#ifdef GDK_WINDOWING_MACOS
+  if (self->use_native_controls)
+    {
+      if (self->side == GTK_PACK_START)
+        {
+          GtkWidget *controls = g_object_new (GTK_TYPE_WINDOW_BUTTONS_QUARTZ, NULL);
+          g_object_bind_property (self, "decoration-layout",
+                                  controls, "decoration-layout",
+                                  G_BINDING_SYNC_CREATE);
+          gtk_widget_set_parent (controls, GTK_WIDGET (self));
+
+          gtk_widget_add_css_class (GTK_WIDGET (self), "native");
+          empty = FALSE;
+        }
+
+      set_empty (self, empty);
+
+      return;
+    }
+  else
+    {
+      gtk_widget_remove_css_class (GTK_WIDGET (self), "native");
+    }
+#endif
 
   window = GTK_WINDOW (root);
   is_sovereign_window = !gtk_window_get_modal (window) &&
@@ -458,6 +489,10 @@ gtk_window_controls_get_property (GObject    *object,
       g_value_set_string (value, gtk_window_controls_get_decoration_layout (self));
       break;
 
+    case PROP_USE_NATIVE_CONTROLS:
+      g_value_set_boolean (value, gtk_window_controls_get_use_native_controls (self));
+      break;
+
     case PROP_EMPTY:
       g_value_set_boolean (value, gtk_window_controls_get_empty (self));
       break;
@@ -484,6 +519,10 @@ gtk_window_controls_set_property (GObject      *object,
 
     case PROP_DECORATION_LAYOUT:
       gtk_window_controls_set_decoration_layout (self, g_value_get_string (value));
+      break;
+
+    case PROP_USE_NATIVE_CONTROLS:
+      gtk_window_controls_set_use_native_controls (self, g_value_get_boolean (value));
       break;
 
     default:
@@ -532,6 +571,24 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
                            NULL,
                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
+
+  /**
+   * GtkWindowControls:use-native-controls:
+   *
+   * Whether to show platform native close/minimize/maximize buttons.
+   *
+   * For macOS, the [property@Gtk.HeaderBar:decoration-layout] property
+   * can be used to enable/disable controls.
+   *
+   * On Linux, this option has no effect.
+   *
+   * See also [Using GTK on Apple macOS](osx.html?native-window-controls).
+   */
+  props[PROP_USE_NATIVE_CONTROLS] =
+      g_param_spec_boolean ("use-native-controls", NULL, NULL,
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   /**
    * GtkWindowControls:empty:
    *
@@ -554,6 +611,7 @@ gtk_window_controls_init (GtkWindowControls *self)
 {
   self->decoration_layout = NULL;
   self->side = GTK_PACK_START;
+  self->use_native_controls = FALSE;
   self->empty = TRUE;
 
   gtk_widget_add_css_class (GTK_WIDGET (self), "empty");
@@ -686,6 +744,53 @@ gtk_window_controls_set_decoration_layout (GtkWindowControls *self,
   update_window_buttons (self);
 
   g_object_notify_by_pspec (G_OBJECT (self), props[PROP_DECORATION_LAYOUT]);
+}
+
+
+/**
+ * gtk_window_controls_get_use_native_controls:
+ * @self: a window controls widget
+ *
+ * Returns whether platform native window controls are shown.
+ *
+ * Returns: true if native window controls are shown
+ */
+gboolean
+gtk_window_controls_get_use_native_controls (GtkWindowControls *self)
+{
+  g_return_val_if_fail (GTK_IS_WINDOW_CONTROLS (self), FALSE);
+
+  return self->use_native_controls;
+}
+
+/**
+ * gtk_window_controls_set_use_native_controls:
+ * @self: a window_controls widget
+ * @setting: true to show native window controls
+ *
+ * Sets whether platform native window controls are used.
+ *
+ * This option shows the "stoplight" buttons on macOS.
+ * For Linux, this option has no effect.
+ *
+ * See also [Using GTK on Apple macOS](osx.html?native-window-controls).
+ */
+void
+gtk_window_controls_set_use_native_controls (GtkWindowControls *self,
+                                             gboolean           setting)
+{
+  g_return_if_fail (GTK_IS_WINDOW_CONTROLS (self));
+
+  setting = setting != FALSE;
+
+  if (self->use_native_controls == setting)
+    return;
+
+  self->use_native_controls = setting;
+
+  update_window_buttons (self);
+
+  g_object_notify_by_pspec (G_OBJECT (self), props[PROP_USE_NATIVE_CONTROLS]);
 }
 
 /**
