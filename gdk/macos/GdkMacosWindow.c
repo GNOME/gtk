@@ -155,6 +155,9 @@ static Class _contentViewClass = nil;
   switch ((int)event_type)
     {
     case NSEventTypeLeftMouseUp: {
+      if (inManualMove || inManualResize || inMove)
+        _gdk_macos_display_send_event ([self gdkDisplay], event);
+
       inManualMove = NO;
       inManualResize = NO;
       inMove = NO;
