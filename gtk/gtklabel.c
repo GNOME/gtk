@@ -1847,7 +1847,16 @@ gtk_label_focus (GtkWidget        *widget,
 {
   GtkLabel *self = GTK_LABEL (widget);
   GtkLabelSelectionInfo *info = self->select_info;
+  GtkWidget *focus_child = gtk_widget_get_focus_child (widget);
   GtkLabelLink *focus_link;
+  gboolean focus_in_child = FALSE;
+
+  if (focus_child)
+    {
+      focus_in_child = gtk_widget_child_focus (focus_child, direction);
+      if (focus_in_child)
+        return TRUE;
+    }
 
   if (!gtk_widget_is_focus (widget))
     {
