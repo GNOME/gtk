@@ -4033,6 +4033,8 @@ gtk_window_unmap (GtkWidget *widget)
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
   gdk_surface_hide (priv->surface);
 
+  _gtk_window_set_is_active (window, FALSE);
+
   gtk_accessible_update_state (GTK_ACCESSIBLE (window),
                                GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
                                -1);
