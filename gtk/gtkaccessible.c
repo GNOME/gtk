@@ -1082,7 +1082,6 @@ gtk_accessible_role_is_abstract (GtkAccessibleRole role)
     case GTK_ACCESSIBLE_ROLE_SELECT:
     case GTK_ACCESSIBLE_ROLE_STRUCTURE:
     case GTK_ACCESSIBLE_ROLE_WIDGET:
-    case GTK_ACCESSIBLE_ROLE_WINDOW:
       return TRUE;
     default:
       return FALSE;

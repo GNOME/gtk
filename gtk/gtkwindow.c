@@ -180,9 +180,9 @@
  *
  * # Accessibility
  *
- * Until GTK 4.10, `GtkWindow` used the [enum@Gtk.AccessibleRole.window] role.
+ * `GtkWindow` uses the [enum@Gtk.AccessibleRole.window] role.
  *
- * Since GTK 4.12, `GtkWindow` uses the [enum@Gtk.AccessibleRole.application] role.
+ * From GTK 4.12 to 4.18, it used the [enum@Gtk.AccessibleRole.application] role.
  */
 
 #define MENU_BAR_ACCEL GDK_KEY_F10
@@ -1260,7 +1260,7 @@ gtk_window_class_init (GtkWindowClass *klass)
 
   gtk_widget_class_set_css_name (widget_class, I_("window"));
 
-  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_APPLICATION);
+  gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_WINDOW);
 }
 
 /**

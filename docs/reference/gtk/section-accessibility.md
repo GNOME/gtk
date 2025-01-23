@@ -46,7 +46,7 @@ Each role name is part of the #GtkAccessibleRole enumeration.
 
 | Role name | Description | Related GTK widget |
 |-----------|-------------|--------------------|
-| `APPLICATION` | An application window | [class@Gtk.Window] |
+| `WINDOW` | An application window | [class@Gtk.Window] |
 | `BUTTON` | A control that performs an action when pressed | [class@Gtk.Button], [class@Gtk.LinkButton], [class@Gtk.Expander] |
 | `CHECKBOX` | A control that has three possible value: `true`, `false`, or `undefined` | [class@Gtk.CheckButton] |
 | `COMBOBOX` | A control that can be expanded to show a list of possible values to select | [class@Gtk.ComboBox] |
