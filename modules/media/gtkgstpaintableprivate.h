@@ -37,6 +37,7 @@ void            gtk_gst_paintable_unrealize             (GtkGstPaintable        
 void            gtk_gst_paintable_queue_set_texture     (GtkGstPaintable        *self,
                                                          GdkTexture             *texture,
                                                          double                  pixel_aspect_ratio,
-                                                         const graphene_rect_t  *viewport);
+                                                         const graphene_rect_t  *viewport,
+                                                         int                     orientation);
 
 G_END_DECLS

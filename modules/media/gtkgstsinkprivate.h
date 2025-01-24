@@ -57,6 +57,7 @@ struct _GtkGstSink
   GstGLContext        *gst_context;
   GdkColorState       *color_state;
   gboolean             uses_gl;
+  int                  orientation;
 };
 
 struct _GtkGstSinkClass
