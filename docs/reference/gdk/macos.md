@@ -49,12 +49,12 @@ calls to different backends, and error out on unsupported windowing systems:
   g_error ("Unsupported GDK backend");
 ```
 
-The compile time check is performed by using the `GDK_WINDOWING_*`
+The compile-time check is performed by using the `GDK_WINDOWING_*`
 pre-processor symbols; there is one defined for each windowing system
 backend built into GDK. For Wayland, the symbol is `GDK_WINDOWING_MACOS`.
 
-The run time check is performed by looking at the type of the
-[class@Gdk.Display] object. For Wayland, the display objects will be of type
+The run-time check is performed by looking at the type of the
+[class@Gdk.Display] object. For macOS, the display objects will be of type
 `GdkMacosDisplay`.
 
 ## Menus
