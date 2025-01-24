@@ -114,8 +114,7 @@
  * - <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes the last modification.
  * - <kbd>Ctrl</kbd>+<kbd>Y</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd>
  *   redoes the last undone modification.
- * - <kbd>Ctrl</kbd>+<kbd>Shift</kbd> sets the text direction. The left
- *   keys set it to LTR, and the right keys set it to RTL.
+ * - <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>T</kbd> toggles the text direction.
  *
  * Additionally, the following signals have default keybindings:
  *
