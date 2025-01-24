@@ -4,6 +4,16 @@ Overview of Changes in 4.17.4, xx-xx-xxxx
 * GtkFileChooser:
  - Stop replacing : (colon) with U+2236 (ratio)
 
+* GtkSpinButton:
+ - Avoid out-of-bounds values in some cases
+
+* GtkWindow:
+ - Send expected a11y events when a window is closed
+ - Change accessible role back to GTK_ACCESSIBLE_ROLE_WINDOW
+
+* GtkLabel:
+ - Make context menus keyboard-navigatable
+
 * GDK:
  - Add a way to retrieve keyboard layout information
 
