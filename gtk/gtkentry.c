@@ -558,8 +558,6 @@ static void gtk_entry_select_all         (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
 static gboolean gtk_entry_popup_menu     (GtkWidget       *widget);
 
-static void keymap_direction_changed     (GdkKeymap       *keymap,
-					  GtkEntry        *entry);
 static void keymap_state_changed         (GdkKeymap       *keymap,
 					  GtkEntry        *entry);
 static void remove_capslock_feedback     (GtkEntry        *entry);
@@ -3002,7 +3000,6 @@ gtk_entry_dispose (GObject *object)
 
   keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (object)));
   g_signal_handlers_disconnect_by_func (keymap, keymap_state_changed, entry);
-  g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, entry);
   G_OBJECT_CLASS (gtk_entry_parent_class)->dispose (object);
 }
 
@@ -4973,9 +4970,6 @@ gtk_entry_focus_in (GtkWidget     *widget,
                         G_CALLBACK (keymap_state_changed), entry);
     }
 
-  g_signal_connect (keymap, "direction-changed",
-		    G_CALLBACK (keymap_direction_changed), entry);
-
   if (gtk_entry_buffer_get_bytes (get_buffer (entry)) == 0 &&
       priv->placeholder_text != NULL)
     {
@@ -5027,7 +5021,6 @@ gtk_entry_focus_out (GtkWidget     *widget,
     }
 
   g_signal_handlers_disconnect_by_func (keymap, keymap_state_changed, entry);
-  g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, entry);
 
   completion = gtk_entry_get_completion (entry);
   if (completion)
@@ -6062,13 +6055,6 @@ gtk_entry_real_activate (GtkEntry *entry)
             }
 	}
     }
-}
-
-static void
-keymap_direction_changed (GdkKeymap *keymap,
-                          GtkEntry  *entry)
-{
-  gtk_entry_recompute (entry);
 }
 
 /* IM Context Callbacks
