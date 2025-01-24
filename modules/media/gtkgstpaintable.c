@@ -67,78 +67,69 @@ gtk_gst_paintable_paintable_snapshot (GdkPaintable *paintable,
                                       double        height)
 {
   GtkGstPaintable *self = GTK_GST_PAINTABLE (paintable);
+  float sx, sy;
 
-  if (self->image)
+  if (!self->image)
+    return;
+
+  gtk_snapshot_save (snapshot);
+
+  sx = gdk_paintable_get_intrinsic_width (self->image) / self->viewport.size.width;
+  sy = gdk_paintable_get_intrinsic_height (self->image) / self->viewport.size.height;
+
+  gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
+
+  gtk_snapshot_translate (snapshot,
+                          &GRAPHENE_POINT_INIT (-self->viewport.origin.x * width / self->viewport.size.width,
+                                                -self->viewport.origin.y * height / self->viewport.size.height));
+
+  if (self->orientation != GST_VIDEO_ORIENTATION_IDENTITY)
     {
-      float sx, sy;
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (width / 2, height / 2));
 
-      gtk_snapshot_save (snapshot);
+      switch (self->orientation)
+        {
+        case GST_VIDEO_ORIENTATION_90R:
+          gtk_snapshot_rotate (snapshot, 90.0);
+          break;
+        case GST_VIDEO_ORIENTATION_180:
+          gtk_snapshot_scale (snapshot, -1.0, -1.0);
+          break;
+        case GST_VIDEO_ORIENTATION_90L:
+          gtk_snapshot_rotate (snapshot, 270.0);
+          break;
+        case GST_VIDEO_ORIENTATION_HORIZ:
+          gtk_snapshot_scale (snapshot, -1.0, 1.0);
+          break;
+        case GST_VIDEO_ORIENTATION_VERT:
+          gtk_snapshot_scale (snapshot, 1.0, -1.0);
+          break;
+        case GST_VIDEO_ORIENTATION_UL_LR:
+          gtk_snapshot_rotate (snapshot, 90.0);
+          gtk_snapshot_scale (snapshot, 1.0, -1.0);
+          break;
+        case GST_VIDEO_ORIENTATION_UR_LL:
+          gtk_snapshot_rotate (snapshot, 270.0);
+          gtk_snapshot_scale (snapshot, 1.0, -1.0);
+          break;
+        default:
+          g_assert_not_reached ();
+          break;
+        }
 
       if (is_orientation_rotated (self->orientation))
-        {
-          sx = gdk_paintable_get_intrinsic_height (self->image) / self->viewport.size.height;
-          sy = gdk_paintable_get_intrinsic_width (self->image) / self->viewport.size.width;
-        }
+        gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-height / 2, -width / 2));
       else
-        {
-          sx = gdk_paintable_get_intrinsic_width (self->image) / self->viewport.size.width;
-          sy = gdk_paintable_get_intrinsic_height (self->image) / self->viewport.size.height;
-        }
-
-      gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
-
-      if (is_orientation_rotated (self->orientation))
-        {
-          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-self->viewport.origin.y * width / self->viewport.size.height,
-                                                                  -self->viewport.origin.x * height / self->viewport.size.width));
-        }
-      else
-        {
-          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-self->viewport.origin.x * width / self->viewport.size.width,
-                                                                  -self->viewport.origin.y * height / self->viewport.size.height));
-        }
-
-      if (self->orientation != GST_VIDEO_ORIENTATION_IDENTITY)
-        {
-          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (width / 2, height / 2));
-
-          switch (self->orientation)
-            {
-            case GST_VIDEO_ORIENTATION_90R:
-              gtk_snapshot_rotate (snapshot, 90.0);
-              break;
-            case GST_VIDEO_ORIENTATION_180:
-              gtk_snapshot_scale (snapshot, -1.0, -1.0);
-              break;
-            case GST_VIDEO_ORIENTATION_90L:
-              gtk_snapshot_rotate (snapshot, 270.0);
-              break;
-            case GST_VIDEO_ORIENTATION_HORIZ:
-              gtk_snapshot_scale (snapshot, -1.0, 1.0);
-              break;
-            case GST_VIDEO_ORIENTATION_VERT:
-              gtk_snapshot_scale (snapshot, 1.0, -1.0);
-              break;
-            case GST_VIDEO_ORIENTATION_UL_LR:
-              gtk_snapshot_rotate (snapshot, 90.0);
-              gtk_snapshot_scale (snapshot, 1.0, -1.0);
-              break;
-            case GST_VIDEO_ORIENTATION_UR_LL:
-              gtk_snapshot_rotate (snapshot, 270.0);
-              gtk_snapshot_scale (snapshot, 1.0, -1.0);
-              break;
-            default:
-              break;
-            }
-
-          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-width / 2, -height / 2));
-        }
-
-      gdk_paintable_snapshot (self->image, snapshot, width * sx, height * sy);
-
-      gtk_snapshot_pop (snapshot);
-      gtk_snapshot_restore (snapshot);
+        gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-width / 2, -height / 2));
     }
+
+  if (is_orientation_rotated (self->orientation))
+    gdk_paintable_snapshot (self->image, snapshot, height * sy, width * sx);
+  else
+    gdk_paintable_snapshot (self->image, snapshot, width * sx, height *sy);
+
+  gtk_snapshot_pop (snapshot);
+  gtk_snapshot_restore (snapshot);
 }
 
 static GdkPaintable *
@@ -160,9 +151,9 @@ gtk_gst_paintable_paintable_get_intrinsic_width (GdkPaintable *paintable)
   if (self->image)
     {
       if (is_orientation_rotated (self->orientation))
-        return round ((1 /self->pixel_aspect_ratio) * self->viewport.size.height);
+        return round (self->viewport.size.height);
       else
-        return round (self->pixel_aspect_ratio * self->viewport.size.width);
+        return round (self->viewport.size.width);
     }
 
   return 0;
@@ -355,6 +346,7 @@ gtk_gst_paintable_set_paintable (GtkGstPaintable       *self,
     return;
 
   if (self->image == NULL ||
+      is_orientation_rotated (self->orientation) != is_orientation_rotated (orientation) ||
       gdk_paintable_get_intrinsic_height (self->image) != gdk_paintable_get_intrinsic_height (paintable) ||
       !G_APPROX_VALUE (self->pixel_aspect_ratio * gdk_paintable_get_intrinsic_width (self->image),
                        pixel_aspect_ratio * gdk_paintable_get_intrinsic_width (paintable),
@@ -370,11 +362,6 @@ gtk_gst_paintable_set_paintable (GtkGstPaintable       *self,
   g_set_object (&self->image, paintable);
   self->pixel_aspect_ratio = pixel_aspect_ratio;
   self->viewport = *viewport;
-
-  if (is_orientation_rotated (self->orientation) !=
-      is_orientation_rotated (orientation))
-    size_changed = TRUE;
-
   self->orientation = orientation;
 
   if (size_changed)
