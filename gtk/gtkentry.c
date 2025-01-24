@@ -328,6 +328,7 @@ enum {
   ICON_RELEASE,
   PREEDIT_CHANGED,
   INSERT_EMOJI,
+  TOGGLE_DIRECTION,
   LAST_SIGNAL
 };
 
@@ -553,6 +554,7 @@ static void gtk_entry_cut_clipboard      (GtkEntry        *entry);
 static void gtk_entry_copy_clipboard     (GtkEntry        *entry);
 static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
 static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
+static void gtk_entry_toggle_direction   (GtkEntry        *entry);
 static void gtk_entry_insert_emoji       (GtkEntry        *entry);
 static void gtk_entry_select_all         (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
@@ -819,6 +821,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->activate = gtk_entry_real_activate;
   class->get_text_area_size = gtk_entry_get_text_area_size;
   class->get_frame_size = gtk_entry_get_frame_size;
+  class->toggle_direction = gtk_entry_toggle_direction;
   
   quark_inner_border = g_quark_from_static_string ("gtk-entry-inner-border");
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
@@ -1845,6 +1848,15 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  NULL,
 		  G_TYPE_NONE, 0);
 
+  signals[TOGGLE_DIRECTION] =
+    g_signal_new (I_("toggle-direction"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkEntryClass, toggle_direction),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
   /**
    * GtkEntry::icon-press:
    * @entry: The entry on which the signal is emitted
@@ -2099,6 +2111,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Insert, 0,
 				"toggle-overwrite", 0);
 
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_t, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
+                                "toggle-direction", 0);
   /**
    * GtkEntry:inner-border:
    *
@@ -6022,6 +6036,34 @@ gtk_entry_toggle_overwrite (GtkEntry *entry)
 }
 
 static void
+update_resolved_dir (GtkEntry *self)
+{
+  GtkEntryPrivate *priv = self->priv;
+
+  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+    priv->resolved_dir = PANGO_DIRECTION_RTL;
+  else
+    priv->resolved_dir = PANGO_DIRECTION_LTR;
+}
+
+static void
+gtk_entry_toggle_direction (GtkEntry *entry)
+{
+  GtkWidget *widget = GTK_WIDGET (entry);
+  GtkEntryPrivate *priv = entry->priv;
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    gtk_widget_set_direction (widget, GTK_TEXT_DIR_LTR);
+  else
+    gtk_widget_set_direction (widget, GTK_TEXT_DIR_RTL);
+
+  update_resolved_dir (entry);
+
+  if (priv->cached_layout)
+    pango_layout_context_changed (priv->cached_layout);
+}
+
+static void
 gtk_entry_select_all (GtkEntry *entry)
 {
   gtk_entry_select_line (entry);
@@ -6314,17 +6356,6 @@ show_placeholder_text (GtkEntry *entry)
     return TRUE;
 
   return FALSE;
-}
-
-static void
-update_resolved_dir (GtkEntry *self)
-{
-  GtkEntryPrivate *priv = self->priv;
-
-  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
-    priv->resolved_dir = PANGO_DIRECTION_RTL;
-  else
-    priv->resolved_dir = PANGO_DIRECTION_LTR;
 }
 
 static PangoLayout *
