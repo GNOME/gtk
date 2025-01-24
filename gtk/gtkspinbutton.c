@@ -2431,6 +2431,10 @@ gtk_spin_button_set_numeric (GtkSpinButton *spin_button,
   if (priv->numeric != numeric)
     {
        priv->numeric = numeric;
+
+       if (numeric)
+         gtk_widget_set_direction (GTK_WIDGET (spin_button), GTK_TEXT_DIR_LTR);
+
        g_object_notify (G_OBJECT (spin_button), "numeric");
     }
 }
