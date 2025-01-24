@@ -22,9 +22,10 @@ meson \
 cd _build
 ninja
 
-# Meson < 0.57 can't exclude suites in a test_setup() so we have to
-# explicitly leave out the failing and flaky suites.
-xvfb-run -a -s "-screen 0 1024x768x24" \
+if [ -n "${DO_TEST-}" ]; then
+  # Meson < 0.57 can't exclude suites in a test_setup() so we have to
+  # explicitly leave out the failing and flaky suites.
+  xvfb-run -a -s "-screen 0 1024x768x24" \
     meson test \
         --timeout-multiplier 4 \
         --print-errorlogs \
@@ -32,15 +33,16 @@ xvfb-run -a -s "-screen 0 1024x768x24" \
         --no-suite=flaky \
         --no-suite=failing
 
-# We run the flaky and failing tests to get them reported in the CI logs,
-# but if they fail (which we expect they often will), that isn't an error.
-xvfb-run -a -s "-screen 0 1024x768x24" \
+  # We run the flaky and failing tests to get them reported in the CI logs,
+  # but if they fail (which we expect they often will), that isn't an error.
+  xvfb-run -a -s "-screen 0 1024x768x24" \
     meson test \
         --timeout-multiplier 4 \
         --print-errorlogs \
         --suite=flaky \
         --suite=failing \
     || true
+fi
 
 if [ -n "${DO_DISTCHECK-}" ]; then
   meson dist --no-tests
