@@ -6330,6 +6330,17 @@ show_placeholder_text (GtkEntry *entry)
   return FALSE;
 }
 
+static void
+update_resolved_dir (GtkEntry *self)
+{
+  GtkEntryPrivate *priv = self->priv;
+
+  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+    priv->resolved_dir = PANGO_DIRECTION_RTL;
+  else
+    priv->resolved_dir = PANGO_DIRECTION_LTR;
+}
+
 static PangoLayout *
 gtk_entry_create_layout (GtkEntry *entry,
 			 gboolean  include_preedit)
@@ -6398,39 +6409,10 @@ gtk_entry_create_layout (GtkEntry *entry,
     }
   else
     {
-      PangoDirection pango_dir;
-
-      if (gtk_entry_get_display_mode (entry) == DISPLAY_NORMAL)
-	pango_dir = _gtk_pango_find_base_dir (display_text, n_bytes);
-      else
-	pango_dir = PANGO_DIRECTION_NEUTRAL;
-
-      if (pango_dir == PANGO_DIRECTION_NEUTRAL)
-        {
-          if (gtk_widget_has_focus (widget))
-	    {
-	      GdkDisplay *display = gtk_widget_get_display (widget);
-	      GdkKeymap *keymap = gdk_keymap_get_for_display (display);
-	      if (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_RTL)
-		pango_dir = PANGO_DIRECTION_RTL;
-	      else
-		pango_dir = PANGO_DIRECTION_LTR;
-	    }
-          else
-	    {
-	      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-		pango_dir = PANGO_DIRECTION_RTL;
-	      else
-		pango_dir = PANGO_DIRECTION_LTR;
-	    }
-        }
-
-      pango_context_set_base_dir (gtk_widget_get_pango_context (widget), pango_dir);
-
-      priv->resolved_dir = pango_dir;
-
       pango_layout_set_text (layout, display_text, n_bytes);
     }
+
+  update_resolved_dir (entry);
 
   pango_layout_set_attributes (layout, tmp_attrs);
 
