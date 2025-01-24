@@ -328,6 +328,7 @@ enum {
   ICON_RELEASE,
   PREEDIT_CHANGED,
   INSERT_EMOJI,
+  TOGGLE_DIRECTION,
   LAST_SIGNAL
 };
 
@@ -553,13 +554,12 @@ static void gtk_entry_cut_clipboard      (GtkEntry        *entry);
 static void gtk_entry_copy_clipboard     (GtkEntry        *entry);
 static void gtk_entry_paste_clipboard    (GtkEntry        *entry);
 static void gtk_entry_toggle_overwrite   (GtkEntry        *entry);
+static void gtk_entry_toggle_direction   (GtkEntry        *entry);
 static void gtk_entry_insert_emoji       (GtkEntry        *entry);
 static void gtk_entry_select_all         (GtkEntry        *entry);
 static void gtk_entry_real_activate      (GtkEntry        *entry);
 static gboolean gtk_entry_popup_menu     (GtkWidget       *widget);
 
-static void keymap_direction_changed     (GdkKeymap       *keymap,
-					  GtkEntry        *entry);
 static void keymap_state_changed         (GdkKeymap       *keymap,
 					  GtkEntry        *entry);
 static void remove_capslock_feedback     (GtkEntry        *entry);
@@ -821,6 +821,7 @@ gtk_entry_class_init (GtkEntryClass *class)
   class->activate = gtk_entry_real_activate;
   class->get_text_area_size = gtk_entry_get_text_area_size;
   class->get_frame_size = gtk_entry_get_frame_size;
+  class->toggle_direction = gtk_entry_toggle_direction;
   
   quark_inner_border = g_quark_from_static_string ("gtk-entry-inner-border");
   quark_password_hint = g_quark_from_static_string ("gtk-entry-password-hint");
@@ -1847,6 +1848,15 @@ gtk_entry_class_init (GtkEntryClass *class)
 		  NULL,
 		  G_TYPE_NONE, 0);
 
+  signals[TOGGLE_DIRECTION] =
+    g_signal_new (I_("toggle-direction"),
+                  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST | G_SIGNAL_ACTION,
+                  G_STRUCT_OFFSET (GtkEntryClass, toggle_direction),
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+
   /**
    * GtkEntry::icon-press:
    * @entry: The entry on which the signal is emitted
@@ -2101,6 +2111,8 @@ gtk_entry_class_init (GtkEntryClass *class)
   gtk_binding_entry_add_signal (binding_set, GDK_KEY_KP_Insert, 0,
 				"toggle-overwrite", 0);
 
+  gtk_binding_entry_add_signal (binding_set, GDK_KEY_t, GDK_CONTROL_MASK|GDK_SHIFT_MASK,
+                                "toggle-direction", 0);
   /**
    * GtkEntry:inner-border:
    *
@@ -3002,7 +3014,6 @@ gtk_entry_dispose (GObject *object)
 
   keymap = gdk_keymap_get_for_display (gtk_widget_get_display (GTK_WIDGET (object)));
   g_signal_handlers_disconnect_by_func (keymap, keymap_state_changed, entry);
-  g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, entry);
   G_OBJECT_CLASS (gtk_entry_parent_class)->dispose (object);
 }
 
@@ -4973,9 +4984,6 @@ gtk_entry_focus_in (GtkWidget     *widget,
                         G_CALLBACK (keymap_state_changed), entry);
     }
 
-  g_signal_connect (keymap, "direction-changed",
-		    G_CALLBACK (keymap_direction_changed), entry);
-
   if (gtk_entry_buffer_get_bytes (get_buffer (entry)) == 0 &&
       priv->placeholder_text != NULL)
     {
@@ -5027,7 +5035,6 @@ gtk_entry_focus_out (GtkWidget     *widget,
     }
 
   g_signal_handlers_disconnect_by_func (keymap, keymap_state_changed, entry);
-  g_signal_handlers_disconnect_by_func (keymap, keymap_direction_changed, entry);
 
   completion = gtk_entry_get_completion (entry);
   if (completion)
@@ -6029,6 +6036,34 @@ gtk_entry_toggle_overwrite (GtkEntry *entry)
 }
 
 static void
+update_resolved_dir (GtkEntry *self)
+{
+  GtkEntryPrivate *priv = self->priv;
+
+  if (gtk_widget_get_direction (GTK_WIDGET (self)) == GTK_TEXT_DIR_RTL)
+    priv->resolved_dir = PANGO_DIRECTION_RTL;
+  else
+    priv->resolved_dir = PANGO_DIRECTION_LTR;
+}
+
+static void
+gtk_entry_toggle_direction (GtkEntry *entry)
+{
+  GtkWidget *widget = GTK_WIDGET (entry);
+  GtkEntryPrivate *priv = entry->priv;
+
+  if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
+    gtk_widget_set_direction (widget, GTK_TEXT_DIR_LTR);
+  else
+    gtk_widget_set_direction (widget, GTK_TEXT_DIR_RTL);
+
+  update_resolved_dir (entry);
+
+  if (priv->cached_layout)
+    pango_layout_context_changed (priv->cached_layout);
+}
+
+static void
 gtk_entry_select_all (GtkEntry *entry)
 {
   gtk_entry_select_line (entry);
@@ -6062,13 +6097,6 @@ gtk_entry_real_activate (GtkEntry *entry)
             }
 	}
     }
-}
-
-static void
-keymap_direction_changed (GdkKeymap *keymap,
-                          GtkEntry  *entry)
-{
-  gtk_entry_recompute (entry);
 }
 
 /* IM Context Callbacks
@@ -6398,39 +6426,10 @@ gtk_entry_create_layout (GtkEntry *entry,
     }
   else
     {
-      PangoDirection pango_dir;
-
-      if (gtk_entry_get_display_mode (entry) == DISPLAY_NORMAL)
-	pango_dir = _gtk_pango_find_base_dir (display_text, n_bytes);
-      else
-	pango_dir = PANGO_DIRECTION_NEUTRAL;
-
-      if (pango_dir == PANGO_DIRECTION_NEUTRAL)
-        {
-          if (gtk_widget_has_focus (widget))
-	    {
-	      GdkDisplay *display = gtk_widget_get_display (widget);
-	      GdkKeymap *keymap = gdk_keymap_get_for_display (display);
-	      if (gdk_keymap_get_direction (keymap) == PANGO_DIRECTION_RTL)
-		pango_dir = PANGO_DIRECTION_RTL;
-	      else
-		pango_dir = PANGO_DIRECTION_LTR;
-	    }
-          else
-	    {
-	      if (gtk_widget_get_direction (widget) == GTK_TEXT_DIR_RTL)
-		pango_dir = PANGO_DIRECTION_RTL;
-	      else
-		pango_dir = PANGO_DIRECTION_LTR;
-	    }
-        }
-
-      pango_context_set_base_dir (gtk_widget_get_pango_context (widget), pango_dir);
-
-      priv->resolved_dir = pango_dir;
-
       pango_layout_set_text (layout, display_text, n_bytes);
     }
+
+  update_resolved_dir (entry);
 
   pango_layout_set_attributes (layout, tmp_attrs);
 
