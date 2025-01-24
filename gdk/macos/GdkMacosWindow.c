@@ -155,14 +155,12 @@ static Class _contentViewClass = nil;
   switch ((int)event_type)
     {
     case NSEventTypeLeftMouseUp: {
-      GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (gdk_surface));
-      double time = ((double)[event timestamp]) * 1000.0;
+      if (inManualMove || inManualResize || inMove)
+        _gdk_macos_display_send_event ([self gdkDisplay], event);
 
       inManualMove = NO;
       inManualResize = NO;
       inMove = NO;
-
-      _gdk_macos_display_break_all_grabs (GDK_MACOS_DISPLAY (display), time);
 
       /* Reset gravity */
       [[[self contentView] layer] setContentsGravity:kCAGravityBottomLeft];

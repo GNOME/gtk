@@ -42,42 +42,11 @@ test_resize (NSEvent         *event,
              int              x,
              int              y)
 {
-  NSWindow *window;
-
   g_assert (event != NULL);
   g_assert (GDK_IS_MACOS_SURFACE (surface));
 
-  window = _gdk_macos_surface_get_native (surface);
-
-  /* Resizing from the resize indicator only begins if an NSLeftMouseButton
-   * event is received in the resizing area.
-   */
-  if ([event type] == NSEventTypeLeftMouseDown &&
-      [window showsResizeIndicator])
-    {
-      NSRect frame;
-
-      /* If the resize indicator is visible and the event is in the lower
-       * right 15x15 corner, we leave these events to Cocoa as to be
-       * handled as resize events.  Applications may have widgets in this
-       * area.  These will most likely be larger than 15x15 and for scroll
-       * bars there are also other means to move the scroll bar.  Since
-       * the resize indicator is the only way of resizing windows on Mac
-       * OS, it is too important to not make functional.
-       */
-      frame = [[window contentView] bounds];
-      if (x > frame.size.width - GRIP_WIDTH &&
-          x < frame.size.width &&
-          y > frame.size.height - GRIP_HEIGHT &&
-          y < frame.size.height)
-        return TRUE;
-     }
-
   /* If we're on Lion and within 5 pixels of an edge, then assume that the
    * user wants to resize, and return NULL to let Quartz get on with it.
-   * We check the selector isRestorable to see if we're on 10.7.  This
-   * extra check is in case the user starts dragging before GDK recognizes
-   * the grab.
    *
    * We perform this check for a button press of all buttons, because we
    * do receive, for instance, a right mouse down event for a GDK surface
