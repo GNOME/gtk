@@ -529,7 +529,7 @@ gtk_application_window_real_unrealize (GtkWidget *widget)
 
 GActionGroup *
 gtk_application_window_get_action_group (GtkApplicationWindow *window)
-{          
+{
   GtkApplicationWindowPrivate *priv = gtk_application_window_get_instance_private (window);
   return G_ACTION_GROUP (priv->actions);
 }
@@ -655,10 +655,26 @@ gtk_application_window_init (GtkApplicationWindow *window)
 }
 
 static void
+gtk_application_window_keys_changed (GtkWindow *window)
+{
+  GtkApplicationWindow *self = GTK_APPLICATION_WINDOW (window);
+  GtkApplicationWindowPrivate *priv = gtk_application_window_get_instance_private (self);
+
+  GTK_WINDOW_CLASS (gtk_application_window_parent_class)->keys_changed (window);
+
+  /* Notify key changes on the help overlay */
+  if (priv->help_overlay != NULL)
+    _gtk_window_notify_keys_changed (GTK_WINDOW (priv->help_overlay));
+}
+
+static void
 gtk_application_window_class_init (GtkApplicationWindowClass *class)
 {
+  GtkWindowClass *window_class = GTK_WINDOW_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
   GObjectClass *object_class = G_OBJECT_CLASS (class);
+
+  window_class->keys_changed = gtk_application_window_keys_changed;
 
   widget_class->measure = gtk_application_window_measure;
   widget_class->size_allocate = gtk_application_window_real_size_allocate;
