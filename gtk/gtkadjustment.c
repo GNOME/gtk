@@ -554,6 +554,7 @@ gtk_adjustment_set_value (GtkAdjustment *adjustment,
 			  double         value)
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  g_return_if_fail (isfinite (value));
 
   gtk_adjustment_set_value_internal (adjustment, value, FALSE);
 }
@@ -563,6 +564,7 @@ gtk_adjustment_animate_to_value (GtkAdjustment *adjustment,
 			         double         value)
 {
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  g_return_if_fail (isfinite (value));
 
   gtk_adjustment_set_value_internal (adjustment, value, TRUE);
 }
@@ -611,6 +613,7 @@ gtk_adjustment_set_lower (GtkAdjustment *adjustment,
   GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  g_return_if_fail (isfinite (lower));
 
   if (lower != priv->lower)
     {
@@ -658,6 +661,7 @@ gtk_adjustment_set_upper (GtkAdjustment *adjustment,
   GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  g_return_if_fail (isfinite (upper));
 
   if (upper != priv->upper)
     {
@@ -702,6 +706,7 @@ gtk_adjustment_set_step_increment (GtkAdjustment *adjustment,
   GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  g_return_if_fail (isfinite (step_increment));
 
   if (step_increment != priv->step_increment)
     {
@@ -746,6 +751,7 @@ gtk_adjustment_set_page_increment (GtkAdjustment *adjustment,
   GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  g_return_if_fail (isfinite (page_increment));
 
   if (page_increment != priv->page_increment)
     {
@@ -790,6 +796,7 @@ gtk_adjustment_set_page_size (GtkAdjustment *adjustment,
   GtkAdjustmentPrivate *priv = gtk_adjustment_get_instance_private (adjustment);
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  g_return_if_fail (isfinite (page_size));
 
   if (page_size != priv->page_size)
     {
@@ -881,6 +888,7 @@ gtk_adjustment_clamp_page (GtkAdjustment *adjustment,
   gboolean need_emission;
 
   g_return_if_fail (GTK_IS_ADJUSTMENT (adjustment));
+  g_return_if_fail (isfinite (lower) && isfinite (upper));
 
   lower = CLAMP (lower, priv->lower, priv->upper);
   upper = CLAMP (upper, priv->lower, priv->upper);
