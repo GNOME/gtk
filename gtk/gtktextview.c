@@ -4538,7 +4538,11 @@ gtk_text_view_measure (GtkWidget      *widget,
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
     extra = borders.left + priv->left_margin + priv->right_margin + borders.right;
   else
-    extra = borders.top + priv->height + borders.bottom;
+    {
+      min = MAX (min, priv->height);
+      nat = MAX (nat, priv->height);
+      extra = borders.top + borders.bottom;
+    }
 
   *minimum = min + extra;
   *natural = nat + extra;
