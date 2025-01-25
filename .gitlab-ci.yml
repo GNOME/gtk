@@ -4,7 +4,7 @@ include:
   - component:  gitlab.gnome.org/GNOME/citemplates/release-service@master
     inputs:
       dist-job-name: "fedora-distcheck"
-      tarball-artifact-path: "_build/meson-dist/${CI_PROJECT_NAME}+-${CI_COMMIT_TAG}.tar.xz"
+      tarball-artifact-path: "_build/meson-dist/${CI_PROJECT_NAME}-${CI_COMMIT_TAG}.tar.xz"
 
 stages:
   - build
