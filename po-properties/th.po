@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 00:08+0000\n"
-"PO-Revision-Date: 2025-01-27 16:33+0700\n"
+"PO-Revision-Date: 2025-01-27 17:44+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "Language: th\n"
@@ -1602,7 +1602,7 @@ msgstr "ใช้เส้นใต้"
 
 #: gtk/gtkbutton.c:289 gtk/gtkexpander.c:318 gtk/gtklabel.c:828 gtk/gtkmenuitem.c:806
 msgid "If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"
-msgstr "ถ้าตั้งค่า เส้นใต้ในข้อความจะระบุว่าควรใช้อักขระถัดไปเป็นแป้นลัดรหัสช่วยจำ"
+msgstr "ถ้าตั้งค่า เส้นใต้ในข้อความจะระบุว่าควรใช้อักขระถัดไปเป็นแป้นลัดที่เป็นอักษรลัด"
 
 #: gtk/gtkbutton.c:301
 msgid "If set, the label is used to pick a stock item instead of being displayed"
@@ -4317,19 +4317,19 @@ msgstr "กำหนดว่าข้อความฉลากสามาร
 
 #: gtk/gtklabel.c:916
 msgid "Mnemonic key"
-msgstr "คีย์รหัสช่วยจำ"
+msgstr "คีย์อักษรลัด"
 
 #: gtk/gtklabel.c:917
 msgid "The mnemonic accelerator key for this label"
-msgstr "คีย์แป้นลัดรหัสช่วยจำสำหรับฉลากนี้"
+msgstr "คีย์แป้นลัดที่เป็นอักษรลัดสำหรับฉลากนี้"
 
 #: gtk/gtklabel.c:924
 msgid "Mnemonic widget"
-msgstr "วิดเจ็ตรหัสช่วยจำ"
+msgstr "วิดเจ็ตอักษรลัด"
 
 #: gtk/gtklabel.c:925
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr "วิดเจ็ตที่ต้องการเรียกทำงานเมื่อคีย์รหัสช่วยจำของฉลากถูกกด"
+msgstr "วิดเจ็ตที่ต้องการเรียกทำงานเมื่อคีย์ที่เป็นอักษรลัดของฉลากถูกกด"
 
 #: gtk/gtklabel.c:965
 msgid "The preferred place to ellipsize the string, if the label does not have enough room to display the entire string"
@@ -6513,236 +6513,236 @@ msgstr "ขนาดที่ต้องการใช้สำหรับเ
 
 #: gtk/gtksettings.c:656
 msgid "Alternative button order"
-msgstr ""
+msgstr "ลำดับปุ่มสำรอง"
 
 #: gtk/gtksettings.c:657
 msgid "Whether buttons in dialogs should use the alternative button order"
-msgstr ""
+msgstr "กำหนดว่าปุ่มต่างๆ ในกล่องโต้ตอบควรใช้ลำดับปุ่มสำรองหรือไม่"
 
 #: gtk/gtksettings.c:674
 msgid "Alternative sort indicator direction"
-msgstr ""
+msgstr "ทิศทางตัวชี้บอกเรียงลำดับสำรอง"
 
 #: gtk/gtksettings.c:675
 msgid "Whether the direction of the sort indicators in list and tree views is inverted compared to the default (where down means ascending)"
-msgstr ""
+msgstr "กำหนดว่าจะกลับทิศทางของตัวชี้บอกเรียงลำดับในมุมมองแบบรายชื่อและต้นไม้หรือไม่ แทนที่จะใช้ค่าเริ่มต้น (โดย down หมายถึงเรียงจากน้อยไปหามาก)"
 
 #: gtk/gtksettings.c:688
 msgid "Show the 'Input Methods' menu"
-msgstr ""
+msgstr "แสดงเมนู 'ช่องทางป้อนข้อมูล'"
 
 #: gtk/gtksettings.c:689
 msgid "Whether the context menus of entries and text views should offer to change the input method"
-msgstr ""
+msgstr "กำหนดว่าเมนูคลิกขวาของช่องป้อนข้อมูลและมุมมองข้อความควรเสนอให้เปลี่ยนช่องทางป้อนข้อมูลหรือไม่"
 
 #: gtk/gtksettings.c:702
 msgid "Show the 'Insert Unicode Control Character' menu"
-msgstr ""
+msgstr "แสดงเมนู 'แทรกอักขระควบคุม Unicode'"
 
 #: gtk/gtksettings.c:703
 msgid "Whether the context menus of entries and text views should offer to insert control characters"
-msgstr ""
+msgstr "กำหนดว่าเมนูคลิกขวาของช่องป้อนข้อมูลและมุมมองข้อความควรเสนอให้แทรกอักขระควบคุมหรือไม่"
 
 #: gtk/gtksettings.c:716
 msgid "Start timeout"
-msgstr ""
+msgstr "ค่าเวลาหมดเริ่มต้น"
 
 #: gtk/gtksettings.c:717
 msgid "Starting value for timeouts, when button is pressed"
-msgstr ""
+msgstr "ค่าเริ่มต้นสำหรับการหมดเวลา เมื่อปุ่มถูกกด"
 
 #: gtk/gtksettings.c:731
 msgid "Repeat timeout"
-msgstr ""
+msgstr "ค่าเวลาหมดวนซ้ำ"
 
 #: gtk/gtksettings.c:732
 msgid "Repeat value for timeouts, when button is pressed"
-msgstr ""
+msgstr "ค่าวนซ้ำสำหรับการหมดเวลา เมื่อปุ่มถูกกด"
 
 #: gtk/gtksettings.c:746
 msgid "Expand timeout"
-msgstr ""
+msgstr "ค่าเวลาหมดเมื่อขยาย"
 
 #: gtk/gtksettings.c:747
 msgid "Expand value for timeouts, when a widget is expanding a new region"
-msgstr ""
+msgstr "ค่าขยายสำหรับการหมดเวลา เมื่อวิดเจ็ตมีการขยายขอบเขตใหม่"
 
 #: gtk/gtksettings.c:785
 msgid "Color scheme"
-msgstr ""
+msgstr "ชุดรูปแบบสี"
 
 #: gtk/gtksettings.c:786
 msgid "A palette of named colors for use in themes"
-msgstr ""
+msgstr "พาเลตซึ่งมีสีที่ตั้งชื่อสำหรับใช้งานในชุดตกแต่ง"
 
 #: gtk/gtksettings.c:795
 msgid "Enable Animations"
-msgstr ""
+msgstr "เปิดใช้ภาพเคลื่อนไหว"
 
 #: gtk/gtksettings.c:796
 msgid "Whether to enable toolkit-wide animations."
-msgstr ""
+msgstr "กำหนดว่าการแสดงผลภาพเคลื่อนไหวทั้งหมดที่ใช้ใน Toolkit จะเปิดใช้หรือไม่"
 
 #: gtk/gtksettings.c:817
 msgid "Enable Touchscreen Mode"
-msgstr ""
+msgstr "เปิดใช้โหมดหน้าจอสัมผัส"
 
 #: gtk/gtksettings.c:818
 msgid "When TRUE, there are no motion notify events delivered on this screen"
-msgstr ""
+msgstr "เมื่อเป็น TRUE จะไม่มีเหตุการณ์แจ้งเตือนการเคลื่อนไหวส่งมาที่หน้าจอนี้"
 
 #: gtk/gtksettings.c:837
 msgid "Tooltip timeout"
-msgstr ""
+msgstr "เวลาหมดคำแนะนำเครื่องมือ"
 
 #: gtk/gtksettings.c:838
 msgid "Timeout before tooltip is shown"
-msgstr ""
+msgstr "เวลาหมดก่อนที่คำแนะนำเครื่องมือจะแสดง"
 
 #: gtk/gtksettings.c:865
 msgid "Tooltip browse timeout"
-msgstr ""
+msgstr "เวลาหมดการท่องดูคำแนะนำเครื่องมือ"
 
 #: gtk/gtksettings.c:866
 msgid "Timeout before tooltip is shown when browse mode is enabled"
-msgstr ""
+msgstr "เวลาหมดก่อนที่คำแนะนำเครื่องมือจะแสดงเมื่อเปิดใช้โหมดท่องดู"
 
 #: gtk/gtksettings.c:889
 msgid "Tooltip browse mode timeout"
-msgstr ""
+msgstr "เวลาหมดโหมดท่องดูคำแนะนำเครื่องมือ"
 
 #: gtk/gtksettings.c:890
 msgid "Timeout after which browse mode is disabled"
-msgstr ""
+msgstr "เวลาหมดหลังจากที่ปิดใช้โหมดท่องดูแล้ว"
 
 #: gtk/gtksettings.c:912
 msgid "Keynav Cursor Only"
-msgstr ""
+msgstr "ควบคุมเคอร์เซอร์ด้วยแป้นพิมพ์เท่านั้น"
 
 #: gtk/gtksettings.c:913
 msgid "When TRUE, there are only cursor keys available to navigate widgets"
-msgstr ""
+msgstr "เมื่อเป็น TRUE จะมีเพียงแป้นเคอร์เซอร์เท่านั้นที่สามารถใช้เพื่อนำทางไปยังวิดเจ็ตต่างๆ ได้"
 
 #: gtk/gtksettings.c:932
 msgid "Keynav Wrap Around"
-msgstr ""
+msgstr "วนกลับเมื่อนำทางด้วยแป้นพิมพ์"
 
 #: gtk/gtksettings.c:933
 msgid "Whether to wrap around when keyboard-navigating widgets"
-msgstr ""
+msgstr "กำหนดว่าจะวนกลับไปที่จุดเริ่มต้นหรือไม่เมื่อใช้การนำทางวิดเจ็ตด้วยแป้นพิมพ์"
 
 #: gtk/gtksettings.c:953
 msgid "Error Bell"
-msgstr ""
+msgstr "เสียงเตือนข้อผิดพลาด"
 
 #: gtk/gtksettings.c:954
 msgid "When TRUE, keyboard navigation and other errors will cause a beep"
-msgstr ""
+msgstr "เมื่อเป็น TRUE การนำทางด้วยแป้นพิมพ์และข้อผิดพลาดอื่นๆ จะมีการเล่นเสียงบี๊บด้วย"
 
 #: gtk/gtksettings.c:973
 msgid "Color Hash"
-msgstr ""
+msgstr "แฮชสี"
 
 #: gtk/gtksettings.c:974
 msgid "A hash table representation of the color scheme."
-msgstr ""
+msgstr "ตารางแฮชที่แสดงถึงชุดรูปแบบสี"
 
 #: gtk/gtksettings.c:989
 msgid "Default file chooser backend"
-msgstr ""
+msgstr "แบ็กเอนด์ตัวช่วยเลือกไฟล์เริ่มต้น"
 
 #: gtk/gtksettings.c:990
 msgid "Name of the GtkFileChooser backend to use by default"
-msgstr ""
+msgstr "ชื่อของแบ็กเอนด์ GtkFileChooser ที่ต้องการใช้โดยปริยาย"
 
 #: gtk/gtksettings.c:1007
 msgid "Default print backend"
-msgstr ""
+msgstr "แบ็กเอนด์การพิมพ์เริ่มต้น"
 
 #: gtk/gtksettings.c:1008
 msgid "List of the GtkPrintBackend backends to use by default"
-msgstr ""
+msgstr "รายชื่อแบ็กเอนด์ GtkPrintBackend ที่ต้องการใช้โดยปริยาย"
 
 #: gtk/gtksettings.c:1031
 msgid "Default command to run when displaying a print preview"
-msgstr ""
+msgstr "คำสั่งเริ่มต้นที่ต้องการเรียกใช้เมื่อแสดงตัวอย่างก่อนพิมพ์"
 
 #: gtk/gtksettings.c:1032
 msgid "Command to run when displaying a print preview"
-msgstr ""
+msgstr "คำสั่งที่ต้องการเรียกใช้เมื่อแสดงตัวอย่างก่อนเพิ่ม"
 
 #: gtk/gtksettings.c:1051
 msgid "Enable Mnemonics"
-msgstr ""
+msgstr "เปิดใช้อักษรลัด"
 
 #: gtk/gtksettings.c:1052
 msgid "Whether labels should have mnemonics"
-msgstr ""
+msgstr "กำหนดว่าฉลากควรมีอักษรลัดหรือไม่"
 
 #: gtk/gtksettings.c:1068
 msgid "Enable Accelerators"
-msgstr ""
+msgstr "เปิดใช้แป้นลัด"
 
 #: gtk/gtksettings.c:1069
 msgid "Whether menu items should have accelerators"
-msgstr ""
+msgstr "กำหนดว่ารายการเมนูควรมีแป้นลัดหรือไม่"
 
 #: gtk/gtksettings.c:1088
 msgid "Recent Files Limit"
-msgstr ""
+msgstr "จำกัดจำนวนไฟล์ล่าสุด"
 
 #: gtk/gtksettings.c:1089
 msgid "Number of recently used files"
-msgstr ""
+msgstr "จำนวนไฟล์ที่ใช้ล่าสุดที่ต้องการให้แสดง"
 
 #: gtk/gtksettings.c:1109
 msgid "Default IM module"
-msgstr ""
+msgstr "มอดูล IM เริ่มต้น"
 
 #: gtk/gtksettings.c:1110
 msgid "Which IM module should be used by default"
-msgstr ""
+msgstr "มอดูล IM ที่ควรจะใช้โดยปริยาย"
 
 #: gtk/gtksettings.c:1128
 msgid "Recent Files Max Age"
-msgstr ""
+msgstr "อายุสูงสุดของไฟล์ล่าสุด"
 
 #: gtk/gtksettings.c:1129
 msgid "Maximum age of recently used files, in days"
-msgstr ""
+msgstr "อายุสูงสุดของไฟล์ที่ใช้ล่าสุด ในหน่วยวัน"
 
 #: gtk/gtksettings.c:1138
 msgid "Fontconfig configuration timestamp"
-msgstr ""
+msgstr "การลงบันทึกเวลาการกำหนดค่า Fontconfig"
 
 #: gtk/gtksettings.c:1139
 msgid "Timestamp of current fontconfig configuration"
-msgstr ""
+msgstr "การลงบันทึกเวลาของการกำหนดค่า Fontconfig ปัจจุบัน"
 
 #: gtk/gtksettings.c:1161
 msgid "Sound Theme Name"
-msgstr ""
+msgstr "ชื่อชุดตกแต่งเสียง"
 
 #: gtk/gtksettings.c:1162
 msgid "XDG sound theme name"
-msgstr ""
+msgstr "ชื่อชุดตกแต่งเสียง XDG"
 
 #. Translators: this means sounds that are played as feedback to user input
 #: gtk/gtksettings.c:1184
 msgid "Audible Input Feedback"
-msgstr ""
+msgstr "เล่นเสียงตอบสนองเมื่อป้อนข้อมูล"
 
 #: gtk/gtksettings.c:1185
 msgid "Whether to play event sounds as feedback to user input"
-msgstr ""
+msgstr "กำหนดว่าจะเล่นเสียงเหตุการณ์เพื่อตอบสนองเมื่อผู้ใช้ป้อนข้อมูลหรือไม่"
 
 #: gtk/gtksettings.c:1206
 msgid "Enable Event Sounds"
-msgstr ""
+msgstr "เปิดใช้เสียงเหตุการณ์"
 
 #: gtk/gtksettings.c:1207
 msgid "Whether to play any event sounds at all"
-msgstr ""
+msgstr "กำหนดว่าจะเล่นเสียงเหตุการณ์ทั้งหมดเลยหรือไม่"
 
 #: gtk/gtksettings.c:1224
 msgid "Enable Tooltips"
