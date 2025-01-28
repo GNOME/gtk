@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 00:08+0000\n"
-"PO-Revision-Date: 2025-01-27 17:44+0700\n"
+"PO-Revision-Date: 2025-01-28 15:58+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "Language: th\n"
@@ -136,7 +136,7 @@ msgstr "ดิสเพลย์เริ่มต้นสำหรับ GDK"
 
 #: gdk/gdkglcontext.c:321
 msgid "The GDK display used to create the GL context"
-msgstr "ดิสเพลย์ GDK ที่ใช้สร้างบริบท GL"
+msgstr "ดิสเพลย์ GDK ที่ใช้สร้าง GL context"
 
 #: gdk/gdkglcontext.c:336 gtk/gtkwidget.c:1353
 msgid "Window"
@@ -144,15 +144,15 @@ msgstr "หน้าต่าง"
 
 #: gdk/gdkglcontext.c:337
 msgid "The GDK window bound to the GL context"
-msgstr "หน้าต่าง GDK ที่ผูกกับบริบท GL"
+msgstr "หน้าต่าง GDK ที่ผูกกับ GL context"
 
 #: gdk/gdkglcontext.c:352
 msgid "Shared context"
-msgstr "บริบทใช้ร่วม"
+msgstr "Context ใช้ร่วม"
 
 #: gdk/gdkglcontext.c:353
 msgid "The GL context this context shares data with"
-msgstr "บริบท GL ซึ่งบริบทนี้แบ่งปันข้อมูลให้"
+msgstr "GL context ซึ่ง Context นี้แบ่งปันข้อมูลให้"
 
 #: gdk/gdkscreen.c:93
 msgid "Font options"
@@ -671,11 +671,11 @@ msgstr "ฉลากที่ต้องการแสดงบริเวณ
 
 #: gtk/deprecated/gtknumerableicon.c:656
 msgid "Icon's style context"
-msgstr "บริบทลักษณะของไอคอน"
+msgstr "Style context ของไอคอน"
 
 #: gtk/deprecated/gtknumerableicon.c:657
 msgid "The style context to theme the icon appearance"
-msgstr "บริบทลักษณะที่ต้องการใช้ตกแต่งลักษณะที่ปรากฏของไอคอน"
+msgstr "Style context ที่ต้องการใช้ตกแต่งลักษณะที่ปรากฏของไอคอน"
 
 #: gtk/deprecated/gtknumerableicon.c:663
 msgid "Background icon"
@@ -828,7 +828,7 @@ msgstr "ชื่อเรื่องของไอคอนถาดนี้
 
 #: gtk/deprecated/gtkstyle.c:471
 msgid "Style context"
-msgstr "บริบทลักษณะ"
+msgstr "Style context"
 
 #: gtk/deprecated/gtkstyle.c:472
 msgid "GtkStyleContext to get style from"
@@ -1602,7 +1602,7 @@ msgstr "ใช้เส้นใต้"
 
 #: gtk/gtkbutton.c:289 gtk/gtkexpander.c:318 gtk/gtklabel.c:828 gtk/gtkmenuitem.c:806
 msgid "If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"
-msgstr "ถ้าตั้งค่า เส้นใต้ในข้อความจะระบุว่าควรใช้อักขระถัดไปเป็นแป้นลัดที่เป็นอักษรลัด"
+msgstr "ถ้าตั้งค่า เส้นใต้ในข้อความจะระบุว่าควรใช้อักขระถัดไปเป็นแป้นลัดที่เป็นอักษรช่วยจำ"
 
 #: gtk/gtkbutton.c:301
 msgid "If set, the label is used to pick a stock item instead of being displayed"
@@ -1858,7 +1858,7 @@ msgstr "พื้นที่"
 
 #: gtk/gtkcellareacontext.c:116
 msgid "The Cell Area this context was created for"
-msgstr "พื้นที่เซลล์ซึ่งบริบทนี้ถูกสร้างขึ้นให้"
+msgstr "พื้นที่เซลล์ซึ่ง Context นี้ถูกสร้างขึ้นให้"
 
 #: gtk/gtkcellareacontext.c:132 gtk/gtkcellareacontext.c:151 gtk/gtktreeviewcolumn.c:300
 msgid "Minimum Width"
@@ -2619,7 +2619,7 @@ msgstr "GtkCellArea ที่ใช้เพื่อวางรูปแบบ
 
 #: gtk/gtkcellview.c:306
 msgid "Cell Area Context"
-msgstr "บริบทพื้นที่เซลล์"
+msgstr "Cell Area Context"
 
 #: gtk/gtkcellview.c:307
 msgid "The GtkCellAreaContext used to compute the geometry of the cell view"
@@ -3919,11 +3919,11 @@ msgstr "เลขปุ่มที่ต้องการให้รอรั
 
 #: gtk/gtkglarea.c:784
 msgid "Context"
-msgstr "บริบท"
+msgstr "Context"
 
 #: gtk/gtkglarea.c:785
 msgid "The GL context"
-msgstr "บริบท GL"
+msgstr "GL context"
 
 #: gtk/gtkglarea.c:807
 msgid "Auto render"
@@ -3963,7 +3963,7 @@ msgstr "ใช้ OpenGL ES"
 
 #: gtk/gtkglarea.c:882
 msgid "Whether the context uses OpenGL or OpenGL ES"
-msgstr "กำหนดว่าบริบทใช้ OpenGL หรือ OpenGL ES"
+msgstr "กำหนดว่า Context ใช้ OpenGL หรือ OpenGL ES"
 
 #: gtk/gtkgrid.c:1770
 msgid "Row Homogeneous"
@@ -4317,19 +4317,19 @@ msgstr "กำหนดว่าข้อความฉลากสามาร
 
 #: gtk/gtklabel.c:916
 msgid "Mnemonic key"
-msgstr "คีย์อักษรลัด"
+msgstr "คีย์อักษรช่วยจำ"
 
 #: gtk/gtklabel.c:917
 msgid "The mnemonic accelerator key for this label"
-msgstr "คีย์แป้นลัดที่เป็นอักษรลัดสำหรับฉลากนี้"
+msgstr "คีย์แป้นลัดที่เป็นอักษรช่วยจำสำหรับฉลากนี้"
 
 #: gtk/gtklabel.c:924
 msgid "Mnemonic widget"
-msgstr "วิดเจ็ตอักษรลัด"
+msgstr "วิดเจ็ตอักษรช่วยจำ"
 
 #: gtk/gtklabel.c:925
 msgid "The widget to be activated when the label's mnemonic key is pressed"
-msgstr "วิดเจ็ตที่ต้องการเรียกทำงานเมื่อคีย์ที่เป็นอักษรลัดของฉลากถูกกด"
+msgstr "วิดเจ็ตที่ต้องการเรียกทำงานเมื่อคีย์ที่เป็นอักษรช่วยจำของฉลากถูกกด"
 
 #: gtk/gtklabel.c:965
 msgid "The preferred place to ellipsize the string, if the label does not have enough room to display the entire string"
@@ -6673,11 +6673,11 @@ msgstr "คำสั่งที่ต้องการเรียกใช้
 
 #: gtk/gtksettings.c:1051
 msgid "Enable Mnemonics"
-msgstr "เปิดใช้อักษรลัด"
+msgstr "เปิดใช้อักษรช่วยจำ"
 
 #: gtk/gtksettings.c:1052
 msgid "Whether labels should have mnemonics"
-msgstr "กำหนดว่าฉลากควรมีอักษรลัดหรือไม่"
+msgstr "กำหนดว่าฉลากควรมีอักษรช่วยจำหรือไม่"
 
 #: gtk/gtksettings.c:1068
 msgid "Enable Accelerators"
@@ -6746,94 +6746,91 @@ msgstr "กำหนดว่าจะเล่นเสียงเหตุก
 
 #: gtk/gtksettings.c:1224
 msgid "Enable Tooltips"
-msgstr ""
+msgstr "เปิดใช้คำแนะนำเครื่องมือ"
 
 #: gtk/gtksettings.c:1225
 msgid "Whether tooltips should be shown on widgets"
-msgstr ""
+msgstr "กำหนดว่าคำแนะนำเครื่องมือควรแสดงบนวิดเจ็ตหรือไม่"
 
 #: gtk/gtksettings.c:1240
 msgid "Toolbar style"
-msgstr ""
+msgstr "ลักษณะแถบเครื่องมือ"
 
 #: gtk/gtksettings.c:1241
 msgid "Whether default toolbars have text only, text and icons, icons only, etc."
-msgstr ""
+msgstr "กำหนดว่าแถบเครื่องมือเริ่มต้นจะมีข้อความเท่านั้น ข้อความและไอคอน ไอคอนเท่านั้น และอื่นๆ"
 
 #: gtk/gtksettings.c:1257
 msgid "Toolbar Icon Size"
-msgstr ""
+msgstr "ขนาดไอคอนแถบเครื่องมือ"
 
 #: gtk/gtksettings.c:1258
 msgid "The size of icons in default toolbars."
-msgstr ""
+msgstr "ขนาดของไอคอนในแถบเครื่องมือเริ่มต้น"
 
 #: gtk/gtksettings.c:1277
 msgid "Auto Mnemonics"
-msgstr ""
+msgstr "อักษรช่วยจำอัตโนมัติ"
 
 #: gtk/gtksettings.c:1278
 msgid "Whether mnemonics should be automatically shown and hidden when the user presses the mnemonic activator."
-msgstr ""
+msgstr "กำหนดว่าอักษรช่วยจำควรจะแสดงและซ่อนโดยอัตโนมัติเมื่อผู้ใช้กดแป้นเรียกอักษรช่วยจำหรือไม่"
 
 #: gtk/gtksettings.c:1300
 msgid "Primary button warps slider"
-msgstr ""
+msgstr "ปุ่มลำดับแรกย้ายตำแหน่งปุ่มรางเลื่อนทันที"
 
 #: gtk/gtksettings.c:1301
 msgid "Whether a primary click on the trough should warp the slider into position"
-msgstr ""
+msgstr "กำหนดว่าการคลิกลำดับแรกบนรางควรจะย้ายปุ่มรางเลื่อนไปยังตำแหน่งที่คลิกนั้นโดยทันทีเลยหรือไม่"
 
 #: gtk/gtksettings.c:1319
-#, fuzzy
-#| msgid "Visible"
 msgid "Visible Focus"
-msgstr "ปรากฏ"
+msgstr "สิ่งโฟกัสที่มองเห็นได้"
 
 #: gtk/gtksettings.c:1320
 msgid "Whether 'focus rectangles' should be hidden until the user starts to use the keyboard."
-msgstr ""
+msgstr "กำหนดว่า 'สี่เหลี่ยมโฟกัส' ควรซ่อนตัวจนกว่าผู้ใช้จะเริ่มใช้แป้นพิมพ์หรือไม่"
 
 #: gtk/gtksettings.c:1346
 msgid "Application prefers a dark theme"
-msgstr ""
+msgstr "แอปพลิเคชันต้องการใช้ชุดตกแต่งแบบมืด"
 
 #: gtk/gtksettings.c:1347
-#, fuzzy
 msgid "Whether the application prefers to have a dark theme."
-msgstr "กำหนดว่าการกระทำนี้เปิดใช้หรือไม่"
+msgstr "กำหนดว่าแอปพลิเคชันต้องการที่จะใช้ชุดตกแต่งแบบมืดหรือไม่"
 
 #: gtk/gtksettings.c:1368
 msgid "Show button images"
-msgstr ""
+msgstr "แสดงภาพบนปุ่ม"
 
 #: gtk/gtksettings.c:1369
 msgid "Whether images should be shown on buttons"
-msgstr ""
+msgstr "กำหนดว่าภาพควรแสดงบนปุ่มหรือไม่"
 
 #: gtk/gtksettings.c:1377 gtk/gtksettings.c:1512
 msgid "Select on focus"
-msgstr ""
+msgstr "เลือกเมื่อโฟกัส"
 
 #: gtk/gtksettings.c:1378
 msgid "Whether to select the contents of an entry when it is focused"
-msgstr ""
+msgstr "กำหนดว่าจะเลือกเนื้อหาของช่องป้อนข้อมูลเมื่อถูกโฟกัสหรือไม่"
 
 #: gtk/gtksettings.c:1395
 msgid "Password Hint Timeout"
-msgstr ""
+msgstr "เวลาหมดการใบ้รหัสผ่าน"
 
 #: gtk/gtksettings.c:1396
 msgid "How long to show the last input character in hidden entries"
-msgstr ""
+msgstr "ระยะเวลาที่ต้องการให้แสดงอักขระที่ป้อนตัวสุดท้ายในช่องป้อนข้อมูลที่ซ่อนไว้"
 
 #: gtk/gtksettings.c:1416
 msgid "Show menu images"
-msgstr ""
+msgstr "แสดงภาพในเมนู"
 
 #: gtk/gtksettings.c:1417
 msgid "Whether images should be shown in menus"
-msgstr ""
+msgstr "กำหนดว่าภาพควรแสดงในเมนูหรือไม่"
 
 #: gtk/gtksettings.c:1432
 msgid "Delay before drop down menus appear"
