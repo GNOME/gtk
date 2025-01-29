@@ -51,9 +51,6 @@
  * [method@Gtk.ToggleButton.set_active], and retrieved using
  * [method@Gtk.ToggleButton.get_active].
  *
- * To simply switch the state of a toggle button, use
- * [method@Gtk.ToggleButton.toggled].
- *
  * ## Grouping
  *
  * Toggle buttons can be grouped together, to form mutually exclusive
