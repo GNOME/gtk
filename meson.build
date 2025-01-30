@@ -22,7 +22,7 @@ glib_req           = '>= @0@.@1@'.format(glib_major_req, glib_minor_req)
 pango_req          = '>= @0@.@1@'.format(pango_major_req, pango_minor_req)
 harfbuzz_req       = '>= 8.4.0'
 fribidi_req        = '>= 1.0.6'
-cairo_req          = '>= 1.18.0'
+cairo_req          = '>= 1.18.2'
 gdk_pixbuf_req     = '>= 2.30.0'
 wayland_proto_req  = '>= 1.36'
 wayland_req        = '>= 1.21.0'
@@ -286,7 +286,7 @@ if cc.get_id() == 'msvc'
     '/wd4116', # breaks G_ALIGNOF()
     '/wd4090', # VC2017 is way too aggressive with this
   ]
-  
+
   msvc_supported_cflags = cc.get_supported_arguments(test_cflags)
   if debug
     required_cflags += required_debug_cflags
@@ -359,7 +359,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     'write-strings',
   ]
 
-  
+
   if get_option('buildtype').startswith('debug')
     foreach warning: extra_warnings
       test_cflags += '-Werror=@0@'.format(warning)
