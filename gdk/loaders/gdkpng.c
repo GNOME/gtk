@@ -130,6 +130,7 @@ png_simple_warning_callback (png_structp     png,
 /* }}} */
 /* {{{ Color profile handling */
 
+#if PNG_LIBPNG_VER < 10645
 typedef struct
 {
   gboolean cicp_chunk_read;
@@ -174,6 +175,7 @@ gdk_png_get_color_state_from_cicp (const CICPData  *data,
 
   return gdk_color_state_new_for_cicp (&cicp, error);
 }
+#endif
 
 static GdkColorState *
 gdk_png_get_color_state (png_struct  *png,
@@ -181,16 +183,35 @@ gdk_png_get_color_state (png_struct  *png,
                          GError     **error)
 {
   GdkColorState *color_state;
-  CICPData *cicp;
   int intent;
 
-  cicp = png_get_user_chunk_ptr (png);
+#if PNG_LIBPNG_VER >= 10645
+  png_byte color_primaries;
+  png_byte transfer_function;
+  png_byte matrix_coefficients;
+  png_byte range;
 
+  if (png_get_cICP (png, info, &color_primaries, &transfer_function, &matrix_coefficients, &range))
+    {
+      GError *local_error = NULL;
+      GdkCicp cicp;
+
+      cicp.color_primaries = color_primaries;
+      cicp.transfer_function = transfer_function;
+      cicp.matrix_coefficients = matrix_coefficients;
+      cicp.range = range;
+
+      color_state = gdk_color_state_new_for_cicp (&cicp, error);
+#else
+  CICPData *cicp;
+
+  cicp = png_get_user_chunk_ptr (png);
   if (cicp->cicp_chunk_read)
     {
       GError *local_error = NULL;
-
       color_state = gdk_png_get_color_state_from_cicp (cicp, &local_error);
+#endif
+
       if (color_state)
         {
           g_debug ("Color state from cICP data: %s", gdk_color_state_get_name (color_state));
@@ -236,6 +257,13 @@ gdk_png_set_color_state (png_struct    *png,
 
   if (cicp)
     {
+#if PNG_LIBPNG_VER >= 10645
+      png_set_cICP (png, info,
+                    (png_byte) cicp->color_primaries,
+                    (png_byte) cicp->transfer_function,
+                    (png_byte) 0 /* png only supports this */,
+                    (png_byte) cicp->range);
+#else
       png_unknown_chunk chunk = {
         .name = { 'c', 'I', 'C', 'P', '\0' },
         .data = chunk_data,
@@ -249,6 +277,7 @@ gdk_png_set_color_state (png_struct    *png,
       chunk_data[3] = (png_byte) cicp->range;
 
       png_set_unknown_chunks (png, info, &chunk, 1);
+#endif
     }
   else
     {
@@ -287,7 +316,9 @@ gdk_load_png (GBytes      *bytes,
   GdkColorState *color_state;
   GdkTexture *texture;
   int bpp;
+#if PNG_LIBPNG_VER < 10645
   CICPData cicp = { FALSE, };
+#endif
 
   G_GNUC_UNUSED gint64 before = GDK_PROFILER_CURRENT_TIME;
 
@@ -309,7 +340,9 @@ gdk_load_png (GBytes      *bytes,
     g_error ("Out of memory");
 
   png_set_read_fn (png, &io, png_read_func);
+#if PNG_LIBPNG_VER < 10645
   png_set_read_user_chunk_fn (png, &cicp, png_read_chunk_func);
+#endif
 
   if (sigsetjmp (png_jmpbuf (png), 1))
     {
