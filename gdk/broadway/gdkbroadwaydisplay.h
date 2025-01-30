@@ -42,14 +42,14 @@ typedef struct _GdkBroadwayDisplayClass GdkBroadwayDisplayClass;
 GDK_AVAILABLE_IN_ALL
 GType                   gdk_broadway_display_get_type            (void);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void                    gdk_broadway_display_show_keyboard       (GdkBroadwayDisplay *display);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void                    gdk_broadway_display_hide_keyboard       (GdkBroadwayDisplay *display);
 
-GDK_AVAILABLE_IN_4_4
+GDK_DEPRECATED_IN_4_18
 int                     gdk_broadway_display_get_surface_scale   (GdkDisplay *display);
-GDK_AVAILABLE_IN_4_4
+GDK_DEPRECATED_IN_4_18
 void                    gdk_broadway_display_set_surface_scale   (GdkDisplay *display,
                                                                   int         scale);
 
