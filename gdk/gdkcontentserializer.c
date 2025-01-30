@@ -794,7 +794,7 @@ file_serializer_finish (GObject      *source,
     gdk_content_serializer_return_success (serializer);
 }
 
-static const gchar *
+static const char *
 file_force_uri_schemas[] = { "http", "https" };
 static char *
 file_get_native_uri (GFile *file)
@@ -802,18 +802,11 @@ file_get_native_uri (GFile *file)
   char *path;
 
   /*
-   * There is currently the issue that we want to convert the URI of
-   * files provided via GVFS that have a representation in the
-   * filesystem (usually via FUSE) into file:// URIs, that other
-   * applications that do not use GIO/GVFS can read text/uri-list from
-   * the clipboard.
-   *
-   * For now we have just whitelisted a set of URI schemas whose Files
-   * should directly be serialized as URI instead of the file://
-   * conversion mechanism. I hope I can get GVFS to return TRUE from
-   * GDaemonFile.is_native if the file has a mounted FUSE path
-   * (gvfs#258); and to get GIO to drop the statement that FUSE files
-   * aren't native in the doc comment of Gio.File.is_native.
+   * We want to convert URIs to file:// URIs, so other applications
+   * that do not use GIO/GVFS can read text/uri-list from the clipboard.
+   * 
+   * But we don't want to do that for URIs that are widely understood,
+   * so for lack of better APIs, we whitelist those.
    */
   for (gsize i = 0; i < G_N_ELEMENTS (file_force_uri_schemas); i++)
     if (g_file_has_uri_scheme (file, file_force_uri_schemas[i]))
