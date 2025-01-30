@@ -43,6 +43,8 @@
 #endif
 #include <string.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 gdk_x11_cursor_remove_from_cache (gpointer data, GObject *cursor)
 {
@@ -359,6 +361,8 @@ _gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
  * may even fall back to a few default cursors.
  *
  * Returns: an Xlib Cursor.
+ *
+ * Deprecated: 4.18
  */
 Cursor
 gdk_x11_display_get_xcursor (GdkDisplay *display,

@@ -45,6 +45,8 @@
 
 #include "gtkmountoperationprivate.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* ---------------------------------------------------------------------------------------------------- */
 /* these functions are based on code from libwnck (LGPLv2) */
 

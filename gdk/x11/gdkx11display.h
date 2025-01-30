@@ -53,16 +53,16 @@ typedef struct _GdkX11DisplayClass GdkX11DisplayClass;
 GDK_AVAILABLE_IN_ALL
 GType      gdk_x11_display_get_type            (void);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 GdkDisplay *  gdk_x11_display_open        (const char  *display_name);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 Display *     gdk_x11_display_get_xdisplay     (GdkDisplay  *display);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 Screen *      gdk_x11_display_get_xscreen      (GdkDisplay  *display);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 Window        gdk_x11_display_get_xrootwindow  (GdkDisplay  *display);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 Cursor        gdk_x11_display_get_xcursor      (GdkDisplay  *display,
                                                 GdkCursor   *cursor);
 
@@ -76,7 +76,7 @@ Cursor        gdk_x11_display_get_xcursor      (GdkDisplay  *display,
  */
 #define GDK_DISPLAY_XDISPLAY(display) (gdk_x11_display_get_xdisplay (display))
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 guint32       gdk_x11_display_get_user_time (GdkDisplay *display);
 
 GDK_DEPRECATED_IN_4_10
@@ -84,7 +84,7 @@ const char * gdk_x11_display_get_startup_notification_id         (GdkDisplay *di
 GDK_DEPRECATED_IN_4_10
 void          gdk_x11_display_set_startup_notification_id         (GdkDisplay  *display,
                                                                    const char *startup_id);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void          gdk_x11_display_set_program_class                   (GdkDisplay  *display,
                                                                    const char  *program_class);
 
@@ -93,41 +93,41 @@ void          gdk_x11_display_set_cursor_theme (GdkDisplay  *display,
                                                 const char *theme,
                                                 const int    size);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void gdk_x11_display_broadcast_startup_message (GdkDisplay *display,
                                                 const char *message_type,
                                                 ...) G_GNUC_NULL_TERMINATED;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 GdkDisplay   *gdk_x11_lookup_xdisplay (Display *xdisplay);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 GdkX11Screen *gdk_x11_display_get_screen (GdkDisplay *display);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 GdkMonitor * gdk_x11_display_get_primary_monitor (GdkDisplay *display);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void        gdk_x11_display_grab              (GdkDisplay *display);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void        gdk_x11_display_ungrab            (GdkDisplay *display);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void        gdk_x11_display_set_surface_scale (GdkDisplay *display,
                                                int scale);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void                           gdk_x11_display_error_trap_push        (GdkDisplay *display);
 /* warn unused because you could use pop_ignored otherwise */
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 G_GNUC_WARN_UNUSED_RESULT int  gdk_x11_display_error_trap_pop         (GdkDisplay *display);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void                           gdk_x11_display_error_trap_pop_ignored (GdkDisplay *display);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void        gdk_x11_set_sm_client_id (const char *sm_client_id);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 GdkSurface * gdk_x11_display_get_default_group (GdkDisplay *display);
 
 G_END_DECLS

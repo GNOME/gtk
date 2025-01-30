@@ -52,28 +52,28 @@ typedef struct _GdkX11SurfaceClass GdkX11SurfaceClass;
 GDK_AVAILABLE_IN_ALL
 GType    gdk_x11_surface_get_type          (void);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 Window   gdk_x11_surface_get_xid           (GdkSurface   *surface);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void     gdk_x11_surface_set_user_time     (GdkSurface   *surface,
                                             guint32      timestamp);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void     gdk_x11_surface_set_utf8_property (GdkSurface *surface,
                                             const char *name,
                                             const char *value);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void     gdk_x11_surface_set_theme_variant (GdkSurface   *surface,
                                             const char  *variant);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void     gdk_x11_surface_move_to_current_desktop (GdkSurface   *surface);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 guint32  gdk_x11_surface_get_desktop             (GdkSurface   *surface);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void     gdk_x11_surface_move_to_desktop         (GdkSurface   *surface,
                                                   guint32      desktop);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void     gdk_x11_surface_set_frame_sync_enabled (GdkSurface *surface,
                                                  gboolean   frame_sync_enabled);
 
@@ -97,27 +97,27 @@ void     gdk_x11_surface_set_frame_sync_enabled (GdkSurface *surface,
  */
 #define GDK_SURFACE_XID(win)           (gdk_x11_surface_get_xid (win))
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 guint32       gdk_x11_get_server_time  (GdkSurface       *surface);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 GdkSurface  *gdk_x11_surface_lookup_for_display      (GdkDisplay *display,
                                                       Window      window);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void gdk_x11_surface_set_skip_taskbar_hint (GdkSurface *surface,
                                             gboolean    skips_taskbar);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void gdk_x11_surface_set_skip_pager_hint   (GdkSurface *surface,
                                             gboolean    skips_pager);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void gdk_x11_surface_set_urgency_hint      (GdkSurface *surface,
                                             gboolean    urgent);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void          gdk_x11_surface_set_group    (GdkSurface *surface,
                                             GdkSurface *leader);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 GdkSurface *  gdk_x11_surface_get_group    (GdkSurface *surface);
 
 

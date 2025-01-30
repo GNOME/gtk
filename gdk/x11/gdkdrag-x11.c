@@ -51,6 +51,8 @@
 
 #include <string.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef enum {
   GDK_DRAG_STATUS_DRAG,
   GDK_DRAG_STATUS_MOTION_WAIT,

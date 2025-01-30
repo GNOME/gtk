@@ -32,6 +32,8 @@
 #include <X11/Xatom.h>
 #include <string.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 insert_atom_pair (GdkDisplay *display,
                   const char *string,
@@ -73,6 +75,8 @@ lookup_cached_xatom (GdkDisplay *display,
  * faster than XInternAtom(), which is a round trip to the server each time.
  * 
  * Returns: a X atom for a `GdkDisplay`
+ *
+ * Deprecated: 4.18
  **/
 Atom
 gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
@@ -145,6 +149,8 @@ _gdk_x11_precache_atoms (GdkDisplay          *display,
  *
  * Returns: name of the X atom; this string is owned by GDK,
  *   so it shouldn’t be modified or freed. 
+ *
+ * Deprecated: 4.18
  **/
 const char *
 gdk_x11_get_xatom_name_for_display (GdkDisplay *display,

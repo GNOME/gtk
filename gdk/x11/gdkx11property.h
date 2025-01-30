@@ -35,10 +35,10 @@
 
 G_BEGIN_DECLS
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 Atom                  gdk_x11_get_xatom_by_name_for_display (GdkDisplay  *display,
                                                              const char *atom_name);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 const char *         gdk_x11_get_xatom_name_for_display (GdkDisplay  *display,
                                                           Atom         xatom);
 

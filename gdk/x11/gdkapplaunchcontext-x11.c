@@ -33,6 +33,8 @@
 #include <string.h>
 #include <unistd.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static char *
 get_display_name (GFile     *file,
                   GFileInfo *info)

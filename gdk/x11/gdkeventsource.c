@@ -26,6 +26,7 @@
 #include "gdkdisplay-x11.h"
 #include "xsettings-client.h"
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 static gboolean gdk_event_source_prepare  (GSource     *source,
                                            int         *timeout);

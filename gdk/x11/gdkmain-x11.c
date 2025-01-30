@@ -45,6 +45,8 @@
 #include <X11/XKBlib.h>
 #endif
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 /* non-GDK previous error handler */
 typedef int (*GdkXErrorHandler) (Display *, XErrorEvent *);
 static GdkXErrorHandler _gdk_old_error_handler;

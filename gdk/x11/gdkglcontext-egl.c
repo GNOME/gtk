@@ -28,6 +28,8 @@
 
 #include <epoxy/egl.h>
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 struct _GdkX11GLContextEGL
 {
   GdkX11GLContext parent_instance;
@@ -50,6 +52,8 @@ G_DEFINE_TYPE (GdkX11GLContextEGL, gdk_x11_gl_context_egl, GDK_TYPE_X11_GL_CONTE
  * Returns: (nullable): the EGL display object
  *
  * Since: 4.4
+ *
+ * Deprecated: 4.18
  */
 gpointer
 gdk_x11_display_get_egl_display (GdkDisplay *display)
@@ -120,6 +124,8 @@ gdk_x11_gl_context_egl_init (GdkX11GLContextEGL *self)
  * Returns: %TRUE if EGL is available
  *
  * Since: 4.4
+ *
+ * Deprecated: 4.18
  */
 gboolean
 gdk_x11_display_get_egl_version (GdkDisplay *display,

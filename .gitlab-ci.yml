@@ -176,7 +176,7 @@ fedora-clang:
     - meson setup
             ${COMMON_MESON_FLAGS}
             ${EXTRA_MESON_FLAGS}
-            ${BACKEND_FLAGS}
+            -Dx11-backend=false -Dwayland-backend=true -Dbroadway-backend=false
             ${FEATURE_FLAGS}
             _build
     - meson compile -C _build

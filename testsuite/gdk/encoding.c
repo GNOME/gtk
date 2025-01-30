@@ -3,6 +3,8 @@
 #include <gdk/x11/gdkx.h>
 #endif
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 static void
 test_to_text_list (void)
 {

@@ -75,6 +75,8 @@
 #include <X11/extensions/Xrandr.h>
 #endif
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 enum {
   XEVENT,
   LAST_SIGNAL
@@ -1418,6 +1420,8 @@ gdk_x11_display_init_leader_surface (GdkX11Display *self)
  * returned.
  *
  * Returns: (nullable) (transfer full): The new display
+ *
+ * Deprecated: 4.18
  */
 GdkDisplay *
 gdk_x11_display_open (const char *display_name)

@@ -39,10 +39,10 @@ typedef struct _GdkX11MonitorClass GdkX11MonitorClass;
 GDK_AVAILABLE_IN_ALL
 GType             gdk_x11_monitor_get_type            (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 XID               gdk_x11_monitor_get_output          (GdkMonitor *monitor);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 void              gdk_x11_monitor_get_workarea        (GdkMonitor   *monitor,
                                                        GdkRectangle *workarea);
 

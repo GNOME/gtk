@@ -50,6 +50,8 @@
 #  endif
 #endif /* HAVE_XKB */
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+
 typedef struct _DirectionCacheEntry DirectionCacheEntry;
 
 struct _DirectionCacheEntry
