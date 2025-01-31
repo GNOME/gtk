@@ -1088,7 +1088,7 @@ fill_button_event (GdkWindow *window,
       axes[1] = y;
       axes[2] = [nsevent pressure];
       axes[3] = [nsevent tilt].x;
-      axes[4] = [nsevent tilt].y;
+      axes[4] = -[nsevent tilt].y;
     }
 
   event->any.type = type;
@@ -1131,7 +1131,7 @@ fill_motion_event (GdkWindow *window,
       axes[1] = y;
       axes[2] = [nsevent pressure];
       axes[3] = [nsevent tilt].x;
-      axes[4] = [nsevent tilt].y;
+      axes[4] = -[nsevent tilt].y;
     }
 
   event->any.type = GDK_MOTION_NOTIFY;
