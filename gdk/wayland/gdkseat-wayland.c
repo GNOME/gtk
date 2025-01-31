@@ -748,6 +748,8 @@ pointer_handle_leave (void              *data,
   if (seat->cursor)
     gdk_wayland_seat_stop_cursor_animation (seat, &seat->pointer_info);
 
+  seat->pointer_info.has_cursor_surface = FALSE;
+
   if (wl_seat_get_version (seat->wl_seat) < WL_POINTER_HAS_FRAME)
     gdk_wayland_seat_flush_frame_event (seat);
 }
@@ -2845,6 +2847,7 @@ tablet_tool_handle_proximity_out (void                      *data,
 
   g_object_unref (tablet->pointer_info.focus);
   tablet->pointer_info.focus = NULL;
+  tablet->pointer_info.has_cursor_surface = FALSE;
 
   tablet->pointer_info.button_modifiers &=
     ~(GDK_BUTTON1_MASK | GDK_BUTTON2_MASK | GDK_BUTTON3_MASK |
