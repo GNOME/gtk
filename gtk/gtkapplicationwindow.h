@@ -56,8 +56,11 @@ struct _GtkApplicationWindowClass
 {
   GtkWindowClass parent_class;
 
+  gboolean     (* save_state)           (GtkApplicationWindow   *window,
+                                         GVariantDict           *dict);
+
   /*< private >*/
-  gpointer padding[8];
+  gpointer padding[7];
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -80,6 +83,7 @@ void        gtk_application_window_set_help_overlay (GtkApplicationWindow *windo
 GDK_DEPRECATED_IN_4_18
 GtkShortcutsWindow *
             gtk_application_window_get_help_overlay (GtkApplicationWindow *window);
+
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkApplicationWindow, g_object_unref)
 

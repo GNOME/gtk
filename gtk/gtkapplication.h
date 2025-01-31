@@ -51,6 +51,9 @@ struct _GtkApplication
  * @window_removed: Signal emitted when a `GtkWindow` is removed from
  *    application, either as a side-effect of being destroyed or
  *    explicitly through gtk_application_remove_window().
+ * @save_state: Vfunc for the save-state signal. Since 4.20
+ * @restore_state: Vfunc for the restore-state signal. Since 4.20
+ * @restore_window: VFunc for the restore-window signal. Since 4.20
  */
 struct _GtkApplicationClass
 {
@@ -63,8 +66,19 @@ struct _GtkApplicationClass
   void (*window_removed) (GtkApplication *application,
                           GtkWindow      *window);
 
+  gboolean (* save_state)    (GtkApplication   *application,
+                              GVariantDict     *state);
+
+  gboolean (* restore_state) (GtkApplication   *application,
+                              GtkRestoreReason  reason,
+                              GVariant         *state);
+
+  void     (*restore_window) (GtkApplication   *application,
+                              GtkRestoreReason  reason,
+                              GVariant         *state);
+
   /*< private >*/
-  gpointer padding[8];
+  gpointer padding[5];
 };
 
 GDK_AVAILABLE_IN_ALL
@@ -133,6 +147,12 @@ void             gtk_application_set_accels_for_action           (GtkApplication
 GDK_AVAILABLE_IN_ALL
 GMenu *          gtk_application_get_menu_by_id                  (GtkApplication       *application,
                                                                   const char           *id);
+
+GDK_AVAILABLE_IN_4_22
+void             gtk_application_save                            (GtkApplication       *application);
+
+GDK_AVAILABLE_IN_4_22
+void             gtk_application_forget                          (GtkApplication       *application);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkApplication, g_object_unref)
 

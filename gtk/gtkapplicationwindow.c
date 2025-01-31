@@ -19,7 +19,7 @@
 
 #include "config.h"
 
-#include "gtkapplicationwindow.h"
+#include "gtkapplicationwindowprivate.h"
 
 #include "gtkapplicationprivate.h"
 #include "gtkwidgetprivate.h"
@@ -28,6 +28,8 @@
 #include "gtksettings.h"
 #include "deprecated/gtkshortcutswindowprivate.h"
 #include "gtktooltipprivate.h"
+#include "gtkprivate.h"
+#include "gtktypebuiltins.h"
 
 #include <glib/gi18n-lib.h>
 
@@ -403,6 +405,12 @@ enum {
 };
 static GParamSpec *gtk_application_window_properties[N_PROPS];
 
+enum {
+  SAVE_STATE,
+  LAST_SIGNAL
+};
+static guint gtk_application_window_signals[LAST_SIGNAL] = { 0 };
+
 static void
 gtk_application_window_measure (GtkWidget      *widget,
                                 GtkOrientation  orientation,
@@ -702,7 +710,36 @@ gtk_application_window_class_init (GtkApplicationWindowClass *class)
   gtk_application_window_properties[PROP_SHOW_MENUBAR] =
     g_param_spec_boolean ("show-menubar", NULL, NULL,
                           FALSE, G_PARAM_CONSTRUCT | G_PARAM_STATIC_STRINGS | G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, N_PROPS, gtk_application_window_properties);
+
+  /**
+   * GtkApplicationWindow:save-state:
+   * @window: the window on which the signal is emitted
+   * @builder: a `GVariantBuilder` of type `a{sv}`
+   *
+   * The handler for this signal should persist any
+   * application-specific state of @window into @dict.
+   *
+   * Note that window management state such as maximized,
+   * fullscreen, or window size should not be saved as
+   * part of this, they are handled by GTK.
+   *
+   * See [signal@Gtk.Application:restore-window].
+   *
+   * Returns: true to stop stop further handlers from running
+   *
+   * Since: 4.22
+   */
+  gtk_application_window_signals[SAVE_STATE] =
+    g_signal_new (I_("save-state"),
+                  G_TYPE_FROM_CLASS (class),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkApplicationWindowClass, save_state),
+                  _gtk_boolean_handled_accumulator, NULL,
+                  NULL,
+                  G_TYPE_BOOLEAN, 1,
+                  G_TYPE_VARIANT_DICT);
 }
 
 /**
@@ -873,4 +910,23 @@ gtk_application_window_get_help_overlay (GtkApplicationWindow *window)
   g_return_val_if_fail (GTK_IS_APPLICATION_WINDOW (window), NULL);
 
   return priv->help_overlay;
+}
+
+/*< private >
+ * gtk_application_window_save:
+ * @window: a `GtkApplicationWindow`
+ * @state: a `GVariantDict` to add state to
+ *
+ * Save the state of @window and its children to a `GVariant`.
+ *
+ * See [signal@Gtk.ApplicationWindow::save-state] for how to override
+ * what state is saved.
+ */
+void
+gtk_application_window_save (GtkApplicationWindow *window,
+                             GVariantDict         *state)
+{
+  gboolean ret;
+
+  g_signal_emit (window, gtk_application_window_signals[SAVE_STATE], 0, state, &ret);
 }
