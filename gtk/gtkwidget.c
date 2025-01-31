@@ -10492,13 +10492,6 @@ gtk_widget_compute_transform (GtkWidget         *widget,
   for (iter = widget; iter != ancestor; iter = iter->priv->parent)
     {
       GtkWidgetPrivate *priv = gtk_widget_get_instance_private (iter);
-
-      if (GTK_IS_NATIVE (iter))
-        {
-          graphene_matrix_init_identity (out_transform);
-          return FALSE;
-        }
-
       gsk_transform_to_matrix (priv->transform, &tmp);
       graphene_matrix_multiply (&transform, &tmp, &transform);
     }
@@ -10515,13 +10508,6 @@ gtk_widget_compute_transform (GtkWidget         *widget,
     {
       GtkWidgetPrivate *priv = gtk_widget_get_instance_private (iter);
       gsk_transform_to_matrix (priv->transform, &tmp);
-
-      if (GTK_IS_NATIVE (iter))
-        {
-          graphene_matrix_init_identity (out_transform);
-          return FALSE;
-        }
-
       graphene_matrix_multiply (&inverse, &tmp, &inverse);
     }
   if (!graphene_matrix_inverse (&inverse, &inverse))

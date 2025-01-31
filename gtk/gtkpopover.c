@@ -726,7 +726,26 @@ gtk_popover_native_layout (GtkNative *native,
 
   if (gtk_widget_needs_allocate (widget))
     {
-      gtk_widget_allocate (widget, width, height, -1, NULL);
+      /* We know the popup's position in the toplevel's coordinate space,
+       * so convert it to be relative to the parent widget to define the
+       * popover's transform.
+       */
+      GskTransform *transform = NULL;
+      double native_x, native_y;
+      GtkWidget *parent = gtk_widget_get_parent (widget);
+      GtkWidget *root = GTK_WIDGET (gtk_widget_get_root (parent));
+      graphene_point_t parent_coords;
+      if (gtk_widget_compute_point (parent, root, &GRAPHENE_POINT_INIT (0, 0), &parent_coords))
+        {
+          transform = gsk_transform_translate (transform,
+                                               &GRAPHENE_POINT_INIT (
+                                                 priv->final_rect.x - parent_coords.x,
+                                                 priv->final_rect.y - parent_coords.y));
+        }
+      gtk_native_get_surface_transform (native, &native_x, &native_y);
+      transform = gsk_transform_translate (transform,
+                                           &GRAPHENE_POINT_INIT (-native_x, -native_y));
+      gtk_widget_allocate (widget, width, height, -1, transform);
 
       /* This fake motion event is needed for getting up to date pointer focus
        * and coordinates when the pointer didn't move but the layout changed
