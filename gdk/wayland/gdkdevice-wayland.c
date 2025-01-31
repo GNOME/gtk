@@ -285,6 +285,27 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
       return G_SOURCE_REMOVE;
     }
 
+  if (buffer)
+    {
+      wl_surface_attach (pointer->pointer_surface, buffer, 0, 0);
+      if (pointer->pointer_surface_viewport)
+        {
+          wp_viewport_set_source (pointer->pointer_surface_viewport,
+                                  wl_fixed_from_int (0),
+                                  wl_fixed_from_int (0),
+                                  wl_fixed_from_double (w * scale),
+                                  wl_fixed_from_double (h * scale));
+          wp_viewport_set_destination (pointer->pointer_surface_viewport, w, h);
+        }
+      wl_surface_damage (pointer->pointer_surface,  0, 0, w, h);
+      wl_surface_commit (pointer->pointer_surface);
+    }
+  else
+    {
+      wl_surface_attach (pointer->pointer_surface, NULL, 0, 0);
+      wl_surface_commit (pointer->pointer_surface);
+    }
+
   if (tablet)
     {
       if (!tablet->current_tool)
@@ -309,27 +330,6 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
     {
       pointer->cursor_timeout_id = 0;
       return G_SOURCE_REMOVE;
-    }
-
-  if (buffer)
-    {
-      wl_surface_attach (pointer->pointer_surface, buffer, 0, 0);
-      if (pointer->pointer_surface_viewport)
-        {
-          wp_viewport_set_source (pointer->pointer_surface_viewport,
-                                  wl_fixed_from_int (0),
-                                  wl_fixed_from_int (0),
-                                  wl_fixed_from_double (w * scale),
-                                  wl_fixed_from_double (h * scale));
-          wp_viewport_set_destination (pointer->pointer_surface_viewport, w, h);
-        }
-      wl_surface_damage (pointer->pointer_surface,  0, 0, w, h);
-      wl_surface_commit (pointer->pointer_surface);
-    }
-  else
-    {
-      wl_surface_attach (pointer->pointer_surface, NULL, 0, 0);
-      wl_surface_commit (pointer->pointer_surface);
     }
 
   next_image_index =
