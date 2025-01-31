@@ -65,6 +65,7 @@ enum {
   COMMIT,
   RETRIEVE_SURROUNDING,
   DELETE_SURROUNDING,
+  INVALID_COMPOSITION,
   LAST_SIGNAL
 };
 
@@ -184,6 +185,8 @@ G_DEFINE_ABSTRACT_TYPE_WITH_PRIVATE (GtkIMContext, gtk_im_context, G_TYPE_OBJECT
  *   behavior. The base implementation emits
  *   [signal@Gtk.IMContext::retrieve-surrounding] and records the context
  *   received by the subsequent invocation of [vfunc@Gtk.IMContext.get_surrounding].
+ * @invalid_composition: Default handler of the
+ *   [signal@Gtk.IMContext::invalid-composition] signal. Since: 4.22
  */
 static void
 gtk_im_context_class_init (GtkIMContextClass *klass)
@@ -323,6 +326,27 @@ gtk_im_context_class_init (GtkIMContextClass *klass)
   g_signal_set_va_marshaller (im_context_signals[DELETE_SURROUNDING],
                               G_TYPE_FROM_CLASS (klass),
                               _gtk_marshal_BOOLEAN__INT_INTv);
+
+  /**
+   * GtkIMContext::invalid-composition:
+   * @context: the object on which the signal is emitted
+   * @str: the completed character(s) entered by the user
+   *
+   * Emitted when the filtered keys do not compose to a single valid character.
+   *
+   * Returns: true if the IM context avoid beeping on invalid composition
+   *
+   * Since: 4.22
+   */
+  im_context_signals[INVALID_COMPOSITION] =
+    g_signal_new (I_("invalid-composition"),
+                  G_TYPE_FROM_CLASS (klass),
+                  G_SIGNAL_RUN_LAST,
+                  G_STRUCT_OFFSET (GtkIMContextClass, invalid_composition),
+                  g_signal_accumulator_first_wins,
+                  NULL, NULL,
+                  G_TYPE_BOOLEAN, 1,
+                  G_TYPE_STRING);
 
   /**
    * GtkIMContext:input-purpose:
