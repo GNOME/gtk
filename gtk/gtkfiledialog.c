@@ -1254,7 +1254,7 @@ gtk_file_dialog_open_multiple (GtkFileDialog       *self,
 /**
  * gtk_file_dialog_open_multiple_finish:
  * @self: a file dialog
- * @result: the rsult
+ * @result: the result
  * @error: return location for a [enum@Gtk.DialogError] error
  *
  * Finishes the [method@Gtk.FileDialog.open] call.
