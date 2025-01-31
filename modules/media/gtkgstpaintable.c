@@ -35,6 +35,7 @@ struct _GtkGstPaintable
   GdkPaintable *image;
   double pixel_aspect_ratio;
   graphene_rect_t viewport;
+  int orientation;
 
   GdkSurface *surface;
 };
@@ -44,6 +45,21 @@ struct _GtkGstPaintableClass
   GObjectClass parent_class;
 };
 
+static gboolean
+is_orientation_rotated (int orientation)
+{
+  switch (orientation)
+    {
+    case GST_VIDEO_ORIENTATION_90R:
+    case GST_VIDEO_ORIENTATION_90L:
+    case GST_VIDEO_ORIENTATION_UL_LR:
+    case GST_VIDEO_ORIENTATION_UR_LL:
+      return TRUE;
+    default:
+      return FALSE;
+    }
+}
+
 static void
 gtk_gst_paintable_paintable_snapshot (GdkPaintable *paintable,
                                       GdkSnapshot  *snapshot,
@@ -51,26 +67,69 @@ gtk_gst_paintable_paintable_snapshot (GdkPaintable *paintable,
                                       double        height)
 {
   GtkGstPaintable *self = GTK_GST_PAINTABLE (paintable);
+  float sx, sy;
 
-  if (self->image)
+  if (!self->image)
+    return;
+
+  gtk_snapshot_save (snapshot);
+
+  sx = gdk_paintable_get_intrinsic_width (self->image) / self->viewport.size.width;
+  sy = gdk_paintable_get_intrinsic_height (self->image) / self->viewport.size.height;
+
+  gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
+
+  gtk_snapshot_translate (snapshot,
+                          &GRAPHENE_POINT_INIT (-self->viewport.origin.x * width / self->viewport.size.width,
+                                                -self->viewport.origin.y * height / self->viewport.size.height));
+
+  if (self->orientation != GST_VIDEO_ORIENTATION_IDENTITY)
     {
-      float sx, sy;
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (width / 2, height / 2));
 
-      gtk_snapshot_save (snapshot);
+      switch (self->orientation)
+        {
+        case GST_VIDEO_ORIENTATION_90R:
+          gtk_snapshot_rotate (snapshot, 90.0);
+          break;
+        case GST_VIDEO_ORIENTATION_180:
+          gtk_snapshot_scale (snapshot, -1.0, -1.0);
+          break;
+        case GST_VIDEO_ORIENTATION_90L:
+          gtk_snapshot_rotate (snapshot, 270.0);
+          break;
+        case GST_VIDEO_ORIENTATION_HORIZ:
+          gtk_snapshot_scale (snapshot, -1.0, 1.0);
+          break;
+        case GST_VIDEO_ORIENTATION_VERT:
+          gtk_snapshot_scale (snapshot, 1.0, -1.0);
+          break;
+        case GST_VIDEO_ORIENTATION_UL_LR:
+          gtk_snapshot_rotate (snapshot, 90.0);
+          gtk_snapshot_scale (snapshot, 1.0, -1.0);
+          break;
+        case GST_VIDEO_ORIENTATION_UR_LL:
+          gtk_snapshot_rotate (snapshot, 270.0);
+          gtk_snapshot_scale (snapshot, 1.0, -1.0);
+          break;
+        default:
+          g_assert_not_reached ();
+          break;
+        }
 
-      sx = gdk_paintable_get_intrinsic_width (self->image) / self->viewport.size.width;
-      sy = gdk_paintable_get_intrinsic_height (self->image) / self->viewport.size.height;
-
-      gtk_snapshot_push_clip (snapshot, &GRAPHENE_RECT_INIT (0, 0, width, height));
-
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-self->viewport.origin.x * width / self->viewport.size.width,
-                                                              -self->viewport.origin.y * height / self->viewport.size.height));
-
-      gdk_paintable_snapshot (self->image, snapshot, width * sx, height * sy);
-
-      gtk_snapshot_pop (snapshot);
-      gtk_snapshot_restore (snapshot);
+      if (is_orientation_rotated (self->orientation))
+        gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-height / 2, -width / 2));
+      else
+        gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (-width / 2, -height / 2));
     }
+
+  if (is_orientation_rotated (self->orientation))
+    gdk_paintable_snapshot (self->image, snapshot, height * sy, width * sx);
+  else
+    gdk_paintable_snapshot (self->image, snapshot, width * sx, height *sy);
+
+  gtk_snapshot_pop (snapshot);
+  gtk_snapshot_restore (snapshot);
 }
 
 static GdkPaintable *
@@ -90,7 +149,12 @@ gtk_gst_paintable_paintable_get_intrinsic_width (GdkPaintable *paintable)
   GtkGstPaintable *self = GTK_GST_PAINTABLE (paintable);
 
   if (self->image)
-    return round (self->pixel_aspect_ratio * self->viewport.size.width);
+    {
+      if (is_orientation_rotated (self->orientation))
+        return round (self->viewport.size.height);
+      else
+        return round (self->viewport.size.width);
+    }
 
   return 0;
 }
@@ -101,7 +165,12 @@ gtk_gst_paintable_paintable_get_intrinsic_height (GdkPaintable *paintable)
   GtkGstPaintable *self = GTK_GST_PAINTABLE (paintable);
 
   if (self->image)
-    return ceil (self->viewport.size.height);
+    {
+      if (is_orientation_rotated (self->orientation))
+        return ceil (self->viewport.size.width);
+      else
+        return ceil (self->viewport.size.height);
+    }
 
   return 0;
 }
@@ -112,7 +181,12 @@ gtk_gst_paintable_paintable_get_intrinsic_aspect_ratio (GdkPaintable *paintable)
   GtkGstPaintable *self = GTK_GST_PAINTABLE (paintable);
 
   if (self->image)
-    return self->viewport.size.width / self->viewport.size.height;
+    {
+      if (is_orientation_rotated (self->orientation))
+        return self->viewport.size.height / self->viewport.size.width;
+      else
+        return self->viewport.size.width / self->viewport.size.height;
+    }
 
   return 0.0;
 };
@@ -263,7 +337,8 @@ static void
 gtk_gst_paintable_set_paintable (GtkGstPaintable       *self,
                                  GdkPaintable          *paintable,
                                  double                 pixel_aspect_ratio,
-                                 const graphene_rect_t *viewport)
+                                 const graphene_rect_t *viewport,
+                                 int                    orientation)
 {
   gboolean size_changed;
 
@@ -271,6 +346,7 @@ gtk_gst_paintable_set_paintable (GtkGstPaintable       *self,
     return;
 
   if (self->image == NULL ||
+      is_orientation_rotated (self->orientation) != is_orientation_rotated (orientation) ||
       gdk_paintable_get_intrinsic_height (self->image) != gdk_paintable_get_intrinsic_height (paintable) ||
       !G_APPROX_VALUE (self->pixel_aspect_ratio * gdk_paintable_get_intrinsic_width (self->image),
                        pixel_aspect_ratio * gdk_paintable_get_intrinsic_width (paintable),
@@ -286,6 +362,7 @@ gtk_gst_paintable_set_paintable (GtkGstPaintable       *self,
   g_set_object (&self->image, paintable);
   self->pixel_aspect_ratio = pixel_aspect_ratio;
   self->viewport = *viewport;
+  self->orientation = orientation;
 
   if (size_changed)
     gdk_paintable_invalidate_size (GDK_PAINTABLE (self));
@@ -300,6 +377,7 @@ struct _SetTextureInvocation {
   GdkTexture      *texture;
   double           pixel_aspect_ratio;
   graphene_rect_t  viewport;
+  int              orientation;
 };
 
 static void
@@ -319,7 +397,8 @@ gtk_gst_paintable_set_texture_invoke (gpointer data)
   gtk_gst_paintable_set_paintable (invoke->paintable,
                                    GDK_PAINTABLE (invoke->texture),
                                    invoke->pixel_aspect_ratio,
-                                   &invoke->viewport);
+                                   &invoke->viewport,
+                                   invoke->orientation);
 
   return G_SOURCE_REMOVE;
 }
@@ -328,7 +407,8 @@ void
 gtk_gst_paintable_queue_set_texture (GtkGstPaintable       *self,
                                      GdkTexture            *texture,
                                      double                 pixel_aspect_ratio,
-                                     const graphene_rect_t *viewport)
+                                     const graphene_rect_t *viewport,
+                                     int                    orientation)
 {
   SetTextureInvocation *invoke;
 
@@ -337,6 +417,7 @@ gtk_gst_paintable_queue_set_texture (GtkGstPaintable       *self,
   invoke->texture = g_object_ref (texture);
   invoke->pixel_aspect_ratio = pixel_aspect_ratio;
   invoke->viewport = *viewport;
+  invoke->orientation = orientation;
 
   g_main_context_invoke_full (NULL,
                               G_PRIORITY_DEFAULT,
