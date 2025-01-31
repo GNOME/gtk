@@ -607,7 +607,7 @@ _gdk_macos_seat_get_tablet_axes_from_nsevent (GdkMacosSeat *seat,
 
       axis_index = tablet->axis_indices[GDK_AXIS_YTILT];
       _gdk_device_translate_axis (tablet->stylus_device, axis_index,
-                                  [nsevent tilt].y, &tablet->axes[GDK_AXIS_YTILT]);
+                                  -[nsevent tilt].y, &tablet->axes[GDK_AXIS_YTILT]);
     }
 
   if (tablet->current_tool->tool_axes & GDK_AXIS_FLAG_PRESSURE)
