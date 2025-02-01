@@ -1686,21 +1686,29 @@ add_device (GtkInspectorGeneral *gen,
 
   if (gdk_device_get_source (device) == GDK_SOURCE_KEYBOARD)
     {
-      char **layout_names;
-      int n_layouts, active_layout;
       GString *s;
+      char **layout_names;
 
-      layout_names = gdk_device_get_layout_names (device);
-      active_layout = gdk_device_get_active_layout_index (device);
-      n_layouts = g_strv_length (layout_names);
       s = g_string_new ("");
-      for (int i = 0; i < n_layouts; i++)
+      layout_names = gdk_device_get_layout_names (device);
+      if (layout_names)
         {
-          if (s->len > 0)
-            g_string_append (s, ", ");
-          g_string_append (s, layout_names[i]);
-          if (i == active_layout)
-            g_string_append (s, "*");
+          int n_layouts, active_layout;
+
+          active_layout = gdk_device_get_active_layout_index (device);
+          n_layouts = g_strv_length (layout_names);
+          for (int i = 0; i < n_layouts; i++)
+            {
+              if (s->len > 0)
+                g_string_append (s, ", ");
+              g_string_append (s, layout_names[i]);
+              if (i == active_layout)
+                g_string_append (s, "*");
+            }
+        }
+      else
+        {
+          g_string_append (s, "Unknown");
         }
 
       add_label_row (gen, GTK_LIST_BOX (gen->device_box), "Layouts", s->str, 20);
