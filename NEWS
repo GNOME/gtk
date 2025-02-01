@@ -1,5 +1,12 @@
-Overview of Changes in 4.17.4, xx-xx-xxxx
+Overview of Changes in 4.17.4, 01-02-2025
 =========================================
+
+This release introduces a new backend, which allows running
+GTK applications on Android phones. It is still considered
+experimental. Feedback and improvements are welcome!
+
+We have a ci job that produces signed apks for gtk4-demo,
+to make it easy to try this out.
 
 * GtkFileChooser:
  - Stop replacing : (colon) with U+2236 (ratio)
@@ -14,17 +21,78 @@ Overview of Changes in 4.17.4, xx-xx-xxxx
 * GtkLabel:
  - Make context menus keyboard-navigatable
 
+* GtkVideo:
+ - Support rotated videos
+
 * GDK:
  - Add a way to retrieve keyboard layout information
+ - Use libpng api for cicp if available
 
 * GSK
  - Drop the old GL renderer
 
-* Demos:
- - gtk-demo: Make settings demos work
+* Accessibility:
+ - Maintain inverse relations
+
+* macOS:
+ - Enable AccessKit in ci
+ - Fix inverted pen tilt
+
+* Deprecations:
+ - The x11 backend
+ - The Broadway backend
+
+* Build:
+ - Require cairo 1.18.2
+
+* Bugs fixed:
+  - #6755 Accessible `window:activate` events missing for Gtk4 (Matthias Clasen)
+  - #6823 Enumeration values starting with numbers (Matthias Clasen)
+  - #7210 ci: Build with -Daccesskit=enabled on macOS
+  - #7228 gtk4-demo settings demo does not actually write settings (Matthias
+    Clasen)
+  - #7246 Cannot navigate context menu of GtkLabel with keyboard
+  - #7268 RFC: API to query the current keyboard layout ?
+  - #7271 Test failures with libpng-1.6.45 (Alessandro Astone)
+  - #7279 GTKFileChooserWidget incorrectly displays "Modified" time of file when
+    format should be "%H:%M" (Matthias Clasen)
+  - #7294 Hovering buttons causes "g_object_unref: assertion 'G_IS_OBJECT
+    (object)' failed" (Matthias Clasen)
+  - !7555 Introducing new android backend
+  - !8017 gdk: fix crash on Wayland with already destroyed surface.
+  - !8060 Deprecate the X11 backend
+  - !8115 Introduce the label for relation and the concept of reverse relations
+  - !8118 Prepare the 4.17.3 release
+  - !8119 Post-release version bump
+  - !8121 vulkan: Handle VK_PRESENT_MODE_FIFO_LATEST_READY_EXT
+  - !8124 Fix the archive URL for Boost
+  - !8126 docs: Mark GtkShortcutsWindow as deprecated
+  - !8127 tools: Drop support for the gl renderer
+  - !8128 spinbutton: Consider adjustment value sanitization
+  - !8129 Drop test exclusions for the gl renderer
+  - !8133 ci: Move subproject download and update over to a separate job
+  - !8134 Keep installing gsk/gl/gskglrenderer.h
+  - !8137 gtktextattributes and gtkaccessible copy-paste errors
+  - !8138 gtk-demo: Plug a memory leak
+  - !8139 window: Hide accessible earlier
+  - !8140 Keep installing gsk/gl/gskglrenderer.h
+  - !8142 gtk4-builder-tool: Plug a few memory leaks
+  - !8144 macos: fix broken accounting messages and click after moving the
+    window
+  - !8147 Docs: Small fixes
+  - !8148 text: Correct the documentation
+  - !8150 Avoid using deprecated GtkWindow::keys-changed internally
+  - !8151 gstreamer: Implement rotation tag support
+  - !8157 gstreamer: Improve rotation tag support
+  - !8160 docs: Don't recommend usage of deprecated ToggleButton method
+  - !8163 gdk/contentserializer: Force specific URI schemes to serialize as URI
+  - !8164 gdk/wayland: Ensure to generate grab broken events before crossings
+  - !8166 filedialog: fix typo in docs
+  - !8167 macos: Gtk4: Fix inverted pen Y tilt on macOS
 
 * Translation updates:
- Slovenian
+  - Slovenian (Martin)
+  - Thai (Aefgh Threenine)
 
 
 Overview of Changes in 4.17.3, 16-01-2025
