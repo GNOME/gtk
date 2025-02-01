@@ -694,6 +694,14 @@ if macos_enabled
   gtk_cargs += ['-xobjective-c']  # FIXME? maybe add_languages() instead?
 endif
 
+if android_enabled
+  gtk_sources += files([
+    'gtkapplication-android.c',
+    'gtkfilechoosernativeandroid.c',
+    'gtkimcontextandroid.c',
+  ])
+endif
+
 if not (x11_enabled or win32_enabled)
   gtk_sources += ['gtkmountoperation-stub.c', ]
 endif

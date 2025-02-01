@@ -22,7 +22,7 @@ glib_req           = '>= @0@.@1@'.format(glib_major_req, glib_minor_req)
 pango_req          = '>= @0@.@1@'.format(pango_major_req, pango_minor_req)
 harfbuzz_req       = '>= 8.4.0'
 fribidi_req        = '>= 1.0.6'
-cairo_req          = '>= 1.18.0'
+cairo_req          = '>= 1.18.2'
 gdk_pixbuf_req     = '>= 2.30.0'
 wayland_proto_req  = '>= 1.36'
 wayland_req        = '>= 1.21.0'
@@ -122,12 +122,14 @@ wayland_enabled  = get_option('wayland-backend')
 broadway_enabled = get_option('broadway-backend')
 macos_enabled    = get_option('macos-backend')
 win32_enabled    = get_option('win32-backend')
+android_enabled  = get_option('android-backend')
 vulkan_enabled   = get_option('vulkan')
 
 os_unix   = false
 os_linux  = false
 os_win32  = false
 os_darwin = false
+os_android = false
 
 cc = meson.get_compiler('c')
 
@@ -151,6 +153,8 @@ if host_machine.system() == 'darwin'
   os_darwin = true
 elif host_machine.system() == 'windows'
   os_win32 = true
+elif host_machine.system() == 'android'
+  os_android = true
 elif host_machine.system() == 'linux'
   os_linux = true
 endif
@@ -168,6 +172,13 @@ if os_win32
   x11_enabled = false
 else
   win32_enabled = false
+endif
+
+if os_android
+  wayland_enabled = false
+  x11_enabled = false
+else
+  android_enabled = false
 endif
 
 gtk_prefix = get_option('prefix')
@@ -286,7 +297,7 @@ if cc.get_id() == 'msvc'
     '/wd4116', # breaks G_ALIGNOF()
     '/wd4090', # VC2017 is way too aggressive with this
   ]
-  
+
   msvc_supported_cflags = cc.get_supported_arguments(test_cflags)
   if debug
     required_cflags += required_debug_cflags
@@ -359,7 +370,7 @@ elif cc.get_id() == 'gcc' or cc.get_id() == 'clang'
     'write-strings',
   ]
 
-  
+
   if get_option('buildtype').startswith('debug')
     foreach warning: extra_warnings
       test_cflags += '-Werror=@0@'.format(warning)
@@ -673,6 +684,11 @@ libdrm_dep = dependency('libdrm', required: os_linux)
 libdrm_dep = libdrm_dep.partial_dependency(includes: true, compile_args: true)
 cdata.set('HAVE_DRM_FOURCC_H', libdrm_dep.found())
 
+if not libdrm_dep.found()
+  have_drm_fourcc = cc.has_header('drm/drm_fourcc.h', required: os_android)
+  cdata.set('HAVE_DRM_DRM_FOURCC_H', have_drm_fourcc)
+endif
+
 cdata.set('HAVE_DMABUF', cc.has_header('linux/dma-buf.h'))
 
 cloudproviders_dep = dependency('cloudproviders',
@@ -852,6 +868,9 @@ subdir('modules')
 subdir('tools')
 subdir('po')
 subdir('docs/reference')
+if os_android
+  subdir('gdk/android/glue')
+endif
 if get_option('build-demos')
   subdir('demos')
 endif
@@ -892,7 +911,7 @@ gsk_packages = [ 'graphene-gobject-1.0 @0@'.format(graphene_req) ]
 gtk_packages = [ 'gio-2.0 @0@'.format(glib_req) ]
 
 enabled_backends = []
-foreach backend: [ 'broadway', 'macos', 'wayland', 'win32', 'x11', ]
+foreach backend: [ 'android', 'broadway', 'macos', 'wayland', 'win32', 'x11', ]
   if get_variable('@0@_enabled'.format(backend))
     enabled_backends += backend
   endif

@@ -36,6 +36,10 @@
 #include "x11/gdkprivate-x11.h"
 #endif
 
+#ifdef GDK_WINDOWING_ANDROID
+#include "android/gdkandroiddisplay-private.h"
+#endif
+
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gdkprivate-broadway.h"
 #endif
@@ -258,6 +262,9 @@ struct _GdkBackend {
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 static GdkBackend gdk_backends[] = {
+#ifdef GDK_WINDOWING_ANDROID
+  { "android", _gdk_android_display_open },
+#endif
 #ifdef GDK_WINDOWING_MACOS
   { "macos",   _gdk_macos_display_open },
 #endif

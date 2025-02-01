@@ -9,7 +9,6 @@
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <linux/udmabuf.h>
-#include <drm_fourcc.h>
 #include <errno.h>
 #include <gtk/gtk.h>
 #include <gio/gio.h>

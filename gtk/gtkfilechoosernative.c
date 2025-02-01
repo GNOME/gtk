@@ -195,6 +195,7 @@ enum {
   MODE_FALLBACK,
   MODE_WIN32,
   MODE_QUARTZ,
+  MODE_ANDROID,
   MODE_PORTAL,
 };
 
@@ -686,6 +687,7 @@ gtk_file_chooser_native_get_files (GtkFileChooser *chooser)
     case MODE_PORTAL:
     case MODE_WIN32:
     case MODE_QUARTZ:
+    case MODE_ANDROID:
       {
         GListStore *store;
         GSList *l;
@@ -720,6 +722,11 @@ gtk_file_chooser_native_show (GtkNativeDialog *native)
     self->mode = MODE_QUARTZ;
 #endif
 
+#ifdef GDK_WINDOWING_ANDROID
+  if (gtk_file_chooser_native_android_show (self))
+    self->mode = MODE_ANDROID;
+#endif
+
   if (self->mode == MODE_FALLBACK &&
       gtk_file_chooser_native_portal_show (self))
     self->mode = MODE_PORTAL;
@@ -746,6 +753,11 @@ gtk_file_chooser_native_hide (GtkNativeDialog *native)
     case MODE_QUARTZ:
 #ifdef GDK_WINDOWING_MACOS
       gtk_file_chooser_native_quartz_hide (self);
+#endif
+      break;
+    case MODE_ANDROID:
+#ifdef GDK_WINDOWING_ANDROID
+      gtk_file_chooser_native_android_hide (self);
 #endif
       break;
     case MODE_PORTAL:

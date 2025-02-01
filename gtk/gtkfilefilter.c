@@ -76,6 +76,11 @@
 #include "gtkfilter.h"
 #include "gtkprivate.h"
 
+#ifdef GDK_WINDOWING_ANDROID
+#include "android/gdkandroidinit-private.h"
+#include "android/gdkandroidutils-private.h"
+#endif
+
 #include <glib/gi18n-lib.h>
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <string.h>
@@ -819,6 +824,48 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
        }
     }
   return array;
+}
+#endif
+
+#ifdef GDK_WINDOWING_ANDROID
+void _gtk_file_filter_store_types_in_list (GtkFileFilter *filter, jobject list)
+{
+  JNIEnv *env = gdk_android_get_env ();
+  (*env)->PushLocalFrame (env, 2);
+
+  for (GSList *i = filter->rules; i != NULL; i = i->next)
+    {
+      FilterRule *rule = i->data;
+
+      switch (rule->type)
+        {
+        case FILTER_RULE_MIME_TYPE:
+        case FILTER_RULE_PIXBUF_FORMATS:
+          {
+            for (gsize j = 0; rule->u.content_types[j] != NULL; j++)
+              {
+                jstring content_type = gdk_android_utf8_to_java (rule->u.content_types[j]);
+                jstring normalized = (*env)->CallStaticObjectMethod (env, gdk_android_get_java_cache ()->a_intent.klass,
+                                                                     gdk_android_get_java_cache ()->a_intent.normalize_mimetype,
+                                                                     content_type);
+                (*env)->CallBooleanMethod (env, list,
+                                           gdk_android_get_java_cache ()->j_list.add,
+                                           normalized);
+                (*env)->DeleteLocalRef (env, normalized);
+                (*env)->DeleteLocalRef (env, content_type);
+              }
+          }
+          break;
+
+        case FILTER_RULE_SUFFIX:
+        case FILTER_RULE_PATTERN:
+        default:
+          // unsupported
+          break;
+       }
+    }
+
+  (*env)->PopLocalFrame (env, NULL);
 }
 #endif
 

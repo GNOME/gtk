@@ -4,6 +4,9 @@
 #ifdef HAVE_DRM_FOURCC_H
 #include <drm_fourcc.h>
 #endif
+#ifdef HAVE_DRM_DRM_FOURCC_H
+#include <drm/drm_fourcc.h>
+#endif
 
 #ifndef DRM_FORMAT_MOD_INVALID
 #define DRM_FORMAT_MOD_INVALID ((1ULL << 56) - 1)

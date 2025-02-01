@@ -40,6 +40,19 @@
  * be abstracted via GtkApplicationImpl.
  */
 
+#ifdef GDK_WINDOWING_ANDROID
+/* Unfortunatly, we'll have to include this here, as we want to force
+ * applications running as Android applications to run as service that
+ * never exists.
+ *
+ * It is not possible to move this into GtkApplicationImpl, as
+ * gtk_application_startup has yet to be called, which means that
+ * gtk_init hasn't been called yet and it is impossible to determine the
+ * the correct GtkApplicationImpl to use.
+ */
+#include "android/gdkandroidinit-private.h"
+#endif // GDK_WINDOWING_ANDROID
+
 /**
  * GtkApplication:
  *
@@ -318,6 +331,15 @@ gtk_application_local_command_line (GApplication   *application,
 {
   /* We need to call setlocale() here so --help output works */
   setlocale_initialization ();
+
+#ifdef GDK_WINDOWING_ANDROID
+  if (gdk_android_get_activity ())
+    {
+      g_application_set_flags (application, g_application_get_flags (application) | G_APPLICATION_IS_SERVICE);
+      // This should get the application service to never exit on Android
+      g_application_hold (application);
+    }
+#endif // GDK_WINDOWING_ANDROID
 
   return G_APPLICATION_CLASS (gtk_application_parent_class)->local_command_line (application, arguments, exit_status);
 }
