@@ -448,6 +448,23 @@ gtk_list_base_select_item (GtkListBase *self,
                                       0, 0);
 }
 
+static void
+activate_listitem_select_action (GtkListBasePrivate *priv,
+                                 guint               pos,
+                                 gboolean            modify,
+                                 gboolean            extend)
+{
+  GtkListTile *tile;
+
+  tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
+
+  /* We do this convoluted calling into the widget because that way
+   * GtkListItem::selectable gets respected, which is what one would expect.
+   */
+  g_assert (tile->widget);
+  gtk_widget_activate_action (tile->widget, "listitem.select", "(bb)", modify, extend);
+}
+
 /*
  * gtk_list_base_grab_focus_on_item:
  * @self: a `GtkListBase`
@@ -506,13 +523,7 @@ gtk_list_base_grab_focus_on_item (GtkListBase *self,
 
   if (select)
     {
-      tile = gtk_list_item_manager_get_nth (priv->item_manager, pos, NULL);
-
-      /* We do this convoluted calling into the widget because that way
-       * GtkListItem::selectable gets respected, which is what one would expect.
-       */
-      g_assert (tile->widget);
-      gtk_widget_activate_action (tile->widget, "listitem.select", "(bb)", modify, extend);
+      activate_listitem_select_action (priv, pos, modify, extend);
     }
 
   return TRUE;
@@ -1132,6 +1143,35 @@ gtk_list_base_move_cursor_to_end (GtkWidget *widget,
 }
 
 static gboolean
+handle_selecting_unselected_cursor (GtkListBase *self,
+                                    guint        position,
+                                    gboolean     select,
+                                    gboolean     modify,
+                                    gboolean     extend)
+{
+  GtkListBasePrivate *priv = gtk_list_base_get_instance_private (self);
+  GtkSelectionModel *model;
+
+  /* If Ctrl is pressed, we don't want to reset the selection. */
+  if (!select || modify)
+    return FALSE;
+
+  model = gtk_list_item_manager_get_model (priv->item_manager);
+
+  /* Selection of current position is not needed if it's already selected or if
+   * there is nothing to select.
+   */
+  if (model == NULL || gtk_selection_model_is_selected (model, position))
+    return FALSE;
+
+  /* Reset cursor to current position trying to select it as well. */
+  activate_listitem_select_action (priv, position, FALSE, extend);
+
+  /* Report whether the model allowed the selection change. */
+  return gtk_selection_model_is_selected (model, position);
+}
+
+static gboolean
 gtk_list_base_move_cursor (GtkWidget *widget,
                            GVariant  *args,
                            gpointer   unused)
@@ -1145,6 +1185,13 @@ gtk_list_base_move_cursor (GtkWidget *widget,
   g_variant_get (args, "(ubbbi)", &orientation, &select, &modify, &extend, &amount);
 
   old_pos = gtk_list_base_get_focus_position (self);
+
+  /* When the focus is on an unselected item while we're selecting, we want to
+   * not move focus but select the focused item instead if we can.
+   */
+  if (handle_selecting_unselected_cursor (self, old_pos, select, modify, extend))
+    return TRUE;
+
   new_pos = gtk_list_base_move_focus (self, old_pos, orientation, amount);
 
   if (old_pos != new_pos)
