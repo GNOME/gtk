@@ -1,5 +1,6 @@
 # Files from the Gtk distribution which have already been
 # marked to allow runtime translation of messages
+gdk/android/gdkandroidclipboard.c
 gdk/broadway/gdkbroadway-server.c
 gdk/gdkapplaunchcontext.c
 gdk/gdk.c
