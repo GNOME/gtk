@@ -81,6 +81,7 @@ struct _GtkWidgetPrivate
   guint has_grab              : 1;
   guint child_visible         : 1;
   guint can_target            : 1;
+  guint limit_events          : 1;
 
   /* Queue-resize related flags */
   guint resize_needed         : 1; /* queue_resize() has been called but no get_preferred_size() yet */
