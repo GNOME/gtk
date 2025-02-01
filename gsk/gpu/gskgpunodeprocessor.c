@@ -2288,7 +2288,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       /* now intersect with actual node bounds */
       if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
         {
-          g_object_unref (image);
+          g_clear_object (&image);
           return;
         }
       clip_bounds.size.width = ceilf (clip_bounds.size.width);
