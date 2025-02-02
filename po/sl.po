@@ -11,18 +11,30 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-01-24 21:07+0000\n"
-"PO-Revision-Date: 2025-01-24 22:13+0100\n"
+"POT-Creation-Date: 2025-02-01 15:17+0000\n"
+"PO-Revision-Date: 2025-02-02 10:14+0100\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || "
-"n%100==4 ? 3 : 0);\n"
+"Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
+"%100==4 ? 3 : 0);\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 2.2.1\n"
+
+#: gdk/android/gdkandroidclipboard.c:174
+msgid "No compatible formats to transfer contents of content provider."
+msgstr "Ni združljivih zapisov za prenos vsebine ponudnika vsebine."
+
+#: gdk/android/gdkandroidclipboard.c:623 gdk/macos/gdkmacospasteboard.c:161
+#: gdk/wayland/gdkclipboard-wayland.c:244 gdk/wayland/gdkdrop-wayland.c:205
+#: gdk/wayland/gdkprimary-wayland.c:343 gdk/win32/gdkdrop-win32.c:1014
+#: gdk/win32/gdkdrop-win32.c:1063 gdk/x11/gdkclipboard-x11.c:801
+#: gdk/x11/gdkdrop-x11.c:237
+msgid "No compatible transfer format found"
+msgstr "Ni najdenega skladnega zapisa za prenos."
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -138,13 +150,13 @@ msgstr "Funkcija Poteg/Spust iz drugih programov ni podprta."
 msgid "No compatible formats to transfer contents."
 msgstr "Ni skladnih zapisov za prenos vsebine."
 
-#: gdk/gdkglcontext.c:427 gdk/x11/gdkglcontext-glx.c:651
+#: gdk/gdkglcontext.c:427 gdk/x11/gdkglcontext-glx.c:653
 msgid "No GL API allowed."
 msgstr "API GL ni dovoljen."
 
 #: gdk/gdkglcontext.c:450 gdk/win32/gdkglcontext-win32-wgl.c:746
 #: gdk/win32/gdkglcontext-win32-wgl.c:889
-#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:697
+#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
@@ -565,7 +577,7 @@ msgstr "Napaka med tolmačenjem slikovne datoteke JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Nepodprt barvni prostor JPEG (%d) "
 
-#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:435 gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:468 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Ni dovolj pomnilnika za sliko velikosti %ux%u"
@@ -575,17 +587,17 @@ msgstr "Ni dovolj pomnilnika za sliko velikosti %ux%u"
 msgid "Error reading png (%s)"
 msgstr "Napaka branja zapisa png (%s)"
 
-#: gdk/loaders/gdkpng.c:356
+#: gdk/loaders/gdkpng.c:389
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Slika PNG ima nepodprto barvno globino %u"
 
-#: gdk/loaders/gdkpng.c:406
+#: gdk/loaders/gdkpng.c:439
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Nepodprta barvna globina %u v sliki PNG"
 
-#: gdk/loaders/gdkpng.c:420
+#: gdk/loaders/gdkpng.c:453
 #, c-format
 msgid "Image stride too large for image size %ux%u"
 msgstr "Korak slike je prevelik za velikost slike %ux%u"
@@ -602,13 +614,6 @@ msgstr "Ni mogoče naložiti podatkov slike TIFF"
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Ni mogoče pridobiti podatkov v vrstici %d"
-
-#: gdk/macos/gdkmacospasteboard.c:161 gdk/wayland/gdkclipboard-wayland.c:244
-#: gdk/wayland/gdkdrop-wayland.c:205 gdk/wayland/gdkprimary-wayland.c:343
-#: gdk/win32/gdkdrop-win32.c:1014 gdk/win32/gdkdrop-win32.c:1063
-#: gdk/x11/gdkclipboard-x11.c:799 gdk/x11/gdkdrop-x11.c:235
-msgid "No compatible transfer format found"
-msgstr "Ni najdenega skladnega zapisa za prenos."
 
 #: gdk/macos/gdkmacospasteboard.c:255
 #, c-format
@@ -660,8 +665,8 @@ msgstr ""
 #, c-format
 msgid "Cannot set clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: "
-"0x%lx."
+"Ni mogoče določiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:836
 #, c-format
@@ -711,8 +716,8 @@ msgstr ""
 #, c-format
 msgid "Cannot get clipboard data. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: "
-"0x%lx."
+"Ni mogoče pridobiti podatkov odložišča. Ukaz OpenClipboard() je spodletel: 0x"
+"%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:953
 #, c-format
@@ -820,17 +825,17 @@ msgstr "Izvedba GlobalLock() je spodletela: "
 msgid "GlobalAlloc() failed: "
 msgstr "Izvedba GlobalAlloc() je spodletela: "
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:297
+#: gdk/x11/gdkapplaunchcontext-x11.c:299
 #, c-format
 msgid "Starting “%s”"
 msgstr "Poteka zaganjanje »%s«"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:310
+#: gdk/x11/gdkapplaunchcontext-x11.c:312
 #, c-format
 msgid "Opening “%s”"
 msgstr "Poteka odpiranj »%s«"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:315
+#: gdk/x11/gdkapplaunchcontext-x11.c:317
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -839,49 +844,49 @@ msgstr[1] "Odpiranje %d predmeta"
 msgstr[2] "Odpiranje %d predmetov"
 msgstr[3] "Odpiranje %d predmetov"
 
-#: gdk/x11/gdkclipboard-x11.c:473
+#: gdk/x11/gdkclipboard-x11.c:475
 msgid "Clipboard manager could not store selection."
 msgstr "Upravljalnik odložišča ne uspe shraniti izbire."
 
-#: gdk/x11/gdkclipboard-x11.c:649
+#: gdk/x11/gdkclipboard-x11.c:651
 msgid "Cannot store clipboard. No clipboard manager is active."
 msgstr "Ni mogoče shraniti odložišča. Ni dejavnega upravljalnika."
 
-#: gdk/x11/gdkglcontext-glx.c:817
+#: gdk/x11/gdkglcontext-glx.c:819
 msgid "No GLX configurations available"
 msgstr "Nastavitve GLX niso na voljo"
 
-#: gdk/x11/gdkglcontext-glx.c:904
+#: gdk/x11/gdkglcontext-glx.c:906
 msgid "No GLX configuration with required features found"
 msgstr "Ni mogoče najti nastavitev GLX za zahtevane možnosti"
 
-#: gdk/x11/gdkglcontext-glx.c:978
+#: gdk/x11/gdkglcontext-glx.c:982
 msgid "GLX is not supported"
 msgstr "Podpora GLX ni na voljo"
 
-#: gdk/x11/gdkselectioninputstream-x11.c:465
+#: gdk/x11/gdkselectioninputstream-x11.c:467
 #, c-format
 msgid "Format %s not supported"
 msgstr "Zapis %s ni podprt."
 
-#: gdk/x11/gdktextlistconverter-x11.c:65 gdk/x11/gdktextlistconverter-x11.c:105
+#: gdk/x11/gdktextlistconverter-x11.c:67 gdk/x11/gdktextlistconverter-x11.c:107
 msgid "Not enough space in destination"
 msgstr "Na ciljnem mestu ni dovolj prostora"
 
-#: gdk/x11/gdktextlistconverter-x11.c:91 gdk/x11/gdktextlistconverter-x11.c:195
+#: gdk/x11/gdktextlistconverter-x11.c:93 gdk/x11/gdktextlistconverter-x11.c:197
 msgid "Need complete input to do conversion"
 msgstr "Zahtevan je celoten vhod za izvedbo pretvarjanja"
 
-#: gdk/x11/gdktextlistconverter-x11.c:216
-#: gdk/x11/gdktextlistconverter-x11.c:250
+#: gdk/x11/gdktextlistconverter-x11.c:218
+#: gdk/x11/gdktextlistconverter-x11.c:252
 msgid "Invalid byte sequence in conversion input"
 msgstr "Neveljavno zaporedje bajtov na vhodu pretvorbe"
 
-#: gdk/x11/gdktextlistconverter-x11.c:242
+#: gdk/x11/gdktextlistconverter-x11.c:244
 msgid "Invalid formats in compound text conversion."
 msgstr "Neveljavni zapisi pri sestavljeni pretvorbi besedila."
 
-#: gdk/x11/gdktextlistconverter-x11.c:259
+#: gdk/x11/gdktextlistconverter-x11.c:261
 #, c-format
 msgid "Unsupported encoding “%s”"
 msgstr "Nepodprto kodiranje »%s«."
@@ -1175,7 +1180,7 @@ msgstr ""
 "Sistemska pravila prepovedujejo spremembe.\n"
 "Stopite v stik s skrbnikom sistema."
 
-#: gtk/deprecated/gtkshow.c:217
+#: gtk/deprecated/gtkshow.c:291
 msgid "Could not show link"
 msgstr "Povezave ni mogoče pokazati"
 
@@ -2303,25 +2308,25 @@ msgstr "Mapa z enakim imenom že obstaja."
 msgid "A file with that name already exists"
 msgstr "Datoteka s tem imenom že obstaja."
 
-#: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:593
+#: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:594
 #: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:4988
 #: gtk/gtkfiledialog.c:911 gtk/gtkmessagedialog.c:170
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:680 gtk/print/gtkprintunixdialog.c:837
-#: gtk/gtkwindow.c:6301 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6321 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
 msgstr "_Prekliči"
 
-#: gtk/gtkfilechoosernative.c:521 gtk/gtkfilechoosernative.c:587
+#: gtk/gtkfilechoosernative.c:522 gtk/gtkfilechoosernative.c:588
 #: gtk/gtkfiledialog.c:883 gtk/gtkplacessidebar.c:3149
 #: gtk/gtkplacessidebar.c:3234 gtk/gtkplacesview.c:1646
 msgid "_Open"
 msgstr "_Odpri"
 
-#: gtk/gtkfilechoosernative.c:587 gtk/gtkfiledialog.c:888
+#: gtk/gtkfilechoosernative.c:588 gtk/gtkfiledialog.c:888
 msgid "_Save"
 msgstr "_Shrani"
 
@@ -2532,7 +2537,7 @@ msgstr "Program"
 msgid "Audio"
 msgstr "Zvok"
 
-#: gtk/gtkfilechooserwidget.c:3819 gtk/gtkfilefilter.c:1022
+#: gtk/gtkfilechooserwidget.c:3819 gtk/gtkfilefilter.c:1069
 msgid "Image"
 msgstr "Slika"
 
@@ -2661,7 +2666,7 @@ msgstr "Kodiranje znakov"
 msgid "Line Ending"
 msgstr "Konec vrstice"
 
-#: gtk/gtkfilefilter.c:1035
+#: gtk/gtkfilefilter.c:1082
 msgid "Unspecified"
 msgstr "Nedoločeno"
 
@@ -2848,7 +2853,7 @@ msgid "Play"
 msgstr "Predvajaj"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6302
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6322
 msgid "_OK"
 msgstr "_V redu"
 
@@ -2941,27 +2946,27 @@ msgid "Cannot kill process with PID %d. Operation is not implemented."
 msgstr "Opravila s PID %d ni mogoče uničiti. Dejanje ni podprto."
 
 #. translators: this string is a name for the 'less' command
-#: gtk/gtkmountoperation-x11.c:986
+#: gtk/gtkmountoperation-x11.c:988
 msgid "Terminal Pager"
 msgstr "Pozivnik terminala"
 
-#: gtk/gtkmountoperation-x11.c:987
+#: gtk/gtkmountoperation-x11.c:989
 msgid "Top Command"
 msgstr "Vrhnji ukaz"
 
-#: gtk/gtkmountoperation-x11.c:988
+#: gtk/gtkmountoperation-x11.c:990
 msgid "Bourne Again Shell"
 msgstr "Lupina Bourne Again"
 
-#: gtk/gtkmountoperation-x11.c:989
+#: gtk/gtkmountoperation-x11.c:991
 msgid "Bourne Shell"
 msgstr "Lupina Bourne"
 
-#: gtk/gtkmountoperation-x11.c:990
+#: gtk/gtkmountoperation-x11.c:992
 msgid "Z Shell"
 msgstr "Lupina Z"
 
-#: gtk/gtkmountoperation-x11.c:1090
+#: gtk/gtkmountoperation-x11.c:1092
 #, c-format
 msgid "Cannot end process with PID %d: %s"
 msgstr "Opravila s PID %d ni mogoče končati: %s"
@@ -3897,12 +3902,12 @@ msgstr "_Razveljavi"
 msgid "_Redo"
 msgstr "_Ponovno uveljavi"
 
-#: gtk/gtkwindow.c:6290
+#: gtk/gtkwindow.c:6310
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Ali želite uporabljati nadzorni program GTK+?"
 
-#: gtk/gtkwindow.c:6292
+#: gtk/gtkwindow.c:6312
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3913,7 +3918,7 @@ msgstr ""
 "nastavitev kateregakoli programa GTK. Neustrezna raba lahko povzroči napačno "
 "delovanje oziroma sesutje okolja."
 
-#: gtk/gtkwindow.c:6297
+#: gtk/gtkwindow.c:6317
 msgid "Don’t show this message again"
 msgstr "Sporočila ne pokaži več"
 
@@ -4098,17 +4103,17 @@ msgstr "Lastnosti CSS"
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Vsebina IM je določena z vrednostjo GTK_IM_MODULE"
 
-#: gtk/inspector/general.c:575
+#: gtk/inspector/general.c:577
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Brez"
 
-#: gtk/inspector/general.c:664
+#: gtk/inspector/general.c:674
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Neznano"
 
-#: gtk/inspector/general.c:910 gtk/inspector/general.c:949
+#: gtk/inspector/general.c:928 gtk/inspector/general.c:967
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Neopredeljeno"
