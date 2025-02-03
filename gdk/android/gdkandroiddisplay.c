@@ -173,6 +173,11 @@ gdk_android_display_get_setting (GdkDisplay *display,
       g_value_set_boolean (value, self->night_mode == GDK_ANDROID_DISPLAY_NIGHT_YES);
       return TRUE;
     }
+  else if (g_strcmp0 (name, "gtk-decoration-layout") == 0)
+    {
+      g_value_set_string (value, ":");
+      return TRUE;
+    }
   else
     {
       return FALSE;
