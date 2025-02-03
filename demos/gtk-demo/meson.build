@@ -28,6 +28,7 @@ demos = files([
   'filtermodel.c',
   'fishbowl.c',
   'fixed.c',
+  'fixed2.c',
   'fontrendering.c',
   'frames.c',
   'gears.c',

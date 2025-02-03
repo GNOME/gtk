@@ -273,6 +273,7 @@
     <file>filtermodel.c</file>
     <file>fishbowl.c</file>
     <file>fixed.c</file>
+    <file>fixed2.c</file>
     <file>flowbox.c</file>
     <file>frames.c</file>
     <file>font_features.c</file>
