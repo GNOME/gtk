@@ -9,7 +9,10 @@
 
 #include <fcntl.h>
 #include <sys/mman.h>
+
+#ifdef HAVE_SYS_SYSMACROS_H
 #include <sys/sysmacros.h>
+#endif
 
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 
@@ -52,19 +55,24 @@ update_dmabuf_formats (DmabufFormatsInfo *info)
 
   GDK_DISPLAY_DEBUG (info->display, MISC,
                      "dmabuf format table (%" G_GSIZE_FORMAT " entries)", info->n_dmabuf_formats);
+
+#ifdef HAVE_SYS_SYSMACROS_H
   GDK_DISPLAY_DEBUG (info->display, MISC,
                      "dmabuf main device: %u %u",
                      major (formats->main_device),
                      minor (formats->main_device));
+#endif
 
   for (gsize i = 0; i < formats->tranches->len; i++)
     {
       DmabufTranche *tranche = g_ptr_array_index (formats->tranches, i);
 
+#ifdef HAVE_SYS_SYSMACROS_H
       GDK_DISPLAY_DEBUG (info->display, MISC,
                          "dmabuf tranche target device: %u %u",
                          major (tranche->target_device),
                          minor (tranche->target_device));
+#endif
 
       GDK_DISPLAY_DEBUG (info->display, MISC,
                          "dmabuf%s tranche (%" G_GSIZE_FORMAT " entries):",
