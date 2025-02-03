@@ -188,9 +188,7 @@ JNIEXPORT void JNICALL Java_org_gtk_android_GlueLibraryContext_runApplication(JN
   if (gtk_thread_s)
     return;
 
-  LOGD("Entered OnLoad");
-
-  g_log_set_always_fatal(G_LOG_LEVEL_CRITICAL|G_LOG_LEVEL_ERROR);
+  LOGD("Reached GTK Android entrypoint");
 
   g_set_print_handler(android_print_handler);
   g_set_printerr_handler(android_printerr_handler);
