@@ -68,7 +68,7 @@
  *
  * A `GtkActionBar`'s CSS node is called `actionbar`. It contains a `revealer`
  * subnode, which contains a `box` subnode, which contains two `box` subnodes at
- * the start and end of the action bar, with `start` and `end style classes
+ * the start and end of the action bar, with `start` and `end` style classes
  * respectively, as well as a center node that represents the center child.
  *
  * Each of the boxes contains children packed for that side.

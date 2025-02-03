@@ -67,7 +67,7 @@
 /**
  * GtkAssistantPage:
  *
- * `GtkAssistantPage` is an auxiliary object used by `GtkAssistant.
+ * `GtkAssistantPage` is an auxiliary object used by `GtkAssistant`.
  *
  * Deprecated: 4.10: This object will be removed in GTK 5
  */
