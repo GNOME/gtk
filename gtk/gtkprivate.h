@@ -162,8 +162,6 @@ void gtk_synthesize_crossing_events (GtkRoot         *toplevel,
 
 void _gtk_load_dll_with_libgtk3_manifest (const wchar_t *dllname);
 
-wchar_t * g_wcsdup (const wchar_t *wcs);
-
 #endif /* G_OS_WIN32 */
 
 G_END_DECLS
