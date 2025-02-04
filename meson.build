@@ -639,12 +639,13 @@ endif
 # Check for bind_textdomain_codeset, including -lintl if GLib brings it in by
 # doing the same check as glib. We can't check that by linking to glib because
 # it might be a subproject and hence not built yet.
-if cc.has_function('ngettext')
+libintl_prefix = '#include <libintl.h>'
+if cc.has_function('ngettext', prefix: libintl_prefix)
   libintl_dep = []
   cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
 else
   libintl_dep = cc.find_library('intl', required : false)
-  if cc.has_function('bind_textdomain_codeset', dependencies: libintl_dep)
+  if cc.has_function('bind_textdomain_codeset', prefix: libintl_prefix, dependencies: libintl_dep)
     cdata.set('HAVE_BIND_TEXTDOMAIN_CODESET', 1)
   else
     # Don't use subproject('proxy-libintl').get_variable('intl_dep') because that
