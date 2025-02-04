@@ -528,25 +528,25 @@ get_renderer_for_name (const char *renderer_name)
 #endif
   else if (g_ascii_strcasecmp (renderer_name, "help") == 0)
     {
-      fprintf (stderr, "Supported arguments for GSK_RENDERER environment variable:\n");
+      gdk_help_message ("Supported arguments for GSK_RENDERER environment variable:\n"
 #ifdef GDK_WINDOWING_BROADWAY
-      fprintf (stderr, "  broadway - Use the Broadway specific renderer\n");
+                        "  broadway - Use the Broadway specific renderer\n"
 #else
-      fprintf (stderr, "  broadway - Disabled during GTK build\n");
+                        "  broadway - Disabled during GTK build\n"
 #endif
-      fprintf (stderr, "     cairo - Use the Cairo fallback renderer\n");
-      fprintf (stderr, "    opengl - Use the OpenGL renderer\n");
-      fprintf (stderr, "       ngl - Use the OpenGL renderer\n");
-      fprintf (stderr, "        gl - Use the OpenGL renderer\n");
+                        "     cairo - Use the Cairo fallback renderer\n"
+                        "    opengl - Use the OpenGL renderer\n"
+                        "       ngl - Use the OpenGL renderer\n"
+                        "        gl - Use the OpenGL renderer\n"
 #ifdef GDK_RENDERING_VULKAN
-      fprintf (stderr, "    vulkan - Use the Vulkan renderer\n");
+                        "    vulkan - Use the Vulkan renderer\n"
 #else
-      fprintf (stderr, "    vulkan - Disabled during GTK build\n");
+                        "    vulkan - Disabled during GTK build\n"
 #endif
-      fprintf (stderr, "      help - Print this help\n\n");
-      fprintf (stderr, "The old OpenGL renderer has been removed in GTK 4.18, so using\n");
-      fprintf (stderr, "GSK_RENDERER=gl will cause a warning and use the new OpenGL renderer.\n\n");
-      fprintf (stderr, "Other arguments will cause a warning and be ignored.\n");
+                        "      help - Print this help\n\n"
+                        "The old OpenGL renderer has been removed in GTK 4.18, so using\n"
+                        "GSK_RENDERER=gl will cause a warning and use the new OpenGL renderer.\n\n"
+                        "Other arguments will cause a warning and be ignored.");
     }
   else
     {
