@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Florian "sp1rit" <sp1rit@disroot.org>
+ * Copyright (c) 2024-2025 Florian "sp1rit" <sp1rit@disroot.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -140,6 +140,10 @@ gdk_android_events_handle_motion_event (GdkAndroidSurface *surface,
 
   gfloat x = AMotionEvent_getX (event, 0) / surface->cfg.scale;
   gfloat y = AMotionEvent_getY (event, 0) / surface->cfg.scale;
+
+  // Update keyboard focus
+  GdkDevice *keyboard = gdk_seat_get_keyboard ((GdkSeat *) display->seat);
+  gdk_android_device_keyboard_maybe_update_surface_focus ((GdkAndroidDevice *) keyboard, surface);
 
   if (GDK_ANDROID_EVENTS_COMPARE_MASK (src, AINPUT_SOURCE_TOUCHSCREEN))
     {
@@ -340,6 +344,7 @@ gdk_android_events_handle_key_event (GdkAndroidSurface *surface,
   GdkEventType event_type = (action == AKEY_STATE_UP || action == AKEY_STATE_VIRTUAL) ? GDK_KEY_PRESS : GDK_KEY_RELEASE;
 
   GdkDevice *dev = gdk_seat_get_keyboard ((GdkSeat *) display->seat);
+  gdk_android_device_keyboard_maybe_update_surface_focus ((GdkAndroidDevice *) dev, surface);
 
   GdkModifierType mods = gdk_android_events_meta_to_gdk (AKeyEvent_getMetaState (event));
   mods |= gdk_android_events_buttons_to_gdkmods (((GdkAndroidDevice *) display->seat->logical_pointer)->button_state);

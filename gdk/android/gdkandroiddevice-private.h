@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Florian "sp1rit" <sp1rit@disroot.org>
+ * Copyright (c) 2024-2025 Florian "sp1rit" <sp1rit@disroot.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -41,5 +41,6 @@ struct _GdkAndroidDevice
 };
 
 void gdk_android_device_maybe_update_surface (GdkAndroidDevice *self, GdkAndroidSurface *new_surface, GdkModifierType new_mods, guint32 timestamp, gfloat x, gfloat y);
+void gdk_android_device_keyboard_maybe_update_surface_focus (GdkAndroidDevice *self, GdkAndroidSurface *new_surface);
 
 G_END_DECLS
