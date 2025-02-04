@@ -1772,8 +1772,7 @@ gtk_window_init (GtkWindow *window)
                       G_CALLBACK (device_removed_cb), window);
 
   controller = gtk_event_controller_motion_new ();
-  gtk_event_controller_set_propagation_phase (controller,
-                                              GTK_PHASE_CAPTURE);
+  gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
   g_signal_connect_swapped (controller, "motion",
                             G_CALLBACK (gtk_window_capture_motion), window);
   g_signal_connect_swapped (controller, "leave",
@@ -1782,6 +1781,7 @@ gtk_window_init (GtkWindow *window)
 
   controller = gtk_event_controller_key_new ();
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_CAPTURE);
+  gtk_event_controller_set_propagation_limit (controller, GTK_LIMIT_NONE);
   g_signal_connect_swapped (controller, "key-pressed",
                             G_CALLBACK (gtk_window_key_pressed), window);
   g_signal_connect_swapped (controller, "key-released",
