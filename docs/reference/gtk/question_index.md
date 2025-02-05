@@ -257,7 +257,7 @@ the question you have, this list is a good place to start.
 
 *  How do I use GTK with other non-C languages?
 
-    See the list of [language bindings](https://www.gtk.org/language-bindings.php)
+    See the list of [language bindings](https://www.gtk.org/docs/language-bindings/)
     on the GTK [website](https://www.gtk.org).
 
 *  How do I load an image or animation from a file?
