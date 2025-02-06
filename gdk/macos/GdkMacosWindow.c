@@ -793,11 +793,9 @@ static Class _contentViewClass = nil;
   [self updateToolbarAppearence];
 }
 
--(void)setToolbar:(NSToolbar *)toolbar
+-(void)showStandardWindowButtons:(BOOL)show
 {
-  g_return_if_fail (!inFullscreenTransition);
-
-  [super setToolbar:toolbar];
+  showStandardWindowButtons = show;
   [self updateToolbarAppearence];
 }
 
@@ -805,19 +803,33 @@ static Class _contentViewClass = nil;
  * Update the toolbar appearence based on the following criteria:
  *
  * 1. The window is used Client Side Decorations (style mask is set)
- * 2. The window has native window buttons enabled (a custom toolbar is set)
+ * 2. The window has native window buttons enabled
  * 3. The window is in fullscreen mode
  */
 -(void)updateToolbarAppearence
 {
   NSWindowStyleMask style_mask = [self styleMask];
-  BOOL is_csd = (style_mask & NSWindowStyleMaskFullSizeContentView) != 0;
-  BOOL has_toolbar = [self toolbar] != nil;
   BOOL is_fullscreen = (style_mask & NSWindowStyleMaskFullScreen) != 0;
-  BOOL hidden = is_csd && !has_toolbar && !is_fullscreen;
+  BOOL is_csd = !is_fullscreen && (style_mask & NSWindowStyleMaskFullSizeContentView) != 0;
+  BOOL hidden = is_csd && !showStandardWindowButtons;
 
-  [self setTitleVisibility:(is_csd || has_toolbar) ? NSWindowTitleHidden : NSWindowTitleVisible];
-  [self setTitlebarAppearsTransparent:is_csd && !is_fullscreen];
+  /* By assigning a toolbar, the window controls are moved a bit more inwards,
+   * In line with how toolbars look in macOS apps.
+   * I haven't found a better way. Unfortunately we have to be careful not to
+   * update the toolbar during a fullscreen transition.
+   */
+  if (is_csd && showStandardWindowButtons && [self toolbar] == nil)
+    {
+      NSToolbar *toolbar = [[NSToolbar alloc] init];
+      [self setToolbar:toolbar];
+      [toolbar release];
+    }
+  else if (!is_csd && [self toolbar] != nil)
+    [self setToolbar:nil];
+
+  [self setTitleVisibility:is_csd ? NSWindowTitleHidden : NSWindowTitleVisible];
+  [self setTitlebarAppearsTransparent:is_csd];
+
   [[self standardWindowButton:NSWindowCloseButton] setHidden:hidden];
   [[self standardWindowButton:NSWindowMiniaturizeButton] setHidden:hidden];
   [[self standardWindowButton:NSWindowZoomButton] setHidden:hidden];
