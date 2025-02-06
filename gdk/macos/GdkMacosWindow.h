@@ -30,11 +30,12 @@
 #include "gdkmacossurface.h"
 #include "edgesnapping.h"
 
-#define GDK_IS_MACOS_WINDOW(obj) ([obj isKindOfClass:[GdkMacosWindow class]])
+#define GDK_IS_MACOS_WINDOW(obj) (obj != nil && [obj isKindOfClass:[GdkMacosWindow class]])
 
 @interface GdkMacosWindow : NSWindow <NSDraggingSource, NSDraggingDestination> {
   GdkMacosSurface *gdk_surface;
 
+  BOOL             showStandardWindowButtons;
   BOOL             inMove;
   BOOL             inShowOrHide;
   BOOL             initialPositionKnown;
@@ -67,6 +68,7 @@
 -(BOOL)trackManualMove;
 -(BOOL)trackManualResize;
 -(void)setDecorated:(BOOL)decorated;
+-(void)showStandardWindowButtons:(BOOL)show;
 -(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage;
 -(BOOL)needsMouseDownQuirk;
 -(BOOL)inFullscreenTransition;

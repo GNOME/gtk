@@ -21,7 +21,7 @@
 
 #import <AppKit/AppKit.h>
 #include <math.h>
-#include <gdk/macos/gdkmacossurface.h>
+#include <gdk/macos/GdkMacosWindow.h>
 #include "gtkprivate.h"
 #include "gtknative.h"
 #include "gtkwindowbuttonsquartzprivate.h"
@@ -77,10 +77,10 @@ struct _GtkWindowButtonsQuartzClass
 G_DEFINE_TYPE (GtkWindowButtonsQuartz, gtk_window_buttons_quartz, GTK_TYPE_WIDGET)
 
 static void
-set_window_controls_height (NSWindow *window,
-                            int       height)
+set_window_controls_height (GdkMacosWindow *window,
+                            int             height)
 {
-  g_return_if_fail (window != NULL);
+  g_return_if_fail (GDK_IS_MACOS_WINDOW (window));
 
   if ([window respondsToSelector:@selector(setTitlebarHeight:)])
     [window setTitlebarHeight:height];
@@ -102,7 +102,7 @@ window_controls_bounds (NSWindow *window, NSRect *out_bounds)
   *out_bounds = bounds;
 }
 
-static NSWindow*
+static GdkMacosWindow*
 native_window (GtkWidget *widget)
 {
   GtkNative *native = GTK_NATIVE (gtk_widget_get_root (widget));
@@ -112,7 +112,7 @@ native_window (GtkWidget *widget)
       GdkSurface *surface = gtk_native_get_surface (native);
 
       if (GDK_IS_MACOS_SURFACE (surface))
-        return (NSWindow*) gdk_macos_surface_get_native_window (GDK_MACOS_SURFACE (surface));
+        return (GdkMacosWindow*) gdk_macos_surface_get_native_window (GDK_MACOS_SURFACE (surface));
     }
   return NULL;
 }
@@ -126,14 +126,14 @@ enable_window_controls (GtkWindowButtonsQuartz *self,
   gboolean deletable;
   GtkRoot *root;
   GtkWindow *window;
-  NSWindow *nswindow;
+  GdkMacosWindow *nswindow;
 
   root = gtk_widget_get_root (GTK_WIDGET (self));
   if (!root || !GTK_IS_WINDOW (root))
     return;
 
   nswindow = native_window (GTK_WIDGET (self));
-  if (!nswindow)
+  if (!GDK_IS_MACOS_WINDOW (nswindow))
     return;
   
   window = GTK_WINDOW (root);
@@ -145,36 +145,6 @@ enable_window_controls (GtkWindowButtonsQuartz *self,
   [[nswindow standardWindowButton:NSWindowCloseButton] setEnabled:enabled && self->close && deletable];
   [[nswindow standardWindowButton:NSWindowMiniaturizeButton] setEnabled:enabled && self->minimize && is_sovereign_window];
   [[nswindow standardWindowButton:NSWindowZoomButton] setEnabled:enabled && self->maximize && resizable && is_sovereign_window];
-}
-
-
-static gboolean
-show_window_controls (GtkWindowButtonsQuartz *self,
-                      gboolean                show)
-{
-  NSWindow *window = native_window (GTK_WIDGET (self));
-
-  if (window == NULL)
-    return FALSE;
-
-  /* By assigning a toolbar, the window controls are moved a bit more inwards,
-   * In line with how toolbars look in macOS apps.
-   * I haven't found a better way. Unfortunately we have to be careful not to
-   * update the toolbar during a fullscreen transition.
-   */
-  if (show && [window toolbar] == nil)
-    {
-      NSToolbar *toolbar = [[NSToolbar alloc] init];
-      [window setToolbar:toolbar];
-      [toolbar release];
-    }
-  else if (!show && [window toolbar] != nil)
-    [window setToolbar:nil];
-
-  if (show)
-    enable_window_controls (self, TRUE);
-
-  return TRUE;
 }
 
 static void
@@ -259,33 +229,34 @@ static void
 gtk_window_buttons_quartz_realize (GtkWidget *widget)
 {
   GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (widget);
-  NSWindow *window;
+  GdkMacosWindow *window;
+  NSRect bounds;
 
   GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->realize (widget);
 
   window = native_window (widget);
 
-  if (window == NULL)
+  if (!GDK_IS_MACOS_WINDOW (window))
     {
       g_critical ("Cannot show GtkWindowButtonsQuartz on a non-macos window");
       return;
     }
 
-  if (show_window_controls (self, TRUE))
-    {
-      NSRect bounds;
+  [window showStandardWindowButtons:YES];
+  
+  enable_window_controls (self, TRUE);
 
-      enable_window_controls (self, TRUE);
-
-      window_controls_bounds (window, &bounds);
-      gtk_widget_set_size_request (widget, bounds.origin.x + bounds.size.width, bounds.size.height);
-    }
+  window_controls_bounds (window, &bounds);
+  gtk_widget_set_size_request (widget, bounds.origin.x + bounds.size.width, bounds.size.height);
 }
 
 static void
 gtk_window_buttons_quartz_unrealize (GtkWidget *widget)
 {
-  show_window_controls (GTK_WINDOW_BUTTONS_QUARTZ (widget), FALSE);
+  GdkMacosWindow *window = native_window (widget);
+
+  if (GDK_IS_MACOS_WINDOW (window))
+    [window showStandardWindowButtons:NO];
 
   GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->unrealize (widget);
 }
@@ -299,9 +270,9 @@ gtk_window_buttons_quartz_measure (GtkWidget      *widget,
                                    int            *minimum_baseline,
                                    int            *natural_baseline)
 {
-  NSWindow *window = native_window (widget);
+  GdkMacosWindow *window = native_window (widget);
 
-  if (window != NULL)
+  if (GDK_IS_MACOS_WINDOW (window))
     {
       NSRect bounds;
 
@@ -320,7 +291,7 @@ gtk_window_buttons_quartz_size_allocate (GtkWidget *widget,
                                          int        height,
                                          int        baseline)
 {
-  NSWindow *window = native_window (widget);
+  GdkMacosWindow *window = native_window (widget);
   graphene_rect_t bounds = { 0 };
 
   GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->size_allocate (widget, width, height, baseline);
