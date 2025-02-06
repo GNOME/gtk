@@ -269,11 +269,14 @@ update_window_buttons (GtkWindowControls *self)
       return;
     }
 
-  clear_controls (self);
-
 #ifdef GDK_WINDOWING_MACOS
   if (self->use_native_controls)
     {
+      if (GTK_IS_WINDOW_BUTTONS_QUARTZ (gtk_widget_get_first_child (widget)))
+        return;
+
+      clear_controls (self);
+
       if (self->side == GTK_PACK_START)
         {
           GtkWidget *controls = g_object_new (GTK_TYPE_WINDOW_BUTTONS_QUARTZ, NULL);
@@ -295,6 +298,8 @@ update_window_buttons (GtkWindowControls *self)
       gtk_widget_remove_css_class (GTK_WIDGET (self), "native");
     }
 #endif
+
+  clear_controls (self);
 
   window = GTK_WINDOW (root);
   is_sovereign_window = !gtk_window_get_modal (window) &&
