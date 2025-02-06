@@ -734,6 +734,9 @@ static Class _contentViewClass = nil;
 {
   inFullscreenTransition = NO;
   initialPositionKnown = NO;
+
+  [self updateToolbarAppearence];
+
   [self checkSendEnterNotify];
 }
 
@@ -746,6 +749,9 @@ static Class _contentViewClass = nil;
 {
   inFullscreenTransition = NO;
   initialPositionKnown = NO;
+
+  [self updateToolbarAppearence];
+
   [self checkSendEnterNotify];
 }
 
@@ -776,20 +782,45 @@ static Class _contentViewClass = nil;
   if (decorated)
     {
       style_mask &= ~NSWindowStyleMaskFullSizeContentView;
-      [self setTitleVisibility:NSWindowTitleVisible];
     }
   else
     {
       style_mask |= NSWindowStyleMaskFullSizeContentView;
-      [self setTitleVisibility:NSWindowTitleHidden];
     }
 
-  [self setTitlebarAppearsTransparent:!decorated];
-  [[self standardWindowButton:NSWindowCloseButton] setHidden:!decorated];
-  [[self standardWindowButton:NSWindowMiniaturizeButton] setHidden:!decorated];
-  [[self standardWindowButton:NSWindowZoomButton] setHidden:!decorated];
-
   [self setStyleMask:style_mask];
+
+  [self updateToolbarAppearence];
+}
+
+-(void)setToolbar:(NSToolbar *)toolbar
+{
+  g_return_if_fail (!inFullscreenTransition);
+
+  [super setToolbar:toolbar];
+  [self updateToolbarAppearence];
+}
+
+/* updateToolbarAppearence:
+ * Update the toolbar appearence based on the following criteria:
+ *
+ * 1. The window is used Client Side Decorations (style mask is set)
+ * 2. The window has native window buttons enabled (a custom toolbar is set)
+ * 3. The window is in fullscreen mode
+ */
+-(void)updateToolbarAppearence
+{
+  NSWindowStyleMask style_mask = [self styleMask];
+  BOOL is_csd = (style_mask & NSWindowStyleMaskFullSizeContentView) != 0;
+  BOOL has_toolbar = [self toolbar] != nil;
+  BOOL is_fullscreen = (style_mask & NSWindowStyleMaskFullScreen) != 0;
+  BOOL hidden = is_csd && !has_toolbar && !is_fullscreen;
+
+  [self setTitleVisibility:(is_csd || has_toolbar) ? NSWindowTitleHidden : NSWindowTitleVisible];
+  [self setTitlebarAppearsTransparent:is_csd && !is_fullscreen];
+  [[self standardWindowButton:NSWindowCloseButton] setHidden:hidden];
+  [[self standardWindowButton:NSWindowMiniaturizeButton] setHidden:hidden];
+  [[self standardWindowButton:NSWindowZoomButton] setHidden:hidden];
 }
 
 -(GdkMacosSurface *)gdkSurface

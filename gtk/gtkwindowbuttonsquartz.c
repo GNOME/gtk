@@ -159,19 +159,17 @@ show_window_controls (GtkWindowButtonsQuartz *self,
 
   /* By assigning a toolbar, the window controls are moved a bit more inwards,
    * In line with how toolbars look in macOS apps.
+   * I haven't found a better way. Unfortunately we have to be careful not to
+   * update the toolbar during a fullscreen transition.
    */
-  if (show)
+  if (show && [window toolbar] == nil)
     {
       NSToolbar *toolbar = [[NSToolbar alloc] init];
       [window setToolbar:toolbar];
       [toolbar release];
     }
-  else
+  else if (!show && [window toolbar] != nil)
     [window setToolbar:nil];
-
-  [[window standardWindowButton:NSWindowCloseButton] setHidden:!show];
-  [[window standardWindowButton:NSWindowMiniaturizeButton] setHidden:!show];
-  [[window standardWindowButton:NSWindowZoomButton] setHidden:!show];
 
   if (show)
     enable_window_controls (self, TRUE);
