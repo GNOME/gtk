@@ -408,7 +408,7 @@ gtk_drag_icon_init (GtkDragIcon *self)
  * If no drag icon exists yet, a new one will be created
  * and shown.
  *
- * Returns: (transfer none): the `GtkDragIcon`
+ * Returns: (transfer none) (type GtkDragIcon): the icon widget
  */
 GtkWidget *
 gtk_drag_icon_get_for_drag (GdkDrag *drag)
