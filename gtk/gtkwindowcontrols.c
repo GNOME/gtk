@@ -129,20 +129,33 @@ get_layout (GtkWindowControls *self)
                   "gtk-decoration-layout", &layout_desc,
                   NULL);
 
+  if (layout_desc == NULL || layout_desc[0] == '\0')
+    {
+      g_free (layout_desc);
+      return NULL;
+    }
+
   tokens = g_strsplit (layout_desc, ":", 2);
 
-  switch (self->side)
+  if (tokens[1] == NULL)
     {
-    case GTK_PACK_START:
       layout_half = g_strdup (tokens[0]);
-      break;
+    }
+  else
+    {
+      switch (self->side)
+        {
+        case GTK_PACK_START:
+          layout_half = g_strdup (tokens[0]);
+          break;
 
-    case GTK_PACK_END:
-      layout_half = g_strdup (tokens[1]);
-      break;
+        case GTK_PACK_END:
+          layout_half = g_strdup (tokens[1]);
+          break;
 
-    default:
-      g_assert_not_reached ();
+        default:
+          g_assert_not_reached ();
+        }
     }
 
   g_free (layout_desc);
