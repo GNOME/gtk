@@ -115,7 +115,11 @@ const static struct {
   { 105, GDK_KEY_F13 },
   { 107, GDK_KEY_F14 },
   { 113, GDK_KEY_F15 },
-  { 106, GDK_KEY_F16 }
+  { 106, GDK_KEY_F16 },
+  {  64, GDK_KEY_F17 },
+  {  79, GDK_KEY_F18 },
+  {  80, GDK_KEY_F19 },
+  {  90, GDK_KEY_F20 }
 };
 
 const static struct {
