@@ -56,9 +56,9 @@
  *  make sure to properly clean up the listitem in step 3 so that no information
  *  from the previous use leaks into the next use.
  *
- * 5. [signal@Gtk.SignalListItemFactory::teardown] is emitted to allow undoing
- * the effects of [signal@Gtk.SignalListItemFactory::setup]. After this signal
- * was emitted on a listitem, the listitem will be destroyed and not be used again.
+ *  5. [signal@Gtk.SignalListItemFactory::teardown] is emitted to allow undoing
+ *  the effects of [signal@Gtk.SignalListItemFactory::setup]. After this signal
+ *  was emitted on a listitem, the listitem will be destroyed and not be used again.
  *
  * Note that during the signal emissions, changing properties on the
  * listitems passed will not trigger notify signals as the listitem's

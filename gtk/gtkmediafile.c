@@ -420,7 +420,7 @@ gtk_media_file_clear (GtkMediaFile *self)
  * @self: a `GtkMediaFile`
  * @filename: (type filename) (nullable): name of file to play
  *
- * Sets the `GtkMediaFile to play the given file.
+ * Sets the `GtkMediaFile` to play the given file.
  *
  * This is a utility function that converts the given @filename
  * to a `GFile` and calls [method@Gtk.MediaFile.set_file].
@@ -449,7 +449,7 @@ gtk_media_file_set_filename (GtkMediaFile *self,
  * @self: a `GtkMediaFile`
  * @resource_path: (nullable): path to resource to play
  *
- * Sets the `GtkMediaFile to play the given resource.
+ * Sets the `GtkMediaFile` to play the given resource.
  *
  * This is a utility function that converts the given @resource_path
  * to a `GFile` and calls [method@Gtk.MediaFile.set_file].

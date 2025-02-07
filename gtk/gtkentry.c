@@ -2831,7 +2831,7 @@ gtk_entry_get_icon_storage_type (GtkEntry             *entry,
  * The position’s coordinates are relative to the @entry’s
  * top left corner. If @x, @y doesn’t lie inside an icon,
  * -1 is returned. This function is intended for use in a
- *  [signal@Gtk.Widget::query-tooltip] signal handler.
+ * [signal@Gtk.Widget::query-tooltip] signal handler.
  *
  * Returns: the index of the icon at the given position, or -1
  */

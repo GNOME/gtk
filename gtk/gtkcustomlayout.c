@@ -5,7 +5,7 @@
  *
  * A `GtkCustomLayout `uses closures matching to the old `GtkWidget`
  * virtual functions for size negotiation, as a convenience API to
- * ease the porting towards the corresponding `GtkLayoutManager
+ * ease the porting towards the corresponding `GtkLayoutManager`
  * virtual functions.
  */
 
