@@ -693,8 +693,7 @@ gtk_window_controls_set_decoration_layout (GtkWindowControls *self,
 {
   g_return_if_fail (GTK_IS_WINDOW_CONTROLS (self));
 
-  g_free (self->decoration_layout);
-  self->decoration_layout = g_strdup (layout);
+  g_set_str (&self->decoration_layout, layout);
 
   update_window_buttons (self);
 
