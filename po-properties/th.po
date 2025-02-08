@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-01-21 00:08+0000\n"
-"PO-Revision-Date: 2025-01-28 15:58+0700\n"
+"PO-Revision-Date: 2025-02-08 05:14+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "Language: th\n"
@@ -18,7 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.5\n"
 
-#: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185 gdk/gdkglcontext.c:320 gdk/gdkseat.c:202 gdk/gdkseat.c:203
+#: gdk/gdkapplaunchcontext.c:127 gdk/gdkcursor.c:139 gdk/gdkdevicemanager.c:185
+#: gdk/gdkglcontext.c:320 gdk/gdkseat.c:202 gdk/gdkseat.c:203
 msgid "Display"
 msgstr "ดิสเพลย์"
 
@@ -214,8 +215,9 @@ msgstr "ตัวเรนเดอร์เซลล์"
 msgid "The cell renderer represented by this accessible"
 msgstr "ตัวเรนเดอร์เซลล์ซึ่งแสดงแทนโดยอ็อบเจกต์สิ่งอำนวยความสะดวกนี้"
 
-#: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:201 gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:638 gtk/gtkprinter.c:121 gtk/gtkstack.c:516
-#: gtk/gtktextmark.c:136
+#: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:201
+#: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:638
+#: gtk/gtkprinter.c:121 gtk/gtkstack.c:516 gtk/gtktextmark.c:136
 msgid "Name"
 msgstr "ชื่อ"
 
@@ -223,8 +225,9 @@ msgstr "ชื่อ"
 msgid "A unique name for the action."
 msgstr "ชื่อเฉพาะสำหรับการกระทำ"
 
-#: gtk/deprecated/gtkaction.c:264 gtk/gtkbutton.c:281 gtk/gtkexpander.c:309 gtk/gtkframe.c:232 gtk/gtklabel.c:806 gtk/gtkmenuitem.c:791 gtk/gtktoolbutton.c:243
-#: gtk/gtktoolitemgroup.c:1639
+#: gtk/deprecated/gtkaction.c:264 gtk/gtkbutton.c:281 gtk/gtkexpander.c:309
+#: gtk/gtkframe.c:232 gtk/gtklabel.c:806 gtk/gtkmenuitem.c:791
+#: gtk/gtktoolbutton.c:243 gtk/gtktoolitemgroup.c:1639
 msgid "Label"
 msgstr "ฉลาก"
 
@@ -260,15 +263,19 @@ msgstr "ไอคอนสำเร็จรูปที่ปรากฏบน
 msgid "GIcon"
 msgstr "GIcon"
 
-#: gtk/deprecated/gtkaction.c:343 gtk/deprecated/gtkstatusicon.c:280 gtk/gtkcellrendererpixbuf.c:282 gtk/gtkimage.c:360
+#: gtk/deprecated/gtkaction.c:343 gtk/deprecated/gtkstatusicon.c:280
+#: gtk/gtkcellrendererpixbuf.c:282 gtk/gtkimage.c:360
 msgid "The GIcon being displayed"
 msgstr "GIcon ที่แสดงผล"
 
-#: gtk/deprecated/gtkaction.c:365 gtk/deprecated/gtkstatusicon.c:263 gtk/gtkcellrendererpixbuf.c:245 gtk/gtkimage.c:343 gtk/gtkprinter.c:170 gtk/gtkwindow.c:893
+#: gtk/deprecated/gtkaction.c:365 gtk/deprecated/gtkstatusicon.c:263
+#: gtk/gtkcellrendererpixbuf.c:245 gtk/gtkimage.c:343 gtk/gtkprinter.c:170
+#: gtk/gtkwindow.c:893
 msgid "Icon Name"
 msgstr "ชื่อไอคอน"
 
-#: gtk/deprecated/gtkaction.c:366 gtk/deprecated/gtkstatusicon.c:264 gtk/gtkcellrendererpixbuf.c:246 gtk/gtkimage.c:344
+#: gtk/deprecated/gtkaction.c:366 gtk/deprecated/gtkstatusicon.c:264
+#: gtk/gtkcellrendererpixbuf.c:246 gtk/gtkimage.c:344
 msgid "The name of the icon from the icon theme"
 msgstr "ชื่อของไอคอนจากชุดตกแต่งไอคอน"
 
@@ -312,7 +319,8 @@ msgstr "ซ่อนถ้าว่างเปล่า"
 msgid "When TRUE, empty menu proxies for this action are hidden."
 msgstr "ถ้าเป็น TRUE เมนูที่แทนการกระทำนี้จะถูกซ่อนถ้าว่างเปล่า"
 
-#: gtk/deprecated/gtkaction.c:466 gtk/deprecated/gtkactiongroup.c:215 gtk/gtkcellrenderer.c:308 gtk/gtkwidget.c:1161
+#: gtk/deprecated/gtkaction.c:466 gtk/deprecated/gtkactiongroup.c:215
+#: gtk/gtkcellrenderer.c:308 gtk/gtkwidget.c:1161
 msgid "Sensitive"
 msgstr "มีการตอบสนอง"
 
@@ -320,8 +328,9 @@ msgstr "มีการตอบสนอง"
 msgid "Whether the action is enabled."
 msgstr "กำหนดว่าการกระทำนี้เปิดใช้หรือไม่"
 
-#: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:229 gtk/deprecated/gtkstatusicon.c:314 gtk/gtkcssnode.c:649 gtk/gtknativedialog.c:242
-#: gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1154
+#: gtk/deprecated/gtkaction.c:481 gtk/deprecated/gtkactiongroup.c:229
+#: gtk/deprecated/gtkstatusicon.c:314 gtk/gtkcssnode.c:649
+#: gtk/gtknativedialog.c:242 gtk/gtktreeviewcolumn.c:246 gtk/gtkwidget.c:1154
 msgid "Visible"
 msgstr "ปรากฏ"
 
@@ -337,11 +346,13 @@ msgstr "กลุ่มการกระทำ"
 msgid "The GtkActionGroup this GtkAction is associated with, or NULL (for internal use)."
 msgstr "GtkActionGroup ที่อ็อบเจกต์ GtkAction นี้เชื่อมโยงอยู่ หรือเป็นค่า NULL (สำหรับใช้เป็นการภายใน)"
 
-#: gtk/deprecated/gtkaction.c:519 gtk/deprecated/gtkimagemenuitem.c:264 gtk/gtkbutton.c:393
+#: gtk/deprecated/gtkaction.c:519 gtk/deprecated/gtkimagemenuitem.c:264
+#: gtk/gtkbutton.c:393
 msgid "Always show image"
 msgstr "แสดงภาพเสมอ"
 
-#: gtk/deprecated/gtkaction.c:520 gtk/deprecated/gtkimagemenuitem.c:265 gtk/gtkbutton.c:394
+#: gtk/deprecated/gtkaction.c:520 gtk/deprecated/gtkimagemenuitem.c:265
+#: gtk/gtkbutton.c:394
 msgid "Whether the image will always be shown"
 msgstr "กำหนดว่าจะแสดงภาพเสมอหรือไม่"
 
@@ -359,11 +370,11 @@ msgstr "กำหนดว่ากลุ่มการกระทำนี้
 
 #: gtk/deprecated/gtkactiongroup.c:243
 msgid "Accelerator Group"
-msgstr "กลุ่มแป้นลัด"
+msgstr "กลุ่มแป้นด่วน"
 
 #: gtk/deprecated/gtkactiongroup.c:244
 msgid "The accelerator group the actions of this group should use."
-msgstr "กลุ่มแป้นลัดที่การกระทำของกลุ่มนี้ควรใช้"
+msgstr "กลุ่มแป้นด่วนที่การกระทำของกลุ่มนี้ควรใช้"
 
 #: gtk/deprecated/gtkactivatable.c:290
 msgid "Related Action"
@@ -461,7 +472,8 @@ msgstr "เงาของลูกศร"
 msgid "Appearance of the shadow surrounding the arrow"
 msgstr "รูปแบบของเงารอบลูกศร"
 
-#: gtk/deprecated/gtkarrow.c:138 gtk/gtkcombobox.c:1227 gtk/gtkmenu.c:1006 gtk/gtkmenuitem.c:900
+#: gtk/deprecated/gtkarrow.c:138 gtk/gtkcombobox.c:1227 gtk/gtkmenu.c:1006
+#: gtk/gtkmenuitem.c:900
 msgid "Arrow Scaling"
 msgstr "การปรับสเกลลูกศร"
 
@@ -557,7 +569,9 @@ msgstr "ข้อความตัวอย่าง"
 msgid "The text to display in order to demonstrate the selected font"
 msgstr "ข้อความที่ต้องการแสดงเพื่อสาธิตตัวอย่างแบบอักษรที่เลือก"
 
-#: gtk/deprecated/gtkhandlebox.c:223 gtk/gtkcombobox.c:1246 gtk/gtkentry.c:1001 gtk/gtkmenubar.c:253 gtk/gtkstatusbar.c:177 gtk/gtktoolbar.c:680 gtk/gtkviewport.c:408
+#: gtk/deprecated/gtkhandlebox.c:223 gtk/gtkcombobox.c:1246 gtk/gtkentry.c:1001
+#: gtk/gtkmenubar.c:253 gtk/gtkstatusbar.c:177 gtk/gtktoolbar.c:680
+#: gtk/gtkviewport.c:408
 msgid "Shadow type"
 msgstr "ชนิดเงา"
 
@@ -615,11 +629,11 @@ msgstr "กำหนดว่าจะใช้ข้อความฉลาก
 
 #: gtk/deprecated/gtkimagemenuitem.c:281 gtk/gtkmenu.c:655
 msgid "Accel Group"
-msgstr "กลุ่มแป้นลัด"
+msgstr "กลุ่มแป้นด่วน"
 
 #: gtk/deprecated/gtkimagemenuitem.c:282
 msgid "The Accel Group to use for stock accelerator keys"
-msgstr "กลุ่มแป้นลัดที่ต้องการใช้สำหรับแป้นลัดสำเร็จรูป"
+msgstr "กลุ่มแป้นด่วนที่ต้องการใช้สำหรับแป้นด่วนสำเร็จรูป"
 
 #: gtk/deprecated/gtkmisc.c:114 gtk/gtkentry.c:968 gtk/gtklabel.c:852
 msgid "X align"
@@ -701,7 +715,8 @@ msgstr "ค่า"
 msgid "The value returned by gtk_radio_action_get_current_value() when this action is the current action of its group."
 msgstr "ค่าที่ส่งกลับโดย gtk_radio_action_get_current_value() เมื่อการกระทำนี้เป็นการกระทำปัจจุบันในกลุ่มของมันเอง"
 
-#: gtk/deprecated/gtkradioaction.c:139 gtk/gtkradiobutton.c:184 gtk/gtkradiomenuitem.c:424 gtk/gtkradiotoolbutton.c:83
+#: gtk/deprecated/gtkradioaction.c:139 gtk/gtkradiobutton.c:184
+#: gtk/gtkradiomenuitem.c:424 gtk/gtkradiotoolbutton.c:83
 msgid "Group"
 msgstr "กลุ่ม"
 
@@ -733,7 +748,8 @@ msgstr "พิกซ์บัฟ"
 msgid "A GdkPixbuf to display"
 msgstr "GdkPixbuf ที่ต้องการแสดงผล"
 
-#: gtk/deprecated/gtkstatusicon.c:242 gtk/gtkimage.c:270 gtk/gtkrecentmanager.c:289
+#: gtk/deprecated/gtkstatusicon.c:242 gtk/gtkimage.c:270
+#: gtk/gtkrecentmanager.c:289
 msgid "Filename"
 msgstr "ชื่อไฟล์"
 
@@ -741,7 +757,8 @@ msgstr "ชื่อไฟล์"
 msgid "Filename to load and display"
 msgstr "ชื่อไฟล์ที่ต้องการโหลดและแสดงผล"
 
-#: gtk/deprecated/gtkstatusicon.c:255 gtk/gtkcellrendererpixbuf.c:195 gtk/gtkimage.c:282
+#: gtk/deprecated/gtkstatusicon.c:255 gtk/gtkcellrendererpixbuf.c:195
+#: gtk/gtkimage.c:282
 msgid "Stock ID"
 msgstr "ID สำเร็จรูป"
 
@@ -757,7 +774,8 @@ msgstr "ชนิดหน่วยเก็บ"
 msgid "The representation being used for image data"
 msgstr "หน่วยแทนที่ต้องการใช้สำหรับข้อมูลภาพ"
 
-#: gtk/deprecated/gtkstatusicon.c:296 gtk/gtkcellrendererpixbuf.c:210 gtk/gtkcellrendererspinner.c:159 gtk/gtkrecentmanager.c:304
+#: gtk/deprecated/gtkstatusicon.c:296 gtk/gtkcellrendererpixbuf.c:210
+#: gtk/gtkcellrendererspinner.c:159 gtk/gtkrecentmanager.c:304
 msgid "Size"
 msgstr "ขนาด"
 
@@ -765,7 +783,8 @@ msgstr "ขนาด"
 msgid "The size of the icon"
 msgstr "ขนาดของไอคอน"
 
-#: gtk/deprecated/gtkstatusicon.c:306 gtk/gtkinvisible.c:98 gtk/gtkmountoperation.c:183 gtk/gtkstylecontext.c:229 gtk/gtkwindow.c:900
+#: gtk/deprecated/gtkstatusicon.c:306 gtk/gtkinvisible.c:98
+#: gtk/gtkmountoperation.c:183 gtk/gtkstylecontext.c:229 gtk/gtkwindow.c:900
 msgid "Screen"
 msgstr "หน้าจอ"
 
@@ -785,7 +804,8 @@ msgstr "ฝังตัว"
 msgid "Whether the status icon is embedded"
 msgstr "กำหนดว่าไอคอนสถานะฝังตัวหรือไม่"
 
-#: gtk/deprecated/gtkstatusicon.c:346 gtk/deprecated/gtktrayicon-x11.c:127 gtk/gtkgesturepan.c:238 gtk/gtkorientable.c:61
+#: gtk/deprecated/gtkstatusicon.c:346 gtk/deprecated/gtktrayicon-x11.c:127
+#: gtk/gtkgesturepan.c:238 gtk/gtkorientable.c:61
 msgid "Orientation"
 msgstr "แนววาง"
 
@@ -817,8 +837,11 @@ msgstr "มาร์กอัปคำแนะนำเครื่องมื
 msgid "The contents of the tooltip for this tray icon"
 msgstr "เนื้อหาของคำแนะนำเครื่องมือสำหรับไอคอนถาดนี้"
 
-#: gtk/deprecated/gtkstatusicon.c:443 gtk/gtkcolorbutton.c:183 gtk/gtkfilechooserbutton.c:443 gtk/gtkfontbutton.c:490 gtk/gtkheaderbar.c:2027 gtk/gtkprintjob.c:133
-#: gtk/gtkshortcutsgroup.c:308 gtk/gtkshortcutssection.c:376 gtk/gtkshortcutsshortcut.c:576 gtk/gtkstack.c:523 gtk/gtktreeviewcolumn.c:316
+#: gtk/deprecated/gtkstatusicon.c:443 gtk/gtkcolorbutton.c:183
+#: gtk/gtkfilechooserbutton.c:443 gtk/gtkfontbutton.c:490
+#: gtk/gtkheaderbar.c:2027 gtk/gtkprintjob.c:133 gtk/gtkshortcutsgroup.c:308
+#: gtk/gtkshortcutssection.c:376 gtk/gtkshortcutsshortcut.c:576
+#: gtk/gtkstack.c:523 gtk/gtktreeviewcolumn.c:316
 msgid "Title"
 msgstr "ชื่อเรื่อง"
 
@@ -866,7 +889,8 @@ msgstr "ช่องไฟคอลัมน์"
 msgid "The amount of space between two consecutive columns"
 msgstr "ปริมาณช่องว่างระหว่างคอลัมน์ที่อยู่ติดกันทั้งสอง"
 
-#: gtk/deprecated/gtktable.c:221 gtk/gtkbox.c:285 gtk/gtkflowbox.c:3849 gtk/gtkstack.c:459 gtk/gtktoolbar.c:597 gtk/gtktoolitemgroup.c:1688
+#: gtk/deprecated/gtktable.c:221 gtk/gtkbox.c:285 gtk/gtkflowbox.c:3849
+#: gtk/gtkstack.c:459 gtk/gtktoolbar.c:597 gtk/gtktoolitemgroup.c:1688
 msgid "Homogeneous"
 msgstr "สม่ำเสมอ"
 
@@ -950,8 +974,10 @@ msgstr "สร้างตัวแทนเดียวกันกับกา
 msgid "Whether the proxies for this action look like radio action proxies"
 msgstr "กำหนดว่าตัวแทนสำหรับการกระทำนี้มีลักษณะเหมือนกับตัวแทนการกระทำปุ่มตัวเลือกหรือไม่"
 
-#: gtk/deprecated/gtktoggleaction.c:135 gtk/gtkcellrendererspinner.c:125 gtk/gtkcheckmenuitem.c:209 gtk/gtkmenu.c:640 gtk/gtkmodelbutton.c:1213 gtk/gtkmodelbutton.c:1214
-#: gtk/gtkspinner.c:221 gtk/gtkswitch.c:879 gtk/gtktogglebutton.c:188 gtk/gtktoggletoolbutton.c:130
+#: gtk/deprecated/gtktoggleaction.c:135 gtk/gtkcellrendererspinner.c:125
+#: gtk/gtkcheckmenuitem.c:209 gtk/gtkmenu.c:640 gtk/gtkmodelbutton.c:1213
+#: gtk/gtkmodelbutton.c:1214 gtk/gtkspinner.c:221 gtk/gtkswitch.c:879
+#: gtk/gtktogglebutton.c:188 gtk/gtktoggletoolbutton.c:130
 msgid "Active"
 msgstr "เปิดใช้งาน"
 
@@ -959,7 +985,8 @@ msgstr "เปิดใช้งาน"
 msgid "Whether the toggle action should be active"
 msgstr "กำหนดว่าการกระทำปุ่มสลับควรจะอยู่ในสถานะเปิดใช้งานหรือไม่"
 
-#: gtk/deprecated/gtktrayicon-x11.c:136 gtk/gtkcellrenderertext.c:334 gtk/gtktexttag.c:277
+#: gtk/deprecated/gtktrayicon-x11.c:136 gtk/gtkcellrenderertext.c:334
+#: gtk/gtktexttag.c:277
 msgid "Foreground color"
 msgstr "สีพื้นหน้า"
 
@@ -1145,21 +1172,22 @@ msgstr "กำหนดว่าจะตัดบรรทัดในการ
 
 #: gtk/gtkaccellabel.c:209
 msgid "Accelerator Closure"
-msgstr "ส่วนปิดคลุมแป้นลัด"
+msgstr "ส่วนปิดคลุมแป้นด่วน"
 
 #: gtk/gtkaccellabel.c:210
 msgid "The closure to be monitored for accelerator changes"
-msgstr "ส่วนปิดคลุมที่ต้องการให้เฝ้าสังเกตการเปลี่ยนแปลงแป้นลัด"
+msgstr "ส่วนปิดคลุมที่ต้องการให้เฝ้าสังเกตการเปลี่ยนแปลงแป้นด่วน"
 
 #: gtk/gtkaccellabel.c:216
 msgid "Accelerator Widget"
-msgstr "วิดเจ็ตแป้นลัด"
+msgstr "วิดเจ็ตแป้นด่วน"
 
 #: gtk/gtkaccellabel.c:217
 msgid "The widget to be monitored for accelerator changes"
-msgstr "วิดเจ็ตที่ต้องการให้เฝ้าสังเกตการเปลี่ยนแปลงแป้นลัด"
+msgstr "วิดเจ็ตที่ต้องการให้เฝ้าสังเกตการเปลี่ยนแปลงแป้นด่วน"
 
-#: gtk/gtkaccessible.c:156 gtk/gtkeventcontroller.c:168 gtk/gtktreeviewcolumn.c:337
+#: gtk/gtkaccessible.c:156 gtk/gtkeventcontroller.c:168
+#: gtk/gtktreeviewcolumn.c:337
 msgid "Widget"
 msgstr "วิดเจ็ต"
 
@@ -1191,16 +1219,19 @@ msgstr "วิธีบรรจุ"
 msgid "A GtkPackType indicating whether the child is packed with reference to the start or end of the parent"
 msgstr "ค่า GtkPackType ระบุว่าวิดเจ็ตลูกบรรจุโดยเทียบกับต้นหรือท้ายของวิดเจ็ตแม่"
 
-#: gtk/gtkactionbar.c:345 gtk/gtkbox.c:365 gtk/gtkheaderbar.c:2020 gtk/gtknotebook.c:841 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1768 gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537
-#: gtk/gtktoolitemgroup.c:1716
+#: gtk/gtkactionbar.c:345 gtk/gtkbox.c:365 gtk/gtkheaderbar.c:2020
+#: gtk/gtknotebook.c:841 gtk/gtkpaned.c:368 gtk/gtkpopover.c:1768
+#: gtk/gtkpopovermenu.c:384 gtk/gtkstack.c:537 gtk/gtktoolitemgroup.c:1716
 msgid "Position"
 msgstr "ตำแหน่ง"
 
-#: gtk/gtkactionbar.c:346 gtk/gtkbox.c:366 gtk/gtkheaderbar.c:2021 gtk/gtknotebook.c:842 gtk/gtkpopovermenu.c:385 gtk/gtkstack.c:538
+#: gtk/gtkactionbar.c:346 gtk/gtkbox.c:366 gtk/gtkheaderbar.c:2021
+#: gtk/gtknotebook.c:842 gtk/gtkpopovermenu.c:385 gtk/gtkstack.c:538
 msgid "The index of the child in the parent"
 msgstr "ดัชนีของวิดเจ็ตลูกภายในวิดเจ็ตแม่"
 
-#: gtk/gtkadjustment.c:142 gtk/gtkcellrendererprogress.c:138 gtk/gtkscalebutton.c:198 gtk/gtkspinbutton.c:436
+#: gtk/gtkadjustment.c:142 gtk/gtkcellrendererprogress.c:138
+#: gtk/gtkscalebutton.c:198 gtk/gtkspinbutton.c:436
 msgid "Value"
 msgstr "ค่า"
 
@@ -1538,13 +1569,14 @@ msgstr "ถ้าเป็น TRUE วิดเจ็ตลูกจะปรา
 
 #: gtk/gtkbbox.c:292
 msgid "Non-Homogeneous"
-msgstr "ไม่เป็นเนื้อเดียวกัน"
+msgstr "ไม่สม่ำเสมอ"
 
 #: gtk/gtkbbox.c:293
 msgid "If TRUE, the child will not be subject to homogeneous sizing"
-msgstr "ถ้าเป็น TRUE วิดเจ็ตลูกจะไม่อยู่ภายใต้การจัดขนาดแบบเป็นเนื้อเดียวกัน"
+msgstr "ถ้าเป็น TRUE วิดเจ็ตลูกจะไม่อยู่ภายใต้การจัดขนาดแบบสม่ำเสมอ"
 
-#: gtk/gtkbox.c:278 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:342 gtk/gtkheaderbar.c:2048 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
+#: gtk/gtkbox.c:278 gtk/gtkcellareabox.c:310 gtk/gtkexpander.c:342
+#: gtk/gtkheaderbar.c:2048 gtk/gtkiconview.c:524 gtk/gtktreeviewcolumn.c:276
 msgid "Spacing"
 msgstr "ช่องไฟ"
 
@@ -1564,7 +1596,9 @@ msgstr "ตำแหน่งเส้นฐาน"
 msgid "The position of the baseline aligned widgets if extra space is available"
 msgstr "ตำแหน่งของวิดเจ็ตที่จัดชิดแนวเส้นฐานในกรณีที่มีพื้นที่เพิ่มเติมอยู่"
 
-#: gtk/gtkbox.c:318 gtk/gtkcellareabox.c:330 gtk/gtktoolbar.c:589 gtk/gtktoolitemgroup.c:1695 gtk/gtktoolpalette.c:1027 gtk/gtktreeviewcolumn.c:323
+#: gtk/gtkbox.c:318 gtk/gtkcellareabox.c:330 gtk/gtktoolbar.c:589
+#: gtk/gtktoolitemgroup.c:1695 gtk/gtktoolpalette.c:1027
+#: gtk/gtktreeviewcolumn.c:323
 msgid "Expand"
 msgstr "ขยาย"
 
@@ -1596,13 +1630,15 @@ msgstr "โดเมนคำแปลที่ gettext ใช้"
 msgid "Text of the label widget inside the button, if the button contains a label widget"
 msgstr "ข้อความของวิดเจ็ตฉลากภายในปุ่ม ถ้าปุ่มดังกล่าวมีวิดเจ็ตฉลาก"
 
-#: gtk/gtkbutton.c:288 gtk/gtkexpander.c:317 gtk/gtklabel.c:827 gtk/gtkmenuitem.c:805 gtk/gtktoolbutton.c:250
+#: gtk/gtkbutton.c:288 gtk/gtkexpander.c:317 gtk/gtklabel.c:827
+#: gtk/gtkmenuitem.c:805 gtk/gtktoolbutton.c:250
 msgid "Use underline"
 msgstr "ใช้เส้นใต้"
 
-#: gtk/gtkbutton.c:289 gtk/gtkexpander.c:318 gtk/gtklabel.c:828 gtk/gtkmenuitem.c:806
+#: gtk/gtkbutton.c:289 gtk/gtkexpander.c:318 gtk/gtklabel.c:828
+#: gtk/gtkmenuitem.c:806
 msgid "If set, an underline in the text indicates the next character should be used for the mnemonic accelerator key"
-msgstr "ถ้าตั้งค่า เส้นใต้ในข้อความจะระบุว่าควรใช้อักขระถัดไปเป็นแป้นลัดที่เป็นอักษรช่วยจำ"
+msgstr "ถ้าตั้งค่า เส้นใต้ในข้อความจะระบุว่าควรใช้อักขระถัดไปเป็นแป้นด่วนที่เป็นอักษรช่วยจำ"
 
 #: gtk/gtkbutton.c:301
 msgid "If set, the label is used to pick a stock item instead of being displayed"
@@ -1860,7 +1896,8 @@ msgstr "พื้นที่"
 msgid "The Cell Area this context was created for"
 msgstr "พื้นที่เซลล์ซึ่ง Context นี้ถูกสร้างขึ้นให้"
 
-#: gtk/gtkcellareacontext.c:132 gtk/gtkcellareacontext.c:151 gtk/gtktreeviewcolumn.c:300
+#: gtk/gtkcellareacontext.c:132 gtk/gtkcellareacontext.c:151
+#: gtk/gtktreeviewcolumn.c:300
 msgid "Minimum Width"
 msgstr "ความกว้างต่ำสุด"
 
@@ -1886,35 +1923,35 @@ msgstr "ระบุว่าการแก้ไขได้ถูกยกเ
 
 #: gtk/gtkcellrendereraccel.c:141
 msgid "Accelerator key"
-msgstr "แป้นลัด"
+msgstr "แป้นด่วน"
 
 #: gtk/gtkcellrendereraccel.c:142
 msgid "The keyval of the accelerator"
-msgstr "ค่าคีย์ของแป้นลัด"
+msgstr "ค่าคีย์ของแป้นด่วน"
 
 #: gtk/gtkcellrendereraccel.c:158
 msgid "Accelerator modifiers"
-msgstr "แป้นประกอบแป้นลัด"
+msgstr "แป้นประกอบแป้นด่วน"
 
 #: gtk/gtkcellrendereraccel.c:159
 msgid "The modifier mask of the accelerator"
-msgstr "ค่ามาสก์ระบุสถานะแป้นประกอบของแป้นลัด"
+msgstr "ค่ามาสก์ระบุสถานะแป้นประกอบของแป้นด่วน"
 
 #: gtk/gtkcellrendereraccel.c:176
 msgid "Accelerator keycode"
-msgstr "คีย์โค้ดแป้นลัด"
+msgstr "คีย์โค้ดแป้นด่วน"
 
 #: gtk/gtkcellrendereraccel.c:177
 msgid "The hardware keycode of the accelerator"
-msgstr "คีย์โค้ดฮาร์ดแวร์ของแป้นลัด"
+msgstr "คีย์โค้ดฮาร์ดแวร์ของแป้นด่วน"
 
 #: gtk/gtkcellrendereraccel.c:196
 msgid "Accelerator Mode"
-msgstr "โหมดแป้นลัด"
+msgstr "โหมดแป้นด่วน"
 
 #: gtk/gtkcellrendereraccel.c:197
 msgid "The type of accelerators"
-msgstr "ชนิดของแป้นลัดต่างๆ"
+msgstr "ชนิดของแป้นด่วนต่างๆ"
 
 #: gtk/gtkcellrenderer.c:292
 msgid "mode"
@@ -2120,7 +2157,8 @@ msgstr "ติดตามสถานะ"
 msgid "Whether the rendered pixbuf should be colorized according to the state"
 msgstr "กำหนดว่าพิกซ์บัฟที่เรนเดอร์ควรจะถูกแต่งสีตามสถานะหรือไม่"
 
-#: gtk/gtkcellrendererpixbuf.c:281 gtk/gtkimage.c:359 gtk/gtkmodelbutton.c:1168 gtk/gtkshortcutsshortcut.c:551 gtk/gtkwindow.c:844
+#: gtk/gtkcellrendererpixbuf.c:281 gtk/gtkimage.c:359 gtk/gtkmodelbutton.c:1168
+#: gtk/gtkshortcutsshortcut.c:551 gtk/gtkwindow.c:844
 msgid "Icon"
 msgstr "ไอคอน"
 
@@ -2128,8 +2166,9 @@ msgstr "ไอคอน"
 msgid "Value of the progress bar"
 msgstr "ค่าของแถบความคืบหน้า"
 
-#: gtk/gtkcellrendererprogress.c:156 gtk/gtkcellrenderertext.c:255 gtk/gtkentrybuffer.c:350 gtk/gtkentry.c:953 gtk/gtkmessagedialog.c:214 gtk/gtkmodelbutton.c:1182
-#: gtk/gtkprogressbar.c:287 gtk/gtktextbuffer.c:219
+#: gtk/gtkcellrendererprogress.c:156 gtk/gtkcellrenderertext.c:255
+#: gtk/gtkentrybuffer.c:350 gtk/gtkentry.c:953 gtk/gtkmessagedialog.c:214
+#: gtk/gtkmodelbutton.c:1182 gtk/gtkprogressbar.c:287 gtk/gtktextbuffer.c:219
 msgid "Text"
 msgstr "ข้อความ"
 
@@ -2161,7 +2200,8 @@ msgstr "ตำแหน่งจัดเรียงข้อความแก
 msgid "The vertical text alignment, from 0 (top) to 1 (bottom)."
 msgstr "ตำแหน่งจัดเรียงข้อความตามแนวตั้ง จาก 0 (บน) ไป 1 (ล่าง)"
 
-#: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1097 gtk/gtkmodelbutton.c:1244 gtk/gtkprogressbar.c:264 gtk/gtkrange.c:441
+#: gtk/gtkcellrendererprogress.c:226 gtk/gtklevelbar.c:1097
+#: gtk/gtkmodelbutton.c:1244 gtk/gtkprogressbar.c:264 gtk/gtkrange.c:441
 msgid "Inverted"
 msgstr "กลับด้าน"
 
@@ -2169,7 +2209,8 @@ msgstr "กลับด้าน"
 msgid "Invert the direction in which the progress bar grows"
 msgstr "กลับทิศทางที่แถบความคืบหน้าจะยืดออกไป"
 
-#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:434 gtk/gtkscalebutton.c:217 gtk/gtkspinbutton.c:379
+#: gtk/gtkcellrendererspin.c:113 gtk/gtkrange.c:434 gtk/gtkscalebutton.c:217
+#: gtk/gtkspinbutton.c:379
 msgid "Adjustment"
 msgstr "วิดเจ็ตปรับค่า"
 
@@ -2277,7 +2318,8 @@ msgstr "สีพื้นหน้าในรูปแบบ RGBA"
 msgid "Foreground color as a GdkRGBA"
 msgstr "สีพื้นหน้าในรูปแบบ GdkRGBA"
 
-#: gtk/gtkcellrenderertext.c:357 gtk/gtkentry.c:861 gtk/gtktexttag.c:309 gtk/gtktextview.c:826
+#: gtk/gtkcellrenderertext.c:357 gtk/gtkentry.c:861 gtk/gtktexttag.c:309
+#: gtk/gtktextview.c:826
 msgid "Editable"
 msgstr "แก้ไขได้"
 
@@ -2285,7 +2327,8 @@ msgstr "แก้ไขได้"
 msgid "Whether the text can be modified by the user"
 msgstr "กำหนดว่าผู้ใช้สามารถแก้ไขข้อความได้หรือไม่"
 
-#: gtk/gtkcellrenderertext.c:364 gtk/gtkcellrenderertext.c:371 gtk/gtkfontchooser.c:64 gtk/gtktexttag.c:325 gtk/gtktexttag.c:333
+#: gtk/gtkcellrenderertext.c:364 gtk/gtkcellrenderertext.c:371
+#: gtk/gtkfontchooser.c:64 gtk/gtktexttag.c:325 gtk/gtktexttag.c:333
 msgid "Font"
 msgstr "แบบอักษร"
 
@@ -2305,23 +2348,28 @@ msgstr "ตระกูลแบบอักษร"
 msgid "Name of the font family, e.g. Sans, Helvetica, Times, Monospace"
 msgstr "ชื่อตระกูลแบบอักษร เช่น Sans, Helvetica, Times, Monospace"
 
-#: gtk/gtkcellrenderertext.c:385 gtk/gtkcellrenderertext.c:386 gtk/gtktexttag.c:349
+#: gtk/gtkcellrenderertext.c:385 gtk/gtkcellrenderertext.c:386
+#: gtk/gtktexttag.c:349
 msgid "Font style"
 msgstr "ลักษณะแบบอักษร"
 
-#: gtk/gtkcellrenderertext.c:393 gtk/gtkcellrenderertext.c:394 gtk/gtktexttag.c:358
+#: gtk/gtkcellrenderertext.c:393 gtk/gtkcellrenderertext.c:394
+#: gtk/gtktexttag.c:358
 msgid "Font variant"
 msgstr "รูปแบบย่อยของแบบอักษร"
 
-#: gtk/gtkcellrenderertext.c:401 gtk/gtkcellrenderertext.c:402 gtk/gtktexttag.c:367
+#: gtk/gtkcellrenderertext.c:401 gtk/gtkcellrenderertext.c:402
+#: gtk/gtktexttag.c:367
 msgid "Font weight"
 msgstr "น้ำหนักเส้นแบบอักษร"
 
-#: gtk/gtkcellrenderertext.c:409 gtk/gtkcellrenderertext.c:410 gtk/gtktexttag.c:378
+#: gtk/gtkcellrenderertext.c:409 gtk/gtkcellrenderertext.c:410
+#: gtk/gtktexttag.c:378
 msgid "Font stretch"
 msgstr "การยืดขนาดแบบอักษร"
 
-#: gtk/gtkcellrenderertext.c:417 gtk/gtkcellrenderertext.c:418 gtk/gtktexttag.c:387
+#: gtk/gtkcellrenderertext.c:417 gtk/gtkcellrenderertext.c:418
+#: gtk/gtktexttag.c:387
 msgid "Font size"
 msgstr "ขนาดแบบอักษร"
 
@@ -2381,7 +2429,8 @@ msgstr "การใช้จุดไข่ปลา"
 msgid "The preferred place to ellipsize the string, if the cell renderer does not have enough room to display the entire string"
 msgstr "ตำแหน่งที่ต้องการให้แสดงจุดไข่ปลาในสตริง ในกรณีที่ตัวเรนเดอร์เซลล์มีพื้นที่ไม่เพียงพอที่จะแสดงสตริงได้ครบทั้งหมด"
 
-#: gtk/gtkcellrenderertext.c:503 gtk/gtkfilechooserbutton.c:457 gtk/gtklabel.c:984
+#: gtk/gtkcellrenderertext.c:503 gtk/gtkfilechooserbutton.c:457
+#: gtk/gtklabel.c:984
 msgid "Width In Characters"
 msgstr "ความกว้างในหน่วยอักขระ"
 
@@ -2593,7 +2642,8 @@ msgstr "วาดปุ่มสลับเป็นปุ่มตัวเล
 msgid "Indicator size"
 msgstr "ขนาดตัวชี้บอก"
 
-#: gtk/gtkcellrenderertoggle.c:171 gtk/gtkcheckbutton.c:233 gtk/gtkcheckmenuitem.c:241
+#: gtk/gtkcellrenderertoggle.c:171 gtk/gtkcheckbutton.c:233
+#: gtk/gtkcheckmenuitem.c:241
 msgid "Size of check or radio indicator"
 msgstr "ขนาดของตัวชี้บอกช่องทำเครื่องหมายหรือปุ่มตัวเลือก"
 
@@ -2609,11 +2659,13 @@ msgstr "ตัวแบบ CellView"
 msgid "The model for cell view"
 msgstr "ตัวแบบสำหรับมุมมองเซลล์"
 
-#: gtk/gtkcellview.c:282 gtk/gtkcombobox.c:1182 gtk/gtkentrycompletion.c:467 gtk/gtkiconview.c:649 gtk/gtktreemenu.c:307 gtk/gtktreeviewcolumn.c:399
+#: gtk/gtkcellview.c:282 gtk/gtkcombobox.c:1182 gtk/gtkentrycompletion.c:467
+#: gtk/gtkiconview.c:649 gtk/gtktreemenu.c:307 gtk/gtktreeviewcolumn.c:399
 msgid "Cell Area"
 msgstr "พื้นที่เซลล์"
 
-#: gtk/gtkcellview.c:283 gtk/gtkcombobox.c:1183 gtk/gtkentrycompletion.c:468 gtk/gtkiconview.c:650 gtk/gtktreemenu.c:308 gtk/gtktreeviewcolumn.c:400
+#: gtk/gtkcellview.c:283 gtk/gtkcombobox.c:1183 gtk/gtkentrycompletion.c:468
+#: gtk/gtkiconview.c:650 gtk/gtktreemenu.c:308 gtk/gtktreeviewcolumn.c:400
 msgid "The GtkCellArea used to layout cells"
 msgstr "GtkCellArea ที่ใช้เพื่อวางรูปแบบเซลล์"
 
@@ -3533,7 +3585,8 @@ msgstr "ข้อความสำหรับฉลากมีมาร์ก
 msgid "Space to put between the label and the child"
 msgstr "พื้นที่ที่ต้องการเติมลงระหว่างฉลากกับวิดเจ็ตลูก"
 
-#: gtk/gtkexpander.c:352 gtk/gtkframe.c:263 gtk/gtktoolbutton.c:257 gtk/gtktoolitemgroup.c:1646
+#: gtk/gtkexpander.c:352 gtk/gtkframe.c:263 gtk/gtktoolbutton.c:257
+#: gtk/gtktoolitemgroup.c:1646
 msgid "Label widget"
 msgstr "วิดเจ็ตฉลาก"
 
@@ -3601,7 +3654,8 @@ msgstr "ตัวกรอง"
 msgid "The current filter for selecting which files are displayed"
 msgstr "ตัวกรองปัจจุบันสำหรับเลือกไฟล์ที่จะให้แสดง"
 
-#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4839 gtk/gtkplacesview.c:2345
+#: gtk/gtkfilechooser.c:388 gtk/gtkplacessidebar.c:4839
+#: gtk/gtkplacesview.c:2345
 msgid "Local Only"
 msgstr "ในเครื่องเท่านั้น"
 
@@ -3693,7 +3747,8 @@ msgstr "ฉลากบนปุ่มยกเลิก"
 msgid "Search mode"
 msgstr "โหมดค้นหา"
 
-#: gtk/gtkfilechooserwidget.c:8652 gtk/gtkfilechooserwidget.c:8653 gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:592
+#: gtk/gtkfilechooserwidget.c:8652 gtk/gtkfilechooserwidget.c:8653
+#: gtk/gtkheaderbar.c:2034 gtk/gtkshortcutsshortcut.c:592
 msgid "Subtitle"
 msgstr "ชื่อเรื่องย่อย"
 
@@ -3713,7 +3768,8 @@ msgstr "ตำแหน่งแกน Y"
 msgid "Y position of child widget"
 msgstr "ตำแหน่งแกน Y ของวิดเจ็ตลูก"
 
-#: gtk/gtkflowbox.c:3822 gtk/gtkiconview.c:408 gtk/gtklistbox.c:485 gtk/gtktreeselection.c:131
+#: gtk/gtkflowbox.c:3822 gtk/gtkiconview.c:408 gtk/gtklistbox.c:485
+#: gtk/gtktreeselection.c:131
 msgid "Selection mode"
 msgstr "โหมดการเลือก"
 
@@ -3721,11 +3777,13 @@ msgstr "โหมดการเลือก"
 msgid "The selection mode"
 msgstr "ระบุโหมดที่ใช้ในการเลือก"
 
-#: gtk/gtkflowbox.c:3836 gtk/gtkiconview.c:665 gtk/gtklistbox.c:493 gtk/gtktreeview.c:1221
+#: gtk/gtkflowbox.c:3836 gtk/gtkiconview.c:665 gtk/gtklistbox.c:493
+#: gtk/gtktreeview.c:1221
 msgid "Activate on Single Click"
 msgstr "เรียกใช้เมื่อคลิกครั้งเดียว"
 
-#: gtk/gtkflowbox.c:3837 gtk/gtkiconview.c:666 gtk/gtklistbox.c:494 gtk/gtktreeview.c:1222
+#: gtk/gtkflowbox.c:3837 gtk/gtkiconview.c:666 gtk/gtklistbox.c:494
+#: gtk/gtktreeview.c:1222
 msgid "Activate row on a single click"
 msgstr "เรียกใช้แถวเมื่อคลิกครั้งเดียว"
 
@@ -3967,7 +4025,7 @@ msgstr "กำหนดว่า Context ใช้ OpenGL หรือ OpenGL ES
 
 #: gtk/gtkgrid.c:1770
 msgid "Row Homogeneous"
-msgstr "แถวเป็นเนื้อเดียวกัน"
+msgstr "แถวสม่ำเสมอ"
 
 #: gtk/gtkgrid.c:1771
 msgid "If TRUE, the rows are all the same height"
@@ -3975,7 +4033,7 @@ msgstr "ถ้าเป็น TRUE แถวทั้งหมดจะมีค
 
 #: gtk/gtkgrid.c:1777
 msgid "Column Homogeneous"
-msgstr "คอลัมน์เป็นเนื้อเดียวกัน"
+msgstr "คอลัมน์สม่ำเสมอ"
 
 #: gtk/gtkgrid.c:1778
 msgid "If TRUE, the columns are all the same width"
@@ -4193,7 +4251,8 @@ msgstr "ชุดไอคอน"
 msgid "Icon set to display"
 msgstr "ชุดไอคอนที่ต้องการแสดงผล"
 
-#: gtk/gtkimage.c:303 gtk/gtkscalebutton.c:208 gtk/gtktoolbar.c:564 gtk/gtktoolpalette.c:965
+#: gtk/gtkimage.c:303 gtk/gtkscalebutton.c:208 gtk/gtktoolbar.c:564
+#: gtk/gtktoolpalette.c:965
 msgid "Icon size"
 msgstr "ขนาดไอคอน"
 
@@ -4282,9 +4341,7 @@ msgid "Justification"
 msgstr "การจัดชิดแนว"
 
 #: gtk/gtklabel.c:835
-msgid ""
-"The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkLabel:xalign for "
-"that"
+msgid "The alignment of the lines in the text of the label relative to each other. This does NOT affect the alignment of the label within its allocation. See GtkLabel:xalign for that"
 msgstr "การจัดแนวของบรรทัดในข้อความของฉลากที่สัมพันธ์ต่อกัน ค่านี้จะไม่มีผลกับการจัดแนวของฉลากภายในพื้นที่ที่จัดสรรของฉลากดังกล่าว ดูที่ GtkLabel:xalign สำหรับข้อมูลดังกล่าว"
 
 #: gtk/gtklabel.c:878
@@ -4321,7 +4378,7 @@ msgstr "คีย์อักษรช่วยจำ"
 
 #: gtk/gtklabel.c:917
 msgid "The mnemonic accelerator key for this label"
-msgstr "คีย์แป้นลัดที่เป็นอักษรช่วยจำสำหรับฉลากนี้"
+msgstr "คีย์แป้นด่วนที่เป็นอักษรช่วยจำสำหรับฉลากนี้"
 
 #: gtk/gtklabel.c:924
 msgid "Mnemonic widget"
@@ -4571,7 +4628,8 @@ msgstr "จัดแนวกับ"
 msgid "The parent widget which the menu should align with."
 msgstr "วิดเจ็ตแม่ซึ่งเมนูควรจัดแนวเข้าด้วย"
 
-#: gtk/gtkmenubutton.c:534 gtk/gtkshortcutsshortcut.c:646 gtk/gtkstylecontext.c:243
+#: gtk/gtkmenubutton.c:534 gtk/gtkshortcutsshortcut.c:646
+#: gtk/gtkstylecontext.c:243
 msgid "Direction"
 msgstr "ทิศทาง"
 
@@ -4601,15 +4659,15 @@ msgstr "รายการเมนูที่เลือกอยู่ขณ
 
 #: gtk/gtkmenu.c:656
 msgid "The accel group holding accelerators for the menu"
-msgstr "กลุ่มแป้นลัดที่เก็บค่าแป้นลัดต่างๆ สำหรับเมนู"
+msgstr "กลุ่มแป้นด่วนที่เก็บค่าแป้นด่วนต่างๆ สำหรับเมนู"
 
 #: gtk/gtkmenu.c:670 gtk/gtkmenuitem.c:777
 msgid "Accel Path"
-msgstr "เส้นทางแป้นลัด"
+msgstr "เส้นทางแป้นด่วน"
 
 #: gtk/gtkmenu.c:671
 msgid "An accel path used to conveniently construct accel paths of child items"
-msgstr "เส้นทางแป้นลัดที่ใช้สร้างเส้นทางแป้นลัดของรายการลูกอย่างสะดวก"
+msgstr "เส้นทางแป้นด่วนที่ใช้สร้างเส้นทางแป้นด่วนของรายการลูกอย่างสะดวก"
 
 #: gtk/gtkmenu.c:687
 msgid "Attach Widget"
@@ -4773,7 +4831,7 @@ msgstr "เมนูย่อยที่แนบติดกับรายก
 
 #: gtk/gtkmenuitem.c:778
 msgid "Sets the accelerator path of the menu item"
-msgstr "ตั้งค่าเส้นทางแป้นลัดของรายการเมนู"
+msgstr "ตั้งค่าเส้นทางแป้นด่วนของรายการเมนู"
 
 #: gtk/gtkmenuitem.c:792
 msgid "The text for the child label"
@@ -6253,19 +6311,19 @@ msgstr "จำนวนพิกเซลระหว่างแถบเลื
 
 #: gtk/gtkscrolledwindow.c:663
 msgid "Minimum Content Width"
-msgstr "ความกว้างเนื้อหาน้อยสุด"
+msgstr "ความกว้างเนื้อหาต่ำสุด"
 
 #: gtk/gtkscrolledwindow.c:664
 msgid "The minimum width that the scrolled window will allocate to its content"
-msgstr "ความกว้างน้อยสุดซึ่งหน้าต่างที่มีการเลื่อนเนื้อหาจะจัดสรรให้กับเนื้อหาที่อยู่ข้างใน"
+msgstr "ความกว้างต่ำสุดซึ่งหน้าต่างที่มีการเลื่อนเนื้อหาจะจัดสรรให้กับเนื้อหาที่อยู่ข้างใน"
 
 #: gtk/gtkscrolledwindow.c:677
 msgid "Minimum Content Height"
-msgstr "ความสูงเนื้อหาน้อยสุด"
+msgstr "ความสูงเนื้อหาต่ำสุด"
 
 #: gtk/gtkscrolledwindow.c:678
 msgid "The minimum height that the scrolled window will allocate to its content"
-msgstr "ความสูงน้อยสุดซึ่งหน้าต่างที่มีการเลื่อนเนื้อหาจะจัดสรรให้กับเนื้อหาที่อยู่ข้างใน"
+msgstr "ความสูงต่ำสุดซึ่งหน้าต่างที่มีการเลื่อนเนื้อหาจะจัดสรรให้กับเนื้อหาที่อยู่ข้างใน"
 
 #: gtk/gtkscrolledwindow.c:692
 msgid "Kinetic Scrolling"
@@ -6285,19 +6343,19 @@ msgstr "โหมดการเลื่อนเนื้อหาแบบโ
 
 #: gtk/gtkscrolledwindow.c:726
 msgid "Maximum Content Width"
-msgstr "ความกว้างเนื้อหามากสุด"
+msgstr "ความกว้างเนื้อหาสูงสุด"
 
 #: gtk/gtkscrolledwindow.c:727
 msgid "The maximum width that the scrolled window will allocate to its content"
-msgstr "ความกว้างมากสุดซึ่งหน้าต่างที่มีการเลื่อนเนื้อหาจะจัดสรรให้กับเนื้อหาที่อยู่ข้างใน"
+msgstr "ความกว้างสูงสุดซึ่งหน้าต่างที่มีการเลื่อนเนื้อหาจะจัดสรรให้กับเนื้อหาที่อยู่ข้างใน"
 
 #: gtk/gtkscrolledwindow.c:740
 msgid "Maximum Content Height"
-msgstr "ความสูงเนื้อหามากสุด"
+msgstr "ความสูงเนื้อหาสูงสุด"
 
 #: gtk/gtkscrolledwindow.c:741
 msgid "The maximum height that the scrolled window will allocate to its content"
-msgstr "ความสูงมากสุดซึ่งหน้าต่างที่มีการเลื่อนเนื้อหาจะจัดสรรให้กับเนื้อหาที่อยู่ข้างใน"
+msgstr "ความสูงสูงสุดซึ่งหน้าต่างที่มีการเลื่อนเนื้อหาจะจัดสรรให้กับเนื้อหาที่อยู่ข้างใน"
 
 #: gtk/gtkscrolledwindow.c:758 gtk/gtkscrolledwindow.c:759
 msgid "Propagate Natural Width"
@@ -6409,15 +6467,15 @@ msgstr "ชื่อของชุดตกแต่งไอคอนที่
 
 #: gtk/gtksettings.c:504
 msgid "Key Theme Name"
-msgstr "ชื่อชุดแป้นลัด"
+msgstr "ชื่อชุดแป้นด่วน"
 
 #: gtk/gtksettings.c:505
 msgid "Name of key theme to load"
-msgstr "ชื่อของชุดแป้นลัดที่ต้องการโหลด"
+msgstr "ชื่อของชุดแป้นด่วนที่ต้องการโหลด"
 
 #: gtk/gtksettings.c:521
 msgid "Menu bar accelerator"
-msgstr "แป้นลัดแถบเมนู"
+msgstr "แป้นด่วนแถบเมนู"
 
 #: gtk/gtksettings.c:522
 msgid "Keybinding to activate the menu bar"
@@ -6681,11 +6739,11 @@ msgstr "กำหนดว่าฉลากควรมีอักษรช่
 
 #: gtk/gtksettings.c:1068
 msgid "Enable Accelerators"
-msgstr "เปิดใช้แป้นลัด"
+msgstr "เปิดใช้แป้นด่วน"
 
 #: gtk/gtksettings.c:1069
 msgid "Whether menu items should have accelerators"
-msgstr "กำหนดว่ารายการเมนูควรมีแป้นลัดหรือไม่"
+msgstr "กำหนดว่ารายการเมนูควรมีแป้นด่วนหรือไม่"
 
 #: gtk/gtksettings.c:1088
 msgid "Recent Files Limit"
@@ -6834,2081 +6892,1995 @@ msgstr "กำหนดว่าภาพควรแสดงในเมนู
 
 #: gtk/gtksettings.c:1432
 msgid "Delay before drop down menus appear"
-msgstr ""
+msgstr "หน่วงเวลาก่อนที่เมนูดึงลงจะปรากฏขึ้น"
 
 #: gtk/gtksettings.c:1433
 msgid "Delay before the submenus of a menu bar appear"
-msgstr ""
+msgstr "หน่วงเวลาก่อนที่เมนูย่อยของแถบเมนูจะปรากฏขึ้น"
 
 #: gtk/gtksettings.c:1452
 msgid "Scrolled Window Placement"
-msgstr ""
+msgstr "ตำแหน่งวางหน้าต่างที่ถูกเลื่อนเนื้อหา"
 
 #: gtk/gtksettings.c:1453
 msgid "Where the contents of scrolled windows are located with respect to the scrollbars, if not overridden by the scrolled window's own placement."
-msgstr ""
+msgstr "ตำแหน่งที่ต้องการให้วางเนื้อหาของหน้าต่างที่ถูกเลื่อนโดยพิจารณาจากแถบเลื่อน ถ้าไม่มีการแทนที่โดยตำแหน่งวางของหน้าต่างที่ถูกเลื่อนเอง"
 
 #: gtk/gtksettings.c:1469
 msgid "Can change accelerators"
-msgstr ""
+msgstr "สามารถเปลี่ยนแป้นด่วนได้"
 
 #: gtk/gtksettings.c:1470
 msgid "Whether menu accelerators can be changed by pressing a key over the menu item"
-msgstr ""
+msgstr "กำหนดว่าแป้นด่วนเมนูสามารถเปลี่ยนได้โดยการกดแป้นเหนือรายการเมนูหรือไม่"
 
 #: gtk/gtksettings.c:1485
 msgid "Delay before submenus appear"
-msgstr ""
+msgstr "หน่วงเวลาก่อนที่เมนูย่อยจะปรากฏขึ้น"
 
 #: gtk/gtksettings.c:1486
 msgid "Minimum time the pointer must stay over a menu item before the submenu appear"
-msgstr ""
+msgstr "เวลาต่ำสุดที่ตัวชี้จะต้องอยู่เหนือรายการเมนูก่อนที่เมนูย่อยจะปรากฏขึ้น"
 
 #: gtk/gtksettings.c:1502
 msgid "Delay before hiding a submenu"
-msgstr ""
+msgstr "หน่วงเวลาก่อนที่จะซ่อนเมนูย่อย"
 
 #: gtk/gtksettings.c:1503
 msgid "The time before hiding a submenu when the pointer is moving towards the submenu"
-msgstr ""
+msgstr "เวลาก่อนที่จะซ่อนเมนูย่อยเมื่อตัวชี้เคลื่อนที่เข้าใกล้กับเมนูย่อย"
 
 #: gtk/gtksettings.c:1513
 msgid "Whether to select the contents of a selectable label when it is focused"
-msgstr ""
+msgstr "กำหนดว่าจะเลือกเนื้อหาของฉลากที่เลือกได้เมื่อถูกโฟกัสอยู่หรือไม่"
 
 #: gtk/gtksettings.c:1528
 msgid "Custom palette"
-msgstr ""
+msgstr "พาเลตกำหนดเอง"
 
 #: gtk/gtksettings.c:1529
 msgid "Palette to use in the color selector"
-msgstr ""
+msgstr "พาเลตที่ต้องการใช้ในเครื่องมือเลือกสี"
 
 #: gtk/gtksettings.c:1544
 msgid "IM Preedit style"
-msgstr ""
+msgstr "ลักษณะสตริงก่อนแก้ไข IM"
 
 #: gtk/gtksettings.c:1545
 msgid "How to draw the input method preedit string"
-msgstr ""
+msgstr "วิธีการวาดสตริงก่อนแก้ไขของช่องทางป้อนข้อมูล"
 
 #: gtk/gtksettings.c:1561
 msgid "IM Status style"
-msgstr ""
+msgstr "ลักษณะสถานะ IM"
 
 #: gtk/gtksettings.c:1562
 msgid "How to draw the input method statusbar"
-msgstr ""
+msgstr "วิธีการวาดแถบสถานะของช่องทางป้อนข้อมูล"
 
 #: gtk/gtksettings.c:1571
 msgid "Desktop shell shows app menu"
-msgstr ""
+msgstr "เชลล์เดสก์ท็อปแสดงเมนูแอป"
 
 #: gtk/gtksettings.c:1572
 msgid "Set to TRUE if the desktop environment is displaying the app menu, FALSE if the app should display it itself."
-msgstr ""
+msgstr "ระบุเป็น TRUE ถ้าสภาพแวดล้อมเดสก์ท็อปจะแสดงเมนูแอป ระบุเป็น FALSE ถ้าแอปควรแสดงเมนูแอปด้วยตัวเอง"
 
 #: gtk/gtksettings.c:1581
 msgid "Desktop shell shows the menubar"
-msgstr ""
+msgstr "เชลล์เดสก์ท็อปแสดงแถบเมนู"
 
 #: gtk/gtksettings.c:1582
 msgid "Set to TRUE if the desktop environment is displaying the menubar, FALSE if the app should display it itself."
-msgstr ""
+msgstr "ระบุเป็น TRUE ถ้าสภาพแวดล้อมเดสก์ท็อปจะแสดงแถบเมนู ระบุเป็น FALSE ถ้าแอปควรแสดงแถบเมนูด้วยตัวเอง"
 
 #: gtk/gtksettings.c:1591
 msgid "Desktop environment shows the desktop folder"
-msgstr ""
+msgstr "สภาพแวดล้อมเดสก์ท็อปแสดงโฟลเดอร์เดสก์ท็อป"
 
 #: gtk/gtksettings.c:1592
 msgid "Set to TRUE if the desktop environment is displaying the desktop folder, FALSE if not."
-msgstr ""
+msgstr "ระบุเป็น TRUE ถ้าสภาพแวดล้อมเดสก์ท็อปจะแสดงโฟลเดอร์เดสก์ท็อป ระบุเป็น FALSE ถ้าจะไม่แสดง"
 
 #: gtk/gtksettings.c:1646
 msgid "Titlebar double-click action"
-msgstr ""
+msgstr "การกระทำเมื่อดับเบิลคลิกแถบชื่อเรื่อง"
 
 #: gtk/gtksettings.c:1647
 msgid "The action to take on titlebar double-click"
-msgstr ""
+msgstr "การกระทำที่ต้องการให้ทำเมื่อดับเบิลคลิกแถบชื่อเรื่อง"
 
 #: gtk/gtksettings.c:1665
 msgid "Titlebar middle-click action"
-msgstr ""
+msgstr "การกระทำเมื่อคลิกกลางแถบชื่อเรื่อง"
 
 #: gtk/gtksettings.c:1666
 msgid "The action to take on titlebar middle-click"
-msgstr ""
+msgstr "การกระทำที่ต้องการให้ทำเมื่อคลิกกลางที่แถบชื่อเรื่อง"
 
 #: gtk/gtksettings.c:1684
 msgid "Titlebar right-click action"
-msgstr ""
+msgstr "การกระทำเมื่อคลิกขวาแถบชื่อเรื่อง"
 
 #: gtk/gtksettings.c:1685
 msgid "The action to take on titlebar right-click"
-msgstr ""
+msgstr "การกระทำที่ต้องการให้ทำเมื่อคลิกขวาที่แถบชื่อเรื่อง"
 
 #: gtk/gtksettings.c:1707
 msgid "Dialogs use header bar"
-msgstr ""
+msgstr "กล่องโต้ตอบใช้แถบส่วนหัว"
 
 #: gtk/gtksettings.c:1708
 msgid "Whether builtin GTK+ dialogs should use a header bar instead of an action area."
-msgstr ""
+msgstr "กำหนดว่ากล่องโต้ตอบ GTK+ ในตัวควรใช้แถบส่วนหัวหรือไม่ แทนที่จะเป็นพื้นที่การกระทำ"
 
 #: gtk/gtksettings.c:1724
 msgid "Enable primary paste"
-msgstr ""
+msgstr "เปิดใช้การแปะเนื้อหาลำดับแรก"
 
 #: gtk/gtksettings.c:1725
 msgid "Whether a middle click on a mouse should paste the 'PRIMARY' clipboard content at the cursor location."
-msgstr ""
+msgstr "กำหนดว่าการคลิกกลางที่เมาส์ควรจะแปะเนื้อหาคลิปบอร์ด 'ลำดับแรก' ที่ตำแหน่งเคอร์เซอร์หรือไม่"
 
 #: gtk/gtksettings.c:1741
 msgid "Recent Files Enabled"
-msgstr ""
+msgstr "เปิดใช้ไฟล์ล่าสุด"
 
 #: gtk/gtksettings.c:1742
 msgid "Whether GTK+ remembers recent files"
-msgstr ""
+msgstr "กำหนดว่า GTK+ จะจดจำไฟล์ล่าสุดหรือไม่"
 
 #: gtk/gtksettings.c:1757
 msgid "Long press time"
-msgstr ""
+msgstr "ระยะเวลาการกดแบบยาว"
 
 #: gtk/gtksettings.c:1758
 msgid "Time for a button/touch press to be considered a long press (in milliseconds)"
-msgstr ""
+msgstr "ระยะเวลาสำหรับการกดปุ่ม/กดโดยสัมผัสที่จะถือว่าเป็นการกดแบบยาว (ในหน่วยมิลลิวินาที)"
 
 #: gtk/gtksettings.c:1775 gtk/gtksettings.c:1776
-#, fuzzy
-#| msgid "Whether to wrap the license text."
 msgid "Whether to show cursor in text"
-msgstr "กำหนดว่าจะตัดบรรทัดในการแสดงข้อความสัญญาอนุญาตหรือไม่"
+msgstr "กำหนดว่าจะแสดงเคอร์เซอร์ในข้อความหรือไม่"
 
 #: gtk/gtksettings.c:1793 gtk/gtksettings.c:1794
 msgid "Whether to use overlay scrollbars"
-msgstr ""
+msgstr "กำหนดว่าจะใช้แถบเลื่อนหน้าจอแบบซ้อนทับหรือไม่"
 
 #: gtk/gtkshortcutlabel.c:479 gtk/gtkshortcutsshortcut.c:537
 msgid "Accelerator"
-msgstr ""
+msgstr "แป้นด่วน"
 
 #: gtk/gtkshortcutlabel.c:491
 msgid "Disabled text"
-msgstr ""
+msgstr "ข้อความที่ถูกปิดใช้งาน"
 
 #: gtk/gtkshortcutsgroup.c:322
 msgid "View"
-msgstr ""
+msgstr "มุมมอง"
 
-#: gtk/gtkshortcutsgroup.c:335 gtk/gtkshortcutsgroup.c:336 gtk/gtkshortcutsshortcut.c:618 gtk/gtkshortcutsshortcut.c:619
+#: gtk/gtkshortcutsgroup.c:335 gtk/gtkshortcutsgroup.c:336
+#: gtk/gtkshortcutsshortcut.c:618 gtk/gtkshortcutsshortcut.c:619
 msgid "Accelerator Size Group"
-msgstr ""
+msgstr "กลุ่มขนาดแป้นด่วน"
 
-#: gtk/gtkshortcutsgroup.c:349 gtk/gtkshortcutsgroup.c:350 gtk/gtkshortcutsshortcut.c:632 gtk/gtkshortcutsshortcut.c:633
+#: gtk/gtkshortcutsgroup.c:349 gtk/gtkshortcutsgroup.c:350
+#: gtk/gtkshortcutsshortcut.c:632 gtk/gtkshortcutsshortcut.c:633
 msgid "Title Size Group"
-msgstr ""
+msgstr "กลุ่มขนาดชื่อเรื่อง"
 
 #: gtk/gtkshortcutssection.c:350 gtk/gtkshortcutswindow.c:787
-#, fuzzy
-#| msgid "Icon Name"
 msgid "Section Name"
-msgstr "ชื่อไอคอน"
+msgstr "ชื่อส่วน"
 
 #: gtk/gtkshortcutssection.c:364 gtk/gtkshortcutswindow.c:802
-#, fuzzy
-#| msgid "Name"
 msgid "View Name"
-msgstr "ชื่อ"
+msgstr "ชื่อมุมมอง"
 
 #: gtk/gtkshortcutssection.c:389
-#, fuzzy
-#| msgid "Maximum Value"
 msgid "Maximum Height"
-msgstr "ค่าสูงสุด"
+msgstr "ความสูงสูงสุด"
 
 #: gtk/gtkshortcutsshortcut.c:538
 msgid "The accelerator keys for shortcuts of type 'Accelerator'"
-msgstr ""
+msgstr "ปุ่มแป้นด่วนสำหรับทางลัดชนิด 'แป้นด่วน'"
 
 #: gtk/gtkshortcutsshortcut.c:552
 msgid "The icon to show for shortcuts of type 'Other Gesture'"
-msgstr ""
+msgstr "ไอคอนที่ต้องการแสดงสำหรับทางลัดชนิด 'ท่าทางอื่นๆ'"
 
 #: gtk/gtkshortcutsshortcut.c:563
-#, fuzzy
-#| msgid "Icon Name"
 msgid "Icon Set"
-msgstr "ชื่อไอคอน"
+msgstr "กำหนดไอคอน"
 
 #: gtk/gtkshortcutsshortcut.c:564
-#, fuzzy
 msgid "Whether an icon has been set"
-msgstr "กำหนดว่าการกระทำนี้ปรากฏให้เห็นหรือไม่"
+msgstr "กำหนดว่าไอคอนถูกกำหนดแล้วหรือไม่"
 
 #: gtk/gtkshortcutsshortcut.c:577
 msgid "A short description for the shortcut"
-msgstr ""
+msgstr "คำอธิบายอย่างสั้นสำหรับทางลัด"
 
 #: gtk/gtkshortcutsshortcut.c:593
 msgid "A short description for the gesture"
-msgstr ""
+msgstr "คำอธิบายอย่างสั้นสำหรับท่าทาง"
 
 #: gtk/gtkshortcutsshortcut.c:604
 msgid "Subtitle Set"
-msgstr ""
+msgstr "กำหนดชื่อเรื่องรอง"
 
 #: gtk/gtkshortcutsshortcut.c:605
-#, fuzzy
 msgid "Whether a subtitle has been set"
-msgstr "กำหนดว่าการกระทำนี้ปรากฏให้เห็นหรือไม่"
+msgstr "กำหนดว่าชื่อเรื่องรองถูกกำหนดแล้วหรือไม่"
 
 #: gtk/gtkshortcutsshortcut.c:647
 msgid "Text direction for which this shortcut is active"
-msgstr ""
+msgstr "ทิศทางข้อความที่ทางลัดมีสถานะใช้งานอยู่"
 
 #: gtk/gtkshortcutsshortcut.c:659
 msgid "Shortcut Type"
-msgstr ""
+msgstr "ชนิดทางลัด"
 
 #: gtk/gtkshortcutsshortcut.c:660
 msgid "The type of shortcut that is represented"
-msgstr ""
+msgstr "ชนิดของทางลัดที่ถูกแสดงถึง"
 
 #: gtk/gtkshortcutsshortcut.c:678
-#, fuzzy
-#| msgid "Icon Name"
 msgid "Action Name"
-msgstr "ชื่อไอคอน"
+msgstr "ชื่อการกระทำ"
 
 #: gtk/gtkshortcutsshortcut.c:679
-#, fuzzy
-#| msgid "The name of the selected font"
 msgid "The name of the action"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ชื่อของการกระทำ"
 
 #: gtk/gtksizegroup.c:229 gtk/gtktreeselection.c:130
 msgid "Mode"
-msgstr ""
+msgstr "โหมด"
 
 #: gtk/gtksizegroup.c:230
 msgid "The directions in which the size group affects the requested sizes of its component widgets"
-msgstr ""
+msgstr "ทิศทางที่กลุ่มขนาดมีผลกับขนาดที่ร้องขอของวิดเจ็ตชิ้นประกอบของมัน"
 
 #: gtk/gtksizegroup.c:254
 msgid "Ignore hidden"
-msgstr ""
+msgstr "ละเว้นที่ซ่อน"
 
 #: gtk/gtksizegroup.c:255
 msgid "If TRUE, unmapped widgets are ignored when determining the size of the group"
-msgstr ""
+msgstr "ถ้าเป็น TRUE วิดเจ็ตที่ไม่ได้แมปจะถูกละเว้นเมื่อระบุขนาดของกลุ่ม"
 
 #: gtk/gtkspinbutton.c:387
 msgid "Climb Rate"
-msgstr ""
+msgstr "อัตราการเปลี่ยนค่า"
 
 #: gtk/gtkspinbutton.c:388
 msgid "The acceleration rate when you hold down a button or key"
-msgstr ""
+msgstr "อัตราเร่งความเร็วเมื่อคุณกดปุ่มหรือคีย์แป้นพิมพ์แช่ค้างไว้"
 
 #: gtk/gtkspinbutton.c:403
 msgid "Snap to Ticks"
-msgstr ""
+msgstr "ปรับให้ตรงกับค่าขั้น"
 
 #: gtk/gtkspinbutton.c:404
 msgid "Whether erroneous values are automatically changed to a spin button's nearest step increment"
-msgstr ""
+msgstr "กำหนดว่าให้ปรับค่าที่ป้อนเข้ามาให้ตรงกับค่าขั้นที่ใกล้เคียงที่สุดของปุ่มเปลี่ยนค่าโดยอัตโนมัติหรือไม่"
 
 #: gtk/gtkspinbutton.c:411
 msgid "Numeric"
-msgstr ""
+msgstr "เป็นตัวเลข"
 
 #: gtk/gtkspinbutton.c:412
 msgid "Whether non-numeric characters should be ignored"
-msgstr ""
+msgstr "กำหนดว่าอักขระที่ไม่เป็นตัวเลขควรจะถูกละเว้นหรือไม่"
 
 #: gtk/gtkspinbutton.c:419
 msgid "Wrap"
-msgstr ""
+msgstr "วนกลับ"
 
 #: gtk/gtkspinbutton.c:420
 msgid "Whether a spin button should wrap upon reaching its limits"
-msgstr ""
+msgstr "กำหนดว่าปุ่มเปลี่ยนค่าควรจะวนกลับหรือไม่เมื่อถึงขีดจำกัดของมันแล้ว"
 
 #: gtk/gtkspinbutton.c:427
 msgid "Update Policy"
-msgstr ""
+msgstr "กฎในการปรับค่า"
 
 #: gtk/gtkspinbutton.c:428
 msgid "Whether the spin button should update always, or only when the value is legal"
-msgstr ""
+msgstr "กำหนดว่าปุ่มเปลี่ยนค่าควรทำการปรับค่าเสมอ หรือเฉพาะเมื่อค่าอยู่ในรูปแบบที่ใช้ได้เท่านั้น"
 
 #: gtk/gtkspinbutton.c:437
 msgid "Reads the current value, or sets a new value"
-msgstr ""
+msgstr "อ่านค่าปัจจุบัน หรือตั้งค่าใหม่"
 
 #: gtk/gtkspinbutton.c:456
 msgid "Style of bevel around the spin button"
-msgstr ""
+msgstr "ลักษณะของรอยมุมรอบๆ ปุ่มเปลี่ยนค่า"
 
 #: gtk/gtkspinner.c:222
-#, fuzzy
 msgid "Whether the spinner is active"
-msgstr "กำหนดว่าการกระทำนี้เปิดใช้หรือไม่"
+msgstr "กำหนดว่าปุ่มเปลี่ยนค่ามีสถานะใช้งานอยู่หรือไม่"
 
 #: gtk/gtkstack.c:459
-#, fuzzy
-#| msgid "Homogeneous"
 msgid "Homogeneous sizing"
-msgstr "สม่ำเสมอ"
+msgstr "การจัดขนาดแบบสม่ำเสมอ"
 
 #: gtk/gtkstack.c:471
-#, fuzzy
-#| msgid "Horizontal alignment"
 msgid "Horizontally homogeneous"
-msgstr "การจัดเรียงตามแนวนอน"
+msgstr "สม่ำเสมอตามแนวนอน"
 
 #: gtk/gtkstack.c:471
 msgid "Horizontally homogeneous sizing"
-msgstr ""
+msgstr "การจัดขนาดแบบสม่ำเสมอตามแนวนอน"
 
 #: gtk/gtkstack.c:483
-#, fuzzy
-#| msgid "Homogeneous"
 msgid "Vertically homogeneous"
-msgstr "สม่ำเสมอ"
+msgstr "สม่ำเสมอตามแนวตั้ง"
 
 #: gtk/gtkstack.c:483
 msgid "Vertically homogeneous sizing"
-msgstr ""
+msgstr "การจัดขนาดแบบสม่ำเสมอตามแนวตั้ง"
 
 #: gtk/gtkstack.c:487
-#, fuzzy
-#| msgid "Visible"
 msgid "Visible child"
-msgstr "ปรากฏ"
+msgstr "วิดเจ็ตลูกมองเห็นได้"
 
 #: gtk/gtkstack.c:487
 msgid "The widget currently visible in the stack"
-msgstr ""
+msgstr "วิดเจ็ตที่มองเห็นได้ในขณะนี้ภายในสแต็ค"
 
 #: gtk/gtkstack.c:491
-#, fuzzy
-#| msgid "X alignment of the child"
 msgid "Name of visible child"
-msgstr "การจัดเรียงในแนวแกน X ของวิดเจ็ตลูก"
+msgstr "ชื่อของวิดเจ็ตลูกมองเห็นได้"
 
 #: gtk/gtkstack.c:491
-#, fuzzy
-#| msgid "The name of the icon from the icon theme"
 msgid "The name of the widget currently visible in the stack"
-msgstr "ชื่อของไอคอนจากชุดตกแต่งไอคอน"
+msgstr "ชื่อของวิดเจ็ตที่มองเห็นได้ในขณะนี้ภายในสแต็ค"
 
 #: gtk/gtkstack.c:503
-#, fuzzy
-#| msgid "Translation Domain"
 msgid "Transition running"
-msgstr "โดเมนคำแปล"
+msgstr "การเปลี่ยนภาพทำงานอยู่"
 
 #: gtk/gtkstack.c:503
-#, fuzzy
-#| msgid "Whether the action is enabled."
 msgid "Whether or not the transition is currently running"
-msgstr "กำหนดว่าการกระทำนี้เปิดใช้หรือไม่"
+msgstr "กำหนดว่าขณะนี้การเปลี่ยนภาพกำลังทำงานอยู่หรือไม่"
 
 #: gtk/gtkstack.c:507
 msgid "Interpolate size"
-msgstr ""
+msgstr "ขนาดสอดแทรก"
 
 #: gtk/gtkstack.c:507
 msgid "Whether or not the size should smoothly change when changing between differently sized children"
-msgstr ""
+msgstr "กำหนดว่าขนาดควรเปลี่ยนอย่างราบรื่นหรือไม่เมื่อเปลี่ยนระหว่างวิดเจ็ตลูกที่มีขนาดแตกต่างกัน"
 
 #: gtk/gtkstack.c:517
-#, fuzzy
-#| msgid "The index of the child in the parent"
 msgid "The name of the child page"
-msgstr "เลขดัชนีของวิดเจ็ตลูกภายในวิดเจ็ตแม่"
+msgstr "ชื่อของหน้าวิดเจ็ตลูก"
 
 #: gtk/gtkstack.c:524
-#, fuzzy
-#| msgid "The title of the assistant page"
 msgid "The title of the child page"
-msgstr "หัวเรื่องของหน้าเครื่องมือช่วย"
+msgstr "ชื่อเรื่องของหน้าวิดเจ็ตลูก"
 
 #: gtk/gtkstack.c:530 gtk/gtktoolbutton.c:287
 msgid "Icon name"
-msgstr ""
+msgstr "ชื่อไอคอน"
 
 #: gtk/gtkstack.c:531
-#, fuzzy
-#| msgid "The index of the child in the parent"
 msgid "The icon name of the child page"
-msgstr "เลขดัชนีของวิดเจ็ตลูกภายในวิดเจ็ตแม่"
+msgstr "ชื่อไอคอนของหน้าวิดเจ็ตลูก"
 
 #: gtk/gtkstack.c:555
 msgid "Needs Attention"
-msgstr ""
+msgstr "ต้องการความสนใจ"
 
 #: gtk/gtkstack.c:556
-#, fuzzy
 msgid "Whether this page needs attention"
-msgstr "กำหนดว่าการกระทำนี้เปิดใช้หรือไม่"
+msgstr "กำหนดว่าหน้านี้ต้องการความสนใจหรือไม่"
 
-#: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:695 gtk/gtkstackswitcher.c:696 gtk/inspector/gtkstackcombo.c:232 gtk/inspector/gtkstackcombo.c:233
+#: gtk/gtkstacksidebar.c:449 gtk/gtkstackswitcher.c:695
+#: gtk/gtkstackswitcher.c:696 gtk/inspector/gtkstackcombo.c:232
+#: gtk/inspector/gtkstackcombo.c:233
 msgid "Stack"
-msgstr ""
+msgstr "สแต็ค"
 
 #: gtk/gtkstacksidebar.c:450
 msgid "Associated stack for this GtkStackSidebar"
-msgstr ""
+msgstr "สแต็คที่เกี่ยวข้องสำหรับ GtkStackSidebar ตัวนี้"
 
 #: gtk/gtkstackswitcher.c:687
 msgid "Symbolic size to use for named icon"
-msgstr ""
+msgstr "ขนาดเชิงสัญลักษณ์ที่ต้องการใช้สำหรับไอคอนที่ตั้งชื่อ"
 
 #: gtk/gtkstatusbar.c:178
 msgid "Style of bevel around the statusbar text"
-msgstr ""
+msgstr "ลักษณะของรอยมุมรอบๆ ข้อความในแถบสถานะ"
 
 #: gtk/gtkstylecontext.c:230
 msgid "The associated GdkScreen"
-msgstr ""
+msgstr "GdkScreen ที่เกี่ยวข้องด้วย"
 
 #: gtk/gtkstylecontext.c:236
 msgid "FrameClock"
-msgstr ""
+msgstr "FrameClock"
 
 #: gtk/gtkstylecontext.c:237
 msgid "The associated GdkFrameClock"
-msgstr ""
+msgstr "GdkFrameClock ที่เกี่ยวข้องด้วย"
 
 #: gtk/gtkstylecontext.c:244 gtk/gtktexttag.c:300
 msgid "Text direction"
-msgstr ""
+msgstr "ทิศทางข้อความ"
 
 #: gtk/gtkstylecontext.c:260
 msgid "The parent style context"
-msgstr ""
+msgstr "Style context ของวิดเจ็ตแม่"
 
 #: gtk/gtkstyleproperty.c:109
-#, fuzzy
-#| msgid "Program name"
 msgid "Property name"
-msgstr "ชื่อโปรแกรม"
+msgstr "ชื่อคุณสมบัติ"
 
 #: gtk/gtkstyleproperty.c:110
-#, fuzzy
-#| msgid "The version of the program"
 msgid "The name of the property"
-msgstr "รุ่นของโปรแกรม"
+msgstr "ชื่อของคุณสมบัติ"
 
 #: gtk/gtkstyleproperty.c:116
-#, fuzzy
-#| msgid "Page type"
 msgid "Value type"
-msgstr "ชนิดของหน้า"
+msgstr "ชนิดค่า"
 
 #: gtk/gtkstyleproperty.c:117
 msgid "The value type returned by GtkStyleContext"
-msgstr ""
+msgstr "ชนิดค่าที่คืนมาโดย GtkStyleContext"
 
 #: gtk/gtkswitch.c:880
-#, fuzzy
 msgid "Whether the switch is on or off"
-msgstr "กำหนดว่าวิดเจ็ตลูกควรมีขนาดเท่ากันหมดหรือไม่"
+msgstr "กำหนดว่าสวิตช์มีสถานะเปิดหรือปิด"
 
 #: gtk/gtkswitch.c:895
 msgid "The backend state"
-msgstr ""
+msgstr "สถานะแบ็กเอนด์"
 
 #: gtk/gtkswitch.c:931
-#, fuzzy
-#| msgid "The minimum value of the adjustment"
 msgid "The minimum width of the handle"
-msgstr "ค่าต่ำสุดของวิดเจ็ตปรับค่า"
+msgstr "ความกว้างต่ำสุดของที่จับ"
 
 #: gtk/gtkswitch.c:947
 msgid "Slider Height"
-msgstr ""
+msgstr "ความสูงปุ่มรางเลื่อน"
 
 #: gtk/gtkswitch.c:948
-#, fuzzy
-#| msgid "The minimum value of the adjustment"
 msgid "The minimum height of the handle"
-msgstr "ค่าต่ำสุดของวิดเจ็ตปรับค่า"
+msgstr "ความสูงต่ำสุดของที่จับ"
 
 #: gtk/gtktextbuffer.c:202
 msgid "Tag Table"
-msgstr ""
+msgstr "ตารางแท็ก"
 
 #: gtk/gtktextbuffer.c:203
 msgid "Text Tag Table"
-msgstr ""
+msgstr "ตารางแท็กข้อความ"
 
 #: gtk/gtktextbuffer.c:220
 msgid "Current text of the buffer"
-msgstr ""
+msgstr "ข้อความปัจจุบันภายในบัฟเฟอร์"
 
 #: gtk/gtktextbuffer.c:233
 msgid "Has selection"
-msgstr ""
+msgstr "มีส่วนที่เลือก"
 
 #: gtk/gtktextbuffer.c:234
 msgid "Whether the buffer has some text currently selected"
-msgstr ""
+msgstr "กำหนดว่าขณะนี้บัฟเฟอร์มีข้อความบางส่วนที่ถูกเลือกไว้หรือไม่"
 
 #: gtk/gtktextbuffer.c:249
 msgid "Cursor position"
-msgstr ""
+msgstr "ตำแหน่งเคอร์เซอร์"
 
 #: gtk/gtktextbuffer.c:250
 msgid "The position of the insert mark (as offset from the beginning of the buffer)"
-msgstr ""
+msgstr "ตำแหน่งของเครื่องหมายแทรก (ในรูปแบบค่าออฟเซตจากจุดเริ่มต้นของบัฟเฟอร์)"
 
 #: gtk/gtktextbuffer.c:265
 msgid "Copy target list"
-msgstr ""
+msgstr "รายชื่อเป้าหมายการคัดลอก"
 
 #: gtk/gtktextbuffer.c:266
 msgid "The list of targets this buffer supports for clipboard copying and DND source"
-msgstr ""
+msgstr "รายชื่อเป้าหมายที่บัฟเฟอร์นี้รองรับสำหรับการคัดลอกคลิปบอร์ดและต้นทาง DND"
 
 #: gtk/gtktextbuffer.c:280
 msgid "Paste target list"
-msgstr ""
+msgstr "รายชื่อเป้าหมายการแปะ"
 
 #: gtk/gtktextbuffer.c:281
 msgid "The list of targets this buffer supports for clipboard pasting and DND destination"
-msgstr ""
+msgstr "รายชื่อเป้าหมายที่บัฟเฟอร์นี้รองรับสำหรับการแปะคลิปบอร์ดและปลายทาง DND"
 
 #: gtk/gtktexthandle.c:721 gtk/gtktexthandle.c:722 gtk/gtkwidget.c:1131
 msgid "Parent widget"
-msgstr ""
+msgstr "วิดเจ็ตแม่"
 
 #: gtk/gtktextmark.c:137
 msgid "Mark name"
-msgstr ""
+msgstr "ชื่อเครื่องหมาย"
 
 #: gtk/gtktextmark.c:151
 msgid "Left gravity"
-msgstr ""
+msgstr "แรงดึงดูดทางซ้าย"
 
 #: gtk/gtktextmark.c:152
 msgid "Whether the mark has left gravity"
-msgstr ""
+msgstr "กำหนดว่าเครื่องหมายมีแรงดึงดูดไปทางซ้ายหรือไม่"
 
 #: gtk/gtktexttag.c:206
 msgid "Tag name"
-msgstr ""
+msgstr "ชื่อแท็ก"
 
 #: gtk/gtktexttag.c:207
 msgid "Name used to refer to the text tag. NULL for anonymous tags"
-msgstr ""
+msgstr "ชื่อที่ใช้เพื่ออ้างอิงถึงแท็กข้อความ ระบุเป็น NULL ถ้าไม่ต้องการระบุชื่อแท็ก"
 
 #: gtk/gtktexttag.c:246
 msgid "Background RGBA"
-msgstr ""
+msgstr "ค่า RGBA ของพื้นหลัง"
 
 #: gtk/gtktexttag.c:254
 msgid "Background full height"
-msgstr ""
+msgstr "พื้นหลังเต็มความสูง"
 
 #: gtk/gtktexttag.c:255
 msgid "Whether the background color fills the entire line height or only the height of the tagged characters"
-msgstr ""
+msgstr "กำหนดว่าสีพื้นหลังควรจะเติมเต็มความสูงของทั้งบรรทัด หรือแค่ความสูงของอักขระที่ถูกแท็ก"
 
 #: gtk/gtktexttag.c:292
 msgid "Foreground RGBA"
-msgstr ""
+msgstr "ค่า RGBA ของพื้นหน้า"
 
 #: gtk/gtktexttag.c:301
 msgid "Text direction, e.g. right-to-left or left-to-right"
-msgstr ""
+msgstr "ทิศทางของข้อความ เช่น right-to-left หรือ left-to-right"
 
 #: gtk/gtktexttag.c:350
 msgid "Font style as a PangoStyle, e.g. PANGO_STYLE_ITALIC"
-msgstr ""
+msgstr "ลักษณะแบบอักษรในรูปแบบ PangoStyle เช่น PANGO_STYLE_ITALIC"
 
 #: gtk/gtktexttag.c:359
 msgid "Font variant as a PangoVariant, e.g. PANGO_VARIANT_SMALL_CAPS"
-msgstr ""
+msgstr "รูปแบบย่อยของแบบอักษรในรูปแบบ PangoVariant เช่น PANGO_VARIANT_SMALL_CAPS"
 
 #: gtk/gtktexttag.c:368
 msgid "Font weight as an integer, see predefined values in PangoWeight; for example, PANGO_WEIGHT_BOLD"
-msgstr ""
+msgstr "ความกว้างของตัวอักษรในรูปแบบเลขจำนวนเต็ม ลองดูค่าที่กำหนดล่วงหน้าใน PangoWeight ตัวอย่างเช่น PANGO_WEIGHT_BOLD"
 
 #: gtk/gtktexttag.c:379
 msgid "Font stretch as a PangoStretch, e.g. PANGO_STRETCH_CONDENSED"
-msgstr ""
+msgstr "การยืดขนาดแบบอักษรในรูปแบบ PangoStretch เช่น PANGO_STRETCH_CONDENSED"
 
 #: gtk/gtktexttag.c:388
 msgid "Font size in Pango units"
-msgstr ""
+msgstr "ขนาดแบบอักษรในหน่วย Pango"
 
 #: gtk/gtktexttag.c:398
-msgid ""
-"Font size as a scale factor relative to the default font size. This properly adapts to theme changes etc. so is recommended. Pango predefines some scales such as "
-"PANGO_SCALE_X_LARGE"
-msgstr ""
+msgid "Font size as a scale factor relative to the default font size. This properly adapts to theme changes etc. so is recommended. Pango predefines some scales such as PANGO_SCALE_X_LARGE"
+msgstr "ขนาดแบบอักษรในรูปตัวประกอบอัตราส่วนเทียบกับขนาดแบบอักษรเริ่มต้น ค่านี้จะปรับตัวไปตามการเปลี่ยนชุดตกแต่งและปัจจัยอื่นๆ อย่างเหมาะสม ดังนั้นจึงขอแนะนำให้ระบุค่านี้ Pango จะกำหนดมาตราส่วนบางอย่างไว้ให้ล่วงหน้า เช่น PANGO_SCALE_X_LARGE"
 
 #: gtk/gtktexttag.c:418 gtk/gtktextview.c:844
 msgid "Left, right, or center justification"
-msgstr ""
+msgstr "การจัดเรียงข้อความชิดซ้าย ชิดขวา หรือจัดกึ่งกลาง"
 
 #: gtk/gtktexttag.c:437
 msgid "The language this text is in, as an ISO code. Pango can use this as a hint when rendering the text. If not set, an appropriate default will be used."
-msgstr ""
+msgstr "ภาษาของข้อความนี้ ในรูปรหัส ISO ซึ่ง Pango สามารถใช้ค่านี้เพื่อบอกใบ้เมื่อทำการเรนเดอร์ข้อความได้ ถ้าไม่ตั้งค่า ก็จะใช้เป็นค่าเริ่มต้นที่เหมาะสมแทน"
 
 #: gtk/gtktexttag.c:444
 msgid "Left margin"
-msgstr ""
+msgstr "ระยะขอบด้านซ้าย"
 
 #: gtk/gtktexttag.c:445 gtk/gtktextview.c:865
 msgid "Width of the left margin in pixels"
-msgstr ""
+msgstr "ความกว้างของระยะขอบด้านซ้ายในหน่วยพิกเซล"
 
 #: gtk/gtktexttag.c:454
 msgid "Right margin"
-msgstr ""
+msgstr "ระยะขอบด้านขวา"
 
 #: gtk/gtktexttag.c:455 gtk/gtktextview.c:885
 msgid "Width of the right margin in pixels"
-msgstr ""
+msgstr "ความกว้างของระยะขอบด้านขวาในหน่วยพิกเซล"
 
 #: gtk/gtktexttag.c:465 gtk/gtktextview.c:934
 msgid "Indent"
-msgstr ""
+msgstr "การเยื้อง"
 
 #: gtk/gtktexttag.c:466 gtk/gtktextview.c:935
 msgid "Amount to indent the paragraph, in pixels"
-msgstr ""
+msgstr "ระยะเยื้องย่อหน้า ในหน่วยพิกเซล"
 
 #: gtk/gtktexttag.c:477
 msgid "Offset of text above the baseline (below the baseline if rise is negative) in Pango units"
-msgstr ""
+msgstr "ค่าออฟเซตของข้อความเหนือเส้นฐาน (ใต้เส้นฐานถ้าค่ายกมีค่าติดลบ) ในหน่วย Pango"
 
 #: gtk/gtktexttag.c:486
 msgid "Pixels above lines"
-msgstr ""
+msgstr "จำนวนพิกเซลเหนือเส้นบรรทัด"
 
 #: gtk/gtktexttag.c:487 gtk/gtktextview.c:803
 msgid "Pixels of blank space above paragraphs"
-msgstr ""
+msgstr "จำนวนพิกเซลของพื้นที่ว่างเหนือย่อหน้า"
 
 #: gtk/gtktexttag.c:496
 msgid "Pixels below lines"
-msgstr ""
+msgstr "จำนวนพิกเซลใต้เส้นบรรทัด"
 
 #: gtk/gtktexttag.c:497 gtk/gtktextview.c:811
 msgid "Pixels of blank space below paragraphs"
-msgstr ""
+msgstr "จำนวนพิกเซลของพื้นที่ว่างใต้ย่อหน้า"
 
 #: gtk/gtktexttag.c:506
 msgid "Pixels inside wrap"
-msgstr ""
+msgstr "จำนวนพิกเซลภายในช่วงตัดบรรทัด"
 
 #: gtk/gtktexttag.c:507 gtk/gtktextview.c:819
 msgid "Pixels of blank space between wrapped lines in a paragraph"
-msgstr ""
+msgstr "จำนวนพิกเซลของพื้นที่ว่างระหว่างแต่ละบรรทัดที่ถูกตัดในย่อหน้าหนึ่ง"
 
 #: gtk/gtktexttag.c:545
 msgid "Underline RGBA"
-msgstr ""
+msgstr "ค่า RGBA ของเส้นใต้"
 
 #: gtk/gtktexttag.c:546
 msgid "Color of underline for this text"
-msgstr ""
+msgstr "สีของเส้นใต้สำหรับข้อความนี้"
 
 #: gtk/gtktexttag.c:561
 msgid "Strikethrough RGBA"
-msgstr ""
+msgstr "ค่า RGBA ของเส้นทับ"
 
 #: gtk/gtktexttag.c:562
 msgid "Color of strikethrough for this text"
-msgstr ""
+msgstr "สีของเส้นทับสำหรับข้อความนี้"
 
 #: gtk/gtktexttag.c:570 gtk/gtktextview.c:835
 msgid "Whether to wrap lines never, at word boundaries, or at character boundaries"
-msgstr ""
+msgstr "กำหนดการตัดขึ้นบรรทัดใหม่ว่าจะไม่ตัดเลย ตัดที่ขอบเขตของคำ หรือตัดที่ขอบเขตของอักขระ"
 
 #: gtk/gtktexttag.c:580 gtk/gtktextview.c:943
 msgid "Custom tabs for this text"
-msgstr ""
+msgstr "แท็บกำหนดเองสำหรับข้อความนี้"
 
 #: gtk/gtktexttag.c:598
 msgid "Invisible"
-msgstr ""
+msgstr "มองเห็นไม่ได้"
 
 #: gtk/gtktexttag.c:599
 msgid "Whether this text is hidden."
-msgstr ""
+msgstr "กำหนดว่าข้อความนี้ซ่อนตัวหรือไม่"
 
 #: gtk/gtktexttag.c:613
 msgid "Paragraph background color name"
-msgstr ""
+msgstr "ชื่อสีพื้นหลังย่อหน้า"
 
 #: gtk/gtktexttag.c:614
 msgid "Paragraph background color as a string"
-msgstr ""
+msgstr "สีพื้นหลังย่อหน้าในรูปแบบสตริง"
 
 #: gtk/gtktexttag.c:630
 msgid "Paragraph background color"
-msgstr ""
+msgstr "สีพื้นหลังย่อหน้า"
 
 #: gtk/gtktexttag.c:631
 msgid "Paragraph background color as a GdkColor"
-msgstr ""
+msgstr "สีพื้นหลังย่อหน้าในรูปแบบ GdkColor"
 
 #: gtk/gtktexttag.c:645
 msgid "Paragraph background RGBA"
-msgstr ""
+msgstr "ค่า RGBA พื้นหลังย่อหน้า"
 
 #: gtk/gtktexttag.c:646
 msgid "Paragraph background RGBA as a GdkRGBA"
-msgstr ""
+msgstr "ค่า RGBA พื้นหลังย่อหน้าในรูปแบบ GdkRGBA"
 
 #: gtk/gtktexttag.c:663
 msgid "Fallback"
-msgstr ""
+msgstr "สำรอง"
 
 #: gtk/gtktexttag.c:664
-#, fuzzy
-#| msgid "Whether the action is enabled."
 msgid "Whether font fallback is enabled."
-msgstr "กำหนดว่าการกระทำนี้เปิดใช้หรือไม่"
+msgstr "กำหนดว่าการสำรองแบบอักษรเปิดใช้หรือไม่"
 
 #: gtk/gtktexttag.c:678
-#, fuzzy
 msgid "Letter Spacing"
-msgstr "การเติมพื้นที่ให้กับหัวเรื่อง"
+msgstr "ช่องไฟตัวอักษร"
 
 #: gtk/gtktexttag.c:679
 msgid "Extra spacing between graphemes"
-msgstr ""
+msgstr "ช่องไฟเพิ่มเติมระหว่างหน่วยอักขระ"
 
 #: gtk/gtktexttag.c:693
-#, fuzzy
-#| msgid "Font name"
 msgid "Font Features"
-msgstr "ชื่อแบบอักษร"
+msgstr "คุณลักษณะแบบอักษร"
 
 #: gtk/gtktexttag.c:694
 msgid "OpenType Font Features to use"
-msgstr ""
+msgstr "คุณลักษณะแบบอักษร OpenType ที่ต้องการใช้"
 
 #: gtk/gtktexttag.c:712
 msgid "Margin Accumulates"
-msgstr ""
+msgstr "ระยะขอบรวมตัวกัน"
 
 #: gtk/gtktexttag.c:713
 msgid "Whether left and right margins accumulate."
-msgstr ""
+msgstr "กำหนดว่าระยะขอบด้านซ้ายและด้านขวารวมตัวกันหรือไม่"
 
 #: gtk/gtktexttag.c:726
 msgid "Background full height set"
-msgstr ""
+msgstr "ตั้งความสูงแบบเต็มของพื้นหลัง"
 
 #: gtk/gtktexttag.c:727
 msgid "Whether this tag affects background height"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับความสูงพื้นหลังหรือไม่"
 
 #: gtk/gtktexttag.c:766
 msgid "Justification set"
-msgstr ""
+msgstr "ตั้งการจัดเรียงข้อความ"
 
 #: gtk/gtktexttag.c:767
 msgid "Whether this tag affects paragraph justification"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับการจัดเรียงข้อความในย่อหน้าหรือไม่"
 
 #: gtk/gtktexttag.c:774
 msgid "Left margin set"
-msgstr ""
+msgstr "ตั้งระยะขอบด้านซ้าย"
 
 #: gtk/gtktexttag.c:775
 msgid "Whether this tag affects the left margin"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับระยะขอบด้านซ้ายหรือไม่"
 
 #: gtk/gtktexttag.c:778
 msgid "Indent set"
-msgstr ""
+msgstr "ตั้งการเยื้อง"
 
 #: gtk/gtktexttag.c:779
 msgid "Whether this tag affects indentation"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับการเยื้องหรือไม่"
 
 #: gtk/gtktexttag.c:786
 msgid "Pixels above lines set"
-msgstr ""
+msgstr "ตั้งจำนวนพิกเซลเหนือเส้นบรรทัด"
 
 #: gtk/gtktexttag.c:787 gtk/gtktexttag.c:791
 msgid "Whether this tag affects the number of pixels above lines"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับจำนวนพิกเซลเหนือแต่ละเส้นบรรทัดหรือไม่"
 
 #: gtk/gtktexttag.c:790
 msgid "Pixels below lines set"
-msgstr ""
+msgstr "ตั้งจำนวนพิกเซลใต้เส้นบรรทัด"
 
 #: gtk/gtktexttag.c:794
 msgid "Pixels inside wrap set"
-msgstr ""
+msgstr "ตั้งจำนวนพิกเซลภายในช่วงตัดบรรทัด"
 
 #: gtk/gtktexttag.c:795
 msgid "Whether this tag affects the number of pixels between wrapped lines"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับจำนวนพิกเซลระหว่างแต่ละบรรทัดที่ถูกตัดหรือไม่"
 
 #: gtk/gtktexttag.c:802
 msgid "Right margin set"
-msgstr ""
+msgstr "ตั้งระยะขอบด้านขวา"
 
 #: gtk/gtktexttag.c:803
 msgid "Whether this tag affects the right margin"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับระยะขอบด้านขวาหรือไม่"
 
 #: gtk/gtktexttag.c:817
 msgid "Underline RGBA set"
-msgstr ""
+msgstr "ตั้งค่า RGBA ของเส้นใต้"
 
 #: gtk/gtktexttag.c:818
 msgid "Whether this tag affects underlining color"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับสีเส้นใต้หรือไม่"
 
 #: gtk/gtktexttag.c:828
 msgid "Strikethrough RGBA set"
-msgstr ""
+msgstr "ตั้งค่า RGBA ของเส้นทับ"
 
 #: gtk/gtktexttag.c:829
 msgid "Whether this tag affects strikethrough color"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับสีเส้นทับหรือไม่"
 
 #: gtk/gtktexttag.c:832
 msgid "Wrap mode set"
-msgstr ""
+msgstr "ตั้งโหมดการตัดบรรทัด"
 
 #: gtk/gtktexttag.c:833
 msgid "Whether this tag affects line wrap mode"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับโหมดการตัดบรรทัดหรือไม่"
 
 #: gtk/gtktexttag.c:836
 msgid "Tabs set"
-msgstr ""
+msgstr "ตั้งแท็บ"
 
 #: gtk/gtktexttag.c:837
 msgid "Whether this tag affects tabs"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับแท็บหรือไม่"
 
 #: gtk/gtktexttag.c:840
 msgid "Invisible set"
-msgstr ""
+msgstr "ตั้งสถานะมองเห็นไม่ได้"
 
 #: gtk/gtktexttag.c:841
 msgid "Whether this tag affects text visibility"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับการมองเห็นของข้อความหรือไม่"
 
 #: gtk/gtktexttag.c:844
 msgid "Paragraph background set"
-msgstr ""
+msgstr "ตั้งพื้นหลังย่อหน้า"
 
 #: gtk/gtktexttag.c:845
 msgid "Whether this tag affects the paragraph background color"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับสีพื้นหลังย่อหน้าหรือไม่"
 
 #: gtk/gtktexttag.c:848
 msgid "Fallback set"
-msgstr ""
+msgstr "ตั้งการสำรอง"
 
 #: gtk/gtktexttag.c:849
-#, fuzzy
 msgid "Whether this tag affects font fallback"
-msgstr "กำหนดว่าวิดเจ็ตลูกควรมีขนาดเท่ากันหมดหรือไม่"
+msgstr "กำหนดว่าแท็กนี้มีผลกับการสำรองแบบอักษรหรือไม่"
 
 #: gtk/gtktexttag.c:852
-#, fuzzy
 msgid "Letter spacing set"
-msgstr "การเติมพื้นที่ให้กับหัวเรื่อง"
+msgstr "ตั้งช่องไฟตัวอักษร"
 
 #: gtk/gtktexttag.c:853
 msgid "Whether this tag affects letter spacing"
-msgstr ""
+msgstr "กำหนดว่าแท็กนี้มีผลกับช่องไฟตัวอักษรหรือไม่"
 
 #: gtk/gtktexttag.c:856
 msgid "Font features set"
-msgstr ""
+msgstr "ตั้งคุณลักษณะแบบอักษร"
 
 #: gtk/gtktexttag.c:857
-#, fuzzy
 msgid "Whether this tag affects font features"
-msgstr "กำหนดว่าวิดเจ็ตลูกควรมีขนาดเท่ากันหมดหรือไม่"
+msgstr "กำหนดว่าแท็กนี้มีผลกับคุณลักษณะแบบอักษรหรือไม่"
 
 #: gtk/gtktextview.c:802
 msgid "Pixels Above Lines"
-msgstr ""
+msgstr "จำนวนพิกเซลเหนือเส้นบรรทัด"
 
 #: gtk/gtktextview.c:810
 msgid "Pixels Below Lines"
-msgstr ""
+msgstr "จำนวนพิกเซลใต้เส้นบรรทัด"
 
 #: gtk/gtktextview.c:818
 msgid "Pixels Inside Wrap"
-msgstr ""
+msgstr "จำนวนพิกเซลภายในช่วงตัดบรรทัด"
 
 #: gtk/gtktextview.c:834
 msgid "Wrap Mode"
-msgstr ""
+msgstr "โหมดการตัดบรรทัด"
 
 #: gtk/gtktextview.c:864
 msgid "Left Margin"
-msgstr ""
+msgstr "ระยะขอบด้านซ้าย"
 
 #: gtk/gtktextview.c:884
 msgid "Right Margin"
-msgstr ""
+msgstr "ระยะขอบด้านขวา"
 
 #: gtk/gtktextview.c:905
-#, fuzzy
-#| msgid "Top Padding"
 msgid "Top Margin"
-msgstr "การเติมพื้นที่ด้านบน"
+msgstr "ระยะขอบด้านบน"
 
 #: gtk/gtktextview.c:906
 msgid "Height of the top margin in pixels"
-msgstr ""
+msgstr "ความสูงของระยะขอบด้านบนในหน่วยพิกเซล"
 
 #: gtk/gtktextview.c:926
-#, fuzzy
-#| msgid "Bottom Padding"
 msgid "Bottom Margin"
-msgstr "การเติมพื้นที่ด้านล่าง"
+msgstr "ระยะขอบด้านล่าง"
 
 #: gtk/gtktextview.c:927
 msgid "Height of the bottom margin in pixels"
-msgstr ""
+msgstr "ความสูงของระยะขอบด้านล่างในหน่วยพิกเซล"
 
 #: gtk/gtktextview.c:950
 msgid "Cursor Visible"
-msgstr ""
+msgstr "เคอร์เซอร์มองเห็นได้"
 
 #: gtk/gtktextview.c:951
 msgid "If the insertion cursor is shown"
-msgstr ""
+msgstr "เคอร์เซอร์แทรกแสดงอยู่หรือไม่"
 
 #: gtk/gtktextview.c:958
 msgid "Buffer"
-msgstr ""
+msgstr "บัฟเฟอร์"
 
 #: gtk/gtktextview.c:959
 msgid "The buffer which is displayed"
-msgstr ""
+msgstr "บัฟเฟอร์ที่ต้องการให้แสดงผล"
 
 #: gtk/gtktextview.c:967
 msgid "Whether entered text overwrites existing contents"
-msgstr ""
+msgstr "กำหนดว่าจะให้ข้อความที่ป้อนเขียนทับเนื้อหาที่มีอยู่แล้วหรือไม่"
 
 #: gtk/gtktextview.c:974
 msgid "Accepts tab"
-msgstr ""
+msgstr "รับอักขระแท็บ"
 
 #: gtk/gtktextview.c:975
 msgid "Whether Tab will result in a tab character being entered"
-msgstr ""
+msgstr "กำหนดว่าการกด Tab จะส่งผลให้อักขระแท็บถูกป้อนเข้าไปหรือไม่"
 
 #: gtk/gtktextview.c:1063
 msgid "Monospace"
-msgstr ""
+msgstr "กว้างคงที่"
 
 #: gtk/gtktextview.c:1064
 msgid "Whether to use a monospace font"
-msgstr ""
+msgstr "กำหนดว่าจะใช้แบบอักษรกว้างคงที่หรือไม่"
 
 #: gtk/gtktextview.c:1082
 msgid "Error underline color"
-msgstr ""
+msgstr "สีเส้นใต้ข้อผิดพลาด"
 
 #: gtk/gtktextview.c:1083
 msgid "Color with which to draw error-indication underlines"
-msgstr ""
+msgstr "สีที่ต้องการใช้ขีดเส้นใต้เพื่อชี้บอกข้อผิดพลาด"
 
 #: gtk/gtktogglebutton.c:189 gtk/gtktoggletoolbutton.c:131
 msgid "If the toggle button should be pressed in"
-msgstr ""
+msgstr "ปุ่มสลับควรจะมีสถานะถูกกดอยู่หรือไม่"
 
 #: gtk/gtktogglebutton.c:196
 msgid "If the toggle button is in an \"in between\" state"
-msgstr ""
+msgstr "ปุ่มสลับอยู่ในสถานะ \"in between\" หรือไม่"
 
 #: gtk/gtktogglebutton.c:202
 msgid "Draw Indicator"
-msgstr ""
+msgstr "วาดตัวชี้บอก"
 
 #: gtk/gtktogglebutton.c:203
 msgid "If the toggle part of the button is displayed"
-msgstr ""
+msgstr "ต้องการแสดงส่วนที่เป็นตัวสลับของปุ่มหรือไม่"
 
 #: gtk/gtktoolbar.c:535 gtk/gtktoolpalette.c:995
 msgid "Toolbar Style"
-msgstr ""
+msgstr "ลักษณะแถบเครื่องมือ"
 
 #: gtk/gtktoolbar.c:536
 msgid "How to draw the toolbar"
-msgstr ""
+msgstr "รูปแบบการวาดแถบเครื่องมือ"
 
 #: gtk/gtktoolbar.c:543
 msgid "Show Arrow"
-msgstr ""
+msgstr "แสดงลูกศร"
 
 #: gtk/gtktoolbar.c:544
 msgid "If an arrow should be shown if the toolbar doesn't fit"
-msgstr ""
+msgstr "กำหนดว่าจะแสดงลูกศรเมื่อแถบเครื่องมือมีขนาดไม่พอดีหรือไม่"
 
 #: gtk/gtktoolbar.c:565
 msgid "Size of icons in this toolbar"
-msgstr ""
+msgstr "ขนาดของไอคอนในแถบเครื่องมือนี้"
 
 #: gtk/gtktoolbar.c:580 gtk/gtktoolpalette.c:981
 msgid "Icon size set"
-msgstr ""
+msgstr "ตั้งขนาดไอคอน"
 
 #: gtk/gtktoolbar.c:581 gtk/gtktoolpalette.c:982
 msgid "Whether the icon-size property has been set"
-msgstr ""
+msgstr "กำหนดว่าคุณสมบัติ icon-size ถูกตั้งไว้หรือไม่"
 
 #: gtk/gtktoolbar.c:590
 msgid "Whether the item should receive extra space when the toolbar grows"
-msgstr ""
+msgstr "กำหนดว่าจะให้รายการมีพื้นที่เพิ่มเติมเมื่อแถบเครื่องมือขยายใหญ่ขึ้นหรือไม่"
 
 #: gtk/gtktoolbar.c:598 gtk/gtktoolitemgroup.c:1689
 msgid "Whether the item should be the same size as other homogeneous items"
-msgstr ""
+msgstr "กำหนดว่าจะให้รายการมีขนาดเท่ากับรายการอื่นๆ ซึ่งมีลักษณะสม่ำเสมอกันหรือไม่"
 
 #: gtk/gtktoolbar.c:612
 msgid "Spacer size"
-msgstr ""
+msgstr "ขนาดตัวเว้นพื้นที่"
 
 #: gtk/gtktoolbar.c:613
 msgid "Size of spacers"
-msgstr ""
+msgstr "ขนาดของตัวเว้นพื้นที่ต่างๆ"
 
 #: gtk/gtktoolbar.c:631
 msgid "Amount of border space between the toolbar shadow and the buttons"
-msgstr ""
+msgstr "ปริมาณพื้นที่เส้นกรอบระหว่างเงาแถบเครื่องมือกับปุ่มต่างๆ"
 
 #: gtk/gtktoolbar.c:639
 msgid "Maximum child expand"
-msgstr ""
+msgstr "พื้นที่ขยายอ็อบเจกต์ลูกสูงสุด"
 
 #: gtk/gtktoolbar.c:640
 msgid "Maximum amount of space an expandable item will be given"
-msgstr ""
+msgstr "ปริมาณสูงสุดของพื้นที่ที่จะเว้นให้กับรายการที่สามารถขยายได้"
 
 #: gtk/gtktoolbar.c:656
 msgid "Space style"
-msgstr ""
+msgstr "ลักษณะการเว้นพื้นที่"
 
 #: gtk/gtktoolbar.c:657
 msgid "Whether spacers are vertical lines or just blank"
-msgstr ""
+msgstr "กำหนดว่าตัวเว้นพื้นที่มีลักษณะเป็นเส้นตั้งหรือเป็นเพียงเนื้อที่ว่างธรรมดา"
 
 #: gtk/gtktoolbar.c:664
 msgid "Button relief"
-msgstr ""
+msgstr "การยุบตัวของปุ่ม"
 
 #: gtk/gtktoolbar.c:665
 msgid "Type of bevel around toolbar buttons"
-msgstr ""
+msgstr "ชนิดของรอยมุมรอบๆ ปุ่มแถบเครื่องมือ"
 
 #: gtk/gtktoolbar.c:681
 msgid "Style of bevel around the toolbar"
-msgstr ""
+msgstr "ลักษณะของรอยมุมรอบๆ แถบเครื่องมือ"
 
 #: gtk/gtktoolbutton.c:244
 msgid "Text to show in the item."
-msgstr ""
+msgstr "ข้อความที่ต้องการแสดงในรายการ"
 
 #: gtk/gtktoolbutton.c:251
 msgid "If set, an underline in the label property indicates that the next character should be used for the mnemonic accelerator key in the overflow menu"
-msgstr ""
+msgstr "ถ้ากำหนดไว้ เส้นใต้ที่อยู่ในคุณสมบัติฉลากจะชี้บอกว่าอักขระตัวถัดไปจะต้องถูกใช้เป็นคีย์แป้นด่วนในรูปแบบอักษรช่วยจำภายในเมนูที่ลอยตัว"
 
 #: gtk/gtktoolbutton.c:258
 msgid "Widget to use as the item label"
-msgstr ""
+msgstr "วิดเจ็ตที่ต้องการใช้เป็นฉลากรายการ"
 
 #: gtk/gtktoolbutton.c:269
 msgid "Stock Id"
-msgstr ""
+msgstr "ID สำเร็จรูป"
 
 #: gtk/gtktoolbutton.c:270
 msgid "The stock icon displayed on the item"
-msgstr ""
+msgstr "ไอคอนสำเร็จรูปที่แสดงบนรายการ"
 
 #: gtk/gtktoolbutton.c:288
 msgid "The name of the themed icon displayed on the item"
-msgstr ""
+msgstr "ชื่อของไอคอนจากในชุดตกแต่งซึ่งแสดงบนรายการ"
 
 #: gtk/gtktoolbutton.c:294
 msgid "Icon widget"
-msgstr ""
+msgstr "วิดเจ็ตไอคอน"
 
 #: gtk/gtktoolbutton.c:295
 msgid "Icon widget to display in the item"
-msgstr ""
+msgstr "วิดเจ็ตไอคอนที่ต้องการแสดงในรายการ"
 
 #: gtk/gtktoolbutton.c:311
 msgid "Icon spacing"
-msgstr ""
+msgstr "ช่องไฟไอคอน"
 
 #: gtk/gtktoolbutton.c:312
 msgid "Spacing in pixels between the icon and label"
-msgstr ""
+msgstr "ช่องไฟในหน่วยพิกเซลระหว่างไอคอนกับฉลาก"
 
 #: gtk/gtktoolitem.c:194
 msgid "Whether the toolbar item is considered important. When TRUE, toolbar buttons show text in GTK_TOOLBAR_BOTH_HORIZ mode"
-msgstr ""
+msgstr "กำหนดว่ารายการในแถบเครื่องมือถือว่าสำคัญหรือไม่ เมื่อเป็น TRUE ปุ่มในแถบเครื่องมือจะแสดงข้อความในโหมด GTK_TOOLBAR_BOTH_HORIZ"
 
 #: gtk/gtktoolitemgroup.c:1640
-#, fuzzy
 msgid "The human-readable title of this item group"
-msgstr "หัวเรื่องของหน้าเครื่องมือช่วย"
+msgstr "ชื่อเรื่องของกลุ่มรายการนี้ที่มนุษย์อ่านได้"
 
 #: gtk/gtktoolitemgroup.c:1647
 msgid "A widget to display in place of the usual label"
-msgstr ""
+msgstr "วิดเจ็ตที่ต้องการแสดงแทนฉลากที่ใช้ปกติ"
 
 #: gtk/gtktoolitemgroup.c:1653
 msgid "Collapsed"
-msgstr ""
+msgstr "ถูกยุบ"
 
 #: gtk/gtktoolitemgroup.c:1654
 msgid "Whether the group has been collapsed and items are hidden"
-msgstr ""
+msgstr "กำหนดว่ากลุ่มถูกยุบแล้ว และรายการต่างๆ ถูกซ่อนไว้หรือไม่"
 
 #: gtk/gtktoolitemgroup.c:1660
 msgid "ellipsize"
-msgstr ""
+msgstr "ใส่จุดไข่ปลา"
 
 #: gtk/gtktoolitemgroup.c:1661
 msgid "Ellipsize for item group headers"
-msgstr ""
+msgstr "ใส่จุดไข่ปลาสำหรับส่วนหัวกลุ่มรายการ"
 
 #: gtk/gtktoolitemgroup.c:1667
-#, fuzzy
 msgid "Header Relief"
-msgstr "ภาพที่หัวเรื่อง"
+msgstr "การยุบตัวของส่วนหัว"
 
 #: gtk/gtktoolitemgroup.c:1668
 msgid "Relief of the group header button"
-msgstr ""
+msgstr "การยุบตัวของปุ่มส่วนหัวกลุ่ม"
 
 #: gtk/gtktoolitemgroup.c:1681
-#, fuzzy
 msgid "Header Spacing"
-msgstr "การเติมพื้นที่ให้กับหัวเรื่อง"
+msgstr "ช่องไฟส่วนหัว"
 
 #: gtk/gtktoolitemgroup.c:1682
 msgid "Spacing between expander arrow and caption"
-msgstr ""
+msgstr "ช่องไฟระหว่างลูกศรวิดเจ็ตขยายและคำบรรยายใต้ภาพ"
 
 #: gtk/gtktoolitemgroup.c:1696
-#, fuzzy
 msgid "Whether the item should receive extra space when the group grows"
-msgstr "กำหนดว่าวิดเจ็ตลูกควรได้พื้นที่เพิ่มตามการขยายขนาดของวิดเจ็ตแม่หรือไม่"
+msgstr "กำหนดว่ารายการควรได้พื้นที่เพิ่มตามการขยายขนาดของกลุ่มหรือไม่"
 
 #: gtk/gtktoolitemgroup.c:1703
-#, fuzzy
 msgid "Whether the item should fill the available space"
-msgstr "กำหนดว่าวิดเจ็ตลูกควรมีขนาดเท่ากันหมดหรือไม่"
+msgstr "กำหนดว่ารายการควรใช้พื้นที่ที่มีอยู่ให้ครบทั้งหมดหรือไม่"
 
 #: gtk/gtktoolitemgroup.c:1709
 msgid "New Row"
-msgstr ""
+msgstr "แถวใหม่"
 
 #: gtk/gtktoolitemgroup.c:1710
-#, fuzzy
 msgid "Whether the item should start a new row"
-msgstr "กำหนดว่าวิดเจ็ตลูกควรมีขนาดเท่ากันหมดหรือไม่"
+msgstr "กำหนดว่ารายการควรขึ้นแถวใหม่หรือไม่"
 
 #: gtk/gtktoolitemgroup.c:1717
 msgid "Position of the item within this group"
-msgstr ""
+msgstr "ตำแหน่งของรายการภายในกลุ่มนี้"
 
 #: gtk/gtktoolpalette.c:966
 msgid "Size of icons in this tool palette"
-msgstr ""
+msgstr "ขนาดของไอคอนในพาเลตเครื่องมือนี้"
 
 #: gtk/gtktoolpalette.c:996
 msgid "Style of items in the tool palette"
-msgstr ""
+msgstr "ลักษณะของรายการในพาเลตเครื่องมือ"
 
 #: gtk/gtktoolpalette.c:1012
 msgid "Exclusive"
-msgstr ""
+msgstr "เฉพาะตัว"
 
 #: gtk/gtktoolpalette.c:1013
 msgid "Whether the item group should be the only expanded at a given time"
-msgstr ""
+msgstr "กำหนดว่ากลุ่มรายการควรเป็นกลุ่มเพียงกลุ่มเดียวที่ถูกขยายเมื่อถึงเวลาที่ระบุไว้หรือไม่"
 
 #: gtk/gtktoolpalette.c:1028
-#, fuzzy
 msgid "Whether the item group should receive extra space when the palette grows"
-msgstr "กำหนดว่าวิดเจ็ตลูกควรได้พื้นที่เพิ่มตามการขยายขนาดของวิดเจ็ตแม่หรือไม่"
+msgstr "กำหนดว่ากลุ่มรายการควรได้พื้นที่เพิ่มตามการขยายขนาดของพาเลตหรือไม่"
 
 #: gtk/gtktreemenu.c:265
 msgid "TreeMenu model"
-msgstr ""
+msgstr "ตัวแบบ TreeMenu"
 
 #: gtk/gtktreemenu.c:266
-#, fuzzy
-#| msgid "The name of the selected font"
 msgid "The model for the tree menu"
-msgstr "ชื่อของแบบอักษรที่เลือก"
+msgstr "ตัวแบบสำหรับเมนูต้นไม้"
 
 #: gtk/gtktreemenu.c:288
 msgid "TreeMenu root row"
-msgstr ""
+msgstr "แถวรากของ TreeMenu"
 
 #: gtk/gtktreemenu.c:289
 msgid "The TreeMenu will display children of the specified root"
-msgstr ""
+msgstr "TreeMenu จะแสดงวิดเจ็ตลูกของรากที่ระบุ"
 
 #: gtk/gtktreemenu.c:322
 msgid "Tearoff"
-msgstr ""
+msgstr "รอยฉีก"
 
 #: gtk/gtktreemenu.c:323
-#, fuzzy
 msgid "Whether the menu has a tearoff item"
-msgstr "กำหนดว่าการกระทำนี้เปิดใช้หรือไม่"
+msgstr "กำหนดว่าเมนูมีรายการรอยฉีกหรือไม่"
 
 #: gtk/gtktreemenu.c:338
 msgid "Wrap Width"
-msgstr ""
+msgstr "ความกว้างวนกลับ"
 
 #: gtk/gtktreemenu.c:339
 msgid "Wrap width for laying out items in a grid"
-msgstr ""
+msgstr "ความกว้างวนกลับสำหรับการจัดวางรายการต่างๆ ในแนวเส้นพิกัด"
 
 #: gtk/gtktreemodelfilter.c:532
 msgid "The child model"
-msgstr ""
+msgstr "ตัวแบบลูก"
 
 #: gtk/gtktreemodelfilter.c:533
 msgid "The model for the filtermodel to filter"
-msgstr ""
+msgstr "ตัวแบบที่ต้องการให้ filtermodel ทำการกรอง"
 
 #: gtk/gtktreemodelfilter.c:540
 msgid "The virtual root"
-msgstr ""
+msgstr "รากเสมือนจริง"
 
 #: gtk/gtktreemodelfilter.c:541
 msgid "The virtual root (relative to the child model) for this filtermodel"
-msgstr ""
+msgstr "รากเสมือนจริง (สัมพันธ์กับตัวแบบลูก) สำหรับ filtermodel ตัวนี้"
 
 #: gtk/gtktreemodelsort.c:484
 msgid "TreeModelSort Model"
-msgstr ""
+msgstr "ตัวแบบ TreeModelSort"
 
 #: gtk/gtktreemodelsort.c:485
 msgid "The model for the TreeModelSort to sort"
-msgstr ""
+msgstr "ตัวแบบที่ต้องการให้ TreeModelSort ทำการกรอง"
 
 #: gtk/gtktreeview.c:1032
 msgid "TreeView Model"
-msgstr ""
+msgstr "ตัวแบบ TreeView"
 
 #: gtk/gtktreeview.c:1033
 msgid "The model for the tree view"
-msgstr ""
+msgstr "ตัวแบบสำหรับมุมมองต้นไม้"
 
 #: gtk/gtktreeview.c:1039
 msgid "Headers Visible"
-msgstr ""
+msgstr "ส่วนหัวมองเห็นได้"
 
 #: gtk/gtktreeview.c:1040
 msgid "Show the column header buttons"
-msgstr ""
+msgstr "แสดงปุ่มต่างๆ ในส่วนหัวคอลัมน์"
 
 #: gtk/gtktreeview.c:1046
 msgid "Headers Clickable"
-msgstr ""
+msgstr "ส่วนหัวคลิกได้"
 
 #: gtk/gtktreeview.c:1047
 msgid "Column headers respond to click events"
-msgstr ""
+msgstr "ส่วนหัวคอลัมน์ตอบสนองต่อเหตุการณ์คลิก"
 
 #: gtk/gtktreeview.c:1053
 msgid "Expander Column"
-msgstr ""
+msgstr "คอลัมน์วิดเจ็ตขยาย"
 
 #: gtk/gtktreeview.c:1054
 msgid "Set the column for the expander column"
-msgstr ""
+msgstr "ตั้งคอลัมน์สำหรับคอลัมน์วิดเจ็ตขยาย"
 
 #: gtk/gtktreeview.c:1075
 msgid "Rules Hint"
-msgstr ""
+msgstr "คำใบ้กฎ"
 
 #: gtk/gtktreeview.c:1076
 msgid "Set a hint to the theme engine to draw rows in alternating colors"
-msgstr ""
+msgstr "กำหนดคำใบ้ให้กับเอนจินชุดตกแต่งในการวาดแถวต่างๆ เป็นสีที่หมุนเวียนกัน"
 
 #: gtk/gtktreeview.c:1082
 msgid "Enable Search"
-msgstr ""
+msgstr "เปิดใช้การค้นหา"
 
 #: gtk/gtktreeview.c:1083
 msgid "View allows user to search through columns interactively"
-msgstr ""
+msgstr "มุมมองอนุญาตให้ผู้ใช้ค้นหาผ่านคอลัมน์ต่างๆ ในเชิงโต้ตอบได้"
 
 #: gtk/gtktreeview.c:1089
 msgid "Search Column"
-msgstr ""
+msgstr "คอลัมน์ที่จะค้นหา"
 
 #: gtk/gtktreeview.c:1090
 msgid "Model column to search through during interactive search"
-msgstr ""
+msgstr "คอลัมน์ตัวแบบที่ต้องการค้นหาระหว่างการค้นหาเชิงโต้ตอบ"
 
 #: gtk/gtktreeview.c:1108
 msgid "Fixed Height Mode"
-msgstr ""
+msgstr "โหมดความสูงตายตัว"
 
 #: gtk/gtktreeview.c:1109
 msgid "Speeds up GtkTreeView by assuming that all rows have the same height"
-msgstr ""
+msgstr "เร่งความเร็ว GtkTreeView โดยถือว่าทุกแถวมีความสูงเท่ากันหมด"
 
 #: gtk/gtktreeview.c:1128
 msgid "Hover Selection"
-msgstr ""
+msgstr "ส่วนที่เลือกเมื่อวางแช่"
 
 #: gtk/gtktreeview.c:1129
 msgid "Whether the selection should follow the pointer"
-msgstr ""
+msgstr "กำหนดว่าส่วนที่เลือกควรตามตัวชี้ไปหรือไม่"
 
 #: gtk/gtktreeview.c:1147
 msgid "Hover Expand"
-msgstr ""
+msgstr "ขยายเมื่อวางแช่"
 
 #: gtk/gtktreeview.c:1148
 msgid "Whether rows should be expanded/collapsed when the pointer moves over them"
-msgstr ""
+msgstr "กำหนดว่าแถวต่างๆ ควรจะยุบ/ขยายเมื่อตัวชี้ขยับอยู่เหนือหรือไม่"
 
 #: gtk/gtktreeview.c:1161
 msgid "Show Expanders"
-msgstr ""
+msgstr "แสดงวิดเจ็ตขยาย"
 
 #: gtk/gtktreeview.c:1162
 msgid "View has expanders"
-msgstr ""
+msgstr "มุมมองมีวิดเจ็ตขยายอยู่ด้วย"
 
 #: gtk/gtktreeview.c:1175
 msgid "Level Indentation"
-msgstr ""
+msgstr "การเยื้องระดับ"
 
 #: gtk/gtktreeview.c:1176
 msgid "Extra indentation for each level"
-msgstr ""
+msgstr "การเยื้องเพิ่มเติมสำหรับแต่ละระดับ"
 
 #: gtk/gtktreeview.c:1183
 msgid "Rubber Banding"
-msgstr ""
+msgstr "การเลือกด้วยการลากพื้นที่คลุม"
 
 #: gtk/gtktreeview.c:1184
 msgid "Whether to enable selection of multiple items by dragging the mouse pointer"
-msgstr ""
+msgstr "กำหนดว่าจะเปิดใช้การเลือกหลายๆ รายการด้วยการลากตัวชี้เมาส์หรือไม่"
 
 #: gtk/gtktreeview.c:1190
 msgid "Enable Grid Lines"
-msgstr ""
+msgstr "เปิดใช้เส้นพิกัด"
 
 #: gtk/gtktreeview.c:1191
 msgid "Whether grid lines should be drawn in the tree view"
-msgstr ""
+msgstr "กำหนดว่าเส้นพิกัดควรจะวาดในมุมมองต้นไม้หรือไม่"
 
 #: gtk/gtktreeview.c:1198
 msgid "Enable Tree Lines"
-msgstr ""
+msgstr "เปิดใช้เส้นต้นไม้"
 
 #: gtk/gtktreeview.c:1199
 msgid "Whether tree lines should be drawn in the tree view"
-msgstr ""
+msgstr "กำหนดว่าเส้นต้นไม้ควรจะวาดในมุมมองต้นไม้หรือไม่"
 
 #: gtk/gtktreeview.c:1206
 msgid "The column in the model containing the tooltip texts for the rows"
-msgstr ""
+msgstr "คอลัมน์ในตัวแบบซึ่งประกอบด้วยข้อความคำแนะนำเครื่องมือสำหรับแถวต่างๆ"
 
 #: gtk/gtktreeview.c:1244
 msgid "Vertical Separator Width"
-msgstr ""
+msgstr "ความกว้างตัวแบ่งแนวตั้ง"
 
 #: gtk/gtktreeview.c:1245
 msgid "Vertical space between cells.  Must be an even number"
-msgstr ""
+msgstr "พื้นที่แนวตั้งระหว่างเซลล์ต่างๆ โดยต้องเป็นจำนวนเลขคู่"
 
 #: gtk/gtktreeview.c:1253
 msgid "Horizontal Separator Width"
-msgstr ""
+msgstr "ความกว้างตัวแบ่งแนวนอน"
 
 #: gtk/gtktreeview.c:1254
 msgid "Horizontal space between cells.  Must be an even number"
-msgstr ""
+msgstr "พื้นที่แนวนอนระหว่างเซลล์ต่างๆ โดยต้องเป็นจำนวนเลขคู่"
 
 #: gtk/gtktreeview.c:1262
 msgid "Allow Rules"
-msgstr ""
+msgstr "อนุญาตกฎ"
 
 #: gtk/gtktreeview.c:1263
 msgid "Allow drawing of alternating color rows"
-msgstr ""
+msgstr "อนุญาตการวาดแถวต่างๆ เป็นสีที่หมุนเวียนกัน"
 
 #: gtk/gtktreeview.c:1269
 msgid "Indent Expanders"
-msgstr ""
+msgstr "เยื้องวิดเจ็ตขยาย"
 
 #: gtk/gtktreeview.c:1270
 msgid "Make the expanders indented"
-msgstr ""
+msgstr "ทำให้วิดเจ็ตขยายอยู่ในสภาพที่ถูกเยื้อง"
 
 #: gtk/gtktreeview.c:1276
 msgid "Even Row Color"
-msgstr ""
+msgstr "สีแถวเลขคู่"
 
 #: gtk/gtktreeview.c:1277
 msgid "Color to use for even rows"
-msgstr ""
+msgstr "สีที่ต้องการใช้สำหรับแถวเลขคู่"
 
 #: gtk/gtktreeview.c:1283
 msgid "Odd Row Color"
-msgstr ""
+msgstr "สีแถวเลขคี่"
 
 #: gtk/gtktreeview.c:1284
 msgid "Color to use for odd rows"
-msgstr ""
+msgstr "สีที่ต้องการใช้สำหรับแถวเลขคี่"
 
 #: gtk/gtktreeview.c:1291
 msgid "Grid line width"
-msgstr ""
+msgstr "ความกว้างเส้นพิกัด"
 
 #: gtk/gtktreeview.c:1292
 msgid "Width, in pixels, of the tree view grid lines"
-msgstr ""
+msgstr "ความกว้าง ในหน่วยพิกเซล ของเส้นพิกัดมุมมองต้นไม้"
 
 #: gtk/gtktreeview.c:1298
 msgid "Tree line width"
-msgstr ""
+msgstr "ความกว้างเส้นต้นไม้"
 
 #: gtk/gtktreeview.c:1299
 msgid "Width, in pixels, of the tree view lines"
-msgstr ""
+msgstr "ความกว้าง ในหน่วยพิกเซล ของเส้นมุมมองต้นไม้"
 
 #: gtk/gtktreeview.c:1305
 msgid "Grid line pattern"
-msgstr ""
+msgstr "รูปแบบเส้นพิกัด"
 
 #: gtk/gtktreeview.c:1306
 msgid "Dash pattern used to draw the tree view grid lines"
-msgstr ""
+msgstr "รูปแบบเส้นประที่ใช้สำหรับวาดเส้นพิกัดมุมมองต้นไม้"
 
 #: gtk/gtktreeview.c:1312
 msgid "Tree line pattern"
-msgstr ""
+msgstr "รูปแบบเส้นต้นไม้"
 
 #: gtk/gtktreeview.c:1313
 msgid "Dash pattern used to draw the tree view lines"
-msgstr ""
+msgstr "รูปแบบเส้นประที่ใช้สำหรับวาดเส้นมุมมองต้นไม้"
 
 #: gtk/gtktreeviewcolumn.c:247
 msgid "Whether to display the column"
-msgstr ""
+msgstr "กำหนดว่าจะแสดงคอลัมน์ด้วยหรือไม่"
 
 #: gtk/gtktreeviewcolumn.c:253 gtk/gtkwindow.c:785
 msgid "Resizable"
-msgstr ""
+msgstr "ปรับขนาดได้"
 
 #: gtk/gtktreeviewcolumn.c:254
 msgid "Column is user-resizable"
-msgstr ""
+msgstr "ผู้ใช้สามารถปรับขนาดของคอลัมน์ได้"
 
 #: gtk/gtktreeviewcolumn.c:261
 msgid "Current X position of the column"
-msgstr ""
+msgstr "ตำแหน่งแกน X ปัจจุบันของคอลัมน์"
 
 #: gtk/gtktreeviewcolumn.c:269
 msgid "Current width of the column"
-msgstr ""
+msgstr "ความกว้างปัจจุบันของคอลัมน์"
 
 #: gtk/gtktreeviewcolumn.c:284
 msgid "Sizing"
-msgstr ""
+msgstr "การจัดขนาด"
 
 #: gtk/gtktreeviewcolumn.c:285
 msgid "Resize mode of the column"
-msgstr ""
+msgstr "โหมดการปรับขนาดของคอลัมน์"
 
 #: gtk/gtktreeviewcolumn.c:292
 msgid "Fixed Width"
-msgstr ""
+msgstr "ความกว้างตายตัว"
 
 #: gtk/gtktreeviewcolumn.c:293
 msgid "Current fixed width of the column"
-msgstr ""
+msgstr "ความกว้างตายตัวปัจจุบันของคอลัมน์"
 
 #: gtk/gtktreeviewcolumn.c:301
 msgid "Minimum allowed width of the column"
-msgstr ""
+msgstr "ความกว้างที่อนุญาตต่ำสุดของคอลัมน์"
 
 #: gtk/gtktreeviewcolumn.c:308
 msgid "Maximum Width"
-msgstr ""
+msgstr "ความกว้างสูงสุด"
 
 #: gtk/gtktreeviewcolumn.c:309
 msgid "Maximum allowed width of the column"
-msgstr ""
+msgstr "ความกว้างที่อนุญาตสูงสุดของคอลัมน์"
 
 #: gtk/gtktreeviewcolumn.c:317
 msgid "Title to appear in column header"
-msgstr ""
+msgstr "ชื่อเรื่องที่ต้องการให้ปรากฏในส่วนหัวคอลัมน์"
 
 #: gtk/gtktreeviewcolumn.c:324
 msgid "Column gets share of extra width allocated to the widget"
-msgstr ""
+msgstr "คอลัมน์ได้ส่วนแบ่งของความกว้างเพิ่มเติมที่จัดสรรให้กับวิดเจ็ต"
 
 #: gtk/gtktreeviewcolumn.c:330
 msgid "Clickable"
-msgstr ""
+msgstr "คลิกได้"
 
 #: gtk/gtktreeviewcolumn.c:331
 msgid "Whether the header can be clicked"
-msgstr ""
+msgstr "กำหนดว่าส่วนหัวสามารถคลิกได้หรือไม่"
 
 #: gtk/gtktreeviewcolumn.c:338
 msgid "Widget to put in column header button instead of column title"
-msgstr ""
+msgstr "วิดเจ็ตที่ต้องการใส่ในปุ่มในส่วนหัวคอลัมน์แทนที่จะเป็นชื่อเรื่องคอลัมน์"
 
 #: gtk/gtktreeviewcolumn.c:345
 msgid "X Alignment of the column header text or widget"
-msgstr ""
+msgstr "ตำแหน่งจัดเรียงแกน X ของข้อความหรือวิดเจ็ตในส่วนหัวคอลัมน์"
 
 #: gtk/gtktreeviewcolumn.c:352
 msgid "Whether the column can be reordered around the headers"
-msgstr ""
+msgstr "กำหนดว่าคอลัมน์สามารถจัดลำดับใหม่รอบๆ ส่วนหัวได้หรือไม่"
 
 #: gtk/gtktreeviewcolumn.c:358
 msgid "Sort indicator"
-msgstr ""
+msgstr "ตัวชี้บอกการเรียงลำดับ"
 
 #: gtk/gtktreeviewcolumn.c:359
 msgid "Whether to show a sort indicator"
-msgstr ""
+msgstr "กำหนดว่าจะแสดงตัวชี้บอกการเรียงลำดับหรือไม่"
 
 #: gtk/gtktreeviewcolumn.c:365
 msgid "Sort order"
-msgstr ""
+msgstr "ลำดับการเรียง"
 
 #: gtk/gtktreeviewcolumn.c:366
 msgid "Sort direction the sort indicator should indicate"
-msgstr ""
+msgstr "ทิศทางการเรียงลำดับที่ตัวชี้บอกการเรียงลำดับควรจะชี้บอก"
 
 #: gtk/gtktreeviewcolumn.c:381
 msgid "Sort column ID"
-msgstr ""
+msgstr "ID คอลัมน์เรียงลำดับ"
 
 #: gtk/gtktreeviewcolumn.c:382
 msgid "Logical sort column ID this column sorts on when selected for sorting"
-msgstr ""
+msgstr "ID คอลัมน์เรียงลำดับเชิงตรรกะที่คอลัมน์นี้จะเรียงลำดับตามเมื่อถูกเลือกให้เรียงลำดับ"
 
 #: gtk/gtkviewport.c:409
 msgid "Determines how the shadowed box around the viewport is drawn"
-msgstr ""
+msgstr "ระบุว่าจะวาดกล่องที่มีเงารอบๆ วิวพอร์ตอย่างไร"
 
 #: gtk/gtkvolumebutton.c:168
 msgid "Use symbolic icons"
-msgstr ""
+msgstr "ใช้ไอคอนเชิงสัญลักษณ์"
 
 #: gtk/gtkvolumebutton.c:169
-#, fuzzy
 msgid "Whether to use symbolic icons"
-msgstr "กำหนดว่ากลุ่มการกระทำนี้เปิดใช้หรือไม่"
+msgstr "กำหนดว่าจะใช้ไอคอนเชิงสัญลักษณ์หรือไม่"
 
 #: gtk/gtkwidget.c:1124
 msgid "Widget name"
-msgstr ""
+msgstr "ชื่อวิดเจ็ต"
 
 #: gtk/gtkwidget.c:1125
 msgid "The name of the widget"
-msgstr ""
+msgstr "ชื่อที่กำหนดให้กับวิดเจ็ต"
 
 #: gtk/gtkwidget.c:1132
 msgid "The parent widget of this widget. Must be a Container widget"
-msgstr ""
+msgstr "วิดเจ็ตแม่ของวิดเจ็ตนี้ ซึ่งต้องเป็นวิดเจ็ตตัวบรรจุ"
 
 #: gtk/gtkwidget.c:1138
 msgid "Width request"
-msgstr ""
+msgstr "คำร้องขอความกว้าง"
 
 #: gtk/gtkwidget.c:1139
 msgid "Override for width request of the widget, or -1 if natural request should be used"
-msgstr ""
+msgstr "ค่าใช้แทนสำหรับคำร้องขอความกว้างของวิดเจ็ต หรือ -1 ถ้าควรใช้คำร้องขอแบบธรรมชาติ"
 
 #: gtk/gtkwidget.c:1146
 msgid "Height request"
-msgstr ""
+msgstr "คำร้องขอความสูง"
 
 #: gtk/gtkwidget.c:1147
 msgid "Override for height request of the widget, or -1 if natural request should be used"
-msgstr ""
+msgstr "ค่าใช้แทนสำหรับคำร้องขอความสูงของวิดเจ็ต หรือ -1 ถ้าควรใช้คำร้องขอแบบธรรมชาติ"
 
 #: gtk/gtkwidget.c:1155
 msgid "Whether the widget is visible"
-msgstr ""
+msgstr "กำหนดว่าวิดเจ็ตมองเห็นได้หรือไม่"
 
 #: gtk/gtkwidget.c:1162
 msgid "Whether the widget responds to input"
-msgstr ""
+msgstr "กำหนดว่าวิดเจ็ตตอบสนองต่ออินพุตหรือไม่"
 
 #: gtk/gtkwidget.c:1168
 msgid "Application paintable"
-msgstr ""
+msgstr "แอปพลิเคชันทาสีได้"
 
 #: gtk/gtkwidget.c:1169
 msgid "Whether the application will paint directly on the widget"
-msgstr ""
+msgstr "กำหนดว่าแอปพลิเคชันจะทาสีบนวิดเจ็ตโดยตรงหรือไม่"
 
 #: gtk/gtkwidget.c:1175
 msgid "Can focus"
-msgstr ""
+msgstr "สามารถโฟกัสได้"
 
 #: gtk/gtkwidget.c:1176
 msgid "Whether the widget can accept the input focus"
-msgstr ""
+msgstr "กำหนดว่าวิดเจ็ตสามารถรับสัญญาณโฟกัสขณะอินพุตได้หรือไม่"
 
 #: gtk/gtkwidget.c:1182
 msgid "Has focus"
-msgstr ""
+msgstr "มีโฟกัส"
 
 #: gtk/gtkwidget.c:1183
 msgid "Whether the widget has the input focus"
-msgstr ""
+msgstr "กำหนดว่าวิดเจ็ตมีสัญญาณโฟกัสขณะอินพุตหรือไม่"
 
 #: gtk/gtkwidget.c:1189
 msgid "Is focus"
-msgstr ""
+msgstr "เป็นโฟกัส"
 
 #: gtk/gtkwidget.c:1190
 msgid "Whether the widget is the focus widget within the toplevel"
-msgstr ""
+msgstr "กำหนดว่าวิดเจ็ตเป็นวิดเจ็ตโฟกัสภายในระดับบนสุดหรือไม่"
 
 #: gtk/gtkwidget.c:1208
 msgid "Focus on click"
-msgstr ""
+msgstr "โฟกัสเมื่อคลิก"
 
 #: gtk/gtkwidget.c:1209
-#, fuzzy
 msgid "Whether the widget should grab focus when it is clicked with the mouse"
-msgstr "กำหนดว่าวิดเจ็ตลูกควรมีขนาดเท่ากันหมดหรือไม่"
+msgstr "กำหนดว่าวิดเจ็ตควรจับสัญญาณโฟกัสหรือไม่เมื่อถูกคลิกด้วยเมาส์"
 
 #: gtk/gtkwidget.c:1215
 msgid "Can default"
-msgstr ""
+msgstr "สามารถเป็นวิดเจ็ตเริ่มต้นได้"
 
 #: gtk/gtkwidget.c:1216
 msgid "Whether the widget can be the default widget"
-msgstr ""
+msgstr "กำหนดว่าวิดเจ็ตสามารถเป็นวิดเจ็ตเริ่มต้นได้หรือไม่"
 
 #: gtk/gtkwidget.c:1222
 msgid "Has default"
-msgstr ""
+msgstr "มีวิดเจ็ตเริ่มต้น"
 
 #: gtk/gtkwidget.c:1223
 msgid "Whether the widget is the default widget"
-msgstr ""
+msgstr "กำหนดว่าวิดเจ็ตเป็นวิดเจ็ตเริ่มต้นหรือไม่"
 
 #: gtk/gtkwidget.c:1229
 msgid "Receives default"
-msgstr ""
+msgstr "รับการกระทำเริ่มต้น"
 
 #: gtk/gtkwidget.c:1230
 msgid "If TRUE, the widget will receive the default action when it is focused"
-msgstr ""
+msgstr "ถ้าเป็น TRUE วิดเจ็ตจะรับการกระทำเริ่มต้นเมื่อถูกโฟกัส"
 
 #: gtk/gtkwidget.c:1236
 msgid "Composite child"
-msgstr ""
+msgstr "วิดเจ็ตลูกประกอบ"
 
 #: gtk/gtkwidget.c:1237
 msgid "Whether the widget is part of a composite widget"
-msgstr ""
+msgstr "กำหนดว่าวิดเจ็ตเป็นส่วนหนึ่งของวิดเจ็ตประกอบหรือไม่"
 
 #: gtk/gtkwidget.c:1252
 msgid "Style"
-msgstr ""
+msgstr "ลักษณะ"
 
 #: gtk/gtkwidget.c:1253
 msgid "The style of the widget, which contains information about how it will look (colors etc)"
-msgstr ""
+msgstr "ลักษณะของวิดเจ็ต ซึ่งมีข้อมูลเกี่ยวกับรูปลักษณ์ของมัน (สี ฯลฯ)"
 
 #: gtk/gtkwidget.c:1261
 msgid "Events"
-msgstr ""
+msgstr "เหตุการณ์"
 
 #: gtk/gtkwidget.c:1262
 msgid "The event mask that decides what kind of GdkEvents this widget gets"
-msgstr ""
+msgstr "ค่ามาสก์เหตุการณ์ที่จะตัดสินใจว่าวิดเจ็ตนี้จะได้ GdkEvents ชนิดไหน"
 
 #: gtk/gtkwidget.c:1269
 msgid "No show all"
-msgstr ""
+msgstr "ไม่มีแสดงทั้งหมด"
 
 #: gtk/gtkwidget.c:1270
 msgid "Whether gtk_widget_show_all() should not affect this widget"
-msgstr ""
+msgstr "กำหนดว่า gtk_widget_show_all() ไม่ควรมีผลกับวิดเจ็ตนี้ใช่หรือไม่"
 
 #: gtk/gtkwidget.c:1292
 msgid "Whether this widget has a tooltip"
-msgstr ""
+msgstr "กำหนดว่าวิดเจ็ตนี้มีคำแนะนำเครื่องมือหรือไม่"
 
 #: gtk/gtkwidget.c:1354
 msgid "The widget's window if it is realized"
-msgstr ""
+msgstr "หน้าต่างของวิดเจ็ตถ้าวิดเจ็ตมีการ Realize"
 
 #: gtk/gtkwidget.c:1369
 msgid "Double Buffered"
-msgstr ""
+msgstr "ใช้บัฟเฟอร์คู่"
 
 #: gtk/gtkwidget.c:1370
-#, fuzzy
 msgid "Whether the widget is double buffered"
-msgstr "กำหนดว่าวิดเจ็ตลูกควรมีขนาดเท่ากันหมดหรือไม่"
+msgstr "กำหนดว่าวิดเจ็ตมีการใช้บัฟเฟอร์คู่หรือไม่"
 
 #: gtk/gtkwidget.c:1384
 msgid "How to position in extra horizontal space"
-msgstr ""
+msgstr "วิธีการวางตำแหน่งในพื้นที่แนวนอนเพิ่มเติม"
 
 #: gtk/gtkwidget.c:1399
 msgid "How to position in extra vertical space"
-msgstr ""
+msgstr "วิธีการวางตำแหน่งในพื้นที่แนวตั้งเพิ่มเติม"
 
 #: gtk/gtkwidget.c:1419
 msgid "Margin on Left"
-msgstr ""
+msgstr "ระยะขอบทางด้านซ้าย"
 
 #: gtk/gtkwidget.c:1420
 msgid "Pixels of extra space on the left side"
-msgstr ""
+msgstr "จำนวนพิกเซลของพื้นที่เพิ่มเติมทางด้านซ้าย"
 
 #: gtk/gtkwidget.c:1440
 msgid "Margin on Right"
-msgstr ""
+msgstr "ระยะขอบทางด้านขวา"
 
 #: gtk/gtkwidget.c:1441
 msgid "Pixels of extra space on the right side"
-msgstr ""
+msgstr "จำนวนพิกเซลของพื้นที่เพิ่มเติมทางด้านขวา"
 
 #: gtk/gtkwidget.c:1460
 msgid "Margin on Start"
-msgstr ""
+msgstr "ระยะขอบที่จุดเริ่มต้น"
 
 #: gtk/gtkwidget.c:1461
 msgid "Pixels of extra space on the start"
-msgstr ""
+msgstr "จำนวนพิกเซลของพื้นที่เพิ่มเติมที่จุดเริ่มต้น"
 
 #: gtk/gtkwidget.c:1480
 msgid "Margin on End"
-msgstr ""
+msgstr "ระยะขอบที่จุดสิ้นสุด"
 
 #: gtk/gtkwidget.c:1481
 msgid "Pixels of extra space on the end"
-msgstr ""
+msgstr "จำนวนพิกเซลของพื้นที่เพิ่มเติมที่จุดสิ้นสุด"
 
 #: gtk/gtkwidget.c:1499
 msgid "Margin on Top"
-msgstr ""
+msgstr "ระยะขอบทางด้านบน"
 
 #: gtk/gtkwidget.c:1500
 msgid "Pixels of extra space on the top side"
-msgstr ""
+msgstr "จำนวนพิกเซลของพื้นที่เพิ่มเติมทางด้านบน"
 
 #: gtk/gtkwidget.c:1518
 msgid "Margin on Bottom"
-msgstr ""
+msgstr "ระยะขอบทางด้านล่าง"
 
 #: gtk/gtkwidget.c:1519
 msgid "Pixels of extra space on the bottom side"
-msgstr ""
+msgstr "จำนวนพิกเซลของพื้นที่เพิ่มเติมทางด้านล่าง"
 
 #: gtk/gtkwidget.c:1534
 msgid "All Margins"
-msgstr ""
+msgstr "ระยะขอบทั้งหมด"
 
 #: gtk/gtkwidget.c:1535
 msgid "Pixels of extra space on all four sides"
-msgstr ""
+msgstr "จำนวนพิกเซลของพื้นที่เพิ่มเติมทั้งสี่ด้าน"
 
 #: gtk/gtkwidget.c:1549
-#, fuzzy
 msgid "Horizontal Expand"
-msgstr "สัดส่วนตามแนวนอน"
+msgstr "การขยายตามแนวนอน"
 
 #: gtk/gtkwidget.c:1550
-#, fuzzy
 msgid "Whether widget wants more horizontal space"
-msgstr "กำหนดว่าวิดเจ็ตลูกควรมีขนาดเท่ากันหมดหรือไม่"
+msgstr "กำหนดว่าวิดเจ็ตต้องการพื้นที่ในแนวนอนเพิ่มหรือไม่"
 
 #: gtk/gtkwidget.c:1563
-#, fuzzy
-#| msgid "Horizontal alignment"
 msgid "Horizontal Expand Set"
-msgstr "การจัดเรียงตามแนวนอน"
+msgstr "ตั้งการขยายตามแนวนอน"
 
 #: gtk/gtkwidget.c:1564
-#, fuzzy
 msgid "Whether to use the hexpand property"
-msgstr "กำหนดว่าจะตัดบรรทัดในการแสดงข้อความสัญญาอนุญาตหรือไม่"
+msgstr "กำหนดว่าจะใช้คุณสมบัติ hexpand หรือไม่"
 
 #: gtk/gtkwidget.c:1577
-#, fuzzy
 msgid "Vertical Expand"
-msgstr "สัดส่วนตามแนวตั้ง"
+msgstr "การขยายตามแนวตั้ง"
 
 #: gtk/gtkwidget.c:1578
 msgid "Whether widget wants more vertical space"
-msgstr ""
+msgstr "กำหนดว่าวิดเจ็ตต้องการพื้นที่ในแนวตั้งเพิ่มหรือไม่"
 
 #: gtk/gtkwidget.c:1591
-#, fuzzy
-#| msgid "Vertical alignment"
 msgid "Vertical Expand Set"
-msgstr "การจัดเรียงตามแนวตั้ง"
+msgstr "ตั้งการขยายตามแนวตั้ง"
 
 #: gtk/gtkwidget.c:1592
-#, fuzzy
-#| msgid "Whether to wrap the license text."
 msgid "Whether to use the vexpand property"
-msgstr "กำหนดว่าจะตัดบรรทัดในการแสดงข้อความสัญญาอนุญาตหรือไม่"
+msgstr "กำหนดว่าจะใช้คุณสมบัติ vexpand หรือไม่"
 
 #: gtk/gtkwidget.c:1605
-#, fuzzy
-#| msgid "Expand"
 msgid "Expand Both"
-msgstr "ขยาย"
+msgstr "ขยายทั้งสองทาง"
 
 #: gtk/gtkwidget.c:1606
 msgid "Whether widget wants to expand in both directions"
-msgstr ""
+msgstr "กำหนดว่าวิดเจ็ตต้องการขยายขนาดในทั้งสองทิศทางหรือไม่"
 
 #: gtk/gtkwidget.c:1622
 msgid "Opacity for Widget"
-msgstr ""
+msgstr "ความทึบแสงสำหรับวิดเจ็ต"
 
 #: gtk/gtkwidget.c:1623
 msgid "The opacity of the widget, from 0 to 1"
-msgstr ""
+msgstr "ค่าความทึบแสงของวิดเจ็ต ตั้งแต่ 0 ถึง 1"
 
 #: gtk/gtkwidget.c:1638
 msgid "Scale factor"
-msgstr ""
+msgstr "ตัวประกอบอัตราส่วน"
 
 #: gtk/gtkwidget.c:1639
 msgid "The scaling factor of the window"
-msgstr ""
+msgstr "ตัวประกอบอัตราส่วนของหน้าต่าง"
 
 #: gtk/gtkwidget.c:3503
 msgid "Interior Focus"
-msgstr ""
+msgstr "โฟกัสส่วนใน"
 
 #: gtk/gtkwidget.c:3504
 msgid "Whether to draw the focus indicator inside widgets"
-msgstr ""
+msgstr "กำหนดว่าจะวาดตัวชี้บอกโฟกัสภายในวิดเจ็ตหรือไม่"
 
 #: gtk/gtkwidget.c:3517
 msgid "Focus linewidth"
-msgstr ""
+msgstr "ความกว้างเส้นโฟกัส"
 
 #: gtk/gtkwidget.c:3518
 msgid "Width, in pixels, of the focus indicator line"
-msgstr ""
+msgstr "ความกว้าง ในหน่วยพิกเซล ของเส้นตัวชี้บอกโฟกัส"
 
 #: gtk/gtkwidget.c:3532
 msgid "Focus line dash pattern"
-msgstr ""
+msgstr "รูปแบบเส้นประเส้นโฟกัส"
 
 #: gtk/gtkwidget.c:3533
 msgid "Dash pattern used to draw the focus indicator. The character values are interpreted as pixel widths of alternating on and off segments of the line."
-msgstr ""
+msgstr "รูปแบบเส้นประที่ใช้วาดตัวชี้บอกโฟกัส ค่าอักขระจะถูกตีความเป็นความกว้างพิกเซลของส่วนเปิดและส่วนปิดที่หมุนเวียนกันภายในเส้น"
 
 #: gtk/gtkwidget.c:3546
 msgid "Focus padding"
-msgstr ""
+msgstr "ระยะเสริมโฟกัส"
 
 #: gtk/gtkwidget.c:3547
 msgid "Width, in pixels, between focus indicator and the widget 'box'"
-msgstr ""
+msgstr "ความกว้าง ในหน่วยพิกเซล ระหว่างตัวชี้บอกโฟกัสและ 'box' ของวิดเจ็ต"
 
 #: gtk/gtkwidget.c:3561
 msgid "Cursor color"
-msgstr ""
+msgstr "สีเคอร์เซอร์"
 
 #: gtk/gtkwidget.c:3562
 msgid "Color with which to draw insertion cursor"
-msgstr ""
+msgstr "สีที่ต้องการจะวาดเคอร์เซอร์แทรก"
 
 #: gtk/gtkwidget.c:3575
 msgid "Secondary cursor color"
-msgstr ""
+msgstr "สีเคอร์เซอร์ลำดับสอง"
 
 #: gtk/gtkwidget.c:3576
 msgid "Color with which to draw the secondary insertion cursor when editing mixed right-to-left and left-to-right text"
-msgstr ""
+msgstr "สีที่ต้องการจะวาดเคอร์เซอร์แทรกลำดับสองเมื่อแก้ไขข้อความที่เขียนจากขวาไปซ้ายและซ้ายไปขวาผสมกัน"
 
 #: gtk/gtkwidget.c:3582
 msgid "Cursor line aspect ratio"
-msgstr ""
+msgstr "สัดส่วนขนาดเส้นเคอร์เซอร์"
 
 #: gtk/gtkwidget.c:3583
 msgid "Aspect ratio with which to draw insertion cursor"
-msgstr ""
+msgstr "สัดส่วนขยายที่ต้องการจะวาดเคอร์เซอร์แทรก"
 
 #: gtk/gtkwidget.c:3589
 msgid "Window dragging"
-msgstr ""
+msgstr "การลากหน้าต่าง"
 
 #: gtk/gtkwidget.c:3590
 msgid "Whether windows can be dragged and maximized by clicking on empty areas"
-msgstr ""
+msgstr "กำหนดว่าหน้าต่างสามารถลากและขยายแผ่ได้ด้วยการคลิกบนพื้นที่ว่างเปล่าหรือไม่"
 
 #: gtk/gtkwidget.c:3607
 msgid "Unvisited Link Color"
-msgstr ""
+msgstr "สีลิงก์ที่ไม่ได้ชม"
 
 #: gtk/gtkwidget.c:3608
 msgid "Color of unvisited links"
-msgstr ""
+msgstr "สีของลิงก์ที่ไม่ได้ชม"
 
 #: gtk/gtkwidget.c:3624
 msgid "Visited Link Color"
-msgstr ""
+msgstr "สีลิงก์ที่ชมแล้ว"
 
 #: gtk/gtkwidget.c:3625
 msgid "Color of visited links"
-msgstr ""
+msgstr "สีของลิงก์ที่ชมแล้ว"
 
 #: gtk/gtkwidget.c:3643
 msgid "Wide Separators"
-msgstr ""
+msgstr "ตัวแบ่งแบบกว้าง"
 
 #: gtk/gtkwidget.c:3644
 msgid "Whether separators have configurable width and should be drawn using a box instead of a line"
-msgstr ""
+msgstr "กำหนดว่าตัวแบ่งมีความกว้างที่กำหนดค่าได้หรือไม่ และควรจะถูกวาดโดยใช้กล่องหรือไม่ แทนที่่จะใช้เส้น"
 
 #: gtk/gtkwidget.c:3661
 msgid "Separator Width"
-msgstr ""
+msgstr "ความกว้างตัวแบ่ง"
 
 #: gtk/gtkwidget.c:3662
 msgid "The width of separators if wide-separators is TRUE"
-msgstr ""
+msgstr "ความกว้างของตัวแบ่ง ในกรณีที่ wide-separators มีค่า TRUE"
 
 #: gtk/gtkwidget.c:3679
 msgid "Separator Height"
-msgstr ""
+msgstr "ความสูงตัวแบ่ง"
 
 #: gtk/gtkwidget.c:3680
 msgid "The height of separators if \"wide-separators\" is TRUE"
-msgstr ""
+msgstr "ความสูงของตัวแบ่ง ในกรณีที่ \"wide-separators\" มีค่า TRUE"
 
 #: gtk/gtkwidget.c:3694
 msgid "Horizontal Scroll Arrow Length"
-msgstr ""
+msgstr "ความยาวลูกศรเลื่อนแนวนอน"
 
 #: gtk/gtkwidget.c:3695
 msgid "The length of horizontal scroll arrows"
-msgstr ""
+msgstr "ความยาวของลูกศรเลื่อนแนวนอน"
 
 #: gtk/gtkwidget.c:3709
 msgid "Vertical Scroll Arrow Length"
-msgstr ""
+msgstr "ความยาวลูกศรเลื่อนแนวตั้ง"
 
 #: gtk/gtkwidget.c:3710
 msgid "The length of vertical scroll arrows"
-msgstr ""
+msgstr "ความยาวของลูกศรเลื่อนแนวตั้ง"
 
 #: gtk/gtkwidget.c:3716 gtk/gtkwidget.c:3717
 msgid "Width of text selection handles"
-msgstr ""
+msgstr "ความกว้างของที่จับสำหรับเลือกข้อความ"
 
 #: gtk/gtkwidget.c:3722 gtk/gtkwidget.c:3723
 msgid "Height of text selection handles"
-msgstr ""
+msgstr "ความสูงของที่จับสำหรับเลือกข้อความ"
 
 #: gtk/gtkwindow.c:747
 msgid "Window Type"
-msgstr ""
+msgstr "ชนิดหน้าต่าง"
 
 #: gtk/gtkwindow.c:748
 msgid "The type of the window"
-msgstr ""
+msgstr "ชนิดของหน้าต่าง"
 
 #: gtk/gtkwindow.c:755
 msgid "Window Title"
-msgstr ""
+msgstr "ชื่อเรื่องหน้าต่าง"
 
 #: gtk/gtkwindow.c:756
 msgid "The title of the window"
-msgstr ""
+msgstr "ชื่อเรื่องของหน้าต่าง"
 
 #: gtk/gtkwindow.c:762
 msgid "Window Role"
-msgstr ""
+msgstr "บทบาทหน้าต่าง"
 
 #: gtk/gtkwindow.c:763
 msgid "Unique identifier for the window to be used when restoring a session"
-msgstr ""
+msgstr "ตัวระบุที่ไม่ซ้ำกันสำหรับหน้าต่างที่ต้องการใช้เมื่อเรียกคืนเซสชัน"
 
 #: gtk/gtkwindow.c:778
 msgid "Startup ID"
-msgstr ""
+msgstr "ID การเริ่มทำงาน"
 
 #: gtk/gtkwindow.c:779
 msgid "Unique startup identifier for the window used by startup-notification"
-msgstr ""
+msgstr "ตัวระบุการเริ่มทำงานที่ไม่ซ้ำกันสำหรับหน้าต่างซึ่งใช้โดย startup-notification"
 
 #: gtk/gtkwindow.c:786
 msgid "If TRUE, users can resize the window"
-msgstr ""
+msgstr "ถ้าเป็น TRUE ผู้ใช้สามารถปรับขนาดของหน้าต่างได้"
 
 #: gtk/gtkwindow.c:793
 msgid "If TRUE, the window is modal (other windows are not usable while this one is up)"
-msgstr ""
+msgstr "ถ้าเป็น TRUE หน้าต่างจะเป็นแบบรอตอบ (หน้าต่างอื่นๆ จะใช้งานไม่ได้ในขณะที่หน้าต่างนี้แสดงอยู่)"
 
 #: gtk/gtkwindow.c:799
 msgid "Window Position"
-msgstr ""
+msgstr "ตำแหน่งหน้าต่าง"
 
 #: gtk/gtkwindow.c:800
 msgid "The initial position of the window"
-msgstr ""
+msgstr "ตำแหน่งเริ่มแรกของหน้าต่าง"
 
 #: gtk/gtkwindow.c:807
 msgid "Default Width"
-msgstr ""
+msgstr "ความกว้างเริ่มต้น"
 
 #: gtk/gtkwindow.c:808
 msgid "The default width of the window, used when initially showing the window"
-msgstr ""
+msgstr "ความกว้างเริ่มต้นของหน้าต่าง ซึ่งใช้เมื่อจะแสดงหน้าต่างตอนเริ่มแรก"
 
 #: gtk/gtkwindow.c:815
 msgid "Default Height"
-msgstr ""
+msgstr "ความสูงเริ่มต้น"
 
 #: gtk/gtkwindow.c:816
 msgid "The default height of the window, used when initially showing the window"
-msgstr ""
+msgstr "ความสูงเริ่มต้นของหน้าต่าง ซึ่งใช้เมื่อจะแสดงหน้าต่างตอนเริ่มแรก"
 
 #: gtk/gtkwindow.c:823
 msgid "Destroy with Parent"
-msgstr ""
+msgstr "ทำลายพร้อมกับวิดเจ็ตแม่"
 
 #: gtk/gtkwindow.c:824
 msgid "If this window should be destroyed when the parent is destroyed"
-msgstr ""
+msgstr "หน้าต่างนี้ควรจะถูกทำลายหรือไม่เมื่อวิดเจ็ตแม่ถูกทำลาย"
 
 #: gtk/gtkwindow.c:837
 msgid "Hide the titlebar during maximization"
