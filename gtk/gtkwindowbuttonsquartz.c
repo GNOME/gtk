@@ -242,7 +242,7 @@ gtk_window_buttons_quartz_realize (GtkWidget *widget)
       return;
     }
 
-  [window showStandardWindowButtons:YES];
+  [window setShowStandardWindowButtons:YES];
   
   enable_window_controls (self, TRUE);
 
@@ -256,7 +256,7 @@ gtk_window_buttons_quartz_unrealize (GtkWidget *widget)
   GdkMacosWindow *window = native_window (widget);
 
   if (GDK_IS_MACOS_WINDOW (window))
-    [window showStandardWindowButtons:NO];
+    [window setShowStandardWindowButtons:NO];
 
   GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->unrealize (widget);
 }

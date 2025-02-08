@@ -35,7 +35,6 @@
 @interface GdkMacosWindow : NSWindow <NSDraggingSource, NSDraggingDestination> {
   GdkMacosSurface *gdk_surface;
 
-  BOOL             showStandardWindowButtons;
   BOOL             inMove;
   BOOL             inShowOrHide;
   BOOL             initialPositionKnown;
@@ -53,6 +52,8 @@
   BOOL             inFullscreenTransition;
 }
 
+@property (nonatomic) BOOL showStandardWindowButtons;
+
 +(void)setContentViewClass:(Class)newViewClass;
 
 -(void)beginManualMove;
@@ -68,7 +69,6 @@
 -(BOOL)trackManualMove;
 -(BOOL)trackManualResize;
 -(void)setDecorated:(BOOL)decorated;
--(void)showStandardWindowButtons:(BOOL)show;
 -(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage;
 -(BOOL)needsMouseDownQuirk;
 -(BOOL)inFullscreenTransition;
