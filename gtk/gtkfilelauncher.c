@@ -287,7 +287,7 @@ gtk_file_launcher_get_always_ask (GtkFileLauncher *self)
  * @self: a file launcher
  * @always_ask: whether to always ask
  *
- * Sets whether to awlays ask the user which app to use.
+ * Sets whether to always ask the user which app to use.
  *
  * If false, the file might be opened with a default app
  * or the previous choice.
