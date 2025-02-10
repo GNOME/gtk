@@ -24,14 +24,17 @@
 #include <errno.h>
 #include <unistd.h>
 #include <fcntl.h>
+
+#ifdef HAVE_SYS_SYSMACROS_H
 #include <sys/sysmacros.h>
+#endif
 
 #ifdef HAVE_LINUX_MEMFD_H
 #include <linux/memfd.h>
+#include <sys/syscall.h>
 #endif
 
 #include <sys/mman.h>
-#include <sys/syscall.h>
 
 #include <glib.h>
 #include <gio/gio.h>
