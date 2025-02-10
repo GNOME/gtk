@@ -65,11 +65,15 @@ struct _GdkWaylandPointerData {
   struct wl_surface *pointer_surface;
   struct wp_viewport *pointer_surface_viewport;
   guint cursor_is_default: 1;
+  guint has_cursor_surface : 1;
   GdkCursor *cursor;
   guint cursor_timeout_id;
   guint cursor_image_index;
   guint cursor_image_delay;
   guint touchpad_event_sequence;
+
+  int32_t cursor_hotspot_x;
+  int32_t cursor_hotspot_y;
 
   GdkFractionalScale preferred_scale;
   struct wp_fractional_scale_v1 *fractional_scale;

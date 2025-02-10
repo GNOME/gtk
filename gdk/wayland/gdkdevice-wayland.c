@@ -285,30 +285,14 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
       return G_SOURCE_REMOVE;
     }
 
-  if (tablet)
+  if (pointer->has_cursor_surface)
     {
-      if (!tablet->current_tool)
-        {
-          pointer->cursor_timeout_id = 0;
-          return G_SOURCE_REMOVE;
-        }
-
-      zwp_tablet_tool_v2_set_cursor (tablet->current_tool->wp_tablet_tool,
-                                     pointer->enter_serial,
-                                     pointer->pointer_surface,
-                                     x, y);
-    }
-  else if (seat->wl_pointer)
-    {
-      wl_pointer_set_cursor (seat->wl_pointer,
-                             pointer->enter_serial,
-                             pointer->pointer_surface,
-                             x, y);
-    }
-  else
-    {
-      pointer->cursor_timeout_id = 0;
-      return G_SOURCE_REMOVE;
+      /* We already have the surface attached to the cursor, change the
+       * offset to adapt to the new buffer.
+       */
+      wl_surface_offset (pointer->pointer_surface,
+                         pointer->cursor_hotspot_x - x,
+                         pointer->cursor_hotspot_y - y);
     }
 
   if (buffer)
@@ -331,6 +315,40 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
       wl_surface_attach (pointer->pointer_surface, NULL, 0, 0);
       wl_surface_commit (pointer->pointer_surface);
     }
+
+  if (!pointer->has_cursor_surface)
+    {
+      if (tablet)
+        {
+          if (!tablet->current_tool)
+            {
+              pointer->cursor_timeout_id = 0;
+              return G_SOURCE_REMOVE;
+            }
+
+          zwp_tablet_tool_v2_set_cursor (tablet->current_tool->wp_tablet_tool,
+                                         pointer->enter_serial,
+                                         pointer->pointer_surface,
+                                         x, y);
+        }
+      else if (seat->wl_pointer)
+        {
+          wl_pointer_set_cursor (seat->wl_pointer,
+                                 pointer->enter_serial,
+                                 pointer->pointer_surface,
+                                 x, y);
+        }
+      else
+        {
+          pointer->cursor_timeout_id = 0;
+          return G_SOURCE_REMOVE;
+        }
+
+      pointer->has_cursor_surface = TRUE;
+    }
+
+  pointer->cursor_hotspot_x = x;
+  pointer->cursor_hotspot_y = y;
 
   next_image_index =
     _gdk_wayland_cursor_get_next_image_index (GDK_WAYLAND_DISPLAY (seat->display),
