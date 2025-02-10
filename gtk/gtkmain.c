@@ -1267,6 +1267,8 @@ update_pointer_focus_state (GtkWindow *toplevel,
   GtkWidget *old_target = NULL;
   GdkEventSequence *sequence;
   GdkDevice *device;
+  GtkWidget *event_widget;
+  graphene_point_t p;
   double x, y;
   double nx, ny;
 
@@ -1277,12 +1279,18 @@ update_pointer_focus_state (GtkWindow *toplevel,
     return old_target;
 
   gdk_event_get_position (event, &x, &y);
+  p = GRAPHENE_POINT_INIT (x, y);
+
+  event_widget  = gtk_get_event_widget (event);
+  if (!gtk_widget_compute_point (event_widget, GTK_WIDGET (toplevel), &p, &p))
+    return old_target;
+
   gtk_native_get_surface_transform (GTK_NATIVE (toplevel), &nx, &ny);
-  x -= nx;
-  y -= ny;
+  p.x -= nx;
+  p.y -= ny;
 
   gtk_window_update_pointer_focus (toplevel, device, sequence,
-                                   new_target, x, y);
+                                   new_target, p.x, p.y);
 
   return old_target;
 }
