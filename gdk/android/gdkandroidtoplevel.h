@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024/25 Florian "sp1rit" <sp1rit@disroot.org>
+ * Copyright (c) 2024-2025 Florian "sp1rit" <sp1rit@disroot.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public

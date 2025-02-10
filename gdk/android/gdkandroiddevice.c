@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024 Florian "sp1rit" <sp1rit@disroot.org>
+ * Copyright (c) 2024-2025 Florian "sp1rit" <sp1rit@disroot.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -206,5 +206,25 @@ gdk_android_device_maybe_update_surface (GdkAndroidDevice  *self,
                                          timestamp, new_mods,
                                          x, y,
                                          GDK_CROSSING_NORMAL, GDK_NOTIFY_UNKNOWN);
+  gdk_android_seat_consume_event (display, ev);
+}
+
+void
+gdk_android_device_keyboard_maybe_update_surface_focus (GdkAndroidDevice  *self,
+                                                        GdkAndroidSurface *new_surface)
+{
+  g_return_if_fail (((GdkDevice *)self)->source == GDK_SOURCE_KEYBOARD);
+  if (self->last == new_surface)
+    return;
+  GdkDisplay *display = gdk_device_get_display ((GdkDevice *) self);
+  if (self->last)
+    {
+      GdkEvent *ev = gdk_focus_event_new ((GdkSurface *)self->last, (GdkDevice *)self, FALSE);
+      gdk_android_seat_consume_event (display, ev);
+      g_object_remove_weak_pointer ((GObject *) self->last, (gpointer *) &self->last);
+    }
+  self->last = new_surface;
+  g_object_add_weak_pointer ((GObject *) self->last, (gpointer *) &self->last);
+  GdkEvent *ev = gdk_focus_event_new ((GdkSurface *)self->last, (GdkDevice *)self, TRUE);
   gdk_android_seat_consume_event (display, ev);
 }
