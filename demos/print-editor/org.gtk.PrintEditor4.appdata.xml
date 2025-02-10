@@ -22,7 +22,7 @@
     <kudo>ModernToolkit</kudo>
   </kudos>
   <url type="homepage">https://www.gtk.org</url>
-  <translation type="gettext">gtk-4.0</translation>
+  <translation type="gettext">gtk40</translation>
   <update_contact>matthias.clasen_at_gmail.com</update_contact>
   <developer_name>Matthias Clasen and others</developer_name>
   <content_rating type="oars-1.1"/>
