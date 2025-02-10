@@ -144,24 +144,15 @@ object_tree_native_get_children (GObject *object)
 {
   GtkNative *native = GTK_NATIVE (object);
   GListStore *list;
-  GListModel *sublist;
 
-  list = g_list_store_new (G_TYPE_LIST_MODEL);
-
-  sublist = G_LIST_MODEL (g_list_store_new (G_TYPE_OBJECT));
+  list = g_list_store_new (G_TYPE_OBJECT);
 
   if (gtk_native_get_surface (native))
-    g_list_store_append (G_LIST_STORE (sublist), gtk_native_get_surface (native));
+    g_list_store_append (list, gtk_native_get_surface (native));
   if (gtk_native_get_renderer (native))
-    g_list_store_append (G_LIST_STORE (sublist), gtk_native_get_renderer (native));
-  g_list_store_append (list, sublist);
-  g_object_unref (sublist);
+    g_list_store_append (list, gtk_native_get_renderer (native));
 
-  sublist = object_tree_widget_get_children (object);
-  g_list_store_append (list, sublist);
-  g_object_unref (sublist);
-
-  return G_LIST_MODEL (gtk_flatten_list_model_new (G_LIST_MODEL (list)));
+  return G_LIST_MODEL (list);
 }
 
 static GListModel *
@@ -505,9 +496,9 @@ object_tree_event_controller_get_parent (GObject *object)
 }
 
 /* Note:
- * This tree must be sorted with the most specific types first.
- * We iterate over it top to bottom and return the first match
- * using g_type_is_a ()
+ * This tree should be sorted with the most specific types first.
+ * We iterate over it top to bottom and append the children to the
+ * list if g_type_is_a () matches.
  */
 static const ObjectTreeClassFuncs object_tree_class_funcs[] = {
   {
