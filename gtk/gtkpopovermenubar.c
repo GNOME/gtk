@@ -160,9 +160,11 @@ set_active_item (GtkPopoverMenuBar     *bar,
 
   if (bar->active_item)
     {
+      GtkStateFlags state = gtk_widget_get_state_flags (GTK_WIDGET (bar));
+
       if (popup || (was_popup && changed))
         open_submenu (bar->active_item);
-      else if (changed)
+      else if (changed && (state & GTK_STATE_FLAG_FOCUS_WITHIN))
         gtk_widget_grab_focus (GTK_WIDGET (bar->active_item));
     }
 }
