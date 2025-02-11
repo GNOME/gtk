@@ -1,8 +1,10 @@
-/* Fixed Layout
+/* Fixed Layout / Cube
  * #Keywords: GtkLayoutManager
  *
  * GtkFixed is a container that allows placing and transforming
  * widgets manually.
+ *
+ * This demo uses a GtkFixed to create a cube out of child widgets.
  */
 
 #include <gtk/gtk.h>
@@ -127,7 +129,7 @@ create_demo_window (GtkWidget *do_widget)
 
   window = gtk_window_new ();
   gtk_window_set_display (GTK_WINDOW (window),  gtk_widget_get_display (do_widget));
-  gtk_window_set_title (GTK_WINDOW (window), "Fixed Layout");
+  gtk_window_set_title (GTK_WINDOW (window), "Fixed Layout ‐ Cube");
   gtk_window_set_default_size (GTK_WINDOW (window), 600, 400);
   g_signal_connect (window, "destroy", G_CALLBACK (close_window), NULL);
 
