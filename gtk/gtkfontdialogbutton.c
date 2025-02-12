@@ -621,6 +621,9 @@ update_font_data (GtkFontDialogButton *self)
         }
     }
 
+  if (self->font_family == NULL)
+    return;
+
   for (unsigned i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (self->font_family)); i++)
     {
       PangoFontFace *face = g_list_model_get_item (G_LIST_MODEL (self->font_family), i);
