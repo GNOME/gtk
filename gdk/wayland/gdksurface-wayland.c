@@ -449,6 +449,14 @@ gdk_wayland_surface_commit (GdkSurface *surface)
   wl_surface_commit (impl->display_server.wl_surface);
 }
 
+/**
+ * gdk_wayland_surface_force_next_commit:
+ * @surface: (type GdkWaylandSurface): a `GdkSurface`
+ *
+ * Forces next commit.
+ *
+ * Since: 4.18
+ */
 void
 gdk_wayland_surface_force_next_commit (GdkSurface *surface)
 {

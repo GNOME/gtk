@@ -43,7 +43,7 @@ GType                    gdk_wayland_surface_get_type             (void);
 GDK_AVAILABLE_IN_ALL
 struct wl_surface       *gdk_wayland_surface_get_wl_surface       (GdkSurface *surface);
 
-GDK_AVAILABLE_IN_ALL
+GDK_AVAILABLE_IN_4_18
 void                     gdk_wayland_surface_force_next_commit    (GdkSurface *surface);
 
 G_END_DECLS
