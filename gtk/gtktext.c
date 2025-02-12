@@ -7585,13 +7585,10 @@ gtk_text_accessible_text_get_contents (GtkAccessibleText *self,
                                        unsigned int       start,
                                        unsigned int       end)
 {
-  const char *text;
-  int len;
+  char *text = gtk_text_get_display_text (GTK_TEXT (self), 0, -1);
+  int len = g_utf8_strlen (text, -1);
   char *string;
   gsize size;
-
-  text = gtk_editable_get_text (GTK_EDITABLE (self));
-  len = g_utf8_strlen (text, -1);
 
   start = CLAMP (start, 0, len);
   end = CLAMP (end, 0, len);
@@ -7609,6 +7606,8 @@ gtk_text_accessible_text_get_contents (GtkAccessibleText *self,
       size = q - p + 1;
       string = g_strndup (p, q - p);
     }
+
+  g_free (text);
 
   return g_bytes_new_take (string, size);
 }
