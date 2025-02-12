@@ -1870,7 +1870,7 @@ settings_update_xsettings (GtkSettings *settings)
 {
   int i;
 
-  for (i = 0; pspecs[i]; i++)
+  for (i = 1; i < NUM_PROPERTIES; i++)
     settings_update_xsetting (settings, pspecs[i], FALSE);
 }
 
