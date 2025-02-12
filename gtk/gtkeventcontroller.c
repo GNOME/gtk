@@ -251,20 +251,38 @@ gtk_event_controller_init (GtkEventController *controller)
   priv->limit = GTK_LIMIT_SAME_NATIVE;
 }
 
+static inline gboolean
+is_event_limit (GtkWidget *widget)
+{
+  return GTK_IS_NATIVE (widget) ||
+         gtk_widget_get_limit_events (widget);
+}
+
+/* Variant of gtk_widget_get_native() that respects GtkWidget:limit-events
+ */
+static GtkWidget *
+get_event_limit (GtkWidget *widget)
+{
+  while (widget && !is_event_limit (widget))
+    widget = _gtk_widget_get_parent (widget);
+
+  return widget;
+}
+
 static gboolean
 same_native (GtkWidget *widget,
              GtkWidget *target)
 {
-  GtkNative *native;
-  GtkNative *native2;
+  GtkWidget *limit1;
+  GtkWidget *limit2;
 
   if (!widget || !target)
     return TRUE;
 
-  native = gtk_widget_get_native (widget);
-  native2 = gtk_widget_get_native (target);
+  limit1 = get_event_limit (widget);
+  limit2 = get_event_limit (target);
 
-  return native == native2;
+  return limit1 == limit2;
 }
 
 static gboolean

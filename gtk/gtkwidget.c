@@ -551,6 +551,7 @@ enum {
   PROP_CSS_NAME,
   PROP_CSS_CLASSES,
   PROP_LAYOUT_MANAGER,
+  PROP_LIMIT_EVENTS,
   NUM_PROPERTIES,
 
   /* GtkAccessible */
@@ -1039,6 +1040,9 @@ gtk_widget_set_property (GObject      *object,
     case PROP_ACCESSIBLE_ROLE:
       gtk_widget_set_accessible_role (widget, g_value_get_enum (value));
       break;
+    case PROP_LIMIT_EVENTS:
+      gtk_widget_set_limit_events (widget, g_value_get_boolean (value));
+      break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1171,6 +1175,9 @@ gtk_widget_get_property (GObject    *object,
       break;
     case PROP_ACCESSIBLE_ROLE:
       g_value_set_enum (value, gtk_widget_get_accessible_role (widget));
+      break;
+    case PROP_LIMIT_EVENTS:
+      g_value_set_boolean (value, gtk_widget_get_limit_events (widget));
       break;
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -1646,6 +1653,23 @@ gtk_widget_class_init (GtkWidgetClass *klass)
     g_param_spec_object ("layout-manager", NULL, NULL,
                          GTK_TYPE_LAYOUT_MANAGER,
                          GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
+
+  /**
+   * GtkWidget:limit-events:
+   *
+   * Makes this widget act like a modal dialog, with respect to
+   * event delivery.
+   *
+   * Global event controllers will not handle events with targets
+   * inside the widget, unless they are set up to ignore propagation
+   * limits. See [method@Gtk.EventController.set_propagation_limit].
+   *
+   * Since: 4.18
+   */
+  widget_props[PROP_LIMIT_EVENTS] =
+      g_param_spec_boolean ("limit-events", NULL, NULL,
+                            FALSE,
+                            GTK_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY);
 
   g_object_class_install_properties (gobject_class, NUM_PROPERTIES, widget_props);
 
@@ -13375,4 +13399,47 @@ gtk_widget_set_active_state (GtkWidget *widget,
       if (priv->n_active == 0)
         gtk_widget_unset_state_flags (widget, GTK_STATE_FLAG_ACTIVE);
     }
+}
+
+/**
+ * gtk_widget_set_limit_events:
+ * @widget: a `GtkWidget`
+ * @limit_events: whether to limit events
+ *
+ * Sets whether the widget acts like a modal dialog,
+ * with respect to event delivery.
+ *
+ * Since: 4.18
+ */
+void
+gtk_widget_set_limit_events (GtkWidget *widget,
+                             gboolean   limit_events)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  if (priv->limit_events == limit_events)
+    return;
+
+  priv->limit_events = limit_events;
+  g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_LIMIT_EVENTS]);
+}
+
+/**
+ * gtk_widget_get_limit_events:
+ * @widget: a `GtkWidget`
+ *
+ * Gets the value of the [property@Gtk.Widget:limit-events] property.
+ *
+ * Since: 4.18
+ */
+gboolean
+gtk_widget_get_limit_events (GtkWidget *widget)
+{
+  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+
+  g_return_val_if_fail (GTK_IS_WIDGET (widget), FALSE);
+
+  return priv->limit_events;
 }

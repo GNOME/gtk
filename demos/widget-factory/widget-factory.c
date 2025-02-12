@@ -2247,6 +2247,7 @@ activate (GApplication *app)
                                    window);
 
   controller = gtk_shortcut_controller_new ();
+  gtk_event_controller_set_static_name (controller, "widget-factory-late-accels");
   gtk_event_controller_set_propagation_phase (controller, GTK_PHASE_BUBBLE);
 
   for (i = 0; i < G_N_ELEMENTS (late_accels); i++)

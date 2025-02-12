@@ -984,6 +984,14 @@ void                    gtk_widget_class_set_accessible_role    (GtkWidgetClass 
 GDK_AVAILABLE_IN_ALL
 GtkAccessibleRole       gtk_widget_class_get_accessible_role    (GtkWidgetClass    *widget_class);
 
+GDK_AVAILABLE_IN_4_18
+void                    gtk_widget_set_limit_events             (GtkWidget         *widget,
+                                                                 gboolean           limit_events);
+GDK_AVAILABLE_IN_4_18
+gboolean                gtk_widget_get_limit_events             (GtkWidget         *widget);
+
+
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWidget, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkRequisition, gtk_requisition_free)
 
