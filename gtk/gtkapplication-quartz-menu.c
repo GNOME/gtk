@@ -22,7 +22,6 @@
 
 #include "gtkapplicationprivate.h"
 #include "gtkicontheme.h"
-#include "gtkquartz.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 
