@@ -22,7 +22,6 @@
 
 #include "gtkapplicationprivate.h"
 #include "gtkicontheme.h"
-#include "gtkquartz.h"
 #include "gtkprivate.h"
 #include "gtkwidgetprivate.h"
 
@@ -77,63 +76,6 @@ tracker_item_changed (GObject    *object,
         [item didChangeAccel];
     }
 }
-
-#if 0
-static void
-icon_loaded (GObject      *object,
-             GAsyncResult *result,
-             gpointer      user_data)
-{
-  GtkIconPaintable *icon = GTK_ICON_PAINTABLE (object);
-  GNSMenuItem *item = user_data;
-  GError *error = NULL;
-  GdkPixbuf *pixbuf;
-  int scale = 1;
-
-  /* we need a run-time check for the backingScaleFactor selector because we
-   * may be compiling on a 10.7 framework, but targeting a 10.6 one
-   */
-  if ([[NSScreen mainScreen] respondsToSelector:@selector(backingScaleFactor)])
-    scale = roundf ([[NSScreen mainScreen] backingScaleFactor]);
-
-  pixbuf = gtk_icon_load_symbolic_finish (icon, result, NULL, &error);
-
-  if (pixbuf != NULL)
-    {
-      cairo_t *cr;
-      cairo_surface_t *surface;
-      NSImage *image;
-
-      surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
-                                            gdk_pixbuf_get_width (pixbuf),
-                                            gdk_pixbuf_get_height (pixbuf));
-
-      cr = cairo_create (surface);
-      cairo_set_operator (cr, CAIRO_OPERATOR_SOURCE);
-      gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
-      cairo_paint (cr);
-      cairo_destroy (cr);
-      g_object_unref (pixbuf);
-
-      cairo_surface_set_device_scale (surface, scale, scale);
-      image = _gtk_quartz_create_image_from_surface (surface);
-      cairo_surface_destroy (surface);
-
-      if (image != NULL)
-        [item setImage:image];
-      else
-        [item setImage:nil];
-    }
-  else
-    {
-      /* on failure to load, clear the old icon */
-      if (!g_error_matches (error, G_IO_ERROR, G_IO_ERROR_CANCELLED))
-        [item setImage:nil];
-
-      g_error_free (error);
-    }
-}
-#endif
 
 @implementation GNSMenuItem
 

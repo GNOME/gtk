@@ -83,17 +83,34 @@ static inline void
 gdk_debug_message (const char *format, ...)
 {
   va_list args;
-  char *s;
 
   va_start (args, format);
-  s = g_strdup_vprintf (format, args);
-  va_end (args);
 #ifdef GLIB_USING_SYSTEM_PRINTF
-  fprintf (stderr, "%s\n", s);
+  vfprintf (stderr, format, args);
 #else
-  g_fprintf (stderr, "%s\n", s);
+  g_vfprintf (stderr, format, args);
 #endif
-  g_free (s);
+  va_end (args);
+
+  fprintf (stderr, "\n");
+}
+
+static inline void
+gdk_help_message (const char *format, ...) G_GNUC_PRINTF(1, 2);
+static inline void
+gdk_help_message (const char *format, ...)
+{
+  va_list args;
+
+  va_start (args, format);
+#ifdef GLIB_USING_SYSTEM_PRINTF
+  vfprintf (stderr, format, args);
+#else
+  g_vfprintf (stderr, format, args);
+#endif
+  va_end (args);
+
+  fprintf (stderr, "\n");
 }
 
 #define GDK_DISPLAY_DEBUG_CHECK(display,type) \

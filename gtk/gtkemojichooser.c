@@ -917,6 +917,8 @@ filter_func (GtkFlowBoxChild *child,
   g_strfreev (term_tokens);
   g_strfreev (name_tokens);
   g_strfreev (name_tokens_en);
+  g_free (keywords_en);
+  g_free (keywords);
 
 out:
   if (res)
