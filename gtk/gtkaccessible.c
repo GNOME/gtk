@@ -1103,7 +1103,7 @@ gtk_accessible_role_is_abstract (GtkAccessibleRole role)
  * AT backends should use [method@Gtk.Accessible.get_platform_state]
  * to obtain the actual state.
  */
-void
+static void
 gtk_accessible_platform_changed (GtkAccessible               *self,
                                  GtkAccessiblePlatformChange  change)
 {
