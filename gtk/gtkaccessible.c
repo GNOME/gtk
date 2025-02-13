@@ -1109,6 +1109,9 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
 {
   GtkATContext *context;
 
+  if (change == 0)
+    return;
+
   if (GTK_IS_WIDGET (self) &&
       gtk_widget_get_root (GTK_WIDGET (self)) == NULL)
     return;
@@ -1158,6 +1161,48 @@ gtk_accessible_get_platform_state (GtkAccessible              *self,
   g_return_val_if_fail (GTK_IS_ACCESSIBLE (self), FALSE);
 
   return GTK_ACCESSIBLE_GET_IFACE (self)->get_platform_state (self, state);
+}
+
+/**
+ * gtk_accessible_update_platform_state:
+ * @self: an accessible object
+ * @state: the platform state to update
+ *
+ * Informs ATs that the platform state has changed.
+ *
+ * This function should be used by `GtkAccessible` implementations that
+ * have a platform state but are not widgets. Widgets handle platform
+ * states automatically.
+ *
+ * Since: 4.18
+ */
+void
+gtk_accessible_update_platform_state (GtkAccessible              *self,
+                                      GtkAccessiblePlatformState  state)
+{
+  GtkAccessiblePlatformChange change = 0;
+
+  g_return_if_fail (GTK_IS_ACCESSIBLE (self));
+
+  switch (state)
+    {
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE:
+      change |= GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE;
+      break;
+
+    case GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED:
+      change |= GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED;
+      break;
+
+    case GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE:
+      change |= GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  gtk_accessible_platform_changed (self, change);
 }
 
 /*< private >
