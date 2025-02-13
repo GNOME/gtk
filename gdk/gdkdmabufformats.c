@@ -25,8 +25,7 @@
 /**
  * GdkDmabufFormats:
  *
- * The `GdkDmabufFormats` struct provides information about
- * supported DMA buffer formats.
+ * Provides information about supported DMA buffer formats.
  *
  * You can query whether a given format is supported with
  * [method@Gdk.DmabufFormats.contains] and you can iterate

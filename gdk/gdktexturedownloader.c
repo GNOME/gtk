@@ -18,8 +18,7 @@
 /**
  * GdkTextureDownloader:
  *
- * The `GdkTextureDownloader` is used to download the contents of a
- * [class@Gdk.Texture].
+ * Used to download the contents of a [class@Gdk.Texture].
  *
  * It is intended to be created as a short-term object for a single download,
  * but can be used for multiple downloads of different textures or with different

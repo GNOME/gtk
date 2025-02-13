@@ -56,7 +56,7 @@
 /**
  * GdkDisplay:
  *
- * `GdkDisplay` objects are the GDK representation of a workstation.
+ * A representation of a workstation.
  *
  * Their purpose are two-fold:
  *

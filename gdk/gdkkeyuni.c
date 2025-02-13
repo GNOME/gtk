@@ -875,12 +875,12 @@ static const struct {
  * gdk_keyval_to_unicode:
  * @keyval: a GDK key symbol
  *
- * Convert from a GDK key symbol to the corresponding Unicode
+ * Converts from a GDK key symbol to the corresponding Unicode
  * character.
  *
  * Note that the conversion does not take the current locale
  * into consideration, which might be expected for particular
- * keyvals, such as %GDK_KEY_KP_Decimal.
+ * keyvals, such as `GDK_KEY_KP_Decimal`.
  *
  * Returns: the corresponding unicode character, or 0 if there
  *   is no corresponding character.
@@ -1699,10 +1699,10 @@ static const struct {
  * gdk_unicode_to_keyval:
  * @wc: a Unicode character
  *
- * Convert from a Unicode character to a key symbol.
+ * Converts from a Unicode character to a key symbol.
  *
- * Returns: the corresponding GDK key symbol, if one exists.
- *   or, if there is no corresponding symbol, wc | 0x01000000
+ * Returns: the corresponding GDK key symbol, if one exists,
+ *   or, if there is no corresponding symbol, `wc | 0x01000000`
  */
 guint
 gdk_unicode_to_keyval (guint32 wc)
@@ -1728,7 +1728,7 @@ gdk_unicode_to_keyval (guint32 wc)
       return gdk_unicode_to_keysym_tab[mid].keysym;
     }
   }
-  
+
   /*
    * No matching keysym value found, return Unicode value plus 0x01000000
    * (a convention introduced in the UTF-8 work on xterm).

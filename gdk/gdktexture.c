@@ -19,7 +19,7 @@
 /**
  * GdkTexture:
  *
- * `GdkTexture` is the basic element used to refer to pixel data.
+ * Refers to pixel data in various forms.
  *
  * It is primarily meant for pixel data that will not change over
  * multiple frames, and will be used for a long time.

@@ -26,7 +26,7 @@
 /**
  * GdkDragSurface:
  *
- * A `GdkDragSurface` is an interface for surfaces used during DND.
+ * A surface that is used during DND.
  */
 
 /**

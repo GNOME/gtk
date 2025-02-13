@@ -56,7 +56,7 @@
 /**
  * GdkSurface:
  *
- * A `GdkSurface` is a rectangular region on the screen.
+ * Represents a rectangular region on the screen.
  *
  * It’s a low-level object, used to implement high-level objects
  * such as [GtkWindow](../gtk4/class.Window.html).

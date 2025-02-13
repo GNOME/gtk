@@ -24,8 +24,7 @@
 /**
  * GdkFrameTimings:
  *
- * A `GdkFrameTimings` object holds timing information for a single frame
- * of the application’s displays.
+ * Holds timing information for a single frame of the application’s displays.
  *
  * To retrieve `GdkFrameTimings` objects, use [method@Gdk.FrameClock.get_timings]
  * or [method@Gdk.FrameClock.get_current_timings]. The information in

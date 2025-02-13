@@ -29,8 +29,7 @@
 /**
  * GdkFrameClock:
  *
- * A `GdkFrameClock` tells the application when to update and repaint
- * a surface.
+ * Tells the application when to update and repaint a surface.
  *
  * This may be synced to the vertical refresh rate of the monitor, for example.
  * Even when the frame clock uses a simple timer rather than a hardware-based

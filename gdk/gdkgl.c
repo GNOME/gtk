@@ -42,7 +42,7 @@
  * @width: The width of the region to draw
  * @height: The height of the region to draw
  *
- * The main way to not draw GL content in GTK.
+ * Draws GL content onto a cairo context.
  *
  * It takes a render buffer ID (@source_type == GL_RENDERBUFFER) or a texture
  * id (@source_type == GL_TEXTURE) and draws it onto @cr with an OVER operation,
@@ -68,15 +68,15 @@
  *   image surface.
  */
 void
-gdk_cairo_draw_from_gl (cairo_t              *cr,
-                        GdkSurface            *surface,
-                        int                   source,
-                        int                   source_type,
-                        int                   buffer_scale,
-                        int                   x,
-                        int                   y,
-                        int                   width,
-                        int                   height)
+gdk_cairo_draw_from_gl (cairo_t    *cr,
+                        GdkSurface *surface,
+                        int         source,
+                        int         source_type,
+                        int         buffer_scale,
+                        int         x,
+                        int         y,
+                        int         width,
+                        int         height)
 {
   GdkGLContext *paint_context;
   cairo_surface_t *image;

@@ -50,8 +50,8 @@ struct _GdkMemoryTextureBuilderClass
 /**
  * GdkMemoryTextureBuilder:
  *
- * `GdkMemoryTextureBuilder` is a builder used to construct [class@Gdk.Texture] objects
- * from system memory provided via [struct@GLib.Bytes].
+ * Constructs [class@Gdk.Texture] objects from system memory provided
+ * via [struct@GLib.Bytes].
  *
  * The operation is quite simple: Create a texture builder, set all the necessary
  * properties - keep in mind that the properties [property@Gdk.MemoryTextureBuilder:bytes],

@@ -30,8 +30,7 @@
 /**
  * GdkSeat:
  *
- * The `GdkSeat` object represents a collection of input devices
- * that belong to a user.
+ * Represents a collection of input devices that belong to a user.
  */
 
 typedef struct _GdkSeatPrivate GdkSeatPrivate;

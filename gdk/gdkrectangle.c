@@ -35,7 +35,7 @@
  * @width: the width of the rectangle
  * @height: the height of the rectangle
  *
- * A `GdkRectangle` data type for representing rectangles.
+ * Represents a rectangle.
  *
  * `GdkRectangle` is identical to `cairo_rectangle_t`. Together with Cairo’s
  * `cairo_region_t` data type, these are the central types for representing

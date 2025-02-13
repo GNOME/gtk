@@ -26,7 +26,7 @@
 /**
  * GdkPopup:
  *
- * A `GdkPopup` is a surface that is attached to another surface.
+ * A surface that is attached to another surface.
  *
  * The `GdkPopup` is positioned relative to its parent surface.
  *

@@ -32,7 +32,7 @@
 /**
  * GdkToplevel:
  *
- * A `GdkToplevel` is a freestanding toplevel surface.
+ * A freestanding toplevel surface.
  *
  * The `GdkToplevel` interface provides useful APIs for interacting with
  * the windowing system, such as controlling maximization and size of the

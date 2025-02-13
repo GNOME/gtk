@@ -21,8 +21,7 @@
 /**
  * GdkGLContext:
  *
- * `GdkGLContext` is an object representing a platform-specific
- * OpenGL draw context.
+ * Represents a platform-specific OpenGL draw context.
  *
  * `GdkGLContext`s are created for a surface using
  * [method@Gdk.Surface.create_gl_context], and the context will match

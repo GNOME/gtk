@@ -28,8 +28,8 @@
 /**
  * GdkContentProvider:
  *
- * A `GdkContentProvider` is used to provide content for the clipboard or
- * for drag-and-drop operations in a number of formats.
+ * Provides content for the clipboard or for drag-and-drop operations
+ * in a number of formats.
  *
  * To create a `GdkContentProvider`, use [ctor@Gdk.ContentProvider.new_for_value]
  * or [ctor@Gdk.ContentProvider.new_for_bytes].

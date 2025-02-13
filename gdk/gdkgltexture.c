@@ -31,7 +31,7 @@
 /**
  * GdkGLTexture:
  *
- * A GdkTexture representing a GL texture object.
+ * A `GdkTexture` representing a GL texture object.
  */
 
 struct _GdkGLTexture {
