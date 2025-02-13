@@ -5380,7 +5380,8 @@ gtk_widget_set_focusable (GtkWidget *widget,
 
   gtk_widget_queue_resize (widget);
 
-  gtk_accessible_platform_changed (GTK_ACCESSIBLE (widget), GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSABLE);
+  gtk_accessible_update_platform_state (GTK_ACCESSIBLE (widget),
+                                        GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSABLE);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_FOCUSABLE]);
 }
@@ -10830,7 +10831,8 @@ gtk_widget_set_has_focus (GtkWidget *widget,
 
   priv->has_focus = has_focus;
 
-  gtk_accessible_platform_changed (GTK_ACCESSIBLE (widget), GTK_ACCESSIBLE_PLATFORM_CHANGE_FOCUSED);
+  gtk_accessible_update_platform_state (GTK_ACCESSIBLE (widget),
+                                        GTK_ACCESSIBLE_PLATFORM_STATE_FOCUSED);
 
   g_object_notify_by_pspec (G_OBJECT (widget), widget_props[PROP_HAS_FOCUS]);
 }
