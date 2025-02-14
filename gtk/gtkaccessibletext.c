@@ -381,6 +381,8 @@ gtk_accessible_text_get_attributes_run (GtkAccessibleText        *self,
 
       g_free (attr_names);
       g_free (attr_values);
+      attr_names = NULL;
+      attr_values = NULL;
     }
 
   res = gtk_accessible_text_get_attributes (self,
