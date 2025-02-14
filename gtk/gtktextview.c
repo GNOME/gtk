@@ -40,6 +40,7 @@
 #include "gtkdragsourceprivate.h"
 #include "gtkdropcontrollermotion.h"
 #include "gtkemojichooser.h"
+#include "gtkimcontextpreview-private.h"
 #include "gtkimmulticontext.h"
 #include "gtkjoinedmenuprivate.h"
 #include "gtkmagnifierprivate.h"
@@ -277,7 +278,17 @@ struct _GtkTextViewPrivate
   GtkTextMark *dnd_drag_begin_mark;
   GtkTextMark *dnd_drag_end_mark;
 
+  /* im_context is a GtkIMContextPreview that allows us to set
+   * additional preview text beyond the preedit used by the
+   * undelrying input method.
+   */
   GtkIMContext *im_context;
+
+  /* im_multicontext allows the GtkTextView:im-module to be set
+   * and is a child context of @im_context.
+   */
+  GtkIMContext *im_multicontext;
+
   GtkWidget *popup_menu;
   GMenuModel *extra_menu;
 
@@ -2137,7 +2148,8 @@ gtk_text_view_init (GtkTextView *text_view)
   /* This object is completely private. No external entity can gain a reference
    * to it; so we create it here and destroy it in finalize ().
    */
-  priv->im_context = gtk_im_multicontext_new ();
+  priv->im_multicontext = gtk_im_multicontext_new ();
+  priv->im_context = gtk_im_context_preview_new (priv->im_multicontext);
 
   g_signal_connect (priv->im_context, "commit",
                     G_CALLBACK (gtk_text_view_commit_handler), text_view);
@@ -4194,6 +4206,7 @@ gtk_text_view_finalize (GObject *object)
 
   text_window_free (priv->text_window);
 
+  g_object_unref (priv->im_multicontext);
   g_object_unref (priv->im_context);
 
   g_free (priv->im_module);
@@ -4285,8 +4298,8 @@ gtk_text_view_set_property (GObject         *object,
     case PROP_IM_MODULE:
       g_free (priv->im_module);
       priv->im_module = g_value_dup_string (value);
-      if (GTK_IS_IM_MULTICONTEXT (priv->im_context))
-        gtk_im_multicontext_set_context_id (GTK_IM_MULTICONTEXT (priv->im_context), priv->im_module);
+      if (GTK_IS_IM_MULTICONTEXT (priv->im_multicontext))
+        gtk_im_multicontext_set_context_id (GTK_IM_MULTICONTEXT (priv->im_multicontext), priv->im_module);
       break;
 
     case PROP_HADJUSTMENT:

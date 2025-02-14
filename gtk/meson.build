@@ -267,6 +267,7 @@ gtk_public_sources = files([
   'gtkimage.c',
   'gtkimagedefinition.c',
   'gtkimcontext.c',
+  'gtkimcontextpreview.c',
   'gtkimcontextsimple.c',
   'gtkimmodule.c',
   'gtkimmulticontext.c',
