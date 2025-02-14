@@ -265,4 +265,8 @@ void gtk_accessible_announce (GtkAccessible                     *self,
                               const char                        *message,
                               GtkAccessibleAnnouncementPriority  priority);
 
+GDK_AVAILABLE_IN_4_18
+void gtk_accessible_update_platform_state (GtkAccessible              *self,
+                                           GtkAccessiblePlatformState  state);
+
 G_END_DECLS

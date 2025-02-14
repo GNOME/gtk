@@ -6040,7 +6040,8 @@ _gtk_window_set_is_active (GtkWindow *window,
       g_object_unref (focus);
     }
 
-  gtk_accessible_platform_changed (GTK_ACCESSIBLE (window), GTK_ACCESSIBLE_PLATFORM_CHANGE_ACTIVE);
+  gtk_accessible_update_platform_state (GTK_ACCESSIBLE (window),
+                                        GTK_ACCESSIBLE_PLATFORM_STATE_ACTIVE);
 
   g_object_notify_by_pspec (G_OBJECT (window), window_props[PROP_IS_ACTIVE]);
 }
