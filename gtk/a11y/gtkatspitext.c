@@ -225,9 +225,8 @@ accessible_text_handle_method (GDBusConnection       *connection,
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       gboolean include_defaults = FALSE;
       int offset;
-      gsize n_ranges = 0;
-      GtkAccessibleTextRange *ranges = NULL;
-      int start, end;
+      gsize n_attributes = 0;
+      int start = 0, end = 0;
       char **attr_names = NULL;
       char **attr_values = NULL;
       gboolean res;
@@ -237,10 +236,11 @@ accessible_text_handle_method (GDBusConnection       *connection,
       res = gtk_accessible_text_get_attributes_run (accessible_text,
                                                     offset,
                                                     include_defaults,
-                                                    &n_ranges,
-                                                    &ranges,
+                                                    &n_attributes,
                                                     &attr_names,
-                                                    &attr_values);
+                                                    &attr_values,
+                                                    &start,
+                                                    &end);
       if (!res)
         {
           /* No attributes */
@@ -251,17 +251,8 @@ accessible_text_handle_method (GDBusConnection       *connection,
       for (unsigned i = 0; attr_names[i] != NULL; i++)
         g_variant_builder_add (&builder, "{ss}", attr_names[i], attr_values[i]);
 
-      start = 0;
-      end = G_MAXINT;
-      for (unsigned i = 0; i < n_ranges; i++)
-        {
-          start = MAX (start, ranges[i].start);
-          end = MIN (end, start + ranges[i].length);
-        }
-
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss}ii)", &builder, start, end));
 
-      g_clear_pointer (&ranges, g_free);
       g_strfreev (attr_names);
       g_strfreev (attr_values);
     }
