@@ -30,6 +30,7 @@ G_DECLARE_FINAL_TYPE (GtkIMContextPreview, gtk_im_context_preview, GTK, IM_CONTE
 
 GtkIMContext *gtk_im_context_preview_new        (GtkIMContext        *im_context);
 void          gtk_im_context_preview_set_suffix (GtkIMContextPreview *self,
-                                                 const char          *suffix);
+                                                 const char          *suffix,
+                                                 PangoAttrList       *suffix_attrs);
 
 G_END_DECLS

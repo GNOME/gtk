@@ -908,6 +908,18 @@ selection_style_changed_cb (GtkCssNode        *node,
 }
 
 static void
+gtk_text_view_constructed (GObject *object)
+{
+  PangoAttrList *attrs;
+
+  G_OBJECT_CLASS (gtk_text_view_parent_class)->constructed (object);
+
+  attrs = pango_attr_list_new ();
+  pango_attr_list_insert (attrs, pango_attr_foreground_new (32000, 32000, 32000));
+  gtk_text_view_set_preview_text (GTK_TEXT_VIEW (object), "This is preview text.", attrs);
+}
+
+static void
 gtk_text_view_class_init (GtkTextViewClass *klass)
 {
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
@@ -915,6 +927,7 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
 
   /* Default handlers and virtual methods
    */
+  gobject_class->constructed = gtk_text_view_constructed;
   gobject_class->set_property = gtk_text_view_set_property;
   gobject_class->get_property = gtk_text_view_get_property;
   gobject_class->finalize = gtk_text_view_finalize;
@@ -10647,6 +10660,12 @@ quantize_value (GtkAdjustment *adjustment,
   return round (gtk_adjustment_get_value (adjustment) / inv_scale) * inv_scale;
 }
 
+/**
+ * gtk_text_view_set_preview_text:
+ * @self: a [class@Gtktextview.]
+ * @preview_text: the new preview text
+ * @attrs: (nullable) (transfer full): [struct@Pango.AttrList] of attributes for @preview_text.
+ */
 void
 gtk_text_view_set_preview_text (GtkTextView   *text_view,
                                 const char    *preview_text,
@@ -10654,10 +10673,9 @@ gtk_text_view_set_preview_text (GtkTextView   *text_view,
 {
   g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
 
-  /* TODO: Attrs support */
-
   gtk_im_context_preview_set_suffix (GTK_IM_CONTEXT_PREVIEW (text_view->priv->im_context),
-                                     preview_text);
+                                     preview_text,
+                                     attrs);
 
 }
 
