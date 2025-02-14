@@ -4,9 +4,9 @@
 gtk4-node-editor
 =================
 
------------------
-Editor render nodes
------------------
+-------------------------------
+View and edit render node files
+-------------------------------
 
 :Version: GTK
 :Manual section: 1
