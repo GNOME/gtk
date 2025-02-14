@@ -334,7 +334,7 @@ android:
     - git clone https://github.com/sp1ritCS/gtk-android-builder.git pixiewood
     - cp -f pixiewood/prepare/wraps/fontconfig/fontconfig.wrap subprojects/
     # Drop this as soon as Debian/the container has meson >= 1.7.0
-    - git clone --depth 1 https://github.com/mesonbuild/meson.git
+    - git clone --depth 1 https://github.com/mesonbuild/meson.git --branch 1.7.0
   script:
     - ./meson/meson.py setup
             --cross-file "${ANDROID_HOME}/toolchain.cross"
