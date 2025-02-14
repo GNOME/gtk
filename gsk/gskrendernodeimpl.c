@@ -2541,8 +2541,8 @@ gsk_border_node_get_widths (const GskRenderNode *node)
  *
  * Retrieves the colors of the border.
  *
- * Returns: (transfer none): an array of 4 `GdkRGBA` structs
- *     for the top, right, bottom and left color of the border
+ * Returns: (transfer none) (array fixed-size=4): an array of 4 `GdkRGBA`
+ *   structs for the top, right, bottom and left color of the border
  */
 const GdkRGBA *
 gsk_border_node_get_colors (const GskRenderNode *node)
@@ -2663,8 +2663,8 @@ gsk_border_node_new2 (const GskRoundedRect *outline,
  *
  * Retrieves the colors of the border.
  *
- * Returns: (transfer none): an array of 4 `GdkColor` structs
- *     for the top, right, bottom and left color of the border
+ * Returns: (transfer none) (array fixed-size=4): an array of 4 `GdkColor`
+ *   structs for the top, right, bottom and left color of the border
  */
 const GdkColor *
 gsk_border_node_get_colors2 (const GskRenderNode *node)
