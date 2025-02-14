@@ -434,6 +434,10 @@ GDK_AVAILABLE_IN_ALL
 PangoContext    *gtk_text_view_get_rtl_context        (GtkTextView      *text_view);
 GDK_AVAILABLE_IN_ALL
 PangoContext    *gtk_text_view_get_ltr_context        (GtkTextView      *text_view);
+GDK_AVAILABLE_IN_4_18
+void             gtk_text_view_set_preview_text       (GtkTextView      *text_view,
+                                                       const char       *preview_text,
+                                                       PangoAttrList    *attrs);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTextView, g_object_unref)
 

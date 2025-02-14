@@ -10647,6 +10647,20 @@ quantize_value (GtkAdjustment *adjustment,
   return round (gtk_adjustment_get_value (adjustment) / inv_scale) * inv_scale;
 }
 
+void
+gtk_text_view_set_preview_text (GtkTextView   *text_view,
+                                const char    *preview_text,
+                                PangoAttrList *attrs)
+{
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+
+  /* TODO: Attrs support */
+
+  gtk_im_context_preview_set_suffix (GTK_IM_CONTEXT_PREVIEW (text_view->priv->im_context),
+                                     preview_text);
+
+}
+
 /* {{{ GtkAccessibleText implementation */
 
 static GBytes *
