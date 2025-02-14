@@ -23,6 +23,9 @@ gtk_accessible_text_get_contents_at (GtkAccessibleText            *self,
                                      unsigned int                 *end);
 
 unsigned int
+gtk_accessible_text_get_character_count (GtkAccessibleText *self);
+
+unsigned int
 gtk_accessible_text_get_caret_position (GtkAccessibleText *self);
 
 gboolean
@@ -47,10 +50,11 @@ gboolean
 gtk_accessible_text_get_attributes_run (GtkAccessibleText        *self,
                                         unsigned int              offset,
                                         gboolean                  include_defaults,
-                                        gsize                    *n_ranges,
-                                        GtkAccessibleTextRange  **ranges,
+                                        gsize                    *n_attributes,
                                         char                   ***attribute_names,
-                                        char                   ***attribute_values);
+                                        char                   ***attribute_values,
+                                        int                      *start,
+                                        int                      *end);
 
 gboolean
 gtk_accessible_text_get_extents (GtkAccessibleText *self,

@@ -185,6 +185,33 @@ gtk_accessible_text_get_contents_at (GtkAccessibleText            *self,
 }
 
 /*< private >
+ * gtk_accessible_text_get_character_count:
+ * @self: the accessible object
+ *
+ * Returns the amount of characters that the text contains.
+ *
+ * Returns: the length of the text, in characters
+ *
+ * Since: 4.18
+ */
+unsigned int
+gtk_accessible_text_get_character_count (GtkAccessibleText *self)
+{
+  GBytes *contents;
+  const char *str;
+  gsize len;
+
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE_TEXT (self), 0);
+
+  contents = gtk_accessible_text_get_contents (self, 0, G_MAXUINT);
+  str = g_bytes_get_data (contents, NULL);
+  len = g_utf8_strlen (str, -1);
+  g_bytes_unref (contents);
+
+  return len;
+}
+
+/*< private >
  * gtk_accessible_text_get_caret_position:
  * @self: the accessible object
  *
@@ -318,13 +345,13 @@ gtk_accessible_text_get_default_attributes (GtkAccessibleText   *self,
  * @offset: the offset, in characters
  * @include_defaults: whether to include the default attributes in the
  *   returned array
- * @n_ranges: (out): the number of attributes
- * @ranges: (out) (array length=n_attributes) (optional): the ranges of the attributes
- *   inside the accessible object
+ * @n_attributes: (out): the number of attributes
  * @attribute_names: (out) (array zero-terminated=1) (element-type utf8) (optional) (transfer full):
  *   the names of the attributes inside the accessible object
  * @attribute_values: (out) (array zero-terminated=1) (element-type utf8) (optional) (transfer full):
  *   the values of the attributes inside the accessible object
+ * @start (out): the start index of the attribute run (portion of text where attributes are the same)
+ * @end (out): the end index of the attribute run (portion of text where attributes are the same)
  *
  * Retrieves the text attributes inside the accessible object.
  *
@@ -334,25 +361,26 @@ gtk_accessible_text_get_default_attributes (GtkAccessibleText   *self,
  * - a name, typically in the form of a reverse DNS identifier
  * - a value
  *
- * If this function returns true, `n_ranges` will be set to a value
- * greater than or equal to one, @ranges will be set to a newly
- * allocated array of [struct#Gtk.AccessibleTextRange] which should
- * be freed with g_free(), @attribute_names and @attribute_values
- * will be set to string arrays that should be freed with g_strfreev().
+ * If this function returns true, `n_attributes` will be set to a value
+ * greater than or equal to one, @attribute_names and @attribute_values
+ * will be set to string arrays that should be freed with g_strfreev()
+ * and @start and @end will be set to the start and end (character) index
+ * of the run.
  *
  * Returns: true if the accessible object has at least an attribute,
  *   and false otherwise
  *
- * Since: 4.14
+ * Since: 4.18
  */
 gboolean
 gtk_accessible_text_get_attributes_run (GtkAccessibleText        *self,
                                         unsigned int              offset,
                                         gboolean                  include_defaults,
-                                        gsize                    *n_ranges,
-                                        GtkAccessibleTextRange  **ranges,
+                                        gsize                    *n_attributes,
                                         char                   ***attribute_names,
-                                        char                   ***attribute_values)
+                                        char                   ***attribute_values,
+                                        int                      *start,
+                                        int                      *end)
 {
   GHashTable *attrs;
   GHashTableIter attr_iter;
@@ -361,6 +389,7 @@ gtk_accessible_text_get_attributes_run (GtkAccessibleText        *self,
   gboolean res;
   GStrvBuilder *names_builder;
   GStrvBuilder *values_builder;
+  GtkAccessibleTextRange *ranges = NULL;
 
   g_return_val_if_fail (GTK_IS_ACCESSIBLE_TEXT (self), FALSE);
 
@@ -381,12 +410,14 @@ gtk_accessible_text_get_attributes_run (GtkAccessibleText        *self,
 
       g_free (attr_names);
       g_free (attr_values);
+      attr_names = NULL;
+      attr_values = NULL;
     }
 
   res = gtk_accessible_text_get_attributes (self,
                                             offset,
-                                            n_ranges,
-                                            ranges,
+                                            n_attributes,
+                                            &ranges,
                                             &attr_names,
                                             &attr_values);
 
@@ -399,13 +430,21 @@ gtk_accessible_text_get_attributes_run (GtkAccessibleText        *self,
       return FALSE;
     }
 
+  *start = 0;
+  *end = G_MAXINT;
+
   /* The text attributes override the default ones */
-  for (unsigned i = 0; i < *n_ranges; i++)
+  for (unsigned i = 0; i < *n_attributes; i++)
     {
       g_hash_table_insert (attrs,
                            g_steal_pointer (&attr_names[i]),
                            g_steal_pointer (&attr_values[i]));
+      *start = MAX (*start, ranges[i].start);
+      *end = MIN (*end, *start + ranges[i].length);
     }
+
+  if (*end == G_MAXINT)
+    *end = gtk_accessible_text_get_character_count (self);
 
   g_free (attr_names);
   g_free (attr_values);
@@ -413,10 +452,12 @@ gtk_accessible_text_get_attributes_run (GtkAccessibleText        *self,
   names_builder = g_strv_builder_new ();
   values_builder = g_strv_builder_new ();
   g_hash_table_iter_init (&attr_iter, attrs);
+  *n_attributes = 0;
   while (g_hash_table_iter_next (&attr_iter, &key, &value))
     {
       g_strv_builder_add (names_builder, key);
       g_strv_builder_add (values_builder, value);
+      (*n_attributes)++;
     }
 
   *attribute_names = g_strv_builder_end (names_builder);
@@ -425,8 +466,9 @@ gtk_accessible_text_get_attributes_run (GtkAccessibleText        *self,
   g_strv_builder_unref (names_builder);
   g_strv_builder_unref (values_builder);
   g_hash_table_unref (attrs);
+  g_clear_pointer (&ranges, g_free);
 
-  return TRUE;
+  return *n_attributes > 0;
 }
 
 /*< private >

@@ -225,9 +225,8 @@ accessible_text_handle_method (GDBusConnection       *connection,
       GVariantBuilder builder = G_VARIANT_BUILDER_INIT (G_VARIANT_TYPE ("a{ss}"));
       gboolean include_defaults = FALSE;
       int offset;
-      gsize n_ranges = 0;
-      GtkAccessibleTextRange *ranges = NULL;
-      int start, end;
+      gsize n_attributes = 0;
+      int start = 0, end = 0;
       char **attr_names = NULL;
       char **attr_values = NULL;
       gboolean res;
@@ -237,10 +236,11 @@ accessible_text_handle_method (GDBusConnection       *connection,
       res = gtk_accessible_text_get_attributes_run (accessible_text,
                                                     offset,
                                                     include_defaults,
-                                                    &n_ranges,
-                                                    &ranges,
+                                                    &n_attributes,
                                                     &attr_names,
-                                                    &attr_values);
+                                                    &attr_values,
+                                                    &start,
+                                                    &end);
       if (!res)
         {
           /* No attributes */
@@ -251,17 +251,8 @@ accessible_text_handle_method (GDBusConnection       *connection,
       for (unsigned i = 0; attr_names[i] != NULL; i++)
         g_variant_builder_add (&builder, "{ss}", attr_names[i], attr_values[i]);
 
-      start = 0;
-      end = G_MAXINT;
-      for (unsigned i = 0; i < n_ranges; i++)
-        {
-          start = MAX (start, ranges[i].start);
-          end = MIN (end, start + ranges[i].length);
-        }
-
       g_dbus_method_invocation_return_value (invocation, g_variant_new ("(a{ss}ii)", &builder, start, end));
 
-      g_clear_pointer (&ranges, g_free);
       g_strfreev (attr_names);
       g_strfreev (attr_values);
     }
@@ -456,16 +447,7 @@ accessible_text_get_property (GDBusConnection  *connection,
 
   if (g_strcmp0 (property_name, "CharacterCount") == 0)
     {
-      GBytes *contents;
-      const char *str;
-      gsize len;
-
-      contents = gtk_accessible_text_get_contents (accessible_text, 0, G_MAXUINT);
-      str = g_bytes_get_data (contents, NULL);
-      len = g_utf8_strlen (str, -1);
-      g_bytes_unref (contents);
-
-      return g_variant_new_int32 ((int) len);
+      return g_variant_new_int32 ((int) gtk_accessible_text_get_character_count (accessible_text));
     }
   else if (g_strcmp0 (property_name, "CaretOffset") == 0)
     {
