@@ -185,6 +185,33 @@ gtk_accessible_text_get_contents_at (GtkAccessibleText            *self,
 }
 
 /*< private >
+ * gtk_accessible_text_get_character_count:
+ * @self: the accessible object
+ *
+ * Returns the amount of characters that the text contains.
+ *
+ * Returns: the length of the text, in characters
+ *
+ * Since: 4.18
+ */
+unsigned int
+gtk_accessible_text_get_character_count (GtkAccessibleText *self)
+{
+  GBytes *contents;
+  const char *str;
+  gsize len;
+
+  g_return_val_if_fail (GTK_IS_ACCESSIBLE_TEXT (self), 0);
+
+  contents = gtk_accessible_text_get_contents (self, 0, G_MAXUINT);
+  str = g_bytes_get_data (contents, NULL);
+  len = g_utf8_strlen (str, -1);
+  g_bytes_unref (contents);
+
+  return len;
+}
+
+/*< private >
  * gtk_accessible_text_get_caret_position:
  * @self: the accessible object
  *

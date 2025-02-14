@@ -456,16 +456,7 @@ accessible_text_get_property (GDBusConnection  *connection,
 
   if (g_strcmp0 (property_name, "CharacterCount") == 0)
     {
-      GBytes *contents;
-      const char *str;
-      gsize len;
-
-      contents = gtk_accessible_text_get_contents (accessible_text, 0, G_MAXUINT);
-      str = g_bytes_get_data (contents, NULL);
-      len = g_utf8_strlen (str, -1);
-      g_bytes_unref (contents);
-
-      return g_variant_new_int32 ((int) len);
+      return g_variant_new_int32 ((int) gtk_accessible_text_get_character_count (accessible_text));
     }
   else if (g_strcmp0 (property_name, "CaretOffset") == 0)
     {

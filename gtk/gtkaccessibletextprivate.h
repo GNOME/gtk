@@ -23,6 +23,9 @@ gtk_accessible_text_get_contents_at (GtkAccessibleText            *self,
                                      unsigned int                 *end);
 
 unsigned int
+gtk_accessible_text_get_character_count (GtkAccessibleText *self);
+
+unsigned int
 gtk_accessible_text_get_caret_position (GtkAccessibleText *self);
 
 gboolean
