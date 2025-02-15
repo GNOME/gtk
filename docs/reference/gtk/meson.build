@@ -104,6 +104,7 @@ endif
 
 rst2x_flags = [
   '--syntax-highlight=none',
+  '--halt=warning',
 ]
 
 if get_option('man-pages')
