@@ -21,7 +21,7 @@
 /**
  * GtkGesture:
  *
- * `GtkGesture` is the base class for gesture recognition.
+ * The base class for gesture recognition.
  *
  * Although `GtkGesture` is quite generalized to serve as a base for
  * multi-touch gestures, it is suitable to implement single-touch and

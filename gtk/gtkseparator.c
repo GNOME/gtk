@@ -34,7 +34,7 @@
 /**
  * GtkSeparator:
  *
- * `GtkSeparator` is a horizontal or vertical separator widget.
+ * Draws a horizontal or vertical line to separate other widgets.
  *
  * ![An example GtkSeparator](separator.png)
  *
@@ -49,7 +49,7 @@
  *
  * # Accessibility
  *
- * `GtkSeparator` uses the %GTK_ACCESSIBLE_ROLE_SEPARATOR role.
+ * `GtkSeparator` uses the [enum@Gtk.AccessibleRole.separator] role.
  */
 
 typedef struct _GtkSeparatorClass GtkSeparatorClass;

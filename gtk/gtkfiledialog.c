@@ -32,9 +32,11 @@
 /**
  * GtkFileDialog:
  *
- * Collects the arguments that are needed to present a file chooser
- * dialog to the user, such as a title for the dialog and whether it
- * should be modal.
+ * Asynchronous API to present a file chooser dialog.
+ *
+ * `GtkFileDialog` collects the arguments that are needed to present
+ * the dialog to the user, such as a title for the dialog and whether
+ * it should be modal.
  *
  * The dialog is shown with [method@Gtk.FileDialog.open],
  * [method@Gtk.FileDialog.save], etc.

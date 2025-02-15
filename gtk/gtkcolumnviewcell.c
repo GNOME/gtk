@@ -26,12 +26,12 @@
 /**
  * GtkColumnViewCell:
  *
- * `GtkColumnViewCell` is used by [class@Gtk.ColumnViewColumn] to represent items
- * in a cell in [class@Gtk.ColumnView].
+ * Represents items in a cell in [class@Gtk.ColumnView].
  *
- * The `GtkColumnViewCell`s are managed by the columnview widget (with its factory)
- * and cannot be created by applications, but they need to be populated
- * by application code. This is done by calling [method@Gtk.ColumnViewCell.set_child].
+ * The `GtkColumnViewCell`s are managed by the [class@Gtk.ColumnView]
+ * widget (with its factory) and cannot be created by applications, but
+ * they need to be populated by application code. This is done by calling
+ * [method@Gtk.ColumnViewCell.set_child].
  *
  * `GtkColumnViewCell`s exist in 2 stages:
  *

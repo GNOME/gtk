@@ -35,9 +35,9 @@ G_BEGIN_DECLS
  * @args: (nullable): The arguments passed to the activation
  * @user_data: (nullable): The user data provided when activating the action
  *
- * Prototype for shortcuts based on user callbacks.
+ * Type for shortcuts based on user callbacks.
  *
- * Returns: %TRUE if the action was successful.
+ * Returns: true if the action was successful
  */
 typedef gboolean (* GtkShortcutFunc) (GtkWidget *widget,
                                       GVariant  *args,
@@ -49,7 +49,7 @@ typedef gboolean (* GtkShortcutFunc) (GtkWidget *widget,
  *   action that can be activated. If this flag is not set,
  *   a future activation may select a different action.
  *
- * List of flags that can be passed to action activation.
+ * Flags that can be passed to action activation.
  *
  * More flags may be added in the future.
  **/
@@ -79,7 +79,7 @@ gboolean                gtk_shortcut_action_activate            (GtkShortcutActi
 /**
  * GtkNothingAction:
  *
- * A `GtkShortcutAction` that does nothing.
+ * Does nothing.
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkNothingAction, gtk_nothing_action, GTK, NOTHING_ACTION, GtkShortcutAction)
@@ -92,7 +92,7 @@ GtkShortcutAction *     gtk_nothing_action_get                  (void);
 /**
  * GtkCallbackAction:
  *
- * A `GtkShortcutAction` that invokes a callback.
+ * Invokes a callback.
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkCallbackAction, gtk_callback_action, GTK, CALLBACK_ACTION, GtkShortcutAction)
@@ -107,7 +107,9 @@ GtkShortcutAction *     gtk_callback_action_new                 (GtkShortcutFunc
 /**
  * GtkMnemonicAction:
  *
- * A `GtkShortcutAction` that calls gtk_widget_mnemonic_activate().
+ * Activates a widget with a mnemonic.
+ *
+ * This means that [method@Gtk.Widget.mnemonic_activate] is called.
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkMnemonicAction, gtk_mnemonic_action, GTK, MNEMONIC_ACTION, GtkShortcutAction)
@@ -120,7 +122,9 @@ GtkShortcutAction *     gtk_mnemonic_action_get                 (void);
 /**
  * GtkActivateAction:
  *
- * A `GtkShortcutAction` that calls gtk_widget_activate().
+ * Activates a widget.
+ *
+ * Widgets are activated by calling [method@Gtk.Widget.activate].
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkActivateAction, gtk_activate_action, GTK, ACTIVATE_ACTION, GtkShortcutAction)
@@ -133,10 +137,10 @@ GtkShortcutAction *     gtk_activate_action_get                 (void);
 /**
  * GtkSignalAction:
  *
- * A `GtkShortcut`Action that emits a signal.
+ * Emits a signal on a widget.
  *
  * Signals that are used in this way are referred to as keybinding signals,
- * and they are expected to be defined with the %G_SIGNAL_ACTION flag.
+ * and they are expected to be defined with the `G_SIGNAL_ACTION` flag.
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkSignalAction, gtk_signal_action, GTK, SIGNAL_ACTION, GtkShortcutAction)
@@ -151,7 +155,11 @@ const char *            gtk_signal_action_get_signal_name       (GtkSignalAction
 /**
  * GtkNamedAction:
  *
- * A `GtkShortcutAction` that activates an action by name.
+ * Activates a named action.
+ *
+ * See [method@Gtk.WidgetClass.install_action] and
+ * [method@Gtk.Widget.insert_action_group] for ways
+ * to associate named actions with widgets.
  */
 GDK_AVAILABLE_IN_ALL
 GDK_DECLARE_INTERNAL_TYPE (GtkNamedAction, gtk_named_action, GTK, NAMED_ACTION, GtkShortcutAction)

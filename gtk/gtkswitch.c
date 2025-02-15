@@ -26,7 +26,7 @@
 /**
  * GtkSwitch:
  *
- * `GtkSwitch` is a "light switch" that has two states: on or off.
+ * Shows a "light switch" that has two states: on or off.
  *
  * ![An example GtkSwitch](switch.png)
  *
@@ -62,7 +62,7 @@
  *
  * # Accessibility
  *
- * `GtkSwitch` uses the %GTK_ACCESSIBLE_ROLE_SWITCH role.
+ * `GtkSwitch` uses the [enum@Gtk.AccessibleRole.switch] role.
  */
 
 #include "config.h"

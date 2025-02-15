@@ -33,7 +33,7 @@
 /**
  * GtkOverlayLayout:
  *
- * `GtkOverlayLayout` is the layout manager used by [class@Gtk.Overlay].
+ * The layout manager used by [class@Gtk.Overlay].
  *
  * It places widgets as overlays on top of the main child.
  *

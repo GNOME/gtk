@@ -26,7 +26,7 @@
 /**
  * GtkListItemFactory:
  *
- * A `GtkListItemFactory` creates widgets for the items taken from a `GListModel`.
+ * Creates widgets for the items taken from a `GListModel`.
  *
  * This is one of the core concepts of handling list widgets such
  * as [class@Gtk.ListView] or [class@Gtk.GridView].

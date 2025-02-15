@@ -99,7 +99,7 @@ typedef enum
  * @GTK_ARROW_RIGHT: Represents a right pointing arrow.
  * @GTK_ARROW_NONE: No arrow.
  *
- * Used to indicate the direction in which an arrow should point.
+ * Indicates the direction in which an arrow should point.
  */
 typedef enum
 {

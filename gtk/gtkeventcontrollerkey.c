@@ -20,8 +20,7 @@
 /**
  * GtkEventControllerKey:
  *
- * `GtkEventControllerKey` is an event controller that provides access
- * to key events.
+ * Provides access to key events.
  */
 
 #include "config.h"

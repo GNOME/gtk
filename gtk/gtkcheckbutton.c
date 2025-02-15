@@ -40,7 +40,7 @@
 /**
  * GtkCheckButton:
  *
- * A `GtkCheckButton` places a label next to an indicator.
+ * Places a label next to an indicator.
  *
  * ![Example GtkCheckButtons](check-button.png)
  *
@@ -102,7 +102,7 @@
  *
  * # Accessibility
  *
- * `GtkCheckButton` uses the %GTK_ACCESSIBLE_ROLE_CHECKBOX role.
+ * `GtkCheckButton` uses the [enum@Gtk.AccessibleRole.checkbox] role.
  */
 
 typedef struct {

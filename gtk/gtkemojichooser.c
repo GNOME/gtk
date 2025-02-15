@@ -40,8 +40,7 @@
 /**
  * GtkEmojiChooser:
  *
- * The `GtkEmojiChooser` is used by text widgets such as `GtkEntry` or
- * `GtkTextView` to let users insert Emoji characters.
+ * Used by text widgets to let users insert Emoji characters.
  *
  * ![An example GtkEmojiChooser](emojichooser.png)
  *

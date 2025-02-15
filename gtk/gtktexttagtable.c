@@ -39,7 +39,7 @@
 /**
  * GtkTextTagTable:
  *
- * The collection of tags in a `GtkTextBuffer`
+ * Collects the tags in a `GtkTextBuffer`.
  *
  * You may wish to begin by reading the
  * [text widget conceptual overview](section-text-widget.html),

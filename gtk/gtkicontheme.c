@@ -66,7 +66,7 @@
 /**
  * GtkIconTheme:
  *
- * `GtkIconTheme` provides a facility for loading themed icons.
+ * Loads themed icons.
  *
  * The main reason for using a name rather than simply providing a filename
  * is to allow different icons to be used depending on what “icon theme” is

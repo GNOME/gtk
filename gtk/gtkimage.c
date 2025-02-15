@@ -40,7 +40,7 @@
 /**
  * GtkImage:
  *
- * The `GtkImage` widget displays an image.
+ * Displays an image.
  *
  * ![An example GtkImage](image.png)
  *
@@ -78,7 +78,7 @@
  *
  * ## Accessibility
  *
- * `GtkImage` uses the `GTK_ACCESSIBLE_ROLE_IMG` role.
+ * `GtkImage` uses the [enum@Gtk.AccessibleRole.img] role.
  */
 
 typedef struct _GtkImageClass GtkImageClass;

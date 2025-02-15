@@ -20,7 +20,7 @@
 /**
  * GtkGestureStylus:
  *
- * `GtkGestureStylus` is a `GtkGesture` specific to stylus input.
+ * Recognizes tablet stylus input.
  *
  * The provided signals just relay the basic information of the
  * stylus events.

@@ -39,7 +39,7 @@
 /**
  * GtkIMContextSimple:
  *
- * `GtkIMContextSimple` is an input method supporting table-based input methods.
+ * Supports compose sequences, dead keys and numeric Unicode input.
  *
  * ## Compose sequences
  *

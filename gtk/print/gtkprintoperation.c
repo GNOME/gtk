@@ -38,7 +38,7 @@
 /**
  * GtkPrintOperation:
  *
- * `GtkPrintOperation` is the high-level, portable printing API.
+ * High-level, portable printing API.
  *
  * It looks a bit different than other GTK dialogs such as the
  * `GtkFileChooser`, since some platforms don’t expose enough

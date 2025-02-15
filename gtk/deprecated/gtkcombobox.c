@@ -106,7 +106,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * ## Accessibility
  *
- * `GtkComboBox` uses the %GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
+ * `GtkComboBox` uses the [enum@Gtk.AccessibleRole.combo_box] role.
  *
  * Deprecated: 4.10: Use [class@Gtk.DropDown] instead
  */

@@ -36,8 +36,7 @@
 /**
  * GtkFrame:
  *
- * `GtkFrame` is a widget that surrounds its child with a decorative
- * frame and an optional label.
+ * Surrounds its child with a decorative frame and an optional label.
  *
  * ![An example GtkFrame](frame.png)
  *
@@ -81,7 +80,7 @@
  *
  * # Accessibility
  *
- * `GtkFrame` uses the `GTK_ACCESSIBLE_ROLE_GROUP` role.
+ * `GtkFrame` uses the [enum@Gtk.AccessibleRole.group] role.
  */
 
 typedef struct

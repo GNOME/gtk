@@ -28,7 +28,7 @@
 /**
  * GtkStringList:
  *
- * `GtkStringList` is a list model that wraps an array of strings.
+ * A list model that wraps an array of strings.
  *
  * The objects in the model are of type [class@Gtk.StringObject] and have
  * a "string" property that can be used inside expressions.
@@ -62,7 +62,7 @@
 /**
  * GtkStringObject:
  *
- * `GtkStringObject` is the type of items in a `GtkStringList`.
+ * The type of items in a `GtkStringList`.
  *
  * A `GtkStringObject` is a wrapper around a `const char*`; it has
  * a [property@Gtk.StringObject:string] property that can be used

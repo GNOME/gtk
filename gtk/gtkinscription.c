@@ -35,7 +35,7 @@
 /**
  * GtkInscription:
  *
- * `GtkInscription` is a widget to show text in a predefined area.
+ * Shows text in a predefined area.
  *
  * You likely want to use `GtkLabel` instead as this widget is intended only
  * for a small subset of use cases. The main scenario envisaged is inside lists

@@ -27,7 +27,7 @@
 /**
  * GtkTreeListModel:
  *
- * `GtkTreeListModel` is a list model that can create child models on demand.
+ * A list model that can create child models on demand.
  */
 
 enum {
@@ -931,7 +931,7 @@ gtk_tree_list_model_get_child_row (GtkTreeListModel *self,
 /**
  * GtkTreeListRow:
  *
- * `GtkTreeListRow` is used by `GtkTreeListModel` to represent items.
+ * The type of item used by `GtkTreeListModel`.
  *
  * It allows navigating the model as a tree and modify the state of rows.
  *

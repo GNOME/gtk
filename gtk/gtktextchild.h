@@ -38,8 +38,7 @@ G_BEGIN_DECLS
 /**
  * GtkTextChildAnchor:
  *
- * A `GtkTextChildAnchor` is a spot in a `GtkTextBuffer` where child widgets can
- * be “anchored”.
+ * Marks a spot in a `GtkTextBuffer` where child widgets can be “anchored”.
  *
  * The anchor can have multiple widgets anchored, to allow for multiple views.
  */

@@ -27,14 +27,14 @@
 /**
  * GtkStringSorter:
  *
- * `GtkStringSorter` is a `GtkSorter` that compares strings.
+ * Sorts items by comparing strings.
+ *
+ * To obtain the strings to compare, this sorter evaluates a
+ * [class@Gtk.Expression].
  *
  * It does the comparison in a linguistically correct way using the
  * current locale by normalizing Unicode strings and possibly case-folding
  * them before performing the comparison.
- *
- * To obtain the strings to compare, this sorter evaluates a
- * [class@Gtk.Expression].
  */
 
 struct _GtkStringSorter

@@ -39,8 +39,7 @@
 /**
  * GtkStack:
  *
- * `GtkStack` is a container which only shows one of its children
- * at a time.
+ * Shows one of its children at a time.
  *
  * In contrast to `GtkNotebook`, `GtkStack` does not provide a means
  * for users to change the visible child. Instead, a separate widget
@@ -84,7 +83,7 @@
  *
  * # Accessibility
  *
- * `GtkStack` uses the %GTK_ACCESSIBLE_ROLE_TAB_PANEL for the stack
+ * `GtkStack` uses the [enum@Gtk.AccessibleRole.tab_panel] role for the stack
  * pages, which are the accessible parent objects of the child widgets.
  */
 
@@ -122,7 +121,7 @@
 /**
  * GtkStackPage:
  *
- * `GtkStackPage` is an auxiliary class used by `GtkStack`.
+ * `An auxiliary class used by `GtkStack`.
  */
 
 /* TODO:

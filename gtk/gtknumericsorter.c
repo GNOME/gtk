@@ -29,7 +29,7 @@
 /**
  * GtkNumericSorter:
  *
- * `GtkNumericSorter` is a `GtkSorter` that compares numbers.
+ * Sorts items numerically.
  *
  * To obtain the numbers to compare, this sorter evaluates a
  * [class@Gtk.Expression].

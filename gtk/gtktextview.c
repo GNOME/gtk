@@ -66,7 +66,7 @@
 /**
  * GtkTextView:
  *
- * A widget that displays the contents of a [class@Gtk.TextBuffer].
+ * Displays the contents of a [class@Gtk.TextBuffer].
  *
  * ![An example GtkTextView](multiline-text.png)
  *
@@ -136,7 +136,7 @@
  *
  * ## Accessibility
  *
- * `GtkTextView` uses the %GTK_ACCESSIBLE_ROLE_TEXT_BOX role.
+ * `GtkTextView` uses the [enum@Gtk.AccessibleRole.text_box] role.
  */
 
 /* How scrolling, validation, exposes, etc. work.

@@ -60,7 +60,7 @@
 /**
  * GtkScrolledWindow:
  *
- * `GtkScrolledWindow` is a container that makes its child scrollable.
+ * Makes its child scrollable.
  *
  * It does so using either internally added scrollbars or externally
  * associated adjustments, and optionally draws a frame around the child.
@@ -131,9 +131,10 @@
  *
  * # Accessibility
  *
- * Until GTK 4.10, `GtkScrolledWindow` used the `GTK_ACCESSIBLE_ROLE_GROUP` role.
+ * Until GTK 4.10, `GtkScrolledWindow` used the [enum@Gtk.AccessibleRole.group] role.
  *
- * Starting from GTK 4.12, `GtkScrolledWindow` uses the `GTK_ACCESSIBLE_ROLE_GENERIC` role.
+ * Starting from GTK 4.12, `GtkScrolledWindow` uses the [enum@Gtk.AccessibleRole.generic]
+ * role.
  */
 
 /* scrolled window policy and size requisition handling:

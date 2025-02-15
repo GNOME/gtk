@@ -46,7 +46,7 @@
 /**
  * GtkScale:
  *
- * A `GtkScale` is a slider control used to select a numeric value.
+ * Allows to select a numeric value with a slider control.
  *
  * ![An example GtkScale](scales.png)
  *
@@ -134,7 +134,7 @@
  *
  * # Accessibility
  *
- * `GtkScale` uses the %GTK_ACCESSIBLE_ROLE_SLIDER role.
+ * `GtkScale` uses the [enum@Gtk.AccessibleRole.slider] role.
  */
 
 

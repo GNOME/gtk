@@ -34,8 +34,7 @@
 /**
  * GtkGraphicsOffload:
  *
- * A widget that allows to bypass gsk rendering for its child by passing the content
- * directly to the compositor.
+ * Bypasses gsk rendering by passing the content of its child directly to the compositor.
  *
  * Graphics offload is an optimization to reduce overhead and battery use that is
  * most useful for video content. It only works on some platforms and in certain

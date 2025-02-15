@@ -26,9 +26,9 @@
 /**
  * GtkBitset: (ref-func gtk_bitset_ref) (unref-func gtk_bitset_unref)
  *
- * A `GtkBitset` represents a set of unsigned integers.
+ * A set of unsigned integers.
  *
- * Another name for this data structure is "bitmap".
+ * Another name for this data structure is “bitmap”.
  *
  * The current implementation is based on [roaring bitmaps](https://roaringbitmap.org/).
  *

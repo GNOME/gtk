@@ -39,7 +39,7 @@
 /**
  * GtkVideo:
  *
- * `GtkVideo` is a widget to show a `GtkMediaStream` with media controls.
+ * Shows a `GtkMediaStream` with media controls.
  *
  * ![An example GtkVideo](video.png)
  *

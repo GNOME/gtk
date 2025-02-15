@@ -38,7 +38,7 @@ G_BEGIN_DECLS
 /**
  * GtkListBase:
  *
- * `GtkListBase` is the abstract base class for GTK's list widgets.
+ * The abstract base class for GTK's list widgets.
  *
  * # Shortcuts and Gestures
  *

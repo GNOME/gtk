@@ -28,7 +28,7 @@
 /**
  * GtkSorter:
  *
- * `GtkSorter` is an object to describe sorting criteria.
+ * Describes sorting criteria for a [class@Gtk.SortListModel].
  *
  * Its primary user is [class@Gtk.SortListModel]
  *

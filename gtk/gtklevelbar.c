@@ -21,7 +21,7 @@
 /**
  * GtkLevelBar:
  *
- * `GtkLevelBar` is a widget that can be used as a level indicator.
+ * Shows a level indicator.
  *
  * Typical use cases are displaying the strength of a password, or
  * showing the charge level of a battery.
@@ -117,7 +117,7 @@
  *
  * # Accessibility
  *
- * `GtkLevelBar` uses the %GTK_ACCESSIBLE_ROLE_METER role.
+ * `GtkLevelBar` uses the [enum@Gtk.AccessibleRole.meter] role.
  */
 #include "config.h"
 

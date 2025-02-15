@@ -26,8 +26,7 @@
 /**
  * GtkCustomSorter:
  *
- * `GtkCustomSorter` is a `GtkSorter` implementation that sorts via a callback
- * function.
+ * Sorts items via a callback function.
  */
 struct _GtkCustomSorter
 {

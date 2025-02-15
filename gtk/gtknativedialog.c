@@ -32,10 +32,10 @@
 /**
  * GtkNativeDialog:
  *
- * Native dialogs are platform dialogs that don't use `GtkDialog`.
+ * Base class for platform dialogs that don't use `GtkDialog`.
  *
- * They are used in order to integrate better with a platform, by
- * looking the same as other native applications and supporting
+ * Native dialogs are used in order to integrate better with a platform,
+ * by looking the same as other native applications and supporting
  * platform specific features.
  *
  * The [class@Gtk.Dialog] functions cannot be used on such objects,

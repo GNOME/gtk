@@ -20,7 +20,7 @@
 /**
  * GtkConstraint:
  *
- * `GtkConstraint` describes a constraint between attributes of two widgets,
+ * Describes a constraint between attributes of two widgets,
  *  expressed as a linear equation.
  *
  * The typical equation for a constraint is:

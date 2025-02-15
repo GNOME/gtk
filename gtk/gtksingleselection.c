@@ -28,8 +28,7 @@
 /**
  * GtkSingleSelection:
  *
- * `GtkSingleSelection` is a `GtkSelectionModel` that allows selecting a single
- * item.
+ * A selection model that allows selecting a single item.
  *
  * Note that the selection is *persistent* -- if the selected item is removed
  * and re-added in the same [signal@Gio.ListModel::items-changed] emission, it

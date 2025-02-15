@@ -157,7 +157,7 @@ struct _GtkAccessibleInterface
 /**
  * GtkAccessibleList:
  *
- * A boxed type which wraps a list of references to GtkAccessible objects.
+ * Wraps a list of references to [iface@Gtk.Accessible] objects.
  *
  * Since: 4.14
  */

@@ -27,8 +27,7 @@
 /**
  * GtkSelectionFilterModel:
  *
- * `GtkSelectionFilterModel` is a list model that presents the selection from
- * a `GtkSelectionModel`.
+ * A list model that presents the selection from a `GtkSelectionModel`.
  */
 
 enum {

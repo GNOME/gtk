@@ -55,7 +55,7 @@
 /**
  * GtkTextMark:
  *
- * A `GtkTextMark` is a position in a `GtkTextbuffer` that is preserved
+ * Marks a position in a `GtkTextbuffer` that is preserved
  * across modifications.
  *
  * You may wish to begin by reading the

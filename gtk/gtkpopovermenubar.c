@@ -21,8 +21,7 @@
 /**
  * GtkPopoverMenuBar:
  *
- * `GtkPopoverMenuBar` presents a horizontal bar of items that pop
- * up popover menus when clicked.
+ * Presents a horizontal bar of items that pop up menus when clicked.
  *
  * ![An example GtkPopoverMenuBar](menubar.png)
  *
@@ -47,9 +46,9 @@
  *
  * # Accessibility
  *
- * `GtkPopoverMenuBar` uses the %GTK_ACCESSIBLE_ROLE_MENU_BAR role,
- * the menu items use the %GTK_ACCESSIBLE_ROLE_MENU_ITEM role and
- * the menus use the %GTK_ACCESSIBLE_ROLE_MENU role.
+ * `GtkPopoverMenuBar` uses the [enum@Gtk.AccessibleRole.menu_bar] role,
+ * the menu items use the [enum@Gtk.AccessibleRole.menu_item] role and
+ * the menus use the [enum@Gtk.AccessibleRole.menu] role.
  */
 
 

@@ -28,8 +28,7 @@
 /**
  * GtkMultiSelection:
  *
- * `GtkMultiSelection` is a `GtkSelectionModel` that allows selecting multiple
- * elements.
+ * A selection model that allows selecting multiple elements.
  */
 
 struct _GtkMultiSelection

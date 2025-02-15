@@ -33,9 +33,10 @@ typedef struct _GtkRequestedSize         GtkRequestedSize;
  * @minimum_size: The minimum size needed for allocation in a given orientation
  * @natural_size: The natural size for allocation in a given orientation
  *
- * Represents a request of a screen object in a given orientation. These
- * are primarily used in container implementations when allocating a natural
- * size for children calling. See [func@distribute_natural_allocation].
+ * Represents a request of a screen object in a given orientation.
+ *
+ * These are primarily used in container implementations when allocating
+ * a natural size for children. See [func@distribute_natural_allocation].
  */
 struct _GtkRequestedSize
 {

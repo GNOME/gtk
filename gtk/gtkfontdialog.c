@@ -31,8 +31,11 @@
 /**
  * GtkFontDialog:
  *
- * Collects the arguments that are needed to present a font chooser dialog
- * to the user, such as a title for the dialog and whether it should be modal.
+ * Asynchronous API to present a font chooser dialog.
+ *
+ * `GtkFontDialog` collects the arguments that are needed to present
+ * the dialog to the user, such as a title for the dialog and whether
+ * it should be modal.
  *
  * The dialog is shown with the [method@Gtk.FontDialog.choose_font]
  * function or its variants.

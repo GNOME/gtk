@@ -63,7 +63,7 @@
 /**
  * GtkScaleButton:
  *
- * `GtkScaleButton` provides a button which pops up a scale widget.
+ * Provides a button which pops up a scale widget.
  *
  * This kind of widget is commonly used for volume controls in multimedia
  * applications, and GTK provides a [class@Gtk.VolumeButton] subclass that

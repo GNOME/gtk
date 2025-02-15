@@ -40,8 +40,7 @@ static void     update_button_sensitivity
 /**
  * GtkFontDialogButton:
  *
- * The `GtkFontDialogButton` is wrapped around a [class@Gtk.FontDialog]
- * and allows to open a font chooser dialog to change the font.
+ * Opens a font chooser dialog to select a font.
  *
  * ![An example GtkFontDialogButton](font-button.png)
  *

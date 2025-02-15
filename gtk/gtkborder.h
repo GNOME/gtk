@@ -44,9 +44,9 @@ typedef struct _GtkBorder GtkBorder;
  * @top: The width of the top border
  * @bottom: The width of the bottom border
  *
- * A struct that specifies a border around a rectangular area.
+ * Specifies a border around a rectangular area.
  *
- * Each side can have different width.
+ * Each side can have a different width.
  */
 struct _GtkBorder
 {

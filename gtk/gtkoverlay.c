@@ -34,8 +34,7 @@
 /**
  * GtkOverlay
  *
- * `GtkOverlay` is a container which contains a single main child, on top
- * of which it can place “overlay” widgets.
+ * Places “overlay” widgets on top of a single main child.
  *
  * ![An example GtkOverlay](overlay.png)
  *

@@ -44,7 +44,7 @@
 /**
  * GtkGridView:
  *
- * `GtkGridView` presents a large dynamic grid of items.
+ * Presents a large dynamic grid of items.
  *
  * `GtkGridView` uses its factory to generate one child widget for each
  * visible item and shows them in a grid. The orientation of the grid view
@@ -84,8 +84,8 @@
  *
  * # Accessibility
  *
- * `GtkGridView` uses the %GTK_ACCESSIBLE_ROLE_GRID role, and the items
- * use the %GTK_ACCESSIBLE_ROLE_GRID_CELL role.
+ * `GtkGridView` uses the [enum@Gtk.AccessibleRole.grid] role, and the items
+ * use the [enum@Gtk.AccessibleRole.grid_cell] role.
  */
 
 struct _GtkGridView

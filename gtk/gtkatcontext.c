@@ -21,8 +21,7 @@
 /**
  * GtkATContext:
  *
- * `GtkATContext` is an abstract class provided by GTK to communicate to
- * platform-specific assistive technologies API.
+ * Communicates with platform-specific assistive technologies API.
  *
  * Each platform supported by GTK implements a `GtkATContext` subclass, and
  * is responsible for updating the accessible state in response to state

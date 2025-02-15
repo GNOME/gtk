@@ -39,7 +39,7 @@
 /**
  * GtkListBox:
  *
- * `GtkListBox` is a vertical list.
+ * Shows a vertical list.
  *
  * A `GtkListBox` only contains `GtkListBoxRow` children. These rows can
  * by dynamically sorted and filtered, and headers can be added dynamically
@@ -99,14 +99,17 @@
  *
  * # Accessibility
  *
- * `GtkListBox` uses the %GTK_ACCESSIBLE_ROLE_LIST role and `GtkListBoxRow` uses
- * the %GTK_ACCESSIBLE_ROLE_LIST_ITEM role.
+ * `GtkListBox` uses the [enum@Gtk.AccessibleRole.list] role and `GtkListBoxRow` uses
+ * the [enum@Gtk.AccessibleRole.list_item] role.
  */
 
 /**
  * GtkListBoxRow:
  *
- * `GtkListBoxRow` is the kind of widget that can be added to a `GtkListBox`.
+ * The kind of widget that can be added to a `GtkListBox`.
+ *
+ * [class@Gtk.ListBox] will automatically wrap its children in a `GtkListboxRow`
+ * when necessary.
  */
 
 typedef struct _GtkListBoxClass   GtkListBoxClass;

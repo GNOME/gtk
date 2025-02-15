@@ -60,7 +60,7 @@ static guint signals[LAST_SIGNAL] = { 0, };
 /**
  * GtkDrawingArea:
  *
- * `GtkDrawingArea` is a widget that allows drawing with cairo.
+ * Allows drawing with cairo.
  *
  * ![An example GtkDrawingArea](drawingarea.png)
  *

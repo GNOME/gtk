@@ -28,7 +28,7 @@
 /**
  * GtkMapListModel:
  *
- * A `GtkMapListModel` maps the items in a list model to different items.
+ * A list model that maps the items in another model to different items.
  *
  * `GtkMapListModel` uses a [callback@Gtk.MapListModelMapFunc].
  *

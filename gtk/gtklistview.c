@@ -42,7 +42,7 @@
 /**
  * GtkListView:
  *
- * `GtkListView` presents a large dynamic list of items.
+ * Presents a large dynamic list of items.
  *
  * `GtkListView` uses its factory to generate one row widget for each visible
  * item and shows them in a linear display, either vertically or horizontally.
@@ -144,8 +144,8 @@
  *
  * # Accessibility
  *
- * `GtkListView` uses the %GTK_ACCESSIBLE_ROLE_LIST role, and the list
- * items use the %GTK_ACCESSIBLE_ROLE_LIST_ITEM role.
+ * `GtkListView` uses the [enum@Gtk.AccessibleRole.list] role, and the list
+ * items use the [enum@Gtk.AccessibleRole.list_item] role.
  */
 
 enum

@@ -29,8 +29,8 @@
 /**
  * GtkBuilderListItemFactory:
  *
- * `GtkBuilderListItemFactory` is a `GtkListItemFactory` that creates
- * widgets by instantiating `GtkBuilder` UI templates.
+ * A `GtkListItemFactory` that creates widgets by instantiating `GtkBuilder`
+ * UI templates.
  *
  * The templates must extend the class that the parent widget expects.
  * For example, a factory provided to [property@Gtk.ListView:factory] must have

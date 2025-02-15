@@ -58,7 +58,7 @@
 /**
  * GtkAboutDialog:
  *
- * A simple way to display information about a program.
+ * Displays information about a program.
  *
  * The shown information includes the programs' logo, name, copyright,
  * website and license. It is also possible to give credits to the authors,

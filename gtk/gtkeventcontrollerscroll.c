@@ -20,8 +20,7 @@
 /**
  * GtkEventControllerScroll:
  *
- * `GtkEventControllerScroll` is an event controller that handles scroll
- * events.
+ * Handles scroll events.
  *
  * It is capable of handling both discrete and continuous scroll
  * events from mice or touchpads, abstracting them both with the

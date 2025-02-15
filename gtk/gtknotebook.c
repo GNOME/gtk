@@ -61,8 +61,7 @@
 /**
  * GtkNotebook:
  *
- * `GtkNotebook` is a container whose children are pages switched
- * between using tabs.
+ * Switches between children using tabs.
  *
  * ![An example GtkNotebook](notebook.png)
  *
@@ -174,16 +173,16 @@
  *
  * `GtkNotebook` uses the following roles:
  *
- *  - %GTK_ACCESSIBLE_ROLE_GROUP for the notebook widget
- *  - %GTK_ACCESSIBLE_ROLE_TAB_LIST for the list of tabs
- *  - %GTK_ACCESSIBLE_ROLE_TAB role for each tab
- *  - %GTK_ACCESSIBLE_ROLE_TAB_PANEL for each page
+ *  - [enum@Gtk.AccessibleRole.group] for the notebook widget
+ *  - [enum@Gtk.AccessibleRole.tab_list] for the list of tabs
+ *  - [enum@Gtk.AccessibleRole.tab] role for each tab
+ *  - [enum@Gtk.AccessibleRole.tab_panel] for each page
  */
 
 /**
  * GtkNotebookPage:
  *
- * `GtkNotebookPage` is an auxiliary object used by `GtkNotebook`.
+ * An auxiliary object used by `GtkNotebook`.
  */
 
 #define SCROLL_DELAY_FACTOR   5

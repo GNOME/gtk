@@ -30,9 +30,11 @@
 /**
  * GtkColorDialog:
  *
- * Collects the arguments that are needed to present a color chooser
- * dialog to the user, such as a title for the dialog and whether it
- * should be modal.
+ * Asynchronous API to present a color chooser dialog.
+ *
+ * `GtkColorDialog` collects the arguments that are needed to present
+ * the dialog to the user, such as a title for the dialog and whether
+ * it should be modal.
  *
  * The dialog is shown with the [method@Gtk.ColorDialog.choose_rgba]
  * function.

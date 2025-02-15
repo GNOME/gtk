@@ -27,8 +27,7 @@
 /**
  * GtkListItem:
  *
- * `GtkListItem` is used by list widgets to represent items in a
- * [iface@Gio.ListModel].
+ * Used by list widgets to represent items in a [iface@Gio.ListModel].
  *
  * `GtkListItem` objects are managed by the list widget (with its factory)
  * and cannot be created by applications, but they need to be populated

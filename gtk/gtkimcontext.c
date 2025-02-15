@@ -27,7 +27,7 @@
 /**
  * GtkIMContext:
  *
- * `GtkIMContext` defines the interface for GTK input methods.
+ * The interface for GTK input methods.
  *
  * `GtkIMContext` is used by GTK text input widgets like `GtkText`
  * to map from key events to Unicode character strings.

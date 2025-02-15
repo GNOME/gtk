@@ -28,8 +28,7 @@
 /**
  * GtkNoSelection:
  *
- * `GtkNoSelection` is a `GtkSelectionModel` that does not allow selecting
- * anything.
+ * A selection model that does not allow selecting anything.
  *
  * This model is meant to be used as a simple wrapper around a `GListModel`
  * when a `GtkSelectionModel` is required.

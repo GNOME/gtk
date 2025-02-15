@@ -28,8 +28,7 @@
 /**
  * GtkSignalListItemFactory:
  *
- * `GtkSignalListItemFactory` is a `GtkListItemFactory` that emits signals
- * to manage listitems.
+ * A `GtkListItemFactory` that emits signals to manage listitems.
  *
  * Signals are emitted for every listitem in the same order:
  *

@@ -46,7 +46,7 @@
 /**
  * GtkGLArea:
  *
- * `GtkGLArea` is a widget that allows drawing with OpenGL.
+ * Allows drawing with OpenGL.
  *
  * ![An example GtkGLArea](glarea.png)
  *

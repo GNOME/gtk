@@ -39,7 +39,7 @@
 /**
  * GtkScrollbar:
  *
- * The `GtkScrollbar` widget is a horizontal or vertical scrollbar.
+ * Shows a horizontal or vertical scrollbar.
  *
  * ![An example GtkScrollbar](scrollbar.png)
  *
@@ -80,7 +80,7 @@
  *
  * # Accessibility
  *
- * `GtkScrollbar` uses the %GTK_ACCESSIBLE_ROLE_SCROLLBAR role.
+ * `GtkScrollbar` uses the [enum@Gtk.AccessibleRole.scrollbar] role.
  */
 
 typedef struct _GtkScrollbarClass   GtkScrollbarClass;
