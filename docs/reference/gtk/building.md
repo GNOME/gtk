@@ -34,12 +34,11 @@ You can get a list of all available options for the build by
 running `meson configure`.
 
 After Meson successfully configured the build directory, you then
-can run the build, using Ninja:
+can build and install GTK:
 
 ```
-cd builddir
-meson compile
-meson install
+meson compile -Cbuilddir
+meson install -Cbuilddir
 ```
 
 If you don't have permission to write to the directory you are
@@ -218,7 +217,7 @@ To see a summary of all supported options and their allowed values, run
 meson configure builddir
 ```
 
-### `x11-backend`, `win32-backend`, `broadway-backend`, `wayland-backend` and `macos-backend`
+### `x11-backend`, `win32-backend`, `broadway-backend`, `wayland-backend`, `macos-backend` and `android-backend`
 
 Enable specific backends for GDK.  If none of these options are given, the
 Wayland backend will be enabled by default, if the platform is Linux; the
