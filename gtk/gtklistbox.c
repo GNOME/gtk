@@ -41,6 +41,8 @@
  *
  * Shows a vertical list.
  *
+ * ![An example GtkListBox](list-box.png)
+ *
  * A `GtkListBox` only contains `GtkListBoxRow` children. These rows can
  * by dynamically sorted and filtered, and headers can be added dynamically
  * depending on the row content. It also allows keyboard and mouse navigation

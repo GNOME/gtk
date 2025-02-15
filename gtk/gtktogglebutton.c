@@ -39,6 +39,8 @@
  *
  * Shows a button which remains “pressed-in” when clicked.
  *
+ * ![Example GtkToggleButtons](toggle-button.png)
+ *
  * Clicking again will cause the toggle button to return to its normal state.
  *
  * A toggle button is created by calling either [ctor@Gtk.ToggleButton.new] or

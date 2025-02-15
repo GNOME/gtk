@@ -41,6 +41,8 @@
  *
  * Shows one of its children at a time.
  *
+ * ![An example GtkStack](stack.png)
+ *
  * In contrast to `GtkNotebook`, `GtkStack` does not provide a means
  * for users to change the visible child. Instead, a separate widget
  * such as [class@Gtk.StackSwitcher] or [class@Gtk.StackSidebar] can

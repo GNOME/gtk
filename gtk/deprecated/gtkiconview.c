@@ -56,6 +56,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * `GtkIconView` is a widget which displays data in a grid of icons.
  *
+ * ![An example GtkIconView](icon-view.png)
+ *
  * `GtkIconView` provides an alternative view on a `GtkTreeModel`.
  * It displays the model as a grid of icons with labels. Like
  * [class@Gtk.TreeView], it allows to select one or multiple items

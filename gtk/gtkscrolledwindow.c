@@ -62,6 +62,8 @@
  *
  * Makes its child scrollable.
  *
+ * ![An example GtkScrolledWindow](scrolledwindow.png)
+ *
  * It does so using either internally added scrollbars or externally
  * associated adjustments, and optionally draws a frame around the child.
  *
