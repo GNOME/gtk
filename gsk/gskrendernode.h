@@ -614,7 +614,7 @@ gpointer                gsk_subsurface_node_get_subsurface      (const GskRender
  * GSK_VALUE_HOLDS_RENDER_NODE:
  * @value: a `GValue`
  *
- * Evaluates to %TRUE if @value was initialized with %GSK_TYPE_RENDER_NODE.
+ * Evaluates to true if @value was initialized with `GSK_TYPE_RENDER_NODE`.
  */
 #define GSK_VALUE_HOLDS_RENDER_NODE(value)       (G_VALUE_HOLDS ((value), GSK_TYPE_RENDER_NODE))
 

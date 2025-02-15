@@ -31,7 +31,7 @@
 /**
  * GskPathBuilder:
  *
- * An auxiliary object for constructing `GskPath` objects.
+ * Constructs `GskPath` objects.
  *
  * A path is constructed like this:
  *

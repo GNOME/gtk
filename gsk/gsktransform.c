@@ -21,7 +21,7 @@
 /**
  * GskTransform: (ref-func gsk_transform_ref) (unref-func gsk_transform_unref)
  *
- * An object to describe transform matrices.
+ * Describes a 3D transform.
  *
  * Unlike `graphene_matrix_t`, `GskTransform` retains the steps in how
  * a transform was constructed, and allows inspecting them. It is modeled

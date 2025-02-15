@@ -36,7 +36,9 @@ G_BEGIN_DECLS
 /**
  * GskShaderArgsBuilder:
  *
- * An object to build the uniforms data for a `GskGLShader`.
+ * Builds the uniforms data for a `GskGLShader`.
+ *
+ * Deprecated: 4.16
  */
 typedef struct _GskGLShader GskGLShader GDK_DEPRECATED_TYPE_IN_4_16_FOR(GtkGLArea);
 typedef struct _GskShaderArgsBuilder GskShaderArgsBuilder GDK_DEPRECATED_TYPE_IN_4_16_FOR(GtkGLArea);

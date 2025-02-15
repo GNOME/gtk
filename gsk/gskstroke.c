@@ -24,7 +24,7 @@
 /**
  * GskStroke:
  *
- * Collects the parameters that influence the operation of stroking a path.
+ * Collects the parameters that are needed when stroking a path.
  *
  * Since: 4.14
  */
