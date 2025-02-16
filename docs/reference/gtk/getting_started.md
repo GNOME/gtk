@@ -114,7 +114,7 @@ warning if the check fails. More information about this convention can be
 found [in the GObject documentation](https://docs.gtk.org/gobject/concepts.html#conventions).
 
 Finally the window size is set using [`method@Gtk.Window.set_default_size`]
-and the window is then shown by GTK via [method@Gtk.Widget.show].
+and the window is then shown by GTK via [method@Gtk.Window.present].
 
 When you close the window, by (for example) pressing the X button, the
 `g_application_run()` call returns with a number which is saved inside an
