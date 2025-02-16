@@ -57,13 +57,12 @@
  * For instance, on OS X, both menus will be displayed remotely;
  * on Windows neither will be.
  *
- * If the desktop environment does not display the menubar, then
- * `GtkApplicationWindow` will automatically show a menubar for it.
- * This behaviour can be overridden with the
- * [property@Gtk.ApplicationWindow:show-menubar] property. If the
- * desktop environment does not display the application menu, then
- * it will automatically be included in the menubar or in the windows
- * client-side decorations.
+ * If the desktop environment does not display the menubar, it can be shown in
+ * the `GtkApplicationWindow` by setting the
+ * [property@Gtk.ApplicationWindow:show-menubar] property to true. If the
+ * desktop environment does not display the application menu, then it will
+ * automatically be included in the menubar or in the window’s client-side
+ * decorations.
  *
  * See [class@Gtk.PopoverMenu] for information about the XML language
  * used by `GtkBuilder` for menu models.
