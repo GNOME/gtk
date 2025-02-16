@@ -130,7 +130,7 @@ extra_demo_sources = files([
   'singular_value_decomposition.c',
   'four_point_transform.c',
   'demo2widget.c',
-  'demo3widget.c',
+  'imageview.c',
   'demo4widget.c',
   'pixbufpaintable.c',
   'script-names.c',

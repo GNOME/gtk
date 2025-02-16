@@ -18,9 +18,9 @@
       <attribute name="target" type="i">90</attribute>
     </item>
   </menu>
-  <template class="Demo3Widget">
+  <template class="ImageView">
     <accessibility>
-      <property name="label">Demo image</property>
+      <property name="label">Image view</property>
     </accessibility>
     <child>
       <object class="GtkPopoverMenu" id="menu">
