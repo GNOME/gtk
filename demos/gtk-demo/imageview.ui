@@ -19,6 +19,8 @@
     </item>
   </menu>
   <template class="ImageView">
+    <signal name="query-tooltip" handler="query_tooltip"/>
+    <property name="has-tooltip">1</property>
     <accessibility>
       <property name="label">Image view</property>
     </accessibility>

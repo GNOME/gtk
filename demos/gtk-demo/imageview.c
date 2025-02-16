@@ -390,6 +390,7 @@ image_view_class_init (ImageViewClass *class)
   gtk_widget_class_set_template_from_resource (widget_class, "/menu/imageview.ui");
   gtk_widget_class_bind_template_child (widget_class, ImageView, menu);
   gtk_widget_class_bind_template_callback (widget_class, pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, query_tooltip);
 
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_IMG);
 }
@@ -404,10 +405,7 @@ image_view_new (const char *resource)
 
   self = g_object_new (IMAGE_TYPE_VIEW,
                        "texture", texture,
-                       "has-tooltip", TRUE,
                        NULL);
-
-  g_signal_connect (self, "query-tooltip", G_CALLBACK (query_tooltip), NULL);
 
   g_object_unref (texture);
 
