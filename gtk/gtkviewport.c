@@ -42,8 +42,8 @@
 /**
  * GtkViewport:
  *
- * `GtkViewport` implements scrollability for widgets that lack their
- * own scrolling capabilities.
+ * Implements scrollability for widgets that don't support scrolling
+ * on their own.
  *
  * Use `GtkViewport` to scroll child widgets such as `GtkGrid`,
  * `GtkBox`, and so on.
@@ -57,9 +57,9 @@
  *
  * # Accessibility
  *
- * Until GTK 4.10, `GtkViewport` used the `GTK_ACCESSIBLE_ROLE_GROUP` role.
+ * Until GTK 4.10, `GtkViewport` used the [enum@Gtk.AccessibleRole.group] role.
  *
- * Starting from GTK 4.12, `GtkViewport` uses the `GTK_ACCESSIBLE_ROLE_GENERIC` role.
+ * Starting from GTK 4.12, `GtkViewport` uses the [enum@Gtk.AccessibleRole.generic] role.
  */
 
 typedef struct _GtkViewportPrivate       GtkViewportPrivate;

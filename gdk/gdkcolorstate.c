@@ -29,8 +29,7 @@
 /**
  * GdkColorState:
  *
- * A `GdkColorState` object provides the information to interpret
- * colors and pixels in a variety of ways.
+ * Provides information to interpret colors and pixels in a variety of ways.
  *
  * They are also known as
  * [*color spaces*](https://en.wikipedia.org/wiki/Color_space).

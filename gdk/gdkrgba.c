@@ -43,8 +43,7 @@ G_DEFINE_BOXED_TYPE (GdkRGBA, gdk_rgba,
  * @alpha: The opacity of the color from 0.0 for completely translucent to
  *   1.0 for opaque
  *
- * A `GdkRGBA` is used to represent a color, in a way that is compatible
- * with cairo’s notion of color.
+ * Represents a color, in a way that is compatible with cairo’s notion of color.
  *
  * `GdkRGBA` is a convenient way to pass colors around. It’s based on
  * cairo’s way to deal with colors and mirrors its behavior. All values

@@ -48,8 +48,7 @@ const GdkDebugKey gdk_vulkan_feature_keys[] = {
 /**
  * GdkVulkanContext:
  *
- * `GdkVulkanContext` is an object representing the platform-specific
- * Vulkan draw context.
+ * Represents the platform-specific Vulkan draw context.
  *
  * `GdkVulkanContext`s are created for a surface using
  * [method@Gdk.Surface.create_vulkan_context], and the context will match

@@ -40,7 +40,7 @@
 /**
  * GtkPasswordEntry:
  *
- * `GtkPasswordEntry` is an entry that has been tailored for entering secrets.
+ * A single-line text entry widget for entering passwords and other secrets.
  *
  * ![An example GtkPasswordEntry](password-entry.png)
  *
@@ -71,7 +71,7 @@
  *
  * # Accessibility
  *
- * `GtkPasswordEntry` uses the %GTK_ACCESSIBLE_ROLE_TEXT_BOX role.
+ * `GtkPasswordEntry` uses the [enum@Gtk.AccessibleRole.text_box] role.
  */
 
 struct _GtkPasswordEntry

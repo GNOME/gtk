@@ -31,8 +31,7 @@
 /**
  * GtkOrientable:
  *
- * The `GtkOrientable` interface is implemented by all widgets that can be
- * oriented horizontally or vertically.
+ * An interface for widgets that can be oriented horizontally or vertically.
  *
  * `GtkOrientable` is more flexible in that it allows the orientation to be
  * changed at runtime, allowing the widgets to “flip”.

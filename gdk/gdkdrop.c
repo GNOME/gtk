@@ -20,7 +20,7 @@
 /**
  * GdkDrop:
  *
- * The `GdkDrop` object represents the target of an ongoing DND operation.
+ * Represents the target of an ongoing DND operation.
  *
  * Possible drop sites get informed about the status of the ongoing drag
  * operation with events of type %GDK_DRAG_ENTER, %GDK_DRAG_LEAVE,

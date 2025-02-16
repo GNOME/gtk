@@ -34,7 +34,7 @@
 /**
  * GtkTreeExpander:
  *
- * `GtkTreeExpander` is a widget that provides an expander for a list.
+ * Provides an expander for a tree-like list.
  *
  * It is typically placed as a bottommost child into a `GtkListView`
  * to allow users to expand and collapse children in a list with a
@@ -106,9 +106,9 @@
  *
  * ## Accessibility
  *
- * Until GTK 4.10, `GtkTreeExpander` used the `GTK_ACCESSIBLE_ROLE_GROUP` role.
+ * Until GTK 4.10, `GtkTreeExpander` used the [enum@Gtk.AccessibleRole.group] role.
  *
- * Since GTK 4.12, `GtkTreeExpander` uses the `GTK_ACCESSIBLE_ROLE_BUTTON` role.
+ * Since GTK 4.12, `GtkTreeExpander` uses the [enum@Gtk.AccessibleRole.button] role.
  * Toggling it will change the `GTK_ACCESSIBLE_STATE_EXPANDED` state.
  */
 

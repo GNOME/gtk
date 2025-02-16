@@ -26,8 +26,7 @@
 /**
  * GtkColumnViewRow:
  *
- * `GtkColumnViewRow` is used by [class@Gtk.ColumnView] to allow configuring
- * how rows are displayed.
+ * Configures how rows are displayed in a [class@Gtk.ColumnView].
  *
  * It is not used to set the widgets displayed in the individual cells. For that
  * see [method@GtkColumnViewColumn.set_factory] and [class@GtkColumnViewCell].

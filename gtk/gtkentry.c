@@ -65,7 +65,7 @@
 /**
  * GtkEntry:
  *
- * `GtkEntry` is a single line text entry widget.
+ * A single-line text entry widget.
  *
  * ![An example GtkEntry](entry.png)
  *
@@ -151,7 +151,7 @@
  *
  * # Accessibility
  *
- * `GtkEntry` uses the %GTK_ACCESSIBLE_ROLE_TEXT_BOX role.
+ * `GtkEntry` uses the [enum@Gtk.AccessibleRole.text_box] role.
  */
 
 #define MAX_ICONS 2

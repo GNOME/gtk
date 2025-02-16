@@ -35,8 +35,7 @@
 /**
  * GtkGrid:
  *
- * `GtkGrid` is a container which arranges its child widgets in
- * rows and columns.
+ * Arranges its child widgets in rows and columns.
  *
  * ![An example GtkGrid](grid.png)
  *
@@ -116,9 +115,9 @@
  *
  * # Accessibility
  *
- * Until GTK 4.10, `GtkGrid` used the `GTK_ACCESSIBLE_ROLE_GROUP` role.
+ * Until GTK 4.10, `GtkGrid` used the [enum@Gtk.AccessibleRole.group] role.
  *
- * Starting from GTK 4.12, `GtkGrid` uses the `GTK_ACCESSIBLE_ROLE_GENERIC` role.
+ * Starting from GTK 4.12, `GtkGrid` uses the [enum@Gtk.AccessibleRole.generic] role.
  */
 
 typedef struct

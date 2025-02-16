@@ -35,8 +35,7 @@
 /**
  * GdkContentDeserializer:
  *
- * A `GdkContentDeserializer` is used to deserialize content received via
- * inter-application data transfers.
+ * Deserializes content received via inter-application data transfers.
  *
  * The `GdkContentDeserializer` transforms serialized content that is
  * identified by a mime type into an object identified by a GType.
@@ -542,9 +541,9 @@ deserialize_not_found (GdkContentDeserializer *deserializer)
  * @callback: (scope async) (closure user_data): callback to call when the operation is done
  * @user_data: data to pass to the callback function
  *
- * Read content from the given input stream and deserialize it, asynchronously.
+ * Reads content from the given input stream and deserialize it, asynchronously.
  *
- * The default I/O priority is %G_PRIORITY_DEFAULT (i.e. 0), and lower numbers
+ * The default I/O priority is `G_PRIORITY_DEFAULT` (i.e. 0), and lower numbers
  * indicate a higher priority.
  */
 void

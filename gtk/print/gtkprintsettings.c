@@ -32,8 +32,7 @@
 /**
  * GtkPrintSettings:
  *
- * A `GtkPrintSettings` object represents the settings of a print dialog in
- * a system-independent way.
+ * Collects the settings of a print dialog in a system-independent way.
  *
  * The main use for this object is that once you’ve printed you can get a
  * settings object that represents the settings the user chose, and the next

@@ -58,8 +58,7 @@ G_STATIC_ASSERT (GTK_DEBUG_CSS == GTK_CSS_PARSER_DEBUG_CSS);
 /**
  * GtkCssProvider:
  *
- * `GtkCssProvider` is an object implementing the `GtkStyleProvider` interface
- * for CSS.
+ * A style provider for CSS.
  *
  * It is able to parse CSS-like input in order to style widgets.
  *

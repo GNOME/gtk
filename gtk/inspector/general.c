@@ -1081,7 +1081,6 @@ static const char *env_list[] = {
   "GSK_CACHE_TIMEOUT",
   "GSK_DEBUG",
   "GSK_GPU_DISABLE",
-  "GSK_MAX_TEXTURE_SIZE",
   "GSK_RENDERER",
   "GSK_SUBSET_FONTS",
   "GTK_A11Y",

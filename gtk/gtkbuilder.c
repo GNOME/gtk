@@ -21,8 +21,7 @@
 /**
  * GtkBuilder:
  *
- * A `GtkBuilder` reads XML descriptions of a user interface and
- * instantiates the described objects.
+ * Reads XML descriptions of a user interface and instantiates the described objects.
  *
  * To create a `GtkBuilder` from a user interface description, call
  * [ctor@Gtk.Builder.new_from_file], [ctor@Gtk.Builder.new_from_resource]

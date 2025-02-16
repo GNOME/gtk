@@ -21,8 +21,7 @@
 /**
  * GtkGestureSingle:
  *
- * `GtkGestureSingle` is a `GtkGestures` subclass optimized for singe-touch
- * and mouse gestures.
+ * A `GtkGesture` subclass optimized for singe-touch and mouse gestures.
  *
  * Under interaction, these gestures stick to the first interacting sequence,
  * which is accessible through [method@Gtk.GestureSingle.get_current_sequence]

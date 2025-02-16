@@ -26,7 +26,9 @@
 /**
  * GtkFlowBox:
  *
- * A `GtkFlowBox` puts child widgets in reflowing grid.
+ * Puts child widgets in a reflowing grid.
+ *
+ * ![An example GtkFlowBox](flow-box.png)
  *
  * For instance, with the horizontal orientation, the widgets will be
  * arranged from left to right, starting a new row under the previous
@@ -79,14 +81,17 @@
  *
  * # Accessibility
  *
- * `GtkFlowBox` uses the %GTK_ACCESSIBLE_ROLE_GRID role, and `GtkFlowBoxChild`
- * uses the %GTK_ACCESSIBLE_ROLE_GRID_CELL role.
+ * `GtkFlowBox` uses the [enum@Gtk.AccessibleRole.grid] role, and `GtkFlowBoxChild`
+ * uses the [enum@Gtk.AccessibleRole.grid_cell] role.
  */
 
 /**
  * GtkFlowBoxChild:
  *
- * `GtkFlowBoxChild` is the kind of widget that can be added to a `GtkFlowBox`.
+ * The kind of widget that can be added to a `GtkFlowBox`.
+ *
+ * [class@Gtk.FlowBox] will automatically wrap its children in a `GtkFlowBoxChild`
+ * when necessary.
  */
 
 #include <config.h>

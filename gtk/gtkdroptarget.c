@@ -38,7 +38,7 @@
 /**
  * GtkDropTarget:
  *
- * `GtkDropTarget` is an event controller to receive Drag-and-Drop operations.
+ * An event controller to receive Drag-and-Drop operations.
  *
  * The most basic way to use a `GtkDropTarget` to receive drops on a
  * widget is to create it via [ctor@Gtk.DropTarget.new], passing in the

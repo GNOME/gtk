@@ -44,8 +44,7 @@ static GQuark quark_gtk_native_private;
 /**
  * GtkNative:
  *
- * `GtkNative` is the interface implemented by all widgets that have
- * their own `GdkSurface`.
+ * An interface for widgets that have their own [class@Gdk.Surface].
  *
  * The obvious example of a `GtkNative` is `GtkWindow`.
  *

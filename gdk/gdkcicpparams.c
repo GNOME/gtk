@@ -25,8 +25,9 @@
 /**
  * GdkCicpParams:
  *
- * The `GdkCicpParams` struct contains the parameters that define
- * a colorstate according to the ITU-T H.273
+ * Contains the parameters that define a colorstate with cicp parameters.
+ *
+ * Cicp parameters are specified in the ITU-T H.273
  * [specification](https://www.itu.int/rec/T-REC-H.273/en).
  *
  * See the documentation of individual properties for supported values.

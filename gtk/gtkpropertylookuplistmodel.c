@@ -21,12 +21,13 @@
 /*
  * GtkPropertyLookupListModel:
  *
- * `GtkPropertyLookupListModel` is a `GListModel` implementation that takes an
- * object and a property and then recursively looks up the next element using
- * the property on the previous object.
+ * A list model that recursively looks up a property.
  *
- * For example, one could use this list model with the GtkWidget:parent property
- * to get a list of a widgets and all its ancestors.
+ * `GtkPropertyLookupListModel` takes an object and a property and looks
+ * up the next element using the property on the previous object.
+ *
+ * For example, one could use this list model with the [property@Gtk.Widget:parent]
+ * property to get a list of a widget and all its ancestors.
  **/
 
 #include "config.h"

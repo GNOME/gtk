@@ -25,8 +25,8 @@
 /**
  * GdkToplevelLayout:
  *
- * The `GdkToplevelLayout` struct contains information that
- * is necessary to present a sovereign window on screen.
+ * Contains information that is necessary to present a sovereign
+ * window on screen.
  *
  * The `GdkToplevelLayout` struct is necessary for using
  * [method@Gdk.Toplevel.present].

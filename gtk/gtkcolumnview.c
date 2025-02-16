@@ -43,8 +43,7 @@
 /**
  * GtkColumnView:
  *
- * `GtkColumnView` presents a large dynamic list of items using multiple columns
- * with headers.
+ * Presents a large dynamic list of items using multiple columns with headers.
  *
  * `GtkColumnView` uses the factories of its columns to generate a cell widget for
  * each column, for each visible item and displays them together as the row for
@@ -104,10 +103,10 @@
  *
  * # Accessibility
  *
- * `GtkColumnView` uses the %GTK_ACCESSIBLE_ROLE_TREE_GRID role, header title
- * widgets are using the %GTK_ACCESSIBLE_ROLE_COLUMN_HEADER role. The row widgets
- * are using the %GTK_ACCESSIBLE_ROLE_ROW role, and individual cells are using
- * the %GTK_ACCESSIBLE_ROLE_GRID_CELL role
+ * `GtkColumnView` uses the [enum@Gtk.AccessibleRole.tree_grid] role, header title
+ * widgets are using the [enum@Gtk.AccessibleRole.column_header] role. The row widgets
+ * are using the [enum@Gtk.AccessibleRole.row] role, and individual cells are using
+ * the [enum@Gtk.AccessibleRole.grid_cell] role
  */
 
 /* We create a subclass of GtkListView for the sole purpose of overriding

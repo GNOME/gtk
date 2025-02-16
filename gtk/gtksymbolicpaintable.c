@@ -26,8 +26,7 @@
 /**
  * GtkSymbolicPaintable:
  *
- * `GtkSymbolicPaintable` is an interface that support symbolic colors in
- * paintables.
+ * An interface that supports symbolic colors in paintables.
  *
  * `GdkPaintable`s implementing the interface will have the
  * [vfunc@Gtk.SymbolicPaintable.snapshot_symbolic] function called and

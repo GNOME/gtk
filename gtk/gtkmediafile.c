@@ -30,7 +30,7 @@
 /**
  * GtkMediaFile:
  *
- * `GtkMediaFile` implements `GtkMediaStream` for files.
+ * Implements the `GtkMediaStream` interface for files.
  *
  * This provides a simple way to play back video files with GTK.
  *

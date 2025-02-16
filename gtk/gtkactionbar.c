@@ -34,7 +34,7 @@
 /**
  * GtkActionBar:
  *
- * Designed to present contextual actions.
+ * Presents contextual actions.
  *
  * ![An example GtkActionBar](action-bar.png)
  *

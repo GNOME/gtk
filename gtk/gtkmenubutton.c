@@ -21,7 +21,7 @@
 /**
  * GtkMenuButton:
  *
- * The `GtkMenuButton` widget is used to display a popup when clicked.
+ * Displays a popup when clicked.
  *
  * ![An example GtkMenuButton](menu-button.png)
  *
@@ -82,7 +82,7 @@
  *
  * # Accessibility
  *
- * `GtkMenuButton` uses the %GTK_ACCESSIBLE_ROLE_BUTTON role.
+ * `GtkMenuButton` uses the [enum@Gtk.AccessibleRole.button] role.
  */
 
 #include "config.h"

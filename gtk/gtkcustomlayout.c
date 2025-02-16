@@ -1,9 +1,9 @@
 /**
  * GtkCustomLayout:
  *
- * `GtkCustomLayout` uses closures for size negotiation.
+ * Uses closures for size negotiation.
  *
- * A `GtkCustomLayout `uses closures matching to the old `GtkWidget`
+ * A `GtkCustomLayout` uses closures matching to the old `GtkWidget`
  * virtual functions for size negotiation, as a convenience API to
  * ease the porting towards the corresponding `GtkLayoutManager`
  * virtual functions.

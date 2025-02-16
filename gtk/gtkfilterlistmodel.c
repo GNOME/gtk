@@ -28,10 +28,9 @@
 /**
  * GtkFilterListModel:
  *
- * `GtkFilterListModel` is a list model that filters the elements of
- * the underlying model according to a `GtkFilter`.
+ * A list model that filters the elements of another model.
  *
- * It hides some elements from the other model according to
+ * It hides some elements from the underlying model according to
  * criteria given by a `GtkFilter`.
  *
  * The model can be set up to do incremental filtering, so that

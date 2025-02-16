@@ -69,8 +69,7 @@
 /**
  * GtkSpinButton:
  *
- * A `GtkSpinButton` is an ideal way to allow the user to set the
- * value of some attribute.
+ * Allows to enter or change numeric values.
  *
  * ![An example GtkSpinButton](spinbutton.png)
  *
@@ -186,7 +185,7 @@
  *
  * # Accessibility
  *
- * `GtkSpinButton` uses the %GTK_ACCESSIBLE_ROLE_SPIN_BUTTON role.
+ * `GtkSpinButton` uses the [enum@Gtk.AccessibleRole.spin_button] role.
  */
 
 typedef struct _GtkSpinButton      GtkSpinButton;

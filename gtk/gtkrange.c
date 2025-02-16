@@ -53,8 +53,7 @@
 /**
  * GtkRange:
  *
- * `GtkRange` is the common base class for widgets which visualize an
- * adjustment.
+ * Base class for widgets which visualize an adjustment.
  *
  * Widgets that are derived from `GtkRange` include
  * [class@Gtk.Scale] and [class@Gtk.Scrollbar].

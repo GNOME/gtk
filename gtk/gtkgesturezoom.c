@@ -21,7 +21,7 @@
 /**
  * GtkGestureZoom:
  *
- * `GtkGestureZoom` is a `GtkGesture` for 2-finger pinch/zoom gestures.
+ * Recognizes 2-finger pinch/zoom gestures.
  *
  * Whenever the distance between both tracked sequences changes, the
  * [signal@Gtk.GestureZoom::scale-changed] signal is emitted to report

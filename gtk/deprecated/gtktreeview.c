@@ -76,6 +76,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * A widget for displaying both trees and lists
  *
+ * ![An example GtkTreeView](list-and-tree.png)
+ *
  * Widget that displays any object that implements the [iface@Gtk.TreeModel] interface.
  *
  * Please refer to the [tree widget conceptual overview](section-tree-widget.html)

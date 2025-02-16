@@ -90,10 +90,8 @@ Attributes provide specific information about an accessible UI
 control, and describe it for the assistive technology applications. GTK
 divides the accessible attributes into three categories:
 
- - *properties*, described by the values of the `GtkAccessibleProperty`
-   enumeration
- - *relations*, described by the values of the `GtkAccessibleRelation`
-   enumeration
+ - *properties*, described by the values of the `GtkAccessibleProperty` enumeration
+ - *relations*, described by the values of the `GtkAccessibleRelation` enumeration
  - *states*, described by the values of the `GtkAccessibleState` enumeration
 
 Each attribute accepts a value of a specific type.

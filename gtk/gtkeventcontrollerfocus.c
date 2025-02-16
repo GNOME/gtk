@@ -20,8 +20,7 @@
 /**
  * GtkEventControllerFocus:
  *
- * `GtkEventControllerFocus` is an event controller to keep track of
- * keyboard focus.
+ * Tracks keyboard focus.
  *
  * The event controller offers [signal@Gtk.EventControllerFocus::enter]
  * and [signal@Gtk.EventControllerFocus::leave] signals, as well as

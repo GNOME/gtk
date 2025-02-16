@@ -50,8 +50,7 @@
 /**
  * GtkPrintSetup:
  *
- * A `GtkPrintSetup` is an auxiliary object for printing that allows decoupling
- * the setup from the printing.
+ * An auxiliary object for printing that allows decoupling the setup from the printing.
  *
  * A print setup is obtained by calling [method@Gtk.PrintDialog.setup],
  * and can later be passed to print functions such as [method@Gtk.PrintDialog.print].
@@ -217,11 +216,14 @@ gtk_print_setup_set_printer (GtkPrintSetup *setup,
 /**
  * GtkPrintDialog:
  *
- * A `GtkPrintDialog` object collects the arguments that
- * are needed to present a print dialog to the user, such
- * as a title for the dialog and whether it should be modal.
+ * Asynchronous API to present a print dialog to the user.
+ *
+ * `GtkPrintDialog` collects the arguments that are needed to present
+ *  the dialog, such as a title for the dialog and whether it should
+ *  be modal.
  *
  * The dialog is shown with the [method@Gtk.PrintDialog.setup] function.
+ *
  * The actual printing can be done with [method@Gtk.PrintDialog.print] or
  * [method@Gtk.PrintDialog.print_file]. These APIs follows the GIO async pattern,
  * and the results can be obtained by calling the corresponding finish methods.

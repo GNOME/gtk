@@ -40,7 +40,9 @@ typedef struct _GtkBuildableParser GtkBuildableParser;
 /**
  * GtkBuildableParseContext:
  *
- * An opaque context struct for `GtkBuildableParser`.
+ * Provides context for parsing GtkBuilder UI files.
+ *
+ * `GtkBuildableParseContext` is an opaque struct.
  */
 
 /**
@@ -131,8 +133,7 @@ struct _GtkBuildableParser
  *  Implement this if the buildable has internal children that may
  *  need to be accessed from a UI definition.
  *
- * The `GtkBuildableIface` interface contains methods that are
- * necessary to allow `GtkBuilder` to construct an object from
+ * Contains methods to let `GtkBuilder` construct an object from
  * a `GtkBuilder` UI definition.
  */
 struct _GtkBuildableIface

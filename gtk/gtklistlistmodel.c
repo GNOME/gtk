@@ -21,8 +21,7 @@
 /*
  * GtkListListModel:
  *
- * `GtkListListModel` is a `GListModel` implementation that takes a list API
- * and provides it as a `GListModel`.
+ * A list model that takes a list API and provides it as a `GListModel`.
  */
 
 #include "config.h"

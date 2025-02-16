@@ -36,21 +36,18 @@ You can think of a [struct@Gdk.KeymapKey] as a representation of a symbol
 printed on a physical keyboard key. That is, it contains three pieces of
 information:
 
-1. first, it contains the hardware keycode; this is an identifying number
-   for a physical key
-1. second, it contains the “level” of the key. The level indicates which
-   symbol on the key will be used, in a vertical direction. So on a standard
-   US keyboard, the key with the number “1“ on it also has the exclamation
-   point (”!”) character on it. The level indicates whether to use the “1”
-   or the “!” symbol. The letter keys are considered to have a lowercase
-   letter at level 0, and an uppercase letter at level 1, though normally
-   only the uppercase letter is printed on the key
-1. third, the [struct@Gdk.KeymapKey] contains a group; groups are not used on
-   standard US keyboards, but are used in many other countries. On a
-   keyboard with groups, there can be 3 or 4 symbols printed on a single
-   key. The group indicates movement in a horizontal direction. Usually
-   groups are used for two different languages. In group 0, a key might
-   have two English characters, and in group 1 it might have two Hebrew
+1. The hardware keycode. This is an identifying number for a physical key
+1. The “level” of the key. The level indicates which symbol on the key will
+   be used, in a vertical direction. So on a standard US keyboard, the key with
+   the number “1“ on it also has the exclamation point (”!”) character on it.
+   The level indicates whether to use the “1" or the “!” symbol. The letter keys
+   are considered to have a lowercase letter at level 0, and an uppercase letter
+   at level 1, though normally only the uppercase letter is printed on the key
+1. A group. Groups are not used on standard US keyboards, but are used in many
+   other countries. On a keyboard with groups, there can be 3 or 4 symbols printed
+   on a single key. The group indicates movement in a horizontal direction.
+   Usually groups are used for two different languages. In group 0, a key
+   might have two English characters, and in group 1 it might have two Hebrew
    characters. The Hebrew characters will be printed on the key next to
    the English characters.
 

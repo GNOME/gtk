@@ -39,8 +39,7 @@
 /**
  * GdkContentSerializer:
  *
- * A `GdkContentSerializer` is used to serialize content for
- * inter-application data transfers.
+ * Serializes content for inter-application data transfers.
  *
  * The `GdkContentSerializer` transforms an object that is identified
  * by a GType into a serialized form (i.e. a byte stream) that is

@@ -29,8 +29,7 @@
 /**
  * GskPathMeasure:
  *
- * An object that allows measurements on paths such as determining
- * the length of the path.
+ * Performs measurements on paths such as determining the length of the path.
  *
  * Many measuring operations require sampling the path length
  * at intermediate points. Therefore, a `GskPathMeasure` has

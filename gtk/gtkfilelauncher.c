@@ -44,7 +44,9 @@
 /**
  * GtkFileLauncher:
  *
- * Collects the arguments that are needed to open a file with an application.
+ * Asynchronous API to open a file with an application.
+ *
+ * `GtkFileLauncher` collects the arguments that are needed to open the file.
  *
  * Depending on system configuration, user preferences and available APIs, this
  * may or may not show an app chooser dialog or launch the default application

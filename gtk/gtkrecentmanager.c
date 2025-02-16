@@ -20,7 +20,7 @@
 /**
  * GtkRecentManager:
  *
- * `GtkRecentManager` manages and looks up recently used files.
+ * Manages and looks up recently used files.
  *
  * Each recently used file is identified by its URI, and has meta-data
  * associated to it, like the names and command lines of the applications
@@ -124,7 +124,7 @@ typedef struct
 /**
  * GtkRecentInfo:
  *
- * `GtkRecentInfo` contains the metadata associated with an item in the
+ * Contains the metadata associated with an item in the
  * recently used files list.
  */
 struct _GtkRecentInfo

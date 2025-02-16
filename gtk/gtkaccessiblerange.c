@@ -7,11 +7,15 @@
 /**
  * GtkAccessibleRange:
  *
- * This interface describes ranged controls, e.g. controls which have a single
- * value within an allowed range and that can optionally be changed by the user.
+ * An interface for accessible objects containing a numeric value.
  *
- * This interface is expected to be implemented by controls using the following
- * roles:
+ * `GtkAccessibleRange` describes ranged controls for Assistive Technologies.
+ *
+ * Ranged controls have a single value within an allowed range that can
+ * optionally be changed by the user.
+ *
+ * This interface is expected to be implemented by controls using the
+ * following roles:
  *
  * - `GTK_ACCESSIBLE_ROLE_METER`
  * - `GTK_ACCESSIBLE_ROLE_PROGRESS_BAR`

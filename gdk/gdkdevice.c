@@ -28,8 +28,7 @@
 /**
  * GdkDevice:
  *
- * The `GdkDevice` object represents an input device, such
- * as a keyboard, a mouse, or a touchpad.
+ * Represents an input device, such as a keyboard, mouse or touchpad.
  *
  * See the [class@Gdk.Seat] documentation for more information
  * about the various kinds of devices, and their relationships.

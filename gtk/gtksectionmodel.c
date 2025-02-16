@@ -26,7 +26,7 @@
 /**
  * GtkSectionModel:
  *
- * `GtkSectionModel` is an interface that adds support for sections to list models.
+ * An interface that adds support for sections to list models.
  *
  * A `GtkSectionModel` groups successive items into so-called sections. List widgets
  * like `GtkListView` and `GtkGridView` then allow displaying section headers for

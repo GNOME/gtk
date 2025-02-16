@@ -53,7 +53,7 @@ G_BEGIN_DECLS
  *  appropriate. No buttons will be shown, and the application must
  *  add its own buttons through gtk_assistant_add_action_widget().
  *
- * Determines the page role inside a `GtkAssistant`.
+ * Determines the role of a page inside a `GtkAssistant`.
  *
  * The role is used to handle buttons sensitivity and visibility.
  *
@@ -63,6 +63,8 @@ G_BEGIN_DECLS
  *
  * The Cancel button will only be shown if the page isn’t “committed”.
  * See gtk_assistant_commit() for details.
+ *
+ * Deprecated: 4.10: `GtkAssistant` will be removed in GTK 5
  */
 typedef enum
 {

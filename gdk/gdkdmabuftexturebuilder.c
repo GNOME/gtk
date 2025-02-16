@@ -56,8 +56,7 @@ struct _GdkDmabufTextureBuilderClass
 /**
  * GdkDmabufTextureBuilder:
  *
- * `GdkDmabufTextureBuilder` is a builder used to construct [class@Gdk.Texture]
- * objects from DMA buffers.
+ * Constructs [class@Gdk.Texture] objects from DMA buffers.
  *
  * DMA buffers are commonly called **_dma-bufs_**.
  *

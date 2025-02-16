@@ -2922,7 +2922,7 @@ gsk_texture_node_new (GdkTexture            *texture,
 /**
  * GskTextureScaleNode:
  *
- * A render node for a `GdkTexture`.
+ * A render node for a `GdkTexture`, with control over scaling.
  *
  * Since: 4.10
  */

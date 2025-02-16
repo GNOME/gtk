@@ -17,8 +17,8 @@ more widgets.
 
 When widgets receive an event, they frequently emit one or more “signals”.
 Signals notify your program that "something interesting happened" by invoking
-functions you’ve connected to the signal with `g_signal_connect()`. Functions
-connected to a signal are often called “callbacks”.
+functions you’ve connected to the signal with [func@GObject.signal_connect].
+Functions connected to a signal are often called “callbacks”.
 
 When your callbacks are invoked, you would typically take some action - for
 example, when an Open button is clicked you might display a [class@Gtk.FileChooserDialog].
@@ -64,5 +64,5 @@ as spinning the main loop.
 
 ### See also
 
-- the GLib manual, especially `GMainLoop`
-- signal-related functions, such as `g_signal_connect()` in GObject
+- the GLib manual, especially [struct@GLib.MainContext]
+- signal-related functions, such as [func@GObject.signal_connect] in GObject

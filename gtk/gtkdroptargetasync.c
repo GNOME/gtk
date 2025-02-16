@@ -38,8 +38,7 @@
 /**
  * GtkDropTargetAsync:
  *
- * `GtkDropTargetAsync` is an event controller to receive Drag-and-Drop
- * operations, asynchronously.
+ * An event controller to receive Drag-and-Drop operations, asynchronously.
  *
  * It is the more complete but also more complex method of handling drop
  * operations compared to [class@Gtk.DropTarget], and you should only use

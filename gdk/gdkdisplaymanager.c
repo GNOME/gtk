@@ -60,8 +60,9 @@
 /**
  * GdkDisplayManager:
  *
- * A singleton object that offers notification when displays appear or
- * disappear.
+ * Offers notification when displays appear or disappear.
+ *
+ * `GdkDisplayManager` is a singleton object.
  *
  * You can use [func@Gdk.DisplayManager.get] to obtain the `GdkDisplayManager`
  * singleton, but that should be rarely necessary. Typically, initializing

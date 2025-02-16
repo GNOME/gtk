@@ -223,7 +223,7 @@ gsk_gpu_device_get_cache (GskGpuDevice *self)
  *
  * Returns the max image size supported by this device.
  *
- * This maps to GL_MAX_TEXTURE_SIZE on GL, but Vulkan is more flexible with
+ * This maps to `GL_MAX_TEXTURE_SIZE` on GL, but Vulkan is more flexible with
  * per-format size limits, so this is an estimate and code should still handle
  * failures of image creation at smaller sizes. (Besides handling them anyway
  * in case of OOM.)
@@ -242,10 +242,12 @@ gsk_gpu_device_get_max_image_size (GskGpuDevice *self)
  * gsk_gpu_device_get_tile_size:
  * @self: a device
  *
- * The suggested size for tiling images. This value will be small enough so that
- * image creation never fails due to size constraints. It should also not be too
- * large to allow efficient caching of tiles and evictions of unused tiles
- * (think of an image editor showing only a section of a large image).
+ * The suggested size for tiling images.
+ *
+ * This value will be small enough so that image creation never fails
+ * due to size constraints. It should also not be too large to allow
+ * efficient caching of tiles and evictions of unused tiles (think of
+ * an image editor showing only a section of a large image).
  *
  * Returns: The suggested size of tiles when tiling images.
  **/
@@ -262,7 +264,8 @@ gsk_gpu_device_get_tile_size (GskGpuDevice *self)
  * @self: a device
  *
  * The required size for allocating arrays of globals.
- * This value will be at least sizeof (GskGpuGlobalsInstance) but due to constraints
+ *
+ * This value will be at least `sizeof (GskGpuGlobalsInstance)` but due to constraints
  * of how buffers are mapped, it might be larger to allow a single buffer to hold
  * all the globals instances.
  *
@@ -285,14 +288,15 @@ gsk_gpu_device_get_globals_aligned_size (GskGpuDevice *self)
  * @width: width of the image
  * @height: height of the image
  *
- * Creates an image suitable for offscreen rendering. Note that the format
- * is a hint and the device may choose a different format if the desired
- * format is not be renderable on the device.
- * 
- * If width/height is too large or the device is out of memory, NULL may
- * be returned.
+ * Creates an image suitable for offscreen rendering.
  *
- * Returns: (nullable): The created image or NULL on error.
+ * Note that the format is a hint and the device may choose a different
+ * format if the desired format is not be renderable on the device.
+ *
+ * If width/height is too large or the device is out of memory,
+ * `NULL` may be returned.
+ *
+ * Returns: (nullable): The created image or `NULL` on error.
  **/
 GskGpuImage *
 gsk_gpu_device_create_offscreen_image (GskGpuDevice    *self,

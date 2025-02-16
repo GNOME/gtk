@@ -31,8 +31,7 @@
 /**
  * GtkBoxLayout:
  *
- * `GtkBoxLayout` is a layout manager that arranges children in a single
- * row or column.
+ * Arranges children in a single row or column.
  *
  * Whether it is a row or column depends on the value of its
  * [property@Gtk.Orientable:orientation] property. Within the other dimension

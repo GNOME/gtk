@@ -31,8 +31,7 @@
 /**
  * GdkMonitor:
  *
- * `GdkMonitor` objects represent the individual outputs that are
- * associated with a `GdkDisplay`.
+ * Represents the individual outputs that are associated with a `GdkDisplay`.
  *
  * `GdkDisplay` keeps a `GListModel` to enumerate and monitor
  * monitors with [method@Gdk.Display.get_monitors]. You can use

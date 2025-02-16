@@ -24,7 +24,7 @@
 /**
  * GtkLinkButton:
  *
- * A `GtkLinkButton` is a button with a hyperlink.
+ * A button with a hyperlink.
  *
  * ![An example GtkLinkButton](link-button.png)
  *
@@ -62,7 +62,7 @@
  *
  * # Accessibility
  *
- * `GtkLinkButton` uses the %GTK_ACCESSIBLE_ROLE_LINK role.
+ * `GtkLinkButton` uses the [enum@Gtk.AccessibleRole.link] role.
  */
 
 #include "config.h"

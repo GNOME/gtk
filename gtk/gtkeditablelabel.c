@@ -35,8 +35,7 @@
 /**
  * GtkEditableLabel:
  *
- * A `GtkEditableLabel` is a label that allows users to
- * edit the text by switching to an “edit mode”.
+ * Allows users to edit the displayed text by switching to an “edit mode”.
  *
  * ![An example GtkEditableLabel](editable-label.png)
  *

@@ -35,7 +35,7 @@
 /**
  * GtkRevealer:
  *
- * A `GtkRevealer` animates the transition of its child from invisible to visible.
+ * Animates the transition of its child from invisible to visible.
  *
  * The style of transition can be controlled with
  * [method@Gtk.Revealer.set_transition_type].
@@ -52,7 +52,7 @@
  *
  * # Accessibility
  *
- * `GtkRevealer` uses the %GTK_ACCESSIBLE_ROLE_GROUP role.
+ * `GtkRevealer` uses the [enum@Gtk.AccessibleRole.group] role.
  *
  * The child of `GtkRevealer`, if set, is always available in the accessibility
  * tree, regardless of the state of the revealer widget.

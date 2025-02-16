@@ -36,8 +36,7 @@
 /**
  * GdkClipboard:
  *
- * The `GdkClipboard` object represents data shared between applications or
- * inside an application.
+ * Represents data shared between applications or inside an application.
  *
  * To get a `GdkClipboard` object, use [method@Gdk.Display.get_clipboard] or
  * [method@Gdk.Display.get_primary_clipboard]. You can find out about the data

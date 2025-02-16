@@ -21,7 +21,7 @@
 /**
  * GtkShortcutController:
  *
- * `GtkShortcutController` is an event controller that manages shortcuts.
+ * Manages keyboard shortcuts and their activation.
  *
  * Most common shortcuts are using this controller implicitly, e.g. by
  * adding a mnemonic underline to a [class@Gtk.Label], or by installing a key

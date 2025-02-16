@@ -38,7 +38,7 @@
 /**
  * GdkCursor:
  *
- * `GdkCursor` is used to create and destroy cursors.
+ * Used to create and destroy cursors.
  *
  * Cursors are immutable objects, so once you created them, there is no way
  * to modify them later. You should create a new cursor when you want to change

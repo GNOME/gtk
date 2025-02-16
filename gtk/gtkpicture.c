@@ -33,7 +33,7 @@
 /**
  * GtkPicture:
  *
- * The `GtkPicture` widget displays a `GdkPaintable`.
+ * Displays a `GdkPaintable`.
  *
  * ![An example GtkPicture](picture.png)
  *
@@ -78,7 +78,7 @@
  *
  * ## Accessibility
  *
- * `GtkPicture` uses the `GTK_ACCESSIBLE_ROLE_IMG` role.
+ * `GtkPicture` uses the [enum@Gtk.AccessibleRole.img] role.
  */
 
 enum

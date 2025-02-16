@@ -31,7 +31,7 @@
 /**
  * GtkSizeGroup
  *
- * `GtkSizeGroup` groups widgets together so they all request the same size.
+ * Groups widgets together so they all request the same size.
  *
  * This is typically useful when you want a column of widgets to have
  * the same size, but you can’t use a [class@Gtk.Grid] or [class@Gtk.Box].

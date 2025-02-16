@@ -224,7 +224,7 @@ typedef enum {
  *   the total number of intersections is odd, the point will be
  *   filled.
  *
- * `GskFillRule` is used to select how paths are filled.
+ * Specifies how paths are filled.
  *
  * Whether or not a point is included in the fill is determined by taking
  * a ray from that point to infinity and looking at intersections with the
@@ -323,7 +323,7 @@ typedef enum {
  *   the start point, control point and end point of the curve. A weight for the
  *   curve will be passed, too.
  *
- * Path operations are used to describe the segments of a `GskPath`.
+ * Describes the segments of a `GskPath`.
  *
  * More values may be added in the future.
  *
@@ -349,8 +349,7 @@ typedef enum {
  * @GSK_PATH_FROM_END: The tangent against path direction of the outgoing
  *   side of the path
  *
- * The values of the `GskPathDirection` enum are used to pick one
- * of the four tangents at a given point on the path.
+ * Used to pick one of the four tangents at a given point on the path.
  *
  * Note that the directions for @GSK_PATH_FROM_START/@GSK_PATH_TO_END and
  * @GSK_PATH_TO_START/@GSK_PATH_FROM_END will coincide for smooth points.
@@ -436,11 +435,12 @@ typedef enum
  * @GSK_GL_UNIFORM_TYPE_VEC3: A GLSL vec3 / graphene_vec3_t uniform
  * @GSK_GL_UNIFORM_TYPE_VEC4: A GLSL vec4 / graphene_vec4_t uniform
  *
- * This defines the types of the uniforms that `GskGLShaders`
- * declare.
+ * Defines the types of the uniforms that `GskGLShaders` declare.
  *
  * It defines both what the type is called in the GLSL shader
  * code, and what the corresponding C type is on the Gtk side.
+ *
+ * Deprecated: 4.16
  */
 typedef enum
 {

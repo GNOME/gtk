@@ -38,7 +38,7 @@
 /**
  * GtkTooltip:
  *
- * `GtkTooltip` is an object representing a widget tooltip.
+ * Represents a widget tooltip.
  *
  * Basic tooltips can be realized simply by using
  * [method@Gtk.Widget.set_tooltip_text] or

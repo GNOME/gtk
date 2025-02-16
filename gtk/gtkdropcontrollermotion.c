@@ -20,8 +20,7 @@
 /**
  * GtkDropControllerMotion:
  *
- * `GtkDropControllerMotion` is an event controller tracking
- * the pointer during Drag-and-Drop operations.
+ * An event controller tracking the pointer during Drag-and-Drop operations.
  *
  * It is modeled after [class@Gtk.EventControllerMotion] so if you
  * have used that, this should feel really familiar.

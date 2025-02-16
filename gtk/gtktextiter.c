@@ -35,7 +35,7 @@
 /**
  * GtkTextIter:
  *
- * An iterator for the contents of a `GtkTextBuffer`.
+ * Iterates over the contents of a `GtkTextBuffer`.
  *
  * You may wish to begin by reading the
  * [text widget conceptual overview](section-text-widget.html),

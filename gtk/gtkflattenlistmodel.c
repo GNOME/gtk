@@ -27,7 +27,7 @@
 /**
  * GtkFlattenListModel:
  *
- * `GtkFlattenListModel` is a list model that concatenates other list models.
+ * A list model that concatenates other list models.
  *
  * `GtkFlattenListModel` takes a list model containing list models, and flattens
  * it into a single model. Each list model becomes a section in the single model.

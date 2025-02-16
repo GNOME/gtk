@@ -24,8 +24,7 @@
 /**
  * GtkListHeader:
  *
- * `GtkListHeader` is used by list widgets to represent the headers they
- * display.
+ * Used by list widgets to represent the headers they display.
  *
  * `GtkListHeader` objects are managed just like [class@Gtk.ListItem]
  * objects via their factory, but provide a different set of properties suitable

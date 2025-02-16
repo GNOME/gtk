@@ -21,7 +21,7 @@
 /**
  * GtkPopover:
  *
- * `GtkPopover` is a bubble-like context popup.
+ * Presents a bubble-like popup.
  *
  * ![An example GtkPopover](popover.png)
  *

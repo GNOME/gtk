@@ -64,8 +64,7 @@
 /**
  * GtkSettings:
  *
- * `GtkSettings` provides a mechanism to share global settings between
- * applications.
+ * Provides a mechanism to share global settings between applications.
  *
  * On the X window system, this sharing is realized by an
  * [XSettings](http://www.freedesktop.org/wiki/Specifications/xsettings-spec)

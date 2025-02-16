@@ -504,13 +504,6 @@ The value can be -1 to disable GC entirely, 0 to force GC to happen
 before every frame, or a positive number to do GC in a timeout every
 n seconds. The default timeout is 15 seconds.
 
-### `GSK_MAX_TEXTURE_SIZE`
-
-Limit texture size to the minimum of this value and the OpenGL limit for
-texture sizes in the "gl" renderer. This can be used to debug issues with
-texture slicing on systems where the OpenGL texture size limit would
-otherwise make texture slicing difficult to test.
-
 ### `GTK_CSD`
 
 The default value of this environment variable is `1`. If changed

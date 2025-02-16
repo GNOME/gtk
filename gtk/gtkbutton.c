@@ -25,8 +25,7 @@
 /**
  * GtkButton:
  *
- * The `GtkButton` widget is generally used to trigger a callback function that is
- * called when the button is pressed.
+ * Calls a callback function when the button is clicked.
  *
  * ![An example GtkButton](button.png)
  *
@@ -60,7 +59,7 @@
  *
  * # Accessibility
  *
- * `GtkButton` uses the %GTK_ACCESSIBLE_ROLE_BUTTON role.
+ * `GtkButton` uses the [enum@Gtk.AccessibleRole.button] role.
  */
 
 #include "config.h"

@@ -22,7 +22,7 @@
 /**
  * GtkShortcutTrigger:
  *
- * `GtkShortcutTrigger` tracks how a `GtkShortcut` should be activated.
+ * Tracks how a `GtkShortcut` can be activated.
  *
  * To find out if a `GtkShortcutTrigger` triggers, you can call
  * [method@Gtk.ShortcutTrigger.trigger] on a `GdkEvent`.

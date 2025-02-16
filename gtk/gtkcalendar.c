@@ -28,8 +28,7 @@
 /**
  * GtkCalendar:
  *
- * `GtkCalendar` is a widget that displays a Gregorian calendar, one month
- * at a time.
+ * Displays a Gregorian calendar, one month at a time.
  *
  * ![An example GtkCalendar](calendar.png)
  *

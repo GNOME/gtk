@@ -30,7 +30,9 @@
 /**
  * GtkUriLauncher:
  *
- * Collects the arguments that are needed to open a uri with an application.
+ * Asynchronous API to open a uri with an application.
+ *
+ * `GtkUriLauncher` collects the arguments that are needed to open the uri.
  *
  * Depending on system configuration, user preferences and available APIs, this
  * may or may not show an app chooser dialog or launch the default application

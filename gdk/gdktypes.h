@@ -157,7 +157,7 @@ typedef struct _GdkKeymapKey GdkKeymapKey;
  *   letter at level 0, and an uppercase letter at level 1, though only the
  *   uppercase letter is printed.
  *
- * A `GdkKeymapKey` is a hardware key that can be mapped to a keyval.
+ * Represents a hardware key that can be mapped to a keyval.
  */
 struct _GdkKeymapKey
 {

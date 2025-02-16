@@ -247,12 +247,11 @@ static gboolean do_setlocale = TRUE;
 /**
  * gtk_disable_setlocale:
  *
- * Prevents [func@Gtk.init] and [func@Gtk.init_check] from automatically calling
- * `setlocale (LC_ALL, "")`.
+ * Prevents [func@Gtk.init] and [func@Gtk.init_check] from calling `setlocale()`.
  *
  * You would want to use this function if you wanted to set the locale for
- * your program to something other than the user’s locale, or if
- * you wanted to set different values for different locale categories.
+ * your program to something other than the user’s locale, or if you wanted
+ * to set different values for different locale categories.
  *
  * Most programs should not need to call this function.
  **/
@@ -604,16 +603,18 @@ do_post_parse_initialization (void)
 /**
  * gtk_init_check:
  *
- * This function does the same work as gtk_init() with only a single
- * change: It does not terminate the program if the windowing system
- * can’t be initialized. Instead it returns %FALSE on failure.
+ * Initializes GTK.
+ *
+ * This function does the same work as [func@Gtk.init] with only a
+ * single change: It does not terminate the program if the windowing
+ * system can’t be initialized. Instead it returns false on failure.
  *
  * This way the application can fall back to some other means of
  * communication with the user - for example a curses or command line
  * interface.
  *
- * Returns: %TRUE if the windowing system has been successfully
- *   initialized, %FALSE otherwise
+ * Returns: true if the windowing system has been successfully
+ *   initialized, false otherwise
  */
 gboolean
 gtk_init_check (void)
@@ -649,16 +650,18 @@ gtk_init_check (void)
 /**
  * gtk_init:
  *
- * Call this function before using any other GTK functions in your GUI
- * applications.
+ * Initializes GTK.
+ *
+ * This function must be called before using any other GTK functions
+ * in your GUI applications.
  *
  * It will initialize everything needed to operate the toolkit. In particular,
  * it will open the default display (see [func@Gdk.Display.get_default]).
  *
- * If you are using `GtkApplication`, you usually don't have to call this
- * function; the `GApplication::startup` handler does it for you. Though,
- * if you are using GApplication methods that will be invoked before `startup`,
- * such as `local_command_line`, you may need to initialize stuff explicitly.
+ * If you are using [class@Gtk.Application], you usually don't have to call this
+ * function; the [vfunc@Gio.Application.startup] handler does it for you. Though,
+ * if you are using `GApplication` methods that will be invoked before `startup`,
+ * such as `local_command_line`, you may need to initialize GTK explicitly.
  *
  * This function will terminate your program if it was unable to initialize
  * the windowing system for some reason. If you want your program to fall back
@@ -745,7 +748,7 @@ gtk_init_check_abi_check (int num_checks, size_t sizeof_GtkWindow, size_t sizeof
 /**
  * gtk_is_initialized:
  *
- * Use this function to check if GTK has been initialized.
+ * Returns whether GTK has been initialized.
  *
  * See [func@Gtk.init].
  *
@@ -761,17 +764,17 @@ gtk_is_initialized (void)
 /**
  * gtk_get_locale_direction:
  *
- * Get the direction of the current locale. This is the expected
- * reading direction for text and UI.
+ * Gets the direction of the current locale.
+ *
+ * This is the expected reading direction for text and UI.
  *
  * This function depends on the current locale being set with
- * setlocale() and will default to setting the %GTK_TEXT_DIR_LTR
- * direction otherwise. %GTK_TEXT_DIR_NONE will never be returned.
+ * `setlocale()` and will default to setting the `GTK_TEXT_DIR_LTR`
+ * direction otherwise. `GTK_TEXT_DIR_NONE` will never be returned.
  *
- * GTK sets the default text direction according to the locale
- * during gtk_init(), and you should normally use
- * gtk_widget_get_direction() or gtk_widget_get_default_direction()
- * to obtain the current direction.
+ * GTK sets the default text direction according to the locale during
+ * [func@Gtk.init], and you should normally use [method@Gtk.Widget.get_direction]
+ * or [func@Gtk.Widget.get_default_direction] to obtain the current direction.
  *
  * This function is only needed rare cases when the locale is
  * changed after GTK has already been initialized. In this case,

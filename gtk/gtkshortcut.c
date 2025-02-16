@@ -28,7 +28,7 @@
 /**
  * GtkShortcut:
  *
- * A `GtkShortcut` describes a keyboard shortcut.
+ * Describes a keyboard shortcut.
  *
  * It contains a description of how to trigger the shortcut via a
  * [class@Gtk.ShortcutTrigger] and a way to activate the shortcut

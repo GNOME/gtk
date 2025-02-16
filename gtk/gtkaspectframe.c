@@ -30,7 +30,7 @@
 /**
  * GtkAspectFrame:
  *
- * `GtkAspectFrame` preserves the aspect ratio of its child.
+ * Preserves the aspect ratio of its child.
  *
  * The frame can respect the aspect ratio of the child widget,
  * or use its own aspect ratio.
@@ -41,9 +41,9 @@
  *
  * # Accessibility
  *
- * Until GTK 4.10, `GtkAspectFrame` used the `GTK_ACCESSIBLE_ROLE_GROUP` role.
+ * Until GTK 4.10, `GtkAspectFrame` used the [enum@Gtk.AccessibleRole.group] role.
  *
- * Starting from GTK 4.12, `GtkAspectFrame` uses the `GTK_ACCESSIBLE_ROLE_GENERIC` role.
+ * Starting from GTK 4.12, `GtkAspectFrame` uses the [enum@Gtk.AccessibleRole.generic] role.
 
  */
 

@@ -49,8 +49,7 @@
 /**
  * GtkDropDown:
  *
- * `GtkDropDown` is a widget that allows the user to choose an item
- * from a list of options.
+ * Allows the user to choose an item from a list of options.
  *
  * ![An example GtkDropDown](drop-down.png)
  *
@@ -104,7 +103,7 @@
  *
  * ## Accessibility
  *
- * `GtkDropDown` uses the %GTK_ACCESSIBLE_ROLE_COMBO_BOX role.
+ * `GtkDropDown` uses the [enum@Gtk.AccessibleRole.combo_box] role.
  */
 
 struct _GtkDropDown

@@ -48,8 +48,7 @@ free_sorter (gpointer data)
 /**
  * GtkColumnViewSorter:
  *
- * `GtkColumnViewSorter` is a sorter implementation that
- * is geared towards the needs of `GtkColumnView`.
+ * Sorts [class@Gtk.ColumnView] columns.
  *
  * The sorter returned by [method@Gtk.ColumnView.get_sorter] is
  * a `GtkColumnViewSorter`.

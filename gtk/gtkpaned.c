@@ -45,7 +45,7 @@
 /**
  * GtkPaned:
  *
- * A widget with two panes, arranged either horizontally or vertically.
+ * Arranges its children in two panes, horizontally or vertically.
  *
  * ![An example GtkPaned](panes.png)
  *

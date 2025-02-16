@@ -196,6 +196,13 @@ gsk_gl_renderer_new (void)
   return g_object_new (GSK_TYPE_GL_RENDERER, NULL);
 }
 
+/**
+ * GskNglRenderer:
+ *
+ * A GL based renderer.
+ *
+ * See [class@Gsk.Renderer].
+ */
 typedef struct {
   GskRenderer parent_instance;
 } GskNglRenderer;

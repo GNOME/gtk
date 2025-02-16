@@ -38,7 +38,7 @@
 /**
  * GtkHeaderBar:
  *
- * A widget for creating custom title bars for windows.
+ * Creates a custom titlebar for a window.
  *
  * ![An example GtkHeaderBar](headerbar.png)
  *

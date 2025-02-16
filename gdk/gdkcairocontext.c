@@ -29,8 +29,7 @@
 /**
  * GdkCairoContext:
  *
- * `GdkCairoContext` is an object representing the platform-specific
- * draw context.
+ * Represents the platform-specific draw context.
  *
  * `GdkCairoContext`s are created for a surface using
  * [method@Gdk.Surface.create_cairo_context], and the context

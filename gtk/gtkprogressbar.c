@@ -43,11 +43,10 @@
 /**
  * GtkProgressBar:
  *
- * `GtkProgressBar` is typically used to display the progress of a long
- * running operation.
+ * Displays the progress of a long-running operation.
  *
- * It provides a visual clue that processing is underway. `GtkProgressBar`
- * can be used in two different modes: percentage mode and activity mode.
+ * `GtkProgressBar` provides a visual clue that processing is underway.
+ * It can be used in two different modes: percentage mode and activity mode.
  *
  * ![An example GtkProgressBar](progressbar.png)
  *
@@ -88,7 +87,7 @@
  *
  * # Accessibility
  *
- * `GtkProgressBar` uses the %GTK_ACCESSIBLE_ROLE_PROGRESS_BAR role.
+ * `GtkProgressBar` uses the [enum@Gtk.AccessibleRole.progress_bar] role.
  */
 
 typedef struct _GtkProgressBarClass         GtkProgressBarClass;

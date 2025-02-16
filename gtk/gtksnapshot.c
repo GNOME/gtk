@@ -44,7 +44,7 @@
 /**
  * GtkSnapshot:
  *
- * `GtkSnapshot` assists in creating [class@Gsk.RenderNode]s for widgets.
+ * Assists in creating [class@Gsk.RenderNode]s for widgets.
  *
  * It functions in a similar way to a cairo context, and maintains a stack
  * of render nodes and their associated transformations.

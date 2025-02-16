@@ -44,7 +44,7 @@
 /**
  * GtkDragSource:
  *
- * `GtkDragSource` is an event controller to initiate Drag-And-Drop operations.
+ * An event controller to initiate Drag-And-Drop operations.
  *
  * `GtkDragSource` can be set up with the necessary
  * ingredients for a DND operation ahead of time. This includes

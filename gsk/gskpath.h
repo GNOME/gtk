@@ -61,8 +61,7 @@ typedef enum
  * @weight: The weight for conic curves, or unused if not a conic curve
  * @user_data: The user data provided with the function
  *
- * Prototype of the callback to iterate through the operations of
- * a path.
+ * Type of the callback to iterate through the operations of a path.
  *
  * For each operation, the callback is given the @op itself, the points
  * that the operation is applied to in @pts, and a @weight for conic

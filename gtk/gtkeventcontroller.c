@@ -21,7 +21,7 @@
 /**
  * GtkEventController:
  *
- * `GtkEventController` is the base class for event controllers.
+ * The base class for event controllers.
  *
  * These are ancillary objects associated to widgets, which react
  * to `GdkEvents`, and possibly trigger actions as a consequence.

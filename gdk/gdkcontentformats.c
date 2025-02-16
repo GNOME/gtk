@@ -18,8 +18,7 @@
 /**
  * GdkContentFormats:
  *
- * The `GdkContentFormats` structure is used to advertise and negotiate the
- * format of content.
+ * Used to advertise and negotiate the format of content.
  *
  * You will encounter `GdkContentFormats` when interacting with objects
  * controlling operations that pass data between different widgets, window
@@ -55,7 +54,7 @@
 /**
  * GdkContentFormatsBuilder:
  *
- * Auxiliary object to create a `GdkContentFormats`.
+ * Creates `GdkContentFormats` objects.
  */
 
 #include "config.h"

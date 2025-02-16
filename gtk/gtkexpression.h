@@ -162,7 +162,7 @@ GtkExpression *         gtk_cclosure_expression_new             (GType          
  * GTK_VALUE_HOLDS_EXPRESSION:
  * @value: a `GValue`
  *
- * Evaluates to %TRUE if @value was initialized with %GTK_TYPE_EXPRESSION.
+ * Evaluates to true if @value was initialized with `GTK_TYPE_EXPRESSION`
  */
 #define GTK_VALUE_HOLDS_EXPRESSION(value)       (G_VALUE_HOLDS ((value), GTK_TYPE_EXPRESSION))
 

@@ -81,7 +81,7 @@ GtkShortcutTrigger *    gtk_never_trigger_get                   (void);
 /**
  * GtkKeyvalTrigger:
  *
- * A `GtkShortcutTrigger` that triggers when a specific keyval and modifiers are pressed.
+ * Triggers when a specific keyval and modifiers are pressed.
  */
 
 GDK_AVAILABLE_IN_ALL
@@ -100,7 +100,7 @@ guint                   gtk_keyval_trigger_get_keyval           (GtkKeyvalTrigge
 /**
  * GtkMnemonicTrigger:
  *
- * A `GtkShortcutTrigger` that triggers when a specific mnemonic is pressed.
+ * Triggers when a specific mnemonic is pressed.
  *
  * Mnemonics require a *mnemonic modifier* (typically <kbd>Alt</kbd>) to be
  * pressed together with the mnemonic key.
@@ -118,9 +118,9 @@ guint                   gtk_mnemonic_trigger_get_keyval         (GtkMnemonicTrig
 /**
  * GtkAlternativeTrigger:
  *
- * A `GtkShortcutTrigger` that combines two triggers.
+ * Combines two shortcut triggers.
  *
- * The `GtkAlternativeTrigger` triggers when either of two trigger.
+ * The `GtkAlternativeTrigger` triggers when either of the two trigger.
  *
  * This can be cascaded to combine more than two triggers.
  */

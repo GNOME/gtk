@@ -37,8 +37,9 @@
 /**
  * GtkToggleButton:
  *
- * A `GtkToggleButton` is a button which remains “pressed-in” when
- * clicked.
+ * Shows a button which remains “pressed-in” when clicked.
+ *
+ * ![Example GtkToggleButtons](toggle-button.png)
  *
  * Clicking again will cause the toggle button to return to its normal state.
  *
@@ -66,7 +67,7 @@
  *
  * ## Accessibility
  *
- * `GtkToggleButton` uses the %GTK_ACCESSIBLE_ROLE_TOGGLE_BUTTON role.
+ * `GtkToggleButton` uses the [enum@Gtk.AccessibleRole.toggle_button] role.
  *
  * ## Creating two `GtkToggleButton` widgets.
  *

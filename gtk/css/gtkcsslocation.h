@@ -30,7 +30,7 @@ typedef struct _GtkCssLocation GtkCssLocation;
 /**
  * GtkCssLocation:
  *
- * A description of a location inside a CSS stream.
+ * Points at a location inside a CSS stream.
  */
 struct _GtkCssLocation
 {

@@ -66,7 +66,7 @@ typedef enum
  * @flags: Flags indicating what axes are present, see [flags@Gdk.AxisFlags]
  * @axes: (array fixed-size=12): axis values, indexed by [enum@Gdk.AxisUse]
  *
- * A `GdkTimeCoord` stores a single event in a motion history.
+ * Stores a single event in a motion history.
  *
  * To check whether an axis is present, check whether the corresponding
  * flag from the [flags@Gdk.AxisFlags] enumeration is set in the @flags

@@ -45,8 +45,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 /**
  * GtkPrintUnixDialog:
  *
- * `GtkPrintUnixDialog` implements a print dialog for platforms
- * which don’t provide a native print dialog, like Unix.
+ * A print dialog for platforms which don’t provide a native
+ * print dialog, like Unix.
  *
  * ![An example GtkPrintUnixDialog](printdialog.png)
  *

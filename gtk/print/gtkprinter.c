@@ -34,7 +34,7 @@
 /**
  * GtkPrinter:
  *
- * A `GtkPrinter` object represents a printer.
+ * Represents a printer.
  *
  * You only need to deal directly with printers if you use the
  * non-portable [class@Gtk.PrintUnixDialog] API.
@@ -1297,12 +1297,12 @@ list_printers_init (PrinterList     *printer_list,
  * @func: a function to call for each printer
  * @data: user data to pass to @func
  * @destroy: function to call if @data is no longer needed
- * @wait: if %TRUE, wait in a recursive mainloop until
+ * @wait: if true, wait in a recursive mainloop until
  *    all printers are enumerated; otherwise return early
  *
- * Calls a function for all `GtkPrinter`s.
+ * Calls a function for all printers that are known to GTK.
  *
- * If @func returns %TRUE, the enumeration is stopped.
+ * If @func returns true, the enumeration is stopped.
  */
 void
 gtk_enumerate_printers (GtkPrinterFunc func,

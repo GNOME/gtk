@@ -20,7 +20,7 @@
 /**
  * GtkConstraintLayout:
  *
- * A layout manager using constraints to describe relations between widgets.
+ * Uses constraints to describe relations between widgets.
  *
  * `GtkConstraintLayout` is a layout manager that uses relations between
  * widget attributes, expressed via [class@Gtk.Constraint] instances, to
