@@ -31,6 +31,7 @@
         </accessibility>
         <property name="has-arrow">0</property>
         <property name="menu-model">model</property>
+        <property name="halign">start</property>
       </object>
     </child>
     <child>
