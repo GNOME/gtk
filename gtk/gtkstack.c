@@ -123,7 +123,7 @@
 /**
  * GtkStackPage:
  *
- * `An auxiliary class used by `GtkStack`.
+ * An auxiliary class used by `GtkStack`.
  */
 
 /* TODO:
