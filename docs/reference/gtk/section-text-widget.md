@@ -74,7 +74,7 @@ multiple bytes in UTF-8, and the two-character sequence "\r\n" is also
 considered a line separator.
 
 Text buffers support undo and redo if gtk_text_buffer_set_enable_undo()
-has been set to %TRUE. Use gtk_text_buffer_undo() or gtk_text_buffer_redo()
+has been set to true. Use gtk_text_buffer_undo() or gtk_text_buffer_redo()
 to perform the necessary action. Note that these operations are ignored if
 the buffer is not editable. Developers may want some operations to not be
 undoable. To do this, wrap your changes in

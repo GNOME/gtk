@@ -73,16 +73,16 @@ In the first phase (the “capture” phase) the event is delivered to
 each widget from the top-most (the top-level `GtkWindow` or grab widget)
 down to the target widget.
 [Event controllers](event-controllers-and-gestures) that are attached
-with %GTK_PHASE_CAPTURE get a chance to react to the event.
+with `GTK_PHASE_CAPTURE` get a chance to react to the event.
 
 After the “capture” phase, the widget that was intended to be the
 destination of the event will run event controllers attached to
-it with %GTK_PHASE_TARGET. This is known as the “target” phase,
+it with `GTK_PHASE_TARGET`. This is known as the “target” phase,
 and only happens on that widget.
 
 In the last phase (the “bubble” phase), the event is delivered
 to each widget from the target to the top-most, and event
-controllers attached with %GTK_PHASE_BUBBLE are run.
+controllers attached with `GTK_PHASE_BUBBLE` are run.
 
 Events are not delivered to a widget which is insensitive or unmapped.
 
@@ -97,7 +97,7 @@ below to learn more about gestures and sequences.
 
 Every `GtkWindow` maintains a single focus location (in the :focus-widget
 property). The focus widget is the target widget for key events sent to
-the window. Only widgets which have :focusable set to %TRUE can become
+the window. Only widgets which have :focusable set to true can become
 the focus. Typically these are input controls such as entries or text
 fields, but e.g. buttons can take the focus too.
 
@@ -208,7 +208,7 @@ Alternatively, or at a later point in time, the widget may choose
 to deny the touch sequences, thus letting those go through again
 in event propagation. When this happens in the capture phase, and
 if there are no other claiming gestures in the widget,
-a %GDK_TOUCH_BEGIN/%GDK_BUTTON_PRESS event will be emulated and
+a `GDK_TOUCH_BEGIN`/`GDK_BUTTON_PRESS` event will be emulated and
 propagated downwards, in order to preserve consistency.
 
 Grouped gestures always share the same state for a given touch
