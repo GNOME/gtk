@@ -268,12 +268,6 @@ get_family_name (gpointer item)
 }
 
 static char *
-get_title (gpointer item)
-{
-  return g_strdup (STRING_HOLDER (item)->title);
-}
-
-static char *
 get_file_name (gpointer item)
 {
   return g_strdup (g_file_info_get_display_name (G_FILE_INFO (item)));
@@ -469,10 +463,9 @@ do_listview_selections (GtkWidget *do_widget)
       g_object_unref (minutes_model);
       g_object_unref (hours_model);
       flat = gtk_flatten_list_model_new (G_LIST_MODEL (store));
-      expression = gtk_cclosure_expression_new (G_TYPE_STRING, NULL,
-                                                0, NULL,
-                                                (GCallback)get_title,
-                                                NULL, NULL);
+      expression = gtk_property_expression_new (GTK_TYPE_STRING_OBJECT,
+                                                NULL,
+                                                "string");
       button = gtk_drop_down_new (G_LIST_MODEL (flat), expression);
       gtk_drop_down_set_enable_search (GTK_DROP_DOWN (button), TRUE);
       factory = gtk_signal_list_item_factory_new ();
