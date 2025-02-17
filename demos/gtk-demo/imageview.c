@@ -1,5 +1,6 @@
 #include <math.h>
-#include "demo3widget.h"
+#include "imageview.h"
+
 
 enum
 {
@@ -9,7 +10,7 @@ enum
   PROP_ANGLE,
 };
 
-struct _Demo3Widget
+struct _ImageView
 {
   GtkWidget parent_instance;
 
@@ -21,12 +22,12 @@ struct _Demo3Widget
   GtkWidget *menu;
 };
 
-struct _Demo3WidgetClass
+struct _ImageViewClass
 {
   GtkWidgetClass parent_class;
 };
 
-G_DEFINE_TYPE (Demo3Widget, demo3_widget, GTK_TYPE_WIDGET)
+G_DEFINE_TYPE (ImageView, image_view, GTK_TYPE_WIDGET)
 
 static gboolean
 query_tooltip (GtkWidget  *widget,
@@ -36,7 +37,7 @@ query_tooltip (GtkWidget  *widget,
                GtkTooltip *tooltip,
                gpointer    data)
 {
-  Demo3Widget *self = DEMO3_WIDGET (widget);
+  ImageView *self = IMAGE_VIEW (widget);
   GtkWidget *grid;
   GtkWidget *label;
   char *s, *s2;
@@ -105,7 +106,7 @@ query_tooltip (GtkWidget  *widget,
 }
 
 static void
-demo3_widget_init (Demo3Widget *self)
+image_view_init (ImageView *self)
 {
   self->scale = 1.f;
   self->angle = 0.f;
@@ -114,22 +115,22 @@ demo3_widget_init (Demo3Widget *self)
 }
 
 static void
-demo3_widget_dispose (GObject *object)
+image_view_dispose (GObject *object)
 {
-  Demo3Widget *self = DEMO3_WIDGET (object);
+  ImageView *self = IMAGE_VIEW (object);
 
   g_clear_object (&self->texture);
 
-  gtk_widget_dispose_template (GTK_WIDGET (self), DEMO3_TYPE_WIDGET);
+  gtk_widget_dispose_template (GTK_WIDGET (self), IMAGE_TYPE_VIEW);
 
-  G_OBJECT_CLASS (demo3_widget_parent_class)->dispose (object);
+  G_OBJECT_CLASS (image_view_parent_class)->dispose (object);
 }
 
 static void
-demo3_widget_snapshot (GtkWidget   *widget,
-                       GtkSnapshot *snapshot)
+image_view_snapshot (GtkWidget   *widget,
+                     GtkSnapshot *snapshot)
 {
-  Demo3Widget *self = DEMO3_WIDGET (widget);
+  ImageView *self = IMAGE_VIEW (widget);
   int x, y, width, height;
   double w, h, w2, h2;
 
@@ -165,15 +166,15 @@ demo3_widget_snapshot (GtkWidget   *widget,
 }
 
 static void
-demo3_widget_measure (GtkWidget      *widget,
-                      GtkOrientation  orientation,
-                      int             for_size,
-                      int            *minimum,
-                      int            *natural,
-                      int            *minimum_baseline,
-                      int            *natural_baseline)
+image_view_measure (GtkWidget      *widget,
+                    GtkOrientation  orientation,
+                    int             for_size,
+                    int            *minimum,
+                    int            *natural,
+                    int            *minimum_baseline,
+                    int            *natural_baseline)
 {
-  Demo3Widget *self = DEMO3_WIDGET (widget);
+  ImageView *self = IMAGE_VIEW (widget);
   int width, height;
   int size;
 
@@ -197,12 +198,12 @@ demo3_widget_measure (GtkWidget      *widget,
 }
 
 static void
-demo3_widget_size_allocate (GtkWidget *widget,
-                            int        width,
-                            int        height,
-                            int        baseline)
+image_view_size_allocate (GtkWidget *widget,
+                          int        width,
+                          int        height,
+                          int        baseline)
 {
-  Demo3Widget *self = DEMO3_WIDGET (widget);
+  ImageView *self = IMAGE_VIEW (widget);
 
   /* Since we are not using a layout manager (who would do this
    * for us), we need to allocate a size for our menu by calling
@@ -211,15 +212,15 @@ demo3_widget_size_allocate (GtkWidget *widget,
   gtk_popover_present (GTK_POPOVER (self->menu));
 }
 
-static void update_actions (Demo3Widget *self);
+static void update_actions (ImageView *self);
 
 static void
-demo3_widget_set_property (GObject      *object,
-                           guint         prop_id,
-                           const GValue *value,
-                           GParamSpec   *pspec)
+image_view_set_property (GObject      *object,
+                         guint         prop_id,
+                         const GValue *value,
+                         GParamSpec   *pspec)
 {
-  Demo3Widget *self = DEMO3_WIDGET (object);
+  ImageView *self = IMAGE_VIEW (object);
 
   switch (prop_id)
     {
@@ -259,12 +260,12 @@ demo3_widget_set_property (GObject      *object,
 }
 
 static void
-demo3_widget_get_property (GObject     *object,
-                           guint        prop_id,
-                           GValue      *value,
-                           GParamSpec  *pspec)
+image_view_get_property (GObject     *object,
+                         guint        prop_id,
+                         GValue      *value,
+                         GParamSpec  *pspec)
 {
-  Demo3Widget *self = DEMO3_WIDGET (object);
+  ImageView *self = IMAGE_VIEW (object);
 
   switch (prop_id)
     {
@@ -295,7 +296,7 @@ pressed_cb (GtkGestureClick *gesture,
             guint            n_press,
             double           x,
             double           y,
-            Demo3Widget     *self)
+            ImageView     *self)
 {
   /* We are placing our menu at the point where
    * the click happened, before popping it up.
@@ -306,7 +307,7 @@ pressed_cb (GtkGestureClick *gesture,
 }
 
 static void
-update_actions (Demo3Widget *self)
+update_actions (ImageView *self)
 {
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "zoom.in", self->scale < 1024.);
   gtk_widget_action_set_enabled (GTK_WIDGET (self), "zoom.out", self->scale > 1./1024.);
@@ -318,7 +319,7 @@ zoom_cb (GtkWidget  *widget,
          const char *action_name,
          GVariant   *parameter)
 {
-  Demo3Widget *self = DEMO3_WIDGET (widget);
+  ImageView *self = IMAGE_VIEW (widget);
   float scale;
 
   if (g_str_equal (action_name, "zoom.in"))
@@ -338,7 +339,7 @@ rotate_cb (GtkWidget  *widget,
            const char *action_name,
            GVariant   *parameter)
 {
-  Demo3Widget *self = DEMO3_WIDGET (widget);
+  ImageView *self = IMAGE_VIEW (widget);
   int angle;
 
   g_variant_get (parameter, "i", &angle);
@@ -347,18 +348,18 @@ rotate_cb (GtkWidget  *widget,
 }
 
 static void
-demo3_widget_class_init (Demo3WidgetClass *class)
+image_view_class_init (ImageViewClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
   GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (class);
 
-  object_class->dispose = demo3_widget_dispose;
-  object_class->set_property = demo3_widget_set_property;
-  object_class->get_property = demo3_widget_get_property;
+  object_class->dispose = image_view_dispose;
+  object_class->set_property = image_view_set_property;
+  object_class->get_property = image_view_get_property;
 
-  widget_class->snapshot = demo3_widget_snapshot;
-  widget_class->measure = demo3_widget_measure;
-  widget_class->size_allocate = demo3_widget_size_allocate;
+  widget_class->snapshot = image_view_snapshot;
+  widget_class->measure = image_view_measure;
+  widget_class->size_allocate = image_view_size_allocate;
 
   g_object_class_install_property (object_class, PROP_TEXTURE,
       g_param_spec_object ("texture", NULL, NULL,
@@ -386,27 +387,25 @@ demo3_widget_class_init (Demo3WidgetClass *class)
   gtk_widget_class_install_action (widget_class, "zoom.reset", NULL, zoom_cb);
   gtk_widget_class_install_action (widget_class, "rotate", "i", rotate_cb);
 
-  gtk_widget_class_set_template_from_resource (widget_class, "/menu/demo3widget.ui");
-  gtk_widget_class_bind_template_child (widget_class, Demo3Widget, menu);
+  gtk_widget_class_set_template_from_resource (widget_class, "/menu/imageview.ui");
+  gtk_widget_class_bind_template_child (widget_class, ImageView, menu);
   gtk_widget_class_bind_template_callback (widget_class, pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, query_tooltip);
 
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_IMG);
 }
 
 GtkWidget *
-demo3_widget_new (const char *resource)
+image_view_new (const char *resource)
 {
-  Demo3Widget *self;
+  ImageView *self;
   GdkTexture *texture;
 
   texture = gdk_texture_new_from_resource (resource);
 
-  self = g_object_new (DEMO3_TYPE_WIDGET,
+  self = g_object_new (IMAGE_TYPE_VIEW,
                        "texture", texture,
-                       "has-tooltip", TRUE,
                        NULL);
-
-  g_signal_connect (self, "query-tooltip", G_CALLBACK (query_tooltip), NULL);
 
   g_object_unref (texture);
 

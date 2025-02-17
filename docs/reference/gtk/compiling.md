@@ -26,11 +26,11 @@ Deprecated GTK functions are annotated to make the compiler
 emit warnings when they are used (e.g. with gcc, you need to use
 the -Wdeprecated-declarations option). If these warnings are
 problematic, they can be turned off by defining the preprocessor
-symbol %GDK_DISABLE_DEPRECATION_WARNINGS by using the commandline
+symbol `GDK_DISABLE_DEPRECATION_WARNINGS` by using the commandline
 option `-DGDK_DISABLE_DEPRECATION_WARNINGS`.
 
 GTK deprecation annotations are versioned; by defining the
-macros %GDK_VERSION_MIN_REQUIRED and %GDK_VERSION_MAX_ALLOWED,
+macros `GDK_VERSION_MIN_REQUIRED` and `GDK_VERSION_MAX_ALLOWED`,
 you can specify the range of GTK versions whose API you want
 to use. APIs that were deprecated before or introduced after
 this range will trigger compiler warnings.
@@ -48,9 +48,9 @@ $ cc `pkg-config --cflags gtk4` -DGDK_VERSION_MAX_ALLOWED=GDK_VERSION_4_2 hello.
 ```
 The older deprecation mechanism of hiding deprecated interfaces
 entirely from the compiler by using the preprocessor symbol
-GTK_DISABLE_DEPRECATED is still used for deprecated macros,
+`GTK_DISABLE_DEPRECATED` is still used for deprecated macros,
 enumeration values, etc. To detect uses of these in your code,
 use the commandline option `-DGTK_DISABLE_DEPRECATED`.
-There are similar symbols GDK_DISABLE_DEPRECATED,
-GDK_PIXBUF_DISABLE_DEPRECATED and G_DISABLE_DEPRECATED for GDK,
-GdkPixbuf and GLib.
+There are similar symbols `GDK_DISABLE_DEPRECATED`,
+`GDK_PIXBUF_DISABLE_DEPRECATED` and `G_DISABLE_DEPRECATED`
+for GDK, GdkPixbuf and GLib.

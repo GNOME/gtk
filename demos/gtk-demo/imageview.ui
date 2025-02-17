@@ -18,9 +18,11 @@
       <attribute name="target" type="i">90</attribute>
     </item>
   </menu>
-  <template class="Demo3Widget">
+  <template class="ImageView">
+    <signal name="query-tooltip" handler="query_tooltip"/>
+    <property name="has-tooltip">1</property>
     <accessibility>
-      <property name="label">Demo image</property>
+      <property name="label">Image view</property>
     </accessibility>
     <child>
       <object class="GtkPopoverMenu" id="menu">
@@ -29,6 +31,7 @@
         </accessibility>
         <property name="has-arrow">0</property>
         <property name="menu-model">model</property>
+        <property name="halign">start</property>
       </object>
     </child>
     <child>

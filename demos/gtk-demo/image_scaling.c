@@ -12,7 +12,8 @@
  */
 
 #include <gtk/gtk.h>
-#include "demo3widget.h"
+#include "imageview.h"
+
 
 static GtkWidget *window = NULL;
 static GCancellable *cancellable = NULL;
@@ -229,6 +230,7 @@ do_image_scaling (GtkWidget *do_widget)
       GtkWidget *box;
       GtkWidget *box2;
       GtkWidget *sw;
+      GtkWidget *vp;
       GtkWidget *widget;
       GtkWidget *scale;
       GtkWidget *dropdown;
@@ -263,8 +265,12 @@ do_image_scaling (GtkWidget *do_widget)
       gtk_widget_set_vexpand (sw, TRUE);
       gtk_box_append (GTK_BOX (box), sw);
 
-      widget = demo3_widget_new ("/transparent/portland-rose.jpg");
-      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), widget);
+      widget = image_view_new ("/transparent/portland-rose.jpg");
+      vp = gtk_viewport_new (NULL, NULL);
+      gtk_viewport_set_scroll_to_focus (GTK_VIEWPORT (vp), FALSE);
+
+      gtk_viewport_set_child (GTK_VIEWPORT (vp), widget);
+      gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (sw), vp);
 
       box2 = gtk_box_new (GTK_ORIENTATION_HORIZONTAL, 0);
       gtk_box_append (GTK_BOX (box), box2);

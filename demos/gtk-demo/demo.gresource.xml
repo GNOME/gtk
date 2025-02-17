@@ -201,9 +201,9 @@
     <file>main.ui</file>
   </gresource>
   <gresource prefix="/menu">
-    <file>demo3widget.c</file>
-    <file>demo3widget.h</file>
-    <file>demo3widget.ui</file>
+    <file>imageview.c</file>
+    <file>imageview.h</file>
+    <file>imageview.ui</file>
   </gresource>
   <gresource prefix="/mask">
     <file>demo4widget.c</file>

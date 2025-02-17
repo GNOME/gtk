@@ -677,11 +677,11 @@ gdk_android_toplevel_get_activity (GdkAndroidToplevel *self)
  * gdk_android_toplevel_launch_activity: (skip)
  * @self: (transfer none): the toplevel
  * @intent: [Intent](https://developer.android.com/reference/android/content/Intent) to launch
- * @error: return location for a [struct@GLib.Error] or %NULL
+ * @error: return location for a [struct@GLib.Error]
  *
  * Launch a new activity defined by @intent with @self as parent.
  *
- * Returns: %TRUE if successful, %FALSE otherwise
+ * Returns: true if successful, false otherwise
  *
  * Since: 4.18
  */
@@ -777,7 +777,7 @@ gdk_android_toplevel_launch_activity_for_result_async (GdkAndroidToplevel *self,
  * Get the result code (and data) returned from an activity launched via
  * [method@Gdk.AndroidToplevel.launch_activity_for_result_async].
  *
- * Returns: %TRUE if successful, %FALSE otherwise
+ * Returns: true if successful, false otherwise
  */
 gboolean
 gdk_android_toplevel_launch_activity_for_result_finish (GdkAndroidToplevel *self,

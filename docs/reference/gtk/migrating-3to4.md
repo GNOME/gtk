@@ -995,7 +995,7 @@ since these windows no longer exist:
 
 ### Widgets are now visible by default
 
-The default value of [property@Gtk.Widget:visible] in GTK 4 is %TRUE, so you no
+The default value of [property@Gtk.Widget:visible] in GTK 4 is true, so you no
 longer need to explicitly show all your widgets. On the flip side, you
 need to hide widgets that are not meant to be visible from the start.
 The only widgets that still need to be explicitly shown are toplevel
@@ -1140,7 +1140,7 @@ The way search entries are connected to global events has changed;
 
 ### Adapt to GtkScale changes
 
-The default value of `GtkScale:draw-value` has been changed to %FALSE.
+The default value of `GtkScale:draw-value` has been changed to false.
 If you want your scales to draw values, you will have to set this
 property explicitly now.
 
@@ -1201,11 +1201,11 @@ instead, as appropriate.
 
 To allow signal handlers to access the deleted text before it
 has been deleted, the [signal@Gtk.EntryBuffer::deleted-text] signal
-has changed from %G_SIGNAL_RUN_FIRST to %G_SIGNAL_RUN_LAST. The default
+has changed from `G_SIGNAL_RUN_FIRST` to `G_SIGNAL_RUN_LAST`. The default
 handler removes the text from the [class@Gtk.EntryBuffer].
 
 To adapt existing code, use `g_signal_connect_after()` or
-%G_CONNECT_AFTER when using `g_signal_connect_data()` or
+`G_CONNECT_AFTER` when using `g_signal_connect_data()` or
 `g_signal_connect_object()`.
 
 ### GtkMenu, GtkMenuBar and GtkMenuItem are gone
@@ -1302,7 +1302,7 @@ has been removed; GFile can be used to access non-local as well as local
 resources.
 
 The `GTK_FILE_CHOOSER_ACTION_CREATE_FOLDER` action has been removed. Use
-%GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER, instead. If a new folder is needed,
+`GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER`, instead. If a new folder is needed,
 the user can create one.
 
 The "confirm-overwrite" signal, and the "do-overwrite-confirmation"
@@ -1327,7 +1327,7 @@ the event-driven programming model of GTK.
 
 You can replace calls to `gtk_dialog_run()` by specifying that the
 `GtkDialog` must be modal using [method@Gtk.Window.set_modal] or the
-%GTK_DIALOG_MODAL flag, and connecting to the [signal@Gtk.Dialog::response]
+`GTK_DIALOG_MODAL` flag, and connecting to the [signal@Gtk.Dialog::response]
 signal.
 
 ### Stop using GtkBuildable API

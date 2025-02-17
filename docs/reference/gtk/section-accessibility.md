@@ -99,14 +99,14 @@ Each attribute accepts a value of a specific type.
 Unlike roles, attributes may change over time, or in response to user action;
 for instance:
 
- - a toggle button will change its %GTK_ACCESSIBLE_STATE_CHECKED state every
+ - a toggle button will change its `GTK_ACCESSIBLE_STATE_CHECKED` state every
    time it is toggled, either by the user or programmatically
  - setting the mnemonic widget on a `GtkLabel` will update the
-   %GTK_ACCESSIBLE_RELATION_LABELLED_BY relation on the widget with a
+   `GTK_ACCESSIBLE_RELATION_LABELLED_BY` relation on the widget with a
    reference to the label
  - changing the `GtkAdjustment` instance on a `GtkScrollbar` will change the
-   %GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, %GTK_ACCESSIBLE_PROPERTY_VALUE_MIN,
-   and %GTK_ACCESSIBLE_PROPERTY_VALUE_NOW properties with the upper, lower,
+   `GTK_ACCESSIBLE_PROPERTY_VALUE_MAX`, `GTK_ACCESSIBLE_PROPERTY_VALUE_MIN`,
+   and `GTK_ACCESSIBLE_PROPERTY_VALUE_NOW` properties with the upper, lower,
    and value properties of the `GtkAdjustment`
 
 See the [WAI-ARIA](https://www.w3.org/WAI/PF/aria/appendices#quickref) list
@@ -118,15 +118,15 @@ Each state name is part of the `GtkAccessibleState` enumeration.
 
 | State name | ARIA attribute | Value type | Notes |
 |------------|----------------|------------|-------|
-| %GTK_ACCESSIBLE_STATE_BUSY | “aria-busy” | boolean |
-| %GTK_ACCESSIBLE_STATE_CHECKED | “aria-checked” | `GtkAccessibleTristate` | Indicates the current state of a [class@Gtk.CheckButton] |
-| %GTK_ACCESSIBLE_STATE_DISABLED | “aria-disabled” | boolean | Corresponds to the [property@Gtk.Widget:sensitive] property on [class@Gtk.Widget] |
-| %GTK_ACCESSIBLE_STATE_EXPANDED | “aria-expanded” | boolean or undefined | Corresponds to the  [property@Gtk.Expander:expanded] property on [class@Gtk.Expander] |
-| %GTK_ACCESSIBLE_STATE_HIDDEN | “aria-hidden” | boolean | Corresponds to the [property@Gtk.Widget:visible] property on [class@Gtk.Widget] |
-| %GTK_ACCESSIBLE_STATE_INVALID | “aria-invalid” | `GtkAccessibleInvalidState` | Set when a widget is showing an error |
-| %GTK_ACCESSIBLE_STATE_PRESSED | “aria-pressed” | `GtkAccessibleTristate` | Indicates the current state of a [class@Gtk.ToggleButton] |
-| %GTK_ACCESSIBLE_STATE_SELECTED | “aria-selected” | boolean or undefined | Set when a widget is selected |
-| %GTK_ACCESSIBLE_STATE_VISITED | N/A | boolean or undefined | Set when a link-like widget is visited |
+| `GTK_ACCESSIBLE_STATE_BUSY` | “aria-busy” | boolean |
+| `GTK_ACCESSIBLE_STATE_CHECKED` | “aria-checked” | `GtkAccessibleTristate` | Indicates the current state of a [class@Gtk.CheckButton] |
+| `GTK_ACCESSIBLE_STATE_DISABLED` | “aria-disabled” | boolean | Corresponds to the [property@Gtk.Widget:sensitive] property on [class@Gtk.Widget] |
+| `GTK_ACCESSIBLE_STATE_EXPANDED` | “aria-expanded” | boolean or undefined | Corresponds to the  [property@Gtk.Expander:expanded] property on [class@Gtk.Expander] |
+| `GTK_ACCESSIBLE_STATE_HIDDEN` | “aria-hidden” | boolean | Corresponds to the [property@Gtk.Widget:visible] property on [class@Gtk.Widget] |
+| `GTK_ACCESSIBLE_STATE_INVALID` | “aria-invalid” | `GtkAccessibleInvalidState` | Set when a widget is showing an error |
+| `GTK_ACCESSIBLE_STATE_PRESSED` | “aria-pressed” | `GtkAccessibleTristate` | Indicates the current state of a [class@Gtk.ToggleButton] |
+| `GTK_ACCESSIBLE_STATE_SELECTED` | “aria-selected” | boolean or undefined | Set when a widget is selected |
+| `GTK_ACCESSIBLE_STATE_VISITED` | N/A | boolean or undefined | Set when a link-like widget is visited |
 
 #### List of accessible properties
 
@@ -134,26 +134,26 @@ Each property name is part of the `GtkAccessibleProperty` enumeration.
 
 | State name | ARIA attribute | Value type |
 |------------|----------------|------------|
-| %GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE | “aria-autocomplete” | `GtkAccessibleAutocomplete` |
-| %GTK_ACCESSIBLE_PROPERTY_DESCRIPTION | “aria-description” | translatable string |
-| %GTK_ACCESSIBLE_PROPERTY_HAS_POPUP | “aria-haspopup” | boolean |
-| %GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS | “aria-keyshortcuts” | string |
-| %GTK_ACCESSIBLE_PROPERTY_LABEL | “aria-label” | translatable string |
-| %GTK_ACCESSIBLE_PROPERTY_LEVEL | “aria-level” | integer |
-| %GTK_ACCESSIBLE_PROPERTY_MODAL | “aria-modal” | boolean |
-| %GTK_ACCESSIBLE_PROPERTY_MULTI_LINE | “aria-multiline” | boolean |
-| %GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE | “aria-multiselectable” | boolean |
-| %GTK_ACCESSIBLE_PROPERTY_ORIENTATION | “aria-orientation” | `GtkOrientation` |
-| %GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER | “aria-placeholder” | translatable string |
-| %GTK_ACCESSIBLE_PROPERTY_READ_ONLY | “aria-readonly” | boolean |
-| %GTK_ACCESSIBLE_PROPERTY_REQUIRED | “aria-required” | boolean |
-| %GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION | “aria-roledescription” | translatable string |
-| %GTK_ACCESSIBLE_PROPERTY_SORT | “aria-sort” | `GtkAccessibleSort` |
-| %GTK_ACCESSIBLE_PROPERTY_VALUE_MAX | “aria-valuemax” | double |
-| %GTK_ACCESSIBLE_PROPERTY_VALUE_MIN | “aria-valuemin” | double |
-| %GTK_ACCESSIBLE_PROPERTY_VALUE_NOW | “aria-valuenow” | double |
-| %GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT | “aria-valuetext” | translatable string |
-| %GTK_ACCESSIBLE_PROPERTY_HELP_TEXT | N/A | translatable string |
+| `GTK_ACCESSIBLE_PROPERTY_AUTOCOMPLETE` | “aria-autocomplete” | `GtkAccessibleAutocomplete` |
+| `GTK_ACCESSIBLE_PROPERTY_DESCRIPTION` | “aria-description” | translatable string |
+| `GTK_ACCESSIBLE_PROPERTY_HAS_POPUP` | “aria-haspopup” | boolean |
+| `GTK_ACCESSIBLE_PROPERTY_KEY_SHORTCUTS` | “aria-keyshortcuts” | string |
+| `GTK_ACCESSIBLE_PROPERTY_LABEL` | “aria-label” | translatable string |
+| `GTK_ACCESSIBLE_PROPERTY_LEVEL` | “aria-level” | integer |
+| `GTK_ACCESSIBLE_PROPERTY_MODAL` | “aria-modal” | boolean |
+| `GTK_ACCESSIBLE_PROPERTY_MULTI_LINE` | “aria-multiline” | boolean |
+| `GTK_ACCESSIBLE_PROPERTY_MULTI_SELECTABLE` | “aria-multiselectable” | boolean |
+| `GTK_ACCESSIBLE_PROPERTY_ORIENTATION` | “aria-orientation” | `GtkOrientation` |
+| `GTK_ACCESSIBLE_PROPERTY_PLACEHOLDER` | “aria-placeholder” | translatable string |
+| `GTK_ACCESSIBLE_PROPERTY_READ_ONLY` | “aria-readonly” | boolean |
+| `GTK_ACCESSIBLE_PROPERTY_REQUIRED` | “aria-required” | boolean |
+| `GTK_ACCESSIBLE_PROPERTY_ROLE_DESCRIPTION` | “aria-roledescription” | translatable string |
+| `GTK_ACCESSIBLE_PROPERTY_SORT` | “aria-sort” | `GtkAccessibleSort` |
+| `GTK_ACCESSIBLE_PROPERTY_VALUE_MAX` | “aria-valuemax” | double |
+| `GTK_ACCESSIBLE_PROPERTY_VALUE_MIN` | “aria-valuemin” | double |
+| `GTK_ACCESSIBLE_PROPERTY_VALUE_NOW` | “aria-valuenow” | double |
+| `GTK_ACCESSIBLE_PROPERTY_VALUE_TEXT` | “aria-valuetext” | translatable string |
+| `GTK_ACCESSIBLE_PROPERTY_HELP_TEXT` | N/A | translatable string |
 
 #### List of accessible relations
 
@@ -161,28 +161,28 @@ Each relation name is part of the `GtkAccessibleRelation` enumeration.
 
 | State name | ARIA attribute | Value type |
 |------------|----------------|------------|
-| %GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT | “aria-activedescendant” | `GtkAccessible` |
-| %GTK_ACCESSIBLE_RELATION_COL_COUNT | “aria-colcount” | integer |
-| %GTK_ACCESSIBLE_RELATION_COL_INDEX | “aria-colindex” | integer |
-| %GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT | “aria-colindextext” | translatable string |
-| %GTK_ACCESSIBLE_RELATION_COL_SPAN | “aria-colspan” | integer |
-| %GTK_ACCESSIBLE_RELATION_CONTROLS | “aria-controls” | a list of `GtkAccessible` |
-| %GTK_ACCESSIBLE_RELATION_DESCRIBED_BY | “aria-describedby” | a list of `GtkAccessible` |
-| %GTK_ACCESSIBLE_RELATION_DETAILS | “aria-details” | a list of `GtkAccessible` |
-| %GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE | “aria-errormessage” | a list of `GtkAccessible` |
-| %GTK_ACCESSIBLE_RELATION_FLOW_TO | “aria-flowto” | a list of `GtkAccessible` |
-| %GTK_ACCESSIBLE_RELATION_LABELLED_BY | “aria-labelledby” | a list of `GtkAccessible` |
-| %GTK_ACCESSIBLE_RELATION_OWNS | “aria-owns” | a list of `GtkAccessible` |
-| %GTK_ACCESSIBLE_RELATION_POS_IN_SET | “aria-posinset” | integer |
-| %GTK_ACCESSIBLE_RELATION_ROW_COUNT | “aria-rowcount” | integer |
-| %GTK_ACCESSIBLE_RELATION_ROW_INDEX | “aria-rowindex” | integer |
-| %GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT | “aria-rowindextext” | translatable string |
-| %GTK_ACCESSIBLE_RELATION_ROW_SPAN | “aria-rowspan” | integer |
-| %GTK_ACCESSIBLE_RELATION_SET_SIZE | “aria-setsize” | integer |
+| `GTK_ACCESSIBLE_RELATION_ACTIVE_DESCENDANT` | “aria-activedescendant” | `GtkAccessible` |
+| `GTK_ACCESSIBLE_RELATION_COL_COUNT` | “aria-colcount” | integer |
+| `GTK_ACCESSIBLE_RELATION_COL_INDEX` | “aria-colindex” | integer |
+| `GTK_ACCESSIBLE_RELATION_COL_INDEX_TEXT` | “aria-colindextext” | translatable string |
+| `GTK_ACCESSIBLE_RELATION_COL_SPAN` | “aria-colspan” | integer |
+| `GTK_ACCESSIBLE_RELATION_CONTROLS` | “aria-controls” | a list of `GtkAccessible` |
+| `GTK_ACCESSIBLE_RELATION_DESCRIBED_BY` | “aria-describedby” | a list of `GtkAccessible` |
+| `GTK_ACCESSIBLE_RELATION_DETAILS` | “aria-details” | a list of `GtkAccessible` |
+| `GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE` | “aria-errormessage” | a list of `GtkAccessible` |
+| `GTK_ACCESSIBLE_RELATION_FLOW_TO` | “aria-flowto” | a list of `GtkAccessible` |
+| `GTK_ACCESSIBLE_RELATION_LABELLED_BY` | “aria-labelledby” | a list of `GtkAccessible` |
+| `GTK_ACCESSIBLE_RELATION_OWNS` | “aria-owns” | a list of `GtkAccessible` |
+| `GTK_ACCESSIBLE_RELATION_POS_IN_SET` | “aria-posinset” | integer |
+| `GTK_ACCESSIBLE_RELATION_ROW_COUNT` | “aria-rowcount” | integer |
+| `GTK_ACCESSIBLE_RELATION_ROW_INDEX` | “aria-rowindex” | integer |
+| `GTK_ACCESSIBLE_RELATION_ROW_INDEX_TEXT` | “aria-rowindextext” | translatable string |
+| `GTK_ACCESSIBLE_RELATION_ROW_SPAN` | “aria-rowspan” | integer |
+| `GTK_ACCESSIBLE_RELATION_SET_SIZE` | “aria-setsize” | integer |
 
 *Note*: When using gtk_accessible_update_relation() with a relation that
 requires a list of `GtkAccessible` instances, you should pass every
-accessible object separately, followed by %NULL. 
+accessible object separately, followed by `NULL`. 
 
 ## Application development rules
 
@@ -267,15 +267,15 @@ gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_BUTTON);
 is a promise that the widget being created will provide the same keyboard
 interactions expected for a button. An accessible role of a button will not
 turn automatically any widget into a `GtkButton`; but if your widget behaves
-like a button, using the %GTK_ACCESSIBLE_ROLE_BUTTON will allow any
+like a button, using the `GTK_ACCESSIBLE_ROLE_BUTTON` will allow any
 assistive technology to handle it like they would a `GtkButton`.
 
 For widgets that act as containers of other widgets, you should use
-%GTK_ACCESSIBLE_ROLE_GROUP if the grouping of the children is semantic
+`GTK_ACCESSIBLE_ROLE_GROUP` if the grouping of the children is semantic
 in nature; for instance, the children of a [class@Gtk.HeaderBar] are
 grouped together on the header of a window. For generic containers that
 only impose a layout on their children, you should use
-%GTK_ACCESSIBLE_ROLE_GENERIC instead.
+`GTK_ACCESSIBLE_ROLE_GENERIC` instead.
 
 ### Attributes can both hide and enhance
 
@@ -320,13 +320,13 @@ widgets.
 
 The accessibility API is mainly used to express semantics useful for
 assistive technologies, but it can also be used to hide elements. The
-canonical way to do so is to use the %GTK_ACCESSIBLE_ROLE_PRESENTATION,
+canonical way to do so is to use the `GTK_ACCESSIBLE_ROLE_PRESENTATION`,
 which declares that a UI element is purely meant for presentation purposes,
 and as such it has no meaningful impact on the accessibility of the
 interface.
 
 A "presentation" role should not be confused with the
-%GTK_ACCESSIBLE_STATE_HIDDEN state; the "hidden" state is transient, and is
+`GTK_ACCESSIBLE_STATE_HIDDEN` state; the "hidden" state is transient, and is
 typically controlled by showing and hiding a widget using the `GtkWidget`
 API.
 
@@ -343,7 +343,7 @@ recommended you use `GtkButton` for anything that looks and behaves like a
 button, it is possible to apply a button behavior to UI elements like images
 by using a `GtkGestureClick` gesture. When doing so, you should:
 
-  - Give your widget the role %GTK_ACCESSIBLE_ROLE_BUTTON
+  - Give your widget the role `GTK_ACCESSIBLE_ROLE_BUTTON`
   - Install an action with no parameters, which will activate the widget
 
 ### Custom entries
@@ -360,12 +360,12 @@ as the core, and just make a custom tab widget to control the active
 stack page. When doing so, the following extra steps will ensure that
 your tabs are accessible in the same way as `GtkStackSwitcher` or `GtkNotebook`:
 
-- Give your tab container the role %GTK_ACCESSIBLE_ROLE_TAB_LIST
-- Give your tab widgets the role %GTK_ACCESSIBLE_ROLE_TAB
-- Set up the %GTK_ACCESSIBLE_RELATION_CONTROLS relation between each
+- Give your tab container the role `GTK_ACCESSIBLE_ROLE_TAB_LIST`
+- Give your tab widgets the role `GTK_ACCESSIBLE_ROLE_TAB`
+- Set up the `GTK_ACCESSIBLE_RELATION_CONTROLS` relation between each
   tab and the `GtkStackPage` object for its page
-- Set the %GTK_ACCESSIBLE_PROPERTY_SELECTED property on each tab, with
-  the active tab getting the value %TRUE, all others %FALSE
+- Set the `GTK_ACCESSIBLE_PROPERTY_SELECTED` property on each tab, with
+  the active tab getting the value true, all others false
 
 To allow changing the active tab via accessible technologies, you can
 export actions. Since the accessibility interfaces only support actions
@@ -377,8 +377,8 @@ or add a `activate-tab` action on each tab.
 
 A value control (ie a widget that controls a one-dimensional quantity
 that can be represented by a `GtkAdjustment`) can be represented to
-accessible technologies by setting the %GTK_ACCESSIBLE_PROPERTY_VALUE_MIN,
-%GTK_ACCESSIBLE_PROPERTY_VALUE_MAX, and %GTK_ACCESSIBLE_PROPERTY_VALUE_NOW
+accessible technologies by setting the `GTK_ACCESSIBLE_PROPERTY_VALUE_MIN`,
+`GTK_ACCESSIBLE_PROPERTY_VALUE_MAX` and `GTK_ACCESSIBLE_PROPERTY_VALUE_NOW`
 properties.
 
 To allow changing the value via accessible technologies, you can export
