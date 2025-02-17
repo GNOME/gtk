@@ -31,6 +31,7 @@
 #include "gtkscrollable.h"
 #include "gtktypebuiltins.h"
 #include "gtkwidgetprivate.h"
+#include "gtksizerequest.h"
 
 #include <float.h>
 #include <math.h>
@@ -2553,119 +2554,265 @@ gtk_list_box_compute_expand (GtkWidget *widget,
 
   *hexpand_p = hexpand;
   *vexpand_p = vexpand;
-
-  /* We don't expand vertically beyond the minimum size */
-  if (*vexpand_p)
-    *vexpand_p = FALSE;
 }
 
 static GtkSizeRequestMode
 gtk_list_box_get_request_mode (GtkWidget *widget)
 {
-  return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+  GtkListBox *box = GTK_LIST_BOX (widget);
+  GSequenceIter *iter;
+  GtkListBoxRow *row;
+
+  if (box->placeholder && gtk_widget_get_child_visible (box->placeholder))
+    return gtk_widget_get_request_mode (box->placeholder);
+
+  /* Return constant-size, unless any of the children do hfw (or wfh) */
+
+  for (iter = g_sequence_get_begin_iter (box->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      row = g_sequence_get (iter);
+      if (!row_is_visible (row))
+        continue;
+
+      if (ROW_PRIV (row)->header != NULL &&
+          gtk_widget_get_request_mode (ROW_PRIV (row)->header) != GTK_SIZE_REQUEST_CONSTANT_SIZE)
+        return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+      if (gtk_widget_get_request_mode (GTK_WIDGET (row)) != GTK_SIZE_REQUEST_CONSTANT_SIZE)
+        return GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH;
+    }
+
+  return GTK_SIZE_REQUEST_CONSTANT_SIZE;
+}
+
+static void
+gtk_list_box_measure_height_for_width (GtkListBox       *box,
+                                       int               for_width,
+                                       int              *minimum,
+                                       int              *natural,
+                                       GtkRequestedSize *sizes)
+{
+  GSequenceIter *iter;
+  GtkListBoxRow *row;
+  int i = 0;
+
+  if (box->placeholder && gtk_widget_get_child_visible (box->placeholder))
+    {
+      gtk_widget_measure (box->placeholder, GTK_ORIENTATION_VERTICAL,
+                          for_width, minimum, natural, NULL, NULL);
+      return;
+    }
+
+  *minimum = 0;
+  *natural = 0;
+
+  for (iter = g_sequence_get_begin_iter (box->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      int row_min = 0, row_nat = 0;
+
+      row = g_sequence_get (iter);
+      if (!row_is_visible (row))
+        continue;
+
+      if (ROW_PRIV (row)->header != NULL)
+        {
+          gtk_widget_measure (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL,
+                              for_width, &row_min, &row_nat, NULL, NULL);
+          *minimum += row_min;
+          *natural += row_nat;
+
+          if (sizes)
+            {
+              sizes[i].minimum_size = row_min;
+              sizes[i].natural_size = row_nat;
+              i++;
+            }
+        }
+      gtk_widget_measure (GTK_WIDGET (row), GTK_ORIENTATION_VERTICAL,
+                          for_width, &row_min, &row_nat, NULL, NULL);
+      *minimum += row_min;
+      *natural += row_nat;
+
+      if (sizes)
+        {
+          sizes[i].minimum_size = row_min;
+          sizes[i].natural_size = row_nat;
+          i++;
+        }
+    }
+}
+
+static void
+gtk_list_box_measure_width_for_height (GtkListBox *box,
+                                       int         for_height,
+                                       int        *minimum,
+                                       int        *natural)
+{
+  GSequenceIter *iter;
+  GtkListBoxRow *row;
+  int i = 0;
+  GtkRequestedSize *sizes = NULL;
+  int min, max, min_height, nat_height;
+  int n_vexpand_children = 0;
+  int extra_height;
+
+  if (box->placeholder && gtk_widget_get_child_visible (box->placeholder))
+    {
+      gtk_widget_measure (box->placeholder, GTK_ORIENTATION_HORIZONTAL,
+                          for_height, minimum, natural, NULL, NULL);
+      return;
+    }
+
+  *minimum = 0;
+  *natural = 0;
+
+  /* Measure width for natural height */
+  for (iter = g_sequence_get_begin_iter (box->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      int row_min, row_nat;
+
+      row = g_sequence_get (iter);
+
+      /* We *do* take visible but filtered rows into account here so that
+       * the list width doesn't change during filtering
+       */
+      if (!gtk_widget_get_visible (GTK_WIDGET (row)))
+        continue;
+
+      gtk_widget_measure (GTK_WIDGET (row), GTK_ORIENTATION_HORIZONTAL,
+                          -1, &row_min, &row_nat, NULL, NULL);
+
+      *minimum = MAX (*minimum, row_min);
+      *natural = MAX (*natural, row_nat);
+
+      if (for_height >= 0 && gtk_widget_compute_expand (GTK_WIDGET (row), GTK_ORIENTATION_VERTICAL))
+        n_vexpand_children++;
+
+      i++;
+
+      if (ROW_PRIV (row)->header != NULL)
+        {
+          gtk_widget_measure (ROW_PRIV (row)->header, GTK_ORIENTATION_HORIZONTAL,
+                              -1, &row_min, &row_nat, NULL, NULL);
+          *minimum = MAX (*minimum, row_min);
+          *natural = MAX (*natural, row_nat);
+
+          if (for_height >= 0 && gtk_widget_compute_expand (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL))
+            n_vexpand_children++;
+
+          i++;
+        }
+    }
+
+  if (for_height < 0)
+    return;
+
+  /* Binary search for the smallest width that lets us fit
+   * into the suggested height.  */
+  min = *minimum;
+  max = G_MAXINT;
+
+  while (min < max)
+    {
+      int test;
+
+      /* We're most likely to be measured for a height that matches
+       * our min or nat width, so start by checking around those
+       * sizes.  */
+      if (min == *minimum + 1 && max == *natural)
+        test = max - 1;
+      else if (max != G_MAXINT)
+        test = (min + max) / 2;
+      else if (min == *minimum)
+        test = min;
+      else if (min == *minimum + 1 && *natural >= min)
+        test = *natural;
+      else
+        test = min * 2;
+
+      gtk_list_box_measure_height_for_width (box, test,
+                                             &min_height, &nat_height,
+                                             NULL);
+      if (min_height > for_height)
+        min = test + 1;
+      else
+        max = test;
+    }
+
+  *minimum = min;
+
+  /* Now find the natural width */
+  sizes = g_new (GtkRequestedSize, i);
+  gtk_list_box_measure_height_for_width (box, -1,
+                                         &min_height, &nat_height,
+                                         sizes);
+  extra_height = gtk_distribute_natural_allocation (for_height - min_height,
+                                                    i, sizes);
+  *natural = 0;
+  i = 0;
+
+  for (iter = g_sequence_get_begin_iter (box->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      int row_height, row_min, row_nat;
+
+      row = g_sequence_get (iter);
+
+      if (!gtk_widget_get_visible (GTK_WIDGET (row)))
+        continue;
+
+      row_height = sizes[i].minimum_size;
+      if (gtk_widget_compute_expand (GTK_WIDGET (row), GTK_ORIENTATION_VERTICAL))
+        row_height += extra_height / n_vexpand_children;
+
+      gtk_widget_measure (GTK_WIDGET (row), GTK_ORIENTATION_HORIZONTAL,
+                          row_height, &row_min, &row_nat,
+                          NULL, NULL);
+
+      *natural = MAX (*natural, row_nat);
+      i++;
+
+      if (ROW_PRIV (row)->header != NULL)
+        {
+          row_height = sizes[i].minimum_size;
+          if (gtk_widget_compute_expand (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL))
+            row_height += extra_height / n_vexpand_children;
+
+          gtk_widget_measure (ROW_PRIV (row)->header, GTK_ORIENTATION_HORIZONTAL,
+                              row_height, &row_min, &row_nat,
+                              NULL, NULL);
+
+          *natural = MAX (*natural, row_nat);
+          i++;
+        }
+    }
+
+  g_free (sizes);
 }
 
 static void
 gtk_list_box_measure (GtkWidget     *widget,
-                      GtkOrientation  orientation,
-                      int             for_size,
-                      int            *minimum,
-                      int            *natural,
-                      int            *minimum_baseline,
-                      int            *natural_baseline)
+                      GtkOrientation orientation,
+                      int            for_size,
+                      int           *minimum,
+                      int           *natural,
+                      int           *minimum_baseline,
+                      int           *natural_baseline)
 {
   GtkListBox *box = GTK_LIST_BOX (widget);
-  GSequenceIter *iter;
 
   if (orientation == GTK_ORIENTATION_HORIZONTAL)
-    {
-      *minimum = 0;
-      *natural = 0;
-
-      if (box->placeholder && gtk_widget_get_child_visible (box->placeholder))
-        gtk_widget_measure (box->placeholder, GTK_ORIENTATION_HORIZONTAL, -1,
-                            minimum, natural,
-                            NULL, NULL);
-
-      for (iter = g_sequence_get_begin_iter (box->children);
-           !g_sequence_iter_is_end (iter);
-           iter = g_sequence_iter_next (iter))
-        {
-          GtkListBoxRow *row;
-          int row_min;
-          int row_nat;
-
-          row = g_sequence_get (iter);
-
-          /* We *do* take visible but filtered rows into account here so that
-           * the list width doesn't change during filtering
-           */
-          if (!gtk_widget_get_visible (GTK_WIDGET (row)))
-            continue;
-
-          gtk_widget_measure (GTK_WIDGET (row), orientation, -1,
-                              &row_min, &row_nat,
-                              NULL, NULL);
-
-          *minimum = MAX (*minimum, row_min);
-          *natural = MAX (*natural, row_nat);
-
-          if (ROW_PRIV (row)->header != NULL)
-            {
-              gtk_widget_measure (ROW_PRIV (row)->header, orientation, -1,
-                                  &row_min, &row_nat,
-                                  NULL, NULL);
-              *minimum = MAX (*minimum, row_min);
-              *natural = MAX (*natural, row_nat);
-            }
-        }
-    }
+    gtk_list_box_measure_width_for_height (box, for_size,
+                                           minimum, natural);
   else
-    {
-      if (for_size < 0)
-        {
-          int f;
-          gtk_list_box_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
-                                &f, &for_size, NULL, NULL);
-        }
-
-      *minimum = 0;
-
-      if (box->placeholder && gtk_widget_get_child_visible (box->placeholder))
-        gtk_widget_measure (box->placeholder, orientation, for_size,
-                            minimum, NULL,
-                            NULL, NULL);
-
-      for (iter = g_sequence_get_begin_iter (box->children);
-           !g_sequence_iter_is_end (iter);
-           iter = g_sequence_iter_next (iter))
-        {
-          GtkListBoxRow *row;
-          int row_min = 0;
-
-          row = g_sequence_get (iter);
-          if (!row_is_visible (row))
-            continue;
-
-          if (ROW_PRIV (row)->header != NULL)
-            {
-              gtk_widget_measure (ROW_PRIV (row)->header, orientation, for_size,
-                                  &row_min, NULL,
-                                  NULL, NULL);
-              *minimum += row_min;
-            }
-          gtk_widget_measure (GTK_WIDGET (row), orientation, for_size,
-                              &row_min, NULL,
-                              NULL, NULL);
-          *minimum += row_min;
-        }
-
-      /* We always allocate the minimum height, since handling expanding rows
-       * is way too costly, and unlikely to be used, as lists are generally put
-       * inside a scrolling window anyway.
-       */
-      *natural = *minimum;
-    }
+    gtk_list_box_measure_height_for_width (box, for_size,
+                                           minimum, natural, NULL);
 }
 
 static void
@@ -2679,7 +2826,13 @@ gtk_list_box_size_allocate (GtkWidget *widget,
   GtkAllocation header_allocation;
   GtkListBoxRow *row;
   GSequenceIter *iter;
-  int child_min;
+  int child_min, child_nat;
+  int total_min = 0, total_nat = 0;
+  gboolean allocate_min = FALSE, allocate_nat = FALSE;
+  GtkRequestedSize *sizes = NULL;
+  int i = 0;
+  int n_vexpand_children = 0;
+  int extra_height = height;
 
 
   child_allocation.x = 0;
@@ -2709,6 +2862,88 @@ gtk_list_box_size_allocate (GtkWidget *widget,
     {
       row = g_sequence_get (iter);
       if (!row_is_visible (row))
+        continue;
+
+      if (ROW_PRIV (row)->header != NULL)
+        {
+          gtk_widget_measure (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL,
+                              width, &child_min, &child_nat, NULL, NULL);
+          total_min += child_min;
+          total_nat += child_nat;
+          i++;
+
+          if (gtk_widget_compute_expand (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL))
+            n_vexpand_children++;
+        }
+
+      gtk_widget_measure (GTK_WIDGET (row), GTK_ORIENTATION_VERTICAL,
+                          width, &child_min, &child_nat, NULL, NULL);
+      total_min += child_min;
+      total_nat += child_nat;
+      i++;
+
+      if (gtk_widget_compute_expand (GTK_WIDGET (row), GTK_ORIENTATION_VERTICAL))
+        n_vexpand_children++;
+    }
+
+  /* We're most likely to be allocated either our minimum or natural
+   * height, even more so when we're placed inside a GtkScrolledWindow &
+   * GtkViewport. Detect these cases and skip the logic for distributing
+   * sizes.
+   */
+  if (height == total_min)
+    {
+      allocate_min = TRUE;
+      extra_height = 0;
+      goto do_allocate;
+    }
+  else if (height >= total_nat)
+    {
+      allocate_nat = TRUE;
+      extra_height = height - total_nat;
+      goto do_allocate;
+    }
+
+  extra_height = height - total_min;
+  sizes = g_new (GtkRequestedSize, i);
+  i = 0;
+
+  for (iter = g_sequence_get_begin_iter (box->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      row = g_sequence_get (iter);
+      if (!row_is_visible (row))
+        continue;
+
+      if (ROW_PRIV (row)->header != NULL)
+        {
+          gtk_widget_measure (ROW_PRIV (row)->header,
+                              GTK_ORIENTATION_VERTICAL, width,
+                              &sizes[i].minimum_size,
+                              &sizes[i].natural_size,
+                              NULL, NULL);
+          i++;
+        }
+
+      gtk_widget_measure (GTK_WIDGET (row),
+                          GTK_ORIENTATION_VERTICAL, width,
+                          &sizes[i].minimum_size,
+                          &sizes[i].natural_size,
+                          NULL, NULL);
+      i++;
+    }
+
+  extra_height = gtk_distribute_natural_allocation (extra_height, i, sizes);
+
+do_allocate:
+  i = 0;
+  for (iter = g_sequence_get_begin_iter (box->children);
+       !g_sequence_iter_is_end (iter);
+       iter = g_sequence_iter_next (iter))
+    {
+      row = g_sequence_get (iter);
+      if (!row_is_visible (row))
         {
           ROW_PRIV (row)->y = child_allocation.y;
           ROW_PRIV (row)->height = 0;
@@ -2717,28 +2952,51 @@ gtk_list_box_size_allocate (GtkWidget *widget,
 
       if (ROW_PRIV (row)->header != NULL)
         {
-          gtk_widget_measure (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL,
-                              width,
-                              &child_min, NULL, NULL, NULL);
-          header_allocation.height = child_min;
+          if (allocate_min || allocate_nat)
+            gtk_widget_measure (ROW_PRIV (row)->header,
+                                GTK_ORIENTATION_VERTICAL, width,
+                                &child_min, &child_nat,
+                                NULL, NULL);
+          if (allocate_min)
+            header_allocation.height = child_min;
+          else if (allocate_nat)
+            header_allocation.height = child_nat;
+          else
+            header_allocation.height = sizes[i].minimum_size;
+
+          if (gtk_widget_compute_expand (ROW_PRIV (row)->header, GTK_ORIENTATION_VERTICAL))
+            header_allocation.height += extra_height / n_vexpand_children;
           header_allocation.y = child_allocation.y;
           gtk_widget_size_allocate (ROW_PRIV (row)->header,
                                     &header_allocation,
                                     -1);
-          child_allocation.y += child_min;
+          child_allocation.y += header_allocation.height;
+          i++;
         }
 
+      if (allocate_min || allocate_nat)
+        gtk_widget_measure (GTK_WIDGET (row),
+                            GTK_ORIENTATION_VERTICAL, width,
+                            &child_min, &child_nat,
+                            NULL, NULL);
+      if (allocate_min)
+        child_allocation.height = child_min;
+      else if (allocate_nat)
+        child_allocation.height = child_nat;
+      else
+        child_allocation.height = sizes[i].minimum_size;
+
+      if (gtk_widget_compute_expand (GTK_WIDGET (row), GTK_ORIENTATION_VERTICAL))
+        child_allocation.height += extra_height / n_vexpand_children;
+
       ROW_PRIV (row)->y = child_allocation.y;
-
-      gtk_widget_measure (GTK_WIDGET (row), GTK_ORIENTATION_VERTICAL,
-                          child_allocation.width,
-                          &child_min, NULL, NULL, NULL);
-      child_allocation.height = child_min;
-
       ROW_PRIV (row)->height = child_allocation.height;
       gtk_widget_size_allocate (GTK_WIDGET (row), &child_allocation, -1);
-      child_allocation.y += child_min;
+      child_allocation.y += child_allocation.height;
+      i++;
     }
+
+  g_free (sizes);
 }
 
 /**
