@@ -16,24 +16,17 @@
  * License along with this library. If not, see <http://www.gnu.org/licenses/>.
  */
 
-
 /*
- * File auto-generated from script https://gitlab.gnome.org/GNOME/gtk/tree/main/gdk/gdkkeysyms-update.pl
- * using the input file
- * http://cgit.freedesktop.org/xorg/proto/x11proto/plain/keysymdef.h
+ * File auto-generated from script at:
+ * https://gitlab.gnome.org/GNOME/gtk/-/raw/main/gdk/gdk-keysyms-update.py?ref_type=heads&inline=false
+ *
+ * using the input files:
+ *  https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/raw/master/include/X11/keysymdef.h
  * and
- * http://cgit.freedesktop.org/xorg/proto/x11proto/plain/XF86keysym.h
- */
-
-/*
- * Modified by the GTK+ Team and others 1997-2007.  See the AUTHORS
- * file for a list of people on the GTK+ Team.  See the ChangeLog
- * files for a list of changes.  These files are distributed with
- * GTK+ at ftp://ftp.gtk.org/pub/gtk/.
+ *  https://gitlab.freedesktop.org/xorg/proto/xorgproto/-/raw/master/include/X11/XF86keysym.h
  */
 
 #pragma once
-
 
 #define GDK_KEY_VoidSymbol 0xffffff
 #define GDK_KEY_BackSpace 0xff08
@@ -2151,6 +2144,7 @@
 #define GDK_KEY_KbdLightOnOff 0x1008ff04
 #define GDK_KEY_KbdBrightnessUp 0x1008ff05
 #define GDK_KEY_KbdBrightnessDown 0x1008ff06
+#define GDK_KEY_MonBrightnessCycle 0x1008ff07
 #define GDK_KEY_Standby 0x1008ff10
 #define GDK_KEY_AudioLowerVolume 0x1008ff11
 #define GDK_KEY_AudioMute 0x1008ff12
@@ -2306,6 +2300,8 @@
 #define GDK_KEY_WWAN 0x1008ffb4
 #define GDK_KEY_RFKill 0x1008ffb5
 #define GDK_KEY_AudioPreset 0x1008ffb6
+#define GDK_KEY_RotationLockToggle 0x1008ffb7
+#define GDK_KEY_FullScreen 0x1008ffb8
 #define GDK_KEY_Switch_VT_1 0x1008fe01
 #define GDK_KEY_Switch_VT_2 0x1008fe02
 #define GDK_KEY_Switch_VT_3 0x1008fe03
@@ -2324,3 +2320,161 @@
 #define GDK_KEY_Prev_VMode 0x1008fe23
 #define GDK_KEY_LogWindowTree 0x1008fe24
 #define GDK_KEY_LogGrabInfo 0x1008fe25
+#define GDK_KEY_BrightnessAuto 0x100810f4
+#define GDK_KEY_DisplayOff 0x100810f5
+#define GDK_KEY_Info 0x10081166
+#define GDK_KEY_AspectRatio 0x10081177
+#define GDK_KEY_DVD 0x10081185
+#define GDK_KEY_Audio 0x10081188
+#define GDK_KEY_ChannelUp 0x10081192
+#define GDK_KEY_ChannelDown 0x10081193
+#define GDK_KEY_VideoPhone 0x100811a0
+#define GDK_KEY_ZoomReset 0x100811a4
+#define GDK_KEY_Editor 0x100811a6
+#define GDK_KEY_GraphicsEditor 0x100811a8
+#define GDK_KEY_Presentation 0x100811a9
+#define GDK_KEY_Database 0x100811aa
+#define GDK_KEY_Voicemail 0x100811ac
+#define GDK_KEY_Addressbook 0x100811ad
+#define GDK_KEY_DisplayToggle 0x100811af
+#define GDK_KEY_SpellCheck 0x100811b0
+#define GDK_KEY_ContextMenu 0x100811b6
+#define GDK_KEY_MediaRepeat 0x100811b7
+#define GDK_KEY_10ChannelsUp 0x100811b8
+#define GDK_KEY_10ChannelsDown 0x100811b9
+#define GDK_KEY_Images 0x100811ba
+#define GDK_KEY_NotificationCenter 0x100811bc
+#define GDK_KEY_PickupPhone 0x100811bd
+#define GDK_KEY_HangupPhone 0x100811be
+#define GDK_KEY_Fn 0x100811d0
+#define GDK_KEY_Fn_Esc 0x100811d1
+#define GDK_KEY_FnRightShift 0x100811e5
+#define GDK_KEY_Numeric0 0x10081200
+#define GDK_KEY_Numeric1 0x10081201
+#define GDK_KEY_Numeric2 0x10081202
+#define GDK_KEY_Numeric3 0x10081203
+#define GDK_KEY_Numeric4 0x10081204
+#define GDK_KEY_Numeric5 0x10081205
+#define GDK_KEY_Numeric6 0x10081206
+#define GDK_KEY_Numeric7 0x10081207
+#define GDK_KEY_Numeric8 0x10081208
+#define GDK_KEY_Numeric9 0x10081209
+#define GDK_KEY_NumericStar 0x1008120a
+#define GDK_KEY_NumericPound 0x1008120b
+#define GDK_KEY_NumericA 0x1008120c
+#define GDK_KEY_NumericB 0x1008120d
+#define GDK_KEY_NumericC 0x1008120e
+#define GDK_KEY_NumericD 0x1008120f
+#define GDK_KEY_CameraFocus 0x10081210
+#define GDK_KEY_WPSButton 0x10081211
+#define GDK_KEY_CameraZoomIn 0x10081215
+#define GDK_KEY_CameraZoomOut 0x10081216
+#define GDK_KEY_CameraUp 0x10081217
+#define GDK_KEY_CameraDown 0x10081218
+#define GDK_KEY_CameraLeft 0x10081219
+#define GDK_KEY_CameraRight 0x1008121a
+#define GDK_KEY_AttendantOn 0x1008121b
+#define GDK_KEY_AttendantOff 0x1008121c
+#define GDK_KEY_AttendantToggle 0x1008121d
+#define GDK_KEY_LightsToggle 0x1008121e
+#define GDK_KEY_ALSToggle 0x10081230
+#define GDK_KEY_RefreshRateToggle 0x10081232
+#define GDK_KEY_Buttonconfig 0x10081240
+#define GDK_KEY_Taskmanager 0x10081241
+#define GDK_KEY_Journal 0x10081242
+#define GDK_KEY_ControlPanel 0x10081243
+#define GDK_KEY_AppSelect 0x10081244
+#define GDK_KEY_Screensaver 0x10081245
+#define GDK_KEY_VoiceCommand 0x10081246
+#define GDK_KEY_Assistant 0x10081247
+#define GDK_KEY_EmojiPicker 0x10081249
+#define GDK_KEY_Dictate 0x1008124a
+#define GDK_KEY_CameraAccessEnable 0x1008124b
+#define GDK_KEY_CameraAccessDisable 0x1008124c
+#define GDK_KEY_CameraAccessToggle 0x1008124d
+#define GDK_KEY_Accessibility 0x1008124e
+#define GDK_KEY_DoNotDisturb 0x1008124f
+#define GDK_KEY_BrightnessMin 0x10081250
+#define GDK_KEY_BrightnessMax 0x10081251
+#define GDK_KEY_KbdInputAssistPrev 0x10081260
+#define GDK_KEY_KbdInputAssistNext 0x10081261
+#define GDK_KEY_KbdInputAssistPrevgroup 0x10081262
+#define GDK_KEY_KbdInputAssistNextgroup 0x10081263
+#define GDK_KEY_KbdInputAssistAccept 0x10081264
+#define GDK_KEY_KbdInputAssistCancel 0x10081265
+#define GDK_KEY_RightUp 0x10081266
+#define GDK_KEY_RightDown 0x10081267
+#define GDK_KEY_LeftUp 0x10081268
+#define GDK_KEY_LeftDown 0x10081269
+#define GDK_KEY_RootMenu 0x1008126a
+#define GDK_KEY_MediaTopMenu 0x1008126b
+#define GDK_KEY_Numeric11 0x1008126c
+#define GDK_KEY_Numeric12 0x1008126d
+#define GDK_KEY_AudioDesc 0x1008126e
+#define GDK_KEY_3DMode 0x1008126f
+#define GDK_KEY_NextFavorite 0x10081270
+#define GDK_KEY_StopRecord 0x10081271
+#define GDK_KEY_PauseRecord 0x10081272
+#define GDK_KEY_VOD 0x10081273
+#define GDK_KEY_Unmute 0x10081274
+#define GDK_KEY_FastReverse 0x10081275
+#define GDK_KEY_SlowReverse 0x10081276
+#define GDK_KEY_Data 0x10081277
+#define GDK_KEY_OnScreenKeyboard 0x10081278
+#define GDK_KEY_PrivacyScreenToggle 0x10081279
+#define GDK_KEY_SelectiveScreenshot 0x1008127a
+#define GDK_KEY_NextElement 0x1008127b
+#define GDK_KEY_PreviousElement 0x1008127c
+#define GDK_KEY_AutopilotEngageToggle 0x1008127d
+#define GDK_KEY_MarkWaypoint 0x1008127e
+#define GDK_KEY_Sos 0x1008127f
+#define GDK_KEY_NavChart 0x10081280
+#define GDK_KEY_FishingChart 0x10081281
+#define GDK_KEY_SingleRangeRadar 0x10081282
+#define GDK_KEY_DualRangeRadar 0x10081283
+#define GDK_KEY_RadarOverlay 0x10081284
+#define GDK_KEY_TraditionalSonar 0x10081285
+#define GDK_KEY_ClearvuSonar 0x10081286
+#define GDK_KEY_SidevuSonar 0x10081287
+#define GDK_KEY_NavInfo 0x10081288
+#define GDK_KEY_Macro1 0x10081290
+#define GDK_KEY_Macro2 0x10081291
+#define GDK_KEY_Macro3 0x10081292
+#define GDK_KEY_Macro4 0x10081293
+#define GDK_KEY_Macro5 0x10081294
+#define GDK_KEY_Macro6 0x10081295
+#define GDK_KEY_Macro7 0x10081296
+#define GDK_KEY_Macro8 0x10081297
+#define GDK_KEY_Macro9 0x10081298
+#define GDK_KEY_Macro10 0x10081299
+#define GDK_KEY_Macro11 0x1008129a
+#define GDK_KEY_Macro12 0x1008129b
+#define GDK_KEY_Macro13 0x1008129c
+#define GDK_KEY_Macro14 0x1008129d
+#define GDK_KEY_Macro15 0x1008129e
+#define GDK_KEY_Macro16 0x1008129f
+#define GDK_KEY_Macro17 0x100812a0
+#define GDK_KEY_Macro18 0x100812a1
+#define GDK_KEY_Macro19 0x100812a2
+#define GDK_KEY_Macro20 0x100812a3
+#define GDK_KEY_Macro21 0x100812a4
+#define GDK_KEY_Macro22 0x100812a5
+#define GDK_KEY_Macro23 0x100812a6
+#define GDK_KEY_Macro24 0x100812a7
+#define GDK_KEY_Macro25 0x100812a8
+#define GDK_KEY_Macro26 0x100812a9
+#define GDK_KEY_Macro27 0x100812aa
+#define GDK_KEY_Macro28 0x100812ab
+#define GDK_KEY_Macro29 0x100812ac
+#define GDK_KEY_Macro30 0x100812ad
+#define GDK_KEY_MacroRecordStart 0x100812b0
+#define GDK_KEY_MacroRecordStop 0x100812b1
+#define GDK_KEY_MacroPresetCycle 0x100812b2
+#define GDK_KEY_MacroPreset1 0x100812b3
+#define GDK_KEY_MacroPreset2 0x100812b4
+#define GDK_KEY_MacroPreset3 0x100812b5
+#define GDK_KEY_KbdLcdMenu1 0x100812b8
+#define GDK_KEY_KbdLcdMenu2 0x100812b9
+#define GDK_KEY_KbdLcdMenu3 0x100812ba
+#define GDK_KEY_KbdLcdMenu4 0x100812bb
+#define GDK_KEY_KbdLcdMenu5 0x100812bc
