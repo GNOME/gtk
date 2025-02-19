@@ -60,7 +60,7 @@ _gdk_macos_settings_load (GdkMacosSettings *settings)
 
   settings->shell_shows_desktop = TRUE;
   settings->shell_shows_menubar = TRUE;
-  settings->enable_animations = TRUE;
+  settings->enable_animations = [[NSWorkspace sharedWorkspace] accessibilityDisplayShouldReduceMotion] == NO;
   settings->xft_dpi = 72 * 1024;
 
   ival = [defaults integerForKey:@"NSTextInsertionPointBlinkPeriod"];
