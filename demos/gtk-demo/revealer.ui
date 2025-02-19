@@ -63,8 +63,8 @@
               <object class="GtkImage">
                 <property name="icon-name">face-cool-symbolic</property>
                 <property name="icon-size">large</property>
-              </property>
-            </child>
+              </object>
+            </property>
             <layout>
               <property name="column">2</property>
               <property name="row">3</property>
