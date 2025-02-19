@@ -1,61 +1,61 @@
 
 #include "gdkwaylandcolor-private.h"
 #include "gdksurface-wayland-private.h"
-#include <gdk/wayland/xx-color-management-v4-client-protocol.h>
+#include <gdk/wayland/color-management-v1-client-protocol.h>
 
 typedef struct _ImageDescription ImageDescription;
 
 static const uint primaries_map[] = {
-  [XX_COLOR_MANAGER_V4_PRIMARIES_SRGB] = 1,
-  [XX_COLOR_MANAGER_V4_PRIMARIES_PAL_M] = 4,
-  [XX_COLOR_MANAGER_V4_PRIMARIES_PAL] = 5,
-  [XX_COLOR_MANAGER_V4_PRIMARIES_NTSC] = 6,
-  [XX_COLOR_MANAGER_V4_PRIMARIES_GENERIC_FILM] = 8,
-  [XX_COLOR_MANAGER_V4_PRIMARIES_BT2020] = 9,
-  [XX_COLOR_MANAGER_V4_PRIMARIES_CIE1931_XYZ] = 10,
-  [XX_COLOR_MANAGER_V4_PRIMARIES_DCI_P3] = 11,
-  [XX_COLOR_MANAGER_V4_PRIMARIES_DISPLAY_P3] = 12,
-  [XX_COLOR_MANAGER_V4_PRIMARIES_ADOBE_RGB] = 0,
+  [WP_COLOR_MANAGER_V1_PRIMARIES_SRGB] = 1,
+  [WP_COLOR_MANAGER_V1_PRIMARIES_PAL_M] = 4,
+  [WP_COLOR_MANAGER_V1_PRIMARIES_PAL] = 5,
+  [WP_COLOR_MANAGER_V1_PRIMARIES_NTSC] = 6,
+  [WP_COLOR_MANAGER_V1_PRIMARIES_GENERIC_FILM] = 8,
+  [WP_COLOR_MANAGER_V1_PRIMARIES_BT2020] = 9,
+  [WP_COLOR_MANAGER_V1_PRIMARIES_CIE1931_XYZ] = 10,
+  [WP_COLOR_MANAGER_V1_PRIMARIES_DCI_P3] = 11,
+  [WP_COLOR_MANAGER_V1_PRIMARIES_DISPLAY_P3] = 12,
+  [WP_COLOR_MANAGER_V1_PRIMARIES_ADOBE_RGB] = 0,
 };
 
 static uint
-wl_to_cicp_primaries (enum xx_color_manager_v4_primaries cp)
+wl_to_cicp_primaries (enum wp_color_manager_v1_primaries cp)
 {
   return primaries_map[cp];
 }
 
-static enum xx_color_manager_v4_primaries
+static enum wp_color_manager_v1_primaries
 cicp_to_wl_primaries (uint cp)
 {
   for (guint i = 0; i < G_N_ELEMENTS (primaries_map); i++)
     if (primaries_map[i] == cp)
-       return (enum xx_color_manager_v4_primaries)i;
+       return (enum wp_color_manager_v1_primaries)i;
 
   return 0;
 }
 
 static const uint primaries_primaries[][8] = {
-  [XX_COLOR_MANAGER_V4_PRIMARIES_SRGB] =         { 6400, 3300, 3000, 6000, 1500,  600, 3127, 3290 },
-  [XX_COLOR_MANAGER_V4_PRIMARIES_PAL_M] =        { 6700, 3300, 2100, 7100, 1400,  800, 3100, 3160 },
-  [XX_COLOR_MANAGER_V4_PRIMARIES_PAL] =          { 6400, 3300, 2900, 6000, 1500,  600, 3127, 3290 },
-  [XX_COLOR_MANAGER_V4_PRIMARIES_NTSC] =         { 6300, 3400, 3100, 5950, 1550,  700, 3127, 3290 },
-  [XX_COLOR_MANAGER_V4_PRIMARIES_GENERIC_FILM] = { 2430, 6920, 1450,  490, 6810, 3190, 3100, 3160 },
-  [XX_COLOR_MANAGER_V4_PRIMARIES_BT2020] =       { 7080, 2920, 1700, 7970, 1310,  460, 3127, 3290 },
-  [XX_COLOR_MANAGER_V4_PRIMARIES_CIE1931_XYZ] =  {10000,    0,    0,10000,    0,    0, 3333, 3333 }, 
-  [XX_COLOR_MANAGER_V4_PRIMARIES_DCI_P3] =       { 6800, 3200, 2650, 6900, 1500,  600, 3140, 3510 },
-  [XX_COLOR_MANAGER_V4_PRIMARIES_DISPLAY_P3] =   { 6800, 3200, 2650, 6900, 1500,  600, 3127, 3290 },
-  [XX_COLOR_MANAGER_V4_PRIMARIES_ADOBE_RGB] =    { 6400, 3300, 2100, 7100, 1500,  600, 3127, 3290 },
+  [WP_COLOR_MANAGER_V1_PRIMARIES_SRGB] =         { 640000, 330000, 300000, 600000, 150000,  60000, 312700, 329000 },
+  [WP_COLOR_MANAGER_V1_PRIMARIES_PAL_M] =        { 670000, 330000, 210000, 710000, 140000,  80000, 310000, 316000 },
+  [WP_COLOR_MANAGER_V1_PRIMARIES_PAL] =          { 640000, 330000, 290000, 600000, 150000,  60000, 312700, 329000 },
+  [WP_COLOR_MANAGER_V1_PRIMARIES_NTSC] =         { 630000, 340000, 310000, 595000, 155000,  70000, 312700, 329000 },
+  [WP_COLOR_MANAGER_V1_PRIMARIES_GENERIC_FILM] = { 243000, 692000, 145000,  49000, 681000, 319000, 310000, 316000 },
+  [WP_COLOR_MANAGER_V1_PRIMARIES_BT2020] =       { 708000, 292000, 170000, 797000, 131000,  46000, 312700, 329000 },
+  [WP_COLOR_MANAGER_V1_PRIMARIES_CIE1931_XYZ] =  {1000000,      0,      0,1000000,      0,      0, 333300, 333300 },
+  [WP_COLOR_MANAGER_V1_PRIMARIES_DCI_P3] =       { 680000, 320000, 265000, 690000, 150000,  60000, 314000, 351000 },
+  [WP_COLOR_MANAGER_V1_PRIMARIES_DISPLAY_P3] =   { 680000, 320000, 265000, 690000, 150000,  60000, 312700, 329000 },
+  [WP_COLOR_MANAGER_V1_PRIMARIES_ADOBE_RGB] =    { 640000, 330000, 210000, 710000, 150000,  60000, 312700, 329000 },
 };
 
 static const uint *
-wl_primaries_to_primaries (enum xx_color_manager_v4_primaries primaries)
+wl_primaries_to_primaries (enum wp_color_manager_v1_primaries primaries)
 {
   return primaries_primaries[primaries];
 }
 
 static gboolean
 primaries_to_wl_primaries (const uint primaries[8],
-                           enum xx_color_manager_v4_primaries *out_primaries)
+                           enum wp_color_manager_v1_primaries *out_primaries)
 {
   guint i, j;
 
@@ -76,34 +76,33 @@ primaries_to_wl_primaries (const uint primaries[8],
 }
 
 static const uint transfer_map[] = {
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_BT709] = 1,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_GAMMA22] = 4,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_GAMMA28] = 5,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST240] = 7,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR] = 8,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LOG_100] = 9,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LOG_316] = 10,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_XVYCC] = 11,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_BT1361] = 12,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_SRGB] = 13,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_EXT_SRGB] = 13,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST2084_PQ] = 16,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST428] = 17,
-  [XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_HLG] = 18,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_BT1886] = 1,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_GAMMA22] = 4,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_GAMMA28] = 5,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_ST240] = 7,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_EXT_LINEAR] = 8,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_LOG_100] = 9,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_LOG_316] = 10,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_XVYCC] = 11,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_SRGB] = 13,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_EXT_SRGB] = 13,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_ST2084_PQ] = 16,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_ST428] = 17,
+  [WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_HLG] = 18,
 };
 
 static uint
-wl_to_cicp_transfer (enum xx_color_manager_v4_transfer_function tf)
+wl_to_cicp_transfer (enum wp_color_manager_v1_transfer_function tf)
 {
   return transfer_map[tf];
 }
 
-static enum xx_color_manager_v4_transfer_function
+static enum wp_color_manager_v1_transfer_function
 cicp_to_wl_transfer (uint tf)
 {
   for (guint i = 0; i < G_N_ELEMENTS (transfer_map); i++)
     if (transfer_map[i] == tf)
-       return (enum xx_color_manager_v4_transfer_function)i;
+       return (enum wp_color_manager_v1_transfer_function)i;
 
   return 0;
 }
@@ -112,7 +111,7 @@ struct _GdkWaylandColor
 {
   GdkWaylandDisplay *display;
 
-  struct xx_color_manager_v4 *color_manager;
+  struct wp_color_manager_v1 *color_manager;
   struct {
     unsigned int intents;
     unsigned int features;
@@ -120,7 +119,7 @@ struct _GdkWaylandColor
     unsigned int primaries;
   } color_manager_supported;
 
-  GHashTable *cs_to_desc; /* GdkColorState => xx_image_description_v4 or NULL */
+  GHashTable *cs_to_desc; /* GdkColorState => wp_image_description_v1 or NULL */
   GHashTable *id_to_cs; /* uint32 identifier => GdkColorState */
 };
 
@@ -163,8 +162,8 @@ color_state_equal (gconstpointer a,
 }
 
 static void
-xx_color_manager_v4_supported_intent (void                       *data,
-                                      struct xx_color_manager_v4 *xx_color_manager_v4,
+wp_color_manager_v1_supported_intent (void                       *data,
+                                      struct wp_color_manager_v1 *wp_color_manager_v1,
                                       uint32_t                    render_intent)
 {
   GdkWaylandColor *color = data;
@@ -173,8 +172,8 @@ xx_color_manager_v4_supported_intent (void                       *data,
 }
 
 static void
-xx_color_manager_v4_supported_feature (void                       *data,
-                                       struct xx_color_manager_v4 *xx_color_manager_v4,
+wp_color_manager_v1_supported_feature (void                       *data,
+                                       struct wp_color_manager_v1 *wp_color_manager_v1,
                                        uint32_t                    feature)
 {
   GdkWaylandColor *color = data;
@@ -183,8 +182,8 @@ xx_color_manager_v4_supported_feature (void                       *data,
 }
 
 static void
-xx_color_manager_v4_supported_tf_named (void                       *data,
-                                        struct xx_color_manager_v4 *xx_color_manager_v4,
+wp_color_manager_v1_supported_tf_named (void                       *data,
+                                        struct wp_color_manager_v1 *wp_color_manager_v1,
                                         uint32_t                    tf)
 {
   GdkWaylandColor *color = data;
@@ -193,8 +192,8 @@ xx_color_manager_v4_supported_tf_named (void                       *data,
 }
 
 static void
-xx_color_manager_v4_supported_primaries_named (void                       *data,
-                                               struct xx_color_manager_v4 *xx_color_manager_v4,
+wp_color_manager_v1_supported_primaries_named (void                       *data,
+                                               struct wp_color_manager_v1 *wp_color_manager_v1,
                                                uint32_t                    primaries)
 {
   GdkWaylandColor *color = data;
@@ -202,11 +201,18 @@ xx_color_manager_v4_supported_primaries_named (void                       *data,
   color->color_manager_supported.primaries |= (1 << primaries);
 }
 
-static struct xx_color_manager_v4_listener color_manager_listener = {
-  xx_color_manager_v4_supported_intent,
-  xx_color_manager_v4_supported_feature,
-  xx_color_manager_v4_supported_tf_named,
-  xx_color_manager_v4_supported_primaries_named,
+static void
+wp_color_manager_v1_done (void                       *data,
+                          struct wp_color_manager_v1 *wp_color_manager_v1)
+{
+}
+
+static struct wp_color_manager_v1_listener color_manager_listener = {
+  wp_color_manager_v1_supported_intent,
+  wp_color_manager_v1_supported_feature,
+  wp_color_manager_v1_supported_tf_named,
+  wp_color_manager_v1_supported_primaries_named,
+  wp_color_manager_v1_done,
 };
 
 GdkWaylandColor *
@@ -223,7 +229,7 @@ gdk_wayland_color_new (GdkWaylandDisplay  *display,
   color->cs_to_desc = g_hash_table_new_full (color_state_hash,
                                              color_state_equal,
                                              (GDestroyNotify) gdk_color_state_unref,
-                                             (GDestroyNotify) xx_image_description_v4_destroy);
+                                             (GDestroyNotify) wp_image_description_v1_destroy);
   color->id_to_cs = g_hash_table_new_full (g_direct_hash,
                                            g_direct_equal,
                                            NULL,
@@ -231,10 +237,10 @@ gdk_wayland_color_new (GdkWaylandDisplay  *display,
 
   color->color_manager = wl_registry_bind (registry,
                                            id,
-                                           &xx_color_manager_v4_interface,
-                                           MIN (version, 2));
+                                           &wp_color_manager_v1_interface,
+                                           MIN (version, 1));
 
-  xx_color_manager_v4_add_listener (color->color_manager,
+  wp_color_manager_v1_add_listener (color->color_manager,
                                     &color_manager_listener,
                                     color);
 
@@ -244,7 +250,7 @@ gdk_wayland_color_new (GdkWaylandDisplay  *display,
 void
 gdk_wayland_color_free (GdkWaylandColor *color)
 {
-  g_clear_pointer (&color->color_manager, xx_color_manager_v4_destroy);
+  g_clear_pointer (&color->color_manager, wp_color_manager_v1_destroy);
 
   g_hash_table_unref (color->cs_to_desc);
   g_hash_table_unref (color->id_to_cs);
@@ -278,14 +284,14 @@ cs_image_listener_data_free (CsImageDescListenerData *csi)
 
 static void
 cs_image_desc_failed (void                           *data,
-                      struct xx_image_description_v4 *desc,
+                      struct wp_image_description_v1 *desc,
                       uint32_t                        cause,
                       const char                     *msg)
 {
   CsImageDescListenerData *csi = data;
 
   g_warning ("Failed to get one of the standard image descriptions: %s", msg);
-  xx_image_description_v4_destroy (desc);
+  wp_image_description_v1_destroy (desc);
 
   g_hash_table_insert (csi->color->cs_to_desc,
                        gdk_color_state_ref (csi->color_state),
@@ -296,7 +302,7 @@ cs_image_desc_failed (void                           *data,
 
 static void
 cs_image_desc_ready (void                           *data,
-                     struct xx_image_description_v4 *desc,
+                     struct wp_image_description_v1 *desc,
                      uint32_t                        identity)
 {
   CsImageDescListenerData *csi = data;
@@ -311,7 +317,7 @@ cs_image_desc_ready (void                           *data,
   cs_image_listener_data_free (csi);
 }
 
-static struct xx_image_description_v4_listener cs_image_desc_listener = {
+static struct wp_image_description_v1_listener cs_image_desc_listener = {
   cs_image_desc_failed,
   cs_image_desc_ready,
 };
@@ -322,8 +328,8 @@ create_image_desc (GdkWaylandColor *color,
                    gboolean         sync)
 {
   CsImageDescListenerData data;
-  struct xx_image_description_creator_params_v4 *creator;
-  struct xx_image_description_v4 *desc;
+  struct wp_image_description_creator_params_v1 *creator;
+  struct wp_image_description_v1 *desc;
   const GdkCicp *cicp;
   GdkCicp norm;
   uint32_t primaries, tf;
@@ -342,7 +348,7 @@ create_image_desc (GdkWaylandColor *color,
   tf = cicp_to_wl_transfer (norm.transfer_function);
 
   if (((color->color_manager_supported.primaries & (1 << primaries)) == 0 &&
-       (color->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V4_FEATURE_SET_PRIMARIES)) == 0) ||
+       (color->color_manager_supported.features & (1 << WP_COLOR_MANAGER_V1_FEATURE_SET_PRIMARIES)) == 0) ||
       (color->color_manager_supported.transfers & (1 << tf)) == 0)
     {
       GDK_DEBUG (MISC, "Unsupported color state %s: Primaries or transfer function unsupported",
@@ -356,24 +362,24 @@ create_image_desc (GdkWaylandColor *color,
   data.sync = sync;
   data.done = FALSE;
 
-  creator = xx_color_manager_v4_new_parametric_creator (color->color_manager);
+  creator = wp_color_manager_v1_create_parametric_creator (color->color_manager);
 
   if (color->color_manager_supported.primaries & (1 << primaries))
     {
-      xx_image_description_creator_params_v4_set_primaries_named (creator, primaries);
+      wp_image_description_creator_params_v1_set_primaries_named (creator, primaries);
     }
   else
     {
       const uint *p = wl_primaries_to_primaries (primaries);
-      xx_image_description_creator_params_v4_set_primaries (creator,
+      wp_image_description_creator_params_v1_set_primaries (creator,
                                                             p[0], p[1],
                                                             p[2], p[3],
                                                             p[4], p[5],
                                                             p[6], p[7]);
     }
-  xx_image_description_creator_params_v4_set_tf_named (creator, tf);
+  wp_image_description_creator_params_v1_set_tf_named (creator, tf);
 
-  desc = xx_image_description_creator_params_v4_create (creator);
+  desc = wp_image_description_creator_params_v1_create (creator);
 
   if (sync)
     {
@@ -381,7 +387,7 @@ create_image_desc (GdkWaylandColor *color,
       
       event_queue = wl_display_create_queue (color->display->wl_display);
       wl_proxy_set_queue ((struct wl_proxy *) desc, event_queue);
-      xx_image_description_v4_add_listener (desc, &cs_image_desc_listener, &data);
+      wp_image_description_v1_add_listener (desc, &cs_image_desc_listener, &data);
       while (!data.done)
         gdk_wayland_display_dispatch_queue (GDK_DISPLAY (color->display), event_queue);
 
@@ -389,7 +395,7 @@ create_image_desc (GdkWaylandColor *color,
     }
   else
     {
-      xx_image_description_v4_add_listener (desc, &cs_image_desc_listener, g_memdup2 (&data, sizeof data));
+      wp_image_description_v1_add_listener (desc, &cs_image_desc_listener, g_memdup2 (&data, sizeof data));
     }
 }
 
@@ -440,37 +446,37 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
     }
 
   if (color->color_manager &&
-      !(color->color_manager_supported.intents & (1 << XX_COLOR_MANAGER_V4_RENDER_INTENT_PERCEPTUAL)))
+      !(color->color_manager_supported.intents & (1 << WP_COLOR_MANAGER_V1_RENDER_INTENT_PERCEPTUAL)))
     {
       GDK_DEBUG (MISC, "Not using color management: Missing perceptual render intent");
-      g_clear_pointer (&color->color_manager, xx_color_manager_v4_destroy);
+      g_clear_pointer (&color->color_manager, wp_color_manager_v1_destroy);
     }
 
   if (color->color_manager &&
-      (!(color->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V4_FEATURE_PARAMETRIC)) ||
-       !(color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_SRGB)) ||
-       !((color->color_manager_supported.primaries & (1 << XX_COLOR_MANAGER_V4_PRIMARIES_SRGB)) ||
-         (color->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V4_FEATURE_SET_PRIMARIES)))))
+      (!(color->color_manager_supported.features & (1 << WP_COLOR_MANAGER_V1_FEATURE_PARAMETRIC)) ||
+       !(color->color_manager_supported.transfers & (1 << WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_SRGB)) ||
+       !((color->color_manager_supported.primaries & (1 << WP_COLOR_MANAGER_V1_PRIMARIES_SRGB)) ||
+         (color->color_manager_supported.features & (1 << WP_COLOR_MANAGER_V1_FEATURE_SET_PRIMARIES)))))
 
     {
       GDK_DEBUG (MISC, "Not using color management: Can't create srgb image description");
-      g_clear_pointer (&color->color_manager, xx_color_manager_v4_destroy);
+      g_clear_pointer (&color->color_manager, wp_color_manager_v1_destroy);
     }
 
   if (color->color_manager)
     {
       create_image_desc (color, GDK_COLOR_STATE_SRGB, FALSE);
 
-      if (color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR))
+      if (color->color_manager_supported.transfers & (1 << WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_EXT_LINEAR))
         create_image_desc (color, GDK_COLOR_STATE_SRGB_LINEAR, FALSE);
 
-      if ((color->color_manager_supported.primaries & (1 << XX_COLOR_MANAGER_V4_PRIMARIES_BT2020) ||
-          (color->color_manager_supported.features & (1 << XX_COLOR_MANAGER_V4_FEATURE_SET_PRIMARIES))))
+      if ((color->color_manager_supported.primaries & (1 << WP_COLOR_MANAGER_V1_PRIMARIES_BT2020) ||
+          (color->color_manager_supported.features & (1 << WP_COLOR_MANAGER_V1_FEATURE_SET_PRIMARIES))))
         {
-          if (color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_ST2084_PQ))
+          if (color->color_manager_supported.transfers & (1 << WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_ST2084_PQ))
             create_image_desc (color, GDK_COLOR_STATE_REC2100_PQ, FALSE);
 
-          if (color->color_manager_supported.transfers & (1 << XX_COLOR_MANAGER_V4_TRANSFER_FUNCTION_LINEAR))
+          if (color->color_manager_supported.transfers & (1 << WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_EXT_LINEAR))
             create_image_desc (color, GDK_COLOR_STATE_REC2100_LINEAR, FALSE);
         }
     }
@@ -481,8 +487,8 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
 struct _GdkWaylandColorSurface
 {
   GdkWaylandColor *color;
-  struct xx_color_management_surface_v4 *surface;
-  struct xx_color_management_feedback_surface_v4 *feedback;
+  struct wp_color_management_surface_v1 *surface;
+  struct wp_color_management_surface_feedback_v1 *feedback;
   ImageDescription *current_desc;
   GdkColorStateChanged callback;
   gpointer data;
@@ -492,8 +498,8 @@ struct _ImageDescription
 {
   GdkWaylandColorSurface *surface;
 
-  struct xx_image_description_v4 *image_desc;
-  struct xx_image_description_info_v4 *info;
+  struct wp_image_description_v1 *image_desc;
+  struct wp_image_description_info_v1 *info;
 
   uint32_t identity;
 
@@ -546,8 +552,8 @@ gdk_wayland_color_surface_clear_image_desc (GdkWaylandColorSurface *self)
   if (desc == NULL)
     return;
 
-  g_clear_pointer (&desc->image_desc, xx_image_description_v4_destroy);
-  g_clear_pointer (&desc->info, xx_image_description_info_v4_destroy);
+  g_clear_pointer (&desc->image_desc, wp_image_description_v1_destroy);
+  g_clear_pointer (&desc->info, wp_image_description_info_v1_destroy);
   g_free (desc);
 
   self->current_desc = NULL;
@@ -555,7 +561,7 @@ gdk_wayland_color_surface_clear_image_desc (GdkWaylandColorSurface *self)
 
 static void
 image_desc_info_done (void *data,
-                      struct xx_image_description_info_v4 *info)
+                      struct wp_image_description_info_v1 *info)
 {
   ImageDescription *desc = data;
   GdkWaylandColorSurface *self = desc->surface;
@@ -573,7 +579,7 @@ image_desc_info_done (void *data,
   else
     {
       cs = GDK_COLOR_STATE_SRGB;
-      g_clear_pointer (&desc->image_desc, xx_image_description_v4_destroy);
+      g_clear_pointer (&desc->image_desc, wp_image_description_v1_destroy);
     }
 
   if (self->callback)
@@ -586,7 +592,7 @@ image_desc_info_done (void *data,
 
 static void
 image_desc_info_icc_file (void *data,
-                          struct xx_image_description_info_v4 *info,
+                          struct wp_image_description_info_v1 *info,
                           int32_t icc,
                           uint32_t icc_size)
 {
@@ -599,7 +605,7 @@ image_desc_info_icc_file (void *data,
 
 static void
 image_desc_info_primaries (void *data,
-                           struct xx_image_description_info_v4 *info,
+                           struct wp_image_description_info_v1 *info,
                            int32_t r_x, int32_t r_y,
                            int32_t g_x, int32_t g_y,
                            int32_t b_x, int32_t b_y,
@@ -619,7 +625,7 @@ image_desc_info_primaries (void *data,
 
 static void
 image_desc_info_primaries_named (void *data,
-                                 struct xx_image_description_info_v4 *info,
+                                 struct wp_image_description_info_v1 *info,
                                  uint32_t primaries)
 {
   ImageDescription *desc = data;
@@ -637,7 +643,7 @@ image_desc_info_primaries_named (void *data,
 
 static void
 image_desc_info_tf_power (void *data,
-                          struct xx_image_description_info_v4 *info,
+                          struct wp_image_description_info_v1 *info,
                           uint32_t tf_power)
 {
   ImageDescription *desc = data;
@@ -648,7 +654,7 @@ image_desc_info_tf_power (void *data,
 
 static void
 image_desc_info_tf_named (void *data,
-                          struct xx_image_description_info_v4 *info,
+                          struct wp_image_description_info_v1 *info,
                           uint32_t tf)
 {
   ImageDescription *desc = data;
@@ -659,7 +665,7 @@ image_desc_info_tf_named (void *data,
 
 static void
 image_desc_info_luminances (void *data,
-                            struct xx_image_description_info_v4 *info,
+                            struct wp_image_description_info_v1 *info,
                             uint32_t min_lum,
                             uint32_t max_lum,
                             uint32_t ref_lum)
@@ -674,7 +680,7 @@ image_desc_info_luminances (void *data,
 
 static void
 image_desc_info_target_primaries (void *data,
-                                  struct xx_image_description_info_v4 *info,
+                                  struct wp_image_description_info_v1 *info,
                                   int32_t r_x, int32_t r_y,
                                   int32_t g_x, int32_t g_y,
                                   int32_t b_x, int32_t b_y,
@@ -691,7 +697,7 @@ image_desc_info_target_primaries (void *data,
 
 static void
 image_desc_info_target_luminance (void *data,
-                                  struct xx_image_description_info_v4 *info,
+                                  struct wp_image_description_info_v1 *info,
                                   uint32_t min_lum,
                                   uint32_t max_lum)
 {
@@ -704,7 +710,7 @@ image_desc_info_target_luminance (void *data,
 
 static void
 image_desc_info_target_max_cll (void *data,
-                                struct xx_image_description_info_v4 *info,
+                                struct wp_image_description_info_v1 *info,
                                 uint32_t max_cll)
 {
   ImageDescription *desc = data;
@@ -715,7 +721,7 @@ image_desc_info_target_max_cll (void *data,
 
 static void
 image_desc_info_target_max_fall (void *data,
-                                 struct xx_image_description_info_v4 *info,
+                                 struct wp_image_description_info_v1 *info,
                                  uint32_t max_fall)
 {
   ImageDescription *desc = data;
@@ -724,7 +730,7 @@ image_desc_info_target_max_fall (void *data,
   desc->has_target_max_fall = 1;
 }
 
-static struct xx_image_description_info_v4_listener info_listener = {
+static struct wp_image_description_info_v1_listener info_listener = {
   image_desc_info_done,
   image_desc_info_icc_file,
   image_desc_info_primaries,
@@ -740,7 +746,7 @@ static struct xx_image_description_info_v4_listener info_listener = {
 
 static void
 image_desc_failed (void                           *data,
-                   struct xx_image_description_v4 *image_desc,
+                   struct wp_image_description_v1 *image_desc,
                    uint32_t                        cause,
                    const char                     *msg)
 {
@@ -756,7 +762,7 @@ image_desc_failed (void                           *data,
 
 static void
 image_desc_ready (void                           *data,
-                  struct xx_image_description_v4 *image_desc,
+                  struct wp_image_description_v1 *image_desc,
                   uint32_t                        identity)
 {
   ImageDescription *desc = data;
@@ -774,20 +780,21 @@ image_desc_ready (void                           *data,
       return;
     }
 
-  desc->info = xx_image_description_v4_get_information (image_desc);
+  desc->info = wp_image_description_v1_get_information (image_desc);
   desc->identity = identity;
 
-  xx_image_description_info_v4_add_listener (desc->info, &info_listener, desc);
+  wp_image_description_info_v1_add_listener (desc->info, &info_listener, desc);
 }
 
-static const struct xx_image_description_v4_listener image_desc_listener = {
+static const struct wp_image_description_v1_listener image_desc_listener = {
   image_desc_failed,
   image_desc_ready
 };
 
 static void
 preferred_changed (void *data,
-                   struct xx_color_management_feedback_surface_v4 *feedback)
+                   struct wp_color_management_surface_feedback_v1 *feedback,
+                   uint32_t identity)
 {
   GdkWaylandColorSurface *self = data;
   ImageDescription *desc;
@@ -803,20 +810,20 @@ preferred_changed (void *data,
   desc->surface = self;
   self->current_desc = desc;
 
-  desc->image_desc = xx_color_management_feedback_surface_v4_get_preferred (self->feedback);
+  desc->image_desc = wp_color_management_surface_feedback_v1_get_preferred_parametric (self->feedback);
 
-  xx_image_description_v4_add_listener (desc->image_desc, &image_desc_listener, desc);
+  wp_image_description_v1_add_listener (desc->image_desc, &image_desc_listener, desc);
 }
 
-static const struct xx_color_management_feedback_surface_v4_listener color_listener = {
+static const struct wp_color_management_surface_feedback_v1_listener color_listener = {
   preferred_changed,
 };
 
 GdkWaylandColorSurface *
-gdk_wayland_color_surface_new (GdkWaylandColor          *color,
-                               struct wl_surface        *wl_surface,
-                               GdkColorStateChanged      callback,
-                               gpointer                  data)
+gdk_wayland_color_surface_new (GdkWaylandColor      *color,
+                               struct wl_surface    *wl_surface,
+                               GdkColorStateChanged  callback,
+                               gpointer              data)
 {
   GdkWaylandColorSurface *self;
 
@@ -824,14 +831,14 @@ gdk_wayland_color_surface_new (GdkWaylandColor          *color,
 
   self->color = color;
 
-  self->surface = xx_color_manager_v4_get_surface (color->color_manager, wl_surface);
-  self->feedback = xx_color_manager_v4_get_feedback_surface (color->color_manager, wl_surface);
+  self->surface = wp_color_manager_v1_get_surface (color->color_manager, wl_surface);
+  self->feedback = wp_color_manager_v1_get_surface_feedback (color->color_manager, wl_surface);
 
   self->callback = callback;
   self->data = data;
 
-  xx_color_management_feedback_surface_v4_add_listener (self->feedback, &color_listener, self);
-  preferred_changed (self, self->feedback);
+  wp_color_management_surface_feedback_v1_add_listener (self->feedback, &color_listener, self);
+  preferred_changed (self, self->feedback, 0);
 
   return self;
 }
@@ -841,13 +848,13 @@ gdk_wayland_color_surface_free (GdkWaylandColorSurface *self)
 {
   gdk_wayland_color_surface_clear_image_desc (self);
 
-  xx_color_management_surface_v4_destroy (self->surface);
-  xx_color_management_feedback_surface_v4_destroy (self->feedback);
+  wp_color_management_surface_v1_destroy (self->surface);
+  wp_color_management_surface_feedback_v1_destroy (self->feedback);
 
   g_free (self);
 }
 
-static struct xx_image_description_v4 *
+static struct wp_image_description_v1 *
 gdk_wayland_color_get_image_description (GdkWaylandColor *color,
                                          GdkColorState   *cs)
 {
@@ -870,16 +877,16 @@ void
 gdk_wayland_color_surface_set_color_state (GdkWaylandColorSurface *self,
                                            GdkColorState          *cs)
 {
-  struct xx_image_description_v4 *desc;
+  struct wp_image_description_v1 *desc;
 
   desc = gdk_wayland_color_get_image_description (self->color, cs);
 
   if (desc)
-    xx_color_management_surface_v4_set_image_description (self->surface,
+    wp_color_management_surface_v1_set_image_description (self->surface,
                                                           desc,
-                                                          XX_COLOR_MANAGER_V4_RENDER_INTENT_PERCEPTUAL);
+                                                          WP_COLOR_MANAGER_V1_RENDER_INTENT_PERCEPTUAL);
   else
-    xx_color_management_surface_v4_unset_image_description (self->surface);
+    wp_color_management_surface_v1_unset_image_description (self->surface);
 }
 
 gboolean

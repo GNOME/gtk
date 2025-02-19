@@ -65,7 +65,7 @@
 #include <wayland/server-decoration-client-protocol.h>
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 #include "presentation-time-client-protocol.h"
-#include "xx-color-management-v4-client-protocol.h"
+#include "color-management-v1-client-protocol.h"
 
 #include "wm-button-layout-translation.h"
 
@@ -539,7 +539,7 @@ gdk_registry_handle_global (void               *data,
                           &wp_presentation_interface,
                           MIN (version, 1));
     }
-  else if (strcmp (interface, xx_color_manager_v4_interface.name) == 0 &&
+  else if (strcmp (interface, wp_color_manager_v1_interface.name) == 0 &&
            gdk_has_feature (GDK_FEATURE_COLOR_MANAGEMENT))
     {
       display_wayland->color = gdk_wayland_color_new (display_wayland, registry, id, version);
