@@ -407,8 +407,12 @@ _gdk_android_surface_on_visibility_ui_thread (JNIEnv *env, jobject this,
       jobject holder = (*env)->CallObjectMethod (env, this, gdk_android_get_java_cache ()->surface.get_holder);
       jobject android_surface = (*env)->CallObjectMethod (env, holder, gdk_android_get_java_cache ()->a_surfaceholder.get_surface);
       self->native = ANativeWindow_fromSurface (env, android_surface);
+      gdk_surface_set_egl_native_window ((GdkSurface *)self, self->native);
       (*env)->PopLocalFrame (env, NULL);
     }
+  else
+    gdk_surface_set_egl_native_window ((GdkSurface *)self, NULL);
+
   g_mutex_unlock (&self->native_lock);
 
   pthread_barrier_wait (&data.surface_update_complete); // let the eventloop continue running
@@ -612,6 +616,7 @@ gdk_android_surface_destroy (GdkSurface *surface, gboolean foreign_destroy)
       (*env)->CallVoidMethod (env, self->surface, gdk_android_get_java_cache ()->surface.drop);
     }
   g_hash_table_remove (display->surfaces, self);
+  gdk_surface_set_egl_native_window (surface, NULL);
 }
 
 static gdouble

@@ -37,6 +37,7 @@ typedef struct
   {
     jclass klass;
     jmethodID constructor;
+    jmethodID vflip;
   } clipboard_bitmap_drag_shadow;
   struct
   {

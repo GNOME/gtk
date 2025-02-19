@@ -9,6 +9,7 @@ gdk_android_sources = files([
   'gdkandroidcairocontext.c',
   'gdkandroidclipboard.c',
   'gdkandroiddnd.c',
+  'gdkandroidglcontext.c',
   'gdkandroidseat.c',
   'gdkandroiddevice.c',
   'gdkandroidkeymap.c',

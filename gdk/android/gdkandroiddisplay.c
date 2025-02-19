@@ -30,8 +30,11 @@
 #include "gdkandroidclipboard-private.h"
 #include "gdkandroiddevice-private.h"
 #include "gdkandroidkeymap-private.h"
+#include "gdkandroidglcontext-private.h"
 
 #include "gdkandroiddisplay-private.h"
+
+#include <epoxy/egl.h>
 
 G_DEFINE_ENUM_TYPE (GdkAndroidDisplayNightMode, gdk_android_display_night_mode,
                     G_DEFINE_ENUM_VALUE (GDK_ANDROID_DISPLAY_NIGHT_UNDEFINED, "undefined"),
@@ -129,6 +132,17 @@ gdk_android_display_queue_events (GdkDisplay *display)
   // NOP
 }
 
+static GdkGLContext *
+gdk_android_display_init_gl (GdkDisplay *display, GError **error)
+{
+  if (!gdk_display_init_egl (display, EGL_PLATFORM_ANDROID_KHR, EGL_DEFAULT_DISPLAY, TRUE, error))
+    {
+      g_warning ("GdkAndroidDisplay.init_egl failed");
+      return NULL;
+    }
+  return g_object_new (GDK_TYPE_ANDROID_GL_CONTEXT, "display", display, NULL);
+}
+
 static gulong
 gdk_android_display_get_next_serial (GdkDisplay *display)
 {
@@ -204,6 +218,8 @@ gdk_android_display_class_init (GdkAndroidDisplayClass *klass)
   display_class->sync = gdk_android_display_sync;
   display_class->flush = gdk_android_display_flush;
   display_class->queue_events = gdk_android_display_queue_events;
+
+  display_class->init_gl = gdk_android_display_init_gl;
 
   display_class->get_next_serial = gdk_android_display_get_next_serial;
   display_class->notify_startup_complete = gdk_android_display_notify_startup_complete;
