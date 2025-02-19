@@ -201,11 +201,18 @@ wp_color_manager_v1_supported_primaries_named (void                       *data,
   color->color_manager_supported.primaries |= (1 << primaries);
 }
 
+static void
+wp_color_manager_v1_done (void                       *data,
+                          struct wp_color_manager_v1 *wp_color_manager_v1)
+{
+}
+
 static struct wp_color_manager_v1_listener color_manager_listener = {
   wp_color_manager_v1_supported_intent,
   wp_color_manager_v1_supported_feature,
   wp_color_manager_v1_supported_tf_named,
   wp_color_manager_v1_supported_primaries_named,
+  wp_color_manager_v1_done,
 };
 
 GdkWaylandColor *
