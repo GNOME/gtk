@@ -1,8 +1,12 @@
 #version 330
 
-layout(location = 0) in vec4 position;
+in vec4 in_position;
+in vec4 in_color;
 uniform mat4 mvp;
 
+out vec4 color;
+
 void main() {
-  gl_Position = mvp * position;
+  color = in_color;
+  gl_Position = mvp * in_position;
 }
