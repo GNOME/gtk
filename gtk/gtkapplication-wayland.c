@@ -113,6 +113,30 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
+static void
+gtk_application_impl_wayland_window_removed (GtkApplicationImpl *impl,
+                                             GtkWindow          *window)
+{
+  GtkApplicationImplWayland *wayland = (GtkApplicationImplWayland *) impl;
+  GSList *iter;
+
+  for (iter = wayland->inhibitors; iter; iter = iter->next)
+    {
+      GtkApplicationWaylandInhibitor *inhibitor = iter->data;
+
+      if (inhibitor->surface && inhibitor->surface == gtk_native_get_surface (GTK_NATIVE (window)))
+        {
+          inhibitor->surface = NULL;
+
+          if (!inhibitor->dbus_cookie)
+            {
+              gtk_application_wayland_inhibitor_free (inhibitor);
+              wayland->inhibitors = g_slist_delete_link (wayland->inhibitors, iter);
+            }
+        }
+    }
+}
+
 static guint
 gtk_application_impl_wayland_inhibit (GtkApplicationImpl         *impl,
                                       GtkWindow                  *window,
@@ -132,7 +156,7 @@ gtk_application_impl_wayland_inhibit (GtkApplicationImpl         *impl,
   inhibitor->flags = flags;
   wayland->inhibitors = g_slist_prepend (wayland->inhibitors, inhibitor);
 
-  if (flags & GTK_APPLICATION_INHIBIT_IDLE)
+  if (flags & GTK_APPLICATION_INHIBIT_IDLE && impl->application == gtk_window_get_application (window))
     {
       surface = gtk_native_get_surface (GTK_NATIVE (window));
       if (GDK_IS_WAYLAND_TOPLEVEL (surface))
@@ -195,6 +219,8 @@ gtk_application_impl_wayland_class_init (GtkApplicationImplWaylandClass *class)
     gtk_application_impl_wayland_handle_window_realize;
   impl_class->before_emit =
     gtk_application_impl_wayland_before_emit;
+  impl_class->window_removed =
+    gtk_application_impl_wayland_window_removed;
   impl_class->inhibit =
     gtk_application_impl_wayland_inhibit;
   impl_class->uninhibit =
