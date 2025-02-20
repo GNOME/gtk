@@ -48,7 +48,10 @@
  *
  * Allows drawing with OpenGL.
  *
- * ![An example GtkGLArea](glarea.png)
+ * <picture>
+ *   <source srcset="glarea-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkGLArea" src="glarea.png">
+ * </picture>
  *
  * `GtkGLArea` sets up its own [class@Gdk.GLContext], and creates a custom
  * GL framebuffer that the widget will do GL rendering onto. It also ensures

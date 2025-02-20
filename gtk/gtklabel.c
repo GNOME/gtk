@@ -70,7 +70,10 @@
  *
  * Most labels are used to label another widget (such as an [class@Entry]).
  *
- * ![An example GtkLabel](label.png)
+ * <picture>
+ *   <source srcset="label-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkLabel" src="label.png">
+ * </picture>
  *
  * ## Shortcuts and Gestures
  *

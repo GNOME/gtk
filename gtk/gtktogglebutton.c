@@ -39,7 +39,10 @@
  *
  * Shows a button which remains “pressed-in” when clicked.
  *
- * ![Example GtkToggleButtons](toggle-button.png)
+ * <picture>
+ *   <source srcset="toggle-button-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="Example GtkToggleButtons" src="toggle-button.png">
+ * </picture>
  *
  * Clicking again will cause the toggle button to return to its normal state.
  *

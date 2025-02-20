@@ -76,7 +76,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * A widget for displaying both trees and lists
  *
- * ![An example GtkTreeView](list-and-tree.png)
+ * <picture>
+ *   <source srcset="list-and-tree-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkTreeView" src="list-and-tree.png">
+ * </picture>
  *
  * Widget that displays any object that implements the [iface@Gtk.TreeModel] interface.
  *

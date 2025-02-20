@@ -63,7 +63,10 @@
  *
  * Switches between children using tabs.
  *
- * ![An example GtkNotebook](notebook.png)
+ * <picture>
+ *   <source srcset="notebook-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkNotebook" src="notebook.png">
+ * </picture>
  *
  * There are many configuration options for `GtkNotebook`. Among
  * other things, you can choose on which edge the tabs appear

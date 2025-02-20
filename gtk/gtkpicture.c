@@ -35,7 +35,10 @@
  *
  * Displays a `GdkPaintable`.
  *
- * ![An example GtkPicture](picture.png)
+ * picture>
+ *   <source srcset="picture-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkPicture" src="picture.png">
+ * </picture>
  *
  * Many convenience functions are provided to make pictures simple to use.
  * For example, if you want to load an image from a file, and then display

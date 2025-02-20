@@ -42,7 +42,10 @@ static void     update_button_sensitivity
  *
  * Opens a font chooser dialog to select a font.
  *
- * ![An example GtkFontDialogButton](font-button.png)
+ * <picture>
+ *   <source srcset="font-button-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkFontDialogButton" src="font-button.png">
+ * </picture>
  *
  * It is suitable widget for selecting a font in a preference dialog.
  *

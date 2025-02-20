@@ -40,7 +40,10 @@
  *
  * Allows users to edit the displayed text by switching to an “edit mode”.
  *
- * ![An example GtkEditableLabel](editable-label.png)
+ * <picture>
+ *   <source srcset="editable-label-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkEditableLabel" src="editable-label.png">
+ * </picture>
  *
  * `GtkEditableLabel` does not have API of its own, but it
  * implements the [iface@Gtk.Editable] interface.

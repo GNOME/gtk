@@ -35,7 +35,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * A dialog for choosing a color.
  *
- * ![An example GtkColorChooserDialog](colorchooser.png)
+ * <picture>
+ *   <source srcset="colorchooser-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkColorChooserDialog" src="colorchooser.png">
+ * </picture>
  *
  * `GtkColorChooserDialog` implements the [iface@Gtk.ColorChooser] interface
  * and does not provide much API of its own.

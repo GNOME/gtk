@@ -24,7 +24,10 @@
  * Arranges three children in a row, keeping the middle child
  * centered as well as possible.
  *
- * ![An example GtkCenterBox](centerbox.png)
+ * <picture>
+ *   <source srcset="centerbox-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkCenterBox" src="centerbox.png">
+ * </picture>
  *
  * To add children to `GtkCenterBox`, use [method@Gtk.CenterBox.set_start_widget],
  * [method@Gtk.CenterBox.set_center_widget] and

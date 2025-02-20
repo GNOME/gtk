@@ -36,7 +36,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * `GtkLockButton` is a widget to obtain and revoke authorizations
  * needed to operate the controls.
  *
- * ![An example GtkLockButton](lock-button.png)
+ * <picture>
+ *   <source srcset="lock-button-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkLockButton" src="lock-button.png">
+ * </picture>
  *
  * It is typically used in preference dialogs or control panels.
  *

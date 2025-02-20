@@ -48,7 +48,10 @@
  * `GtkProgressBar` provides a visual clue that processing is underway.
  * It can be used in two different modes: percentage mode and activity mode.
  *
- * ![An example GtkProgressBar](progressbar.png)
+ * <picture>
+ *   <source srcset="progressbar-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkProgressBar" src="progressbar.png">
+ * </picture>
  *
  * When an application can determine how much work needs to take place
  * (e.g. read a fixed number of bytes from a file) and can monitor its

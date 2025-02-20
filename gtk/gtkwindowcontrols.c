@@ -40,7 +40,10 @@
  * Typical window frame controls are minimize, maximize and close buttons,
  * and the window icon.
  *
- * ![An example GtkWindowControls](windowcontrols.png)
+ * <picture>
+ *   <source srcset="windowcontrols-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkWindowControls" src="windowcontrols.png">
+ * </picture>
  *
  * `GtkWindowControls` only displays start or end side of the controls (see
  * [property@Gtk.WindowControls:side]), so it's intended to be always used

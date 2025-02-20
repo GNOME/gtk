@@ -37,7 +37,10 @@
  *
  * Shows a row of buttons to switch between `GtkStack` pages.
  *
- * ![An example GtkStackSwitcher](stackswitcher.png)
+ * <picture>
+ *   <source srcset="stackswitcher-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkStackSwitcher" src="stackswitcher.png">
+ * </picture>
  *
  * It acts as a controller for the associated `GtkStack`.
  *

@@ -68,7 +68,10 @@
  *
  * Displays the contents of a [class@Gtk.TextBuffer].
  *
- * ![An example GtkTextView](multiline-text.png)
+ * <picture>
+ *   <source srcset="multiline-text-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkTextView" src="multiline-text.png">
+ * </picture>
  *
  * You may wish to begin by reading the [conceptual overview](section-text-widget.html),
  * which gives an overview of all the objects and data types related to the

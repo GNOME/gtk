@@ -47,7 +47,10 @@
  * It is often used as an alternative to a [class@Gtk.ProgressBar]
  * for displaying indefinite activity, instead of actual progress.
  *
- * ![An example GtkSpinner](spinner.png)
+ * <picture>
+ *   <source srcset="spinner-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkSpinner" src="spinner.png">
+ * </picture>
  *
  * To start the animation, use [method@Gtk.Spinner.start], to stop it
  * use [method@Gtk.Spinner.stop].

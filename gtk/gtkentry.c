@@ -67,7 +67,10 @@
  *
  * A single-line text entry widget.
  *
- * ![An example GtkEntry](entry.png)
+ * <picture>
+ *   <source srcset="entry-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkEntry" src="entry.png">
+ * </picture>
  *
  * A fairly large set of key bindings are supported by default. If the
  * entered text is longer than the allocation of the widget, the widget

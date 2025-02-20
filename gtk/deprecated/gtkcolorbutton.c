@@ -54,7 +54,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * The `GtkColorButton` allows to open a color chooser dialog to change
  * the color.
  *
- * ![An example GtkColorButton](color-button.png)
+ * <picture>
+ *   <source srcset="color-button-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkColorButton" src="color-button.png">
+ * </picture>
  *
  * It is suitable widget for selecting a color in a preference dialog.
  *

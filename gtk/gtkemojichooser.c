@@ -42,7 +42,10 @@
  *
  * Used by text widgets to let users insert Emoji characters.
  *
- * ![An example GtkEmojiChooser](emojichooser.png)
+ * <picture>
+ *   <source srcset="emojichooser-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkEmojiChooser" src="emojichooser.png">
+ * </picture>
  *
  * `GtkEmojiChooser` emits the [signal@Gtk.EmojiChooser::emoji-picked]
  * signal when an Emoji is selected.

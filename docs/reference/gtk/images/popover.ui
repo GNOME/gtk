@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <object class="GtkMenuButton">
-    <property name="popover">
       <object class="GtkPopover">
         <property name="width-request">180</property>
         <property name="height-request">180</property>
@@ -15,6 +13,4 @@
           </object>
         </child>
       </object>
-    </property>
-  </object>
 </interface>

@@ -62,7 +62,10 @@
  *
  * Makes its child scrollable.
  *
- * ![An example GtkScrolledWindow](scrolledwindow.png)
+ * <picture>
+ *   <source srcset="scrolledwindow-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkScrolledWindow" src="scrolledwindow.png">
+ * </picture>
  *
  * It does so using either internally added scrollbars or externally
  * associated adjustments, and optionally draws a frame around the child.

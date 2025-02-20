@@ -41,7 +41,10 @@
  *
  * Shows a horizontal or vertical scrollbar.
  *
- * ![An example GtkScrollbar](scrollbar.png)
+ * <picture>
+ *   <source srcset="scrollbar-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkScrollbar" src="scrollbar.png">
+ * </picture>
  *
  * Its position and movement are controlled by the adjustment that is passed to
  * or created by [ctor@Gtk.Scrollbar.new]. See [class@Gtk.Adjustment] for more

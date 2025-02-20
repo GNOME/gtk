@@ -62,7 +62,10 @@ static guint signals[LAST_SIGNAL] = { 0, };
  *
  * Allows drawing with cairo.
  *
- * ![An example GtkDrawingArea](drawingarea.png)
+ * <picture>
+ *   <source srcset="drawingarea-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkDrawingArea" src="drawingarea.png">
+ * </picture>
  *
  * It’s essentially a blank widget; you can draw on it. After
  * creating a drawing area, the application may want to connect to:

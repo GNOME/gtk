@@ -62,7 +62,10 @@ struct _GtkFontChooserDialogClass
  *
  * The `GtkFontChooserDialog` widget is a dialog for selecting a font.
  *
- * ![An example GtkFontChooserDialog](fontchooser.png)
+ * <picture>
+ *   <source srcset="fontchooser-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkFontChooserDialog" src="fontchooser.png">
+ * </picture>
  *
  * `GtkFontChooserDialog` implements the [iface@Gtk.FontChooser] interface
  * and does not provide much API of its own.

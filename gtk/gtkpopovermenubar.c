@@ -23,7 +23,10 @@
  *
  * Presents a horizontal bar of items that pop up menus when clicked.
  *
- * ![An example GtkPopoverMenuBar](menubar.png)
+ * <picture>
+ *   <source srcset="menubar-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkPopoverMenuBar" src="menubar.png">
+ * </picture>
  *
  * The only way to create instances of `GtkPopoverMenuBar` is
  * from a `GMenuModel`.

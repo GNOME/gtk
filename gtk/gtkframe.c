@@ -38,7 +38,10 @@
  *
  * Surrounds its child with a decorative frame and an optional label.
  *
- * ![An example GtkFrame](frame.png)
+ * <picture>
+ *   <source srcset="frame-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkFrame" src="frame.png">
+ * </picture>
  *
  * If present, the label is drawn inside the top edge of the frame.
  * The horizontal position of the label can be controlled with
