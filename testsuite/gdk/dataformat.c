@@ -35,7 +35,7 @@ data_format_from_string (const char *string)
 
   for (format = 0; format < GDK_DATA_N_FORMATS; format++)
     {
-      if (g_strcasecmp (string, gdk_data_format_get_name (format)) == 0)
+      if (g_ascii_strcasecmp (string, gdk_data_format_get_name (format)) == 0)
         break;
     }
 

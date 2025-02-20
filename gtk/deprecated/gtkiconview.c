@@ -2775,7 +2775,7 @@ gtk_icon_view_layout (GtkIconView *icon_view)
                                      sizes);
 
   /* Actually allocate the rows */
-  g_qsort_with_data (sizes, n_rows, sizeof (GtkRequestedSize), compare_sizes, NULL);
+  g_sort_array (sizes, n_rows, sizeof (GtkRequestedSize), compare_sizes, NULL);
 
   items = priv->items;
   priv->height = priv->margin;

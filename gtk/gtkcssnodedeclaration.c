@@ -435,7 +435,7 @@ gtk_css_node_declaration_print (const GtkCssNodeDeclaration *decl,
   for (i = 0; i < decl->n_classes; i++)
     classnames[i] = (char *)g_quark_to_string (decl->classes[i]);
 
-  g_qsort_with_data (classnames, decl->n_classes, sizeof (char *), cmpstr, NULL);
+  g_sort_array (classnames, decl->n_classes, sizeof (char *), cmpstr, NULL);
 
   for (i = 0; i < decl->n_classes; i++)
     {
