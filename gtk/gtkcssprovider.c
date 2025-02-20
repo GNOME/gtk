@@ -1700,7 +1700,7 @@ gtk_css_ruleset_print (const GtkCssRuleset *ruleset,
         sorted[i] = i;
 
       /* so the output is identical for identical selector styles */
-      g_qsort_with_data (sorted, ruleset->n_styles, sizeof (guint), compare_properties, ruleset->styles);
+      g_sort_array (sorted, ruleset->n_styles, sizeof (guint), compare_properties, ruleset->styles);
 
       for (i = 0; i < ruleset->n_styles; i++)
         {
