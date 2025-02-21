@@ -37,6 +37,7 @@ typedef struct
 {
   ParserData *parser_data;
   struct frame frame;
+  char *id;
 
   /* attributes */
   char         *attribute;
@@ -366,33 +367,47 @@ _gtk_builder_menu_start (ParserData   *parser_data,
                          GError      **error)
 {
   GtkBuilderMenuState *state;
-  char *id;
+  const char *id = NULL;
+  char *internal_id = NULL;
 
   state = g_new0 (GtkBuilderMenuState, 1);
   state->parser_data = parser_data;
   gtk_buildable_parse_context_push (&parser_data->ctx, &gtk_builder_menu_subparser, state);
 
-  if (COLLECT (STRING, "id", &id))
+  if (COLLECT (STRING | OPTIONAL, "id", &id))
     {
       GMenu *menu;
+
+      if (id == NULL)
+        {
+          internal_id = g_strdup_printf ("___object_%d___", ++parser_data->object_counter);
+          id = internal_id;
+        }
 
       menu = g_menu_new ();
       _gtk_builder_add_object (state->parser_data->builder, id, G_OBJECT (menu));
       gtk_builder_menu_push_frame (state, menu, NULL);
       g_object_unref (menu);
+      state->id = g_strdup (id);
     }
+
+  g_free (internal_id);
 }
 
-void
+char *
 _gtk_builder_menu_end (ParserData *parser_data)
 {
   GtkBuilderMenuState *state;
+  char *id;
 
   state = gtk_buildable_parse_context_pop (&parser_data->ctx);
+  id = state->id;
   gtk_builder_menu_pop_frame (state);
 
   g_assert (state->frame.prev == NULL);
   g_assert (state->frame.item == NULL);
   g_assert (state->frame.menu == NULL);
   g_free (state);
+
+  return id;
 }

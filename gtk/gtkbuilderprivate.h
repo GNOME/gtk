@@ -262,7 +262,7 @@ void      _gtk_builder_menu_start (ParserData   *parser_data,
                                    const char **attribute_names,
                                    const char **attribute_values,
                                    GError      **error);
-void      _gtk_builder_menu_end   (ParserData  *parser_data);
+char *    _gtk_builder_menu_end   (ParserData  *parser_data);
 
 GType     gtk_builder_get_template_type (GtkBuilder *builder,
                                          gboolean *out_allow_parents);
