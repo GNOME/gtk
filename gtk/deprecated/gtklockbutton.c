@@ -37,8 +37,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * needed to operate the controls.
  *
  * <picture>
- *   <source srcset="lock-button-dark.png" media="(prefers-color-scheme: dark)">
- *   <img alt="An example GtkLockButton" src="lock-button.png">
+ *   <source srcset="lockbutton-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkLockButton" src="lockbutton.png">
  * </picture>
  *
  * It is typically used in preference dialogs or control panels.
@@ -51,19 +51,28 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * If the user is not currently allowed to perform the action, but can
  * obtain the permission, the widget looks like this:
  *
- * ![](lockbutton-locked.png)
+ * <picture>
+ *   <source srcset="lockbutton-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An locked GtkLockButton" src="lockbutton.png">
+ * </picture>
  *
  * and the user can click the button to request the permission. Depending
  * on the platform, this may pop up an authentication dialog or ask the user
  * to authenticate in some other way. Once the user has obtained the permission,
  * the widget changes to this:
  *
- * ![](lockbutton-unlocked.png)
+ * <picture>
+ *   <source srcset="lockbutton-unlocked-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An unlocked GtkLockButton" src="lockbutton-unlocked.png">
+ * </picture>
  *
  * and the permission can be dropped again by clicking the button. If the user
  * is not able to obtain the permission at all, the widget looks like this:
  *
- * ![](lockbutton-sorry.png)
+ * <picture>
+ *   <source srcset="lockbutton-sorry-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An unobtainable GtkLockButton" src="lockbutton-sorry.png">
+ * </picture>
  *
  * If the user has the permission and cannot drop it, the button is hidden.
  *
