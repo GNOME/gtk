@@ -148,12 +148,12 @@ proto_sources = [
   },
   {
     'name': 'color-management',
-    'stability': 'private',
+    'stability': 'staging',
     'version': 1,
   },
   {
     'name': 'xdg-system-bell',
-    'stability': 'private',
+    'stability': 'staging',
     'version': 1,
   },
 ]
