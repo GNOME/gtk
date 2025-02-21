@@ -19,6 +19,13 @@
 #include <gtk/gtk.h>
 #include <gio/gio.h>
 
+/* This is used to take screenshots of GtkLockButton for the docs.
+ *
+ * Run it like: testlockbutton lockbutton.ui style.css
+ *
+ * with the ui and css from the images directory for the docs.
+ */
+
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
 /* a fake permission implementation */
@@ -190,8 +197,6 @@ update_clicked (GtkButton *button, GtkLockButton *lockbutton)
   g_test_permission_set_success (G_TEST_PERMISSION (permission), success);
 }
 
-static GtkWidget *content;
-
 static void
 permission_changed (GPermission *permission,
                     GParamSpec  *pspec)
@@ -207,8 +212,93 @@ permission_changed (GPermission *permission,
   gtk_check_button_set_active (GTK_CHECK_BUTTON (allowed_button), allowed);
   gtk_check_button_set_active (GTK_CHECK_BUTTON (can_acquire_button), can_acquire);
   gtk_check_button_set_active (GTK_CHECK_BUTTON (can_release_button), can_release);
+}
 
-  gtk_widget_set_sensitive (content, allowed);
+static void
+draw_paintable (GdkPaintable *paintable)
+{
+  GtkSnapshot *snapshot;
+  GskRenderNode *node;
+  GdkTexture *texture;
+  GskRenderer *renderer;
+  graphene_rect_t bounds;
+  static int count = 0;
+  char *path;
+
+  snapshot = gtk_snapshot_new ();
+  gdk_paintable_snapshot (paintable,
+                          snapshot,
+                          gdk_paintable_get_intrinsic_width (paintable),
+                          gdk_paintable_get_intrinsic_height (paintable));
+  node = gtk_snapshot_free_to_node (snapshot);
+
+  /* If the window literally draws nothing, we assume it hasn't been mapped yet and as such
+   * the invalidations were only side effects of resizes.
+   */
+  if (node == NULL)
+    return;
+
+  if (gsk_render_node_get_node_type (node) == GSK_CLIP_NODE)
+    {
+      GskRenderNode *child;
+
+      child = gsk_render_node_ref (gsk_clip_node_get_child (node));
+      gsk_render_node_unref (node);
+      node = child;
+    }
+
+  renderer = gtk_native_get_renderer (
+                 gtk_widget_get_native (
+                     gtk_widget_paintable_get_widget (GTK_WIDGET_PAINTABLE (paintable))));
+
+  gsk_render_node_get_bounds (node, &bounds);
+  graphene_rect_union (&bounds,
+                       &GRAPHENE_RECT_INIT (
+                         0, 0,
+                         gdk_paintable_get_intrinsic_width (paintable),
+                         gdk_paintable_get_intrinsic_height (paintable)
+                       ),
+                       &bounds);
+
+  texture = gsk_renderer_render_texture (renderer, node, &bounds);
+  g_object_set_data_full (G_OBJECT (texture),
+                          "source-render-node",
+                          node,
+                          (GDestroyNotify) gsk_render_node_unref);
+
+  path = g_strdup_printf ("screenshot%d.png", count++);
+  gdk_texture_save_to_png (texture, path);
+  g_free (path);
+
+  g_object_unref (texture);
+
+  g_signal_handlers_disconnect_by_func (paintable, draw_paintable, NULL);
+  g_object_unref (paintable);
+}
+
+static gboolean
+do_snapshot (gpointer data)
+{
+  GtkWidget *widget = data;
+  GdkPaintable *paintable;
+
+  paintable = gtk_widget_paintable_new (widget);
+  g_signal_connect (paintable, "invalidate-contents", G_CALLBACK (draw_paintable), NULL);
+
+  gtk_widget_queue_draw (widget);
+
+  return G_SOURCE_REMOVE;
+}
+
+static void
+screenshot_clicked (GtkButton *button,
+                    GtkWidget *widget)
+{
+  g_assert_true (gtk_widget_get_realized (widget));
+
+  gtk_widget_grab_focus (GTK_WIDGET (gtk_widget_get_root (widget)));
+
+  g_idle_add (do_snapshot, gtk_widget_get_root (widget));
 }
 
 int
@@ -219,7 +309,10 @@ main (int argc, char *argv[])
   GtkWidget *button;
   GtkWidget *box;
   GtkWidget *update;
+  GtkWidget *screenshot;
   GPermission *permission;
+  GtkBuilder *builder;
+  GtkCssProvider *provider;
 
   gtk_init ();
 
@@ -241,27 +334,28 @@ main (int argc, char *argv[])
   gtk_box_append (GTK_BOX (box), success_button);
   update = gtk_button_new_with_label ("Update");
   gtk_box_append (GTK_BOX (box), update);
+  screenshot = gtk_button_new_with_label ("Screenshot");
+  gtk_box_append (GTK_BOX (box), screenshot);
   g_signal_connect (permission, "notify",
                     G_CALLBACK (permission_changed), NULL);
 
-  button = gtk_lock_button_new (permission);
+  builder = gtk_builder_new_from_file (argv[1]);
+
+  provider = gtk_css_provider_new ();
+  gtk_css_provider_load_from_path (provider, argv[2]);
+
+  gtk_style_context_add_provider_for_display (gdk_display_get_default (), GTK_STYLE_PROVIDER (provider), GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+  button = GTK_WIDGET (gtk_builder_get_object (builder, "lockbutton"));
+  gtk_lock_button_set_permission (GTK_LOCK_BUTTON (button), permission);
+
+  dialog = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
+  gtk_widget_add_css_class (dialog, "nobackground");
 
   g_signal_connect (update, "clicked",
                     G_CALLBACK (update_clicked), button);
-
-  dialog = gtk_dialog_new_with_buttons ("Dialog", NULL, 0,
-                                        "Close", GTK_RESPONSE_CLOSE,
-                                        "Some other action", GTK_RESPONSE_APPLY,
-                                        NULL);
-  gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-
-  content = gtk_box_new (GTK_ORIENTATION_VERTICAL, 5);
-  gtk_box_append (GTK_BOX (content), gtk_check_button_new_with_label ("Control 1"));
-  gtk_box_append (GTK_BOX (content), gtk_check_button_new_with_label ("Control 2"));
-  gtk_widget_set_sensitive (content, FALSE);
-
-  gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), content);
-  gtk_box_append (GTK_BOX (gtk_dialog_get_content_area (GTK_DIALOG (dialog))), button);
+  g_signal_connect (screenshot, "clicked",
+                    G_CALLBACK (screenshot_clicked), button);
 
   gtk_window_present (GTK_WINDOW (window));
   gtk_window_present (GTK_WINDOW (dialog));
