@@ -27,7 +27,10 @@
  *
  * Calls a callback function when the button is clicked.
  *
- * ![An example GtkButton](button.png)
+ * <picture>
+ *   <source srcset="button-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkButton" src="button.png">
+ * </picture>
  *
  * The `GtkButton` widget can hold any valid child widget. That is, it can hold
  * almost any other standard `GtkWidget`. The most commonly used child is the

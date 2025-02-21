@@ -42,7 +42,10 @@
  *
  * Shows a vertical list.
  *
- * ![An example GtkListBox](list-box.png)
+ * <picture>
+ *   <source srcset="list-box-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkListBox" src="list-box.png">
+ * </picture>
  *
  * A `GtkListBox` only contains `GtkListBoxRow` children. These rows can
  * by dynamically sorted and filtered, and headers can be added dynamically

@@ -36,7 +36,10 @@
  *
  * Places “overlay” widgets on top of a single main child.
  *
- * ![An example GtkOverlay](overlay.png)
+ * <picture>
+ *   <source srcset="overlay-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkOverlay" src="overlay.png">
+ * </picture>
  *
  * The position of each overlay widget is determined by its
  * [property@Gtk.Widget:halign] and [property@Gtk.Widget:valign]

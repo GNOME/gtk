@@ -42,7 +42,10 @@
  *
  * A single-line text entry widget for entering passwords and other secrets.
  *
- * ![An example GtkPasswordEntry](password-entry.png)
+ * <picture>
+ *   <source srcset="password-entry-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkPasswordEntry" src="password-entry.png">
+ * </picture>
  *
  * It does not show its contents in clear text, does not allow to copy it
  * to the clipboard, and it shows a warning when Caps Lock is engaged. If

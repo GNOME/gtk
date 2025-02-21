@@ -27,7 +27,10 @@
  *
  * Arranges child widgets into a single row or column.
  *
- * ![An example GtkBox](box.png)
+ * <picture>
+ *   <source srcset="box-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkBox" src="box.png">
+ * </picture>
  *
  * Whether it is a row or column depends on the value of its
  * [property@Gtk.Orientable:orientation] property. Within the other

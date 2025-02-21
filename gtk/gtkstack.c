@@ -41,7 +41,10 @@
  *
  * Shows one of its children at a time.
  *
- * ![An example GtkStack](stack.png)
+ * <picture>
+ *   <source srcset="stack-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkStack" src="stack.png">
+ * </picture>
  *
  * In contrast to `GtkNotebook`, `GtkStack` does not provide a means
  * for users to change the visible child. Instead, a separate widget

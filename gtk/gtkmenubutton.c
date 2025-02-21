@@ -23,7 +23,10 @@
  *
  * Displays a popup when clicked.
  *
- * ![An example GtkMenuButton](menu-button.png)
+ * <picture>
+ *   <source srcset="menu-button-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkMenuButton" src="menu-button.png">
+ * </picture>
  *
  * This popup can be provided either as a `GtkPopover` or as an abstract
  * `GMenuModel`.

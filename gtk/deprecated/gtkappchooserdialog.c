@@ -27,7 +27,10 @@
  *
  * `GtkAppChooserDialog` shows a `GtkAppChooserWidget` inside a `GtkDialog`.
  *
- * ![An example GtkAppChooserDialog](appchooserdialog.png)
+ * <picture>
+ *   <source srcset="appchooserdialog-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkAppChooserDialog" src="appchooserdialog.png">
+ * </picture>
  *
  * Note that `GtkAppChooserDialog` does not have any interesting methods
  * of its own. Instead, you should get the embedded `GtkAppChooserWidget`

@@ -43,7 +43,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * `GtkVolumeButton` is a `GtkScaleButton` subclass tailored for
  * volume control.
  *
- * ![An example GtkVolumeButton](volumebutton.png)
+ * <picture>
+ *   <source srcset="volumebutton-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkVolumeButton" src="volumebutton.png">
+ * </picture>
  *
  * Deprecated: 4.10: This widget will be removed in GTK 5
  */

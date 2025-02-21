@@ -52,7 +52,10 @@
  * The main API for interacting with a `GtkSearchEntry` as entry
  * is the `GtkEditable` interface.
  *
- * ![An example GtkSearchEntry](search-entry.png)
+ * <picture>
+ *   <source srcset="search-entry-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkSearchEntry" src="search-entry.png">
+ * </picture>
  *
  * It will show an inactive symbolic “find” icon when the search
  * entry is empty, and a symbolic “clear” icon when there is text.

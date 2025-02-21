@@ -44,7 +44,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * `GtkMessageDialog` presents a dialog with some message text.
  *
- * ![An example GtkMessageDialog](messagedialog.png)
+ * <picture>
+ *   <source srcset="messagedialog-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkMessageDialog" src="messagedialog.png">
+ * </picture>
  *
  * It’s simply a convenience widget; you could construct the equivalent of
  * `GtkMessageDialog` from `GtkDialog` without too much effort, but

@@ -43,7 +43,10 @@
  *
  * A subclass of `GtkPopover` that implements menu behavior.
  *
- * ![An example GtkPopoverMenu](menu.png)
+ * <picture>
+ *   <source srcset="menu-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkPopoverMenu" src="menu.png">
+ * </picture>
  *
  * `GtkPopoverMenu` treats its children like menus and allows switching
  * between them. It can open submenus as traditional, nested submenus,

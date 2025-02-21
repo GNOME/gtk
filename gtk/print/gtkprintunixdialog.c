@@ -48,7 +48,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * A print dialog for platforms which don’t provide a native
  * print dialog, like Unix.
  *
- * ![An example GtkPrintUnixDialog](printdialog.png)
+ * <picture>
+ *   <source srcset="printdialog-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkPrintUnixDialog" src="printdialog.png">
+ * </picture>
  *
  * It can be used very much like any other GTK dialog, at the cost of
  * the portability offered by the high-level printing API with

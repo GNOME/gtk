@@ -67,7 +67,10 @@
  * An about dialog is typically opened when the user selects the `About`
  * option from the `Help` menu. All parts of the dialog are optional.
  *
- * ![An example GtkAboutDialog](aboutdialog.png)
+ * <picture>
+ *   <source srcset="aboutdialot-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkAboutDialog" src="aboutdialog.png">
+ * </picture>
  *
  * About dialogs often contain links and email addresses. `GtkAboutDialog`
  * displays these as clickable links. By default, it calls [method@Gtk.FileLauncher.launch]

@@ -36,7 +36,10 @@
  *
  * Presents contextual actions.
  *
- * ![An example GtkActionBar](action-bar.png)
+ * <picture>
+ *   <source srcset="action-bar-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkActionBar" src="action-bar.png">
+ * </picture>
  *
  * `GtkActionBar` is expected to be displayed below the content and expand
  * horizontally to fill the area.

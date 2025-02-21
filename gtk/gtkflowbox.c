@@ -28,7 +28,10 @@
  *
  * Puts child widgets in a reflowing grid.
  *
- * ![An example GtkFlowBox](flow-box.png)
+ * <picture>
+ *   <source srcset="flow-box-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkFlowBox" src="flow-box.png">
+ * </picture>
  *
  * For instance, with the horizontal orientation, the widgets will be
  * arranged from left to right, starting a new row under the previous

@@ -51,7 +51,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  * Dialogs are a convenient way to prompt the user for a small amount
  * of input.
  *
- * ![An example GtkDialog](dialog.png)
+ * <picture>
+ *   <source srcset="dialog-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkDialog" src="dialog.png">
+ * </picture>
  *
  * Typical uses are to display a message, ask a question, or anything else
  * that does not require extensive effort on the user’s part.

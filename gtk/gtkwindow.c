@@ -114,7 +114,10 @@
  *
  * A toplevel window which can contain other widgets.
  *
- * ![An example GtkWindow](window.png)
+ * <picture>
+ *   <source srcset="window-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkWindow" src="window.png">
+ * </picture>
  *
  * Windows normally have decorations that are under the control
  * of the windowing system and allow the user to manipulate the window

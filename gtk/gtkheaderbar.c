@@ -40,7 +40,10 @@
  *
  * Creates a custom titlebar for a window.
  *
- * ![An example GtkHeaderBar](headerbar.png)
+ * <picture>
+ *   <source srcset="headerbar-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkHeaderBar" src="headerbar.png">
+ * </picture>
  *
  * `GtkHeaderBar` is similar to a horizontal `GtkCenterBox`. It allows
  * children to be placed at the start or the end. In addition, it allows

@@ -51,7 +51,10 @@
  *
  * Allows the user to choose an item from a list of options.
  *
- * ![An example GtkDropDown](drop-down.png)
+ * <picture>
+ *   <source srcset="drop-down-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkDropDown" src="drop-down.png">
+ * </picture>
  *
  * The `GtkDropDown` displays the [selected][property@Gtk.DropDown:selected]
  * choice.

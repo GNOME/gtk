@@ -26,7 +26,10 @@
  *
  * A button with a hyperlink.
  *
- * ![An example GtkLinkButton](link-button.png)
+ * <picture>
+ *   <source srcset="link-button-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkLinkButton" src="link-button.png">
+ * </picture>
  *
  * It is useful to show quick links to resources.
  *

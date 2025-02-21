@@ -24,7 +24,10 @@
  *
  * Allows the user to reveal or conceal a child widget.
  *
- * ![An example GtkExpander](expander.png)
+ * <picture>
+ *   <source srcset="expander-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkExpander" src="expander.png">
+ * </picture>
  *
  * This is similar to the triangles used in a `GtkTreeView`.
  *

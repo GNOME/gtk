@@ -23,7 +23,10 @@
  *
  * Presents a bubble-like popup.
  *
- * ![An example GtkPopover](popover.png)
+ * <picture>
+ *   <source srcset="popover-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example GtkPopover" src="popover.png">
+ * </picture>
  *
  * It is primarily meant to provide context-dependent information
  * or options. Popovers are attached to a parent widget. By default,

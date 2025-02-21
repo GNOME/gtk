@@ -1020,7 +1020,7 @@ gtk_application_get_menubar (GtkApplication *application)
  * If a window is given, the session manager may point the user to
  * this window to find out more about why the action is inhibited.
  *
- * The cookie tha tis returned by this function  should be used as an
+ * The cookie that is returned by this function  should be used as an
  * argument to [method@Gtk.Application.uninhibit] in order to remove
  * the request.
  *
