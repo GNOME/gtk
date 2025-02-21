@@ -69,7 +69,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * # A simple example:
  *
- * ![](gedit-shortcuts.png)
+ * <picture>
+ *   <source srcset="gedit-shortcuts-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="A simple example" src="gedit-shortcuts.png">
+ * </picture>
  *
  * This example has as single section. As you can see, the shortcut groups
  * are arranged in columns, and spread across several pages if there are too
@@ -79,7 +82,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * # An example with multiple views:
  *
- * ![](clocks-shortcuts.png)
+ * <picture>
+ *   <source srcset="clocks-shortcuts-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example with multiple views" src="clocks-shortcuts.png">
+ * </picture>
  *
  * This example shows a `GtkShortcutsWindow` that has been configured to show only
  * the shortcuts relevant to the “Stopwatch” view.
@@ -88,7 +94,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * # An example with multiple sections:
  *
- * ![](builder-shortcuts.png)
+ * <picture>
+ *   <source srcset="builder-shortcuts-dark.png" media="(prefers-color-scheme: dark)">
+ *   <img alt="An example with multiple sections" src="builder-shortcuts.png">
+ * </picture>
  *
  * This example shows a `GtkShortcutsWindow` with two sections, “Editor Shortcuts”
  * and “Terminal Shortcuts”.
