@@ -11,7 +11,7 @@
 # Gil Forcada <gilforcada@guifi.net>, 2012, 2013, 2014.
 # Jordi Serratosa <jordis@softcatala.cat>, 2012.
 # Josep Sànchez <papapep@gmx.com>, 2013.
-# Jordi Mas i Hernàndez <jmas@softcatala.org>, 2015-2024
+# Jordi Mas i Hernàndez <jmas@softcatala.org>, 2015-2025
 #
 # Recull de termes
 #
@@ -35,7 +35,7 @@ msgstr ""
 "Project-Id-Version: gtk+ 2.8.2\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2024-09-17 05:42+0000\n"
-"PO-Revision-Date: 2024-09-17 12:26+0200\n"
+"PO-Revision-Date: 2025-02-21 12:26+0200\n"
 "Last-Translator: Jordi Mas i Hernàndez <jmas@softcatala.org>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "Language: ca\n"
@@ -109,7 +109,7 @@ msgstr "S'ha desactivat el suport OpenGL mitjançant GDK_DISABLE"
 
 #: gdk/gdkdisplay.c:1683
 msgid "No EGL configuration available"
-msgstr "No hi ha cap implementació EGL disponible"
+msgstr "No hi ha cap configuració EGL disponible"
 
 #: gdk/gdkdisplay.c:1691
 msgid "Failed to get EGL configurations"
@@ -554,7 +554,7 @@ msgstr "Hiberna"
 #: gdk/keynamesprivate.h:6929
 msgctxt "keyboard label"
 msgid "WLAN"
-msgstr "Wi-Fi"
+msgstr "WLAN"
 
 #: gdk/keynamesprivate.h:6930
 msgctxt "keyboard label"
@@ -3950,7 +3950,7 @@ msgstr "Desa el CSS personalitzat"
 
 #: gtk/inspector/css-editor.ui:51
 msgid "Show deprecations"
-msgstr "Mostra les precedències"
+msgstr "Mostra obsolets"
 
 #: gtk/inspector/css-node-tree.ui:28 tools/gtk-builder-tool-preview.c:178
 #: tools/gtk-builder-tool-screenshot.c:359
