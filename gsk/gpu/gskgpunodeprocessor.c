@@ -3807,14 +3807,14 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
       !gsk_gpu_node_processor_clip_first_node (self, info, &opaque))
     return FALSE;
 
-  for (i = n; i-->0; )
+  for (i = n; i-- > 0; )
     {
       if (gsk_gpu_node_processor_add_first_node (self, info, children[i]))
         break;
     }
 
   if (i < 0)
-    gsk_gpu_first_node_begin_rendering (self, info, NULL);
+    gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
 
   for (i++; i < n; i++)
     gsk_gpu_node_processor_add_node (self, children[i]);
@@ -4173,7 +4173,7 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor *self,
   if (!gsk_gpu_node_processor_clip_first_node (self, info, &opaque))
     return FALSE;
 
-  gsk_gpu_first_node_begin_rendering (self, info, NULL);
+  gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
   gsk_gpu_node_processor_add_node (self, node);
 
   return TRUE;
