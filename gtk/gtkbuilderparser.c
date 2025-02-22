@@ -2073,7 +2073,16 @@ end_element (GtkBuildableParseContext  *context,
     }
   else if (strcmp (element_name, "menu") == 0)
     {
-      _gtk_builder_menu_end (data);
+      PropertyInfo *prop_info;
+      char *id;
+
+      id = _gtk_builder_menu_end (data);
+
+      prop_info = state_peek_info (data, PropertyInfo);
+      if (prop_info && prop_info->tag_type == TAG_PROPERTY)
+        g_string_assign (prop_info->text, id);
+
+      g_free (id);
     }
   else if (strcmp (element_name, "placeholder") == 0)
     {

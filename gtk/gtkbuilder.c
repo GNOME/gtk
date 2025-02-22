@@ -355,6 +355,14 @@
  * elements and attributes to the XML. Typically, any extension will be
  * documented in each type that implements the interface.
  *
+ * ## Menus
+ *
+ * In addition to objects with properties that are created with `<object>` and
+ * `<property>` elements, `GtkBuilder` also allows to parse XML menu definitions
+ * as used by [class@Gio.Menu] when exporting menu models over D-Bus, and as
+ * described in the [class@Gtk.PopoverMenu] documentation. Menus can be defined
+ * as toplevel elements, or as property values for properties of type `GMenuModel`.
+ *
  * ## Templates
  *
  * When describing a [class@Gtk.Widget], you can use the `<template>` tag to

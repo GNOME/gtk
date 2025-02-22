@@ -122,6 +122,7 @@
         <ref name="constant"/>
         <ref name="lookup"/>
         <ref name="closure"/>
+        <ref name="menu"/>
       </choice>
     </element>
   </define>
@@ -178,9 +179,11 @@
   </define>
   <define name="menu">
     <element name="menu">
-      <attribute name="id">
-        <data type="ID" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"/>
-      </attribute>
+      <optional>
+        <attribute name="id">
+          <data type="ID" datatypeLibrary="http://www.w3.org/2001/XMLSchema-datatypes"/>
+        </attribute>
+      </optional>
       <optional>
         <attribute name="domain">
           <text/>
