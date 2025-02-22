@@ -148,12 +148,12 @@ proto_sources = [
   },
   {
     'name': 'color-management',
-    'stability': 'private',
+    'stability': 'staging',
     'version': 1,
   },
   {
     'name': 'xdg-system-bell',
-    'stability': 'private',
+    'stability': 'staging',
     'version': 1,
   },
 ]
@@ -200,4 +200,8 @@ libgdk_wayland = static_library('gdk-wayland',
 )
 
 # Used to generate pkg-config Requires
-wayland_public_deps = [wlclientdep]
+wayland_public_deps = []
+
+if wlclientdep.type_name() != 'internal'
+  wayland_public_deps += [wlclientdep]
+endif

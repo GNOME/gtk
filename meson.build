@@ -24,8 +24,8 @@ harfbuzz_req       = '>= 8.4.0'
 fribidi_req        = '>= 1.0.6'
 cairo_req          = '>= 1.18.2'
 gdk_pixbuf_req     = '>= 2.30.0'
-wayland_proto_req  = '>= 1.36'
-wayland_req        = '>= 1.21.0'
+wayland_proto_req  = '>= 1.41'
+wayland_req        = '>= 1.23.0'
 graphene_req       = '>= 1.10.0'
 epoxy_req          = '>= 1.4'
 cloudproviders_req = '>= 0.3.1'
@@ -538,8 +538,9 @@ endif
 wayland_pkgs = []
 if wayland_enabled
   wlclientdep    = dependency('wayland-client', version:  wayland_req,
-                              default_options: ['documentation=false'])
-  wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
+                              default_options: ['documentation=false', 'tests=false'])
+  wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req,
+                              default_options: ['tests=false'])
   wlegldep       = dependency('wayland-egl')
 
   wayland_pkgs = [
