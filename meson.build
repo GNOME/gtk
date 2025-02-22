@@ -538,8 +538,9 @@ endif
 wayland_pkgs = []
 if wayland_enabled
   wlclientdep    = dependency('wayland-client', version:  wayland_req,
-                              default_options: ['documentation=false'])
-  wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req)
+                              default_options: ['documentation=false', 'tests=false'])
+  wlprotocolsdep = dependency('wayland-protocols', version: wayland_proto_req,
+                              default_options: ['tests=false'])
   wlegldep       = dependency('wayland-egl')
 
   wayland_pkgs = [
