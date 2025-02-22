@@ -149,19 +149,27 @@ gdk_cairo_surface_convert_color_state (cairo_surface_t *surface,
                                        GdkColorState   *target)
 {
   cairo_surface_t *image_surface;
+  int status, width, height;
 
   if (gdk_color_state_equal (source, target))
     return;
 
   image_surface = cairo_surface_map_to_image (surface, NULL);
 
-  gdk_memory_convert_color_state (cairo_image_surface_get_data (image_surface),
-                                  cairo_image_surface_get_stride (image_surface),
-                                  gdk_cairo_format_to_memory_format (cairo_image_surface_get_format (image_surface)),
-                                  source,
-                                  target,
-                                  cairo_image_surface_get_width (image_surface),
-                                  cairo_image_surface_get_height (image_surface));
+  status = cairo_surface_status (image_surface);
+  width = cairo_image_surface_get_width (image_surface);
+  height = cairo_image_surface_get_height (image_surface);
+
+  if (status == CAIRO_STATUS_SUCCESS && width > 0 && height > 0)
+    {
+      gdk_memory_convert_color_state (cairo_image_surface_get_data (image_surface),
+                                      cairo_image_surface_get_stride (image_surface),
+                                      gdk_cairo_format_to_memory_format (cairo_image_surface_get_format (image_surface)),
+                                      source,
+                                      target,
+                                      width,
+                                      height);
+    }
 
   cairo_surface_mark_dirty (image_surface);
   cairo_surface_unmap_image (surface, image_surface);
