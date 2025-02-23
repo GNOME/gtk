@@ -120,7 +120,7 @@ gsk_gl_renderer_get_backbuffer (GskGpuRenderer *renderer)
 
   context = gsk_gpu_renderer_get_context (renderer);
   surface = gdk_draw_context_get_surface (context);
-  scale = gsk_gpu_renderer_get_scale (renderer);
+  scale = gdk_surface_get_scale (surface);
 
   if (self->backbuffer == NULL ||
       !!(gsk_gpu_image_get_flags (self->backbuffer) & GSK_GPU_IMAGE_SRGB) != gdk_surface_get_gl_is_srgb (surface) ||

@@ -188,7 +188,7 @@ get_render_region (GskGpuRenderer *self)
   cairo_region_t *scaled_damage;
   double scale;
 
-  scale = gsk_gpu_renderer_get_scale (self);
+  scale = gdk_surface_get_scale (gdk_draw_context_get_surface (priv->context));
 
   damage = gdk_draw_context_get_frame_region (priv->context);
   scaled_damage = cairo_region_create ();
@@ -447,7 +447,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 
   depth = gsk_render_node_get_preferred_depth (root);
   frame = gsk_gpu_renderer_get_frame (self);
-  scale = gsk_gpu_renderer_get_scale (self);
+  scale = gdk_surface_get_scale (gdk_draw_context_get_surface (priv->context));
 
   if (gsk_render_node_get_opaque_rect (root, &opaque_tmp))
     opaque = &opaque_tmp;
@@ -477,17 +477,6 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
   gsk_gpu_device_queue_gc (priv->device);
 }
 
-static double
-gsk_gpu_renderer_real_get_scale (GskGpuRenderer *self)
-{
-  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
-  GdkSurface *surface;
-
-  surface = gdk_draw_context_get_surface (priv->context);
-
-  return gdk_surface_get_scale (surface);
-}
-
 static void
 gsk_gpu_renderer_class_init (GskGpuRendererClass *klass)
 {
@@ -508,7 +497,6 @@ gsk_gpu_renderer_class_init (GskGpuRendererClass *klass)
       "certain optimizations in the \'ngl\' and \'vulkan\' renderers.\n",
       gsk_gpu_optimization_keys,
       G_N_ELEMENTS (gsk_gpu_optimization_keys));
-  klass->get_scale = gsk_gpu_renderer_real_get_scale;
 }
 
 static void
@@ -533,10 +521,4 @@ gsk_gpu_renderer_get_device (GskGpuRenderer *self)
   GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
 
   return priv->device;
-}
-
-double
-gsk_gpu_renderer_get_scale (GskGpuRenderer *self)
-{
-  return GSK_GPU_RENDERER_GET_CLASS (self)->get_scale (self);
 }
