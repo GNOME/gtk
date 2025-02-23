@@ -139,14 +139,6 @@ gsk_gl_renderer_get_backbuffer (GskGpuRenderer *renderer)
   return self->backbuffer;
 }
 
-static double
-gsk_gl_renderer_get_scale (GskGpuRenderer *self)
-{
-  GdkDrawContext *context = gsk_gpu_renderer_get_context (self);
-
-  return gdk_gl_context_get_scale (GDK_GL_CONTEXT (context));
-}
-
 static void
 gsk_gl_renderer_unrealize (GskRenderer *renderer)
 {
@@ -173,7 +165,6 @@ gsk_gl_renderer_class_init (GskGLRendererClass *klass)
   gpu_renderer_class->save_current = gsk_gl_renderer_save_current;
   gpu_renderer_class->restore_current = gsk_gl_renderer_restore_current;
   gpu_renderer_class->get_backbuffer = gsk_gl_renderer_get_backbuffer;
-  gpu_renderer_class->get_scale = gsk_gl_renderer_get_scale;
 
   renderer_class->unrealize = gsk_gl_renderer_unrealize;
 }

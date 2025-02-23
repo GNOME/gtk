@@ -586,18 +586,6 @@ gdk_gl_context_real_make_current (GdkGLContext *context,
 #endif
 }
 
-double
-gdk_gl_context_get_scale (GdkGLContext *self)
-{
-  GdkSurface *surface;
-  double scale;
-
-  surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
-  scale = gdk_surface_get_scale (surface);
-
-  return scale;
-}
-
 static void
 gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
                                  GdkMemoryDepth   depth,
@@ -615,7 +603,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
   int i;
 
   color_state = gdk_surface_get_color_state (surface);
-  scale = gdk_gl_context_get_scale (context);
+  scale = gdk_surface_get_scale (surface);
 
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));
 
@@ -692,7 +680,7 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
       EGLint *heap_rects = NULL;
       int i, j, n_rects = cairo_region_num_rectangles (painted);
       int surface_height = gdk_surface_get_height (surface);
-      double scale = gdk_gl_context_get_scale (context);
+      double scale = gdk_surface_get_scale (surface);
       EGLint *rects;
 
       if (n_rects < G_N_ELEMENTS (stack_rects) / 4)
