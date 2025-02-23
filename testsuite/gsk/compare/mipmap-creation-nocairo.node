@@ -1,0 +1,63 @@
+texture {
+  bounds: 0 0 2 15;
+  texture: "texture1" url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAAPCAIAAACqfTKuAAAAAXNSR0IArs4c6QAAAARjSUNQAQ0A\
+AZxpOzIAAAAUSURBVAiZY2Bg+MDwgYGBiYF0DABsFAH7Vv74rgAAAABJRU5ErkJggg==\
+");
+}
+texture {
+  bounds: 3 0 2 14;
+  texture: "texture1";
+}
+texture {
+  bounds: 6 0 2 13;
+  texture: "texture1";
+}
+texture {
+  bounds: 9 0 2 12;
+  texture: "texture1";
+}
+texture {
+  bounds: 12 0 2 11;
+  texture: "texture1";
+}
+texture {
+  bounds: 15 0 2 10;
+  texture: "texture1";
+}
+texture {
+  bounds: 18 0 2 9;
+  texture: "texture1";
+}
+texture {
+  bounds: 21 0 2 8;
+  texture: "texture1";
+}
+texture {
+  bounds: 24 0 2 7;
+  texture: "texture1";
+}
+texture {
+  bounds: 27 0 2 6;
+  texture: "texture1";
+}
+texture {
+  bounds: 30 0 2 5;
+  texture: "texture1";
+}
+texture {
+  bounds: 33 0 2 4;
+  texture: "texture1";
+}
+texture {
+  bounds: 36 0 2 3;
+  texture: "texture1";
+}
+texture {
+  bounds: 39 0 2 2;
+  texture: "texture1";
+}
+texture {
+  bounds: 42 0 2 1;
+  texture: "texture1";
+}
