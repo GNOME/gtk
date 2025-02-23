@@ -631,6 +631,8 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
    * On Linux, this option has no effect.
    *
    * See also [Using GTK on Apple macOS](osx.html?native-window-controls).
+   *
+   * Since: 4.18
    */
   header_bar_props[PROP_USE_NATIVE_CONTROLS] =
       g_param_spec_boolean ("use-native-controls", NULL, NULL,
@@ -867,6 +869,8 @@ gtk_header_bar_get_decoration_layout (GtkHeaderBar *bar)
  * native window controls.
  *
  * Returns: true if native window controls are shown
+ *
+ * Since: 4.18
  */
 gboolean
 gtk_header_bar_get_use_native_controls (GtkHeaderBar *bar)
@@ -885,6 +889,8 @@ gtk_header_bar_get_use_native_controls (GtkHeaderBar *bar)
  * For Linux, this option has no effect.
  *
  * See also [Using GTK on Apple macOS](osx.html?native-window-controls).
+ *
+ * Since: 4.18
  */
 void
 gtk_header_bar_set_use_native_controls (GtkHeaderBar *bar,

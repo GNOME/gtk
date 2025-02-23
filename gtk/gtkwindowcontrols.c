@@ -599,11 +599,13 @@ gtk_window_controls_class_init (GtkWindowControlsClass *klass)
    * Whether to show platform native close/minimize/maximize buttons.
    *
    * For macOS, the [property@Gtk.HeaderBar:decoration-layout] property
-   * can be used to enable/disable controls.
+   * controls the use of native window controls.
    *
-   * On Linux, this option has no effect.
+   * On other platforms, this option has no effect.
    *
    * See also [Using GTK on Apple macOS](osx.html?native-window-controls).
+   *
+   * Since: 4.18
    */
   props[PROP_USE_NATIVE_CONTROLS] =
       g_param_spec_boolean ("use-native-controls", NULL, NULL,
@@ -774,6 +776,8 @@ gtk_window_controls_set_decoration_layout (GtkWindowControls *self,
  * Returns whether platform native window controls are shown.
  *
  * Returns: true if native window controls are shown
+ *
+ * Since: 4.18
  */
 gboolean
 gtk_window_controls_get_use_native_controls (GtkWindowControls *self)
@@ -794,6 +798,8 @@ gtk_window_controls_get_use_native_controls (GtkWindowControls *self)
  * For Linux, this option has no effect.
  *
  * See also [Using GTK on Apple macOS](osx.html?native-window-controls).
+ *
+ * Since: 4.18
  */
 void
 gtk_window_controls_set_use_native_controls (GtkWindowControls *self,
