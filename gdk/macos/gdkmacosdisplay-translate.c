@@ -166,6 +166,17 @@ _gdk_macos_display_get_current_keyboard_modifiers (GdkMacosDisplay *self)
   return get_keyboard_modifiers_from_ns_flags ([NSEvent modifierFlags]);
 }
 
+static gboolean
+over_native_window_buttons (GdkMacosWindow *window, int x, int y)
+{
+  NSPoint pos = NSMakePoint(x, y);
+
+  return [window showStandardWindowButtons] &&
+         (NSPointInRect(pos, [[window standardWindowButton:NSWindowCloseButton] frame]) ||
+          NSPointInRect(pos, [[window standardWindowButton:NSWindowMiniaturizeButton] frame]) ||
+          NSPointInRect(pos, [[window standardWindowButton:NSWindowZoomButton] frame]));
+}
+
 static GdkEvent *
 fill_button_event (GdkMacosDisplay *display,
                    GdkMacosSurface *surface,
@@ -217,6 +228,17 @@ fill_button_event (GdkMacosDisplay *display,
        y < 0 || y > GDK_SURFACE (surface)->height ||
        (input_region && !cairo_region_contains_point (input_region, x, y))))
     return NULL;
+
+  /* Ignore button press events that happen on a native window button.
+   * For those events we do not receive a button release event which leaves
+   * our app in a "grabbed" state.
+   */
+  if (type == GDK_BUTTON_PRESS &&
+      over_native_window_buttons ((GdkMacosWindow *) _gdk_macos_surface_get_native (surface), x, y))
+    {
+      GDK_DEBUG (EVENTS, "Ignoring button press over native controls (%d, %d)", x, y);
+      return NULL;
+    }
 
   if (([nsevent subtype] == NSEventSubtypeTabletPoint) &&
       _gdk_macos_seat_get_tablet (GDK_MACOS_SEAT (seat), &pointer, &tool))

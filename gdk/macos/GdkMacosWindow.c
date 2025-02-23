@@ -734,6 +734,9 @@ static Class _contentViewClass = nil;
 {
   inFullscreenTransition = NO;
   initialPositionKnown = NO;
+
+  [self updateToolbarAppearence];
+
   [self checkSendEnterNotify];
 }
 
@@ -746,6 +749,9 @@ static Class _contentViewClass = nil;
 {
   inFullscreenTransition = NO;
   initialPositionKnown = NO;
+
+  [self updateToolbarAppearence];
+
   [self checkSendEnterNotify];
 }
 
@@ -776,20 +782,57 @@ static Class _contentViewClass = nil;
   if (decorated)
     {
       style_mask &= ~NSWindowStyleMaskFullSizeContentView;
-      [self setTitleVisibility:NSWindowTitleVisible];
     }
   else
     {
       style_mask |= NSWindowStyleMaskFullSizeContentView;
-      [self setTitleVisibility:NSWindowTitleHidden];
     }
 
-  [self setTitlebarAppearsTransparent:!decorated];
-  [[self standardWindowButton:NSWindowCloseButton] setHidden:!decorated];
-  [[self standardWindowButton:NSWindowMiniaturizeButton] setHidden:!decorated];
-  [[self standardWindowButton:NSWindowZoomButton] setHidden:!decorated];
-
   [self setStyleMask:style_mask];
+
+  [self updateToolbarAppearence];
+}
+
+-(void)setShowStandardWindowButtons:(BOOL)show
+{
+  _showStandardWindowButtons = show;
+  [self updateToolbarAppearence];
+}
+
+/* updateToolbarAppearence:
+ * Update the toolbar appearence based on the following criteria:
+ *
+ * 1. The window is used Client Side Decorations (style mask is set)
+ * 2. The window has native window buttons enabled
+ * 3. The window is in fullscreen mode
+ */
+-(void)updateToolbarAppearence
+{
+  NSWindowStyleMask style_mask = [self styleMask];
+  BOOL is_fullscreen = (style_mask & NSWindowStyleMaskFullScreen) != 0;
+  BOOL is_csd = !is_fullscreen && (style_mask & NSWindowStyleMaskFullSizeContentView) != 0;
+  BOOL hidden = is_csd && !_showStandardWindowButtons;
+
+  /* By assigning a toolbar, the window controls are moved a bit more inwards,
+   * In line with how toolbars look in macOS apps.
+   * I haven't found a better way. Unfortunately we have to be careful not to
+   * update the toolbar during a fullscreen transition.
+   */
+  if (is_csd && _showStandardWindowButtons && [self toolbar] == nil)
+    {
+      NSToolbar *toolbar = [[NSToolbar alloc] init];
+      [self setToolbar:toolbar];
+      [toolbar release];
+    }
+  else if (!is_csd && [self toolbar] != nil)
+    [self setToolbar:nil];
+
+  [self setTitleVisibility:is_csd ? NSWindowTitleHidden : NSWindowTitleVisible];
+  [self setTitlebarAppearsTransparent:is_csd];
+
+  [[self standardWindowButton:NSWindowCloseButton] setHidden:hidden];
+  [[self standardWindowButton:NSWindowMiniaturizeButton] setHidden:hidden];
+  [[self standardWindowButton:NSWindowZoomButton] setHidden:hidden];
 }
 
 -(GdkMacosSurface *)gdkSurface

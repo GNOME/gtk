@@ -237,6 +237,7 @@ content_images = [
   "images/lockbutton-sorry-dark.png",
   "images/lockbutton-unlocked.png",
   "images/lockbutton-unlocked-dark.png",
+  "images/macos-window-controls.png",
   "images/media-controls.png",
   "images/media-controls-dark.png",
   "images/menu.png",

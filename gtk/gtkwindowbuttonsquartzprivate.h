@@ -1,5 +1,5 @@
-/*
- * Copyright © 2020 Red Hat, Inc.
+/* GTK - The GIMP Toolkit
+ * Copyright (c) 2024 Arjan Molenaar <amolenaar@gnome.org>
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -19,15 +19,20 @@
 
 #pragma once
 
-#define __GDKMACOS_H_INSIDE__
 
-#include <gdk/gdk.h>
+#include <gtk/gtkwidget.h>
 
-#include "gdkmacosdevice.h"
-#include "gdkmacosdisplay.h"
-#include "gdkmacosglcontext.h"
-#include "gdkmacoskeymap.h"
-#include "gdkmacosmonitor.h"
-#include "gdkmacossurface.h"
 
-#undef __GDKMACOS_H_INSIDE__
+G_BEGIN_DECLS
+
+#define GTK_TYPE_WINDOW_BUTTONS_QUARTZ                  (gtk_window_buttons_quartz_get_type ())
+#define GTK_WINDOW_BUTTONS_QUARTZ(obj)                  (G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_WINDOW_BUTTONS_QUARTZ, GtkWindowButtonsQuartz))
+#define GTK_IS_WINDOW_BUTTONS_QUARTZ(obj)               (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GTK_TYPE_WINDOW_BUTTONS_QUARTZ))
+
+typedef struct _GtkWindowButtonsQuartz              GtkWindowButtonsQuartz;
+
+GDK_AVAILABLE_IN_ALL
+GType      gtk_window_buttons_quartz_get_type (void) G_GNUC_CONST;
+
+G_END_DECLS
+

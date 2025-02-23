@@ -134,6 +134,7 @@ struct _GtkHeaderBar
   char *decoration_layout;
 
   guint show_title_buttons : 1;
+  guint use_native_controls : 1;
   guint track_default_decoration : 1;
 };
 
@@ -149,6 +150,7 @@ enum {
   PROP_TITLE_WIDGET,
   PROP_SHOW_TITLE_BUTTONS,
   PROP_DECORATION_LAYOUT,
+  PROP_USE_NATIVE_CONTROLS,
   LAST_PROP
 };
 
@@ -169,6 +171,9 @@ create_window_controls (GtkHeaderBar *bar)
   g_object_bind_property (bar, "decoration-layout",
                           controls, "decoration-layout",
                           G_BINDING_SYNC_CREATE);
+  g_object_bind_property (bar, "use-native-controls",
+                          controls, "use-native-controls",
+                          G_BINDING_SYNC_CREATE);
   g_object_bind_property (controls, "empty",
                           controls, "visible",
                           G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
@@ -178,6 +183,9 @@ create_window_controls (GtkHeaderBar *bar)
   controls = gtk_window_controls_new (GTK_PACK_END);
   g_object_bind_property (bar, "decoration-layout",
                           controls, "decoration-layout",
+                          G_BINDING_SYNC_CREATE);
+  g_object_bind_property (bar, "use-native-controls",
+                          controls, "use-native-controls",
                           G_BINDING_SYNC_CREATE);
   g_object_bind_property (controls, "empty",
                           controls, "visible",
@@ -422,6 +430,10 @@ gtk_header_bar_get_property (GObject    *object,
       g_value_set_string (value, gtk_header_bar_get_decoration_layout (bar));
       break;
 
+    case PROP_USE_NATIVE_CONTROLS:
+      g_value_set_boolean (value, gtk_header_bar_get_use_native_controls (bar));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -448,6 +460,10 @@ gtk_header_bar_set_property (GObject      *object,
 
     case PROP_DECORATION_LAYOUT:
       gtk_header_bar_set_decoration_layout (bar, g_value_get_string (value));
+      break;
+
+    case PROP_USE_NATIVE_CONTROLS:
+      gtk_header_bar_set_use_native_controls (bar, g_value_get_boolean (value));
       break;
 
     default:
@@ -604,6 +620,25 @@ gtk_header_bar_class_init (GtkHeaderBarClass *class)
                            NULL,
                            GTK_PARAM_READWRITE);
 
+  /**
+   * GtkHeaderBar:use-native-controls:
+   *
+   * Whether to show platform native close/minimize/maximize buttons.
+   *
+   * For macOS, the [property@Gtk.HeaderBar:decoration-layout] property
+   * can be used to enable/disable controls.
+   *
+   * On Linux, this option has no effect.
+   *
+   * See also [Using GTK on Apple macOS](osx.html?native-window-controls).
+   *
+   * Since: 4.18
+   */
+  header_bar_props[PROP_USE_NATIVE_CONTROLS] =
+      g_param_spec_boolean ("use-native-controls", NULL, NULL,
+                            FALSE,
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, LAST_PROP, header_bar_props);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
@@ -617,6 +652,7 @@ gtk_header_bar_init (GtkHeaderBar *bar)
   bar->title_widget = NULL;
   bar->decoration_layout = NULL;
   bar->show_title_buttons = TRUE;
+  bar->use_native_controls = FALSE;
 
   bar->handle = gtk_window_handle_new ();
   gtk_widget_set_parent (bar->handle, GTK_WIDGET (bar));
@@ -823,4 +859,51 @@ gtk_header_bar_get_decoration_layout (GtkHeaderBar *bar)
   g_return_val_if_fail (GTK_IS_HEADER_BAR (bar), NULL);
 
   return bar->decoration_layout;
+}
+
+/**
+ * gtk_header_bar_get_use_native_controls:
+ * @bar: a header bar
+ *
+ * Returns whether this header bar shows platform
+ * native window controls.
+ *
+ * Returns: true if native window controls are shown
+ *
+ * Since: 4.18
+ */
+gboolean
+gtk_header_bar_get_use_native_controls (GtkHeaderBar *bar)
+{
+  return bar->use_native_controls;
+}
+
+/**
+ * gtk_header_bar_set_use_native_controls:
+ * @bar: a header bar
+ * @setting: true to show native window controls
+ *
+ * Sets whether this header bar shows native window controls.
+ *
+ * This option shows the "stoplight" buttons on macOS.
+ * For Linux, this option has no effect.
+ *
+ * See also [Using GTK on Apple macOS](osx.html?native-window-controls).
+ *
+ * Since: 4.18
+ */
+void
+gtk_header_bar_set_use_native_controls (GtkHeaderBar *bar,
+                                         gboolean      setting)
+{
+  g_return_if_fail (GTK_IS_HEADER_BAR (bar));
+
+  setting = setting != FALSE;
+
+  if (bar->use_native_controls == setting)
+    return;
+
+  bar->use_native_controls = setting;
+
+  g_object_notify_by_pspec (G_OBJECT (bar), header_bar_props[PROP_USE_NATIVE_CONTROLS]);
 }
