@@ -1,5 +1,101 @@
-Overview of Changes in 4.17.5, xx-xx-xxxx
+Overview of Changes in 4.17.5, 23-02-2025
 =========================================
+
+* Numeric mode in GtkSpinButtons works again
+
+* Client-side dialogs can be made fully modal
+
+* Portals work better for unsandboxed apps, by registering
+
+* Editable labels have a context menu
+
+* GtkListBox size allocation has been improved
+
+* We require wayland 1.23 and wayland-protocols 1.41
+
+* We use the wp_color_manager_v1 protocol for color management under Wayland
+
+* Most screenshots in the documentation have a dark variant
+
+* GtkBuilder allows inline definition for GMenu-valued properties
+
+* Headerbars can use native window controls on macOS
+
+* Bugs fixed:
+  - #4353 Keyboard: Set shortcut does not work for key-codes > 247 (Matthias
+    Clasen)
+  - #5125 Demo / Menu: Popup at wrong position, hangs on Wayland (Matthias
+    Clasen)
+  - #5815 builder: integrate menus more properly (Matthias Clasen)
+  - #6010 gtk4-demo > Lists > Selections emits CRITICALS (Matthias Clasen)
+  - #6272 a11y: API for updating platform state for custom GtkAccessible
+    implementations is missing (Emmanuele Bassi)
+  - #6355 gtk_widget_compute_transform() not working correctly with GtkPopover
+    (Alessandro Astone)
+  - #6379 GtkListBox crashes if the placeholder is focused and then TAB is
+    pressed
+  - #7191 Have a way to block parent shortcuts in AdwDialog (Matthias Clasen)
+  - #7215 Changing the click behavior of Gtk.EditableLabel (Matthias Clasen)
+  - #7229 GSK/vulkan uses mipmaps without checking the formats/tiling
+    `VkImageFormatProperties.maxMipLevels` (Janne Grunau)
+  - #7249 Cursor hotspot and cursor image are not updated atomically on Wayland
+    (Carlos Garnacho)
+  - #7257 Unexpected spacing at the end of a textview when using child widgets.
+    (Sergey Bugaev)
+  - #7286 GtkApplicationWindow show-menubar documentation inconsistent
+  - #7307 GtkAppChooserWidget doesn't fit in a mobile screen (Automeris naranja)
+  - #7310 Inspector showing child widgets & controllers twice (Florian
+    "sp1rit"​)
+  - #7311 GtkSpinButton:numeric=True doesn't work (Matthias Clasen)
+  - #7312 Dead link in common questions
+  - #7321 mem leak in emoji chooser (Matthias Clasen)
+  - #7322 invalid array index use
+  - #7324 Missing support for F17, F18, F19 and F20 keys on MacOS (Elisa Pau)
+  - #7334 Gtk password inputs should expose the displayed text (e.g. black
+    circles) via AT-SPI; not the underlying value (Emmanuele Bassi)
+  - #7340 Job Failed #4757144: Meson error
+  - !7951 ListBox hacking
+  - !8071 macos: Native window controls
+  - !8073 gpu: Fix off-by-one error in gsk_vulkan_mipmap_levels
+  - !8155 application: Register host apps with portal
+  - !8177 Small Android fixes
+  - !8178 Fix typo in `FileLauncher.set_always_ask` docs
+  - !8179 gdk/wayland: Use forgotten include guards
+  - !8180 docs: fix some typos, mainly closing ticks
+  - !8184 android: Provide Gdk.FOCUS_CHANGE events
+  - !8187 demos: Fix gettext domain in metainfo
+  - !8195 gtk-demo: Tweak the fixed demo
+  - !8196 settings: Fix GdkDisplay values ignored at init
+  - !8197 popovermenubar: Do not steal the focus on hover
+  - !8198 gi: Add missing annotation to WaylandSurface.force_next_commit
+  - !8200 rendernode: Add fixed-size annotations
+  - !8201 fontdialogbutton: Gracefully handle unknown font
+  - !8205 Update getting_started.md - point to Gtk.Widget.present instead of
+    show
+  - !8206 docs: Fix 'Title overline too short' error
+  - !8207 Update getting_started for gdk_surface_create_similar_surface
+    depreaction
+  - !8208 a11y: Fix issues in text attribute run logic
+  - !8210 gdk: Small documentation improvements
+  - !8211 wayland: Use the wp_color_manager_v1 protocol
+  - !8217 macos: Disable animations if setting "Reduce Motion" is active
+  - !8219 application: Clean up dangling inhibitor surface
+  - !8221 gtk-demo: Improve colors of triangle in GLArea demo
+  - !8222 vulkan: Fix max amount of modifiers per format
+  - !8223 docs: Add dark variants to widget gallery
+  - !8224 docs: Fix gallery images for menus
+  - !8228 gsk: Don't color-convert empty surfaces
+  - !8229 gdk: Remove GDK_DEBUG=gl-no-fractional
+
+* Translation updates:
+  - Catalan (Jordi Mas)
+  - Chinese (Taiwan) (Chao-Hsiung Liao)
+  - French (Vincent Chatelain)
+  - Georgian (Ekaterine Papava)
+  - Nepali (Pawan Chitrakar)
+  - Persian (Danial Behzadi)
+  - Polish (Piotr Drąg)
+  - Slovenian (Martin)
 
 
 Overview of Changes in 4.17.4, 01-02-2025
