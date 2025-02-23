@@ -38,13 +38,10 @@ struct _GskGpuRendererClass
   void                  (* restore_current)                             (GskGpuRenderer         *self,
                                                                          gpointer                current);
   GskGpuImage *         (* get_backbuffer)                              (GskGpuRenderer         *self);
-
-  double                (* get_scale)                                   (GskGpuRenderer         *self);
 };
 
 GdkDrawContext *        gsk_gpu_renderer_get_context                    (GskGpuRenderer         *self);
 GskGpuDevice *          gsk_gpu_renderer_get_device                     (GskGpuRenderer         *self);
-double                  gsk_gpu_renderer_get_scale                      (GskGpuRenderer         *self);
 
 G_END_DECLS
 

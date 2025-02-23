@@ -229,9 +229,6 @@ A number of options affect behavior instead of logging:
 : Force graphics offload for all textures, even when slower. This allows
   to debug offloading in the absence of dmabufs.
 
-`gl-no-fractional`
-: Disable fractional scaling for OpenGL.
-
 `gl-debug`
 : Insert debugging information in OpenGL
 

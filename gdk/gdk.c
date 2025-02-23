@@ -139,7 +139,6 @@ static const GdkDebugKey gdk_debug_keys[] = {
   { "portals",         GDK_DEBUG_PORTALS, "Force use of portals" },
   { "no-portals",      GDK_DEBUG_NO_PORTALS, "Disable use of portals" },
   { "force-offload",   GDK_DEBUG_FORCE_OFFLOAD, "Force graphics offload for all textures" },
-  { "gl-no-fractional", GDK_DEBUG_GL_NO_FRACTIONAL, "Disable fractional scaling for OpenGL" },
   { "gl-debug",        GDK_DEBUG_GL_DEBUG, "Insert debugging information in OpenGL" },
   { "gl-prefer-gl",    GDK_DEBUG_GL_PREFER_GL, "Prefer GL over GLES API" },
   { "default-settings",GDK_DEBUG_DEFAULT_SETTINGS, "Force default values for xsettings" },
