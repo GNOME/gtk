@@ -589,16 +589,11 @@ gdk_gl_context_real_make_current (GdkGLContext *context,
 double
 gdk_gl_context_get_scale (GdkGLContext *self)
 {
-  GdkDisplay *display;
   GdkSurface *surface;
   double scale;
 
   surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
   scale = gdk_surface_get_scale (surface);
-
-  display = gdk_gl_context_get_display (self);
-  if (gdk_display_get_debug_flags (display) & GDK_DEBUG_GL_NO_FRACTIONAL)
-    scale = ceil (scale);
 
   return scale;
 }

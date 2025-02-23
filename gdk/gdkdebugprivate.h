@@ -44,13 +44,12 @@ typedef enum {
   GDK_DEBUG_HDR             = 1 << 14,
   GDK_DEBUG_PORTALS         = 1 << 15,
   GDK_DEBUG_NO_PORTALS      = 1 << 16,
-  GDK_DEBUG_GL_NO_FRACTIONAL= 1 << 17,
-  GDK_DEBUG_FORCE_OFFLOAD   = 1 << 18,
-  GDK_DEBUG_GL_PREFER_GL    = 1 << 19,
-  GDK_DEBUG_GL_DEBUG        = 1 << 20,
-  GDK_DEBUG_DEFAULT_SETTINGS= 1 << 21,
-  GDK_DEBUG_HIGH_DEPTH      = 1 << 22,
-  GDK_DEBUG_NO_VSYNC        = 1 << 23,
+  GDK_DEBUG_FORCE_OFFLOAD   = 1 << 17,
+  GDK_DEBUG_GL_PREFER_GL    = 1 << 18,
+  GDK_DEBUG_GL_DEBUG        = 1 << 19,
+  GDK_DEBUG_DEFAULT_SETTINGS= 1 << 20,
+  GDK_DEBUG_HIGH_DEPTH      = 1 << 21,
+  GDK_DEBUG_NO_VSYNC        = 1 << 22,
 } GdkDebugFlags;
 
 typedef enum {
