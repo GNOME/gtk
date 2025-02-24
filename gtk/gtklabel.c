@@ -4280,6 +4280,7 @@ gtk_label_set_wrap_mode (GtkLabel *self,
       self->wrap_mode = wrap_mode;
       g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_WRAP_MODE]);
 
+      gtk_label_clear_layout (self);
       gtk_widget_queue_resize (GTK_WIDGET (self));
     }
 }
