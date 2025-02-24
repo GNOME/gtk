@@ -6986,6 +6986,16 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_widget_forall (widget, (GtkCallback)_gtk_widget_scale_changed, NULL);
 }
 
+void
+gtk_widget_monitor_changed (GtkWidget *widget)
+{
+  g_return_if_fail (GTK_IS_WIDGET (widget));
+
+  gtk_widget_update_default_pango_context (widget);
+
+  gtk_widget_forall (widget, (GtkCallback)gtk_widget_monitor_changed, NULL);
+}
+
 /**
  * gtk_widget_get_scale_factor:
  * @widget: a widget

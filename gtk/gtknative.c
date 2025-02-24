@@ -37,6 +37,8 @@ typedef struct _GtkNativePrivate
   gulong update_handler_id;
   gulong layout_handler_id;
   gulong scale_changed_handler_id;
+  gulong enter_monitor_handler_id;
+  gulong leave_monitor_handler_id;
 } GtkNativePrivate;
 
 static GQuark quark_gtk_native_private;
@@ -131,6 +133,14 @@ scale_changed_cb (GdkSurface *surface,
 }
 
 static void
+monitor_changed_cb (GdkSurface *surface,
+                    GdkMonitor *monitor,
+                    GtkNative  *native)
+{
+  gtk_widget_monitor_changed (GTK_WIDGET (native));
+}
+
+static void
 verify_priv_unrealized (gpointer user_data)
 {
   GtkNativePrivate *priv = user_data;
@@ -138,6 +148,8 @@ verify_priv_unrealized (gpointer user_data)
   g_warn_if_fail (priv->update_handler_id == 0);
   g_warn_if_fail (priv->layout_handler_id == 0);
   g_warn_if_fail (priv->scale_changed_handler_id == 0);
+  g_warn_if_fail (priv->enter_monitor_handler_id == 0);
+  g_warn_if_fail (priv->leave_monitor_handler_id == 0);
 
   g_free (priv);
 }
@@ -176,6 +188,13 @@ gtk_native_realize (GtkNative *self)
                                                      G_CALLBACK (scale_changed_cb),
                                                      self);
 
+  priv->enter_monitor_handler_id = g_signal_connect (surface, "enter-monitor",
+                                                     G_CALLBACK (monitor_changed_cb),
+                                                     self);
+  priv->leave_monitor_handler_id = g_signal_connect (surface, "leave-monitor",
+                                                     G_CALLBACK (monitor_changed_cb),
+                                                     self);
+
   g_object_set_qdata_full (G_OBJECT (self),
                            quark_gtk_native_private,
                            priv,
@@ -207,6 +226,8 @@ gtk_native_unrealize (GtkNative *self)
   g_clear_signal_handler (&priv->update_handler_id, clock);
   g_clear_signal_handler (&priv->layout_handler_id, surface);
   g_clear_signal_handler (&priv->scale_changed_handler_id, surface);
+  g_clear_signal_handler (&priv->enter_monitor_handler_id, surface);
+  g_clear_signal_handler (&priv->leave_monitor_handler_id, surface);
 
   g_object_set_qdata (G_OBJECT (self), quark_gtk_native_private, NULL);
 }

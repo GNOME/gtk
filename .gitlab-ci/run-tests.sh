@@ -40,11 +40,8 @@ case "${setup}" in
   wayland*)
     export XDG_RUNTIME_DIR="$(mktemp -p $(pwd) -d xdg-runtime-XXXXXX)"
 
-    weston --backend=headless-backend.so --socket=wayland-5 --idle-time=0 &
-    compositor=$!
-    export WAYLAND_DISPLAY=wayland-5
-
     dbus-run-session -- \
+      mutter --headless --wayland --no-x11 --virtual-monitor 1024x768 -- \
           meson test -C ${builddir} \
                 --quiet \
                 --timeout-multiplier "${multiplier}" \
@@ -58,8 +55,6 @@ case "${setup}" in
                 --no-suite=headless \
                 --no-suite=gsk-compare-broadway
     exit_code=$?
-
-    kill ${compositor}
     ;;
 
   broadway*)
