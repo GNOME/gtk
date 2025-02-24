@@ -2200,6 +2200,30 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
   g_object_unref (image);
 }
 
+static gboolean
+gsk_gpu_node_processor_add_first_node_no_blend (GskGpuNodeProcessor *self,
+                                                GskGpuFirstNodeInfo *info,
+                                                GskRenderNode       *node)
+{
+  if (!node->fully_opaque)
+    return FALSE;
+
+  if (!gsk_gpu_node_processor_clip_first_node (self, info, &node->bounds))
+    return FALSE;
+
+  gsk_gpu_first_node_begin_rendering (self, info, NULL);
+
+  self->blend = GSK_GPU_BLEND_NONE;
+  self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+
+  gsk_gpu_node_processor_add_node (self, node);
+
+  self->blend = GSK_GPU_BLEND_OVER;
+  self->pending_globals |= GSK_GPU_GLOBAL_BLEND;
+
+  return TRUE;
+}
+
 static GskGpuImage *
 gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
                                    GskGpuAsImageFlags     flags,
@@ -3783,14 +3807,14 @@ gsk_gpu_node_processor_add_first_container_node (GskGpuNodeProcessor *self,
       !gsk_gpu_node_processor_clip_first_node (self, info, &opaque))
     return FALSE;
 
-  for (i = n; i-->0; )
+  for (i = n; i-- > 0; )
     {
       if (gsk_gpu_node_processor_add_first_node (self, info, children[i]))
         break;
     }
 
   if (i < 0)
-    gsk_gpu_first_node_begin_rendering (self, info, NULL);
+    gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
 
   for (i++; i < n; i++)
     gsk_gpu_node_processor_add_node (self, children[i]);
@@ -3872,7 +3896,7 @@ static const struct
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_cairo_node,
-    NULL,
+    gsk_gpu_node_processor_add_first_node_no_blend,
     gsk_gpu_get_cairo_node_as_image,
   },
   [GSK_COLOR_NODE] = {
@@ -3886,35 +3910,35 @@ static const struct
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_linear_gradient_node,
-    NULL,
+    gsk_gpu_node_processor_add_first_node_no_blend,
     NULL,
   },
   [GSK_REPEATING_LINEAR_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_linear_gradient_node,
-    NULL,
+    gsk_gpu_node_processor_add_first_node_no_blend,
     NULL,
   },
   [GSK_RADIAL_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_radial_gradient_node,
-    NULL,
+    gsk_gpu_node_processor_add_first_node_no_blend,
     NULL,
   },
   [GSK_REPEATING_RADIAL_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_radial_gradient_node,
-    NULL,
+    gsk_gpu_node_processor_add_first_node_no_blend,
     NULL,
   },
   [GSK_CONIC_GRADIENT_NODE] = {
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_conic_gradient_node,
-    NULL,
+    gsk_gpu_node_processor_add_first_node_no_blend,
     NULL,
   },
   [GSK_BORDER_NODE] = {
@@ -3928,7 +3952,7 @@ static const struct
     0,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_texture_node,
-    NULL,
+    gsk_gpu_node_processor_add_first_node_no_blend,
     gsk_gpu_get_texture_node_as_image,
   },
   [GSK_INSET_SHADOW_NODE] = {
@@ -4040,7 +4064,7 @@ static const struct
     0,
     0,
     gsk_gpu_node_processor_add_texture_scale_node,
-    NULL,
+    gsk_gpu_node_processor_add_first_node_no_blend,
     NULL,
   },
   [GSK_MASK_NODE] = {
@@ -4149,7 +4173,7 @@ gsk_gpu_node_processor_add_first_node (GskGpuNodeProcessor *self,
   if (!gsk_gpu_node_processor_clip_first_node (self, info, &opaque))
     return FALSE;
 
-  gsk_gpu_first_node_begin_rendering (self, info, NULL);
+  gsk_gpu_first_node_begin_rendering (self, info, GSK_VEC4_TRANSPARENT);
   gsk_gpu_node_processor_add_node (self, node);
 
   return TRUE;
