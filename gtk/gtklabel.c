@@ -1318,20 +1318,14 @@ get_width_for_height (GtkLabel *self,
         }
 
       /* then, do minimum width */
-      if (self->ellipsize != PANGO_ELLIPSIZE_NONE)
-        {
-          g_object_unref (layout);
-          layout = gtk_label_get_measuring_layout (self, NULL, MAX (minimum_default, 0));
-          pango_layout_get_size (layout, minimum_width, NULL);
-          *minimum_width = MAX (*minimum_width, minimum_default);
-        }
-      else if (self->natural_wrap_mode == GTK_NATURAL_WRAP_INHERIT)
+      if (self->natural_wrap_mode == GTK_NATURAL_WRAP_INHERIT && self->ellipsize == PANGO_ELLIPSIZE_NONE)
         {
           *minimum_width = *natural_width;
         }
       else
         {
           pango_layout_set_wrap (layout, self->wrap_mode);
+          pango_layout_set_ellipsize (layout, self->ellipsize);
           *minimum_width = my_pango_layout_get_width_for_height (layout, height, min, *natural_width);
         }
     }
@@ -2676,7 +2670,16 @@ gtk_label_class_init (GtkLabelClass *class)
    * GtkLabel:lines:
    *
    * The number of lines to which an ellipsized, wrapping label
-   * should be limited.
+   * should display before it gets ellipsized. This both prevents the label
+   * from ellipsizing before this many lines are displayed, and limits the
+   * height request of the label to this many lines.
+   *
+   * ::: warning
+   *     Setting this property has unintuitive and unfortunate consequences
+   *     for the minimum _width_ of the label. Specifically, if the height
+   *     of the label is such that it fits a smaller number of lines than
+   *     the value of this property, the label can not be ellipsized at all,
+   *     which means it must be wide enough to fit all the text fully.
    *
    * This property has no effect if the label is not wrapping or ellipsized.
    *
@@ -4286,6 +4289,7 @@ gtk_label_set_wrap_mode (GtkLabel *self,
       self->wrap_mode = wrap_mode;
       g_object_notify_by_pspec (G_OBJECT (self), label_props[PROP_WRAP_MODE]);
 
+      gtk_label_clear_layout (self);
       gtk_widget_queue_resize (GTK_WIDGET (self));
     }
 }
