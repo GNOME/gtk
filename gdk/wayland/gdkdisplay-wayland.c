@@ -1012,7 +1012,7 @@ gdk_wayland_display_get_monitors (GdkDisplay *display)
 
 static GdkMonitor *
 gdk_wayland_display_get_monitor_at_surface (GdkDisplay *display,
-                                           GdkSurface  *window)
+                                            GdkSurface *window)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   struct wl_output *output;

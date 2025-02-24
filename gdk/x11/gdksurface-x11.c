@@ -1757,6 +1757,14 @@ gdk_x11_surface_layout_popup (GdkSurface     *surface,
     {
       monitor = gdk_surface_get_layout_monitor (surface, layout,
                                                 gdk_monitor_get_geometry);
+
+      if (!monitor)
+        {
+          GListModel *monitors = gdk_display_get_monitors (surface->display);
+          monitor = g_list_model_get_item (monitors, 0);
+          g_object_unref (monitor);
+        }
+
       gdk_monitor_get_geometry (monitor, &bounds);
     }
 
