@@ -2670,7 +2670,16 @@ gtk_label_class_init (GtkLabelClass *class)
    * GtkLabel:lines:
    *
    * The number of lines to which an ellipsized, wrapping label
-   * should be limited.
+   * should display before it gets ellipsized. This both prevents the label
+   * from ellipsizing before this many lines are displayed, and limits the
+   * height request of the label to this many lines.
+   *
+   * ::: warning
+   *     Setting this property has unintuitive and unfortunate consequences
+   *     for the minimum _width_ of the label. Specifically, if the height
+   *     of the label is such that it fits a smaller number of lines than
+   *     the value of this property, the label can not be ellipsized at all,
+   *     which means it must be wide enough to fit all the text fully.
    *
    * This property has no effect if the label is not wrapping or ellipsized.
    *
