@@ -229,6 +229,7 @@ gboolean     gtk_widget_needs_allocate      (GtkWidget *widget);
 void         gtk_widget_ensure_resize       (GtkWidget *widget);
 void         gtk_widget_ensure_allocate     (GtkWidget *widget);
 void          _gtk_widget_scale_changed     (GtkWidget *widget);
+void         gtk_widget_monitor_changed     (GtkWidget *widget);
 
 GdkSurface * gtk_widget_get_surface         (GtkWidget *widget);
 
