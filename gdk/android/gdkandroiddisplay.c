@@ -34,7 +34,7 @@
 #include "gdkandroiddisplay-private.h"
 
 G_DEFINE_ENUM_TYPE (GdkAndroidDisplayNightMode, gdk_android_display_night_mode,
-                    G_DEFINE_ENUM_VALUE (GDK_ANDROID_DISPLAY_NIGHT_UNDEFINED, "undefinied"),
+                    G_DEFINE_ENUM_VALUE (GDK_ANDROID_DISPLAY_NIGHT_UNDEFINED, "undefined"),
                     G_DEFINE_ENUM_VALUE (GDK_ANDROID_DISPLAY_NIGHT_NO, "no"),
                     G_DEFINE_ENUM_VALUE (GDK_ANDROID_DISPLAY_NIGHT_YES, "yes"))
 
