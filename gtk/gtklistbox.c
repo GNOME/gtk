@@ -2463,6 +2463,8 @@ gtk_list_box_remove (GtkListBox *box,
 
   row = GTK_LIST_BOX_ROW (child);
   iter = ROW_PRIV (row)->iter;
+  ROW_PRIV (row)->iter = NULL;
+
   if (g_sequence_iter_get_sequence (iter) != box->children)
     {
       g_warning ("Tried to remove non-child %p", child);
