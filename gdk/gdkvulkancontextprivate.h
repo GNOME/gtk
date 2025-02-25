@@ -52,10 +52,6 @@ struct _GdkVulkanContextClass
 #ifdef GDK_RENDERING_VULKAN
   VkResult              (* create_surface)                              (GdkVulkanContext      *context,
                                                                          VkSurfaceKHR          *surface);
-  void                  (* get_image_size)                              (GdkVulkanContext      *context,
-                                                                         uint32_t              *out_width,
-                                                                         uint32_t              *out_height);
-
 #endif
 };
 
