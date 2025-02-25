@@ -957,6 +957,9 @@ gesture_drag_begin_cb (GtkGestureDrag *gesture,
       else
         paned->drag_pos = start_y - handle_area.origin.y;
 
+      if (!gtk_paned_get_wide_handle (paned))
+        paned->drag_pos -= HANDLE_EXTRA_SIZE;
+
       paned->panning = TRUE;
 
       gtk_gesture_set_state (GTK_GESTURE (gesture),
