@@ -52,8 +52,7 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
 {
   GskVulkanDevice *device;
   GdkSurface *surface;
-  double scale;
-  gsize width, height;
+  guint width, height;
   guint i;
 
   surface = gsk_renderer_get_surface (GSK_RENDERER (self));
@@ -67,9 +66,7 @@ gsk_vulkan_renderer_update_images_cb (GdkVulkanContext  *context,
   self->n_targets = gdk_vulkan_context_get_n_images (context);
   self->targets = g_new (GskGpuImage *, self->n_targets);
 
-  scale = gdk_surface_get_scale (surface);
-  width = (gsize) ceil (gdk_surface_get_width (surface) * scale);
-  height = (gsize) ceil (gdk_surface_get_height (surface) * scale);
+  gdk_draw_context_get_buffer_size (GDK_DRAW_CONTEXT (context), &width, &height);
 
   for (i = 0; i < self->n_targets; i++)
     {
