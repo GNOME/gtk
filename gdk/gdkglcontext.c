@@ -598,12 +598,10 @@ gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
   GdkColorState *color_state;
   cairo_region_t *damage;
-  double scale;
-  int ww, wh;
+  guint ww, wh;
   int i;
 
   color_state = gdk_surface_get_color_state (surface);
-  scale = gdk_surface_get_scale (surface);
 
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));
 
@@ -636,8 +634,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
   cairo_region_union (region, damage);
   cairo_region_destroy (damage);
 
-  ww = (int) ceil (gdk_surface_get_width (surface) * scale);
-  wh = (int) ceil (gdk_surface_get_height (surface) * scale);
+  gdk_draw_context_get_buffer_size (draw_context, &ww, &wh);
 
   gdk_gl_context_make_current (context);
 
