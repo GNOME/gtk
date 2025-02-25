@@ -2555,7 +2555,6 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
     }
 
   recording = gtk_inspector_render_recording_new (frame_time,
-                                                  gsk_renderer_get_profiler (renderer),
                                                   &(GdkRectangle) { 0, 0,
                                                     gdk_surface_get_width (surface),
                                                     gdk_surface_get_height (surface) },

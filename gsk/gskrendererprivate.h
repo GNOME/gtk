@@ -19,7 +19,6 @@
 #pragma once
 
 #include "gskrenderer.h"
-#include "gskprofilerprivate.h"
 #include "gskdebugprivate.h"
 #include "gskoffloadprivate.h"
 
@@ -53,8 +52,6 @@ struct _GskRendererClass
                                                                  GskRenderNode          *root,
                                                                  const cairo_region_t   *invalid);
 };
-
-GskProfiler *           gsk_renderer_get_profiler               (GskRenderer    *renderer);
 
 GskDebugFlags           gsk_renderer_get_debug_flags            (GskRenderer    *renderer);
 void                    gsk_renderer_set_debug_flags            (GskRenderer    *renderer,

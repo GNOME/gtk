@@ -19,7 +19,6 @@
 
 #include <gdk/gdk.h>
 #include <gsk/gsk.h>
-#include "gsk/gskprofilerprivate.h"
 #include "gtk/gtkenums.h"
 #include "gtk/gtkwidget.h"
 #include "gtk/gtkeventcontroller.h"

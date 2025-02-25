@@ -37,7 +37,6 @@
 
 #include "gskcairorenderer.h"
 #include "gskdebugprivate.h"
-#include "gskprofilerprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskoffloadprivate.h"
 
@@ -66,8 +65,6 @@ typedef struct
 
   GdkSurface *surface;
   GskRenderNode *prev_node;
-
-  GskProfiler *profiler;
 
   GskDebugFlags debug_flags;
 
@@ -126,13 +123,11 @@ static void
 gsk_renderer_dispose (GObject *gobject)
 {
   GskRenderer *self = GSK_RENDERER (gobject);
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
+  G_GNUC_UNUSED GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
 
   /* We can't just unrealize here because superclasses have already run dispose.
    * So we insist that unrealize must be called before unreffing. */
   g_assert (!priv->is_realized);
-
-  g_clear_object (&priv->profiler);
 
   G_OBJECT_CLASS (gsk_renderer_parent_class)->dispose (gobject);
 }
@@ -203,7 +198,6 @@ gsk_renderer_init (GskRenderer *self)
 {
   GskRendererPrivate *priv = gsk_renderer_get_instance_private (self);
 
-  priv->profiler = gsk_profiler_new ();
   priv->debug_flags = gsk_get_debug_flags ();
 }
 
@@ -483,24 +477,6 @@ gsk_renderer_render (GskRenderer          *renderer,
   cairo_region_destroy (clip);
   g_clear_pointer (&offload, gsk_offload_free);
   priv->prev_node = gsk_render_node_ref (root);
-}
-
-/*< private >
- * gsk_renderer_get_profiler:
- * @renderer: a renderer
- *
- * Retrieves a pointer to the `GskProfiler` instance of the renderer.
- *
- * Returns: (transfer none): the profiler
- */
-GskProfiler *
-gsk_renderer_get_profiler (GskRenderer *renderer)
-{
-  GskRendererPrivate *priv = gsk_renderer_get_instance_private (renderer);
-
-  g_return_val_if_fail (GSK_IS_RENDERER (renderer), NULL);
-
-  return priv->profiler;
 }
 
 static GType
