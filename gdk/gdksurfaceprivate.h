@@ -154,6 +154,11 @@ struct _GdkSurfaceClass
                                          double              dy);
 
   double       (* get_scale)              (GdkSurface      *surface);
+  /* see docs for gdk_draw_context_get_buffer_size() */
+  void         (* get_buffer_size)        (GdkSurface      *surface,
+                                           GdkDrawContext  *context,
+                                           guint           *out_width,
+                                           guint           *out_height);
 
   void         (* set_opaque_region)      (GdkSurface      *surface,
                                            cairo_region_t *region);

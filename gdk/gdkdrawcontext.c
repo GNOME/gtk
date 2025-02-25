@@ -571,3 +571,36 @@ gdk_draw_context_empty_frame (GdkDrawContext *context)
 
   GDK_DRAW_CONTEXT_GET_CLASS (context)->empty_frame (context);
 }
+
+/*<private>
+ * gdk_draw_context_get_buffer_size:
+ * @self: the draw context
+ * @out_width: (out) the width of the buffer in pixels
+ * @out_height: (out) the height of the buffer in pixels
+ *
+ * Queries the size that is used (for contexts where the system creates the
+ * buffer) or should be used (for contexts where the buffer is created by GDK)
+ * for the buffer.
+ *
+ * This function must only be called on draw context with a
+ * surface.
+ *
+ * Implementation detail:
+ * The vfunc for this function is part of GdkSurface as most
+ * backends share the size implementation across different contexts.
+ **/
+void
+gdk_draw_context_get_buffer_size (GdkDrawContext *self,
+                                  guint          *out_width,
+                                  guint          *out_height)
+{
+  GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
+
+  g_return_if_fail (GDK_IS_DRAW_CONTEXT (self));
+  g_return_if_fail (priv->surface != NULL);
+
+  GDK_SURFACE_GET_CLASS (priv->surface)->get_buffer_size (priv->surface,
+                                                          self,
+                                                          out_width, out_height);
+}
+
