@@ -5029,7 +5029,8 @@ gdk_wayland_seat_grab (GdkSeat                *seat,
         {
           GdkWaylandTabletData *tablet = l->data;
 
-          device_maybe_emit_grab_crossing (tablet->master, native, evtime);
+          if (tablet->current_tool)
+            device_maybe_emit_grab_crossing (tablet->master, native, evtime);
 
           _gdk_display_add_device_grab (display,
                                         tablet->master,
