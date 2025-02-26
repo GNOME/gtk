@@ -37,7 +37,7 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 GType                   gdk_cairo_context_get_type                      (void) G_GNUC_CONST;
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18_FOR(gsk_cairo_node_get_draw_context)
 cairo_t *               gdk_cairo_context_cairo_create                  (GdkCairoContext        *self);
 
 G_END_DECLS
