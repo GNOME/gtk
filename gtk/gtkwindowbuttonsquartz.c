@@ -67,6 +67,8 @@ struct _GtkWindowButtonsQuartz
   gboolean maximize;
 
   char *decoration_layout;
+
+  GBinding *fullscreen_binding;
 };
 
 struct _GtkWindowButtonsQuartzClass
@@ -226,6 +228,37 @@ gtk_window_buttons_quartz_set_property (GObject      *object,
 }
 
 static void
+gtk_window_buttons_quartz_root (GtkWidget *widget)
+{
+  GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (widget);
+
+  GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->root (widget);
+
+  if (self->fullscreen_binding)
+    g_object_unref (self->fullscreen_binding);
+
+  self->fullscreen_binding = g_object_bind_property (gtk_widget_get_root (widget),
+                                                     "fullscreened",
+                                                     widget,
+                                                     "visible",
+                                                     G_BINDING_SYNC_CREATE | G_BINDING_INVERT_BOOLEAN);
+}
+
+static void
+gtk_window_buttons_quartz_unroot (GtkWidget *widget)
+{
+  GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (widget);
+
+  if (self->fullscreen_binding)
+    {
+      g_object_unref (self->fullscreen_binding);
+      self->fullscreen_binding = NULL;
+    }
+
+  GTK_WIDGET_CLASS (gtk_window_buttons_quartz_parent_class)->unroot (widget);
+}
+
+static void
 gtk_window_buttons_quartz_realize (GtkWidget *widget)
 {
   GtkWindowButtonsQuartz *self = GTK_WINDOW_BUTTONS_QUARTZ (widget);
@@ -328,6 +361,8 @@ gtk_window_buttons_quartz_class_init (GtkWindowButtonsQuartzClass *class)
 
   widget_class->measure = gtk_window_buttons_quartz_measure;
   widget_class->size_allocate = gtk_window_buttons_quartz_size_allocate;
+  widget_class->root = gtk_window_buttons_quartz_root;
+  widget_class->unroot = gtk_window_buttons_quartz_unroot;
   widget_class->realize = gtk_window_buttons_quartz_realize;
   widget_class->unrealize = gtk_window_buttons_quartz_unrealize;
   widget_class->state_flags_changed = gtk_window_buttons_quartz_state_flags_changed;
@@ -359,4 +394,5 @@ gtk_window_buttons_quartz_init (GtkWindowButtonsQuartz *self)
   self->minimize = TRUE;
   self->maximize = TRUE;
   self->decoration_layout = NULL;
+  self->fullscreen_binding = NULL;
 }
