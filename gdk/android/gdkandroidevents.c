@@ -141,9 +141,16 @@ gdk_android_events_handle_motion_event (GdkAndroidSurface *surface,
   gfloat x = AMotionEvent_getX (event, 0) / surface->cfg.scale;
   gfloat y = AMotionEvent_getY (event, 0) / surface->cfg.scale;
 
-  // Update keyboard focus
-  GdkDevice *keyboard = gdk_seat_get_keyboard ((GdkSeat *) display->seat);
-  gdk_android_device_keyboard_maybe_update_surface_focus ((GdkAndroidDevice *) keyboard, surface);
+  // Update keyboard focus on motion events only for autohide surfaces
+  // This *doesn't really* match the behaviour of Mutter (autohide popups
+  // get keyboard focus on present, while non-autohide popups do not),
+  // especially as motion events shouldn't update keyboard focus, but it'll
+  // work in the grand scheme of things for now.
+  if (((GdkSurface *)surface)->autohide)
+    {
+      GdkDevice *keyboard = gdk_seat_get_keyboard ((GdkSeat *) display->seat);
+      gdk_android_device_keyboard_maybe_update_surface_focus ((GdkAndroidDevice *) keyboard, surface);
+    }
 
   if (GDK_ANDROID_EVENTS_COMPARE_MASK (src, AINPUT_SOURCE_TOUCHSCREEN))
     {
