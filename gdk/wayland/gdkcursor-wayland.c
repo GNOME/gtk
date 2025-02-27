@@ -99,7 +99,8 @@ static const struct {
   { "nesw-resize",  "fd_double_arrow" },
   { "nwse-resize",  "bd_double_arrow" },
   { "zoom-in",      "left_ptr" },
-  { "zoom-out",     "left_ptr" }
+  { "zoom-out",     "left_ptr" },
+  { "all-resize",   "move" }, /* not CSS, but we want to guarantee it anyway */
 };
 
 static const char *
