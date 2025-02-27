@@ -1311,6 +1311,9 @@ gdk_surface_create_gl_context (GdkSurface   *surface,
  * Creates a new `GdkCairoContext` for rendering on @surface.
  *
  * Returns: (transfer full): the newly created `GdkCairoContext`
+ *
+ * Deprecated: 4.18: Drawing content with Cairo should be done via
+ *   Cairo rendernodes, not by using the Cairo renderer.
  */
 GdkCairoContext *
 gdk_surface_create_cairo_context (GdkSurface *surface)

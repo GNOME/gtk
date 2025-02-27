@@ -58,8 +58,10 @@ gsk_cairo_renderer_realize (GskRenderer  *renderer,
 {
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (surface)
     self->cairo_context = gdk_surface_create_cairo_context (surface);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   return TRUE;
 }
