@@ -150,7 +150,9 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
                                      GDK_MEMORY_U8,
                                      region,
                                      opaque);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   cr = gdk_cairo_context_cairo_create (self->cairo_context);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   g_return_if_fail (cr != NULL);
 

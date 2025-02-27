@@ -70,6 +70,9 @@ gdk_cairo_context_init (GdkCairoContext *self)
  *
  * Returns: (transfer full) (nullable): a Cairo context
  *   to draw on `GdkSurface
+ *
+ * Deprecated: 4.18: Drawing content with Cairo should be done via
+ *   Cairo rendernodes, not by using renderers.
  */
 cairo_t *
 gdk_cairo_context_cairo_create (GdkCairoContext *self)
