@@ -156,6 +156,11 @@ proto_sources = [
     'stability': 'staging',
     'version': 1,
   },
+  {
+    'name': 'cursor-shape',
+    'stability': 'private',
+    'version': 1,
+  },
 ]
 
 gdk_wayland_gen_headers = []

@@ -557,6 +557,12 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry, id,
                           &xdg_system_bell_v1_interface, 1);
     }
+  else if (strcmp (interface, wp_cursor_shape_manager_v1_interface.name) == 0)
+    {
+      display_wayland->cursor_shape =
+        wl_registry_bind (display_wayland->wl_registry, id,
+                          &wp_cursor_shape_manager_v1_interface, 1);
+    }
 
   g_hash_table_insert (display_wayland->known_globals,
                        GUINT_TO_POINTER (id), g_strdup (interface));
