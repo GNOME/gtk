@@ -303,3 +303,4 @@ gdk_cairo_region_create_from_surface (cairo_surface_t *surface)
 
   return region;
 }
+

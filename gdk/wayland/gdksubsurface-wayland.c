@@ -85,7 +85,7 @@ get_shm_wl_buffer (GdkWaylandSubsurface *self,
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
-  surface = gdk_wayland_display_create_shm_surface (display, width, height, &GDK_FRACTIONAL_SCALE_INIT_INT (1));
+  surface = gdk_wayland_display_create_shm_surface (display, width, height);
 
   downloader = gdk_texture_downloader_new (texture);
 

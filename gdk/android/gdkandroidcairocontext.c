@@ -99,10 +99,10 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext *draw_context,
       cairo_region_get_extents (region, &bounds);
 
       self->surface.bounds = (ARect){
-        .left = floorf (bounds.x * surface_impl->cfg.scale),
-        .top = floorf (bounds.y * surface_impl->cfg.scale),
-        .right = ceilf ((bounds.x + bounds.width) * surface_impl->cfg.scale),
-        .bottom = ceilf ((bounds.y + bounds.height) * surface_impl->cfg.scale)
+        .left = bounds.x,
+        .top = bounds.y,
+        .right = bounds.x + bounds.width,
+        .bottom = bounds.y + bounds.height,
       };
       gint rc = ANativeWindow_lock (self->surface.window,
                                     &self->surface.buffer,
@@ -119,17 +119,16 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext *draw_context,
       g_assert (self->surface.buffer.format == AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM);
 
       cairo_rectangle_int_t true_bounds = {
-        .x = floorf (self->surface.bounds.left / surface_impl->cfg.scale),
-        .y = floorf (self->surface.bounds.top / surface_impl->cfg.scale),
-        .width = ceilf (self->surface.bounds.right / surface_impl->cfg.scale) - floorf (self->surface.bounds.left / surface_impl->cfg.scale),
-        .height = ceilf (self->surface.bounds.bottom / surface_impl->cfg.scale) - floorf (self->surface.bounds.top / surface_impl->cfg.scale),
+        .x = self->surface.bounds.left,
+        .y = self->surface.bounds.top,
+        .width = self->surface.bounds.right - self->surface.bounds.left,
+        .height = self->surface.bounds.bottom - self->surface.bounds.top,
       };
       cairo_region_union_rectangle (region, &true_bounds);
 
       self->active_surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32,
                                                          self->surface.bounds.right - self->surface.bounds.left,
                                                          self->surface.bounds.bottom - self->surface.bounds.top);
-      cairo_surface_set_device_scale (self->active_surface, surface_impl->cfg.scale, surface_impl->cfg.scale);
       cairo_surface_set_device_offset (self->active_surface,
                                        -self->surface.bounds.left,
                                        -self->surface.bounds.top);
@@ -149,13 +148,12 @@ gdk_android_cairo_context_begin_frame (GdkDrawContext *draw_context,
                                                                  CAIRO_FORMAT_ARGB32,
                                                                  scaled_width, scaled_height,
                                                                  scaled_width*sizeof(jint));
-      cairo_surface_set_device_scale (self->active_surface, initiator->cfg.scale, initiator->cfg.scale);
 
       cairo_rectangle_int_t bounds = {
         .x = 0,
         .y = 0,
-        .width = surface->width,
-        .height = surface->height,
+        .width = scaled_width,
+        .height = scaled_height,
       };
       cairo_region_union_rectangle (region, &bounds);
     }

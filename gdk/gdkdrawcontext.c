@@ -22,6 +22,7 @@
 
 #include "gdkdrawcontextprivate.h"
 
+#include "gdkcairoprivate.h"
 #include "gdkdebugprivate.h"
 #include <glib/gi18n-lib.h>
 #include "gdkprofilerprivate.h"
@@ -47,7 +48,7 @@ struct _GdkDrawContextPrivate {
   GdkDisplay *display;
   GdkSurface *surface;
 
-  cairo_region_t *frame_region;
+  cairo_region_t *render_region;
   GdkColorState *color_state;
   GdkMemoryDepth depth;
 };
@@ -234,7 +235,7 @@ gdk_draw_context_is_in_frame (GdkDrawContext *context)
 
   g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), FALSE);
 
-  return priv->frame_region != NULL;
+  return priv->render_region != NULL;
 }
 
 /*< private >
@@ -364,6 +365,8 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
                                    const graphene_rect_t *opaque)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
+  double scale;
+  guint buffer_width, buffer_height;
 
   if (GDK_SURFACE_DESTROYED (priv->surface))
     return;
@@ -391,14 +394,15 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   if (gdk_display_get_debug_flags (priv->display) & GDK_DEBUG_HIGH_DEPTH)
     depth = GDK_MEMORY_FLOAT32;
 
-  priv->frame_region = cairo_region_copy (region);
+  scale = gdk_surface_get_scale (priv->surface);
+  priv->render_region = gdk_cairo_region_scale_grow (region, scale, scale);
   priv->surface->paint_context = g_object_ref (context);
 
   g_assert (priv->color_state == NULL);
 
   GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context,
                                                      depth,
-                                                     priv->frame_region,
+                                                     priv->render_region,
                                                      &priv->color_state,
                                                      &priv->depth);
 
@@ -406,10 +410,11 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   g_assert (priv->color_state != NULL);
   g_assert (priv->depth < GDK_N_DEPTHS);
 
-  cairo_region_intersect_rectangle (priv->frame_region,
+  gdk_draw_context_get_buffer_size (context, &buffer_width, &buffer_height);
+  cairo_region_intersect_rectangle (priv->render_region,
                                     &(cairo_rectangle_int_t) {
                                       0, 0,
-                                      priv->surface->width, priv->surface->height
+                                      buffer_width, buffer_height
                                     });
 }
 
@@ -437,12 +442,12 @@ gdk_draw_context_end_frame_full (GdkDrawContext *context)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, priv->frame_region);
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, priv->render_region);
 
-  gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (priv->frame_region));
+  gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (priv->render_region));
 
   priv->color_state = NULL;
-  g_clear_pointer (&priv->frame_region, cairo_region_destroy);
+  g_clear_pointer (&priv->render_region, cairo_region_destroy);
   g_clear_object (&priv->surface->paint_context);
   priv->depth = GDK_N_DEPTHS;
 }
@@ -511,19 +516,39 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
  *   Use `GskRenderNode` and `GskRenderer`.
  */
 const cairo_region_t *
-_gdk_draw_context_get_frame_region (GdkDrawContext *self)
+gdk_draw_context_get_frame_region (GdkDrawContext *self)
+{
+  return NULL;
+}
+
+/*<private>
+ * gdk_draw_context_get_render_region:
+ * @self: a `GdkDrawContext`
+ *
+ * Retrieves the region that is currently being repainted.
+ *
+ * After a call to [method@Gdk.DrawContext.begin_frame] this function will
+ * return the area of the current buffer that the @context determined needs
+ * to be repainted.
+ * This region is created by a union of the region passed to
+ * [method@Gdk.DrawContext.begin_frame] converted to device pixels and any
+ * additional pixels the context has determined need to be repainted.
+ *
+ * The region will never extend the buffer's size.
+ *
+ * If @context is not in between calls to [method@Gdk.DrawContext.begin_frame]
+ * and [method@Gdk.DrawContext.end_frame], %NULL will be returned.
+ *
+ * Returns: (transfer none) (nullable): a Cairo region
+ *
+ * Returns:
+ **/
+const cairo_region_t *
+gdk_draw_context_get_render_region (GdkDrawContext *self)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (self);
 
-  return priv->frame_region;
-}
-
-const cairo_region_t *
-(gdk_draw_context_get_frame_region) (GdkDrawContext *context)
-{
-  g_return_val_if_fail (GDK_IS_DRAW_CONTEXT (context), NULL);
-
-  return _gdk_draw_context_get_frame_region (context);
+  return priv->render_region;
 }
 
 /*<private>

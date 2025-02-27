@@ -340,9 +340,8 @@ fromCGRect (const CGRect rect)
 {
   IOSurfaceRef ioSurface = _gdk_macos_buffer_get_native (buffer);
   gboolean flipped = _gdk_macos_buffer_get_flipped (buffer);
-  double scale = _gdk_macos_buffer_get_device_scale (buffer);
-  double width = _gdk_macos_buffer_get_width (buffer) / scale;
-  double height = _gdk_macos_buffer_get_height (buffer) / scale;
+  double width = _gdk_macos_buffer_get_width (buffer);
+  double height = _gdk_macos_buffer_get_height (buffer);
 
   if (flipped != self->_isFlipped)
     {
