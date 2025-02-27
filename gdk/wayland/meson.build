@@ -59,6 +59,7 @@ proto_sources = [
   ['server-decoration', 'private' ],
   ['xdg-output', 'unstable', 'v1', ],
   ['primary-selection', 'unstable', 'v1', ],
+  ['cursor-shape-v1', 'private', ],
 ]
 if wlprotocolsdep.version().version_compare('>=1.21')
   proto_sources += [['xdg-activation', 'staging', 'v1', ]]

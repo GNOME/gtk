@@ -211,6 +211,13 @@ gdk_wayland_cursor_get_surface (GdkCursor *cursor,
   return NULL;
 }
 
+const char *
+_gdk_wayland_cursor_get_name (GdkCursor *cursor)
+{
+  GdkWaylandCursor *wayland_cursor = GDK_WAYLAND_CURSOR (cursor);
+  return wayland_cursor->name;
+}
+
 struct wl_buffer *
 _gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
                                 guint      image_index,

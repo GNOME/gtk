@@ -89,6 +89,8 @@ gboolean   _gdk_wayland_display_supports_cursor_color (GdkDisplay *display);
 void       gdk_wayland_display_system_bell (GdkDisplay *display,
                                             GdkWindow  *window);
 
+const char *_gdk_wayland_cursor_get_name (GdkCursor *cursor);
+
 struct wl_buffer *_gdk_wayland_cursor_get_buffer (GdkCursor *cursor,
                                                   guint      image_index,
                                                   int       *hotspot_x,
