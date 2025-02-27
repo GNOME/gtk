@@ -5958,6 +5958,7 @@ gtk_text_view_click_gesture_pressed (GtkGestureClick *gesture,
           gtk_text_view_start_selection_drag (text_view, &iter,
                                               n_press == 2 ? SELECT_WORDS : SELECT_LINES,
                                               extends);
+          gtk_gesture_set_state (GTK_GESTURE (gesture), GTK_EVENT_SEQUENCE_CLAIMED);
           break;
         default:
           break;
