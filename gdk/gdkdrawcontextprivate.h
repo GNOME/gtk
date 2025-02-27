@@ -65,8 +65,7 @@ void                    gdk_draw_context_end_frame_full         (GdkDrawContext 
 
 void                    gdk_draw_context_empty_frame            (GdkDrawContext         *context);
 
-#define gdk_draw_context_get_frame_region(...) _gdk_draw_context_get_frame_region(__VA_ARGS__)
-const cairo_region_t *  _gdk_draw_context_get_frame_region      (GdkDrawContext         *self);
+const cairo_region_t *  gdk_draw_context_get_render_region      (GdkDrawContext         *self);
 GdkColorState *         gdk_draw_context_get_color_state        (GdkDrawContext         *self);
 GdkMemoryDepth          gdk_draw_context_get_depth              (GdkDrawContext         *self);
 void                    gdk_draw_context_get_buffer_size        (GdkDrawContext         *self,

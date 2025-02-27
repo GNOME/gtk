@@ -53,7 +53,6 @@ _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
   NSWindow *nswindow;
   cairo_t *cr;
   gpointer data;
-  double scale;
   guint width;
   guint height;
   guint stride;
@@ -69,7 +68,6 @@ _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
   damage = _gdk_macos_buffer_get_damage (buffer);
   width = _gdk_macos_buffer_get_width (buffer);
   height = _gdk_macos_buffer_get_height (buffer);
-  scale = _gdk_macos_buffer_get_device_scale (buffer);
   stride = _gdk_macos_buffer_get_stride (buffer);
   data = _gdk_macos_buffer_get_data (buffer);
 
@@ -81,17 +79,12 @@ _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
    * Additionally, cairo_quartz_surface_t can't handle a number of
    * tricks that the GSK cairo renderer does with border nodes and
    * shadows, so an image surface is necessary for that.
-   *
-   * Since our IOSurfaceRef is width*scale-by-height*scale, we undo
-   * the scaling using cairo_surface_set_device_scale() so the renderer
-   * just thinks it's on a 2x scale surface for HiDPI.
    */
   image_surface = cairo_image_surface_create_for_data (data,
                                                        CAIRO_FORMAT_ARGB32,
                                                        width,
                                                        height,
                                                        stride);
-  cairo_surface_set_device_scale (image_surface, scale, scale);
 
   /* The buffer should already be locked at this point, and will
    * be unlocked as part of end_frame.

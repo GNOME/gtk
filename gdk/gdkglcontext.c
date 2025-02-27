@@ -472,13 +472,15 @@ gdk_gl_context_default_realize (GdkGLContext  *context,
 static cairo_region_t *
 gdk_gl_context_real_get_damage (GdkGLContext *context)
 {
-  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
+  GdkDrawContext *draw_context = GDK_DRAW_CONTEXT (context);
+  guint buffer_width, buffer_height;
 #ifdef HAVE_EGL
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
-  GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
+  GdkDisplay *display = gdk_draw_context_get_display (draw_context);
 
   if (priv->egl_context && display->have_egl_buffer_age)
     {
+      GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
       EGLSurface egl_surface;
       int buffer_age = 0;
       egl_surface = gdk_surface_get_egl_surface (surface);
@@ -495,10 +497,11 @@ gdk_gl_context_real_get_damage (GdkGLContext *context)
             {
               if (context->old_updated_area[i] == NULL)
                 {
+                  gdk_draw_context_get_buffer_size (draw_context, &buffer_width, &buffer_height);
                   cairo_region_create_rectangle (&(GdkRectangle) {
                                                      0, 0,
-                                                     gdk_surface_get_width (surface),
-                                                     gdk_surface_get_height (surface)
+                                                     buffer_width,
+                                                     buffer_height
                                                  });
                   break;
                 }
@@ -510,10 +513,11 @@ gdk_gl_context_real_get_damage (GdkGLContext *context)
     }
 #endif
 
+  gdk_draw_context_get_buffer_size (draw_context, &buffer_width, &buffer_height);
   return cairo_region_create_rectangle (&(GdkRectangle) {
                                             0, 0,
-                                            gdk_surface_get_width (surface),
-                                            gdk_surface_get_height (surface)
+                                            buffer_width,
+                                            buffer_height
                                         });
 }
 
@@ -676,9 +680,10 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
       EGLint stack_rects[4 * 4]; /* 4 rects */
       EGLint *heap_rects = NULL;
       int i, j, n_rects = cairo_region_num_rectangles (painted);
-      int surface_height = gdk_surface_get_height (surface);
-      double scale = gdk_surface_get_scale (surface);
+      guint buffer_width, buffer_height;
       EGLint *rects;
+
+      gdk_draw_context_get_buffer_size (draw_context, &buffer_width, &buffer_height);
 
       if (n_rects < G_N_ELEMENTS (stack_rects) / 4)
         rects = (EGLint *)&stack_rects;
@@ -690,10 +695,10 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
           cairo_rectangle_int_t rect;
 
           cairo_region_get_rectangle (painted, i, &rect);
-          rects[j++] = (int) floor (rect.x * scale);
-          rects[j++] = (int) floor ((surface_height - rect.height - rect.y) * scale);
-          rects[j++] = (int) ceil ((rect.x + rect.width) * scale) - floor (rect.x * scale);
-          rects[j++] = (int) ceil ((surface_height - rect.y) * scale) - floor ((surface_height - rect.height - rect.y) * scale);
+          rects[j++] = rect.x;
+          rects[j++] = buffer_height - rect.height - rect.y;
+          rects[j++] = rect.width;
+          rects[j++] = rect.height;
         }
       priv->eglSwapBuffersWithDamage (gdk_display_get_egl_display (display), egl_surface, rects, n_rects);
       g_free (heap_rects);

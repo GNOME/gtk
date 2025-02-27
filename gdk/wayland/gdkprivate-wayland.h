@@ -201,12 +201,11 @@ GdkMonitor *gdk_wayland_display_get_monitor_for_output (GdkDisplay       *displa
                                                         struct wl_output *output);
 
 void _gdk_wayland_surface_set_grab_seat (GdkSurface      *surface,
-                                        GdkSeat        *seat);
+                                         GdkSeat         *seat);
 
 cairo_surface_t * gdk_wayland_display_create_shm_surface  (GdkWaylandDisplay        *display,
-                                                           int                       width,
-                                                           int                       height,
-                                                           const GdkFractionalScale *scale);
+                                                           guint                     width,
+                                                           guint                     height);
 struct wl_buffer *_gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface);
 gboolean _gdk_wayland_is_shm_surface (cairo_surface_t *surface);
 

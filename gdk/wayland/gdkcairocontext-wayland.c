@@ -120,18 +120,16 @@ static const struct wl_buffer_listener buffer_listener = {
 static cairo_surface_t *
 gdk_wayland_cairo_context_create_surface (GdkWaylandCairoContext *self)
 {
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self)));
-  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
+  GdkDrawContext *draw_context = GDK_DRAW_CONTEXT (self);
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_draw_context_get_display (draw_context));
   cairo_surface_t *cairo_surface;
   struct wl_buffer *buffer;
   cairo_region_t *region;
-  int width, height;
+  guint width, height;
 
-  width = gdk_surface_get_width (surface);
-  height = gdk_surface_get_height (surface);
+  gdk_draw_context_get_buffer_size (draw_context, &width, &height);
   cairo_surface = gdk_wayland_display_create_shm_surface (display_wayland,
-                                                          width, height,
-                                                          &GDK_WAYLAND_SURFACE (surface)->scale);
+                                                          width, height);
   buffer = _gdk_wayland_shm_surface_get_wl_buffer (cairo_surface);
   wl_buffer_add_listener (buffer, &buffer_listener, cairo_surface);
   gdk_wayland_cairo_context_add_surface (self, cairo_surface);

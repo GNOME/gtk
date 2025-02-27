@@ -25,6 +25,7 @@
 #include "gdkcairocontextprivate.h"
 
 #include "gdkcairo.h"
+#include "gdksurface.h"
 
 /**
  * GdkCairoContext:
@@ -79,6 +80,7 @@ gdk_cairo_context_cairo_create (GdkCairoContext *self)
 {
   GdkDrawContext *draw_context;
   cairo_t *cr;
+  double scale;
 
   g_return_val_if_fail (GDK_IS_CAIRO_CONTEXT (self), NULL);
 
@@ -91,8 +93,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   cr = GDK_CAIRO_CONTEXT_GET_CLASS (self)->cairo_create (self);
 
-  gdk_cairo_region (cr, gdk_draw_context_get_frame_region (draw_context));
+  gdk_cairo_region (cr, gdk_draw_context_get_render_region (draw_context));
   cairo_clip (cr);
+
+  scale = gdk_surface_get_scale (gdk_draw_context_get_surface (draw_context));
+  cairo_scale (cr, scale, scale);
 
   return cr;
 }
