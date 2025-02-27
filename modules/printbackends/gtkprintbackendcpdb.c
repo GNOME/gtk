@@ -277,23 +277,12 @@ gtk_print_backend_cpdb_class_finalize (GtkPrintBackendCpdbClass *class)
 static void
 gtk_print_backend_cpdb_init (GtkPrintBackendCpdb *backend_cpdb)
 {
-  char *tmp, *instance_name;
-
   initialize ();
 
-  /*
-   * Initialize the FrontendObj with a random instance name to
-   * prevent conflicts with print dialogs opened from other programs
-   */
-  tmp = random_string (4);
-  instance_name = g_strdup_printf ("Gtk_%s", tmp);
-  GTK_DEBUG (PRINTING, "Creating frontendObj for CPDB backend: %s", instance_name);
-  backend_cpdb->frontend_obj = cpdbGetNewFrontendObj (instance_name,
-                                                      (cpdb_printer_callback) printer_updates_callback);
+  GTK_DEBUG (PRINTING, "Creating frontendObj for CPDB backend");
+  backend_cpdb->frontend_obj = cpdbGetNewFrontendObj ((cpdb_printer_callback) printer_updates_callback);
   cpdbIgnoreLastSavedSettings (backend_cpdb->frontend_obj);
   gtk_print_backend = GTK_PRINT_BACKEND (backend_cpdb);
-  g_free (tmp);
-  g_free (instance_name);
 }
 
 static void
