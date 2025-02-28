@@ -324,7 +324,7 @@ gdk_cursor_equal (gconstpointer a,
  * | ![](alias_cursor.png)         | "alias"         | DND: Something will be linked |
  * | ![](copy_cursor.png)          | "copy"          | DND: Something will be copied |
  * | ![](move_cursor.png)          | "move"          | DND: Something will be moved |
- * | ![](dnd_ask.png)              | "dnd-ask"       | DND: User can choose action to be carried out |
+ * | ![](dnd_ask_cursor.png)       | "dnd-ask"       | DND: User can choose action to be carried out |
  * | ![](no_drop_cursor.png)       | "no-drop"       | DND: Can't drop here |
  * | ![](not_allowed_cursor.png)   | "not-allowed"   | DND: Action will not be carried out |
  * | ![](grab_cursor.png)          | "grab"          | DND: Something can be grabbed |
