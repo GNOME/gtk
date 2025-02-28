@@ -77,6 +77,7 @@
   </gresource>
   <gresource prefix="/cursors">
     <file>cursors.ui</file>
+    <file>cursors.css</file>
   </gresource>
   <gresource prefix="/cursors/images">
     <file>alias_cursor.png</file>
