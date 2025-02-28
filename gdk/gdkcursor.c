@@ -324,7 +324,7 @@ gdk_cursor_equal (gconstpointer a,
  * | ![](alias_cursor.png)         | "alias"         | DND: Something will be linked |
  * | ![](copy_cursor.png)          | "copy"          | DND: Something will be copied |
  * | ![](move_cursor.png)          | "move"          | DND: Something will be moved |
- * | ![](dnd_ask.png)              | "dnd-ask"       | DND: User can choose action to be carried out |
+ * | ![](dnd_ask_cursor.png)       | "dnd-ask"       | DND: User can choose action to be carried out |
  * | ![](no_drop_cursor.png)       | "no-drop"       | DND: Can't drop here |
  * | ![](not_allowed_cursor.png)   | "not-allowed"   | DND: Action will not be carried out |
  * | ![](grab_cursor.png)          | "grab"          | DND: Something can be grabbed |
@@ -340,7 +340,7 @@ gdk_cursor_equal (gconstpointer a,
  * | ![](col_resize_cursor.png)    | "col-resize"    | Resizing: Move an item or border horizontally |
  * | ![](row_resize_cursor.png)    | "row-resize"    | Resizing: Move an item or border vertically |
  * | ![](ew_resize_cursor.png)     | "ew-resize"     | Moving: Something can be moved horizontally |
- * | ![](ns_resize_cursor.png)     | "ns-resize"     | Moving: Something can be moved vertially |
+ * | ![](ns_resize_cursor.png)     | "ns-resize"     | Moving: Something can be moved vertically |
  * | ![](nesw_resize_cursor.png)   | "nesw-resize"   | Moving: Something can be moved diagonally, north-east to south-west |
  * | ![](nwse_resize_cursor.png)   | "nwse-resize"   | Moving: something can be moved diagonally, north-west to south-east |
  * | ![](all_resize_cursor.png)    | "all-resize"    | Moving: Something can be moved in any direction |
