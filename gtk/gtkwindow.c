@@ -867,7 +867,8 @@ gtk_window_class_init (GtkWindowClass *klass)
   /**
    * GtkWindow:hide-on-close:
    *
-   * If this window should be hidden when the users clicks the close button.
+   * If this window should be hidden instead of destroyed when the user clicks
+   * the close button.
    */
   window_props[PROP_HIDE_ON_CLOSE] =
       g_param_spec_boolean ("hide-on-close", NULL, NULL,
@@ -2960,7 +2961,7 @@ gtk_window_set_hide_on_close (GtkWindow *window,
  * gtk_window_get_hide_on_close:
  * @window: a window
  *
- * Returns whether the window will be hidden when the close
+ * Returns whether the window will be hidden instead of destroyed when the close
  * button is clicked.
  *
  * Returns: true if the window will be hidden
