@@ -603,32 +603,6 @@ run_tests (GtkTextBuffer *buffer)
   check_specific_tag (buffer, "end_tag");
 }
 
-
-static const char  *book_closed_xpm[] = {
-"16 16 6 1",
-"       c None s None",
-".      c black",
-"X      c red",
-"o      c yellow",
-"O      c #808080",
-"#      c white",
-"                ",
-"       ..       ",
-"     ..XX.      ",
-"   ..XXXXX.     ",
-" ..XXXXXXXX.    ",
-".ooXXXXXXXXX.   ",
-"..ooXXXXXXXXX.  ",
-".X.ooXXXXXXXXX. ",
-".XX.ooXXXXXX..  ",
-" .XX.ooXXX..#O  ",
-"  .XX.oo..##OO. ",
-"   .XX..##OO..  ",
-"    .X.#OO..    ",
-"     ..O..      ",
-"      ..        ",
-"                "};
-
 static void
 fill_buffer (GtkTextBuffer *buffer)
 {
@@ -674,7 +648,7 @@ fill_buffer (GtkTextBuffer *buffer)
                               "font", "-*-courier-bold-r-*-*-10-*-*-*-*-*-*-*",
                               NULL);
 
-  pixbuf = gdk_pixbuf_new_from_xpm_data (book_closed_xpm);
+  pixbuf = gdk_pixbuf_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/application-exit.png", NULL);
 
   g_assert (pixbuf != NULL);
 
