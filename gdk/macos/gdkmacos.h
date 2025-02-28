@@ -28,6 +28,7 @@
 #include "gdkmacosglcontext.h"
 #include "gdkmacoskeymap.h"
 #include "gdkmacosmonitor.h"
+#include "gdkmacosseat.h"
 #include "gdkmacossurface.h"
 
 #undef __GDKMACOS_H_INSIDE__
