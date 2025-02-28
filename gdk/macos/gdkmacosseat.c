@@ -160,8 +160,6 @@ gdk_macos_seat_grab (GdkSeat                *seat,
       return GDK_GRAB_NOT_VIEWABLE;
     }
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
-
   if (capabilities & GDK_SEAT_CAPABILITY_ALL_POINTING)
     {
       /* ALL_POINTING spans 3 capabilities; get the mask for the ones we have */
@@ -201,8 +199,6 @@ gdk_macos_seat_grab (GdkSeat                *seat,
   if (status != GDK_GRAB_SUCCESS && !was_visible)
     gdk_surface_hide (surface);
 
-  G_GNUC_END_IGNORE_DEPRECATIONS;
-
   return status;
 }
 
@@ -211,10 +207,8 @@ gdk_macos_seat_ungrab (GdkSeat *seat)
 {
   GdkMacosSeat *self = GDK_MACOS_SEAT (seat);
 
-  G_GNUC_BEGIN_IGNORE_DEPRECATIONS;
   gdk_device_ungrab (self->logical_pointer, GDK_CURRENT_TIME);
   gdk_device_ungrab (self->logical_keyboard, GDK_CURRENT_TIME);
-  G_GNUC_END_IGNORE_DEPRECATIONS;
 }
 
 static GdkDevice *
