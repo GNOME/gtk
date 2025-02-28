@@ -308,17 +308,45 @@ gdk_cursor_equal (gconstpointer a,
  * A recommended set of cursor names that will work across different
  * platforms can be found in the CSS specification:
  *
- * | | | | |
- * | --- | --- | ---- | --- |
- * | "none" | ![](default_cursor.png) "default" | ![](help_cursor.png) "help" | ![](pointer_cursor.png) "pointer" |
- * | ![](context_menu_cursor.png) "context-menu" | ![](progress_cursor.png) "progress" | ![](wait_cursor.png) "wait" | ![](cell_cursor.png) "cell" |
- * | ![](crosshair_cursor.png) "crosshair" | ![](text_cursor.png) "text" | ![](vertical_text_cursor.png) "vertical-text" | ![](alias_cursor.png) "alias" |
- * | ![](copy_cursor.png) "copy" | ![](no_drop_cursor.png) "no-drop" | ![](move_cursor.png) "move" | ![](not_allowed_cursor.png) "not-allowed" |
- * | ![](grab_cursor.png) "grab" | ![](grabbing_cursor.png) "grabbing" | ![](all_scroll_cursor.png) "all-scroll" | ![](col_resize_cursor.png) "col-resize" |
- * | ![](row_resize_cursor.png) "row-resize" | ![](n_resize_cursor.png) "n-resize" | ![](e_resize_cursor.png) "e-resize" | ![](s_resize_cursor.png) "s-resize" |
- * | ![](w_resize_cursor.png) "w-resize" | ![](ne_resize_cursor.png) "ne-resize" | ![](nw_resize_cursor.png) "nw-resize" | ![](sw_resize_cursor.png) "sw-resize" |
- * | ![](se_resize_cursor.png) "se-resize" | ![](ew_resize_cursor.png) "ew-resize" | ![](ns_resize_cursor.png) "ns-resize" | ![](nesw_resize_cursor.png) "nesw-resize" |
- * | ![](nwse_resize_cursor.png) "nwse-resize" | ![](zoom_in_cursor.png) "zoom-in" | ![](zoom_out_cursor.png) "zoom-out" | |
+ * | | | |
+ * | --- | --- | --- |
+ * |                               | "none"          | No cursor |
+ * | ![](default_cursor.png)       | "default"       | The default cursor |
+ * | ![](help_cursor.png)          | "help"          | Help is available |
+ * | ![](pointer_cursor.png)       | "pointer"       | Indicates a link or interactive element |
+ * | ![](context_menu_cursor.png)  |"context-menu"   | A context menu is available |
+ * | ![](progress_cursor.png)      | "progress"      | Progress indicator |
+ * | ![](wait_cursor.png)          | "wait"          | Busy cursor |
+ * | ![](cell_cursor.png)          | "cell"          | Cell(s) may be selected |
+ * | ![](crosshair_cursor.png)     | "crosshair"     | Simple crosshair |
+ * | ![](text_cursor.png)          | "text"          | Text may be selected |
+ * | ![](vertical_text_cursor.png) | "vertical-text" | Vertical text may be selected |
+ * | ![](alias_cursor.png)         | "alias"         | DND: Something will be linked |
+ * | ![](copy_cursor.png)          | "copy"          | DND: Something will be copied |
+ * | ![](move_cursor.png)          | "move"          | DND: Something will be moved |
+ * | ![](dnd_ask.png)              | "dnd-ask"       | DND: User can choose action to be carried out |
+ * | ![](no_drop_cursor.png)       | "no-drop"       | DND: Can't drop here |
+ * | ![](not_allowed_cursor.png)   | "not-allowed"   | DND: Action will not be carried out |
+ * | ![](grab_cursor.png)          | "grab"          | DND: Something can be grabbed |
+ * | ![](grabbing_cursor.png)      | "grabbing"      | DND: Something is being grabbed |
+ * | ![](n_resize_cursor.png)      | "n-resize"      | Resizing: Move north border |
+ * | ![](e_resize_cursor.png)      | "e-resize"      | Resizing: Move east border |
+ * | ![](s_resize_cursor.png)      | "s-resize"      | Resizing: Move south border |
+ * | ![](w_resize_cursor.png)      | "w-resize"      | Resizing: Move west border |
+ * | ![](ne_resize_cursor.png)     | "ne-resize"     | Resizing: Move north-east corner |
+ * | ![](nw_resize_cursor.png)     | "nw-resize"     | Resizing: Move north-west corner |
+ * | ![](sw_resize_cursor.png)     | "sw-resize"     | Resizing: Move south-west corner |
+ * | ![](se_resize_cursor.png)     | "se-resize"     | Resizing: Move south-east corner |
+ * | ![](col_resize_cursor.png)    | "col-resize"    | Resizing: Move an item or border horizontally |
+ * | ![](row_resize_cursor.png)    | "row-resize"    | Resizing: Move an item or border vertically |
+ * | ![](ew_resize_cursor.png)     | "ew-resize"     | Moving: Something can be moved horizontally |
+ * | ![](ns_resize_cursor.png)     | "ns-resize"     | Moving: Something can be moved vertially |
+ * | ![](nesw_resize_cursor.png)   | "nesw-resize"   | Moving: Something can be moved diagonally, north-east to south-west |
+ * | ![](nwse_resize_cursor.png)   | "nwse-resize"   | Moving: something can be moved diagonally, north-west to south-east |
+ * | ![](all_resize_cursor.png)    | "all-resize"    | Moving: Something can be moved in any direction |
+ * | ![](all_scroll_cursor.png)    | "all-scroll"    | Can scroll in any direction |
+ * | ![](zoom_in_cursor.png)       | "zoom-in"       | Zoom in |
+ * | ![](zoom_out_cursor.png)      | "zoom-out"      | Zoom out |
  *
  * Returns: (nullable): a new `GdkCursor`, or %NULL if there is no
  *   cursor with the given name

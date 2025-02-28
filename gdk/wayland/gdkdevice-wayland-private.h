@@ -64,6 +64,7 @@ struct _GdkWaylandPointerData {
 
   struct wl_surface *pointer_surface;
   struct wp_viewport *pointer_surface_viewport;
+  struct wp_cursor_shape_device_v1 *shape_device;
   guint cursor_is_default: 1;
   guint has_cursor_surface : 1;
   GdkCursor *cursor;
@@ -122,6 +123,7 @@ struct _GdkWaylandTabletToolData
 {
   GdkSeat *seat;
   struct zwp_tablet_tool_v2 *wp_tablet_tool;
+  struct wp_cursor_shape_device_v1 *shape_device;
   GdkAxisFlags axes;
   GdkDeviceToolType type;
   guint64 hardware_serial;
