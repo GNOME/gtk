@@ -340,7 +340,7 @@ gdk_cursor_equal (gconstpointer a,
  * | ![](col_resize_cursor.png)    | "col-resize"    | Resizing: Move an item or border horizontally |
  * | ![](row_resize_cursor.png)    | "row-resize"    | Resizing: Move an item or border vertically |
  * | ![](ew_resize_cursor.png)     | "ew-resize"     | Moving: Something can be moved horizontally |
- * | ![](ns_resize_cursor.png)     | "ns-resize"     | Moving: Something can be moved vertially |
+ * | ![](ns_resize_cursor.png)     | "ns-resize"     | Moving: Something can be moved vertically |
  * | ![](nesw_resize_cursor.png)   | "nesw-resize"   | Moving: Something can be moved diagonally, north-east to south-west |
  * | ![](nwse_resize_cursor.png)   | "nwse-resize"   | Moving: something can be moved diagonally, north-west to south-east |
  * | ![](all_resize_cursor.png)    | "all-resize"    | Moving: Something can be moved in any direction |
