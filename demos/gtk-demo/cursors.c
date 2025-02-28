@@ -63,6 +63,14 @@ do_cursors (GtkWidget *do_widget)
       GtkBuilder *builder;
       GtkWidget *logo_callback;
       GdkCursor *cursor;
+      GtkCssProvider *provider;
+
+      provider = gtk_css_provider_new ();
+      gtk_css_provider_load_from_resource (provider, "/cursors/cursors.css");
+      gtk_style_context_add_provider_for_display (gdk_display_get_default (),
+                                                  GTK_STYLE_PROVIDER (provider),
+                                                  800);
+      g_object_unref (provider);
 
       builder = gtk_builder_new_from_resource ("/cursors/cursors.ui");
       window = GTK_WIDGET (gtk_builder_get_object (builder, "window"));
