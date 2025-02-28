@@ -142,7 +142,8 @@ static const struct {
   { "nesw-resize",  "fd_double_arrow",     XC_X_cursor },
   { "nwse-resize",  "bd_double_arrow",     XC_X_cursor },
   { "zoom-in",      "left_ptr",            XC_draped_box },
-  { "zoom-out",     "left_ptr",            XC_draped_box }
+  { "zoom-out",     "left_ptr",            XC_draped_box },
+  { "all-resize",   "move",                XC_target }, /* not CSS, but we want to guarantee it anyway */
 };
 
 #ifdef HAVE_XCURSOR
