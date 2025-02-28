@@ -793,9 +793,23 @@ static Class _contentViewClass = nil;
   [self updateToolbarAppearence];
 }
 
+-(BOOL)showStandardWindowButtons;
+{
+  return showButtonCount > 0;
+}
+
 -(void)setShowStandardWindowButtons:(BOOL)show
 {
-  _showStandardWindowButtons = show;
+  if (show)
+    showButtonCount++;
+  else if (showButtonCount > 0)
+    showButtonCount--;
+  else
+    {
+      g_warning ("Show standard window button count doesn't match hide count");
+      return;
+    }
+
   [self updateToolbarAppearence];
 }
 
@@ -811,14 +825,14 @@ static Class _contentViewClass = nil;
   NSWindowStyleMask style_mask = [self styleMask];
   BOOL is_fullscreen = (style_mask & NSWindowStyleMaskFullScreen) != 0;
   BOOL is_csd = !is_fullscreen && (style_mask & NSWindowStyleMaskFullSizeContentView) != 0;
-  BOOL hidden = is_csd && !_showStandardWindowButtons;
+  BOOL hidden = is_csd && (showButtonCount == 0);
 
   /* By assigning a toolbar, the window controls are moved a bit more inwards,
    * In line with how toolbars look in macOS apps.
    * I haven't found a better way. Unfortunately we have to be careful not to
    * update the toolbar during a fullscreen transition.
    */
-  if (is_csd && _showStandardWindowButtons && [self toolbar] == nil)
+  if (is_csd && (showButtonCount > 0) && [self toolbar] == nil)
     {
       NSToolbar *toolbar = [[NSToolbar alloc] init];
       [self setToolbar:toolbar];

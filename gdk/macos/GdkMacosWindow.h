@@ -50,9 +50,11 @@
   EdgeSnapping     snapping;
 
   BOOL             inFullscreenTransition;
+  NSUInteger       showButtonCount;
 }
 
-@property (nonatomic) BOOL showStandardWindowButtons;
+-(BOOL)showStandardWindowButtons;
+-(void)setShowStandardWindowButtons:(BOOL)show;
 
 +(void)setContentViewClass:(Class)newViewClass;
 
