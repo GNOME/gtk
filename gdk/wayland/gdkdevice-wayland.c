@@ -455,8 +455,6 @@ static const struct
   { "dnd-ask", WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_CONTEXT_MENU, 1 },
   { "all-resize", WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_ALL_RESIZE, 2 },
   { "all-resize", WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_MOVE, 1 },
-  { "none", WP_CURSOR_SHAPE_DEVICE_V1_SHAPE_NONE, 2 },
-  { "none", 0, 1 },
 };
 
 static unsigned int
@@ -467,7 +465,8 @@ _gdk_wayland_cursor_get_shape (GdkCursor *cursor,
   const char *cursor_name;
 
   cursor_name = _gdk_wayland_cursor_get_name (cursor);
-  if (cursor_name == NULL)
+  if (cursor_name == NULL ||
+      g_str_equal (cursor_name, "none") == 0)
     return 0;
 
   for (i = 0; i < G_N_ELEMENTS (shape_map); i++)
