@@ -603,7 +603,7 @@ file_transfer_portal_register (void)
       called = TRUE;
 
       /* Cheating a bit, since the document portal is special */
-      if (gdk_display_should_use_portal (gdk_display_get_default (), "org.freedesktop.DBus.Properties", 0))
+      if (gdk_display_should_use_portal (gdk_display_get_default (), NULL, 0))
         file_transfer_proxy = g_dbus_proxy_new_for_bus_sync (G_BUS_TYPE_SESSION,
                                   G_DBUS_PROXY_FLAGS_DO_NOT_LOAD_PROPERTIES
                                   | G_DBUS_PROXY_FLAGS_DO_NOT_CONNECT_SIGNALS
