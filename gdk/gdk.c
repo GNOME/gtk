@@ -445,6 +445,9 @@ gdk_display_should_use_portal (GdkDisplay *display,
   if (gdk_running_in_sandbox ())
     return TRUE;
 
+  if (portal_interface == NULL)
+    return TRUE;
+
   bus = g_bus_get_sync (G_BUS_TYPE_SESSION, NULL, NULL);
   if (bus == NULL)
     goto done;
@@ -465,15 +468,18 @@ gdk_display_should_use_portal (GdkDisplay *display,
   if (owner == NULL)
     goto done;
 
+  if (min_version == 0)
+    {
+      result = TRUE;
+      goto done;
+    }
+
   ret = g_dbus_proxy_get_cached_property (proxy, "version");
 
   if (!ret)
     goto done;
 
-  if (min_version == 0)
-    result = TRUE;
-  else
-    result = g_variant_get_uint32 (ret) >= min_version;
+  result = g_variant_get_uint32 (ret) >= min_version;
 
 done:
   g_clear_object (&bus);

@@ -615,6 +615,18 @@ _gdk_win32_print_event (GdkEvent *event)
     CASE (GDK_DROP_START);
     CASE (GDK_SCROLL);
     CASE (GDK_GRAB_BROKEN);
+    CASE (GDK_TOUCH_BEGIN);
+    CASE (GDK_TOUCH_UPDATE);
+    CASE (GDK_TOUCH_END);
+    CASE (GDK_TOUCH_CANCEL);
+    CASE (GDK_TOUCHPAD_SWIPE);
+    CASE (GDK_TOUCHPAD_PINCH);
+    CASE (GDK_PAD_BUTTON_PRESS);
+    CASE (GDK_PAD_BUTTON_RELEASE);
+    CASE (GDK_PAD_RING);
+    CASE (GDK_PAD_STRIP);
+    CASE (GDK_PAD_GROUP_MODE);
+    CASE (GDK_TOUCHPAD_HOLD);
 #undef CASE
     default: g_assert_not_reached ();
     }
