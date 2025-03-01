@@ -2171,10 +2171,12 @@ gtk_window_native_layout (GtkNative *native,
                                                           device, NULL);
           if (focus)
             {
-              GdkSurface *focus_surface =
-                gtk_native_get_surface (gtk_widget_get_native (focus));
+              GdkSurface *surface;
 
-              gdk_surface_request_motion (focus_surface);
+              surface = gtk_native_get_surface (gtk_widget_get_native (focus));
+
+              if (surface)
+                gdk_surface_request_motion (surface);
             }
         }
     }
