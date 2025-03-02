@@ -120,7 +120,7 @@
                                             <property name="hexpand">1</property>
                                             <property name="halign">3</property>
                                             <accessibility>
-                                              <property name="label" translatable="yes">Search</property>
+                                              <property name="label" translatable="yes" comments="Translators: Label for a search button and entry, should be translated as a verb">Search</property>
                                             </accessibility>
                                             <signal name="search-changed" handler="search_entry_activate_cb" swapped="yes"/>
                                             <signal name="stop-search" handler="search_entry_stop_cb" swapped="yes"/>
