@@ -1,0 +1,16 @@
+<interface>
+  <requires lib="gtk" version="4.0"/>
+  <object class="GtkWindow">
+    <property name="title" translatable="yes">Boo</property>
+    <property name="titlebar">
+      <object class="GtkLabel">
+        <property name="label" translatable="no">Boo</property>
+      </object>
+    </property>
+    <property name="child">
+      <object class="GtkLabel">
+        <property name="label" translatable="1">Boo</property>
+      </object>
+    </property>
+  </object>
+</interface>

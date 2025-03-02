@@ -9163,6 +9163,7 @@ accessibility_start_element (GtkBuildableParseContext  *context,
     {
       const char *name = NULL;
       const char *ctx = NULL;
+      const char *translatable_string = NULL;
       gboolean translatable = FALSE;
       AccessibilityAttributeInfo *pinfo;
 
@@ -9174,11 +9175,17 @@ accessibility_start_element (GtkBuildableParseContext  *context,
 
       if (!g_markup_collect_attributes (element_name, names, values, error,
                                         G_MARKUP_COLLECT_STRING, "name", &name,
-                                        G_MARKUP_COLLECT_BOOLEAN | G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable_string,
                                         G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "comments", NULL, /* ignore, just for translators */
-
                                         G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "context", &ctx,
                                         G_MARKUP_COLLECT_INVALID))
+        {
+          _gtk_builder_prefix_error (accessibility_data->builder, context, error);
+          return;
+        }
+
+      if (translatable_string &&
+          !gtk_builder_parse_translatable (translatable_string, &translatable, error))
         {
           _gtk_builder_prefix_error (accessibility_data->builder, context, error);
           return;
