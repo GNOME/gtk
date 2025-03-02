@@ -138,9 +138,15 @@
  *
  * ```xml
  * <object class="GtkButton">
- *   <property name="label" translatable="yes" context="button">Hello, world</property>
+ *   <property name="label"
+ *             translatable="yes"
+ *             context="button"
+ *             comments="A classic">Hello, world</property>
  * </object>
  * ```
+ *
+ * The xgettext tool that is part of gettext can extract these strings,
+ * but note that it only looks for translatable="yes".
  *
  * `GtkBuilder` can parse textual representations for the most common
  * property types:
@@ -2276,6 +2282,19 @@ error:
   return FALSE;
 }
 
+gboolean
+gtk_builder_parse_translatable (const char  *string,
+                                gboolean    *value,
+                                GError     **error)
+{
+  if (!_gtk_builder_boolean_from_string (string, value, error))
+    return FALSE;
+
+  if (*value && strcmp (string, "yes") != 0)
+    GTK_DEBUG (BUILDER, "Useless translatable attribute: '%s' (xgettext only recognizes 'yes')", string);
+
+  return TRUE;
+}
 
 /**
  * gtk_builder_value_from_string_type:

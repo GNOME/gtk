@@ -871,6 +871,7 @@ parse_property (ParserData   *data,
   const char *bind_flags_str = NULL;
   GBindingFlags bind_flags = G_BINDING_DEFAULT;
   gboolean translatable = FALSE;
+  const char *translatable_string = NULL;
   ObjectInfo *object_info;
   GParamSpec *pspec = NULL;
   int line, col;
@@ -886,7 +887,7 @@ parse_property (ParserData   *data,
 
   if (!g_markup_collect_attributes (element_name, names, values, error,
                                     G_MARKUP_COLLECT_STRING, "name", &name,
-                                    G_MARKUP_COLLECT_BOOLEAN|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable_string,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "comments", NULL,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &context,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "bind-source", &bind_source,
@@ -907,6 +908,13 @@ parse_property (ParserData   *data,
                    GTK_BUILDER_ERROR_INVALID_PROPERTY,
                    "Invalid property: %s.%s",
                    g_type_name (object_info->type), name);
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
+  if (translatable_string &&
+      !gtk_builder_parse_translatable (translatable_string, &translatable, error))
+    {
       _gtk_builder_prefix_error (data->builder, &data->ctx, error);
       return;
     }

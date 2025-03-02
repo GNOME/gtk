@@ -163,12 +163,13 @@ gtk_builder_menu_start_element (GtkBuildableParseContext  *context,
       /* Can have '<attribute>' or '<link>' here. */
       if (g_str_equal (element_name, "attribute"))
         {
-          const char *typestr;
-          const char *name;
-          const char *ctxt;
+          const char *typestr = NULL;
+          const char *name = NULL;
+          const char *ctxt = NULL;
+          const char *translatable = NULL;
 
           if (COLLECT (STRING,             "name", &name,
-                       OPTIONAL | BOOLEAN, "translatable", &state->translatable,
+                       OPTIONAL | STRING , "translatable", &translatable,
                        OPTIONAL | STRING,  "context", &ctxt,
                        OPTIONAL | STRING,  "comments", NULL, /* ignore, just for translators */
                        OPTIONAL | STRING,  "type", &typestr))
@@ -178,6 +179,12 @@ gtk_builder_menu_start_element (GtkBuildableParseContext  *context,
                   g_set_error (error, G_VARIANT_PARSE_ERROR,
                                G_VARIANT_PARSE_ERROR_INVALID_TYPE_STRING,
                                "Invalid GVariant type string '%s'", typestr);
+                  return;
+                }
+
+              if (translatable &&
+                  !gtk_builder_parse_translatable (translatable, &state->translatable, error))
+                {
                   return;
                 }
 

@@ -22,7 +22,7 @@
             <property name="icon-size">2</property>
             <property name="accessible-role">button</property>
             <accessibility>
-              <property name="label" translatable="1">Play</property>
+              <property name="label" translatable="yes">Play</property>
             </accessibility>
             <child>
               <object class="GtkGestureClick">
