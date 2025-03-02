@@ -466,7 +466,7 @@ _gdk_wayland_cursor_get_shape (GdkCursor *cursor,
 
   cursor_name = _gdk_wayland_cursor_get_name (cursor);
   if (cursor_name == NULL ||
-      g_str_equal (cursor_name, "none") == 0)
+      g_str_equal (cursor_name, "none"))
     return 0;
 
   for (i = 0; i < G_N_ELEMENTS (shape_map); i++)
