@@ -352,6 +352,7 @@ gtk/gtkvideo.c
 gtk/gtkviewport.c
 gtk/gtkwidget.c
 gtk/gtkwidgetpaintable.c
+gtk/gtkwindowbuttonsquartz.c
 gtk/gtkwindow.c
 gtk/gtkwindowcontrols.c
 gtk/gtkwindowhandle.c

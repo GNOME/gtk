@@ -63,6 +63,9 @@ demos/print-editor/print-editor.c
 demos/widget-factory/menus.ui
 demos/widget-factory/widget-factory.c
 demos/widget-factory/widget-factory.ui
+docs/reference/gtk/images/builder-shortcuts.ui
+docs/reference/gtk/images/clocks-shortcuts.ui
+docs/reference/gtk/images/gedit-shortcuts.ui
 docs/reference/gtk/images/shortcuts-window.ui
 docs/tools/shortcuts-boxes.ui
 examples/application10/app-menu.ui
@@ -158,6 +161,8 @@ testsuite/gtk/ui/constraints.ui
 testsuite/gtk/ui/container1.ui
 testsuite/gtk/ui/container8.ui
 testsuite/gtk/ui/scale1.ui
+testsuite/gtk/ui/test8.ui
+testsuite/gtk/ui/test9.ui
 testsuite/reftests/721800-0px-dotted-border.ref.ui
 testsuite/reftests/721800-0px-dotted-border.ui
 testsuite/reftests/animation-direction.ref.ui
