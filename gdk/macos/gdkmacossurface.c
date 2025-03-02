@@ -237,6 +237,18 @@ gdk_macos_surface_get_scale (GdkSurface *surface)
 }
 
 static void
+gdk_macos_surface_get_buffer_size (GdkSurface      *surface,
+                                   GdkDrawContext  *context,
+                                   guint           *out_width,
+                                   guint           *out_height)
+{
+  GdkMacosSurface *self = (GdkMacosSurface *)surface;
+
+  *out_width = _gdk_macos_buffer_get_width (self->buffer);
+  *out_height = _gdk_macos_buffer_get_height (self->buffer);
+}
+
+static void
 gdk_macos_surface_begin_frame (GdkMacosSurface *self)
 {
   g_assert (GDK_IS_MACOS_SURFACE (self));
@@ -528,6 +540,7 @@ gdk_macos_surface_class_init (GdkMacosSurfaceClass *klass)
   surface_class->get_geometry = gdk_macos_surface_get_geometry;
   surface_class->get_root_coords = gdk_macos_surface_get_root_coords;
   surface_class->get_scale = gdk_macos_surface_get_scale;
+  surface_class->get_buffer_size = gdk_macos_surface_get_buffer_size;
   surface_class->hide = gdk_macos_surface_hide;
   surface_class->set_input_region = gdk_macos_surface_set_input_region;
   surface_class->set_opaque_region = gdk_macos_surface_set_opaque_region;
