@@ -9175,6 +9175,8 @@ accessibility_start_element (GtkBuildableParseContext  *context,
       if (!g_markup_collect_attributes (element_name, names, values, error,
                                         G_MARKUP_COLLECT_STRING, "name", &name,
                                         G_MARKUP_COLLECT_BOOLEAN | G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable,
+                                        G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "comments", NULL, /* ignore, just for translators */
+
                                         G_MARKUP_COLLECT_STRING | G_MARKUP_COLLECT_OPTIONAL, "context", &ctx,
                                         G_MARKUP_COLLECT_INVALID))
         {
