@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface domain="gtk40">
   <object class="GtkSingleSelection" id="selection">
+    <property name="autoselect">0</property>
     <signal name="notify::selected-item" handler="selection_changed_cb" object="GtkFontChooserWidget" swapped="0"/>
     <signal name="items-changed" handler="rows_changed_cb" object="GtkFontChooserWidget" swapped="1"/>
     <property name="model">

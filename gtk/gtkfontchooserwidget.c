@@ -1050,7 +1050,7 @@ add_languages_from_font (GtkFontChooserWidget *self,
   pango_font_description_free (desc);
 }
 
-static gboolean
+static void
 gtk_font_chooser_widget_ensure_matching_selection (GtkFontChooserWidget *self);
 
 /* We incrementally populate our fontlist to prevent blocking
@@ -1091,13 +1091,15 @@ add_to_fontlist (GtkWidget     *widget,
 
   gtk_slice_list_model_set_size (model, n);
 
-  if (gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (self->selection)) == GTK_INVALID_LIST_POSITION)
-    gtk_font_chooser_widget_ensure_matching_selection (self);
-
   if (n == G_MAXUINT)
-    return G_SOURCE_REMOVE;
-  else
-    return G_SOURCE_CONTINUE;
+    {
+      if (gtk_single_selection_get_selected (GTK_SINGLE_SELECTION (self->selection)) == GTK_INVALID_LIST_POSITION)
+        gtk_font_chooser_widget_ensure_matching_selection (self);
+
+      return G_SOURCE_REMOVE;
+    }
+
+  return G_SOURCE_CONTINUE;
 }
 
 static void
@@ -1292,7 +1294,7 @@ my_pango_font_family_equal (const char *familya,
   return g_ascii_strcasecmp (familya, familyb) == 0;
 }
 
-static gboolean
+static void
 gtk_font_chooser_widget_ensure_matching_selection (GtkFontChooserWidget *self)
 {
   const char *desc_family;
@@ -1302,7 +1304,7 @@ gtk_font_chooser_widget_ensure_matching_selection (GtkFontChooserWidget *self)
   if (desc_family == NULL)
     {
       gtk_single_selection_set_selected (self->selection, GTK_INVALID_LIST_POSITION);
-      return TRUE;
+      return;
     }
 
   n = g_list_model_get_n_items (G_LIST_MODEL (self->selection));
@@ -1343,11 +1345,9 @@ gtk_font_chooser_widget_ensure_matching_selection (GtkFontChooserWidget *self)
 
   if (i < n)
     {
-      gtk_single_selection_set_selected (self->selection, i);
-      return TRUE;
+      gtk_list_view_scroll_to (GTK_LIST_VIEW (self->family_face_list), i,
+                               GTK_LIST_SCROLL_SELECT | GTK_LIST_SCROLL_FOCUS, NULL);
     }
-
-  return FALSE;
 }
 
 static PangoFontFace *
