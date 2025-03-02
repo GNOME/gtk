@@ -418,6 +418,7 @@ gtk/print/ui/gtkprintunixdialog.ui
 gtk/ui/gtkscalebutton.ui
 gtk/ui/gtksidebarrow.ui
 gtk/ui/gtkstatusbar.ui
+gtk/ui/gtkvideo.ui
 gtk/ui/gtkvolumebutton.ui
 modules/media/gtkgstsink.c
 modules/printbackends/gtkprintbackendcpdb.c
