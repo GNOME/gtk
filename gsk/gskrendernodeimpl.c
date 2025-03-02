@@ -7347,7 +7347,7 @@ gsk_text_node_new2 (PangoFont              *font,
   PangoGlyphInfo *glyph_infos;
   int n;
 
-  pango_glyph_string_extents (glyphs, font, &ink_rect, NULL);
+  gsk_get_glyph_string_extents (glyphs, font, &ink_rect);
 
   /* Don't create nodes with empty bounds */
   if (ink_rect.width == 0 || ink_rect.height == 0)
