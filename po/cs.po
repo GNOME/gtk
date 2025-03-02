@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-03-17 03:06+0000\n"
-"PO-Revision-Date: 2024-03-18 12:28+0100\n"
+"POT-Creation-Date: 2025-02-13 02:09+0000\n"
+"PO-Revision-Date: 2025-03-02 22:52+0100\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Poedit 3.4.2\n"
+"X-Generator: Poedit 3.5\n"
 "X-Project-Style: gnome\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
@@ -44,7 +44,7 @@ msgstr "Tato schránka nemůže uchovávat data."
 msgid "Cannot read from empty clipboard."
 msgstr "Nelze číst z prázdné schránky."
 
-#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:618
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1136 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Není žádný kompatibilní formát pro přenos obsahu schránky."
 
@@ -63,7 +63,7 @@ msgstr "Nezdařilo se poskytnout obsah jako %s"
 msgid "The current backend does not support OpenGL"
 msgstr "Aktuální podpůrná vrstva nepodporuje OpenGL"
 
-#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1600
+#: gdk/gdkdisplay.c:1315 gdk/gdkvulkancontext.c:1621
 msgid "Vulkan support disabled via GDK_DEBUG"
 msgstr "Podpora technologie Vulkan je zakázána skrz GDK_DEBUG"
 
@@ -71,23 +71,23 @@ msgstr "Podpora technologie Vulkan je zakázána skrz GDK_DEBUG"
 msgid "GL support disabled via GDK_DEBUG"
 msgstr "Podpora GL je zakázána skrz GDK_DEBUG"
 
-#: gdk/gdkdisplay.c:1674
+#: gdk/gdkdisplay.c:1675
 msgid "No EGL configuration available"
 msgstr "Není k dispozici žádná konfigurace EGL"
 
-#: gdk/gdkdisplay.c:1682
+#: gdk/gdkdisplay.c:1683
 msgid "Failed to get EGL configurations"
 msgstr "Selhalo získání konfigurace EGL"
 
-#: gdk/gdkdisplay.c:1712
+#: gdk/gdkdisplay.c:1713
 msgid "No EGL configuration with required features found"
 msgstr "Nebyla nazelezna žádná konfigurace EGL s požadovanými vlastnostmi"
 
-#: gdk/gdkdisplay.c:1719
+#: gdk/gdkdisplay.c:1720
 msgid "No perfect EGL configuration found"
 msgstr "Nebyla nalezena žádná bezvadná konfigurace EGL"
 
-#: gdk/gdkdisplay.c:1761
+#: gdk/gdkdisplay.c:1762
 #, c-format
 msgid "EGL implementation is missing extension %s"
 msgid_plural "EGL implementation is missing %2$d extensions: %1$s"
@@ -95,23 +95,23 @@ msgstr[0] "Implementace EGL postrádá rozšíření %s"
 msgstr[1] "Implementace EGL postrádá %2$d rozšíření: %1$s"
 msgstr[2] "Implementace EGL postrádá %2$d rozšíření: %1$s"
 
-#: gdk/gdkdisplay.c:1810
+#: gdk/gdkdisplay.c:1811
 msgid "libEGL not available in this sandbox"
 msgstr "V tomto izolovaném prostředí není k dispozici libEGL"
 
-#: gdk/gdkdisplay.c:1811
+#: gdk/gdkdisplay.c:1812
 msgid "libEGL not available"
 msgstr "libEGL není dostupná"
 
-#: gdk/gdkdisplay.c:1821
+#: gdk/gdkdisplay.c:1822
 msgid "Failed to create EGL display"
 msgstr "Selhalo vytvoření displeje EGL"
 
-#: gdk/gdkdisplay.c:1830
+#: gdk/gdkdisplay.c:1831
 msgid "Could not initialize EGL display"
 msgstr "Nezdařilo se inicializovat displej EGL"
 
-#: gdk/gdkdisplay.c:1840
+#: gdk/gdkdisplay.c:1841
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
 msgstr "Verze EGL %d.%d je příliš stará. GTK vyžaduje %d.%d"
@@ -149,7 +149,7 @@ msgstr "Aplikace nepodporuje API %s"
 
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
-#: gdk/gdkglcontext.c:2123
+#: gdk/gdkglcontext.c:2121
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Zkouší se použít %s, ale již se používá %s"
@@ -545,7 +545,7 @@ msgstr "Chyba při interpretaci souboru s obrázkem JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Nepodporovaný prostor barev pro JPEG (%d)"
 
-#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:286 gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:203 gdk/loaders/gdkpng.c:289 gdk/loaders/gdktiff.c:472
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Nedostatek paměti pro obrázek velikosti %u × %u"
@@ -555,17 +555,17 @@ msgstr "Nedostatek paměti pro obrázek velikosti %u × %u"
 msgid "Error reading png (%s)"
 msgstr "Chyba při čtení obrázku png (%s)"
 
-#: gdk/loaders/gdkpng.c:212
+#: gdk/loaders/gdkpng.c:215
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Nepodporovaná hloubka %u v obrázku PNG"
 
-#: gdk/loaders/gdkpng.c:262
+#: gdk/loaders/gdkpng.c:265
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Nepodporovaný typ barvy %u v obrázku PNG"
 
-#: gdk/loaders/gdkpng.c:272
+#: gdk/loaders/gdkpng.c:275
 #, c-format
 msgid "Image stride too large for image size %ux%u"
 msgstr ""
@@ -585,7 +585,7 @@ msgstr "Čtení dat selhalo na řádku %d"
 
 #: gdk/macos/gdkmacospasteboard.c:211 gdk/wayland/gdkclipboard-wayland.c:238
 #: gdk/wayland/gdkdrop-wayland.c:205 gdk/wayland/gdkprimary-wayland.c:337
-#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1063
+#: gdk/win32/gdkdrop-win32.c:1018 gdk/win32/gdkdrop-win32.c:1067
 #: gdk/x11/gdkclipboard-x11.c:799 gdk/x11/gdkdrop-x11.c:235
 msgid "No compatible transfer format found"
 msgstr "Nebyl nalezen žádný kompatibilní přenosový formát"
@@ -723,22 +723,22 @@ msgid "Cannot get DnD data. Failed to allocate %s bytes to store the data."
 msgstr ""
 "Nezdařilo se získat data DnD. Selhalo přidělení %s bajtů pro uchování dat."
 
-#: gdk/win32/gdkdrop-win32.c:1037
+#: gdk/win32/gdkdrop-win32.c:1039
 #, c-format
 msgid "GDK surface 0x%p is not registered as a drop target"
 msgstr "Povrch GDK 0x%p není registrován jako cíl pro upuštění"
 
-#: gdk/win32/gdkdrop-win32.c:1044
+#: gdk/win32/gdkdrop-win32.c:1047
 #, c-format
 msgid "Target context record 0x%p has no data object"
 msgstr "Záznam cílového kontextu 0x%p nemá žádný datový objekt"
 
-#: gdk/win32/gdkdrop-win32.c:1082
+#: gdk/win32/gdkdrop-win32.c:1087
 #, c-format
 msgid "IDataObject_GetData (0x%x) failed, returning 0x%lx"
 msgstr "Selhalo volání IDataObject_GetData (0x%x), vrací se 0x%lx"
 
-#: gdk/win32/gdkdrop-win32.c:1114
+#: gdk/win32/gdkdrop-win32.c:1121
 #, c-format
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Selhala přeměna dat DnD ve formátu W32 0x%x na %p (%s)"
@@ -1116,8 +1116,8 @@ msgstr "Sans 12"
 msgid "Pick a Font"
 msgstr "Vybrat font"
 
-#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3815
-#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:169
+#: gtk/deprecated/gtkfontbutton.c:600 gtk/gtkfilechooserwidget.c:3826
+#: gtk/gtkfontdialogbutton.c:126 gtk/inspector/visual.ui:285
 msgid "Font"
 msgstr "Font"
 
@@ -2279,12 +2279,12 @@ msgid "A file with that name already exists"
 msgstr "Soubor s tímto názvem již existuje"
 
 #: gtk/gtkfilechoosernative.c:520 gtk/gtkfilechoosernative.c:600
-#: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:4973
+#: gtk/gtkfilechooserwidget.c:1192 gtk/gtkfilechooserwidget.c:4993
 #: gtk/gtkfiledialog.c:843 gtk/gtkmessagedialog.c:170
 #: gtk/gtkmessagedialog.c:179 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:282 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:682 gtk/print/gtkprintunixdialog.c:839
-#: gtk/gtkwindow.c:6256 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6257 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:27
 msgid "_Cancel"
@@ -2300,7 +2300,7 @@ msgstr "_Otevřít"
 msgid "_Save"
 msgstr "_Uložit"
 
-#: gtk/gtkfilechoosernativequartz.c:344 gtk/ui/gtkfilechooserwidget.ui:288
+#: gtk/gtkfilechoosernativequartz.c:348 gtk/ui/gtkfilechooserwidget.ui:288
 msgid "Select which types of files are shown"
 msgstr "Výběr zobrazených typů souborů"
 
@@ -2362,238 +2362,239 @@ msgstr "Soubor nelze smazat"
 msgid "The file could not be moved to the Trash"
 msgstr "Soubor nelze přesunout do koše"
 
-#: gtk/gtkfilechooserwidget.c:1186
+#: gtk/gtkfilechooserwidget.c:1190
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "Jste si jisti, že chcete trvale smazat „%s“?"
 
-#: gtk/gtkfilechooserwidget.c:1187
+#: gtk/gtkfilechooserwidget.c:1191
 msgid "If you delete an item, it will be permanently lost."
 msgstr "Pokud smažete položku, bude natrvalo ztracena."
 
-#: gtk/gtkfilechooserwidget.c:1188 gtk/gtkfilechooserwidget.c:1786
-#: gtk/gtklabel.c:5712 gtk/gtktext.c:6194 gtk/gtktextview.c:9099
+#: gtk/gtkfilechooserwidget.c:1192 gtk/gtkfilechooserwidget.c:1794
+#: gtk/gtklabel.c:5734 gtk/gtktext.c:6196 gtk/gtktextview.c:9099
 msgid "_Delete"
 msgstr "_Smazat"
 
-#: gtk/gtkfilechooserwidget.c:1301
+#: gtk/gtkfilechooserwidget.c:1309
 msgid "The file could not be renamed"
 msgstr "Soubor nemohl být přejmenován."
 
-#: gtk/gtkfilechooserwidget.c:1477
+#: gtk/gtkfilechooserwidget.c:1485
 msgid "Could not select file"
 msgstr "Nelze vybrat soubor"
 
-#: gtk/gtkfilechooserwidget.c:1697 gtk/ui/gtkfilechooserwidget.ui:66
+#: gtk/gtkfilechooserwidget.c:1705 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
 msgstr "Zobrazení v mřížce"
 
-#: gtk/gtkfilechooserwidget.c:1703
+#: gtk/gtkfilechooserwidget.c:1711
 msgid "List View"
 msgstr "Zobrazení v seznamu"
 
-#: gtk/gtkfilechooserwidget.c:1766
+#: gtk/gtkfilechooserwidget.c:1774
 msgid "_Visit File"
 msgstr "Podí_vat se na tento soubor"
 
-#: gtk/gtkfilechooserwidget.c:1770
+#: gtk/gtkfilechooserwidget.c:1778
 msgid "_Open With File Manager"
 msgstr "_Otevřít pomocí správce souborů"
 
-#: gtk/gtkfilechooserwidget.c:1774
+#: gtk/gtkfilechooserwidget.c:1782
 msgid "_Copy Location"
 msgstr "_Kopírovat umístění"
 
-#: gtk/gtkfilechooserwidget.c:1778
+#: gtk/gtkfilechooserwidget.c:1786
 msgid "_Add to Bookmarks"
 msgstr "_Přidat mezi záložky"
 
-#: gtk/gtkfilechooserwidget.c:1782 gtk/gtkplacessidebar.c:2312
+#: gtk/gtkfilechooserwidget.c:1790 gtk/gtkplacessidebar.c:2312
 #: gtk/gtkplacessidebar.c:3270 gtk/ui/gtkfilechooserwidget.ui:410
 msgid "_Rename"
 msgstr "Př_ejmenovat"
 
-#: gtk/gtkfilechooserwidget.c:1790
+#: gtk/gtkfilechooserwidget.c:1798
 msgid "_Move to Trash"
 msgstr "Pře_sunout do koše"
 
-#: gtk/gtkfilechooserwidget.c:1799
+#: gtk/gtkfilechooserwidget.c:1807
 msgid "Show _Hidden Files"
 msgstr "Zobrazovat _skryté soubory"
 
-#: gtk/gtkfilechooserwidget.c:1803
+#: gtk/gtkfilechooserwidget.c:1811
 msgid "Sort _Folders Before Files"
 msgstr "_Složky řadit před soubory"
 
-#: gtk/gtkfilechooserwidget.c:1926 gtk/gtkfilechooserwidget.c:1956
-#: gtk/gtkfilechooserwidget.c:3858
+#: gtk/gtkfilechooserwidget.c:1934 gtk/gtkfilechooserwidget.c:1964
+#: gtk/gtkfilechooserwidget.c:3869
 msgid "Unknown"
 msgstr "Neznámé"
 
-#: gtk/gtkfilechooserwidget.c:2011 gtk/gtkplacessidebar.c:1025
+#: gtk/gtkfilechooserwidget.c:2019 gtk/gtkplacessidebar.c:1025
 msgid "Home"
 msgstr "Domů"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2166 gtk/gtkfilechooserwidget.c:7383
+#: gtk/gtkfilechooserwidget.c:2174 gtk/gtkfilechooserwidget.c:7405
 #: gtk/inspector/css-node-tree.ui:76 gtk/print/ui/gtkprintunixdialog.ui:111
 msgid "Location"
 msgstr "Umístění"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2273
+#: gtk/gtkfilechooserwidget.c:2281
 msgid "_Name:"
 msgstr "_Název:"
 
-#: gtk/gtkfilechooserwidget.c:2828 gtk/gtkfilechooserwidget.c:2842
+#: gtk/gtkfilechooserwidget.c:2838 gtk/gtkfilechooserwidget.c:2852
 #, c-format
 msgid "Searching in %s"
 msgstr "Hledá se v %s"
 
-#: gtk/gtkfilechooserwidget.c:2848
+#: gtk/gtkfilechooserwidget.c:2858
 msgid "Searching"
 msgstr "Hledá se"
 
-#: gtk/gtkfilechooserwidget.c:2854
+#: gtk/gtkfilechooserwidget.c:2864
 msgid "Enter location or URL"
 msgstr "Zadat umístění nebo URL"
 
-#: gtk/gtkfilechooserwidget.c:3413 gtk/gtkfilechooserwidget.c:5758
-#: gtk/gtkfilechooserwidget.c:7405
+#: gtk/gtkfilechooserwidget.c:3423 gtk/gtkfilechooserwidget.c:5780
+#: gtk/gtkfilechooserwidget.c:7427
 msgid "Modified"
 msgstr "Změněno"
 
-#: gtk/gtkfilechooserwidget.c:3598
+#: gtk/gtkfilechooserwidget.c:3608
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "Nelze přečíst obsah %s"
 
-#: gtk/gtkfilechooserwidget.c:3602
+#: gtk/gtkfilechooserwidget.c:3612
 msgid "Could not read the contents of the folder"
 msgstr "Nelze přečíst obsah složky"
 
 #. Translators: see g_date_time_format() for details on the format
-#: gtk/gtkfilechooserwidget.c:3753 gtk/gtkfilechooserwidget.c:3796
+#: gtk/gtkfilechooserwidget.c:3763 gtk/gtkfilechooserwidget.c:3807
 msgid "%H:%M"
 msgstr "%k∶%M"
 
-#: gtk/gtkfilechooserwidget.c:3755 gtk/gtkfilechooserwidget.c:3798
+#: gtk/gtkfilechooserwidget.c:3765 gtk/gtkfilechooserwidget.c:3809
 msgid "%l:%M %p"
 msgstr "%l:%M %p"
 
-#: gtk/gtkfilechooserwidget.c:3759
+#: gtk/gtkfilechooserwidget.c:3769
 msgid "Yesterday"
 msgstr "Včera"
 
-#: gtk/gtkfilechooserwidget.c:3767
+#: gtk/gtkfilechooserwidget.c:3778
+#, no-c-format
 msgid "%-e %b"
 msgstr "%-e. %B"
 
-#: gtk/gtkfilechooserwidget.c:3771
+#: gtk/gtkfilechooserwidget.c:3782
 msgid "%-e %b %Y"
 msgstr "%-e. %B %Y"
 
-#: gtk/gtkfilechooserwidget.c:3813 gtk/gtkfilechooserwidget.c:3821
+#: gtk/gtkfilechooserwidget.c:3824 gtk/gtkfilechooserwidget.c:3832
 msgid "Program"
 msgstr "Program"
 
-#: gtk/gtkfilechooserwidget.c:3814
+#: gtk/gtkfilechooserwidget.c:3825
 msgid "Audio"
 msgstr "Zvuk"
 
-#: gtk/gtkfilechooserwidget.c:3816 gtk/gtkfilefilter.c:1013
+#: gtk/gtkfilechooserwidget.c:3827 gtk/gtkfilefilter.c:1013
 msgid "Image"
 msgstr "Obrázek"
 
-#: gtk/gtkfilechooserwidget.c:3817
+#: gtk/gtkfilechooserwidget.c:3828
 msgid "Archive"
 msgstr "Archiv"
 
-#: gtk/gtkfilechooserwidget.c:3818
+#: gtk/gtkfilechooserwidget.c:3829
 msgid "Markup"
 msgstr "Formátovaný text"
 
-#: gtk/gtkfilechooserwidget.c:3819 gtk/gtkfilechooserwidget.c:3820
+#: gtk/gtkfilechooserwidget.c:3830 gtk/gtkfilechooserwidget.c:3831
 msgid "Text"
 msgstr "Text"
 
-#: gtk/gtkfilechooserwidget.c:3822
+#: gtk/gtkfilechooserwidget.c:3833
 msgid "Video"
 msgstr "Video"
 
-#: gtk/gtkfilechooserwidget.c:3823
+#: gtk/gtkfilechooserwidget.c:3834
 msgid "Contacts"
 msgstr "Kontakty"
 
-#: gtk/gtkfilechooserwidget.c:3824
+#: gtk/gtkfilechooserwidget.c:3835
 msgid "Calendar"
 msgstr "Kalendář"
 
-#: gtk/gtkfilechooserwidget.c:3825
+#: gtk/gtkfilechooserwidget.c:3836
 msgid "Document"
 msgstr "Dokument"
 
-#: gtk/gtkfilechooserwidget.c:3826
+#: gtk/gtkfilechooserwidget.c:3837
 msgid "Presentation"
 msgstr "Prezentace"
 
-#: gtk/gtkfilechooserwidget.c:3827
+#: gtk/gtkfilechooserwidget.c:3838
 msgid "Spreadsheet"
 msgstr "Tabulka"
 
-#: gtk/gtkfilechooserwidget.c:4965 gtk/print/gtkprintunixdialog.c:673
+#: gtk/gtkfilechooserwidget.c:4985 gtk/print/gtkprintunixdialog.c:673
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
 msgstr "Soubor nazvaný „%s“ již existuje. Chcete jej nahradit?"
 
-#: gtk/gtkfilechooserwidget.c:4967 gtk/print/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:4987 gtk/print/gtkprintunixdialog.c:677
 #, c-format
 msgid ""
 "The file already exists in “%s”.  Replacing it will overwrite its contents."
 msgstr ""
 "V „%s“ již tento soubor existuje. Jeho nahrazením přepíšete celý jeho obsah."
 
-#: gtk/gtkfilechooserwidget.c:4973 gtk/print/gtkprintunixdialog.c:685
+#: gtk/gtkfilechooserwidget.c:4993 gtk/print/gtkprintunixdialog.c:685
 msgid "_Replace"
 msgstr "Na_hradit"
 
-#: gtk/gtkfilechooserwidget.c:5128
+#: gtk/gtkfilechooserwidget.c:5148
 msgid "You do not have access to the specified folder."
 msgstr "Do zadané složky nemáte přístup."
 
-#: gtk/gtkfilechooserwidget.c:5705
+#: gtk/gtkfilechooserwidget.c:5727
 msgid "Could not send the search request"
 msgstr "Nelze odeslat vyhledávací požadavek"
 
-#: gtk/gtkfilechooserwidget.c:5986
+#: gtk/gtkfilechooserwidget.c:6008
 msgid "Accessed"
 msgstr "Otevřeno"
 
-#: gtk/gtkfilechooserwidget.c:7361
+#: gtk/gtkfilechooserwidget.c:7383
 msgid "_Size"
 msgstr "Veliko_st"
 
-#: gtk/gtkfilechooserwidget.c:7365
+#: gtk/gtkfilechooserwidget.c:7387
 msgid "T_ype"
 msgstr "T_yp"
 
-#: gtk/gtkfilechooserwidget.c:7369
+#: gtk/gtkfilechooserwidget.c:7391
 msgid "_Time"
 msgstr "Č_as"
 
-#: gtk/gtkfilechooserwidget.c:7375 gtk/gtkplacessidebar.c:2306
+#: gtk/gtkfilechooserwidget.c:7397 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
 #: gtk/inspector/css-node-tree.ui:22 gtk/inspector/prop-list.ui:24
 #: gtk/ui/gtkfilechooserwidget.ui:385 gtk/print/ui/gtkprintunixdialog.ui:80
 msgid "Name"
 msgstr "Název"
 
-#: gtk/gtkfilechooserwidget.c:7392 gtk/inspector/resource-list.ui:82
+#: gtk/gtkfilechooserwidget.c:7414 gtk/inspector/resource-list.ui:82
 #: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:386
 msgid "Size"
 msgstr "Velikost"
 
-#: gtk/gtkfilechooserwidget.c:7398 gtk/inspector/misc-info.ui:57
+#: gtk/gtkfilechooserwidget.c:7420 gtk/inspector/misc-info.ui:57
 #: gtk/inspector/prop-list.ui:35 gtk/inspector/statistics.ui:36
 msgid "Type"
 msgstr "Typ"
@@ -2692,7 +2693,7 @@ msgstr "Zlomky"
 
 #: gtk/gtkfontchooserwidget.c:2526
 msgid "Style Variations"
-msgstr "Vyrianty stylů"
+msgstr "Varianty stylů"
 
 #: gtk/gtkfontchooserwidget.c:2528
 msgid "Character Variations"
@@ -2711,31 +2712,31 @@ msgstr "Zavřít"
 msgid "Close the infobar"
 msgstr "Zavřít informační lištu"
 
-#: gtk/gtklabel.c:5709 gtk/gtktext.c:6182 gtk/gtktextview.c:9087
+#: gtk/gtklabel.c:5731 gtk/gtktext.c:6184 gtk/gtktextview.c:9087
 msgid "Cu_t"
 msgstr "_Vyjmout"
 
-#: gtk/gtklabel.c:5710 gtk/gtktext.c:6186 gtk/gtktextview.c:9091
+#: gtk/gtklabel.c:5732 gtk/gtktext.c:6188 gtk/gtktextview.c:9091
 msgid "_Copy"
 msgstr "_Kopírovat"
 
-#: gtk/gtklabel.c:5711 gtk/gtktext.c:6190 gtk/gtktextview.c:9095
+#: gtk/gtklabel.c:5733 gtk/gtktext.c:6192 gtk/gtktextview.c:9095
 msgid "_Paste"
 msgstr "V_ložit"
 
-#: gtk/gtklabel.c:5717 gtk/gtktext.c:6203 gtk/gtktextview.c:9120
+#: gtk/gtklabel.c:5739 gtk/gtktext.c:6205 gtk/gtktextview.c:9120
 msgid "Select _All"
 msgstr "Vybr_at vše"
 
-#: gtk/gtklabel.c:5722
+#: gtk/gtklabel.c:5744
 msgid "_Open Link"
 msgstr "_Otevřít odkaz"
 
-#: gtk/gtklabel.c:5726
+#: gtk/gtklabel.c:5748
 msgid "Copy _Link Address"
 msgstr "Ko_pírovat adresu odkazu"
 
-#: gtk/gtklabel.c:5770 gtk/gtktext.c:2723 gtk/gtktextview.c:9169
+#: gtk/gtklabel.c:5792 gtk/gtktext.c:2723 gtk/gtktextview.c:9169
 msgid "Context menu"
 msgstr "Kontextová nabídka"
 
@@ -2743,7 +2744,7 @@ msgstr "Kontextová nabídka"
 msgid "_Copy URL"
 msgstr "_Kopírovat URL"
 
-#: gtk/gtklinkbutton.c:567
+#: gtk/gtklinkbutton.c:589
 msgid "Invalid URI"
 msgstr "Neplatné URI"
 
@@ -2806,7 +2807,7 @@ msgid "Play"
 msgstr "Přehrát"
 
 #: gtk/gtkmessagedialog.c:162 gtk/gtkmessagedialog.c:180
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6257
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6258
 msgid "_OK"
 msgstr "_Budiž"
 
@@ -3318,11 +3319,11 @@ msgstr "Ověření"
 msgid "_Remember password"
 msgstr "Pamat_ovat si heslo"
 
-#: gtk/print/gtkprinteroptionwidget.c:702
+#: gtk/print/gtkprinteroptionwidget.c:703
 msgid "Select a filename"
 msgstr "Vyberte soubor"
 
-#: gtk/print/gtkprinteroptionwidget.c:919
+#: gtk/print/gtkprinteroptionwidget.c:947
 msgid "Not available"
 msgstr "Nedostupné"
 
@@ -3427,7 +3428,7 @@ msgstr "Došel papír"
 
 #. Translators: this is a printer status.
 #: gtk/print/gtkprintoperation-win32.c:640
-#: modules/printbackends/gtkprintbackendcpdb.c:1528
+#: modules/printbackends/gtkprintbackendcpdb.c:1533
 #: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused"
 msgstr "Přerušeno"
@@ -3498,42 +3499,42 @@ msgstr "Získávají se informace o tiskárně…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5672
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, top to bottom"
 msgstr "Zleva doprava, shora dolů"
 
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5672
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Left to right, bottom to top"
 msgstr "Zleva doprava, zdola nahoru"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5673
+#: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, top to bottom"
 msgstr "Zprava doleva, shora dolů"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5673
+#: modules/printbackends/gtkprintbackendcups.c:5678
 msgid "Right to left, bottom to top"
 msgstr "Zprava doleva, zdola nahoru"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5674
+#: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, left to right"
 msgstr "Shora dolů, zleva doprava"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5674
+#: modules/printbackends/gtkprintbackendcups.c:5679
 msgid "Top to bottom, right to left"
 msgstr "Shora dolů, zprava doleva"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5675
+#: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, left to right"
 msgstr "Zdola nahoru, zleva doprava"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5675
+#: modules/printbackends/gtkprintbackendcups.c:5680
 msgid "Bottom to top, right to left"
 msgstr "Zdola nahoru, zprava doleva"
 
@@ -3557,7 +3558,7 @@ msgstr "Shora dolů"
 msgid "Bottom to top"
 msgstr "Zdola nahoru"
 
-#: gtk/gtkprogressbar.c:609
+#: gtk/gtkprogressbar.c:627
 #, c-format
 msgctxt "progress bar label"
 msgid "%.0f %%"
@@ -3657,12 +3658,12 @@ msgstr "Klávesové zkratky"
 msgid "Search Results"
 msgstr "Výsledky hledání"
 
-#: gtk/gtkshortcutswindow.c:1014 gtk/ui/gtkemojichooser.ui:349
+#: gtk/gtkshortcutswindow.c:1014 gtk/ui/gtkemojichooser.ui:350
 #: gtk/ui/gtkfilechooserwidget.ui:239
 msgid "No Results Found"
 msgstr "Nebyly nalezeny žádné výsledky"
 
-#: gtk/gtkshortcutswindow.c:1025 gtk/ui/gtkemojichooser.ui:362
+#: gtk/gtkshortcutswindow.c:1025 gtk/ui/gtkemojichooser.ui:363
 #: gtk/ui/gtkfilechooserwidget.ui:252 gtk/ui/gtkplacesview.ui:218
 msgid "Try a different search"
 msgstr "Zkuste zadat jiný termín k vyhledání"
@@ -3672,7 +3673,7 @@ msgctxt "accessibility"
 msgid "Sidebar"
 msgstr "Postranní panel"
 
-#: gtk/gtktext.c:6208 gtk/gtktextview.c:9125
+#: gtk/gtktext.c:6210 gtk/gtktextview.c:9125
 msgid "Insert _Emoji"
 msgstr "Vložit _Emodži"
 
@@ -3684,12 +3685,12 @@ msgstr "_Zpět"
 msgid "_Redo"
 msgstr "Zn_ovu"
 
-#: gtk/gtkwindow.c:6245
+#: gtk/gtkwindow.c:6246
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Chcete použít Inspectora GTK?"
 
-#: gtk/gtkwindow.c:6247
+#: gtk/gtkwindow.c:6248
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3700,7 +3701,7 @@ msgstr ""
 "změnit vnitřní strukturu jakékoliv aplikace GTK. Použití tohoto programu "
 "může vést k přerušení běhu nebo pádu aplikace."
 
-#: gtk/gtkwindow.c:6252
+#: gtk/gtkwindow.c:6253
 msgid "Don’t show this message again"
 msgstr "Tuto zprávu znovu nezobrazovat"
 
@@ -3908,7 +3909,7 @@ msgctxt "Vulkan version"
 msgid "None"
 msgstr "žádná"
 
-#: gtk/inspector/general.c:923
+#: gtk/inspector/general.c:924
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Kontext IM je napevno nastaven pomocí GTK_IM_MODULE"
 
@@ -4094,7 +4095,7 @@ msgstr "Počet snímků"
 msgid "Frame Rate"
 msgstr "Snímková rychlost"
 
-#: gtk/inspector/misc-info.ui:527
+#: gtk/inspector/misc-info.ui:527 gtk/inspector/visual.ui:315
 msgid "Scale"
 msgstr "Škálovat"
 
@@ -4356,7 +4357,7 @@ msgstr "Hierarchie"
 msgid "Implements"
 msgstr "Implementuje"
 
-#: gtk/inspector/visual.c:672 gtk/inspector/visual.c:691
+#: gtk/inspector/visual.c:777 gtk/inspector/visual.c:795
 msgid "Theme is hardcoded by GTK_THEME"
 msgstr "Motiv je napevno nastaven pomocí GTK_THEME"
 
@@ -4380,88 +4381,130 @@ msgstr "Velikost kurzoru"
 msgid "Icon Theme"
 msgstr "Motiv ikon"
 
-#: gtk/inspector/visual.ui:199
-msgid "Font Scale"
-msgstr "Škálování fontu"
-
-#: gtk/inspector/visual.ui:244
+#: gtk/inspector/visual.ui:169
 msgid "Text Direction"
 msgstr "Směr textu"
 
-#: gtk/inspector/visual.ui:259
+#: gtk/inspector/visual.ui:184
 msgid "Left-to-Right"
 msgstr "Zleva doprava"
 
-#: gtk/inspector/visual.ui:260
+#: gtk/inspector/visual.ui:185
 msgid "Right-to-Left"
 msgstr "Zprava doleva"
 
-#: gtk/inspector/visual.ui:277
+#: gtk/inspector/visual.ui:202
 msgid "Animations"
 msgstr "Animace"
 
-#: gtk/inspector/visual.ui:302
+#: gtk/inspector/visual.ui:227
 msgid "Slowdown"
 msgstr "Zpomalení"
 
-#: gtk/inspector/visual.ui:356
+#: gtk/inspector/visual.ui:362
+msgid "Antialiasing"
+msgstr ""
+
+#: gtk/inspector/visual.ui:387
+#, fuzzy
+#| msgctxt "print operation status"
+#| msgid "Printing"
+msgid "Hinting"
+msgstr "Tiskne se"
+
+#: gtk/inspector/visual.ui:402
+#, fuzzy
+#| msgctxt "font"
+#| msgid "None"
+msgctxt "Font hinting style"
+msgid "None"
+msgstr "Žádný"
+
+#: gtk/inspector/visual.ui:403
+#, fuzzy
+#| msgctxt "keyboard label"
+#| msgid "Right"
+msgctxt "Font hinting style"
+msgid "Slight"
+msgstr "Vpravo"
+
+#: gtk/inspector/visual.ui:404
+#, fuzzy
+#| msgid "Medium"
+msgctxt "Font hinting style"
+msgid "Medium"
+msgstr "Střední"
+
+#: gtk/inspector/visual.ui:405
+msgctxt "Font hinting style"
+msgid "Full"
+msgstr ""
+
+#: gtk/inspector/visual.ui:422
+#, fuzzy
+#| msgctxt "OpenType layout"
+#| msgid "Vertical Writing"
+msgid "Metrics Hinting"
+msgstr "svislé psaní"
+
+#: gtk/inspector/visual.ui:457
 msgid "Show Framerate"
 msgstr "Zobrazit snímkovou rychlost"
 
-#: gtk/inspector/visual.ui:381
+#: gtk/inspector/visual.ui:482
 msgid "Show Graphic Updates"
 msgstr "Zobrazovat aktualizace grafiky"
 
-#: gtk/inspector/visual.ui:401
+#: gtk/inspector/visual.ui:502
 msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
 "Obarví všechna místa, kde aktuální vykreslování používá Cairo namísto GPU."
 
-#: gtk/inspector/visual.ui:407
+#: gtk/inspector/visual.ui:508
 msgid "Show Cairo Rendering"
 msgstr "Zobrazovat vykreslování Cairo"
 
-#: gtk/inspector/visual.ui:432
+#: gtk/inspector/visual.ui:533
 msgid "Show Baselines"
 msgstr "Zobrazovat účaří"
 
-#: gtk/inspector/visual.ui:460
+#: gtk/inspector/visual.ui:561
 msgid "Show Layout Borders"
 msgstr "Zobrazovat hranice rozvržení"
 
-#: gtk/inspector/visual.ui:517
+#: gtk/inspector/visual.ui:618
 msgid "CSS Padding"
 msgstr "Odsazení CSS"
 
-#: gtk/inspector/visual.ui:527
+#: gtk/inspector/visual.ui:628
 msgid "CSS Border"
 msgstr "Ohraničení CSS"
 
-#: gtk/inspector/visual.ui:537
+#: gtk/inspector/visual.ui:638
 msgid "CSS Margin"
 msgstr "Okraje CSS"
 
-#: gtk/inspector/visual.ui:547
+#: gtk/inspector/visual.ui:648
 msgid "Widget Margin"
 msgstr "Okraje widgetu"
 
-#: gtk/inspector/visual.ui:582
+#: gtk/inspector/visual.ui:683
 msgid "Show Focus"
 msgstr "Zobrazovat zaměření"
 
-#: gtk/inspector/visual.ui:607
+#: gtk/inspector/visual.ui:708
 msgid "Show Accessibility warnings"
 msgstr "Zobrazovat upozornění přístupnosti"
 
-#: gtk/inspector/visual.ui:632
+#: gtk/inspector/visual.ui:733
 #, fuzzy
 #| msgid "Show Graphic Updates"
 msgid "Show Graphics Offload"
 msgstr "Zobrazovat aktualizace grafiky"
 
-#: gtk/inspector/visual.ui:664
+#: gtk/inspector/visual.ui:765
 msgid "Inspect Inspector"
 msgstr "Prozkoumat inspektora"
 
@@ -6215,52 +6258,52 @@ msgstr "(nic)"
 msgid "Search…"
 msgstr "hledat…"
 
-#: gtk/ui/gtkemojichooser.ui:69 gtk/ui/gtkemojichooser.ui:239
+#: gtk/ui/gtkemojichooser.ui:70 gtk/ui/gtkemojichooser.ui:240
 msgctxt "emoji category"
 msgid "Smileys & People"
 msgstr "Smajlíci a lidé"
 
-#: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:248
+#: gtk/ui/gtkemojichooser.ui:95 gtk/ui/gtkemojichooser.ui:249
 msgctxt "emoji category"
 msgid "Body & Clothing"
 msgstr "Tělo a oblečení"
 
-#: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:257
+#: gtk/ui/gtkemojichooser.ui:120 gtk/ui/gtkemojichooser.ui:258
 msgctxt "emoji category"
 msgid "Animals & Nature"
 msgstr "Zvířata a příroda"
 
-#: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:266
+#: gtk/ui/gtkemojichooser.ui:134 gtk/ui/gtkemojichooser.ui:267
 msgctxt "emoji category"
 msgid "Food & Drink"
 msgstr "Jídlo a pití"
 
-#: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:275
+#: gtk/ui/gtkemojichooser.ui:148 gtk/ui/gtkemojichooser.ui:276
 msgctxt "emoji category"
 msgid "Travel & Places"
 msgstr "Cestování a místa"
 
-#: gtk/ui/gtkemojichooser.ui:161 gtk/ui/gtkemojichooser.ui:284
+#: gtk/ui/gtkemojichooser.ui:162 gtk/ui/gtkemojichooser.ui:285
 msgctxt "emoji category"
 msgid "Activities"
 msgstr "Činnosti"
 
-#: gtk/ui/gtkemojichooser.ui:175 gtk/ui/gtkemojichooser.ui:293
+#: gtk/ui/gtkemojichooser.ui:176 gtk/ui/gtkemojichooser.ui:294
 msgctxt "emoji category"
 msgid "Objects"
 msgstr "Objekty"
 
-#: gtk/ui/gtkemojichooser.ui:189 gtk/ui/gtkemojichooser.ui:302
+#: gtk/ui/gtkemojichooser.ui:190 gtk/ui/gtkemojichooser.ui:303
 msgctxt "emoji category"
 msgid "Symbols"
 msgstr "Symboly"
 
-#: gtk/ui/gtkemojichooser.ui:203 gtk/ui/gtkemojichooser.ui:311
+#: gtk/ui/gtkemojichooser.ui:204 gtk/ui/gtkemojichooser.ui:312
 msgctxt "emoji category"
 msgid "Flags"
 msgstr "Vlajky"
 
-#: gtk/ui/gtkemojichooser.ui:230
+#: gtk/ui/gtkemojichooser.ui:231
 msgctxt "emoji category"
 msgid "Recent"
 msgstr "Naposledy použité"
@@ -6587,34 +6630,43 @@ msgstr "Pokročilé"
 msgid "Some of the settings in the dialog conflict"
 msgstr "Některá nastavení v dialogovém okně se navzájem vylučují"
 
-#. Translators: These strings name the possible values of the
-#. * job priority option in the print dialog
-#.
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:542
+#: modules/printbackends/gtkprintbackendcups.c:5668
+#, fuzzy
+#| msgid "Urgent"
+msgctxt "Print job priority"
 msgid "Urgent"
 msgstr "Naléhavá"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:543
+#: modules/printbackends/gtkprintbackendcups.c:5669
+#, fuzzy
+#| msgid "High"
+msgctxt "Print job priority"
 msgid "High"
 msgstr "Vysoká"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:544
+#: modules/printbackends/gtkprintbackendcups.c:5670
+#, fuzzy
+#| msgid "Medium"
+msgctxt "Print job priority"
 msgid "Medium"
 msgstr "Střední"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5667
+#: modules/printbackends/gtkprintbackendcpdb.c:545
+#: modules/printbackends/gtkprintbackendcups.c:5671
+#, fuzzy
+#| msgid "Low"
+msgctxt "Print job priority"
 msgid "Low"
 msgstr "Nízká"
 
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/gtkprintbackendcpdb.c:562
-#: modules/printbackends/gtkprintbackendcups.c:5809
+#: modules/printbackends/gtkprintbackendcpdb.c:567
+#: modules/printbackends/gtkprintbackendcups.c:5814
 msgctxt "printer option"
 msgid "Before"
 msgstr "Před"
@@ -6622,33 +6674,33 @@ msgstr "Před"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/gtkprintbackendcpdb.c:569
-#: modules/printbackends/gtkprintbackendcups.c:5824
+#: modules/printbackends/gtkprintbackendcpdb.c:574
+#: modules/printbackends/gtkprintbackendcups.c:5829
 msgctxt "printer option"
 msgid "After"
 msgstr "Za"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:592
+#: modules/printbackends/gtkprintbackendcpdb.c:597
 msgid "Print at"
 msgstr "Vytisknout"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:602
+#: modules/printbackends/gtkprintbackendcpdb.c:607
 msgid "Print at time"
 msgstr "Vytisknout v určený čas"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:665
+#: modules/printbackends/gtkprintbackendcpdb.c:670
 msgctxt "print option"
 msgid "Borderless"
 msgstr "Bez okrajů"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1525
+#: modules/printbackends/gtkprintbackendcpdb.c:1530
 #: modules/printbackends/gtkprintbackendcups.c:2636
 msgid "Paused; Rejecting Jobs"
 msgstr "Pozastaveno ; Úlohy se odmítají"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1531
+#: modules/printbackends/gtkprintbackendcpdb.c:1536
 #: modules/printbackends/gtkprintbackendcups.c:2642
 msgid "Rejecting Jobs"
 msgstr "Úlohy se odmítají"
@@ -7017,51 +7069,51 @@ msgstr "Výchozí pro tiskárnu"
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5697
+#: modules/printbackends/gtkprintbackendcups.c:5702
 msgid "Job Priority"
 msgstr "Priorita úlohy"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5708
+#: modules/printbackends/gtkprintbackendcups.c:5713
 msgid "Billing Info"
 msgstr "Účtovací informace"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5732
+#: modules/printbackends/gtkprintbackendcups.c:5737
 msgctxt "cover page"
 msgid "None"
 msgstr "Žádná"
 
-#: modules/printbackends/gtkprintbackendcups.c:5733
+#: modules/printbackends/gtkprintbackendcups.c:5738
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Utajované"
 
-#: modules/printbackends/gtkprintbackendcups.c:5734
+#: modules/printbackends/gtkprintbackendcups.c:5739
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Důvěrné"
 
-#: modules/printbackends/gtkprintbackendcups.c:5735
+#: modules/printbackends/gtkprintbackendcups.c:5740
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Tajné"
 
-#: modules/printbackends/gtkprintbackendcups.c:5736
+#: modules/printbackends/gtkprintbackendcups.c:5741
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Standardní"
 
-#: modules/printbackends/gtkprintbackendcups.c:5737
+#: modules/printbackends/gtkprintbackendcups.c:5742
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Přísně tajné"
 
-#: modules/printbackends/gtkprintbackendcups.c:5738
+#: modules/printbackends/gtkprintbackendcups.c:5743
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Neutajované"
@@ -7069,7 +7121,7 @@ msgstr "Neutajované"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5750
+#: modules/printbackends/gtkprintbackendcups.c:5755
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Stránek na list"
@@ -7077,7 +7129,7 @@ msgstr "Stránek na list"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5767
+#: modules/printbackends/gtkprintbackendcups.c:5772
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Řazení stránek"
@@ -7086,7 +7138,7 @@ msgstr "Řazení stránek"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5844
+#: modules/printbackends/gtkprintbackendcups.c:5849
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Vytisknout"
@@ -7094,7 +7146,7 @@ msgstr "Vytisknout"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5855
+#: modules/printbackends/gtkprintbackendcups.c:5860
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Vytisknout v určený čas"
@@ -7104,19 +7156,19 @@ msgstr "Vytisknout v určený čas"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5902
+#: modules/printbackends/gtkprintbackendcups.c:5907
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Vlastní %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:6013
+#: modules/printbackends/gtkprintbackendcups.c:6018
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Profil tiskárny"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:6020
+#: modules/printbackends/gtkprintbackendcups.c:6025
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Není k dispozici"
@@ -7177,22 +7229,22 @@ msgstr "Výstup do tohoto adresáře namísto cwd"
 msgid "Generate debug output"
 msgstr "Generovat ladicí výstup"
 
-#: tools/encodesymbolic.c:92
+#: tools/encodesymbolic.c:95
 #, c-format
 msgid "Invalid size %s\n"
 msgstr "Neplatná velikost %s\n"
 
-#: tools/encodesymbolic.c:104 tools/encodesymbolic.c:113
+#: tools/encodesymbolic.c:107 tools/encodesymbolic.c:116
 #, c-format
 msgid "Can’t load file: %s\n"
 msgstr "Nezdařilo se načíst soubor: %s\n"
 
-#: tools/encodesymbolic.c:141 tools/encodesymbolic.c:147
+#: tools/encodesymbolic.c:144 tools/encodesymbolic.c:162
 #, c-format
 msgid "Can’t save file %s: %s\n"
 msgstr "Nezdařilo se uložit soubor %s: %s\n"
 
-#: tools/encodesymbolic.c:153
+#: tools/encodesymbolic.c:168
 #, c-format
 msgid "Can’t close stream"
 msgstr "Nezdařilo se zavřít datový proud"
@@ -7266,7 +7318,7 @@ msgstr "Použít styl ze souboru CSS"
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:268
 #: tools/gtk-rendernode-tool-benchmark.c:106
-#: tools/gtk-rendernode-tool-render.c:203 tools/gtk-rendernode-tool-show.c:113
+#: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:113
 #, c-format
 msgid "Could not initialize windowing system\n"
 msgstr "Nezdařilo se inicializovat okenní systém\n"
@@ -7311,13 +7363,13 @@ msgstr ""
 "Použijte --force pro jeho přepsání.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:332
-#: tools/gtk-rendernode-tool-render.c:171
+#: tools/gtk-rendernode-tool-render.c:230
 #, c-format
 msgid "Output written to %s.\n"
 msgstr "Výstup zapsán do %s.\n"
 
 #: tools/gtk-builder-tool-screenshot.c:336
-#: tools/gtk-rendernode-tool-render.c:175
+#: tools/gtk-rendernode-tool-render.c:234
 #, c-format
 msgid "Failed to save %s: %s\n"
 msgstr "Nezdařilo se uložení %s: %s\n"
@@ -7336,7 +7388,7 @@ msgstr "Přepsat existující soubor"
 
 #: tools/gtk-builder-tool-screenshot.c:363
 #: tools/gtk-rendernode-tool-benchmark.c:97
-#: tools/gtk-rendernode-tool-render.c:196
+#: tools/gtk-rendernode-tool-render.c:255
 msgid "FILE…"
 msgstr "SOUBOR…"
 
@@ -7834,7 +7886,7 @@ msgstr "Přidat do benchmarku vykreslování"
 
 #: tools/gtk-rendernode-tool-benchmark.c:94
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:195
+#: tools/gtk-rendernode-tool-render.c:254
 msgid "RENDERER"
 msgstr "VYKRESLOVÁNÍ"
 
@@ -7855,7 +7907,7 @@ msgid "Benchmark rendering of a .node file."
 msgstr "Benchmark vykreslování souboru .node"
 
 #: tools/gtk-rendernode-tool-benchmark.c:127
-#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:224
+#: tools/gtk-rendernode-tool-info.c:236 tools/gtk-rendernode-tool-render.c:283
 #: tools/gtk-rendernode-tool-show.c:134
 #, c-format
 msgid "No .node file specified\n"
@@ -7867,7 +7919,7 @@ msgid "Can only benchmark a single .node file\n"
 msgstr "Je možné spustit benchmark pouze pro jeden soubor .node\n"
 
 #: tools/gtk-rendernode-tool-compare.c:65
-#: tools/gtk-rendernode-tool-render.c:195
+#: tools/gtk-rendernode-tool-render.c:254
 msgid "Renderer to use"
 msgstr "Jaké vykreslování použít"
 
@@ -7889,7 +7941,7 @@ msgid "Must specify two files\n"
 msgstr "Musí být určeny dva soubory\n"
 
 #: tools/gtk-rendernode-tool-compare.c:102
-#: tools/gtk-rendernode-tool-render.c:150
+#: tools/gtk-rendernode-tool-render.c:209
 #, c-format
 msgid "Failed to create renderer: %s\n"
 msgstr "Nezdařilo se vytvořit vykreslování: %s\n"
@@ -7948,7 +8000,7 @@ msgstr "Poskytnout informace o uzlu vykreslení."
 msgid "Can only accept a single .node file\n"
 msgstr "Je možné přijmout pouze jeden soubor .node\n"
 
-#: tools/gtk-rendernode-tool-render.c:123
+#: tools/gtk-rendernode-tool-render.c:170
 #, c-format
 msgid ""
 "File %s exists.\n"
@@ -7957,16 +8009,17 @@ msgstr ""
 "Soubor %s již existuje.\n"
 "Pokud jej chcete přepsat, zadejte název souboru.\n"
 
-#: tools/gtk-rendernode-tool-render.c:137
+#: tools/gtk-rendernode-tool-render.c:184
+#: tools/gtk-rendernode-tool-render.c:196
 #, c-format
 msgid "Failed to generate SVG: %s\n"
 msgstr "Nepodařilo se vygenerovat SVG: %s\n"
 
-#: tools/gtk-rendernode-tool-render.c:211
+#: tools/gtk-rendernode-tool-render.c:270
 msgid "Render a .node file to an image."
 msgstr "Vykreslit soubor .node jako obrázek."
 
-#: tools/gtk-rendernode-tool-render.c:230
+#: tools/gtk-rendernode-tool-render.c:289
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
@@ -8102,6 +8155,9 @@ msgstr ""
 "V „%s“ nebyl nenalezen žádný indexový soubor motivu.\n"
 "Pokud si zde opravdu přejete vytvořit mezipaměť ikon, použijte --ignore-"
 "theme-index.\n"
+
+#~ msgid "Font Scale"
+#~ msgstr "Škálování fontu"
 
 #~ msgid "Backend does not support window scaling"
 #~ msgstr "Podpůrná vrstva nepodporuje škálování oken"
