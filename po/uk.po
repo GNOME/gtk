@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-02 13:54+0000\n"
-"PO-Revision-Date: 2025-03-02 16:11+0200\n"
+"POT-Creation-Date: 2025-03-02 15:08+0000\n"
+"PO-Revision-Date: 2025-03-02 21:48+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -2641,7 +2641,7 @@ msgid "Name"
 msgstr "Назва"
 
 #: gtk/gtkfilechooserwidget.c:7429 gtk/inspector/resource-list.ui:82
-#: gtk/ui/gtkfontchooserwidget.ui:216 gtk/ui/gtkfontchooserwidget.ui:382
+#: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:383
 msgid "Size"
 msgstr "Розмір"
 
@@ -6357,7 +6357,6 @@ msgid "ROC 8k"
 msgstr "ROC 8k"
 
 #: gtk/ui/gtkaboutdialog.ui:15
-#| msgid "_All Pages"
 msgid "Pages"
 msgstr "Сторінки"
 
@@ -6378,7 +6377,6 @@ msgid "System"
 msgstr "Система"
 
 #: gtk/ui/gtkaboutdialog.ui:240
-#| msgid "Information"
 msgid "System Information"
 msgstr "Дані щодо системи"
 
@@ -6577,7 +6575,6 @@ msgid "Remote location — only searching the current folder"
 msgstr "Віддалена адреса — пошук можливий лише в поточній теці"
 
 #: gtk/ui/gtkfilechooserwidget.ui:301
-#| msgid "Filters"
 msgid "Filter"
 msgstr "Фільтр"
 
@@ -6593,47 +6590,44 @@ msgstr "_Створити"
 msgid "Select Font"
 msgstr "Виберіть шрифт"
 
-#: gtk/ui/gtkfontchooserwidget.ui:66 gtk/ui/gtkfontchooserwidget.ui:69
+#: gtk/ui/gtkfontchooserwidget.ui:67 gtk/ui/gtkfontchooserwidget.ui:70
 msgid "Search font name"
 msgstr "Пошук за назвою шрифту"
 
-#: gtk/ui/gtkfontchooserwidget.ui:76 gtk/ui/gtkfontchooserwidget.ui:79
+#: gtk/ui/gtkfontchooserwidget.ui:77 gtk/ui/gtkfontchooserwidget.ui:80
 msgid "Filters"
 msgstr "Фільтри"
 
-#: gtk/ui/gtkfontchooserwidget.ui:91
+#: gtk/ui/gtkfontchooserwidget.ui:92
 msgid "Filter by"
 msgstr "Критерій фільтрування"
 
-#: gtk/ui/gtkfontchooserwidget.ui:101
+#: gtk/ui/gtkfontchooserwidget.ui:102
 msgid "Monospace"
 msgstr "Моноширинний"
 
-#: gtk/ui/gtkfontchooserwidget.ui:106
+#: gtk/ui/gtkfontchooserwidget.ui:107
 msgid "Language"
 msgstr "Мова"
 
-#: gtk/ui/gtkfontchooserwidget.ui:197 gtk/ui/gtkfontchooserwidget.ui:199
-#: gtk/ui/gtkfontchooserwidget.ui:349 gtk/ui/gtkfontchooserwidget.ui:353
+#: gtk/ui/gtkfontchooserwidget.ui:198 gtk/ui/gtkfontchooserwidget.ui:200
+#: gtk/ui/gtkfontchooserwidget.ui:350 gtk/ui/gtkfontchooserwidget.ui:354
 msgid "Preview Font"
 msgstr "Перегляд шрифту"
 
-#: gtk/ui/gtkfontchooserwidget.ui:295
+#: gtk/ui/gtkfontchooserwidget.ui:296
 msgid "No Fonts Found"
 msgstr "Не знайдено жодного шрифту"
 
-#: gtk/ui/gtkfontchooserwidget.ui:333
-#| msgid "Font Scale"
+#: gtk/ui/gtkfontchooserwidget.ui:334
 msgid "Font Name"
 msgstr "Назва шрифту"
 
-#: gtk/ui/gtkfontchooserwidget.ui:378
-#| msgid "Style Variations"
+#: gtk/ui/gtkfontchooserwidget.ui:379
 msgid "Font Variation Axes"
 msgstr "Вісі варіації шрифту"
 
-#: gtk/ui/gtkfontchooserwidget.ui:426
-#| msgid "Change Font Features"
+#: gtk/ui/gtkfontchooserwidget.ui:427
 msgid "Font Features"
 msgstr "Параметри шрифту"
 
@@ -6912,6 +6906,12 @@ msgstr "Додатково"
 #: gtk/print/ui/gtkprintunixdialog.ui:1164
 msgid "Some of the settings in the dialog conflict"
 msgstr "Деякі параметри у діалоговому вікні конфліктують"
+
+#: gtk/ui/gtkvideo.ui:25
+#| msgctxt "media controls tooltip"
+#| msgid "Play"
+msgid "Play"
+msgstr "Відтворити"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:531
 #: modules/printbackends/gtkprintbackendcups.c:5670
