@@ -31,8 +31,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-01 23:05+0000\n"
-"PO-Revision-Date: 2025-03-02 14:06+0800\n"
+"POT-Creation-Date: 2025-03-02 22:59+0000\n"
+"PO-Revision-Date: 2025-03-03 19:33+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -1180,6 +1180,7 @@ msgid "%d %%"
 msgstr "%d %%"
 
 #: gtk/gtkaboutdialog.c:127 gtk/ui/gtkaboutdialog.ui:173
+#: gtk/ui/gtkaboutdialog.ui:192
 msgid "License"
 msgstr "许可"
 
@@ -1824,17 +1825,17 @@ msgstr "书签列表里没有 %s"
 msgid "%s already exists in the bookmarks list"
 msgstr "%s 已在书签列表里"
 
-#: gtk/gtkbuilder-menus.c:225
+#: gtk/gtkbuilder-menus.c:232
 #, c-format
 msgid "Element <%s> not allowed inside <%s>"
 msgstr "元素 <%s> 不允许位于 <%s> 内部"
 
-#: gtk/gtkbuilder-menus.c:231
+#: gtk/gtkbuilder-menus.c:238
 #, c-format
 msgid "Element <%s> not allowed at toplevel"
 msgstr "元素 <%s> 不允许位于顶层"
 
-#: gtk/gtkbuilder-menus.c:320
+#: gtk/gtkbuilder-menus.c:327
 #, c-format
 msgid "Text may not appear inside <%s>"
 msgstr "文本不能出现在 <%s> 内部"
@@ -2234,7 +2235,8 @@ msgstr "右键菜单"
 msgid "Insert Emoji"
 msgstr "插入表情符号"
 
-#: gtk/gtkfilechooserdialog.c:481
+#. Translators: Label for a search button and entry, should be translated as a verb
+#: gtk/gtkfilechooserdialog.c:481 gtk/ui/gtkfilechooserwidget.ui:123
 msgid "Search"
 msgstr "搜索"
 
@@ -2614,7 +2616,7 @@ msgid "Name"
 msgstr "名称"
 
 #: gtk/gtkfilechooserwidget.c:7429 gtk/inspector/resource-list.ui:82
-#: gtk/ui/gtkfontchooserwidget.ui:216 gtk/ui/gtkfontchooserwidget.ui:382
+#: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:383
 msgid "Size"
 msgstr "大小"
 
@@ -6321,17 +6323,29 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "八开"
 
+#: gtk/ui/gtkaboutdialog.ui:15
+msgid "Pages"
+msgstr "页面"
+
+#: gtk/ui/gtkaboutdialog.ui:43
+msgid "Logo"
+msgstr "标志"
+
 #: gtk/ui/gtkaboutdialog.ui:68
 msgid "About"
 msgstr "关于"
 
-#: gtk/ui/gtkaboutdialog.ui:129
+#: gtk/ui/gtkaboutdialog.ui:129 gtk/ui/gtkaboutdialog.ui:157
 msgid "Credits"
 msgstr "鸣谢"
 
 #: gtk/ui/gtkaboutdialog.ui:221
 msgid "System"
 msgstr "系统"
+
+#: gtk/ui/gtkaboutdialog.ui:240
+msgid "System Information"
+msgstr "系统信息"
 
 #: gtk/ui/gtkappchooserdialog.ui:4
 msgid "Select App"
@@ -6420,6 +6434,10 @@ msgstr "选择颜色"
 #: gtk/ui/gtkcoloreditor.ui:43 gtk/ui/gtkcoloreditor.ui:53
 msgid "Pick a color from the screen"
 msgstr "从屏幕上选取颜色"
+
+#: gtk/ui/gtkcoloreditor.ui:66
+msgid "The current color"
+msgstr "当前颜色"
 
 #: gtk/ui/gtkcoloreditor.ui:84
 msgid "Hexadecimal color or color name"
@@ -6523,6 +6541,10 @@ msgstr "创建文件夹"
 msgid "Remote location — only searching the current folder"
 msgstr "远程位置 — 仅搜索目前的文件夹"
 
+#: gtk/ui/gtkfilechooserwidget.ui:301
+msgid "Filter"
+msgstr "筛选器"
+
 #: gtk/ui/gtkfilechooserwidget.ui:334
 msgid "Folder Name"
 msgstr "文件夹名称"
@@ -6535,34 +6557,46 @@ msgstr "创建(_C)"
 msgid "Select Font"
 msgstr "选择字体"
 
-#: gtk/ui/gtkfontchooserwidget.ui:66
+#: gtk/ui/gtkfontchooserwidget.ui:67 gtk/ui/gtkfontchooserwidget.ui:70
 msgid "Search font name"
 msgstr "搜索字体名"
 
-#: gtk/ui/gtkfontchooserwidget.ui:79
+#: gtk/ui/gtkfontchooserwidget.ui:77 gtk/ui/gtkfontchooserwidget.ui:80
 msgid "Filters"
-msgstr "过滤器"
+msgstr "筛选器"
 
-#: gtk/ui/gtkfontchooserwidget.ui:91
+#: gtk/ui/gtkfontchooserwidget.ui:92
 msgid "Filter by"
 msgstr "筛选依据"
 
-#: gtk/ui/gtkfontchooserwidget.ui:101
+#: gtk/ui/gtkfontchooserwidget.ui:102
 msgid "Monospace"
 msgstr "等宽"
 
-#: gtk/ui/gtkfontchooserwidget.ui:106
+#: gtk/ui/gtkfontchooserwidget.ui:107
 msgid "Language"
 msgstr "语言"
 
-#: gtk/ui/gtkfontchooserwidget.ui:197 gtk/ui/gtkfontchooserwidget.ui:199
-#: gtk/ui/gtkfontchooserwidget.ui:349 gtk/ui/gtkfontchooserwidget.ui:353
+#: gtk/ui/gtkfontchooserwidget.ui:198 gtk/ui/gtkfontchooserwidget.ui:200
+#: gtk/ui/gtkfontchooserwidget.ui:350 gtk/ui/gtkfontchooserwidget.ui:354
 msgid "Preview Font"
 msgstr "预览字体"
 
-#: gtk/ui/gtkfontchooserwidget.ui:295
+#: gtk/ui/gtkfontchooserwidget.ui:296
 msgid "No Fonts Found"
 msgstr "未找到字体"
+
+#: gtk/ui/gtkfontchooserwidget.ui:334
+msgid "Font Name"
+msgstr "字体名称"
+
+#: gtk/ui/gtkfontchooserwidget.ui:379
+msgid "Font Variation Axes"
+msgstr "字体变体轴"
+
+#: gtk/ui/gtkfontchooserwidget.ui:427
+msgid "Font Features"
+msgstr "字体特性"
 
 #: gtk/ui/gtkmediacontrols.ui:45
 msgctxt "media controls"
@@ -6841,6 +6875,10 @@ msgstr "高级"
 #: gtk/print/ui/gtkprintunixdialog.ui:1164
 msgid "Some of the settings in the dialog conflict"
 msgstr "对话框中的某些设置冲突"
+
+#: gtk/ui/gtkvideo.ui:25
+msgid "Play"
+msgstr "播放"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:531
 #: modules/printbackends/gtkprintbackendcups.c:5670
@@ -8616,9 +8654,6 @@ msgstr ""
 #~ msgid "Backend does not support window scaling"
 #~ msgstr "后端不支持窗口缩放"
 
-#~ msgid "Font Scale"
-#~ msgstr "字体缩放"
-
 #~ msgid "Window Scaling"
 #~ msgstr "窗口缩放"
 
@@ -9900,9 +9935,6 @@ msgstr ""
 
 #~ msgid "Setting:"
 #~ msgstr "设置："
-
-#~ msgid "Pages"
-#~ msgstr "页面"
 
 #~ msgid "Time of print"
 #~ msgstr "打印时间"
