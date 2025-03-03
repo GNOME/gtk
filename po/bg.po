@@ -1,14 +1,12 @@
 # Bulgarian translation of gtk po-file.
-# Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008 Free Software Foundation, Inc.
-# Copyright (C) 2009, 2010, 2011, 2012, 2013, 2015 Free Software Foundation, Inc.
+# Copyright (C) 2002, 2004, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2015 Free Software Foundation, Inc.
 # Copyright (C) 2015 Zahari Yurukov <zahari.yurukov@gmail.com>.
-# Copyright (C) 2022, 2023, 2024 Alexander Shopov <ash@kambanaria.org>.
+# Copyright (C) 2022, 2023, 2024, 2025 Alexander Shopov <ash@kambanaria.org>.
 # Copyright (C) 2024, 2025 twlvnn kraftwerk <kraft_werk@tutanota.com>.
 # Borislav Aleksandrov <B.Aleksandrov@CNsys.bg>, 2002.
 # Yanko Kaneti <yaneti@declera.com>, 2002.
 # Vladimir Petkov <kaladan@gmail.com>, 2004, 2005.
-# Alexander Shopov <ash@kambanaria.org>, 2005, 2006, 2007, 2008, 2009, 2010, 2011.
-# Alexander Shopov <ash@kambanaria.org>, 2012, 2013, 2022, 2023.
+# Alexander Shopov <ash@kambanaria.org>, 2005, 2006, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2022, 2023, 2025.
 # Damyan Ivanov <dam+gnome@ktnx.net>, 2010.
 # Zahari Yurukov <zahari.yurukov@gmail.com>, 2015.
 # twlvnn kraftwerk <kraft_werk@tutanota.com>, 2024, 2025.
@@ -17,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-02-24 05:29+0000\n"
-"PO-Revision-Date: 2025-02-24 12:09+0100\n"
+"POT-Creation-Date: 2025-03-03 08:26+0000\n"
+"PO-Revision-Date: 2025-03-03 09:53+0100\n"
 "Last-Translator: twlvnn kraftwerk <kraft_werk@tutanota.com>\n"
 "Language-Team: Bulgarian <dict-notifications@fsa-bg.org>\n"
 "Language: bg\n"
@@ -92,7 +90,7 @@ msgstr "Съдържанието не може да се предостави к
 msgid "The current backend does not support OpenGL"
 msgstr "Текущата графична подсистема не поддържа OpenGL"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1726
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1701
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Поддръжката на Vulkan е забранена чрез „GDK_DISABLE“"
 
@@ -162,15 +160,15 @@ msgstr "Никое API за GL не е позволено."
 msgid "Unable to create a GL context"
 msgstr "Не може да се създаде контекст за GL"
 
-#: gdk/gdkglcontext.c:1310
+#: gdk/gdkglcontext.c:1307
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "OpenGL ES е забранен чрез „GDK_DISABLE“"
 
-#: gdk/gdkglcontext.c:1322
+#: gdk/gdkglcontext.c:1319
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "OpenGL е забранен чрез „GDK_DISABLE“"
 
-#: gdk/gdkglcontext.c:1333
+#: gdk/gdkglcontext.c:1330
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Програмата не поддържа API „%s“"
@@ -178,12 +176,12 @@ msgstr "Програмата не поддържа API „%s“"
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2110
+#: gdk/gdkglcontext.c:2107
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Опит за ползване на „%s“, но вече се ползва „%s“"
 
-#: gdk/gdkglcontext.c:2121
+#: gdk/gdkglcontext.c:2118
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "Опит за ползване на „%s“, но вариантът е забранен чрез „GDK_DISABLE“"
@@ -1210,6 +1208,7 @@ msgid "%d %%"
 msgstr "%d %%"
 
 #: gtk/gtkaboutdialog.c:127 gtk/ui/gtkaboutdialog.ui:173
+#: gtk/ui/gtkaboutdialog.ui:192
 msgid "License"
 msgstr "Лиценз"
 
@@ -1854,17 +1853,17 @@ msgstr "„%s“ липсва в списъка с отметки"
 msgid "%s already exists in the bookmarks list"
 msgstr "„%s“ вече съществува в списъка с отметки"
 
-#: gtk/gtkbuilder-menus.c:225
+#: gtk/gtkbuilder-menus.c:232
 #, c-format
 msgid "Element <%s> not allowed inside <%s>"
 msgstr "Елементът <%s> не е позволен под <%s>"
 
-#: gtk/gtkbuilder-menus.c:231
+#: gtk/gtkbuilder-menus.c:238
 #, c-format
 msgid "Element <%s> not allowed at toplevel"
 msgstr "Елементът <%s> не е позволен на най-горно ниво"
 
-#: gtk/gtkbuilder-menus.c:320
+#: gtk/gtkbuilder-menus.c:327
 #, c-format
 msgid "Text may not appear inside <%s>"
 msgstr "В <%s> не може да има текст"
@@ -2250,13 +2249,13 @@ msgstr "Бели полета"
 msgid "_Edit"
 msgstr "_Редактиране"
 
-#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5898 gtk/gtktext.c:6322
-#: gtk/gtktextview.c:9326
+#: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5902 gtk/gtktext.c:6322
+#: gtk/gtktextview.c:9327
 msgid "_Copy"
 msgstr "_Копиране"
 
-#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5958 gtk/gtktext.c:2877
-#: gtk/gtktextview.c:9404
+#: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5962 gtk/gtktext.c:2877
+#: gtk/gtktextview.c:9405
 msgid "Context menu"
 msgstr "Контекстно меню"
 
@@ -2264,7 +2263,8 @@ msgstr "Контекстно меню"
 msgid "Insert Emoji"
 msgstr "Емоджи"
 
-#: gtk/gtkfilechooserdialog.c:481
+#. Translators: Label for a search button and entry, should be translated as a verb
+#: gtk/gtkfilechooserdialog.c:481 gtk/ui/gtkfilechooserwidget.ui:123
 msgid "Search"
 msgstr "Търсене"
 
@@ -2334,7 +2334,7 @@ msgstr "Вече съществува файл с това име"
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6330 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6333 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2429,7 +2429,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Когато окончателно изтриете обект, го загубите безвъзвратно."
 
 #: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:1816
-#: gtk/gtklabel.c:5900 gtk/gtktext.c:6330 gtk/gtktextview.c:9334
+#: gtk/gtklabel.c:5904 gtk/gtktext.c:6330 gtk/gtktextview.c:9335
 msgid "_Delete"
 msgstr "_Изтриване"
 
@@ -2648,7 +2648,7 @@ msgid "Name"
 msgstr "Име"
 
 #: gtk/gtkfilechooserwidget.c:7429 gtk/inspector/resource-list.ui:82
-#: gtk/ui/gtkfontchooserwidget.ui:216 gtk/ui/gtkfontchooserwidget.ui:382
+#: gtk/ui/gtkfontchooserwidget.ui:217 gtk/ui/gtkfontchooserwidget.ui:383
 msgid "Size"
 msgstr "Размер"
 
@@ -2782,23 +2782,23 @@ msgstr "Затваряне"
 msgid "Close the infobar"
 msgstr "Затваряне на информационната лента"
 
-#: gtk/gtklabel.c:5897 gtk/gtktext.c:6318 gtk/gtktextview.c:9322
+#: gtk/gtklabel.c:5901 gtk/gtktext.c:6318 gtk/gtktextview.c:9323
 msgid "Cu_t"
 msgstr "От_рязване"
 
-#: gtk/gtklabel.c:5899 gtk/gtktext.c:6326 gtk/gtktextview.c:9330
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6326 gtk/gtktextview.c:9331
 msgid "_Paste"
 msgstr "_Поставяне"
 
-#: gtk/gtklabel.c:5905 gtk/gtktext.c:6339 gtk/gtktextview.c:9355
+#: gtk/gtklabel.c:5909 gtk/gtktext.c:6339 gtk/gtktextview.c:9356
 msgid "Select _All"
 msgstr "Избиране на _всичко"
 
-#: gtk/gtklabel.c:5910
+#: gtk/gtklabel.c:5914
 msgid "_Open Link"
 msgstr "_Отваряне на връзка"
 
-#: gtk/gtklabel.c:5914
+#: gtk/gtklabel.c:5918
 msgid "Copy _Link Address"
 msgstr "Копиране на _адреса на връзка"
 
@@ -2869,7 +2869,7 @@ msgid "Play"
 msgstr "Пускане"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6331
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6334
 msgid "_OK"
 msgstr "_Добре"
 
@@ -3494,7 +3494,7 @@ msgstr "Хартията свърши"
 
 #. Translators: this is a printer status.
 #: gtk/print/gtkprintoperation-win32.c:630
-#: modules/printbackends/gtkprintbackendcpdb.c:1533
+#: modules/printbackends/gtkprintbackendcpdb.c:1522
 #: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused"
 msgstr "На пауза"
@@ -3747,7 +3747,7 @@ msgstr "Странична лента"
 msgid "Change di_rection"
 msgstr "Променяне на _посоката"
 
-#: gtk/gtktext.c:6349 gtk/gtktextview.c:9360
+#: gtk/gtktext.c:6349 gtk/gtktextview.c:9361
 msgid "Insert _Emoji"
 msgstr "Вмъкване на емоджи"
 
@@ -3907,20 +3907,20 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS Classic"
 
-#: gtk/gtktextview.c:9342
+#: gtk/gtktextview.c:9343
 msgid "_Undo"
 msgstr "_Отмяна"
 
-#: gtk/gtktextview.c:9346
+#: gtk/gtktextview.c:9347
 msgid "_Redo"
 msgstr "Пов_таряне"
 
-#: gtk/gtkwindow.c:6319
+#: gtk/gtkwindow.c:6322
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Желаете ли да използвате „Инспектор на GTK“?"
 
-#: gtk/gtkwindow.c:6321
+#: gtk/gtkwindow.c:6324
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3931,7 +3931,7 @@ msgstr ""
 "ви позволява да изследвате и променяте съдържанието на всяка програма за "
 "GTK. Използването му може да доведе до забиване на програмата."
 
-#: gtk/gtkwindow.c:6326
+#: gtk/gtkwindow.c:6329
 msgid "Don’t show this message again"
 msgstr "Това съобщение да не се показва повече"
 
@@ -6361,17 +6361,29 @@ msgctxt "paper size"
 msgid "ROC 8k"
 msgstr "ROC 8k"
 
+#: gtk/ui/gtkaboutdialog.ui:15
+msgid "Pages"
+msgstr "Страници"
+
+#: gtk/ui/gtkaboutdialog.ui:43
+msgid "Logo"
+msgstr "Емблема"
+
 #: gtk/ui/gtkaboutdialog.ui:68
 msgid "About"
 msgstr "Относно"
 
-#: gtk/ui/gtkaboutdialog.ui:129
+#: gtk/ui/gtkaboutdialog.ui:129 gtk/ui/gtkaboutdialog.ui:157
 msgid "Credits"
 msgstr "Заслуги"
 
 #: gtk/ui/gtkaboutdialog.ui:221
 msgid "System"
 msgstr "Системен"
+
+#: gtk/ui/gtkaboutdialog.ui:240
+msgid "System Information"
+msgstr "Системна информация"
 
 #: gtk/ui/gtkappchooserdialog.ui:4
 msgid "Select App"
@@ -6460,6 +6472,10 @@ msgstr "Избор на цвят"
 #: gtk/ui/gtkcoloreditor.ui:43 gtk/ui/gtkcoloreditor.ui:53
 msgid "Pick a color from the screen"
 msgstr "Избор на цвят от екрана"
+
+#: gtk/ui/gtkcoloreditor.ui:66
+msgid "The current color"
+msgstr "Текущият цвят"
 
 #: gtk/ui/gtkcoloreditor.ui:84
 msgid "Hexadecimal color or color name"
@@ -6563,6 +6579,10 @@ msgstr "Създаване на папка"
 msgid "Remote location — only searching the current folder"
 msgstr "Отдалечено местоположение — търсене само в текущата папка"
 
+#: gtk/ui/gtkfilechooserwidget.ui:301
+msgid "Filter"
+msgstr "Филтър"
+
 #: gtk/ui/gtkfilechooserwidget.ui:334
 msgid "Folder Name"
 msgstr "Име на папката"
@@ -6575,34 +6595,46 @@ msgstr "_Създаване"
 msgid "Select Font"
 msgstr "Избор на шрифт"
 
-#: gtk/ui/gtkfontchooserwidget.ui:66
+#: gtk/ui/gtkfontchooserwidget.ui:67 gtk/ui/gtkfontchooserwidget.ui:70
 msgid "Search font name"
 msgstr "Търсене по име на шрифт"
 
-#: gtk/ui/gtkfontchooserwidget.ui:79
+#: gtk/ui/gtkfontchooserwidget.ui:77 gtk/ui/gtkfontchooserwidget.ui:80
 msgid "Filters"
 msgstr "Филтри"
 
-#: gtk/ui/gtkfontchooserwidget.ui:91
+#: gtk/ui/gtkfontchooserwidget.ui:92
 msgid "Filter by"
 msgstr "Филтриране по"
 
-#: gtk/ui/gtkfontchooserwidget.ui:101
+#: gtk/ui/gtkfontchooserwidget.ui:102
 msgid "Monospace"
 msgstr "Равношироки"
 
-#: gtk/ui/gtkfontchooserwidget.ui:106
+#: gtk/ui/gtkfontchooserwidget.ui:107
 msgid "Language"
 msgstr "Език"
 
-#: gtk/ui/gtkfontchooserwidget.ui:197 gtk/ui/gtkfontchooserwidget.ui:199
-#: gtk/ui/gtkfontchooserwidget.ui:349 gtk/ui/gtkfontchooserwidget.ui:353
+#: gtk/ui/gtkfontchooserwidget.ui:198 gtk/ui/gtkfontchooserwidget.ui:200
+#: gtk/ui/gtkfontchooserwidget.ui:350 gtk/ui/gtkfontchooserwidget.ui:354
 msgid "Preview Font"
 msgstr "Преглед на шрифт"
 
-#: gtk/ui/gtkfontchooserwidget.ui:295
+#: gtk/ui/gtkfontchooserwidget.ui:296
 msgid "No Fonts Found"
 msgstr "Не са открити шрифтове"
+
+#: gtk/ui/gtkfontchooserwidget.ui:334
+msgid "Font Name"
+msgstr "Име на шрифт"
+
+#: gtk/ui/gtkfontchooserwidget.ui:379
+msgid "Font Variation Axes"
+msgstr "Оси за промяна на шрифта"
+
+#: gtk/ui/gtkfontchooserwidget.ui:427
+msgid "Font Features"
+msgstr "Свойства на шрифта"
 
 #: gtk/ui/gtkmediacontrols.ui:45
 msgctxt "media controls"
@@ -6880,25 +6912,29 @@ msgstr "Допълнителни"
 msgid "Some of the settings in the dialog conflict"
 msgstr "Някои от настройките в прозореца взаимно си противоречат"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:542
+#: gtk/ui/gtkvideo.ui:25
+msgid "Play"
+msgstr "Пускане"
+
+#: modules/printbackends/gtkprintbackendcpdb.c:531
 #: modules/printbackends/gtkprintbackendcups.c:5670
 msgctxt "Print job priority"
 msgid "Urgent"
 msgstr "Спешен"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:543
+#: modules/printbackends/gtkprintbackendcpdb.c:532
 #: modules/printbackends/gtkprintbackendcups.c:5671
 msgctxt "Print job priority"
 msgid "High"
 msgstr "Висок"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:544
+#: modules/printbackends/gtkprintbackendcpdb.c:533
 #: modules/printbackends/gtkprintbackendcups.c:5672
 msgctxt "Print job priority"
 msgid "Medium"
 msgstr "Среден"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:545
+#: modules/printbackends/gtkprintbackendcpdb.c:534
 #: modules/printbackends/gtkprintbackendcups.c:5673
 msgctxt "Print job priority"
 msgid "Low"
@@ -6907,7 +6943,7 @@ msgstr "Нисък"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/gtkprintbackendcpdb.c:567
+#: modules/printbackends/gtkprintbackendcpdb.c:556
 #: modules/printbackends/gtkprintbackendcups.c:5816
 msgctxt "printer option"
 msgid "Before"
@@ -6916,33 +6952,33 @@ msgstr "Преди"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/gtkprintbackendcpdb.c:574
+#: modules/printbackends/gtkprintbackendcpdb.c:563
 #: modules/printbackends/gtkprintbackendcups.c:5831
 msgctxt "printer option"
 msgid "After"
 msgstr "След"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:597
+#: modules/printbackends/gtkprintbackendcpdb.c:586
 msgid "Print at"
 msgstr "Време на печат"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:607
+#: modules/printbackends/gtkprintbackendcpdb.c:596
 msgid "Print at time"
 msgstr "Време на печат"
 
-#: modules/printbackends/gtkprintbackendcpdb.c:670
+#: modules/printbackends/gtkprintbackendcpdb.c:659
 msgctxt "print option"
 msgid "Borderless"
 msgstr "Без граници"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1530
+#: modules/printbackends/gtkprintbackendcpdb.c:1519
 #: modules/printbackends/gtkprintbackendcups.c:2636
 msgid "Paused; Rejecting Jobs"
 msgstr "На пауза. Отхвърля задачите"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1536
+#: modules/printbackends/gtkprintbackendcpdb.c:1525
 #: modules/printbackends/gtkprintbackendcups.c:2642
 msgid "Rejecting Jobs"
 msgstr "Отхвърля задачите"
@@ -8355,7 +8391,9 @@ msgstr "Не изтегляй резултата/изчакай видео ка�
 
 #: tools/gtk-rendernode-tool-benchmark.c:116
 msgid "Benchmark rendering of a .node file."
-msgstr "Тестване на производителността на изобразяването на файл с разширение „.node“."
+msgstr ""
+"Тестване на производителността на изобразяването на файл с разширение "
+"„.node“."
 
 #: tools/gtk-rendernode-tool-benchmark.c:129
 #: tools/gtk-rendernode-tool-extract.c:316 tools/gtk-rendernode-tool-info.c:248
