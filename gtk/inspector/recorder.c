@@ -47,6 +47,7 @@
 #include <gsk/gskroundedrectprivate.h>
 #include <gsk/gsktransformprivate.h>
 
+#include <cairo-gobject.h>
 #include <glib/gi18n-lib.h>
 #include <gdk/gdkdmabufprivate.h>
 #include <gdk/gdkdmabuftextureprivate.h>
@@ -1222,12 +1223,29 @@ populate_render_node_properties (GListStore    *store,
         PangoFontDescription *desc;
         GString *s;
         gchar *tmp;
+        cairo_scaled_font_t *sf;
+        cairo_font_options_t *options;
+        cairo_hint_style_t hint_style;
+        cairo_antialias_t antialias;
+        cairo_hint_metrics_t hint_metrics;
 
         desc = pango_font_describe ((PangoFont *)font);
         tmp = pango_font_description_to_string (desc);
         add_text_row (store, "Font", "%s", tmp);
         g_free (tmp);
         pango_font_description_free (desc);
+
+        sf = pango_cairo_font_get_scaled_font (PANGO_CAIRO_FONT (font));
+        options = cairo_font_options_create ();
+        cairo_scaled_font_get_font_options (sf, options);
+        hint_style = cairo_font_options_get_hint_style (options);
+        antialias = cairo_font_options_get_antialias (options);
+        hint_metrics = cairo_font_options_get_hint_metrics (options);
+        cairo_font_options_destroy (options);
+
+        add_text_row (store, "Hint Style", "%s", enum_to_nick (CAIRO_GOBJECT_TYPE_HINT_STYLE, hint_style));
+        add_text_row (store, "Antialias", "%s", enum_to_nick (CAIRO_GOBJECT_TYPE_ANTIALIAS, antialias));
+        add_text_row (store, "Hint Metrics", "%s", enum_to_nick (CAIRO_GOBJECT_TYPE_HINT_METRICS, hint_metrics));
 
         s = g_string_sized_new (0);
         gsk_text_node_serialize_glyphs (node, s);
