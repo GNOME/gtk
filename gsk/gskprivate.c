@@ -138,7 +138,7 @@ gsk_get_glyph_string_extents (PangoGlyphString *glyphs,
 
   unhinted = gsk_reload_font (font,
                               1.0,
-                              CAIRO_HINT_METRICS_OFF,
+                              CAIRO_HINT_METRICS_DEFAULT,
                               CAIRO_HINT_STYLE_NONE,
                               CAIRO_ANTIALIAS_DEFAULT);
 

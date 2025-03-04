@@ -100,6 +100,7 @@ compare_render_tests = [
   'huge-height',
   'huge-width',
   'inset-shadow-multiple',
+  'inter-hinting',
   'invalid-transform',
   'issue-3615',
   'linear-gradient-interpolation-nocairo',
@@ -255,6 +256,9 @@ compare_xfails = {
     'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
     'big-checkerboard': ['clip'], # 6444
   },
+  'cairo': {
+    'inter-hinting': ['flip', 'rotate'],
+  }
 }
 
 foreach renderer : renderers
