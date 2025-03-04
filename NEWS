@@ -1,5 +1,87 @@
-Overview of Changes in 4.17.6, xx-xx-xxxx
+Overview of Changes in 4.17.7, xx-xx-xxxx
 =========================================
+
+Overview of Changes in 4.17.6, 04-03-2025
+=========================================
+
+Note: The buffer sizing fixes in this release are known to
+not work with fractional scales on macOS. This will hopefully
+be fixed soon. In the meantime, you can use the cairo renderer.
+
+* GSK rendering issues on Asahi Linux are fixed
+
+* Buffer sizing issues with fractional scaling are fixed
+
+* GtkFontChooser scrolls to the initially selected font
+
+* Font rendering with the new default GNOME font is improved
+
+* The Wayland cursor shape protocol is supported
+
+* Initial focus for popups on Android is fixed
+
+* Bugs fixed:
+  - #3184 Application crashes when presenting popover menus (Matthias Clasen)
+  - #4019 Crash on ListBoxRow.get_index (Matthias Clasen)
+  - #6455 GtkFlowBox aligns incorrectly with GTK_ALIGN_END and
+    min/max_children_per_line (Gergo Koteles)
+  - #6817 Null pointer dereference in gdk_surface_request_motion (Matthias
+    Clasen)
+  - #7146 GSK issues illegal render ops with load=dont-care and blend=over with
+    Wayland fractional scaling, causing graphical corruption (Benjamin Otte)
+  - #7282 memorytexture testsuite fails the float tests (Benjamin Otte)
+  - #7314 Incorrect height calculations with fractional scaling under vulkan
+    renderer (violates vulkan validation layers) (Benjamin Otte)
+  - #7369 GtkTextView does not claim all click gestures (Maximiliano Sandoval)
+  - #7370 activating `GDK_DEBUG=EVENTS` crashes the application if a touch event
+    occurs (Matthias Clasen)
+  - #7384 Comment required for search string (Matthias Clasen)
+  - !6617 Fix measuring label min wfh with wrap+ellipsize+lines
+  - !6635 gtkmodelbutton: Always close submenus when changing parent item
+  - !7746 ci: Regenerate Fedora image from F41
+  - !8028 fontchooser: scroll to selected font
+  - !8111 macos: Re-enable macOS GIR generation
+  - !8154 adjustment: Verify that values are finite
+  - !8156 Clarify hide-on-close documentation
+  - !8188 gdkkeys-win32: Add keymap get_active_layout_index/get_layout_names
+  - !8231 docs: Fix the missing image in the picture screenshots
+  - !8232 gdk: Fix spelling for GdkAndroidDisplayNightMode enum value nick
+  - !8234 wayland: Update color coordinates for extra precision
+  - !8235 Drop GskProfiler
+  - !8241 macos: Do not occupy space for window buttons when full screen
+  - !8242 android: Update focus state on motion events for autohide surfaces
+  - !8243 gdk: Deprecate gdk_cairo_context_cairo_create()
+  - !8246 cpdb: Update gtk_print_backend_cpdb_init for latest CPDB version
+  - !8247 wayland: Support the cursor-shape protocol
+  - !8248 docs: Fix an image name
+  - !8250 macos: Track number of button widgets realized on a window
+  - !8251 wayland: Go back to the old none cursor
+  - !8253 Bring back unhinted extents
+  - !8256 wayland: Fix none cursor check
+  - !8263 inspector: Show font options
+  - !8264 Try again to fix font rendering
+
+* Translation updates:
+  - Basque (Asier Sarasua Garmendia)
+  - Bulgarian (twlvnn kraftwerk, Alexander Shopov)
+  - Catalan (Jordi Mas i Hernandez)
+  - Chinese (China) (Luming Zh)
+  - Czech (Daniel Rusek)
+  - Finnish (Jiri Grönroos)
+  - Galician (Fran Dieguez)
+  - Georgian (Ekaterine Papava)
+  - Hebrew (Yosef Or Boczko)
+  - Indonesian (Andika Triwidada)
+  - Korean (Changwoo Ryu)
+  - Lithuanian (Aurimas Černius)
+  - Persian (Danial Behzadi)
+  - Polish (Piotr Drąg)
+  - Portuguese (Hugo Carvalho)
+  - Portuguese (Brazil) (Rafael Fontenelle)
+  - Slovenian (Martin)
+  - Spanish (Daniel Mustieles)
+  - Turkish (Sabri Ünal)
+  - Ukrainian (Yuri Chornoivan)
 
 
 Overview of Changes in 4.17.5, 23-02-2025
