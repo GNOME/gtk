@@ -558,8 +558,8 @@ gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
         {
           priv->regions[i] = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                                 0, 0,
-                                                                gdk_surface_get_width (surface),
-                                                                gdk_surface_get_height (surface),
+                                                                size.width,
+                                                                size.height
                                                             });
         }
     }
@@ -781,15 +781,11 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-  GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
   VkRectLayerKHR *rectangles;
   int n_regions;
 
   if (gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT))
     {
-      double scale;
-
-      scale = gdk_surface_get_scale (surface);
       n_regions = cairo_region_num_rectangles (painted);
       rectangles = g_alloca (sizeof (VkRectLayerKHR) * n_regions);
 
@@ -800,11 +796,10 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
           cairo_region_get_rectangle (painted, i, &r);
 
           rectangles[i] = (VkRectLayerKHR) {
-              .layer = 0,
-              .offset.x = (int) floor (r.x * scale),
-              .offset.y = (int) floor (r.y * scale),
-              .extent.width = (int) ceil ((r.x + r.width) * scale) - floor (r.x * scale),
-              .extent.height = (int) ceil ((r.y + r.height) * scale) - floor (r.y * scale),
+              .offset.x = r.x,
+              .offset.y = r.y,
+              .extent.width = r.width,
+              .extent.height = r.height
           };
         }
     }

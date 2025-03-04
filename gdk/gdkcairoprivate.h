@@ -177,3 +177,26 @@ gdk_cairo_surface_convert_color_state (cairo_surface_t *surface,
   cairo_surface_mark_dirty (surface);
 }
 
+static inline cairo_region_t *
+gdk_cairo_region_scale_grow (const cairo_region_t *region,
+                             double                scale_x,
+                             double                scale_y)
+{
+  cairo_region_t *result;
+
+  result = cairo_region_create ();
+  for (int i = 0; i < cairo_region_num_rectangles (region); i++)
+    {
+      cairo_rectangle_int_t rect;
+      cairo_region_get_rectangle (region, i, &rect);
+      cairo_region_union_rectangle (result, &(cairo_rectangle_int_t) {
+                                      .x = (int) floor (rect.x * scale_x),
+                                      .y = (int) floor (rect.y * scale_y),
+                                      .width = (int) ceil ((rect.x + rect.width) * scale_x) - floor (rect.x * scale_x),
+                                      .height = (int) ceil ((rect.y + rect.height) * scale_y) - floor (rect.y * scale_y),
+                                    });
+    }
+
+  return result;
+}
+

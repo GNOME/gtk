@@ -92,6 +92,13 @@ gdk_android_drag_surface_hide (GdkSurface *surface)
   g_debug("Hiding drag surface");
 }
 
+static gdouble
+gdk_android_drag_surface_get_scale (GdkSurface *surface)
+{
+  GdkAndroidDragSurface *self = (GdkAndroidDragSurface *)surface;
+  return gdk_surface_get_scale (gdk_drag_get_surface ((GDK_DRAG (self->drag))));
+}
+
 static gboolean
 gdk_android_drag_surface_compute_size (GdkSurface *surface)
 {
@@ -125,6 +132,7 @@ gdk_android_drag_surface_class_init (GdkAndroidDragSurfaceClass *klass)
   surface_class->get_geometry = gdk_android_drag_surface_get_geometry;
   surface_class->get_root_coords = gdk_android_drag_surface_get_root_coords;
   surface_class->hide = gdk_android_drag_surface_hide;
+  surface_class->get_scale = gdk_android_drag_surface_get_scale;
   surface_class->compute_size = gdk_android_drag_surface_compute_size;
   surface_class->destroy = gdk_android_drag_surface_destroy;
 }

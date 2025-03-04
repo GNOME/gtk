@@ -180,33 +180,6 @@ gsk_gpu_renderer_dmabuf_downloader_init (GdkDmabufDownloaderInterface *iface)
   iface->download = gsk_gpu_renderer_dmabuf_downloader_download;
 }
 
-static cairo_region_t *
-get_render_region (GskGpuRenderer *self)
-{
-  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
-  const cairo_region_t *damage;
-  cairo_region_t *scaled_damage;
-  double scale;
-
-  scale = gdk_surface_get_scale (gdk_draw_context_get_surface (priv->context));
-
-  damage = gdk_draw_context_get_frame_region (priv->context);
-  scaled_damage = cairo_region_create ();
-  for (int i = 0; i < cairo_region_num_rectangles (damage); i++)
-    {
-      cairo_rectangle_int_t rect;
-      cairo_region_get_rectangle (damage, i, &rect);
-      cairo_region_union_rectangle (scaled_damage, &(cairo_rectangle_int_t) {
-                                      .x = (int) floor (rect.x * scale),
-                                      .y = (int) floor (rect.y * scale),
-                                      .width = (int) ceil ((rect.x + rect.width) * scale) - floor (rect.x * scale),
-                                      .height = (int) ceil ((rect.y + rect.height) * scale) - floor (rect.y * scale),
-                                    });
-    }
-
-  return scaled_damage;
-}
-
 static gboolean
 gsk_gpu_renderer_realize (GskRenderer  *renderer,
                           GdkDisplay   *display,
@@ -457,7 +430,7 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 
   backbuffer = GSK_GPU_RENDERER_GET_CLASS (self)->get_backbuffer (self);
 
-  render_region = get_render_region (self);
+  render_region = cairo_region_copy (gdk_draw_context_get_render_region (priv->context));
 
   gsk_gpu_frame_render (frame,
                         g_get_monotonic_time (),

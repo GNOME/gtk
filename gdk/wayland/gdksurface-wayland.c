@@ -514,20 +514,21 @@ gdk_wayland_surface_attach_image (GdkSurface           *surface,
   impl->pending_buffer_offset_x = 0;
   impl->pending_buffer_offset_y = 0;
 
-  n = cairo_region_num_rectangles (damage);
-  for (i = 0; i < n; i++)
+  if (wl_surface_version >= WL_SURFACE_DAMAGE_BUFFER_SINCE_VERSION)
     {
-      cairo_region_get_rectangle (damage, i, &rect);
-      if (wl_surface_version >= WL_SURFACE_DAMAGE_BUFFER_SINCE_VERSION)
+      n = cairo_region_num_rectangles (damage);
+      for (i = 0; i < n; i++)
         {
-          float scale = gdk_surface_get_scale (surface);
-          gdk_rectangle_transform_affine (&rect, scale, scale, 0, 0, &rect);
+          cairo_region_get_rectangle (damage, i, &rect);
           wl_surface_damage_buffer (impl->display_server.wl_surface, rect.x, rect.y, rect.width, rect.height);
         }
-      else
-        {
-          wl_surface_damage (impl->display_server.wl_surface, rect.x, rect.y, rect.width, rect.height);
-        }
+    }
+  else
+    {
+      wl_surface_damage (impl->display_server.wl_surface,
+                         0, 0,
+                         gdk_surface_get_width (surface),
+                         gdk_surface_get_height (surface));
     }
 }
 

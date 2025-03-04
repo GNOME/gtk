@@ -32,8 +32,7 @@
 G_DEFINE_TYPE (GdkWin32CairoContext, gdk_win32_cairo_context, GDK_TYPE_CAIRO_CONTEXT)
 
 static cairo_surface_t *
-create_cairo_surface_for_surface (GdkSurface *surface,
-                                  int         scale)
+create_cairo_surface_for_surface (GdkSurface *surface)
 {
   cairo_surface_t *cairo_surface;
   HDC hdc;
@@ -46,7 +45,6 @@ create_cairo_surface_for_surface (GdkSurface *surface,
     }
 
   cairo_surface = cairo_win32_surface_create_with_format (hdc, CAIRO_FORMAT_ARGB32);
-  cairo_surface_set_device_scale (cairo_surface, scale, scale);
 
   return cairo_surface;
 }
@@ -60,13 +58,11 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext  *draw_context,
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
   GdkSurface *surface;
-  int scale;
   cairo_t *cr;
   int width, height;
   RECT queued_hwnd_rect;
 
   surface = gdk_draw_context_get_surface (draw_context);
-  scale = gdk_surface_get_scale_factor (surface);
 
   queued_hwnd_rect = gdk_win32_surface_handle_queued_move_resize (draw_context);
 
@@ -75,7 +71,7 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext  *draw_context,
   width = MAX (width, 1);
   height = MAX (height, 1);
 
-  self->hwnd_surface = create_cairo_surface_for_surface (surface, scale);
+  self->hwnd_surface = create_cairo_surface_for_surface (surface);
 
   if (!self->double_buffered)
     /* Non-double-buffered GDK surfaces paint on the window surface directly */
@@ -96,6 +92,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
                                                                  self->db_width,
                                                                  self->db_height);
 G_GNUC_END_IGNORE_DEPRECATIONS
+          cairo_surface_set_device_scale (self->db_surface, 1.0, 1.0);
         }
 
       /* Double-buffered GDK surfaces paint on a DB surface.
