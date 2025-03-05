@@ -235,6 +235,7 @@ enum
   PROP_DEBUG_NODES,
   PROP_HIGHLIGHT_SEQUENCES,
   PROP_SELECTED_SEQUENCE,
+  PROP_RECORD_EVENTS,
   LAST_PROP
 };
 
@@ -2294,6 +2295,10 @@ gtk_inspector_recorder_get_property (GObject    *object,
       g_value_set_boolean (value, recorder->recording != NULL);
       break;
 
+    case PROP_RECORD_EVENTS:
+      g_value_set_boolean (value, recorder->record_events);
+      break;
+
     case PROP_DEBUG_NODES:
       g_value_set_boolean (value, recorder->debug_nodes);
       break;
@@ -2324,6 +2329,10 @@ gtk_inspector_recorder_set_property (GObject      *object,
     {
     case PROP_RECORDING:
       gtk_inspector_recorder_set_recording (recorder, g_value_get_boolean (value));
+      break;
+
+    case PROP_RECORD_EVENTS:
+      recorder->record_events = g_value_get_boolean (value);
       break;
 
     case PROP_DEBUG_NODES:
@@ -2368,19 +2377,17 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   object_class->set_property = gtk_inspector_recorder_set_property;
   object_class->dispose = gtk_inspector_recorder_dispose;
 
-  props[PROP_RECORDING] =
-    g_param_spec_boolean ("recording", NULL, NULL,
-                          FALSE,
-                          G_PARAM_READWRITE);
-  props[PROP_DEBUG_NODES] =
-    g_param_spec_boolean ("debug-nodes", NULL, NULL,
-                          FALSE,
-                          G_PARAM_READWRITE);
-
+  props[PROP_RECORDING] = g_param_spec_boolean ("recording", NULL, NULL, FALSE, G_PARAM_READWRITE);
+  props[PROP_RECORD_EVENTS] = g_param_spec_boolean ("record-events", NULL, NULL, TRUE, G_PARAM_READWRITE);
+  props[PROP_DEBUG_NODES] = g_param_spec_boolean ("debug-nodes", NULL, NULL, FALSE, G_PARAM_READWRITE);
   props[PROP_HIGHLIGHT_SEQUENCES] = g_param_spec_boolean ("highlight-sequences", NULL, NULL, FALSE, G_PARAM_READWRITE);
   props[PROP_SELECTED_SEQUENCE] = g_param_spec_pointer ("selected-sequence", NULL, NULL, G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
+
+  gtk_widget_class_install_property_action (widget_class, "record.record-events", "record-events");
+  gtk_widget_class_install_property_action (widget_class, "record.debug-nodes", "debug-nodes");
+  gtk_widget_class_install_property_action (widget_class, "record.highlight-sequences", "highlight-sequences");
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/recorder.ui");
 
@@ -2412,6 +2419,8 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   GtkListItemFactory *factory;
   GtkSelectionModel *model;
   GtkColumnViewColumn *column;
+
+  recorder->record_events = TRUE;
 
   gtk_widget_init_template (GTK_WIDGET (recorder));
 
@@ -2508,7 +2517,6 @@ gtk_inspector_recorder_set_recording (GtkInspectorRecorder *recorder,
     {
       recorder->recording = gtk_inspector_start_recording_new ();
       recorder->start_time = 0;
-      recorder->record_events = TRUE;
       gtk_inspector_recorder_add_recording (recorder, recorder->recording);
     }
   else
