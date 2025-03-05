@@ -593,8 +593,8 @@ draw_gear(GtkGears *self,
   glBindBuffer(GL_ARRAY_BUFFER, gear_vbo);
 
   /* Set up the position of the attributes in the vertex buffer object */
-  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), NULL);
-  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (GLfloat *) 0 + 3);
+  glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void *) 0);
+  glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(GLfloat), (void *) (3 * sizeof(GLfloat)));
 
   /* Enable the attributes */
   glEnableVertexAttribArray(0);
