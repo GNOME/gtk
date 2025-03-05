@@ -31,8 +31,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-02 22:59+0000\n"
-"PO-Revision-Date: 2025-03-03 19:33+0800\n"
+"POT-Creation-Date: 2025-03-05 11:48+0000\n"
+"PO-Revision-Date: 2025-03-05 19:52+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -106,7 +106,7 @@ msgstr "无法以 %s 提供内容"
 msgid "The current backend does not support OpenGL"
 msgstr "当前后端不支持 OpenGL"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1701
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1696
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "已通过 GDK_DISABLE 禁用 Vulkan 支持"
 
@@ -169,21 +169,21 @@ msgstr "无兼容格式可用于传输内容。"
 msgid "No GL API allowed."
 msgstr "无允许的 GL API。"
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
-#: gdk/win32/gdkglcontext-win32-wgl.c:889
-#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
+#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:745
+#: gdk/win32/gdkglcontext-win32-wgl.c:888
+#: gdk/win32/gdkglcontext-win32-wgl.c:932 gdk/x11/gdkglcontext-glx.c:699
 msgid "Unable to create a GL context"
 msgstr "无法创建 GL 上下文"
 
-#: gdk/gdkglcontext.c:1307
+#: gdk/gdkglcontext.c:1312
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "已通过 GDK_DISABLE 禁用 OpenGL ES 接口"
 
-#: gdk/gdkglcontext.c:1319
+#: gdk/gdkglcontext.c:1324
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "已通过 GDK_DISABLE 禁用 OpenGL 接口"
 
-#: gdk/gdkglcontext.c:1330
+#: gdk/gdkglcontext.c:1335
 #, c-format
 msgid "Application does not support %s API"
 msgstr "应用程序不支持 %s API"
@@ -191,12 +191,12 @@ msgstr "应用程序不支持 %s API"
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2107
+#: gdk/gdkglcontext.c:2112
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "尝试使用 %s，但 %s 已在使用"
 
-#: gdk/gdkglcontext.c:2118
+#: gdk/gdkglcontext.c:2123
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "尝试使用 %s，但已通过 GDK_DISABLE 将其禁用"
@@ -752,21 +752,21 @@ msgstr "IDataObject_GetData (0x%x) 失败，返回码 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "无法将拖放数据的 W32 格式 0x%x 转换为 %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:668
+#: gdk/win32/gdkglcontext-win32-wgl.c:667
 msgid "No GL implementation is available"
 msgstr "没有可用的 GL 实现"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:755
+#: gdk/win32/gdkglcontext-win32-wgl.c:754
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "EGL %d.%d 版太旧。需要至少 %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:773
+#: gdk/win32/gdkglcontext-win32-wgl.c:772
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL 实现无法分享 GL 上下文"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1053
+#: gdk/win32/gdkglcontext-win32-wgl.c:1052
 msgid "No available configurations for the given pixel format"
 msgstr "指定的像素格式没有可用的设置"
 
@@ -3946,8 +3946,8 @@ msgid "Attribute"
 msgstr "属性"
 
 #: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:149
-#: gtk/inspector/recorder.ui:192 gtk/inspector/strv-editor.c:73
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:156
+#: gtk/inspector/recorder.ui:199 gtk/inspector/strv-editor.c:73
 msgid "Value"
 msgstr "值"
 
@@ -4434,40 +4434,60 @@ msgstr "来源："
 msgid "Defined At"
 msgstr "定义于"
 
-#: gtk/inspector/recorder.c:2036
+#: gtk/inspector/recorder.c:2055
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "无法保存 RenderNode"
 
 #: gtk/inspector/recorder.ui:20
-msgid "Record frames"
-msgstr "记录帧"
+msgid "Recording Options"
+msgstr "记录选项"
 
-#: gtk/inspector/recorder.ui:27
-msgid "Clear recorded frames"
-msgstr "清除已记录帧"
+#: gtk/inspector/recorder.ui:24
+msgid "Record events"
+msgstr "记录事件"
 
-#: gtk/inspector/recorder.ui:34
+#: gtk/inspector/recorder.ui:25
+msgid "record.record-events"
+msgstr "record.record-events"
+
+#: gtk/inspector/recorder.ui:28
 msgid "Add debug nodes"
 msgstr "添加调试节点"
 
-#: gtk/inspector/recorder.ui:42
+#: gtk/inspector/recorder.ui:29
+msgid "record.debug-nodes"
+msgstr "record.debug-nodes"
+
+#: gtk/inspector/recorder.ui:32
 msgid "Highlight event sequences"
 msgstr "高亮事件序列"
 
-#: gtk/inspector/recorder.ui:51
+#: gtk/inspector/recorder.ui:33
+msgid "record.highlight-sequences"
+msgstr "record.highlight-sequences"
+
+#: gtk/inspector/recorder.ui:42
+msgid "Record frames"
+msgstr "记录帧"
+
+#: gtk/inspector/recorder.ui:49
+msgid "Clear recorded frames"
+msgstr "清除已记录帧"
+
+#: gtk/inspector/recorder.ui:58
 msgid "Use a dark background"
 msgstr "使用暗色背景"
 
-#: gtk/inspector/recorder.ui:59
+#: gtk/inspector/recorder.ui:66
 msgid "Save selected node"
 msgstr "保存选中节点"
 
-#: gtk/inspector/recorder.ui:67
+#: gtk/inspector/recorder.ui:74
 msgid "Copy to clipboard"
 msgstr "复制到剪贴板"
 
-#: gtk/inspector/recorder.ui:144 gtk/inspector/recorder.ui:187
+#: gtk/inspector/recorder.ui:151 gtk/inspector/recorder.ui:194
 msgid "Property"
 msgstr "属性"
 
