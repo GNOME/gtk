@@ -157,7 +157,6 @@ fromCGRect (const CGRect rect)
   self->_layoutInvalid = TRUE;
 
   [self setContentsGravity:kCAGravityCenter];
-  [self setContentsScale:1.0f];
   [self setGeometryFlipped:YES];
 
   return self;
@@ -220,7 +219,6 @@ fromCGRect (const CGRect rect)
       info->tile = [GdkMacosTile layer];
 
       [info->tile setAffineTransform:transform];
-      [info->tile setContentsScale:1.0f];
       [info->tile setOpaque:info->opaque];
       [(id<CanSetContentsOpaque>)info->tile setContentsOpaque:info->opaque];
       [info->tile setFrame:info->area];
