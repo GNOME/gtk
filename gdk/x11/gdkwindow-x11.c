@@ -72,6 +72,8 @@
 #include <X11/extensions/Xdamage.h>
 #endif
 
+#define XLIB_COORD_MAX 32767
+
 const int _gdk_x11_event_mask_table[21] =
 {
   ExposureMask,
@@ -193,6 +195,14 @@ _gdk_x11_window_update_size (GdkWindowImplX11 *impl)
 {
   if (impl->cairo_surface)
     {
+      if (impl->unscaled_width < 0)
+        impl->unscaled_width = 0;
+      else if (impl->unscaled_width > XLIB_COORD_MAX)
+        impl->unscaled_width = XLIB_COORD_MAX;
+      if (impl->unscaled_height < 0)
+        impl->unscaled_height = 0;
+      else if (impl->unscaled_height > XLIB_COORD_MAX)
+        impl->unscaled_height = XLIB_COORD_MAX;
       cairo_xlib_surface_set_size (impl->cairo_surface,
                                    impl->unscaled_width, impl->unscaled_height);
     }
