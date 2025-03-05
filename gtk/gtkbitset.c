@@ -56,7 +56,7 @@ G_DEFINE_BOXED_TYPE (GtkBitset, gtk_bitset,
 
 /**
  * gtk_bitset_ref:
- * @self: (nullable): a `GtkBitset`
+ * @self: (not nullable): a `GtkBitset`
  *
  * Acquires a reference on the given `GtkBitset`.
  *
@@ -74,7 +74,7 @@ gtk_bitset_ref (GtkBitset *self)
 
 /**
  * gtk_bitset_unref:
- * @self: (nullable): a `GtkBitset`
+ * @self: (not nullable) (transfer full): a `GtkBitset`
  *
  * Releases a reference on the given `GtkBitset`.
  *
