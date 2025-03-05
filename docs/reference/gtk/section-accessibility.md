@@ -1,4 +1,4 @@
-Title: GTK Accessibility
+Title: Accessibility
 Slug: gtk-accessibility
 
 ## The standard accessibility interface
@@ -388,3 +388,10 @@ and `decrease-value`.
 
 Since GTK 4.10, the best way to suppose changing the value is by implementing
 the [iface@Gtk.AccessibleRange] interface.
+
+## Other resources
+
+The Orca screenreader has [Tips for Application Developers](https://gitlab.gnome.org/GNOME/orca/-/blob/main/README-APPLICATION-DEVELOPERS.md).
+
+The [Web Content Accessibility Guidelines](https://www.w3.org/TR/WCAG21/) are Web-focused,
+but useful nevertheless.
