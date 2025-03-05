@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-02 15:08+0000\n"
-"PO-Revision-Date: 2025-03-02 22:44+0100\n"
+"POT-Creation-Date: 2025-03-05 15:05+0000\n"
+"PO-Revision-Date: 2025-03-05 21:36+0100\n"
 "Last-Translator: Daniel Rusek <mail@asciiwolf.com>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "Language: cs\n"
@@ -97,7 +97,7 @@ msgstr "Nezdařilo se poskytnout obsah jako %s"
 msgid "The current backend does not support OpenGL"
 msgstr "Aktuální podpůrná vrstva nepodporuje OpenGL"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1701
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1696
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Podpora technologie Vulkan je zakázána skrz GDK_DISABLE"
 
@@ -162,21 +162,21 @@ msgstr "Není k dispozici žádný kompatibilní formát pro přenos obsahu."
 msgid "No GL API allowed."
 msgstr "Není povolené žádné GL API."
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
-#: gdk/win32/gdkglcontext-win32-wgl.c:889
-#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
+#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:745
+#: gdk/win32/gdkglcontext-win32-wgl.c:888
+#: gdk/win32/gdkglcontext-win32-wgl.c:932 gdk/x11/gdkglcontext-glx.c:699
 msgid "Unable to create a GL context"
 msgstr "Nelze vytvořit kontext GL"
 
-#: gdk/gdkglcontext.c:1307
+#: gdk/gdkglcontext.c:1312
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "OpenGL ES API je zakázáno skrz GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1319
+#: gdk/gdkglcontext.c:1324
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "OpenGL API je zakázáno skrz GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1330
+#: gdk/gdkglcontext.c:1335
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Aplikace nepodporuje API %s"
@@ -184,12 +184,12 @@ msgstr "Aplikace nepodporuje API %s"
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2107
+#: gdk/gdkglcontext.c:2112
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Zkouší se použít %s, ale již se používá %s"
 
-#: gdk/gdkglcontext.c:2118
+#: gdk/gdkglcontext.c:2123
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "Zkouší se použít %s, ale je zakázáno skrz GDK_DISABLE"
@@ -776,21 +776,21 @@ msgstr "Selhalo volání IDataObject_GetData (0x%x), vrací se 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Selhala přeměna dat DnD ve formátu W32 0x%x na %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:668
+#: gdk/win32/gdkglcontext-win32-wgl.c:667
 msgid "No GL implementation is available"
 msgstr "Není k dispozici žádná implementace GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:755
+#: gdk/win32/gdkglcontext-win32-wgl.c:754
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Verze WGL %d.%d je příliš stará, je třeba alespoň %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:773
+#: gdk/win32/gdkglcontext-win32-wgl.c:772
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Implementace GL nemůže sdílet kontexty GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1053
+#: gdk/win32/gdkglcontext-win32-wgl.c:1052
 msgid "No available configurations for the given pixel format"
 msgstr "Není dostupné žádné nastavení pro daný pixelový fotmát"
 
@@ -3979,8 +3979,8 @@ msgid "Attribute"
 msgstr "Atribut"
 
 #: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:149
-#: gtk/inspector/recorder.ui:192 gtk/inspector/strv-editor.c:73
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:156
+#: gtk/inspector/recorder.ui:199 gtk/inspector/strv-editor.c:73
 msgid "Value"
 msgstr "Hodnota"
 
@@ -4468,40 +4468,62 @@ msgstr "Zdroj:"
 msgid "Defined At"
 msgstr "Definováno v"
 
-#: gtk/inspector/recorder.c:2036
+#: gtk/inspector/recorder.c:2055
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Uložení RenderNode selhalo"
 
 #: gtk/inspector/recorder.ui:20
-msgid "Record frames"
-msgstr "Nahrávat snímky"
+msgid "Recording Options"
+msgstr "Možnosti nahrávání"
 
-#: gtk/inspector/recorder.ui:27
-msgid "Clear recorded frames"
-msgstr "Vymazat nahrané snímky"
+#: gtk/inspector/recorder.ui:24
+msgid "Record events"
+msgstr "Nahrávat události"
 
-#: gtk/inspector/recorder.ui:34
+#: gtk/inspector/recorder.ui:25
+msgid "record.record-events"
+msgstr ""
+
+#: gtk/inspector/recorder.ui:28
 msgid "Add debug nodes"
 msgstr "Přidal ladicí uzly"
 
-#: gtk/inspector/recorder.ui:42
+#: gtk/inspector/recorder.ui:29
+#| msgid "Add debug nodes"
+msgid "record.debug-nodes"
+msgstr ""
+
+#: gtk/inspector/recorder.ui:32
 msgid "Highlight event sequences"
 msgstr "Zvýrazňovat posloupnosti událostí"
 
-#: gtk/inspector/recorder.ui:51
+#: gtk/inspector/recorder.ui:33
+#| msgid "Highlight event sequences"
+msgid "record.highlight-sequences"
+msgstr ""
+
+#: gtk/inspector/recorder.ui:42
+msgid "Record frames"
+msgstr "Nahrávat snímky"
+
+#: gtk/inspector/recorder.ui:49
+msgid "Clear recorded frames"
+msgstr "Vymazat nahrané snímky"
+
+#: gtk/inspector/recorder.ui:58
 msgid "Use a dark background"
 msgstr "Používat tmavé pozadí"
 
-#: gtk/inspector/recorder.ui:59
+#: gtk/inspector/recorder.ui:66
 msgid "Save selected node"
 msgstr "Uložit vybraný uzel"
 
-#: gtk/inspector/recorder.ui:67
+#: gtk/inspector/recorder.ui:74
 msgid "Copy to clipboard"
 msgstr "Zkopírovat do schránky"
 
-#: gtk/inspector/recorder.ui:144 gtk/inspector/recorder.ui:187
+#: gtk/inspector/recorder.ui:151 gtk/inspector/recorder.ui:194
 msgid "Property"
 msgstr "Vlastnost"
 
