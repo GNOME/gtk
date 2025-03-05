@@ -101,6 +101,7 @@ compare_render_tests = [
   'huge-width',
   'inset-shadow-multiple',
   'inter-hinting',
+  'inter-optical-scaling',
   'invalid-transform',
   'issue-3615',
   'linear-gradient-interpolation-nocairo',
@@ -258,6 +259,7 @@ compare_xfails = {
   },
   'cairo': {
     'inter-hinting': ['flip', 'rotate'],
+    'inter-optical-scaling': ['flip', 'rotate'],
   }
 }
 
