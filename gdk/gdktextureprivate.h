@@ -3,6 +3,7 @@
 #include "gdktexture.h"
 
 #include "gdkenums.h"
+#include "gdkdataformatprivate.h"
 #include "gdkmemoryformatprivate.h"
 
 G_BEGIN_DECLS
@@ -51,6 +52,9 @@ struct _GdkTextureClass {
                                                          GdkColorState          *color_state,
                                                          guchar                 *data,
                                                          gsize                   stride);
+  /* optional: Download into the given GdkDataBuffer */
+  GBytes *             (* download_data_buffer)         (GdkTexture             *texture,
+                                                         GdkDataBuffer          *out_buffer);
 };
 
 gboolean                gdk_texture_can_load            (GBytes                 *bytes);
@@ -66,6 +70,8 @@ void                    gdk_texture_do_download         (GdkTexture             
                                                          GdkColorState          *color_state,
                                                          guchar                 *data,
                                                          gsize                   stride);
+GBytes *                gdk_texture_download_data_buffer(GdkTexture             *texture,
+                                                         GdkDataBuffer          *out_buffer);
 void                    gdk_texture_diff                (GdkTexture             *self,
                                                          GdkTexture             *other,
                                                          cairo_region_t         *region);

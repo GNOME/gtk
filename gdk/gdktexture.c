@@ -280,6 +280,13 @@ gdk_texture_default_download (GdkTexture      *texture,
   GDK_TEXTURE_WARN_NOT_IMPLEMENTED_METHOD (texture, download);
 }
 
+static GBytes *
+gdk_texture_default_download_data_buffer (GdkTexture    *texture,
+                                          GdkDataBuffer *out_buffer)
+{
+  return NULL;
+}
+
 static void
 gdk_texture_set_property (GObject      *gobject,
                           guint         prop_id,
@@ -388,6 +395,7 @@ gdk_texture_class_init (GdkTextureClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   klass->download = gdk_texture_default_download;
+  klass->download_data_buffer = gdk_texture_default_download_data_buffer;
 
   gobject_class->set_property = gdk_texture_set_property;
   gobject_class->get_property = gdk_texture_get_property;
@@ -838,6 +846,26 @@ gdk_texture_do_download (GdkTexture      *texture,
                          gsize            stride)
 {
   GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, color_state, data, stride);
+}
+
+/*<private>
+ * gdk_texture_download_data_buffer:
+ * @texture: a texture
+ * @out_buffer: (out): The buffer to fill with the
+ *   relevant data
+ *
+ * Tries to download the texture without conversion into a single
+ * host memory region.
+ *
+ * If the texture format doesn't support raw download, NULL is returned.
+ *
+ * Returns: (nullable) the memory that @out_bytes is pointing into.
+ **/
+GBytes *
+gdk_texture_download_data_buffer (GdkTexture    *texture,
+                                  GdkDataBuffer *out_buffer)
+{
+  return GDK_TEXTURE_GET_CLASS (texture)->download_data_buffer (texture, out_buffer);
 }
 
 static gboolean
