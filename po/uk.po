@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-02 15:08+0000\n"
-"PO-Revision-Date: 2025-03-02 21:48+0200\n"
+"POT-Creation-Date: 2025-03-05 15:05+0000\n"
+"PO-Revision-Date: 2025-03-05 18:26+0200\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -86,7 +86,7 @@ msgstr "Не вдалося надати дані як %s"
 msgid "The current backend does not support OpenGL"
 msgstr "Цей модуль не підтримує OpenGL"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1701
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1696
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Вимкнено підтримування Vulkan через GDK_DISABLE"
 
@@ -138,7 +138,8 @@ msgstr "Не вдалося ініціалізувати дисплей EGL"
 #: gdk/gdkdisplay.c:1898
 #, c-format
 msgid "EGL version %d.%d is too old. GTK requires %d.%d"
-msgstr "Версія EGL %d.%d є надто давньою. Для роботи GTK потрібна версія %d.%d"
+msgstr ""
+"Версія EGL %d.%d є надто давньою. Для роботи GTK потрібна версія %d.%d"
 
 #: gdk/gdkdrop.c:130
 msgid "Drag’n’drop from other applications is not supported."
@@ -153,21 +154,21 @@ msgstr "Немає сумісних форматів для передаванн
 msgid "No GL API allowed."
 msgstr "Програмний інтерфейс GL заборонено."
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
-#: gdk/win32/gdkglcontext-win32-wgl.c:889
-#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
+#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:745
+#: gdk/win32/gdkglcontext-win32-wgl.c:888
+#: gdk/win32/gdkglcontext-win32-wgl.c:932 gdk/x11/gdkglcontext-glx.c:699
 msgid "Unable to create a GL context"
 msgstr "Неможливо створити вміст GL"
 
-#: gdk/gdkglcontext.c:1307
+#: gdk/gdkglcontext.c:1312
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "За допомогою GDK_DISABLE вимкнено API OpenGL ES"
 
-#: gdk/gdkglcontext.c:1319
+#: gdk/gdkglcontext.c:1324
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "API OpenGL вимкнено за допомогою GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1330
+#: gdk/gdkglcontext.c:1335
 #, c-format
 msgid "Application does not support %s API"
 msgstr "У програмі не передбачено підтримки програмного інтерфейсу %s"
@@ -175,12 +176,12 @@ msgstr "У програмі не передбачено підтримки пр�
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2107
+#: gdk/gdkglcontext.c:2112
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Намагаємося скористатися %s, але %s вже використано"
 
-#: gdk/gdkglcontext.c:2118
+#: gdk/gdkglcontext.c:2123
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr ""
@@ -629,7 +630,8 @@ msgstr ""
 
 #: gdk/win32/gdkclipdrop-win32.c:694
 #, c-format
-msgid "Cannot claim clipboard ownership. Another process claimed it before us."
+msgid ""
+"Cannot claim clipboard ownership. Another process claimed it before us."
 msgstr ""
 "Не вдалося отримати буфер обміну у власність. Інший процес пов'язав його із "
 "собою до нас."
@@ -656,7 +658,8 @@ msgstr ""
 
 #: gdk/win32/gdkclipdrop-win32.c:770 gdk/win32/gdkclipdrop-win32.c:801
 #, c-format
-msgid "Cannot set clipboard data. Another process claimed clipboard ownership."
+msgid ""
+"Cannot set clipboard data. Another process claimed clipboard ownership."
 msgstr ""
 "Не вдалося встановити дані буфера обміну. Інший процес пов'язав його із "
 "собою до нас."
@@ -770,21 +773,21 @@ msgstr ""
 "Не вдалося перетворити формат W32 даних перетягування зі скиданням 0x%x до "
 "%p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:668
+#: gdk/win32/gdkglcontext-win32-wgl.c:667
 msgid "No GL implementation is available"
 msgstr "Немає жодної реалізації GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:755
+#: gdk/win32/gdkglcontext-win32-wgl.c:754
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Версія WGL %d.%d є надто давньою. Потрібна версія принаймні %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:773
+#: gdk/win32/gdkglcontext-win32-wgl.c:772
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Реалізація GL не може оприлюднювати контексти GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1053
+#: gdk/win32/gdkglcontext-win32-wgl.c:1052
 msgid "No available configurations for the given pixel format"
 msgstr "Немає доступних налаштувань для заданого формату точок"
 
@@ -3464,7 +3467,8 @@ msgstr "Помилка при створенні перегляду"
 
 #: gtk/print/gtkprintoperation.c:2911
 #, c-format
-msgid "The most probable reason is that a temporary file could not be created."
+msgid ""
+"The most probable reason is that a temporary file could not be created."
 msgstr "Найімовірніша причина: не вдалось створити тимчасовий файл."
 
 #. window
@@ -3977,8 +3981,8 @@ msgid "Attribute"
 msgstr "Атрибут"
 
 #: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:149
-#: gtk/inspector/recorder.ui:192 gtk/inspector/strv-editor.c:73
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:156
+#: gtk/inspector/recorder.ui:199 gtk/inspector/strv-editor.c:73
 msgid "Value"
 msgstr "Значення"
 
@@ -4465,40 +4469,64 @@ msgstr "Джерело:"
 msgid "Defined At"
 msgstr "Визначено в"
 
-#: gtk/inspector/recorder.c:2036
+#: gtk/inspector/recorder.c:2055
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Не вдалося зберегти RenderNode"
 
 #: gtk/inspector/recorder.ui:20
-msgid "Record frames"
-msgstr "Запис кадрів"
+#| msgid "Description"
+msgid "Recording Options"
+msgstr "Параметри записування"
 
-#: gtk/inspector/recorder.ui:27
-msgid "Clear recorded frames"
-msgstr "Вилучити записані кадри"
+#: gtk/inspector/recorder.ui:24
+#| msgid "Record frames"
+msgid "Record events"
+msgstr "Записувати події"
 
-#: gtk/inspector/recorder.ui:34
+#: gtk/inspector/recorder.ui:25
+msgid "record.record-events"
+msgstr "record.record-events"
+
+#: gtk/inspector/recorder.ui:28
 msgid "Add debug nodes"
 msgstr "Додати діагностичні вузли"
 
-#: gtk/inspector/recorder.ui:42
+#: gtk/inspector/recorder.ui:29
+#| msgid "Add debug nodes"
+msgid "record.debug-nodes"
+msgstr "record.debug-nodes"
+
+#: gtk/inspector/recorder.ui:32
 msgid "Highlight event sequences"
 msgstr "Підсвітити послідовності подій"
 
-#: gtk/inspector/recorder.ui:51
+#: gtk/inspector/recorder.ui:33
+#| msgid "Highlight event sequences"
+msgid "record.highlight-sequences"
+msgstr "record.highlight-sequences"
+
+#: gtk/inspector/recorder.ui:42
+msgid "Record frames"
+msgstr "Запис кадрів"
+
+#: gtk/inspector/recorder.ui:49
+msgid "Clear recorded frames"
+msgstr "Вилучити записані кадри"
+
+#: gtk/inspector/recorder.ui:58
 msgid "Use a dark background"
 msgstr "Використовувати темне тло"
 
-#: gtk/inspector/recorder.ui:59
+#: gtk/inspector/recorder.ui:66
 msgid "Save selected node"
 msgstr "Зберегти позначений вузол"
 
-#: gtk/inspector/recorder.ui:67
+#: gtk/inspector/recorder.ui:74
 msgid "Copy to clipboard"
 msgstr "Скопіювати до буфера"
 
-#: gtk/inspector/recorder.ui:144 gtk/inspector/recorder.ui:187
+#: gtk/inspector/recorder.ui:151 gtk/inspector/recorder.ui:194
 msgid "Property"
 msgstr "Властивість"
 
@@ -6681,7 +6709,8 @@ msgstr "Серверні адреси"
 #: gtk/ui/gtkplacesview.ui:26
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
-msgstr "Серверні адреси складаються з префіксу протоколу та адреси. Наприклад:"
+msgstr ""
+"Серверні адреси складаються з префіксу протоколу та адреси. Наприклад:"
 
 #: gtk/ui/gtkplacesview.ui:52
 msgid "Available Protocols"
@@ -6908,8 +6937,6 @@ msgid "Some of the settings in the dialog conflict"
 msgstr "Деякі параметри у діалоговому вікні конфліктують"
 
 #: gtk/ui/gtkvideo.ui:25
-#| msgctxt "media controls tooltip"
-#| msgid "Play"
 msgid "Play"
 msgstr "Відтворити"
 
@@ -7053,7 +7080,8 @@ msgstr "Щоб надрукувати документ «%s», потрібно 
 #: modules/printbackends/gtkprintbackendcups.c:1478
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
-msgstr "Для друкування документа на принтері %s потрібно пройти автентифікацію"
+msgstr ""
+"Для друкування документа на принтері %s потрібно пройти автентифікацію"
 
 #: modules/printbackends/gtkprintbackendcups.c:1480
 msgid "Authentication is required to print this document"
