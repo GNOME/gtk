@@ -1211,7 +1211,7 @@ property_editor (GObject                *object,
                                  G_CALLBACK (attr_list_changed),
                                  prop_edit, G_OBJECT (prop_edit));
 
-      connect_controller (G_OBJECT (prop_edit), "changed",
+      connect_controller (G_OBJECT (prop_edit), "activate",
                           object, spec, G_CALLBACK (attr_list_modified));
     }
   else if (type == GTK_TYPE_PARAM_SPEC_EXPRESSION)
