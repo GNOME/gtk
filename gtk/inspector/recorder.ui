@@ -22,15 +22,15 @@
                   <menu>
                     <item>
                       <attribute name="label" translatable="yes">Record events</attribute>
-                      <attribute name="action" translatable="yes">record.record-events</attribute>
+                      <attribute name="action">record.record-events</attribute>
                     </item>
                     <item>
                       <attribute name="label" translatable="yes">Add debug nodes</attribute>
-                      <attribute name="action" translatable="yes">record.debug-nodes</attribute>
+                      <attribute name="action">record.debug-nodes</attribute>
                     </item>
                     <item>
                       <attribute name="label" translatable="yes">Highlight event sequences</attribute>
-                      <attribute name="action" translatable="yes">record.highlight-sequences</attribute>
+                      <attribute name="action">record.highlight-sequences</attribute>
                     </item>
                   </menu>
                 </property>
