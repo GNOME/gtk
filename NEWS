@@ -1,3 +1,25 @@
+Overview of Changes in GTK+ 3.24.49, 05-03-2025
+===============================================
+
+* Fix a crash in GtkIMContext
+
+* Fix crashes in DND with GtkPlug/GtkSocket
+
+* Wayland:
+ - Fix erroneous crossing events, causing menus to malfunction
+ - Support the cursor-shape protocol
+
+* X11:
+ - Enforce size limits on windows, preventing lockups
+
+* macOS:
+ - Fix pen tilt handling
+
+* Translation updates
+ Bulgarian
+ Thai
+
+
 Overview of Changes in GTK+ 3.24.48, 25-02-2025
 ===============================================
 
