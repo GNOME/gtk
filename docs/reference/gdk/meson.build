@@ -142,6 +142,8 @@ images = [
   'images/X_cursor.png',
   'images/zoom_in_cursor.png',
   'images/zoom_out_cursor.png',
+  'images/dnd_ask_cursor.png',
+  'images/all_resize_cursor.png',
 ]
 
 src_dir = [ gdkinc ]

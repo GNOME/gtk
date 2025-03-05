@@ -40,6 +40,7 @@
 #ifdef HAVE_XDG_ACTIVATION
 #include <gdk/wayland/xdg-activation-v1-client-protocol.h>
 #endif
+#include <gdk/wayland/cursor-shape-v1-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -108,6 +109,7 @@ struct _GdkWaylandDisplay
 #ifdef HAVE_XDG_ACTIVATION
   struct xdg_activation_v1 *xdg_activation;
 #endif
+  struct wp_cursor_shape_manager_v1 *cursor_shape;
 
   GList *async_roundtrips;
 
