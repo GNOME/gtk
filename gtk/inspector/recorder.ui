@@ -15,6 +15,28 @@
               <class name="toolbar"/>
             </style>
             <child>
+              <object class="GtkMenuButton">
+                <property name="icon-name">open-menu-symbolic</property>
+                <property name="tooltip-text" translatable="yes">Recording Options</property>
+                <property name="menu-model">
+                  <menu>
+                    <item>
+                      <attribute name="label" translatable="yes">Record events</attribute>
+                      <attribute name="action" translatable="yes">record.record-events</attribute>
+                    </item>
+                    <item>
+                      <attribute name="label" translatable="yes">Add debug nodes</attribute>
+                      <attribute name="action" translatable="yes">record.debug-nodes</attribute>
+                    </item>
+                    <item>
+                      <attribute name="label" translatable="yes">Highlight event sequences</attribute>
+                      <attribute name="action" translatable="yes">record.highlight-sequences</attribute>
+                    </item>
+                  </menu>
+                </property>
+              </object>
+            </child>
+            <child>
               <object class="GtkToggleButton">
                 <property name="icon-name">media-record-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Record frames</property>
@@ -26,23 +48,8 @@
                 <property name="icon-name">edit-clear-all-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Clear recorded frames</property>
                 <signal name="clicked" handler="recordings_clear_all"/>
-              </object>
-            </child>
-            <child>
-              <object class="GtkToggleButton">
-                <property name="icon-name">insert-object-symbolic</property>
-                <property name="tooltip-text" translatable="yes">Add debug nodes</property>
-                <property name="active" bind-source="GtkInspectorRecorder" bind-property="debug-nodes" bind-flags="bidirectional|sync-create"/>
+                <property name="hexpand">true</property>
                 <property name="halign">start</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkToggleButton">
-                <property name="icon-name">function-linear-symbolic</property>
-                <property name="tooltip-text" translatable="yes">Highlight event sequences</property>
-                <property name="active" bind-source="GtkInspectorRecorder" bind-property="highlight-sequences" bind-flags="bidirectional|sync-create"/>
-                <property name="halign">start</property>
-                <property name="hexpand">1</property>
               </object>
             </child>
             <child>
