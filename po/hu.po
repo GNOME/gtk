@@ -1,19 +1,19 @@
 # Hungarian translation for gtk.
-# Copyright (C) 1999, 2000, 2001, 2002, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 #
 # Szabolcs Ban <shooby at gnome dot hu>, 1999, 2000, 2001, 2002.
 # Andras Timar <timar at gnome dot hu>, 2002.
 # Laszlo Dvornik <dvornik at gnome dot hu>, 2004, 2005.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
-# Balázs Úr <ur.balazs at fsf dot hu>, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024.
+# Balázs Úr <ur.balazs at fsf dot hu>, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025.
 # Balázs Meskó <mesko.balazs at fsf dot hu>, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-02-21 19:59+0000\n"
-"PO-Revision-Date: 2024-02-23 01:37+0100\n"
+"POT-Creation-Date: 2025-02-13 02:08+0000\n"
+"PO-Revision-Date: 2025-03-06 01:44+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -556,7 +556,6 @@ msgstr "Nem támogatott színtípus (%u) a PNG-képben"
 
 #: gdk/loaders/gdkpng.c:272
 #, c-format
-#| msgid "Not enough memory for image size %ux%u"
 msgid "Image stride too large for image size %ux%u"
 msgstr "A kép memóriában elfoglalt helye túl nagy a(z) %u×%u méretű képhez"
 
@@ -1136,7 +1135,7 @@ msgstr ""
 
 #: gtk/deprecated/gtkshow.c:183
 msgid "Could not show link"
-msgstr "Nem jeleníthető meg a hivatkozás"
+msgstr "Nem sikerült megjeleníteni a hivatkozást"
 
 #: gtk/deprecated/gtkvolumebutton.c:236
 msgid "Muted"
@@ -2267,7 +2266,7 @@ msgstr "Adja meg az új mappa nevét"
 
 #: gtk/gtkfilechooserwidget.c:727
 msgid "The folder could not be created"
-msgstr "A mappa nem hozható létre"
+msgstr "A mappát nem sikerült létrehozni"
 
 #: gtk/gtkfilechooserwidget.c:740
 msgid "You need to choose a valid filename."
@@ -2300,15 +2299,15 @@ msgstr "Érvénytelen fájlnév"
 
 #: gtk/gtkfilechooserwidget.c:782
 msgid "The folder contents could not be displayed"
-msgstr "A mappa tartalma nem jeleníthető meg"
+msgstr "A mappa tartalmát nem sikerült megjeleníteni"
 
 #: gtk/gtkfilechooserwidget.c:790
 msgid "The file could not be deleted"
-msgstr "A fájl törlése nem sikerült"
+msgstr "A fájlt nem sikerült törölni"
 
 #: gtk/gtkfilechooserwidget.c:798
 msgid "The file could not be moved to the Trash"
-msgstr "A fájl nem helyezhető át a Kukába"
+msgstr "A fájlt nem sikerült áthelyezni a Kukába"
 
 #: gtk/gtkfilechooserwidget.c:1183
 #, c-format
@@ -2326,7 +2325,7 @@ msgstr "_Törlés"
 
 #: gtk/gtkfilechooserwidget.c:1298
 msgid "The file could not be renamed"
-msgstr "A fájl nem nevezhető át"
+msgstr "A fájlt nem sikerült átnevezni"
 
 #: gtk/gtkfilechooserwidget.c:1504
 msgid "Could not select file"
@@ -2446,8 +2445,10 @@ msgid "Yesterday"
 msgstr "Tegnap"
 
 #: gtk/gtkfilechooserwidget.c:3823
+#, c-format
+#| msgid "%-e %b"
 msgid "%-e %b"
-msgstr "%b. %-e."
+msgstr "%2$b. %1$-e."
 
 #: gtk/gtkfilechooserwidget.c:3827
 msgid "%-e %b %Y"
@@ -3352,7 +3353,8 @@ msgstr "Hiba a nyomtatási előnézet létrehozásakor"
 #: gtk/print/gtkprintoperation.c:2907
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr "A legvalószínűbb ok, hogy egy ideiglenes fájl nem hozható létre."
+msgstr ""
+"A legvalószínűbb ok, hogy egy ideiglenes fájlt nem sikerült létrehozni."
 
 #. window
 #: gtk/print/gtkprintoperation-portal.c:264
@@ -3447,42 +3449,42 @@ msgstr "Nyomtatóinformációk lekérése…"
 #. * multiple pages on a sheet when printing
 #.
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5647
+#: modules/printbackends/gtkprintbackendcups.c:5674
 msgid "Left to right, top to bottom"
 msgstr "Balról jobbra, fentről le"
 
 #: gtk/print/gtkprintunixdialog.c:2753
-#: modules/printbackends/gtkprintbackendcups.c:5647
+#: modules/printbackends/gtkprintbackendcups.c:5674
 msgid "Left to right, bottom to top"
 msgstr "Balról jobbra, lentről fel"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5648
+#: modules/printbackends/gtkprintbackendcups.c:5675
 msgid "Right to left, top to bottom"
 msgstr "Jobbról balra, fentről le"
 
 #: gtk/print/gtkprintunixdialog.c:2754
-#: modules/printbackends/gtkprintbackendcups.c:5648
+#: modules/printbackends/gtkprintbackendcups.c:5675
 msgid "Right to left, bottom to top"
 msgstr "Jobbról balra, lentről fel"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5649
+#: modules/printbackends/gtkprintbackendcups.c:5676
 msgid "Top to bottom, left to right"
 msgstr "Fentről le, balról jobbra"
 
 #: gtk/print/gtkprintunixdialog.c:2755
-#: modules/printbackends/gtkprintbackendcups.c:5649
+#: modules/printbackends/gtkprintbackendcups.c:5676
 msgid "Top to bottom, right to left"
 msgstr "Fentről le, jobbról balra"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5650
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Bottom to top, left to right"
 msgstr "Lentről fel, balról jobbra"
 
 #: gtk/print/gtkprintunixdialog.c:2756
-#: modules/printbackends/gtkprintbackendcups.c:5650
+#: modules/printbackends/gtkprintbackendcups.c:5677
 msgid "Bottom to top, right to left"
 msgstr "Lentről fel, jobbról balra"
 
@@ -6555,22 +6557,22 @@ msgstr "Nem található hangkimenet"
 #. * job priority option in the print dialog
 #.
 #: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5669
 msgid "Urgent"
 msgstr "Sürgős"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5669
 msgid "High"
 msgstr "Magas"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5669
 msgid "Medium"
 msgstr "Közepes"
 
 #: modules/printbackends/gtkprintbackendcpdb.c:541
-#: modules/printbackends/gtkprintbackendcups.c:5642
+#: modules/printbackends/gtkprintbackendcups.c:5669
 msgid "Low"
 msgstr "Alacsony"
 
@@ -6578,7 +6580,7 @@ msgstr "Alacsony"
 #. * dialog that controls the front cover page.
 #.
 #: modules/printbackends/gtkprintbackendcpdb.c:562
-#: modules/printbackends/gtkprintbackendcups.c:5784
+#: modules/printbackends/gtkprintbackendcups.c:5811
 msgctxt "printer option"
 msgid "Before"
 msgstr "Előtte"
@@ -6587,7 +6589,7 @@ msgstr "Előtte"
 #. * dialog that controls the back cover page.
 #.
 #: modules/printbackends/gtkprintbackendcpdb.c:569
-#: modules/printbackends/gtkprintbackendcups.c:5799
+#: modules/printbackends/gtkprintbackendcups.c:5826
 msgctxt "printer option"
 msgid "After"
 msgstr "Mögötte"
@@ -6767,266 +6769,266 @@ msgstr "A nyomtató („%s”) problémát észlelt."
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/gtkprintbackendcups.c:4584
-#: modules/printbackends/gtkprintbackendcups.c:4651
+#: modules/printbackends/gtkprintbackendcups.c:4611
+#: modules/printbackends/gtkprintbackendcups.c:4678
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "Kétoldalas"
 
-#: modules/printbackends/gtkprintbackendcups.c:4585
+#: modules/printbackends/gtkprintbackendcups.c:4612
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "Papírtípus"
 
-#: modules/printbackends/gtkprintbackendcups.c:4586
+#: modules/printbackends/gtkprintbackendcups.c:4613
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "Papírforrás"
 
-#: modules/printbackends/gtkprintbackendcups.c:4587
-#: modules/printbackends/gtkprintbackendcups.c:4652
+#: modules/printbackends/gtkprintbackendcups.c:4614
+#: modules/printbackends/gtkprintbackendcups.c:4679
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "Kimeneti tálca"
 
-#: modules/printbackends/gtkprintbackendcups.c:4588
+#: modules/printbackends/gtkprintbackendcups.c:4615
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "Felbontás"
 
-#: modules/printbackends/gtkprintbackendcups.c:4589
+#: modules/printbackends/gtkprintbackendcups.c:4616
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "GhostScript előszűrés"
 
-#: modules/printbackends/gtkprintbackendcups.c:4598
+#: modules/printbackends/gtkprintbackendcups.c:4625
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "Egyoldalas"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4600
+#: modules/printbackends/gtkprintbackendcups.c:4627
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "Hosszú él (szabványos)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4602
+#: modules/printbackends/gtkprintbackendcups.c:4629
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "Rövid él (tükrözés)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/gtkprintbackendcups.c:4604
-#: modules/printbackends/gtkprintbackendcups.c:4606
-#: modules/printbackends/gtkprintbackendcups.c:4614
+#: modules/printbackends/gtkprintbackendcups.c:4631
+#: modules/printbackends/gtkprintbackendcups.c:4633
+#: modules/printbackends/gtkprintbackendcups.c:4641
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "Automatikus kiválasztás"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/gtkprintbackendcups.c:4608
-#: modules/printbackends/gtkprintbackendcups.c:4610
-#: modules/printbackends/gtkprintbackendcups.c:4612
-#: modules/printbackends/gtkprintbackendcups.c:4616
+#: modules/printbackends/gtkprintbackendcups.c:4635
+#: modules/printbackends/gtkprintbackendcups.c:4637
+#: modules/printbackends/gtkprintbackendcups.c:4639
+#: modules/printbackends/gtkprintbackendcups.c:4643
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "Nyomtató alapértelmezése"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4618
+#: modules/printbackends/gtkprintbackendcups.c:4645
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "Csak GhostScript betűkészletek beágyazása"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4620
+#: modules/printbackends/gtkprintbackendcups.c:4647
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "Átalakítás 1. PS szintre"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4622
+#: modules/printbackends/gtkprintbackendcups.c:4649
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "Átalakítás 2. PS szintre"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/gtkprintbackendcups.c:4624
+#: modules/printbackends/gtkprintbackendcups.c:4651
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "Nincs előszűrés"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/gtkprintbackendcups.c:4633
+#: modules/printbackends/gtkprintbackendcups.c:4660
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "Egyebek"
 
-#: modules/printbackends/gtkprintbackendcups.c:4660
+#: modules/printbackends/gtkprintbackendcups.c:4687
 msgctxt "sides"
 msgid "One Sided"
 msgstr "Egyoldalas"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4662
+#: modules/printbackends/gtkprintbackendcups.c:4689
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "Hosszú él (szabványos)"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/gtkprintbackendcups.c:4664
+#: modules/printbackends/gtkprintbackendcups.c:4691
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "Rövid él (tükrözés)"
 
 #. Translators: Top output bin
-#: modules/printbackends/gtkprintbackendcups.c:4667
+#: modules/printbackends/gtkprintbackendcups.c:4694
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "Felső tároló"
 
 #. Translators: Middle output bin
-#: modules/printbackends/gtkprintbackendcups.c:4669
+#: modules/printbackends/gtkprintbackendcups.c:4696
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "Középső tároló"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/gtkprintbackendcups.c:4671
+#: modules/printbackends/gtkprintbackendcups.c:4698
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "Alsó tároló"
 
 #. Translators: Side output bin
-#: modules/printbackends/gtkprintbackendcups.c:4673
+#: modules/printbackends/gtkprintbackendcups.c:4700
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "Oldalsó tároló"
 
 #. Translators: Left output bin
-#: modules/printbackends/gtkprintbackendcups.c:4675
+#: modules/printbackends/gtkprintbackendcups.c:4702
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "Bal tároló"
 
 #. Translators: Right output bin
-#: modules/printbackends/gtkprintbackendcups.c:4677
+#: modules/printbackends/gtkprintbackendcups.c:4704
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "Jobb tároló"
 
 #. Translators: Center output bin
-#: modules/printbackends/gtkprintbackendcups.c:4679
+#: modules/printbackends/gtkprintbackendcups.c:4706
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "Központi tároló"
 
 #. Translators: Rear output bin
-#: modules/printbackends/gtkprintbackendcups.c:4681
+#: modules/printbackends/gtkprintbackendcups.c:4708
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "Hátsó tároló"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/gtkprintbackendcups.c:4683
+#: modules/printbackends/gtkprintbackendcups.c:4710
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "Felfelé néző tároló"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/gtkprintbackendcups.c:4685
+#: modules/printbackends/gtkprintbackendcups.c:4712
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "Lefelé néző tároló"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/gtkprintbackendcups.c:4687
+#: modules/printbackends/gtkprintbackendcups.c:4714
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "Nagy kapacitású tároló"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/gtkprintbackendcups.c:4709
+#: modules/printbackends/gtkprintbackendcups.c:4736
 #, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "%d. halmozó"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/gtkprintbackendcups.c:4713
+#: modules/printbackends/gtkprintbackendcups.c:4740
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "%d. postafiók"
 
 #. Translators: Private mailbox
-#: modules/printbackends/gtkprintbackendcups.c:4717
+#: modules/printbackends/gtkprintbackendcups.c:4744
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "Saját postafiók"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/gtkprintbackendcups.c:4721
+#: modules/printbackends/gtkprintbackendcups.c:4748
 #, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "%d. tálca"
 
-#: modules/printbackends/gtkprintbackendcups.c:5198
+#: modules/printbackends/gtkprintbackendcups.c:5225
 msgid "Printer Default"
 msgstr "Nyomtató alapértelmezése"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5672
+#: modules/printbackends/gtkprintbackendcups.c:5699
 msgid "Job Priority"
 msgstr "Feladatprioritás"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5683
+#: modules/printbackends/gtkprintbackendcups.c:5710
 msgid "Billing Info"
 msgstr "Fizetési információk"
 
 #. Translators, these strings are names for various 'standard' cover
 #. * pages that the printing system may support.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5707
+#: modules/printbackends/gtkprintbackendcups.c:5734
 msgctxt "cover page"
 msgid "None"
 msgstr "Nincs"
 
-#: modules/printbackends/gtkprintbackendcups.c:5708
+#: modules/printbackends/gtkprintbackendcups.c:5735
 msgctxt "cover page"
 msgid "Classified"
 msgstr "Nem nyilvános"
 
-#: modules/printbackends/gtkprintbackendcups.c:5709
+#: modules/printbackends/gtkprintbackendcups.c:5736
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "Bizalmas"
 
-#: modules/printbackends/gtkprintbackendcups.c:5710
+#: modules/printbackends/gtkprintbackendcups.c:5737
 msgctxt "cover page"
 msgid "Secret"
 msgstr "Titkos"
 
-#: modules/printbackends/gtkprintbackendcups.c:5711
+#: modules/printbackends/gtkprintbackendcups.c:5738
 msgctxt "cover page"
 msgid "Standard"
 msgstr "Szabványos"
 
-#: modules/printbackends/gtkprintbackendcups.c:5712
+#: modules/printbackends/gtkprintbackendcups.c:5739
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "Szigorúan titkos"
 
-#: modules/printbackends/gtkprintbackendcups.c:5713
+#: modules/printbackends/gtkprintbackendcups.c:5740
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "Nyilvános"
@@ -7034,7 +7036,7 @@ msgstr "Nyilvános"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5725
+#: modules/printbackends/gtkprintbackendcups.c:5752
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "Oldalak laponként"
@@ -7042,7 +7044,7 @@ msgstr "Oldalak laponként"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5742
+#: modules/printbackends/gtkprintbackendcups.c:5769
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "Oldalsorrend"
@@ -7051,7 +7053,7 @@ msgstr "Oldalsorrend"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5819
+#: modules/printbackends/gtkprintbackendcups.c:5846
 msgctxt "printer option"
 msgid "Print at"
 msgstr "Nyomtatás ekkor"
@@ -7059,7 +7061,7 @@ msgstr "Nyomtatás ekkor"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5830
+#: modules/printbackends/gtkprintbackendcups.c:5857
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "Nyomtatás adott időben"
@@ -7069,19 +7071,19 @@ msgstr "Nyomtatás adott időben"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/gtkprintbackendcups.c:5877
+#: modules/printbackends/gtkprintbackendcups.c:5904
 #, c-format
 msgid "Custom %s×%s"
 msgstr "Egyéni %s×%s"
 
 #. TRANSLATORS: this is the ICC color profile to use for this job
-#: modules/printbackends/gtkprintbackendcups.c:5988
+#: modules/printbackends/gtkprintbackendcups.c:6015
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "Nyomtatóprofil"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/gtkprintbackendcups.c:5995
+#: modules/printbackends/gtkprintbackendcups.c:6022
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "Nem érhető el"
@@ -7511,12 +7513,12 @@ msgstr "Információk szolgáltatása a megjelenítő csomóponttal kapcsolatban
 #: tools/gtk-rendernode-tool-render.c:225
 #, c-format
 msgid "No .node file specified\n"
-msgstr "Nincs .node fájl megadva\n"
+msgstr "Nincs .node-fájl megadva\n"
 
 #: tools/gtk-rendernode-tool-info.c:230
 #, c-format
 msgid "Can only accept a single .node file\n"
-msgstr "Csak egy önálló .node fájl fogadható el\n"
+msgstr "Csak egy önálló .node-fájl fogadható el\n"
 
 #: tools/gtk-rendernode-tool-show.c:105
 msgid "Don't add a titlebar"
@@ -7529,7 +7531,7 @@ msgstr "A megjelenítő csomópont megjelenítése."
 #: tools/gtk-rendernode-tool-show.c:140
 #, c-format
 msgid "Can only preview a single .node file\n"
-msgstr "Csak egy önálló .node fájl előnézete tekinthető meg\n"
+msgstr "Csak egy önálló .node-fájl előnézete tekinthető meg\n"
 
 #: tools/gtk-rendernode-tool-render.c:123
 #, c-format
@@ -7555,13 +7557,13 @@ msgstr "MEGJELENÍTŐ"
 
 #: tools/gtk-rendernode-tool-render.c:212
 msgid "Render a .node file to an image."
-msgstr "Egy .node fájl megjelenítésének kiírása egy képbe."
+msgstr "Egy .node-fájl megjelenítésének kiírása egy képbe."
 
 #: tools/gtk-rendernode-tool-render.c:231
 #, c-format
 msgid "Can only render a single .node file to a single output file\n"
 msgstr ""
-"Csak egy önálló .node fájl megjelenítése írható ki egy önálló kimeneti "
+"Csak egy önálló .node-fájl megjelenítése írható ki egy önálló kimeneti "
 "fájlba\n"
 
 #: tools/gtk-rendernode-tool-utils.c:51
@@ -7613,18 +7615,18 @@ msgstr "Az előállított gyorsítótár érvénytelen volt.\n"
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
-"%s nem nevezhető át a következőre: %s: %s, ezért a(z) %s eltávolításra "
-"kerül.\n"
+"Nem sikerült a(z) %s átnevezése következőre: %s: %s, ezért a(z) %s "
+"eltávolításra kerül.\n"
 
 #: tools/updateiconcache.c:1581
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr "%s nem nevezhető át (erre: %s): %s\n"
+msgstr "Nem sikerült a(z) %s átnevezése erre: %s: %s\n"
 
 #: tools/updateiconcache.c:1591
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "%s nem nevezhető át (erre: %s): %s.\n"
+msgstr "Nem sikerült a(z) %s visszanevezése erre: %s: %s.\n"
 
 #: tools/updateiconcache.c:1614
 #, c-format
@@ -7683,3 +7685,4 @@ msgstr ""
 "Nem található témaindexfájl a következőben: „%s”.\n"
 "Ha valóban ikongyorsítótárat kíván itt létrehozni, akkor használja a --"
 "ignore-theme-index kapcsolót.\n"
+
