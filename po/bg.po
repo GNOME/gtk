@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-06 00:02+0000\n"
-"PO-Revision-Date: 2025-03-03 09:53+0100\n"
+"POT-Creation-Date: 2025-03-06 00:30+0000\n"
+"PO-Revision-Date: 2025-03-06 07:59+0100\n"
 "Last-Translator: twlvnn kraftwerk <kraft_werk@tutanota.com>\n"
 "Language-Team: Bulgarian <dict-notifications@fsa-bg.org>\n"
 "Language: bg\n"
@@ -4476,16 +4476,12 @@ msgid "Saving RenderNode failed"
 msgstr "Неуспешно запазване на изобразения възел"
 
 #: gtk/inspector/recorder.ui:20
-#, fuzzy
-#| msgid "Description"
 msgid "Recording Options"
-msgstr "Описание"
+msgstr "Настройки за запис"
 
 #: gtk/inspector/recorder.ui:24
-#, fuzzy
-#| msgid "Record frames"
 msgid "Record events"
-msgstr "Записване на кадри"
+msgstr "Записване на събития"
 
 #: gtk/inspector/recorder.ui:28
 msgid "Add debug nodes"
@@ -8404,8 +8400,8 @@ msgstr "Не изтегляй резултата/изчакай видео ка�
 #: tools/gtk-rendernode-tool-benchmark.c:116
 msgid "Benchmark rendering of a .node file."
 msgstr ""
-"Тестване на производителността на изобразяването на файл с разширение „."
-"node“."
+"Тестване на производителността на изобразяването на файл с разширение "
+"„.node“."
 
 #: tools/gtk-rendernode-tool-benchmark.c:129
 #: tools/gtk-rendernode-tool-extract.c:316 tools/gtk-rendernode-tool-info.c:248
