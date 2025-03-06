@@ -1,27 +1,27 @@
 # Hungarian translation for gtk.
-# Copyright (C) 1999, 2000, 2001, 2002, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2025 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 #
 # Szabolcs Ban <shooby at gnome dot hu>, 1999, 2000, 2001, 2002.
 # Andras Timar <timar at gnome dot hu>, 2002.
 # Laszlo Dvornik <dvornik at gnome dot hu>, 2004, 2005.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
-# Balázs Úr <ur.balazs at fsf dot hu>, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022.
+# Balázs Úr <ur.balazs at fsf dot hu>, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2022, 2025.
 # Balázs Meskó <mesko.balazs at fsf dot hu>, 2021, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2022-09-02 21:41+0000\n"
-"PO-Revision-Date: 2022-09-18 08:28+0200\n"
+"POT-Creation-Date: 2025-02-13 02:15+0000\n"
+"PO-Revision-Date: 2025-03-06 01:57+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
-"Language-Team: Hungarian <gnome-hu-list at gnome dot org>\n"
+"Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 19.12.3\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -465,7 +465,7 @@ msgstr "Nem található megfelelő átviteli formátum"
 #: gdk/macos/gdkmacosclipboard.c:643
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
-msgstr "A tartalom dekódolása a(z) „%s” MIME-típussal sikertelen"
+msgstr "Nem sikerült a tartalom dekódolása a(z) „%s” MIME-típussal"
 
 #: gdk/wayland/gdkglcontext-wayland.c:191
 #: gdk/win32/gdkglcontext-win32-egl.c:402
@@ -540,15 +540,15 @@ msgstr ""
 #, c-format
 msgid "Cannot claim clipboard ownership. OpenClipboard() failed: 0x%lx."
 msgstr ""
-"Nem lehet elkérni a vágólap tulajdonjogát. Az OpenClipboard() sikertelen: 0x"
-"%lx."
+"Nem lehet elkérni a vágólap tulajdonjogát. Az OpenClipboard() sikertelen: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:754
 #, c-format
 msgid "Cannot claim clipboard ownership. EmptyClipboard() failed: 0x%lx."
 msgstr ""
-"Nem lehet elkérni a vágólap tulajdonjogát. Az EmptyClipboard() sikertelen: 0x"
-"%lx."
+"Nem lehet elkérni a vágólap tulajdonjogát. Az EmptyClipboard() sikertelen: "
+"0x%lx."
 
 #: gdk/win32/gdkclipdrop-win32.c:797
 #, c-format
@@ -733,7 +733,7 @@ msgstr "Nem érhető el EGL konfiguráció"
 
 #: gdk/x11/gdkglcontext-egl.c:188
 msgid "Failed to get EGL configurations"
-msgstr "Nem kérhetők le az EGL konfigurációk"
+msgstr "Nem sikerült lekérni az EGL konfigurációkat"
 
 #: gdk/x11/gdkglcontext-egl.c:266
 msgid "No EGL configuration with required features found"
@@ -749,7 +749,7 @@ msgstr "Az EGL nem támogatott"
 
 #: gdk/x11/gdkglcontext-egl.c:693
 msgid "Failed to create EGL display"
-msgstr "Az EGL megjelenítő létrehozása sikertelen"
+msgstr "Nem sikerült létrehozni az EGL megjelenítőt"
 
 #: gdk/x11/gdkglcontext-glx.c:772
 msgid "No GLX configurations available"
@@ -1530,7 +1530,7 @@ msgstr "Nem találhatók alkalmazások ezekhez: „%s” fájlok"
 
 #: gtk/gtkappchooserdialog.c:422
 msgid "Failed to start GNOME Software"
-msgstr "A GNOME Szoftverek indítása sikertelen"
+msgstr "Nem sikerült a GNOME Szoftverek indítása"
 
 #: gtk/gtkappchooserwidget.c:519
 msgid "Default Application"
@@ -2115,7 +2115,7 @@ msgstr "Adja meg az új mappa nevét"
 
 #: gtk/gtkfilechooserwidget.c:723
 msgid "The folder could not be created"
-msgstr "A mappa nem hozható létre"
+msgstr "A mappát nem sikerült létrehozni"
 
 #: gtk/gtkfilechooserwidget.c:736
 msgid "You need to choose a valid filename."
@@ -2148,15 +2148,15 @@ msgstr "Érvénytelen fájlnév"
 
 #: gtk/gtkfilechooserwidget.c:778
 msgid "The folder contents could not be displayed"
-msgstr "A mappa tartalma nem jeleníthető meg"
+msgstr "A mappa tartalmát nem sikerült megjeleníteni"
 
 #: gtk/gtkfilechooserwidget.c:786
 msgid "The file could not be deleted"
-msgstr "A fájl törlése nem sikerült"
+msgstr "A fájlt nem sikerült törölni"
 
 #: gtk/gtkfilechooserwidget.c:794
 msgid "The file could not be moved to the Trash"
-msgstr "A fájl nem helyezhető át a Kukába"
+msgstr "A fájlt nem sikerült áthelyezni a Kukába"
 
 #: gtk/gtkfilechooserwidget.c:1205
 #, c-format
@@ -2175,7 +2175,7 @@ msgstr "_Törlés"
 
 #: gtk/gtkfilechooserwidget.c:1333
 msgid "The file could not be renamed"
-msgstr "A fájl nem nevezhető át"
+msgstr "A fájlt nem sikerült átnevezni"
 
 #: gtk/gtkfilechooserwidget.c:1593
 msgid "Could not select file"
@@ -2278,8 +2278,10 @@ msgid "Yesterday"
 msgstr "Tegnap"
 
 #: gtk/gtkfilechooserwidget.c:4208
+#, c-format
+#| msgid "%-e %b"
 msgid "%-e %b"
-msgstr "%b. %-e."
+msgstr "%2$b. %1$-e."
 
 #: gtk/gtkfilechooserwidget.c:4212
 msgid "%-e %b %Y"
@@ -3171,7 +3173,8 @@ msgstr "Hiba a nyomtatási előnézet létrehozásakor"
 #: gtk/gtkprintoperation.c:2924
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr "A legvalószínűbb ok, hogy egy ideiglenes fájl nem hozható létre."
+msgstr ""
+"A legvalószínűbb ok, hogy egy ideiglenes fájlt nem sikerült létrehozni."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:554
@@ -3431,7 +3434,7 @@ msgstr "Próbáljon mást keresni"
 
 #: gtk/gtkshow.c:177
 msgid "Could not show link"
-msgstr "Nem jeleníthető meg a hivatkozás"
+msgstr "Nem sikerült megjeleníteni a hivatkozást"
 
 #: gtk/gtktext.c:6076 gtk/gtktextview.c:8924
 msgid "Insert _Emoji"
@@ -6704,7 +6707,6 @@ msgid "Services"
 msgstr "Szolgáltatások"
 
 #: gtk/ui/gtkapplication-quartz.ui:25
-#, c-format
 msgid "Hide %s"
 msgstr "%s elrejtése"
 
@@ -6717,7 +6719,6 @@ msgid "Show All"
 msgstr "Összes megjelenítése"
 
 #: gtk/ui/gtkapplication-quartz.ui:42
-#, c-format
 msgid "Quit %s"
 msgstr "%s bezárása"
 
@@ -6988,7 +6989,7 @@ msgstr "_Példányok:"
 
 #: gtk/ui/gtkprintunixdialog.ui:327
 msgid "C_ollate"
-msgstr "_Szétválogatás"
+msgstr "Össze_fésülés"
 
 #: gtk/ui/gtkprintunixdialog.ui:338
 msgid "_Reverse"
@@ -7820,7 +7821,7 @@ msgstr "Nem dolgozható fel: „%s”: %s\n"
 #: tools/gtk-builder-tool-simplify.c:2242
 #, c-format
 msgid "Failed to read “%s”: %s\n"
-msgstr "Nem olvasható: „%s”: %s\n"
+msgstr "Nem sikerült olvasni: „%s”: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2248
 #, c-format
@@ -7898,32 +7899,32 @@ msgstr "%s: hiba az alkalmazás indításakor: %s\n"
 #: tools/updateiconcache.c:1391
 #, c-format
 msgid "Failed to write header\n"
-msgstr "A fejléc írása sikertelen\n"
+msgstr "Nem sikerült a fejléc írása\n"
 
 #: tools/updateiconcache.c:1397
 #, c-format
 msgid "Failed to write hash table\n"
-msgstr "A hash tábla írása sikertelen\n"
+msgstr "Nem sikerült a hash tábla írása\n"
 
 #: tools/updateiconcache.c:1403
 #, c-format
 msgid "Failed to write folder index\n"
-msgstr "A mappaindex írása sikertelen\n"
+msgstr "Nem sikerült a mappaindex írása\n"
 
 #: tools/updateiconcache.c:1411
 #, c-format
 msgid "Failed to rewrite header\n"
-msgstr "A fejléc újraírása sikertelen\n"
+msgstr "Nem sikerült a fejléc újraírása\n"
 
 #: tools/updateiconcache.c:1505
 #, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "A fájl (%s) megnyitása sikertelen: %s\n"
+msgstr "Nem sikerült a(z) %s fájl megnyitása: %s\n"
 
 #: tools/updateiconcache.c:1513 tools/updateiconcache.c:1543
 #, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "A gyorsítótárfájl írása sikertelen: „%s”\n"
+msgstr "Nem sikerült a gyorsítótárfájl írása: „%s”\n"
 
 #: tools/updateiconcache.c:1553
 #, c-format
@@ -7934,18 +7935,18 @@ msgstr "Az előállított gyorsítótár érvénytelen volt.\n"
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
-"%s nem nevezhető át a következőre: %s: %s, ezért a(z) %s eltávolításra "
-"kerül.\n"
+"Nem sikerült a(z) %s átnevezése következőre: %s: %s, ezért a(z) %s "
+"eltávolításra kerül.\n"
 
 #: tools/updateiconcache.c:1581
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr "%s nem nevezhető át (erre: %s): %s\n"
+msgstr "Nem sikerült a(z) %s átnevezése erre: %s: %s\n"
 
 #: tools/updateiconcache.c:1591
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "%s nem nevezhető át (erre: %s): %s.\n"
+msgstr "Nem sikerült a(z) %s visszanevezése erre: %s: %s.\n"
 
 #: tools/updateiconcache.c:1618
 #, c-format
@@ -8004,3 +8005,4 @@ msgstr ""
 "Nem található témaindexfájl a következőben: „%s”.\n"
 "Ha valóban ikongyorsítótárat kíván itt létrehozni, akkor használja a --"
 "ignore-theme-index kapcsolót.\n"
+
