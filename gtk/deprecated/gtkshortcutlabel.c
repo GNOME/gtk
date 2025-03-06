@@ -428,6 +428,8 @@ gtk_shortcut_label_rebuild (GtkShortcutLabel *self)
   gtk_accessible_update_relation_value (GTK_ACCESSIBLE (self),
                                         1, &relation, &value);
 
+  g_list_free (parts);
+  g_value_unset (&value);
 }
 
 static void

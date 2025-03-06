@@ -613,6 +613,7 @@ gtk_reference_list_accessible_value_remove (GtkAccessibleValue *value,
   g_return_if_fail (value->value_class == &GTK_REFERENCE_LIST_ACCESSIBLE_VALUE);
 
   g_object_weak_unref (G_OBJECT (ref), remove_weak_ref_from_list, self);
+  self->refs = g_list_remove (self->refs, ref);
 }
 
 /* }}} */
@@ -1403,7 +1404,7 @@ gtk_accessible_value_collect_value (const GtkAccessibleCollect  *cstate,
           }
         else 
           {
-            value = g_value_get_pointer (value_);
+            value = g_list_copy (g_value_get_pointer (value_));
           }
 
         if (ctor == NULL)
