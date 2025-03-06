@@ -727,7 +727,7 @@ gtk_application_class_init (GtkApplicationClass *class)
  * the primary instance.
  *
  * Concretely, [func@Gtk.init] is called in the default handler for the
- * `GApplication::tartup` signal. Therefore, `GtkApplication` subclasses
+ * `GApplication::startup` signal. Therefore, `GtkApplication` subclasses
  * should always chain up in their [vfunc@GIO.Application.startup] handler
  * before using any GTK API.
  *
