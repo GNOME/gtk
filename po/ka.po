@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-02 15:08+0000\n"
-"PO-Revision-Date: 2025-03-02 21:52+0100\n"
+"POT-Creation-Date: 2025-03-06 00:02+0000\n"
+"PO-Revision-Date: 2025-03-06 01:23+0100\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -89,7 +89,7 @@ msgstr "შემცველობის %s-ად გამოტანა შ
 msgid "The current backend does not support OpenGL"
 msgstr "მიმდინარე უკანაბოლოს OpenGL-ის მხარდაჭერა არ გააჩნია"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1701
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1696
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Vulkan-ის მხარდაჭერა გამორთულია GDK_DISABLE-ით"
 
@@ -152,21 +152,21 @@ msgstr "შემცველობის გადატანის თავ�
 msgid "No GL API allowed."
 msgstr "GL API არ არის დაშვებული."
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
-#: gdk/win32/gdkglcontext-win32-wgl.c:889
-#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
+#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:745
+#: gdk/win32/gdkglcontext-win32-wgl.c:888
+#: gdk/win32/gdkglcontext-win32-wgl.c:932 gdk/x11/gdkglcontext-glx.c:699
 msgid "Unable to create a GL context"
 msgstr "GL-ის კონტექსტის შექმნა შეუძლებელია"
 
-#: gdk/gdkglcontext.c:1307
+#: gdk/gdkglcontext.c:1312
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "OpenGL ES API გამორთულია GDK_DISABLE-ის საშუალებით"
 
-#: gdk/gdkglcontext.c:1319
+#: gdk/gdkglcontext.c:1324
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "OpenGL API გამორთულია GDK_DISABLE-ის საშუალებით"
 
-#: gdk/gdkglcontext.c:1330
+#: gdk/gdkglcontext.c:1335
 #, c-format
 msgid "Application does not support %s API"
 msgstr "აპლიკაციას %s-ის API-ის მხარდაჭერა არ გააცნია"
@@ -174,12 +174,12 @@ msgstr "აპლიკაციას %s-ის API-ის მხარდა�
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2107
+#: gdk/gdkglcontext.c:2112
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s გამოყენების მცდელობა, მაგრამ %s უკვე გამოიყენება"
 
-#: gdk/gdkglcontext.c:2118
+#: gdk/gdkglcontext.c:2123
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "%s გამოყენების მცდელობა, მაგრამ ის GDK_DISABLE-ითაა გათიშული"
@@ -769,21 +769,21 @@ msgstr "IDataObject_GetData (0x%x) -ის შეცდომა, დააბ�
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "DnD-ის W32 მონაცემების ფორმატის 0x%x-დან %p-ში (%s) გადაყვანის შეცდომა"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:668
+#: gdk/win32/gdkglcontext-win32-wgl.c:667
 msgid "No GL implementation is available"
 msgstr "GL-ის იმპლემენტაცია არ არსებობს"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:755
+#: gdk/win32/gdkglcontext-win32-wgl.c:754
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL-ის ვერსია %d.%d ძალიან ძველია. საჭიროა მინიმუმ %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:773
+#: gdk/win32/gdkglcontext-win32-wgl.c:772
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL-ის განხორციელებებს GL-ის კონტექსტების გაზიარება არ შეუძლიათ"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1053
+#: gdk/win32/gdkglcontext-win32-wgl.c:1052
 msgid "No available configurations for the given pixel format"
 msgstr "მითითებული პიქსელის ფორმატისთვის ხელმისაწვდომი კონფიგურაციების გარეშე"
 
@@ -3967,8 +3967,8 @@ msgid "Attribute"
 msgstr "ატრიბუტი"
 
 #: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:149
-#: gtk/inspector/recorder.ui:192 gtk/inspector/strv-editor.c:73
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:156
+#: gtk/inspector/recorder.ui:199 gtk/inspector/strv-editor.c:73
 msgid "Value"
 msgstr "მნიშვნელობა"
 
@@ -4456,40 +4456,48 @@ msgstr "წყარო:"
 msgid "Defined At"
 msgstr "აღწერის წერტილი"
 
-#: gtk/inspector/recorder.c:2036
+#: gtk/inspector/recorder.c:2055
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "RenderNode-ის შენახვის შეცდომა"
 
 #: gtk/inspector/recorder.ui:20
-msgid "Record frames"
-msgstr "კადრების ჩაწერა"
+msgid "Recording Options"
+msgstr "ჩაწერის მორგება"
 
-#: gtk/inspector/recorder.ui:27
-msgid "Clear recorded frames"
-msgstr "ჩაწერილი კადრების გასუფთავება"
+#: gtk/inspector/recorder.ui:24
+msgid "Record events"
+msgstr "მოვლენების ჩასწერა"
 
-#: gtk/inspector/recorder.ui:34
+#: gtk/inspector/recorder.ui:28
 msgid "Add debug nodes"
 msgstr "გამართვის კვანძების დამატება"
 
-#: gtk/inspector/recorder.ui:42
+#: gtk/inspector/recorder.ui:32
 msgid "Highlight event sequences"
 msgstr "მოვლენების თანამიმდევრობის გამოკვეთა"
 
-#: gtk/inspector/recorder.ui:51
+#: gtk/inspector/recorder.ui:42
+msgid "Record frames"
+msgstr "კადრების ჩაწერა"
+
+#: gtk/inspector/recorder.ui:49
+msgid "Clear recorded frames"
+msgstr "ჩაწერილი კადრების გასუფთავება"
+
+#: gtk/inspector/recorder.ui:58
 msgid "Use a dark background"
 msgstr "მუქი ფონის გამოყენება"
 
-#: gtk/inspector/recorder.ui:59
+#: gtk/inspector/recorder.ui:66
 msgid "Save selected node"
 msgstr "მონიშნული კვანძის შენახვა"
 
-#: gtk/inspector/recorder.ui:67
+#: gtk/inspector/recorder.ui:74
 msgid "Copy to clipboard"
 msgstr "გაცვლის ბუფერში კოპირება"
 
-#: gtk/inspector/recorder.ui:144 gtk/inspector/recorder.ui:187
+#: gtk/inspector/recorder.ui:151 gtk/inspector/recorder.ui:194
 msgid "Property"
 msgstr "თვისება"
 
