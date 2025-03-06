@@ -1,19 +1,19 @@
 # Hungarian translation for gtk.
-# Copyright (C) 1999, 2000, 2001, 2002, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2024 Free Software Foundation, Inc.
+# Copyright (C) 1999, 2000, 2001, 2002, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2024, 2025 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gtk+ package.
 #
 # Szabolcs Ban <shooby at gnome dot hu>, 1999, 2000, 2001, 2002.
 # Andras Timar <timar at gnome dot hu>, 2002.
 # Laszlo Dvornik <dvornik at gnome dot hu>, 2004, 2005.
 # Gabor Kelemen <kelemeng at gnome dot hu>, 2004, 2005, 2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017.
-# Balázs Úr <ur.balazs at fsf dot hu>, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2024.
+# Balázs Úr <ur.balazs at fsf dot hu>, 2012, 2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021, 2024, 2025.
 # Balázs Meskó <mesko.balazs at fsf dot hu>, 2021.
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2024-03-16 21:10+0000\n"
-"PO-Revision-Date: 2024-05-20 01:54+0200\n"
+"POT-Creation-Date: 2025-02-13 02:12+0000\n"
+"PO-Revision-Date: 2025-03-06 01:49+0100\n"
 "Last-Translator: Balázs Úr <ur.balazs at fsf dot hu>\n"
 "Language-Team: Hungarian <openscope at fsf dot hu>\n"
 "Language: hu\n"
@@ -21,7 +21,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.4\n"
+"X-Generator: Lokalize 23.08.5\n"
 
 #: gdk/broadway/gdkbroadway-server.c:135
 #, c-format
@@ -458,7 +458,7 @@ msgstr "Nem található megfelelő átviteli formátum"
 #: gdk/macos/gdkmacosclipboard.c:338
 #, c-format
 msgid "Failed to decode contents with mime-type of '%s'"
-msgstr "A tartalom dekódolása a(z) „%s” MIME-típussal sikertelen"
+msgstr "Nem sikerült a tartalom dekódolása a(z) „%s” MIME-típussal"
 
 #: gdk/wayland/gdkglcontext-wayland.c:191 gdk/win32/gdkglcontext-win32.c:944
 #: gdk/win32/gdkglcontext-win32.c:985 gdk/x11/gdkglcontext-x11.c:581
@@ -1458,7 +1458,7 @@ msgstr "Nem találhatók alkalmazások ezekhez: „%s” fájlok"
 
 #: gtk/gtkappchooserdialog.c:422
 msgid "Failed to start GNOME Software"
-msgstr "A GNOME Szoftverek indítása sikertelen"
+msgstr "Nem sikerült a GNOME Szoftverek indítása"
 
 #: gtk/gtkappchooserwidget.c:519
 msgid "Default Application"
@@ -2043,7 +2043,7 @@ msgstr "Adja meg az új mappa nevét"
 
 #: gtk/gtkfilechooserwidget.c:723
 msgid "The folder could not be created"
-msgstr "A mappa nem hozható létre"
+msgstr "A mappát nem sikerült létrehozni"
 
 #: gtk/gtkfilechooserwidget.c:736
 msgid "You need to choose a valid filename."
@@ -2076,15 +2076,15 @@ msgstr "Érvénytelen fájlnév"
 
 #: gtk/gtkfilechooserwidget.c:778
 msgid "The folder contents could not be displayed"
-msgstr "A mappa tartalma nem jeleníthető meg"
+msgstr "A mappa tartalmát nem sikerült megjeleníteni"
 
 #: gtk/gtkfilechooserwidget.c:786
 msgid "The file could not be deleted"
-msgstr "A fájl törlése nem sikerült"
+msgstr "A fájlt nem sikerült törölni"
 
 #: gtk/gtkfilechooserwidget.c:794
 msgid "The file could not be moved to the Trash"
-msgstr "A fájl nem helyezhető át a Kukába"
+msgstr "A fájlt nem sikerült áthelyezni a Kukába"
 
 #: gtk/gtkfilechooserwidget.c:1205
 #, c-format
@@ -2103,7 +2103,7 @@ msgstr "_Törlés"
 
 #: gtk/gtkfilechooserwidget.c:1333
 msgid "The file could not be renamed"
-msgstr "A fájl nem nevezhető át"
+msgstr "A fájlt nem sikerült átnevezni"
 
 #: gtk/gtkfilechooserwidget.c:1593
 msgid "Could not select file"
@@ -2206,8 +2206,10 @@ msgid "Yesterday"
 msgstr "Tegnap"
 
 #: gtk/gtkfilechooserwidget.c:4209
+#, c-format
+#| msgid "%-e %b"
 msgid "%-e %b"
-msgstr "%b. %-e."
+msgstr "%2$b. %1$-e."
 
 #: gtk/gtkfilechooserwidget.c:4213
 msgid "%-e %b %Y"
@@ -3102,7 +3104,8 @@ msgstr "Hiba a nyomtatási előnézet létrehozásakor"
 #: gtk/gtkprintoperation.c:2924
 #, c-format
 msgid "The most probable reason is that a temporary file could not be created."
-msgstr "A legvalószínűbb ok, hogy egy ideiglenes fájl nem hozható létre."
+msgstr ""
+"A legvalószínűbb ok, hogy egy ideiglenes fájlt nem sikerült létrehozni."
 
 #. window
 #: gtk/gtkprintoperation-portal.c:236 gtk/gtkprintoperation-portal.c:554
@@ -3362,7 +3365,7 @@ msgstr "Próbáljon mást keresni"
 
 #: gtk/gtkshow.c:177
 msgid "Could not show link"
-msgstr "Nem jeleníthető meg a hivatkozás"
+msgstr "Nem sikerült megjeleníteni a hivatkozást"
 
 #: gtk/gtktext.c:6059 gtk/gtktextview.c:8779
 msgid "Insert _Emoji"
@@ -3979,7 +3982,7 @@ msgstr "Megvalósítja"
 
 #: gtk/inspector/visual.c:600 gtk/inspector/visual.c:619
 msgid "Theme is hardcoded by GTK_THEME"
-msgstr "A téma bedrótozva a GTK_THEME-ben"
+msgstr "A téma a GTK_THEME által beégetett érték"
 
 #: gtk/inspector/visual.c:831
 msgid "Backend does not support window scaling"
@@ -6600,7 +6603,7 @@ msgstr "Névjegy"
 
 #: gtk/ui/gtkaboutdialog.ui:123
 msgid "Credits"
-msgstr "Köszönet"
+msgstr "Köszönetnyilvánítás"
 
 #: gtk/ui/gtkaboutdialog.ui:206
 msgid "System"
@@ -6644,7 +6647,7 @@ msgstr "%s bezárása"
 
 #: gtk/ui/gtkassistant.ui:64
 msgid "_Finish"
-msgstr "_Befejezés"
+msgstr "Be_fejezés"
 
 #: gtk/ui/gtkassistant.ui:75
 msgid "_Back"
@@ -6656,7 +6659,7 @@ msgstr "_Következő"
 
 #: gtk/ui/gtkcolorchooserdialog.ui:4
 msgid "Select a Color"
-msgstr "Válasszon egy színt"
+msgstr "Válasszon színt"
 
 #: gtk/ui/gtkcoloreditor.ui:43 gtk/ui/gtkcoloreditor.ui:53
 msgid "Pick a color from the screen"
@@ -6714,7 +6717,7 @@ msgstr "Mosolyok és emberek"
 #: gtk/ui/gtkemojichooser.ui:94 gtk/ui/gtkemojichooser.ui:247
 msgctxt "emoji category"
 msgid "Body & Clothing"
-msgstr "Test és ruházat"
+msgstr "Test és ruhák"
 
 #: gtk/ui/gtkemojichooser.ui:119 gtk/ui/gtkemojichooser.ui:256
 msgctxt "emoji category"
@@ -6724,7 +6727,7 @@ msgstr "Állatok és természet"
 #: gtk/ui/gtkemojichooser.ui:133 gtk/ui/gtkemojichooser.ui:265
 msgctxt "emoji category"
 msgid "Food & Drink"
-msgstr "Étel-ital"
+msgstr "Étel és ital"
 
 #: gtk/ui/gtkemojichooser.ui:147 gtk/ui/gtkemojichooser.ui:274
 msgctxt "emoji category"
@@ -6766,7 +6769,7 @@ msgstr "Távoli hely – keresés csak a jelenlegi mappában"
 
 #: gtk/ui/gtkfilechooserwidget.ui:377
 msgid "Folder Name"
-msgstr "Mappa neve"
+msgstr "Mappanév"
 
 #: gtk/ui/gtkfilechooserwidget.ui:403
 msgid "_Create"
@@ -6782,7 +6785,7 @@ msgstr "Betűkészletnév keresése"
 
 #: gtk/ui/gtkfontchooserwidget.ui:79
 msgid "Filter by"
-msgstr "Szűrési szempont"
+msgstr "Szűrés eszerint:"
 
 #: gtk/ui/gtkfontchooserwidget.ui:89
 msgid "Monospace"
@@ -6839,8 +6842,7 @@ msgstr "Kiszolgálócímek"
 #: gtk/ui/gtkplacesview.ui:40
 msgid ""
 "Server addresses are made up of a protocol prefix and an address. Examples:"
-msgstr ""
-"A kiszolgálócímek egy protokollelőtagból és egy címből állnak. Például:"
+msgstr "A kiszolgálócímek egy protokollelőtagból és egy címből állnak. Példák:"
 
 #: gtk/ui/gtkplacesview.ui:66
 msgid "Available Protocols"
@@ -6849,7 +6851,7 @@ msgstr "Elérhető protokollok"
 #. Translators: Server as any successfully connected network address
 #: gtk/ui/gtkplacesview.ui:118
 msgid "No recent servers found"
-msgstr "Nem található legutóbbi kiszolgáló"
+msgstr "Nem találhatók legutóbbi kiszolgálók"
 
 #: gtk/ui/gtkplacesview.ui:141
 msgid "Recent Servers"
@@ -6878,11 +6880,11 @@ msgstr "Tartomány"
 
 #: gtk/ui/gtkprintunixdialog.ui:214
 msgid "_All Pages"
-msgstr "Min_den oldal"
+msgstr "Össz_es oldal"
 
 #: gtk/ui/gtkprintunixdialog.ui:226
 msgid "C_urrent Page"
-msgstr "J_elenlegi oldal"
+msgstr "_Jelenlegi oldal"
 
 #: gtk/ui/gtkprintunixdialog.ui:239
 msgid "Se_lection"
@@ -6897,20 +6899,20 @@ msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
 msgstr ""
-"Adjon meg oldaltartományokat,\n"
-" például 1–3, 7, 11"
+"Adjon meg egy vagy több oldaltartományt.\n"
+" például: 1-3, 7, 11"
 
 #: gtk/ui/gtkprintunixdialog.ui:289
 msgid "Copies"
-msgstr "Példányszám"
+msgstr "Példányok"
 
 #: gtk/ui/gtkprintunixdialog.ui:304
 msgid "Copie_s:"
-msgstr "Pél_dányszám:"
+msgstr "_Példányok:"
 
 #: gtk/ui/gtkprintunixdialog.ui:327
 msgid "C_ollate"
-msgstr "_Szétválogatás"
+msgstr "Össze_fésülés"
 
 #: gtk/ui/gtkprintunixdialog.ui:338
 msgid "_Reverse"
@@ -6926,19 +6928,19 @@ msgstr "_Kétoldalas:"
 
 #: gtk/ui/gtkprintunixdialog.ui:432
 msgid "Pages per _side:"
-msgstr "_Lapok oldalanként:"
+msgstr "Oldalak _laponként:"
 
 #: gtk/ui/gtkprintunixdialog.ui:456
 msgid "Page or_dering:"
-msgstr "Ol_dalsorrend:"
+msgstr "Oldal_sorrend:"
 
 #: gtk/ui/gtkprintunixdialog.ui:479
 msgid "_Only print:"
-msgstr "_Nyomtatandó:"
+msgstr "_Csak nyomtatás:"
 
 #: gtk/ui/gtkprintunixdialog.ui:495
 msgid "All sheets"
-msgstr "Minden oldal"
+msgstr "Összes oldal"
 
 #: gtk/ui/gtkprintunixdialog.ui:496
 msgid "Even sheets"
@@ -6958,19 +6960,19 @@ msgstr "Papír"
 
 #: gtk/ui/gtkprintunixdialog.ui:571
 msgid "Paper _type:"
-msgstr "Papír _típusa:"
+msgstr "Papír_típus:"
 
 #: gtk/ui/gtkprintunixdialog.ui:593
 msgid "Paper _source:"
-msgstr "_Papírforrás:"
+msgstr "Papír_forrás:"
 
 #: gtk/ui/gtkprintunixdialog.ui:615
 msgid "Output t_ray:"
-msgstr "Kimeneti tál_ca:"
+msgstr "Kimeneti _tálca:"
 
 #: gtk/ui/gtkprintunixdialog.ui:660
 msgid "Or_ientation:"
-msgstr "_Tájolás:"
+msgstr "Tá_jolás:"
 
 #: gtk/ui/gtkprintunixdialog.ui:734
 msgid "Job Details"
@@ -6978,11 +6980,11 @@ msgstr "Feladat részletei"
 
 #: gtk/ui/gtkprintunixdialog.ui:749
 msgid "Pri_ority:"
-msgstr "_Prioritás:"
+msgstr "Pri_oritás:"
 
 #: gtk/ui/gtkprintunixdialog.ui:770
 msgid "_Billing info:"
-msgstr "_Fizetési információk:"
+msgstr "Fi_zetési információk:"
 
 #: gtk/ui/gtkprintunixdialog.ui:803
 msgid "Print Document"
@@ -6991,7 +6993,7 @@ msgstr "Dokumentum nyomtatása"
 #. this is one of the choices for the print at option in the print dialog
 #: gtk/ui/gtkprintunixdialog.ui:816
 msgid "_Now"
-msgstr "_Azonnal"
+msgstr "_Most"
 
 #. this is one of the choices for the print at option in the print dialog. It also serves as the label for an entry that allows the user to enter a time.
 #: gtk/ui/gtkprintunixdialog.ui:830
@@ -7005,17 +7007,17 @@ msgid ""
 "Specify the time of print,\n"
 " e.g. 15∶30, 2∶35 pm, 14∶15∶20, 11∶46∶30 am, 4 pm"
 msgstr ""
-"A nyomtatás idejének megadása\n"
-" például: 15.30, 2.35 du, 14.15.20, 11.46.30 de, 4 du"
+"Adja meg a nyomtatás idejét,\n"
+" például 15:30, 14:15:20"
 
 #. this is one of the choices for the print at option in the print dialog. It means that the print job will not be printed until it explicitly gets 'released'.
 #: gtk/ui/gtkprintunixdialog.ui:864
 msgid "On _hold"
-msgstr "_Várakoztatás"
+msgstr "_Tartásban"
 
 #: gtk/ui/gtkprintunixdialog.ui:866 gtk/ui/gtkprintunixdialog.ui:867
 msgid "Hold the job until it is explicitly released"
-msgstr "A feladat felfüggesztése kifejezett elengedéséig"
+msgstr "A feladat tartása, amíg explicit módon el nem engedi"
 
 #: gtk/ui/gtkprintunixdialog.ui:894
 msgid "Add Cover Page"
@@ -7024,12 +7026,12 @@ msgstr "Borítóoldal hozzáadása"
 #. this is the label used for the option in the print dialog that controls the front cover page.
 #: gtk/ui/gtkprintunixdialog.ui:909
 msgid "Be_fore:"
-msgstr "_Elé:"
+msgstr "_Előtte:"
 
 #. this is the label used for the option in the print dialog that controls the back cover page.
 #: gtk/ui/gtkprintunixdialog.ui:930
 msgid "_After:"
-msgstr "_Mögé:"
+msgstr "_Mögötte:"
 
 #: gtk/ui/gtkprintunixdialog.ui:959
 msgid "Job"
@@ -7056,7 +7058,7 @@ msgstr "Speciális"
 
 #: gtk/ui/gtkprintunixdialog.ui:1092
 msgid "Some of the settings in the dialog conflict"
-msgstr "A párbeszédablak egyes beállításai ütköznek"
+msgstr "A párbeszédablak egyes beállításai ütköznek egymással"
 
 #: modules/media/gtkffmediafile.c:220
 #, c-format
@@ -7762,7 +7764,7 @@ msgstr "Nem dolgozható fel: „%s”: %s\n"
 #: tools/gtk-builder-tool-simplify.c:2241
 #, c-format
 msgid "Failed to read “%s”: %s\n"
-msgstr "Nem olvasható: „%s”: %s\n"
+msgstr "Nem sikerült olvasni: „%s”: %s\n"
 
 #: tools/gtk-builder-tool-simplify.c:2247
 #, c-format
@@ -7840,32 +7842,32 @@ msgstr "%s: hiba az alkalmazás indításakor: %s\n"
 #: tools/updateiconcache.c:1392
 #, c-format
 msgid "Failed to write header\n"
-msgstr "A fejléc írása sikertelen\n"
+msgstr "Nem sikerült a fejléc írása\n"
 
 #: tools/updateiconcache.c:1398
 #, c-format
 msgid "Failed to write hash table\n"
-msgstr "A hash tábla írása sikertelen\n"
+msgstr "Nem sikerült a hash tábla írása\n"
 
 #: tools/updateiconcache.c:1404
 #, c-format
 msgid "Failed to write folder index\n"
-msgstr "A mappaindex írása sikertelen\n"
+msgstr "Nem sikerült a mappaindex írása\n"
 
 #: tools/updateiconcache.c:1412
 #, c-format
 msgid "Failed to rewrite header\n"
-msgstr "A fejléc újraírása sikertelen\n"
+msgstr "Nem sikerült a fejléc újraírása\n"
 
 #: tools/updateiconcache.c:1506
 #, c-format
 msgid "Failed to open file %s : %s\n"
-msgstr "A fájl (%s) megnyitása sikertelen: %s\n"
+msgstr "Nem sikerült a(z) %s fájl megnyitása: %s\n"
 
 #: tools/updateiconcache.c:1514 tools/updateiconcache.c:1544
 #, c-format
 msgid "Failed to write cache file: %s\n"
-msgstr "A gyorsítótárfájl írása sikertelen: „%s”\n"
+msgstr "Nem sikerült a gyorsítótárfájl írása: „%s”\n"
 
 #: tools/updateiconcache.c:1554
 #, c-format
@@ -7876,18 +7878,18 @@ msgstr "Az előállított gyorsítótár érvénytelen volt.\n"
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr ""
-"%s nem nevezhető át a következőre: %s: %s, ezért a(z) %s eltávolításra "
-"kerül.\n"
+"Nem sikerült a(z) %s átnevezése következőre: %s: %s, ezért a(z) %s "
+"eltávolításra kerül.\n"
 
 #: tools/updateiconcache.c:1582
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
-msgstr "%s nem nevezhető át (erre: %s): %s\n"
+msgstr "Nem sikerült a(z) %s átnevezése erre: %s: %s\n"
 
 #: tools/updateiconcache.c:1592
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
-msgstr "%s nem nevezhető át (erre: %s): %s.\n"
+msgstr "Nem sikerült a(z) %s visszanevezése erre: %s: %s.\n"
 
 #: tools/updateiconcache.c:1619
 #, c-format
@@ -7946,3 +7948,4 @@ msgstr ""
 "Nem található témaindexfájl a következőben: „%s”.\n"
 "Ha valóban ikongyorsítótárat kíván itt létrehozni, akkor használja a --"
 "ignore-theme-index kapcsolót.\n"
+
