@@ -119,8 +119,7 @@ failure:
 static void
 copy_surface_data (GdkMacosBuffer       *from,
                    GdkMacosBuffer       *to,
-                   const cairo_region_t *region,
-                   int                   scale)
+                   const cairo_region_t *region)
 {
   const guint8 *from_base;
   guint8 *to_base;
@@ -148,11 +147,6 @@ copy_surface_data (GdkMacosBuffer       *from,
 
       cairo_region_get_rectangle (region, i, &rect);
 
-      rect.y *= scale;
-      rect.height *= scale;
-      rect.x *= scale;
-      rect.width *= scale;
-
       y2 = rect.y + rect.height;
 
       for (int y = rect.y; y < y2; y++)
@@ -160,14 +154,6 @@ copy_surface_data (GdkMacosBuffer       *from,
                 &from_base[y * from_stride + rect.x * 4],
                 rect.width * 4);
     }
-}
-
-static void
-clamp_region_to_surface (cairo_region_t *region,
-                         GdkSurface     *surface)
-{
-  cairo_rectangle_int_t rectangle = {0, 0, surface->width, surface->height};
-  cairo_region_intersect_rectangle (region, &rectangle);
 }
 
 static void
@@ -188,8 +174,6 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext  *draw_context,
 
   surface = GDK_MACOS_SURFACE (gdk_draw_context_get_surface (draw_context));
   buffer = _gdk_macos_surface_get_buffer (surface);
-
-  clamp_region_to_surface (region, GDK_SURFACE (surface));
 
   _gdk_macos_buffer_set_damage (buffer, region);
   _gdk_macos_buffer_set_flipped (buffer, FALSE);
@@ -215,10 +199,8 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext  *draw_context,
 
           if (!cairo_region_is_empty (copy))
             {
-              int scale = gdk_surface_get_scale_factor (GDK_SURFACE (surface));
-
               _gdk_macos_buffer_read_lock (surface->front);
-              copy_surface_data (surface->front, buffer, copy, scale);
+              copy_surface_data (surface->front, buffer, copy);
               _gdk_macos_buffer_read_unlock (surface->front);
             }
 

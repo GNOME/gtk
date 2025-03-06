@@ -281,7 +281,14 @@ _gdk_macos_buffer_set_damage (GdkMacosBuffer *self,
     return;
 
   g_clear_pointer (&self->damage, cairo_region_destroy);
+
   self->damage = cairo_region_copy (damage);
+  cairo_region_intersect_rectangle (self->damage,
+                                    &(cairo_rectangle_int_t) {
+                                      0, 0,
+                                      self->width, self->height
+                                    });
+  
 }
 
 gpointer
