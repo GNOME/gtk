@@ -548,6 +548,7 @@ gdk_android_dnd_surface_handle_drop_event (GdkAndroidSurface *surface,
       GdkDrag *drag = gdk_android_drag_from_drop_event (display, event, &native);
       if (drag)
         {
+          g_object_ref (drag);
           jboolean successful = (*env)->CallBooleanMethod (env, event,
                                                            gdk_android_get_java_cache()->a_drag_event.get_result);
           if (successful)
@@ -555,6 +556,7 @@ gdk_android_dnd_surface_handle_drop_event (GdkAndroidSurface *surface,
           gdk_drag_drop_done (drag, successful);
           g_hash_table_remove (display->drags, GSIZE_TO_POINTER (native));
           g_signal_emit_by_name (drag, "dnd-finished");
+          g_object_unref (drag);
         }
       return TRUE;
     }

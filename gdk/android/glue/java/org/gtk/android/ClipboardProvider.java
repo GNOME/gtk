@@ -23,6 +23,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.net.Uri;
 import android.view.View;
@@ -49,6 +50,14 @@ public final class ClipboardProvider {
 		Bitmap bitmap;
 		int hot_x;
 		int hot_y;
+
+		// The bitmap produced by the OpenGL renderer is vertically flipped,
+		// so we need a mechanism to unflip it.
+		public static Bitmap vflip(Bitmap bitmap) {
+			Matrix vflip = new Matrix();
+			vflip.setScale(1.f, -1.f);
+			return Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), vflip, false);
+		}
 
 		public ClipboardBitmapDragShadow(View view, Bitmap bitmap, int hot_x, int hot_y) {
 			super(view);

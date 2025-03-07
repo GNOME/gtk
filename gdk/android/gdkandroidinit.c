@@ -192,6 +192,7 @@ gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject ac
   jclass gdk_clipboard_bitmap_drag_shadow_class = gdk_android_init_find_class_using_classloader (env, application_classloader, "org/gtk/android/ClipboardProvider$ClipboardBitmapDragShadow");
   gdk_android_java_cache.clipboard_bitmap_drag_shadow.klass = (*env)->NewGlobalRef (env, gdk_clipboard_bitmap_drag_shadow_class);
   gdk_android_java_cache.clipboard_bitmap_drag_shadow.constructor = (*env)->GetMethodID (env, gdk_android_java_cache.clipboard_bitmap_drag_shadow.klass, "<init>", "(Landroid/view/View;Landroid/graphics/Bitmap;II)V");
+  gdk_android_java_cache.clipboard_bitmap_drag_shadow.vflip = (*env)->GetStaticMethodID (env, gdk_android_java_cache.clipboard_bitmap_drag_shadow.klass, "vflip", "(Landroid/graphics/Bitmap;)Landroid/graphics/Bitmap;");
 
   jclass gdk_clipboard_empty_drag_shadow_class = gdk_android_init_find_class_using_classloader (env, application_classloader, "org/gtk/android/ClipboardProvider$ClipboardEmptyDragShadow");
   gdk_android_java_cache.clipboard_empty_drag_shadow.klass = (*env)->NewGlobalRef (env, gdk_clipboard_empty_drag_shadow_class);

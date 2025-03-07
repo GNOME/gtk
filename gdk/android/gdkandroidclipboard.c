@@ -571,7 +571,7 @@ gdk_android_clipdata_read_async (GTask              *task,
               jstring text_str = (*env)->CallObjectMethod (env, text,
                                                            gdk_android_get_java_cache ()->j_object.to_string);
               gdk_android_clipboard_string_to_task_result (task,
-                                                           mimes[j],
+                                                           "text/plain;charset=utf-8",
                                                            text_str);
               goto cleanup;
             }
@@ -741,6 +741,10 @@ gdk_android_clipboard_description_to_formats (jobject clipdesc)
           jstring mime = (*env)->CallObjectMethod (env, clipdesc,
                                                    gdk_android_get_java_cache ()->a_clip_desc.get_mime_type, i);
           const char *utf = (*env)->GetStringUTFChars (env, mime, NULL); // this breaks on high codepoints
+          if (g_strcmp0(utf, "text/plain") == 0) {
+            // Consider all Android text/plain as UTF-8 (it comes in UTF-16, but we'll convert it)
+            gdk_content_formats_builder_add_mime_type (builder, "text/plain;charset=utf-8");
+          }
           gdk_content_formats_builder_add_mime_type (builder, utf);
           (*env)->ReleaseStringUTFChars (env, mime, utf);
 
