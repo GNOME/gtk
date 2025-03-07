@@ -1,19 +1,17 @@
 # Persian translation of gtk+.
-# Copyright (C) 2000, 2002, 2003, 2004, 2005 Sharif FarsiWeb, Inc.
-# Copyright (C) 2010, 2011 Iranian Free Software Users Group (IFSUG.org)translation team.
-# Roozbeh Pournader <roozbeh@farsiweb.info>, 2000, 2002-2005.
+# Roozbeh Pournader <roozbeh@farsiweb.info>, 2000-2005.
 # Meelad Zakaria <meelad@bamdad.org>, 2005.
 # Mahyar Moghimi <mahyar.moqimi@gmail.com>, 2010.
 # Ali Yousefi Sabzevar <aysabzevar@gmail.com>, 2010.
 # Arash Mousavi <mousavi.arash@gmail.com>, 2011-2017.
-# Danial Behzadi <dani.behzi@ubuntu.com>, 2018-2024.
+# Danial Behzadi <dani.behzi@ubuntu.com>, 2018-2025.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.6\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-02 22:59+0000\n"
-"PO-Revision-Date: 2025-03-03 18:46+0330\n"
+"POT-Creation-Date: 2025-03-07 18:41+0000\n"
+"PO-Revision-Date: 2025-03-08 02:04+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <>\n"
 "Language: fa\n"
@@ -89,7 +87,7 @@ msgstr "نمی‌توان محتوا را به شکل %s فراهم کرد"
 msgid "The current backend does not support OpenGL"
 msgstr "پسانه در حال حاضر از OpenGL پشتیبانی نمی‌کند"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1701
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1696
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "پشتیبانی از ولکان به دست GDK_DISABLE از کار افتاده"
 
@@ -153,21 +151,21 @@ msgstr "هیچ قالب سازگاری برای انتقال محتویات وج
 msgid "No GL API allowed."
 msgstr "هیچ رابط برنامه‌نویسی GLای مجاز نیست."
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
-#: gdk/win32/gdkglcontext-win32-wgl.c:889 gdk/win32/gdkglcontext-win32-wgl.c:933
+#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:745
+#: gdk/win32/gdkglcontext-win32-wgl.c:888 gdk/win32/gdkglcontext-win32-wgl.c:932
 #: gdk/x11/gdkglcontext-glx.c:699
 msgid "Unable to create a GL context"
 msgstr "امکان ساخت زمینه مناسب برای GL نبود"
 
-#: gdk/gdkglcontext.c:1307
+#: gdk/gdkglcontext.c:1312
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "میانای برنامه نویسی OpenGL ES به دست GDK_DISABLE از کار افتاد"
 
-#: gdk/gdkglcontext.c:1319
+#: gdk/gdkglcontext.c:1324
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "میانای برنامه نویسی OpenGL به دست GDK_DISABLE از کار افتاد"
 
-#: gdk/gdkglcontext.c:1330
+#: gdk/gdkglcontext.c:1335
 #, c-format
 msgid "Application does not support %s API"
 msgstr "برنامه از API مربوط به %s پشتبانی نمی‌کند"
@@ -175,12 +173,12 @@ msgstr "برنامه از API مربوط به %s پشتبانی نمی‌کند"
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2107
+#: gdk/gdkglcontext.c:2112
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "تلاش شد از %s استفاده شود، ولی %s از پیش در حال استفاده است"
 
-#: gdk/gdkglcontext.c:2118
+#: gdk/gdkglcontext.c:2123
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "تلاش شد از %s استفاده شود، ولی به دست GDK_DISABLE از کار افتاده"
@@ -736,21 +734,21 @@ msgstr "IDataObject_GetData (0x%x) شکست خورد. 0x%lx را برگردان�
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "شکست در تغییر شکل قالب W32 دادهٔ ک‌ور 0x%x به %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:668
+#: gdk/win32/gdkglcontext-win32-wgl.c:667
 msgid "No GL implementation is available"
 msgstr "هیچ پیاده سازی GLای پیدا نشد"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:755
+#: gdk/win32/gdkglcontext-win32-wgl.c:754
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL نگارش %Id. %Id بیش از حد قدیمی است. کمینه به %Id.%Id نیاز است"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:773
+#: gdk/win32/gdkglcontext-win32-wgl.c:772
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "پیاده‌سازی GL نمی‌تواند بافتارهای GL را هم‌رساند"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1053
+#: gdk/win32/gdkglcontext-win32-wgl.c:1052
 msgid "No available configurations for the given pixel format"
 msgstr "هیچ پیکربندی برای قالب نقطه‌ای ارائه شده موجود نیست"
 
@@ -3918,8 +3916,8 @@ msgid "Attribute"
 msgstr "ویژگی"
 
 #: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:149
-#: gtk/inspector/recorder.ui:192 gtk/inspector/strv-editor.c:73
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:156
+#: gtk/inspector/recorder.ui:199 gtk/inspector/strv-editor.c:73
 msgid "Value"
 msgstr "مقدار"
 
@@ -4256,8 +4254,8 @@ msgid "Surface"
 msgstr "سطح"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1153
-#: gtk/inspector/prop-editor.c:1536 gtk/inspector/window.ui:394
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1199
+#: gtk/inspector/prop-editor.c:1594 gtk/inspector/window.ui:394
 msgid "Properties"
 msgstr "ویژگی‌ها"
 
@@ -4305,7 +4303,7 @@ msgstr "سطح بالا (Toplevel) است"
 msgid "Child Visible"
 msgstr "فرزند قابل دیدن است"
 
-#: gtk/inspector/prop-editor.c:702
+#: gtk/inspector/prop-editor.c:748
 #, c-format
 msgid "Pointer: %p"
 msgstr "نشانگر: %p"
@@ -4313,7 +4311,7 @@ msgstr "نشانگر: %p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:827
+#: gtk/inspector/prop-editor.c:873
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s با مقدار «%s»"
@@ -4321,7 +4319,7 @@ msgstr "%s با مقدار «%s»"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:838
+#: gtk/inspector/prop-editor.c:884
 #, c-format
 msgid "%s with type %s"
 msgstr "%s با گونهٔ %s"
@@ -4329,7 +4327,7 @@ msgstr "%s با گونهٔ %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:851
+#: gtk/inspector/prop-editor.c:897
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s برای %s %p"
@@ -4337,72 +4335,72 @@ msgstr "%s برای %s %p"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:881
+#: gtk/inspector/prop-editor.c:927
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s با گونهٔ مقدار %s"
 
-#: gtk/inspector/prop-editor.c:1230
+#: gtk/inspector/prop-editor.c:1288
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "مشخصه غیرقابل ویرایش: %s"
 
 # farmaan
-#: gtk/inspector/prop-editor.c:1388
+#: gtk/inspector/prop-editor.c:1446
 msgctxt "column number"
 msgid "None"
 msgstr "هیچ‌کدام"
 
-#: gtk/inspector/prop-editor.c:1425
+#: gtk/inspector/prop-editor.c:1483
 msgid "Attribute:"
 msgstr "ویژگی:"
 
-#: gtk/inspector/prop-editor.c:1428
+#: gtk/inspector/prop-editor.c:1486
 msgid "Model"
 msgstr "مدل"
 
-#: gtk/inspector/prop-editor.c:1433
+#: gtk/inspector/prop-editor.c:1491
 msgid "Column:"
 msgstr "ستون:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1532
+#: gtk/inspector/prop-editor.c:1590
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "کنش از: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1587
+#: gtk/inspector/prop-editor.c:1645
 msgid "Reset"
 msgstr "تنظیم‌مجدد"
 
-#: gtk/inspector/prop-editor.c:1595
+#: gtk/inspector/prop-editor.c:1653
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "پیش‌گزیده"
 
-#: gtk/inspector/prop-editor.c:1598
+#: gtk/inspector/prop-editor.c:1656
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "زمینه"
 
-#: gtk/inspector/prop-editor.c:1601
+#: gtk/inspector/prop-editor.c:1659
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "تنظیمات X"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1663
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "برنامه"
 
-#: gtk/inspector/prop-editor.c:1608
+#: gtk/inspector/prop-editor.c:1666
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "ناشناخته"
 
-#: gtk/inspector/prop-editor.c:1611
+#: gtk/inspector/prop-editor.c:1669
 msgid "Source:"
 msgstr "منبع:"
 
@@ -4410,40 +4408,48 @@ msgstr "منبع:"
 msgid "Defined At"
 msgstr "تعریف شده در"
 
-#: gtk/inspector/recorder.c:2036
+#: gtk/inspector/recorder.c:2055
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "ذخیرهٔ RenderNode شکست خورد"
 
 #: gtk/inspector/recorder.ui:20
-msgid "Record frames"
-msgstr "ضبط قاب‌ها"
+msgid "Recording Options"
+msgstr "گزینه‌های ضبط کردن"
 
-#: gtk/inspector/recorder.ui:27
-msgid "Clear recorded frames"
-msgstr "پاک سازی قاب‌های ضبط‌شده"
+#: gtk/inspector/recorder.ui:24
+msgid "Record events"
+msgstr "ضبط رویدادها"
 
-#: gtk/inspector/recorder.ui:34
+#: gtk/inspector/recorder.ui:28
 msgid "Add debug nodes"
 msgstr "افزودن گره‌های اشکال‌زدایی"
 
-#: gtk/inspector/recorder.ui:42
+#: gtk/inspector/recorder.ui:32
 msgid "Highlight event sequences"
 msgstr "پررنگ کردن دنبالهٔ رویداد"
 
-#: gtk/inspector/recorder.ui:51
+#: gtk/inspector/recorder.ui:42
+msgid "Record frames"
+msgstr "ضبط قاب‌ها"
+
+#: gtk/inspector/recorder.ui:49
+msgid "Clear recorded frames"
+msgstr "پاک سازی قاب‌های ضبط‌شده"
+
+#: gtk/inspector/recorder.ui:58
 msgid "Use a dark background"
 msgstr "استفاده از یک پس‌زمینهٔ تاریک"
 
-#: gtk/inspector/recorder.ui:59
+#: gtk/inspector/recorder.ui:66
 msgid "Save selected node"
 msgstr "ذخیرهٔ گره گزیده"
 
-#: gtk/inspector/recorder.ui:67
+#: gtk/inspector/recorder.ui:74
 msgid "Copy to clipboard"
 msgstr "رونوشت در تخته‌گیره"
 
-#: gtk/inspector/recorder.ui:144 gtk/inspector/recorder.ui:187
+#: gtk/inspector/recorder.ui:151 gtk/inspector/recorder.ui:194
 msgid "Property"
 msgstr "مشخصه"
 
@@ -7783,7 +7789,7 @@ msgstr "بدون تفاوت.\n"
 
 #: tools/gtk-image-tool-convert.c:86
 msgid "Format to use"
-msgstr "قالب مورد استفاده:"
+msgstr "قالب مورد استفاده"
 
 #: tools/gtk-image-tool-convert.c:86
 msgid "FORMAT"
