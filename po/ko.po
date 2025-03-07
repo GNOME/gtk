@@ -14,8 +14,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-03 07:38+0000\n"
-"PO-Revision-Date: 2025-03-03 16:43+0900\n"
+"POT-Creation-Date: 2025-03-05 11:48+0000\n"
+"PO-Revision-Date: 2025-03-05 23:42+0900\n"
 "Last-Translator: Changwoo Ryu <cwryu@debian.org>\n"
 "Language-Team: Gnome Korea <gnome-kr@googlegroups.com>\n"
 "Language: ko\n"
@@ -92,7 +92,7 @@ msgstr "내용을 %s(으)로 제공할 수 없습니다"
 msgid "The current backend does not support OpenGL"
 msgstr "현재 백엔드가 OpenGL을 지원하지 않습니다"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1701
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1696
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "GDK_DISABLE을 통해 Vulkan 기능을 사용하지 않습니다"
 
@@ -155,21 +155,21 @@ msgstr "내용을 전달할 호환 형식이 없습니다."
 msgid "No GL API allowed."
 msgstr "GL API를 허용하지 않습니다."
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
-#: gdk/win32/gdkglcontext-win32-wgl.c:889
-#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
+#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:745
+#: gdk/win32/gdkglcontext-win32-wgl.c:888
+#: gdk/win32/gdkglcontext-win32-wgl.c:932 gdk/x11/gdkglcontext-glx.c:699
 msgid "Unable to create a GL context"
 msgstr "GL 컨텍스트를 만들 수 없습니다"
 
-#: gdk/gdkglcontext.c:1307
+#: gdk/gdkglcontext.c:1312
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "GDK_DISABLE을 통해 OpenGL ES를 사용하지 않습니다"
 
-#: gdk/gdkglcontext.c:1319
+#: gdk/gdkglcontext.c:1324
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "GDK_DISABLE을 통해 OpenGL을 사용하지 않습니다"
 
-#: gdk/gdkglcontext.c:1330
+#: gdk/gdkglcontext.c:1335
 #, c-format
 msgid "Application does not support %s API"
 msgstr "프로그램이 %s API를 지원하지 않습니다"
@@ -177,12 +177,12 @@ msgstr "프로그램이 %s API를 지원하지 않습니다"
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2107
+#: gdk/gdkglcontext.c:2112
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "%s 백엔드 사용을 시도했지만, 이미 %s 백엔드를 사용 중입니다"
 
-#: gdk/gdkglcontext.c:2118
+#: gdk/gdkglcontext.c:2123
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "%s 백엔드 사용을 시도했지만, GDK_DISABLE을 통해 사용하지 않습니다"
@@ -791,21 +791,21 @@ msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr ""
 "드래그앤드롭 W32 형식 0x%x에서 %p (%s) 형식으로 변환하는데 실패했습니다"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:668
+#: gdk/win32/gdkglcontext-win32-wgl.c:667
 msgid "No GL implementation is available"
 msgstr "GL 구현이 없습니다"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:755
+#: gdk/win32/gdkglcontext-win32-wgl.c:754
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL %d.%d 버전은 너무 낮습니다. 최소 %d.%d 버전이 필요합니다."
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:773
+#: gdk/win32/gdkglcontext-win32-wgl.c:772
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL 구현에서 GL 컨텍스트를 공유할 수 없습니다"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1053
+#: gdk/win32/gdkglcontext-win32-wgl.c:1052
 msgid "No available configurations for the given pixel format"
 msgstr "주어진 픽셀 형식에 대한 설정이 없습니다"
 
@@ -4008,8 +4008,8 @@ msgid "Attribute"
 msgstr "속성"
 
 #: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:149
-#: gtk/inspector/recorder.ui:192 gtk/inspector/strv-editor.c:73
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:156
+#: gtk/inspector/recorder.ui:199 gtk/inspector/strv-editor.c:73
 msgid "Value"
 msgstr "값"
 
@@ -4498,40 +4498,63 @@ msgstr "원본:"
 msgid "Defined At"
 msgstr "정의된 위치"
 
-#: gtk/inspector/recorder.c:2036
+#: gtk/inspector/recorder.c:2055
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "RenderNode 저장 실패"
 
 #: gtk/inspector/recorder.ui:20
-msgid "Record frames"
-msgstr "프레임 녹화"
+msgid "Recording Options"
+msgstr "녹화 옵션"
 
-#: gtk/inspector/recorder.ui:27
-msgid "Clear recorded frames"
-msgstr "녹화한 프레임 지우기"
+#: gtk/inspector/recorder.ui:24
+msgid "Record events"
+msgstr "이벤트 녹화"
 
-#: gtk/inspector/recorder.ui:34
+# 번역 문자열 아님
+#: gtk/inspector/recorder.ui:25
+msgid "record.record-events"
+msgstr "record.record-events"
+
+#: gtk/inspector/recorder.ui:28
 msgid "Add debug nodes"
 msgstr "디버깅 노드 추가"
 
-#: gtk/inspector/recorder.ui:42
+# 번역 문자열 아님
+#: gtk/inspector/recorder.ui:29
+msgid "record.debug-nodes"
+msgstr "record.debug-nodes"
+
+#: gtk/inspector/recorder.ui:32
 msgid "Highlight event sequences"
 msgstr "이벤트 순서 강조"
 
-#: gtk/inspector/recorder.ui:51
+# 번역 문자열 아님
+#: gtk/inspector/recorder.ui:33
+msgid "record.highlight-sequences"
+msgstr "record.highlight-sequences"
+
+#: gtk/inspector/recorder.ui:42
+msgid "Record frames"
+msgstr "프레임 녹화"
+
+#: gtk/inspector/recorder.ui:49
+msgid "Clear recorded frames"
+msgstr "녹화한 프레임 지우기"
+
+#: gtk/inspector/recorder.ui:58
 msgid "Use a dark background"
 msgstr "어두운 배경 사용"
 
-#: gtk/inspector/recorder.ui:59
+#: gtk/inspector/recorder.ui:66
 msgid "Save selected node"
 msgstr "선택한 노드 저장"
 
-#: gtk/inspector/recorder.ui:67
+#: gtk/inspector/recorder.ui:74
 msgid "Copy to clipboard"
 msgstr "클립보드에 복사"
 
-#: gtk/inspector/recorder.ui:144 gtk/inspector/recorder.ui:187
+#: gtk/inspector/recorder.ui:151 gtk/inspector/recorder.ui:194
 msgid "Property"
 msgstr "속성"
 
