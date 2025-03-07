@@ -1044,7 +1044,10 @@ handling is done via event controllers now.
 
 Only [method@Gtk.Widget.queue_draw] is left to mark a widget as needing redraw.
 Variations like `gtk_widget_queue_draw_rectangle()` or `gtk_widget_queue_draw_region()`
-are no longer available.
+are no longer available. The minimum unit of invalidation is the widget. If you are
+invalidating parts of a larger widget surface, like a canvas, you will need to replace
+those parts with child widgets instead. You can use widgets for your canvas items,
+or you can use a tiled rendering approach with a widget for each tile.
 
 ### Stop using GtkWidget::draw
 
