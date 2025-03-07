@@ -6660,17 +6660,16 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
       options = cairo_font_options_create ();
 
       cairo_font_options_set_antialias (options, CAIRO_ANTIALIAS_GRAY);
+      cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_OFF);
 
       if (dpi < 200.)
         {
           /* Not high-dpi. Prefer sharpness by enabling hinting */
-          cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_ON);
           cairo_font_options_set_hint_style (options, CAIRO_HINT_STYLE_SLIGHT);
         }
       else
         {
           /* High-dpi. Prefer precise positioning */
-          cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_OFF);
           cairo_font_options_set_hint_style (options, CAIRO_HINT_STYLE_NONE);
         }
 
