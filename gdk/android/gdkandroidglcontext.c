@@ -114,3 +114,20 @@ gdk_android_gl_context_class_init (GdkAndroidGLContextClass *class)
 static void
 gdk_android_gl_context_init (GdkAndroidGLContext *self)
 {}
+
+/**
+ * gdk_android_display_get_egl_display:
+ * @display: (transfer none): the display
+ *
+ * Retrieves the EGL display connection object for the given GDK display.
+ *
+ * Returns: (nullable): the EGL display
+ *
+ * Since: 4.18
+ */
+gpointer
+gdk_android_display_get_egl_display (GdkAndroidDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_ANDROID_DISPLAY (display), NULL);
+  return gdk_display_get_egl_display ((GdkDisplay *)display);
+}
