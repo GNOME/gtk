@@ -376,6 +376,22 @@ attr_list_modified (GtkEntry *entry, ObjectProperty *p)
 }
 
 static void
+tab_array_modified (GtkEntry *entry, ObjectProperty *p)
+{
+  GValue val = G_VALUE_INIT;
+  PangoTabArray *tabs;
+
+  tabs = pango_tab_array_from_string (gtk_editable_get_text (GTK_EDITABLE (entry)));
+  if (!tabs)
+    return;
+
+  g_value_init (&val, PANGO_TYPE_TAB_ARRAY);
+  g_value_take_boxed (&val, tabs);
+  set_property_value (p->obj, p->spec, &val);
+  g_value_unset (&val);
+}
+
+static void
 string_changed (GObject *object, GParamSpec *pspec, gpointer data)
 {
   GtkEntry *entry = GTK_ENTRY (data);
@@ -415,6 +431,36 @@ attr_list_changed (GObject *object, GParamSpec *pspec, gpointer data)
   attrs = g_value_get_boxed (&val);
   if (attrs)
     str = pango_attr_list_to_string (attrs);
+  if (str == NULL)
+    str = g_strdup ("");
+  text = gtk_editable_get_text (GTK_EDITABLE (entry));
+  if (g_strcmp0 (str, text) != 0)
+    {
+      block_controller (G_OBJECT (entry));
+      gtk_editable_set_text (GTK_EDITABLE (entry), str);
+      unblock_controller (G_OBJECT (entry));
+    }
+
+  g_free (str);
+
+  g_value_unset (&val);
+}
+
+static void
+tab_array_changed (GObject *object, GParamSpec *pspec, gpointer data)
+{
+  GtkEntry *entry = GTK_ENTRY (data);
+  GValue val = G_VALUE_INIT;
+  char *str = NULL;
+  const char *text;
+  PangoTabArray *tabs;
+
+  g_value_init (&val, PANGO_TYPE_TAB_ARRAY);
+  get_property_value (object, pspec, &val);
+
+  tabs = g_value_get_boxed (&val);
+  if (tabs)
+    str = pango_tab_array_to_string (tabs);
   if (str == NULL)
     str = g_strdup ("");
   text = gtk_editable_get_text (GTK_EDITABLE (entry));
@@ -1213,6 +1259,18 @@ property_editor (GObject                *object,
 
       connect_controller (G_OBJECT (prop_edit), "activate",
                           object, spec, G_CALLBACK (attr_list_modified));
+    }
+  else if (type == G_TYPE_PARAM_BOXED &&
+           G_PARAM_SPEC_VALUE_TYPE (spec) == PANGO_TYPE_TAB_ARRAY)
+    {
+      prop_edit = gtk_entry_new ();
+
+      g_object_connect_property (object, spec,
+                                 G_CALLBACK (tab_array_changed),
+                                 prop_edit, G_OBJECT (prop_edit));
+
+      connect_controller (G_OBJECT (prop_edit), "activate",
+                          object, spec, G_CALLBACK (tab_array_modified));
     }
   else if (type == GTK_TYPE_PARAM_SPEC_EXPRESSION)
     {
