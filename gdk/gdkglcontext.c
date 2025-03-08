@@ -2234,7 +2234,7 @@ gdk_gl_context_export_dmabuf (GdkGLContext *self,
   int i;
   int fourcc;
   int n_planes;
-  guint64 modifier;
+  EGLuint64KHR modifiers[GDK_DMABUF_MAX_PLANES];
   int fds[GDK_DMABUF_MAX_PLANES];
   int strides[GDK_DMABUF_MAX_PLANES];
   int offsets[GDK_DMABUF_MAX_PLANES];
@@ -2275,7 +2275,7 @@ gdk_gl_context_export_dmabuf (GdkGLContext *self,
                                       image,
                                       &fourcc,
                                       &n_planes,
-                                      &modifier))
+                                      NULL))
     {
       GDK_DISPLAY_DEBUG (display, DMABUF,
                          "eglExportDMABUFImageQueryMESA failed: %#x", eglGetError ());
@@ -2286,6 +2286,17 @@ gdk_gl_context_export_dmabuf (GdkGLContext *self,
     {
       GDK_DISPLAY_DEBUG (display, DMABUF,
                          "dmabufs with %d planes are not supported", n_planes);
+      goto out;
+    }
+
+  if (!eglExportDMABUFImageQueryMESA (egl_display,
+                                      image,
+                                      &fourcc,
+                                      &n_planes,
+                                      modifiers))
+    {
+      GDK_DISPLAY_DEBUG (display, DMABUF,
+                         "eglExportDMABUFImageQueryMESA for modifiers failed: %#x", eglGetError ());
       goto out;
     }
 
@@ -2309,7 +2320,7 @@ gdk_gl_context_export_dmabuf (GdkGLContext *self,
     }
 
   dmabuf->fourcc = (guint32)fourcc;
-  dmabuf->modifier = modifier;
+  dmabuf->modifier = modifiers[0];
   dmabuf->n_planes = n_planes;
 
   for (i = 0; i < n_planes; i++)
@@ -2321,7 +2332,7 @@ gdk_gl_context_export_dmabuf (GdkGLContext *self,
 
   GDK_DISPLAY_DEBUG (display, DMABUF,
                      "Exported GL texture to dmabuf (format: %.4s:%#" G_GINT64_MODIFIER "x, planes: %d)",
-             (char *)&fourcc, modifier, n_planes);
+                     (char *)&fourcc, modifiers[0], n_planes);
 
   result = TRUE;
 
