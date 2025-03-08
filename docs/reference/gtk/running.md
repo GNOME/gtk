@@ -360,9 +360,6 @@ disable certain features.
 `color-mgmt`
 : Disable color management
 
-`aerosnap`
-: Disable Aerosnap support on Windows
-
 `threads`
 : Disabled the use of threads where possible
 
