@@ -35,7 +35,6 @@ struct _GskGpuDownloadOp
 
   GskGpuImage *image;
   GdkColorState *color_state;
-  gboolean allow_dmabuf;
   GdkGpuDownloadOpCreateFunc create_func;
   GdkTexture **texture;
 
@@ -216,9 +215,8 @@ gsk_gpu_download_op_vk_command (GskGpuOp              *op,
   GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
 
 #ifdef HAVE_DMABUF
-  if (self->allow_dmabuf)
-    *self->texture = gsk_vulkan_image_to_dmabuf_texture (GSK_VULKAN_IMAGE (self->image),
-                                                        self->color_state);
+  *self->texture = gsk_vulkan_image_to_dmabuf_texture (GSK_VULKAN_IMAGE (self->image),
+                                                       self->color_state);
   if (*self->texture)
     {
       GskGpuDevice *device = gsk_gpu_frame_get_device (frame);
@@ -309,42 +307,40 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
   GdkGLTextureBuilder *builder;
   GskGLTextureData *data;
   guint texture_id;
+#ifdef HAVE_DMABUF
+  GdkGLContext *context;
+  Texture *texture;
+#endif
 
   texture_id = gsk_gl_image_get_texture_id (GSK_GL_IMAGE (self->image));
 
 #ifdef HAVE_DMABUF
-  if (self->allow_dmabuf)
+  context = GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame));
+  texture = g_new0 (Texture, 1);
+
+  if (gdk_gl_context_export_dmabuf (context, texture_id, &texture->dmabuf))
     {
-      GdkGLContext *context;
-      Texture *texture;
+      GdkDmabufTextureBuilder *db;
 
-      context = GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame));
-      texture = g_new0 (Texture, 1);
+      db = gdk_dmabuf_texture_builder_new ();
+      gdk_dmabuf_texture_builder_set_display (db, gdk_gl_context_get_display (context));
+      gdk_dmabuf_texture_builder_set_dmabuf (db, &texture->dmabuf);
+      gdk_dmabuf_texture_builder_set_premultiplied (db, gdk_memory_format_get_premultiplied (gsk_gpu_image_get_format (self->image)));
+      gdk_dmabuf_texture_builder_set_width (db, gsk_gpu_image_get_width (self->image));
+      gdk_dmabuf_texture_builder_set_height (db, gsk_gpu_image_get_height (self->image));
+      gdk_dmabuf_texture_builder_set_color_state (db, self->color_state);
 
-      if (gdk_gl_context_export_dmabuf (context, texture_id, &texture->dmabuf))
-        {
-          GdkDmabufTextureBuilder *db;
+      *self->texture = gdk_dmabuf_texture_builder_build (db, release_dmabuf_texture, texture, NULL);
 
-          db = gdk_dmabuf_texture_builder_new ();
-          gdk_dmabuf_texture_builder_set_display (db, gdk_gl_context_get_display (context));
-          gdk_dmabuf_texture_builder_set_dmabuf (db, &texture->dmabuf);
-          gdk_dmabuf_texture_builder_set_premultiplied (db, gdk_memory_format_get_premultiplied (gsk_gpu_image_get_format (self->image)));
-          gdk_dmabuf_texture_builder_set_width (db, gsk_gpu_image_get_width (self->image));
-          gdk_dmabuf_texture_builder_set_height (db, gsk_gpu_image_get_height (self->image));
-          gdk_dmabuf_texture_builder_set_color_state (db, self->color_state);
+      g_object_unref (db);
 
-          *self->texture = gdk_dmabuf_texture_builder_build (db, release_dmabuf_texture, texture, NULL);
+      if (*self->texture)
+        return op->next;
 
-          g_object_unref (db);
-
-          if (*self->texture)
-            return op->next;
-
-          gdk_dmabuf_close_fds (&texture->dmabuf);
-        }
-
-      g_free (texture);
+      gdk_dmabuf_close_fds (&texture->dmabuf);
     }
+
+  g_free (texture);
 #endif
 
   data = g_new (GskGLTextureData, 1);
