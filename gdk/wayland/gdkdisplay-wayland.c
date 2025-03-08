@@ -540,7 +540,7 @@ gdk_registry_handle_global (void               *data,
                           MIN (version, 1));
     }
   else if (strcmp (interface, wp_color_manager_v1_interface.name) == 0 &&
-           gdk_has_feature (GDK_FEATURE_COLOR_MANAGEMENT))
+           GDK_DISPLAY_DEBUG_CHECK (GDK_DISPLAY (display_wayland), COLOR_MANAGEMENT))
     {
       display_wayland->color = gdk_wayland_color_new (display_wayland, registry, id, version);
     }
