@@ -57,6 +57,7 @@ gdk_parallel_task_run (GdkTaskFunc task_func,
                        guint       max_tasks)
 {
   static GThreadPool *pool;
+  static guint nproc;
   TaskData task = {
     .task_func = task_func,
     .task_data = task_data,
@@ -71,7 +72,8 @@ gdk_parallel_task_run (GdkTaskFunc task_func,
 
   if (g_once_init_enter (&pool))
     {
-      guint num_threads = CLAMP (2, g_get_num_processors () - 1, 32);
+      nproc = g_get_num_processors ();
+      guint num_threads = CLAMP (2, nproc - 1, 32);
       GThreadPool *the_pool = g_thread_pool_new (gdk_parallel_task_thread_func,
                                                  NULL,
                                                  num_threads,
@@ -81,7 +83,7 @@ gdk_parallel_task_run (GdkTaskFunc task_func,
       g_once_init_leave (&pool, the_pool);
     }
 
-  n_tasks = MIN (max_tasks, g_get_num_processors ());
+  n_tasks = MIN (max_tasks, nproc);
   task.n_running_tasks = n_tasks;
   /* Start with 1 because we run 1 task ourselves */
   for (i = 1; i < n_tasks; i++)
