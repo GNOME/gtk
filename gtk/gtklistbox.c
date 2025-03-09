@@ -86,10 +86,10 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * list[.separators][.rich-list][.navigation-sidebar][.boxed-list]
  * ╰── row[.activatable]
- * ]|
+ * ```
  *
  * `GtkListBox` uses a single CSS node named list. It may carry the .separators
  * style class, when the [property@Gtk.ListBox:show-separators] property is set.

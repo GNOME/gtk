@@ -40,7 +40,7 @@ G_BEGIN_DECLS
 /**
  * GskCairoRenderer:
  *
- * A GSK renderer that is using cairo.
+ * Renders a GSK rendernode tree with cairo.
  *
  * Since it is using cairo, this renderer cannot support
  * 3D transformations.

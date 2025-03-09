@@ -19,8 +19,7 @@
 /**
  * GskGLShader:
  *
- * A `GskGLShader` is a snippet of GLSL that is meant to run in the
- * fragment shader of the rendering pipeline.
+ * Implements a fragment shader using GLSL.
  *
  * A fragment shader gets the coordinates being rendered as input and
  * produces the pixel values for that particular pixel. Additionally,

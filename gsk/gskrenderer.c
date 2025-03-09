@@ -18,8 +18,7 @@
 /**
  * GskRenderer:
  *
- * A class that renders a scene graph defined via a tree of
- * [class@Gsk.RenderNode] instances.
+ * Renders a scene graph defined via a tree of [class@Gsk.RenderNode] instances.
  *
  * Typically you will use a `GskRenderer` instance to repeatedly call
  * [method@Gsk.Renderer.render] to update the contents of its associated
