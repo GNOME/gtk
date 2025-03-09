@@ -1526,17 +1526,6 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         GdkTranslatedKey translated;
         GdkTranslatedKey no_lock;
 
-        GDK_DISPLAY_DEBUG (display, EVENTS,
-                           "key %s:\twindow %ld\n"
-                           "\tdevice:%u\n"
-                           "\tsource device:%u\n"
-                           "\tkey number: %u\n",
-                           (ev->evtype == XI_KeyPress) ? "press" : "release",
-                           xev->event,
-                           xev->deviceid,
-                           xev->sourceid,
-                           xev->detail);
-
         state = _gdk_x11_device_xi2_translate_state (&xev->mods, &xev->buttons, &xev->group);
 
         device = g_hash_table_lookup (device_manager->id_table,
@@ -1557,6 +1546,18 @@ gdk_x11_device_manager_xi2_translate_event (GdkEventTranslator *translator,
         state &= ~consumed;
         _gdk_x11_keymap_add_virt_mods (keymap, &state);
         state |= orig_state;
+
+        GDK_DISPLAY_DEBUG (display, EVENTS,
+                           "key %s:\twindow %ld\n"
+                           "\tdevice:%u\n"
+                           "\tsource device:%u\n"
+                           "\tkey number: %u (%s)\n",
+                           (ev->evtype == XI_KeyPress) ? "press" : "release",
+                           xev->event,
+                           xev->deviceid,
+                           xev->sourceid,
+                           xev->detail,
+                           gdk_keyval_name (keyval));
 
         translated.keyval = keyval;
         translated.consumed = consumed;
