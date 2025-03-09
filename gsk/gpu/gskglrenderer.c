@@ -17,7 +17,7 @@
 /**
  * GskGLRenderer:
  *
- * A GL based renderer.
+ * Renders a GSK rendernode tree with OpenGL.
  *
  * See [class@Gsk.Renderer].
  *

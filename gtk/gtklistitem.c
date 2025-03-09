@@ -37,10 +37,10 @@
  *
  * 1. The unbound stage where the listitem is not currently connected to
  *    an item in the list. In that case, the [property@Gtk.ListItem:item]
- *    property is set to %NULL.
+ *    property is set to `NULL`.
  *
  * 2. The bound stage where the listitem references an item from the list.
- *    The [property@Gtk.ListItem:item] property is not %NULL.
+ *    The [property@Gtk.ListItem:item] property is not `NULL`.
  */
 
 enum
@@ -188,7 +188,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
   /**
    * GtkListItem:accessible-description:
    *
-   * The accessible description to set on the list item.
+   * The accessible description to set on the listitem.
    *
    * Since: 4.12
    */
@@ -200,7 +200,7 @@ gtk_list_item_class_init (GtkListItemClass *klass)
   /**
    * GtkListItem:accessible-label:
    *
-   * The accessible label to set on the list item.
+   * The accessible label to set on the listitem.
    *
    * Since: 4.12
    */
@@ -316,11 +316,11 @@ gtk_list_item_do_notify (GtkListItem *list_item,
 
 /**
  * gtk_list_item_get_item:
- * @self: a `GtkListItem`
+ * @self: a listitem
  *
  * Gets the model item that associated with @self.
  *
- * If @self is unbound, this function returns %NULL.
+ * If @self is unbound, this function returns `NULL`.
  *
  * Returns: (nullable) (transfer none) (type GObject): The item displayed
  **/
@@ -339,10 +339,10 @@ gtk_list_item_get_item (GtkListItem *self)
 
 /**
  * gtk_list_item_get_child:
- * @self: a `GtkListItem`
+ * @self: a listitem
  *
- * Gets the child previously set via gtk_list_item_set_child() or
- * %NULL if none was set.
+ * Gets the child previously set via [method@Gtk.ListItem.set_child]
+ * or `NULL` if none was set.
  *
  * Returns: (transfer none) (nullable): The child
  */
@@ -359,8 +359,8 @@ gtk_list_item_get_child (GtkListItem *self)
 
 /**
  * gtk_list_item_set_child:
- * @self: a `GtkListItem`
- * @child: (nullable): The list item's child or %NULL to unset
+ * @self: a listitem
+ * @child: (nullable): The listitem's child or `NULL` to unset
  *
  * Sets the child to be used for this listitem.
  *
@@ -406,11 +406,11 @@ gtk_list_item_set_child (GtkListItem *self,
 
 /**
  * gtk_list_item_get_position:
- * @self: a `GtkListItem`
+ * @self: a listitem
  *
  * Gets the position in the model that @self currently displays.
  *
- * If @self is unbound, %GTK_INVALID_LIST_POSITION is returned.
+ * If @self is unbound, `GTK_INVALID_LIST_POSITION` is returned.
  *
  * Returns: The position of this item
  */
@@ -429,14 +429,14 @@ gtk_list_item_get_position (GtkListItem *self)
 
 /**
  * gtk_list_item_get_selected:
- * @self: a `GtkListItem`
+ * @self: a listitem
  *
  * Checks if the item is displayed as selected.
  *
  * The selected state is maintained by the list widget and its model
  * and cannot be set otherwise.
  *
- * Returns: %TRUE if the item is selected.
+ * Returns: true if the item is selected.
  */
 gboolean
 gtk_list_item_get_selected (GtkListItem *self)
@@ -453,14 +453,14 @@ gtk_list_item_get_selected (GtkListItem *self)
 
 /**
  * gtk_list_item_get_selectable:
- * @self: a `GtkListItem`
+ * @self: a listitem
  *
- * Checks if a list item has been set to be selectable via
- * gtk_list_item_set_selectable().
+ * Checks if a listitem has been set to be selectable via
+ * [method@Gtk.ListItem.set_selectable].
  *
  * Do not confuse this function with [method@Gtk.ListItem.get_selected].
  *
- * Returns: %TRUE if the item is selectable
+ * Returns: true if the item is selectable
  */
 gboolean
 gtk_list_item_get_selectable (GtkListItem *self)
@@ -472,7 +472,7 @@ gtk_list_item_get_selectable (GtkListItem *self)
 
 /**
  * gtk_list_item_set_selectable:
- * @self: a `GtkListItem`
+ * @self: a listitem
  * @selectable: if the item should be selectable
  *
  * Sets @self to be selectable.
@@ -485,7 +485,7 @@ gtk_list_item_get_selectable (GtkListItem *self)
  * influence on the selected state at all. A non-selectable item
  * may still be selected.
  *
- * By default, list items are selectable. When rebinding them to
+ * By default, listitems are selectable. When rebinding them to
  * a new item, they will also be reset to be selectable by GTK.
  */
 void
@@ -507,12 +507,12 @@ gtk_list_item_set_selectable (GtkListItem *self,
 
 /**
  * gtk_list_item_get_activatable:
- * @self: a `GtkListItem`
+ * @self: a listitem
  *
- * Checks if a list item has been set to be activatable via
- * gtk_list_item_set_activatable().
+ * Checks if a listitem has been set to be activatable via
+ * [method@Gtk.ListItem.set_activatable].
  *
- * Returns: %TRUE if the item is activatable
+ * Returns: true if the item is activatable
  */
 gboolean
 gtk_list_item_get_activatable (GtkListItem *self)
@@ -524,18 +524,18 @@ gtk_list_item_get_activatable (GtkListItem *self)
 
 /**
  * gtk_list_item_set_activatable:
- * @self: a `GtkListItem`
+ * @self: a listitem
  * @activatable: if the item should be activatable
  *
  * Sets @self to be activatable.
  *
  * If an item is activatable, double-clicking on the item, using
- * the Return key or calling gtk_widget_activate() will activate
+ * the Return key or calling [method@Gtk.Widget.activate] will activate
  * the item. Activating instructs the containing view to handle
  * activation. `GtkListView` for example will be emitting the
  * [signal@Gtk.ListView::activate] signal.
  *
- * By default, list items are activatable.
+ * By default, listitems are activatable.
  */
 void
 gtk_list_item_set_activatable (GtkListItem *self,
@@ -556,12 +556,12 @@ gtk_list_item_set_activatable (GtkListItem *self,
 
 /**
  * gtk_list_item_get_focusable:
- * @self: a `GtkListItem`
+ * @self: a lits item
  *
- * Checks if a list item has been set to be focusable via
- * gtk_list_item_set_focusable().
+ * Checks if a listitem has been set to be focusable via
+ * [method@Gtk.ListItem.set_focusable].
  *
- * Returns: %TRUE if the item is focusable
+ * Returns: true if the item is focusable
  *
  * Since: 4.12
  */
@@ -575,7 +575,7 @@ gtk_list_item_get_focusable (GtkListItem *self)
 
 /**
  * gtk_list_item_set_focusable:
- * @self: a `GtkListItem`
+ * @self: a listitem
  * @focusable: if the item should be focusable
  *
  * Sets @self to be focusable.
@@ -586,7 +586,7 @@ gtk_list_item_get_focusable (GtkListItem *self)
  * Note that if items are not focusable, the keyboard cannot be used to activate
  * them and selecting only works if one of the listitem's children is focusable.
  *
- * By default, list items are focusable.
+ * By default, listitems are focusable.
  *
  * Since: 4.12
  */
@@ -611,11 +611,12 @@ gtk_list_item_set_focusable (GtkListItem *self,
 
 /**
  * gtk_list_item_set_accessible_description:
- * @self: a `GtkListItem`
+ * @self: a listitem
  * @description: the description
  *
- * Sets the accessible description for the list item,
- * which may be used by e.g. screen readers.
+ * Sets the accessible description for the listitem.
+ *
+ * The accessible description may be used by e.g. screen readers.
  *
  * Since: 4.12
  */
@@ -638,7 +639,7 @@ gtk_list_item_set_accessible_description (GtkListItem *self,
 
 /**
  * gtk_list_item_get_accessible_description:
- * @self: a `GtkListItem`
+ * @self: a listitem
  *
  * Gets the accessible description of @self.
  *
@@ -656,11 +657,12 @@ gtk_list_item_get_accessible_description (GtkListItem *self)
 
 /**
  * gtk_list_item_set_accessible_label:
- * @self: a `GtkListItem`
+ * @self: a listitem
  * @label: the label
  *
- * Sets the accessible label for the list item,
- * which may be used by e.g. screen readers.
+ * Sets the accessible label for the listitem.
+ *
+ * The accessible label may be used by e.g. screen readers.
  *
  * Since: 4.12
  */
@@ -683,7 +685,7 @@ gtk_list_item_set_accessible_label (GtkListItem *self,
 
 /**
  * gtk_list_item_get_accessible_label:
- * @self: a `GtkListItem`
+ * @self: a listitem
  *
  * Gets the accessible label of @self.
  *

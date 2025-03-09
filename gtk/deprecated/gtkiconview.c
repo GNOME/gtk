@@ -5060,7 +5060,8 @@ gtk_icon_view_unselect_path (GtkIconView *icon_view,
  * To do this, you can use gtk_tree_row_reference_new().
  *
  * To free the return value, use `g_list_free_full`:
- * |[<!-- language="C" -->
+ *
+ * ```c
  * GtkWidget *icon_view = gtk_icon_view_new ();
  * // Use icon_view
  *
@@ -5069,7 +5070,7 @@ gtk_icon_view_unselect_path (GtkIconView *icon_view,
  * // use list
  *
  * g_list_free_full (list, (GDestroyNotify) gtk_tree_path_free);
- * ]|
+ * ```
  *
  * Returns: (element-type GtkTreePath) (transfer full): A `GList` containing a `GtkTreePath` for each selected row.
  *

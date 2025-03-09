@@ -35,7 +35,7 @@
  *
  * A path is constructed like this:
  *
- * |[<!-- language="C" -->
+ * ```c
  * GskPath *
  * construct_path (void)
  * {
@@ -46,7 +46,7 @@
  *   // add contours to the path here
  *
  *   return gsk_path_builder_free_to_path (builder);
- * ]|
+ * ```
  *
  * Adding contours to the path can be done in two ways.
  * The easiest option is to use the `gsk_path_builder_add_*` group

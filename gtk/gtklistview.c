@@ -957,11 +957,13 @@ gtk_list_view_class_init (GtkListViewClass *klass)
 
   /**
    * GtkListView::activate:
-   * @self: The `GtkListView`
+   * @self: the listview
    * @position: position of item to activate
    *
-   * Emitted when a row has been activated by the user,
-   * usually via activating the GtkListView|list.activate-item action.
+   * Emitted when a row has been activated by the user.
+   *
+   * Activation usually happens via the list.activate-item action of
+   * the `GtkListView`.
    *
    * This allows for a convenient way to handle activation in a listview.
    * See [method@Gtk.ListItem.set_activatable] for details on how to use
@@ -1048,7 +1050,7 @@ gtk_list_view_new (GtkSelectionModel  *model,
 
 /**
  * gtk_list_view_get_model:
- * @self: a `GtkListView`
+ * @self: a listview
  *
  * Gets the model that's currently used to read the items displayed.
  *
@@ -1064,7 +1066,7 @@ gtk_list_view_get_model (GtkListView *self)
 
 /**
  * gtk_list_view_set_model:
- * @self: a `GtkListView`
+ * @self: a listview
  * @model: (nullable) (transfer none): the model to use
  *
  * Sets the model to use.
@@ -1090,7 +1092,7 @@ gtk_list_view_set_model (GtkListView       *self,
 
 /**
  * gtk_list_view_get_factory:
- * @self: a `GtkListView`
+ * @self: a listview
  *
  * Gets the factory that's currently used to populate list items.
  *
@@ -1106,7 +1108,7 @@ gtk_list_view_get_factory (GtkListView *self)
 
 /**
  * gtk_list_view_set_factory:
- * @self: a `GtkListView`
+ * @self: a listview
  * @factory: (nullable) (transfer none): the factory to use
  *
  * Sets the `GtkListItemFactory` to use for populating list items.
@@ -1128,7 +1130,7 @@ gtk_list_view_set_factory (GtkListView        *self,
 
 /**
  * gtk_list_view_get_header_factory:
- * @self: a `GtkListView`
+ * @self: a listview
  *
  * Gets the factory that's currently used to populate section headers.
  *
@@ -1146,13 +1148,14 @@ gtk_list_view_get_header_factory (GtkListView *self)
 
 /**
  * gtk_list_view_set_header_factory:
- * @self: a `GtkListView`
+ * @self: a listview
  * @factory: (nullable) (transfer none): the factory to use
  *
  * Sets the `GtkListItemFactory` to use for populating the
  * [class@Gtk.ListHeader] objects used in section headers.
  *
- * If this factory is set to %NULL, the list will not show section headers.
+ * If this factory is set to `NULL`, the list will not show
+ * section headers.
  *
  * Since: 4.12
  */
@@ -1191,10 +1194,10 @@ gtk_list_view_set_header_factory (GtkListView        *self,
 
 /**
  * gtk_list_view_set_show_separators:
- * @self: a `GtkListView`
- * @show_separators: %TRUE to show separators
+ * @self: a listview
+ * @show_separators: whether to show separators
  *
- * Sets whether the list box should show separators
+ * Sets whether the listview should show separators
  * between rows.
  */
 void
@@ -1218,12 +1221,12 @@ gtk_list_view_set_show_separators (GtkListView *self,
 
 /**
  * gtk_list_view_get_show_separators:
- * @self: a `GtkListView`
+ * @self: a listview
  *
- * Returns whether the list box should show separators
+ * Returns whether the listview should show separators
  * between rows.
  *
- * Returns: %TRUE if the list box shows separators
+ * Returns: true if the listview shows separators
  */
 gboolean
 gtk_list_view_get_show_separators (GtkListView *self)
@@ -1235,8 +1238,8 @@ gtk_list_view_get_show_separators (GtkListView *self)
 
 /**
  * gtk_list_view_set_single_click_activate:
- * @self: a `GtkListView`
- * @single_click_activate: %TRUE to activate items on single click
+ * @self: a listview
+ * @single_click_activate: whether to activate items on single click
  *
  * Sets whether rows should be activated on single click and
  * selected on hover.
@@ -1267,12 +1270,12 @@ gtk_list_view_set_single_click_activate (GtkListView *self,
 
 /**
  * gtk_list_view_get_single_click_activate:
- * @self: a `GtkListView`
+ * @self: a listview
  *
  * Returns whether rows will be activated on single click and
  * selected on hover.
  *
- * Returns: %TRUE if rows are activated on single click
+ * Returns: true if rows are activated on single click
  */
 gboolean
 gtk_list_view_get_single_click_activate (GtkListView *self)
@@ -1284,8 +1287,8 @@ gtk_list_view_get_single_click_activate (GtkListView *self)
 
 /**
  * gtk_list_view_set_enable_rubberband:
- * @self: a `GtkListView`
- * @enable_rubberband: %TRUE to enable rubberband selection
+ * @self: a listview
+ * @enable_rubberband: whether to enable rubberband selection
  *
  * Sets whether selections can be changed by dragging with the mouse.
  */
@@ -1305,11 +1308,11 @@ gtk_list_view_set_enable_rubberband (GtkListView *self,
 
 /**
  * gtk_list_view_get_enable_rubberband:
- * @self: a `GtkListView`
+ * @self: a listview
  *
  * Returns whether rows can be selected by dragging with the mouse.
  *
- * Returns: %TRUE if rubberband selection is enabled
+ * Returns: true if rubberband selection is enabled
  */
 gboolean
 gtk_list_view_get_enable_rubberband (GtkListView *self)
@@ -1321,10 +1324,14 @@ gtk_list_view_get_enable_rubberband (GtkListView *self)
 
 /**
  * gtk_list_view_set_tab_behavior:
- * @self: a `GtkListView`
+ * @self: a listview
  * @tab_behavior: The desired tab behavior
  *
- * Sets the behavior of the <kbd>Tab</kbd> and <kbd>Shift</kbd>+<kbd>Tab</kbd> keys.
+ * Sets the <kbd>Tab</kbd> key behavior.
+ *
+ * This influences how the <kbd>Tab</kbd> and
+ * <kbd>Shift</kbd>+<kbd>Tab</kbd> keys move the
+ * focus in the listview.
  *
  * Since: 4.12
  */
@@ -1344,7 +1351,7 @@ gtk_list_view_set_tab_behavior (GtkListView        *self,
 
 /**
  * gtk_list_view_get_tab_behavior:
- * @self: a `GtkListView`
+ * @self: a listview
  *
  * Gets the behavior set for the <kbd>Tab</kbd> key.
  *
@@ -1362,7 +1369,7 @@ gtk_list_view_get_tab_behavior (GtkListView *self)
 
 /**
  * gtk_list_view_scroll_to:
- * @self: The listview to scroll in
+ * @self: a listview
  * @pos: position of the item. Must be less than the number of
  *   items in the view.
  * @flags: actions to perform

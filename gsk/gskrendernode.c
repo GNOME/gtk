@@ -19,8 +19,7 @@
 /**
  * GskRenderNode: (ref-func gsk_render_node_ref) (unref-func gsk_render_node_unref) (set-value-func gsk_value_set_render_node) (get-value-func gsk_value_get_render_node)
  *
- * `GskRenderNode` is the basic block in a scene graph to be
- * rendered using [class@Gsk.Renderer].
+ * The basic block in a scene graph to be rendered using [class@Gsk.Renderer].
  *
  * Each node has a parent, except the top-level node; each node may have
  * children nodes.

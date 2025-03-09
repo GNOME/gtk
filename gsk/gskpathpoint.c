@@ -30,7 +30,7 @@
 /**
  * GskPathPoint:
  *
- * An opaque type representing a point on a path.
+ * Represents a point on a path.
  *
  * It can be queried for properties of the path at that point,
  * such as its tangent or its curvature.

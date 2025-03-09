@@ -51,7 +51,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * ## Using a `GtkTreeModelSort`
  *
- * |[<!-- language="C" -->
+ * ```c
  * {
  *   GtkTreeView *tree_view1;
  *   GtkTreeView *tree_view2;
@@ -76,7 +76,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *   gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (sort_model2),
  *                                         COLUMN_1, GTK_SORT_DESCENDING);
  * }
- * ]|
+ * ```
  *
  * To demonstrate how to access the underlying child model from the sort
  * model, the next example will be a callback for the `GtkTreeSelection`
@@ -86,7 +86,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *
  * ## Accessing the child model of in a selection changed callback
  *
- * |[<!-- language="C" -->
+ * ```c
  * void
  * selection_changed (GtkTreeSelection *selection, gpointer data)
  * {
@@ -126,7 +126,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
  *                       -1);
  *   g_free (modified_data);
  * }
- * ]|
+ * ```
  *
  * Deprecated: 4.10: Use [class@Gtk.SortListModel] instead
  */

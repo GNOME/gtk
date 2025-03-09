@@ -247,7 +247,8 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    * continue to use the same kind of widget for editing in future
    * releases, therefore you should check the type of @editable
    * before doing any specific setup, as in the following example:
-   * |[<!-- language="C" -->
+   *
+   * ```c
    * static void
    * text_editing_started (GtkCellRenderer *cell,
    *                       GtkCellEditable *editable,
@@ -263,7 +264,7 @@ gtk_cell_renderer_class_init (GtkCellRendererClass *class)
    *       gtk_entry_set_completion (entry, completion);
    *     }
    * }
-   * ]|
+   * ```
    */
   cell_renderer_signals[EDITING_STARTED] =
     g_signal_new (I_("editing-started"),

@@ -33,7 +33,7 @@ G_BEGIN_DECLS
 /**
  * GskVulkanRenderer:
  *
- * A GSK renderer that is using Vulkan.
+ * Renders a GSK rendernode tree with Vulkan.
  *
  * This renderer will fail to realize if Vulkan is not supported.
  */

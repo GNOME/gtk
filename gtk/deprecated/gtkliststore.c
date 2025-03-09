@@ -2216,7 +2216,7 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  * `gtk_list_store_insert_with_values (list_store, iter, position...)`
  * has the same effect as calling:
  *
- * |[<!-- language="C" -->
+ * ```c
  * static void
  * insert_value (GtkListStore *list_store,
  *               GtkTreeIter  *iter,
@@ -2228,7 +2228,7 @@ gtk_list_store_has_default_sort_func (GtkTreeSortable *sortable)
  *                       // ...
  *                       );
  * }
- * ]|
+ * ```
  *
  * with the difference that the former will only emit `GtkTreeModel`::row-inserted
  * once, while the latter will emit `GtkTreeModel`::row-inserted,

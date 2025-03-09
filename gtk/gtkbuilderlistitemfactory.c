@@ -29,14 +29,13 @@
 /**
  * GtkBuilderListItemFactory:
  *
- * A `GtkListItemFactory` that creates widgets by instantiating `GtkBuilder`
- * UI templates.
+ * Creates widgets by instantiating `GtkBuilder` UI templates.
  *
  * The templates must extend the class that the parent widget expects.
  * For example, a factory provided to [property@Gtk.ListView:factory] must have
  * a template that extends [class@Gtk.ListItem].
  *
- * Templates typically use `GtkExpression`s to obtain data from the items
+ * Templates typically use [class@Gtk.Expression] to obtain data from the items
  * in the model.
  *
  * Example:
@@ -305,7 +304,7 @@ gtk_builder_list_item_factory_init (GtkBuilderListItemFactory *self)
 /**
  * gtk_builder_list_item_factory_new_from_bytes:
  * @scope: (nullable) (transfer none): A scope to use when instantiating
- * @bytes: the `GBytes` containing the ui file to instantiate
+ * @bytes: the `GBytes` containing the UI definition to instantiate
  *
  * Creates a new `GtkBuilderListItemFactory` that instantiates widgets
  * using @bytes as the data to pass to `GtkBuilder`.
@@ -327,7 +326,7 @@ gtk_builder_list_item_factory_new_from_bytes (GtkBuilderScope *scope,
 /**
  * gtk_builder_list_item_factory_new_from_resource:
  * @scope: (nullable) (transfer none): A scope to use when instantiating
- * @resource_path: valid path to a resource that contains the data
+ * @resource_path: valid path to a resource that contains the UI definition
  *
  * Creates a new `GtkBuilderListItemFactory` that instantiates widgets
  * using data read from the given @resource_path to pass to `GtkBuilder`.

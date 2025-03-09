@@ -1629,7 +1629,7 @@ typedef struct
  *
  * A typical use is:
  *
- * |[<!-- language="C" -->
+ * ```c
  *   GtkConstraintExpressionBuilder builder;
  *
  *   // "solver" is set in another part of the code
@@ -1651,7 +1651,7 @@ typedef struct
  *
  *   // The builder is inert, and can be re-used by calling
  *   // gtk_constraint_expression_builder_init() again.
- * ]|
+ * ```
  */
 void
 gtk_constraint_expression_builder_init (GtkConstraintExpressionBuilder *builder,

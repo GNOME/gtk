@@ -118,23 +118,23 @@
  *
  * # CSS nodes
  *
- * |[<!-- language="plain" -->
+ * ```
  * modelbutton
  * ├── <child>
  * ╰── check
- * ]|
+ * ```
  *
- * |[<!-- language="plain" -->
+ * ```
  * modelbutton
  * ├── <child>
  * ╰── radio
- * ]|
+ * ```
  *
- * |[<!-- language="plain" -->
+ * ```
  * modelbutton
  * ├── <child>
  * ╰── arrow
- * ]|
+ * ```
  *
  * GtkModelButton has a main CSS node with name modelbutton, and a subnode,
  * which will have the name check, radio or arrow, depending on the role
@@ -143,11 +143,11 @@
  * The subnode is positioned before or after the content nodes and gets the
  * .left or .right style class, depending on where it is located.
  *
- * |[<!-- language="plain" -->
+ * ```
  * button.model
  * ├── <child>
  * ╰── check
- * ]|
+ * ```
  *
  * Iconic model buttons (see GtkModelButton:iconic) change the name of
  * their main node to button and add a .model style class to it. The indicator

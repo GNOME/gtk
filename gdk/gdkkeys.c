@@ -607,7 +607,7 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * the `plus` symbol is shifted, so when comparing a key press to a
  * `<Control>plus` accelerator `<Shift>` should be masked out.
  *
- * |[<!-- language="C" -->
+ * ```c
  * // We want to ignore irrelevant modifiers like ScrollLock
  * #define ALL_ACCELS_MASK (GDK_CONTROL_MASK | GDK_SHIFT_MASK | GDK_ALT_MASK)
  * state = gdk_event_get_modifier_state (event);
@@ -619,18 +619,19 @@ gdk_keymap_lookup_key (GdkKeymap          *keymap,
  * if (keyval == GDK_PLUS &&
  *     (state & ~consumed & ALL_ACCELS_MASK) == GDK_CONTROL_MASK)
  *   // Control was pressed
- * ]|
+ * ```
  * 
  * An older interpretation @consumed_modifiers was that it contained
  * all modifiers that might affect the translation of the key;
  * this allowed accelerators to be stored with irrelevant consumed
  * modifiers, by doing:
- * |[<!-- language="C" -->
+ *
+ * ```c
  * // XXX Don’t do this XXX
  * if (keyval == accel_keyval &&
  *     (state & ~consumed & ALL_ACCELS_MASK) == (accel_mods & ~consumed))
  *   // Accelerator was pressed
- * ]|
+ * ```
  *
  * However, this did not work if multi-modifier combinations were
  * used in the keymap, since, for instance, `<Control>` would be
