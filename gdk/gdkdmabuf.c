@@ -2082,6 +2082,59 @@ gdk_dmabuf_get_mmap_formats (void)
   return formats;
 }
 
+const guchar *
+gdk_dmabuf_mmap (int    dmabuf_fd,
+                 gsize *out_size)
+{
+  gsize size;
+  const guchar *result;
+
+  size = lseek (dmabuf_fd, 0, SEEK_END);
+  if (size == (off_t) -1)
+    {
+      g_warning ("Failed to seek dmabuf: %s", g_strerror (errno));
+      return NULL;
+    }
+
+  /* be a good citizen and seek back to the start, as the docs recommend */
+  lseek (dmabuf_fd, 0, SEEK_SET);
+
+  if (gdk_dmabuf_ioctl (dmabuf_fd,
+                        DMA_BUF_IOCTL_SYNC,
+                        &(struct dma_buf_sync) { DMA_BUF_SYNC_START|DMA_BUF_SYNC_READ }) < 0)
+    {
+      g_warning ("Failed to sync dmabuf before mmap(): %s", g_strerror (errno));
+      /* not a fatal error, but might cause glitches */
+    }
+
+  result = mmap (NULL, size, PROT_READ, MAP_SHARED, dmabuf_fd, 0);
+  if (result == NULL || result == MAP_FAILED)
+    {
+      g_warning ("Failed to mmap dmabuf: %s", g_strerror (errno));
+      return NULL;
+    }
+
+  *out_size = size;
+
+  return result;
+}
+
+void
+gdk_dmabuf_munmap (int           dmabuf_fd,
+                   const guchar *addr,
+                   gsize         size)
+{
+  munmap ((void *) addr, size);
+
+  if (gdk_dmabuf_ioctl (dmabuf_fd,
+                        DMA_BUF_IOCTL_SYNC,
+                        &(struct dma_buf_sync) { DMA_BUF_SYNC_END|DMA_BUF_SYNC_READ }) < 0)
+    {
+      g_warning ("Failed to sync dmabuf after munmap(): %s", g_strerror (errno));
+      /* not a fatal error, but might cause glitches */
+    }
+}
+
 static gboolean
 gdk_dmabuf_do_download_mmap (GdkTexture *texture,
                              guchar     *data,
@@ -2119,24 +2172,9 @@ gdk_dmabuf_do_download_mmap (GdkTexture *texture,
           continue;
         }
 
-      sizes[i] = lseek (dmabuf->planes[i].fd, 0, SEEK_END);
-      if (sizes[i] == (off_t) -1)
-        {
-          g_warning ("Failed to seek dmabuf: %s", g_strerror (errno));
-          goto out;
-        }
-      /* be a good citizen and seek back to the start, as the docs recommend */
-      lseek (dmabuf->planes[i].fd, 0, SEEK_SET);
-
-      if (gdk_dmabuf_ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_START|DMA_BUF_SYNC_READ }) < 0)
-        g_warning ("Failed to sync dmabuf: %s", g_strerror (errno));
-
-      src_data[i] = mmap (NULL, sizes[i], PROT_READ, MAP_SHARED, dmabuf->planes[i].fd, 0);
-      if (src_data[i] == NULL || src_data[i] == MAP_FAILED)
-        {
-          g_warning ("Failed to mmap dmabuf: %s", g_strerror (errno));
-          goto out;
-        }
+      src_data[i] = gdk_dmabuf_mmap (dmabuf->planes[i].fd, &sizes[i]);
+      if (src_data[i] == NULL)
+        goto out;
       needs_unmap[i] = TRUE;
     }
 
@@ -2162,10 +2200,7 @@ out:
       if (!needs_unmap[i])
         continue;
 
-      munmap ((void *)src_data[i], sizes[i]);
-
-      if (gdk_dmabuf_ioctl (dmabuf->planes[i].fd, DMA_BUF_IOCTL_SYNC, &(struct dma_buf_sync) { DMA_BUF_SYNC_END|DMA_BUF_SYNC_READ }) < 0)
-        g_warning ("Failed to sync dmabuf: %s", g_strerror (errno));
+      gdk_dmabuf_munmap (dmabuf->planes[i].fd, src_data[i], sizes[i]);
     }
 
   return retval;

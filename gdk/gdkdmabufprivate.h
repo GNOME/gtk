@@ -41,6 +41,12 @@ gboolean                    gdk_dmabuf_import_sync_file         (int            
                                                                  int                             sync_file_fd);
 int                         gdk_dmabuf_export_sync_file         (int                             dmabuf_fd,
                                                                  guint32                         flags);
+const guchar *              gdk_dmabuf_mmap                     (int                             dmabuf_fd,
+                                                                 gsize                          *out_size);
+void                        gdk_dmabuf_munmap                   (int                             dmabuf_fd,
+                                                                 const guchar *                  addr,
+                                                                 gsize                           size);
+
 
 gboolean                    gdk_dmabuf_sanitize                 (GdkDmabuf                      *dest,
                                                                  gsize                           width,
