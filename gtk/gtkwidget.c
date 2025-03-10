@@ -6623,12 +6623,12 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
       gboolean hint_font_metrics;
       cairo_font_options_t *font_options, *options;
 
-      g_object_get (settings, "gtk-hint-font-metrics", &hint_font_metrics, NULL);
-
       options = cairo_font_options_copy (gtk_settings_get_font_options (settings));
-      font_options = (cairo_font_options_t*)g_object_get_qdata (G_OBJECT (widget), quark_font_options);
+      font_options = (cairo_font_options_t *) g_object_get_qdata (G_OBJECT (widget), quark_font_options);
       if (font_options)
         cairo_font_options_merge (options, font_options);
+
+      g_object_get (settings, "gtk-hint-font-metrics", &hint_font_metrics, NULL);
 
       cairo_font_options_set_hint_metrics (options,
                                            hint_font_metrics == 1 ? CAIRO_HINT_METRICS_ON
@@ -6642,36 +6642,12 @@ gtk_widget_update_pango_context (GtkWidget        *widget,
   else
     {
       cairo_font_options_t *options;
-      double dpi = 96.;
-      GdkSurface *surface;
-
-      surface = gtk_widget_get_surface (widget);
-      if (surface)
-        {
-          GdkDisplay *display;
-          GdkMonitor *monitor;
-
-          display = gdk_surface_get_display (surface);
-          monitor = gdk_display_get_monitor_at_surface (display, surface);
-          if (monitor)
-            dpi = gdk_monitor_get_dpi (monitor);
-        }
 
       options = cairo_font_options_create ();
 
       cairo_font_options_set_antialias (options, CAIRO_ANTIALIAS_GRAY);
       cairo_font_options_set_hint_metrics (options, CAIRO_HINT_METRICS_OFF);
-
-      if (dpi < 200.)
-        {
-          /* Not high-dpi. Prefer sharpness by enabling hinting */
-          cairo_font_options_set_hint_style (options, CAIRO_HINT_STYLE_SLIGHT);
-        }
-      else
-        {
-          /* High-dpi. Prefer precise positioning */
-          cairo_font_options_set_hint_style (options, CAIRO_HINT_STYLE_NONE);
-        }
+      cairo_font_options_set_hint_style (options, CAIRO_HINT_STYLE_SLIGHT);
 
       pango_context_set_round_glyph_positions (context, FALSE);
       pango_cairo_context_set_font_options (context, options);
