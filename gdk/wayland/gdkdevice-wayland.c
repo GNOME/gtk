@@ -22,6 +22,8 @@
 #include "gdkcursorprivate.h"
 #include "gdkeventsprivate.h"
 
+#define  GTK_SHELL_FIXED_WL_SURFACE_OFFSET_VERSION 6
+
 #define GDK_SLOT_TO_EVENT_SEQUENCE(s) ((GdkEventSequence *) GUINT_TO_POINTER((s) + 1))
 #define GDK_EVENT_SEQUENCE_TO_SLOT(s) (GPOINTER_TO_UINT(s) - 1)
 
@@ -330,6 +332,7 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
   GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
   GdkWaylandPointerData *pointer =
     gdk_wayland_device_get_pointer (wayland_device);
+  GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (seat->display);
   struct wl_buffer *buffer;
   int x, y, w, h;
   double preferred_scale, scale;
@@ -337,6 +340,7 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
   gboolean retval = G_SOURCE_REMOVE;
   GdkWaylandTabletData *tablet;
   unsigned int shape;
+  gboolean use_surface_offset;
 
   tablet = gdk_wayland_seat_find_tablet (seat, device);
 
@@ -382,7 +386,15 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
                                            &x, &y, &w, &h,
                                            &scale);
 
-  if (pointer->has_cursor_surface)
+  use_surface_offset =
+    pointer->has_cursor_surface &&
+    wl_surface_get_version (pointer->pointer_surface) >=
+    WL_SURFACE_OFFSET_SINCE_VERSION &&
+    (!wayland_display->gtk_shell ||
+     gtk_shell1_get_version (wayland_display->gtk_shell) >=
+     GTK_SHELL_FIXED_WL_SURFACE_OFFSET_VERSION);
+
+  if (use_surface_offset)
     {
       /* We already have the surface attached to the cursor, change the
        * offset to adapt to the new buffer.
@@ -413,7 +425,7 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
       wl_surface_commit (pointer->pointer_surface);
     }
 
-  if (!pointer->has_cursor_surface)
+  if (!use_surface_offset)
     {
       if (tablet)
         {
