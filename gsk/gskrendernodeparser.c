@@ -4077,12 +4077,38 @@ base64_encode_with_linebreaks (const guchar *data,
 }
 
 static void
+append_bytes_url (Printer    *p,
+                  GBytes     *bytes,
+                  const char *mime_type)
+{
+  char *b64;
+
+  g_string_append_printf (p->str, "url(\"data:%s;base64,\\\n", mime_type ? mime_type : "");
+  b64 = base64_encode_with_linebreaks (g_bytes_get_data (bytes, NULL),
+                                       g_bytes_get_size (bytes));
+  append_escaping_newlines (p->str, b64);
+  g_free (b64);
+  g_string_append (p->str, "\")");
+}
+
+static void
+append_bytes_param (Printer    *p,
+                    const char *param_name,
+                    GBytes     *bytes,
+                    const char *mime_type)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+  append_bytes_url (p, bytes, mime_type);
+  g_string_append (p->str, ";\n");
+}
+
+static void
 append_texture_param (Printer    *p,
                       const char *param_name,
                       GdkTexture *texture)
 {
   GBytes *bytes;
-  char *b64;
   const char *texture_name;
 
   _indent (p);
@@ -4116,13 +4142,17 @@ append_texture_param (Printer    *p,
     case GDK_MEMORY_U8_SRGB:
     case GDK_MEMORY_U16:
       bytes = gdk_texture_save_to_png_bytes (texture);
-      g_string_append (p->str, "url(\"data:image/png;base64,\\\n");
+      append_bytes_url (p, bytes, "image/png");
+      g_bytes_unref (bytes);
+      g_string_append (p->str, ";\n");
       break;
 
     case GDK_MEMORY_FLOAT16:
     case GDK_MEMORY_FLOAT32:
       bytes = gdk_texture_save_to_tiff_bytes (texture);
-      g_string_append (p->str, "url(\"data:image/tiff;base64,\\\n");
+      append_bytes_url (p, bytes, "image/tiff");
+      g_bytes_unref (bytes);
+      g_string_append (p->str, ";\n");
       break;
 
     case GDK_MEMORY_NONE:
@@ -4130,14 +4160,6 @@ append_texture_param (Printer    *p,
     default:
       g_assert_not_reached ();
     }
-
-  b64 = base64_encode_with_linebreaks (g_bytes_get_data (bytes, NULL),
-                                       g_bytes_get_size (bytes));
-  append_escaping_newlines (p->str, b64);
-  g_free (b64);
-  g_string_append (p->str, "\");\n");
-
-  g_bytes_unref (bytes);
 }
 
 static void
@@ -4152,7 +4174,7 @@ gsk_text_node_serialize_font (GskRenderNode *node,
   hb_blob_t *blob;
   const char *data;
   guint length;
-  char *b64;
+  GBytes *bytes;
 
   desc = pango_font_describe_with_absolute_size (font);
   s = pango_font_description_to_string (desc);
@@ -4171,14 +4193,12 @@ gsk_text_node_serialize_font (GskRenderNode *node,
 
   blob = hb_face_reference_blob (face);
   data = hb_blob_get_data (blob, &length);
+  bytes = g_bytes_new_static (data, length);
 
-  b64 = base64_encode_with_linebreaks ((const guchar *) data, length);
+  g_string_append (p->str, " ");
+  append_bytes_url (p, bytes, "font/ttf");
 
-  g_string_append (p->str, " url(\"data:font/ttf;base64,\\\n");
-  append_escaping_newlines (p->str, b64);
-  g_string_append (p->str, "\")");
-
-  g_free (b64);
+  g_bytes_unref (bytes);
   hb_blob_destroy (blob);
   hb_face_destroy (face);
 
@@ -4378,11 +4398,11 @@ append_hue_interpolation_param (Printer             *p,
   g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
 }
+
 static void
 render_node_print (Printer       *p,
                    GskRenderNode *node)
 {
-  char *b64;
   const char *node_name;
 
   node_name = g_hash_table_lookup (p->named_nodes, node);
@@ -5025,6 +5045,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       {
         cairo_surface_t *surface = gsk_cairo_node_get_surface (node);
         GByteArray *array;
+        GBytes *bytes;
 
         start_node (p, "cairo", node_name);
         append_rect_param (p, "bounds", &node->bounds);
@@ -5035,15 +5056,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 #if CAIRO_HAS_PNG_FUNCTIONS
             cairo_surface_write_to_png_stream (surface, cairo_write_array, array);
 #endif
+            bytes = g_byte_array_free_to_bytes (array);
 
-            _indent (p);
-            g_string_append (p->str, "pixels: url(\"data:image/png;base64,\\\n");
-            b64 = base64_encode_with_linebreaks (array->data, array->len);
-            append_escaping_newlines (p->str, b64);
-            g_free (b64);
-            g_string_append (p->str, "\");\n");
+            append_bytes_param (p, "pixels", bytes, "image/png");
 
-            g_byte_array_free (array, TRUE);
+            g_bytes_unref (bytes);
 
 #ifdef CAIRO_HAS_SCRIPT_SURFACE
             if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_RECORDING)
@@ -5056,12 +5073,11 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
                 if (cairo_script_from_recording_surface (script, surface) == CAIRO_STATUS_SUCCESS)
                   {
-                    _indent (p);
-                    g_string_append (p->str, "script: url(\"data:;base64,\\\n");
-                    b64 = base64_encode_with_linebreaks (array->data, array->len);
-                    append_escaping_newlines (p->str, b64);
-                    g_free (b64);
+                    g_byte_array_ref (array); /* Cairo... see below */
+                    bytes = g_byte_array_free_to_bytes (array);
+                    append_bytes_param (p, "script", bytes, NULL);
                     g_string_append (p->str, "\");\n");
+                    g_bytes_unref (bytes);
                   }
 
                 /* because Cairo is stupid and writes to the device after we finished it,
