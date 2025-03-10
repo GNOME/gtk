@@ -129,7 +129,7 @@ GDK_DEPRECATED_IN_4_16
 void       gdk_surface_set_opaque_region        (GdkSurface      *surface,
                                                  cairo_region_t *region);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_18
 GdkCairoContext *gdk_surface_create_cairo_context(GdkSurface    *surface);
 GDK_AVAILABLE_IN_ALL
 GdkGLContext * gdk_surface_create_gl_context    (GdkSurface     *surface,
