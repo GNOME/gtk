@@ -169,6 +169,59 @@ parse_vec4 (GtkCssParser    *parser,
   return TRUE;
 }
 
+static GBytes *
+consume_bytes (GtkCssParser *parser)
+{
+  GtkCssLocation start_location;
+  GError *error = NULL;
+  char *url, *scheme;
+  GBytes *bytes;
+
+  start_location = *gtk_css_parser_get_start_location (parser);
+  url = gtk_css_parser_consume_url (parser);
+  if (url == NULL)
+    return NULL;
+
+  scheme = g_uri_parse_scheme (url);
+  if (scheme && g_ascii_strcasecmp (scheme, "data") == 0)
+    {
+      bytes = gtk_css_data_url_parse (url, NULL, &error);
+    }
+  else
+    {
+      GFile *file;
+
+      file = gtk_css_parser_resolve_url (parser, url);
+      if (file)
+        {
+          bytes = g_file_load_bytes (file, NULL, NULL, &error);
+          g_object_unref (file);
+        }
+      else
+        {
+          g_set_error (&error,
+                       GTK_CSS_PARSER_ERROR,
+                       GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                       "Failed to resolve URL");
+          bytes = NULL;
+        }
+    }
+
+  g_free (scheme);
+  g_free (url);
+
+  if (bytes == NULL)
+    {
+      gtk_css_parser_emit_error (parser,
+                                 &start_location,
+                                 gtk_css_parser_get_end_location (parser),
+                                 error);
+      g_clear_error (&error);
+    }
+
+  return bytes;
+}
+
 static gboolean
 parse_texture (GtkCssParser *parser,
                Context      *context,
@@ -176,12 +229,11 @@ parse_texture (GtkCssParser *parser,
 {
   GdkTexture *texture;
   GError *error = NULL;
-  const GtkCssToken *token;
   GtkCssLocation start_location;
-  char *url, *scheme, *texture_name;
+  GBytes *bytes;
+  char *texture_name;
 
-  token = gtk_css_parser_get_token (parser);
-  if (gtk_css_token_is (token, GTK_CSS_TOKEN_STRING))
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
     {
       texture_name = gtk_css_parser_consume_string (parser);
 
@@ -213,60 +265,23 @@ parse_texture (GtkCssParser *parser,
     texture_name = NULL;
 
   start_location = *gtk_css_parser_get_start_location (parser);
-  url = gtk_css_parser_consume_url (parser);
-  if (url == NULL)
-    return FALSE;
-
-  scheme = g_uri_parse_scheme (url);
-  if (scheme && g_ascii_strcasecmp (scheme, "data") == 0)
+  bytes = consume_bytes (parser);
+  if (bytes == NULL)
     {
-      GBytes *bytes;
-
-      bytes = gtk_css_data_url_parse (url, NULL, &error);
-      if (bytes)
-        {
-          texture = gdk_texture_new_from_bytes (bytes, &error);
-          g_bytes_unref (bytes);
-        }
-      else
-        {
-          texture = NULL;
-        }
-    }
-  else
-    {
-      GFile *file;
-
-      file = gtk_css_parser_resolve_url (parser, url);
-
-      if (file)
-        {
-          texture = gdk_texture_new_from_file (file, &error);
-          g_object_unref (file);
-        }
-      else
-        {
-          g_set_error (&error,
-                       GTK_CSS_PARSER_ERROR,
-                       GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
-                       "Failed to resolve URL");
-          texture = NULL;
-        }
+      g_free (texture_name);
+      return FALSE;
     }
 
-  g_free (scheme);
-  g_free (url);
-
+  texture = gdk_texture_new_from_bytes (bytes, &error);
+  g_bytes_unref (bytes);
   if (texture == NULL)
     {
-      if (error)
-        {
-          gtk_css_parser_emit_error (parser,
-                                     &start_location,
-                                     gtk_css_parser_get_end_location (parser),
-                                     error);
-          g_clear_error (&error);
-        }
+      gtk_css_parser_emit_error (parser,
+                                 &start_location,
+                                 gtk_css_parser_get_end_location (parser),
+                                 error);
+      g_clear_error (&error);
+      g_free (texture_name);
       return FALSE;
     }
 
@@ -334,10 +349,7 @@ parse_script (GtkCssParser *parser,
               gpointer      out_data)
 {
 #ifdef HAVE_CAIRO_SCRIPT_INTERPRETER
-  GError *error = NULL;
   GBytes *bytes;
-  GtkCssLocation start_location;
-  char *url, *scheme;
   cairo_script_interpreter_t *csi;
   cairo_script_interpreter_hooks_t hooks = {
     .surface_create = csi_hooks_surface_create,
@@ -345,48 +357,9 @@ parse_script (GtkCssParser *parser,
     .context_destroy = csi_hooks_context_destroy,
   };
 
-  start_location = *gtk_css_parser_get_start_location (parser);
-  url = gtk_css_parser_consume_url (parser);
-  if (url == NULL)
-    return FALSE;
-
-  scheme = g_uri_parse_scheme (url);
-  if (scheme && g_ascii_strcasecmp (scheme, "data") == 0)
-    {
-      bytes = gtk_css_data_url_parse (url, NULL, &error);
-    }
-  else
-    {
-      GFile *file;
-
-      file = gtk_css_parser_resolve_url (parser, url);
-      if (file)
-        {
-          bytes = g_file_load_bytes (file, NULL, NULL, &error);
-          g_object_unref (file);
-        }
-      else
-        {
-          g_set_error (&error,
-                       GTK_CSS_PARSER_ERROR,
-                       GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
-                       "Failed to resolve URL");
-          bytes = NULL;
-        }
-    }
-
-  g_free (scheme);
-  g_free (url);
-
+  bytes = consume_bytes (parser);
   if (bytes == NULL)
-    {
-      gtk_css_parser_emit_error (parser,
-                                 &start_location,
-                                 gtk_css_parser_get_end_location (parser),
-                                 error);
-      g_clear_error (&error);
-      return FALSE;
-    }
+    return FALSE;
 
   hooks.closure = cairo_recording_surface_create (CAIRO_CONTENT_COLOR_ALPHA, NULL);
   csi = cairo_script_interpreter_create ();
@@ -1243,61 +1216,37 @@ parse_font (GtkCssParser *parser,
 
   if (gtk_css_parser_has_url (parser))
     {
-      char *url;
-      char *scheme;
       GBytes *bytes;
       GError *error = NULL;
       GtkCssLocation start_location;
-      gboolean success = FALSE;
 
       start_location = *gtk_css_parser_get_start_location (parser);
-      url = gtk_css_parser_consume_url (parser);
-
-      if (url != NULL)
+      bytes = consume_bytes (parser);
+      if (bytes != NULL)
         {
-          scheme = g_uri_parse_scheme (url);
-          if (scheme && g_ascii_strcasecmp (scheme, "data") == 0)
+          if (add_font_from_bytes (context, bytes, &error))
             {
-              bytes = gtk_css_data_url_parse (url, NULL, &error);
+              font = font_from_string (context->fontmap, font_name, FALSE);
+              if (!font)
+                {
+                  gtk_css_parser_error (parser,
+                                        GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                                        &start_location,
+                                        gtk_css_parser_get_end_location (parser),
+                                        "The given url does not define a font named \"%s\"",
+                                        font_name);
+                }
             }
           else
-            {
-              GFile *file;
-
-              file = g_file_new_for_uri (url);
-              bytes = g_file_load_bytes (file, NULL, NULL, &error);
-              g_object_unref (file);
-            }
-
-          g_free (scheme);
-          g_free (url);
-          if (bytes != NULL)
-            {
-              success = add_font_from_bytes (context, bytes, &error);
-              g_bytes_unref (bytes);
-            }
-
-          if (!success)
             {
               gtk_css_parser_emit_error (parser,
                                          &start_location,
                                          gtk_css_parser_get_end_location (parser),
                                          error);
+              g_clear_error (&error);
             }
-        }
 
-      if (success)
-        {
-          font = font_from_string (context->fontmap, font_name, FALSE);
-          if (!font)
-            {
-              gtk_css_parser_error (parser,
-                                    GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
-                                    &start_location,
-                                    gtk_css_parser_get_end_location (parser),
-                                    "The given url does not define a font named \"%s\"",
-                                    font_name);
-            }
+          g_bytes_unref (bytes);
         }
     }
   else
