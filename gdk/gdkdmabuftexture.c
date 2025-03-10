@@ -103,7 +103,7 @@ struct _Download
 };
 
 static gboolean
-gdk_dmabuf_texture_invoke_callback (gpointer data)
+gdk_dmabuf_texture_invoke_download (gpointer data)
 {
   Download *download = data;
   //GdkDisplay *display = download->texture->display;
@@ -164,9 +164,72 @@ gdk_dmabuf_texture_download (GdkTexture      *texture,
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (texture);
   Download download = { self, format, color_state, data, stride, 0 };
 
-  g_main_context_invoke (NULL, gdk_dmabuf_texture_invoke_callback, &download);
+  g_main_context_invoke (NULL, gdk_dmabuf_texture_invoke_download, &download);
 
   while (g_atomic_int_get (&download.spinlock) == 0);
+}
+
+typedef struct _DownloadDataBuffer DownloadDataBuffer;
+
+struct _DownloadDataBuffer
+{
+  GdkDmabufTexture *texture;
+  GdkDataBuffer *data_buffer;
+  GBytes *result;
+  volatile int spinlock;
+};
+
+static gboolean
+gdk_dmabuf_texture_invoke_download_data_buffer (gpointer data_)
+{
+  DownloadDataBuffer *download = data_;
+  gsize i;
+  gboolean is_yuv;
+  const guchar *data;
+  gsize size;
+
+  if (gdk_dmabuf_is_disjoint (&download->texture->dmabuf))
+    goto out;
+
+  if (!gdk_data_format_find_by_dmabuf_fourcc (download->texture->dmabuf.fourcc,
+                                              &download->data_buffer->format,
+                                              &is_yuv))
+    goto out;
+
+  g_assert (download->texture->dmabuf.n_planes == gdk_data_format_n_planes (download->data_buffer->format));
+
+  data = gdk_dmabuf_mmap (download->texture->dmabuf.planes[0].fd, &size);
+  if (data == NULL)
+    goto out;
+  download->result = g_bytes_new (data, size);
+  gdk_dmabuf_munmap (download->texture->dmabuf.planes[0].fd, data, size);
+
+  data = g_bytes_get_data (download->result, NULL);
+  download->data_buffer->width = GDK_TEXTURE (download->texture)->width;
+  download->data_buffer->height = GDK_TEXTURE (download->texture)->height;
+  for (i = 0; i < download->texture->dmabuf.n_planes; i++)
+    {
+      download->data_buffer->planes[i].data = data + download->texture->dmabuf.planes[i].offset;
+      download->data_buffer->planes[i].stride = download->texture->dmabuf.planes[i].stride;
+    }
+
+out:
+  g_atomic_int_set (&download->spinlock, 1);
+  return FALSE;
+}
+
+static GBytes *
+gdk_dmabuf_texture_download_data_buffer (GdkTexture    *texture,
+                                         GdkDataBuffer *out_buffer)
+{
+  GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (texture);
+  DownloadDataBuffer download = { self, out_buffer, NULL, 0 };
+
+  g_main_context_invoke (NULL, gdk_dmabuf_texture_invoke_download_data_buffer, &download);
+
+  while (g_atomic_int_get (&download.spinlock) == 0);
+
+  return download.result;
 }
 
 static void
@@ -176,6 +239,7 @@ gdk_dmabuf_texture_class_init (GdkDmabufTextureClass *klass)
   GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
 
   texture_class->download = gdk_dmabuf_texture_download;
+  texture_class->download_data_buffer = gdk_dmabuf_texture_download_data_buffer;
 
   gobject_class->dispose = gdk_dmabuf_texture_dispose;
 }
