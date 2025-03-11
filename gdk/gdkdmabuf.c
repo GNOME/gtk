@@ -26,10 +26,13 @@
 #include "gdkmemoryformatprivate.h"
 
 #ifdef HAVE_DMABUF
+#include <fcntl.h>
 #include <sys/mman.h>
 #include <sys/ioctl.h>
 #include <linux/dma-buf.h>
+#include <linux/udmabuf.h>
 #include <epoxy/egl.h>
+#include <errno.h>
 
 GdkDmabufFormats *
 gdk_dmabuf_get_mmap_formats (void)
@@ -497,6 +500,123 @@ gdk_dmabuf_is_disjoint (const GdkDmabuf *dmabuf)
   return FALSE;
 }
 
+static int
+udmabuf_initialize (GError **error)
+{
+  static int udmabuf_fd;
+
+  if (udmabuf_fd == 0)
+    {
+      udmabuf_fd = open ("/dev/udmabuf", O_RDWR);
+      if (udmabuf_fd == -1)
+        {
+          g_set_error (error,
+                       G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "Failed to open /dev/udmabuf: %s",
+                       g_strerror (errno));
+        }
+    }
+
+  return udmabuf_fd;
+}
+
+#define align(x,y) (((x) + (y) - 1) & ~((y) - 1))
+
+/*<private>
+ * gdk_dmabuf_new_for_bytes:
+ * @bytes: the bytes to create a dmabuf for
+ * @error: Return location for an error
+ *
+ * Creates a dmabuf representing the given bytes.
+ *
+ * Returns: The new dmabuf fd or -1 on error.
+ **/
+int
+gdk_dmabuf_new_for_bytes (GBytes  *bytes,
+                          GError **error)
+{
+  int udmabuf_fd;
+  int mem_fd = -1;
+  int dmabuf_fd = -1;
+  gsize alignment, size;
+  gpointer data;
+  int res;
+
+  g_return_val_if_fail (bytes != NULL, -1);
+
+  udmabuf_fd = udmabuf_initialize (error);
+  if (udmabuf_fd < 0)
+    return -1;
+
+  alignment = sysconf (_SC_PAGE_SIZE);
+  size = align (g_bytes_get_size (bytes), alignment);
+
+  mem_fd = memfd_create ("gtk", MFD_ALLOW_SEALING);
+  if (mem_fd == -1)
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "Failed to create memfd: %s",
+                   g_strerror (errno));
+      goto out;
+    }
+
+  res = ftruncate (mem_fd, size);
+  if (res == -1)
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "ftruncate on memfd failed: %s",
+                    g_strerror (errno));
+      goto out;
+    }
+
+  if (fcntl (mem_fd, F_ADD_SEALS, F_SEAL_SHRINK) < 0)
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "fcntl on memfd failed: %s",
+                    g_strerror (errno));
+      goto out;
+    }
+
+  data = mmap (NULL, size, PROT_WRITE, MAP_SHARED, mem_fd, 0);
+  if (data == NULL || data == MAP_FAILED)
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "mmap failed: %s",
+                    g_strerror (errno));
+      goto out;
+    }
+
+  memcpy (data, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
+
+  munmap (data, size);
+
+  dmabuf_fd = ioctl (udmabuf_fd,
+                     UDMABUF_CREATE,
+                     &(struct udmabuf_create) {
+                       .memfd = mem_fd,
+                       .flags = UDMABUF_FLAGS_CLOEXEC,
+                       .offset = 0,
+                       .size = size
+                     });
+
+  if (dmabuf_fd < 0)
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "UDMABUF_CREATE ioctl failed: %s",
+                    g_strerror (errno));
+    }
+
+out:
+  if (mem_fd != -1)
+    close (mem_fd);
+
+  return dmabuf_fd;
+}
 #endif  /* HAVE_DMABUF */
 
 void
@@ -515,3 +635,4 @@ gdk_dmabuf_close_fds (GdkDmabuf *dmabuf)
         g_close (dmabuf->planes[i].fd, NULL);
     }
 }
+
