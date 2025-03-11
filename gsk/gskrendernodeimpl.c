@@ -7955,7 +7955,7 @@ gsk_mask_node_draw (GskRenderNode *node,
   graphene_vec4_t color_offset;
 
   /* clip so the push_group() creates a smaller surface */
-  gdk_cairo_rect (cr, &node->bounds);
+  gsk_cairo_rectangle_pixel_aligned (cr, &node->bounds);
   cairo_clip (cr);
 
   if (has_empty_clip (cr))
@@ -7990,9 +7990,6 @@ gsk_mask_node_draw (GskRenderNode *node,
     default:
       g_assert_not_reached ();
     }
-
-  gdk_cairo_rect (cr, &node->bounds);
-  cairo_clip (cr);
 
   cairo_mask (cr, mask_pattern);
 

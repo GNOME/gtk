@@ -114,6 +114,7 @@ compare_render_tests = [
   'mask-clipped-inverted-alpha',
   'mask-empty-mask',
   'mask-empty-source',
+  'mask-half-pixel',
   'mask-modes',
   'mask-modes-in-opacity',
   'mask-modes-with-alpha',
