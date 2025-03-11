@@ -1,0 +1,14 @@
+color {
+  bounds: 0 0 3 2;
+  color: black;
+}
+mask {
+  source: color {
+    bounds: 0 0 3 2;
+    color: #640032;
+  }
+  mask: color {
+    bounds: 0.6 0 2 2;
+    color: turquoise;
+  }
+}
