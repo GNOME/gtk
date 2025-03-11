@@ -42,6 +42,7 @@ const GdkDebugKey gdk_vulkan_feature_keys[] = {
   { "semaphore-import", GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT, "Disable sync of imported dmabufs" },
   { "incremental-present", GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT, "Do not send damage regions" },
   { "swapchain-maintenance", GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE, "Do not use advanced swapchain features" },
+  { "swapchain-colorspace", GDK_VULKAN_FEATURE_SWAPCHAIN_COLORSPACE, "Force default colorspace (likely crashes Wayland)" },
 };
 #endif
 
@@ -663,6 +664,9 @@ physical_device_check_features (VkPhysicalDevice device)
       physical_device_supports_extension (device, VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME))
     features |= GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE;
 
+  if (physical_device_supports_extension (device, VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME))
+    features |= GDK_VULKAN_FEATURE_SWAPCHAIN_COLORSPACE;
+
   return features;
 }
 
@@ -937,6 +941,7 @@ gdk_vulkan_context_real_init (GInitable     *initable,
   else
     {
       uint32_t n_formats;
+
       GDK_VK_CHECK (vkGetPhysicalDeviceSurfaceFormatsKHR, gdk_vulkan_context_get_physical_device (context),
                                                           priv->surface,
                                                           &n_formats, NULL);
@@ -946,13 +951,16 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                                                           &n_formats, formats);
       for (i = 0; i < n_formats; i++)
         {
-          if (formats[i].colorSpace != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR)
+          if (formats[i].colorSpace != VK_COLOR_SPACE_SRGB_NONLINEAR_KHR &&
+              formats[i].colorSpace != VK_COLOR_SPACE_PASS_THROUGH_EXT)
             continue;
 
           switch ((int) formats[i].format)
             {
               case VK_FORMAT_B8G8R8A8_UNORM:
-                if (priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_UNDEFINED)
+                if (priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_UNDEFINED ||
+                    (formats[i].colorSpace == VK_COLOR_SPACE_PASS_THROUGH_EXT &&
+                     priv->formats[GDK_MEMORY_U16].vk_format.colorSpace != VK_COLOR_SPACE_PASS_THROUGH_EXT))
                   {
                     priv->formats[GDK_MEMORY_U8].vk_format = formats[i];
                     priv->formats[GDK_MEMORY_U8].gdk_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
@@ -960,7 +968,9 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                 break;
 
               case VK_FORMAT_R8G8B8A8_UNORM:
-                if (priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_UNDEFINED)
+                if (priv->formats[GDK_MEMORY_U8].vk_format.format == VK_FORMAT_UNDEFINED ||
+                    (formats[i].colorSpace == VK_COLOR_SPACE_PASS_THROUGH_EXT &&
+                     priv->formats[GDK_MEMORY_U16].vk_format.colorSpace != VK_COLOR_SPACE_PASS_THROUGH_EXT))
                   {
                     priv->formats[GDK_MEMORY_U8].vk_format = formats[i];
                     priv->formats[GDK_MEMORY_U8].gdk_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
@@ -968,7 +978,9 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                 break;
 
               case VK_FORMAT_B8G8R8A8_SRGB:
-                if (priv->formats[GDK_MEMORY_U8_SRGB].vk_format.format == VK_FORMAT_UNDEFINED)
+                if (priv->formats[GDK_MEMORY_U8_SRGB].vk_format.format == VK_FORMAT_UNDEFINED ||
+                    (formats[i].colorSpace == VK_COLOR_SPACE_PASS_THROUGH_EXT &&
+                     priv->formats[GDK_MEMORY_U16].vk_format.colorSpace != VK_COLOR_SPACE_PASS_THROUGH_EXT))
                   {
                     priv->formats[GDK_MEMORY_U8_SRGB].vk_format = formats[i];
                     priv->formats[GDK_MEMORY_U8_SRGB].gdk_format = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED;
@@ -976,7 +988,9 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                 break;
 
               case VK_FORMAT_R8G8B8A8_SRGB:
-                if (priv->formats[GDK_MEMORY_U8_SRGB].vk_format.format == VK_FORMAT_UNDEFINED)
+                if (priv->formats[GDK_MEMORY_U8_SRGB].vk_format.format == VK_FORMAT_UNDEFINED ||
+                    (formats[i].colorSpace == VK_COLOR_SPACE_PASS_THROUGH_EXT &&
+                     priv->formats[GDK_MEMORY_U16].vk_format.colorSpace != VK_COLOR_SPACE_PASS_THROUGH_EXT))
                   {
                     priv->formats[GDK_MEMORY_U8_SRGB].vk_format = formats[i];
                     priv->formats[GDK_MEMORY_U8_SRGB].gdk_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
@@ -984,18 +998,27 @@ gdk_vulkan_context_real_init (GInitable     *initable,
                 break;
 
               case VK_FORMAT_R16G16B16A16_UNORM:
-                priv->formats[GDK_MEMORY_U16].vk_format = formats[i];
-                priv->formats[GDK_MEMORY_U16].gdk_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+                if (priv->formats[GDK_MEMORY_U16].vk_format.colorSpace != VK_COLOR_SPACE_PASS_THROUGH_EXT)
+                  {
+                    priv->formats[GDK_MEMORY_U16].vk_format = formats[i];
+                    priv->formats[GDK_MEMORY_U16].gdk_format = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED;
+                  }
                 break;
 
               case VK_FORMAT_R16G16B16A16_SFLOAT:
-                priv->formats[GDK_MEMORY_FLOAT16].vk_format = formats[i];
-                priv->formats[GDK_MEMORY_FLOAT16].gdk_format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+                if (priv->formats[GDK_MEMORY_FLOAT16].vk_format.colorSpace != VK_COLOR_SPACE_PASS_THROUGH_EXT)
+                  {
+                    priv->formats[GDK_MEMORY_FLOAT16].vk_format = formats[i];
+                    priv->formats[GDK_MEMORY_FLOAT16].gdk_format = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED;
+                  }
                 break;
 
               case VK_FORMAT_R32G32B32A32_SFLOAT:
-                priv->formats[GDK_MEMORY_FLOAT32].vk_format = formats[i];
-                priv->formats[GDK_MEMORY_FLOAT32].gdk_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+                if (priv->formats[GDK_MEMORY_FLOAT32].vk_format.colorSpace != VK_COLOR_SPACE_PASS_THROUGH_EXT)
+                  {
+                    priv->formats[GDK_MEMORY_FLOAT32].vk_format = formats[i];
+                    priv->formats[GDK_MEMORY_FLOAT32].gdk_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+                  }
                 break;
 
               default:
@@ -1595,6 +1618,8 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                   swapchain_maintenance1_features.pNext = create_device_pNext;
                   create_device_pNext = &swapchain_maintenance1_features;
                 }
+              if (features & GDK_VULKAN_FEATURE_SWAPCHAIN_COLORSPACE)
+                g_ptr_array_add (device_extensions, (gpointer) VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME);
 
 #define ENABLE_IF(flag) ((features & (flag)) ? VK_TRUE : VK_FALSE)
               GDK_DISPLAY_DEBUG (display, VULKAN, "Using Vulkan device %u, queue %u", i, j);
