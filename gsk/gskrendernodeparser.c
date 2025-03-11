@@ -100,6 +100,73 @@ context_finish (Context *context)
   g_clear_object (&context->fontmap);
 }
 
+static guint
+parse_declarations (GtkCssParser      *parser,
+                    Context           *context,
+                    const Declaration *declarations,
+                    guint              n_declarations)
+{
+  guint parsed = 0;
+  guint i;
+
+  g_assert (n_declarations < 8 * sizeof (guint));
+
+  while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    {
+      gtk_css_parser_start_semicolon_block (parser, GTK_CSS_TOKEN_OPEN_CURLY);
+
+      for (i = 0; i < n_declarations; i++)
+        {
+          if (gtk_css_parser_try_ident (parser, declarations[i].name))
+            {
+              if (parsed & (1 << i))
+                {
+                  gtk_css_parser_warn_syntax (parser, "Variable \"%s\" defined multiple times", declarations[i].name);
+                  /* Unset, just to be sure */
+                  parsed &= ~(1 << i);
+                  if (declarations[i].clear_func)
+                    declarations[i].clear_func (declarations[i].result);
+                }
+
+              if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COLON))
+                {
+                  gtk_css_parser_error_syntax (parser, "Expected ':' after variable declaration");
+                }
+              else
+                {
+                  if (!declarations[i].parse_func (parser, context, declarations[i].result))
+                    {
+                      /* nothing to do */
+                    }
+                  else if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+                    {
+                      gtk_css_parser_error_syntax (parser, "Expected ';' at end of statement");
+                      if (declarations[i].clear_func)
+                        declarations[i].clear_func (declarations[i].result);
+                    }
+                  else
+                    {
+                      parsed |= (1 << i);
+                    }
+                }
+              break;
+            }
+        }
+      if (i == n_declarations)
+        {
+          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
+            gtk_css_parser_error_syntax (parser, "No variable named \"%s\"",
+                                         gtk_css_token_get_string (gtk_css_parser_get_token (parser)));
+          else
+            gtk_css_parser_error_syntax (parser, "Expected a variable name");
+        }
+
+      gtk_css_parser_end_block (parser);
+    }
+
+  return parsed;
+}
+
 static gboolean
 parse_enum (GtkCssParser *parser,
             GType         type,
@@ -1413,73 +1480,6 @@ parse_container_node (GtkCssParser *parser,
   g_ptr_array_unref (nodes);
 
   return node;
-}
-
-static guint
-parse_declarations (GtkCssParser      *parser,
-                    Context           *context,
-                    const Declaration *declarations,
-                    guint              n_declarations)
-{
-  guint parsed = 0;
-  guint i;
-
-  g_assert (n_declarations < 8 * sizeof (guint));
-
-  while (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-    {
-      gtk_css_parser_start_semicolon_block (parser, GTK_CSS_TOKEN_OPEN_CURLY);
-
-      for (i = 0; i < n_declarations; i++)
-        {
-          if (gtk_css_parser_try_ident (parser, declarations[i].name))
-            {
-              if (parsed & (1 << i))
-                {
-                  gtk_css_parser_warn_syntax (parser, "Variable \"%s\" defined multiple times", declarations[i].name);
-                  /* Unset, just to be sure */
-                  parsed &= ~(1 << i);
-                  if (declarations[i].clear_func)
-                    declarations[i].clear_func (declarations[i].result);
-                }
-
-              if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COLON))
-                {
-                  gtk_css_parser_error_syntax (parser, "Expected ':' after variable declaration");
-                }
-              else
-                {
-                  if (!declarations[i].parse_func (parser, context, declarations[i].result))
-                    {
-                      /* nothing to do */
-                    }
-                  else if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
-                    {
-                      gtk_css_parser_error_syntax (parser, "Expected ';' at end of statement");
-                      if (declarations[i].clear_func)
-                        declarations[i].clear_func (declarations[i].result);
-                    }
-                  else
-                    {
-                      parsed |= (1 << i);
-                    }
-                }
-              break;
-            }
-        }
-      if (i == n_declarations)
-        {
-          if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_IDENT))
-            gtk_css_parser_error_syntax (parser, "No variable named \"%s\"",
-                                         gtk_css_token_get_string (gtk_css_parser_get_token (parser)));
-          else
-            gtk_css_parser_error_syntax (parser, "Expected a variable name");
-        }
-
-      gtk_css_parser_end_block (parser);
-    }
-
-  return parsed;
 }
 
 static GdkTexture *
