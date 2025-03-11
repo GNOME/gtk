@@ -3002,6 +3002,7 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
 
   if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
     return;
+  gsk_rect_snap_to_grid (&bounds, &self->scale, &self->offset, &bounds);
 
   mask_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                          0,
@@ -3019,14 +3020,14 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
       mask_mode == GSK_MASK_MODE_ALPHA)
     {
       gsk_gpu_colorize_op (self->frame,
-                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
                            self->ccs,
                            self->opacity,
                            &self->offset,
                            &(GskGpuShaderImage) {
                                mask_image,
                                GSK_GPU_SAMPLER_DEFAULT,
-                               &node->bounds,
+                               &bounds,
                                &mask_rect,
                            },
                            gsk_color_node_get_color2 (source_child));
@@ -3048,8 +3049,8 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
         }
 
       gsk_gpu_mask_op (self->frame,
-                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
-                       &node->bounds,
+                       gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
+                       &bounds,
                        &self->offset,
                        self->opacity,
                        mask_mode,
