@@ -172,13 +172,14 @@ parse_unsigned (GtkCssParser *parser,
                 Context      *context,
                 gpointer      out)
 {
-  const GtkCssToken *token;
-
-  token = gtk_css_parser_get_token (parser);
-  if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
     {
-      gtk_css_parser_consume_token (parser);
-      *((guint *)out) = (guint) token->number.number;
+      double d;
+
+      if (!gtk_css_parser_consume_number (parser, &d))
+        return FALSE;
+
+      *(unsigned *) out = d;
       return TRUE;
     }
 
