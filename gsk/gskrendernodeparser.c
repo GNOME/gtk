@@ -168,6 +168,25 @@ parse_declarations (GtkCssParser      *parser,
 }
 
 static gboolean
+parse_unsigned (GtkCssParser *parser,
+                Context      *context,
+                gpointer      out)
+{
+  const GtkCssToken *token;
+
+  token = gtk_css_parser_get_token (parser);
+  if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
+    {
+      gtk_css_parser_consume_token (parser);
+      *((guint *)out) = (guint) token->number.number;
+      return TRUE;
+    }
+
+  gtk_css_parser_error_value (parser, "Not an allowed value here");
+  return FALSE;
+}
+
+static gboolean
 parse_enum (GtkCssParser *parser,
             GType         type,
             gpointer      out_value)
@@ -1547,25 +1566,6 @@ parse_cicp_range (GtkCssParser *parser,
     return FALSE;
 
   return TRUE;
-}
-
-static gboolean
-parse_unsigned (GtkCssParser *parser,
-                Context      *context,
-                gpointer      out)
-{
-  const GtkCssToken *token;
-
-  token = gtk_css_parser_get_token (parser);
-  if (gtk_css_token_is (token, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
-    {
-      gtk_css_parser_consume_token (parser);
-      *((guint *)out) = (guint) token->number.number;
-      return TRUE;
-    }
-
-  gtk_css_parser_error_value (parser, "Not an allowed value here");
-  return FALSE;
 }
 
 static gboolean
