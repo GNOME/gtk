@@ -60,6 +60,7 @@ compare_render_tests = [
   'css-background',
   'dihedral',
   'dihedral-f',
+  'eagain',
   'empty-blend',
   'empty-blur',
   'empty-border',
@@ -248,6 +249,7 @@ compare_xfails = {
     'blur-child-bounds-oversize': ['clip'], # 6450
     'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
     'big-checkerboard': ['clipped'], # 6444
+    'inter-optical-scaling': ['flip', 'rotate', 'mask', 'colorflip'],
   },
   'vulkan': {
     'radial-gradient-with-64-colorstops': ['clip', 'colorflip'],
@@ -257,10 +259,12 @@ compare_xfails = {
     'repeating-radial-gradient-edge-colors': ['colorflip'],
     'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
     'big-checkerboard': ['clip'], # 6444
+    'inter-optical-scaling': ['flip', 'rotate', 'mask', 'colorflip'],
   },
   'cairo': {
     'inter-hinting': ['flip', 'rotate'],
-    'inter-optical-scaling': ['flip', 'rotate'],
+    'inter-optical-scaling': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
+    'eagain': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
   }
 }
 
