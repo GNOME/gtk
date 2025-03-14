@@ -2401,7 +2401,8 @@ gtk_list_box_row_visibility_changed (GtkListBox    *box,
 {
   update_row_is_visible (box, row);
 
-  if (gtk_widget_get_visible (GTK_WIDGET (box)))
+  if (gtk_widget_get_visible (GTK_WIDGET (box)) &&
+      ROW_PRIV (row)->iter)
     {
       gtk_list_box_update_header (box, ROW_PRIV (row)->iter);
       gtk_list_box_update_header (box,
