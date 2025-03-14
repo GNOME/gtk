@@ -2595,10 +2595,10 @@ gtk_window_transient_parent_destroyed (GtkWindow *parent,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
 
+  gtk_window_unset_transient_for (window);
+
   if (priv->destroy_with_parent)
     gtk_window_destroy (window);
-  else
-    priv->transient_parent = NULL;
 }
 
 static void
