@@ -2679,29 +2679,54 @@ gtk_stack_snapshot (GtkWidget   *widget,
 }
 
 static void
-adjust_child_allocation (GtkWidget *child,
-                         int       *width,
-                         int       *height)
+adjust_child_allocation (GtkWidget     *child,
+                         GtkAllocation *allocation)
 {
-  int min;
+  int min, width, height;
+  GtkAlign align;
 
   if (gtk_widget_get_request_mode (child) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
     {
       gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, -1,
                           &min, NULL, NULL, NULL);
-      *height = MAX (*height, min);
-      gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, *height,
+      height = MAX (allocation->height, min);
+      gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, height,
                           &min, NULL, NULL, NULL);
-      *width = MAX (*width, min);
+      width = MAX (allocation->width, min);
     }
   else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
     {
       gtk_widget_measure (child, GTK_ORIENTATION_HORIZONTAL, -1,
                           &min, NULL, NULL, NULL);
-      *width = MAX (*width, min);
-      gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, *width,
+      width = MAX (allocation->width, min);
+      gtk_widget_measure (child, GTK_ORIENTATION_VERTICAL, width,
                           &min, NULL, NULL, NULL);
-      *height = MAX (*height, min);
+      height = MAX (allocation->height, min);
+    }
+
+  if (width > allocation->width)
+    {
+      GtkTextDirection direction = _gtk_widget_get_direction (child);
+      align = gtk_widget_get_halign (child);
+
+      if (align == GTK_ALIGN_CENTER || align == GTK_ALIGN_FILL)
+        allocation->x -= (width - allocation->width) / 2;
+      else if (align == (direction == GTK_TEXT_DIR_RTL ? GTK_ALIGN_START : GTK_ALIGN_END))
+        allocation->x -= (width - allocation->width);
+
+      allocation->width = width;
+    }
+
+  if (height > allocation->height)
+    {
+      align = gtk_widget_get_valign (child);
+
+      if (align == GTK_ALIGN_CENTER || align == GTK_ALIGN_FILL)
+        allocation->y -= (height - allocation->height) / 2;
+      else if (align == GTK_ALIGN_END)
+        allocation->y -= (height - allocation->height);
+
+      allocation->height = height;
     }
 }
 
@@ -2717,13 +2742,12 @@ gtk_stack_size_allocate (GtkWidget *widget,
 
   if (priv->last_visible_child)
     {
-      int child_width = width, child_height = height;
-
+      child_allocation = (GtkAllocation) {0, 0, width, height};
       adjust_child_allocation (priv->last_visible_child->widget,
-                               &child_width, &child_height);
+                               &child_allocation);
 
       gtk_widget_size_allocate (priv->last_visible_child->widget,
-                                &(GtkAllocation) { 0, 0, child_width, child_height }, -1);
+                                &child_allocation, -1);
     }
 
   child_allocation.x = get_bin_window_x (stack);
@@ -2734,28 +2758,7 @@ gtk_stack_size_allocate (GtkWidget *widget,
   if (priv->visible_child)
     {
       adjust_child_allocation (priv->visible_child->widget,
-                               &child_allocation.width,
-                               &child_allocation.height);
-
-      if (child_allocation.width > width)
-        {
-          GtkAlign halign = gtk_widget_get_halign (priv->visible_child->widget);
-
-          if (halign == GTK_ALIGN_CENTER || halign == GTK_ALIGN_FILL)
-            child_allocation.x = (width - child_allocation.width) / 2;
-          else if (halign == GTK_ALIGN_END)
-            child_allocation.x = (width - child_allocation.width);
-        }
-
-      if (child_allocation.height > height)
-        {
-          GtkAlign valign = gtk_widget_get_valign (priv->visible_child->widget);
-
-          if (valign == GTK_ALIGN_CENTER || valign == GTK_ALIGN_FILL)
-            child_allocation.y = (height - child_allocation.height) / 2;
-          else if (valign == GTK_ALIGN_END)
-            child_allocation.y = (height - child_allocation.height);
-        }
+                               &child_allocation);
 
       gtk_widget_size_allocate (priv->visible_child->widget, &child_allocation, -1);
     }

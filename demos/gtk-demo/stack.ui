@@ -4,15 +4,12 @@
     <property name="title" translatable="yes">Stack</property>
     <property name="resizable">0</property>
     <property name="child">
-      <object class="GtkGrid">
+      <object class="GtkBox">
+        <property name="orientation">vertical</property>
         <child>
           <object class="GtkStackSwitcher">
             <property name="stack">stack</property>
             <property name="halign">center</property>
-            <layout>
-              <property name="column">0</property>
-              <property name="row">0</property>
-            </layout>
           </object>
         </child>
         <child>
@@ -58,10 +55,6 @@
                 </property>
               </object>
             </child>
-            <layout>
-              <property name="column">0</property>
-              <property name="row">1</property>
-            </layout>
           </object>
         </child>
       </object>
