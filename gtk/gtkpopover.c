@@ -704,6 +704,41 @@ maybe_request_motion_event (GtkPopover *popover)
   gdk_surface_request_motion (focus_surface);
 }
 
+static gboolean
+is_acceptable_size (GtkWidget *widget,
+                    int        width,
+                    int        height)
+{
+  if (gtk_widget_get_request_mode (widget) == GTK_SIZE_REQUEST_WIDTH_FOR_HEIGHT)
+    {
+      int min_height, min_width_for_height;
+
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, -1,
+                          &min_height, NULL, NULL, NULL);
+      if (height < min_height)
+        return FALSE;
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, height,
+                          &min_width_for_height, NULL, NULL, NULL);
+      if (width < min_width_for_height)
+        return FALSE;
+    }
+  else /* GTK_SIZE_REQUEST_HEIGHT_FOR_WIDTH or CONSTANT_SIZE */
+    {
+      int min_width, min_height_for_width;
+
+      gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, -1,
+                          &min_width, NULL, NULL, NULL);
+      if (width < min_width)
+        return FALSE;
+      gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, width,
+                          &min_height_for_width, NULL, NULL, NULL);
+      if (height < min_height_for_width)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 static void
 gtk_popover_native_layout (GtkNative *native,
                            int        width,
@@ -712,14 +747,8 @@ gtk_popover_native_layout (GtkNative *native,
   GtkPopover *popover = GTK_POPOVER (native);
   GtkPopoverPrivate *priv = gtk_popover_get_instance_private (popover);
   GtkWidget *widget = GTK_WIDGET (popover);
-  int min_height_for_width, min_width_for_height;
 
-  gtk_widget_measure (widget, GTK_ORIENTATION_VERTICAL, width,
-                      &min_height_for_width, NULL, NULL, NULL);
-  gtk_widget_measure (widget, GTK_ORIENTATION_HORIZONTAL, height,
-                      &min_width_for_height, NULL, NULL, NULL);
-
-  if (width < min_width_for_height || height < min_height_for_width)
+  if (!is_acceptable_size (widget, width, height))
     {
       gtk_popover_popdown (popover);
       return;
