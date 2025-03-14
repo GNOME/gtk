@@ -1,5 +1,5 @@
 color {
-  bounds: -1 -1 3 3;
+  bounds: -2 -2 5 5;
   color: black;
 }
 text {
