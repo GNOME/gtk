@@ -101,7 +101,7 @@ _gdk_android_toplevel_on_configuration_change (JNIEnv *env, jobject this)
 }
 
 void
-_gdk_android_toplevel_on_state_change (JNIEnv *env, jobject this)
+_gdk_android_toplevel_on_state_change (JNIEnv *env, jobject this, jboolean has_focus, jboolean is_fullscreen)
 {
   glong identifier = (*env)->GetLongField (env, this, gdk_android_get_java_cache ()->toplevel.native_identifier);
 
@@ -115,14 +115,13 @@ _gdk_android_toplevel_on_state_change (JNIEnv *env, jobject this)
   GdkToplevelState unset = 0;
   GdkToplevelState set = 0;
 
-  gboolean has_focus = (*env)->CallBooleanMethod (env, self->activity, gdk_android_get_java_cache ()->a_activity.has_window_focus);
   *(has_focus ? &set : &unset) |= GDK_TOPLEVEL_STATE_FOCUSED;
   if (has_focus)
     gdk_android_clipboard_update_remote_formats ((GdkAndroidClipboard *) ((GdkDisplay *) display)->clipboard);
 
+  *(is_fullscreen ? &set : &unset) |= GDK_TOPLEVEL_STATE_FULLSCREEN;
   /*GDK_TOPLEVEL_STATE_MINIMIZED
   GDK_TOPLEVEL_STATE_MAXIMIZED
-  GDK_TOPLEVEL_STATE_FULLSCREEN
   GDK_TOPLEVEL_STATE_SUSPENDED*/
 
   gdk_synthesize_surface_state (surface, unset, set);
@@ -271,6 +270,7 @@ skip_new_activity:
   else if (surface_impl->surface)
     {
       (*env)->CallVoidMethod (env, surface_impl->surface, gdk_android_get_java_cache ()->surface.set_visibility, TRUE);
+      gdk_android_toplevel_update_window (self);
     }
 
   (*env)->PopLocalFrame (env, NULL);
@@ -648,9 +648,13 @@ gdk_android_toplevel_update_window (GdkAndroidToplevel *self)
 {
   if (!self->activity)
     return;
+  gboolean is_fullscreen;
+  if (!self->layout || !gdk_toplevel_layout_get_fullscreen (self->layout, &is_fullscreen))
+    is_fullscreen = FALSE;
   JNIEnv *env = gdk_android_get_env ();
   (*env)->CallVoidMethod (env, self->activity, gdk_android_get_java_cache ()->toplevel.post_window_configuration,
-                          gdk_android_utils_color_to_android (gdk_android_toplevel_get_bars_color (self)));
+                          gdk_android_utils_color_to_android (gdk_android_toplevel_get_bars_color (self)),
+                          is_fullscreen);
 }
 
 /**

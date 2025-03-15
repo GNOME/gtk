@@ -62,7 +62,7 @@ static const JNINativeMethod surface_natives[] = {
 static const JNINativeMethod toplevel_natives[] = {
   { .name = "bindNative", .signature = "(J)V", .fnPtr = _gdk_android_toplevel_bind_native },
   { .name = "notifyConfigurationChange", .signature = "()V", .fnPtr = _gdk_android_toplevel_on_configuration_change },
-  { .name = "notifyStateChange", .signature = "()V", .fnPtr = _gdk_android_toplevel_on_state_change },
+  { .name = "notifyStateChange", .signature = "(ZZ)V", .fnPtr = _gdk_android_toplevel_on_state_change },
   { .name = "notifyOnBackPress", .signature = "()V", .fnPtr = _gdk_android_toplevel_on_back_press },
   { .name = "notifyDestroy", .signature = "()V", .fnPtr = _gdk_android_toplevel_on_destroy },
   { .name = "notifyActivityResult", .signature = "(IILandroid/content/Intent;)V", .fnPtr = _gdk_android_toplevel_on_activity_result }
@@ -230,7 +230,7 @@ gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject ac
   gdk_android_java_cache.toplevel.toplevel_view = (*env)->GetFieldID (env, gdk_android_java_cache.toplevel.klass, "view", "Lorg/gtk/android/ToplevelActivity$ToplevelView;");
   POPULATE_GDK_REFCACHE_STRING (toplevel, toplevel_identifier_key, "toplevelIdentifierKey")
   POPULATE_GDK_REFCACHE_METHOD (toplevel, bind_native, "bindNative", "(J)V")
-  POPULATE_GDK_REFCACHE_METHOD (toplevel, post_window_configuration, "postWindowConfiguration", "(I)V")
+  POPULATE_GDK_REFCACHE_METHOD (toplevel, post_window_configuration, "postWindowConfiguration", "(IZ)V")
   POPULATE_GDK_REFCACHE_METHOD (toplevel, post_title, "postTitle", "(Ljava/lang/String;)V")
   (*env)->RegisterNatives (env, toplevel_class, toplevel_natives, sizeof toplevel_natives / sizeof (JNINativeMethod));
 
@@ -251,7 +251,6 @@ gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject ac
   gdk_android_java_cache.a_activity.klass = (*env)->NewGlobalRef (env, android_activity_class);
   gdk_android_java_cache.a_activity.get_task_id = (*env)->GetMethodID (env, gdk_android_java_cache.a_activity.klass, "getTaskId", "()I");
   gdk_android_java_cache.a_activity.get_window_manager = (*env)->GetMethodID (env, gdk_android_java_cache.a_activity.klass, "getWindowManager", "()Landroid/view/WindowManager;");
-  POPULATE_REFCACHE_METHOD (activity, has_window_focus, "hasWindowFocus", "()Z")
   gdk_android_java_cache.a_activity.finish = (*env)->GetMethodID (env, gdk_android_java_cache.a_activity.klass, "finish", "()V");
   gdk_android_java_cache.a_activity.move_task_to_back = (*env)->GetMethodID (env, gdk_android_java_cache.a_activity.klass, "moveTaskToBack", "(Z)Z");
   gdk_android_java_cache.a_activity.start_activity = (*env)->GetMethodID (env, gdk_android_java_cache.a_activity.klass, "startActivity", "(Landroid/content/Intent;)V");
