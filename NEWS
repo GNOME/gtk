@@ -1,5 +1,81 @@
-Overview of Changes in 4.17.7, xx-xx-xxxx
+Overview of Changes in 4.18.2, xx-xx-xxxx
 =========================================
+
+
+Overview of Changes in 4.18.1, 14-03-2025
+=========================================
+
+Note: This release makes the use of the Wayland color-management protocol
+opt-in, since our code is not quite ready for being used by default yet.
+To enable the color management protocol, use GDK_DEBUG=color-mgmt.
+
+* macOS: Make fractional scaling work again
+
+* Android: Provide a GL renderer
+
+* Bugs fixed:
+  - #7386 Deadkeys using UFDD modifiers do not work under gtk4 apps (Matthias
+    Clasen)
+  - #7390 recorder.ui's action items made available for translation (Matthias
+    Clasen)
+  - #7402 Trying to measure GtkPopover 0x42761b0 for height of 277, but it needs
+    at least 313 (Sergey Bugaev)
+  - #7406 Nautilus crashes when try to pin any folder as a new bookmark on the
+    side panel. (Matthias Clasen)
+  - !8191 treeview: Drop cell-only states when rendering the empty bottom area
+  - !8237 paned: Fix handle jump on drag start
+  - !8258 Revamp the portal check
+  - !8260 fix: Fix the type conversion (gtk demo) in the gtkgear example
+  - !8262 bitset: Fix annotations
+  - !8268 Add another font testcase
+  - !8269 inspector: Make editing attributes work
+  - !8270 docs: Add some a11y references
+  - !8271 docs: fix typo
+  - !8272 inspector: Don't translate action names
+  - !8273 macos: Fix HiDPI rendering on macOS
+  - !8274 call nproc once in gdk parallel
+  - !8276 docs: Clarify invalidation replacements
+  - !8278 android: Introduced partial OpenGL backend
+  - !8280 Tweak text layout
+  - !8282 inspector: Allow editing PangoTabArrays
+  - !8283 egl: modifers must be an array
+  - !8284 gpu: Make sure we actually download dmabuf textures again
+  - !8285 Make color management opt-in
+  - !8287 Improve key event logging
+  - !8288 Tweak font rendering more
+  - !8289 API: Deprecate gdk_surface_create_cairo_context()
+  - !8291 Use gtk_shell version to announce wl_surface.offset support for cursors
+  - !8292 gsk: Fix multiple clipping of partial pixels
+  - !8294 vulkan: Prepare for Vulkan using wp-color-v1
+  - !8296 gsk: Pad text node bounds
+  - !8298 window: Fix destroying with transient parent
+  - !8299 stack: Fix adjusting child allocation
+
+* Translation updates:
+  - Basque (Asier Saratsua Garmendia)
+  - Bulgarian (Alexander Shopov)
+  - Catalan (Jordi Mas i Hernandez)
+  - Chinese (China) (Luming Zh)
+  - Czech (Daniel Rusek)
+  - Danish (Ask Hjorth Larsen)
+  - French (Vincent Chatelain)
+  - Galician (Fran Dieguez)
+  - Georgian (Ekaterine Papava)
+  - Hebrew (Yosef Or Boczko)
+  - Hungarian (Balázs Úr)
+  - Indonesian (Andika Triwidada)
+  - Korean (Changwoo Ryu)
+  - Lithuanian (Aurimas Černius)
+  - Persian (Danial Behzadi)
+  - Polish (Piotr Drąg)
+  - Portuguese (Hugo Carvalho)
+  - Portuguese (Brazil) (Artur Miranda)
+  - Russian (Artur S0)
+  - Slovenian (Martin)
+  - Swedish (Anders Jonsson)
+  - Turkish (Sabri Ünal)
+  - Ukrainian (Yuri Chornoivan)
+
 
 Overview of Changes in 4.17.6, 04-03-2025
 =========================================
