@@ -67,6 +67,7 @@ tests = [
   { 'name': 'objects-finalize' },
   { 'name': 'papersize' },
   #{ 'name': 'popover' },
+  { 'name': 'popovermenu' },
   { 'name': 'recentmanager' },
   { 'name': 'regression-tests' },
   { 'name': 'scrolledwindow' },
