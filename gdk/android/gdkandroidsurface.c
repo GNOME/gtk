@@ -220,6 +220,8 @@ gdk_android_surface_on_layout (GdkAndroidSurfaceOnLayoutData *data)
                       data->self->next.width, data->self->next.height,
                       data->self->next.scale);
 
+  // As on_layout may be called from Java surfaceChanged, recreate the EGL surface
+  gdk_surface_set_egl_native_window ((GdkSurface *)data->self, data->self->native);
   gdk_surface_request_layout ((GdkSurface *) data->self);
 
   if (data->self->delayed_map)

@@ -32,7 +32,7 @@ G_BEGIN_DECLS
 
 void _gdk_android_toplevel_bind_native (JNIEnv *env, jobject this, jlong native_identifier);
 void _gdk_android_toplevel_on_configuration_change (JNIEnv *env, jobject this);
-void _gdk_android_toplevel_on_state_change (JNIEnv *env, jobject this);
+void _gdk_android_toplevel_on_state_change (JNIEnv *env, jobject this, jboolean has_focus, jboolean is_fullscreen);
 void _gdk_android_toplevel_on_back_press (JNIEnv *env, jobject this);
 void _gdk_android_toplevel_on_destroy (JNIEnv *env, jobject this);
 void _gdk_android_toplevel_on_activity_result (JNIEnv *env, jobject this, jint request_code, jint response_code, jobject result);

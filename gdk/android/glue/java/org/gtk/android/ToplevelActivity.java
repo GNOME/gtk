@@ -359,7 +359,7 @@ public class ToplevelActivity extends Activity {
 	@GlibContext.GtkThread
 	private native void notifyConfigurationChange();
 	@GlibContext.GtkThread
-	private native void notifyStateChange();
+	private native void notifyStateChange(boolean has_focus, boolean is_fullscreen);
 	@GlibContext.GtkThread
 	private native void notifyOnBackPress();
 	@GlibContext.GtkThread
@@ -368,15 +368,18 @@ public class ToplevelActivity extends Activity {
 	private native void notifyActivityResult(int requestCode, int resultCode, Intent result);
 
 	private ToplevelView view;
+	private boolean fullscreenState;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		System.loadLibrary(GlueLibraryContext.getGlueLibraryName());
 		GlueLibraryContext.runApplication(this);
 
+		this.fullscreenState = false;
+
 		super.onCreate(savedInstanceState);
 		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_USER);
-		getWindow().setDecorFitsSystemWindows(true);
+		getWindow().setDecorFitsSystemWindows(false);
 
 		this.view = new ToplevelView();
 		setContentView(this.view);
@@ -417,6 +420,12 @@ public class ToplevelActivity extends Activity {
 		});
 	}
 
+	private void updateToplevelState() {
+		boolean has_focus = hasWindowFocus();
+		boolean is_fullscreen = this.fullscreenState;
+		GlibContext.runOnMain(() -> notifyStateChange(has_focus, is_fullscreen));
+	}
+
 	@Override
 	public void onBackPressed() {
 		GlibContext.runOnMain(this::notifyOnBackPress);
@@ -431,7 +440,7 @@ public class ToplevelActivity extends Activity {
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
 		super.onWindowFocusChanged(hasFocus);
-		GlibContext.runOnMain(this::notifyStateChange);
+		updateToplevelState();
 	}
 
 	@Override
@@ -460,7 +469,7 @@ public class ToplevelActivity extends Activity {
 			super.finish();
 	}
 
-	public void postWindowConfiguration(int color) {
+	public void postWindowConfiguration(int color, boolean fullscreen) {
 		runOnUiThread(() -> {
 			Window window = getWindow();
 			WindowInsetsController controller = window.getInsetsController();
@@ -474,6 +483,16 @@ public class ToplevelActivity extends Activity {
 
 			int bars = WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS | WindowInsetsController.APPEARANCE_LIGHT_NAVIGATION_BARS;
 			controller.setSystemBarsAppearance(dark_fg ? bars : 0, bars);
+
+			this.fullscreenState = fullscreen;
+			if (fullscreen) {
+				controller.hide(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
+				controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+			} else {
+				controller.show(WindowInsets.Type.statusBars() | WindowInsets.Type.navigationBars());
+				controller.setSystemBarsBehavior(WindowInsetsController.BEHAVIOR_DEFAULT);
+			}
+			updateToplevelState();
 		});
 	}
 
