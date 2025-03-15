@@ -64,7 +64,6 @@ gdk_x11_cairo_context_begin_frame (GdkDrawContext  *draw_context,
   GdkX11CairoContext *self = GDK_X11_CAIRO_CONTEXT (draw_context);
   GdkRectangle clip_box;
   GdkSurface *surface;
-  int scale;
 
   surface = gdk_draw_context_get_surface (draw_context);
   cairo_region_get_extents (region, &clip_box);
@@ -79,8 +78,7 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_GNUC_END_IGNORE_DEPRECATIONS
 
   cairo_surface_set_device_scale (self->paint_surface, 1.0, 1.0);
-  scale = gdk_surface_get_scale_factor (surface);
-  cairo_surface_set_device_offset (self->paint_surface, -clip_box.x * scale, -clip_box.y * scale);
+  cairo_surface_set_device_offset (self->paint_surface, -clip_box.x, -clip_box.y);
 
   *out_color_state = GDK_COLOR_STATE_SRGB;
   *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
