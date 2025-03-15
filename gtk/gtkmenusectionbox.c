@@ -574,7 +574,7 @@ gtk_menu_section_box_new_toplevel (GtkPopoverMenu      *popover,
                                        gtk_menu_section_box_insert_func,
                                        gtk_menu_section_box_remove_func, box);
 
-  g_signal_connect (G_OBJECT (popover), "notify::position", G_CALLBACK (update_popover_position_cb), box);
+  g_signal_connect_object (G_OBJECT (popover), "notify::position", G_CALLBACK (update_popover_position_cb), box, G_CONNECT_DEFAULT);
 }
 
 static void
