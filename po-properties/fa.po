@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ 2.3.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-03-10 22:53+0000\n"
-"PO-Revision-Date: 2025-03-13 01:58+0330\n"
+"POT-Creation-Date: 2025-03-12 22:48+0000\n"
+"PO-Revision-Date: 2025-03-15 03:46+0330\n"
 "Last-Translator: Danial Behzadi <dani.behzi@ubuntu.com>\n"
 "Language-Team: Persian <translate@ifsug.org>\n"
 "Language: fa\n"
@@ -140,7 +140,7 @@ msgstr "صفحه‌نمایش پیش‌فرض GDK"
 
 #: gdk/gdkglcontext.c:321
 msgid "The GDK display used to create the GL context"
-msgstr ""
+msgstr "نمایشگر GDK استفاده شده برای ایجاد بافتار GL"
 
 #: gdk/gdkglcontext.c:336 gtk/gtkwidget.c:1353
 msgid "Window"
@@ -148,7 +148,7 @@ msgstr "پنجره"
 
 #: gdk/gdkglcontext.c:337
 msgid "The GDK window bound to the GL context"
-msgstr ""
+msgstr "پنجرهٔ GDK مربوط به بافتار GL"
 
 #: gdk/gdkglcontext.c:352
 msgid "Shared context"
@@ -156,7 +156,7 @@ msgstr "بافتار هم‌رسانده"
 
 #: gdk/gdkglcontext.c:353
 msgid "The GL context this context shares data with"
-msgstr ""
+msgstr "بافتار GL که این بافتار داده‌هایش را با آن هم می‌رساند"
 
 #: gdk/gdkscreen.c:93
 msgid "Font options"
@@ -184,7 +184,7 @@ msgstr "کد اجرایی"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:133
 msgid "Opcode for XInput2 requests"
-msgstr ""
+msgstr "کد عملیات درخواست‌های XInput2"
 
 #: gdk/x11/gdkdevicemanager-xi2.c:139
 msgid "Major"
@@ -216,7 +216,7 @@ msgstr "پرداختگر سلَول"
 
 #: gtk/a11y/gtkrenderercellaccessible.c:98
 msgid "The cell renderer represented by this accessible"
-msgstr ""
+msgstr "پرداختگر سلّول ارائه شده به دست این دسترسی‌پذیر"
 
 #: gtk/deprecated/gtkaction.c:243 gtk/deprecated/gtkactiongroup.c:201
 #: gtk/deprecated/gtkthemingengine.c:247 gtk/gtkcssnode.c:638
@@ -226,7 +226,7 @@ msgstr "نام"
 
 #: gtk/deprecated/gtkaction.c:244
 msgid "A unique name for the action."
-msgstr ""
+msgstr "نامی یکتا برای این کنش."
 
 #: gtk/deprecated/gtkaction.c:264 gtk/gtkbutton.c:281 gtk/gtkexpander.c:309
 #: gtk/gtkframe.c:232 gtk/gtklabel.c:806 gtk/gtkmenuitem.c:791
@@ -236,7 +236,7 @@ msgstr "برچسب"
 
 #: gtk/deprecated/gtkaction.c:265
 msgid "The label used for menu items and buttons that activate this action."
-msgstr ""
+msgstr "برچسب استفاده شده برای موارد فهرست و دکمه‌هایی که این کنش را فعّال می‌کنند."
 
 #: gtk/deprecated/gtkaction.c:284
 msgid "Short label"
@@ -244,7 +244,7 @@ msgstr "برچسب کوتاه"
 
 #: gtk/deprecated/gtkaction.c:285
 msgid "A shorter label that may be used on toolbar buttons."
-msgstr ""
+msgstr "برچسبی کوتاه‌تر که ممکن است روی دکمه‌های نوار ابزار استفاده شود."
 
 #: gtk/deprecated/gtkaction.c:300
 msgid "Tooltip"
@@ -301,6 +301,8 @@ msgid ""
 "When TRUE, toolitem proxies for this action are represented in the toolbar "
 "overflow menu."
 msgstr ""
+"پیشکارهای مورد ابزار برای این کنش هنگام درست بودن در فهرست رویی نوار ابزار "
+"ارائه می‌شند."
 
 #: gtk/deprecated/gtkaction.c:417 gtk/gtktoolitem.c:186
 msgid "Visible when vertical"
@@ -321,6 +323,8 @@ msgid ""
 "Whether the action is considered important. When TRUE, toolitem proxies for "
 "this action show text in GTK_TOOLBAR_BOTH_HORIZ mode."
 msgstr ""
+"این که این کند مهم در نظر گرفته می‌شود یا نه. پیشکارهای مورد ابزار این کنش "
+"هنگام درست بود متن را در حالت GTK_TOOLBAR_BOTH_HORIZ نشان می‌دهند."
 
 #: gtk/deprecated/gtkaction.c:451
 msgid "Hide if empty"
@@ -328,7 +332,7 @@ msgstr "اگر خالی بود مخفی شود"
 
 #: gtk/deprecated/gtkaction.c:452
 msgid "When TRUE, empty menu proxies for this action are hidden."
-msgstr ""
+msgstr "پیشکارهای فهرست خالی این کنش هنگام درست بودن پنهانند."
 
 #: gtk/deprecated/gtkaction.c:466 gtk/deprecated/gtkactiongroup.c:215
 #: gtk/gtkcellrenderer.c:308 gtk/gtkwidget.c:1161
@@ -358,6 +362,8 @@ msgid ""
 "The GtkActionGroup this GtkAction is associated with, or NULL (for internal "
 "use)."
 msgstr ""
+"گروه GtkActionGroup که این GtkAction به آن مرتبط است یا NULL (برای استفادهٔ "
+"داخلی)."
 
 #: gtk/deprecated/gtkaction.c:519 gtk/deprecated/gtkimagemenuitem.c:264
 #: gtk/gtkbutton.c:393
@@ -387,7 +393,7 @@ msgstr "گروه شتاب‌ده"
 
 #: gtk/deprecated/gtkactiongroup.c:244
 msgid "The accelerator group the actions of this group should use."
-msgstr ""
+msgstr "گروه شتاب‌دهنده‌ای که کنش‌های این گروه باید استفاده کنند."
 
 #: gtk/deprecated/gtkactivatable.c:290
 msgid "Related Action"
@@ -395,7 +401,7 @@ msgstr "کنش مربوط"
 
 #: gtk/deprecated/gtkactivatable.c:291
 msgid "The action this activatable will activate and receive updates from"
-msgstr ""
+msgstr "کنشی که این فعّال‌شونده فعّال کرده و از آن به‌روز رسانی خواهد گرفت"
 
 #: gtk/deprecated/gtkactivatable.c:315
 msgid "Use Action Appearance"
@@ -403,7 +409,7 @@ msgstr "استفاده از ظاهر کنش"
 
 #: gtk/deprecated/gtkactivatable.c:316
 msgid "Whether to use the related actions appearance properties"
-msgstr ""
+msgstr "این که از ویژگی‌های ظاهری کنش‌های مرتبط استفاده شود یا نه"
 
 #: gtk/deprecated/gtkalignment.c:151
 msgid "Horizontal alignment"
@@ -593,7 +599,7 @@ msgstr "متن پیش‌نمایش"
 
 #: gtk/deprecated/gtkfontsel.c:248 gtk/gtkfontchooser.c:91
 msgid "The text to display in order to demonstrate the selected font"
-msgstr ""
+msgstr "متن نمایش داده برای نمایاندن قلم گزیده"
 
 #: gtk/deprecated/gtkhandlebox.c:223 gtk/gtkcombobox.c:1246 gtk/gtkentry.c:1002
 #: gtk/gtkmenubar.c:253 gtk/gtkstatusbar.c:177 gtk/gtktoolbar.c:680
@@ -603,7 +609,7 @@ msgstr "نوع سایه"
 
 #: gtk/deprecated/gtkhandlebox.c:224
 msgid "Appearance of the shadow that surrounds the container"
-msgstr ""
+msgstr "ظاهر سایهٔ دور بارگنج"
 
 #: gtk/deprecated/gtkhandlebox.c:232
 msgid "Handle position"
@@ -632,6 +638,8 @@ msgid ""
 "Whether to use the value from the snap_edge property or a value derived from "
 "handle_position"
 msgstr ""
+"این که از مقدار ویژگی snap_edge استفاده شود یا از مقداری برگرفته از "
+"handle_position"
 
 #: gtk/deprecated/gtkhandlebox.c:258
 msgid "Child Detached"
@@ -641,7 +649,7 @@ msgstr "فرزند جدا شد"
 msgid ""
 "A boolean value indicating whether the handlebox's child is attached or "
 "detached."
-msgstr ""
+msgstr "مقداری بولی که وصل بودن یا نبودن فرزند handlebox را مشخّص می‌کند."
 
 #: gtk/deprecated/gtkimagemenuitem.c:226 gtk/gtkbutton.c:360
 msgid "Image widget"
@@ -657,7 +665,7 @@ msgstr "استفاده از آماده"
 
 #: gtk/deprecated/gtkimagemenuitem.c:244
 msgid "Whether to use the label text to create a stock menu item"
-msgstr ""
+msgstr "این که از متن برچسب برای ایجاد مورد فهرست اصلی استفاده شود یا نه"
 
 #: gtk/deprecated/gtkimagemenuitem.c:281 gtk/gtkmenu.c:655
 msgid "Accel Group"
@@ -665,7 +673,7 @@ msgstr "گروه شتاب"
 
 #: gtk/deprecated/gtkimagemenuitem.c:282
 msgid "The Accel Group to use for stock accelerator keys"
-msgstr ""
+msgstr "گروه شتاب‌دهندهٔ استفاده شده برای کلیدهای شتاب‌دهندهٔ اصلی"
 
 #: gtk/deprecated/gtkmisc.c:114 gtk/gtkentry.c:969 gtk/gtklabel.c:852
 msgid "X align"
@@ -674,7 +682,7 @@ msgstr "قرار گیری X"
 #: gtk/deprecated/gtkmisc.c:115 gtk/gtkentry.c:970 gtk/gtklabel.c:853
 msgid ""
 "The horizontal alignment, from 0 (left) to 1 (right). Reversed for RTL layouts."
-msgstr ""
+msgstr "قرارگیری افقی. از 0 (چپ) تا 1 (راست). معکوس برای چینش‌های راست به چپ."
 
 #: gtk/deprecated/gtkmisc.c:133 gtk/gtklabel.c:870
 msgid "Y align"
@@ -682,7 +690,7 @@ msgstr "قرار گیری Y"
 
 #: gtk/deprecated/gtkmisc.c:134 gtk/gtklabel.c:871
 msgid "The vertical alignment, from 0 (top) to 1 (bottom)"
-msgstr ""
+msgstr "قرارگیری عمودی. از 0 (بالا) تا 1 (پایین)"
 
 #: gtk/deprecated/gtkmisc.c:152
 msgid "X pad"
@@ -690,7 +698,7 @@ msgstr "فاصلهٔ X"
 
 #: gtk/deprecated/gtkmisc.c:153
 msgid "The amount of space to add on the left and right of the widget, in pixels"
-msgstr ""
+msgstr "مقدار فضا برای افزودن به چپ و راست ابزارک بر حسب تصدانه"
 
 #: gtk/deprecated/gtkmisc.c:171
 msgid "Y pad"
@@ -698,7 +706,7 @@ msgstr "فاصلهٔ Y"
 
 #: gtk/deprecated/gtkmisc.c:172
 msgid "The amount of space to add on the top and bottom of the widget, in pixels"
-msgstr ""
+msgstr "مقدار فضا برای افزودن به بالا و پایین ابزارک بر حسب تصدانه"
 
 #: gtk/deprecated/gtknumerableicon.c:642
 msgid "Icon's count"
@@ -749,6 +757,8 @@ msgid ""
 "The value returned by gtk_radio_action_get_current_value() when this action is "
 "the current action of its group."
 msgstr ""
+"مقدار بازگشتی از ‪gtk_radio_action_get_current_value()‬ هنگامی که این کنش، کنش "
+"کنونی گروهش است."
 
 #: gtk/deprecated/gtkradioaction.c:139 gtk/gtkradiobutton.c:184
 #: gtk/gtkradiomenuitem.c:424 gtk/gtkradiotoolbutton.c:83
@@ -767,7 +777,7 @@ msgstr "ارزش فعلی"
 msgid ""
 "The value property of the currently active member of the group to which this "
 "action belongs."
-msgstr ""
+msgstr "ویژگی مقدار عضو فعّال کنونی گروهی که این کنش متعلّق به آن است."
 
 #: gtk/deprecated/gtkrecentaction.c:674 gtk/gtkrecentchoosermenu.c:239
 msgid "Show Numbers"
@@ -809,7 +819,7 @@ msgstr "نوع حافظه"
 
 #: gtk/deprecated/gtkstatusicon.c:288 gtk/gtkimage.c:381
 msgid "The representation being used for image data"
-msgstr ""
+msgstr "ارائه استفاده شده برای داده‌های تصویری"
 
 #: gtk/deprecated/gtkstatusicon.c:296 gtk/gtkcellrendererpixbuf.c:210
 #: gtk/gtkcellrendererspinner.c:159 gtk/gtkrecentmanager.c:304
@@ -933,7 +943,7 @@ msgstr "همگن"
 
 #: gtk/deprecated/gtktable.c:222
 msgid "If TRUE, the table cells are all the same width/height"
-msgstr ""
+msgstr "اگر درست باشد همهٔ سلّول‌ها هم‌پهنا و هم‌بلندایند"
 
 #: gtk/deprecated/gtktable.c:229 gtk/gtkgrid.c:1795
 msgid "Left attachment"
@@ -941,7 +951,7 @@ msgstr "پیوست چپ"
 
 #: gtk/deprecated/gtktable.c:230 gtk/gtkgrid.c:1796 gtk/gtkmenu.c:966
 msgid "The column number to attach the left side of the child to"
-msgstr ""
+msgstr "شمارهٔ ستون برای چسباندن سمت چپ فرزند به آن"
 
 #: gtk/deprecated/gtktable.c:236
 msgid "Right attachment"
@@ -949,7 +959,7 @@ msgstr "پیوست راست"
 
 #: gtk/deprecated/gtktable.c:237
 msgid "The column number to attach the right side of a child widget to"
-msgstr ""
+msgstr "شمارهٔ ستون برای چسباندن سمت راست فرزند به آن"
 
 #: gtk/deprecated/gtktable.c:243 gtk/gtkgrid.c:1802
 msgid "Top attachment"
@@ -957,7 +967,7 @@ msgstr "پیوست بالا"
 
 #: gtk/deprecated/gtktable.c:244
 msgid "The row number to attach the top of a child widget to"
-msgstr ""
+msgstr "شمارهٔ ردیف برای چسباندن بالای فرزند به آن"
 
 #: gtk/deprecated/gtktable.c:250
 msgid "Bottom attachment"
@@ -965,7 +975,7 @@ msgstr "پیوست پایین"
 
 #: gtk/deprecated/gtktable.c:251 gtk/gtkmenu.c:990
 msgid "The row number to attach the bottom of the child to"
-msgstr ""
+msgstr "شمارهٔ ردیف برای چسباندن پایین فرزند به آن"
 
 #: gtk/deprecated/gtktable.c:257
 msgid "Horizontal options"
@@ -973,7 +983,7 @@ msgstr "گزینه‌های افقی"
 
 #: gtk/deprecated/gtktable.c:258
 msgid "Options specifying the horizontal behaviour of the child"
-msgstr ""
+msgstr "گزینه‌های مشخّص کنندهٔ رفتار افقی فرزند"
 
 #: gtk/deprecated/gtktable.c:264
 msgid "Vertical options"
@@ -981,7 +991,7 @@ msgstr "گزینه‌های عمودی"
 
 #: gtk/deprecated/gtktable.c:265
 msgid "Options specifying the vertical behaviour of the child"
-msgstr ""
+msgstr "گزینه‌های مشخّص کنندهٔ رفتار عمودی فرزند"
 
 #: gtk/deprecated/gtktable.c:271
 msgid "Horizontal padding"
@@ -991,7 +1001,7 @@ msgstr "فاصله دهی افقی"
 msgid ""
 "Extra space to put between the child and its left and right neighbors, in "
 "pixels"
-msgstr ""
+msgstr "فضای اضافی برای گذاشتن بین فرزند و همسایه‌های چپ و راستش بر حسب تصدانه"
 
 #: gtk/deprecated/gtktable.c:278
 msgid "Vertical padding"
@@ -1001,7 +1011,7 @@ msgstr "فاصله‌دهی عمودی"
 msgid ""
 "Extra space to put between the child and its upper and lower neighbors, in "
 "pixels"
-msgstr ""
+msgstr "فضای اضافی برای گذاشتن بین فرزند و همسایه‌های بالا و پایینش بر حسب تصدانه"
 
 #: gtk/deprecated/gtkthemingengine.c:248
 msgid "Theming engine name"
@@ -1013,7 +1023,7 @@ msgstr "ایجاد پیشکارهای مشابه به عنوان کنش رادی
 
 #: gtk/deprecated/gtktoggleaction.c:119
 msgid "Whether the proxies for this action look like radio action proxies"
-msgstr ""
+msgstr "این که پیشکارهای این کنش شبیه پیشکارهای کنش رادیوییند یا نه"
 
 #: gtk/deprecated/gtktoggleaction.c:135 gtk/gtkcellrendererspinner.c:125
 #: gtk/gtkcheckmenuitem.c:209 gtk/gtkmenu.c:640 gtk/gtkmodelbutton.c:1213
@@ -1077,11 +1087,11 @@ msgstr "اندازهٔ تصدانه‌ای که نقشک باید به آن اج
 
 #: gtk/deprecated/gtkuimanager.c:463 gtk/gtkcombobox.c:1010
 msgid "Add tearoffs to menus"
-msgstr ""
+msgstr "افزودن پارگی به فهرست‌ها"
 
 #: gtk/deprecated/gtkuimanager.c:464
 msgid "Whether tearoff menu items should be added to menus"
-msgstr ""
+msgstr "این که باید موارد پاره باید به فهرست‌ها اضافه شوند یا نه"
 
 #: gtk/deprecated/gtkuimanager.c:471
 msgid "Merged UI definition"
@@ -1089,7 +1099,7 @@ msgstr "ادغام شرح میانی کاربری"
 
 #: gtk/deprecated/gtkuimanager.c:472
 msgid "An XML string describing the merged UI"
-msgstr ""
+msgstr "رشتهٔ XML توصیف کنندهٔ میانای کاربری ادغام شده"
 
 #: gtk/gtkaboutdialog.c:349
 msgid "Program name"
@@ -1100,6 +1110,7 @@ msgid ""
 "The name of the program. If this is not set, it defaults to "
 "g_get_application_name()"
 msgstr ""
+"نانم برنامه. اگر تنظیم نشده باشد پیش‌گزیده‌اش ‪g_get_application_name()‬ خواهد بود"
 
 #: gtk/gtkaboutdialog.c:363
 msgid "Program version"
@@ -1147,7 +1158,7 @@ msgstr "آدرس اینترنتی پایگاه وب"
 
 #: gtk/gtkaboutdialog.c:459
 msgid "The URL for the link to the website of the program"
-msgstr ""
+msgstr "نشانی پیوند پایگاه وب برنامه"
 
 #: gtk/gtkaboutdialog.c:472
 msgid "Website label"
@@ -1198,6 +1209,8 @@ msgid ""
 "A logo for the about box. If this is not set, it defaults to "
 "gtk_window_get_default_icon_list()"
 msgstr ""
+"نشانی برای جعبهٔ درباره. اگر تنظیم نشده باشد پیش‌گزیده‌اش "
+"‪gtk_window_get_default_icon_list()‬ خواهد بود"
 
 #: gtk/gtkaboutdialog.c:566
 msgid "Logo Icon Name"
@@ -1229,7 +1242,7 @@ msgstr "ابزارک شتاب‌ده"
 
 #: gtk/gtkaccellabel.c:217
 msgid "The widget to be monitored for accelerator changes"
-msgstr ""
+msgstr "ابزارک پایش شده برای تغییرات شتاب‌دهنده"
 
 #: gtk/gtkaccessible.c:156 gtk/gtkeventcontroller.c:168
 #: gtk/gtktreeviewcolumn.c:337
@@ -1238,7 +1251,7 @@ msgstr "ابزارک"
 
 #: gtk/gtkaccessible.c:157
 msgid "The widget referenced by this accessible."
-msgstr ""
+msgstr "ابزارک ارجاع داده شده به دست این دسترس‌پذیر."
 
 #: gtk/gtkactionable.c:71
 msgid "Action name"
@@ -1335,6 +1348,7 @@ msgstr "شام مورد «دیگر…»"
 msgid ""
 "Whether the combobox should include an item that triggers a GtkAppChooserDialog"
 msgstr ""
+"این که combobox باید موردی داشته باشد که GtkAppChooserDialog را تحریک کند یا نه"
 
 #: gtk/gtkappchooserbutton.c:634
 msgid "Show default item"
@@ -1358,7 +1372,7 @@ msgstr "گونهٔ محتوا"
 
 #: gtk/gtkappchooser.c:74
 msgid "The content type used by the open with object"
-msgstr ""
+msgstr "گونهٔ محتوای استفاده شده به دست شی «گشودن با»"
 
 #: gtk/gtkappchooserdialog.c:674
 msgid "GFile"
@@ -1494,7 +1508,7 @@ msgstr "پیروی از فرزند"
 
 #: gtk/gtkaspectframe.c:133
 msgid "Force aspect ratio to match that of the frame's child"
-msgstr ""
+msgstr "احبار نسبت ابعاد برای مطابقت با فرزند قاب"
 
 #: gtk/gtkassistant.c:526 gtk/gtkdialog.c:653
 msgid "Use Header Bar"
@@ -1558,7 +1572,7 @@ msgstr "صفحه کامل"
 
 #: gtk/gtkassistant.c:642
 msgid "Whether all required fields on the page have been filled out"
-msgstr ""
+msgstr "این که همهٔ زمینه‌های ضروری صفحه پر شده‌اند یا نه"
 
 #: gtk/gtkassistant.c:647
 msgid "Has padding"
@@ -9256,7 +9270,7 @@ msgstr "دستگیرهٔ تغییر اندازه نمایان است"
 
 #: gtk/gtkwindow.c:1037
 msgid "Specifies whether the window's resize grip is visible."
-msgstr "مشخّص می‌کند که دستگیرهٔ تغییراندازهٔ پنره باید نمایان باشد یا نه"
+msgstr "مشخّص می‌کند که دستگیرهٔ تغییراندازهٔ پنره باید نمایان باشد یا نه."
 
 #: gtk/gtkwindow.c:1051
 msgid "Gravity"
