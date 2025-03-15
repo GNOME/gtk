@@ -1144,6 +1144,12 @@ if build_gir
     '-DGTK_COMPILATION',
     '--quiet',
   ]
+  gir_dep = dependency('gobject-introspection-1.0')
+  if gir_dep.version().version_compare('>=1.83.2')
+    gir_args += [
+     '--doc-format=gi-docgen',
+    ]
+  endif
 
   gdk_gir_inc = [ 'cairo-1.0', 'Gio-2.0', 'GdkPixbuf-2.0', 'Pango-1.0', 'PangoCairo-1.0' ]
 
