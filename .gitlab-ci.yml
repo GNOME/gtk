@@ -150,8 +150,6 @@ release-build:
     # - export PATH="$HOME/.local/bin:${CI_PROJECT_DIR}/_install/bin:$PATH"
     # - .gitlab-ci/install-meson-project.sh --prefix ${CI_PROJECT_DIR}/_install https://gitlab.gnome.org/jadahl/catch.git main
     - git config --global --add safe.directory $CI_PROJECT_DIR
-    - meson subprojects download
-    - meson subprojects update --reset
     - meson setup
             --prefix=${CI_PROJECT_DIR}/_install
             ${COMMON_MESON_FLAGS}
