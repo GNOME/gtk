@@ -1020,20 +1020,25 @@ gtk_at_context_get_accessible_property (GtkATContext          *self,
 
 static void
 append_to_accessible_relation (GtkATContext          *self,
-                                              GtkAccessibleRelation  relation,
-                                              GtkAccessible         *accessible)
+                               GtkAccessibleRelation  relation,
+                               GtkAccessible         *accessible)
 {
   g_return_if_fail (GTK_IS_AT_CONTEXT (self));
-  GtkAccessibleValue * target_value;
+  GtkAccessibleValue *target_value;
 
   if (gtk_accessible_attribute_set_contains (self->relations, relation))
-    target_value = gtk_accessible_attribute_set_get_value (self->relations, relation);
+    {
+      target_value = gtk_accessible_value_ref (gtk_accessible_attribute_set_get_value (self->relations, relation));
+    }
   else
     {
       target_value = gtk_reference_list_accessible_value_new (NULL);
       gtk_accessible_attribute_set_add (self->relations, relation, target_value);
     }
+
   gtk_reference_list_accessible_value_append (target_value, accessible);
+
+  gtk_accessible_value_unref (target_value);
 
   self->updated_relations |= (1 << relation);
 }
