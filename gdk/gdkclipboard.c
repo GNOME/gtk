@@ -146,6 +146,7 @@ gdk_clipboard_finalize (GObject *object)
   GdkClipboardPrivate *priv = gdk_clipboard_get_instance_private (clipboard);
 
   g_clear_pointer (&priv->formats, gdk_content_formats_unref);
+  g_clear_object (&priv->content);
 
   G_OBJECT_CLASS (gdk_clipboard_parent_class)->finalize (object);
 }
