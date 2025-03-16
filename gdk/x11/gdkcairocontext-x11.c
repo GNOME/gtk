@@ -24,7 +24,7 @@
 
 #include "gdkprivate-x11.h"
 
-#include "gdkcairo.h"
+#include "gdkcairoprivate.h"
 #include "gdksurfaceprivate.h"
 
 #include <X11/Xlib.h>
@@ -64,23 +64,20 @@ gdk_x11_cairo_context_begin_frame (GdkDrawContext  *draw_context,
   GdkX11CairoContext *self = GDK_X11_CAIRO_CONTEXT (draw_context);
   GdkRectangle clip_box;
   GdkSurface *surface;
-  int scale;
+  cairo_format_t format;
 
   surface = gdk_draw_context_get_surface (draw_context);
   cairo_region_get_extents (region, &clip_box);
 
   self->window_surface = create_cairo_surface_for_surface (surface);
 
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  self->paint_surface = gdk_surface_create_similar_surface (surface,
-                                                            cairo_surface_get_content (self->window_surface),
-                                                            MAX (clip_box.width, 1),
-                                                            MAX (clip_box.height, 1));
-G_GNUC_END_IGNORE_DEPRECATIONS
+  format = gdk_cairo_format_for_content (cairo_surface_get_content (self->window_surface)),
+  self->paint_surface = cairo_image_surface_create (format,
+                                                    MAX (clip_box.width, 1),
+                                                    MAX (clip_box.height, 1));
 
   cairo_surface_set_device_scale (self->paint_surface, 1.0, 1.0);
-  scale = gdk_surface_get_scale_factor (surface);
-  cairo_surface_set_device_offset (self->paint_surface, -clip_box.x * scale, -clip_box.y * scale);
+  cairo_surface_set_device_offset (self->paint_surface, -clip_box.x, -clip_box.y);
 
   *out_color_state = GDK_COLOR_STATE_SRGB;
   *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);

@@ -89,6 +89,22 @@ gdk_cairo_format_to_memory_format (cairo_format_t format)
   }
 }
 
+static inline cairo_format_t
+gdk_cairo_format_for_content (cairo_content_t content)
+{
+  switch (content)
+    {
+      case CAIRO_CONTENT_COLOR:
+        return CAIRO_FORMAT_RGB24;
+      case CAIRO_CONTENT_ALPHA:
+        return CAIRO_FORMAT_A8;
+      case CAIRO_CONTENT_COLOR_ALPHA:
+        return CAIRO_FORMAT_ARGB32;
+      default:
+        g_return_val_if_reached (CAIRO_FORMAT_ARGB32);
+    }
+}
+
 static inline void
 gdk_cairo_set_source_color (cairo_t        *cr,
                             GdkColorState  *ccs,
@@ -198,5 +214,21 @@ gdk_cairo_region_scale_grow (const cairo_region_t *region,
     }
 
   return result;
+}
+
+static inline char *
+gdk_cairo_region_to_debug_string (const cairo_region_t *region)
+{
+  GString *string;
+  cairo_rectangle_int_t extents;
+
+  cairo_region_get_extents (region, &extents);
+
+  string = g_string_new (NULL);
+  g_string_append_printf (string, "{ %d, %d, %d, %d } (%d rects)",
+                          extents.x, extents.y, extents.width, extents.height,
+                          cairo_region_num_rectangles (region));
+
+  return g_string_free (string, FALSE);
 }
 
