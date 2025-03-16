@@ -219,6 +219,14 @@
 }
 
 {
+   FcPatternObjectInsertElt2
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:realloc
+   fun:FcPatternObjectInsertElt
+}
+
+{
    FcFontRenderPrepare
    Memcheck:Leak
    match-leak-kinds: definite
@@ -236,6 +244,26 @@
    obj:/usr/lib*/libfontconfig.so*
    obj:/usr/lib*/libfontconfig.so*
    fun:FcDefaultSubstitute
+}
+
+{
+   FcDefaultSubstituteWithPat
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:realloc
+   obj:/usr/lib*/libfontconfig.so*
+   obj:/usr/lib*/libfontconfig.so*
+   fun:FcDefaultSubstituteWithPat
+}
+
+{
+   FcConfigSubstituteWithPat
+   Memcheck:Leak
+   match-leak-kinds: definite
+   fun:realloc
+   obj:/usr/lib*/libfontconfig.so*
+   obj:/usr/lib*/libfontconfig.so*
+   fun:FcConfigSubstituteWithPat
 }
 
 # Pixman
