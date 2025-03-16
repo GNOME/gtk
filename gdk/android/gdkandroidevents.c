@@ -26,6 +26,8 @@
 #include "gdkandroidseat-private.h"
 #include "gdkandroiddevice-private.h"
 
+#include "gdkandroidtoplevel.h"
+
 #include "gdkandroidevents-private.h"
 
 static GdkModifierType
@@ -146,7 +148,7 @@ gdk_android_events_handle_motion_event (GdkAndroidSurface *surface,
   // get keyboard focus on present, while non-autohide popups do not),
   // especially as motion events shouldn't update keyboard focus, but it'll
   // work in the grand scheme of things for now.
-  if (((GdkSurface *)surface)->autohide)
+  if (GDK_IS_ANDROID_TOPLEVEL(surface) || ((GdkSurface *)surface)->autohide)
     {
       GdkDevice *keyboard = gdk_seat_get_keyboard ((GdkSeat *) display->seat);
       gdk_android_device_keyboard_maybe_update_surface_focus ((GdkAndroidDevice *) keyboard, surface);
