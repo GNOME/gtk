@@ -89,6 +89,22 @@ gdk_cairo_format_to_memory_format (cairo_format_t format)
   }
 }
 
+static inline cairo_format_t
+gdk_cairo_format_for_content (cairo_content_t content)
+{
+  switch (content)
+    {
+      case CAIRO_CONTENT_COLOR:
+        return CAIRO_FORMAT_RGB24;
+      case CAIRO_CONTENT_ALPHA:
+        return CAIRO_FORMAT_A8;
+      case CAIRO_CONTENT_COLOR_ALPHA:
+        return CAIRO_FORMAT_ARGB32;
+      default:
+        g_return_val_if_reached (CAIRO_FORMAT_ARGB32);
+    }
+}
+
 static inline void
 gdk_cairo_set_source_color (cairo_t        *cr,
                             GdkColorState  *ccs,
