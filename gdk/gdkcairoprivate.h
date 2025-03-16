@@ -216,3 +216,19 @@ gdk_cairo_region_scale_grow (const cairo_region_t *region,
   return result;
 }
 
+static inline char *
+gdk_cairo_region_to_debug_string (const cairo_region_t *region)
+{
+  GString *string;
+  cairo_rectangle_int_t extents;
+
+  cairo_region_get_extents (region, &extents);
+
+  string = g_string_new (NULL);
+  g_string_append_printf (string, "{ %d, %d, %d, %d } (%d rects)",
+                          extents.x, extents.y, extents.width, extents.height,
+                          cairo_region_num_rectangles (region));
+
+  return g_string_free (string, FALSE);
+}
+
