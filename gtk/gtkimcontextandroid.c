@@ -54,7 +54,7 @@ G_DEFINE_TYPE_WITH_CODE (GtkIMContextAndroid, gtk_im_context_android, GTK_TYPE_I
                                                          g_define_type_id, "android", 0))
 
 static void
-gdk_im_context_android_update_ime_keyboard (GtkIMContextAndroid *self)
+gtk_im_context_android_update_ime_keyboard (GtkIMContextAndroid *self)
 {
   if (!GDK_IS_ANDROID_SURFACE (self->client_surface))
     return;
@@ -85,7 +85,7 @@ gtk_im_context_android_set_client_widget (GtkIMContext *context,
       if (native != NULL)
         {
           self->client_surface = gtk_native_get_surface (native);
-          gdk_im_context_android_update_ime_keyboard (self);
+          gtk_im_context_android_update_ime_keyboard (self);
         }
     }
 
@@ -100,7 +100,7 @@ gtk_im_context_android_focus_in (GtkIMContext *context)
 
   GtkIMContextAndroid *self = GTK_IM_CONTEXT_ANDROID (context);
   self->focused = TRUE;
-  gdk_im_context_android_update_ime_keyboard (self);
+  gtk_im_context_android_update_ime_keyboard (self);
 
   if (GTK_IM_CONTEXT_CLASS (gtk_im_context_android_parent_class)->focus_in)
     GTK_IM_CONTEXT_CLASS (gtk_im_context_android_parent_class)->focus_in (context);
@@ -113,18 +113,18 @@ gtk_im_context_android_focus_out (GtkIMContext *context)
 
   GtkIMContextAndroid *self = GTK_IM_CONTEXT_ANDROID (context);
   self->focused = FALSE;
-  gdk_im_context_android_update_ime_keyboard (self);
+  gtk_im_context_android_update_ime_keyboard (self);
 
   if (GTK_IM_CONTEXT_CLASS (gtk_im_context_android_parent_class)->focus_out)
     GTK_IM_CONTEXT_CLASS (gtk_im_context_android_parent_class)->focus_out (context);
 }
 
 static gboolean
-gdk_im_context_activate_osk_keyboard (GtkIMContext *context,
+gtk_im_context_activate_osk_keyboard (GtkIMContext *context,
                                       GdkEvent     *event)
 {
   GtkIMContextAndroid *self = (GtkIMContextAndroid *)context;
-  gdk_im_context_android_update_ime_keyboard (self);
+  gtk_im_context_android_update_ime_keyboard (self);
   return self->focused;
 }
 
@@ -137,7 +137,7 @@ gtk_im_context_android_class_init (GtkIMContextAndroidClass *klass)
   context_class->set_client_widget = gtk_im_context_android_set_client_widget;
   context_class->focus_in = gtk_im_context_android_focus_in;
   context_class->focus_out = gtk_im_context_android_focus_out;
-  context_class->activate_osk_with_event = gdk_im_context_activate_osk_keyboard;
+  context_class->activate_osk_with_event = gtk_im_context_activate_osk_keyboard;
 }
 
 static void
