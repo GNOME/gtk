@@ -119,12 +119,23 @@ public class ToplevelActivity extends Activity {
 				setFocusableInTouchMode(true);
 			}
 
+			private int queuedImeKeyboardState; // 0 not queued, 1 show keyboard, -1 hide keyboard
+			@GlibContext.GtkThread
 			public void setImeKeyboardState(boolean state) {
-				runOnUiThread(() -> {
-					if (state)
-						getWindowInsetsController().show(WindowInsets.Type.ime());
-					else
-						getWindowInsetsController().hide(WindowInsets.Type.ime());
+				boolean was_queued = queuedImeKeyboardState != 0;
+				queuedImeKeyboardState = state ? 1 : -1;
+				if (was_queued)
+					return;
+				GlibContext.runOnMain(() -> {
+					boolean imeKeyboardState = queuedImeKeyboardState > 0;
+					queuedImeKeyboardState = 0;
+					runOnUiThread(() -> {
+						if (imeKeyboardState)
+							getWindowInsetsController().show(WindowInsets.Type.ime());
+						else
+							getWindowInsetsController().hide(WindowInsets.Type.ime());
+					});
+
 				});
 			}
 
