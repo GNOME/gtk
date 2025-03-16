@@ -224,7 +224,11 @@ static inline void *roaring_bitmap_aligned_malloc(size_t alignment, size_t size)
 #else
     // somehow, if this is used before including "x86intrin.h", it creates an
     // implicit defined warning.
-    if (posix_memalign(&p, alignment, size) != 0) return NULL;
+    if (posix_memalign(&p, alignment, size) != 0)
+      {
+        g_error ("%s: failed to allocate %"G_GSIZE_FORMAT" bytes aligned to %"G_GSIZE_FORMAT,
+                 G_STRLOC, size, alignment);
+      }
 #endif
     return p;
 }

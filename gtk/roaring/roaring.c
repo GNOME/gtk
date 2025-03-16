@@ -2922,14 +2922,13 @@ void bitset_flip_list(void *bitset, const uint16_t *list, uint64_t length) {
 array_container_t *array_container_create_given_capacity(int32_t size) {
     array_container_t *container;
 
-    container = (array_container_t *)malloc(sizeof(array_container_t));
+    container = (array_container_t *)g_new(array_container_t, 1);
     assert (container);
 
     if( size <= 0 ) { // we don't want to rely on malloc(0)
         container->array = NULL;
     } else {
-        container->array = (uint16_t *)malloc(sizeof(uint16_t) * size);
-        assert (container->array);
+        container->array = (uint16_t *)g_malloc(sizeof(uint16_t) * size);
     }
 
     container->capacity = size;
@@ -2973,12 +2972,12 @@ int array_container_shrink_to_fit(array_container_t *src) {
     int savings = src->capacity - src->cardinality;
     src->capacity = src->cardinality;
     if( src->capacity == 0) { // we do not want to rely on realloc for zero allocs
-      free(src->array);
+      g_free(src->array);
       src->array = NULL;
     } else {
       uint16_t *oldarray = src->array;
       src->array =
-        (uint16_t *)realloc(oldarray, src->capacity * sizeof(uint16_t));
+        (uint16_t *)g_realloc(oldarray, src->capacity * sizeof(uint16_t));
     }
     return savings;
 }
@@ -2986,10 +2985,10 @@ int array_container_shrink_to_fit(array_container_t *src) {
 /* Free memory. */
 void array_container_free(array_container_t *arr) {
     if(arr->array != NULL) {// Jon Strabala reports that some tools complain otherwise
-      free(arr->array);
+      g_free(arr->array);
       arr->array = NULL; // pedantic
     }
-    free(arr);
+    g_free(arr);
 }
 
 static inline int32_t grow_capacity(int32_t capacity) {
@@ -3014,20 +3013,14 @@ void array_container_grow(array_container_t *container, int32_t min,
 
     if (preserve) {
         container->array =
-            (uint16_t *)realloc(array, new_capacity * sizeof(uint16_t));
+            (uint16_t *)g_realloc(array, new_capacity * sizeof(uint16_t));
     } else {
         // Jon Strabala reports that some tools complain otherwise
         if (array != NULL) {
-          free(array);
+          g_free(array);
         }
-        container->array = (uint16_t *)malloc(new_capacity * sizeof(uint16_t));
+        container->array = (uint16_t *)g_malloc(new_capacity * sizeof(uint16_t));
     }
-
-    //  handle the case where realloc fails
-    if (container->array == NULL) {
-      fprintf(stderr, "could not allocate memory\n");
-    }
-    assert(container->array != NULL);
 }
 
 /* Copy one container into another. We assume that they are distinct. */
@@ -3337,8 +3330,8 @@ void *array_container_deserialize(const char *buf, size_t buf_len) {
     else
         buf_len -= 2;
 
-    if ((ptr = (array_container_t *)malloc(sizeof(array_container_t))) !=
-        NULL) {
+    ptr = (array_container_t *)g_malloc(sizeof(array_container_t));
+    {
         size_t len;
         int32_t off;
         uint16_t cardinality;
@@ -3349,23 +3342,19 @@ void *array_container_deserialize(const char *buf, size_t buf_len) {
         len = sizeof(uint16_t) * ptr->cardinality;
 
         if (len != buf_len) {
-            free(ptr);
+            g_free(ptr);
             return (NULL);
         }
 
-        if ((ptr->array = (uint16_t *)malloc(sizeof(uint16_t) *
-                                             ptr->capacity)) == NULL) {
-            free(ptr);
-            return (NULL);
-        }
+        ptr->array = (uint16_t *)g_malloc(sizeof(uint16_t) * ptr->capacity);
 
         if (len) memcpy(ptr->array, &buf[off], len);
 
         /* Check if returned values are monotonically increasing */
         for (int32_t i = 0, j = 0; i < ptr->cardinality; i++) {
             if (ptr->array[i] < j) {
-                free(ptr->array);
-                free(ptr);
+                g_free(ptr->array);
+                g_free(ptr);
                 return (NULL);
             } else
                 j = ptr->array[i];
@@ -3421,18 +3410,11 @@ void bitset_container_set_all(bitset_container_t *bitset) {
 /* Create a new bitset. Return NULL in case of failure. */
 bitset_container_t *bitset_container_create(void) {
     bitset_container_t *bitset =
-        (bitset_container_t *)malloc(sizeof(bitset_container_t));
+        (bitset_container_t *)g_malloc(sizeof(bitset_container_t));
 
-    if (!bitset) {
-        return NULL;
-    }
     // sizeof(__m256i) == 32
     bitset->array = (uint64_t *)roaring_bitmap_aligned_malloc(
         32, sizeof(uint64_t) * BITSET_CONTAINER_SIZE_IN_WORDS);
-    if (!bitset->array) {
-        free(bitset);
-        return NULL;
-    }
     bitset_container_clear(bitset);
     return bitset;
 }
@@ -3479,19 +3461,17 @@ void bitset_container_free(bitset_container_t *bitset) {
       roaring_bitmap_aligned_free(bitset->array);
       bitset->array = NULL; // pedantic
     }
-    free(bitset);
+    g_free(bitset);
 }
 
 /* duplicate container. */
 bitset_container_t *bitset_container_clone(const bitset_container_t *src) {
     bitset_container_t *bitset =
-        (bitset_container_t *)malloc(sizeof(bitset_container_t));
-    assert(bitset);
+        (bitset_container_t *)g_malloc(sizeof(bitset_container_t));
 
     // sizeof(__m256i) == 32
     bitset->array = (uint64_t *)roaring_bitmap_aligned_malloc(
         32, sizeof(uint64_t) * BITSET_CONTAINER_SIZE_IN_WORDS);
-    assert(bitset->array);
     bitset->cardinality = src->cardinality;
     memcpy(bitset->array, src->array,
            sizeof(uint64_t) * BITSET_CONTAINER_SIZE_IN_WORDS);
@@ -3917,17 +3897,12 @@ void* bitset_container_deserialize(const char *buf, size_t buf_len) {
   if(l != buf_len)
     return(NULL);
 
-  if((ptr = (bitset_container_t *)malloc(sizeof(bitset_container_t))) != NULL) {
-    memcpy(ptr, buf, sizeof(bitset_container_t));
-    // sizeof(__m256i) == 32
-    ptr->array = (uint64_t *) roaring_bitmap_aligned_malloc(32, l);
-    if (! ptr->array) {
-        free(ptr);
-        return NULL;
-    }
-    memcpy(ptr->array, buf, l);
-    ptr->cardinality = bitset_container_compute_cardinality(ptr);
-  }
+  ptr = (bitset_container_t *)g_malloc(sizeof(bitset_container_t));
+  memcpy(ptr, buf, sizeof(bitset_container_t));
+  // sizeof(__m256i) == 32
+  ptr->array = (uint64_t *) roaring_bitmap_aligned_malloc(32, l);
+  memcpy(ptr->array, buf, l);
+  ptr->cardinality = bitset_container_compute_cardinality(ptr);
 
   return((void*)ptr);
 }
@@ -4220,10 +4195,7 @@ void *get_copy_of_container(void *container, uint8_t *typecode,
         }
         assert(*typecode != SHARED_CONTAINER_TYPE_CODE);
 
-        if ((shared_container = (shared_container_t *)malloc(
-                 sizeof(shared_container_t))) == NULL) {
-            return NULL;
-        }
+        shared_container = (shared_container_t *)g_malloc(sizeof(shared_container_t));
 
         shared_container->container = container;
         shared_container->typecode = *typecode;
@@ -4273,7 +4245,7 @@ void *shared_container_extract_copy(shared_container_t *container,
     if (container->counter == 0) {
         answer = container->container;
         container->container = NULL;  // paranoid
-        free(container);
+        g_free(container);
     } else {
         answer = container_clone(container->container, *typecode);
     }
@@ -4288,7 +4260,7 @@ void shared_container_free(shared_container_t *container) {
         assert(container->typecode != SHARED_CONTAINER_TYPE_CODE);
         container_free(container->container, container->typecode);
         container->container = NULL;  // paranoid
-        free(container);
+        g_free(container);
     }
 }
 
@@ -5073,6 +5045,8 @@ bool bitset_bitset_container_andnot(const bitset_container_t *src_1,
                                     const bitset_container_t *src_2,
                                     void **dst) {
     bitset_container_t *ans = bitset_container_create();
+    if (ans == NULL)
+      return false;
     int card = bitset_container_andnot(src_1, src_2, ans);
     if (card <= DEFAULT_MAX_SIZE) {
         *dst = array_container_from_bitset(ans);
@@ -6510,6 +6484,8 @@ bool array_array_container_lazy_xor(const array_container_t *src_1,
 bool bitset_bitset_container_xor(const bitset_container_t *src_1,
                                  const bitset_container_t *src_2, void **dst) {
     bitset_container_t *ans = bitset_container_create();
+    if (ans == NULL)
+      return false;
     int card = bitset_container_xor(src_1, src_2, ans);
     if (card <= DEFAULT_MAX_SIZE) {
         *dst = array_container_from_bitset(ans);
@@ -6672,12 +6648,11 @@ bool run_container_add(run_container_t *run, uint16_t pos) {
 run_container_t *run_container_create_given_capacity(int32_t size) {
     run_container_t *run;
     /* Allocate the run container itself. */
-    run = (run_container_t *)malloc(sizeof(run_container_t));
-    assert (run);
+    run = (run_container_t *)g_malloc(sizeof(run_container_t));
     if (size <= 0) // we don't want to rely on malloc(0)
         run->runs = NULL;
-    run->runs = (rle16_t *)malloc(sizeof(rle16_t) * size);
-    assert (run->runs);
+    else
+      run->runs = (rle16_t *)g_malloc(sizeof(rle16_t) * size);
     run->capacity = size;
     run->n_runs = 0;
     return run;
@@ -6688,7 +6663,7 @@ int run_container_shrink_to_fit(run_container_t *src) {
     int savings = src->capacity - src->n_runs;
     src->capacity = src->n_runs;
     rle16_t *oldruns = src->runs;
-    src->runs = (rle16_t *)realloc(oldruns, src->capacity * sizeof(rle16_t));
+    src->runs = (rle16_t *)g_realloc(oldruns, src->capacity * sizeof(rle16_t));
     return savings;
 }
 /* Create a new run container. Return NULL in case of failure. */
@@ -6708,10 +6683,10 @@ run_container_t *run_container_clone(const run_container_t *src) {
 /* Free memory. */
 void run_container_free(run_container_t *run) {
     if(run->runs != NULL) {// Jon Strabala reports that some tools complain otherwise
-      free(run->runs);
+      g_free(run->runs);
       run->runs = NULL;  // pedantic
     }
-    free(run);
+    g_free(run);
 }
 
 void run_container_grow(run_container_t *run, int32_t min, bool copy) {
@@ -6727,19 +6702,14 @@ void run_container_grow(run_container_t *run, int32_t min, bool copy) {
     if (copy) {
         rle16_t *oldruns = run->runs;
         run->runs =
-            (rle16_t *)realloc(oldruns, run->capacity * sizeof(rle16_t));
+            (rle16_t *)g_realloc(oldruns, run->capacity * sizeof(rle16_t));
     } else {
         // Jon Strabala reports that some tools complain otherwise
         if (run->runs != NULL) {
-          free(run->runs);
+          g_free(run->runs);
         }
-        run->runs = (rle16_t *)malloc(run->capacity * sizeof(rle16_t));
+        run->runs = (rle16_t *)g_malloc(run->capacity * sizeof(rle16_t));
     }
-    // handle the case where realloc fails
-    if (run->runs == NULL) {
-      fprintf(stderr, "could not allocate memory\n");
-    }
-    assert(run->runs != NULL);
 }
 
 /* copy one container into another */
@@ -7255,7 +7225,7 @@ void *run_container_deserialize(const char *buf, size_t buf_len) {
     else
         buf_len -= 8;
 
-    if ((ptr = (run_container_t *)malloc(sizeof(run_container_t))) != NULL) {
+    if ((ptr = (run_container_t *)g_malloc(sizeof(run_container_t))) != NULL) {
         size_t len;
         int32_t off;
 
@@ -7266,22 +7236,19 @@ void *run_container_deserialize(const char *buf, size_t buf_len) {
         len = sizeof(rle16_t) * ptr->n_runs;
 
         if (len != buf_len) {
-            free(ptr);
+            g_free(ptr);
             return (NULL);
         }
 
-        if ((ptr->runs = (rle16_t *)malloc(len)) == NULL) {
-            free(ptr);
-            return (NULL);
-        }
+        ptr->runs = (rle16_t *)g_malloc(len);
 
         memcpy(ptr->runs, &buf[off], len);
 
         /* Check if returned values are monotonically increasing */
         for (int32_t i = 0, j = 0; i < ptr->n_runs; i++) {
             if (ptr->runs[i].value < j) {
-                free(ptr->runs);
-                free(ptr);
+                g_free(ptr->runs);
+                g_free(ptr);
                 return (NULL);
             } else
                 j = ptr->runs[i].value;
@@ -7487,24 +7454,16 @@ static inline void *containerptr_roaring_bitmap_add(roaring_bitmap_t *r,
 }
 
 roaring_bitmap_t *roaring_bitmap_create(void) {
-    roaring_bitmap_t *ans =
-        (roaring_bitmap_t *)malloc(sizeof(roaring_bitmap_t));
-    if (!ans) {
-        return NULL;
-    }
+    roaring_bitmap_t *ans = g_new (roaring_bitmap_t, 1);
     ra_init(&ans->high_low_container);
     return ans;
 }
 
 roaring_bitmap_t *roaring_bitmap_create_with_capacity(uint32_t cap) {
-    roaring_bitmap_t *ans =
-        (roaring_bitmap_t *)malloc(sizeof(roaring_bitmap_t));
-    if (!ans) {
-        return NULL;
-    }
+    roaring_bitmap_t *ans = g_new (roaring_bitmap_t, 1);
     bool is_ok = ra_init_with_capacity(&ans->high_low_container, cap);
     if (!is_ok) {
-        free(ans);
+        g_free(ans);
         return NULL;
     }
     return ans;
@@ -7794,15 +7753,11 @@ void roaring_bitmap_statistics(const roaring_bitmap_t *ra,
 }
 
 roaring_bitmap_t *roaring_bitmap_copy(const roaring_bitmap_t *r) {
-    roaring_bitmap_t *ans =
-        (roaring_bitmap_t *)malloc(sizeof(roaring_bitmap_t));
-    if (!ans) {
-        return NULL;
-    }
+    roaring_bitmap_t *ans = g_new (roaring_bitmap_t, 1);
     bool is_ok = ra_copy(&r->high_low_container, &ans->high_low_container,
                          is_cow(r));
     if (!is_ok) {
-        free(ans);
+        g_free(ans);
         return NULL;
     }
     roaring_bitmap_set_copy_on_write(ans, is_cow(r));
@@ -7819,7 +7774,7 @@ void roaring_bitmap_free(const roaring_bitmap_t *r) {
     if (!is_frozen(r)) {
       ra_clear((roaring_array_t*)&r->high_low_container);
     }
-    free((roaring_bitmap_t*)r);
+    g_free((roaring_bitmap_t*)r);
 }
 
 void roaring_bitmap_clear(roaring_bitmap_t *r) {
@@ -8771,17 +8726,13 @@ size_t roaring_bitmap_portable_size_in_bytes(const roaring_bitmap_t *ra) {
 
 
 roaring_bitmap_t *roaring_bitmap_portable_deserialize_safe(const char *buf, size_t maxbytes) {
-    roaring_bitmap_t *ans =
-        (roaring_bitmap_t *)malloc(sizeof(roaring_bitmap_t));
-    if (ans == NULL) {
-        return NULL;
-    }
+    roaring_bitmap_t *ans = g_new (roaring_bitmap_t, 1);
     size_t bytesread;
     bool is_ok = ra_portable_deserialize(&ans->high_low_container, buf, maxbytes, &bytesread);
     if(is_ok) assert(bytesread <= maxbytes);
     roaring_bitmap_set_copy_on_write(ans, false);
     if (!is_ok) {
-        free(ans);
+        g_free(ans);
         return NULL;
     }
     return ans;
@@ -8996,17 +8947,14 @@ void roaring_init_iterator_last(const roaring_bitmap_t *ra,
 }
 
 roaring_uint32_iterator_t *roaring_create_iterator(const roaring_bitmap_t *ra) {
-    roaring_uint32_iterator_t *newit =
-        (roaring_uint32_iterator_t *)malloc(sizeof(roaring_uint32_iterator_t));
-    if (newit == NULL) return NULL;
+    roaring_uint32_iterator_t *newit = g_new (roaring_uint32_iterator_t, 1);
     roaring_init_iterator(ra, newit);
     return newit;
 }
 
 roaring_uint32_iterator_t *roaring_copy_uint32_iterator(
     const roaring_uint32_iterator_t *it) {
-    roaring_uint32_iterator_t *newit =
-        (roaring_uint32_iterator_t *)malloc(sizeof(roaring_uint32_iterator_t));
+    roaring_uint32_iterator_t *newit = g_new (roaring_uint32_iterator_t, 1);
     memcpy(newit, it, sizeof(roaring_uint32_iterator_t));
     return newit;
 }
@@ -9250,7 +9198,7 @@ uint32_t roaring_read_uint32_iterator(roaring_uint32_iterator_t *it, uint32_t* b
 
 
 
-void roaring_free_uint32_iterator(roaring_uint32_iterator_t *it) { free(it); }
+void roaring_free_uint32_iterator(roaring_uint32_iterator_t *it) { g_free(it); }
 
 /****
 * end of roaring_uint32_iterator_t
@@ -10311,10 +10259,7 @@ roaring_bitmap_frozen_view(const char *buf, size_t length) {
     alloc_size += num_run_containers * sizeof(run_container_t);
     alloc_size += num_array_containers * sizeof(array_container_t);
 
-    char *arena = (char *)malloc(alloc_size);
-    if (arena == NULL) {
-        return NULL;
-    }
+    char *arena = (char *)g_malloc(alloc_size);
 
     roaring_bitmap_t *rb = (roaring_bitmap_t *)
             arena_alloc(&arena, sizeof(roaring_bitmap_t));
@@ -10357,7 +10302,7 @@ roaring_bitmap_frozen_view(const char *buf, size_t length) {
                 break;
             }
             default:
-                free(arena);
+                g_free(arena);
                 return NULL;
         }
     }
@@ -10386,14 +10331,14 @@ ra->containers =
 ra->typecodes =
     (uint8_t *)realloc(ra->typecodes, sizeof(uint8_t) * new_capacity);
 if (!ra->keys || !ra->containers || !ra->typecodes) {
-    free(ra->keys);
-    free(ra->containers);
-    free(ra->typecodes);
+    g_free(ra->keys);
+    g_free(ra->containers);
+    g_free(ra->typecodes);
     return false;
 }*/
 
     if ( new_capacity == 0 ) {
-      free(ra->containers);
+      g_free(ra->containers);
       ra->containers = NULL;
       ra->keys = NULL;
       ra->typecodes = NULL;
@@ -10402,8 +10347,7 @@ if (!ra->keys || !ra->containers || !ra->typecodes) {
     }
     const size_t memoryneeded =
         new_capacity * (sizeof(uint16_t) + sizeof(void *) + sizeof(uint8_t));
-    void *bigalloc = malloc(memoryneeded);
-    if (!bigalloc) return false;
+    void *bigalloc = g_malloc(memoryneeded);
     void *oldbigalloc = ra->containers;
     void **newcontainers = (void **)bigalloc;
     uint16_t *newkeys = (uint16_t *)(newcontainers + new_capacity);
@@ -10419,7 +10363,7 @@ if (!ra->keys || !ra->containers || !ra->typecodes) {
     ra->keys = newkeys;
     ra->typecodes = newtypecodes;
     ra->allocation_size = new_capacity;
-    free(oldbigalloc);
+    g_free(oldbigalloc);
     return true;
 }
 
@@ -10431,8 +10375,7 @@ bool ra_init_with_capacity(roaring_array_t *new_ra, uint32_t cap) {
 
     if(cap > 0) {
       void *bigalloc =
-        malloc(cap * (sizeof(uint16_t) + sizeof(void *) + sizeof(uint8_t)));
-      if( bigalloc == NULL ) return false;
+        g_malloc(cap * (sizeof(uint16_t) + sizeof(void *) + sizeof(uint8_t)));
       new_ra->containers = (void **)bigalloc;
       new_ra->keys = (uint16_t *)(new_ra->containers + cap);
       new_ra->typecodes = (uint8_t *)(new_ra->keys + cap);
@@ -10558,7 +10501,7 @@ void ra_reset(roaring_array_t *ra) {
 }
 
 void ra_clear_without_containers(roaring_array_t *ra) {
-    free(ra->containers);    // keys and typecodes are allocated with containers
+    g_free(ra->containers);    // keys and typecodes are allocated with containers
     ra->size = 0;
     ra->allocation_size = 0;
     ra->containers = NULL;
@@ -10830,23 +10773,16 @@ bool ra_range_uint32_array(const roaring_array_t *ra, size_t offset, size_t limi
                 //first_skip = t_limit - (ctr + t_limit - offset);
                 first_skip = offset - ctr;
                 first = true;
-                t_ans = (uint32_t *)malloc(sizeof(*t_ans) * (first_skip + limit));
-                if(t_ans == NULL) {
-                  return false;
-                }
+                t_ans = (uint32_t *)g_malloc(sizeof(*t_ans) * (first_skip + limit));
                 memset(t_ans, 0, sizeof(*t_ans) * (first_skip + limit)) ;
                 cur_len = first_skip + limit;
             }
             if (dtr + t_limit > cur_len){
-                uint32_t * append_ans = (uint32_t *)malloc(sizeof(*append_ans) * (cur_len + t_limit));
-                if(append_ans == NULL) {
-                  if(t_ans != NULL) free(t_ans);
-                  return false;
-                }
+                uint32_t * append_ans = (uint32_t *)g_malloc(sizeof(*append_ans) * (cur_len + t_limit));
                 memset(append_ans, 0, sizeof(*append_ans) * (cur_len + t_limit));
                 cur_len = cur_len + t_limit;
                 memcpy(append_ans, t_ans, dtr * sizeof(uint32_t));
-                free(t_ans);
+                g_free(t_ans);
                 t_ans = append_ans;
             }
             switch (ra->typecodes[i]) {
@@ -10876,7 +10812,7 @@ bool ra_range_uint32_array(const roaring_array_t *ra, size_t offset, size_t limi
     }
     if(t_ans != NULL) {
       memcpy(ans, t_ans+first_skip, limit * sizeof(uint32_t));
-      free(t_ans);
+      g_free(t_ans);
     }
     return true;
 }
@@ -10931,7 +10867,7 @@ size_t ra_portable_serialize(const roaring_array_t *ra, char *buf) {
         }
         memcpy(buf, bitmapOfRunContainers, s);
         buf += s;
-        free(bitmapOfRunContainers);
+        g_free(bitmapOfRunContainers);
         if (ra->size < NO_OFFSET_THRESHOLD) {
             startOffset = 4 + 4 * ra->size + s;
         } else {
@@ -11263,9 +11199,9 @@ static void pq_add(roaring_pq_t *pq, roaring_pq_element_t *t) {
 }
 
 static void pq_free(roaring_pq_t *pq) {
-    free(pq->elements);
+    g_free(pq->elements);
     pq->elements = NULL;  // paranoid
-    free(pq);
+    g_free(pq);
 }
 
 static void percolate_down(roaring_pq_t *pq, uint32_t i) {
@@ -11292,9 +11228,9 @@ static void percolate_down(roaring_pq_t *pq, uint32_t i) {
 }
 
 static roaring_pq_t *create_pq(const roaring_bitmap_t **arr, uint32_t length) {
-    roaring_pq_t *answer = (roaring_pq_t *)malloc(sizeof(roaring_pq_t));
+    roaring_pq_t *answer = g_new (roaring_pq_t, 1);
     answer->elements =
-        (roaring_pq_element_t *)malloc(sizeof(roaring_pq_element_t) * length);
+        (roaring_pq_element_t *)g_malloc(sizeof(roaring_pq_element_t) * length);
     answer->size = length;
     for (uint32_t i = 0; i < length; i++) {
         answer->elements[i].bitmap = (roaring_bitmap_t *)arr[i];
@@ -11410,8 +11346,8 @@ static roaring_bitmap_t *lazy_or_from_lazy_inputs(roaring_bitmap_t *x1,
     }
     ra_clear_without_containers(&x1->high_low_container);
     ra_clear_without_containers(&x2->high_low_container);
-    free(x1);
-    free(x2);
+    g_free(x1);
+    g_free(x2);
     return answer;
 }
 
