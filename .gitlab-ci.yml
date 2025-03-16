@@ -155,8 +155,6 @@ dist-build:
   script:
     - .gitlab-ci/show-info-linux.sh
     - git config --global --add safe.directory $CI_PROJECT_DIR
-    - meson subprojects download
-    - meson subprojects update --reset
     - meson setup
             --prefix=${CI_PROJECT_DIR}/_install
             ${COMMON_MESON_FLAGS}
