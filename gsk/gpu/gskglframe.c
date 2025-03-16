@@ -49,7 +49,7 @@ gsk_gl_frame_wait (GskGpuFrame *frame)
   if (!self->sync)
     return;
 
-  glClientWaitSync (self->sync, 0, G_MAXINT64);
+  glClientWaitSync (self->sync, GL_SYNC_FLUSH_COMMANDS_BIT, G_MAXUINT64);
 }
 
 static void
@@ -59,7 +59,7 @@ gsk_gl_frame_cleanup (GskGpuFrame *frame)
 
   if (self->sync)
     {
-      glClientWaitSync (self->sync, 0, -1);
+      glClientWaitSync (self->sync, GL_SYNC_FLUSH_COMMANDS_BIT, G_MAXUINT64);
 
       /* can't use g_clear_pointer() on glDeleteSync(), see MR !7294 */
       glDeleteSync (self->sync);
