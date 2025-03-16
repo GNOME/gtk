@@ -1,5 +1,34 @@
-Overview of Changes in 4.18.2, xx-xx-xxxx
+Overview of Changes in 4.18.2, 16-03-2025
 =========================================
+
+* GtkPopoverMenu:
+ - Fix a sporatic crash that affected Showtime
+
+* X11:
+ - Fix interactions between scaling and the cairo renderer
+   that broke the mutter-x11-frame client
+
+* Windows:
+ - Fix a lockup in AdwTabOverview with the GL renderer
+ - Don't default to Vulkan
+
+* Android:
+ - Make fullscreen work as expected
+
+* Bugs fixed:
+  - #7407 Segfault on setting popover child of a MenuButton (Matthias Clasen)
+  - #7408 Transparent/bugged close button on titlebar in 48.rc (Benjamin Otte)
+  - #7409 Gtk 4.18 erroneously defaults to vulkan on windows (Matthias Clasen)
+  - #7411 `AdwTabOverview` only works with the vulkan renderer (on windows)
+    (Matthias Clasen)
+  - !8306 android: Implement fullscreen for AndroidToplevel
+  - !8308 clipboard: Plug a memory leak
+  - !8309 wayland: Avoid leaks in drag surfaces
+  - !8310 android: Wait for main thread to idle before updating IME
+  - !8314 roaring: Use g_malloc/g_free
+
+* Translation updates:
+  - English (United Kingdom) (Bruce Cowan)
 
 
 Overview of Changes in 4.18.1, 14-03-2025
