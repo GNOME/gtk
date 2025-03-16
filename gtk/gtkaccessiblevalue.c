@@ -612,6 +612,8 @@ gtk_reference_list_accessible_value_remove (GtkAccessibleValue *value,
   g_return_if_fail (value != NULL);
   g_return_if_fail (value->value_class == &GTK_REFERENCE_LIST_ACCESSIBLE_VALUE);
 
+  self->refs = g_list_remove (self->refs, ref);
+
   g_object_weak_unref (G_OBJECT (ref), remove_weak_ref_from_list, self);
 }
 
