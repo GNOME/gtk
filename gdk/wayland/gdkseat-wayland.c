@@ -347,6 +347,9 @@ data_device_enter (void                  *data,
   GdkContentFormats *formats;
   GdkDevice *device;
 
+  if (!surface)
+    return;
+
   dest_surface = wl_surface_get_user_data (surface);
 
   if (!GDK_IS_SURFACE (dest_surface))
@@ -1333,13 +1336,14 @@ deliver_key_event (GdkWaylandSeat *seat,
   _gdk_wayland_display_deliver_event (seat->display, event);
 
   GDK_SEAT_DEBUG (seat, EVENTS,
-                  "keyboard %s event%s, surface %p, code %d, sym %d, "
+                  "keyboard %s event%s, surface %p, code %d, sym %d (%s), "
                   "mods 0x%x, consumed 0x%x, layout %d level %d",
                   (state ? "press" : "release"),
                   (from_key_repeat ? " (repeat)" : ""),
                   gdk_event_get_surface (event),
                   gdk_key_event_get_keycode (event),
                   gdk_key_event_get_keyval (event),
+                  gdk_keyval_name (gdk_key_event_get_keyval (event)),
                   gdk_event_get_modifier_state (event),
                   gdk_key_event_get_consumed_modifiers (event),
                   gdk_key_event_get_layout (event),

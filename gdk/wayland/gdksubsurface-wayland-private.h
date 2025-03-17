@@ -3,7 +3,9 @@
 #include "gdksubsurfaceprivate.h"
 
 #include "gdkwaylandcolor-private.h"
+#include "gdkdisplay-wayland.h"
 #include "wayland-client-protocol.h"
+
 
 typedef struct _GdkWaylandSubsurface GdkWaylandSubsurface;
 typedef struct _GdkWaylandSubsurfaceClass GdkWaylandSubsurfaceClass;
@@ -37,6 +39,8 @@ struct _GdkWaylandSubsurface
   struct wp_viewport *bg_viewport;
   cairo_rectangle_int_t bg_rect;
   gboolean bg_attached;
+
+  struct zwp_idle_inhibitor_v1 *idle_inhibitor;
 };
 
 struct _GdkWaylandSubsurfaceClass
@@ -51,3 +55,5 @@ void gdk_wayland_subsurface_clear_frame_callback (GdkSubsurface *subsurface);
 
 GdkSubsurface * gdk_wayland_surface_create_subsurface (GdkSurface *surface);
 
+gboolean gdk_wayland_subsurface_inhibit_idle   (GdkSubsurface *subsurface);
+void     gdk_wayland_subsurface_uninhibit_idle (GdkSubsurface *subsurface);

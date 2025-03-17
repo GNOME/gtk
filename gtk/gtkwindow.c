@@ -2171,10 +2171,12 @@ gtk_window_native_layout (GtkNative *native,
                                                           device, NULL);
           if (focus)
             {
-              GdkSurface *focus_surface =
-                gtk_native_get_surface (gtk_widget_get_native (focus));
+              GdkSurface *surface;
 
-              gdk_surface_request_motion (focus_surface);
+              surface = gtk_native_get_surface (gtk_widget_get_native (focus));
+
+              if (surface)
+                gdk_surface_request_motion (surface);
             }
         }
     }
@@ -2593,10 +2595,10 @@ gtk_window_transient_parent_destroyed (GtkWindow *parent,
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (GTK_WINDOW (window));
 
+  gtk_window_unset_transient_for (window);
+
   if (priv->destroy_with_parent)
     gtk_window_destroy (window);
-  else
-    priv->transient_parent = NULL;
 }
 
 static void
@@ -3987,6 +3989,10 @@ gtk_window_unmap (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_window_parent_class)->unmap (widget);
   gdk_surface_hide (priv->surface);
+
+  gtk_accessible_update_state (GTK_ACCESSIBLE (window),
+                               GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
+                               -1);
 
   gtk_widget_unrealize_at_context (widget);
 
@@ -6781,9 +6787,6 @@ gtk_window_destroy (GtkWindow *window)
   gtk_tooltip_unset_surface (GTK_NATIVE (window));
 
   gtk_window_hide (GTK_WIDGET (window));
-  gtk_accessible_update_state (GTK_ACCESSIBLE (window),
-                               GTK_ACCESSIBLE_STATE_HIDDEN, TRUE,
-                               -1);
 
   g_list_store_remove (toplevel_list, i);
 

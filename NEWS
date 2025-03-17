@@ -1,5 +1,43 @@
-Overview of Changes in 4.16.13, xx-xx-xxxx
+Overview of Changes in 4.16.13, 03-16-2025
 ==========================================
+
+* GtkVideo: Implement rotation support for gstreamer
+
+* GtkTextView:
+ - Fix cursor invalidation
+
+* GtkAppChooser:
+ - Sort applications properly
+
+* GtkFileChooser:
+ - Stop replacing : (colon) with U+2236 (ratio)
+
+* Accessibility:
+ - Fix various state tracking problems
+
+* Input:
+ - Support BEPO compose sequences
+
+* GSK:
+ - Fix problems with mipmap generation
+ - Don't double-clip edges
+ - Fix double-clipping with non-aligned mask nodes
+
+* Wayland:
+ - Make idle inhibit work with offloading
+ - Fix a crash during DND
+
+* X11:
+ - Update shadow width when the window manager changes
+
+* Translation updates:
+ Chinese (Taiwan)
+ Czech
+ French
+ Hungarian
+ Nepali
+ Russian
+ Thai
 
 
 Overview of Changes in 4.16.12, 03-01-2025

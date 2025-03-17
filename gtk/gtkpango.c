@@ -498,6 +498,10 @@ pango_wrap_mode_to_string (PangoWrapMode mode)
       return "char";
     case PANGO_WRAP_WORD_CHAR:
       return "word-char";
+#if PANGO_VERSION_CHECK(1, 56, 0)
+    case PANGO_WRAP_NONE:
+      return "none";
+#endif
     default:
       g_assert_not_reached ();
     }
