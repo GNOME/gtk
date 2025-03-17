@@ -1070,6 +1070,7 @@ free_expression_info (ExpressionInfo *info)
 
     case EXPRESSION_CONSTANT:
       g_string_free (info->constant.text, TRUE);
+      g_free (info->constant.context);
       break;
 
     case EXPRESSION_CLOSURE:
@@ -1142,6 +1143,9 @@ parse_constant_expression (ParserData   *data,
   ExpressionInfo *info;
   const char *type_name = NULL;
   GType type;
+  gboolean translatable = FALSE;
+  const char *translatable_string = NULL;
+  const char *context = NULL;
 
   if (!check_expression_parent (data))
     {
@@ -1151,6 +1155,9 @@ parse_constant_expression (ParserData   *data,
 
   if (!g_markup_collect_attributes (element_name, names, values, error,
                                     G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "type", &type_name,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "translatable", &translatable_string,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "comments", NULL,
+                                    G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "context", &context,
                                     G_MARKUP_COLLECT_INVALID))
     {
       _gtk_builder_prefix_error (data->builder, &data->ctx, error);
@@ -1173,11 +1180,20 @@ parse_constant_expression (ParserData   *data,
         }
     }
 
+  if (translatable_string &&
+      !gtk_builder_parse_translatable (translatable_string, &translatable, error))
+    {
+      _gtk_builder_prefix_error (data->builder, &data->ctx, error);
+      return;
+    }
+
   info = g_new0 (ExpressionInfo, 1);
   info->tag_type = TAG_EXPRESSION;
   info->expression_type = EXPRESSION_CONSTANT;
   info->constant.type = type;
   info->constant.text = g_string_new (NULL);
+  info->constant.translatable = translatable;
+  info->constant.context = g_strdup (context);
 
   state_push (data, info);
 }
@@ -1300,6 +1316,7 @@ parse_lookup_expression (ParserData   *data,
 
 GtkExpression *
 expression_info_construct (GtkBuilder      *builder,
+                           const char      *domain,
                            ExpressionInfo  *info,
                            GError         **error)
 {
@@ -1311,6 +1328,16 @@ expression_info_construct (GtkBuilder      *builder,
     case EXPRESSION_CONSTANT:
       {
         GtkExpression *expr;
+
+        if (info->constant.translatable && info->constant.text->len)
+          {
+            const char *translated;
+
+            translated = _gtk_builder_parser_translate (domain,
+                                                        info->constant.context,
+                                                        info->constant.text->str);
+            g_string_assign (info->constant.text, translated);
+          }
 
         if (info->constant.type == G_TYPE_INVALID)
           {
@@ -1365,7 +1392,7 @@ expression_info_construct (GtkBuilder      *builder,
             object = NULL;
           }
 
-        closure = gtk_builder_create_closure (builder, 
+        closure = gtk_builder_create_closure (builder,
                                               info->closure.function_name,
                                               info->closure.swapped,
                                               object,
@@ -1377,7 +1404,7 @@ expression_info_construct (GtkBuilder      *builder,
         i = n_params;
         for (l = info->closure.params; l; l = l->next)
           {
-            params[--i] = expression_info_construct (builder, l->data, error);
+            params[--i] = expression_info_construct (builder, domain, l->data, error);
             if (params[i] == NULL)
               return NULL;
           }
@@ -1398,7 +1425,7 @@ expression_info_construct (GtkBuilder      *builder,
 
         if (info->property.expression)
           {
-            expression = expression_info_construct (builder, info->property.expression, error);
+            expression = expression_info_construct (builder, domain, info->property.expression, error);
             if (expression == NULL)
               return NULL;
             g_clear_pointer (&info->property.expression, free_expression_info);
@@ -2022,7 +2049,7 @@ end_element (GtkBuildableParseContext  *context,
         {
           PropertyInfo *prop_info = (PropertyInfo *) parent_info;
 
-          prop_info->value = expression_info_construct (data->builder, expression_info, error);
+          prop_info->value = expression_info_construct (data->builder, data->domain, expression_info, error);
           free_expression_info (expression_info);
         }
       else if (parent_info->tag_type == TAG_EXPRESSION)

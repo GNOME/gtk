@@ -359,6 +359,24 @@
         <text/>
       </attribute>
       <optional>
+        <attribute name="translatable">
+          <choice>
+            <value>yes</value>
+            <value>no</value>
+          </choice>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="context">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
+        <attribute name="comments">
+          <text/>
+        </attribute>
+      </optional>
+      <optional>
         <text/>
       </optional>
     </element>

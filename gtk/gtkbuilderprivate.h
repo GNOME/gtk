@@ -91,6 +91,8 @@ struct _ExpressionInfo {
     struct {
       GType type;
       GString *text;
+      gboolean translatable;
+      char *context;
     } constant;
     struct {
       GType type;
@@ -233,6 +235,7 @@ void _free_binding_info (BindingInfo *info,
                          gpointer user_data);
 void free_binding_expression_info (BindingExpressionInfo *info);
 GtkExpression * expression_info_construct (GtkBuilder      *builder,
+                                           const char      *domain,
                                            ExpressionInfo  *info,
                                            GError         **error);
 
