@@ -1126,6 +1126,8 @@ gdk_quartz_window_destroy (GdkWindow *window,
       cairo_surface_finish (impl->cairo_surface);
       cairo_surface_set_user_data (impl->cairo_surface, &gdk_quartz_cairo_key,
 				   NULL, NULL);
+      if (cairo_surface_get_reference_count(impl->cairo_surface))
+        cairo_surface_destroy(impl->cairo_surface);
       impl->cairo_surface = NULL;
     }
 
