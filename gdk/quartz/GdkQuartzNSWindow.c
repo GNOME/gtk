@@ -251,8 +251,6 @@ synthesize_configure_event(GdkWindow *window)
   content_rect.origin.x = 0;
   content_rect.origin.y = 0;
 
-  [[self contentView] setFrame:content_rect];
-
   /* Certain resize operations (e.g. going fullscreen), also move the
    * origin of the window.
    */

@@ -993,10 +993,6 @@ _gdk_quartz_display_create_window_impl (GdkDisplay    *display,
 	impl->view = [[GdkQuartzView alloc] initWithFrame:content_rect];
 	[impl->view setGdkWindow:window];
 	[impl->toplevel setContentView:impl->view];
-        [[NSNotificationCenter defaultCenter] addObserver: impl->toplevel
-                                      selector: @selector (windowDidResize:)
-                                      name: @"NSViewFrameDidChangeNotification"
-                                      object: impl->view];
       }
       break;
 
@@ -1390,7 +1386,6 @@ move_resize_window_internal (GdkWindow *window,
       content_rect = NSMakeRect (gx, gy, window->width, window->height);
 
       frame_rect = [impl->toplevel frameRectForContentRect:content_rect];
-      [impl->toplevel setFrame:frame_rect display:YES];
       impl->cairo_surface = gdk_quartz_ref_cairo_surface (window);
       cairo_surface_destroy (impl->cairo_surface); // Remove the extra reference
     }
@@ -1433,13 +1428,10 @@ move_resize_window_internal (GdkWindow *window,
 			              by:delta];
                 }
 
-              [impl->view setFrame:nsrect];
-
               gdk_quartz_window_set_needs_display_in_region (window, expose_region);
             }
           else
             {
-              [impl->view setFrame:nsrect];
               [impl->view setNeedsDisplay:YES];
             }
 
