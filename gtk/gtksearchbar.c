@@ -651,6 +651,8 @@ gtk_search_bar_set_key_capture_widget (GtkSearchBar *bar,
                                  (gpointer *) &bar->capture_widget);
 
       bar->capture_widget_controller = gtk_event_controller_key_new ();
+      gtk_event_controller_set_static_name (bar->capture_widget_controller,
+                                            "gtk-search-bar-capture");
       gtk_event_controller_set_propagation_phase (bar->capture_widget_controller,
                                                   GTK_PHASE_BUBBLE);
       g_signal_connect (bar->capture_widget_controller, "key-pressed",

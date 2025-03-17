@@ -280,8 +280,13 @@ gtk_column_view_scrollable_get_border (GtkScrollable *scrollable,
                                        GtkBorder     *border)
 {
   GtkColumnView *self = GTK_COLUMN_VIEW (scrollable);
+  int min, nat;
 
-  border->top = gtk_widget_get_height (self->header);
+  gtk_widget_measure (self->header, GTK_ORIENTATION_VERTICAL, -1, &min, &nat, NULL, NULL);
+  if (gtk_scrollable_get_vscroll_policy (GTK_SCROLLABLE (self->listview)) == GTK_SCROLL_MINIMUM)
+    border->top = min;
+  else
+    border->top = nat;
 
   return TRUE;
 }
