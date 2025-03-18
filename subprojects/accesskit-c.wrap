@@ -1,7 +1,7 @@
 [wrap-git]
 directory = accesskit-c
 url = https://github.com/AccessKit/accesskit-c.git
-revision = main
+revision = 0.15.1
 depth = 1
 
 [provide]
