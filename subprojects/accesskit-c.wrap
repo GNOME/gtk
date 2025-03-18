@@ -5,4 +5,4 @@ revision = main
 depth = 1
 
 [provide]
-dependency_names = accesskit-c-0.14
+dependency_names = accesskit-c-0.15
