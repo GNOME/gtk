@@ -1290,7 +1290,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:visible:
+   * GtkWidget:visible: (getter get_visible)
    *
    * Whether the widget is visible.
    */
