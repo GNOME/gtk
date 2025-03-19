@@ -74,6 +74,8 @@ gtk_gst_paintable_paintable_snapshot (GdkPaintable *paintable,
 
   gtk_snapshot_save (snapshot);
 
+  gtk_snapshot_set_snap (snapshot, GSK_RECT_SNAP_SHRINK);
+
   sx = gdk_paintable_get_intrinsic_width (self->image) / self->viewport.size.width;
   sy = gdk_paintable_get_intrinsic_height (self->image) / self->viewport.size.height;
 
