@@ -25,6 +25,7 @@
 
 #include "gskpath.h"
 #include "gskpathbuilder.h"
+#include "gskrectsnap.h"
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskstroke.h"
@@ -1803,6 +1804,51 @@ parse_mask_mode (GtkCssParser *parser,
   return FALSE;
 }
 
+static gboolean
+parse_rect_snap (GtkCssParser *parser,
+                 Context      *context,
+                 gpointer      out_snap)
+{
+  GskRectSnap snap;
+
+  if (gtk_css_parser_try_ident (parser, "grow"))
+    snap = GSK_RECT_SNAP_GROW;
+  else if (gtk_css_parser_try_ident (parser, "shrink"))
+    snap = GSK_RECT_SNAP_SHRINK;
+  else
+    {
+      GskSnapDirection dir[4];
+      gsize i;
+
+      for (i = 0; i < 4; i++)
+        {
+          if (gtk_css_parser_try_ident (parser, "round"))
+            dir[i] = GSK_SNAP_ROUND;
+          else if (gtk_css_parser_try_ident (parser, "floor"))
+            dir[i] = GSK_SNAP_FLOOR;
+          else if (gtk_css_parser_try_ident (parser, "ceil"))
+            dir[i] = GSK_SNAP_CEIL;
+          else if (gtk_css_parser_try_ident (parser, "none"))
+            dir[i] = GSK_SNAP_NONE;
+          else
+            break;
+        }
+      if (i == 0)
+        {
+          gtk_css_parser_error_value (parser, "Unknown value for snap");
+          return FALSE;
+        }
+      for (; i < 4; i++)
+        {
+          dir[i] = dir[(i - 1) >> 1];
+        }
+      snap = gsk_rect_snap_new (dir[0], dir[1], dir[2], dir[3]);
+    }
+
+  *(GskRectSnap *) out_snap = snap;
+  return TRUE;
+}
+
 static PangoFont *
 font_from_string (PangoFontMap *fontmap,
                   const char   *string,
@@ -2960,9 +3006,11 @@ parse_texture_node (GtkCssParser *parser,
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   GdkTexture *texture = NULL;
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
-    { "texture", parse_texture, clear_texture, &texture }
+    { "texture", parse_texture, clear_texture, &texture },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *node;
 
@@ -2971,7 +3019,7 @@ parse_texture_node (GtkCssParser *parser,
   if (texture == NULL)
     texture = create_default_texture ();
 
-  node = gsk_texture_node_new (texture, &bounds);
+  node = gsk_texture_node_new_snapped (texture, &bounds, snap);
   g_object_unref (texture);
 
   return node;
@@ -4536,6 +4584,58 @@ append_enum_param (Printer    *p,
 }
 
 static void
+append_snap_param (Printer     *p,
+                   const char  *param_name,
+                   GskRectSnap  snap)
+{
+  static const char *names[] = {
+    [GSK_SNAP_NONE] = "none",
+    [GSK_SNAP_FLOOR] = "floor",
+    [GSK_SNAP_CEIL] = "ceil",
+    [GSK_SNAP_ROUND] = "round",
+  };
+
+  if (snap == GSK_RECT_SNAP_NONE)
+    return;
+
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+
+  /* try the shortcuts */
+  if (snap == GSK_RECT_SNAP_GROW)
+    {
+      g_string_append (p->str, "grow;\n");
+      return;
+    }
+  else if (snap == GSK_RECT_SNAP_SHRINK)
+    {
+      g_string_append (p->str, "shrink;\n");
+      return;
+    }
+
+  g_string_append (p->str, names[gsk_rect_snap_get_direction (snap, 0)]);
+  if (gsk_rect_snap_get_direction (snap, 0) != gsk_rect_snap_get_direction (snap, 1) ||
+      gsk_rect_snap_get_direction (snap, 0) != gsk_rect_snap_get_direction (snap, 2) ||
+      gsk_rect_snap_get_direction (snap, 0) != gsk_rect_snap_get_direction (snap, 3))
+    {
+      g_string_append_c (p->str, ' ');
+      g_string_append (p->str, names[gsk_rect_snap_get_direction (snap, 1)]);
+      if (gsk_rect_snap_get_direction (snap, 0) != gsk_rect_snap_get_direction (snap, 2) ||
+          gsk_rect_snap_get_direction (snap, 1) != gsk_rect_snap_get_direction (snap, 3))
+        {
+          g_string_append_c (p->str, ' ');
+          g_string_append (p->str, names[gsk_rect_snap_get_direction (snap, 2)]);
+          if (gsk_rect_snap_get_direction (snap, 1) != gsk_rect_snap_get_direction (snap, 3))
+            {
+              g_string_append_c (p->str, ' ');
+              g_string_append (p->str, names[gsk_rect_snap_get_direction (snap, 3)]);
+            }
+        }
+    }
+  g_string_append (p->str, ";\n");
+}
+
+static void
 append_vec4_param (Printer               *p,
                    const char            *param_name,
                    const graphene_vec4_t *value)
@@ -5646,6 +5746,7 @@ render_node_print (Printer       *p,
 
         append_rect_param (p, "bounds", &node->bounds);
         append_texture_param (p, "texture", gsk_texture_node_get_texture (node));
+        append_snap_param (p, "snap", gsk_texture_node_get_snap (node));
 
         end_node (p);
       }

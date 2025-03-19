@@ -1,0 +1,64 @@
+texture {
+  bounds: 0 0 1 1;
+  texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGNJQ1ABDQABnGk7MgAAAAFzUkdC\
+AK7OHOkAAAANSURBVAiZY/jPwPAfAAUAAf+rzjaJAAAAAElFTkSuQmCC\
+");
+  snap: shrink;
+}
+texture {
+  bounds: 2 0 1 1;
+  texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGNJQ1ABDQABnGk7MgAAAAFzUkdC\
+AK7OHOkAAAANSURBVAiZY/jPwPAfAAUAAf+rzjaJAAAAAElFTkSuQmCC\
+");
+  snap: round ceil floor none;
+}
+texture {
+  bounds: 5 0 1 1;
+  texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGNJQ1ABDQABnGk7MgAAAAFzUkdC\
+AK7OHOkAAAANSURBVAiZY/jPwPAfAAUAAf+rzjaJAAAAAElFTkSuQmCC\
+");
+  snap: round round round round round;
+}
+texture {
+  bounds: 6 0 1 1;
+  texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGNJQ1ABDQABnGk7MgAAAAFzUkdC\
+AK7OHOkAAAANSURBVAiZY/jPwPAfAAUAAf+rzjaJAAAAAElFTkSuQmCC\
+");
+  snap: round floor;
+}
+texture {
+  bounds: 7 0 1 1;
+  texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGNJQ1ABDQABnGk7MgAAAAFzUkdC\
+AK7OHOkAAAANSURBVAiZY/jPwPAfAAUAAf+rzjaJAAAAAElFTkSuQmCC\
+");
+  snap: round floor none;
+}
+texture {
+  bounds: 8 0 1 1;
+  texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGNJQ1ABDQABnGk7MgAAAAFzUkdC\
+AK7OHOkAAAANSURBVAiZY/jPwPAfAAUAAf+rzjaJAAAAAElFTkSuQmCC\
+");
+  snap: round floor none ceil;
+}
+texture {
+  bounds: 9 0 1 1;
+  texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGNJQ1ABDQABnGk7MgAAAAFzUkdC\
+AK7OHOkAAAANSURBVAiZY/jPwPAfAAUAAf+rzjaJAAAAAElFTkSuQmCC\
+");
+  snap: floor ceil ceil floor;
+}
+texture {
+  bounds: 10 0 1 1;
+  texture: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAABGNJQ1ABDQABnGk7MgAAAAFzUkdC\
+AK7OHOkAAAANSURBVAiZY/jPwPAfAAUAAf+rzjaJAAAAAElFTkSuQmCC\
+");
+  snap: ceil floor floor ceil;
+}

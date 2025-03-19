@@ -530,6 +530,7 @@ Possible value for hint-metrics are:
 | -------- | ------------------- | ---------------------- | ----------- |
 | bounds   | `<rect>`            | 50                     | always      |
 | texture  | `<string>`?`<url>`? | *see below*            | always      |
+| snap     | `<snap>`            | none                   | non-default |
 
 Creates a node like `gsk_texture_node_new()` with the given properties.
 
@@ -541,6 +542,10 @@ The default texture is a 10x10 checkerboard with the top left and bottom right
 5x5 being in the color #FF00CC and the other part being transparent. A possible
 representation for this texture is `url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAAKUlEQVQYlWP8z3DmPwMaYGQwYUQXY0IXwAUGUCGGoxkYGBiweXAoeAYAz44F3e3U1xUAAAAASUVORK5CYII=")
 `.
+
+Possible values for the snap property are:
+
+    snap: grow | shrink | ( round | floor | ceil | none ){1-4}
 
 ### texture-scale
 

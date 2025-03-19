@@ -482,6 +482,8 @@ node_parser_tests = [
   'texture-scale-unknown-filter.errors',
   'texture-scale-unknown-filter.node',
   'texture-scale-unknown-filter.ref.node',
+  'texture-snap.node',
+  'texture-snap.ref.node',
   'transform-fail.node',
   'transform-fail.ref.node',
   'transform-fail.errors',

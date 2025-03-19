@@ -1,0 +1,112 @@
+texture {
+  bounds: 0 0 1 1;
+  texture: memory {
+    format: RGBA8;
+    width: 1;
+    height: 1;
+    offset: 0;
+    stride: 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPAfAGA2Q9IEAAAA\
+");
+  }
+  snap: shrink;
+}
+texture {
+  bounds: 2 0 1 1;
+  texture: memory {
+    format: RGBA8;
+    width: 1;
+    height: 1;
+    offset: 0;
+    stride: 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPAfAGA2Q9IEAAAA\
+");
+  }
+  snap: round ceil floor none;
+}
+texture {
+  bounds: 5 0 1 1;
+  texture: memory {
+    format: RGBA8;
+    width: 1;
+    height: 1;
+    offset: 0;
+    stride: 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPAfAGA2Q9IEAAAA\
+");
+  }
+  snap: round;
+}
+texture {
+  bounds: 6 0 1 1;
+  texture: memory {
+    format: RGBA8;
+    width: 1;
+    height: 1;
+    offset: 0;
+    stride: 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPAfAGA2Q9IEAAAA\
+");
+  }
+  snap: round floor;
+}
+texture {
+  bounds: 7 0 1 1;
+  texture: memory {
+    format: RGBA8;
+    width: 1;
+    height: 1;
+    offset: 0;
+    stride: 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPAfAGA2Q9IEAAAA\
+");
+  }
+  snap: round floor none;
+}
+texture {
+  bounds: 8 0 1 1;
+  texture: memory {
+    format: RGBA8;
+    width: 1;
+    height: 1;
+    offset: 0;
+    stride: 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPAfAGA2Q9IEAAAA\
+");
+  }
+  snap: round floor none ceil;
+}
+texture {
+  bounds: 9 0 1 1;
+  texture: memory {
+    format: RGBA8;
+    width: 1;
+    height: 1;
+    offset: 0;
+    stride: 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPAfAGA2Q9IEAAAA\
+");
+  }
+  snap: grow;
+}
+texture {
+  bounds: 10 0 1 1;
+  texture: memory {
+    format: RGBA8;
+    width: 1;
+    height: 1;
+    offset: 0;
+    stride: 4;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA/vPwPAfAGA2Q9IEAAAA\
+");
+  }
+  snap: shrink;
+}
