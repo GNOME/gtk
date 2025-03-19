@@ -474,3 +474,26 @@ typedef enum
   GSK_MASK_MODE_LUMINANCE,
   GSK_MASK_MODE_INVERTED_LUMINANCE
 } GskMaskMode;
+
+/**
+ * GskSnapDirection:
+ * @GSK_SNAP_NONE: Don't snap the value
+ * @GSK_SNAP_FLOOR: Use floor() to snap
+ * @GSK_SNAP_CEIL: Use ceil() to snap
+ * @GSK_SNAP_ROUND: Use round() to snap
+ *
+ * Specifies how a coordinate should be snapped to the pixel grid.
+ *
+ * Note that the top and left sides of rectangles need to be snapped
+ * in the opposite direction from the bottom and right sides to make
+ * the rectangle grow or shrink.
+ *
+ * Since: 4.20
+ */
+typedef enum {
+  GSK_SNAP_NONE,
+  GSK_SNAP_FLOOR,
+  GSK_SNAP_CEIL,
+  GSK_SNAP_ROUND
+} GskSnapDirection;
+

@@ -29,6 +29,7 @@ typedef struct _GskPath                 GskPath;
 typedef struct _GskPathBuilder          GskPathBuilder;
 typedef struct _GskPathMeasure          GskPathMeasure;
 typedef struct _GskPathPoint            GskPathPoint;
+typedef unsigned                        GskRectSnap;
 typedef struct _GskRenderer             GskRenderer;
 typedef struct _GskRenderNode           GskRenderNode;
 typedef struct _GskRoundedRect          GskRoundedRect;
