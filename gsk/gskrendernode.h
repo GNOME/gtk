@@ -226,8 +226,14 @@ GType                   gsk_texture_node_get_type               (void) G_GNUC_CO
 GDK_AVAILABLE_IN_ALL
 GskRenderNode *         gsk_texture_node_new                    (GdkTexture               *texture,
                                                                  const graphene_rect_t    *bounds);
+GDK_AVAILABLE_IN_4_20
+GskRenderNode *         gsk_texture_node_new_snapped            (GdkTexture               *texture,
+                                                                 const graphene_rect_t    *bounds,
+                                                                 GskRectSnap               snap);
 GDK_AVAILABLE_IN_ALL
 GdkTexture *            gsk_texture_node_get_texture            (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_20
+GskRectSnap             gsk_texture_node_get_snap               (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_4_10
 GType                   gsk_texture_scale_node_get_type         (void) G_GNUC_CONST;
