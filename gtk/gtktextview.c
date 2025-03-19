@@ -3093,6 +3093,44 @@ gtk_text_view_update_layout_width (GtkTextView *text_view)
 }
 
 static void
+calculate_gutter_offsets (GtkTextView *text_view,
+                          int         *width,
+                          int         *height)
+{
+  GtkWidget *x_gutter;
+  GtkWidget *y_gutter;
+
+  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
+  g_return_if_fail (width != NULL && height != NULL);
+
+  x_gutter = gtk_text_view_get_gutter (text_view, GTK_TEXT_WINDOW_LEFT);
+
+  if (x_gutter != NULL)
+    {
+      GtkRequisition x_req = {0};
+      gtk_widget_get_preferred_size (x_gutter, &x_req, NULL);
+      *width = x_req.width;
+    }
+  else
+    {
+      *width = 0;
+    }
+
+  y_gutter = gtk_text_view_get_gutter (text_view, GTK_TEXT_WINDOW_TOP);
+
+  if (y_gutter != NULL)
+    {
+      GtkRequisition y_req = {0};
+      gtk_widget_get_preferred_size (y_gutter, &y_req, NULL);
+      *height = y_req.height;
+    }
+  else
+    {
+      *height = 0;
+    }
+}
+
+static void
 gtk_text_view_update_im_spot_location (GtkTextView *text_view)
 {
   GdkRectangle area;
@@ -3100,10 +3138,15 @@ gtk_text_view_update_im_spot_location (GtkTextView *text_view)
   if (text_view->priv->layout == NULL)
     return;
 
+  int x_offset = 0;
+  int y_offset = 0;
+
+  calculate_gutter_offsets (text_view, &x_offset, &y_offset);
+
   gtk_text_view_get_cursor_locations (text_view, NULL, &area, NULL);
 
-  area.x -= text_view->priv->xoffset;
-  area.y -= text_view->priv->yoffset;
+  area.x -= text_view->priv->xoffset - x_offset;
+  area.y -= text_view->priv->yoffset - y_offset;
 
   /* Width returned by Pango indicates direction of cursor,
    * by its sign more than the size of cursor.
@@ -4602,44 +4645,6 @@ gtk_text_view_update_child_allocation (GtkTextView         *text_view,
            allocation.origin.y,
            text_view->priv->yoffset);
 #endif
-}
-
-static void
-calculate_gutter_offsets (GtkTextView *text_view,
-                          int         *width,
-                          int         *height)
-{
-  GtkWidget *x_gutter;
-  GtkWidget *y_gutter;
-
-  g_return_if_fail (GTK_IS_TEXT_VIEW (text_view));
-  g_return_if_fail (width != NULL && height != NULL);
-
-  x_gutter = gtk_text_view_get_gutter (text_view, GTK_TEXT_WINDOW_LEFT);
-
-  if (x_gutter != NULL)
-    {
-      GtkRequisition x_req = {0};
-      gtk_widget_get_preferred_size (x_gutter, &x_req, NULL);
-      *width = x_req.width;
-    }
-  else
-    {
-      *width = 0;
-    }
-
-  y_gutter = gtk_text_view_get_gutter (text_view, GTK_TEXT_WINDOW_TOP);
-
-  if (y_gutter != NULL)
-    {
-      GtkRequisition y_req = {0};
-      gtk_widget_get_preferred_size (y_gutter, &y_req, NULL);
-      *height = y_req.height;
-    }
-  else
-    {
-      *height = 0;
-    }
 }
 
 static void
