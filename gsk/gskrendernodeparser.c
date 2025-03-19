@@ -55,6 +55,7 @@
 #include "gskpathbuilder.h"
 #include "gskprivate.h"
 #include "gskradialgradientnodeprivate.h"
+#include "gskrectsnap.h"
 #include "gskrendernodeprivate.h"
 #include "gskrepeatnodeprivate.h"
 #include "gskroundedclipnode.h"
@@ -1858,6 +1859,76 @@ parse_porter_duff (GtkCssParser *parser,
   return parse_enum (parser, GSK_TYPE_PORTER_DUFF, out_rule);
 }
 
+static gboolean G_GNUC_UNUSED
+parse_rect_snap (GtkCssParser *parser,
+                 Context      *context,
+                 gpointer      out_snap)
+{
+  GskRectSnap snap;
+  GskSnapDirection dir[4];
+  gboolean grow_shrink[4] = { FALSE, };
+  gsize i;
+
+  for (i = 0; i < 4; i++)
+    {
+      if (gtk_css_parser_try_ident (parser, "round"))
+        dir[i] = GSK_SNAP_ROUND;
+      else if (gtk_css_parser_try_ident (parser, "floor"))
+        dir[i] = GSK_SNAP_FLOOR;
+      else if (gtk_css_parser_try_ident (parser, "ceil"))
+        dir[i] = GSK_SNAP_CEIL;
+      else if (gtk_css_parser_try_ident (parser, "none"))
+        dir[i] = GSK_SNAP_NONE;
+      else if (gtk_css_parser_try_ident (parser, "grow"))
+        {
+          dir[i] = (i == 0 || i == 3) ? GSK_SNAP_FLOOR : GSK_SNAP_CEIL;
+          grow_shrink[i] = TRUE;
+        }
+      else if (gtk_css_parser_try_ident (parser, "shrink"))
+        {
+          dir[i] = (i == 0 || i == 3) ? GSK_SNAP_CEIL : GSK_SNAP_FLOOR;
+          grow_shrink[i] = TRUE;
+        }
+      else
+        break;
+    }
+  if (i == 0)
+    {
+      gtk_css_parser_error_value (parser, "Unknown value for snap");
+      return FALSE;
+    }
+  for (; i < 4; i++)
+    {
+      dir[i] = dir[(i - 1) >> 1];
+      grow_shrink[i] = grow_shrink[(i - 1) >> 1];
+      if (grow_shrink[(i - 1) >> 1])
+        {
+          /* It just so happens to work that the
+           * inheritance of these values flips
+           * ceil<=>floor for grow and shrink
+           */
+          switch (dir[i])
+            {
+              case GSK_SNAP_FLOOR:
+                dir[i] = GSK_SNAP_CEIL;
+                break;
+              case GSK_SNAP_CEIL:
+                dir[i] = GSK_SNAP_FLOOR;
+                break;
+              case GSK_SNAP_ROUND:
+              case GSK_SNAP_NONE:
+              default:
+                g_assert_not_reached ();
+                break;
+            }
+        }
+    }
+  snap = gsk_rect_snap_new (dir[0], dir[1], dir[2], dir[3]);
+
+  *(GskRectSnap *) out_snap = snap;
+  return TRUE;
+}
+
 static PangoFont *
 font_from_string (PangoFontMap *fontmap,
                   const char   *string,
@@ -3155,7 +3226,7 @@ parse_texture_node (GtkCssParser *parser,
   GdkTexture *texture = NULL;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
-    { "texture", parse_texture, clear_texture, &texture }
+    { "texture", parse_texture, clear_texture, &texture },
   };
   GskRenderNode *node;
 
@@ -5148,6 +5219,91 @@ append_enum_param (Printer    *p,
   g_string_append (p->str, enum_to_nick (type, value));
   g_string_append_c (p->str, ';');
   g_string_append_c (p->str, '\n');
+}
+
+static gboolean
+snap_direction_equal (GskRectSnap  snap,
+                      guint        first_id,
+                      guint        second_id,
+                      gboolean    *grow_shrink)
+{
+  GskSnapDirection first = gsk_rect_snap_get_direction (snap, first_id);
+  GskSnapDirection second = gsk_rect_snap_get_direction (snap, second_id);
+
+  if (first == second)
+    {
+      *grow_shrink = FALSE;
+      return TRUE;
+    }
+
+  if ((first == GSK_SNAP_CEIL && second == GSK_SNAP_FLOOR) ||
+      (first == GSK_SNAP_FLOOR && second == GSK_SNAP_CEIL))
+    {
+      *grow_shrink = TRUE;
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void G_GNUC_UNUSED
+append_snap_param (Printer     *p,
+                   const char  *param_name,
+                   GskRectSnap  snap)
+{
+  static const char *names[] = {
+    [GSK_SNAP_NONE] = "none",
+    [GSK_SNAP_FLOOR] = "floor",
+    [GSK_SNAP_CEIL] = "ceil",
+    [GSK_SNAP_ROUND] = "round",
+  };
+  gboolean grow_shrink[4] = { FALSE, };
+  guint i, n;
+
+  if (snap == GSK_RECT_SNAP_NONE)
+    return;
+
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+
+  if (snap_direction_equal (snap, 1, 3, &grow_shrink[1]))
+    {
+      if (snap_direction_equal (snap, 0, 2, &grow_shrink[0]))
+        {
+          gboolean grow_shrink_check;
+
+          if (snap_direction_equal (snap, 0, 1, &grow_shrink_check) &&
+              grow_shrink_check == grow_shrink[0] &&
+              grow_shrink_check == grow_shrink[1])
+            n = 1;
+          else
+            n = 2;
+        }
+      else
+        n = 3;
+    }
+  else
+    n = 4;
+
+  for (i = 0; i < n; i++)
+    {
+      if (i > 0)
+        g_string_append_c (p->str, ' ');
+
+      if (grow_shrink[i])
+        {
+          if ((gsk_rect_snap_get_direction (snap, i) == GSK_SNAP_CEIL) ^
+              (i == 0 || i == 3))
+            g_string_append (p->str, "grow");
+          else
+            g_string_append (p->str, "shrink");
+        }
+      else
+        {
+          g_string_append (p->str, names[gsk_rect_snap_get_direction (snap, i)]);
+        }
+    }
+  g_string_append (p->str, ";\n");
 }
 
 static void
