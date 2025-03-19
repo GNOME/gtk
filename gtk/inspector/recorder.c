@@ -1110,6 +1110,23 @@ add_texture_rows (GListStore *store,
 }
 
 static void
+add_snap_row (GListStore *store,
+              const char *name,
+              GskRectSnap snap)
+{
+  char *names[4];
+  gsize i;
+
+  for (i = 0; i < 4; i++)
+    names[i] = g_enum_to_string (GSK_TYPE_SNAP_DIRECTION, gsk_rect_snap_get_direction (snap, i));
+
+  add_text_row (store, name, "%s %s %s %s", names[0], names[1], names[2], names[3]);
+
+  for (i = 0; i < 4; i++)
+    g_free (names[i]);
+}
+
+static void
 populate_render_node_properties (GListStore    *store,
                                  GskRenderNode *node,
                                  const char    *role)
@@ -1178,6 +1195,7 @@ populate_render_node_properties (GListStore    *store,
         GdkTexture *texture = gsk_texture_node_get_texture (node);
 
         add_texture_rows (store, texture);
+        add_snap_row (store, "Snap", gsk_texture_node_get_snap (node));
       }
       break;
 
