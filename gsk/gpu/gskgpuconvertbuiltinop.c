@@ -40,7 +40,7 @@ gsk_gpu_convert_builtin_op_print_instance (GskGpuShaderOp *shader,
   gsk_gpu_print_string (string, gdk_color_state_get_name (builtin));
 }
 
-static const GskGpuShaderOpClass GSK_GPU_CONVERT_OP_CLASS = {
+static const GskGpuShaderOpClass GSK_GPU_CONVERT_BUILTIN_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuConvertBuiltinOp),
     GSK_GPU_STAGE_SHADER,
@@ -92,7 +92,7 @@ gsk_gpu_convert_from_builtin_op (GskGpuFrame             *frame,
   g_assert (GDK_IS_BUILTIN_COLOR_STATE (builtin));
 
   gsk_gpu_shader_op_alloc (frame,
-                           &GSK_GPU_CONVERT_OP_CLASS,
+                           &GSK_GPU_CONVERT_BUILTIN_OP_CLASS,
                            gsk_gpu_color_states_create (ccs, TRUE,
                                                         gsk_gpu_get_shader_color_state (builtin), FALSE),
                            GDK_BUILTIN_COLOR_STATE_ID (builtin) |
@@ -121,7 +121,7 @@ gsk_gpu_convert_to_builtin_op (GskGpuFrame             *frame,
   GskGpuConvertbuiltinInstance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
-                           &GSK_GPU_CONVERT_OP_CLASS,
+                           &GSK_GPU_CONVERT_BUILTIN_OP_CLASS,
                            gsk_gpu_color_states_create (source_cs, TRUE,
                                                         gsk_gpu_get_shader_color_state (builtin), FALSE),
                            GDK_BUILTIN_COLOR_STATE_ID (builtin) |
