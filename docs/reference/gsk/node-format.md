@@ -150,6 +150,19 @@ Rounded rectangles use a CSS-like syntax:
 
     rounded-rect: <rect> [ "/" <number>{1,4} [ "/" <number>{1,4} ] ]
 
+# Snapping
+
+Various nodes have snapping properties. They are specified as up to four values
+for the top, right, bottom, and left side respectively. If omitted, the values
+for the left, bottom, or right side are set to the ones from the right, top,
+and top side respectively, just like CSS borders/padding/margin.
+
+    snap: <single-snap>{1,4}
+    single-snap: none | ceil | floor | round | grow | shrink
+
+The "grow" and "shrink" values map to one of "floor" or "ceil" depending on which
+side they are used for.
+
 # Nodes
 
 ### container
