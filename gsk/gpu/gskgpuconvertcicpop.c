@@ -39,7 +39,7 @@ gsk_gpu_convert_cicp_op_print_instance (GskGpuShaderOp *shader,
                           0, 1);
 }
 
-static const GskGpuShaderOpClass GSK_GPU_CONVERT_OP_CLASS = {
+static const GskGpuShaderOpClass GSK_GPU_CONVERT_CICP_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuConvertCicpOp),
     GSK_GPU_STAGE_SHADER,
@@ -74,7 +74,7 @@ gsk_gpu_convert_from_cicp_op (GskGpuFrame             *frame,
   GskGpuConvertcicpInstance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
-                           &GSK_GPU_CONVERT_OP_CLASS,
+                           &GSK_GPU_CONVERT_CICP_OP_CLASS,
                            color_states,
                            (opacity < 1.0 ? VARIATION_OPACITY : 0) |
                              (straight_alpha ? VARIATION_STRAIGHT_ALPHA : 0),
@@ -103,7 +103,7 @@ gsk_gpu_convert_to_cicp_op (GskGpuFrame             *frame,
   GskGpuConvertcicpInstance *instance;
 
   gsk_gpu_shader_op_alloc (frame,
-                           &GSK_GPU_CONVERT_OP_CLASS,
+                           &GSK_GPU_CONVERT_CICP_OP_CLASS,
                            color_states,
                            (opacity < 1.0 ? VARIATION_OPACITY : 0) |
                              (straight_alpha ? VARIATION_STRAIGHT_ALPHA : 0) |
