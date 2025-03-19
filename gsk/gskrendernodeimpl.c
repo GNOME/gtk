@@ -2776,6 +2776,7 @@ struct _GskTextureNode
   GskRenderNode render_node;
 
   GdkTexture *texture;
+  GskRectSnap snap;
 };
 
 static void
@@ -2905,6 +2906,7 @@ gsk_texture_node_diff (GskRenderNode *node1,
   cairo_region_t *sub;
 
   if (!gsk_rect_equal (&node1->bounds, &node2->bounds) ||
+      self1->snap != self2->snap ||
       gdk_texture_get_width (self1->texture) != gdk_texture_get_width (self2->texture) ||
       gdk_texture_get_height (self1->texture) != gdk_texture_get_height (self2->texture))
     {
@@ -2956,6 +2958,24 @@ gsk_texture_node_get_texture (const GskRenderNode *node)
 }
 
 /**
+ * gsk_texture_node_get_snap:
+ * @node: (type GskInsetShadowNode): a `GskRenderNode` for a texture
+ *
+ * Retrieves the snap value used when creating this node.
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.20
+ */
+GskRectSnap
+gsk_texture_node_get_snap (const GskRenderNode *node)
+{
+  const GskTextureNode *self = (const GskTextureNode *) node;
+
+  return self->snap;
+}
+
+/**
  * gsk_texture_node_new:
  * @texture: the `GdkTexture`
  * @bounds: the rectangle to render the texture into
@@ -2973,6 +2993,32 @@ GskRenderNode *
 gsk_texture_node_new (GdkTexture            *texture,
                       const graphene_rect_t *bounds)
 {
+  return gsk_texture_node_new_snapped (texture, bounds, GSK_RECT_SNAP_NONE);
+}
+
+/**
+ * gsk_texture_node_new_snapped:
+ * @texture: the `GdkTexture`
+ * @bounds: the rectangle to render the texture into
+ * @snap: the snap value
+ *
+ * Creates a `GskRenderNode` that will render the given
+ * @texture into the area given by @bounds and aligned to
+ * the pixel grid according to @snap.
+ *
+ * Note that GSK applies linear filtering when textures are
+ * scaled and transformed. See [class@Gsk.TextureScaleNode]
+ * for a way to influence filtering.
+ *
+ * Returns: (transfer full) (type GskTextureNode): A new `GskRenderNode`
+ *
+ * Since: 4.20
+ */
+GskRenderNode *
+gsk_texture_node_new_snapped (GdkTexture            *texture,
+                              const graphene_rect_t *bounds,
+                              GskRectSnap            snap)
+{
   GskTextureNode *self;
   GskRenderNode *node;
 
@@ -2986,6 +3032,7 @@ gsk_texture_node_new (GdkTexture            *texture,
   node->is_hdr = color_state_is_hdr (gdk_texture_get_color_state (texture));
 
   self->texture = g_object_ref (texture);
+  self->snap = snap;
   gsk_rect_init_from_rect (&node->bounds, bounds);
   gsk_rect_normalize (&node->bounds);
 
