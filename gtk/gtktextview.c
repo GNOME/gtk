@@ -236,12 +236,11 @@ struct _GtkTextViewPrivate
   GtkAdjustment *vadjustment;
 
   /* X offset between widget coordinates and buffer coordinates
-   * taking left_padding in account
    */
   double xoffset;
 
   /* Y offset between widget coordinates and buffer coordinates
-   * taking top_padding and top_margin in account
+   * taking top_margin in account
    */
   double yoffset;
 
@@ -304,10 +303,6 @@ struct _GtkTextViewPrivate
   int right_margin;
   int top_margin;
   int bottom_margin;
-  int left_padding;
-  int right_padding;
-  int top_padding;
-  int bottom_padding;
 
   int indent;
 
@@ -2681,7 +2676,7 @@ gtk_text_view_get_line_at_y (GtkTextView *text_view,
 }
 
 /* Same as gtk_text_view_scroll_to_iter but deal with
- * (top_margin / top_padding) and (bottom_margin / bottom_padding).
+ * top_margin and bottom_margin.
  * When with_border == TRUE and you scroll on the edges,
  * all borders are shown for the corresponding edge.
  * When with_border == FALSE, only left margin and right_margin
@@ -2748,7 +2743,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
    * (-priv->top_margin) [top padding][top margin] (0) [text][bottom margin][bottom padding]
    *
    * Hadjustment value:
-   * (-priv->left_padding) [left padding] (0) [left margin][text][right margin][right padding]
+   * [left padding] (0) [left margin][text][right margin][right padding]
    *
    * Buffer coordinates:
    * on x: (0) [left margin][text][right margin]
@@ -2761,7 +2756,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
    * Canvas coordinates:
    * (the canvas is the virtual window where the content of the buffer is drawn )
    *
-   * on x: (-priv->left_padding) [left padding] (0) [left margin][text][right margin][right padding]
+   * on x: [left padding] (0) [left margin][text][right margin][right padding]
    * on y: (-priv->top_margin) [top margin][top padding] (0) [text][bottom margin][bottom padding]
    *
    * (priv->xoffset, priv->yoffset) is the origin of the view (visible part of the canvas)
@@ -2788,7 +2783,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
   screen_inner_bottom = screen.y + screen.height - within_margin_yoffset;
 
   buffer_bottom = priv->height - priv->bottom_margin;
-  buffer_right = priv->width - priv->right_margin - priv->left_padding - 1;
+  buffer_right = priv->width - priv->right_margin - 1;
 
   screen_dest.x = screen.x;
   screen_dest.y = screen.y;
@@ -2830,14 +2825,14 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
       if (cursor.y < screen_inner_top)
         {
           if (cursor.y == 0)
-            border_yoffset = with_border ? priv->top_padding : 0;
+            border_yoffset = 0;
 
           screen_dest.y = cursor.y - MAX (within_margin_yoffset, border_yoffset);
         }
       else if (cursor_bottom > screen_inner_bottom)
         {
           if (cursor_bottom == buffer_bottom - priv->top_margin)
-            border_yoffset = with_border ? priv->bottom_padding : 0;
+            border_yoffset = 0;
 
           screen_dest.y = cursor_bottom - screen_dest.height -
                           MAX (within_margin_yoffset, border_yoffset);
@@ -2868,14 +2863,14 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
       if (cursor.x < screen_inner_left)
         {
           if (cursor.x == priv->left_margin)
-            border_xoffset = with_border ? priv->left_padding : 0;
+            border_xoffset = 0;
 
           screen_dest.x = cursor.x - MAX (within_margin_xoffset, border_xoffset);
         }
       else if (cursor_right >= screen_inner_right - 1)
         {
-          if (cursor.x >= buffer_right - priv->right_padding)
-            border_xoffset = with_border ? priv->right_padding : 0;
+          if (cursor.x >= buffer_right)
+            border_xoffset = 0;
 
           screen_dest.x = cursor_right - screen_dest.width -
                           MAX (within_margin_xoffset, border_xoffset) + 1;
@@ -2884,7 +2879,7 @@ _gtk_text_view_scroll_to_iter (GtkTextView   *text_view,
 
   if (screen_dest.x != screen.x)
     {
-      gtk_adjustment_animate_to_value (priv->hadjustment, screen_dest.x + priv->left_padding);
+      gtk_adjustment_animate_to_value (priv->hadjustment, screen_dest.x);
 
       DV (g_print (" horiz increment %d\n", screen_dest.x - screen.x));
     }
@@ -3736,7 +3731,6 @@ gtk_text_view_set_left_margin (GtkTextView *text_view,
   if (priv->left_margin != left_margin)
     {
       priv->left_margin = left_margin;
-      priv->left_margin = left_margin + priv->left_padding;
 
       if (priv->layout && priv->layout->default_style)
         {
@@ -3789,7 +3783,6 @@ gtk_text_view_set_right_margin (GtkTextView *text_view,
   if (priv->right_margin != right_margin)
     {
       priv->right_margin = right_margin;
-      priv->right_margin = right_margin + priv->right_padding;
 
       if (priv->layout && priv->layout->default_style)
         {
@@ -3842,7 +3835,6 @@ gtk_text_view_set_top_margin (GtkTextView *text_view,
       priv->yoffset += priv->top_margin - top_margin;
 
       priv->top_margin = top_margin;
-      priv->top_margin = top_margin + priv->top_padding;
 
       if (priv->layout && priv->layout->default_style)
         gtk_text_layout_default_style_changed (priv->layout);
@@ -3890,7 +3882,6 @@ gtk_text_view_set_bottom_margin (GtkTextView *text_view,
   if (priv->bottom_margin != bottom_margin)
     {
       priv->bottom_margin = bottom_margin;
-      priv->bottom_margin = bottom_margin + priv->bottom_padding;
 
       if (priv->layout && priv->layout->default_style)
         gtk_text_layout_default_style_changed (priv->layout);
@@ -6104,7 +6095,7 @@ gtk_text_view_paint (GtkWidget   *widget,
   priv = text_view->priv;
 
   g_return_if_fail (priv->layout != NULL);
-  g_return_if_fail (priv->xoffset >= - priv->left_padding);
+  g_return_if_fail (priv->xoffset >= 0);
   g_return_if_fail (priv->yoffset >= - priv->top_margin);
 
   while (priv->first_validate_idle != 0)
@@ -8262,8 +8253,6 @@ gtk_text_view_ensure_layout (GtkTextView *text_view)
 
       style->left_margin = priv->left_margin;
       style->right_margin = priv->right_margin;
-      priv->layout->right_padding = priv->right_padding;
-      priv->layout->left_padding = priv->left_padding;
 
       style->indent = priv->indent;
       style->tabs = priv->tabs ? pango_tab_array_copy (priv->tabs) : NULL;
@@ -8750,7 +8739,7 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
   if (adjustment == priv->hadjustment)
     {
       dx = priv->xoffset - value;
-      priv->xoffset = value - priv->left_padding;
+      priv->xoffset = value;
     }
   else if (adjustment == priv->vadjustment)
     {
