@@ -342,7 +342,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
                           G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
-   * GtkMediaStream:ended:
+   * GtkMediaStream:ended: (getter get_ended)
    *
    * Set when playback has finished.
    */
