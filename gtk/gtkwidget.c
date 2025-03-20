@@ -1300,7 +1300,7 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
-   * GtkWidget:sensitive:
+   * GtkWidget:sensitive: (getter get_sensitive)
    *
    * Whether the widget responds to input.
    */
