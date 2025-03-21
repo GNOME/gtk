@@ -46,7 +46,9 @@ typedef struct _GtkCellLayoutIface      GtkCellLayoutIface;
  * @data: (closure): user data passed to gtk_cell_layout_set_cell_data_func()
  *
  * A function which should set the value of @cell_layout’s cell renderer(s)
- * as appropriate. 
+ * as appropriate.
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 typedef void (* GtkCellLayoutDataFunc) (GtkCellLayout   *cell_layout,
                                         GtkCellRenderer *cell,

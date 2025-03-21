@@ -62,6 +62,8 @@ GType gtk_file_chooser_get_type (void) G_GNUC_CONST;
  * GTK_FILE_CHOOSER_ERROR:
  *
  * Used to get the `GError` quark for `GtkFileChooser` errors.
+ *
+ * Deprecated: 4.10: There is no replacement
  */
 #define GTK_FILE_CHOOSER_ERROR (gtk_file_chooser_error_quark ())
 
@@ -76,6 +78,8 @@ GType gtk_file_chooser_get_type (void) G_GNUC_CONST;
  *
  * These identify the various errors that can occur while calling
  * `GtkFileChooser` functions.
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 typedef enum {
   GTK_FILE_CHOOSER_ERROR_NONEXISTENT,

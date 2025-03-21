@@ -53,6 +53,7 @@ typedef struct _GtkTreeModelIface   GtkTreeModelIface;
  *
  * Returns: %TRUE to stop iterating, %FALSE to continue
  *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef gboolean (* GtkTreeModelForeachFunc) (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, gpointer data);
 
@@ -70,7 +71,7 @@ typedef gboolean (* GtkTreeModelForeachFunc) (GtkTreeModel *model, GtkTreePath *
  * of %GTK_TREE_MODEL_ITERS_PERSIST can be found in the overview of
  * this section.
  *
- * Deprecated: 4.10
+ * Deprecated: 4.10: There is no replacement
  */
 typedef enum
 {

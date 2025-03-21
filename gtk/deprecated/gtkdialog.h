@@ -40,6 +40,8 @@ G_BEGIN_DECLS
  *   bar instead of action area
  *
  * Flags used to influence dialog construction.
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef enum
 {
@@ -67,6 +69,8 @@ typedef enum
  *
  * All predefined values are negative; GTK leaves values of 0 or greater for
  * application-defined response ids.
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef enum
 {

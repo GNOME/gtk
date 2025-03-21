@@ -37,6 +37,8 @@ typedef struct _GtkCellRendererAccel GtkCellRendererAccel;
  * @GTK_CELL_RENDERER_ACCEL_MODE_OTHER: Other accelerator mode
  *
  * The available modes for [property@Gtk.CellRendererAccel:accel-mode].
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 typedef enum
 {
@@ -53,5 +55,3 @@ GtkCellRenderer *gtk_cell_renderer_accel_new             (void);
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkCellRendererAccel, g_object_unref)
 
 G_END_DECLS
-
-

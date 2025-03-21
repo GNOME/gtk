@@ -773,6 +773,8 @@ typedef enum
  * @GTK_TREE_VIEW_GRID_LINES_BOTH: Horizontal and vertical grid lines.
  *
  * Used to indicate which grid lines to draw in a tree view.
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 typedef enum
 {
@@ -1722,57 +1724,57 @@ typedef enum {
 
 /**
  * GTK_ACCESSIBLE_RELATION_LABEL_FOR:
- * 
+ *
  * Identifies the element (or elements) that are labeled by the
  * current element. Value type: reference
- * 
+ *
  * This relation is managed by GTK and should not be set from application code.
- * 
+ *
  * Since: 4.18
  */
 /**
  * GTK_ACCESSIBLE_RELATION_DESCRIPTION_FOR:
- * 
+ *
  * Identifies the element (or elements) that are described by
  * the current element. Value type: reference
- * 
+ *
  * This relation is managed by GTK and should not be set from application code.
- * 
+ *
  * Since: 4.18
  */
 /**
  * GTK_ACCESSIBLE_RELATION_CONTROLLED_BY:
- * 
+ *
  * Identifies the element (or elements) that the current
  * element is controlled by. Value type: reference
- * 
+ *
  * This relation is managed by GTK and should not be set from application code.
- * 
+ *
  * Since: 4.18
  */
 /**
  * GTK_ACCESSIBLE_RELATION_DETAILS_FOR:
- * 
+ *
  * Identifies the element (or elements) for which the current
  * element provides additional information. Value type: reference
- * 
+ *
  * This relation is managed by GTK and should not be set from application code.
- * 
+ *
  * Since: 4.18
  */
 /**
  * GTK_ACCESSIBLE_RELATION_ERROR_MESSAGE_FOR:
- * 
+ *
  * Identifies the element (or elements) for which the current
  * element provides an error message. Value type: reference
- * 
+ *
  * This relation is managed by GTK and should not be set from application code.
- * 
+ *
  * Since: 4.18
  */
 /**
  * GTK_ACCESSIBLE_RELATION_FLOW_FROM:
- * 
+ *
  * Identifies the previous element (or elements) in an alternate
  * reading order of content which, at the user's discretion, allows
  * assistive technology to override the general default of reading in

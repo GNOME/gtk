@@ -45,6 +45,8 @@ typedef struct _GtkTreeViewColumn        GtkTreeViewColumn;
  * The sizing method the column uses to determine its width.  Please note
  * that %GTK_TREE_VIEW_COLUMN_AUTOSIZE are inefficient for large views, and
  * can make columns appear choppy.
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef enum
 {
@@ -69,6 +71,8 @@ typedef enum
  * the “text” attribute of “cell” by converting it to its written equivalent.
  *
  * See also: gtk_tree_view_column_set_cell_data_func()
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 typedef void (* GtkTreeCellDataFunc) (GtkTreeViewColumn *tree_column,
 				      GtkCellRenderer   *cell,
@@ -248,5 +252,3 @@ GtkWidget              *gtk_tree_view_column_get_button          (GtkTreeViewCol
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkTreeViewColumn, g_object_unref)
 
 G_END_DECLS
-
-

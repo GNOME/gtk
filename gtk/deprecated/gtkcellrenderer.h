@@ -38,6 +38,8 @@ G_BEGIN_DECLS
  * @GTK_CELL_RENDERER_EXPANDED: The cell is in a row that is expanded
  *
  * Tells how a cell is to be rendered.
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef enum
 {
@@ -61,6 +63,8 @@ typedef enum
  * @GTK_CELL_RENDERER_MODE_EDITABLE: The cell can be edited or otherwise modified.
  *
  * Identifies how the user can interact with a particular cell.
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef enum
 {
