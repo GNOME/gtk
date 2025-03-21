@@ -40,6 +40,8 @@ G_BEGIN_DECLS
  * See [method@Gtk.FontChooser.set_filter_func].
  *
  * Returns: %TRUE if the font should be displayed
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 typedef gboolean (*GtkFontFilterFunc) (const PangoFontFamily *family,
                                        const PangoFontFace   *face,
@@ -58,6 +60,8 @@ typedef gboolean (*GtkFontFilterFunc) (const PangoFontFamily *family,
  *
  * This enumeration may be extended in the future; applications should
  * ignore unknown values.
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef enum {
   GTK_FONT_CHOOSER_LEVEL_FAMILY     = 0,
