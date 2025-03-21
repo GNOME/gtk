@@ -53,6 +53,8 @@ typedef struct _GtkEntryCompletion            GtkEntryCompletion;
  *
  * Returns: %TRUE if @iter should be displayed as a possible completion
  *   for @key
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 typedef gboolean (* GtkEntryCompletionMatchFunc) (GtkEntryCompletion *completion,
                                                   const char         *key,

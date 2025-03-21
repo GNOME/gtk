@@ -45,6 +45,8 @@ typedef struct _GtkIconView           GtkIconView;
  * selected rows.
  *
  * It will be called on every selected row in the view.
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef void (* GtkIconViewForeachFunc)     (GtkIconView      *icon_view,
                                              GtkTreePath      *path,
@@ -60,6 +62,8 @@ typedef void (* GtkIconViewForeachFunc)     (GtkIconView      *icon_view,
  * @GTK_ICON_VIEW_DROP_BELOW: dropped item is inserted below
  *
  * An enum for determining where a dropped item goes.
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef enum
 {
@@ -284,4 +288,3 @@ int      gtk_icon_view_get_tooltip_column                     (GtkIconView      
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkIconView, g_object_unref)
 
 G_END_DECLS
-

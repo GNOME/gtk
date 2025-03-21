@@ -36,6 +36,8 @@ G_BEGIN_DECLS
  * @GTK_TREE_VIEW_DROP_INTO_OR_AFTER: dropped row becomes a child or is inserted after
  *
  * An enum for determining where a dropped row goes.
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef enum
 {
@@ -78,6 +80,8 @@ typedef struct _GtkTreeSelection      GtkTreeSelection;
  * spot to the user.
  *
  * Returns: %TRUE, if @column can be dropped in this spot
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef gboolean (* GtkTreeViewColumnDropFunc) (GtkTreeView             *tree_view,
 						GtkTreeViewColumn       *column,
@@ -92,6 +96,8 @@ typedef gboolean (* GtkTreeViewColumnDropFunc) (GtkTreeView             *tree_vi
  * @user_data: user data
  *
  * Function used for gtk_tree_view_map_expanded_rows().
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef void     (* GtkTreeViewMappingFunc)    (GtkTreeView             *tree_view,
 						GtkTreePath             *path,
@@ -112,6 +118,8 @@ typedef void     (* GtkTreeViewMappingFunc)    (GtkTreeView             *tree_vi
  * has some similarity to strcmp() returning 0 for equal strings.
  *
  * Returns: %FALSE if the row matches, %TRUE otherwise.
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef gboolean (*GtkTreeViewSearchEqualFunc) (GtkTreeModel            *model,
 						int                      column,
@@ -131,6 +139,8 @@ typedef gboolean (*GtkTreeViewSearchEqualFunc) (GtkTreeModel            *model,
  * returns.
  *
  * Returns: %TRUE if the row is a separator
+ *
+ * Deprecated: 4.20: There is no replacement.
  */
 typedef gboolean (*GtkTreeViewRowSeparatorFunc) (GtkTreeModel      *model,
 						 GtkTreeIter       *iter,

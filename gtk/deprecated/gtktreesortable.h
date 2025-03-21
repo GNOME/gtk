@@ -39,6 +39,8 @@ G_BEGIN_DECLS
  * Uses the default sort function in a [iface@Gtk.TreeSortable].
  *
  * See also: [method@Gtk.TreeSortable.set_sort_column_id]
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 #define GTK_TREE_SORTABLE_DEFAULT_SORT_COLUMN_ID (-1)
 
@@ -48,6 +50,8 @@ G_BEGIN_DECLS
  * Disables sorting in a [iface@Gtk.TreeSortable].
  *
  * See also: [method@Gtk.TreeSortable.set_sort_column_id]
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 #define GTK_TREE_SORTABLE_UNSORTED_SORT_COLUMN_ID (-2)
 
@@ -77,6 +81,8 @@ typedef struct _GtkTreeSortableIface GtkTreeSortableIface;
  *
  * Returns: a negative integer, zero or a positive integer depending on whether
  *   @a sorts before, with or after @b
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 typedef int (* GtkTreeIterCompareFunc) (GtkTreeModel *model,
 					GtkTreeIter  *a,

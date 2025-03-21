@@ -51,6 +51,8 @@ typedef struct _GtkCellAreaContext       GtkCellAreaContext;
  *
  * This macro should be used to emit a standard warning about unexpected
  * properties in set_cell_property() and get_cell_property() implementations.
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 #define GTK_CELL_AREA_WARN_INVALID_CELL_PROPERTY_ID(object, property_id, pspec) \
   G_OBJECT_WARN_INVALID_PSPEC ((object), "cell property id", (property_id), (pspec))
@@ -64,6 +66,8 @@ typedef struct _GtkCellAreaContext       GtkCellAreaContext;
  * the cell renderers of a `GtkCellArea`, see gtk_cell_area_foreach().
  *
  * Returns: %TRUE to stop iterating over cells.
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 typedef gboolean    (*GtkCellCallback) (GtkCellRenderer  *renderer,
                                         gpointer          data);
@@ -82,6 +86,8 @@ typedef gboolean    (*GtkCellCallback) (GtkCellRenderer  *renderer,
  * see gtk_cell_area_foreach_alloc().
  *
  * Returns: %TRUE to stop iterating over cells.
+ *
+ * Deprecated: 4.20: There is no replacement
  */
 typedef gboolean    (*GtkCellAllocCallback) (GtkCellRenderer    *renderer,
                                              const GdkRectangle *cell_area,
