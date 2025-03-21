@@ -1148,7 +1148,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                         -1, G_MAXINT,
                         -1,
                         GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
-
+  /**
+   * GtkWidget:visible: (getter get_visible)
+   */
   widget_props[PROP_VISIBLE] =
       g_param_spec_boolean ("visible",
                             P_("Visible"),
@@ -1156,6 +1158,9 @@ gtk_widget_class_init (GtkWidgetClass *klass)
                             FALSE,
                             GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  /**
+   * GtkWidget:visible: (getter get_sensitive)
+   */
   widget_props[PROP_SENSITIVE] =
       g_param_spec_boolean ("sensitive",
                             P_("Sensitive"),
