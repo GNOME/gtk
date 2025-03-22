@@ -504,6 +504,7 @@ struct _GdkMemoryFormatDescription
 #endif
   struct {
     guint32 rgb_fourcc;
+    guint32 yuv_fourcc;
   } dmabuf;
   /* no premultiplication going on here */
   void (* to_float) (float (*)[4], const guchar *, const GdkMemoryLayout *, gsize);
@@ -559,6 +560,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ARGB8888,
+        .yuv_fourcc = DRM_FORMAT_AYUV,
     },
     .to_float = b8g8r8a8_premultiplied_to_float,
     .from_float = b8g8r8a8_premultiplied_from_float,
@@ -603,6 +605,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_BGRA8888,
+        .yuv_fourcc = 0,
     },
     .to_float = a8r8g8b8_premultiplied_to_float,
     .from_float = a8r8g8b8_premultiplied_from_float,
@@ -645,6 +648,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ABGR8888,
+        .yuv_fourcc = DRM_FORMAT_AVUY8888,
     },
     .to_float = r8g8b8a8_premultiplied_to_float,
     .from_float = r8g8b8a8_premultiplied_from_float,
@@ -689,6 +693,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_RGBA8888,
+        .yuv_fourcc = 0,
     },
     .to_float = a8b8g8r8_premultiplied_to_float,
     .from_float = a8b8g8r8_premultiplied_from_float,
@@ -733,6 +738,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ARGB8888,
+        .yuv_fourcc = DRM_FORMAT_AYUV,
     },
     .to_float = b8g8r8a8_to_float,
     .from_float = b8g8r8a8_from_float,
@@ -777,6 +783,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_BGRA8888,
+        .yuv_fourcc = 0,
     },
     .to_float = a8r8g8b8_to_float,
     .from_float = a8r8g8b8_from_float,
@@ -819,6 +826,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ABGR8888,
+        .yuv_fourcc = DRM_FORMAT_AVUY8888,
     },
     .to_float = r8g8b8a8_to_float,
     .from_float = r8g8b8a8_from_float,
@@ -863,6 +871,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_RGBA8888,
+        .yuv_fourcc = 0,
     },
     .to_float = a8b8g8r8_to_float,
     .from_float = a8b8g8r8_from_float,
@@ -907,6 +916,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_XRGB8888,
+        .yuv_fourcc = DRM_FORMAT_XYUV8888,
     },
     .to_float = b8g8r8x8_to_float,
     .from_float = b8g8r8x8_from_float,
@@ -952,6 +962,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_BGRX8888,
+        .yuv_fourcc = 0,
     },
     .to_float = x8r8g8b8_to_float,
     .from_float = x8r8g8b8_from_float,
@@ -995,6 +1006,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_XBGR8888,
+        .yuv_fourcc = DRM_FORMAT_XVUY8888,
     },
     .to_float = r8g8b8x8_to_float,
     .from_float = r8g8b8x8_from_float,
@@ -1040,6 +1052,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_RGBX8888,
+        .yuv_fourcc = 0,
     },
     .to_float = x8b8g8r8_to_float,
     .from_float = x8b8g8r8_from_float,
@@ -1084,6 +1097,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_BGR888,
+        .yuv_fourcc = DRM_FORMAT_VUY888,
     },
     .to_float = r8g8b8_to_float,
     .from_float = r8g8b8_from_float,
@@ -1128,6 +1142,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_RGB888,
+        .yuv_fourcc = 0,
     },
     .to_float = b8g8r8_to_float,
     .from_float = b8g8r8_from_float,
@@ -1174,6 +1189,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = r16g16b16_to_float,
     .from_float = r16g16b16_from_float,
@@ -1219,6 +1235,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ABGR16161616,
+        .yuv_fourcc = 0,
     },
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
@@ -1264,6 +1281,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ABGR16161616,
+        .yuv_fourcc = 0,
     },
     .to_float = r16g16b16a16_to_float,
     .from_float = r16g16b16a16_from_float,
@@ -1309,6 +1327,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = r16g16b16_float_to_float,
     .from_float = r16g16b16_float_from_float,
@@ -1353,6 +1372,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ABGR16161616F,
+        .yuv_fourcc = 0,
     },
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
@@ -1397,6 +1417,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ABGR16161616F,
+        .yuv_fourcc = 0,
     },
     .to_float = r16g16b16a16_float_to_float,
     .from_float = r16g16b16a16_float_from_float,
@@ -1442,6 +1463,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = r32g32b32_float_to_float,
     .from_float = r32g32b32_float_from_float,
@@ -1486,6 +1508,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
@@ -1530,6 +1553,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = r32g32b32a32_float_to_float,
     .from_float = r32g32b32a32_float_from_float,
@@ -1573,6 +1597,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = g8a8_premultiplied_to_float,
     .from_float = g8a8_premultiplied_from_float,
@@ -1616,6 +1641,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = g8a8_to_float,
     .from_float = g8a8_from_float,
@@ -1659,6 +1685,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_R8,
+        .yuv_fourcc = 0,
     },
     .to_float = g8_to_float,
     .from_float = g8_from_float,
@@ -1705,6 +1732,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = g16a16_premultiplied_to_float,
     .from_float = g16a16_premultiplied_from_float,
@@ -1751,6 +1779,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = g16a16_to_float,
     .from_float = g16a16_from_float,
@@ -1797,6 +1826,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_R16,
+        .yuv_fourcc = 0,
     },
     .to_float = g16_to_float,
     .from_float = g16_from_float,
@@ -1840,6 +1870,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = a8_to_float,
     .from_float = a8_from_float,
@@ -1886,6 +1917,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = a16_to_float,
     .from_float = a16_from_float,
@@ -1931,6 +1963,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = a16_float_to_float,
     .from_float = a16_float_from_float,
@@ -1976,6 +2009,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 #endif
     .dmabuf = {
         .rgb_fourcc = 0,
+        .yuv_fourcc = 0,
     },
     .to_float = a32_float_to_float,
     .from_float = a32_float_from_float,
@@ -2505,7 +2539,8 @@ gdk_memory_format_vk_rgba_format (GdkMemoryFormat     format,
 gboolean
 gdk_memory_format_find_by_dmabuf_fourcc (guint32          fourcc,
                                          gboolean         premultiplied,
-                                         GdkMemoryFormat *out_format)
+                                         GdkMemoryFormat *out_format,
+                                         gboolean        *out_is_yuv)
 {
 #ifdef HAVE_DMABUF
   gsize i;
@@ -2518,6 +2553,16 @@ gdk_memory_format_find_by_dmabuf_fourcc (guint32          fourcc,
             *out_format = memory_formats[i].premultiplied;
           else
             *out_format = memory_formats[i].straight;
+          *out_is_yuv = FALSE;
+          return TRUE;
+        }
+      if (memory_formats[i].dmabuf.yuv_fourcc == fourcc)
+        {
+          if (premultiplied)
+            *out_format = memory_formats[i].premultiplied;
+          else
+            *out_format = memory_formats[i].straight;
+          *out_is_yuv = TRUE;
           return TRUE;
         }
     }
@@ -2547,6 +2592,28 @@ guint32
 gdk_memory_format_get_dmabuf_rgb_fourcc (GdkMemoryFormat format)
 {
   return memory_formats[format].dmabuf.rgb_fourcc;
+}
+
+/*<private>
+ * gdk_memory_format_get_dmabuf_yuv_fourcc:
+ * @format: The memory format
+ *
+ * Gets the dmabuf fourcc for YUV data in a given memory format.
+ *
+ * The format is an exact match, so data can be copied between the
+ * dmabuf and data of the format. This is different from the
+ * memoryformat returned by a GdkDmabufTexture, which is just the
+ * closest match.
+ *
+ * Not all formats have a corresponding YUV dmabuf format.
+ * In those cases 0 will be returned.
+ *
+ * Returns: the YUV fourcc or 0
+ **/
+guint32
+gdk_memory_format_get_dmabuf_yuv_fourcc (GdkMemoryFormat format)
+{
+  return memory_formats[format].dmabuf.yuv_fourcc;
 }
 
 const char *

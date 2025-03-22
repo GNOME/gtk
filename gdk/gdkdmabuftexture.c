@@ -223,9 +223,9 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
                             error))
     return NULL;
 
-  if (gdk_memory_format_find_by_dmabuf_fourcc (dmabuf.fourcc, premultiplied, &format))
+  if (gdk_memory_format_find_by_dmabuf_fourcc (dmabuf.fourcc, premultiplied, &format, &is_yuv))
     {
-      is_yuv = FALSE;
+      /* nothing to do */
     }
   else
     {
