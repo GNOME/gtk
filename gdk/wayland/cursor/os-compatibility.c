@@ -154,9 +154,7 @@ os_create_anonymous_file(off_t size)
 
 #ifdef HAVE_POSIX_FALLOCATE
 	ret = posix_fallocate(fd, 0, size);
-        if (ret == 0) {
-                goto allocated;
-        }
+        if (ret != 0) {
 #endif
 
 	ret = ftruncate(fd, size);
@@ -166,7 +164,9 @@ os_create_anonymous_file(off_t size)
 		return -1;
 	}
 
-allocated:
+#ifdef HAVE_POSIX_FALLOCATE
+        }
+#endif
         if (fd >= 0 && name)
                 unlink (name);
 
