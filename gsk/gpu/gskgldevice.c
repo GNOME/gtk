@@ -620,8 +620,8 @@ gsk_gl_device_get_format_flags (GskGLDevice      *self,
 
   if ((gl_flags & GDK_GL_FORMAT_RENDERABLE) && gsk_gl_swizzle_is_framebuffer_compatible (swizzle))
     *out_flags |= GSK_GPU_IMAGE_RENDERABLE;
-  else if (gdk_gl_context_get_use_es (context))
-    *out_flags |= GSK_GPU_IMAGE_NO_BLIT;
+  else if (!gdk_gl_context_get_use_es (context))
+    *out_flags |= GSK_GPU_IMAGE_BLIT;
   if (gl_flags & GDK_GL_FORMAT_FILTERABLE)
     *out_flags |= GSK_GPU_IMAGE_FILTERABLE;
   if ((gl_flags & (GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE))
