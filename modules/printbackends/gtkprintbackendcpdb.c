@@ -1392,7 +1392,6 @@ printer_updates_callback (cpdb_frontend_obj_t     *frontend_obj,
 
     case CPDB_CHANGE_PRINTER_REMOVED:
       cpdb_remove_gtk_printer (gtk_print_backend, printer_obj);
-      cpdbDeletePrinterObj (printer_obj);
       break;
 
     case CPDB_CHANGE_PRINTER_STATE_CHANGED:
