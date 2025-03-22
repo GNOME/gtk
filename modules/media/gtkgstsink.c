@@ -190,17 +190,13 @@ gtk_gst_color_state_from_colorimetry (GtkGstSink                *self,
   else
     gdk_cicp_params_set_transfer_function (params, gst_video_transfer_function_to_iso (colorimetry->transfer));
 
-#if 0
   if (colorimetry->matrix == GST_VIDEO_COLOR_MATRIX_UNKNOWN)
     gdk_cicp_params_set_matrix_coefficients (params, 6);
   else
     gdk_cicp_params_set_matrix_coefficients (params, gst_video_color_matrix_to_iso (colorimetry->matrix));
 
   gdk_cicp_params_set_range (params, colorimetry->range == GST_VIDEO_COLOR_RANGE_0_255 ? GDK_CICP_RANGE_FULL : GDK_CICP_RANGE_NARROW);
-#else
-  gdk_cicp_params_set_matrix_coefficients (params, 0);
-  gdk_cicp_params_set_range (params, GDK_CICP_RANGE_FULL);
-#endif
+
   color_state = gdk_cicp_params_build_color_state (params, &error);
   g_object_unref (params);
 
