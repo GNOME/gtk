@@ -450,7 +450,8 @@ gdk_memory_texture_builder_get_height (GdkMemoryTextureBuilder *self)
  *
  * Sets the height of the texture.
  *
- * The height must be set before calling [method@Gdk.MemoryTextureBuilder.build].
+ * The height must be set before calling [method@Gdk.MemoryTextureBuilder.build]
+ * and conform to size requirements of the provided format.
  *
  * Since: 4.16
  */
@@ -494,7 +495,8 @@ gdk_memory_texture_builder_get_width (GdkMemoryTextureBuilder *self)
  *
  * Sets the width of the texture.
  *
- * The width must be set before calling [method@Gdk.MemoryTextureBuilder.build].
+ * The width must be set before calling [method@Gdk.MemoryTextureBuilder.build]
+ * and conform to size requirements of the provided format.
  *
  * Since: 4.16
  */
@@ -718,6 +720,8 @@ gdk_memory_texture_builder_build (GdkMemoryTextureBuilder *self)
   g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self), NULL);
   g_return_val_if_fail (self->width > 0, NULL);
   g_return_val_if_fail (self->height > 0, NULL);
+  g_return_val_if_fail (self->width % gdk_memory_format_get_block_width (self->format) == 0, NULL);
+  g_return_val_if_fail (self->height % gdk_memory_format_get_block_height (self->format) == 0, NULL);
   g_return_val_if_fail (self->bytes != NULL, NULL);
   g_return_val_if_fail (self->stride >= self->width * gdk_memory_format_bytes_per_pixel (self->format), NULL);
   /* needs to be this complex to support subtexture of the bottom right part */
