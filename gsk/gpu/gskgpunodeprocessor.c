@@ -748,7 +748,7 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
                                                 width, height);
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_BLIT) &&
-      (flags & (GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_STRAIGHT_ALPHA | GSK_GPU_IMAGE_FILTERABLE)) == GSK_GPU_IMAGE_FILTERABLE &&
+      (flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_STRAIGHT_ALPHA | GSK_GPU_IMAGE_FILTERABLE)) == (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_BLIT) &&
       gdk_color_state_equal (ccs, image_cs))
     {
       gsk_gpu_blit_op (frame,

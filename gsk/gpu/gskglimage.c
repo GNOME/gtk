@@ -119,8 +119,8 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
     {
       self->gl_internal_format = gl_internal_format;
     }
-  if (!swizzle_is_identity (swizzle))
-    flags |= GSK_GPU_IMAGE_NO_BLIT;
+  if (swizzle_is_identity (swizzle))
+    flags |= GSK_GPU_IMAGE_BLIT;
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, format, width, height);
 
@@ -176,8 +176,8 @@ gsk_gl_image_new (GskGLDevice      *device,
     {
       self->gl_internal_format = gl_internal_format;
     }
-  if (!swizzle_is_identity (swizzle))
-    flags |= GSK_GPU_IMAGE_NO_BLIT;
+  if (swizzle_is_identity (swizzle))
+    flags |= GSK_GPU_IMAGE_BLIT;
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags,
@@ -243,12 +243,15 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
   self->gl_internal_format = gl_internal_format;
 
   if (format != real_format)
-    flags = GSK_GPU_IMAGE_NO_BLIT | 
-            (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0);
+    {
+      flags = (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0);
+    }
   else
-    flags &= ~(GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP);
-  if (!swizzle_is_identity (swizzle))
-    flags |= GSK_GPU_IMAGE_NO_BLIT;
+    {
+      flags &= ~(GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP);
+      if (swizzle_is_identity (swizzle) && (extra_flags & GSK_GPU_IMAGE_EXTERNAL) == 0)
+        flags |= GSK_GPU_IMAGE_BLIT;
+    }
   
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags | extra_flags,

@@ -207,7 +207,7 @@ gsk_gpu_blit_op (GskGpuFrame                 *frame,
 {
   GskGpuBlitOp *self;
 
-  g_assert ((gsk_gpu_image_get_flags (src_image) & GSK_GPU_IMAGE_NO_BLIT) == 0);
+  g_assert (gsk_gpu_image_get_flags (src_image) & GSK_GPU_IMAGE_BLIT);
   g_assert (filter != GSK_GPU_BLIT_LINEAR || (gsk_gpu_image_get_flags (src_image) & GSK_GPU_IMAGE_FILTERABLE) == GSK_GPU_IMAGE_FILTERABLE);
   g_assert ((gsk_gpu_image_get_flags (dest_image) & GSK_GPU_IMAGE_RENDERABLE) == GSK_GPU_IMAGE_RENDERABLE);
 

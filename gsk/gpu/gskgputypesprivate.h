@@ -25,7 +25,7 @@ typedef enum {
   GSK_GPU_IMAGE_EXTERNAL       = (1 << 0),
   GSK_GPU_IMAGE_TOGGLE_REF     = (1 << 1),
   GSK_GPU_IMAGE_STRAIGHT_ALPHA = (1 << 2),
-  GSK_GPU_IMAGE_NO_BLIT        = (1 << 3),
+  GSK_GPU_IMAGE_BLIT           = (1 << 3),
   GSK_GPU_IMAGE_CAN_MIPMAP     = (1 << 4),
   GSK_GPU_IMAGE_MIPMAP         = (1 << 5),
   GSK_GPU_IMAGE_FILTERABLE     = (1 << 6),
