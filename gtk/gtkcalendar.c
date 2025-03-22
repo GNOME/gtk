@@ -1568,6 +1568,8 @@ gtk_calendar_new (void)
  * @date: (transfer none): a `GDateTime` representing the day to select
  *
  * Switches to @date's year and month and select its day.
+ *
+ * Deprecated: 4.20: Use [method@Calendar.set_date] instead.
  */
 void
 gtk_calendar_select_day (GtkCalendar *calendar,

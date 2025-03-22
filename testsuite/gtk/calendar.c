@@ -29,31 +29,6 @@ test_calendar_set_get_properties (void)
 }
 
 static void
-test_calendar_select_day (void)
-{
-  GtkWidget *cal;
-  GTimeZone *tz;
-  GDateTime *dt;
-  GDateTime *dt2;
-
-  cal = gtk_calendar_new ();
-
-  tz = g_time_zone_new_offset (2 * 60 * 60);
-  g_assert_nonnull (tz);
-  dt = g_date_time_new (tz, 1970, 3, 1, 0, 0, 0);
-  g_assert_nonnull (dt);
-
-  gtk_calendar_select_day (GTK_CALENDAR (cal), dt);
-
-  dt2 = gtk_calendar_get_date (GTK_CALENDAR (cal));
-  g_assert_true (g_date_time_equal (dt, dt2));
-
-  g_date_time_unref (dt);
-  g_date_time_unref (dt2);
-  g_time_zone_unref (tz);
-}
-
-static void
 test_calendar_set_date (void)
 {
   GtkWidget *calendar;
@@ -132,7 +107,6 @@ main (int argc, char *argv[])
   (g_test_init) (&argc, &argv, NULL);
 
   g_test_add_func ("/calendar/set_get_properties", test_calendar_set_get_properties);
-  g_test_add_func ("/calendar/select_day", test_calendar_select_day);
   g_test_add_func ("/calendar/set_date", test_calendar_set_date);
   g_test_add_func ("/calendar/get_date", test_calendar_get_date);
   g_test_add_func ("/calendar/set_get_day", test_calendar_set_get_day);

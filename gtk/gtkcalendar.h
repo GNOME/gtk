@@ -49,7 +49,7 @@ GType	   gtk_calendar_get_type	(void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
 GtkWidget* gtk_calendar_new		(void);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_20_FOR (gtk_calendar_set_date)
 void          gtk_calendar_select_day                  (GtkCalendar *self,
                                                         GDateTime   *date);
 
