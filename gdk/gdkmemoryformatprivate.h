@@ -54,6 +54,8 @@ typedef enum {
 
 #define GDK_MEMORY_DEPTH_BITS 3
 
+#define GDK_MEMORY_MAX_PLANES 4
+
 gsize                   gdk_memory_format_alignment         (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryAlpha          gdk_memory_format_alpha             (GdkMemoryFormat             format) G_GNUC_CONST;
 gsize                   gdk_memory_format_bytes_per_pixel   (GdkMemoryFormat             format) G_GNUC_CONST;
@@ -63,6 +65,10 @@ const GdkMemoryFormat * gdk_memory_format_get_fallbacks     (GdkMemoryFormat    
 GdkMemoryDepth          gdk_memory_format_get_depth         (GdkMemoryFormat             format,
                                                              gboolean                    srgb) G_GNUC_CONST;
 gsize                   gdk_memory_format_get_n_planes      (GdkMemoryFormat             format) G_GNUC_CONST;
+gsize                   gdk_memory_format_get_block_width   (GdkMemoryFormat             format,
+                                                             gsize                       plane) G_GNUC_CONST;
+gsize                   gdk_memory_format_get_block_height  (GdkMemoryFormat             format,
+                                                             gsize                       plane) G_GNUC_CONST;
 gsize                   gdk_memory_format_min_buffer_size   (GdkMemoryFormat             format,
                                                              gsize                       stride,
                                                              gsize                       width,
