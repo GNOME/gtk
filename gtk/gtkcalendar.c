@@ -397,6 +397,9 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * The selected year.
    *
    * This property gets initially set to the current year.
+   *
+   * Deprecated: 4.20: This property will be removed in GTK 5.
+   *   Use [property@Calendar:date] instead.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_YEAR,
@@ -410,6 +413,9 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * The selected month (as a number between 0 and 11).
    *
    * This property gets initially set to the current month.
+   *
+   * Deprecated: 4.20: This property will be removed in GTK 5.
+   *   Use [property@Calendar:date] instead.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_MONTH,
@@ -421,6 +427,9 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * GtkCalendar:day:
    *
    * The selected day (as a number between 1 and 31).
+   *
+   * Deprecated: 4.20: This property will be removed in GTK 5.
+   *   Use [property@Calendar:date] instead.
    */
   g_object_class_install_property (gobject_class,
                                    PROP_DAY,

@@ -6,7 +6,6 @@ static void
 test_calendar_set_get_properties (void)
 {
   GtkWidget *calendar;
-  int year, month, day;
   GDateTime *date_in;
   GDateTime *date_out;
 
@@ -17,15 +16,6 @@ test_calendar_set_get_properties (void)
   g_assert_true (g_date_time_equal (date_in, date_out));
   g_date_time_unref (date_out);
   g_date_time_unref (date_in);
-  g_object_set (calendar, "year", 2024, NULL);
-  g_object_get (calendar, "year", &year, NULL);
-  g_assert_cmpint (year, ==, 2024);
-  g_object_set (calendar, "month", 0, NULL); /* January */
-  g_object_get (calendar, "month", &month, NULL);
-  g_assert_cmpint (month, ==, 0);
-  g_object_set (calendar, "day", 15, NULL);
-  g_object_get (calendar, "day", &day, NULL);
-  g_assert_cmpint (day, ==, 15);
 }
 
 static void

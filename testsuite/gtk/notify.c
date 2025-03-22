@@ -578,11 +578,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   else if (g_type_is_a (type, GTK_TYPE_CALENDAR))
     {
       /* avoid day 30 and 31, since they don't exist in February */
-      instance = g_object_new (type,
-                               "year", 1984,
-                               "day", 05,
-                               "month", 10,
-                               NULL);
+      GDateTime *date;
+      date = g_date_time_new_from_iso8601 ("1984-05-10T00:00:00Z", NULL);
+      instance = g_object_new (type, "date", date, NULL);
+      g_date_time_unref (date);
     }
   /* special casing for singletons */
   else if (g_type_is_a (type, GTK_TYPE_NEVER_TRIGGER))
