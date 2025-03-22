@@ -1,12 +1,22 @@
+#include <glib-object.h>
+#include <glib.h>
 #include <gtk/gtk.h>
 
 static void
-test_calendar_get_set_properties (void)
+test_calendar_set_get_properties (void)
 {
   GtkWidget *calendar;
   int year, month, day;
+  GDateTime *date_in;
+  GDateTime *date_out;
 
   calendar = gtk_calendar_new ();
+  date_in = g_date_time_new_from_iso8601 ("1970-01-01T00:00:00Z", NULL);
+  g_object_set (calendar, "date", date_in, NULL);
+  g_object_get (calendar, "date", &date_out, NULL);
+  g_assert_true (g_date_time_equal (date_in, date_out));
+  g_date_time_unref (date_out);
+  g_date_time_unref (date_in);
   g_object_set (calendar, "year", 2024, NULL);
   g_object_get (calendar, "year", &year, NULL);
   g_assert_cmpint (year, ==, 2024);
@@ -44,25 +54,33 @@ test_calendar_select_day (void)
 }
 
 static void
+test_calendar_set_date (void)
+{
+  GtkWidget *calendar;
+  GDateTime *date_in;
+  GDateTime *date_out;
+  calendar = gtk_calendar_new ();
+  date_in = g_date_time_new_from_iso8601 ("2110-11-03T20:20:05Z", NULL);
+  gtk_calendar_set_date (GTK_CALENDAR (calendar), date_in);
+  g_object_get (calendar, "date", &date_out, NULL);
+  g_assert_true (g_date_time_equal (date_in, date_out));
+  g_date_time_unref (date_out);
+  g_date_time_unref (date_in);
+}
+
+static void
 test_calendar_get_date (void)
 {
-  GtkWidget *cal;
-  GDateTime *dt2;
-
-  cal = gtk_calendar_new ();
-
-  g_object_set (cal,
-                "year", 1970,
-                "month", 2, /* March */
-                "day", 1,
-                NULL);
-
-  dt2 = gtk_calendar_get_date (GTK_CALENDAR (cal));
-  g_assert_cmpint (g_date_time_get_year (dt2), ==, 1970);
-  g_assert_cmpint (g_date_time_get_month (dt2), ==, 3);
-  g_assert_cmpint (g_date_time_get_day_of_month (dt2), ==, 1);
-
-  g_date_time_unref (dt2);
+  GtkWidget *calendar;
+  GDateTime *date_in;
+  GDateTime *date_out;
+  calendar = gtk_calendar_new ();
+  date_in = g_date_time_new_from_iso8601 ("0010-11-25T10:20:30Z", NULL);
+  g_object_set (calendar, "date", date_in, NULL);
+  date_out = gtk_calendar_get_date (GTK_CALENDAR (calendar));
+  g_assert_true (g_date_time_equal (date_in, date_out));
+  g_date_time_unref (date_out);
+  g_date_time_unref (date_in);
 }
 
 static void
@@ -113,9 +131,10 @@ main (int argc, char *argv[])
   gtk_init ();
   (g_test_init) (&argc, &argv, NULL);
 
-  g_test_add_func ("/calendar/get_set_properties", test_calendar_get_set_properties);
+  g_test_add_func ("/calendar/set_get_properties", test_calendar_set_get_properties);
   g_test_add_func ("/calendar/select_day", test_calendar_select_day);
-  g_test_add_func ("/calendar/test_calendar_get_date", test_calendar_get_date);
+  g_test_add_func ("/calendar/set_date", test_calendar_set_date);
+  g_test_add_func ("/calendar/get_date", test_calendar_get_date);
   g_test_add_func ("/calendar/set_get_day", test_calendar_set_get_day);
   g_test_add_func ("/calendar/set_get_month", test_calendar_set_get_month);
   g_test_add_func ("/calendar/set_get_year", test_calendar_set_get_year);

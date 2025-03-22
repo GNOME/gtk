@@ -99,6 +99,9 @@ void          gtk_calendar_set_year                    (GtkCalendar *self,
 GDK_AVAILABLE_IN_4_14
 int           gtk_calendar_get_year                    (GtkCalendar *self);
 
+GDK_AVAILABLE_IN_4_20
+void          gtk_calendar_set_date                    (GtkCalendar *self,
+                                                        GDateTime   *date);
 GDK_AVAILABLE_IN_ALL
 GDateTime *   gtk_calendar_get_date                    (GtkCalendar *self);
 

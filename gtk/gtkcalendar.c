@@ -37,16 +37,14 @@
  *
  * A `GtkCalendar` can be created with [ctor@Gtk.Calendar.new].
  *
- * The date that is currently displayed can be altered with
- * [method@Gtk.Calendar.select_day].
+ * The selected date can be retrieved from a `GtkCalendar` using
+ * [method@Gtk.Calendar.get_date].
+ * It can be altered with [method@Gtk.Calendar.set_date].
  *
  * To place a visual marker on a particular day, use
  * [method@Gtk.Calendar.mark_day] and to remove the marker,
  * [method@Gtk.Calendar.unmark_day]. Alternative, all
  * marks can be cleared with [method@Gtk.Calendar.clear_marks].
- *
- * The selected date can be retrieved from a `GtkCalendar` using
- * [method@Gtk.Calendar.get_date].
  *
  * Users should be aware that, although the Gregorian calendar is the
  * legal calendar in most countries, it was adopted progressively
@@ -198,6 +196,7 @@ enum {
 enum
 {
   PROP_0,
+  PROP_DATE,
   PROP_YEAR,
   PROP_MONTH,
   PROP_DAY,
@@ -378,6 +377,19 @@ gtk_calendar_class_init (GtkCalendarClass *class)
   gobject_class->dispose = gtk_calendar_dispose;
   gobject_class->set_property = gtk_calendar_set_property;
   gobject_class->get_property = gtk_calendar_get_property;
+
+  /**
+   * GtkCalendar:date:
+   *
+   * The selected date.
+   *
+   * This property gets initially set to the current date.
+   */
+  g_object_class_install_property (gobject_class,
+                                   PROP_DATE,
+                                   g_param_spec_boxed ("date", NULL, NULL,
+                                                       G_TYPE_DATE_TIME,
+                                                       G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY));
 
   /**
    * GtkCalendar:year:
@@ -1169,6 +1181,8 @@ calendar_select_day_internal (GtkCalendar *calendar,
 
   if (year_changed)
     g_object_notify (G_OBJECT (calendar), "year");
+
+  g_object_notify (G_OBJECT (calendar), "date");
 }
 
 static void
@@ -1210,6 +1224,9 @@ gtk_calendar_set_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_DATE:
+      gtk_calendar_set_date (calendar, g_value_get_boxed (value));
+      break;
     case PROP_YEAR:
       gtk_calendar_set_year (calendar, g_value_get_int (value));
       break;
@@ -1244,6 +1261,9 @@ gtk_calendar_get_property (GObject      *object,
 
   switch (prop_id)
     {
+    case PROP_DATE:
+      g_value_take_boxed (value, gtk_calendar_get_date (calendar));
+      break;
     case PROP_YEAR:
       g_value_set_int (value, gtk_calendar_get_year (calendar));
       break;
@@ -1673,6 +1693,25 @@ gtk_calendar_unmark_day (GtkCalendar *calendar,
       update_mark_state (calendar, day, FALSE);
       calendar_invalidate_day_num (calendar, day);
     }
+}
+
+/**
+ * gtk_calendar_set_date:
+ * @self: a `GtkCalendar`.
+ * @date: (transfer none): a `GDateTime` representing the day to select
+ *
+ * Switches to @date's year and month and select its day.
+ *
+ * Since: 4.20
+ */
+void
+gtk_calendar_set_date (GtkCalendar *self,
+                       GDateTime   *date)
+{
+  g_return_if_fail (GTK_IS_CALENDAR (self));
+  g_return_if_fail (date != NULL);
+
+  calendar_select_day_internal (self, date, TRUE);
 }
 
 /**
