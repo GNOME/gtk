@@ -1259,7 +1259,7 @@ gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self,
   if (!(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_EXTERNAL))
     return FALSE;
  
-  fourcc = gdk_memory_format_get_dmabuf_fourcc (gsk_gpu_image_get_format (image));
+  fourcc = gdk_memory_format_get_dmabuf_rgb_fourcc (gsk_gpu_image_get_format (image));
   if (fourcc == 0)
     return FALSE;
 
