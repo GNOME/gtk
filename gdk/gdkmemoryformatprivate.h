@@ -115,8 +115,11 @@ VkFormat                gdk_memory_format_vk_rgba_format    (GdkMemoryFormat    
 gboolean                gdk_memory_format_find_by_dmabuf_fourcc
                                                             (guint32                     fourcc,
                                                              gboolean                    premultiplied,
-                                                             GdkMemoryFormat            *out_format);
+                                                             GdkMemoryFormat            *out_format,
+                                                             gboolean                   *out_is_yuv);
 guint32                 gdk_memory_format_get_dmabuf_rgb_fourcc
+                                                            (GdkMemoryFormat             format);
+guint32                 gdk_memory_format_get_dmabuf_yuv_fourcc
                                                             (GdkMemoryFormat             format);
 const char *            gdk_memory_format_get_name          (GdkMemoryFormat             format);
 

@@ -920,10 +920,9 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
       return NULL;
     }
 
-  if (gdk_memory_format_find_by_dmabuf_fourcc (dmabuf->fourcc, premultiplied, &format))
+  if (gdk_memory_format_find_by_dmabuf_fourcc (dmabuf->fourcc, premultiplied, &format, &is_yuv))
     {
       vk_format = gdk_memory_format_vk_format (format, &vk_components, &needs_conversion);
-      is_yuv = FALSE;
     }
   else
     {
@@ -1253,6 +1252,8 @@ gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self,
     return FALSE;
  
   fourcc = gdk_memory_format_get_dmabuf_rgb_fourcc (gsk_gpu_image_get_format (image));
+  if (fourcc == 0)
+    fourcc = gdk_memory_format_get_dmabuf_yuv_fourcc (gsk_gpu_image_get_format (image));
   if (fourcc == 0)
     return FALSE;
 
