@@ -51,14 +51,21 @@ gdk_dmabuf_get_mmap_formats (void)
       for (i = 0; i < GDK_MEMORY_N_FORMATS; i++)
         {
           fourcc = gdk_memory_format_get_dmabuf_rgb_fourcc (i);
-          if (fourcc == 0)
-            continue;
-
-          GDK_DEBUG (DMABUF,
-                     "mmap advertises dmabuf format %.4s::%016" G_GINT64_MODIFIER "x",
-                     (char *) &fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
-
-          gdk_dmabuf_formats_builder_add_format (builder, fourcc, DRM_FORMAT_MOD_LINEAR);
+          if (fourcc != 0)
+            {
+              GDK_DEBUG (DMABUF,
+                         "mmap advertises dmabuf format %.4s::%016" G_GINT64_MODIFIER "x as RGB",
+                         (char *) &fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
+              gdk_dmabuf_formats_builder_add_format (builder, fourcc, DRM_FORMAT_MOD_LINEAR);
+            }
+          fourcc = gdk_memory_format_get_dmabuf_yuv_fourcc (i);
+          if (fourcc != 0)
+            {
+              GDK_DEBUG (DMABUF,
+                         "mmap advertises dmabuf format %.4s::%016" G_GINT64_MODIFIER "x as YUV",
+                         (char *) &fourcc, (guint64) DRM_FORMAT_MOD_LINEAR);
+              gdk_dmabuf_formats_builder_add_format (builder, fourcc, DRM_FORMAT_MOD_LINEAR);
+            }
         }
       for (i = 0; i < GDK_DATA_N_FORMATS; i++)
         {
@@ -178,7 +185,7 @@ gdk_dmabuf_do_download_mmap (GdkTexture *texture,
       needs_unmap[i] = TRUE;
     }
 
-  if (gdk_memory_format_find_by_dmabuf_fourcc (dmabuf->fourcc, FALSE, (GdkMemoryFormat[1]) { 0 }))
+  if (gdk_memory_format_find_by_dmabuf_fourcc (dmabuf->fourcc, FALSE, (GdkMemoryFormat[1]) { 0 }, &unused))
     {
       gdk_memory_convert (data,
                           stride,
