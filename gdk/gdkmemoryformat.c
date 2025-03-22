@@ -433,6 +433,12 @@ struct _GdkMemoryFormatDescription
     gsize width;
     gsize height;
   } block_size;
+  struct {
+    struct {
+      gsize width;
+      gsize height;
+    } block_size;
+  } planes[GDK_MEMORY_MAX_PLANES];
   GdkMemoryAlpha alpha;
   GdkMemoryFormat premultiplied;
   GdkMemoryFormat straight;
@@ -483,6 +489,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "BGRA8(p)",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_B8G8R8A8,
@@ -522,6 +533,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "ARGB8(p)",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8R8G8B8,
@@ -561,6 +577,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGBA8(p)",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_R8G8B8A8,
@@ -598,6 +619,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "ABGR8(p)",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8B8G8R8,
@@ -637,6 +663,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "BGRA8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_B8G8R8A8,
@@ -676,6 +707,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "ARGB8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8R8G8B8,
@@ -715,6 +751,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGBA8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_R8G8B8A8,
@@ -752,6 +793,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "ABGR8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8B8G8R8,
@@ -791,6 +837,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "BGRX8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_B8G8R8X8,
     .straight = GDK_MEMORY_B8G8R8X8,
@@ -830,6 +881,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "XRGB8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_X8R8G8B8,
     .straight = GDK_MEMORY_X8R8G8B8,
@@ -870,6 +926,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGBX8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R8G8B8X8,
     .straight = GDK_MEMORY_R8G8B8X8,
@@ -908,6 +969,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "XBGR8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_X8B8G8R8,
     .straight = GDK_MEMORY_X8B8G8R8,
@@ -948,6 +1014,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGB8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R8G8B8,
     .straight = GDK_MEMORY_R8G8B8,
@@ -987,6 +1058,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "BGR8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_B8G8R8,
     .straight = GDK_MEMORY_B8G8R8,
@@ -1026,6 +1102,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGB16",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R16G16B16,
     .straight = GDK_MEMORY_R16G16B16,
@@ -1067,6 +1148,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGBA16(p)",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16,
@@ -1107,6 +1193,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGBA16",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16,
@@ -1147,6 +1238,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGBA16f",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R16G16B16_FLOAT,
     .straight = GDK_MEMORY_R16G16B16_FLOAT,
@@ -1187,6 +1283,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGBA16f(p)",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16_FLOAT,
@@ -1226,6 +1327,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGBA16f",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16_FLOAT,
@@ -1265,6 +1371,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGB32f",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R32G32B32_FLOAT,
     .straight = GDK_MEMORY_R32G32B32_FLOAT,
@@ -1305,6 +1416,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGBA32f(p)",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R32G32B32A32_FLOAT,
@@ -1344,6 +1460,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "RGBA32f",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R32G32B32A32_FLOAT,
@@ -1383,6 +1504,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "GA8(p)",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_G8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_G8A8,
@@ -1421,6 +1547,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "GA8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_G8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_G8A8,
@@ -1459,6 +1590,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "G8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8,
     .straight = GDK_MEMORY_G8,
@@ -1497,6 +1633,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "GA16(p)",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_G16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_G16A16,
@@ -1538,6 +1679,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "GA16",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_G16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_G16A16,
@@ -1579,6 +1725,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "G16",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G16,
     .straight = GDK_MEMORY_G16,
@@ -1620,6 +1771,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "A8",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A8,
     .straight = GDK_MEMORY_A8,
@@ -1658,6 +1814,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "A16",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A16,
     .straight = GDK_MEMORY_A16,
@@ -1699,6 +1860,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "A16f",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A16_FLOAT,
     .straight = GDK_MEMORY_A16_FLOAT,
@@ -1739,6 +1905,11 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .name = "A32f",
     .n_planes = 1,
     .block_size = { 1, 1 },
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+        },
+    },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A32_FLOAT,
     .straight = GDK_MEMORY_A32_FLOAT,
@@ -1884,6 +2055,58 @@ gdk_memory_format_get_depth (GdkMemoryFormat format,
     depth = GDK_MEMORY_U8_SRGB;
 
   return depth;
+}
+
+/*<private>
+ * gdk_memory_format_get_plane_block_width:
+ * @format: a memory format
+ * @plane: the plane to query. Must be a valid plane of the
+ *   format
+ *
+ * Each texture plane is made up of blocks. The properties of
+ * those blocks are defined by the format.
+ *
+ * This function returns the number of pixels occupied by one
+ * block of data in the x direction.
+ *
+ * Note that this is different from
+ * gdk_memory_format_get_block_width() in that planes may have
+ * multiple blocks covering a single image block.
+ * Plane blocks can however never be larger than image blocks.
+ *
+ * Returns: the width of a block
+ **/
+gsize
+gdk_memory_format_get_plane_block_width (GdkMemoryFormat format,
+                                         gsize           plane)
+{
+  return memory_formats[format].planes[plane].block_size.width;
+}
+
+/*<private>
+ * gdk_memory_format_get_plane_block_height:
+ * @format: a memory format
+ * @plane: the plane to query. Must be a valid plane of the
+ *   format
+ *
+ * Each texture plane is made up of blocks. The properties of
+ * those blocks are defined by the format.
+ *
+ * This function returns the number of pixels occupied by one
+ * block of data in the y direction.
+ *
+ * Note that this is different from
+ * gdk_memory_format_get_block_height() in that planes may have
+ * multiple blocks covering a single image block.
+ * Plane blocks can however never be larger than image blocks.
+ *
+ * Returns: the height of a block
+ **/
+gsize
+gdk_memory_format_get_plane_block_height (GdkMemoryFormat format,
+                                          gsize           plane)
+{
+  return memory_formats[format].planes[plane].block_size.height;
 }
 
 /*<private>
