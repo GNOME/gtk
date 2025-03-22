@@ -613,10 +613,13 @@ gsk_gl_device_get_format_flags (GskGLDevice      *self,
   GdkGLMemoryFlags gl_flags;
 
   *out_flags = 0;
+
   gl_flags = gdk_gl_context_get_format_flags (context, format);
 
   if (!(gl_flags & GDK_GL_FORMAT_USABLE))
     return FALSE;
+
+  *out_flags |= GSK_GPU_IMAGE_DOWNLOADABLE;
 
   if ((gl_flags & GDK_GL_FORMAT_RENDERABLE) && gsk_gl_swizzle_is_framebuffer_compatible (swizzle))
     *out_flags |= GSK_GPU_IMAGE_RENDERABLE;

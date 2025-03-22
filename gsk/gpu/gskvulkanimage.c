@@ -159,6 +159,8 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
     *out_flags |= GSK_GPU_IMAGE_FILTERABLE;
   if (features & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT)
     *out_flags |= GSK_GPU_IMAGE_RENDERABLE;
+  if (features & VK_FORMAT_FEATURE_TRANSFER_SRC_BIT)
+    *out_flags |= GSK_GPU_IMAGE_DOWNLOADABLE;
   if (image_properties.imageFormatProperties.maxMipLevels >= gsk_vulkan_mipmap_levels (width, height))
     *out_flags |= GSK_GPU_IMAGE_CAN_MIPMAP;
 
@@ -378,7 +380,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                     .samples = VK_SAMPLE_COUNT_1_BIT,
                                     .tiling = tiling,
                                     .usage = usage |
-                                             (flags & GSK_GPU_IMAGE_BLIT ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
+                                             (flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_DOWNLOADABLE) ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
                                     .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
                                     .initialLayout = self->vk_image_layout,
                                 },
@@ -614,7 +616,7 @@ gsk_vulkan_device_check_dmabuf_format (GskVulkanDevice          *device,
                                         vk_format,
                                         &properties);
 
-  flags = GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE;
+  flags = GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_DOWNLOADABLE;
   n_modifiers = 0;
   for (i = 0; i < drm_properties.drmFormatModifierCount; i++)
     {
@@ -655,6 +657,8 @@ gsk_vulkan_device_check_dmabuf_format (GskVulkanDevice          *device,
         flags &= ~GSK_GPU_IMAGE_FILTERABLE;
       if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT) == 0)
         flags &= ~GSK_GPU_IMAGE_RENDERABLE;
+      if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_TRANSFER_SRC_BIT) == 0)
+        flags &= ~GSK_GPU_IMAGE_DOWNLOADABLE;
 
       modifiers[n_modifiers++] = drm_mod_properties[i].drmFormatModifier;
     }
@@ -788,7 +792,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                            .samples = VK_SAMPLE_COUNT_1_BIT,
                            .tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
                            .usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
-                                    ((flags & GSK_GPU_IMAGE_BLIT) ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
+                                    (flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_DOWNLOADABLE) ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
                            .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
                            .initialLayout = self->vk_image_layout,
                            .pNext = &(VkExternalMemoryImageCreateInfo) {
@@ -932,7 +936,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                             .samples = VK_SAMPLE_COUNT_1_BIT,
                             .tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
                             .usage = VK_IMAGE_USAGE_SAMPLED_BIT |
-                                     (flags & GSK_GPU_IMAGE_BLIT ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
+                                     (flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_DOWNLOADABLE) ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
                             .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
                             .initialLayout = self->vk_image_layout,
                             .pNext = &(VkExternalMemoryImageCreateInfo) {
