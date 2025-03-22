@@ -62,6 +62,7 @@ GdkMemoryFormat         gdk_memory_format_get_straight      (GdkMemoryFormat    
 const GdkMemoryFormat * gdk_memory_format_get_fallbacks     (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryDepth          gdk_memory_format_get_depth         (GdkMemoryFormat             format,
                                                              gboolean                    srgb) G_GNUC_CONST;
+gsize                   gdk_memory_format_get_n_planes      (GdkMemoryFormat             format) G_GNUC_CONST;
 gsize                   gdk_memory_format_min_buffer_size   (GdkMemoryFormat             format,
                                                              gsize                       stride,
                                                              gsize                       width,
