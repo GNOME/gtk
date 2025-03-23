@@ -438,11 +438,11 @@ struct _GdkMemoryFormatDescription
       gsize width;
       gsize height;
     } block_size;
+    gsize block_bytes;
   } planes[GDK_MEMORY_MAX_PLANES];
   GdkMemoryAlpha alpha;
   GdkMemoryFormat premultiplied;
   GdkMemoryFormat straight;
-  gsize bytes_per_pixel;
   gsize alignment;
   GdkMemoryDepth depth;
   const GdkMemoryFormat *fallbacks;
@@ -492,12 +492,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_B8G8R8A8,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -536,12 +536,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8R8G8B8,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -580,12 +580,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_R8G8B8A8,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -622,12 +622,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8B8G8R8,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -666,12 +666,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_B8G8R8A8,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -710,12 +710,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8R8G8B8,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -754,12 +754,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_R8G8B8A8,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -796,12 +796,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8B8G8R8,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -840,12 +840,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_B8G8R8X8,
     .straight = GDK_MEMORY_B8G8R8X8,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -884,12 +884,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_X8R8G8B8,
     .straight = GDK_MEMORY_X8R8G8B8,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -929,12 +929,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R8G8B8X8,
     .straight = GDK_MEMORY_R8G8B8X8,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -972,12 +972,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_X8B8G8R8,
     .straight = GDK_MEMORY_X8B8G8R8,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1017,12 +1017,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 3,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R8G8B8,
     .straight = GDK_MEMORY_R8G8B8,
-    .bytes_per_pixel = 3,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1061,12 +1061,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 3,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_B8G8R8,
     .straight = GDK_MEMORY_B8G8R8,
-    .bytes_per_pixel = 3,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1105,12 +1105,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 6,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R16G16B16,
     .straight = GDK_MEMORY_R16G16B16,
-    .bytes_per_pixel = 6,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1151,12 +1151,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 8,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16,
-    .bytes_per_pixel = 8,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1196,12 +1196,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 8,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16,
-    .bytes_per_pixel = 8,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1241,12 +1241,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 6,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R16G16B16_FLOAT,
     .straight = GDK_MEMORY_R16G16B16_FLOAT,
-    .bytes_per_pixel = 6,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1286,12 +1286,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 8,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16_FLOAT,
-    .bytes_per_pixel = 8,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1330,12 +1330,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 8,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16_FLOAT,
-    .bytes_per_pixel = 8,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1374,12 +1374,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 12,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R32G32B32_FLOAT,
     .straight = GDK_MEMORY_R32G32B32_FLOAT,
-    12,
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1419,12 +1419,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 16,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R32G32B32A32_FLOAT,
-    16,
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1463,12 +1463,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 16,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R32G32B32A32_FLOAT,
-    16,
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1507,12 +1507,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 2,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_G8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_G8A8,
-    .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1550,12 +1550,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 2,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_G8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_G8A8,
-    .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1593,12 +1593,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 1,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8,
     .straight = GDK_MEMORY_G8,
-    .bytes_per_pixel = 1,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1636,12 +1636,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_G16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_G16A16,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1682,12 +1682,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_G16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_G16A16,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1728,12 +1728,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 2,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G16,
     .straight = GDK_MEMORY_G16,
-    .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1774,12 +1774,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 1,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A8,
     .straight = GDK_MEMORY_A8,
-    .bytes_per_pixel = 1,
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1817,12 +1817,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 2,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A16,
     .straight = GDK_MEMORY_A16,
-    .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1863,12 +1863,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 2,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A16_FLOAT,
     .straight = GDK_MEMORY_A16_FLOAT,
-    .bytes_per_pixel = 2,
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1908,12 +1908,12 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .planes = {
         {
             .block_size = { 1, 1 },
+            .block_bytes = 4,
         },
     },
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A32_FLOAT,
     .straight = GDK_MEMORY_A32_FLOAT,
-    .bytes_per_pixel = 4,
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1954,7 +1954,7 @@ G_STATIC_ASSERT (G_N_ELEMENTS (memory_formats) == GDK_MEMORY_N_FORMATS);
 gsize
 gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
 {
-  return memory_formats[format].bytes_per_pixel;
+  return gdk_memory_format_get_plane_block_bytes (format, 0);
 }
 
 GdkMemoryAlpha
@@ -2107,6 +2107,27 @@ gdk_memory_format_get_plane_block_height (GdkMemoryFormat format,
                                           gsize           plane)
 {
   return memory_formats[format].planes[plane].block_size.height;
+}
+
+/**
+ * gdk_memory_format_get_plane_block_bytes:
+ * @format: a memory format
+ * @plane: the plane to query. Must be a valid plane of the
+ *   format
+ *
+ * Each texture plane is made up of blocks. The properties of
+ * those blocks are defined by the format.
+ *
+ * This function returns the number of bytes in memory occupied
+ * pixels occupied by one block of data.
+ *
+ * Returns: The number of bytes required for one block
+ **/
+gsize
+gdk_memory_format_get_plane_block_bytes (GdkMemoryFormat format,
+                                         gsize           plane)
+{
+  return memory_formats[format].planes[plane].block_bytes;
 }
 
 /*<private>
@@ -2711,8 +2732,7 @@ gdk_memory_convert (guchar              *dest_data,
 
   if (src_format == dest_format && gdk_color_state_equal (dest_cs, src_cs))
     {
-      const GdkMemoryFormatDescription *src_desc = &memory_formats[src_format];
-      gsize bytes_per_row = src_desc->bytes_per_pixel * width;
+      gsize bytes_per_row = gdk_memory_format_bytes_per_pixel (src_format) * width;
 
       if (bytes_per_row == src_stride && bytes_per_row == dest_stride)
         {
