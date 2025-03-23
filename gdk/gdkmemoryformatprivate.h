@@ -69,6 +69,8 @@ gsize                   gdk_memory_format_get_block_width   (GdkMemoryFormat    
                                                              gsize                       plane) G_GNUC_CONST;
 gsize                   gdk_memory_format_get_block_height  (GdkMemoryFormat             format,
                                                              gsize                       plane) G_GNUC_CONST;
+gsize                   gdk_memory_format_get_block_bytes   (GdkMemoryFormat             format,
+                                                             gsize                       plane) G_GNUC_CONST;
 gsize                   gdk_memory_format_min_buffer_size   (GdkMemoryFormat             format,
                                                              gsize                       stride,
                                                              gsize                       width,
