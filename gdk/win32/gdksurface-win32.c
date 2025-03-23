@@ -2920,8 +2920,8 @@ _gdk_win32_surface_compute_size (GdkSurface *surface)
 
       if (GDK_IS_TOPLEVEL (surface) && impl->force_recompute_size)
         {
-          size_changed = width != surface->width ||
-                         height != surface->height;
+          size_changed = surface->width != width ||
+                         surface->height != height;
 
           surface->width = width;
           surface->height = height;
@@ -2930,8 +2930,8 @@ _gdk_win32_surface_compute_size (GdkSurface *surface)
         }
       else
         {
-          size_changed = width != impl->next_layout.configured_width ||
-                         height != impl->next_layout.configured_height;
+          size_changed = surface->width != impl->next_layout.configured_width ||
+                         surface->height != impl->next_layout.configured_height;
 
           surface->width = impl->next_layout.configured_width;
           surface->height = impl->next_layout.configured_height;

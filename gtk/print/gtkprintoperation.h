@@ -102,7 +102,8 @@ typedef enum {
  * GtkPrintOperationAction:
  * @GTK_PRINT_OPERATION_ACTION_PRINT_DIALOG: Show the print dialog.
  * @GTK_PRINT_OPERATION_ACTION_PRINT: Start to print without showing
- *   the print dialog, based on the current print settings.
+ *   the print dialog, based on the current print settings, if possible.
+ *   Depending on the platform, a print dialog might appear anyway.
  * @GTK_PRINT_OPERATION_ACTION_PREVIEW: Show the print preview.
  * @GTK_PRINT_OPERATION_ACTION_EXPORT: Export to a file. This requires
  *   the export-filename property to be set.
