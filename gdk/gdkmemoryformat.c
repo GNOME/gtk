@@ -2188,6 +2188,15 @@ gdk_memory_format_get_block_height (GdkMemoryFormat format)
   return memory_formats[format].block_size.height;
 }
 
+gboolean
+gdk_memory_format_is_block_boundary (GdkMemoryFormat format,
+                                     gsize           x,
+                                     gsize           y)
+{
+  return x % memory_formats[format].block_size.width == 0 &&
+         y % memory_formats[format].block_size.height == 0;
+}
+
 const char *
 gdk_memory_depth_get_name (GdkMemoryDepth depth)
 {
