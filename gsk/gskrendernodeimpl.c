@@ -2735,11 +2735,14 @@ gsk_texture_node_draw_oversized (GskRenderNode *node,
   gdk_texture_downloader_finish (&downloader);
   data = g_bytes_get_data (bytes, NULL);
   gdk_memory_convert_color_state ((guchar *) data,
-                                  stride,
-                                  GDK_MEMORY_DEFAULT,
+                                  &GDK_MEMORY_LAYOUT_SIMPLE (
+                                      GDK_MEMORY_DEFAULT,
+                                      stride,
+                                      width,
+                                      height
+                                  ),
                                   GDK_COLOR_STATE_SRGB,
-                                  ccs,
-                                  width, height);
+                                  ccs);
 
   gsk_cairo_rectangle_pixel_aligned (cr, &node->bounds);
   cairo_clip (cr);

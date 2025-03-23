@@ -179,12 +179,13 @@ gdk_cairo_surface_convert_color_state (cairo_surface_t *surface,
   if (status == CAIRO_STATUS_SUCCESS && width > 0 && height > 0)
     {
       gdk_memory_convert_color_state (cairo_image_surface_get_data (image_surface),
-                                      cairo_image_surface_get_stride (image_surface),
-                                      gdk_cairo_format_to_memory_format (cairo_image_surface_get_format (image_surface)),
+                                      &GDK_MEMORY_LAYOUT_SIMPLE (
+                                          gdk_cairo_format_to_memory_format (cairo_image_surface_get_format (image_surface)),
+                                          width,
+                                          height,
+                                          cairo_image_surface_get_stride (image_surface)),
                                       source,
-                                      target,
-                                      width,
-                                      height);
+                                      target);
     }
 
   cairo_surface_mark_dirty (image_surface);
