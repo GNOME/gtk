@@ -177,8 +177,7 @@ static void        gdk_x11_drag_set_hotspot  (GdkDrag         *drag,
                                               int              hot_y);
 static void        gdk_x11_drag_drop_done    (GdkDrag         *drag,
                                               gboolean         success);
-static void        gdk_x11_drag_set_cursor   (GdkDrag *drag,
-                                              GdkCursor      *cursor);
+static void        gdk_x11_drag_update_cursor (GdkDrag        *drag);
 static void        gdk_x11_drag_cancel       (GdkDrag             *drag,
                                               GdkDragCancelReason  reason);
 static void        gdk_x11_drag_drop_performed (GdkDrag           *drag,
@@ -195,7 +194,7 @@ gdk_x11_drag_class_init (GdkX11DragClass *klass)
   drag_class->get_drag_surface = gdk_x11_drag_get_drag_surface;
   drag_class->set_hotspot = gdk_x11_drag_set_hotspot;
   drag_class->drop_done = gdk_x11_drag_drop_done;
-  drag_class->set_cursor = gdk_x11_drag_set_cursor;
+  drag_class->update_cursor = gdk_x11_drag_update_cursor;
   drag_class->cancel = gdk_x11_drag_cancel;
   drag_class->drop_performed = gdk_x11_drag_drop_performed;
   drag_class->handle_event = gdk_x11_drag_handle_event;
@@ -1950,10 +1949,14 @@ _gdk_x11_surface_drag_begin (GdkSurface         *surface,
 }
 
 static void
-gdk_x11_drag_set_cursor (GdkDrag   *drag,
-                         GdkCursor *cursor)
+gdk_x11_drag_update_cursor (GdkDrag *drag)
 {
   GdkX11Drag *x11_drag = GDK_X11_DRAG (drag);
+  GdkDragAction action;
+  GdkCursor *cursor;
+
+  action = gdk_drag_get_selected_action (drag);
+  cursor = gdk_drag_get_cursor (drag, action);
 
   if (!g_set_object (&x11_drag->cursor, cursor))
     return;

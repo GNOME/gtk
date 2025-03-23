@@ -641,15 +641,13 @@ gdk_drag_set_selected_action (GdkDrag       *drag,
                               GdkDragAction  action)
 {
   GdkDragPrivate *priv = gdk_drag_get_instance_private (drag);
-  GdkCursor *cursor;
 
   if (priv->selected_action == action)
     return;
 
   priv->selected_action = action;
 
-  cursor = gdk_drag_get_cursor (drag, action);
-  gdk_drag_set_cursor (drag, cursor);
+  gdk_drag_update_cursor (drag);
 
   g_object_notify_by_pspec (G_OBJECT (drag), properties[PROP_SELECTED_ACTION]);
 }
@@ -736,13 +734,12 @@ gdk_drag_drop_done (GdkDrag  *drag,
 }
 
 void
-gdk_drag_set_cursor (GdkDrag   *drag,
-                     GdkCursor *cursor)
+gdk_drag_update_cursor (GdkDrag *drag)
 {
   g_return_if_fail (GDK_IS_DRAG (drag));
 
-  if (GDK_DRAG_GET_CLASS (drag)->set_cursor)
-    GDK_DRAG_GET_CLASS (drag)->set_cursor (drag, cursor);
+  if (GDK_DRAG_GET_CLASS (drag)->update_cursor)
+    GDK_DRAG_GET_CLASS (drag)->update_cursor (drag);
 }
 
 void
