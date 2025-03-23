@@ -2420,12 +2420,14 @@ gdk_gl_context_download (GdkGLContext    *self,
                          dest_data);
 
           gdk_memory_convert_color_state (dest_data,
-                                          dest_stride,
-                                          dest_format,
+                                          &GDK_MEMORY_LAYOUT_SIMPLE (
+                                              dest_format,
+                                              width,
+                                              height,
+                                              dest_stride
+                                          ),
                                           dest_color_state,
-                                          tex_color_state,
-                                          width,
-                                          height);
+                                          tex_color_state);
         }
       else
         {
@@ -2506,12 +2508,14 @@ gdk_gl_context_download (GdkGLContext    *self,
                         dest_data);
 
           gdk_memory_convert_color_state (dest_data,
-                                          dest_stride,
-                                          dest_format,
+                                          &GDK_MEMORY_LAYOUT_SIMPLE (
+                                              dest_format,
+                                              width,
+                                              height,
+                                              dest_stride
+                                          ),
                                           dest_color_state,
-                                          tex_color_state,
-                                          width,
-                                          height);
+                                          tex_color_state);
         }
       else
         {

@@ -2220,10 +2220,14 @@ gdk_dmabuf_download_mmap (GdkTexture      *texture,
   if (format == src_format)
     {
       retval = gdk_dmabuf_do_download_mmap (texture, data, stride);
-      gdk_memory_convert_color_state (data, stride, format,
-                                      src_color_state, color_state,
-                                      gdk_texture_get_width (texture),
-                                      gdk_texture_get_height (texture));
+      gdk_memory_convert_color_state (data,
+                                      &GDK_MEMORY_LAYOUT_SIMPLE (
+                                          format,
+                                          gdk_texture_get_width (texture),
+                                          gdk_texture_get_height (texture),
+                                          stride),
+                                      src_color_state,
+                                      color_state);
     }
   else
     {
