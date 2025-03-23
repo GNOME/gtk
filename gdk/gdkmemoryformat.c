@@ -2736,6 +2736,12 @@ gdk_memory_convert_generic (gpointer data)
             mc->width, mc->height, rows);
 }
 
+static inline gsize
+round_up (gsize number, gsize divisor)
+{
+  return (number + divisor - 1) / divisor * divisor;
+}
+
 void
 gdk_memory_convert (guchar              *dest_data,
                     gsize                dest_stride,
@@ -2804,12 +2810,9 @@ typedef struct _MemoryConvertColorState MemoryConvertColorState;
 struct _MemoryConvertColorState
 {
   guchar *data;
-  gsize stride;
-  GdkMemoryFormat format;
+  GdkMemoryLayout layout;
   GdkColorState *src_cs;
   GdkColorState *dest_cs;
-  gsize width;
-  gsize height;
   gsize chunk_size;
 
   /* atomic */ int rows_done;
@@ -2927,16 +2930,16 @@ gdk_memory_convert_color_state_srgb_to_srgb_linear (gpointer data)
   gsize rows;
 
   for (y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size), rows = 0;
-       y0 < mc->height;
+       y0 < mc->layout.height;
        y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size))
     {
-      for (y = y0; y < MIN (y0 + mc->chunk_size, mc->height); y++, rows++)
-        convert_srgb_to_srgb_linear (mc->data + y * mc->stride, mc->width);
+      for (y = y0; y < MIN (y0 + mc->chunk_size, mc->layout.height); y++, rows++)
+        convert_srgb_to_srgb_linear (mc->data + gdk_memory_layout_offset (&mc->layout, 0, 0, y), mc->layout.width);
     }
 
   ADD_MARK (before,
             "Color state convert srgb->srgb-linear (thread)", "size %lux%lu, %lu rows",
-            mc->width, mc->height, rows);
+            mc->layout.width, mc->layout.height, rows);
 }
 
 static void
@@ -2948,23 +2951,23 @@ gdk_memory_convert_color_state_srgb_linear_to_srgb (gpointer data)
   gsize rows;
 
   for (y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size), rows = 0;
-       y0 < mc->height;
+       y0 < mc->layout.height;
        y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size))
     {
-      for (y = y0; y < MIN (y0 + mc->chunk_size, mc->height); y++, rows++)
-        convert_srgb_linear_to_srgb (mc->data + y * mc->stride, mc->width);
+      for (y = y0; y < MIN (y0 + mc->chunk_size, mc->layout.height); y++, rows++)
+        convert_srgb_linear_to_srgb (mc->data + gdk_memory_layout_offset (&mc->layout, 0, 0, y), mc->layout.width);
     }
 
   ADD_MARK (before,
             "Color state convert srgb-linear->srgb (thread)", "size %lux%lu, %lu rows",
-            mc->width, mc->height, rows);
+            mc->layout.width, mc->layout.height, rows);
 }
 
 static void
 gdk_memory_convert_color_state_generic (gpointer user_data)
 {
   MemoryConvertColorState *mc = user_data;
-  const GdkMemoryFormatDescription *desc = &memory_formats[mc->format];
+  const GdkMemoryFormatDescription *desc = &memory_formats[mc->layout.format];
   GdkFloatColorConvert convert_func = NULL;
   GdkFloatColorConvert convert_func2 = NULL;
   float (*tmp)[4];
@@ -2986,29 +2989,32 @@ gdk_memory_convert_color_state_generic (gpointer user_data)
       convert_func2 = gdk_color_state_get_convert_from (mc->dest_cs, connection);
     }
 
-  tmp = g_malloc (sizeof (*tmp) * mc->width);
+  tmp = g_malloc (sizeof (*tmp) * mc->layout.width * desc->block_size.height);
 
   for (y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size), rows = 0;
-       y0 < mc->height;
+       y0 < mc->layout.height;
        y0 = g_atomic_int_add (&mc->rows_done, mc->chunk_size))
     {
-      for (y = y0; y < MIN (y0 + mc->chunk_size, mc->height); y++, rows++)
+      for (y = y0; y < MIN (y0 + mc->chunk_size, mc->layout.height); y++, rows++)
         {
-          desc->to_float (tmp, mc->data, &GDK_MEMORY_LAYOUT_SIMPLE (mc->format, mc->width, mc->height, mc->stride), y);
+          float (*row)[4] = &tmp[mc->layout.width * (y % desc->block_size.height)];
+
+          desc->to_float (row, mc->data, &mc->layout, y);
 
           if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-            unpremultiply (tmp, mc->width);
+            unpremultiply (row, mc->layout.width);
 
           if (convert_func)
-            convert_func (mc->src_cs, tmp, mc->width);
+            convert_func (mc->src_cs, row, mc->layout.width);
 
           if (convert_func2)
-            convert_func2 (mc->dest_cs, tmp, mc->width);
+            convert_func2 (mc->dest_cs, row, mc->layout.width);
 
           if (desc->alpha == GDK_MEMORY_ALPHA_PREMULTIPLIED)
-            premultiply (tmp, mc->width);
+            premultiply (row, mc->layout.width);
 
-          desc->from_float (mc->data, &GDK_MEMORY_LAYOUT_SIMPLE (mc->format, mc->width, mc->height, mc->stride), tmp, y);
+          if (y % desc->block_size.height == desc->block_size.height - 1)
+            desc->from_float (mc->data, &mc->layout, row, y - (desc->block_size.height - 1));
         }
     }
 
@@ -3016,42 +3022,36 @@ gdk_memory_convert_color_state_generic (gpointer user_data)
 
   ADD_MARK (before,
             "Color state convert (thread)", "size %lux%lu, %lu rows",
-            mc->width, mc->height, rows);
+            mc->layout.width, mc->layout.height, rows);
 }
 
 void
-gdk_memory_convert_color_state (guchar          *data,
-                                gsize            stride,
-                                GdkMemoryFormat  format,
-                                GdkColorState   *src_color_state,
-                                GdkColorState   *dest_color_state,
-                                gsize            width,
-                                gsize            height)
+gdk_memory_convert_color_state (guchar                *data,
+                                const GdkMemoryLayout *layout,
+                                GdkColorState         *src_color_state,
+                                GdkColorState         *dest_color_state)
 {
   MemoryConvertColorState mc = {
     .data = data,
-    .stride = stride,
-    .format = format,
+    .layout = *layout,
     .src_cs = src_color_state,
     .dest_cs = dest_color_state,
-    .width = width,
-    .height = height,
-    .chunk_size = MAX (1, 512 / width),
+    .chunk_size = round_up (MAX (1, 512 / layout->width), gdk_memory_format_get_block_height (layout->format)),
   };
   guint n_tasks;
 
   if (gdk_color_state_equal (src_color_state, dest_color_state))
     return;
 
-  n_tasks = (mc.height + mc.chunk_size - 1) / mc.chunk_size;
+  n_tasks = (mc.layout.height + mc.chunk_size - 1) / mc.chunk_size;
 
-  if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
+  if (mc.layout.format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
       src_color_state == GDK_COLOR_STATE_SRGB &&
       dest_color_state == GDK_COLOR_STATE_SRGB_LINEAR)
     {
       gdk_parallel_task_run (gdk_memory_convert_color_state_srgb_to_srgb_linear, &mc, n_tasks);
     }
-  else if (format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
+  else if (mc.layout.format == GDK_MEMORY_B8G8R8A8_PREMULTIPLIED &&
            src_color_state == GDK_COLOR_STATE_SRGB_LINEAR &&
            dest_color_state == GDK_COLOR_STATE_SRGB)
     {
