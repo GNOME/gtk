@@ -20,6 +20,7 @@
 #pragma once
 
 #include "gdkenums.h"
+#include "gdkmemorylayoutprivate.h"
 #include "gdktypes.h"
 
 /* epoxy needs this, see https://github.com/anholt/libepoxy/issues/299 */
@@ -53,8 +54,6 @@ typedef enum {
 } GdkMemoryDepth;
 
 #define GDK_MEMORY_DEPTH_BITS 3
-
-#define GDK_MEMORY_MAX_PLANES 4
 
 gsize                   gdk_memory_format_alignment         (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryAlpha          gdk_memory_format_alpha             (GdkMemoryFormat             format) G_GNUC_CONST;
