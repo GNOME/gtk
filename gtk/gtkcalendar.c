@@ -488,7 +488,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * GtkCalendar::prev-month:
    * @calendar: the object which received the signal.
    *
-   * Emitted when the user switched to the previous month.
+   * Emitted when the user switches to the previous month.
    */
   gtk_calendar_signals[PREV_MONTH_SIGNAL] =
     g_signal_new (I_("prev-month"),
@@ -503,7 +503,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * GtkCalendar::next-month:
    * @calendar: the object which received the signal.
    *
-   * Emitted when the user switched to the next month.
+   * Emitted when the user switches to the next month.
    */
   gtk_calendar_signals[NEXT_MONTH_SIGNAL] =
     g_signal_new (I_("next-month"),
@@ -518,7 +518,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * GtkCalendar::prev-year:
    * @calendar: the object which received the signal.
    *
-   * Emitted when user switched to the previous year.
+   * Emitted when user switches to the previous year.
    */
   gtk_calendar_signals[PREV_YEAR_SIGNAL] =
     g_signal_new (I_("prev-year"),
@@ -533,7 +533,7 @@ gtk_calendar_class_init (GtkCalendarClass *class)
    * GtkCalendar::next-year:
    * @calendar: the object which received the signal.
    *
-   * Emitted when user switched to the next year.
+   * Emitted when user switches to the next year.
    */
   gtk_calendar_signals[NEXT_YEAR_SIGNAL] =
     g_signal_new (I_("next-year"),
@@ -1711,7 +1711,7 @@ gtk_calendar_unmark_day (GtkCalendar *calendar,
  * @self: a `GtkCalendar`.
  * @date: (transfer none): a `GDateTime` representing the day to select
  *
- * Switches to @date's year and month and select its day.
+ * Switches to @date's year and month and selects its day.
  *
  * Since: 4.20
  */
@@ -1734,7 +1734,7 @@ gtk_calendar_set_date (GtkCalendar *self,
  *
  * The returned date is in the local time zone.
  *
- * Returns: (transfer full): the `GDateTime` representing the shown date
+ * Returns: (transfer full): the `GDateTime` representing the selected date
  */
 GDateTime *
 gtk_calendar_get_date (GtkCalendar *self)
@@ -1747,7 +1747,7 @@ gtk_calendar_get_date (GtkCalendar *self)
 /**
  * gtk_calendar_set_show_week_numbers:
  * @self: a `GtkCalendar`
- * @value: whether to show week numbers on the left of the days
+ * @value: whether to show week numbers alongside the days
  *
  * Sets whether week numbers are shown in the calendar.
  */
@@ -1888,8 +1888,8 @@ gtk_calendar_get_show_day_names (GtkCalendar *self)
  *
  * Sets the day for the selected date.
  *
- * The new date must be valid. For example, setting 31 for the day when the
- * month is February, fails.
+ * The new date must be valid. For example, setting the day to 31 when the
+ * month is February will fail.
  *
  * Since: 4.14
  */
@@ -1942,8 +1942,8 @@ gtk_calendar_get_day (GtkCalendar *self)
  *
  * Sets the month for the selected date.
  *
- * The new date must be valid. For example, setting 1 (February) for the month
- * when the day is 31, fails.
+ * The new date must be valid. For example, setting the month to 1 (February)
+ * when the day is 31 will fail.
  *
  * Since: 4.14
  */
@@ -1997,8 +1997,8 @@ gtk_calendar_get_month (GtkCalendar *self)
  *
  * Sets the year for the selected date.
  *
- * The new date must be valid. For example, setting 2023 for the year when then
- * the date is 2024-02-29, fails.
+ * The new date must be valid. For example, setting the year to 2023 when the
+ * date is February 29 will fail.
  *
  * Since: 4.14
  */
