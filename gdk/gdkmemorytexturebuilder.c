@@ -554,6 +554,57 @@ gdk_memory_texture_builder_set_stride (GdkMemoryTextureBuilder *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STRIDE]);
 }
 
+gsize
+gdk_memory_texture_builder_get_stride_for_plane (GdkMemoryTextureBuilder *self,
+                                                 unsigned int             plane)
+{
+  g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self), 0);
+  g_return_val_if_fail (plane < GDK_MEMORY_MAX_PLANES, 0);
+
+  return self->layout.planes[plane].stride;
+}
+
+void
+gdk_memory_texture_builder_set_stride_for_plane (GdkMemoryTextureBuilder *self,
+                                                 unsigned int             plane,
+                                                 gsize                    stride)
+{
+  g_return_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self));
+  g_return_if_fail (plane < GDK_MEMORY_MAX_PLANES);
+
+  if (self->layout.planes[plane].stride == stride)
+    return;
+
+  self->layout.planes[plane].stride = stride;
+
+  if (plane == 0)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STRIDE]);
+}
+
+gsize
+gdk_memory_texture_builder_get_offset (GdkMemoryTextureBuilder *self,
+                                       unsigned int             plane)
+{
+  g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self), 0);
+  g_return_val_if_fail (plane < GDK_MEMORY_MAX_PLANES, 0);
+
+  return self->layout.planes[plane].offset;
+}
+
+void
+gdk_memory_texture_builder_set_offset (GdkMemoryTextureBuilder *self,
+                                       unsigned int             plane,
+                                       gsize                    offset)
+{
+  g_return_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self));
+  g_return_if_fail (plane < GDK_MEMORY_MAX_PLANES);
+
+  if (self->layout.planes[plane].offset == offset)
+    return;
+
+  self->layout.planes[plane].offset = offset;
+}
+
 /**
  * gdk_memory_texture_builder_get_format:
  * @self: a `GdkMemoryTextureBuilder`
