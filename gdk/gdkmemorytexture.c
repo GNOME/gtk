@@ -262,10 +262,8 @@ gdk_memory_texture_from_texture (GdkTexture *texture)
 }
 
 GBytes *
-gdk_memory_texture_get_bytes (GdkMemoryTexture *self,
-                              gsize            *out_stride)
+gdk_memory_texture_get_bytes (GdkMemoryTexture *self)
 {
-  *out_stride = self->layout.planes[0].stride;
   return self->bytes;
 }
 
