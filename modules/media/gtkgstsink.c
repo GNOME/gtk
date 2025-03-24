@@ -556,6 +556,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       gdk_memory_texture_builder_set_format (builder, gtk_gst_memory_format_from_video_info (&frame->info));
       gdk_memory_texture_builder_set_width (builder, frame->info.width);
       gdk_memory_texture_builder_set_height (builder, frame->info.height);
+      gdk_memory_texture_builder_set_color_state (builder, self->color_state);
       gdk_memory_texture_builder_set_bytes (builder, bytes);
       gdk_memory_texture_builder_set_stride (builder, frame->info.stride[0]);
 
