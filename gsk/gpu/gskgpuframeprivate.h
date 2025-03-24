@@ -116,10 +116,9 @@ void                    gsk_gpu_frame_render                            (GskGpuF
 gboolean                gsk_gpu_frame_download_texture                  (GskGpuFrame            *self,
                                                                          gint64                  timestamp,
                                                                          GdkTexture             *texture,
-                                                                         GdkMemoryFormat         format,
-                                                                         GdkColorState          *color_state,
                                                                          guchar                 *data,
-                                                                         gsize                   stride);
+                                                                         const GdkMemoryLayout  *layout,
+                                                                         GdkColorState          *color_state);
 GskGpuOp               *gsk_gpu_frame_get_last_op                       (GskGpuFrame            *self);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GskGpuFrame, g_object_unref)

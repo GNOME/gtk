@@ -110,20 +110,28 @@ gdk_dmabuf_texture_invoke_callback (gpointer data)
   if (display->egl_downloader &&
       gdk_dmabuf_downloader_download (display->egl_downloader,
                                       download->texture,
-                                      download->format,
-                                      download->color_state,
                                       download->data,
-                                      download->stride))
+                                      &GDK_MEMORY_LAYOUT_SIMPLE (
+                                          download->format,
+                                          gdk_texture_get_width (GDK_TEXTURE (download->texture)),
+                                          gdk_texture_get_height (GDK_TEXTURE (download->texture)),
+                                          download->stride
+                                      ),
+                                      download->color_state))
     {
       /* Successfully downloaded using EGL */
     }
   else if (display->vk_downloader &&
            gdk_dmabuf_downloader_download (display->vk_downloader,
                                            download->texture,
-                                           download->format,
-                                           download->color_state,
                                            download->data,
-                                           download->stride))
+                                           &GDK_MEMORY_LAYOUT_SIMPLE (
+                                               download->format,
+                                               gdk_texture_get_width (GDK_TEXTURE (download->texture)),
+                                               gdk_texture_get_height (GDK_TEXTURE (download->texture)),
+                                               download->stride
+                                           ),
+                                           download->color_state))
     {
       /* Successfully downloaded using Vulkan */
     }
