@@ -2442,15 +2442,21 @@ gdk_gl_context_download (GdkGLContext    *self,
                          pixels);
 
           gdk_memory_convert (dest_data,
-                              dest_stride,
-                              dest_format,
+                              &GDK_MEMORY_LAYOUT_SIMPLE (
+                                  dest_format,
+                                  width,
+                                  height,
+                                  dest_stride
+                              ),
                               dest_color_state,
                               pixels,
-                              stride,
-                              tex_format,
-                              tex_color_state,
-                              width,
-                              height);
+                              &GDK_MEMORY_LAYOUT_SIMPLE (
+                                  tex_format,
+                                  width,
+                                  height,
+                                  stride
+                              ),
+                              tex_color_state);
 
           g_free (pixels);
         }
@@ -2605,15 +2611,21 @@ gdk_gl_context_download (GdkGLContext    *self,
             }
 
           gdk_memory_convert (dest_data,
-                              dest_stride,
-                              dest_format,
+                              &GDK_MEMORY_LAYOUT_SIMPLE (
+                                  dest_format,
+                                  width,
+                                  height,
+                                  dest_stride
+                              ),
                               dest_color_state,
                               pixels,
-                              stride,
-                              actual_format,
-                              tex_color_state,
-                              width,
-                              height);
+                              &GDK_MEMORY_LAYOUT_SIMPLE (
+                                  actual_format,
+                                  width,
+                                  height,
+                                  stride
+                              ),
+                              tex_color_state);
 
           g_free (pixels);
         }

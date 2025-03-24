@@ -185,12 +185,12 @@ gdk_android_cairo_context_end_frame (GdkDrawContext *draw_context,
           gint height = cairo_image_surface_get_height (self->active_surface);
           if (width > 0 && height > 0)
             gdk_memory_convert (&((guchar *) self->surface.buffer.bits)[(self->surface.buffer.stride * self->surface.bounds.top + self->surface.bounds.left) * bpp],
-                                self->surface.buffer.stride * bpp,
-                                GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, GDK_COLOR_STATE_SRGB, // TODO: figure out if the android buffer actually is PREMULTIPLIED or not
+                                // TODO: figure out if the android buffer actually is PREMULTIPLIED or not
+                                &GDK_MEMORY_LAYOUT_SIMPLE (GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, width, height, self->surface.buffer.stride * bpp),
+                                GDK_COLOR_STATE_SRGB,
                                 cairo_image_surface_get_data (self->active_surface),
-                                cairo_image_surface_get_stride (self->active_surface),
-                                GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, GDK_COLOR_STATE_SRGB,
-                                width, height);
+                                &GDK_MEMORY_LAYOUT_SIMPLE (GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, width, height, cairo_image_surface_get_stride (self->active_surface)),
+                                GDK_COLOR_STATE_SRGB);
 
           ANativeWindow_unlockAndPost (self->surface.window);
           //g_debug("Andoroid.CairoContext (%s): pushed frame", G_OBJECT_TYPE_NAME (surface));
