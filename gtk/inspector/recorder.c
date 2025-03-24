@@ -987,17 +987,52 @@ add_texture_rows (GListStore *store,
   list_store_add_object_property (store, "Texture", NULL, texture);
   add_text_row (store, "Type", "%s", G_OBJECT_TYPE_NAME (texture));
   add_text_row (store, "Size", "%u x %u", gdk_texture_get_width (texture), gdk_texture_get_height (texture));
-  add_text_row (store, "Format", "%s", enum_to_nick (GDK_TYPE_MEMORY_FORMAT, gdk_texture_get_format (texture)));
+  add_text_row (store, "Format", "%s (%s)",
+                gdk_memory_format_get_name (gdk_texture_get_format (texture)),
+                enum_to_nick (GDK_TYPE_MEMORY_FORMAT, gdk_texture_get_format (texture)));
   add_text_row (store, "Color State", "%s", gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
 
   if (GDK_IS_MEMORY_TEXTURE (texture))
     {
-      GBytes *bytes;
-      gsize stride;
+      const GdkMemoryLayout *layout;
 
-      bytes = gdk_memory_texture_get_bytes (GDK_MEMORY_TEXTURE (texture), &stride);
-      add_uint_row (store, "Buffer Size", g_bytes_get_size (bytes));
-      add_uint_row (store, "Stride", stride);
+      layout = gdk_memory_texture_get_layout (GDK_MEMORY_TEXTURE (texture));
+      add_uint_row (store, "Buffer Size", layout->size);
+      switch (gdk_memory_format_get_n_planes (layout->format))
+        {
+        case 1:
+          if (layout->planes[0].offset)
+            add_uint_row (store, "Offset", layout->planes[0].offset);
+          add_uint_row (store, "Stride", layout->planes[0].stride);
+          break;
+
+        case 2:
+          add_text_row (store, "Offsets", "%zu, %zu",
+                        layout->planes[0].offset, layout->planes[1].offset);
+          add_text_row (store, "Strides", "%zu, %zu",
+                        layout->planes[0].stride, layout->planes[1].stride);
+          break;
+
+        case 3:
+          add_text_row (store, "Offsets", "%zu, %zu, %zu",
+                        layout->planes[0].offset, layout->planes[1].offset, layout->planes[2].offset);
+          add_text_row (store, "Strides", "%zu, %zu, %zu",
+                        layout->planes[0].stride, layout->planes[1].stride, layout->planes[2].stride);
+          break;
+        
+        case 4:
+          add_text_row (store, "Offsets", "%zu, %zu, %zu, %zu",
+                        layout->planes[0].offset, layout->planes[1].offset,
+                        layout->planes[2].offset, layout->planes[3].offset);
+          add_text_row (store, "Strides", "%zu, %zu, %zu, %zu",
+                        layout->planes[0].stride, layout->planes[1].stride,
+                        layout->planes[2].stride, layout->planes[3].stride);
+          break;
+
+        default:
+          g_assert_not_reached ();
+          break;
+        }
     }
   else if (GDK_IS_GL_TEXTURE (texture))
     {

@@ -44,6 +44,7 @@ GdkTexture *            gdk_memory_texture_new_from_layout       (GBytes        
 
 GBytes *                gdk_memory_texture_get_bytes             (GdkMemoryTexture      *self,
                                                                   gsize                 *out_stride);
+const GdkMemoryLayout * gdk_memory_texture_get_layout            (GdkMemoryTexture      *self);
 
 
 G_END_DECLS
