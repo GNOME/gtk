@@ -130,6 +130,107 @@ gdk_memory_layout_init_sublayout (GdkMemoryLayout             *self,
   self->size = other->size;
 }
 
+gboolean
+gdk_memory_layout_is_valid (const GdkMemoryLayout  *self,
+                            GError                **error)
+{
+  gsize i, needed_size;
+
+  if (self->format >= GDK_MEMORY_N_FORMATS)
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "invalid format given");
+      return FALSE;
+    }
+
+  if (self->width <= 0 || self->height <= 0)
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "image size %zux%zu is invalid", self->width, self->height);
+      return FALSE;
+    }
+
+  needed_size = 0;
+  for (i = 0; i < gdk_memory_format_get_n_planes (self->format); i++)
+    {
+      gsize block_width, block_height, block_bytes;
+
+      block_width = gdk_memory_format_get_block_width (self->format, i);
+      block_height = gdk_memory_format_get_block_height (self->format, i);
+      block_bytes = gdk_memory_format_get_block_bytes (self->format, i);
+
+      if (self->planes[i].offset < needed_size)
+        {
+          g_set_error (error,
+                       G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "offset for plane %zu is %zu which overlaps previous plane going up to offset %zu",
+                       i, self->planes[i].offset, needed_size);
+          return FALSE;
+        }
+
+      if (self->width % block_width)
+        {
+          g_set_error (error,
+                       G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "image width %zu is not a multiple of %zu", self->width, block_width);
+          return FALSE;
+        }
+      if (self->height % block_height)
+        {
+          g_set_error (error,
+                       G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "image height %zu is not a multiple of %zu", self->height, block_height);
+          return FALSE;
+        }
+      if (self->width / block_width * block_bytes > self->planes[i].stride)
+        {
+          g_set_error (error,
+                       G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "stride for plane %zu is %zu bytes, but image width %zu requires a stride of %zu bytes",
+                       i, self->planes[i].stride, self->width, self->width / block_width * block_bytes);
+          return FALSE;
+        }
+
+      needed_size = self->planes[i].offset +
+                    (self->height / block_height - 1) * self->planes[i].stride +
+                    self->width / block_width * block_bytes;
+    }
+
+  if (needed_size > self->size)
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "image size of %zu bytes is too small, at least %zu bytes are needed",
+                   self->size, needed_size);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+gboolean
+gdk_memory_layout_is_aligned (const GdkMemoryLayout *self,
+                              gsize                  align)
+{
+  gsize i;
+
+  align = MAX (align, gdk_memory_format_alignment (self->format));
+
+  if (self->size % align)
+    return FALSE;
+
+  for (i = 0; i < gdk_memory_format_get_n_planes (self->format); i++)
+    {
+      if (self->planes[i].offset % align ||
+          self->planes[i].stride % align)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 /*<private>
  * gdk_memory_copy:
  * @dest_data: the data to copy into

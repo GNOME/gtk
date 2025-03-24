@@ -53,6 +53,22 @@ void                    gdk_memory_layout_init_sublayout        (GdkMemoryLayout
                                                                  const GdkMemoryLayout          *other,
                                                                  const cairo_rectangle_int_t    *area);
 
+gboolean                gdk_memory_layout_is_valid              (const GdkMemoryLayout          *self,
+                                                                 GError                        **error);
+gboolean                gdk_memory_layout_is_aligned            (const GdkMemoryLayout          *self,
+                                                                 gsize                           align);
+#define gdk_memory_layout_return_val_if_invalid(layout, val) G_STMT_START{\
+  GError *_e = NULL; \
+  if (!gdk_memory_layout_is_valid (layout, &_e)) \
+    { \
+      g_return_if_fail_warning (G_LOG_DOMAIN, \
+                                G_STRFUNC, \
+                                _e->message); \
+      g_clear_error (&_e); \
+      return (val); \
+    } \
+}G_STMT_END
+
 void                    gdk_memory_copy                         (guchar                         *dest_data,
                                                                  const GdkMemoryLayout          *dest_layout,
                                                                  const guchar                   *src_data,
