@@ -19,17 +19,16 @@ gdk_dmabuf_downloader_close (GdkDmabufDownloader *self)
 }
 
 gboolean
-gdk_dmabuf_downloader_download (GdkDmabufDownloader *self,
-                                GdkDmabufTexture    *texture,
-                                GdkMemoryFormat      format,
-                                GdkColorState       *color_state,
-                                guchar              *data,
-                                gsize                stride)
+gdk_dmabuf_downloader_download (GdkDmabufDownloader   *self,
+                                GdkDmabufTexture      *texture,
+                                guchar                *data,
+                                const GdkMemoryLayout *layout,
+                                GdkColorState         *color_state)
 {
   GdkDmabufDownloaderInterface *iface;
 
   g_return_val_if_fail (GDK_IS_DMABUF_DOWNLOADER (self), FALSE);
 
   iface = GDK_DMABUF_DOWNLOADER_GET_IFACE (self);
-  return iface->download (self, texture, format, color_state, data, stride);
+  return iface->download (self, texture, data, layout, color_state);
 }
