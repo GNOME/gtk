@@ -128,6 +128,126 @@ gdk_memory_layout_init_sublayout (GdkMemoryLayout             *self,
   self->size = other->size;
 }
 
+gboolean
+gdk_memory_layout_is_valid (const GdkMemoryLayout  *self,
+                            GError                **error)
+{
+  gsize p, needed_size;
+
+  if (self->format >= GDK_MEMORY_N_FORMATS)
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "invalid format given");
+      return FALSE;
+    }
+
+  if (self->width <= 0 || self->height <= 0)
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "image size %zux%zu is invalid", self->width, self->height);
+      return FALSE;
+    }
+
+  if (!gdk_memory_format_is_block_boundary (self->format, self->width, self->height))
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "image size %zux%zu is not a multiple of the block size %zux%zu",
+                   self->width, self->height,
+                   gdk_memory_format_get_block_width (self->format),
+                   gdk_memory_format_get_block_height (self->format));
+      return FALSE;
+    }
+
+  needed_size = 0;
+  for (p = 0; p < gdk_memory_format_get_n_planes (self->format); p++)
+    {
+      gsize block_width, block_height, block_bytes, plane_size;
+
+      block_width = gdk_memory_format_get_plane_block_width (self->format, p);
+      block_height = gdk_memory_format_get_plane_block_height (self->format, p);
+      block_bytes = gdk_memory_format_get_plane_block_bytes (self->format, p);
+
+      if (self->planes[p].offset < needed_size)
+        {
+          g_set_error (error,
+                       G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "offset for plane %zu is %zu which overlaps previous plane going up to offset %zu",
+                       p, self->planes[p].offset, needed_size);
+          return FALSE;
+        }
+
+      if (!g_size_checked_mul (&plane_size, self->width / block_width, block_bytes))
+        {
+          g_set_error (error,
+                       G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "stride for plane %zu is %zu bytes, but image width %zu would overflow the stride requirement",
+                       p, self->planes[p].stride, self->width);
+          return FALSE;
+        }
+      if (plane_size > self->planes[p].stride)
+        {
+          g_set_error (error,
+                       G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "stride for plane %zu is %zu bytes, but image width %zu requires a stride of %zu bytes",
+                       p, self->planes[p].stride, self->width, plane_size);
+          return FALSE;
+        }
+
+      if (!g_size_checked_mul (&plane_size, self->planes[p].stride, (self->height - 1) / block_height) ||
+          !g_size_checked_add (&plane_size, plane_size, self->width / block_width * block_bytes))
+        {
+          g_set_error (error,
+                       G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "size for plane %zu would overflow, image size %zux%zu with stride of %zu bytes is too large",
+                       p, self->width, self->height, self->planes[p].stride);
+          return FALSE;
+        }
+      if (!g_size_checked_add (&needed_size, self->planes[p].offset, plane_size))
+        {
+          g_set_error (error,
+                       G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "size for plane %zu of %zu bytes at offset %zu does overflow",
+                       p, plane_size, self->planes[p].offset);
+          return FALSE;
+        }
+    }
+
+  if (needed_size > self->size)
+    {
+      g_set_error (error,
+                   G_IO_ERROR, G_IO_ERROR_FAILED,
+                   "image size of %zu bytes is too small, at least %zu bytes are needed",
+                   self->size, needed_size);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+gboolean
+gdk_memory_layout_is_aligned (const GdkMemoryLayout *self,
+                              gsize                  align)
+{
+  gsize i;
+
+  align = MAX (align, gdk_memory_format_alignment (self->format));
+
+  if (self->size % align)
+    return FALSE;
+
+  for (i = 0; i < gdk_memory_format_get_n_planes (self->format); i++)
+    {
+      if (self->planes[i].offset % align ||
+          self->planes[i].stride % align)
+        return FALSE;
+    }
+
+  return TRUE;
+}
+
 /* This is just meant to be a good enough check for assertions, not a guaranteed
  * check you can rely on.
  * It's meant to check accidental overlap during copies between layouts.

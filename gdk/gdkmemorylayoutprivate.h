@@ -53,10 +53,36 @@ void                    gdk_memory_layout_init_sublayout        (GdkMemoryLayout
                                                                  const GdkMemoryLayout          *other,
                                                                  const cairo_rectangle_int_t    *area);
 
+gboolean                gdk_memory_layout_is_valid              (const GdkMemoryLayout          *self,
+                                                                 GError                        **error);
+gboolean                gdk_memory_layout_is_aligned            (const GdkMemoryLayout          *self,
+                                                                 gsize                           align);
 gboolean                gdk_memory_layout_has_overlap           (const guchar                   *data1,
                                                                  const GdkMemoryLayout          *layout1,
                                                                  const guchar                   *data2,
                                                                  const GdkMemoryLayout          *layout2);
+#define gdk_memory_layout_return_val_if_invalid(layout, val) G_STMT_START{\
+  GError *_e = NULL; \
+  if (!gdk_memory_layout_is_valid (layout, &_e)) \
+    { \
+      g_return_if_fail_warning (G_LOG_DOMAIN, \
+                                G_STRFUNC, \
+                                _e->message); \
+      g_clear_error (&_e); \
+      return (val); \
+    } \
+}G_STMT_END
+#define gdk_memory_layout_return_if_invalid(layout) G_STMT_START{\
+  GError *_e = NULL; \
+  if (!gdk_memory_layout_is_valid (layout, &_e)) \
+    { \
+      g_return_if_fail_warning (G_LOG_DOMAIN, \
+                                G_STRFUNC, \
+                                _e->message); \
+      g_clear_error (&_e); \
+      return; \
+    } \
+}G_STMT_END
 
 gsize                   gdk_memory_layout_offset                (const GdkMemoryLayout          *layout,
                                                                  gsize                           plane,
