@@ -64,15 +64,22 @@ gdk_memory_texture_download (GdkTexture      *texture,
 {
   GdkMemoryTexture *self = GDK_MEMORY_TEXTURE (texture);
 
-  gdk_memory_convert (data, stride,
-                      format,
+  gdk_memory_convert (data,
+                      &GDK_MEMORY_LAYOUT_SIMPLE (
+                          format,
+                          texture->width,
+                          texture->height,
+                          stride
+                      ),
                       color_state,
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
-                      self->stride,
-                      texture->format,
-                      texture->color_state,
-                      gdk_texture_get_width (texture),
-                      gdk_texture_get_height (texture));
+                      &GDK_MEMORY_LAYOUT_SIMPLE (
+                          texture->format,
+                          texture->width,
+                          texture->height,
+                          self->stride
+                      ),
+                      texture->color_state);
 }
 
 static void

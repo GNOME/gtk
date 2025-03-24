@@ -81,6 +81,89 @@ gdk_memory_layout_init (GdkMemoryLayout *self,
 }
 
 /**
+ * gdk_memory_layout_init_sublayout:
+ * @self: layout to initialize
+ * @other: layout to initialize from
+ * @area: rectangle inside `other`
+ *
+ * Initializes a new memory layout for the given subarea of an existing layout.
+ * 
+ * The area bounds must be aligned to the block size.
+ *
+ * Keep in mind that this only adjusts the offsets, it doesn't shrink the
+ * size from the original layout.
+ **/
+void
+gdk_memory_layout_init_sublayout (GdkMemoryLayout             *self,
+                                  const GdkMemoryLayout       *other,
+                                  const cairo_rectangle_int_t *area)
+{
+  gsize plane, n_planes;
+
+  g_assert (area->x + area->width <= other->width);
+  g_assert (area->y + area->height <= other->height);
+  g_assert (gdk_memory_format_is_block_boundary (other->format, area->x, area->y));
+  g_assert (gdk_memory_format_is_block_boundary (other->format, area->width, area->height));
+
+  n_planes = gdk_memory_format_get_n_planes (other->format);
+
+  self->format = other->format;
+  self->width = area->width;
+  self->height = area->height;
+
+  for (plane = 0; plane < n_planes; plane++)
+    {
+      gsize block_width, block_height, block_bytes;
+
+      block_width = gdk_memory_format_get_plane_block_width (other->format, plane);
+      block_height = gdk_memory_format_get_plane_block_height (other->format, plane);
+      block_bytes = gdk_memory_format_get_plane_block_bytes (other->format, plane);
+
+      self->planes[plane].offset = other->planes[plane].offset +
+                                   area->y / block_height * other->planes[plane].stride +
+                                   area->x / block_width * block_bytes;
+      self->planes[plane].stride = other->planes[plane].stride;
+    }
+
+  self->size = other->size;
+}
+
+/* This is just meant to be a good enough check for assertions, not a guaranteed
+ * check you can rely on.
+ * It's meant to check accidental overlap during copies between layouts.
+ */
+gboolean
+gdk_memory_layout_has_overlap (const guchar          *data1,
+                               const GdkMemoryLayout *layout1,
+                               const guchar          *data2,
+                               const GdkMemoryLayout *layout2)
+{
+  /* really, these are pointers, but we wanna do math on them */
+  gsize start1, end1, start2, end2, shift;
+
+  /* We only check one plane for now */
+  start1 = GPOINTER_TO_SIZE (data1 + gdk_memory_layout_offset (layout1, 0, 0, 0));
+  start2 = GPOINTER_TO_SIZE (data2 + gdk_memory_layout_offset (layout2, 0, 0, 0));
+  end1 = GPOINTER_TO_SIZE (data1 + gdk_memory_layout_offset (layout1, 0, layout1->width, layout1->height - 1));
+  end2 = GPOINTER_TO_SIZE (data2 + gdk_memory_layout_offset (layout2, 0, layout2->width, layout2->height - 1));
+  if (end2 < start1 || end1 < start2)
+    return FALSE;
+
+  /* This can't happen with subimages of the same large image, so something
+   * is probably screwed up. */
+  if (layout1->planes[0].stride != layout2->planes[0].stride)
+    return TRUE;
+
+  end1 = GPOINTER_TO_SIZE (data1 + gdk_memory_layout_offset (layout1, 0, layout1->width, 0));
+  end2 = GPOINTER_TO_SIZE (data2 + gdk_memory_layout_offset (layout2, 0, layout2->width, 0));
+  shift = start1 % layout1->planes[0].stride;
+  if ((end1 - shift) % layout1->planes[0].stride < (start2 - shift) % layout2->planes[0].stride)
+    return FALSE;
+
+  return TRUE;
+}
+
+/**
  * gdk_memory_layout_offset:
  * @layout: a layout
  * @plane: the plane to get the offset for
@@ -115,5 +198,71 @@ gdk_memory_layout_offset (const GdkMemoryLayout *layout,
   return layout->planes[plane].offset +
          y / block_height * layout->planes[plane].stride +
          x / block_width * block_bytes;
+}
+
+/*<private>
+ * gdk_memory_copy:
+ * @dest_data: the data to copy into
+ * @dest_layout: the layout of `dest_data`
+ * @src_data: the data to copy from
+ * @src_layout: the layout of `src_data`
+ *
+ * Copies the source into the destination.
+ *
+ * The source and the destination must have the same format.
+ * 
+ * The source and destination must have the same size.
+ * You can use gdk_memory_layout_init_sublayout() to adjust sizes
+ * before calling this function.
+ **/
+void
+gdk_memory_copy (guchar                      *dest_data,
+                 const GdkMemoryLayout       *dest_layout,
+                 const guchar                *src_data,
+                 const GdkMemoryLayout       *src_layout)
+{
+  gsize n_planes, plane;
+  GdkMemoryFormat format;
+
+  g_assert (dest_layout->format == src_layout->format);
+  g_assert (dest_layout->width == src_layout->width);
+  g_assert (dest_layout->height == src_layout->height);
+
+  format = src_layout->format;
+  n_planes = gdk_memory_format_get_n_planes (format);
+
+  for (plane = 0; plane < n_planes; plane++)
+    {
+      gsize block_width, block_height, block_bytes, plane_width, plane_height;
+      guchar *dest;
+      const guchar *src;
+
+      block_width = gdk_memory_format_get_plane_block_width (format, plane);
+      block_height = gdk_memory_format_get_plane_block_height (format, plane);
+      block_bytes = gdk_memory_format_get_plane_block_bytes (format, plane);
+
+      plane_width = src_layout->width / block_width;
+      plane_height = src_layout->height / block_height;
+
+      dest = dest_data + dest_layout->planes[plane].offset;
+      src = src_data + src_layout->planes[plane].offset;
+
+      if (dest_layout->planes[plane].stride == src_layout->planes[plane].stride &&
+          dest_layout->planes[plane].stride == plane_width * block_bytes)
+        {
+          memcpy (dest, src, dest_layout->planes[plane].stride * plane_height);
+        }
+      else
+        {
+          gsize y;
+
+          for (y = 0; y < plane_height; y++)
+            {
+              memcpy (dest + y * dest_layout->planes[plane].stride,
+                      src + y * src_layout->planes[plane].stride,
+                      plane_width * block_bytes);
+            }
+        }
+    }
 }
 

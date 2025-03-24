@@ -124,15 +124,11 @@ guint32                 gdk_memory_format_get_dmabuf_yuv_fourcc
 const char *            gdk_memory_format_get_name          (GdkMemoryFormat             format);
 
 void                    gdk_memory_convert                  (guchar                     *dest_data,
-                                                             gsize                       dest_stride,
-                                                             GdkMemoryFormat             dest_format,
+                                                             const GdkMemoryLayout      *dest_layout,
                                                              GdkColorState              *dest_cs,
                                                              const guchar               *src_data,
-                                                             gsize                       src_stride,
-                                                             GdkMemoryFormat             src_format,
-                                                             GdkColorState              *src_cs,
-                                                             gsize                       width,
-                                                             gsize                       height);
+                                                             const GdkMemoryLayout      *src_layout,
+                                                             GdkColorState              *src_cs);
 void                    gdk_memory_convert_color_state      (guchar                     *data,
                                                              const GdkMemoryLayout      *layout,
                                                              GdkColorState              *src_color_state,

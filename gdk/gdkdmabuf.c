@@ -127,11 +127,12 @@ gdk_dmabuf_munmap (int           dmabuf_fd,
 }
 
 static gboolean
-gdk_dmabuf_do_download_mmap (GdkTexture *texture,
-                             guchar     *data,
-                             gsize       stride)
+gdk_dmabuf_do_download_mmap (GdkTexture            *texture,
+                             guchar                *data,
+                             const GdkMemoryLayout *layout)
 {
   const GdkDmabuf *dmabuf;
+  GdkMemoryLayout dmabuf_layout;
   const guchar *src_data[GDK_DMABUF_MAX_PLANES];
   gsize sizes[GDK_DMABUF_MAX_PLANES];
   gsize needs_unmap[GDK_DMABUF_MAX_PLANES] = { FALSE, };
@@ -163,18 +164,18 @@ gdk_dmabuf_do_download_mmap (GdkTexture *texture,
       needs_unmap[i] = TRUE;
     }
 
-  if (gdk_memory_format_find_by_dmabuf_fourcc (dmabuf->fourcc, FALSE, (GdkMemoryFormat[1]) { 0 }, &unused))
+  if (gdk_memory_layout_init_from_dmabuf (&dmabuf_layout,
+                                          dmabuf,
+                                          gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED,
+                                          gdk_texture_get_width (texture),
+                                          gdk_texture_get_height (texture)))
     {
       gdk_memory_convert (data,
-                          stride,
-                          gdk_texture_get_format (texture),
+                          layout,
                           gdk_texture_get_color_state (texture),
-                          src_data[0] + dmabuf->planes[0].offset,
-                          dmabuf->planes[0].stride,
-                          gdk_texture_get_format (texture),
-                          gdk_texture_get_color_state (texture),
-                          gdk_texture_get_width (texture),
-                          gdk_texture_get_height (texture));
+                          src_data[0],
+                          &dmabuf_layout,
+                          gdk_texture_get_color_state (texture));
       retval = TRUE;
     }
 
@@ -204,37 +205,43 @@ gdk_dmabuf_download_mmap (GdkTexture      *texture,
 {
   GdkMemoryFormat src_format = gdk_texture_get_format (texture);
   GdkColorState *src_color_state = gdk_texture_get_color_state (texture);
+  GdkMemoryLayout layout;
   gboolean retval;
+
+  layout = GDK_MEMORY_LAYOUT_SIMPLE (format,
+                                     gdk_texture_get_width (texture),
+                                     gdk_texture_get_height (texture),
+                                     stride);
 
   if (format == src_format)
     {
-      retval = gdk_dmabuf_do_download_mmap (texture, data, stride);
+      retval = gdk_dmabuf_do_download_mmap (texture, data, &layout);
       gdk_memory_convert_color_state (data,
-                                      &GDK_MEMORY_LAYOUT_SIMPLE (
-                                          format,
-                                          gdk_texture_get_width (texture),
-                                          gdk_texture_get_height (texture),
-                                          stride),
+                                      &layout,
                                       src_color_state,
                                       color_state);
     }
   else
     {
-      unsigned int width, height;
+      GdkMemoryLayout src_layout;
       guchar *src_data;
-      gsize src_stride;
 
-      width = gdk_texture_get_width (texture);
-      height = gdk_texture_get_height (texture);
+      gdk_memory_layout_init (&src_layout,
+                              src_format,
+                              gdk_texture_get_width (texture),
+                              gdk_texture_get_height (texture),
+                              1);
 
-      src_stride = width * gdk_memory_format_bytes_per_pixel (src_format);
-      src_data = g_new (guchar, src_stride * height);
+      src_data = g_new (guchar, src_layout.size);
 
-      retval = gdk_dmabuf_do_download_mmap (texture, src_data, src_stride);
+      retval = gdk_dmabuf_do_download_mmap (texture, src_data, &src_layout);
 
-      gdk_memory_convert (data, stride, format, color_state,
-                          src_data, src_stride, src_format, src_color_state,
-                          width, height);
+      gdk_memory_convert (data,
+                          &layout,
+                          color_state,
+                          src_data,
+                          &src_layout,
+                          src_color_state);
 
       g_free (src_data);
     }
@@ -641,5 +648,44 @@ gdk_dmabuf_close_fds (GdkDmabuf *dmabuf)
       if (i == j)
         g_close (dmabuf->planes[i].fd, NULL);
     }
+}
+
+gboolean
+gdk_memory_layout_init_from_dmabuf (GdkMemoryLayout *self,
+                                    const GdkDmabuf *dmabuf,
+                                    gboolean         premultiplied,
+                                    gsize            width,
+                                    gsize            height)
+{
+  gboolean is_yuv;
+  gsize i;
+
+  if (dmabuf->modifier != DRM_FORMAT_MOD_LINEAR)
+    return FALSE;
+
+  if (!gdk_memory_format_find_by_dmabuf_fourcc (dmabuf->fourcc, premultiplied, &self->format, &is_yuv))
+    return FALSE;
+
+  if (!gdk_memory_format_is_block_boundary (self->format, width, height))
+    return FALSE;
+
+  g_return_val_if_fail (dmabuf->n_planes == gdk_memory_format_get_n_planes (self->format), FALSE);
+
+  self->width = width;
+  self->height = height;
+
+  for (i = 0; i < dmabuf->n_planes; i++)
+    {
+      self->planes[i].offset = dmabuf->planes[i].offset;
+      self->planes[i].stride = dmabuf->planes[i].stride;
+    }
+
+  self->size = self->planes[dmabuf->n_planes - 1].offset + 
+               (self->height - 1) / gdk_memory_format_get_plane_block_height (self->format, dmabuf->n_planes - 1)
+                                  * self->planes[dmabuf->n_planes - 1].stride +
+               self->width / gdk_memory_format_get_plane_block_width (self->format, dmabuf->n_planes - 1)
+                           * gdk_memory_format_get_plane_block_bytes (self->format, dmabuf->n_planes - 1);
+
+  return TRUE;
 }
 

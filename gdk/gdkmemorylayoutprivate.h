@@ -49,11 +49,24 @@ void                    gdk_memory_layout_init                  (GdkMemoryLayout
                                                                  gsize                           width,
                                                                  gsize                           height,
                                                                  gsize                           align);
+void                    gdk_memory_layout_init_sublayout        (GdkMemoryLayout                *self,
+                                                                 const GdkMemoryLayout          *other,
+                                                                 const cairo_rectangle_int_t    *area);
+
+gboolean                gdk_memory_layout_has_overlap           (const guchar                   *data1,
+                                                                 const GdkMemoryLayout          *layout1,
+                                                                 const guchar                   *data2,
+                                                                 const GdkMemoryLayout          *layout2);
 
 gsize                   gdk_memory_layout_offset                (const GdkMemoryLayout          *layout,
                                                                  gsize                           plane,
                                                                  gsize                           x,
                                                                  gsize                           y) G_GNUC_PURE;
+
+void                    gdk_memory_copy                         (guchar                         *dest_data,
+                                                                 const GdkMemoryLayout          *dest_layout,
+                                                                 const guchar                   *src_data,
+                                                                 const GdkMemoryLayout          *src_layout);
 
 G_END_DECLS
 
