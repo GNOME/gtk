@@ -11,10 +11,9 @@ void                    gsk_gpu_download_op                             (GskGpuF
 void                    gsk_gpu_download_into_op                        (GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *image,
                                                                          GdkColorState                  *image_color_state,
-                                                                         GdkMemoryFormat                 format,
-                                                                         GdkColorState                  *color_state,
                                                                          guchar                         *data,
-                                                                         gsize                           stride);
+                                                                         const GdkMemoryLayout          *layout,
+                                                                         GdkColorState                  *color_state);
 
 G_END_DECLS
 
