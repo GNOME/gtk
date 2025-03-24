@@ -269,3 +269,9 @@ gdk_memory_texture_get_bytes (GdkMemoryTexture *self,
   return self->bytes;
 }
 
+const GdkMemoryLayout *
+gdk_memory_texture_get_layout (GdkMemoryTexture *self)
+{
+  return &self->layout;
+}
+
