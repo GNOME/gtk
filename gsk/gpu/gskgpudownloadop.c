@@ -464,15 +464,21 @@ gsk_gpu_download_into_op_vk_create (GskGpuDownloadIntoOp *self)
   height = gsk_gpu_image_get_height (self->image);
 
   gdk_memory_convert (self->data,
-                      self->stride,
-                      self->format,
+                      &GDK_MEMORY_LAYOUT_SIMPLE (
+                          self->format,
+                          width,
+                          height,
+                          self->stride
+                      ),
                       self->color_state,
                       data,
-                      width * gdk_memory_format_bytes_per_pixel (format),
-                      format,
-                      self->image_color_state,
-                      width,
-                      height);
+                      &GDK_MEMORY_LAYOUT_SIMPLE (
+                          format,
+                          width,
+                          height,
+                          width * gdk_memory_format_bytes_per_pixel (format)
+                      ),
+                      self->image_color_state);
 
   gsk_gpu_buffer_unmap (self->buffer, 0);
 }

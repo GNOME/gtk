@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gdkdmabufformatsbuilderprivate.h"
+#include "gdkmemorylayoutprivate.h"
 
 #ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
@@ -59,4 +60,9 @@ gboolean                    gdk_dmabuf_sanitize                 (GdkDmabuf      
 
 gboolean                    gdk_dmabuf_is_disjoint              (const GdkDmabuf                *dmabuf);
 
+gboolean                    gdk_memory_layout_init_from_dmabuf  (GdkMemoryLayout                *self,
+                                                                 const GdkDmabuf                *dmabuf,
+                                                                 gboolean                        premultiplied,
+                                                                 gsize                           width,
+                                                                 gsize                           height);
 #endif
