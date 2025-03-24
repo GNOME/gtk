@@ -105,6 +105,7 @@ compose_table_compare (gconstpointer data)
   expected = g_strconcat (file, ".expected", NULL);
 
   table = gtk_compose_table_parse (file, NULL);
+  g_assert_nonnull (table);
   output = gtk_compose_table_print (table);
 
   diff = diff_string_with_file (expected, output, -1, &error);
@@ -251,6 +252,17 @@ compose_table_match (void)
   g_assert_false (finish);
   g_assert_true (match);
   g_assert_cmpstr (output->str, ==, "qq");
+
+  g_string_set_size (output, 0);
+
+  buffer[0] = 0xfdd7;
+  buffer[1] = GDK_KEY_s;
+  buffer[2] = 0;
+  ret = gtk_compose_table_check (table, buffer, 2, &finish, &match, output);
+  g_assert_true (ret);
+  g_assert_true (finish);
+  g_assert_true (match);
+  g_assert_cmpstr (output->str, ==, "∫");
 
   g_string_free (output, TRUE);
   g_free (file);
@@ -471,6 +483,7 @@ main (int argc, char *argv[])
   g_test_add_data_func ("/compose-table/single", "single", compose_table_compare);
   g_test_add_data_func ("/compose-table/include", "include", compose_table_compare);
   g_test_add_data_func ("/compose-table/system", "system", compose_table_compare);
+  g_test_add_data_func ("/compose-table/bepo", "bepo", compose_table_compare);
   g_test_add_func ("/compose-table/include-cycle", compose_table_cycle);
   g_test_add_func ("/compose-table/include-nofile", compose_table_nofile);
   g_test_add_func ("/compose-table/match", compose_table_match);
