@@ -31,6 +31,12 @@ gdk_memory_format_get_channel_type (GdkMemoryFormat format)
     case GDK_MEMORY_G8A8:
     case GDK_MEMORY_G8A8_PREMULTIPLIED:
     case GDK_MEMORY_A8:
+    case GDK_MEMORY_G8_B8R8_420:
+    case GDK_MEMORY_G8_R8B8_420:
+    case GDK_MEMORY_G8_B8R8_422:
+    case GDK_MEMORY_G8_R8B8_422:
+    case GDK_MEMORY_G8_B8R8_444:
+    case GDK_MEMORY_G8_R8B8_444:
       return CHANNEL_UINT_8;
 
     case GDK_MEMORY_R16G16B16:
@@ -90,6 +96,12 @@ gdk_memory_format_n_colors (GdkMemoryFormat format)
     case GDK_MEMORY_R16G16B16A16_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_R32G32B32A32_FLOAT:
+    case GDK_MEMORY_G8_B8R8_420:
+    case GDK_MEMORY_G8_R8B8_420:
+    case GDK_MEMORY_G8_B8R8_422:
+    case GDK_MEMORY_G8_R8B8_422:
+    case GDK_MEMORY_G8_B8R8_444:
+    case GDK_MEMORY_G8_R8B8_444:
       return 3;
 
     case GDK_MEMORY_G8:
@@ -235,6 +247,23 @@ gdk_memory_pixel_print (const guchar          *data,
       }
       break;
 
+    /* multiplanar */
+    case GDK_MEMORY_G8_B8R8_420:
+    case GDK_MEMORY_G8_R8B8_420:
+    case GDK_MEMORY_G8_B8R8_422:
+    case GDK_MEMORY_G8_R8B8_422:
+    case GDK_MEMORY_G8_B8R8_444:
+    case GDK_MEMORY_G8_R8B8_444:
+      {
+        const guchar *y_data = data + gdk_memory_layout_offset (layout, 0, x, y);
+        const guchar *uv_data = data + gdk_memory_layout_offset (layout,
+                                                                 1,
+                                                                 x - x % gdk_memory_format_get_plane_block_width (layout->format, 1),
+                                                                 y - y % gdk_memory_format_get_plane_block_height (layout->format, 1));
+        g_string_append_printf (string, "%02X %02X %02X", y_data[0], uv_data[0], uv_data[1]);
+      }
+      break;
+
     case GDK_MEMORY_N_FORMATS:
     default:
       g_assert_not_reached ();
@@ -336,6 +365,26 @@ gdk_memory_pixel_equal (const guchar          *data1,
           }
       }
       return TRUE;
+
+    /* multiplanar */
+    case GDK_MEMORY_G8_B8R8_420:
+    case GDK_MEMORY_G8_R8B8_420:
+    case GDK_MEMORY_G8_B8R8_422:
+    case GDK_MEMORY_G8_R8B8_422:
+    case GDK_MEMORY_G8_B8R8_444:
+    case GDK_MEMORY_G8_R8B8_444:
+      return memcmp (data1 + gdk_memory_layout_offset (layout1, 0, x, y),
+                     data2 + gdk_memory_layout_offset (layout2, 0, x, y),
+                     gdk_memory_format_get_plane_block_bytes (layout1->format, 0)) == 0 &&
+             memcmp (data1 + gdk_memory_layout_offset (layout1,
+                                                       1,
+                                                       x - x % gdk_memory_format_get_plane_block_width (layout1->format, 1),
+                                                       y - y % gdk_memory_format_get_plane_block_height (layout1->format, 1)),
+                     data2 + gdk_memory_layout_offset (layout2,
+                                                       1,
+                                                       x - x % gdk_memory_format_get_plane_block_width (layout2->format, 1),
+                                                       y - y % gdk_memory_format_get_plane_block_height (layout2->format, 1)),
+                     gdk_memory_format_get_plane_block_bytes (layout1->format, 1)) == 0;
 
     case GDK_MEMORY_N_FORMATS:
     default:
