@@ -857,10 +857,14 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
   gsk_gpu_download_into_op (self,
                             image,
                             image_cs,
-                            format,
-                            color_state,
                             data,
-                            stride);
+                            &GDK_MEMORY_LAYOUT_SIMPLE (
+                                format,
+                                gsk_gpu_image_get_width (image),
+                                gsk_gpu_image_get_height (image),
+                                stride
+                            ),
+                            color_state);
 
   gsk_gpu_frame_submit (self, GSK_RENDER_PASS_EXPORT);
   g_object_unref (image);

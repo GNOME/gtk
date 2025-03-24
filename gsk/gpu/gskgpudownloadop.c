@@ -414,10 +414,9 @@ struct _GskGpuDownloadIntoOp
   GskGpuImage *image;
   GdkColorState *image_color_state;
 
-  GdkMemoryFormat format;
-  GdkColorState *color_state;
   guchar *data;
-  gsize stride;
+  GdkMemoryLayout layout;
+  GdkColorState *color_state;
 };
 
 static void
@@ -445,7 +444,7 @@ gsk_gpu_download_into_op_print (GskGpuOp    *op,
   gsk_gpu_print_op (string, indent, "download-into");
   gsk_gpu_print_image (string, self->image);
   g_string_append_printf (string, "%s ", gdk_color_state_get_name (self->image_color_state));
-  g_string_append_printf (string, "%s ", gdk_memory_format_get_name (self->format));
+  g_string_append_printf (string, "%s ", gdk_memory_format_get_name (self->layout.format));
   g_string_append_printf (string, "%s ", gdk_color_state_get_name (self->color_state));
   gsk_gpu_print_newline (string);
 }
@@ -464,12 +463,7 @@ gsk_gpu_download_into_op_vk_create (GskGpuDownloadIntoOp *self)
   height = gsk_gpu_image_get_height (self->image);
 
   gdk_memory_convert (self->data,
-                      &GDK_MEMORY_LAYOUT_SIMPLE (
-                          self->format,
-                          width,
-                          height,
-                          self->stride
-                      ),
+                      &self->layout,
                       self->color_state,
                       data,
                       &GDK_MEMORY_LAYOUT_SIMPLE (
@@ -509,12 +503,7 @@ gsk_gpu_download_into_op_gl_command (GskGpuOp          *op,
                            gsk_gpu_image_get_format (self->image),
                            self->image_color_state,
                            self->data,
-                           &GDK_MEMORY_LAYOUT_SIMPLE (
-                               self->format,
-                               gsk_gpu_image_get_width (self->image),
-                               gsk_gpu_image_get_height (self->image),
-                               self->stride
-                           ),
+                           &self->layout,
                            self->color_state);
 
   return op->next;
@@ -532,13 +521,12 @@ static const GskGpuOpClass GSK_GPU_DOWNLOAD_INTO_OP_CLASS = {
 };
 
 void
-gsk_gpu_download_into_op (GskGpuFrame     *frame,
-                          GskGpuImage     *image,
-                          GdkColorState   *image_color_state,
-                          GdkMemoryFormat  format,
-                          GdkColorState   *color_state,
-                          guchar          *data,
-                          gsize            stride)
+gsk_gpu_download_into_op (GskGpuFrame           *frame,
+                          GskGpuImage           *image,
+                          GdkColorState         *image_color_state,
+                          guchar                *data,
+                          const GdkMemoryLayout *layout,
+                          GdkColorState         *color_state)
 {
   GskGpuDownloadIntoOp *self;
 
@@ -548,9 +536,8 @@ gsk_gpu_download_into_op (GskGpuFrame     *frame,
 
   self->image = g_object_ref (image);
   self->image_color_state = gdk_color_state_ref (image_color_state);
-  self->format = format;
-  self->color_state = gdk_color_state_ref (color_state);
   self->data = data;
-  self->stride = stride;
+  self->layout = *layout;
+  self->color_state = gdk_color_state_ref (color_state);
 }
 
