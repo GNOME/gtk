@@ -304,8 +304,12 @@ gdk_texture_downloader_download_bytes (const GdkTextureDownloader *self,
       gdk_color_state_equal (gdk_texture_get_color_state (self->texture), self->color_state))
     {
       GdkMemoryTexture *memtex = GDK_MEMORY_TEXTURE (self->texture);
+      const GdkMemoryLayout *layout = gdk_memory_texture_get_layout (memtex);
 
-      return g_bytes_ref (gdk_memory_texture_get_bytes (memtex, out_stride));
+      *out_stride = layout->planes[0].stride;
+      return g_bytes_new_from_bytes (gdk_memory_texture_get_bytes (memtex),
+                                     layout->planes[0].offset,
+                                     layout->size - layout->planes[0].offset);
     }
 
   stride = self->texture->width * gdk_memory_format_bytes_per_pixel (self->format);
