@@ -801,13 +801,12 @@ image_is_uploaded (GskGpuImage *image)
 }
 
 gboolean
-gsk_gpu_frame_download_texture (GskGpuFrame     *self,
-                                gint64           timestamp,
-                                GdkTexture      *texture,
-                                GdkMemoryFormat  format,
-                                GdkColorState   *color_state,
-                                guchar          *data,
-                                gsize            stride)
+gsk_gpu_frame_download_texture (GskGpuFrame           *self,
+                                gint64                 timestamp,
+                                GdkTexture            *texture,
+                                guchar                *data,
+                                const GdkMemoryLayout *layout,
+                                GdkColorState         *color_state)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   const GdkDmabuf *dmabuf;
@@ -840,7 +839,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
       GskGpuImage *converted;
 
       converted = gsk_gpu_node_processor_convert_image (self,
-                                                        format,
+                                                        layout->format,
                                                         color_state,
                                                         image,
                                                         image_cs);
@@ -858,12 +857,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
                             image,
                             image_cs,
                             data,
-                            &GDK_MEMORY_LAYOUT_SIMPLE (
-                                format,
-                                gsk_gpu_image_get_width (image),
-                                gsk_gpu_image_get_height (image),
-                                stride
-                            ),
+                            layout,
                             color_state);
 
   gsk_gpu_frame_submit (self, GSK_RENDER_PASS_EXPORT);

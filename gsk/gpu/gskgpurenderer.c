@@ -129,12 +129,11 @@ gsk_gpu_renderer_dmabuf_downloader_close (GdkDmabufDownloader *downloader)
 }
 
 static gboolean
-gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
-                                             GdkDmabufTexture    *texture,
-                                             GdkMemoryFormat      format,
-                                             GdkColorState       *color_state,
-                                             guchar              *data,
-                                             gsize                stride)
+gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader   *downloader,
+                                             GdkDmabufTexture      *texture,
+                                             guchar                *data,
+                                             const GdkMemoryLayout *layout,
+                                             GdkColorState         *color_state)
 {
   GskGpuRenderer *self = GSK_GPU_RENDERER (downloader);
   GskGpuFrame *frame;
@@ -150,10 +149,9 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
   if (gsk_gpu_frame_download_texture (frame,
                                       g_get_monotonic_time (),
                                       GDK_TEXTURE (texture),
-                                      format,
-                                      color_state,
                                       data,
-                                      stride))
+                                      layout,
+                                      color_state))
     {
       retval = TRUE;
 
