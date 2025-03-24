@@ -252,6 +252,8 @@ gdk_texture_downloader_get_color_state (const GdkTextureDownloader *self)
  *
  * Downloads the @texture into local memory.
  *
+ * This function cannot be used with a multiplanar format.
+ *
  * Since: 4.10
  **/
 void
@@ -261,6 +263,7 @@ gdk_texture_downloader_download_into (const GdkTextureDownloader *self,
 {
   g_return_if_fail (self != NULL);
   g_return_if_fail (data != NULL);
+  g_return_if_fail (gdk_memory_format_get_n_planes (self->format) == 1);
   g_return_if_fail (stride >= gdk_texture_get_width (self->texture) * gdk_memory_format_bytes_per_pixel (self->format));
 
   gdk_texture_do_download (self->texture, self->format, self->color_state, data, stride);
@@ -279,6 +282,8 @@ gdk_texture_downloader_download_into (const GdkTextureDownloader *self,
  * memory allocation yourself and use [method@Gdk.TextureDownloader.download_into]
  * once allocation succeeded.
  *
+ * This function cannot be used with a multiplanar format.
+ *
  * Returns: The downloaded pixels
  *
  * Since: 4.10
@@ -292,6 +297,7 @@ gdk_texture_downloader_download_bytes (const GdkTextureDownloader *self,
 
   g_return_val_if_fail (self != NULL, NULL);
   g_return_val_if_fail (out_stride != NULL, NULL);
+  g_return_val_if_fail (gdk_memory_format_get_n_planes (self->format) == 1, NULL);
 
   if (GDK_IS_MEMORY_TEXTURE (self->texture) &&
       gdk_texture_get_format (self->texture) == self->format &&
