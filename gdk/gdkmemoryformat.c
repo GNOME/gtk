@@ -111,6 +111,59 @@ name ## _from_float (guchar                *dest_data, \
     } \
 }
 
+#define NV12_FUNCS(name, uv_swapped, x_subsample, y_subsample) \
+static void \
+name ## _to_float (float                (*dest)[4], \
+                   const guchar          *src_data, \
+                   const GdkMemoryLayout *src_layout, \
+                   gsize                  y) \
+{ \
+  const guchar *y_data = src_data + src_layout->planes[0].offset + y * src_layout->planes[0].stride; \
+  const guchar *uv_data = src_data + src_layout->planes[1].offset + (y / y_subsample) * src_layout->planes[1].stride; \
+  for (gsize x = 0; x < src_layout->width; x++) \
+    { \
+      dest[x][0] = y_data[x] / 255.; \
+      dest[x][1] = uv_data[x / x_subsample * 2 + (uv_swapped ? 1 : 0)] / 255.; \
+      dest[x][2] = uv_data[x / x_subsample * 2 + (uv_swapped ? 0 : 1)] / 255.; \
+      dest[x][3] = 1.0f; \
+    } \
+} \
+\
+static void \
+name ## _from_float (guchar                *dest_data, \
+                     const GdkMemoryLayout *dest_layout, \
+                     const float          (*src)[4], \
+                     gsize                  y) \
+{ \
+  guchar *y_data = dest_data + dest_layout->planes[0].offset + y * dest_layout->planes[0].stride; \
+  guchar *uv_data = dest_data + dest_layout->planes[1].offset + (y / y_subsample) * dest_layout->planes[1].stride; \
+\
+  for (gsize ys = 0; ys < y_subsample; ys++) \
+    {\
+      for (gsize x = 0; x < dest_layout->width; x++) \
+        { \
+          y_data[x] = CLAMP (src[x][0] * 255 + 0.5, 0, 255); \
+        } \
+      y_data += dest_layout->planes[0].stride; \
+    }\
+\
+  for (gsize x = 0; x < dest_layout->width; x += x_subsample) \
+    { \
+      float u = 0, v = 0; \
+\
+      for (gsize ys = 0; ys < y_subsample; ys++) \
+        for (gsize xs = 0; xs < x_subsample; xs++) \
+          { \
+            u += src[x][uv_swapped ? 1 : 0]; \
+            v += src[x][uv_swapped ? 0 : 1]; \
+          } \
+      u /= x_subsample * y_subsample; \
+      v /= x_subsample * y_subsample; \
+      uv_data[x / x_subsample * 2] = CLAMP (u * 255 + 0.5, 0, 255); \
+      uv_data[x / x_subsample * 2] = CLAMP (v * 255 + 0.5, 0, 255); \
+    } \
+}
+
 TYPED_FUNCS (b8g8r8a8_premultiplied, guchar, 2, 1, 0, 3, 4, 255)
 TYPED_FUNCS (a8r8g8b8_premultiplied, guchar, 1, 2, 3, 0, 4, 255)
 TYPED_FUNCS (r8g8b8a8_premultiplied, guchar, 0, 1, 2, 3, 4, 255)
@@ -138,6 +191,13 @@ TYPED_GRAY_FUNCS (g16a16_premultiplied, guint16, 0, 1, 4, 65535)
 TYPED_GRAY_FUNCS (g16a16, guint16, 0, 1, 4, 65535)
 TYPED_GRAY_FUNCS (g16, guint16, 0, -1, 2, 65535)
 TYPED_GRAY_FUNCS (a16, guint16, -1, 0, 2, 65535)
+
+NV12_FUNCS (nv12, FALSE, 2, 2)
+NV12_FUNCS (nv21, TRUE, 2, 2)
+NV12_FUNCS (nv16, FALSE, 2, 1)
+NV12_FUNCS (nv61, TRUE, 2, 1)
+NV12_FUNCS (nv24, FALSE, 1, 1)
+NV12_FUNCS (nv42, TRUE, 1, 1)
 
 static void
 r16g16b16_float_to_float (float                 (*dest)[4],
@@ -1991,6 +2051,300 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .mipmap_format = GDK_MEMORY_A32_FLOAT,
     .mipmap_nearest = gdk_mipmap_float_1_nearest,
     .mipmap_linear = gdk_mipmap_float_1_linear,
+  },
+  [GDK_MEMORY_G8_B8R8_420] = {
+    .name = "NV12",
+    .n_planes = 2,
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 1,
+        },
+        {
+            .block_size = { 2, 2 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G8_B8R8_420,
+    .straight = GDK_MEMORY_G8_B8R8_420,
+    .alignment = G_ALIGNOF (guint8),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_gl_format = -1,
+        .internal_gles_format = -1,
+        .internal_srgb_format = -1,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_G8_B8R8_2PLANE_420_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
+    },
+#endif
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_NV12,
+    },
+    .to_float = nv12_to_float,
+    .from_float = nv12_from_float,
+    .mipmap_format = GDK_MEMORY_G8_B8R8_420,
+    .mipmap_nearest = NULL,
+    .mipmap_linear = NULL,
+  },
+  [GDK_MEMORY_G8_R8B8_420] = {
+    .name = "NV21",
+    .n_planes = 2,
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 1,
+        },
+        {
+            .block_size = { 2, 2 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G8_R8B8_420,
+    .straight = GDK_MEMORY_G8_R8B8_420,
+    .alignment = G_ALIGNOF (guint8),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_gl_format = -1,
+        .internal_gles_format = -1,
+        .internal_srgb_format = -1,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_BLUE, GL_GREEN, GL_ALPHA },
+        .rgba_format = -1,
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_G8_B8R8_2PLANE_420_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
+    },
+#endif
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_NV21,
+    },
+    .to_float = nv21_to_float,
+    .from_float = nv21_from_float,
+    .mipmap_format = GDK_MEMORY_G8_R8B8_420,
+    .mipmap_nearest = NULL,
+    .mipmap_linear = NULL,
+  },
+  [GDK_MEMORY_G8_B8R8_422] = {
+    .name = "NV16",
+    .n_planes = 2,
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 1,
+        },
+        {
+            .block_size = { 2, 1 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G8_B8R8_422,
+    .straight = GDK_MEMORY_G8_B8R8_422,
+    .alignment = G_ALIGNOF (guint8),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_gl_format = -1,
+        .internal_gles_format = -1,
+        .internal_srgb_format = -1,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_G8_B8R8_2PLANE_422_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
+    },
+#endif
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_NV16,
+    },
+    .to_float = nv16_to_float,
+    .from_float = nv16_from_float,
+    .mipmap_format = GDK_MEMORY_G8_B8R8_422,
+    .mipmap_nearest = NULL,
+    .mipmap_linear = NULL,
+  },
+  [GDK_MEMORY_G8_R8B8_422] = {
+    .name = "NV61",
+    .n_planes = 2,
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 1,
+        },
+        {
+            .block_size = { 2, 1 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G8_R8B8_422,
+    .straight = GDK_MEMORY_G8_R8B8_422,
+    .alignment = G_ALIGNOF (guint8),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_gl_format = -1,
+        .internal_gles_format = -1,
+        .internal_srgb_format = -1,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_BLUE, GL_GREEN, GL_ALPHA },
+        .rgba_format = -1,
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_G8_B8R8_2PLANE_422_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
+    },
+#endif
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_NV61,
+    },
+    .to_float = nv61_to_float,
+    .from_float = nv61_from_float,
+    .mipmap_format = GDK_MEMORY_G8_R8B8_422,
+    .mipmap_nearest = NULL,
+    .mipmap_linear = NULL,
+  },
+  [GDK_MEMORY_G8_B8R8_444] = {
+    .name = "NV24",
+    .n_planes = 2,
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 1,
+        },
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G8_B8R8_444,
+    .straight = GDK_MEMORY_G8_B8R8_444,
+    .alignment = G_ALIGNOF (guint8),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_gl_format = -1,
+        .internal_gles_format = -1,
+        .internal_srgb_format = -1,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_G8_B8R8_2PLANE_444_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
+    },
+#endif
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_NV24,
+    },
+    .to_float = nv24_to_float,
+    .from_float = nv24_from_float,
+    .mipmap_format = GDK_MEMORY_G8_B8R8_444,
+    .mipmap_nearest = NULL,
+    .mipmap_linear = NULL,
+  },
+  [GDK_MEMORY_G8_R8B8_444] = {
+    .name = "NV42",
+    .n_planes = 2,
+    .planes = {
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 1,
+        },
+        {
+            .block_size = { 1, 1 },
+            .block_bytes = 2,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G8_R8B8_444,
+    .straight = GDK_MEMORY_G8_R8B8_444,
+    .alignment = G_ALIGNOF (guint8),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_gl_format = -1,
+        .internal_gles_format = -1,
+        .internal_srgb_format = -1,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_BYTE,
+        .swizzle = { GL_RED, GL_BLUE, GL_GREEN, GL_ALPHA },
+        .rgba_format = -1,
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_G8_B8R8_2PLANE_444_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
+    },
+#endif
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_NV42,
+    },
+    .to_float = nv42_to_float,
+    .from_float = nv42_from_float,
+    .mipmap_format = GDK_MEMORY_G8_R8B8_444,
+    .mipmap_nearest = NULL,
+    .mipmap_linear = NULL,
   }
 };
 

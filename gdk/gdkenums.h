@@ -505,6 +505,90 @@ typedef enum
  *
  * Since: 4.12
  */
+/**
+ * GDK_MEMORY_G8_B8R8_420:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cb followed by Cr.
+ * Subsampled in both the X and Y direction.
+ *
+ * Commonly known by the fourcc "NV12".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_R8B8_420:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cr followed by Cb.
+ * Subsampled in both the X and Y direction.
+ *
+ * Commonly known by the fourcc "NV21".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_B8R8_422:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cb followed by Cr.
+ * Subsampled in the X direction.
+ *
+ * Commonly known by the fourcc "NV16".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_R8B8_422:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cr followed by Cb.
+ * Subsampled in the X direction.
+ *
+ * Commonly known by the fourcc "NV61".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_B8R8_444:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cb followed by Cr.
+ * This format is not subsampled.
+ *
+ * Commonly known by the fourcc "NV24".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_R8B8_444:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cr followed by Cb.
+ * This format is not subsampled.
+ *
+ * Commonly known by the fourcc "NV42".
+ *
+ * Since: 4.20
+ */
 typedef enum {
   GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
   GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
@@ -539,6 +623,12 @@ typedef enum {
   GDK_MEMORY_X8R8G8B8 GDK_AVAILABLE_ENUMERATOR_IN_4_14,
   GDK_MEMORY_R8G8B8X8 GDK_AVAILABLE_ENUMERATOR_IN_4_14,
   GDK_MEMORY_X8B8G8R8 GDK_AVAILABLE_ENUMERATOR_IN_4_14,
+  GDK_MEMORY_G8_B8R8_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_R8B8_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_B8R8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_R8B8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_B8R8_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_R8B8_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
 
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;
