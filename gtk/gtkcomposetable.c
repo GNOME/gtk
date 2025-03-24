@@ -260,7 +260,7 @@ parse_compose_sequence (const char *seq,
               keyval = 0;
             }
 
-          sequence[n] = keyval;
+          sequence[n] = ch;
           sequence[n + 1] = 0;
         }
       else
