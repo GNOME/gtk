@@ -164,11 +164,13 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
                            gdk_texture_get_format (texture),
                            gdk_texture_get_color_state (texture),
                            download->data,
-                           download->stride,
-                           download->format,
-                           download->color_state,
-                           gdk_texture_get_width (texture),
-                           gdk_texture_get_height (texture));
+                           &GDK_MEMORY_LAYOUT_SIMPLE (
+                               download->format,
+                               gdk_texture_get_width (texture),
+                               gdk_texture_get_height (texture),
+                               download->stride
+                           ),
+                           download->color_state);
 }
                             
 static void

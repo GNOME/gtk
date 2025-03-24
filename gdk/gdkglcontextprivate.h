@@ -186,11 +186,8 @@ void                    gdk_gl_context_download                 (GdkGLContext   
                                                                  GdkMemoryFormat  tex_format,
                                                                  GdkColorState   *tex_color_state,
                                                                  guchar          *dest_data,
-                                                                 gsize            dest_stride,
-                                                                 GdkMemoryFormat  dest_format,
-                                                                 GdkColorState   *dest_color_state,
-                                                                 gsize            width,
-                                                                 gsize            height);
+                                                                 const GdkMemoryLayout *dest_layout,
+                                                                 GdkColorState   *dest_color_state);
 
 guint                   gdk_gl_context_import_dmabuf            (GdkGLContext    *self,
                                                                  int              width,

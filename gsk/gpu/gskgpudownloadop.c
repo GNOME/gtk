@@ -509,11 +509,13 @@ gsk_gpu_download_into_op_gl_command (GskGpuOp          *op,
                            gsk_gpu_image_get_format (self->image),
                            self->image_color_state,
                            self->data,
-                           self->stride,
-                           self->format,
-                           self->color_state,
-                           gsk_gpu_image_get_width (self->image),
-                           gsk_gpu_image_get_height (self->image));
+                           &GDK_MEMORY_LAYOUT_SIMPLE (
+                               self->format,
+                               gsk_gpu_image_get_width (self->image),
+                               gsk_gpu_image_get_height (self->image),
+                               self->stride
+                           ),
+                           self->color_state);
 
   return op->next;
 }
