@@ -512,7 +512,7 @@ infer_edge_constraints (GdkToplevelState state)
 }
 
 static gboolean
-supports_native_edge_constraints (GdkWaylandToplevel*toplevel)
+supports_native_edge_constraints (GdkWaylandToplevel *toplevel)
 {
   struct gtk_surface1 *gtk_surface = toplevel->display_server.gtk_surface;
   if (!gtk_surface)
