@@ -838,6 +838,33 @@ gdk_texture_do_download (GdkTexture            *texture,
   GDK_TEXTURE_GET_CLASS (texture)->download (texture, data, layout, color_state);
 }
 
+GBytes *
+gdk_texture_download_bytes (GdkTexture      *self,
+                            GdkMemoryLayout *out_layout)
+{
+  if (GDK_IS_MEMORY_TEXTURE (self))
+    {
+      GdkMemoryTexture *memtex = GDK_MEMORY_TEXTURE (self);
+
+      *out_layout = *gdk_memory_texture_get_layout (memtex);
+      return g_bytes_ref (gdk_memory_texture_get_bytes (memtex));
+    }
+  else
+    {
+      guchar *data;
+
+      gdk_memory_layout_init (out_layout,
+                              self->format,
+                              self->width,
+                              self->height,
+                              1);
+      data = g_malloc (out_layout->size);
+      
+      gdk_texture_do_download (self, data, out_layout, self->color_state);
+      return g_bytes_new_take (data, out_layout->size);
+    }
+}
+
 static gboolean
 gdk_texture_has_ancestor (GdkTexture *self,
                           GdkTexture *other)
