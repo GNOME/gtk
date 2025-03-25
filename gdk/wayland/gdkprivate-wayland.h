@@ -119,17 +119,11 @@ void       gdk_wayland_display_system_bell (GdkDisplay *display,
 struct wl_buffer *_gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
                                                   GdkCursor         *cursor,
                                                   double             desired_scale,
-                                                  guint              image_index,
                                                   int               *hotspot_x,
                                                   int               *hotspot_y,
                                                   int               *w,
                                                   int               *h,
                                                   double            *scale);
-guint      _gdk_wayland_cursor_get_next_image_index (GdkWaylandDisplay *display,
-                                                     GdkCursor         *cursor,
-                                                     guint              scale,
-                                                     guint              current_image_index,
-                                                     guint             *next_image_delay);
 
 void            gdk_wayland_surface_sync                   (GdkSurface           *surface);
 void            gdk_wayland_surface_handle_empty_frame     (GdkSurface           *surface);

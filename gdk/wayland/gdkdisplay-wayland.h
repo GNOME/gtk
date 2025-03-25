@@ -53,7 +53,6 @@
 #include "gdkdisplayprivate.h"
 #include "gdkwaylanddevice.h"
 #include "gdkdmabuf-wayland-private.h"
-#include "cursor/wayland-cursor.h"
 
 #include <epoxy/egl.h>
 
@@ -147,10 +146,7 @@ struct _GdkWaylandDisplay
   GList *current_popups;
   GList *current_grabbing_popups;
 
-  struct wl_cursor_theme *cursor_theme;
-  char *cursor_theme_name;
   int cursor_theme_size;
-  GHashTable *cursor_surface_cache;
 
   GSource *event_source;
   GSource *poll_source;

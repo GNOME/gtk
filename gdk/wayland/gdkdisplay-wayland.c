@@ -105,7 +105,6 @@
 #define XDG_WM_BASE_VERSION      5
 #endif
 
-static void _gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland);
 static void _gdk_wayland_display_set_cursor_theme  (GdkDisplay        *display,
                                                     const char        *name,
                                                     int                size);
@@ -718,8 +717,6 @@ _gdk_wayland_display_open (const char *display_name)
   display_wayland->known_globals =
     g_hash_table_new_full (NULL, NULL, NULL, g_free);
 
-  _gdk_wayland_display_init_cursors (display_wayland);
-
   display_wayland->wl_registry = wl_display_get_registry (display_wayland->wl_display);
   wl_registry_add_listener (display_wayland->wl_registry, &registry_listener, display_wayland);
   if (wl_display_roundtrip (display_wayland->wl_display) < 0)
@@ -787,8 +784,6 @@ _gdk_wayland_display_open (const char *display_name)
       return NULL;
     }
 
-  _gdk_wayland_display_load_cursor_theme (display_wayland);
-
   if (display_wayland->color)
     {
       if (!gdk_wayland_color_prepare (display_wayland->color))
@@ -825,7 +820,6 @@ gdk_wayland_display_dispose (GObject *object)
 
   g_list_free_full (display_wayland->on_has_globals_closures, g_free);
 
-  g_clear_pointer (&display_wayland->cursor_theme, wl_cursor_theme_destroy);
   g_clear_pointer (&display_wayland->compositor, wl_compositor_destroy);
   g_clear_pointer (&display_wayland->xdg_wm_base, xdg_wm_base_destroy);
   g_clear_pointer (&display_wayland->zxdg_shell_v6, zxdg_shell_v6_destroy);
@@ -868,12 +862,9 @@ gdk_wayland_display_finalize (GObject *object)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (object);
 
-  _gdk_wayland_display_finalize_cursors (display_wayland);
-
   g_object_unref (display_wayland->monitors);
 
   g_free (display_wayland->startup_notification_id);
-  g_free (display_wayland->cursor_theme_name);
   xkb_context_unref (display_wayland->xkb_context);
 
   if (display_wayland->settings)
@@ -1177,58 +1168,6 @@ gdk_wayland_display_get_toplevel_surfaces (GdkDisplay *display)
   return GDK_WAYLAND_DISPLAY (display)->toplevels;
 }
 
-static struct wl_cursor_theme *
-try_load_theme (GdkWaylandDisplay *display_wayland,
-                const char        *dir,
-                gboolean           dotdir,
-                const char        *name,
-                int                size)
-{
-  struct wl_cursor_theme *theme = NULL;
-  char *path;
-
-  path = g_build_filename (dir, dotdir ? ".icons" : "icons", name, "cursors", NULL);
-
-  if (g_file_test (path, G_FILE_TEST_IS_DIR))
-    theme = wl_cursor_theme_create (path, size, display_wayland->shm);
-
-  g_free (path);
-
-  return theme;
-}
-
-static struct wl_cursor_theme *
-get_cursor_theme (GdkWaylandDisplay *display_wayland,
-                  const char *name,
-                  int size)
-{
-  const char * const *xdg_data_dirs;
-  struct wl_cursor_theme *theme = NULL;
-  int i;
-
-  theme = try_load_theme (display_wayland, g_get_user_data_dir (), FALSE, name, size);
-  if (theme)
-    return theme;
-
-  theme = try_load_theme (display_wayland, g_get_home_dir (), TRUE, name, size);
-  if (theme)
-    return theme;
-
-  xdg_data_dirs = g_get_system_data_dirs ();
-  for (i = 0; xdg_data_dirs[i]; i++)
-    {
-      theme = try_load_theme (display_wayland, xdg_data_dirs[i], FALSE, name, size);
-      if (theme)
-        return theme;
-    }
-
-  if (strcmp (name, "default") != 0)
-    return get_cursor_theme (display_wayland, "default", size);
-
-  /* This may fall back to builtin cursors */
-  return wl_cursor_theme_create ("/usr/share/icons/Adwaita/cursors", size, display_wayland->shm);
-}
-
 /**
  * gdk_wayland_display_set_cursor_theme:
  * @display: (type GdkWaylandDisplay): a `GdkDisplay`
@@ -1254,87 +1193,11 @@ _gdk_wayland_display_set_cursor_theme (GdkDisplay *display,
                                        int         size)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY(display);
-  struct wl_cursor_theme *theme;
-  GList *seats;
-
-  g_assert (display_wayland);
-  g_assert (display_wayland->shm);
 
   if (size == 0)
     size = 24;
 
-  if (g_strcmp0 (name, display_wayland->cursor_theme_name) == 0 &&
-      display_wayland->cursor_theme_size == size)
-    return;
-
-  theme = get_cursor_theme (display_wayland, name, size);
-
-  if (theme == NULL)
-    {
-      g_warning ("Failed to load cursor theme %s", name);
-      return;
-    }
-
-  if (display_wayland->cursor_theme)
-    {
-      wl_cursor_theme_destroy (display_wayland->cursor_theme);
-      display_wayland->cursor_theme = NULL;
-    }
-  display_wayland->cursor_theme = theme;
-  if (display_wayland->cursor_theme_name != NULL)
-    g_free (display_wayland->cursor_theme_name);
-  display_wayland->cursor_theme_name = g_strdup (name);
   display_wayland->cursor_theme_size = size;
-
- seats = gdk_display_list_seats (display);
- for (GList *l = seats; l; l = l->next)
-   {
-     GdkSeat *seat = l->data;
-
-     gdk_wayland_device_update_surface_cursor (gdk_seat_get_pointer (seat));
-   }
- g_list_free (seats);
-}
-
-struct wl_cursor_theme *
-_gdk_wayland_display_get_cursor_theme (GdkWaylandDisplay *display_wayland)
-{
-  g_assert (display_wayland->cursor_theme_name);
-
-  return display_wayland->cursor_theme;
-}
-
-static void
-_gdk_wayland_display_load_cursor_theme (GdkWaylandDisplay *display_wayland)
-{
-  guint size;
-  const char *name;
-  GValue v = G_VALUE_INIT;
-  gint64 before G_GNUC_UNUSED;
-
-  before = GDK_PROFILER_CURRENT_TIME;
-
-  g_assert (display_wayland);
-  g_assert (display_wayland->shm);
-
-  g_value_init (&v, G_TYPE_INT);
-  if (gdk_display_get_setting (GDK_DISPLAY (display_wayland), "gtk-cursor-theme-size", &v))
-    size = g_value_get_int (&v);
-  else
-    size = 24;
-  g_value_unset (&v);
-
-  g_value_init (&v, G_TYPE_STRING);
-  if (gdk_display_get_setting (GDK_DISPLAY (display_wayland), "gtk-cursor-theme-name", &v))
-    name = g_value_get_string (&v);
-  else
-    name = "default";
-
-  _gdk_wayland_display_set_cursor_theme (GDK_DISPLAY (display_wayland), name, size);
-  g_value_unset (&v);
-
-  gdk_profiler_end_mark (before, "Wayland cursor theme load", NULL);
-
 }
 
 /**
