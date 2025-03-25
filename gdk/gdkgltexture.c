@@ -145,10 +145,9 @@ typedef struct _Download Download;
 
 struct _Download
 {
-  GdkMemoryFormat format;
-  GdkColorState *color_state;
   guchar *data;
-  gsize stride;
+  GdkMemoryLayout layout;
+  GdkColorState *color_state;
 };
 
 static void
@@ -164,35 +163,28 @@ gdk_gl_texture_do_download (GdkGLTexture *self,
                            gdk_texture_get_format (texture),
                            gdk_texture_get_color_state (texture),
                            download->data,
-                           &GDK_MEMORY_LAYOUT_SIMPLE (
-                               download->format,
-                               gdk_texture_get_width (texture),
-                               gdk_texture_get_height (texture),
-                               download->stride
-                           ),
+                           &download->layout,
                            download->color_state);
 }
                             
 static void
-gdk_gl_texture_download (GdkTexture      *texture,
-                         GdkMemoryFormat  format,
-                         GdkColorState   *color_state,
-                         guchar          *data,
-                         gsize            stride)
+gdk_gl_texture_download (GdkTexture            *texture,
+                         guchar                *data,
+                         const GdkMemoryLayout *layout,
+                         GdkColorState         *color_state)
 {
   GdkGLTexture *self = GDK_GL_TEXTURE (texture);
   Download download;
 
   if (self->saved)
     {
-      gdk_texture_do_download (self->saved, format, color_state, data, stride);
+      gdk_texture_do_download (self->saved, data, layout, color_state);
       return;
     }
 
-  download.format = format;
-  download.color_state = color_state;
   download.data = data;
-  download.stride = stride;
+  download.layout = *layout;
+  download.color_state = color_state;
 
   gdk_gl_texture_run (self, gdk_gl_texture_do_download, &download);
 }

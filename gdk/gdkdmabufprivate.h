@@ -38,10 +38,9 @@ int                         gdk_dmabuf_new_for_bytes            (GBytes         
 
 GdkDmabufFormats *          gdk_dmabuf_get_mmap_formats         (void) G_GNUC_CONST;
 gboolean                    gdk_dmabuf_download_mmap            (GdkTexture                     *texture,
-                                                                 GdkMemoryFormat                 format,
-                                                                 GdkColorState                  *color_state,
                                                                  guchar                         *data,
-                                                                 gsize                           stride);
+                                                                 const GdkMemoryLayout          *layout,
+                                                                 GdkColorState                  *color_state);
 
 int                         gdk_dmabuf_ioctl                    (int                             fd,
                                                                  unsigned long                   request,

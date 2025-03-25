@@ -266,7 +266,15 @@ gdk_texture_downloader_download_into (const GdkTextureDownloader *self,
   g_return_if_fail (gdk_memory_format_get_n_planes (self->format) == 1);
   g_return_if_fail (stride >= gdk_texture_get_width (self->texture) * gdk_memory_format_bytes_per_pixel (self->format));
 
-  gdk_texture_do_download (self->texture, self->format, self->color_state, data, stride);
+  gdk_texture_do_download (self->texture,
+                           data,
+                           &GDK_MEMORY_LAYOUT_SIMPLE (
+                               self->format,
+                               self->texture->width,
+                               self->texture->height,
+                               stride
+                           ),
+                           self->color_state);
 }
 
 /**
@@ -315,7 +323,15 @@ gdk_texture_downloader_download_bytes (const GdkTextureDownloader *self,
   stride = self->texture->width * gdk_memory_format_bytes_per_pixel (self->format);
   data = g_malloc_n (stride, self->texture->height);
 
-  gdk_texture_do_download (self->texture, self->format, self->color_state, data, stride);
+  gdk_texture_do_download (self->texture,
+                           data,
+                           &GDK_MEMORY_LAYOUT_SIMPLE (
+                               self->format,
+                               self->texture->width,
+                               self->texture->height,
+                               stride
+                           ),
+                           self->color_state);
 
   *out_stride = stride;
   return g_bytes_new_take (data, stride * self->texture->height);

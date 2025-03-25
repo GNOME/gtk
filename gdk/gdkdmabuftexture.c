@@ -94,10 +94,9 @@ typedef struct _Download Download;
 struct _Download
 {
   GdkDmabufTexture *texture;
-  GdkMemoryFormat format;
-  GdkColorState *color_state;
   guchar *data;
-  gsize stride;
+  GdkMemoryLayout layout;
+  GdkColorState *color_state;
   volatile int spinlock;
 };
 
@@ -111,12 +110,7 @@ gdk_dmabuf_texture_invoke_callback (gpointer data)
       gdk_dmabuf_downloader_download (display->egl_downloader,
                                       download->texture,
                                       download->data,
-                                      &GDK_MEMORY_LAYOUT_SIMPLE (
-                                          download->format,
-                                          gdk_texture_get_width (GDK_TEXTURE (download->texture)),
-                                          gdk_texture_get_height (GDK_TEXTURE (download->texture)),
-                                          download->stride
-                                      ),
+                                      &download->layout,
                                       download->color_state))
     {
       /* Successfully downloaded using EGL */
@@ -125,22 +119,16 @@ gdk_dmabuf_texture_invoke_callback (gpointer data)
            gdk_dmabuf_downloader_download (display->vk_downloader,
                                            download->texture,
                                            download->data,
-                                           &GDK_MEMORY_LAYOUT_SIMPLE (
-                                               download->format,
-                                               gdk_texture_get_width (GDK_TEXTURE (download->texture)),
-                                               gdk_texture_get_height (GDK_TEXTURE (download->texture)),
-                                               download->stride
-                                           ),
+                                           &download->layout,
                                            download->color_state))
     {
       /* Successfully downloaded using Vulkan */
     }
 #ifdef HAVE_DMABUF
   else if (gdk_dmabuf_download_mmap (GDK_TEXTURE (download->texture),
-                                     download->format,
-                                     download->color_state,
                                      download->data,
-                                     download->stride))
+                                     &download->layout,
+                                     download->color_state))
     {
       /* Successfully downloaded using mmap */
     }
@@ -160,14 +148,13 @@ gdk_dmabuf_texture_invoke_callback (gpointer data)
 }
 
 static void
-gdk_dmabuf_texture_download (GdkTexture      *texture,
-                             GdkMemoryFormat  format,
-                             GdkColorState   *color_state,
-                             guchar          *data,
-                             gsize            stride)
+gdk_dmabuf_texture_download (GdkTexture            *texture,
+                             guchar                *data,
+                             const GdkMemoryLayout *layout,
+                             GdkColorState         *color_state)
 {
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (texture);
-  Download download = { self, format, color_state, data, stride, 0 };
+  Download download = { self, data, *layout, color_state, 0 };
 
   g_main_context_invoke (NULL, gdk_dmabuf_texture_invoke_callback, &download);
 
