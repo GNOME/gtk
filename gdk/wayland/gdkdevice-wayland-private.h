@@ -67,6 +67,7 @@ struct _GdkWaylandPointerData {
   struct wp_cursor_shape_device_v1 *shape_device;
   guint cursor_is_default: 1;
   guint has_cursor_surface : 1;
+  guint cursor_shape;
   GdkCursor *cursor;
   guint cursor_timeout_id;
   guint cursor_image_index;

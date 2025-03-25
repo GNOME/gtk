@@ -362,15 +362,20 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
                                              wp_cursor_shape_manager_v1_get_version (GDK_WAYLAND_DISPLAY (seat->display)->cursor_shape));
       if (shape != 0)
         {
+          if (pointer->cursor_shape == shape)
+            return G_SOURCE_REMOVE;
+
           if (tablet && tablet->current_tool->shape_device)
             {
               pointer->has_cursor_surface = FALSE;
+              pointer->cursor_shape = shape;
               wp_cursor_shape_device_v1_set_shape (tablet->current_tool->shape_device, pointer->enter_serial, shape);
               return G_SOURCE_REMOVE;
             }
           else if (seat->wl_pointer && pointer->shape_device)
             {
               pointer->has_cursor_surface = FALSE;
+              pointer->cursor_shape = shape;
               wp_cursor_shape_device_v1_set_shape (pointer->shape_device, pointer->enter_serial, shape);
               return G_SOURCE_REMOVE;
             }
@@ -448,6 +453,7 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
         }
 
       pointer->has_cursor_surface = TRUE;
+      pointer->cursor_shape = 0;
     }
 
   pointer->cursor_hotspot_x = x;
