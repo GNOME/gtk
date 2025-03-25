@@ -1098,6 +1098,8 @@ update_reverse_relation (GtkATContext *self, GtkAccessibleRelation relation, Gtk
                   for (l = gtk_reference_list_accessible_value_get (val); l; l = l->next)
                     {
                       related_context = gtk_accessible_get_at_context (l->data);
+                      if (!related_context)
+                        continue;
                       remove_from_accessible_relation (related_context, reverse_rels_map[i].reverse_rel, self->accessible);
                       g_clear_object (&related_context);
                     }
