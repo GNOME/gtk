@@ -64,6 +64,8 @@ void                    gdk_texture_do_download         (GdkTexture             
                                                          guchar                 *data,
                                                          const GdkMemoryLayout  *layout,
                                                          GdkColorState          *color_state);
+GBytes *                gdk_texture_download_bytes      (GdkTexture             *self,
+                                                         GdkMemoryLayout        *out_layout);
 void                    gdk_texture_diff                (GdkTexture             *self,
                                                          GdkTexture             *other,
                                                          cairo_region_t         *region);
