@@ -47,10 +47,9 @@ struct _GdkTextureClass {
 
   /* mandatory: Download in the given format into data */
   void                  (* download)                    (GdkTexture             *texture,
-                                                         GdkMemoryFormat         format,
-                                                         GdkColorState          *color_state,
                                                          guchar                 *data,
-                                                         gsize                   stride);
+                                                         const GdkMemoryLayout  *layout,
+                                                         GdkColorState          *color_state);
 };
 
 gboolean                gdk_texture_can_load            (GBytes                 *bytes);
@@ -62,10 +61,9 @@ cairo_surface_t *       gdk_texture_download_surface    (GdkTexture             
 GdkMemoryDepth          gdk_texture_get_depth           (GdkTexture             *self);
 
 void                    gdk_texture_do_download         (GdkTexture             *texture,
-                                                         GdkMemoryFormat         format,
-                                                         GdkColorState          *color_state,
                                                          guchar                 *data,
-                                                         gsize                   stride);
+                                                         const GdkMemoryLayout  *layout,
+                                                         GdkColorState          *color_state);
 void                    gdk_texture_diff                (GdkTexture             *self,
                                                          GdkTexture             *other,
                                                          cairo_region_t         *region);

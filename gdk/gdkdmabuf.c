@@ -129,7 +129,8 @@ gdk_dmabuf_munmap (int           dmabuf_fd,
 static gboolean
 gdk_dmabuf_do_download_mmap (GdkTexture            *texture,
                              guchar                *data,
-                             const GdkMemoryLayout *layout)
+                             const GdkMemoryLayout *layout,
+                             GdkColorState         *color_state)
 {
   const GdkDmabuf *dmabuf;
   GdkMemoryLayout dmabuf_layout;
@@ -197,27 +198,20 @@ out:
 }
 
 gboolean
-gdk_dmabuf_download_mmap (GdkTexture      *texture,
-                          GdkMemoryFormat  format,
-                          GdkColorState   *color_state,
-                          guchar          *data,
-                          gsize            stride)
+gdk_dmabuf_download_mmap (GdkTexture            *texture,
+                          guchar                *data,
+                          const GdkMemoryLayout *layout,
+                          GdkColorState         *color_state)
 {
   GdkMemoryFormat src_format = gdk_texture_get_format (texture);
   GdkColorState *src_color_state = gdk_texture_get_color_state (texture);
-  GdkMemoryLayout layout;
   gboolean retval;
 
-  layout = GDK_MEMORY_LAYOUT_SIMPLE (format,
-                                     gdk_texture_get_width (texture),
-                                     gdk_texture_get_height (texture),
-                                     stride);
-
-  if (format == src_format)
+  if (layout->format == src_format)
     {
-      retval = gdk_dmabuf_do_download_mmap (texture, data, &layout);
+      retval = gdk_dmabuf_do_download_mmap (texture, data, layout, color_state);
       gdk_memory_convert_color_state (data,
-                                      &layout,
+                                      layout,
                                       src_color_state,
                                       color_state);
     }
@@ -234,10 +228,10 @@ gdk_dmabuf_download_mmap (GdkTexture      *texture,
 
       src_data = g_new (guchar, src_layout.size);
 
-      retval = gdk_dmabuf_do_download_mmap (texture, src_data, &src_layout);
+      retval = gdk_dmabuf_do_download_mmap (texture, src_data, &src_layout, src_color_state);
 
       gdk_memory_convert (data,
-                          &layout,
+                          layout,
                           color_state,
                           src_data,
                           &src_layout,
