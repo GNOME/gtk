@@ -1559,6 +1559,47 @@ _gdk_wayland_is_shm_surface (cairo_surface_t *surface)
   return cairo_surface_get_user_data (surface, &gdk_wayland_shm_surface_cairo_key) != NULL;
 }
 
+static void
+shm_buffer_release (void             *data,
+                    struct wl_buffer *buffer)
+{
+  cairo_surface_t *surface = data;
+
+  /* Note: the wl_buffer is destroyed as cairo user data */
+  cairo_surface_destroy (surface);
+}
+
+static const struct wl_buffer_listener shm_buffer_listener = {
+  shm_buffer_release,
+};
+
+struct wl_buffer *
+_gdk_wayland_shm_texture_get_wl_buffer (GdkWaylandDisplay *display,
+                                        GdkTexture        *texture)
+{
+  int width, height;
+  cairo_surface_t *surface;
+  GdkTextureDownloader *downloader;
+  struct wl_buffer *buffer;
+
+  width = gdk_texture_get_width (texture);
+  height = gdk_texture_get_height (texture);
+  surface = gdk_wayland_display_create_shm_surface (display, width, height);
+
+  downloader = gdk_texture_downloader_new (texture);
+
+  gdk_texture_downloader_download_into (downloader,
+                                        cairo_image_surface_get_data (surface),
+                                        cairo_image_surface_get_stride (surface));
+
+  gdk_texture_downloader_free (downloader);
+
+  buffer = _gdk_wayland_shm_surface_get_wl_buffer (surface);
+  wl_buffer_add_listener (buffer, &shm_buffer_listener, surface);
+
+  return buffer;
+}
+
 typedef enum
 {
   GSD_FONT_ANTIALIASING_MODE_NONE,

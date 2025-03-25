@@ -208,6 +208,8 @@ cairo_surface_t * gdk_wayland_display_create_shm_surface  (GdkWaylandDisplay    
                                                            guint                     height);
 struct wl_buffer *_gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface);
 gboolean _gdk_wayland_is_shm_surface (cairo_surface_t *surface);
+struct wl_buffer *_gdk_wayland_shm_texture_get_wl_buffer (GdkWaylandDisplay *display,
+                                                          GdkTexture        *texture);
 
 void gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
                                          GdkCursor *cursor);
