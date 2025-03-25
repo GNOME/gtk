@@ -63,6 +63,9 @@ gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
     case GDK_MEMORY_G8_R8B8_422:
     case GDK_MEMORY_G8_B8R8_444:
     case GDK_MEMORY_G8_R8B8_444:
+    case GDK_MEMORY_G10X6_B10X6R10X6_420:
+    case GDK_MEMORY_G12X4_B12X4R12X4_420:
+    case GDK_MEMORY_G16_B16R16_420:
     case GDK_MEMORY_N_FORMATS:
     default:
       g_assert_not_reached ();
@@ -108,6 +111,9 @@ gdk_memory_format_get_channel_type (GdkMemoryFormat format)
     case GDK_MEMORY_G16A16:
     case GDK_MEMORY_G16A16_PREMULTIPLIED:
     case GDK_MEMORY_A16:
+    case GDK_MEMORY_G10X6_B10X6R10X6_420:
+    case GDK_MEMORY_G12X4_B12X4R12X4_420:
+    case GDK_MEMORY_G16_B16R16_420:
       return CHANNEL_UINT_16;
 
     case GDK_MEMORY_R16G16B16_FLOAT:
@@ -164,6 +170,9 @@ gdk_memory_format_n_colors (GdkMemoryFormat format)
     case GDK_MEMORY_G8_R8B8_422:
     case GDK_MEMORY_G8_B8R8_444:
     case GDK_MEMORY_G8_R8B8_444:
+    case GDK_MEMORY_G10X6_B10X6R10X6_420:
+    case GDK_MEMORY_G12X4_B12X4R12X4_420:
+    case GDK_MEMORY_G16_B16R16_420:
       return 3;
 
     case GDK_MEMORY_G8:
@@ -209,6 +218,9 @@ gdk_memory_format_has_alpha (GdkMemoryFormat format)
     case GDK_MEMORY_G8_R8B8_422:
     case GDK_MEMORY_G8_B8R8_444:
     case GDK_MEMORY_G8_R8B8_444:
+    case GDK_MEMORY_G10X6_B10X6R10X6_420:
+    case GDK_MEMORY_G12X4_B12X4R12X4_420:
+    case GDK_MEMORY_G16_B16R16_420:
       return FALSE;
 
     case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
@@ -288,6 +300,9 @@ gdk_memory_format_is_premultiplied (GdkMemoryFormat format)
     case GDK_MEMORY_G8_R8B8_422:
     case GDK_MEMORY_G8_B8R8_444:
     case GDK_MEMORY_G8_R8B8_444:
+    case GDK_MEMORY_G10X6_B10X6R10X6_420:
+    case GDK_MEMORY_G12X4_B12X4R12X4_420:
+    case GDK_MEMORY_G16_B16R16_420:
       return FALSE;
 
     case GDK_MEMORY_N_FORMATS:
@@ -425,6 +440,9 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_G8_R8B8_422:
     case GDK_MEMORY_G8_B8R8_444:
     case GDK_MEMORY_G8_R8B8_444:
+    case GDK_MEMORY_G10X6_B10X6R10X6_420:
+    case GDK_MEMORY_G12X4_B12X4R12X4_420:
+    case GDK_MEMORY_G16_B16R16_420:
     case GDK_MEMORY_N_FORMATS:
     default:
       g_assert_not_reached ();
@@ -521,6 +539,9 @@ gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
     case GDK_MEMORY_G8_R8B8_422:
     case GDK_MEMORY_G8_B8R8_444:
     case GDK_MEMORY_G8_R8B8_444:
+    case GDK_MEMORY_G10X6_B10X6R10X6_420:
+    case GDK_MEMORY_G12X4_B12X4R12X4_420:
+    case GDK_MEMORY_G16_B16R16_420:
     case GDK_MEMORY_N_FORMATS:
     default:
       g_assert_not_reached ();
@@ -825,6 +846,9 @@ texture_builder_set_pixel (TextureBuilder  *builder,
     case GDK_MEMORY_G8_R8B8_422:
     case GDK_MEMORY_G8_B8R8_444:
     case GDK_MEMORY_G8_R8B8_444:
+    case GDK_MEMORY_G10X6_B10X6R10X6_420:
+    case GDK_MEMORY_G12X4_B12X4R12X4_420:
+    case GDK_MEMORY_G16_B16R16_420:
     case GDK_MEMORY_N_FORMATS:
     default:
       g_assert_not_reached ();
