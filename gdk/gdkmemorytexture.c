@@ -56,21 +56,15 @@ gdk_memory_texture_dispose (GObject *object)
 }
 
 static void
-gdk_memory_texture_download (GdkTexture      *texture,
-                             GdkMemoryFormat  format,
-                             GdkColorState   *color_state,
-                             guchar          *data,
-                             gsize            stride)
+gdk_memory_texture_download (GdkTexture            *texture,
+                             guchar                *data,
+                             const GdkMemoryLayout *layout,
+                             GdkColorState         *color_state)
 {
   GdkMemoryTexture *self = GDK_MEMORY_TEXTURE (texture);
 
   gdk_memory_convert (data,
-                      &GDK_MEMORY_LAYOUT_SIMPLE (
-                          format,
-                          texture->width,
-                          texture->height,
-                          stride
-                      ),
+                      layout,
                       color_state,
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
                       &self->layout,
@@ -239,23 +233,26 @@ gdk_memory_texture_from_texture (GdkTexture *texture)
   GdkTexture *result;
   GBytes *bytes;
   guchar *data;
-  gsize stride;
+  GdkMemoryLayout layout;
 
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
 
   if (GDK_IS_MEMORY_TEXTURE (texture))
     return g_object_ref (GDK_MEMORY_TEXTURE (texture));
 
-  stride = texture->width * gdk_memory_format_bytes_per_pixel (texture->format);
-  data = g_malloc_n (stride, texture->height);
+  gdk_memory_layout_init (&layout,
+                          texture->format,
+                          texture->width,
+                          texture->height,
+                          1);
+  data = g_malloc (layout.size);
 
-  gdk_texture_do_download (texture, texture->format, texture->color_state, data, stride);
-  bytes = g_bytes_new_take (data, stride * texture->height);
-  result = gdk_memory_texture_new (texture->width,
-                                   texture->height,
-                                   texture->format,
-                                   bytes,
-                                   stride);
+  gdk_texture_do_download (texture, data, &layout, texture->color_state);
+  bytes = g_bytes_new_take (data, layout.size);
+  result = gdk_memory_texture_new_from_layout (bytes,
+                                               &layout,
+                                               texture->color_state,
+                                               NULL, NULL);
   g_bytes_unref (bytes);
 
   return GDK_MEMORY_TEXTURE (result);
