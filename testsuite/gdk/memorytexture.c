@@ -407,15 +407,15 @@ create_random_color (GdkRGBA *color)
   int r, g, b;
   do
     {
-      r = g_test_rand_int_range (0, 6);
-      g = g_test_rand_int_range (0, 6);
-      b = g_test_rand_int_range (0, 6);
+      r = g_test_rand_int_range (0, 4);
+      g = g_test_rand_int_range (0, 4);
+      b = g_test_rand_int_range (0, 4);
     }
   while ((r + g + b) % 3 != 0);
-  color->red = r / 5.f;
-  color->green = g / 5.f;
-  color->blue = b / 5.f;
-  color->alpha = g_test_rand_int_range (0, 4) / 3.f;
+  color->red = r / 3.f;
+  color->green = g / 3.f;
+  color->blue = b / 3.f;
+  color->alpha = g_test_rand_int_range (0, 6) / 5.f;
 }
 
 static gboolean
@@ -552,7 +552,8 @@ test_conversion (gconstpointer data,
   block_height = MAX (gdk_memory_format_get_block_height (format1),
                      gdk_memory_format_get_block_height (format2));
 
-  if (gdk_memory_format_get_channel_type (format1) == CHANNEL_FLOAT_16)
+  if (gdk_memory_format_get_channel_type (format1) == CHANNEL_FLOAT_16 ||
+      format1 == GDK_MEMORY_G10X6_B10X6R10X6_420)
     accurate = FALSE;
   else
     accurate = TRUE;

@@ -273,6 +273,9 @@ static const FormatData format_data[] = {
   [GDK_MEMORY_G8_R8B8_422]                      = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
   [GDK_MEMORY_G8_B8R8_444]                      = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
   [GDK_MEMORY_G8_R8B8_444]                      = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G10X6_B10X6R10X6_420]             = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G12X4_B12X4R12X4_420]             = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G16_B16R16_420]                   = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
 };
 
 /* if this fails, somebody forgot to add formats above */

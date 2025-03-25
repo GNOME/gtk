@@ -589,6 +589,54 @@ typedef enum
  *
  * Since: 4.20
  */
+/**
+ * GDK_MEMORY_G10X6_B10X6R10X6_420:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * Each channel is a 16 bit integer, but only the highest 10 bits are used.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cr followed by Cb.
+ * This format is not subsampled.
+ *
+ * Commonly known by the fourcc "P010".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G12X4_B12X4R12X4_420:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * Each channel is a 16 bit integer, but only the highest 10 bits are used.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cr followed by Cb.
+ * This format is not subsampled.
+ *
+ * Commonly known by the fourcc "P012".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G16_B16R16_420:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * Each channel is a 16 bit integer.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cr followed by Cb.
+ * This format is not subsampled.
+ *
+ * Commonly known by the fourcc "P016".
+ *
+ * Since: 4.20
+ */
 typedef enum {
   GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
   GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
@@ -629,6 +677,9 @@ typedef enum {
   GDK_MEMORY_G8_R8B8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
   GDK_MEMORY_G8_B8R8_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
   GDK_MEMORY_G8_R8B8_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G10X6_B10X6R10X6_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G12X4_B12X4R12X4_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G16_B16R16_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
 
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;
