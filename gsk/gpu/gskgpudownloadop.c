@@ -19,6 +19,7 @@
 #include "gdk/gdkdmabuftexturebuilderprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
+#include "gdk/gdkmemorytextureprivate.h"
 
 #ifdef HAVE_DMABUF
 #include <glib-unix.h>
@@ -39,6 +40,7 @@ struct _GskGpuDownloadOp
   GdkTexture **texture;
 
   GskGpuBuffer *buffer;
+  GdkMemoryLayout buffer_layout;
 #ifdef GDK_RENDERING_VULKAN
   VkSemaphore vk_semaphore;
 #endif
@@ -74,16 +76,23 @@ gsk_gpu_download_op_print (GskGpuOp    *op,
 static GskGpuBuffer *
 gsk_gpu_download_vk_start (GskGpuFrame           *frame,
                            GskVulkanCommandState *state,
-                           GskGpuImage           *image)
+                           GskGpuImage           *image,
+                           GdkMemoryLayout       *layout)
 {
-  gsize width, height, stride;
+  const VkImageAspectFlags aspect_flags[3] = { VK_IMAGE_ASPECT_PLANE_0_BIT, VK_IMAGE_ASPECT_PLANE_1_BIT, VK_IMAGE_ASPECT_PLANE_2_BIT };
+  VkBufferImageCopy buffer_image_copy[3];
   GskGpuBuffer *buffer;
+  gsize i, n_planes;
 
-  width = gsk_gpu_image_get_width (image);
-  height = gsk_gpu_image_get_height (image);
-  stride = width * gdk_memory_format_bytes_per_pixel (gsk_gpu_image_get_format (image));
+  gdk_memory_layout_init (layout,
+                          gsk_gpu_image_get_format (image),
+                          gsk_gpu_image_get_width (image),
+                          gsk_gpu_image_get_height (image),
+                          1);
+  n_planes = gdk_memory_format_get_n_planes (layout->format);
+
   buffer = gsk_vulkan_buffer_new_read (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                       height * stride);
+                                       layout->size);
 
   gsk_vulkan_image_transition (GSK_VULKAN_IMAGE (image),
                                state->semaphores,
@@ -92,34 +101,41 @@ gsk_gpu_download_vk_start (GskGpuFrame           *frame,
                                VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                                VK_ACCESS_TRANSFER_READ_BIT);
 
+  for (i = 0; i < n_planes; i++)
+    {
+      gsize block_width = gdk_memory_format_get_plane_block_width (layout->format, i);
+      gsize block_height = gdk_memory_format_get_plane_block_height (layout->format, i);
+      gsize block_bytes = gdk_memory_format_get_plane_block_bytes (layout->format, i);
+
+      buffer_image_copy[i] = (VkBufferImageCopy) {
+                                 .bufferOffset = layout->planes[i].offset,
+                                 .bufferRowLength = layout->planes[i].stride / block_bytes,
+                                 .bufferImageHeight = layout->height / block_height,
+                                 .imageSubresource = {
+                                     .aspectMask = n_planes == 1 ? VK_IMAGE_ASPECT_COLOR_BIT : aspect_flags[i],
+                                     .mipLevel = 0,
+                                     .baseArrayLayer = 0,
+                                     .layerCount = 1
+                                 },
+                                 .imageOffset = {
+                                     .x = 0,
+                                     .y = 0,
+                                     .z = 0
+                                 },
+                                 .imageExtent = {
+                                     .width = layout->width / block_width,
+                                     .height = layout->height / block_height,
+                                     .depth = 1
+                                 }
+                             };
+    }
+
   vkCmdCopyImageToBuffer (state->vk_command_buffer,
                           gsk_vulkan_image_get_vk_image (GSK_VULKAN_IMAGE (image)),
                           VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL,
                           gsk_vulkan_buffer_get_vk_buffer (GSK_VULKAN_BUFFER (buffer)),
-                          1,
-                          (VkBufferImageCopy[1]) {
-                               {
-                                   .bufferOffset = 0,
-                                   .bufferRowLength = width,
-                                   .bufferImageHeight = height,
-                                   .imageSubresource = {
-                                       .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                       .mipLevel = 0,
-                                       .baseArrayLayer = 0,
-                                       .layerCount = 1
-                                   },
-                                   .imageOffset = {
-                                       .x = 0,
-                                       .y = 0,
-                                       .z = 0
-                                   },
-                                   .imageExtent = {
-                                       .width = width,
-                                       .height = height,
-                                       .depth = 1
-                                   }
-                               }
-                          });
+                          n_planes,
+                          buffer_image_copy);
 
   vkCmdPipelineBarrier (state->vk_command_buffer,
                         VK_PIPELINE_STAGE_TRANSFER_BIT,
@@ -182,27 +198,15 @@ gsk_gpu_download_op_vk_create (GskGpuDownloadOp *self)
 {
   GBytes *bytes;
   guchar *data;
-  gsize width, height, stride;
-  GdkMemoryFormat format;
-  GdkMemoryTextureBuilder *builder;
 
   data = gsk_gpu_buffer_map (self->buffer);
-  width = gsk_gpu_image_get_width (self->image);
-  height = gsk_gpu_image_get_height (self->image);
-  format = gsk_gpu_image_get_format (self->image);
-  stride = width * gdk_memory_format_bytes_per_pixel (format);
-  bytes = g_bytes_new (data, stride * height);
+  bytes = g_bytes_new (data, self->buffer_layout.size);
 
-  builder = gdk_memory_texture_builder_new ();
-  gdk_memory_texture_builder_set_width (builder, width);
-  gdk_memory_texture_builder_set_height (builder, height);
-  gdk_memory_texture_builder_set_format (builder, format);
-  gdk_memory_texture_builder_set_bytes (builder, bytes);
-  gdk_memory_texture_builder_set_stride (builder, stride);
-  gdk_memory_texture_builder_set_color_state (builder, self->color_state);
-  *self->texture = gdk_memory_texture_builder_build (builder);
+  *self->texture = gdk_memory_texture_new_from_layout (bytes,
+                                                       &self->buffer_layout,
+                                                       self->color_state,
+                                                       NULL, NULL);
 
-  g_object_unref (builder);
   g_bytes_unref (bytes);
   gsk_gpu_buffer_unmap (self->buffer, 0);
 }
@@ -246,7 +250,7 @@ gsk_gpu_download_op_vk_command (GskGpuOp              *op,
     }
 #endif
 
-  self->buffer = gsk_gpu_download_vk_start (frame, state, self->image);
+  self->buffer = gsk_gpu_download_vk_start (frame, state, self->image, &self->buffer_layout);
   self->create_func = gsk_gpu_download_op_vk_create;
 
   return op->next;
@@ -410,6 +414,7 @@ struct _GskGpuDownloadIntoOp
 
   GdkGpuDownloadIntoOpCreateFunc create_func;
   GskGpuBuffer *buffer;
+  GdkMemoryLayout buffer_layout;
 
   GskGpuImage *image;
   GdkColorState *image_color_state;
@@ -454,24 +459,14 @@ static void
 gsk_gpu_download_into_op_vk_create (GskGpuDownloadIntoOp *self)
 {
   guchar *data;
-  GdkMemoryFormat format;
-  gsize width, height;
 
   data = gsk_gpu_buffer_map (self->buffer);
-  format = gsk_gpu_image_get_format (self->image);
-  width = gsk_gpu_image_get_width (self->image);
-  height = gsk_gpu_image_get_height (self->image);
 
   gdk_memory_convert (self->data,
                       &self->layout,
                       self->color_state,
                       data,
-                      &GDK_MEMORY_LAYOUT_SIMPLE (
-                          format,
-                          width,
-                          height,
-                          width * gdk_memory_format_bytes_per_pixel (format)
-                      ),
+                      &self->buffer_layout,
                       self->image_color_state);
 
   gsk_gpu_buffer_unmap (self->buffer, 0);
@@ -484,7 +479,7 @@ gsk_gpu_download_into_op_vk_command (GskGpuOp              *op,
 {
   GskGpuDownloadIntoOp *self = (GskGpuDownloadIntoOp *) op;
 
-  self->buffer = gsk_gpu_download_vk_start (frame, state, self->image);
+  self->buffer = gsk_gpu_download_vk_start (frame, state, self->image, &self->buffer_layout);
   self->create_func = gsk_gpu_download_into_op_vk_create;
 
   return op->next;
