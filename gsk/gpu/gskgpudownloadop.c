@@ -390,6 +390,7 @@ gsk_gpu_download_op (GskGpuFrame        *frame,
 {
   GskGpuDownloadOp *self;
 
+  g_assert (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_DOWNLOADABLE);
   g_assert (out_texture != NULL && *out_texture == NULL);
 
   self = (GskGpuDownloadOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_DOWNLOAD_OP_CLASS);
@@ -532,6 +533,8 @@ gsk_gpu_download_into_op (GskGpuFrame     *frame,
                           gsize            stride)
 {
   GskGpuDownloadIntoOp *self;
+
+  g_assert (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_DOWNLOADABLE);
 
   self = (GskGpuDownloadIntoOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_DOWNLOAD_INTO_OP_CLASS);
 
