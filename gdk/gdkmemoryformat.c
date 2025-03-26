@@ -452,6 +452,7 @@ struct _GdkMemoryFormatDescription
   struct {
     VkFormat vk_format;
     VkFormat vk_srgb_format;
+    gboolean needs_ycbcr_conversion;
   } vulkan;
 #endif
 #ifdef HAVE_DMABUF
@@ -499,6 +500,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_B8G8R8A8_UNORM,
         .vk_srgb_format = VK_FORMAT_B8G8R8A8_SRGB,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -535,6 +537,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_UNDEFINED,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -569,6 +572,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R8G8B8A8_UNORM,
         .vk_srgb_format = VK_FORMAT_R8G8B8A8_SRGB,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -605,6 +609,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_UNDEFINED,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -641,6 +646,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_B8G8R8A8_UNORM,
         .vk_srgb_format = VK_FORMAT_B8G8R8A8_SRGB,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -677,6 +683,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_UNDEFINED,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -711,6 +718,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R8G8B8A8_UNORM,
         .vk_srgb_format = VK_FORMAT_R8G8B8A8_SRGB,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -747,6 +755,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_UNDEFINED,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -783,6 +792,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_B8G8R8A8_UNORM,
         .vk_srgb_format = VK_FORMAT_B8G8R8A8_SRGB,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -820,6 +830,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_UNDEFINED,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -855,6 +866,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R8G8B8A8_UNORM,
         .vk_srgb_format = VK_FORMAT_R8G8B8A8_SRGB,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -892,6 +904,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_UNDEFINED,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -928,6 +941,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R8G8B8_UNORM,
         .vk_srgb_format = VK_FORMAT_R8G8B8_SRGB,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -964,6 +978,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_B8G8R8_UNORM,
         .vk_srgb_format = VK_FORMAT_B8G8R8_SRGB,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1002,6 +1017,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R16G16B16_UNORM,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1039,6 +1055,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R16G16B16A16_UNORM,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1076,6 +1093,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R16G16B16A16_UNORM,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1113,6 +1131,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R16G16B16_SFLOAT,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1149,6 +1168,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R16G16B16A16_SFLOAT,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1185,6 +1205,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R16G16B16A16_SFLOAT,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1222,6 +1243,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R32G32B32_SFLOAT,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1258,6 +1280,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R32G32B32A32_SFLOAT,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1294,6 +1317,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R32G32B32A32_SFLOAT,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1329,6 +1353,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R8G8_UNORM,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1364,6 +1389,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R8G8_UNORM,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1399,6 +1425,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R8_UNORM,
         .vk_srgb_format = VK_FORMAT_R8_SRGB,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1437,6 +1464,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R16G16_UNORM,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1475,6 +1503,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R16G16_UNORM,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1513,6 +1542,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R16_UNORM,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1548,6 +1578,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R8_UNORM,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1586,6 +1617,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R16_UNORM,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1623,6 +1655,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R16_SFLOAT,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -1660,6 +1693,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .vulkan = {
         .vk_format = VK_FORMAT_R32_SFLOAT,
         .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = FALSE,
     },
 #endif
 #ifdef HAVE_DMABUF
@@ -2011,10 +2045,13 @@ vk_swizzle_from_gl_swizzle (VkComponentMapping *vk_swizzle,
  * Returns VK_FORMAT_UNDEFINED on failure */
 VkFormat
 gdk_memory_format_vk_format (GdkMemoryFormat     format,
-                             VkComponentMapping *out_swizzle)
+                             VkComponentMapping *out_swizzle,
+                             gboolean           *needs_ycbcr_conversion)
 {
   if (out_swizzle)
     vk_swizzle_from_gl_swizzle (out_swizzle, memory_formats[format].gl.swizzle);
+  if (needs_ycbcr_conversion)
+    *needs_ycbcr_conversion = memory_formats[format].vulkan.needs_ycbcr_conversion;
 
   return memory_formats[format].vulkan.vk_format;
 }
