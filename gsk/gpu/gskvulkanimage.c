@@ -443,7 +443,7 @@ gsk_vulkan_image_new_for_upload (GskVulkanDevice *device,
   self = gsk_vulkan_image_new (device,
                                format,
                                try_srgb,
-                               with_mipmap ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_FILTERABLE) : 0,
+                               0, //with_mipmap ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_FILTERABLE) : 0,
                                width,
                                height,
                                VK_IMAGE_TILING_LINEAR,
@@ -478,25 +478,40 @@ gsk_vulkan_image_can_map (GskVulkanImage *self)
 }
 
 guchar *
-gsk_vulkan_image_get_data (GskVulkanImage *self,
-                           gsize          *out_stride)
-{
-  VkImageSubresource image_res;
+gsk_vulkan_image_get_data (GskVulkanImage  *self,
+                           GdkMemoryLayout *out_layout)
+{ 
+  const VkImageAspectFlags aspect_flags[3] = { VK_IMAGE_ASPECT_PLANE_0_BIT, VK_IMAGE_ASPECT_PLANE_1_BIT, VK_IMAGE_ASPECT_PLANE_2_BIT };
+  GskGpuImage *image = GSK_GPU_IMAGE (self);
   VkSubresourceLayout image_layout;
+  VkDevice vk_device;
+  gsize i, n_planes;
 
   if (!gsk_vulkan_image_can_map (self))
     return NULL;
 
-  image_res.aspectMask = VK_IMAGE_ASPECT_COLOR_BIT;
-  image_res.mipLevel = 0;
-  image_res.arrayLayer = 0;
+  out_layout->format = gsk_gpu_image_get_format (image);
+  out_layout->width = gsk_gpu_image_get_width (image);
+  out_layout->height = gsk_gpu_image_get_height (image);
+  out_layout->size = self->allocation.size;
+  n_planes = gdk_memory_format_get_n_planes (out_layout->format);
+  vk_device = gsk_vulkan_device_get_vk_device (self->device);
 
-  vkGetImageSubresourceLayout (gsk_vulkan_device_get_vk_device (self->device),
-                               self->vk_image, &image_res, &image_layout);
+  for (i = 0; i < n_planes; i++)
+    {
+      vkGetImageSubresourceLayout (vk_device,
+                                   self->vk_image,
+                                   &(VkImageSubresource) {
+                                       .aspectMask = n_planes == 1 ? VK_IMAGE_ASPECT_COLOR_BIT : aspect_flags[i],
+                                       .mipLevel = 0,
+                                       .arrayLayer = 0
+                                   },
+                                   &image_layout);
+      out_layout->planes[i].offset = image_layout.offset;
+      out_layout->planes[i].stride = image_layout.rowPitch;
+    }
 
-  *out_stride = image_layout.rowPitch;
-
-  return self->allocation.map + image_layout.offset;
+  return self->allocation.map;
 }
 
 GskGpuImage *
