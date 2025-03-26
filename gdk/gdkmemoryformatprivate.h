@@ -61,6 +61,7 @@ gsize                   gdk_memory_format_bytes_per_pixel   (GdkMemoryFormat    
 GdkMemoryFormat         gdk_memory_format_get_premultiplied (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_format_get_straight      (GdkMemoryFormat             format) G_GNUC_CONST;
 const GdkMemoryFormat * gdk_memory_format_get_fallbacks     (GdkMemoryFormat             format) G_GNUC_CONST;
+GdkMemoryFormat         gdk_memory_format_get_mipmap_format (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryDepth          gdk_memory_format_get_depth         (GdkMemoryFormat             format,
                                                              gboolean                    srgb) G_GNUC_CONST;
 gsize                   gdk_memory_format_get_n_planes      (GdkMemoryFormat             format) G_GNUC_CONST;
