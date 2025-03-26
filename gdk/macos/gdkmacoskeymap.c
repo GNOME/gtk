@@ -338,8 +338,6 @@ gdk_macos_keymap_update (GdkMacosKeymap *self)
 
       if (p[3] == p[2])
         p[3] = 0;
-      if (p[2] == p[1])
-        p[2] = 0;
       if (p[1] == p[0])
         p[1] = 0;
       if (p[0] == p[2] &&
