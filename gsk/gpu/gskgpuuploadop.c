@@ -14,6 +14,7 @@
 
 #include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkglcontextprivate.h"
+#include "gdk/gdktextureprivate.h"
 #include "gsk/gskdebugprivate.h"
 
 static GskGpuOp *
@@ -21,28 +22,31 @@ gsk_gpu_upload_op_gl_command_with_area (GskGpuOp                    *op,
                                         GskGpuFrame                 *frame,
                                         GskGpuImage                 *image,
                                         const cairo_rectangle_int_t *area,
-                                        void           (* draw_func) (GskGpuOp *, guchar *, gsize))
+                                        void           (* draw_func) (GskGpuOp *, guchar *, const GdkMemoryLayout *))
 {
   GskGLImage *gl_image = GSK_GL_IMAGE (image);
-  GdkMemoryFormat format;
-  gsize stride, bpp;
+  GdkMemoryLayout layout;
   guchar *data;
-  guint gl_format, gl_type;
+  guint gl_format, gl_type, stride, bpp;
 
-  format = gsk_gpu_image_get_format (image);
-  bpp = gdk_memory_format_bytes_per_pixel (format);
-  stride = area->width * bpp;
-  data = g_malloc (area->height * stride);
+  gdk_memory_layout_init (&layout,
+                          gsk_gpu_image_get_format (GSK_GPU_IMAGE (image)),
+                          area->width,
+                          area->height,
+                          4);
+  data = g_malloc (layout.size);
 
-  draw_func (op, data, stride);
+  draw_func (op, data, &layout);
 
   gl_format = gsk_gl_image_get_gl_format (gl_image);
   gl_type = gsk_gl_image_get_gl_type (gl_image);
+  bpp = gdk_memory_format_get_plane_block_bytes (layout.format, 0);
+  stride = layout.planes[0].stride;
 
   glActiveTexture (GL_TEXTURE0);
   gsk_gl_image_bind_texture (gl_image);
   
-  glPixelStorei (GL_UNPACK_ALIGNMENT, gdk_memory_format_alignment (format));
+  glPixelStorei (GL_UNPACK_ALIGNMENT, gdk_memory_format_alignment (layout.format));
 
   /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
    * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
@@ -77,7 +81,7 @@ static GskGpuOp *
 gsk_gpu_upload_op_gl_command (GskGpuOp          *op,
                               GskGpuFrame       *frame,
                               GskGpuImage       *image,
-                              void (* draw_func) (GskGpuOp *, guchar *, gsize))
+                              void (* draw_func) (GskGpuOp *, guchar *, const GdkMemoryLayout *))
 {
   return gsk_gpu_upload_op_gl_command_with_area (op,
                                                  frame,
@@ -97,20 +101,29 @@ gsk_gpu_upload_op_vk_command_with_area (GskGpuOp                    *op,
                                         GskVulkanCommandState       *state,
                                         GskVulkanImage              *image,
                                         const cairo_rectangle_int_t *area,
-                                        void           (* draw_func) (GskGpuOp *, guchar *, gsize),
+                                        void           (* draw_func) (GskGpuOp *, guchar *, const GdkMemoryLayout *),
                                         GskGpuBuffer               **buffer)
 {
-  gsize stride;
+  const VkImageAspectFlags aspect_flags[3] = { VK_IMAGE_ASPECT_PLANE_0_BIT, VK_IMAGE_ASPECT_PLANE_1_BIT, VK_IMAGE_ASPECT_PLANE_2_BIT };
+  VkBufferImageCopy buffer_image_copy[3];
+  GdkMemoryLayout layout;
   guchar *data;
+  gsize i, n_planes;
 
-  stride = area->width * gdk_memory_format_bytes_per_pixel (gsk_gpu_image_get_format (GSK_GPU_IMAGE (image)));
+  gdk_memory_layout_init (&layout,
+                          gsk_gpu_image_get_format (GSK_GPU_IMAGE (image)),
+                          area->width,
+                          area->height,
+                          1);
+
   *buffer = gsk_vulkan_buffer_new_write (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                         area->height * stride);
+                                         layout.size);
   data = gsk_gpu_buffer_map (*buffer);
 
-  draw_func (op, data, stride);
+  draw_func (op, data, &layout);
 
-  gsk_gpu_buffer_unmap (*buffer, area->height * stride);
+  gsk_gpu_buffer_unmap (*buffer, layout.size);
+  n_planes = gdk_memory_format_get_n_planes (layout.format);
 
   vkCmdPipelineBarrier (state->vk_command_buffer,
                         VK_PIPELINE_STAGE_HOST_BIT,
@@ -135,34 +148,41 @@ gsk_gpu_upload_op_vk_command_with_area (GskGpuOp                    *op,
                                VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
                                VK_ACCESS_TRANSFER_WRITE_BIT);
 
+  for (i = 0; i < n_planes; i++)
+    {
+      gsize block_width = gdk_memory_format_get_plane_block_width (layout.format, i);
+      gsize block_height = gdk_memory_format_get_plane_block_height (layout.format, i);
+      gsize block_bytes = gdk_memory_format_get_plane_block_bytes (layout.format, i);
+
+      buffer_image_copy[i] = (VkBufferImageCopy) {
+                                 .bufferOffset = layout.planes[i].offset,
+                                 .bufferRowLength = layout.planes[i].stride / block_bytes,
+                                 .bufferImageHeight = layout.height / block_height,
+                                 .imageSubresource = {
+                                     .aspectMask = n_planes == 1 ? VK_IMAGE_ASPECT_COLOR_BIT : aspect_flags[i],
+                                     .mipLevel = 0,
+                                     .baseArrayLayer = 0,
+                                     .layerCount = 1
+                                 },
+                                 .imageOffset = {
+                                     .x = area->x / block_width,
+                                     .y = area->y / block_height,
+                                     .z = 0
+                                 },
+                                 .imageExtent = {
+                                     .width = layout.width / block_width,
+                                     .height = layout.height / block_height,
+                                     .depth = 1
+                                 }
+                             };
+    }
+
   vkCmdCopyBufferToImage (state->vk_command_buffer,
                           gsk_vulkan_buffer_get_vk_buffer (GSK_VULKAN_BUFFER (*buffer)),
                           gsk_vulkan_image_get_vk_image (image),
                           VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL,
-                          1,
-                          (VkBufferImageCopy[1]) {
-                               {
-                                   .bufferOffset = 0,
-                                   .bufferRowLength = area->width,
-                                   .bufferImageHeight = area->height,
-                                   .imageSubresource = {
-                                       .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
-                                       .mipLevel = 0,
-                                       .baseArrayLayer = 0,
-                                       .layerCount = 1
-                                   },
-                                   .imageOffset = {
-                                       .x = area->x,
-                                       .y = area->y,
-                                       .z = 0
-                                   },
-                                   .imageExtent = {
-                                       .width = area->width,
-                                       .height = area->height,
-                                       .depth = 1
-                                   }
-                               }
-                          });
+                          n_planes,
+                          buffer_image_copy);
 
   return op->next;
 }
@@ -172,16 +192,16 @@ gsk_gpu_upload_op_vk_command (GskGpuOp              *op,
                               GskGpuFrame           *frame,
                               GskVulkanCommandState *state,
                               GskVulkanImage        *image,
-                              void                 (* draw_func) (GskGpuOp *, guchar *, gsize),
+                              void                 (* draw_func) (GskGpuOp *, guchar *, const GdkMemoryLayout *),
                               GskGpuBuffer         **buffer)
 {
-  gsize stride;
+  GdkMemoryLayout layout;
   guchar *data;
 
-  data = gsk_vulkan_image_get_data (image, &stride);
+  data = gsk_vulkan_image_get_data (image, &layout);
   if (data)
     {
-      draw_func (op, data, stride);
+      draw_func (op, data, &layout);
 
       *buffer = NULL;
 
@@ -244,40 +264,35 @@ gsk_gpu_upload_texture_op_print (GskGpuOp    *op,
 }
 
 static void
-gsk_gpu_upload_texture_op_draw (GskGpuOp *op,
-                                guchar   *data,
-                                gsize     stride)
+gsk_gpu_upload_texture_op_draw (GskGpuOp              *op,
+                                guchar                *data,
+                                const GdkMemoryLayout *layout)
 {
   GskGpuUploadTextureOp *self = (GskGpuUploadTextureOp *) op;
-  GdkTextureDownloader *downloader;
 
-  downloader = gdk_texture_downloader_new (self->texture);
-  gdk_texture_downloader_set_color_state (downloader, gdk_texture_get_color_state (self->texture));
   if (self->lod_level == 0)
     {
-      gdk_texture_downloader_set_format (downloader, gsk_gpu_image_get_format (self->image));
-      gdk_texture_downloader_download_into (downloader, data, stride);
+      gdk_texture_do_download (self->texture, data, layout, gdk_texture_get_color_state (self->texture));
     }
   else
     {
+#if 0
+      GdkMemoryLayout bytes_layout;
       GBytes *bytes;
-      gsize src_stride;
       
-      gdk_texture_downloader_set_format (downloader, gdk_texture_get_format (self->texture));
-      bytes = gdk_texture_downloader_download_bytes (downloader, &src_stride);
+      bytes = gdk_texture_download_bytes (self->texture, &bytes_layout);
       gdk_memory_mipmap (data,
-                         stride,
+                         layout,
                          gsk_gpu_image_get_format (self->image),
                          g_bytes_get_data (bytes, NULL),
-                         src_stride,
-                         gdk_texture_get_format (self->texture),
-                         gdk_texture_get_width (self->texture),
-                         gdk_texture_get_height (self->texture),
+                         &bytes_layout,
                          self->lod_level,
                          self->lod_filter == GSK_SCALING_FILTER_TRILINEAR ? TRUE : FALSE);
       g_bytes_unref (bytes);
+#else
+      g_assert_not_reached ();
+#endif
     }
-  gdk_texture_downloader_free (downloader);
 }
 
 #ifdef GDK_RENDERING_VULKAN
@@ -419,9 +434,9 @@ gsk_gpu_upload_cairo_op_print (GskGpuOp    *op,
 }
 
 static void
-gsk_gpu_upload_cairo_op_draw (GskGpuOp *op,
-                              guchar   *data,
-                              gsize     stride)
+gsk_gpu_upload_cairo_op_draw (GskGpuOp              *op,
+                              guchar                *data,
+                              const GdkMemoryLayout *layout)
 {
   GskGpuUploadCairoOp *self = (GskGpuUploadCairoOp *) op;
   cairo_surface_t *surface;
@@ -434,7 +449,7 @@ gsk_gpu_upload_cairo_op_draw (GskGpuOp *op,
   surface = cairo_image_surface_create_for_data (data,
                                                  CAIRO_FORMAT_ARGB32,
                                                  width, height,
-                                                 stride);
+                                                 layout->planes[0].stride);
   cairo_surface_set_device_scale (surface,
                                   width / self->viewport.size.width,
                                   height / self->viewport.size.height);
@@ -568,9 +583,9 @@ gsk_gpu_upload_glyph_op_print (GskGpuOp    *op,
 }
 
 static void
-gsk_gpu_upload_glyph_op_draw (GskGpuOp *op,
-                              guchar   *data,
-                              gsize     stride)
+gsk_gpu_upload_glyph_op_draw (GskGpuOp              *op,
+                              guchar                *data,
+                              const GdkMemoryLayout *layout)
 {
   GskGpuUploadGlyphOp *self = (GskGpuUploadGlyphOp *) op;
   cairo_surface_t *surface;
@@ -581,7 +596,7 @@ gsk_gpu_upload_glyph_op_draw (GskGpuOp *op,
                                                  CAIRO_FORMAT_ARGB32,
                                                  self->area.width,
                                                  self->area.height,
-                                                 stride);
+                                                 layout->planes[0].stride);
   cairo_surface_set_device_offset (surface, self->origin.x, self->origin.y);
 
   cr = cairo_create (surface);
