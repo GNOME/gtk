@@ -56,7 +56,7 @@
               <object class="GtkToggleButton" id="dark_mode_button">
                 <property name="icon-name">display-brightness-symbolic</property>
                 <property name="tooltip-text" translatable="yes">Use a dark background</property>
-                <signal name="notify::active" handler="toggle_dark_mode" swapped="0" object="render_node_view"/>
+                <property name="action-name">record.toggle-dark</property>
               </object>
             </child>
             <child>

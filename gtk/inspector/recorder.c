@@ -216,6 +216,7 @@ struct _GtkInspectorRecorder
   gboolean highlight_sequences;
   gboolean record_events;
   gboolean stop_after_next_frame;
+  gboolean dark;
 
   GdkEventSequence *selected_sequence;
 
@@ -236,6 +237,7 @@ enum
   PROP_HIGHLIGHT_SEQUENCES,
   PROP_SELECTED_SEQUENCE,
   PROP_RECORD_EVENTS,
+  PROP_DARK,
   LAST_PROP
 };
 
@@ -2111,25 +2113,6 @@ render_node_clip (GtkButton            *button,
 }
 
 static void
-toggle_dark_mode (GtkToggleButton *button,
-                  GParamSpec      *pspec,
-                  gpointer         data)
-{
-  GtkWidget *picture = data;
-
-  if (gtk_toggle_button_get_active (button))
-    {
-      gtk_widget_add_css_class (picture, "dark");
-      gtk_widget_remove_css_class (picture, "light");
-    }
-  else
-    {
-      gtk_widget_remove_css_class (picture, "dark");
-      gtk_widget_add_css_class (picture, "light");
-    }
-}
-
-static void
 setup_widget_for_recording (GtkListItemFactory *factory,
                             GtkListItem        *item,
                             gpointer            data)
@@ -2282,6 +2265,31 @@ bind_widget_for_recording (GtkListItemFactory *factory,
 }
 
 static void
+recorder_set_dark (GtkInspectorRecorder *recorder,
+                   gboolean              dark)
+{
+  GtkWidget *picture = recorder->render_node_view;
+
+  if (recorder->dark == dark)
+    return;
+
+  recorder->dark = dark;
+
+  if (dark)
+    {
+      gtk_widget_add_css_class (picture, "dark");
+      gtk_widget_remove_css_class (picture, "light");
+    }
+  else
+    {
+      gtk_widget_remove_css_class (picture, "dark");
+      gtk_widget_add_css_class (picture, "light");
+    }
+
+  g_object_notify_by_pspec (G_OBJECT (recorder), props[PROP_DARK]);
+}
+
+static void
 gtk_inspector_recorder_get_property (GObject    *object,
                                      guint       param_id,
                                      GValue     *value,
@@ -2309,6 +2317,10 @@ gtk_inspector_recorder_get_property (GObject    *object,
 
     case PROP_SELECTED_SEQUENCE:
       g_value_set_pointer (value, recorder->selected_sequence);
+      break;
+
+    case PROP_DARK:
+      g_value_set_boolean (value, recorder->dark);
       break;
 
     default:
@@ -2347,6 +2359,10 @@ gtk_inspector_recorder_set_property (GObject      *object,
       recorder->selected_sequence = g_value_get_pointer (value);
       break;
 
+    case PROP_DARK:
+      recorder_set_dark (recorder, g_value_get_boolean (value));
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
       break;
@@ -2382,12 +2398,14 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   props[PROP_DEBUG_NODES] = g_param_spec_boolean ("debug-nodes", NULL, NULL, FALSE, G_PARAM_READWRITE);
   props[PROP_HIGHLIGHT_SEQUENCES] = g_param_spec_boolean ("highlight-sequences", NULL, NULL, FALSE, G_PARAM_READWRITE);
   props[PROP_SELECTED_SEQUENCE] = g_param_spec_pointer ("selected-sequence", NULL, NULL, G_PARAM_READWRITE);
+  props[PROP_DARK] = g_param_spec_boolean ("dark", NULL, NULL, FALSE, G_PARAM_READWRITE);
 
   g_object_class_install_properties (object_class, LAST_PROP, props);
 
   gtk_widget_class_install_property_action (widget_class, "record.record-events", "record-events");
   gtk_widget_class_install_property_action (widget_class, "record.debug-nodes", "debug-nodes");
   gtk_widget_class_install_property_action (widget_class, "record.highlight-sequences", "highlight-sequences");
+  gtk_widget_class_install_property_action (widget_class, "record.toggle-dark", "dark");
 
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/inspector/recorder.ui");
 
@@ -2408,7 +2426,6 @@ gtk_inspector_recorder_class_init (GtkInspectorRecorderClass *klass)
   gtk_widget_class_bind_template_callback (widget_class, render_node_save);
   gtk_widget_class_bind_template_callback (widget_class, render_node_clip);
   //gtk_widget_class_bind_template_callback (widget_class, node_property_activated);
-  gtk_widget_class_bind_template_callback (widget_class, toggle_dark_mode);
 
   gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
 }
