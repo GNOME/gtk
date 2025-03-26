@@ -695,6 +695,13 @@ static Class _contentViewClass = nil;
   _gdk_macos_surface_monitor_changed (gdk_surface);
 }
 
+/* We need this for the Vulkan renderer to update it's content scaling.
+ */
+-(void)windowDidChangeBackingProperties:(NSNotification *) notification
+{
+  _gdk_surface_update_size (GDK_SURFACE (gdk_surface));
+}
+
 -(void)setGdkSurface:(GdkMacosSurface *)surface
 {
   self->gdk_surface = surface;

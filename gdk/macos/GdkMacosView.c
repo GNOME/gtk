@@ -33,20 +33,6 @@
 
 @implementation GdkMacosView
 
-/**
- * If this view moves to a screen that has a different resolution scale (eg. Standard <=> Retina),
- * update the contentsScale of the layer, which will trigger a Vulkan VK_SUBOPTIMAL_KHR result, which
- * causes the  to replace the swapchain, in order to optimize rendering for the new resolution.
- */
--(BOOL)layer:(CALayer *)layer shouldInheritContentsScale:(CGFloat)newScale fromWindow:(NSWindow *)window
-{
-	if (newScale == layer.contentsScale)
-    return NO;
-
-	layer.contentsScale = newScale;
-	return YES;
-}
-
 -(BOOL)isFlipped
 {
   return YES;

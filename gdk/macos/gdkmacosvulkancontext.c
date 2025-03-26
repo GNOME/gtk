@@ -52,8 +52,13 @@ gdk_macos_vulkan_context_create_surface (GdkVulkanContext *context,
   NSView *view = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (gdk_surface));
   VkMetalSurfaceCreateInfoEXT info;
   VkResult result;
+  CAMetalLayer *layer;
+  double scale = gdk_surface_get_scale_factor (gdk_surface);
 
-  g_assert ([[view layer] isKindOfClass:[CAMetalLayer class]]);
+  layer = [CAMetalLayer layer];
+  [layer setOpaque:NO];
+  [layer setContentsScale: scale];
+  [view setLayer:layer];
 
   info.sType = VK_STRUCTURE_TYPE_METAL_SURFACE_CREATE_INFO_EXT;
   info.pNext = NULL;
@@ -75,6 +80,20 @@ gdk_macos_vulkan_context_empty_frame (GdkDrawContext *context)
 }
 
 static void
+gdk_macos_vulkan_context_surface_resized (GdkDrawContext *context)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (context);
+  NSView *view = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface));
+  CALayer *layer = [view layer];
+  double newScale = gdk_surface_get_scale (surface);
+
+  if (newScale != [layer contentsScale])
+    [layer setContentsScale:newScale];
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_macos_vulkan_context_parent_class)->surface_resized(context);
+}
+
+static void
 gdk_macos_vulkan_context_class_init (GdkMacosVulkanContextClass *klass)
 {
   GdkVulkanContextClass *vulkan_context_class = GDK_VULKAN_CONTEXT_CLASS (klass);
@@ -83,6 +102,7 @@ gdk_macos_vulkan_context_class_init (GdkMacosVulkanContextClass *klass)
   vulkan_context_class->create_surface = gdk_macos_vulkan_context_create_surface;
 
   draw_context_class->empty_frame = gdk_macos_vulkan_context_empty_frame;
+  draw_context_class->surface_resized = gdk_macos_vulkan_context_surface_resized;
 }
 
 static void
