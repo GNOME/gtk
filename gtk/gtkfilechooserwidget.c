@@ -6662,15 +6662,15 @@ gtk_file_chooser_widget_class_init (GtkFileChooserWidgetClass *class)
                                        "show-hidden",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
+                                       GDK_KEY_Find, GDK_NO_MODIFIER_MASK,
+                                       "search-shortcut",
+                                       NULL);
+  gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_s, GDK_ALT_MASK,
                                        "search-shortcut",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
                                        GDK_KEY_f, GDK_CONTROL_MASK,
-                                       "search-shortcut",
-                                       NULL);
-  gtk_widget_class_add_binding_signal (widget_class,
-                                       GDK_KEY_Find, GDK_NO_MODIFIER_MASK,
                                        "search-shortcut",
                                        NULL);
   gtk_widget_class_add_binding_signal (widget_class,
