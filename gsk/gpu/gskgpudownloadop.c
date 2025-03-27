@@ -472,6 +472,8 @@ gsk_gpu_download_into_op_vk_create (GskGpuDownloadIntoOp *self)
                       self->image_color_state,
                       width,
                       height);
+
+  gsk_gpu_buffer_unmap (self->buffer, 0);
 }
 
 static GskGpuOp *
