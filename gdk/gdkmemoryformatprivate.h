@@ -135,13 +135,9 @@ void                    gdk_memory_convert_color_state      (guchar             
                                                              GdkColorState              *src_color_state,
                                                              GdkColorState              *dest_color_state);
 void                    gdk_memory_mipmap                   (guchar                     *dest,
-                                                             gsize                       dest_stride,
-                                                             GdkMemoryFormat             dest_format,
+                                                             const GdkMemoryLayout      *dest_layout,
                                                              const guchar               *src,
-                                                             gsize                       src_stride,
-                                                             GdkMemoryFormat             src_format,
-                                                             gsize                       src_width,
-                                                             gsize                       src_height,
+                                                             const GdkMemoryLayout      *src_layout,
                                                              guint                       lod_level,
                                                              gboolean                    linear);
 
