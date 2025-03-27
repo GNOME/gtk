@@ -381,66 +381,51 @@ SWAP_FUNC(b8g8r8a8_to_r8g8b8a8, 2, 1, 0, 3)
 
 #define MIPMAP_FUNC(SumType, DataType, n_units) \
 static void \
-gdk_mipmap_ ## DataType ## _ ## n_units ## _nearest (guchar       *dest, \
-                                                     gsize         dest_stride, \
-                                                     const guchar *src, \
-                                                     gsize         src_stride, \
-                                                     gsize         src_width, \
-                                                     gsize         src_height, \
-                                                     guint         lod_level) \
+gdk_mipmap_ ## DataType ## _ ## n_units ## _nearest (guchar                *dest, \
+                                                     const guchar          *src, \
+                                                     const GdkMemoryLayout *src_layout,\
+                                                     gsize                  y,\
+                                                     guint                  lod_level) \
 { \
-  gsize y, x, i; \
+  gsize x, i; \
   gsize n = 1 << lod_level; \
+  DataType *dest_data = (DataType *) dest; \
+  const DataType *src_data = (const DataType *) (src + gdk_memory_layout_offset (src_layout, 0, 0, MIN (y + n / 2, src_layout->height - 1))); \
 \
-  for (y = 0; y < src_height; y += n) \
+  for (x = 0; x < src_layout->width; x += n) \
     { \
-      DataType *dest_data = (DataType *) dest; \
-      for (x = 0; x < src_width; x += n) \
-        { \
-          const DataType *src_data = (const DataType *) (src + (y + MIN (n / 2, src_height - y))  * src_stride); \
-\
-          for (i = 0; i < n_units; i++) \
-            *dest_data++ = src_data[n_units * (x + MIN (n / 2, src_width - n_units)) + i]; \
-        } \
-      dest += dest_stride; \
-      src += src_stride * n; \
+      for (i = 0; i < n_units; i++) \
+        *dest_data++ = src_data[n_units * MIN (x + n / 2, src_layout->width - 1) + i]; \
     } \
 } \
 \
 static void \
-gdk_mipmap_ ## DataType ## _ ## n_units ## _linear (guchar       *dest, \
-                                                    gsize         dest_stride, \
-                                                    const guchar *src, \
-                                                    gsize         src_stride, \
-                                                    gsize         src_width, \
-                                                    gsize         src_height, \
-                                                    guint         lod_level) \
+gdk_mipmap_ ## DataType ## _ ## n_units ## _linear (guchar                *dest, \
+                                                    const guchar          *src, \
+                                                    const GdkMemoryLayout *src_layout,\
+                                                    gsize                  y_start,\
+                                                    guint                  lod_level) \
 { \
-  gsize y_dest, y, x_dest, x, i; \
+  gsize y, x_dest, x, i; \
   gsize n = 1 << lod_level; \
+  DataType *dest_data = (DataType *) dest; \
 \
-  for (y_dest = 0; y_dest < src_height; y_dest += n) \
+  for (x_dest = 0; x_dest < src_layout->width; x_dest += n) \
     { \
-      DataType *dest_data = (DataType *) dest; \
-      for (x_dest = 0; x_dest < src_width; x_dest += n) \
+      SumType tmp[n_units] = { 0, }; \
+\
+      for (y = 0; y < MIN (n, src_layout->height - y_start); y++) \
         { \
-          SumType tmp[n_units] = { 0, }; \
-\
-          for (y = 0; y < MIN (n, src_height - y_dest); y++) \
+          const DataType *src_data = (const DataType *) (src + gdk_memory_layout_offset (src_layout, 0, 0, y + y_start)); \
+          for (x = 0; x < MIN (n, src_layout->width - x_dest); x++) \
             { \
-              const DataType *src_data = (const DataType *) (src + y * src_stride); \
-              for (x = 0; x < MIN (n, src_width - x_dest); x++) \
-                { \
-                  for (i = 0; i < n_units; i++) \
-                    tmp[i] += src_data[n_units * (x_dest + x) + i]; \
-                } \
+              for (i = 0; i < n_units; i++) \
+                tmp[i] += src_data[n_units * (x_dest + x) + i]; \
             } \
-\
-          for (i = 0; i < n_units; i++) \
-            *dest_data++ = tmp[i] / (x * y); \
         } \
-      dest += dest_stride; \
-      src += src_stride * n; \
+\
+      for (i = 0; i < n_units; i++) \
+        *dest_data++ = tmp[i] / (x * y); \
     } \
 }
 
@@ -510,8 +495,8 @@ struct _GdkMemoryFormatDescription
   void (* to_float) (float (*)[4], const guchar *, const GdkMemoryLayout *, gsize);
   void (* from_float) (guchar *, const GdkMemoryLayout *, const float (*)[4], gsize);
   GdkMemoryFormat mipmap_format; /* must be single plane continuous format with 1x1 block size */
-  void (* mipmap_nearest) (guchar *, gsize, const guchar *, gsize, gsize, gsize, guint);
-  void (* mipmap_linear) (guchar *, gsize, const guchar *, gsize, gsize, gsize, guint);
+  void (* mipmap_nearest) (guchar *, const guchar *, const GdkMemoryLayout *, gsize, guint);
+  void (* mipmap_linear) (guchar *, const guchar *, const GdkMemoryLayout *, gsize, guint);
 };
 
 #if  G_BYTE_ORDER == G_LITTLE_ENDIAN
@@ -3171,13 +3156,9 @@ typedef struct _MipmapData MipmapData;
 struct _MipmapData
 {
   guchar          *dest;
-  gsize            dest_stride;
-  GdkMemoryFormat  dest_format;
+  GdkMemoryLayout  dest_layout;
   const guchar    *src;
-  gsize            src_stride;
-  GdkMemoryFormat  src_format;
-  gsize            src_width;
-  gsize            src_height;
+  GdkMemoryLayout  src_layout;
   guint            lod_level;
   gboolean         linear;
 
@@ -3188,7 +3169,7 @@ static void
 gdk_memory_mipmap_same_format_nearest (gpointer data)
 {
   MipmapData *mipmap = data;
-  const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
+  const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_layout.format];
   gsize n, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
@@ -3196,28 +3177,27 @@ gdk_memory_mipmap_same_format_nearest (gpointer data)
   n = 1 << mipmap->lod_level;
 
   for (y = g_atomic_int_add (&mipmap->rows_done, n), rows = 0;
-       y < mipmap->src_height;
+       y < mipmap->src_layout.height;
        y = g_atomic_int_add (&mipmap->rows_done, n), rows++)
     {
-      guchar *dest = mipmap->dest + (y >> mipmap->lod_level) * mipmap->dest_stride;
-      const guchar *src = mipmap->src + y * mipmap->src_stride;
+      guchar *dest = mipmap->dest + gdk_memory_layout_offset (&mipmap->dest_layout, 0, 0, (y >> mipmap->lod_level));
 
-      desc->mipmap_nearest (dest, mipmap->dest_stride,
-                            src, mipmap->src_stride,
-                            mipmap->src_width, MIN (n, mipmap->src_height - y),
+      desc->mipmap_nearest (dest,
+                            mipmap->src, &mipmap->src_layout,
+                            y,
                             mipmap->lod_level);
     }
 
   ADD_MARK (before,
             "Mipmap nearest (thread)", "size %lux%lu, lod %u, %lu rows",
-            mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
+            mipmap->src_layout.width, mipmap->src_layout.height, mipmap->lod_level, rows);
 }
 
 static void
 gdk_memory_mipmap_same_format_linear (gpointer data)
 {
   MipmapData *mipmap = data;
-  const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
+  const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_layout.format];
   gsize n, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
@@ -3225,108 +3205,105 @@ gdk_memory_mipmap_same_format_linear (gpointer data)
   n = 1 << mipmap->lod_level;
 
   for (y = g_atomic_int_add (&mipmap->rows_done, n), rows = 0;
-       y < mipmap->src_height;
+       y < mipmap->src_layout.height;
        y = g_atomic_int_add (&mipmap->rows_done, n), rows++)
     {
-      guchar *dest = mipmap->dest + (y >> mipmap->lod_level) * mipmap->dest_stride;
-      const guchar *src = mipmap->src + y * mipmap->src_stride;
+      guchar *dest = mipmap->dest + gdk_memory_layout_offset (&mipmap->dest_layout, 0, 0, (y >> mipmap->lod_level));
 
-      desc->mipmap_linear (dest, mipmap->dest_stride,
-                           src, mipmap->src_stride,
-                           mipmap->src_width, MIN (n, mipmap->src_height - y),
+      desc->mipmap_linear (dest,
+                           mipmap->src, &mipmap->src_layout,
+                           y,
                            mipmap->lod_level);
     }
 
   ADD_MARK (before,
             "Mipmap linear (thread)", "size %lux%lu, lod %u, %lu rows",
-            mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
+            mipmap->src_layout.width, mipmap->src_layout.height, mipmap->lod_level, rows);
 }
 
 static void
 gdk_memory_mipmap_generic (gpointer data)
 {
   MipmapData *mipmap = data;
-  const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_format];
+  const GdkMemoryFormatDescription *desc = &memory_formats[mipmap->src_layout.format];
   FastConversionFunc func;
   gsize dest_width;
-  gsize size;
+  GdkMemoryLayout tmp_layout;
   guchar *tmp;
   gsize n, y;
   guint64 before = GDK_PROFILER_CURRENT_TIME;
   gsize rows;
 
   n = 1 << mipmap->lod_level;
-  dest_width = (mipmap->src_width + n - 1) >> mipmap->lod_level;
-  size = gdk_memory_format_bytes_per_pixel (mipmap->src_format) * dest_width;
-  tmp = g_malloc (size);
-  func = get_fast_conversion_func (mipmap->dest_format, mipmap->src_format);
+  dest_width = (mipmap->src_layout.width + n - 1) >> mipmap->lod_level;
+  gdk_memory_layout_init (&tmp_layout,
+                          desc->mipmap_format,
+                          dest_width,
+                          gdk_memory_format_get_block_height (desc->mipmap_format),
+                          1);
+  tmp = g_malloc (tmp_layout.size);
+  func = get_fast_conversion_func (mipmap->dest_layout.format, desc->mipmap_format);
 
   for (y = g_atomic_int_add (&mipmap->rows_done, n), rows = 0;
-       y < mipmap->src_height;
+       y < mipmap->src_layout.height;
        y = g_atomic_int_add (&mipmap->rows_done, n), rows++)
     {
-      guchar *dest = mipmap->dest + (y >> mipmap->lod_level) * mipmap->dest_stride;
-      const guchar *src = mipmap->src + y * mipmap->src_stride;
-
       if (mipmap->linear)
-        desc->mipmap_linear (tmp, (size + 7) & 7,
-                             src, mipmap->src_stride,
-                             mipmap->src_width, MIN (n, mipmap->src_height - y),
+        desc->mipmap_linear (tmp,
+                             mipmap->src, &mipmap->src_layout,
+                             y,
                              mipmap->lod_level);
       else
-        desc->mipmap_nearest (tmp, (size + 7) & 7,
-                              src, mipmap->src_stride,
-                              mipmap->src_width, MIN (n, mipmap->src_height - y),
+        desc->mipmap_nearest (tmp,
+                              mipmap->src, &mipmap->src_layout,
+                              y,
                               mipmap->lod_level);
       if (func)
-        func (dest, tmp, dest_width);
+        {
+          guchar *dest = mipmap->dest + gdk_memory_layout_offset (&mipmap->dest_layout, 0, 0, (y >> mipmap->lod_level));
+
+          func (dest, tmp, dest_width);
+        }
       else
-        gdk_memory_convert (dest,
-                            &GDK_MEMORY_LAYOUT_SIMPLE (
-                                mipmap->dest_format,
-                                dest_width,
-                                1,
-                                mipmap->dest_stride
-                            ),
-                            GDK_COLOR_STATE_SRGB,
-                            tmp,
-                            &GDK_MEMORY_LAYOUT_SIMPLE (
-                                mipmap->src_format,
-                                dest_width,
-                                1,
-                                (size + 7) & 7
-                            ),
-                            GDK_COLOR_STATE_SRGB);
+        {
+          GdkMemoryLayout sub;
+          gdk_memory_layout_init_sublayout (&sub,
+                                            &mipmap->dest_layout,
+                                            &(cairo_rectangle_int_t) {
+                                                0,
+                                                y >> mipmap->lod_level, 
+                                                mipmap->dest_layout.width,
+                                                1
+                                            });
+          gdk_memory_convert (mipmap->dest,
+                              &sub,
+                              GDK_COLOR_STATE_SRGB,
+                              tmp,
+                              &tmp_layout,
+                              GDK_COLOR_STATE_SRGB);
+        }
     }
 
   g_free (tmp);
 
   ADD_MARK (before,
             "Mipmap generic (thread)", "size %lux%lu, lod %u, %lu rows",
-            mipmap->src_width, mipmap->src_height, mipmap->lod_level, rows);
+            mipmap->src_layout.width, mipmap->src_layout.height, mipmap->lod_level, rows);
 }
 
 void
-gdk_memory_mipmap (guchar          *dest,
-                   gsize            dest_stride,
-                   GdkMemoryFormat  dest_format,
-                   const guchar    *src,
-                   gsize            src_stride,
-                   GdkMemoryFormat  src_format,
-                   gsize            src_width,
-                   gsize            src_height,
-                   guint            lod_level,
-                   gboolean         linear)
+gdk_memory_mipmap (guchar                *dest,
+                   const GdkMemoryLayout *dest_layout,
+                   const guchar          *src,
+                   const GdkMemoryLayout *src_layout,
+                   guint                  lod_level,
+                   gboolean               linear)
 {
   MipmapData mipmap = {
     .dest = dest,
-    .dest_stride = dest_stride,
-    .dest_format = dest_format,
+    .dest_layout = *dest_layout,
     .src = src,
-    .src_stride = src_stride,
-    .src_format = src_format,
-    .src_width = src_width,
-    .src_height = src_height,
+    .src_layout = *src_layout,
     .lod_level = lod_level,
     .linear = linear,
     .rows_done = 0,
@@ -3336,10 +3313,10 @@ gdk_memory_mipmap (guchar          *dest,
 
   g_assert (lod_level > 0);
 
-  chunk_size = MAX (1, 512 / src_width),
-  n_tasks = (src_height + chunk_size - 1) / chunk_size;
+  chunk_size = MAX (1, 512 / src_layout->width);
+  n_tasks = (src_layout->height + chunk_size - 1) / chunk_size;
 
-  if (dest_format == src_format)
+  if (memory_formats[dest_layout->format].mipmap_format == src_layout->format)
     {
       if (linear)
         gdk_parallel_task_run (gdk_memory_mipmap_same_format_linear, &mipmap, n_tasks);

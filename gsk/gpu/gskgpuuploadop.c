@@ -276,22 +276,17 @@ gsk_gpu_upload_texture_op_draw (GskGpuOp              *op,
     }
   else
     {
-#if 0
       GdkMemoryLayout bytes_layout;
       GBytes *bytes;
       
       bytes = gdk_texture_download_bytes (self->texture, &bytes_layout);
       gdk_memory_mipmap (data,
                          layout,
-                         gsk_gpu_image_get_format (self->image),
                          g_bytes_get_data (bytes, NULL),
                          &bytes_layout,
                          self->lod_level,
                          self->lod_filter == GSK_SCALING_FILTER_TRILINEAR ? TRUE : FALSE);
       g_bytes_unref (bytes);
-#else
-      g_assert_not_reached ();
-#endif
     }
 }
 
