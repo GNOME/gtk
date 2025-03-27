@@ -92,8 +92,8 @@ gsk_vulkan_ycbcr_new (GskVulkanDevice *device,
                                                 &(VkSamplerYcbcrConversionCreateInfo) {
                                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO,
                                                     .format = vk_format,
-                                                    .ycbcrModel = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601,
-                                                    .ycbcrRange = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW,
+                                                    .ycbcrModel = VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY,
+                                                    .ycbcrRange = VK_SAMPLER_YCBCR_RANGE_ITU_FULL,
                                                     .components = (VkComponentMapping) {
                                                         VK_COMPONENT_SWIZZLE_IDENTITY,
                                                         VK_COMPONENT_SWIZZLE_IDENTITY,
