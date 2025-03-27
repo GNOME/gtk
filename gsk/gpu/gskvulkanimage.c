@@ -344,10 +344,10 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
     flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
 
-  if (((flags & (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_STRAIGHT_ALPHA)) ==
-       (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE)) &&
-      (required_flags & GSK_GPU_IMAGE_CAN_MIPMAP))
-    flags |= GSK_GPU_IMAGE_CAN_MIPMAP;
+  if (((flags & (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_STRAIGHT_ALPHA)) !=
+       (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_CAN_MIPMAP)) ||
+      !(required_flags & GSK_GPU_IMAGE_CAN_MIPMAP))
+    flags &= ~GSK_GPU_IMAGE_CAN_MIPMAP;
 
   if (!gsk_component_mapping_is_framebuffer_compatible (&vk_components))
     flags |= GSK_GPU_IMAGE_NO_BLIT;
