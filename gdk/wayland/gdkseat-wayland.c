@@ -44,12 +44,6 @@
 
 #include <xkbcommon/xkbcommon.h>
 
-#include <errno.h>
-#include <fcntl.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/time.h>
-#include <sys/mman.h>
 #if defined(HAVE_DEV_EVDEV_INPUT_H)
 #include <dev/evdev/input.h>
 #elif defined(HAVE_LINUX_INPUT_H)

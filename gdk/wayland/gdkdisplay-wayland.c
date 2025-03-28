@@ -25,10 +25,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-#ifdef HAVE_SYS_SYSMACROS_H
-#include <sys/sysmacros.h>
-#endif
-
 #ifdef HAVE_SYS_MMAN_H
 #include <sys/mman.h>
 #endif
