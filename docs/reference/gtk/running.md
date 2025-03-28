@@ -413,6 +413,17 @@ does not support them.
 The special value `all` can be used to turn on all values. The special
 value `help` can be used to obtain a list of all supported values.
 
+### `GDK_WAYLAND_DISABLE`
+
+This variable can be set to a list of values, which cause the GDK Wayland
+backend to not use certain Wayland interfaces, even if the compositor advertises
+them.
+
+The special value `help` can be used to obtain help.
+
+To see a list of Wayland interface names, use `GDK_DEBUG=misc` and look for
+`global` in the output.
+
 ### `GSK_RENDERER`
 
 If set, selects the GSK renderer to use. The following renderers can
