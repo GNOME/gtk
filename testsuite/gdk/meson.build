@@ -72,6 +72,7 @@ internal_tests = [
   { 'name': 'dihedral' },
   { 'name': 'image' },
   { 'name': 'memorytexture', 'sources': [ 'gdktestutils.c' ] },
+  { 'name': 'mipmap', 'sources': [ 'gdktestutils.c' ] },
   { 'name': 'texture' },
   { 'name': 'gltexture' },
   { 'name': 'subsurface' },
