@@ -204,7 +204,6 @@ check_headers = [
   'dev/evdev/input.h',
   'ftw.h',
   'linux/input.h',
-  'linux/memfd.h',
   'sys/mman.h',
   'sys/sysmacros.h',
   'sys/time.h',
