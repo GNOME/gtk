@@ -1,9 +1,5 @@
 #include "config.h"
 
-#ifdef HAVE_LINUX_MEMFD_H
-#include <linux/memfd.h>
-#endif
-
 #ifdef HAVE_SYS_MMAN_H
 #include <sys/mman.h>
 #endif
@@ -579,16 +575,16 @@ open_shared_memory (void)
   static gboolean force_shm_open = FALSE;
   int ret = -1;
 
-#if !defined (__NR_memfd_create)
+#if !defined (HAVE_MEMFD_CREATE)
   force_shm_open = TRUE;
 #endif
 
   do
     {
-#if defined (__NR_memfd_create)
+#if defined (HAVE_MEMFD_CREATE)
       if (!force_shm_open)
         {
-          ret = syscall (__NR_memfd_create, "gdk-broadway", MFD_CLOEXEC);
+          ret = memfd_create ("gdk-broadway", MFD_CLOEXEC);
 
           /* fall back to shm_open until debian stops shipping 3.16 kernel
            * See bug 766341

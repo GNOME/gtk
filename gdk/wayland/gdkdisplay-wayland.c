@@ -29,12 +29,9 @@
 #include <sys/sysmacros.h>
 #endif
 
-#ifdef HAVE_LINUX_MEMFD_H
-#include <linux/memfd.h>
-#include <sys/syscall.h>
-#endif
-
+#ifdef HAVE_SYS_MMAN_H
 #include <sys/mman.h>
+#endif
 
 #include <glib.h>
 #include <gio/gio.h>
@@ -1310,20 +1307,20 @@ open_shared_memory (void)
   static gboolean force_shm_open = FALSE;
   int ret = -1;
 
-#if !defined (__NR_memfd_create)
+#if !defined (HAVE_MEMFD_CREATE)
   force_shm_open = TRUE;
 #endif
 
   do
     {
-#if defined (__NR_memfd_create)
+#if defined (HAVE_MEMFD_CREATE)
       if (!force_shm_open)
         {
           int options = MFD_CLOEXEC;
 #if defined (MFD_ALLOW_SEALING)
           options |= MFD_ALLOW_SEALING;
 #endif
-          ret = syscall (__NR_memfd_create, "gdk-wayland", options);
+          ret = memfd_create ("gdk-wayland", options);
 
           /* fall back to shm_open until debian stops shipping 3.16 kernel
            * See bug 766341
