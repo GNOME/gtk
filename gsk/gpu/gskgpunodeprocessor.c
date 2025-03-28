@@ -4549,6 +4549,8 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
                                 NULL,
                                 GSK_RENDER_PASS_OFFSCREEN);
 
+  self.blend = GSK_GPU_BLEND_NONE;
+  self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
   gsk_gpu_node_processor_sync_globals (&self, 0);
 
   if (GDK_IS_DEFAULT_COLOR_STATE (target_color_state))
