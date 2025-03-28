@@ -29,8 +29,6 @@
 
 #include "gsk/gl/fp16private.h"
 
-#include <epoxy/gl.h>
-
 /* Don't report quick (< 0.5 msec) runs */
 #define MIN_MARK_DURATION 500000
 
