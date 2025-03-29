@@ -776,10 +776,11 @@ poll_func (GPollFD *ufds,
   NSEvent *event;
   NSDate *limit_date;
   int n_ready;
+  guint64 execution_id;
 
-  static GPollFD *last_ufds;
+  static guint64 execution_count = 0;
 
-  last_ufds = ufds;
+  execution_id = ++execution_count;
 
   n_ready = select_thread_start_poll (ufds, nfds, timeout_);
   if (n_ready > 0)
@@ -799,16 +800,17 @@ poll_func (GPollFD *ufds,
                                dequeue: YES];
   getting_events--;
 
-  /* We check if last_ufds did not change since the time this function was
+  /* Here last_ufds might have changed since the time this function was
    * called. It is possible that a recursive main loop (and thus recursive
    * invocation of this poll function) is triggered while in
    * nextEventMatchingMask:. If during that time new fds are added,
-   * the cached fds array might be replaced in g_main_context_iterate().
-   * So, we should avoid accessing the old fd array (still pointed at by
-   * ufds) here in that case, since it might have been freed. We avoid this
-   * by not calling the collect stage.
+   * the cached fds array might be replaced in g_main_context_iterate(),
+   * or if the fds change, they might be replaced in the array contents and
+   * not match the ones the collect stage expects. So we check if we entered
+   * any nested mainloop (checking the ufds pointer changed is not enough).
+   * We avoid this by not calling the collect stage.
    */
-  if (last_ufds == ufds && n_ready < 0)
+  if (execution_id == execution_count && n_ready < 0)
     n_ready = select_thread_collect_poll (ufds, nfds);
 
   _gdk_macos_event_source_queue_event (event);
