@@ -291,7 +291,7 @@ linear_gradient (guint n)
           hsv_to_rgb (&stops[j].color, g_random_double (), g_random_double_range (0.15, 0.4), g_random_double_range (0.6, 0.85));
           stops[j].color.alpha = g_random_double_range (0, 1);
         }
-      g_qsort_with_data (stops, n_stops, sizeof (stops[0]), compare_color_stops, 0);
+      g_sort_array (stops, n_stops, sizeof (stops[0]), compare_color_stops, 0);
       if (g_random_boolean ())
         nodes[i] = gsk_linear_gradient_node_new (&bounds, &start, &end, stops, n_stops);
       else

@@ -803,9 +803,7 @@ gtk_distribute_natural_allocation (int               extra_space,
    */
 
   /* Sort descending by gap and position. */
-  g_qsort_with_data (spreading,
-		     n_requested_sizes, sizeof (guint),
-		     compare_gap, sizes);
+  g_sort_array (spreading, n_requested_sizes, sizeof (guint), compare_gap, sizes);
 
   /* Distribute available space.
    * This masterpiece of a loop was conceived by Behdad Esfahbod.
