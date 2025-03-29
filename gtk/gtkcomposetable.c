@@ -1263,6 +1263,16 @@ gtk_compose_table_new_with_data (const guint16 *data,
   return compose_table;
 }
 
+static guint
+gtk_compose_key_flag (guint key)
+{
+  const char *name = gdk_keyval_name (key);
+  if (!name || g_str_has_prefix (name, "0x"))
+    return 0x1000000;
+
+  return 0;
+}
+
 static int
 compare_seq (const void *key, const void *value)
 {
@@ -1273,14 +1283,12 @@ compare_seq (const void *key, const void *value)
   while (keysyms[i])
     {
       guint keysym = seq[i];
+      guint flag = gtk_compose_key_flag (keysym);
 
-      if (!gdk_keyval_name (keysym))
-        keysym = keysym | 0x01000000;
-
-      if (keysyms[i] < keysym)
-        return -1;
-      else if (keysyms[i] > keysym)
-        return 1;
+      if (keysyms[i] < (keysym + flag))
+        return (0xffff & keysyms[i]) - keysym;
+      else if (keysyms[i]> (keysym + flag))
+        return (0xffff & keysyms[i]) - keysym;
 
       i++;
     }
@@ -1293,11 +1301,13 @@ compare_seq_index (const void *key, const void *value)
 {
   const guint *keysyms = key;
   const guint16 *seq = value;
+  guint keysym = seq[0];
+  guint flag = gtk_compose_key_flag (keysym);
 
-  if (keysyms[0] < seq[0])
-    return -1;
-  else if (keysyms[0] > seq[0])
-    return 1;
+  if (keysyms[0] < (keysym + flag))
+    return (0xffff & keysyms[0]) - keysym;
+  else if (keysyms[0] > (keysym + flag))
+    return (0xffff & keysyms[0]) - keysym;
 
   return 0;
 }
