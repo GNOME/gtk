@@ -1,5 +1,54 @@
-Overview of Changes in 4.18.3, xx-xx-xxxx
+Overview of Changes in 4.18.3, 29-03-2025
 =========================================
+
+* Bugs fixed:
+  - #4186 GtkTextView left and right margins (Matthias Clasen)
+  - #7386 Deadkeys using UFDD modifiers do not work under gtk4 apps (Matthias
+    Clasen)
+  - #7398 Wrong position for input method when line number is enabled.
+  - #7399 uninitialized variable being used at _gdk_win32_surface_compute_size
+    (Matthias Clasen)
+  - #7410 Vulkan renderer : `vkCreateSwapchainKHR` errors on windows when
+    opening a popover for the first time (Luca Bacci)
+  - #7419 GtkTextView double click select then drag not working (Matthias
+    Clasen)
+  - #7423 menu is does not open on mobile since translation is too long
+    (Matthias Clasen)
+  - #7425 a11y:  remove_from_accessible_relation: assertion 'GTK_IS_AT_CONTEXT
+    (self)' failed
+  - !8316 window: Allow window resizing to always work
+  - !8318 columnview: Measure header for get_border
+  - !8319 vulkan: Fix copy/paste error
+  - !8323 widget: Explicitly annotate visible's getter
+  - !8324 build: Use accesskit-c 0.15
+  - !8328 Fixed MacOS GDK issue where calling main loop iterations in some Cocoa
+    event...
+  - !8331 widget: Explicitly annotate sensitive's getter
+  - !8333 Windows: Fix #warning not defined with MSVC
+  - !8335 Add more deprecations
+  - !8336 Emit inclusion warning only in normal use
+  - !8339 Fix Double-Free Issue in GTK Print Backend CPDB
+  - !8341 wayland: Avoid a warning without posix_fallocate
+  - !8344 print: Add more docs
+  - !8346 listbox: Don't explicitly show headers and model rows
+  - !8347 Test rapid cursor changes
+  - !8355 wayland: Avoid setting the same shape twice
+  - !8356 Drop an unused field
+  - !8357 build: Improve libintl function check
+  - !8358 gdkglcontext-win32-wgl.c: Apply scale for glAddSwapHintRectWIN() (fix
+    use on HiDPI)
+  - !8359 gtklistbase: Do not select invalid positions
+  - !8360 inspector: Persist some UI state
+  - !8361 gstsink: Set the actual buffer size
+  - !8362 menus: prefer standard shortcuts over action keys
+  - !8363 wayland: Stop using syscall() for memfds
+  - !8367 memoryformat: Remove unneeded GL header
+  - !8368 Improve BEPO compose sequence visuals
+
+* Translation updates:
+  - Romanian (Antonio Marin)
+  - Spanish (Daniel Mustieles)
+
 
 Overview of Changes in 4.18.2, 16-03-2025
 =========================================
