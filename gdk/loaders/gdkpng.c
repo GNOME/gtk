@@ -22,7 +22,7 @@
 #include <glib/gi18n-lib.h>
 #include "gdkcolorstateprivate.h"
 #include "gdkmemoryformatprivate.h"
-#include "gdkmemorytexturebuilder.h"
+#include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
 #include "gdktexturedownloaderprivate.h"
 
@@ -305,17 +305,16 @@ gdk_load_png (GBytes      *bytes,
   png_textp text;
   int num_texts;
   guint width, height;
-  gsize i, stride;
+  gsize i;
   int depth, color_type;
   int interlace;
-  GdkMemoryTextureBuilder *builder;
   GdkMemoryFormat format;
+  GdkMemoryLayout layout;
   guchar *buffer = NULL;
   guchar **row_pointers = NULL;
   GBytes *out_bytes;
   GdkColorState *color_state;
   GdkTexture *texture;
-  int bpp;
 #if PNG_LIBPNG_VER < 10645
   CICPData cicp = { FALSE, };
 #endif
@@ -444,9 +443,7 @@ gdk_load_png (GBytes      *bytes,
   if (color_state == NULL)
     return NULL;
 
-  bpp = gdk_memory_format_bytes_per_pixel (format);
-  if (!g_size_checked_mul (&stride, width, bpp) ||
-      !g_size_checked_add (&stride, stride, (8 - stride % 8) % 8))
+  if (!gdk_memory_layout_try_init (&layout, format, width, height, 1))
     {
       g_set_error (error,
                    GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_TOO_LARGE,
@@ -454,7 +451,7 @@ gdk_load_png (GBytes      *bytes,
       return NULL;
     }
 
-  buffer = g_try_malloc_n (height, stride);
+  buffer = g_try_malloc (layout.size);
   row_pointers = g_try_malloc_n (height, sizeof (char *));
 
   if (!buffer || !row_pointers)
@@ -470,21 +467,13 @@ gdk_load_png (GBytes      *bytes,
     }
 
   for (i = 0; i < height; i++)
-    row_pointers[i] = &buffer[i * stride];
+    row_pointers[i] = &buffer[gdk_memory_layout_offset (&layout, 0, 0, i)];
 
   png_read_image (png, row_pointers);
   png_read_end (png, info);
 
-  out_bytes = g_bytes_new_take (buffer, height * stride);
-  builder = gdk_memory_texture_builder_new ();
-  gdk_memory_texture_builder_set_format (builder, format);
-  gdk_memory_texture_builder_set_color_state (builder, color_state);
-  gdk_memory_texture_builder_set_width (builder, width);
-  gdk_memory_texture_builder_set_height (builder, height);
-  gdk_memory_texture_builder_set_bytes (builder, out_bytes);
-  gdk_memory_texture_builder_set_stride (builder, stride);
-  texture = gdk_memory_texture_builder_build (builder);
-  g_object_unref (builder);
+  out_bytes = g_bytes_new_take (buffer, layout.size);
+  texture = gdk_memory_texture_new_from_layout (out_bytes, &layout, color_state, NULL, NULL);
   g_bytes_unref (out_bytes);
   gdk_color_state_unref (color_state);
 
