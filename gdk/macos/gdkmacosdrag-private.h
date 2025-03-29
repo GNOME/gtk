@@ -75,6 +75,8 @@ void            _gdk_macos_drag_set_start_position (GdkMacosDrag   *self,
                                                     int             start_y);
 void            _gdk_macos_drag_set_actions        (GdkMacosDrag   *self,
                                                     GdkModifierType mods);
+void            gdk_macos_drag_set_cursor          (GdkMacosDrag   *self,
+                                                    GdkCursor      *cursor);
 
 
 G_END_DECLS

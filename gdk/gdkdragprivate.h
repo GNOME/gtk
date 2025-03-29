@@ -39,8 +39,7 @@ struct _GdkDragClass {
   void        (*drop_done)     (GdkDrag   *drag,
                                 gboolean          success);
 
-  void        (*set_cursor)     (GdkDrag  *drag,
-                                 GdkCursor       *cursor);
+  void        (*update_cursor)  (GdkDrag      *drag);
   void        (*cancel)         (GdkDrag      *drag,
                                  GdkDragCancelReason  reason);
   void        (*drop_performed) (GdkDrag  *drag,
@@ -55,8 +54,7 @@ struct _GdkDrag {
   GObject parent_instance;
 };
 
-void     gdk_drag_set_cursor          (GdkDrag        *drag,
-                                       GdkCursor      *cursor);
+void     gdk_drag_update_cursor       (GdkDrag        *drag);
 void     gdk_drag_set_actions         (GdkDrag        *drag,
                                        GdkDragAction   actions);
 void     gdk_drag_set_selected_action (GdkDrag        *drag,
