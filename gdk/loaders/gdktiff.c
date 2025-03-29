@@ -19,12 +19,13 @@
 
 #include "gdktiffprivate.h"
 
-#include <glib/gi18n-lib.h>
+#include "gdkcolorstate.h"
 #include "gdkmemoryformatprivate.h"
-#include "gdkmemorytexture.h"
+#include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
 #include "gdktexturedownloaderprivate.h"
 
+#include <glib/gi18n-lib.h>
 #include <tiffio.h>
 
 /* Our main interest in tiff as an image format is that it is
@@ -386,9 +387,8 @@ gdk_load_tiff (GBytes  *input_bytes,
   guint32 width, height;
   gint16 alpha_samples;
   GdkMemoryFormat format;
+  GdkMemoryLayout layout;
   guchar *data, *line;
-  gsize stride;
-  int bpp;
   GBytes *bytes;
   GdkTexture *texture;
   G_GNUC_UNUSED gint64 before = GDK_PROFILER_CURRENT_TIME;
@@ -460,12 +460,8 @@ gdk_load_tiff (GBytes  *input_bytes,
       return texture;
     }
 
-  stride = width * gdk_memory_format_bytes_per_pixel (format);
-
-  g_assert (TIFFScanlineSize (tif) == stride);
-
-  data = g_try_malloc_n (height, stride);
-  if (!data)
+  if (!gdk_memory_layout_try_init (&layout, format, width, height, 1) ||
+      !(data = g_try_malloc (layout.size)))
     {
       g_set_error (error,
                    GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_TOO_LARGE,
@@ -474,7 +470,9 @@ gdk_load_tiff (GBytes  *input_bytes,
       return NULL;
     }
 
-  line = data;
+  g_assert (TIFFScanlineSize (tif) == layout.planes[0].stride);
+
+  line = data + layout.planes[0].offset;
   for (int y = 0; y < height; y++)
     {
       if (TIFFReadScanline (tif, line, y, 0) == -1)
@@ -487,15 +485,14 @@ gdk_load_tiff (GBytes  *input_bytes,
           return NULL;
         }
 
-      line += stride;
+      line += layout.planes[0].stride;
     }
 
-  bpp = gdk_memory_format_bytes_per_pixel (format);
-  bytes = g_bytes_new_take (data, width * height * bpp);
-
-  texture = gdk_memory_texture_new (width, height,
-                                    format,
-                                    bytes, width * bpp);
+  bytes = g_bytes_new_take (data, layout.size);
+  texture = gdk_memory_texture_new_from_layout (bytes,
+                                                &layout,
+                                                gdk_color_state_get_srgb (),
+                                                NULL, NULL);
   g_bytes_unref (bytes);
 
   TIFFClose (tif);
