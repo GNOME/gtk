@@ -2401,7 +2401,7 @@ gdk_gl_context_download (GdkGLContext    *self,
   GLenum gl_format, gl_type;
   GLint gl_swizzle[4];
 
-  expected_stride = width * gdk_memory_format_bytes_per_pixel (dest_format);
+  expected_stride = (width * gdk_memory_format_bytes_per_pixel (dest_format) + 3) & ~3;
 
   if (!gdk_gl_context_get_use_es (self) &&
       ((gdk_gl_context_get_format_flags (self, tex_format) & GDK_GL_FORMAT_USABLE) == GDK_GL_FORMAT_USABLE))

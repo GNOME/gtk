@@ -29,8 +29,6 @@
 
 #include "gsk/gl/fp16private.h"
 
-#include <epoxy/gl.h>
-
 /* Don't report quick (< 0.5 msec) runs */
 #define MIN_MARK_DURATION 500000
 
@@ -482,6 +480,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
     .gl = {
@@ -515,6 +514,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
     .gl = {
@@ -580,6 +580,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
     .gl = {
@@ -613,6 +614,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8,
         -1,
     },
     .gl = {
@@ -646,6 +648,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8,
         -1,
     },
     .gl = {
@@ -711,6 +714,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8A8,
         -1,
     },
     .gl = {
@@ -778,6 +782,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8X8,
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
@@ -845,6 +850,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8X8,
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
@@ -879,6 +885,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8X8,
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
