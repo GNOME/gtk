@@ -87,6 +87,9 @@ struct _GdkWaylandDisplay
   GsdXftSettings xft_settings;
   GDBusProxy *settings_portal;
 
+  gboolean list_protocols;
+  char **skip_protocols;
+
   guint32    shell_capabilities;
 
   /* Startup notification */

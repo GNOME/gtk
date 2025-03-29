@@ -113,6 +113,85 @@ static void _gdk_wayland_display_set_cursor_theme  (GdkDisplay        *display,
 G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)
 
 static void
+init_skip_protocols (GdkWaylandDisplay *display_wayland)
+{
+  const char *variable, *string, *p, *q;
+  gboolean help;
+  GStrvBuilder *strv;
+
+  variable = "GDK_WAYLAND_DISABLE";
+  string = g_getenv (variable);
+
+  help = FALSE;
+
+  if (string == NULL)
+    string = "";
+
+  strv = g_strv_builder_new ();
+
+  p = string;
+  while (*p)
+    {
+      q = strpbrk (p, ":;, \t");
+      if (!q)
+        q = p + strlen (p);
+
+      if (g_ascii_strncasecmp ("help", p, q - p) == 0)
+        help = TRUE;
+      else
+        g_strv_builder_take (strv, g_strndup (p, q - p));
+
+      p = q;
+      if (*p)
+        p++;
+    }
+
+  if (!GDK_DISPLAY_DEBUG_CHECK (GDK_DISPLAY (display_wayland), COLOR_MANAGEMENT))
+    g_strv_builder_add (strv, wp_color_manager_v1_interface.name);
+
+  if (help)
+    {
+      gdk_help_message ("%s can be set to a list of Wayland interfaces to disable.\n", variable);
+      if (!GDK_DISPLAY_DEBUG_CHECK (GDK_DISPLAY (display_wayland), MISC))
+        {
+          gdk_help_message ("Supported %s values:", variable);
+          display_wayland->list_protocols = TRUE;
+        }
+    }
+
+  display_wayland->skip_protocols = g_strv_builder_unref_to_strv (strv);
+}
+
+static gboolean
+match_global (GdkWaylandDisplay *display_wayland,
+              const char        *interface,
+              uint32_t           version,
+              const char        *name,
+              uint32_t           min_version)
+{
+  if (strcmp (interface, name) != 0)
+    return FALSE;
+
+  if (version < min_version)
+    {
+      GDK_DISPLAY_DEBUG (GDK_DISPLAY (display_wayland), MISC,
+                         "Not using %s, too old (%u < %u)",
+                         interface, version, min_version);
+      return FALSE;
+    }
+
+  if (g_strv_contains ((const char * const *) display_wayland->skip_protocols, name))
+    {
+      GDK_DISPLAY_DEBUG (GDK_DISPLAY (display_wayland), MISC,
+                         "Not using %s, disabled",
+                         interface);
+      return FALSE;
+    }
+
+  return TRUE;
+}
+
+static void
 async_roundtrip_callback (void               *data,
                           struct wl_callback *callback,
                           uint32_t            time)
@@ -348,21 +427,24 @@ gdk_registry_handle_global (void               *data,
   GdkWaylandDisplay *display_wayland = data;
   struct wl_output *output;
 
-  GDK_DEBUG (MISC, "add global %u, interface %s, version %u", id, interface, version);
+  if (display_wayland->list_protocols)
+    gdk_debug_message ("    %s", interface);
+  else
+    GDK_DEBUG (MISC, "add global %u, interface %s, version %u", id, interface, version);
 
-  if (strcmp (interface, wl_compositor_interface.name) == 0)
+  if (match_global (display_wayland, interface, version, wl_compositor_interface.name, 0))
     {
       display_wayland->compositor =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &wl_compositor_interface, MIN (version, 6));
     }
-  else if (strcmp (interface, wl_shm_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, wl_shm_interface.name, 0))
     {
       display_wayland->shm =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_shm_interface, 1);
       wl_shm_add_listener (display_wayland->shm, &wl_shm_listener, display_wayland);
     }
-  else if (strcmp (interface, zwp_linux_dmabuf_v1_interface.name) == 0 && version >= 4)
+  else if (match_global (display_wayland, interface, version, zwp_linux_dmabuf_v1_interface.name, 4))
     {
       struct zwp_linux_dmabuf_feedback_v1 *feedback;
 
@@ -374,23 +456,23 @@ gdk_registry_handle_global (void               *data,
                                                                       feedback);
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
-  else if (strcmp (interface, xdg_wm_base_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, xdg_wm_base_interface.name, 0))
     {
       display_wayland->xdg_wm_base_id = id;
       display_wayland->xdg_wm_base_version = version;
     }
-  else if (strcmp (interface, zxdg_shell_v6_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, zxdg_shell_v6_interface.name, 0))
     {
       display_wayland->zxdg_shell_v6_id = id;
     }
-  else if (strcmp (interface, xdg_wm_dialog_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, xdg_wm_dialog_v1_interface.name, 0))
     {
       display_wayland->xdg_wm_dialog =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &xdg_wm_dialog_v1_interface,
                           MIN (version, XDG_WM_DIALOG_VERSION));
     }
-  else if (strcmp (interface, gtk_shell1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, gtk_shell1_interface.name, 0))
     {
       display_wayland->gtk_shell =
         wl_registry_bind (display_wayland->wl_registry, id,
@@ -398,7 +480,7 @@ gdk_registry_handle_global (void               *data,
                           MIN (version, GTK_SHELL1_VERSION));
       gdk_wayland_display_set_has_gtk_shell (display_wayland);
     }
-  else if (strcmp (interface, wl_output_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, wl_output_interface.name, 0))
     {
       output =
        wl_registry_bind (display_wayland->wl_registry, id, &wl_output_interface,
@@ -407,7 +489,7 @@ gdk_registry_handle_global (void               *data,
                                       MIN (version, OUTPUT_VERSION));
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
-  else if (strcmp (interface, wl_seat_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, wl_seat_interface.name, 0))
     {
       SeatAddedClosure *closure;
       static const char *required_device_manager_globals[] = {
@@ -423,67 +505,67 @@ gdk_registry_handle_global (void               *data,
       closure->version = version;
       postpone_on_globals_closure (display_wayland, &closure->base);
     }
-  else if (strcmp (interface, wl_data_device_manager_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, wl_data_device_manager_interface.name, 0))
     {
       display_wayland->data_device_manager =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_data_device_manager_interface,
                           MIN (version, 3));
     }
-  else if (strcmp (interface, wl_subcompositor_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, wl_subcompositor_interface.name, 0))
     {
       display_wayland->subcompositor =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_subcompositor_interface, 1);
     }
-  else if (strcmp (interface, zwp_pointer_gestures_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, zwp_pointer_gestures_v1_interface.name, 0))
     {
       display_wayland->pointer_gestures =
         wl_registry_bind (display_wayland->wl_registry,
                           id, &zwp_pointer_gestures_v1_interface,
                           MIN (version, GDK_ZWP_POINTER_GESTURES_V1_VERSION));
     }
-  else if (strcmp (interface, zwp_primary_selection_device_manager_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, zwp_primary_selection_device_manager_v1_interface.name, 0))
     {
       display_wayland->primary_selection_manager =
         wl_registry_bind(display_wayland->wl_registry, id,
                          &zwp_primary_selection_device_manager_v1_interface, 1);
     }
-  else if (strcmp (interface, zwp_tablet_manager_v2_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, zwp_tablet_manager_v2_interface.name, 0))
     {
       display_wayland->tablet_manager =
         wl_registry_bind(display_wayland->wl_registry, id,
                          &zwp_tablet_manager_v2_interface, 1);
     }
-  else if (strcmp (interface, zxdg_exporter_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, zxdg_exporter_v1_interface.name, 0))
     {
       display_wayland->xdg_exporter =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zxdg_exporter_v1_interface, 1);
     }
-  else if (strcmp (interface, zxdg_exporter_v2_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, zxdg_exporter_v2_interface.name, 0))
     {
       display_wayland->xdg_exporter_v2 =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zxdg_exporter_v2_interface, 1);
     }
-  else if (strcmp (interface, zxdg_importer_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, zxdg_importer_v1_interface.name, 0))
     {
       display_wayland->xdg_importer =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zxdg_importer_v1_interface, 1);
     }
-  else if (strcmp (interface, zxdg_importer_v2_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, zxdg_importer_v2_interface.name, 0))
     {
       display_wayland->xdg_importer_v2 =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zxdg_importer_v2_interface, 1);
     }
-  else if (strcmp (interface, zwp_keyboard_shortcuts_inhibit_manager_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, zwp_keyboard_shortcuts_inhibit_manager_v1_interface.name, 0))
     {
       display_wayland->keyboard_shortcuts_inhibit =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zwp_keyboard_shortcuts_inhibit_manager_v1_interface, 1);
     }
-  else if (strcmp (interface, org_kde_kwin_server_decoration_manager_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, org_kde_kwin_server_decoration_manager_interface.name, 0))
     {
       display_wayland->server_decoration_manager =
         wl_registry_bind (display_wayland->wl_registry, id,
@@ -492,7 +574,7 @@ gdk_registry_handle_global (void               *data,
                                                            &server_decoration_listener,
                                                            display_wayland);
     }
-  else if (strcmp (interface, zxdg_output_manager_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, zxdg_output_manager_v1_interface.name, 0))
     {
       display_wayland->xdg_output_manager =
         wl_registry_bind (display_wayland->wl_registry, id,
@@ -501,56 +583,55 @@ gdk_registry_handle_global (void               *data,
       gdk_wayland_display_init_xdg_output (display_wayland);
       _gdk_wayland_display_async_roundtrip (display_wayland);
     }
-  else if (strcmp (interface, zwp_idle_inhibit_manager_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, zwp_idle_inhibit_manager_v1_interface.name, 0))
     {
       display_wayland->idle_inhibit_manager =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &zwp_idle_inhibit_manager_v1_interface, 1);
     }
-  else if (strcmp (interface, xdg_activation_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, xdg_activation_v1_interface.name, 0))
     {
       display_wayland->xdg_activation =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &xdg_activation_v1_interface, 1);
     }
-  else if (strcmp (interface, wp_fractional_scale_manager_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, wp_fractional_scale_manager_v1_interface.name, 0))
     {
       display_wayland->fractional_scale =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &wp_fractional_scale_manager_v1_interface, 1);
     }
-  else if (strcmp (interface, wp_viewporter_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, wp_viewporter_interface.name, 0))
     {
       display_wayland->viewporter =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &wp_viewporter_interface, 1);
     }
-  else if (strcmp (interface, wp_presentation_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, wp_presentation_interface.name, 0))
     {
       display_wayland->presentation =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &wp_presentation_interface,
                           MIN (version, 1));
     }
-  else if (strcmp (interface, wp_color_manager_v1_interface.name) == 0 &&
-           GDK_DISPLAY_DEBUG_CHECK (GDK_DISPLAY (display_wayland), COLOR_MANAGEMENT))
+  else if (match_global (display_wayland, interface, version, wp_color_manager_v1_interface.name, 0))
     {
       display_wayland->color = gdk_wayland_color_new (display_wayland, registry, id, version);
     }
-  else if (strcmp (interface, wp_single_pixel_buffer_manager_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, wp_single_pixel_buffer_manager_v1_interface.name, 0))
     {
       display_wayland->single_pixel_buffer =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &wp_single_pixel_buffer_manager_v1_interface,
                           MIN (version, 1));
     }
-  else if (strcmp (interface, xdg_system_bell_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, xdg_system_bell_v1_interface.name, 0))
     {
       display_wayland->system_bell =
         wl_registry_bind (display_wayland->wl_registry, id,
                           &xdg_system_bell_v1_interface, 1);
     }
-  else if (strcmp (interface, wp_cursor_shape_manager_v1_interface.name) == 0)
+  else if (match_global (display_wayland, interface, version, wp_cursor_shape_manager_v1_interface.name, 0))
     {
       display_wayland->cursor_shape =
         wl_registry_bind (display_wayland->wl_registry, id,
@@ -633,6 +714,8 @@ _gdk_wayland_display_open (const char *display_name)
   display_wayland = GDK_WAYLAND_DISPLAY (display);
   display_wayland->wl_display = wl_display;
   gdk_wayland_display_install_gsources (display_wayland);
+
+  init_skip_protocols (display_wayland);
 
   init_settings (display);
 
@@ -800,6 +883,8 @@ gdk_wayland_display_finalize (GObject *object)
     g_hash_table_destroy (display_wayland->settings);
 
   g_clear_object (&display_wayland->settings_portal);
+
+  g_strfreev (display_wayland->skip_protocols);
 
   G_OBJECT_CLASS (gdk_wayland_display_parent_class)->finalize (object);
 }
