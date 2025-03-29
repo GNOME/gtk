@@ -424,6 +424,24 @@ match_algorithmic (void)
   g_assert_true (ret);
   g_assert_cmpstr (output->str, ==, "ä");
 
+  buffer[0] = GDK_KEY_dead_a;
+  buffer[1] = GDK_KEY_a;
+  ret = gtk_check_algorithmically (buffer, 2, output);
+  g_assert_true (ret);
+  g_assert_cmpstr (output->str, ==, "aͣ");
+
+  buffer[0] = GDK_KEY_dead_a;
+  buffer[1] = GDK_KEY_a;
+  ret = gtk_check_algorithmically (buffer, 2, output);
+  g_assert_true (ret);
+  g_assert_cmpstr (output->str, ==, "aͣ");
+
+  buffer[0] = GDK_KEY_dead_schwa;
+  buffer[1] = GDK_KEY_a;
+  ret = gtk_check_algorithmically (buffer, 2, output);
+  g_assert_true (ret);
+  g_assert_cmpstr (output->str, ==, "aᷪ");
+
   g_string_free (output, TRUE);
 }
 

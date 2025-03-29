@@ -1236,6 +1236,11 @@ gtk_im_context_simple_get_preedit_string (GtkIMContext   *context,
                       priv->compose_buffer[i + 1] == GDK_KEY_Multi_key)
                     g_string_append (s, "·");
                 }
+              else if (priv->compose_buffer[i] >= 0x0100fdd0 && priv->compose_buffer[i] <= 0x0100fdd9)
+                {
+                    /* A BEPOs pseudo deadkey */
+                    g_string_append (s, "·");
+                }
               else
                 {
                   gunichar ch;
