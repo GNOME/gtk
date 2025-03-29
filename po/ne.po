@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Gnome Nepali Translation Project\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-07 14:04+0000\n"
+"POT-Creation-Date: 2025-03-10 22:52+0000\n"
 "PO-Revision-Date: 2021-04-30 10:39+0545\n"
 "Last-Translator: Pawan Chitrakar <chautari@gmail.com>\n"
 "Language-Team: Nepali Translation Team <chautari@gmail.com>\n"
@@ -476,66 +476,40 @@ msgstr "निलम्बन गर्नुहोस्"
 msgid "Unable to create a GL pixel format"
 msgstr "जीएल पिक्सेल ढाँचा सिर्जना गर्न असक्षम"
 
-#: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208 gdk/win32/gdkglcontext-win32.c:1089 gdk/win32/gdkglcontext-win32.c:1129
+#: gdk/quartz/gdkglcontext-quartz.c:133 gdk/wayland/gdkglcontext-wayland.c:208
+#: gdk/win32/gdkglcontext-win32.c:808 gdk/win32/gdkglcontext-win32.c:1264
 #: gdk/x11/gdkglcontext-x11.c:724 gdk/x11/gdkglcontext-x11.c:774
 msgid "Unable to create a GL context"
 msgstr "जीएल विषयवस्तु सिर्जना गर्न अक्षम"
 
-#: gdk/wayland/gdkglcontext-wayland.c:418 gdk/wayland/gdkglcontext-wayland.c:428 gdk/win32/gdkglcontext-win32.c:927 gdk/win32/gdkglcontext-win32.c:937
-#: gdk/win32/gdkglcontext-win32.c:1054 gdk/x11/gdkglcontext-x11.c:975
+#: gdk/wayland/gdkglcontext-wayland.c:422
+#: gdk/wayland/gdkglcontext-wayland.c:432 gdk/win32/gdkglcontext-win32.c:777
+#: gdk/win32/gdkglcontext-win32.c:1142 gdk/win32/gdkglcontext-win32.c:1152
+#: gdk/x11/gdkglcontext-x11.c:975
 msgid "No available configurations for the given pixel format"
 msgstr ""
 
-#: gdk/wayland/gdkglcontext-wayland.c:468 gdk/win32/gdkglcontext-win32.c:1196 gdk/x11/gdkglcontext-x11.c:1281
+#: gdk/wayland/gdkglcontext-wayland.c:472 gdk/win32/gdkglcontext-win32.c:1497
+#: gdk/x11/gdkglcontext-x11.c:1281
 #, fuzzy
 msgid "No GL implementation is available"
 msgstr "प्रकार्य कार्यान्वयन उपलब्ध छैन।"
 
-#: gdk/wayland/gdkglcontext-wayland.c:476
+#: gdk/wayland/gdkglcontext-wayland.c:480
 msgid "Core GL is not available on EGL implementation"
 msgstr ""
 
-#. Description of --sync in --help output
-#: gdk/win32/gdkmain-win32.c:56
-msgid "Don't batch GDI requests"
-msgstr "GDI अनुरोधहरू समूहबद्ध नगर्नुहोस्"
-
-#. Description of --no-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:58
-msgid "Don't use the Wintab API for tablet support"
-msgstr "ट्याबलेट समर्थनका लागि Wintab API प्रयोग नगर्नुहोस्"
-
-#. Description of --ignore-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:60
-msgid "Same as --no-wintab"
-msgstr "--no-wintab जस्तै समान"
-
-#. Description of --use-wintab in --help output
-#: gdk/win32/gdkmain-win32.c:62
-msgid "Do use the Wintab API [default]"
-msgstr "API [पूर्वनिर्धारित] प्रयोग गर्नुहोस्"
-
-#. Description of --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:64
-msgid "Size of the palette in 8 bit mode"
-msgstr "८ बिट मोडमा रङदानीको साइज"
-
-#. Placeholder in --max-colors=COLORS in --help output
-#: gdk/win32/gdkmain-win32.c:65
-msgid "COLORS"
-msgstr "COLORS"
-
-#: gdk/x11/gdkapplaunchcontext-x11.c:295
+#: gdk/x11/gdkapplaunchcontext-x11.c:298
 #, c-format
 msgid "Starting %s"
 msgstr "%s सुरु गरिँदैछ"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:308
+#: gdk/x11/gdkapplaunchcontext-x11.c:311
 #, c-format
 msgid "Opening %s"
 msgstr "%s खोलिदैछ"
 
-#: gdk/x11/gdkapplaunchcontext-x11.c:313
+#: gdk/x11/gdkapplaunchcontext-x11.c:316
 #, c-format
 msgid "Opening %d Item"
 msgid_plural "Opening %d Items"
@@ -581,7 +555,8 @@ msgctxt "Action name"
 msgid "Edit"
 msgstr "सम्पादन गर्नुहोस्"
 
-#: gtk/a11y/gtkcellaccessible.c:261 gtk/a11y/gtkcolorswatchaccessible.c:149 gtk/a11y/gtkentryaccessible.c:1557 gtk/a11y/gtkexpanderaccessible.c:281
+#: gtk/a11y/gtkcellaccessible.c:261 gtk/a11y/gtkcolorswatchaccessible.c:149
+#: gtk/a11y/gtkentryaccessible.c:1557 gtk/a11y/gtkexpanderaccessible.c:281
 msgctxt "Action name"
 msgid "Activate"
 msgstr "सक्रिय गर्ने"
@@ -652,6 +627,18 @@ msgctxt "Action description"
 msgid "Activates the expander"
 msgstr "पूर्वनिर्धारित सक्रियहरु"
 
+#: gtk/a11y/gtkfilechooserwidgetaccessible.c:101
+#, fuzzy
+#| msgid "Show other locations"
+msgctxt "Action name"
+msgid "Show location"
+msgstr "अन्य स्थानहरू देखाउनुहोस्"
+
+#: gtk/a11y/gtkfilechooserwidgetaccessible.c:110
+msgctxt "Action description"
+msgid "Show the File Chooser's Location text field"
+msgstr ""
+
 #. FIXME these need accelerators when appropriate, and
 #. * need the mnemonics to be rationalized
 #.
@@ -686,15 +673,15 @@ msgctxt "Stock label"
 msgid "_Close"
 msgstr "_बन्द"
 
-#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9319
+#: gtk/a11y/gtkimageaccessible.c:59 gtk/gtkheaderbar.c:415 gtk/gtkwindow.c:9355
 msgid "Minimize"
 msgstr "सानो पार्नुहोस्"
 
-#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9328
+#: gtk/a11y/gtkimageaccessible.c:60 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9364
 msgid "Maximize"
 msgstr "ठूलो पार्नुहोस्"
 
-#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9285
+#: gtk/a11y/gtkimageaccessible.c:61 gtk/gtkheaderbar.c:439 gtk/gtkwindow.c:9321
 msgid "Restore"
 msgstr "पूर्वावस्थामा ल्याउनुहोस्"
 
@@ -1110,12 +1097,20 @@ msgid "Toggles the switch"
 msgstr "यो सञ्झ्यालका लागि ग्रिडमा सटाउने टगल गर्दछ।"
 
 #: gtk/deprecated/gtkcolorsel.c:425
-msgid "Select the color you want from the outer ring. Select the darkness or lightness of that color using the inner triangle."
-msgstr "तपाईँले बाहिरी घेराबाट चाहेको रङ चयन गर्नुहोस्। भित्री त्रिकोण प्रयोग गर्ने रङको अँध्यारोपन वा चम्किलोपन चयन गर्नुहोस्।"
+msgid ""
+"Select the color you want from the outer ring. Select the darkness or "
+"lightness of that color using the inner triangle."
+msgstr ""
+"तपाईँले बाहिरी घेराबाट चाहेको रङ चयन गर्नुहोस्। भित्री त्रिकोण प्रयोग गर्ने रङको "
+"अँध्यारोपन वा चम्किलोपन चयन गर्नुहोस्।"
 
 #: gtk/deprecated/gtkcolorsel.c:451
-msgid "Click the eyedropper, then click a color anywhere on your screen to select that color."
-msgstr "आइड्रपरमा क्लिक गर्नुहोस्, त्यसपछि त्यो रङ चयन गर्न तपाईँको पर्दामा कुनै पनि ठाउँमा एउटा रङमा क्लिक गर्नुहोस्।"
+msgid ""
+"Click the eyedropper, then click a color anywhere on your screen to select "
+"that color."
+msgstr ""
+"आइड्रपरमा क्लिक गर्नुहोस्, त्यसपछि त्यो रङ चयन गर्न तपाईँको पर्दामा कुनै पनि ठाउँमा एउटा "
+"रङमा क्लिक गर्नुहोस्।"
 
 #: gtk/deprecated/gtkcolorsel.c:461
 msgid "_Hue:"
@@ -1180,9 +1175,15 @@ msgstr "रङ नाम:"
 
 #: gtk/deprecated/gtkcolorsel.c:516
 #, fuzzy
-#| msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as 'orange' in this entry."
-msgid "You can enter an HTML-style hexadecimal color value, or simply a color name such as “orange” in this entry."
-msgstr "तपाईँले एउटा HTML-शैली हेक्जाडेसिमल रङ मान प्रविष्ट गर्न सक्नहुन्छ, वा कुनै एउटा रङ नाम जस्तो कि यो प्रविष्टिमा 'सुन्तला रङ'"
+#| msgid ""
+#| "You can enter an HTML-style hexadecimal color value, or simply a color "
+#| "name such as 'orange' in this entry."
+msgid ""
+"You can enter an HTML-style hexadecimal color value, or simply a color name "
+"such as “orange” in this entry."
+msgstr ""
+"तपाईँले एउटा HTML-शैली हेक्जाडेसिमल रङ मान प्रविष्ट गर्न सक्नहुन्छ, वा कुनै एउटा रङ नाम "
+"जस्तो कि यो प्रविष्टिमा 'सुन्तला रङ'"
 
 #: gtk/deprecated/gtkcolorsel.c:548
 msgid "_Palette:"
@@ -1195,23 +1196,34 @@ msgstr "रङ चक्र"
 #: gtk/deprecated/gtkcolorsel.c:1072
 #, fuzzy
 #| msgid ""
-#| "The previously-selected color, for comparison to the color you're selecting now. You can drag this color to a palette entry, or select this color as "
-#| "current by dragging it to the other color swatch alongside."
+#| "The previously-selected color, for comparison to the color you're "
+#| "selecting now. You can drag this color to a palette entry, or select this "
+#| "color as current by dragging it to the other color swatch alongside."
 msgid ""
-"The previously-selected color, for comparison to the color you’re selecting now. You can drag this color to a palette entry, or select this color as "
+"The previously-selected color, for comparison to the color you’re selecting "
+"now. You can drag this color to a palette entry, or select this color as "
 "current by dragging it to the other color swatch alongside."
 msgstr ""
-"तपाईँले अहिले चयन गरिरहेको रङको तुलनामा, पूर्व-चयन गरिएको रङ। तपाईँले यो रङलाई एउटा रङदानी प्रविष्टिमा तान्न सक्नुहुन्छ, वासँगै रहेको अन्य रङ सम्म तानेर हालको रूपमा यो रङ चयन "
+"तपाईँले अहिले चयन गरिरहेको रङको तुलनामा, पूर्व-चयन गरिएको रङ। तपाईँले यो रङलाई एउटा "
+"रङदानी प्रविष्टिमा तान्न सक्नुहुन्छ, वासँगै रहेको अन्य रङ सम्म तानेर हालको रूपमा यो रङ चयन "
 "गर्न सक्नुहुन्छ।"
 
 #: gtk/deprecated/gtkcolorsel.c:1078
 #, fuzzy
-#| msgid "The color you've chosen. You can drag this color to a palette entry to save it for use in the future."
-msgid "The color you’ve chosen. You can drag this color to a palette entry to save it for use in the future."
-msgstr "तपाईँले रोजेको रङ। भविष्यमा प्रयोगका लागि यसलाई बचत गर्न तपाईँले यो रङलाई एउटा रङदानी प्रविष्टिमा तान्न सक्नुहुन्छ।"
+#| msgid ""
+#| "The color you've chosen. You can drag this color to a palette entry to "
+#| "save it for use in the future."
+msgid ""
+"The color you’ve chosen. You can drag this color to a palette entry to save "
+"it for use in the future."
+msgstr ""
+"तपाईँले रोजेको रङ। भविष्यमा प्रयोगका लागि यसलाई बचत गर्न तपाईँले यो रङलाई एउटा "
+"रङदानी प्रविष्टिमा तान्न सक्नुहुन्छ।"
 
 #: gtk/deprecated/gtkcolorsel.c:1084
-msgid "The previously-selected color, for comparison to the color you’re selecting now."
+msgid ""
+"The previously-selected color, for comparison to the color you’re selecting "
+"now."
 msgstr ""
 
 #: gtk/deprecated/gtkcolorsel.c:1088
@@ -1225,23 +1237,32 @@ msgstr "यहाँ रङ बचत गर्नुहोस्"
 #: gtk/deprecated/gtkcolorsel.c:1664
 #, fuzzy
 #| msgid ""
-#| "Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select \"Save color here."
-#| "\""
+#| "Click this palette entry to make it the current color. To change this "
+#| "entry, drag a color swatch here or right-click it and select \"Save color "
+#| "here.\""
 msgid ""
-"Click this palette entry to make it the current color. To change this entry, drag a color swatch here or right-click it and select “Save color here.”"
+"Click this palette entry to make it the current color. To change this entry, "
+"drag a color swatch here or right-click it and select “Save color here.”"
 msgstr ""
-"यसलाई हालको रङ बनाउन यो रङदानीमा क्लिक गर्नुहोस्। यो प्रविष्टि परिवर्तन गर्न, एउटा रङ खण्डलाई यहाँ तान्नुहोस् वा यसलाई दायाँ-क्लिक गर्नुहोस् र \"यहाँ रङ बचत गर्नुहोस्\" चयन "
+"यसलाई हालको रङ बनाउन यो रङदानीमा क्लिक गर्नुहोस्। यो प्रविष्टि परिवर्तन गर्न, एउटा "
+"रङ खण्डलाई यहाँ तान्नुहोस् वा यसलाई दायाँ-क्लिक गर्नुहोस् र \"यहाँ रङ बचत गर्नुहोस्\" चयन "
 "गर्नुहोस्।"
 
-#: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689 gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
-#: gtk/gtkfilechooserwidget.c:1498 gtk/gtkfilechooserwidget.c:6572 gtk/gtkmessagedialog.c:952 gtk/gtkmessagedialog.c:965 gtk/gtkmountoperation.c:594
-#: gtk/gtkpagesetupunixdialog.c:197 gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545 gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
-#: gtk/gtkwindow.c:12789 gtk/inspector/css-editor.c:201 gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125 gtk/ui/gtkcolorchooserdialog.ui:34
-#: gtk/ui/gtkfontchooserdialog.ui:31
+#: gtk/deprecated/gtkcolorseldialog.c:191 gtk/deprecated/gtkfontsel.c:1689
+#: gtk/gtkfilechoosernative.c:545 gtk/gtkfilechoosernative.c:637
+#: gtk/gtkfilechooserwidget.c:1502 gtk/gtkfilechooserwidget.c:6549
+#: gtk/gtkmessagedialog.c:971 gtk/gtkmessagedialog.c:984
+#: gtk/gtkmountoperation.c:599 gtk/gtkpagesetupunixdialog.c:197
+#: gtk/gtkprintbackend.c:779 gtk/gtkprinteroptionwidget.c:545
+#: gtk/gtkprintunixdialog.c:674 gtk/gtkprintunixdialog.c:747
+#: gtk/gtkwindow.c:12829 gtk/inspector/css-editor.c:201
+#: gtk/ui/gtkappchooserdialog.ui:61 gtk/ui/gtkassistant.ui:125
+#: gtk/ui/gtkcolorchooserdialog.ui:34 gtk/ui/gtkfontchooserdialog.ui:31
 msgid "_Cancel"
 msgstr "_रद्द"
 
-#: gtk/deprecated/gtkcolorseldialog.c:195 gtk/gtkprinteroptionwidget.c:546 gtk/ui/gtkappchooserdialog.ui:67 gtk/ui/gtkcolorchooserdialog.ui:40
+#: gtk/deprecated/gtkcolorseldialog.c:195 gtk/gtkprinteroptionwidget.c:546
+#: gtk/ui/gtkappchooserdialog.ui:67 gtk/ui/gtkcolorchooserdialog.ui:40
 #: gtk/ui/gtkfontchooserdialog.ui:37
 msgid "_Select"
 msgstr "_चयन गर्नुहोस्"
@@ -1277,11 +1298,13 @@ msgstr "साइज:"
 msgid "_Preview:"
 msgstr "पूर्वावलोकन:"
 
-#: gtk/deprecated/gtkfontsel.c:1693 gtk/gtkpagesetupunixdialog.c:198 gtk/ui/gtkassistant.ui:50
+#: gtk/deprecated/gtkfontsel.c:1693 gtk/gtkpagesetupunixdialog.c:198
+#: gtk/ui/gtkassistant.ui:50
 msgid "_Apply"
 msgstr "_लागू"
 
-#: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:944 gtk/gtkmessagedialog.c:966 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12790
+#: gtk/deprecated/gtkfontsel.c:1698 gtk/gtkmessagedialog.c:963
+#: gtk/gtkmessagedialog.c:985 gtk/gtkprintbackend.c:780 gtk/gtkwindow.c:12830
 msgid "_OK"
 msgstr "_ठिक छ"
 
@@ -1427,7 +1450,6 @@ msgstr "cwd को साटोमा यो निर्देशिकाम�
 
 #: gtk/encodesymbolic.c:266
 #, c-format
-#| msgid "Invalid filename: %s"
 msgid "Invalid size %s\n"
 msgstr "अवैध साईज %s\n"
 
@@ -1526,7 +1548,8 @@ msgstr "श्रेय"
 msgid "_License"
 msgstr "इजाजतपत्र"
 
-#: gtk/gtkaboutdialog.c:720 gtk/gtkcustompaperunixdialog.c:329 gtk/gtkmessagedialog.c:948 gtk/ui/gtkassistant.ui:144
+#: gtk/gtkaboutdialog.c:720 gtk/gtkcustompaperunixdialog.c:329
+#: gtk/gtkmessagedialog.c:967 gtk/ui/gtkassistant.ui:144
 msgid "_Close"
 msgstr "_बन्द"
 
@@ -1575,7 +1598,8 @@ msgstr ""
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:181 gtk/gtkshortcutlabel.c:102 gtk/gtkshortcutlabel.c:138
+#: gtk/gtkaccellabel.c:181 gtk/gtkshortcutlabel.c:102
+#: gtk/gtkshortcutlabel.c:138
 msgctxt "keyboard label"
 msgid "Shift"
 msgstr "शिफ्ट"
@@ -1585,7 +1609,8 @@ msgstr "शिफ्ट"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:187 gtk/gtkshortcutlabel.c:105 gtk/gtkshortcutlabel.c:140
+#: gtk/gtkaccellabel.c:187 gtk/gtkshortcutlabel.c:105
+#: gtk/gtkshortcutlabel.c:140
 msgctxt "keyboard label"
 msgid "Ctrl"
 msgstr "Ctrl"
@@ -1595,7 +1620,8 @@ msgstr "Ctrl"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:193 gtk/gtkshortcutlabel.c:108 gtk/gtkshortcutlabel.c:142
+#: gtk/gtkaccellabel.c:193 gtk/gtkshortcutlabel.c:108
+#: gtk/gtkshortcutlabel.c:142
 msgctxt "keyboard label"
 msgid "Alt"
 msgstr "Alt"
@@ -1605,7 +1631,8 @@ msgstr "Alt"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:845 gtk/gtkshortcutlabel.c:114 gtk/gtkshortcutlabel.c:152
+#: gtk/gtkaccellabel.c:845 gtk/gtkshortcutlabel.c:114
+#: gtk/gtkshortcutlabel.c:152
 msgctxt "keyboard label"
 msgid "Super"
 msgstr "सुपर"
@@ -1615,7 +1642,8 @@ msgstr "सुपर"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:858 gtk/gtkshortcutlabel.c:117 gtk/gtkshortcutlabel.c:154
+#: gtk/gtkaccellabel.c:858 gtk/gtkshortcutlabel.c:117
+#: gtk/gtkshortcutlabel.c:154
 msgctxt "keyboard label"
 msgid "Hyper"
 msgstr "Hyper"
@@ -1625,17 +1653,27 @@ msgstr "Hyper"
 #. * translated on keyboards used for your language, don't translate
 #. * this.
 #.
-#: gtk/gtkaccellabel.c:872 gtk/gtkshortcutlabel.c:111 gtk/gtkshortcutlabel.c:156
+#: gtk/gtkaccellabel.c:872 gtk/gtkshortcutlabel.c:111
+#: gtk/gtkshortcutlabel.c:156
 msgctxt "keyboard label"
 msgid "Meta"
 msgstr "Meta"
 
-#: gtk/gtkaccellabel.c:889
+#. Translators: "KP" means "numeric key pad". This string will
+#. * be used in accelerators such as "Ctrl+Shift+KP 1" in menus,
+#. * and therefore the translation needs to be very short.
+#.
+#: gtk/gtkaccellabel.c:893
+msgctxt "keyboard label"
+msgid "KP"
+msgstr ""
+
+#: gtk/gtkaccellabel.c:900
 msgctxt "keyboard label"
 msgid "Space"
 msgstr "स्पेस"
 
-#: gtk/gtkaccellabel.c:892 gtk/gtkshortcutlabel.c:181
+#: gtk/gtkaccellabel.c:903 gtk/gtkshortcutlabel.c:181
 msgctxt "keyboard label"
 msgid "Backslash"
 msgstr "ब्याकस्ल्यास"
@@ -1644,7 +1682,8 @@ msgstr "ब्याकस्ल्यास"
 msgid "Other application…"
 msgstr "अन्यअनुप्रयोग"
 
-#: gtk/gtkappchooserdialog.c:202 gtk/gtkappchooserdialog.c:230 gtk/ui/gtkappchooserdialog.ui:5
+#: gtk/gtkappchooserdialog.c:202 gtk/gtkappchooserdialog.c:230
+#: gtk/ui/gtkappchooserdialog.ui:5
 msgid "Select Application"
 msgstr "एप्लिकेसन छनोट गर्नुहोस्"
 
@@ -1699,7 +1738,8 @@ msgstr "सम्बन्धित अनुप्रयोगहरू"
 msgid "Other Applications"
 msgstr "अन्य अनुप्रयोगहरू"
 
-#: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:485 gtk/gtkprintoperation-win32.c:1521 gtk/inspector/prop-editor.c:1686
+#: gtk/gtkapplicationwindow.c:345 gtk/gtkprintoperation-unix.c:485
+#: gtk/gtkprintoperation-win32.c:1589 gtk/inspector/prop-editor.c:1686
 msgid "Application"
 msgstr "अनुप्रयोग"
 
@@ -1878,7 +1918,7 @@ msgstr "अवैध"
 msgid "New accelerator…"
 msgstr "नयाँ एक्सेलेरेटर…"
 
-#: gtk/gtkcellrendererprogress.c:377 gtk/gtkcellrendererprogress.c:470
+#: gtk/gtkcellrendererprogress.c:377 gtk/gtkcellrendererprogress.c:481
 #, c-format
 msgctxt "progress bar label"
 msgid "%d %%"
@@ -2229,51 +2269,52 @@ msgstr "_दायाँ:"
 msgid "Paper Margins"
 msgstr "कागज सिमान्तहरू"
 
-#: gtk/gtkentry.c:9591 gtk/gtklabel.c:6686 gtk/gtktextview.c:9520
+#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6688 gtk/gtktextview.c:9528
 msgid "Cu_t"
 msgstr "काट्नुहोस्"
 
-#: gtk/gtkentry.c:9595 gtk/gtklabel.c:6687 gtk/gtktextview.c:9524
+#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6689 gtk/gtktextview.c:9532
 msgid "_Copy"
 msgstr "प्रतिलिपि गर्नुहोस्"
 
-#: gtk/gtkentry.c:9599 gtk/gtklabel.c:6688 gtk/gtktextview.c:9526
+#: gtk/gtkentry.c:9603 gtk/gtklabel.c:6690 gtk/gtktextview.c:9534
 msgid "_Paste"
 msgstr "टाँस्नुहोस्"
 
-#: gtk/gtkentry.c:9602 gtk/gtkfilechooserwidget.c:1499 gtk/gtkfilechooserwidget.c:2334 gtk/gtklabel.c:6690 gtk/gtktextview.c:9529
+#: gtk/gtkentry.c:9606 gtk/gtkfilechooserwidget.c:1503
+#: gtk/gtkfilechooserwidget.c:2338 gtk/gtklabel.c:6692 gtk/gtktextview.c:9537
 msgid "_Delete"
 msgstr "मेटाउनुहोस्"
 
-#: gtk/gtkentry.c:9613 gtk/gtklabel.c:6699 gtk/gtktextview.c:9543
+#: gtk/gtkentry.c:9617 gtk/gtklabel.c:6701 gtk/gtktextview.c:9551
 msgid "Select _All"
 msgstr "सबै_छान्नुहोस्"
 
-#: gtk/gtkentry.c:9623 gtk/gtktextview.c:9553
+#: gtk/gtkentry.c:9627 gtk/gtktextview.c:9561
 msgid "Insert _Emoji"
 msgstr "ई-मोजि घुसाउनुहोस्"
 
-#: gtk/gtkentry.c:9799 gtk/gtktextview.c:9777
+#: gtk/gtkentry.c:9803 gtk/gtktextview.c:9785
 msgid "Select all"
 msgstr "सबै चयन गर्नुहोस्"
 
-#: gtk/gtkentry.c:9802 gtk/gtktextview.c:9780
+#: gtk/gtkentry.c:9806 gtk/gtktextview.c:9788
 msgid "Cut"
 msgstr "काट्नुहोस्"
 
-#: gtk/gtkentry.c:9805 gtk/gtktextview.c:9783
+#: gtk/gtkentry.c:9809 gtk/gtktextview.c:9791
 msgid "Copy"
 msgstr "प्रतिलपि गर्नुहोस्"
 
-#: gtk/gtkentry.c:9808 gtk/gtktextview.c:9786
+#: gtk/gtkentry.c:9812 gtk/gtktextview.c:9794
 msgid "Paste"
 msgstr "टाँस्नुहोस्"
 
-#: gtk/gtkentry.c:10880
+#: gtk/gtkentry.c:10884
 msgid "Caps Lock is on"
 msgstr "क्यप्स लक अन छ"
 
-#: gtk/gtkentry.c:11158
+#: gtk/gtkentry.c:11162
 msgid "Insert Emoji"
 msgstr "ई-मोजि घुसाउनुहोस्"
 
@@ -2281,7 +2322,7 @@ msgstr "ई-मोजि घुसाउनुहोस्"
 msgid "Select a File"
 msgstr "एउटा फाइल चयन गर्नुहोस्"
 
-#: gtk/gtkfilechooserbutton.c:113 gtk/gtkplacessidebar.c:1109
+#: gtk/gtkfilechooserbutton.c:113 gtk/gtkplacessidebar.c:1112
 msgid "Desktop"
 msgstr "डेस्कटप"
 
@@ -2298,7 +2339,9 @@ msgid "_Name"
 msgstr "नाम"
 
 #. Open item is always present
-#: gtk/gtkfilechoosernative.c:546 gtk/gtkfilechoosernative.c:631 gtk/gtkplacessidebar.c:3625 gtk/gtkplacessidebar.c:3693 gtk/gtkplacesview.c:1696
+#: gtk/gtkfilechoosernative.c:546 gtk/gtkfilechoosernative.c:631
+#: gtk/gtkplacessidebar.c:3628 gtk/gtkplacessidebar.c:3696
+#: gtk/gtkplacesview.c:1705
 msgid "_Open"
 msgstr "_खोल्नुहोस्"
 
@@ -2306,7 +2349,7 @@ msgstr "_खोल्नुहोस्"
 msgid "_Save"
 msgstr "बचत"
 
-#: gtk/gtkfilechoosernativequartz.c:331 gtk/ui/gtkfilechooserwidget.ui:405
+#: gtk/gtkfilechoosernativequartz.c:332 gtk/ui/gtkfilechooserwidget.ui:435
 msgid "Select which types of files are shown"
 msgstr "कुन प्रकारहरूको फाइलहरू देखाइएको छ चयन गर्नुहोस्"
 
@@ -2319,338 +2362,349 @@ msgstr "कुन प्रकारहरूको फाइलहरू दे
 msgid "%1$s on %2$s"
 msgstr "%1$s मा %2$s"
 
-#: gtk/gtkfilechooserwidget.c:385
+#: gtk/gtkfilechooserwidget.c:386
 msgid "Type name of new folder"
 msgstr "नयाँ फोल्डरको नाम टाइप गर्नुहोस्"
 
-#: gtk/gtkfilechooserwidget.c:809
+#: gtk/gtkfilechooserwidget.c:810
 msgid "The folder could not be created"
 msgstr "फोल्डर सिर्जना गर्न सकिएन"
 
-#: gtk/gtkfilechooserwidget.c:821
-msgid "The folder could not be created, as a file with the same name already exists."
+#: gtk/gtkfilechooserwidget.c:822
+msgid ""
+"The folder could not be created, as a file with the same name already exists."
 msgstr "फोल्डर सिर्जना गर्न सकिने छैन, त्यस्तै नामको फाइल पहिले नै अवस्थित छ ।"
 
-#: gtk/gtkfilechooserwidget.c:823
+#: gtk/gtkfilechooserwidget.c:824
 msgid "Try using a different name for the folder, or rename the file first."
-msgstr "फोल्डरका लागि फरक नाम प्रयोग गरेर प्रयास गर्नुहोस्, वा पहिला फाइलको पुन: नामकरण गर्नुहोस् ।"
+msgstr ""
+"फोल्डरका लागि फरक नाम प्रयोग गरेर प्रयास गर्नुहोस्, वा पहिला फाइलको पुन: नामकरण "
+"गर्नुहोस् ।"
 
-#: gtk/gtkfilechooserwidget.c:836
+#: gtk/gtkfilechooserwidget.c:837
 msgid "You need to choose a valid filename."
 msgstr "तपाईँले वैध फाइलनाम छनोट गर्नु आवश्यक हुन्छ ।"
 
-#: gtk/gtkfilechooserwidget.c:839
+#: gtk/gtkfilechooserwidget.c:840
 #, c-format
 msgid "Cannot create a file under %s as it is not a folder"
 msgstr "फाइल सिर्जना गर्न सकेन %s"
 
-#: gtk/gtkfilechooserwidget.c:849
+#: gtk/gtkfilechooserwidget.c:850
 msgid "Cannot create file as the filename is too long"
 msgstr "फाइलनाम धेरै लामो भएकोले फाइल सिर्जना गर्न सकिँदैन"
 
-#: gtk/gtkfilechooserwidget.c:850
+#: gtk/gtkfilechooserwidget.c:851
 msgid "Try using a shorter name."
 msgstr "छोटो नाम प्रयोग गरेर प्रयास गर्नुहोस् ।"
 
-#: gtk/gtkfilechooserwidget.c:860
+#: gtk/gtkfilechooserwidget.c:861
 msgid "You may only select folders"
 msgstr "तपाईँले फोल्डरहरू मात्र चयन गर्न सक्नुहुन्छ"
 
-#: gtk/gtkfilechooserwidget.c:861
+#: gtk/gtkfilechooserwidget.c:862
 msgid "The item that you selected is not a folder try using a different item."
 msgstr ""
 
-#: gtk/gtkfilechooserwidget.c:869
+#: gtk/gtkfilechooserwidget.c:870
 msgid "Invalid file name"
 msgstr "अवैध फाइल नाम"
 
-#: gtk/gtkfilechooserwidget.c:878
+#: gtk/gtkfilechooserwidget.c:879
 msgid "The folder contents could not be displayed"
 msgstr "फोल्डरको सामग्रीहरू प्रदर्शन गर्न सकिएन"
 
-#: gtk/gtkfilechooserwidget.c:886
+#: gtk/gtkfilechooserwidget.c:887
 msgid "The file could not be deleted"
 msgstr "फाइल मेट्न सकिएन"
 
-#: gtk/gtkfilechooserwidget.c:894
+#: gtk/gtkfilechooserwidget.c:895
 msgid "The file could not be moved to the Trash"
 msgstr "फाइललाई रद्दीटोकरीमा सार्न सकेन ।"
 
-#: gtk/gtkfilechooserwidget.c:1039
+#: gtk/gtkfilechooserwidget.c:1040
 msgid "A folder with that name already exists"
 msgstr "\"%s\" मा उही नामको नया फोल्डर पहिले नै अवस्थित छ"
 
-#: gtk/gtkfilechooserwidget.c:1041
+#: gtk/gtkfilechooserwidget.c:1042
 msgid "A file with that name already exists"
 msgstr "यो नामको फाइल पहिल्यै अवस्थित छ"
 
-#: gtk/gtkfilechooserwidget.c:1076
+#: gtk/gtkfilechooserwidget.c:1077
 msgid "A folder cannot be called “.”"
 msgstr "“..” नाममा फोल्डर राख्न सकिँदैन"
 
-#: gtk/gtkfilechooserwidget.c:1077
+#: gtk/gtkfilechooserwidget.c:1078
 msgid "A file cannot be called “.”"
 msgstr "“.” नाममा फाइल राख्न सकिँदैन"
 
-#: gtk/gtkfilechooserwidget.c:1080
+#: gtk/gtkfilechooserwidget.c:1081
 msgid "A folder cannot be called “..”"
 msgstr "“..” नाममा फोल्डर राख्न सकिँदैन "
 
-#: gtk/gtkfilechooserwidget.c:1081
+#: gtk/gtkfilechooserwidget.c:1082
 msgid "A file cannot be called “..”"
 msgstr "“.” नाममा फाइल राख्न सकिँदैन"
 
-#: gtk/gtkfilechooserwidget.c:1084
+#: gtk/gtkfilechooserwidget.c:1085
 msgid "Folder names cannot contain “/”"
 msgstr "फोल्डर नामहरूले '/' समावेश गर्न सक्दैन"
 
-#: gtk/gtkfilechooserwidget.c:1085
+#: gtk/gtkfilechooserwidget.c:1086
 msgid "File names cannot contain “/”"
 msgstr "फोल्डर नामहरूमा '/' समावेश गर्न सक्दैन"
 
-#: gtk/gtkfilechooserwidget.c:1111
+#: gtk/gtkfilechooserwidget.c:1112
 msgid "Folder names should not begin with a space"
 msgstr "फोल्डर नाम खाली स्थानसँग सुरु हुँदैन"
 
-#: gtk/gtkfilechooserwidget.c:1112
+#: gtk/gtkfilechooserwidget.c:1113
 msgid "File names should not begin with a space"
 msgstr ""
 
-#: gtk/gtkfilechooserwidget.c:1116
+#: gtk/gtkfilechooserwidget.c:1117
 msgid "Folder names should not end with a space"
 msgstr "फोल्डर नाम खाली स्थानसँग अन्त्य हुँदैन"
 
-#: gtk/gtkfilechooserwidget.c:1117
+#: gtk/gtkfilechooserwidget.c:1118
 msgid "File names should not end with a space"
 msgstr ""
 
-#: gtk/gtkfilechooserwidget.c:1120
+#: gtk/gtkfilechooserwidget.c:1121
 msgid "Folder names starting with a “.” are hidden"
 msgstr "\".\" बाट सुरु भएको फोल्डर नामहरू लुकेका छन्"
 
-#: gtk/gtkfilechooserwidget.c:1121
+#: gtk/gtkfilechooserwidget.c:1122
 msgid "File names starting with a “.” are hidden"
 msgstr "\".\" बाट सुरु भएको फाइल नामहरू लुकेका छन् ।"
 
-#: gtk/gtkfilechooserwidget.c:1494
+#: gtk/gtkfilechooserwidget.c:1498
 #, c-format
 msgid "Are you sure you want to permanently delete “%s”?"
 msgstr "तपाईँ \"%s\" मेट्न निश्चित हुनुहुन्छ?"
 
-#: gtk/gtkfilechooserwidget.c:1497
+#: gtk/gtkfilechooserwidget.c:1501
 #, c-format
 msgid "If you delete an item, it will be permanently lost."
 msgstr "यदि तपाईँले वस्तु मेट्नु भयो भने, यो स्थायी रूपले हराउनेछ ।"
 
-#: gtk/gtkfilechooserwidget.c:1634
+#: gtk/gtkfilechooserwidget.c:1638
 msgid "The file could not be renamed"
 msgstr "फाइल पुन: नामकरण गर्न सकेन"
 
-#: gtk/gtkfilechooserwidget.c:1979
+#: gtk/gtkfilechooserwidget.c:1983
 msgid "Could not select file"
 msgstr "फाइल चयन गर्न सकेन"
 
-#: gtk/gtkfilechooserwidget.c:2329
+#: gtk/gtkfilechooserwidget.c:2333
 msgid "_Visit File"
 msgstr "फाइलमा जानुहोस्"
 
-#: gtk/gtkfilechooserwidget.c:2330
+#: gtk/gtkfilechooserwidget.c:2334
 msgid "_Open With File Manager"
 msgstr "फाइल प्रबन्धकसंग खोल्नुहोस्"
 
-#: gtk/gtkfilechooserwidget.c:2331
+#: gtk/gtkfilechooserwidget.c:2335
 msgid "_Copy Location"
 msgstr "स्थान प्रतिलिपि गर्नुहोस्"
 
-#: gtk/gtkfilechooserwidget.c:2332
+#: gtk/gtkfilechooserwidget.c:2336
 msgid "_Add to Bookmarks"
 msgstr "पुस्तकचिनोहरूलाई थप्नुहोस्"
 
-#: gtk/gtkfilechooserwidget.c:2333 gtk/gtkplacessidebar.c:2741 gtk/ui/gtkfilechooserwidget.ui:539
+#: gtk/gtkfilechooserwidget.c:2337 gtk/gtkplacessidebar.c:2744
+#: gtk/ui/gtkfilechooserwidget.ui:569
 msgid "_Rename"
 msgstr "पुन: नामकरण गर्नुहोस्"
 
-#: gtk/gtkfilechooserwidget.c:2335
+#: gtk/gtkfilechooserwidget.c:2339
 msgid "_Move to Trash"
 msgstr "रद्दीटोकरीमा सार्नुहोस्"
 
-#: gtk/gtkfilechooserwidget.c:2339
+#: gtk/gtkfilechooserwidget.c:2343
 msgid "Show _Hidden Files"
 msgstr "लुकाइएको फाइलहरू देखाउनुहोस्"
 
-#: gtk/gtkfilechooserwidget.c:2340
+#: gtk/gtkfilechooserwidget.c:2344
 msgid "Show _Size Column"
 msgstr "स्तम्भ आकार देखाउनुस्"
 
-#: gtk/gtkfilechooserwidget.c:2341
+#: gtk/gtkfilechooserwidget.c:2345
 msgid "Show T_ype Column"
 msgstr "स्तम्भ प्रकार देखाउनुस्"
 
-#: gtk/gtkfilechooserwidget.c:2342
+#: gtk/gtkfilechooserwidget.c:2346
 msgid "Show _Time"
 msgstr "समय देखाउनुहोस्"
 
-#: gtk/gtkfilechooserwidget.c:2343
+#: gtk/gtkfilechooserwidget.c:2347
 #, fuzzy
 msgid "Sort _Folders before Files"
 msgstr "फाइलहरू र फोल्डरहरू"
 
 #. this is the header for the location column in the print dialog
-#: gtk/gtkfilechooserwidget.c:2625 gtk/inspector/css-node-tree.ui:141 gtk/ui/gtkfilechooserwidget.ui:208 gtk/ui/gtkprintunixdialog.ui:123
+#: gtk/gtkfilechooserwidget.c:2629 gtk/inspector/css-node-tree.ui:141
+#: gtk/ui/gtkfilechooserwidget.ui:238 gtk/ui/gtkprintunixdialog.ui:123
 msgid "Location"
 msgstr "स्थान"
 
 #. Label
-#: gtk/gtkfilechooserwidget.c:2718
+#: gtk/gtkfilechooserwidget.c:2722
 msgid "_Name:"
 msgstr "नाम:"
 
-#: gtk/gtkfilechooserwidget.c:3343 gtk/gtkfilechooserwidget.c:3357
+#: gtk/gtkfilechooserwidget.c:3347 gtk/gtkfilechooserwidget.c:3361
 #, c-format
 msgid "Searching in %s"
 msgstr "%s खोजी गर्दैछ"
 
-#: gtk/gtkfilechooserwidget.c:3363
+#: gtk/gtkfilechooserwidget.c:3367
 msgid "Searching"
 msgstr "खोजी गर्दै"
 
-#: gtk/gtkfilechooserwidget.c:3370
+#: gtk/gtkfilechooserwidget.c:3374
 msgid "Enter location"
 msgstr "स्थान प्रविष्ट गर्नुहोस्"
 
-#: gtk/gtkfilechooserwidget.c:3372
+#: gtk/gtkfilechooserwidget.c:3376
 msgid "Enter location or URL"
 msgstr "यूआरएल वा स्थान प्रविष्ट गर्नुहोस्"
 
-#: gtk/gtkfilechooserwidget.c:4450 gtk/gtkfilechooserwidget.c:7492 gtk/ui/gtkfilechooserwidget.ui:248
+#: gtk/gtkfilechooserwidget.c:4454 gtk/gtkfilechooserwidget.c:7469
+#: gtk/ui/gtkfilechooserwidget.ui:278
 msgid "Modified"
 msgstr "परिमार्जित"
 
-#: gtk/gtkfilechooserwidget.c:4728
+#: gtk/gtkfilechooserwidget.c:4734
 #, c-format
 msgid "Could not read the contents of %s"
 msgstr "%s को सामाग्री पढ्न सकेन"
 
-#: gtk/gtkfilechooserwidget.c:4732
+#: gtk/gtkfilechooserwidget.c:4738
 #, fuzzy
 msgid "Could not read the contents of the folder"
 msgstr "फोल्डरको सामग्रीहरू प्रदर्शन गर्न सकिएन"
 
-#: gtk/gtkfilechooserwidget.c:4892 gtk/gtkfilechooserwidget.c:4940
+#: gtk/gtkfilechooserwidget.c:4870 gtk/gtkfilechooserwidget.c:4918
 msgid "%H:%M"
 msgstr "%H:%M"
 
-#: gtk/gtkfilechooserwidget.c:4894 gtk/gtkfilechooserwidget.c:4942
+#: gtk/gtkfilechooserwidget.c:4872 gtk/gtkfilechooserwidget.c:4920
 msgid "%l:%M %p"
 msgstr "%l∶%M %p"
 
-#: gtk/gtkfilechooserwidget.c:4898
+#: gtk/gtkfilechooserwidget.c:4876
 msgid "Yesterday"
 msgstr "हिजो"
 
-#: gtk/gtkfilechooserwidget.c:4906
+#: gtk/gtkfilechooserwidget.c:4885
+#, no-c-format
 msgid "%-e %b"
 msgstr "%-e %b"
 
-#: gtk/gtkfilechooserwidget.c:4910
+#: gtk/gtkfilechooserwidget.c:4889
 msgid "%-e %b %Y"
 msgstr "%-e %b %Y"
 
-#: gtk/gtkfilechooserwidget.c:5009 gtk/gtkfilechooserwidget.c:5017
+#: gtk/gtkfilechooserwidget.c:4986 gtk/gtkfilechooserwidget.c:4994
 msgid "Program"
 msgstr "कार्यक्रम"
 
-#: gtk/gtkfilechooserwidget.c:5010
+#: gtk/gtkfilechooserwidget.c:4987
 msgid "Audio"
 msgstr "अडियो"
 
-#: gtk/gtkfilechooserwidget.c:5011 gtk/inspector/visual.ui:230 gtk/ui/gtkfontbutton.ui:13
+#: gtk/gtkfilechooserwidget.c:4988 gtk/inspector/visual.ui:230
+#: gtk/ui/gtkfontbutton.ui:13
 msgid "Font"
 msgstr "फन्ट"
 
-#: gtk/gtkfilechooserwidget.c:5012 gtk/inspector/visual.ui:488
+#: gtk/gtkfilechooserwidget.c:4989 gtk/inspector/visual.ui:488
 msgid "Image"
 msgstr "तस्विर"
 
-#: gtk/gtkfilechooserwidget.c:5013
+#: gtk/gtkfilechooserwidget.c:4990
 msgid "Archive"
 msgstr "संग्रह"
 
-#: gtk/gtkfilechooserwidget.c:5014
+#: gtk/gtkfilechooserwidget.c:4991
 msgid "Markup"
 msgstr "मार्कअप"
 
-#: gtk/gtkfilechooserwidget.c:5015 gtk/gtkfilechooserwidget.c:5016
+#: gtk/gtkfilechooserwidget.c:4992 gtk/gtkfilechooserwidget.c:4993
 msgid "Text"
 msgstr "पाठ"
 
-#: gtk/gtkfilechooserwidget.c:5018
+#: gtk/gtkfilechooserwidget.c:4995
 msgid "Video"
 msgstr "भिडियो"
 
-#: gtk/gtkfilechooserwidget.c:5019
+#: gtk/gtkfilechooserwidget.c:4996
 msgid "Contacts"
 msgstr "सम्पर्कहरू"
 
-#: gtk/gtkfilechooserwidget.c:5020
+#: gtk/gtkfilechooserwidget.c:4997
 msgid "Calendar"
 msgstr "पात्रो"
 
-#: gtk/gtkfilechooserwidget.c:5021
+#: gtk/gtkfilechooserwidget.c:4998
 msgid "Document"
 msgstr "कागजात"
 
-#: gtk/gtkfilechooserwidget.c:5022
+#: gtk/gtkfilechooserwidget.c:4999
 msgid "Presentation"
 msgstr "प्रस्तुतिकरण"
 
-#: gtk/gtkfilechooserwidget.c:5023
+#: gtk/gtkfilechooserwidget.c:5000
 msgid "Spreadsheet"
 msgstr "स्प्रेडसिट"
 
-#. Translators: We don't know whether this printer is
-#. * available to print to.
-#: gtk/gtkfilechooserwidget.c:5054 gtk/gtkfilechooserwidget.c:5243 gtk/inspector/prop-editor.c:1689
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:748
+#: gtk/gtkfilechooserwidget.c:5031 gtk/gtkfilechooserwidget.c:5220
+#: gtk/inspector/prop-editor.c:1689
 msgid "Unknown"
 msgstr "अज्ञात"
 
-#: gtk/gtkfilechooserwidget.c:5282 gtk/gtkplacessidebar.c:1094
+#: gtk/gtkfilechooserwidget.c:5259 gtk/gtkplacessidebar.c:1097
 msgid "Home"
 msgstr "होम"
 
-#: gtk/gtkfilechooserwidget.c:5779
+#: gtk/gtkfilechooserwidget.c:5756
 msgid "Cannot change to folder because it is not local"
 msgstr "फोल्डरमा परिवर्तन गर्न सक्दैन किनभने यो स्थानीय होइन।"
 
-#: gtk/gtkfilechooserwidget.c:6565 gtk/gtkprintunixdialog.c:665
+#: gtk/gtkfilechooserwidget.c:6542 gtk/gtkprintunixdialog.c:665
 #, c-format
 msgid "A file named “%s” already exists.  Do you want to replace it?"
-msgstr "\"%s\" नाम गरिएको फाइल पहिले नै अवस्थित छ ।  तपाईँ यसलाई प्रतिस्थापन गर्न चाहनुहुन्छ?"
+msgstr ""
+"\"%s\" नाम गरिएको फाइल पहिले नै अवस्थित छ ।  तपाईँ यसलाई प्रतिस्थापन गर्न चाहनुहुन्छ?"
 
-#: gtk/gtkfilechooserwidget.c:6568 gtk/gtkprintunixdialog.c:669
+#: gtk/gtkfilechooserwidget.c:6545 gtk/gtkprintunixdialog.c:669
 #, fuzzy, c-format
-#| msgid "The file already exists in \"%s\".  Replacing it will overwrite its contents."
-msgid "The file already exists in “%s”.  Replacing it will overwrite its contents."
-msgstr "फाइल नाम \"%s\" पहिल्यै अवस्थित छ। यसलाई बदल्नाले यसको सामग्रीहरूमा अधिलेखन हुन्छ।"
+#| msgid ""
+#| "The file already exists in \"%s\".  Replacing it will overwrite its "
+#| "contents."
+msgid ""
+"The file already exists in “%s”.  Replacing it will overwrite its contents."
+msgstr ""
+"फाइल नाम \"%s\" पहिल्यै अवस्थित छ। यसलाई बदल्नाले यसको सामग्रीहरूमा अधिलेखन हुन्छ।"
 
-#: gtk/gtkfilechooserwidget.c:6573 gtk/gtkprintunixdialog.c:677
+#: gtk/gtkfilechooserwidget.c:6550 gtk/gtkprintunixdialog.c:677
 msgid "_Replace"
 msgstr "बदल्नुहोस्"
 
-#: gtk/gtkfilechooserwidget.c:6792
+#: gtk/gtkfilechooserwidget.c:6769
 msgid "You do not have access to the specified folder."
 msgstr "तपाईँसँग निर्दिष्ट गरिएको फोल्डरमा पहुँच छैन ।."
 
-#: gtk/gtkfilechooserwidget.c:7415
+#: gtk/gtkfilechooserwidget.c:7392
 msgid "Could not send the search request"
 msgstr "खोजी अनुरोध पठाउन सकेन"
 
-#: gtk/gtkfilechooserwidget.c:7703
+#: gtk/gtkfilechooserwidget.c:7680
 msgid "Accessed"
 msgstr "पहुँच प्राप्त"
 
-#: gtk/gtkfilechooserwidget.c:8822 gtk/ui/gtkfilechooserwidget.ui:69
+#: gtk/gtkfilechooserwidget.c:8800 gtk/ui/gtkfilechooserwidget.ui:89
 msgid "Create Folder"
 msgstr "फोल्डर सिर्जना गर्नुहोस्"
 
@@ -2676,52 +2730,52 @@ msgctxt "font"
 msgid "None"
 msgstr "कुनै पनि होइन"
 
-#: gtk/gtkfontchooserwidget.c:1556
+#: gtk/gtkfontchooserwidget.c:1604
 msgid "Width"
 msgstr "चौडाई"
 
-#: gtk/gtkfontchooserwidget.c:1557
+#: gtk/gtkfontchooserwidget.c:1605
 msgid "Weight"
 msgstr "तौल"
 
-#: gtk/gtkfontchooserwidget.c:1558
+#: gtk/gtkfontchooserwidget.c:1606
 msgid "Italic"
 msgstr "इटालिक"
 
-#: gtk/gtkfontchooserwidget.c:1559
+#: gtk/gtkfontchooserwidget.c:1607
 msgid "Slant"
 msgstr "छड्के"
 
-#: gtk/gtkfontchooserwidget.c:1560
+#: gtk/gtkfontchooserwidget.c:1608
 msgid "Optical Size"
 msgstr "अप्टिकल साइज"
 
-#: gtk/gtkfontchooserwidget.c:2097 gtk/inspector/prop-editor.c:1676
+#: gtk/gtkfontchooserwidget.c:2308 gtk/inspector/prop-editor.c:1676
 msgid "Default"
 msgstr "पूर्वनिर्धारित"
 
-#: gtk/gtkfontchooserwidget.c:2144
+#: gtk/gtkfontchooserwidget.c:2355
 msgid "Ligatures"
 msgstr "लिगाचरस्"
 
-#: gtk/gtkfontchooserwidget.c:2145
+#: gtk/gtkfontchooserwidget.c:2356
 #, fuzzy
 msgid "Letter Case"
 msgstr "अक्षर"
 
-#: gtk/gtkfontchooserwidget.c:2146
+#: gtk/gtkfontchooserwidget.c:2357
 msgid "Number Case"
 msgstr "संख्या केस"
 
-#: gtk/gtkfontchooserwidget.c:2147
+#: gtk/gtkfontchooserwidget.c:2358
 msgid "Number Spacing"
 msgstr "संख्या दूरी (अन्तराल)"
 
-#: gtk/gtkfontchooserwidget.c:2148
+#: gtk/gtkfontchooserwidget.c:2359
 msgid "Number Formatting"
 msgstr "संख्या ढाँचाबद्धता"
 
-#: gtk/gtkfontchooserwidget.c:2149
+#: gtk/gtkfontchooserwidget.c:2360
 msgid "Character Variants"
 msgstr "वर्ण फरकप्रकार"
 
@@ -2733,7 +2787,7 @@ msgstr "खुला जीएल विषयवस्तु सिर्जन
 msgid "Application menu"
 msgstr "अनुप्रयोग मेनु"
 
-#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9355
+#: gtk/gtkheaderbar.c:458 gtk/gtkwindow.c:9391
 msgid "Close"
 msgstr "बन्दगर्नुहोस्"
 
@@ -2757,40 +2811,40 @@ msgctxt "input method menu"
 msgid "None"
 msgstr "कुनै पनि होइन"
 
-#: gtk/gtkimmulticontext.c:615
+#: gtk/gtkimmulticontext.c:608
 msgctxt "input method menu"
 msgid "System"
 msgstr "प्रणाली"
 
-#: gtk/gtkimmulticontext.c:694
+#: gtk/gtkimmulticontext.c:687
 #, c-format
 msgctxt "input method menu"
 msgid "System (%s)"
 msgstr "प्रणाली (%s)"
 
-#: gtk/gtkinfobar.c:1307 gtk/gtkmessagedialog.c:385
+#: gtk/gtkinfobar.c:1307 gtk/gtkmessagedialog.c:386
 msgid "Information"
 msgstr "सूचना"
 
-#: gtk/gtkinfobar.c:1311 gtk/gtkmessagedialog.c:389
+#: gtk/gtkinfobar.c:1311 gtk/gtkmessagedialog.c:390
 msgid "Question"
 msgstr "प्रश्‍न"
 
-#: gtk/gtkinfobar.c:1315 gtk/gtkmessagedialog.c:393
+#: gtk/gtkinfobar.c:1315 gtk/gtkmessagedialog.c:394
 msgid "Warning"
 msgstr "चेतावनी"
 
-#: gtk/gtkinfobar.c:1319 gtk/gtkmessagedialog.c:397
+#: gtk/gtkinfobar.c:1319 gtk/gtkmessagedialog.c:398
 msgid "Error"
 msgstr "त्रुटी"
 
 #. Open Link
-#: gtk/gtklabel.c:6667
+#: gtk/gtklabel.c:6669
 msgid "_Open Link"
 msgstr "लिङ्क खोल्नुहोस्"
 
 #. Copy Link Address
-#: gtk/gtklabel.c:6676
+#: gtk/gtklabel.c:6678
 msgid "Copy _Link Address"
 msgstr "लिङ्क ठेगाना प्रतिलिपि बनाउनुहोस्"
 
@@ -2929,81 +2983,81 @@ msgstr "GTK+ विकल्पहरू देखाउनुहोस्"
 msgid "default:LTR"
 msgstr "default:LTR"
 
-#: gtk/gtkmessagedialog.c:956
+#: gtk/gtkmessagedialog.c:975
 msgid "_No"
 msgstr "होइन"
 
-#: gtk/gtkmessagedialog.c:957
+#: gtk/gtkmessagedialog.c:976
 msgid "_Yes"
 msgstr "हो"
 
-#: gtk/gtkmountoperation.c:595
+#: gtk/gtkmountoperation.c:600
 msgid "Co_nnect"
 msgstr "जडान गर्नुहोस्"
 
-#: gtk/gtkmountoperation.c:668
+#: gtk/gtkmountoperation.c:673
 msgid "Connect As"
 msgstr "जडान गर्नुहोस्"
 
-#: gtk/gtkmountoperation.c:677
+#: gtk/gtkmountoperation.c:682
 msgid "_Anonymous"
 msgstr "बेनामी"
 
-#: gtk/gtkmountoperation.c:686
+#: gtk/gtkmountoperation.c:691
 msgid "Registered U_ser"
 msgstr "दर्ता भएको प्रयोगकर्ता"
 
-#: gtk/gtkmountoperation.c:697
+#: gtk/gtkmountoperation.c:702
 msgid "_Username"
 msgstr "प्रयोगकर्ताको नाम"
 
-#: gtk/gtkmountoperation.c:702
+#: gtk/gtkmountoperation.c:707
 msgid "_Domain"
 msgstr "डोमेन"
 
-#: gtk/gtkmountoperation.c:711
+#: gtk/gtkmountoperation.c:716
 msgid "Volume type"
 msgstr "भोल्युम प्रकार"
 
-#: gtk/gtkmountoperation.c:721
+#: gtk/gtkmountoperation.c:726
 msgid "_Hidden"
 msgstr "लुकाइएको"
 
-#: gtk/gtkmountoperation.c:724
+#: gtk/gtkmountoperation.c:729
 msgid "_Windows system"
 msgstr "सञ्झ्याल प्रणाली"
 
-#: gtk/gtkmountoperation.c:727
+#: gtk/gtkmountoperation.c:732
 msgid "_PIM"
 msgstr "_PIM"
 
-#: gtk/gtkmountoperation.c:733
+#: gtk/gtkmountoperation.c:738
 msgid "_Password"
 msgstr "पासवर्ड"
 
-#: gtk/gtkmountoperation.c:755
+#: gtk/gtkmountoperation.c:760
 msgid "Forget password _immediately"
 msgstr "तत्काल पासवर्ड भुल्नुहोस्"
 
-#: gtk/gtkmountoperation.c:765
+#: gtk/gtkmountoperation.c:770
 msgid "Remember password until you _logout"
 msgstr "पासवर्ड नभएसम्म तपाईलाई लग इन गर्नुहोस्"
 
-#: gtk/gtkmountoperation.c:775
+#: gtk/gtkmountoperation.c:780
 msgid "Remember _forever"
 msgstr "सधैँ याद गर्नुहोस्"
 
-#: gtk/gtkmountoperation.c:1170
+#: gtk/gtkmountoperation.c:1175
 #, c-format
 msgid "Unknown Application (PID %d)"
 msgstr "अज्ञात अनुप्रयोग  (PID %d)"
 
-#: gtk/gtkmountoperation.c:1355
+#: gtk/gtkmountoperation.c:1360
 #, c-format
 msgid "Unable to end process"
 msgstr "प्रक्रिया अन्त्य असफल"
 
-#: gtk/gtkmountoperation.c:1389
+#: gtk/gtkmountoperation.c:1394
 msgid "_End Process"
 msgstr "प्रक्रिया समाप्त गर्नुहोस्"
 
@@ -3038,7 +3092,7 @@ msgstr "Z सेल"
 msgid "Cannot end process with PID %d: %s"
 msgstr "PID %d सँग प्रक्रिया अन्त्य गर्न सकिँदैन: %s"
 
-#: gtk/gtknotebook.c:5150 gtk/gtknotebook.c:7428
+#: gtk/gtknotebook.c:5151 gtk/gtknotebook.c:7429
 #, c-format
 msgid "Page %u"
 msgstr "पृष्ठ %u"
@@ -3074,223 +3128,228 @@ msgstr ""
 msgid "Manage Custom Sizes…"
 msgstr "अनुकुलन साइजहरू प्रबन्ध गर्नुहोस्"
 
-#: gtk/gtkpagesetupunixdialog.c:903 gtk/ui/gtkpagesetupunixdialog.ui:31 gtk/ui/gtkprintunixdialog.ui:854
+#: gtk/gtkpagesetupunixdialog.c:903 gtk/ui/gtkpagesetupunixdialog.ui:31
+#: gtk/ui/gtkprintunixdialog.ui:854
 msgid "Page Setup"
 msgstr "पृष्ठ सेटअप"
 
-#: gtk/gtkpathbar.c:1571
+#: gtk/gtkpathbar.c:1572
 msgid "File System Root"
 msgstr "फाइल प्रणाली मूल"
 
 #. translators: %s is the name of a cloud provider for files
-#: gtk/gtkplacessidebar.c:981
+#: gtk/gtkplacessidebar.c:984
 #, c-format
 msgid "Open %s"
 msgstr "%s खोल्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:1070 gtk/ui/gtkemojichooser.ui:197
+#: gtk/gtkplacessidebar.c:1073 gtk/ui/gtkemojichooser.ui:197
 msgid "Recent"
 msgstr "हालसालै"
 
-#: gtk/gtkplacessidebar.c:1072
+#: gtk/gtkplacessidebar.c:1075
 msgid "Recent files"
 msgstr "हालैका फाइल"
 
-#: gtk/gtkplacessidebar.c:1082
+#: gtk/gtkplacessidebar.c:1085
 msgid "Starred"
 msgstr "तारा चिन्ह"
 
 #. TODO: Rename to 'Starred files'
-#: gtk/gtkplacessidebar.c:1085
+#: gtk/gtkplacessidebar.c:1088
 msgid "Favorite files"
 msgstr "मनपर्ने फाईल"
 
-#: gtk/gtkplacessidebar.c:1096
+#: gtk/gtkplacessidebar.c:1099
 msgid "Open your personal folder"
 msgstr "तपाईँको व्यक्तिगत फोल्डर खोल्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:1111
+#: gtk/gtkplacessidebar.c:1114
 msgid "Open the contents of your desktop in a folder"
 msgstr "तपाईँको डेस्कटपको फोल्डरमा भएको सामाग्री खोल्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:1125
+#: gtk/gtkplacessidebar.c:1128
 msgid "Enter Location"
 msgstr "स्थान प्रविष्ट गर्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:1127
+#: gtk/gtkplacessidebar.c:1130
 msgid "Manually enter a location"
 msgstr "म्यानुअल रूपमा एक स्थान प्रविष्ट गर्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:1137
+#: gtk/gtkplacessidebar.c:1140
 msgid "Trash"
 msgstr "रद्दी टोकरी"
 
-#: gtk/gtkplacessidebar.c:1139
+#: gtk/gtkplacessidebar.c:1142
 msgid "Open the trash"
 msgstr "रद्दीटोकरी खोल्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:1248 gtk/gtkplacessidebar.c:1276 gtk/gtkplacessidebar.c:1491
+#: gtk/gtkplacessidebar.c:1251 gtk/gtkplacessidebar.c:1279
+#: gtk/gtkplacessidebar.c:1494
 #, fuzzy, c-format
 msgid "Mount and open “%s”"
 msgstr "%s माउण्ट गर्न सकेन"
 
-#: gtk/gtkplacessidebar.c:1371
+#: gtk/gtkplacessidebar.c:1374
 msgid "Open the contents of the file system"
 msgstr "फाइल प्रणालीको सामाग्री खोल्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:1455
+#: gtk/gtkplacessidebar.c:1458
 msgid "New bookmark"
 msgstr "नयाँ पुस्तकचिनो"
 
-#: gtk/gtkplacessidebar.c:1457
+#: gtk/gtkplacessidebar.c:1460
 msgid "Add a new bookmark"
 msgstr "नयाँ पुस्तकचिनो थप्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:1470
+#: gtk/gtkplacessidebar.c:1473
 msgid "Connect to Server"
 msgstr "सर्भरमा जडान गर्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:1472
+#: gtk/gtkplacessidebar.c:1475
 msgid "Connect to a network server address"
 msgstr "सञ्जाल सर्भर ठेगानामा जडान गर्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:1534
+#: gtk/gtkplacessidebar.c:1537
 msgid "Other Locations"
 msgstr "अन्य स्थानहरू"
 
-#: gtk/gtkplacessidebar.c:1535
+#: gtk/gtkplacessidebar.c:1538
 msgid "Show other locations"
 msgstr "अन्य स्थानहरू देखाउनुहोस्"
 
 #. Adjust start/stop items to reflect the type of the drive
-#: gtk/gtkplacessidebar.c:2334 gtk/gtkplacessidebar.c:3713
+#: gtk/gtkplacessidebar.c:2337 gtk/gtkplacessidebar.c:3716
 msgid "_Start"
 msgstr "सुरू"
 
-#: gtk/gtkplacessidebar.c:2335 gtk/gtkplacessidebar.c:3714
+#: gtk/gtkplacessidebar.c:2338 gtk/gtkplacessidebar.c:3717
 msgid "_Stop"
 msgstr "रोक्नुहोस्"
 
 #. start() for type G_DRIVE_START_STOP_TYPE_SHUTDOWN is normally not used
-#: gtk/gtkplacessidebar.c:2342
+#: gtk/gtkplacessidebar.c:2345
 msgid "_Power On"
 msgstr "खोल्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:2343
+#: gtk/gtkplacessidebar.c:2346
 msgid "_Safely Remove Drive"
 msgstr "ड्राइभ सुरक्षित तरिकाले निकाल्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:2347
+#: gtk/gtkplacessidebar.c:2350
 msgid "_Connect Drive"
 msgstr "ड्राइभ जडान गर्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:2348
+#: gtk/gtkplacessidebar.c:2351
 msgid "_Disconnect Drive"
 msgstr "ड्राइभ विच्छेदन गर्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:2352
+#: gtk/gtkplacessidebar.c:2355
 msgid "_Start Multi-disk Device"
 msgstr "बहु-डिस्क यन्त्र सुरु गर्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:2353
+#: gtk/gtkplacessidebar.c:2356
 msgid "_Stop Multi-disk Device"
 msgstr "बहु-डिस्क यन्त्र रोक्नुहोस्"
 
 #. stop() for type G_DRIVE_START_STOP_TYPE_PASSWORD is normally not used
-#: gtk/gtkplacessidebar.c:2358
+#: gtk/gtkplacessidebar.c:2361
 msgid "_Unlock Device"
 msgstr "यन्त्र ताल्चा खोल्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:2359
+#: gtk/gtkplacessidebar.c:2362
 msgid "_Lock Device"
 msgstr "यन्त्र ताल्चा लगाउनुहोस्"
 
-#: gtk/gtkplacessidebar.c:2397 gtk/gtkplacessidebar.c:3394
+#: gtk/gtkplacessidebar.c:2400 gtk/gtkplacessidebar.c:3397
 #, c-format
 msgid "Unable to start “%s”"
 msgstr "सुरु गर्न अक्षम: “%s”"
 
-#: gtk/gtkplacessidebar.c:2430
+#: gtk/gtkplacessidebar.c:2433
 #, c-format
 msgid "Error unlocking “%s”"
 msgstr "\"%s\" ताल्चा बाट हटाउदै त्रुटि"
 
-#: gtk/gtkplacessidebar.c:2432
+#: gtk/gtkplacessidebar.c:2435
 #, c-format
 msgid "Unable to access “%s”"
 msgstr "\"%s\" पहुँच गर्न असक्षम"
 
-#: gtk/gtkplacessidebar.c:2666
+#: gtk/gtkplacessidebar.c:2669
 msgid "This name is already taken"
 msgstr "पहिल्यै प्रयोग भइसकेको नाम"
 
-#: gtk/gtkplacessidebar.c:2735 gtk/inspector/actions.ui:43 gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
-#: gtk/ui/gtkfilechooserwidget.ui:190 gtk/ui/gtkfilechooserwidget.ui:513
+#: gtk/gtkplacessidebar.c:2738 gtk/inspector/actions.ui:43
+#: gtk/inspector/css-node-tree.ui:39 gtk/inspector/object-tree.ui:110
+#: gtk/ui/gtkfilechooserwidget.ui:220 gtk/ui/gtkfilechooserwidget.ui:543
 msgid "Name"
 msgstr "नाम"
 
-#: gtk/gtkplacessidebar.c:2935
+#: gtk/gtkplacessidebar.c:2938
 #, c-format
 msgid "Unable to unmount “%s”"
 msgstr "%s अनमाउन्ट गर्न असफल"
 
-#: gtk/gtkplacessidebar.c:3111
+#: gtk/gtkplacessidebar.c:3114
 #, c-format
 msgid "Unable to stop “%s”"
 msgstr "रोक्न असफल “%s”"
 
-#: gtk/gtkplacessidebar.c:3140
+#: gtk/gtkplacessidebar.c:3143
 #, c-format
 msgid "Unable to eject “%s”"
 msgstr "\"%s\" निकाल्न असक्षम"
 
-#: gtk/gtkplacessidebar.c:3169 gtk/gtkplacessidebar.c:3198
+#: gtk/gtkplacessidebar.c:3172 gtk/gtkplacessidebar.c:3201
 #, c-format
 msgid "Unable to eject %s"
 msgstr "%s निकाल्न असफल"
 
-#: gtk/gtkplacessidebar.c:3346
+#: gtk/gtkplacessidebar.c:3349
 #, c-format
 msgid "Unable to poll “%s” for media changes"
 msgstr ""
 
-#: gtk/gtkplacessidebar.c:3630 gtk/gtkplacessidebar.c:3696 gtk/gtkplacesview.c:1706
+#: gtk/gtkplacessidebar.c:3633 gtk/gtkplacessidebar.c:3699
+#: gtk/gtkplacesview.c:1715
 msgid "Open in New _Tab"
 msgstr "नयाँ ट्याबमा खोल्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:3636 gtk/gtkplacessidebar.c:3699 gtk/gtkplacesview.c:1717
+#: gtk/gtkplacessidebar.c:3639 gtk/gtkplacessidebar.c:3702
+#: gtk/gtkplacesview.c:1726
 msgid "Open in New _Window"
 msgstr "नयाँ सञ्झ्यालमा खोल्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:3703
+#: gtk/gtkplacessidebar.c:3706
 msgid "_Add Bookmark"
 msgstr "पुस्तकचिनो थप्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:3704
+#: gtk/gtkplacessidebar.c:3707
 msgid "_Remove"
 msgstr "हटाउनुहोस्"
 
-#: gtk/gtkplacessidebar.c:3705
+#: gtk/gtkplacessidebar.c:3708
 msgid "Rename…"
 msgstr "_पुन: नामकरण गर्नुहोस्…"
 
-#: gtk/gtkplacessidebar.c:3709 gtk/gtkplacesview.c:1751
+#: gtk/gtkplacessidebar.c:3712 gtk/gtkplacesview.c:1760
 msgid "_Mount"
 msgstr "माउन्ट गर्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:3710 gtk/gtkplacesview.c:1741
+#: gtk/gtkplacessidebar.c:3713 gtk/gtkplacesview.c:1750
 msgid "_Unmount"
 msgstr "अनमाउण्ट गर्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:3711
+#: gtk/gtkplacessidebar.c:3714
 msgid "_Eject"
 msgstr "निकाल्नुहोस्"
 
-#: gtk/gtkplacessidebar.c:3712
+#: gtk/gtkplacessidebar.c:3715
 msgid "_Detect Media"
 msgstr "मिडिया पत्ता लगाउनुहोस्"
 
-#: gtk/gtkplacessidebar.c:4158 gtk/gtkplacesview.c:1122
+#: gtk/gtkplacessidebar.c:4161 gtk/gtkplacesview.c:1122
 msgid "Computer"
 msgstr "कमप्युटर"
 
@@ -3303,7 +3362,7 @@ msgid "No network locations found"
 msgstr "सञ्जाल स्थान  फेला परेन"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1232 gtk/gtkplacesview.c:1321
+#: gtk/gtkplacesview.c:1232 gtk/gtkplacesview.c:1330
 msgid "Unable to access location"
 msgstr "स्थान पहुँच गर्न असक्षम"
 
@@ -3313,71 +3372,71 @@ msgid "Con_nect"
 msgstr "जोड्नुहोस्"
 
 #. if it wasn't cancelled show a dialog
-#: gtk/gtkplacesview.c:1384
+#: gtk/gtkplacesview.c:1393
 msgid "Unable to unmount volume"
 msgstr "भोल्युम अनमाउन्ट गर्न असक्षम"
 
 #. Allow to cancel the operation
-#: gtk/gtkplacesview.c:1485
+#: gtk/gtkplacesview.c:1494
 msgid "Cance_l"
 msgstr "रद्द गर्नुहोस्"
 
-#: gtk/gtkplacesview.c:1648
+#: gtk/gtkplacesview.c:1657
 msgid "AppleTalk"
 msgstr "AppleTalk"
 
 #. Translators: do not translate ftp:// and ftps://
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1661
 msgid "File Transfer Protocol"
 msgstr "फाईल-ट्रान्स्फर प्रोटोकल"
 
-#: gtk/gtkplacesview.c:1652
+#: gtk/gtkplacesview.c:1661
 msgid "ftp:// or ftps://"
 msgstr "ftp:// or ftps://"
 
-#: gtk/gtkplacesview.c:1655
+#: gtk/gtkplacesview.c:1664
 msgid "Network File System"
 msgstr "सञ्जाल फाइल प्रणाली"
 
-#: gtk/gtkplacesview.c:1658
+#: gtk/gtkplacesview.c:1667
 msgid "Samba"
 msgstr "साम्बा"
 
 #. Translators: do not translate sftp:// and ssh://
-#: gtk/gtkplacesview.c:1662
+#: gtk/gtkplacesview.c:1671
 msgid "SSH File Transfer Protocol"
 msgstr "SSH फाईल-ट्रान्स्फर प्रोटोकल"
 
-#: gtk/gtkplacesview.c:1662
+#: gtk/gtkplacesview.c:1671
 msgid "sftp:// or ssh://"
 msgstr "sftp:// or ssh://"
 
 #. Translators: do not translate dav:// and davs://
-#: gtk/gtkplacesview.c:1666
+#: gtk/gtkplacesview.c:1675
 msgid "WebDAV"
 msgstr "WebDAV"
 
-#: gtk/gtkplacesview.c:1666
+#: gtk/gtkplacesview.c:1675
 msgid "dav:// or davs://"
 msgstr "dav:// वा davs://"
 
-#: gtk/gtkplacesview.c:1741
+#: gtk/gtkplacesview.c:1750
 msgid "_Disconnect"
 msgstr "जडान विच्छेद गर्नुहोस्"
 
-#: gtk/gtkplacesview.c:1751
+#: gtk/gtkplacesview.c:1760
 msgid "_Connect"
 msgstr "जडान गर्नुहोस्"
 
-#: gtk/gtkplacesview.c:1892
+#: gtk/gtkplacesview.c:1901
 msgid "Unable to get remote server location"
 msgstr ""
 
-#: gtk/gtkplacesview.c:2087 gtk/gtkplacesview.c:2096
+#: gtk/gtkplacesview.c:2096 gtk/gtkplacesview.c:2105
 msgid "Networks"
 msgstr "सञ्जाल"
 
-#: gtk/gtkplacesview.c:2087 gtk/gtkplacesview.c:2096
+#: gtk/gtkplacesview.c:2096 gtk/gtkplacesview.c:2105
 msgid "On This Computer"
 msgstr "यस कम्प्युटरमा"
 
@@ -3396,7 +3455,8 @@ msgstr[1] "%s / %s उपलब्ध छ"
 msgid "Disconnect"
 msgstr "विच्छेदन गर्नुहोस्"
 
-#: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72 gtk/ui/gtksidebarrow.ui:62
+#: gtk/gtkplacesviewrow.c:481 gtk/ui/gtkplacesviewrow.ui:72
+#: gtk/ui/gtksidebarrow.ui:62
 msgid "Unmount"
 msgstr "अनमाउन्ट गर्नुहोस्"
 
@@ -3499,60 +3559,63 @@ msgid "The most probable reason is that a temporary file could not be created."
 msgstr ""
 
 #. window
-#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:549 gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3415
+#: gtk/gtkprintoperation-portal.c:231 gtk/gtkprintoperation-portal.c:549
+#: gtk/gtkprintoperation-portal.c:618 gtk/gtkprintunixdialog.c:3415
 msgid "Print"
 msgstr "मुद्रण गर्नुहोस्"
 
-#: gtk/gtkprintoperation-win32.c:631
+#: gtk/gtkprintoperation-win32.c:654
 msgid "Printer offline"
 msgstr "मुद्रक अफलाइन"
 
-#: gtk/gtkprintoperation-win32.c:633
+#: gtk/gtkprintoperation-win32.c:656
 msgid "Out of paper"
 msgstr "कागज सकियो"
 
 #. Translators: this is a printer status.
-#: gtk/gtkprintoperation-win32.c:635 modules/printbackends/cups/gtkprintbackendcups.c:2672
+#: gtk/gtkprintoperation-win32.c:658
+#: modules/printbackends/cups/gtkprintbackendcups.c:2680
 msgid "Paused"
 msgstr "पज गरियो"
 
-#: gtk/gtkprintoperation-win32.c:637
+#: gtk/gtkprintoperation-win32.c:660
 msgid "Need user intervention"
 msgstr "आवश्यक प्रयोगकर्ता अवरोध"
 
-#: gtk/gtkprintoperation-win32.c:742
+#: gtk/gtkprintoperation-win32.c:765
 msgid "Custom size"
 msgstr "अनुकूल साइज"
 
-#: gtk/gtkprintoperation-win32.c:1613
+#: gtk/gtkprintoperation-win32.c:1681
 msgid "No printer found"
 msgstr "मुद्रणयन्त्र भेटिएन"
 
-#: gtk/gtkprintoperation-win32.c:1640
+#: gtk/gtkprintoperation-win32.c:1708
 msgid "Invalid argument to CreateDC"
 msgstr " CreateDC मा अमान्य तर्क"
 
-#: gtk/gtkprintoperation-win32.c:1676 gtk/gtkprintoperation-win32.c:1922
+#: gtk/gtkprintoperation-win32.c:1744 gtk/gtkprintoperation-win32.c:1996
 msgid "Error from StartDoc"
 msgstr "StartDoc बाट त्रुटि"
 
-#: gtk/gtkprintoperation-win32.c:1777 gtk/gtkprintoperation-win32.c:1800 gtk/gtkprintoperation-win32.c:1848
+#: gtk/gtkprintoperation-win32.c:1851 gtk/gtkprintoperation-win32.c:1874
+#: gtk/gtkprintoperation-win32.c:1922
 msgid "Not enough free memory"
 msgstr "पर्याप्त खाली स्मृति छैन"
 
-#: gtk/gtkprintoperation-win32.c:1853
+#: gtk/gtkprintoperation-win32.c:1927
 msgid "Invalid argument to PrintDlgEx"
 msgstr "PrintDlgEx मा अवैध आर्गुमेन्ट"
 
-#: gtk/gtkprintoperation-win32.c:1858
+#: gtk/gtkprintoperation-win32.c:1932
 msgid "Invalid pointer to PrintDlgEx"
 msgstr "PrintDlgEx मा अवैध सङ्केतक"
 
-#: gtk/gtkprintoperation-win32.c:1863
+#: gtk/gtkprintoperation-win32.c:1937
 msgid "Invalid handle to PrintDlgEx"
 msgstr "PrintDlgEx मा अवैध ह्याण्डल"
 
-#: gtk/gtkprintoperation-win32.c:1868
+#: gtk/gtkprintoperation-win32.c:1942
 msgid "Unspecified error"
 msgstr "निर्दिष्ट नगरिएको त्रुटि"
 
@@ -3578,35 +3641,43 @@ msgstr "मुद्रणयन्त्र जानकारि लिदै�
 #. Translators: These strings name the possible arrangements of
 #. * multiple pages on a sheet when printing
 #.
-#: gtk/gtkprintunixdialog.c:3120 modules/printbackends/cups/gtkprintbackendcups.c:5698
+#: gtk/gtkprintunixdialog.c:3120
+#: modules/printbackends/cups/gtkprintbackendcups.c:5736
 msgid "Left to right, top to bottom"
 msgstr "बाँया-दायाँ,माथि-तल"
 
-#: gtk/gtkprintunixdialog.c:3120 modules/printbackends/cups/gtkprintbackendcups.c:5698
+#: gtk/gtkprintunixdialog.c:3120
+#: modules/printbackends/cups/gtkprintbackendcups.c:5736
 msgid "Left to right, bottom to top"
 msgstr "बाँया-दायाँ,तल-माथि"
 
-#: gtk/gtkprintunixdialog.c:3121 modules/printbackends/cups/gtkprintbackendcups.c:5699
+#: gtk/gtkprintunixdialog.c:3121
+#: modules/printbackends/cups/gtkprintbackendcups.c:5737
 msgid "Right to left, top to bottom"
 msgstr "दायाँ-बाँया,माथि-तल"
 
-#: gtk/gtkprintunixdialog.c:3121 modules/printbackends/cups/gtkprintbackendcups.c:5699
+#: gtk/gtkprintunixdialog.c:3121
+#: modules/printbackends/cups/gtkprintbackendcups.c:5737
 msgid "Right to left, bottom to top"
 msgstr "दायाँ-बाँया,तल-माथि"
 
-#: gtk/gtkprintunixdialog.c:3122 modules/printbackends/cups/gtkprintbackendcups.c:5700
+#: gtk/gtkprintunixdialog.c:3122
+#: modules/printbackends/cups/gtkprintbackendcups.c:5738
 msgid "Top to bottom, left to right"
 msgstr "माथि-तल,बाँया-दायाँ"
 
-#: gtk/gtkprintunixdialog.c:3122 modules/printbackends/cups/gtkprintbackendcups.c:5700
+#: gtk/gtkprintunixdialog.c:3122
+#: modules/printbackends/cups/gtkprintbackendcups.c:5738
 msgid "Top to bottom, right to left"
 msgstr "माथि-तल,दायाँ-बाँया"
 
-#: gtk/gtkprintunixdialog.c:3123 modules/printbackends/cups/gtkprintbackendcups.c:5701
+#: gtk/gtkprintunixdialog.c:3123
+#: modules/printbackends/cups/gtkprintbackendcups.c:5739
 msgid "Bottom to top, left to right"
 msgstr "तल-माथि,बाँया-दायाँ"
 
-#: gtk/gtkprintunixdialog.c:3123 modules/printbackends/cups/gtkprintbackendcups.c:5701
+#: gtk/gtkprintunixdialog.c:3123
+#: modules/printbackends/cups/gtkprintbackendcups.c:5739
 msgid "Bottom to top, right to left"
 msgstr "तल-माथि,दायाँ-बाँया"
 
@@ -3717,8 +3788,9 @@ msgctxt "recent menu label"
 msgid "%d. %s"
 msgstr "%d. %s"
 
-#: gtk/gtkrecentmanager.c:1053 gtk/gtkrecentmanager.c:1066 gtk/gtkrecentmanager.c:1203 gtk/gtkrecentmanager.c:1213 gtk/gtkrecentmanager.c:1265
-#: gtk/gtkrecentmanager.c:1274
+#: gtk/gtkrecentmanager.c:1053 gtk/gtkrecentmanager.c:1066
+#: gtk/gtkrecentmanager.c:1203 gtk/gtkrecentmanager.c:1213
+#: gtk/gtkrecentmanager.c:1265 gtk/gtkrecentmanager.c:1274
 #, c-format
 msgid "Unable to find an item with URI '%s'"
 msgstr "'%s' URI सँग एउटा वस्तु फेला पार्न असक्षम"
@@ -3801,11 +3873,13 @@ msgstr "नतिजा खोजी गर्नुहोस्"
 msgid "Search Shortcuts"
 msgstr "सर्टकट खोजी"
 
-#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:376 gtk/ui/gtkfilechooserwidget.ui:323
+#: gtk/gtkshortcutswindow.c:1053 gtk/ui/gtkemojichooser.ui:376
+#: gtk/ui/gtkfilechooserwidget.ui:353
 msgid "No Results Found"
 msgstr "नतिजा भेटिएन"
 
-#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:390 gtk/ui/gtkfilechooserwidget.ui:337 gtk/ui/gtkplacesview.ui:274
+#: gtk/gtkshortcutswindow.c:1060 gtk/ui/gtkemojichooser.ui:390
+#: gtk/ui/gtkfilechooserwidget.ui:367 gtk/ui/gtkplacesview.ui:274
 msgid "Try a different search"
 msgstr "फरक खोज कोशिश गर्नुहोस्"
 
@@ -3863,7 +3937,8 @@ msgstr "बेनामी ट्याग फेला पर्यो र ट�
 msgid "Tag \"%s\" does not exist in buffer and tags can not be created."
 msgstr "\"%s\" ट्याग बफरमा अवस्थित छैन र ट्यागहरू सिर्जना गर्न सकिँदैन ।"
 
-#: gtk/gtktextbufferserialize.c:1148 gtk/gtktextbufferserialize.c:1223 gtk/gtktextbufferserialize.c:1328 gtk/gtktextbufferserialize.c:1402
+#: gtk/gtktextbufferserialize.c:1148 gtk/gtktextbufferserialize.c:1223
+#: gtk/gtktextbufferserialize.c:1328 gtk/gtktextbufferserialize.c:1402
 #, c-format
 msgid "Element <%s> is not allowed below <%s>"
 msgstr "<%s> को तल <%s> तत्वलाई अनुमति छैन"
@@ -3880,8 +3955,10 @@ msgstr "\"%s\" एउटा वैध विशेषता नाम होइ�
 
 #: gtk/gtktextbufferserialize.c:1197
 #, c-format
-msgid "\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
-msgstr "\"%s\" विशेषताका लागि \"%s\" लाई \"%s\" प्रकारको एउटा मानमा रूपान्तरण गर्न सकिएन"
+msgid ""
+"\"%s\" could not be converted to a value of type \"%s\" for attribute \"%s\""
+msgstr ""
+"\"%s\" विशेषताका लागि \"%s\" लाई \"%s\" प्रकारको एउटा मानमा रूपान्तरण गर्न सकिएन"
 
 #: gtk/gtktextbufferserialize.c:1206
 #, c-format
@@ -3917,7 +3994,8 @@ msgid "Serialized data is malformed"
 msgstr "क्रमाङ्कन गरिएको डेटा विकृत छ"
 
 #: gtk/gtktextbufferserialize.c:1873
-msgid "Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
+msgid ""
+"Serialized data is malformed. First section isn't GTKTEXTBUFFERCONTENTS-0001"
 msgstr "क्रमाङ्कन गरिएको डेटा विकृत छ । पहिलो खण्ड GTKTEXTBUFFERCONTENTS-0001 होइन"
 
 #: gtk/gtktextutil.c:57
@@ -3984,31 +4062,32 @@ msgctxt "volume percentage"
 msgid "%d %%"
 msgstr "%d %%"
 
-#: gtk/gtkwindow.c:9303
+#: gtk/gtkwindow.c:9339
 msgid "Move"
 msgstr "सार्नुहोस्"
 
-#: gtk/gtkwindow.c:9311
+#: gtk/gtkwindow.c:9347
 msgid "Resize"
 msgstr "पुन:आकार"
 
-#: gtk/gtkwindow.c:9342
+#: gtk/gtkwindow.c:9378
 msgid "Always on Top"
 msgstr "सधै माथि"
 
-#: gtk/gtkwindow.c:12777
+#: gtk/gtkwindow.c:12817
 #, c-format
 msgid "Do you want to use GTK+ Inspector?"
 msgstr "तपाईँ GTK+ निरीक्षक प्रयोग गर्न चाहनुहुन्छ?"
 
-#: gtk/gtkwindow.c:12779
+#: gtk/gtkwindow.c:12819
 #, c-format
 msgid ""
-"GTK+ Inspector is an interactive debugger that lets you explore and modify the internals of any GTK+ application. Using it may cause the application to "
+"GTK+ Inspector is an interactive debugger that lets you explore and modify "
+"the internals of any GTK+ application. Using it may cause the application to "
 "break or crash."
 msgstr ""
 
-#: gtk/gtkwindow.c:12784
+#: gtk/gtkwindow.c:12824
 msgid "Don't show this message again"
 msgstr "यो सन्देश पुन: नदेखाउनुहोस्"
 
@@ -4016,11 +4095,13 @@ msgstr "यो सन्देश पुन: नदेखाउनुहोस�
 msgid "Activate"
 msgstr "सक्रिय गर्ने"
 
-#: gtk/inspector/action-editor.c:302 gtk/inspector/actions.ui:82 gtk/inspector/css-node-tree.ui:78 gtk/inspector/misc-info.ui:102
+#: gtk/inspector/action-editor.c:302 gtk/inspector/actions.ui:82
+#: gtk/inspector/css-node-tree.ui:78 gtk/inspector/misc-info.ui:102
 msgid "State"
 msgstr "अवस्था"
 
-#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:115 gtk/ui/gtkplacesview.ui:92
+#: gtk/inspector/actions.ui:30 gtk/inspector/general.ui:264
+#: gtk/ui/gtkplacesview.ui:92
 msgid "Prefix"
 msgstr "PREFIX"
 
@@ -4037,7 +4118,9 @@ msgid "You can type here any CSS rule recognized by GTK+."
 msgstr ""
 
 #: gtk/inspector/css-editor.c:113
-msgid "You can temporarily disable this custom CSS by clicking on the “Pause” button above."
+msgid ""
+"You can temporarily disable this custom CSS by clicking on the “Pause” "
+"button above."
 msgstr ""
 
 #: gtk/inspector/css-editor.c:114
@@ -4069,7 +4152,8 @@ msgstr "शैली वर्गहरू"
 msgid "CSS Property"
 msgstr "CSS गुण"
 
-#: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50 gtk/ui/gtkcoloreditor.ui:320
+#: gtk/inspector/css-node-tree.ui:125 gtk/inspector/prop-list.ui:50
+#: gtk/ui/gtkcoloreditor.ui:320
 msgid "Value"
 msgstr "मान"
 
@@ -4077,18 +4161,22 @@ msgstr "मान"
 msgid "Show data"
 msgstr "डेटा देखाउनुहोस्"
 
-#: gtk/inspector/general.c:309
+#: gtk/inspector/general.c:334
 msgctxt "GL version"
 msgid "None"
 msgstr "कुनै पनि होइन"
 
-#: gtk/inspector/general.c:310
+#: gtk/inspector/general.c:335
 msgctxt "GL vendor"
 msgid "None"
 msgstr "कुनै पनि होइन"
 
+#: gtk/inspector/general.c:550
+#, fuzzy
+msgid "IM Context is hardcoded by GTK_IM_MODULE"
+msgstr "gtk+ द्वारा प्रयोग गरिएको पूर्वनिर्धारित विषयवस्तुको आधार नाम ।"
+
 #: gtk/inspector/general.ui:34
-#| msgid "GTK+ Options"
 msgid "GTK+ Version"
 msgstr "GTK+ संस्करण"
 
@@ -4097,23 +4185,45 @@ msgstr "GTK+ संस्करण"
 msgid "GDK Backend"
 msgstr "ब्याकएन्ड"
 
-#: gtk/inspector/general.ui:373
+#: gtk/inspector/general.ui:102
+msgid "Pango Fontmap"
+msgstr ""
+
+#: gtk/inspector/general.ui:136
+#, fuzzy
+#| msgid "Input _Methods"
+msgid "Input Method"
+msgstr "आगत विधिहरू"
+
+#: gtk/inspector/general.ui:183
+#, fuzzy
+#| msgid "Application"
+msgid "Application ID"
+msgstr "अनुप्रयोग"
+
+#: gtk/inspector/general.ui:217
+#, fuzzy
+#| msgid "Resources"
+msgid "Resource Path"
+msgstr "स्रोत"
+
+#: gtk/inspector/general.ui:522
 msgid "Display"
 msgstr "डिस्प्ले"
 
-#: gtk/inspector/general.ui:408
+#: gtk/inspector/general.ui:557
 msgid "RGBA visual"
 msgstr "RGBA दृश्य"
 
-#: gtk/inspector/general.ui:442
+#: gtk/inspector/general.ui:591
 msgid "Composited"
 msgstr "मिश्रित गरिएको"
 
-#: gtk/inspector/general.ui:489
+#: gtk/inspector/general.ui:638
 msgid "GL Version"
 msgstr "GLसंस्करण"
 
-#: gtk/inspector/general.ui:524
+#: gtk/inspector/general.ui:673
 msgid "GL Vendor"
 msgstr "GL विक्रेता"
 
@@ -4174,8 +4284,10 @@ msgstr "(आई डी-छैन)"
 msgid "Default Widget"
 msgstr "पूर्वनिर्धारित औजार"
 
-#: gtk/inspector/misc-info.ui:192 gtk/inspector/misc-info.ui:237 gtk/inspector/misc-info.ui:453 gtk/inspector/prop-editor.c:1071
-#: gtk/inspector/prop-editor.c:1268 gtk/inspector/prop-editor.c:1393 gtk/inspector/prop-editor.c:1504 gtk/inspector/window.ui:382
+#: gtk/inspector/misc-info.ui:192 gtk/inspector/misc-info.ui:237
+#: gtk/inspector/misc-info.ui:453 gtk/inspector/prop-editor.c:1071
+#: gtk/inspector/prop-editor.c:1268 gtk/inspector/prop-editor.c:1393
+#: gtk/inspector/prop-editor.c:1504 gtk/inspector/window.ui:382
 msgid "Properties"
 msgstr "गुण"
 
@@ -4343,7 +4455,8 @@ msgstr ""
 msgid "Property"
 msgstr "विशेषता"
 
-#: gtk/inspector/prop-list.ui:68 gtk/inspector/statistics.ui:53 gtk/ui/gtkfilechooserwidget.ui:236
+#: gtk/inspector/prop-list.ui:68 gtk/inspector/statistics.ui:53
+#: gtk/ui/gtkfilechooserwidget.ui:266
 msgid "Type"
 msgstr "वर्ग"
 
@@ -4363,7 +4476,8 @@ msgstr "पाथ"
 msgid "Count"
 msgstr "गणना"
 
-#: gtk/inspector/resource-list.ui:130 gtk/ui/gtkfilechooserwidget.ui:224 gtk/ui/gtkfontchooserwidget.ui:134 gtk/ui/gtkfontchooserwidget.ui:276
+#: gtk/inspector/resource-list.ui:130 gtk/ui/gtkfilechooserwidget.ui:254
+#: gtk/ui/gtkfontchooserwidget.ui:134 gtk/ui/gtkfontchooserwidget.ui:276
 msgid "Size"
 msgstr "साइज"
 
@@ -4474,7 +4588,8 @@ msgid ""
 "Use GDK_GL=always or GDK_GL=disable instead"
 msgstr ""
 
-#: gtk/inspector/visual.c:831 gtk/inspector/visual.c:832 gtk/inspector/visual.c:833
+#: gtk/inspector/visual.c:831 gtk/inspector/visual.c:832
+#: gtk/inspector/visual.c:833
 msgid "GL rendering is disabled"
 msgstr "जिएल रेन्डरिङ असक्षम पारिएको"
 
@@ -7127,7 +7242,6 @@ msgstr "सेवाहरू"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:29
-#, c-format
 msgid "Hide %s"
 msgstr "%s लुकाउनुहोस्"
 
@@ -7143,7 +7257,6 @@ msgstr "सबै देखाऊ"
 
 #. used for the application menu on MacOS.  %s is replaced with the application name.
 #: gtk/ui/gtkapplication-quartz.ui:49
-#, c-format
 msgid "Quit %s"
 msgstr "%s अन्त्य गर्नुहोस्"
 
@@ -7240,19 +7353,54 @@ msgstr "प्रतीक"
 msgid "Flags"
 msgstr "झण्डा"
 
-#: gtk/ui/gtkfilechooserwidget.ui:169
+#: gtk/ui/gtkfilechooserdialog.ui:32
+#, fuzzy
+#| msgid "Focus Widget"
+msgid "File Chooser Widget"
+msgstr "विजेट फोकस गर्नुहोस्"
+
+#: gtk/ui/gtkfilechooserwidget.ui:22
+#, fuzzy
+msgid "Places"
+msgstr "बदल्नुहोस्"
+
+#: gtk/ui/gtkfilechooserwidget.ui:47
+msgid "Browse Header Revealer"
+msgstr ""
+
+#: gtk/ui/gtkfilechooserwidget.ui:65
+msgid "Browse Header Stack"
+msgstr ""
+
+#: gtk/ui/gtkfilechooserwidget.ui:75
+msgid "PathBar Layer"
+msgstr ""
+
+#: gtk/ui/gtkfilechooserwidget.ui:121
+#, fuzzy
+#| msgid "Location"
+msgid "Location Layer"
+msgstr "स्थान"
+
+#: gtk/ui/gtkfilechooserwidget.ui:137
+#, fuzzy
+#| msgid "Search"
+msgid "Search Layer"
+msgstr "खोज्नुहोस्"
+
+#: gtk/ui/gtkfilechooserwidget.ui:199
 msgid "Files"
 msgstr "फाइलहरू"
 
-#: gtk/ui/gtkfilechooserwidget.ui:274
+#: gtk/ui/gtkfilechooserwidget.ui:304
 msgid "Remote location — only searching the current folder"
 msgstr "टाढाको स्थान — हालको फोल्डरमात्र खोजी गरिरहेको"
 
-#: gtk/ui/gtkfilechooserwidget.ui:446
+#: gtk/ui/gtkfilechooserwidget.ui:476
 msgid "Folder Name"
 msgstr "फोल्डर नाम"
 
-#: gtk/ui/gtkfilechooserwidget.ui:474
+#: gtk/ui/gtkfilechooserwidget.ui:504
 msgid "_Create"
 msgstr "सिर्जना गर्ने"
 
@@ -7317,7 +7465,8 @@ msgid "Server Addresses"
 msgstr "सर्भर ठेगानाहरू"
 
 #: gtk/ui/gtkplacesview.ui:43
-msgid "Server addresses are made up of a protocol prefix and an address. Examples:"
+msgid ""
+"Server addresses are made up of a protocol prefix and an address. Examples:"
 msgstr "सर्भर ठेगाना प्रोटोकल उपसर्ग र ठेगानाबाट बनेको हुन्छ । उदाहरण:"
 
 #: gtk/ui/gtkplacesview.ui:78
@@ -7374,7 +7523,8 @@ msgstr "चयन"
 msgid "Pag_es:"
 msgstr "पृष्ठ"
 
-#: gtk/ui/gtkprintunixdialog.ui:252 gtk/ui/gtkprintunixdialog.ui:270 gtk/ui/gtkprintunixdialog.ui:277
+#: gtk/ui/gtkprintunixdialog.ui:252 gtk/ui/gtkprintunixdialog.ui:270
+#: gtk/ui/gtkprintunixdialog.ui:277
 msgid ""
 "Specify one or more page ranges,\n"
 " e.g. 1–3, 7, 11"
@@ -7483,7 +7633,8 @@ msgid "A_t:"
 msgstr "मा:"
 
 #. Ability to parse the am/pm format depends on actual locale. You can remove the am/pm values below for your locale if they are not supported.
-#: gtk/ui/gtkprintunixdialog.ui:1007 gtk/ui/gtkprintunixdialog.ui:1009 gtk/ui/gtkprintunixdialog.ui:1028 gtk/ui/gtkprintunixdialog.ui:1030
+#: gtk/ui/gtkprintunixdialog.ui:1007 gtk/ui/gtkprintunixdialog.ui:1009
+#: gtk/ui/gtkprintunixdialog.ui:1028 gtk/ui/gtkprintunixdialog.ui:1030
 #: gtk/ui/gtkprintunixdialog.ui:1037
 msgid ""
 "Specify the time of print,\n"
@@ -7572,113 +7723,114 @@ msgstr "भोल्युम घटाउनुहोस्"
 msgid "Decreases the volume"
 msgstr "भोल्युम घटाउनुहोस्"
 
-#: gtk/updateiconcache.c:1397
+#: gtk/updateiconcache.c:1406
 #, c-format
 msgid "Failed to write header\n"
 msgstr "हेडर लेख्न असफल भयो\n"
 
-#: gtk/updateiconcache.c:1403
+#: gtk/updateiconcache.c:1412
 #, c-format
 msgid "Failed to write hash table\n"
 msgstr "ह्यास तालिका लेख्न असफल भयो\n"
 
-#: gtk/updateiconcache.c:1409
+#: gtk/updateiconcache.c:1418
 #, c-format
 msgid "Failed to write folder index\n"
 msgstr "फोल्डर अनुक्रमाणिका लेख्न असफल भयो\n"
 
-#: gtk/updateiconcache.c:1417
+#: gtk/updateiconcache.c:1426
 #, c-format
 msgid "Failed to rewrite header\n"
 msgstr "हेडर पुन: लेख्न असफल भयो\n"
 
-#: gtk/updateiconcache.c:1511
+#: gtk/updateiconcache.c:1520
 #, c-format
 msgid "Failed to open file %s : %s\n"
 msgstr "फाइल %s खोल्न असफल: %s\n"
 
-#: gtk/updateiconcache.c:1519 gtk/updateiconcache.c:1549
+#: gtk/updateiconcache.c:1528 gtk/updateiconcache.c:1558
 #, c-format
 msgid "Failed to write cache file: %s\n"
 msgstr "क्यास फाइल लेख्न असफल भयो: %s\n"
 
-#: gtk/updateiconcache.c:1559
+#: gtk/updateiconcache.c:1568
 #, c-format
 msgid "The generated cache was invalid.\n"
 msgstr "सिर्जना गरिएको क्यास अवैध थियो ।\n"
 
-#: gtk/updateiconcache.c:1573
+#: gtk/updateiconcache.c:1582
 #, c-format
 msgid "Could not rename %s to %s: %s, removing %s then.\n"
 msgstr "%s लाई %s मा पुन: नामाकरण गर्न सकेन: %s, %s हटाउँदै त्यसपछि ।\n"
 
-#: gtk/updateiconcache.c:1587
+#: gtk/updateiconcache.c:1596
 #, c-format
 msgid "Could not rename %s to %s: %s\n"
 msgstr "%s लाई %s पुन: नामाकरण गर्न सकेन: %s\n"
 
-#: gtk/updateiconcache.c:1597
+#: gtk/updateiconcache.c:1606
 #, c-format
 msgid "Could not rename %s back to %s: %s.\n"
 msgstr "%s लाई फेरि %s मा पुन: नामाकरण गर्न सकेन: %s.\n"
 
-#: gtk/updateiconcache.c:1624
+#: gtk/updateiconcache.c:1633
 #, c-format
 msgid "Cache file created successfully.\n"
 msgstr "क्याश फाइल सफलतापूर्वक सिर्जना गरियो ।\n"
 
-#: gtk/updateiconcache.c:1663
+#: gtk/updateiconcache.c:1672
 msgid "Overwrite an existing cache, even if up to date"
 msgstr "एउटा अवस्थित क्याशलाई अधिलेखन गर्नुहोस्, यदि अद्यावधिक भए पनि"
 
-#: gtk/updateiconcache.c:1664
+#: gtk/updateiconcache.c:1673
 msgid "Don't check for the existence of index.theme"
 msgstr "अवस्थित index.theme को लागि जाँच नगर्नुहोस्"
 
-#: gtk/updateiconcache.c:1665
+#: gtk/updateiconcache.c:1674
 msgid "Don't include image data in the cache"
 msgstr "क्याशमा छवि डेटा समावेश नगर्नुहोस्"
 
-#: gtk/updateiconcache.c:1666
+#: gtk/updateiconcache.c:1675
 #, fuzzy
 msgid "Include image data in the cache"
 msgstr "क्याशमा छवि डेटा समावेश नगर्नुहोस्"
 
-#: gtk/updateiconcache.c:1667
+#: gtk/updateiconcache.c:1676
 msgid "Output a C header file"
 msgstr "सी हेडर फाइल निर्गत गर्नुहोस्"
 
-#: gtk/updateiconcache.c:1668
+#: gtk/updateiconcache.c:1677
 msgid "Turn off verbose output"
 msgstr "भरबोस निर्गत बन्द गर्नुहोस्"
 
-#: gtk/updateiconcache.c:1669
+#: gtk/updateiconcache.c:1678
 msgid "Validate existing icon cache"
 msgstr "अवस्थित प्रतिमा क्याश प्रमाणीत गर्नुहोस्"
 
-#: gtk/updateiconcache.c:1736
+#: gtk/updateiconcache.c:1746
 #, c-format
 msgid "File not found: %s\n"
 msgstr "फाइल फेला परेन: %s\n"
 
-#: gtk/updateiconcache.c:1742
+#: gtk/updateiconcache.c:1752
 #, c-format
 msgid "Not a valid icon cache: %s\n"
 msgstr "वैध प्रतिमा क्याश होइन: %s\n"
 
-#: gtk/updateiconcache.c:1755
+#: gtk/updateiconcache.c:1765
 #, c-format
 msgid "No theme index file.\n"
 msgstr "विषयवस्तु अनुक्रमणिका फाइल होइन ।\n"
 
-#: gtk/updateiconcache.c:1759
+#: gtk/updateiconcache.c:1769
 #, c-format
 msgid ""
 "No theme index file in '%s'.\n"
 "If you really want to create an icon cache here, use --ignore-theme-index.\n"
 msgstr ""
 "'%s' मा विषयवस्तु अनुक्रमाणिका फाइल छैन ।\n"
-"यदि तपाईँ यहाँ साँच्चै एउटा प्रतिमा क्याश सिर्जना गर्न चाहनुहुन्छ भने, --ignore-theme-index प्रयोग गर्नुहोस् ।\n"
+"यदि तपाईँ यहाँ साँच्चै एउटा प्रतिमा क्याश सिर्जना गर्न चाहनुहुन्छ भने, --ignore-theme-"
+"index प्रयोग गर्नुहोस् ।\n"
 
 #  ID
 #. ID
@@ -7765,16 +7917,10 @@ msgid "Vietnamese (VIQR)"
 msgstr "भियतनामी (VIQR)"
 
 #. ID
-#: modules/input/imwayland.c:105
+#: modules/input/imwayland.c:106
 msgctxt "input method menu"
 msgid "Wayland"
 msgstr "व्यल्यान्ड"
-
-#. ID
-#: modules/input/imwaylandgtk.c:82
-msgctxt "input method menu"
-msgid "Waylandgtk"
-msgstr ""
 
 #  ID
 #. ID
@@ -7783,465 +7929,449 @@ msgctxt "input method menu"
 msgid "X Input Method"
 msgstr "X आगत विधि"
 
-#. Translators: The printer status is online, i.e. it is
-#. * ready to print.
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:744
-msgid "Online"
-msgstr "अनलाइन"
-
-#. Translators: The printer is offline.
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:751
-msgid "Offline"
-msgstr "अफलाइन"
-
-#. We shouldn't get here because the query omits dormant
-#. * printers by default.
-#. Translators: Printer has been offline for a long time.
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:757
-msgid "Dormant"
-msgstr ""
-
-#. How many document pages to go onto one side of paper.
-#: modules/printbackends/cloudprint/gtkprintbackendcloudprint.c:939 modules/printbackends/file/gtkprintbackendfile.c:676
-#: modules/printbackends/test/gtkprintbackendtest.c:501
-msgid "Pages per _sheet:"
-msgstr "प्रति पाना पृष्ठहरू:"
-
-#: modules/printbackends/cups/gtkprintbackendcups.c:1153 modules/printbackends/cups/gtkprintbackendcups.c:1462
+#: modules/printbackends/cups/gtkprintbackendcups.c:1159
+#: modules/printbackends/cups/gtkprintbackendcups.c:1468
 msgid "Username:"
 msgstr "प्रयोगकर्ता-नाम:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1154 modules/printbackends/cups/gtkprintbackendcups.c:1471
+#: modules/printbackends/cups/gtkprintbackendcups.c:1160
+#: modules/printbackends/cups/gtkprintbackendcups.c:1477
 msgid "Password:"
 msgstr "गोप्यशब्द:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1193 modules/printbackends/cups/gtkprintbackendcups.c:1484
+#: modules/printbackends/cups/gtkprintbackendcups.c:1199
+#: modules/printbackends/cups/gtkprintbackendcups.c:1490
 #, c-format
 msgid "Authentication is required to print document “%s” on printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1195
+#: modules/printbackends/cups/gtkprintbackendcups.c:1201
 #, c-format
 msgid "Authentication is required to print a document on %s"
 msgstr "%s मा कागजात मुद्रण गर्न प्रमाणीकरण आवश्यक छ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1199
+#: modules/printbackends/cups/gtkprintbackendcups.c:1205
 #, c-format
 msgid "Authentication is required to get attributes of job “%s”"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1201
+#: modules/printbackends/cups/gtkprintbackendcups.c:1207
 msgid "Authentication is required to get attributes of a job"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1205
+#: modules/printbackends/cups/gtkprintbackendcups.c:1211
 #, c-format
 msgid "Authentication is required to get attributes of printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1207
+#: modules/printbackends/cups/gtkprintbackendcups.c:1213
 msgid "Authentication is required to get attributes of a printer"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1210
+#: modules/printbackends/cups/gtkprintbackendcups.c:1216
 #, c-format
 msgid "Authentication is required to get default printer of %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1213
+#: modules/printbackends/cups/gtkprintbackendcups.c:1219
 #, c-format
 msgid "Authentication is required to get printers from %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1218
+#: modules/printbackends/cups/gtkprintbackendcups.c:1224
 #, c-format
 msgid "Authentication is required to get a file from %s"
 msgstr "%s बाट फाइल प्राप्त गर्न प्रमाणीकरण आवश्यक छ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1220
+#: modules/printbackends/cups/gtkprintbackendcups.c:1226
 #, c-format
 msgid "Authentication is required on %s"
 msgstr "%s प्रमाणिकरण आवश्यक छ ।"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1456
+#: modules/printbackends/cups/gtkprintbackendcups.c:1462
 msgid "Domain:"
 msgstr "डोमेन:"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1486
+#: modules/printbackends/cups/gtkprintbackendcups.c:1492
 #, c-format
 msgid "Authentication is required to print document “%s”"
 msgstr "कागजात \"%s\" मुद्रण गर्न प्रमाणीकरण आवश्यक छ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1491
+#: modules/printbackends/cups/gtkprintbackendcups.c:1497
 #, c-format
 msgid "Authentication is required to print this document on printer %s"
 msgstr ""
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:1493
+#: modules/printbackends/cups/gtkprintbackendcups.c:1499
 msgid "Authentication is required to print this document"
 msgstr "यो कागजात मुद्रण गर्न प्रमाणीकरण आवश्यक हुन्छ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2601
+#: modules/printbackends/cups/gtkprintbackendcups.c:2609
 #, c-format
 msgid "Printer “%s” is low on toner."
 msgstr "मुद्रणयन्त्र\"%s\" मा टोनर कम छ ।"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2605
+#: modules/printbackends/cups/gtkprintbackendcups.c:2613
 #, c-format
 msgid "Printer “%s” has no toner left."
 msgstr "मुद्रणयन्त्र “%s” मा टोनर सकियो"
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:2610
+#: modules/printbackends/cups/gtkprintbackendcups.c:2618
 #, c-format
 msgid "Printer “%s” is low on developer."
 msgstr "विकासकर्तामा मुद्रक \"%s\" कम छ।."
 
 #. Translators: "Developer" like on photo development context
-#: modules/printbackends/cups/gtkprintbackendcups.c:2615
+#: modules/printbackends/cups/gtkprintbackendcups.c:2623
 #, c-format
 msgid "Printer “%s” is out of developer."
 msgstr "मुद्रणयन्त्र\"%s\" मा विकासकर्ता छैन ।."
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:2620
+#: modules/printbackends/cups/gtkprintbackendcups.c:2628
 #, c-format
 msgid "Printer “%s” is low on at least one marker supply."
 msgstr "मुद्रक \"%s\" कम्तिमा एउटा मार्कर आपूर्तिमा कम छ।"
 
 #. Translators: "marker" is one color bin of the printer
-#: modules/printbackends/cups/gtkprintbackendcups.c:2625
+#: modules/printbackends/cups/gtkprintbackendcups.c:2633
 #, c-format
 msgid "Printer “%s” is out of at least one marker supply."
 msgstr "मुद्रणयन्त्र “%s” मा कम्तीमा एउटा मार्कर आपूर्ति सकियो ।."
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2629
+#: modules/printbackends/cups/gtkprintbackendcups.c:2637
 #, c-format
 msgid "The cover is open on printer “%s”."
 msgstr "मुद्रणयन्त्र  “%s” मा कवर खुला छ ।"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2633
+#: modules/printbackends/cups/gtkprintbackendcups.c:2641
 #, c-format
 msgid "The door is open on printer “%s”."
 msgstr "मुद्रणयन्त्र  “%s” मा ढोका खुला छ ।"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2637
+#: modules/printbackends/cups/gtkprintbackendcups.c:2645
 #, c-format
 msgid "Printer “%s” is low on paper."
 msgstr "मुद्रणयन्त्र\"%s\" कागज मा कम छ ।"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2641
+#: modules/printbackends/cups/gtkprintbackendcups.c:2649
 #, c-format
 msgid "Printer “%s” is out of paper."
 msgstr "मुद्रणयन्त्र\"%s\" मा कागज छैन ।"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2645
+#: modules/printbackends/cups/gtkprintbackendcups.c:2653
 #, c-format
 msgid "Printer “%s” is currently offline."
 msgstr "मुद्रक \"%s\" हाल अफलाइन छ।"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:2649
+#: modules/printbackends/cups/gtkprintbackendcups.c:2657
 #, c-format
 msgid "There is a problem on printer “%s”."
 msgstr "\"%s\" मुद्रणयन्त्रमा त्रुटि छ ।."
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2669
+#: modules/printbackends/cups/gtkprintbackendcups.c:2677
 msgid "Paused; Rejecting Jobs"
 msgstr "पज गरिएको; कार्य अस्वीकार गर्दै"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2675
+#: modules/printbackends/cups/gtkprintbackendcups.c:2683
 msgid "Rejecting Jobs"
 msgstr "कार्य अस्वीकार गर्दै"
 
 #. Translators: this string connects multiple printer states together.
-#: modules/printbackends/cups/gtkprintbackendcups.c:2716
+#: modules/printbackends/cups/gtkprintbackendcups.c:2724
 msgid "; "
 msgstr "; "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4644 modules/printbackends/cups/gtkprintbackendcups.c:4711
+#: modules/printbackends/cups/gtkprintbackendcups.c:4682
+#: modules/printbackends/cups/gtkprintbackendcups.c:4749
 msgctxt "printing option"
 msgid "Two Sided"
 msgstr "दुबैपट्टी"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4645
+#: modules/printbackends/cups/gtkprintbackendcups.c:4683
 msgctxt "printing option"
 msgid "Paper Type"
 msgstr "कागज प्रकार"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4646
+#: modules/printbackends/cups/gtkprintbackendcups.c:4684
 msgctxt "printing option"
 msgid "Paper Source"
 msgstr "कागज श्रोत"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4647 modules/printbackends/cups/gtkprintbackendcups.c:4712
+#: modules/printbackends/cups/gtkprintbackendcups.c:4685
+#: modules/printbackends/cups/gtkprintbackendcups.c:4750
 msgctxt "printing option"
 msgid "Output Tray"
 msgstr "निर्गत ट्रे"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4648
+#: modules/printbackends/cups/gtkprintbackendcups.c:4686
 msgctxt "printing option"
 msgid "Resolution"
 msgstr "रिजोल्युसन"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4649
+#: modules/printbackends/cups/gtkprintbackendcups.c:4687
 msgctxt "printing option"
 msgid "GhostScript pre-filtering"
 msgstr "घोस्टस्क्रिप्ट प्रि-फिल्टरिङ"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4658
+#: modules/printbackends/cups/gtkprintbackendcups.c:4696
 msgctxt "printing option value"
 msgid "One Sided"
 msgstr "एकापट्टी"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4660
+#: modules/printbackends/cups/gtkprintbackendcups.c:4698
 msgctxt "printing option value"
 msgid "Long Edge (Standard)"
 msgstr "लामो धार भएको"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4662
+#: modules/printbackends/cups/gtkprintbackendcups.c:4700
 msgctxt "printing option value"
 msgid "Short Edge (Flip)"
 msgstr "छोटो किनारा (फ्लिप)"
 
 #. Translators: this is an option of "Paper Source"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4664 modules/printbackends/cups/gtkprintbackendcups.c:4666
-#: modules/printbackends/cups/gtkprintbackendcups.c:4674
+#: modules/printbackends/cups/gtkprintbackendcups.c:4702
+#: modules/printbackends/cups/gtkprintbackendcups.c:4704
+#: modules/printbackends/cups/gtkprintbackendcups.c:4712
 msgctxt "printing option value"
 msgid "Auto Select"
 msgstr "स्वतः छान्ने"
 
 #. Translators: this is an option of "Paper Source"
 #. Translators: this is an option of "Resolution"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4668 modules/printbackends/cups/gtkprintbackendcups.c:4670
-#: modules/printbackends/cups/gtkprintbackendcups.c:4672 modules/printbackends/cups/gtkprintbackendcups.c:4676
+#: modules/printbackends/cups/gtkprintbackendcups.c:4706
+#: modules/printbackends/cups/gtkprintbackendcups.c:4708
+#: modules/printbackends/cups/gtkprintbackendcups.c:4710
+#: modules/printbackends/cups/gtkprintbackendcups.c:4714
 msgctxt "printing option value"
 msgid "Printer Default"
 msgstr "पूर्वानिर्धारण मुद्रण"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4678
+#: modules/printbackends/cups/gtkprintbackendcups.c:4716
 msgctxt "printing option value"
 msgid "Embed GhostScript fonts only"
 msgstr "घोस्टस्क्रिप्ट फन्टहरू मात्र सम्मिलित गर्नुहोस्"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4680
+#: modules/printbackends/cups/gtkprintbackendcups.c:4718
 msgctxt "printing option value"
 msgid "Convert to PS level 1"
 msgstr "पीएस स्तर १ रूपान्तरण"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4682
+#: modules/printbackends/cups/gtkprintbackendcups.c:4720
 msgctxt "printing option value"
 msgid "Convert to PS level 2"
 msgstr "पीएस स्तर २ रूपान्तरण"
 
 #. Translators: this is an option of "GhostScript"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4684
+#: modules/printbackends/cups/gtkprintbackendcups.c:4722
 msgctxt "printing option value"
 msgid "No pre-filtering"
 msgstr "कुनै पूर्व-फिल्टर छैन"
 
 #. Translators: "Miscellaneous" is the label for a button, that opens
 #. up an extra panel of settings in a print dialog.
-#: modules/printbackends/cups/gtkprintbackendcups.c:4693
+#: modules/printbackends/cups/gtkprintbackendcups.c:4731
 msgctxt "printing option group"
 msgid "Miscellaneous"
 msgstr "विविध"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:4720
+#: modules/printbackends/cups/gtkprintbackendcups.c:4758
 msgctxt "sides"
 msgid "One Sided"
 msgstr "एकापट्टी"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4722
+#: modules/printbackends/cups/gtkprintbackendcups.c:4760
 msgctxt "sides"
 msgid "Long Edge (Standard)"
 msgstr "लामो धार भएको"
 
 #. Translators: this is an option of "Two Sided"
-#: modules/printbackends/cups/gtkprintbackendcups.c:4724
+#: modules/printbackends/cups/gtkprintbackendcups.c:4762
 msgctxt "sides"
 msgid "Short Edge (Flip)"
 msgstr "छोटो किनारा (फ्लिप)"
 
 #. Translators: Top output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4727
+#: modules/printbackends/cups/gtkprintbackendcups.c:4765
 #, fuzzy
 msgctxt "output-bin"
 msgid "Top Bin"
 msgstr "बिन %i"
 
 #. Translators: Middle output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4729
+#: modules/printbackends/cups/gtkprintbackendcups.c:4767
 #, fuzzy
 msgctxt "output-bin"
 msgid "Middle Bin"
 msgstr "बीचको:"
 
 #. Translators: Bottom output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4731
+#: modules/printbackends/cups/gtkprintbackendcups.c:4769
 #, fuzzy
 msgctxt "output-bin"
 msgid "Bottom Bin"
 msgstr "_तल:"
 
 #. Translators: Side output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4733
+#: modules/printbackends/cups/gtkprintbackendcups.c:4771
 #, fuzzy
 msgctxt "output-bin"
 msgid "Side Bin"
 msgstr "बिन %i"
 
 #. Translators: Left output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4735
+#: modules/printbackends/cups/gtkprintbackendcups.c:4773
 #, fuzzy
 msgctxt "output-bin"
 msgid "Left Bin"
 msgstr "बिन %i"
 
 #. Translators: Right output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4737
+#: modules/printbackends/cups/gtkprintbackendcups.c:4775
 #, fuzzy
 msgctxt "output-bin"
 msgid "Right Bin"
 msgstr "बिन %i"
 
 #. Translators: Center output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4739
+#: modules/printbackends/cups/gtkprintbackendcups.c:4777
 #, fuzzy
 msgctxt "output-bin"
 msgid "Center Bin"
 msgstr "बिन %i"
 
 #. Translators: Rear output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4741
+#: modules/printbackends/cups/gtkprintbackendcups.c:4779
 #, fuzzy
 msgctxt "output-bin"
 msgid "Rear Bin"
 msgstr "पछाडि"
 
 #. Translators: Output bin where one sided output is oriented in the face-up position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4743
+#: modules/printbackends/cups/gtkprintbackendcups.c:4781
 #, fuzzy
 msgctxt "output-bin"
 msgid "Face Up Bin"
 msgstr "आकृति"
 
 #. Translators: Output bin where one sided output is oriented in the face-down position
-#: modules/printbackends/cups/gtkprintbackendcups.c:4745
+#: modules/printbackends/cups/gtkprintbackendcups.c:4783
 #, fuzzy
 msgctxt "output-bin"
 msgid "Face Down Bin"
 msgstr "आकृति"
 
 #. Translators: Large capacity output bin
-#: modules/printbackends/cups/gtkprintbackendcups.c:4747
+#: modules/printbackends/cups/gtkprintbackendcups.c:4785
 #, fuzzy
 msgctxt "output-bin"
 msgid "Large Capacity Bin"
 msgstr "बिन %i"
 
 #. Translators: Output stacker number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4769
+#: modules/printbackends/cups/gtkprintbackendcups.c:4807
 #, fuzzy, c-format
 msgctxt "output-bin"
 msgid "Stacker %d"
 msgstr "%'d / %'d"
 
 #. Translators: Output mailbox number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4773
+#: modules/printbackends/cups/gtkprintbackendcups.c:4811
 #, c-format
 msgctxt "output-bin"
 msgid "Mailbox %d"
 msgstr "पत्रमञ्जूषा %d"
 
 #. Translators: Private mailbox
-#: modules/printbackends/cups/gtkprintbackendcups.c:4777
+#: modules/printbackends/cups/gtkprintbackendcups.c:4815
 msgctxt "output-bin"
 msgid "My Mailbox"
 msgstr "मेरो पत्रमञ्जूषा"
 
 #. Translators: Output tray number %d
-#: modules/printbackends/cups/gtkprintbackendcups.c:4781
+#: modules/printbackends/cups/gtkprintbackendcups.c:4819
 #, fuzzy, c-format
 msgctxt "output-bin"
 msgid "Tray %d"
 msgstr "निर्गत ट्रे "
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5252
+#: modules/printbackends/cups/gtkprintbackendcups.c:5290
 msgid "Printer Default"
 msgstr "पूर्वानिर्धारण मुद्रण"
 
 #. Translators: These strings name the possible values of the
 #. * job priority option in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5693
+#: modules/printbackends/cups/gtkprintbackendcups.c:5731
 msgid "Urgent"
 msgstr "जरूरी"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5693
+#: modules/printbackends/cups/gtkprintbackendcups.c:5731
 msgid "High"
 msgstr "उच्च"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5693
+#: modules/printbackends/cups/gtkprintbackendcups.c:5731
 msgid "Medium"
 msgstr "मध्यम"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5693
+#: modules/printbackends/cups/gtkprintbackendcups.c:5731
 msgid "Low"
 msgstr "न्युन"
 
 #. Translators, this string is used to label the job priority option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5723
+#: modules/printbackends/cups/gtkprintbackendcups.c:5761
 msgid "Job Priority"
 msgstr "कार्य प्राथमिकता"
 
 #. Translators, this string is used to label the billing info entry
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5734
+#: modules/printbackends/cups/gtkprintbackendcups.c:5772
 msgid "Billing Info"
 msgstr "बिलिङ सूचना"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5758
+#: modules/printbackends/cups/gtkprintbackendcups.c:5796
 msgctxt "cover page"
 msgid "None"
 msgstr "कुनै पनि होइन"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5759
+#: modules/printbackends/cups/gtkprintbackendcups.c:5797
 msgctxt "cover page"
 msgid "Classified"
 msgstr "वर्गीकृत"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5760
+#: modules/printbackends/cups/gtkprintbackendcups.c:5798
 msgctxt "cover page"
 msgid "Confidential"
 msgstr "विश्वसनीय"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5761
+#: modules/printbackends/cups/gtkprintbackendcups.c:5799
 msgctxt "cover page"
 msgid "Secret"
 msgstr "गोप्य"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5762
+#: modules/printbackends/cups/gtkprintbackendcups.c:5800
 msgctxt "cover page"
 msgid "Standard"
 msgstr "माणक"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5763
+#: modules/printbackends/cups/gtkprintbackendcups.c:5801
 msgctxt "cover page"
 msgid "Top Secret"
 msgstr "अति गोप्य"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:5764
+#: modules/printbackends/cups/gtkprintbackendcups.c:5802
 msgctxt "cover page"
 msgid "Unclassified"
 msgstr "वर्गिकृत नगरिएको"
@@ -8249,7 +8379,7 @@ msgstr "वर्गिकृत नगरिएको"
 #. Translators, this string is used to label the pages-per-sheet option
 #. * in the print dialog
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5776
+#: modules/printbackends/cups/gtkprintbackendcups.c:5814
 msgctxt "printer option"
 msgid "Pages per Sheet"
 msgstr "पृष्ठहरू प्रति पाना"
@@ -8257,7 +8387,7 @@ msgstr "पृष्ठहरू प्रति पाना"
 #. Translators, this string is used to label the option in the print
 #. * dialog that controls in what order multiple pages are arranged
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5793
+#: modules/printbackends/cups/gtkprintbackendcups.c:5831
 msgctxt "printer option"
 msgid "Page Ordering"
 msgstr "पृष्ठ क्रमाङ्क"
@@ -8265,7 +8395,7 @@ msgstr "पृष्ठ क्रमाङ्क"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the front cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5835
+#: modules/printbackends/cups/gtkprintbackendcups.c:5873
 msgctxt "printer option"
 msgid "Before"
 msgstr "अगाडि छ"
@@ -8273,7 +8403,7 @@ msgstr "अगाडि छ"
 #. Translators, this is the label used for the option in the print
 #. * dialog that controls the back cover page.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5850
+#: modules/printbackends/cups/gtkprintbackendcups.c:5888
 msgctxt "printer option"
 msgid "After"
 msgstr "पछि"
@@ -8282,7 +8412,7 @@ msgstr "पछि"
 #. * a print job is printed. Possible values are 'now', a specified time,
 #. * or 'on hold'
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5870
+#: modules/printbackends/cups/gtkprintbackendcups.c:5908
 msgctxt "printer option"
 msgid "Print at"
 msgstr "मुद्रण गर्नुहोस्"
@@ -8290,7 +8420,7 @@ msgstr "मुद्रण गर्नुहोस्"
 #. Translators: this is the name of the option that allows the user
 #. * to specify a time when a print job will be printed.
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5881
+#: modules/printbackends/cups/gtkprintbackendcups.c:5919
 msgctxt "printer option"
 msgid "Print at time"
 msgstr "मुद्रण समय"
@@ -8300,18 +8430,18 @@ msgstr "मुद्रण समय"
 #. * the width and height in points. E.g: "Custom
 #. * 230.4x142.9"
 #.
-#: modules/printbackends/cups/gtkprintbackendcups.c:5926
+#: modules/printbackends/cups/gtkprintbackendcups.c:5964
 #, c-format
 msgid "Custom %s×%s"
 msgstr "अनुकूल %s×%s"
 
-#: modules/printbackends/cups/gtkprintbackendcups.c:6036
+#: modules/printbackends/cups/gtkprintbackendcups.c:6074
 msgctxt "printer option"
 msgid "Printer Profile"
 msgstr "मुद्रण प्रोफाइल"
 
 #. TRANSLATORS: this is when color profile information is unavailable
-#: modules/printbackends/cups/gtkprintbackendcups.c:6043
+#: modules/printbackends/cups/gtkprintbackendcups.c:6081
 msgctxt "printer option value"
 msgid "Unavailable"
 msgstr "अनुपलब्ध"
@@ -8351,6 +8481,11 @@ msgstr "पोस्टस्क्रिप्ट"
 #: modules/printbackends/file/gtkprintbackendfile.c:663
 msgid "SVG"
 msgstr "SVG"
+
+#: modules/printbackends/file/gtkprintbackendfile.c:676
+#: modules/printbackends/test/gtkprintbackendtest.c:501
+msgid "Pages per _sheet:"
+msgstr "प्रति पाना पृष्ठहरू:"
 
 #: modules/printbackends/file/gtkprintbackendfile.c:735
 msgid "File"
@@ -8406,6 +8541,30 @@ msgstr "test-output.%s"
 #: modules/printbackends/test/gtkprintbackendtest.c:465
 msgid "Print to Test Printer"
 msgstr "परीक्षण मुद्रकमा मुद्रण गर्नुहोस्"
+
+#~ msgid "Don't batch GDI requests"
+#~ msgstr "GDI अनुरोधहरू समूहबद्ध नगर्नुहोस्"
+
+#~ msgid "Don't use the Wintab API for tablet support"
+#~ msgstr "ट्याबलेट समर्थनका लागि Wintab API प्रयोग नगर्नुहोस्"
+
+#~ msgid "Same as --no-wintab"
+#~ msgstr "--no-wintab जस्तै समान"
+
+#~ msgid "Do use the Wintab API [default]"
+#~ msgstr "API [पूर्वनिर्धारित] प्रयोग गर्नुहोस्"
+
+#~ msgid "Size of the palette in 8 bit mode"
+#~ msgstr "८ बिट मोडमा रङदानीको साइज"
+
+#~ msgid "COLORS"
+#~ msgstr "COLORS"
+
+#~ msgid "Online"
+#~ msgstr "अनलाइन"
+
+#~ msgid "Offline"
+#~ msgstr "अफलाइन"
 
 #, fuzzy
 #~ msgid "Not implemented on OS X"
@@ -8525,9 +8684,6 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "Received invalid color data\n"
 #~ msgstr "प्राप्त अवैध रङ डेटा\n"
 
-#~ msgid "Input _Methods"
-#~ msgstr "आगत विधिहरू"
-
 #~ msgid "_Insert Unicode Control Character"
 #~ msgstr "युनिकोड नियन्त्रण क्यारेक्टर घुसाउनुहोस्"
 
@@ -8564,10 +8720,6 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 
 #~ msgid "Rename..."
 #~ msgstr "पुन: नामकरण गर्नुहोस्..."
-
-#, fuzzy
-#~ msgid "_Places"
-#~ msgstr "बदल्नुहोस्"
 
 #~ msgid "_Add"
 #~ msgstr "थप्नुहोस्"
@@ -8647,7 +8799,8 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "Failed to open file '%s': %s"
 #~ msgstr "फाइल '%s' खोल्न असफल: %s"
 
-#~ msgid "Failed to load image '%s': reason not known, probably a corrupt image file"
+#~ msgid ""
+#~ "Failed to load image '%s': reason not known, probably a corrupt image file"
 #~ msgstr "छवि '%s' लोड गर्न असफल: कारण अज्ञात, संभवत एउटा नष्ट छवि फाइल"
 
 #~ msgid "Gdk debugging flags to set"
@@ -8659,14 +8812,20 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "Image file '%s' contains no data"
 #~ msgstr "छवि फाइल '%s' मा डेटा छैन"
 
-#~ msgid "Failed to load animation '%s': reason not known, probably a corrupt animation file"
+#~ msgid ""
+#~ "Failed to load animation '%s': reason not known, probably a corrupt "
+#~ "animation file"
 #~ msgstr "एनिमेसन '%s' लोड गर्न असफल: कारण अज्ञात, संभवत एउटा नष्ट एनिमेसन फाइल"
 
 #~ msgid "Unable to load image-loading module: %s: %s"
 #~ msgstr "छवि-लोडिङ मोड्युल लोड गर्न असफल: %s: %s"
 
-#~ msgid "Image-loading module %s does not export the proper interface; perhaps it's from a different GTK version?"
-#~ msgstr "छवि-लोडिङ मोड्युल %s ले उचित इन्टरफेस निर्यात गर्दैन; सायद यो फरक GTK संस्करण बाट हो ?"
+#~ msgid ""
+#~ "Image-loading module %s does not export the proper interface; perhaps "
+#~ "it's from a different GTK version?"
+#~ msgstr ""
+#~ "छवि-लोडिङ मोड्युल %s ले उचित इन्टरफेस निर्यात गर्दैन; सायद यो फरक GTK संस्करण बाट "
+#~ "हो ?"
 
 #~ msgid "Image type '%s' is not supported"
 #~ msgstr "छवि प्रकार '%s' समर्थित छैन"
@@ -8683,7 +8842,8 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "Error writing to image file: %s"
 #~ msgstr "छवि फाइलमा लेख्दा त्रुटि: %s"
 
-#~ msgid "This build of gdk-pixbuf does not support saving the image format: %s"
+#~ msgid ""
+#~ "This build of gdk-pixbuf does not support saving the image format: %s"
 #~ msgstr "gdk-pixbuf को निर्माणले छवि ढाँचा बचत गर्न समर्थन गर्दैन: %s"
 
 #~ msgid "Insufficient memory to save image to callback"
@@ -8698,7 +8858,9 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "Failed to open '%s' for writing: %s"
 #~ msgstr "लेख्नका लागि '%s' खोल्न असफल: %s"
 
-#~ msgid "Failed to close '%s' while writing image, all data may not have been saved: %s"
+#~ msgid ""
+#~ "Failed to close '%s' while writing image, all data may not have been "
+#~ "saved: %s"
 #~ msgstr "छवि लेख्दा '%s' बन्द गर्न असफल, सबै डेटा बचत नभएको हुनसक्छ: %s"
 
 #~ msgid "Insufficient memory to save image into a buffer"
@@ -8709,8 +8871,12 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgstr "छवि फाइलमा लेख्दा त्रुटि: %s"
 
 #, fuzzy
-#~ msgid "Internal error: Image loader module '%s' failed to complete an operation, but didn't give a reason for the failure"
-#~ msgstr "आन्तरिक त्रुटि: छवि लोडर मोड्युल '%s' ले एउटा छवि लोड सुरु गर्न असफल भयो, तर असफलताका लागि कारण दिएन।"
+#~ msgid ""
+#~ "Internal error: Image loader module '%s' failed to complete an operation, "
+#~ "but didn't give a reason for the failure"
+#~ msgstr ""
+#~ "आन्तरिक त्रुटि: छवि लोडर मोड्युल '%s' ले एउटा छवि लोड सुरु गर्न असफल भयो, तर "
+#~ "असफलताका लागि कारण दिएन।"
 
 #~ msgid "Incremental loading of image type '%s' is not supported"
 #~ msgstr "छवि प्रकार '%s' को बढ्दो लोडिङ समर्थित छैन"
@@ -8809,8 +8975,11 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "Version %s of the GIF file format is not supported"
 #~ msgstr "GIF फाइल ढाँचाको संस्करण %s समर्थित छैन"
 
-#~ msgid "GIF image has no global colormap, and a frame inside it has no local colormap."
-#~ msgstr "GIF छविसँग विश्वव्यापी कलरम्याप छैन, र यसभित्रको एउटा फ्रेममा स्थानीय कलरम्याप छैन।"
+#~ msgid ""
+#~ "GIF image has no global colormap, and a frame inside it has no local "
+#~ "colormap."
+#~ msgstr ""
+#~ "GIF छविसँग विश्वव्यापी कलरम्याप छैन, र यसभित्रको एउटा फ्रेममा स्थानीय कलरम्याप छैन।"
 
 #~ msgid "GIF image was truncated or incomplete."
 #~ msgstr "GIF छवि काटिएको थियो वा अपूर्ण थियो।"
@@ -8898,8 +9067,12 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "Error interpreting JPEG image file (%s)"
 #~ msgstr "JPEG छवि फाइल (%s) व्याख्या गर्दा त्रुटि"
 
-#~ msgid "Insufficient memory to load image, try exiting some applications to free memory"
-#~ msgstr "छवि लोड गर्न अपर्याप्त स्मृति, स्मृति स्वतन्त्र गर्न केही अनुप्रयोगहरू निष्काशन गरेर प्रयास गर्नुहोस्"
+#~ msgid ""
+#~ "Insufficient memory to load image, try exiting some applications to free "
+#~ "memory"
+#~ msgstr ""
+#~ "छवि लोड गर्न अपर्याप्त स्मृति, स्मृति स्वतन्त्र गर्न केही अनुप्रयोगहरू निष्काशन गरेर प्रयास "
+#~ "गर्नुहोस्"
 
 #~ msgid "Unsupported JPEG color space (%s)"
 #~ msgstr "असमर्थित JPEG रङ खाली स्थान (%s)"
@@ -8911,10 +9084,13 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "Transformed JPEG has zero width or height."
 #~ msgstr "बदलिएको PNGसँग शून्य चौडाइ वा उचाइ छ।"
 
-#~ msgid "JPEG quality must be a value between 0 and 100; value '%s' could not be parsed."
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%s' could not be "
+#~ "parsed."
 #~ msgstr "JPEG गुण ० देखि १०० बीचको एउटा मान हुनुपर्दछ; मान '%s' पदवर्णन गर्न सकिएन।"
 
-#~ msgid "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
+#~ msgid ""
+#~ "JPEG quality must be a value between 0 and 100; value '%d' is not allowed."
 #~ msgstr "JPEG गुण ० देखि १०० बीचको एउटा मान हुनुपर्दछ; '%d' लाई अनुमति दिइएको छैन।"
 
 #~ msgid "The JPEG image format"
@@ -8974,8 +9150,12 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "Insufficient memory to load PNG file"
 #~ msgstr "PNG फाइल लोड गर्न अपर्याप्त स्मृति"
 
-#~ msgid "Insufficient memory to store a %ld by %ld image; try exiting some applications to reduce memory usage"
-#~ msgstr "एउटा %ld छवि द्धारा %ld भण्डारण गर्न अपर्याप्त स्मृति; स्मृति उपयोग घटाउन केही अनुप्रयोगहरू निष्काशन गरेर प्रयास गर्नुहोस्"
+#~ msgid ""
+#~ "Insufficient memory to store a %ld by %ld image; try exiting some "
+#~ "applications to reduce memory usage"
+#~ msgstr ""
+#~ "एउटा %ld छवि द्धारा %ld भण्डारण गर्न अपर्याप्त स्मृति; स्मृति उपयोग घटाउन केही "
+#~ "अनुप्रयोगहरू निष्काशन गरेर प्रयास गर्नुहोस्"
 
 #~ msgid "Fatal error reading PNG image file"
 #~ msgstr "PNG छवि फाइल पढ्दा घातक त्रुटि"
@@ -8983,19 +9163,27 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "Fatal error reading PNG image file: %s"
 #~ msgstr "PNG छवि फाइल पढ्दा घातक त्रुटि: %s"
 
-#~ msgid "Keys for PNG text chunks must have at least 1 and at most 79 characters."
-#~ msgstr "PNG पाठ टुक्राहरूका लागि कुञ्जीहरूसँग कम्तीमा १ र बढीमा ७९ क्यारेक्टरहरू हुनुपर्दछ।"
+#~ msgid ""
+#~ "Keys for PNG text chunks must have at least 1 and at most 79 characters."
+#~ msgstr ""
+#~ "PNG पाठ टुक्राहरूका लागि कुञ्जीहरूसँग कम्तीमा १ र बढीमा ७९ क्यारेक्टरहरू हुनुपर्दछ।"
 
 #~ msgid "Keys for PNG text chunks must be ASCII characters."
 #~ msgstr "PNG पाठ टुक्राहरूका लागि कुञ्जीहरू ASCII क्यारेक्टरहरू हुनुपर्दछ।"
 
-#~ msgid "PNG compression level must be a value between 0 and 9; value '%s' could not be parsed."
-#~ msgstr "PNG सङ्कुचन तह ० र ९ बीचको एउटा मान हुनुपर्दछ; मान '%s' पदवर्णन गर्न सकिएन।"
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%s' could "
+#~ "not be parsed."
+#~ msgstr ""
+#~ "PNG सङ्कुचन तह ० र ९ बीचको एउटा मान हुनुपर्दछ; मान '%s' पदवर्णन गर्न सकिएन।"
 
-#~ msgid "PNG compression level must be a value between 0 and 9; value '%d' is not allowed."
+#~ msgid ""
+#~ "PNG compression level must be a value between 0 and 9; value '%d' is not "
+#~ "allowed."
 #~ msgstr "PNG सङ्कुचन तह ० र ९ बीचको एउटा मान हुनुपर्दछ; '%d' लाई अनुमति दिइएको छैन।"
 
-#~ msgid "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
+#~ msgid ""
+#~ "Value for PNG text chunk %s cannot be converted to ISO-8859-1 encoding."
 #~ msgstr "PNG पाठ टुक्रा %s का लागि मान ISO-8859-1 सङ्केतनमा रूपान्तरण गर्न सकिँदैन।"
 
 #~ msgid "The PNG image format"
@@ -9029,7 +9217,8 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgstr "PNM छवि लोडरले यो PNM उपढाँचा समर्थन गर्दैन"
 
 #~ msgid "Raw PNM formats require exactly one whitespace before sample data"
-#~ msgstr "कच्चा PNM ढाँचाहरूलाई नमूना डेटा भन्दा अघि ठीक एउटा सेतो खाली स्थान आवश्यक पर्दछ"
+#~ msgstr ""
+#~ "कच्चा PNM ढाँचाहरूलाई नमूना डेटा भन्दा अघि ठीक एउटा सेतो खाली स्थान आवश्यक पर्दछ"
 
 #~ msgid "Cannot allocate memory for loading PNM image"
 #~ msgstr "PNM छवि लोड गर्नका लागि स्मृति निर्धारण गर्न सक्दैन"
@@ -9274,7 +9463,8 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgstr "फोल्डर पढ्न-योग्य होइन: %s"
 
 #~ msgid ""
-#~ "The file \"%s\" resides on another machine (called %s) and may not be available to this program.\n"
+#~ "The file \"%s\" resides on another machine (called %s) and may not be "
+#~ "available to this program.\n"
 #~ "Are you sure that you want to select it?"
 #~ msgstr ""
 #~ "फाइल \"%s\" अर्को मेशिनमा छ ( %s भनिने) र यो कार्यक्रममा उपलब्ध नहुनसक्छ।\n"
@@ -9289,13 +9479,15 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "_Rename File"
 #~ msgstr "फाइलको पुन: नामकरण गर्नुहोस्"
 
-#~ msgid "The folder name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgid ""
+#~ "The folder name \"%s\" contains symbols that are not allowed in filenames"
 #~ msgstr "फोल्डर नाम \"%s\" ले फाइलनामहरूमा अनुमिति नभएको सङ्केतहरू समावेश गर्दछ"
 
 #~ msgid "New Folder"
 #~ msgstr "नयाँ फोल्डर"
 
-#~ msgid "The filename \"%s\" contains symbols that are not allowed in filenames"
+#~ msgid ""
+#~ "The filename \"%s\" contains symbols that are not allowed in filenames"
 #~ msgstr "फाइल नाम \"%s\" ले फाइलनामहरूमा अनुमिति नभएको सङ्केतहरू समावेश गर्दछ"
 
 #, fuzzy
@@ -9329,8 +9521,12 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "Rename file \"%s\" to:"
 #~ msgstr "मा फाइल \"%s\" को पुन: नामकरण गर्नुहोस्:"
 
-#~ msgid "The filename \"%s\" couldn't be converted to UTF-8. (try setting the environment variable G_FILENAME_ENCODING): %s"
-#~ msgstr "फाइलनाम \"%s\" लाई युटिएफ-८ मा रूपान्तरण गर्न सकिएन।(परिवेश चल G_FILENAME_ENCODING सेट गरेर प्रयास गर्नुहोस्): %s"
+#~ msgid ""
+#~ "The filename \"%s\" couldn't be converted to UTF-8. (try setting the "
+#~ "environment variable G_FILENAME_ENCODING): %s"
+#~ msgstr ""
+#~ "फाइलनाम \"%s\" लाई युटिएफ-८ मा रूपान्तरण गर्न सकिएन।(परिवेश चल "
+#~ "G_FILENAME_ENCODING सेट गरेर प्रयास गर्नुहोस्): %s"
 
 #~ msgid "Invalid UTF-8"
 #~ msgstr "अवैध UTF-8"
@@ -9603,7 +9799,8 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "The radio tool button whose group this button belongs to."
 #~ msgstr "रेडियो उपकरण बटन जसको समूहमा यो बटन अधिनस्थ छ"
 
-#~ msgid "Could not add a bookmark for '%s' because it is an invalid path name."
+#~ msgid ""
+#~ "Could not add a bookmark for '%s' because it is an invalid path name."
 #~ msgstr "'%s' का लागि पुस्तकचिनो थप गर्न सकेन किनभने यो एउटा अवैध मार्गनाम हो।"
 
 #~ msgid "Could not select file '%s' because it is an invalid path name."
@@ -9624,8 +9821,12 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "This file system does not support mounting"
 #~ msgstr "यो फाइल प्रणालीले माउण्टिङ समर्थन गर्दैन"
 
-#~ msgid "The name \"%s\" is not valid because it contains the character \"%s\". Please use a different name."
-#~ msgstr "नाम \"%s\" अवैध छ किनभने यसमा \"%s\" क्यारेक्टर समाहित छ। कृपया एउटा भिन्न नाम प्रयोग गर्नुहोस्।"
+#~ msgid ""
+#~ "The name \"%s\" is not valid because it contains the character \"%s\". "
+#~ "Please use a different name."
+#~ msgstr ""
+#~ "नाम \"%s\" अवैध छ किनभने यसमा \"%s\" क्यारेक्टर समाहित छ। कृपया एउटा भिन्न नाम "
+#~ "प्रयोग गर्नुहोस्।"
 
 #~ msgid "Bookmark saving failed: %s"
 #~ msgstr "पुस्तकचिनो बचत गर्दा असफल: %s"
@@ -9691,7 +9892,8 @@ msgstr "परीक्षण मुद्रकमा मुद्रण गर
 #~ msgid "It probably contains symbols not allowed in filenames."
 #~ msgstr "सम्भवत यसमा चिन्हहरू समाहित छन् जुन फाइलनामहरूमा अनुमति छैन।"
 
-#~ msgid "The file name \"%s\" contains symbols that are not allowed in filenames"
+#~ msgid ""
+#~ "The file name \"%s\" contains symbols that are not allowed in filenames"
 #~ msgstr "फाइल नाम \"%s\" ले फाइलनामहरूमा अनुमिति नभएको सङ्केतहरू समावेश गर्दछ"
 
 #~ msgid "Error creating directory '%s': %s"
