@@ -12,7 +12,7 @@
     </key>
     <key name='record-events' type='b'>
       <default>false</default>
-      <summary>REcord events</summary>
+      <summary>Record events</summary>
       <description>
         If this setting is true, the recorder will include events
         in the recording.
