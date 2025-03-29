@@ -23,12 +23,6 @@
 
 #include "gdkmemoryformatprivate.h"
 
-static inline gsize
-round_up (gsize number, gsize divisor)
-{
-  return (number + divisor - 1) / divisor * divisor;
-}
-
 /*<private>
  * gdk_memory_layout_init:
  * @self: layout to initialize
@@ -48,10 +42,44 @@ gdk_memory_layout_init (GdkMemoryLayout *self,
                         gsize            height,
                         gsize            align)
 {
+  if (gdk_memory_layout_try_init (self, format, width, height, align))
+    return;
+
+  g_assert_not_reached ();
+}
+
+/*<private>
+ * gdk_memory_layout_try_init:
+ * @self: layout to initialize
+ * @format: a format
+ * @width: width to compute layout for
+ * @height: height to compute layout for
+ * @align: alignment to guarantee for stride. Must be power of 2.
+ *   Use 1 if you don't care.
+ *
+ * Initializes a layout for the given arguments. The layout can
+ * then be used to allocate and then copy data into that memory.
+ *
+ * It might not be possible to initialize a layout, for example
+ * when the size is too large or when it is not a multiple of the
+ * given format's block size. In that case %FALSE will be returned
+ * and the layout won't be initialized.
+ *
+ * Returns: TRUE if the layout could be initialized
+ **/
+gboolean
+gdk_memory_layout_try_init (GdkMemoryLayout *self,
+                            GdkMemoryFormat  format,
+                            gsize            width,
+                            gsize            height,
+                            gsize            align)
+{
   gsize plane, n_planes, size;
 
   g_assert (align > 0);
-  g_assert (gdk_memory_format_is_block_boundary (format, width, height));
+
+  if (!gdk_memory_format_is_block_boundary (format, width, height))
+    return FALSE;
 
   n_planes = gdk_memory_format_get_n_planes (format);
 
@@ -63,6 +91,7 @@ gdk_memory_layout_init (GdkMemoryLayout *self,
   for (plane = 0; plane < n_planes; plane++)
     {
       gsize block_width, block_height, block_bytes, plane_width, plane_height;
+      gsize plane_size;
 
       block_width = gdk_memory_format_get_plane_block_width (format, plane);
       block_height = gdk_memory_format_get_plane_block_height (format, plane);
@@ -73,11 +102,23 @@ gdk_memory_layout_init (GdkMemoryLayout *self,
       plane_width = width / block_width;
       plane_height = height / block_height;
 
+      if (!g_size_checked_mul (&plane_size, plane_width, block_bytes))
+        return FALSE;
+      /* round up to alignment using fancy checked math */
+      if (!g_size_checked_add (&plane_size, plane_size, (align - plane_size % align) % align))
+        return FALSE;
+
+      self->planes[plane].stride = plane_size;
       self->planes[plane].offset = size;
-      self->planes[plane].stride = round_up (plane_width * block_bytes, align);
-      size += self->planes[plane].stride * plane_height;
+      if (!g_size_checked_mul (&plane_size, plane_size, plane_height))
+        return FALSE;
+
+      if (!g_size_checked_add (&size, size, plane_size))
+        return FALSE;
     }
   self->size = size;
+
+  return TRUE;
 }
 
 /**

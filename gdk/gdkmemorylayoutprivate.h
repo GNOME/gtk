@@ -49,6 +49,11 @@ void                    gdk_memory_layout_init                  (GdkMemoryLayout
                                                                  gsize                           width,
                                                                  gsize                           height,
                                                                  gsize                           align);
+gboolean                gdk_memory_layout_try_init              (GdkMemoryLayout                *self,
+                                                                 GdkMemoryFormat                 format,
+                                                                 gsize                           width,
+                                                                 gsize                           height,
+                                                                 gsize                           align);
 void                    gdk_memory_layout_init_sublayout        (GdkMemoryLayout                *self,
                                                                  const GdkMemoryLayout          *other,
                                                                  const cairo_rectangle_int_t    *area);
