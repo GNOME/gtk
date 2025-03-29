@@ -4356,6 +4356,7 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
 
 static void
 gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
+                                   gboolean               target_premultiplied,
                                    GskGpuImage           *image,
                                    GdkColorState         *image_color_state,
                                    const graphene_rect_t *rect,
@@ -4368,7 +4369,7 @@ gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
       gsk_gpu_convert_to_builtin_op (self->frame,
                                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
                                      self->ccs,
-                                     TRUE,
+                                     target_premultiplied,
                                      image_color_state,
                                      self->opacity,
                                      &self->offset,
@@ -4388,7 +4389,7 @@ gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
       gsk_gpu_convert_to_cicp_op (self->frame,
                                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
                                   cicp,
-                                  gsk_gpu_color_states_create_cicp (image_color_state, TRUE, TRUE),
+                                  gsk_gpu_color_states_create_cicp (image_color_state, TRUE, target_premultiplied),
                                   self->opacity,
                                   FALSE,
                                   &self->offset,
@@ -4403,7 +4404,8 @@ gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
     {
       gsk_gpu_convert_op (self->frame,
                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, rect),
-                          gsk_gpu_node_processor_color_states_explicit (self, image_color_state, TRUE),
+                          gsk_gpu_color_states_create (self->ccs, target_premultiplied,
+                                                       image_color_state, TRUE),
                           self->opacity,
                           FALSE,
                           &self->offset,
@@ -4482,6 +4484,7 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
           self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
 
           gsk_gpu_node_processor_convert_to (&self,
+                                             !(gsk_gpu_image_get_flags (target) & GSK_GPU_IMAGE_STRAIGHT_ALPHA),
                                              image,
                                              ccs,
                                              &clip_bounds,
@@ -4508,24 +4511,28 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
                                       GdkColorState   *image_color_state)
 {
   GskGpuNodeProcessor self;
-  GskGpuImage *converted, *intermediate = NULL;
+  GskGpuImage *target, *intermediate = NULL;
   gsize width, height;
+  gboolean target_premultiplied, image_premultiplied;
 
   width = gsk_gpu_image_get_width (image);
   height = gsk_gpu_image_get_height (image);
 
-  converted = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
-                                                     FALSE,
-                                                     target_format,
-                                                     gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB,
-                                                     width,
-                                                     height);
-  if (converted == NULL)
+  target = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
+                                                  FALSE,
+                                                  target_format,
+                                                  gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB,
+                                                  width,
+                                                  height);
+  if (target == NULL)
     return NULL;
 
+  target_premultiplied = !(gsk_gpu_image_get_flags (target) & GSK_GPU_IMAGE_STRAIGHT_ALPHA);
+  image_premultiplied = !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA);
+
   /* We need to go via an intermediate colorstate */
-  if (!GDK_IS_DEFAULT_COLOR_STATE (image_color_state) &&
-      !GDK_IS_DEFAULT_COLOR_STATE (target_color_state))
+  if (!(GDK_IS_DEFAULT_COLOR_STATE (image_color_state) && image_premultiplied) &&
+      !(GDK_IS_DEFAULT_COLOR_STATE (target_color_state) && target_premultiplied))
     {
       GdkColorState *ccs = gdk_color_state_get_rendering_color_state (image_color_state);
 
@@ -4534,16 +4541,17 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
         return NULL;
       image = intermediate;
       image_color_state = ccs;
+      image_premultiplied = TRUE;
     }
 
   gsk_gpu_node_processor_init (&self,
                                frame,
-                               converted,
+                               target,
                                target_color_state,
                                &(cairo_rectangle_int_t) { 0, 0, width, height },
                                &GRAPHENE_RECT_INIT (0, 0, width, height));
   gsk_gpu_render_pass_begin_op (frame,
-                                converted,
+                                target,
                                 &(cairo_rectangle_int_t) { 0, 0, width, height },
                                 GSK_GPU_LOAD_OP_DONT_CARE,
                                 NULL,
@@ -4553,7 +4561,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
   self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
   gsk_gpu_node_processor_sync_globals (&self, 0);
 
-  if (GDK_IS_DEFAULT_COLOR_STATE (target_color_state))
+  if (GDK_IS_DEFAULT_COLOR_STATE (target_color_state) && target_premultiplied)
     {
       gsk_gpu_node_processor_image_op (&self,
                                        image,
@@ -4565,6 +4573,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
   else
     {
       gsk_gpu_node_processor_convert_to (&self,
+                                         target_premultiplied,
                                          image,
                                          image_color_state,
                                          &GRAPHENE_RECT_INIT (0, 0, width, height),
@@ -4572,11 +4581,11 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
     }
 
   gsk_gpu_render_pass_end_op (self.frame,
-                              converted,
+                              target,
                               GSK_RENDER_PASS_OFFSCREEN);
   gsk_gpu_node_processor_finish (&self);
 
   g_clear_object (&intermediate);
 
-  return converted;
+  return target;
 }
