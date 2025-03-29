@@ -261,19 +261,19 @@ gdk_texture_downloader_download_into (const GdkTextureDownloader *self,
                                       guchar                     *data,
                                       gsize                       stride)
 {
+  GdkMemoryLayout layout;
   g_return_if_fail (self != NULL);
   g_return_if_fail (data != NULL);
   g_return_if_fail (gdk_memory_format_get_n_planes (self->format) == 1);
-  g_return_if_fail (stride >= gdk_texture_get_width (self->texture) * gdk_memory_format_bytes_per_pixel (self->format));
+  layout = GDK_MEMORY_LAYOUT_SIMPLE (self->format,
+                                     self->texture->width,
+                                     self->texture->height,
+                                     stride);
+  gdk_memory_layout_return_if_invalid (&layout);
 
   gdk_texture_do_download (self->texture,
                            data,
-                           &GDK_MEMORY_LAYOUT_SIMPLE (
-                               self->format,
-                               self->texture->width,
-                               self->texture->height,
-                               stride
-                           ),
+                           &layout,
                            self->color_state);
 }
 
