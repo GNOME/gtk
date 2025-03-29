@@ -1159,9 +1159,9 @@ handle_selecting_unselected_cursor (GtkListBase *self,
   model = gtk_list_item_manager_get_model (priv->item_manager);
 
   /* Selection of current position is not needed if it's already selected or if
-   * there is nothing to select.
+   * there is nothing to select, or the position is invalid.
    */
-  if (model == NULL || gtk_selection_model_is_selected (model, position))
+  if (model == NULL || position == GTK_INVALID_LIST_POSITION || gtk_selection_model_is_selected (model, position))
     return FALSE;
 
   /* Reset cursor to current position trying to select it as well. */
