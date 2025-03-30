@@ -17,7 +17,6 @@ tests = [
   { 'name': 'displaymanager' },
   { 'name': 'glcontext' },
   { 'name': 'keysyms' },
-  { 'name': 'memorytexture', 'sources': [ 'gdktestutils.c' ] },
   { 'name': 'rectangle' },
   { 'name': 'rgba' },
   { 'name': 'seat' },
@@ -72,6 +71,7 @@ internal_tests = [
   { 'name': 'colorstate-internal' },
   { 'name': 'dihedral' },
   { 'name': 'image' },
+  { 'name': 'memorytexture', 'sources': [ 'gdktestutils.c' ] },
   { 'name': 'texture' },
   { 'name': 'gltexture' },
   { 'name': 'subsurface' },
@@ -87,7 +87,7 @@ endif
 foreach t : internal_tests
   test_name = t.get('name')
   test_exe = executable(test_name,
-    sources: '@0@.c'.format(test_name),
+    sources: [ '@0@.c'.format(test_name) ] + t.get('sources', []),
     c_args: common_cflags + ['-DGTK_COMPILATION'],
     dependencies: libgtk_static_dep,
     install: false,

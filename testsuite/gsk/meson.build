@@ -546,7 +546,6 @@ tests = [
   [ 'opaque' ],
   [ 'path', [ 'path-utils.c' ], [ 'flaky'] ],
   [ 'path-special-cases' ],
-  [ 'scaling', [ 'scaling.c', '../gdk/gdktestutils.c' ] ],
 ]
 
 test_cargs = []
@@ -583,6 +582,7 @@ internal_tests = [
   [ 'misc'],
   [ 'path-private' ],
   [ 'rounded-rect'],
+  [ 'scaling', [ 'scaling.c', '../gdk/gdktestutils.c' ] ],
   [ 'transform' ],
 ]
 

@@ -28,9 +28,6 @@ struct _TextureBuilder
 gsize       gdk_memory_format_bytes_per_pixel  (GdkMemoryFormat  format);
 ChannelType gdk_memory_format_get_channel_type (GdkMemoryFormat  format);
 guint       gdk_memory_format_n_colors         (GdkMemoryFormat  format);
-gboolean    gdk_memory_format_has_alpha        (GdkMemoryFormat  format);
-gboolean    gdk_memory_format_is_premultiplied (GdkMemoryFormat  format);
-gboolean    gdk_memory_format_is_deep          (GdkMemoryFormat  format);
 void        gdk_memory_format_pixel_print      (GdkMemoryFormat  format,
                                                 const guchar    *data,
                                                 GString         *string);
