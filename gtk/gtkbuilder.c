@@ -1324,7 +1324,7 @@ gtk_builder_create_bindings (GtkBuilder  *builder,
 
           if (object)
             {
-              expression = expression_info_construct (builder, info->expr, error);
+              expression = expression_info_construct (builder, priv->domain, info->expr, error);
               if (expression == NULL)
                 {
                   g_prefix_error (error, "%s:%d:%d: ", priv->filename, info->line, info->col);
