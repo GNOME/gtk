@@ -2,9 +2,7 @@
 
 #include <gdk/gdk.h>
 
-/* This shadows a function of the same name in a GDK private header,
- * because tests can't use hidden functions from the shared library */
-#define gdk_memory_format_bytes_per_pixel test_memory_format_bytes_per_pixel
+#include "gdk/gdkmemorylayoutprivate.h"
 
 typedef enum {
   CHANNEL_UINT_8,
@@ -25,16 +23,21 @@ struct _TextureBuilder
   gsize offset;
 };
 
-gsize       gdk_memory_format_bytes_per_pixel  (GdkMemoryFormat  format);
-ChannelType gdk_memory_format_get_channel_type (GdkMemoryFormat  format);
-guint       gdk_memory_format_n_colors         (GdkMemoryFormat  format);
-void        gdk_memory_format_pixel_print      (GdkMemoryFormat  format,
-                                                const guchar    *data,
-                                                GString         *string);
-gboolean    gdk_memory_format_pixel_equal      (GdkMemoryFormat  format,
-                                                gboolean         accurate,
-                                                const guchar    *pixel1,
-                                                const guchar    *pixel2);
+ChannelType     gdk_memory_format_get_channel_type              (GdkMemoryFormat         format);
+guint           gdk_memory_format_n_colors                      (GdkMemoryFormat         format);
+
+void            gdk_memory_pixel_print                          (const guchar           *data,
+                                                                 const GdkMemoryLayout  *layout,
+                                                                 gsize                   x,
+                                                                 gsize                   y,
+                                                                 GString                *string);
+gboolean        gdk_memory_pixel_equal                          (const guchar           *data1,
+                                                                 const GdkMemoryLayout  *layout1,
+                                                                 const guchar           *data2,
+                                                                 const GdkMemoryLayout  *layout2,
+                                                                 gsize                   x,
+                                                                 gsize                   y,
+                                                                 gboolean                accurate);
 
 void        texture_builder_init      (TextureBuilder  *builder,
                                        GdkMemoryFormat  format,

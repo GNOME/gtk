@@ -1,67 +1,11 @@
+#include "config.h"
+
 #include "gdktestutils.h"
 
+#include "gdk/gdkmemoryformatprivate.h"
+#include "gdk/gdktexturedownloaderprivate.h"
+
 #include "gsk/gl/fp16private.h"
-
-gsize
-gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
-{
-  switch (format)
-    {
-    case GDK_MEMORY_G8:
-    case GDK_MEMORY_A8:
-      return 1;
-
-    case GDK_MEMORY_G8A8_PREMULTIPLIED:
-    case GDK_MEMORY_G8A8:
-    case GDK_MEMORY_G16:
-    case GDK_MEMORY_A16:
-    case GDK_MEMORY_A16_FLOAT:
-      return 2;
-
-    case GDK_MEMORY_R8G8B8:
-    case GDK_MEMORY_B8G8R8:
-      return 3;
-
-    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
-    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
-    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
-    case GDK_MEMORY_A8B8G8R8_PREMULTIPLIED:
-    case GDK_MEMORY_B8G8R8A8:
-    case GDK_MEMORY_A8R8G8B8:
-    case GDK_MEMORY_R8G8B8A8:
-    case GDK_MEMORY_A8B8G8R8:
-    case GDK_MEMORY_B8G8R8X8:
-    case GDK_MEMORY_X8R8G8B8:
-    case GDK_MEMORY_R8G8B8X8:
-    case GDK_MEMORY_X8B8G8R8:
-    case GDK_MEMORY_G16A16_PREMULTIPLIED:
-    case GDK_MEMORY_G16A16:
-    case GDK_MEMORY_A32_FLOAT:
-      return 4;
-
-    case GDK_MEMORY_R16G16B16:
-    case GDK_MEMORY_R16G16B16_FLOAT:
-      return 6;
-
-    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
-    case GDK_MEMORY_R16G16B16A16:
-    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
-    case GDK_MEMORY_R16G16B16A16_FLOAT:
-      return 8;
-
-    case GDK_MEMORY_R32G32B32_FLOAT:
-      return 12;
-
-    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
-    case GDK_MEMORY_R32G32B32A32_FLOAT:
-      return 16;
-
-    case GDK_MEMORY_N_FORMATS:
-    default:
-      g_assert_not_reached ();
-      return 4;
-    }
-}
 
 ChannelType
 gdk_memory_format_get_channel_type (GdkMemoryFormat format)
@@ -169,11 +113,13 @@ gdk_memory_format_n_colors (GdkMemoryFormat format)
 }
 
 void
-gdk_memory_format_pixel_print (GdkMemoryFormat  format,
-                               const guchar    *data,
-                               GString         *string)
+gdk_memory_pixel_print (const guchar          *data,
+                        const GdkMemoryLayout *layout,
+                        gsize                  x,
+                        gsize                  y,
+                        GString               *string)
 {
-  switch (format)
+  switch (layout->format)
     {
     case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
     case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
@@ -183,6 +129,7 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_A8R8G8B8:
     case GDK_MEMORY_R8G8B8A8:
     case GDK_MEMORY_A8B8G8R8:
+      data += gdk_memory_layout_offset (layout, 0, x, y);
       g_string_append_printf (string, "%02X %02X %02X %02X", data[0], data[1], data[2], data[3]);
       break;
 
@@ -190,21 +137,25 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_R8G8B8X8:
     case GDK_MEMORY_R8G8B8:
     case GDK_MEMORY_B8G8R8:
+      data += gdk_memory_layout_offset (layout, 0, x, y);
       g_string_append_printf (string, "%02X %02X %02X", data[0], data[1], data[2]);
       break;
 
     case GDK_MEMORY_G8A8:
     case GDK_MEMORY_G8A8_PREMULTIPLIED:
+      data += gdk_memory_layout_offset (layout, 0, x, y);
       g_string_append_printf (string, "%02X %02X", data[0], data[1]);
       break;
 
     case GDK_MEMORY_A8:
     case GDK_MEMORY_G8:
+      data += gdk_memory_layout_offset (layout, 0, x, y);
       g_string_append_printf (string, "%02X", data[0]);
       break;
 
     case GDK_MEMORY_X8R8G8B8:
     case GDK_MEMORY_X8B8G8R8:
+      data += gdk_memory_layout_offset (layout, 0, x, y);
       g_string_append_printf (string, "%02X %02X %02X", data[1], data[2], data[3]);
       break;
 
@@ -212,14 +163,14 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_R16G16B16A16:
     case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
       {
-        const guint16 *data16 = (const guint16 *) data;
+        const guint16 *data16 = (const guint16 *) (data + gdk_memory_layout_offset (layout, 0, x, y));
         g_string_append_printf (string, "%04X %04X %04X %04X", data16[0], data16[1], data16[2], data16[3]);
       }
       break;
 
     case GDK_MEMORY_R16G16B16:
       {
-        const guint16 *data16 = (const guint16 *) data;
+        const guint16 *data16 = (const guint16 *) (data + gdk_memory_layout_offset (layout, 0, x, y));
         g_string_append_printf (string, "%04X %04X %04X", data16[0], data16[1], data16[2]);
       }
       break;
@@ -227,7 +178,7 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_G16A16:
     case GDK_MEMORY_G16A16_PREMULTIPLIED:
       {
-        const guint16 *data16 = (const guint16 *) data;
+        const guint16 *data16 = (const guint16 *) (data + gdk_memory_layout_offset (layout, 0, x, y));
         g_string_append_printf (string, "%04X %04X", data16[0], data16[1]);
       }
       break;
@@ -235,14 +186,14 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_G16:
     case GDK_MEMORY_A16:
       {
-        const guint16 *data16 = (const guint16 *) data;
+        const guint16 *data16 = (const guint16 *) (data + gdk_memory_layout_offset (layout, 0, x, y));
         g_string_append_printf (string, "%04X", data16[0]);
       }
       break;
 
     case GDK_MEMORY_R16G16B16_FLOAT:
       {
-        const guint16 *data16 = (const guint16 *) data;
+        const guint16 *data16 = (const guint16 *) (data + gdk_memory_layout_offset (layout, 0, x, y));
         g_string_append_printf (string, "%f %f %f", half_to_float_one (data16[0]), half_to_float_one (data16[1]), half_to_float_one (data16[2]));
       }
       break;
@@ -250,13 +201,13 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_R16G16B16A16_FLOAT:
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
       {
-        const guint16 *data16 = (const guint16 *) data;
+        const guint16 *data16 = (const guint16 *) (data + gdk_memory_layout_offset (layout, 0, x, y));
         g_string_append_printf (string, "%f %f %f %f", half_to_float_one (data16[0]), half_to_float_one (data16[1]), half_to_float_one (data16[2]), half_to_float_one (data16[3]));
       }
       break;
     case GDK_MEMORY_A16_FLOAT:
       {
-        const guint16 *data16 = (const guint16 *) data;
+        const guint16 *data16 = (const guint16 *) (data + gdk_memory_layout_offset (layout, 0, x, y));
         g_string_append_printf (string, "%f", half_to_float_one (data16[0]));
       }
       break;
@@ -264,21 +215,21 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
     case GDK_MEMORY_R32G32B32A32_FLOAT:
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
       {
-        const float *dataf = (const float *) data;
+        const float *dataf = (const float *) (data + gdk_memory_layout_offset (layout, 0, x, y));
         g_string_append_printf (string, "%f %f %f %f", dataf[0], dataf[1], dataf[2], dataf[3]);
       }
       break;
 
     case GDK_MEMORY_R32G32B32_FLOAT:
       {
-        const float *dataf = (const float *) data;
+        const float *dataf = (const float *) (data + gdk_memory_layout_offset (layout, 0, x, y));
         g_string_append_printf (string, "%f %f %f", dataf[0], dataf[1], dataf[2]);
       }
       break;
 
     case GDK_MEMORY_A32_FLOAT:
       {
-        const float *dataf = (const float *) data;
+        const float *dataf = (const float *) (data + gdk_memory_layout_offset (layout, 0, x, y));
         g_string_append_printf (string, "%f", dataf[0]);
       }
       break;
@@ -290,12 +241,17 @@ gdk_memory_format_pixel_print (GdkMemoryFormat  format,
 }
 
 gboolean
-gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
-                               gboolean         accurate,
-                               const guchar    *pixel1,
-                               const guchar    *pixel2)
+gdk_memory_pixel_equal (const guchar          *data1,
+                        const GdkMemoryLayout *layout1,
+                        const guchar          *data2,
+                        const GdkMemoryLayout *layout2,
+                        gsize                  x,
+                        gsize                  y,
+                        gboolean               accurate)
 {
-  switch (format)
+  g_assert (layout1->format == layout2->format);
+
+  switch (layout1->format)
     {
     case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
     case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
@@ -311,15 +267,21 @@ gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
     case GDK_MEMORY_G8:
     case GDK_MEMORY_G8A8:
     case GDK_MEMORY_G8A8_PREMULTIPLIED:
-      return memcmp (pixel1, pixel2, gdk_memory_format_bytes_per_pixel (format)) == 0;
+      return memcmp (data1 + gdk_memory_layout_offset (layout1, 0, x, y),
+                     data2 + gdk_memory_layout_offset (layout2, 0, x, y),
+                     gdk_memory_format_get_plane_block_bytes (layout1->format, 0)) == 0;
 
     case GDK_MEMORY_B8G8R8X8:
     case GDK_MEMORY_R8G8B8X8:
-      return memcmp (pixel1, pixel2, 3) == 0;
+      return memcmp (data1 + gdk_memory_layout_offset (layout1, 0, x, y),
+                     data2 + gdk_memory_layout_offset (layout2, 0, x, y),
+                     3) == 0;
 
     case GDK_MEMORY_X8R8G8B8:
     case GDK_MEMORY_X8B8G8R8:
-      return memcmp (pixel1 + 1, pixel2 + 1, 3) == 0;
+      return memcmp (data1 + gdk_memory_layout_offset (layout1, 0, x, y) + 1,
+                     data2 + gdk_memory_layout_offset (layout2, 0, x, y) + 1,
+                     3) == 0;
 
     case GDK_MEMORY_R16G16B16:
     case GDK_MEMORY_R16G16B16A16:
@@ -329,10 +291,10 @@ gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
     case GDK_MEMORY_G16A16_PREMULTIPLIED:
     case GDK_MEMORY_A16:
       {
-        const guint16 *u1 = (const guint16 *) pixel1;
-        const guint16 *u2 = (const guint16 *) pixel2;
+        const guint16 *u1 = (const guint16 *) (data1 + gdk_memory_layout_offset (layout1, 0, x, y));
+        const guint16 *u2 = (const guint16 *) (data2 + gdk_memory_layout_offset (layout2, 0, x, y));
         guint i;
-        for (i = 0; i < gdk_memory_format_bytes_per_pixel (format) / sizeof (guint16); i++)
+        for (i = 0; i < gdk_memory_format_get_plane_block_bytes (layout1->format, 0) / sizeof (guint16); i++)
           {
             if (!G_APPROX_VALUE (u1[i], u2[i], accurate ? 1 : 256))
               return FALSE;
@@ -345,11 +307,13 @@ gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
     case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_A16_FLOAT:
       {
+        const guint16 *pixel1 = (const guint16 *) (data1 + gdk_memory_layout_offset (layout1, 0, x, y));
+        const guint16 *pixel2 = (const guint16 *) (data2 + gdk_memory_layout_offset (layout2, 0, x, y));
         guint i;
-        for (i = 0; i < gdk_memory_format_bytes_per_pixel (format) / sizeof (guint16); i++)
+        for (i = 0; i < gdk_memory_format_get_plane_block_bytes (layout1->format, 0) / sizeof (guint16); i++)
           {
-            float f1 = half_to_float_one (((guint16 *) pixel1)[i]);
-            float f2 = half_to_float_one (((guint16 *) pixel2)[i]);
+            float f1 = half_to_float_one (pixel1[i]);
+            float f2 = half_to_float_one (pixel2[i]);
             if (!G_APPROX_VALUE (f1, f2, accurate ? 1./65535 : 1./255))
               return FALSE;
           }
@@ -361,10 +325,10 @@ gdk_memory_format_pixel_equal (GdkMemoryFormat  format,
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_A32_FLOAT:
       {
-        const float *f1 = (const float *) pixel1;
-        const float *f2 = (const float *) pixel2;
+        const float *f1 = (const float *) (data1 + gdk_memory_layout_offset (layout1, 0, x, y));
+        const float *f2 = (const float *) (data2 + gdk_memory_layout_offset (layout2, 0, x, y));
         guint i;
-        for (i = 0; i < gdk_memory_format_bytes_per_pixel (format) / sizeof (float); i++)
+        for (i = 0; i < gdk_memory_format_get_plane_block_bytes (layout1->format, 0) / sizeof (float); i++)
           {
             if (!G_APPROX_VALUE (f1[i], f2[i], accurate ? 1./65535 : 1./255))
               return FALSE;
@@ -393,7 +357,7 @@ texture_builder_init (TextureBuilder  *builder,
 
   extra_stride = g_test_rand_bit() ? g_test_rand_int_range (0, 16) : 0;
   builder->offset = g_test_rand_bit() ? g_test_rand_int_range (0, 128) : 0;
-  builder->stride = width * gdk_memory_format_bytes_per_pixel (format) + extra_stride;
+  builder->stride = width * gdk_memory_format_get_plane_block_bytes (format, 0) + extra_stride;
   builder->pixels = g_malloc0 (builder->offset + builder->stride * height);
 }
 
@@ -464,7 +428,7 @@ texture_builder_set_pixel (TextureBuilder  *builder,
   data = builder->pixels
          + builder->offset
          + y * builder->stride
-         + x * gdk_memory_format_bytes_per_pixel (builder->format);
+         + x * gdk_memory_format_get_plane_block_bytes (builder->format, 0);
 
   switch (builder->format)
   {
@@ -693,32 +657,34 @@ compare_textures (GdkTexture *texture1,
 {
   GdkTextureDownloader *downloader1, *downloader2;
   GBytes *bytes1, *bytes2;
-  gsize stride1, stride2, bpp;
+  GdkMemoryLayout layout1, layout2;
   const guchar *data1, *data2;
   int width, height, x, y;
   GdkMemoryFormat format;
+  GError *error = NULL;
 
   g_assert_cmpint (gdk_texture_get_width (texture1), ==, gdk_texture_get_width (texture2));
   g_assert_cmpint (gdk_texture_get_height (texture1), ==, gdk_texture_get_height (texture2));
   g_assert_cmpint (gdk_texture_get_format (texture1), ==, gdk_texture_get_format (texture2));
 
   format = gdk_texture_get_format (texture1);
-  bpp = gdk_memory_format_bytes_per_pixel (format);
   width = gdk_texture_get_width (texture1);
   height = gdk_texture_get_height (texture1);
 
   downloader1 = gdk_texture_downloader_new (texture1);
   gdk_texture_downloader_set_format (downloader1, format);
-  bytes1 = gdk_texture_downloader_download_bytes (downloader1, &stride1);
-  g_assert_cmpint (stride1, >=, bpp * width);
+  bytes1 = gdk_texture_downloader_download_bytes_layout (downloader1, &layout1);
   g_assert_nonnull (bytes1);
+  g_assert_true (gdk_memory_layout_is_valid (&layout1, &error));
+  g_assert_no_error (error);
   gdk_texture_downloader_free (downloader1);
 
   downloader2 = gdk_texture_downloader_new (texture2);
   gdk_texture_downloader_set_format (downloader2, format);
-  bytes2 = gdk_texture_downloader_download_bytes (downloader2, &stride2);
-  g_assert_cmpint (stride2, >=, bpp * width);
+  bytes2 = gdk_texture_downloader_download_bytes_layout (downloader2, &layout2);
   g_assert_nonnull (bytes2);
+  g_assert_true (gdk_memory_layout_is_valid (&layout2, &error));
+  g_assert_no_error (error);
   gdk_texture_downloader_free (downloader2);
 
   data1 = g_bytes_get_data (bytes1, NULL);
@@ -727,7 +693,7 @@ compare_textures (GdkTexture *texture1,
     {
       for (x = 0; x < width; x++)
         {
-          if (!gdk_memory_format_pixel_equal (format, accurate_compare, data1 + bpp * x, data2 + bpp * x))
+          if (!gdk_memory_pixel_equal (data1, &layout1, data2, &layout2, x, y, accurate_compare))
             {
               GString *msg = g_string_new (NULL);
               GEnumClass *enum_class;
@@ -737,16 +703,14 @@ compare_textures (GdkTexture *texture1,
               format_name = g_enum_get_value (enum_class, format)->value_nick;
 
               g_string_append_printf (msg, "%s (%u %u): ", format_name, x, y);
-              gdk_memory_format_pixel_print (format, data1 + bpp * x, msg);
+              gdk_memory_pixel_print (data1, &layout1, x, y, msg);
               g_string_append (msg, " != ");
-              gdk_memory_format_pixel_print (format, data2 + bpp * x, msg);
+              gdk_memory_pixel_print (data2, &layout2, x, y, msg);
               g_test_message ("%s", msg->str);
               g_string_free (msg, TRUE);
               g_test_fail ();
             }
         }
-      data1 += stride1;
-      data2 += stride2;
     }
 
   g_bytes_unref (bytes2);
