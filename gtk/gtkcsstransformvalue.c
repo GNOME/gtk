@@ -936,7 +936,9 @@ _gtk_css_transform_value_parse (GtkCssParser *parser)
 
   while (TRUE)
     {
-      GtkCssTransform transform = { 0, };
+      GtkCssTransform transform;
+
+      memset (&transform, 0, sizeof (GtkCssTransform));
 
       if (gtk_css_parser_has_function (parser, "matrix"))
         {
