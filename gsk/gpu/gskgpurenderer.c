@@ -276,12 +276,16 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
     {
       for (x = 0; x < width; x += image_width)
         {
+          gsize tile_width, tile_height;
+
+          tile_width = MIN (image_width, width - x);
+          tile_height = MIN (image_height, height - y);
           texture = NULL;
+
           if (image == NULL)
             image = gsk_gpu_device_create_download_image (priv->device,
                                                           depth,
-                                                          MIN (image_width, width - x),
-                                                          MIN (image_height, height - y));
+                                                          tile_width, tile_height);
 
           if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
             color_state = GDK_COLOR_STATE_SRGB_LINEAR;
@@ -290,8 +294,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
 
           clip_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                            0, 0,
-                                                           gsk_gpu_image_get_width (image),
-                                                           gsk_gpu_image_get_height (image)
+                                                           tile_width, tile_height
                                                        });
           frame = gsk_gpu_renderer_get_frame (self);
           gsk_gpu_frame_render (frame,
@@ -302,8 +305,8 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                 root,
                                 &GRAPHENE_RECT_INIT (rounded_viewport->origin.x + x,
                                                      rounded_viewport->origin.y + y,
-                                                     image_width,
-                                                     image_height),
+                                                     tile_width,
+                                                     tile_height),
                                 &texture);
           gsk_gpu_frame_wait (frame);
 
