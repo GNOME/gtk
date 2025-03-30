@@ -671,28 +671,6 @@ log_handler (const char *format, va_list args)
   g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, format, args);
 }
 
-static void
-load_cursor_theme_closure_run (GdkWaylandDisplay *display_wayland,
-                               OnHasGlobalsClosure *closure)
-{
-  _gdk_wayland_display_load_cursor_theme (display_wayland);
-}
-
-static void
-_gdk_wayland_display_prepare_cursor_themes (GdkWaylandDisplay *display_wayland)
-{
-  OnHasGlobalsClosure *closure;
-  static const char *required_cursor_theme_globals[] = {
-      "wl_shm",
-      NULL
-  };
-
-  closure = g_new0 (OnHasGlobalsClosure, 1);
-  closure->handler = load_cursor_theme_closure_run;
-  closure->required_globals = required_cursor_theme_globals;
-  postpone_on_globals_closure (display_wayland, closure);
-}
-
 static void init_settings (GdkDisplay *display);
 
 GdkDisplay *
@@ -723,7 +701,6 @@ _gdk_wayland_display_open (const char *display_name)
     g_hash_table_new_full (NULL, NULL, NULL, g_free);
 
   _gdk_wayland_display_init_cursors (display_wayland);
-  _gdk_wayland_display_prepare_cursor_themes (display_wayland);
 
   display_wayland->wl_registry = wl_display_get_registry (display_wayland->wl_display);
   wl_registry_add_listener (display_wayland->wl_registry, &registry_listener, display_wayland);
@@ -791,6 +768,8 @@ _gdk_wayland_display_open (const char *display_name)
 
       return NULL;
     }
+
+  _gdk_wayland_display_load_cursor_theme (display_wayland);
 
   if (display_wayland->color)
     {
