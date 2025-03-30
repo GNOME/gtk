@@ -117,6 +117,7 @@ struct _GtkInspectorGeneral
   GtkWidget *pango_fontmap;
   GtkWidget *media_backend;
   GtkWidget *im_module;
+  GtkWidget *a11y_backend;
   GtkWidget *gl_backend_version;
   GtkWidget *gl_backend_version_row;
   GtkWidget *gl_backend_vendor;
@@ -459,6 +460,50 @@ dump_im_module (GdkDisplay *display,
                 GString    *string)
 {
   g_string_append_printf (string, "| Input Method | %s |\n", get_im_module_kind (display));
+}
+
+/* }}} */
+/* {{{ Accessibility */
+
+static const char *
+get_a11y_backend (GdkDisplay *display)
+{
+  GtkWidget *widget;
+  GtkATContext *ctx;
+  const char *backend;
+
+  widget = gtk_label_new ("");
+  g_object_ref_sink (widget);
+  ctx = gtk_at_context_create (GTK_ACCESSIBLE_ROLE_LABEL, GTK_ACCESSIBLE (widget), display);
+
+  if (ctx == NULL)
+    backend = "none";
+  else if (strcmp (G_OBJECT_TYPE_NAME (ctx), "GtkAtSpiContext") == 0)
+    backend = "atspi";
+  else if (strcmp (G_OBJECT_TYPE_NAME (ctx), "GtkAccessKitContext") == 0)
+    backend = "accesskit";
+  else if (strcmp (G_OBJECT_TYPE_NAME (ctx), "GtkTestATContext") == 0)
+    backend = "test";
+  else
+    backend = "unknown";
+
+  g_clear_object (&ctx);
+  g_clear_object (&widget);
+
+  return backend;
+}
+
+static void
+init_a11y_backend (GtkInspectorGeneral *gen)
+{
+  gtk_label_set_label (GTK_LABEL (gen->a11y_backend), get_a11y_backend (gen->display));
+}
+
+static void
+dump_a11y_backend (GdkDisplay *display,
+                   GString    *string)
+{
+  g_string_append_printf (string, "| Accessibility backend | %s |\n", get_a11y_backend (display));
 }
 
 /* }}} */
@@ -2056,6 +2101,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, pango_fontmap);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, media_backend);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, im_module);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, a11y_backend);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_error);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_error_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_version);
@@ -2106,6 +2152,7 @@ gtk_inspector_general_set_display (GtkInspectorGeneral *gen,
   init_pango (gen);
   init_media (gen);
   init_im_module (gen);
+  init_a11y_backend (gen);
   init_app_id (gen);
   init_env (gen);
   init_display (gen);
@@ -2128,6 +2175,7 @@ generate_dump (GdkDisplay *display)
   dump_pango (display, string);
   dump_media (display, string);
   dump_im_module (display, string);
+  dump_a11y_backend (display, string);
   dump_app_id (display, string);
   dump_env (display, string);
   dump_display (display, string);
