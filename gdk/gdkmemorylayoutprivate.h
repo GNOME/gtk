@@ -50,5 +50,10 @@ void                    gdk_memory_layout_init                  (GdkMemoryLayout
                                                                  gsize                           height,
                                                                  gsize                           align);
 
+gsize                   gdk_memory_layout_offset                (const GdkMemoryLayout          *layout,
+                                                                 gsize                           plane,
+                                                                 gsize                           x,
+                                                                 gsize                           y) G_GNUC_PURE;
+
 G_END_DECLS
 
