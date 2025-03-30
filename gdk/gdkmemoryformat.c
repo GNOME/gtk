@@ -2040,12 +2040,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
 /* if this fails, somebody forgot to add formats above */
 G_STATIC_ASSERT (G_N_ELEMENTS (memory_formats) == GDK_MEMORY_N_FORMATS);
 
-gsize
-gdk_memory_format_bytes_per_pixel (GdkMemoryFormat format)
-{
-  return gdk_memory_format_get_plane_block_bytes (format, 0);
-}
-
 GdkMemoryAlpha
 gdk_memory_format_alpha (GdkMemoryFormat format)
 {
@@ -2114,15 +2108,6 @@ GdkMemoryFormat
 gdk_memory_format_get_mipmap_format (GdkMemoryFormat format)
 {
   return memory_formats[format].mipmap_format;
-}
-
-gsize
-gdk_memory_format_min_buffer_size (GdkMemoryFormat format,
-                                   gsize           stride,
-                                   gsize           width,
-                                   gsize           height)
-{
-  return stride * (height - 1) + width * gdk_memory_format_bytes_per_pixel (format);
 }
 
 /*<private>
