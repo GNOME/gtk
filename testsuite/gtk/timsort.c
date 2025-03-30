@@ -77,7 +77,7 @@ run_comparison (gpointer         a,
   start = g_get_monotonic_time ();
   gtk_tim_sort (a, n, element_size, compare_func, data);
   mid = g_get_monotonic_time ();
-  g_qsort_with_data (b, n, element_size, compare_func, data);
+  g_sort_array (b, n, element_size, compare_func, data);
   end = g_get_monotonic_time ();
 
   g_test_message ("%zu items in %uus vs %uus (%u%%)",
@@ -230,7 +230,7 @@ test_steps (void)
       assert_sort_equal (a, b, int, n);
     }
 
-  g_qsort_with_data (b, n, sizeof (int), compare_int, NULL);
+  g_sort_array (b, n, sizeof (int), compare_int, NULL);
   assert_sort_equal (a, b, int, n);
 
   gtk_tim_sort_finish (&sort);

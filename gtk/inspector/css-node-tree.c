@@ -307,11 +307,7 @@ sort_strv (gconstpointer a,
 static void
 strv_sort (char **strv)
 {
-  g_qsort_with_data (strv,
-		     g_strv_length (strv),
-                     sizeof (char *),
-                     sort_strv,
-                     NULL);
+  g_sort_array (strv, g_strv_length (strv), sizeof (char *), sort_strv, NULL);
 }
 
 static char *

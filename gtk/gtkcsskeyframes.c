@@ -527,18 +527,14 @@ _gtk_css_keyframes_print (GtkCssKeyframes *keyframes,
   sorted = g_new (guint, keyframes->n_properties);
   for (p = 0; p < keyframes->n_properties; p++)
     sorted[p] = p;
-  g_qsort_with_data (sorted, keyframes->n_properties, sizeof (guint), compare_property_by_name, keyframes);
+  g_sort_array (sorted, keyframes->n_properties, sizeof (guint), compare_property_by_name, keyframes);
 
   if (keyframes->variable_ids)
     {
       sorted_variable_ids = g_memdup2 (keyframes->variable_ids,
                                        sizeof (int) * keyframes->n_variables);
 
-      g_qsort_with_data (sorted_variable_ids,
-                         keyframes->n_variables,
-                         sizeof (int),
-                         compare_custom_property_ids,
-                         pool);
+      g_sort_array (sorted_variable_ids, keyframes->n_variables, sizeof (int), compare_custom_property_ids, pool);
     }
 
   for (k = 0; k < keyframes->n_keyframes; k++)
