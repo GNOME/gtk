@@ -323,6 +323,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
 
           /* Let's GC like a madman, we draw oversized stuff and don't want to OOM */
           gsk_gpu_device_maybe_gc (priv->device);
+          gsk_gpu_renderer_make_current (self);
         }
     }
 
