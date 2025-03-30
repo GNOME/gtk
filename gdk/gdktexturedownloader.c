@@ -243,6 +243,17 @@ gdk_texture_downloader_get_color_state (const GdkTextureDownloader *self)
   return self->color_state;
 }
 
+void
+gdk_texture_downloader_download_into_layout (const GdkTextureDownloader *self,
+                                             guchar                     *data,
+                                             const GdkMemoryLayout      *layout)
+{
+  gdk_texture_do_download (self->texture,
+                           data,
+                           layout,
+                           self->color_state);
+}
+
 /**
  * gdk_texture_downloader_download_into:
  * @self: a texture downloader
@@ -271,10 +282,32 @@ gdk_texture_downloader_download_into (const GdkTextureDownloader *self,
                                      stride);
   gdk_memory_layout_return_if_invalid (&layout);
 
-  gdk_texture_do_download (self->texture,
-                           data,
-                           &layout,
-                           self->color_state);
+  gdk_texture_downloader_download_into_layout (self, data, &layout);
+}
+
+GBytes *
+gdk_texture_downloader_download_bytes_layout (const GdkTextureDownloader *self,
+                                              GdkMemoryLayout            *out_layout)
+{
+  if (gdk_texture_get_format (self->texture) == self->format &&
+      gdk_color_state_equal (gdk_texture_get_color_state (self->texture), self->color_state))
+    {
+      return gdk_texture_download_bytes (self->texture, out_layout);
+    }
+  else
+    {
+      guchar *data;
+
+      gdk_memory_layout_init (out_layout,
+                              self->format,
+                              self->texture->width,
+                              self->texture->height,
+                              1);
+      data = g_malloc (out_layout->size);
+      
+      gdk_texture_do_download (self->texture, data, out_layout, self->color_state);
+      return g_bytes_new_take (data, out_layout->size);
+    }
 }
 
 /**
@@ -307,25 +340,7 @@ gdk_texture_downloader_download_bytes (const GdkTextureDownloader *self,
   g_return_val_if_fail (out_stride != NULL, NULL);
   g_return_val_if_fail (gdk_memory_format_get_n_planes (self->format) == 1, NULL);
 
-  if (gdk_texture_get_format (self->texture) == self->format &&
-      gdk_color_state_equal (gdk_texture_get_color_state (self->texture), self->color_state))
-    {
-      bytes = gdk_texture_download_bytes (self->texture, &layout);
-    }
-  else
-    {
-      guchar *data;
-
-      gdk_memory_layout_init (&layout,
-                              self->format,
-                              self->texture->width,
-                              self->texture->height,
-                              1);
-      data = g_malloc (layout.size);
-      
-      gdk_texture_do_download (self->texture, data, &layout, self->color_state);
-      bytes = g_bytes_new_take (data, layout.size);
-    }
+  bytes = gdk_texture_downloader_download_bytes_layout (self, &layout);
 
   if (layout.planes[0].offset)
     {
