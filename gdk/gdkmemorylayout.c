@@ -80,3 +80,40 @@ gdk_memory_layout_init (GdkMemoryLayout *self,
   self->size = size;
 }
 
+/**
+ * gdk_memory_layout_offset:
+ * @layout: a layout
+ * @plane: the plane to get the offset for
+ * @x: X coordinate to query the offset for. Must be a multiple of the
+ *   block size
+ * @y: Y coordinate to query the offset for. Must be a multiple of the
+ *   block size
+ *
+ * Queries the byte offset to a block of data.
+ *
+ * You can set x == 0 to query the offset of a row.
+ * You can also set y == 0 to query the offset of a plane.
+ *
+ * Returns: the offset in bytes to the location of the block at the
+ *   given plane and coordinate.
+ **/
+gsize
+gdk_memory_layout_offset (const GdkMemoryLayout *layout,
+                          gsize                  plane,
+                          gsize                  x,
+                          gsize                  y)
+{
+  gsize block_width, block_height, block_bytes;
+
+  block_width = gdk_memory_format_get_plane_block_width (layout->format, plane);
+  block_height = gdk_memory_format_get_plane_block_height (layout->format, plane);
+  block_bytes = gdk_memory_format_get_plane_block_bytes (layout->format, plane);
+
+  g_assert (x % block_width == 0);
+  g_assert (y % block_height == 0);
+
+  return layout->planes[plane].offset +
+         y / block_height * layout->planes[plane].stride +
+         x / block_width * block_bytes;
+}
+
