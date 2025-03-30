@@ -1,0 +1,7 @@
+color {
+  /* make sure it's HDR */
+  color: color(rec2100-pq 1 1 1);
+  /* - more than 32k, to trip modern GPUs and Cairo
+   */
+  bounds: 0 0 33333 128;
+}
