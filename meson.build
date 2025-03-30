@@ -33,6 +33,7 @@ xkbcommon_req      = '>= 0.2.0'
 sysprof_req        = '>= 3.38.0'
 vulkan_req         = '>= 1.3'
 gstreamer_req      = '>= 1.24.0'
+gi_req             = '>= 1.84'
 
 fs = import('fs')
 gnome = import('gnome')
@@ -416,6 +417,7 @@ testinc = include_directories('tests')
 
 # Dependencies
 glib_dep       = dependency('glib-2.0', version: glib_req)
+gi_dep         = dependency('gobject-introspection-1.0', version: gi_req, required: get_option('introspection').enabled())
 gobject_dep    = dependency('gobject-2.0', version: glib_req)
 if os_win32
   giowin32_dep = dependency('gio-windows-2.0', version: glib_req, required: win32_enabled)
