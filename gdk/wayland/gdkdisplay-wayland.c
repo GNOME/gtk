@@ -93,6 +93,7 @@
 
 #define MIN_SYSTEM_BELL_DELAY_MS 20
 
+#define POINTER_GESTURES_VERSION 3
 #define GTK_SHELL1_VERSION       6
 #define OUTPUT_VERSION_WITH_DONE 2
 #define NO_XDG_OUTPUT_DONE_SINCE_VERSION 3
@@ -539,7 +540,7 @@ gdk_registry_handle_global (void               *data,
       display_wayland->pointer_gestures =
         wl_registry_bind (display_wayland->wl_registry,
                           id, &zwp_pointer_gestures_v1_interface,
-                          MIN (version, GDK_ZWP_POINTER_GESTURES_V1_VERSION));
+                          MIN (version, POINTER_GESTURES_VERSION));
     }
   else if (match_global (display_wayland, interface, version, zwp_primary_selection_device_manager_v1_interface.name, 0))
     {
