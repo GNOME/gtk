@@ -221,6 +221,25 @@ _gdk_wayland_display_async_roundtrip (GdkWaylandDisplay *display_wayland)
 }
 
 static void
+gtk_shell_handle_capabilities (void              *data,
+                               struct gtk_shell1 *shell,
+                               uint32_t           capabilities)
+{
+  GdkDisplay *display = data;
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (data);
+
+  display_wayland->shell_capabilities = capabilities;
+
+  gdk_display_setting_changed (display, "gtk-shell-shows-app-menu");
+  gdk_display_setting_changed (display, "gtk-shell-shows-menubar");
+  gdk_display_setting_changed (display, "gtk-shell-shows-desktop");
+}
+
+struct gtk_shell1_listener gdk_display_gtk_shell_listener = {
+  gtk_shell_handle_capabilities
+};
+
+static void
 xdg_wm_base_ping (void               *data,
                   struct xdg_wm_base *xdg_wm_base,
                   uint32_t            serial)
@@ -407,7 +426,6 @@ gdk_wayland_display_prefers_ssd (GdkDisplay *display)
   return FALSE;
 }
 
-static void gdk_wayland_display_set_has_gtk_shell (GdkWaylandDisplay *display_wayland);
 static void gdk_wayland_display_add_output        (GdkWaylandDisplay *display_wayland,
                                                    guint32            id,
                                                    struct wl_output  *output,
@@ -478,7 +496,7 @@ gdk_registry_handle_global (void               *data,
         wl_registry_bind (display_wayland->wl_registry, id,
                           &gtk_shell1_interface,
                           MIN (version, GTK_SHELL1_VERSION));
-      gdk_wayland_display_set_has_gtk_shell (display_wayland);
+      gtk_shell1_add_listener (display_wayland->gtk_shell, &gdk_display_gtk_shell_listener, display_wayland);
     }
   else if (match_global (display_wayland, interface, version, wl_output_interface.name, 0))
     {
@@ -2147,33 +2165,6 @@ fallback:
     }
 
   update_xft_settings (display);
-}
-
-static void
-gtk_shell_handle_capabilities (void              *data,
-                               struct gtk_shell1 *shell,
-                               uint32_t           capabilities)
-{
-  GdkDisplay *display = data;
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (data);
-
-  display_wayland->shell_capabilities = capabilities;
-
-  gdk_display_setting_changed (display, "gtk-shell-shows-app-menu");
-  gdk_display_setting_changed (display, "gtk-shell-shows-menubar");
-  gdk_display_setting_changed (display, "gtk-shell-shows-desktop");
-}
-
-struct gtk_shell1_listener gdk_display_gtk_shell_listener = {
-  gtk_shell_handle_capabilities
-};
-
-static void
-gdk_wayland_display_set_has_gtk_shell (GdkWaylandDisplay *display_wayland)
-{
-  gtk_shell1_add_listener (display_wayland->gtk_shell,
-                           &gdk_display_gtk_shell_listener,
-                           display_wayland);
 }
 
 static void
