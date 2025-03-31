@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-05 15:05+0000\n"
-"PO-Revision-Date: 2025-03-05 18:26+0200\n"
+"POT-Creation-Date: 2025-03-31 12:35+0000\n"
+"PO-Revision-Date: 2025-03-31 18:49+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -34,20 +34,20 @@ msgstr "Немає сумісних форматів для передаванн
 msgid "No compatible transfer format found"
 msgstr "Не знайдено сумісного формату передавання даних"
 
-#: gdk/broadway/gdkbroadway-server.c:135
+#: gdk/broadway/gdkbroadway-server.c:131
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "Тип показу Broadway не підтримується: %s"
 
-#: gdk/gdkclipboard.c:231
+#: gdk/gdkclipboard.c:232
 msgid "This clipboard cannot store data."
 msgstr "У цьому буфері даних неможливо зберегти дані."
 
-#: gdk/gdkclipboard.c:286 gdk/gdkclipboard.c:780 gdk/gdkclipboard.c:1071
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:781 gdk/gdkclipboard.c:1072
 msgid "Cannot read from empty clipboard."
 msgstr "Неможливо прочитати дані з порожнього буфера обміну."
 
-#: gdk/gdkclipboard.c:317 gdk/gdkclipboard.c:1121 gdk/gdkdrag.c:606
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1122 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Немає сумісних форматів для передавання вмісту буфера обміну."
 
@@ -86,7 +86,7 @@ msgstr "Не вдалося надати дані як %s"
 msgid "The current backend does not support OpenGL"
 msgstr "Цей модуль не підтримує OpenGL"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1696
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1715
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Вимкнено підтримування Vulkan через GDK_DISABLE"
 
@@ -154,9 +154,9 @@ msgstr "Немає сумісних форматів для передаванн
 msgid "No GL API allowed."
 msgstr "Програмний інтерфейс GL заборонено."
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:745
-#: gdk/win32/gdkglcontext-win32-wgl.c:888
-#: gdk/win32/gdkglcontext-win32-wgl.c:932 gdk/x11/gdkglcontext-glx.c:699
+#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
+#: gdk/win32/gdkglcontext-win32-wgl.c:889
+#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
 msgid "Unable to create a GL context"
 msgstr "Неможливо створити вміст GL"
 
@@ -773,21 +773,21 @@ msgstr ""
 "Не вдалося перетворити формат W32 даних перетягування зі скиданням 0x%x до "
 "%p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:667
+#: gdk/win32/gdkglcontext-win32-wgl.c:668
 msgid "No GL implementation is available"
 msgstr "Немає жодної реалізації GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:754
+#: gdk/win32/gdkglcontext-win32-wgl.c:755
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Версія WGL %d.%d є надто давньою. Потрібна версія принаймні %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:772
+#: gdk/win32/gdkglcontext-win32-wgl.c:773
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Реалізація GL не може оприлюднювати контексти GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1052
+#: gdk/win32/gdkglcontext-win32-wgl.c:1053
 msgid "No available configurations for the given pixel format"
 msgstr "Немає доступних налаштувань для заданого формату точок"
 
@@ -2250,12 +2250,12 @@ msgid "_Edit"
 msgstr "З_міни"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5902 gtk/gtktext.c:6322
-#: gtk/gtktextview.c:9327
+#: gtk/gtktextview.c:9320
 msgid "_Copy"
 msgstr "_Копіювати"
 
 #: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5962 gtk/gtktext.c:2877
-#: gtk/gtktextview.c:9405
+#: gtk/gtktextview.c:9398
 msgid "Context menu"
 msgstr "Контекстне меню"
 
@@ -2334,7 +2334,7 @@ msgstr "Файл з такою назвою вже існує"
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6333 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6345 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2427,7 +2427,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Якщо вилучити об'єкт, його буде втрачено назавжди."
 
 #: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:1816
-#: gtk/gtklabel.c:5904 gtk/gtktext.c:6330 gtk/gtktextview.c:9335
+#: gtk/gtklabel.c:5904 gtk/gtktext.c:6330 gtk/gtktextview.c:9328
 msgid "_Delete"
 msgstr "В_илучити"
 
@@ -2769,7 +2769,7 @@ msgstr "Варіанти символів"
 msgid "OpenGL context creation failed"
 msgstr "Не вдалося створити контекст OpenGL"
 
-#: gtk/deprecated/gtkinfobar.c:501 gtk/gtkwindowcontrols.c:409
+#: gtk/deprecated/gtkinfobar.c:501 gtk/gtkwindowcontrols.c:412
 #: gtk/gtkwindowhandle.c:253
 msgid "Close"
 msgstr "Закрити"
@@ -2778,15 +2778,15 @@ msgstr "Закрити"
 msgid "Close the infobar"
 msgstr "Закрити панель відомостей"
 
-#: gtk/gtklabel.c:5901 gtk/gtktext.c:6318 gtk/gtktextview.c:9323
+#: gtk/gtklabel.c:5901 gtk/gtktext.c:6318 gtk/gtktextview.c:9316
 msgid "Cu_t"
 msgstr "Ви_різати"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6326 gtk/gtktextview.c:9331
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6326 gtk/gtktextview.c:9324
 msgid "_Paste"
 msgstr "Вст_авити"
 
-#: gtk/gtklabel.c:5909 gtk/gtktext.c:6339 gtk/gtktextview.c:9356
+#: gtk/gtklabel.c:5909 gtk/gtktext.c:6339 gtk/gtktextview.c:9349
 msgid "Select _All"
 msgstr "Виді_лити все"
 
@@ -2865,7 +2865,7 @@ msgid "Play"
 msgstr "Пуск"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6334
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6346
 msgid "_OK"
 msgstr "_Гаразд"
 
@@ -3493,7 +3493,7 @@ msgstr "Немає паперу"
 
 #. Translators: this is a printer status.
 #: gtk/print/gtkprintoperation-win32.c:630
-#: modules/printbackends/gtkprintbackendcpdb.c:1522
+#: modules/printbackends/gtkprintbackendcpdb.c:1521
 #: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused"
 msgstr "Призупинено"
@@ -3747,7 +3747,7 @@ msgstr "Бічна панель"
 msgid "Change di_rection"
 msgstr "Змінити _напрям"
 
-#: gtk/gtktext.c:6349 gtk/gtktextview.c:9361
+#: gtk/gtktext.c:6349 gtk/gtktextview.c:9354
 msgid "Insert _Emoji"
 msgstr "Вставити _емодзі"
 
@@ -3907,20 +3907,20 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS Classic"
 
-#: gtk/gtktextview.c:9343
+#: gtk/gtktextview.c:9336
 msgid "_Undo"
 msgstr "_Скасувати"
 
-#: gtk/gtktextview.c:9347
+#: gtk/gtktextview.c:9340
 msgid "_Redo"
 msgstr "Пов_торити"
 
-#: gtk/gtkwindow.c:6322
+#: gtk/gtkwindow.c:6334
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Бажаєте використовувати інспектор GTK?"
 
-#: gtk/gtkwindow.c:6324
+#: gtk/gtkwindow.c:6336
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3931,27 +3931,27 @@ msgstr ""
 "редагувати внутрішні частини будь-які програми GTK. Його використання може "
 "спричинити збої в програмі."
 
-#: gtk/gtkwindow.c:6329
+#: gtk/gtkwindow.c:6341
 msgid "Don’t show this message again"
 msgstr "Не показувати це повідомлення надалі"
 
-#: gtk/gtkwindowcontrols.c:361 gtk/gtkwindowhandle.c:237
+#: gtk/gtkwindowcontrols.c:362 gtk/gtkwindowhandle.c:237
 msgid "Minimize"
 msgstr "Згорнути"
 
-#: gtk/gtkwindowcontrols.c:363
+#: gtk/gtkwindowcontrols.c:364
 msgid "Minimize the window"
 msgstr "Згорнути вікно"
 
-#: gtk/gtkwindowcontrols.c:387 gtk/gtkwindowhandle.c:243
+#: gtk/gtkwindowcontrols.c:389 gtk/gtkwindowhandle.c:243
 msgid "Maximize"
 msgstr "Розгорнути"
 
-#: gtk/gtkwindowcontrols.c:389
+#: gtk/gtkwindowcontrols.c:391
 msgid "Maximize the window"
 msgstr "Розгорнути вікно"
 
-#: gtk/gtkwindowcontrols.c:411
+#: gtk/gtkwindowcontrols.c:414
 msgid "Close the window"
 msgstr "Закрити вікно"
 
@@ -4112,21 +4112,21 @@ msgstr "Класи стилів"
 msgid "CSS Property"
 msgstr "Властивість CSS"
 
-#: gtk/inspector/general.c:446
+#: gtk/inspector/general.c:447
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Контекст способу введення жорстко встановлено у GTK_IM_MODULE"
 
-#: gtk/inspector/general.c:577
+#: gtk/inspector/general.c:622
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:674
+#: gtk/inspector/general.c:719
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: gtk/inspector/general.c:928 gtk/inspector/general.c:967
+#: gtk/inspector/general.c:973 gtk/inspector/general.c:1012
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Немає"
@@ -4159,99 +4159,104 @@ msgstr "Мультимедійний модуль"
 msgid "Input Method"
 msgstr "Спосіб введення"
 
-#: gtk/inspector/general.ui:212
+#: gtk/inspector/general.ui:201
+#| msgid "Accessibility"
+msgid "Accessibility Backend"
+msgstr "Модуль доступності"
+
+#: gtk/inspector/general.ui:238
 msgid "Application ID"
 msgstr "Ід. програми"
 
-#: gtk/inspector/general.ui:238
+#: gtk/inspector/general.ui:264
 msgid "Resource Path"
 msgstr "Шлях до ресурсів"
 
-#: gtk/inspector/general.ui:275 gtk/ui/gtkplacesview.ui:63
+#: gtk/inspector/general.ui:301 gtk/ui/gtkplacesview.ui:63
 msgid "Prefix"
 msgstr "Префікс"
 
-#: gtk/inspector/general.ui:302
+#: gtk/inspector/general.ui:328
 msgid "Environment"
 msgstr "Середовище"
 
-#: gtk/inspector/general.ui:405
+#: gtk/inspector/general.ui:431
 msgid "Display"
 msgstr "Екран"
 
-#: gtk/inspector/general.ui:432
+#: gtk/inspector/general.ui:458
 msgid "RGBA Visual"
 msgstr "Візуалізація RGBA"
 
-#: gtk/inspector/general.ui:458
+#: gtk/inspector/general.ui:484
 msgid "Composited"
 msgstr "Складений"
 
-#: gtk/inspector/general.ui:483
+#: gtk/inspector/general.ui:509
 msgid "Protocols"
 msgstr "Протоколи"
 
-#: gtk/inspector/general.ui:539
+#: gtk/inspector/general.ui:565
 msgid "GL Renderer"
 msgstr "Обробник GL"
 
-#: gtk/inspector/general.ui:568
+#: gtk/inspector/general.ui:594
 msgid "GL Vendor"
 msgstr "Постачальник GL"
 
-#: gtk/inspector/general.ui:597
+#: gtk/inspector/general.ui:623
 msgid "GL Version"
 msgstr "Версія GL"
 
-#: gtk/inspector/general.ui:624
+#: gtk/inspector/general.ui:650
 msgid "GL Backend Vendor"
 msgstr "Постачальник модуля GL"
 
-#: gtk/inspector/general.ui:651
+#: gtk/inspector/general.ui:677
 msgid "GL Backend Version"
 msgstr "Версія модуля GL"
 
-#: gtk/inspector/general.ui:701
+#: gtk/inspector/general.ui:727
 msgid "GL Full Version"
 msgstr "Повна версія GL"
 
-#: gtk/inspector/general.ui:730
+#: gtk/inspector/general.ui:756
 msgid "GLSL Version"
 msgstr "Версія GLSL"
 
-#: gtk/inspector/general.ui:759
+#: gtk/inspector/general.ui:785
 msgid "GL Extensions"
 msgstr "Розширення GL"
 
-#: gtk/inspector/general.ui:847
+#: gtk/inspector/general.ui:873
 msgid "EGL Extensions"
 msgstr "Розширення EGL"
 
-#: gtk/inspector/general.ui:934
+#: gtk/inspector/general.ui:960
 msgid "GL Features"
 msgstr "Можливості GL"
 
-#: gtk/inspector/general.ui:970
+#: gtk/inspector/general.ui:996
 msgid "Vulkan Device"
 msgstr "Пристрій Vulkan"
 
-#: gtk/inspector/general.ui:997
+#: gtk/inspector/general.ui:1023
 msgid "Vulkan API Version"
 msgstr "Версія інтерфейсу Vulkan"
 
-#: gtk/inspector/general.ui:1024
+#: gtk/inspector/general.ui:1050
 msgid "Vulkan Driver Version"
 msgstr "Версія драйвера Vulkan"
 
-#: gtk/inspector/general.ui:1073
+#: gtk/inspector/general.ui:1099
 msgid "Vulkan Layers"
 msgstr "Шари Vulkan"
 
-#: gtk/inspector/general.ui:1142
+#: gtk/inspector/general.ui:1168
 msgid "Vulkan Extensions"
 msgstr "Розширення Vulkan"
 
-#: gtk/inspector/general.ui:1229
+#: gtk/inspector/general.ui:1255
 msgid "Vulkan Features"
 msgstr "Можливості Vulkan"
 
@@ -4316,8 +4321,8 @@ msgid "Surface"
 msgstr "Поверхня"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1153
-#: gtk/inspector/prop-editor.c:1536 gtk/inspector/window.ui:394
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1199
+#: gtk/inspector/prop-editor.c:1594 gtk/inspector/window.ui:394
 msgid "Properties"
 msgstr "Властивості"
 
@@ -4365,7 +4370,7 @@ msgstr "На верхньому рівні"
 msgid "Child Visible"
 msgstr "Видимі діти"
 
-#: gtk/inspector/prop-editor.c:702
+#: gtk/inspector/prop-editor.c:748
 #, c-format
 msgid "Pointer: %p"
 msgstr "Принтер: %p"
@@ -4373,7 +4378,7 @@ msgstr "Принтер: %p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:827
+#: gtk/inspector/prop-editor.c:873
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s зі значенням «%s»"
@@ -4381,7 +4386,7 @@ msgstr "%s зі значенням «%s»"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:838
+#: gtk/inspector/prop-editor.c:884
 #, c-format
 msgid "%s with type %s"
 msgstr "%s з типом %s"
@@ -4389,7 +4394,7 @@ msgstr "%s з типом %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:851
+#: gtk/inspector/prop-editor.c:897
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s для %s %p"
@@ -4397,71 +4402,71 @@ msgstr "%s для %s %p"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:881
+#: gtk/inspector/prop-editor.c:927
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s із типом значення %s"
 
-#: gtk/inspector/prop-editor.c:1230
+#: gtk/inspector/prop-editor.c:1288
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Неможливо редагувати цей тип властивості: %s"
 
-#: gtk/inspector/prop-editor.c:1388
+#: gtk/inspector/prop-editor.c:1446
 msgctxt "column number"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/prop-editor.c:1425
+#: gtk/inspector/prop-editor.c:1483
 msgid "Attribute:"
 msgstr "Атрибут:"
 
-#: gtk/inspector/prop-editor.c:1428
+#: gtk/inspector/prop-editor.c:1486
 msgid "Model"
 msgstr "Модель"
 
-#: gtk/inspector/prop-editor.c:1433
+#: gtk/inspector/prop-editor.c:1491
 msgid "Column:"
 msgstr "Стовпець:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1532
+#: gtk/inspector/prop-editor.c:1590
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Джерело дії: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1587
+#: gtk/inspector/prop-editor.c:1645
 msgid "Reset"
 msgstr "Скинути"
 
-#: gtk/inspector/prop-editor.c:1595
+#: gtk/inspector/prop-editor.c:1653
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Типове"
 
-#: gtk/inspector/prop-editor.c:1598
+#: gtk/inspector/prop-editor.c:1656
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Тема"
 
-#: gtk/inspector/prop-editor.c:1601
+#: gtk/inspector/prop-editor.c:1659
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1663
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Програма"
 
-#: gtk/inspector/prop-editor.c:1608
+#: gtk/inspector/prop-editor.c:1666
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Невідоме"
 
-#: gtk/inspector/prop-editor.c:1611
+#: gtk/inspector/prop-editor.c:1669
 msgid "Source:"
 msgstr "Джерело:"
 
@@ -4469,42 +4474,26 @@ msgstr "Джерело:"
 msgid "Defined At"
 msgstr "Визначено в"
 
-#: gtk/inspector/recorder.c:2055
+#: gtk/inspector/recorder.c:2059
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Не вдалося зберегти RenderNode"
 
 #: gtk/inspector/recorder.ui:20
-#| msgid "Description"
 msgid "Recording Options"
 msgstr "Параметри записування"
 
 #: gtk/inspector/recorder.ui:24
-#| msgid "Record frames"
 msgid "Record events"
 msgstr "Записувати події"
-
-#: gtk/inspector/recorder.ui:25
-msgid "record.record-events"
-msgstr "record.record-events"
 
 #: gtk/inspector/recorder.ui:28
 msgid "Add debug nodes"
 msgstr "Додати діагностичні вузли"
 
-#: gtk/inspector/recorder.ui:29
-#| msgid "Add debug nodes"
-msgid "record.debug-nodes"
-msgstr "record.debug-nodes"
-
 #: gtk/inspector/recorder.ui:32
 msgid "Highlight event sequences"
 msgstr "Підсвітити послідовності подій"
-
-#: gtk/inspector/recorder.ui:33
-#| msgid "Highlight event sequences"
-msgid "record.highlight-sequences"
-msgstr "record.highlight-sequences"
 
 #: gtk/inspector/recorder.ui:42
 msgid "Record frames"
@@ -6996,13 +6985,13 @@ msgid "Borderless"
 msgstr "Без рамки"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1519
+#: modules/printbackends/gtkprintbackendcpdb.c:1518
 #: modules/printbackends/gtkprintbackendcups.c:2636
 msgid "Paused; Rejecting Jobs"
 msgstr "Призупинено ; скасування завдань"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1525
+#: modules/printbackends/gtkprintbackendcpdb.c:1524
 #: modules/printbackends/gtkprintbackendcups.c:2642
 msgid "Rejecting Jobs"
 msgstr "Скасування завдань"
@@ -8656,6 +8645,17 @@ msgstr ""
 "Немає індексного файла теми в «%s».\n"
 "Якщо ви дійсно бажаєте створити тут кеш значків, використовуйте --ignore-"
 "theme-index.\n"
+
+#~ msgid "record.record-events"
+#~ msgstr "record.record-events"
+
+#~| msgid "Add debug nodes"
+#~ msgid "record.debug-nodes"
+#~ msgstr "record.debug-nodes"
+
+#~| msgid "Highlight event sequences"
+#~ msgid "record.highlight-sequences"
+#~ msgstr "record.highlight-sequences"
 
 #, c-format
 #~ msgid ""
