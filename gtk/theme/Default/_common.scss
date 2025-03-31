@@ -1471,22 +1471,30 @@ windowcontrols {
   }
 
   button {
-    @extend %button_basic;
-
     @extend %button_basic_flat;
 
+    box-shadow: none;
+    border-radius: 0;
+    min-width: 34px;
+    padding: 0;
 
-    border-radius: 9999px;
-    padding: 6px;
-    margin: 0 2px;
-    min-width: 0;
-    min-height: 0;
-    &:hover {
+    > image {
+        border-radius: 9999px;
+        min-height: 26px;
+        min-width: 26px;
+    }
+    &:hover > image {
       //special case hover colors inside a headerbar
       @include button(undecorated-hover,$c:darken($headerbar_bg_color,6%));
     }
+    &:active > image,
+    &:checked > image { @include button(undecorated-active,$c:darken($headerbar_bg_color,10%)); }
+
+    &:hover,
     &:active,
-    &:checked { @include button(undecorated-active,$c:darken($headerbar_bg_color,10%)); }
+    &:checked {
+        background: none;
+    }
   }
 }
 
@@ -1606,6 +1614,27 @@ headerbar {
   menubutton {
     margin-top: 6px;
     margin-bottom: 6px;
+  }
+
+  windowcontrols {
+    > button {
+      margin: 0;
+    }
+
+    &.start {
+      margin-left: -6px;
+
+      > button:first-child {
+        padding-left: 6px;
+      }
+    }
+    &.end {
+      margin-right: -6px;
+
+      > button:last-child {
+        padding-right: 6px;
+      }
+    }
   }
 
   // Reset margins for buttons inside menubutton

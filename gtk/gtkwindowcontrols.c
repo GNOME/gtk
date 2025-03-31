@@ -345,12 +345,14 @@ update_window_buttons (GtkWindowControls *self)
                is_sovereign_window)
         {
           button = gtk_button_new ();
-          gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+          gtk_widget_set_valign (button, GTK_ALIGN_FILL);
           gtk_widget_add_css_class (button, "minimize");
           /* The icon is not relevant for accessibility purposes */
           image = g_object_new (GTK_TYPE_IMAGE,
                                 "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                                 "icon-name", "window-minimize-symbolic",
+                                "valign", GTK_ALIGN_CENTER,
+                                "halign", GTK_ALIGN_CENTER,
                                 NULL);
           g_object_set (image, "use-fallback", TRUE, NULL);
           gtk_button_set_child (GTK_BUTTON (button), image);
@@ -371,12 +373,14 @@ update_window_buttons (GtkWindowControls *self)
 
           icon_name = maximized ? "window-restore-symbolic" : "window-maximize-symbolic";
           button = gtk_button_new ();
-          gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+          gtk_widget_set_valign (button, GTK_ALIGN_FILL);
           gtk_widget_add_css_class (button, "maximize");
           /* The icon is not relevant for accessibility purposes */
           image = g_object_new (GTK_TYPE_IMAGE,
                                 "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                                 "icon-name", icon_name,
+                                "valign", GTK_ALIGN_CENTER,
+                                "halign", GTK_ALIGN_CENTER,
                                 NULL);
           g_object_set (image, "use-fallback", TRUE, NULL);
           gtk_button_set_child (GTK_BUTTON (button), image);
@@ -393,11 +397,13 @@ update_window_buttons (GtkWindowControls *self)
                deletable)
         {
           button = gtk_button_new ();
-          gtk_widget_set_valign (button, GTK_ALIGN_CENTER);
+          gtk_widget_set_valign (button, GTK_ALIGN_FILL);
           /* The icon is not relevant for accessibility purposes */
           image = g_object_new (GTK_TYPE_IMAGE,
                                 "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
                                 "icon-name", "window-close-symbolic",
+                                "valign", GTK_ALIGN_CENTER,
+                                "halign", GTK_ALIGN_CENTER,
                                 "use-fallback", TRUE,
                                 NULL);
           gtk_widget_add_css_class (button, "close");
