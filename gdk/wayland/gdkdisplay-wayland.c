@@ -2611,7 +2611,7 @@ output_handle_geometry (void             *data,
 {
   GdkWaylandMonitor *monitor = (GdkWaylandMonitor *)data;
 
-  GDK_DEBUG (MISC, "handle geometry output %d, position %d %d, phys. size %d %d, subpixel layout %s, manufacturer %s, model %s, transform %s",
+  GDK_DEBUG (MISC, "handle geometry output %d, position %d %d, phys. size %d x %d mm, subpixel layout %s, manufacturer %s, model %s, transform %s",
                    monitor->id, x, y,
                    physical_width, physical_height,
                    subpixel_to_string (subpixel),
