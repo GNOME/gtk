@@ -1639,9 +1639,9 @@ gdk_broadway_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_CAPABILITIES:
-      g_value_set_boolean (value, GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE |
-                                  GDK_TOPLEVEL_CAPABILITIES_FULLSCREEN |
-                                  GDK_TOPLEVEL_CAPABILITIES_MINIMIZE);
+      g_value_set_flags (value, GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE |
+                                GDK_TOPLEVEL_CAPABILITIES_FULLSCREEN |
+                                GDK_TOPLEVEL_CAPABILITIES_MINIMIZE);
       break;
 
     default:

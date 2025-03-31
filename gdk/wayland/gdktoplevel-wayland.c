@@ -142,7 +142,7 @@ struct _GdkWaylandToplevel
   int bounds_height;
   gboolean has_bounds;
 
-  GdkToplevelCapabilities capabilities;;
+  GdkToplevelCapabilities capabilities;
 
   char *title;
   gboolean decorated;
