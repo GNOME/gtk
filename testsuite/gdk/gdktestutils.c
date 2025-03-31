@@ -3,6 +3,7 @@
 #include "gdktestutils.h"
 
 #include "gdk/gdkmemoryformatprivate.h"
+#include "gdk/gdkmemorytextureprivate.h"
 #include "gdk/gdktexturedownloaderprivate.h"
 
 #include "gsk/gl/fp16private.h"
@@ -343,22 +344,42 @@ gdk_memory_pixel_equal (const guchar          *data1,
     }
 }
 
+static inline gsize
+round_up (gsize number, gsize divisor)
+{
+  return (number + divisor - 1) / divisor * divisor;
+}
+
+void
+gdk_memory_layout_fudge (GdkMemoryLayout *layout,
+                         gsize            align)
+{
+  gsize p, waste;
+
+  waste = g_test_rand_bit () ? round_up (g_test_rand_int_range (0, 128), align) : 0;
+  for (p = 0; p < gdk_memory_format_get_n_planes (layout->format); p++)
+    {
+      gsize extra_stride = g_test_rand_bit() ? round_up (g_test_rand_int_range (0, 16), align) : 0;
+
+      layout->planes[p].offset += waste;
+      layout->planes[p].stride += extra_stride;
+      waste += extra_stride * layout->height;
+
+      waste += g_test_rand_bit () ? round_up (g_test_rand_int_range (0, 128), align) : 0;
+    }
+
+  layout->size += waste;
+}
+
 void
 texture_builder_init (TextureBuilder  *builder,
                       GdkMemoryFormat  format,
                       int              width,
                       int              height)
 {
-  gsize extra_stride;
-
-  builder->format = format;
-  builder->width = width;
-  builder->height = height;
-
-  extra_stride = g_test_rand_bit() ? g_test_rand_int_range (0, 16) : 0;
-  builder->offset = g_test_rand_bit() ? g_test_rand_int_range (0, 128) : 0;
-  builder->stride = width * gdk_memory_format_get_plane_block_bytes (format, 0) + extra_stride;
-  builder->pixels = g_malloc0 (builder->offset + builder->stride * height);
+  gdk_memory_layout_init (&builder->layout, format, width, height, 1);
+  gdk_memory_layout_fudge (&builder->layout, 1);
+  builder->pixels = g_malloc0 (builder->layout.size);
 }
 
 GdkTexture *
@@ -367,287 +388,111 @@ texture_builder_finish (TextureBuilder *builder)
   GBytes *bytes;
   GdkTexture *texture;
 
-  bytes = g_bytes_new_with_free_func (builder->pixels + builder->offset,
-                                      builder->height * builder->stride,
-                                      g_free,
-                                      builder->pixels);
-  texture = gdk_memory_texture_new (builder->width,
-                                    builder->height,
-                                    builder->format,
-                                    bytes,
-                                    builder->stride);
+  bytes = g_bytes_new_take (builder->pixels, builder->layout.size);
+  texture = gdk_memory_texture_new_from_layout (bytes,
+                                                &builder->layout,
+                                                gdk_color_state_get_srgb (),
+                                                NULL, NULL);
   g_bytes_unref (bytes);
 
   return texture;
 }
 
-static inline void
-set_pixel_u8 (guchar          *data,
-              int              r,
-              int              g,
-              int              b,
-              int              a,
-              gboolean         premultiply,
-              const GdkRGBA   *color)
-{
-  if (a >= 0)
-    data[a] = CLAMP (color->alpha * 255.f + 0.5f, 0.f, 255.f);
-  if (premultiply)
-    {
-      data[r] = CLAMP (color->red * color->alpha * 255.f + 0.5f, 0.f, 255.f);
-      data[g] = CLAMP (color->green * color->alpha * 255.f + 0.5f, 0.f, 255.f);
-      data[b] = CLAMP (color->blue * color->alpha * 255.f + 0.5f, 0.f, 255.f);
-    }
-  else
-    {
-      data[r] = CLAMP (color->red * 255.f + 0.5f, 0.f, 255.f);
-      data[g] = CLAMP (color->green * 255.f + 0.5f, 0.f, 255.f);
-      data[b] = CLAMP (color->blue * 255.f + 0.5f, 0.f, 255.f);
-    }
-}
-
-static float
-color_gray (const GdkRGBA *color)
-{
-  return 1/3.f * (color->red + color->green + color->blue);
-}
-
 void
-texture_builder_set_pixel (TextureBuilder  *builder,
-                           int              x,
-                           int              y,
-                           const GdkRGBA   *color)
+texture_builder_draw_color (TextureBuilder              *builder,
+                            const cairo_rectangle_int_t *area,
+                            const GdkRGBA               *color)
 {
-  guchar *data;
+  float data[4 * 4 * 4];
+  GdkMemoryLayout data_layout;
+  gsize xs, ys, block_width, block_height;
 
-  g_assert_cmpint (x, >=, 0);
-  g_assert_cmpint (x, <, builder->width);
-  g_assert_cmpint (y, >=, 0);
-  g_assert_cmpint (y, <, builder->height);
+  g_assert_cmpint (area->x, >=, 0);
+  g_assert_cmpint (area->x + area->width, <=, builder->layout.width);
+  g_assert_cmpint (area->y, >=, 0);
+  g_assert_cmpint (area->y + area->height, <=, builder->layout.height);
+  g_assert_true (gdk_memory_format_is_block_boundary (builder->layout.format, area->x, area->y));
+  g_assert_true (gdk_memory_format_is_block_boundary (builder->layout.format, area->width, area->height));
 
-  data = builder->pixels
-         + builder->offset
-         + y * builder->stride
-         + x * gdk_memory_format_get_plane_block_bytes (builder->format, 0);
+  block_width = gdk_memory_format_get_block_width (builder->layout.format);
+  block_height = gdk_memory_format_get_block_height (builder->layout.format);
+  g_assert (block_width * block_height * 4 <= G_N_ELEMENTS (data));
 
-  switch (builder->format)
-  {
-    case GDK_MEMORY_B8G8R8A8_PREMULTIPLIED:
-      set_pixel_u8 (data, 2, 1, 0, 3, TRUE, color);
-      break;
-    case GDK_MEMORY_A8R8G8B8_PREMULTIPLIED:
-      set_pixel_u8 (data, 1, 2, 3, 0, TRUE, color);
-      break;
-    case GDK_MEMORY_R8G8B8A8_PREMULTIPLIED:
-      set_pixel_u8 (data, 0, 1, 2, 3, TRUE, color);
-      break;
-    case GDK_MEMORY_A8B8G8R8_PREMULTIPLIED:
-      set_pixel_u8 (data, 3, 2, 1, 0, TRUE, color);
-      break;
-    case GDK_MEMORY_B8G8R8A8:
-      set_pixel_u8 (data, 2, 1, 0, 3, FALSE, color);
-      break;
-    case GDK_MEMORY_A8R8G8B8:
-      set_pixel_u8 (data, 1, 2, 3, 0, FALSE, color);
-      break;
-    case GDK_MEMORY_R8G8B8A8:
-      set_pixel_u8 (data, 0, 1, 2, 3, FALSE, color);
-      break;
-    case GDK_MEMORY_A8B8G8R8:
-      set_pixel_u8 (data, 3, 2, 1, 0, FALSE, color);
-      break;
-    case GDK_MEMORY_B8G8R8X8:
-      set_pixel_u8 (data, 2, 1, 0, -1, TRUE, color);
-      break;
-    case GDK_MEMORY_X8R8G8B8:
-      set_pixel_u8 (data, 1, 2, 3, -1, TRUE, color);
-      break;
-    case GDK_MEMORY_R8G8B8X8:
-      set_pixel_u8 (data, 0, 1, 2, -1, TRUE, color);
-      break;
-    case GDK_MEMORY_X8B8G8R8:
-      set_pixel_u8 (data, 3, 2, 1, -1, TRUE, color);
-      break;
-    case GDK_MEMORY_R8G8B8:
-      set_pixel_u8 (data, 0, 1, 2, -1, TRUE, color);
-      break;
-    case GDK_MEMORY_B8G8R8:
-      set_pixel_u8 (data, 2, 1, 0, -1, TRUE, color);
-      break;
-    case GDK_MEMORY_R16G16B16:
-      {
-        guint16 pixels[3] = {
-          CLAMP (color->red * color->alpha * 65535.f + 0.5f, 0, 65535.f),
-          CLAMP (color->green * color->alpha * 65535.f + 0.5f, 0, 65535.f),
-          CLAMP (color->blue * color->alpha * 65535.f + 0.5f, 0, 65535.f),
-        };
-        memcpy (data, pixels, 3 * sizeof (guint16));
-      }
-      break;
-    case GDK_MEMORY_R16G16B16A16_PREMULTIPLIED:
-      {
-        guint16 pixels[4] = {
-          CLAMP (color->red * color->alpha * 65535.f + 0.5f, 0, 65535.f),
-          CLAMP (color->green * color->alpha * 65535.f + 0.5f, 0, 65535.f),
-          CLAMP (color->blue * color->alpha * 65535.f + 0.5f, 0, 65535.f),
-          CLAMP (color->alpha * 65535.f + 0.5f, 0, 65535.f),
-        };
-        memcpy (data, pixels, 4 * sizeof (guint16));
-      }
-      break;
-    case GDK_MEMORY_R16G16B16A16:
-      {
-        guint16 pixels[4] = {
-          CLAMP (color->red * 65535.f + 0.5f, 0, 65535.f),
-          CLAMP (color->green * 65535.f + 0.5f, 0, 65535.f),
-          CLAMP (color->blue * 65535.f + 0.5f, 0, 65535.f),
-          CLAMP (color->alpha * 65535.f + 0.5f, 0, 65535.f),
-        };
-        memcpy (data, pixels, 4 * sizeof (guint16));
-      }
-      break;
-    case GDK_MEMORY_R16G16B16_FLOAT:
-      {
-        guint16 pixels[3] = {
-          float_to_half_one (color->red * color->alpha),
-          float_to_half_one (color->green * color->alpha),
-          float_to_half_one (color->blue * color->alpha)
-        };
-        memcpy (data, pixels, 3 * sizeof (guint16));
-      }
-      break;
-    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
-      {
-        guint16 pixels[4] = {
-          float_to_half_one (color->red * color->alpha),
-          float_to_half_one (color->green * color->alpha),
-          float_to_half_one (color->blue * color->alpha),
-          float_to_half_one (color->alpha)
-        };
-        memcpy (data, pixels, 4 * sizeof (guint16));
-      }
-      break;
-    case GDK_MEMORY_R16G16B16A16_FLOAT:
-      {
-        guint16 pixels[4] = {
-          float_to_half_one (color->red),
-          float_to_half_one (color->green),
-          float_to_half_one (color->blue),
-          float_to_half_one (color->alpha)
-        };
-        memcpy (data, pixels, 4 * sizeof (guint16));
-      }
-      break;
-    case GDK_MEMORY_R32G32B32_FLOAT:
-      {
-        float pixels[3] = {
-          color->red * color->alpha,
-          color->green * color->alpha,
-          color->blue * color->alpha
-        };
-        memcpy (data, pixels, 3 * sizeof (float));
-      }
-      break;
-    case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
-      {
-        float pixels[4] = {
-          color->red * color->alpha,
-          color->green * color->alpha,
-          color->blue * color->alpha,
-          color->alpha
-        };
-        memcpy (data, pixels, 4 * sizeof (float));
-      }
-      break;
-    case GDK_MEMORY_R32G32B32A32_FLOAT:
-      {
-        float pixels[4] = {
-          color->red,
-          color->green,
-          color->blue,
-          color->alpha
-        };
-        memcpy (data, pixels, 4 * sizeof (float));
-      }
-      break;
-    case GDK_MEMORY_G8A8_PREMULTIPLIED:
-      {
-        data[0] = CLAMP (color_gray (color) * color->alpha * 255.f + 0.5f, 0.f, 255.f);
-        data[1] = CLAMP (color->alpha * 255.f + 0.5f, 0.f, 255.f);
-      }
-      break;
-    case GDK_MEMORY_G8A8:
-      {
-        data[0] = CLAMP (color_gray (color) * 255.f + 0.5f, 0.f, 255.f);
-        data[1] = CLAMP (color->alpha * 255.f + 0.5f, 0.f, 255.f);
-      }
-      break;
-    case GDK_MEMORY_G8:
-      {
-        *data = CLAMP (color_gray (color) * color->alpha * 255.f + 0.5f, 0.f, 255.f);
-      }
-      break;
-    case GDK_MEMORY_G16A16_PREMULTIPLIED:
-      {
-        guint16 pixels[2] = {
-          CLAMP (color_gray (color) * color->alpha * 65535.f + 0.5f, 0.f, 65535.f),
-          CLAMP (color->alpha * 65535.f + 0.5f, 0.f, 65535.f),
-        };
-        memcpy (data, pixels, 2 * sizeof (guint16));
-      }
-      break;
-    case GDK_MEMORY_G16A16:
-      {
-        guint16 pixels[2] = {
-          CLAMP (color_gray (color) * 65535.f + 0.5f, 0.f, 65535.f),
-          CLAMP (color->alpha * 65535.f + 0.5f, 0.f, 65535.f),
-        };
-        memcpy (data, pixels, 2 * sizeof (guint16));
-      }
-      break;
-    case GDK_MEMORY_G16:
-      {
-        guint16 pixel = CLAMP (color_gray (color) * color->alpha * 65535.f + 0.5f, 0.f, 65535.f);
-        memcpy (data, &pixel,  sizeof (guint16));
-      }
-      break;
-    case GDK_MEMORY_A8:
-      {
-        *data = CLAMP (color->alpha * 255.f + 0.5f, 0.f, 255.f);
-      }
-      break;
-    case GDK_MEMORY_A16:
-      {
-        guint16 pixel = CLAMP (color->alpha * 65535.f, 0.f, 65535.f);
-        memcpy (data, &pixel,  sizeof (guint16));
-      }
-      break;
-    case GDK_MEMORY_A16_FLOAT:
-      {
-        guint16 pixel = float_to_half_one (color->alpha);
-        memcpy (data, &pixel, sizeof (guint16));
-      }
-      break;
-    case GDK_MEMORY_A32_FLOAT:
-      {
-        memcpy (data, &color->alpha, sizeof (float));
-      }
-      break;
-    case GDK_MEMORY_N_FORMATS:
-    default:
-      g_assert_not_reached ();
-      break;
-  }
+  for (ys = 0; ys < block_height; ys++)
+    {
+      for (xs = 0; xs < block_width; xs++)
+        {
+          data[4 * (ys * block_width + xs) + 0] = color->red;
+          data[4 * (ys * block_width + xs) + 1] = color->green;
+          data[4 * (ys * block_width + xs) + 2] = color->blue;
+          data[4 * (ys * block_width + xs) + 3] = color->alpha;
+        }
+    }
+  gdk_memory_layout_init (&data_layout, GDK_MEMORY_R32G32B32A32_FLOAT, block_width, block_height, 1);
+
+  for (ys = 0; ys < area->height; ys += block_height)
+    {
+      for (xs = 0; xs < area->width; xs += block_width)
+        {
+          GdkMemoryLayout sub;
+
+          gdk_memory_layout_init_sublayout (&sub,
+                                            &builder->layout,
+                                            &(cairo_rectangle_int_t) {
+                                                area->x + xs, area->y + ys,
+                                                block_width, block_height
+                                            });
+
+          gdk_memory_convert (builder->pixels,
+                              &sub,
+                              gdk_color_state_get_srgb (),
+                              (guchar *) data,
+                              &data_layout,
+                              gdk_color_state_get_srgb ());
+        }
+    }
 }
 
 void
 texture_builder_fill (TextureBuilder  *builder,
                       const GdkRGBA   *color)
 {
-  int x, y;
-  for (y = 0; y < builder->height; y++)
-    for (x = 0; x < builder->width; x++)
-      texture_builder_set_pixel (builder, x, y, color);
+  texture_builder_draw_color (builder,
+                              &(cairo_rectangle_int_t) {
+                                  0, 0,
+                                  builder->layout.width,
+                                  builder->layout.height
+                              },
+                              color);
+}
+
+void
+texture_builder_draw_data (TextureBuilder        *builder,
+                           gsize                  x,
+                           gsize                  y,
+                           const guchar          *data,
+                           const GdkMemoryLayout *layout)
+{
+  GdkMemoryLayout sub;
+
+  g_assert_cmpint (x + layout->width, <=, builder->layout.width);
+  g_assert_cmpint (y + layout->height, <=, builder->layout.height);
+  g_assert_true (gdk_memory_format_is_block_boundary (builder->layout.format, x, y));
+  g_assert_true (gdk_memory_format_is_block_boundary (builder->layout.format, layout->width, layout->height));
+
+  gdk_memory_layout_init_sublayout (&sub,
+                                    &builder->layout,
+                                    &(cairo_rectangle_int_t) {
+                                        x, y,
+                                        layout->width, layout->height
+                                    });
+
+  gdk_memory_convert (builder->pixels,
+                      &sub,
+                      gdk_color_state_get_srgb (),
+                      (guchar *) data,
+                      layout,
+                      gdk_color_state_get_srgb ());
 }
 
 void
