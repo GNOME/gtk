@@ -31,6 +31,21 @@
 
 
 static void
+save_to_node (GdkTexture *texture,
+              const char *output)
+{
+  GskRenderNode *node = gsk_texture_node_new (texture,
+                                              &GRAPHENE_RECT_INIT(
+                                                  0, 0,
+                                                  gdk_texture_get_width (texture),
+                                                  gdk_texture_get_height (texture)
+                                              ));
+  gsk_render_node_write_to_file (node, output, NULL);
+
+  gsk_render_node_unref (node);
+}
+
+static void
 save_image (const char      *filename,
             const char      *output,
             GdkMemoryFormat  format,
@@ -63,6 +78,8 @@ save_image (const char      *filename,
 
   if (g_str_has_suffix (output, ".tiff"))
     gdk_texture_save_to_tiff (texture, output);
+  else if (g_str_has_suffix (output, ".node"))
+    save_to_node (texture, output);
   else
     gdk_texture_save_to_png (texture, output);
 
