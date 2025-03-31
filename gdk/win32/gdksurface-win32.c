@@ -3345,12 +3345,6 @@ gdk_win32_toplevel_minimize (GdkToplevel *toplevel)
   return TRUE;
 }
 
-static gboolean
-gdk_win32_toplevel_lower (GdkToplevel *toplevel)
-{
-  return FALSE;
-}
-
 static void
 gdk_win32_toplevel_focus (GdkToplevel *toplevel,
                             guint32      timestamp)
@@ -3363,12 +3357,6 @@ gdk_win32_toplevel_show_window_menu (GdkToplevel *toplevel,
                                      GdkEvent    *event)
 {
   return gdk_win32_surface_show_window_menu (GDK_SURFACE (toplevel), event);
-}
-
-static gboolean
-gdk_win32_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
-{
-  return FALSE;
 }
 
 static void
@@ -3435,10 +3423,8 @@ gdk_win32_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_win32_toplevel_present;
   iface->minimize = gdk_win32_toplevel_minimize;
-  iface->lower = gdk_win32_toplevel_lower;
   iface->focus = gdk_win32_toplevel_focus;
   iface->show_window_menu = gdk_win32_toplevel_show_window_menu;
-  iface->supports_edge_constraints = gdk_win32_toplevel_supports_edge_constraints;
   iface->inhibit_system_shortcuts = gdk_win32_toplevel_inhibit_system_shortcuts;
   iface->restore_system_shortcuts = gdk_win32_toplevel_restore_system_shortcuts;
   iface->begin_resize = gdk_win32_toplevel_begin_resize;
