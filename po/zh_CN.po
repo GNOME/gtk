@@ -31,8 +31,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-05 11:48+0000\n"
-"PO-Revision-Date: 2025-03-05 19:52+0800\n"
+"POT-Creation-Date: 2025-03-31 03:18+0000\n"
+"PO-Revision-Date: 2025-03-31 18:26+0800\n"
 "Last-Translator: lumingzh <lumingzh@qq.com>\n"
 "Language-Team: Chinese (China) <i18n-zh@googlegroups.com>\n"
 "Language: zh_CN\n"
@@ -40,7 +40,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Gtranslator 47.1\n"
+"X-Generator: Gtranslator 48.0\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
 msgid "No compatible formats to transfer contents of content provider."
@@ -54,20 +54,20 @@ msgstr "无兼容格式可用于传输内容提供者的内容。"
 msgid "No compatible transfer format found"
 msgstr "未找到兼容传输格式"
 
-#: gdk/broadway/gdkbroadway-server.c:135
+#: gdk/broadway/gdkbroadway-server.c:131
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "不支持 broadway 显示类型：%s"
 
-#: gdk/gdkclipboard.c:231
+#: gdk/gdkclipboard.c:232
 msgid "This clipboard cannot store data."
 msgstr "剪贴板无法存放数据。"
 
-#: gdk/gdkclipboard.c:286 gdk/gdkclipboard.c:780 gdk/gdkclipboard.c:1071
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:781 gdk/gdkclipboard.c:1072
 msgid "Cannot read from empty clipboard."
 msgstr "无法读取空剪贴板。"
 
-#: gdk/gdkclipboard.c:317 gdk/gdkclipboard.c:1121 gdk/gdkdrag.c:606
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1122 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "无兼容格式可用于传输剪贴板内容。"
 
@@ -106,7 +106,7 @@ msgstr "无法以 %s 提供内容"
 msgid "The current backend does not support OpenGL"
 msgstr "当前后端不支持 OpenGL"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1696
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1715
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "已通过 GDK_DISABLE 禁用 Vulkan 支持"
 
@@ -169,9 +169,9 @@ msgstr "无兼容格式可用于传输内容。"
 msgid "No GL API allowed."
 msgstr "无允许的 GL API。"
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:745
-#: gdk/win32/gdkglcontext-win32-wgl.c:888
-#: gdk/win32/gdkglcontext-win32-wgl.c:932 gdk/x11/gdkglcontext-glx.c:699
+#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
+#: gdk/win32/gdkglcontext-win32-wgl.c:889
+#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
 msgid "Unable to create a GL context"
 msgstr "无法创建 GL 上下文"
 
@@ -752,21 +752,21 @@ msgstr "IDataObject_GetData (0x%x) 失败，返回码 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "无法将拖放数据的 W32 格式 0x%x 转换为 %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:667
+#: gdk/win32/gdkglcontext-win32-wgl.c:668
 msgid "No GL implementation is available"
 msgstr "没有可用的 GL 实现"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:754
+#: gdk/win32/gdkglcontext-win32-wgl.c:755
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "EGL %d.%d 版太旧。需要至少 %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:772
+#: gdk/win32/gdkglcontext-win32-wgl.c:773
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL 实现无法分享 GL 上下文"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1052
+#: gdk/win32/gdkglcontext-win32-wgl.c:1053
 msgid "No available configurations for the given pixel format"
 msgstr "指定的像素格式没有可用的设置"
 
@@ -2222,12 +2222,12 @@ msgid "_Edit"
 msgstr "编辑(_E)"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5902 gtk/gtktext.c:6322
-#: gtk/gtktextview.c:9327
+#: gtk/gtktextview.c:9320
 msgid "_Copy"
 msgstr "复制(_C)"
 
 #: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5962 gtk/gtktext.c:2877
-#: gtk/gtktextview.c:9405
+#: gtk/gtktextview.c:9398
 msgid "Context menu"
 msgstr "右键菜单"
 
@@ -2306,7 +2306,7 @@ msgstr "同名文件已存在"
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6333 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6345 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2399,7 +2399,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "如果您删除一个项目，它将永久丢失。"
 
 #: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:1816
-#: gtk/gtklabel.c:5904 gtk/gtktext.c:6330 gtk/gtktextview.c:9335
+#: gtk/gtklabel.c:5904 gtk/gtktext.c:6330 gtk/gtktextview.c:9328
 msgid "_Delete"
 msgstr "删除(_D)"
 
@@ -2750,15 +2750,15 @@ msgstr "关闭"
 msgid "Close the infobar"
 msgstr "关闭信息栏"
 
-#: gtk/gtklabel.c:5901 gtk/gtktext.c:6318 gtk/gtktextview.c:9323
+#: gtk/gtklabel.c:5901 gtk/gtktext.c:6318 gtk/gtktextview.c:9316
 msgid "Cu_t"
 msgstr "剪切(_T)"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6326 gtk/gtktextview.c:9331
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6326 gtk/gtktextview.c:9324
 msgid "_Paste"
 msgstr "粘贴(_P)"
 
-#: gtk/gtklabel.c:5909 gtk/gtktext.c:6339 gtk/gtktextview.c:9356
+#: gtk/gtklabel.c:5909 gtk/gtktext.c:6339 gtk/gtktextview.c:9349
 msgid "Select _All"
 msgstr "全选(_A)"
 
@@ -2837,7 +2837,7 @@ msgid "Play"
 msgstr "播放"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6334
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6346
 msgid "_OK"
 msgstr "确定(_O)"
 
@@ -3459,7 +3459,7 @@ msgstr "缺纸"
 
 #. Translators: this is a printer status.
 #: gtk/print/gtkprintoperation-win32.c:630
-#: modules/printbackends/gtkprintbackendcpdb.c:1522
+#: modules/printbackends/gtkprintbackendcpdb.c:1521
 #: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused"
 msgstr "已暂停"
@@ -3712,7 +3712,7 @@ msgstr "侧边栏"
 msgid "Change di_rection"
 msgstr "更改方向(_R)"
 
-#: gtk/gtktext.c:6349 gtk/gtktextview.c:9361
+#: gtk/gtktext.c:6349 gtk/gtktextview.c:9354
 msgid "Insert _Emoji"
 msgstr "插入表情符号(_E)"
 
@@ -3872,21 +3872,21 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS 经典"
 
-#: gtk/gtktextview.c:9343
+#: gtk/gtktextview.c:9336
 msgid "_Undo"
 msgstr "撤消(_U)"
 
-#: gtk/gtktextview.c:9347
+#: gtk/gtktextview.c:9340
 msgid "_Redo"
 msgstr "重做(_R)"
 
 # Chrome 那个叫检查元素，这个叫检查器也没什么问题吧。
-#: gtk/gtkwindow.c:6322
+#: gtk/gtkwindow.c:6334
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "您是否要使用 GTK 检查器？"
 
-#: gtk/gtkwindow.c:6324
+#: gtk/gtkwindow.c:6336
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3896,7 +3896,7 @@ msgstr ""
 "GTK 检查器是一个交互式的调试器，让您可以探索并修改任何 GTK 应用程序的内部构"
 "造。使用它可能造成应用程序损坏或崩溃。"
 
-#: gtk/gtkwindow.c:6329
+#: gtk/gtkwindow.c:6341
 msgid "Don’t show this message again"
 msgstr "不要再显示此消息"
 
@@ -4077,21 +4077,21 @@ msgstr "样式类别"
 msgid "CSS Property"
 msgstr "CSS 属性"
 
-#: gtk/inspector/general.c:446
+#: gtk/inspector/general.c:447
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "输入法上下文由 GTK_IM_MODULE 硬编码"
 
-#: gtk/inspector/general.c:577
+#: gtk/inspector/general.c:622
 msgctxt "GL renderer"
 msgid "None"
 msgstr "无"
 
-#: gtk/inspector/general.c:674
+#: gtk/inspector/general.c:719
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/inspector/general.c:928 gtk/inspector/general.c:967
+#: gtk/inspector/general.c:973 gtk/inspector/general.c:1012
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "无"
@@ -4124,99 +4124,103 @@ msgstr "媒体后端"
 msgid "Input Method"
 msgstr "输入法"
 
-#: gtk/inspector/general.ui:212
+#: gtk/inspector/general.ui:201
+msgid "Accessibility Backend"
+msgstr "无障碍后端"
+
+#: gtk/inspector/general.ui:238
 msgid "Application ID"
 msgstr "应用程序 ID"
 
-#: gtk/inspector/general.ui:238
+#: gtk/inspector/general.ui:264
 msgid "Resource Path"
 msgstr "资源路径"
 
-#: gtk/inspector/general.ui:275 gtk/ui/gtkplacesview.ui:63
+#: gtk/inspector/general.ui:301 gtk/ui/gtkplacesview.ui:63
 msgid "Prefix"
 msgstr "前缀"
 
-#: gtk/inspector/general.ui:302
+#: gtk/inspector/general.ui:328
 msgid "Environment"
 msgstr "环境"
 
-#: gtk/inspector/general.ui:405
+#: gtk/inspector/general.ui:431
 msgid "Display"
 msgstr "显示"
 
-#: gtk/inspector/general.ui:432
+#: gtk/inspector/general.ui:458
 msgid "RGBA Visual"
 msgstr "RGBA 视觉"
 
-#: gtk/inspector/general.ui:458
+#: gtk/inspector/general.ui:484
 msgid "Composited"
 msgstr "混成"
 
-#: gtk/inspector/general.ui:483
+#: gtk/inspector/general.ui:509
 msgid "Protocols"
 msgstr "协议"
 
-#: gtk/inspector/general.ui:539
+#: gtk/inspector/general.ui:565
 msgid "GL Renderer"
 msgstr "GL 渲染器"
 
-#: gtk/inspector/general.ui:568
+#: gtk/inspector/general.ui:594
 msgid "GL Vendor"
 msgstr "GL 供应商"
 
-#: gtk/inspector/general.ui:597
+#: gtk/inspector/general.ui:623
 msgid "GL Version"
 msgstr "GL 版本"
 
-#: gtk/inspector/general.ui:624
+#: gtk/inspector/general.ui:650
 msgid "GL Backend Vendor"
 msgstr "GL 后端厂商"
 
-#: gtk/inspector/general.ui:651
+#: gtk/inspector/general.ui:677
 msgid "GL Backend Version"
 msgstr "GL 后端版本"
 
-#: gtk/inspector/general.ui:701
+#: gtk/inspector/general.ui:727
 msgid "GL Full Version"
 msgstr "GL 完整版本"
 
-#: gtk/inspector/general.ui:730
+#: gtk/inspector/general.ui:756
 msgid "GLSL Version"
 msgstr "GLSL 版本"
 
-#: gtk/inspector/general.ui:759
+#: gtk/inspector/general.ui:785
 msgid "GL Extensions"
 msgstr "GL 扩展"
 
-#: gtk/inspector/general.ui:847
+#: gtk/inspector/general.ui:873
 msgid "EGL Extensions"
 msgstr "EGL 扩展"
 
-#: gtk/inspector/general.ui:934
+#: gtk/inspector/general.ui:960
 msgid "GL Features"
 msgstr "GL 特性"
 
-#: gtk/inspector/general.ui:970
+#: gtk/inspector/general.ui:996
 msgid "Vulkan Device"
 msgstr "Vulkan 设备"
 
-#: gtk/inspector/general.ui:997
+#: gtk/inspector/general.ui:1023
 msgid "Vulkan API Version"
 msgstr "Vulkan API 版本"
 
-#: gtk/inspector/general.ui:1024
+#: gtk/inspector/general.ui:1050
 msgid "Vulkan Driver Version"
 msgstr "Vulkan 驱动版本"
 
-#: gtk/inspector/general.ui:1073
+#: gtk/inspector/general.ui:1099
 msgid "Vulkan Layers"
 msgstr "Vulkan 层"
 
-#: gtk/inspector/general.ui:1142
+#: gtk/inspector/general.ui:1168
 msgid "Vulkan Extensions"
 msgstr "Vulkan 扩展"
 
-#: gtk/inspector/general.ui:1229
+#: gtk/inspector/general.ui:1255
 msgid "Vulkan Features"
 msgstr "Vulkan 特性"
 
@@ -4281,8 +4285,8 @@ msgid "Surface"
 msgstr "表面"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1153
-#: gtk/inspector/prop-editor.c:1536 gtk/inspector/window.ui:394
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1199
+#: gtk/inspector/prop-editor.c:1594 gtk/inspector/window.ui:394
 msgid "Properties"
 msgstr "属性"
 
@@ -4330,7 +4334,7 @@ msgstr "是顶端层级"
 msgid "Child Visible"
 msgstr "子项可见性"
 
-#: gtk/inspector/prop-editor.c:702
+#: gtk/inspector/prop-editor.c:748
 #, c-format
 msgid "Pointer: %p"
 msgstr "指针：%p"
@@ -4338,7 +4342,7 @@ msgstr "指针：%p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:827
+#: gtk/inspector/prop-editor.c:873
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s 具有值“%s”"
@@ -4346,7 +4350,7 @@ msgstr "%s 具有值“%s”"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:838
+#: gtk/inspector/prop-editor.c:884
 #, c-format
 msgid "%s with type %s"
 msgstr "%s 具有类型 %s"
@@ -4354,7 +4358,7 @@ msgstr "%s 具有类型 %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:851
+#: gtk/inspector/prop-editor.c:897
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s 对于 %s %p"
@@ -4362,71 +4366,71 @@ msgstr "%s 对于 %s %p"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:881
+#: gtk/inspector/prop-editor.c:927
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s 具有值类型 %s"
 
-#: gtk/inspector/prop-editor.c:1230
+#: gtk/inspector/prop-editor.c:1288
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "不可编辑的属性类型：%s"
 
-#: gtk/inspector/prop-editor.c:1388
+#: gtk/inspector/prop-editor.c:1446
 msgctxt "column number"
 msgid "None"
 msgstr "无"
 
-#: gtk/inspector/prop-editor.c:1425
+#: gtk/inspector/prop-editor.c:1483
 msgid "Attribute:"
 msgstr "属性："
 
-#: gtk/inspector/prop-editor.c:1428
+#: gtk/inspector/prop-editor.c:1486
 msgid "Model"
 msgstr "型号"
 
-#: gtk/inspector/prop-editor.c:1433
+#: gtk/inspector/prop-editor.c:1491
 msgid "Column:"
 msgstr "列："
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1532
+#: gtk/inspector/prop-editor.c:1590
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "动作来源：%p (%s)"
 
-#: gtk/inspector/prop-editor.c:1587
+#: gtk/inspector/prop-editor.c:1645
 msgid "Reset"
 msgstr "重置"
 
-#: gtk/inspector/prop-editor.c:1595
+#: gtk/inspector/prop-editor.c:1653
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "默认"
 
-#: gtk/inspector/prop-editor.c:1598
+#: gtk/inspector/prop-editor.c:1656
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "主题"
 
-#: gtk/inspector/prop-editor.c:1601
+#: gtk/inspector/prop-editor.c:1659
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "XSettings"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1663
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "应用程序"
 
-#: gtk/inspector/prop-editor.c:1608
+#: gtk/inspector/prop-editor.c:1666
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "未知"
 
-#: gtk/inspector/prop-editor.c:1611
+#: gtk/inspector/prop-editor.c:1669
 msgid "Source:"
 msgstr "来源："
 
@@ -4434,7 +4438,7 @@ msgstr "来源："
 msgid "Defined At"
 msgstr "定义于"
 
-#: gtk/inspector/recorder.c:2055
+#: gtk/inspector/recorder.c:2059
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "无法保存 RenderNode"
@@ -4447,25 +4451,13 @@ msgstr "记录选项"
 msgid "Record events"
 msgstr "记录事件"
 
-#: gtk/inspector/recorder.ui:25
-msgid "record.record-events"
-msgstr "record.record-events"
-
 #: gtk/inspector/recorder.ui:28
 msgid "Add debug nodes"
 msgstr "添加调试节点"
 
-#: gtk/inspector/recorder.ui:29
-msgid "record.debug-nodes"
-msgstr "record.debug-nodes"
-
 #: gtk/inspector/recorder.ui:32
 msgid "Highlight event sequences"
 msgstr "高亮事件序列"
-
-#: gtk/inspector/recorder.ui:33
-msgid "record.highlight-sequences"
-msgstr "record.highlight-sequences"
 
 #: gtk/inspector/recorder.ui:42
 msgid "Record frames"
@@ -6956,13 +6948,13 @@ msgid "Borderless"
 msgstr "无边框"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1519
+#: modules/printbackends/gtkprintbackendcpdb.c:1518
 #: modules/printbackends/gtkprintbackendcups.c:2636
 msgid "Paused; Rejecting Jobs"
 msgstr "暂停，拒绝任务"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1525
+#: modules/printbackends/gtkprintbackendcpdb.c:1524
 #: modules/printbackends/gtkprintbackendcups.c:2642
 msgid "Rejecting Jobs"
 msgstr "拒绝任务"
@@ -8601,6 +8593,15 @@ msgid ""
 msgstr ""
 "“%s”中没有主题索引文件。\n"
 "如果您确实想要在此创建图标缓存，请使用 --ignore-theme-index 参数。\n"
+
+#~ msgid "record.record-events"
+#~ msgstr "record.record-events"
+
+#~ msgid "record.debug-nodes"
+#~ msgstr "record.debug-nodes"
+
+#~ msgid "record.highlight-sequences"
+#~ msgstr "record.highlight-sequences"
 
 #, c-format
 #~ msgid ""
