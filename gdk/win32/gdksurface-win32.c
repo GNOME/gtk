@@ -3032,10 +3032,6 @@ gdk_win32_popup_get_property (GObject    *object,
       g_value_set_boolean (value, surface->autohide);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
-      g_value_set_boolean (value, surface->shortcuts_inhibited);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3060,9 +3056,6 @@ gdk_win32_popup_set_property (GObject      *object,
 
     case LAST_PROP + GDK_POPUP_PROP_AUTOHIDE:
       surface->autohide = g_value_get_boolean (value);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
       break;
 
     default:
