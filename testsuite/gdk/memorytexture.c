@@ -2,7 +2,9 @@
 
 #include <gtk/gtk.h>
 
+#include "gdk/gdktexturedownloaderprivate.h"
 #include "gdk/gdkmemoryformatprivate.h"
+#include "gdk/gdkmemorytextureprivate.h"
 #include "gsk/gl/fp16private.h"
 #include "testsuite/gdk/gdktestutils.h"
 
@@ -347,21 +349,20 @@ ensure_texture_format (GdkTexture      *texture,
   GdkTextureDownloader *downloader;
   GdkTexture *result;
   GBytes *bytes;
-  gsize stride;
+  GdkMemoryLayout layout;
 
   if (gdk_texture_get_format (texture) == format)
     return texture;
 
   downloader = gdk_texture_downloader_new (texture);
   gdk_texture_downloader_set_format (downloader, format);
-  bytes = gdk_texture_downloader_download_bytes (downloader, &stride);
+  bytes = gdk_texture_downloader_download_bytes_layout (downloader, &layout);
   gdk_texture_downloader_free (downloader);
 
-  result = gdk_memory_texture_new (gdk_texture_get_width (texture),
-                                   gdk_texture_get_height (texture),
-                                   format,
-                                   bytes,
-                                   stride);
+  result = gdk_memory_texture_new_from_layout (bytes,
+                                               &layout,
+                                               gdk_texture_get_color_state (texture),
+                                               NULL, NULL);
   g_bytes_unref (bytes);
   g_object_unref (texture);
 
@@ -460,6 +461,12 @@ should_skip_download_test (GdkMemoryFormat format,
   }
 }
 
+static inline gsize
+round_up (gsize number, gsize divisor)
+{
+  return (number + divisor - 1) / divisor * divisor;
+}
+
 static void
 test_download (gconstpointer data,
                unsigned int  width,
@@ -475,6 +482,9 @@ test_download (gconstpointer data,
 
   if (should_skip_download_test (format, method))
     return;
+
+  width = round_up (width, gdk_memory_format_get_block_width (format));
+  height = round_up (height, gdk_memory_format_get_block_height (format));
 
   for (i = 0; i < n_runs; i++)
     {
@@ -533,9 +543,14 @@ test_conversion (gconstpointer data,
   GdkTexture *test1, *test2;
   GdkRGBA color1, color2;
   gboolean accurate;
-  gsize i;
+  gsize i, block_width, block_height;
 
   decode_two_formats (data, &format1, &format2);
+
+  block_width = MAX (gdk_memory_format_get_block_width (format1),
+                     gdk_memory_format_get_block_width (format2));
+  block_height = MAX (gdk_memory_format_get_block_height (format1),
+                     gdk_memory_format_get_block_height (format2));
 
   if (gdk_memory_format_get_channel_type (format1) == CHANNEL_FLOAT_16)
     accurate = FALSE;
@@ -576,8 +591,8 @@ test_conversion (gconstpointer data,
             color_make_white (&color2, &color2);
         }
 
-      test1 = create_texture (format1, TEXTURE_METHOD_LOCAL, 1, 1, &color1);
-      test2 = create_texture (format2, TEXTURE_METHOD_LOCAL, 1, 1, &color2);
+      test1 = create_texture (format1, TEXTURE_METHOD_LOCAL, block_width, block_height, &color1);
+      test2 = create_texture (format2, TEXTURE_METHOD_LOCAL, block_width, block_height, &color2);
 
       /* Convert the first one to the format of the 2nd */
       test1 = ensure_texture_format (test1, format2);
