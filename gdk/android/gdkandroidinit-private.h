@@ -67,6 +67,7 @@ typedef struct
     jmethodID start_dnd;
     jmethodID update_dnd;
     jmethodID cancel_dnd;
+    jmethodID set_active_im_context;
     jmethodID reposition;
     jmethodID drop;
   } surface;
@@ -504,8 +505,11 @@ JNIEnv *gdk_android_get_env (void);
 GdkAndroidThreadGuard gdk_android_get_thread_env (void);
 void gdk_android_drop_thread_env (GdkAndroidThreadGuard *self);
 
-jobject *gdk_android_get_activity        (void);
-void     gdk_android_set_latest_activity (JNIEnv *env, jobject activity);
+jobject gdk_android_get_activity        (void);
+void    gdk_android_set_latest_activity (JNIEnv *env, jobject activity);
+
+jobject gdk_android_init_get_user_classloader (void);
+jclass gdk_android_init_find_class_using_classloader (JNIEnv *env, jobject class_loader, const gchar *klass);
 
 const GdkAndroidJavaCache *gdk_android_get_java_cache (void);
 

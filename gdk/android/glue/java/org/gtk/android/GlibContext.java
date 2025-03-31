@@ -21,21 +21,16 @@ package org.gtk.android;
 
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
 import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.RetentionPolicy.CLASS;
 
 import androidx.annotation.UiThread;
 
-import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
 public final class GlibContext {
-	@Retention(CLASS)
-	@Target({METHOD, CONSTRUCTOR, TYPE, PARAMETER})
+	@Target({METHOD, CONSTRUCTOR})
 	public @interface GtkThread {}
 
 	private GlibContext() {}

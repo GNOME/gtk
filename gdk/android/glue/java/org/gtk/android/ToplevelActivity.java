@@ -32,6 +32,7 @@ import android.graphics.RectF;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.DragEvent;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -43,6 +44,9 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -75,6 +79,8 @@ public class ToplevelActivity extends Activity {
 			private long surfaceIdentifier = 0;
 
 			private RectF[] inputRegion = null;
+
+			private ImContext activeImContext = null;
 
 			@GlibContext.GtkThread
 			private native void bindNative(long identifier) throws UnregisteredSurfaceException;
@@ -130,12 +136,13 @@ public class ToplevelActivity extends Activity {
 					boolean imeKeyboardState = queuedImeKeyboardState > 0;
 					queuedImeKeyboardState = 0;
 					runOnUiThread(() -> {
-						if (imeKeyboardState)
+						if (imeKeyboardState) {
+							requestFocus();
 							getWindowInsetsController().show(WindowInsets.Type.ime());
-						else
+						 } else {
 							getWindowInsetsController().hide(WindowInsets.Type.ime());
+						 }
 					});
-
 				});
 			}
 
@@ -170,6 +177,14 @@ public class ToplevelActivity extends Activity {
 			}
 			public void cancelDND() {
 				runOnUiThread(() -> cancelDragAndDrop());
+			}
+
+			public void setActiveImContext(ImContext context) {
+				if (activeImContext == context)
+					return;
+				activeImContext = context;
+				InputMethodManager imm = getSystemService(InputMethodManager.class);
+				imm.restartInput(this);
 			}
 
 			public void reposition(int x, int y, int width, int height) {
@@ -239,6 +254,21 @@ public class ToplevelActivity extends Activity {
 			@Override
 			public boolean onDragEvent(DragEvent event) {
 				return GlibContext.blockForMain(() -> notifyDragEvent(event));
+			}
+
+			@Override
+			public boolean onCheckIsTextEditor() {
+				return this.activeImContext != null;
+			}
+			@Override
+			public InputConnection onCreateInputConnection(EditorInfo outAttrs) {
+				if (activeImContext == null)
+					return null;
+				outAttrs.contentMimeTypes = new String[] { "text/plain" };
+				//outAttrs.inputType = GlibContext.blockForMain(() -> activeImContext.getInputType());
+				outAttrs.inputType = InputType.TYPE_NULL;
+				outAttrs.imeOptions = EditorInfo.IME_FLAG_NO_FULLSCREEN;
+				return activeImContext.new ImeConnection(this);
 			}
 
 			@Override
