@@ -58,6 +58,7 @@ static void gdk_wayland_toplevel_sync_parent_of_imported (GdkWaylandToplevel *to
 static void gdk_wayland_surface_create_xdg_toplevel      (GdkWaylandToplevel *toplevel);
 static void gdk_wayland_toplevel_sync_title              (GdkWaylandToplevel *toplevel);
 static void unset_transient_for_exported                 (GdkWaylandToplevel *toplevel);
+static gboolean gdk_wayland_toplevel_supports_titlebar_gestures (GdkWaylandToplevel *wayland_toplevel);
 
 /* {{{ GdkWaylandToplevel definition */
 
@@ -141,6 +142,8 @@ struct _GdkWaylandToplevel
   int bounds_height;
   gboolean has_bounds;
 
+  GdkToplevelCapabilities capabilities;;
+
   char *title;
   gboolean decorated;
 
@@ -202,6 +205,29 @@ gdk_wayland_toplevel_clear_saved_size (GdkWaylandToplevel *toplevel)
 
   toplevel->saved_width = -1;
   toplevel->saved_height = -1;
+}
+
+static void
+gdk_wayland_toplevel_init_capabilities (GdkWaylandToplevel *toplevel)
+{
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (toplevel));
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  toplevel->capabilities = GDK_TOPLEVEL_CAPABILITIES_EDGE_CONSTRAINTS;
+
+  if (display_wayland->keyboard_shortcuts_inhibit)
+    toplevel->capabilities |= GDK_TOPLEVEL_CAPABILITIES_INHIBIT_SHORTCUTS;
+
+  if (gdk_wayland_toplevel_supports_titlebar_gestures (toplevel))
+    toplevel->capabilities |= GDK_TOPLEVEL_CAPABILITIES_TITLEBAR_GESTURES;
+
+  GDK_DISPLAY_DEBUG (display, MISC,
+                     "toplevel capabilities, surface %p%s%s%s", toplevel,
+                     (toplevel->capabilities & GDK_TOPLEVEL_CAPABILITIES_EDGE_CONSTRAINTS) ? "edge-constraints" : "",
+                     (toplevel->capabilities & GDK_TOPLEVEL_CAPABILITIES_INHIBIT_SHORTCUTS) ? " inhibit-shortcuts" : "",
+                     (toplevel->capabilities & GDK_TOPLEVEL_CAPABILITIES_TITLEBAR_GESTURES) ? " titlebar-gestures" : "");
+
+  /* wm capabilities get set from events */
 }
 
 /* }}} */
@@ -732,6 +758,42 @@ xdg_toplevel_wm_capabilities (void                *data,
                               struct xdg_toplevel *xdg_toplevel,
                               struct wl_array     *capabilities)
 {
+  GdkSurface *surface = GDK_SURFACE (data);
+  GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
+  uint32_t *c;
+
+  toplevel->capabilities &= ~(GDK_TOPLEVEL_CAPABILITIES_WINDOW_MENU |
+                              GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE |
+                              GDK_TOPLEVEL_CAPABILITIES_FULLSCREEN |
+                              GDK_TOPLEVEL_CAPABILITIES_MINIMIZE);
+
+  wl_array_for_each (c, capabilities)
+    switch (*c)
+      {
+      case XDG_TOPLEVEL_WM_CAPABILITIES_WINDOW_MENU:
+        toplevel->capabilities |= GDK_TOPLEVEL_CAPABILITIES_WINDOW_MENU;
+        break;
+      case XDG_TOPLEVEL_WM_CAPABILITIES_MAXIMIZE:
+        toplevel->capabilities |= GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE;
+        break;
+      case XDG_TOPLEVEL_WM_CAPABILITIES_FULLSCREEN:
+        toplevel->capabilities |= GDK_TOPLEVEL_CAPABILITIES_FULLSCREEN;
+        break;
+      case XDG_TOPLEVEL_WM_CAPABILITIES_MINIMIZE:
+        toplevel->capabilities |= GDK_TOPLEVEL_CAPABILITIES_MINIMIZE;
+        break;
+      default:
+        g_assert_not_reached ();
+      }
+
+  GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), EVENTS,
+                     "wm capabilities, surface %p%s%s%s%s", surface,
+                     (toplevel->capabilities & GDK_TOPLEVEL_CAPABILITIES_WINDOW_MENU) ? "window-menu" : "",
+                     (toplevel->capabilities & GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE) ? " maximize" : "",
+                     (toplevel->capabilities & GDK_TOPLEVEL_CAPABILITIES_FULLSCREEN) ? " fullscreen" : "",
+                     (toplevel->capabilities & GDK_TOPLEVEL_CAPABILITIES_MINIMIZE) ? " minimize" : "");
+
+  g_object_notify (G_OBJECT (toplevel), "capabilities");
 }
 
 static const struct xdg_toplevel_listener xdg_toplevel_listener = {
@@ -1258,7 +1320,7 @@ gdk_wayland_toplevel_set_transient_for (GdkWaylandToplevel *toplevel,
 
 #define LAST_PROP 1
 
-static void 
+static void
 gdk_wayland_toplevel_set_decorated (GdkWaylandToplevel *self,
                                     gboolean            decorated)
 {
@@ -1389,6 +1451,10 @@ gdk_wayland_toplevel_get_property (GObject    *object,
       g_value_set_boolean (value, surface->shortcuts_inhibited);
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_CAPABILITIES:
+      g_value_set_flags (value, toplevel->capabilities);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1430,6 +1496,8 @@ gdk_wayland_toplevel_constructed (GObject *object)
   frame_clock = _gdk_frame_clock_idle_new ();
   gdk_surface_set_frame_clock (surface, frame_clock);
   g_object_unref (frame_clock);
+
+  gdk_wayland_toplevel_init_capabilities (GDK_WAYLAND_TOPLEVEL (surface));
 
   display_wayland->toplevels = g_list_prepend (display_wayland->toplevels, object);
 
@@ -1739,12 +1807,6 @@ gdk_wayland_toplevel_present (GdkToplevel       *toplevel,
       wayland_surface->next_layout.surface_geometry_dirty = TRUE;
       gdk_surface_request_layout (surface);
     }
-}
-
-static gboolean
-gdk_wayland_toplevel_lower (GdkToplevel *toplevel)
-{
-  return FALSE;
 }
 
 static void
@@ -2068,21 +2130,29 @@ translate_gesture (GdkTitlebarGesture         gesture,
 }
 
 static gboolean
+gdk_wayland_toplevel_supports_titlebar_gestures (GdkWaylandToplevel *wayland_toplevel)
+{
+  if (!wayland_toplevel->display_server.gtk_surface)
+    return FALSE;
+
+  if (gtk_surface1_get_version (wayland_toplevel->display_server.gtk_surface) < GTK_SURFACE1_TITLEBAR_GESTURE_SINCE_VERSION)
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
 gdk_wayland_toplevel_titlebar_gesture (GdkToplevel        *toplevel,
                                        GdkTitlebarGesture  gesture)
 {
   GdkSurface *surface = GDK_SURFACE (toplevel);
   GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
-  struct gtk_surface1 *gtk_surface = wayland_toplevel->display_server.gtk_surface;
   enum gtk_surface1_gesture gtk_gesture;
   GdkSeat *seat;
   struct wl_seat *wl_seat;
   uint32_t serial;
 
-  if (!gtk_surface)
-    return FALSE;
-
-  if (gtk_surface1_get_version (gtk_surface) < GTK_SURFACE1_TITLEBAR_GESTURE_SINCE_VERSION)
+  if (!gdk_wayland_toplevel_supports_titlebar_gestures (wayland_toplevel))
     return FALSE;
 
   if (!translate_gesture (gesture, &gtk_gesture))
@@ -2336,7 +2406,6 @@ gdk_wayland_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_wayland_toplevel_present;
   iface->minimize = gdk_wayland_toplevel_minimize;
-  iface->lower = gdk_wayland_toplevel_lower;
   iface->focus = gdk_wayland_toplevel_focus;
   iface->show_window_menu = gdk_wayland_toplevel_show_window_menu;
   iface->titlebar_gesture = gdk_wayland_toplevel_titlebar_gesture;

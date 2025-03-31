@@ -226,5 +226,96 @@ GDK_AVAILABLE_IN_4_4
 gboolean      gdk_toplevel_titlebar_gesture          (GdkToplevel        *toplevel,
                                                       GdkTitlebarGesture  gesture);
 
+/**
+ * GdkToplevelCapabilities:
+ *
+ * Reflects what features a `GdkToplevel` supports.
+ *
+ * Since: 4.20
+ */
+
+/**
+ * GDK_TOPLEVEL_CAPABILITIES_EDGE_CONSTRAINTS:
+ *
+ * Whether tiled window states are supported.
+ *
+ * Since: 4.20
+ */
+
+/**
+ * GDK_TOPLEVEL_CAPABILITIES_INHIBIT_SHORTCUTS:
+ *
+ * Whether inhibiting system shortcuts is supported.
+ * See [method@Gdk.Toplevel.inhibit_system_shortcuts].
+ *
+ * Since: 4.20
+ */
+
+/**
+ * GDK_TOPLEVEL_CAPABILITIES_TITLEBAR_GESTURES:
+ *
+ * Whether titlebar gestures are supported.
+ * See [method@Gdk.Toplevel.titlebar_gesture].
+ *
+ * Since: 4.20
+ */
+
+/**
+ * GDK_TOPLEVEL_CAPABILITIES_WINDOW_MENU:
+ *
+ * Whether showing the window menu is supported.
+ * See [method@Gdk.Toplevel.show_window_menu].
+ *
+ * Since: 4.20
+ */
+
+/**
+ * GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE:
+ *
+ * Whether the toplevel can be maximized.
+ *
+ * Since: 4.20
+ */
+
+/**
+ * GDK_TOPLEVEL_CAPABILITIES_FULLSCREEN:
+ *
+ * Whether the toplevel can be made fullscreen.
+ *
+ * Since: 4.20
+ */
+
+/**
+ * GDK_TOPLEVEL_CAPABILITIES_MINIMIZE:
+ *
+ * Whether the toplevel can be minimized.
+ * See [method@Gdk.Toplevel.minimize].
+ *
+ * Since: 4.20
+ */
+
+/**
+ * GDK_TOPLEVEL_CAPABILITIES_LOWER:
+ *
+ * Whether the toplevel can be lowered.
+ * See [method@Gdk.Toplevel.lower].
+ *
+ * Since: 4.20
+ */
+typedef enum
+{
+  GDK_TOPLEVEL_CAPABILITIES_EDGE_CONSTRAINTS  = 1 << 0,
+  GDK_TOPLEVEL_CAPABILITIES_INHIBIT_SHORTCUTS = 1 << 1,
+  GDK_TOPLEVEL_CAPABILITIES_TITLEBAR_GESTURES = 1 << 2,
+  GDK_TOPLEVEL_CAPABILITIES_WINDOW_MENU       = 1 << 3,
+  GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE          = 1 << 4,
+  GDK_TOPLEVEL_CAPABILITIES_FULLSCREEN        = 1 << 5,
+  GDK_TOPLEVEL_CAPABILITIES_MINIMIZE          = 1 << 6,
+  GDK_TOPLEVEL_CAPABILITIES_LOWER             = 1 << 7,
+} GdkToplevelCapabilities;
+
+GDK_AVAILABLE_IN_4_20
+GdkToplevelCapabilities gdk_toplevel_get_capabilities (GdkToplevel *toplevel);
+
 G_END_DECLS
 

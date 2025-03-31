@@ -3032,10 +3032,6 @@ gdk_win32_popup_get_property (GObject    *object,
       g_value_set_boolean (value, surface->autohide);
       break;
 
-    case LAST_PROP + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
-      g_value_set_boolean (value, surface->shortcuts_inhibited);
-      break;
-
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3060,9 +3056,6 @@ gdk_win32_popup_set_property (GObject      *object,
 
     case LAST_PROP + GDK_POPUP_PROP_AUTOHIDE:
       surface->autohide = g_value_get_boolean (value);
-      break;
-
-    case LAST_PROP + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
       break;
 
     default:
@@ -3259,6 +3252,14 @@ gdk_win32_toplevel_get_property (GObject    *object,
       g_value_set_boolean (value, surface->shortcuts_inhibited);
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_CAPABILITIES:
+      g_value_set_boolean (value, GDK_TOPLEVEL_CAPABILITIES_INHIBIT_SHORTCUTS |
+                                  GDK_TOPLEVEL_CAPABILITIES_WINDOW_MENU |
+                                  GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE |
+                                  GDK_TOPLEVEL_CAPABILITIES_FULLSCREEN |
+                                  GDK_TOPLEVEL_CAPABILITIES_MINIMIZE);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -3345,12 +3346,6 @@ gdk_win32_toplevel_minimize (GdkToplevel *toplevel)
   return TRUE;
 }
 
-static gboolean
-gdk_win32_toplevel_lower (GdkToplevel *toplevel)
-{
-  return FALSE;
-}
-
 static void
 gdk_win32_toplevel_focus (GdkToplevel *toplevel,
                             guint32      timestamp)
@@ -3363,12 +3358,6 @@ gdk_win32_toplevel_show_window_menu (GdkToplevel *toplevel,
                                      GdkEvent    *event)
 {
   return gdk_win32_surface_show_window_menu (GDK_SURFACE (toplevel), event);
-}
-
-static gboolean
-gdk_win32_toplevel_supports_edge_constraints (GdkToplevel *toplevel)
-{
-  return FALSE;
 }
 
 static void
@@ -3435,10 +3424,8 @@ gdk_win32_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_win32_toplevel_present;
   iface->minimize = gdk_win32_toplevel_minimize;
-  iface->lower = gdk_win32_toplevel_lower;
   iface->focus = gdk_win32_toplevel_focus;
   iface->show_window_menu = gdk_win32_toplevel_show_window_menu;
-  iface->supports_edge_constraints = gdk_win32_toplevel_supports_edge_constraints;
   iface->inhibit_system_shortcuts = gdk_win32_toplevel_inhibit_system_shortcuts;
   iface->restore_system_shortcuts = gdk_win32_toplevel_restore_system_shortcuts;
   iface->begin_resize = gdk_win32_toplevel_begin_resize;

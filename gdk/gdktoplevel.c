@@ -260,6 +260,19 @@ gdk_toplevel_default_init (GdkToplevelInterface *iface)
                             G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
 
   /**
+   * GdkToplevel:capabilities:
+   *
+   * The capabilities that are available for this toplevel.
+   *
+   * Since: 4.20
+   */
+  g_object_interface_install_property (iface,
+      g_param_spec_flags ("capabilities", NULL, NULL,
+                          GDK_TYPE_TOPLEVEL_CAPABILITIES,
+                          0,
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY));
+
+  /**
    * GdkToplevel::compute-size:
    * @toplevel: a `GdkToplevel`
    * @size: (type Gdk.ToplevelSize): a `GdkToplevelSize`
@@ -303,6 +316,7 @@ gdk_toplevel_install_properties (GObjectClass *object_class,
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_DELETABLE, "deletable");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE, "fullscreen-mode");
   g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED, "shortcuts-inhibited");
+  g_object_class_override_property (object_class, first_prop + GDK_TOPLEVEL_PROP_CAPABILITIES, "capabilities");
 
   return GDK_TOPLEVEL_NUM_PROPERTIES;
 }
@@ -827,4 +841,16 @@ gdk_toplevel_unexport_handle (GdkToplevel *toplevel,
                               const char  *handle)
 {
   GDK_TOPLEVEL_GET_IFACE (toplevel)->unexport_handle (toplevel, handle);
+}
+
+GdkToplevelCapabilities
+gdk_toplevel_get_capabilities (GdkToplevel *toplevel)
+{
+  GdkToplevelCapabilities caps;
+
+  g_return_val_if_fail (GDK_IS_TOPLEVEL (toplevel), 0);
+
+  g_object_get (toplevel, "capabilities", &caps, NULL);
+
+  return caps;
 }

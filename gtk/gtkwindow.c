@@ -3850,11 +3850,18 @@ update_window_actions (GtkWindow *window)
 {
   GtkWindowPrivate *priv = gtk_window_get_instance_private (window);
   gboolean is_sovereign_window = !priv->modal && !priv->transient_parent;
+  GdkToplevelCapabilities capabilities;
+
+  if (priv->surface)
+    capabilities = gdk_toplevel_get_capabilities (GDK_TOPLEVEL (priv->surface));
+  else
+    capabilities = GDK_TOPLEVEL_CAPABILITIES_MINIMIZE |
+                   GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE;
 
   gtk_widget_action_set_enabled (GTK_WIDGET (window), "window.minimize",
-                                 is_sovereign_window);
+                                 is_sovereign_window && (capabilities & GDK_TOPLEVEL_CAPABILITIES_MINIMIZE));
   gtk_widget_action_set_enabled (GTK_WIDGET (window), "window.toggle-maximized",
-                                 priv->resizable && is_sovereign_window);
+                                 is_sovereign_window && priv->resizable && (capabilities & GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE));
   gtk_widget_action_set_enabled (GTK_WIDGET (window), "window.close",
                                  priv->deletable);
 
@@ -4406,6 +4413,7 @@ gtk_window_realize (GtkWidget *widget)
 
   g_signal_connect_swapped (surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
   g_signal_connect_swapped (surface, "notify::mapped", G_CALLBACK (surface_state_changed), widget);
+  g_signal_connect_swapped (surface, "notify::capabilities", G_CALLBACK (update_window_actions), widget);
   g_signal_connect (surface, "render", G_CALLBACK (surface_render), widget);
   g_signal_connect (surface, "event", G_CALLBACK (surface_event), widget);
   g_signal_connect (surface, "compute-size", G_CALLBACK (toplevel_compute_size), widget);
@@ -4465,6 +4473,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     _gtk_widget_scale_changed (widget);
 
   gtk_native_realize (GTK_NATIVE (window));
+
+  update_window_actions (window);
 }
 
 static void
@@ -4512,6 +4522,7 @@ gtk_window_unrealize (GtkWidget *widget)
   surface = priv->surface;
 
   g_signal_handlers_disconnect_by_func (surface, surface_state_changed, widget);
+  g_signal_handlers_disconnect_by_func (surface, update_window_actions, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_render, widget);
   g_signal_handlers_disconnect_by_func (surface, surface_event, widget);
   g_signal_handlers_disconnect_by_func (surface, toplevel_compute_size, widget);
