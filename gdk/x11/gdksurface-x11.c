@@ -5147,6 +5147,19 @@ gdk_x11_toplevel_get_property (GObject    *object,
       g_value_set_boolean (value, surface->shortcuts_inhibited);
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_CAPABILITIES:
+      g_value_set_flags (value, (gdk_x11_surface_supports_edge_constraints (surface)
+                                  ? GDK_TOPLEVEL_CAPABILITIES_EDGE_CONSTRAINTS : 0) |
+                                GDK_TOPLEVEL_CAPABILITIES_INHIBIT_SHORTCUTS |
+                                (gdk_x11_screen_supports_net_wm_hint (GDK_SURFACE_SCREEN (surface),
+                                                                      g_intern_static_string ("_GTK_SHOW_WINDOW_MENU"))
+                                  ? GDK_TOPLEVEL_CAPABILITIES_WINDOW_MENU : 0) |
+                                GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE |
+                                GDK_TOPLEVEL_CAPABILITIES_FULLSCREEN |
+                                GDK_TOPLEVEL_CAPABILITIES_MINIMIZE |
+                                GDK_TOPLEVEL_CAPABILITIES_LOWER);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
