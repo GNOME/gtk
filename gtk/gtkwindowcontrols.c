@@ -345,7 +345,6 @@ update_window_buttons (GtkWindowControls *self)
                is_sovereign_window)
         {
           button = gtk_button_new ();
-          gtk_widget_set_valign (button, GTK_ALIGN_FILL);
           gtk_widget_add_css_class (button, "minimize");
           /* The icon is not relevant for accessibility purposes */
           image = g_object_new (GTK_TYPE_IMAGE,
@@ -373,7 +372,6 @@ update_window_buttons (GtkWindowControls *self)
 
           icon_name = maximized ? "window-restore-symbolic" : "window-maximize-symbolic";
           button = gtk_button_new ();
-          gtk_widget_set_valign (button, GTK_ALIGN_FILL);
           gtk_widget_add_css_class (button, "maximize");
           /* The icon is not relevant for accessibility purposes */
           image = g_object_new (GTK_TYPE_IMAGE,
@@ -397,7 +395,6 @@ update_window_buttons (GtkWindowControls *self)
                deletable)
         {
           button = gtk_button_new ();
-          gtk_widget_set_valign (button, GTK_ALIGN_FILL);
           /* The icon is not relevant for accessibility purposes */
           image = g_object_new (GTK_TYPE_IMAGE,
                                 "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION,
@@ -840,3 +837,4 @@ gtk_window_controls_get_empty (GtkWindowControls *self)
 
   return self->empty;
 }
+
