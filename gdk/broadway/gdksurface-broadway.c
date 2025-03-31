@@ -1707,12 +1707,6 @@ gdk_broadway_toplevel_minimize (GdkToplevel *toplevel)
   return TRUE;
 }
 
-static gboolean
-gdk_broadway_toplevel_lower (GdkToplevel *toplevel)
-{
-  return FALSE;
-}
-
 static void
 gdk_broadway_toplevel_focus (GdkToplevel *toplevel,
                              guint32      timestamp)
@@ -1720,21 +1714,12 @@ gdk_broadway_toplevel_focus (GdkToplevel *toplevel,
   gdk_broadway_surface_focus (GDK_SURFACE (toplevel), timestamp);
 }
 
-static gboolean
-gdk_broadway_toplevel_show_window_menu (GdkToplevel *toplevel,
-                                        GdkEvent    *event)
-{
-  return FALSE;
-}
-
 static void
 gdk_broadway_toplevel_iface_init (GdkToplevelInterface *iface)
 {
   iface->present = gdk_broadway_toplevel_present;
   iface->minimize = gdk_broadway_toplevel_minimize;
-  iface->lower = gdk_broadway_toplevel_lower;
   iface->focus = gdk_broadway_toplevel_focus;
-  iface->show_window_menu = gdk_broadway_toplevel_show_window_menu;
   iface->begin_resize = gdk_broadway_toplevel_begin_resize;
   iface->begin_move = gdk_broadway_toplevel_begin_move;
 }
