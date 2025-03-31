@@ -261,8 +261,10 @@ typedef struct
   guint    client_decorated          : 1; /* Decorations drawn client-side */
   guint    use_client_shadow         : 1; /* Decorations use client-side shadows */
   guint    maximized                 : 1;
+  guint    is_set_maximized          : 1;
   guint    suspended                 : 1;
   guint    fullscreen                : 1;
+  guint    is_set_fullscreen         : 1;
   guint    tiled                     : 1;
 
   guint    hide_on_close             : 1;
@@ -973,7 +975,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_MAXIMIZED] =
       g_param_spec_boolean ("maximized", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:fullscreened: (getter is_fullscreen)
@@ -989,7 +991,7 @@ gtk_window_class_init (GtkWindowClass *klass)
   window_props[PROP_FULLSCREENED] =
       g_param_spec_boolean ("fullscreened", NULL, NULL,
                             FALSE,
-                            GTK_PARAM_READWRITE|G_PARAM_CONSTRUCT|G_PARAM_EXPLICIT_NOTIFY);
+                            GTK_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
   /**
    * GtkWindow:suspended: (getter is_suspended)
@@ -3942,9 +3944,11 @@ gtk_window_present_toplevel (GtkWindow *window)
   GdkToplevelLayout *layout;
 
   layout = gtk_window_compute_base_layout (window);
-  gdk_toplevel_layout_set_maximized (layout, priv->maximized);
-  gdk_toplevel_layout_set_fullscreen (layout, priv->fullscreen,
-                                      priv->initial_fullscreen_monitor);
+  if (priv->is_set_maximized)
+    gdk_toplevel_layout_set_maximized (layout, priv->maximized);
+  if (priv->is_set_fullscreen)
+    gdk_toplevel_layout_set_fullscreen (layout, priv->fullscreen,
+                                        priv->initial_fullscreen_monitor);
   gdk_toplevel_present (GDK_TOPLEVEL (priv->surface), layout);
   gdk_toplevel_layout_unref (layout);
 }
@@ -5496,6 +5500,7 @@ gtk_window_maximize (GtkWindow *window)
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  priv->is_set_maximized = TRUE;
   if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     {
       GdkToplevelLayout *layout;
@@ -5533,6 +5538,7 @@ gtk_window_unmaximize (GtkWindow *window)
 
   g_return_if_fail (GTK_IS_WINDOW (window));
 
+  priv->is_set_maximized = TRUE;
   if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     {
       GdkToplevelLayout *layout;
@@ -5585,6 +5591,7 @@ gtk_window_fullscreen (GtkWindow *window)
 
   unset_fullscreen_monitor (window);
 
+  priv->is_set_fullscreen = TRUE;
   if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     {
       GdkToplevelLayout *layout;
@@ -5633,6 +5640,7 @@ gtk_window_fullscreen_on_monitor (GtkWindow  *window,
                             G_CALLBACK (unset_fullscreen_monitor), window);
   g_object_ref (priv->initial_fullscreen_monitor);
 
+  priv->is_set_fullscreen = TRUE;
   if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     {
       GdkToplevelLayout *layout;
@@ -5675,6 +5683,7 @@ gtk_window_unfullscreen (GtkWindow *window)
 
   unset_fullscreen_monitor (window);
 
+  priv->is_set_fullscreen = TRUE;
   if (_gtk_widget_get_mapped (GTK_WIDGET (window)))
     {
       GdkToplevelLayout *layout;
