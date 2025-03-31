@@ -323,7 +323,8 @@ gdk_texture_downloader_download_bytes_layout (const GdkTextureDownloader *self,
  * memory allocation yourself and use [method@Gdk.TextureDownloader.download_into]
  * once allocation succeeded.
  *
- * This function cannot be used with a multiplanar format.
+ * This function cannot be used with a multiplanar format. Use
+ * [method@Gdk.TextureDownloader.download_bytes_with_planes] for that purpose.
  *
  * Returns: The downloaded pixels
  *
@@ -352,6 +353,46 @@ gdk_texture_downloader_download_bytes (const GdkTextureDownloader *self,
     }
 
   *out_stride = layout.planes[0].stride;
+  return bytes;
+}
+
+/**
+ * gdk_texture_downloader_download_bytes_with_planes:
+ * @self: the downloader
+ * @out_offsets: (out): The offsets of the resulting data planes in bytes
+ * @out_strides: (out): The stride of the resulting data planes in bytes
+ *
+ * Downloads the given texture pixels into a `GBytes`. The offsets and
+ * strides of the resulting buffer will be stored in the respective values.
+ *
+ * Both arrays need to be allocated to be large enough to hold all planes
+ * of the format in use. Currently no format uses more than 4 planes.
+ *
+ * Returns: The downloaded pixels
+ *
+ * Since: 4.20
+ **/
+GBytes *
+gdk_texture_downloader_download_bytes_with_planes (const GdkTextureDownloader *self,
+                                                   gsize                      *out_offsets,
+                                                   gsize                      *out_strides)
+{
+  GBytes *bytes;
+  GdkMemoryLayout layout;
+  gsize p;
+
+  g_return_val_if_fail (self != NULL, NULL);
+  g_return_val_if_fail (out_offsets != NULL, NULL);
+  g_return_val_if_fail (out_strides != NULL, NULL);
+
+  bytes = gdk_texture_downloader_download_bytes_layout (self, &layout);
+
+  for (p = 0; p < gdk_memory_format_get_n_planes (layout.format); p++)
+    {
+      out_offsets[p] = layout.planes[p].offset;
+      out_strides[p] = layout.planes[p].stride;
+    }
+
   return bytes;
 }
 

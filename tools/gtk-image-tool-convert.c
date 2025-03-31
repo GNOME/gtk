@@ -54,9 +54,11 @@ save_image (const char      *filename,
   GdkTexture *orig;
   GdkTextureDownloader *downloader;
   GBytes *bytes;
-  gsize stride;
   GdkTexture *texture;
   GdkMemoryTextureBuilder *builder;
+  gsize offsets[4];
+  gsize strides[4];
+  gsize p;
 
   orig = load_image_file (filename);
   downloader = gdk_texture_downloader_new (orig);
@@ -64,11 +66,15 @@ save_image (const char      *filename,
   gdk_texture_downloader_set_format (downloader, format);
   gdk_texture_downloader_set_color_state (downloader, color_state);
 
-  bytes = gdk_texture_downloader_download_bytes (downloader, &stride);
+  bytes = gdk_texture_downloader_download_bytes_with_planes (downloader, offsets, strides);
 
   builder = gdk_memory_texture_builder_new ();
   gdk_memory_texture_builder_set_bytes (builder, bytes);
-  gdk_memory_texture_builder_set_stride (builder, stride);
+  for (p = 0; p < G_N_ELEMENTS (offsets); p++)
+    {
+      gdk_memory_texture_builder_set_offset (builder, p, offsets[p]);
+      gdk_memory_texture_builder_set_stride_for_plane (builder, p, strides[p]);
+    }
   gdk_memory_texture_builder_set_format (builder, format);
   gdk_memory_texture_builder_set_color_state (builder, color_state);
   gdk_memory_texture_builder_set_width (builder, gdk_texture_get_width (orig));

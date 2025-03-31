@@ -62,6 +62,11 @@ void                    gdk_texture_downloader_download_into    (const GdkTextur
 GDK_AVAILABLE_IN_4_10
 GBytes *                gdk_texture_downloader_download_bytes   (const GdkTextureDownloader     *self,
                                                                  gsize                          *out_stride);
+GDK_AVAILABLE_IN_4_20
+GBytes *                gdk_texture_downloader_download_bytes_with_planes
+                                                                (const GdkTextureDownloader     *self,
+                                                                 gsize                          *out_offsets,
+                                                                 gsize                          *out_strides);
 
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GdkTextureDownloader, gdk_texture_downloader_free)
 
