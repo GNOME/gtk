@@ -195,6 +195,10 @@ TYPED_GRAY_FUNCS (g16a16, guint16, 0, 1, 4, 65535)
 TYPED_GRAY_FUNCS (g16, guint16, 0, -1, 2, 65535)
 TYPED_GRAY_FUNCS (a16, guint16, -1, 0, 2, 65535)
 
+#ifdef _MSC_VER
+#pragma warning( push )
+#pragma warning( disable : 4333)
+#endif
 NV12_FUNCS (nv12, guchar, 0, 255, FALSE, 2, 2)
 NV12_FUNCS (nv21, guchar, 0, 255, TRUE, 2, 2)
 NV12_FUNCS (nv16, guchar, 0, 255, FALSE, 2, 1)
@@ -204,6 +208,9 @@ NV12_FUNCS (nv42, guchar, 0, 255, TRUE, 1, 1)
 NV12_FUNCS (p010, guint16, 6, 1023, FALSE, 2, 2)
 NV12_FUNCS (p012, guint16, 4, 4095, FALSE, 2, 2)
 NV12_FUNCS (p016, guint16, 0, 65535, FALSE, 2, 2)
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
 
 static void
 r16g16b16_float_to_float (float                 (*dest)[4],
