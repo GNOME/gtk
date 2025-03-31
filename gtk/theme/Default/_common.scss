@@ -1474,14 +1474,14 @@ windowcontrols {
     @extend %button_basic_flat;
 
     box-shadow: none;
-    border-radius: 0;
+    border: none;
     min-width: 34px;
     padding: 0;
 
     > image {
         border-radius: 9999px;
-        min-height: 26px;
-        min-width: 26px;
+        min-height: 30px;
+        min-width: 30px;
     }
     &:hover > image {
       //special case hover colors inside a headerbar
