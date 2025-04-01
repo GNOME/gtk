@@ -250,7 +250,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
       /* These are set to the current date */
       if (g_type_is_a (type, GTK_TYPE_CALENDAR) &&
-          (strcmp (pspec->name, "year") == 0 ||
+          (strcmp (pspec->name, "date") == 0 ||
+           strcmp (pspec->name, "year") == 0 ||
            strcmp (pspec->name, "month") == 0 ||
            strcmp (pspec->name, "day") == 0))
         check = FALSE;
