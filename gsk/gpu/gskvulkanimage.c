@@ -412,7 +412,13 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
 
   if (needs_conversion)
     {
-      self->ycbcr = gsk_vulkan_device_get_ycbcr (device, vk_format);
+      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
+                                                 &(GskVulkanYcbcrInfo) {
+                                                     .vk_format = vk_format,
+                                                     .vk_components = vk_components,
+                                                     .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601,
+                                                     .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW,
+                                                 });
       gsk_vulkan_ycbcr_ref (self->ycbcr);
       vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
     }
@@ -869,7 +875,13 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
 
   if (needs_conversion)
     {
-      self->ycbcr = gsk_vulkan_device_get_ycbcr (device, vk_format);
+      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
+                                                 &(GskVulkanYcbcrInfo) {
+                                                     .vk_format = vk_format,
+                                                     .vk_components = vk_components,
+                                                     .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601,
+                                                     .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW,
+                                                 });
       gsk_vulkan_ycbcr_ref (self->ycbcr);
       vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
     }
@@ -1165,7 +1177,13 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
 
   if (needs_conversion)
     {
-      self->ycbcr = gsk_vulkan_device_get_ycbcr (device, vk_format);
+      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
+                                                 &(GskVulkanYcbcrInfo) {
+                                                     .vk_format = vk_format,
+                                                     .vk_components = vk_components,
+                                                     .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601,
+                                                     .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW,
+                                                 });
       gsk_vulkan_ycbcr_ref (self->ycbcr);
       vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
     }

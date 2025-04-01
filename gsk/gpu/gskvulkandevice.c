@@ -364,7 +364,7 @@ gsk_vulkan_device_class_init (GskVulkanDeviceClass *klass)
 static void
 gsk_vulkan_device_init (GskVulkanDevice *self)
 {
-  self->ycbcr_cache = g_hash_table_new (g_direct_hash, g_direct_equal);
+  self->ycbcr_cache = g_hash_table_new (gsk_vulkan_ycbcr_info_hash, gsk_vulkan_ycbcr_info_equal);
   self->render_pass_cache = g_hash_table_new (render_pass_cache_key_hash, render_pass_cache_key_equal);
   self->pipeline_cache = g_hash_table_new (pipeline_cache_key_hash, pipeline_cache_key_equal);
 
@@ -687,25 +687,25 @@ gsk_vulkan_device_get_vk_sampler (GskVulkanDevice     *self,
 }
 
 GskVulkanYcbcr *
-gsk_vulkan_device_get_ycbcr (GskVulkanDevice *self,
-                             VkFormat         vk_format)
+gsk_vulkan_device_get_ycbcr (GskVulkanDevice          *self,
+                             const GskVulkanYcbcrInfo *info)
 {
   GskVulkanYcbcr *ycbcr;
 
-  ycbcr = g_hash_table_lookup (self->ycbcr_cache, GSIZE_TO_POINTER(vk_format));
+  ycbcr = g_hash_table_lookup (self->ycbcr_cache, info);
   if (ycbcr)
     return ycbcr;
 
-  ycbcr = gsk_vulkan_ycbcr_new (self, vk_format);
-  g_hash_table_insert (self->ycbcr_cache, GSIZE_TO_POINTER(vk_format), ycbcr);
+  ycbcr = gsk_vulkan_ycbcr_new (self, info);
+  g_hash_table_insert (self->ycbcr_cache, (gpointer) gsk_vulkan_ycbcr_get_info (ycbcr), ycbcr);
   return ycbcr;
 }
 
 void
 gsk_vulkan_device_remove_ycbcr (GskVulkanDevice *self,
-                                VkFormat         vk_format)
+                                GskVulkanYcbcr  *ycbcr)
 {
-  g_hash_table_remove (self->ycbcr_cache, GSIZE_TO_POINTER(vk_format));
+  g_hash_table_remove (self->ycbcr_cache, gsk_vulkan_ycbcr_get_info (ycbcr));
 }
 
 VkRenderPass

@@ -10,12 +10,43 @@ struct _GskVulkanYcbcr
 
   int ref_count;
 
-  VkFormat vk_format;
+  GskVulkanYcbcrInfo info;
+
   VkSamplerYcbcrConversion vk_conversion;
   VkSampler vk_sampler;
   VkDescriptorSetLayout vk_descriptor_set_layout;
   VkPipelineLayout vk_pipeline_layouts[2];
 };
+
+guint
+gsk_vulkan_ycbcr_info_hash (gconstpointer info_)
+{
+  const GskVulkanYcbcrInfo *info = info_;
+
+  return ((info->vk_components.r << 29) |
+          (info->vk_components.g << 26) |
+          (info->vk_components.b << 23) |
+          (info->vk_components.a << 20) |
+          (info->vk_ycbcr_model << 17) |
+          (info->vk_ycbcr_range << 16)) ^
+         info->vk_format;
+}
+
+gboolean
+gsk_vulkan_ycbcr_info_equal (gconstpointer info1_,
+                             gconstpointer info2_)
+{
+  const GskVulkanYcbcrInfo *info1 = info1_;
+  const GskVulkanYcbcrInfo *info2 = info2_;
+
+  return info1->vk_format == info2->vk_format &&
+         info1->vk_components.r == info2->vk_components.r && 
+         info1->vk_components.g == info2->vk_components.g && 
+         info1->vk_components.b == info2->vk_components.b && 
+         info1->vk_components.a == info2->vk_components.a && 
+         info1->vk_ycbcr_model == info2->vk_ycbcr_model &&
+         info1->vk_ycbcr_range == info2->vk_ycbcr_range;
+}
 
 static void
 gsk_vulkan_ycbcr_free (GskGpuCache  *cache,
@@ -30,7 +61,7 @@ gsk_vulkan_ycbcr_free (GskGpuCache  *cache,
 
   g_assert (self->ref_count == 0);
 
-  gsk_vulkan_device_remove_ycbcr (device, self->vk_format);
+  gsk_vulkan_device_remove_ycbcr (device, self);
 
   vkDestroySampler (vk_device, self->vk_sampler, NULL);
   vkDestroySamplerYcbcrConversion (vk_device, self->vk_conversion, NULL);
@@ -77,7 +108,7 @@ static const GskGpuCachedClass GSK_VULKAN_YCBCR_CLASS =
 
 GskVulkanYcbcr *
 gsk_vulkan_ycbcr_new (GskVulkanDevice *device,
-                      VkFormat         vk_format)
+                      const GskVulkanYcbcrInfo *info)
 {
   GskGpuCache *cache = gsk_gpu_device_get_cache (GSK_GPU_DEVICE (device));
   VkDevice vk_device = gsk_vulkan_device_get_vk_device (device);
@@ -86,20 +117,15 @@ gsk_vulkan_ycbcr_new (GskVulkanDevice *device,
 
   self = gsk_gpu_cached_new (cache, &GSK_VULKAN_YCBCR_CLASS);
 
-  self->vk_format = vk_format;
+  self->info = *info;
 
   GSK_VK_CHECK (vkCreateSamplerYcbcrConversion, vk_device,
                                                 &(VkSamplerYcbcrConversionCreateInfo) {
                                                     .sType = VK_STRUCTURE_TYPE_SAMPLER_YCBCR_CONVERSION_CREATE_INFO,
-                                                    .format = vk_format,
-                                                    .ycbcrModel = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601,
-                                                    .ycbcrRange = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW,
-                                                    .components = (VkComponentMapping) {
-                                                        VK_COMPONENT_SWIZZLE_IDENTITY,
-                                                        VK_COMPONENT_SWIZZLE_IDENTITY,
-                                                        VK_COMPONENT_SWIZZLE_IDENTITY,
-                                                        VK_COMPONENT_SWIZZLE_IDENTITY
-                                                    },
+                                                    .format = self->info.vk_format,
+                                                    .ycbcrModel = self->info.vk_ycbcr_model,
+                                                    .ycbcrRange = self->info.vk_ycbcr_range,
+                                                    .components = self->info.vk_components,
                                                     .xChromaOffset = VK_CHROMA_LOCATION_COSITED_EVEN,
                                                     .yChromaOffset = VK_CHROMA_LOCATION_COSITED_EVEN,
                                                     .chromaFilter = VK_FILTER_LINEAR,
@@ -173,6 +199,12 @@ void
 gsk_vulkan_ycbcr_unref (GskVulkanYcbcr *self)
 {
   self->ref_count--;
+}
+
+const GskVulkanYcbcrInfo *
+gsk_vulkan_ycbcr_get_info (GskVulkanYcbcr *self)
+{
+  return &self->info;
 }
 
 VkSamplerYcbcrConversion
