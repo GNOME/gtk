@@ -59,8 +59,6 @@
 
 G_BEGIN_DECLS
 
-#define GDK_ZWP_POINTER_GESTURES_V1_VERSION 3
-
 typedef struct _GdkWaylandColor GdkWaylandColor;
 typedef struct _GdkWaylandSelection GdkWaylandSelection;
 
