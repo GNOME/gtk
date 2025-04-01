@@ -2,7 +2,6 @@
 
 #include <gdk/gdkframeclock.h>
 #include <gdk/wayland/gdkdisplay-wayland.h>
-#include <gdk/wayland/gdksurface-wayland.h>
 #include <gdk/wayland/gdkwaylanddisplay.h>
 
 G_BEGIN_DECLS

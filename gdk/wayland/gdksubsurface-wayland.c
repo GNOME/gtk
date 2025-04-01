@@ -21,7 +21,6 @@
 
 #include "gdkmemoryformatprivate.h"
 #include "gdkdisplay-wayland.h"
-#include "gdkprivate-wayland.h"
 #include "gdkdmabuftextureprivate.h"
 #include "gdksurface-wayland-private.h"
 #include "gdksubsurfaceprivate.h"
@@ -29,6 +28,7 @@
 #include "gdkglcontextprivate.h"
 #include "gdkgltextureprivate.h"
 #include "gsk/gskrectprivate.h"
+#include "gdkshm.h"
 
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 

@@ -17,6 +17,8 @@
 
 #include "config.h"
 
+#include "gdkapplaunchcontext-wayland.h"
+
 #include <string.h>
 #include <unistd.h>
 
@@ -24,7 +26,9 @@
 #include <gio/gdesktopappinfo.h>
 
 #include "gdkwayland.h"
-#include "gdkprivate-wayland.h"
+#include "gdkdisplay-wayland.h"
+#include "gdkseat-wayland.h"
+#include "gdkdevice-wayland-private.h"
 #include "gdkapplaunchcontextprivate.h"
 #include <glib/gi18n-lib.h>
 
@@ -157,7 +161,7 @@ gdk_wayland_app_launch_context_init (GdkWaylandAppLaunchContext *ctx)
 }
 
 GdkAppLaunchContext *
-_gdk_wayland_display_get_app_launch_context (GdkDisplay *display)
+gdk_wayland_display_get_app_launch_context (GdkDisplay *display)
 {
   GdkAppLaunchContext *ctx;
 

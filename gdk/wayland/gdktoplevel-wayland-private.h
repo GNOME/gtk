@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include "gdksurfaceprivate.h"
 
 void gdk_wayland_toplevel_set_geometry_hints      (GdkWaylandToplevel *toplevel,
                                                    const GdkGeometry  *geometry,

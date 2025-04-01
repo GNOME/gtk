@@ -24,13 +24,11 @@
 #include "gdkglcontext-wayland.h"
 
 #include "gdkdisplay-wayland.h"
-#include "gdksurface-wayland.h"
 #include "gdksurface-wayland-private.h"
 
 #include "gdkwaylanddisplay.h"
 #include "gdkwaylandglcontext.h"
 #include "gdkwaylandsurface.h"
-#include "gdkprivate-wayland.h"
 
 #include "gdkprivate.h"
 #include "gdksurfaceprivate.h"

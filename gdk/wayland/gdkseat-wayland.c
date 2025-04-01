@@ -18,7 +18,9 @@
 #include "config.h"
 
 #include "gdkdevice-wayland-private.h"
+#include "gdksurface-wayland-private.h"
 
+#include "gdkeventsource.h"
 #include "gdkclipboard-wayland.h"
 #include "gdkclipboardprivate.h"
 #include "gdkcursorprivate.h"
@@ -30,7 +32,8 @@
 #include "gdkkeysprivate.h"
 #include "gdkkeysyms.h"
 #include "gdkprimary-wayland.h"
-#include "gdkprivate-wayland.h"
+#include "gdkkeymap-wayland.h"
+#include "gdkdrop-wayland.h"
 #include "gdkseat-wayland.h"
 #include "gdkseatprivate.h"
 #include "gdksurfaceprivate.h"
@@ -49,6 +52,8 @@
 #elif defined(HAVE_LINUX_INPUT_H)
 #include <linux/input.h>
 #endif
+
+#define WL_POINTER_HAS_FRAME 5
 
 /**
  * GdkWaylandDevice:
@@ -4232,9 +4237,9 @@ init_pointer_data (GdkWaylandPointerData *pointer_data,
 }
 
 void
-_gdk_wayland_display_create_seat (GdkWaylandDisplay *display_wayland,
-                                  guint32            id,
-				  struct wl_seat    *wl_seat)
+gdk_wayland_display_create_seat (GdkWaylandDisplay *display_wayland,
+                                 guint32            id,
+                                 struct wl_seat    *wl_seat)
 {
   GdkDisplay *display = GDK_DISPLAY (display_wayland);
   GdkWaylandSeat *seat;
@@ -4290,8 +4295,8 @@ _gdk_wayland_display_create_seat (GdkWaylandDisplay *display_wayland,
 }
 
 void
-_gdk_wayland_display_remove_seat (GdkWaylandDisplay *display_wayland,
-                                  guint32            id)
+gdk_wayland_display_remove_seat (GdkWaylandDisplay *display_wayland,
+                                 guint32            id)
 {
   GdkDisplay *display = GDK_DISPLAY (display_wayland);
   GList *l, *seats;

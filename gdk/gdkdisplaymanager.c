@@ -54,7 +54,7 @@
 #endif
 
 #ifdef GDK_WINDOWING_WAYLAND
-#include "wayland/gdkprivate-wayland.h"
+#include "wayland/gdkdisplay-wayland.h"
 #endif
 
 /**

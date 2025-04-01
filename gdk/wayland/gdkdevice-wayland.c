@@ -18,8 +18,11 @@
 #include "config.h"
 
 #include "gdkdevice-wayland-private.h"
-#include "gdkprivate-wayland.h"
+#include "gdksurface-wayland-private.h"
+#include "gdkcursor-wayland.h"
+#include "gdkkeymap-wayland.h"
 #include "gdkcursorprivate.h"
+#include "gdkeventsource.h"
 #include "gdkeventsprivate.h"
 
 #define  GTK_SHELL_FIXED_WL_SURFACE_OFFSET_VERSION 6

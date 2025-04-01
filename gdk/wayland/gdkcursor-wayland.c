@@ -28,10 +28,10 @@
 
 #include <string.h>
 
-#include "gdkprivate-wayland.h"
+#include "gdkcursor-wayland.h"
 #include "gdkcursorprivate.h"
 #include "gdkdisplay-wayland.h"
-#include "gdkwayland.h"
+#include "gdkshm.h"
 
 
 typedef struct

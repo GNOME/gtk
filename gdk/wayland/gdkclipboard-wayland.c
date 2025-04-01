@@ -22,7 +22,8 @@
 
 #include "gdkcontentformats.h"
 #include <glib/gi18n-lib.h>
-#include "gdkprivate-wayland.h"
+#include "gdkdevice-wayland-private.h"
+#include "gdkdisplay-wayland.h"
 #include "gdkprivate.h"
 
 #include <glib-unix.h>

@@ -29,7 +29,6 @@
 #include "gdkwaylanddisplay.h"
 #include "gdkwaylandsurface.h"
 #include "gdksurface-wayland-private.h"
-#include "gdkprivate-wayland.h"
 
 G_DEFINE_TYPE (GdkWaylandVulkanContext, gdk_wayland_vulkan_context, GDK_TYPE_VULKAN_CONTEXT)
 

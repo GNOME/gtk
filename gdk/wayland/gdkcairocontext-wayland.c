@@ -20,8 +20,8 @@
 
 #include "gdkcairocontext-wayland.h"
 
-#include "gdkprivate-wayland.h"
 #include "gdksurface-wayland-private.h"
+#include "gdkshm.h"
 
 #include "gdkprofilerprivate.h"
 

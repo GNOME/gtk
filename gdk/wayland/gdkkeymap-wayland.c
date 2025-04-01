@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#include "gdkkeymap-wayland.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -35,8 +37,8 @@
 #include "gdk.h"
 #include "gdkwayland.h"
 
-#include "gdkprivate-wayland.h"
 #include "gdkprivate.h"
+#include "gdkdebugprivate.h"
 #include "gdkkeysprivate.h"
 
 #include <xkbcommon/xkbcommon.h>

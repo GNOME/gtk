@@ -17,7 +17,9 @@
 
 #include "config.h"
 
-#include "gdksurface-wayland.h"
+#include "gdkdragsurface-wayland.h"
+
+#include "gdksurface-wayland-private.h"
 
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-wayland.h"
@@ -27,8 +29,6 @@
 #include "gdkglcontext-wayland.h"
 #include "gdkmonitor-wayland.h"
 #include "gdkpopupprivate.h"
-#include "gdkprivate-wayland.h"
-#include "gdkprivate-wayland.h"
 #include "gdkseat-wayland.h"
 #include "gdksurfaceprivate.h"
 #include "gdktoplevelprivate.h"
