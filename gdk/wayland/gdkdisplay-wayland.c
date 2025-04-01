@@ -132,6 +132,20 @@
 
 G_DEFINE_TYPE (GdkWaylandDisplay, gdk_wayland_display, GDK_TYPE_DISPLAY)
 
+static void init_settings (GdkDisplay *display);
+static gboolean gdk_wayland_display_get_setting (GdkDisplay *display,
+                                                 const char *name,
+                                                 GValue     *value);
+
+G_GNUC_PRINTF (1, 0)
+static void
+log_handler (const char *format, va_list args)
+{
+  g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, format, args);
+}
+
+/* {{{ GDK_WAYLAND_DISABLE filtering */
+
 static void
 init_skip_protocols (GdkWaylandDisplay *display_wayland)
 {
@@ -211,6 +225,9 @@ match_global (GdkWaylandDisplay *display_wayland,
   return TRUE;
 }
 
+/* }}} */
+/* {{{ Async roundtrips */
+
 static void
 async_roundtrip_callback (void               *data,
                           struct wl_callback *callback,
@@ -240,53 +257,8 @@ _gdk_wayland_display_async_roundtrip (GdkWaylandDisplay *display_wayland)
     g_list_append (display_wayland->async_roundtrips, callback);
 }
 
-static void
-gtk_shell_handle_capabilities (void              *data,
-                               struct gtk_shell1 *shell,
-                               uint32_t           capabilities)
-{
-  GdkDisplay *display = data;
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (data);
-
-  display_wayland->shell_capabilities = capabilities;
-
-  gdk_display_setting_changed (display, "gtk-shell-shows-app-menu");
-  gdk_display_setting_changed (display, "gtk-shell-shows-menubar");
-  gdk_display_setting_changed (display, "gtk-shell-shows-desktop");
-}
-
-struct gtk_shell1_listener gdk_display_gtk_shell_listener = {
-  gtk_shell_handle_capabilities
-};
-
-static void
-xdg_wm_base_ping (void               *data,
-                  struct xdg_wm_base *xdg_wm_base,
-                  uint32_t            serial)
-{
-  GDK_DEBUG (EVENTS, "ping, shell %p, serial %u", xdg_wm_base, serial);
-
-  xdg_wm_base_pong (xdg_wm_base, serial);
-}
-
-static const struct xdg_wm_base_listener xdg_wm_base_listener = {
-  xdg_wm_base_ping,
-};
-
-static void
-zxdg_shell_v6_ping (void                 *data,
-                    struct zxdg_shell_v6 *xdg_shell,
-                    uint32_t              serial)
-{
-  GDK_DISPLAY_DEBUG (GDK_DISPLAY (data), EVENTS,
-                     "ping, shell %p, serial %u", xdg_shell, serial);
-
-  zxdg_shell_v6_pong (xdg_shell, serial);
-}
-
-static const struct zxdg_shell_v6_listener zxdg_shell_v6_listener = {
-  zxdg_shell_v6_ping,
-};
+/* }}} */
+/* {{{ Global dependency handling */
 
 static gboolean
 is_known_global (gpointer key, gpointer value, gpointer user_data)
@@ -391,6 +363,66 @@ postpone_on_globals_closure (GdkWaylandDisplay *display_wayland,
     g_list_append (display_wayland->on_has_globals_closures, closure);
 }
 
+/* }}} */
+/* {{{ gtk_shell listener */
+
+static void
+gtk_shell_handle_capabilities (void              *data,
+                               struct gtk_shell1 *shell,
+                               uint32_t           capabilities)
+{
+  GdkDisplay *display = data;
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (data);
+
+  display_wayland->shell_capabilities = capabilities;
+
+  gdk_display_setting_changed (display, "gtk-shell-shows-app-menu");
+  gdk_display_setting_changed (display, "gtk-shell-shows-menubar");
+  gdk_display_setting_changed (display, "gtk-shell-shows-desktop");
+}
+
+struct gtk_shell1_listener gdk_display_gtk_shell_listener = {
+  gtk_shell_handle_capabilities
+};
+
+/* }}} */
+/* {{{ xdg_wm_base listener */
+
+static void
+xdg_wm_base_ping (void               *data,
+                  struct xdg_wm_base *xdg_wm_base,
+                  uint32_t            serial)
+{
+  GDK_DEBUG (EVENTS, "ping, shell %p, serial %u", xdg_wm_base, serial);
+
+  xdg_wm_base_pong (xdg_wm_base, serial);
+}
+
+static const struct xdg_wm_base_listener xdg_wm_base_listener = {
+  xdg_wm_base_ping,
+};
+
+/* }}} */
+/* {{{ zxdg_shell_v6 listener */
+
+static void
+zxdg_shell_v6_ping (void                 *data,
+                    struct zxdg_shell_v6 *xdg_shell,
+                    uint32_t              serial)
+{
+  GDK_DISPLAY_DEBUG (GDK_DISPLAY (data), EVENTS,
+                     "ping, shell %p, serial %u", xdg_shell, serial);
+
+  zxdg_shell_v6_pong (xdg_shell, serial);
+}
+
+static const struct zxdg_shell_v6_listener zxdg_shell_v6_listener = {
+  zxdg_shell_v6_ping,
+};
+
+/* }}} */
+/* {{{ wl_shm listener */
+
 static void
 wl_shm_format (void          *data,
                struct wl_shm *wl_shm,
@@ -405,6 +437,9 @@ wl_shm_format (void          *data,
 static const struct wl_shm_listener wl_shm_listener = {
   wl_shm_format
 };
+
+/* }}} */
+/* {{{ server_decoration listener */
 
 static void
 server_decoration_manager_default_mode (void                                          *data,
@@ -426,25 +461,8 @@ static const struct org_kde_kwin_server_decoration_manager_listener server_decor
   .default_mode = server_decoration_manager_default_mode
 };
 
-/*
- * gdk_wayland_display_prefers_ssd:
- * @display: (type GdkWaylandDisplay): a `GdkDisplay`
- *
- * Checks whether the Wayland compositor prefers to draw the window
- * decorations or if it leaves decorations to the application.
- *
- * Returns: %TRUE if the compositor prefers server-side decorations
- */
-gboolean
-gdk_wayland_display_prefers_ssd (GdkDisplay *display)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  if (display_wayland->server_decoration_manager)
-    return display_wayland->server_decoration_mode == ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER;
-
-  return FALSE;
-}
+/* }}} */
+/* {{{ wl_registry listener */
 
 static void
 gdk_registry_handle_global (void               *data,
@@ -694,14 +712,8 @@ static const struct wl_registry_listener registry_listener = {
     gdk_registry_handle_global_remove
 };
 
-G_GNUC_PRINTF (1, 0)
-static void
-log_handler (const char *format, va_list args)
-{
-  g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, format, args);
-}
-
-static void init_settings (GdkDisplay *display);
+/* }}} */
+/* {{{ GObject implementation */
 
 GdkDisplay *
 _gdk_wayland_display_open (const char *display_name)
@@ -902,47 +914,6 @@ gdk_wayland_display_get_name (GdkDisplay *display)
   return name;
 }
 
-void
-gdk_wayland_display_system_bell (GdkDisplay *display,
-                                 GdkSurface *surface)
-{
-  GdkWaylandDisplay *display_wayland;
-  struct gtk_surface1 *gtk_surface = NULL;
-  struct wl_surface *wl_surface = NULL;
-  gint64 now_ms;
-
-  g_return_if_fail (GDK_IS_DISPLAY (display));
-
-  display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  if (!display_wayland->gtk_shell &&
-      !display_wayland->system_bell)
-    return;
-
-  if (surface)
-    {
-      if (GDK_IS_WAYLAND_TOPLEVEL (surface))
-        {
-          GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
-
-          gtk_surface = gdk_wayland_toplevel_get_gtk_surface (toplevel);
-        }
-
-      wl_surface = gdk_wayland_surface_get_wl_surface (surface);
-    }
-
-  now_ms = g_get_monotonic_time () / 1000;
-  if (now_ms - display_wayland->last_bell_time_ms < MIN_SYSTEM_BELL_DELAY_MS)
-    return;
-
-  display_wayland->last_bell_time_ms = now_ms;
-
-  if (display_wayland->system_bell)
-    xdg_system_bell_v1_ring (display_wayland->system_bell, wl_surface);
-  else
-    gtk_shell1_system_bell (display_wayland->gtk_shell, gtk_surface);
-}
-
 static void
 gdk_wayland_display_beep (GdkDisplay *display)
 {
@@ -991,53 +962,9 @@ gdk_wayland_display_get_next_serial (GdkDisplay *display)
   return ++serial;
 }
 
-/**
- * gdk_wayland_display_get_startup_notification_id:
- * @display: (type GdkWaylandDisplay): a `GdkDisplay`
- *
- * Gets the startup notification ID for a Wayland display, or %NULL
- * if no ID has been defined.
- *
- * Returns: (nullable): the startup notification ID for @display
- *
- * Deprecated: 4.10.
- */
-const char *
-gdk_wayland_display_get_startup_notification_id (GdkDisplay  *display)
-{
-  return GDK_WAYLAND_DISPLAY (display)->startup_notification_id;
-}
-
-/**
- * gdk_wayland_display_set_startup_notification_id:
- * @display: (type GdkWaylandDisplay): a `GdkDisplay`
- * @startup_id: the startup notification ID (must be valid utf8)
- *
- * Sets the startup notification ID for a display.
- *
- * This is usually taken from the value of the `DESKTOP_STARTUP_ID`
- * environment variable, but in some cases (such as the application not
- * being launched using exec()) it can come from other sources.
- *
- * The startup ID is also what is used to signal that the startup is
- * complete (for example, when opening a window or when calling
- * [method@Gdk.Display.notify_startup_complete]).
- *
- * Deprecated: 4.10. Use [method@Gdk.Toplevel.set_startup_id]
- */
-void
-gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,
-                                                 const char *startup_id)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  g_free (display_wayland->startup_notification_id);
-  display_wayland->startup_notification_id = g_strdup (startup_id);
-}
-
 static void
 gdk_wayland_display_notify_startup_complete (GdkDisplay  *display,
-					     const char *startup_id)
+                                             const char *startup_id)
 {
   GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
   char *free_this = NULL;
@@ -1123,10 +1050,6 @@ gdk_wayland_display_get_monitor_at_surface (GdkDisplay *display,
   return NULL;
 }
 
-static gboolean gdk_wayland_display_get_setting (GdkDisplay *display,
-                                                 const char *name,
-                                                 GValue     *value);
-
 static void
 _gdk_wayland_display_set_cursor_theme (GdkDisplay *display,
                                        const char *name,
@@ -1185,63 +1108,7 @@ gdk_wayland_display_init (GdkWaylandDisplay *display)
   display->monitors = g_list_store_new (GDK_TYPE_MONITOR);
 }
 
-GList *
-gdk_wayland_display_get_toplevel_surfaces (GdkDisplay *display)
-{
-  return GDK_WAYLAND_DISPLAY (display)->toplevels;
-}
-
-/**
- * gdk_wayland_display_set_cursor_theme:
- * @display: (type GdkWaylandDisplay): a `GdkDisplay`
- * @name: the new cursor theme
- * @size: the size to use for cursors
- *
- * Sets the cursor theme for the given @display.
- *
- * Deprecated: 4.16: Use the cursor-related properties of
- *   [GtkSettings](../gtk4/class.Settings.html) to set the cursor theme
- */
-void
-gdk_wayland_display_set_cursor_theme (GdkDisplay *display,
-                                      const char *name,
-                                      int         size)
-{
-  _gdk_wayland_display_set_cursor_theme (display, name, size);
-}
-
-/**
- * gdk_wayland_display_get_wl_display: (skip)
- * @display: (type GdkWaylandDisplay): a `GdkDisplay`
- *
- * Returns the Wayland `wl_display` of a `GdkDisplay`.
- *
- * Returns: (transfer none): a Wayland `wl_display`
- */
-struct wl_display *
-gdk_wayland_display_get_wl_display (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), NULL);
-
-  return GDK_WAYLAND_DISPLAY (display)->wl_display;
-}
-
-/**
- * gdk_wayland_display_get_wl_compositor: (skip)
- * @display: (type GdkWaylandDisplay): a `GdkDisplay`
- *
- * Returns the Wayland `wl_compositor` of a `GdkDisplay`.
- *
- * Returns: (transfer none): a Wayland `wl_compositor`
- */
-struct wl_compositor *
-gdk_wayland_display_get_wl_compositor (GdkDisplay *display)
-{
-  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), NULL);
-
-  return GDK_WAYLAND_DISPLAY (display)->compositor;
-}
-
+/* }}} */
 /* {{{ Shm buffer handling */
 
 static const cairo_user_data_key_t gdk_wayland_shm_surface_cairo_key;
@@ -2309,17 +2176,190 @@ gdk_wayland_display_get_setting (GdkDisplay *display,
 }
 
 /* }}} */
+/* {{{ Private API */
+
+void
+gdk_wayland_display_system_bell (GdkDisplay *display,
+                                 GdkSurface *surface)
+{
+  GdkWaylandDisplay *display_wayland;
+  struct gtk_surface1 *gtk_surface = NULL;
+  struct wl_surface *wl_surface = NULL;
+  gint64 now_ms;
+
+  g_return_if_fail (GDK_IS_DISPLAY (display));
+
+  display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (!display_wayland->gtk_shell &&
+      !display_wayland->system_bell)
+    return;
+
+  if (surface)
+    {
+      if (GDK_IS_WAYLAND_TOPLEVEL (surface))
+        {
+          GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (surface);
+
+          gtk_surface = gdk_wayland_toplevel_get_gtk_surface (toplevel);
+        }
+
+      wl_surface = gdk_wayland_surface_get_wl_surface (surface);
+    }
+
+  now_ms = g_get_monotonic_time () / 1000;
+  if (now_ms - display_wayland->last_bell_time_ms < MIN_SYSTEM_BELL_DELAY_MS)
+    return;
+
+  display_wayland->last_bell_time_ms = now_ms;
+
+  if (display_wayland->system_bell)
+    xdg_system_bell_v1_ring (display_wayland->system_bell, wl_surface);
+  else
+    gtk_shell1_system_bell (display_wayland->gtk_shell, gtk_surface);
+}
+
+void
+gdk_wayland_display_dispatch_queue (GdkDisplay            *display,
+                                    struct wl_event_queue *event_queue)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (wl_display_dispatch_queue (display_wayland->wl_display, event_queue) == -1)
+    {
+      g_message ("Error %d (%s) dispatching to Wayland display.",
+                 errno, g_strerror (errno));
+      _exit (1);
+    }
+}
+
+/* }}} */
 /* {{{ Public API */
+
+/*
+ * gdk_wayland_display_prefers_ssd:
+ * @display: (type GdkWaylandDisplay): a display
+ *
+ * Checks whether the Wayland compositor prefers to draw the window
+ * decorations or if it leaves decorations to the application.
+ *
+ * Returns: true if the compositor prefers server-side decorations
+ */
+gboolean
+gdk_wayland_display_prefers_ssd (GdkDisplay *display)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (display_wayland->server_decoration_manager)
+    return display_wayland->server_decoration_mode == ORG_KDE_KWIN_SERVER_DECORATION_MANAGER_MODE_SERVER;
+
+  return FALSE;
+}
+
+/**
+ * gdk_wayland_display_get_startup_notification_id:
+ * @display: (type GdkWaylandDisplay): a display
+ *
+ * Gets the startup notification ID for a Wayland display, or `NULL`
+ * if no ID has been defined.
+ *
+ * Returns: (nullable): the startup notification ID for @display
+ *
+ * Deprecated: 4.10.
+ */
+const char *
+gdk_wayland_display_get_startup_notification_id (GdkDisplay  *display)
+{
+  return GDK_WAYLAND_DISPLAY (display)->startup_notification_id;
+}
+
+/**
+ * gdk_wayland_display_set_startup_notification_id:
+ * @display: (type GdkWaylandDisplay): a display
+ * @startup_id: the startup notification ID (must be valid utf8)
+ *
+ * Sets the startup notification ID for a display.
+ *
+ * This is usually taken from the value of the `DESKTOP_STARTUP_ID`
+ * environment variable, but in some cases (such as the application not
+ * being launched using exec()) it can come from other sources.
+ *
+ * The startup ID is also what is used to signal that the startup is
+ * complete (for example, when opening a window or when calling
+ * [method@Gdk.Display.notify_startup_complete]).
+ *
+ * Deprecated: 4.10. Use [method@Gdk.Toplevel.set_startup_id]
+ */
+void
+gdk_wayland_display_set_startup_notification_id (GdkDisplay *display,
+                                                 const char *startup_id)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  g_free (display_wayland->startup_notification_id);
+  display_wayland->startup_notification_id = g_strdup (startup_id);
+}
+
+/**
+ * gdk_wayland_display_set_cursor_theme:
+ * @display: (type GdkWaylandDisplay): a display
+ * @name: the new cursor theme
+ * @size: the size to use for cursors
+ *
+ * Sets the cursor theme for the given @display.
+ *
+ * Deprecated: 4.16: Use the cursor-related properties of
+ *   [GtkSettings](../gtk4/class.Settings.html) to set the cursor theme
+ */
+void
+gdk_wayland_display_set_cursor_theme (GdkDisplay *display,
+                                      const char *name,
+                                      int         size)
+{
+  _gdk_wayland_display_set_cursor_theme (display, name, size);
+}
+
+/**
+ * gdk_wayland_display_get_wl_display: (skip)
+ * @display: (type GdkWaylandDisplay): a display
+ *
+ * Returns the Wayland `wl_display` of a display.
+ *
+ * Returns: (transfer none): a Wayland `wl_display`
+ */
+struct wl_display *
+gdk_wayland_display_get_wl_display (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), NULL);
+
+  return GDK_WAYLAND_DISPLAY (display)->wl_display;
+}
+
+/**
+ * gdk_wayland_display_get_wl_compositor: (skip)
+ * @display: (type GdkWaylandDisplay): a display
+ *
+ * Returns the Wayland `wl_compositor` of a display.
+ *
+ * Returns: (transfer none): a Wayland `wl_compositor`
+ */
+struct wl_compositor *
+gdk_wayland_display_get_wl_compositor (GdkDisplay *display)
+{
+  g_return_val_if_fail (GDK_IS_WAYLAND_DISPLAY (display), NULL);
+
+  return GDK_WAYLAND_DISPLAY (display)->compositor;
+}
 
 /**
  * gdk_wayland_display_query_registry:
- * @display: (type GdkWaylandDisplay): a `GdkDisplay`
+ * @display: (type GdkWaylandDisplay): a display
  * @global: global interface to query in the registry
  *
- * Returns %TRUE if the interface was found in the display
+ * Returns true if the interface was found in the display
  * `wl_registry.global` handler.
  *
- * Returns: %TRUE if the global is offered by the compositor
+ * Returns: true if the global is offered by the compositor
  */
 gboolean
 gdk_wayland_display_query_registry (GdkDisplay *display,
@@ -2344,19 +2384,5 @@ gdk_wayland_display_query_registry (GdkDisplay *display,
 }
 
 /* }}} */
-
-void
-gdk_wayland_display_dispatch_queue (GdkDisplay            *display,
-                                    struct wl_event_queue *event_queue)
-{
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  if (wl_display_dispatch_queue (display_wayland->wl_display, event_queue) == -1)
-    {
-      g_message ("Error %d (%s) dispatching to Wayland display.",
-                 errno, g_strerror (errno));
-      _exit (1);
-    }
-}
 
 /* vim:set foldmethod=marker: */
