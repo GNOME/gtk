@@ -81,15 +81,15 @@ memory_format_is_high_depth (GdkMemoryFormat format)
 static GdkTexture *
 buffer_diff_u8 (GdkColorState *color_state,
                 const guchar  *buf_a,
-                int            stride_a,
+                gsize          stride_a,
                 const guchar  *buf_b,
-                int            stride_b,
+                gsize          stride_b,
                 int            width,
                 int            height)
 {
   int x, y;
   guchar *buf_diff = NULL;
-  int stride_diff = 0;
+  gsize stride_diff = 0;
   GdkTexture *diff = NULL;
 
   for (y = 0; y < height; y++)

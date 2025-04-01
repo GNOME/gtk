@@ -177,7 +177,8 @@ gsk_vulkan_image_create_view (GskVulkanImage            *self,
                                      .image = self->vk_image,
                                      .viewType = VK_IMAGE_VIEW_TYPE_2D,
                                      .format = vk_format,
-                                     .components = *vk_components,
+                                     .components = vk_conversion ? (VkComponentMapping) { 0, }
+                                                                 : *vk_components,
                                      .subresourceRange = {
                                          .aspectMask = VK_IMAGE_ASPECT_COLOR_BIT,
                                          .baseMipLevel = 0,
