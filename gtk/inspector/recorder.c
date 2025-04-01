@@ -2440,6 +2440,7 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   GtkListItemFactory *factory;
   GtkSelectionModel *model;
   GtkColumnViewColumn *column;
+  GSettingsSchema *schema;
 
   recorder->record_events = TRUE;
 
@@ -2519,12 +2520,20 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   g_object_unref (factory);
   g_object_unref (column);
 
-  recorder->settings = g_settings_new ("org.gtk.gtk4.Inspector.Recorder");
+  schema = g_settings_schema_source_lookup (g_settings_schema_source_get_default (),
+                                            "org.gtk.gtk4.Inspector.Recorder",
+                                            TRUE);
+  if (schema)
+    {
+      recorder->settings = g_settings_new_full (schema, NULL, NULL);
 
-  g_settings_bind (recorder->settings, "debug-nodes", recorder, "debug-nodes", G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (recorder->settings, "record-events", recorder, "record-events", G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (recorder->settings, "highlight-sequences", recorder, "highlight-sequences", G_SETTINGS_BIND_DEFAULT);
-  g_settings_bind (recorder->settings, "dark", recorder, "dark", G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (recorder->settings, "debug-nodes", recorder, "debug-nodes", G_SETTINGS_BIND_DEFAULT);
+      g_settings_bind (recorder->settings, "record-events", recorder, "record-events", G_SETTINGS_BIND_DEFAULT);
+     g_settings_bind (recorder->settings, "highlight-sequences", recorder, "highlight-sequences", G_SETTINGS_BIND_DEFAULT);
+     g_settings_bind (recorder->settings, "dark", recorder, "dark", G_SETTINGS_BIND_DEFAULT);
+
+     g_settings_schema_unref (schema);
+   }
 }
 
 static void
