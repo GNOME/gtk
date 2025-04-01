@@ -219,3 +219,11 @@ void gdk_wayland_surface_restore_shortcuts (GdkSurface *surface,
 
 GdkModifierType gdk_wayland_keymap_get_gdk_modifiers (GdkKeymap *keymap,
                                                       guint32    mods);
+
+void gdk_wayland_display_init_xdg_output (GdkWaylandDisplay *display_wayland);
+void gdk_wayland_monitor_get_xdg_output  (GdkWaylandMonitor *monitor);
+void gdk_wayland_display_add_output      (GdkWaylandDisplay *display_wayland,
+                                          guint32            id,
+                                          struct wl_output  *output);
+void gdk_wayland_display_remove_output   (GdkWaylandDisplay *self,
+                                          guint32            id);
