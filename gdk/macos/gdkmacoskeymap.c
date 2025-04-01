@@ -580,7 +580,7 @@ gdk_macos_keymap_translate_keyboard_state (GdkKeymap       *keymap,
   if (hardware_keycode < 0 || hardware_keycode >= NUM_KEYCODES)
     return FALSE;
 
-  tmp_keyval = translate_keysym (hardware_keycode, group, state, level, effective_group);
+  tmp_keyval = translate_keysym (hardware_keycode, group, state, effective_group, level);
 
   /* Check if modifiers modify the keyval */
   if (consumed_modifiers)
