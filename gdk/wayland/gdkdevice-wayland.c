@@ -64,7 +64,6 @@ gdk_wayland_device_set_surface_cursor (GdkDevice  *device,
           pointer->cursor = gdk_cursor_new_from_name ("default", NULL);
           pointer->cursor_is_default = TRUE;
 
-          gdk_wayland_seat_stop_cursor_animation (seat, pointer);
           gdk_wayland_device_update_surface_cursor (device);
         }
       else
@@ -77,7 +76,6 @@ gdk_wayland_device_set_surface_cursor (GdkDevice  *device,
       g_set_object (&pointer->cursor, cursor);
       pointer->cursor_is_default = FALSE;
 
-      gdk_wayland_seat_stop_cursor_animation (seat, pointer);
       gdk_wayland_device_update_surface_cursor (device);
     }
 }
@@ -326,19 +324,16 @@ _gdk_wayland_cursor_get_shape (GdkCursor *cursor,
   return 0;
 }
 
-gboolean
+void
 gdk_wayland_device_update_surface_cursor (GdkDevice *device)
 {
   GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (gdk_device_get_seat (device));
   GdkWaylandDevice *wayland_device = GDK_WAYLAND_DEVICE (device);
-  GdkWaylandPointerData *pointer =
-    gdk_wayland_device_get_pointer (wayland_device);
+  GdkWaylandPointerData *pointer = gdk_wayland_device_get_pointer (wayland_device);
   GdkWaylandDisplay *wayland_display = GDK_WAYLAND_DISPLAY (seat->display);
   struct wl_buffer *buffer;
   int x, y, w, h;
   double preferred_scale, scale;
-  guint next_image_index, next_image_delay;
-  gboolean retval = G_SOURCE_REMOVE;
   GdkWaylandTabletData *tablet;
   unsigned int shape;
   gboolean use_surface_offset;
@@ -346,16 +341,10 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
   tablet = gdk_wayland_seat_find_tablet (seat, device);
 
   if (!pointer->cursor)
-    {
-      pointer->cursor_timeout_id = 0;
-      return G_SOURCE_REMOVE;
-    }
+    return;
 
   if (tablet && !tablet->current_tool)
-    {
-      pointer->cursor_timeout_id = 0;
-      return G_SOURCE_REMOVE;
-    }
+    return;
 
   if (GDK_WAYLAND_DISPLAY (seat->display)->cursor_shape)
     {
@@ -364,21 +353,21 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
       if (shape != 0)
         {
           if (pointer->cursor_shape == shape)
-            return G_SOURCE_REMOVE;
+            return;
 
           if (tablet && tablet->current_tool->shape_device)
             {
               pointer->has_cursor_surface = FALSE;
               pointer->cursor_shape = shape;
               wp_cursor_shape_device_v1_set_shape (tablet->current_tool->shape_device, pointer->enter_serial, shape);
-              return G_SOURCE_REMOVE;
+              return;
             }
           else if (seat->wl_pointer && pointer->shape_device)
             {
               pointer->has_cursor_surface = FALSE;
               pointer->cursor_shape = shape;
               wp_cursor_shape_device_v1_set_shape (pointer->shape_device, pointer->enter_serial, shape);
-              return G_SOURCE_REMOVE;
+              return;
             }
         }
     }
@@ -388,7 +377,6 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
   buffer = _gdk_wayland_cursor_get_buffer (GDK_WAYLAND_DISPLAY (seat->display),
                                            pointer->cursor,
                                            preferred_scale,
-                                           pointer->cursor_image_index,
                                            &x, &y, &w, &h,
                                            &scale);
 
@@ -418,9 +406,9 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
           wp_viewport_set_source (pointer->pointer_surface_viewport,
                                   wl_fixed_from_int (0),
                                   wl_fixed_from_int (0),
-                                  wl_fixed_from_double (w * scale),
-                                  wl_fixed_from_double (h * scale));
-          wp_viewport_set_destination (pointer->pointer_surface_viewport, w, h);
+                                  wl_fixed_from_double (w),
+                                  wl_fixed_from_double (h));
+          wp_viewport_set_destination (pointer->pointer_surface_viewport, w * scale, h * scale);
         }
       wl_surface_damage (pointer->pointer_surface,  0, 0, w, h);
       wl_surface_commit (pointer->pointer_surface);
@@ -448,10 +436,7 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
                                  x, y);
         }
       else
-        {
-          pointer->cursor_timeout_id = 0;
-          return G_SOURCE_REMOVE;
-        }
+        return;
 
       pointer->has_cursor_surface = TRUE;
       pointer->cursor_shape = 0;
@@ -459,42 +444,6 @@ gdk_wayland_device_update_surface_cursor (GdkDevice *device)
 
   pointer->cursor_hotspot_x = x;
   pointer->cursor_hotspot_y = y;
-
-  next_image_index =
-    _gdk_wayland_cursor_get_next_image_index (GDK_WAYLAND_DISPLAY (seat->display),
-                                              pointer->cursor,
-                                              preferred_scale,
-                                              pointer->cursor_image_index,
-                                              &next_image_delay);
-
-  if (next_image_index != pointer->cursor_image_index)
-    {
-      if (next_image_delay != pointer->cursor_image_delay ||
-          pointer->cursor_timeout_id == 0)
-        {
-          guint id;
-          GSource *source;
-
-          gdk_wayland_seat_stop_cursor_animation (seat, pointer);
-
-          /* Queue timeout for next frame */
-          id = g_timeout_add (next_image_delay,
-                              (GSourceFunc) gdk_wayland_device_update_surface_cursor,
-                              device);
-          source = g_main_context_find_source_by_id (NULL, id);
-          g_source_set_static_name (source, "[gtk] gdk_wayland_device_update_surface_cursor");
-          pointer->cursor_timeout_id = id;
-        }
-      else
-        retval = G_SOURCE_CONTINUE;
-
-      pointer->cursor_image_index = next_image_index;
-      pointer->cursor_image_delay = next_image_delay;
-    }
-  else
-    gdk_wayland_seat_stop_cursor_animation (seat, pointer);
-
-  return retval;
 }
 
 GdkModifierType
@@ -860,7 +809,7 @@ gdk_wayland_device_maybe_emit_grab_crossing (GdkDevice  *device,
     device_emit_grab_crossing (device, focus, window, GDK_CROSSING_GRAB, time);
 }
 
-GdkSurface*
+GdkSurface *
 gdk_wayland_device_maybe_emit_ungrab_crossing (GdkDevice *device,
                                                guint32    time_)
 {

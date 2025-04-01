@@ -99,20 +99,6 @@ static void deliver_key_event (GdkWaylandSeat       *seat,
                                uint32_t              state,
                                gboolean              from_key_repeat);
 
-void
-gdk_wayland_seat_stop_cursor_animation (GdkWaylandSeat        *seat,
-                                        GdkWaylandPointerData *pointer)
-{
-  if (pointer->cursor_timeout_id > 0)
-    {
-      g_source_remove (pointer->cursor_timeout_id);
-      pointer->cursor_timeout_id = 0;
-      pointer->cursor_image_delay = 0;
-    }
-
-  pointer->cursor_image_index = 0;
-}
-
 GdkWaylandTabletData *
 gdk_wayland_seat_find_tablet (GdkWaylandSeat *seat,
                               GdkDevice      *device)
@@ -742,8 +728,6 @@ pointer_handle_leave (void              *data,
   g_object_unref (seat->pointer_info.focus);
   seat->pointer_info.focus = NULL;
   seat->pointer_info.cursor_shape = 0;
-  if (seat->cursor)
-    gdk_wayland_seat_stop_cursor_animation (seat, &seat->pointer_info);
 
   seat->pointer_info.has_cursor_surface = FALSE;
 
@@ -2848,9 +2832,6 @@ tablet_tool_handle_proximity_out (void                      *data,
                                    tool->tool,
                                    tablet->pointer_info.time);
   gdk_wayland_tablet_set_frame_event (tablet, event);
-
-  gdk_wayland_seat_stop_cursor_animation (GDK_WAYLAND_SEAT (tool->seat),
-                                          &tablet->pointer_info);
 
   g_object_unref (tablet->pointer_info.focus);
   tablet->pointer_info.focus = NULL;

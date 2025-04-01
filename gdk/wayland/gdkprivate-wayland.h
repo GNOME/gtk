@@ -119,17 +119,11 @@ void       gdk_wayland_display_system_bell (GdkDisplay *display,
 struct wl_buffer *_gdk_wayland_cursor_get_buffer (GdkWaylandDisplay *display,
                                                   GdkCursor         *cursor,
                                                   double             desired_scale,
-                                                  guint              image_index,
                                                   int               *hotspot_x,
                                                   int               *hotspot_y,
                                                   int               *w,
                                                   int               *h,
                                                   double            *scale);
-guint      _gdk_wayland_cursor_get_next_image_index (GdkWaylandDisplay *display,
-                                                     GdkCursor         *cursor,
-                                                     guint              scale,
-                                                     guint              current_image_index,
-                                                     guint             *next_image_delay);
 
 void            gdk_wayland_surface_sync                   (GdkSurface           *surface);
 void            gdk_wayland_surface_handle_empty_frame     (GdkSurface           *surface);
@@ -208,6 +202,8 @@ cairo_surface_t * gdk_wayland_display_create_shm_surface  (GdkWaylandDisplay    
                                                            guint                     height);
 struct wl_buffer *_gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface);
 gboolean _gdk_wayland_is_shm_surface (cairo_surface_t *surface);
+struct wl_buffer *_gdk_wayland_shm_texture_get_wl_buffer (GdkWaylandDisplay *display,
+                                                          GdkTexture        *texture);
 
 void gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
                                          GdkCursor *cursor);
