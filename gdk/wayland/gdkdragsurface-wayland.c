@@ -19,7 +19,7 @@
 
 #include "gdkdragsurface-wayland.h"
 
-#include "gdksurface-wayland.h"
+#include "gdksurface-wayland-private.h"
 
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-wayland.h"

@@ -17,7 +17,8 @@
 
 #include "config.h"
 
-#include "gdksurface-wayland.h"
+#include "gdkwaylandpopup.h"
+#include "gdksurface-wayland-private.h"
 
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-wayland.h"

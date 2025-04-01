@@ -36,7 +36,6 @@
 #include "gdkdisplay-wayland.h"
 #include "gdkmonitor-wayland.h"
 #include "gdkseat-wayland.h"
-#include "gdksurface-wayland.h"
 #include "gdksurfaceprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-wayland-private.h"

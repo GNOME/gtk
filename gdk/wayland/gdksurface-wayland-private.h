@@ -17,6 +17,7 @@
 
 #pragma once
 
+#include "gdkwaylandsurface.h"
 #include "gdkfractionalscale.h"
 #include "gdkwaylandcolor-private.h"
 #include "gdkwaylandpresentationtime-private.h"
@@ -162,3 +163,5 @@ void gdk_wayland_surface_inhibit_shortcuts (GdkSurface *surface,
                                            GdkSeat   *gdk_seat);
 void gdk_wayland_surface_restore_shortcuts (GdkSurface *surface,
                                            GdkSeat   *gdk_seat);
+
+void                    gdk_wayland_surface_ensure_wl_egl_window        (GdkSurface  *surface);

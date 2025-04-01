@@ -17,8 +17,9 @@
 
 #include "config.h"
 
-#include "gdksurface-wayland.h"
+#include "gdksubsurface-wayland-private.h"
 
+#include "gdkwaylandtoplevel.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdisplay-wayland.h"
 #include "gdkdragsurfaceprivate.h"
@@ -34,7 +35,6 @@
 #include "gdkdevice-wayland-private.h"
 #include "gdkdmabuftextureprivate.h"
 #include "gdksubsurfaceprivate.h"
-#include "gdksubsurface-wayland-private.h"
 #include "gdkshm.h"
 
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>

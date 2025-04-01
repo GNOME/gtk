@@ -24,7 +24,6 @@
 #include "gdkglcontext-wayland.h"
 
 #include "gdkdisplay-wayland.h"
-#include "gdksurface-wayland.h"
 #include "gdksurface-wayland-private.h"
 
 #include "gdkwaylanddisplay.h"
