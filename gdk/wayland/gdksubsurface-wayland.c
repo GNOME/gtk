@@ -160,6 +160,9 @@ get_dmabuf_wl_buffer (GdkWaylandSubsurface            *self,
   CreateBufferData cd = { NULL, FALSE };
   struct wl_event_queue *event_queue;
 
+  if (display->linux_dmabuf == NULL)
+    return NULL;
+
   params = zwp_linux_dmabuf_v1_create_params (display->linux_dmabuf);
 
   for (gsize i = 0; i < dmabuf->n_planes; i++)
@@ -249,7 +252,8 @@ get_gl_texture_wl_buffer (GdkWaylandSubsurface *self,
   GLBufferData gldata;
 
   glcontext = gdk_display_get_gl_context (display);
-  if (!gdk_gl_context_is_shared (glcontext, gdk_gl_texture_get_context (gltexture)))
+  if (glcontext == NULL ||
+      !gdk_gl_context_is_shared (glcontext, gdk_gl_texture_get_context (gltexture)))
     return NULL;
 
   /* Can we avoid this when a right context is current already? */
