@@ -551,6 +551,16 @@ gdk_save_png (GdkTexture *texture)
     case GDK_MEMORY_G8_R8B8_422:
     case GDK_MEMORY_G8_B8R8_444:
     case GDK_MEMORY_G8_R8B8_444:
+    case GDK_MEMORY_G8_B8_R8_410:
+    case GDK_MEMORY_G8_R8_B8_410:
+    case GDK_MEMORY_G8_B8_R8_411:
+    case GDK_MEMORY_G8_R8_B8_411:
+    case GDK_MEMORY_G8_B8_R8_420:
+    case GDK_MEMORY_G8_R8_B8_420:
+    case GDK_MEMORY_G8_B8_R8_422:
+    case GDK_MEMORY_G8_R8_B8_422:
+    case GDK_MEMORY_G8_B8_R8_444:
+    case GDK_MEMORY_G8_R8_B8_444:
       format = GDK_MEMORY_R8G8B8;
       png_format = PNG_COLOR_TYPE_RGB;
       depth = 8;

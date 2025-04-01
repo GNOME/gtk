@@ -37,6 +37,16 @@ gdk_memory_format_get_channel_type (GdkMemoryFormat format)
     case GDK_MEMORY_G8_R8B8_422:
     case GDK_MEMORY_G8_B8R8_444:
     case GDK_MEMORY_G8_R8B8_444:
+    case GDK_MEMORY_G8_B8_R8_410:
+    case GDK_MEMORY_G8_R8_B8_410:
+    case GDK_MEMORY_G8_B8_R8_411:
+    case GDK_MEMORY_G8_R8_B8_411:
+    case GDK_MEMORY_G8_B8_R8_420:
+    case GDK_MEMORY_G8_R8_B8_420:
+    case GDK_MEMORY_G8_B8_R8_422:
+    case GDK_MEMORY_G8_R8_B8_422:
+    case GDK_MEMORY_G8_B8_R8_444:
+    case GDK_MEMORY_G8_R8_B8_444:
       return CHANNEL_UINT_8;
 
     case GDK_MEMORY_R16G16B16:
@@ -108,6 +118,16 @@ gdk_memory_format_n_colors (GdkMemoryFormat format)
     case GDK_MEMORY_G10X6_B10X6R10X6_420:
     case GDK_MEMORY_G12X4_B12X4R12X4_420:
     case GDK_MEMORY_G16_B16R16_420:
+    case GDK_MEMORY_G8_B8_R8_410:
+    case GDK_MEMORY_G8_R8_B8_410:
+    case GDK_MEMORY_G8_B8_R8_411:
+    case GDK_MEMORY_G8_R8_B8_411:
+    case GDK_MEMORY_G8_B8_R8_420:
+    case GDK_MEMORY_G8_R8_B8_420:
+    case GDK_MEMORY_G8_B8_R8_422:
+    case GDK_MEMORY_G8_R8_B8_422:
+    case GDK_MEMORY_G8_B8_R8_444:
+    case GDK_MEMORY_G8_R8_B8_444:
       return 3;
 
     case GDK_MEMORY_G8:
@@ -283,6 +303,30 @@ gdk_memory_pixel_print (const guchar          *data,
       }
       break;
 
+    case GDK_MEMORY_G8_B8_R8_410:
+    case GDK_MEMORY_G8_R8_B8_410:
+    case GDK_MEMORY_G8_B8_R8_411:
+    case GDK_MEMORY_G8_R8_B8_411:
+    case GDK_MEMORY_G8_B8_R8_420:
+    case GDK_MEMORY_G8_R8_B8_420:
+    case GDK_MEMORY_G8_B8_R8_422:
+    case GDK_MEMORY_G8_R8_B8_422:
+    case GDK_MEMORY_G8_B8_R8_444:
+    case GDK_MEMORY_G8_R8_B8_444:
+      {
+        const guchar *y_data = data + gdk_memory_layout_offset (layout, 0, x, y);
+        const guchar *u_data = data + gdk_memory_layout_offset (layout,
+                                                                1,
+                                                                x - x % gdk_memory_format_get_plane_block_width (layout->format, 1),
+                                                                y - y % gdk_memory_format_get_plane_block_height (layout->format, 1));
+        const guchar *v_data = data + gdk_memory_layout_offset (layout,
+                                                                2,
+                                                                x - x % gdk_memory_format_get_plane_block_width (layout->format, 2),
+                                                                y - y % gdk_memory_format_get_plane_block_height (layout->format, 2));
+        g_string_append_printf (string, "%02X %02X %02X", y_data[0], u_data[0], v_data[0]);
+      }
+      break;
+
     case GDK_MEMORY_N_FORMATS:
     default:
       g_assert_not_reached ();
@@ -430,6 +474,35 @@ gdk_memory_pixel_equal (const guchar          *data1,
           return FALSE;
       }
       return TRUE;
+
+    case GDK_MEMORY_G8_B8_R8_410:
+    case GDK_MEMORY_G8_R8_B8_410:
+    case GDK_MEMORY_G8_B8_R8_411:
+    case GDK_MEMORY_G8_R8_B8_411:
+    case GDK_MEMORY_G8_B8_R8_420:
+    case GDK_MEMORY_G8_R8_B8_420:
+    case GDK_MEMORY_G8_B8_R8_422:
+    case GDK_MEMORY_G8_R8_B8_422:
+    case GDK_MEMORY_G8_B8_R8_444:
+    case GDK_MEMORY_G8_R8_B8_444:
+      return *(data1 + gdk_memory_layout_offset (layout1, 0, x, y)) == 
+             *(data2 + gdk_memory_layout_offset (layout2, 0, x, y)) &&
+             *(data1 + gdk_memory_layout_offset (layout1,
+                                                 1,
+                                                 x - x % gdk_memory_format_get_plane_block_width (layout1->format, 1),
+                                                 y - y % gdk_memory_format_get_plane_block_height (layout1->format, 1))) ==
+             *(data2 + gdk_memory_layout_offset (layout2,
+                                                 1,
+                                                 x - x % gdk_memory_format_get_plane_block_width (layout2->format, 1),
+                                                  y - y % gdk_memory_format_get_plane_block_height (layout2->format, 1))) &&
+             *(data1 + gdk_memory_layout_offset (layout1,
+                                                 2,
+                                                 x - x % gdk_memory_format_get_plane_block_width (layout1->format, 2),
+                                                 y - y % gdk_memory_format_get_plane_block_height (layout1->format, 2))) ==
+             *(data2 + gdk_memory_layout_offset (layout2,
+                                                 2,
+                                                 x - x % gdk_memory_format_get_plane_block_width (layout2->format, 2),
+                                                 y - y % gdk_memory_format_get_plane_block_height (layout2->format, 2)));
 
     case GDK_MEMORY_N_FORMATS:
     default:
