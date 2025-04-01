@@ -12,6 +12,10 @@
 #define DRM_FORMAT_MOD_INVALID ((1ULL << 56) - 1)
 #endif
 
+#ifndef DRM_FORMAT_MOD_LINEAR
+#define DRM_FORMAT_MOD_LINEAR 0
+#endif
+
 #ifndef fourcc_code
 #define fourcc_code(a, b, c, d) ((guint32)(a) | ((guint32)(b) << 8) | \
 				 ((guint32)(c) << 16) | ((guint32)(d) << 24))

@@ -1,11 +1,13 @@
+#include "config.h"
+
 #include <gtk/gtk.h>
 
-#include <epoxy/gl.h>
-
+#include "gdk/gdkmemoryformatprivate.h"
 #include "gsk/gl/fp16private.h"
 #include "testsuite/gdk/gdktestutils.h"
 
-#define N 10
+
+#define N_RUNS 10
 
 static GdkGLContext *gl_context = NULL;
 static GskRenderer *gl_renderer = NULL;
@@ -107,14 +109,8 @@ gl_native_should_skip_format (GdkMemoryFormat format)
 
   gdk_gl_context_get_version (gl_context, &major, &minor);
 
-  if (major < 3)
-    {
-      g_test_skip ("GLES < 3.0 is not supported");
-      return TRUE;
-    }
-
-  if (gdk_memory_format_is_deep (format) &&
-      (major < 3 || (major == 3 && minor < 1)))
+  if (gdk_memory_format_get_depth (format, FALSE) != GDK_MEMORY_U8 &&
+      major == 3 && minor < 1)
     {
       g_test_skip ("GLES < 3.1 can't handle 16bit non-RGBA formats");
       return TRUE;
@@ -488,8 +484,7 @@ test_download (gconstpointer data,
 
       /* these methods may premultiply during operation */
       if (color.alpha == 0.f &&
-          !gdk_memory_format_is_premultiplied (format) &&
-          gdk_memory_format_has_alpha (format) &&
+          gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT &&
           (method == TEXTURE_METHOD_GL_NATIVE || method == TEXTURE_METHOD_VULKAN ||
            method == TEXTURE_METHOD_GL || method == TEXTURE_METHOD_GL_RELEASED))
         color = (GdkRGBA) { 0, 0, 0, 0 };
@@ -508,7 +503,7 @@ test_download (gconstpointer data,
 static void
 test_download_1x1 (gconstpointer data)
 {
-  test_download (data, 1, 1, N);
+  test_download (data, 1, 1, N_RUNS);
 }
 
 static void
@@ -547,7 +542,7 @@ test_conversion (gconstpointer data,
   else
     accurate = TRUE;
 
-  for (i = 0; i < N; i++)
+  for (i = 0; i < N_RUNS; i++)
     {
       /* non-premultiplied can represet GdkRGBA (1, 1, 1, 0)
        * but premultiplied cannot.
@@ -558,15 +553,15 @@ test_conversion (gconstpointer data,
           create_random_color (&color1);
         }
       while (color1.alpha == 0 &&
-             gdk_memory_format_is_premultiplied (format1) !=
-             gdk_memory_format_is_premultiplied (format2));
+             (gdk_memory_format_alpha (format1) == GDK_MEMORY_ALPHA_PREMULTIPLIED) !=
+             (gdk_memory_format_alpha (format2) == GDK_MEMORY_ALPHA_PREMULTIPLIED));
 
       /* If the source can't handle alpha, make sure
        * the target uses with the opaque version of the color.
        */
       color2 = color1;
-      if (!gdk_memory_format_has_alpha (format1) &&
-          gdk_memory_format_has_alpha (format2))
+      if (gdk_memory_format_alpha (format1) == GDK_MEMORY_ALPHA_OPAQUE &&
+          gdk_memory_format_alpha (format2) != GDK_MEMORY_ALPHA_OPAQUE)
         color_make_opaque (&color2, &color2);
 
       /* If the source has fewer color channels than the
@@ -654,7 +649,7 @@ add_conversion_test (const char    *name,
     {
       for (format2 = 0; format2 < GDK_MEMORY_N_FORMATS; format2++)
         {
-          char *test_name = g_strdup_printf ("%s/%s/%s",
+          char *test_name = g_strdup_printf ("%s/from-%s/to-%s",
                                              name,
                                              g_enum_get_value (enum_class, format1)->value_nick,
                                              g_enum_get_value (enum_class, format2)->value_nick);
