@@ -4827,6 +4827,12 @@ gdk_x11_surface_create_window (GdkX11Surface        *self,
   xattributes->background_pixmap = None;
   xattributes_mask |= CWBackPixmap;
 
+  if (gdk_display_is_rgba (display))
+    {
+      xattributes->background_pixel = 0;
+      xattributes_mask |= CWBackPixel;
+    }
+
   xattributes->border_pixel = BlackPixel (GDK_DISPLAY_XDISPLAY (display),
                                           display_x11->screen->screen_num);
   xattributes_mask |= CWBorderPixel;
