@@ -1896,6 +1896,7 @@ gtk_clipboard_wait_for_targets (GtkClipboard  *clipboard,
  
       if (gdk_display_supports_selection_notification (gtk_clipboard_get_display (clipboard)))
  	{
+ 	  g_free (clipboard->cached_targets);
  	  clipboard->n_cached_targets = tmp_n_targets;
  	  clipboard->cached_targets = g_memdup (tmp_targets,
  						tmp_n_targets * sizeof (GdkAtom));
