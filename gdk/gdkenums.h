@@ -849,6 +849,81 @@ typedef enum
  *
  * Since: 4.20
  */
+/**
+ * GDK_MEMORY_G8B8G8R8_422:
+ *
+ * Packed format with subsampled channels.
+ *
+ * Each channel is a 8 bit integer. The red and blue/chroma channels
+ * are subsampled and interleaved with the green/luma channel.
+ *
+ * Each block contains 2 pixels, so the width must be a multiple of
+ * 2.
+ *
+ * Commonly known by the fourcc "YUYV".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8B8G8R8_422:
+ *
+ * Packed format with subsampled channels.
+ *
+ * Each channel is a 8 bit integer. The red and blue/chroma channels
+ * are subsampled and interleaved with the green/luma channel.
+ *
+ * Each block contains 2 pixels, so the width must be a multiple of
+ * 2.
+ *
+ * Commonly known by the fourcc "YUYV".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8R8G8B8_422:
+ *
+ * Packed format with subsampled channels.
+ *
+ * Each channel is a 8 bit integer. The red and blue/chroma channels
+ * are subsampled and interleaved with the green/luma channel.
+ *
+ * Each block contains 2 pixels, so the width must be a multiple of
+ * 2.
+ *
+ * Commonly known by the fourcc "YVYU".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_R8G8B8G8_422:
+ *
+ * Packed format with subsampled channels.
+ *
+ * Each channel is a 8 bit integer. The red and blue/chroma channels
+ * are subsampled and interleaved with the green/luma channel.
+ *
+ * Each block contains 2 pixels, so the width must be a multiple of
+ * 2.
+ *
+ * Commonly known by the fourcc "VYUY".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_B8G8R8G8_422:
+ *
+ * Packed format with subsampled channels.
+ *
+ * Each channel is a 8 bit integer. The red and blue/chroma channels
+ * are subsampled and interleaved with the green/luma channel.
+ *
+ * Each block contains 2 pixels, so the width must be a multiple of
+ * 2.
+ *
+ * Commonly known by the fourcc "UYVY".
+ *
+ * Since: 4.20
+ */
 typedef enum {
   GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
   GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
@@ -902,6 +977,10 @@ typedef enum {
   GDK_MEMORY_G8_R8_B8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
   GDK_MEMORY_G8_B8_R8_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
   GDK_MEMORY_G8_R8_B8_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8B8G8R8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8R8G8B8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_R8G8B8G8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_B8G8R8G8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
 
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;
