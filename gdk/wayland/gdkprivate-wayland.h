@@ -225,3 +225,8 @@ void gdk_wayland_display_add_output      (GdkWaylandDisplay *display_wayland,
                                           struct wl_output  *output);
 void gdk_wayland_display_remove_output   (GdkWaylandDisplay *self,
                                           guint32            id);
+
+void gdk_wayland_display_init_settings (GdkDisplay *display);
+gboolean gdk_wayland_display_get_setting (GdkDisplay *display,
+                                          const char *name,
+                                          GValue     *value);
