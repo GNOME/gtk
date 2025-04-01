@@ -26,22 +26,16 @@ struct _GdkWaylandMonitor {
   GdkMonitor parent;
 
   guint32 id;
-  guint32 version;
   struct wl_output *output;
   gboolean added;
 
   struct zxdg_output_v1 *xdg_output;
-  /* Raw wl_output data */
+
+  /* Raw wl_output and xdg_output data */
   GdkRectangle output_geometry;
-  /* Raw xdg_output data */
-  GdkRectangle xdg_output_geometry;
-  char *name;
-  char *description;
-  gboolean wl_output_done;
-  gboolean xdg_output_done;
+  GdkRectangle logical_geometry;
 };
 
 struct _GdkWaylandMonitorClass {
   GdkMonitorClass parent_class;
 };
-
