@@ -90,8 +90,6 @@
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
 #include "wayland/gdkdisplay-wayland.h"
-#include "wayland/gdksurface-wayland.h"
-#include "wayland/gdktoplevel-wayland-private.h"
 #endif
 
 #ifdef GDK_WINDOWING_MACOS
