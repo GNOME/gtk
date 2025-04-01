@@ -5521,6 +5521,11 @@ gtk_window_unminimize (GtkWindow *window)
  * in which case the window will be maximized when it appears onscreen
  * initially.
  *
+ * If a window is not explicitly maximized or unmaximized before it is
+ * shown, the initial state is at the window managers discretion. For
+ * example, it might decide to maximize a window that almost fills the
+ * screen.
+ *
  * You can track the result of this operation via the
  * [property@Gdk.Toplevel:state] property, or by listening to
  * notifications on the [property@Gtk.Window:maximized]
@@ -5559,6 +5564,11 @@ gtk_window_maximize (GtkWindow *window)
  * afterward, because other entities (e.g. the user or window manager)
  * maximize it again, and not all window managers honor requests to
  * unmaximize.
+ *
+ * If a window is not explicitly maximized or unmaximized before it is
+ * shown, the initial state is at the window managers discretion. For
+ * example, it might decide to maximize a window that almost fills the
+ * screen.
  *
  * You can track the result of this operation via the
  * [property@Gdk.Toplevel:state] property, or by listening to
@@ -5610,6 +5620,9 @@ unset_fullscreen_monitor (GtkWindow *window)
  * afterward, because other entities (e.g. the user or window manager)
  * unfullscreen it again, and not all window managers honor requests
  * to fullscreen windows.
+ *
+ * If a window is not explicitly fullscreened or unfullscreened before
+ * it is shown, the initial state is at the window managers discretion.
  *
  * You can track the result of this operation via the
  * [property@Gdk.Toplevel:state] property, or by listening to
@@ -5702,6 +5715,9 @@ gtk_window_fullscreen_on_monitor (GtkWindow  *window,
  * managers honor requests to unfullscreen windows; normally the
  * window will end up restored to its normal state. Just don’t
  * write code that crashes if not.
+ *
+ * If a window is not explicitly fullscreened or unfullscreened before
+ * it is shown, the initial state is at the window managers discretion.
  *
  * You can track the result of this operation via the
  * [property@Gdk.Toplevel:state] property, or by listening to
