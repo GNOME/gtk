@@ -684,7 +684,8 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   gsize n_modifiers;
   GskGpuImageFlags flags;
 
-  if (!gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF))
+  if (!gdk_has_feature (GDK_FEATURE_DMABUF) ||
+      !gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF))
     return NULL;
 
   vk_srgb_format = VK_FORMAT_UNDEFINED;
