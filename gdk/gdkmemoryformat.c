@@ -338,6 +338,98 @@ name ## _mipmap_linear (guchar                *dest, \
     } \
 } \
 
+#define YUYV_FUNCS(name, yi, ui, vi) \
+static void \
+name ## _to_float (float                (*dest)[4], \
+                   const guchar          *src_data, \
+                   const GdkMemoryLayout *src_layout, \
+                   gsize                  y) \
+{ \
+  const guchar *src = (const guchar *) (src_data + gdk_memory_layout_offset (src_layout, 0, 0, y)); \
+\
+  for (gsize x = 0; x < src_layout->width; x += 2) \
+    { \
+      dest[x][1] = (float) src[2 * x + yi] / 255.f; \
+      dest[x][2] = (float) src[2 * x + ui] / 255.f; \
+      dest[x][0] = (float) src[2 * x + vi] / 255.f; \
+      dest[x][3] = 1.0f; \
+      dest[x + 1][1] = (float) src[2 * x + yi + 2] / 255.f; \
+      dest[x + 1][2] = (float) src[2 * x + ui] / 255.f; \
+      dest[x + 1][0] = (float) src[2 * x + vi] / 255.f; \
+      dest[x + 1][3] = 1.0f; \
+    } \
+} \
+\
+static void \
+name ## _from_float (guchar                *dest_data, \
+                     const GdkMemoryLayout *dest_layout, \
+                     const float          (*src)[4], \
+                     gsize                  y) \
+{ \
+  guchar *dest = (guchar *) (dest_data + gdk_memory_layout_offset (dest_layout, 0, 0, y)); \
+\
+  for (gsize x = 0; x < dest_layout->width; x += 2) \
+    { \
+      dest[2 * x + yi] = CLAMP (src[x][1] * 255 + 0.5, 0, 255); \
+      dest[2 * x + yi + 2] = CLAMP (src[x + 1][1] * 255 + 0.5, 0, 255); \
+      dest[2 * x + ui] = CLAMP ((src[x][2] + src[x + 1][2]) / 2 * 255 + 0.5, 0, 255); \
+      dest[2 * x + vi] = CLAMP ((src[x][0] + src[x + 1][0]) / 2 * 255 + 0.5, 0, 255); \
+    } \
+}\
+\
+static void \
+name ## _mipmap_nearest (guchar                *dest, \
+                         const guchar          *src, \
+                         const GdkMemoryLayout *src_layout,\
+                         gsize                  y,\
+                         guint                  lod_level) \
+{ \
+  gsize x, pos; \
+  gsize n = 1 << lod_level; \
+  guchar *dest_data = (guchar *) dest; \
+  const guchar *src_data = (const guchar *) (src + gdk_memory_layout_offset (src_layout, 0, 0, MIN (y + n / 2, src_layout->height - 1))); \
+\
+  for (x = 0; x < src_layout->width; x += n) \
+    { \
+      pos = MIN (x + n / 2, src_layout->width - 1); \
+      *dest_data++ = src_data[2 * (pos & ~1) + vi]; \
+      *dest_data++ = src_data[2 * pos + yi]; \
+      *dest_data++ = src_data[2 * (pos & ~1) + ui]; \
+    } \
+} \
+\
+static void \
+name ## _mipmap_linear (guchar                *dest, \
+                        const guchar          *src, \
+                        const GdkMemoryLayout *src_layout,\
+                        gsize                  y_start,\
+                        guint                  lod_level) \
+{ \
+  gsize x_start, x, y; \
+  gsize n = 1 << lod_level; \
+  guchar *dest_data = (guchar *) dest; \
+\
+  for (x_start = 0; x_start < src_layout->width; x_start += n) \
+    { \
+      guint32 y_ = 0, u_ = 0, v_ = 0; \
+\
+      for (y = 0; y < MIN (n, src_layout->height - y_start); y++) \
+        { \
+          const guchar *src_data = (const guchar *) (src + gdk_memory_layout_offset (src_layout, 0, 0, y + y_start)); \
+          for (x = 0; x < MIN (n, src_layout->width - x_start); x += 2) \
+            { \
+              y_ += src_data[2 * (x + x_start) + yi] + src_data[2 * (x + x_start) + yi + 2]; \
+              u_ += src_data[2 * (x_start + x) + ui]; \
+              v_ += src_data[2 * (x_start + x) + vi]; \
+            } \
+        } \
+\
+      *dest_data++ = v_ * 2 / (x * y); \
+      *dest_data++ = y_ / (x * y); \
+      *dest_data++ = u_ * 2 / (x * y); \
+    } \
+} \
+
 TYPED_FUNCS (b8g8r8a8_premultiplied, guchar, 2, 1, 0, 3, 4, 255)
 TYPED_FUNCS (a8r8g8b8_premultiplied, guchar, 1, 2, 3, 0, 4, 255)
 TYPED_FUNCS (r8g8b8a8_premultiplied, guchar, 0, 1, 2, 3, 4, 255)
@@ -393,6 +485,11 @@ YUV3_FUNCS (yuv422, FALSE, 2, 1)
 YUV3_FUNCS (yvu422, TRUE, 2, 1)
 YUV3_FUNCS (yuv444, FALSE, 1, 1)
 YUV3_FUNCS (yvu444, TRUE, 1, 1)
+
+YUYV_FUNCS (yuyv, 0, 1, 3)
+YUYV_FUNCS (yvyu, 0, 3, 1)
+YUYV_FUNCS (uyvy, 1, 0, 2)
+YUYV_FUNCS (vyuy, 1, 2, 0)
 
 static void
 r16g16b16_float_to_float (float                 (*dest)[4],
@@ -3279,6 +3376,190 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .mipmap_format = GDK_MEMORY_R8G8B8,
     .mipmap_nearest = yvu444_mipmap_nearest,
     .mipmap_linear = yvu444_mipmap_linear,
+  },
+  [GDK_MEMORY_G8B8G8R8_422] = {
+    .name = "YUYV",
+    .n_planes = 1,
+    .block_size = { 2, 1 },
+    .planes = {
+        {
+            .block_size = { 2, 1 },
+            .block_bytes = 4,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G8B8G8R8_422,
+    .straight = GDK_MEMORY_G8B8G8R8_422,
+    .alignment = G_ALIGNOF (guint8),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_gl_format = -1,
+        .internal_gles_format = -1,
+        .internal_srgb_format = -1,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_SHORT,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_G8B8G8R8_422_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = TRUE,
+    },
+#endif
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YUYV,
+    },
+    .to_float = yuyv_to_float,
+    .from_float = yuyv_from_float,
+    .mipmap_format = GDK_MEMORY_R8G8B8,
+    .mipmap_nearest = yuyv_mipmap_nearest,
+    .mipmap_linear = yuyv_mipmap_linear,
+  },
+  [GDK_MEMORY_G8R8G8B8_422] = {
+    .name = "YVYU",
+    .n_planes = 1,
+    .block_size = { 2, 1 },
+    .planes = {
+        {
+            .block_size = { 2, 1 },
+            .block_bytes = 4,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_G8R8G8B8_422,
+    .straight = GDK_MEMORY_G8R8G8B8_422,
+    .alignment = G_ALIGNOF (guint8),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_gl_format = -1,
+        .internal_gles_format = -1,
+        .internal_srgb_format = -1,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_SHORT,
+        .swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
+        .rgba_format = -1,
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_G8B8G8R8_422_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = TRUE,
+    },
+#endif
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_YVYU,
+    },
+    .to_float = yvyu_to_float,
+    .from_float = yvyu_from_float,
+    .mipmap_format = GDK_MEMORY_R8G8B8,
+    .mipmap_nearest = yvyu_mipmap_nearest,
+    .mipmap_linear = yvyu_mipmap_linear,
+  },
+  [GDK_MEMORY_B8G8R8G8_422] = {
+    .name = "UYVY",
+    .n_planes = 1,
+    .block_size = { 2, 1 },
+    .planes = {
+        {
+            .block_size = { 2, 1 },
+            .block_bytes = 4,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_B8G8R8G8_422,
+    .straight = GDK_MEMORY_B8G8R8G8_422,
+    .alignment = G_ALIGNOF (guint8),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_gl_format = -1,
+        .internal_gles_format = -1,
+        .internal_srgb_format = -1,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_SHORT,
+        .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
+        .rgba_format = -1,
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_B8G8R8G8_422_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = TRUE,
+    },
+#endif
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_UYVY,
+    },
+    .to_float = uyvy_to_float,
+    .from_float = uyvy_from_float,
+    .mipmap_format = GDK_MEMORY_R8G8B8,
+    .mipmap_nearest = uyvy_mipmap_nearest,
+    .mipmap_linear = uyvy_mipmap_linear,
+  },
+  [GDK_MEMORY_R8G8B8G8_422] = {
+    .name = "VYUY",
+    .n_planes = 1,
+    .block_size = { 2, 1 },
+    .planes = {
+        {
+            .block_size = { 2, 1 },
+            .block_bytes = 4,
+        },
+    },
+    .alpha = GDK_MEMORY_ALPHA_OPAQUE,
+    .premultiplied = GDK_MEMORY_R8G8B8G8_422,
+    .straight = GDK_MEMORY_R8G8B8G8_422,
+    .alignment = G_ALIGNOF (guint8),
+    .depth = GDK_MEMORY_U8,
+    .fallbacks = (GdkMemoryFormat[]) {
+        GDK_MEMORY_R8G8B8,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        -1,
+    },
+    .gl = {
+        .internal_gl_format = -1,
+        .internal_gles_format = -1,
+        .internal_srgb_format = -1,
+        .format = GL_RED,
+        .type = GL_UNSIGNED_SHORT,
+        .swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
+        .rgba_format = -1,
+    },
+#ifdef GDK_RENDERING_VULKAN
+    .vulkan = {
+        .vk_format = VK_FORMAT_B8G8R8G8_422_UNORM,
+        .vk_srgb_format = VK_FORMAT_UNDEFINED,
+        .needs_ycbcr_conversion = TRUE,
+    },
+#endif
+    .dmabuf = {
+        .rgb_fourcc = 0,
+        .yuv_fourcc = DRM_FORMAT_VYUY,
+    },
+    .to_float = vyuy_to_float,
+    .from_float = vyuy_from_float,
+    .mipmap_format = GDK_MEMORY_R8G8B8,
+    .mipmap_nearest = vyuy_mipmap_nearest,
+    .mipmap_linear = vyuy_mipmap_linear,
   },
 };
 

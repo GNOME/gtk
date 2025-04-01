@@ -47,6 +47,10 @@ gdk_memory_format_get_channel_type (GdkMemoryFormat format)
     case GDK_MEMORY_G8_R8_B8_422:
     case GDK_MEMORY_G8_B8_R8_444:
     case GDK_MEMORY_G8_R8_B8_444:
+    case GDK_MEMORY_G8B8G8R8_422:
+    case GDK_MEMORY_G8R8G8B8_422:
+    case GDK_MEMORY_R8G8B8G8_422:
+    case GDK_MEMORY_B8G8R8G8_422:
       return CHANNEL_UINT_8;
 
     case GDK_MEMORY_R16G16B16:
@@ -128,6 +132,10 @@ gdk_memory_format_n_colors (GdkMemoryFormat format)
     case GDK_MEMORY_G8_R8_B8_422:
     case GDK_MEMORY_G8_B8_R8_444:
     case GDK_MEMORY_G8_R8_B8_444:
+    case GDK_MEMORY_G8B8G8R8_422:
+    case GDK_MEMORY_G8R8G8B8_422:
+    case GDK_MEMORY_R8G8B8G8_422:
+    case GDK_MEMORY_B8G8R8G8_422:
       return 3;
 
     case GDK_MEMORY_G8:
@@ -327,6 +335,14 @@ gdk_memory_pixel_print (const guchar          *data,
       }
       break;
 
+    case GDK_MEMORY_G8B8G8R8_422:
+    case GDK_MEMORY_G8R8G8B8_422:
+    case GDK_MEMORY_R8G8B8G8_422:
+    case GDK_MEMORY_B8G8R8G8_422:
+      data += gdk_memory_layout_offset (layout, 0, x & ~1, y);
+      g_string_append_printf (string, "%02X %02X %02X %02X", data[0], data[1], data[2], data[3]);
+      break;
+
     case GDK_MEMORY_N_FORMATS:
     default:
       g_assert_not_reached ();
@@ -503,6 +519,22 @@ gdk_memory_pixel_equal (const guchar          *data1,
                                                  2,
                                                  x - x % gdk_memory_format_get_plane_block_width (layout2->format, 2),
                                                  y - y % gdk_memory_format_get_plane_block_height (layout2->format, 2)));
+
+    case GDK_MEMORY_G8B8G8R8_422:
+    case GDK_MEMORY_G8R8G8B8_422:
+      data1 += gdk_memory_layout_offset (layout1, 0, x & ~1, y);
+      data2 += gdk_memory_layout_offset (layout2, 0, x & ~1, y);
+      return data1[1] == data2[1] &&
+             data1[3] == data2[3] &&
+             data1[2 * (y & 1)] == data2[2 * (y & 1)];
+
+    case GDK_MEMORY_R8G8B8G8_422:
+    case GDK_MEMORY_B8G8R8G8_422:
+      data1 += gdk_memory_layout_offset (layout1, 0, x & ~1, y);
+      data2 += gdk_memory_layout_offset (layout2, 0, x & ~1, y);
+      return data1[0] == data2[0] &&
+             data1[2] == data2[2] &&
+             data1[1 + 2 * (y & 1)] == data2[1 + 2 * (y & 1)];
 
     case GDK_MEMORY_N_FORMATS:
     default:
