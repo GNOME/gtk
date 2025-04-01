@@ -267,12 +267,12 @@ gtk_builder_menu_end_element (GtkBuildableParseContext  *context,
           else
             translated = g_dgettext (state->parser_data->domain, text);
 
-         if (translated != text)
-           {
-             /* it's safe because we know that translated != text */
-             g_free (text);
-             text = g_strdup (translated);
-           }
+          if (translated != text)
+            {
+              /* it's safe because we know that translated != text */
+              g_free (text);
+              text = g_strdup (translated);
+            }
         }
 
       if (state->type == NULL)
@@ -295,6 +295,8 @@ gtk_builder_menu_end_element (GtkBuildableParseContext  *context,
           g_variant_type_free (state->type);
           state->type = NULL;
         }
+
+      state->translatable = FALSE;
 
       g_free (state->context);
       state->context = NULL;
@@ -414,6 +416,12 @@ _gtk_builder_menu_end (ParserData *parser_data)
   g_assert (state->frame.prev == NULL);
   g_assert (state->frame.item == NULL);
   g_assert (state->frame.menu == NULL);
+
+  g_assert (state->string == NULL);
+  g_assert (state->attribute == NULL);
+  g_assert (state->context == NULL);
+  g_assert (!state->translatable);
+
   g_free (state);
 
   return id;
