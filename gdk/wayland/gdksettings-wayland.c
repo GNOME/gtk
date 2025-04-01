@@ -17,8 +17,7 @@
 
 #include "config.h"
 
-#include "gdkdisplay-wayland.h"
-#include "gdkprivate-wayland.h"
+#include "gdksettings-wayland.h"
 #include "gdk/gdkprivate.h"
 
 #include "wm-button-layout-translation.h"

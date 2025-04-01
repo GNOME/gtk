@@ -30,7 +30,6 @@
 #include "gdkwaylanddisplay.h"
 #include "gdkwaylandglcontext.h"
 #include "gdkwaylandsurface.h"
-#include "gdkprivate-wayland.h"
 
 #include "gdkprivate.h"
 #include "gdksurfaceprivate.h"

@@ -23,6 +23,7 @@
 
 #include "gdkwaylandseat.h"
 #include "gdk/gdkseatprivate.h"
+#include "gdkdisplay-wayland.h"
 
 #define GDK_WAYLAND_SEAT_CLASS(c)     (G_TYPE_CHECK_CLASS_CAST ((c), GDK_TYPE_WAYLAND_SEAT, GdkWaylandSeatClass))
 #define GDK_IS_WAYLAND_SEAT_CLASS(c)  (G_TYPE_CHECK_CLASS_TYPE ((c), GDK_TYPE_WAYLAND_SEAT))
@@ -35,4 +36,20 @@ struct _GdkWaylandSeatClass
 
 void gdk_wayland_seat_clear_touchpoints (GdkWaylandSeat *seat,
                                          GdkSurface     *surface);
+
+uint32_t _gdk_wayland_seat_get_implicit_grab_serial (GdkSeat          *seat,
+                                                     GdkDevice        *event,
+                                                     GdkEventSequence *sequence);
+uint32_t _gdk_wayland_seat_get_last_implicit_grab_serial (GdkWaylandSeat     *seat,
+                                                          GdkEventSequence **sequence);
+void gdk_wayland_seat_set_global_cursor (GdkSeat   *seat,
+                                         GdkCursor *cursor);
+void gdk_wayland_seat_set_drag (GdkSeat        *seat,
+                                GdkDrag *drag);
+
+void       gdk_wayland_display_create_seat    (GdkWaylandDisplay     *display,
+                                               guint32                id,
+                                               struct wl_seat        *seat);
+void       gdk_wayland_display_remove_seat    (GdkWaylandDisplay     *display,
+                                               guint32                id);
 

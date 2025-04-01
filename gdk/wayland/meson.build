@@ -17,6 +17,7 @@ gdk_wayland_sources = files([
   'gdkprimary-wayland.c',
   'gdkseat-wayland.c',
   'gdksettings-wayland.c',
+  'gdkshm.c',
   'gdksurface-wayland.c',
   'gdksubsurface-wayland.c',
   'gdktoplevel-wayland.c',

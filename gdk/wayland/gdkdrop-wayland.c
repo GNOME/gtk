@@ -18,8 +18,8 @@
 #include "config.h"
 
 #include "gdkdropprivate.h"
+#include "gdkdrop-wayland.h"
 
-#include "gdkprivate-wayland.h"
 #include "gdkcontentformats.h"
 #include "gdkdisplay-wayland.h"
 #include <glib/gi18n-lib.h>

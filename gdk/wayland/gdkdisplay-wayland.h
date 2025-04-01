@@ -48,10 +48,11 @@
 #include <glib.h>
 #include <gdk/gdkkeys.h>
 #include <gdk/gdksurface.h>
-#include <gdk/gdk.h>		/* For gdk_get_program_class() */
+#include <gdk/gdk.h>
 
 #include "gdkdisplayprivate.h"
 #include "gdkwaylanddevice.h"
+#include "gdkwaylanddisplay.h"
 #include "gdkdmabuf-wayland-private.h"
 
 #include <epoxy/egl.h>
@@ -163,10 +164,15 @@ struct _GdkWaylandDisplayClass
   GdkDisplayClass parent_class;
 };
 
-gboolean                gdk_wayland_display_prefers_ssd         (GdkDisplay *display);
+gboolean   gdk_wayland_display_prefers_ssd    (GdkDisplay            *display);
 
-void gdk_wayland_display_dispatch_queue (GdkDisplay            *display,
-                                         struct wl_event_queue *event_queue);
+void       gdk_wayland_display_system_bell    (GdkDisplay            *display,
+                                               GdkSurface            *surface);
+
+void       gdk_wayland_display_dispatch_queue (GdkDisplay            *display,
+                                               struct wl_event_queue *event_queue);
+
+GdkDisplay *_gdk_wayland_display_open (const char *display_name);
 
 G_END_DECLS
 

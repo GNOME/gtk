@@ -19,12 +19,14 @@
 
 #include "gdkdragprivate.h"
 
-#include "gdkprivate-wayland.h"
 #include "gdkcontentformats.h"
 #include "gdkdisplay-wayland.h"
+#include "gdkdrop-wayland.h"
 #include <glib/gi18n-lib.h>
 #include "gdkseat-wayland.h"
+#include "gdkdragsurface-wayland.h"
 #include "gdksurface-wayland-private.h"
+#include "gdkdevice-wayland-private.h"
 
 #include "gdkdeviceprivate.h"
 

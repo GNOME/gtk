@@ -19,8 +19,8 @@
 
 #include <glib.h>
 #include <gio/gio.h>
+#include "gdkdisplay-wayland.h"
 #include "gdkdihedralprivate.h"
-#include "gdkprivate-wayland.h"
 #include "gdkmonitor-wayland.h"
 
 /* {{{ GObject implementation */
@@ -403,44 +403,24 @@ gdk_wayland_display_remove_output (GdkWaylandDisplay *self,
     }
 }
 
-static GdkWaylandMonitor *
-get_monitor_for_output (GdkWaylandDisplay *self,
-                        struct wl_output  *output)
+GdkMonitor *
+gdk_wayland_display_get_monitor (GdkWaylandDisplay *display,
+                                 struct wl_output  *output)
 {
   guint i, n;
 
-  n = g_list_model_get_n_items (G_LIST_MODEL (self->monitors));
+  n = g_list_model_get_n_items (G_LIST_MODEL (display->monitors));
   for (i = 0; i < n; i++)
     {
-      GdkWaylandMonitor *monitor = g_list_model_get_item (G_LIST_MODEL (self->monitors), i);
+      GdkWaylandMonitor *monitor = g_list_model_get_item (G_LIST_MODEL (display->monitors), i);
 
       g_object_unref (monitor);
 
       if (monitor->output == output)
-        return monitor;
+        return (GdkMonitor *) monitor;
     }
 
   return NULL;
-}
-
-GdkMonitor *
-gdk_wayland_display_get_monitor_for_output (GdkDisplay       *display,
-                                            struct wl_output *output)
-{
-  return (GdkMonitor *)get_monitor_for_output (GDK_WAYLAND_DISPLAY (display), output);
-}
-
-int
-gdk_wayland_display_get_output_refresh_rate (GdkWaylandDisplay *display_wayland,
-                                             struct wl_output  *output)
-{
-  GdkWaylandMonitor *monitor;
-
-  monitor = get_monitor_for_output (display_wayland, output);
-  if (monitor != NULL)
-    return gdk_monitor_get_refresh_rate (GDK_MONITOR (monitor));
-
-  return 0;
 }
 
 /* }}} */

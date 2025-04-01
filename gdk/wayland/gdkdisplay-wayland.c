@@ -40,8 +40,8 @@
 #include "gdksurfaceprivate.h"
 #include "gdkdeviceprivate.h"
 #include "gdkdevice-wayland-private.h"
-#include "gdkkeysprivate.h"
-#include "gdkprivate-wayland.h"
+#include "gdksurface-wayland-private.h"
+#include "gdkkeymap-wayland.h"
 #include "gdkcairocontext-wayland.h"
 #include "gdkglcontext-wayland.h"
 #include "gdkvulkancontext-wayland.h"
@@ -49,6 +49,11 @@
 #include "gdkprofilerprivate.h"
 #include "gdktoplevel-wayland-private.h"
 #include "gdkwaylandcolor-private.h"
+#include "gdkshm.h"
+#include "gdksettings-wayland.h"
+#include "gdkapplaunchcontext-wayland.h"
+#include "gdkeventsource.h"
+
 #include <wayland/pointer-gestures-unstable-v1-client-protocol.h>
 #include "tablet-unstable-v2-client-protocol.h"
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
@@ -324,16 +329,16 @@ typedef struct
 } SeatAddedClosure;
 
 static void
-_gdk_wayland_display_add_seat (GdkWaylandDisplay *display_wayland,
-                               uint32_t id,
-                               uint32_t version)
+gdk_wayland_display_add_seat (GdkWaylandDisplay *display_wayland,
+                              uint32_t id,
+                              uint32_t version)
 {
   struct wl_seat *seat;
 
   seat = wl_registry_bind (display_wayland->wl_registry,
                            id, &wl_seat_interface,
                            MIN (version, 8));
-  _gdk_wayland_display_create_seat (display_wayland, id, seat);
+  gdk_wayland_display_create_seat (display_wayland, id, seat);
   _gdk_wayland_display_async_roundtrip (display_wayland);
 }
 
@@ -343,9 +348,9 @@ seat_added_closure_run (GdkWaylandDisplay *display_wayland,
 {
   SeatAddedClosure *seat_added_closure = (SeatAddedClosure*)closure;
 
-  _gdk_wayland_display_add_seat (display_wayland,
-                                 seat_added_closure->id,
-                                 seat_added_closure->version);
+  gdk_wayland_display_add_seat (display_wayland,
+                                seat_added_closure->id,
+                                seat_added_closure->version);
 }
 
 static void
@@ -692,7 +697,7 @@ gdk_registry_handle_global_remove (void               *data,
 
   GDK_DEBUG (MISC, "remove global %u", id);
 
-  _gdk_wayland_display_remove_seat (display_wayland, id);
+  gdk_wayland_display_remove_seat (display_wayland, id);
   gdk_wayland_display_remove_output (display_wayland, id);
 
   g_hash_table_remove (display_wayland->known_globals, GUINT_TO_POINTER (id));
@@ -1077,7 +1082,7 @@ gdk_wayland_display_class_init (GdkWaylandDisplayClass *class)
   display_class->flush = gdk_wayland_display_flush;
   display_class->make_default = gdk_wayland_display_make_default;
   display_class->queue_events = _gdk_wayland_display_queue_events;
-  display_class->get_app_launch_context = _gdk_wayland_display_get_app_launch_context;
+  display_class->get_app_launch_context = gdk_wayland_display_get_app_launch_context;
   display_class->get_next_serial = gdk_wayland_display_get_next_serial;
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   display_class->get_startup_notification_id = gdk_wayland_display_get_startup_notification_id;
@@ -1099,244 +1104,6 @@ gdk_wayland_display_init (GdkWaylandDisplay *display)
   display->xkb_context = xkb_context_new (0);
 
   display->monitors = g_list_store_new (GDK_TYPE_MONITOR);
-}
-
-/* }}} */
-/* {{{ Shm buffer handling */
-
-static const cairo_user_data_key_t gdk_wayland_shm_surface_cairo_key;
-
-typedef struct _GdkWaylandCairoSurfaceData {
-  gpointer buf;
-  size_t buf_length;
-  struct wl_shm_pool *pool;
-  struct wl_buffer *buffer;
-  GdkWaylandDisplay *display;
-} GdkWaylandCairoSurfaceData;
-
-static int
-open_shared_memory (void)
-{
-  static gboolean force_shm_open = FALSE;
-  int ret = -1;
-
-#if !defined (HAVE_MEMFD_CREATE)
-  force_shm_open = TRUE;
-#endif
-
-  do
-    {
-#if defined (HAVE_MEMFD_CREATE)
-      if (!force_shm_open)
-        {
-          int options = MFD_CLOEXEC;
-#if defined (MFD_ALLOW_SEALING)
-          options |= MFD_ALLOW_SEALING;
-#endif
-          ret = memfd_create ("gdk-wayland", options);
-
-          /* fall back to shm_open until debian stops shipping 3.16 kernel
-           * See bug 766341
-           */
-          if (ret < 0 && errno == ENOSYS)
-            force_shm_open = TRUE;
-#if defined (F_ADD_SEALS) && defined (F_SEAL_SHRINK)
-          if (ret >= 0)
-            fcntl (ret, F_ADD_SEALS, F_SEAL_SHRINK);
-#endif
-        }
-#endif
-
-      if (force_shm_open)
-        {
-#if defined (__FreeBSD__)
-          ret = shm_open (SHM_ANON, O_CREAT | O_EXCL | O_RDWR | O_CLOEXEC, 0600);
-#else
-          char name[NAME_MAX - 1] = "";
-
-          sprintf (name, "/gdk-wayland-%x", g_random_int ());
-
-          ret = shm_open (name, O_CREAT | O_EXCL | O_RDWR | O_CLOEXEC, 0600);
-
-          if (ret >= 0)
-            shm_unlink (name);
-          else if (errno == EEXIST)
-            continue;
-#endif
-        }
-    }
-  while (ret < 0 && errno == EINTR);
-
-  if (ret < 0)
-    g_critical (G_STRLOC ": creating shared memory file (using %s) failed: %m",
-                force_shm_open? "shm_open" : "memfd_create");
-
-  return ret;
-}
-
-static struct wl_shm_pool *
-create_shm_pool (struct wl_shm  *shm,
-                 int             size,
-                 size_t         *buf_length,
-                 void          **data_out)
-{
-  struct wl_shm_pool *pool;
-  int fd;
-  void *data;
-
-  fd = open_shared_memory ();
-
-  if (fd < 0)
-    goto fail;
-
-  if (ftruncate (fd, size) < 0)
-    {
-      g_critical (G_STRLOC ": Truncating shared memory file failed: %m");
-      close (fd);
-      goto fail;
-    }
-
-  data = mmap (NULL, size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-
-  if (data == MAP_FAILED)
-    {
-      g_critical (G_STRLOC ": mmap'ping shared memory file failed: %m");
-      close (fd);
-      goto fail;
-    }
-
-  pool = wl_shm_create_pool (shm, fd, size);
-
-  close (fd);
-
-  *data_out = data;
-  *buf_length = size;
-
-  return pool;
-
-fail:
-  *data_out = NULL;
-  *buf_length = 0;
-  return NULL;
-}
-
-static void
-gdk_wayland_cairo_surface_destroy (void *p)
-{
-  GdkWaylandCairoSurfaceData *data = p;
-
-  if (data->buffer)
-    wl_buffer_destroy (data->buffer);
-
-  if (data->pool)
-    wl_shm_pool_destroy (data->pool);
-
-  munmap (data->buf, data->buf_length);
-  g_free (data);
-}
-
-cairo_surface_t *
-gdk_wayland_display_create_shm_surface (GdkWaylandDisplay *display,
-                                        guint              width,
-                                        guint              height)
-{
-  GdkWaylandCairoSurfaceData *data;
-  cairo_surface_t *surface = NULL;
-  cairo_status_t status;
-  int stride;
-
-  data = g_new (GdkWaylandCairoSurfaceData, 1);
-  data->display = display;
-  data->buffer = NULL;
-
-  stride = cairo_format_stride_for_width (CAIRO_FORMAT_ARGB32, width);
-
-  data->pool = create_shm_pool (display->shm,
-                                height * stride,
-                                &data->buf_length,
-                                &data->buf);
-  if (G_UNLIKELY (data->pool == NULL))
-    g_error ("Unable to create shared memory pool");
-
-  surface = cairo_image_surface_create_for_data (data->buf,
-                                                 CAIRO_FORMAT_ARGB32,
-                                                 width,
-                                                 height,
-                                                 stride);
-
-  data->buffer = wl_shm_pool_create_buffer (data->pool, 0,
-                                            width, height,
-                                            stride, WL_SHM_FORMAT_ARGB8888);
-
-  cairo_surface_set_user_data (surface, &gdk_wayland_shm_surface_cairo_key,
-                               data, gdk_wayland_cairo_surface_destroy);
-
-  status = cairo_surface_status (surface);
-  if (status != CAIRO_STATUS_SUCCESS)
-    {
-      g_critical (G_STRLOC ": Unable to create Cairo image surface: %s",
-                  cairo_status_to_string (status));
-    }
-
-  return surface;
-}
-
-struct wl_buffer *
-_gdk_wayland_shm_surface_get_wl_buffer (cairo_surface_t *surface)
-{
-  GdkWaylandCairoSurfaceData *data = cairo_surface_get_user_data (surface, &gdk_wayland_shm_surface_cairo_key);
-  return data->buffer;
-}
-
-gboolean
-_gdk_wayland_is_shm_surface (cairo_surface_t *surface)
-{
-  return cairo_surface_get_user_data (surface, &gdk_wayland_shm_surface_cairo_key) != NULL;
-}
-
-/* {{{2 wl_shm_buffer listener */
-
-static void
-shm_buffer_release (void             *data,
-                    struct wl_buffer *buffer)
-{
-  cairo_surface_t *surface = data;
-
-  /* Note: the wl_buffer is destroyed as cairo user data */
-  cairo_surface_destroy (surface);
-}
-
-static const struct wl_buffer_listener shm_buffer_listener = {
-  shm_buffer_release,
-};
-
-/* }}} */
-
-struct wl_buffer *
-_gdk_wayland_shm_texture_get_wl_buffer (GdkWaylandDisplay *display,
-                                        GdkTexture        *texture)
-{
-  int width, height;
-  cairo_surface_t *surface;
-  GdkTextureDownloader *downloader;
-  struct wl_buffer *buffer;
-
-  width = gdk_texture_get_width (texture);
-  height = gdk_texture_get_height (texture);
-  surface = gdk_wayland_display_create_shm_surface (display, width, height);
-
-  downloader = gdk_texture_downloader_new (texture);
-
-  gdk_texture_downloader_download_into (downloader,
-                                        cairo_image_surface_get_data (surface),
-                                        cairo_image_surface_get_stride (surface));
-
-  gdk_texture_downloader_free (downloader);
-
-  buffer = _gdk_wayland_shm_surface_get_wl_buffer (surface);
-  wl_buffer_add_listener (buffer, &shm_buffer_listener, surface);
-
-  return buffer;
 }
 
 /* }}} */

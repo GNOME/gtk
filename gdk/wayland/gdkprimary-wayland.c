@@ -19,10 +19,10 @@
 
 #include "gdkprimary-wayland.h"
 
+#include "gdkdisplay-wayland.h"
 #include "gdkclipboardprivate.h"
 #include "gdkcontentformats.h"
 #include <glib/gi18n-lib.h>
-#include "gdkprivate-wayland.h"
 #include "gdkprivate.h"
 
 #include <glib-unix.h>

@@ -27,7 +27,6 @@
 #include "gdkglcontext-wayland.h"
 #include "gdkmonitor-wayland.h"
 #include "gdkpopupprivate.h"
-#include "gdkprivate-wayland.h"
 #include "gdkrectangleprivate.h"
 #include "gdkseat-wayland.h"
 #include "gdksurfaceprivate.h"
@@ -36,6 +35,7 @@
 #include "gdkdmabuftextureprivate.h"
 #include "gdksubsurfaceprivate.h"
 #include "gdksubsurface-wayland-private.h"
+#include "gdkshm.h"
 
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>
@@ -306,10 +306,12 @@ gdk_wayland_surface_frame_callback (GdkSurface *surface,
   if (impl->display_server.outputs)
     {
       /* We pick a random output out of the outputs that the surface touches
-       * The rate here is in milli-hertz */
-      int refresh_rate =
-        gdk_wayland_display_get_output_refresh_rate (display_wayland,
-                                                     impl->display_server.outputs->data);
+       * The rate here is in milli-hertz
+       */
+      GdkMonitor *monitor =
+         gdk_wayland_display_get_monitor (display_wayland,
+                                          impl->display_server.outputs->data);
+      int refresh_rate = monitor ? gdk_monitor_get_refresh_rate (monitor) : 0;
       if (refresh_rate != 0)
         timings->refresh_interval = G_GINT64_CONSTANT(1000000000) / refresh_rate;
     }
@@ -829,7 +831,7 @@ surface_enter (void              *data,
 
   impl->display_server.outputs = g_slist_prepend (impl->display_server.outputs, output);
 
-  monitor = gdk_wayland_display_get_monitor_for_output (display, output);
+  monitor = gdk_wayland_display_get_monitor (GDK_WAYLAND_DISPLAY (display), output);
   gdk_surface_enter_monitor (surface, monitor);
 }
 
@@ -848,7 +850,7 @@ surface_leave (void              *data,
 
   impl->display_server.outputs = g_slist_remove (impl->display_server.outputs, output);
 
-  monitor = gdk_wayland_display_get_monitor_for_output (display, output);
+  monitor = gdk_wayland_display_get_monitor (GDK_WAYLAND_DISPLAY (display), output);
   gdk_surface_leave_monitor (surface, monitor);
 }
 
