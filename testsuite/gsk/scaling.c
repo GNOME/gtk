@@ -1,7 +1,8 @@
+#include "config.h"
+
 #include <gtk/gtk.h>
 
-#define N 10
-
+#include "gdk/gdkmemoryformatprivate.h"
 #include "gsk/gl/fp16private.h"
 #include "testsuite/gdk/gdktestutils.h"
 
@@ -136,11 +137,11 @@ create_random_color_for_format (GdkRGBA *color,
       create_random_color (color);
     }
   while (color->alpha == 0 &&
-         gdk_memory_format_is_premultiplied (format));
+         gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
 
   /* If the format can't handle alpha, make things opaque
    */
-  if (!gdk_memory_format_has_alpha (format))
+  if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_OPAQUE)
     color_make_opaque (color, color);
 
   /* If the format has fewer color channels than the
@@ -196,7 +197,7 @@ create_stipple_texture (GdkMemoryFormat  format,
       for (x = 0; x < 2; x++)
         {
           create_random_color_for_format (&colors[x][y], format);
-          if (gdk_memory_format_has_alpha (format))
+          if (gdk_memory_format_alpha (format) != GDK_MEMORY_ALPHA_OPAQUE)
             colors[x][y].alpha *= 16.f/17.f;
           else
             {
