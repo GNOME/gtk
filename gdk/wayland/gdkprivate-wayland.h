@@ -48,45 +48,6 @@
  */
 #define GDK_WAYLAND_LOCAL_DND_MIME_TYPE "application/x-gtk-local-dnd"
 
-#define GDK_FRACTIONAL_SCALE_FACTOR 120
-
-typedef struct _GdkFractionalScale GdkFractionalScale;
-
-struct _GdkFractionalScale
-{
-  guint32 scale;
-};
-
-#define GDK_FRACTIONAL_SCALE_INIT(fractional_scale) (GdkFractionalScale) { fractional_scale }
-#define GDK_FRACTIONAL_SCALE_INIT_INT(scale) GDK_FRACTIONAL_SCALE_INIT (scale * GDK_FRACTIONAL_SCALE_FACTOR)
-
-static inline int
-gdk_fractional_scale_to_int (const GdkFractionalScale *self)
-{
-  /* ceil() */
-  return (self->scale + GDK_FRACTIONAL_SCALE_FACTOR - 1) / GDK_FRACTIONAL_SCALE_FACTOR;
-}
-
-static inline double
-gdk_fractional_scale_to_double (const GdkFractionalScale *self)
-{
-  return (double) self->scale / GDK_FRACTIONAL_SCALE_FACTOR;
-}
-
-static inline int
-gdk_fractional_scale_scale (const GdkFractionalScale *self,
-                            int                       value)
-{
-  return (value * self->scale + GDK_FRACTIONAL_SCALE_FACTOR / 2) / GDK_FRACTIONAL_SCALE_FACTOR;
-}
-
-static inline gboolean
-gdk_fractional_scale_equal (const GdkFractionalScale *a,
-                            const GdkFractionalScale *b)
-{
-  return a->scale == b->scale;
-}
-
 GdkKeymap *_gdk_wayland_keymap_new (GdkDisplay *display);
 void       _gdk_wayland_keymap_update_from_fd (GdkKeymap *keymap,
                                                uint32_t   format,

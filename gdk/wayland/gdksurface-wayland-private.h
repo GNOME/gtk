@@ -18,6 +18,7 @@
 #pragma once
 
 #include "gdkprivate-wayland.h"
+#include "gdkfractionalscale.h"
 #include "gdkwaylandcolor-private.h"
 
 typedef enum _PopupState
