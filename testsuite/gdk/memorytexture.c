@@ -654,7 +654,7 @@ add_conversion_test (const char    *name,
     {
       for (format2 = 0; format2 < GDK_MEMORY_N_FORMATS; format2++)
         {
-          char *test_name = g_strdup_printf ("%s/%s/%s",
+          char *test_name = g_strdup_printf ("%s/from-%s/to-%s",
                                              name,
                                              g_enum_get_value (enum_class, format1)->value_nick,
                                              g_enum_get_value (enum_class, format2)->value_nick);
