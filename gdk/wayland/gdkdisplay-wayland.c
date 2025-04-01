@@ -122,8 +122,6 @@
 #define SYSTEM_BELL_VERSION             1
 #define CURSOR_SHAPE_VERSION            1
 #define GTK_SHELL1_VERSION              6
-#define OUTPUT_VERSION_WITH_DONE        2
-#define NO_XDG_OUTPUT_DONE_SINCE_VERSION 3
 #define XDG_WM_DIALOG_VERSION           1
 
 #ifdef HAVE_TOPLEVEL_STATE_SUSPENDED
