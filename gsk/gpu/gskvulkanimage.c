@@ -62,6 +62,64 @@ gsk_component_mapping_is_framebuffer_compatible (const VkComponentMapping *compo
 }
 
 static gboolean
+gsk_vulkan_get_ycbcr_flags (GskGpuConversion               conv,
+                            VkSamplerYcbcrModelConversion *out_model,
+                            VkSamplerYcbcrRange           *out_range)
+{
+  switch (conv)
+    {
+    case GSK_GPU_CONVERSION_NONE:
+      *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY;
+      *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL;
+      return FALSE;
+
+    case GSK_GPU_CONVERSION_SRGB:
+      *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY;
+      *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL;
+      return FALSE;
+
+    case GSK_GPU_CONVERSION_NARROW:
+      *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_IDENTITY;
+      *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
+      return TRUE;
+
+    case GSK_GPU_CONVERSION_BT601:
+      *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
+      *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL;
+      return TRUE;
+
+    case GSK_GPU_CONVERSION_BT601_NARROW:
+      *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
+      *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
+      return TRUE;
+
+    case GSK_GPU_CONVERSION_BT709:
+      *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_709;
+      *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL;
+      return TRUE;
+
+    case GSK_GPU_CONVERSION_BT709_NARROW:
+      *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_709;
+      *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
+      return TRUE;
+
+    case GSK_GPU_CONVERSION_BT2020:
+      *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_2020;
+      *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL;
+      return TRUE;
+
+    case GSK_GPU_CONVERSION_BT2020_NARROW:
+      *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_2020;
+      *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
+      return TRUE;
+
+    default:
+      g_assert_not_reached ();
+      return FALSE;
+    }
+}
+
+static gboolean
 gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
                                    VkFormat           format,
                                    uint64_t           modifier,
@@ -924,13 +982,16 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                  gsize            width,
                                  gsize            height,
                                  const GdkDmabuf *dmabuf,
-                                 gboolean         premultiplied)
+                                 gboolean         premultiplied,
+                                 GskGpuConversion conv)
 {
   GskVulkanImage *self;
   VkDevice vk_device;
   VkFormat vk_format;
   VkComponentMapping vk_components;
   VkSamplerYcbcrConversion vk_conversion;
+  VkSamplerYcbcrModelConversion model;
+  VkSamplerYcbcrRange range;
   PFN_vkGetMemoryFdPropertiesKHR func_vkGetMemoryFdPropertiesKHR;
   gsize i;
   int fd;
@@ -1046,9 +1107,24 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
   if (needs_conversion || !gsk_component_mapping_is_framebuffer_compatible (&vk_components))
     flags &= ~GSK_GPU_IMAGE_BLIT;
 
+  if (gsk_vulkan_get_ycbcr_flags (conv, &model, &range) || needs_conversion)
+    {
+      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
+                                                 &(GskVulkanYcbcrInfo) {
+                                                     .vk_format = vk_format,
+                                                     .vk_components = vk_components,
+                                                     .vk_ycbcr_model = model,
+                                                     .vk_ycbcr_range = range,
+                                                 });
+      gsk_vulkan_ycbcr_ref (self->ycbcr);
+      vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
+    }
+  else
+    vk_conversion = VK_NULL_HANDLE;
+
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags,
-                       GSK_GPU_CONVERSION_NONE,
+                       conv,
                        format,
                        width, height);
 
@@ -1193,21 +1269,6 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                         }
                                     });
 #endif
-
-  if (needs_conversion)
-    {
-      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
-                                                 &(GskVulkanYcbcrInfo) {
-                                                     .vk_format = vk_format,
-                                                     .vk_components = vk_components,
-                                                     .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY,
-                                                     .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL,
-                                                 });
-      gsk_vulkan_ycbcr_ref (self->ycbcr);
-      vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
-    }
-  else
-    vk_conversion = VK_NULL_HANDLE;
 
   gsk_vulkan_image_create_view (self, vk_format, &vk_components, vk_conversion);
 
