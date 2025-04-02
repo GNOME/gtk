@@ -218,7 +218,8 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
                               GdkTexture       *owner,
                               GLuint            tex_id,
                               gboolean          take_ownership,
-                              GskGpuImageFlags  extra_flags)
+                              GskGpuImageFlags  extra_flags,
+                              GskGpuConversion  conv)
 {
   GdkMemoryFormat format, real_format;
   GskGpuImageFlags flags;
@@ -256,7 +257,7 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
   
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags | extra_flags,
-                       GSK_GPU_CONVERSION_NONE,
+                       conv,
                        format,
                        gdk_texture_get_width (owner),
                        gdk_texture_get_height (owner));
