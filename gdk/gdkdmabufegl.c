@@ -141,7 +141,9 @@ static EGLImage
 gdk_dmabuf_egl_create_image (GdkDisplay      *display,
                              int              width,
                              int              height,
-                             const GdkDmabuf *dmabuf)
+                             const GdkDmabuf *dmabuf,
+                             EGLint           color_space_hint,
+                             EGLint           range_hint)
 {
   EGLDisplay egl_display = gdk_display_get_egl_display (display);
   EGLint attribs[64];
@@ -172,10 +174,16 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
   attribs[i++] = height;
   attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
   attribs[i++] = dmabuf->fourcc;
-  attribs[i++] = EGL_YUV_COLOR_SPACE_HINT_EXT;
-  attribs[i++] = EGL_ITU_REC601_EXT;
-  attribs[i++] = EGL_SAMPLE_RANGE_HINT_EXT;
-  attribs[i++] = EGL_YUV_NARROW_RANGE_EXT;
+  if (color_space_hint)
+    {
+      attribs[i++] = EGL_YUV_COLOR_SPACE_HINT_EXT;
+      attribs[i++] = color_space_hint;
+    }
+  if (range_hint)
+    {
+      attribs[i++] = EGL_SAMPLE_RANGE_HINT_EXT;
+      attribs[i++] = range_hint;
+    }
 
 #define ADD_PLANE(plane) \
   { \
@@ -224,6 +232,8 @@ gdk_dmabuf_egl_import_dmabuf (GdkGLContext    *context,
                               int              width,
                               int              height,
                               const GdkDmabuf *dmabuf,
+                              EGLint           color_space_hint,
+                              EGLint           range_hint,
                               gboolean        *external)
 {
   GdkDisplay *display = gdk_gl_context_get_display (context);
@@ -251,7 +261,9 @@ gdk_dmabuf_egl_import_dmabuf (GdkGLContext    *context,
   image = gdk_dmabuf_egl_create_image (display,
                                        width,
                                        height,
-                                       dmabuf);
+                                       dmabuf,
+                                       color_space_hint,
+                                       range_hint);
   if (image == EGL_NO_IMAGE)
     {
       GDK_DISPLAY_DEBUG (display, DMABUF,

@@ -111,6 +111,8 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
                                              gdk_texture_get_width (texture),
                                              gdk_texture_get_height (texture),
                                              gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
+                                             EGL_ITU_REC601_EXT,
+                                             EGL_YUV_NARROW_RANGE_EXT,
                                              &external);
       if (tex_id)
         {

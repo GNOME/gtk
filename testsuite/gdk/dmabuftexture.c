@@ -230,7 +230,7 @@ test_dmabuf_import (void)
   g_assert_no_error (error);
 
   dmabuf2 = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
-  texture_id2 = gdk_dmabuf_egl_import_dmabuf (context2, 64, 64, dmabuf2, &external);
+  texture_id2 = gdk_dmabuf_egl_import_dmabuf (context2, 64, 64, dmabuf2, EGL_ITU_REC601_EXT, EGL_YUV_NARROW_RANGE_EXT, &external);
   g_assert_cmpint (texture_id2, !=, 0);
   g_assert_false (external);
 
