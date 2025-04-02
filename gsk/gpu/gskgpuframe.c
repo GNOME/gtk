@@ -12,6 +12,7 @@
 #include "gskgpuopprivate.h"
 #include "gskgpurendererprivate.h"
 #include "gskgpuuploadopprivate.h"
+#include "gskgpuutilsprivate.h"
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
@@ -838,11 +839,16 @@ gsk_gpu_frame_download_texture (GskGpuFrame           *self,
     {
       GskGpuImage *converted;
 
+      image_cs = gsk_gpu_color_state_apply_conversion (gdk_texture_get_color_state (texture),
+                                                       gsk_gpu_image_get_conversion (image));
+      g_assert (image_cs);
+
       converted = gsk_gpu_node_processor_convert_image (self,
                                                         layout->format,
                                                         color_state,
                                                         image,
                                                         image_cs);
+      gdk_color_state_unref (image_cs);
       if (converted == NULL)
         {
           g_object_unref (image);
