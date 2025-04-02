@@ -90,6 +90,7 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
 {
   GskGLImage *self;
   GskGpuImageFlags flags;
+  GskGpuConversion conv;
   GLint swizzle[4];
   GLint gl_internal_format, gl_internal_srgb_format;
 
@@ -114,13 +115,15 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
       else /* FIXME: Happens when the driver uses formats that it does not expose */
         self->gl_internal_format = gl_internal_format;
       flags |= GSK_GPU_IMAGE_SRGB;
+      conv = GSK_GPU_CONVERSION_SRGB;
     }
   else
     {
       self->gl_internal_format = gl_internal_format;
+      conv = GSK_GPU_CONVERSION_NONE;
     }
 
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, format, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, conv, format, width, height);
 
   /* texture_id == 0 means backbuffer */
 
@@ -145,6 +148,7 @@ gsk_gl_image_new (GskGLDevice      *device,
   GskGLImage *self;
   GLint swizzle[4];
   GskGpuImageFlags flags;
+  GskGpuConversion conv;
   GLint gl_internal_format, gl_internal_srgb_format;
   gsize max_size;
 
@@ -169,14 +173,17 @@ gsk_gl_image_new (GskGLDevice      *device,
     {
       self->gl_internal_format = gl_internal_srgb_format;
       flags |= GSK_GPU_IMAGE_SRGB;
+      conv = GSK_GPU_CONVERSION_SRGB;
     }
   else
     {
       self->gl_internal_format = gl_internal_format;
+      conv = GSK_GPU_CONVERSION_NONE;
     }
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags,
+                       conv,
                        format,
                        width, height);
 
@@ -251,6 +258,7 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
   
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags | extra_flags,
+                       GSK_GPU_CONVERSION_NONE,
                        format,
                        gdk_texture_get_width (owner),
                        gdk_texture_get_height (owner));

@@ -32,6 +32,7 @@ GType                   gsk_gpu_image_get_type                          (void) G
 
 void                    gsk_gpu_image_setup                             (GskGpuImage            *self,
                                                                          GskGpuImageFlags        flags,
+                                                                         GskGpuConversion        conversion,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
@@ -44,6 +45,7 @@ gsize                   gsk_gpu_image_get_height                        (GskGpuI
 GskGpuImageFlags        gsk_gpu_image_get_flags                         (GskGpuImage            *self);
 void                    gsk_gpu_image_set_flags                         (GskGpuImage            *self,
                                                                          GskGpuImageFlags        flags);
+GskGpuConversion        gsk_gpu_image_get_conversion                    (GskGpuImage            *self);
 
 void                    gsk_gpu_image_get_projection_matrix             (GskGpuImage            *self,
                                                                          graphene_matrix_t      *out_projection);
