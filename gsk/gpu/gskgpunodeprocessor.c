@@ -738,7 +738,7 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
   height = gsk_gpu_image_get_height (image);
   flags = gsk_gpu_image_get_flags (image);
   depth = gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
-                                       flags & GSK_GPU_IMAGE_SRGB);
+                                       gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB);
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (ccs));
 
   copy = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
@@ -1922,6 +1922,29 @@ texture_node_should_mipmap (GskRenderNode         *node,
          gdk_texture_get_height (texture) > 2 * node->bounds.size.height * graphene_vec2_get_y (scale);
 }
 
+static GdkColorState *
+gsk_gpu_color_state_apply_conversion (GdkColorState    *color_state,
+                                      GskGpuConversion  conv)
+{
+  switch (conv)
+    {
+    case GSK_GPU_CONVERSION_NONE:
+      return color_state;
+    case GSK_GPU_CONVERSION_SRGB:
+      return gdk_color_state_get_no_srgb_tf (color_state);
+    case GSK_GPU_CONVERSION_NARROW:
+    case GSK_GPU_CONVERSION_BT601:
+    case GSK_GPU_CONVERSION_BT601_NARROW:
+    case GSK_GPU_CONVERSION_BT709:
+    case GSK_GPU_CONVERSION_BT709_NARROW:
+    case GSK_GPU_CONVERSION_BT2020:
+    case GSK_GPU_CONVERSION_BT2020_NARROW:
+    default:
+      g_assert_not_reached ();
+      return NULL;
+  }
+}
+
 static GskGpuImage *
 gsk_gpu_lookup_texture (GskGpuFrame    *frame,
                         GdkColorState  *ccs,
@@ -1952,7 +1975,9 @@ gsk_gpu_lookup_texture (GskGpuFrame    *frame,
 
   image_cs = gdk_texture_get_color_state (texture);
 
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
+  image_cs = gsk_gpu_color_state_apply_conversion (image_cs, 
+                                                   gsk_gpu_image_get_conversion (image));
+  if (gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB)
     {
       image_cs = gdk_color_state_get_no_srgb_tf (image_cs);
       g_assert (image_cs);
@@ -2056,7 +2081,7 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
                 }
 
               tile_cs = gdk_texture_get_color_state (texture);
-              if (gsk_gpu_image_get_flags (tile) & GSK_GPU_IMAGE_SRGB)
+              if (gsk_gpu_image_get_conversion (tile) == GSK_GPU_CONVERSION_SRGB)
                 {
                   tile_cs = gdk_color_state_get_no_srgb_tf (tile_cs);
                   g_assert (tile_cs);
@@ -2741,7 +2766,7 @@ gsk_gpu_node_processor_add_blur_node (GskGpuNodeProcessor *self,
                                   NULL,
                                   image,
                                   gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
-                                                               gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB),
+                                                               gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB),
                                   &tex_rect);
 
   g_object_unref (image);
@@ -2807,7 +2832,7 @@ gsk_gpu_node_processor_add_shadow_node (GskGpuNodeProcessor *self,
                                           &shadow->color,
                                           image,
                                           gdk_memory_format_get_depth (gsk_gpu_image_get_format (image),
-                                                                       gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB),
+                                                                       gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB),
                                           &tex_rect);
         }
     }
@@ -4521,7 +4546,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
   target = gsk_gpu_device_create_offscreen_image (gsk_gpu_frame_get_device (frame),
                                                   FALSE,
                                                   target_format,
-                                                  gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB,
+                                                  gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB,
                                                   width,
                                                   height);
   if (target == NULL)
