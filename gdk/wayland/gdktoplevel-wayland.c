@@ -49,6 +49,7 @@
 #include "gdksurface-wayland-private.h"
 #include "gdktoplevel-wayland-private.h"
 #include "gdksubsurface-wayland-private.h"
+#include "gdkshm.h"
 
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
 
@@ -87,6 +88,7 @@ struct _GdkWaylandToplevel
     struct xdg_toplevel *xdg_toplevel;
     struct zxdg_toplevel_v6 *zxdg_toplevel_v6;
     struct xdg_dialog_v1 *xdg_dialog;
+    struct xdg_toplevel_icon_v1 *toplevel_icon;
   } display_server;
 
   GdkWaylandToplevel *transient_for;
@@ -153,6 +155,8 @@ struct _GdkWaylandToplevel
   struct zxdg_imported_v1 *imported_transient_for;
   struct zxdg_imported_v2 *imported_transient_for_v2;
   GHashTable *shortcuts_inhibitors;
+
+  GList *icons;
 };
 
 typedef struct
@@ -235,6 +239,7 @@ gdk_wayland_toplevel_init_capabilities (GdkWaylandToplevel *toplevel)
 static void maybe_set_gtk_surface_dbus_properties (GdkWaylandToplevel *wayland_toplevel);
 static void maybe_set_gtk_surface_modal (GdkWaylandToplevel *wayland_toplevel);
 static gboolean maybe_set_xdg_dialog_modal (GdkWaylandToplevel *wayland_toplevel);
+static gboolean maybe_set_xdg_toplevel_icon (GdkWaylandToplevel *wayland_toplevel);
 
 static void
 gdk_wayland_toplevel_hide_surface (GdkWaylandSurface *wayland_surface)
@@ -947,6 +952,8 @@ gdk_wayland_surface_create_xdg_toplevel (GdkWaylandToplevel *wayland_toplevel)
   if (!maybe_set_xdg_dialog_modal (wayland_toplevel))
     maybe_set_gtk_surface_modal (wayland_toplevel);
 
+  maybe_set_xdg_toplevel_icon (wayland_toplevel);
+
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
   wl_surface_commit (wayland_surface->display_server.wl_surface);
 }
@@ -1317,7 +1324,54 @@ gdk_wayland_toplevel_set_transient_for (GdkWaylandToplevel *toplevel,
   gdk_wayland_toplevel_sync_parent (toplevel);
 }
 
-#define LAST_PROP 1
+static gboolean
+maybe_set_xdg_toplevel_icon (GdkWaylandToplevel *self)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (self)));
+
+  if (display_wayland->toplevel_icon == NULL ||
+      self->display_server.xdg_toplevel == NULL)
+    return FALSE;
+
+  xdg_toplevel_icon_manager_v1_set_icon (display_wayland->toplevel_icon,
+                                         self->display_server.xdg_toplevel,
+                                         self->display_server.toplevel_icon);
+
+  return TRUE;
+}
+
+static void
+gdk_wayland_toplevel_set_icon_list (GdkWaylandToplevel *self,
+                                    GList              *textures)
+{
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (self)));
+  GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (self);
+
+  if (display_wayland->toplevel_icon == NULL)
+    return;
+
+  g_clear_pointer (&self->display_server.toplevel_icon, xdg_toplevel_icon_v1_destroy);
+  g_list_free_full (self->icons, (GDestroyNotify) wl_buffer_destroy);
+  self->icons = NULL;
+
+  self->display_server.toplevel_icon = xdg_toplevel_icon_manager_v1_create_icon (display_wayland->toplevel_icon);
+
+  for (GList *l = textures; l; l = l->next)
+    {
+      GdkTexture *texture = l->data;
+      struct wl_buffer *buffer;
+
+      buffer = _gdk_wayland_shm_texture_get_wl_buffer (display_wayland, texture);
+      self->icons = g_list_prepend (self->icons, buffer);
+      xdg_toplevel_icon_v1_add_buffer (self->display_server.toplevel_icon, buffer, 1);
+    }
+
+  if (maybe_set_xdg_toplevel_icon (self))
+    {
+      gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);
+      wl_surface_commit (wayland_surface->display_server.wl_surface);
+    }
+}
 
 static void
 gdk_wayland_toplevel_set_decorated (GdkWaylandToplevel *self,
@@ -1344,6 +1398,8 @@ gdk_wayland_toplevel_set_decorated (GdkWaylandToplevel *self,
 
   g_object_notify (G_OBJECT (self), "decorated");
 }
+
+#define LAST_PROP 1
 
 static void
 gdk_wayland_toplevel_set_property (GObject      *object,
@@ -1377,10 +1433,13 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_ICON_LIST:
+      gdk_wayland_toplevel_set_icon_list (toplevel, g_value_get_pointer (value));
+      g_object_notify_by_pspec (object, pspec);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DECORATED:
       gdk_wayland_toplevel_set_decorated (toplevel, g_value_get_boolean (value));
+      g_object_notify_by_pspec (object, pspec);
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_DELETABLE:
@@ -1481,6 +1540,9 @@ gdk_wayland_toplevel_finalize (GObject *object)
   g_clear_pointer (&self->shortcuts_inhibitors, g_hash_table_unref);
 
   g_clear_pointer (&self->idle_inhibitor, zwp_idle_inhibitor_v1_destroy);
+
+  g_clear_pointer (&self->display_server.toplevel_icon, xdg_toplevel_icon_v1_destroy);
+  g_list_free_full (self->icons, (GDestroyNotify) wl_buffer_destroy);
 
   G_OBJECT_CLASS (gdk_wayland_toplevel_parent_class)->finalize (object);
 }

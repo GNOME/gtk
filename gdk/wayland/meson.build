@@ -161,6 +161,11 @@ proto_sources = [
     'stability': 'private',
     'version': 1,
   },
+  {
+    'name': 'xdg-toplevel-icon',
+    'stability': 'staging',
+    'version': 1,
+  },
 ]
 
 gdk_wayland_gen_headers = []
