@@ -44,6 +44,7 @@
 #include <gdk/wayland/xdg-dialog-v1-client-protocol.h>
 #include <gdk/wayland/xdg-system-bell-v1-client-protocol.h>
 #include <gdk/wayland/cursor-shape-v1-client-protocol.h>
+#include <gdk/wayland/xdg-toplevel-icon-v1-client-protocol.h>
 
 #include <glib.h>
 #include <gdk/gdkkeys.h>
@@ -129,6 +130,7 @@ struct _GdkWaylandDisplay
   struct wp_presentation *presentation;
   struct wp_single_pixel_buffer_manager_v1 *single_pixel_buffer;
   struct wp_cursor_shape_manager_v1 *cursor_shape;
+  struct xdg_toplevel_icon_manager_v1 *toplevel_icon;
   GdkWaylandColor *color;
 
   GList *async_roundtrips;
