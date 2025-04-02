@@ -220,7 +220,17 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
 
   if (gdk_memory_format_find_by_dmabuf_fourcc (dmabuf.fourcc, premultiplied, &format, &is_yuv))
     {
-      /* nothing to do */
+      if (!gdk_memory_format_is_block_boundary (format, width, height))
+        {
+          g_set_error (error,
+                       GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                       "Size of %dx%d is not valid for dmabuf format %.4s, must be multiple of %zux%zu",
+                       width, height,
+                       (char *) &dmabuf.fourcc,
+                       gdk_memory_format_get_block_width (format),
+                       gdk_memory_format_get_block_height (format));
+          return NULL;
+        }
     }
   else
     {
