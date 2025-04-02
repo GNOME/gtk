@@ -409,6 +409,56 @@ parse_compressed_bytes (GtkCssParser *parser,
 }
 
 static gboolean
+parse_texture_data (GtkCssParser *parser,
+                    Context      *context,
+                    gpointer      out_data)
+{
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
+    {
+      char *s;
+      gsize i, j, len;
+      guchar *data;
+
+      s = gtk_css_parser_consume_string (parser);
+      if (s == NULL)
+        return FALSE;
+
+      len = strlen (s);
+
+      data = g_malloc (len);
+      j = 0;
+      for (i = 0; i < len; i++)
+        {
+          int v1, v2;
+
+          if (g_ascii_isspace (s[i]))
+            continue;
+
+          v1 = g_ascii_xdigit_value (s[i]);
+          if (v1 < 0)
+            {
+              gtk_css_parser_error_syntax (parser, "Invalid hex character at position %zu", i);
+              continue;
+            }
+          i++;
+          v2 = g_ascii_xdigit_value (s[i]);
+          if (v2 < 0)
+            {
+              gtk_css_parser_error_syntax (parser, "Invalid hex character at position %zu", i);
+              continue;
+            }
+
+          data[j++] = v1 * 16 + v2;
+        }
+
+      *(GBytes **) out_data = g_bytes_new_take (data, j);
+      return TRUE;
+    }
+
+  return parse_compressed_bytes (parser, context, out_data);
+}
+
+static gboolean
 parse_color_state (GtkCssParser *parser,
                    Context      *context,
                    gpointer      color_state)
@@ -553,7 +603,7 @@ parse_dmabuf_texture (GtkCssParser *parser,
   GdkColorState *color_state = NULL;
   unsigned offsets[4] = { 0, }, strides[4] = { 0, };
   const Declaration declarations[] = {
-    { "data", parse_compressed_bytes, clear_bytes, &bytes },
+    { "data", parse_texture_data, clear_bytes, &bytes },
     { "width", parse_unsigned, NULL, &width },
     { "height", parse_unsigned , NULL, &height },
     { "fourcc", parse_dmabuf_fourcc, NULL, &dmabuf.fourcc },
@@ -737,7 +787,7 @@ parse_memory_texture (GtkCssParser *parser,
   GdkColorState *color_state = NULL;
   unsigned offsets[4] = { 0, }, strides[4] = { 0, };
   const Declaration declarations[] = {
-    { "data", parse_compressed_bytes, clear_bytes, &bytes },
+    { "data", parse_texture_data, clear_bytes, &bytes },
     { "width", parse_size, NULL, &layout.width },
     { "height", parse_size, NULL, &layout.height },
     { "format", parse_memory_format, NULL, &layout.format },
