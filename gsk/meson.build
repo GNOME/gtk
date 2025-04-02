@@ -66,6 +66,7 @@ gsk_private_sources = files([
   'gpu/gskgpushaderop.c',
   'gpu/gskgpuscissorop.c',
   'gpu/gskgputextureop.c',
+  'gpu/gskgpuutils.c',
   'gpu/gskgpuuploadop.c',
 ])
 
