@@ -32,6 +32,7 @@
 #include "gskgpuscissoropprivate.h"
 #include "gskgputextureopprivate.h"
 #include "gskgpuuploadopprivate.h"
+#include "gskgpuutilsprivate.h"
 
 #include "gskcairoblurprivate.h"
 #include "gskdebugprivate.h"
@@ -1922,29 +1923,6 @@ texture_node_should_mipmap (GskRenderNode         *node,
          gdk_texture_get_height (texture) > 2 * node->bounds.size.height * graphene_vec2_get_y (scale);
 }
 
-static GdkColorState *
-gsk_gpu_color_state_apply_conversion (GdkColorState    *color_state,
-                                      GskGpuConversion  conv)
-{
-  switch (conv)
-    {
-    case GSK_GPU_CONVERSION_NONE:
-      return color_state;
-    case GSK_GPU_CONVERSION_SRGB:
-      return gdk_color_state_get_no_srgb_tf (color_state);
-    case GSK_GPU_CONVERSION_NARROW:
-    case GSK_GPU_CONVERSION_BT601:
-    case GSK_GPU_CONVERSION_BT601_NARROW:
-    case GSK_GPU_CONVERSION_BT709:
-    case GSK_GPU_CONVERSION_BT709_NARROW:
-    case GSK_GPU_CONVERSION_BT2020:
-    case GSK_GPU_CONVERSION_BT2020_NARROW:
-    default:
-      g_assert_not_reached ();
-      return NULL;
-  }
-}
-
 static GskGpuImage *
 gsk_gpu_lookup_texture (GskGpuFrame    *frame,
                         GdkColorState  *ccs,
@@ -1973,15 +1951,9 @@ gsk_gpu_lookup_texture (GskGpuFrame    *frame,
   if (image == NULL)
     return NULL;
 
-  image_cs = gdk_texture_get_color_state (texture);
-
-  image_cs = gsk_gpu_color_state_apply_conversion (image_cs, 
+  image_cs = gsk_gpu_color_state_apply_conversion (gdk_texture_get_color_state (texture),
                                                    gsk_gpu_image_get_conversion (image));
-  if (gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB)
-    {
-      image_cs = gdk_color_state_get_no_srgb_tf (image_cs);
-      g_assert (image_cs);
-    }
+  g_assert (image_cs);
 
   *out_image_cs = image_cs;
   return image;
@@ -2195,7 +2167,8 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
           !gdk_color_state_equal (image_cs, self->ccs))
         {
           image = gsk_gpu_copy_image (self->frame, self->ccs, image, image_cs, TRUE);
-          image_cs = self->ccs;
+          gdk_color_state_unref (image_cs);
+          image_cs = gdk_color_state_ref (self->ccs);
           gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame)),
                                              texture,
                                              image,
@@ -2222,6 +2195,7 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
                                        &node->bounds);
     }
 
+  gdk_color_state_unref (image_cs);
   g_object_unref (image);
 }
 
@@ -2284,7 +2258,11 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
     }
 
   if (should_mipmap)
-    return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds);
+    {
+      gdk_color_state_unref (image_cs);
+      g_object_unref (image);
+      return gsk_gpu_get_node_as_image_via_offscreen (frame, flags, ccs, clip_bounds, scale, node, out_bounds);
+    }
 
   if (!gdk_color_state_equal (ccs, image_cs) ||
       gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA ||
@@ -2292,12 +2270,15 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
        gdk_memory_format_alpha (gsk_gpu_image_get_format (image)) == GDK_MEMORY_ALPHA_OPAQUE))
     {
       image = gsk_gpu_copy_image (frame, ccs, image, image_cs, FALSE);
+      gdk_color_state_unref (image_cs);
+      image_cs = gdk_color_state_ref (ccs);
       gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (frame)),
                                          texture,
                                          image,
                                          ccs);
     }
 
+  gdk_color_state_unref (image_cs);
   *out_bounds = node->bounds;
   return image;
 }
@@ -2337,7 +2318,11 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       /* now intersect with actual node bounds */
       if (!gsk_rect_intersection (&clip_bounds, &node->bounds, &clip_bounds))
         {
-          g_clear_object (&image);
+          if (image)
+            {
+              gdk_color_state_unref (image_cs);
+              g_object_unref (image);
+            }
           return;
         }
       clip_bounds.size.width = ceilf (clip_bounds.size.width);
@@ -2359,6 +2344,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
                                                                graphene_vec2_one (),
                                                                &clip_bounds,
                                                                node);
+          gdk_color_state_unref (image_cs);
           g_object_unref (image);
         }
       gsk_gpu_texture_op (self->frame,
@@ -2379,7 +2365,8 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       !gdk_color_state_equal (image_cs, self->ccs))
     {
       image = gsk_gpu_copy_image (self->frame, self->ccs, image, image_cs, need_mipmap);
-      image_cs = self->ccs;
+      gdk_color_state_unref (image_cs);
+      image_cs = gdk_color_state_ref (self->ccs);
       gsk_gpu_cache_cache_texture_image (gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame)),
                                          texture,
                                          image,
@@ -2399,6 +2386,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
                           &node->bounds,
                       });
 
+  gdk_color_state_unref (image_cs);
   g_object_unref (image);
 }
 
