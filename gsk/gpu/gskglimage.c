@@ -114,7 +114,6 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
         self->gl_internal_format = gl_internal_srgb_format;
       else /* FIXME: Happens when the driver uses formats that it does not expose */
         self->gl_internal_format = gl_internal_format;
-      flags |= GSK_GPU_IMAGE_SRGB;
       conv = GSK_GPU_CONVERSION_SRGB;
     }
   else
@@ -172,7 +171,6 @@ gsk_gl_image_new (GskGLDevice      *device,
   if (try_srgb && gl_internal_srgb_format != -1)
     {
       self->gl_internal_format = gl_internal_srgb_format;
-      flags |= GSK_GPU_IMAGE_SRGB;
       conv = GSK_GPU_CONVERSION_SRGB;
     }
   else

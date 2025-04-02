@@ -276,7 +276,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
   image_width = gsk_gpu_image_get_width (image);
   image_height = gsk_gpu_image_get_height (image);
 
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
+  if (gsk_gpu_image_get_conversion (image) & GSK_GPU_CONVERSION_SRGB)
     color_state = GDK_COLOR_STATE_SRGB_LINEAR;
   else
     color_state = GDK_COLOR_STATE_SRGB;
@@ -298,7 +298,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                                             depth,
                                                             tile_width, tile_height);
 
-              if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
+              if (gsk_gpu_image_get_conversion (image) & GSK_GPU_CONVERSION_SRGB)
                 color_state = GDK_COLOR_STATE_SRGB_LINEAR;
               else
                 color_state = GDK_COLOR_STATE_SRGB;
@@ -378,7 +378,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   if (image == NULL)
     return gsk_gpu_renderer_fallback_render_texture (self, root, &rounded_viewport);
 
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
+  if (gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB)
     color_state = GDK_COLOR_STATE_SRGB_LINEAR;
   else
     color_state = GDK_COLOR_STATE_SRGB;
