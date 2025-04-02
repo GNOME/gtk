@@ -189,12 +189,6 @@ void                    gdk_gl_context_download                 (GdkGLContext   
                                                                  const GdkMemoryLayout *dest_layout,
                                                                  GdkColorState   *dest_color_state);
 
-guint                   gdk_gl_context_import_dmabuf            (GdkGLContext    *self,
-                                                                 int              width,
-                                                                 int              height,
-                                                                 const GdkDmabuf *dmabuf,
-                                                                 gboolean        *external);
-
 gboolean                gdk_gl_context_export_dmabuf            (GdkGLContext    *self,
                                                                  unsigned int     texture_id,
                                                                  GdkDmabuf       *dmabuf);

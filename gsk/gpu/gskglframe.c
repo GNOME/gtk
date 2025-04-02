@@ -10,6 +10,7 @@
 #include "gskglimageprivate.h"
 
 #include "gdkdmabuftextureprivate.h"
+#include "gdkdmabufeglprivate.h"
 #include "gdkglcontextprivate.h"
 #include "gdkgltextureprivate.h"
 
@@ -100,12 +101,13 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
           return image;
         }
     }
+#if defined(HAVE_DMABUF) && defined (HAVE_EGL)
   else if (GDK_IS_DMABUF_TEXTURE (texture))
     {
       gboolean external;
       GLuint tex_id;
 
-      tex_id = gdk_gl_context_import_dmabuf (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+      tex_id = gdk_dmabuf_egl_import_dmabuf (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
                                              gdk_texture_get_width (texture),
                                              gdk_texture_get_height (texture),
                                              gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
@@ -119,6 +121,7 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
                                                (external ? GSK_GPU_IMAGE_EXTERNAL : 0));
         }
     }
+#endif  /* HAVE_DMABUF && HAVE_EGL */
 
   return GSK_GPU_FRAME_CLASS (gsk_gl_frame_parent_class)->upload_texture (frame, with_mipmap, texture);
 }
