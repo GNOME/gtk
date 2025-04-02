@@ -6,6 +6,7 @@
 #include "gskglimageprivate.h"
 #include "gskgpuimageprivate.h"
 #include "gskgpuprintprivate.h"
+#include "gskgpuutilsprivate.h"
 #ifdef GDK_RENDERING_VULKAN
 #include "gskgpucacheprivate.h"
 #include "gskvulkanbufferprivate.h"
@@ -492,14 +493,20 @@ gsk_gpu_download_into_op_gl_command (GskGpuOp          *op,
                                      GskGLCommandState *state)
 {
   GskGpuDownloadIntoOp *self = (GskGpuDownloadIntoOp *) op;
+  GdkColorState *real_cs;
+
+  real_cs = gsk_gpu_color_state_apply_conversion (self->image_color_state,
+                                                  gsk_gpu_image_get_conversion (self->image));
 
   gdk_gl_context_download (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
                            gsk_gl_image_get_texture_id (GSK_GL_IMAGE (self->image)),
                            gsk_gpu_image_get_format (self->image),
-                           self->image_color_state,
+                           real_cs,
                            self->data,
                            &self->layout,
                            self->color_state);
+
+  gdk_color_state_unref (real_cs);
 
   return op->next;
 }
