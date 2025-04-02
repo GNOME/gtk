@@ -269,6 +269,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   GskVulkanImage *self;
   VkDevice vk_device;
   GskGpuImageFlags flags;
+  GskGpuConversion conv;
   VkFormat vk_format, vk_srgb_format;
   VkComponentMapping vk_components;
   VkSamplerYcbcrConversion vk_conversion;
@@ -344,7 +345,12 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
     }
 
   if (vk_format == vk_srgb_format)
-    flags |= GSK_GPU_IMAGE_SRGB;
+    {
+      conv = GSK_GPU_CONVERSION_SRGB;
+      flags |= GSK_GPU_IMAGE_SRGB;
+    }
+  else
+    conv = GSK_GPU_CONVERSION_NONE;
 
   if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
     flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
@@ -372,7 +378,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   self->vk_image_layout = layout;
   self->vk_access = access;
 
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, format, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, conv, format, width, height);
 
   GSK_VK_CHECK (vkCreateImage, vk_device,
                                 &(VkImageCreateInfo) {
@@ -525,6 +531,7 @@ gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
 {
   GskVulkanImage *self;
   GskGpuImageFlags flags = 0;
+  GskGpuConversion conv;
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
 
@@ -537,10 +544,15 @@ gsk_vulkan_image_new_for_swapchain (GskVulkanDevice  *device,
   self->vk_access = 0;
 
   if (format == gdk_memory_format_vk_srgb_format (memory_format))
-    flags |= GSK_GPU_IMAGE_SRGB;
+    {
+      flags |= GSK_GPU_IMAGE_SRGB;
+      conv = GSK_GPU_CONVERSION_SRGB;
+    }
+  else
+    conv = GSK_GPU_CONVERSION_NONE;
 
   /* FIXME: The flags here are very suboptimal */
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, memory_format, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, conv, memory_format, width, height);
 
   gsk_vulkan_image_create_view (self,
                                 format,
@@ -724,6 +736,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   VkResult res;
   gsize n_modifiers;
   GskGpuImageFlags flags;
+  GskGpuConversion conv;
   gboolean needs_conversion;
 
   if (!gdk_has_feature (GDK_FEATURE_DMABUF) ||
@@ -813,7 +826,11 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   flags |= GSK_GPU_IMAGE_EXTERNAL;
 
   if (vk_format == vk_srgb_format)
-    flags |= GSK_GPU_IMAGE_SRGB;
+    {
+      conv = GSK_GPU_CONVERSION_SRGB;
+      flags |= GSK_GPU_IMAGE_SRGB;
+    }
+  else
 
   if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
     flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
@@ -823,6 +840,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags,
+                       conv,
                        format,
                        width, height);
 
@@ -1038,6 +1056,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags,
+                       GSK_GPU_CONVERSION_NONE,
                        format,
                        width, height);
 
