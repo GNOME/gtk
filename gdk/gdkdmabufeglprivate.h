@@ -11,6 +11,8 @@ guint                       gdk_dmabuf_egl_import_dmabuf        (GdkGLContext   
                                                                  int                             width,
                                                                  int                             height,
                                                                  const GdkDmabuf                *dmabuf,
+                                                                 EGLint                          color_space_hint,
+                                                                 EGLint                          range_hint,
                                                                  gboolean                       *external);
 
 #endif  /* HAVE_DMABUF && HAVE_EGL */
