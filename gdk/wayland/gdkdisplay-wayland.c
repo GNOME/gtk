@@ -98,7 +98,9 @@
 #define SHM_VERSION                     1
 #define LINUX_DMABUF_MIN_VERSION        4
 #define LINUX_DMABUF_VERSION            5
-#define DATA_DEVICE_MANAGER_VERSION     4
+#define DATA_DEVICE_MANAGER_VERSION     3
+#define SUBCOMPOSITOR_VERSION           1
+#define SEAT_VERSION                    8
 #define POINTER_GESTURES_VERSION        3
 #define PRIMARY_SELECTION_VERSION       1
 #define OUTPUT_MIN_VERSION              2
@@ -335,7 +337,7 @@ gdk_wayland_display_add_seat (GdkWaylandDisplay *display_wayland,
 
   seat = wl_registry_bind (display_wayland->wl_registry,
                            id, &wl_seat_interface,
-                           MIN (version, 8));
+                           MIN (version, SEAT_VERSION));
   gdk_wayland_display_create_seat (display_wayland, id, seat);
   _gdk_wayland_display_async_roundtrip (display_wayland);
 }
@@ -553,12 +555,12 @@ gdk_registry_handle_global (void               *data,
     {
       display_wayland->data_device_manager =
         wl_registry_bind (display_wayland->wl_registry, id, &wl_data_device_manager_interface,
-                          MIN (version, 3));
+                          MIN (version, DATA_DEVICE_MANAGER_VERSION));
     }
   else if (match_global (display_wayland, interface, version, wl_subcompositor_interface.name, 0))
     {
       display_wayland->subcompositor =
-        wl_registry_bind (display_wayland->wl_registry, id, &wl_subcompositor_interface, 1);
+        wl_registry_bind (display_wayland->wl_registry, id, &wl_subcompositor_interface, SUBCOMPOSITOR_VERSION);
     }
   else if (match_global (display_wayland, interface, version, zwp_pointer_gestures_v1_interface.name, 0))
     {
