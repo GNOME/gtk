@@ -270,6 +270,11 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
   size = stride * height;
   data = g_malloc_n (stride, height);
 
+  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
+    color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+  else
+    color_state = GDK_COLOR_STATE_SRGB;
+
   for (y = 0; y < height; y += image_height)
     {
       for (x = 0; x < width; x += image_width)
@@ -281,14 +286,16 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
           texture = NULL;
 
           if (image == NULL)
-            image = gsk_gpu_device_create_download_image (priv->device,
-                                                          depth,
-                                                          tile_width, tile_height);
+            {
+              image = gsk_gpu_device_create_download_image (priv->device,
+                                                            depth,
+                                                            tile_width, tile_height);
 
-          if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
-            color_state = GDK_COLOR_STATE_SRGB_LINEAR;
-          else
-            color_state = GDK_COLOR_STATE_SRGB;
+              if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
+                color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+              else
+                color_state = GDK_COLOR_STATE_SRGB;
+            }
 
           clip_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                            0, 0,
