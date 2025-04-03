@@ -111,6 +111,7 @@ struct _GtkInspectorGeneral
   GtkWidget *vulkan_layers_row;
   GtkStringList *vulkan_layers_list;
   GtkWidget *device_box;
+  GtkWidget *os_info;
   GtkWidget *gtk_version;
   GtkWidget *gdk_backend;
   GtkWidget *gsk_renderer;
@@ -254,6 +255,27 @@ set_monospace_font (GtkWidget *w)
   gtk_label_set_attributes (GTK_LABEL (w), attrs);
   pango_attr_list_unref (attrs);
 }
+
+/* }}} */
+/* {{{ OS Info */
+
+static void
+init_os_info (GtkInspectorGeneral *gen)
+{
+  char *os_info = g_get_os_info (G_OS_INFO_KEY_PRETTY_NAME);
+  gtk_label_set_text (GTK_LABEL (gen->os_info), os_info);
+  g_free (os_info);
+}
+
+static void
+dump_os_info (GdkDisplay *display,
+              GString    *string)
+{
+  char *os_info = g_get_os_info (G_OS_INFO_KEY_PRETTY_NAME);
+  g_string_append_printf (string, "| Operating System | %s |\n", os_info);
+  g_free (os_info);
+}
+
 
 /* }}} */
 /* {{{ Version */
@@ -2095,6 +2117,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_extensions_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_layers_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_layers_list);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, os_info);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gtk_version);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gdk_backend);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gsk_renderer);
@@ -2148,6 +2171,7 @@ gtk_inspector_general_set_display (GtkInspectorGeneral *gen,
 {
   gen->display = display;
 
+  init_os_info (gen);
   init_version (gen);
   init_pango (gen);
   init_media (gen);
@@ -2171,6 +2195,7 @@ generate_dump (GdkDisplay *display)
   g_string_append (string, "| Name | Value |\n");
   g_string_append (string, "| - | - |\n");
 
+  dump_os_info (display, string);
   dump_version (display, string);
   dump_pango (display, string);
   dump_media (display, string);
