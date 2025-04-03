@@ -226,7 +226,7 @@ gdk_wayland_toplevel_init_capabilities (GdkWaylandToplevel *toplevel)
 
   GDK_DISPLAY_DEBUG (display, MISC,
                      "toplevel capabilities, surface %p%s%s%s", toplevel,
-                     (toplevel->capabilities & GDK_TOPLEVEL_CAPABILITIES_EDGE_CONSTRAINTS) ? "edge-constraints" : "",
+                     (toplevel->capabilities & GDK_TOPLEVEL_CAPABILITIES_EDGE_CONSTRAINTS) ? " edge-constraints" : "",
                      (toplevel->capabilities & GDK_TOPLEVEL_CAPABILITIES_INHIBIT_SHORTCUTS) ? " inhibit-shortcuts" : "",
                      (toplevel->capabilities & GDK_TOPLEVEL_CAPABILITIES_TITLEBAR_GESTURES) ? " titlebar-gestures" : "");
 
@@ -2025,10 +2025,13 @@ translate_gesture (GdkTitlebarGesture         gesture,
 static gboolean
 gdk_wayland_toplevel_supports_titlebar_gestures (GdkWaylandToplevel *wayland_toplevel)
 {
-  if (!wayland_toplevel->display_server.gtk_surface)
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (wayland_toplevel));
+  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
+
+  if (!display_wayland->gtk_shell)
     return FALSE;
 
-  if (gtk_surface1_get_version (wayland_toplevel->display_server.gtk_surface) < GTK_SURFACE1_TITLEBAR_GESTURE_SINCE_VERSION)
+  if (gtk_shell1_get_version (display_wayland->gtk_shell) < GTK_SURFACE1_TITLEBAR_GESTURE_SINCE_VERSION)
     return FALSE;
 
   return TRUE;
