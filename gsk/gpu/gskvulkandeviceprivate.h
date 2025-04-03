@@ -13,6 +13,7 @@ G_BEGIN_DECLS
 
 /* forward declaration */
 typedef struct _GskVulkanYcbcr GskVulkanYcbcr;
+typedef struct _GskVulkanYcbcrInfo GskVulkanYcbcrInfo;
 
 #define GSK_TYPE_VULKAN_DEVICE (gsk_vulkan_device_get_type ())
 
@@ -47,9 +48,9 @@ VkSampler               gsk_vulkan_device_get_vk_sampler                (GskVulk
                                                                          GskGpuSampler           sampler) G_GNUC_PURE;
 
 GskVulkanYcbcr *        gsk_vulkan_device_get_ycbcr                     (GskVulkanDevice        *self,
-                                                                         VkFormat                vk_format);
+                                                                         const GskVulkanYcbcrInfo *info);
 void                    gsk_vulkan_device_remove_ycbcr                  (GskVulkanDevice        *self,
-                                                                         VkFormat                vk_format);
+                                                                         GskVulkanYcbcr         *ycbcr);
 
 VkRenderPass            gsk_vulkan_device_get_vk_render_pass            (GskVulkanDevice        *self,
                                                                          VkFormat                format,

@@ -3272,23 +3272,6 @@ printer_init_check_texture (Printer    *printer,
     g_hash_table_insert (printer->named_textures, texture, g_strdup (""));
 }
 
-static void
-printer_init_check_color_state (Printer       *printer,
-                                GdkColorState *cs)
-{
-  gpointer name;
-
-  if (GDK_IS_DEFAULT_COLOR_STATE (cs) ||
-      GDK_IS_BUILTIN_COLOR_STATE (cs))
-    return;
-
-  if (!g_hash_table_lookup_extended (printer->named_color_states, cs, NULL, &name))
-    {
-      name = g_strdup_printf ("cicp%zu", ++printer->named_color_state_counter);
-      g_hash_table_insert (printer->named_color_states, cs, name);
-    }
-}
-
 typedef struct {
   hb_face_t *face;
   hb_subset_input_t *input;
@@ -3362,58 +3345,17 @@ printer_init_duplicates_for_node (Printer       *printer,
     {
     case GSK_TEXT_NODE:
       printer_init_collect_font_info (printer, node);
-      printer_init_check_color_state (printer, gsk_text_node_get_color2 (node)->color_state);
       break;
 
     case GSK_COLOR_NODE:
-      printer_init_check_color_state (printer, gsk_color_node_get_color2 (node)->color_state);
-      break;
-
     case GSK_BORDER_NODE:
-      {
-        const GdkColor *colors = gsk_border_node_get_colors2 (node);
-        for (int i = 0; i < 4; i++)
-          printer_init_check_color_state (printer, colors[i].color_state);
-      }
-      break;
-
     case GSK_INSET_SHADOW_NODE:
-      printer_init_check_color_state (printer, gsk_inset_shadow_node_get_color2 (node)->color_state);
-      break;
-
     case GSK_OUTSET_SHADOW_NODE:
-      printer_init_check_color_state (printer, gsk_outset_shadow_node_get_color2 (node)->color_state);
-      break;
-
     case GSK_LINEAR_GRADIENT_NODE:
     case GSK_REPEATING_LINEAR_GRADIENT_NODE:
-      {
-        const GskColorStop2 *stops = gsk_linear_gradient_node_get_color_stops2 (node);
-        for (int i = 0; i < gsk_linear_gradient_node_get_n_color_stops (node); i++)
-          printer_init_check_color_state (printer, stops[i].color.color_state);
-        printer_init_check_color_state (printer, gsk_linear_gradient_node_get_interpolation_color_state (node));
-      }
-      break;
-
     case GSK_RADIAL_GRADIENT_NODE:
     case GSK_REPEATING_RADIAL_GRADIENT_NODE:
-      {
-        const GskColorStop2 *stops = gsk_radial_gradient_node_get_color_stops2 (node);
-        for (int i = 0; i < gsk_radial_gradient_node_get_n_color_stops (node); i++)
-          printer_init_check_color_state (printer, stops[i].color.color_state);
-        printer_init_check_color_state (printer, gsk_radial_gradient_node_get_interpolation_color_state (node));
-      }
-      break;
-
     case GSK_CONIC_GRADIENT_NODE:
-      {
-        const GskColorStop2 *stops = gsk_conic_gradient_node_get_color_stops2 (node);
-        for (int i = 0; i < gsk_conic_gradient_node_get_n_color_stops (node); i++)
-          printer_init_check_color_state (printer, stops[i].color.color_state);
-        printer_init_check_color_state (printer, gsk_conic_gradient_node_get_interpolation_color_state (node));
-      }
-      break;
-
     case GSK_CAIRO_NODE:
       /* no children */
       break;
@@ -3456,11 +3398,6 @@ printer_init_duplicates_for_node (Printer       *printer,
 
     case GSK_SHADOW_NODE:
       printer_init_duplicates_for_node (printer, gsk_shadow_node_get_child (node));
-      for (int i = 0; i < gsk_shadow_node_get_n_shadows (node); i++)
-        {
-          const GskShadow2 * shadow = gsk_shadow_node_get_shadow2 (node, i);
-          printer_init_check_color_state (printer, shadow->color.color_state);
-        }
       break;
 
     case GSK_DEBUG_NODE:
@@ -3546,8 +3483,7 @@ printer_init (Printer       *self,
 static void
 printer_clear (Printer *self)
 {
-  if (self->str)
-    g_string_free (self->str, TRUE);
+  g_string_free (self->str, TRUE);
   g_hash_table_unref (self->named_nodes);
   g_hash_table_unref (self->named_textures);
   g_hash_table_unref (self->named_color_states);
@@ -3711,15 +3647,6 @@ append_float_param (Printer    *p,
 }
 
 static void
-append_unsigned_param (Printer    *p,
-                       const char *param_name,
-                       guint       value)
-{
-  _indent (p);
-  g_string_append_printf (p->str, "%s: %u;\n", param_name, value);
-}
-
-static void
 print_color_state (Printer       *p,
                    GdkColorState *color_state)
 {
@@ -3730,9 +3657,13 @@ print_color_state (Printer       *p,
     }
   else
     {
-      const char *name;
+      gpointer name;
 
-      name = g_hash_table_lookup (p->named_color_states, color_state);
+      if (!g_hash_table_lookup_extended (p->named_color_states, color_state, NULL, &name))
+        {
+          name = g_strdup_printf ("cicp%zu", ++p->named_color_state_counter);
+          g_hash_table_insert (p->named_color_states, color_state, name);
+        }
       g_assert (name != NULL);
       g_string_append_c (p->str, '"');
       g_string_append (p->str, name);
@@ -5063,21 +4994,19 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void
-serialize_color_state (Printer       *p,
+serialize_color_state (GString       *str,
                        GdkColorState *color_state,
                        const char    *name)
 {
   const GdkCicp *cicp = gdk_color_state_get_cicp (color_state);
 
-  g_string_append_printf (p->str, "@cicp \"%s\" {\n", name);
-  p->indentation_level ++;
-  append_unsigned_param (p, "primaries", cicp->color_primaries);
-  append_unsigned_param (p, "transfer", cicp->transfer_function);
-  append_unsigned_param (p, "matrix", cicp->matrix_coefficients);
+  g_string_append_printf (str, "@cicp \"%s\" {\n", name);
+  g_string_append_printf (str, "  primaries: %u;\n", cicp->color_primaries);
+  g_string_append_printf (str, "  transfer: %u;\n", cicp->transfer_function);
+  g_string_append_printf (str, "  matrix: %u;\n", cicp->matrix_coefficients);
   if (cicp->range != GDK_CICP_RANGE_FULL)
-    append_enum_param (p, "range", GDK_TYPE_CICP_RANGE, cicp->range);
-  p->indentation_level --;
-  g_string_append (p->str, "}\n");
+    g_string_append_printf (str, "  range: %s;\n", enum_to_nick (GDK_TYPE_CICP_RANGE, cicp->range));
+  g_string_append (str, "}\n");
 }
 
 /**
@@ -5100,16 +5029,12 @@ GBytes *
 gsk_render_node_serialize (GskRenderNode *node)
 {
   Printer p;
-  GBytes *res;
   GHashTableIter iter;
   GdkColorState *cs;
   const char *name;
+  GString *str;
 
   printer_init (&p, node);
-
-  g_hash_table_iter_init (&iter, p.named_color_states);
-  while (g_hash_table_iter_next (&iter, (gpointer *)&cs, (gpointer *)&name))
-    serialize_color_state (&p, cs, name);
 
   if (gsk_render_node_get_node_type (node) == GSK_CONTAINER_NODE)
     {
@@ -5127,9 +5052,15 @@ gsk_render_node_serialize (GskRenderNode *node)
       render_node_print (&p, node);
     }
 
-  res = g_string_free_to_bytes (g_steal_pointer (&p.str));
+  str = g_string_new (NULL);
+
+  g_hash_table_iter_init (&iter, p.named_color_states);
+  while (g_hash_table_iter_next (&iter, (gpointer *)&cs, (gpointer *)&name))
+    serialize_color_state (str, cs, name);
+
+  g_string_append_len (str, p.str->str, p.str->len);
 
   printer_clear (&p);
 
-  return res;
+  return g_string_free_to_bytes (str);
 }

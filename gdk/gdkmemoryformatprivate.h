@@ -89,7 +89,8 @@ gboolean                gdk_memory_format_gl_rgba_format    (GdkMemoryFormat    
                                                              GLint                       out_swizzle[4]);
 #ifdef GDK_RENDERING_VULKAN
 VkFormat                gdk_memory_format_vk_format         (GdkMemoryFormat             format,
-                                                             VkComponentMapping         *out_swizzle);
+                                                             VkComponentMapping         *out_swizzle,
+                                                             gboolean                   *needs_ycbcr_conversion);
 VkFormat                gdk_memory_format_vk_srgb_format    (GdkMemoryFormat             format);
 VkFormat                gdk_memory_format_vk_rgba_format    (GdkMemoryFormat             format,
                                                              GdkMemoryFormat            *out_rgba_format,

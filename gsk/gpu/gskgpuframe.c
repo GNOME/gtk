@@ -833,6 +833,7 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
   gsk_gpu_frame_cleanup (self);
 
   if (gdk_memory_format_get_dmabuf_fourcc (gsk_gpu_image_get_format (image)) != dmabuf->fourcc ||
+      !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_DOWNLOADABLE) ||
       image_cs != color_state)
     {
       GskGpuImage *converted;

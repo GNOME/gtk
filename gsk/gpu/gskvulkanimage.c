@@ -153,12 +153,14 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
     return FALSE;
 
   *out_flags = 0;
-  if ((features & VK_FORMAT_FEATURE_BLIT_SRC_BIT) == 0)
-    *out_flags |= GSK_GPU_IMAGE_NO_BLIT;
+  if (features & VK_FORMAT_FEATURE_BLIT_SRC_BIT)
+    *out_flags |= GSK_GPU_IMAGE_BLIT;
   if (features & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT)
     *out_flags |= GSK_GPU_IMAGE_FILTERABLE;
   if (features & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT)
     *out_flags |= GSK_GPU_IMAGE_RENDERABLE;
+  if (features & VK_FORMAT_FEATURE_TRANSFER_SRC_BIT)
+    *out_flags |= GSK_GPU_IMAGE_DOWNLOADABLE;
   if (image_properties.imageFormatProperties.maxMipLevels >= gsk_vulkan_mipmap_levels (width, height))
     *out_flags |= GSK_GPU_IMAGE_CAN_MIPMAP;
 
@@ -207,7 +209,7 @@ gsk_vulkan_device_check_format (GskVulkanDevice          *device,
                                 VkImageTiling            *out_tiling,
                                 GskGpuImageFlags         *out_flags)
 {
-#define CHECK_FLAGS (GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_CAN_MIPMAP)
+#define CHECK_FLAGS (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_CAN_MIPMAP)
   GskGpuImageFlags flags;
 
   if (vk_format == VK_FORMAT_UNDEFINED)
@@ -268,13 +270,15 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   GskGpuImageFlags flags;
   VkFormat vk_format, vk_srgb_format;
   VkComponentMapping vk_components;
+  VkSamplerYcbcrConversion vk_conversion;
+  gboolean needs_conversion;
 
   g_assert (width > 0 && height > 0);
 
   vk_srgb_format = VK_FORMAT_UNDEFINED;
 
   /* First, try the actual format */
-  vk_format = gdk_memory_format_vk_format (format, &vk_components);
+  vk_format = gdk_memory_format_vk_format (format, &vk_components, &needs_conversion);
   if (try_srgb)
     vk_srgb_format = gdk_memory_format_vk_srgb_format (format);
   if (gsk_vulkan_device_check_format (device, vk_srgb_format, &vk_components, required_flags,
@@ -312,7 +316,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
           fallbacks = gdk_memory_format_get_fallbacks (format);
           for (i = 0; fallbacks[i] != -1; i++)
             {
-              vk_format = gdk_memory_format_vk_format (fallbacks[i], &vk_components);
+              vk_format = gdk_memory_format_vk_format (fallbacks[i], &vk_components, &needs_conversion);
               if (try_srgb)
                 vk_srgb_format = gdk_memory_format_vk_srgb_format (fallbacks[i]);
               if (gsk_vulkan_device_check_format (device, vk_srgb_format, &vk_components, required_flags,
@@ -344,13 +348,16 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
     flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
 
-  if (((flags & (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_NO_BLIT | GSK_GPU_IMAGE_STRAIGHT_ALPHA)) ==
-       (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE)) &&
-      (required_flags & GSK_GPU_IMAGE_CAN_MIPMAP))
-    flags |= GSK_GPU_IMAGE_CAN_MIPMAP;
+  if (((flags & (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_STRAIGHT_ALPHA)) !=
+       (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_CAN_MIPMAP)) ||
+      !(required_flags & GSK_GPU_IMAGE_CAN_MIPMAP))
+    flags &= ~GSK_GPU_IMAGE_CAN_MIPMAP;
 
-  if (!gsk_component_mapping_is_framebuffer_compatible (&vk_components))
-    flags |= GSK_GPU_IMAGE_NO_BLIT;
+  if (!gsk_component_mapping_is_framebuffer_compatible (&vk_components) || needs_conversion)
+    flags &= ~GSK_GPU_IMAGE_BLIT;
+
+  if (needs_conversion)
+    flags |= GSK_GPU_IMAGE_EXTERNAL;
 
   vk_device = gsk_vulkan_device_get_vk_device (device);
 
@@ -378,7 +385,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                     .samples = VK_SAMPLE_COUNT_1_BIT,
                                     .tiling = tiling,
                                     .usage = usage |
-                                             (flags & GSK_GPU_IMAGE_NO_BLIT ? 0 : VK_IMAGE_USAGE_TRANSFER_SRC_BIT),
+                                             (flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_DOWNLOADABLE) ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
                                     .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
                                     .initialLayout = self->vk_image_layout,
                                 },
@@ -403,7 +410,22 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                    self->allocation.vk_memory,
                                    self->allocation.offset);
 
-  gsk_vulkan_image_create_view (self, vk_format, &vk_components, VK_NULL_HANDLE);
+  if (needs_conversion)
+    {
+      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
+                                                 &(GskVulkanYcbcrInfo) {
+                                                     .vk_format = vk_format,
+                                                     .vk_components = vk_components,
+                                                     .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601,
+                                                     .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW,
+                                                 });
+      gsk_vulkan_ycbcr_ref (self->ycbcr);
+      vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
+    }
+  else
+    vk_conversion = VK_NULL_HANDLE;
+
+  gsk_vulkan_image_create_view (self, vk_format, &vk_components, vk_conversion);
 
   return self;
 }
@@ -614,7 +636,7 @@ gsk_vulkan_device_check_dmabuf_format (GskVulkanDevice          *device,
                                         vk_format,
                                         &properties);
 
-  flags = GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE;
+  flags = GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_DOWNLOADABLE;
   n_modifiers = 0;
   for (i = 0; i < drm_properties.drmFormatModifierCount; i++)
     {
@@ -650,11 +672,13 @@ gsk_vulkan_device_check_dmabuf_format (GskVulkanDevice          *device,
 
       /* we could check the real used format after creation, but for now: */
       if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_BLIT_SRC_BIT) == 0)
-        flags |= GSK_GPU_IMAGE_NO_BLIT;
+        flags &= ~GSK_GPU_IMAGE_BLIT;
       if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_SAMPLED_IMAGE_FILTER_LINEAR_BIT) == 0)
         flags &= ~GSK_GPU_IMAGE_FILTERABLE;
       if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_COLOR_ATTACHMENT_BLEND_BIT) == 0)
         flags &= ~GSK_GPU_IMAGE_RENDERABLE;
+      if ((drm_mod_properties[i].drmFormatModifierTilingFeatures & VK_FORMAT_FEATURE_TRANSFER_SRC_BIT) == 0)
+        flags &= ~GSK_GPU_IMAGE_DOWNLOADABLE;
 
       modifiers[n_modifiers++] = drm_mod_properties[i].drmFormatModifier;
     }
@@ -679,12 +703,15 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   VkFormat vk_format, vk_srgb_format;
   VkComponentMapping vk_components;
   VkMemoryRequirements requirements;
+  VkSamplerYcbcrConversion vk_conversion;
   GskVulkanImage *self;
   VkResult res;
   gsize n_modifiers;
   GskGpuImageFlags flags;
+  gboolean needs_conversion;
 
-  if (!gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF))
+  if (!gdk_has_feature (GDK_FEATURE_DMABUF) ||
+      !gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF))
     return NULL;
 
   vk_srgb_format = VK_FORMAT_UNDEFINED;
@@ -692,7 +719,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   vk_device = gsk_vulkan_device_get_vk_device (device);
 
   /* First, try the actual format */
-  vk_format = gdk_memory_format_vk_format (format, &vk_components);
+  vk_format = gdk_memory_format_vk_format (format, &vk_components, &needs_conversion);
   if (try_srgb)
     vk_srgb_format = gdk_memory_format_vk_srgb_format (format);
   if (gsk_vulkan_device_check_dmabuf_format (device, vk_srgb_format, &vk_components, width, height,
@@ -708,7 +735,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
       vk_format = gdk_memory_format_vk_rgba_format (format, &rgba_format, NULL);
       if (vk_format != VK_FORMAT_UNDEFINED)
         {
-          vk_format = gdk_memory_format_vk_format (rgba_format, &vk_components);
+          vk_format = gdk_memory_format_vk_format (rgba_format, &vk_components, &needs_conversion);
           if (try_srgb)
             vk_srgb_format = gdk_memory_format_vk_srgb_format (format);
         }
@@ -734,7 +761,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
           fallbacks = gdk_memory_format_get_fallbacks (format);
           for (i = 0; fallbacks[i] != -1; i++)
             {
-              vk_format = gdk_memory_format_vk_format (fallbacks[i], &vk_components);
+              vk_format = gdk_memory_format_vk_format (fallbacks[i], &vk_components, &needs_conversion);
               if (try_srgb)
                 vk_srgb_format = gdk_memory_format_vk_srgb_format (format);
               if (gsk_vulkan_device_check_dmabuf_format (device, vk_srgb_format, &vk_components, width, height,
@@ -767,11 +794,19 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
   self->vk_access = 0;
 
+  flags |= GSK_GPU_IMAGE_EXTERNAL;
+
+  if (vk_format == vk_srgb_format)
+    flags |= GSK_GPU_IMAGE_SRGB;
+
+  if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
+    flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
+
+  if (!gsk_component_mapping_is_framebuffer_compatible (&vk_components) || needs_conversion)
+    flags &= ~GSK_GPU_IMAGE_BLIT;
+
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
-                       flags | GSK_GPU_IMAGE_EXTERNAL |
-                       (vk_format == vk_srgb_format ? GSK_GPU_IMAGE_SRGB : 0) |
-                       (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0) |
-                       (gsk_component_mapping_is_framebuffer_compatible (&vk_components) ? 0 : GSK_GPU_IMAGE_NO_BLIT),
+                       flags,
                        format,
                        width, height);
 
@@ -787,7 +822,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                            .samples = VK_SAMPLE_COUNT_1_BIT,
                            .tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
                            .usage = VK_IMAGE_USAGE_SAMPLED_BIT | VK_IMAGE_USAGE_COLOR_ATTACHMENT_BIT |
-                                    ((flags & GSK_GPU_IMAGE_NO_BLIT) ? 0 : VK_IMAGE_USAGE_TRANSFER_SRC_BIT),
+                                    (flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_DOWNLOADABLE) ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
                            .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
                            .initialLayout = self->vk_image_layout,
                            .pNext = &(VkExternalMemoryImageCreateInfo) {
@@ -838,7 +873,22 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                                    self->allocation.vk_memory,
                                    self->allocation.offset);
 
-  gsk_vulkan_image_create_view (self, vk_format, &vk_components, VK_NULL_HANDLE);
+  if (needs_conversion)
+    {
+      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
+                                                 &(GskVulkanYcbcrInfo) {
+                                                     .vk_format = vk_format,
+                                                     .vk_components = vk_components,
+                                                     .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601,
+                                                     .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW,
+                                                 });
+      gsk_vulkan_ycbcr_ref (self->ycbcr);
+      vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
+    }
+  else
+    vk_conversion = VK_NULL_HANDLE;
+
+  gsk_vulkan_image_create_view (self, vk_format, &vk_components, vk_conversion);
 
   return GSK_GPU_IMAGE (self);
 }
@@ -861,7 +911,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
   VkResult res;
   GdkMemoryFormat format;
   GskGpuImageFlags flags;
-  gboolean is_yuv;
+  gboolean is_yuv, needs_conversion;
 
   if (!gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_DMABUF))
     {
@@ -888,6 +938,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
     {
       g_assert_not_reached ();
     }
+  needs_conversion = is_yuv;
 
   /* FIXME: Add support for disjoint images */
   if (gdk_dmabuf_is_disjoint (dmabuf))
@@ -931,7 +982,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                             .samples = VK_SAMPLE_COUNT_1_BIT,
                             .tiling = VK_IMAGE_TILING_DRM_FORMAT_MODIFIER_EXT,
                             .usage = VK_IMAGE_USAGE_SAMPLED_BIT |
-                                     (flags & GSK_GPU_IMAGE_NO_BLIT ? 0 : VK_IMAGE_USAGE_TRANSFER_SRC_BIT),
+                                     (flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_DOWNLOADABLE) ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
                             .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
                             .initialLayout = self->vk_image_layout,
                             .pNext = &(VkExternalMemoryImageCreateInfo) {
@@ -970,11 +1021,15 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
       return NULL;
     }
 
+  if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
+    flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
+  if (needs_conversion)
+    flags |= GSK_GPU_IMAGE_EXTERNAL;
+  if (needs_conversion || !gsk_component_mapping_is_framebuffer_compatible (&vk_components))
+    flags &= ~GSK_GPU_IMAGE_BLIT;
+
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
-                       flags |
-                       (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0) |
-                       (is_yuv ? (GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT) : 0) |
-                       (gsk_component_mapping_is_framebuffer_compatible (&vk_components) ? 0 : GSK_GPU_IMAGE_NO_BLIT),
+                       flags,
                        format,
                        width, height);
 
@@ -1120,19 +1175,22 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                     });
 #endif
 
-  if (is_yuv)
+  if (needs_conversion)
     {
-      self->ycbcr = gsk_vulkan_device_get_ycbcr (device, vk_format);
+      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
+                                                 &(GskVulkanYcbcrInfo) {
+                                                     .vk_format = vk_format,
+                                                     .vk_components = vk_components,
+                                                     .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601,
+                                                     .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW,
+                                                 });
       gsk_vulkan_ycbcr_ref (self->ycbcr);
       vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
     }
   else
     vk_conversion = VK_NULL_HANDLE;
 
-  gsk_vulkan_image_create_view (self,
-                                vk_format,
-                                &vk_components,
-                                vk_conversion);
+  gsk_vulkan_image_create_view (self, vk_format, &vk_components, vk_conversion);
 
   GDK_DEBUG (DMABUF, "Vulkan uploaded %zux%zu %.4s:%016llx %sdmabuf",
              width, height,

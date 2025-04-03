@@ -116,7 +116,7 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
                                                texture,
                                                tex_id,
                                                TRUE,
-                                               (external ? GSK_GPU_IMAGE_EXTERNAL | GSK_GPU_IMAGE_NO_BLIT : 0));
+                                               (external ? GSK_GPU_IMAGE_EXTERNAL : 0));
         }
     }
 
