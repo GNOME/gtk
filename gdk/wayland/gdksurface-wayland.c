@@ -584,7 +584,6 @@ static void
 gdk_wayland_surface_sync_shadow (GdkSurface *surface)
 {
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkRectangle geometry;
 
   if (!is_realized_shell_surface (impl))
@@ -600,25 +599,7 @@ gdk_wayland_surface_sync_shadow (GdkSurface *surface)
   if (gdk_rectangle_equal (&geometry, &impl->last_sent_window_geometry))
     return;
 
-  switch (display_wayland->shell_variant)
-    {
-    case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
-      xdg_surface_set_window_geometry (impl->display_server.xdg_surface,
-                                       geometry.x,
-                                       geometry.y,
-                                       geometry.width,
-                                       geometry.height);
-      break;
-    case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
-      zxdg_surface_v6_set_window_geometry (impl->display_server.zxdg_surface_v6,
-                                           geometry.x,
-                                           geometry.y,
-                                           geometry.width,
-                                           geometry.height);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
+  XDG_SHELL_CALL (xdg_surface, set_window_geometry, impl, geometry.x, geometry.y, geometry.width, geometry.height);
 
   impl->last_sent_window_geometry = geometry;
 }
@@ -1044,6 +1025,22 @@ static const struct xdg_surface_listener xdg_surface_listener = {
 };
 
 static void
+xdg_surface_create_resources (gpointer unused,
+                              GdkWaylandSurface *impl)
+{
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (impl)));
+
+  impl->display_server.xdg_surface =
+    xdg_wm_base_get_xdg_surface (display->xdg_wm_base,
+                                 impl->display_server.wl_surface);
+  wl_proxy_set_queue ((struct wl_proxy *) impl->display_server.xdg_surface,
+                      impl->event_queue);
+  xdg_surface_add_listener (impl->display_server.xdg_surface,
+                            &xdg_surface_listener,
+                            impl);
+}
+
+static void
 zxdg_surface_v6_configure (void                   *data,
                            struct zxdg_surface_v6 *xdg_surface,
                            uint32_t                serial)
@@ -1055,36 +1052,26 @@ static const struct zxdg_surface_v6_listener zxdg_surface_v6_listener = {
   zxdg_surface_v6_configure,
 };
 
+static void
+zxdg_surface_v6_create_resources (gpointer unused,
+                                  GdkWaylandSurface *impl)
+{
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (impl)));
+
+  impl->display_server.zxdg_surface_v6 =
+    zxdg_shell_v6_get_xdg_surface (display->zxdg_shell_v6,
+                                   impl->display_server.wl_surface);
+  zxdg_surface_v6_add_listener (impl->display_server.zxdg_surface_v6,
+                                &zxdg_surface_v6_listener,
+                                impl);
+}
+
 void
 gdk_wayland_surface_create_xdg_surface_resources (GdkSurface *surface)
 {
-  GdkWaylandDisplay *display =
-    GDK_WAYLAND_DISPLAY (gdk_surface_get_display (surface));
   GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
 
-  switch (display->shell_variant)
-    {
-    case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
-      impl->display_server.xdg_surface =
-        xdg_wm_base_get_xdg_surface (display->xdg_wm_base,
-                                     impl->display_server.wl_surface);
-      wl_proxy_set_queue ((struct wl_proxy *) impl->display_server.xdg_surface,
-                          impl->event_queue);
-      xdg_surface_add_listener (impl->display_server.xdg_surface,
-                                &xdg_surface_listener,
-                                surface);
-      break;
-    case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
-      impl->display_server.zxdg_surface_v6 =
-        zxdg_shell_v6_get_xdg_surface (display->zxdg_shell_v6,
-                                       impl->display_server.wl_surface);
-      zxdg_surface_v6_add_listener (impl->display_server.zxdg_surface_v6,
-                                    &zxdg_surface_v6_listener,
-                                    surface);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
+  XDG_SHELL_CALL (xdg_surface, create_resources, impl, impl);
 }
 
 static void

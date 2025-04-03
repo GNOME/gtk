@@ -917,6 +917,38 @@ can_map_grabbing_popup (GdkSurface *surface,
   return top_most_popup == parent;
 }
 
+static void
+xdg_popup_create_resources (gpointer unused,
+                            GdkWaylandPopup *wayland_popup,
+                            GdkWaylandSurface *parent_impl,
+                            gpointer positioner)
+{
+  wayland_popup->display_server.xdg_popup =
+    xdg_surface_get_popup (GDK_WAYLAND_SURFACE (wayland_popup)->display_server.xdg_surface,
+                           parent_impl->display_server.xdg_surface,
+                           positioner);
+  xdg_popup_add_listener (wayland_popup->display_server.xdg_popup,
+                          &xdg_popup_listener,
+                          wayland_popup);
+  xdg_positioner_destroy (positioner);
+}
+
+static void
+zxdg_popup_v6_create_resources (gpointer unused,
+                                GdkWaylandPopup *wayland_popup,
+                                GdkWaylandSurface *parent_impl,
+                                gpointer positioner)
+{
+  wayland_popup->display_server.zxdg_popup_v6 =
+    zxdg_surface_v6_get_popup (GDK_WAYLAND_SURFACE (wayland_popup)->display_server.zxdg_surface_v6,
+                               parent_impl->display_server.zxdg_surface_v6,
+                               positioner);
+  zxdg_popup_v6_add_listener (wayland_popup->display_server.zxdg_popup_v6,
+                              &zxdg_popup_v6_listener,
+                              wayland_popup);
+  zxdg_positioner_v6_destroy (positioner);
+}
+
 static gboolean
 gdk_wayland_surface_create_xdg_popup (GdkWaylandPopup *wayland_popup,
                                       GdkSurface      *parent,
@@ -955,31 +987,7 @@ gdk_wayland_surface_create_xdg_popup (GdkWaylandPopup *wayland_popup,
   positioner = create_dynamic_positioner (wayland_popup, width, height, layout, FALSE);
   gdk_wayland_surface_create_xdg_surface_resources (surface);
 
-  switch (display->shell_variant)
-    {
-    case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
-      wayland_popup->display_server.xdg_popup =
-        xdg_surface_get_popup (impl->display_server.xdg_surface,
-                               parent_impl->display_server.xdg_surface,
-                               positioner);
-      xdg_popup_add_listener (wayland_popup->display_server.xdg_popup,
-                              &xdg_popup_listener,
-                              wayland_popup);
-      xdg_positioner_destroy (positioner);
-      break;
-    case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
-      wayland_popup->display_server.zxdg_popup_v6 =
-        zxdg_surface_v6_get_popup (impl->display_server.zxdg_surface_v6,
-                                   parent_impl->display_server.zxdg_surface_v6,
-                                   positioner);
-      zxdg_popup_v6_add_listener (wayland_popup->display_server.zxdg_popup_v6,
-                                  &zxdg_popup_v6_listener,
-                                  wayland_popup);
-      zxdg_positioner_v6_destroy (positioner);
-      break;
-    default:
-      g_assert_not_reached ();
-    }
+  XDG_SHELL_CALL (xdg_popup, create_resources, wayland_popup, wayland_popup, parent_impl, positioner);
 
   wayland_popup->received_reposition_token = 0;
   wayland_popup->reposition_token = 0;
@@ -998,17 +1006,7 @@ gdk_wayland_surface_create_xdg_popup (GdkWaylandPopup *wayland_popup,
       seat = gdk_wayland_seat_get_wl_seat (GDK_SEAT (grab_input_seat));
       serial = _gdk_wayland_seat_get_last_implicit_grab_serial (grab_input_seat, NULL);
 
-      switch (display->shell_variant)
-        {
-        case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL:
-          xdg_popup_grab (wayland_popup->display_server.xdg_popup, seat, serial);
-          break;
-        case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6:
-          zxdg_popup_v6_grab (wayland_popup->display_server.zxdg_popup_v6, seat, serial);
-          break;
-        default:
-          g_assert_not_reached ();
-        }
+      XDG_SHELL_CALL (xdg_popup, grab, wayland_popup, seat, serial);
     }
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "Wayland surface commit", NULL);

@@ -165,3 +165,16 @@ void gdk_wayland_surface_restore_shortcuts (GdkSurface *surface,
                                            GdkSeat   *gdk_seat);
 
 void                    gdk_wayland_surface_ensure_wl_egl_window        (GdkSurface  *surface);
+
+#define XDG_SHELL_CALL(obj,func,surface,...) \
+  switch (GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (surface)))->shell_variant) \
+    { \
+    case GDK_WAYLAND_SHELL_VARIANT_XDG_SHELL: \
+      obj ## _ ## func (surface->display_server.obj __VA_OPT__(,) __VA_ARGS__ ); \
+      break; \
+    case GDK_WAYLAND_SHELL_VARIANT_ZXDG_SHELL_V6: \
+      z ## obj ## _v6_ ## func (surface->display_server.z ## obj ## _v6 __VA_OPT__(,) __VA_ARGS__ ); \
+      break; \
+    default: \
+      g_assert_not_reached (); \
+    }
