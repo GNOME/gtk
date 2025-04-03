@@ -111,6 +111,7 @@ struct _GtkInspectorGeneral
   GtkWidget *vulkan_layers_row;
   GtkStringList *vulkan_layers_list;
   GtkWidget *device_box;
+  GtkWidget *os_info;
   GtkWidget *gtk_version;
   GtkWidget *gdk_backend;
   GtkWidget *gsk_renderer;
@@ -254,6 +255,27 @@ set_monospace_font (GtkWidget *w)
   gtk_label_set_attributes (GTK_LABEL (w), attrs);
   pango_attr_list_unref (attrs);
 }
+
+/* }}} */
+/* {{{ OS Info */
+
+static void
+init_os_info (GtkInspectorGeneral *gen)
+{
+  char *os_info = g_get_os_info (G_OS_INFO_KEY_PRETTY_NAME);
+  gtk_label_set_text (GTK_LABEL (gen->os_info), os_info);
+  g_free (os_info);
+}
+
+static void
+dump_os_info (GdkDisplay *display,
+              GString    *string)
+{
+  char *os_info = g_get_os_info (G_OS_INFO_KEY_PRETTY_NAME);
+  g_string_append_printf (string, "| Operating System | %s |\n", os_info);
+  g_free (os_info);
+}
+
 
 /* }}} */
 /* {{{ Version */
@@ -1183,27 +1205,17 @@ static void
 dump_env (GdkDisplay *display,
           GString    *s)
 {
-  GString *env = g_string_new ("");
-  guint count = 0;
-
   g_string_append_printf (s, "| Prefix | %s |\n", _gtk_get_data_prefix ());
 
+  g_string_append (s, "| Environment| ");
   for (guint i = 0; i < G_N_ELEMENTS (env_list); i++)
     {
       const char *val = g_getenv (env_list[i]);
 
       if (val)
-        {
-          count++;
-          g_string_append_printf (env, "%s%s=%s", i > 0 ? "<br>" : "", env_list[i], val);
-        }
+        g_string_append_printf (s, "%s%s=%s", i > 0 ? "<br>" : "", env_list[i], val);
     }
-
-  g_string_append_printf (s, "| Environment| <details><summary>%u relevant variables</summary>", count);
-  g_string_append (s, env->str);
-  g_string_append (s, "</details> |\n");
-
-  g_string_free (env, TRUE);
+  g_string_append (s, " |\n");
 }
 
 /* }}} */
@@ -1308,42 +1320,40 @@ dump_wayland_protocols (GdkDisplay *display,
   if (GDK_IS_WAYLAND_DISPLAY (display))
     {
       GdkWaylandDisplay *d = (GdkWaylandDisplay *) display;
-      GString *ext = g_string_new ("");
       guint count = 0;
 
-      g_string_append (string, "| Protocols | <details><summary>");
+      g_string_append (string, "| Protocols | ");
 
-      append_wayland_protocol (ext, (struct wl_proxy *)d->compositor, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->shm, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->linux_dmabuf, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_wm_base, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->zxdg_shell_v6, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->gtk_shell, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->data_device_manager, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->subcompositor, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->pointer_gestures, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->primary_selection_manager, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->tablet_manager, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_exporter, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_exporter_v2, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_importer, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_importer_v2, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->keyboard_shortcuts_inhibit, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->server_decoration_manager, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_output_manager, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->idle_inhibit_manager, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->xdg_activation, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->fractional_scale, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->viewporter, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->presentation, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->single_pixel_buffer, &count);
-      append_wayland_protocol (ext, d->color ? gdk_wayland_color_get_color_manager (d->color) : NULL, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->system_bell, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->cursor_shape, &count);
-      append_wayland_protocol (ext, (struct wl_proxy *)d->toplevel_icon, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->compositor, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->shm, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->linux_dmabuf, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->xdg_wm_base, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->zxdg_shell_v6, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->gtk_shell, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->data_device_manager, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->subcompositor, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->pointer_gestures, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->primary_selection_manager, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->tablet_manager, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->xdg_exporter, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->xdg_exporter_v2, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->xdg_importer, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->xdg_importer_v2, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->keyboard_shortcuts_inhibit, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->server_decoration_manager, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->xdg_output_manager, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->idle_inhibit_manager, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->xdg_activation, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->fractional_scale, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->viewporter, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->presentation, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->single_pixel_buffer, &count);
+      append_wayland_protocol (string, d->color ? gdk_wayland_color_get_color_manager (d->color) : NULL, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->system_bell, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->cursor_shape, &count);
+      append_wayland_protocol (string, (struct wl_proxy *)d->toplevel_icon, &count);
 
-      g_string_append_printf (string, "%u Protocols</summary>%s</details> |\n", count, ext->str);
-      g_string_free (ext, TRUE);
+      g_string_append (string, " |\n");
     }
 }
 #endif
@@ -2099,6 +2109,7 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_extensions_list);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_layers_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, vulkan_layers_list);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, os_info);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gtk_version);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gdk_backend);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gsk_renderer);
@@ -2152,6 +2163,7 @@ gtk_inspector_general_set_display (GtkInspectorGeneral *gen,
 {
   gen->display = display;
 
+  init_os_info (gen);
   init_version (gen);
   init_pango (gen);
   init_media (gen);
@@ -2172,21 +2184,59 @@ generate_dump (GdkDisplay *display)
   GString *string;
 
   string = g_string_new ("");
+
+  g_string_append (string, "\n<details open=\"true\"><summary>General Information</summary>\n\n");
   g_string_append (string, "| Name | Value |\n");
   g_string_append (string, "| - | - |\n");
-
+  dump_os_info (display, string);
   dump_version (display, string);
   dump_pango (display, string);
   dump_media (display, string);
   dump_im_module (display, string);
   dump_a11y_backend (display, string);
+  g_string_append (string, "\n</details>\n");
+
+  g_string_append (string, "\n<details><summary>Application</summary>\n\n");
+  g_string_append (string, "| Name | Value |\n");
+  g_string_append (string, "| - | - |\n");
   dump_app_id (display, string);
+  g_string_append (string, "\n</details>\n");
+
+  g_string_append (string, "<details><summary>Environment</summary>\n\n");
+  g_string_append (string, "| Name | Value |\n");
+  g_string_append (string, "| - | - |\n");
   dump_env (display, string);
+  g_string_append (string, "\n</details>\n");
+
+  g_string_append (string, "<details><summary>Display</summary>\n\n");
+  g_string_append (string, "| Name | Value |\n");
+  g_string_append (string, "| - | - |\n");
   dump_display (display, string);
+  g_string_append (string, "\n</details>\n");
+
+  g_string_append (string, "<details><summary>Monitors</summary>\n\n");
+  g_string_append (string, "| Name | Value |\n");
+  g_string_append (string, "| - | - |\n");
   dump_monitors (display, string);
+  g_string_append (string, "\n</details>\n");
+
+  g_string_append (string, "<details><summary>Seats</summary>\n\n");
+  g_string_append (string, "| Name | Value |\n");
+  g_string_append (string, "| - | - |\n");
   dump_seats (display, string);
+  g_string_append (string, "\n</details>\n");
+
+  g_string_append (string, "<details><summary>OpenGL</summary>\n\n");
+  g_string_append (string, "| Name | Value |\n");
+  g_string_append (string, "| - | - |\n");
   dump_gl (display, string);
+  g_string_append (string, "\n</details>\n");
+
+  g_string_append (string, "<details><summary>Vulkan</summary>\n\n");
+  g_string_append (string, "| Name | Value |\n");
+  g_string_append (string, "| - | - |\n");
   dump_vulkan (display, string);
+  g_string_append (string, "\n</details>\n");
 
   return g_string_free (string, FALSE);
 }
