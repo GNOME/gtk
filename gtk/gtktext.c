@@ -2950,6 +2950,7 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
     {
       gboolean have_selection;
       gboolean is_touchscreen, extend_selection;
+      GdkDisplay *display;
       GdkDevice *source;
       guint state;
 
@@ -2959,8 +2960,10 @@ gtk_text_click_gesture_pressed (GtkGestureClick *gesture,
       sel_end = priv->current_pos;
       have_selection = sel_start != sel_end;
 
+      display = gtk_widget_get_display (widget);
       source = gdk_event_get_device (event);
-      is_touchscreen = gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
+      is_touchscreen = GTK_DISPLAY_DEBUG_CHECK (display, TOUCHSCREEN) ||
+                       gdk_device_get_source (source) == GDK_SOURCE_TOUCHSCREEN;
 
       priv->text_handles_enabled = is_touchscreen;
 
@@ -3261,6 +3264,7 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
   else
     {
       GdkInputSource input_source;
+      GdkDisplay *display;
       GdkDevice *source;
       guint length;
       int tmp_pos;
@@ -3275,6 +3279,7 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
       else
         tmp_pos = gtk_text_find_position (self, x);
 
+      display = gtk_widget_get_display (GTK_WIDGET (self));
       source = gdk_event_get_device (event);
       input_source = gdk_device_get_source (source);
 
@@ -3325,7 +3330,8 @@ gtk_text_drag_gesture_update (GtkGestureDrag *gesture,
       gtk_text_set_positions (self, pos, bound);
 
       /* Update touch handles' position */
-      if (input_source == GDK_SOURCE_TOUCHSCREEN)
+      if (GTK_DISPLAY_DEBUG_CHECK (display, TOUCHSCREEN) ||
+          input_source == GDK_SOURCE_TOUCHSCREEN)
         {
           priv->text_handles_enabled = TRUE;
           gtk_text_update_handles (self);
