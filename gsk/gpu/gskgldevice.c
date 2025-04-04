@@ -666,14 +666,14 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
   gsize i;
 
   /* First, try the actual format */
-  gdk_memory_format_gl_format (format,
-                               gdk_gl_context_get_use_es (context),
-                               out_gl_internal_format,
-                               out_gl_internal_srgb_format,
-                               out_gl_format,
-                               out_gl_type,
-                               out_swizzle);
-  if (gsk_gl_device_get_format_flags (self, context, format, out_swizzle, &flags) &&
+  if (gdk_memory_format_gl_format (format,
+                                   gdk_gl_context_get_use_es (context),
+                                   out_gl_internal_format,
+                                   out_gl_internal_srgb_format,
+                                   out_gl_format,
+                                   out_gl_type,
+                                   out_swizzle) &&
+      gsk_gl_device_get_format_flags (self, context, format, out_swizzle, &flags) &&
       ((flags & required_flags) == required_flags))
     {
       *out_format = format;
@@ -702,14 +702,14 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
   fallbacks = gdk_memory_format_get_fallbacks (format);
   for (i = 0; fallbacks[i] != -1; i++)
     {
-      gdk_memory_format_gl_format (fallbacks[i],
-                                   gdk_gl_context_get_use_es (context),
-                                   out_gl_internal_format,
-                                   out_gl_internal_srgb_format,
-                                   out_gl_format,
-                                   out_gl_type,
-                                   out_swizzle);
-      if (gsk_gl_device_get_format_flags (self, context, fallbacks[i], out_swizzle, &flags) &&
+      if (gdk_memory_format_gl_format (fallbacks[i],
+                                       gdk_gl_context_get_use_es (context),
+                                       out_gl_internal_format,
+                                       out_gl_internal_srgb_format,
+                                       out_gl_format,
+                                       out_gl_type,
+                                       out_swizzle) &&
+          gsk_gl_device_get_format_flags (self, context, fallbacks[i], out_swizzle, &flags) &&
           ((flags & required_flags) == required_flags))
         {
           *out_format = fallbacks[i];
