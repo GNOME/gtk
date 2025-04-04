@@ -36,8 +36,27 @@
     </child>
     <child>
       <object class="GtkGestureClick">
-        <property name="button">3</property>
+	<property name="exclusive">true</property>
+	<property name="button">3</property>
         <signal name="pressed" handler="pressed_cb"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkGestureClick">
+	<property name="touch-only">true</property>
+        <signal name="released" handler="pressed_cb"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkGestureZoom">
+        <signal name="begin" handler="scale_begin_cb"/>
+        <signal name="scale-changed" handler="scale_changed_cb"/>
+      </object>
+    </child>
+    <child>
+      <object class="GtkGestureRotate">
+        <signal name="begin" handler="rotate_begin_cb"/>
+        <signal name="angle-changed" handler="angle_changed_cb"/>
       </object>
     </child>
   </template>
