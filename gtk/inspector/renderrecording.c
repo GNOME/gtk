@@ -50,7 +50,8 @@ GtkInspectorRecording *
 gtk_inspector_render_recording_new (gint64                timestamp,
                                     const GdkRectangle   *area,
                                     const cairo_region_t *clip_region,
-                                    GskRenderNode        *node)
+                                    GskRenderNode        *node,
+                                    gpointer              surface)
 {
   GtkInspectorRenderRecording *recording;
 
@@ -61,6 +62,7 @@ gtk_inspector_render_recording_new (gint64                timestamp,
   recording->area = *area;
   recording->clip_region = cairo_region_copy (clip_region);
   recording->node = gsk_render_node_ref (node);
+  recording->surface = surface;
 
   return GTK_INSPECTOR_RECORDING (recording);
 }
@@ -81,6 +83,12 @@ const cairo_rectangle_int_t *
 gtk_inspector_render_recording_get_area (GtkInspectorRenderRecording *recording)
 {
   return &recording->area;
+}
+
+gpointer
+gtk_inspector_render_recording_get_surface (GtkInspectorRenderRecording *recording)
+{
+  return recording->surface;
 }
 
 // vim: set et sw=2 ts=2:
