@@ -772,15 +772,17 @@ gdk_mipmap_ ## DataType ## _ ## n_units ## _linear (guchar                *dest,
           for (x = 0; x < MIN (n, src_layout->width - x_dest); x++) \
             { \
               for (i = 0; i < n_units; i++) \
-                tmp[i] += src_data[n_units * (x_dest + x) + i]; \
+                tmp[i] += FROM (src_data[n_units * (x_dest + x) + i]); \
             } \
         } \
 \
       for (i = 0; i < n_units; i++) \
-        *dest_data++ = tmp[i] / (x * y); \
+        *dest_data++ = TO (tmp[i] / (x * y)); \
     } \
 }
 
+#define FROM(x) (x)
+#define TO(x) (x)
 MIPMAP_FUNC(guint32, guint8, 1)
 MIPMAP_FUNC(guint32, guint8, 2)
 MIPMAP_FUNC(guint32, guint8, 3)
@@ -792,11 +794,17 @@ MIPMAP_FUNC(guint32, guint16, 4)
 MIPMAP_FUNC(float, float, 1)
 MIPMAP_FUNC(float, float, 3)
 MIPMAP_FUNC(float, float, 4)
+#undef FROM
+#undef TO
 #define half_float guint16
+#define FROM half_to_float_one
+#define TO float_to_half_one
 MIPMAP_FUNC(float, half_float, 1)
 MIPMAP_FUNC(float, half_float, 3)
 MIPMAP_FUNC(float, half_float, 4)
 #undef half_float
+#undef FROM
+#undef TO
 
 struct _GdkMemoryFormatDescription
 {
