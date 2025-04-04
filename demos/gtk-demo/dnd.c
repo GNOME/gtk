@@ -416,10 +416,14 @@ drag_begin (GtkDragSource *source,
   CanvasItem *item;
   GdkPaintable *paintable;
   Hotspot *hotspot;
+  GtkWidget *trash;
 
   canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
   item = CANVAS_ITEM (g_object_get_data (G_OBJECT (canvas), "dragged-item"));
   hotspot = (Hotspot *) g_object_get_data (G_OBJECT (canvas), "hotspot");
+
+  trash = g_object_get_data (G_OBJECT (canvas), "trash");
+  gtk_widget_set_visible (trash, TRUE);
 
   paintable = canvas_item_get_drag_icon (item);
   gtk_drag_source_set_icon (source, paintable, hotspot->x, hotspot->y);
@@ -434,12 +438,16 @@ drag_end (GtkDragSource *source,
 {
   GtkWidget *canvas;
   GtkWidget *item;
+  GtkWidget *trash;
 
   canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
   item = g_object_get_data (G_OBJECT (canvas), "dragged-item");
   g_object_set_data (G_OBJECT (canvas), "dragged-item", NULL);
 
   gtk_widget_set_opacity (item, 1.0);
+
+  trash = g_object_get_data (G_OBJECT (canvas), "trash");
+  gtk_widget_set_visible (trash, FALSE);
 }
 
 static gboolean
@@ -447,6 +455,13 @@ drag_cancel (GtkDragSource       *source,
              GdkDrag             *drag,
              GdkDragCancelReason  reason)
 {
+  GtkWidget *canvas;
+  GtkWidget *trash;
+
+  canvas = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (source));
+  trash = g_object_get_data (G_OBJECT (canvas), "trash");
+  gtk_widget_set_visible (trash, FALSE);
+
   return FALSE;
 }
 
@@ -468,6 +483,27 @@ drag_drop (GtkDropTarget *target,
     gtk_widget_insert_after (GTK_WIDGET (item), canvas, last_child);
 
   gtk_fixed_move (GTK_FIXED (canvas), GTK_WIDGET (item), x - item->r, y - item->r);
+
+  return TRUE;
+}
+
+static gboolean
+drop_in_trash (GtkDropTarget *target,
+               const GValue  *value,
+               double         x,
+               double         y)
+{
+  GtkWidget *item;
+  GtkWidget *canvas;
+  GtkWidget *trash;
+
+  trash = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (target));
+  item = g_value_get_object (value);
+  canvas = gtk_widget_get_parent (item);
+
+  gtk_fixed_remove (GTK_FIXED (canvas), item);
+
+  gtk_widget_set_visible (trash, FALSE);
 
   return TRUE;
 }
@@ -513,6 +549,49 @@ delete_cb (GtkWidget *button, GtkWidget *child)
 }
 
 static void
+show_context_menu (GtkWidget *widget,
+                   GtkWidget *child,
+		   int        x,
+		   int        y)
+{
+  GtkWidget *menu;
+  GtkWidget *box;
+  GtkWidget *item;
+
+  menu = gtk_popover_new ();
+  gtk_widget_set_parent (menu, widget);
+  gtk_popover_set_has_arrow (GTK_POPOVER (menu), FALSE);
+  gtk_popover_set_pointing_to (GTK_POPOVER (menu), &(GdkRectangle){ x, y, 1, 1});
+  box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
+  gtk_popover_set_child (GTK_POPOVER (menu), box);
+
+  item = gtk_button_new_with_label ("New");
+  gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
+  g_signal_connect (item, "clicked", G_CALLBACK (new_item_cb), widget);
+  gtk_box_append (GTK_BOX (box), item);
+
+  item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_box_append (GTK_BOX (box), item);
+
+  item = gtk_button_new_with_label ("Edit");
+  gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
+  gtk_widget_set_sensitive (item, child != NULL && child != widget);
+  g_signal_connect (item, "clicked", G_CALLBACK (edit_cb), child);
+  gtk_box_append (GTK_BOX (box), item);
+
+  item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
+  gtk_box_append (GTK_BOX (box), item);
+
+  item = gtk_button_new_with_label ("Delete");
+  gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
+  gtk_widget_set_sensitive (item, child != NULL && child != widget);
+  g_signal_connect (item, "clicked", G_CALLBACK (delete_cb), child);
+  gtk_box_append (GTK_BOX (box), item);
+
+  gtk_popover_popup (GTK_POPOVER (menu));
+}
+
+static void
 pressed_cb (GtkGesture *gesture,
             int         n_press,
             double      x,
@@ -526,43 +605,9 @@ pressed_cb (GtkGesture *gesture,
   child = gtk_widget_pick (widget, x, y, GTK_PICK_DEFAULT);
   child = gtk_widget_get_ancestor (child, canvas_item_get_type ());
 
-  if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_SECONDARY)
+  if (gdk_event_triggers_context_menu (gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture))))
     {
-      GtkWidget *menu;
-      GtkWidget *box;
-      GtkWidget *item;
-
-      menu = gtk_popover_new ();
-      gtk_widget_set_parent (menu, widget);
-      gtk_popover_set_has_arrow (GTK_POPOVER (menu), FALSE);
-      gtk_popover_set_pointing_to (GTK_POPOVER (menu), &(GdkRectangle){ x, y, 1, 1});
-      box = gtk_box_new (GTK_ORIENTATION_VERTICAL, 0);
-      gtk_popover_set_child (GTK_POPOVER (menu), box);
-
-      item = gtk_button_new_with_label ("New");
-      gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
-      g_signal_connect (item, "clicked", G_CALLBACK (new_item_cb), widget);
-      gtk_box_append (GTK_BOX (box), item);
-
-      item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_box_append (GTK_BOX (box), item);
-
-      item = gtk_button_new_with_label ("Edit");
-      gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
-      gtk_widget_set_sensitive (item, child != NULL && child != widget);
-      g_signal_connect (item, "clicked", G_CALLBACK (edit_cb), child);
-      gtk_box_append (GTK_BOX (box), item);
-
-      item = gtk_separator_new (GTK_ORIENTATION_HORIZONTAL);
-      gtk_box_append (GTK_BOX (box), item);
-
-      item = gtk_button_new_with_label ("Delete");
-      gtk_button_set_has_frame (GTK_BUTTON (item), FALSE);
-      gtk_widget_set_sensitive (item, child != NULL && child != widget);
-      g_signal_connect (item, "clicked", G_CALLBACK (delete_cb), child);
-      gtk_box_append (GTK_BOX (box), item);
-
-      gtk_popover_popup (GTK_POPOVER (menu));
+      show_context_menu (widget, child, x, y);
     }
 }
 
@@ -579,11 +624,22 @@ released_cb (GtkGesture *gesture,
 
   widget = gtk_event_controller_get_widget (GTK_EVENT_CONTROLLER (gesture));
   child = gtk_widget_pick (widget, x, y, 0);
+
   if (!child)
     return;
+
   item = (CanvasItem *)gtk_widget_get_ancestor (child, canvas_item_get_type ());
   if (!item)
-    return;
+    {
+      GdkEvent *event = gtk_event_controller_get_current_event (GTK_EVENT_CONTROLLER (gesture));
+
+      if (gdk_event_get_event_type (event) == GDK_TOUCH_END)
+        {
+          show_context_menu (widget, NULL, x, y);
+        }
+
+      return;
+    }
 
   if (gtk_gesture_single_get_current_button (GTK_GESTURE_SINGLE (gesture)) == GDK_BUTTON_PRIMARY)
     {
@@ -601,6 +657,7 @@ canvas_new (void)
   GtkDragSource *source;
   GtkDropTarget *dest;
   GtkGesture *gesture;
+  GtkWidget *trash;
 
   canvas = gtk_fixed_new ();
   gtk_widget_set_hexpand (canvas, TRUE);
@@ -623,6 +680,18 @@ canvas_new (void)
   g_signal_connect (gesture, "pressed", G_CALLBACK (pressed_cb), NULL);
   g_signal_connect (gesture, "released", G_CALLBACK (released_cb), NULL);
   gtk_widget_add_controller (canvas, GTK_EVENT_CONTROLLER (gesture));
+
+  trash = gtk_image_new_from_icon_name ("user-trash-symbolic");
+  gtk_image_set_pixel_size (GTK_IMAGE (trash), 64);
+  gtk_widget_add_css_class (trash, "trash");
+
+  gtk_fixed_put (GTK_FIXED (canvas), trash, 20, 20);
+  gtk_widget_set_visible (trash, FALSE);
+
+  dest = gtk_drop_target_new (GTK_TYPE_WIDGET, GDK_ACTION_MOVE);
+  g_signal_connect (dest, "drop", G_CALLBACK (drop_in_trash), NULL);
+  gtk_widget_add_controller (trash, GTK_EVENT_CONTROLLER (dest));
+  g_object_set_data (G_OBJECT (canvas), "trash", trash);
 
   return canvas;
 }
