@@ -791,7 +791,8 @@ recording_selected (GtkSingleSelection   *selection,
           GtkInspectorRecording *item = g_list_model_get_item (G_LIST_MODEL (selection), pos);
 
           g_object_unref (item);
-          if (GTK_INSPECTOR_IS_RENDER_RECORDING (item))
+          if (GTK_INSPECTOR_IS_RENDER_RECORDING (item) &&
+              gdk_event_get_surface (event) == gtk_inspector_render_recording_get_surface (GTK_INSPECTOR_RENDER_RECORDING (item)))
             {
               GskRenderNode *node;
 
@@ -2622,7 +2623,8 @@ gtk_inspector_recorder_record_render (GtkInspectorRecorder *recorder,
                                                     gdk_surface_get_width (surface),
                                                     gdk_surface_get_height (surface) },
                                                   region,
-                                                  node);
+                                                  node,
+                                                  surface);
   gtk_inspector_recorder_add_recording (recorder, recording);
   g_object_unref (recording);
 
