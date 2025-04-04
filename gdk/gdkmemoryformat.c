@@ -2400,7 +2400,7 @@ gdk_memory_depth_is_srgb (GdkMemoryDepth depth)
     }
 }
 
-void
+gboolean
 gdk_memory_format_gl_format (GdkMemoryFormat  format,
                              gboolean         gles,
                              GLint           *out_internal_format,
@@ -2409,6 +2409,9 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
                              GLenum          *out_type,
                              GLint            out_swizzle[4])
 {
+  if (memory_formats[format].gl.internal_gl_format == -1)
+    return FALSE;
+
   if (gles)
     *out_internal_format = memory_formats[format].gl.internal_gles_format;
   else
@@ -2417,6 +2420,8 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
   *out_format = memory_formats[format].gl.format;
   *out_type = memory_formats[format].gl.type;
   memcpy (out_swizzle, memory_formats[format].gl.swizzle, sizeof(GLint) * 4);
+
+  return TRUE;
 }
 
 /*

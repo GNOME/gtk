@@ -2366,13 +2366,14 @@ gdk_gl_context_find_format (GdkGLContext    *self,
       if (!(gdk_gl_context_get_format_flags (self, format) & GDK_GL_FORMAT_RENDERABLE))
         continue;
 
-      gdk_memory_format_gl_format (format,
-                                   gdk_gl_context_get_use_es (self),
-                                   &q_internal_format,
-                                   &q_internal_srgb_format,
-                                   &q_format,
-                                   &q_type,
-                                   q_swizzle);
+      if (!gdk_memory_format_gl_format (format,
+                                        gdk_gl_context_get_use_es (self),
+                                        &q_internal_format,
+                                        &q_internal_srgb_format,
+                                        &q_format,
+                                        &q_type,
+                                        q_swizzle))
+        continue;
 
       if (q_format != gl_format || q_type != gl_type)
         continue;
@@ -2407,10 +2408,13 @@ gdk_gl_context_download (GdkGLContext          *self,
   if (!gdk_gl_context_get_use_es (self) &&
       ((gdk_gl_context_get_format_flags (self, tex_format) & GDK_GL_FORMAT_USABLE) == GDK_GL_FORMAT_USABLE))
     {
-      gdk_memory_format_gl_format (tex_format,
-                                   gdk_gl_context_get_use_es (self),
-                                   &gl_internal_format, &gl_internal_srgb_format,
-                                   &gl_format, &gl_type, gl_swizzle);
+      if (!gdk_memory_format_gl_format (tex_format,
+                                        gdk_gl_context_get_use_es (self),
+                                        &gl_internal_format, &gl_internal_srgb_format,
+                                        &gl_format, &gl_type, gl_swizzle))
+        {
+          g_assert_not_reached ();
+        }
       if (dest_layout->planes[0].stride == expected_stride &&
           dest_layout->format == tex_format)
         {
@@ -2475,10 +2479,13 @@ gdk_gl_context_download (GdkGLContext          *self,
               if (gdk_memory_format_alpha (tex_format) == GDK_MEMORY_ALPHA_STRAIGHT)
                 actual_format = gdk_memory_format_get_straight (actual_format);
 
-              gdk_memory_format_gl_format (actual_format,
-                                           gdk_gl_context_get_use_es (self),
-                                           &gl_internal_format, &gl_internal_srgb_format,
-                                           &gl_read_format, &gl_read_type, gl_swizzle);
+              if (!gdk_memory_format_gl_format (actual_format,
+                                                gdk_gl_context_get_use_es (self),
+                                                &gl_internal_format, &gl_internal_srgb_format,
+                                                &gl_read_format, &gl_read_type, gl_swizzle))
+                {
+                  g_assert_not_reached ();
+                }
             }
         }
       else
@@ -2487,10 +2494,13 @@ gdk_gl_context_download (GdkGLContext          *self,
           if (gdk_memory_format_alpha (tex_format) == GDK_MEMORY_ALPHA_STRAIGHT)
             actual_format = gdk_memory_format_get_straight (actual_format);
 
-          gdk_memory_format_gl_format (actual_format,
-                                       gdk_gl_context_get_use_es (self),
-                                       &gl_internal_format, &gl_internal_srgb_format,
-                                       &gl_read_format, &gl_read_type, gl_swizzle);
+          if (!gdk_memory_format_gl_format (actual_format,
+                                            gdk_gl_context_get_use_es (self),
+                                            &gl_internal_format, &gl_internal_srgb_format,
+                                            &gl_read_format, &gl_read_type, gl_swizzle))
+            {
+              g_assert_not_reached ();
+            }
         }
 
       if (dest_layout->format == actual_format &&
