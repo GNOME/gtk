@@ -122,6 +122,15 @@ gtk_gesture_stylus_handle_event (GtkEventController *controller,
       else
         n_signal = PROXIMITY;
       break;
+    case GDK_TOUCH_BEGIN:
+      n_signal = DOWN;
+      break;
+    case GDK_TOUCH_END:
+      n_signal = UP;
+      break;
+    case GDK_TOUCH_UPDATE:
+      n_signal = MOTION;
+      break;
     default:
       return FALSE;
     }
