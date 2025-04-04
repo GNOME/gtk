@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk main\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-06 00:30+0000\n"
-"PO-Revision-Date: 2025-03-06 07:59+0100\n"
+"POT-Creation-Date: 2025-03-31 03:18+0000\n"
+"PO-Revision-Date: 2025-03-31 09:00+0300\n"
 "Last-Translator: twlvnn kraftwerk <kraft_werk@tutanota.com>\n"
 "Language-Team: Bulgarian <dict-notifications@fsa-bg.org>\n"
 "Language: bg\n"
@@ -38,20 +38,20 @@ msgstr "Няма съвместим формат за пренос на съдъ
 msgid "No compatible transfer format found"
 msgstr "Няма съвместим формат за пренос"
 
-#: gdk/broadway/gdkbroadway-server.c:135
+#: gdk/broadway/gdkbroadway-server.c:131
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "Дисплеи Broadway не се поддържат: %s"
 
-#: gdk/gdkclipboard.c:231
+#: gdk/gdkclipboard.c:232
 msgid "This clipboard cannot store data."
 msgstr "Този буфер за обмен не може да съдържа данни."
 
-#: gdk/gdkclipboard.c:286 gdk/gdkclipboard.c:780 gdk/gdkclipboard.c:1071
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:781 gdk/gdkclipboard.c:1072
 msgid "Cannot read from empty clipboard."
 msgstr "Не може да се чете от празен буфер за обмен."
 
-#: gdk/gdkclipboard.c:317 gdk/gdkclipboard.c:1121 gdk/gdkdrag.c:606
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1122 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Няма съвместим формат за пренос на съдържанието на буфера за обмен."
 
@@ -90,7 +90,7 @@ msgstr "Съдържанието не може да се предостави к
 msgid "The current backend does not support OpenGL"
 msgstr "Текущата графична подсистема не поддържа OpenGL"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1696
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1715
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Поддръжката на Vulkan е забранена чрез „GDK_DISABLE“"
 
@@ -154,9 +154,9 @@ msgstr "Няма съвместим формат за пренос на съдъ
 msgid "No GL API allowed."
 msgstr "Никое API за GL не е позволено."
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:745
-#: gdk/win32/gdkglcontext-win32-wgl.c:888
-#: gdk/win32/gdkglcontext-win32-wgl.c:932 gdk/x11/gdkglcontext-glx.c:699
+#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
+#: gdk/win32/gdkglcontext-win32-wgl.c:889
+#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
 msgid "Unable to create a GL context"
 msgstr "Не може да се създаде контекст за GL"
 
@@ -778,21 +778,21 @@ msgstr ""
 "Неуспешно преобразуване на данните са влачене и пускане от формат W32 0x%x "
 "към %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:667
+#: gdk/win32/gdkglcontext-win32-wgl.c:668
 msgid "No GL implementation is available"
 msgstr "Липсва реализация на GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:754
+#: gdk/win32/gdkglcontext-win32-wgl.c:755
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Версията на WGL %d.%d е твърде стара, необходима е поне %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:772
+#: gdk/win32/gdkglcontext-win32-wgl.c:773
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Реализацията на GL не може да споделя GL контексти"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1052
+#: gdk/win32/gdkglcontext-win32-wgl.c:1053
 msgid "No available configurations for the given pixel format"
 msgstr "Няма налични конфигурации за указания формат на пикселите"
 
@@ -2250,12 +2250,12 @@ msgid "_Edit"
 msgstr "_Редактиране"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5902 gtk/gtktext.c:6322
-#: gtk/gtktextview.c:9327
+#: gtk/gtktextview.c:9320
 msgid "_Copy"
 msgstr "_Копиране"
 
 #: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5962 gtk/gtktext.c:2877
-#: gtk/gtktextview.c:9405
+#: gtk/gtktextview.c:9398
 msgid "Context menu"
 msgstr "Контекстно меню"
 
@@ -2334,7 +2334,7 @@ msgstr "Вече съществува файл с това име"
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6333 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6345 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2429,7 +2429,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Когато окончателно изтриете обект, го загубите безвъзвратно."
 
 #: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:1816
-#: gtk/gtklabel.c:5904 gtk/gtktext.c:6330 gtk/gtktextview.c:9335
+#: gtk/gtklabel.c:5904 gtk/gtktext.c:6330 gtk/gtktextview.c:9328
 msgid "_Delete"
 msgstr "_Изтриване"
 
@@ -2782,15 +2782,15 @@ msgstr "Затваряне"
 msgid "Close the infobar"
 msgstr "Затваряне на информационната лента"
 
-#: gtk/gtklabel.c:5901 gtk/gtktext.c:6318 gtk/gtktextview.c:9323
+#: gtk/gtklabel.c:5901 gtk/gtktext.c:6318 gtk/gtktextview.c:9316
 msgid "Cu_t"
 msgstr "От_рязване"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6326 gtk/gtktextview.c:9331
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6326 gtk/gtktextview.c:9324
 msgid "_Paste"
 msgstr "_Поставяне"
 
-#: gtk/gtklabel.c:5909 gtk/gtktext.c:6339 gtk/gtktextview.c:9356
+#: gtk/gtklabel.c:5909 gtk/gtktext.c:6339 gtk/gtktextview.c:9349
 msgid "Select _All"
 msgstr "Избиране на _всичко"
 
@@ -2869,7 +2869,7 @@ msgid "Play"
 msgstr "Пускане"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6334
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6346
 msgid "_OK"
 msgstr "_Добре"
 
@@ -3494,7 +3494,7 @@ msgstr "Хартията свърши"
 
 #. Translators: this is a printer status.
 #: gtk/print/gtkprintoperation-win32.c:630
-#: modules/printbackends/gtkprintbackendcpdb.c:1522
+#: modules/printbackends/gtkprintbackendcpdb.c:1521
 #: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused"
 msgstr "На пауза"
@@ -3747,7 +3747,7 @@ msgstr "Странична лента"
 msgid "Change di_rection"
 msgstr "Променяне на _посоката"
 
-#: gtk/gtktext.c:6349 gtk/gtktextview.c:9361
+#: gtk/gtktext.c:6349 gtk/gtktextview.c:9354
 msgid "Insert _Emoji"
 msgstr "Вмъкване на емоджи"
 
@@ -3907,20 +3907,20 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Mac OS Classic"
 
-#: gtk/gtktextview.c:9343
+#: gtk/gtktextview.c:9336
 msgid "_Undo"
 msgstr "_Отмяна"
 
-#: gtk/gtktextview.c:9347
+#: gtk/gtktextview.c:9340
 msgid "_Redo"
 msgstr "Пов_таряне"
 
-#: gtk/gtkwindow.c:6322
+#: gtk/gtkwindow.c:6334
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Желаете ли да използвате „Инспектор на GTK“?"
 
-#: gtk/gtkwindow.c:6324
+#: gtk/gtkwindow.c:6336
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3931,7 +3931,7 @@ msgstr ""
 "ви позволява да изследвате и променяте съдържанието на всяка програма за "
 "GTK. Използването му може да доведе до забиване на програмата."
 
-#: gtk/gtkwindow.c:6329
+#: gtk/gtkwindow.c:6341
 msgid "Don’t show this message again"
 msgstr "Това съобщение да не се показва повече"
 
@@ -4113,21 +4113,21 @@ msgstr "Класове за стил"
 msgid "CSS Property"
 msgstr "Свойство на CSS"
 
-#: gtk/inspector/general.c:446
+#: gtk/inspector/general.c:447
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Контекстът на входният метод е вграден чрез „GTK_IM_MODULE“"
 
-#: gtk/inspector/general.c:577
+#: gtk/inspector/general.c:622
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Без"
 
-#: gtk/inspector/general.c:674
+#: gtk/inspector/general.c:719
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: gtk/inspector/general.c:928 gtk/inspector/general.c:967
+#: gtk/inspector/general.c:973 gtk/inspector/general.c:1012
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Няма"
@@ -4160,99 +4160,103 @@ msgstr "Ядро за медия"
 msgid "Input Method"
 msgstr "Входен метод"
 
-#: gtk/inspector/general.ui:212
+#: gtk/inspector/general.ui:201
+msgid "Accessibility Backend"
+msgstr "Ядро за достъпността"
+
+#: gtk/inspector/general.ui:238
 msgid "Application ID"
 msgstr "Идентификатор на програма"
 
-#: gtk/inspector/general.ui:238
+#: gtk/inspector/general.ui:264
 msgid "Resource Path"
 msgstr "Път към ресурс"
 
-#: gtk/inspector/general.ui:275 gtk/ui/gtkplacesview.ui:63
+#: gtk/inspector/general.ui:301 gtk/ui/gtkplacesview.ui:63
 msgid "Prefix"
 msgstr "Префикс"
 
-#: gtk/inspector/general.ui:302
+#: gtk/inspector/general.ui:328
 msgid "Environment"
 msgstr "Среда"
 
-#: gtk/inspector/general.ui:405
+#: gtk/inspector/general.ui:431
 msgid "Display"
 msgstr "Дисплей"
 
-#: gtk/inspector/general.ui:432
+#: gtk/inspector/general.ui:458
 msgid "RGBA Visual"
 msgstr "Елемент RGBA"
 
-#: gtk/inspector/general.ui:458
+#: gtk/inspector/general.ui:484
 msgid "Composited"
 msgstr "Насложен"
 
-#: gtk/inspector/general.ui:483
+#: gtk/inspector/general.ui:509
 msgid "Protocols"
 msgstr "Протоколи"
 
-#: gtk/inspector/general.ui:539
+#: gtk/inspector/general.ui:565
 msgid "GL Renderer"
 msgstr "Изобразяване с GL"
 
-#: gtk/inspector/general.ui:568
+#: gtk/inspector/general.ui:594
 msgid "GL Vendor"
 msgstr "Производител на GL"
 
-#: gtk/inspector/general.ui:597
+#: gtk/inspector/general.ui:623
 msgid "GL Version"
 msgstr "Версия на GL"
 
-#: gtk/inspector/general.ui:624
+#: gtk/inspector/general.ui:650
 msgid "GL Backend Vendor"
 msgstr "Производител на вътрешния слой на GL"
 
-#: gtk/inspector/general.ui:651
+#: gtk/inspector/general.ui:677
 msgid "GL Backend Version"
 msgstr "Версия на вътрешния слой на GL"
 
-#: gtk/inspector/general.ui:701
+#: gtk/inspector/general.ui:727
 msgid "GL Full Version"
 msgstr "Пълна версия на GL"
 
-#: gtk/inspector/general.ui:730
+#: gtk/inspector/general.ui:756
 msgid "GLSL Version"
 msgstr "Версия на GLSL"
 
-#: gtk/inspector/general.ui:759
+#: gtk/inspector/general.ui:785
 msgid "GL Extensions"
 msgstr "Разширения на GL"
 
-#: gtk/inspector/general.ui:847
+#: gtk/inspector/general.ui:873
 msgid "EGL Extensions"
 msgstr "Разширения на EGL"
 
-#: gtk/inspector/general.ui:934
+#: gtk/inspector/general.ui:960
 msgid "GL Features"
 msgstr "Функции на GL"
 
-#: gtk/inspector/general.ui:970
+#: gtk/inspector/general.ui:996
 msgid "Vulkan Device"
 msgstr "Устройство с Vulkan"
 
-#: gtk/inspector/general.ui:997
+#: gtk/inspector/general.ui:1023
 msgid "Vulkan API Version"
 msgstr "API версия на Vulkan"
 
-#: gtk/inspector/general.ui:1024
+#: gtk/inspector/general.ui:1050
 msgid "Vulkan Driver Version"
 msgstr "Версия на драйвера за Vulkan"
 
-#: gtk/inspector/general.ui:1073
+#: gtk/inspector/general.ui:1099
 msgid "Vulkan Layers"
 msgstr "Слоеве на Vulkan"
 
-#: gtk/inspector/general.ui:1142
+#: gtk/inspector/general.ui:1168
 msgid "Vulkan Extensions"
 msgstr "Разширения на Vulkan"
 
-#: gtk/inspector/general.ui:1229
+#: gtk/inspector/general.ui:1255
 msgid "Vulkan Features"
 msgstr "Функции на Vulkan"
 
@@ -4317,8 +4321,8 @@ msgid "Surface"
 msgstr "Повърхност"
 
 #: gtk/inspector/misc-info.ui:365 gtk/inspector/misc-info.ui:400
-#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1153
-#: gtk/inspector/prop-editor.c:1536 gtk/inspector/window.ui:394
+#: gtk/inspector/misc-info.ui:435 gtk/inspector/prop-editor.c:1199
+#: gtk/inspector/prop-editor.c:1594 gtk/inspector/window.ui:394
 msgid "Properties"
 msgstr "Настройки"
 
@@ -4366,7 +4370,7 @@ msgstr "На преден план"
 msgid "Child Visible"
 msgstr "Видим дъщерен"
 
-#: gtk/inspector/prop-editor.c:702
+#: gtk/inspector/prop-editor.c:748
 #, c-format
 msgid "Pointer: %p"
 msgstr "Показалец: %p"
@@ -4374,7 +4378,7 @@ msgstr "Показалец: %p"
 #. Translators: %s is a type name, for example
 #. * GtkPropertyExpression with value \"2.5\"
 #.
-#: gtk/inspector/prop-editor.c:827
+#: gtk/inspector/prop-editor.c:873
 #, c-format
 msgid "%s with value \"%s\""
 msgstr "%s със стойност „%s“"
@@ -4382,7 +4386,7 @@ msgstr "%s със стойност „%s“"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with type GObject
 #.
-#: gtk/inspector/prop-editor.c:838
+#: gtk/inspector/prop-editor.c:884
 #, c-format
 msgid "%s with type %s"
 msgstr "%s с вид %s"
@@ -4390,7 +4394,7 @@ msgstr "%s с вид %s"
 #. Translators: Both %s are type names, for example
 #. * GtkObjectExpression for GtkStringObject 0x23456789
 #.
-#: gtk/inspector/prop-editor.c:851
+#: gtk/inspector/prop-editor.c:897
 #, c-format
 msgid "%s for %s %p"
 msgstr "%s за %s %p"
@@ -4398,71 +4402,71 @@ msgstr "%s за %s %p"
 #. Translators: Both %s are type names, for example
 #. * GtkPropertyExpression with value type: gchararray
 #.
-#: gtk/inspector/prop-editor.c:881
+#: gtk/inspector/prop-editor.c:927
 #, c-format
 msgid "%s with value type %s"
 msgstr "%s със стойност от вид %s"
 
-#: gtk/inspector/prop-editor.c:1230
+#: gtk/inspector/prop-editor.c:1288
 #, c-format
 msgid "Uneditable property type: %s"
 msgstr "Нередактируем вид свойство: %s"
 
-#: gtk/inspector/prop-editor.c:1388
+#: gtk/inspector/prop-editor.c:1446
 msgctxt "column number"
 msgid "None"
 msgstr "Без"
 
-#: gtk/inspector/prop-editor.c:1425
+#: gtk/inspector/prop-editor.c:1483
 msgid "Attribute:"
 msgstr "Атрибут:"
 
-#: gtk/inspector/prop-editor.c:1428
+#: gtk/inspector/prop-editor.c:1486
 msgid "Model"
 msgstr "Модел"
 
-#: gtk/inspector/prop-editor.c:1433
+#: gtk/inspector/prop-editor.c:1491
 msgid "Column:"
 msgstr "Колона:"
 
 #. Translators: %s is a type name, for example
 #. * Action from 0x2345678 (GtkApplicationWindow)
 #.
-#: gtk/inspector/prop-editor.c:1532
+#: gtk/inspector/prop-editor.c:1590
 #, c-format
 msgid "Action from: %p (%s)"
 msgstr "Действие от: %p (%s)"
 
-#: gtk/inspector/prop-editor.c:1587
+#: gtk/inspector/prop-editor.c:1645
 msgid "Reset"
 msgstr "Нулиране"
 
-#: gtk/inspector/prop-editor.c:1595
+#: gtk/inspector/prop-editor.c:1653
 msgctxt "GtkSettings source"
 msgid "Default"
 msgstr "Стандартно"
 
-#: gtk/inspector/prop-editor.c:1598
+#: gtk/inspector/prop-editor.c:1656
 msgctxt "GtkSettings source"
 msgid "Theme"
 msgstr "Тема"
 
-#: gtk/inspector/prop-editor.c:1601
+#: gtk/inspector/prop-editor.c:1659
 msgctxt "GtkSettings source"
 msgid "XSettings"
 msgstr "Настройки на X"
 
-#: gtk/inspector/prop-editor.c:1605
+#: gtk/inspector/prop-editor.c:1663
 msgctxt "GtkSettings source"
 msgid "Application"
 msgstr "Програма"
 
-#: gtk/inspector/prop-editor.c:1608
+#: gtk/inspector/prop-editor.c:1666
 msgctxt "GtkSettings source"
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: gtk/inspector/prop-editor.c:1611
+#: gtk/inspector/prop-editor.c:1669
 msgid "Source:"
 msgstr "Източник:"
 
@@ -4470,7 +4474,7 @@ msgstr "Източник:"
 msgid "Defined At"
 msgstr "Дефиниран на"
 
-#: gtk/inspector/recorder.c:2055
+#: gtk/inspector/recorder.c:2059
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Неуспешно запазване на изобразения възел"
@@ -6980,13 +6984,13 @@ msgid "Borderless"
 msgstr "Без граници"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1519
+#: modules/printbackends/gtkprintbackendcpdb.c:1518
 #: modules/printbackends/gtkprintbackendcups.c:2636
 msgid "Paused; Rejecting Jobs"
 msgstr "На пауза. Отхвърля задачите"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1525
+#: modules/printbackends/gtkprintbackendcpdb.c:1524
 #: modules/printbackends/gtkprintbackendcups.c:2642
 msgid "Rejecting Jobs"
 msgstr "Отхвърля задачите"
