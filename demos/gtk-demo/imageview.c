@@ -20,6 +20,8 @@ struct _ImageView
   GskScalingFilter filter;
 
   GtkWidget *menu;
+  float start_scale;
+  float start_angle;
 };
 
 struct _ImageViewClass
@@ -348,6 +350,45 @@ rotate_cb (GtkWidget  *widget,
 }
 
 static void
+scale_begin_cb (GtkGesture       *gesture,
+                GdkEventSequence *sequence,
+	        ImageView        *self)
+{
+  self->start_scale = self->scale;
+}
+
+static void
+scale_changed_cb (GtkGestureZoom *gesture,
+		  double          scale,
+		  ImageView      *self)
+{
+  g_object_set (self, "scale", self->start_scale*scale, NULL);
+}
+
+#define RAD_TO_DEG(a) (180.0 * (a) / M_PI)
+
+static void
+rotate_begin_cb (GtkGesture       *gesture,
+	         GdkEventSequence *sequence,
+	         ImageView        *self)
+{
+  self->start_angle = self->angle;
+}
+
+static void
+angle_changed_cb (GtkGestureRotate *gesture,
+		  double            angle,
+		  double            delta,
+		  ImageView        *self)
+{
+  double a;
+
+  a = 90 * round (RAD_TO_DEG (delta) / 10);
+
+  g_object_set (self, "angle", fmodf (self->start_angle + a, 360.f), NULL);
+}
+
+static void
 image_view_class_init (ImageViewClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
@@ -390,6 +431,10 @@ image_view_class_init (ImageViewClass *class)
   gtk_widget_class_set_template_from_resource (widget_class, "/menu/imageview.ui");
   gtk_widget_class_bind_template_child (widget_class, ImageView, menu);
   gtk_widget_class_bind_template_callback (widget_class, pressed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, scale_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, scale_begin_cb);
+  gtk_widget_class_bind_template_callback (widget_class, angle_changed_cb);
+  gtk_widget_class_bind_template_callback (widget_class, rotate_begin_cb);
   gtk_widget_class_bind_template_callback (widget_class, query_tooltip);
 
   gtk_widget_class_set_accessible_role (widget_class, GTK_ACCESSIBLE_ROLE_IMG);
