@@ -3315,8 +3315,8 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
             {
 	      rect->x = wx;
 	      rect->y = wy;
-	      rect->width = ww;
-	      rect->height = wh;
+	      rect->width = ww + wb * 2;
+	      rect->height = wh + wb * 2;
 	    }
 
 	  /* _NET_FRAME_EXTENTS format is left, right, top, bottom */
@@ -3388,8 +3388,8 @@ gdk_x11_window_get_frame_extents (GdkWindow    *window,
     {
       rect->x = wx;
       rect->y = wy;
-      rect->width = ww;
-      rect->height = wh;
+      rect->width = ww + wb * 2;
+      rect->height = wh + wb * 2;
     }
 
  out:
