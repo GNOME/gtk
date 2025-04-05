@@ -40,7 +40,6 @@ typedef struct _GtkInspectorEventRecordingPrivate GtkInspectorEventRecordingPriv
 typedef struct
 {
   GtkPropagationPhase phase;
-  gpointer widget;
   GType widget_type;
   GType controller_type;
   GType target_type;

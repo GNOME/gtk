@@ -79,7 +79,6 @@ gtk_inspector_event_recording_add_trace (GtkInspectorEventRecording *recording,
   EventTrace trace;
 
   trace.phase = phase;
-  trace.widget = widget;
   trace.widget_type = G_OBJECT_TYPE (widget);
   trace.controller_type = G_OBJECT_TYPE (controller);
   trace.target_type = G_OBJECT_TYPE (target);
