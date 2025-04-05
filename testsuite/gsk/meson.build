@@ -211,6 +211,8 @@ compare_render_tests = [
   'transform-huge-child-3d-nocairo',
   'transform-in-transform',
   'transform-in-transform-in-transform',
+  'yuv-matrix-dmabuf',
+  'yuv-matrix-memory',
   'z-transform-clipping-bounds-nocairo',
 ]
 
