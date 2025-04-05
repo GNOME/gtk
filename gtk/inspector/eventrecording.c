@@ -57,6 +57,7 @@ gtk_inspector_event_recording_new (gint64    timestamp,
                             NULL);
 
   recording->event = gdk_event_ref (event);
+  recording->target_type = G_TYPE_INVALID;
   recording->traces = g_array_new (FALSE, FALSE, sizeof (EventTrace));
 
   return GTK_INSPECTOR_RECORDING (recording);
@@ -78,10 +79,12 @@ gtk_inspector_event_recording_add_trace (GtkInspectorEventRecording *recording,
 {
   EventTrace trace;
 
+  if (recording->target_type == G_TYPE_INVALID)
+    recording->target_type = G_OBJECT_TYPE (target);
+
   trace.phase = phase;
   trace.widget_type = G_OBJECT_TYPE (widget);
   trace.controller_type = G_OBJECT_TYPE (controller);
-  trace.target_type = G_OBJECT_TYPE (target);
   trace.handled = handled;
 
   g_array_append_val (recording->traces, trace);
@@ -96,5 +99,10 @@ gtk_inspector_event_recording_get_traces (GtkInspectorEventRecording *recording,
   return (EventTrace *) recording->traces->data;
 }
 
+GType
+gtk_inspector_event_recording_get_target_type (GtkInspectorEventRecording *recording)
+{
+  return recording->target_type;
+}
 
 // vim: set et sw=2 ts=2:

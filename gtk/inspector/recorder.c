@@ -746,9 +746,7 @@ show_event (GtkInspectorRecorder *recorder,
 }
 
 static void populate_event_properties (GListStore *store,
-                                       GdkEvent   *event,
-                                       EventTrace *traces,
-                                       gsize       n_traces);
+                                       GtkInspectorEventRecording *recording);
 
 static void
 recording_selected (GtkSingleSelection   *selection,
@@ -778,13 +776,10 @@ recording_selected (GtkSingleSelection   *selection,
   else if (GTK_INSPECTOR_IS_EVENT_RECORDING (recording))
     {
       GdkEvent *event;
-      EventTrace *traces;
-      gsize n_traces;
 
       gtk_stack_set_visible_child_name (GTK_STACK (recorder->recording_data_stack), "event_data");
 
       event = gtk_inspector_event_recording_get_event (GTK_INSPECTOR_EVENT_RECORDING (recording));
-      traces = gtk_inspector_event_recording_get_traces (GTK_INSPECTOR_EVENT_RECORDING (recording), &n_traces);
 
       for (guint pos = gtk_single_selection_get_selected (selection) - 1; pos > 0; pos--)
         {
@@ -802,7 +797,7 @@ recording_selected (GtkSingleSelection   *selection,
             }
         }
 
-      populate_event_properties (recorder->event_properties, event, traces, n_traces);
+      populate_event_properties (recorder->event_properties, GTK_INSPECTOR_EVENT_RECORDING (recording));
 
       if (recorder->highlight_sequences)
         selected_sequence = gdk_event_get_event_sequence (event);
@@ -1786,9 +1781,7 @@ scroll_unit_name (GdkScrollUnit unit)
 
 static void
 populate_event_properties (GListStore *store,
-                           GdkEvent   *event,
-                           EventTrace *traces,
-                           gsize       n_traces)
+                           GtkInspectorEventRecording *recording)
 {
   GdkEventType type;
   GdkDevice *device;
@@ -1797,8 +1790,16 @@ populate_event_properties (GListStore *store,
   double dx, dy;
   GdkModifierType state;
   GdkScrollUnit scroll_unit;
+  GdkEvent *event;
+  GType target_type;
+  EventTrace *traces;
+  gsize n_traces;
 
   g_list_store_remove_all (store);
+
+  event = gtk_inspector_event_recording_get_event (recording);
+  traces = gtk_inspector_event_recording_get_traces (recording, &n_traces);
+  target_type = gtk_inspector_event_recording_get_target_type (recording);
 
   type = gdk_event_get_event_type (event);
 
@@ -1960,12 +1961,12 @@ populate_event_properties (GListStore *store,
         }
     }
 
+  add_text_row (store, "Target", "%s", g_type_name (target_type));
+
   if (n_traces > 0)
     {
       GString *s = g_string_new ("");
       const char *phase_name[] = { "", "↘", "↙", "⊙" };
-
-      add_text_row (store, "Target", "%s", g_type_name (traces[0].target_type));
 
       for (gsize i = 0; i < n_traces; i++)
         {

@@ -42,7 +42,6 @@ typedef struct
   GtkPropagationPhase phase;
   GType widget_type;
   GType controller_type;
-  GType target_type;
   gboolean handled;
 } EventTrace;
 
@@ -51,6 +50,7 @@ typedef struct _GtkInspectorEventRecording
   GtkInspectorRecording parent;
 
   GdkEvent *event;
+  GType target_type;
   GArray *traces;
 } GtkInspectorEventRecording;
 
@@ -76,6 +76,7 @@ void            gtk_inspector_event_recording_add_trace      (GtkInspectorEventR
 
 EventTrace *   gtk_inspector_event_recording_get_traces      (GtkInspectorEventRecording       *recording,
                                                               gsize                            *n_traces);
+GType          gtk_inspector_event_recording_get_target_type (GtkInspectorEventRecording       *recording);
 
 G_END_DECLS
 
