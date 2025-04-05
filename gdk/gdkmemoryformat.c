@@ -869,7 +869,7 @@ struct _GdkMemoryFormatDescription
 
 static const GdkMemoryFormatDescription memory_formats[] = {
   [GDK_MEMORY_B8G8R8A8_PREMULTIPLIED] = {
-    .name = "BGRA8(p)",
+    .name = "BGRA8p",
     .n_planes = 1,
     .block_size = { 1, 1 },
     .planes = {
@@ -915,7 +915,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_A8R8G8B8_PREMULTIPLIED] = {
-    .name = "ARGB8(p)",
+    .name = "ARGB8p",
     .n_planes = 1,
     .block_size = { 1, 1 },
     .planes = {
@@ -961,7 +961,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_R8G8B8A8_PREMULTIPLIED] = {
-    .name = "RGBA8(p)",
+    .name = "RGBA8p",
     .n_planes = 1,
     .block_size = { 1, 1 },
     .planes = {
@@ -1005,7 +1005,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .mipmap_linear = gdk_mipmap_guint8_4_linear,
   },
   [GDK_MEMORY_A8B8G8R8_PREMULTIPLIED] = {
-    .name = "ABGR8(p)",
+    .name = "ABGR8p",
     .n_planes = 1,
     .block_size = { 1, 1 },
     .planes = {
@@ -1558,7 +1558,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .mipmap_linear = gdk_mipmap_guint16_3_linear,
   },
   [GDK_MEMORY_R16G16B16A16_PREMULTIPLIED] = {
-    .name = "RGBA16(p)",
+    .name = "RGBA16p",
     .n_planes = 1,
     .block_size = { 1, 1 },
     .planes = {
@@ -1699,7 +1699,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .mipmap_linear = gdk_mipmap_half_float_3_linear,
   },
   [GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED] = {
-    .name = "RGBA16f(p)",
+    .name = "RGBA16fp",
     .n_planes = 1,
     .block_size = { 1, 1 },
     .planes = {
@@ -1838,7 +1838,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .mipmap_linear = gdk_mipmap_float_3_linear,
   },
   [GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED] = {
-    .name = "RGBA32f(p)",
+    .name = "RGBA32fp",
     .n_planes = 1,
     .block_size = { 1, 1 },
     .planes = {
@@ -1930,7 +1930,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .mipmap_linear = gdk_mipmap_float_4_linear,
   },
   [GDK_MEMORY_G8A8_PREMULTIPLIED] = {
-    .name = "GA8(p)",
+    .name = "GA8p",
     .n_planes = 1,
     .block_size = { 1, 1 },
     .planes = {
@@ -2065,7 +2065,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .mipmap_linear = gdk_mipmap_guint8_1_linear,
   },
   [GDK_MEMORY_G16A16_PREMULTIPLIED] = {
-    .name = "GA16(p)",
+    .name = "GA16p",
     .n_planes = 1,
     .block_size = { 1, 1 },
     .planes = {
