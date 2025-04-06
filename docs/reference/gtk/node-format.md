@@ -25,7 +25,60 @@ Nodes can be given a name by adding a string after the `<node-type>` in their de
 
 ### Textures
 
-Just like nodes, textures can be referenced by name. When defining a named texture, the name has to be placed in front of the URL.
+Just like nodes, textures can be referenced by name. See the section about textures below for a detailed discussion.
+
+### Color states
+
+Custom color states can be defined at the top of the document and then later referenced in the document. The section about color states explains it.
+
+# Textures
+
+Textures can be referenced in 3 different ways: They can either reference a previously defined texture by name, they can reference an external resource by URL or they can be described in detail by specifying all their properties. The external reference must be a URL to a valid image file in a format understood by [ctor@Gdk.Texture.new_from_bytes].
+
+    texture: "name" | "name" <texture-definition>
+    texture-definition: <url> | <memory-texture> | <dmabuf-texture>
+
+### memory textures
+
+| property    | syntax           | default  | printed     |
+| ----------- | ---------------- | -------- | ----------- |
+| format      | `<memoryformat>` | none     | always      |
+| width       | `<integer>`      | none     | always      |
+| height      | `<integer>`      | none     | always      |
+| offset      | `<integer>{1,4}` | 0        | non-default |
+| stride      | `<integer>{1,4}` | none     | always      |
+| color-state | `<color-state>`  | srgb     | non-default |
+| data        | `<image-data>`   | none     | always      |
+
+Creates a [class@Gdk.MemoryTexture] with the properties mapping to the properties of [class@Gdk.MemoryTextureBuilder].
+
+### dmabuf textures
+
+| property    | syntax               | default     | printed     |
+| ----------- | -------------------- | ----------- | ----------- |
+| fourcc      | `<string>|<integer>` | none        | always      |
+| width       | `<integer>`          | none        | always      |
+| height      | `<integer>`          | none        | always      |
+| offset      | `<integer>{1,4}`     | 0           | non-default |
+| stride      | `<integer>{1,4}`     | none        | always      |
+| color-state | `<color-state>`      | *see below* | non-default |
+| data        | `<image-data>`       | none        | always      |
+
+Creates a [class@Gdk.DmabufTexture] with the properties mapping to the properties of [class@Gdk.DmabufTextureBuilder]. If no dmabuf texture can be created due to lack of support, a warning will be emitted and a fallback memory texture will be used.
+
+The fourcc can be given either as a four-letter string, like "NV12" or using the literal number, in this case 842094158.
+
+The default color state will be determined by the fourcc. If the fourcc defines an RGB format, it will use the srgb color state. If it defines a YUV format, the default color state will be the CICP 1/13/6/0, just as when [property@Gdk.DmabufTextureBuilder:color-state] is unset.
+
+### image data
+
+Image data specifies the raw data of the resource. It has to include all padding data.
+
+     image-data: <url> | string
+
+If data is given as a URL, it needs to be tagged as application/gzip and be gzip encoded. The default encoding scheme may be adapted in the future.
+
+If given as a string, it is a literal hex string. This is mainly intended for testing and debugging purposes. Whitespace inside the string is ignored. For example, "FF0000 ff" can be used to define the image data for a 1x1 red pixel RGBA8 image.
 
 # Color states
 
