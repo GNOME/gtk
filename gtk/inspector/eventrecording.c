@@ -17,6 +17,7 @@
 
 #include "config.h"
 #include <glib/gi18n-lib.h>
+#include <gtk/gtknative.h>
 
 #include "eventrecording.h"
 
@@ -78,14 +79,33 @@ gtk_inspector_event_recording_add_trace (GtkInspectorEventRecording *recording,
                                          gboolean                    handled)
 {
   EventTrace trace;
-
-  if (recording->target_type == G_TYPE_INVALID)
-    recording->target_type = G_OBJECT_TYPE (target);
+  GtkNative *native;
+  double x, y;
 
   trace.phase = phase;
   trace.widget_type = G_OBJECT_TYPE (widget);
   trace.controller_type = G_OBJECT_TYPE (controller);
   trace.handled = handled;
+
+  native = gtk_widget_get_native (widget),
+  gtk_native_get_surface_transform (native, &x, &y);
+
+  if (!gtk_widget_compute_bounds (widget, GTK_WIDGET (native), &trace.bounds))
+    return;
+
+  trace.bounds.origin.x += x;
+  trace.bounds.origin.y += y;
+
+  if (recording->target_type == G_TYPE_INVALID)
+    {
+      recording->target_type = G_OBJECT_TYPE (target);
+
+      if (!gtk_widget_compute_bounds (target, GTK_WIDGET (native), &recording->bounds))
+        return;
+
+      recording->bounds.origin.x += x;
+      recording->bounds.origin.y += y;
+    }
 
   g_array_append_val (recording->traces, trace);
 }
@@ -104,5 +124,13 @@ gtk_inspector_event_recording_get_target_type (GtkInspectorEventRecording *recor
 {
   return recording->target_type;
 }
+
+void
+gtk_inspector_event_recording_get_target_bounds (GtkInspectorEventRecording *recording,
+                                                 graphene_rect_t *bounds)
+{
+  *bounds = recording->bounds;
+}
+
 
 // vim: set et sw=2 ts=2:
