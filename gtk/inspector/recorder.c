@@ -42,6 +42,8 @@
 #include <gtk/gtknoselection.h>
 #include <gtk/gtkcolumnview.h>
 #include <gtk/gtkcolumnviewcolumn.h>
+#include <gtk/gtknative.h>
+#include <gtk/gtkprivate.h>
 #include <gsk/gskrendererprivate.h>
 #include <gsk/gskrendernodeprivate.h>
 #include <gsk/gskroundedrectprivate.h>
@@ -729,29 +731,46 @@ make_dot (double x, double y)
   return dot;
 }
 
-static void
-show_event (GtkInspectorRecorder *recorder,
-            GskRenderNode        *node,
-            GdkEvent             *event)
+static GskRenderNode *
+make_rect (const graphene_rect_t *bounds)
 {
-  GskRenderNode *temp;
+  return gsk_color_node_new (&(GdkRGBA){ 0.2, 0, 0, 0.2 }, bounds);
+}
+
+static GskRenderNode *
+make_event_node (GdkEvent              *event,
+                 GskRenderNode         *frame,
+                 const graphene_rect_t *bounds)
+{
   double x, y;
+  GskRenderNode *nodes[3];
+  int n_nodes = 0;
+  GskRenderNode *node;
+
+  if (!frame)
+    return NULL;
+
+  nodes[n_nodes++] = gsk_render_node_ref (frame);
+
+  if (bounds)
+    nodes[n_nodes++] = make_rect (bounds);
 
   if (gdk_event_get_position (event, &x, &y))
-    {
-      GskRenderNode *dot = make_dot (x, y);
-      temp = gsk_container_node_new ((GskRenderNode *[]) { node, dot }, 2);
-      gsk_render_node_unref (dot);
-    }
-  else
-    temp = gsk_render_node_ref (node);
+    nodes[n_nodes++] = make_dot (x, y);
 
-  show_render_node (recorder, temp);
+  if (n_nodes == 1)
+    return nodes[0];
 
-  gsk_render_node_unref (temp);
+  node = gsk_container_node_new (nodes, n_nodes);
+
+  for (int i = 0; i < n_nodes; i++)
+    gsk_render_node_unref (nodes[i]);
+
+  return node;
 }
 
 static void populate_event_properties (GListStore *store,
+                                       GskRenderNode *node,
                                        GtkInspectorEventRecording *recording);
 
 static void
@@ -782,6 +801,7 @@ recording_selected (GtkSingleSelection   *selection,
   else if (GTK_INSPECTOR_IS_EVENT_RECORDING (recording))
     {
       GdkEvent *event;
+      GskRenderNode *node = NULL;
 
       gtk_stack_set_visible_child_name (GTK_STACK (recorder->recording_data_stack), "event_data");
 
@@ -795,15 +815,22 @@ recording_selected (GtkSingleSelection   *selection,
           if (GTK_INSPECTOR_IS_RENDER_RECORDING (item) &&
               gdk_event_get_surface (event) == gtk_inspector_render_recording_get_surface (GTK_INSPECTOR_RENDER_RECORDING (item)))
             {
-              GskRenderNode *node;
-
               node = gtk_inspector_render_recording_get_node (GTK_INSPECTOR_RENDER_RECORDING (item));
-              show_event (recorder, node, event);
+
+              if (node)
+                {
+                  GskRenderNode *temp;
+
+                  temp = make_event_node (event, node, NULL);
+                  show_render_node (recorder, temp);
+                  gsk_render_node_unref (temp);
+                }
+
               break;
             }
         }
 
-      populate_event_properties (recorder->event_properties, GTK_INSPECTOR_EVENT_RECORDING (recording));
+      populate_event_properties (recorder->event_properties, node, GTK_INSPECTOR_EVENT_RECORDING (recording));
 
       if (recorder->highlight_sequences)
         selected_sequence = gdk_event_get_event_sequence (event);
@@ -1788,6 +1815,7 @@ scroll_unit_name (GdkScrollUnit unit)
 
 static void
 populate_event_properties (GListStore *store,
+                           GskRenderNode *node,
                            GtkInspectorEventRecording *recording)
 {
   GdkEventType type;
@@ -1798,9 +1826,10 @@ populate_event_properties (GListStore *store,
   GdkModifierType state;
   GdkScrollUnit scroll_unit;
   GdkEvent *event;
-  GType target_type;
   EventTrace *traces;
+  GType target_type;
   gsize n_traces;
+  GskRenderNode *temp;
 
   g_list_store_remove_all (store);
 
@@ -1968,27 +1997,43 @@ populate_event_properties (GListStore *store,
         }
     }
 
-  add_text_row (store, "Target", "%s", g_type_name (target_type));
+  temp = make_event_node (event, node, NULL);
+  if (temp)
+    {
+      for (gsize i = 0; i < g_list_model_get_n_items (G_LIST_MODEL (store)); i++)
+        {
+          ObjectProperty *prop = g_list_model_get_item (G_LIST_MODEL (store), i);
+
+          prop->node = gsk_render_node_ref (temp);
+          g_object_unref (prop);
+        }
+    }
+  g_clear_pointer (&temp, gsk_render_node_unref);
+
+  temp = make_event_node (event, node, &recording->bounds);
+  list_store_add_object_property (store, "Target", g_type_name (target_type), NULL, temp);
+  g_clear_pointer (&temp, gsk_render_node_unref);
 
   if (n_traces > 0)
     {
-      GString *s = g_string_new ("");
       const char *phase_name[] = { "", "↘", "↙", "⊙" };
+
 
       for (gsize i = 0; i < n_traces; i++)
         {
           EventTrace *t = &traces[i];
+          char val[256];
 
-          g_string_append_printf (s, "%s %s %s %s\n",
-                                  phase_name[t->phase],
-                                  g_type_name (t->widget_type),
-                                  g_type_name (t->controller_type),
-                                  t->handled ? "✓" : "");
-          g_string_append_c (s, '\n');
+          g_snprintf (val, sizeof (val), "%s %s %s %s",
+                      phase_name[t->phase],
+                      g_type_name (t->widget_type),
+                      g_type_name (t->controller_type),
+                      t->handled ? "✓" : "");
+
+          temp = make_event_node (event, node, &traces[i].bounds);
+          list_store_add_object_property (store, i == 0 ? "Trace" : "", val, NULL, temp);
+          g_clear_pointer (&temp, gsk_render_node_unref);
         }
-
-      add_text_row (store, "Trace", "%s", s->str);
-      g_string_free (s, TRUE);
     }
 }
 
