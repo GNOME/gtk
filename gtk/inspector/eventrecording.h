@@ -40,10 +40,9 @@ typedef struct _GtkInspectorEventRecordingPrivate GtkInspectorEventRecordingPriv
 typedef struct
 {
   GtkPropagationPhase phase;
-  gpointer widget;
   GType widget_type;
+  graphene_rect_t bounds;
   GType controller_type;
-  GType target_type;
   gboolean handled;
 } EventTrace;
 
@@ -52,6 +51,8 @@ typedef struct _GtkInspectorEventRecording
   GtkInspectorRecording parent;
 
   GdkEvent *event;
+  GType target_type;
+  graphene_rect_t bounds;
   GArray *traces;
 } GtkInspectorEventRecording;
 
@@ -77,6 +78,9 @@ void            gtk_inspector_event_recording_add_trace      (GtkInspectorEventR
 
 EventTrace *   gtk_inspector_event_recording_get_traces      (GtkInspectorEventRecording       *recording,
                                                               gsize                            *n_traces);
+GType          gtk_inspector_event_recording_get_target_type (GtkInspectorEventRecording       *recording);
+void           gtk_inspector_event_recording_get_target_bounds (GtkInspectorEventRecording     *recording,
+                                                                graphene_rect_t                *bounds);
 
 G_END_DECLS
 

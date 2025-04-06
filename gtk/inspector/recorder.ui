@@ -93,6 +93,7 @@
                   <object class="GtkListView" id="recordings_list">
                     <property name="vexpand">1</property>
                     <property name="model">selection</property>
+                    <property name="tab-behavior">item</property>
                   </object>
                 </child>
               </object>
@@ -128,6 +129,7 @@
                               <object class="GtkListView" id="render_node_list">
                                 <property name="vexpand">1</property>
                                 <property name="hexpand">1</property>
+                                <property name="tab-behavior">item</property>
                               </object>
                             </child>
                           </object>
@@ -142,6 +144,7 @@
                                 <property name="propagate-natural-width">1</property>
                                 <child>
                                   <object class="GtkColumnView" id="node_property_tree">
+                                    <property name="tab-behavior">item</property>
                                     <style>
                                       <class name="data-table"/>
                                       <class name="list"/>
@@ -185,6 +188,7 @@
                             <property name="propagate-natural-width">1</property>
                             <child>
                               <object class="GtkColumnView" id="event_property_tree">
+                                <property name="tab-behavior">item</property>
                                 <style>
                                   <class name="data-table"/>
                                   <class name="list"/>
