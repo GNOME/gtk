@@ -12,7 +12,7 @@
     </icon>
   </style>
   <dependencies>
-    <glib revision="2.80.0">
+    <glib>
       <patch>hack</patch>
     </glib>
     <cairo/>
