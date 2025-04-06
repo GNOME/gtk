@@ -717,16 +717,33 @@ bind_value_widgets (GtkSignalListItemFactory *factory,
 static GskRenderNode *
 make_dot (double x, double y)
 {
-  GskRenderNode *fill, *dot;
-  GdkColor red = GDK_COLOR_SRGB (1, 0, 0, 1);
-  graphene_rect_t rect = GRAPHENE_RECT_INIT (x - 3, y - 3, 6, 6);
-  graphene_size_t corner = GRAPHENE_SIZE_INIT (3, 3);
-  GskRoundedRect clip;
+  GskRenderNode *dot;
+  GskRenderNode *nodes[3];
+  GskRoundedRect rr;
+  float widths[4] = { 1, 1, 1, 1 };
+  GdkRGBA colors[4] = {
+    { 1, 0, 0, 1 },
+    { 1, 0, 0, 1 },
+    { 1, 0, 0, 1 },
+    { 1, 0, 0, 1 },
+  };
 
-  fill = gsk_color_node_new2 (&red, &rect);
-  dot = gsk_rounded_clip_node_new (fill, gsk_rounded_rect_init (&clip, &rect,
-                                                               &corner, &corner, &corner, &corner));
-  gsk_render_node_unref (fill);
+  nodes[0] = gsk_color_node_new (&colors[0], &GRAPHENE_RECT_INIT (x - 7.5, y - 0.5, 15, 1));
+  nodes[1] = gsk_color_node_new (&colors[0], &GRAPHENE_RECT_INIT (x - 0.5, y - 7.5, 1, 15));
+  nodes[2] = gsk_border_node_new (gsk_rounded_rect_init (&rr,
+                                                         &GRAPHENE_RECT_INIT (x - 5, y - 5, 10, 10),
+                                                         &GRAPHENE_SIZE_INIT (5, 5),
+                                                         &GRAPHENE_SIZE_INIT (5, 5),
+                                                         &GRAPHENE_SIZE_INIT (5, 5),
+                                                         &GRAPHENE_SIZE_INIT (5, 5)),
+                                  widths,
+                                  colors);
+
+  dot = gsk_container_node_new (nodes, 3);
+
+  gsk_render_node_unref (nodes[0]);
+  gsk_render_node_unref (nodes[1]);
+  gsk_render_node_unref (nodes[2]);
 
   return dot;
 }
