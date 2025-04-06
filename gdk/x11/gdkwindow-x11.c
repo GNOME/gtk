@@ -3197,9 +3197,9 @@ gdk_window_x11_get_geometry (GdkWindow *window,
 		    &root, &tx, &ty, &twidth, &theight, &tborder_width, &tdepth);
       
       if (x)
-	*x = tx / impl->window_scale;
+	*x = (tx + tborder_width) / impl->window_scale;
       if (y)
-	*y = ty / impl->window_scale;
+	*y = (ty + tborder_width) / impl->window_scale;
       if (width)
 	*width = twidth / impl->window_scale;
       if (height)
