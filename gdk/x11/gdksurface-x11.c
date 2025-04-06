@@ -2699,9 +2699,9 @@ gdk_x11_surface_get_geometry (GdkSurface *surface,
                              root, 0, 0, &tx, &ty, &child);
 
       if (x)
-	*x = tx / impl->surface_scale;
+	*x = (tx + tborder_width) / impl->surface_scale;
       if (y)
-	*y = ty / impl->surface_scale;
+	*y = (ty + tborder_width) / impl->surface_scale;
       if (width)
 	*width = twidth / impl->surface_scale;
       if (height)
