@@ -245,8 +245,6 @@ static void
 gdk_wayland_toplevel_hide_surface (GdkWaylandSurface *wayland_surface)
 {
   GdkWaylandToplevel *toplevel = GDK_WAYLAND_TOPLEVEL (wayland_surface);
-  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (toplevel));
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
 
   g_clear_pointer (&toplevel->display_server.xdg_toplevel, xdg_toplevel_destroy);
   g_clear_pointer (&toplevel->display_server.zxdg_toplevel_v6, zxdg_toplevel_v6_destroy);
@@ -254,7 +252,7 @@ gdk_wayland_toplevel_hide_surface (GdkWaylandSurface *wayland_surface)
 
   if (toplevel->display_server.gtk_surface)
     {
-      if (gtk_shell1_get_version (display_wayland->gtk_shell) >= GTK_SURFACE1_RELEASE_SINCE_VERSION)
+      if (gtk_surface1_get_version (toplevel->display_server.gtk_surface) >= GTK_SURFACE1_RELEASE_SINCE_VERSION)
         gtk_surface1_release (toplevel->display_server.gtk_surface);
       else
         gtk_surface1_destroy (toplevel->display_server.gtk_surface);
@@ -1006,7 +1004,7 @@ static const struct gtk_surface1_listener gtk_surface_listener = {
   gtk_surface_configure_edges
 };
 
-static void
+static gboolean
 gdk_wayland_toplevel_init_gtk_surface (GdkWaylandToplevel *wayland_toplevel)
 {
   GdkWaylandSurface *wayland_surface = GDK_WAYLAND_SURFACE (wayland_toplevel);
@@ -1014,11 +1012,13 @@ gdk_wayland_toplevel_init_gtk_surface (GdkWaylandToplevel *wayland_toplevel)
     GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (wayland_toplevel)));
 
   if (wayland_toplevel->display_server.gtk_surface != NULL)
-    return;
+    return TRUE;
+
   if (!is_realized_toplevel (wayland_surface))
-    return;
+    return FALSE;
+
   if (display->gtk_shell == NULL)
-    return;
+    return FALSE;
 
   wayland_toplevel->display_server.gtk_surface =
     gtk_shell1_get_gtk_surface (display->gtk_shell,
@@ -1031,6 +1031,8 @@ gdk_wayland_toplevel_init_gtk_surface (GdkWaylandToplevel *wayland_toplevel)
   gtk_surface1_add_listener (wayland_toplevel->display_server.gtk_surface,
                              &gtk_surface_listener,
                              wayland_surface);
+
+  return TRUE;
 }
 
 static void
@@ -1092,8 +1094,7 @@ gdk_wayland_toplevel_set_startup_id (GdkWaylandToplevel *toplevel,
 static void
 maybe_set_gtk_surface_modal (GdkWaylandToplevel *wayland_toplevel)
 {
-  gdk_wayland_toplevel_init_gtk_surface (wayland_toplevel);
-  if (wayland_toplevel->display_server.gtk_surface == NULL)
+  if (!gdk_wayland_toplevel_init_gtk_surface (wayland_toplevel))
     return;
 
   if (GDK_SURFACE (wayland_toplevel)->modal_hint)
@@ -2025,13 +2026,10 @@ translate_gesture (GdkTitlebarGesture         gesture,
 static gboolean
 gdk_wayland_toplevel_supports_titlebar_gestures (GdkWaylandToplevel *wayland_toplevel)
 {
-  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (wayland_toplevel));
-  GdkWaylandDisplay *display_wayland = GDK_WAYLAND_DISPLAY (display);
-
-  if (!display_wayland->gtk_shell)
+  if (!gdk_wayland_toplevel_init_gtk_surface (wayland_toplevel))
     return FALSE;
 
-  if (gtk_shell1_get_version (display_wayland->gtk_shell) < GTK_SURFACE1_TITLEBAR_GESTURE_SINCE_VERSION)
+  if (gtk_surface1_get_version (wayland_toplevel->display_server.gtk_surface) < GTK_SURFACE1_TITLEBAR_GESTURE_SINCE_VERSION)
     return FALSE;
 
   return TRUE;
@@ -2254,7 +2252,7 @@ gdk_wayland_toplevel_focus (GdkToplevel *toplevel,
                                   startup_id,
                                   wayland_surface->display_server.wl_surface);
     }
-  else if (wayland_toplevel->display_server.gtk_surface)
+  else if (gdk_wayland_toplevel_init_gtk_surface (wayland_toplevel))
     {
       if (timestamp != GDK_CURRENT_TIME)
         gtk_surface1_present (wayland_toplevel->display_server.gtk_surface, timestamp);
@@ -2307,8 +2305,7 @@ maybe_set_gtk_surface_dbus_properties (GdkWaylandToplevel *wayland_toplevel)
       wayland_toplevel->application.unique_bus_name == NULL)
     return;
 
-  gdk_wayland_toplevel_init_gtk_surface (wayland_toplevel);
-  if (wayland_toplevel->display_server.gtk_surface == NULL)
+  if (!gdk_wayland_toplevel_init_gtk_surface (wayland_toplevel))
     return;
 
   gtk_surface1_set_dbus_properties (wayland_toplevel->display_server.gtk_surface,
