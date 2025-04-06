@@ -3351,6 +3351,10 @@ row {
   }
 }
 
+listview:not(:focus-within) > row:selected {
+  background-color: $backdrop_selected_bg_color;
+}
+
 columnview {
   // move padding to child cells
   > listview > row {
