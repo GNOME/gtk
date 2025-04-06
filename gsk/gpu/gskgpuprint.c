@@ -162,6 +162,35 @@ gsk_gpu_print_newline (GString *string)
     g_string_append_c (string, '\n');
 }
 
+static const char *
+gsk_gpu_print_get_conversion_string (GskGpuConversion conv)
+{
+  switch (conv)
+    {
+    case GSK_GPU_CONVERSION_NONE:
+      return "";
+    case GSK_GPU_CONVERSION_SRGB:
+      return "srgb";
+    case GSK_GPU_CONVERSION_NARROW:
+      return "n";
+    case GSK_GPU_CONVERSION_BT601:
+      return "bt601";
+    case GSK_GPU_CONVERSION_BT601_NARROW:
+      return "bt601n";
+    case GSK_GPU_CONVERSION_BT709:
+      return "bt709";
+    case GSK_GPU_CONVERSION_BT709_NARROW:
+      return "bt709n";
+    case GSK_GPU_CONVERSION_BT2020:
+      return "bt2020";
+    case GSK_GPU_CONVERSION_BT2020_NARROW:
+      return "bt2020n";
+    default:
+      g_assert_not_reached ();
+      return "";
+  }
+}
+
 void
 gsk_gpu_print_image (GString     *string,
                      GskGpuImage *image)
@@ -169,7 +198,7 @@ gsk_gpu_print_image (GString     *string,
   g_string_append_printf (string, "%zux%zu %s%s ",
                           gsk_gpu_image_get_width (image),
                           gsk_gpu_image_get_height (image),
-                          gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB ? "S" : "",
-                          gdk_memory_format_get_name (gsk_gpu_image_get_format (image)));
+                          gdk_memory_format_get_name (gsk_gpu_image_get_format (image)),
+                          gsk_gpu_print_get_conversion_string (gsk_gpu_image_get_conversion (image)));
 }
 

@@ -26,7 +26,8 @@ GskGpuImage *           gsk_gl_image_new_for_texture                    (GskGLDe
                                                                          GdkTexture             *owner,
                                                                          GLuint                  tex_id,
                                                                          gboolean                take_ownership,
-                                                                         GskGpuImageFlags        extra_flags);
+                                                                         GskGpuImageFlags        extra_flags,
+                                                                         GskGpuConversion        conv);
                                                                          
 
 void                    gsk_gl_image_bind_texture                       (GskGLImage             *self);

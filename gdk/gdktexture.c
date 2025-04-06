@@ -271,11 +271,10 @@ G_DEFINE_ABSTRACT_TYPE_WITH_CODE (GdkTexture, gdk_texture, G_TYPE_OBJECT,
   g_critical ("Texture of type '%s' does not implement GdkTexture::" # method, G_OBJECT_TYPE_NAME (obj))
 
 static void
-gdk_texture_default_download (GdkTexture      *texture,
-                              GdkMemoryFormat  format,
-                              GdkColorState   *color_state,
-                              guchar          *data,
-                              gsize            stride)
+gdk_texture_default_download (GdkTexture            *texture,
+                              guchar                *data,
+                              const GdkMemoryLayout *layout,
+                              GdkColorState         *color_state)
 {
   GDK_TEXTURE_WARN_NOT_IMPLEMENTED_METHOD (texture, download);
 }
@@ -831,13 +830,39 @@ gdk_texture_get_color_state (GdkTexture *self)
 }
 
 void
-gdk_texture_do_download (GdkTexture      *texture,
-                         GdkMemoryFormat  format,
-                         GdkColorState   *color_state,
-                         guchar          *data,
-                         gsize            stride)
+gdk_texture_do_download (GdkTexture            *texture,
+                         guchar                *data,
+                         const GdkMemoryLayout *layout,
+                         GdkColorState         *color_state)
 {
-  GDK_TEXTURE_GET_CLASS (texture)->download (texture, format, color_state, data, stride);
+  GDK_TEXTURE_GET_CLASS (texture)->download (texture, data, layout, color_state);
+}
+
+GBytes *
+gdk_texture_download_bytes (GdkTexture      *self,
+                            GdkMemoryLayout *out_layout)
+{
+  if (GDK_IS_MEMORY_TEXTURE (self))
+    {
+      GdkMemoryTexture *memtex = GDK_MEMORY_TEXTURE (self);
+
+      *out_layout = *gdk_memory_texture_get_layout (memtex);
+      return g_bytes_ref (gdk_memory_texture_get_bytes (memtex));
+    }
+  else
+    {
+      guchar *data;
+
+      gdk_memory_layout_init (out_layout,
+                              self->format,
+                              self->width,
+                              self->height,
+                              1);
+      data = g_malloc (out_layout->size);
+      
+      gdk_texture_do_download (self, data, out_layout, self->color_state);
+      return g_bytes_new_take (data, out_layout->size);
+    }
 }
 
 static gboolean
@@ -1018,10 +1043,14 @@ gdk_texture_download (GdkTexture *texture,
   g_return_if_fail (stride >= gdk_texture_get_width (texture) * 4);
 
   gdk_texture_do_download (texture,
-                           GDK_MEMORY_DEFAULT,
-                           GDK_COLOR_STATE_SRGB,
                            data,
-                           stride);
+                           &GDK_MEMORY_LAYOUT_SIMPLE (
+                              GDK_MEMORY_DEFAULT,
+                              texture->width,
+                              texture->height,
+                              stride
+                           ),
+                           GDK_COLOR_STATE_SRGB);
 }
 
 /**

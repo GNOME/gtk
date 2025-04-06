@@ -32,10 +32,7 @@ struct _GdkMemoryTextureBuilder
   GObject parent_instance;
 
   GBytes *bytes;
-  gsize stride;
-  int width;
-  int height;
-  GdkMemoryFormat format;
+  GdkMemoryLayout layout;
   GdkColorState *color_state;
 
   GdkTexture *update_texture;
@@ -117,15 +114,15 @@ gdk_memory_texture_builder_get_property (GObject    *object,
       break;
 
     case PROP_FORMAT:
-      g_value_set_enum (value, self->format);
+      g_value_set_enum (value, self->layout.format);
       break;
 
     case PROP_HEIGHT:
-      g_value_set_int (value, self->height);
+      g_value_set_int (value, self->layout.height);
       break;
 
     case PROP_STRIDE:
-      g_value_set_uint64 (value, self->stride);
+      g_value_set_uint64 (value, self->layout.planes[0].stride);
       break;
 
     case PROP_UPDATE_REGION:
@@ -137,7 +134,7 @@ gdk_memory_texture_builder_get_property (GObject    *object,
       break;
 
     case PROP_WIDTH:
-      g_value_set_int (value, self->width);
+      g_value_set_int (value, self->layout.width);
       break;
 
     default:
@@ -309,7 +306,7 @@ gdk_memory_texture_builder_class_init (GdkMemoryTextureBuilderClass *klass)
 static void
 gdk_memory_texture_builder_init (GdkMemoryTextureBuilder *self)
 {
-  self->format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
+  self->layout.format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED;
   self->color_state = gdk_color_state_ref (gdk_color_state_get_srgb ());
 }
 
@@ -440,7 +437,7 @@ gdk_memory_texture_builder_get_height (GdkMemoryTextureBuilder *self)
 {
   g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self), 0);
 
-  return self->height;
+  return self->layout.height;
 }
 
 /**
@@ -450,7 +447,8 @@ gdk_memory_texture_builder_get_height (GdkMemoryTextureBuilder *self)
  *
  * Sets the height of the texture.
  *
- * The height must be set before calling [method@Gdk.MemoryTextureBuilder.build].
+ * The height must be set before calling [method@Gdk.MemoryTextureBuilder.build]
+ * and conform to size requirements of the provided format.
  *
  * Since: 4.16
  */
@@ -460,10 +458,10 @@ gdk_memory_texture_builder_set_height (GdkMemoryTextureBuilder *self,
 {
   g_return_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self));
 
-  if (self->height == height)
+  if (self->layout.height == height)
     return;
 
-  self->height = height;
+  self->layout.height = height;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_HEIGHT]);
 }
@@ -484,7 +482,7 @@ gdk_memory_texture_builder_get_width (GdkMemoryTextureBuilder *self)
 {
   g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self), 0);
 
-  return self->width;
+  return self->layout.width;
 }
 
 /**
@@ -494,7 +492,8 @@ gdk_memory_texture_builder_get_width (GdkMemoryTextureBuilder *self)
  *
  * Sets the width of the texture.
  *
- * The width must be set before calling [method@Gdk.MemoryTextureBuilder.build].
+ * The width must be set before calling [method@Gdk.MemoryTextureBuilder.build]
+ * and conform to size requirements of the provided format.
  *
  * Since: 4.16
  */
@@ -504,10 +503,10 @@ gdk_memory_texture_builder_set_width (GdkMemoryTextureBuilder *self,
 {
   g_return_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self));
 
-  if (self->width == width)
+  if (self->layout.width == width)
     return;
 
-  self->width = width;
+  self->layout.width = width;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_WIDTH]);
 }
@@ -527,7 +526,7 @@ gdk_memory_texture_builder_get_stride (GdkMemoryTextureBuilder *self)
 {
   g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self), 0);
 
-  return self->stride;
+  return self->layout.planes[0].stride;
 }
 
 /**
@@ -547,12 +546,63 @@ gdk_memory_texture_builder_set_stride (GdkMemoryTextureBuilder *self,
 {
   g_return_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self));
 
-  if (self->stride == stride)
+  if (self->layout.planes[0].stride == stride)
     return;
 
-  self->stride = stride;
+  self->layout.planes[0].stride = stride;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STRIDE]);
+}
+
+gsize
+gdk_memory_texture_builder_get_stride_for_plane (GdkMemoryTextureBuilder *self,
+                                                 unsigned int             plane)
+{
+  g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self), 0);
+  g_return_val_if_fail (plane < GDK_MEMORY_MAX_PLANES, 0);
+
+  return self->layout.planes[plane].stride;
+}
+
+void
+gdk_memory_texture_builder_set_stride_for_plane (GdkMemoryTextureBuilder *self,
+                                                 unsigned int             plane,
+                                                 gsize                    stride)
+{
+  g_return_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self));
+  g_return_if_fail (plane < GDK_MEMORY_MAX_PLANES);
+
+  if (self->layout.planes[plane].stride == stride)
+    return;
+
+  self->layout.planes[plane].stride = stride;
+
+  if (plane == 0)
+    g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STRIDE]);
+}
+
+gsize
+gdk_memory_texture_builder_get_offset (GdkMemoryTextureBuilder *self,
+                                       unsigned int             plane)
+{
+  g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self), 0);
+  g_return_val_if_fail (plane < GDK_MEMORY_MAX_PLANES, 0);
+
+  return self->layout.planes[plane].offset;
+}
+
+void
+gdk_memory_texture_builder_set_offset (GdkMemoryTextureBuilder *self,
+                                       unsigned int             plane,
+                                       gsize                    offset)
+{
+  g_return_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self));
+  g_return_if_fail (plane < GDK_MEMORY_MAX_PLANES);
+
+  if (self->layout.planes[plane].offset == offset)
+    return;
+
+  self->layout.planes[plane].offset = offset;
 }
 
 /**
@@ -570,7 +620,7 @@ gdk_memory_texture_builder_get_format (GdkMemoryTextureBuilder *self)
 {
   g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self), GDK_MEMORY_R8G8B8A8_PREMULTIPLIED);
 
-  return self->format;
+  return self->layout.format;
 }
 
 /**
@@ -590,10 +640,10 @@ gdk_memory_texture_builder_set_format (GdkMemoryTextureBuilder *self,
 {
   g_return_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self));
 
-  if (self->format == format)
+  if (self->layout.format == format)
     return;
 
-  self->format = format;
+  self->layout.format = format;
 
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_FORMAT]);
 }
@@ -716,12 +766,13 @@ GdkTexture *
 gdk_memory_texture_builder_build (GdkMemoryTextureBuilder *self)
 {
   g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE_BUILDER (self), NULL);
-  g_return_val_if_fail (self->width > 0, NULL);
-  g_return_val_if_fail (self->height > 0, NULL);
   g_return_val_if_fail (self->bytes != NULL, NULL);
-  g_return_val_if_fail (self->stride >= self->width * gdk_memory_format_bytes_per_pixel (self->format), NULL);
-  /* needs to be this complex to support subtexture of the bottom right part */
-  g_return_val_if_fail (g_bytes_get_size (self->bytes) >= gdk_memory_format_min_buffer_size (self->format, self->stride, self->width, self->height), NULL);
+  self->layout.size = g_bytes_get_size (self->bytes);
+  gdk_memory_layout_return_val_if_invalid (&self->layout, NULL);
 
-  return gdk_memory_texture_new_from_builder (self);
+  return gdk_memory_texture_new_from_layout (self->bytes,
+                                             &self->layout,
+                                             self->color_state,
+                                             self->update_texture,
+                                             self->update_region);
 }

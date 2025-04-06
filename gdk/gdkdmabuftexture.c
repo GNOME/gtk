@@ -94,10 +94,9 @@ typedef struct _Download Download;
 struct _Download
 {
   GdkDmabufTexture *texture;
-  GdkMemoryFormat format;
-  GdkColorState *color_state;
   guchar *data;
-  gsize stride;
+  GdkMemoryLayout layout;
+  GdkColorState *color_state;
   volatile int spinlock;
 };
 
@@ -110,29 +109,26 @@ gdk_dmabuf_texture_invoke_callback (gpointer data)
   if (display->egl_downloader &&
       gdk_dmabuf_downloader_download (display->egl_downloader,
                                       download->texture,
-                                      download->format,
-                                      download->color_state,
                                       download->data,
-                                      download->stride))
+                                      &download->layout,
+                                      download->color_state))
     {
       /* Successfully downloaded using EGL */
     }
   else if (display->vk_downloader &&
            gdk_dmabuf_downloader_download (display->vk_downloader,
                                            download->texture,
-                                           download->format,
-                                           download->color_state,
                                            download->data,
-                                           download->stride))
+                                           &download->layout,
+                                           download->color_state))
     {
       /* Successfully downloaded using Vulkan */
     }
 #ifdef HAVE_DMABUF
   else if (gdk_dmabuf_download_mmap (GDK_TEXTURE (download->texture),
-                                     download->format,
-                                     download->color_state,
                                      download->data,
-                                     download->stride))
+                                     &download->layout,
+                                     download->color_state))
     {
       /* Successfully downloaded using mmap */
     }
@@ -152,14 +148,13 @@ gdk_dmabuf_texture_invoke_callback (gpointer data)
 }
 
 static void
-gdk_dmabuf_texture_download (GdkTexture      *texture,
-                             GdkMemoryFormat  format,
-                             GdkColorState   *color_state,
-                             guchar          *data,
-                             gsize            stride)
+gdk_dmabuf_texture_download (GdkTexture            *texture,
+                             guchar                *data,
+                             const GdkMemoryLayout *layout,
+                             GdkColorState         *color_state)
 {
   GdkDmabufTexture *self = GDK_DMABUF_TEXTURE (texture);
-  Download download = { self, format, color_state, data, stride, 0 };
+  Download download = { self, data, *layout, color_state, 0 };
 
   g_main_context_invoke (NULL, gdk_dmabuf_texture_invoke_callback, &download);
 
@@ -208,6 +203,8 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   GdkColorState *color_state;
   int width, height;
   gboolean premultiplied;
+  GdkMemoryFormat format;
+  gboolean is_yuv;
 
   display = gdk_dmabuf_texture_builder_get_display (builder);
   width = gdk_dmabuf_texture_builder_get_width (builder);
@@ -220,6 +217,29 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
                             gdk_dmabuf_texture_builder_get_dmabuf (builder),
                             error))
     return NULL;
+
+  if (gdk_memory_format_find_by_dmabuf_fourcc (dmabuf.fourcc, premultiplied, &format, &is_yuv))
+    {
+      if (!gdk_memory_format_is_block_boundary (format, width, height))
+        {
+          g_set_error (error,
+                       GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                       "Size of %dx%d is not valid for dmabuf format %.4s, must be multiple of %zux%zu",
+                       width, height,
+                       (char *) &dmabuf.fourcc,
+                       gdk_memory_format_get_block_width (format),
+                       gdk_memory_format_get_block_height (format));
+          return NULL;
+        }
+    }
+  else
+    {
+      g_set_error (error,
+                   GDK_DMABUF_ERROR, GDK_DMABUF_ERROR_UNSUPPORTED_FORMAT,
+                   "Unsupported dmabuf format %.4s",
+                   (char *) &dmabuf.fourcc);
+      return NULL;
+    }
 
   gdk_display_init_dmabuf (display);
 
@@ -235,15 +255,10 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   color_state = gdk_dmabuf_texture_builder_get_color_state (builder);
   if (color_state == NULL)
     {
-      gboolean is_yuv;
-
-      if (gdk_dmabuf_fourcc_is_yuv (dmabuf.fourcc, &is_yuv) && is_yuv)
-        {
-          g_warning_once ("FIXME: Implement the proper colorstate for YUV dmabufs");
-          color_state = gdk_color_state_get_srgb ();
-        }
+      if (is_yuv)
+        color_state = GDK_COLOR_STATE_YUV;
       else
-        color_state = gdk_color_state_get_srgb ();
+        color_state = GDK_COLOR_STATE_SRGB;
     }
 
   self = g_object_new (GDK_TYPE_DMABUF_TEXTURE,
@@ -253,16 +268,8 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
                        NULL);
 
   g_set_object (&self->display, display);
+  GDK_TEXTURE (self)->format = format;
   self->dmabuf = dmabuf;
-
-  if (!gdk_dmabuf_get_memory_format (dmabuf.fourcc, premultiplied, &(GDK_TEXTURE (self)->format)))
-    {
-      GDK_DISPLAY_DEBUG (display, DMABUF,
-                         "Falling back to generic RGBA for dmabuf format %.4s",
-                         (char *) &dmabuf.fourcc);
-      GDK_TEXTURE (self)->format = premultiplied ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED
-                                                 : GDK_MEMORY_R8G8B8A8;
-    }
 
   GDK_DISPLAY_DEBUG (display, DMABUF,
                      "Creating dmabuf texture, format %.4s:%#" G_GINT64_MODIFIER "x, %s%u planes, memory format %u",

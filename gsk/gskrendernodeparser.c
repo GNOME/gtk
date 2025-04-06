@@ -34,9 +34,14 @@
 
 #include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkcolorprivate.h"
+#include "gdk/gdkdmabufprivate.h"
+#include "gdk/gdkdmabuffourccprivate.h"
+#include "gdk/gdkdmabuftextureprivate.h"
+#include "gdk/gdkdmabuftexturebuilderprivate.h"
+#include "gdk/gdkmemoryformatprivate.h"
+#include "gdk/gdkmemorytextureprivate.h"
 #include "gdk/gdkrgbaprivate.h"
 #include "gdk/gdktextureprivate.h"
-#include "gdk/gdkmemoryformatprivate.h"
 #include <gtk/css/gtkcss.h>
 #include "gtk/css/gtkcssdataurlprivate.h"
 #include "gtk/css/gtkcssparserprivate.h"
@@ -188,6 +193,46 @@ parse_unsigned (GtkCssParser *parser,
 }
 
 static gboolean
+parse_size (GtkCssParser *parser,
+            Context      *context,
+            gpointer      out)
+{
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
+    {
+      double d;
+
+      if (!gtk_css_parser_consume_number (parser, &d))
+        return FALSE;
+
+      *(gsize *) out = d;
+      return TRUE;
+    }
+
+  gtk_css_parser_error_value (parser, "Not an allowed value here");
+  return FALSE;
+}
+
+static gboolean
+parse_boolean (GtkCssParser *parser,
+               Context      *context,
+               gpointer      boolean)
+{
+  if (gtk_css_parser_try_ident (parser, "true"))
+    {
+      *(gboolean *) boolean = TRUE;
+      return TRUE;
+    }
+  else if (gtk_css_parser_try_ident (parser, "false"))
+    {
+      *(gboolean *) boolean = FALSE;
+      return TRUE;
+    }
+
+  gtk_css_parser_error_syntax (parser, "Boolean value must be \"true\" or \"false\"");
+  return FALSE;
+}
+
+static gboolean
 parse_enum (GtkCssParser *parser,
             GType         type,
             gpointer      out_value)
@@ -309,15 +354,537 @@ consume_bytes (GtkCssParser *parser)
   return bytes;
 }
 
+static void
+clear_bytes (gpointer inout_bytes)
+{
+  g_clear_pointer ((GBytes **) inout_bytes, g_bytes_unref);
+}
+
+static gboolean
+parse_bytes (GtkCssParser *parser,
+             Context      *context,
+             gpointer      out_data)
+{
+  GBytes **out_bytes = out_data;
+  GBytes *bytes;
+
+  bytes = consume_bytes (parser);
+  if (bytes == NULL)
+    return FALSE;
+
+  *out_bytes = bytes;
+
+  return TRUE;
+}
+
+static gboolean
+parse_compressed_bytes (GtkCssParser *parser,
+                        Context      *context,
+                        gpointer      out_data)
+{
+  GZlibDecompressor *decompressor;
+  GError *error = NULL;
+  GBytes *decompressed_bytes, *data_bytes;
+
+  if (!parse_bytes (parser, context, &data_bytes))
+    return FALSE;
+
+  decompressor = g_zlib_decompressor_new (G_ZLIB_COMPRESSOR_FORMAT_GZIP);
+  decompressed_bytes = g_converter_convert_bytes (G_CONVERTER (decompressor), data_bytes, &error);
+  g_object_unref (decompressor);
+  g_bytes_unref (data_bytes);
+  if (decompressed_bytes == NULL)
+    {
+      gtk_css_parser_emit_error (parser,
+                                 gtk_css_parser_get_start_location (parser),
+                                 gtk_css_parser_get_end_location (parser),
+                                 error);
+      g_clear_error (&error);
+      return FALSE;
+    }
+  
+  *(GBytes **) out_data = decompressed_bytes;
+
+  return TRUE;
+}
+
+static gboolean
+parse_texture_data (GtkCssParser *parser,
+                    Context      *context,
+                    gpointer      out_data)
+{
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
+    {
+      char *s;
+      gsize i, j, len;
+      guchar *data;
+
+      s = gtk_css_parser_consume_string (parser);
+      if (s == NULL)
+        return FALSE;
+
+      len = strlen (s);
+
+      data = g_malloc (len);
+      j = 0;
+      for (i = 0; i < len; i++)
+        {
+          int v1, v2;
+
+          if (g_ascii_isspace (s[i]))
+            continue;
+
+          v1 = g_ascii_xdigit_value (s[i]);
+          if (v1 < 0)
+            {
+              gtk_css_parser_error_syntax (parser, "Invalid hex character at position %zu", i);
+              continue;
+            }
+          i++;
+          v2 = g_ascii_xdigit_value (s[i]);
+          if (v2 < 0)
+            {
+              gtk_css_parser_error_syntax (parser, "Invalid hex character at position %zu", i);
+              continue;
+            }
+
+          data[j++] = v1 * 16 + v2;
+        }
+
+      *(GBytes **) out_data = g_bytes_new_take (data, j);
+      return TRUE;
+    }
+
+  return parse_compressed_bytes (parser, context, out_data);
+}
+
+static gboolean
+parse_color_state (GtkCssParser *parser,
+                   Context      *context,
+                   gpointer      color_state)
+{
+  GdkColorState *cs = NULL;
+
+  if (gtk_css_parser_try_ident (parser, "srgb"))
+    cs = gdk_color_state_get_srgb ();
+  else if (gtk_css_parser_try_ident (parser, "srgb-linear"))
+    cs = gdk_color_state_get_srgb_linear ();
+  else if (gtk_css_parser_try_ident (parser, "rec2100-pq"))
+    cs = gdk_color_state_get_rec2100_pq ();
+  else if (gtk_css_parser_try_ident (parser, "rec2100-linear"))
+    cs = gdk_color_state_get_rec2100_linear ();
+  else if (gtk_css_parser_try_ident (parser, "oklab"))
+    cs = gdk_color_state_get_oklab ();
+  else if (gtk_css_parser_try_ident (parser, "oklch"))
+    cs = gdk_color_state_get_oklch ();
+  else if (gtk_css_token_is (gtk_css_parser_get_token (parser), GTK_CSS_TOKEN_STRING))
+    {
+      char *name = gtk_css_parser_consume_string (parser);
+
+      if (context->named_color_states)
+        cs = g_hash_table_lookup (context->named_color_states, name);
+
+      if (!cs)
+        {
+          gtk_css_parser_error_value (parser, "No color state named \"%s\"", name);
+          g_free (name);
+          return FALSE;
+        }
+
+      g_free (name);
+    }
+  else
+    {
+      gtk_css_parser_error_syntax (parser, "Expected a valid color state");
+      return FALSE;
+    }
+
+  *(GdkColorState **) color_state = gdk_color_state_ref (cs);
+  return TRUE;
+}
+
+static void
+clear_color_state (gpointer inout_color_state)
+{
+  GdkColorState **cs = inout_color_state;
+
+  if (*cs)
+    {
+      gdk_color_state_unref (*cs);
+      *cs = NULL;
+    }
+}
+
+static gboolean
+parse_dmabuf_fourcc (GtkCssParser *parser,
+                     Context      *context,
+                     gpointer      data)
+{
+  guint32 fourcc;
+
+  if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
+    {
+      char *fourcc_str = gtk_css_parser_consume_string (parser);
+
+      if (strlen (fourcc_str) != 4)
+        {
+          gtk_css_parser_error_value (parser, "fourccs must be 4 characters long");
+          return FALSE;
+        }
+
+      fourcc = (fourcc_str[0] <<  0) |
+               (fourcc_str[1] <<  8) |
+               (fourcc_str[2] << 16) |
+               (fourcc_str[3] << 24);
+    }
+  else if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_SIGNLESS_INTEGER))
+    {
+      double tmp;
+      if (!gtk_css_parser_consume_number (parser, &tmp))
+        return FALSE;
+
+      fourcc = tmp;
+    }
+  else
+    {
+      gtk_css_parser_error_value (parser, "fourccs must be specified as strings or integers");
+      return FALSE;
+    }
+
+  *(guint32 *) data = fourcc;
+  return TRUE;
+}
+
+static gboolean
+parse_4_unsigned (GtkCssParser *parser,
+                  Context      *context,
+                  gpointer      data)
+{
+  unsigned *u = data;
+
+  if (!parse_unsigned (parser, context, &u[0]))
+    return FALSE;
+  if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA))
+    return TRUE;
+  if (!parse_unsigned (parser, context, &u[1]))
+    return FALSE;
+  if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA))
+    return TRUE;
+  if (!parse_unsigned (parser, context, &u[2]))
+    return FALSE;
+  if (!gtk_css_parser_try_token (parser, GTK_CSS_TOKEN_COMMA))
+    return TRUE;
+  if (!parse_unsigned (parser, context, &u[3]))
+    return FALSE;
+
+  return TRUE;
+}
+
+#ifdef HAVE_DMABUF
+static void
+destroy_fd (gpointer data)
+{
+  close (GPOINTER_TO_INT (data));
+}
+#endif
+
+static GdkTexture *
+parse_dmabuf_texture (GtkCssParser *parser,
+                      Context      *context)
+{
+  GBytes *bytes = NULL;
+  GdkTexture *texture;
+  GError *error = NULL;
+  GtkCssLocation start_location;
+  guint width = 0;
+  guint height = 0;
+  GdkDmabuf dmabuf = { 0, };
+  gboolean premultiplied = FALSE;
+  GdkColorState *color_state = NULL;
+  unsigned offsets[4] = { 0, }, strides[4] = { 0, };
+  const Declaration declarations[] = {
+    { "data", parse_texture_data, clear_bytes, &bytes },
+    { "width", parse_unsigned, NULL, &width },
+    { "height", parse_unsigned , NULL, &height },
+    { "fourcc", parse_dmabuf_fourcc, NULL, &dmabuf.fourcc },
+    { "premultiplied", parse_boolean, NULL, &premultiplied },
+    { "offset", parse_4_unsigned, NULL, offsets },
+    { "stride", parse_4_unsigned, NULL, strides },
+    { "color-state", parse_color_state, clear_color_state, &color_state }
+  };
+  guint parse_result;
+#ifdef HAVE_DMABUF
+  int dmabuf_fd;
+#endif
+
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    {
+      gtk_css_parser_error_syntax (parser, "Expected '{' for \"dmabuf\"");
+      return NULL;
+    }
+
+  start_location = *gtk_css_parser_get_start_location (parser);
+  gtk_css_parser_end_block_prelude (parser);
+
+  parse_result = parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+
+  /* deduce number of planes from given amount of strides */
+  while (dmabuf.n_planes < GDK_DMABUF_MAX_PLANES && strides[dmabuf.n_planes] > 0)
+    {
+      dmabuf.planes[dmabuf.n_planes].offset = offsets[dmabuf.n_planes];
+      dmabuf.planes[dmabuf.n_planes].stride = strides[dmabuf.n_planes];
+      dmabuf.n_planes++;
+    }
+
+  if (dmabuf.fourcc == 0)
+    {
+      g_set_error (&error,
+                   GTK_CSS_PARSER_ERROR,
+                   GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                   "Cannot create a dmabuf texture without fourcc");
+    }
+  else if (dmabuf.n_planes == 0)
+    {
+      g_set_error (&error,
+                   GTK_CSS_PARSER_ERROR,
+                   GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                   "No stride specified");
+    }
+  else if (bytes == NULL && !(parse_result & (1 << 0)))
+    {
+      g_set_error (&error,
+                   GTK_CSS_PARSER_ERROR,
+                   GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                   "Cannot create a dmabuf texture without data");
+    }
+  else if (width == 0 && !(parse_result & (1 << 1)))
+    {
+      g_set_error (&error,
+                   GTK_CSS_PARSER_ERROR,
+                   GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                   "No width specified");
+    }
+  else if (height == 0 && !(parse_result & (1 << 2)))
+    {
+      g_set_error (&error,
+                   GTK_CSS_PARSER_ERROR,
+                   GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                   "No height specified");
+    }
+  if (error)
+    {
+      gtk_css_parser_emit_error (parser,
+                                 &start_location,
+                                 gtk_css_parser_get_end_location (parser),
+                                 error);
+      g_clear_pointer (&bytes, g_bytes_unref);
+      g_clear_pointer (&color_state, gdk_color_state_unref);
+      g_clear_error (&error);
+      return NULL;
+    }
+
+#ifdef HAVE_DMABUF
+  dmabuf_fd = gdk_dmabuf_new_for_bytes (bytes, &error);
+  if (dmabuf_fd >= 0)
+    {
+      GdkDmabufTextureBuilder *builder = gdk_dmabuf_texture_builder_new ();
+      gsize i;
+
+      for (i = 0; i < dmabuf.n_planes; i++)
+        dmabuf.planes[i].fd = dmabuf_fd;
+
+      gdk_dmabuf_texture_builder_set_dmabuf (builder, &dmabuf);
+      gdk_dmabuf_texture_builder_set_premultiplied (builder, premultiplied);
+      gdk_dmabuf_texture_builder_set_width (builder, width);
+      gdk_dmabuf_texture_builder_set_height (builder, height);
+      gdk_dmabuf_texture_builder_set_color_state (builder, color_state);
+      texture = gdk_dmabuf_texture_builder_build (builder, destroy_fd, GINT_TO_POINTER (dmabuf_fd), &error);
+      if (texture == NULL)
+        close (dmabuf_fd);
+
+      g_object_unref (builder);
+    }
+  else
+    texture = NULL;
+  if (error)
+    {
+      gtk_css_parser_emit_error (parser,
+                                 &start_location,
+                                 gtk_css_parser_get_end_location (parser),
+                                 error);
+      g_clear_error (&error);
+    }
+#else
+  gtk_css_parser_warn (parser,
+                       GTK_CSS_PARSER_WARNING_UNIMPLEMENTED,
+                       &start_location,
+                       gtk_css_parser_get_end_location (parser),
+                       "No dmabuf support available. Using fallback.");
+  texture = NULL;
+#endif
+
+  if (texture == NULL)
+    {
+      GdkMemoryLayout layout;
+
+      if (gdk_memory_layout_init_from_dmabuf (&layout, &dmabuf, premultiplied, width, height) && 
+          g_bytes_get_size (bytes) >= layout.size)
+        {
+          if (color_state == NULL)
+            {
+              if (gdk_memory_format_get_dmabuf_yuv_fourcc (layout.format) == dmabuf.fourcc)
+                color_state = gdk_color_state_ref (gdk_color_state_yuv ());
+              else
+                color_state = gdk_color_state_ref (gdk_color_state_get_srgb ());
+            }
+          texture = gdk_memory_texture_new_from_layout (bytes, &layout, color_state, NULL, NULL);
+        }
+      else
+        {
+          gtk_css_parser_error (parser,
+                                GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                                &start_location,
+                                gtk_css_parser_get_end_location (parser),
+                                "Cannot create fallback texture for this fourcc");
+        }
+    }
+
+  g_bytes_unref (bytes);
+  g_clear_pointer (&color_state, gdk_color_state_unref);
+
+  return texture;
+}
+
+static gboolean
+parse_memory_format (GtkCssParser *parser,
+                     Context      *context,
+                     gpointer      out)
+{
+  gsize i;
+
+  for (i = 0; i < GDK_MEMORY_N_FORMATS; i++)
+    {
+      if (gtk_css_parser_try_ident (parser, gdk_memory_format_get_name (i)))
+        {
+          *(GdkMemoryFormat *) out = i;
+          return TRUE;
+        }
+    }
+
+  return parse_enum (parser, GDK_TYPE_MEMORY_FORMAT, out);
+
+}
+
+static GdkTexture *
+parse_memory_texture (GtkCssParser *parser,
+                      Context      *context)
+{
+  GBytes *bytes = NULL;
+  GdkTexture *texture;
+  GError *error = NULL;
+  GtkCssLocation start_location;
+  GdkMemoryLayout layout = { 0, };
+  GdkColorState *color_state = NULL;
+  unsigned offsets[4] = { 0, }, strides[4] = { 0, };
+  const Declaration declarations[] = {
+    { "data", parse_texture_data, clear_bytes, &bytes },
+    { "width", parse_size, NULL, &layout.width },
+    { "height", parse_size, NULL, &layout.height },
+    { "format", parse_memory_format, NULL, &layout.format },
+    { "offset", parse_4_unsigned, NULL, offsets },
+    { "stride", parse_4_unsigned, NULL, strides },
+    { "color-state", parse_color_state, clear_color_state, &color_state }
+  };
+  guint parse_result;
+  gsize i, n_planes;
+
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    {
+      gtk_css_parser_error_syntax (parser, "Expected '{' for \"memory\"");
+      return NULL;
+    }
+
+  start_location = *gtk_css_parser_get_start_location (parser);
+  gtk_css_parser_end_block_prelude (parser);
+
+  parse_result = parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+
+  n_planes = gdk_memory_format_get_n_planes (layout.format);
+  for (i = 0; i < n_planes; i++)
+    {
+      layout.planes[i].offset = offsets[i];
+      layout.planes[i].stride = strides[i];
+    }
+
+  if (bytes == NULL)
+    {
+      if (!(parse_result & (1 << 0)))
+        gtk_css_parser_error_value (parser, "Cannot create a memory texture without data");
+    }
+  else
+    layout.size = g_bytes_get_size (bytes);
+
+  if (!gdk_memory_layout_is_valid (&layout, &error))
+    {
+      gtk_css_parser_emit_error (parser,
+                                 &start_location,
+                                 gtk_css_parser_get_end_location (parser),
+                                 error);
+      g_clear_error (&error);
+      g_clear_pointer (&bytes, g_bytes_unref);
+    }
+
+  if (color_state == NULL)
+    color_state = gdk_color_state_ref (gdk_color_state_get_srgb ());
+  
+  if (bytes)
+    {
+      texture = gdk_memory_texture_new_from_layout (bytes, &layout, color_state, NULL, NULL);
+      g_bytes_unref (bytes);
+    }
+  else
+    texture = NULL;
+
+  gdk_color_state_unref (color_state);
+
+  return texture;
+}
+
+static GdkTexture *
+parse_default_texture (GtkCssParser *parser,
+                       Context      *context)
+{
+  GdkTexture *texture;
+  GError *error = NULL;
+  GtkCssLocation start_location;
+  GBytes *bytes;
+
+  start_location = *gtk_css_parser_get_start_location (parser);
+  bytes = consume_bytes (parser);
+  if (bytes == NULL)
+    return NULL;
+
+  texture = gdk_texture_new_from_bytes (bytes, &error);
+  g_bytes_unref (bytes);
+  if (texture == NULL)
+    {
+      gtk_css_parser_emit_error (parser,
+                                 &start_location,
+                                 gtk_css_parser_get_end_location (parser),
+                                 error);
+      g_clear_error (&error);
+      return NULL;
+    }
+
+  return texture;
+}
+
 static gboolean
 parse_texture (GtkCssParser *parser,
                Context      *context,
                gpointer      out_data)
 {
   GdkTexture *texture;
-  GError *error = NULL;
-  GtkCssLocation start_location;
-  GBytes *bytes;
   char *texture_name;
 
   if (gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_STRING))
@@ -351,27 +918,16 @@ parse_texture (GtkCssParser *parser,
   else
     texture_name = NULL;
 
-  start_location = *gtk_css_parser_get_start_location (parser);
-  bytes = consume_bytes (parser);
-  if (bytes == NULL)
-    {
-      g_free (texture_name);
-      return FALSE;
-    }
+  if (gtk_css_parser_try_ident (parser, "memory"))
+    texture = parse_memory_texture (parser, context);
+  else if (gtk_css_parser_try_ident (parser, "dmabuf"))
+    texture = parse_dmabuf_texture (parser, context);
+  else
+    texture = parse_default_texture (parser, context);
 
-  texture = gdk_texture_new_from_bytes (bytes, &error);
-  g_bytes_unref (bytes);
   if (texture == NULL)
-    {
-      gtk_css_parser_emit_error (parser,
-                                 &start_location,
-                                 gtk_css_parser_get_end_location (parser),
-                                 error);
-      g_clear_error (&error);
-      g_free (texture_name);
-      return FALSE;
-    }
-
+    g_clear_pointer (&texture_name, g_free);
+    
   if (texture_name)
     {
       if (context->named_textures == NULL)
@@ -676,63 +1232,6 @@ static void
 clear_string (gpointer inout_string)
 {
   g_clear_pointer ((char **) inout_string, g_free);
-}
-
-static gboolean
-parse_color_state (GtkCssParser *parser,
-                   Context      *context,
-                   gpointer      color_state)
-{
-  GdkColorState *cs = NULL;
-
-  if (gtk_css_parser_try_ident (parser, "srgb"))
-    cs = gdk_color_state_get_srgb ();
-  else if (gtk_css_parser_try_ident (parser, "srgb-linear"))
-    cs = gdk_color_state_get_srgb_linear ();
-  else if (gtk_css_parser_try_ident (parser, "rec2100-pq"))
-    cs = gdk_color_state_get_rec2100_pq ();
-  else if (gtk_css_parser_try_ident (parser, "rec2100-linear"))
-    cs = gdk_color_state_get_rec2100_linear ();
-  else if (gtk_css_parser_try_ident (parser, "oklab"))
-    cs = gdk_color_state_get_oklab ();
-  else if (gtk_css_parser_try_ident (parser, "oklch"))
-    cs = gdk_color_state_get_oklch ();
-  else if (gtk_css_token_is (gtk_css_parser_get_token (parser), GTK_CSS_TOKEN_STRING))
-    {
-      char *name = gtk_css_parser_consume_string (parser);
-
-      if (context->named_color_states)
-        cs = g_hash_table_lookup (context->named_color_states, name);
-
-      if (!cs)
-        {
-          gtk_css_parser_error_value (parser, "No color state named \"%s\"", name);
-          g_free (name);
-          return FALSE;
-        }
-
-      g_free (name);
-    }
-  else
-    {
-      gtk_css_parser_error_syntax (parser, "Expected a valid color state");
-      return FALSE;
-    }
-
-  *(GdkColorState **) color_state = gdk_color_state_ref (cs);
-  return TRUE;
-}
-
-static void
-clear_color_state (gpointer inout_color_state)
-{
-  GdkColorState **cs = inout_color_state;
-
-  if (*cs)
-    {
-      gdk_color_state_unref (*cs);
-      *cs = NULL;
-    }
 }
 
 typedef struct {
@@ -3647,6 +4146,15 @@ append_float_param (Printer    *p,
 }
 
 static void
+append_unsigned_param (Printer    *p,
+                       const char *param_name,
+                       guint       value)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: %u;\n", param_name, value);
+}
+
+static void
 print_color_state (Printer       *p,
                    GdkColorState *color_state)
 {
@@ -3830,6 +4338,15 @@ append_transform_param (Printer      *p,
   g_string_append_c (p->str, '\n');
 }
 
+static void
+append_memory_format_param (Printer         *p,
+                            const char      *param_name,
+                            GdkMemoryFormat  format)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: %s;\n", param_name, gdk_memory_format_get_name (format));
+}
+
 static void render_node_print (Printer       *p,
                                GskRenderNode *node);
 
@@ -3985,6 +4502,164 @@ append_bytes_param (Printer    *p,
 }
 
 static void
+append_compressed_bytes_param (Printer    *p,
+                               const char *param_name,
+                               GBytes     *bytes)
+{
+  GZlibCompressor *compressor;
+  GBytes *compressed_bytes;
+
+  compressor = g_zlib_compressor_new (G_ZLIB_COMPRESSOR_FORMAT_GZIP, 9);
+  compressed_bytes = g_converter_convert_bytes (G_CONVERTER (compressor), bytes, NULL);
+  g_assert (compressed_bytes != NULL);
+
+  append_bytes_param (p, param_name, compressed_bytes, "application/gzip");
+}
+
+static void
+append_memory_texture (Printer    *p,
+                       GdkTexture *texture)
+{
+  const GdkMemoryLayout *layout;
+  gsize i;
+
+  layout = gdk_memory_texture_get_layout (GDK_MEMORY_TEXTURE (texture));
+
+  g_string_append_printf (p->str, "memory {\n");
+  p->indentation_level ++;
+
+  append_memory_format_param (p, "format", layout->format);
+  append_unsigned_param (p, "width", layout->width);
+  append_unsigned_param (p, "height", layout->height);
+
+  if (gdk_memory_format_get_n_planes (layout->format) > 0 ||
+      layout->planes[0].offset != 0)
+    {
+      _indent (p);
+      g_string_append (p->str, "offset: ");
+      for (i = 0; i < gdk_memory_format_get_n_planes (layout->format); i++)
+        {
+          if (i > 0)
+            g_string_append_printf (p->str, ", ");
+          g_string_append_printf (p->str, "%zu", layout->planes[i].offset);
+        }
+      g_string_append (p->str, ";\n");
+    }
+  _indent (p);
+  g_string_append (p->str, "stride: ");
+  for (i = 0; i < gdk_memory_format_get_n_planes (layout->format); i++)
+    {
+      if (i > 0)
+        g_string_append_printf (p->str, ", ");
+      g_string_append_printf (p->str, "%zu", layout->planes[i].stride);
+    }
+  g_string_append (p->str, ";\n");
+
+  append_color_state_param (p, "color-state", gdk_texture_get_color_state (texture), GDK_COLOR_STATE_SRGB);
+  append_compressed_bytes_param (p, "data", gdk_memory_texture_get_bytes (GDK_MEMORY_TEXTURE (texture)));
+
+  p->indentation_level --;
+  _indent (p);
+  g_string_append_printf (p->str, "}\n");
+}
+
+static void
+append_dmabuf_texture (Printer    *p,
+                       GdkTexture *texture)
+{
+  GdkMemoryLayout layout;
+  GBytes *bytes;
+  gsize i, n_planes;
+  char fourcc_str[5];
+  GdkColorState *default_color_state;
+  const GdkDmabuf *dmabuf;
+
+  dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+
+  gdk_memory_layout_init (&layout,
+                          gdk_texture_get_format (texture),
+                          gdk_texture_get_width (texture),
+                          gdk_texture_get_height (texture),
+                          1);
+
+  bytes = gdk_texture_download_bytes (texture, &layout);
+
+  n_planes = gdk_memory_format_get_n_planes (layout.format);
+  default_color_state = GDK_COLOR_STATE_SRGB;
+
+  g_string_append_printf (p->str, "dmabuf {\n");
+  p->indentation_level ++;
+
+  if (dmabuf->fourcc == gdk_memory_format_get_dmabuf_rgb_fourcc (layout.format))
+    default_color_state = GDK_COLOR_STATE_SRGB;
+  else if (dmabuf->fourcc == gdk_memory_format_get_dmabuf_yuv_fourcc (layout.format))
+    default_color_state = GDK_COLOR_STATE_YUV;
+  else
+    {
+      g_assert_not_reached ();
+    }
+
+  fourcc_str[0] = dmabuf->fourcc >> 0;
+  fourcc_str[1] = dmabuf->fourcc >> 8;
+  fourcc_str[2] = dmabuf->fourcc >> 16;
+  fourcc_str[3] = dmabuf->fourcc >> 24;
+  fourcc_str[4] = 0;
+  if (g_ascii_isalnum (fourcc_str[0]) &&
+      g_ascii_isalnum (fourcc_str[1]) &&
+      g_ascii_isalnum (fourcc_str[2]) &&
+      g_ascii_isalnum (fourcc_str[3]))
+    {
+      append_string_param (p, "fourcc", fourcc_str);
+    }
+  else
+    {
+      append_unsigned_param (p, "fourcc", dmabuf->fourcc);
+    }
+  if (dmabuf->modifier != DRM_FORMAT_MOD_LINEAR)
+    {
+      _indent (p);
+      g_string_append_printf (p->str, "/* modifier: %llu (0x%0llX) */\n",
+                              (unsigned long long) dmabuf->modifier, (unsigned long long) dmabuf->modifier);
+    }
+  append_unsigned_param (p, "width", layout.width);
+  append_unsigned_param (p, "height", layout.height);
+
+  if (n_planes > 0 || layout.planes[0].offset != 0)
+    {
+      _indent (p);
+      g_string_append (p->str, "offset: ");
+      for (i = 0; i < n_planes; i++)
+        {
+          if (i > 0)
+            g_string_append_printf (p->str, ", ");
+          g_string_append_printf (p->str, "%zu", layout.planes[i].offset);
+        }
+      g_string_append (p->str, ";\n");
+    }
+  for (i = 0; i < n_planes; i++)
+    {
+      _indent (p);
+      g_string_append (p->str, "stride: ");
+      for (i = 0; i < n_planes; i++)
+        {
+          if (i > 0)
+            g_string_append_printf (p->str, ", ");
+          g_string_append_printf (p->str, "%zu", layout.planes[i].stride);
+        }
+      g_string_append (p->str, ";\n");
+    }
+
+  append_color_state_param (p, "color-state", gdk_texture_get_color_state (texture), default_color_state);
+  append_compressed_bytes_param (p, "data", bytes);
+
+  p->indentation_level --;
+  _indent (p);
+  g_string_append_printf (p->str, "}\n");
+
+  g_bytes_unref (bytes);
+}
+
+static void
 append_texture_param (Printer    *p,
                       const char *param_name,
                       GdkTexture *texture)
@@ -4017,29 +4692,40 @@ append_texture_param (Printer    *p,
       g_hash_table_insert (p->named_textures, texture, new_name);
     }
 
-  switch (gdk_texture_get_depth (texture))
+  if (GDK_IS_MEMORY_TEXTURE (texture))
     {
-    case GDK_MEMORY_U8:
-    case GDK_MEMORY_U8_SRGB:
-    case GDK_MEMORY_U16:
-      bytes = gdk_texture_save_to_png_bytes (texture);
-      append_bytes_url (p, bytes, "image/png");
-      g_bytes_unref (bytes);
-      g_string_append (p->str, ";\n");
-      break;
+      append_memory_texture (p, texture);
+    }
+  else if (GDK_IS_DMABUF_TEXTURE (texture))
+    {
+      append_dmabuf_texture (p, texture);
+    }
+  else
+    {
+      switch (gdk_texture_get_depth (texture))
+        {
+        case GDK_MEMORY_U8:
+        case GDK_MEMORY_U8_SRGB:
+        case GDK_MEMORY_U16:
+          bytes = gdk_texture_save_to_png_bytes (texture);
+          append_bytes_url (p, bytes, "image/png");
+          g_bytes_unref (bytes);
+          g_string_append (p->str, ";\n");
+          break;
 
-    case GDK_MEMORY_FLOAT16:
-    case GDK_MEMORY_FLOAT32:
-      bytes = gdk_texture_save_to_tiff_bytes (texture);
-      append_bytes_url (p, bytes, "image/tiff");
-      g_bytes_unref (bytes);
-      g_string_append (p->str, ";\n");
-      break;
+        case GDK_MEMORY_FLOAT16:
+        case GDK_MEMORY_FLOAT32:
+          bytes = gdk_texture_save_to_tiff_bytes (texture);
+          append_bytes_url (p, bytes, "image/tiff");
+          g_bytes_unref (bytes);
+          g_string_append (p->str, ";\n");
+          break;
 
-    case GDK_MEMORY_NONE:
-    case GDK_N_DEPTHS:
-    default:
-      g_assert_not_reached ();
+        case GDK_MEMORY_NONE:
+        case GDK_N_DEPTHS:
+        default:
+          g_assert_not_reached ();
+        }
     }
 }
 

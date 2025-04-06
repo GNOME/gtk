@@ -3,6 +3,7 @@
 #include "gskvulkanframeprivate.h"
 
 #include "gskgpuopprivate.h"
+#include "gskgpuutilsprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkandeviceprivate.h"
 #include "gskvulkanimageprivate.h"
@@ -188,7 +189,8 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
                                                        gdk_texture_get_width (texture),
                                                        gdk_texture_get_height (texture),
                                                        &dmabuf,
-                                                       gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
+                                                       gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED,
+                                                       GSK_GPU_CONVERSION_NONE);
 
               /* Vulkan import dups the fds, so we can close these */
               gdk_dmabuf_close_fds (&dmabuf);
@@ -210,7 +212,8 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
                                                gdk_texture_get_width (texture),
                                                gdk_texture_get_height (texture),
                                                gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
-                                               gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED);
+                                               gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED,
+                                               gsk_gpu_color_state_get_conversion (gdk_texture_get_color_state (texture)));
       if (image)
         {
           gsk_gpu_image_toggle_ref_texture (image, texture);

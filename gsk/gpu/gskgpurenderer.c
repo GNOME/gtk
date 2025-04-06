@@ -13,10 +13,10 @@
 #include "gdk/gdkdebugprivate.h"
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
+#include "gdk/gdkmemorytextureprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
 #include "gdk/gdkprofilerprivate.h"
 #include "gdk/gdktextureprivate.h"
-#include "gdk/gdktexturedownloaderprivate.h"
 #include "gdk/gdkdrawcontextprivate.h"
 #include "gdk/gdkcolorstateprivate.h"
 
@@ -129,12 +129,11 @@ gsk_gpu_renderer_dmabuf_downloader_close (GdkDmabufDownloader *downloader)
 }
 
 static gboolean
-gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
-                                             GdkDmabufTexture    *texture,
-                                             GdkMemoryFormat      format,
-                                             GdkColorState       *color_state,
-                                             guchar              *data,
-                                             gsize                stride)
+gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader   *downloader,
+                                             GdkDmabufTexture      *texture,
+                                             guchar                *data,
+                                             const GdkMemoryLayout *layout,
+                                             GdkColorState         *color_state)
 {
   GskGpuRenderer *self = GSK_GPU_RENDERER (downloader);
   GskGpuFrame *frame;
@@ -150,10 +149,9 @@ gsk_gpu_renderer_dmabuf_downloader_download (GdkDmabufDownloader *downloader,
   if (gsk_gpu_frame_download_texture (frame,
                                       g_get_monotonic_time (),
                                       GDK_TEXTURE (texture),
-                                      format,
-                                      color_state,
                                       data,
-                                      stride))
+                                      layout,
+                                      color_state))
     {
       retval = TRUE;
 
@@ -239,16 +237,15 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
   GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
   GskGpuImage *image;
   gsize width, height, max_size, image_width, image_height;
-  gsize x, y, size, bpp, stride;
-  GdkMemoryFormat format;
+  gsize x, y;
   GdkMemoryDepth depth;
   GdkColorState *color_state;
   GBytes *bytes;
   guchar *data;
   GdkTexture *texture;
-  GdkTextureDownloader downloader;
   cairo_region_t *clip_region;
   GskGpuFrame *frame;
+  GdkMemoryLayout layout;
 
   max_size = gsk_gpu_device_get_max_image_size (priv->device);
   depth = gsk_render_node_get_preferred_depth (root);
@@ -262,35 +259,50 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
     }
   while (image == NULL);
 
-  format = gsk_gpu_image_get_format (image);
-  bpp = gdk_memory_format_bytes_per_pixel (format);
-  image_width = gsk_gpu_image_get_width (image);
-  image_height = gsk_gpu_image_get_height (image);
   width = rounded_viewport->size.width;
   height = rounded_viewport->size.height;
-  stride = width * bpp;
-  size = stride * height;
-  data = g_malloc_n (stride, height);
+
+  if (!gdk_memory_layout_try_init (&layout, 
+                                   gsk_gpu_image_get_format (image),
+                                   width,
+                                   height,
+                                   1) ||
+      !(data = g_malloc (layout.size)))
+    {
+      g_critical ("Image size %zux%zu too large", width, height);
+      return NULL;
+    }
+
+  image_width = gsk_gpu_image_get_width (image);
+  image_height = gsk_gpu_image_get_height (image);
+
+  if (gsk_gpu_image_get_conversion (image) & GSK_GPU_CONVERSION_SRGB)
+    color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+  else
+    color_state = GDK_COLOR_STATE_SRGB;
 
   for (y = 0; y < height; y += image_height)
     {
       for (x = 0; x < width; x += image_width)
         {
           gsize tile_width, tile_height;
+          GdkMemoryLayout sub;
 
           tile_width = MIN (image_width, width - x);
           tile_height = MIN (image_height, height - y);
           texture = NULL;
 
           if (image == NULL)
-            image = gsk_gpu_device_create_download_image (priv->device,
-                                                          depth,
-                                                          tile_width, tile_height);
+            {
+              image = gsk_gpu_device_create_download_image (priv->device,
+                                                            depth,
+                                                            tile_width, tile_height);
 
-          if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
-            color_state = GDK_COLOR_STATE_SRGB_LINEAR;
-          else
-            color_state = GDK_COLOR_STATE_SRGB;
+              if (gsk_gpu_image_get_conversion (image) & GSK_GPU_CONVERSION_SRGB)
+                color_state = GDK_COLOR_STATE_SRGB_LINEAR;
+              else
+                color_state = GDK_COLOR_STATE_SRGB;
+            }
 
           clip_region = cairo_region_create_rectangle (&(cairo_rectangle_int_t) {
                                                            0, 0,
@@ -311,13 +323,16 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
           gsk_gpu_frame_wait (frame);
 
           g_assert (texture);
-          gdk_texture_downloader_init (&downloader, texture);
-          gdk_texture_downloader_set_format (&downloader, format);
-          gdk_texture_downloader_download_into (&downloader,
-                                                data + stride * y + x * bpp,
-                                                stride);
+          gdk_memory_layout_init_sublayout (&sub,
+                                            &layout,
+                                            &(cairo_rectangle_int_t) {
+                                                x,
+                                                y,
+                                                tile_width,
+                                                tile_height
+                                            });
+          gdk_texture_do_download (texture, data, &sub, color_state);
 
-          gdk_texture_downloader_finish (&downloader);
           g_object_unref (texture);
           g_clear_object (&image);
 
@@ -327,8 +342,8 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
         }
     }
 
-  bytes = g_bytes_new_take (data, size);
-  texture = gdk_memory_texture_new (width, height, GDK_MEMORY_DEFAULT, bytes, stride);
+  bytes = g_bytes_new_take (data, layout.size);
+  texture = gdk_memory_texture_new_from_layout (bytes, &layout, color_state, NULL, NULL);
   g_bytes_unref (bytes);
   return texture;
 }
@@ -363,7 +378,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
   if (image == NULL)
     return gsk_gpu_renderer_fallback_render_texture (self, root, &rounded_viewport);
 
-  if (gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_SRGB)
+  if (gsk_gpu_image_get_conversion (image) == GSK_GPU_CONVERSION_SRGB)
     color_state = GDK_COLOR_STATE_SRGB_LINEAR;
   else
     color_state = GDK_COLOR_STATE_SRGB;

@@ -7,6 +7,7 @@ typedef struct _GskGpuImagePrivate GskGpuImagePrivate;
 struct _GskGpuImagePrivate
 {
   GskGpuImageFlags flags;
+  GskGpuConversion conversion;
   GdkMemoryFormat format;
   gsize width;
   gsize height;
@@ -75,6 +76,7 @@ gsk_gpu_image_init (GskGpuImage *self)
 void
 gsk_gpu_image_setup (GskGpuImage      *self,
                      GskGpuImageFlags  flags,
+                     GskGpuConversion  conversion,
                      GdkMemoryFormat   format,
                      gsize             width,
                      gsize             height)
@@ -83,6 +85,7 @@ gsk_gpu_image_setup (GskGpuImage      *self,
 
   priv->flags = flags;
   priv->format = format;
+  priv->conversion = conversion;
   priv->width = width;
   priv->height = height;
 }
@@ -145,6 +148,23 @@ gsk_gpu_image_get_flags (GskGpuImage *self)
   GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
 
   return priv->flags;
+}
+
+/*<private>
+ * gsk_gpu_image_get_conversion:
+ * @self: the image
+ *
+ * Returns the conversion applied by the image between the actual raw
+ * image data and the way it's read in shaders/framebuffers.
+ *
+ * Returns: the conversion
+ **/
+GskGpuConversion
+gsk_gpu_image_get_conversion (GskGpuImage *self)
+{
+  GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
+
+  return priv->conversion;
 }
 
 void

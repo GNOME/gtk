@@ -19,12 +19,13 @@
 
 #include "gdktiffprivate.h"
 
-#include <glib/gi18n-lib.h>
+#include "gdkcolorstate.h"
 #include "gdkmemoryformatprivate.h"
-#include "gdkmemorytexture.h"
+#include "gdkmemorytextureprivate.h"
 #include "gdkprofilerprivate.h"
 #include "gdktexturedownloaderprivate.h"
 
+#include <glib/gi18n-lib.h>
 #include <tiffio.h>
 
 /* Our main interest in tiff as an image format is that it is
@@ -266,6 +267,29 @@ static const FormatData format_data[] = {
   [GDK_MEMORY_A16]                              = { GDK_MEMORY_G16A16,                           16, 2, SAMPLEFORMAT_UINT,   EXTRASAMPLE_UNASSALPHA, PHOTOMETRIC_MINISBLACK },
   [GDK_MEMORY_A16_FLOAT]                        = { GDK_MEMORY_R16G16B16A16_FLOAT,               16, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_ASSOCALPHA, PHOTOMETRIC_RGB },
   [GDK_MEMORY_A32_FLOAT]                        = { GDK_MEMORY_R32G32B32A32_FLOAT,               32, 4, SAMPLEFORMAT_IEEEFP, EXTRASAMPLE_ASSOCALPHA, PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_B8R8_420]                      = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_R8B8_420]                      = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_B8R8_422]                      = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_R8B8_422]                      = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_B8R8_444]                      = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_R8B8_444]                      = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G10X6_B10X6R10X6_420]             = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G12X4_B12X4R12X4_420]             = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G16_B16R16_420]                   = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_B8_R8_410]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_R8_B8_410]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_B8_R8_411]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_R8_B8_411]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_B8_R8_420]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_R8_B8_420]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_B8_R8_422]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_R8_B8_422]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_B8_R8_444]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8_R8_B8_444]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8B8G8R8_422]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G8R8G8B8_422]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_R8G8B8G8_422]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_B8G8R8G8_422]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
 };
 
 /* if this fails, somebody forgot to add formats above */
@@ -386,9 +410,8 @@ gdk_load_tiff (GBytes  *input_bytes,
   guint32 width, height;
   gint16 alpha_samples;
   GdkMemoryFormat format;
+  GdkMemoryLayout layout;
   guchar *data, *line;
-  gsize stride;
-  int bpp;
   GBytes *bytes;
   GdkTexture *texture;
   G_GNUC_UNUSED gint64 before = GDK_PROFILER_CURRENT_TIME;
@@ -460,12 +483,8 @@ gdk_load_tiff (GBytes  *input_bytes,
       return texture;
     }
 
-  stride = width * gdk_memory_format_bytes_per_pixel (format);
-
-  g_assert (TIFFScanlineSize (tif) == stride);
-
-  data = g_try_malloc_n (height, stride);
-  if (!data)
+  if (!gdk_memory_layout_try_init (&layout, format, width, height, 1) ||
+      !(data = g_try_malloc (layout.size)))
     {
       g_set_error (error,
                    GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_TOO_LARGE,
@@ -474,7 +493,9 @@ gdk_load_tiff (GBytes  *input_bytes,
       return NULL;
     }
 
-  line = data;
+  g_assert (TIFFScanlineSize (tif) == layout.planes[0].stride);
+
+  line = data + layout.planes[0].offset;
   for (int y = 0; y < height; y++)
     {
       if (TIFFReadScanline (tif, line, y, 0) == -1)
@@ -487,15 +508,14 @@ gdk_load_tiff (GBytes  *input_bytes,
           return NULL;
         }
 
-      line += stride;
+      line += layout.planes[0].stride;
     }
 
-  bpp = gdk_memory_format_bytes_per_pixel (format);
-  bytes = g_bytes_new_take (data, width * height * bpp);
-
-  texture = gdk_memory_texture_new (width, height,
-                                    format,
-                                    bytes, width * bpp);
+  bytes = g_bytes_new_take (data, layout.size);
+  texture = gdk_memory_texture_new_from_layout (bytes,
+                                                &layout,
+                                                gdk_color_state_get_srgb (),
+                                                NULL, NULL);
   g_bytes_unref (bytes);
 
   TIFFClose (tif);

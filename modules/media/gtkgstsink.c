@@ -68,7 +68,14 @@ enum {
 GST_DEBUG_CATEGORY (gtk_debug_gst_sink);
 #define GST_CAT_DEFAULT gtk_debug_gst_sink
 
-#define FORMATS "{ BGRA, ARGB, RGBA, ABGR, RGB, BGR }"
+#if G_BYTE_ORDER == G_LITTLE_ENDIAN
+#define ENDIAN_FORMATS "P010_10LE, P012_LE, P016_LE"
+#elif G_BYTE_ORDER == G_BIG_ENDIAN
+#define ENDIAN_FORMATS "P010_10BE, P012_BE, P016_BE"
+#else
+#define ENDIAN_FORMATS ""
+#endif
+#define FORMATS "{ BGRA, ARGB, RGBA, ABGR, RGB, BGR, NV12, NV21, NV16, NV61, NV24, " ENDIAN_FORMATS ", YUV9, YVU9, Y41B, I420, YV12, Y42B, Y444, YUY2, UYVY, YVYU, VYUY }"
 
 #define MEMORY_TEXTURE_CAPS GST_VIDEO_CAPS_MAKE (FORMATS)
 
@@ -183,17 +190,13 @@ gtk_gst_color_state_from_colorimetry (GtkGstSink                *self,
   else
     gdk_cicp_params_set_transfer_function (params, gst_video_transfer_function_to_iso (colorimetry->transfer));
 
-#if 0
   if (colorimetry->matrix == GST_VIDEO_COLOR_MATRIX_UNKNOWN)
     gdk_cicp_params_set_matrix_coefficients (params, 6);
   else
     gdk_cicp_params_set_matrix_coefficients (params, gst_video_color_matrix_to_iso (colorimetry->matrix));
 
   gdk_cicp_params_set_range (params, colorimetry->range == GST_VIDEO_COLOR_RANGE_0_255 ? GDK_CICP_RANGE_FULL : GDK_CICP_RANGE_NARROW);
-#else
-  gdk_cicp_params_set_matrix_coefficients (params, 0);
-  gdk_cicp_params_set_range (params, GDK_CICP_RANGE_FULL);
-#endif
+
   color_state = gdk_cicp_params_build_color_state (params, &error);
   g_object_unref (params);
 
@@ -416,6 +419,47 @@ gtk_gst_memory_format_from_video_info (GstVideoInfo *info)
       return GDK_MEMORY_R8G8B8;
     case GST_VIDEO_FORMAT_BGR:
       return GDK_MEMORY_B8G8R8;
+    case GST_VIDEO_FORMAT_NV12:
+      return GDK_MEMORY_G8_B8R8_420;
+    case GST_VIDEO_FORMAT_NV21:
+      return GDK_MEMORY_G8_R8B8_420;
+    case GST_VIDEO_FORMAT_NV16:
+      return GDK_MEMORY_G8_B8R8_422;
+    case GST_VIDEO_FORMAT_NV61:
+      return GDK_MEMORY_G8_R8B8_422;
+    case GST_VIDEO_FORMAT_NV24:
+      return GDK_MEMORY_G8_B8R8_444;
+    case GST_VIDEO_FORMAT_P010_10LE:
+    case GST_VIDEO_FORMAT_P010_10BE:
+      return GDK_MEMORY_G10X6_B10X6R10X6_420;
+    case GST_VIDEO_FORMAT_P012_LE:
+    case GST_VIDEO_FORMAT_P012_BE:
+      return GDK_MEMORY_G12X4_B12X4R12X4_420;
+    case GST_VIDEO_FORMAT_P016_LE:
+    case GST_VIDEO_FORMAT_P016_BE:
+      return GDK_MEMORY_G16_B16R16_420;
+    case GST_VIDEO_FORMAT_YUV9:
+      return GDK_MEMORY_G8_B8_R8_410;
+    case GST_VIDEO_FORMAT_YVU9:
+      return GDK_MEMORY_G8_R8_B8_410;
+    case GST_VIDEO_FORMAT_Y41B:
+      return GDK_MEMORY_G8_B8_R8_411;
+    case GST_VIDEO_FORMAT_I420:
+      return GDK_MEMORY_G8_B8_R8_420;
+    case GST_VIDEO_FORMAT_YV12:
+      return GDK_MEMORY_G8_R8_B8_420;
+    case GST_VIDEO_FORMAT_Y42B:
+      return GDK_MEMORY_G8_B8_R8_422;
+    case GST_VIDEO_FORMAT_Y444:
+      return GDK_MEMORY_G8_B8_R8_444;
+    case GST_VIDEO_FORMAT_YUY2:
+      return GDK_MEMORY_G8B8G8R8_422;
+    case GST_VIDEO_FORMAT_YVYU:
+      return GDK_MEMORY_G8R8G8B8_422;
+    case GST_VIDEO_FORMAT_UYVY:
+      return GDK_MEMORY_B8G8R8G8_422;
+    case GST_VIDEO_FORMAT_VYUY:
+      return GDK_MEMORY_R8G8B8G8_422;
     default:
       if (GST_VIDEO_INFO_HAS_ALPHA (info))
         return IS_PREMULTIPLIED (info) ? GDK_MEMORY_R8G8B8A8_PREMULTIPLIED : GDK_MEMORY_R8G8B8A8;
@@ -546,6 +590,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
     {
       GdkMemoryTextureBuilder *builder;
       GBytes *bytes;
+      gsize i;
 
       bytes = g_bytes_new_with_free_func (frame->data[0],
                                           frame->info.size,
@@ -558,7 +603,11 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       gdk_memory_texture_builder_set_height (builder, frame->info.height);
       gdk_memory_texture_builder_set_color_state (builder, self->color_state);
       gdk_memory_texture_builder_set_bytes (builder, bytes);
-      gdk_memory_texture_builder_set_stride (builder, frame->info.stride[0]);
+      for (i = 0; i < frame->info.finfo->n_planes; i++)
+        {
+          gdk_memory_texture_builder_set_offset (builder, i, frame->info.offset[i]);
+          gdk_memory_texture_builder_set_stride_for_plane (builder, i, frame->info.stride[i]);
+        }
 
       texture = gdk_memory_texture_builder_build (builder);
       g_object_unref (builder);

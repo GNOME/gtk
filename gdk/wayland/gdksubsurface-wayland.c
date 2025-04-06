@@ -355,6 +355,23 @@ scaled_rect_is_integral (const graphene_rect_t *rect,
          device_int.height == device_rect->size.height;
 }
 
+static inline gboolean
+texture_has_default_color_state (GdkTexture *texture)
+{
+  GdkMemoryFormat format = gdk_texture_get_format (texture);
+  GdkColorState *color_state = gdk_texture_get_color_state (texture);
+
+  if (GDK_IS_DMABUF_TEXTURE (texture))
+    {
+      const GdkDmabuf *dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+
+      if (dmabuf->fourcc == gdk_memory_format_get_dmabuf_yuv_fourcc (format))
+        return gdk_color_state_equal (color_state, gdk_color_state_yuv ());
+    }
+  
+  return gdk_color_state_equal (color_state, gdk_color_state_get_srgb ());
+}
+
 static gboolean
 gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                GdkTexture            *texture,
@@ -517,6 +534,13 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "[%p] 🗙 Texture colorstate %s not supported",
+                         self,
+                         gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
+    }
+  else if (!self->color && !texture_has_default_color_state (texture))
+    {
+      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                         "[%p] 🗙 Texture colorstate %s is not default and color manager not supported",
                          self,
                          gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
     }

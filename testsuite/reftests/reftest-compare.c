@@ -45,6 +45,26 @@ memory_format_is_high_depth (GdkMemoryFormat format)
     case GDK_MEMORY_G8A8:
     case GDK_MEMORY_G8A8_PREMULTIPLIED:
     case GDK_MEMORY_A8:
+    case GDK_MEMORY_G8_B8R8_420:
+    case GDK_MEMORY_G8_R8B8_420:
+    case GDK_MEMORY_G8_B8R8_422:
+    case GDK_MEMORY_G8_R8B8_422:
+    case GDK_MEMORY_G8_B8R8_444:
+    case GDK_MEMORY_G8_R8B8_444:
+    case GDK_MEMORY_G8_B8_R8_410:
+    case GDK_MEMORY_G8_R8_B8_410:
+    case GDK_MEMORY_G8_B8_R8_411:
+    case GDK_MEMORY_G8_R8_B8_411:
+    case GDK_MEMORY_G8_B8_R8_420:
+    case GDK_MEMORY_G8_R8_B8_420:
+    case GDK_MEMORY_G8_B8_R8_422:
+    case GDK_MEMORY_G8_R8_B8_422:
+    case GDK_MEMORY_G8_B8_R8_444:
+    case GDK_MEMORY_G8_R8_B8_444:
+    case GDK_MEMORY_G8B8G8R8_422:
+    case GDK_MEMORY_G8R8G8B8_422:
+    case GDK_MEMORY_R8G8B8G8_422:
+    case GDK_MEMORY_B8G8R8G8_422:
       return FALSE;
 
     case GDK_MEMORY_R16G16B16:
@@ -62,6 +82,9 @@ memory_format_is_high_depth (GdkMemoryFormat format)
     case GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED:
     case GDK_MEMORY_R32G32B32A32_FLOAT:
     case GDK_MEMORY_A32_FLOAT:
+    case GDK_MEMORY_G10X6_B10X6R10X6_420:
+    case GDK_MEMORY_G12X4_B12X4R12X4_420:
+    case GDK_MEMORY_G16_B16R16_420:
       return TRUE;
 
     case GDK_MEMORY_N_FORMATS:

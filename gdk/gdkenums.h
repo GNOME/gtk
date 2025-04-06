@@ -505,6 +505,410 @@ typedef enum
  *
  * Since: 4.12
  */
+/**
+ * GDK_MEMORY_G8_B8R8_420:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cb followed by Cr.
+ * Subsampled in both the X and Y direction.
+ *
+ * Commonly known by the fourcc "NV12".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_R8B8_420:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cr followed by Cb.
+ * Subsampled in both the X and Y direction.
+ *
+ * Commonly known by the fourcc "NV21".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_B8R8_422:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cb followed by Cr.
+ * Subsampled in the X direction.
+ *
+ * Commonly known by the fourcc "NV16".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_R8B8_422:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cr followed by Cb.
+ * Subsampled in the X direction.
+ *
+ * Commonly known by the fourcc "NV61".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_B8R8_444:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cb followed by Cr.
+ * This format is not subsampled.
+ *
+ * Commonly known by the fourcc "NV24".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_R8B8_444:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cr followed by Cb.
+ * This format is not subsampled.
+ *
+ * Commonly known by the fourcc "NV42".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G10X6_B10X6R10X6_420:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * Each channel is a 16 bit integer, but only the highest 10 bits are used.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cr followed by Cb.
+ * This format is not subsampled.
+ *
+ * Commonly known by the fourcc "P010".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G12X4_B12X4R12X4_420:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * Each channel is a 16 bit integer, but only the highest 10 bits are used.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cr followed by Cb.
+ * This format is not subsampled.
+ *
+ * Commonly known by the fourcc "P012".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G16_B16R16_420:
+ *
+ * Multiplane format with 2 planes.
+ *
+ * Each channel is a 16 bit integer.
+ *
+ * The first plane contains the first channel, usually containing
+ * luma values.
+ * The second plane with interleaved chroma values, Cr followed by Cb.
+ * This format is not subsampled.
+ *
+ * Commonly known by the fourcc "P016".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_B8_R8_410:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 8 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel.
+ * Subsampled in both the X and Y direction with 4:1 ratio. It is
+ * mapped into the 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel.
+ * Subsampled in both the X and Y direction with 4:1 ratio. It is
+ * mapped into the 1st channel.
+ *
+ * Commonly known by the fourcc "YUV410".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_R8_B8_410:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 8 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the second chroma chanel.
+ * Subsampled in both the X and Y direction with 4:1 ratio. It is
+ * mapped into the 1st channel.
+ *
+ * The third plane usually contains the first chroma channel.
+ * Subsampled in both the X and Y direction with 4:1 ratio. It is
+ * mapped into the 3rd channel.
+ *
+ * Commonly known by the fourcc "YVU410".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_B8_R8_411:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 8 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel.
+ * Subsampled in the X direction with 4:1 ratio. It is
+ * mapped into the 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel.
+ * Subsampled in the X direction with 4:1 ratio. It is
+ * mapped into the 1st channel.
+ *
+ * Commonly known by the fourcc "YUV411".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_R8_B8_411:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 8 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the second chroma chanel.
+ * Subsampled in the X direction with 4:1 ratio. It is
+ * mapped into the 1st channel.
+ *
+ * The third plane usually contains the first chroma channel.
+ * Subsampled in the X direction with 4:1 ratio. It is
+ * mapped into the 3rd channel.
+ *
+ * Commonly known by the fourcc "YVU411".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_B8_R8_420:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 8 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel.
+ * Subsampled in both the X and Y direction. It is mapped into the
+ * 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel.
+ * Subsampled in both the X and Y direction. It is mapped into the
+ * 1st channel.
+ *
+ * Commonly known by the fourcc "YUV420".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_R8_B8_420:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 8 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the second chroma chanel.
+ * Subsampled in both the X and Y direction. It is mapped into the
+ * 1st channel.
+ *
+ * The third plane usually contains the first chroma channel.
+ * Subsampled in both the X and Y direction. It is mapped into the
+ * 3rd channel.
+ *
+ * Commonly known by the fourcc "YVU420".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_B8_R8_422:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 8 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel.
+ * Subsampled in the X direction. It is mapped into the 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel.
+ * Subsampled in the X direction. It is mapped into the 1st channel.
+ *
+ * Commonly known by the fourcc "YUV422".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_R8_B8_422:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 8 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the second chroma chanel.
+ * Subsampled in the X direction. It is mapped into the 1st channel.
+ *
+ * The third plane usually contains the first chroma channel.
+ * Subsampled in the X direction. It is mapped into the 3rd channel.
+ *
+ * Commonly known by the fourcc "YVU422".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_B8_R8_444:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 8 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel. It is
+ * mapped into the 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel. It is
+ * mapped into the 1st channel.
+ *
+ * Commonly known by the fourcc "YUV444".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8_R8_B8_444:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 8 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the second chroma chanel.
+ * Subsampled in the X direction. It is mapped into the 1st channel.
+ *
+ * The third plane usually contains the first chroma channel.
+ * Subsampled in the X direction. It is mapped into the 3rd channel.
+ *
+ * Commonly known by the fourcc "YVU444".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8B8G8R8_422:
+ *
+ * Packed format with subsampled channels.
+ *
+ * Each channel is a 8 bit integer. The red and blue/chroma channels
+ * are subsampled and interleaved with the green/luma channel.
+ *
+ * Each block contains 2 pixels, so the width must be a multiple of
+ * 2.
+ *
+ * Commonly known by the fourcc "YUYV".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G8R8G8B8_422:
+ *
+ * Packed format with subsampled channels.
+ *
+ * Each channel is a 8 bit integer. The red and blue/chroma channels
+ * are subsampled and interleaved with the green/luma channel.
+ *
+ * Each block contains 2 pixels, so the width must be a multiple of
+ * 2.
+ *
+ * Commonly known by the fourcc "YVYU".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_R8G8B8G8_422:
+ *
+ * Packed format with subsampled channels.
+ *
+ * Each channel is a 8 bit integer. The red and blue/chroma channels
+ * are subsampled and interleaved with the green/luma channel.
+ *
+ * Each block contains 2 pixels, so the width must be a multiple of
+ * 2.
+ *
+ * Commonly known by the fourcc "VYUY".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_B8G8R8G8_422:
+ *
+ * Packed format with subsampled channels.
+ *
+ * Each channel is a 8 bit integer. The red and blue/chroma channels
+ * are subsampled and interleaved with the green/luma channel.
+ *
+ * Each block contains 2 pixels, so the width must be a multiple of
+ * 2.
+ *
+ * Commonly known by the fourcc "UYVY".
+ *
+ * Since: 4.20
+ */
 typedef enum {
   GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
   GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
@@ -539,6 +943,29 @@ typedef enum {
   GDK_MEMORY_X8R8G8B8 GDK_AVAILABLE_ENUMERATOR_IN_4_14,
   GDK_MEMORY_R8G8B8X8 GDK_AVAILABLE_ENUMERATOR_IN_4_14,
   GDK_MEMORY_X8B8G8R8 GDK_AVAILABLE_ENUMERATOR_IN_4_14,
+  GDK_MEMORY_G8_B8R8_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_R8B8_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_B8R8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_R8B8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_B8R8_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_R8B8_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G10X6_B10X6R10X6_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G12X4_B12X4R12X4_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G16_B16R16_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_B8_R8_410 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_R8_B8_410 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_B8_R8_411 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_R8_B8_411 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_B8_R8_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_R8_B8_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_B8_R8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_R8_B8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_B8_R8_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8_R8_B8_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8B8G8R8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G8R8G8B8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_R8G8B8G8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_B8G8R8G8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
 
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;

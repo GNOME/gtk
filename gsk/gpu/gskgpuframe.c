@@ -12,6 +12,7 @@
 #include "gskgpuopprivate.h"
 #include "gskgpurendererprivate.h"
 #include "gskgpuuploadopprivate.h"
+#include "gskgpuutilsprivate.h"
 
 #include "gskdebugprivate.h"
 #include "gskrendererprivate.h"
@@ -801,13 +802,12 @@ image_is_uploaded (GskGpuImage *image)
 }
 
 gboolean
-gsk_gpu_frame_download_texture (GskGpuFrame     *self,
-                                gint64           timestamp,
-                                GdkTexture      *texture,
-                                GdkMemoryFormat  format,
-                                GdkColorState   *color_state,
-                                guchar          *data,
-                                gsize            stride)
+gsk_gpu_frame_download_texture (GskGpuFrame           *self,
+                                gint64                 timestamp,
+                                GdkTexture            *texture,
+                                guchar                *data,
+                                const GdkMemoryLayout *layout,
+                                GdkColorState         *color_state)
 {
   GskGpuFramePrivate *priv = gsk_gpu_frame_get_instance_private (self);
   const GdkDmabuf *dmabuf;
@@ -832,17 +832,23 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
 
   gsk_gpu_frame_cleanup (self);
 
-  if (gdk_memory_format_get_dmabuf_fourcc (gsk_gpu_image_get_format (image)) != dmabuf->fourcc ||
+  if ((gdk_memory_format_get_dmabuf_rgb_fourcc (gsk_gpu_image_get_format (image)) != dmabuf->fourcc &&
+       gdk_memory_format_get_dmabuf_yuv_fourcc (gsk_gpu_image_get_format (image)) != dmabuf->fourcc) ||
       !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_DOWNLOADABLE) ||
       image_cs != color_state)
     {
       GskGpuImage *converted;
 
+      image_cs = gsk_gpu_color_state_apply_conversion (gdk_texture_get_color_state (texture),
+                                                       gsk_gpu_image_get_conversion (image));
+      g_assert (image_cs);
+
       converted = gsk_gpu_node_processor_convert_image (self,
-                                                        format,
+                                                        layout->format,
                                                         color_state,
                                                         image,
                                                         image_cs);
+      gdk_color_state_unref (image_cs);
       if (converted == NULL)
         {
           g_object_unref (image);
@@ -856,10 +862,9 @@ gsk_gpu_frame_download_texture (GskGpuFrame     *self,
   gsk_gpu_download_into_op (self,
                             image,
                             image_cs,
-                            format,
-                            color_state,
                             data,
-                            stride);
+                            layout,
+                            color_state);
 
   gsk_gpu_frame_submit (self, GSK_RENDER_PASS_EXPORT);
   g_object_unref (image);

@@ -35,7 +35,7 @@ struct _GdkMemoryTexture
   GdkTexture parent_instance;
 
   GBytes *bytes;
-  gsize stride;
+  GdkMemoryLayout layout;
 };
 
 struct _GdkMemoryTextureClass
@@ -56,23 +56,19 @@ gdk_memory_texture_dispose (GObject *object)
 }
 
 static void
-gdk_memory_texture_download (GdkTexture      *texture,
-                             GdkMemoryFormat  format,
-                             GdkColorState   *color_state,
-                             guchar          *data,
-                             gsize            stride)
+gdk_memory_texture_download (GdkTexture            *texture,
+                             guchar                *data,
+                             const GdkMemoryLayout *layout,
+                             GdkColorState         *color_state)
 {
   GdkMemoryTexture *self = GDK_MEMORY_TEXTURE (texture);
 
-  gdk_memory_convert (data, stride,
-                      format,
+  gdk_memory_convert (data,
+                      layout,
                       color_state,
                       (guchar *) g_bytes_get_data (self->bytes, NULL),
-                      self->stride,
-                      texture->format,
-                      texture->color_state,
-                      gdk_texture_get_width (texture),
-                      gdk_texture_get_height (texture));
+                      &self->layout,
+                      texture->color_state);
 }
 
 static void
@@ -92,76 +88,71 @@ gdk_memory_texture_init (GdkMemoryTexture *self)
 }
 
 static GBytes *
-gdk_memory_sanitize (GBytes          *bytes,
-                     int              width,
-                     int              height,
-                     GdkMemoryFormat  format,
-                     gsize            stride,
-                     gsize           *out_stride)
+gdk_memory_sanitize (GBytes                *bytes,
+                     const GdkMemoryLayout *layout,
+                     GdkMemoryLayout       *out_layout)
 {
-  gsize align, size, copy_stride, bpp;
+  gsize align;
   const guchar *data;
   guchar *copy;
-  int y;
 
-  data = g_bytes_get_data (bytes, &size);
-  align = gdk_memory_format_alignment (format);
+  data = g_bytes_get_data (bytes, NULL);
+  align = gdk_memory_format_alignment (layout->format);
 
   if (GPOINTER_TO_SIZE (data) % align == 0 &&
-      stride % align == 0)
+      gdk_memory_layout_is_aligned (layout, align))
     {
-      *out_stride = stride;
+      *out_layout = *layout;
       return bytes;
     }
 
-  bpp = gdk_memory_format_bytes_per_pixel (format);
-  copy_stride = bpp * width;
-  /* align to multiples of 4, just to be sure */
-  copy_stride = (copy_stride + 3) & ~3;
-  copy = g_malloc (copy_stride * height);
-  for (y = 0; y < height; y++)
-    memcpy (copy + y * copy_stride, data + y * stride, bpp * width);
+  gdk_memory_layout_init (out_layout,
+                          layout->format,
+                          layout->width,
+                          layout->height,
+                          align);
+  
+  copy = g_malloc (out_layout->size);
+  gdk_memory_copy (copy, out_layout, data, layout);
 
   g_bytes_unref (bytes);
 
-  *out_stride = copy_stride;
-  return g_bytes_new_take (copy, copy_stride * height);
+  return g_bytes_new_take (copy, out_layout->size);
 }
 
 GdkTexture *
-gdk_memory_texture_new_from_builder (GdkMemoryTextureBuilder *builder)
+gdk_memory_texture_new_from_layout (GBytes                *bytes,
+                                    const GdkMemoryLayout *layout,
+                                    GdkColorState         *color_state,
+                                    GdkTexture            *update_texture,
+                                    const cairo_region_t  *update_region)
 {
   GdkMemoryTexture *self;
-  GdkTexture *texture, *update_texture;
+  GdkTexture *texture;
 
   self = g_object_new (GDK_TYPE_MEMORY_TEXTURE,
-                       "width", gdk_memory_texture_builder_get_width (builder),
-                       "height", gdk_memory_texture_builder_get_height (builder),
-                       "color-state", gdk_memory_texture_builder_get_color_state (builder),
+                       "width", layout->width,
+                       "height", layout->height,
+                       "color-state", color_state,
                        NULL);
   texture = GDK_TEXTURE (self);
 
-  texture->format = gdk_memory_texture_builder_get_format (builder);
-  self->bytes = gdk_memory_sanitize (g_bytes_ref (gdk_memory_texture_builder_get_bytes (builder)),
-                                     texture->width,
-                                     texture->height,
-                                     texture->format,
-                                     gdk_memory_texture_builder_get_stride (builder),
-                                     &self->stride);
-
-  update_texture = gdk_memory_texture_builder_get_update_texture (builder);
+  texture->format = layout->format,
+  self->bytes = gdk_memory_sanitize (g_bytes_ref (bytes),
+                                     layout,
+                                     &self->layout);
+  
   if (update_texture)
     {
-      cairo_region_t *update_region = gdk_memory_texture_builder_get_update_region (builder);
       if (update_region)
         {
-          update_region = cairo_region_copy (update_region);
-          cairo_region_intersect_rectangle (update_region,
+          cairo_region_t *copy_region = cairo_region_copy (update_region);
+          cairo_region_intersect_rectangle (copy_region,
                                             &(cairo_rectangle_int_t) {
                                               0, 0,
                                               update_texture->width, update_texture->height
                                             });
-          gdk_texture_set_diff (GDK_TEXTURE (self), update_texture, update_region);
+          gdk_texture_set_diff (GDK_TEXTURE (self), update_texture, copy_region);
         }
     }
 
@@ -191,15 +182,11 @@ gdk_memory_texture_new (int              width,
                         gsize            stride)
 {
   GdkMemoryTexture *self;
+  GdkMemoryLayout layout = GDK_MEMORY_LAYOUT_SIMPLE (format, width, height, stride);
 
-  g_return_val_if_fail (width > 0, NULL);
-  g_return_val_if_fail (height > 0, NULL);
   g_return_val_if_fail (bytes != NULL, NULL);
-  g_return_val_if_fail (stride >= width * gdk_memory_format_bytes_per_pixel (format), NULL);
-  /* needs to be this complex to support subtexture of the bottom right part */
-  g_return_val_if_fail (g_bytes_get_size (bytes) >= gdk_memory_format_min_buffer_size (format, stride, width, height), NULL);
-
-  bytes = gdk_memory_sanitize (g_bytes_ref (bytes), width, height, format, stride, &stride);
+  gdk_memory_layout_return_val_if_invalid (&layout, NULL);
+  g_return_val_if_fail (g_bytes_get_size (bytes) >= layout.size, NULL);
 
   self = g_object_new (GDK_TYPE_MEMORY_TEXTURE,
                        "width", width,
@@ -208,8 +195,7 @@ gdk_memory_texture_new (int              width,
                        NULL);
 
   GDK_TEXTURE (self)->format = format;
-  self->bytes = bytes;
-  self->stride = stride;
+  self->bytes = gdk_memory_sanitize (g_bytes_ref (bytes), &layout, &self->layout);
 
   return GDK_TEXTURE (self);
 }
@@ -221,29 +207,24 @@ gdk_memory_texture_new_subtexture (GdkMemoryTexture  *source,
                                    int                width,
                                    int                height)
 {
-  GdkTexture *texture, *result;
-  gsize offset, size;
-  GBytes *bytes;
+  GdkMemoryLayout sublayout;
+  GdkTexture *texture = GDK_TEXTURE (source);
 
   g_return_val_if_fail (GDK_IS_MEMORY_TEXTURE (source), NULL);
-  g_return_val_if_fail (x >= 0 && x < GDK_TEXTURE (source)->width, NULL);
-  g_return_val_if_fail (y >= 0 && y < GDK_TEXTURE (source)->height, NULL);
-  g_return_val_if_fail (width > 0 && x + width <= GDK_TEXTURE (source)->width, NULL);
-  g_return_val_if_fail (height > 0 && y + height <= GDK_TEXTURE (source)->height, NULL);
+  g_return_val_if_fail (x >= 0 && x < texture->width, NULL);
+  g_return_val_if_fail (y >= 0 && y < texture->height, NULL);
+  g_return_val_if_fail (width > 0 && x + width <= texture->width, NULL);
+  g_return_val_if_fail (height > 0 && y + height <= texture->height, NULL);
 
-  texture = GDK_TEXTURE (source);
-  offset = y * source->stride + x * gdk_memory_format_bytes_per_pixel (texture->format);
-  size = gdk_memory_format_min_buffer_size (texture->format, source->stride, width, height);
-  bytes = g_bytes_new_from_bytes (source->bytes, offset, size);
+  gdk_memory_layout_init_sublayout (&sublayout,
+                                    &source->layout,
+                                    &(cairo_rectangle_int_t) { x, y, width, height});
 
-  result = gdk_memory_texture_new (width,
-                                   height,
-                                   texture->format,
-                                   bytes,
-                                   source->stride);
-  g_bytes_unref (bytes);
-
-  return result;
+  return gdk_memory_texture_new_from_layout (source->bytes,
+                                             &sublayout,
+                                             gdk_texture_get_color_state (texture),
+                                             NULL,
+                                             NULL);
 }
 
 GdkMemoryTexture *
@@ -252,33 +233,40 @@ gdk_memory_texture_from_texture (GdkTexture *texture)
   GdkTexture *result;
   GBytes *bytes;
   guchar *data;
-  gsize stride;
+  GdkMemoryLayout layout;
 
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
 
   if (GDK_IS_MEMORY_TEXTURE (texture))
     return g_object_ref (GDK_MEMORY_TEXTURE (texture));
 
-  stride = texture->width * gdk_memory_format_bytes_per_pixel (texture->format);
-  data = g_malloc_n (stride, texture->height);
+  gdk_memory_layout_init (&layout,
+                          texture->format,
+                          texture->width,
+                          texture->height,
+                          1);
+  data = g_malloc (layout.size);
 
-  gdk_texture_do_download (texture, texture->format, texture->color_state, data, stride);
-  bytes = g_bytes_new_take (data, stride * texture->height);
-  result = gdk_memory_texture_new (texture->width,
-                                   texture->height,
-                                   texture->format,
-                                   bytes,
-                                   stride);
+  gdk_texture_do_download (texture, data, &layout, texture->color_state);
+  bytes = g_bytes_new_take (data, layout.size);
+  result = gdk_memory_texture_new_from_layout (bytes,
+                                               &layout,
+                                               texture->color_state,
+                                               NULL, NULL);
   g_bytes_unref (bytes);
 
   return GDK_MEMORY_TEXTURE (result);
 }
 
 GBytes *
-gdk_memory_texture_get_bytes (GdkMemoryTexture *self,
-                              gsize            *out_stride)
+gdk_memory_texture_get_bytes (GdkMemoryTexture *self)
 {
-  *out_stride = self->stride;
   return self->bytes;
+}
+
+const GdkMemoryLayout *
+gdk_memory_texture_get_layout (GdkMemoryTexture *self)
+{
+  return &self->layout;
 }
 

@@ -137,11 +137,13 @@ gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
   return TRUE;
 }
 
-EGLImage
+static EGLImage
 gdk_dmabuf_egl_create_image (GdkDisplay      *display,
                              int              width,
                              int              height,
-                             const GdkDmabuf *dmabuf)
+                             const GdkDmabuf *dmabuf,
+                             EGLint           color_space_hint,
+                             EGLint           range_hint)
 {
   EGLDisplay egl_display = gdk_display_get_egl_display (display);
   EGLint attribs[64];
@@ -172,10 +174,16 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
   attribs[i++] = height;
   attribs[i++] = EGL_LINUX_DRM_FOURCC_EXT;
   attribs[i++] = dmabuf->fourcc;
-  attribs[i++] = EGL_YUV_COLOR_SPACE_HINT_EXT;
-  attribs[i++] = EGL_ITU_REC601_EXT;
-  attribs[i++] = EGL_SAMPLE_RANGE_HINT_EXT;
-  attribs[i++] = EGL_YUV_NARROW_RANGE_EXT;
+  if (color_space_hint)
+    {
+      attribs[i++] = EGL_YUV_COLOR_SPACE_HINT_EXT;
+      attribs[i++] = color_space_hint;
+    }
+  if (range_hint)
+    {
+      attribs[i++] = EGL_SAMPLE_RANGE_HINT_EXT;
+      attribs[i++] = range_hint;
+    }
 
 #define ADD_PLANE(plane) \
   { \
@@ -217,6 +225,70 @@ gdk_dmabuf_egl_create_image (GdkDisplay      *display,
     }
 
   return image;
+}
+
+guint
+gdk_dmabuf_egl_import_dmabuf (GdkGLContext    *context,
+                              int              width,
+                              int              height,
+                              const GdkDmabuf *dmabuf,
+                              EGLint           color_space_hint,
+                              EGLint           range_hint,
+                              gboolean        *external)
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  EGLImage image;
+  guint texture_id;
+  int target;
+
+  gdk_dmabuf_egl_init (display);
+
+  if (gdk_dmabuf_formats_contains (display->egl_internal_formats, dmabuf->fourcc, dmabuf->modifier))
+    {
+      target = GL_TEXTURE_2D;
+    }
+  else
+    {
+      /* This is the opportunistic path.
+       * We hit it both for drivers that do not support modifiers as well as for dmabufs
+       * that the driver did not explicitly advertise. */
+      if (gdk_gl_context_get_use_es (context))
+        target = GL_TEXTURE_EXTERNAL_OES;
+      else
+        target = GL_TEXTURE_2D;
+    }
+
+  image = gdk_dmabuf_egl_create_image (display,
+                                       width,
+                                       height,
+                                       dmabuf,
+                                       color_space_hint,
+                                       range_hint);
+  if (image == EGL_NO_IMAGE)
+    {
+      GDK_DISPLAY_DEBUG (display, DMABUF,
+                         "Import of %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf failed",
+                         width, height,
+                         (char *) &dmabuf->fourcc, dmabuf->modifier);
+      return 0;
+    }
+
+  glGenTextures (1, &texture_id);
+  glBindTexture (target, texture_id);
+  glEGLImageTargetTexture2DOES (target, image);
+  glTexParameteri (target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+  glTexParameteri (target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+  eglDestroyImageKHR (gdk_display_get_egl_display (display), image);
+
+  GDK_DISPLAY_DEBUG (display, DMABUF,
+                     "Imported %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf as %s texture",
+                     width, height,
+                     (char *) &dmabuf->fourcc, dmabuf->modifier,
+                     target == GL_TEXTURE_EXTERNAL_OES ? "GL_TEXTURE_EXTERNAL_OES" : "GL_TEXTURE_2D");
+
+  *external = target == GL_TEXTURE_EXTERNAL_OES;
+  return texture_id;
 }
 
 #endif  /* HAVE_DMABUF && HAVE_EGL */

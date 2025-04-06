@@ -106,6 +106,9 @@ static MatrixTest matrices[] = {
   { "srgb<>rec2020", rec2020_to_srgb, srgb_to_rec2020 },
   { "oklab<>lms", oklab_to_lms, lms_to_oklab },
   { "lms<>srgb", lms_to_srgb, srgb_to_lms },
+  { "bt601", bt601_to_rgb, rgb_to_bt601 },
+  { "bt709", bt709_to_rgb, rgb_to_bt709 },
+  { "bt2020", bt2020_to_rgb, rgb_to_bt2020 },
 };
 
 #define IDX(i,j) 3*i+j

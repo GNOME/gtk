@@ -2,6 +2,8 @@
 
 #include <gdk/gdktypes.h>
 
+#include "gdkmemorylayoutprivate.h"
+
 G_BEGIN_DECLS
 
 #define GDK_TYPE_DMABUF_DOWNLOADER               (gdk_dmabuf_downloader_get_type ())
@@ -16,19 +18,18 @@ struct _GdkDmabufDownloaderInterface
   void                  (* close)                               (GdkDmabufDownloader            *downloader);
   gboolean              (* download)                            (GdkDmabufDownloader            *downloader,
                                                                  GdkDmabufTexture               *texture,
-                                                                 GdkMemoryFormat                 format,
-                                                                 GdkColorState                  *color_state,
                                                                  guchar                         *data,
-                                                                 gsize                           stride);
+                                                                 const GdkMemoryLayout          *layout,
+                                                                 GdkColorState                  *color_state);
+
 };
 
 void                    gdk_dmabuf_downloader_close             (GdkDmabufDownloader            *self);
 gboolean                gdk_dmabuf_downloader_download          (GdkDmabufDownloader            *downloader,
                                                                  GdkDmabufTexture               *texture,
-                                                                 GdkMemoryFormat                 format,
-                                                                 GdkColorState                  *color_state,
                                                                  guchar                         *data,
-                                                                 gsize                           stride);
+                                                                 const GdkMemoryLayout          *layout,
+                                                                 GdkColorState                  *color_state);
 
 
 G_END_DECLS

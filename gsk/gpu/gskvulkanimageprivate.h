@@ -43,13 +43,14 @@ GskGpuImage *           gsk_vulkan_image_new_for_dmabuf                 (GskVulk
                                                                          gsize                   width,
                                                                          gsize                   height,
                                                                          const GdkDmabuf        *dmabuf,
-                                                                         gboolean                premultiplied);
+                                                                         gboolean                premultiplied,
+                                                                         GskGpuConversion        conv);
 GdkTexture *            gsk_vulkan_image_to_dmabuf_texture              (GskVulkanImage         *self,
                                                                          GdkColorState          *color_state);
 #endif
 
 guchar *                gsk_vulkan_image_get_data                       (GskVulkanImage         *self,
-                                                                         gsize                  *out_stride);
+                                                                         GdkMemoryLayout        *out_layout);
 
 GskVulkanYcbcr *        gsk_vulkan_image_get_ycbcr                      (GskVulkanImage         *self);
 VkDescriptorSet         gsk_vulkan_image_get_vk_descriptor_set          (GskVulkanImage         *self,

@@ -123,7 +123,7 @@ gsk_gl_renderer_get_backbuffer (GskGpuRenderer *renderer)
   gdk_draw_context_get_buffer_size (context, &width, &height);
 
   if (self->backbuffer == NULL ||
-      !!(gsk_gpu_image_get_flags (self->backbuffer) & GSK_GPU_IMAGE_SRGB) != gdk_surface_get_gl_is_srgb (surface) ||
+      (gsk_gpu_image_get_conversion (self->backbuffer) == GSK_GPU_CONVERSION_SRGB) != gdk_surface_get_gl_is_srgb (surface) ||
       gsk_gpu_image_get_width (self->backbuffer) != width ||
       gsk_gpu_image_get_height (self->backbuffer) != height)
     {

@@ -5,11 +5,13 @@
 #include "gskgpuglobalsopprivate.h"
 #include "gskgpuopprivate.h"
 #include "gskgpushaderopprivate.h"
+#include "gskgpuutilsprivate.h"
 #include "gskglbufferprivate.h"
 #include "gskgldeviceprivate.h"
 #include "gskglimageprivate.h"
 
 #include "gdkdmabuftextureprivate.h"
+#include "gdkdmabufeglprivate.h"
 #include "gdkglcontextprivate.h"
 #include "gdkgltextureprivate.h"
 
@@ -90,8 +92,9 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
                                                 texture,
                                                 gdk_gl_texture_get_id (gl_texture),
                                                 FALSE,
-                                                gdk_gl_texture_has_mipmap (gl_texture) ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) : 0);
-         
+                                                gdk_gl_texture_has_mipmap (gl_texture) ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) : 0,
+                                                GSK_GPU_CONVERSION_NONE);
+
           /* This is a hack, but it works */
           sync = gdk_gl_texture_get_sync (gl_texture);
           if (sync)
@@ -100,25 +103,92 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
           return image;
         }
     }
+#if defined(HAVE_DMABUF) && defined (HAVE_EGL)
   else if (GDK_IS_DMABUF_TEXTURE (texture))
     {
+      const GdkDmabuf *dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+      GdkMemoryFormat format = gdk_texture_get_format (texture);
       gboolean external;
       GLuint tex_id;
+      GskGpuConversion conv;
+      EGLint color_space_hint, range_hint;
 
-      tex_id = gdk_gl_context_import_dmabuf (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
-                                             gdk_texture_get_width (texture),
-                                             gdk_texture_get_height (texture),
-                                             gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture)),
-                                             &external);
-      if (tex_id)
+      if (gdk_memory_format_get_dmabuf_yuv_fourcc (format) == dmabuf->fourcc)
         {
-          return gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                               texture,
-                                               tex_id,
-                                               TRUE,
-                                               (external ? GSK_GPU_IMAGE_EXTERNAL : 0));
+          conv = gsk_gpu_color_state_get_conversion (gdk_texture_get_color_state (texture));
+
+          range_hint = EGL_YUV_NARROW_RANGE_EXT;
+          switch (conv)
+            {
+            case GSK_GPU_CONVERSION_NONE:
+            case GSK_GPU_CONVERSION_SRGB:
+            case GSK_GPU_CONVERSION_NARROW:
+              GDK_DEBUG (DMABUF, "EGL cannot import YUV dmabufs of colorstate %s",
+                         gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
+              /* no hints for these */
+              dmabuf = NULL;
+              break;
+
+            case GSK_GPU_CONVERSION_BT601:
+              range_hint = EGL_YUV_FULL_RANGE_EXT;
+              G_GNUC_FALLTHROUGH;
+            case GSK_GPU_CONVERSION_BT601_NARROW:
+              color_space_hint = EGL_ITU_REC601_EXT;
+              break;
+
+            case GSK_GPU_CONVERSION_BT709:
+              range_hint = EGL_YUV_FULL_RANGE_EXT;
+              G_GNUC_FALLTHROUGH;
+            case GSK_GPU_CONVERSION_BT709_NARROW:
+              color_space_hint = EGL_ITU_REC709_EXT;
+              break;
+
+            case GSK_GPU_CONVERSION_BT2020:
+              range_hint = EGL_YUV_FULL_RANGE_EXT;
+              G_GNUC_FALLTHROUGH;
+            case GSK_GPU_CONVERSION_BT2020_NARROW:
+              color_space_hint = EGL_ITU_REC2020_EXT;
+              break;
+
+            default:
+              g_assert_not_reached ();
+              dmabuf = NULL;
+              break;
+            }
+        }
+      else if (gdk_memory_format_get_dmabuf_rgb_fourcc (format) == dmabuf->fourcc)
+        {
+          conv = GSK_GPU_CONVERSION_NONE;
+          color_space_hint = 0;
+          range_hint = 0;
+        }
+      else
+        {
+          g_warn_if_reached ();
+          dmabuf = NULL;
+        }
+
+      if (dmabuf != NULL)
+        {
+          tex_id = gdk_dmabuf_egl_import_dmabuf (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+                                                 gdk_texture_get_width (texture),
+                                                 gdk_texture_get_height (texture),
+                                                 dmabuf,
+                                                 color_space_hint,
+                                                 range_hint,
+                                                 &external);
+          if (tex_id)
+            {
+              return gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                   texture,
+                                                   tex_id,
+                                                   TRUE,
+                                                   (external ? GSK_GPU_IMAGE_EXTERNAL : 0),
+                                                   conv);
+            }
         }
     }
+#endif  /* HAVE_DMABUF && HAVE_EGL */
 
   return GSK_GPU_FRAME_CLASS (gsk_gl_frame_parent_class)->upload_texture (frame, with_mipmap, texture);
 }
