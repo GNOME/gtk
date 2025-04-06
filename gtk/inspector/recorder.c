@@ -211,6 +211,7 @@ struct _GtkInspectorRecorder
   GtkWidget *recording_data_stack;
   GListStore *render_node_properties;
   GListStore *event_properties;
+  GtkSingleSelection *event_properties_selection;
   GtkWidget *event_property_tree;
   GtkWidget *event_view;
 
@@ -2038,6 +2039,22 @@ render_node_list_selection_changed (GtkListBox           *list,
 }
 
 static void
+event_properties_list_selection_changed (GtkSelectionModel *model,
+                                         GParamSpec *pspec,
+                                         GtkInspectorRecorder *recorder)
+{
+  ObjectProperty *prop;
+
+  prop = gtk_single_selection_get_selected_item (recorder->event_properties_selection);
+
+  if (prop == NULL)
+    return;
+
+  if (prop->node)
+    show_render_node (recorder, prop->node);
+}
+
+static void
 render_node_save_response (GObject *source,
                            GAsyncResult *result,
                            gpointer data)
@@ -2387,6 +2404,7 @@ gtk_inspector_recorder_dispose (GObject *object)
   g_clear_object (&recorder->render_node_model);
   g_clear_object (&recorder->render_node_root_model);
   g_clear_object (&recorder->render_node_selection);
+  g_clear_object (&recorder->event_properties_selection);
 
   gtk_widget_dispose_template (GTK_WIDGET (recorder), GTK_TYPE_INSPECTOR_RECORDER);
 
@@ -2504,9 +2522,9 @@ gtk_inspector_recorder_init (GtkInspectorRecorder *recorder)
   g_object_unref (column);
 
   recorder->event_properties = g_list_store_new (object_property_get_type ());
-  model = GTK_SELECTION_MODEL (gtk_no_selection_new (G_LIST_MODEL (recorder->event_properties)));
-  gtk_column_view_set_model (GTK_COLUMN_VIEW (recorder->event_property_tree), model);
-  g_object_unref (model);
+  recorder->event_properties_selection = gtk_single_selection_new (G_LIST_MODEL (recorder->event_properties));
+  g_signal_connect (recorder->event_properties_selection, "notify::selected-item", G_CALLBACK (event_properties_list_selection_changed), recorder);
+ gtk_column_view_set_model (GTK_COLUMN_VIEW (recorder->event_property_tree), GTK_SELECTION_MODEL (recorder->event_properties_selection));
 
   column = g_list_model_get_item (gtk_column_view_get_columns (GTK_COLUMN_VIEW (recorder->event_property_tree)), 0);
 
