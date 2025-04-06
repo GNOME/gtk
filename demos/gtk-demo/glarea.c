@@ -130,6 +130,9 @@ init_shaders (const char *vertex_path,
   glAttachShader (program, vertex);
   glAttachShader (program, fragment);
 
+  glBindAttribLocation (program, 0, "in_position");
+  glBindAttribLocation (program, 1, "in_color");
+
   glLinkProgram (program);
 
   glGetProgramiv (program, GL_LINK_STATUS, &status);
