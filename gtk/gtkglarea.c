@@ -119,7 +119,7 @@
  *
  * ```c
  * static void
- * on_realize (GtkGLarea *area)
+ * on_realize (GtkGLArea *area)
  * {
  *   // We need to make the context current if we want to
  *   // call GL API
