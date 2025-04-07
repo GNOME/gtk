@@ -1,0 +1,24 @@
+_gtk4_demo()
+{
+    local cur prev opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+    opts="--help --help-all --help-gapplication --list --run --autoquit --version"
+
+    case "${prev}" in
+        --run)
+            local demos=$(gtk4-demo --list 2>/dev/null | tr '\n' ' ')
+            COMPREPLY=( $(compgen -W "${demos}" -- ${cur}) )
+            return 0
+            ;;
+        *)
+        ;;
+    esac
+
+    if [[ ${cur} == -* ]] ; then
+        COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+        return 0
+    fi
+}
+complete -F _gtk4_demo gtk4-demo
