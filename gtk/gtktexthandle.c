@@ -166,8 +166,6 @@ gtk_text_handle_present_surface (GtkTextHandle *handle)
   layout = gdk_popup_layout_new (&rect,
                                  GDK_GRAVITY_SOUTH,
                                  GDK_GRAVITY_NORTH);
-  gdk_popup_layout_set_anchor_hints (layout,
-                                     GDK_ANCHOR_FLIP_Y | GDK_ANCHOR_SLIDE_X);
 
   gdk_popup_present (GDK_POPUP (handle->surface),
                      MAX (req.width, 1),
