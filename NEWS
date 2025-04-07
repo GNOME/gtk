@@ -1,5 +1,34 @@
-Overview of Changes in 4.18.4, xx-xx-xxxx
+Overview of Changes in 4.18.4, 06-04-2025
 =========================================
+
+* Bugs fixed:
+  - #7447 4.18.3 regression: cursor doesn't update state when crossing window
+    boundaries (Matthias Clasen)
+  - #7459 Gtk.Video causes segfault inside VM with wayland backend (Matthias
+    Clasen)
+  - #7466 Win32: can't resize or move windows anymore (Matthias Clasen)
+  - !8375 testsuite: Make reftest-compare use gsize instead of int (Benjamin
+    Otte)
+  - !8378 wayland: Force setting cursor on enter
+  - !8394 wayland: Force setting cursor on enter
+  - !8400 Merge fixes from !8375 into 4.18
+  - !8403 inspector: Survive without installed schemas
+  - !8408 builder: Fix a menu parsing issue
+  - !8422 win32: Fix initial window state
+  - !8429 vulkan: Do not create dmabuf target images if not enabled
+
+* Translation updates:
+  - Bulgarian (Alexander Shopov)
+  - Chinese (China) (Luming Zh)
+  - Czech (Daniel Rusek)
+  - Georgian (Ekaterine Papava)
+  - Lithuanian (Aurimas Černius)
+  - Persian (Danial Behzadi)
+  - Portuguese (Hugo Carvalho)
+  - Slovenian (Martin)
+  - Turkish (Emin Tufan Çetin)
+  - Ukrainian (Yuri Chornoivan)
+
 
 Overview of Changes in 4.18.3, 29-03-2025
 =========================================
