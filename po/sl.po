@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-04-03 01:34+0000\n"
-"PO-Revision-Date: 2025-04-03 08:55+0200\n"
+"POT-Creation-Date: 2025-04-07 00:48+0000\n"
+"PO-Revision-Date: 2025-04-07 12:31+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -53,25 +53,25 @@ msgstr "Ni mogoče brati iz praznega odložišča."
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Ni skladnih zapisov za prenos vsebine odložišča."
 
-#: gdk/gdkcolorstate.c:921
-#, c-format
-msgid "cicp: Narrow range or YUV not supported"
-msgstr "cicp: Ozek obseg ali YUV ni podprt"
-
-#: gdk/gdkcolorstate.c:931
+#: gdk/gdkcolorstate.c:1057
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp: nedoločeni parametri niso podprti"
 
-#: gdk/gdkcolorstate.c:977
+#: gdk/gdkcolorstate.c:1103
 #, c-format
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp: funkcija prenosa %u ni podprta"
 
-#: gdk/gdkcolorstate.c:1007
+#: gdk/gdkcolorstate.c:1134
 #, c-format
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: Primarne barve %u niso podprte"
+
+#: gdk/gdkcolorstate.c:1161
+#, c-format
+msgid "cicp: Matrix coefficients %u, %s not supported"
+msgstr "cicp: Koeficienti matrike %u, %s niso podprti"
 
 #: gdk/gdkcontentprovider.c:106 gdk/gdkcontentproviderimpl.c:313
 #: gdk/gdkcontentproviderimpl.c:532
@@ -186,7 +186,7 @@ msgstr "Podana je zahteva za uporabo %s, a je %s že v uporabi."
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "Poskus uporabe %s, vendar je onemogočeno prek GDK_DISABLE"
 
-#: gdk/gdktexture.c:672
+#: gdk/gdktexture.c:671
 msgid "Unknown image format."
 msgstr "Neznan zapis slike."
 
@@ -577,7 +577,7 @@ msgstr "Napaka med tolmačenjem slikovne datoteke JPEG (%s)"
 msgid "Unsupported JPEG colorspace (%d)"
 msgstr "Nepodprt barvni prostor JPEG (%d) "
 
-#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:468 gdk/loaders/gdktiff.c:472
+#: gdk/loaders/gdkjpeg.c:194 gdk/loaders/gdkpng.c:465 gdk/loaders/gdktiff.c:491
 #, c-format
 msgid "Not enough memory for image size %ux%u"
 msgstr "Ni dovolj pomnilnika za sliko velikosti %ux%u"
@@ -587,30 +587,30 @@ msgstr "Ni dovolj pomnilnika za sliko velikosti %ux%u"
 msgid "Error reading png (%s)"
 msgstr "Napaka branja zapisa png (%s)"
 
-#: gdk/loaders/gdkpng.c:389
+#: gdk/loaders/gdkpng.c:388
 #, c-format
 msgid "Unsupported depth %u in png image"
 msgstr "Slika PNG ima nepodprto barvno globino %u"
 
-#: gdk/loaders/gdkpng.c:439
+#: gdk/loaders/gdkpng.c:438
 #, c-format
 msgid "Unsupported color type %u in png image"
 msgstr "Nepodprta barvna globina %u v sliki PNG"
 
-#: gdk/loaders/gdkpng.c:453
+#: gdk/loaders/gdkpng.c:450
 #, c-format
 msgid "Image stride too large for image size %ux%u"
 msgstr "Korak slike je prevelik za velikost slike %ux%u"
 
-#: gdk/loaders/gdktiff.c:358
+#: gdk/loaders/gdktiff.c:382
 msgid "Failed to load RGB data from TIFF file"
 msgstr "Podatkov RGB iz datoteke TIFF ni mogoče naložiti"
 
-#: gdk/loaders/gdktiff.c:401
+#: gdk/loaders/gdktiff.c:424
 msgid "Could not load TIFF data"
 msgstr "Ni mogoče naložiti podatkov slike TIFF"
 
-#: gdk/loaders/gdktiff.c:484
+#: gdk/loaders/gdktiff.c:505
 #, c-format
 msgid "Reading data failed at row %d"
 msgstr "Ni mogoče pridobiti podatkov v vrstici %d"
@@ -3976,8 +3976,8 @@ msgid "Attribute"
 msgstr "Atribut"
 
 #: gtk/inspector/a11y.ui:176 gtk/inspector/css-node-tree.ui:70
-#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:156
-#: gtk/inspector/recorder.ui:199 gtk/inspector/strv-editor.c:73
+#: gtk/inspector/prop-list.ui:57 gtk/inspector/recorder.ui:159
+#: gtk/inspector/recorder.ui:203 gtk/inspector/strv-editor.c:73
 msgid "Value"
 msgstr "Vrednost"
 
@@ -4472,7 +4472,7 @@ msgstr "Vir:"
 msgid "Defined At"
 msgstr "Določeno pri"
 
-#: gtk/inspector/recorder.c:2059
+#: gtk/inspector/recorder.c:2181
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Shranjevanje izrisovanja vozlišča je spodletelo"
@@ -4513,7 +4513,7 @@ msgstr "Shrani izbrano vozlišče"
 msgid "Copy to clipboard"
 msgstr "Kopiraj v odložišče"
 
-#: gtk/inspector/recorder.ui:151 gtk/inspector/recorder.ui:194
+#: gtk/inspector/recorder.ui:154 gtk/inspector/recorder.ui:198
 msgid "Property"
 msgstr "Lastnosti"
 
@@ -7675,7 +7675,7 @@ msgid "Overwrite existing file"
 msgstr "Prepiši obstoječo datoteko"
 
 #: tools/gtk-builder-tool-screenshot.c:363 tools/gtk-image-tool-compare.c:46
-#: tools/gtk-image-tool-convert.c:89 tools/gtk-image-tool-relabel.c:86
+#: tools/gtk-image-tool-convert.c:112 tools/gtk-image-tool-relabel.c:86
 #: tools/gtk-image-tool-show.c:119 tools/gtk-rendernode-tool-benchmark.c:99
 #: tools/gtk-rendernode-tool-render.c:255
 msgid "FILE…"
@@ -7826,7 +7826,7 @@ msgstr "Izhodna datoteka"
 msgid "Compare two images"
 msgstr "Primerjaj sliki"
 
-#: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:113
+#: tools/gtk-image-tool-compare.c:70 tools/gtk-image-tool-convert.c:136
 #: tools/gtk-image-tool-info.c:101 tools/gtk-image-tool-relabel.c:109
 #: tools/gtk-image-tool-show.c:141
 #, c-format
@@ -7863,40 +7863,40 @@ msgstr "Sliki se razlikujeta.\n"
 msgid "No differences.\n"
 msgstr "Brez razlik.\n"
 
-#: tools/gtk-image-tool-convert.c:86
+#: tools/gtk-image-tool-convert.c:109
 msgid "Format to use"
 msgstr "Oblika, ki jo želite uporabiti"
 
-#: tools/gtk-image-tool-convert.c:86
+#: tools/gtk-image-tool-convert.c:109
 msgid "FORMAT"
 msgstr "OBLIKAZAPISA"
 
-#: tools/gtk-image-tool-convert.c:87 tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:110 tools/gtk-image-tool-relabel.c:84
 msgid "Color state to use"
 msgstr "Barvno stanje, ki ga želite uporabiti"
 
-#: tools/gtk-image-tool-convert.c:87 tools/gtk-image-tool-relabel.c:84
+#: tools/gtk-image-tool-convert.c:110 tools/gtk-image-tool-relabel.c:84
 msgid "COLORSTATE"
 msgstr "BARVNOSTANJE"
 
-#: tools/gtk-image-tool-convert.c:88 tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:111 tools/gtk-image-tool-relabel.c:85
 msgid "Color state to use, as cicp tuple"
 msgstr "Barvno stanje, ki ga je treba uporabiti, kot npr. dvojec cicp"
 
-#: tools/gtk-image-tool-convert.c:88 tools/gtk-image-tool-relabel.c:85
+#: tools/gtk-image-tool-convert.c:111 tools/gtk-image-tool-relabel.c:85
 msgid "CICP"
 msgstr "CICP"
 
-#: tools/gtk-image-tool-convert.c:100
+#: tools/gtk-image-tool-convert.c:123
 msgid "Convert the image to a different format or color state."
 msgstr "Pretvorite sliko v drugo obliko ali barvno stanje."
 
-#: tools/gtk-image-tool-convert.c:119 tools/gtk-image-tool-relabel.c:115
+#: tools/gtk-image-tool-convert.c:142 tools/gtk-image-tool-relabel.c:115
 #, c-format
 msgid "Can only accept a single image file and output file\n"
 msgstr "Lahko sprejme samo eno slikovno datoteko in izhodno datoteko\n"
 
-#: tools/gtk-image-tool-convert.c:133
+#: tools/gtk-image-tool-convert.c:156
 #, c-format
 msgid ""
 "Not a memory format: %s\n"
@@ -7907,7 +7907,7 @@ msgstr ""
 "Možne vrednosti:\n"
 "  %s\n"
 
-#: tools/gtk-image-tool-convert.c:150
+#: tools/gtk-image-tool-convert.c:173
 #, c-format
 msgid ""
 "Not a color state: %s\n"
@@ -7918,12 +7918,12 @@ msgstr ""
 "Možne vrednosti:\n"
 "   %s\n"
 
-#: tools/gtk-image-tool-convert.c:160 tools/gtk-image-tool-relabel.c:140
+#: tools/gtk-image-tool-convert.c:183 tools/gtk-image-tool-relabel.c:140
 #, c-format
 msgid "Can't specify both --color-state and --cicp\n"
 msgstr "Ni mogoče hkrati določiti --color-state in --cicp\n"
 
-#: tools/gtk-image-tool-convert.c:168 tools/gtk-image-tool-relabel.c:148
+#: tools/gtk-image-tool-convert.c:191 tools/gtk-image-tool-relabel.c:148
 #, c-format
 msgid "Not a supported cicp tuple: %s\n"
 msgstr "Ni podprti n-terec cicp: %s\n"
