@@ -336,7 +336,6 @@
     <file>rotated_text.c</file>
     <file>scale.c</file>
     <file>search_entry.c</file>
-    <file>search_entry2.c</file>
     <file>shadertoy.c</file>
     <file>shortcuts.c</file>
     <file>shortcut_triggers.c</file>
