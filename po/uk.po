@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-04-01 03:38+0000\n"
-"PO-Revision-Date: 2025-04-01 09:21+0300\n"
+"POT-Creation-Date: 2025-04-07 00:36+0000\n"
+"PO-Revision-Date: 2025-04-07 09:23+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <trans-uk@lists.fedoraproject.org>\n"
 "Language: uk\n"
@@ -1863,7 +1863,7 @@ msgstr "Елемент «%s» не допустимий у «%s»"
 msgid "Element <%s> not allowed at toplevel"
 msgstr "Елемент <%s> не допустимий на верхньому рівні"
 
-#: gtk/gtkbuilder-menus.c:327
+#: gtk/gtkbuilder-menus.c:329
 #, c-format
 msgid "Text may not appear inside <%s>"
 msgstr "Текст може не показуватись усередині «%s»"
@@ -2334,7 +2334,7 @@ msgstr "Файл з такою назвою вже існує"
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6334 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6359 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2865,7 +2865,7 @@ msgid "Play"
 msgstr "Пуск"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6335
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6360
 msgid "_OK"
 msgstr "_Гаразд"
 
@@ -3915,12 +3915,12 @@ msgstr "_Скасувати"
 msgid "_Redo"
 msgstr "Пов_торити"
 
-#: gtk/gtkwindow.c:6323
+#: gtk/gtkwindow.c:6348
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Бажаєте використовувати інспектор GTK?"
 
-#: gtk/gtkwindow.c:6325
+#: gtk/gtkwindow.c:6350
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3931,7 +3931,7 @@ msgstr ""
 "редагувати внутрішні частини будь-які програми GTK. Його використання може "
 "спричинити збої в програмі."
 
-#: gtk/gtkwindow.c:6330
+#: gtk/gtkwindow.c:6355
 msgid "Don’t show this message again"
 msgstr "Не показувати це повідомлення надалі"
 
@@ -4112,21 +4112,21 @@ msgstr "Класи стилів"
 msgid "CSS Property"
 msgstr "Властивість CSS"
 
-#: gtk/inspector/general.c:447
+#: gtk/inspector/general.c:469
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Контекст способу введення жорстко встановлено у GTK_IM_MODULE"
 
-#: gtk/inspector/general.c:622
+#: gtk/inspector/general.c:644
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Немає"
 
-#: gtk/inspector/general.c:719
+#: gtk/inspector/general.c:741
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Невідомо"
 
-#: gtk/inspector/general.c:973 gtk/inspector/general.c:1012
+#: gtk/inspector/general.c:995 gtk/inspector/general.c:1034
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Немає"
@@ -4136,127 +4136,132 @@ msgid "Copy to clipboard as gitlab markdown"
 msgstr "Скопіювати до буфера як код розмітки gitlab"
 
 #: gtk/inspector/general.ui:45
+#| msgid "Opening %d Item"
+#| msgid_plural "Opening %d Items"
+msgid "Operating System"
+msgstr "Операційна система"
+
+#: gtk/inspector/general.ui:71
 msgid "GTK Version"
 msgstr "Версія GTK"
 
-#: gtk/inspector/general.ui:71
+#: gtk/inspector/general.ui:97
 msgid "GDK Backend"
 msgstr "Модуль GDK"
 
-#: gtk/inspector/general.ui:97
+#: gtk/inspector/general.ui:123
 msgid "GSK Renderer"
 msgstr "Обробник GSK"
 
-#: gtk/inspector/general.ui:123
+#: gtk/inspector/general.ui:149
 msgid "Pango Fontmap"
 msgstr "Мапа шрифтів Pango"
 
-#: gtk/inspector/general.ui:149
+#: gtk/inspector/general.ui:175
 msgid "Media Backend"
 msgstr "Мультимедійний модуль"
 
-#: gtk/inspector/general.ui:175
+#: gtk/inspector/general.ui:201
 msgid "Input Method"
 msgstr "Спосіб введення"
 
-#: gtk/inspector/general.ui:201
-#| msgid "Accessibility"
+#: gtk/inspector/general.ui:227
 msgid "Accessibility Backend"
 msgstr "Модуль доступності"
 
-#: gtk/inspector/general.ui:238
+#: gtk/inspector/general.ui:264
 msgid "Application ID"
 msgstr "Ід. програми"
 
-#: gtk/inspector/general.ui:264
+#: gtk/inspector/general.ui:290
 msgid "Resource Path"
 msgstr "Шлях до ресурсів"
 
-#: gtk/inspector/general.ui:301 gtk/ui/gtkplacesview.ui:63
+#: gtk/inspector/general.ui:327 gtk/ui/gtkplacesview.ui:63
 msgid "Prefix"
 msgstr "Префікс"
 
-#: gtk/inspector/general.ui:328
+#: gtk/inspector/general.ui:354
 msgid "Environment"
 msgstr "Середовище"
 
-#: gtk/inspector/general.ui:431
+#: gtk/inspector/general.ui:457
 msgid "Display"
 msgstr "Екран"
 
-#: gtk/inspector/general.ui:458
+#: gtk/inspector/general.ui:484
 msgid "RGBA Visual"
 msgstr "Візуалізація RGBA"
 
-#: gtk/inspector/general.ui:484
+#: gtk/inspector/general.ui:510
 msgid "Composited"
 msgstr "Складений"
 
-#: gtk/inspector/general.ui:509
+#: gtk/inspector/general.ui:535
 msgid "Protocols"
 msgstr "Протоколи"
 
-#: gtk/inspector/general.ui:565
+#: gtk/inspector/general.ui:591
 msgid "GL Renderer"
 msgstr "Обробник GL"
 
-#: gtk/inspector/general.ui:594
+#: gtk/inspector/general.ui:620
 msgid "GL Vendor"
 msgstr "Постачальник GL"
 
-#: gtk/inspector/general.ui:623
+#: gtk/inspector/general.ui:649
 msgid "GL Version"
 msgstr "Версія GL"
 
-#: gtk/inspector/general.ui:650
+#: gtk/inspector/general.ui:676
 msgid "GL Backend Vendor"
 msgstr "Постачальник модуля GL"
 
-#: gtk/inspector/general.ui:677
+#: gtk/inspector/general.ui:703
 msgid "GL Backend Version"
 msgstr "Версія модуля GL"
 
-#: gtk/inspector/general.ui:727
+#: gtk/inspector/general.ui:753
 msgid "GL Full Version"
 msgstr "Повна версія GL"
 
-#: gtk/inspector/general.ui:756
+#: gtk/inspector/general.ui:782
 msgid "GLSL Version"
 msgstr "Версія GLSL"
 
-#: gtk/inspector/general.ui:785
+#: gtk/inspector/general.ui:811
 msgid "GL Extensions"
 msgstr "Розширення GL"
 
-#: gtk/inspector/general.ui:873
+#: gtk/inspector/general.ui:899
 msgid "EGL Extensions"
 msgstr "Розширення EGL"
 
-#: gtk/inspector/general.ui:960
+#: gtk/inspector/general.ui:986
 msgid "GL Features"
 msgstr "Можливості GL"
 
-#: gtk/inspector/general.ui:996
+#: gtk/inspector/general.ui:1022
 msgid "Vulkan Device"
 msgstr "Пристрій Vulkan"
 
-#: gtk/inspector/general.ui:1023
+#: gtk/inspector/general.ui:1049
 msgid "Vulkan API Version"
 msgstr "Версія інтерфейсу Vulkan"
 
-#: gtk/inspector/general.ui:1050
+#: gtk/inspector/general.ui:1076
 msgid "Vulkan Driver Version"
 msgstr "Версія драйвера Vulkan"
 
-#: gtk/inspector/general.ui:1099
+#: gtk/inspector/general.ui:1125
 msgid "Vulkan Layers"
 msgstr "Шари Vulkan"
 
-#: gtk/inspector/general.ui:1168
+#: gtk/inspector/general.ui:1194
 msgid "Vulkan Extensions"
 msgstr "Розширення Vulkan"
 
-#: gtk/inspector/general.ui:1255
+#: gtk/inspector/general.ui:1281
 msgid "Vulkan Features"
 msgstr "Можливості Vulkan"
 
