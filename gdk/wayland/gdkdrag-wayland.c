@@ -114,8 +114,6 @@ gdk_wayland_drag_init (GdkWaylandDrag *drag_wayland)
 
   drag = GDK_DRAG (drag_wayland);
   drags = g_list_prepend (drags, drag);
-
-  gdk_drag_set_selected_action (drag, GDK_ACTION_COPY);
 }
 
 static GdkSurface *
