@@ -1,5 +1,113 @@
-Overview of Changes in 4.19.0, xx-xx-xxxx
+Overview of Changes in 4.19.1, xx-xx-xxxx
 =========================================
+
+
+Overview of Changes in 4.19.0, 06-04-2025
+=========================================
+
+* GtkBuilder
+ - Allow translating constant expressions
+ - Fix a problem with translated menu attributes
+
+* GtkWindow no longer force-unmaximizes windows on initial map
+
+* GtkCalendar has gained a date property
+
+* GtkSearch entry no longer captures the enter key
+
+* GtkVideo supports YUV formats
+
+* Wayland
+ - Don't load themed cursors anymore, since we rely on the cursor-shape
+   protocol now. A fallback set of unthemed cursors is still provided
+   as a last resort
+ - Require wl_output version 2 and xdg_output version 3
+ - Survive without linux_dmabuf
+ - Use the xdg_toplevel_icon protocol for window icons
+
+* GDK:
+ - The GdkMemoryFormat enum has gained entries for the most common
+   YCbCr multi-planar formats (NV12, P010, YUV410, etc)
+ - GdkMemoryTextureBuilder can set offsets and strides per plane,
+   allowing the creation of yuv memory textures
+ - GdkTextureDownloader allows downloading data in multi-planar formats
+
+* GSK:
+ - Fix mimap handling in Vulkan
+ - Introduce the concept of (non-)downloadable images
+ - Introduce the concept of subsampled and multi-planar images
+ - Handle YUV content more correctly
+
+* Tools:
+ - inspector: Show OS information
+ - inspector: Improve event visualization in the recorder
+ - image-tool: Allow convert to write out .node files
+
+* Demos:
+ - gtk4-demo: Make the paint demo work with touch
+ - gtk4-demo: Improve the zoom demo with touch
+ - gtk4-demo: Improve the dnd demo with touch
+ - gtk4-demo: Make the GLArea demo work on Android
+
+* Bugs fixed:
+  - #583 GtkHeaderBar: Close button's mouse-over area doesn't extend to top-
+    right pixel when maximized (fitts' law)
+  - #6874 GtkListBox keyboard activation
+  - #7397 [feature] implement `xdg-toplevel-icon-v1` (Matthias Clasen)
+  - #7447 4.18.3 regression: cursor doesn't update state when crossing window
+    boundaries (Matthias Clasen)
+  - #7459 Gtk.Video causes segfault inside VM with wayland backend (Matthias
+    Clasen)
+  - #7466 Win32: can't resize or move windows anymore (Matthias Clasen)
+  - #7469 inspector: event recording is buggy for multi-surface situations
+    (Matthias Clasen)
+  - #7471 inspector: show bounds of widgets in event propagation traces
+  - !7914 Add new Memoryformats and CICP matrix coefficients
+  - !8320 builder: Translatable constant expressions
+  - !8343 GtkCalendar: Introduce a date property
+  - !8345 dnd: Move drag cursor selection to backends
+  - !8352 wayland: Drop themed client-side cursors
+  - !8364 wayland: Add GDK_WAYLAND_DISABLE
+  - !8371 inspector: fix capitalization
+  - !8373 Update our ci image to Fedora 42
+  - !8374 gi: Dynamically set doc-format
+  - !8375 testsuite: Make reftest-compare use gsize instead of int
+  - !8376 inspector: Survive without installed schemas
+  - !8380 inspector: SHow the a11y backend
+  - !8381 Drop Timm from the list of maintainers
+  - !8383 broadway: Drop pointless vfuncs
+  - !8389 window: Set fullscreen/maximize on present only if needed
+  - !8392 gdksurface: toplevel capabilities fixes
+  - !8393 x11: Try to make window default backgrounds transparent
+  - !8395 wayland: Move all version defines in one place
+  - !8396 wayland: Simplify output handling
+  - !8397 Some refactoring of the Wayland backend
+  - !8406 builder: Fix a menu parsing issue
+  - !8407 window: Document handling of initial states
+  - !8411 A bunch of refactorings
+  - !8412 gtk/texthandle: Don't set any anchor hints
+  - !8414 inspector: Show the OS
+  - !8415 wayland: Refactor some code
+  - !8418 wayland: Fix titlebar gesture availability
+  - !8419 win32: Fix initial window state
+  - !8420 gtk-demo: Improve the paint demo
+  - !8425 demo: Make GL Area work as properly on Android
+  - !8426 ci: Unbreak GTK Demo apk build
+  - !8428 GtkGLArea: fix typo in docs
+  - !8430 wayland: Fix gtk_surface handling more
+
+* Translation updates:
+  - Bulgarian (Alexander Shopov)
+  - Chinese (China) (Luming Zh)
+  - Czech (Daniel Rusek)
+  - Lithuanian (Aurimas Černius)
+  - Persian (Danial Behzadi)
+  - Portuguese (Hugo Carvalho)
+  - Portuguese (Brazil) (Álvaro Burns)
+  - Slovenian (Martin)
+  - Turkish (Emin Tufan Çetin)
+  - Ukrainian (Yuri Chornoivan)
+
 
 Overview of Changes in 4.18.3, 29-03-2025
 =========================================
