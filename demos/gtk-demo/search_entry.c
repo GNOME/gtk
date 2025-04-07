@@ -22,7 +22,7 @@ search_changed_cb (GtkSearchEntry *entry,
 }
 
 GtkWidget *
-do_search_entry2 (GtkWidget *do_widget)
+do_search_entry (GtkWidget *do_widget)
 {
   static GtkWidget *window = NULL;
   GtkWidget *vbox;
