@@ -86,7 +86,6 @@ demos = files([
   'rotated_text.c',
   'scale.c',
   'search_entry.c',
-  'search_entry2.c',
   'shadertoy.c',
   'shortcuts.c',
   'shortcut_triggers.c',
