@@ -4,7 +4,14 @@ _gtk4_demo()
     COMPREPLY=()
     cur="${COMP_WORDS[COMP_CWORD]}"
     prev="${COMP_WORDS[COMP_CWORD-1]}"
-    opts="--help --help-all --help-gapplication --list --run --autoquit --version"
+    opts="--gapplication-service \
+          --help \
+          --help-all \
+          --help-gapplication \
+          --list \
+          --run \
+          --autoquit \
+          --version"
 
     case "${prev}" in
         --run)
