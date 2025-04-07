@@ -804,6 +804,23 @@ if os_unix
   cups_dep = dependency('cups', version : '>=2.0', required: get_option('print-cups'))
 endif
 
+# Shell completion
+bash = find_program('bash', required : false)
+
+if bash.found()
+  bash_comp_dep = dependency('bash-completion', version: '>=2.0', required: false)
+  bash_comp_inst_dir = ''
+  if bash_comp_dep.found()
+    bash_comp_dir_override = bash_comp_dep.version().version_compare('>= 2.10') ? ['datadir', get_option('datadir')] : ['prefix', get_option('prefix')]
+    bash_comp_inst_dir = bash_comp_dep.get_variable('completionsdir', pkgconfig_define: bash_comp_dir_override)
+  endif
+
+  if bash_comp_inst_dir == ''
+    message('Found bash-completion but the .pc file did not set \'completionsdir\', fallback to a predefined path')
+    bash_comp_inst_dir = join_paths(get_option('datadir'), 'bash-completion/completions')
+  endif
+endif
+
 # Introspection
 gir = find_program('g-ir-scanner', required : get_option('introspection'))
 
