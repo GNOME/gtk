@@ -917,6 +917,210 @@ typedef enum
  *
  * Since: 4.20
  */
+/**
+ * GDK_MEMORY_X6G10_X6B10_X6R10_420:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 16 bit integer.
+ *
+ * Only the 10 lower bits are used. The remaining ones must be set to 0 by the
+ * producer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel.
+ * Subsampled in both the X and Y direction. It is mapped into the
+ * 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel.
+ * Subsampled in both the X and Y direction. It is mapped into the
+ * 1st channel.
+ *
+ * Commonly known by the fourcc "S010".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_X6G10_X6B10_X6R10_422:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 16 bit integer.
+ *
+ * Only the 10 lower bits are used. The remaining ones must be set to 0 by the
+ * producer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel.
+ * Subsampled in the X direction. It is mapped into the 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel.
+ * Subsampled in the X direction. It is mapped into the 1st channel.
+ *
+ * Commonly known by the fourcc "S210".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_X6G10_X6B10_X6R10_444:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 16 bit integer.
+ *
+ * Only the 10 lower bits are used. The remaining ones must be set to 0 by the
+ * producer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel. It is
+ * mapped into the 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel. It is
+ * mapped into the 1st channel.
+ *
+ * Commonly known by the fourcc "S410".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_X4G12_X4B12_X4R12_420:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 16 bit integer.
+ *
+ * Only the 12 lower bits are used. The remaining ones must be set to 0 by the
+ * producer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel.
+ * Subsampled in both the X and Y direction. It is mapped into the
+ * 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel.
+ * Subsampled in both the X and Y direction. It is mapped into the
+ * 1st channel.
+ *
+ * Commonly known by the fourcc "S012".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_X4G12_X4B12_X4R12_422:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 16 bit integer.
+ *
+ * Only the 12 lower bits are used. The remaining ones must be set to 0 by the
+ * producer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel.
+ * Subsampled in the X direction. It is mapped into the 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel.
+ * Subsampled in the X direction. It is mapped into the 1st channel.
+ *
+ * Commonly known by the fourcc "S212".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_X4G12_X4B12_X4R12_444:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 16 bit integer.
+ *
+ * Only the 12 lower bits are used. The remaining ones must be set to 0 by the
+ * producer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel. It is
+ * mapped into the 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel. It is
+ * mapped into the 1st channel.
+ *
+ * Commonly known by the fourcc "S412".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G16_B16_R16_420:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 16 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel.
+ * Subsampled in both the X and Y direction. It is mapped into the
+ * 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel.
+ * Subsampled in both the X and Y direction. It is mapped into the
+ * 1st channel.
+ *
+ * Commonly known by the fourcc "S016".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G16_B16_R16_422:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 16 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel.
+ * Subsampled in the X direction. It is mapped into the 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel.
+ * Subsampled in the X direction. It is mapped into the 1st channel.
+ *
+ * Commonly known by the fourcc "S216".
+ *
+ * Since: 4.20
+ */
+/**
+ * GDK_MEMORY_G16_B16_R16_444:
+ *
+ * Multiplane format with 3 planes.
+ *
+ * Each channel is a 16 bit integer.
+ *
+ * The first plane usually contains the luma channel. It is mapped
+ * into the 2nd channel.
+ *
+ * The second plane usually contains the first chroma chanel. It is
+ * mapped into the 3rd channel.
+ *
+ * The third plane usually contains the second chroma channel. It is
+ * mapped into the 1st channel.
+ *
+ * Commonly known by the fourcc "S416".
+ *
+ * Since: 4.20
+ */
 typedef enum {
   GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
   GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
@@ -974,6 +1178,15 @@ typedef enum {
   GDK_MEMORY_G8R8G8B8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
   GDK_MEMORY_R8G8B8G8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
   GDK_MEMORY_B8G8R8G8_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_X6G10_X6B10_X6R10_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_X6G10_X6B10_X6R10_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_X6G10_X6B10_X6R10_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_X4G12_X4B12_X4R12_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_X4G12_X4B12_X4R12_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_X4G12_X4B12_X4R12_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G16_B16_R16_420 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G16_B16_R16_422 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
+  GDK_MEMORY_G16_B16_R16_444 GDK_AVAILABLE_ENUMERATOR_IN_4_20,
 
   GDK_MEMORY_N_FORMATS
 } GdkMemoryFormat;

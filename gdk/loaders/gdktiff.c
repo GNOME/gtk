@@ -290,6 +290,15 @@ static const FormatData format_data[] = {
   [GDK_MEMORY_G8R8G8B8_422]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
   [GDK_MEMORY_R8G8B8G8_422]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
   [GDK_MEMORY_B8G8R8G8_422]                     = { GDK_MEMORY_R8G8B8,                            8, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_X6G10_X6B10_X6R10_420]            = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_X6G10_X6B10_X6R10_422]            = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_X6G10_X6B10_X6R10_444]            = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_X4G12_X4B12_X4R12_420]            = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_X4G12_X4B12_X4R12_422]            = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_X4G12_X4B12_X4R12_444]            = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G16_B16_R16_420]                  = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G16_B16_R16_422]                  = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
+  [GDK_MEMORY_G16_B16_R16_444]                  = { GDK_MEMORY_R16G16B16,                        16, 3, SAMPLEFORMAT_UINT,   -1,                     PHOTOMETRIC_RGB },
 };
 
 /* if this fails, somebody forgot to add formats above */

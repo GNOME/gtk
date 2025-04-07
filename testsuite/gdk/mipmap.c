@@ -91,6 +91,7 @@ test_mipmap_pixels (gconstpointer data_)
   gboolean linear;
   GdkMemoryLayout layout;
   guchar *data;
+  gboolean accurate;
 
   decode (data_, &format, &size, &lod_level, &linear);
 
@@ -215,7 +216,14 @@ test_mipmap_pixels (gconstpointer data_)
   mipmap = gdk_memory_texture_new_from_layout (bytes, &layout, gdk_color_state_get_srgb (), NULL, NULL);
   g_bytes_unref (bytes);
   
-  compare_textures (ref, mipmap, !linear);
+  if (linear ||
+      gdk_memory_format_get_default_shader_op (format) == GDK_SHADER_3_PLANES_10BIT_LSB ||
+      gdk_memory_format_get_default_shader_op (format) == GDK_SHADER_3_PLANES_12BIT_LSB)
+    accurate = FALSE;
+  else
+    accurate = TRUE;
+
+  compare_textures (ref, mipmap, accurate);
 
   g_object_unref (mipmap);
   g_object_unref (large);
@@ -234,6 +242,7 @@ test_mipmap_simple (gconstpointer data_)
   gboolean linear;
   GdkMemoryLayout layout;
   guchar *data;
+  gboolean accurate;
 
   decode (data_, &format, &size, &lod_level, &linear);
 
@@ -269,7 +278,14 @@ test_mipmap_simple (gconstpointer data_)
   mipmap = gdk_memory_texture_new_from_layout (bytes, &layout, gdk_color_state_get_srgb (), NULL, NULL);
   g_bytes_unref (bytes);
   
-  compare_textures (ref, mipmap, !linear);
+  if (linear ||
+      gdk_memory_format_get_default_shader_op (format) == GDK_SHADER_3_PLANES_10BIT_LSB ||
+      gdk_memory_format_get_default_shader_op (format) == GDK_SHADER_3_PLANES_12BIT_LSB)
+    accurate = FALSE;
+  else
+    accurate = TRUE;
+
+  compare_textures (ref, mipmap, accurate);
 
   g_object_unref (mipmap);
   g_object_unref (large);

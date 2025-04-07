@@ -394,3 +394,31 @@
 #ifndef DRM_FORMAT_YVU444
 #define DRM_FORMAT_YVU444	fourcc_code('Y', 'V', '2', '4')
 #endif
+
+#ifndef DRM_FORMAT_S010
+#define DRM_FORMAT_S010		fourcc_code('S', '0', '1', '0')
+#endif
+#ifndef DRM_FORMAT_S210
+#define DRM_FORMAT_S210		fourcc_code('S', '2', '1', '0')
+#endif
+#ifndef DRM_FORMAT_S410
+#define DRM_FORMAT_S410		fourcc_code('S', '4', '1', '0')
+#endif
+#ifndef DRM_FORMAT_S012
+#define DRM_FORMAT_S012		fourcc_code('S', '0', '1', '2')
+#endif
+#ifndef DRM_FORMAT_S212
+#define DRM_FORMAT_S212		fourcc_code('S', '2', '1', '2')
+#endif
+#ifndef DRM_FORMAT_S412
+#define DRM_FORMAT_S412		fourcc_code('S', '4', '1', '2')
+#endif
+#ifndef DRM_FORMAT_S016
+#define DRM_FORMAT_S016		fourcc_code('S', '0', '1', '6')
+#endif
+#ifndef DRM_FORMAT_S216
+#define DRM_FORMAT_S216		fourcc_code('S', '2', '1', '6')
+#endif
+#ifndef DRM_FORMAT_S416
+#define DRM_FORMAT_S416		fourcc_code('S', '4', '1', '6')
+#endif
