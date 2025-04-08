@@ -1,4 +1,4 @@
-/* Search Entry/Type to Search
+/* Entry/Search Entry
  *
  * GtkSearchEntry provides an entry that is ready for search.
  *
