@@ -30,9 +30,6 @@ gsk_gpu_color_state_get_conversion (GdkColorState *color_state)
         default:
           break;
         }
-
-      if (cicp->range == GDK_CICP_RANGE_NARROW)
-        return GSK_GPU_CONVERSION_NARROW;
     }
 
   return GSK_GPU_CONVERSION_NONE;
@@ -48,13 +45,6 @@ gsk_gpu_cicp_apply_conversion (const GdkCicp    *cicp,
     case GSK_GPU_CONVERSION_NONE:
     case GSK_GPU_CONVERSION_SRGB:
       return FALSE;
-
-    case GSK_GPU_CONVERSION_NARROW:
-      if (cicp->range != GDK_CICP_RANGE_NARROW)
-        return FALSE;
-      *result = *cicp;
-      result->range = GDK_CICP_RANGE_FULL;
-      return TRUE;
 
     case GSK_GPU_CONVERSION_BT601:
       if ((cicp->matrix_coefficients != 5 &&
@@ -144,7 +134,6 @@ gsk_gpu_color_state_apply_conversion (GdkColorState    *color_state,
         return NULL;
       return gdk_color_state_ref (result);
 
-    case GSK_GPU_CONVERSION_NARROW:
     case GSK_GPU_CONVERSION_BT601:
     case GSK_GPU_CONVERSION_BT601_NARROW:
     case GSK_GPU_CONVERSION_BT709:

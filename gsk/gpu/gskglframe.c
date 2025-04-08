@@ -122,7 +122,6 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
             {
             case GSK_GPU_CONVERSION_NONE:
             case GSK_GPU_CONVERSION_SRGB:
-            case GSK_GPU_CONVERSION_NARROW:
               GDK_DEBUG (DMABUF, "EGL cannot import YUV dmabufs of colorstate %s",
                          gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
               /* no hints for these */

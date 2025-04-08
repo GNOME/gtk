@@ -78,11 +78,6 @@ gsk_vulkan_get_ycbcr_flags (GskGpuConversion               conv,
       *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL;
       return FALSE;
 
-    case GSK_GPU_CONVERSION_NARROW:
-      *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_IDENTITY;
-      *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
-      return TRUE;
-
     case GSK_GPU_CONVERSION_BT601:
       *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
       *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL;
@@ -319,7 +314,6 @@ gsk_vulkan_device_supports_conversion (GskVulkanDevice *device,
     case GSK_GPU_CONVERSION_NONE:
       break;
 
-    case GSK_GPU_CONVERSION_NARROW:
     case GSK_GPU_CONVERSION_BT601:
     case GSK_GPU_CONVERSION_BT601_NARROW:
     case GSK_GPU_CONVERSION_BT709:
