@@ -229,7 +229,7 @@ informative_render_tests = [
 renderers = [
   { 'name': 'broadway' },
   { 'name': 'cairo' },
-  { 'name': 'ngl' },
+  { 'name': 'gl' },
   { 'name': 'vulkan' },
 ]
 
@@ -245,7 +245,7 @@ variants = {
 }
 
 compare_xfails = {
-  'ngl': {
+  'gl': {
     # the gradients are prone to rounding errors which become
     # more pronounced in small clips, it seems
     'radial-gradient-with-64-colorstops': ['plain','flip','rotate','repeate','mask','replay','clip','colorflip'],
