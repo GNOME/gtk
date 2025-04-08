@@ -181,6 +181,7 @@ fedora-clang:
             ${FEATURE_FLAGS}
             _build
     - meson compile -C _build
+    - .gitlab-ci/run-tests.sh _build wayland_minimal gtk:gsk
 
 fedora-mingw64:
   extends: .build-fedora-default
