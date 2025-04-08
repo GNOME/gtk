@@ -31,10 +31,17 @@ setups = [
   { 'backend': 'wayland', 'if': wayland_enabled, 'is_default': true, },
   { 'name': 'wayland_gl',
     'backend': 'wayland', 'if': wayland_enabled,
-    'env': ['GDK_DISABLE=gles-api' ], },
+    'env': [ 'GDK_DISABLE=gles-api'
+    ],
+  },
+  { 'name': 'wayland_minimal',
+    'backend': 'wayland', 'if': wayland_enabled,
+    'env': [ 'GDK_GL_DISABLE=all',
+             'GDK_VULKAN_DISABLE=all'
+    ],
+  },
   { 'backend': 'win32', 'if': os_win32 },
   { 'backend': 'broadway', 'if': broadway_enabled, },
-  { 'backend': 'win32', 'if': os_win32 },
 ]
 
 foreach setup : setups
