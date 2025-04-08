@@ -90,3 +90,11 @@ configure_file(
   configuration: appdata_config,
   install_dir: gtk_appdatadir
 )
+
+if bash.found()
+  install_data([ 'completion' ],
+    rename: [ 'gtk4-widget-factory' ],
+    install_dir: bash_comp_inst_dir,
+    install_tag: 'bin',
+  )
+endif

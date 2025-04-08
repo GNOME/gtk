@@ -38,3 +38,10 @@ configure_file(
   install_dir: gtk_appdatadir
 )
 
+if bash.found()
+  install_data([ 'completion' ],
+    rename: [ 'gtk4-node-editor' ],
+    install_dir: bash_comp_inst_dir,
+    install_tag: 'bin',
+  )
+endif

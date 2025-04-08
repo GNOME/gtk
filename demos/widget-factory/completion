@@ -1,4 +1,4 @@
-_gtk4_demo()
+_gtk4_widget_factory()
 {
     local cur prev opts
     COMPREPLY=()
@@ -8,24 +8,11 @@ _gtk4_demo()
           --help \
           --help-all \
           --help-gapplication \
-          --list \
-          --run \
-          --autoquit \
           --version"
-
-    case "${prev}" in
-        --run)
-            local demos=$(gtk4-demo --list 2>/dev/null | tr '\n' ' ')
-            COMPREPLY=( $(compgen -W "${demos}" -- ${cur}) )
-            return 0
-            ;;
-        *)
-        ;;
-    esac
 
     if [[ ${cur} == -* ]] ; then
         COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
         return 0
     fi
 }
-complete -F _gtk4_demo gtk4-demo
+complete -F _gtk4_widget_factory gtk4-widget-factory

@@ -260,6 +260,31 @@ node_editor_application_class_init (NodeEditorApplicationClass *class)
   application_class->open = node_editor_application_open;
 }
 
+static int
+local_options (GApplication *app,
+               GVariantDict *options,
+               gpointer      data)
+{
+  gboolean reset = FALSE;
+
+  g_variant_dict_lookup (options, "reset", "b", &reset);
+
+  if (reset)
+    {
+      char *path;
+
+      path = get_autosave_path ("-unsafe");
+      g_remove (path);
+      g_free (path);
+      path = get_autosave_path (NULL);
+      g_remove (path);
+      g_free (path);
+    }
+
+  return -1;
+}
+
+
 NodeEditorApplication *
 node_editor_application_new (void)
 {
@@ -278,6 +303,8 @@ node_editor_application_new (void)
                       NULL);
 
   g_application_add_main_option (G_APPLICATION (app), "reset", 0, 0,G_OPTION_ARG_NONE, "Remove autosave content", NULL);
+
+  g_signal_connect (app, "handle-local-options", G_CALLBACK (local_options), NULL);
 
   return app;
 }

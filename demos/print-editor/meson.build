@@ -20,3 +20,11 @@ icontheme_dir = join_paths(gtk_datadir, 'icons/hicolor')
 foreach size: ['scalable', 'symbolic']
   install_subdir('data/' + size, install_dir: icontheme_dir)
 endforeach
+
+if bash.found()
+  install_data([ 'completion' ],
+    rename: [ 'gtk4-print-editor' ],
+    install_dir: bash_comp_inst_dir,
+    install_tag: 'bin',
+  )
+endif

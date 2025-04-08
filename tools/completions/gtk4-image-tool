@@ -1,0 +1,71 @@
+_gtk4_image_tool()
+{
+    local cur prev cmd opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    if [[ "$COMP_CWORD" == "1" ]] ; then
+      local commands="compare convert info relabel show"
+      COMPREPLY=( $(compgen -W "${commands}" -- ${cur}) )
+      return 0
+    fi
+
+    cmd="${COMP_WORDS[1]}"
+
+    case "${prev}" in
+        --output|--)
+            return 0
+            ;;
+
+        --format)
+            local formats=$(gtk4-image-tool convert --format=help foo bar 2>&1 | tail --lines=+3)
+            COMPREPLY=( $(compgen -W "${formats}" -- ${cur}) )
+            return 0
+            ;;
+
+        --color-state)
+            local colorstates=$(gtk4-image-tool convert --color-state=help foo bar 2>&1 | tail --lines=+3)
+            COMPREPLY=( $(compgen -W "${colorstates}" -- ${cur}) )
+            return 0
+            ;;
+
+        --cicp)
+            return 0
+            ;;
+    esac
+
+    case "${cmd}" in
+        compare)
+            opts="--help --output --quiet"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        convert)
+            opts="--help --format --color-state --cicp"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        info)
+            opts="--help"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        relabel)
+            opts="--help --color-state --cicp"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        show)
+            opts="--help --undecorated"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+    esac
+}
+
+complete -o default -F _gtk4_image_tool gtk4-image-tool

@@ -1,0 +1,82 @@
+_gtk4_rendernode_tool()
+{
+    local cur prev cmd opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    if [[ "$COMP_CWORD" == "1" ]] ; then
+      local commands="benchmark compare extract info show render"
+      COMPREPLY=( $(compgen -W "${commands}" -- ${cur}) )
+      return 0
+    fi
+
+    cmd="${COMP_WORDS[1]}"
+
+    case "${prev}" in
+        --)
+            return 0
+            ;;
+
+        --renderer)
+            local renderers="cairo ngl vulkan"
+            COMPREPLY=( $(compgen -W "${renderers}" -- ${cur}) )
+            return 0
+            ;;
+
+        --runs)
+            return 0
+            ;;
+
+        --output)
+            COMPREPLY=( $(compgen -o filenames -- ${cur}) )
+            return 0
+            ;;
+
+        --dir)
+            COMPREPLY=( $(compgen -o dirnames -- ${cur}) )
+            return 0
+            ;;
+
+    esac
+
+    case "${cmd}" in
+        benchmark)
+            opts="--help --renderer --runs --no-download"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        compare)
+            opts="--help --renderer --output --quiet"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        extract)
+            opts="--help --dir --verbose"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        info)
+            opts="--help"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        show)
+            opts="--help --undecorated"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        render)
+            opts="--help --renderer"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+    esac
+}
+
+complete -o default -F _gtk4_rendernode_tool gtk4-rendernode-tool
