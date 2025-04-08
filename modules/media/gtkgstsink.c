@@ -476,6 +476,10 @@ video_frame_free (GstVideoFrame *frame)
   g_free (frame);
 }
 
+/* using the last plane's subsampling works for all supported formats */
+#define ROUND_UP_WIDTH(vinfo, width) GST_ROUND_UP_N ((width), 1 << GST_VIDEO_FORMAT_INFO_W_SUB ((vinfo)->finfo, GST_VIDEO_INFO_N_PLANES (vinfo) - 1))
+#define ROUND_UP_HEIGHT(vinfo, height) GST_ROUND_UP_N ((height), 1 << GST_VIDEO_FORMAT_INFO_H_SUB ((vinfo)->finfo, GST_VIDEO_INFO_N_PLANES (vinfo) - 1))
+
 static GdkTexture *
 gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
                                   GstBuffer       *buffer,
@@ -510,8 +514,8 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       gdk_dmabuf_texture_builder_set_display (builder, self->gdk_display);
       gdk_dmabuf_texture_builder_set_fourcc (builder, self->drm_info.drm_fourcc);
       gdk_dmabuf_texture_builder_set_modifier (builder, self->drm_info.drm_modifier);
-      gdk_dmabuf_texture_builder_set_width (builder, vmeta->width);
-      gdk_dmabuf_texture_builder_set_height (builder, vmeta->height);
+      gdk_dmabuf_texture_builder_set_width (builder, ROUND_UP_WIDTH (&self->v_info, vmeta->width));
+      gdk_dmabuf_texture_builder_set_height (builder, ROUND_UP_HEIGHT (&self->v_info, vmeta->height));
       gdk_dmabuf_texture_builder_set_n_planes (builder, vmeta->n_planes);
       gdk_dmabuf_texture_builder_set_color_state (builder, self->color_state);
 
@@ -573,8 +577,8 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       gdk_gl_texture_builder_set_context (builder, self->gdk_context);
       gdk_gl_texture_builder_set_format (builder, gtk_gst_memory_format_from_video_info (&frame->info));
       gdk_gl_texture_builder_set_id (builder, *(guint *) frame->data[0]);
-      gdk_gl_texture_builder_set_width (builder, frame->info.width);
-      gdk_gl_texture_builder_set_height (builder, frame->info.height);
+      gdk_gl_texture_builder_set_width (builder, ROUND_UP_WIDTH (&self->v_info, frame->info.width));
+      gdk_gl_texture_builder_set_height (builder, ROUND_UP_HEIGHT (&self->v_info, frame->info.height));
       gdk_gl_texture_builder_set_sync (builder, sync_meta ? sync_meta->data : NULL);
       gdk_gl_texture_builder_set_color_state (builder, self->color_state);
 
@@ -599,8 +603,8 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
 
       builder = gdk_memory_texture_builder_new ();
       gdk_memory_texture_builder_set_format (builder, gtk_gst_memory_format_from_video_info (&frame->info));
-      gdk_memory_texture_builder_set_width (builder, frame->info.width);
-      gdk_memory_texture_builder_set_height (builder, frame->info.height);
+      gdk_memory_texture_builder_set_width (builder, ROUND_UP_WIDTH (&self->v_info, frame->info.width));
+      gdk_memory_texture_builder_set_height (builder, ROUND_UP_HEIGHT (&self->v_info, frame->info.height));
       gdk_memory_texture_builder_set_color_state (builder, self->color_state);
       gdk_memory_texture_builder_set_bytes (builder, bytes);
       for (i = 0; i < frame->info.finfo->n_planes; i++)
