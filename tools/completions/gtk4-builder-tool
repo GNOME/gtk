@@ -1,0 +1,55 @@
+_gtk4_builder_tool()
+{
+    local cur prev cmd opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    if [[ "$COMP_CWORD" == "1" ]] ; then
+      local commands="validate simplify enumerate preview render screenshot"
+      COMPREPLY=( $(compgen -W "${commands}" -- ${cur}) )
+      return 0
+    fi
+
+    cmd="${COMP_WORDS[1]}"
+
+    case "${prev}" in
+        --id|--css|--)
+            return 0
+            ;;
+    esac
+
+    case "${cmd}" in
+        validate)
+            opts="--help --deprecations"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        simplify)
+            opts="--help --replace --3to4"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        enumerate)
+            opts="--help --callbacks"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        preview)
+            opts="--help --id --css"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        render|screenshot)
+            opts="--help --id --css --node --force"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+    esac
+}
+
+complete -o default -F _gtk4_builder_tool gtk4-builder-tool

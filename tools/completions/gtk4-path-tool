@@ -1,0 +1,55 @@
+_gtk4_path_tool()
+{
+    local cur prev cmd opts
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    if [[ "$COMP_CWORD" == "1" ]] ; then
+      local commands="decompose reverse restrict show render info"
+      COMPREPLY=( $(compgen -W "${commands}" -- ${cur}) )
+      return 0
+    fi
+
+    cmd="${COMP_WORDS[1]}"
+
+    case "${prev}" in
+        --start|--end)
+            return 0
+            ;;
+        --fg-color|--bg-color|--point-color)
+            return 0
+            ;;
+        --)
+            return 0
+            ;;
+    esac
+
+    case "${cmd}" in
+        decompose)
+            opts="--help --allow-quad --allow-cubic --allow-conic"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        reverse|info)
+            opts="--help"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        restrict)
+            opts="--help --start --end"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+        show|render)
+            opts="--help --help-all --help-fill --help-stroke --fill --stroke --points --controls --fg-color --bg-color --point-color"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
+    esac
+}
+complete -F _gtk4_path_tool gtk4-path-tool
