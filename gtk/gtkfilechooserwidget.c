@@ -4172,7 +4172,8 @@ update_current_folder_get_info_cb (GObject      *source,
 
   /* If we have no permissions to access the file, g_file_query_info() will
    * return successfully, but with a GFileInfo with no attributes. Synthesise
-   * an error in that case, so the logic to try the parent directory can be used. */
+   * an error in that case, so the logic to try the parent directory can be used.
+   */
   if (info != NULL && !g_file_info_has_attribute (info, G_FILE_ATTRIBUTE_STANDARD_TYPE))
     {
       g_set_error_literal (&error, G_IO_ERROR, G_IO_ERROR_PERMISSION_DENIED,
