@@ -2699,9 +2699,9 @@ gdk_x11_surface_get_geometry (GdkSurface *surface,
                              root, 0, 0, &tx, &ty, &child);
 
       if (x)
-	*x = tx / impl->surface_scale;
+	*x = (tx + tborder_width) / impl->surface_scale;
       if (y)
-	*y = ty / impl->surface_scale;
+	*y = (ty + tborder_width) / impl->surface_scale;
       if (width)
 	*width = twidth / impl->surface_scale;
       if (height)
@@ -2814,8 +2814,8 @@ gdk_x11_surface_get_frame_extents (GdkSurface    *surface,
             {
 	      rect->x = wx;
 	      rect->y = wy;
-	      rect->width = ww;
-	      rect->height = wh;
+	      rect->width = ww + wb * 2;
+	      rect->height = wh + wb * 2;
 	    }
 
 	  /* _NET_FRAME_EXTENTS format is left, right, top, bottom */
@@ -2887,8 +2887,8 @@ gdk_x11_surface_get_frame_extents (GdkSurface    *surface,
     {
       rect->x = wx;
       rect->y = wy;
-      rect->width = ww;
-      rect->height = wh;
+      rect->width = ww + wb * 2;
+      rect->height = wh + wb * 2;
     }
 
  out:
