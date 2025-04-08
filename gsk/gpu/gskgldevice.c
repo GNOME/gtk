@@ -85,18 +85,18 @@ gsk_gl_device_create_offscreen_image (GskGpuDevice   *device,
 }
 
 static GskGpuImage *
-gsk_gl_device_create_upload_image (GskGpuDevice    *device,
-                                   gboolean         with_mipmap,
-                                   GdkMemoryFormat  format,
-                                   gboolean         try_srgb,
-                                   gsize            width,
-                                   gsize            height)
+gsk_gl_device_create_upload_image (GskGpuDevice     *device,
+                                   gboolean          with_mipmap,
+                                   GdkMemoryFormat   format,
+                                   GskGpuConversion  conv,
+                                   gsize             width,
+                                   gsize             height)
 {
   GskGLDevice *self = GSK_GL_DEVICE (device);
 
   return gsk_gl_image_new (self,
                            format,
-                           try_srgb,
+                           conv == GSK_GPU_CONVERSION_SRGB,
                            0,
                            width,
                            height);

@@ -5,6 +5,7 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuimageprivate.h"
 #include "gskgpuprintprivate.h"
+#include "gskgpuutilsprivate.h"
 #include "gskgldeviceprivate.h"
 #include "gskglimageprivate.h"
 #ifdef GDK_RENDERING_VULKAN
@@ -348,8 +349,9 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame      *frame,
                                               with_mipmap,
                                               lod_level == 0 ? format
                                                              : gdk_memory_format_get_mipmap_format (format),
-                                              gdk_memory_format_alpha (format) != GDK_MEMORY_ALPHA_PREMULTIPLIED &&
-                                              gdk_color_state_get_no_srgb_tf (gdk_texture_get_color_state (texture)) != NULL,
+                                              gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_PREMULTIPLIED
+                                              ? GSK_GPU_CONVERSION_NONE
+                                              : gsk_gpu_color_state_get_conversion (gdk_texture_get_color_state (texture)),
                                               (gdk_texture_get_width (texture) + (1 << lod_level) - 1) >> lod_level,
                                               (gdk_texture_get_height (texture) + (1 << lod_level) - 1) >> lod_level);
   if (image == NULL)
@@ -518,7 +520,7 @@ gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
   self->image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
                                                     FALSE,
                                                     GDK_MEMORY_DEFAULT,
-                                                    gdk_color_state_get_no_srgb_tf (GDK_COLOR_STATE_SRGB) != NULL,
+                                                    gsk_gpu_color_state_get_conversion (GDK_COLOR_STATE_SRGB),
                                                     ceil (graphene_vec2_get_x (scale) * viewport->size.width),
                                                     ceil (graphene_vec2_get_y (scale) * viewport->size.height));
   self->viewport = *viewport;

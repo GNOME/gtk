@@ -279,7 +279,7 @@ gsk_gpu_device_get_globals_aligned_size (GskGpuDevice *self)
   return priv->globals_aligned_size;
 }
 
-/**
+/*<private>
  * gsk_gpu_device_create_offscreen_image:
  * @self: the device to create the offscreen in
  * @with_mipmap: whether to allocate memory for mipmap levels
@@ -317,15 +317,34 @@ gsk_gpu_device_create_atlas_image (GskGpuDevice *self,
   return GSK_GPU_DEVICE_GET_CLASS (self)->create_atlas_image (self, width, height);
 }
 
+/*<private>
+ * gsk_gpu_device_create_upload_image:
+ * @self: the device to create the offscreen in
+ * @with_mipmap: whether to try to allocate memory for mipmap levels
+ * @format: the desired format
+ * @conv: the desired builtin conversion
+ * @width: width of the image
+ * @height: height of the image
+ *
+ * Creates an image suitable for uploading data into.
+ *
+ * Note that the with_mipmap, format, and conv arguments are all hints and
+ * the device may choose a different format if those are not supported.
+ * The device will choose the most suitable format and the uploading code
+ * should convert on the CPU to that format.
+ *
+ * Returns: (nullable): The created image or `NULL` if the image size was
+ *   too large.
+ **/
 GskGpuImage *
-gsk_gpu_device_create_upload_image (GskGpuDevice   *self,
-                                    gboolean        with_mipmap,
-                                    GdkMemoryFormat format,
-                                    gboolean        try_srgb,
-                                    gsize           width,
-                                    gsize           height)
+gsk_gpu_device_create_upload_image (GskGpuDevice     *self,
+                                    gboolean          with_mipmap,
+                                    GdkMemoryFormat   format,
+                                    GskGpuConversion  conv,
+                                    gsize             width,
+                                    gsize             height)
 {
-  return GSK_GPU_DEVICE_GET_CLASS (self)->create_upload_image (self, with_mipmap, format, try_srgb, width, height);
+  return GSK_GPU_DEVICE_GET_CLASS (self)->create_upload_image (self, with_mipmap, format, conv, width, height);
 }
 
 GskGpuImage *
