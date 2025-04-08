@@ -671,11 +671,21 @@ xdg_toplevel_configure (void                *data,
           pending_state |= (GDK_TOPLEVEL_STATE_TILED |
                             GDK_TOPLEVEL_STATE_LEFT_TILED);
           break;
-#ifdef HAVE_TOPLEVEL_STATE_SUSPENDED
+        case XDG_TOPLEVEL_STATE_CONSTRAINED_TOP:
+          resize_constraint_state ^= GDK_TOPLEVEL_STATE_TOP_RESIZABLE;
+          break;
+        case XDG_TOPLEVEL_STATE_CONSTRAINED_RIGHT:
+          resize_constraint_state ^= GDK_TOPLEVEL_STATE_RIGHT_RESIZABLE;
+          break;
+        case XDG_TOPLEVEL_STATE_CONSTRAINED_BOTTOM:
+          resize_constraint_state ^= GDK_TOPLEVEL_STATE_BOTTOM_RESIZABLE;
+          break;
+        case XDG_TOPLEVEL_STATE_CONSTRAINED_LEFT:
+          resize_constraint_state ^= GDK_TOPLEVEL_STATE_LEFT_RESIZABLE;
+          break;
         case XDG_TOPLEVEL_STATE_SUSPENDED:
           pending_state |= GDK_TOPLEVEL_STATE_SUSPENDED;
           break;
-#endif
         default:
           /* Unknown state */
           break;
