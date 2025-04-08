@@ -48,6 +48,7 @@
 #include "gtkeditable.h"
 #include "gtkentry.h"
 #include "gtkstringlist.h"
+#include "gtklabel.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
@@ -686,9 +687,11 @@ init_theme (GtkInspectorVisual *vis)
       GtkWidget *row;
 
       /* theme is hardcoded, nothing we can do */
-      gtk_widget_set_sensitive (vis->theme_combo, FALSE);
-      row = gtk_widget_get_ancestor (vis->theme_combo, GTK_TYPE_LIST_BOX_ROW);
-      gtk_widget_set_tooltip_text (row, _("Theme is hardcoded by GTK_THEME"));
+      row = gtk_widget_get_parent (vis->theme_combo);
+      gtk_widget_unparent (vis->theme_combo);
+      vis->theme_combo = gtk_label_new ("Set via GTK_THEME");
+      gtk_widget_add_css_class (vis->theme_combo, "dim-label");
+      gtk_box_append (GTK_BOX (row), vis->theme_combo);
     }
 }
 
@@ -704,9 +707,11 @@ init_dark (GtkInspectorVisual *vis)
       GtkWidget *row;
 
       /* theme is hardcoded, nothing we can do */
-      gtk_widget_set_sensitive (vis->dark_switch, FALSE);
-      row = gtk_widget_get_ancestor (vis->theme_combo, GTK_TYPE_LIST_BOX_ROW);
-      gtk_widget_set_tooltip_text (row, _("Theme is hardcoded by GTK_THEME"));
+      row = gtk_widget_get_parent (vis->dark_switch);
+      gtk_widget_unparent (vis->dark_switch);
+      vis->dark_switch = gtk_label_new ("Set via GTK_THEME");
+      gtk_widget_add_css_class (vis->dark_switch, "dim-label");
+      gtk_box_append (GTK_BOX (row), vis->dark_switch);
     }
 }
 
@@ -864,9 +869,11 @@ init_cursors (GtkInspectorVisual *vis)
     {
       GtkWidget *row;
 
-      gtk_widget_set_sensitive (vis->cursor_combo, FALSE);
-      row = gtk_widget_get_ancestor (vis->cursor_combo, GTK_TYPE_LIST_BOX_ROW);
-      gtk_widget_set_tooltip_text (row, _("Cursor visuals are controlled by the Wayland compositor"));
+      row = gtk_widget_get_parent (vis->cursor_combo);
+      gtk_widget_unparent (vis->cursor_combo);
+      vis->cursor_combo = gtk_label_new ("Set by Compositor");
+      gtk_widget_add_css_class (vis->cursor_combo, "dim-label");
+      gtk_box_append (GTK_BOX (row), vis->cursor_combo);
     }
 #endif
 }
@@ -899,9 +906,11 @@ init_cursor_size (GtkInspectorVisual *vis)
     {
       GtkWidget *row;
 
-      gtk_widget_set_sensitive (vis->cursor_size_spin, FALSE);
-      row = gtk_widget_get_ancestor (vis->cursor_size_spin, GTK_TYPE_LIST_BOX_ROW);
-      gtk_widget_set_tooltip_text (row, _("Cursor sizes are controlled by the Wayland compositor"));
+      row = gtk_widget_get_parent (vis->cursor_size_spin);
+      gtk_widget_unparent (vis->cursor_size_spin);
+      vis->cursor_size_spin = gtk_label_new ("Set by Compositor");
+      gtk_widget_add_css_class (vis->cursor_size_spin, "dim-label");
+      gtk_box_append (GTK_BOX (row), vis->cursor_size_spin);
     }
 #endif
 }
