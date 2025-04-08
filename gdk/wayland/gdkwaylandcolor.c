@@ -409,7 +409,7 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
       };
       const char *features[] = {
         "icc-v4-v4", "parametric", "set-primaries", "set-tf-power",
-        "set-mastering-display-primaries", "extended-target-volume"
+        "set-mastering-display-primaries", "extended-target-volume", "windows-scrgb"
       };
       const char *tf[] = {
         "bt709", "gamma22", "gamma28", "st240", "linear", "log100",
