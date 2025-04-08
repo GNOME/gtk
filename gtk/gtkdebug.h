@@ -42,7 +42,7 @@ G_BEGIN_DECLS
  * @GTK_DEBUG_GEOMETRY: Information about size allocation
  * @GTK_DEBUG_ICONTHEME: Information about icon themes
  * @GTK_DEBUG_PRINTING: Information about printing
- * @GTK_DEBUG_BUILDER: Trace GtkBuilder operation
+ * @GTK_DEBUG_BUILDER_TRACE: Trace GtkBuilder operation
  * @GTK_DEBUG_SIZE_REQUEST: Information about size requests
  * @GTK_DEBUG_NO_CSS_CACHE: Disable the style property cache
  * @GTK_DEBUG_INTERACTIVE: Open the GTK inspector
@@ -82,6 +82,14 @@ G_BEGIN_DECLS
  * Information about deprecated CSS features.
  *
  * Since: 4.16
+ */
+
+/**
+ * GTK_DEBUG_BUILDER:
+ *
+ * Information about deprecated GtkBuilder features.
+ *
+ * Since: 4.18
  */
 typedef enum {
   GTK_DEBUG_TEXT            = 1 <<  0,

@@ -48,12 +48,14 @@
 #include "gtkeditable.h"
 #include "gtkentry.h"
 #include "gtkstringlist.h"
+#include "gtklabel.h"
 
 #ifdef GDK_WINDOWING_X11
 #include "x11/gdkx.h"
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
+#include "wayland/gdkdisplay-wayland.h"
 #endif
 #ifdef GDK_WINDOWING_MACOS
 #include "macos/gdkmacos.h"
@@ -685,9 +687,11 @@ init_theme (GtkInspectorVisual *vis)
       GtkWidget *row;
 
       /* theme is hardcoded, nothing we can do */
-      gtk_widget_set_sensitive (vis->theme_combo, FALSE);
-      row = gtk_widget_get_ancestor (vis->theme_combo, GTK_TYPE_LIST_BOX_ROW);
-      gtk_widget_set_tooltip_text (row, _("Theme is hardcoded by GTK_THEME"));
+      row = gtk_widget_get_parent (vis->theme_combo);
+      gtk_widget_unparent (vis->theme_combo);
+      vis->theme_combo = gtk_label_new ("Set via GTK_THEME");
+      gtk_widget_add_css_class (vis->theme_combo, "dim-label");
+      gtk_box_append (GTK_BOX (row), vis->theme_combo);
     }
 }
 
@@ -703,9 +707,11 @@ init_dark (GtkInspectorVisual *vis)
       GtkWidget *row;
 
       /* theme is hardcoded, nothing we can do */
-      gtk_widget_set_sensitive (vis->dark_switch, FALSE);
-      row = gtk_widget_get_ancestor (vis->theme_combo, GTK_TYPE_LIST_BOX_ROW);
-      gtk_widget_set_tooltip_text (row, _("Theme is hardcoded by GTK_THEME"));
+      row = gtk_widget_get_parent (vis->dark_switch);
+      gtk_widget_unparent (vis->dark_switch);
+      vis->dark_switch = gtk_label_new ("Set via GTK_THEME");
+      gtk_widget_add_css_class (vis->dark_switch, "dim-label");
+      gtk_box_append (GTK_BOX (row), vis->dark_switch);
     }
 }
 
@@ -856,6 +862,20 @@ init_cursors (GtkInspectorVisual *vis)
                                vis->cursor_combo, "selected",
                                G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
                                theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_object_unref);
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (vis->display) &&
+      GDK_WAYLAND_DISPLAY (vis->display)->cursor_shape != NULL)
+    {
+      GtkWidget *row;
+
+      row = gtk_widget_get_parent (vis->cursor_combo);
+      gtk_widget_unparent (vis->cursor_combo);
+      vis->cursor_combo = gtk_label_new ("Set by Compositor");
+      gtk_widget_add_css_class (vis->cursor_combo, "dim-label");
+      gtk_box_append (GTK_BOX (row), vis->cursor_combo);
+    }
+#endif
 }
 
 static void
@@ -879,6 +899,20 @@ init_cursor_size (GtkInspectorVisual *vis)
   gtk_adjustment_set_value (vis->cursor_size_adjustment, (double)size);
   g_signal_connect (vis->cursor_size_adjustment, "value-changed",
                     G_CALLBACK (cursor_size_changed), vis);
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (vis->display) &&
+      GDK_WAYLAND_DISPLAY (vis->display)->cursor_shape != NULL)
+    {
+      GtkWidget *row;
+
+      row = gtk_widget_get_parent (vis->cursor_size_spin);
+      gtk_widget_unparent (vis->cursor_size_spin);
+      vis->cursor_size_spin = gtk_label_new ("Set by Compositor");
+      gtk_widget_add_css_class (vis->cursor_size_spin, "dim-label");
+      gtk_box_append (GTK_BOX (row), vis->cursor_size_spin);
+    }
+#endif
 }
 
 static gboolean

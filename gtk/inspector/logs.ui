@@ -143,6 +143,12 @@
               </object>
             </child>
             <child>
+              <object class="GtkCheckButton" id="fallback">
+                <property name="label">Fallback</property>
+                <signal name="toggled" handler="flag_toggled"/>
+              </object>
+            </child>
+            <child>
               <object class="GtkCheckButton" id="verbose">
                 <property name="label">Verbose</property>
                 <signal name="toggled" handler="flag_toggled"/>
