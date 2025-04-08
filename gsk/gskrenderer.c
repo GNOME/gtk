@@ -489,12 +489,12 @@ get_renderer_for_name (const char *renderer_name)
 #endif
   else if (g_ascii_strcasecmp (renderer_name, "cairo") == 0)
     return GSK_TYPE_CAIRO_RENDERER;
-  else if (g_ascii_strcasecmp (renderer_name, "ngl") == 0 ||
+  else if (g_ascii_strcasecmp (renderer_name, "gl") == 0 ||
            g_ascii_strcasecmp (renderer_name, "opengl") == 0)
     return GSK_TYPE_GL_RENDERER;
-  else if (g_ascii_strcasecmp (renderer_name, "gl") == 0)
+  else if (g_ascii_strcasecmp (renderer_name, "ngl") == 0)
     {
-      g_warning ("The old GL renderer has been removed. Try GSK_RENDERER=help");
+      g_warning ("The new GL renderer has been renamed to gl. Try GSK_RENDERER=help");
       return GSK_TYPE_GL_RENDERER;
     }
 #ifdef GDK_RENDERING_VULKAN
@@ -511,7 +511,6 @@ get_renderer_for_name (const char *renderer_name)
 #endif
                         "     cairo - Use the Cairo fallback renderer\n"
                         "    opengl - Use the OpenGL renderer\n"
-                        "       ngl - Use the OpenGL renderer\n"
                         "        gl - Use the OpenGL renderer\n"
 #ifdef GDK_RENDERING_VULKAN
                         "    vulkan - Use the Vulkan renderer\n"
