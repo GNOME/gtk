@@ -84,7 +84,8 @@
  * - <kbd>Shift</kbd>+<kbd>F10</kbd> or <kbd>Menu</kbd> opens the context menu.
  * - <kbd>Ctrl</kbd>+<kbd>Z</kbd> undoes the last modification.
  * - <kbd>Ctrl</kbd>+<kbd>Y</kbd> or <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Z</kbd>
- *   redoes the last undone modification.
+ *    redoes the last undone modification.
+ * - <kbd>Clear</kbd> clears the content.
  *
  * Additionally, the following signals have default keybindings:
  *
@@ -113,6 +114,7 @@
  * - `selection.select-all` selects all of the widgets content.
  * - `text.redo` redoes the last change to the contents.
  * - `text.undo` undoes the last change to the contents.
+ * - `text.clear` clears the content.
  *
  * ## CSS nodes
  *
@@ -664,6 +666,7 @@ static void extend_selection (GtkTextView          *text_view,
 
 static void gtk_text_view_update_clipboard_actions (GtkTextView *text_view);
 static void gtk_text_view_update_emoji_action      (GtkTextView *text_view);
+static void gtk_text_view_update_clear_action      (GtkTextView *text_view);
 
 static void gtk_text_view_activate_clipboard_cut        (GtkWidget  *widget,
                                                          const char *action_name,
@@ -683,6 +686,10 @@ static void gtk_text_view_activate_selection_select_all (GtkWidget  *widget,
 static void gtk_text_view_activate_misc_insert_emoji    (GtkWidget  *widget,
                                                          const char *action_name,
                                                          GVariant   *parameter);
+
+static void gtk_text_view_clear (GtkWidget  *widget,
+                                 const char *action_name,
+                                 GVariant   *parameter);
 
 static void gtk_text_view_real_undo (GtkWidget   *widget,
                                      const char *action_name,
@@ -1649,6 +1656,9 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   gtk_widget_class_install_action (widget_class, "misc.insert-emoji", NULL,
                                    gtk_text_view_activate_misc_insert_emoji);
 
+  gtk_widget_class_install_action (widget_class, "text.clear", NULL,
+                                   gtk_text_view_clear);
+
   /**
    * GtkTextView|text.undo:
    *
@@ -1681,6 +1691,11 @@ gtk_text_view_class_init (GtkTextViewClass *klass)
   gtk_widget_class_add_binding_action (widget_class,
                                        GDK_KEY_Menu, 0,
                                        "menu.popup",
+                                       NULL);
+
+  gtk_widget_class_add_binding_action (widget_class,
+                                       GDK_KEY_Clear, GDK_NO_MODIFIER_MASK,
+                                       "text.clear",
                                        NULL);
 
   /* Moving the insertion point */
@@ -3478,6 +3493,7 @@ gtk_text_view_set_editable (GtkTextView *text_view,
                                       GTK_ACCESSIBLE_PROPERTY_READ_ONLY, !setting,
                                       -1);
       gtk_text_view_update_emoji_action (text_view);
+      gtk_text_view_update_clear_action (text_view);
 
       g_object_notify (G_OBJECT (text_view), "editable");
     }
@@ -9250,6 +9266,19 @@ gtk_text_view_activate_selection_delete (GtkWidget  *widget,
 }
 
 static void
+gtk_text_view_clear (GtkWidget  *widget,
+                     const char *action_name,
+                     GVariant   *parameter)
+{
+  GtkTextView *text_view = GTK_TEXT_VIEW (widget);
+  GtkTextIter start, end;
+
+  gtk_text_buffer_get_bounds (get_buffer (text_view), &start, &end);
+  gtk_text_buffer_delete (get_buffer (text_view), &start, &end);
+
+}
+
+static void
 gtk_text_view_activate_misc_insert_emoji (GtkWidget  *widget,
                                           const char *action_name,
                                           GVariant   *parameter)
@@ -9298,6 +9327,12 @@ gtk_text_view_update_emoji_action (GtkTextView *text_view)
   gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "misc.insert-emoji",
                                  (gtk_text_view_get_input_hints (text_view) & GTK_INPUT_HINT_NO_EMOJI) == 0 &&
                                  text_view->priv->editable);
+}
+
+static void
+gtk_text_view_update_clear_action (GtkTextView *text_view)
+{
+  gtk_widget_action_set_enabled (GTK_WIDGET (text_view), "text.clear", text_view->priv->editable);
 }
 
 static GMenuModel *
