@@ -661,6 +661,7 @@ test_introspection (void)
     { GTK_TYPE_TEXT, "menu.popup", NULL, NULL },
     { GTK_TYPE_TEXT, "text.redo", NULL, NULL },
     { GTK_TYPE_TEXT, "text.undo", NULL, NULL },
+    { GTK_TYPE_TEXT, "text.clear", NULL, NULL },
   };
 
   j = 0;
