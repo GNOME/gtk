@@ -30,7 +30,7 @@ GskGpuImage *           gsk_vulkan_image_new_for_offscreen              (GskVulk
 GskGpuImage *           gsk_vulkan_image_new_for_upload                 (GskVulkanDevice        *device,
                                                                          gboolean                with_mipmap,
                                                                          GdkMemoryFormat         format,
-                                                                         gboolean                try_srgb,
+                                                                         GskGpuConversion        conv,
                                                                          gsize                   width,
                                                                          gsize                   height);
 #ifdef HAVE_DMABUF

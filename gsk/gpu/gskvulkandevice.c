@@ -238,7 +238,8 @@ gsk_vulkan_device_create_upload_image (GskGpuDevice    *device,
   return gsk_vulkan_image_new_for_upload (self,
                                           with_mipmap,
                                           format,
-                                          try_srgb,
+                                          try_srgb ? GSK_GPU_CONVERSION_SRGB
+                                                   : GSK_GPU_CONVERSION_NONE,
                                           width,
                                           height);
 }
