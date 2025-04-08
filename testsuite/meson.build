@@ -34,7 +34,6 @@ setups = [
     'env': ['GDK_DISABLE=gles-api' ], },
   { 'backend': 'win32', 'if': os_win32 },
   { 'backend': 'broadway', 'if': broadway_enabled, },
-  { 'backend': 'win32', 'if': os_win32 },
 ]
 
 foreach setup : setups
