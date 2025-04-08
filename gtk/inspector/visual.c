@@ -54,6 +54,7 @@
 #endif
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
+#include "wayland/gdkdisplay-wayland.h"
 #endif
 #ifdef GDK_WINDOWING_MACOS
 #include "macos/gdkmacos.h"
@@ -856,6 +857,18 @@ init_cursors (GtkInspectorVisual *vis)
                                vis->cursor_combo, "selected",
                                G_BINDING_BIDIRECTIONAL | G_BINDING_SYNC_CREATE,
                                theme_to_pos, pos_to_theme, names, (GDestroyNotify)g_object_unref);
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (vis->display) &&
+      GDK_WAYLAND_DISPLAY (vis->display)->cursor_shape != NULL)
+    {
+      GtkWidget *row;
+
+      gtk_widget_set_sensitive (vis->cursor_combo, FALSE);
+      row = gtk_widget_get_ancestor (vis->cursor_combo, GTK_TYPE_LIST_BOX_ROW);
+      gtk_widget_set_tooltip_text (row, _("Cursor visuals are controlled by the Wayland compositor"));
+    }
+#endif
 }
 
 static void
@@ -879,6 +892,18 @@ init_cursor_size (GtkInspectorVisual *vis)
   gtk_adjustment_set_value (vis->cursor_size_adjustment, (double)size);
   g_signal_connect (vis->cursor_size_adjustment, "value-changed",
                     G_CALLBACK (cursor_size_changed), vis);
+
+#ifdef GDK_WINDOWING_WAYLAND
+  if (GDK_IS_WAYLAND_DISPLAY (vis->display) &&
+      GDK_WAYLAND_DISPLAY (vis->display)->cursor_shape != NULL)
+    {
+      GtkWidget *row;
+
+      gtk_widget_set_sensitive (vis->cursor_size_spin, FALSE);
+      row = gtk_widget_get_ancestor (vis->cursor_size_spin, GTK_TYPE_LIST_BOX_ROW);
+      gtk_widget_set_tooltip_text (row, _("Cursor sizes are controlled by the Wayland compositor"));
+    }
+#endif
 }
 
 static gboolean
