@@ -54,7 +54,8 @@ quit_cb (GtkWidget *widget,
 
 static void
 show_file (const char *filename,
-           gboolean    decorated)
+           gboolean    decorated,
+           gboolean    offload)
 {
   GskRenderNode *node;
   graphene_rect_t node_bounds;
@@ -77,6 +78,9 @@ show_file (const char *filename,
   picture = gtk_picture_new_for_paintable (paintable);
   gtk_picture_set_can_shrink (GTK_PICTURE (picture), FALSE);
   gtk_picture_set_content_fit (GTK_PICTURE (picture), GTK_CONTENT_FIT_SCALE_DOWN);
+
+  if (offload)
+    picture = gtk_graphics_offload_new (picture);
 
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_propagate_natural_width (GTK_SCROLLED_WINDOW (sw), TRUE);
@@ -111,7 +115,9 @@ do_show (int          *argc,
   GOptionContext *context;
   char **filenames = NULL;
   gboolean decorated = TRUE;
+  gboolean offload = FALSE;
   const GOptionEntry entries[] = {
+    { "offload", 0, G_OPTION_FLAG_NONE, G_OPTION_ARG_NONE, &offload, N_("Put node into offload container"), NULL },
     { "undecorated", 0, G_OPTION_FLAG_REVERSE, G_OPTION_ARG_NONE, &decorated, N_("Don't add a titlebar"), NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE") },
     { NULL, }
@@ -151,7 +157,7 @@ do_show (int          *argc,
       exit (1);
     }
 
-  show_file (filenames[0], decorated);
+  show_file (filenames[0], decorated, offload);
 
   g_strfreev (filenames);
 }

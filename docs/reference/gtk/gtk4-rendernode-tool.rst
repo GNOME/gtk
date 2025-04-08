@@ -42,6 +42,11 @@ Showing
 
 The ``show`` command displays the rendernode.
 
+``--offload``
+
+Puts the node into a GraphicsOffload. Intended for testing offloading capabilities
+of simple rendernodes.
+
 ``--undecorated``
 
 Removes window decorations. This is meant for rendering of exactly the rendernode
