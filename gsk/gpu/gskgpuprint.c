@@ -171,8 +171,6 @@ gsk_gpu_print_get_conversion_string (GskGpuConversion conv)
       return "";
     case GSK_GPU_CONVERSION_SRGB:
       return "srgb";
-    case GSK_GPU_CONVERSION_NARROW:
-      return "n";
     case GSK_GPU_CONVERSION_BT601:
       return "bt601";
     case GSK_GPU_CONVERSION_BT601_NARROW:

@@ -36,7 +36,7 @@ struct _GskGpuDeviceClass
   GskGpuImage *         (* create_upload_image)                         (GskGpuDevice           *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkMemoryFormat         format,
-                                                                         gboolean                try_srgb,
+                                                                         GskGpuConversion        conv,
                                                                          gsize                   width,
                                                                          gsize                   height);
   GskGpuImage *         (* create_download_image)                       (GskGpuDevice           *self,
@@ -74,7 +74,7 @@ GskGpuImage *           gsk_gpu_device_create_atlas_image               (GskGpuD
 GskGpuImage *           gsk_gpu_device_create_upload_image              (GskGpuDevice           *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkMemoryFormat         format,
-                                                                         gboolean                try_srgb,
+                                                                         GskGpuConversion        conv,
                                                                          gsize                   width,
                                                                          gsize                   height);
 GskGpuImage *           gsk_gpu_device_create_download_image            (GskGpuDevice           *self,

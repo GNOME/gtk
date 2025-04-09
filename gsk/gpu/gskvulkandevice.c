@@ -226,19 +226,19 @@ gsk_vulkan_device_create_atlas_image (GskGpuDevice *device,
 }
 
 static GskGpuImage *
-gsk_vulkan_device_create_upload_image (GskGpuDevice    *device,
-                                       gboolean         with_mipmap,
-                                       GdkMemoryFormat  format,
-                                       gboolean         try_srgb,
-                                       gsize            width,
-                                       gsize            height)
+gsk_vulkan_device_create_upload_image (GskGpuDevice     *device,
+                                       gboolean          with_mipmap,
+                                       GdkMemoryFormat   format,
+                                       GskGpuConversion  conv,
+                                       gsize             width,
+                                       gsize             height)
 {
   GskVulkanDevice *self = GSK_VULKAN_DEVICE (device);
 
   return gsk_vulkan_image_new_for_upload (self,
                                           with_mipmap,
                                           format,
-                                          try_srgb,
+                                          conv,
                                           width,
                                           height);
 }

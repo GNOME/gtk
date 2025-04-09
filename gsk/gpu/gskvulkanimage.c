@@ -78,11 +78,6 @@ gsk_vulkan_get_ycbcr_flags (GskGpuConversion               conv,
       *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL;
       return FALSE;
 
-    case GSK_GPU_CONVERSION_NARROW:
-      *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_IDENTITY;
-      *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_NARROW;
-      return TRUE;
-
     case GSK_GPU_CONVERSION_BT601:
       *out_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_YCBCR_601;
       *out_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL;
@@ -309,10 +304,37 @@ gsk_vulkan_device_check_format (GskVulkanDevice          *device,
 #undef CHECK_FLAGS
 }
 
+static gboolean
+gsk_vulkan_device_supports_conversion (GskVulkanDevice *device,
+                                       GskGpuConversion conv)
+{
+  switch (conv)
+    {
+    case GSK_GPU_CONVERSION_SRGB:
+    case GSK_GPU_CONVERSION_NONE:
+      break;
+
+    case GSK_GPU_CONVERSION_BT601:
+    case GSK_GPU_CONVERSION_BT601_NARROW:
+    case GSK_GPU_CONVERSION_BT709:
+    case GSK_GPU_CONVERSION_BT709_NARROW:
+    case GSK_GPU_CONVERSION_BT2020:
+    case GSK_GPU_CONVERSION_BT2020_NARROW:
+      if (!gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_YCBCR))
+        return FALSE;
+      break;
+
+    default:
+      break;
+    }
+
+  return TRUE;
+}
+
 static GskVulkanImage *
 gsk_vulkan_image_new (GskVulkanDevice           *device,
                       GdkMemoryFormat            format,
-                      gboolean                   try_srgb,
+                      GskGpuConversion           conv,
                       GskGpuImageFlags           required_flags,
                       gsize                      width,
                       gsize                      height,
@@ -327,15 +349,21 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   GskVulkanImage *self;
   VkDevice vk_device;
   GskGpuImageFlags flags;
-  GskGpuConversion conv;
+  gboolean try_srgb;
   VkFormat vk_format, vk_srgb_format;
   VkComponentMapping vk_components;
   VkSamplerYcbcrConversion vk_conversion;
+  VkSamplerYcbcrModelConversion vk_model;
+  VkSamplerYcbcrRange vk_range;
   gboolean needs_conversion;
 
   g_assert (width > 0 && height > 0);
 
+  if (!gsk_vulkan_device_supports_conversion (device, conv))
+    conv = GSK_GPU_CONVERSION_NONE;
+
   vk_srgb_format = VK_FORMAT_UNDEFINED;
+  try_srgb = conv == GSK_GPU_CONVERSION_SRGB;
 
   /* First, try the actual format */
   vk_format = gdk_memory_format_vk_format (format, &vk_components, &needs_conversion);
@@ -402,9 +430,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
         }
     }
 
-  if (vk_format == vk_srgb_format)
-    conv = GSK_GPU_CONVERSION_SRGB;
-  else
+  if (vk_format != vk_srgb_format && conv == GSK_GPU_CONVERSION_SRGB)
     conv = GSK_GPU_CONVERSION_NONE;
 
   if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
@@ -418,9 +444,6 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   if (!gsk_component_mapping_is_framebuffer_compatible (&vk_components) || needs_conversion)
     flags &= ~GSK_GPU_IMAGE_BLIT;
 
-  if (needs_conversion)
-    flags |= GSK_GPU_IMAGE_EXTERNAL;
-
   vk_device = gsk_vulkan_device_get_vk_device (device);
 
   self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
@@ -432,6 +455,22 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   self->vk_pipeline_stage = stage;
   self->vk_image_layout = layout;
   self->vk_access = access;
+
+  if (gsk_vulkan_get_ycbcr_flags (conv, &vk_model, &vk_range) || needs_conversion)
+    {
+      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
+                                                 &(GskVulkanYcbcrInfo) {
+                                                     .vk_format = vk_format,
+                                                     .vk_components = vk_components,
+                                                     .vk_ycbcr_model = vk_model,
+                                                     .vk_ycbcr_range = vk_range,
+                                                 });
+      gsk_vulkan_ycbcr_ref (self->ycbcr);
+      vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
+      flags |= GSK_GPU_IMAGE_EXTERNAL;
+    }
+  else
+    vk_conversion = VK_NULL_HANDLE;
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, conv, format, width, height);
 
@@ -472,21 +511,6 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                    self->allocation.vk_memory,
                                    self->allocation.offset);
 
-  if (needs_conversion)
-    {
-      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
-                                                 &(GskVulkanYcbcrInfo) {
-                                                     .vk_format = vk_format,
-                                                     .vk_components = vk_components,
-                                                     .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY,
-                                                     .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL,
-                                                 });
-      gsk_vulkan_ycbcr_ref (self->ycbcr);
-      vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
-    }
-  else
-    vk_conversion = VK_NULL_HANDLE;
-
   gsk_vulkan_image_create_view (self, vk_format, &vk_components, vk_conversion);
 
   return self;
@@ -496,7 +520,7 @@ GskGpuImage *
 gsk_vulkan_image_new_for_upload (GskVulkanDevice *device,
                                  gboolean         with_mipmap,
                                  GdkMemoryFormat  format,
-                                 gboolean         try_srgb,
+                                 GskGpuConversion conv,
                                  gsize            width,
                                  gsize            height)
 {
@@ -504,7 +528,7 @@ gsk_vulkan_image_new_for_upload (GskVulkanDevice *device,
 
   self = gsk_vulkan_image_new (device,
                                format,
-                               try_srgb,
+                               conv,
                                0, //with_mipmap ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_FILTERABLE) : 0,
                                width,
                                height,
@@ -628,7 +652,7 @@ gsk_vulkan_image_new_for_atlas (GskVulkanDevice *device,
 
   self = gsk_vulkan_image_new (device,
                                GDK_MEMORY_DEFAULT,
-                               FALSE,
+                               GSK_GPU_CONVERSION_NONE,
                                GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE,
                                width,
                                height,
@@ -654,7 +678,7 @@ gsk_vulkan_image_new_for_offscreen (GskVulkanDevice *device,
 
   self = gsk_vulkan_image_new (device,
                                preferred_format,
-                               try_srgb,
+                               try_srgb ? GSK_GPU_CONVERSION_SRGB : GSK_GPU_CONVERSION_NONE,
                                GSK_GPU_IMAGE_RENDERABLE |
                                (with_mipmap ? GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_FILTERABLE : 0),
                                width,
