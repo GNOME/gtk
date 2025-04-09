@@ -82,6 +82,9 @@ A number of keys are influencing behavior instead of just logging:
 `no-css-cache`
 : Bypass caching for CSS style properties
 
+`touch-ui`
+: Show touch ui elements for pointer events
+
 `snapshot`
 : Include debug render nodes in the generated snapshots
 
