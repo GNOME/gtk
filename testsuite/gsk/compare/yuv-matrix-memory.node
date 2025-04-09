@@ -43,7 +43,8 @@
   matrix: 9;
 }
 color-matrix {
-  matrix: scale3d(1.004,1.004,1.004);
+  matrix: scale3d(1.01,1.01,1.01);
+  offset: -0.005 -0.005 -0.005 0;
   child: container {
     texture {
       bounds: 0 0 256 64;
