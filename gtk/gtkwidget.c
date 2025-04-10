@@ -3541,24 +3541,30 @@ gtk_widget_unrealize (GtkWidget *widget)
 void
 gtk_widget_queue_draw (GtkWidget *widget)
 {
+  GtkWidget *w;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   /* Just return if the widget isn't mapped */
   if (!_gtk_widget_get_mapped (widget))
     return;
 
-  for (; widget; widget = _gtk_widget_get_parent (widget))
+  gtk_widget_push_verify_invariants (widget);
+
+  for (w = widget; w; w = _gtk_widget_get_parent (w))
     {
-      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (w);
 
       if (priv->draw_needed)
         break;
 
       priv->draw_needed = TRUE;
       g_clear_pointer (&priv->render_node, gsk_render_node_unref);
-      if (GTK_IS_NATIVE (widget) && _gtk_widget_get_realized (widget))
-        gdk_surface_queue_render (gtk_native_get_surface (GTK_NATIVE (widget)));
+      if (GTK_IS_NATIVE (w) && _gtk_widget_get_realized (w))
+        gdk_surface_queue_render (gtk_native_get_surface (GTK_NATIVE (w)));
     }
+
+  gtk_widget_pop_verify_invariants (widget);
 }
 
 static void
@@ -3584,9 +3590,13 @@ gtk_widget_queue_allocate (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  gtk_widget_push_verify_invariants (widget);
+
   gtk_widget_queue_draw (widget);
 
   gtk_widget_set_alloc_needed (widget);
+
+  gtk_widget_pop_verify_invariants (widget);
 }
 
 static inline gboolean
@@ -3664,9 +3674,13 @@ gtk_widget_queue_resize (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
+  gtk_widget_push_verify_invariants (widget);
+
   gtk_widget_queue_draw (widget);
 
   gtk_widget_queue_resize_internal (widget);
+
+  gtk_widget_pop_verify_invariants (widget);
 }
 
 /**
@@ -6477,6 +6491,23 @@ gtk_widget_verify_invariants (GtkWidget *widget)
                    G_OBJECT_TYPE_NAME (widget), widget);
 #endif
     }
+
+  /* Some layout-related invariants */
+
+  /* resize_needed -> alloc_needed */
+  if (widget->priv->resize_needed && !widget->priv->alloc_needed)
+    g_warning ("%s %p resize_needed but not alloc_needed",
+               G_OBJECT_TYPE_NAME (widget), widget);
+
+  /* alloc_needed -> draw_needed */
+  if (widget->priv->alloc_needed && !widget->priv->draw_needed)
+    g_warning ("%s %p alloc_needed but not draw_needed",
+               G_OBJECT_TYPE_NAME (widget), widget);
+
+  /* !mapped -> draw_needed */
+  if (!widget->priv->mapped && !widget->priv->draw_needed)
+    g_warning ("%s %p not mapped and not draw_needed",
+               G_OBJECT_TYPE_NAME (widget), widget);
 }
 
 /* The point of this push/pop is that invariants may not hold while
