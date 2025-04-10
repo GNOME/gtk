@@ -3628,7 +3628,7 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
   for (l = groups; l; l = l->next)
     {
       for (widgets = gtk_size_group_get_widgets (l->data); widgets; widgets = widgets->next)
-        gtk_widget_queue_resize_internal (widgets->data);
+        gtk_widget_queue_resize (widgets->data);
     }
 
   if (_gtk_widget_get_visible (widget))
@@ -3639,7 +3639,7 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
           if (GTK_IS_NATIVE (widget))
             gtk_widget_queue_allocate (parent);
           else
-            gtk_widget_queue_resize_internal (parent);
+            gtk_widget_queue_resize (parent);
         }
     }
 }
