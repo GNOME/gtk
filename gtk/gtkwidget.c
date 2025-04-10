@@ -3609,22 +3609,40 @@ gtk_widget_get_resize_needed (GtkWidget *widget)
   return priv->resize_needed;
 }
 
-/*
- * gtk_widget_queue_resize_internal:
+/**
+ * gtk_widget_queue_resize:
  * @widget: a widget
  *
- * Queue a resize on a widget, and on all other widgets
- * grouped with this widget.
+ * Flags a widget to have its size renegotiated.
+ *
+ * This should be called when a widget for some reason has a new
+ * size request. For example, when you change the text in a
+ * [class@Gtk.Label], the label queues a resize to ensure there’s
+ * enough space for the new text.
+ *
+ * Note that you cannot call gtk_widget_queue_resize() on a widget
+ * from inside its implementation of the [vfunc@Gtk.Widget.size_allocate]
+ * virtual method. Calls to gtk_widget_queue_resize() from inside
+ * [vfunc@Gtk.Widget.size_allocate] will be silently ignored.
+ *
+ * This function is only for use in widget implementations.
  */
-static void
-gtk_widget_queue_resize_internal (GtkWidget *widget)
+void
+gtk_widget_queue_resize (GtkWidget *widget)
 {
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+  GtkWidgetPrivate *priv;
   GSList *groups, *l, *widgets;
+
+  g_return_if_fail (GTK_IS_WIDGET (widget));
 
   if (gtk_widget_get_resize_needed (widget))
     return;
 
+  gtk_widget_push_verify_invariants (widget);
+
+  gtk_widget_queue_draw (widget);
+
+  priv = gtk_widget_get_instance_private (widget);
   priv->resize_needed = TRUE;
   _gtk_size_request_cache_clear (&priv->requests);
   gtk_widget_set_alloc_needed (widget);
@@ -3651,36 +3669,6 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
             gtk_widget_queue_resize (parent);
         }
     }
-}
-
-/**
- * gtk_widget_queue_resize:
- * @widget: a widget
- *
- * Flags a widget to have its size renegotiated.
- *
- * This should be called when a widget for some reason has a new
- * size request. For example, when you change the text in a
- * [class@Gtk.Label], the label queues a resize to ensure there’s
- * enough space for the new text.
- *
- * Note that you cannot call gtk_widget_queue_resize() on a widget
- * from inside its implementation of the [vfunc@Gtk.Widget.size_allocate]
- * virtual method. Calls to gtk_widget_queue_resize() from inside
- * [vfunc@Gtk.Widget.size_allocate] will be silently ignored.
- *
- * This function is only for use in widget implementations.
- */
-void
-gtk_widget_queue_resize (GtkWidget *widget)
-{
-  g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  gtk_widget_push_verify_invariants (widget);
-
-  gtk_widget_queue_draw (widget);
-
-  gtk_widget_queue_resize_internal (widget);
 
   gtk_widget_pop_verify_invariants (widget);
 }
