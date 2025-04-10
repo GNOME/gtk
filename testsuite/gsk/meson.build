@@ -395,7 +395,9 @@ node_parser_tests = [
   'empty-subsurface.ref.node',
   'empty-text.node',
   'empty-text.ref.node',
+  'empty-texture.node',
   'empty-texture.ref.node',
+  'empty-texture-scale.node',
   'empty-texture-scale.ref.node',
   'empty-transform.node',
   'empty-transform.ref.node',
@@ -455,10 +457,14 @@ node_parser_tests = [
   'text-font-options-error.ref.node',
   'text-font-options-error.ref.errors',
   'text-no-color.node',
+  'texture-fail.node',
   'texture-fail.ref.node',
   'texture-fail.errors',
+  'texture-names.node',
+  'texture-scale-filters.node',
   'texture-scale-filters.ref.node',
   'texture-scale-unknown-filter.errors',
+  'texture-scale-unknown-filter.node',
   'texture-scale-unknown-filter.ref.node',
   'transform-fail.node',
   'transform-fail.ref.node',
@@ -466,18 +472,6 @@ node_parser_tests = [
   # this fails in f40 since libpng changes the pngs while reencoding
   #'widgetfactory.node',
 ]
-
-# libpng 1.6.45 changes the chunk order. These ref tests can only pass on libpng >=1.6.45
-if png_dep.version().version_compare('>=1.6.45')
-node_parser_tests += [
-  'empty-texture-scale.node',
-  'empty-texture.node',
-  'texture-fail.node',
-  'texture-names.node',
-  'texture-scale-filters.node',
-  'texture-scale-unknown-filter.node',
-]
-endif
 
 foreach test : node_parser_tests
   if test.endswith('.node') and not test.endswith('.ref.node')
