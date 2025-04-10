@@ -926,7 +926,10 @@ parse_texture (GtkCssParser *parser,
     texture = parse_default_texture (parser, context);
 
   if (texture == NULL)
-    g_clear_pointer (&texture_name, g_free);
+    {
+      g_free (texture_name);
+      return FALSE;
+    }
     
   if (texture_name)
     {
