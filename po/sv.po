@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-07 18:41+0000\n"
-"PO-Revision-Date: 2025-03-09 16:07+0100\n"
+"POT-Creation-Date: 2025-04-07 00:45+0000\n"
+"PO-Revision-Date: 2025-04-10 17:42+0200\n"
 "Last-Translator: Anders Jonsson <anders.jonsson@norsjovallen.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "Language: sv\n"
@@ -35,20 +35,20 @@ msgstr ""
 msgid "No compatible transfer format found"
 msgstr "Inget kompatibelt överföringsformat hittades"
 
-#: gdk/broadway/gdkbroadway-server.c:135
+#: gdk/broadway/gdkbroadway-server.c:131
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "Broadway-displaytyp stöds inte: %s"
 
-#: gdk/gdkclipboard.c:231
+#: gdk/gdkclipboard.c:232
 msgid "This clipboard cannot store data."
 msgstr "Detta urklipp kan inte lagra data."
 
-#: gdk/gdkclipboard.c:286 gdk/gdkclipboard.c:780 gdk/gdkclipboard.c:1071
+#: gdk/gdkclipboard.c:287 gdk/gdkclipboard.c:781 gdk/gdkclipboard.c:1072
 msgid "Cannot read from empty clipboard."
 msgstr "Kan inte läsa från tomt urklipp."
 
-#: gdk/gdkclipboard.c:317 gdk/gdkclipboard.c:1121 gdk/gdkdrag.c:606
+#: gdk/gdkclipboard.c:318 gdk/gdkclipboard.c:1122 gdk/gdkdrag.c:606
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "Inga kompatibla format för att överföra urklippsinnehåll."
 
@@ -87,7 +87,7 @@ msgstr "Kan inte tillhandahålla innehåll som %s"
 msgid "The current backend does not support OpenGL"
 msgstr "Den aktuella bakänden stöder inte OpenGL"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1696
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1715
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Vulkan-stöd inaktiverat via GDK_DISABLE"
 
@@ -151,9 +151,9 @@ msgstr "Inga kompatibla format för att överföra innehåll."
 msgid "No GL API allowed."
 msgstr "Inget GL-API tillåtet."
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:745
-#: gdk/win32/gdkglcontext-win32-wgl.c:888
-#: gdk/win32/gdkglcontext-win32-wgl.c:932 gdk/x11/gdkglcontext-glx.c:699
+#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
+#: gdk/win32/gdkglcontext-win32-wgl.c:889
+#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
 msgid "Unable to create a GL context"
 msgstr "Kan inte skapa en GL-kontext"
 
@@ -755,21 +755,21 @@ msgstr ""
 "Misslyckades med att omvandla dra-och-släpp-data i W32-format 0x%x till %p "
 "(%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:667
+#: gdk/win32/gdkglcontext-win32-wgl.c:668
 msgid "No GL implementation is available"
 msgstr "Ingen GL-implementation tillgänglig"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:754
+#: gdk/win32/gdkglcontext-win32-wgl.c:755
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL-version %d.%d är för låg, behöver minst %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:772
+#: gdk/win32/gdkglcontext-win32-wgl.c:773
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL-implementationen kan inte dela GL-kontexter"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1052
+#: gdk/win32/gdkglcontext-win32-wgl.c:1053
 msgid "No available configurations for the given pixel format"
 msgstr "Inga tillgängliga inställningar för det givna bildpunktsformatet"
 
@@ -1840,7 +1840,7 @@ msgstr "Elementet <%s> är inte tillåtet inuti <%s>"
 msgid "Element <%s> not allowed at toplevel"
 msgstr "Elementet <%s> är inte tillåtet i toppnivå"
 
-#: gtk/gtkbuilder-menus.c:327
+#: gtk/gtkbuilder-menus.c:329
 #, c-format
 msgid "Text may not appear inside <%s>"
 msgstr "Text får inte finnas inuti <%s>"
@@ -2228,12 +2228,12 @@ msgid "_Edit"
 msgstr "R_edigera"
 
 #: gtk/gtkeditablelabel.c:171 gtk/gtklabel.c:5902 gtk/gtktext.c:6322
-#: gtk/gtktextview.c:9327
+#: gtk/gtktextview.c:9320
 msgid "_Copy"
 msgstr "_Kopiera"
 
 #: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5962 gtk/gtktext.c:2877
-#: gtk/gtktextview.c:9405
+#: gtk/gtktextview.c:9398
 msgid "Context menu"
 msgstr "Snabbvalsmeny"
 
@@ -2312,7 +2312,7 @@ msgstr "Det finns redan en fil med det namnet"
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6333 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6359 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2406,7 +2406,7 @@ msgid "If you delete an item, it will be permanently lost."
 msgstr "Om du tar bort ett objekt är det borta för alltid."
 
 #: gtk/gtkfilechooserwidget.c:1214 gtk/gtkfilechooserwidget.c:1816
-#: gtk/gtklabel.c:5904 gtk/gtktext.c:6330 gtk/gtktextview.c:9335
+#: gtk/gtklabel.c:5904 gtk/gtktext.c:6330 gtk/gtktextview.c:9328
 msgid "_Delete"
 msgstr "_Ta bort"
 
@@ -2751,7 +2751,7 @@ msgstr "Teckenvariationer"
 msgid "OpenGL context creation failed"
 msgstr "Skapande av OpenGL-kontext misslyckades"
 
-#: gtk/deprecated/gtkinfobar.c:501 gtk/gtkwindowcontrols.c:409
+#: gtk/deprecated/gtkinfobar.c:501 gtk/gtkwindowcontrols.c:412
 #: gtk/gtkwindowhandle.c:253
 msgid "Close"
 msgstr "Stäng"
@@ -2760,15 +2760,15 @@ msgstr "Stäng"
 msgid "Close the infobar"
 msgstr "Stäng inforaden"
 
-#: gtk/gtklabel.c:5901 gtk/gtktext.c:6318 gtk/gtktextview.c:9323
+#: gtk/gtklabel.c:5901 gtk/gtktext.c:6318 gtk/gtktextview.c:9316
 msgid "Cu_t"
 msgstr "Klipp _ut"
 
-#: gtk/gtklabel.c:5903 gtk/gtktext.c:6326 gtk/gtktextview.c:9331
+#: gtk/gtklabel.c:5903 gtk/gtktext.c:6326 gtk/gtktextview.c:9324
 msgid "_Paste"
 msgstr "Klistra _in"
 
-#: gtk/gtklabel.c:5909 gtk/gtktext.c:6339 gtk/gtktextview.c:9356
+#: gtk/gtklabel.c:5909 gtk/gtktext.c:6339 gtk/gtktextview.c:9349
 msgid "Select _All"
 msgstr "Markera _allt"
 
@@ -2847,7 +2847,7 @@ msgid "Play"
 msgstr "Spela upp"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6334
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6360
 msgid "_OK"
 msgstr "_OK"
 
@@ -3470,7 +3470,7 @@ msgstr "Slut på papper"
 
 #. Translators: this is a printer status.
 #: gtk/print/gtkprintoperation-win32.c:630
-#: modules/printbackends/gtkprintbackendcpdb.c:1522
+#: modules/printbackends/gtkprintbackendcpdb.c:1521
 #: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused"
 msgstr "Pausad"
@@ -3724,7 +3724,7 @@ msgstr "Sidopanel"
 msgid "Change di_rection"
 msgstr "Änd_ra riktning"
 
-#: gtk/gtktext.c:6349 gtk/gtktextview.c:9361
+#: gtk/gtktext.c:6349 gtk/gtktextview.c:9354
 msgid "Insert _Emoji"
 msgstr "Infoga _emoji"
 
@@ -3884,20 +3884,20 @@ msgctxt "Line ending name"
 msgid "Mac OS Classic"
 msgstr "Klassiskt Mac OS"
 
-#: gtk/gtktextview.c:9343
+#: gtk/gtktextview.c:9336
 msgid "_Undo"
 msgstr "_Ångra"
 
-#: gtk/gtktextview.c:9347
+#: gtk/gtktextview.c:9340
 msgid "_Redo"
 msgstr "_Gör om"
 
-#: gtk/gtkwindow.c:6322
+#: gtk/gtkwindow.c:6348
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Vill du använda GTK Inspector?"
 
-#: gtk/gtkwindow.c:6324
+#: gtk/gtkwindow.c:6350
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3908,27 +3908,27 @@ msgstr ""
 "det inre i vilket GTK-program som helst. Användning av det kan medföra att "
 "programmet avslutar eller kraschar."
 
-#: gtk/gtkwindow.c:6329
+#: gtk/gtkwindow.c:6355
 msgid "Don’t show this message again"
 msgstr "Visa inte detta meddelande igen"
 
-#: gtk/gtkwindowcontrols.c:361 gtk/gtkwindowhandle.c:237
+#: gtk/gtkwindowcontrols.c:362 gtk/gtkwindowhandle.c:237
 msgid "Minimize"
 msgstr "Minimera"
 
-#: gtk/gtkwindowcontrols.c:363
+#: gtk/gtkwindowcontrols.c:364
 msgid "Minimize the window"
 msgstr "Minimera fönstret"
 
-#: gtk/gtkwindowcontrols.c:387 gtk/gtkwindowhandle.c:243
+#: gtk/gtkwindowcontrols.c:389 gtk/gtkwindowhandle.c:243
 msgid "Maximize"
 msgstr "Maximera"
 
-#: gtk/gtkwindowcontrols.c:389
+#: gtk/gtkwindowcontrols.c:391
 msgid "Maximize the window"
 msgstr "Maximera fönstret"
 
-#: gtk/gtkwindowcontrols.c:411
+#: gtk/gtkwindowcontrols.c:414
 msgid "Close the window"
 msgstr "Stäng fönstret"
 
@@ -4091,21 +4091,21 @@ msgstr "Stilklasser"
 msgid "CSS Property"
 msgstr "CSS-egenskap"
 
-#: gtk/inspector/general.c:446
+#: gtk/inspector/general.c:469
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM-kontext är hårdkodad med GTK_IM_MODULE"
 
-#: gtk/inspector/general.c:577
+#: gtk/inspector/general.c:644
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Ingen"
 
-#: gtk/inspector/general.c:674
+#: gtk/inspector/general.c:741
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Okänd"
 
-#: gtk/inspector/general.c:928 gtk/inspector/general.c:967
+#: gtk/inspector/general.c:995 gtk/inspector/general.c:1034
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Ingen"
@@ -4115,122 +4115,130 @@ msgid "Copy to clipboard as gitlab markdown"
 msgstr "Kopiera till urklipp som gitlab-markdown"
 
 #: gtk/inspector/general.ui:45
+msgid "Operating System"
+msgstr "Operativsystem"
+
+#: gtk/inspector/general.ui:71
 msgid "GTK Version"
 msgstr "GTK-version"
 
-#: gtk/inspector/general.ui:71
+#: gtk/inspector/general.ui:97
 msgid "GDK Backend"
 msgstr "GDK-bakände"
 
-#: gtk/inspector/general.ui:97
+#: gtk/inspector/general.ui:123
 msgid "GSK Renderer"
 msgstr "GSK-renderare"
 
-#: gtk/inspector/general.ui:123
+#: gtk/inspector/general.ui:149
 msgid "Pango Fontmap"
 msgstr "Pango-typsnittskarta"
 
-#: gtk/inspector/general.ui:149
+#: gtk/inspector/general.ui:175
 msgid "Media Backend"
 msgstr "Mediabakände"
 
-#: gtk/inspector/general.ui:175
+#: gtk/inspector/general.ui:201
 msgid "Input Method"
 msgstr "Inmatningsmetod"
 
-#: gtk/inspector/general.ui:212
+#: gtk/inspector/general.ui:227
+msgid "Accessibility Backend"
+msgstr "Hjälpmedelsbakände"
+
+#: gtk/inspector/general.ui:264
 msgid "Application ID"
 msgstr "Program-ID"
 
-#: gtk/inspector/general.ui:238
+#: gtk/inspector/general.ui:290
 msgid "Resource Path"
 msgstr "Resurssökväg"
 
-#: gtk/inspector/general.ui:275 gtk/ui/gtkplacesview.ui:63
+#: gtk/inspector/general.ui:327 gtk/ui/gtkplacesview.ui:63
 msgid "Prefix"
 msgstr "Prefix"
 
-#: gtk/inspector/general.ui:302
+#: gtk/inspector/general.ui:354
 msgid "Environment"
 msgstr "Miljö"
 
-#: gtk/inspector/general.ui:405
+#: gtk/inspector/general.ui:457
 msgid "Display"
 msgstr "Display"
 
-#: gtk/inspector/general.ui:432
+#: gtk/inspector/general.ui:484
 msgid "RGBA Visual"
 msgstr "RGBA-visuell"
 
-#: gtk/inspector/general.ui:458
+#: gtk/inspector/general.ui:510
 msgid "Composited"
 msgstr "Sammansatt"
 
-#: gtk/inspector/general.ui:483
+#: gtk/inspector/general.ui:535
 msgid "Protocols"
 msgstr "Protokoll"
 
-#: gtk/inspector/general.ui:539
+#: gtk/inspector/general.ui:591
 msgid "GL Renderer"
 msgstr "GL-renderare"
 
-#: gtk/inspector/general.ui:568
+#: gtk/inspector/general.ui:620
 msgid "GL Vendor"
 msgstr "GL-leverantör"
 
-#: gtk/inspector/general.ui:597
+#: gtk/inspector/general.ui:649
 msgid "GL Version"
 msgstr "GL-version"
 
-#: gtk/inspector/general.ui:624
+#: gtk/inspector/general.ui:676
 msgid "GL Backend Vendor"
 msgstr "GL-bakändesleverantör"
 
-#: gtk/inspector/general.ui:651
+#: gtk/inspector/general.ui:703
 msgid "GL Backend Version"
 msgstr "GL-bakändesversion"
 
-#: gtk/inspector/general.ui:701
+#: gtk/inspector/general.ui:753
 msgid "GL Full Version"
 msgstr "Fullständig GL-version"
 
-#: gtk/inspector/general.ui:730
+#: gtk/inspector/general.ui:782
 msgid "GLSL Version"
 msgstr "GLSL-version"
 
-#: gtk/inspector/general.ui:759
+#: gtk/inspector/general.ui:811
 msgid "GL Extensions"
 msgstr "GL-tillägg"
 
-#: gtk/inspector/general.ui:847
+#: gtk/inspector/general.ui:899
 msgid "EGL Extensions"
 msgstr "EGL-tillägg"
 
-#: gtk/inspector/general.ui:934
+#: gtk/inspector/general.ui:986
 msgid "GL Features"
 msgstr "GL-funktioner"
 
-#: gtk/inspector/general.ui:970
+#: gtk/inspector/general.ui:1022
 msgid "Vulkan Device"
 msgstr "Vulkan-enhet"
 
-#: gtk/inspector/general.ui:997
+#: gtk/inspector/general.ui:1049
 msgid "Vulkan API Version"
 msgstr "Vulkan-API-version"
 
-#: gtk/inspector/general.ui:1024
+#: gtk/inspector/general.ui:1076
 msgid "Vulkan Driver Version"
 msgstr "Vulkan-drivrutinsversion"
 
-#: gtk/inspector/general.ui:1073
+#: gtk/inspector/general.ui:1125
 msgid "Vulkan Layers"
 msgstr "Vulkan-lager"
 
-#: gtk/inspector/general.ui:1142
+#: gtk/inspector/general.ui:1194
 msgid "Vulkan Extensions"
 msgstr "Vulkan-tillägg"
 
-#: gtk/inspector/general.ui:1229
+#: gtk/inspector/general.ui:1281
 msgid "Vulkan Features"
 msgstr "Vulkan-funktioner"
 
@@ -4448,7 +4456,7 @@ msgstr "Källa:"
 msgid "Defined At"
 msgstr "Definierad vid"
 
-#: gtk/inspector/recorder.c:2055
+#: gtk/inspector/recorder.c:2059
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Sparande av RenderNode misslyckades"
@@ -6961,13 +6969,13 @@ msgid "Borderless"
 msgstr "Kantlöst"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1519
+#: modules/printbackends/gtkprintbackendcpdb.c:1518
 #: modules/printbackends/gtkprintbackendcups.c:2636
 msgid "Paused; Rejecting Jobs"
 msgstr "Pausad; Avvisar jobb"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1525
+#: modules/printbackends/gtkprintbackendcpdb.c:1524
 #: modules/printbackends/gtkprintbackendcups.c:2642
 msgid "Rejecting Jobs"
 msgstr "Avvisar jobb"
