@@ -790,9 +790,10 @@ update_context_from_dragging_info (id <NSDraggingInfo> sender)
           wh = gdk_window_get_height (win);
 
           if (gx > wx && gy > wy && gx <= wx + ww && gy <= wy + wh)
-            event->dnd.context->dest_window = g_object_ref (win);
-            break;
-        }
+            {
+              event->dnd.context->dest_window = g_object_ref (win);
+              break;
+            }}
     }
 
   device = gdk_drag_context_get_device (_gdk_quartz_drag_source_context);
