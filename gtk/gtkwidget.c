@@ -2889,7 +2889,9 @@ gtk_widget_map (GtkWidget *widget)
 
       update_cursor_on_state_change (widget);
 
-      gtk_widget_queue_draw (widget);
+      /* widget->draw_needed is guaranteed to be TRUE here. Propagate it */
+      if (widget->priv->parent)
+        gtk_widget_queue_draw (widget->priv->parent);
 
       gtk_accessible_update_state (GTK_ACCESSIBLE (widget),
                                    GTK_ACCESSIBLE_STATE_HIDDEN, FALSE,
