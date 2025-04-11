@@ -6389,23 +6389,6 @@ gtk_widget_verify_invariants (GtkWidget *widget)
         g_warning ("%s %p is mapped but not child_visible",
                    gtk_widget_get_name (widget), widget);
     }
-  else
-    {
-      /* Not mapped implies... */
-
-#if 0
-  /* This check makes sense for normal toplevels, but for
-   * something like a toplevel that is embedded within a clutter
-   * state, mapping may depend on external factors.
-   */
-      if (widget->priv->toplevel)
-        {
-          if (widget->priv->visible)
-            g_warning ("%s %p toplevel is visible but not mapped",
-                       G_OBJECT_TYPE_NAME (widget), widget);
-        }
-#endif
-    }
 
   /* Parent related checks aren't possible if parent has
    * verifying_invariants_count > 0 because parent needs to recurse
@@ -6417,18 +6400,6 @@ gtk_widget_verify_invariants (GtkWidget *widget)
           parent->priv->realized)
         {
           /* Parent realized implies... */
-
-#if 0
-          /* This is in widget_system.txt but appears to fail
-           * because there's no gtk_container_realize() that
-           * realizes all children... instead we just lazily
-           * wait for map to fix things up.
-           */
-          if (!widget->priv->realized)
-            g_warning ("%s %p is realized but child %s %p is not realized",
-                       G_OBJECT_TYPE_NAME (parent), parent,
-                       G_OBJECT_TYPE_NAME (widget), widget);
-#endif
         }
       else if (priv->realized && !GTK_IS_ROOT (widget))
         {
@@ -6460,26 +6431,6 @@ gtk_widget_verify_invariants (GtkWidget *widget)
                      parent ? gtk_widget_get_name (parent) : "no parent", parent,
                      parent ? parent->priv->mapped : FALSE);
         }
-    }
-
-  if (!priv->realized)
-    {
-      /* Not realized implies... */
-
-#if 0
-      /* widget_system.txt says these hold, but they don't. */
-      if (widget->priv->alloc_needed)
-        g_warning ("%s %p alloc needed but not realized",
-                   G_OBJECT_TYPE_NAME (widget), widget);
-
-      if (widget->priv->width_request_needed)
-        g_warning ("%s %p width request needed but not realized",
-                   G_OBJECT_TYPE_NAME (widget), widget);
-
-      if (widget->priv->height_request_needed)
-        g_warning ("%s %p height request needed but not realized",
-                   G_OBJECT_TYPE_NAME (widget), widget);
-#endif
     }
 
   /* Some layout-related invariants */
