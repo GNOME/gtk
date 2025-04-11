@@ -301,6 +301,37 @@ needs_blur (float        radius,
   return TRUE;
 }
 
+static void
+apply_current_scale (cairo_t *cr,
+                     double  *x,
+                     double  *y)
+{
+  double x_scale, y_scale;
+  cairo_matrix_t matrix;
+
+  cairo_get_matrix (cr, &matrix);
+
+  if (matrix.xx != 0 || matrix.yx != 0)
+    {
+      x_scale = sqrt (matrix.xx * matrix.xx + matrix.yx * matrix.yx);
+      y_scale = (matrix.xx * matrix.yy - matrix.yx * matrix.xy) / x_scale;
+    }
+  else if (matrix.xy != 0 || matrix.yy != 0)
+    {
+      y_scale = sqrt (matrix.xy * matrix.xy + matrix.yy * matrix.yy);
+      x_scale = (matrix.xx * matrix.yy - matrix.yx * matrix.xy) / y_scale;
+    }
+  else
+    {
+      return;
+    }
+
+  if (x)
+    *x *= fabs (x_scale);
+  if (y)
+    *y *= fabs (y_scale);
+}
+
 static const cairo_user_data_key_t original_cr_key;
 
 cairo_t *
@@ -327,6 +358,7 @@ gsk_cairo_blur_start_drawing (cairo_t         *cr,
 
   x_scale = y_scale = 1;
   cairo_surface_get_device_scale (cairo_get_target (cr), &x_scale, &y_scale);
+  apply_current_scale (cr, &x_scale, &y_scale);
 
   if (blur_flags & GSK_BLUR_REPEAT)
     {
