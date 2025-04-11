@@ -87,6 +87,8 @@ _gdk_android_toplevel_bind_native (JNIEnv *env, jobject this,
   self->activity = (*env)->NewGlobalRef (env, this);
   (*env)->SetLongField (env, this, gdk_android_get_java_cache ()->toplevel.native_identifier, native_identifier);
 
+  (*env)->CallVoidMethod (env, this, gdk_android_get_java_cache ()->toplevel.attach_toplevel_surface);
+
   gdk_android_toplevel_update_title (self);
   gdk_android_toplevel_update_window (self);
 
