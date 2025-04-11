@@ -230,6 +230,7 @@ gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject ac
   gdk_android_java_cache.toplevel.toplevel_view = (*env)->GetFieldID (env, gdk_android_java_cache.toplevel.klass, "view", "Lorg/gtk/android/ToplevelActivity$ToplevelView;");
   POPULATE_GDK_REFCACHE_STRING (toplevel, toplevel_identifier_key, "toplevelIdentifierKey")
   POPULATE_GDK_REFCACHE_METHOD (toplevel, bind_native, "bindNative", "(J)V")
+  POPULATE_GDK_REFCACHE_METHOD (toplevel, attach_toplevel_surface, "attachToplevelSurface", "()V")
   POPULATE_GDK_REFCACHE_METHOD (toplevel, post_window_configuration, "postWindowConfiguration", "(IZ)V")
   POPULATE_GDK_REFCACHE_METHOD (toplevel, post_title, "postTitle", "(Ljava/lang/String;)V")
   (*env)->RegisterNatives (env, toplevel_class, toplevel_natives, sizeof toplevel_natives / sizeof (JNINativeMethod));
