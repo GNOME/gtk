@@ -2889,7 +2889,9 @@ gtk_widget_map (GtkWidget *widget)
 
       update_cursor_on_state_change (widget);
 
-      gtk_widget_queue_draw (widget);
+      /* widget->draw_needed is guaranteed to be TRUE here. Propagate it */
+      if (widget->priv->parent)
+        gtk_widget_queue_draw (widget->priv->parent);
 
       gtk_accessible_update_state (GTK_ACCESSIBLE (widget),
                                    GTK_ACCESSIBLE_STATE_HIDDEN, FALSE,
@@ -3541,24 +3543,30 @@ gtk_widget_unrealize (GtkWidget *widget)
 void
 gtk_widget_queue_draw (GtkWidget *widget)
 {
+  GtkWidget *w;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
   /* Just return if the widget isn't mapped */
   if (!_gtk_widget_get_mapped (widget))
     return;
 
-  for (; widget; widget = _gtk_widget_get_parent (widget))
+  gtk_widget_push_verify_invariants (widget);
+
+  for (w = widget; w; w = _gtk_widget_get_parent (w))
     {
-      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
+      GtkWidgetPrivate *priv = gtk_widget_get_instance_private (w);
 
       if (priv->draw_needed)
         break;
 
       priv->draw_needed = TRUE;
       g_clear_pointer (&priv->render_node, gsk_render_node_unref);
-      if (GTK_IS_NATIVE (widget) && _gtk_widget_get_realized (widget))
-        gdk_surface_queue_render (gtk_native_get_surface (GTK_NATIVE (widget)));
+      if (GTK_IS_NATIVE (w) && _gtk_widget_get_realized (w))
+        gdk_surface_queue_render (gtk_native_get_surface (GTK_NATIVE (w)));
     }
+
+  gtk_widget_pop_verify_invariants (widget);
 }
 
 static void
@@ -3584,10 +3592,13 @@ gtk_widget_queue_allocate (GtkWidget *widget)
 {
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (_gtk_widget_get_realized (widget))
-    gtk_widget_queue_draw (widget);
+  gtk_widget_push_verify_invariants (widget);
+
+  gtk_widget_queue_draw (widget);
 
   gtk_widget_set_alloc_needed (widget);
+
+  gtk_widget_pop_verify_invariants (widget);
 }
 
 static inline gboolean
@@ -3596,50 +3607,6 @@ gtk_widget_get_resize_needed (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
   return priv->resize_needed;
-}
-
-/*
- * gtk_widget_queue_resize_internal:
- * @widget: a widget
- *
- * Queue a resize on a widget, and on all other widgets
- * grouped with this widget.
- */
-static void
-gtk_widget_queue_resize_internal (GtkWidget *widget)
-{
-  GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-  GSList *groups, *l, *widgets;
-
-  if (gtk_widget_get_resize_needed (widget))
-    return;
-
-  priv->resize_needed = TRUE;
-  _gtk_size_request_cache_clear (&priv->requests);
-  gtk_widget_set_alloc_needed (widget);
-
-  if (priv->resize_func)
-    priv->resize_func (widget);
-
-  groups = _gtk_widget_get_sizegroups (widget);
-
-  for (l = groups; l; l = l->next)
-    {
-      for (widgets = gtk_size_group_get_widgets (l->data); widgets; widgets = widgets->next)
-        gtk_widget_queue_resize_internal (widgets->data);
-    }
-
-  if (_gtk_widget_get_visible (widget))
-    {
-      GtkWidget *parent = _gtk_widget_get_parent (widget);
-      if (parent)
-        {
-          if (GTK_IS_NATIVE (widget))
-            gtk_widget_queue_allocate (parent);
-          else
-            gtk_widget_queue_resize_internal (parent);
-        }
-    }
 }
 
 /**
@@ -3663,12 +3630,47 @@ gtk_widget_queue_resize_internal (GtkWidget *widget)
 void
 gtk_widget_queue_resize (GtkWidget *widget)
 {
+  GtkWidgetPrivate *priv;
+  GSList *groups, *l, *widgets;
+
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (_gtk_widget_get_realized (widget))
-    gtk_widget_queue_draw (widget);
+  if (gtk_widget_get_resize_needed (widget))
+    return;
 
-  gtk_widget_queue_resize_internal (widget);
+  gtk_widget_push_verify_invariants (widget);
+
+  gtk_widget_queue_draw (widget);
+
+  priv = gtk_widget_get_instance_private (widget);
+  priv->resize_needed = TRUE;
+  _gtk_size_request_cache_clear (&priv->requests);
+  gtk_widget_set_alloc_needed (widget);
+
+  if (priv->resize_func)
+    priv->resize_func (widget);
+
+  groups = _gtk_widget_get_sizegroups (widget);
+
+  for (l = groups; l; l = l->next)
+    {
+      for (widgets = gtk_size_group_get_widgets (l->data); widgets; widgets = widgets->next)
+        gtk_widget_queue_resize (widgets->data);
+    }
+
+  if (_gtk_widget_get_visible (widget))
+    {
+      GtkWidget *parent = _gtk_widget_get_parent (widget);
+      if (parent)
+        {
+          if (GTK_IS_NATIVE (widget))
+            gtk_widget_queue_allocate (parent);
+          else
+            gtk_widget_queue_resize (parent);
+        }
+    }
+
+  gtk_widget_pop_verify_invariants (widget);
 }
 
 /**
@@ -6479,6 +6481,23 @@ gtk_widget_verify_invariants (GtkWidget *widget)
                    G_OBJECT_TYPE_NAME (widget), widget);
 #endif
     }
+
+  /* Some layout-related invariants */
+
+  /* resize_needed -> alloc_needed */
+  if (widget->priv->resize_needed && !widget->priv->alloc_needed)
+    g_warning ("%s %p resize_needed but not alloc_needed",
+               G_OBJECT_TYPE_NAME (widget), widget);
+
+  /* alloc_needed -> draw_needed */
+  if (widget->priv->alloc_needed && !widget->priv->draw_needed)
+    g_warning ("%s %p alloc_needed but not draw_needed",
+               G_OBJECT_TYPE_NAME (widget), widget);
+
+  /* !mapped -> draw_needed */
+  if (!widget->priv->mapped && !widget->priv->draw_needed)
+    g_warning ("%s %p not mapped and not draw_needed",
+               G_OBJECT_TYPE_NAME (widget), widget);
 }
 
 /* The point of this push/pop is that invariants may not hold while
