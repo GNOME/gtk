@@ -4515,7 +4515,9 @@ append_compressed_bytes_param (Printer    *p,
   compressor = g_zlib_compressor_new (G_ZLIB_COMPRESSOR_FORMAT_GZIP, 9);
   compressed_bytes = g_converter_convert_bytes (G_CONVERTER (compressor), bytes, NULL);
   g_assert (compressed_bytes != NULL);
-
+  /* Set the OS code to UNIX on all platforms for reproducibility, see
+   * https://gitlab.gnome.org/GNOME/glib/-/issues/3663 */
+  ((guchar *) g_bytes_get_data (compressed_bytes, NULL))[9] = 0x03;
   append_bytes_param (p, param_name, compressed_bytes, "application/gzip");
 }
 
