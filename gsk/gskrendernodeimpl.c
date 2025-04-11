@@ -7481,6 +7481,9 @@ gsk_text_node_new2 (PangoFont              *font,
                  offset->y + pango_units_to_float (ink_rect.y),
                  pango_units_to_float (ink_rect.width),
                  pango_units_to_float (ink_rect.height));
+#ifdef G_OS_WIN32
+  graphene_rect_inset (&node->bounds, 1, 1);
+#endif
 
   return node;
 }
