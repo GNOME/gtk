@@ -365,6 +365,8 @@ gtk_accesskit_root_constructed (GObject *gobject)
   gpointer window = gdk_macos_surface_get_native_window (GDK_MACOS_SURFACE (surface));
 #endif
 
+  g_assert (gtk_native_get_surface (GTK_NATIVE (self->root_widget)) != NULL);
+
   self->contexts = g_hash_table_new (NULL, NULL);
 
 #if defined(GDK_WINDOWING_WIN32)
