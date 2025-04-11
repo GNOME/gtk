@@ -60,7 +60,6 @@ compare_render_tests = [
   'css-background',
   'dihedral',
   'dihedral-f',
-  'eagain',
   'empty-blend',
   'empty-blur',
   'empty-border',
@@ -253,7 +252,6 @@ compare_xfails = {
     'blur-child-bounds-oversize': ['clip'], # 6450
     'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
     'big-checkerboard': ['clipped'], # 6444
-    'inter-optical-scaling': ['flip', 'rotate', 'mask', 'colorflip'],
   },
   'vulkan': {
     'radial-gradient-with-64-colorstops': ['clip', 'colorflip'],
@@ -263,12 +261,10 @@ compare_xfails = {
     'repeating-radial-gradient-edge-colors': ['colorflip'],
     'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
     'big-checkerboard': ['clip'], # 6444
-    'inter-optical-scaling': ['flip', 'rotate', 'mask', 'colorflip'],
   },
   'cairo': {
     'inter-hinting': ['flip', 'rotate'],
-    'inter-optical-scaling': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
-    'eagain': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
+    'inter-optical-scaling': ['flip', 'rotate'],
   }
 }
 
@@ -395,7 +391,9 @@ node_parser_tests = [
   'empty-subsurface.ref.node',
   'empty-text.node',
   'empty-text.ref.node',
+  'empty-texture.node',
   'empty-texture.ref.node',
+  'empty-texture-scale.node',
   'empty-texture-scale.ref.node',
   'empty-transform.node',
   'empty-transform.ref.node',
@@ -455,10 +453,14 @@ node_parser_tests = [
   'text-font-options-error.ref.node',
   'text-font-options-error.ref.errors',
   'text-no-color.node',
+  'texture-fail.node',
   'texture-fail.ref.node',
   'texture-fail.errors',
+  'texture-names.node',
+  'texture-scale-filters.node',
   'texture-scale-filters.ref.node',
   'texture-scale-unknown-filter.errors',
+  'texture-scale-unknown-filter.node',
   'texture-scale-unknown-filter.ref.node',
   'transform-fail.node',
   'transform-fail.ref.node',
@@ -466,18 +468,6 @@ node_parser_tests = [
   # this fails in f40 since libpng changes the pngs while reencoding
   #'widgetfactory.node',
 ]
-
-# libpng 1.6.45 changes the chunk order. These ref tests can only pass on libpng >=1.6.45
-if png_dep.version().version_compare('>=1.6.45')
-node_parser_tests += [
-  'empty-texture-scale.node',
-  'empty-texture.node',
-  'texture-fail.node',
-  'texture-names.node',
-  'texture-scale-filters.node',
-  'texture-scale-unknown-filter.node',
-]
-endif
 
 foreach test : node_parser_tests
   if test.endswith('.node') and not test.endswith('.ref.node')

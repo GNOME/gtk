@@ -1,5 +1,5 @@
 color {
-  bounds: -1 -83 392 102;
+  bounds: 0 -82 390 100;
   color: rgb(255,255,255);
 }
 transform {

@@ -1,8 +1,13 @@
 texture-scale {
   bounds: 0 0 50 50;
-  texture: url("data:image/png;base64,\
-iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABGNJQ1ABDQABnGk7MgAAAAFzUkdC\
-AK7OHOkAAAApSURBVBiVY/zPcOY/AxpgZDBhRBdjQhfABQZQIYajGRgYGLB5cCh4BgDPjgXd7dTX\
-FQAAAABJRU5ErkJggg==\
+  texture: memory {
+    format: BGRA8p;
+    width: 10;
+    height: 10;
+    offset: 0;
+    stride: 40;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAzvD8P//GTTMgAWcGeTqhqKbsakDAA6D0eeQAQAA\
 ");
+  }
 }

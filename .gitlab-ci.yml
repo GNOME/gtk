@@ -66,8 +66,7 @@ style-check-diff:
   script:
     - .gitlab-ci/run-style-check-diff.sh
 
-.build-fedora-default:
-  image: $FEDORA_IMAGE
+.test-runner:
   artifacts:
     name: "gtk-${CI_COMMIT_REF_NAME}"
     when: always
@@ -76,6 +75,7 @@ style-check-diff:
         - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-x11.junit.xml"
         - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-wayland.junit.xml"
         - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-wayland_gl.junit.xml"
+        - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-wayland_minimal.junit.xml"
         - "${CI_PROJECT_DIR}/_build/meson-logs/testlog-broadway.junit.xml"
     paths:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
@@ -90,6 +90,9 @@ style-check-diff:
       - "${CI_PROJECT_DIR}/_build/gtk/GdkX11-4.0.gir"
       - "${CI_PROJECT_DIR}/_build/gtk/GdkWayland-4.0.gir"
       - "${CI_PROJECT_DIR}/_build/meson-dist/*.tar.xz"
+
+.build-fedora-default:
+  image: $FEDORA_IMAGE
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -118,7 +121,9 @@ meson-subprojects:
       - subprojects/
 
 fedora-x86_64:
-  extends: .build-fedora-default
+  extends: 
+    - .test-runner
+    - .build-fedora-default
   stage: build
   needs: ["meson-subprojects"]
   variables:
@@ -138,7 +143,9 @@ fedora-x86_64:
     - .gitlab-ci/run-tests.sh _build wayland_gl gtk:gdk,gtk:gsk-gl
 
 release-build:
-  extends: .build-fedora-default
+  extends: 
+    - .test-runner
+    - .build-fedora-default
   stage: build
   needs: []
   variables:
@@ -165,7 +172,9 @@ release-build:
     - meson dist -C _build --include-subprojects --no-tests
 
 fedora-clang:
-  extends: .build-fedora-default
+  extends: 
+    - .test-runner
+    - .build-fedora-default
   stage: build
   needs: ["meson-subprojects"]
   variables:
@@ -517,7 +526,9 @@ static-scan:
 # Run tests with the address sanitizer. We need to turn off introspection
 # and f16c, since they are incompatible with asan
 asan-build:
-  extends: .build-fedora-default
+  extends: 
+    - .test-runner
+    - .build-fedora-default
   tags: [ asan ]
   stage: analysis
   needs: []

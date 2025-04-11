@@ -7356,17 +7356,6 @@ gsk_text_node_new2 (PangoFont              *font,
   if (ink_rect.width == 0 || ink_rect.height == 0)
     return NULL;
 
-  /* Hack. As long as we shift glyphs when rendering, we risk ink leakage and clipping,
-   * so add some slop here. Note that this is not technically correct, the rendering can
-   * happen in scaled context, compared to this.
-   *
-   * See: https://gitlab.gnome.org/GNOME/gtk/-/issues/7400
-   */
-  ink_rect.x -= 1 * PANGO_SCALE;
-  ink_rect.y -= 1 * PANGO_SCALE;
-  ink_rect.width += 2 * PANGO_SCALE;
-  ink_rect.height += 2 * PANGO_SCALE;
-
   self = gsk_render_node_alloc (GSK_TEXT_NODE);
   node = (GskRenderNode *) self;
   node->offscreen_for_opacity = FALSE;
