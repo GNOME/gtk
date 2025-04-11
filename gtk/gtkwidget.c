@@ -2600,8 +2600,7 @@ gtk_widget_unparent (GtkWidget *widget)
   if (gtk_widget_get_focus_child (priv->parent) == widget)
     gtk_widget_set_focus_child (priv->parent, NULL);
 
-  if (_gtk_widget_get_mapped (priv->parent))
-    gtk_widget_queue_draw (priv->parent);
+  gtk_widget_queue_draw (priv->parent);
 
   if (priv->visible && _gtk_widget_get_visible (priv->parent))
     gtk_widget_queue_resize (priv->parent);
