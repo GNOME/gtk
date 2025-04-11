@@ -360,6 +360,9 @@ gsk_cairo_blur_start_drawing (cairo_t         *cr,
   cairo_surface_get_device_scale (cairo_get_target (cr), &x_scale, &y_scale);
   apply_current_scale (cr, &x_scale, &y_scale);
 
+  clip_width = x_scale * (clip_width + (blur_x ? 2 * clip_radius : 0));
+  clip_height = y_scale * (clip_height + (blur_y ? 2 * clip_radius : 0));
+
   if (blur_flags & GSK_BLUR_REPEAT)
     {
       if (!blur_x)
@@ -371,8 +374,8 @@ gsk_cairo_blur_start_drawing (cairo_t         *cr,
   /* Create a larger surface to center the blur. */
   surface = cairo_surface_create_similar_image (cairo_get_target (cr),
                                                 CAIRO_FORMAT_A8,
-                                                x_scale * (clip_width + (blur_x ? 2 * clip_radius : 0)),
-                                                y_scale * (clip_height + (blur_y ? 2 * clip_radius : 0)));
+                                                clip_width,
+                                                clip_height);
   cairo_surface_set_device_scale (surface, x_scale, y_scale);
   cairo_surface_set_device_offset (surface,
                                     x_scale * ((blur_x ? clip_radius : 0) - clip_x1),
