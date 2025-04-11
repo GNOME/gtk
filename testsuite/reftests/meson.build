@@ -660,6 +660,7 @@ foreach testname : testdata
         '-o', join_paths(meson.current_build_dir(), 'output'),
         join_paths(meson.current_source_dir(), testname),
       ],
+      is_parallel: false,
       protocol: 'tap',
       env: reftest_env,
       suite: suites,
