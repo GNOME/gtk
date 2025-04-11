@@ -4091,7 +4091,6 @@ gdk_memory_format_find_by_dmabuf_fourcc (guint32          fourcc,
                                          GdkMemoryFormat *out_format,
                                          gboolean        *out_is_yuv)
 {
-#ifdef HAVE_DMABUF
   gsize i;
 
   for (i = 0; i < G_N_ELEMENTS (memory_formats); i++)
@@ -4115,7 +4114,6 @@ gdk_memory_format_find_by_dmabuf_fourcc (guint32          fourcc,
           return TRUE;
         }
     }
-#endif
 
   *out_format = GDK_MEMORY_N_FORMATS;
   return FALSE;
