@@ -416,6 +416,7 @@ gsk_cairo_blur_finish_drawing (cairo_t         *cr,
   cairo_t *original_cr;
   cairo_surface_t *surface;
   double x_scale;
+  double scaled_radius;
 
   if (!needs_blur (radius, blur_flags))
     return cr;
@@ -427,8 +428,9 @@ gsk_cairo_blur_finish_drawing (cairo_t         *cr,
 
   x_scale = 1;
   cairo_surface_get_device_scale (cairo_get_target (cr), &x_scale, NULL);
+  scaled_radius = round ((x_scale + 0.0001) * radius);
 
-  gsk_cairo_blur_surface (surface, x_scale * radius, blur_flags);
+  gsk_cairo_blur_surface (surface, scaled_radius, blur_flags);
 
   gdk_cairo_set_source_color (original_cr, ccs, color);
   if (blur_flags & GSK_BLUR_REPEAT)
