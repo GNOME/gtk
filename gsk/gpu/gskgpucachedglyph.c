@@ -183,7 +183,20 @@ gsk_gpu_cached_glyph_lookup (GskGpuCache            *self,
       return cache->image;
     }
 
+#ifdef G_OS_WIN32
+  {
+    cairo_font_options_t *options = cairo_font_options_create ();
+
+    cairo_scaled_font_t *sf = pango_cairo_font_get_scaled_font (PANGO_CAIRO_FONT (font));
+    cairo_scaled_font_get_font_options (sf, options);
+    cairo_hint_style_t hint_style = cairo_font_options_get_hint_style (options);
+    if (hint_style == CAIRO_HINT_STYLE_SLIGHT || hint_style == CAIRO_HINT_STYLE_MEDIUM)
+      hint_style = CAIRO_HINT_STYLE_FULL;
+    scaled_font = gsk_reload_font (font, scale, CAIRO_HINT_METRICS_DEFAULT, hint_style, CAIRO_ANTIALIAS_DEFAULT);
+  }
+#else
   scaled_font = gsk_reload_font (font, scale, CAIRO_HINT_METRICS_DEFAULT, CAIRO_HINT_STYLE_DEFAULT, CAIRO_ANTIALIAS_DEFAULT);
+#endif
 
   subpixel_x = (flags & 3) / 4.f;
   subpixel_y = ((flags >> 2) & 3) / 4.f;
