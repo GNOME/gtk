@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: lt\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-04-02 01:44+0000\n"
-"PO-Revision-Date: 2025-04-03 22:56+0300\n"
+"POT-Creation-Date: 2025-04-12 07:43+0000\n"
+"PO-Revision-Date: 2025-04-13 21:31+0300\n"
 "Last-Translator: Aurimas Černius <aurisc4@gmail.com>\n"
 "Language-Team: Lietuvių <gnome-lt@lists.akl.lt>\n"
 "Language: lt\n"
@@ -4075,21 +4075,21 @@ msgstr "Stiliaus klasės"
 msgid "CSS Property"
 msgstr "CSS savybė"
 
-#: gtk/inspector/general.c:447
+#: gtk/inspector/general.c:469
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "IM kontekstas yra fiksuotas su GTK_IM_MODULE"
 
-#: gtk/inspector/general.c:622
+#: gtk/inspector/general.c:644
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Nėra"
 
-#: gtk/inspector/general.c:719
+#: gtk/inspector/general.c:741
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Nežinoma"
 
-#: gtk/inspector/general.c:973 gtk/inspector/general.c:1012
+#: gtk/inspector/general.c:995 gtk/inspector/general.c:1034
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Nėra"
@@ -4099,126 +4099,130 @@ msgid "Copy to clipboard as gitlab markdown"
 msgstr "Kopijuoti į iškarpinę kaip gitlab markdown"
 
 #: gtk/inspector/general.ui:45
+msgid "Operating System"
+msgstr "Operacinė sistema"
+
+#: gtk/inspector/general.ui:71
 msgid "GTK Version"
 msgstr "GTK versija"
 
-#: gtk/inspector/general.ui:71
+#: gtk/inspector/general.ui:97
 msgid "GDK Backend"
 msgstr "GDK realizacija"
 
-#: gtk/inspector/general.ui:97
+#: gtk/inspector/general.ui:123
 msgid "GSK Renderer"
 msgstr "GSK piešėjas"
 
-#: gtk/inspector/general.ui:123
+#: gtk/inspector/general.ui:149
 msgid "Pango Fontmap"
 msgstr "Pango šriftų lentelė"
 
-#: gtk/inspector/general.ui:149
+#: gtk/inspector/general.ui:175
 msgid "Media Backend"
 msgstr "Daugialypės terpės realizacija"
 
-#: gtk/inspector/general.ui:175
+#: gtk/inspector/general.ui:201
 msgid "Input Method"
 msgstr "Įvesties metodas"
 
-#: gtk/inspector/general.ui:201
+#: gtk/inspector/general.ui:227
 msgid "Accessibility Backend"
 msgstr "Prieigos realizacija"
 
-#: gtk/inspector/general.ui:238
+#: gtk/inspector/general.ui:264
 msgid "Application ID"
 msgstr "Programos ID"
 
-#: gtk/inspector/general.ui:264
+#: gtk/inspector/general.ui:290
 msgid "Resource Path"
 msgstr "Ištekliaus kelias"
 
-#: gtk/inspector/general.ui:301 gtk/ui/gtkplacesview.ui:63
+#: gtk/inspector/general.ui:327 gtk/ui/gtkplacesview.ui:63
 msgid "Prefix"
 msgstr "Priešdėlis"
 
-#: gtk/inspector/general.ui:328
+#: gtk/inspector/general.ui:354
 msgid "Environment"
 msgstr "Aplinka"
 
-#: gtk/inspector/general.ui:431
+#: gtk/inspector/general.ui:457
 msgid "Display"
 msgstr "Displėjus"
 
-#: gtk/inspector/general.ui:458
+#: gtk/inspector/general.ui:484
 msgid "RGBA Visual"
 msgstr "RGBA vaizdas"
 
-#: gtk/inspector/general.ui:484
+#: gtk/inspector/general.ui:510
 msgid "Composited"
 msgstr "Kompozicija"
 
-#: gtk/inspector/general.ui:509
+#: gtk/inspector/general.ui:535
 msgid "Protocols"
 msgstr "Protokolai"
 
-#: gtk/inspector/general.ui:565
+#: gtk/inspector/general.ui:591
 msgid "GL Renderer"
 msgstr "GL piešėjas"
 
-#: gtk/inspector/general.ui:594
+#: gtk/inspector/general.ui:620
 msgid "GL Vendor"
 msgstr "GL tiekėjas"
 
-#: gtk/inspector/general.ui:623
+#: gtk/inspector/general.ui:649
 msgid "GL Version"
 msgstr "GL versija"
 
-#: gtk/inspector/general.ui:650
+#: gtk/inspector/general.ui:676
 msgid "GL Backend Vendor"
 msgstr "GL realizacijos tiekėjas"
 
-#: gtk/inspector/general.ui:677
+#: gtk/inspector/general.ui:703
 msgid "GL Backend Version"
 msgstr "GL realizacijos versija"
 
-#: gtk/inspector/general.ui:727
+#: gtk/inspector/general.ui:753
 msgid "GL Full Version"
 msgstr "GL pilna versija"
 
-#: gtk/inspector/general.ui:756
+#: gtk/inspector/general.ui:782
 msgid "GLSL Version"
 msgstr "GLSL versija"
 
-#: gtk/inspector/general.ui:785
+#: gtk/inspector/general.ui:811
 msgid "GL Extensions"
 msgstr "GL plėtiniai"
 
-#: gtk/inspector/general.ui:873
+#: gtk/inspector/general.ui:899
 msgid "EGL Extensions"
 msgstr "EGL plėtiniai"
 
-#: gtk/inspector/general.ui:960
+#: gtk/inspector/general.ui:986
 msgid "GL Features"
 msgstr "GL savybės"
 
-#: gtk/inspector/general.ui:996
+#: gtk/inspector/general.ui:1022
 msgid "Vulkan Device"
 msgstr "Vulkan įrenginys"
 
-#: gtk/inspector/general.ui:1023
+#: gtk/inspector/general.ui:1049
 msgid "Vulkan API Version"
 msgstr "Vulkan API versija"
 
-#: gtk/inspector/general.ui:1050
+#: gtk/inspector/general.ui:1076
 msgid "Vulkan Driver Version"
 msgstr "Vulkan tvarkyklės versija"
 
-#: gtk/inspector/general.ui:1099
+#: gtk/inspector/general.ui:1125
 msgid "Vulkan Layers"
 msgstr "Vulkan sluoksniai"
 
-#: gtk/inspector/general.ui:1168
+#: gtk/inspector/general.ui:1194
 msgid "Vulkan Extensions"
 msgstr "Vulkan plėtiniai"
 
-#: gtk/inspector/general.ui:1255
+#: gtk/inspector/general.ui:1281
 msgid "Vulkan Features"
 msgstr "Vulkan savybės"
 
