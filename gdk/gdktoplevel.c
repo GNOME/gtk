@@ -843,6 +843,14 @@ gdk_toplevel_unexport_handle (GdkToplevel *toplevel,
   GDK_TOPLEVEL_GET_IFACE (toplevel)->unexport_handle (toplevel, handle);
 }
 
+/**
+ * gdk_toplevel_get_capabilities:
+ * @toplevel: a `GdkToplevel`
+ *
+ * The capabilities that are available for this toplevel.
+ *
+ * Since: 4.20
+ */
 GdkToplevelCapabilities
 gdk_toplevel_get_capabilities (GdkToplevel *toplevel)
 {
