@@ -808,7 +808,7 @@ _gdk_win32_display_create_window_impl (GdkDisplay    *display,
 	  if (window->window_type == GDK_WINDOW_TOPLEVEL)
 	    dwStyle = WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS;
 	  else
-	    dwStyle = WS_OVERLAPPED | WS_MINIMIZEBOX | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
+	    dwStyle = WS_OVERLAPPED | WS_SYSMENU | WS_CAPTION | WS_THICKFRAME | WS_CLIPCHILDREN;
 
 	  offset_x = _gdk_offset_x;
 	  offset_y = _gdk_offset_y;
@@ -1743,7 +1743,7 @@ gdk_win32_window_reparent (GdkWindow *window,
       /* Reparenting from top-level (child of desktop). Clear out
        * decorations.
        */
-      style &= ~(WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX);
+      style &= ~(WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MAXIMIZEBOX);
       style |= WS_CHILD;
       SetWindowLong (GDK_WINDOW_HWND (window), GWL_STYLE, style);
     }
@@ -2771,7 +2771,7 @@ _gdk_win32_window_lacks_wm_decorations (GdkWindow *window)
   has_any_decorations = FALSE;
 
   if (style & (WS_BORDER | WS_THICKFRAME | WS_CAPTION |
-               WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX))
+               WS_SYSMENU | WS_MAXIMIZEBOX))
     has_any_decorations = TRUE;
   else
     GDK_NOTE (MISC, g_print ("Window %p (handle %p): has no decorations (style %lx)\n",
@@ -2866,7 +2866,6 @@ _gdk_win32_window_update_style_bits (GdkWindow *window)
       update_single_bit (&new_style, all, decorations & GDK_DECOR_RESIZEH, WS_THICKFRAME);
       update_single_bit (&new_style, all, decorations & GDK_DECOR_TITLE, WS_CAPTION);
       update_single_bit (&new_style, all, decorations & GDK_DECOR_MENU, WS_SYSMENU);
-      update_single_bit (&new_style, all, decorations & GDK_DECOR_MINIMIZE, WS_MINIMIZEBOX);
       update_single_bit (&new_style, all, decorations & GDK_DECOR_MAXIMIZE, WS_MAXIMIZEBOX);
     }
 
