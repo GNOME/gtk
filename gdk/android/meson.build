@@ -43,6 +43,12 @@ gdk_android_deps = [
   cc.find_library('nativewindow')
 ]
 
+android_runtime = get_option('android-runtime')
+if android_runtime.allowed()
+  gdk_android_sources += files(['gdkandroidruntime.c'])
+  gdk_android_deps += cc.find_library('log')
+endif
+
 libgdk_android = static_library('gdk-android',
   sources: [ gdk_android_sources, gdk_gen_headers ],
   include_directories: [ confinc, gdkinc, ],

@@ -121,7 +121,7 @@ meson-subprojects:
       - subprojects/
 
 fedora-x86_64:
-  extends: 
+  extends:
     - .test-runner
     - .build-fedora-default
   stage: build
@@ -143,7 +143,7 @@ fedora-x86_64:
     - .gitlab-ci/run-tests.sh _build wayland_gl gtk:gdk,gtk:gsk-gl
 
 release-build:
-  extends: 
+  extends:
     - .test-runner
     - .build-fedora-default
   stage: build
@@ -172,7 +172,7 @@ release-build:
     - meson dist -C _build --include-subprojects --no-tests
 
 fedora-clang:
-  extends: 
+  extends:
     - .test-runner
     - .build-fedora-default
   stage: build
@@ -339,9 +339,13 @@ android:
     FEATURE_FLAGS: "-Dmedia-gstreamer=disabled"
   before_script:
     - .gitlab-ci/show-info-linux.sh
-    # We aren't actually using pixiewood here, we just make get the ${ARCH}.cross, android.cross and fontconfig.wrap files.
+    # We aren't actually using pixiewood here, we just make get the ${ARCH}.cross, android.cross, fontconfig.wrap and glib/hack.patch files.
     - git clone https://github.com/sp1ritCS/gtk-android-builder.git pixiewood
     - cp -f pixiewood/prepare/wraps/fontconfig/fontconfig.wrap subprojects/
+    # glib/hack makes the g_set_user_dirs public. Drop once glib has android support
+    - mkdir -p subprojects/packagefiles/
+    - cp -f pixiewood/prepare/wraps/glib/hack.patch subprojects/packagefiles/glib_hack.patch
+    - sed -i 's/\[provide\]/diff_files = glib_hack.patch\n\n\0/' subprojects/glib.wrap
     # Drop this as soon as Debian/the container has meson >= 1.7.0
     - git clone --depth 1 https://github.com/mesonbuild/meson.git --branch 1.7.0
   script:
@@ -526,7 +530,7 @@ static-scan:
 # Run tests with the address sanitizer. We need to turn off introspection
 # and f16c, since they are incompatible with asan
 asan-build:
-  extends: 
+  extends:
     - .test-runner
     - .build-fedora-default
   tags: [ asan ]
