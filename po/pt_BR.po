@@ -33,8 +33,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GTK\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-04-02 01:44+0000\n"
-"PO-Revision-Date: 2025-04-02 21:01-0300\n"
+"POT-Creation-Date: 2025-04-09 10:33+0000\n"
+"PO-Revision-Date: 2025-04-09 21:50-0300\n"
 "Last-Translator: Álvaro Burns <>\n"
 "Language-Team: Brazilian Portuguese <https://br.gnome.org/traducao/>\n"
 "Language: pt_BR\n"
@@ -4186,21 +4186,21 @@ msgstr "Classes de estilo"
 msgid "CSS Property"
 msgstr "Propriedade CSS"
 
-#: gtk/inspector/general.c:447
+#: gtk/inspector/general.c:469
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Contexto de IM é codificado por GTK_IM_MODULE"
 
-#: gtk/inspector/general.c:622
+#: gtk/inspector/general.c:644
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Nenhum"
 
-#: gtk/inspector/general.c:719
+#: gtk/inspector/general.c:741
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: gtk/inspector/general.c:973 gtk/inspector/general.c:1012
+#: gtk/inspector/general.c:995 gtk/inspector/general.c:1034
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Nenhum"
@@ -4210,126 +4210,130 @@ msgid "Copy to clipboard as gitlab markdown"
 msgstr "Copia para a área de transferência como Markdown do GitLab"
 
 #: gtk/inspector/general.ui:45
+msgid "Operating System"
+msgstr "Sistema operacional"
+
+#: gtk/inspector/general.ui:71
 msgid "GTK Version"
 msgstr "Versão do GTK"
 
-#: gtk/inspector/general.ui:71
+#: gtk/inspector/general.ui:97
 msgid "GDK Backend"
 msgstr "Backend GDK"
 
-#: gtk/inspector/general.ui:97
+#: gtk/inspector/general.ui:123
 msgid "GSK Renderer"
 msgstr "Renderizador GSK"
 
-#: gtk/inspector/general.ui:123
+#: gtk/inspector/general.ui:149
 msgid "Pango Fontmap"
 msgstr "Mapa de fontes Pango"
 
-#: gtk/inspector/general.ui:149
+#: gtk/inspector/general.ui:175
 msgid "Media Backend"
 msgstr "Backend de mídia"
 
-#: gtk/inspector/general.ui:175
+#: gtk/inspector/general.ui:201
 msgid "Input Method"
 msgstr "Método de entrada"
 
-#: gtk/inspector/general.ui:201
+#: gtk/inspector/general.ui:227
 msgid "Accessibility Backend"
 msgstr "Backend de Acessibilidade"
 
-#: gtk/inspector/general.ui:238
+#: gtk/inspector/general.ui:264
 msgid "Application ID"
 msgstr "ID de aplicativo"
 
-#: gtk/inspector/general.ui:264
+#: gtk/inspector/general.ui:290
 msgid "Resource Path"
 msgstr "Caminho de recursos"
 
-#: gtk/inspector/general.ui:301 gtk/ui/gtkplacesview.ui:63
+#: gtk/inspector/general.ui:327 gtk/ui/gtkplacesview.ui:63
 msgid "Prefix"
 msgstr "Prefixo"
 
-#: gtk/inspector/general.ui:328
+#: gtk/inspector/general.ui:354
 msgid "Environment"
 msgstr "Ambiente"
 
-#: gtk/inspector/general.ui:431
+#: gtk/inspector/general.ui:457
 msgid "Display"
 msgstr "Vídeo"
 
-#: gtk/inspector/general.ui:458
+#: gtk/inspector/general.ui:484
 msgid "RGBA Visual"
 msgstr "Visual RGBA"
 
-#: gtk/inspector/general.ui:484
+#: gtk/inspector/general.ui:510
 msgid "Composited"
 msgstr "Composto"
 
-#: gtk/inspector/general.ui:509
+#: gtk/inspector/general.ui:535
 msgid "Protocols"
 msgstr "Protocolos"
 
-#: gtk/inspector/general.ui:565
+#: gtk/inspector/general.ui:591
 msgid "GL Renderer"
 msgstr "Renderizador GL"
 
-#: gtk/inspector/general.ui:594
+#: gtk/inspector/general.ui:620
 msgid "GL Vendor"
 msgstr "Fornecedor GL"
 
-#: gtk/inspector/general.ui:623
+#: gtk/inspector/general.ui:649
 msgid "GL Version"
 msgstr "Versão GL"
 
-#: gtk/inspector/general.ui:650
+#: gtk/inspector/general.ui:676
 msgid "GL Backend Vendor"
 msgstr "Fornecedor de backend GL"
 
-#: gtk/inspector/general.ui:677
+#: gtk/inspector/general.ui:703
 msgid "GL Backend Version"
 msgstr "Versão de backend GL"
 
-#: gtk/inspector/general.ui:727
+#: gtk/inspector/general.ui:753
 msgid "GL Full Version"
 msgstr "Versão completa GL"
 
-#: gtk/inspector/general.ui:756
+#: gtk/inspector/general.ui:782
 msgid "GLSL Version"
 msgstr "Versão GLSL"
 
-#: gtk/inspector/general.ui:785
+#: gtk/inspector/general.ui:811
 msgid "GL Extensions"
 msgstr "Extensões GL"
 
-#: gtk/inspector/general.ui:873
+#: gtk/inspector/general.ui:899
 msgid "EGL Extensions"
 msgstr "Extensões EGL"
 
-#: gtk/inspector/general.ui:960
+#: gtk/inspector/general.ui:986
 msgid "GL Features"
 msgstr "Recursos GL"
 
-#: gtk/inspector/general.ui:996
+#: gtk/inspector/general.ui:1022
 msgid "Vulkan Device"
 msgstr "Dispositivo Vulkan"
 
-#: gtk/inspector/general.ui:1023
+#: gtk/inspector/general.ui:1049
 msgid "Vulkan API Version"
 msgstr "Versão de API Vulkan"
 
-#: gtk/inspector/general.ui:1050
+#: gtk/inspector/general.ui:1076
 msgid "Vulkan Driver Version"
 msgstr "Versão de driver Vulkan"
 
-#: gtk/inspector/general.ui:1099
+#: gtk/inspector/general.ui:1125
 msgid "Vulkan Layers"
 msgstr "Camadas Vulkan"
 
-#: gtk/inspector/general.ui:1168
+#: gtk/inspector/general.ui:1194
 msgid "Vulkan Extensions"
 msgstr "Extensões Vulkan"
 
-#: gtk/inspector/general.ui:1255
+#: gtk/inspector/general.ui:1281
 msgid "Vulkan Features"
 msgstr "Recursos Vulkan"
 
