@@ -19,7 +19,8 @@ guint64                 gdk_d3d12_texture_get_fence_wait                (GdkD3D1
 
 guint                   gdk_d3d12_texture_import_gl                     (GdkD3D12Texture        *self,
                                                                          GdkGLContext           *context,
-                                                                         guint                  *out_mem_id);
+                                                                         guint                  *out_mem_id,
+                                                                         guint                  *out_semaphore_id);
 
 G_END_DECLS
 

@@ -198,18 +198,19 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
 #ifdef GDK_WINDOWING_WIN32
   else if (GDK_IS_D3D12_TEXTURE (texture))
     {
-      guint tex_id, mem_id;
+      guint tex_id, mem_id, semaphore_id;
 
       tex_id = gdk_d3d12_texture_import_gl (GDK_D3D12_TEXTURE (texture),
                                             GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
-                                            &mem_id);
+                                            &mem_id,
+                                            &semaphore_id);
       if (tex_id)
         {
           return gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                texture,
                                                tex_id,
                                                mem_id,
-                                               0,
+                                               semaphore_id,
                                                TRUE,
                                                0,
                                                GSK_GPU_CONVERSION_NONE);

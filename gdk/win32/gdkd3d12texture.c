@@ -471,6 +471,9 @@ gdk_d3d12_texture_get_fence_wait (GdkD3D12Texture *self)
  * @out_mem_id: (out): out result for the memory object
  *   created during the import. See GL_EXT_memory_object_win32
  *   for details.
+ * @out_semaphore_id: (out): out result for a semaphore
+ *   created from the attached fence object. If no fence was
+ *   provided, the value will be set to 0.
  *
  * Imports the given D3D12 texture into the given OpenGL
  * context.
@@ -482,12 +485,13 @@ gdk_d3d12_texture_get_fence_wait (GdkD3D12Texture *self)
 guint
 gdk_d3d12_texture_import_gl (GdkD3D12Texture *self,
                              GdkGLContext    *context,
-                             guint           *out_mem_id)
+                             guint           *out_mem_id,
+                             guint           *out_semaphore_id)
 {
   GdkTexture *texture = GDK_TEXTURE (self);
-  GLuint tex_id, mem_id;
+  GLuint tex_id, mem_id, sema_id;
   D3D12_RESOURCE_DESC desc;
-  HANDLE handle;
+  HANDLE handle, fence_handle;
   GLint gl_internal_format, gl_internal_srgb_format;
   GLenum gl_format, gl_type;
   GLenum gl_error;
@@ -541,6 +545,17 @@ gdk_d3d12_texture_import_gl (GdkD3D12Texture *self,
                         mem_id,
                         0);
 
+  fence_handle = gdk_d3d12_texture_get_resource_handle (self);
+  if (fence_handle)
+    {
+      glGenSemaphoresEXT (1, &sema_id);
+      glImportSemaphoreWin32HandleEXT (sema_id,
+                                       GL_HANDLE_TYPE_D3D12_FENCE_EXT,
+                                       fence_handle);
+    }
+  else
+    sema_id = 0;
+
   gl_error = glGetError ();
   if (gl_error != GL_NO_ERROR)
     {
@@ -549,10 +564,13 @@ gdk_d3d12_texture_import_gl (GdkD3D12Texture *self,
                  gl_error);
       glDeleteMemoryObjectsEXT (1, &mem_id);
       glDeleteTextures (1, &tex_id);
+      if (sema_id)
+        glDeleteSemaphoresEXT (1, &sema_id);
       return 0;
     }
 
   *out_mem_id = mem_id;
+  *out_semaphore_id = sema_id;
 
   return tex_id;
 }
