@@ -19,6 +19,7 @@
 
 #include "config.h"
 #include <gtk/gtk.h>
+#include <gmodule.h>
 #include <glib/gstdio.h>
 #include <glib/gi18n.h>
 
@@ -1107,6 +1108,7 @@ out:
   return 0;
 }
 
+G_MODULE_EXPORT
 int
 main (int argc, char **argv)
 {

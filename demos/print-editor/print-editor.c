@@ -2,6 +2,7 @@
 #include <math.h>
 #include <pango/pangocairo.h>
 #include <glib/gi18n.h>
+#include <gmodule.h>
 #include <gtk/gtk.h>
 
 #include "profile_conf.h"
@@ -863,6 +864,7 @@ open (GApplication  *application,
   load_file (files[0]);
 }
 
+G_MODULE_EXPORT
 int
 main (int argc, char **argv)
 {

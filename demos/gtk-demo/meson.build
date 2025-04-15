@@ -108,7 +108,7 @@ demos = files([
   'video_player.c',
 ])
 
-gtkdemo_deps = [ libgtk_dep, ]
+gtkdemo_deps = [ libgtk_dep, gmodule_headers_dep ]
 
 extra_demo_sources = files([
   'bluroverlay.c',

@@ -19,8 +19,11 @@
 
 #include "config.h"
 
+#include <gmodule.h>
+
 #include <node-editor-application.h>
 
+G_MODULE_EXPORT
 int
 main (int argc, char *argv[])
 {

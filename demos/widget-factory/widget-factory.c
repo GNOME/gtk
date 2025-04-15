@@ -23,6 +23,7 @@
 #include <stdlib.h>
 
 #include <glib/gi18n.h>
+#include <gmodule.h>
 #include <gtk/gtk.h>
 
 #include "profile_conf.h"
@@ -2543,6 +2544,7 @@ quit_timeout (gpointer data)
   return G_SOURCE_REMOVE;
 }
 
+G_MODULE_EXPORT
 int
 main (int argc, char *argv[])
 {
