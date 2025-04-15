@@ -77,6 +77,7 @@ typedef struct
     jfieldID native_identifier;
     jfieldID toplevel_view;
     jmethodID bind_native;
+    jmethodID attach_toplevel_surface;
     jmethodID post_window_configuration;
     jmethodID post_title;
   } toplevel;

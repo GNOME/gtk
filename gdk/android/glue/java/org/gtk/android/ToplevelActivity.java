@@ -44,6 +44,7 @@ import android.view.Window;
 import android.view.WindowInsets;
 import android.view.WindowInsetsController;
 
+import androidx.annotation.Keep;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.UiThread;
@@ -177,7 +178,7 @@ public class ToplevelActivity extends Activity {
 			}
 
 			public void drop() {
-				if (this != ToplevelView.this.toplevel)
+				//if (this != ToplevelView.this.toplevel)
 					runOnUiThread(() -> ToplevelView.this.removeView(this));
 				/*else
 					logger.log(Level.SEVERE, "Attempted to drop toplevel from view");*/
@@ -418,16 +419,23 @@ public class ToplevelActivity extends Activity {
 				}
 			}
 
-			this.view.toplevel = this.view.new Surface(this.nativeIdentifier);
-			runOnUiThread(() -> {
-				this.view.addView(this.view.toplevel, this.view.new LayoutParams(
-						0, 0,
-						ViewGroup.LayoutParams.MATCH_PARENT,
-						ViewGroup.LayoutParams.MATCH_PARENT
-				));
-				this.view.requestLayout();
-			});
 			return null;
+		});
+	}
+
+	@Keep
+	@GlibContext.GtkThread
+	private void attachToplevelSurface() {
+		if (this.view.toplevel != null)
+			this.view.toplevel.drop();
+		this.view.toplevel = this.view.new Surface(this.nativeIdentifier);
+		runOnUiThread(() -> {
+			this.view.addView(this.view.toplevel, this.view.new LayoutParams(
+					0, 0,
+					ViewGroup.LayoutParams.MATCH_PARENT,
+					ViewGroup.LayoutParams.MATCH_PARENT
+			));
+			this.view.requestLayout();
 		});
 	}
 
