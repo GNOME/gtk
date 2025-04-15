@@ -11,6 +11,7 @@ struct _GskGLImage
 
   guint texture_id;
   guint memory_id;
+  guint semaphore_id;
   guint framebuffer_id;
 
   GLint gl_internal_format;
@@ -52,6 +53,9 @@ gsk_gl_image_finalize (GObject *object)
 
   if (self->memory_id)
     glDeleteMemoryObjectsEXT (1, &self->memory_id);
+
+  if (self->semaphore_id)
+    glDeleteSemaphoresEXT (1, &self->semaphore_id);
 
   G_OBJECT_CLASS (gsk_gl_image_parent_class)->finalize (object);
 }
@@ -222,6 +226,7 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
                               GdkTexture       *owner,
                               GLuint            tex_id,
                               GLuint            mem_id,
+                              GLuint            semaphore_id,
                               gboolean          take_ownership,
                               GskGpuImageFlags  extra_flags,
                               GskGpuConversion  conv)
@@ -270,8 +275,19 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
 
   self->texture_id = tex_id;
   self->memory_id = mem_id;
+  self->semaphore_id = semaphore_id;
   self->owns_texture = take_ownership;
 
+  /* XXX: We're waiting for the semaphore here, which is quite early.
+   * And unexpected.
+   * But it means we only wait once.
+   * So we got that going for us, which is nice. */
+  if (semaphore_id)
+    {
+      glWaitSemaphoreEXT (semaphore_id,
+                          0, NULL,
+                          1, &tex_id, (GLenum[1]) {GL_LAYOUT_GENERAL_EXT });
+    }
   return GSK_GPU_IMAGE (self);
 }
 
