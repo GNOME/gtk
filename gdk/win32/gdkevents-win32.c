@@ -267,8 +267,6 @@ _gdk_win32_surface_procedure (HWND   hwnd,
   else
     display = GDK_WIN32_DISPLAY (gdk_display_get_default ());
 
-  display->event_record->debug_indent_surface_events = display->event_record->debug_indent_surface_events;
-
   GDK_NOTE (EVENTS, g_print ("%s%*s%s %p %#" G_GINTPTR_MODIFIER "x %#" G_GINTPTR_MODIFIER "x",
 			     (display->event_record->debug_indent_surface_events > 0 ? "\n" : ""),
 			     display->event_record->debug_indent_surface_events, "",
