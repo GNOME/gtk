@@ -962,6 +962,9 @@ gsk_gpu_node_processor_add_cairo_node (GskGpuNodeProcessor *self,
 
   gsk_rect_snap_to_grid (&clipped_bounds, &self->scale, &self->offset, &clipped_bounds);
 
+  if (graphene_rect_get_height (&clipped_bounds) <= 0.0 || graphene_rect_get_width (&clipped_bounds) <= 0.0)
+    return;
+
   gsk_gpu_node_processor_sync_globals (self, 0);
 
   image = gsk_gpu_upload_cairo_op (self->frame,
