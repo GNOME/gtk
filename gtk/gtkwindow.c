@@ -4602,9 +4602,10 @@ update_window_style_classes (GtkWindow *window)
 
 /* _gtk_window_set_allocation:
  * @window: a `GtkWindow`
- * @allocation: the original allocation for the window
- * @allocation_out: @allocation taking decorations into
- * consideration
+ * @width: the original width for the window
+ * @height: the original height for the window
+ * @allocation_out: (out): @allocation taking decorations
+ * into consideration
  *
  * This function is like gtk_widget_set_allocation()
  * but does the necessary extra work to update
