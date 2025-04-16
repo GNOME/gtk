@@ -1331,7 +1331,8 @@ gtk_css_tokenizer_read_token (GtkCssTokenizer  *tokenizer,
 
     case '#':
       gtk_css_tokenizer_consume_ascii (tokenizer);
-      if (is_name (*tokenizer->data) || gtk_css_tokenizer_has_valid_escape (tokenizer))
+      if (gtk_css_tokenizer_remaining (tokenizer) > 0 &&
+          (is_name (*tokenizer->data) || gtk_css_tokenizer_has_valid_escape (tokenizer)))
         {
           GtkCssTokenType type;
 
