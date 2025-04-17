@@ -47,6 +47,12 @@
 #include "gtk/css/gtkcssparserprivate.h"
 #include "gtk/css/gtkcssserializerprivate.h"
 
+#ifdef GDK_WINDOWING_WIN32
+#include "gdk/win32/gdkd3d12texturebuilder.h"
+#include "gdk/win32/gdkd3d12textureprivate.h"
+#include "gdk/win32/gdkd3d12utilsprivate.h"
+#endif
+
 #ifdef CAIRO_HAS_SCRIPT_SURFACE
 #include <cairo-script.h>
 #endif
@@ -849,6 +855,189 @@ parse_memory_texture (GtkCssParser *parser,
   return texture;
 }
 
+static gboolean
+parse_dxgi_format (GtkCssParser *parser,
+                   Context      *context,
+                   gpointer      out)
+{
+  GdkMemoryFormat format;
+  guint value;
+
+  if (!parse_unsigned (parser, context, &value))
+    return FALSE;
+
+  /* We can ignore premultiplied here, we just need to update the format later */
+  if (!gdk_memory_format_find_by_dxgi_format (value, FALSE, &format))
+    {
+      gtk_css_parser_error_value (parser, "Unhandled DXGI format");
+      return FALSE;
+    }
+
+  *((GdkMemoryFormat *) out) = format;
+  return TRUE;
+}
+
+#ifdef GDK_WINDOWING_WIN32
+static void
+destroy_d3d12_resource (gpointer data)
+{
+  ID3D12Resource *resource = data;
+
+  ID3D12Resource_Release (resource);
+}
+#endif
+
+static GdkTexture *
+parse_d3d12_texture (GtkCssParser *parser,
+                     Context      *context)
+{
+  GBytes *bytes = NULL;
+  GdkTexture *texture;
+  GError *error = NULL;
+  GtkCssLocation start_location;
+  GdkMemoryFormat format = GDK_MEMORY_N_FORMATS;
+  guint width = 0;
+  guint height = 0;
+  gboolean premultiplied = FALSE;
+  GdkColorState *color_state = NULL;
+  GdkMemoryLayout layout;
+#ifdef GDK_WINDOWING_WIN32
+  ID3D12Resource *resource;
+  GdkD3D12TextureBuilder *builder;
+#endif
+  const Declaration declarations[] = {
+    { "data", parse_texture_data, clear_bytes, &bytes },
+    { "width", parse_unsigned, NULL, &width },
+    { "height", parse_unsigned , NULL, &height },
+    { "format", parse_dxgi_format, NULL, &format },
+    { "premultiplied", parse_boolean, NULL, &premultiplied },
+    { "color-state", parse_color_state, clear_color_state, &color_state }
+  };
+  guint parse_result;
+
+  if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_EOF))
+    {
+      gtk_css_parser_error_syntax (parser, "Expected '{' for \"d3d12\"");
+      return NULL;
+    }
+
+  start_location = *gtk_css_parser_get_start_location (parser);
+  gtk_css_parser_end_block_prelude (parser);
+
+  parse_result = parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
+
+  if (format == GDK_MEMORY_N_FORMATS)
+    {
+      if (!(parse_result & (1 << 3)))
+        g_set_error (&error,
+                    GTK_CSS_PARSER_ERROR,
+                    GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                    "Cannot create a dmabuf texture without data");
+      g_clear_pointer (&bytes, g_bytes_unref);
+    }
+  else if (bytes == NULL && !(parse_result & (1 << 0)))
+    {
+      g_set_error (&error,
+                   GTK_CSS_PARSER_ERROR,
+                   GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                   "Cannot create a dmabuf texture without data");
+    }
+  else if (width == 0)
+    {
+      if (!(parse_result & (1 << 1)))
+        g_set_error (&error,
+                     GTK_CSS_PARSER_ERROR,
+                     GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                     "No width specified");
+      g_clear_pointer (&bytes, g_bytes_unref);
+    }
+  else if (height == 0)
+    {
+      if (!(parse_result & (1 << 2)))
+        g_set_error (&error,
+                     GTK_CSS_PARSER_ERROR,
+                     GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                     "No height specified");
+      g_clear_pointer (&bytes, g_bytes_unref);
+    }
+  else
+    {
+      gdk_memory_layout_init (&layout, format, width, height, gdk_memory_format_alignment (format));
+      if (layout.size > g_bytes_get_size (bytes))
+        {
+          g_set_error (&error,
+                      GTK_CSS_PARSER_ERROR,
+                      GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                      "Not enough data for texture. Expected %zu bytes, got %zu",
+                      layout.size, g_bytes_get_size (bytes));
+        }
+    }
+  if (error || bytes == NULL || width == 0 || height == 0)
+    {
+      if (error)
+        {
+          gtk_css_parser_emit_error (parser,
+                                    &start_location,
+                                    gtk_css_parser_get_end_location (parser),
+                                    error);
+          g_clear_error (&error);
+        }
+      g_clear_pointer (&bytes, g_bytes_unref);
+      g_clear_pointer (&color_state, gdk_color_state_unref);
+      return NULL;
+    }
+
+  if (premultiplied)
+    format = gdk_memory_format_get_premultiplied (format);
+  if (color_state == NULL)
+    color_state = gdk_color_state_ref (gdk_color_state_get_srgb ());
+
+#ifdef GDK_WINDOWING_WIN32
+  resource = gdk_d3d12_resource_new_from_bytes (g_bytes_get_data (bytes, NULL),
+                                                &layout,
+                                                &error);
+  if (resource == NULL)
+    {
+      gtk_css_parser_emit_error (parser,
+                                &start_location,
+                                gtk_css_parser_get_end_location (parser),
+                                error);
+      g_bytes_unref (bytes);
+      gdk_color_state_unref (color_state);
+      return FALSE;
+    }
+
+  builder = gdk_d3d12_texture_builder_new();
+  gdk_d3d12_texture_builder_set_resource (builder, resource);
+  gdk_d3d12_texture_builder_set_premultiplied (builder, premultiplied);
+  gdk_d3d12_texture_builder_set_color_state (builder, color_state);
+  texture = gdk_d3d12_texture_builder_build (builder, destroy_d3d12_resource, resource, &error);
+  if (texture)
+    {
+      g_clear_pointer (&bytes, g_bytes_unref);
+      g_clear_pointer (&color_state, gdk_color_state_unref);
+      return texture;
+    }
+
+  gtk_css_parser_emit_error (parser,
+                            &start_location,
+                            gtk_css_parser_get_end_location (parser),
+                            error);
+  g_clear_error (&error);
+#else
+  gtk_css_parser_warn (parser,
+                       GTK_CSS_PARSER_WARNING_UNIMPLEMENTED,
+                       &start_location,
+                       gtk_css_parser_get_end_location (parser),
+                       "No D3D12 support available. Using fallback.");
+#endif
+
+  texture = gdk_memory_texture_new_from_layout (bytes, &layout, color_state, NULL, NULL);
+  g_bytes_unref (bytes);
+  gdk_color_state_unref (color_state);
+  return texture;
+}
+
 static GdkTexture *
 parse_default_texture (GtkCssParser *parser,
                        Context      *context)
@@ -921,6 +1110,8 @@ parse_texture (GtkCssParser *parser,
     texture = parse_memory_texture (parser, context);
   else if (gtk_css_parser_try_ident (parser, "dmabuf"))
     texture = parse_dmabuf_texture (parser, context);
+  else if (gtk_css_parser_try_ident (parser, "d3d12"))
+    texture = parse_d3d12_texture (parser, context);
   else
     texture = parse_default_texture (parser, context);
 
@@ -4673,6 +4864,44 @@ append_dmabuf_texture (Printer    *p,
   g_bytes_unref (bytes);
 }
 
+#ifdef GDK_WINDOWING_WIN32
+static void
+append_d3d12_texture (Printer    *p,
+                      GdkTexture *texture)
+{
+  GdkMemoryLayout layout;
+  GBytes *bytes;
+  D3D12_RESOURCE_DESC desc;
+
+  gdk_memory_layout_init (&layout,
+                          gdk_texture_get_format (texture),
+                          gdk_texture_get_width (texture),
+                          gdk_texture_get_height (texture),
+                          gdk_memory_format_alignment (gdk_texture_get_format (texture)));
+
+  bytes = gdk_texture_download_bytes (texture, &layout);
+
+  g_string_append_printf (p->str, "d3d12 {\n");
+  p->indentation_level ++;
+
+  ID3D12Resource_GetDesc (gdk_d3d12_texture_get_resource (GDK_D3D12_TEXTURE (texture)), &desc);
+  append_unsigned_param (p, "format", desc.Format);
+  append_unsigned_param (p, "width", layout.width);
+  append_unsigned_param (p, "height", layout.height);
+  if (gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_STRAIGHT)
+    append_boolean_param (p, "premultiplied", FALSE);
+
+  append_color_state_param (p, "color-state", gdk_texture_get_color_state (texture), GDK_COLOR_STATE_SRGB);
+  append_compressed_bytes_param (p, "data", bytes);
+
+  p->indentation_level --;
+  _indent (p);
+  g_string_append_printf (p->str, "}\n");
+
+  g_bytes_unref (bytes);
+}
+#endif
+
 static void
 append_texture_param (Printer    *p,
                       const char *param_name,
@@ -4714,6 +4943,12 @@ append_texture_param (Printer    *p,
     {
       append_dmabuf_texture (p, texture);
     }
+#ifdef GDK_WINDOWING_WIN32
+  else if (GDK_IS_D3D12_TEXTURE (texture))
+    {
+      append_d3d12_texture (p, texture);
+    }
+#endif
   else
     {
       switch (gdk_texture_get_depth (texture))
