@@ -326,6 +326,7 @@ node_parser_tests = [
   'blend-unknown-mode.ref.node',
   'border.node',
   'box-shadow.node',
+  'cairo.node',
   'color.node',
   'color2.node',
   'color3.node',

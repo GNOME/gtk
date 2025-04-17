@@ -5642,7 +5642,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                     g_byte_array_ref (array); /* Cairo... see below */
                     bytes = g_byte_array_free_to_bytes (array);
                     append_bytes_param (p, "script", bytes, NULL);
-                    g_string_append (p->str, "\");\n");
                     g_bytes_unref (bytes);
                   }
 
