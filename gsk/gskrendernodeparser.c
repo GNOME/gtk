@@ -772,7 +772,6 @@ parse_memory_format (GtkCssParser *parser,
     }
 
   return parse_enum (parser, GDK_TYPE_MEMORY_FORMAT, out);
-
 }
 
 static GdkTexture *
@@ -4158,6 +4157,15 @@ append_unsigned_param (Printer    *p,
 }
 
 static void
+append_boolean_param (Printer    *p,
+                      const char *param_name,
+                      gboolean    value)
+{
+  _indent (p);
+  g_string_append_printf (p->str, "%s: %s;\n", param_name, value ? "true" : "false");
+}
+
+static void
 print_color_state (Printer       *p,
                    GdkColorState *color_state)
 {
@@ -4626,6 +4634,8 @@ append_dmabuf_texture (Printer    *p,
     }
   append_unsigned_param (p, "width", layout.width);
   append_unsigned_param (p, "height", layout.height);
+  if (gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_STRAIGHT)
+    append_boolean_param (p, "premultiplied", FALSE);
 
   if (n_planes > 0 || layout.planes[0].offset != 0)
     {

@@ -133,12 +133,6 @@ if os_unix
   ]
 endif
 
-if os_linux
-  gtk_tests += [
-    ['testdmabuf', ['testdmabuf.c', 'gtkclipper.c']],
-  ]
-endif
-
 if x11_enabled
   gtk_tests += [['testerrors']]
 endif
