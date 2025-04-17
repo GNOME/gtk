@@ -884,9 +884,6 @@ subdir('modules')
 subdir('tools')
 subdir('po')
 subdir('docs/reference')
-if os_android
-  subdir('gdk/android/glue')
-endif
 if get_option('build-demos')
   subdir('demos')
 endif

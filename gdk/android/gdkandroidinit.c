@@ -157,11 +157,12 @@ gdk_android_set_latest_activity (JNIEnv *env, jobject activity)
       if ((*env)->IsSameObject (env, gdk_android_activity, activity))
         return;
 
-      if ((*env)->GetLongField (env, gdk_android_activity, gdk_android_get_java_cache ()->toplevel.native_identifier) == 0) // previously set activity was stil unbound
-        (*env)->CallVoidMethod (env, gdk_android_activity, gdk_android_get_java_cache ()->a_activity.finish);
+      if ((*env)->IsInstanceOf (env, gdk_android_activity, gdk_android_get_java_cache ()->toplevel.klass))
+        if ((*env)->GetLongField (env, gdk_android_activity, gdk_android_get_java_cache ()->toplevel.native_identifier) == 0) // previously set activity was stil unbound
+          (*env)->CallVoidMethod (env, gdk_android_activity, gdk_android_get_java_cache ()->a_activity.finish);
       (*env)->DeleteGlobalRef(env, gdk_android_activity);
     }
-  gdk_android_activity = (*env)->NewGlobalRef(env, activity);
+  gdk_android_activity = activity ? (*env)->NewGlobalRef(env, activity) : NULL;
 }
 
 gboolean
@@ -243,10 +244,6 @@ gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject ac
   jclass surface_exception_class = gdk_android_init_find_class_using_classloader (env, application_classloader, "org/gtk/android/ToplevelActivity$UnregisteredSurfaceException");
   gdk_android_java_cache.surface_exception.klass = (*env)->NewGlobalRef (env, surface_exception_class);
   gdk_android_java_cache.surface_exception.constructor = (*env)->GetMethodID (env, gdk_android_java_cache.surface_exception.klass, "<init>", "(Ljava/lang/Object;)V");
-
-  jclass glue_lib_provider = gdk_android_init_find_class_using_classloader (env, application_classloader, "org/gtk/android/GlueLibraryProvider");
-  gdk_android_java_cache.glue_library_provider.klass = (*env)->NewGlobalRef (env, glue_lib_provider);
-  gdk_android_java_cache.glue_library_provider.get_glue_lib_name = (*env)->GetMethodID (env, gdk_android_java_cache.glue_library_provider.klass, "getGlueLibraryName", "()Ljava/lang/String;");
 
   jclass android_activity_class = (*env)->FindClass (env, "android/app/Activity");
   gdk_android_java_cache.a_activity.klass = (*env)->NewGlobalRef (env, android_activity_class);
@@ -632,7 +629,6 @@ gdk_android_finalize (void)
   (*env)->DeleteGlobalRef (env, gdk_android_java_cache.toplevel.toplevel_identifier_key);
   (*env)->DeleteGlobalRef (env, gdk_android_java_cache.toplevel_view.klass);
   (*env)->DeleteGlobalRef (env, gdk_android_java_cache.surface_exception.klass);
-  (*env)->DeleteGlobalRef (env, gdk_android_java_cache.glue_library_provider.klass);
   (*env)->DeleteGlobalRef (env, gdk_android_java_cache.a_activity.klass);
   (*env)->DeleteGlobalRef (env, gdk_android_java_cache.a_context.klass);
   (*env)->DeleteGlobalRef (env, gdk_android_java_cache.a_context.activity_service);

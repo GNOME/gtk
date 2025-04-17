@@ -384,9 +384,6 @@ public class ToplevelActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		System.loadLibrary(GlueLibraryContext.getGlueLibraryName());
-		GlueLibraryContext.runApplication(this);
-
 		this.fullscreenState = false;
 
 		super.onCreate(savedInstanceState);

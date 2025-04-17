@@ -92,6 +92,11 @@ option('accesskit',
        value: 'disabled',
        description: 'Enable the AccessKit backend for accessibility')
 
+option('android-runtime',
+       type: 'feature',
+       value: 'enabled',
+       description : 'Enable the runtime for running native applications on Android')
+
 # Introspection
 
 option('introspection',

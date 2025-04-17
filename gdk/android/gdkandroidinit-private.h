@@ -95,11 +95,6 @@ typedef struct
   struct
   {
     jclass klass;
-    jmethodID get_glue_lib_name;
-  } glue_library_provider;
-  struct
-  {
-    jclass klass;
     jmethodID get_task_id;
     jmethodID get_window_manager;
     jmethodID finish;
