@@ -54,15 +54,16 @@ Creates a [class@Gdk.MemoryTexture] with the properties mapping to the propertie
 
 ### dmabuf textures
 
-| property    | syntax               | default     | printed     |
-| ----------- | -------------------- | ----------- | ----------- |
-| fourcc      | `<string>|<integer>` | none        | always      |
-| width       | `<integer>`          | none        | always      |
-| height      | `<integer>`          | none        | always      |
-| offset      | `<integer>{1,4}`     | 0           | non-default |
-| stride      | `<integer>{1,4}`     | none        | always      |
-| color-state | `<color-state>`      | *see below* | non-default |
-| data        | `<image-data>`       | none        | always      |
+| property      | syntax               | default     | printed     |
+| ------------- | -------------------- | ----------- | ----------- |
+| fourcc        | `<string>|<integer>` | none        | always      |
+| width         | `<integer>`          | none        | always      |
+| height        | `<integer>`          | none        | always      |
+| premultiplied | `<boolean>`          | true        | non-default |
+| offset        | `<integer>{1,4}`     | 0           | non-default |
+| stride        | `<integer>{1,4}`     | none        | always      |
+| color-state   | `<color-state>`      | *see below* | non-default |
+| data          | `<image-data>`       | none        | always      |
 
 Creates a [class@Gdk.DmabufTexture] with the properties mapping to the properties of [class@Gdk.DmabufTextureBuilder]. If no dmabuf texture can be created due to lack of support, a warning will be emitted and a fallback memory texture will be used.
 
