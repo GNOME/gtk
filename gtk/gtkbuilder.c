@@ -70,7 +70,7 @@
  * For example:
  *
  * ```xml
- * <?xml version="1.0" encoding="UTF-8">
+ * <?xml version="1.0" encoding="UTF-8"?>
  * <interface domain="your-app">
  *   ...
  * </interface>
@@ -85,7 +85,7 @@
  * error out if the version requirements are not met. For example:
  *
  * ```xml
- * <?xml version="1.0" encoding="UTF-8">
+ * <?xml version="1.0" encoding="UTF-8"?>
  * <interface domain="your-app">
  *   <requires lib="gtk" version="4.0" />
  * </interface>
