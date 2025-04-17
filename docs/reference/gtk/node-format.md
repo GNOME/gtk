@@ -36,7 +36,7 @@ Custom color states can be defined at the top of the document and then later ref
 Textures can be referenced in 3 different ways: They can either reference a previously defined texture by name, they can reference an external resource by URL or they can be described in detail by specifying all their properties. The external reference must be a URL to a valid image file in a format understood by [ctor@Gdk.Texture.new_from_bytes].
 
     texture: "name" | "name" <texture-definition>
-    texture-definition: <url> | <memory-texture> | <dmabuf-texture>
+    texture-definition: <url> | <memory-texture> | <dmabuf-texture> | <d3d12-texture>
 
 ### memory textures
 
@@ -70,6 +70,22 @@ Creates a [class@Gdk.DmabufTexture] with the properties mapping to the propertie
 The fourcc can be given either as a four-letter string, like "NV12" or using the literal number, in this case 842094158.
 
 The default color state will be determined by the fourcc. If the fourcc defines an RGB format, it will use the srgb color state. If it defines a YUV format, the default color state will be the CICP 1/13/6/0, just as when [property@Gdk.DmabufTextureBuilder:color-state] is unset.
+
+### D3D12 textures
+
+| property      | syntax               | default     | printed     |
+| ------------- | -------------------- | ----------- | ----------- |
+| format        | `<integer>`          | none        | always      |
+| width         | `<integer>`          | none        | always      |
+| height        | `<integer>`          | none        | always      |
+| premultiplied | `<boolean>`          | true        | non-default |
+| color-state   | `<color-state>`      | srgb        | non-default |
+| data          | `<image-data>`       | none        | always      |
+
+Creates a [class@Gdk.Win32.D3d12Texture] with the properties mapping to the properties of [class@Gdk.Win32.D3d12TextureBuilder]. If no D3D12 texture can be created due to not
+running on Windows, a warning will be emitted and a fallback memory texture will be used.
+
+The format has to be given as a literal number, you can see [Microsoft's documentation](https://learn.microsoft.com/en-us/windows/win32/api/dxgiformat/ne-dxgiformat-dxgi_format) for a list.
 
 ### image data
 
