@@ -4288,6 +4288,18 @@ gsk_cairo_node_get_surface (GskRenderNode *node)
   return self->surface;
 }
 
+void
+gsk_cairo_node_set_surface (GskRenderNode   *node,
+                            cairo_surface_t *surface)
+{
+  GskCairoNode *self = (GskCairoNode *) node;
+
+  g_return_if_fail (GSK_IS_RENDER_NODE_TYPE (node, GSK_CAIRO_NODE));
+  g_return_if_fail (self->surface == NULL);
+
+  self->surface = cairo_surface_reference (surface);
+}
+
 /**
  * gsk_cairo_node_new:
  * @bounds: the rectangle to render to

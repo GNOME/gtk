@@ -955,37 +955,20 @@ csi_hooks_surface_create (void            *closure,
                           double           height,
                           long             uid)
 {
-  return cairo_surface_create_similar (closure, content, width, height);
-}
+  cairo_surface_t **surface = (cairo_surface_t **) closure;
+  cairo_surface_t *result;
 
-static const cairo_user_data_key_t csi_hooks_key;
+  result = cairo_recording_surface_create (content,
+                                           &(cairo_rectangle_t) {
+                                               0, 0,
+                                               width,
+                                               height
+                                           });
 
-static cairo_t *
-csi_hooks_context_create (void            *closure,
-                          cairo_surface_t *surface)
-{
-  cairo_t *cr = cairo_create (surface);
+  if (*surface == NULL)
+    *surface = cairo_surface_reference (result);
 
-  cairo_set_user_data (cr,
-                       &csi_hooks_key,
-                       cairo_surface_reference (surface),
-                       (cairo_destroy_func_t) cairo_surface_destroy);
-
-  return cr;
-}
-
-static void
-csi_hooks_context_destroy (void *closure,
-                           void *ptr)
-{
-  cairo_surface_t *surface;
-  cairo_t *cr;
-
-  surface = cairo_get_user_data (ptr, &csi_hooks_key);
-  cr = cairo_create (closure);
-  cairo_set_source_surface (cr, surface, 0, 0);
-  cairo_paint (cr);
-  cairo_destroy (cr);
+  return result;
 }
 
 static gboolean
@@ -996,35 +979,41 @@ parse_script (GtkCssParser *parser,
 #ifdef HAVE_CAIRO_SCRIPT_INTERPRETER
   GBytes *bytes;
   cairo_script_interpreter_t *csi;
+  cairo_surface_t *surface = NULL;
   cairo_script_interpreter_hooks_t hooks = {
+    .closure = &surface,
     .surface_create = csi_hooks_surface_create,
-    .context_create = csi_hooks_context_create,
-    .context_destroy = csi_hooks_context_destroy,
   };
 
   bytes = consume_bytes (parser);
   if (bytes == NULL)
     return FALSE;
 
-  hooks.closure = cairo_recording_surface_create (CAIRO_CONTENT_COLOR_ALPHA, NULL);
   csi = cairo_script_interpreter_create ();
   cairo_script_interpreter_install_hooks (csi, &hooks);
   cairo_script_interpreter_feed_string (csi, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
   g_bytes_unref (bytes);
-  if (cairo_surface_status (hooks.closure) != CAIRO_STATUS_SUCCESS)
+  if (surface == NULL)
+    {
+      gtk_css_parser_error_value (parser, "Cairo script did not create a surface");
+      cairo_script_interpreter_destroy (csi);
+      return FALSE;
+    }
+  else if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
     {
       gtk_css_parser_error_value (parser, "Invalid Cairo script: %s", cairo_status_to_string (cairo_surface_status (hooks.closure)));
       cairo_script_interpreter_destroy (csi);
+      cairo_surface_destroy (surface);
       return FALSE;
     }
   if (cairo_script_interpreter_destroy (csi) != CAIRO_STATUS_SUCCESS)
     {
       gtk_css_parser_error_value (parser, "Invalid Cairo script");
-      cairo_surface_destroy (hooks.closure);
+      cairo_surface_destroy (surface);
       return FALSE;
     }
 
-  *(cairo_surface_t **) out_data = hooks.closure;
+  *(cairo_surface_t **) out_data = surface;
   return TRUE;
 #else
   gtk_css_parser_warn (parser,
@@ -2802,10 +2791,7 @@ parse_cairo_node (GtkCssParser *parser,
 
   if (surface != NULL)
     {
-      cairo_t *cr = gsk_cairo_node_get_draw_context (node);
-      cairo_set_source_surface (cr, surface, 0, 0);
-      cairo_paint (cr);
-      cairo_destroy (cr);
+      gsk_cairo_node_set_surface (node, surface);
     }
   else if (pixels != NULL)
     {
@@ -5656,7 +5642,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
                     g_byte_array_ref (array); /* Cairo... see below */
                     bytes = g_byte_array_free_to_bytes (array);
                     append_bytes_param (p, "script", bytes, NULL);
-                    g_string_append (p->str, "\");\n");
                     g_bytes_unref (bytes);
                   }
 

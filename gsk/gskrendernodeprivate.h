@@ -261,5 +261,7 @@ GdkColorState * gsk_conic_gradient_node_get_interpolation_color_state
                                                         (const GskRenderNode *node);
 GskHueInterpolation gsk_conic_gradient_node_get_hue_interpolation
                                                         (const GskRenderNode *node);
+void                    gsk_cairo_node_set_surface              (GskRenderNode          *node,
+                                                                 cairo_surface_t        *surface);
 
 G_END_DECLS
