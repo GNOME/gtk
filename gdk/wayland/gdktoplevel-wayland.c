@@ -1402,6 +1402,9 @@ gdk_wayland_toplevel_set_property (GObject      *object,
     case LAST_PROP + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_GRAVITY:
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -1460,6 +1463,10 @@ gdk_wayland_toplevel_get_property (GObject    *object,
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_CAPABILITIES:
       g_value_set_flags (value, toplevel->capabilities);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_GRAVITY:
+      g_value_set_enum (value, GDK_GRAVITY_NORTH_EAST);
       break;
 
     default:

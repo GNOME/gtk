@@ -5089,6 +5089,9 @@ gdk_x11_toplevel_set_property (GObject      *object,
     case LAST_PROP + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
       break;
 
+    case LAST_PROP + GDK_TOPLEVEL_PROP_GRAVITY:
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -5164,6 +5167,10 @@ gdk_x11_toplevel_get_property (GObject    *object,
                                 GDK_TOPLEVEL_CAPABILITIES_FULLSCREEN |
                                 GDK_TOPLEVEL_CAPABILITIES_MINIMIZE |
                                 GDK_TOPLEVEL_CAPABILITIES_LOWER);
+      break;
+
+    case LAST_PROP + GDK_TOPLEVEL_PROP_GRAVITY:
+      g_value_set_enum (value, GDK_GRAVITY_NORTH_WEST);
       break;
 
     default:

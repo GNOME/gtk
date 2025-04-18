@@ -317,5 +317,12 @@ typedef enum
 GDK_AVAILABLE_IN_4_20
 GdkToplevelCapabilities gdk_toplevel_get_capabilities (GdkToplevel *toplevel);
 
+GDK_AVAILABLE_IN_4_20
+GdkGravity      gdk_toplevel_get_gravity (GdkToplevel *toplevel);
+
+GDK_AVAILABLE_IN_4_20
+void            gdk_toplevel_set_gravity (GdkToplevel *toplevel,
+                                          GdkGravity   gravity);
+
 G_END_DECLS
 
