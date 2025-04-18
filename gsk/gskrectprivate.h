@@ -200,7 +200,7 @@ gsk_rect_snap_to_grid (const graphene_rect_t  *src,
       (ceilf ((src->origin.x + grid_offset->x + src->size.width) * xscale) - x) / xscale,
       (ceilf ((src->origin.y + grid_offset->y + src->size.height) * yscale) - y) / yscale);
 
-  if (graphene_rect_get_height (dest) <= 0.0 || graphene_rect_get_width (dest) <= 0.0)
+  if (dest->size.width <= 0.0 || dest->size.height <= 0.0)
     return FALSE;
 
   return TRUE;
