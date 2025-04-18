@@ -265,6 +265,61 @@ void     gtk_window_set_handle_menubar_accel (GtkWindow *window,
 GDK_AVAILABLE_IN_4_2
 gboolean gtk_window_get_handle_menubar_accel (GtkWindow *window);
 
+/**
+ * GtkWindowGravity:
+ * @GTK_WINDOW_GRAVITY_TOP_LEFT: The top left corner
+ * @GTK_WINDOW_GRAVITY_TOP: The top edge
+ * @GTK_WINDOW_GRAVITY_TOP_RIGHT: The top right corner
+ * @GTK_WINDOW_GRAVITY_LEFT: The left edge
+ * @GTK_WINDOW_GRAVITY_CENTER: The center pointer
+ * @GTK_WINDOW_GRAVITY_RIGHT: The right edge
+ * @GTK_WINDOW_GRAVITY_BOTTOM_LEFT: The bottom left corner
+ * @GTK_WINDOW_GRAVITY_BOTTOM: the bottom edge
+ * @GTK_WINDOW_GRAVITY_BOTTOM_RIGHT: The bottom right corner
+ * @GTK_WINDOW_GRAVITY_TOP_START: The top left or top right corner,
+ *   depending on the text direction
+ * @GTK_WINDOW_GRAVITY_TOP_END: The top right or top left corner,
+ *   depending on the text direction
+ * @GTK_WINDOW_GRAVITY_START: The left or right edge,
+ *   depending on the text direction
+ * @GTK_WINDOW_GRAVITY_END: The right or left edge,
+ *   depending on the text direction
+ * @GTK_WINDOW_GRAVITY_BOTTOM_START: The bottom left or top right corner,
+ *   depending on the text direction
+ * @GTK_WINDOW_GRAVITY_BOTTOM_END: The bottom right or top left corner,
+ *   depending on the text direction
+ *
+ * Determines which point or edge of a window is meant to remain fixed
+ * when a window changes size.
+ *
+ * Since: 4.20
+ */
+typedef enum
+{
+  GTK_WINDOW_GRAVITY_TOP_LEFT,
+  GTK_WINDOW_GRAVITY_TOP,
+  GTK_WINDOW_GRAVITY_TOP_RIGHT,
+  GTK_WINDOW_GRAVITY_LEFT,
+  GTK_WINDOW_GRAVITY_CENTER,
+  GTK_WINDOW_GRAVITY_RIGHT,
+  GTK_WINDOW_GRAVITY_BOTTOM_LEFT,
+  GTK_WINDOW_GRAVITY_BOTTOM,
+  GTK_WINDOW_GRAVITY_BOTTOM_RIGHT,
+  GTK_WINDOW_GRAVITY_TOP_START,
+  GTK_WINDOW_GRAVITY_TOP_END,
+  GTK_WINDOW_GRAVITY_START,
+  GTK_WINDOW_GRAVITY_END,
+  GTK_WINDOW_GRAVITY_BOTTOM_START,
+  GTK_WINDOW_GRAVITY_BOTTOM_END,
+} GtkWindowGravity;
+
+GDK_AVAILABLE_IN_4_20
+GtkWindowGravity
+         gtk_window_get_gravity              (GtkWindow        *window);
+GDK_AVAILABLE_IN_4_20
+void     gtk_window_set_gravity              (GtkWindow        *window,
+                                              GtkWindowGravity  gravity);
+
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindow, g_object_unref)
 G_DEFINE_AUTOPTR_CLEANUP_FUNC(GtkWindowGroup, g_object_unref)
 
