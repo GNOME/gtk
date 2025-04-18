@@ -178,8 +178,10 @@ gsk_rect_coverage (const graphene_rect_t *r1,
  *
  * Note that floating point rounding issues might result
  * in the snapping not being perfectly exact.
+ * 
+ * Returns false if the resulting rect has zero width/height
  **/
-static inline void
+static inline gboolean
 gsk_rect_snap_to_grid (const graphene_rect_t  *src,
                        const graphene_vec2_t  *grid_scale,
                        const graphene_point_t *grid_offset,
@@ -197,6 +199,11 @@ gsk_rect_snap_to_grid (const graphene_rect_t  *src,
       y / yscale - grid_offset->y,
       (ceilf ((src->origin.x + grid_offset->x + src->size.width) * xscale) - x) / xscale,
       (ceilf ((src->origin.y + grid_offset->y + src->size.height) * yscale) - y) / yscale);
+
+  if (graphene_rect_get_height (dest) <= 0.0 || graphene_rect_get_width (dest) <= 0.0)
+    return FALSE;
+
+  return TRUE;
 }
 
 static inline gboolean G_GNUC_PURE
