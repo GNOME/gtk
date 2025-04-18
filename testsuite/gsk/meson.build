@@ -186,6 +186,7 @@ compare_render_tests = [
   'shadow-replay-nocairo',
   'shadow-texture-formats',
   'shrink-rounded-border',
+  'small-cairo-node-fractional-edge-case',
   'stroke',
   'stroke-clipped',
   'stroke-fractional-translate-gradient',

@@ -1,0 +1,32 @@
+/* put a color node to avoid "downsizing" */
+color {
+  bounds: 0 0 1071 10;
+  color: transparent;
+}
+
+/* Size the area just right */
+clip {
+  clip: 46 0 1025 10;
+
+  /* Now for the actual test. First, apply the application's scale: */
+  child: transform {
+    transform: scale(1.69999992847442626953125) translate(46, 0);
+
+    child: container {
+      /* first, draw something to not cause the transform node to be downsized */
+      color {
+        bounds: 0 0 10 10;
+        color: transparent;
+      }
+
+      /* then draw the Cairo node at the right location to make it go boom */
+      cairo {
+        bounds: 584 0 10 10;
+        script: url("data:;base64,\
+JSFDYWlyb1NjcmlwdAo8PCAvY29udGVudCAvL0NPTE9SX0FMUEhBIC93aWR0aCAxMCAvaGVpZ2h0\
+IDEwID4+IHN1cmZhY2UgY29udGV4dAoxLjAgMC4wIDAuMCByZ2Igc2V0LXNvdXJjZQpwYWludApw\
+b3AK");
+        }
+    }
+  }
+}
