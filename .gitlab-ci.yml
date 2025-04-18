@@ -340,26 +340,18 @@ msys2-ucrt64:
       - "${CI_PROJECT_DIR}/_build/gtk/GdkWin32-4.0.gir"
 
 macos-arm64:
-  rules:
-    # Do not run in forks as the runner is not available there.
-    # (except for dehesselle who maintains the runner)
-    - if: $CI_PROJECT_NAMESPACE == "GNOME" || $CI_PROJECT_NAMESPACE == "dehesselle"
   stage: build
   tags:
-    - macosarm
+    - macos
+    - arm64
   needs: []
   variables:
     BACKEND_FLAGS: "-Dx11-backend=false -Dbroadway-backend=true"
     FEATURE_FLAGS: "-Daccesskit=enabled -Dgobject-introspection:werror=false -Dintrospection=enabled -Dmedia-gstreamer=disabled"
     EXTRA_MESON_FLAGS: ""
     # additional settings
-    CARGO_HOME: $CI_PROJECT_DIR/.cargo
-    PIP_CACHE_DIR: /Users/Shared/work/cache
-    PIPENV_CACHE_DIR: $PIP_CACHE_DIR
     PKG_CONFIG_PATH: $CI_PROJECT_DIR/.venv/lib/pkgconfig
-    PYTHONPYCACHEPREFIX: $PIP_CACHE_DIR
     SDKROOT: /opt/sdks/MacOSX11.3.sdk
-    TMPDIR: /Users/Shared/work/tmp
   before_script:
     - .gitlab-ci/show-info-macos.sh
     # Setup the virtual environment with 'meson' and 'ninja'.
@@ -371,7 +363,7 @@ macos-arm64:
     - curl -L $CI_API_V4_URL/projects/30437/packages/generic/pkgconfig/v0.29.2+10/pkg-config-0.29.2+10_$(uname -m).tar.xz | tar -C .venv -xJ
     - curl -L $CI_API_V4_URL/projects/30438/packages/generic/bison/v3.8.2+3/bison-3.8.2+3_$(uname -m).tar.xz | tar -C .venv -xJ
     # The AccessKit feature requires Rust.
-    - ln -s /opt/rustup/toolchains/1.84.0-aarch64-apple-darwin/bin/* .venv/bin
+    - ln -s /opt/rustup/toolchains/1.86.0-aarch64-apple-darwin/bin/* .venv/bin
     # The GLib subproject requires 'packaging'.
     - pip3 install packaging==24.2
     # Meson cannot handle circular dependencies in subprojects, so we have to build GLib and
