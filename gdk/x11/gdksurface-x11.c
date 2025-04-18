@@ -139,6 +139,7 @@ gdk_x11_surface_init (GdkX11Surface *impl)
   impl->surface_scale = 1;
   impl->frame_sync_enabled = TRUE;
   impl->surface_is_on_monitor = NULL;
+  impl->gravity = GDK_GRAVITY_NORTH_WEST;
 }
 
 GdkToplevelX11 *
@@ -1726,7 +1727,70 @@ gdk_x11_surface_toplevel_resize (GdkSurface *surface,
                                  int         width,
                                  int         height)
 {
-  x11_surface_resize (surface, width, height);
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+  GdkRectangle geometry;
+  GdkRectangle new_geometry;
+
+  gdk_surface_get_geometry (surface,
+                            &geometry.x,
+                            &geometry.y,
+                            &geometry.width,
+                            &geometry.height);
+
+  new_geometry.width = width;
+  new_geometry.height = height;
+
+  switch (impl->gravity)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+    case GDK_GRAVITY_WEST:
+    case GDK_GRAVITY_SOUTH_WEST:
+      new_geometry.x = geometry.x;
+      break;
+
+    case GDK_GRAVITY_NORTH:
+    case GDK_GRAVITY_CENTER:
+    case GDK_GRAVITY_SOUTH:
+      new_geometry.x = geometry.x + geometry.width / 2 - new_geometry.width / 2;
+      break;
+
+    case GDK_GRAVITY_NORTH_EAST:
+    case GDK_GRAVITY_EAST:
+    case GDK_GRAVITY_SOUTH_EAST:
+      new_geometry.x = geometry.x + geometry.width - new_geometry.width;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  switch (impl->gravity)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+    case GDK_GRAVITY_NORTH:
+    case GDK_GRAVITY_NORTH_EAST:
+      new_geometry.y = geometry.y;
+      break;
+
+    case GDK_GRAVITY_WEST:
+    case GDK_GRAVITY_CENTER:
+    case GDK_GRAVITY_EAST:
+      new_geometry.y = geometry.y + geometry.height / 2 - new_geometry.height / 2;
+      break;
+
+    case GDK_GRAVITY_SOUTH_WEST:
+    case GDK_GRAVITY_SOUTH:
+    case GDK_GRAVITY_SOUTH_EAST:
+      new_geometry.y = geometry.y + geometry.height - new_geometry.height;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  x11_surface_move_resize (surface, new_geometry.x, new_geometry.y, new_geometry.width, new_geometry.height);
 }
 
 void
@@ -4814,6 +4878,36 @@ gdk_x11_surface_class_init (GdkX11SurfaceClass *klass)
   impl_class->compute_size = gdk_x11_surface_compute_size;
 }
 
+static unsigned int
+gdk_gravity_to_x11 (GdkGravity gravity)
+{
+  switch (gravity)
+    {
+    case GDK_GRAVITY_NORTH_WEST:
+      return NorthWestGravity;
+    case GDK_GRAVITY_NORTH:
+      return NorthGravity;
+    case GDK_GRAVITY_NORTH_EAST:
+      return NorthEastGravity;
+    case GDK_GRAVITY_WEST:
+      return WestGravity;
+    case GDK_GRAVITY_CENTER:
+      return CenterGravity;
+    case GDK_GRAVITY_EAST:
+      return EastGravity;
+    case GDK_GRAVITY_SOUTH_WEST:
+      return SouthWestGravity;
+    case GDK_GRAVITY_SOUTH:
+      return SouthGravity;
+    case GDK_GRAVITY_SOUTH_EAST:
+      return SouthEastGravity;
+    case GDK_GRAVITY_STATIC:
+      return StaticGravity;
+    default:
+      g_assert_not_reached ();
+    }
+}
+
 static void
 gdk_x11_surface_create_window (GdkX11Surface        *self,
                                XSetWindowAttributes *xattributes,
@@ -4837,7 +4931,7 @@ gdk_x11_surface_create_window (GdkX11Surface        *self,
                                           display_x11->screen->screen_num);
   xattributes_mask |= CWBorderPixel;
 
-  xattributes->bit_gravity = NorthWestGravity;
+  xattributes->bit_gravity = gdk_gravity_to_x11 (self->gravity);
   xattributes_mask |= CWBitGravity;
 
   xattributes->colormap = gdk_x11_display_get_window_colormap (display_x11);
@@ -5002,6 +5096,40 @@ gdk_x11_popup_iface_init (GdkPopupInterface *iface)
   iface->get_position_y = gdk_x11_popup_get_position_y;
 }
 
+static void
+update_gravity (GdkX11Surface *self)
+{
+  GdkDisplay *display = gdk_surface_get_display (GDK_SURFACE (self));
+  XSetWindowAttributes xattributes;
+  long xattributes_mask = 0;
+
+  xattributes.bit_gravity = gdk_gravity_to_x11 (self->gravity);
+  xattributes_mask |= CWBitGravity;
+
+  XChangeWindowAttributes (GDK_DISPLAY_XDISPLAY (display),
+                           self->xid,
+                           xattributes_mask,
+                           &xattributes);
+}
+
+static void
+gdk_x11_surface_set_gravity (GdkSurface *surface,
+                             GdkGravity  gravity)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+
+  impl->gravity = gravity;
+  update_gravity (impl);
+}
+
+static GdkGravity
+gdk_x11_surface_get_gravity (GdkSurface *surface)
+{
+  GdkX11Surface *impl = GDK_X11_SURFACE (surface);
+
+  return impl->gravity;
+}
+
 static void gdk_x11_toplevel_iface_init (GdkToplevelInterface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (GdkX11Toplevel, gdk_x11_toplevel, GDK_TYPE_X11_SURFACE,
@@ -5090,6 +5218,8 @@ gdk_x11_toplevel_set_property (GObject      *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_GRAVITY:
+      gdk_x11_surface_set_gravity (surface, g_value_get_enum (value));
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
     default:
@@ -5170,7 +5300,7 @@ gdk_x11_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_GRAVITY:
-      g_value_set_enum (value, GDK_GRAVITY_NORTH_WEST);
+      g_value_set_enum (value, gdk_x11_surface_get_gravity (surface));
       break;
 
     default:
