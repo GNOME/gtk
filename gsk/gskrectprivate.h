@@ -181,7 +181,7 @@ gsk_rect_coverage (const graphene_rect_t *r1,
  * 
  * Returns false if the resulting rect has zero width/height
  **/
-static inline gboolean
+static inline gboolean G_GNUC_WARN_UNUSED_RESULT
 gsk_rect_snap_to_grid (const graphene_rect_t  *src,
                        const graphene_vec2_t  *grid_scale,
                        const graphene_point_t *grid_offset,
