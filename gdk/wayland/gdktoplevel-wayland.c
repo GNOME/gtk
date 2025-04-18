@@ -145,6 +145,8 @@ struct _GdkWaylandToplevel
 
   GdkToplevelCapabilities capabilities;
 
+  GdkGravity gravity;
+
   char *title;
   gboolean decorated;
 
@@ -364,6 +366,69 @@ gdk_wayland_toplevel_sync_title (GdkWaylandToplevel *toplevel)
   XDG_SHELL_CALL (xdg_toplevel, set_title, toplevel, toplevel->title);
 }
 
+static void
+gdk_wayland_toplevel_update_size (GdkSurface               *surface,
+                                  int32_t                   width,
+                                  int32_t                   height,
+                                  const GdkFractionalScale *scale)
+{
+  GdkWaylandToplevel *self = GDK_WAYLAND_TOPLEVEL (surface);
+  int x, y;
+
+  switch (self->gravity)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+    case GDK_GRAVITY_WEST:
+    case GDK_GRAVITY_SOUTH_WEST:
+      x = 0;
+      break;
+
+    case GDK_GRAVITY_NORTH:
+    case GDK_GRAVITY_CENTER:
+    case GDK_GRAVITY_SOUTH:
+      x = surface->width / 2 - width / 2;
+      break;
+
+    case GDK_GRAVITY_NORTH_EAST:
+    case GDK_GRAVITY_EAST:
+    case GDK_GRAVITY_SOUTH_EAST:
+      x = surface->width - width;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  switch (self->gravity)
+    {
+    case GDK_GRAVITY_STATIC:
+    case GDK_GRAVITY_NORTH_WEST:
+    case GDK_GRAVITY_NORTH:
+    case GDK_GRAVITY_NORTH_EAST:
+      y = 0;
+      break;
+
+    case GDK_GRAVITY_WEST:
+    case GDK_GRAVITY_CENTER:
+    case GDK_GRAVITY_EAST:
+      y = surface->height / 2 - height / 2;
+      break;
+
+    case GDK_GRAVITY_SOUTH_WEST:
+    case GDK_GRAVITY_SOUTH:
+    case GDK_GRAVITY_SOUTH_EAST:
+      y = surface->height - height;
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  _gdk_wayland_surface_offset_next_wl_buffer (surface, x, y);
+  gdk_wayland_surface_update_size (surface, width, height, scale);
+}
+
 static gboolean
 gdk_wayland_toplevel_compute_size (GdkSurface *surface)
 {
@@ -451,7 +516,7 @@ gdk_wayland_toplevel_compute_size (GdkSurface *surface)
                                       width, height,
                                       &width, &height);
         }
-      gdk_wayland_surface_update_size (surface, width, height, &wayland_surface->scale);
+      gdk_wayland_toplevel_update_size (surface, width, height, &wayland_surface->scale);
 
       if (!wayland_toplevel->next_layout.size_is_fixed)
         {
@@ -469,7 +534,7 @@ gdk_wayland_toplevel_compute_size (GdkSurface *surface)
       gdk_surface_constrain_size (&geometry, mask,
                                   width, height,
                                   &width, &height);
-      gdk_wayland_surface_update_size (surface, width, height, &wayland_surface->scale);
+      gdk_wayland_toplevel_update_size (surface, width, height, &wayland_surface->scale);
     }
 
   wayland_surface->next_layout.surface_geometry_dirty = FALSE;
@@ -943,6 +1008,7 @@ gdk_wayland_toplevel_init (GdkWaylandToplevel *toplevel)
   toplevel->saved_height = -1;
 
   toplevel->title = g_strdup (get_default_title ());
+  toplevel->gravity = GDK_GRAVITY_NORTH_WEST;
 }
 
 static void
@@ -1403,6 +1469,8 @@ gdk_wayland_toplevel_set_property (GObject      *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_GRAVITY:
+      toplevel->gravity = g_value_get_enum (value);
+      g_object_notify_by_pspec (object, pspec);
       break;
 
     default:
@@ -1466,7 +1534,7 @@ gdk_wayland_toplevel_get_property (GObject    *object,
       break;
 
     case LAST_PROP + GDK_TOPLEVEL_PROP_GRAVITY:
-      g_value_set_enum (value, GDK_GRAVITY_NORTH_EAST);
+      g_value_set_enum (value, toplevel->gravity);
       break;
 
     default:
