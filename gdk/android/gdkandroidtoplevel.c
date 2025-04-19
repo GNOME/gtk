@@ -487,6 +487,10 @@ gdk_android_toplevel_get_property (GObject    *object,
       g_value_set_boolean (value, FALSE);
       break;
 
+    case N_PROPERTIES + GDK_TOPLEVEL_PROP_GRAVITY:
+      g_value_set_enum (value, GDK_GRAVITY_NORTH_EAST);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -531,6 +535,9 @@ gdk_android_toplevel_set_property (GObject      *object,
       break;
 
     case N_PROPERTIES + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
+      break;
+
+    case N_PROPERTIES + GDK_TOPLEVEL_PROP_GRAVITY:
       break;
 
     default:

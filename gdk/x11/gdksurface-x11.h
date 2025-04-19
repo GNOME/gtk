@@ -83,6 +83,8 @@ struct _GdkX11Surface
 
   GdkToplevelLayout *toplevel_layout;
 
+  GdkGravity gravity;
+
   struct {
     int configured_width;
     int configured_height;
