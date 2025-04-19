@@ -216,16 +216,14 @@ static struct wp_color_manager_v1_listener color_manager_listener = {
 };
 
 GdkWaylandColor *
-gdk_wayland_color_new (GdkWaylandDisplay  *display,
-                       struct wl_registry *registry,
-                       uint32_t            id,
-                       uint32_t            version)
+gdk_wayland_color_new (GdkWaylandDisplay *display)
 {
   GdkWaylandColor *color;
 
   color = g_new0 (GdkWaylandColor, 1);
 
   color->display = display;
+
   color->cs_to_desc = g_hash_table_new_full (color_state_hash,
                                              color_state_equal,
                                              (GDestroyNotify) gdk_color_state_unref,
@@ -235,6 +233,15 @@ gdk_wayland_color_new (GdkWaylandDisplay  *display,
                                            NULL,
                                            (GDestroyNotify) gdk_color_state_unref);
 
+  return color;
+}
+
+void
+gdk_wayland_color_set_color_manager (GdkWaylandColor    *color,
+                                     struct wl_registry *registry,
+                                     uint32_t            id,
+                                     uint32_t            version)
+{
   color->color_manager = wl_registry_bind (registry,
                                            id,
                                            &wp_color_manager_v1_interface,
@@ -243,8 +250,6 @@ gdk_wayland_color_new (GdkWaylandDisplay  *display,
   wp_color_manager_v1_add_listener (color->color_manager,
                                     &color_manager_listener,
                                     color);
-
-  return color;
 }
 
 void
@@ -898,14 +903,17 @@ gdk_wayland_color_surface_new (GdkWaylandColor      *color,
 
   self->color = color;
 
-  self->surface = wp_color_manager_v1_get_surface (color->color_manager, wl_surface);
-  self->feedback = wp_color_manager_v1_get_surface_feedback (color->color_manager, wl_surface);
+  if (color->color_manager)
+    {
+      self->surface = wp_color_manager_v1_get_surface (color->color_manager, wl_surface);
+      self->feedback = wp_color_manager_v1_get_surface_feedback (color->color_manager, wl_surface);
 
-  self->callback = callback;
-  self->data = data;
+      self->callback = callback;
+      self->data = data;
 
-  wp_color_management_surface_feedback_v1_add_listener (self->feedback, &color_listener, self);
-  preferred_changed (self, self->feedback, 0);
+      wp_color_management_surface_feedback_v1_add_listener (self->feedback, &color_listener, self);
+      preferred_changed (self, self->feedback, 0);
+    }
 
   return self;
 }
@@ -915,8 +923,8 @@ gdk_wayland_color_surface_free (GdkWaylandColorSurface *self)
 {
   gdk_wayland_color_surface_clear_image_desc (self);
 
-  wp_color_management_surface_v1_destroy (self->surface);
-  wp_color_management_surface_feedback_v1_destroy (self->feedback);
+  g_clear_pointer (&self->surface, wp_color_management_surface_v1_destroy);
+  g_clear_pointer (&self->feedback, wp_color_management_surface_feedback_v1_destroy);
 
   g_free (self);
 }
@@ -929,14 +937,14 @@ gdk_wayland_color_get_image_description (GdkWaylandColor *color,
 
   if (g_hash_table_lookup_extended (color->cs_to_desc, cs, NULL, &result))
     return result;
-  
+
   create_image_desc (color, cs, TRUE);
 
   if (!g_hash_table_lookup_extended (color->cs_to_desc, cs, NULL, &result))
     {
       g_assert_not_reached ();
     }
-  
+
   return result;
 }
 
@@ -944,16 +952,19 @@ void
 gdk_wayland_color_surface_set_color_state (GdkWaylandColorSurface *self,
                                            GdkColorState          *cs)
 {
-  struct wp_image_description_v1 *desc;
+  if (self->surface)
+    {
+      struct wp_image_description_v1 *desc;
 
-  desc = gdk_wayland_color_get_image_description (self->color, cs);
+      desc = gdk_wayland_color_get_image_description (self->color, cs);
 
-  if (desc)
-    wp_color_management_surface_v1_set_image_description (self->surface,
-                                                          desc,
-                                                          WP_COLOR_MANAGER_V1_RENDER_INTENT_PERCEPTUAL);
-  else
-    wp_color_management_surface_v1_unset_image_description (self->surface);
+      if (desc)
+        wp_color_management_surface_v1_set_image_description (self->surface,
+                                                              desc,
+                                                              WP_COLOR_MANAGER_V1_RENDER_INTENT_PERCEPTUAL);
+      else
+        wp_color_management_surface_v1_unset_image_description (self->surface);
+    }
 }
 
 gboolean
