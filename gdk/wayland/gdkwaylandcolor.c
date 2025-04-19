@@ -337,8 +337,9 @@ create_image_desc (GdkWaylandColor *color,
   cicp = gdk_color_state_get_cicp (cs);
   if (!cicp)
     {
-      GDK_DEBUG (MISC, "Unsupported color state %s: Not a CICP colorstate",
-                 gdk_color_state_get_name (cs));
+      GDK_DISPLAY_DEBUG (GDK_DISPLAY (color->display), MISC,
+                         "Unsupported color state %s: Not a CICP colorstate",
+                         gdk_color_state_get_name (cs));
       g_hash_table_insert (color->cs_to_desc, gdk_color_state_ref (cs), NULL);
       return;
     }
@@ -351,8 +352,9 @@ create_image_desc (GdkWaylandColor *color,
        (color->color_manager_supported.features & (1 << WP_COLOR_MANAGER_V1_FEATURE_SET_PRIMARIES)) == 0) ||
       (color->color_manager_supported.transfers & (1 << tf)) == 0)
     {
-      GDK_DEBUG (MISC, "Unsupported color state %s: Primaries or transfer function unsupported",
-                 gdk_color_state_get_name (cs));
+      GDK_DISPLAY_DEBUG (GDK_DISPLAY (color->display), MISC,
+                         "Unsupported color state %s: Primaries or transfer function unsupported",
+                         gdk_color_state_get_name (cs));
       g_hash_table_insert (color->cs_to_desc, gdk_color_state_ref (cs), NULL);
       return;
     }
@@ -404,51 +406,116 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
 {
   if (color->color_manager)
     {
-      const char *intents[] = {
-        "perceptual", "relative", "saturation", "absolute", "relative-bpc"
-      };
-      const char *features[] = {
-        "icc-v4-v4", "parametric", "set-primaries", "set-tf-power",
-        "set-mastering-display-primaries", "extended-target-volume", "windows-scrgb"
-      };
-      const char *tf[] = {
-        "bt709", "gamma22", "gamma28", "st240", "linear", "log100",
-        "log316", "xvycc", "bt1361", "srgb", "ext-srgb", "pq", "st428", "hlg"
-      };
-      const char *primaries[] = {
-        "srgb", "pal-m", "pal", "ntsc", "generic-film", "bt2020", "xyz",
-        "dci-p3", "display-p3", "adobe-rgb",
-      };
-
-     for (int i = 0; i < G_N_ELEMENTS (intents); i++)
+      if (GDK_DISPLAY_DEBUG_CHECK (GDK_DISPLAY (color->display), MISC))
         {
-          GDK_DEBUG (MISC, "Rendering intent %d (%s): %s",
-                   i, intents[i], color->color_manager_supported.intents & (1 << i) ? "✓" : "✗");
-        }
+          struct {
+            const char *name;
+            enum wp_color_manager_v1_render_intent value;
+          } intents[] = {
+            { "perceptual", WP_COLOR_MANAGER_V1_RENDER_INTENT_PERCEPTUAL },
+            { "relative", WP_COLOR_MANAGER_V1_RENDER_INTENT_RELATIVE },
+            { "saturation", WP_COLOR_MANAGER_V1_RENDER_INTENT_SATURATION },
+            { "absolute", WP_COLOR_MANAGER_V1_RENDER_INTENT_ABSOLUTE },
+            { "relative-bpc", WP_COLOR_MANAGER_V1_RENDER_INTENT_RELATIVE_BPC },
+          };
+          struct {
+            const char *name;
+            enum wp_color_manager_v1_feature value;
+          } features[] = {
+            { "icc-v2-v4", WP_COLOR_MANAGER_V1_FEATURE_ICC_V2_V4 },
+            { "parametric", WP_COLOR_MANAGER_V1_FEATURE_PARAMETRIC },
+            { "set-primaries", WP_COLOR_MANAGER_V1_FEATURE_SET_PRIMARIES },
+            { "set-tf-power", WP_COLOR_MANAGER_V1_FEATURE_SET_TF_POWER },
+            { "set-luminances", WP_COLOR_MANAGER_V1_FEATURE_SET_LUMINANCES },
+            { "set-mastering-display-primaries", WP_COLOR_MANAGER_V1_FEATURE_SET_MASTERING_DISPLAY_PRIMARIES },
+            { "extended-target-volume", WP_COLOR_MANAGER_V1_FEATURE_EXTENDED_TARGET_VOLUME },
+            { "windows-scrgb", WP_COLOR_MANAGER_V1_FEATURE_WINDOWS_SCRGB },
+          };
+          struct {
+            const char *name;
+            enum wp_color_manager_v1_primaries value;
+          } primaries[] = {
+            { "srgb", WP_COLOR_MANAGER_V1_PRIMARIES_SRGB },
+            { "pal-m", WP_COLOR_MANAGER_V1_PRIMARIES_PAL_M },
+            { "pal", WP_COLOR_MANAGER_V1_PRIMARIES_PAL },
+            { "ntsc", WP_COLOR_MANAGER_V1_PRIMARIES_NTSC },
+            { "generic-film", WP_COLOR_MANAGER_V1_PRIMARIES_GENERIC_FILM },
+            { "bt2020", WP_COLOR_MANAGER_V1_PRIMARIES_BT2020 },
+            { "cie1931-xyz", WP_COLOR_MANAGER_V1_PRIMARIES_CIE1931_XYZ },
+            { "dci-p3", WP_COLOR_MANAGER_V1_PRIMARIES_DCI_P3 },
+            { "display-p3", WP_COLOR_MANAGER_V1_PRIMARIES_DISPLAY_P3 },
+            { "adobe-rgb", WP_COLOR_MANAGER_V1_PRIMARIES_ADOBE_RGB },
+          };
+          struct {
+            const char *name;
+            enum wp_color_manager_v1_transfer_function value;
+          } tf[] = {
+            { "bt1886", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_BT1886 },
+            { "gamma22", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_GAMMA22 },
+            { "gamma28", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_GAMMA28 },
+            { "st240", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_ST240 },
+            { "ext-linear", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_EXT_LINEAR },
+            { "log100", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_LOG_100 },
+            { "log316", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_LOG_316 },
+            { "xvycc", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_XVYCC },
+            { "srgb", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_SRGB },
+            { "ext-srgb", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_EXT_SRGB },
+            { "st2084-pq", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_ST2084_PQ },
+            { "st428", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_ST428 },
+            { "hlg", WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_HLG },
+          };
+          unsigned int len;
 
-      for (int i = 0; i < G_N_ELEMENTS (features); i++)
-        {
-          GDK_DEBUG (MISC, "Feature %d (%s): %s",
-                   i, features[i], color->color_manager_supported.features & (1 << i) ? "✓" : "✗");
-        }
+         len = 0;
+         for (int i = 0; i < G_N_ELEMENTS (intents); i++)
+           len = MAX (len, strlen (intents[i].name));
 
-      for (int i = 0; i < G_N_ELEMENTS (tf); i++)
-        {
-          GDK_DEBUG (MISC, "Transfer function %d (%s): %s",
-                   i, tf[i], color->color_manager_supported.transfers & (1 << i) ? "✓" : "✗");
-        }
+         for (int i = 0; i < G_N_ELEMENTS (intents); i++)
+            gdk_debug_message ("Rendering intent %2u (%s): %*s%s",
+                               intents[i].value,
+                               intents[i].name,
+                               (int) (len - strlen (intents[i].name)), "",
+                               color->color_manager_supported.intents & (1 << intents[i].value) ? "✓" : "✗");
 
-      for (int i = 0; i < G_N_ELEMENTS (primaries); i++)
-        {
-          GDK_DEBUG (MISC, "Primaries %d (%s): %s",
-                   i, primaries[i], color->color_manager_supported.primaries& (1 << i) ? "✓" : "✗");
+         len = 0;
+         for (int i = 0; i < G_N_ELEMENTS (features); i++)
+           len = MAX (len, strlen (features[i].name));
+
+          for (int i = 0; i < G_N_ELEMENTS (features); i++)
+            gdk_debug_message ("Feature %2u (%s): %*s%s",
+                               features[i].value,
+                               features[i].name,
+                               (int) (len - strlen (features[i].name)), "",
+                               color->color_manager_supported.features & (1 << features[i].value) ? "✓" : "✗");
+
+         len = 0;
+         for (int i = 0; i < G_N_ELEMENTS (primaries); i++)
+           len = MAX (len, strlen (primaries[i].name));
+
+          for (int i = 0; i < G_N_ELEMENTS (primaries); i++)
+            gdk_debug_message ("Primaries %2u (%s): %*s%s",
+                               primaries[i].value,
+                               primaries[i].name,
+                               (int) (len - strlen (primaries[i].name)), "",
+                               color->color_manager_supported.primaries & (1 << primaries[i].value) ? "✓" : "✗");
+
+         len = 0;
+         for (int i = 0; i < G_N_ELEMENTS (tf); i++)
+           len = MAX (len, strlen (tf[i].name));
+
+          for (int i = 0; i < G_N_ELEMENTS (tf); i++)
+            gdk_debug_message ("Transfer function %2u (%s): %*s%s",
+                               tf[i].value,
+                               tf[i].name,
+                               (int) (len - strlen (tf[i].name)), "",
+                               color->color_manager_supported.transfers & (1 << tf[i].value) ? "✓" : "✗");
         }
     }
 
   if (color->color_manager &&
       !(color->color_manager_supported.intents & (1 << WP_COLOR_MANAGER_V1_RENDER_INTENT_PERCEPTUAL)))
     {
-      GDK_DEBUG (MISC, "Not using color management: Missing perceptual render intent");
+      GDK_DISPLAY_DEBUG (GDK_DISPLAY (color->display), MISC, "Not using color management: Missing perceptual render intent");
       g_clear_pointer (&color->color_manager, wp_color_manager_v1_destroy);
     }
 
@@ -459,7 +526,7 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
          (color->color_manager_supported.features & (1 << WP_COLOR_MANAGER_V1_FEATURE_SET_PRIMARIES)))))
 
     {
-      GDK_DEBUG (MISC, "Not using color management: Can't create srgb image description");
+      GDK_DISPLAY_DEBUG (GDK_DISPLAY (color->display), MISC, "Not using color management: Can't create srgb image description");
       g_clear_pointer (&color->color_manager, wp_color_manager_v1_destroy);
     }
 
