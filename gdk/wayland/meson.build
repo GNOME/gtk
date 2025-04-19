@@ -158,7 +158,7 @@ proto_sources = [
   },
   {
     'name': 'cursor-shape',
-    'stability': 'private',
+    'stability': 'staging',
     'version': 1,
   },
   {
