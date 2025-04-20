@@ -32,6 +32,8 @@ compare_render_tests = [
   'border-zero-width-color',
   'borders-rotated',
   'borders-scaled',
+  'cairo-coordinates',
+  'cairo-translations',
   'clip-all-clipped-issue-7044',
   'clip-contained',
   'clip-coordinates-2d',

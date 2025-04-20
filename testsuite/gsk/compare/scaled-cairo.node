@@ -1,7 +1,16 @@
+color {
+  bounds: 0 0 100 100;
+  color: transparent;
+}
 transform {
   transform: scale(0.5);
   child: cairo {
-    bounds: 0 0 100 100;
-    script: url("data:;base64,JSFDYWlyb1NjcmlwdAo8PCAvY29udGVudCAvL0NPTE9SX0FMUEhBIC93aWR0aCA1MCAvaGVpZ2h0IDUwID4+IHN1cmZhY2UgY29udGV4dAoxIDAgMC44IHJnYiBzZXQtc291cmNlCnBhaW50CnBvcAo=");
+    bounds: 50 50 100 100;
+    script: url("data:,\
+%25%21CairoScript%0A\
+<< /content //COLOR_ALPHA /width 100 /height 100 >> surface context \
+1 0 0.8 rgb set-source \
+paint \
+pop");
   }
 }
