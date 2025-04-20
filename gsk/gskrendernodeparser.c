@@ -948,6 +948,14 @@ clear_texture (gpointer inout_texture)
   g_clear_object ((GdkTexture **) inout_texture);
 }
 
+typedef struct _CairoHookData CairoHookData;
+struct _CairoHookData
+{
+  GtkCssParser *parser;
+  graphene_rect_t node_bounds;
+  cairo_surface_t *surface;
+};
+
 static cairo_surface_t *
 csi_hooks_surface_create (void            *closure,
                           cairo_content_t  content,
@@ -955,81 +963,79 @@ csi_hooks_surface_create (void            *closure,
                           double           height,
                           long             uid)
 {
-  cairo_surface_t **surface = (cairo_surface_t **) closure;
-  cairo_surface_t *result;
+  CairoHookData *hook = closure;
 
-  result = cairo_recording_surface_create (content,
-                                           &(cairo_rectangle_t) {
-                                               0, 0,
-                                               width,
-                                               height
-                                           });
+  if (hook->surface != NULL)
+    {
+      return cairo_surface_create_similar (hook->surface,
+                                           content,
+                                           width,
+                                           height);
+    }
 
-  if (*surface == NULL)
-    *surface = cairo_surface_reference (result);
+  if (width != hook->node_bounds.size.width || height != hook->node_bounds.size.height)
+    {
+      gtk_css_parser_error (hook->parser,
+                            GTK_CSS_PARSER_ERROR_UNKNOWN_VALUE,
+                            gtk_css_parser_get_block_location (hook->parser),
+                            gtk_css_parser_get_start_location (hook->parser),
+                            "Node size %gx%g does not match script size %gx%g",
+                            hook->node_bounds.size.width, hook->node_bounds.size.height,
+                            width, height);
+    }
 
-  return result;
+  hook->surface = cairo_recording_surface_create (content,
+                                                  &(cairo_rectangle_t) {
+                                                      hook->node_bounds.origin.x,
+                                                      hook->node_bounds.origin.y,
+                                                      hook->node_bounds.size.width,
+                                                      hook->node_bounds.size.height
+                                                  });
+
+  return cairo_surface_reference (hook->surface);
 }
 
-static gboolean
-parse_script (GtkCssParser *parser,
-              Context      *context,
-              gpointer      out_data)
+static cairo_surface_t *
+interpret_cairo_script (GtkCssParser          *parser,
+                        const graphene_rect_t *bounds,
+                        GBytes                *script)
 {
 #ifdef HAVE_CAIRO_SCRIPT_INTERPRETER
-  GBytes *bytes;
   cairo_script_interpreter_t *csi;
-  cairo_surface_t *surface = NULL;
+  CairoHookData hook = { parser, *bounds, NULL };
   cairo_script_interpreter_hooks_t hooks = {
-    .closure = &surface,
+    .closure = &hook,
     .surface_create = csi_hooks_surface_create,
   };
 
-  bytes = consume_bytes (parser);
-  if (bytes == NULL)
-    return FALSE;
-
   csi = cairo_script_interpreter_create ();
   cairo_script_interpreter_install_hooks (csi, &hooks);
-  cairo_script_interpreter_feed_string (csi, g_bytes_get_data (bytes, NULL), g_bytes_get_size (bytes));
-  g_bytes_unref (bytes);
-  if (surface == NULL)
+  cairo_script_interpreter_feed_string (csi, g_bytes_get_data (script, NULL), g_bytes_get_size (script));
+  if (hook.surface == NULL)
     {
       gtk_css_parser_error_value (parser, "Cairo script did not create a surface");
-      cairo_script_interpreter_destroy (csi);
-      return FALSE;
     }
-  else if (cairo_surface_status (surface) != CAIRO_STATUS_SUCCESS)
+  else if (cairo_surface_status (hook.surface) != CAIRO_STATUS_SUCCESS)
     {
-      gtk_css_parser_error_value (parser, "Invalid Cairo script: %s", cairo_status_to_string (cairo_surface_status (hooks.closure)));
+      gtk_css_parser_error_value (parser, "Invalid Cairo script: %s", cairo_status_to_string (cairo_surface_status (hook.surface)));
       cairo_script_interpreter_destroy (csi);
-      cairo_surface_destroy (surface);
-      return FALSE;
+      g_clear_pointer (&hook.surface, cairo_surface_destroy);
     }
   if (cairo_script_interpreter_destroy (csi) != CAIRO_STATUS_SUCCESS)
     {
       gtk_css_parser_error_value (parser, "Invalid Cairo script");
-      cairo_surface_destroy (surface);
-      return FALSE;
+      g_clear_pointer (&hook.surface, cairo_surface_destroy);
     }
 
-  *(cairo_surface_t **) out_data = surface;
-  return TRUE;
+  return hook.surface;
 #else
   gtk_css_parser_warn (parser,
                        GTK_CSS_PARSER_WARNING_UNIMPLEMENTED,
                        gtk_css_parser_get_block_location (parser),
                        gtk_css_parser_get_start_location (parser),
-                       "GTK was compiled with script interpreter support. Using fallback pixel data for Cairo node.");
-  *(cairo_surface_t **) out_data = NULL;
-  return TRUE;
+                       "GTK was compiled without script interpreter support. Using fallback pixel data for Cairo node.");
+  return NULL;
 #endif
-}
-
-static void
-clear_surface (gpointer inout_surface)
-{
-  g_clear_pointer ((cairo_surface_t **) inout_surface, cairo_surface_destroy);
 }
 
 static gboolean
@@ -2777,17 +2783,26 @@ parse_cairo_node (GtkCssParser *parser,
 {
   graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 50, 50);
   GdkTexture *pixels = NULL;
-  cairo_surface_t *surface = NULL;
+  cairo_surface_t *surface;
+  GBytes *bytes = NULL;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "pixels", parse_texture, clear_texture, &pixels },
-    { "script", parse_script, clear_surface, &surface }
+    { "script", parse_bytes, clear_bytes, &bytes }
   };
   GskRenderNode *node;
 
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
 
   node = gsk_cairo_node_new (&bounds);
+
+  if (bytes != NULL)
+    {
+      surface = interpret_cairo_script (parser, &bounds, bytes);
+      g_bytes_unref (bytes);
+    }
+  else
+    surface = NULL;
 
   if (surface != NULL)
     {

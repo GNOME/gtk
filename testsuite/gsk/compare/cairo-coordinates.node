@@ -1,0 +1,18 @@
+color {
+  bounds: 0 0 40 40;
+  color: black;
+}
+
+cairo "node1" {
+  bounds: 10 10 10 10;
+  script: url("data:,\
+%25%21CairoScript%0A\
+<< /content //COLOR_ALPHA /width 10 /height 10 >> surface context \
+n 0 0 m 40 0 l 40 40 l 0 40 l 0 0 l \
+1 0 0 rgb set-source \
+fill \
+n 15 15 m 25 15 l 25 25 l 15 25 l 15 15 l \
+1 1 0 rgb set-source \
+fill \
+pop");
+}
