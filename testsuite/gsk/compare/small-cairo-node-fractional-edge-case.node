@@ -1,0 +1,40 @@
+/* put a node to avoid "downsizing" and make its border the same color the
+   same as the Cairo node below to cover rouding errors. */
+border {
+  outline: 0 0 1071 10;
+  colors: red;
+  widths: 1;
+}
+
+/* Size the area just right */
+clip {
+  clip: 46 0 1025 10;
+
+  /* Now for the actual test. First, apply the application's scale: */
+  child: transform {
+    transform: scale(1.69999992847442626953125) translate(46, 0);
+
+    child: container {
+      /* first, draw something to not cause the transform node to be downsized */
+      color {
+        bounds: 0 0 10 10;
+        color: transparent;
+      }
+
+      /* then draw the Cairo node at the right location to make it go boom */
+      cairo {
+        bounds: 584 0 10 10;
+        pixels: url("data:image/png;base64,\
+iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAIAAAACUFjqAAAABmJLR0QA/wD/AP+gvaeTAAAAEklE\
+QVQYlWP8z4APMOGVHbHSAEEsARM3dz+eAAAAAElFTkSuQmCC\
+");
+        script: url("data:,\
+%25%21CairoScript%0A\
+<< /content //COLOR_ALPHA /width 10 /height 10 >> surface context \
+1 0 0 rgb set-source \
+paint \
+pop");
+        }
+    }
+  }
+}

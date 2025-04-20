@@ -568,6 +568,24 @@ gsk_gpu_node_processor_clip_node_bounds (GskGpuNodeProcessor *self,
   return TRUE;
 }
 
+static gboolean G_GNUC_WARN_UNUSED_RESULT
+gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (GskGpuNodeProcessor *self,
+                                                          GskRenderNode *node,
+                                                          graphene_rect_t *out_bounds)
+{
+  graphene_rect_t tmp;
+
+  gsk_gpu_node_processor_get_clip_bounds (self, &tmp);
+
+  if (!gsk_rect_intersection (&tmp, &node->bounds, out_bounds))
+    return FALSE;
+
+  if (!gsk_rect_snap_to_grid (out_bounds, &self->scale, &self->offset, out_bounds))
+    return FALSE;
+
+  return TRUE;
+}
+
 static void
 gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                  GskGpuImage           *image,
@@ -846,7 +864,8 @@ gsk_gpu_node_processor_get_node_as_image (GskGpuNodeProcessor   *self,
           if (!gsk_rect_intersection (clip_bounds, &node->bounds, &clip))
             return NULL;
         }
-      gsk_rect_snap_to_grid (&clip, &self->scale, &self->offset, &clip);
+      if (!gsk_rect_snap_to_grid (&clip, &self->scale, &self->offset, &clip))
+        return NULL;
     }
 
   return gsk_gpu_get_node_as_image (self->frame,
@@ -885,7 +904,8 @@ gsk_gpu_node_processor_blur_op (GskGpuNodeProcessor       *self,
   if (!gsk_rect_intersection (rect, &clip_rect, &intermediate_rect))
     return;
 
-  gsk_rect_snap_to_grid (&intermediate_rect, &self->scale, &self->offset, &intermediate_rect);
+  if (!gsk_rect_snap_to_grid (&intermediate_rect, &self->scale, &self->offset, &intermediate_rect))
+    return;
 
   intermediate = gsk_gpu_node_processor_init_draw (&other,
                                                    self->frame,
@@ -957,10 +977,8 @@ gsk_gpu_node_processor_add_cairo_node (GskGpuNodeProcessor *self,
   GskGpuImage *image;
   graphene_rect_t clipped_bounds;
 
-  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clipped_bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clipped_bounds))
     return;
-
-  gsk_rect_snap_to_grid (&clipped_bounds, &self->scale, &self->offset, &clipped_bounds);
 
   gsk_gpu_node_processor_sync_globals (self, 0);
 
@@ -1293,9 +1311,8 @@ gsk_gpu_node_processor_add_rounded_clip_node_with_mask (GskGpuNodeProcessor *sel
   GskGpuImage *child_image, *mask_image;
   GdkColor white;
 
-  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
     return;
-  gsk_rect_snap_to_grid (&clip_bounds, &self->scale, &self->offset, &clip_bounds);
 
   child_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                           0,
@@ -2142,7 +2159,9 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
 
       if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip))
         return;
-      gsk_rect_snap_to_grid (&clip, &self->scale, &self->offset, &rounded_clip);
+
+      if (!gsk_rect_snap_to_grid (&clip, &self->scale, &self->offset, &rounded_clip))
+        return;
 
       image = gsk_gpu_get_texture_tiles_as_image (self->frame,
                                                   self->ccs,
@@ -2309,7 +2328,15 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
 
       gsk_gpu_node_processor_get_clip_bounds (self, &clip_bounds);
       /* first round to pixel boundaries, so we make sure the full pixels are covered */
-      gsk_rect_snap_to_grid (&clip_bounds, &self->scale, &self->offset, &clip_bounds);
+      if (!gsk_rect_snap_to_grid (&clip_bounds, &self->scale, &self->offset, &clip_bounds))
+        {
+          if (image)
+            {
+              gdk_color_state_unref (image_cs);
+              g_object_unref (image);
+            }
+          return;
+        }
       /* then expand by half a pixel so that pixels needed for eventual linear
        * filtering are available */
       graphene_rect_inset (&clip_bounds, -0.5, -0.5);
@@ -2546,9 +2573,8 @@ gsk_gpu_node_processor_add_gradient_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &bounds))
     return;
-  gsk_rect_snap_to_grid (&bounds, &self->scale, &self->offset, &bounds);
 
   image = gsk_gpu_node_processor_init_draw (&other,
                                             self->frame,
@@ -3013,9 +3039,8 @@ gsk_gpu_node_processor_add_mask_node (GskGpuNodeProcessor *self,
   mask_child = gsk_mask_node_get_mask (node);
   mask_mode = gsk_mask_node_get_mask_mode (node);
 
-  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &bounds))
     return;
-  gsk_rect_snap_to_grid (&bounds, &self->scale, &self->offset, &bounds);
 
   mask_image = gsk_gpu_node_processor_get_node_as_image (self,
                                                          0,
@@ -3490,9 +3515,8 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
   GskRenderNode *child;
   GdkColor color;
 
-  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
     return;
-  gsk_rect_snap_to_grid (&clip_bounds, &self->scale, &self->offset, &clip_bounds);
 
   child = gsk_fill_node_get_child (node);
 
@@ -3593,9 +3617,8 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
   GskRenderNode *child;
   GdkColor color;
 
-  if (!gsk_gpu_node_processor_clip_node_bounds (self, node, &clip_bounds))
+  if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
     return;
-  gsk_rect_snap_to_grid (&clip_bounds, &self->scale, &self->offset, &clip_bounds);
 
   child = gsk_stroke_node_get_child (node);
 
@@ -4472,10 +4495,9 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
           gsk_gpu_node_processor_set_scissor (&self, &rect);
 
           /* Can't use gsk_gpu_node_processor_get_node_as_image () because of colorspaces */
-          if (!gsk_gpu_node_processor_clip_node_bounds (&self, node, &clip_bounds))
+          if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (&self, node, &clip_bounds))
             continue;
 
-          gsk_rect_snap_to_grid (&clip_bounds, &self.scale, &self.offset, &clip_bounds);
           image = gsk_gpu_get_node_as_image (self.frame,
                                              0,
                                              ccs,
