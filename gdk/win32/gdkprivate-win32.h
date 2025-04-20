@@ -36,6 +36,8 @@
          { action; };                                     \
     } G_STMT_END
 
+#define GDK_WIN32_HRESULT_ERROR (gdk_win32_hresult_error_quark ())
+
 /* According to
  * http://blog.airesoft.co.uk/2009/11/wm_messages/
  * this is the actual internal name MS uses for this undocumented message.
@@ -65,6 +67,8 @@ typedef enum
   GDK_DRAG_PROTO_WIN32_DROPFILES,
   GDK_DRAG_PROTO_OLE2,
 } GdkDragProtocol;
+
+GQuark                  gdk_win32_hresult_error_quark                   (void) G_GNUC_CONST;
 
 gulong _gdk_win32_get_next_tick (gulong suggested_tick);
 BOOL _gdk_win32_get_cursor_pos (GdkDisplay *display,
@@ -182,6 +186,11 @@ void    _gdk_other_api_failed        (const char *where,
       g_free (_msg); \
     } \
   }G_STMT_END
+
+gboolean                gdk_win32_check_hresult                         (HRESULT                         hr,
+                                                                         GError                        **error,
+                                                                         const char                     *format,
+                                                                         ...) G_GNUC_PRINTF(3,4);
 
 extern LRESULT CALLBACK _gdk_win32_surface_procedure (HWND, UINT, WPARAM, LPARAM);
 
