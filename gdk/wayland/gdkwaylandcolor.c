@@ -27,7 +27,7 @@ wl_to_cicp_primaries (enum wp_color_manager_v1_primaries cp)
 static enum wp_color_manager_v1_primaries
 cicp_to_wl_primaries (uint cp)
 {
-  for (guint i = 0; i < G_N_ELEMENTS (primaries_map); i++)
+  for (guint i = WP_COLOR_MANAGER_V1_PRIMARIES_SRGB; i < G_N_ELEMENTS (primaries_map); i++)
     if (primaries_map[i] == cp)
        return (enum wp_color_manager_v1_primaries)i;
 
@@ -59,7 +59,7 @@ primaries_to_wl_primaries (const uint primaries[8],
 {
   guint i, j;
 
-  for (i = 0; i < G_N_ELEMENTS (primaries_primaries); i++)
+  for (i = WP_COLOR_MANAGER_V1_PRIMARIES_SRGB; i < G_N_ELEMENTS (primaries_primaries); i++)
     {
       for (j = 0; j < 8; j++)
         {
@@ -100,7 +100,7 @@ wl_to_cicp_transfer (enum wp_color_manager_v1_transfer_function tf)
 static enum wp_color_manager_v1_transfer_function
 cicp_to_wl_transfer (uint tf)
 {
-  for (guint i = 0; i < G_N_ELEMENTS (transfer_map); i++)
+  for (guint i = WP_COLOR_MANAGER_V1_TRANSFER_FUNCTION_BT1886; i < G_N_ELEMENTS (transfer_map); i++)
     if (transfer_map[i] == tf)
        return (enum wp_color_manager_v1_transfer_function)i;
 
