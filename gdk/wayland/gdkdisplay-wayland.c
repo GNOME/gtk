@@ -657,7 +657,9 @@ gdk_registry_handle_global (void               *data,
     }
   else if (match_global (display_wayland, interface, version, wp_color_manager_v1_interface.name, 0))
     {
-      display_wayland->color = gdk_wayland_color_new (display_wayland, registry, id, version);
+      if (!display_wayland->color)
+        display_wayland->color = gdk_wayland_color_new (display_wayland);
+      gdk_wayland_color_set_color_manager (display_wayland->color, registry, id, version);
     }
   else if (match_global (display_wayland, interface, version, wp_single_pixel_buffer_manager_v1_interface.name, 0))
     {

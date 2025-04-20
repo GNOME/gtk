@@ -6,7 +6,9 @@
 
 typedef struct _GdkWaylandColor GdkWaylandColor;
 
-GdkWaylandColor * gdk_wayland_color_new                         (GdkWaylandDisplay      *display,
+GdkWaylandColor * gdk_wayland_color_new                         (GdkWaylandDisplay      *display);
+
+void              gdk_wayland_color_set_color_manager           (GdkWaylandColor        *color,
                                                                  struct wl_registry     *registry,
                                                                  uint32_t                id,
                                                                  uint32_t                version);
