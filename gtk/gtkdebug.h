@@ -46,7 +46,6 @@ G_BEGIN_DECLS
  * @GTK_DEBUG_SIZE_REQUEST: Information about size requests
  * @GTK_DEBUG_NO_CSS_CACHE: Disable the style property cache
  * @GTK_DEBUG_INTERACTIVE: Open the GTK inspector
- * @GTK_DEBUG_TOUCHSCREEN: Pretend the pointer is a touchscreen
  * @GTK_DEBUG_ACTIONS: Information about actions and menu models
  * @GTK_DEBUG_LAYOUT: Information from layout managers
  * @GTK_DEBUG_SNAPSHOT: Include debug render nodes in the generated snapshots
@@ -92,6 +91,14 @@ G_BEGIN_DECLS
  *
  * Since: 4.18
  */
+
+ /**
+  * GTK_DEBUG_TOUCHSCREEN:
+  *
+  * Show touch UI elements for pointer events.
+  *
+  * Since: 4.20
+  */
 typedef enum {
   GTK_DEBUG_TEXT            = 1 <<  0,
   GTK_DEBUG_TREE            = 1 <<  1,
@@ -131,4 +138,3 @@ GDK_AVAILABLE_IN_ALL
 void          gtk_set_debug_flags (GtkDebugFlags flags);
 
 G_END_DECLS
-
