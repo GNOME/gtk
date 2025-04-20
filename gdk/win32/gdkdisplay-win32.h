@@ -21,7 +21,6 @@
 
 #pragma once
 
-#include "gdkwin32screen.h"
 #include "gdkwin32cursor.h"
 #include "gdkprivate-win32.h"
  
@@ -181,8 +180,6 @@ struct _GdkWin32Display
 {
   GdkDisplay display;
 
-  GdkWin32Screen *screen;
-
   Win32CursorTheme *cursor_theme;
   char *cursor_theme_name;
   int cursor_theme_size;
@@ -251,8 +248,6 @@ struct _GdkWin32DisplayClass
 {
   GdkDisplayClass display_class;
 };
-
-void       _gdk_win32_display_init_monitors    (GdkWin32Display *display);
 
 GPtrArray *_gdk_win32_display_get_monitor_list (GdkWin32Display *display);
 
