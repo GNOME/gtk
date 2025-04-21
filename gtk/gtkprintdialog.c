@@ -77,6 +77,7 @@ G_DEFINE_BOXED_TYPE (GtkPrintSetup, gtk_print_setup,
                      gtk_print_setup_ref,
                      gtk_print_setup_unref)
 
+#ifdef HAVE_GIO_UNIX
 static GtkPrintSetup *
 gtk_print_setup_new (void)
 {
@@ -88,6 +89,7 @@ gtk_print_setup_new (void)
 
   return setup;
 }
+#endif
 
 /**
  * gtk_print_setup_ref:
@@ -151,12 +153,14 @@ gtk_print_setup_get_print_settings (GtkPrintSetup *setup)
   return setup->print_settings;
 }
 
+#ifdef HAVE_GIO_UNIX
 static void
 gtk_print_setup_set_print_settings (GtkPrintSetup    *setup,
                                     GtkPrintSettings *print_settings)
 {
   g_set_object (&setup->print_settings, print_settings);
 }
+#endif
 
 /**
  * gtk_print_setup_get_page_setup:
@@ -177,6 +181,7 @@ gtk_print_setup_get_page_setup (GtkPrintSetup *setup)
   return setup->page_setup;
 }
 
+#ifdef HAVE_GIO_UNIX
 static void
 gtk_print_setup_set_page_setup (GtkPrintSetup *setup,
                                 GtkPageSetup  *page_setup)
@@ -187,7 +192,6 @@ gtk_print_setup_set_page_setup (GtkPrintSetup *setup,
 static GtkPrinter *
 gtk_print_setup_get_printer (GtkPrintSetup *setup)
 {
-#ifdef HAVE_GIO_UNIX
   if (!setup->printer)
     {
       const char *name = NULL;
@@ -198,7 +202,6 @@ gtk_print_setup_get_printer (GtkPrintSetup *setup)
       if (name)
         setup->printer = gtk_printer_find (name);
     }
-#endif
 
   return setup->printer;
 }
@@ -209,6 +212,7 @@ gtk_print_setup_set_printer (GtkPrintSetup *setup,
 {
   g_set_object (&setup->printer, printer);
 }
+#endif
 
 /* }}} */
 /* {{{ GObject implementation */
