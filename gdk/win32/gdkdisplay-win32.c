@@ -1071,13 +1071,6 @@ gdk_handle_equal (HANDLE *a,
   return (*a == *b);
 }
 
-/* facts of life, DestroyWindow() is a __stdcall function */
-static void
-gdk_destroy_surface_hwnd (gpointer hwnd)
-{
-  DestroyWindow ((HWND)hwnd);
-}
-
 static void
 gdk_win32_display_init (GdkWin32Display *display_win32)
 {

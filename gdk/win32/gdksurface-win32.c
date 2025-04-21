@@ -1719,47 +1719,6 @@ _gdk_win32_surface_update_style_bits (GdkSurface *surface)
 		flags);
 }
 
-/* Registers a dumb window class. This window
- * has DefWindowProc() for a window procedure and
- * does not do anything that GdkSurface-bound HWNDs do.
- */
-static ATOM
-RegisterGdkDumbClass ()
-{
-  static ATOM klassDUMB = 0;
-  static WNDCLASSEXW wcl;
-  ATOM klass = 0;
-
-  wcl.cbSize = sizeof (WNDCLASSEX);
-  wcl.style = 0; /* DON'T set CS_<H,V>REDRAW. It causes total redraw
-                  * on WM_SIZE and WM_MOVE. Flicker, Performance!
-                  */
-  wcl.lpfnWndProc = DefWindowProcW;
-  wcl.cbClsExtra = 0;
-  wcl.cbWndExtra = 0;
-  wcl.hInstance = this_module ();
-  wcl.hIcon = 0;
-  wcl.hIconSm = 0;
-  wcl.lpszMenuName = NULL;
-  wcl.hbrBackground = NULL;
-  wcl.hCursor = LoadCursor (NULL, IDC_ARROW);
-  wcl.style |= CS_OWNDC;
-  wcl.lpszClassName = L"gdkSurfaceDumb";
-
-  if (klassDUMB == 0)
-    klassDUMB = RegisterClassExW (&wcl);
-
-  klass = klassDUMB;
-
-  if (klass == 0)
-    {
-      WIN32_API_FAILED ("RegisterClassExW");
-      g_error ("That is a fatal error");
-    }
-
-  return klass;
-}
-
 static const char *
 get_cursor_name_from_op (GdkW32WindowDragOp op,
                          GdkSurfaceEdge      edge)
