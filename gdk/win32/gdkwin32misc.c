@@ -55,23 +55,6 @@ struct _GdkWin32InputLocaleItems
   guint keymap_serial;
 };
 
-static guint
-gdk_handle_hash (HANDLE *handle)
-{
-#ifdef _WIN64
-  return ((guint *) handle)[0] ^ ((guint *) handle)[1];
-#else
-  return (guint) *handle;
-#endif
-}
-
-static int
-gdk_handle_equal (HANDLE *a,
-		  HANDLE *b)
-{
-  return (*a == *b);
-}
-
 #define GDK_DISPLAY_HANDLE_HT(d) GDK_WIN32_DISPLAY(d)->display_surface_record->handle_ht
 
 void

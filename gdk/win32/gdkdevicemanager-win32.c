@@ -72,8 +72,6 @@ struct _wintab_items
   t_WTQueueSizeSet p_WTQueueSizeSet;
 };
 
-static t_WTQueueSizeSet p_WTQueueSizeSet;
-
 static gboolean default_display_opened = FALSE;
 
 G_DEFINE_TYPE (GdkDeviceManagerWin32, gdk_device_manager_win32, G_TYPE_OBJECT)
