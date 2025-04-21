@@ -1008,9 +1008,7 @@ process_clipboard_queue (gpointer data)
 {
   GdkWin32Clipdrop *clipdrop = data;
   GdkWin32ClipboardThreadQueueItem *placeholder;
-  GList *p;
   gboolean try_again;
-  GList *p_next;
 
   while ((placeholder = g_async_queue_try_pop (CLIPDROP_CB_THREAD_MEMBER (clipdrop, input_queue))) != NULL)
     {
@@ -1369,7 +1367,6 @@ static gpointer
 _gdk_win32_clipboard_thread_main (gpointer data)
 {
   GdkWin32Clipdrop *self = data;
-  MSG msg;
   GAsyncQueue *queue = self->clipboard_open_thread_queue;
   GAsyncQueue *render_queue = self->clipboard_render_queue;
   guint message_source_id;

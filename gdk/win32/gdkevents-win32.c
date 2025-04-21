@@ -588,7 +588,6 @@ _gdk_win32_print_event (GdkEvent *event)
   GdkCrossingMode mode;
   GdkNotifyType detail;
   GdkScrollDirection direction;
-  GdkSurface *surface = gdk_event_get_surface (event);
   GdkWin32Display *display = GDK_WIN32_DISPLAY (gdk_surface_get_display (gdk_event_get_surface (event)));
   int debug_indent = display->event_record->debug_indent_surface_events;
 

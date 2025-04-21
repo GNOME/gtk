@@ -1827,17 +1827,13 @@ setup_drag_move_resize_context (GdkSurface                  *surface,
   /* Before we drag, we need to undo any maximization */
   if (maximized)
     {
-      GdkMonitor *monitor;
       int wx, wy, wwidth, wheight;
       int swx, swy, swwidth, swheight;
       gboolean pointer_outside_of_surface;
       int offsetx, offsety;
       gboolean left_half;
-      GdkDisplay *display;
 
       restore_configure = TRUE;
-      display = gdk_surface_get_display (surface);
-      monitor = gdk_display_get_monitor_at_surface (display, surface);
       gdk_surface_get_geometry (surface, &wx, &wy, &wwidth, &wheight);
 
       swx = wx;
