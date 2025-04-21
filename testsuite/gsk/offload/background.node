@@ -8,7 +8,14 @@ container {
           color: black;
         }
         texture {
-          texture: url('data:image/svg+xml;utf-8,<svg width="13" height="17"></svg>');
+          texture: memory {
+            format: BGRA8p;
+            width: 13;
+            height: 17;
+            offset: 0;
+            stride: 52;
+            data: url("data:application/gzip;base64,H4sIAAAAAAACA2NgYPjPMIpH8SimGwYAbDAf2nQDAAA=");
+          }
         }
       }
     }
@@ -23,7 +30,14 @@ container {
           color: red;
         }
         texture {
-          texture: url('data:image/svg+xml;utf-8,<svg width="13" height="17"></svg>');
+          texture: memory {
+            format: BGRA8p;
+            width: 13;
+            height: 17;
+            offset: 0;
+            stride: 52;
+            data: url("data:application/gzip;base64,H4sIAAAAAAACA2NgYPjPMIpH8SimGwYAbDAf2nQDAAA=");
+          }
         }
       }
     }
@@ -42,7 +56,14 @@ container {
           color: red;
         }
         texture {
-          texture: url('data:image/svg+xml;utf-8,<svg width="13" height="17"></svg>');
+          texture: memory {
+            format: BGRA8p;
+            width: 13;
+            height: 17;
+            offset: 0;
+            stride: 52;
+            data: url("data:application/gzip;base64,H4sIAAAAAAACA2NgYPjPMIpH8SimGwYAbDAf2nQDAAA=");
+          }
         }
       }
     }
@@ -60,7 +81,14 @@ container {
           debug {
             message: "bla";
             child: texture {
-              texture: url('data:image/svg+xml;utf-8,<svg width="13" height="17"></svg>');
+              texture: memory {
+                format: BGRA8p;
+                width: 13;
+                height: 17;
+                offset: 0;
+                stride: 52;
+                data: url("data:application/gzip;base64,H4sIAAAAAAACA2NgYPjPMIpH8SimGwYAbDAf2nQDAAA=");
+              }
             }
           }
         }

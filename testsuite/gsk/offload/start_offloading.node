@@ -4,8 +4,15 @@ subsurface {
     child: transform {
       transform: rotate(4);
       child: texture {
-        texture: url('data:image/svg+xml;utf-8,<svg width="16" height="16"></svg>');
         bounds: 0 0 16 16;
+        texture: memory {
+          format: RGB8;
+          width: 16;
+          height: 16;
+          offset: 0;
+          stride: 48;
+          data: url("data:application/gzip;base64,H4sIAAAAAAACA2NgGAWjYOQCABX0oPUAAwAA");
+        }
       }
     }
   }

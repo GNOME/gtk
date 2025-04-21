@@ -3,7 +3,13 @@ container {
     transform: translate(20,20);
     child: subsurface {
       child: texture {
-        texture: url('data:image/svg+xml;utf-8,<svg width="13" height="17"></svg>');
+        texture: memory {
+          format: r8g8b8;
+          width: 13;
+          height: 17;
+          stride: 39;
+          data: url("data:application/gzip;base64,H4sIAAAAAAACA2NgGAWjYNABAKXOBQ2XAgAA");
+        }
       }
     }
   }
@@ -11,7 +17,13 @@ container {
     transform: translate(0,100) scale(10, 10);
     child: subsurface {
       child: texture {
-        texture: url('data:image/svg+xml;utf-8,<svg width="10" height="21"></svg>');
+        texture: memory {
+          format: r8g8b8;
+          width: 10;
+          height: 21;
+          stride: 30;
+          data: url("data:application/gzip;base64,H4sIAAAAAAACA2NgGAWjgN4AAIkr6EF2AgAA");
+        }
       }
     }
   }
@@ -21,7 +33,14 @@ container {
       opacity: 0.5;
       child: subsurface {
         child: texture {
-          texture: url('data:image/svg+xml;utf-8,<svg width="16" height="16"></svg>');
+          texture: memory {
+            format: r8g8b8;
+            width: 16;
+            height: 16;
+            stride: 48;
+            data: url("data:application/gzip;base64,H4sIAAAAAAACA2NgGAWjYOQCABX0oPUAAwAA");
+
+          }
         }
       }
     }

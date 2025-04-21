@@ -5,7 +5,16 @@ subsurface {
       clip: 4 4 40 40;
       child: texture {
         bounds: 0 0 48 48;
-        texture: url('data:image/svg+xml;utf-8,<svg width="24" height="24"></svg>');
+        texture: memory {
+          format: BGRA8p;
+          width: 24;
+          height: 24;
+          offset: 0;
+          stride: 96;
+          data: url("data:application/gzip;base64,\
+      H4sIAAAAAAACA+3DAQ0AAAzDoPo3/QsZJFSXqurQB+U+4OIACQAA\
+      ");
+        }
       }
     }
   }

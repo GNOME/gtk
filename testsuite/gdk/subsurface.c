@@ -19,6 +19,7 @@ test_subsurface_basics (void)
   GdkSubsurface *sub;
   GdkTexture *texture;
   graphene_rect_t rect;
+  char *path;
 
 #ifdef GDK_WINDOWING_WAYLAND
   if (!GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
@@ -41,7 +42,11 @@ test_subsurface_basics (void)
   g_assert_false (gdk_subsurface_is_above_parent (sub));
   g_assert_true (gdk_subsurface_get_transform (sub) == GDK_DIHEDRAL_NORMAL);
 
-  texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/media-eject.png");
+  path = g_test_build_filename (G_TEST_DIST, "image-data", "image.jpeg", NULL);
+  texture = gdk_texture_new_from_filename (path, NULL);
+  g_assert_nonnull (texture);
+  g_free (path);
+
   gdk_subsurface_attach (sub, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_DIHEDRAL_90, &GRAPHENE_RECT_INIT (0, 0, 20, 20), TRUE, NULL);
 
   g_assert_true (gdk_subsurface_get_texture (sub) == texture);
@@ -65,6 +70,7 @@ test_subsurface_stacking (void)
   GdkSurface *surface;
   GdkSubsurface *sub0, *sub1, *sub2;
   GdkTexture *texture;
+  char *path;
 
 #ifdef GDK_WINDOWING_WAYLAND
   if (!GDK_IS_WAYLAND_DISPLAY (gdk_display_get_default ()))
@@ -88,7 +94,10 @@ test_subsurface_stacking (void)
   g_assert_true (gdk_surface_get_subsurface (surface, 1) == sub1);
   g_assert_true (gdk_surface_get_subsurface (surface, 2) == sub2);
 
-  texture = gdk_texture_new_from_resource ("/org/gtk/libgtk/icons/16x16/actions/media-eject.png");
+  path = g_test_build_filename (G_TEST_DIST, "image-data", "image.jpeg", NULL);
+  texture = gdk_texture_new_from_filename (path, NULL);
+  g_assert_nonnull (texture);
+  g_free (path);
 
   gdk_subsurface_attach (sub0, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_DIHEDRAL_NORMAL, NULL, TRUE, NULL);
   gdk_subsurface_attach (sub1, texture, &TEXTURE_RECT (texture), &GRAPHENE_RECT_INIT (0, 0, 10, 10), GDK_DIHEDRAL_NORMAL, NULL, TRUE, NULL);
