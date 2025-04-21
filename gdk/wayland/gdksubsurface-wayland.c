@@ -523,6 +523,14 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          gdk_texture_get_width (texture),
                          gdk_texture_get_height (texture));
     }
+  else if (gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_STRAIGHT)
+    {
+      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                         "[%p] 🗙 Straight-alpha texture (%dx%d)",
+                         self,
+                         gdk_texture_get_width (texture),
+                         gdk_texture_get_height (texture));
+    }
   else if (has_background && !display->single_pixel_buffer)
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,

@@ -3,7 +3,16 @@ clip {
   child: subsurface {
     child: texture {
       bounds: 0 0 20 20;
-      texture: url('data:image/svg+xml;utf-8,<svg width="20" height="20"></svg>');
+      texture: memory {
+        format: BGRA8p;
+        width: 20;
+        height: 20;
+        offset: 0;
+        stride: 80;
+        data: url("data:application/gzip;base64,\
+    H4sIAAAAAAACA2NgYPjPMIpH8SgexaN4FJOIAUXkZkNABgAA\
+    ");
+      }
     }
   }
 }
