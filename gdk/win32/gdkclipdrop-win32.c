@@ -875,7 +875,6 @@ static gboolean
 process_retrieve (GdkWin32Clipdrop                *clipdrop,
                   GdkWin32ClipboardThreadRetrieve *retr)
 {
-  DWORD error_code;
   int i;
   UINT fmt, fmt_to_use;
   HANDLE hdata;
@@ -915,18 +914,22 @@ process_retrieve (GdkWin32Clipdrop                *clipdrop,
     }
 
   if (CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_opened_for) == INVALID_HANDLE_VALUE)
-    error_code = try_open_clipboard (clipdrop, CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd));
-
-  if (error_code == ERROR_ACCESS_DENIED)
-    return TRUE;
-
-  if (G_UNLIKELY (error_code != NO_ERROR))
     {
-      send_response (retr->parent.item_type,
-                     retr->parent.opaque_task,
-                     g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED,
-                                  _("Cannot get clipboard data. OpenClipboard() failed: 0x%lx."), error_code));
-      return FALSE;
+      DWORD error_code;
+
+      error_code = try_open_clipboard (clipdrop, CLIPDROP_CB_THREAD_MEMBER (clipdrop, clipboard_hwnd));
+
+      if (error_code == ERROR_ACCESS_DENIED)
+        return TRUE;
+
+      if (G_UNLIKELY (error_code != NO_ERROR))
+        {
+          send_response (retr->parent.item_type,
+                        retr->parent.opaque_task,
+                        g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED,
+                                      _("Cannot get clipboard data. OpenClipboard() failed: 0x%lx."), error_code));
+          return FALSE;
+        }
     }
 
   for (fmt_to_use = 0, pair = NULL, fmt = 0;
@@ -956,7 +959,7 @@ process_retrieve (GdkWin32Clipdrop                *clipdrop,
 
   if ((hdata = GetClipboardData (fmt_to_use)) == NULL)
     {
-      error_code = GetLastError ();
+      int error_code = GetLastError ();
       send_response (retr->parent.item_type,
                      retr->parent.opaque_task,
                      g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED,
