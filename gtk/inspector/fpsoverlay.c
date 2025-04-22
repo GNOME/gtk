@@ -259,7 +259,11 @@ gtk_fps_overlay_queue_draw (GtkInspectorOverlay *overlay)
 
   g_hash_table_iter_init (&iter, self->infos);
   while (g_hash_table_iter_next (&iter, &widget, NULL))
-    gdk_surface_queue_render (gtk_native_get_surface (gtk_widget_get_native (widget)));
+    {
+      GdkSurface *surface = gtk_native_get_surface (gtk_widget_get_native (widget));
+      if (surface)
+        gdk_surface_queue_render (surface);
+    }
 }
 
 static void
