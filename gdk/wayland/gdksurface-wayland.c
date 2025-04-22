@@ -915,11 +915,10 @@ gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
           wp_viewporter_get_viewport (display_wayland->viewporter, wl_surface);
     }
 
-  if (display_wayland->color)
-    self->display_server.color = gdk_wayland_color_surface_new (display_wayland->color,
-                                                                wl_surface,
-                                                                preferred_changed,
-                                                                self);
+  self->display_server.color = gdk_wayland_color_surface_new (display_wayland->color,
+                                                              wl_surface,
+                                                              preferred_changed,
+                                                              self);
 
   self->display_server.wl_surface = wl_surface;
 }

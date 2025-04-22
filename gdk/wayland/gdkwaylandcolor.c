@@ -969,7 +969,9 @@ gdk_wayland_color_surface_set_color_state (GdkWaylandColorSurface *self,
 
 gboolean
 gdk_wayland_color_surface_can_set_color_state (GdkWaylandColorSurface *self,
-                                               GdkColorState          *cs)
+                                               GdkColorState          *cs,
+                                               gboolean                default_cs)
 {
-  return gdk_wayland_color_get_image_description (self->color, cs) != NULL;
+  return (default_cs && !self->mgmt_surface) ||
+         gdk_wayland_color_get_image_description (self->color, cs) != NULL;
 }

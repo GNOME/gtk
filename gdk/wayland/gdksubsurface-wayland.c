@@ -540,18 +540,12 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          "[%p] 🗙 Texture has background, but no single-pixel buffer support",
                          self);
     }
-  else if (self->color &&
-           !gdk_wayland_color_surface_can_set_color_state (self->color, gdk_texture_get_color_state (texture)))
+  else if (!gdk_wayland_color_surface_can_set_color_state (self->color,
+                                                           gdk_texture_get_color_state (texture),
+                                                           texture_has_default_color_state (texture)))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "[%p] 🗙 Texture colorstate %s not supported",
-                         self,
-                         gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
-    }
-  else if (!self->color && !texture_has_default_color_state (texture))
-    {
-      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "[%p] 🗙 Texture colorstate %s is not default and color manager not supported",
                          self,
                          gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
     }
@@ -660,12 +654,12 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
         {
           wl_surface_attach (self->surface, buffer, 0, 0);
 
-          if (self->color && color_changed)
+          if (color_changed)
             gdk_wayland_color_surface_set_color_state (self->color, gdk_texture_get_color_state (texture));
 
           needs_commit = TRUE;
         }
-      
+
       if (buffer || transform_changed)
         {
           wl_surface_damage_buffer (self->surface,
@@ -921,8 +915,7 @@ gdk_wayland_surface_create_subsurface (GdkSurface *surface)
   sub->subsurface = wl_subcompositor_get_subsurface (disp->subcompositor,
                                                      sub->surface,
                                                      impl->display_server.wl_surface);
-  if (disp->color)
-    sub->color = gdk_wayland_color_surface_new (disp->color, sub->surface, NULL, NULL);
+  sub->color = gdk_wayland_color_surface_new (disp->color, sub->surface, NULL, NULL);
 
   sub->viewport = wp_viewporter_get_viewport (disp->viewporter, sub->surface);
 

@@ -38,4 +38,5 @@ void              gdk_wayland_color_surface_set_color_state     (GdkWaylandColor
                                                                  GdkColorState          *cs);
 
 gboolean          gdk_wayland_color_surface_can_set_color_state (GdkWaylandColorSurface *self,
-                                                                 GdkColorState          *cs);
+                                                                 GdkColorState          *cs,
+                                                                 gboolean                default_cs);
