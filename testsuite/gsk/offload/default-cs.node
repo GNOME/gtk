@@ -1,0 +1,58 @@
+@cicp "cicp0" {
+  primaries: 1;
+  transfer: 13;
+  matrix: 6;
+  range: narrow;
+}
+
+/* premultiplied rgba can be offloaded without color-repr */
+subsurface {
+  child: texture {
+    texture: dmabuf {
+      fourcc: "RA24";
+      color-state: srgb;
+      premultiplied: true;
+      width: 24;
+      height: 24;
+      offset: 0;
+      stride: 96;
+      data: url("data:application/gzip;base64,H4sIAAAAAAACA+3DAQ0AAAzDoPo3/QsZJFSXqurQB+U+4OIACQAA");
+    }
+  }
+}
+/* straight rgba can't */
+transform {
+  transform: translate(100,0);
+  child: subsurface {
+    child: texture {
+      texture: dmabuf {
+        fourcc: "RA24";
+        color-state: srgb;
+        premultiplied: false;
+        width: 24;
+        height: 24;
+        offset: 0;
+        stride: 96;
+        data: url("data:application/gzip;base64,H4sIAAAAAAACA+3DAQ0AAAzDoPo3/QsZJFSXqurQB+U+4OIACQAA");
+
+      }
+    }
+  }
+}
+/* yuv can */
+transform {
+  transform: translate(200,0);
+  child: subsurface {
+    child: texture {
+      texture: dmabuf {
+        fourcc: "NV12";
+        width: 256;
+        height: 64;
+        offset: 0, 16384;
+        stride: 256, 256;
+        color-state: "cicp0";
+        data: url("data:application/gzip;base64,H4sIAAAAAAACA+3BAQkAAAwDoArrn3IRFuMc1AQAAAAAAAAAAAAAAAAAAAA4V1VVVVVVVVX1+wGMTciZAGAAAA==");
+      }
+    }
+  }
+}

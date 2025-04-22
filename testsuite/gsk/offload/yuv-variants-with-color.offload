@@ -1,0 +1,32 @@
+0: offloaded, raised, above: -, texture: 256x64, source: 0 0 256 64, dest: 0 0 256 64
+1: offloaded, raised, above: 0, texture: 256x64, source: 0 0 256 64, dest: 0 64 256 64
+2: offloaded, raised, above: 1, texture: 256x64, source: 0 0 256 64, dest: 0 128 256 64
+3: offloaded, raised, above: 2, texture: 256x64, source: 0 0 256 64, dest: 0 192 256 64
+4: offloaded, raised, above: 3, texture: 256x64, source: 0 0 256 64, dest: 256 0 256 64
+5: offloaded, raised, above: 4, texture: 256x64, source: 0 0 256 64, dest: 256 64 256 64
+6: offloaded, raised, above: 5, texture: 256x64, source: 0 0 256 64, dest: 256 128 256 64
+7: offloaded, raised, above: 6, texture: 256x64, source: 0 0 256 64, dest: 256 192 256 64
+8: offloaded, raised, above: 7, texture: 256x64, source: 0 0 256 64, dest: 512 0 256 64
+9: offloaded, raised, above: 8, texture: 256x64, source: 0 0 256 64, dest: 512 64 256 64
+10: offloaded, raised, above: 9, texture: 256x64, source: 0 0 256 64, dest: 512 128 256 64
+11: offloaded, raised, above: 10, texture: 256x64, source: 0 0 256 64, dest: 512 192 256 64
+12: not offloaded
+13: not offloaded
+14: not offloaded
+15: not offloaded
+16: offloaded, raised, above: 11, texture: 256x64, source: 0 0 256 64, dest: 0 256 256 64
+17: offloaded, raised, above: 16, texture: 256x64, source: 0 0 256 64, dest: 0 320 256 64
+18: offloaded, raised, above: 17, texture: 256x64, source: 0 0 256 64, dest: 0 384 256 64
+19: offloaded, raised, above: 18, texture: 256x64, source: 0 0 256 64, dest: 0 448 256 64
+20: offloaded, raised, above: 19, texture: 256x64, source: 0 0 256 64, dest: 256 256 256 64
+21: offloaded, raised, above: 20, texture: 256x64, source: 0 0 256 64, dest: 256 320 256 64
+22: offloaded, raised, above: 21, texture: 256x64, source: 0 0 256 64, dest: 256 384 256 64
+23: offloaded, raised, above: 22, texture: 256x64, source: 0 0 256 64, dest: 256 448 256 64
+24: offloaded, raised, above: 23, texture: 256x64, source: 0 0 256 64, dest: 512 256 256 64
+25: offloaded, raised, above: 24, texture: 256x64, source: 0 0 256 64, dest: 512 320 256 64
+26: offloaded, raised, above: 25, texture: 256x64, source: 0 0 256 64, dest: 512 384 256 64
+27: offloaded, raised, above: 26, texture: 256x64, source: 0 0 256 64, dest: 512 448 256 64
+28: not offloaded
+29: not offloaded
+30: not offloaded
+31: not offloaded
