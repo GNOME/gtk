@@ -554,6 +554,17 @@ gdk_memory_texture_builder_set_stride (GdkMemoryTextureBuilder *self,
   g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STRIDE]);
 }
 
+/**
+ * gdk_memory_texture_builder_get_stride_for_plane:
+ * @self: a `GdkMemoryTextureBuilder`
+ * @plane: a plane
+ *
+ * Gets the stride previously set via gdk_memory_texture_builder_set_stride_for_plane().
+ *
+ * Returns: The stride associated to a @plane
+ *
+ * Since: 4.20
+ */
 gsize
 gdk_memory_texture_builder_get_stride_for_plane (GdkMemoryTextureBuilder *self,
                                                  unsigned int             plane)
@@ -564,6 +575,16 @@ gdk_memory_texture_builder_get_stride_for_plane (GdkMemoryTextureBuilder *self,
   return self->layout.planes[plane].stride;
 }
 
+/**
+ * gdk_memory_texture_builder_set_stride_for_plane:
+ * @self: a `GdkMemoryTextureBuilder`
+ * @plane: a plane
+ * @stride: the texture's stride for @plane
+ *
+ * Sets the stride of the texture for @plane.
+ *
+ * Since: 4.20
+ */
 void
 gdk_memory_texture_builder_set_stride_for_plane (GdkMemoryTextureBuilder *self,
                                                  unsigned int             plane,
@@ -581,6 +602,17 @@ gdk_memory_texture_builder_set_stride_for_plane (GdkMemoryTextureBuilder *self,
     g_object_notify_by_pspec (G_OBJECT (self), properties[PROP_STRIDE]);
 }
 
+/**
+ * gdk_memory_texture_builder_get_offset:
+ * @self: a `GdkMemoryTextureBuilder`
+ * @plane: a plane
+ *
+ * Gets the offset previously set via gdk_memory_texture_builder_set_offset().
+ *
+ * Returns: The offset associated to a @plane
+ *
+ * Since: 4.20
+ */
 gsize
 gdk_memory_texture_builder_get_offset (GdkMemoryTextureBuilder *self,
                                        unsigned int             plane)
@@ -591,6 +623,16 @@ gdk_memory_texture_builder_get_offset (GdkMemoryTextureBuilder *self,
   return self->layout.planes[plane].offset;
 }
 
+/**
+ * gdk_memory_texture_builder_set_offset:
+ * @self: a `GdkMemoryTextureBuilder`
+ * @plane: a plane
+ * @offset: the texture's offset for @plane
+ *
+ * Sets the offset of the texture for @plane.
+ *
+ * Since: 4.20
+ */
 void
 gdk_memory_texture_builder_set_offset (GdkMemoryTextureBuilder *self,
                                        unsigned int             plane,
