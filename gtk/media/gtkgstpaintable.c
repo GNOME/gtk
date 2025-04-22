@@ -245,7 +245,7 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
 #ifdef GDK_WINDOWING_WIN32
   if (GDK_IS_WIN32_DISPLAY (display))
     {
-      GstElement *bin, *convert;
+      GstElement *bin, *convert, *upload;
       GstPad *pad, *ghostpad;
       gboolean res = TRUE;
 
@@ -256,7 +256,17 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
         res &= gst_bin_add (GST_BIN (bin), convert);
         res &= gst_bin_add (GST_BIN (bin), sink);
         res &= gst_element_link_pads (convert, "src", sink, "sink");
-        pad = gst_element_get_static_pad (convert, "sink");
+        upload = gst_element_factory_make ("d3d12upload", NULL);
+        if (upload)
+          {
+            res &= gst_bin_add (GST_BIN (bin), upload);
+            res &= gst_element_link_pads (upload, "src", convert, "sink");
+            pad = gst_element_get_static_pad (upload, "sink");
+          }
+        else
+          {
+            pad = gst_element_get_static_pad (convert, "sink");
+          }
         ghostpad = gst_ghost_pad_new ("sink", pad);
         gst_element_add_pad (bin, ghostpad);
         gst_object_unref (pad);
