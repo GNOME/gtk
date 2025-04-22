@@ -403,7 +403,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   gboolean needs_commit = FALSE;
   gboolean background_changed = FALSE;
   gboolean needs_bg_commit = FALSE;
-  gboolean color_state_changed = FALSE;
+  gboolean color_changed = FALSE;
 
   if (sibling)
     will_be_above = sibling->above_parent;
@@ -565,10 +565,10 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
         was_transparent = FALSE;
 
       if (self->texture && texture)
-        color_state_changed = !gdk_color_state_equal (gdk_texture_get_color_state (self->texture),
-                                                      gdk_texture_get_color_state (texture));
+        color_changed = !gdk_color_state_equal (gdk_texture_get_color_state (self->texture),
+                                                gdk_texture_get_color_state (texture));
       else
-        color_state_changed = TRUE;
+        color_changed = TRUE;
 
       if (g_set_object (&self->texture, texture))
         {
@@ -660,7 +660,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
         {
           wl_surface_attach (self->surface, buffer, 0, 0);
 
-          if (self->color && color_state_changed)
+          if (self->color && color_changed)
             gdk_wayland_color_surface_set_color_state (self->color, gdk_texture_get_color_state (texture));
 
           needs_commit = TRUE;

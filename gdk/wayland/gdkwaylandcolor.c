@@ -559,8 +559,8 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
 struct _GdkWaylandColorSurface
 {
   GdkWaylandColor *color;
-  struct wp_color_management_surface_v1 *surface;
-  struct wp_color_management_surface_feedback_v1 *feedback;
+  struct wp_color_management_surface_v1 *mgmt_surface;
+  struct wp_color_management_surface_feedback_v1 *mgmt_feedback;
   ImageDescription *current_desc;
   GdkColorStateChanged callback;
   gpointer data;
@@ -882,7 +882,7 @@ preferred_changed (void *data,
   desc->surface = self;
   self->current_desc = desc;
 
-  desc->image_desc = wp_color_management_surface_feedback_v1_get_preferred_parametric (self->feedback);
+  desc->image_desc = wp_color_management_surface_feedback_v1_get_preferred_parametric (self->mgmt_feedback);
 
   wp_image_description_v1_add_listener (desc->image_desc, &image_desc_listener, desc);
 }
@@ -905,14 +905,14 @@ gdk_wayland_color_surface_new (GdkWaylandColor      *color,
 
   if (color->color_manager)
     {
-      self->surface = wp_color_manager_v1_get_surface (color->color_manager, wl_surface);
-      self->feedback = wp_color_manager_v1_get_surface_feedback (color->color_manager, wl_surface);
+      self->mgmt_surface = wp_color_manager_v1_get_surface (color->color_manager, wl_surface);
+      self->mgmt_feedback = wp_color_manager_v1_get_surface_feedback (color->color_manager, wl_surface);
 
       self->callback = callback;
       self->data = data;
 
-      wp_color_management_surface_feedback_v1_add_listener (self->feedback, &color_listener, self);
-      preferred_changed (self, self->feedback, 0);
+      wp_color_management_surface_feedback_v1_add_listener (self->mgmt_feedback, &color_listener, self);
+      preferred_changed (self, self->mgmt_feedback, 0);
     }
 
   return self;
@@ -923,8 +923,8 @@ gdk_wayland_color_surface_free (GdkWaylandColorSurface *self)
 {
   gdk_wayland_color_surface_clear_image_desc (self);
 
-  g_clear_pointer (&self->surface, wp_color_management_surface_v1_destroy);
-  g_clear_pointer (&self->feedback, wp_color_management_surface_feedback_v1_destroy);
+  g_clear_pointer (&self->mgmt_surface, wp_color_management_surface_v1_destroy);
+  g_clear_pointer (&self->mgmt_feedback, wp_color_management_surface_feedback_v1_destroy);
 
   g_free (self);
 }
@@ -952,18 +952,18 @@ void
 gdk_wayland_color_surface_set_color_state (GdkWaylandColorSurface *self,
                                            GdkColorState          *cs)
 {
-  if (self->surface)
+  if (self->mgmt_surface)
     {
       struct wp_image_description_v1 *desc;
 
       desc = gdk_wayland_color_get_image_description (self->color, cs);
 
       if (desc)
-        wp_color_management_surface_v1_set_image_description (self->surface,
+        wp_color_management_surface_v1_set_image_description (self->mgmt_surface,
                                                               desc,
                                                               WP_COLOR_MANAGER_V1_RENDER_INTENT_PERCEPTUAL);
       else
-        wp_color_management_surface_v1_unset_image_description (self->surface);
+        wp_color_management_surface_v1_unset_image_description (self->mgmt_surface);
     }
 }
 
