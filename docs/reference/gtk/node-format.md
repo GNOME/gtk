@@ -82,7 +82,7 @@ The default color state will be determined by the fourcc. If the fourcc defines 
 | color-state   | `<color-state>`      | srgb        | non-default |
 | data          | `<image-data>`       | none        | always      |
 
-Creates a [class@Gdk.Win32.D3d12Texture] with the properties mapping to the properties of [class@Gdk.Win32.D3d12TextureBuilder]. If no D3D12 texture can be created due to not
+Creates a `GdkD3d12Texture` with the properties mapping to the properties of `GdkD3d12TextureBuilder`. If no D3D12 texture can be created due to not
 running on Windows, a warning will be emitted and a fallback memory texture will be used.
 
 The format has to be given as a literal number, you can see [Microsoft's documentation](https://learn.microsoft.com/en-us/windows/win32/api/dxgiformat/ne-dxgiformat-dxgi_format) for a list.
