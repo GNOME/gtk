@@ -30,7 +30,6 @@
 #include "gdkwin32display.h"
 #include "gdkwin32glcontext.h"
 #include "gdkwin32misc.h"
-#include "gdkwin32screen.h"
 #include "gdkwin32surface.h"
 
 #include "gdkglcontext.h"

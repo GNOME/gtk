@@ -23,7 +23,6 @@
 #include <gdk/gdkdebugprivate.h>
 #include <gdk/win32/gdksurface-win32.h>
 #include <gdk/win32/gdkwin32display.h>
-#include <gdk/win32/gdkwin32screen.h>
 #include <gdk/win32/gdkwin32keys.h>
 #include <gdk/win32/gdkdevicemanager-win32.h>
 #include <gdk/win32/gdkclipdrop-win32.h>
@@ -248,9 +247,6 @@ gboolean   gdk_win32_display_input_locale_is_ime     (GdkWin32Display *display);
 GdkKeymap *gdk_win32_display_get_default_keymap      (GdkWin32Display *display);
 void       gdk_win32_display_increment_keymap_serial (GdkWin32Display *display);
 guint      gdk_win32_display_get_keymap_serial       (GdkWin32Display *display);
-
-/* Stray GdkWin32Screen members */
-void _gdk_win32_screen_on_displaychange_event (GdkWin32Screen *screen);
 
 /* Distributed display manager implementation */
 GdkDisplay *_gdk_win32_display_open (const char *display_name);

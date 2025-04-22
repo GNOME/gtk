@@ -9,7 +9,6 @@ gdk_win32_public_sources = files([
   'gdksurface-win32.c',
   'gdkevents-win32.c',
   'gdkmonitor-win32.c',
-  'gdkscreen-win32.c',
 ])
 
 gdk_win32_sources = gdk_win32_public_sources + files([
@@ -45,7 +44,6 @@ gdk_win32_public_headers = files([
   'gdkwin32glcontext.h',
   'gdkwin32misc.h',
   'gdkwin32monitor.h',
-  'gdkwin32screen.h',
   'gdkwin32surface.h',
 ])
 

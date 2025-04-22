@@ -31,7 +31,6 @@
 #include "gdkinput-dmanipulation.h"
 #include "gdksurface-win32.h"
 #include "gdkwin32display.h"
-#include "gdkwin32screen.h"
 #include "gdkwin32surface.h"
 #include "gdkmonitor-win32.h"
 #include "gdkwin32.h"
@@ -188,8 +187,8 @@ _gdk_win32_display_find_matching_monitor (GdkWin32Display *win32_display,
   return NULL;
 }
 
-void
-_gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
+static void
+gdk_win32_display_init_monitors (GdkWin32Display *win32_display)
 {
   GPtrArray *new_monitors;
   int i;
@@ -424,9 +423,9 @@ gdk_win32_display_get_next_serial (GdkDisplay *display)
 
 static LRESULT CALLBACK
 inner_display_change_hwnd_procedure (HWND   hwnd,
-                                       UINT   message,
-                                       WPARAM wparam,
-                                       LPARAM lparam)
+                                     UINT   message,
+                                     WPARAM wparam,
+                                     LPARAM lparam)
 {
   switch (message)
     {
@@ -435,11 +434,11 @@ inner_display_change_hwnd_procedure (HWND   hwnd,
         PostQuitMessage (0);
         return 0;
       }
-    case WM_DISPLAYCHANGE:
+      case WM_DISPLAYCHANGE:
       {
         GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (GetWindowLongPtr (hwnd, GWLP_USERDATA));
 
-        _gdk_win32_screen_on_displaychange_event (GDK_WIN32_SCREEN (win32_display->screen));
+        gdk_win32_display_init_monitors (win32_display);
         return 0;
       }
     default:
@@ -546,10 +545,7 @@ _gdk_win32_display_open (const char *display_name)
 
       win32_display = GDK_WIN32_DISPLAY (display);
 
-      win32_display->screen = g_object_new (GDK_TYPE_WIN32_SCREEN,
-                                            "display", display,
-                                            NULL);
-
+      gdk_win32_display_init_monitors (win32_display);
       _gdk_events_init (display);
 
       win32_display->device_manager = g_object_new (GDK_TYPE_DEVICE_MANAGER_WIN32,
