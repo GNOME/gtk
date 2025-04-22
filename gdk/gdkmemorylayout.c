@@ -307,7 +307,7 @@ gdk_memory_layout_has_overlap (const guchar          *data1,
   start2 = GPOINTER_TO_SIZE (data2 + gdk_memory_layout_offset (layout2, 0, 0, 0));
   end1 = GPOINTER_TO_SIZE (data1 + gdk_memory_layout_offset (layout1, 0, layout1->width, layout1->height - 1));
   end2 = GPOINTER_TO_SIZE (data2 + gdk_memory_layout_offset (layout2, 0, layout2->width, layout2->height - 1));
-  if (end2 < start1 || end1 < start2)
+  if (end2 <= start1 || end1 <= start2)
     return FALSE;
 
   /* This can't happen with subimages of the same large image, so something
