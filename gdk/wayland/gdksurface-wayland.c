@@ -730,8 +730,19 @@ gdk_wayland_surface_sync_color_state (GdkSurface *surface)
   if (!self->color_state_changed)
     return;
 
-  gdk_wayland_color_surface_set_color_state (self->display_server.color,
-                                             gdk_surface_get_color_state (surface));
+  if (gdk_wayland_color_surface_can_set_color_state (self->display_server.color,
+                                                     gdk_surface_get_color_state (surface),
+                                                     TRUE,
+                                                     GDK_MEMORY_DEFAULT))
+    {
+      gdk_wayland_color_surface_set_color_state (self->display_server.color,
+                                                 gdk_surface_get_color_state (surface),
+                                                 GDK_MEMORY_DEFAULT);
+    }
+  else
+    {
+      gdk_wayland_color_surface_unset_color_state (self->display_server.color);
+    }
 
   self->color_state_changed = FALSE;
 }

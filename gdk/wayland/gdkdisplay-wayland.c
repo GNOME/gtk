@@ -62,6 +62,7 @@
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 #include "presentation-time-client-protocol.h"
 #include "color-management-v1-client-protocol.h"
+#include "color-representation-v1-client-protocol.h"
 
 #include "gdk/gdkprivate.h"
 
@@ -658,6 +659,10 @@ gdk_registry_handle_global (void               *data,
   else if (match_global (display_wayland, interface, version, wp_color_manager_v1_interface.name, 0))
     {
       gdk_wayland_color_set_color_manager (display_wayland->color, registry, id, version);
+    }
+  else if (match_global (display_wayland, interface, version, wp_color_representation_manager_v1_interface.name, 0))
+    {
+      gdk_wayland_color_set_color_representation (display_wayland->color, registry, id, version);
     }
   else if (match_global (display_wayland, interface, version, wp_single_pixel_buffer_manager_v1_interface.name, 0))
     {

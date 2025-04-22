@@ -526,14 +526,6 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          gdk_texture_get_width (texture),
                          gdk_texture_get_height (texture));
     }
-  else if (gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_STRAIGHT)
-    {
-      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "[%p] 🗙 Straight-alpha texture (%dx%d)",
-                         self,
-                         gdk_texture_get_width (texture),
-                         gdk_texture_get_height (texture));
-    }
   else if (has_background && !display->single_pixel_buffer)
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
@@ -542,7 +534,8 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     }
   else if (!gdk_wayland_color_surface_can_set_color_state (self->color,
                                                            gdk_texture_get_color_state (texture),
-                                                           texture_has_default_color_state (texture)))
+                                                           texture_has_default_color_state (texture),
+                                                           gdk_texture_get_format (texture)))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "[%p] 🗙 Texture colorstate %s not supported",
@@ -559,10 +552,15 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
         was_transparent = FALSE;
 
       if (self->texture && texture)
-        color_changed = !gdk_color_state_equal (gdk_texture_get_color_state (self->texture),
-                                                gdk_texture_get_color_state (texture));
+        {
+          color_changed = !gdk_color_state_equal (gdk_texture_get_color_state (self->texture),
+                                                  gdk_texture_get_color_state (texture)) ||
+                          gdk_texture_get_format (self->texture) != gdk_texture_get_format (texture);
+        }
       else
-        color_changed = TRUE;
+        {
+          color_changed = TRUE;
+        }
 
       if (g_set_object (&self->texture, texture))
         {
@@ -655,7 +653,14 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
           wl_surface_attach (self->surface, buffer, 0, 0);
 
           if (color_changed)
-            gdk_wayland_color_surface_set_color_state (self->color, gdk_texture_get_color_state (texture));
+            {
+              GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                                 "[%p] Setting color state %s",
+                                 self, gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
+              gdk_wayland_color_surface_set_color_state (self->color,
+                                                         gdk_texture_get_color_state (texture),
+                                                         gdk_texture_get_format (texture));
+            }
 
           needs_commit = TRUE;
         }
