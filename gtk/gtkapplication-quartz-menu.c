@@ -137,7 +137,14 @@ tracker_item_changed (GObject    *object,
       [self didChangeAccel];
 
       if (gtk_menu_tracker_item_get_has_link (trackerItem, G_MENU_LINK_SUBMENU))
-        [self setSubmenu:[[[GNSMenu alloc] initWithTitle:[self title] trackerItem:trackerItem] autorelease]];
+        {
+          NSMenu *submenu = [[GNSMenu alloc] initWithTitle:[self title] trackerItem:trackerItem];
+
+          if (special && g_str_equal (special, "window-submenu"))
+            [NSApp setWindowsMenu:[submenu autorelease]];
+
+          [self setSubmenu:submenu];
+        }
     }
 
   return self;

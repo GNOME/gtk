@@ -81,5 +81,9 @@
         </item>
       </section>
     </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_Window</attribute>
+      <attribute name="x-gtk-private-special">window-submenu</attribute>
+    </submenu>
   </menu>
 </interface>
