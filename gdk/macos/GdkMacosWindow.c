@@ -827,6 +827,12 @@ static Class _contentViewClass = nil;
   BOOL is_csd = !is_fullscreen && (style_mask & NSWindowStyleMaskFullSizeContentView) != 0;
   BOOL hidden = is_csd && (showButtonCount == 0);
 
+  /* Do not update toolbars when in fullscreen transition, as it can cause the app to crash.
+   * It will be updated once the transition has finished.
+   */
+  if (inFullscreenTransition)
+    return;
+
   /* By assigning a toolbar, the window controls are moved a bit more inwards,
    * In line with how toolbars look in macOS apps.
    * I haven't found a better way. Unfortunately we have to be careful not to
