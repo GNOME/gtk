@@ -752,7 +752,7 @@ gtk_menu_tracker_item_get_special (GtkMenuTrackerItem *self)
 {
   const char *special = NULL;
 
-  g_menu_item_get_attribute (self->item, "x-gtk-private-special", "&s", &special);
+  g_menu_item_get_attribute (self->item, "gtk-macos-special", "&s", &special);
 
   return special;
 }
