@@ -1216,6 +1216,7 @@ populate_render_node_properties (GListStore    *store,
 
     case GSK_COLOR_NODE:
       add_color_row (store, "Color", gsk_color_node_get_gdk_color (node));
+      add_snap_row (store, "Snap", gsk_color_node_get_snap (node));
       break;
 
     case GSK_LINEAR_GRADIENT_NODE:
