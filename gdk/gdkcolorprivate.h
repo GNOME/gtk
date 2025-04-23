@@ -21,7 +21,6 @@
 #include <gdk/gdktypes.h>
 #include <gdk/gdkcolorstate.h>
 #include <gdk/gdkrgba.h>
-#include <gdk/gdkmemoryformatprivate.h>
 
 
 typedef struct _GdkColor GdkColor;
