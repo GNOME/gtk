@@ -83,6 +83,7 @@ gdk_public_headers = files([
   'gdkcairocontext.h',
   'gdkcicpparams.h',
   'gdkclipboard.h',
+  'gdkcolor.h',
   'gdkcolorstate.h',
   'gdkcontentdeserializer.h',
   'gdkcontentformats.h',

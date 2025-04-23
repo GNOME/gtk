@@ -22,7 +22,7 @@
 #include "gdkcolorstateprivate.h"
 #include "gdkrgbaprivate.h"
 
-/*< private >
+/**
  * GdkColor:
  * @color_state: the color state to interpret the values in
  * @values: the 3 coordinates that define the color, followed
@@ -43,7 +43,7 @@
  * and alpha, or r, g, b and a.
  */
 
-/*< private >
+/**
  * gdk_color_init:
  * @self: the `GdkColor` struct to initialize
  * @color_state: the color state
@@ -53,7 +53,7 @@
  * and values.
  *
  * Note that this takes a reference on @color_state that
- * must be freed by calling [function@Gdk.Color.finish]
+ * must be freed by calling [method@Gdk.Color.finish]
  * when the `GdkColor` is no longer needed.
  */
 void
@@ -64,7 +64,7 @@ void
   _gdk_color_init (self, color_state, values);
 }
 
-/*< private >
+/**
  * gdk_color_init_copy:
  * @self: the `GdkColor` struct to initialize
  * @color: the `GdkColor` to copy
@@ -73,7 +73,7 @@ void
  * of another `GdkColor`.
  *
  * Note that this takes a reference on the color state
- * that must be freed by calling [function@Gdk.Color.finish]
+ * that must be freed by calling [method@Gdk.Color.finish]
  * when the `GdkColor` is no longer needed.
  */
 void
@@ -83,7 +83,7 @@ void
   _gdk_color_init_copy (self, color);
 }
 
-/*< private >
+/**
  * gdk_color_init_from_rgba:
  * @self: the `GdkColor` struct to initialize
  * @rgba: the `GdkRGBA` to copy
@@ -95,7 +95,7 @@ void
  * color state.
  *
  * Note that this takes a reference on the color state
- * that must be freed by calling [function@Gdk.Color.finish]
+ * that must be freed by calling [method@Gdk.Color.finish]
  * when the `GdkColor` is no longer needed.
  */
 void
@@ -105,13 +105,14 @@ void
   _gdk_color_init_from_rgba (self, rgba);
 }
 
-/*< private >
+/**
+ * gdk_color_finish:
  * @self: a `GdkColor`
  *
  * Drop the reference on the color state of @self.
  *
  * After this, @self is empty and can be initialized again
- * with [function@Gdk.Color.init] and its variants.
+ * with [method@Gdk.Color.init] and its variants.
  */
 void
 (gdk_color_finish) (GdkColor *self)
@@ -119,7 +120,7 @@ void
   _gdk_color_finish (self);
 }
 
-/*< private >
+/**
  * gdk_color_equal:
  * @self: a `GdkColor`
  * @other: another `GdkColor`
@@ -135,7 +136,7 @@ gboolean
   return _gdk_color_equal (self, other);
 }
 
-/*< private >
+/**
  * gdk_color_is_clear:
  * @self: a `GdkColor`
  *
@@ -149,7 +150,7 @@ gboolean
   return _gdk_color_is_clear (self);
 }
 
-/*< private >
+/**
  * gdk_color_is_opaque:
  * @self: a `GdkColor`
  *
@@ -163,7 +164,7 @@ gboolean
   return _gdk_color_is_opaque (self);
 }
 
-/*< private >
+/**
  * gdk_color_convert:
  * @self: the `GdkColor` to store the result in
  * @color_state: the target color start
@@ -187,7 +188,7 @@ void
   gdk_color_convert (self, color_state, other);
 }
 
-/*< private >
+/**
  * gdk_color_to_float:
  * @self: a `GdkColor`
  * @target: the color state to convert to
@@ -204,7 +205,7 @@ void
   gdk_color_to_float (self, target, values);
 }
 
-/*< private >
+/**
  * gdk_color_from_rgba:
  * @self: the `GdkColor` to store the result in
  * @color_state: the target color state
@@ -229,7 +230,7 @@ gdk_color_from_rgba (GdkColor        *self,
   gdk_color_finish (&tmp);
 }
 
-/*< private >
+/**
  * gdk_color_print:
  * @self: the `GdkColor` to print
  * @string: the string to print to
@@ -265,8 +266,8 @@ gdk_color_print (const GdkColor *self,
     }
 }
 
-/*< private >
- * gdk_color_print:
+/**
+ * gdk_color_to_string:
  * @self: the `GdkColor` to print
  *
  * Create a string representation of @self.
@@ -283,5 +284,3 @@ gdk_color_to_string (const GdkColor *self)
   gdk_color_print (self, string);
   return g_string_free (string, FALSE);
 }
-
-

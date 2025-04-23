@@ -18,35 +18,7 @@
 
 #pragma once
 
-#include <gdk/gdktypes.h>
-#include <gdk/gdkcolorstate.h>
-#include <gdk/gdkrgba.h>
-
-
-typedef struct _GdkColor GdkColor;
-
-/* The interpretation of the first 3 components depends on the color state.
- * values[3] is always alpha.
- */
-struct _GdkColor
-{
-  GdkColorState *color_state;
-  union {
-    float values[4];
-    struct {
-      float r;
-      float g;
-      float b;
-      float a;
-    };
-    struct {
-      float red;
-      float green;
-      float blue;
-      float alpha;
-    };
-  };
-};
+#include <gdk/gdkcolor.h>
 
 G_STATIC_ASSERT (G_STRUCT_OFFSET (GdkColor, r) == G_STRUCT_OFFSET (GdkColor, red));
 G_STATIC_ASSERT (G_STRUCT_OFFSET (GdkColor, g) == G_STRUCT_OFFSET (GdkColor, green));
@@ -69,37 +41,4 @@ G_STATIC_ASSERT (G_STRUCT_OFFSET (GdkColor, a) == G_STRUCT_OFFSET (GdkColor, val
   .values = { (r), (g), (b), (a) } \
 }
 
-void              gdk_color_init                (GdkColor               *self,
-                                                 GdkColorState          *color_state,
-                                                 const float             values[4]);
-void              gdk_color_init_copy           (GdkColor               *self,
-                                                 const GdkColor         *color);
-void              gdk_color_init_from_rgba      (GdkColor               *self,
-                                                 const GdkRGBA          *rgba);
-void              gdk_color_finish              (GdkColor               *self);
-
-gboolean          gdk_color_equal               (const GdkColor         *self,
-                                                 const GdkColor         *other);
-gboolean          gdk_color_is_clear            (const GdkColor         *self);
-gboolean          gdk_color_is_opaque           (const GdkColor         *self);
-
-void              gdk_color_convert             (GdkColor               *self,
-                                                 GdkColorState          *color_state,
-                                                 const GdkColor         *other);
-
-void              gdk_color_to_float            (const GdkColor         *self,
-                                                 GdkColorState          *target,
-                                                 float                   values[4]);
-
-void              gdk_color_from_rgba           (GdkColor               *self,
-                                                 GdkColorState          *color_state,
-                                                 const GdkRGBA          *rgba);
-
-void              gdk_color_print               (const GdkColor         *self,
-                                                 GString                *string);
-
-char *            gdk_color_to_string           (const GdkColor         *self);
-
 #include "gdkcolorimpl.h"
-
-G_END_DECLS
