@@ -1771,6 +1771,13 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
   cairo_rectangle_int_t int_clipped;
   graphene_rect_t rect, clipped;
   float clear_color[4];
+  graphene_rect_t bounds;
+
+  gsk_rect_snap_to_grid (&node->bounds,
+                         gsk_color_node_get_snap (node),
+                         &self->scale,
+                         &self->offset,
+                         &bounds);
 
   gsk_rect_init_offset (&rect, &node->bounds, &self->offset);
   gsk_rect_intersection (&self->clip.rect.bounds, &rect, &clipped);
@@ -1778,7 +1785,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
   if (gsk_gpu_frame_should_optimize (self->frame, GSK_GPU_OPTIMIZE_CLEAR) &&
       gdk_color_is_opaque (gsk_color_node_get_gdk_color (node)) &&
       self->opacity >= 1.0 &&
-      node->bounds.size.width * node->bounds.size.height > 100 * 100 && /* not worth the effort for small images */
+      bounds.size.width * bounds.size.height > 100 * 100 && /* not worth the effort for small images */
       gsk_gpu_node_processor_rect_is_integer (self, &clipped, &int_clipped))
     {
       /* now handle all the clip */
@@ -1800,7 +1807,7 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
                                 self->ccs,
                                 self->opacity,
                                 &self->offset,
-                                &node->bounds,
+                                &bounds,
                                 gsk_color_node_get_gdk_color (node));
               return;
             }
@@ -1877,11 +1884,11 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
     }
 
   gsk_gpu_color_op (self->frame,
-                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                    gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
                     self->ccs,
                     self->opacity,
                     &self->offset,
-                    &node->bounds,
+                    &bounds,
                     gsk_color_node_get_gdk_color (node));
 }
 
