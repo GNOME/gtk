@@ -26,6 +26,7 @@
 
 #include "gtktooltipwindowprivate.h"
 
+#include "gtkbinlayout.h"
 #include "gtkbox.h"
 #include "gtkimage.h"
 #include "gtklabel.h"
@@ -305,36 +306,6 @@ gtk_tooltip_window_unmap (GtkWidget *widget)
 }
 
 static void
-gtk_tooltip_window_measure (GtkWidget      *widget,
-                            GtkOrientation  orientation,
-                            int             for_size,
-                            int            *minimum,
-                            int            *natural,
-                            int            *minimum_baseline,
-                            int            *natural_baseline)
-{
-  GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
-
-  if (window->box)
-    gtk_widget_measure (window->box,
-                        orientation, for_size,
-                        minimum, natural,
-                        minimum_baseline, natural_baseline);
-}
-
-static void
-gtk_tooltip_window_size_allocate (GtkWidget *widget,
-                                  int        width,
-                                  int        height,
-                                  int        baseline)
-{
-  GtkTooltipWindow *window = GTK_TOOLTIP_WINDOW (widget);
-
-  if (window->box)
-    gtk_widget_allocate (window->box, width, height, baseline, NULL);
-}
-
-static void
 gtk_tooltip_window_show (GtkWidget *widget)
 {
   _gtk_widget_set_visible_flag (widget, TRUE);
@@ -374,12 +345,11 @@ gtk_tooltip_window_class_init (GtkTooltipWindowClass *klass)
   widget_class->unrealize = gtk_tooltip_window_unrealize;
   widget_class->map = gtk_tooltip_window_map;
   widget_class->unmap = gtk_tooltip_window_unmap;
-  widget_class->measure = gtk_tooltip_window_measure;
-  widget_class->size_allocate = gtk_tooltip_window_size_allocate;
   widget_class->show = gtk_tooltip_window_show;
   widget_class->hide = gtk_tooltip_window_hide;
 
   gtk_widget_class_set_css_name (widget_class, I_("tooltip"));
+  gtk_widget_class_set_layout_manager_type (widget_class, GTK_TYPE_BIN_LAYOUT);
   gtk_widget_class_set_template_from_resource (widget_class, "/org/gtk/libgtk/ui/gtktooltipwindow.ui");
 
   gtk_widget_class_bind_template_child (widget_class, GtkTooltipWindow, box);
