@@ -21,6 +21,7 @@ linear-gradient {
   stops: 0 rgb(0, 0, 0), 0.5 0.3 color(rec2100-pq 0.4 0.5 0.6), 1 #AF0;
   interpolation: srgb;
   hue-interpolation: longer;
+  snap: grow;
 }
 
 radial-gradient {
@@ -33,6 +34,7 @@ radial-gradient {
   stops: 0 rgb(0, 0, 0), 0.5 color(rec2100-pq 0.4 0.5 0.6), 1 #AF0;
   interpolation: rec2100-pq;
   hue-interpolation: increasing;
+  snap: shrink;
 }
 
 conic-gradient {
@@ -41,4 +43,5 @@ conic-gradient {
   rotation: 200;
   stops: 0 rgb(0, 0, 0), 0.5 color(rec2100-pq 0.4 0.5 0.6), 1 #AF0;
   interpolation: "cicp1";
+  snap: round floor ceil none;
 }

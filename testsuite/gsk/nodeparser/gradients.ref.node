@@ -12,6 +12,7 @@ linear-gradient {
 }
 linear-gradient {
   bounds: 10 10 100 100;
+  snap: grow;
   start: 2 3;
   end: 20 40;
   stops: 0 rgb(0,0,0), 0.5 0.3 color(rec2100-pq 0.4 0.5 0.6), 1 rgb(170,255,0);
@@ -19,6 +20,7 @@ linear-gradient {
 }
 radial-gradient {
   bounds: 10 10 100 100;
+  snap: shrink;
   center: 25 26;
   hradius: 10;
   vradius: 20;
@@ -30,6 +32,7 @@ radial-gradient {
 }
 conic-gradient {
   bounds: 10 10 100 100;
+  snap: round floor ceil none;
   center: 25 26;
   rotation: 200;
   stops: 0 rgb(0,0,0), 0.5 color(rec2100-pq 0.4 0.5 0.6), 1 rgb(170,255,0);

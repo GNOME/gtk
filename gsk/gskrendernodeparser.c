@@ -2463,6 +2463,7 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
   GArray *stops = NULL;
   GdkColorState *interpolation = NULL;
   GskHueInterpolation hue_interpolation = GSK_HUE_INTERPOLATION_SHORTER;
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "start", parse_point, NULL, &start },
@@ -2470,6 +2471,7 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
     { "stops", parse_stops, clear_stops, &stops },
     { "interpolation", parse_color_state, &clear_color_state, &interpolation },
     { "hue-interpolation", parse_hue_interpolation, NULL, &hue_interpolation },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *result;
 
@@ -2496,19 +2498,21 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
     interpolation = GDK_COLOR_STATE_SRGB;
 
   if (repeating)
-    result = gsk_repeating_linear_gradient_node_new2 (&bounds,
-                                                      &start, &end,
-                                                      interpolation,
-                                                      hue_interpolation,
-                                                      (GskGradientStop *) stops->data,
-                                                      stops->len);
+    result = gsk_repeating_linear_gradient_node_new_snapped (&bounds,
+                                                             snap,
+                                                             &start, &end,
+                                                             interpolation,
+                                                             hue_interpolation,
+                                                             (GskGradientStop *) stops->data,
+                                                             stops->len);
   else
-    result = gsk_linear_gradient_node_new2 (&bounds,
-                                            &start, &end,
-                                            interpolation,
-                                            hue_interpolation,
-                                            (GskGradientStop *) stops->data,
-                                            stops->len);
+    result = gsk_linear_gradient_node_new_snapped (&bounds,
+                                                   snap,
+                                                   &start, &end,
+                                                   interpolation,
+                                                   hue_interpolation,
+                                                   (GskGradientStop *) stops->data,
+                                                   stops->len);
 
   clear_stops (&stops);
   clear_color_state (&interpolation);
@@ -2544,6 +2548,7 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
   GArray *stops = NULL;
   GdkColorState *interpolation = NULL;
   GskHueInterpolation hue_interpolation = GSK_HUE_INTERPOLATION_SHORTER;
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "center", parse_point, NULL, &center },
@@ -2554,6 +2559,7 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
     { "stops", parse_stops, clear_stops, &stops },
     { "interpolation", parse_color_state, &clear_color_state, &interpolation },
     { "hue-interpolation", parse_hue_interpolation, NULL, &hue_interpolation },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *result;
 
@@ -2589,21 +2595,25 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
       result = NULL;
     }
   else if (repeating)
-    result = gsk_repeating_radial_gradient_node_new2 (&bounds, &center,
-                                                      hradius, vradius,
-                                                      start, end,
-                                                      interpolation,
-                                                      hue_interpolation,
-                                                      (GskGradientStop *) stops->data,
-                                                      stops->len);
+    result = gsk_repeating_radial_gradient_node_new_snapped (&bounds,
+                                                             snap,
+                                                             &center,
+                                                             hradius, vradius,
+                                                             start, end,
+                                                             interpolation,
+                                                             hue_interpolation,
+                                                             (GskGradientStop *) stops->data,
+                                                             stops->len);
   else
-    result = gsk_radial_gradient_node_new2 (&bounds, &center,
-                                            hradius, vradius,
-                                            start, end,
-                                            interpolation,
-                                            hue_interpolation,
-                                            (GskGradientStop *) stops->data,
-                                            stops->len);
+    result = gsk_radial_gradient_node_new_snapped (&bounds,
+                                                   snap,
+                                                   &center,
+                                                   hradius, vradius,
+                                                   start, end,
+                                                   interpolation,
+                                                   hue_interpolation,
+                                                   (GskGradientStop *) stops->data,
+                                                   stops->len);
 
   clear_stops (&stops);
   clear_color_state (&interpolation);
@@ -2635,6 +2645,7 @@ parse_conic_gradient_node (GtkCssParser *parser,
   GArray *stops = NULL;
   GdkColorState *interpolation = NULL;
   GskHueInterpolation hue_interpolation = GSK_HUE_INTERPOLATION_SHORTER;
+  GskRectSnap snap = GSK_RECT_SNAP_NONE;
   const Declaration declarations[] = {
     { "bounds", parse_rect, NULL, &bounds },
     { "center", parse_point, NULL, &center },
@@ -2642,6 +2653,7 @@ parse_conic_gradient_node (GtkCssParser *parser,
     { "stops", parse_stops, clear_stops, &stops },
     { "interpolation", parse_color_state, &clear_color_state, &interpolation },
     { "hue-interpolation", parse_hue_interpolation, NULL, &hue_interpolation },
+    { "snap", parse_rect_snap, NULL, &snap },
   };
   GskRenderNode *result;
 
@@ -2667,12 +2679,13 @@ parse_conic_gradient_node (GtkCssParser *parser,
   if (interpolation == NULL)
     interpolation = GDK_COLOR_STATE_SRGB;
 
-  result = gsk_conic_gradient_node_new2 (&bounds,
-                                         &center, rotation,
-                                         interpolation,
-                                         hue_interpolation,
-                                         (GskGradientStop *) stops->data,
-                                         stops->len);
+  result = gsk_conic_gradient_node_new_snapped (&bounds,
+                                                snap,
+                                                &center, rotation,
+                                                interpolation,
+                                                hue_interpolation,
+                                                (GskGradientStop *) stops->data,
+                                                stops->len);
 
   clear_stops (&stops);
   clear_color_state (&interpolation);
@@ -5451,6 +5464,7 @@ render_node_print (Printer       *p,
           start_node (p, "linear-gradient", node_name);
 
         append_rect_param (p, "bounds", &node->bounds);
+        append_snap_param (p, "snap", gsk_linear_gradient_node_get_snap (node));
         append_point_param (p, "start", gsk_linear_gradient_node_get_start (node));
         append_point_param (p, "end", gsk_linear_gradient_node_get_end (node));
         append_stops_param (p, "stops", gsk_linear_gradient_node_get_gradient_stops (node),
@@ -5477,6 +5491,7 @@ render_node_print (Printer       *p,
           start_node (p, "radial-gradient", node_name);
 
         append_rect_param (p, "bounds", &node->bounds);
+        append_snap_param (p, "snap", gsk_radial_gradient_node_get_snap (node));
         append_point_param (p, "center", gsk_radial_gradient_node_get_center (node));
         append_float_param (p, "hradius", gsk_radial_gradient_node_get_hradius (node), 0.0f);
         append_float_param (p, "vradius", gsk_radial_gradient_node_get_vradius (node), 0.0f);
@@ -5503,6 +5518,7 @@ render_node_print (Printer       *p,
         start_node (p, "conic-gradient", node_name);
 
         append_rect_param (p, "bounds", &node->bounds);
+        append_snap_param (p, "snap", gsk_conic_gradient_node_get_snap (node));
         append_point_param (p, "center", gsk_conic_gradient_node_get_center (node));
         append_float_param (p, "rotation", gsk_conic_gradient_node_get_rotation (node), 0.0f);
 

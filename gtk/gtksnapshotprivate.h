@@ -123,5 +123,4 @@ void                    gtk_snapshot_append_node_scaled         (GtkSnapshot    
                                                                  graphene_rect_t         *from,
                                                                  graphene_rect_t         *to);
 
-
 G_END_DECLS

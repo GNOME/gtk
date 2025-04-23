@@ -264,21 +264,90 @@ GskScalingFilter        gsk_texture_scale_node_get_filter       (const GskRender
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_linear_gradient_node_get_type           (void) G_GNUC_CONST;
+
+/**
+ * GskGradientStop:
+ * @offset: the offset of the color stop
+ * @transition_hint: where to place the midpoint between the previous stop
+ *   and this one, as a value between 0 and 1. If this is != 0.5, the
+ *   interpolation is non-linear
+ * @color: the color at the given offset
+ *
+ * A color stop in a gradient node.
+ *
+ * In contrast to [struct@Gsk.ColorStop], this struct
+ * uses a [struct@Gdk.Color] to allow specifying
+ * color state information.
+ *
+ * Since: 4.20
+ */
+typedef struct _GskGradientStop GskGradientStop;
+struct _GskGradientStop
+{
+  float offset;
+  float transition_hint;
+  GdkColor color;
+};
+
+/**
+ * GskHueInterpolation:
+ * @GSK_HUE_INTERPOLATION_SHORTER: Hue is interpolated
+ *   along the smaller leg
+ * @GSK_HUE_INTERPOLATION_LONGER: Hue is interpolated
+ *   along the longer leg
+ * @GSK_HUE_INTERPOLATION_INCREASING: Hue is interpolated
+ *   in the direction of increasing angles
+ * @GSK_HUE_INTERPOLATION_DECREASING: Hue is interpolated
+ *   in the direction of decreasing angles
+ *
+ * Determines how hue interpolation of gradients
+ * works in polar color states such as HSV or OKLCH.
+ *
+ * Since: 4.20
+ */
+typedef enum
+{
+  GSK_HUE_INTERPOLATION_SHORTER,
+  GSK_HUE_INTERPOLATION_LONGER,
+  GSK_HUE_INTERPOLATION_INCREASING,
+  GSK_HUE_INTERPOLATION_DECREASING,
+} GskHueInterpolation;
+
 GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_linear_gradient_node_new                (const graphene_rect_t    *bounds,
+GskRenderNode *          gsk_linear_gradient_node_new                (const graphene_rect_t   *bounds,
                                                                      const graphene_point_t   *start,
                                                                      const graphene_point_t   *end,
                                                                      const GskColorStop       *color_stops,
                                                                      gsize                     n_color_stops);
+GDK_AVAILABLE_IN_4_20
+GskRenderNode *          gsk_linear_gradient_node_new_snapped       (const graphene_rect_t    *bounds,
+                                                                     GskRectSnap               snap,
+                                                                     const graphene_point_t   *start,
+                                                                     const graphene_point_t   *end,
+                                                                     GdkColorState            *interpolation,
+                                                                     GskHueInterpolation       hue_interpolation,
+                                                                     const GskGradientStop    *stops,
+                                                                     gsize                     n_stops);
+GDK_AVAILABLE_IN_4_20
+GskRectSnap              gsk_linear_gradient_node_get_snap          (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const graphene_point_t * gsk_linear_gradient_node_get_start         (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const graphene_point_t * gsk_linear_gradient_node_get_end           (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_20
+GskHueInterpolation      gsk_linear_gradient_node_get_hue_interpolation
+                                                                    (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_20
+GdkColorState *          gsk_linear_gradient_node_get_interpolation_color_state
+                                                                    (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 gsize                    gsk_linear_gradient_node_get_n_color_stops (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const GskColorStop *     gsk_linear_gradient_node_get_color_stops   (const GskRenderNode      *node,
                                                                      gsize                    *n_stops);
+GDK_AVAILABLE_IN_4_20
+const GskGradientStop *  gsk_linear_gradient_node_get_gradient_stops
+                                                                    (const GskRenderNode      *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_repeating_linear_gradient_node_get_type (void) G_GNUC_CONST;
@@ -288,7 +357,16 @@ GskRenderNode *         gsk_repeating_linear_gradient_node_new      (const graph
                                                                      const graphene_point_t   *end,
                                                                      const GskColorStop       *color_stops,
                                                                      gsize                     n_color_stops);
-
+GDK_AVAILABLE_IN_4_20
+GskRenderNode *         gsk_repeating_linear_gradient_node_new_snapped
+                                                                    (const graphene_rect_t    *bounds,
+                                                                     GskRectSnap               snap,
+                                                                     const graphene_point_t   *start,
+                                                                     const graphene_point_t   *end,
+                                                                     GdkColorState            *interpolation,
+                                                                     GskHueInterpolation       hue_interpolation,
+                                                                     const GskGradientStop    *stops,
+                                                                     gsize                     n_stops);
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_conic_gradient_node_get_type            (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
@@ -297,44 +375,86 @@ GskRenderNode *         gsk_conic_gradient_node_new                 (const graph
                                                                      float                     rotation,
                                                                      const GskColorStop       *color_stops,
                                                                      gsize                     n_color_stops);
+GDK_AVAILABLE_IN_4_20
+GskRenderNode *         gsk_conic_gradient_node_new_snapped         (const graphene_rect_t    *bounds,
+                                                                     GskRectSnap               snap,
+                                                                     const graphene_point_t   *center,
+                                                                     float                     rotation,
+                                                                     GdkColorState            *interpolation,
+                                                                     GskHueInterpolation       hue_interpolation,
+                                                                     const GskGradientStop    *stops,
+                                                                     gsize                     n_stops);
+GDK_AVAILABLE_IN_4_20
+GskRectSnap              gsk_conic_gradient_node_get_snap           (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const graphene_point_t * gsk_conic_gradient_node_get_center         (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 float                    gsk_conic_gradient_node_get_rotation       (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_2
 float                    gsk_conic_gradient_node_get_angle          (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_20
+GskHueInterpolation      gsk_conic_gradient_node_get_hue_interpolation
+                                                                    (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_20
+GdkColorState *          gsk_conic_gradient_node_get_interpolation_color_state
+                                                                    (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 gsize                    gsk_conic_gradient_node_get_n_color_stops  (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const GskColorStop *     gsk_conic_gradient_node_get_color_stops    (const GskRenderNode      *node,
                                                                      gsize                    *n_stops);
+GDK_AVAILABLE_IN_4_20
+const GskGradientStop *  gsk_conic_gradient_node_get_gradient_stops (const GskRenderNode      *node);
 
 GDK_AVAILABLE_IN_ALL
-GType                   gsk_radial_gradient_node_get_type (void) G_GNUC_CONST;
+GType                    gsk_radial_gradient_node_get_type          (void) G_GNUC_CONST;
 GDK_AVAILABLE_IN_ALL
-GskRenderNode *         gsk_radial_gradient_node_new      (const graphene_rect_t    *bounds,
-                                                           const graphene_point_t   *center,
-                                                           float                     hradius,
-                                                           float                     vradius,
-                                                           float                     start,
-                                                           float                     end,
-                                                           const GskColorStop       *color_stops,
-                                                           gsize                     n_color_stops);
+GskRenderNode *          gsk_radial_gradient_node_new               (const graphene_rect_t    *bounds,
+                                                                     const graphene_point_t   *center,
+                                                                     float                     hradius,
+                                                                     float                     vradius,
+                                                                     float                     start,
+                                                                     float                     end,
+                                                                     const GskColorStop       *color_stops,
+                                                                     gsize                     n_color_stops);
+GDK_AVAILABLE_IN_4_20
+GskRenderNode *          gsk_radial_gradient_node_new_snapped       (const graphene_rect_t    *bounds,
+                                                                     GskRectSnap               snap,
+                                                                     const graphene_point_t   *center,
+                                                                     float                     hradius,
+                                                                     float                     vradius,
+                                                                     float                     start,
+                                                                     float                     end,
+                                                                     GdkColorState            *interpolation,
+                                                                     GskHueInterpolation       hue_interpolation,
+                                                                     const GskGradientStop    *stops,
+                                                                     gsize                     n_stops);
+GDK_AVAILABLE_IN_4_20
+GskRectSnap              gsk_radial_gradient_node_get_snap          (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-gsize                   gsk_radial_gradient_node_get_n_color_stops (const GskRenderNode *node) G_GNUC_PURE;
+const graphene_point_t * gsk_radial_gradient_node_get_center        (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-const GskColorStop *    gsk_radial_gradient_node_get_color_stops   (const GskRenderNode *node,
-                                                                    gsize               *n_stops);
+float                    gsk_radial_gradient_node_get_hradius       (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-const graphene_point_t *gsk_radial_gradient_node_get_center        (const GskRenderNode *node) G_GNUC_PURE;
+float                    gsk_radial_gradient_node_get_vradius       (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-float                   gsk_radial_gradient_node_get_hradius       (const GskRenderNode *node) G_GNUC_PURE;
+float                    gsk_radial_gradient_node_get_start         (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-float                   gsk_radial_gradient_node_get_vradius       (const GskRenderNode *node) G_GNUC_PURE;
+float                    gsk_radial_gradient_node_get_end           (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_20
+GskHueInterpolation      gsk_radial_gradient_node_get_hue_interpolation
+                                                                    (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_20
+GdkColorState *          gsk_radial_gradient_node_get_interpolation_color_state
+                                                                    (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-float                   gsk_radial_gradient_node_get_start         (const GskRenderNode *node) G_GNUC_PURE;
+gsize                    gsk_radial_gradient_node_get_n_color_stops (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
-float                   gsk_radial_gradient_node_get_end           (const GskRenderNode *node) G_GNUC_PURE;
+const GskColorStop *     gsk_radial_gradient_node_get_color_stops   (const GskRenderNode      *node,
+                                                                     gsize                    *n_stops);
+GDK_AVAILABLE_IN_4_20
+const GskGradientStop *  gsk_radial_gradient_node_get_gradient_stops
+                                                                    (const GskRenderNode      *node);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_repeating_radial_gradient_node_get_type (void) G_GNUC_CONST;
@@ -347,6 +467,20 @@ GskRenderNode *         gsk_repeating_radial_gradient_node_new      (const graph
                                                                      float                     end,
                                                                      const GskColorStop       *color_stops,
                                                                      gsize                     n_color_stops);
+
+GDK_AVAILABLE_IN_4_20
+GskRenderNode *         gsk_repeating_radial_gradient_node_new_snapped
+                                                                    (const graphene_rect_t      *bounds,
+                                                                     GskRectSnap                 snap,
+                                                                     const graphene_point_t     *center,
+                                                                     float                       hradius,
+                                                                     float                       vradius,
+                                                                     float                       start,
+                                                                     float                       end,
+                                                                     GdkColorState              *interpolation,
+                                                                     GskHueInterpolation         hue_interpolation,
+                                                                     const GskGradientStop      *stops,
+                                                                     gsize                       n_stops);
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_border_node_get_type                (void) G_GNUC_CONST;
