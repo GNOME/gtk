@@ -38,28 +38,9 @@ struct _GdkWin32CairoContext
 {
   GdkCairoContext parent_instance;
 
-  /* Set to TRUE when double-buffering is used.
-   * Layered HWNDs use their own, custom double-buffering
-   * code that is unaffected by this flag.
-   */
-  guint            double_buffered : 1;
-
-  /* The a surface for double-buffering. We keep it
-   * around between repaints, and only re-allocate it
-   * if it's too small. */
-  cairo_surface_t *db_surface;
-  int              db_width;
-  int              db_height;
-
   /* Surface for the underlying window DC */
   cairo_surface_t *hwnd_surface;
-  /* A reference to db_surface (when double-buffering).
-   * When not using double-buffering this is a reference
-   * to hwnd_surface.
-   */
-  cairo_surface_t *paint_surface;
 };
-
 struct _GdkWin32CairoContextClass
 {
   GdkCairoContextClass parent_class;
