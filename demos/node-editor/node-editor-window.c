@@ -1288,6 +1288,11 @@ node_editor_window_realize (GtkWidget *widget)
                                    NULL,
                                    "Default");
 #endif
+#ifdef GDK_WINDOWING_WIN32
+  node_editor_window_add_renderer (self,
+                                   gsk_d3d12_renderer_new (),
+                                   "Direct3D 12");
+#endif
   node_editor_window_add_renderer (self,
                                    gsk_gl_renderer_new (),
                                    "OpenGL");
