@@ -67,8 +67,9 @@
 #include <gsk/gskglshader.h>
 
 #include <gsk/gskcairorenderer.h>
-#include <gsk/gpu/gskvulkanrenderer.h>
+#include <gsk/gpu/gskd3d12renderer.h>
 #include <gsk/gpu/gskglrenderer.h>
+#include <gsk/gpu/gskvulkanrenderer.h>
 
 #include <gsk/gsktypes.h>
 #include <gsk/gskenumtypes.h>
