@@ -459,6 +459,9 @@ using and the GDK backend supports them:
 `cairo`
 : Selects the fallback Cairo renderer
 
+`d3d12`
+: Selects the Windows-backend specific Direct3D 12 renderer
+
 `opengl`
 : Selects the OpenGL renderer
 
