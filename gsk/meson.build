@@ -55,6 +55,7 @@ gsk_public_sources = files([
   'gsktexturescalenode.c',
   'gsktransform.c',
   'gsktransformnode.c',
+  'gpu/gskd3d12renderer.c',
   'gpu/gskglrenderer.c',
   'gpu/gskvulkanrenderer.c',
 ])
@@ -162,8 +163,9 @@ install_headers(gsk_public_gl_headers, subdir: 'gtk-4.0/gsk/gl')
 gsk_public_headers += gsk_public_gl_headers
 
 gsk_public_gpu_headers = files([
-  'gpu/gskvulkanrenderer.h',
-  'gpu/gskglrenderer.h'
+  'gpu/gskd3d12renderer.h',
+  'gpu/gskglrenderer.h',
+  'gpu/gskvulkanrenderer.h'
 ])
 install_headers(gsk_public_gpu_headers, subdir: 'gtk-4.0/gsk/gpu')
 gsk_public_headers += gsk_public_gpu_headers
@@ -189,6 +191,11 @@ if have_vulkan
     'gpu/gskvulkanycbcr.c',
   ])
 endif # have_vulkan
+
+if get_variable('win32_enabled')
+  gsk_private_sources += files([
+  ])
+endif
 
 subdir('gpu/shaders')
 
