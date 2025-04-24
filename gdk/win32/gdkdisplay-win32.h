@@ -29,6 +29,8 @@
 /* Used for active language or text service change notifications */
 #include <msctf.h>
 
+#include <dxgi1_4.h>
+
 #ifdef HAVE_EGL
 # include <epoxy/egl.h>
 #endif
@@ -196,6 +198,10 @@ struct _GdkWin32Display
 
   dmanip_items *dmanip_items;
 
+  /* D3D12 */
+  IDXGIFactory4 *dxgi_factory;
+  ID3D12Device *d3d12_device;
+
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;
   guint hasWglARBCreateContext : 1;
@@ -245,13 +251,16 @@ struct _GdkWin32DisplayClass
   GdkDisplayClass display_class;
 };
 
-GPtrArray *_gdk_win32_display_get_monitor_list         (GdkWin32Display *display);
+GPtrArray *             _gdk_win32_display_get_monitor_list             (GdkWin32Display        *display);
 
-guint      gdk_win32_display_get_monitor_scale_factor  (GdkWin32Display *display_win32,
-                                                        GdkSurface      *surface,
-                                                        HMONITOR         hmonitor);
+IDXGIFactory4 *         gdk_win32_display_get_dxgi_factory              (GdkWin32Display        *self);
+ID3D12Device *          gdk_win32_display_get_d3d12_device              (GdkWin32Display        *self);
 
-GdkWin32Clipdrop *gdk_win32_display_get_clipdrop       (GdkDisplay *display);
+guint                   gdk_win32_display_get_monitor_scale_factor      (GdkWin32Display        *display_win32,
+                                                                         GdkSurface             *surface,
+                                                                         HMONITOR                hmonitor);
+
+GdkWin32Clipdrop *      gdk_win32_display_get_clipdrop                  (GdkDisplay             *display);
 
 typedef struct _GdkWin32MessageFilter GdkWin32MessageFilter;
 
