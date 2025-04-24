@@ -495,6 +495,8 @@ get_renderer_for_name (const char *renderer_name)
 #endif
   else if (g_ascii_strcasecmp (renderer_name, "cairo") == 0)
     return GSK_TYPE_CAIRO_RENDERER;
+  else if (g_ascii_strcasecmp (renderer_name, "d3d12") == 0)
+    return GSK_TYPE_D3D12_RENDERER;
   else if (g_ascii_strcasecmp (renderer_name, "gl") == 0 ||
            g_ascii_strcasecmp (renderer_name, "opengl") == 0)
     return GSK_TYPE_GL_RENDERER;
@@ -516,6 +518,11 @@ get_renderer_for_name (const char *renderer_name)
                         "  broadway - Disabled during GTK build\n"
 #endif
                         "     cairo - Use the Cairo fallback renderer\n"
+#ifdef GDK_WINDOWING_WIN32
+                        "     d3d12 - Use the Direct3D 12 renderer\n"
+#else
+                        "     d3d12 - Direct3D 12 renderer, only available on Windows\n"
+#endif
                         "    opengl - Use the OpenGL renderer\n"
                         "        gl - Use the OpenGL renderer\n"
 #ifdef GDK_RENDERING_VULKAN
