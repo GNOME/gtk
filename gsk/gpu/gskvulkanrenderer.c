@@ -4,6 +4,8 @@
 
 #include "gskgpurendererprivate.h"
 
+#include <glib/gi18n-lib.h>
+
 #ifdef GDK_RENDERING_VULKAN
 
 #include "gskvulkandeviceprivate.h"
@@ -143,14 +145,28 @@ gsk_vulkan_renderer_unrealize (GskRenderer *renderer)
 
   GSK_RENDERER_CLASS (gsk_vulkan_renderer_parent_class)->unrealize (renderer);
 }
-#endif
+
+#else /* !GDK_RENDERING_VULKAN */
+
+static gboolean
+gsk_vulkan_renderer_realize (GskRenderer  *renderer,
+                             GdkDisplay   *display,
+                             GdkSurface   *surface,
+                             GError      **error)
+{
+  g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,
+                       _("Vulkan support disabled during GTK build"));
+
+  return FALSE;
+}
+#endif /* GDK_RENDERING_VULKAN */
 
 static void
 gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
 {
+  GskRendererClass *renderer_class = GSK_RENDERER_CLASS (klass);
 #ifdef GDK_RENDERING_VULKAN
   GskGpuRendererClass *gpu_renderer_class = GSK_GPU_RENDERER_CLASS (klass);
-  GskRendererClass *renderer_class = GSK_RENDERER_CLASS (klass);
 
   gpu_renderer_class->frame_type = GSK_TYPE_VULKAN_FRAME;
 
@@ -162,6 +178,8 @@ gsk_vulkan_renderer_class_init (GskVulkanRendererClass *klass)
   gpu_renderer_class->get_backbuffer = gsk_vulkan_renderer_get_backbuffer;
 
   renderer_class->unrealize = gsk_vulkan_renderer_unrealize;
+#else
+  renderer_class->realize = gsk_vulkan_renderer_realize;
 #endif
 }
 
