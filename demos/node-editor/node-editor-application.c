@@ -95,6 +95,10 @@ activate_about (GSimpleAction *action,
     renderer = "OpenGL";
   else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskCairoRenderer") == 0)
     renderer = "Cairo";
+  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskD3d12Renderer") == 0)
+    renderer = "Direct3D 12";
+  else if (strcmp (G_OBJECT_TYPE_NAME (gsk_renderer), "GskBroadwayRenderer") == 0)
+    renderer = "Broadway";
   else
     renderer = "Unknown";
 
