@@ -141,7 +141,12 @@ replay_texture_node (GskRenderNode *node, GtkSnapshot *snapshot)
         }
     }
 
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, gsk_texture_node_get_snap (node));
+
   gtk_snapshot_append_texture (snapshot, texture, &bounds);
+
+  gtk_snapshot_restore (snapshot);
 
   g_object_unref (texture);
 }
