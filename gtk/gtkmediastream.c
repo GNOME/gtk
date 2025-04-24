@@ -298,7 +298,7 @@ gtk_media_stream_class_init (GtkMediaStreamClass *class)
   properties[PROP_PREPARED] =
     g_param_spec_boolean ("prepared", NULL, NULL,
                           FALSE,
-                          G_PARAM_READWRITE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
+                          G_PARAM_READABLE | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_STATIC_STRINGS);
 
   /**
    * GtkMediaStream:error:
