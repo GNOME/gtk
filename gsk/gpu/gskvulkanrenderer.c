@@ -130,7 +130,7 @@ gsk_vulkan_renderer_get_backbuffer (GskGpuRenderer *renderer)
   
   context = GDK_VULKAN_CONTEXT (gsk_gpu_renderer_get_context (renderer));
 
-  return self->targets[gdk_vulkan_context_get_draw_index (context)];
+  return g_object_ref (self->targets[gdk_vulkan_context_get_draw_index (context)]);
 }
 
 static void
