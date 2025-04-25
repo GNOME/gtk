@@ -13,6 +13,10 @@
 #include "gskvulkanframeprivate.h"
 #include "gskvulkanimageprivate.h"
 #endif
+#ifdef GDK_WINDOWING_WIN32
+#include "gskd3d12imageprivate.h"
+#include "gdk/win32/gdkd3d12texturebuilder.h"
+#endif
 
 #include <glib/gstdio.h>
 
@@ -377,6 +381,44 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
   return op->next;
 }
 
+#ifdef GDK_WINDOWING_WIN32
+static void
+free_resource (gpointer data)
+{
+  ID3D12Resource *resource = data;
+
+  ID3D12Resource_Release (resource);
+}
+
+static GskGpuOp *
+gsk_gpu_download_op_d3d12_command (GskGpuOp             *op,
+                                   GskGpuFrame          *frame,
+                                   GskD3d12CommandState *state)
+{
+  GskGpuDownloadOp *self = (GskGpuDownloadOp *) op;
+  GdkD3D12TextureBuilder *builder;
+  ID3D12Resource *resource;
+
+  resource = gsk_d3d12_image_get_resource (GSK_D3D12_IMAGE (self->image));
+  ID3D12Resource_AddRef (resource);
+
+  builder = gdk_d3d12_texture_builder_new ();
+  gdk_d3d12_texture_builder_set_resource (builder, resource);
+  gdk_d3d12_texture_builder_set_color_state (builder, self->color_state);
+  gdk_d3d12_texture_builder_set_premultiplied (builder,
+                                               gdk_memory_format_alpha (gsk_gpu_image_get_format (self->image)) != GDK_MEMORY_ALPHA_STRAIGHT);
+
+  *self->texture = gdk_d3d12_texture_builder_build (builder,
+                                                    free_resource,
+                                                    resource,
+                                                    NULL);
+
+  g_object_unref (builder);
+
+  return op->next;
+}
+#endif
+
 static const GskGpuOpClass GSK_GPU_DOWNLOAD_OP_CLASS = {
   GSK_GPU_OP_SIZE (GskGpuDownloadOp),
   GSK_GPU_STAGE_COMMAND,
@@ -385,7 +427,10 @@ static const GskGpuOpClass GSK_GPU_DOWNLOAD_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   gsk_gpu_download_op_vk_command,
 #endif
-  gsk_gpu_download_op_gl_command
+  gsk_gpu_download_op_gl_command,
+#ifdef GDK_WINDOWING_WIN32
+  gsk_gpu_download_op_d3d12_command,
+#endif
 };
 
 void
