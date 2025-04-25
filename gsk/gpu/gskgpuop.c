@@ -49,3 +49,20 @@ gsk_gpu_op_gl_command (GskGpuOp          *op,
   return op->op_class->gl_command (op, frame, state);
 }
 
+#ifdef GDK_WINDOWING_WIN32
+GskGpuOp *
+gsk_gpu_op_d3d12_command (GskGpuOp             *op,
+                          GskGpuFrame          *frame,
+                          GskD3d12CommandState *state)
+{
+  if (!op->op_class->d3d12_command)
+    {
+      GString *string = g_string_new ("");
+      gsk_gpu_op_print (op, frame, string, 0);
+      g_warning ("FIXME: Implement %s", string->str);
+      g_string_free (string, TRUE);
+      return op->next;
+    }
+  return op->op_class->d3d12_command (op, frame, state);
+}
+#endif
