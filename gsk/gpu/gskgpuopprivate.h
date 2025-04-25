@@ -19,6 +19,7 @@ typedef enum
 
 typedef struct _GskGLCommandState GskGLCommandState;
 typedef struct _GskVulkanCommandState GskVulkanCommandState;
+typedef struct _GskD3d12CommandState GskD3d12CommandState;
 
 struct _GskGLCommandState
 {
@@ -48,6 +49,12 @@ struct _GskVulkanCommandState
 };
 #endif
 
+#ifdef GDK_WINDOWING_WIN32
+struct _GskD3d12CommandState
+{
+  int totally_unused;
+};
+#endif
 struct _GskGpuOp
 {
   const GskGpuOpClass *op_class;
@@ -75,6 +82,11 @@ struct _GskGpuOpClass
   GskGpuOp *            (* gl_command)                                  (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
                                                                          GskGLCommandState      *state);
+#ifdef GDK_WINDOWING_WIN32
+  GskGpuOp *            (* d3d12_command)                               (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame,
+                                                                         GskD3d12CommandState   *state);
+#endif
 };
 
 /* ensures alignment of ops to multiples of 16 bytes - and that makes graphene happy */
@@ -97,6 +109,11 @@ GskGpuOp *              gsk_gpu_op_vk_command                           (GskGpuO
 GskGpuOp *              gsk_gpu_op_gl_command                           (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
                                                                          GskGLCommandState      *state);
+#ifdef GDK_WINDOWING_WIN32
+GskGpuOp *              gsk_gpu_op_d3d12_command                        (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame,
+                                                                         GskD3d12CommandState   *state);
+#endif
 
 G_END_DECLS
 
