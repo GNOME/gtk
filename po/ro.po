@@ -13,17 +13,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-03-20 01:38+0000\n"
-"PO-Revision-Date: 2025-03-20 19:58+0100\n"
+"POT-Creation-Date: 2025-04-18 22:12+0000\n"
+"PO-Revision-Date: 2025-04-26 12:17+0200\n"
 "Last-Translator: Antonio Marin <gnmer.6qxyg@slmail.me>\n"
-"Language-Team: Romanian Gnome Team <gnomero-list@lists.sourceforge.net>\n"
+"Language-Team: Romanian <gnomero-list@lists.sourceforge.net>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
 "20)) ? 1 : 2);\n"
-"X-Generator: Gtranslator 47.1\n"
+"X-Generator: Gtranslator 48.0\n"
 "X-Poedit-SourceCharset: UTF-8\n"
 
 #: gdk/android/gdkandroidclipboard.c:174
@@ -38,7 +38,7 @@ msgstr "Niciun format compatibil pentru a transfera conținutul furnizorului."
 msgid "No compatible transfer format found"
 msgstr "Niciun format de transfer compatibil nu a fost găsit"
 
-#: gdk/broadway/gdkbroadway-server.c:135
+#: gdk/broadway/gdkbroadway-server.c:131
 #, c-format
 msgid "Broadway display type not supported: %s"
 msgstr "Tipul de display Broadway nu este suportat: %s"
@@ -90,7 +90,7 @@ msgstr "Nu s-a putut oferi conținutul ca %s"
 msgid "The current backend does not support OpenGL"
 msgstr "Suportul curent nu suportă OpenGL"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1721
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1715
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Suportul Vulkan dezactivat prin GDK_DISABLE"
 
@@ -155,9 +155,9 @@ msgstr "Niciun format compatibil pentru transferarea conținutului."
 msgid "No GL API allowed."
 msgstr "Nu este permis niciun API GL."
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:745
-#: gdk/win32/gdkglcontext-win32-wgl.c:888
-#: gdk/win32/gdkglcontext-win32-wgl.c:932 gdk/x11/gdkglcontext-glx.c:699
+#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:746
+#: gdk/win32/gdkglcontext-win32-wgl.c:889
+#: gdk/win32/gdkglcontext-win32-wgl.c:933 gdk/x11/gdkglcontext-glx.c:699
 msgid "Unable to create a GL context"
 msgstr "Nu s-a putut crea un context GL"
 
@@ -759,21 +759,21 @@ msgstr "IDataObject_GetData (0x%x) a eșuat, se returnează 0x%lx"
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "Eroarea la transmutarea datelor DnD format W32 0x%x în %p (%s)"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:667
+#: gdk/win32/gdkglcontext-win32-wgl.c:668
 msgid "No GL implementation is available"
 msgstr "Nicio implementare GL nu este disponibilă"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:754
+#: gdk/win32/gdkglcontext-win32-wgl.c:755
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "Versiunea WGL %d.%d este prea veche, este necesar cel puțin %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:772
+#: gdk/win32/gdkglcontext-win32-wgl.c:773
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "Implementarea GL nu poate partaja contexturile GL"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1052
+#: gdk/win32/gdkglcontext-win32-wgl.c:1053
 msgid "No available configurations for the given pixel format"
 msgstr "Nu sunt configurații disponibile pentru formatul de pixel dat"
 
@@ -1845,7 +1845,7 @@ msgstr "Elementul <%s> nu este permis în interiorul lui <%s>"
 msgid "Element <%s> not allowed at toplevel"
 msgstr "Elementul <%s> nu este permis la nivelul de top"
 
-#: gtk/gtkbuilder-menus.c:327
+#: gtk/gtkbuilder-menus.c:329
 #, c-format
 msgid "Text may not appear inside <%s>"
 msgstr "Textul poate să apară doar înăuntrul <%s>"
@@ -2317,7 +2317,7 @@ msgstr "Un fișier cu acel nume există deja"
 #: gtk/gtkmessagedialog.c:182 gtk/gtkmountoperation.c:608
 #: gtk/print/gtkpagesetupunixdialog.c:285 gtk/print/gtkprintbackend.c:638
 #: gtk/print/gtkprintunixdialog.c:683 gtk/print/gtkprintunixdialog.c:840
-#: gtk/gtkwindow.c:6334 gtk/ui/gtkappchooserdialog.ui:48
+#: gtk/gtkwindow.c:6359 gtk/ui/gtkappchooserdialog.ui:48
 #: gtk/ui/gtkassistant.ui:52 gtk/ui/gtkcolorchooserdialog.ui:36
 #: gtk/ui/gtkfontchooserdialog.ui:29
 msgid "_Cancel"
@@ -2755,7 +2755,7 @@ msgstr "Variații de caractere"
 msgid "OpenGL context creation failed"
 msgstr "Crearea contextului OpenGL a eșuat"
 
-#: gtk/deprecated/gtkinfobar.c:501 gtk/gtkwindowcontrols.c:409
+#: gtk/deprecated/gtkinfobar.c:501 gtk/gtkwindowcontrols.c:412
 #: gtk/gtkwindowhandle.c:253
 msgid "Close"
 msgstr "Închide"
@@ -2851,7 +2851,7 @@ msgid "Play"
 msgstr "Redare"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
-#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6335
+#: gtk/print/gtkprintbackend.c:639 gtk/gtkwindow.c:6360
 msgid "_OK"
 msgstr "_OK"
 
@@ -3478,7 +3478,7 @@ msgstr "Fără hârtie"
 
 #. Translators: this is a printer status.
 #: gtk/print/gtkprintoperation-win32.c:630
-#: modules/printbackends/gtkprintbackendcpdb.c:1522
+#: modules/printbackends/gtkprintbackendcpdb.c:1521
 #: modules/printbackends/gtkprintbackendcups.c:2639
 msgid "Paused"
 msgstr "Pauzat"
@@ -3901,12 +3901,12 @@ msgstr "An_ulează"
 msgid "_Redo"
 msgstr "_Refă"
 
-#: gtk/gtkwindow.c:6323
+#: gtk/gtkwindow.c:6348
 #, c-format
 msgid "Do you want to use GTK Inspector?"
 msgstr "Doriți să utilizați Inspector GTK?"
 
-#: gtk/gtkwindow.c:6325
+#: gtk/gtkwindow.c:6350
 #, c-format
 msgid ""
 "GTK Inspector is an interactive debugger that lets you explore and modify "
@@ -3917,27 +3917,27 @@ msgstr ""
 "să modificați componentele interne ale oricărei aplicație GTK. Folosindu-l "
 "poate cauza crăparea aplicației."
 
-#: gtk/gtkwindow.c:6330
+#: gtk/gtkwindow.c:6355
 msgid "Don’t show this message again"
 msgstr "Nu arăta acest mesaj din nou"
 
-#: gtk/gtkwindowcontrols.c:361 gtk/gtkwindowhandle.c:237
+#: gtk/gtkwindowcontrols.c:362 gtk/gtkwindowhandle.c:237
 msgid "Minimize"
 msgstr "Minimizează"
 
-#: gtk/gtkwindowcontrols.c:363
+#: gtk/gtkwindowcontrols.c:364
 msgid "Minimize the window"
 msgstr "Minimizează fereastra"
 
-#: gtk/gtkwindowcontrols.c:387 gtk/gtkwindowhandle.c:243
+#: gtk/gtkwindowcontrols.c:389 gtk/gtkwindowhandle.c:243
 msgid "Maximize"
 msgstr "Maximizează"
 
-#: gtk/gtkwindowcontrols.c:389
+#: gtk/gtkwindowcontrols.c:391
 msgid "Maximize the window"
 msgstr "Maximizează fereastra"
 
-#: gtk/gtkwindowcontrols.c:411
+#: gtk/gtkwindowcontrols.c:414
 msgid "Close the window"
 msgstr "Închide fereastra"
 
@@ -4100,21 +4100,21 @@ msgstr "Clase de stil"
 msgid "CSS Property"
 msgstr "Proprietate CSS"
 
-#: gtk/inspector/general.c:446
+#: gtk/inspector/general.c:469
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
 msgstr "Contextul IM este hardcodat de GTK_IM_MODULE"
 
-#: gtk/inspector/general.c:577
+#: gtk/inspector/general.c:644
 msgctxt "GL renderer"
 msgid "None"
 msgstr "Niciunul"
 
-#: gtk/inspector/general.c:674
+#: gtk/inspector/general.c:741
 msgctxt "GL version"
 msgid "Unknown"
 msgstr "Necunoscut"
 
-#: gtk/inspector/general.c:928 gtk/inspector/general.c:967
+#: gtk/inspector/general.c:995 gtk/inspector/general.c:1034
 msgctxt "Vulkan device"
 msgid "None"
 msgstr "Niciunul"
@@ -4124,122 +4124,130 @@ msgid "Copy to clipboard as gitlab markdown"
 msgstr "Copiază ca Markdown GitLab"
 
 #: gtk/inspector/general.ui:45
+msgid "Operating System"
+msgstr "Sistem de operare"
+
+#: gtk/inspector/general.ui:71
 msgid "GTK Version"
 msgstr "Versiune GTK"
 
-#: gtk/inspector/general.ui:71
-msgid "GDK Backend"
-msgstr "Suport GDK"
-
 #: gtk/inspector/general.ui:97
+msgid "GDK Backend"
+msgstr "Backend GDK"
+
+#: gtk/inspector/general.ui:123
 msgid "GSK Renderer"
 msgstr "Motor de redare GSK"
 
-#: gtk/inspector/general.ui:123
+#: gtk/inspector/general.ui:149
 msgid "Pango Fontmap"
 msgstr "Pango FontMap"
 
-#: gtk/inspector/general.ui:149
+#: gtk/inspector/general.ui:175
 msgid "Media Backend"
 msgstr "Suport media"
 
-#: gtk/inspector/general.ui:175
+#: gtk/inspector/general.ui:201
 msgid "Input Method"
 msgstr "Metodă de intrare"
 
-#: gtk/inspector/general.ui:212
+#: gtk/inspector/general.ui:227
+msgid "Accessibility Backend"
+msgstr "Backend Accesibilitate"
+
+#: gtk/inspector/general.ui:264
 msgid "Application ID"
 msgstr "ID aplicație"
 
-#: gtk/inspector/general.ui:238
+#: gtk/inspector/general.ui:290
 msgid "Resource Path"
 msgstr "Cale resurse"
 
-#: gtk/inspector/general.ui:275 gtk/ui/gtkplacesview.ui:63
+#: gtk/inspector/general.ui:327 gtk/ui/gtkplacesview.ui:63
 msgid "Prefix"
 msgstr "Prefix"
 
-#: gtk/inspector/general.ui:302
+#: gtk/inspector/general.ui:354
 msgid "Environment"
 msgstr "Mediu"
 
-#: gtk/inspector/general.ui:405
+#: gtk/inspector/general.ui:457
 msgid "Display"
 msgstr "Afișaj"
 
-#: gtk/inspector/general.ui:432
+#: gtk/inspector/general.ui:484
 msgid "RGBA Visual"
 msgstr "RGBA Vizual"
 
-#: gtk/inspector/general.ui:458
+#: gtk/inspector/general.ui:510
 msgid "Composited"
 msgstr "Compus"
 
-#: gtk/inspector/general.ui:483
+#: gtk/inspector/general.ui:535
 msgid "Protocols"
 msgstr "Protocoale"
 
-#: gtk/inspector/general.ui:539
+#: gtk/inspector/general.ui:591
 msgid "GL Renderer"
 msgstr "Motor de redare GL"
 
-#: gtk/inspector/general.ui:568
+#: gtk/inspector/general.ui:620
 msgid "GL Vendor"
 msgstr "Furnizor GL"
 
-#: gtk/inspector/general.ui:597
+#: gtk/inspector/general.ui:649
 msgid "GL Version"
 msgstr "Versiune GL"
 
-#: gtk/inspector/general.ui:624
+#: gtk/inspector/general.ui:676
 msgid "GL Backend Vendor"
 msgstr "Furnizor backend GL"
 
-#: gtk/inspector/general.ui:651
+#: gtk/inspector/general.ui:703
 msgid "GL Backend Version"
 msgstr "Versiune backend GL"
 
-#: gtk/inspector/general.ui:701
+#: gtk/inspector/general.ui:753
 msgid "GL Full Version"
 msgstr "Versiunea completă GL"
 
-#: gtk/inspector/general.ui:730
+#: gtk/inspector/general.ui:782
 msgid "GLSL Version"
 msgstr "Versiune GLSL"
 
-#: gtk/inspector/general.ui:759
+#: gtk/inspector/general.ui:811
 msgid "GL Extensions"
 msgstr "Extensii GL"
 
-#: gtk/inspector/general.ui:847
+#: gtk/inspector/general.ui:899
 msgid "EGL Extensions"
 msgstr "Extensii EGL"
 
-#: gtk/inspector/general.ui:934
+#: gtk/inspector/general.ui:986
 msgid "GL Features"
 msgstr "Caracteristici GL"
 
-#: gtk/inspector/general.ui:970
+#: gtk/inspector/general.ui:1022
 msgid "Vulkan Device"
 msgstr "Dispozitiv Vulkan"
 
-#: gtk/inspector/general.ui:997
+#: gtk/inspector/general.ui:1049
 msgid "Vulkan API Version"
 msgstr "Versiunea API Vulkan"
 
-#: gtk/inspector/general.ui:1024
+#: gtk/inspector/general.ui:1076
 msgid "Vulkan Driver Version"
 msgstr "Versiunea driverului Vulkan"
 
-#: gtk/inspector/general.ui:1073
+#: gtk/inspector/general.ui:1125
 msgid "Vulkan Layers"
 msgstr "Straturi Vulkan"
 
-#: gtk/inspector/general.ui:1142
+#: gtk/inspector/general.ui:1194
 msgid "Vulkan Extensions"
 msgstr "Extensii Vulkan"
 
-#: gtk/inspector/general.ui:1229
+#: gtk/inspector/general.ui:1281
 msgid "Vulkan Features"
 msgstr "Caracteristici Vulkan"
 
@@ -4457,7 +4465,7 @@ msgstr "Sursă:"
 msgid "Defined At"
 msgstr "Definit la"
 
-#: gtk/inspector/recorder.c:2055
+#: gtk/inspector/recorder.c:2059
 #, c-format
 msgid "Saving RenderNode failed"
 msgstr "Salvarea RenderNode a eșuat"
@@ -6969,13 +6977,13 @@ msgid "Borderless"
 msgstr "Fără chenar"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1519
+#: modules/printbackends/gtkprintbackendcpdb.c:1518
 #: modules/printbackends/gtkprintbackendcups.c:2636
 msgid "Paused; Rejecting Jobs"
 msgstr "Pauzat; se refuză sarcinile"
 
 #. Translators: this is a printer status.
-#: modules/printbackends/gtkprintbackendcpdb.c:1525
+#: modules/printbackends/gtkprintbackendcpdb.c:1524
 #: modules/printbackends/gtkprintbackendcups.c:2642
 msgid "Rejecting Jobs"
 msgstr "Se refuză lucrări de tipărire"
