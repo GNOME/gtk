@@ -70,13 +70,43 @@ gdk_android_surface_long_hash (guint64 num)
   return (gint) (num ^ (num >> 32));
 }
 
+// Taken from Thomas Mueller on SO, licensed under CC BY-SA 4.0
+// https://stackoverflow.com/a/12996028/10890264
+static guint
+gdk_android_events_int_hash (guint32 num)
+{
+  num = ((num >> 16) ^ num) * 0x45d9f3bu;
+  num = ((num >> 16) ^ num) * 0x45d9f3bu;
+  num = (num >> 16) ^ num;
+  return num;
+}
+
 #define GDK_ANDROID_EVENTS_COMPARE_MASK(val, mask) \
   (((val) & (mask)) == (mask))
 
 #define GDK_ANDROID_TOUCH_EVENT_TYPE_MASK (3) // least significant 2 bits
 static GdkEventType
-gdk_android_events_touch_action_to_gdk (gint32 masked_action)
+gdk_android_events_touch_action_to_gdk (const AInputEvent *event, size_t pointer_index)
 {
+  gint32 action = AMotionEvent_getAction (event);
+  gint32 masked_action = action & AMOTION_EVENT_ACTION_MASK;
+  if (masked_action == AMOTION_EVENT_ACTION_POINTER_DOWN ||
+      masked_action == AMOTION_EVENT_ACTION_POINTER_UP)
+    {
+      size_t affected_pointer = (action & AMOTION_EVENT_ACTION_POINTER_INDEX_MASK) >> AMOTION_EVENT_ACTION_POINTER_INDEX_SHIFT;
+      if (pointer_index != affected_pointer)
+        return GDK_TOUCH_UPDATE;
+      switch (masked_action)
+        {
+        case AMOTION_EVENT_ACTION_POINTER_DOWN:
+          return GDK_TOUCH_BEGIN;
+        case AMOTION_EVENT_ACTION_POINTER_UP:
+          return GDK_TOUCH_END;
+        default:
+          __builtin_unreachable ();
+        }
+    }
+
   jint event_type = masked_action & GDK_ANDROID_TOUCH_EVENT_TYPE_MASK;
   switch (event_type)
     {
@@ -111,7 +141,7 @@ gdk_android_events_emit_button_press (gint32 mask, guint32 state, guint button,
                                        time, mods,
                                        button,
                                        x, y,
-                                       gdk_android_seat_create_axes_from_motion_event (event));
+                                       gdk_android_seat_create_axes_from_motion_event (event, 0));
   gdk_android_seat_consume_event (display, ev);
 }
 
@@ -134,14 +164,7 @@ gdk_android_events_handle_motion_event (GdkAndroidSurface *surface,
   GdkModifierType mods = gdk_android_events_meta_to_gdk (AMotionEvent_getMetaState (event));
   mods |= gdk_android_events_buttons_to_gdkmods (dev_impl->button_state);
 
-  // I think it might be better to drop the down time and only rely on the event identity
-  guint sequence = gdk_android_surface_long_hash ((guint64) AMotionEvent_getDownTime (event));
-  sequence ^= (guint) event_identifier;
-
   gint64 time = AMotionEvent_getEventTime (event);
-
-  gfloat x = AMotionEvent_getX (event, 0) / surface->cfg.scale;
-  gfloat y = AMotionEvent_getY (event, 0) / surface->cfg.scale;
 
   // Update keyboard focus on motion events only for autohide surfaces
   // This *doesn't really* match the behaviour of Mutter (autohide popups
@@ -156,20 +179,32 @@ gdk_android_events_handle_motion_event (GdkAndroidSurface *surface,
 
   if (GDK_ANDROID_EVENTS_COMPARE_MASK (src, AINPUT_SOURCE_TOUCHSCREEN))
     {
-      if (masked_action == AMOTION_EVENT_ACTION_POINTER_DOWN ||
-          masked_action == AMOTION_EVENT_ACTION_POINTER_UP)
-        goto skip; // lets just ignore events from secondary pointers
-      GdkEventType ev_type = gdk_android_events_touch_action_to_gdk (masked_action);
+      // I think it might be better to drop the down time and only rely on the event identity
+      guint base_sequence = gdk_android_surface_long_hash ((guint64) AMotionEvent_getDownTime (event));
+      base_sequence ^= (guint) event_identifier;
 
-      GdkEvent *ev = gdk_touch_event_new (ev_type, GUINT_TO_POINTER (sequence), (GdkSurface *) surface,
-                                          display->seat->logical_touchscreen,
-                                          time, mods,
-                                          x, y,
-                                          gdk_android_seat_create_axes_from_motion_event (event), TRUE);
-      gdk_android_seat_consume_event ((GdkDisplay *) display, ev);
+      size_t pointers = AMotionEvent_getPointerCount (event);
+      for (size_t i = 0; i < pointers; i++)
+        {
+          GdkEventType ev_type = gdk_android_events_touch_action_to_gdk (event, i);
+
+          guint sequence = base_sequence ^ gdk_android_events_int_hash(AMotionEvent_getPointerId (event, i));
+          gfloat x = AMotionEvent_getX (event, i) / surface->cfg.scale;
+          gfloat y = AMotionEvent_getY (event, i) / surface->cfg.scale;
+
+          GdkEvent *ev = gdk_touch_event_new (ev_type, GUINT_TO_POINTER (sequence), (GdkSurface *) surface,
+                                              display->seat->logical_touchscreen,
+                                              time, mods,
+                                              x, y,
+                                              gdk_android_seat_create_axes_from_motion_event (event, i), i == 0);
+          gdk_android_seat_consume_event ((GdkDisplay *) display, ev);
+        }
     }
   else if (GDK_ANDROID_EVENTS_COMPARE_MASK (src, AINPUT_SOURCE_CLASS_POINTER))
     {
+      gfloat x = AMotionEvent_getX (event, 0) / surface->cfg.scale;
+      gfloat y = AMotionEvent_getY (event, 0) / surface->cfg.scale;
+
       if (masked_action == AMOTION_EVENT_ACTION_SCROLL)
         {
           GdkEvent *ev = gdk_scroll_event_new ((GdkSurface *) surface, dev, NULL,
@@ -221,7 +256,7 @@ gdk_android_events_handle_motion_event (GdkAndroidSurface *surface,
                                                    time, mods,
                                                    GDK_BUTTON_PRIMARY,
                                                    x, y,
-                                                   gdk_android_seat_create_axes_from_motion_event (event));
+                                                   gdk_android_seat_create_axes_from_motion_event (event, 0));
               gdk_android_seat_consume_event ((GdkDisplay *) display, ev);
 
               // this will cause conflicts in cases where the mouse/touchpad and
@@ -259,7 +294,7 @@ gdk_android_events_handle_motion_event (GdkAndroidSurface *surface,
           GdkEvent *ev = gdk_motion_event_new ((GdkSurface *) surface, dev, tool,
                                                time, mods,
                                                x, y,
-                                               gdk_android_seat_create_axes_from_motion_event (event));
+                                               gdk_android_seat_create_axes_from_motion_event (event, 0));
           gdk_android_seat_consume_event ((GdkDisplay *) display, ev);
 
           // as changes in BUTTON_STYLUS_{PRIMARY,SECONDARY} do not emit a special
@@ -319,7 +354,7 @@ gdk_android_events_handle_motion_event (GdkAndroidSurface *surface,
       for (gsize i = 0; i < G_N_ELEMENTS (pad_axes); i++)
         {
           gdouble value;
-          if (gdk_android_seat_normalize_range (env, jdevice, event, pad_axes[i].axis, pad_axes[i].min, pad_axes[i].max, &value) && value != 0.)
+          if (gdk_android_seat_normalize_range (env, jdevice, event, 0, pad_axes[i].axis, pad_axes[i].min, pad_axes[i].max, &value) && value != 0.)
             { // the value != 0. check is less than ideal, as 0 is a legitimate value, but
               // android also returns 0 when the finger leaves the ring (and often just
               // randomly too)
@@ -333,7 +368,6 @@ gdk_android_events_handle_motion_event (GdkAndroidSurface *surface,
       (*env)->PopLocalFrame (env, NULL);
     }
 
-skip:
   AInputEvent_release (event);
 }
 

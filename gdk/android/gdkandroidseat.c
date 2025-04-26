@@ -320,7 +320,8 @@ gdk_android_seat_get_device_tool (GdkAndroidSeat *self, gint32 tool_type)
 
 gboolean
 gdk_android_seat_normalize_range (JNIEnv *env, jobject device,
-                                  const AInputEvent *event, guint32 mask,
+                                  const AInputEvent *event, size_t pointer_index,
+                                  guint32 mask,
                                   gfloat from, gfloat to,
                                   gdouble *out)
 {
@@ -339,7 +340,7 @@ gdk_android_seat_normalize_range (JNIEnv *env, jobject device,
   gfloat max = (*env)->CallFloatMethod (env,
                                         axis,
                                         gdk_android_get_java_cache ()->a_motion_range.get_max);
-  gfloat value = AMotionEvent_getAxisValue (event, mask, 0);
+  gfloat value = AMotionEvent_getAxisValue (event, mask, pointer_index);
 
   // $v_\text{new}=from+\frac{(v-min)*(to-from)}{max-min}$
   *out = from + ((value - min) * (to - from)) / (max - min);
@@ -347,11 +348,11 @@ gdk_android_seat_normalize_range (JNIEnv *env, jobject device,
 }
 
 gdouble *
-gdk_android_seat_create_axes_from_motion_event (const AInputEvent *event)
+gdk_android_seat_create_axes_from_motion_event (const AInputEvent *event, size_t pointer_index)
 {
   gdouble axes[GDK_AXIS_LAST] = { 0 };
-  axes[0] = AMotionEvent_getX (event, 0);
-  axes[1] = AMotionEvent_getY (event, 0);
+  axes[0] = AMotionEvent_getX (event, pointer_index);
+  axes[1] = AMotionEvent_getY (event, pointer_index);
 
   JNIEnv *env = gdk_android_get_env ();
   (*env)->PushLocalFrame (env, 1);
@@ -365,13 +366,13 @@ gdk_android_seat_create_axes_from_motion_event (const AInputEvent *event)
       // _gdk_device_add_axis. As the _gdk_device_* family of functions is not
       // used, ensure they are kept in sync manually.
 
-      if (!gdk_android_seat_normalize_range (env, device, event, AMOTION_EVENT_AXIS_PRESSURE, 0.f, 1.f, &axes[GDK_AXIS_PRESSURE]))
+      if (!gdk_android_seat_normalize_range (env, device, event, pointer_index, AMOTION_EVENT_AXIS_PRESSURE, 0.f, 1.f, &axes[GDK_AXIS_PRESSURE]))
         axes[GDK_AXIS_PRESSURE] = 0.;
-      if (!gdk_android_seat_normalize_range (env, device, event, AMOTION_EVENT_AXIS_DISTANCE, 0.f, 1.f, &axes[GDK_AXIS_DISTANCE]))
+      if (!gdk_android_seat_normalize_range (env, device, event, pointer_index, AMOTION_EVENT_AXIS_DISTANCE, 0.f, 1.f, &axes[GDK_AXIS_DISTANCE]))
         axes[GDK_AXIS_DISTANCE] = 0.;
 
       gdouble orientation, tilt;
-      if (gdk_android_seat_normalize_range (env, device, event, AMOTION_EVENT_AXIS_ORIENTATION, -G_PI, G_PI, &orientation) && gdk_android_seat_normalize_range (env, device, event, AMOTION_EVENT_AXIS_TILT, 0.f, G_PI / 2.f, &tilt))
+      if (gdk_android_seat_normalize_range (env, device, event, pointer_index, AMOTION_EVENT_AXIS_ORIENTATION, -G_PI, G_PI, &orientation) && gdk_android_seat_normalize_range (env, device, event, pointer_index, AMOTION_EVENT_AXIS_TILT, 0.f, G_PI / 2.f, &tilt))
         {
           // Taken and modified from Termux-x11. Unlike the other axes, x/y-tilt are
           // in [-1;1], which are the bounds of $\frac{\arcsin(x)}{0.5*\pi}$.
