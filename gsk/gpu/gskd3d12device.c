@@ -2,6 +2,7 @@
 
 #include "gskd3d12deviceprivate.h"
 #include "gskd3d12imageprivate.h"
+#include "gskgpuglobalsopprivate.h"
 
 #include "gdk/win32/gdkd3d12contextprivate.h"
 #include "gdk/win32/gdkd3d12texture.h"
@@ -12,6 +13,8 @@ struct _GskD3d12Device
   GskGpuDevice parent_instance;
 
   ID3D12Device *device;
+
+  ID3D12RootSignature *root_signature;
 };
 
 struct _GskD3d12DeviceClass
@@ -93,6 +96,7 @@ gsk_d3d12_device_finalize (GObject *object)
   display = gsk_gpu_device_get_display (device);
   g_object_steal_data (G_OBJECT (display), "-gsk-d3d12-device");
 
+  gdk_win32_com_clear (&self->root_signature);
   gdk_win32_com_clear (&self->device);
 
   G_OBJECT_CLASS (gsk_d3d12_device_parent_class)->finalize (object);
@@ -132,9 +136,41 @@ gsk_d3d12_device_setup (GskD3d12Device *self,
                         /* not used */ 1);
 }
 
+static void
+gsk_d3d12_device_create_d3d12_objects (GskD3d12Device *self)
+{
+  ID3DBlob *signature;
+
+  hr_warn (D3D12SerializeRootSignature ((&(D3D12_ROOT_SIGNATURE_DESC) {
+                                            .NumParameters = 1,
+                                            .pParameters = (D3D12_ROOT_PARAMETER[1]) {
+                                              {
+                                                .ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS,
+                                                .Constants = {
+                                                    .ShaderRegister = 0,
+                                                    .RegisterSpace = 0,
+                                                    .Num32BitValues = sizeof (GskGpuGlobalsInstance) / 4,
+                                                },
+                                                .ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL,
+                                              },
+                                            },
+                                        }),
+                                        D3D_ROOT_SIGNATURE_VERSION_1,
+                                        &signature,
+                                        NULL));
+  hr_warn (ID3D12Device_CreateRootSignature (self->device,
+                                             0,
+                                             ID3D10Blob_GetBufferPointer (signature),
+                                             ID3D10Blob_GetBufferSize (signature),
+                                             &IID_ID3D12RootSignature,
+                                             (void **) &self->root_signature));
+
+  gdk_win32_com_clear (&signature);
+}
+
 GskGpuDevice *
 gsk_d3d12_device_get_for_display (GdkDisplay  *display,
-                                   GError     **error)
+                                   GError    **error)
 {
   GskD3d12Device *self;
 
@@ -155,6 +191,8 @@ gsk_d3d12_device_get_for_display (GdkDisplay  *display,
 
   gsk_d3d12_device_setup (self, display);
 
+  gsk_d3d12_device_create_d3d12_objects (self);
+
   g_object_set_data (G_OBJECT (display), "-gsk-d3d12-device", self);
 
   return GSK_GPU_DEVICE (self);
@@ -164,4 +202,10 @@ ID3D12Device *
 gsk_d3d12_device_get_d3d12_device (GskD3d12Device *self)
 {
   return self->device;
+}
+
+ID3D12RootSignature *
+gsk_d3d12_device_get_d3d12_root_signature (GskD3d12Device *self)
+{
+  return self->root_signature;
 }
