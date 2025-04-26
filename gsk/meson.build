@@ -191,19 +191,11 @@ if have_vulkan
   ])
 endif # have_vulkan
 
-if have_vulkan
+if get_variable('win32_enabled')
   gsk_private_sources += files([
-    'gpu/gskvulkanbuffer.c',
-    'gpu/gskvulkandevice.c',
-    'gpu/gskvulkanframe.c',
-    'gpu/gskvulkanimage.c',
-    'gpu/gskvulkanmemory.c',
-    'gpu/gskvulkanycbcr.c',
-  ])
-endif # have_vulkan
-
-if win32_enabled
-  gsk_private_sources += files([
+    'gpu/gskd3d12device.c',
+    'gpu/gskd3d12frame.c',
+    'gpu/gskd3d12image.c',
   ])
 endif
 
