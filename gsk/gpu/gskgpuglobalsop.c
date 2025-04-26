@@ -79,6 +79,24 @@ gsk_gpu_globals_op_gl_command (GskGpuOp          *op,
   return op->next;
 }
 
+#ifdef GDK_WINDOWING_WIN32
+static GskGpuOp *
+gsk_gpu_globals_op_d3d12_command (GskGpuOp             *op,
+                                  GskGpuFrame          *frame,
+                                  GskD3d12CommandState *state)
+{
+  GskGpuGlobalsOp *self = (GskGpuGlobalsOp *) op;
+
+  ID3D12GraphicsCommandList_SetGraphicsRoot32BitConstants (state->command_list,
+                                                           0,
+                                                           sizeof (self->instance) / 4,
+                                                           &self->instance,
+                                                           0);
+
+  return op->next;
+}
+#endif
+
 static const GskGpuOpClass GSK_GPU_GLOBALS_OP_CLASS = {
   GSK_GPU_OP_SIZE (GskGpuGlobalsOp),
   GSK_GPU_STAGE_COMMAND,
@@ -87,7 +105,10 @@ static const GskGpuOpClass GSK_GPU_GLOBALS_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   gsk_gpu_globals_op_vk_command,
 #endif
-  gsk_gpu_globals_op_gl_command
+  gsk_gpu_globals_op_gl_command,
+#ifdef GDK_WINDOWING_WIN32
+  gsk_gpu_globals_op_d3d12_command,
+#endif
 };
 
 void
