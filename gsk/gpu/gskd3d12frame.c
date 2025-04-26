@@ -161,12 +161,17 @@ gsk_d3d12_frame_submit (GskGpuFrame       *frame,
                         GskGpuOp          *op)
 {
   GskD3d12Frame *self = GSK_D3D12_FRAME (frame);
+  GskD3d12Device *device;
   GskD3d12CommandState state = {
     .command_list = self->command_list,
   };
   ID3D12CommandQueue *queue;
 
+  device = GSK_D3D12_DEVICE (gsk_gpu_frame_get_device (frame));
   queue = gdk_d3d12_context_get_command_queue (GDK_D3D12_CONTEXT (gsk_gpu_frame_get_context (frame)));
+
+  ID3D12GraphicsCommandList_SetGraphicsRootSignature (self->command_list,
+                                                      gsk_d3d12_device_get_d3d12_root_signature (device));
 
   while (op)
     {
