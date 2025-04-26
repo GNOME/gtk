@@ -68,7 +68,6 @@
 -(void)setGdkSurface:(GdkMacosSurface *)surface;
 -(void)setStyleMask:(NSWindowStyleMask)styleMask;
 -(void)showAndMakeKey:(BOOL)makeKey;
--(BOOL)trackManualMove;
 -(BOOL)trackManualResize;
 -(void)setDecorated:(BOOL)decorated;
 -(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage;
