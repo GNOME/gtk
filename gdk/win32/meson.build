@@ -17,6 +17,7 @@ gdk_win32_sources = gdk_win32_public_sources + files([
   'gdkcairocontext-win32.c',
   'gdkclipboard-win32.c',
   'gdkclipdrop-win32.c',
+  'gdkd3d12context.c',
   'gdkd3d12utils.c',
   'gdkdevicemanager-win32.c',
   'gdkdevice-virtual.c',
