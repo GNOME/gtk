@@ -9,8 +9,6 @@ gdk_macos_public_sources = files([
 ])
 
 gdk_macos_sources = gdk_macos_public_sources + files([
-  'edgesnapping.c',
-
   'gdkdisplaylinksource.c',
   'gdkmacosbuffer.c',
   'gdkmacoscairocontext.c',

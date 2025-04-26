@@ -29,6 +29,7 @@
 #include "gdkmacoskeymap-private.h"
 #include "gdkmacossurface-private.h"
 #include "gdkmacosseat-private.h"
+#include "gdkmacosutils-private.h"
 
 #include "gdk/gdkeventsprivate.h"
 
