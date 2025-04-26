@@ -1,5 +1,9 @@
 [wrap-git]
-directory=fontconfig
-url=https://github.com/centricular/fontconfig.git
-push-url=git@github.com:centricular/fontconfig.git
-revision=meson
+directory = fontconfig
+url = https://gitlab.freedesktop.org/fontconfig/fontconfig
+push-url = git@ssh.gitlab.freedesktop.org:fontconfig/fontconfig.git
+depth = 1
+revision = 2.15.0
+
+[provide]
+fontconfig = fontconfig_dep

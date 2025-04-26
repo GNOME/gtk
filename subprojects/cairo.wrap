@@ -1,5 +1,10 @@
 [wrap-git]
-directory=cairo
-url=https://github.com/centricular/cairo.git
-push-url=git@github.com:centricular/cairo.git
-revision=meson
+directory = cairo
+url = https://gitlab.freedesktop.org/cairo/cairo.git
+push-url = git@ssh.gitlab.freedesktop.org:cairo/cairo.git
+revision = 1.18.2
+depth = 1
+
+[provide]
+cairo = libcairo_dep
+cairo-gobject = libcairogobject_dep

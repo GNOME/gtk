@@ -76,7 +76,7 @@ demos = files([
 
 gtkdemo_deps = [libgtk_dep]
 
-if pango_dep.version().version_compare('>=1.44.0') and harfbuzz_dep.found() and cc.has_header_symbol(
+if pango_dep.version().version_compare('>=1.44.0') and harfbuzz_dep.found() and harfbuzz_dep.type_name() != 'internal' and cc.has_header_symbol(
   'hb-ot.h',
   'hb_ot_var_get_axis_count',
   dependencies: harfbuzz_dep
