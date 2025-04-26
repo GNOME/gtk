@@ -17,6 +17,9 @@ struct _GskD3d12Frame
 {
   GskGpuFrame parent_instance;
 
+  ID3D12CommandAllocator *command_allocator;
+  ID3D12GraphicsCommandList *command_list;
+
   ID3D12Fence *fence;
   guint64 fence_wait;
 };
@@ -55,6 +58,18 @@ gsk_d3d12_frame_setup (GskGpuFrame *frame)
 
   d3d12_device = gsk_d3d12_device_get_d3d12_device (GSK_D3D12_DEVICE (gsk_gpu_frame_get_device (frame)));
 
+  hr_warn (ID3D12Device_CreateCommandAllocator (d3d12_device,
+                                                D3D12_COMMAND_LIST_TYPE_DIRECT,
+                                                &IID_ID3D12CommandAllocator,
+                                                (void **) &self->command_allocator));
+  hr_warn (ID3D12Device_CreateCommandList (d3d12_device,
+                                           0,
+                                           D3D12_COMMAND_LIST_TYPE_DIRECT,
+                                           self->command_allocator,
+                                           NULL,
+                                           &IID_ID3D12GraphicsCommandList,
+                                           (void **) &self->command_list));
+
   self->fence_wait = 0;
   hr_warn (ID3D12Device_CreateFence (d3d12_device,
                                      self->fence_wait,
@@ -70,6 +85,11 @@ gsk_d3d12_frame_cleanup (GskGpuFrame *frame)
 
   if (ID3D12Fence_GetCompletedValue (self->fence) < self->fence_wait)
     gdk_d3d12_fence_wait_sync (self->fence, self->fence_wait);
+
+  hr_warn (ID3D12CommandAllocator_Reset (self->command_allocator));
+  hr_warn (ID3D12GraphicsCommandList_Reset (self->command_list,
+                                            self->command_allocator,
+                                            NULL));
 
   GSK_GPU_FRAME_CLASS (gsk_d3d12_frame_parent_class)->cleanup (frame);
 }
@@ -141,7 +161,9 @@ gsk_d3d12_frame_submit (GskGpuFrame       *frame,
                         GskGpuOp          *op)
 {
   GskD3d12Frame *self = GSK_D3D12_FRAME (frame);
-  GskD3d12CommandState state = { 0, };
+  GskD3d12CommandState state = {
+    .command_list = self->command_list,
+  };
   ID3D12CommandQueue *queue;
 
   queue = gdk_d3d12_context_get_command_queue (GDK_D3D12_CONTEXT (gsk_gpu_frame_get_context (frame)));
@@ -150,6 +172,10 @@ gsk_d3d12_frame_submit (GskGpuFrame       *frame,
     {
       op = gsk_gpu_op_d3d12_command (op, frame, &state);
     }
+
+  hr_warn (ID3D12GraphicsCommandList_Close (self->command_list));
+
+  ID3D12CommandQueue_ExecuteCommandLists (queue, 1, (ID3D12CommandList **) &self->command_list);
 }
 
 static void
@@ -158,6 +184,8 @@ gsk_d3d12_frame_finalize (GObject *object)
   GskD3d12Frame *self = GSK_D3D12_FRAME (object);
 
   gdk_win32_com_clear (&self->fence);
+  gdk_win32_com_clear (&self->command_list);
+  gdk_win32_com_clear (&self->command_allocator);
 
   G_OBJECT_CLASS (gsk_d3d12_frame_parent_class)->finalize (object);
 }
