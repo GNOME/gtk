@@ -52,7 +52,7 @@ struct _GskVulkanCommandState
 #ifdef GDK_WINDOWING_WIN32
 struct _GskD3d12CommandState
 {
-  int totally_unused;
+  ID3D12GraphicsCommandList *command_list;
 };
 #endif
 struct _GskGpuOp
