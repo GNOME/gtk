@@ -16,5 +16,7 @@ GskGpuDevice *          gsk_d3d12_device_get_for_display                (GdkDisp
                                                                          GError                **error);
 
 ID3D12Device *          gsk_d3d12_device_get_d3d12_device               (GskD3d12Device         *self);
+ID3D12RootSignature *   gsk_d3d12_device_get_d3d12_root_signature       (GskD3d12Device         *self);
+
 
 G_END_DECLS
