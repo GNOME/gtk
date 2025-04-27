@@ -77,8 +77,6 @@ struct _GdkVulkanContextPrivate {
   guint n_images;
   VkImage *images;
   cairo_region_t **regions;
-
-  VkSemaphore draw_semaphore;
 #endif
 
   guint32 draw_index;
@@ -679,9 +677,11 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
   GdkColorState *color_state;
   VkResult acquire_result;
+  VkSemaphore draw_semaphore;
   guint i;
 
-  g_assert (priv->draw_semaphore != VK_NULL_HANDLE);
+  g_assert (context_data != NULL);
+  draw_semaphore = *(VkSemaphore *) context_data;
 
   color_state = gdk_surface_get_color_state (surface);
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));
@@ -715,7 +715,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
       acquire_result = GDK_VK_CHECK (vkAcquireNextImageKHR, gdk_vulkan_context_get_device (context),
                                                             priv->swapchain,
                                                             UINT64_MAX,
-                                                            priv->draw_semaphore,
+                                                            draw_semaphore,
                                                             VK_NULL_HANDLE,
                                                             &priv->draw_index);
       if ((acquire_result == VK_ERROR_OUT_OF_DATE_KHR) ||
@@ -732,7 +732,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
                              &(VkSubmitInfo) {
                                .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
                                .waitSemaphoreCount = 1,
-                               .pWaitSemaphores = &priv->draw_semaphore,
+                               .pWaitSemaphores = &draw_semaphore,
                                .pWaitDstStageMask = &mask,
                              },
                              VK_NULL_HANDLE);
@@ -764,8 +764,6 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
 
       break;
     }
-
-  priv->draw_semaphore = VK_NULL_HANDLE;
 
   cairo_region_union (region, priv->regions[priv->draw_index]);
 
@@ -1454,30 +1452,6 @@ gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
   g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), 0);
 
   return priv->draw_index;
-}
-
-/**
- * gdk_vulkan_context_set_draw_semaphore:
- * @context: a `GdkVulkanContext`
- * @semaphore: a `VkSemaphore`
- *
- * Sets the Vulkan semaphore that will be used in the immediately following
- * gdk_draw_context_begin_frame() call.
- * This is essentially an extra argument for that call, but without extending the
- * arguments of that generic function with Vulkan-specific things.
- *
- * This function must be called or begin_frame() will abort.
- */
-void
-gdk_vulkan_context_set_draw_semaphore (GdkVulkanContext *context,
-                                       VkSemaphore       semaphore)
-{
-  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-
-  g_return_if_fail (GDK_IS_VULKAN_CONTEXT (context));
-  g_return_if_fail (priv->draw_semaphore == VK_NULL_HANDLE);
-
-  priv->draw_semaphore = semaphore;
 }
 
 static gboolean

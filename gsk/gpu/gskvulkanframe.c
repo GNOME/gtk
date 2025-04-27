@@ -156,8 +156,12 @@ gsk_vulkan_frame_begin (GskGpuFrame           *frame,
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
 
-  gdk_vulkan_context_set_draw_semaphore (GDK_VULKAN_CONTEXT (context), self->vk_acquire_semaphore);
-  GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->begin (frame, context, depth, region, opaque);
+  gdk_draw_context_begin_frame_full (context,
+                                     /* We pass a pointer here for 32bit architectures */
+                                     &self->vk_acquire_semaphore,
+                                     depth,
+                                     region,
+                                     opaque);
 }
 
 static GskGpuImage *
