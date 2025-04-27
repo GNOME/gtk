@@ -1,7 +1,9 @@
 include:
   - project: 'Infrastructure/freedesktop-ci-templates'
     ref: '707b49ef'
-    file: 'templates/fedora.yml'
+    file:
+      - 'templates/fedora.yml'
+      - 'templates/debian.yml'
   - project: 'gnome/citemplates'
     file: 'flatpak/flatpak_ci_initiative.yml'
   - component:  gitlab.gnome.org/GNOME/citemplates/release-service@master
@@ -38,7 +40,6 @@ variables:
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled -Dbuild-testsuite=true -Dintrospection=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
   MESON_TEST_MAX_PROCESSES: 8
-  ANDROID_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/android:v2"
 
 workflow:
   rules:
@@ -118,6 +119,55 @@ container:fedora:
   extends:
     - .container.fedora
     - .fdo.container-build@fedora@x86_64
+  stage: prepare
+
+.container.android:
+  variables:
+    BASE_TAG: '2025-04-27.1'
+    FDO_DISTRIBUTION_VERSION: sid
+    FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
+    FDO_DISTRIBUTION_PACKAGES:
+      build-essential
+      gir1.2-appstream
+      git
+      git-lfs
+      glslc
+      gobject-introspection
+      libglib2.0-dev-bin
+      libglib-perl
+      libglib-object-introspection-perl
+      libipc-run-perl
+      libjson-perl
+      libset-scalar-perl
+      libxml2-utils
+      libxml-libxml-perl
+      libxml-libxslt-perl
+      meson
+      ninja-build
+      openjdk-17-jre
+      openjdk-17-jdk
+      perl
+      pkg-config
+      sassc
+      sdkmanager
+      sudo
+    FDO_DISTRIBUTION_EXEC: |
+      .gitlab-ci/android-sdk.sh &&
+      apt-get -y clean
+    ANDROID_HOME: "/opt/android/"
+    ANDROID_SDKVER: "35.0.0"
+    HOST_USER_ID: "5555"
+    LANG: "C.UTF-8"
+
+.distribution.android:
+  extends:
+    - .fdo.distribution-image@debian
+    - .container.android
+
+container:android:
+  extends:
+    - .container.android
+    - .fdo.container-build@debian@x86_64
   stage: prepare
 
 style-check-diff:
@@ -380,12 +430,13 @@ vs2019-x64:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
 android:
-  image: $ANDROID_IMAGE
+  extends:
+    - .distribution.android
   stage: build
   parallel:
     matrix:
       - ARCH: [ "aarch64", "x86_64" ]
-  needs: []
+  needs: ['container:android']
   variables:
     EXTRA_MESON_FLAGS: "-Dgperf:werror=false"
     BACKEND_FLAGS: "-Dandroid-backend=true"
@@ -418,7 +469,8 @@ android:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
 .android-defaults:
-  image: $ANDROID_IMAGE
+  extends:
+    - .distribution.android
   stage: android
   allow_failure: true
   artifacts:
@@ -430,7 +482,7 @@ android:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH != "main"
       when: "manual"
-  needs: []
+  needs: ['container:android']
   before_script:
     - .gitlab-ci/show-info-linux.sh
     - git clone https://github.com/sp1ritCS/gtk-android-builder.git pixiewood
@@ -452,7 +504,8 @@ android:demo:
     APPID: org.gtk.Demo4
 
 android-signer:
-  image: $ANDROID_IMAGE
+  extends:
+    - .distribution.android
   stage: android
   artifacts:
     paths:
