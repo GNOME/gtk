@@ -221,9 +221,6 @@ _gdk_win32_surface_enable_transparency (GdkSurface *surface)
   if (surface == NULL || GDK_SURFACE_HWND (surface) == NULL)
     return FALSE;
 
-  if (!gdk_display_is_composited (gdk_surface_get_display (surface)))
-    return FALSE;
-
   this_hwnd = GDK_SURFACE_HWND (surface);
 
   empty_region = CreateRectRgn (0, 0, -1, -1);
