@@ -15,6 +15,7 @@ struct _GskD3d12Image
 
   ID3D12Resource *resource;
   guint swizzle; /* aka shader4ComponentMapping */
+  D3D12_RESOURCE_STATES state;
 };
 
 G_DEFINE_TYPE (GskD3d12Image, gsk_d3d12_image, GSK_TYPE_GPU_IMAGE)
@@ -35,6 +36,7 @@ swizzle_is_framebuffer_compatible (guint swizzle)
 GskGpuImage *
 gsk_d3d12_image_new_for_resource (GskD3d12Device        *device,
                                   ID3D12Resource        *resource,
+                                  D3D12_RESOURCE_STATES  initial_state,
                                   gboolean               premultiplied)
 {
   GskD3d12Image *self;
@@ -48,6 +50,7 @@ gsk_d3d12_image_new_for_resource (GskD3d12Device        *device,
 
   self = g_object_new (GSK_TYPE_D3D12_IMAGE, NULL);
   self->device = g_object_ref (device);
+  self->state = initial_state;
 
   ID3D12Resource_AddRef (resource);
   self->resource = resource;
@@ -117,6 +120,7 @@ gsk_d3d12_image_new (GskD3d12Device       *device,
 
   self = g_object_new (GSK_TYPE_D3D12_IMAGE, NULL);
   self->device = g_object_ref (device);
+  self->state = initial_state;
   self->resource = resource;
   self->swizzle = swizzle;
 
@@ -188,4 +192,29 @@ ID3D12Resource *
 gsk_d3d12_image_get_resource (GskD3d12Image *self)
 {
   return self->resource;
+}
+
+void
+gsk_d3d12_image_transition (GskD3d12Image             *self,
+                            ID3D12GraphicsCommandList *command_list,
+                            D3D12_RESOURCE_STATES      state)
+{
+  if (self->state == state)
+    return;
+
+  ID3D12GraphicsCommandList_ResourceBarrier (command_list,
+                                            1,
+                                            ((D3D12_RESOURCE_BARRIER[1]) {
+                                              {
+                                                .Type = D3D12_RESOURCE_BARRIER_TYPE_TRANSITION,
+                                                .Flags = D3D12_RESOURCE_BARRIER_FLAG_NONE,
+                                                .Transition = {
+                                                    .pResource = self->resource,
+                                                    .Subresource = D3D12_RESOURCE_BARRIER_ALL_SUBRESOURCES,
+                                                    .StateBefore = self->state,
+                                                    .StateAfter = state,
+                                                }
+                                              }
+                                            }));
+  self->state = state;
 }
