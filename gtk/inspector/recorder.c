@@ -1515,6 +1515,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         float spread = gsk_inset_shadow_node_get_spread (node);
         float radius = gsk_inset_shadow_node_get_blur_radius (node);
 
+        add_snap_row (store, "Snap", gsk_inset_shadow_node_get_snap (node));
         add_color_row (store, "Color", color);
 
         add_text_row (store, "Offset", "%.2f %.2f", dx, dy);
@@ -1534,6 +1535,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         float radius = gsk_outset_shadow_node_get_blur_radius (node);
         float rect[12];
 
+        add_snap_row (store, "Snap", gsk_outset_shadow_node_get_snap (node));
         gsk_rounded_rect_to_float (outline, graphene_point_zero (), rect);
         add_text_row (store, "Outline",
                              "%.2f x %.2f + %.2f + %.2f",
