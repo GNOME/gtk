@@ -91,6 +91,29 @@ gsk_gpu_clear_op_gl_command (GskGpuOp          *op,
   return op->next;
 }
 
+#ifdef GDK_WINDOWING_WIN32
+static GskGpuOp *
+gsk_gpu_clear_op_d3d12_command (GskGpuOp             *op,
+                                GskGpuFrame          *frame,
+                                GskD3d12CommandState *state)
+{
+  GskGpuClearOp *self = (GskGpuClearOp *) op;
+
+  ID3D12GraphicsCommandList_ClearRenderTargetView (state->command_list,
+                                                   state->rtv,
+                                                   self->color,
+                                                   1,
+                                                   (&(D3D12_RECT) {
+                                                       .left = self->rect.x,
+                                                       .top = self->rect.y,
+                                                       .right = self->rect.x + self->rect.width,
+                                                       .bottom = self->rect.y + self->rect.height
+                                                   }));
+
+  return op->next;
+}
+#endif
+
 static const GskGpuOpClass GSK_GPU_CLEAR_OP_CLASS = {
   GSK_GPU_OP_SIZE (GskGpuClearOp),
   GSK_GPU_STAGE_COMMAND,
@@ -99,7 +122,10 @@ static const GskGpuOpClass GSK_GPU_CLEAR_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   gsk_gpu_clear_op_vk_command,
 #endif
-  gsk_gpu_clear_op_gl_command
+  gsk_gpu_clear_op_gl_command,
+#ifdef GDK_WINDOWING_WIN32
+  gsk_gpu_clear_op_d3d12_command,
+#endif
 };
 
 void
