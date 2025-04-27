@@ -12,6 +12,9 @@
 #ifdef GDK_RENDERING_VULKAN
 #include "gskvulkanimageprivate.h"
 #endif
+#ifdef GDK_WINDOWING_WIN32
+#include "gskd3d12imageprivate.h"
+#endif
 
 typedef struct _GskGpuRenderPassOp GskGpuRenderPassOp;
 
@@ -240,6 +243,85 @@ gsk_gpu_render_pass_op_gl_command (GskGpuOp          *op,
   return op;
 }
 
+#ifdef GDK_WINDOWING_WIN32
+static D3D12_RESOURCE_STATES
+gsk_gpu_render_pass_type_to_resource_states (GskRenderPassType type)
+{
+  switch (type)
+  {
+    default:
+      g_assert_not_reached ();
+    case GSK_RENDER_PASS_PRESENT:
+      return D3D12_RESOURCE_STATE_PRESENT;
+    case GSK_RENDER_PASS_OFFSCREEN:
+      return D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE;
+    case GSK_RENDER_PASS_EXPORT:
+      return D3D12_RESOURCE_STATE_COMMON;
+  }
+}
+
+static GskGpuOp *
+gsk_gpu_render_pass_op_d3d12_command (GskGpuOp             *op,
+                                      GskGpuFrame          *frame,
+                                      GskD3d12CommandState *state)
+{
+  GskGpuRenderPassOp *self = (GskGpuRenderPassOp *) op;
+
+  /* nesting frame passes not allowed */
+
+  gsk_d3d12_image_transition (GSK_D3D12_IMAGE (self->target),
+                              state->command_list,
+                              D3D12_RESOURCE_STATE_RENDER_TARGET);
+
+  //gsk_gpu_render_pass_op_do_barriers (self, state);
+
+  ID3D12GraphicsCommandList_OMSetRenderTargets (state->command_list,
+                                                1,
+                                                gsk_d3d12_image_get_rtv (GSK_D3D12_IMAGE (self->target)),
+                                                false,
+                                                NULL);
+
+  ID3D12GraphicsCommandList_RSSetViewports (state->command_list,
+                                            1,
+                                            (&(D3D12_VIEWPORT) {
+                                              .TopLeftX = 0,
+                                              .TopLeftY = 0,
+                                              .Width = gsk_gpu_image_get_width (self->target),
+                                              .Height = gsk_gpu_image_get_height (self->target),
+                                              .MinDepth = 0,
+                                              .MaxDepth = 1
+                                            }));
+
+  if (self->load_op == GSK_GPU_LOAD_OP_CLEAR)
+    {
+      ID3D12GraphicsCommandList_ClearRenderTargetView (state->command_list,
+                                                       *gsk_d3d12_image_get_rtv (GSK_D3D12_IMAGE (self->target)),
+                                                       self->clear_color,
+                                                       1,
+                                                       (&(D3D12_RECT) {
+                                                        .left = 0,
+                                                        .top = 0,
+                                                        .right = gsk_gpu_image_get_width (self->target),
+                                                        .bottom = gsk_gpu_image_get_height (self->target)
+                                                       }));
+    }
+
+  op = op->next;
+  while (op->op_class->stage != GSK_GPU_STAGE_END_PASS)
+    {
+      op = gsk_gpu_op_d3d12_command (op, frame, state);
+    }
+
+  op = gsk_gpu_op_d3d12_command (op, frame, state);
+
+  gsk_d3d12_image_transition (GSK_D3D12_IMAGE (self->target),
+                              state->command_list,
+                              gsk_gpu_render_pass_type_to_resource_states (self->pass_type));
+
+  return op;
+}
+#endif
+
 static const GskGpuOpClass GSK_GPU_RENDER_PASS_OP_CLASS = {
   GSK_GPU_OP_SIZE (GskGpuRenderPassOp),
   GSK_GPU_STAGE_BEGIN_PASS,
@@ -248,7 +330,10 @@ static const GskGpuOpClass GSK_GPU_RENDER_PASS_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   gsk_gpu_render_pass_op_vk_command,
 #endif
-  gsk_gpu_render_pass_op_gl_command
+  gsk_gpu_render_pass_op_gl_command,
+#ifdef GDK_WINDOWING_WIN32
+  gsk_gpu_render_pass_op_d3d12_command,
+#endif
 };
 
 typedef struct _GskGpuFramePassEndOp GskGpuFramePassEndOp;
@@ -343,6 +428,18 @@ gsk_gpu_render_pass_end_op_gl_command (GskGpuOp          *op,
   return op->next;
 }
 
+#ifdef GDK_WINDOWING_WIN32
+static GskGpuOp *
+gsk_gpu_render_pass_end_op_d3d12_command (GskGpuOp             *op,
+                                          GskGpuFrame          *frame,
+                                          GskD3d12CommandState *state)
+{
+  /* nothing to do here, everything's done by the renderpass op */
+
+  return op->next;
+}
+#endif
+
 static const GskGpuOpClass GSK_GPU_RENDER_PASS_END_OP_CLASS = {
   GSK_GPU_OP_SIZE (GskGpuFramePassEndOp),
   GSK_GPU_STAGE_END_PASS,
@@ -351,7 +448,10 @@ static const GskGpuOpClass GSK_GPU_RENDER_PASS_END_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   gsk_gpu_render_pass_end_op_vk_command,
 #endif
-  gsk_gpu_render_pass_end_op_gl_command
+  gsk_gpu_render_pass_end_op_gl_command,
+#ifdef GDK_WINDOWING_WIN32
+  gsk_gpu_render_pass_end_op_d3d12_command,
+#endif
 };
 
 void
