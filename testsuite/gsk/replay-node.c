@@ -332,25 +332,24 @@ replay_cross_fade_node (GskRenderNode *node, GtkSnapshot *snapshot)
 static void
 replay_text_node (GskRenderNode *node, GtkSnapshot *snapshot)
 {
-#if 0
-  /* The following does not compile, since gtk_snapshot_append_text () is
-   * not exported.  */
-
   PangoFont *font = gsk_text_node_get_font (node);
   PangoGlyphString glyphs;
   guint n_glyphs = 0;
   glyphs.glyphs = (PangoGlyphInfo *) gsk_text_node_get_glyphs (node, &n_glyphs);
-  const GdkRGBA *color = gsk_text_node_get_color (node);
+  const GdkColor *color = gsk_text_node_get_gdk_color (node);
   const graphene_point_t *offset = gsk_text_node_get_offset (node);
+  GskPointSnap snap = gsk_text_node_get_snap (node);
 
   glyphs.num_glyphs = n_glyphs;
   glyphs.log_clusters = NULL;
 
-  gtk_snapshot_append_text (snapshot, font, glyphs, color,
-                            offset->x, offset->y);
-#else
-  gtk_snapshot_append_node (snapshot, node);
-#endif
+  gtk_snapshot_save (snapshot);
+  gtk_snapshot_set_snap (snapshot, gsk_rect_snap_new_from_point_snaps (snap, snap));
+
+  gtk_snapshot_add_text (snapshot, font, &glyphs, color,
+                         offset->x, offset->y);
+
+  gtk_snapshot_restore (snapshot);
 }
 
 static void
