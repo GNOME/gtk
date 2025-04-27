@@ -26,8 +26,6 @@
 struct _GskGLRenderer
 {
   GskGpuRenderer parent_instance;
-
-  GskGpuImage *backbuffer;
 };
 
 struct _GskGLRendererClass
@@ -104,16 +102,9 @@ gsk_gl_renderer_restore_current (GskGpuRenderer *renderer,
     gdk_gl_context_clear_current ();
 }
 
-static void
-gsk_gl_renderer_free_backbuffer (GskGLRenderer *self)
-{
-  g_clear_object (&self->backbuffer);
-}
-
 static GskGpuImage *
 gsk_gl_renderer_get_backbuffer (GskGpuRenderer *renderer)
 {
-  GskGLRenderer *self = GSK_GL_RENDERER (renderer);
   GdkDrawContext *context;
   GdkSurface *surface;
   guint width, height;
@@ -122,30 +113,17 @@ gsk_gl_renderer_get_backbuffer (GskGpuRenderer *renderer)
   surface = gdk_draw_context_get_surface (context);
   gdk_draw_context_get_buffer_size (context, &width, &height);
 
-  if (self->backbuffer == NULL ||
-      (gsk_gpu_image_get_conversion (self->backbuffer) == GSK_GPU_CONVERSION_SRGB) != gdk_surface_get_gl_is_srgb (surface) ||
-      gsk_gpu_image_get_width (self->backbuffer) != width ||
-      gsk_gpu_image_get_height (self->backbuffer) != height)
-    {
-      gsk_gl_renderer_free_backbuffer (self);
-      self->backbuffer = gsk_gl_image_new_backbuffer (GSK_GL_DEVICE (gsk_gpu_renderer_get_device (renderer)),
-                                                      GDK_GL_CONTEXT (context),
-                                                      GDK_MEMORY_DEFAULT /* FIXME */,
-                                                      gdk_surface_get_gl_is_srgb (surface),
-                                                      width,
-                                                      height);
-    }
-
-  return self->backbuffer;
+  return gsk_gl_image_new_backbuffer (GSK_GL_DEVICE (gsk_gpu_renderer_get_device (renderer)),
+                                      GDK_GL_CONTEXT (context),
+                                      GDK_MEMORY_DEFAULT /* FIXME */,
+                                      gdk_surface_get_gl_is_srgb (surface),
+                                      width,
+                                      height);
 }
 
 static void
 gsk_gl_renderer_unrealize (GskRenderer *renderer)
 {
-  GskGLRenderer *self = GSK_GL_RENDERER (renderer);
-
-  gsk_gl_renderer_free_backbuffer (self);
-
   gdk_gl_context_clear_current ();
 
   GSK_RENDERER_CLASS (gsk_gl_renderer_parent_class)->unrealize (renderer);

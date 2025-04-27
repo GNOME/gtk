@@ -378,12 +378,6 @@ gsk_vulkan_frame_init (GskVulkanFrame *self)
   self->pool_n_buffers = 8;
 }
 
-VkFence
-gsk_vulkan_frame_get_vk_fence (GskVulkanFrame *self)
-{
-  return self->vk_fence;
-}
-
 void
 gsk_vulkan_semaphores_add_wait (GskVulkanSemaphores  *self,
                                 VkSemaphore           semaphore,

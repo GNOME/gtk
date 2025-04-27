@@ -466,6 +466,8 @@ gsk_gpu_renderer_render (GskRenderer          *renderer,
 
   gsk_gpu_frame_end (frame, priv->context);
 
+  g_object_unref (backbuffer);
+
   gsk_gpu_device_queue_gc (priv->device);
 }
 

@@ -2717,6 +2717,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
     .gl = {
@@ -2767,6 +2768,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
     .gl = {
@@ -2817,6 +2819,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .fallbacks = (GdkMemoryFormat[]) {
         GDK_MEMORY_R16G16B16,
         GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
+        GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
     .gl = {
