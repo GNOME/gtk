@@ -87,7 +87,9 @@ gsk_d3d12_renderer_get_backbuffer (GskGpuRenderer *renderer)
                                       &IID_ID3D12Resource,
                                       (void **) &resource));
 
-  result = gsk_d3d12_image_new_for_resource (resource, TRUE);
+  result = gsk_d3d12_image_new_for_resource (GSK_D3D12_DEVICE (gsk_gpu_renderer_get_device (renderer)),
+                                             resource,
+                                             TRUE);
 
   gdk_win32_com_clear (&resource);
 
