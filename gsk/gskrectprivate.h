@@ -4,6 +4,7 @@
 #include "gsk/gskenums.h"
 #include "gsk/gskpointsnap.h"
 #include "gsk/gskrectsnap.h"
+#include "gsk/gskroundedrect.h"
 
 #include <graphene.h>
 #include <math.h>
@@ -324,6 +325,23 @@ gsk_point_snap_to_grid (const graphene_point_t *src,
 
   dest->x = x / xscale - grid_offset->x;
   dest->y = y / xscale - grid_offset->y;
+}
+
+/* This function snaps the bounds of a rounded rect.
+ * Note that we intentionally don't snap the corner widths,
+ * since pixel alignment is not very relevant for rounded
+ * corners.
+ */
+static inline void
+gsk_rounded_rect_snap_to_grid (const GskRoundedRect   *rect,
+                               GskRectSnap             snap,
+                               const graphene_vec2_t  *grid_scale,
+                               const graphene_point_t *grid_offset,
+                               GskRoundedRect         *snapped)
+{
+  gsk_rounded_rect_init_copy (snapped, rect);
+  gsk_rect_snap_to_grid (&rect->bounds, snap, grid_scale, grid_offset, &snapped->bounds);
+  gsk_rounded_rect_normalize (snapped);
 }
 
 static inline gboolean G_GNUC_PURE
