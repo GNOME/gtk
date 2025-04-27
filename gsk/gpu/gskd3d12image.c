@@ -11,6 +11,8 @@ struct _GskD3d12Image
 {
   GskGpuImage parent_instance;
 
+  GskD3d12Device *device;
+
   ID3D12Resource *resource;
   guint swizzle; /* aka shader4ComponentMapping */
 };
@@ -31,8 +33,9 @@ swizzle_is_framebuffer_compatible (guint swizzle)
 }
 
 GskGpuImage *
-gsk_d3d12_image_new_for_resource (ID3D12Resource *resource,
-                                  gboolean        premultiplied)
+gsk_d3d12_image_new_for_resource (GskD3d12Device        *device,
+                                  ID3D12Resource        *resource,
+                                  gboolean               premultiplied)
 {
   GskD3d12Image *self;
   D3D12_RESOURCE_DESC desc;
@@ -44,6 +47,7 @@ gsk_d3d12_image_new_for_resource (ID3D12Resource *resource,
     return NULL;
 
   self = g_object_new (GSK_TYPE_D3D12_IMAGE, NULL);
+  self->device = g_object_ref (device);
 
   ID3D12Resource_AddRef (resource);
   self->resource = resource;
@@ -61,7 +65,7 @@ gsk_d3d12_image_new_for_resource (ID3D12Resource *resource,
 }
 
 GskGpuImage *
-gsk_d3d12_image_new (ID3D12Device         *device,
+gsk_d3d12_image_new (GskD3d12Device       *device,
                      GdkMemoryFormat       format,
                      gsize                 width,
                      gsize                 height,
@@ -75,10 +79,12 @@ gsk_d3d12_image_new (ID3D12Device         *device,
   DXGI_FORMAT dxgi_format;
   guint swizzle;
   GskGpuImageFlags flags;
+  ID3D12Device *d3d12_device;
 
   dxgi_format = gdk_memory_format_get_dxgi_format (format, &swizzle);
+  d3d12_device = gsk_d3d12_device_get_d3d12_device (device);
 
-  hr = ID3D12Device_CreateCommittedResource (device,
+  hr = ID3D12Device_CreateCommittedResource (d3d12_device,
                                              (&(D3D12_HEAP_PROPERTIES) {
                                                  .Type = D3D12_HEAP_TYPE_DEFAULT,
                                                  .CreationNodeMask = 1,
@@ -110,7 +116,7 @@ gsk_d3d12_image_new (ID3D12Device         *device,
     }
 
   self = g_object_new (GSK_TYPE_D3D12_IMAGE, NULL);
-
+  self->device = g_object_ref (device);
   self->resource = resource;
   self->swizzle = swizzle;
 
@@ -156,6 +162,8 @@ gsk_d3d12_image_finalize (GObject *object)
   GskD3d12Image *self = GSK_D3D12_IMAGE (object);
 
   gdk_win32_com_clear (&self->resource);
+
+  g_object_unref (self->device);
 
   G_OBJECT_CLASS (gsk_d3d12_image_parent_class)->finalize (object);
 }

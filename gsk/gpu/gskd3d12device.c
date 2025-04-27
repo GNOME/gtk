@@ -36,7 +36,7 @@ gsk_d3d12_device_create_offscreen_image (GskGpuDevice   *device,
 
   g_warn_if_fail (with_mipmap == FALSE);
 
-  return gsk_d3d12_image_new (self->device,
+  return gsk_d3d12_image_new (self,
                               format,
                               width,
                               height,
@@ -72,7 +72,7 @@ gsk_d3d12_device_create_download_image (GskGpuDevice   *device,
 {
   GskD3d12Device *self = GSK_D3D12_DEVICE (device);
 
-  return gsk_d3d12_image_new (self->device,
+  return gsk_d3d12_image_new (self,
                               gdk_memory_depth_get_format (depth),
                               width,
                               height,
