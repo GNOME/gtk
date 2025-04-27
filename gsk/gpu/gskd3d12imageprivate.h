@@ -18,8 +18,13 @@ GskGpuImage *           gsk_d3d12_image_new                             (GskD3d1
                                                                          D3D12_RESOURCE_FLAGS            resource_flags);
 GskGpuImage *           gsk_d3d12_image_new_for_resource                (GskD3d12Device                 *device,
                                                                          ID3D12Resource                 *resource,
+                                                                         D3D12_RESOURCE_STATES           initial_state,
                                                                          gboolean                        premultiplied);
 
 ID3D12Resource *        gsk_d3d12_image_get_resource                    (GskD3d12Image                  *self);
+
+void                    gsk_d3d12_image_transition                      (GskD3d12Image                  *self,
+                                                                         ID3D12GraphicsCommandList      *command_list,
+                                                                         D3D12_RESOURCE_STATES           state);
 
 G_END_DECLS
