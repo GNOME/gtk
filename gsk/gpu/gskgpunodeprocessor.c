@@ -2474,6 +2474,13 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
 {
   float spread, blur_radius;
   const GdkColor *color;
+  GskRoundedRect outline;
+
+  gsk_rounded_rect_snap_to_grid (gsk_inset_shadow_node_get_outline (node),
+                                 gsk_inset_shadow_node_get_snap (node),
+                                 &self->scale,
+                                 &self->offset,
+                                 &outline);
 
   color = gsk_inset_shadow_node_get_gdk_color (node);
   spread = gsk_inset_shadow_node_get_spread (node);
@@ -2491,7 +2498,7 @@ gsk_gpu_node_processor_add_inset_shadow_node (GskGpuNodeProcessor *self,
                          self->ccs,
                          self->opacity,
                          &self->offset,
-                         gsk_inset_shadow_node_get_outline (node),
+                         &outline,
                          gsk_inset_shadow_node_get_offset (node),
                          (float[4]) { spread, spread, spread, spread },
                          colors);
@@ -2523,6 +2530,13 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
   float spread, blur_radius;
   const GdkColor *color;
   const graphene_point_t *offset;
+  GskRoundedRect snapped;
+
+  gsk_rounded_rect_snap_to_grid (gsk_outset_shadow_node_get_outline (node),
+                                 gsk_outset_shadow_node_get_snap (node),
+                                 &self->scale,
+                                 &self->offset,
+                                 &snapped);
 
   color = gsk_outset_shadow_node_get_gdk_color (node);
   spread = gsk_outset_shadow_node_get_spread (node);
@@ -2534,7 +2548,7 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
       GskRoundedRect outline;
       GdkColor colors[4];
 
-      gsk_rounded_rect_init_copy (&outline, gsk_outset_shadow_node_get_outline (node));
+      gsk_rounded_rect_init_copy (&outline, &snapped);
       gsk_rounded_rect_shrink (&outline, -spread, -spread, -spread, -spread);
       gsk_rect_init_offset (&outline.bounds, &outline.bounds, offset);
 
@@ -2563,7 +2577,7 @@ gsk_gpu_node_processor_add_outset_shadow_node (GskGpuNodeProcessor *self,
                              &self->offset,
                              FALSE,
                              &node->bounds,
-                             gsk_outset_shadow_node_get_outline (node),
+                             &snapped,
                              offset,
                              spread,
                              blur_radius,
