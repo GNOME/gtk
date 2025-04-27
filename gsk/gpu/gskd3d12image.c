@@ -16,6 +16,8 @@ struct _GskD3d12Image
   ID3D12Resource *resource;
   guint swizzle; /* aka shader4ComponentMapping */
   D3D12_RESOURCE_STATES state;
+
+  D3D12_CPU_DESCRIPTOR_HANDLE rtv;
 };
 
 G_DEFINE_TYPE (GskD3d12Image, gsk_d3d12_image, GSK_TYPE_GPU_IMAGE)
@@ -165,6 +167,9 @@ gsk_d3d12_image_finalize (GObject *object)
 {
   GskD3d12Image *self = GSK_D3D12_IMAGE (object);
 
+  if (self->rtv.ptr)
+    gsk_d3d12_device_free_rtv (self->device, &self->rtv);
+
   gdk_win32_com_clear (&self->resource);
 
   g_object_unref (self->device);
@@ -192,6 +197,20 @@ ID3D12Resource *
 gsk_d3d12_image_get_resource (GskD3d12Image *self)
 {
   return self->resource;
+}
+
+const D3D12_CPU_DESCRIPTOR_HANDLE *
+gsk_d3d12_image_get_rtv (GskD3d12Image *self)
+{
+  if (self->rtv.ptr == 0)
+    {
+      gsk_d3d12_device_alloc_rtv (self->device, &self->rtv);
+      ID3D12Device_CreateRenderTargetView (gsk_d3d12_device_get_d3d12_device (self->device),
+                                           self->resource,
+                                           NULL,
+                                           self->rtv);
+    }
+  return &self->rtv;
 }
 
 void
