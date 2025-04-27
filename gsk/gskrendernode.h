@@ -728,6 +728,14 @@ GskRenderNode *         gsk_text_node_new                       (PangoFont      
                                                                  PangoGlyphString         *glyphs,
                                                                  const GdkRGBA            *color,
                                                                  const graphene_point_t   *offset);
+GDK_AVAILABLE_IN_4_20
+GskRenderNode *         gsk_text_node_new_snapped               (PangoFont                *font,
+                                                                 PangoGlyphString         *glyphs,
+                                                                 const GdkColor           *color,
+                                                                 const graphene_point_t   *offset,
+                                                                 GskPointSnap              snap);
+GDK_AVAILABLE_IN_4_20
+GskPointSnap            gsk_text_node_get_snap                  (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 PangoFont *             gsk_text_node_get_font                  (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_4_2
@@ -741,6 +749,8 @@ GDK_AVAILABLE_IN_ALL
 const GdkRGBA *         gsk_text_node_get_color                 (const GskRenderNode      *node) G_GNUC_PURE;
 GDK_AVAILABLE_IN_ALL
 const graphene_point_t *gsk_text_node_get_offset                (const GskRenderNode      *node) G_GNUC_PURE;
+GDK_AVAILABLE_IN_4_20
+const GdkColor *        gsk_text_node_get_gdk_color             (const GskRenderNode      *node) G_GNUC_PURE;
 
 GDK_AVAILABLE_IN_ALL
 GType                   gsk_blur_node_get_type                  (void) G_GNUC_CONST;

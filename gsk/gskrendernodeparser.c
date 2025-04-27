@@ -25,6 +25,7 @@
 
 #include "gskpath.h"
 #include "gskpathbuilder.h"
+#include "gskpointsnap.h"
 #include "gskrectsnap.h"
 #include "gskroundedrectprivate.h"
 #include "gskrendernodeprivate.h"
@@ -1805,6 +1806,25 @@ parse_mask_mode (GtkCssParser *parser,
 }
 
 static gboolean
+parse_snap_dir (GtkCssParser *parser,
+                Context      *context,
+                gpointer      out_dir)
+{
+  if (gtk_css_parser_try_ident (parser, "round"))
+    *(GskSnapDirection *) out_dir = GSK_SNAP_ROUND;
+  else if (gtk_css_parser_try_ident (parser, "floor"))
+    *(GskSnapDirection *) out_dir = GSK_SNAP_FLOOR;
+  else if (gtk_css_parser_try_ident (parser, "ceil"))
+    *(GskSnapDirection *) out_dir = GSK_SNAP_CEIL;
+  else if (gtk_css_parser_try_ident (parser, "none"))
+    *(GskSnapDirection *) out_dir = GSK_SNAP_NONE;
+  else
+    return FALSE;
+
+  return TRUE;
+}
+
+static gboolean
 parse_rect_snap (GtkCssParser *parser,
                  Context      *context,
                  gpointer      out_snap)
@@ -1822,15 +1842,7 @@ parse_rect_snap (GtkCssParser *parser,
 
       for (i = 0; i < 4; i++)
         {
-          if (gtk_css_parser_try_ident (parser, "round"))
-            dir[i] = GSK_SNAP_ROUND;
-          else if (gtk_css_parser_try_ident (parser, "floor"))
-            dir[i] = GSK_SNAP_FLOOR;
-          else if (gtk_css_parser_try_ident (parser, "ceil"))
-            dir[i] = GSK_SNAP_CEIL;
-          else if (gtk_css_parser_try_ident (parser, "none"))
-            dir[i] = GSK_SNAP_NONE;
-          else
+          if (!parse_snap_dir (parser, context, &dir[i]))
             break;
         }
       if (i == 0)
@@ -1846,6 +1858,34 @@ parse_rect_snap (GtkCssParser *parser,
     }
 
   *(GskRectSnap *) out_snap = snap;
+  return TRUE;
+}
+
+static gboolean
+parse_point_snap (GtkCssParser *parser,
+                  Context      *context,
+                  gpointer      out_snap)
+{
+  GskSnapDirection dir[2];
+  gsize i;
+
+  for (i = 0; i < 2; i++)
+    {
+      if (!parse_snap_dir (parser, context, &dir[i]))
+        break;
+    }
+
+  if (i == 0)
+    {
+      gtk_css_parser_error_value (parser, "Unknown value for snap");
+      return FALSE;
+    }
+
+  if (i == 1)
+    dir[1] = dir[0];
+
+  *(GskPointSnap *) out_snap = GSK_POINT_SNAP_INIT (dir[0], dir[1]);
+
   return TRUE;
 }
 
@@ -3440,6 +3480,7 @@ parse_text_node (GtkCssParser *parser,
   cairo_antialias_t antialias = CAIRO_ANTIALIAS_GRAY;
   cairo_hint_metrics_t hint_metrics = CAIRO_HINT_METRICS_OFF;
   PangoFont *hinted;
+  GskPointSnap snap = GSK_POINT_SNAP_NONE;
   const Declaration declarations[] = {
     { "font", parse_font, clear_font, &font },
     { "offset", parse_point, NULL, &offset },
@@ -3448,6 +3489,7 @@ parse_text_node (GtkCssParser *parser,
     { "hint-style", parse_hint_style, NULL, &hint_style },
     { "antialias", parse_antialias, NULL, &antialias },
     { "hint-metrics", parse_hint_metrics, NULL, &hint_metrics },
+    { "snap", parse_point_snap, NULL, &snap },
   };
   GskRenderNode *result;
 
@@ -3486,7 +3528,7 @@ parse_text_node (GtkCssParser *parser,
     }
   else
     {
-      result = gsk_text_node_new2 (font, glyphs, &color, &offset);
+      result = gsk_text_node_new_snapped (font, glyphs, &color, &offset, snap);
       if (result == NULL)
         {
           gtk_css_parser_error_value (parser, "Glyphs result in empty text");
@@ -4606,18 +4648,18 @@ append_enum_param (Printer    *p,
   g_string_append_c (p->str, '\n');
 }
 
+static const char *snap_dir_names[] = {
+  [GSK_SNAP_NONE] = "none",
+  [GSK_SNAP_FLOOR] = "floor",
+  [GSK_SNAP_CEIL] = "ceil",
+  [GSK_SNAP_ROUND] = "round",
+};
+
 static void
 append_snap_param (Printer     *p,
                    const char  *param_name,
                    GskRectSnap  snap)
 {
-  static const char *names[] = {
-    [GSK_SNAP_NONE] = "none",
-    [GSK_SNAP_FLOOR] = "floor",
-    [GSK_SNAP_CEIL] = "ceil",
-    [GSK_SNAP_ROUND] = "round",
-  };
-
   if (snap == GSK_RECT_SNAP_NONE)
     return;
 
@@ -4636,25 +4678,46 @@ append_snap_param (Printer     *p,
       return;
     }
 
-  g_string_append (p->str, names[gsk_rect_snap_get_direction (snap, 0)]);
+  g_string_append (p->str, snap_dir_names[gsk_rect_snap_get_direction (snap, 0)]);
   if (gsk_rect_snap_get_direction (snap, 0) != gsk_rect_snap_get_direction (snap, 1) ||
       gsk_rect_snap_get_direction (snap, 0) != gsk_rect_snap_get_direction (snap, 2) ||
       gsk_rect_snap_get_direction (snap, 0) != gsk_rect_snap_get_direction (snap, 3))
     {
       g_string_append_c (p->str, ' ');
-      g_string_append (p->str, names[gsk_rect_snap_get_direction (snap, 1)]);
+      g_string_append (p->str, snap_dir_names[gsk_rect_snap_get_direction (snap, 1)]);
       if (gsk_rect_snap_get_direction (snap, 0) != gsk_rect_snap_get_direction (snap, 2) ||
           gsk_rect_snap_get_direction (snap, 1) != gsk_rect_snap_get_direction (snap, 3))
         {
           g_string_append_c (p->str, ' ');
-          g_string_append (p->str, names[gsk_rect_snap_get_direction (snap, 2)]);
+          g_string_append (p->str, snap_dir_names[gsk_rect_snap_get_direction (snap, 2)]);
           if (gsk_rect_snap_get_direction (snap, 1) != gsk_rect_snap_get_direction (snap, 3))
             {
               g_string_append_c (p->str, ' ');
-              g_string_append (p->str, names[gsk_rect_snap_get_direction (snap, 3)]);
+              g_string_append (p->str, snap_dir_names[gsk_rect_snap_get_direction (snap, 3)]);
             }
         }
     }
+  g_string_append (p->str, ";\n");
+}
+
+static void
+append_point_snap_param (Printer      *p,
+                         const char   *param_name,
+                         GskPointSnap  snap)
+{
+  if (snap == GSK_POINT_SNAP_NONE)
+    return;
+
+  _indent (p);
+  g_string_append_printf (p->str, "%s: ", param_name);
+
+  g_string_append (p->str, snap_dir_names[gsk_point_snap_get_direction (snap, 1)]);
+  if (gsk_point_snap_get_direction (snap, 0) != gsk_point_snap_get_direction (snap, 1))
+    {
+      g_string_append_c (p->str, ' ');
+      g_string_append (p->str, snap_dir_names[gsk_point_snap_get_direction (snap, 0)]);
+    }
+
   g_string_append (p->str, ";\n");
 }
 
@@ -5832,6 +5895,8 @@ render_node_print (Printer       *p,
 
         if (!graphene_point_equal (offset, graphene_point_zero ()))
           append_point_param (p, "offset", offset);
+
+        append_point_snap_param (p, "snap", gsk_text_node_get_snap (node));
 
         gsk_text_node_serialize_font_options (node, p);
 

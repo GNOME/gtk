@@ -509,6 +509,7 @@ Possible values for the line-join property are:
 | hint-style   | `<hint-style>`      | slight              | non-default |
 | antialias    | `<antialias>`       | gray                | non-default |
 | hint-metrics | `<hint-metrics>`    | off                 | non-default |
+| snap         | `<snap>`            | none                | non-default |
 
 Creates a node like `gsk_text_node_new()` with the given properties.
 
@@ -535,6 +536,11 @@ Possible value for hint-metrics are:
 
     hint-metrics:  on | off
 
+Possible values for the snap property are:
+
+    snap: ( round | floor | ceil | none ){1-2}
+
+### cairo
 ### texture
 
 | property | syntax              | default                | printed     |

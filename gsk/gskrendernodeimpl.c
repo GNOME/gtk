@@ -7639,6 +7639,8 @@ struct _GskTextNode
 
   guint num_glyphs;
   PangoGlyphInfo *glyphs;
+
+  GskPointSnap snap;
 };
 
 static void
@@ -7695,7 +7697,8 @@ gsk_text_node_diff (GskRenderNode *node1,
   if (self1->font == self2->font &&
       gdk_color_equal (&self1->color, &self2->color) &&
       graphene_point_equal (&self1->offset, &self2->offset) &&
-      self1->num_glyphs == self2->num_glyphs)
+      self1->num_glyphs == self2->num_glyphs &&
+      self1->snap == self2->snap)
     {
       guint i;
 
@@ -7765,18 +7768,19 @@ gsk_text_node_new (PangoFont              *font,
   GskRenderNode *node;
 
   gdk_color_init_from_rgba (&color2, color);
-  node = gsk_text_node_new2 (font, glyphs, &color2, offset);
+  node = gsk_text_node_new_snapped (font, glyphs, &color2, offset, GSK_POINT_SNAP_NONE);
   gdk_color_finish (&color2);
 
   return node;
 }
 
-/*< private >
- * gsk_text_node_new2:
+/**
+ * gsk_text_node_new_snapped:
  * @font: the `PangoFont` containing the glyphs
  * @glyphs: the `PangoGlyphString` to render
  * @color: the foreground color to render with
  * @offset: offset of the baseline
+ * @snap: the snap value
  *
  * Creates a render node that renders the given glyphs.
  *
@@ -7784,12 +7788,15 @@ gsk_text_node_new (PangoFont              *font,
  * color glyphs.
  *
  * Returns: (nullable) (transfer full) (type GskTextNode): a new `GskRenderNode`
+ *
+ * Since: 4.20
  */
 GskRenderNode *
-gsk_text_node_new2 (PangoFont              *font,
-                    PangoGlyphString       *glyphs,
-                    const GdkColor         *color,
-                    const graphene_point_t *offset)
+gsk_text_node_new_snapped (PangoFont              *font,
+                           PangoGlyphString       *glyphs,
+                           const GdkColor         *color,
+                           const graphene_point_t *offset,
+                           GskPointSnap            snap)
 {
   GskTextNode *self;
   GskRenderNode *node;
@@ -7815,6 +7822,8 @@ gsk_text_node_new2 (PangoFont              *font,
   self->offset = *offset;
   self->has_color_glyphs = FALSE;
   self->hint_style = gsk_font_get_hint_style (font);
+
+  self->snap = snap;
 
   glyph_infos = g_malloc_n (glyphs->num_glyphs, sizeof (PangoGlyphInfo));
 
@@ -7845,7 +7854,6 @@ gsk_text_node_new2 (PangoFont              *font,
   return node;
 }
 
-
 /**
  * gsk_text_node_get_color:
  * @node: (type GskTextNode): a text `GskRenderNode`
@@ -7866,13 +7874,33 @@ gsk_text_node_get_color (const GskRenderNode *node)
   return (const GdkRGBA *) &self->color;
 }
 
-/*< private >
+/**
+ * gsk_text_node_get_snap:
+ * @node: (type GskTextNode): a `GskRenderNode`
+ *
+ * Retrieves the snap value used when creating this node.
+ *
+ * Returns: the snap value
+ *
+ * Since: 4.20
+ */
+GskPointSnap
+gsk_text_node_get_snap (const GskRenderNode *node)
+{
+  const GskTextNode *self = (const GskTextNode *) node;
+
+  return self->snap;
+}
+
+/**
  * gsk_text_node_get_gdk_color:
  * @node: (type GskTextNode): a `GskRenderNode`
  *
  * Retrieves the color of the given @node.
  *
  * Returns: (transfer none): the color of the node
+ *
+ * Since: 4.20
  */
 const GdkColor *
 gsk_text_node_get_gdk_color (const GskRenderNode *node)

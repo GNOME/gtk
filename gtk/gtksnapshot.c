@@ -2593,18 +2593,22 @@ gtk_snapshot_add_text (GtkSnapshot      *snapshot,
 {
   GskRenderNode *node;
   float dx, dy;
+  const GtkSnapshotState *state;
 
   g_return_if_fail (snapshot != NULL);
   g_return_if_fail (PANGO_IS_FONT (font));
   g_return_if_fail (glyphs != NULL);
   g_return_if_fail (color != NULL);
 
+  state = gtk_snapshot_get_current_state (snapshot);
+
   gtk_snapshot_ensure_translate (snapshot, &dx, &dy);
 
-  node = gsk_text_node_new2 (font,
-                             glyphs,
-                             color,
-                             &GRAPHENE_POINT_INIT (x + dx, y + dy));
+  node = gsk_text_node_new_snapped (font,
+                                    glyphs,
+                                    color,
+                                    &GRAPHENE_POINT_INIT (x + dx, y + dy),
+                                    gsk_rect_snap_get_origin_snap (state->snap));
   if (node == NULL)
     return;
 

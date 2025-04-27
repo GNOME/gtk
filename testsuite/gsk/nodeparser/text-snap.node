@@ -1,0 +1,32 @@
+
+text {
+  color: rgb(50,50,50);
+  font: "Cantarell 14px";
+  glyphs: "N";
+  offset: 0 0;
+  snap: floor;
+}
+
+text {
+  color: rgb(50,50,50);
+  font: "Cantarell 14px";
+  glyphs: "o";
+  offset: 0 0;
+  snap: ceil ceil;
+}
+
+text {
+  color: rgb(50,50,50);
+  font: "Cantarell 14px";
+  glyphs: "o";
+  offset: 0 0;
+  snap: round none;
+}
+
+text {
+  color: rgb(50,50,50);
+  font: "Cantarell 14px";
+  glyphs: "o";
+  offset: 0 0;
+  snap: round round round;
+}
