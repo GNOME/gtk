@@ -54,8 +54,8 @@ GdkAndroidSeat *gdk_android_seat_new (GdkDisplay *display);
 
 GdkDeviceTool *gdk_android_seat_get_device_tool (GdkAndroidSeat *self, gint32 tool_type);
 
-gboolean gdk_android_seat_normalize_range (JNIEnv *env, jobject device, const AInputEvent *event, guint32 mask, gfloat from, gfloat to, gdouble *out);
-gdouble *gdk_android_seat_create_axes_from_motion_event (const AInputEvent *event);
+gboolean gdk_android_seat_normalize_range (JNIEnv *env, jobject device, const AInputEvent *event, size_t pointer_index, guint32 mask, gfloat from, gfloat to, gdouble *out);
+gdouble *gdk_android_seat_create_axes_from_motion_event (const AInputEvent *event, size_t pointer_index);
 void gdk_android_seat_consume_event (GdkDisplay *display, GdkEvent *event);
 
 G_END_DECLS
