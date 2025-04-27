@@ -34,6 +34,7 @@ gdk_broadway_cairo_context_dispose (GObject *object)
 
 static void
 gdk_broadway_cairo_context_begin_frame (GdkDrawContext  *draw_context,
+                                        gpointer         context_data,
                                         GdkMemoryDepth   depth,
                                         cairo_region_t  *region,
                                         GdkColorState  **out_color_state,
@@ -77,6 +78,7 @@ add_float (GArray *nodes, float f)
 
 static void
 gdk_broadway_cairo_context_end_frame (GdkDrawContext *draw_context,
+                                      gpointer        context_data,
                                       cairo_region_t *painted)
 {
   GdkBroadwayCairoContext *self = GDK_BROADWAY_CAIRO_CONTEXT (draw_context);

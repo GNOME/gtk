@@ -668,6 +668,7 @@ physical_device_check_features (VkPhysicalDevice device)
 
 static void
 gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
+                                gpointer         context_data,
                                 GdkMemoryDepth   depth,
                                 cairo_region_t  *region,
                                 GdkColorState  **out_color_state,
@@ -777,6 +778,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
 
 static void
 gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
+                              gpointer        context_data,
                               cairo_region_t *painted)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);

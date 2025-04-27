@@ -94,14 +94,14 @@ gsk_gpu_frame_default_begin (GskGpuFrame           *self,
                              const cairo_region_t  *region,
                              const graphene_rect_t *opaque)
 {
-  gdk_draw_context_begin_frame_full (context, depth, region, opaque);
+  gdk_draw_context_begin_frame_full (context, NULL, depth, region, opaque);
 }
 
 static void
 gsk_gpu_frame_default_end (GskGpuFrame    *self,
                            GdkDrawContext *context)
 {
-  gdk_draw_context_end_frame_full (context);
+  gdk_draw_context_end_frame_full (context, NULL);
 }
 
 static gboolean

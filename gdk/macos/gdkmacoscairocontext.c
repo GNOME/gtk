@@ -158,6 +158,7 @@ copy_surface_data (GdkMacosBuffer       *from,
 
 static void
 _gdk_macos_cairo_context_begin_frame (GdkDrawContext  *draw_context,
+                                      gpointer         context_data,
                                       GdkMemoryDepth   depth,
                                       cairo_region_t  *region,
                                       GdkColorState  **out_color_state,
@@ -214,6 +215,7 @@ _gdk_macos_cairo_context_begin_frame (GdkDrawContext  *draw_context,
 
 static void
 _gdk_macos_cairo_context_end_frame (GdkDrawContext *draw_context,
+                                    gpointer        context_data,
                                     cairo_region_t *painted)
 {
   GdkMacosCairoContext *self = (GdkMacosCairoContext *)draw_context;

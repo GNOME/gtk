@@ -56,6 +56,7 @@ create_cairo_surface_for_surface (GdkSurface *surface)
 
 static void
 gdk_x11_cairo_context_begin_frame (GdkDrawContext  *draw_context,
+                                   gpointer         context_data,
                                    GdkMemoryDepth   depth,
                                    cairo_region_t  *region,
                                    GdkColorState  **out_color_state,
@@ -85,6 +86,7 @@ gdk_x11_cairo_context_begin_frame (GdkDrawContext  *draw_context,
 
 static void
 gdk_x11_cairo_context_end_frame (GdkDrawContext *draw_context,
+                                 gpointer        context_data,
                                  cairo_region_t *painted)
 {
   GdkX11CairoContext *self = GDK_X11_CAIRO_CONTEXT (draw_context);

@@ -85,6 +85,7 @@ gdk_win32_gl_context_wgl_dispose (GObject *gobject)
 
 static void
 gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
+                                    gpointer        context_data,
                                     cairo_region_t *painted)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
@@ -95,7 +96,7 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
   gboolean can_wait = display_win32->hasWglOMLSyncControl;
   HDC hdc;
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->end_frame (draw_context, painted);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->end_frame (draw_context, context_data, painted);
 
   gdk_gl_context_make_current (context);
 
@@ -183,6 +184,7 @@ gdk_win32_gl_context_wgl_get_damage (GdkGLContext *gl_context)
 
 static void
 gdk_win32_gl_context_wgl_begin_frame (GdkDrawContext  *draw_context,
+                                      gpointer         context_data,
                                       GdkMemoryDepth   depth,
                                       cairo_region_t  *update_area,
                                       GdkColorState  **out_color_state,
@@ -190,7 +192,7 @@ gdk_win32_gl_context_wgl_begin_frame (GdkDrawContext  *draw_context,
 {
   gdk_win32_surface_handle_queued_move_resize (draw_context);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->begin_frame (draw_context, depth, update_area, out_color_state, out_depth);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->begin_frame (draw_context, context_data, depth, update_area, out_color_state, out_depth);
 }
 
 typedef struct {

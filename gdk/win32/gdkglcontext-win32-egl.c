@@ -79,6 +79,7 @@ reset_egl_force_redraw (GdkSurface *surface)
 
 static void
 gdk_win32_gl_context_egl_end_frame (GdkDrawContext *draw_context,
+                                    gpointer        context_data,
                                     cairo_region_t *painted)
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
@@ -86,7 +87,7 @@ gdk_win32_gl_context_egl_end_frame (GdkDrawContext *draw_context,
   GdkDisplay *display = gdk_gl_context_get_display (context);
   EGLSurface egl_surface;
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->end_frame (draw_context, painted);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->end_frame (draw_context, context_data, painted);
 
   gdk_gl_context_make_current (context);
 
@@ -108,6 +109,7 @@ gdk_win32_gl_context_egl_end_frame (GdkDrawContext *draw_context,
 
 static void
 gdk_win32_gl_context_egl_begin_frame (GdkDrawContext  *draw_context,
+                                      gpointer         context_data,
                                       GdkMemoryDepth   depth,
                                       cairo_region_t  *update_area,
                                       GdkColorState  **out_color_state,
@@ -115,7 +117,7 @@ gdk_win32_gl_context_egl_begin_frame (GdkDrawContext  *draw_context,
 {
   gdk_win32_surface_handle_queued_move_resize (draw_context);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->begin_frame (draw_context, depth, update_area, out_color_state, out_depth);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->begin_frame (draw_context, context_data, depth, update_area, out_color_state, out_depth);
 }
 
 static void

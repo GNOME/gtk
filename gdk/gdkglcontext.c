@@ -592,6 +592,7 @@ gdk_gl_context_real_make_current (GdkGLContext *context,
 
 static void
 gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
+                                 gpointer         context_data,
                                  GdkMemoryDepth   depth,
                                  cairo_region_t  *region,
                                  GdkColorState  **out_color_state,
@@ -658,6 +659,7 @@ gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
 
 static void
 gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
+                               gpointer        context_data,
                                cairo_region_t *painted)
 {
 #ifdef HAVE_EGL

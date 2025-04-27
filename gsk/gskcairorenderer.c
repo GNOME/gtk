@@ -149,6 +149,7 @@ gsk_cairo_renderer_render (GskRenderer          *renderer,
   else
     opaque = NULL;
   gdk_draw_context_begin_frame_full (GDK_DRAW_CONTEXT (self->cairo_context),
+                                     NULL,
                                      GDK_MEMORY_U8,
                                      region,
                                      opaque);
@@ -176,7 +177,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   cairo_destroy (cr);
 
-  gdk_draw_context_end_frame_full (GDK_DRAW_CONTEXT (self->cairo_context));
+  gdk_draw_context_end_frame_full (GDK_DRAW_CONTEXT (self->cairo_context), NULL);
 }
 
 static void
