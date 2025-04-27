@@ -55,6 +55,7 @@ gtk_renderer_paintable_paintable_snapshot (GdkPaintable *paintable,
   GtkSnapshot *node_snapshot;
   GskRenderNode *node;
   GdkTexture *texture;
+  gsize node_width, node_height;
 
   if (self->paintable == NULL)
     return;
@@ -66,15 +67,18 @@ gtk_renderer_paintable_paintable_snapshot (GdkPaintable *paintable,
       return;
     }
 
+  node_width = gdk_paintable_get_intrinsic_width (self->paintable);
+  node_height = gdk_paintable_get_intrinsic_height (self->paintable);
+
   node_snapshot = gtk_snapshot_new ();
-  gdk_paintable_snapshot (self->paintable, node_snapshot, width, height);
+  gdk_paintable_snapshot (self->paintable, node_snapshot, node_width, node_height);
   node = gtk_snapshot_free_to_node (node_snapshot);
   if (node == NULL)
     return;
 
   texture = gsk_renderer_render_texture (self->renderer,
                                          node,
-                                         &GRAPHENE_RECT_INIT (0, 0, width, height));
+                                         NULL);
 
   gdk_paintable_snapshot (GDK_PAINTABLE (texture), snapshot, width, height);
   g_object_unref (texture);
