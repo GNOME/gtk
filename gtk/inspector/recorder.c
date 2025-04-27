@@ -1127,6 +1127,23 @@ add_snap_row (GListStore *store,
 }
 
 static void
+add_point_snap_row (GListStore   *store,
+                    const char   *name,
+                    GskPointSnap  snap)
+{
+  char *names[2];
+  gsize i;
+
+  for (i = 0; i < 2; i++)
+    names[i] = g_enum_to_string (GSK_TYPE_SNAP_DIRECTION, gsk_point_snap_get_direction (snap, i));
+
+  add_text_row (store, name, "%s %s", names[0], names[1]);
+
+  for (i = 0; i < 2; i++)
+    g_free (names[i]);
+}
+
+static void
 populate_render_node_properties (GListStore    *store,
                                  GskRenderNode *node,
                                  const char    *role)
@@ -1368,6 +1385,7 @@ populate_render_node_properties (GListStore    *store,
         add_text_row (store, "Position", "%.2f %.2f", offset->x, offset->y);
 
         add_color_row (store, "Color", gsk_text_node_get_gdk_color (node));
+        add_point_snap_row (store, "Snap", gsk_text_node_get_snap (node));
       }
       break;
 
