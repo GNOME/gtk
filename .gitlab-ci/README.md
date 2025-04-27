@@ -19,23 +19,23 @@ recently uploaded image in the registry.
 
 ### Checklist for Updating a CI image
 
- - [ ] Update the `${image}.Dockerfile` file with the dependencies
- - [ ] Run `./run-docker.sh build --base ${image} --version ${number}`
- - [ ] Run `./run-docker.sh push --base ${image} --version ${number}`
-   once the Docker image is built; you may need to log in by using
-   `docker login` or `podman login`
- - [ ] Update the `image` keys in the `.gitlab-ci.yml` file with the new
-   image tag
+ - [ ] Update FDO_DISTRIBUTION_VERSION if needed
+ - [ ] Update FDO_DISTRIBUTION_PACKAGES with the dependencies
+ - [ ] Update FDO_DISTRIBUTION_EXEC with new image setup commands
+ - [ ] Bump BASE_TAG
+ - [ ] Commit
  - [ ] Open a merge request with your changes and let it run
 
 ### Checklist for Adding a new CI image
 
- - [ ] Write a new `${image}.Dockerfile` with the instructions to set up
-   a build environment
- - [ ] Add the `pip3 install meson` incantation
- - [ ] Run `./run-docker.sh build --base ${image} --version ${number}`
- - [ ] Run `./run-docker.sh push --base ${image} --version ${number}`
- - [ ] Add the new job to `.gitlab-ci.yml` referencing the image
+ - [ ] Add a new `container:{platform}` job in the `prepare` stage, see
+   others for reference. This job must extend
+   `.fdo.container-build@{distro}@{arch}` directly or indirectly
+ - [ ] Add a `.distribution.{platform}` job extending
+   `.fdo.distribution-image@{distro}`
+ - [ ] Make every job using this image extend `.distribution.{platform}`
+   and need `container:{platform}`
+ - [ ] Commit
  - [ ] Open a merge request with your changes and let it run
 
 ### Checklist for Adding a new dependency to a CI image
