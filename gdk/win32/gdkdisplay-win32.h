@@ -249,9 +249,7 @@ struct _GdkWin32DisplayClass
   GdkDisplayClass display_class;
 };
 
-GPtrArray *_gdk_win32_display_get_monitor_list (GdkWin32Display *display);
-
-void        gdk_win32_display_check_composited (GdkWin32Display *display);
+GPtrArray *_gdk_win32_display_get_monitor_list         (GdkWin32Display *display);
 
 guint      gdk_win32_display_get_monitor_scale_factor  (GdkWin32Display *display_win32,
                                                         GdkSurface      *surface,

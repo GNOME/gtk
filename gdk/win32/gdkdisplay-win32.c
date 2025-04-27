@@ -1101,27 +1101,8 @@ gdk_win32_display_init (GdkWin32Display *display_win32)
       gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
 
   _gdk_win32_display_init_cursors (display_win32);
-  gdk_win32_display_check_composited (display_win32);
-}
-
-void
-gdk_win32_display_check_composited (GdkWin32Display *display)
-{
-  gboolean composited;
-
-  /* On Windows 8 and later, DWM (composition) is always enabled */
-  if (g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY))
-    {
-      composited = TRUE;
-    }
-  else
-    {
-      if (DwmIsCompositionEnabled (&composited) != S_OK)
-        composited = FALSE;
-    }
-
-  gdk_display_set_composited (GDK_DISPLAY (display), composited);
-  gdk_display_set_shadow_width (GDK_DISPLAY (display), composited);
+  gdk_display_set_composited (GDK_DISPLAY (display_win32), TRUE);
+  gdk_display_set_shadow_width (GDK_DISPLAY (display_win32), TRUE);
 }
 
 static void
