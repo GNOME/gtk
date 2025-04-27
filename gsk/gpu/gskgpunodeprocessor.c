@@ -1916,12 +1916,20 @@ static void
 gsk_gpu_node_processor_add_border_node (GskGpuNodeProcessor *self,
                                         GskRenderNode       *node)
 {
+  GskRoundedRect outline;
+
+  gsk_rounded_rect_snap_to_grid (gsk_border_node_get_outline (node),
+                                 gsk_border_node_get_snap (node),
+                                 &self->scale,
+                                 &self->offset,
+                                 &outline);
+
   gsk_gpu_border_op (self->frame,
                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
                      self->ccs,
                      self->opacity,
                      &self->offset,
-                     gsk_border_node_get_outline (node),
+                     &outline,
                      graphene_point_zero (),
                      gsk_border_node_get_widths (node),
                      gsk_border_node_get_gdk_colors (node));
