@@ -3256,6 +3256,12 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
 
   node_clip = gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
 
+  gsk_point_snap_to_grid (&offset,
+                          gsk_text_node_get_snap (node),
+                          &self->scale,
+                          &self->offset,
+                          &offset);
+
   offset.x += self->offset.x;
   offset.y += self->offset.y;
 
