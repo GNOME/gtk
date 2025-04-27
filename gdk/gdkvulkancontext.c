@@ -781,32 +781,50 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-  VkRectLayerKHR *rectangles;
-  int n_regions;
+  VkPresentRegionsKHR present_regions;
+  VkPresentRegionKHR present_region;
+  VkSwapchainPresentFenceInfoEXT fence_info;
+  void *pNext = NULL;
+
+  g_assert (context_data != NULL);
+
+  if (gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
+    {
+      fence_info = (VkSwapchainPresentFenceInfoEXT) {
+          .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_FENCE_INFO_EXT,
+          .pNext = pNext,
+          .swapchainCount = 1,
+          .pFences = context_data,
+      };
+      pNext = &fence_info;
+    }
 
   if (gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT))
     {
-      n_regions = cairo_region_num_rectangles (painted);
-      rectangles = g_alloca (sizeof (VkRectLayerKHR) * n_regions);
+      present_regions = (VkPresentRegionsKHR) {
+          .sType = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR,
+          .pNext = pNext,
+          .swapchainCount = 1,
+          .pRegions = &present_region
+      };
+      pNext = &present_regions;
 
-      for (int i = 0; i < n_regions; i++)
+      present_region.rectangleCount = cairo_region_num_rectangles (painted);
+      present_region.pRectangles = g_alloca (sizeof (VkRectLayerKHR) * present_region.rectangleCount);
+
+      for (int i = 0; i < present_region.rectangleCount; i++)
         {
           cairo_rectangle_int_t r;
 
           cairo_region_get_rectangle (painted, i, &r);
 
-          rectangles[i] = (VkRectLayerKHR) {
+          ((VkRectLayerKHR *) present_region.pRectangles)[i] = (VkRectLayerKHR) {
               .offset.x = r.x,
               .offset.y = r.y,
               .extent.width = r.width,
               .extent.height = r.height
           };
         }
-    }
-  else
-    {
-      rectangles = NULL;
-      n_regions = 0;
     }
 
   GDK_VK_CHECK (vkQueuePresentKHR, gdk_vulkan_context_get_queue (context),
@@ -821,18 +839,18 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
                                        .pImageIndices = (uint32_t[]) {
                                            priv->draw_index
                                        },
-                                       .pNext = rectangles == NULL ? NULL : &(VkPresentRegionsKHR) {
-                                           .sType = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR,
-                                           .swapchainCount = 1,
-                                           .pRegions = &(VkPresentRegionKHR) {
-                                              .rectangleCount = n_regions,
-                                              .pRectangles = rectangles,
-                                           },
-                                       }
+                                       .pNext = pNext,
                                    });
 
   cairo_region_destroy (priv->regions[priv->draw_index]);
   priv->regions[priv->draw_index] = cairo_region_create ();
+
+  if (!gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
+    {
+      GDK_VK_CHECK (vkQueueSubmit, gdk_vulkan_context_get_queue (context),
+                                   0, NULL,
+                                   *(VkFence *) context_data);
+    }
 }
 
 static void
