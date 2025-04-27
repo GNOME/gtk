@@ -214,7 +214,6 @@ struct _GdkWin32Display
 
   /* HiDPI Items */
   GdkWin32ProcessDpiAwareness dpi_aware_type;
-  guint has_fixed_scale : 1;
   guint surface_scale;
 
   GdkWin32ShcoreFuncs shcore_funcs;

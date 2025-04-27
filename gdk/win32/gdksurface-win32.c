@@ -2723,28 +2723,14 @@ _gdk_win32_surface_get_scale (GdkSurface *surface)
 
   if (win32_display->dpi_aware_type != PROCESS_DPI_UNAWARE)
     {
-      if (win32_display->has_fixed_scale)
-        impl->surface_scale = win32_display->surface_scale;
-      else
-        impl->surface_scale = gdk_win32_display_get_monitor_scale_factor (win32_display,
-                                                                          surface,
-                                                                          NULL);
+      impl->surface_scale = gdk_win32_display_get_monitor_scale_factor (win32_display,
+                                                                        surface,
+                                                                        NULL);
 
       return impl->surface_scale;
     }
   else
     {
-      if (win32_display->has_fixed_scale)
-        {
-          static gsize hidpi_msg_displayed = 0;
-
-          if (g_once_init_enter (&hidpi_msg_displayed))
-            {
-              g_message ("Note: GDK_SCALE is ignored as HiDPI awareness is disabled.");
-              g_once_init_leave (&hidpi_msg_displayed, 1);
-            }
-        }
-
       /* Application is not DPI aware, don't bother */
       return 1;
     }

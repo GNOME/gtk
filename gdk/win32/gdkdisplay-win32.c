@@ -997,8 +997,6 @@ gdk_handle_equal (HANDLE *a,
 static void
 gdk_win32_display_init (GdkWin32Display *display_win32)
 {
-  const char *scale_str = g_getenv ("GDK_SCALE");
-
   display_win32->monitors = G_LIST_MODEL (g_list_store_new (GDK_TYPE_MONITOR));
   display_win32->pointer_device_items = g_new0 (GdkWin32PointerDeviceItems, 1);
   display_win32->cb_dnd_items = g_new0 (GdkWin32CbDnDItems, 1);
@@ -1012,20 +1010,7 @@ gdk_win32_display_init (GdkWin32Display *display_win32)
   _gdk_win32_enable_hidpi (display_win32);
   display_win32->running_on_arm64 = _gdk_win32_check_processor (GDK_WIN32_ARM64);
 
-  /* if we have DPI awareness, set up fixed scale if set */
-  if (display_win32->dpi_aware_type != PROCESS_DPI_UNAWARE &&
-      scale_str != NULL)
-    {
-      display_win32->surface_scale = atol (scale_str);
-
-      if (display_win32->surface_scale <= 0)
-        display_win32->surface_scale = 1;
-
-      display_win32->has_fixed_scale = TRUE;
-    }
-  else
-    display_win32->surface_scale =
-      gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
+  display_win32->surface_scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
 
   _gdk_win32_display_init_cursors (display_win32);
   gdk_display_set_composited (GDK_DISPLAY (display_win32), TRUE);
@@ -1120,13 +1105,7 @@ gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
     }
 
   if (is_scale_acquired)
-    /* USER_DEFAULT_SCREEN_DPI = 96, in winuser.h */
-    {
-      if (display_win32->has_fixed_scale)
-        return display_win32->surface_scale;
-      else
-        return dpix / USER_DEFAULT_SCREEN_DPI > 1 ? dpix / USER_DEFAULT_SCREEN_DPI : 1;
-    }
+    return dpix / USER_DEFAULT_SCREEN_DPI > 1 ? dpix / USER_DEFAULT_SCREEN_DPI : 1;
   else
     return 1;
 }
