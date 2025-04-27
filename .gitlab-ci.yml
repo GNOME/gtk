@@ -65,7 +65,7 @@ default:
 
 .container.fedora:
   variables:
-    BASE_TAG: '2025-04-27.5'
+    BASE_TAG: '2025-04-27.6'
     FDO_DISTRIBUTION_VERSION: 42
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
@@ -84,6 +84,15 @@ default:
       libcloudproviders-devel
       libubsan
       meson
+      mingw64-filesystem
+      mingw64-gcc
+      mingw64-binutils
+      mingw64-cairo
+      mingw64-gdk-pixbuf
+      mingw64-gstreamer1-plugins-bad-free
+      mingw64-glib2
+      mingw64-libepoxy
+      mingw64-pango
       mutter
       python-devel
       python3-jinja2
@@ -252,18 +261,6 @@ fedora-mingw64:
   extends: .build-fedora-default
   stage: build
   needs: ["meson-subprojects"]
-  before_script:
-    - sudo dnf install -y
-            mingw64-filesystem
-            mingw64-gcc
-            mingw64-binutils
-            mingw64-cairo
-            mingw64-gdk-pixbuf
-            mingw64-gstreamer1-plugins-bad-free
-            mingw64-glib2
-            mingw64-libepoxy
-            mingw64-pango
-            # mingw64-graphene (rawhide)
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
