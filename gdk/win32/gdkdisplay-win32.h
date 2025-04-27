@@ -199,8 +199,6 @@ struct _GdkWin32Display
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;
   guint hasWglARBCreateContext : 1;
-  guint hasWglEXTSwapControl : 1;
-  guint hasWglOMLSyncControl : 1;
   guint hasWglARBPixelFormat : 1;
   guint hasGlWINSwapHint : 1;
 

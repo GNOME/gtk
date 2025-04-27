@@ -48,7 +48,6 @@ struct _GdkWin32GLContextWGL
   GdkWin32GLContext parent_instance;
 
   HGLRC wgl_context;
-  guint do_frame_sync : 1;
   guint double_buffered : 1;
 
   enum {
@@ -93,7 +92,6 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkWin32Display *display_win32 = (GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context)));
   GdkWin32Surface *surface_win32 = GDK_WIN32_SURFACE (surface);
-  gboolean can_wait = display_win32->hasWglOMLSyncControl;
   HDC hdc;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->end_frame (draw_context, context_data, painted);
@@ -133,25 +131,6 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
                                                  rectangle.width,
                                                  rectangle.height);
         }
-    }
-
-  if (context_wgl->do_frame_sync)
-    {
-
-      glFinish ();
-
-      if (can_wait)
-        {
-          gint64 ust, msc, sbc;
-
-          wglGetSyncValuesOML (hdc, &ust, &msc, &sbc);
-          wglWaitForMscOML (hdc,
-                            0,
-                            2,
-                            (msc + 1) % 2,
-                           &ust, &msc, &sbc);
-        }
-
     }
 
   SwapBuffers (hdc);
@@ -674,10 +653,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
 
   display_win32->hasWglARBCreateContext =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_create_context");
-  display_win32->hasWglEXTSwapControl =
-    epoxy_has_wgl_extension (hdc, "WGL_EXT_swap_control");
-  display_win32->hasWglOMLSyncControl =
-    epoxy_has_wgl_extension (hdc, "WGL_OML_sync_control");
   display_win32->hasWglARBPixelFormat =
     epoxy_has_wgl_extension (hdc, "WGL_ARB_pixel_format");
   display_win32->hasGlWINSwapHint =
@@ -706,8 +681,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                          " - Checked extensions:\n"
                          "\t* WGL_ARB_pixel_format: %s\n"
                          "\t* WGL_ARB_create_context: %s\n"
-                         "\t* WGL_EXT_swap_control: %s\n"
-                         "\t* WGL_OML_sync_control: %s\n"
                          "\t* GL_WIN_swap_hint: %s\n",
                          major, minor,
                          glGetString (GL_VENDOR),
@@ -715,8 +688,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                          display_win32->wgl_quirks.disallow_swap_exchange ? "enabled" : "disabled",
                          display_win32->hasWglARBPixelFormat ? "yes" : "no",
                          display_win32->hasWglARBCreateContext ? "yes" : "no",
-                         display_win32->hasWglEXTSwapControl ? "yes" : "no",
-                         display_win32->hasWglOMLSyncControl ? "yes" : "no",
                          display_win32->hasGlWINSwapHint ? "yes" : "no"));
   }
 
@@ -1201,24 +1172,6 @@ gdk_win32_gl_context_wgl_make_current (GdkGLContext *context,
 
   if (!gdk_win32_private_wglMakeCurrent (hdc, context_wgl->wgl_context))
     return FALSE;
-
-  if (!surfaceless && display_win32->hasWglEXTSwapControl)
-    {
-      gboolean do_frame_sync = FALSE;
-
-      /* If there is compositing there is no particular need to delay
-       * the swap when drawing on the offscreen, rendering to the screen
-       * happens later anyway, and its up to the compositor to sync that
-       * to the vblank. */
-      do_frame_sync = ! gdk_display_is_composited (display);
-
-      if (do_frame_sync != context_wgl->do_frame_sync)
-        {
-          context_wgl->do_frame_sync = do_frame_sync;
-
-          wglSwapIntervalEXT (do_frame_sync ? 1 : 0);
-        }
-    }
 
   return TRUE;
 }
