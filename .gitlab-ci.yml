@@ -1,4 +1,7 @@
 include:
+  - project: 'Infrastructure/freedesktop-ci-templates'
+    ref: '707b49ef'
+    file: 'templates/fedora.yml'
   - project: 'gnome/citemplates'
     file: 'flatpak/flatpak_ci_initiative.yml'
   - component:  gitlab.gnome.org/GNOME/citemplates/release-service@master
@@ -7,6 +10,7 @@ include:
       tarball-artifact-path: "_build/meson-dist/$CI_PROJECT_NAME-$CI_COMMIT_TAG.tar.xz"
 
 stages:
+  - prepare
   - check
   - build
   - analysis
@@ -28,12 +32,12 @@ stages:
 
 # Common variables
 variables:
+  FDO_UPSTREAM_REPO: GNOME/gtk
   COMMON_MESON_FLAGS: "-Dwerror=true -Dcairo:werror=false -Dgi-docgen:werror=false -Dgraphene:werror=false -Dlibepoxy:werror=false -Dlibsass:werror=false -Dpango:werror=false -Dsassc:werror=false -Dgdk-pixbuf:werror=false -Dglib:werror=false -Dlibcloudproviders:werror=false -Dlibpng:werror=false -Dlibtiff:werror=false -Dsysprof:werror=false -Dwayland:werror=false -Dwayland-protocols:werror=false -Dharfbuzz:werror=false -Dfreetype2:werror=false -Dfontconfig:werror=false -Dfribidi:werror=false -Dlibffi:werror=false -Dlibjpeg-turbo:werror=false -Dmutest:werror=false -Dpcre2:werror=false -Dpixman:werror=false -Dproxy-libintl:werror=false"
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true"
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled -Dbuild-testsuite=true -Dintrospection=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
   MESON_TEST_MAX_PROCESSES: 8
-  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v55"
   ANDROID_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/android:v2"
 
 workflow:
@@ -59,12 +63,62 @@ default:
       - 'api_failure'
   interruptible: true
 
+.container.fedora:
+  variables:
+    BASE_TAG: '2025-04-27.5'
+    FDO_DISTRIBUTION_VERSION: 42
+    FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
+    FDO_DISTRIBUTION_PACKAGES:
+      ccache
+      clang
+      clang-analyzer
+      clang-tools-extra
+      cmake
+      compiler-rt
+      dbus-daemon
+      dejavu-sans-mono-fonts
+      diffutils
+      git
+      graphviz
+      libasan
+      libcloudproviders-devel
+      libubsan
+      meson
+      mutter
+      python-devel
+      python3-jinja2
+      python3-markdown
+      python3-markupsafe
+      python3-pip
+      python3-pygments
+      python3-typogrify
+      sassc
+      vulkan-validation-layers
+      weston
+      xorg-x11-server-Xvfb
+    FDO_DISTRIBUTION_EXEC: |
+      dnf builddep -y gtk4 &&
+      dnf clean all
+
+.distribution.fedora:
+  extends:
+    - .fdo.distribution-image@fedora
+    - .container.fedora
+
+container:fedora:
+  extends:
+    - .container.fedora
+    - .fdo.container-build@fedora@x86_64
+  stage: prepare
+
 style-check-diff:
-  image: $FEDORA_IMAGE
+  extends:
+    - .distribution.fedora
   stage: check
   when: manual
   script:
     - .gitlab-ci/run-style-check-diff.sh
+  needs: ['container:fedora']
 
 .test-runner:
   artifacts:
@@ -92,7 +146,8 @@ style-check-diff:
       - "${CI_PROJECT_DIR}/_build/meson-dist/*.tar.xz"
 
 .build-fedora-default:
-  image: $FEDORA_IMAGE
+  extends:
+    - .distribution.fedora
   cache:
     key: "$CI_JOB_NAME"
     paths:
@@ -100,8 +155,9 @@ style-check-diff:
 
 meson-subprojects:
   stage: build
-  needs: []
-  image: $FEDORA_IMAGE
+  needs: ['container:fedora']
+  extends:
+    - .distribution.fedora
   script:
     - export PATH="$HOME/.local/bin:$PATH"
     # DNS issues can cause this to fail
@@ -147,7 +203,7 @@ release-build:
     - .test-runner
     - .build-fedora-default
   stage: build
-  needs: []
+  needs: ['container:fedora']
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
@@ -509,9 +565,10 @@ nightly node-editor aarch64:
     needs: ['flatpak:node-editor:aarch64']
 
 static-scan:
-  image: $FEDORA_IMAGE
+  extends:
+    - .distribution.fedora
   stage: analysis
-  needs: []
+  needs: ['container:fedora']
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug"
   script:
@@ -536,7 +593,7 @@ asan-build:
     - .build-fedora-default
   tags: [ asan ]
   stage: analysis
-  needs: []
+  needs: ['container:fedora']
   script:
     - export PATH="$HOME/.local/bin:$PATH"
     - CC=clang meson setup
@@ -555,9 +612,10 @@ asan-build:
     - .gitlab-ci/run-tests.sh _build wayland gtk
 
 reference:
-  image: $FEDORA_IMAGE
+  extends:
+    - .distribution.fedora
   stage: docs
-  needs: []
+  needs: ['container:fedora']
   script:
     - export PATH="$HOME/.local/bin:$PATH"
     - meson setup
@@ -595,7 +653,8 @@ reference:
       - _reference
 
 publish-docs:
-  image: $FEDORA_IMAGE
+  extends:
+    - .distribution.fedora
   stage: publish
   interruptible: false
   needs: ['reference']
