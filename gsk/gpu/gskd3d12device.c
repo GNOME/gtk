@@ -8,6 +8,20 @@
 #include "gdk/win32/gdkd3d12texture.h"
 #include "gdk/win32/gdkdisplay-win32.h"
 
+typedef struct _DescriptorHeap DescriptorHeap;
+struct _DescriptorHeap
+{
+  ID3D12DescriptorHeap *heap;
+  guint64 free_mask;
+};
+
+#define GDK_ARRAY_NAME descriptor_heaps
+#define GDK_ARRAY_TYPE_NAME DescriptorHeaps
+#define GDK_ARRAY_ELEMENT_TYPE DescriptorHeap
+#define GDK_ARRAY_PREALLOC 8
+#define GDK_ARRAY_NO_MEMSET 1
+#define GDK_ARRAY_BY_VALUE 1
+#include "gdk/gdkarrayimpl.c"
 struct _GskD3d12Device
 {
   GskGpuDevice parent_instance;
@@ -15,6 +29,8 @@ struct _GskD3d12Device
   ID3D12Device *device;
 
   ID3D12RootSignature *root_signature;
+
+  DescriptorHeaps descriptor_heaps;
 };
 
 struct _GskD3d12DeviceClass
@@ -92,9 +108,17 @@ gsk_d3d12_device_finalize (GObject *object)
   GskD3d12Device *self = GSK_D3D12_DEVICE (object);
   GskGpuDevice *device = GSK_GPU_DEVICE (self);
   GdkDisplay *display;
+  gsize i;
 
   display = gsk_gpu_device_get_display (device);
   g_object_steal_data (G_OBJECT (display), "-gsk-d3d12-device");
+
+  for (i = 0; i < descriptor_heaps_get_size (&self->descriptor_heaps); i++)
+    {
+      DescriptorHeap *heap = descriptor_heaps_get (&self->descriptor_heaps, i);
+      ID3D12DescriptorHeap_Release (heap->heap);
+    }
+  descriptor_heaps_clear (&self->descriptor_heaps);
 
   gdk_win32_com_clear (&self->root_signature);
   gdk_win32_com_clear (&self->device);
@@ -120,6 +144,7 @@ gsk_d3d12_device_class_init (GskD3d12DeviceClass *klass)
 static void
 gsk_d3d12_device_init (GskD3d12Device *self)
 {
+  descriptor_heaps_init (&self->descriptor_heaps);
 }
 
 static void
@@ -208,4 +233,100 @@ ID3D12RootSignature *
 gsk_d3d12_device_get_d3d12_root_signature (GskD3d12Device *self)
 {
   return self->root_signature;
+}
+
+/* taken from glib source code, adapted to guint64 */
+
+static inline int
+my_bit_nth_lsf (guint64 mask,
+                int     nth_bit)
+{
+  if (G_UNLIKELY (nth_bit < -1))
+    nth_bit = -1;
+  while (nth_bit < (((int) sizeof (guint64) * 8) - 1))
+    {
+      nth_bit++;
+      if (mask & (((guint64) 1U) << nth_bit))
+        return nth_bit;
+    }
+  return -1;
+}
+
+void
+gsk_d3d12_device_alloc_rtv (GskD3d12Device              *self,
+                            D3D12_CPU_DESCRIPTOR_HANDLE *out_descriptor)
+{
+  DescriptorHeap *heap = NULL; /* poor MSVC */
+  gsize i;
+  int pos;
+
+  for (i = 0; i < descriptor_heaps_get_size (&self->descriptor_heaps); i++)
+    {
+      D3D12_DESCRIPTOR_HEAP_DESC desc;
+
+      heap = descriptor_heaps_get (&self->descriptor_heaps, i);
+      if (heap->free_mask == 0)
+        continue;
+      ID3D12DescriptorHeap_GetDesc (heap->heap, &desc);
+      if (desc.Type != D3D12_DESCRIPTOR_HEAP_TYPE_RTV)
+        continue;
+
+      break;
+    }
+
+  if (i == descriptor_heaps_get_size (&self->descriptor_heaps))
+    {
+      descriptor_heaps_set_size (&self->descriptor_heaps, i + 1);
+      heap = descriptor_heaps_get (&self->descriptor_heaps, i);
+
+      heap->free_mask = G_MAXUINT64;
+      hr_warn (ID3D12Device_CreateDescriptorHeap (self->device,
+                                                  (&(D3D12_DESCRIPTOR_HEAP_DESC) {
+                                                      .Type = D3D12_DESCRIPTOR_HEAP_TYPE_RTV,
+                                                      .NumDescriptors = sizeof (heap->free_mask) * 8,
+                                                      .Flags = 0,
+                                                      .NodeMask = 0,
+                                                  }),
+                                                  &IID_ID3D12DescriptorHeap,
+                                                  (void **) &heap->heap));
+    }
+
+  pos = my_bit_nth_lsf (heap->free_mask, -1);
+  g_assert (pos >= 0);
+  heap->free_mask &= ~(((guint64) 1U) << pos);
+
+  ID3D12DescriptorHeap_GetCPUDescriptorHandleForHeapStart (heap->heap, out_descriptor);
+  out_descriptor->ptr += pos * ID3D12Device_GetDescriptorHandleIncrementSize (self->device, D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+}
+
+void
+gsk_d3d12_device_free_rtv (GskD3d12Device              *self,
+                           D3D12_CPU_DESCRIPTOR_HANDLE *descriptor)
+{
+  DescriptorHeap *heap;
+  gsize i, size;
+
+  size = ID3D12Device_GetDescriptorHandleIncrementSize (self->device, D3D12_DESCRIPTOR_HEAP_TYPE_RTV);
+
+  for (i = 0; i < descriptor_heaps_get_size (&self->descriptor_heaps); i++)
+    {
+      D3D12_CPU_DESCRIPTOR_HANDLE start;
+      SIZE_T offset;
+
+      heap = descriptor_heaps_get (&self->descriptor_heaps, i);
+      ID3D12DescriptorHeap_GetCPUDescriptorHandleForHeapStart (heap->heap, &start);
+
+      offset = descriptor->ptr - start.ptr;
+      offset /= size;
+      if (offset < sizeof (guint64) * 8)
+        {
+          /* entry must not be marked free yet */
+          g_assert (!(heap->free_mask & (((guint64) 1U) << offset)));
+          heap->free_mask |= ((guint64) 1U) << offset;
+          return;
+        }
+    }
+
+  /* We didn't find the heap this handle belongs to. Something went seriously wrong. */
+  g_assert_not_reached ();
 }
