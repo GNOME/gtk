@@ -24,6 +24,7 @@ gl_source_shaders = []
 ngl_source_shaders = []
 vulkan_compiled_shaders = []
 gpu_vulkan_compiled_shaders = []
+gpu_d3d12_compiled_shaders = []
 vulkan_shaders = []
 
 for f in sys.argv[2:]:
@@ -37,6 +38,8 @@ for f in sys.argv[2:]:
       gpu_vulkan_compiled_shaders.append(f)
     else:
       vulkan_compiled_shaders.append(f)
+  elif f.endswith('.hlsl'):
+      gpu_d3d12_compiled_shaders.append(f)
   elif f.endswith('.frag') or f.endswith('.vert'):
     vulkan_shaders.append(f)
   else:
@@ -65,6 +68,11 @@ xml += '\n'
 
 for f in gpu_vulkan_compiled_shaders:
   xml += '    <file alias=\'shaders/vulkan/{0}\'>gpu/shaders/{0}</file>\n'.format(os.path.basename(f))
+
+xml += '\n'
+
+for f in gpu_d3d12_compiled_shaders:
+  xml += '    <file alias=\'shaders/d3d12/{0}\'>gpu/shaders/{0}</file>\n'.format(os.path.basename(f))
 
 xml += '\n'
 
