@@ -250,7 +250,10 @@ parse_compose_sequence (const char *seq,
         {
           gunichar ch = (gunichar) g_ascii_strtoll (match + 1, NULL, 16);
           if (ch > 0xffff)
-            g_warning ("Can't handle > 16bit Unicode codepoints");
+            {
+              g_warning ("Can't handle > 16bit Unicode codepoints");
+              goto fail;
+            }
 
           keyval = gdk_unicode_to_keyval (ch);
           if (keyval > 0xffff &&
@@ -258,6 +261,7 @@ parse_compose_sequence (const char *seq,
             {
               g_warning ("Can't handle Unicode codepoint %x", ch);
               keyval = 0;
+              goto fail;
             }
 
           sequence[n] = ch;
@@ -266,18 +270,21 @@ parse_compose_sequence (const char *seq,
       else
         {
           keyval = gdk_keyval_from_name (match);
-          if (keyval > 0xffff)
+          if (keyval == GDK_KEY_VoidSymbol)
+            {
+              g_warning ("Could not get code point of keysym %s", match);
+              goto fail;
+            }
+          else if (keyval > 0xffff)
             {
               g_warning ("Can't handle >16bit keyvals");
-              keyval = 0;
+              goto fail;
             }
 
           sequence[n] = keyval;
           sequence[n + 1] = 0;
         }
 
-      if (keyval == GDK_KEY_VoidSymbol)
-        g_warning ("Could not get code point of keysym %s", match);
       g_free (match);
       n++;
     }
@@ -380,6 +387,9 @@ add_sequence (gunichar   *sequence,
 
   seq = g_new (gunichar, len + 1);
   memcpy (seq, sequence, (len + 1) * sizeof (gunichar));
+
+  if (seq[0] == 0)
+    g_print ("bad sequence, value %s\n", value);
 
   g_hash_table_replace (parser->sequences, seq, g_strdup (value));
 }
