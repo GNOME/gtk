@@ -160,6 +160,7 @@ gsk_resources_xml = custom_target(output: 'gsk.resources.xml',
     gsk_private_vulkan_shaders,
     gsk_private_gpu_gl_shaders,
     gsk_private_gpu_vulkan_shaders,
+    gsk_private_gpu_d3d12_shaders,
   ],
 )
 
