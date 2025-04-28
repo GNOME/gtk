@@ -2320,6 +2320,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
   GdkColorState *image_cs;
   GskScalingFilter scaling_filter;
   gboolean need_mipmap, need_offscreen;
+  graphene_rect_t bounds;
 
   texture = gsk_texture_scale_node_get_texture (node);
   scaling_filter = gsk_texture_scale_node_get_filter (node);
@@ -2388,6 +2389,12 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       return;
     }
 
+  gsk_rect_snap_to_grid (&node->bounds,
+                         gsk_texture_scale_node_get_snap (node),
+                         &self->scale,
+                         &self->offset,
+                         &bounds);
+
   if (gsk_gpu_image_get_shader_op (image) != GDK_SHADER_DEFAULT ||
       (need_mipmap && !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_CAN_MIPMAP)) ||
       !gdk_color_state_equal (image_cs, self->ccs))
@@ -2405,13 +2412,13 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
     gsk_gpu_mipmap_op (self->frame, image);
 
   gsk_gpu_texture_op (self->frame,
-                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
+                      gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &bounds),
                       &self->offset,
                       &(GskGpuShaderImage) {
                           image,
                           gsk_gpu_sampler_for_scaling_filter (scaling_filter),
-                          &node->bounds,
-                          &node->bounds,
+                          &bounds,
+                          &bounds,
                       });
 
   gdk_color_state_unref (image_cs);
