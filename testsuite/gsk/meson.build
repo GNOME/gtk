@@ -640,6 +640,7 @@ internal_tests = [
   [ 'rounded-rect'],
   [ 'scaling', [ 'scaling.c', '../gdk/gdktestutils.c' ] ],
   [ 'transform' ],
+  [ 'snap' ],
 ]
 
 foreach t : internal_tests
