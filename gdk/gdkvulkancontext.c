@@ -1767,6 +1767,9 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   g_ptr_array_add (used_extensions, (gpointer) VK_KHR_SURFACE_EXTENSION_NAME);
   g_ptr_array_add (used_extensions, (gpointer) VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
   g_ptr_array_add (used_extensions, (gpointer) GDK_DISPLAY_GET_CLASS (display)->vk_extension_name);
+#ifdef __APPLE__
+  g_ptr_array_add (used_extensions, (gpointer) VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+#endif
 
   for (i = 0; i < n_extensions; i++)
     {
@@ -1799,7 +1802,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   res = vkCreateInstance (&(VkInstanceCreateInfo) {
                                .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
                                .pNext = NULL,
-                               .flags = 0,
+                               .flags = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR,
                                .pApplicationInfo = &(VkApplicationInfo) {
                                    .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
                                    .pNext = NULL,
