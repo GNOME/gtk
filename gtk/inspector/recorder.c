@@ -1209,6 +1209,7 @@ populate_render_node_properties (GListStore    *store,
 
         tmp = g_enum_to_string (GSK_TYPE_SCALING_FILTER, filter);
         add_text_row (store, "Filter", "%s", tmp);
+        add_snap_row (store, "Snap", gsk_texture_scale_node_get_snap (node));
         g_free (tmp);
       }
       break;
