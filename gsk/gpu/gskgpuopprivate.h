@@ -54,6 +54,7 @@ struct _GskD3d12CommandState
 {
   ID3D12GraphicsCommandList *command_list;
   D3D12_CPU_DESCRIPTOR_HANDLE rtv;
+  GskGpuBlend blend;
 };
 #endif
 struct _GskGpuOp
