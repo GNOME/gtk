@@ -2,6 +2,7 @@
 
 #include "gdk/gdkdihedralprivate.h"
 #include "gsk/gskenums.h"
+#include "gsk/gskpointsnap.h"
 #include "gsk/gskrectsnap.h"
 
 #include <graphene.h>
@@ -296,6 +297,33 @@ gsk_rect_snap_to_grid_shrink (const graphene_rect_t  *src,
       y / yscale - grid_offset->y,
       (floorf ((src->origin.x + grid_offset->x + src->size.width) * xscale) - x) / xscale,
       (floorf ((src->origin.y + grid_offset->y + src->size.height) * yscale) - y) / yscale);
+}
+
+static inline void
+gsk_point_snap_to_grid (const graphene_point_t *src,
+                        GskPointSnap            snap,
+                        const graphene_vec2_t  *grid_scale,
+                        const graphene_point_t *grid_offset,
+                        graphene_point_t       *dest)
+{
+  float xscale, yscale;
+  float x, y;
+  GskSnapDirection xsnap, ysnap;
+
+  xsnap = gsk_point_snap_get_direction (snap, 1);
+  ysnap = gsk_point_snap_get_direction (snap, 0);
+
+  xscale = graphene_vec2_get_x (grid_scale);
+  yscale = graphene_vec2_get_y (grid_scale);
+
+  x = (src->x + grid_offset->x) * xscale;
+  y = (src->y + grid_offset->y) * yscale;
+
+  x = gsk_rect_snap_direction (x, xsnap);
+  y = gsk_rect_snap_direction (y, ysnap);
+
+  dest->x = x / xscale - grid_offset->x;
+  dest->y = y / xscale - grid_offset->y;
 }
 
 static inline gboolean G_GNUC_PURE

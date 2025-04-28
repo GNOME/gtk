@@ -37,7 +37,7 @@
  *
  * Since: 4.20
  */
-#define GSK_RECT_SNAP_INIT(top, right, bottom, left) (((((((left) << 8) | (bottom)) << 8) | (right)) << 8) | (top)) 
+#define GSK_RECT_SNAP_INIT(top, right, bottom, left) (((((((left) << 8) | (bottom)) << 8) | (right)) << 8) | (top))
 
 /**
  * GSK_RECT_SNAP_NONE:
@@ -95,3 +95,11 @@ GDK_AVAILABLE_IN_4_20
 GskSnapDirection        gsk_rect_snap_get_direction             (GskRectSnap             snap,
                                                                  unsigned                border);
 
+GDK_AVAILABLE_IN_4_20
+GskPointSnap            gsk_rect_snap_get_origin_snap           (GskRectSnap            snap);
+
+GDK_AVAILABLE_IN_4_20
+GskPointSnap            gsk_rect_snap_get_opposite_snap         (GskRectSnap            snap);
+GDK_AVAILABLE_IN_4_20
+GskRectSnap             gsk_rect_snap_new_from_point_snaps      (GskPointSnap           origin,
+                                                                 GskPointSnap           opposite);

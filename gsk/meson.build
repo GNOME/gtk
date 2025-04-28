@@ -8,6 +8,7 @@ gsk_public_sources = files([
   'gskpathmeasure.c',
   'gskpathparser.c',
   'gskpathpoint.c',
+  'gskpointsnap.c',
   'gskrectsnap.c',
   'gskrenderer.c',
   'gskrendernode.c',
