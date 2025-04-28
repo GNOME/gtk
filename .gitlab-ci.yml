@@ -1,4 +1,9 @@
 include:
+  - project: 'Infrastructure/freedesktop-ci-templates'
+    ref: '707b49ef'
+    file:
+      - 'templates/fedora.yml'
+      - 'templates/debian.yml'
   - project: 'gnome/citemplates'
     file: 'flatpak/flatpak_ci_initiative.yml'
   - component:  gitlab.gnome.org/GNOME/citemplates/release-service@master
@@ -7,6 +12,7 @@ include:
       tarball-artifact-path: "_build/meson-dist/$CI_PROJECT_NAME-$CI_COMMIT_TAG.tar.xz"
 
 stages:
+  - prepare
   - check
   - build
   - analysis
@@ -28,13 +34,12 @@ stages:
 
 # Common variables
 variables:
+  FDO_UPSTREAM_REPO: GNOME/gtk
   COMMON_MESON_FLAGS: "-Dwerror=true -Dcairo:werror=false -Dgi-docgen:werror=false -Dgraphene:werror=false -Dlibepoxy:werror=false -Dlibsass:werror=false -Dpango:werror=false -Dsassc:werror=false -Dgdk-pixbuf:werror=false -Dglib:werror=false -Dlibcloudproviders:werror=false -Dlibpng:werror=false -Dlibtiff:werror=false -Dsysprof:werror=false -Dwayland:werror=false -Dwayland-protocols:werror=false -Dharfbuzz:werror=false -Dfreetype2:werror=false -Dfontconfig:werror=false -Dfribidi:werror=false -Dlibffi:werror=false -Dlibjpeg-turbo:werror=false -Dmutest:werror=false -Dpcre2:werror=false -Dpixman:werror=false -Dproxy-libintl:werror=false"
   BACKEND_FLAGS: "-Dx11-backend=true -Dwayland-backend=true -Dbroadway-backend=true"
   FEATURE_FLAGS: "-Dvulkan=enabled -Dcloudproviders=enabled -Dbuild-testsuite=true -Dintrospection=enabled"
   MESON_TEST_TIMEOUT_MULTIPLIER: 3
   MESON_TEST_MAX_PROCESSES: 8
-  FEDORA_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/fedora:v55"
-  ANDROID_IMAGE: "registry.gitlab.gnome.org/gnome/gtk/android:v2"
 
 workflow:
   rules:
@@ -59,12 +64,126 @@ default:
       - 'api_failure'
   interruptible: true
 
+.container.fedora:
+  variables:
+    BASE_TAG: '2025-04-28.1'
+    FDO_DISTRIBUTION_VERSION: 42
+    FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
+    FDO_DISTRIBUTION_PACKAGES:
+      ccache
+      clang
+      clang-analyzer
+      clang-tools-extra
+      cmake
+      compiler-rt
+      dbus-daemon
+      dejavu-sans-mono-fonts
+      diffutils
+      git
+      graphviz
+      libasan
+      libcloudproviders-devel
+      libubsan
+      meson
+      mingw64-filesystem
+      mingw64-gcc
+      mingw64-binutils
+      mingw64-cairo
+      mingw64-gdk-pixbuf
+      mingw64-gstreamer1-plugins-bad-free
+      mingw64-glib2
+      mingw64-libepoxy
+      mingw64-pango
+      mutter
+      python-devel
+      python3-jinja2
+      python3-markdown
+      python3-markupsafe
+      python3-pip
+      python3-pygments
+      python3-typogrify
+      sassc
+      vulkan-validation-layers
+      weston
+      xorg-x11-server-Xvfb
+    FDO_DISTRIBUTION_EXEC: |
+      dnf builddep -y gtk4 &&
+      meson subprojects download || exit 137 &&
+      meson subprojects update --reset || exit 137 &&
+      mkdir /subprojects && find subprojects -mindepth 1 -maxdepth 1 -type d -exec mv {} /subprojects \;
+
+.distribution.fedora:
+  extends:
+    - .fdo.distribution-image@fedora
+    - .container.fedora
+
+container:fedora:
+  extends:
+    - .container.fedora
+    - .fdo.container-build@fedora@x86_64
+  # DNS issues can cause this to fail
+  retry:
+    max: 2
+    exit_codes: 137
+  stage: prepare
+
+.container.android:
+  variables:
+    BASE_TAG: '2025-04-27.1'
+    FDO_DISTRIBUTION_VERSION: sid
+    FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
+    FDO_DISTRIBUTION_PACKAGES:
+      build-essential
+      gir1.2-appstream
+      git
+      git-lfs
+      glslc
+      gobject-introspection
+      libglib2.0-dev-bin
+      libglib-perl
+      libglib-object-introspection-perl
+      libipc-run-perl
+      libjson-perl
+      libset-scalar-perl
+      libxml2-utils
+      libxml-libxml-perl
+      libxml-libxslt-perl
+      meson
+      ninja-build
+      openjdk-17-jre
+      openjdk-17-jdk
+      perl
+      pkg-config
+      sassc
+      sdkmanager
+      sudo
+    FDO_DISTRIBUTION_EXEC: |
+      .gitlab-ci/android-sdk.sh &&
+      apt-get -y clean
+    ANDROID_HOME: "/opt/android/"
+    ANDROID_SDKVER: "35.0.0"
+    HOST_USER_ID: "5555"
+    LANG: "C.UTF-8"
+
+.distribution.android:
+  extends:
+    - .fdo.distribution-image@debian
+    - .container.android
+
+container:android:
+  extends:
+    - .container.android
+    - .fdo.container-build@debian@x86_64
+  stage: prepare
+
 style-check-diff:
-  image: $FEDORA_IMAGE
+  extends:
+    - .distribution.fedora
   stage: check
   when: manual
   script:
     - .gitlab-ci/run-style-check-diff.sh
+  needs: ['container:fedora']
 
 .test-runner:
   artifacts:
@@ -92,40 +211,24 @@ style-check-diff:
       - "${CI_PROJECT_DIR}/_build/meson-dist/*.tar.xz"
 
 .build-fedora-default:
-  image: $FEDORA_IMAGE
+  extends:
+    - .distribution.fedora
   cache:
     key: "$CI_JOB_NAME"
     paths:
       - _ccache/
 
-meson-subprojects:
-  stage: build
-  needs: []
-  image: $FEDORA_IMAGE
-  script:
-    - export PATH="$HOME/.local/bin:$PATH"
-    # DNS issues can cause this to fail
-    - meson subprojects download || exit 137
-    - meson subprojects update --reset || exit 137
-  retry:
-    max: 2
-    exit_codes: 137
-  artifacts:
-    name: "gtk-subprojects-${CI_COMMIT_REF_NAME}"
-    when: always
-    paths:
-      - "${CI_PROJECT_DIR}/subprojects"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-      - subprojects/
+.meson-subprojects:
+  before_script:
+    - find /subprojects -mindepth 1 -maxdepth 1 -type d -exec ln -s {} subprojects/ \;
 
 fedora-x86_64:
   extends:
     - .test-runner
     - .build-fedora-default
+    - .meson-subprojects
   stage: build
-  needs: ["meson-subprojects"]
+  needs: ["container:fedora"]
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
@@ -147,7 +250,7 @@ release-build:
     - .test-runner
     - .build-fedora-default
   stage: build
-  needs: []
+  needs: ['container:fedora']
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
@@ -175,8 +278,9 @@ fedora-clang:
   extends:
     - .test-runner
     - .build-fedora-default
+    - .meson-subprojects
   stage: build
-  needs: ["meson-subprojects"]
+  needs: ["container:fedora"]
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
@@ -193,21 +297,11 @@ fedora-clang:
     - .gitlab-ci/run-tests.sh _build wayland_minimal gtk:gsk
 
 fedora-mingw64:
-  extends: .build-fedora-default
+  extends:
+    - .build-fedora-default
+    - .meson-subprojects
   stage: build
-  needs: ["meson-subprojects"]
-  before_script:
-    - sudo dnf install -y
-            mingw64-filesystem
-            mingw64-gcc
-            mingw64-binutils
-            mingw64-cairo
-            mingw64-gdk-pixbuf
-            mingw64-gstreamer1-plugins-bad-free
-            mingw64-glib2
-            mingw64-libepoxy
-            mingw64-pango
-            # mingw64-graphene (rawhide)
+  needs: ["container:fedora"]
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
@@ -327,12 +421,13 @@ vs2019-x64:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
 android:
-  image: $ANDROID_IMAGE
+  extends:
+    - .distribution.android
   stage: build
   parallel:
     matrix:
       - ARCH: [ "aarch64", "x86_64" ]
-  needs: []
+  needs: ['container:android']
   variables:
     EXTRA_MESON_FLAGS: "-Dgperf:werror=false"
     BACKEND_FLAGS: "-Dandroid-backend=true"
@@ -365,7 +460,8 @@ android:
       - "${CI_PROJECT_DIR}/_build/meson-logs"
 
 .android-defaults:
-  image: $ANDROID_IMAGE
+  extends:
+    - .distribution.android
   stage: android
   allow_failure: true
   artifacts:
@@ -377,7 +473,7 @@ android:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_COMMIT_BRANCH != "main"
       when: "manual"
-  needs: []
+  needs: ['container:android']
   before_script:
     - .gitlab-ci/show-info-linux.sh
     - git clone https://github.com/sp1ritCS/gtk-android-builder.git pixiewood
@@ -399,7 +495,8 @@ android:demo:
     APPID: org.gtk.Demo4
 
 android-signer:
-  image: $ANDROID_IMAGE
+  extends:
+    - .distribution.android
   stage: android
   artifacts:
     paths:
@@ -509,9 +606,10 @@ nightly node-editor aarch64:
     needs: ['flatpak:node-editor:aarch64']
 
 static-scan:
-  image: $FEDORA_IMAGE
+  extends:
+    - .distribution.fedora
   stage: analysis
-  needs: []
+  needs: ['container:fedora']
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug"
   script:
@@ -536,7 +634,7 @@ asan-build:
     - .build-fedora-default
   tags: [ asan ]
   stage: analysis
-  needs: []
+  needs: ['container:fedora']
   script:
     - export PATH="$HOME/.local/bin:$PATH"
     - CC=clang meson setup
@@ -555,9 +653,10 @@ asan-build:
     - .gitlab-ci/run-tests.sh _build wayland gtk
 
 reference:
-  image: $FEDORA_IMAGE
+  extends:
+    - .distribution.fedora
   stage: docs
-  needs: []
+  needs: ['container:fedora']
   script:
     - export PATH="$HOME/.local/bin:$PATH"
     - meson setup
@@ -595,7 +694,8 @@ reference:
       - _reference
 
 publish-docs:
-  image: $FEDORA_IMAGE
+  extends:
+    - .distribution.fedora
   stage: publish
   interruptible: false
   needs: ['reference']
