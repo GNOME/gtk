@@ -66,7 +66,7 @@ default:
 
 .container.fedora:
   variables:
-    BASE_TAG: '2025-04-27.6'
+    BASE_TAG: '2025-04-28.1'
     FDO_DISTRIBUTION_VERSION: 42
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
@@ -108,7 +108,9 @@ default:
       xorg-x11-server-Xvfb
     FDO_DISTRIBUTION_EXEC: |
       dnf builddep -y gtk4 &&
-      dnf clean all
+      meson subprojects download || exit 137 &&
+      meson subprojects update --reset || exit 137 &&
+      mkdir /subprojects && find subprojects -mindepth 1 -maxdepth 1 -type d -exec mv {} /subprojects \;
 
 .distribution.fedora:
   extends:
@@ -119,6 +121,10 @@ container:fedora:
   extends:
     - .container.fedora
     - .fdo.container-build@fedora@x86_64
+  # DNS issues can cause this to fail
+  retry:
+    max: 2
+    exit_codes: 137
   stage: prepare
 
 .container.android:
@@ -212,35 +218,17 @@ style-check-diff:
     paths:
       - _ccache/
 
-meson-subprojects:
-  stage: build
-  needs: ['container:fedora']
-  extends:
-    - .distribution.fedora
-  script:
-    - export PATH="$HOME/.local/bin:$PATH"
-    # DNS issues can cause this to fail
-    - meson subprojects download || exit 137
-    - meson subprojects update --reset || exit 137
-  retry:
-    max: 2
-    exit_codes: 137
-  artifacts:
-    name: "gtk-subprojects-${CI_COMMIT_REF_NAME}"
-    when: always
-    paths:
-      - "${CI_PROJECT_DIR}/subprojects"
-  cache:
-    key: "$CI_JOB_NAME"
-    paths:
-      - subprojects/
+.meson-subprojects:
+  before_script:
+    - find /subprojects -mindepth 1 -maxdepth 1 -type d -exec ln -s {} subprojects/ \;
 
 fedora-x86_64:
   extends:
     - .test-runner
     - .build-fedora-default
+    - .meson-subprojects
   stage: build
-  needs: ["meson-subprojects"]
+  needs: ["container:fedora"]
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=debug --default-library=both"
   script:
@@ -290,8 +278,9 @@ fedora-clang:
   extends:
     - .test-runner
     - .build-fedora-default
+    - .meson-subprojects
   stage: build
-  needs: ["meson-subprojects"]
+  needs: ["container:fedora"]
   variables:
     EXTRA_MESON_FLAGS: "--buildtype=release"
   script:
@@ -308,9 +297,11 @@ fedora-clang:
     - .gitlab-ci/run-tests.sh _build wayland_minimal gtk:gsk
 
 fedora-mingw64:
-  extends: .build-fedora-default
+  extends:
+    - .build-fedora-default
+    - .meson-subprojects
   stage: build
-  needs: ["meson-subprojects"]
+  needs: ["container:fedora"]
   script:
     - .gitlab-ci/show-info-linux.sh
     - export PATH="$HOME/.local/bin:$PATH"
