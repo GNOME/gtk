@@ -1973,6 +1973,8 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
           GskGpuShaderClip shader_clip;
           float scale_x, scale_y;
 
+          gsk_gpu_node_processor_sync_globals (self, 0);
+
           if (self->modelview)
             {
               /* Yuck, rounded clip and modelview. I give up. */
@@ -2068,6 +2070,8 @@ gsk_gpu_node_processor_add_color_node (GskGpuNodeProcessor *self,
       gsk_gpu_clear_op (self->frame, &int_clipped, clear_color);
       return;
     }
+
+  gsk_gpu_node_processor_sync_globals (self, 0);
 
   gsk_gpu_color_op (self->frame,
                     gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &node->bounds),
@@ -4829,7 +4833,7 @@ static const struct
     gsk_gpu_get_cairo_node_as_image,
   },
   [GSK_COLOR_NODE] = {
-    0,
+    GSK_GPU_GLOBAL_MATRIX | GSK_GPU_GLOBAL_SCALE | GSK_GPU_GLOBAL_CLIP | GSK_GPU_GLOBAL_SCISSOR,
     GSK_GPU_HANDLE_OPACITY,
     gsk_gpu_node_processor_add_color_node,
     gsk_gpu_node_processor_add_first_color_node,
