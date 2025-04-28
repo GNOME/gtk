@@ -720,7 +720,14 @@ endif
 vulkan_dep = dependency('vulkan',
                         version: vulkan_req,
                         required: vulkan_enabled)
-glslc = find_program('glslc', required: vulkan_enabled)
+
+# Check or shader compiler support
+# Note that we compile D3D12 shaders by first generating Vulkan SPIRV
+# and then decompiling it to HLSL.
+# So the Vulkan compiler is needed on Windows even if Vulkan isn't used.
+glslc = find_program('glslc', required: vulkan_dep.found() or get_variable('win32_enabled'))
+spirv_cross = find_program('spirv-cross', required: get_variable('win32_enabled'))
+
 if vulkan_dep.found() and glslc.found()
   have_vulkan = true
   vulkan_pkg_found = vulkan_dep.type_name() == 'pkgconfig'
@@ -728,6 +735,7 @@ else
   have_vulkan = false
   vulkan_pkg_found = false
 endif
+
 
 libdrm_dep = dependency('libdrm', required: os_linux)
 # We only care about drm_fourcc.h for all the fourccs,
