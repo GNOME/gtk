@@ -48,7 +48,7 @@
 #include "gdkprofilerprivate.h"
 #include "gdktoplevel-wayland-private.h"
 #include "gdkwaylandcolor-private.h"
-#include "gdkshm.h"
+#include "gdkshm-private.h"
 #include "gdksettings-wayland.h"
 #include "gdkapplaunchcontext-wayland.h"
 #include "gdkeventsource.h"

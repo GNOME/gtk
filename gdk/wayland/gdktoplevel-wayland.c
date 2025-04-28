@@ -49,7 +49,7 @@
 #include "gdksurface-wayland-private.h"
 #include "gdktoplevel-wayland-private.h"
 #include "gdksubsurface-wayland-private.h"
-#include "gdkshm.h"
+#include "gdkshm-private.h"
 
 #define MAX_WL_BUFFER_SIZE (4083) /* 4096 minus header, string argument length and NUL byte */
 

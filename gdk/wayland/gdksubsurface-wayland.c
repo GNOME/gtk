@@ -28,7 +28,7 @@
 #include "gdkglcontextprivate.h"
 #include "gdkgltextureprivate.h"
 #include "gsk/gskrectprivate.h"
-#include "gdkshm.h"
+#include "gdkshm-private.h"
 
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 

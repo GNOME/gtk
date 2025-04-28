@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gdkfractionalscale.h"
+#include "gdkfractionalscale-private.h"
 #include "gdkwaylanddevice.h"
 #include "gdkwaylandseat.h"
 

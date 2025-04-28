@@ -27,7 +27,7 @@
 #include <sys/mman.h>
 #endif
 
-#include "gdkshm.h"
+#include "gdkshm-private.h"
 
 /* {{{ Shm buffer handling */
 
