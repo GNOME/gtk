@@ -67,7 +67,8 @@ gdk_android_cairo_context_cairo_create (GdkCairoContext *cairo_context)
 
 static void
 gdk_android_cairo_context_begin_frame (GdkDrawContext *draw_context,
-                                       GdkMemoryDepth depth,
+                                       gpointer        context_data,
+                                       GdkMemoryDepth  depth,
                                        cairo_region_t *region,
                                        GdkColorState **out_color_state,
                                        GdkMemoryDepth *out_depth)
@@ -167,6 +168,7 @@ cleanup:
 
 static void
 gdk_android_cairo_context_end_frame (GdkDrawContext *draw_context,
+                                     gpointer        context_data,
                                      cairo_region_t *painted)
 {
   GdkAndroidCairoContext *self = (GdkAndroidCairoContext *)draw_context;

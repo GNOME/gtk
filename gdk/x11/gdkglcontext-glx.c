@@ -127,6 +127,7 @@ maybe_wait_for_vblank (GdkDisplay  *display,
 
 static void
 gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
+                                  gpointer        context_data,
                                   cairo_region_t *painted)
 {
   GdkX11GLContextGLX *self = GDK_X11_GL_CONTEXT_GLX (draw_context);
@@ -138,7 +139,7 @@ gdk_x11_gl_context_glx_end_frame (GdkDrawContext *draw_context,
   GdkX11Display *display_x11 = GDK_X11_DISPLAY (display);
   GLXDrawable drawable;
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_glx_parent_class)->end_frame (draw_context, painted);
+  GDK_DRAW_CONTEXT_CLASS (gdk_x11_gl_context_glx_parent_class)->end_frame (draw_context, context_data, painted);
 
   gdk_gl_context_make_current (context);
 

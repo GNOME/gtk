@@ -46,6 +46,7 @@ G_DEFINE_TYPE (GdkWaylandGLContext, gdk_wayland_gl_context, GDK_TYPE_GL_CONTEXT)
 
 static void
 gdk_wayland_gl_context_begin_frame (GdkDrawContext  *draw_context,
+                                    gpointer         context_data,
                                     GdkMemoryDepth   depth,
                                     cairo_region_t  *region,
                                     GdkColorState  **out_color_state,
@@ -53,11 +54,12 @@ gdk_wayland_gl_context_begin_frame (GdkDrawContext  *draw_context,
 {
   gdk_wayland_surface_ensure_wl_egl_window (gdk_draw_context_get_surface (draw_context));
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->begin_frame (draw_context, depth, region, out_color_state, out_depth);
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->begin_frame (draw_context, context_data, depth, region, out_color_state, out_depth);
 }
 
 static void
 gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
+                                  gpointer        context_data,
                                   cairo_region_t *painted)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
@@ -78,7 +80,7 @@ gdk_wayland_gl_context_end_frame (GdkDrawContext *draw_context,
   /* We should do this when setting up the EGLSurface, but we don't make_current then */
   eglSwapInterval (gdk_display_get_egl_display (gdk_draw_context_get_display (draw_context)), 0);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->end_frame (draw_context, painted);
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_gl_context_parent_class)->end_frame (draw_context, context_data, painted);
 
   gdk_wayland_surface_notify_committed (surface);
 }

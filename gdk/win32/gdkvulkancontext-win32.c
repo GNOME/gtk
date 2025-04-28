@@ -58,6 +58,7 @@ gdk_win32_vulkan_context_create_surface (GdkVulkanContext *context,
 
 static void
 gdk_win32_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
+                                      gpointer         context_data,
                                       GdkMemoryDepth   depth,
                                       cairo_region_t  *update_area,
                                       GdkColorState  **out_color_state,
@@ -65,7 +66,7 @@ gdk_win32_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
 {
   gdk_win32_surface_handle_queued_move_resize (draw_context);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_vulkan_context_parent_class)->begin_frame (draw_context, depth, update_area, out_color_state, out_depth);
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_vulkan_context_parent_class)->begin_frame (draw_context, context_data, depth, update_area, out_color_state, out_depth);
 }
 
 static void

@@ -320,6 +320,7 @@ gsk_gpu_renderer_fallback_render_texture (GskGpuRenderer        *self,
                                                      tile_width,
                                                      tile_height),
                                 &texture);
+          gsk_gpu_frame_sync (frame);
           gsk_gpu_frame_wait (frame);
 
           g_assert (texture);
@@ -400,6 +401,7 @@ gsk_gpu_renderer_render_texture (GskRenderer           *renderer,
                         root,
                         &rounded_viewport,
                         &texture);
+  gsk_gpu_frame_sync (frame);
 
   gsk_gpu_frame_wait (frame);
   g_object_unref (image);

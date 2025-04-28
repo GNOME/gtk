@@ -77,8 +77,6 @@ struct _GdkVulkanContextPrivate {
   guint n_images;
   VkImage *images;
   cairo_region_t **regions;
-
-  VkSemaphore draw_semaphore;
 #endif
 
   guint32 draw_index;
@@ -668,6 +666,7 @@ physical_device_check_features (VkPhysicalDevice device)
 
 static void
 gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
+                                gpointer         context_data,
                                 GdkMemoryDepth   depth,
                                 cairo_region_t  *region,
                                 GdkColorState  **out_color_state,
@@ -678,9 +677,11 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
   GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
   GdkColorState *color_state;
   VkResult acquire_result;
+  VkSemaphore draw_semaphore;
   guint i;
 
-  g_assert (priv->draw_semaphore != VK_NULL_HANDLE);
+  g_assert (context_data != NULL);
+  draw_semaphore = *(VkSemaphore *) context_data;
 
   color_state = gdk_surface_get_color_state (surface);
   depth = gdk_memory_depth_merge (depth, gdk_color_state_get_depth (color_state));
@@ -714,7 +715,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
       acquire_result = GDK_VK_CHECK (vkAcquireNextImageKHR, gdk_vulkan_context_get_device (context),
                                                             priv->swapchain,
                                                             UINT64_MAX,
-                                                            priv->draw_semaphore,
+                                                            draw_semaphore,
                                                             VK_NULL_HANDLE,
                                                             &priv->draw_index);
       if ((acquire_result == VK_ERROR_OUT_OF_DATE_KHR) ||
@@ -731,7 +732,7 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
                              &(VkSubmitInfo) {
                                .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
                                .waitSemaphoreCount = 1,
-                               .pWaitSemaphores = &priv->draw_semaphore,
+                               .pWaitSemaphores = &draw_semaphore,
                                .pWaitDstStageMask = &mask,
                              },
                              VK_NULL_HANDLE);
@@ -764,8 +765,6 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
       break;
     }
 
-  priv->draw_semaphore = VK_NULL_HANDLE;
-
   cairo_region_union (region, priv->regions[priv->draw_index]);
 
   if (priv->current_depth == GDK_MEMORY_U8_SRGB)
@@ -777,36 +776,55 @@ gdk_vulkan_context_begin_frame (GdkDrawContext  *draw_context,
 
 static void
 gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
+                              gpointer        context_data,
                               cairo_region_t *painted)
 {
   GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
   GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-  VkRectLayerKHR *rectangles;
-  int n_regions;
+  VkPresentRegionsKHR present_regions;
+  VkPresentRegionKHR present_region;
+  VkSwapchainPresentFenceInfoEXT fence_info;
+  void *pNext = NULL;
+
+  g_assert (context_data != NULL);
+
+  if (gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
+    {
+      fence_info = (VkSwapchainPresentFenceInfoEXT) {
+          .sType = VK_STRUCTURE_TYPE_SWAPCHAIN_PRESENT_FENCE_INFO_EXT,
+          .pNext = pNext,
+          .swapchainCount = 1,
+          .pFences = context_data,
+      };
+      pNext = &fence_info;
+    }
 
   if (gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT))
     {
-      n_regions = cairo_region_num_rectangles (painted);
-      rectangles = g_alloca (sizeof (VkRectLayerKHR) * n_regions);
+      present_regions = (VkPresentRegionsKHR) {
+          .sType = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR,
+          .pNext = pNext,
+          .swapchainCount = 1,
+          .pRegions = &present_region
+      };
+      pNext = &present_regions;
 
-      for (int i = 0; i < n_regions; i++)
+      present_region.rectangleCount = cairo_region_num_rectangles (painted);
+      present_region.pRectangles = g_alloca (sizeof (VkRectLayerKHR) * present_region.rectangleCount);
+
+      for (int i = 0; i < present_region.rectangleCount; i++)
         {
           cairo_rectangle_int_t r;
 
           cairo_region_get_rectangle (painted, i, &r);
 
-          rectangles[i] = (VkRectLayerKHR) {
+          ((VkRectLayerKHR *) present_region.pRectangles)[i] = (VkRectLayerKHR) {
               .offset.x = r.x,
               .offset.y = r.y,
               .extent.width = r.width,
               .extent.height = r.height
           };
         }
-    }
-  else
-    {
-      rectangles = NULL;
-      n_regions = 0;
     }
 
   GDK_VK_CHECK (vkQueuePresentKHR, gdk_vulkan_context_get_queue (context),
@@ -821,18 +839,18 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
                                        .pImageIndices = (uint32_t[]) {
                                            priv->draw_index
                                        },
-                                       .pNext = rectangles == NULL ? NULL : &(VkPresentRegionsKHR) {
-                                           .sType = VK_STRUCTURE_TYPE_PRESENT_REGIONS_KHR,
-                                           .swapchainCount = 1,
-                                           .pRegions = &(VkPresentRegionKHR) {
-                                              .rectangleCount = n_regions,
-                                              .pRectangles = rectangles,
-                                           },
-                                       }
+                                       .pNext = pNext,
                                    });
 
   cairo_region_destroy (priv->regions[priv->draw_index]);
   priv->regions[priv->draw_index] = cairo_region_create ();
+
+  if (!gdk_vulkan_context_has_feature (context, GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE))
+    {
+      GDK_VK_CHECK (vkQueueSubmit, gdk_vulkan_context_get_queue (context),
+                                   0, NULL,
+                                   *(VkFence *) context_data);
+    }
 }
 
 static void
@@ -1452,30 +1470,6 @@ gdk_vulkan_context_get_draw_index (GdkVulkanContext *context)
   g_return_val_if_fail (GDK_IS_VULKAN_CONTEXT (context), 0);
 
   return priv->draw_index;
-}
-
-/**
- * gdk_vulkan_context_set_draw_semaphore:
- * @context: a `GdkVulkanContext`
- * @semaphore: a `VkSemaphore`
- *
- * Sets the Vulkan semaphore that will be used in the immediately following
- * gdk_draw_context_begin_frame() call.
- * This is essentially an extra argument for that call, but without extending the
- * arguments of that generic function with Vulkan-specific things.
- *
- * This function must be called or begin_frame() will abort.
- */
-void
-gdk_vulkan_context_set_draw_semaphore (GdkVulkanContext *context,
-                                       VkSemaphore       semaphore)
-{
-  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-
-  g_return_if_fail (GDK_IS_VULKAN_CONTEXT (context));
-  g_return_if_fail (priv->draw_semaphore == VK_NULL_HANDLE);
-
-  priv->draw_semaphore = semaphore;
 }
 
 static gboolean

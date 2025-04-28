@@ -53,6 +53,7 @@ gdk_wayland_vulkan_context_create_surface (GdkVulkanContext *context,
 
 static void
 gdk_vulkan_context_wayland_end_frame (GdkDrawContext *context,
+                                      gpointer        context_data,
                                       cairo_region_t *painted)
 {
   GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
@@ -66,7 +67,7 @@ gdk_vulkan_context_wayland_end_frame (GdkDrawContext *context,
   if (wl_surface_get_version (impl->display_server.wl_surface) >= WL_SURFACE_OFFSET_SINCE_VERSION)
     wl_surface_offset (impl->display_server.wl_surface, dx, dy);
 
-  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_vulkan_context_parent_class)->end_frame (context, painted);
+  GDK_DRAW_CONTEXT_CLASS (gdk_wayland_vulkan_context_parent_class)->end_frame (context, context_data, painted);
 
   gdk_wayland_surface_notify_committed (surface);
 }

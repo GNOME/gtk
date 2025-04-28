@@ -331,7 +331,7 @@ gdk_draw_context_begin_frame (GdkDrawContext       *context,
   g_return_if_fail (priv->surface != NULL);
   g_return_if_fail (region != NULL);
 
-  gdk_draw_context_begin_frame_full (context, GDK_MEMORY_U8, region, NULL);
+  gdk_draw_context_begin_frame_full (context, NULL, GDK_MEMORY_U8, region, NULL);
 }
 
 /*
@@ -360,6 +360,7 @@ gdk_draw_context_begin_frame (GdkDrawContext       *context,
  */
 void
 gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
+                                   gpointer               context_data,
                                    GdkMemoryDepth         depth,
                                    const cairo_region_t  *region,
                                    const graphene_rect_t *opaque)
@@ -401,6 +402,7 @@ gdk_draw_context_begin_frame_full (GdkDrawContext        *context,
   g_assert (priv->color_state == NULL);
 
   GDK_DRAW_CONTEXT_GET_CLASS (context)->begin_frame (context,
+                                                     context_data,
                                                      depth,
                                                      priv->render_region,
                                                      &priv->color_state,
@@ -438,11 +440,12 @@ region_get_pixels (cairo_region_t *region)
 #endif
 
 void
-gdk_draw_context_end_frame_full (GdkDrawContext *context)
+gdk_draw_context_end_frame_full (GdkDrawContext *context,
+                                 gpointer        context_data)
 {
   GdkDrawContextPrivate *priv = gdk_draw_context_get_instance_private (context);
 
-  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, priv->render_region);
+  GDK_DRAW_CONTEXT_GET_CLASS (context)->end_frame (context, context_data, priv->render_region);
 
   gdk_profiler_set_int_counter (pixels_counter, region_get_pixels (priv->render_region));
 
@@ -494,7 +497,7 @@ gdk_draw_context_end_frame (GdkDrawContext *context)
       return;
     }
 
-  gdk_draw_context_end_frame_full (context);
+  gdk_draw_context_end_frame_full (context, NULL);
 }
 
 /**

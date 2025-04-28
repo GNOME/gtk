@@ -34,6 +34,7 @@ struct _GskGpuFrameClass
                                                                          const graphene_rect_t  *opaque);
   void                  (* end)                                         (GskGpuFrame            *self,
                                                                          GdkDrawContext         *context);
+  void                  (* sync)                                        (GskGpuFrame            *self);
   GskGpuImage *         (* upload_texture)                              (GskGpuFrame            *self,
                                                                          gboolean                with_mipmap,
                                                                          GdkTexture             *texture);
@@ -74,6 +75,7 @@ void                    gsk_gpu_frame_begin                             (GskGpuF
                                                                          const graphene_rect_t  *opaque);
 void                    gsk_gpu_frame_end                               (GskGpuFrame            *self,
                                                                          GdkDrawContext         *context);
+void                    gsk_gpu_frame_sync                              (GskGpuFrame            *self);
 
 GdkDrawContext *        gsk_gpu_frame_get_context                       (GskGpuFrame            *self) G_GNUC_PURE;
 GskGpuDevice *          gsk_gpu_frame_get_device                        (GskGpuFrame            *self) G_GNUC_PURE;
