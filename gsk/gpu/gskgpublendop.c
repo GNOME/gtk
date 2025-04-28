@@ -123,6 +123,20 @@ gsk_gpu_blend_op_gl_command (GskGpuOp          *op,
   return op->next;
 }
 
+#ifdef GDK_WINDOWING_WIN32
+static GskGpuOp *
+gsk_gpu_blend_op_d3d12_command (GskGpuOp             *op,
+                                GskGpuFrame          *frame,
+                                GskD3d12CommandState *state)
+{
+  GskGpuBlendOp *self = (GskGpuBlendOp *) op;
+
+  state->blend = self->blend;
+
+  return op->next;
+}
+#endif
+
 static const GskGpuOpClass GSK_GPU_BLEND_OP_CLASS = {
   GSK_GPU_OP_SIZE (GskGpuBlendOp),
   GSK_GPU_STAGE_COMMAND,
@@ -131,7 +145,10 @@ static const GskGpuOpClass GSK_GPU_BLEND_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   gsk_gpu_blend_op_vk_command,
 #endif
-  gsk_gpu_blend_op_gl_command
+  gsk_gpu_blend_op_gl_command,
+#ifdef GDK_WINDOWING_WIN32
+  gsk_gpu_blend_op_d3d12_command,
+#endif
 };
 
 void
