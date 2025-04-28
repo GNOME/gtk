@@ -28,6 +28,7 @@ pacman --noconfirm -S --needed \
     ${MINGW_PACKAGE_PREFIX}-shared-mime-info \
     ${MINGW_PACKAGE_PREFIX}-python-gobject \
     ${MINGW_PACKAGE_PREFIX}-shaderc \
+    ${MINGW_PACKAGE_PREFIX}-spirv-cross \
     ${MINGW_PACKAGE_PREFIX}-vulkan \
     ${MINGW_PACKAGE_PREFIX}-vulkan-headers \
     ${MINGW_PACKAGE_PREFIX}-sassc
