@@ -33,6 +33,7 @@ gsk_private_gpu_shaders = files([
 gsk_private_gpu_shader_headers = []
 gsk_private_gpu_gl_shaders = []
 gsk_private_gpu_vulkan_shaders = []
+gsk_private_gpu_d3d12_shaders = []
 
 generate_header = find_program('generate-header.py')
 process_includes = find_program('process-glsl-includes.py')
@@ -61,23 +62,29 @@ foreach shader: gsk_private_gpu_shaders
                              capture: true)
   gsk_private_gpu_gl_shaders += gl_shader
 
-  if (have_vulkan)
-    glslc_options = [
+  if (have_vulkan or get_variable('win32_enabled'))
+    shader_options = [
       [ fs.name (fs.replace_suffix (shader, '')) + '.vert.spv',
         [ '--target-env=vulkan1.0',
           '-fshader-stage=vertex',
           '-DGSK_VERTEX_SHADER=1',
-        ]
+        ],
+        fs.name (fs.replace_suffix (shader, '')) + '.vert.hlsl',
+        [ '--stage', 'vert',
+        ],
       ],
       [ fs.name (fs.replace_suffix (shader, '')) + '.frag.spv',
         [ '--target-env=vulkan1.0',
           '-fshader-stage=fragment',
           '-DGSK_FRAGMENT_SHADER=1',
-        ]
+        ],
+        fs.name (fs.replace_suffix (shader, '')) + '.frag.hlsl',
+        [ '--stage', 'frag',
+        ],
       ],
     ]
-    foreach option: glslc_options
-      target = custom_target(option.get(0),
+    foreach option: shader_options
+      target_spv = custom_target(option.get(0),
                              input: shader,
                              output: option.get(0),
                              depend_files: gsk_private_gpu_include_shaders,
@@ -88,7 +95,23 @@ foreach shader: gsk_private_gpu_shaders
                                '@INPUT@',
                                '-o', '@OUTPUT@'
                              ])
-      gsk_private_gpu_vulkan_shaders += target
+      gsk_private_gpu_vulkan_shaders += target_spv
+      if get_variable('win32_enabled')
+        target_hlsl = custom_target(option.get(2),
+                               input: target_spv,
+                               output: option.get(2),
+                               depends: target_spv,
+                               command: [
+                                 spirv_cross,
+                                 '--hlsl',
+                                 '--shader-model', '50',
+                                 '--hlsl-auto-binding', 'all',
+                                 option.get(3),
+                                 '--output', '@OUTPUT@',
+                                 '@INPUT@',
+                               ])
+        gsk_private_gpu_vulkan_shaders += target_hlsl
+      endif
     endforeach
   endif
 endforeach
