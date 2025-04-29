@@ -31,7 +31,7 @@
 #include "gdkcursor-wayland.h"
 #include "gdkcursorprivate.h"
 #include "gdkdisplay-wayland.h"
-#include "gdkshm.h"
+#include "gdkshm-private.h"
 
 
 typedef struct

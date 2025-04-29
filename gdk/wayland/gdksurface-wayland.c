@@ -35,7 +35,7 @@
 #include "gdkdevice-wayland-private.h"
 #include "gdkdmabuftextureprivate.h"
 #include "gdksubsurfaceprivate.h"
-#include "gdkshm.h"
+#include "gdkshm-private.h"
 
 #include <wayland/xdg-shell-unstable-v6-client-protocol.h>
 #include <wayland/xdg-foreign-unstable-v2-client-protocol.h>

@@ -21,7 +21,7 @@
 #include "gdkcairocontext-wayland.h"
 
 #include "gdksurface-wayland-private.h"
-#include "gdkshm.h"
+#include "gdkshm-private.h"
 
 #include "gdkprofilerprivate.h"
 

@@ -18,7 +18,7 @@
 #pragma once
 
 #include "gdkwaylandsurface.h"
-#include "gdkfractionalscale.h"
+#include "gdkfractionalscale-private.h"
 #include "gdkwaylandcolor-private.h"
 #include "gdkwaylandpresentationtime-private.h"
 #include "gdkseat-wayland.h"
