@@ -41,6 +41,9 @@ struct _GskGpuShaderOpClass
 #ifdef GDK_RENDERING_VULKAN
   const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
 #endif
+#ifdef GDK_WINDOWING_WIN32
+  const D3D12_INPUT_LAYOUT_DESC *d3d12_input_layout;
+#endif
   void                  (* print_instance)                              (GskGpuShaderOp         *shader,
                                                                          gpointer                instance,
                                                                          GString                *string);
