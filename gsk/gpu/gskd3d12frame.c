@@ -5,7 +5,7 @@
 #include "gskgpudeviceprivate.h"
 #include "gskgpuopprivate.h"
 #include "gskgpuutilsprivate.h"
-//#include "gskd3d12bufferprivate.h"
+#include "gskd3d12bufferprivate.h"
 #include "gskd3d12deviceprivate.h"
 #include "gskd3d12imageprivate.h"
 
@@ -127,7 +127,7 @@ static GskGpuBuffer *
 gsk_d3d12_frame_create_vertex_buffer (GskGpuFrame *frame,
                                        gsize        size)
 {
-  return NULL;
+  return gsk_d3d12_buffer_new_vertex (GSK_D3D12_DEVICE (gsk_gpu_frame_get_device (frame)), size);
 }
 
 static GskGpuBuffer *
@@ -172,6 +172,14 @@ gsk_d3d12_frame_submit (GskGpuFrame       *frame,
 
   ID3D12GraphicsCommandList_SetGraphicsRootSignature (self->command_list,
                                                       gsk_d3d12_device_get_d3d12_root_signature (device));
+
+  ID3D12GraphicsCommandList_IASetPrimitiveTopology (self->command_list, D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+  if (vertex_buffer)
+    {
+      state.vertex_buffer_view.BufferLocation = ID3D12Resource_GetGPUVirtualAddress (
+              gsk_d3d12_buffer_get_d3d12_resource (GSK_D3D12_BUFFER (vertex_buffer)));
+      state.vertex_buffer_view.SizeInBytes = gsk_gpu_buffer_get_size (vertex_buffer);
+    }
 
   while (op)
     {
