@@ -5570,8 +5570,8 @@ setup_ipp_option (const char          *ipp_option_name,
 
       length = g_list_length (ipp_choices);
 
-      choices = g_new0 (char *, length);
-      choices_display = g_new0 (char *, length);
+      choices = g_new0 (char *, length + 1);
+      choices_display = g_new0 (char *, length + 1);
 
       i = 0;
       for (iter = ipp_choices; iter != NULL; iter = iter->next)
