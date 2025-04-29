@@ -214,26 +214,84 @@ gsk_d3d12_device_setup (GskD3d12Device *self,
 static void
 gsk_d3d12_device_create_d3d12_objects (GskD3d12Device *self)
 {
-  ID3DBlob *signature;
+  ID3DBlob *signature, *error_msg;
+  HRESULT hr;
 
-  hr_warn (D3D12SerializeRootSignature ((&(D3D12_ROOT_SIGNATURE_DESC) {
-                                            .NumParameters = 1,
-                                            .pParameters = (D3D12_ROOT_PARAMETER[1]) {
-                                              {
-                                                .ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS,
-                                                .Constants = {
-                                                    .ShaderRegister = 0,
-                                                    .RegisterSpace = 0,
-                                                    .Num32BitValues = sizeof (GskGpuGlobalsInstance) / 4,
-                                                },
-                                                .ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL,
-                                              },
-                                            },
-                                            .Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT,
-                                        }),
-                                        D3D_ROOT_SIGNATURE_VERSION_1,
-                                        &signature,
-                                        NULL));
+  hr = D3D12SerializeRootSignature ((&(D3D12_ROOT_SIGNATURE_DESC) {
+                                    .NumParameters = GSK_D3D12_ROOT_N_PARAMETERS,
+                                    .pParameters = (D3D12_ROOT_PARAMETER[GSK_D3D12_ROOT_N_PARAMETERS]) {
+                                      [GSK_D3D12_ROOT_PUSH_CONSTANTS] = {
+                                        .ParameterType = D3D12_ROOT_PARAMETER_TYPE_32BIT_CONSTANTS,
+                                        .Constants = {
+                                            .ShaderRegister = 0,
+                                            .RegisterSpace = 0,
+                                            .Num32BitValues = sizeof (GskGpuGlobalsInstance) / 4,
+                                        },
+                                        .ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL,
+                                      },
+                                      [GSK_D3D12_ROOT_SAMPLER_0] = {
+                                        .ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+                                        .DescriptorTable = {
+                                            .NumDescriptorRanges = 1,
+                                            .pDescriptorRanges = &(D3D12_DESCRIPTOR_RANGE) {
+                                                .RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER,
+                                                .NumDescriptors = 3,
+                                                .BaseShaderRegister = 0,
+                                                .RegisterSpace = 0,
+                                                .OffsetInDescriptorsFromTableStart = 0,
+                                            }
+                                        }
+                                      },
+                                      [GSK_D3D12_ROOT_SAMPLER_1] = {
+                                        .ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+                                        .DescriptorTable = {
+                                            .NumDescriptorRanges = 1,
+                                            .pDescriptorRanges = &(D3D12_DESCRIPTOR_RANGE) {
+                                                .RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SAMPLER,
+                                                .NumDescriptors = 3,
+                                                .BaseShaderRegister = 3,
+                                                .RegisterSpace = 0,
+                                                .OffsetInDescriptorsFromTableStart = 0,
+                                            }
+                                        }
+                                      },
+                                      [GSK_D3D12_ROOT_TEXTURE_0] = {
+                                        .ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+                                        .DescriptorTable = {
+                                            .NumDescriptorRanges = 1,
+                                            .pDescriptorRanges = &(D3D12_DESCRIPTOR_RANGE) {
+                                                .RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
+                                                .NumDescriptors = 3,
+                                                .BaseShaderRegister = 0,
+                                                .RegisterSpace = 0,
+                                                .OffsetInDescriptorsFromTableStart = 0,
+                                            }
+                                        }
+                                      },
+                                      [GSK_D3D12_ROOT_TEXTURE_1] = {
+                                        .ParameterType = D3D12_ROOT_PARAMETER_TYPE_DESCRIPTOR_TABLE,
+                                        .DescriptorTable = {
+                                            .NumDescriptorRanges = 1,
+                                            .pDescriptorRanges = &(D3D12_DESCRIPTOR_RANGE) {
+                                                .RangeType = D3D12_DESCRIPTOR_RANGE_TYPE_SRV,
+                                                .NumDescriptors = 3,
+                                                .BaseShaderRegister = 3,
+                                                .RegisterSpace = 0,
+                                                .OffsetInDescriptorsFromTableStart = 0,
+                                            }
+                                        }
+                                      },
+                                    },
+                                    .Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT,
+                                }),
+                                D3D_ROOT_SIGNATURE_VERSION_1,
+                                &signature,
+                                &error_msg);
+  if (FAILED (hr))
+    {
+      g_critical ("%*s", (int) ID3D10Blob_GetBufferSize (error_msg), (const char *) ID3D10Blob_GetBufferPointer (error_msg));
+      return;
+    }
   hr_warn (ID3D12Device_CreateRootSignature (self->device,
                                              0,
                                              ID3D10Blob_GetBufferPointer (signature),
