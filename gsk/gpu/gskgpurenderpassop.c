@@ -266,17 +266,23 @@ gsk_gpu_render_pass_op_d3d12_command (GskGpuOp             *op,
                                       GskD3d12CommandState *state)
 {
   GskGpuRenderPassOp *self = (GskGpuRenderPassOp *) op;
+  D3D12_RESOURCE_DESC rtv_desc;
+  GskD3d12Image *target;
 
   /* nesting frame passes not allowed */
   g_assert (state->rtv.ptr == 0);
 
-  gsk_d3d12_image_transition (GSK_D3D12_IMAGE (self->target),
+  target = GSK_D3D12_IMAGE (self->target);
+
+  gsk_d3d12_image_transition (target,
                               state->command_list,
                               D3D12_RESOURCE_STATE_RENDER_TARGET);
 
   //gsk_gpu_render_pass_op_do_barriers (self, state);
 
-  state->rtv = *gsk_d3d12_image_get_rtv (GSK_D3D12_IMAGE (self->target));
+  state->rtv = *gsk_d3d12_image_get_rtv (target);
+  ID3D12Resource1_GetDesc (gsk_d3d12_image_get_resource (target), &rtv_desc);
+  state->rtv_format = rtv_desc.Format;
 
   ID3D12GraphicsCommandList_OMSetRenderTargets (state->command_list,
                                                 1,
@@ -317,7 +323,7 @@ gsk_gpu_render_pass_op_d3d12_command (GskGpuOp             *op,
 
   op = gsk_gpu_op_d3d12_command (op, frame, state);
 
-  gsk_d3d12_image_transition (GSK_D3D12_IMAGE (self->target),
+  gsk_d3d12_image_transition (target,
                               state->command_list,
                               gsk_gpu_render_pass_type_to_resource_states (self->pass_type));
 
@@ -438,6 +444,7 @@ gsk_gpu_render_pass_end_op_d3d12_command (GskGpuOp             *op,
                                           GskD3d12CommandState *state)
 {
   state->rtv.ptr = 0;
+  state->rtv_format = DXGI_FORMAT_UNKNOWN;
 
   return op->next;
 }
