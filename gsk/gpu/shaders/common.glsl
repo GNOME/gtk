@@ -103,6 +103,8 @@ border_get_position (RoundedRect outside,
     case SLICE_LEFT:
       rect = rect_snap (rect, GSK_RECT_SNAP_GROW_SHRINK);
       break;
+    default:
+      return vec2(0,0);
     }
 
   vec2 pos = mix (rect_bounds (rect).xy, rect_bounds (rect).zw, offsets[vert_index]);
