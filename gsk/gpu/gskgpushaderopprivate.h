@@ -5,6 +5,7 @@
 #include "gskgputypesprivate.h"
 #include "gskgpucolorstatesprivate.h"
 #include "gdkcolorprivate.h"
+#include "gdkdxgiformatprivate.h"
 
 #include <graphene.h>
 
@@ -33,6 +34,9 @@ struct _GskGpuShaderOpClass
   gsize                 vertex_size;
 #ifdef GDK_RENDERING_VULKAN
   const VkPipelineVertexInputStateCreateInfo *vertex_input_state;
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  const D3D12_INPUT_LAYOUT_DESC              *vertex_input_layout_desc;
 #endif
   void                  (* print_instance)                              (GskGpuShaderOp         *shader,
                                                                          gpointer                instance,
