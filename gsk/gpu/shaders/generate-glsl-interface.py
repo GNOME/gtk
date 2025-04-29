@@ -38,6 +38,7 @@ class VarType:
     glsl_name: str
     glsl_prefix: str
     vk_type: str
+    d3d12_type: str
     gl_attrib_pointer_str: str
 
     def get_gl_type (self, size):
@@ -66,6 +67,7 @@ VarType.FLOAT = VarType (
         glsl_name = 'float',
         glsl_prefix ='',
         vk_type = 'SFLOAT',
+        d3d12_type = 'FLOAT',
         gl_attrib_pointer_str = '{0}glVertexAttribPointer ({1},\n'
                                 '{0}                       {2},\n'
                                 '{0}                       GL_FLOAT,\n'
@@ -78,6 +80,7 @@ VarType.INT = VarType (
         glsl_name ='int',
         glsl_prefix = 'i',
         vk_type = 'SINT',
+        d3d12_type = 'SINT',
         gl_attrib_pointer_str = '{0}glVertexAttribIPointer ({1},\n'
                                 '{0}                        {2},\n'
                                 '{0}                        GL_INT,\n'
@@ -89,6 +92,7 @@ VarType.UINT = VarType (
         glsl_name = 'uint',
         glsl_prefix = 'u',
         vk_type = 'UINT',
+        d3d12_type = 'UINT',
         gl_attrib_pointer_str = '{0}glVertexAttribIPointer ({1},\n'
                                 '{0}                        {2},\n'
                                 '{0}                        GL_UNSIGNED_INT,\n'
@@ -476,7 +480,7 @@ def print_c_shader_op_class (file):
 #ifdef GDK_RENDERING_VULKAN
     gsk_gpu_shader_op_vk_command,
 #endif
-    gsk_gpu_shader_op_gl_command
+    gsk_gpu_shader_op_gl_command,
   }},
   "gskgpu{file.name}",
   {file.n_textures},
@@ -484,6 +488,9 @@ def print_c_shader_op_class (file):
   sizeof ({file.struct_name}Instance),
 #ifdef GDK_RENDERING_VULKAN
   &{file.var_name}_info,
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  &{file.var_name}_input_layout,
 #endif
   {file.var_name}_op_print_instance,
   {file.var_name}_setup_attrib_locations,
@@ -617,6 +624,40 @@ static const VkPipelineVertexInputStateCreateInfo {file.var_name}_info = {{
 #endif /* GDK_RENDERING_VULKAN */
 ''')
 
+
+def print_d3d12_input_layout (file, n_attributes, attributes):
+    print(f'''#ifdef GDK_WINDOWING_WIN32
+
+static const D3D12_INPUT_ELEMENT_DESC {file.var_name}_input_elements[] = {{''')
+    for idx, attr in enumerate(attributes):
+        for offset in range(0, attr.size, 4):
+            size = min (attr.size - offset, 4)
+            if attr.size > 4: # This means mat3x4 and vec4 at least
+                semantic_name = 'TEXCOORD' + str(idx) + '_'
+                semantic_idx = offset // 4
+            else:
+                semantic_name = 'TEXCOORD'
+                semantic_idx = attr.location + offset // 4
+            print(f'''    {{
+      .SemanticName = "{semantic_name}",
+      .SemanticIndex = {semantic_idx},
+      .Format = DXGI_FORMAT_{'R32G32B32A32'[0:size * 3]}_{attr.var_type.d3d12_type},
+      .InputSlot = 0,
+      .AlignedByteOffset = {attr.location * 16 + offset * 4},
+      .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+      .InstanceDataStepRate = 1,
+    }},''')
+
+    print(f'''}};
+
+static const D3D12_INPUT_LAYOUT_DESC {file.var_name}_input_layout = {{
+  .pInputElementDescs = {file.var_name}_input_elements,
+  .NumElements = G_N_ELEMENTS ({file.var_name}_input_elements),
+}};
+#endif /* GDK_WINDOWING_WIN32 */
+''')
+
+
 def print_glsl_file (file, n_attributes, attributes):
     print (f'''#define GSK_N_TEXTURES {file.n_textures}
 {'//#undef' if not file.dual_blend else '#define'} GSK_DUAL_BLEND 1
@@ -653,6 +694,7 @@ def print_source_file (file, n_attributes, attributes):
     print_gl_setup_vao (file, n_attributes, attributes)
     print_gl_attrib_locations (file, n_attributes, attributes)
     print_vulkan_info (file, n_attributes, attributes)
+    print_d3d12_input_layout (file, n_attributes, attributes)
     print_c_shader_op_class (file)
     print_c_invocation (file, n_attributes, attributes, False)
 
