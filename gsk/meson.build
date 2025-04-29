@@ -193,6 +193,7 @@ endif # have_vulkan
 
 if get_variable('win32_enabled')
   gsk_private_sources += files([
+    'gpu/gskd3d12buffer.c',
     'gpu/gskd3d12device.c',
     'gpu/gskd3d12frame.c',
     'gpu/gskd3d12image.c',
