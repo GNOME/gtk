@@ -50,6 +50,9 @@ static const GskGpuShaderOpClass GSK_GPU_BLUR_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_blur_info,
 #endif
+#ifdef GDK_WINDOWING_WIN32
+  &gsk_gpu_blur_input_layout,
+#endif
   gsk_gpu_blur_op_print_instance,
   gsk_gpu_blur_setup_attrib_locations,
   gsk_gpu_blur_setup_vao
