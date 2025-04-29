@@ -91,7 +91,7 @@ rect_coverage (Rect r,
 float
 rect_coverage (Rect r, vec2 p)
 {
-  return rect_coverage (r, p, abs (fwidth (p)));
+  return rect_coverage (r, p, fwidth (p));
 }
 
 
