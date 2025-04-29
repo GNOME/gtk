@@ -49,6 +49,9 @@ static const GskGpuShaderOpClass GSK_GPU_RADIAL_GRADIENT_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_radialgradient_info,
 #endif
+#ifdef GDK_WINDOWING_WIN32
+  &gsk_gpu_radialgradient_input_layout,
+#endif
   gsk_gpu_radial_gradient_op_print_instance,
   gsk_gpu_radialgradient_setup_attrib_locations,
   gsk_gpu_radialgradient_setup_vao
