@@ -336,8 +336,14 @@ gsk_d3d12_device_compile_shader (const char         *shader_name,
   char *flags_str, *color_states_str, *variation_str;
   char *resource_path;
   GBytes *bytes;
-  ID3D10Blob *shader, *error_msg;
+  ID3D10Blob *shader, *error_msg = NULL;
   HRESULT hr;
+  UINT extra_compile_flags[] = {
+    0,
+    D3DCOMPILE_SKIP_VALIDATION,
+    D3DCOMPILE_SKIP_VALIDATION | D3DCOMPILE_SKIP_OPTIMIZATION
+  };
+  gsize i;
 
   resource_path = g_strconcat ("/org/gtk/libgsk/shaders/d3d12/",
                                shader_name,
@@ -355,34 +361,43 @@ gsk_d3d12_device_compile_shader (const char         *shader_name,
   color_states_str = g_strdup_printf ("%uu", color_states);
   variation_str = g_strdup_printf ("%uu", variation);
 
-  hr = D3DCompile (g_bytes_get_data (bytes, NULL),
-                   g_bytes_get_size (bytes),
-                   resource_path,
-                   ((D3D_SHADER_MACRO[]) {
-                     {
-                       .Name = "SPIRV_CROSS_CONSTANT_ID_0",
-                       .Definition = flags_str,
-                     },
-                     {
-                       .Name = "SPIRV_CROSS_CONSTANT_ID_1",
-                       .Definition = color_states_str,
-                     },
-                     {
-                       .Name = "SPIRV_CROSS_CONSTANT_ID_2",
-                       .Definition = variation_str,
-                     },
-                     {
-                       .Name = NULL,
-                       .Definition = NULL,
-                     }
-                   }),
-                   NULL,
-                   "main",
-                   get_target_for_shader_stage (stage),
-                   0,
-                   0,
-                   &shader,
-                   &error_msg);
+  for (i = 0; i < G_N_ELEMENTS (extra_compile_flags); i++)
+    {
+      /* clear potential error from previous loop */
+      gdk_win32_com_clear (&error_msg);
+
+      hr = D3DCompile (g_bytes_get_data (bytes, NULL),
+                      g_bytes_get_size (bytes),
+                      resource_path,
+                      ((D3D_SHADER_MACRO[]) {
+                        {
+                          .Name = "SPIRV_CROSS_CONSTANT_ID_0",
+                          .Definition = flags_str,
+                        },
+                        {
+                          .Name = "SPIRV_CROSS_CONSTANT_ID_1",
+                          .Definition = color_states_str,
+                        },
+                        {
+                          .Name = "SPIRV_CROSS_CONSTANT_ID_2",
+                          .Definition = variation_str,
+                        },
+                        {
+                          .Name = NULL,
+                          .Definition = NULL,
+                        }
+                      }),
+                      NULL,
+                      "main",
+                      get_target_for_shader_stage (stage),
+                      extra_compile_flags[i],
+                      0,
+                      &shader,
+                      &error_msg);
+
+      if (SUCCEEDED (hr))
+        break;
+    }
 
   g_free (flags_str);
   g_free (color_states_str);
