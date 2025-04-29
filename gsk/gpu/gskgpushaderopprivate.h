@@ -82,6 +82,15 @@ GskGpuOp *              gsk_gpu_shader_op_gl_command_n                  (GskGpuO
 GskGpuOp *              gsk_gpu_shader_op_gl_command                    (GskGpuOp               *op,
                                                                          GskGpuFrame            *frame,
                                                                          GskGLCommandState      *state);
+#ifdef GDK_WINDOWING_WIN32
+GskGpuOp *              gsk_gpu_shader_op_d3d12_command_n               (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame,
+                                                                         GskD3d12CommandState   *state,
+                                                                         gsize                   instance_scale);
+GskGpuOp *              gsk_gpu_shader_op_d3d12_command                 (GskGpuOp               *op,
+                                                                         GskGpuFrame            *frame,
+                                                                         GskD3d12CommandState   *state);
+#endif
 
 #define GSK_RGBA_TO_VEC4(_color) (float[4]) { (_color)->red, (_color)->green, (_color)->blue, (_color)->alpha }
 #define GSK_RGBA_TO_VEC4_ALPHA(_color, _alpha) (float[4]) { (_color)->red, (_color)->green, (_color)->blue, (_color)->alpha * (_alpha) }
