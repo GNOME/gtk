@@ -43,6 +43,9 @@ static const GskGpuShaderOpClass GSK_GPU_COLOR_MATRIX_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_colormatrix_info,
 #endif
+#ifdef GDK_WINDOWING_WIN32
+  &gsk_gpu_colormatrix_input_layout,
+#endif
   gsk_gpu_color_matrix_op_print_instance,
   gsk_gpu_colormatrix_setup_attrib_locations,
   gsk_gpu_colormatrix_setup_vao

@@ -68,6 +68,9 @@ static const GskGpuShaderOpClass GSK_GPU_BOX_SHADOW_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_boxshadow_info,
 #endif
+#ifdef GDK_WINDOWING_WIN32
+  &gsk_gpu_boxshadow_input_layout,
+#endif
   gsk_gpu_box_shadow_op_print_instance,
   gsk_gpu_boxshadow_setup_attrib_locations,
   gsk_gpu_boxshadow_setup_vao
