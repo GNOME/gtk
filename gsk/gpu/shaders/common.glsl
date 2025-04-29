@@ -98,6 +98,8 @@ border_get_position (RoundedRect outside,
     case SLICE_LEFT:
       rect = rect_round_larger_smaller (rect);
       break;
+    default:
+      return vec2(0,0);
     }
 
   vec2 pos = mix (rect.bounds.xy, rect.bounds.zw, offsets[vert_index]);
