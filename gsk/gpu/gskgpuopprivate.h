@@ -55,6 +55,7 @@ struct _GskD3d12CommandState
   ID3D12GraphicsCommandList *command_list;
   D3D12_CPU_DESCRIPTOR_HANDLE rtv;
   DXGI_FORMAT rtv_format;
+  D3D12_VERTEX_BUFFER_VIEW vertex_buffer_view;
   GskGpuBlend blend;
 };
 #endif
