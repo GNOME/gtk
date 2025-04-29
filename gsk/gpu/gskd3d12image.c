@@ -127,8 +127,6 @@ gsk_d3d12_image_new (GskD3d12Device       *device,
   self->swizzle = swizzle;
 
   flags = GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_DOWNLOADABLE;
-  if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
-    flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
   if (swizzle_is_framebuffer_compatible (swizzle))
     flags |= GSK_GPU_IMAGE_RENDERABLE;
 
