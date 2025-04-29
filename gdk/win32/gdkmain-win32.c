@@ -191,6 +191,21 @@ gdk_win32_check_hresult (HRESULT     hr,
   return FALSE;
 }
 
+/*<private>
+ * gdk_win32_com_release:
+ * @com_ptr: Pointer to a COM object
+ *
+ * This is a utility wrapper for IUnknown_Release() and gdk_win32_com_clear()
+ * that can be used as a GDestroyNotify in hash tables etc.
+ */
+void
+gdk_win32_com_release (void *com_ptr)
+{
+  IUnknown *unknown = com_ptr;
+
+  IUnknown_Release (unknown);
+}
+
 /*
  * Like g_strdup_printf, but to a static buffer. Return value does not
  * have to be g_free()d. The buffer is of bounded size and reused
