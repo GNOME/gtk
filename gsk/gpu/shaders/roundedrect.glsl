@@ -231,7 +231,7 @@ rounded_rect_intersection_slice (RoundedRect outside,
 float
 rounded_rect_coverage (RoundedRect r, vec2 p)
 {
-  vec2 fw = abs (fwidth (p));
+  vec2 fw = fwidth (p);
   float distance_scale = max (fw.x, fw.y);
   float distance = rounded_rect_distance (r, p) / distance_scale;
   float coverage = 0.5 - distance;
