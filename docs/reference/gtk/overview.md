@@ -2,7 +2,7 @@ Title: Overview
 
 GTK is a library for creating graphical user interfaces. It works on many
 UNIX-like platforms, Windows, and macOS. GTK is released under the terms of
-the [GNU Library General Public License][gnu-lgpl], which allows for flexible
+the [GNU Lesser General Public License][gnu-lgpl], which allows for flexible
 licensing of client applications. GTK has a C-based, object-oriented
 architecture that allows for maximum flexibility and portability; there are
 bindings for many other languages, including C++, Objective-C, Guile/Scheme, Perl,
@@ -28,8 +28,8 @@ GTK depends on the following libraries:
  - **OpenGL**: OpenGL is the premier environment for developing portable,
    interactive 2D and 3D graphics applications. More information available
    on the [Khronos website][opengl].
- - **Vulkan**: Vulkan is the a newer graphics API, that can be considered
-   the successor of OpenGL.  More information available on the
+ - **Vulkan**: Vulkan is a newer graphics API, that can be considered the
+   successor of OpenGL.  More information available on the
    [Khronos website][vulkan].
  - **Pango**: Pango is a library for internationalized text handling. It
    centers around the `PangoLayout` object, representing a paragraph of
@@ -44,7 +44,7 @@ GTK depends on the following libraries:
  - **graphene**: A small library which provides vector and matrix
    datatypes and operations. Graphene provides optimized implementations
    using various SIMD instruction sets such as SSE and ARM NEON. More
-   information available on the [Graphene website][graphene]
+   information available on the [Graphene website][graphene].
 
 GTK is divided into three parts:
 
