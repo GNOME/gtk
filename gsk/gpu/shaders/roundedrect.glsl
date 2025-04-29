@@ -30,30 +30,29 @@ rounded_rect_distance (RoundedRect r, vec2 p)
 {
   Rect bounds = Rect(vec4(r.bounds));
 
-  float bounds_distance = rect_distance (bounds, p);
+  float distance = rect_distance (bounds, p);
                       
   Ellipse tl = Ellipse (r.bounds.xy + vec2( r.corner_widths.x,  r.corner_heights.x),
                         vec2(r.corner_widths.x, r.corner_heights.x));
+  if (p.x < tl.center.x && p.y < tl.center.y)
+    distance = max (distance, ellipse_distance (tl, p));
+
   Ellipse tr = Ellipse (r.bounds.zy + vec2(-r.corner_widths.y,  r.corner_heights.y),
                         vec2(r.corner_widths.y, r.corner_heights.y));
+  if (p.x > tr.center.x && p.y < tr.center.y)
+    distance = max (distance, ellipse_distance (tr, p));
+
   Ellipse br = Ellipse (r.bounds.zw + vec2(-r.corner_widths.z, -r.corner_heights.z),
                         vec2(r.corner_widths.z, r.corner_heights.z));
+  if (p.x > br.center.x && p.y > br.center.y)
+    distance = max (distance, ellipse_distance (br, p));
+
   Ellipse bl = Ellipse (r.bounds.xw + vec2( r.corner_widths.w, -r.corner_heights.w),
                         vec2(r.corner_widths.w, r.corner_heights.w));
+  if (p.x < bl.center.x && p.y > bl.center.y)
+    distance = max (distance, ellipse_distance (bl, p));
 
- vec4 distances = vec4(ellipse_distance (tl, p),
-                       ellipse_distance (tr, p),
-                       ellipse_distance (br, p),
-                       ellipse_distance (bl, p));
-
-  bvec4 is_out = bvec4(p.x < tl.center.x && p.y < tl.center.y,
-                       p.x > tr.center.x && p.y < tr.center.y,
-                       p.x > br.center.x && p.y > br.center.y,
-                       p.x < bl.center.x && p.y > bl.center.y);
-  distances = mix (vec4(bounds_distance), distances, is_out);
-
-  vec2 max2 = max (distances.xy, distances.zw);
-  return max (max2.x, max2.y);
+  return distance;
 }
 
 RoundedRect
