@@ -347,3 +347,156 @@ print(f'''  }},
 
 #endif
 ''');
+
+
+print(f'''#ifdef GDK_WINDOWING_WIN32
+
+static const D3D12_INPUT_ELEMENT_DESC {var_name}_input_elements[] = {{''')
+
+for match in matches:
+    if match['type'] == 'float':
+        print(f'''      {{
+        .SemanticName = "TEXCOORD",
+        .SemanticIndex = {match['location']},
+        .Format = DXGI_FORMAT_R32_FLOAT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}),
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},''')
+    elif match['type'] == 'int':
+        print(f'''      {{
+        .SemanticName = "TEXCOORD",
+        .SemanticIndex = {match['location']},
+        .Format = DXGI_FORMAT_R32_SINT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}),
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},''')
+    elif match['type'] == 'uint':
+        print(f'''      {{
+        .SemanticName = "TEXCOORD",
+        .SemanticIndex = {match['location']},
+        .Format = DXGI_FORMAT_R32_UINT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}),
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},''')
+    elif match['type'] == 'uvec2':
+        print(f'''      {{
+        .SemanticName = "TEXCOORD",
+        .SemanticIndex = {match['location']},
+        .Format = DXGI_FORMAT_R32G32_UINT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}),
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},''')
+    elif match['type'] == 'vec2':
+        print(f'''      {{
+        .SemanticName = "TEXCOORD",
+        .SemanticIndex = {match['location']},
+        .Format = DXGI_FORMAT_R32G32_FLOAT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}),
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},''')
+    elif match['type'] == 'vec3':
+        print(f'''      {{
+        .SemanticName = "TEXCOORD",
+        .SemanticIndex = {match['location']},
+        .Format = DXGI_FORMAT_R32G32B32_FLOAT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}),
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},''')
+    elif match['type'] == 'vec4':
+        print(f'''      {{
+        .SemanticName = "TEXCOORD",
+        .SemanticIndex = {match['location']},
+        .Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}),
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},''')
+    elif match['type'] == 'mat3x4':
+        print(f'''      {{
+        .SemanticName = "TEXCOORD{match['location']}_",
+        .SemanticIndex = 0,
+        .Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}),
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},
+      {{
+        .SemanticName = "TEXCOORD{match['location']}_",
+        .SemanticIndex = 1,
+        .Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}) + sizeof (float) * 4,
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},
+      {{
+        .SemanticName = "TEXCOORD{match['location']}_",
+        .SemanticIndex = 2,
+        .Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}) + sizeof (float) * 8,
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},''')
+    elif match['type'] == 'mat4':
+        print(f'''      {{
+        .SemanticName = "TEXCOORD{match['location']}_",
+        .SemanticIndex = 0,
+        .Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}),
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},
+      {{
+        .SemanticName = "TEXCOORD{match['location']}_",
+        .SemanticIndex = 1,
+        .Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}) + sizeof (float) * 4,
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},
+      {{
+        .SemanticName = "TEXCOORD{match['location']}_",
+        .SemanticIndex = 2,
+        .Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}) + sizeof (float) * 8,
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},
+      {{
+        .SemanticName = "TEXCOORD{match['location']}_",
+        .SemanticIndex = 3,
+        .Format = DXGI_FORMAT_R32G32B32A32_FLOAT,
+        .InputSlot = 0,
+        .AlignedByteOffset = G_STRUCT_OFFSET({struct_name}, {match['name']}) + sizeof (float) * 12,
+        .InputSlotClass = D3D12_INPUT_CLASSIFICATION_PER_INSTANCE_DATA,
+        .InstanceDataStepRate = 1,
+      }},''')
+    else:
+        raise Exception(f"{filename}: Don't know what a {match['type']} is")
+
+print(f'''}};
+
+static const D3D12_INPUT_LAYOUT_DESC {var_name}_input_layout = {{
+  .pInputElementDescs = {var_name}_input_elements,
+  .NumElements = G_N_ELEMENTS ({var_name}_input_elements),
+}};
+
+#endif''')
