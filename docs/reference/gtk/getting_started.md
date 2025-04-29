@@ -1,7 +1,7 @@
 Title: Getting Started with GTK
 Slug: gtk-getting-started
 
-GTK is a [widget toolkit](http://en.wikipedia.org/wiki/Widget_toolkit).
+GTK is a [widget toolkit](https://en.wikipedia.org/wiki/Widget_toolkit).
 Each user interface created by GTK consists of widgets. This is implemented
 in C using [class@GObject.Object], an object-oriented framework for C. Widgets
 are organized in a hierarchy. The window widget is the main container.
@@ -33,7 +33,7 @@ Create a new file with the following content named `example-0.c`.
 #include <gtk/gtk.h>
 
 static void
-activate (GtkApplication* app,
+activate (GtkApplication *app,
           gpointer        user_data)
 {
   GtkWidget *window;
