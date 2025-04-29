@@ -62,30 +62,29 @@ rounded_rect_corner_height (RoundedRect r, const uint corner)
 float
 rounded_rect_distance (RoundedRect r, vec2 p)
 {
-  float bounds_distance = rect_distance (Rect (rounded_rect_bounds (r)), p);
+  float distance = rect_distance (Rect (rounded_rect_bounds (r)), p);
                       
   Ellipse tl = Ellipse (rounded_rect_bounds (r).xy + vec2( 1.,  1.)*rounded_rect_corner (r, TOP_LEFT),
                         rounded_rect_corner (r, TOP_LEFT));
+  if (p.x < tl.center.x && p.y < tl.center.y)
+    distance = max (distance, ellipse_distance (tl, p));
+
   Ellipse tr = Ellipse (rounded_rect_bounds (r).zy + vec2(-1.,  1.)*rounded_rect_corner (r, TOP_RIGHT),
                         rounded_rect_corner (r, TOP_RIGHT));
+  if (p.x > tr.center.x && p.y < tr.center.y)
+    distance = max (distance, ellipse_distance (tr, p));
+
   Ellipse br = Ellipse (rounded_rect_bounds (r).zw + vec2(-1., -1.)*rounded_rect_corner (r, BOTTOM_RIGHT),
                         rounded_rect_corner (r, BOTTOM_RIGHT));
+  if (p.x > br.center.x && p.y > br.center.y)
+    distance = max (distance, ellipse_distance (br, p));
+
   Ellipse bl = Ellipse (rounded_rect_bounds (r).xw + vec2( 1., -1.)*rounded_rect_corner (r, BOTTOM_LEFT),
                         rounded_rect_corner (r, BOTTOM_LEFT));
+  if (p.x < bl.center.x && p.y > bl.center.y)
+    distance = max (distance, ellipse_distance (bl, p));
 
- vec4 distances = vec4(ellipse_distance (tl, p),
-                       ellipse_distance (tr, p),
-                       ellipse_distance (br, p),
-                       ellipse_distance (bl, p));
-
-  bvec4 is_out = bvec4(p.x < tl.center.x && p.y < tl.center.y,
-                       p.x > tr.center.x && p.y < tr.center.y,
-                       p.x > br.center.x && p.y > br.center.y,
-                       p.x < bl.center.x && p.y > bl.center.y);
-  distances = mix (vec4(bounds_distance), distances, is_out);
-
-  vec2 max2 = max (distances.xy, distances.zw);
-  return max (max2.x, max2.y);
+  return distance;
 }
 
 RoundedRect
