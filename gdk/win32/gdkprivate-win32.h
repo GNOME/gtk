@@ -121,6 +121,7 @@ G_STMT_START {\
     } \
 }G_STMT_END
 
+void gdk_win32_com_release (void *com_ptr);
 void   _gdk_win32_print_dc             (HDC          hdc);
 
 char *_gdk_win32_surface_state_to_string (GdkToplevelState state);
