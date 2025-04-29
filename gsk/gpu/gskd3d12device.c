@@ -3,12 +3,17 @@
 #include "gskd3d12deviceprivate.h"
 #include "gskd3d12imageprivate.h"
 #include "gskgpuglobalsopprivate.h"
+#include "gskgpushaderopprivate.h"
 
 #include "gdk/win32/gdkd3d12contextprivate.h"
 #include "gdk/win32/gdkd3d12texture.h"
 #include "gdk/win32/gdkdisplay-win32.h"
 
+#include <d3dcompiler.h>
+
 typedef struct _DescriptorHeap DescriptorHeap;
+typedef struct _PipelineCacheKey PipelineCacheKey;
+
 struct _DescriptorHeap
 {
   ID3D12DescriptorHeap *heap;
@@ -30,6 +35,7 @@ struct _GskD3d12Device
 
   ID3D12RootSignature *root_signature;
 
+  GHashTable *pipeline_cache;
   DescriptorHeaps descriptor_heaps;
 };
 
@@ -37,6 +43,43 @@ struct _GskD3d12DeviceClass
 {
   GskGpuDeviceClass parent_class;
 };
+struct _PipelineCacheKey
+{
+  const GskGpuShaderOpClass *op_class;
+  GskGpuShaderFlags flags;
+  GskGpuColorStates color_states;
+  guint32 variation;
+  GskGpuBlend blend;
+  DXGI_FORMAT rtv_format;
+};
+
+static guint
+pipeline_cache_key_hash (gconstpointer data)
+{
+  const PipelineCacheKey *key = data;
+
+  return GPOINTER_TO_UINT (key->op_class) ^
+         key->flags ^
+         (key->color_states << 4) ^
+         (key->variation << 12) ^
+         (key->blend << 20) ^
+         (key->rtv_format << 24);
+}
+
+static gboolean
+pipeline_cache_key_equal (gconstpointer a,
+                          gconstpointer b)
+{
+  const PipelineCacheKey *keya = a;
+  const PipelineCacheKey *keyb = b;
+
+  return keya->op_class == keyb->op_class &&
+         keya->flags == keyb->flags &&
+         keya->color_states == keyb->color_states &&
+         keya->variation == keyb->variation &&
+         keya->blend == keyb->blend &&
+         keya->rtv_format == keyb->rtv_format;
+}
 
 G_DEFINE_TYPE (GskD3d12Device, gsk_d3d12_device, GSK_TYPE_GPU_DEVICE)
 
@@ -113,6 +156,8 @@ gsk_d3d12_device_finalize (GObject *object)
   display = gsk_gpu_device_get_display (device);
   g_object_steal_data (G_OBJECT (display), "-gsk-d3d12-device");
 
+  g_hash_table_unref (self->pipeline_cache);
+
   for (i = 0; i < descriptor_heaps_get_size (&self->descriptor_heaps); i++)
     {
       DescriptorHeap *heap = descriptor_heaps_get (&self->descriptor_heaps, i);
@@ -145,6 +190,11 @@ static void
 gsk_d3d12_device_init (GskD3d12Device *self)
 {
   descriptor_heaps_init (&self->descriptor_heaps);
+
+  self->pipeline_cache = g_hash_table_new_full (pipeline_cache_key_hash,
+                                                pipeline_cache_key_equal,
+                                                g_free,
+                                                gdk_win32_com_release);
 }
 
 static void
@@ -179,6 +229,7 @@ gsk_d3d12_device_create_d3d12_objects (GskD3d12Device *self)
                                                 .ShaderVisibility = D3D12_SHADER_VISIBILITY_ALL,
                                               },
                                             },
+                                            .Flags = D3D12_ROOT_SIGNATURE_FLAG_ALLOW_INPUT_ASSEMBLER_INPUT_LAYOUT,
                                         }),
                                         D3D_ROOT_SIGNATURE_VERSION_1,
                                         &signature,
@@ -235,8 +286,310 @@ gsk_d3d12_device_get_d3d12_root_signature (GskD3d12Device *self)
   return self->root_signature;
 }
 
-/* taken from glib source code, adapted to guint64 */
+typedef enum
+{
+  VERTEX_SHADER,
+  FRAGMENT_SHADER,
+  N_STAGES
+} ShaderStage;
 
+static const char *
+get_target_for_shader_stage (ShaderStage stage)
+{
+  switch (stage)
+  {
+    case VERTEX_SHADER:
+      return "vs_5_0";
+    case FRAGMENT_SHADER:
+      return "ps_5_0";
+    case N_STAGES:
+    default:
+      g_assert_not_reached ();
+      return "ps_5_0";
+  }
+}
+
+static const char *
+get_extension_for_shader_stage (ShaderStage stage)
+{
+  switch (stage)
+  {
+    case VERTEX_SHADER:
+      return ".vert.hlsl";
+    case FRAGMENT_SHADER:
+      return ".frag.hlsl";
+    case N_STAGES:
+    default:
+      g_assert_not_reached ();
+      return ".frag.hlsl";
+  }
+}
+
+static ID3D10Blob *
+gsk_d3d12_device_compile_shader (const char         *shader_name,
+                                 ShaderStage         stage,
+                                 GskGpuShaderFlags   flags,
+                                 GskGpuColorStates   color_states,
+                                 guint32             variation,
+                                 GError            **error)
+{
+  char *flags_str, *color_states_str, *variation_str;
+  char *resource_path;
+  GBytes *bytes;
+  ID3D10Blob *shader, *error_msg;
+  HRESULT hr;
+
+  resource_path = g_strconcat ("/org/gtk/libgsk/shaders/d3d12/",
+                               shader_name,
+                               get_extension_for_shader_stage (stage),
+                               NULL);
+
+  bytes = g_resources_lookup_data (resource_path, 0, error);
+  if (bytes == NULL)
+    {
+      g_free (resource_path);
+      return NULL;
+    }
+
+  flags_str = g_strdup_printf ("%uu", flags);
+  color_states_str = g_strdup_printf ("%uu", color_states);
+  variation_str = g_strdup_printf ("%uu", variation);
+
+  hr = D3DCompile (g_bytes_get_data (bytes, NULL),
+                   g_bytes_get_size (bytes),
+                   resource_path,
+                   ((D3D_SHADER_MACRO[]) {
+                     {
+                       .Name = "SPIRV_CROSS_CONSTANT_ID_0",
+                       .Definition = flags_str,
+                     },
+                     {
+                       .Name = "SPIRV_CROSS_CONSTANT_ID_1",
+                       .Definition = color_states_str,
+                     },
+                     {
+                       .Name = "SPIRV_CROSS_CONSTANT_ID_2",
+                       .Definition = variation_str,
+                     },
+                     {
+                       .Name = NULL,
+                       .Definition = NULL,
+                     }
+                   }),
+                   NULL,
+                   "main",
+                   get_target_for_shader_stage (stage),
+                   0,
+                   0,
+                   &shader,
+                   &error_msg);
+
+  g_free (flags_str);
+  g_free (color_states_str);
+  g_free (variation_str);
+  g_bytes_unref (bytes);
+  g_free (resource_path);
+
+  if (!gdk_win32_check_hresult (hr, error, "%s", ""))
+    {
+      if (error)
+        {
+          char *new_msg = g_strdup_printf ("%s\n%*s",
+                                           (*error)->message,
+                                           (int) ID3D10Blob_GetBufferSize (error_msg),
+                                           (const char *) ID3D10Blob_GetBufferPointer (error_msg));
+          g_free ((*error)->message);
+          (*error)->message = new_msg;
+        }
+      gdk_win32_com_clear (&error_msg);
+      return NULL;
+    }
+
+  return shader;
+}
+
+static const D3D12_BLEND_DESC blend_descs[4] = {
+  [GSK_GPU_BLEND_NONE] = {
+    .AlphaToCoverageEnable = false,
+    .IndependentBlendEnable = false,
+    .RenderTarget = {
+      {
+        .BlendEnable = false,
+        .LogicOpEnable = false,
+        .RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL,
+      },
+    }
+  },
+  [GSK_GPU_BLEND_OVER] = {
+    .AlphaToCoverageEnable = false,
+    .IndependentBlendEnable = false,
+    .RenderTarget = {
+      {
+        .BlendEnable = true,
+        .LogicOpEnable = false,
+        .SrcBlend = D3D12_BLEND_ONE,
+        .DestBlend = D3D12_BLEND_INV_SRC_ALPHA,
+        .BlendOp = D3D12_BLEND_OP_ADD,
+        .SrcBlendAlpha = D3D12_BLEND_ONE,
+        .DestBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA,
+        .BlendOpAlpha = D3D12_BLEND_OP_ADD,
+        .RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL,
+      },
+    }
+  },
+  [GSK_GPU_BLEND_ADD] = {
+    .AlphaToCoverageEnable = false,
+    .IndependentBlendEnable = false,
+    .RenderTarget = {
+      {
+        .BlendEnable = true,
+        .LogicOpEnable = false,
+        .SrcBlend = D3D12_BLEND_ONE,
+        .DestBlend = D3D12_BLEND_ONE,
+        .BlendOp = D3D12_BLEND_OP_ADD,
+        .SrcBlendAlpha = D3D12_BLEND_ONE,
+        .DestBlendAlpha = D3D12_BLEND_ONE,
+        .BlendOpAlpha = D3D12_BLEND_OP_ADD,
+        .RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL,
+      },
+    }
+  },
+  [GSK_GPU_BLEND_CLEAR] = {
+    .AlphaToCoverageEnable = false,
+    .IndependentBlendEnable = false,
+    .RenderTarget = {
+      {
+        .BlendEnable = true,
+        .LogicOpEnable = false,
+        .SrcBlend = D3D12_BLEND_ZERO,
+        .DestBlend = D3D12_BLEND_INV_SRC_ALPHA,
+        .BlendOp = D3D12_BLEND_OP_ADD,
+        .SrcBlendAlpha = D3D12_BLEND_ZERO,
+        .DestBlendAlpha = D3D12_BLEND_INV_SRC_ALPHA,
+        .BlendOpAlpha = D3D12_BLEND_OP_ADD,
+        .RenderTargetWriteMask = D3D12_COLOR_WRITE_ENABLE_ALL,
+      },
+    }
+  },
+};
+
+ID3D12PipelineState *
+gsk_d3d12_device_get_d3d12_pipeline_state (GskD3d12Device            *self,
+                                           const GskGpuShaderOpClass *op_class,
+                                           GskGpuShaderFlags          flags,
+                                           GskGpuColorStates          color_states,
+                                           guint32                    variation,
+                                           GskGpuBlend                blend,
+                                           DXGI_FORMAT                rtv_format)
+{
+  PipelineCacheKey cache_key;
+  ID3D12PipelineState *result;
+  ID3D10Blob *shaders[N_STAGES];
+  D3D12_GRAPHICS_PIPELINE_STATE_DESC desc;
+  const char *blend_name[] = { "NONE", "OVER", "ADD", "CLEAR" };
+  GError *error = NULL;
+  gsize i;
+
+  cache_key = (PipelineCacheKey) {
+    .op_class = op_class,
+    .color_states = color_states,
+    .variation = variation,
+    .flags = flags,
+    .blend = blend,
+    .rtv_format = rtv_format,
+  };
+  result = g_hash_table_lookup (self->pipeline_cache, &cache_key);
+  if (result)
+    return result;
+
+  for (i = 0; i < N_STAGES; i++)
+    {
+      shaders[i] = gsk_d3d12_device_compile_shader (op_class->shader_name,
+                                                    i,
+                                                    flags,
+                                                    color_states,
+                                                    variation,
+                                                    &error);
+      if (shaders[i] == NULL)
+      {
+        g_critical ("%s", error->message);
+        g_clear_error (&error);
+      }
+    }
+
+  desc = (D3D12_GRAPHICS_PIPELINE_STATE_DESC) {
+    .pRootSignature = self->root_signature,
+    .VS = (D3D12_SHADER_BYTECODE) {
+        .pShaderBytecode = ID3D10Blob_GetBufferPointer (shaders[VERTEX_SHADER]),
+        .BytecodeLength = ID3D10Blob_GetBufferSize (shaders[VERTEX_SHADER]),
+    },
+    .PS = (D3D12_SHADER_BYTECODE) {
+      .pShaderBytecode = ID3D10Blob_GetBufferPointer (shaders[FRAGMENT_SHADER]),
+      .BytecodeLength = ID3D10Blob_GetBufferSize (shaders[FRAGMENT_SHADER]),
+    },
+    .BlendState = blend_descs[blend],
+    .SampleMask = UINT_MAX,
+    .RasterizerState = {
+        .FillMode = D3D12_FILL_MODE_SOLID,
+        .CullMode = D3D12_CULL_MODE_NONE,
+        .FrontCounterClockwise = FALSE,
+        .DepthBias = D3D12_DEFAULT_DEPTH_BIAS,
+        .DepthBiasClamp = D3D12_DEFAULT_DEPTH_BIAS_CLAMP,
+        .SlopeScaledDepthBias = D3D12_DEFAULT_SLOPE_SCALED_DEPTH_BIAS,
+        .DepthClipEnable = TRUE,
+        .MultisampleEnable = FALSE,
+        .AntialiasedLineEnable = FALSE,
+        .ForcedSampleCount = 0,
+        .ConservativeRaster = D3D12_CONSERVATIVE_RASTERIZATION_MODE_OFF,
+    },
+    .DepthStencilState = {
+        .DepthEnable = FALSE,
+        .StencilEnable = FALSE,
+    },
+    .InputLayout = *op_class->d3d12_input_layout,
+    .IBStripCutValue = D3D12_INDEX_BUFFER_STRIP_CUT_VALUE_DISABLED,
+    .PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE,
+    .NumRenderTargets = 1,
+    .RTVFormats = { rtv_format, 0, 0, 0, 0, 0, 0, 0 },
+    .DSVFormat = 0,
+    .SampleDesc = {
+        .Count = 1,
+        .Quality = 0,
+    },
+    .NodeMask = 0,
+    .CachedPSO = {
+      .pCachedBlob = NULL,
+      .CachedBlobSizeInBytes = 0
+    },
+    .Flags = 0,
+  };
+
+  hr_warn (ID3D12Device_CreateGraphicsPipelineState (self->device,
+                                                     &desc,
+                                                     &IID_ID3D12PipelineState,
+                                                     (void **) &result));
+  GSK_DEBUG (SHADERS,
+             "Create D3D12 pipeline (%s, %u/%u/%u/%s/%u)",
+             op_class->shader_name,
+             flags,
+             color_states,
+             variation,
+             blend_name[blend],
+             rtv_format);
+
+  for (i = 0; i < N_STAGES; i++)
+    {
+       gdk_win32_com_clear (&shaders[i]);
+    }
+
+  g_hash_table_insert (self->pipeline_cache,
+                       g_memdup2 (&cache_key, sizeof (PipelineCacheKey)),
+                       result);
+
+  return result;
+}
+
+/* taken from glib source code, adapted to guint64 */
 static inline int
 my_bit_nth_lsf (guint64 mask,
                 int     nth_bit)
