@@ -481,6 +481,9 @@ def print_c_shader_op_class (file):
     gsk_gpu_shader_op_vk_command,
 #endif
     gsk_gpu_shader_op_gl_command,
+#ifdef GDK_WINDOWING_WIN32
+    gsk_gpu_shader_op_d3d12_command,
+#endif
   }},
   "gskgpu{file.name}",
   {file.n_textures},
