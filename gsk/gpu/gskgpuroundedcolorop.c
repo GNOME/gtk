@@ -44,6 +44,9 @@ static const GskGpuShaderOpClass GSK_GPU_ROUNDED_COLOR_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_roundedcolor_info,
 #endif
+#ifdef GDK_WINDOWING_WIN32
+  &gsk_gpu_roundedcolor_input_layout,
+#endif
   gsk_gpu_rounded_color_op_print_instance,
   gsk_gpu_roundedcolor_setup_attrib_locations,
   gsk_gpu_roundedcolor_setup_vao
