@@ -207,8 +207,8 @@ gcc $( pkg-config --cflags gtk4 ) -o example-1 example-1.c $( pkg-config --libs 
 As seen above, `example-1.c` builds further upon `example-0.c` by adding a
 button to our window, with the label "Hello World". Two new `GtkWidget`
 pointers are declared to accomplish this, `button` and `box`. The box
-variable is created to store a [class@Gtk.Box], which is GTK's way of
-controlling the size and layout of buttons.
+variable is created to store a [class@Gtk.Box], which is one of GTK's ways
+of controlling the size and layout of widgets.
 
 The `GtkBox` widget is created with [ctor@Gtk.Box.new], which takes a
 [enum@Gtk.Orientation] enumeration value as parameter. The buttons which
