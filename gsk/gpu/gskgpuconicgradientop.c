@@ -45,6 +45,9 @@ static const GskGpuShaderOpClass GSK_GPU_CONIC_GRADIENT_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_conicgradient_info,
 #endif
+#ifdef GDK_WINDOWING_WIN32
+  &gsk_gpu_conicgradient_input_layout,
+#endif
   gsk_gpu_conic_gradient_op_print_instance,
   gsk_gpu_conicgradient_setup_attrib_locations,
   gsk_gpu_conicgradient_setup_vao
