@@ -51,6 +51,16 @@ gsk_gpu_box_shadow_op_gl_command (GskGpuOp          *op,
   return gsk_gpu_shader_op_gl_command_n (op, frame, state, 8);
 }
 
+#ifdef GDK_WINDOWING_WIN32
+static GskGpuOp *
+gsk_gpu_box_shadow_op_d3d12_command (GskGpuOp             *op,
+                                     GskGpuFrame          *frame,
+                                     GskD3d12CommandState *state)
+{
+  return gsk_gpu_shader_op_d3d12_command_n (op, frame, state, 8);
+}
+#endif
+
 static const GskGpuShaderOpClass GSK_GPU_BOX_SHADOW_OP_CLASS = {
   {
     GSK_GPU_OP_SIZE (GskGpuBoxShadowOp),
@@ -60,7 +70,10 @@ static const GskGpuShaderOpClass GSK_GPU_BOX_SHADOW_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
     gsk_gpu_box_shadow_op_vk_command,
 #endif
-    gsk_gpu_box_shadow_op_gl_command
+    gsk_gpu_box_shadow_op_gl_command,
+#ifdef GDK_WINDOWING_WIN32
+    gsk_gpu_box_shadow_op_d3d12_command,
+#endif
   },
   "gskgpuboxshadow",
   gsk_gpu_boxshadow_n_textures,
