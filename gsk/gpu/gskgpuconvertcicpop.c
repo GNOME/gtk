@@ -54,6 +54,9 @@ static const GskGpuShaderOpClass GSK_GPU_CONVERT_CICP_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   &gsk_gpu_convertcicp_info,
 #endif
+#ifdef GDK_WINDOWING_WIN32
+  &gsk_gpu_convertcicp_input_layout,
+#endif
   gsk_gpu_convert_cicp_op_print_instance,
   gsk_gpu_convertcicp_setup_attrib_locations,
   gsk_gpu_convertcicp_setup_vao
