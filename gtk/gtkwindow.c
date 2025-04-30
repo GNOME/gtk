@@ -4469,7 +4469,7 @@ toplevel_compute_size (GdkToplevel     *toplevel,
                                           shadow.top, shadow.bottom);
     }
 
-  gtk_widget_ensure_resize (widget);
+  gtk_widget_clear_resize_queued (widget);
 }
 
 static void

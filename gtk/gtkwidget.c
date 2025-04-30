@@ -4265,7 +4265,7 @@ gtk_widget_allocate (GtkWidget    *widget,
                      gtk_widget_get_name (widget), widget);
         }
 
-      gtk_widget_ensure_resize (widget);
+      gtk_widget_clear_resize_queued (widget);
       priv->alloc_needed = FALSE;
 
       gtk_widget_update_paintables (widget);
@@ -10906,7 +10906,7 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
   if (!gtk_widget_needs_allocate (widget))
     return;
 
-  gtk_widget_ensure_resize (widget);
+  gtk_widget_clear_resize_queued (widget);
 
   /*  This code assumes that we only reach here if the previous
    *  allocation is still valid (ie no resize was queued).
@@ -10928,12 +10928,9 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
 }
 
 void
-gtk_widget_ensure_resize (GtkWidget *widget)
+gtk_widget_clear_resize_queued (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
-
-  if (!priv->resize_queued)
-    return;
 
   priv->resize_queued = FALSE;
 }
