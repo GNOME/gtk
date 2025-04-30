@@ -1,5 +1,5 @@
 [wrap-git]
 directory=wayland-protocols
 url=https://gitlab.freedesktop.org/wayland/wayland-protocols.git
-revision=1.43
+revision=1.44
 depth=1
