@@ -3601,11 +3601,11 @@ gtk_widget_queue_allocate (GtkWidget *widget)
 }
 
 static inline gboolean
-gtk_widget_get_resize_needed (GtkWidget *widget)
+gtk_widget_get_resize_queued (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  return priv->resize_needed;
+  return priv->resize_queued;
 }
 
 /**
@@ -3634,7 +3634,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
 
-  if (gtk_widget_get_resize_needed (widget))
+  if (gtk_widget_get_resize_queued (widget))
     return;
 
   gtk_widget_push_verify_invariants (widget);
@@ -3642,7 +3642,7 @@ gtk_widget_queue_resize (GtkWidget *widget)
   gtk_widget_queue_draw (widget);
 
   priv = gtk_widget_get_instance_private (widget);
-  priv->resize_needed = TRUE;
+  priv->resize_queued = TRUE;
   _gtk_size_request_cache_clear (&priv->requests);
   gtk_widget_set_alloc_needed (widget);
 
@@ -4020,7 +4020,7 @@ gtk_widget_ensure_allocate_on_children (GtkWidget *widget)
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GtkWidget *child;
 
-  g_assert (!priv->resize_needed);
+  g_assert (!priv->resize_queued);
   g_assert (!priv->alloc_needed);
 
   if (!priv->alloc_needed_on_child)
@@ -4085,8 +4085,29 @@ gtk_widget_allocate (GtkWidget    *widget,
       goto out;
     }
 
+#ifdef G_ENABLE_CONSISTENCY_CHECKS
+  {
+    SizeRequestCache *cache;
+    GtkSizeRequestMode cached;
+
+    cache = _gtk_widget_peek_request_cache (widget);
+
+    if (cache->request_mode_valid)
+      {
+        cached = cache->request_mode;
+        cache->request_mode_valid = FALSE;
+
+        if (cached != gtk_widget_get_request_mode (widget))
+          {
+            g_warning ("Allocating size to %s %p with stale request mode.",
+                       gtk_widget_get_name (widget), widget);
+          }
+      }
+  }
+#endif
+
 #ifdef G_ENABLE_DEBUG
-  if (gtk_widget_get_resize_needed (widget))
+  if (gtk_widget_get_resize_queued (widget))
     {
       g_warning ("Allocating size to %s %p without calling gtk_widget_measure(). "
                  "How does the code know the size to allocate?",
@@ -4238,13 +4259,13 @@ gtk_widget_allocate (GtkWidget    *widget,
 
       /* Size allocation is god... after consulting god, no further requests or allocations are needed */
       if (GTK_DISPLAY_DEBUG_CHECK (_gtk_widget_get_display (widget), GEOMETRY) &&
-          gtk_widget_get_resize_needed (widget))
+          gtk_widget_get_resize_queued (widget))
         {
           g_warning ("%s %p or a child called gtk_widget_queue_resize() during size_allocate().",
                      gtk_widget_get_name (widget), widget);
         }
 
-      gtk_widget_ensure_resize (widget);
+      gtk_widget_clear_resize_queued (widget);
       priv->alloc_needed = FALSE;
 
       gtk_widget_update_paintables (widget);
@@ -6434,9 +6455,9 @@ gtk_widget_verify_invariants (GtkWidget *widget)
 
   /* Some layout-related invariants */
 
-  /* resize_needed -> alloc_needed */
-  if (widget->priv->resize_needed && !widget->priv->alloc_needed)
-    g_warning ("%s %p resize_needed but not alloc_needed",
+  /* resize_queued -> alloc_needed */
+  if (widget->priv->resize_queued && !widget->priv->alloc_needed)
+    g_warning ("%s %p resize_queued but not alloc_needed",
                G_OBJECT_TYPE_NAME (widget), widget);
 
   /* alloc_needed -> draw_needed */
@@ -10871,7 +10892,7 @@ gtk_widget_needs_allocate (GtkWidget *widget)
   if (!priv->visible || !priv->child_visible)
     return FALSE;
 
-  if (priv->resize_needed || priv->alloc_needed || priv->alloc_needed_on_child)
+  if (priv->resize_queued || priv->alloc_needed || priv->alloc_needed_on_child)
     return TRUE;
 
   return FALSE;
@@ -10885,7 +10906,7 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
   if (!gtk_widget_needs_allocate (widget))
     return;
 
-  gtk_widget_ensure_resize (widget);
+  gtk_widget_clear_resize_queued (widget);
 
   /*  This code assumes that we only reach here if the previous
    *  allocation is still valid (ie no resize was queued).
@@ -10907,14 +10928,11 @@ gtk_widget_ensure_allocate (GtkWidget *widget)
 }
 
 void
-gtk_widget_ensure_resize (GtkWidget *widget)
+gtk_widget_clear_resize_queued (GtkWidget *widget)
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
 
-  if (!priv->resize_needed)
-    return;
-
-  priv->resize_needed = FALSE;
+  priv->resize_queued = FALSE;
 }
 
 void

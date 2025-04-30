@@ -145,7 +145,7 @@ gtk_widget_query_size_for_orientation (GtkWidget        *widget,
   int nat_baseline = -1;
   gboolean found_in_cache;
 
-  gtk_widget_ensure_resize (widget);
+  gtk_widget_clear_resize_queued (widget);
 
   /* We check the request mode first, to determine whether the widget even does
    * any wfh/hfw handling. If it doesn't, we reset for_size to -1 and ensure
@@ -589,7 +589,7 @@ gtk_widget_get_request_mode (GtkWidget *widget)
 {
   SizeRequestCache *cache;
 
-  gtk_widget_ensure_resize (widget);
+  gtk_widget_clear_resize_queued (widget);
   cache = _gtk_widget_peek_request_cache (widget);
 
   if (G_UNLIKELY (!cache->request_mode_valid))
@@ -621,7 +621,7 @@ gtk_widget_get_request_mode (GtkWidget *widget)
           GtkWidget *peer_widget = key;
           SizeRequestCache *peer_cache;
 
-          gtk_widget_ensure_resize (peer_widget);
+          gtk_widget_clear_resize_queued (peer_widget);
           peer_cache = _gtk_widget_peek_request_cache (peer_widget);
           if (G_UNLIKELY (!peer_cache->request_mode_valid))
             {

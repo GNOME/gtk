@@ -84,7 +84,7 @@ struct _GtkWidgetPrivate
   guint limit_events          : 1;
 
   /* Queue-resize related flags */
-  guint resize_needed         : 1; /* queue_resize() has been called but no get_preferred_size() yet */
+  guint resize_queued         : 1; /* queue_resize() has been called but no get_preferred_size() yet */
   guint alloc_needed          : 1; /* this widget needs a size_allocate() call */
   guint alloc_needed_on_child : 1; /* 0 or more children - or this widget - need a size_allocate() call */
 
@@ -226,7 +226,7 @@ void         _gtk_widget_set_visible_flag   (GtkWidget *widget,
                                              gboolean   visible);
 gboolean     _gtk_widget_get_alloc_needed   (GtkWidget *widget);
 gboolean     gtk_widget_needs_allocate      (GtkWidget *widget);
-void         gtk_widget_ensure_resize       (GtkWidget *widget);
+void         gtk_widget_clear_resize_queued (GtkWidget *widget);
 void         gtk_widget_ensure_allocate     (GtkWidget *widget);
 void          _gtk_widget_scale_changed     (GtkWidget *widget);
 void         gtk_widget_monitor_changed     (GtkWidget *widget);
