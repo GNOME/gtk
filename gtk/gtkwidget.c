@@ -4085,6 +4085,27 @@ gtk_widget_allocate (GtkWidget    *widget,
       goto out;
     }
 
+#ifdef G_ENABLE_CONSISTENCY_CHECKS
+  {
+    SizeRequestCache *cache;
+    GtkSizeRequestMode cached;
+
+    cache = _gtk_widget_peek_request_cache (widget);
+
+    if (cache->request_mode_valid)
+      {
+        cached = cache->request_mode;
+        cache->request_mode_valid = FALSE;
+
+        if (cached != gtk_widget_get_request_mode (widget))
+          {
+            g_warning ("Allocating size to %s %p with stale request mode.",
+                       gtk_widget_get_name (widget), widget);
+          }
+      }
+  }
+#endif
+
 #ifdef G_ENABLE_DEBUG
   if (gtk_widget_get_resize_needed (widget))
     {
