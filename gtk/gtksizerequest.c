@@ -589,6 +589,7 @@ gtk_widget_get_request_mode (GtkWidget *widget)
 {
   SizeRequestCache *cache;
 
+  gtk_widget_ensure_resize (widget);
   cache = _gtk_widget_peek_request_cache (widget);
 
   if (G_UNLIKELY (!cache->request_mode_valid))
@@ -620,6 +621,7 @@ gtk_widget_get_request_mode (GtkWidget *widget)
           GtkWidget *peer_widget = key;
           SizeRequestCache *peer_cache;
 
+          gtk_widget_ensure_resize (peer_widget);
           peer_cache = _gtk_widget_peek_request_cache (peer_widget);
           if (G_UNLIKELY (!peer_cache->request_mode_valid))
             {
