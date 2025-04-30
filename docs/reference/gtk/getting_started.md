@@ -1,7 +1,7 @@
 Title: Getting Started with GTK
 Slug: gtk-getting-started
 
-GTK is a [widget toolkit](http://en.wikipedia.org/wiki/Widget_toolkit).
+GTK is a [widget toolkit](https://en.wikipedia.org/wiki/Widget_toolkit).
 Each user interface created by GTK consists of widgets. This is implemented
 in C using [class@GObject.Object], an object-oriented framework for C. Widgets
 are organized in a hierarchy. The window widget is the main container.
@@ -33,7 +33,7 @@ Create a new file with the following content named `example-0.c`.
 #include <gtk/gtk.h>
 
 static void
-activate (GtkApplication* app,
+activate (GtkApplication *app,
           gpointer        user_data)
 {
   GtkWidget *window;
@@ -207,8 +207,8 @@ gcc $( pkg-config --cflags gtk4 ) -o example-1 example-1.c $( pkg-config --libs 
 As seen above, `example-1.c` builds further upon `example-0.c` by adding a
 button to our window, with the label "Hello World". Two new `GtkWidget`
 pointers are declared to accomplish this, `button` and `box`. The box
-variable is created to store a [class@Gtk.Box], which is GTK's way of
-controlling the size and layout of buttons.
+variable is created to store a [class@Gtk.Box], which is one of GTK's ways
+of controlling the size and layout of widgets.
 
 The `GtkBox` widget is created with [ctor@Gtk.Box.new], which takes a
 [enum@Gtk.Orientation] enumeration value as parameter. The buttons which
