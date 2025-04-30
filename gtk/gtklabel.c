@@ -3920,7 +3920,7 @@ gtk_label_set_markup_internal (GtkLabel   *self,
   g_clear_pointer (&self->markup_attrs, pango_attr_list_unref);
   self->markup_attrs = attrs;
 
-  self->mnemonic_keyval = accel_keyval;
+  self->mnemonic_keyval = accel_keyval ? accel_keyval : GDK_KEY_VoidSymbol;
 
   return;
 

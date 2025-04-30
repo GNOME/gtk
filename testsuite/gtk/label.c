@@ -206,8 +206,10 @@ test_label_parse_more (void)
     { "tes_t m__e mo_re", TRUE, FALSE, "test m_e more", GDK_KEY_t },
     { "test m__e mo_re", TRUE, FALSE, "test m_e more", GDK_KEY_r },
     { "tes_t m__e mo_re", FALSE, FALSE, "tes_t m__e mo_re", GDK_KEY_VoidSymbol },
+    { "test m__e more", TRUE, FALSE, "test m_e more", GDK_KEY_VoidSymbol },
     { "<span font='test_font'>test <a href='bla'>w_ith</a> bla</span>", TRUE, TRUE, "test with bla", GDK_KEY_i },
     { "<span font='test_font'>test <a href='bla'>w_ith</a> bla</span>", FALSE, TRUE, "test w_ith bla", GDK_KEY_VoidSymbol },
+    { "<span font='test_font'>test <a href='bla'>with</a> bla</span>", TRUE, TRUE, "test with bla", GDK_KEY_VoidSymbol },
   };
   GtkWidget *label;
 
