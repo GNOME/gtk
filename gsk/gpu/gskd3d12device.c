@@ -34,6 +34,7 @@ struct _GskD3d12Device
   ID3D12Device *device;
 
   ID3D12RootSignature *root_signature;
+  ID3D12DescriptorHeap *sampler_heap;
 
   GHashTable *pipeline_cache;
   DescriptorHeaps descriptor_heaps;
@@ -165,6 +166,7 @@ gsk_d3d12_device_finalize (GObject *object)
     }
   descriptor_heaps_clear (&self->descriptor_heaps);
 
+  gdk_win32_com_clear (&self->sampler_heap);
   gdk_win32_com_clear (&self->root_signature);
   gdk_win32_com_clear (&self->device);
 
@@ -212,7 +214,101 @@ gsk_d3d12_device_setup (GskD3d12Device *self,
 }
 
 static void
-gsk_d3d12_device_create_d3d12_objects (GskD3d12Device *self)
+gsk_d3d12_device_create_samplers (GskD3d12Device *self)
+{
+  static const D3D12_SAMPLER_DESC filter_descs[GSK_GPU_SAMPLER_N_SAMPLERS] = {
+      [GSK_GPU_SAMPLER_DEFAULT] = {
+          .Filter = D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT,
+          .AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+          .AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+          .AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+          .MipLODBias = 0.0f,
+          .MaxAnisotropy = 1,
+          .ComparisonFunc = D3D12_COMPARISON_FUNC_NONE,
+          .BorderColor = { 0.0f , 0.0f , 0.0f , 0.0f },
+          .MinLOD = 0.0f,
+          .MaxLOD = 0.0f
+      },
+      [GSK_GPU_SAMPLER_TRANSPARENT] = {
+          .Filter = D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT,
+          .AddressU = D3D12_TEXTURE_ADDRESS_MODE_BORDER,
+          .AddressV = D3D12_TEXTURE_ADDRESS_MODE_BORDER,
+          .AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+          .MipLODBias = 0.0f,
+          .MaxAnisotropy = 1,
+          .ComparisonFunc = D3D12_COMPARISON_FUNC_NONE,
+          .BorderColor = { 0.0f , 0.0f , 0.0f , 0.0f },
+          .MinLOD = 0.0f,
+          .MaxLOD = 0.0f
+      },
+      [GSK_GPU_SAMPLER_REPEAT] = {
+          .Filter = D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT,
+          .AddressU = D3D12_TEXTURE_ADDRESS_MODE_WRAP,
+          .AddressV = D3D12_TEXTURE_ADDRESS_MODE_WRAP,
+          .AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+          .MipLODBias = 0.0f,
+          .MaxAnisotropy = 1,
+          .ComparisonFunc = D3D12_COMPARISON_FUNC_NONE,
+          .BorderColor = { 0.0f , 0.0f , 0.0f , 0.0f },
+          .MinLOD = 0.0f,
+          .MaxLOD = 0.0f
+      },
+      [GSK_GPU_SAMPLER_NEAREST] = {
+          .Filter = D3D12_FILTER_MIN_MAG_MIP_POINT,
+          .AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+          .AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+          .AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+          .MipLODBias = 0.0f,
+          .MaxAnisotropy = 1,
+          .ComparisonFunc = D3D12_COMPARISON_FUNC_NONE,
+          .BorderColor = { 0.0f , 0.0f , 0.0f , 0.0f },
+          .MinLOD = 0.0f,
+          .MaxLOD = 0.0f
+      },
+      [GSK_GPU_SAMPLER_MIPMAP_DEFAULT] = {
+          .Filter = D3D12_FILTER_MIN_MAG_MIP_LINEAR,
+          .AddressU = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+          .AddressV = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+          .AddressW = D3D12_TEXTURE_ADDRESS_MODE_CLAMP,
+          .MipLODBias = 0.0f,
+          .MaxAnisotropy = 1,
+          .ComparisonFunc = D3D12_COMPARISON_FUNC_NONE,
+          .BorderColor = { 0.0f , 0.0f , 0.0f , 0.0f },
+          .MinLOD = 0.0f,
+          .MaxLOD = FLT_MAX
+      },
+  };
+  D3D12_CPU_DESCRIPTOR_HANDLE descriptor;
+  SIZE_T size;
+  gsize i, j;
+
+  hr_warn (ID3D12Device_CreateDescriptorHeap (self->device,
+                                              (&(D3D12_DESCRIPTOR_HEAP_DESC) {
+                                                  .Type = D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER,
+                                                  .NumDescriptors = 3 * GSK_GPU_SAMPLER_N_SAMPLERS,
+                                                  .Flags = D3D12_DESCRIPTOR_HEAP_FLAG_SHADER_VISIBLE,
+                                                  .NodeMask = 0,
+                                              }),
+                                              &IID_ID3D12DescriptorHeap,
+                                              (void **) &self->sampler_heap));
+
+  ID3D12DescriptorHeap_GetCPUDescriptorHandleForHeapStart (self->sampler_heap, &descriptor);
+  size = ID3D12Device_GetDescriptorHandleIncrementSize (self->device, D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
+
+  for (i = 0; i < GSK_GPU_SAMPLER_N_SAMPLERS; i++)
+    {
+      for (j = 0; j < 3; j++)
+        {
+          ID3D12Device_CreateSampler (self->device,
+                                      &filter_descs[i],
+                                      descriptor);
+          descriptor.ptr += size;
+        }
+    }
+}
+
+static void
+gsk_d3d12_device_create_root_signature (GskD3d12Device *self)
 {
   ID3DBlob *signature, *error_msg;
   HRESULT hr;
@@ -325,7 +421,8 @@ gsk_d3d12_device_get_for_display (GdkDisplay  *display,
 
   gsk_d3d12_device_setup (self, display);
 
-  gsk_d3d12_device_create_d3d12_objects (self);
+  gsk_d3d12_device_create_root_signature (self);
+  gsk_d3d12_device_create_samplers (self);
 
   g_object_set_data (G_OBJECT (display), "-gsk-d3d12-device", self);
 
@@ -660,6 +757,22 @@ gsk_d3d12_device_get_d3d12_pipeline_state (GskD3d12Device            *self,
                        result);
 
   return result;
+}
+
+ID3D12DescriptorHeap *
+gsk_d3d12_device_get_d3d12_sampler_heap (GskD3d12Device *self)
+{
+  return self->sampler_heap;
+}
+
+void
+gsk_d3d12_device_get_sampler (GskD3d12Device              *self,
+                              GskGpuSampler                sampler,
+                              D3D12_GPU_DESCRIPTOR_HANDLE *out_gpu_handle)
+{
+  ID3D12DescriptorHeap_GetGPUDescriptorHandleForHeapStart (self->sampler_heap, out_gpu_handle);
+
+  out_gpu_handle->ptr += 3 * sampler * ID3D12Device_GetDescriptorHandleIncrementSize (self->device, D3D12_DESCRIPTOR_HEAP_TYPE_SAMPLER);
 }
 
 /* taken from glib source code, adapted to guint64 */
