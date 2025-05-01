@@ -278,8 +278,6 @@ GType _gdk_win32_surface_get_type (void);
 
 void  _gdk_win32_surface_update_style_bits   (GdkSurface *surface);
 
-int   _gdk_win32_surface_get_scale_factor    (GdkSurface *surface);
-
 void  _gdk_win32_get_window_client_area_rect (GdkSurface *surface,
                                               int         scale,
                                               RECT       *rect);
