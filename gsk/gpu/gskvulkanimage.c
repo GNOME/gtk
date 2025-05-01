@@ -2,6 +2,7 @@
 
 #include "gskvulkanimageprivate.h"
 
+#include "gskgpuutilsprivate.h"
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkanframeprivate.h"
 #include "gskvulkanmemoryprivate.h"
@@ -214,7 +215,7 @@ gsk_vulkan_device_supports_format (GskVulkanDevice   *device,
     *out_flags |= GSK_GPU_IMAGE_RENDERABLE;
   if (features & VK_FORMAT_FEATURE_TRANSFER_SRC_BIT)
     *out_flags |= GSK_GPU_IMAGE_DOWNLOADABLE;
-  if (image_properties.imageFormatProperties.maxMipLevels >= gsk_vulkan_mipmap_levels (width, height) &&
+  if (image_properties.imageFormatProperties.maxMipLevels >= gsk_gpu_mipmap_levels (width, height) &&
       (*out_flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE)) == (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_RENDERABLE))
     *out_flags |= GSK_GPU_IMAGE_CAN_MIPMAP;
 
@@ -481,7 +482,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                     .imageType = VK_IMAGE_TYPE_2D,
                                     .format = vk_format,
                                     .extent = { width, height, 1 },
-                                    .mipLevels = (flags & GSK_GPU_IMAGE_CAN_MIPMAP) ? gsk_vulkan_mipmap_levels (width, height) : 1,
+                                    .mipLevels = (flags & GSK_GPU_IMAGE_CAN_MIPMAP) ? gsk_gpu_mipmap_levels (width, height) : 1,
                                     .arrayLayers = 1,
                                     .samples = VK_SAMPLE_COUNT_1_BIT,
                                     .tiling = tiling,
