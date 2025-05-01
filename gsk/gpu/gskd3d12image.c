@@ -18,6 +18,8 @@ struct _GskD3d12Image
   D3D12_RESOURCE_STATES state;
 
   D3D12_CPU_DESCRIPTOR_HANDLE rtv;
+  D3D12_CPU_DESCRIPTOR_HANDLE srv_cpu;
+  D3D12_GPU_DESCRIPTOR_HANDLE srv_gpu;
 };
 
 G_DEFINE_TYPE (GskD3d12Image, gsk_d3d12_image, GSK_TYPE_GPU_IMAGE)
@@ -303,6 +305,8 @@ gsk_d3d12_image_finalize (GObject *object)
 
   if (self->rtv.ptr)
     gsk_d3d12_device_free_rtv (self->device, &self->rtv);
+  if (self->srv_cpu.ptr)
+    gsk_d3d12_device_free_srv (self->device, &self->srv_cpu);
 
   gdk_win32_com_clear (&self->resource);
 
@@ -345,6 +349,33 @@ gsk_d3d12_image_get_rtv (GskD3d12Image *self)
                                            self->rtv);
     }
   return &self->rtv;
+}
+
+const D3D12_GPU_DESCRIPTOR_HANDLE *
+gsk_d3d12_image_get_srv (GskD3d12Image *self)
+{
+  if (self->srv_cpu.ptr == 0)
+    {
+      D3D12_RESOURCE_DESC desc;
+
+      ID3D12Resource_GetDesc (self->resource, &desc);
+      gsk_d3d12_device_alloc_srv (self->device, &self->srv_cpu, &self->srv_gpu);
+      ID3D12Device_CreateShaderResourceView (gsk_d3d12_device_get_d3d12_device (self->device),
+                                             self->resource,
+                                             (&(D3D12_SHADER_RESOURCE_VIEW_DESC) {
+                                                 .Format = desc.Format,
+                                                 .ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D,
+                                                 .Shader4ComponentMapping = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING,
+                                                 .Texture2D = {
+                                                     .MostDetailedMip = 0,
+                                                     .MipLevels = desc.MipLevels,
+                                                     .PlaneSlice = 0,
+                                                     .ResourceMinLODClamp = 0.0f
+                                                 }
+                                             }),
+                                             self->srv_cpu);
+    }
+  return &self->srv_gpu;
 }
 
 void
