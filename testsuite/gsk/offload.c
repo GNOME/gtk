@@ -33,6 +33,8 @@
 #include <gdk/wayland/gdkwayland.h>
 #endif
 
+#include <fcntl.h>
+
 #include "../testutils.h"
 
 static char *
@@ -357,6 +359,7 @@ parse_node_file (GFile *file, const char *generate)
   char *path, *diff;
   GskRenderNode *node2;
   const char *generate_values[] = { "offload", "offload2", "diff", NULL };
+  int udmabuf_fd;
 
   if (generate && !g_strv_contains (generate_values, generate))
     {
@@ -383,8 +386,19 @@ parse_node_file (GFile *file, const char *generate)
 
   subsurface = gdk_surface_create_subsurface (surface);
   if (subsurface == NULL)
-    exit (77); /* subsurfaces aren't supported, skip these tests */
+    {
+      g_print ("Offload tests don't work without subsurfaces\n");
+      exit (77); /* subsurfaces aren't supported, skip these tests */
+    }
   g_clear_object (&subsurface);
+
+  udmabuf_fd = open ("/dev/udmabuf", O_RDWR);
+  if (udmabuf_fd == -1)
+    {
+      g_print ("Offload tests don't work without /dev/udmabuf\n");
+      exit (77); /* subsurfaces aren't supported, skip these tests */
+    }
+  close (udmabuf_fd);
 
   node = node_from_file (file);
   if (node == NULL)
