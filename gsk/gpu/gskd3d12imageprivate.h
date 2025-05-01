@@ -27,6 +27,8 @@ ID3D12Resource *        gsk_d3d12_image_get_resource                    (GskD3d1
 
 const D3D12_CPU_DESCRIPTOR_HANDLE *
                         gsk_d3d12_image_get_rtv                         (GskD3d12Image                  *self);
+const D3D12_GPU_DESCRIPTOR_HANDLE *
+                        gsk_d3d12_image_get_srv                         (GskD3d12Image                  *self);
 
 void                    gsk_d3d12_image_transition                      (GskD3d12Image                  *self,
                                                                          ID3D12GraphicsCommandList      *command_list,
