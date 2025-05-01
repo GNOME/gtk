@@ -82,6 +82,28 @@ pipeline_cache_key_equal (gconstpointer a,
          keya->rtv_format == keyb->rtv_format;
 }
 
+static gboolean
+gsk_d3d12_conversion_supported (GskGpuConversion conv)
+{
+  switch (conv)
+  {
+    case GSK_GPU_CONVERSION_NONE:
+    case GSK_GPU_CONVERSION_SRGB:
+      return TRUE;
+
+    case GSK_GPU_CONVERSION_BT601:
+    case GSK_GPU_CONVERSION_BT601_NARROW:
+    case GSK_GPU_CONVERSION_BT709:
+    case GSK_GPU_CONVERSION_BT709_NARROW:
+    case GSK_GPU_CONVERSION_BT2020:
+    case GSK_GPU_CONVERSION_BT2020_NARROW:
+      return FALSE;
+
+    default:
+      g_return_val_if_reached (FALSE);
+  }
+}
+
 G_DEFINE_TYPE (GskD3d12Device, gsk_d3d12_device, GSK_TYPE_GPU_DEVICE)
 
 static GskGpuImage *
@@ -112,7 +134,17 @@ gsk_d3d12_device_create_atlas_image (GskGpuDevice *device,
                                      gsize         width,
                                      gsize         height)
 {
-  g_return_val_if_reached (NULL);
+  GskD3d12Device *self = GSK_D3D12_DEVICE (device);
+
+  return gsk_d3d12_image_new (self,
+                              GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+                              FALSE,
+                              GSK_GPU_CONVERSION_NONE,
+                              width,
+                              height,
+                              D3D12_RESOURCE_STATE_RENDER_TARGET,
+                              0,
+                              D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET);
 }
 
 static GskGpuImage *
@@ -123,7 +155,20 @@ gsk_d3d12_device_create_upload_image (GskGpuDevice     *device,
                                       gsize             width,
                                       gsize             height)
 {
-  g_return_val_if_reached (NULL);
+  GskD3d12Device *self = GSK_D3D12_DEVICE (device);
+
+  if (!gsk_d3d12_conversion_supported (conv))
+    conv = GSK_GPU_CONVERSION_NONE;
+
+  return gsk_d3d12_image_new (self,
+                              format,
+                              with_mipmap,
+                              conv,
+                              width,
+                              height,
+                              D3D12_RESOURCE_STATE_COPY_DEST,
+                              0,
+                              0);
 }
 
 static GskGpuImage *
