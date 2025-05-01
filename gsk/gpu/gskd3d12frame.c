@@ -164,6 +164,7 @@ gsk_d3d12_frame_submit (GskGpuFrame       *frame,
   GskD3d12Device *device;
   GskD3d12CommandState state = {
     .command_list = self->command_list,
+    .current_samplers = { GSK_GPU_SAMPLER_N_SAMPLERS, GSK_GPU_SAMPLER_N_SAMPLERS },
   };
   ID3D12CommandQueue *queue;
 
@@ -172,6 +173,13 @@ gsk_d3d12_frame_submit (GskGpuFrame       *frame,
 
   ID3D12GraphicsCommandList_SetGraphicsRootSignature (self->command_list,
                                                       gsk_d3d12_device_get_d3d12_root_signature (device));
+
+  ID3D12GraphicsCommandList_SetDescriptorHeaps (self->command_list,
+                                                2,
+                                                ((ID3D12DescriptorHeap *[2]) {
+                                                  gsk_d3d12_device_get_d3d12_sampler_heap (device),
+                                                  gsk_d3d12_device_get_d3d12_srv_heap (device)
+                                                }));
 
   ID3D12GraphicsCommandList_IASetPrimitiveTopology (self->command_list, D3D_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
   if (vertex_buffer)
