@@ -4,6 +4,7 @@
 
 #include "gskglimageprivate.h"
 #include "gskgpuprintprivate.h"
+#include "gskgpuutilsprivate.h"
 #ifdef GDK_RENDERING_VULKAN
 #include "gskvulkanimageprivate.h"
 #endif
@@ -54,7 +55,7 @@ gsk_gpu_mipmap_op_vk_command (GskGpuOp              *op,
   vk_image = gsk_vulkan_image_get_vk_image (image);
   width = gsk_gpu_image_get_width (self->image);
   height = gsk_gpu_image_get_height (self->image);
-  n_levels = gsk_vulkan_mipmap_levels (width, height);
+  n_levels = gsk_gpu_mipmap_levels (width, height);
 
   /* optimize me: only transition mipmap layers 1..n, but not 0 */
   gsk_vulkan_image_transition (image,
