@@ -19,6 +19,8 @@ struct _GskD3d12Image
   D3D12_RESOURCE_STATES state;
 
   D3D12_CPU_DESCRIPTOR_HANDLE rtv;
+  D3D12_CPU_DESCRIPTOR_HANDLE srv_cpu[3];
+  D3D12_GPU_DESCRIPTOR_HANDLE srv_gpu[3];
 };
 
 G_DEFINE_TYPE (GskD3d12Image, gsk_d3d12_image, GSK_TYPE_GPU_IMAGE)
@@ -313,6 +315,8 @@ gsk_d3d12_image_finalize (GObject *object)
 
   if (self->rtv.ptr)
     gsk_d3d12_device_free_rtv (self->device, &self->rtv);
+  if (self->srv_cpu[0].ptr)
+    gsk_d3d12_device_free_srv (self->device, self->srv_cpu);
 
   gdk_win32_com_clear (&self->resource);
 
@@ -355,6 +359,56 @@ gsk_d3d12_image_get_rtv (GskD3d12Image *self)
                                            self->rtv);
     }
   return &self->rtv;
+}
+
+const D3D12_GPU_DESCRIPTOR_HANDLE *
+gsk_d3d12_image_get_srv (GskD3d12Image *self)
+{
+  if (self->srv_cpu[0].ptr == 0)
+    {
+      D3D12_RESOURCE_DESC desc;
+      GdkMemoryFormat format;
+      GdkShaderOp shader_op;
+      gsize i;
+
+      ID3D12Resource_GetDesc (self->resource, &desc);
+      format = gsk_gpu_image_get_format (GSK_GPU_IMAGE (self));
+
+      shader_op = gdk_memory_format_get_default_shader_op (format);
+      for (i = 0; i < gdk_shader_op_get_n_shaders (shader_op); i++)
+        {
+          gsize unused;
+          DXGI_FORMAT dxgi_format;
+          guint swizzle, plane_slice;
+
+          plane_slice = gdk_memory_format_get_shader_plane (format, i, &unused, &unused, &unused);
+          
+          dxgi_format = gdk_memory_format_get_dxgi_srv_format (format, i, &swizzle);
+          if (shader_op == GDK_SHADER_DEFAULT || shader_op == GDK_SHADER_STRAIGHT)
+            swizzle = self->swizzle;
+          
+          gsk_d3d12_device_alloc_srv (self->device, self->srv_cpu, self->srv_gpu);
+          ID3D12Device_CreateShaderResourceView (gsk_d3d12_device_get_d3d12_device (self->device),
+                                                 self->resource,
+                                                 (&(D3D12_SHADER_RESOURCE_VIEW_DESC) {
+                                                     .Format = dxgi_format,
+                                                     .ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D,
+                                                     .Shader4ComponentMapping = swizzle,
+                                                     .Texture2D = {
+                                                         .MostDetailedMip = 0,
+                                                         .MipLevels = desc.MipLevels,
+                                                         .PlaneSlice = plane_slice,
+                                                         .ResourceMinLODClamp = 0.0f
+                                                     }
+                                                 }),
+                                                 self->srv_cpu[i]);
+      }
+    }
+
+  if (self->srv_cpu[0].ptr == 0)
+    return NULL;
+
+  return self->srv_gpu;
 }
 
 void
