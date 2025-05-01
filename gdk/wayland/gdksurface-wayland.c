@@ -54,6 +54,8 @@
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 #include "presentation-time-client-protocol.h"
 
+#include "gdkdmabuffourccprivate.h"
+
 #include "gsk/gskrectprivate.h"
 
 /**
@@ -730,14 +732,18 @@ gdk_wayland_surface_sync_color_state (GdkSurface *surface)
   if (!self->color_state_changed)
     return;
 
+  /* Note that we don't have the actual fourcc here (since thats up
+   * up to mesa) so we just pass DRM_FORMAT_RGBA8888.
+   */
   if (gdk_wayland_color_surface_can_set_color_state (self->display_server.color,
                                                      gdk_surface_get_color_state (surface),
-                                                     TRUE,
-                                                     GDK_MEMORY_DEFAULT))
+                                                     DRM_FORMAT_RGBA8888,
+                                                     TRUE))
     {
       gdk_wayland_color_surface_set_color_state (self->display_server.color,
                                                  gdk_surface_get_color_state (surface),
-                                                 GDK_MEMORY_DEFAULT);
+                                                 DRM_FORMAT_RGBA8888,
+                                                 TRUE);
     }
   else
     {

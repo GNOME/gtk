@@ -1219,7 +1219,8 @@ gdk_wayland_color_get_color_representation (GdkWaylandColor *color,
 void
 gdk_wayland_color_surface_set_color_state (GdkWaylandColorSurface *self,
                                            GdkColorState          *cs,
-                                           GdkMemoryFormat         format)
+                                           guint32                 fourcc,
+                                           gboolean                premultiplied)
 {
   if (self->mgmt_surface)
     {
@@ -1230,9 +1231,10 @@ gdk_wayland_color_surface_set_color_state (GdkWaylandColorSurface *self,
       g_assert (desc);
 
       GDK_DISPLAY_DEBUG (GDK_DISPLAY (self->color->display), MISC,
-                         "Setting color state %s, %s on surface: image desc %p",
+                         "Setting color state %s (fourcc %.4s, premul %d) on surface: image desc %p",
                          gdk_color_state_get_name (cs),
-                         gdk_memory_format_get_name (format),
+                         (char *) &fourcc,
+                         premultiplied,
                          desc);
 
       wp_color_management_surface_v1_set_image_description (self->mgmt_surface,
@@ -1244,15 +1246,20 @@ gdk_wayland_color_surface_set_color_state (GdkWaylandColorSurface *self,
     {
       uint32_t coefficients, range, alpha;
       gboolean ret G_GNUC_UNUSED;
+      GdkMemoryFormat format;
+      gboolean is_yuv;
+
+      ret = gdk_memory_format_find_by_dmabuf_fourcc (fourcc, premultiplied, &format, &is_yuv);
+      g_assert (ret);
 
       ret = gdk_wayland_color_get_color_representation (self->color, cs, format, &coefficients, &range, &alpha);
-
       g_assert (ret);
 
       GDK_DISPLAY_DEBUG (GDK_DISPLAY (self->color->display), MISC,
-                         "Setting color state %s, %s on surface: coefficients: %u (%s), range: %u (%s), alpha %u (%s)",
+                         "Setting color state %s (fourcc %.4s, premul %d)  on surface: coefficients: %u (%s), range: %u (%s), alpha %u (%s)",
                          gdk_color_state_get_name (cs),
-                         gdk_memory_format_get_name (format),
+                         (char *) &fourcc,
+                         premultiplied,
                          coefficients, wl_coefficients_name (coefficients),
                          range, wl_range_name (range),
                          alpha, wl_alpha_name (alpha));
@@ -1277,12 +1284,21 @@ gdk_wayland_color_surface_unset_color_state (GdkWaylandColorSurface *self)
 gboolean
 gdk_wayland_color_surface_can_set_color_state (GdkWaylandColorSurface *self,
                                                GdkColorState          *cs,
-                                               gboolean                default_cs,
-                                               GdkMemoryFormat         format)
+                                               guint32                 fourcc,
+                                               gboolean                premultiplied)
 {
+  GdkMemoryFormat format;
+  gboolean is_yuv;
+  GdkColorState *default_cs;
+
+  if (!gdk_memory_format_find_by_dmabuf_fourcc (fourcc, premultiplied, &format, &is_yuv))
+    return FALSE;
+
+  default_cs = is_yuv ? GDK_COLOR_STATE_YUV : GDK_COLOR_STATE_SRGB;
+
   if (!self->mgmt_surface)
     {
-      if (!default_cs)
+      if (!gdk_color_state_equivalent (cs, default_cs))
         return FALSE;
     }
   else
@@ -1293,7 +1309,10 @@ gdk_wayland_color_surface_can_set_color_state (GdkWaylandColorSurface *self,
 
   if (!self->color->color_representation_manager)
     {
-      if (!default_cs)
+      if (!gdk_color_state_equivalent (cs, default_cs))
+        return FALSE;
+
+      if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
         return FALSE;
     }
   else

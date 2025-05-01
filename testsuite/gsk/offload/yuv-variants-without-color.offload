@@ -6,10 +6,10 @@
 5: not offloaded
 6: not offloaded
 7: not offloaded
-8: not offloaded
-9: not offloaded
-10: not offloaded
-11: not offloaded
+8: offloaded, raised, above: 7, texture: 256x64, source: 0 0 256 64, dest: 512 0 256 64
+9: offloaded, raised, above: 8, texture: 256x64, source: 0 0 256 64, dest: 512 64 256 64
+10: offloaded, raised, above: 9, texture: 256x64, source: 0 0 256 64, dest: 512 128 256 64
+11: offloaded, raised, above: 10, texture: 256x64, source: 0 0 256 64, dest: 512 192 256 64
 12: not offloaded
 13: not offloaded
 14: not offloaded

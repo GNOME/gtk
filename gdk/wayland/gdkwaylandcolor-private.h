@@ -42,9 +42,10 @@ void              gdk_wayland_color_surface_free                (GdkWaylandColor
 
 gboolean          gdk_wayland_color_surface_can_set_color_state (GdkWaylandColorSurface *self,
                                                                  GdkColorState          *cs,
-                                                                 gboolean                default_cs,
-                                                                 GdkMemoryFormat         format);
+                                                                 guint32                 fourcc,
+                                                                 gboolean                premultiplied);
 void              gdk_wayland_color_surface_set_color_state     (GdkWaylandColorSurface *self,
                                                                  GdkColorState          *cs,
-                                                                 GdkMemoryFormat         format);
+                                                                 guint32                 fourcc,
+                                                                 gboolean                premultiplied);
 void              gdk_wayland_color_surface_unset_color_state   (GdkWaylandColorSurface *self);
