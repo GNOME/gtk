@@ -370,9 +370,6 @@ texture_has_default_color_state (GdkTexture *texture)
         return gdk_color_state_equal (color_state, gdk_color_state_yuv ());
     }
 
-  if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
-    return FALSE;
-
   return gdk_color_state_equal (color_state, gdk_color_state_get_srgb ());
 }
 
