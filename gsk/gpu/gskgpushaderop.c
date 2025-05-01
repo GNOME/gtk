@@ -15,6 +15,7 @@
 #endif
 #ifdef GDK_WINDOWING_WIN32
 #include "gskd3d12deviceprivate.h"
+#include "gskd3d12imageprivate.h"
 #endif
 
 #include "gdkglcontextprivate.h"
@@ -266,8 +267,6 @@ gsk_gpu_shader_op_d3d12_command_n (GskGpuOp             *op,
   gsize i, n_ops, max_ops_per_draw;
   ID3D12PipelineState *pipeline;
 
-  g_assert (shader_op_class->n_textures == 0);
-
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
     max_ops_per_draw = MAX_MERGE_OPS;
   else
@@ -282,7 +281,9 @@ gsk_gpu_shader_op_d3d12_command_n (GskGpuOp             *op,
           next_shader->flags != self->flags ||
           next_shader->color_states != self->color_states ||
           next_shader->variation != self->variation ||
-          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size)
+          next_shader->vertex_offset != self->vertex_offset + n_ops * shader_op_class->vertex_size ||
+          (shader_op_class->n_textures > 0 && (next_shader->images[0] != self->images[0] || next_shader->samplers[0] != self->samplers[0])) ||
+          (shader_op_class->n_textures > 1 && (next_shader->images[1] != self->images[1] || next_shader->samplers[1] != self->samplers[1])))
         break;
 
       n_ops += next_shader->n_ops;
@@ -304,6 +305,31 @@ gsk_gpu_shader_op_d3d12_command_n (GskGpuOp             *op,
                                                         state->blend,
                                                         state->rtv_format);
   ID3D12GraphicsCommandList_SetPipelineState (state->command_list, pipeline);
+
+  for (i = 0; i < shader_op_class->n_textures; i++)
+    {
+      if (state->current_images[i] != self->images[i])
+        {
+          gsk_d3d12_image_transition (GSK_D3D12_IMAGE (self->images[i]),
+                                      state->command_list,
+                                      D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
+          ID3D12GraphicsCommandList_SetGraphicsRootDescriptorTable (state->command_list,
+                                                                    GSK_D3D12_ROOT_TEXTURE_0 + i,
+                                                                    *gsk_d3d12_image_get_srv (GSK_D3D12_IMAGE (self->images[i])));
+          state->current_images[i] = self->images[i];
+        }
+      if (state->current_samplers[i] != self->samplers[i])
+        {
+          D3D12_GPU_DESCRIPTOR_HANDLE descriptor;
+          gsk_d3d12_device_get_sampler (GSK_D3D12_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                        self->samplers[i],
+                                        &descriptor);
+          ID3D12GraphicsCommandList_SetGraphicsRootDescriptorTable (state->command_list,
+                                                                    GSK_D3D12_ROOT_SAMPLER_0 + i,
+                                                                    descriptor);
+          state->current_samplers[i] = self->samplers[i];
+        }
+    }
 
   for (i = 0; i < n_ops; i += max_ops_per_draw)
     {
