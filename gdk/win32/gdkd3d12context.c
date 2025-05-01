@@ -21,10 +21,15 @@
 #include "gdkconfig.h"
 
 #include "gdkd3d12contextprivate.h"
+
+#include "gdkdamagetrackerprivate.h"
 #include "gdkd3d12textureprivate.h" /* for GdkD312Error */
 #include "gdkdisplay-win32.h"
 #include "gdkprivate-win32.h"
 #include "gdkwin32misc.h"
+
+/* Vulkan uses this number */
+#define SWAP_CHAIN_BUFFER_COUNT 4
 
 struct _GdkD3d12Context
 {
@@ -32,6 +37,8 @@ struct _GdkD3d12Context
 
   ID3D12CommandQueue *command_queue;
   IDXGISwapChain3 *swap_chain;
+
+  GdkDamageTracker damage_tracker;
 };
 
 struct _GdkD3d12ContextClass
@@ -49,6 +56,22 @@ gdk_d3d12_context_begin_frame (GdkDrawContext  *draw_context,
                                GdkColorState  **out_color_state,
                                GdkMemoryDepth  *out_depth)
 {
+  GdkD3d12Context *self = GDK_D3D12_CONTEXT (draw_context);
+  ID3D12Resource *resource;
+
+  hr_warn (IDXGISwapChain3_GetBuffer (self->swap_chain,
+                                      IDXGISwapChain3_GetCurrentBackBufferIndex (self->swap_chain),
+                                      &IID_ID3D12Resource,
+                                      (void **) &resource));
+
+  if (!gdk_damage_tracker_add (&self->damage_tracker, resource, region, region))
+    {
+      guint width, height;
+
+      gdk_draw_context_get_buffer_size (draw_context, &width, &height);
+      cairo_region_union_rectangle (region, &(cairo_rectangle_int_t) { 0, 0, width, height });
+    }
+
   *out_color_state = GDK_COLOR_STATE_SRGB;
   *out_depth = gdk_color_state_get_depth (GDK_COLOR_STATE_SRGB);
 }
@@ -59,12 +82,44 @@ gdk_d3d12_context_end_frame (GdkDrawContext *draw_context,
                              cairo_region_t *painted)
 {
   GdkD3d12Context *self = GDK_D3D12_CONTEXT (draw_context);
+  int i, n_rects;
+  RECT *rects;
+  guint width, height;
+
+  gdk_draw_context_get_buffer_size (draw_context, &width, &height);
+  if (cairo_region_contains_rectangle (painted,
+                                       &(cairo_rectangle_int_t) {
+                                           .x = 0,
+                                           .y = 0,
+                                           .width = width,
+                                           .height = height,
+                                       }) == CAIRO_REGION_OVERLAP_IN)
+    {
+      n_rects = 0;
+      rects = NULL;
+    }
+  else
+    {
+      n_rects = cairo_region_num_rectangles (painted);
+      rects = g_newa(RECT, n_rects);
+      for (i = 0; i < n_rects; i++)
+        {
+          cairo_rectangle_int_t crect;
+
+          cairo_region_get_rectangle (painted, i, &crect);
+          rects[i].left = crect.x;
+          rects[i].top = crect.y;
+          rects[i].right = crect.x + crect.width;
+          rects[i].bottom = crect.y + crect.height;
+        }
+    }
 
   hr_warn (IDXGISwapChain3_Present1 (self->swap_chain,
                                      0,
                                      DXGI_PRESENT_RESTART,
                                      (&(DXGI_PRESENT_PARAMETERS) {
-                                         .DirtyRectsCount = 0,
+                                         .DirtyRectsCount = n_rects,
+                                         .pDirtyRects = rects,
                                      })));
 }
 
@@ -142,7 +197,7 @@ gdk_d3d12_context_surface_attach (GdkDrawContext  *context,
                                                          .Quality = 0,
                                                      },
                                                      .BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT,
-                                                     .BufferCount = 4, /* Vulkan uses this */
+                                                     .BufferCount = SWAP_CHAIN_BUFFER_COUNT,
                                                      .Scaling = DXGI_SCALING_STRETCH,
                                                      .SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL,
                                                      .AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED,
@@ -168,6 +223,8 @@ gdk_d3d12_context_surface_detach (GdkDrawContext *context)
 {
   GdkD3d12Context *self = GDK_D3D12_CONTEXT (context);
 
+  gdk_damage_tracker_finish (&self->damage_tracker);
+
   gdk_win32_com_clear (&self->swap_chain);
 }
 
@@ -177,10 +234,12 @@ gdk_d3d12_context_surface_resized (GdkDrawContext *context)
   GdkD3d12Context *self = GDK_D3D12_CONTEXT (context);
   guint width, height;
 
+  gdk_damage_tracker_reset (&self->damage_tracker);
+
   gdk_draw_context_get_buffer_size (context, &width, &height);
 
   hr_warn (IDXGISwapChain3_ResizeBuffers (self->swap_chain,
-                                          4,
+                                          SWAP_CHAIN_BUFFER_COUNT,
                                           width,
                                           height,
                                           DXGI_FORMAT_R8G8B8A8_UNORM,
@@ -216,6 +275,7 @@ gdk_d3d12_context_class_init (GdkD3d12ContextClass *klass)
 static void
 gdk_d3d12_context_init (GdkD3d12Context *self)
 {
+  gdk_damage_tracker_init (&self->damage_tracker, gdk_win32_com_release);
 }
 
 /*<private>
