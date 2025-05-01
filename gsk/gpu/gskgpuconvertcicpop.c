@@ -46,7 +46,10 @@ static const GskGpuShaderOpClass GSK_GPU_CONVERT_CICP_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
     gsk_gpu_shader_op_vk_command,
 #endif
-    gsk_gpu_shader_op_gl_command
+    gsk_gpu_shader_op_gl_command,
+#ifdef GDK_WINDOWING_WIN32
+    gsk_gpu_shader_op_d3d12_command,
+#endif
   },
   "gskgpuconvertcicp",
   gsk_gpu_convertcicp_n_textures,
