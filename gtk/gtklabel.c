@@ -3100,7 +3100,11 @@ gtk_label_setup_mnemonic (GtkLabel *self)
 
   /* always set up this widgets initial value */
   g_object_get (native, "mnemonics-visible", &mnemonics_visible, NULL);
-  self->mnemonics_visible = mnemonics_visible;
+  if (self->mnemonics_visible != mnemonics_visible)
+    {
+      self->mnemonics_visible = mnemonics_visible;
+      gtk_label_recalculate (self);
+    }
 
   connected = GPOINTER_TO_INT (g_object_get_qdata (G_OBJECT (native),
                                                    quark_mnemonics_visible_connected));
