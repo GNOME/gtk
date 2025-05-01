@@ -57,6 +57,9 @@ struct _GskD3d12CommandState
   DXGI_FORMAT rtv_format;
   D3D12_VERTEX_BUFFER_VIEW vertex_buffer_view;
   GskGpuBlend blend;
+
+  GskGpuImage *current_images[2];
+  GskGpuSampler current_samplers[2];
 };
 #endif
 struct _GskGpuOp
