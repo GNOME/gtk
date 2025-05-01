@@ -293,8 +293,11 @@ if cc.get_id() == 'msvc'
   # Extra warning flags and those that should be disabled because they are too common or
   # break features.
   test_cflags += [
+    '/wd4018', # signed/unsigned mismatch, gcc/clang don't warn about it so the codes littered with it
+    '/wd4334', # '<<': result of 32-bit shift implicitly converted to 64 bits (was 64-bit shift intended?)
     '/wd4068', # unknown pragma, triggers for all gcc/clang pragmas
     '/wd4116', # breaks G_ALIGNOF()
+    '/wd4267', # conversion from $64BIT to $32BIT, possible loss of data (no gcc warning, so GTK's littered with it)
     '/wd4090', # VC2017 is way too aggressive with this
   ]
 
