@@ -12,6 +12,11 @@
 #include "gskvulkanbufferprivate.h"
 #include "gskvulkanimageprivate.h"
 #endif
+#ifdef GDK_WINDOWING_WIN32
+#include "gskd3d12bufferprivate.h"
+#include "gskd3d12imageprivate.h"
+#include "gdk/win32/gdkprivate-win32.h"
+#endif
 
 #include "gdk/gdkcolorstateprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
@@ -254,6 +259,144 @@ gsk_gpu_upload_op_vk_command (GskGpuOp              *op,
 }
 #endif
 
+#ifdef GDK_WINDOWING_WIN32
+static GskGpuOp *
+gsk_gpu_upload_op_d3d12_command_with_area (GskGpuOp                    *op,
+                                           GskGpuFrame                 *frame,
+                                           GskD3d12CommandState        *state,
+                                           GskD3d12Image               *image,
+                                           const cairo_rectangle_int_t *area,
+                                           void           (* draw_func) (GskGpuOp *, guchar *, const GdkMemoryLayout *),
+                                           GskGpuBuffer               **buffer)
+{
+  GskD3d12Device *device;
+  ID3D12Resource *resource, *buffer_resource;
+  D3D12_RESOURCE_DESC resource_desc;
+  GdkMemoryLayout layout;
+  D3D12_PLACED_SUBRESOURCE_FOOTPRINT footprints[GDK_MEMORY_MAX_PLANES];
+  gsize p, n_planes;
+  UINT64 buffer_size;
+  void *data;
+
+  device = GSK_D3D12_DEVICE (gsk_gpu_frame_get_device (frame));
+  resource = gsk_d3d12_image_get_resource (image);
+  layout.format = gsk_gpu_image_get_format (GSK_GPU_IMAGE (image));
+  n_planes = gdk_memory_format_get_n_planes (layout.format);
+  ID3D12Resource_GetDesc (resource, &resource_desc);
+
+  ID3D12Device_GetCopyableFootprints (gsk_d3d12_device_get_d3d12_device (device),
+                                      (&(D3D12_RESOURCE_DESC) {
+                                          .Dimension = resource_desc.Dimension,
+                                          .Alignment = resource_desc.Alignment,
+                                          .Width = area->width,
+                                          .Height = area->height,
+                                          .DepthOrArraySize = 1,
+                                          .MipLevels = 1,
+                                          .Format = resource_desc.Format,
+                                          .SampleDesc = resource_desc.SampleDesc,
+                                          .Layout = D3D12_TEXTURE_LAYOUT_UNKNOWN,
+                                          .Flags = 0
+                                      }),
+                                      0, n_planes,
+                                      0,
+                                      footprints,
+                                      NULL,
+                                      NULL,
+                                      &buffer_size);
+
+  layout.width = area->width;
+  layout.height = area->height;
+  layout.size = buffer_size;
+  for (p = 0; p < n_planes; p++)
+    {
+      layout.planes[p].offset = footprints[p].Offset;
+      layout.planes[p].stride = footprints[p].Footprint.RowPitch;
+    }
+
+  hr_warn (ID3D12Device_CreateCommittedResource (gsk_d3d12_device_get_d3d12_device (device),
+                                                 (&(D3D12_HEAP_PROPERTIES) {
+                                                     .Type = D3D12_HEAP_TYPE_UPLOAD,
+                                                     .CreationNodeMask = 1,
+                                                     .VisibleNodeMask = 1,
+                                                 }),
+                                                 D3D12_HEAP_FLAG_NONE,
+                                                 (&(D3D12_RESOURCE_DESC) {
+                                                     .Dimension = D3D12_RESOURCE_DIMENSION_BUFFER,
+                                                     .Width = buffer_size,
+                                                     .Height = 1,
+                                                     .DepthOrArraySize = 1,
+                                                     .MipLevels = 1,
+                                                     .SampleDesc = {
+                                                         .Count = 1,
+                                                         .Quality = 0,
+                                                     },
+                                                     .Layout = D3D12_TEXTURE_LAYOUT_ROW_MAJOR,
+                                                 }),
+                                                 D3D12_RESOURCE_STATE_GENERIC_READ,
+                                                 NULL,
+                                                 &IID_ID3D12Resource,
+                                                 (void **) &buffer_resource));
+
+  hr_warn (ID3D12Resource_Map (buffer_resource, 0, (&(D3D12_RANGE) { 0, 0 }), &data));
+
+  draw_func (op, data, &layout);
+
+  ID3D12Resource_Unmap (buffer_resource, 0, (&(D3D12_RANGE) { 0, buffer_size }));
+
+  gsk_d3d12_image_transition (image, state->command_list, D3D12_RESOURCE_STATE_COPY_DEST);
+
+  for (p = 0; p < gdk_memory_format_get_n_planes (layout.format); p++)
+    {
+      ID3D12GraphicsCommandList_CopyTextureRegion (state->command_list,
+                                                   (&(D3D12_TEXTURE_COPY_LOCATION) {
+                                                       .pResource = resource,
+                                                       .Type = D3D12_TEXTURE_COPY_TYPE_SUBRESOURCE_INDEX,
+                                                       .SubresourceIndex = p,
+                                                   }),
+                                                   area->x, area->y, 0,
+                                                   (&(D3D12_TEXTURE_COPY_LOCATION) {
+                                                       .pResource = buffer_resource,
+                                                       .Type = D3D12_TEXTURE_COPY_TYPE_PLACED_FOOTPRINT,
+                                                       .PlacedFootprint = footprints[p],
+                                                   }),
+                                                   (&(D3D12_BOX) {
+                                                       .left = 0,
+                                                       .top = 0,
+                                                       .front = 0,
+                                                       .right = area->width / gdk_memory_format_get_plane_block_width (layout.format, p),
+                                                       .bottom = area->height / gdk_memory_format_get_plane_block_height (layout.format, p),
+                                                       .back = 1
+                                                   }));
+    }
+
+  *buffer = gsk_d3d12_buffer_new_from_resource (device, buffer_resource, buffer_size);
+
+  return op->next;
+}
+
+static GskGpuOp *
+gsk_gpu_upload_op_d3d12_command (GskGpuOp             *op,
+                                 GskGpuFrame          *frame,
+                                 GskD3d12CommandState *state,
+                                 GskD3d12Image        *image,
+                                 void                 (* draw_func) (GskGpuOp *, guchar *, const GdkMemoryLayout *),
+                                 GskGpuBuffer         **buffer)
+{
+  return gsk_gpu_upload_op_d3d12_command_with_area (op,
+                                                    frame,
+                                                    state,
+                                                    image,
+                                                    &(cairo_rectangle_int_t) {
+                                                        0, 0,
+                                                        gsk_gpu_image_get_width (GSK_GPU_IMAGE (image)),
+                                                        gsk_gpu_image_get_height (GSK_GPU_IMAGE (image)),
+                                                    },
+                                                    draw_func,
+                                                    buffer);
+
+}
+#endif
+
 typedef struct _GskGpuUploadTextureOp GskGpuUploadTextureOp;
 
 struct _GskGpuUploadTextureOp
@@ -351,6 +494,23 @@ gsk_gpu_upload_texture_op_gl_command (GskGpuOp          *op,
                                        gsk_gpu_upload_texture_op_draw);
 }
 
+#ifdef GDK_WINDOWING_WIN32
+static GskGpuOp *
+gsk_gpu_upload_texture_op_d3d12_command (GskGpuOp             *op,
+                                         GskGpuFrame          *frame,
+                                         GskD3d12CommandState *state)
+{
+  GskGpuUploadTextureOp *self = (GskGpuUploadTextureOp *) op;
+
+  return gsk_gpu_upload_op_d3d12_command (op,
+                                          frame,
+                                          state,
+                                          GSK_D3D12_IMAGE (self->image),
+                                          gsk_gpu_upload_texture_op_draw,
+                                          &self->buffer);
+}
+#endif
+
 static const GskGpuOpClass GSK_GPU_UPLOAD_TEXTURE_OP_CLASS = {
   GSK_GPU_OP_SIZE (GskGpuUploadTextureOp),
   GSK_GPU_STAGE_UPLOAD,
@@ -359,7 +519,10 @@ static const GskGpuOpClass GSK_GPU_UPLOAD_TEXTURE_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   gsk_gpu_upload_texture_op_vk_command,
 #endif
-  gsk_gpu_upload_texture_op_gl_command
+  gsk_gpu_upload_texture_op_gl_command,
+#ifdef GDK_WINDOWING_WIN32
+  gsk_gpu_upload_texture_op_d3d12_command,
+#endif
 };
 
 GskGpuImage *
@@ -540,6 +703,24 @@ gsk_gpu_upload_cairo_op_gl_command (GskGpuOp          *op,
                                                  gsk_gpu_upload_cairo_op_draw);
 }
 
+#ifdef GDK_WINDOWING_WIN32
+static GskGpuOp *
+gsk_gpu_upload_cairo_op_d3d12_command (GskGpuOp             *op,
+                                       GskGpuFrame          *frame,
+                                       GskD3d12CommandState *state)
+{
+  GskGpuUploadCairoOp *self = (GskGpuUploadCairoOp *) op;
+
+  return gsk_gpu_upload_op_d3d12_command_with_area (op,
+                                                    frame,
+                                                    state,
+                                                    GSK_D3D12_IMAGE (self->image),
+                                                    &self->area,
+                                                    gsk_gpu_upload_cairo_op_draw,
+                                                    &self->buffer);
+}
+#endif
+
 static const GskGpuOpClass GSK_GPU_UPLOAD_CAIRO_OP_CLASS = {
   GSK_GPU_OP_SIZE (GskGpuUploadCairoOp),
   GSK_GPU_STAGE_UPLOAD,
@@ -548,7 +729,10 @@ static const GskGpuOpClass GSK_GPU_UPLOAD_CAIRO_OP_CLASS = {
 #ifdef GDK_RENDERING_VULKAN
   gsk_gpu_upload_cairo_op_vk_command,
 #endif
-  gsk_gpu_upload_cairo_op_gl_command
+  gsk_gpu_upload_cairo_op_gl_command,
+#ifdef GDK_WINDOWING_WIN32
+  gsk_gpu_upload_cairo_op_d3d12_command,
+#endif
 };
 
 GskGpuImage *
