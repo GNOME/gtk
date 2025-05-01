@@ -552,6 +552,14 @@ gdk_dmabuf_new_for_bytes (GBytes  *bytes,
 
   g_return_val_if_fail (bytes != NULL, -1);
 
+  if (!gdk_has_feature (GDK_FEATURE_DMABUF))
+    {
+      g_set_error_literal (error,
+                           G_IO_ERROR, G_IO_ERROR_FAILED,
+                           "Dmabuf support is disabled");
+      return -1;
+    }
+
   udmabuf_fd = udmabuf_initialize (error);
   if (udmabuf_fd < 0)
     return -1;
