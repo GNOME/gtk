@@ -230,6 +230,27 @@ gboolean
 }
 
 /**
+ * gdk_color_state_equivalent:
+ * @self: a `GdkColorState`
+ * @other: another `GdkColorStatee`
+ *
+ * Compares two `GdkColorStates` for equivalence.
+ *
+ * Two objects that represent the same color state should be equivalent,
+ * even though they may not be equal in the sense of [method@Gdk.ColorState.equal].
+ *
+ * Returns: %TRUE if the two color states are equivalent
+ *
+ * Since: 4.20
+ */
+gboolean
+(gdk_color_state_equivalent) (GdkColorState *self,
+                              GdkColorState *other)
+{
+  return _gdk_color_state_equivalent (self, other);
+}
+
+/**
  * gdk_color_state_create_cicp_params:
  * @self: a `GdkColorState`
  *
@@ -1276,7 +1297,7 @@ gdk_color_state_yuv (void)
     {
       GdkColorState *cs;
 
-      cs = gdk_color_state_new_for_cicp (&(GdkCicp) { 1, 13, 6, 0 }, NULL);
+      cs = gdk_color_state_new_for_cicp (&(GdkCicp) { 1, 13, 5, 0 }, NULL);
       g_assert (cs);
 
       g_once_init_leave_pointer (&yuv_cs, cs);
