@@ -28,6 +28,7 @@ GskGpuDevice *          gsk_d3d12_device_get_for_display                (GdkDisp
 ID3D12Device *          gsk_d3d12_device_get_d3d12_device               (GskD3d12Device                 *self);
 ID3D12RootSignature *   gsk_d3d12_device_get_d3d12_root_signature       (GskD3d12Device                 *self);
 ID3D12DescriptorHeap *  gsk_d3d12_device_get_d3d12_sampler_heap         (GskD3d12Device                 *self);
+ID3D12DescriptorHeap *  gsk_d3d12_device_get_d3d12_srv_heap             (GskD3d12Device                 *self);
 
 ID3D12PipelineState *   gsk_d3d12_device_get_d3d12_pipeline_state       (GskD3d12Device                 *self,
                                                                          const GskGpuShaderOpClass      *op_class,
@@ -45,5 +46,10 @@ void                    gsk_d3d12_device_alloc_rtv                      (GskD3d1
                                                                          D3D12_CPU_DESCRIPTOR_HANDLE    *out_descriptor);
 void                    gsk_d3d12_device_free_rtv                       (GskD3d12Device                 *self,
                                                                          D3D12_CPU_DESCRIPTOR_HANDLE    *descriptor);
+void                    gsk_d3d12_device_alloc_srv                      (GskD3d12Device                 *self,
+                                                                         D3D12_CPU_DESCRIPTOR_HANDLE     out_cpu[3],
+                                                                         D3D12_GPU_DESCRIPTOR_HANDLE     out_gpu[3]);
+void                    gsk_d3d12_device_free_srv                       (GskD3d12Device                 *self,
+                                                                         D3D12_CPU_DESCRIPTOR_HANDLE     descriptor[3]);
 
 G_END_DECLS
