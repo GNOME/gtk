@@ -148,7 +148,6 @@ get_dmabuf_wl_buffer (GdkWaylandSubsurface            *self,
     gdk_wayland_display_dispatch_queue (GDK_DISPLAY (display), event_queue);
 
   zwp_linux_buffer_params_v1_destroy (params);
-  wl_event_queue_destroy (event_queue);
 
   buffer = cd.buffer;
 
@@ -161,6 +160,8 @@ get_dmabuf_wl_buffer (GdkWaylandSubsurface            *self,
     {
       listener->release (data, NULL);
     }
+
+  wl_event_queue_destroy (event_queue);
 
   return buffer;
 }
