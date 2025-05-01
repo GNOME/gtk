@@ -41,6 +41,7 @@
 
 #include "gskenumtypes.h"
 
+#include "gpu/gskd3d12renderer.h"
 #include "gpu/gskglrenderer.h"
 #include "gpu/gskvulkanrenderer.h"
 #include "gdk/gdkvulkancontextprivate.h"
@@ -53,6 +54,9 @@
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/wayland/gdkwayland.h>
+#endif
+#ifdef GDK_WINDOWING_WIN32
+#include <gdk/win32/gdkwin32.h>
 #endif
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gskbroadwayrenderer.h"
@@ -578,6 +582,10 @@ get_renderer_for_backend (GdkSurface *surface)
 #ifdef GDK_WINDOWING_BROADWAY
   if (GDK_IS_BROADWAY_SURFACE (surface))
     return GSK_TYPE_BROADWAY_RENDERER;
+#endif
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_WIN32_SURFACE (surface))
+    return GSK_TYPE_D3D12_RENDERER;
 #endif
 
   return G_TYPE_INVALID;
