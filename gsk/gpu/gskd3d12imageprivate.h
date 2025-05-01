@@ -11,6 +11,8 @@ G_DECLARE_FINAL_TYPE (GskD3d12Image, gsk_d3d12_image, GSK, D3D12_IMAGE, GskGpuIm
 
 GskGpuImage *           gsk_d3d12_image_new                             (GskD3d12Device                 *device,
                                                                          GdkMemoryFormat                 format,
+                                                                         gboolean                        with_mipmap,
+                                                                         GskGpuConversion                conv,
                                                                          gsize                           width,
                                                                          gsize                           height,
                                                                          D3D12_RESOURCE_STATES           initial_state,
