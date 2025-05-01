@@ -65,12 +65,15 @@ get_keybinding (GtkAtSpiContext *self)
     {
       GtkAccessibleValue *value = gtk_at_context_get_accessible_relation (GTK_AT_CONTEXT (self), GTK_ACCESSIBLE_RELATION_LABELLED_BY);
       GList *l = gtk_reference_list_accessible_value_get (value);
-      GtkAccessible *accessible = l->data;
-      if (GTK_IS_LABEL (accessible))
+      if (l)
         {
-          guint keyval = gtk_label_get_mnemonic_keyval (GTK_LABEL (accessible));
-          if (keyval != GDK_KEY_VoidSymbol)
-            mnemonic = gdk_keyval_name (gdk_keyval_to_upper (keyval));
+          GtkAccessible *accessible = l->data;
+          if (GTK_IS_LABEL (accessible))
+            {
+              guint keyval = gtk_label_get_mnemonic_keyval (GTK_LABEL (accessible));
+              if (keyval != GDK_KEY_VoidSymbol)
+                mnemonic = gdk_keyval_name (gdk_keyval_to_upper (keyval));
+            }
         }
     }
 
