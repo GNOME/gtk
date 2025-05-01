@@ -3,6 +3,7 @@
 #include "gskd3d12imageprivate.h"
 
 #include "gskd3d12frameprivate.h"
+#include "gskgpuutilsprivate.h"
 
 #include "gdk/gdkmemoryformatprivate.h"
 #include "gdk/win32/gdkprivate-win32.h"
@@ -35,6 +36,132 @@ swizzle_is_framebuffer_compatible (guint swizzle)
   return TRUE;
 }
 
+static gboolean
+gsk_d3d12_device_supports_format (GskD3d12Device   *device,
+                                  DXGI_FORMAT       format,
+                                  GskGpuImageFlags *out_flags)
+{
+  D3D12_FEATURE_DATA_FORMAT_SUPPORT support = { .Format = format, };
+  static const D3D12_FORMAT_SUPPORT1 mandatory = D3D12_FORMAT_SUPPORT1_TEXTURE2D;
+
+  if (format == DXGI_FORMAT_UNKNOWN)
+    return FALSE;
+
+  if (FAILED (ID3D12Device_CheckFeatureSupport (gsk_d3d12_device_get_d3d12_device (device),
+                                                D3D12_FEATURE_FORMAT_SUPPORT,
+                                                &support,
+                                                sizeof (support))))
+    return FALSE;
+
+  if ((support.Support1 & mandatory) != mandatory )
+    return FALSE;
+
+  *out_flags = GSK_GPU_IMAGE_DOWNLOADABLE;
+  if (support.Support1 & D3D12_FORMAT_SUPPORT1_SHADER_SAMPLE)
+    *out_flags |= GSK_GPU_IMAGE_FILTERABLE;
+  if (support.Support1 & D3D12_FORMAT_SUPPORT1_MIP)
+    *out_flags |= GSK_GPU_IMAGE_CAN_MIPMAP;
+  if (support.Support1 & D3D12_FORMAT_SUPPORT1_RENDER_TARGET)
+    *out_flags |= GSK_GPU_IMAGE_RENDERABLE;
+
+  return TRUE;
+}
+
+static void
+gsk_d3d12_device_find_format (GskD3d12Device   *device,
+                              GdkMemoryFormat   format,
+                              gboolean          try_srgb,
+                              GskGpuImageFlags  required_flags,
+                              GdkMemoryFormat  *out_format,
+                              DXGI_FORMAT      *out_dxgi_format,
+                              GskGpuImageFlags *out_flags,
+                              guint            *out_swizzle)
+{
+  DXGI_FORMAT dxgi_format, dxgi_srgb_format = DXGI_FORMAT_UNKNOWN;
+
+  /* First, try the actual format */
+  dxgi_format = gdk_memory_format_get_dxgi_format (format, out_swizzle);
+  if (try_srgb)
+    dxgi_srgb_format = gdk_memory_format_get_dxgi_srgb_format (format);
+  if (gsk_d3d12_device_supports_format (device, dxgi_srgb_format, out_flags) &&
+      (*out_flags & required_flags) == required_flags)
+    {
+      *out_dxgi_format = dxgi_srgb_format;
+      *out_format = format;
+    }
+  else if (gsk_d3d12_device_supports_format (device, dxgi_format, out_flags) &&
+           (*out_flags & required_flags) == required_flags)
+  {
+      *out_dxgi_format = dxgi_format;
+      *out_format = format;
+    }
+  else
+    {
+      GdkMemoryFormat rgba_format;
+      GdkSwizzle rgba_swizzle;
+
+      if (gdk_memory_format_get_rgba_format (format, &rgba_format, &rgba_swizzle))
+        {
+          dxgi_format = gdk_memory_format_get_dxgi_format (format, NULL);
+          *out_swizzle = gdk_swizzle_to_d3d12 (rgba_swizzle); 
+        }
+      else
+        dxgi_format = DXGI_FORMAT_UNKNOWN;
+        
+      if (dxgi_format == DXGI_FORMAT_UNKNOWN)
+        dxgi_srgb_format = DXGI_FORMAT_UNKNOWN;
+      else if (try_srgb)
+        dxgi_srgb_format = gdk_memory_format_get_dxgi_srgb_format (rgba_format);
+      if (gsk_d3d12_device_supports_format (device, dxgi_srgb_format, out_flags) &&
+          (*out_flags & required_flags) == required_flags)
+        {
+          *out_dxgi_format = dxgi_srgb_format;
+          *out_format = format;
+        }
+      else if (gsk_d3d12_device_supports_format (device, dxgi_format, out_flags) &&
+               (*out_flags & required_flags) == required_flags)
+        {
+          *out_dxgi_format = dxgi_format;
+          *out_format = format;
+        }
+      else
+        {
+          const GdkMemoryFormat *fallbacks;
+          gsize i;
+
+          /* Next, try the fallbacks */
+          fallbacks = gdk_memory_format_get_fallbacks (format);
+          for (i = 0; fallbacks[i] != -1; i++)
+            {
+              dxgi_format = gdk_memory_format_get_dxgi_format (fallbacks[i], out_swizzle);
+              if (try_srgb)
+                dxgi_srgb_format = gdk_memory_format_get_dxgi_srgb_format (fallbacks[i]);
+              if (gsk_d3d12_device_supports_format (device, dxgi_srgb_format, out_flags) &&
+                  (*out_flags & required_flags) == required_flags)
+                {
+                  *out_dxgi_format = dxgi_srgb_format;
+                  *out_format = fallbacks[i];
+                  format = fallbacks[i];
+                  break;
+                }
+              else if (gsk_d3d12_device_supports_format (device, dxgi_format, out_flags) &&
+                       (*out_flags & required_flags) == required_flags)
+                {
+                  *out_dxgi_format = dxgi_format;
+                  *out_format = fallbacks[i];
+                  break;
+                }
+            }
+
+          /* No format found. This should never happen. */
+          g_assert (fallbacks[i] != -1);
+        }
+    }
+
+  if (!swizzle_is_framebuffer_compatible (*out_swizzle))
+    *out_flags &= ~GSK_GPU_IMAGE_RENDERABLE;
+}
+
 GskGpuImage *
 gsk_d3d12_image_new_for_resource (GskD3d12Device        *device,
                                   ID3D12Resource        *resource,
@@ -44,10 +171,14 @@ gsk_d3d12_image_new_for_resource (GskD3d12Device        *device,
   GskD3d12Image *self;
   D3D12_RESOURCE_DESC desc;
   GdkMemoryFormat format;
+  GskGpuImageFlags flags;
 
   ID3D12Resource_GetDesc (resource, &desc);
 
   if (!gdk_memory_format_find_by_dxgi_format (desc.Format, premultiplied, &format))
+    return NULL;
+
+  if (!gsk_d3d12_device_supports_format (device, desc.Format, &flags))
     return NULL;
 
   self = g_object_new (GSK_TYPE_D3D12_IMAGE, NULL);
@@ -59,7 +190,7 @@ gsk_d3d12_image_new_for_resource (GskD3d12Device        *device,
   self->swizzle = D3D12_DEFAULT_SHADER_4_COMPONENT_MAPPING;
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
-                       0,
+                       flags,
                        GSK_GPU_CONVERSION_NONE,
                        gdk_memory_format_get_default_shader_op (format),
                        format,
@@ -72,6 +203,8 @@ gsk_d3d12_image_new_for_resource (GskD3d12Device        *device,
 GskGpuImage *
 gsk_d3d12_image_new (GskD3d12Device       *device,
                      GdkMemoryFormat       format,
+                     gboolean              with_mipmap,
+                     GskGpuConversion      conv,
                      gsize                 width,
                      gsize                 height,
                      D3D12_RESOURCE_STATES initial_state,
@@ -85,6 +218,23 @@ gsk_d3d12_image_new (GskD3d12Device       *device,
   guint swizzle;
   GskGpuImageFlags flags;
   ID3D12Device *d3d12_device;
+
+  if (width > D3D12_REQ_TEXTURE2D_U_OR_V_DIMENSION ||
+      height > D3D12_REQ_TEXTURE2D_U_OR_V_DIMENSION)
+    return NULL;
+
+  gsk_d3d12_device_find_format (device,
+                                format,
+                                conv == GSK_GPU_CONVERSION_SRGB,
+                                ((resource_flags & D3D12_RESOURCE_FLAG_ALLOW_RENDER_TARGET) ? GSK_GPU_IMAGE_RENDERABLE : 0) |
+                                (with_mipmap ? GSK_GPU_IMAGE_CAN_MIPMAP : 0),
+                                &format,
+                                &dxgi_format,
+                                &flags,
+                                &swizzle);
+
+  if (!with_mipmap)
+    flags &= ~GSK_GPU_IMAGE_CAN_MIPMAP;
 
   dxgi_format = gdk_memory_format_get_dxgi_format (format, &swizzle);
   d3d12_device = gsk_d3d12_device_get_d3d12_device (device);
@@ -101,7 +251,7 @@ gsk_d3d12_image_new (GskD3d12Device       *device,
                                                  .Width = width,
                                                  .Height = height,
                                                  .DepthOrArraySize = 1,
-                                                 .MipLevels = 1,
+                                                 .MipLevels = (flags & GSK_GPU_IMAGE_CAN_MIPMAP) ? gsk_gpu_mipmap_levels (width, height) : 1,
                                                  .Format = dxgi_format,
                                                  .SampleDesc = {
                                                      .Count = 1,
@@ -125,12 +275,6 @@ gsk_d3d12_image_new (GskD3d12Device       *device,
   self->state = initial_state;
   self->resource = resource;
   self->swizzle = swizzle;
-
-  flags = GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_DOWNLOADABLE;
-  if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
-    flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
-  if (swizzle_is_framebuffer_compatible (swizzle))
-    flags |= GSK_GPU_IMAGE_RENDERABLE;
 
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags,
