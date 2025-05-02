@@ -42,7 +42,7 @@
 #include "gdkprivate.h"
 
 #include "pointer-gestures-unstable-v1-client-protocol.h"
-#include "tablet-unstable-v2-client-protocol.h"
+#include "tablet-v2-client-protocol.h"
 #include "cursor-shape-v1-client-protocol.h"
 
 #include <xkbcommon/xkbcommon.h>
@@ -2322,12 +2322,23 @@ tablet_handle_removed (void                 *data,
   _gdk_wayland_seat_remove_tablet (GDK_WAYLAND_SEAT (tablet->seat), tablet);
 }
 
+static void
+tablet_handle_bustype (void                 *data,
+                       struct zwp_tablet_v2 *wp_tablet,
+                       uint32_t              bustype)
+{
+  GdkWaylandTabletData *tablet = data;
+
+  tablet->bustype = bustype;
+}
+
 static const struct zwp_tablet_v2_listener tablet_listener = {
   tablet_handle_name,
   tablet_handle_id,
   tablet_handle_path,
   tablet_handle_done,
   tablet_handle_removed,
+  tablet_handle_bustype,
 };
 
 /* }}} */
@@ -3493,6 +3504,69 @@ tablet_pad_group_handle_mode (void                           *data,
                                       event);
 }
 
+static void
+tablet_pad_dial_handle_delta (void                          *data,
+                              struct zwp_tablet_pad_dial_v2 *wp_tablet_pad_dial,
+                              int32_t                        v120)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad dial handle delta, dial = %p delta = %d",
+                  wp_tablet_pad_dial, v120);
+
+  group->axis_tmp_info.value = v120;
+}
+
+static void
+tablet_pad_dial_handle_frame (void                          *data,
+                              struct zwp_tablet_pad_dial_v2 *wp_tablet_pad_dial,
+                              uint32_t                       time)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+  GdkWaylandTabletPadData *pad = group->pad;
+  GdkWaylandSeat *seat = GDK_WAYLAND_SEAT (pad->seat);
+  GdkEvent *event;
+
+  GDK_SEAT_DEBUG (seat, EVENTS,
+                  "tablet pad dial handle frame, dial = %p", wp_tablet_pad_dial);
+
+  event = gdk_pad_event_new_dial (seat->keyboard_focus,
+                                  pad->device,
+                                  time,
+                                  g_list_index (pad->mode_groups, group),
+                                  g_list_index (pad->dials, wp_tablet_pad_dial),
+                                  group->current_mode,
+                                  group->axis_tmp_info.value);
+
+  _gdk_wayland_display_deliver_event (gdk_seat_get_display (pad->seat),
+                                      event);
+}
+
+static const struct zwp_tablet_pad_dial_v2_listener tablet_pad_dial_listener = {
+  tablet_pad_dial_handle_delta,
+  tablet_pad_dial_handle_frame,
+};
+
+static void
+tablet_pad_group_handle_dial (void                           *data,
+                              struct zwp_tablet_pad_group_v2 *wp_tablet_pad_group,
+                              struct zwp_tablet_pad_dial_v2  *wp_tablet_pad_dial)
+{
+  GdkWaylandTabletPadGroupData *group = data;
+
+  GDK_SEAT_DEBUG (group->pad->seat, EVENTS,
+                  "tablet pad group handle dial, pad group = %p, dial = %p",
+                  wp_tablet_pad_group, wp_tablet_pad_dial);
+
+  zwp_tablet_pad_dial_v2_add_listener (wp_tablet_pad_dial,
+                                       &tablet_pad_dial_listener, group);
+  zwp_tablet_pad_dial_v2_set_user_data (wp_tablet_pad_dial, group);
+
+  group->dials = g_list_append (group->dials, wp_tablet_pad_dial);
+  group->pad->dials = g_list_append (group->pad->dials, wp_tablet_pad_dial);
+}
+
 static const struct zwp_tablet_pad_group_v2_listener tablet_pad_group_listener = {
   tablet_pad_group_handle_buttons,
   tablet_pad_group_handle_ring,
@@ -3500,6 +3574,7 @@ static const struct zwp_tablet_pad_group_v2_listener tablet_pad_group_listener =
   tablet_pad_group_handle_modes,
   tablet_pad_group_handle_done,
   tablet_pad_group_handle_mode,
+  tablet_pad_group_handle_dial,
 };
 
 /* }}} */

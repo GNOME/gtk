@@ -2890,6 +2890,7 @@ GDK_DEFINE_EVENT_TYPE (GdkPadEvent, gdk_pad_event,
                        GDK_EVENT_TYPE_SLOT (GDK_PAD_BUTTON_RELEASE)
                        GDK_EVENT_TYPE_SLOT (GDK_PAD_RING)
                        GDK_EVENT_TYPE_SLOT (GDK_PAD_STRIP)
+                       GDK_EVENT_TYPE_SLOT (GDK_PAD_DIAL)
                        GDK_EVENT_TYPE_SLOT (GDK_PAD_GROUP_MODE))
 
 GdkEvent *
@@ -2921,6 +2922,25 @@ gdk_pad_event_new_strip (GdkSurface *surface,
                          double      value)
 {
   GdkPadEvent *self = gdk_event_alloc (GDK_PAD_STRIP, surface, device, time);
+
+  self->group = group;
+  self->index = index;
+  self->mode = mode;
+  self->value = value;
+
+  return (GdkEvent *) self;
+}
+
+GdkEvent *
+gdk_pad_event_new_dial (GdkSurface *surface,
+                        GdkDevice  *device,
+                        guint32     time,
+                        guint       group,
+                        guint       index,
+                        guint       mode,
+                        double      value)
+{
+  GdkPadEvent *self = gdk_event_alloc (GDK_PAD_DIAL, surface, device, time);
 
   self->group = group;
   self->index = index;
@@ -3005,7 +3025,8 @@ gdk_pad_event_get_axis_value (GdkEvent *event,
 
   g_return_if_fail (GDK_IS_EVENT (event));
   g_return_if_fail (GDK_IS_EVENT_TYPE (event, GDK_PAD_RING) ||
-                    GDK_IS_EVENT_TYPE (event, GDK_PAD_STRIP));
+                    GDK_IS_EVENT_TYPE (event, GDK_PAD_STRIP) ||
+                    GDK_IS_EVENT_TYPE (event, GDK_PAD_DIAL));
 
   *index = self->index;
   *value = self->value;
@@ -3031,7 +3052,8 @@ gdk_pad_event_get_group_mode (GdkEvent *event,
                     GDK_IS_EVENT_TYPE (event, GDK_PAD_BUTTON_PRESS) ||
                     GDK_IS_EVENT_TYPE (event, GDK_PAD_BUTTON_RELEASE) ||
                     GDK_IS_EVENT_TYPE (event, GDK_PAD_RING) ||
-                    GDK_IS_EVENT_TYPE (event, GDK_PAD_STRIP));
+                    GDK_IS_EVENT_TYPE (event, GDK_PAD_STRIP) ||
+                    GDK_IS_EVENT_TYPE (event, GDK_PAD_DIAL));
 
   *group = self->group;
   *mode = self->mode;

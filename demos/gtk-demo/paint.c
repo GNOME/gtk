@@ -38,6 +38,7 @@ static GtkPadActionEntry pad_actions[] = {
   { GTK_PAD_ACTION_BUTTON, 5, -1, N_("Purple"), "pad.purple" },
   { GTK_PAD_ACTION_BUTTON, 6, -1, N_("Orange"), "pad.orange" },
   { GTK_PAD_ACTION_STRIP, -1, -1, N_("Brush size"), "pad.brush_size" },
+  { GTK_PAD_ACTION_DIAL,  -1, -1, N_("Brush size"), "pad.change_brush_size" },
 };
 
 static const char *pad_colors[] = {
@@ -169,6 +170,16 @@ on_pad_knob_change (GSimpleAction *action,
 }
 
 static void
+on_pad_dial_change (GSimpleAction *action,
+                    GVariant      *parameter,
+                    DrawingArea   *area)
+{
+  double value = g_variant_get_double (parameter);
+
+  area->brush_size += value / 120.0;
+}
+
+static void
 drawing_area_unroot (GtkWidget *widget)
 {
   DrawingArea *area = (DrawingArea *) widget;
@@ -210,6 +221,13 @@ drawing_area_root (GtkWidget *widget)
                              (gpointer) pad_colors[i]);
           g_signal_connect (action, "activate",
                             G_CALLBACK (on_pad_button_activate), area);
+        }
+      else if (pad_actions[i].type == GTK_PAD_ACTION_DIAL)
+        {
+          action = g_simple_action_new_stateful (pad_actions[i].action_name,
+                                                 G_VARIANT_TYPE_DOUBLE, NULL);
+          g_signal_connect (action, "activate",
+                            G_CALLBACK (on_pad_dial_change), area);
         }
       else
         {

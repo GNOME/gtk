@@ -345,43 +345,54 @@ macos-arm64:
     - macos
     - arm64
   needs: []
+  cache:
+    - key: $CI_JOB_NAME_SLUG
+      paths:
+        - ccache
   variables:
     BACKEND_FLAGS: "-Dx11-backend=false -Dbroadway-backend=true"
     FEATURE_FLAGS: "-Daccesskit=enabled -Dgobject-introspection:werror=false -Dintrospection=enabled -Dmedia-gstreamer=disabled"
     EXTRA_MESON_FLAGS: ""
     # additional settings
+    CCACHE_MAXSIZE: "250Mi"
+    CCACHE_DIR: $CI_PROJECT_DIR/ccache
     PKG_CONFIG_PATH: $CI_PROJECT_DIR/.venv/lib/pkgconfig
     SDKROOT: /opt/sdks/MacOSX11.3.sdk
+    SSL_CERT_FILE: $CI_PROJECT_DIR/.venv/lib/python3.11/site-packages/certifi/cacert.pem
   before_script:
     - .gitlab-ci/show-info-macos.sh
-    # Setup the virtual environment with 'meson' and 'ninja'.
+    # Setup the virtual environment with meson and ninja. Add ccache to speed
+    # up the build.
     - |
-      python3 -m venv .venv
+      /opt/macports/bin/python3.11 -m venv .venv
       source .venv/bin/activate
-      pip3 install meson==1.4.0 ninja==1.11.1.1 toml2json
-    # The introspection feature requires 'pkg-config' and 'bison'.
+      pip3 install meson==1.7.2 ninja==1.11.1.1 certifi==2025.4.26
+      ln -s /opt/ccache/ccache .venv/bin
+    # The introspection feature requires pkg-config and bison.
     - curl -L $CI_API_V4_URL/projects/30437/packages/generic/pkgconfig/v0.29.2+10/pkg-config-0.29.2+10_$(uname -m).tar.xz | tar -C .venv -xJ
     - curl -L $CI_API_V4_URL/projects/30438/packages/generic/bison/v3.8.2+3/bison-3.8.2+3_$(uname -m).tar.xz | tar -C .venv -xJ
-    # The AccessKit feature requires Rust.
+    # The AccessKit feature requires Rust and toml2json.
     - ln -s /opt/rustup/toolchains/1.86.0-aarch64-apple-darwin/bin/* .venv/bin
-    # The GLib subproject requires 'packaging'.
-    - pip3 install packaging==24.2
+    - pip3 install toml2json==0.1.0
     # Meson cannot handle circular dependencies in subprojects, so we have to build GLib and
-    # GObject Introspection ourselves.
+    # GObject Introspection ourselves. With crudini we ensure using the same versions as
+    # defined in the subproject wrappers.
+    - pip3 install crudini==0.9.6
     - |
-      git clone --depth 1 https://gitlab.gnome.org/gnome/glib.git
+      pip3 install packaging==24.2
+      git clone --depth 1 --branch $(crudini --get subprojects/glib.wrap wrap-git revision) https://gitlab.gnome.org/gnome/glib.git
       meson setup -Dprefix=${CI_PROJECT_DIR}/.venv -Dintrospection=disabled -Dtests=false _glib_build glib
-      meson compile -C_glib_build
-      meson install -C_glib_build
+      meson compile -C _glib_build
+      meson install -C _glib_build
     - |
-      git clone --depth 1 --recurse-submodules https://gitlab.gnome.org/gnome/gobject-introspection.git
+      git clone --depth 1 --branch $(crudini --get subprojects/gobject-introspection.wrap wrap-git revision) --recurse-submodules https://gitlab.gnome.org/gnome/gobject-introspection.git
       meson setup -Dprefix=${CI_PROJECT_DIR}/.venv _gi_build gobject-introspection
-      meson compile -C_gi_build
-      meson install -C_gi_build
+      meson compile -C _gi_build
+      meson install -C _gi_build
     - |
       meson configure -Dintrospection=enabled _glib_build
-      meson compile -C_glib_build
-      meson install -C_glib_build
+      meson compile -C _glib_build
+      meson install -C _glib_build
   script:
     - meson setup
             ${COMMON_MESON_FLAGS}

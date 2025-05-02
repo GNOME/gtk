@@ -26,7 +26,7 @@
 #include <stdint.h>
 #include <wayland-client.h>
 #include <wayland-egl.h>
-#include <gdk/wayland/tablet-unstable-v2-client-protocol.h>
+#include <gdk/wayland/tablet-v2-client-protocol.h>
 #include <gdk/wayland/gtk-shell-client-protocol.h>
 #include <gdk/wayland/xdg-shell-client-protocol.h>
 #include <gdk/wayland/xdg-shell-unstable-v6-client-protocol.h>
