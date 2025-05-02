@@ -67,4 +67,7 @@ GDK_AVAILABLE_IN_ALL
 void                     gdk_wayland_toplevel_set_application_id (GdkToplevel *toplevel,
                                                                   const char  *application_id);
 
+GDK_AVAILABLE_IN_4_20
+struct xdg_toplevel *   gdk_wayland_toplevel_get_xdg_toplevel    (GdkToplevel *toplevel);
+
 G_END_DECLS
