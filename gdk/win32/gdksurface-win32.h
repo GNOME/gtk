@@ -122,63 +122,6 @@ struct _GdkW32DragMoveResizeContext
 
   /* The cursor we should use while the operation is running. */
   GdkCursor         *cursor;
-
-  /* This HWND looks like an outline and is drawn under the surface
-   * that is being dragged. It indicates the shape the dragged surface
-   * will take if released at a particular point.
-   * Indicator HWND size always matches the target indicator shape,
-   * the actual indicator drawn on it might not, depending on
-   * how much time elapsed since the animation started.
-   */
-  HWND               shape_indicator;
-
-  /* Used to draw the indicator */
-  cairo_surface_t   *indicator_surface;
-  int                indicator_surface_width;
-  int                indicator_surface_height;
-
-  /* Size/position of shape_indicator */
-  GdkRectangle       indicator_surface_rect;
-
-  /* Indicator will animate to occupy this rectangle */
-  GdkRectangle       indicator_target;
-
-  /* Indicator will start animating from this rectangle */
-  GdkRectangle       indicator_start;
-
-  /* Timestamp of the animation start */
-  gint64             indicator_start_time;
-
-  /* Timer that drives the animation */
-  guint              timer;
-
-  /* A special timestamp, if we want to draw not how
-   * the animation should look *now*, but how it should
-   * look at arbitrary moment of time.
-   * Set to 0 to tell GDK to use current time.
-   */
-  gint64             draw_timestamp;
-
-  /* Indicates that a transformation was revealed:
-   *
-   * For drag-resize: If it's FALSE,
-   * then the pointer have not yet hit a trigger that triggers fullup.
-   * If TRUE, then the pointer did hit a trigger that triggers fullup
-   * at some point during this drag op.
-   * This is used to prevent drag-resize from triggering
-   * a transformation when first approaching a trigger of the work area -
-   * one must drag it all the way to the very trigger to trigger; afterwards
-   * a transformation will start triggering at some distance from the trigger
-   * for as long as the op is still running. This is how AeroSnap works.
-   *
-   * For drag-move: If it's FALSE,
-   * then the pointer have not yet hit a trigger, even if it is
-   * already within an edge region.
-   * If it's TRUE, then the pointer did hit a trigger within an
-   * edge region, and have not yet left an edge region
-   * (passing from one edge region into another doesn't count).
-   */
-  gboolean           revealed;
 };
 
 typedef struct _GdkW32DragMoveResizeContext GdkW32DragMoveResizeContext;

@@ -1977,14 +1977,6 @@ gdk_win32_surface_end_move_resize_drag (GdkSurface *surface)
 
   g_clear_object (&context->cursor);
 
-  context->revealed = FALSE;
-
-  if (context->timer)
-    {
-      g_source_remove (context->timer);
-      context->timer = 0;
-    }
-
   g_clear_object (&context->surface);
 
   GDK_NOTE (EVENTS,
