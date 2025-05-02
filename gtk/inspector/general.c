@@ -53,12 +53,14 @@
 #endif
 
 #ifdef GDK_WINDOWING_WIN32
+#include "win32/gdkdisplay-win32.h"
 #include "win32/gdkwin32.h"
 #include "gdkglcontextprivate.h"
 #include <epoxy/wgl.h>
 #ifdef GDK_WIN32_ENABLE_EGL
 #include <epoxy/egl.h>
 #endif
+#include <directx/d3d12.h>
 #endif
 
 #ifdef GDK_WINDOWING_MACOS
@@ -120,6 +122,10 @@ struct _GtkInspectorGeneral
   GtkWidget *media_backend;
   GtkWidget *im_module;
   GtkWidget *a11y_backend;
+  GtkWidget *d3d12_box;
+  GtkWidget *d3d12_renderer;
+  GtkWidget *d3d12_feature_level;
+  GtkWidget *d3d12_shader_model;
   GtkWidget *gl_backend_version;
   GtkWidget *gl_backend_version_row;
   GtkWidget *gl_backend_vendor;
@@ -568,6 +574,111 @@ dump_app_id (GdkDisplay *display,
   g_string_append_printf (string, "| Resource Path | %s |\n", g_application_get_resource_base_path (app));
 }
 
+/* }}} */
+/* {{{ D3D12 */
+
+#ifdef GDK_WINDOWING_WIN32
+static void
+init_d3d12 (GtkInspectorGeneral *gen)
+{
+  static const char *feature_level_names[] = {
+    [D3D_FEATURE_LEVEL_11_0] = "11.0",
+    [D3D_FEATURE_LEVEL_11_1] = "11.1",
+    [D3D_FEATURE_LEVEL_12_0] = "12.0",
+    [D3D_FEATURE_LEVEL_12_1] = "12.1",
+    [D3D_FEATURE_LEVEL_12_2] = "12.2",
+  };
+  static const char *shader_model_names[] = {
+    [D3D_SHADER_MODEL_5_1] = "5.1",
+    [D3D_SHADER_MODEL_6_0] = "6.0",
+    [D3D_SHADER_MODEL_6_1] = "6.1",
+    [D3D_SHADER_MODEL_6_2] = "6.2",
+    [D3D_SHADER_MODEL_6_3] = "6.3",
+    [D3D_SHADER_MODEL_6_4] = "6.4",
+    [D3D_SHADER_MODEL_6_5] = "6.5",
+    [D3D_SHADER_MODEL_6_6] = "6.6",
+    [D3D_SHADER_MODEL_6_7] = "6.7",
+    [D3D_SHADER_MODEL_6_8] = "6.8",
+  };
+  D3D12_FEATURE_DATA_FEATURE_LEVELS feature_levels = {
+    .NumFeatureLevels = 5,
+    .pFeatureLevelsRequested = (D3D_FEATURE_LEVEL[5]) { D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_11_1,
+                                                        D3D_FEATURE_LEVEL_12_0, D3D_FEATURE_LEVEL_12_1, D3D_FEATURE_LEVEL_12_2 }
+  };
+  D3D12_FEATURE_DATA_SHADER_MODEL shader_model = {
+    .HighestShaderModel = D3D_SHADER_MODEL_6_8,
+  };
+  GdkWin32Display *display;
+  IDXGIFactory4 *factory;
+  IDXGIAdapter1 *adapter;
+  ID3D12Device *device;
+  LUID luid;
+  gsize i;
+  HRESULT hr;
+
+  if (!GDK_IS_WIN32_DISPLAY (gen->display))
+    return;
+
+  display = GDK_WIN32_DISPLAY (gen->display);
+
+  gtk_widget_set_visible (gen->d3d12_box, TRUE);
+
+  factory = gdk_win32_display_get_dxgi_factory (display);
+  device = gdk_win32_display_get_d3d12_device (display);
+  if (device == NULL)
+    {
+      gtk_label_set_text (GTK_LABEL (gen->d3d12_renderer), _("No D3D12 device found"));
+      gtk_label_set_text (GTK_LABEL (gen->d3d12_feature_level), C_("D3D12 feature level", "None"));
+      gtk_label_set_text (GTK_LABEL (gen->d3d12_shader_model), C_("D3D12 shader model", "None"));
+      return;
+    }
+
+  ID3D12Device_GetAdapterLuid (device, &luid);
+
+  for (i = 0; IDXGIFactory4_EnumAdapters1 (factory, i, &adapter) != DXGI_ERROR_NOT_FOUND; i++)
+  {
+    DXGI_ADAPTER_DESC1 desc;
+    char *s;
+
+    if (FAILED (IDXGIAdapter1_GetDesc1 (adapter, &desc)) ||
+        desc.AdapterLuid.HighPart != luid.HighPart ||
+        desc.AdapterLuid.LowPart != luid.LowPart)
+      {
+        gdk_win32_com_clear (&adapter);
+        continue;
+      }
+
+    s = g_utf16_to_utf8 (desc.Description, sizeof (desc.Description), NULL, NULL, NULL);
+    gtk_label_set_text (GTK_LABEL (gen->d3d12_renderer), s);
+    g_free (s);
+    break;
+  }
+
+  hr = ID3D12Device_CheckFeatureSupport (device, D3D12_FEATURE_FEATURE_LEVELS, &feature_levels, sizeof (feature_levels));
+  if (SUCCEEDED (hr))
+    {
+      if (feature_levels.MaxSupportedFeatureLevel < G_N_ELEMENTS (feature_level_names) &&
+          feature_level_names[feature_levels.MaxSupportedFeatureLevel] != NULL)
+        gtk_label_set_text (GTK_LABEL (gen->d3d12_feature_level), feature_level_names[feature_levels.MaxSupportedFeatureLevel]);
+      else
+        gtk_label_set_text (GTK_LABEL (gen->d3d12_feature_level), C_("D3D12 feature level", "Unknown"));
+    }
+  else
+    gtk_label_set_text (GTK_LABEL (gen->d3d12_feature_level), C_("D3D12 feature level", "None"));
+
+  hr = ID3D12Device_CheckFeatureSupport (device, D3D12_FEATURE_SHADER_MODEL, &shader_model, sizeof (shader_model));
+  if (SUCCEEDED (hr))
+    {
+      if (shader_model.HighestShaderModel < G_N_ELEMENTS (shader_model_names) &&
+          shader_model_names[shader_model.HighestShaderModel] != NULL)
+        gtk_label_set_text (GTK_LABEL (gen->d3d12_shader_model), shader_model_names[shader_model.HighestShaderModel]);
+      else
+        gtk_label_set_text (GTK_LABEL (gen->d3d12_shader_model), C_("D3D12 shader model", "Unknown"));
+    }
+  else
+    gtk_label_set_text (GTK_LABEL (gen->d3d12_shader_model), C_("D3D12 shader model", "None"));
+}
+#endif
 /* }}} */
 /* {{{ GL */
 
@@ -2131,6 +2242,10 @@ gtk_inspector_general_class_init (GtkInspectorGeneralClass *klass)
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, media_backend);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, im_module);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, a11y_backend);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, d3d12_box);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, d3d12_renderer);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, d3d12_feature_level);
+  gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, d3d12_shader_model);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_error);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_error_row);
   gtk_widget_class_bind_template_child (widget_class, GtkInspectorGeneral, gl_version);
@@ -2188,6 +2303,9 @@ gtk_inspector_general_set_display (GtkInspectorGeneral *gen,
   init_display (gen);
   init_monitors (gen);
   init_seats (gen);
+#ifdef GDK_WINDOWING_WIN32
+  init_d3d12 (gen);
+#endif
   init_gl (gen);
   init_vulkan (gen);
 }
