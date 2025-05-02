@@ -113,9 +113,10 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
       GDK_GL_MAX_TRACKED_BUFFERS >= 1 &&
       context->old_updated_area[0])
     {
+      guint width, height;
       int num_rectangles = cairo_region_num_rectangles (context->old_updated_area[0]);
-      int scale = surface_win32->surface_scale;
       cairo_rectangle_int_t rectangle;
+      gdk_draw_context_get_buffer_size (draw_context, &width, &height);
 
       for (int i = 0; i < num_rectangles; i++)
         {
@@ -125,7 +126,7 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
            * conventions. Coordinates are that of the client-area, but the origin is
            * at the lower-left corner; rectangles are passed by their lower-left corner
            */
-          rectangle.y = (surface->height * scale) - rectangle.y - rectangle.height;
+          rectangle.y = height - rectangle.y - rectangle.height;
 
           context_wgl->ptr_glAddSwapHintRectWIN (rectangle.x,
                                                  rectangle.y,
