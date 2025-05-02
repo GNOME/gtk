@@ -213,6 +213,8 @@ get_gl_texture_wl_buffer (GdkWaylandSubsurface *self,
   GdkGLContext *glcontext;
   GLBufferData gldata;
 
+  *out_fourcc = 0;
+
   glcontext = gdk_display_get_gl_context (display);
   if (glcontext == NULL ||
       !gdk_gl_context_is_shared (glcontext, gdk_gl_texture_get_context (gltexture)))
@@ -387,49 +389,9 @@ scaled_rect_is_integral (const graphene_rect_t *rect,
 }
 
 static gboolean
-gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
-                               GdkTexture            *texture,
-                               const graphene_rect_t *source,
-                               const graphene_rect_t *dest,
-                               GdkDihedral            transform,
-                               const graphene_rect_t *background,
-                               gboolean               above,
-                               GdkSubsurface         *sibling)
+update_dest (GdkWaylandSubsurface  *self,
+             const graphene_rect_t *dest)
 {
-  GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
-  GdkWaylandSurface *parent = GDK_WAYLAND_SURFACE (sub->parent);
-  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (sub->parent));
-  struct wl_buffer *buffer = NULL;
-  gboolean result = FALSE;
-  GdkWaylandSubsurface *sib = sibling ? GDK_WAYLAND_SUBSURFACE (sibling) : NULL;
-  gboolean will_be_above;
-  double scale;
-  graphene_rect_t device_rect;
-  gboolean has_background;
-  enum wl_output_transform tf;
-  gboolean dest_changed = FALSE;
-  gboolean source_changed = FALSE;
-  gboolean transform_changed = FALSE;
-  gboolean stacking_changed = FALSE;
-  gboolean needs_commit = FALSE;
-  gboolean background_changed = FALSE;
-  gboolean needs_bg_commit = FALSE;
-  gboolean color_changed = FALSE;
-  guint32 fourcc;
-  gboolean premultiplied;
-  gboolean was_transparent;
-
-  if (sibling)
-    will_be_above = sibling->above_parent;
-  else
-    will_be_above = above;
-
-  if (sub->parent == NULL)
-    {
-      g_warning ("Can't attach to destroyed subsurface %p", self);
-      return FALSE;
-    }
-
   if (self->dest.x != dest->origin.x ||
       self->dest.y != dest->origin.y ||
       self->dest.width != dest->size.width ||
@@ -439,38 +401,46 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
       self->dest.y = dest->origin.y;
       self->dest.width = dest->size.width;
       self->dest.height = dest->size.height;
-      dest_changed = TRUE;
+      return TRUE;
     }
+  return FALSE;
+}
 
+static gboolean
+update_source (GdkWaylandSubsurface  *self,
+               const graphene_rect_t *source)
+{
   if (!gsk_rect_equal (&self->source, source))
     {
       self->source.origin.x = source->origin.x;
       self->source.origin.y = source->origin.y;
       self->source.size.width = source->size.width;
       self->source.size.height = source->size.height;
-      source_changed = TRUE;
+      return TRUE;
     }
+  return FALSE;
+}
+
+static gboolean
+update_transform (GdkWaylandSubsurface *self,
+                  GdkDihedral           transform)
+{
+  enum wl_output_transform tf;
 
   tf = gdk_texture_transform_to_wl (transform);
   if (self->transform != tf)
     {
       self->transform = tf;
-      transform_changed = TRUE;
+      return TRUE;
     }
+  return FALSE;
+}
 
-  if (sibling != gdk_subsurface_get_sibling (sub, above) ||
-      will_be_above != gdk_subsurface_is_above_parent (sub))
-    stacking_changed = TRUE;
-
-  if (self->texture == NULL)
-    {
-      dest_changed = TRUE;
-      source_changed = TRUE;
-      transform_changed = TRUE;
-      stacking_changed = TRUE;
-    }
-
-  scale = gdk_fractional_scale_to_double (&parent->scale);
+static gboolean
+update_background (GdkWaylandSubsurface  *self,
+                   const graphene_rect_t *background)
+{
+  gboolean background_changed;
 
   if (background)
     {
@@ -494,7 +464,85 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
       self->bg_rect.height = 0;
     }
 
+  return background_changed;
+}
+
+static gboolean
+gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
+                               GdkTexture            *texture,
+                               const graphene_rect_t *source,
+                               const graphene_rect_t *dest,
+                               GdkDihedral            transform,
+                               const graphene_rect_t *background,
+                               gboolean               above,
+                               GdkSubsurface         *sibling)
+{
+  GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
+  GdkWaylandSurface *parent = GDK_WAYLAND_SURFACE (sub->parent);
+  GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (sub->parent));
+  struct wl_buffer *buffer = NULL;
+  gboolean result = FALSE;
+  GdkWaylandSubsurface *sib = sibling ? GDK_WAYLAND_SUBSURFACE (sibling) : NULL;
+  gboolean will_be_above;
+  double scale;
+  graphene_rect_t device_rect;
+  gboolean has_background;
+  gboolean dest_changed = FALSE;
+  gboolean source_changed = FALSE;
+  gboolean transform_changed = FALSE;
+  gboolean stacking_changed = FALSE;
+  gboolean needs_commit = FALSE;
+  gboolean background_changed = FALSE;
+  gboolean needs_bg_commit = FALSE;
+  gboolean color_changed = FALSE;
+  gboolean transparent_changed = FALSE;
+  guint32 fourcc = 0;
+  gboolean premultiplied = TRUE;
+  gboolean was_transparent;
+  gboolean is_transparent;
+
+  if (sub->parent == NULL)
+    {
+      g_warning ("Can't attach to destroyed subsurface %p", self);
+      return FALSE;
+    }
+
+  if (sibling)
+    will_be_above = sibling->above_parent;
+  else
+    will_be_above = above;
+
+  if (sibling != gdk_subsurface_get_sibling (sub, above) ||
+      will_be_above != gdk_subsurface_is_above_parent (sub))
+    stacking_changed = TRUE;
+
+  dest_changed = update_dest (self, dest);
+  source_changed = update_source (self, source);
+  transform_changed = update_transform (self, transform);
+  if (self->texture)
+    {
+      was_transparent = gdk_memory_format_alpha (gdk_texture_get_format (self->texture)) != GDK_MEMORY_ALPHA_OPAQUE;
+    }
+  else
+    {
+      dest_changed = TRUE;
+      source_changed = TRUE;
+      transform_changed = TRUE;
+      stacking_changed = TRUE;
+      was_transparent = FALSE;
+    }
+
+  if (texture)
+    is_transparent = gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_OPAQUE;
+  else
+    is_transparent = TRUE;
+
+  transparent_changed = is_transparent != was_transparent;
+  background_changed = update_background (self, background);
+
   has_background = self->bg_rect.width > 0 && self->bg_rect.height > 0;
+
+  scale = gdk_fractional_scale_to_double (&parent->scale);
 
   if (!scaled_rect_is_integral (dest, 1, &device_rect))
     {
@@ -503,9 +551,8 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          self,
                          dest->origin.x, dest->origin.y,
                          dest->size.width, dest->size.height);
-      goto has_result;
     }
-  if (!scaled_rect_is_integral (dest, scale, &device_rect))
+  else if (!scaled_rect_is_integral (dest, scale, &device_rect))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "[%p] 🗙 Non-integral device coordinates %g %g %g %g (scale %.2f)",
@@ -513,18 +560,16 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          device_rect.origin.x, device_rect.origin.y,
                          device_rect.size.width, device_rect.size.height,
                          scale);
-      goto has_result;
     }
-  if (background && !scaled_rect_is_integral (background, 1, &device_rect))
+  else if (background && !scaled_rect_is_integral (background, 1, &device_rect))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "[%p] 🗙 Non-integral background coordinates %g %g %g %g",
                          self,
                          background->origin.x, background->origin.y,
                          background->size.width, background->size.height);
-      goto has_result;
     }
-  if (background && !scaled_rect_is_integral (background, scale, &device_rect))
+  else if (background && !scaled_rect_is_integral (background, scale, &device_rect))
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "[%p] 🗙 Non-integral background device coordinates %g %g %g %g (scale %.2f)",
@@ -532,131 +577,101 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          device_rect.origin.x, device_rect.origin.y,
                          device_rect.size.width, device_rect.size.height,
                          scale);
-      goto has_result;
     }
-  if (!will_be_above &&
-           gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_OPAQUE &&
-           !has_background)
+  else if (!will_be_above && is_transparent && !has_background)
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "[%p] 🗙 Non-opaque texture (%dx%d) below",
                          self,
                          gdk_texture_get_width (texture),
                          gdk_texture_get_height (texture));
-      goto has_result;
     }
-  if (has_background && !display->single_pixel_buffer)
+  else if (has_background && !display->single_pixel_buffer)
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "[%p] 🗙 Texture has background, but no single-pixel buffer support",
                          self);
-      goto has_result;
     }
-
-  /* Create the buffer early, since we need the format info */
-  buffer = get_wl_buffer (self, texture, &fourcc, &premultiplied);
-
-  if (!buffer)
+  else if (texture && texture != self->texture &&
+           (buffer = get_wl_buffer (self, texture, &fourcc, &premultiplied)) == NULL)
     {
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "[%p] 🗙 Failed to create wl_buffer for %s",
                          self,
                          G_OBJECT_TYPE_NAME (texture));
-      goto has_result;
     }
-  if (!gdk_wayland_color_surface_can_set_color_state (self->color,
-                                                      gdk_texture_get_color_state (texture),
-                                                      fourcc, premultiplied))
+  else if (buffer && !gdk_wayland_color_surface_can_set_color_state (self->color,
+                                                                     gdk_texture_get_color_state (texture),
+                                                                     fourcc, premultiplied))
     {
+      g_clear_pointer (&buffer, wl_buffer_destroy);
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "[%p] 🗙 Texture colorstate %s not supported",
                          self,
                          gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
-      goto has_result;
-    }
-
-  if (self->texture)
-    was_transparent = gdk_memory_format_alpha (gdk_texture_get_format (self->texture)) != GDK_MEMORY_ALPHA_OPAQUE;
-  else
-    was_transparent = FALSE;
-
-  if (self->texture && texture)
-    {
-      color_changed = !gdk_color_state_equal (gdk_texture_get_color_state (self->texture),
-                                              gdk_texture_get_color_state (texture)) ||
-                      self->fourcc != fourcc ||
-                      self->premultiplied != premultiplied;
     }
   else
     {
-      color_changed = TRUE;
-    }
-
-  if (g_set_object (&self->texture, texture))
-    {
-      self->fourcc = fourcc;
-      self->premultiplied = premultiplied;
-
-      if (buffer != NULL)
+      if (self->texture && texture)
         {
-          gboolean is_transparent;
-
-          is_transparent = gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_OPAQUE;
-          if (is_transparent != was_transparent)
-            {
-              if (is_transparent)
-                wl_surface_set_opaque_region (self->surface, NULL);
-              else
-                wl_surface_set_opaque_region (self->surface, self->opaque_region);
-            }
-
-          GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                             "[%p] %s Attaching %s (%dx%d, %s) at %d %d %d %d%s%s%s",
-                             self,
-                             G_OBJECT_TYPE_NAME (texture),
-                             will_be_above
-                               ? (has_background ? "▲" : "△")
-                               : (has_background ? "▼" : "▽"),
-                             gdk_texture_get_width (texture),
-                             gdk_texture_get_height (texture),
-                             gdk_color_state_get_name (gdk_texture_get_color_state (texture)),
-                             self->dest.x, self->dest.y,
-                             self->dest.width, self->dest.height,
-                             transform != GDK_DIHEDRAL_NORMAL ? " (" : "",
-                             transform != GDK_DIHEDRAL_NORMAL ? gdk_dihedral_get_name (transform) : "",
-                             transform != GDK_DIHEDRAL_NORMAL ? ")" : ""
-                             );
-          result = TRUE;
+          color_changed = !gdk_color_state_equal (gdk_texture_get_color_state (self->texture),
+                                                  gdk_texture_get_color_state (texture)) ||
+                          self->fourcc != fourcc ||
+                          self->premultiplied != premultiplied;
         }
       else
         {
-          GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                             "[%p] 🗙 Failed to create wl_buffer for %s",
-                             self,
-                             G_OBJECT_TYPE_NAME (texture));
+          color_changed = TRUE;
+        }
+
+      if (g_set_object (&self->texture, texture))
+        {
+          self->fourcc = fourcc;
+          self->premultiplied = premultiplied;
+          result = buffer != NULL;
+          if (result)
+            GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                               "[%p] %s Attaching %s (%dx%d, %s) at %d %d %d %d%s%s%s",
+                               self,
+                               G_OBJECT_TYPE_NAME (texture),
+                               will_be_above
+                                 ? (has_background ? "▲" : "△")
+                                 : (has_background ? "▼" : "▽"),
+                               gdk_texture_get_width (texture),
+                               gdk_texture_get_height (texture),
+                               gdk_color_state_get_name (gdk_texture_get_color_state (texture)),
+                               self->dest.x, self->dest.y,
+                               self->dest.width, self->dest.height,
+                               transform != GDK_DIHEDRAL_NORMAL ? " (" : "",
+                               transform != GDK_DIHEDRAL_NORMAL ? gdk_dihedral_get_name (transform) : "",
+                               transform != GDK_DIHEDRAL_NORMAL ? ")" : "");
+        }
+      else
+        {
+          if (dest_changed)
+            GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
+                               "[%p] %s Moving texture (%dx%d) to %d %d %d %d",
+                               self,
+                               will_be_above
+                                 ? (has_background ? "▲" : "△")
+                                 : (has_background ? "▼" : "▽"),
+                               gdk_texture_get_width (texture),
+                               gdk_texture_get_height (texture),
+                               self->dest.x, self->dest.y,
+                               self->dest.width, self->dest.height);
+          g_clear_pointer (&buffer, wl_buffer_destroy);
+          result = TRUE;
         }
     }
-  else
-    {
-      if (dest_changed)
-        GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                           "[%p] %s Moving texture (%dx%d) to %d %d %d %d",
-                           self,
-                           will_be_above
-                             ? (has_background ? "▲" : "△")
-                             : (has_background ? "▼" : "▽"),
-                           gdk_texture_get_width (texture),
-                           gdk_texture_get_height (texture),
-                           self->dest.x, self->dest.y,
-                           self->dest.width, self->dest.height);
-      g_clear_pointer (&buffer, wl_buffer_destroy);
-      result = TRUE;
-    }
-
-has_result:
 
   if (result)
     {
+      if (transparent_changed)
+        {
+          wl_surface_set_opaque_region (self->surface, is_transparent ? NULL : self->opaque_region);
+          needs_commit = TRUE;
+        }
+
       if (transform_changed)
         {
           wl_surface_set_buffer_transform (self->surface, self->transform);
@@ -686,12 +701,11 @@ has_result:
 
           if (color_changed)
             {
+              GdkColorState *cs = gdk_texture_get_color_state (texture);
               GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                                  "[%p] Setting color state %s",
-                                 self, gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
-              gdk_wayland_color_surface_set_color_state (self->color,
-                                                         gdk_texture_get_color_state (texture),
-                                                         fourcc, premultiplied);
+                                 self, gdk_color_state_get_name (cs));
+              gdk_wayland_color_surface_set_color_state (self->color, cs, fourcc, premultiplied);
             }
 
           needs_commit = TRUE;
@@ -739,8 +753,6 @@ has_result:
               needs_bg_commit = TRUE;
             }
         }
-
-      result = TRUE;
     }
   else /* !result */
     {
@@ -762,29 +774,19 @@ has_result:
 
   if (stacking_changed)
     {
-      if (sib)
-        {
-          if (above)
-            wl_subsurface_place_above (self->subsurface, sib->surface);
-          else
-            wl_subsurface_place_below (self->subsurface, sib->surface);
-        }
+      if (above)
+        wl_subsurface_place_above (self->subsurface,
+                                   sib ? sib->surface : GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
       else
-        {
-          if (above)
-            wl_subsurface_place_above (self->subsurface,
-                                       GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
-          else
-            wl_subsurface_place_below (self->subsurface,
-                                       GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
-        }
+        wl_subsurface_place_below (self->subsurface,
+                                   sib ? sib->surface : GDK_WAYLAND_SURFACE (sub->parent)->display_server.wl_surface);
       needs_commit = TRUE;
+    }
 
-      if (self->bg_attached)
-        {
-          wl_subsurface_place_below (self->bg_subsurface, self->surface);
-          needs_bg_commit = TRUE;
-        }
+  if (self->bg_attached)
+    {
+      wl_subsurface_place_below (self->bg_subsurface, self->surface);
+      needs_bg_commit = TRUE;
     }
 
   if (needs_commit)
