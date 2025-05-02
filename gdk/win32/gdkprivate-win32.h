@@ -152,8 +152,6 @@ void    _gdk_other_api_failed        (const char *where,
 #define GDI_CALL(api, arglist) (api arglist ? 1 : (WIN32_GDI_FAILED (#api), 0))
 #define API_CALL(api, arglist) (api arglist ? 1 : (WIN32_API_FAILED (#api), 0))
 
-#define HR_LOG(hr)
-
 /*<private>
  * hr_warn:
  * @expr: The expression to evaluate

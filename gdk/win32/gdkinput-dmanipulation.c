@@ -509,10 +509,15 @@ void gdk_dmanipulation_initialize (GdkWin32Display *display)
 
       if (FAILED (hr))
         {
-          if (hr == REGDB_E_CLASSNOTREG || hr == E_NOINTERFACE);
-            /* Not an error,
-             * DirectManipulation is not available */
-          else HR_LOG (hr);
+          if (hr == REGDB_E_CLASSNOTREG || hr == E_NOINTERFACE)
+            {
+              /* Not an error,
+               * DirectManipulation is not available */
+            }
+          else
+            {
+              hr_warn (hr);
+            }
         }
     }
 }

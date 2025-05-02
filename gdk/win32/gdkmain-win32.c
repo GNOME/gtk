@@ -58,16 +58,21 @@ gdk_win32_ensure_com (void)
 
       hr = CoInitializeEx (NULL, flags);
       if (SUCCEEDED (hr))
-        init_result = TRUE;
-      else switch (hr)
         {
-        case RPC_E_CHANGED_MODE:
-          g_warning ("COM runtime already initialized on the main "
-                     "thread with an incompatible apartment model");
-        break;
-        default:
-          HR_LOG (hr);
-        break;
+          init_result = TRUE;
+        }
+      else
+        {
+          switch (hr)
+          {
+            case RPC_E_CHANGED_MODE:
+              g_warning ("COM runtime already initialized on the main "
+                         "thread with an incompatible apartment model");
+              break;
+            default:
+              hr_warn (hr);
+              break;
+          }
         }
 
       g_once_init_leave (&co_initialized, init_result);
@@ -88,16 +93,21 @@ gdk_win32_ensure_ole (void)
       HRESULT hr = OleInitialize (NULL);
 
       if (SUCCEEDED (hr))
-        init_result = TRUE;
-      else switch (hr)
         {
-        case RPC_E_CHANGED_MODE:
-          g_warning ("Failed to initialize the OLE2 runtime because "
-                     "the thread has an incompatible apartment model");
-        break;
-        default:
-          HR_LOG (hr);
-        break;
+          init_result = TRUE;
+        }
+      else
+        {
+          switch (hr)
+          {
+            case RPC_E_CHANGED_MODE:
+              g_warning ("Failed to initialize the OLE2 runtime because "
+                         "the thread has an incompatible apartment model");
+              break;
+            default:
+              hr_warn (hr);
+              break;
+          }
         }
 
        g_once_init_leave (&ole_initialized, init_result);
