@@ -210,26 +210,28 @@ _gdk_win32_adjust_client_rect (GdkSurface *surface,
   API_CALL (AdjustWindowRectEx, (rect, style, FALSE, exstyle));
 }
 
-gboolean
-_gdk_win32_surface_enable_transparency (GdkSurface *surface)
+void
+gdk_win32_surface_enable_transparency (GdkSurface *surface)
 {
   DWM_BLURBEHIND blur_behind;
   HRGN empty_region;
   HRESULT call_result;
   HWND this_hwnd;
+  BOOL dummy;
 
   if (surface == NULL || GDK_SURFACE_HWND (surface) == NULL)
-    return FALSE;
+    return;
 
-  if (!gdk_display_is_composited (gdk_surface_get_display (surface)))
-    return FALSE;
+  /* happens while dwm.exe is restarting */
+  if (FAILED (DwmIsCompositionEnabled (&dummy)))
+    return;
 
   this_hwnd = GDK_SURFACE_HWND (surface);
 
   empty_region = CreateRectRgn (0, 0, -1, -1);
 
   if (empty_region == NULL)
-    return FALSE;
+    return;
 
   memset (&blur_behind, 0, sizeof (blur_behind));
   blur_behind.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
@@ -242,8 +244,6 @@ _gdk_win32_surface_enable_transparency (GdkSurface *surface)
         G_STRLOC, "DwmEnableBlurBehindWindow", this_hwnd, (guint32) call_result);
 
   DeleteObject (empty_region);
-
-  return SUCCEEDED (call_result);
 }
 
 static const char *
@@ -474,7 +474,7 @@ gdk_win32_surface_constructed (GObject *object)
       gdk_dmanipulation_initialize_surface (surface);
     }
 
-  _gdk_win32_surface_enable_transparency (surface);
+  gdk_win32_surface_enable_transparency (surface);
   _gdk_win32_surface_register_dnd (surface);
   _gdk_win32_surface_update_style_bits (surface);
 
@@ -2723,28 +2723,14 @@ _gdk_win32_surface_get_scale (GdkSurface *surface)
 
   if (win32_display->dpi_aware_type != PROCESS_DPI_UNAWARE)
     {
-      if (win32_display->has_fixed_scale)
-        impl->surface_scale = win32_display->surface_scale;
-      else
-        impl->surface_scale = gdk_win32_display_get_monitor_scale_factor (win32_display,
-                                                                          surface,
-                                                                          NULL);
+      impl->surface_scale = gdk_win32_display_get_monitor_scale_factor (win32_display,
+                                                                        surface,
+                                                                        NULL);
 
       return impl->surface_scale;
     }
   else
     {
-      if (win32_display->has_fixed_scale)
-        {
-          static gsize hidpi_msg_displayed = 0;
-
-          if (g_once_init_enter (&hidpi_msg_displayed))
-            {
-              g_message ("Note: GDK_SCALE is ignored as HiDPI awareness is disabled.");
-              g_once_init_leave (&hidpi_msg_displayed, 1);
-            }
-        }
-
       /* Application is not DPI aware, don't bother */
       return 1;
     }

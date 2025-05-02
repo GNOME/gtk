@@ -799,11 +799,7 @@ gdk_drag_new (GdkDisplay         *display,
 
   drag = GDK_DRAG (drag_win32);
 
-  if (display_win32->has_fixed_scale)
-    drag_win32->scale = display_win32->surface_scale;
-  else
-    drag_win32->scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
-
+  drag_win32->scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
   drag_win32->dnd_thread_items = display_win32->cb_dnd_items->clipdrop->dnd_thread_items;
 
   return drag;

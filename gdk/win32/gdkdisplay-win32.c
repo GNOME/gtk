@@ -683,13 +683,10 @@ gdk_win32_display_dispose (GObject *object)
       display_win32->hwnd = NULL;
     }
 
-  if (display_win32->have_at_least_win81)
+  if (display_win32->shcore_funcs.hshcore != NULL)
     {
-      if (display_win32->shcore_funcs.hshcore != NULL)
-        {
-          FreeLibrary (display_win32->shcore_funcs.hshcore);
-          display_win32->shcore_funcs.hshcore = NULL;
-        }
+      FreeLibrary (display_win32->shcore_funcs.hshcore);
+      display_win32->shcore_funcs.hshcore = NULL;
     }
 
   G_OBJECT_CLASS (gdk_win32_display_parent_class)->dispose (object);
@@ -742,149 +739,103 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
     DPI_STATUS_FAILED
   } status = DPI_STATUS_PENDING;
 
-  if (g_win32_check_windows_version (6, 3, 0, G_WIN32_OS_ANY))
+  if (user32 != NULL)
     {
-      /* If we are on Windows 8.1 or later, cache up functions from shcore.dll, by all means */
-      display->have_at_least_win81 = TRUE;
-
-      if (user32 != NULL)
-        {
-          display->user32_dpi_funcs.setPDAC =
-            (funcSPDAC) GetProcAddress (user32, "SetProcessDpiAwarenessContext");
-          display->user32_dpi_funcs.getTDAC =
-            (funcGTDAC) GetProcAddress (user32, "GetThreadDpiAwarenessContext");
-          display->user32_dpi_funcs.areDACEqual =
-            (funcADACE) GetProcAddress (user32, "AreDpiAwarenessContextsEqual");
-        }
-
-      display->shcore_funcs.hshcore = LoadLibraryW (L"shcore.dll");
-
-      if (display->shcore_funcs.hshcore != NULL)
-        {
-          display->shcore_funcs.setDpiAwareFunc =
-            (funcSetProcessDpiAwareness) GetProcAddress (display->shcore_funcs.hshcore,
-                                                         "SetProcessDpiAwareness");
-          display->shcore_funcs.getDpiAwareFunc =
-            (funcGetProcessDpiAwareness) GetProcAddress (display->shcore_funcs.hshcore,
-                                                         "GetProcessDpiAwareness");
-
-          display->shcore_funcs.getDpiForMonitorFunc =
-            (funcGetDpiForMonitor) GetProcAddress (display->shcore_funcs.hshcore,
-                                                   "GetDpiForMonitor");
-        }
+      display->user32_dpi_funcs.setPDAC =
+        (funcSPDAC) GetProcAddress (user32, "SetProcessDpiAwarenessContext");
+      display->user32_dpi_funcs.getTDAC =
+        (funcGTDAC) GetProcAddress (user32, "GetThreadDpiAwarenessContext");
+      display->user32_dpi_funcs.areDACEqual =
+        (funcADACE) GetProcAddress (user32, "AreDpiAwarenessContextsEqual");
     }
-  else
+
+  display->shcore_funcs.hshcore = LoadLibraryW (L"shcore.dll");
+
+  if (display->shcore_funcs.hshcore != NULL)
     {
-      /* Windows Vista through 8: use functions from user32.dll directly */
+      display->shcore_funcs.setDpiAwareFunc =
+        (funcSetProcessDpiAwareness) GetProcAddress (display->shcore_funcs.hshcore,
+                                                      "SetProcessDpiAwareness");
+      display->shcore_funcs.getDpiAwareFunc =
+        (funcGetProcessDpiAwareness) GetProcAddress (display->shcore_funcs.hshcore,
+                                                      "GetProcessDpiAwareness");
 
-      display->have_at_least_win81 = FALSE;
-
-      if (user32 != NULL)
-        {
-          display->user32_dpi_funcs.setDpiAwareFunc =
-            (funcSetProcessDPIAware) GetProcAddress (user32, "SetProcessDPIAware");
-          display->user32_dpi_funcs.isDpiAwareFunc =
-            (funcIsProcessDPIAware) GetProcAddress (user32, "IsProcessDPIAware");
-        }
+      display->shcore_funcs.getDpiForMonitorFunc =
+        (funcGetDpiForMonitor) GetProcAddress (display->shcore_funcs.hshcore,
+                                                "GetDpiForMonitor");
     }
 
   if (g_getenv ("GDK_WIN32_DISABLE_HIDPI") == NULL)
     {
-      /* For Windows 8.1 and later, use SetProcessDPIAwareness() */
-      if (display->have_at_least_win81)
+      /* then make the GDK-using app DPI-aware */
+      if (display->user32_dpi_funcs.setPDAC != NULL)
         {
-          /* then make the GDK-using app DPI-aware */
-          if (display->user32_dpi_funcs.setPDAC != NULL)
+          HANDLE hidpi_mode_ctx;
+          GdkWin32ProcessDpiAwareness hidpi_mode;
+
+          /* TODO: See how per-monitor DPI awareness is done by the Wayland backend */
+          if (g_getenv ("GDK_WIN32_PER_MONITOR_HIDPI") != NULL)
             {
-              HANDLE hidpi_mode_ctx;
-              GdkWin32ProcessDpiAwareness hidpi_mode;
-
-              /* TODO: See how per-monitor DPI awareness is done by the Wayland backend */
-              if (g_getenv ("GDK_WIN32_PER_MONITOR_HIDPI") != NULL)
-                {
-                  hidpi_mode_ctx = DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2;
-                  hidpi_mode = PROCESS_PER_MONITOR_DPI_AWARE;
-                }
-              else
-                {
-                  hidpi_mode_ctx = DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
-                  hidpi_mode = PROCESS_SYSTEM_DPI_AWARE;
-                }
-
-              if (display->user32_dpi_funcs.setPDAC (hidpi_mode_ctx))
-                {
-                  display->dpi_aware_type = hidpi_mode;
-                  status = DPI_STATUS_SUCCESS;
-                }
-              else
-                {
-                  DWORD err = GetLastError ();
-
-                  if (err == ERROR_ACCESS_DENIED)
-                    check_for_dpi_awareness = TRUE;
-                  else
-                    {
-                      display->dpi_aware_type = PROCESS_DPI_UNAWARE;
-                      status = DPI_STATUS_FAILED;
-                    }
-                }
-            }
-          else if (display->shcore_funcs.setDpiAwareFunc != NULL)
-            {
-              GdkWin32ProcessDpiAwareness hidpi_mode;
-
-              /* TODO: See how per-monitor DPI awareness is done by the Wayland backend */
-              if (g_getenv ("GDK_WIN32_PER_MONITOR_HIDPI") != NULL)
-                hidpi_mode = PROCESS_PER_MONITOR_DPI_AWARE;
-              else
-                hidpi_mode = PROCESS_SYSTEM_DPI_AWARE;
-
-              switch (display->shcore_funcs.setDpiAwareFunc (hidpi_mode))
-                {
-                  case S_OK:
-                    display->dpi_aware_type = hidpi_mode;
-                    status = DPI_STATUS_SUCCESS;
-                    break;
-                  case E_ACCESSDENIED:
-                    /* This means the app used a manifest to set DPI awareness, or a
-                       DPI compatibility setting is used.
-                       The manifest is the trump card in this game of bridge here.  The
-                       same applies if one uses the control panel or program properties to
-                       force system DPI awareness */
-                    check_for_dpi_awareness = TRUE;
-                    break;
-                  default:
-                    display->dpi_aware_type = PROCESS_DPI_UNAWARE;
-                    status = DPI_STATUS_FAILED;
-                    break;
-                }
+              hidpi_mode_ctx = DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2;
+              hidpi_mode = PROCESS_PER_MONITOR_DPI_AWARE;
             }
           else
             {
-              check_for_dpi_awareness = TRUE;
+              hidpi_mode_ctx = DPI_AWARENESS_CONTEXT_SYSTEM_AWARE;
+              hidpi_mode = PROCESS_SYSTEM_DPI_AWARE;
+            }
+
+          if (display->user32_dpi_funcs.setPDAC (hidpi_mode_ctx))
+            {
+              display->dpi_aware_type = hidpi_mode;
+              status = DPI_STATUS_SUCCESS;
+            }
+          else
+            {
+              DWORD err = GetLastError ();
+
+              if (err == ERROR_ACCESS_DENIED)
+                check_for_dpi_awareness = TRUE;
+              else
+                {
+                  display->dpi_aware_type = PROCESS_DPI_UNAWARE;
+                  status = DPI_STATUS_FAILED;
+                }
+            }
+        }
+      else if (display->shcore_funcs.setDpiAwareFunc != NULL)
+        {
+          GdkWin32ProcessDpiAwareness hidpi_mode;
+
+          /* TODO: See how per-monitor DPI awareness is done by the Wayland backend */
+          if (g_getenv ("GDK_WIN32_PER_MONITOR_HIDPI") != NULL)
+            hidpi_mode = PROCESS_PER_MONITOR_DPI_AWARE;
+          else
+            hidpi_mode = PROCESS_SYSTEM_DPI_AWARE;
+
+          switch (display->shcore_funcs.setDpiAwareFunc (hidpi_mode))
+            {
+              case S_OK:
+                display->dpi_aware_type = hidpi_mode;
+                status = DPI_STATUS_SUCCESS;
+                break;
+              case E_ACCESSDENIED:
+                /* This means the app used a manifest to set DPI awareness, or a
+                    DPI compatibility setting is used.
+                    The manifest is the trump card in this game of bridge here.  The
+                    same applies if one uses the control panel or program properties to
+                    force system DPI awareness */
+                check_for_dpi_awareness = TRUE;
+                break;
+              default:
+                display->dpi_aware_type = PROCESS_DPI_UNAWARE;
+                status = DPI_STATUS_FAILED;
+                break;
             }
         }
       else
         {
-          /* For Windows Vista through 8, use SetProcessDPIAware() */
-          display->have_at_least_win81 = FALSE;
-          if (display->user32_dpi_funcs.setDpiAwareFunc != NULL)
-            {
-              if (display->user32_dpi_funcs.setDpiAwareFunc () != 0)
-                {
-                  display->dpi_aware_type = PROCESS_SYSTEM_DPI_AWARE;
-                  status = DPI_STATUS_SUCCESS;
-                }
-              else
-                {
-                  check_for_dpi_awareness = TRUE;
-                }
-            }
-          else
-            {
-              display->dpi_aware_type = PROCESS_DPI_UNAWARE;
-              status = DPI_STATUS_FAILED;
-            }
+          check_for_dpi_awareness = TRUE;
         }
     }
   else
@@ -898,62 +849,38 @@ _gdk_win32_enable_hidpi (GdkWin32Display *display)
 
   if (check_for_dpi_awareness)
     {
-      if (display->have_at_least_win81)
+      if (display->user32_dpi_funcs.getTDAC != NULL &&
+          display->user32_dpi_funcs.areDACEqual != NULL)
         {
-          if (display->user32_dpi_funcs.getTDAC != NULL &&
-              display->user32_dpi_funcs.areDACEqual != NULL)
-            {
-              HANDLE dpi_aware_ctx = display->user32_dpi_funcs.getTDAC ();
-              if (display->user32_dpi_funcs.areDACEqual (dpi_aware_ctx,
-                                                         DPI_AWARENESS_CONTEXT_UNAWARE))
-                /* This means the DPI awareness setting was forcefully disabled */
-                status = DPI_STATUS_DISABLED;
-              else
-                {
-                  status = DPI_STATUS_SUCCESS;
-                  if (display->user32_dpi_funcs.areDACEqual (dpi_aware_ctx,
-                                                             DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
-                    display->dpi_aware_type = PROCESS_SYSTEM_DPI_AWARE;
-                  else
-                    display->dpi_aware_type = PROCESS_PER_MONITOR_DPI_AWARE_V2;
-                }
-            }
-          else if (display->shcore_funcs.getDpiAwareFunc != NULL)
-            {
-              display->shcore_funcs.getDpiAwareFunc (NULL, &display->dpi_aware_type);
-
-              if (display->dpi_aware_type != PROCESS_DPI_UNAWARE)
-                status = DPI_STATUS_SUCCESS;
-              else
-                /* This means the DPI awareness setting was forcefully disabled */
-                status = DPI_STATUS_DISABLED;
-            }
+          HANDLE dpi_aware_ctx = display->user32_dpi_funcs.getTDAC ();
+          if (display->user32_dpi_funcs.areDACEqual (dpi_aware_ctx,
+                                                      DPI_AWARENESS_CONTEXT_UNAWARE))
+            /* This means the DPI awareness setting was forcefully disabled */
+            status = DPI_STATUS_DISABLED;
           else
             {
-              display->dpi_aware_type = PROCESS_DPI_UNAWARE;
-              status = DPI_STATUS_FAILED;
+              status = DPI_STATUS_SUCCESS;
+              if (display->user32_dpi_funcs.areDACEqual (dpi_aware_ctx,
+                                                          DPI_AWARENESS_CONTEXT_SYSTEM_AWARE))
+                display->dpi_aware_type = PROCESS_SYSTEM_DPI_AWARE;
+              else
+                display->dpi_aware_type = PROCESS_PER_MONITOR_DPI_AWARE_V2;
             }
+        }
+      else if (display->shcore_funcs.getDpiAwareFunc != NULL)
+        {
+          display->shcore_funcs.getDpiAwareFunc (NULL, &display->dpi_aware_type);
+
+          if (display->dpi_aware_type != PROCESS_DPI_UNAWARE)
+            status = DPI_STATUS_SUCCESS;
+          else
+            /* This means the DPI awareness setting was forcefully disabled */
+            status = DPI_STATUS_DISABLED;
         }
       else
         {
-          if (display->user32_dpi_funcs.isDpiAwareFunc != NULL)
-            {
-              /* This most probably means DPI awareness is set through
-                 the manifest, or a DPI compatibility setting is used. */
-              display->dpi_aware_type = display->user32_dpi_funcs.isDpiAwareFunc () ?
-                                        PROCESS_SYSTEM_DPI_AWARE :
-                                        PROCESS_DPI_UNAWARE;
-
-              if (display->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE)
-                status = DPI_STATUS_SUCCESS;
-              else
-                status = DPI_STATUS_DISABLED;
-            }
-          else
-            {
-              display->dpi_aware_type = PROCESS_DPI_UNAWARE;
-              status = DPI_STATUS_FAILED;
-            }
+          display->dpi_aware_type = PROCESS_DPI_UNAWARE;
+          status = DPI_STATUS_FAILED;
         }
       if (have_hpi_disable_envvar &&
           status == DPI_STATUS_SUCCESS)
@@ -1070,8 +997,6 @@ gdk_handle_equal (HANDLE *a,
 static void
 gdk_win32_display_init (GdkWin32Display *display_win32)
 {
-  const char *scale_str = g_getenv ("GDK_SCALE");
-
   display_win32->monitors = G_LIST_MODEL (g_list_store_new (GDK_TYPE_MONITOR));
   display_win32->pointer_device_items = g_new0 (GdkWin32PointerDeviceItems, 1);
   display_win32->cb_dnd_items = g_new0 (GdkWin32CbDnDItems, 1);
@@ -1085,43 +1010,11 @@ gdk_win32_display_init (GdkWin32Display *display_win32)
   _gdk_win32_enable_hidpi (display_win32);
   display_win32->running_on_arm64 = _gdk_win32_check_processor (GDK_WIN32_ARM64);
 
-  /* if we have DPI awareness, set up fixed scale if set */
-  if (display_win32->dpi_aware_type != PROCESS_DPI_UNAWARE &&
-      scale_str != NULL)
-    {
-      display_win32->surface_scale = atol (scale_str);
-
-      if (display_win32->surface_scale <= 0)
-        display_win32->surface_scale = 1;
-
-      display_win32->has_fixed_scale = TRUE;
-    }
-  else
-    display_win32->surface_scale =
-      gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
+  display_win32->surface_scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
 
   _gdk_win32_display_init_cursors (display_win32);
-  gdk_win32_display_check_composited (display_win32);
-}
-
-void
-gdk_win32_display_check_composited (GdkWin32Display *display)
-{
-  gboolean composited;
-
-  /* On Windows 8 and later, DWM (composition) is always enabled */
-  if (g_win32_check_windows_version (6, 2, 0, G_WIN32_OS_ANY))
-    {
-      composited = TRUE;
-    }
-  else
-    {
-      if (DwmIsCompositionEnabled (&composited) != S_OK)
-        composited = FALSE;
-    }
-
-  gdk_display_set_composited (GDK_DISPLAY (display), composited);
-  gdk_display_set_shadow_width (GDK_DISPLAY (display), composited);
+  gdk_display_set_composited (GDK_DISPLAY (display_win32), TRUE);
+  gdk_display_set_shadow_width (GDK_DISPLAY (display_win32), TRUE);
 }
 
 static void
@@ -1161,16 +1054,13 @@ gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
   gboolean use_dpi_for_monitor = FALSE;
   guint dpix, dpiy;
 
-  if (display_win32->have_at_least_win81)
-    {
-      if (surface != NULL && hmonitor == NULL)
-        hmonitor = MonitorFromWindow (GDK_SURFACE_HWND (surface),
-                                      MONITOR_DEFAULTTONEAREST);
-      if (hmonitor != NULL &&
-          display_win32->shcore_funcs.hshcore != NULL &&
-          display_win32->shcore_funcs.getDpiForMonitorFunc != NULL)
-        use_dpi_for_monitor = TRUE;
-    }
+  if (surface != NULL && hmonitor == NULL)
+    hmonitor = MonitorFromWindow (GDK_SURFACE_HWND (surface),
+                                  MONITOR_DEFAULTTONEAREST);
+  if (hmonitor != NULL &&
+      display_win32->shcore_funcs.hshcore != NULL &&
+      display_win32->shcore_funcs.getDpiForMonitorFunc != NULL)
+    use_dpi_for_monitor = TRUE;
 
   if (use_dpi_for_monitor)
     {
@@ -1215,13 +1105,7 @@ gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
     }
 
   if (is_scale_acquired)
-    /* USER_DEFAULT_SCREEN_DPI = 96, in winuser.h */
-    {
-      if (display_win32->has_fixed_scale)
-        return display_win32->surface_scale;
-      else
-        return dpix / USER_DEFAULT_SCREEN_DPI > 1 ? dpix / USER_DEFAULT_SCREEN_DPI : 1;
-    }
+    return dpix / USER_DEFAULT_SCREEN_DPI > 1 ? dpix / USER_DEFAULT_SCREEN_DPI : 1;
   else
     return 1;
 }

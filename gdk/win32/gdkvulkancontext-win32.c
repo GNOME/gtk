@@ -37,7 +37,6 @@ gdk_win32_vulkan_context_create_surface (GdkVulkanContext *context,
                                          VkSurfaceKHR     *surface)
 {
   GdkSurface *gdk_surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
-  GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (context));
   VkWin32SurfaceCreateInfoKHR info;
   VkResult result;
 

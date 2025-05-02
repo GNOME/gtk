@@ -70,7 +70,7 @@ gulong _gdk_win32_get_next_tick (gulong suggested_tick);
 BOOL _gdk_win32_get_cursor_pos (GdkDisplay *display,
                                 LPPOINT     lpPoint);
 
-gboolean _gdk_win32_surface_enable_transparency (GdkSurface *surface);
+void gdk_win32_surface_enable_transparency (GdkSurface *surface);
 
 void _gdk_win32_dnd_exit (void);
 

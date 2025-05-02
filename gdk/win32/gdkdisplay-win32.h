@@ -199,8 +199,6 @@ struct _GdkWin32Display
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;
   guint hasWglARBCreateContext : 1;
-  guint hasWglEXTSwapControl : 1;
-  guint hasWglOMLSyncControl : 1;
   guint hasWglARBPixelFormat : 1;
   guint hasGlWINSwapHint : 1;
 
@@ -215,9 +213,7 @@ struct _GdkWin32Display
 #endif
 
   /* HiDPI Items */
-  guint have_at_least_win81 : 1;
   GdkWin32ProcessDpiAwareness dpi_aware_type;
-  guint has_fixed_scale : 1;
   guint surface_scale;
 
   GdkWin32ShcoreFuncs shcore_funcs;
@@ -249,9 +245,7 @@ struct _GdkWin32DisplayClass
   GdkDisplayClass display_class;
 };
 
-GPtrArray *_gdk_win32_display_get_monitor_list (GdkWin32Display *display);
-
-void        gdk_win32_display_check_composited (GdkWin32Display *display);
+GPtrArray *_gdk_win32_display_get_monitor_list         (GdkWin32Display *display);
 
 guint      gdk_win32_display_get_monitor_scale_factor  (GdkWin32Display *display_win32,
                                                         GdkSurface      *surface,

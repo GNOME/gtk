@@ -959,7 +959,7 @@ process_retrieve (GdkWin32Clipdrop                *clipdrop,
 
   if ((hdata = GetClipboardData (fmt_to_use)) == NULL)
     {
-      int error_code = GetLastError ();
+      DWORD error_code = GetLastError ();
       send_response (retr->parent.item_type,
                      retr->parent.opaque_task,
                      g_error_new (G_IO_ERROR, G_IO_ERROR_FAILED,

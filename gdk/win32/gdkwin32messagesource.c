@@ -19,9 +19,6 @@ static gboolean
 gdk_win32_message_source_prepare (GSource *source,
 		                          int     *timeout)
 {
-  GdkWin32MessageSource *self = (GdkWin32MessageSource *) source;
-  gboolean retval;
-
   *timeout = -1;
 
   return GetQueueStatus (QS_ALLINPUT) != 0;

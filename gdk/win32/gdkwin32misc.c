@@ -450,8 +450,7 @@ gdk_win32_display_get_setting (GdkDisplay  *display,
     {
       GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
 
-      if (display_win32->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE &&
-          !display_win32->has_fixed_scale)
+      if (display_win32->dpi_aware_type == PROCESS_SYSTEM_DPI_AWARE)
         {
           HDC hdc = GetDC (NULL);
 

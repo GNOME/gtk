@@ -1,3 +1,4 @@
+
 /* GDK - The GIMP Drawing Kit
  * Copyright (C) 1995-1997 Peter Mattis, Spencer Kimball and Josh MacDonald
  * Copyright (C) 1998-2002 Tor Lillqvist
@@ -1341,17 +1342,12 @@ handle_dpi_changed (GdkSurface *surface,
                     MSG        *msg)
 {
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-  GdkDisplay *display = gdk_display_get_default ();
-  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (display);
+  GdkDisplay *display = gdk_surface_get_display (surface);
   RECT *rect = (RECT *)msg->lParam;
   guint old_scale = impl->surface_scale;
 
   /* MSDN for WM_DPICHANGED: dpi_x == dpi_y here, so LOWORD (msg->wParam) == HIWORD (msg->wParam) */
   guint dpi = LOWORD (msg->wParam);
-
-  /* Don't bother if we use a fixed scale */
-  if (win32_display->has_fixed_scale)
-    return;
 
   impl->surface_scale = dpi / USER_DEFAULT_SCREEN_DPI;
 
@@ -3065,8 +3061,7 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_DWMCOMPOSITIONCHANGED:
-      gdk_win32_display_check_composited (GDK_WIN32_DISPLAY (display));
-      _gdk_win32_surface_enable_transparency (surface);
+      gdk_win32_surface_enable_transparency (surface);
       break;
 
     case WM_ACTIVATE:
