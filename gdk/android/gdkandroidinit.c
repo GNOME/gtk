@@ -92,7 +92,8 @@ _gdk_android_gdk_context_open (JNIEnv *env, jclass this, jobject uri, jstring jh
 }
 
 static JavaVM *gdk_android_vm = NULL;
-static jobject *gdk_android_activity = NULL;
+static jobject gdk_android_activity = NULL;
+static jobject gdk_android_user_classloader = NULL;
 
 static GdkAndroidJavaCache gdk_android_java_cache;
 
@@ -134,7 +135,7 @@ static GdkAndroidJavaCache gdk_android_java_cache;
     g_hash_table_insert (gdk_android_java_cache.a_pointericon.gdk_type_mapping, cssname, GINT_TO_POINTER (gdk_android_java_cache.a_pointericon.cname)); \
   }
 
-static jclass
+jclass
 gdk_android_init_find_class_using_classloader (JNIEnv *env,
                                                jobject class_loader,
                                                const gchar *klass)
@@ -175,6 +176,7 @@ gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject ac
       return FALSE;
     }
   gdk_android_set_latest_activity (env, activity);
+  gdk_android_user_classloader = (*env)->NewGlobalRef (env, application_classloader);
 
   (*env)->PushLocalFrame (env, 16);
 
@@ -221,6 +223,7 @@ gdk_android_initialize (JNIEnv *env, jobject application_classloader, jobject ac
   gdk_android_java_cache.surface.start_dnd = (*env)->GetMethodID (env, gdk_android_java_cache.surface.klass, "startDND", "(Landroid/content/ClipData;Landroid/view/View$DragShadowBuilder;Lorg/gtk/android/ClipboardProvider$NativeDragIdentifier;I)V");
   gdk_android_java_cache.surface.update_dnd = (*env)->GetMethodID (env, gdk_android_java_cache.surface.klass, "updateDND", "(Landroid/view/View$DragShadowBuilder;)V");
   gdk_android_java_cache.surface.cancel_dnd = (*env)->GetMethodID (env, gdk_android_java_cache.surface.klass, "cancelDND", "()V");
+  gdk_android_java_cache.surface.set_active_im_context = (*env)->GetMethodID (env, gdk_android_java_cache.surface.klass, "setActiveImContext", "(Lorg/gtk/android/ImContext;)V");
   gdk_android_java_cache.surface.reposition = (*env)->GetMethodID (env, gdk_android_java_cache.surface.klass, "reposition", "(IIII)V");
   gdk_android_java_cache.surface.drop = (*env)->GetMethodID (env, gdk_android_java_cache.surface.klass, "drop", "()V");
   (*env)->RegisterNatives (env, surface_class, surface_natives, sizeof surface_natives / sizeof (JNINativeMethod));
@@ -783,10 +786,16 @@ gdk_android_drop_thread_env (GdkAndroidThreadGuard *self)
     }
 }
 
-jobject *
+jobject
 gdk_android_get_activity (void)
 {
   return gdk_android_activity;
+}
+
+jobject
+gdk_android_init_get_user_classloader (void)
+{
+  return gdk_android_user_classloader;
 }
 
 const GdkAndroidJavaCache *
