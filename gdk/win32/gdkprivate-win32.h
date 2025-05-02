@@ -152,11 +152,36 @@ void    _gdk_other_api_failed        (const char *where,
 #define GDI_CALL(api, arglist) (api arglist ? 1 : (WIN32_GDI_FAILED (#api), 0))
 #define API_CALL(api, arglist) (api arglist ? 1 : (WIN32_API_FAILED (#api), 0))
 
-#define HR_LOG(hr)
-
-#define HR_CHECK_RETURN(hr) { if G_UNLIKELY (FAILED (hr)) return; }
-#define HR_CHECK_RETURN_VAL(hr, val) { if G_UNLIKELY (FAILED (hr)) return val; }
-#define HR_CHECK_GOTO(hr, label) { if G_UNLIKELY (FAILED (hr)) goto label; }
+/*<private>
+ * hr_warn:
+ * @expr: The expression to evaluate
+ *
+ * Evaluates the given expression. The expression must return a HRESULT.
+ * It is expected that this expression will never fail unless the
+ * application is in a critical state.
+ *
+ * If the expression does fail, instead of silently ignoring the result,
+ * this macro will cause it to log a critical message using g_log().
+ *
+ * Think of this as equivalent to `g_warn_if_fail(SUCCEEDED (expr))`
+ */
+#define hr_warn(expr) G_STMT_START {\
+  HRESULT _hr = (expr); \
+  if (G_UNLIKELY (FAILED (_hr))) \
+    { \
+      char *_msg = g_win32_error_message (_hr); \
+      g_log (G_LOG_DOMAIN, \
+             G_LOG_LEVEL_CRITICAL, \
+             "file %s: line %d (%s): %s returned %ld (%s)", \
+             __FILE__, \
+             __LINE__, \
+             G_STRFUNC, \
+             #expr, \
+             _hr, \
+             _msg); \
+      g_free (_msg); \
+    } \
+  }G_STMT_END
 
 extern LRESULT CALLBACK _gdk_win32_surface_procedure (HWND, UINT, WPARAM, LPARAM);
 
