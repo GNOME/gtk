@@ -154,9 +154,6 @@ void    _gdk_other_api_failed        (const char *where,
 
 #define HR_LOG(hr)
 
-#define HR_CHECK_RETURN(hr) { if G_UNLIKELY (FAILED (hr)) return; }
-#define HR_CHECK_RETURN_VAL(hr, val) { if G_UNLIKELY (FAILED (hr)) return val; }
-
 /*<private>
  * hr_warn:
  * @expr: The expression to evaluate

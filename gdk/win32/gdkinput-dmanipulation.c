@@ -158,7 +158,8 @@ DManipEventHandler_OnContentUpdated (IDirectManipulationViewportEventHandler *se
 
   hr = IDirectManipulationContent_GetContentTransform (content, transform,
                                                        G_N_ELEMENTS (transform));
-  HR_CHECK_RETURN_VAL (hr, E_FAIL);
+  if G_UNLIKELY (FAILED (hr))
+    return E_FAIL;
 
   switch (self->gesture)
     {
@@ -535,7 +536,6 @@ void gdk_dmanipulation_initialize_surface (GdkSurface *surface)
 
   hr = IDirectManipulationManager_Activate (dmanipulation_manager,
                                             GDK_SURFACE_HWND (surface));
-  HR_CHECK_RETURN (hr);
 }
 
 void gdk_dmanipulation_finalize_surface (GdkSurface *surface)
@@ -572,15 +572,11 @@ void gdk_dmanipulation_maybe_add_contact (GdkSurface *surface,
   if (type == PT_TOUCHPAD)
     {
       GdkWin32Surface *surface_win32 = GDK_WIN32_SURFACE (surface);
-      HRESULT hr;
 
-      hr = IDirectManipulationViewport_SetContact (surface_win32->dmanipulation_viewport_pan,
-                                                   pointer_id);
-      HR_CHECK_RETURN (hr);
-
-      hr = IDirectManipulationViewport_SetContact (surface_win32->dmanipulation_viewport_zoom,
-                                                   pointer_id);
-      HR_CHECK_RETURN (hr);
+      IDirectManipulationViewport_SetContact (surface_win32->dmanipulation_viewport_pan,
+                                              pointer_id);
+      IDirectManipulationViewport_SetContact (surface_win32->dmanipulation_viewport_zoom,
+                                              pointer_id);
     }
 }
 
