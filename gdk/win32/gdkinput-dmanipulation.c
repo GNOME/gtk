@@ -353,11 +353,13 @@ reset_viewport (IDirectManipulationViewport *viewport)
   HRESULT hr;
 
   hr = IDirectManipulationViewport_GetPrimaryContent (viewport, iid, (void**)&content);
-  HR_CHECK_GOTO (hr, failed);
+  if (G_UNLIKELY (FAILED (hr)))
+    goto failed;
 
   hr = IDirectManipulationContent_SyncContentTransform (content, identity,
                                                         G_N_ELEMENTS (identity));
-  HR_CHECK_GOTO (hr, failed);
+  if (G_UNLIKELY (FAILED (hr)))
+    goto failed;
 
 failed:
   gdk_win32_com_clear (&content);
@@ -413,7 +415,8 @@ create_viewport (GdkSurface *surface,
   hr = IDirectManipulationManager_CreateViewport (dmanipulation_manager, NULL, hwnd,
                                                   &IID_IDirectManipulationViewport,
                                                   (void**) pViewport);
-  HR_CHECK_GOTO (hr, failed);
+  if (G_UNLIKELY (FAILED (hr)))
+    goto failed;
 
   switch (gesture)
     {
@@ -435,16 +438,21 @@ create_viewport (GdkSurface *surface,
     dmanip_event_handler_new (surface, gesture);
 
   hr = IDirectManipulationViewport_AddEventHandler (*pViewport, hwnd, handler, &cookie);
-  HR_CHECK_GOTO (hr, failed);
+  if (G_UNLIKELY (FAILED (hr)))
+    goto failed;
 
   hr = IDirectManipulationViewport_ActivateConfiguration (*pViewport, configuration);
-  HR_CHECK_GOTO (hr, failed);
+  if (G_UNLIKELY (FAILED (hr)))
+    goto failed;
 
   hr = IDirectManipulationViewport_SetViewportOptions (*pViewport,
          DIRECTMANIPULATION_VIEWPORT_OPTIONS_DISABLEPIXELSNAPPING);
+  if (G_UNLIKELY (FAILED (hr)))
+    goto failed;
 
   hr = IDirectManipulationViewport_Enable (*pViewport);
-  HR_CHECK_GOTO (hr, failed);
+  if (G_UNLIKELY (FAILED (hr)))
+    goto failed;
 
   // drop our initial reference
   IUnknown_Release (handler);
