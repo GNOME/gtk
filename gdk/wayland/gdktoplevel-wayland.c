@@ -2801,5 +2801,24 @@ gdk_wayland_toplevel_set_transient_for_exported (GdkToplevel *toplevel,
   return TRUE;
 }
 
+/**
+ * gdk_wayland_toplevel_get_xdg_toplevel:
+ * @toplevel: (type GdkWaylandToplevel): a toplevel
+ *
+ * Returns the Wayland `xdg_toplevel` of a toplevel,
+ * if it has one.
+ *
+ * Returns: (transfer none) (nullable): a Wayland `xdg_toplevel`
+ *
+ * Since: 4.20
+ */
+struct xdg_toplevel *
+gdk_wayland_toplevel_get_xdg_toplevel (GdkToplevel *toplevel)
+{
+  GdkWaylandToplevel *wayland_toplevel = GDK_WAYLAND_TOPLEVEL (toplevel);
+
+  return wayland_toplevel->display_server.xdg_toplevel;
+}
+
 /* }}} */
 /* vim:set foldmethod=marker: */
