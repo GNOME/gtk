@@ -241,40 +241,12 @@ static void                 secrets_service_vanished_cb             (GDBusConnec
                                                                      const char *name,
                                                                      gpointer user_data);
 
-G_DEFINE_DYNAMIC_TYPE(GtkPrintBackendCups, gtk_print_backend_cups, GTK_TYPE_PRINT_BACKEND)
+G_DEFINE_TYPE_WITH_CODE (GtkPrintBackendCups, gtk_print_backend_cups, GTK_TYPE_PRINT_BACKEND,
+                         g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+                                                         g_define_type_id,
+                                                         "cups",
+                                                         10))
 
-G_MODULE_EXPORT
-void
-g_io_module_load (GIOModule *module)
-{
-  g_type_module_use (G_TYPE_MODULE (module));
-
-  gtk_print_backend_cups_register_type (G_TYPE_MODULE (module));
-  gtk_printer_cups_register_type (G_TYPE_MODULE (module));
-
-  g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
-                                  GTK_TYPE_PRINT_BACKEND_CUPS,
-                                  "cups",
-                                  10);
-}
-
-G_MODULE_EXPORT
-void
-g_io_module_unload (GIOModule *module)
-{
-}
-
-G_MODULE_EXPORT
-char **
-g_io_module_query (void)
-{
-  char *eps[] = {
-    (char *)GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
-    NULL
-  };
-
-  return g_strdupv (eps);
-}
 
 /*
  * GtkPrintBackendCups
@@ -327,11 +299,6 @@ gtk_print_backend_cups_class_init (GtkPrintBackendCupsClass *class)
   backend_class->printer_get_hard_margins_for_paper_size = cups_printer_get_hard_margins_for_paper_size;
   backend_class->printer_get_capabilities = cups_printer_get_capabilities;
   backend_class->set_password = gtk_print_backend_cups_set_password;
-}
-
-static void
-gtk_print_backend_cups_class_finalize (GtkPrintBackendCupsClass *class)
-{
 }
 
 static gboolean

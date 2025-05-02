@@ -17,10 +17,17 @@ gtk_print_sources = files([
   'gtkprintutils.c',
 ])
 
+print_backends = []
+print_backend_sources = []
+print_backend_deps = []
+print_backend_cflags = []
+
 gtk_unix_print_headers = []
 gtk_unix_print_sources = []
 
 if os_unix
+  subdir('backends')
+
   gtk_unix_print_headers += files([
     'gtkpagesetupunixdialog.h',
     'gtkprintunixdialog.h',

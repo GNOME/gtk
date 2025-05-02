@@ -31,12 +31,7 @@ enum {
   PROP_PROFILE_TITLE
 };
 
-static void gtk_printer_cups_init       (GtkPrinterCups      *printer);
-static void gtk_printer_cups_class_init (GtkPrinterCupsClass *class);
 static void gtk_printer_cups_finalize   (GObject             *object);
-
-static GtkPrinterClass *gtk_printer_cups_parent_class;
-static GType gtk_printer_cups_type = 0;
 
 static void gtk_printer_cups_set_property (GObject      *object,
                                            guint         prop_id,
@@ -47,33 +42,7 @@ static void gtk_printer_cups_get_property (GObject      *object,
                                            GValue       *value,
                                            GParamSpec   *pspec);
 
-void 
-gtk_printer_cups_register_type (GTypeModule *module)
-{
-  const GTypeInfo object_info =
-  {
-    sizeof (GtkPrinterCupsClass),
-    (GBaseInitFunc) NULL,
-    (GBaseFinalizeFunc) NULL,
-    (GClassInitFunc) gtk_printer_cups_class_init,
-    NULL,           /* class_finalize */
-    NULL,           /* class_data */
-    sizeof (GtkPrinterCups),
-    0,              /* n_preallocs */
-    (GInstanceInitFunc) gtk_printer_cups_init,
-  };
-
- gtk_printer_cups_type = g_type_module_register_type (module,
-                                                      GTK_TYPE_PRINTER,
-                                                      "GtkPrinterCups",
-                                                      &object_info, 0);
-}
-
-GType
-gtk_printer_cups_get_type (void)
-{
-  return gtk_printer_cups_type;
-}
+G_DEFINE_TYPE (GtkPrinterCups, gtk_printer_cups, GTK_TYPE_PRINTER);
 
 static void
 gtk_printer_cups_class_init (GtkPrinterCupsClass *class)

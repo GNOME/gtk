@@ -120,39 +120,11 @@ static cairo_surface_t *    file_printer_create_cairo_surface      (GtkPrinter  
 static GList *              file_printer_list_papers               (GtkPrinter              *printer);
 static GtkPageSetup *       file_printer_get_default_page_size     (GtkPrinter              *printer);
 
-G_DEFINE_DYNAMIC_TYPE(GtkPrintBackendFile, gtk_print_backend_file, GTK_TYPE_PRINT_BACKEND)
-
-G_MODULE_EXPORT
-void
-g_io_module_load (GIOModule *module)
-{
-  g_type_module_use (G_TYPE_MODULE (module));
-
-  gtk_print_backend_file_register_type (G_TYPE_MODULE (module));
-
-  g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
-                                  GTK_TYPE_PRINT_BACKEND_FILE,
-                                  "file",
-                                  10);
-}
-
-G_MODULE_EXPORT
-void
-g_io_module_unload (GIOModule *module)
-{
-}
-
-G_MODULE_EXPORT
-char **
-g_io_module_query (void)
-{
-  char *eps[] = {
-    (char *)GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
-    NULL
-  };
-
-  return g_strdupv (eps);
-}
+G_DEFINE_TYPE_WITH_CODE (GtkPrintBackendFile, gtk_print_backend_file, GTK_TYPE_PRINT_BACKEND,
+                         g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+                                                         g_define_type_id,
+                                                         "file",
+                                                         10))
 
 /**
  * gtk_print_backend_file_new:
@@ -183,11 +155,6 @@ gtk_print_backend_file_class_init (GtkPrintBackendFileClass *class)
   backend_class->printer_prepare_for_print = file_printer_prepare_for_print;
   backend_class->printer_list_papers = file_printer_list_papers;
   backend_class->printer_get_default_page_size = file_printer_get_default_page_size;
-}
-
-static void
-gtk_print_backend_file_class_finalize (GtkPrintBackendFileClass *class)
-{
 }
 
 /* return N_FORMATS if no explicit format in the settings */

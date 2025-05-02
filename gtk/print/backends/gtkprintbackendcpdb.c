@@ -183,47 +183,16 @@ typedef struct {
   GDestroyNotify dnotify;
 } _PrintStreamData;
 
-
-G_DEFINE_DYNAMIC_TYPE (GtkPrintBackendCpdb, gtk_print_backend_cpdb, GTK_TYPE_PRINT_BACKEND)
+G_DEFINE_TYPE_WITH_CODE (GtkPrintBackendCpdb, gtk_print_backend_cpdb, GTK_TYPE_PRINT_BACKEND,
+                         g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
+                                                         g_define_type_id,
+                                                         "cpdb",
+                                                         10))
 
 /*
  * GtkPrintBackend object for currently opened print dialog
  */
 static GtkPrintBackend *gtk_print_backend = NULL;
-
-
-G_MODULE_EXPORT
-void
-g_io_module_load (GIOModule *module)
-{
-  g_type_module_use (G_TYPE_MODULE (module));
-
-  gtk_print_backend_cpdb_register_type (G_TYPE_MODULE (module));
-  gtk_printer_cpdb_register_type (G_TYPE_MODULE (module));
-
-  g_io_extension_point_implement (GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
-                                  GTK_TYPE_PRINT_BACKEND_CPDB,
-                                  "cpdb",
-                                  10);
-}
-
-G_MODULE_EXPORT
-void
-g_io_module_unload (GIOModule *module)
-{
-}
-
-G_MODULE_EXPORT
-char **
-g_io_module_query (void)
-{
-  char *eps[] = {
-    (char *)GTK_PRINT_BACKEND_EXTENSION_POINT_NAME,
-    NULL
-  };
-
-  return g_strdupv (eps);
-}
 
 /*
  * GtkPrintBackendCpdb
@@ -267,11 +236,6 @@ gtk_print_backend_cpdb_class_init (GtkPrintBackendCpdbClass *klass)
   backend_class->printer_prepare_for_print = cpdb_printer_prepare_for_print;
   backend_class->printer_create_cairo_surface = cpdb_printer_create_cairo_surface;
   backend_class->print_stream = cpdb_print_stream;
-}
-
-static void
-gtk_print_backend_cpdb_class_finalize (GtkPrintBackendCpdbClass *class)
-{
 }
 
 static void

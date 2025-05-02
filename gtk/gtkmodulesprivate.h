@@ -24,6 +24,8 @@
 
 #pragma once
 
+#include <glib.h>
+
 G_BEGIN_DECLS
 
 char ** _gtk_get_module_path          (const char   *type);
