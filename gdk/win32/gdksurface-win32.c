@@ -210,23 +210,28 @@ _gdk_win32_adjust_client_rect (GdkSurface *surface,
   API_CALL (AdjustWindowRectEx, (rect, style, FALSE, exstyle));
 }
 
-gboolean
-_gdk_win32_surface_enable_transparency (GdkSurface *surface)
+void
+gdk_win32_surface_enable_transparency (GdkSurface *surface)
 {
   DWM_BLURBEHIND blur_behind;
   HRGN empty_region;
   HRESULT call_result;
   HWND this_hwnd;
+  BOOL dummy;
 
   if (surface == NULL || GDK_SURFACE_HWND (surface) == NULL)
-    return FALSE;
+    return;
+
+  /* happens while dwm.exe is restarting */
+  if (FAILED (DwmIsCompositionEnabled (&dummy)))
+    return;
 
   this_hwnd = GDK_SURFACE_HWND (surface);
 
   empty_region = CreateRectRgn (0, 0, -1, -1);
 
   if (empty_region == NULL)
-    return FALSE;
+    return;
 
   memset (&blur_behind, 0, sizeof (blur_behind));
   blur_behind.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION;
@@ -239,8 +244,6 @@ _gdk_win32_surface_enable_transparency (GdkSurface *surface)
         G_STRLOC, "DwmEnableBlurBehindWindow", this_hwnd, (guint32) call_result);
 
   DeleteObject (empty_region);
-
-  return SUCCEEDED (call_result);
 }
 
 static const char *
@@ -471,7 +474,7 @@ gdk_win32_surface_constructed (GObject *object)
       gdk_dmanipulation_initialize_surface (surface);
     }
 
-  _gdk_win32_surface_enable_transparency (surface);
+  gdk_win32_surface_enable_transparency (surface);
   _gdk_win32_surface_register_dnd (surface);
   _gdk_win32_surface_update_style_bits (surface);
 

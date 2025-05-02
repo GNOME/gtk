@@ -3065,7 +3065,7 @@ gdk_event_translate (MSG *msg,
       break;
 
     case WM_DWMCOMPOSITIONCHANGED:
-      _gdk_win32_surface_enable_transparency (surface);
+      gdk_win32_surface_enable_transparency (surface);
       break;
 
     case WM_ACTIVATE:
