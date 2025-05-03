@@ -8835,7 +8835,12 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
 
   gtk_text_view_update_handles (text_view);
 
-  if (priv->anchored_children.length > 0)
+  if (priv->anchored_children.length > 0 ||
+      priv->left_child != NULL ||
+      priv->right_child != NULL ||
+      priv->top_child != NULL ||
+      priv->bottom_child != NULL ||
+      priv->center_child != NULL)
     gtk_widget_queue_allocate (GTK_WIDGET (text_view));
   else
     gtk_widget_queue_draw (GTK_WIDGET (text_view));
