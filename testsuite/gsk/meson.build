@@ -240,6 +240,11 @@ if broadway_enabled
     { 'name': 'broadway' }
   ]
 endif
+if get_variable('win32_enabled')
+  renderers += [
+    { 'name': 'd3d12' }
+  ]
+endif
 if have_vulkan
   renderers += [
     { 'name': 'vulkan' }
