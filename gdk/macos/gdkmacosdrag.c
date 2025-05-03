@@ -26,6 +26,7 @@
 #include "gdkmacosdisplay-private.h"
 #include "gdkmacosdragsurface-private.h"
 #include "gdkmacospasteboard-private.h"
+#include "gdkmacosutils-private.h"
 
 #include "gdk/gdkdeviceprivate.h"
 #include "gdk/gdkeventsprivate.h"

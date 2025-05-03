@@ -28,7 +28,6 @@
 #include "gdkmacosbuffer-private.h"
 #include "gdkmacosdisplay.h"
 #include "gdkmacossurface.h"
-#include "edgesnapping.h"
 
 #define GDK_IS_MACOS_WINDOW(obj) (obj != nil && [obj isKindOfClass:[GdkMacosWindow class]])
 
@@ -46,8 +45,6 @@
   NSPoint          initialResizeLocation;
   NSRect           initialResizeFrame;
   GdkSurfaceEdge   resizeEdge;
-
-  EdgeSnapping     snapping;
 
   BOOL             inFullscreenTransition;
   NSUInteger       showButtonCount;
@@ -68,7 +65,6 @@
 -(void)setGdkSurface:(GdkMacosSurface *)surface;
 -(void)setStyleMask:(NSWindowStyleMask)styleMask;
 -(void)showAndMakeKey:(BOOL)makeKey;
--(BOOL)trackManualMove;
 -(BOOL)trackManualResize;
 -(void)setDecorated:(BOOL)decorated;
 -(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage;

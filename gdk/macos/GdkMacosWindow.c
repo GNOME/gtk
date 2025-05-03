@@ -169,7 +169,7 @@ static Class _contentViewClass = nil;
     }
 
     case NSEventTypeLeftMouseDragged:
-      if ([self trackManualMove] || [self trackManualResize])
+      if (inManualMove || [self trackManualResize])
         return;
       break;
 
@@ -294,63 +294,6 @@ static Class _contentViewClass = nil;
     [self windowDidResignKey:nil];
 }
 
--(BOOL)trackManualMove
-{
-  NSRect windowFrame;
-  NSPoint currentLocation;
-  GdkMonitor *monitor;
-  GdkRectangle geometry;
-  GdkRectangle workarea;
-  GdkRectangle window_gdk;
-  GdkPoint pointer_position;
-  GdkPoint new_origin;
-
-  if (!inManualMove)
-    return NO;
-
-  windowFrame = [self frame];
-  currentLocation = [NSEvent mouseLocation];
-
-  /* Update the snapping geometry to match the current monitor */
-  monitor = _gdk_macos_display_get_monitor_at_display_coords ([self gdkDisplay],
-                                                              currentLocation.x,
-                                                              currentLocation.y);
-  gdk_monitor_get_geometry (monitor, &geometry);
-  gdk_macos_monitor_get_workarea (monitor, &workarea);
-  _edge_snapping_set_monitor (&self->snapping, &geometry, &workarea);
-
-  /* Convert origins to GDK coordinates */
-  _gdk_macos_display_from_display_coords ([self gdkDisplay],
-                                          currentLocation.x,
-                                          currentLocation.y,
-                                          &pointer_position.x,
-                                          &pointer_position.y);
-  _gdk_macos_display_from_display_coords ([self gdkDisplay],
-                                          windowFrame.origin.x,
-                                          windowFrame.origin.y + windowFrame.size.height,
-                                          &window_gdk.x,
-                                          &window_gdk.y);
-  window_gdk.width = windowFrame.size.width;
-  window_gdk.height = windowFrame.size.height;
-
-  /* Now place things on the monitor */
-  _edge_snapping_motion (&self->snapping, &pointer_position, &window_gdk);
-
-  /* Convert to quartz coordinates */
-  _gdk_macos_display_to_display_coords ([self gdkDisplay],
-                                        window_gdk.x,
-                                        window_gdk.y + window_gdk.height,
-                                        &new_origin.x, &new_origin.y);
-  windowFrame.origin.x = new_origin.x;
-  windowFrame.origin.y = new_origin.y;
-
-  [self setFrame:NSMakeRect (new_origin.x, new_origin.y,
-                             window_gdk.width, window_gdk.height)
-         display:YES];
-
-  return YES;
-}
-
 -(void)windowDidMove:(NSNotification *)notification
 {
   if ([self isZoomed])
@@ -384,40 +327,22 @@ static Class _contentViewClass = nil;
 
 -(void)beginManualMove
 {
-  NSPoint initialMoveLocation;
-  GdkPoint point;
-  GdkMonitor *monitor;
-  GdkRectangle geometry;
-  GdkRectangle area;
-  GdkRectangle workarea;
+  NSEvent *event;
 
   if (inMove || inManualMove || inManualResize)
     return;
 
+  event = _gdk_macos_display_get_last_nsevent ();
+
+  if (event == NULL)
+    return; 
+  
   inManualMove = YES;
 
-  monitor = _gdk_macos_surface_get_best_monitor ([self gdkSurface]);
-  gdk_monitor_get_geometry (monitor, &geometry);
-  gdk_macos_monitor_get_workarea (monitor, &workarea);
-
-  initialMoveLocation = [NSEvent mouseLocation];
-
-  _gdk_macos_display_from_display_coords ([self gdkDisplay],
-                                          initialMoveLocation.x,
-                                          initialMoveLocation.y,
-                                          &point.x,
-                                          &point.y);
-
-  area.x = gdk_surface->root_x;
-  area.y = gdk_surface->root_y;
-  area.width = GDK_SURFACE (gdk_surface)->width;
-  area.height = GDK_SURFACE (gdk_surface)->height;
-
-  _edge_snapping_init (&self->snapping,
-                       &geometry,
-                       &workarea,
-                       &point,
-                       &area);
+  /* The docs state it has to be a button press event,
+   * but it works just as well with motion events.
+   */
+  [self performWindowDragWithEvent: event];
 }
 
 -(BOOL)trackManualResize
