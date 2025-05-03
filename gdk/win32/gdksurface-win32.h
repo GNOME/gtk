@@ -25,6 +25,7 @@
 #include "gdk/gdkcursor.h"
 
 #include <windows.h>
+#include "gdk/win32/dcomp.h"
 #include <directmanipulation.h>
 
 #ifdef HAVE_EGL
@@ -130,6 +131,9 @@ struct _GdkWin32Surface
 
   HANDLE handle;
 
+  IDCompositionTarget *dcomp_target;
+  IDCompositionVisual *dcomp_visual;
+
   HICON   hicon_big;
   HICON   hicon_small;
 
@@ -217,6 +221,8 @@ void gdk_win32_surface_move_resize (GdkSurface *surface,
 
 GdkSurface *    gdk_win32_drag_surface_new                      (GdkDisplay             *display);
 
+void            gdk_win32_surface_set_dcomp_content             (GdkWin32Surface        *self,
+                                                                 IUnknown               *dcomp_content);
 
 #ifdef HAVE_EGL
 EGLSurface gdk_win32_surface_get_egl_surface (GdkSurface *surface,
