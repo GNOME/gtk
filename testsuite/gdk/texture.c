@@ -113,7 +113,9 @@ test_texture_from_pixbuf (void)
   width = gdk_pixbuf_get_width (pixbuf);
   height = gdk_pixbuf_get_height (pixbuf);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   g_assert_nonnull (texture);
   g_assert_cmpint (gdk_texture_get_width (texture), ==, width);
@@ -125,7 +127,9 @@ test_texture_from_pixbuf (void)
 
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
   cr = cairo_create (surface);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+G_GNUC_END_IGNORE_DEPRECATIONS
   cairo_paint (cr);
   cairo_destroy (cr);
 
@@ -283,7 +287,9 @@ test_texture_icon (void)
   g_assert_no_error (error);
   g_assert_nonnull (pixbuf);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   texture2 = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   compare_textures (texture, texture2);
 
@@ -313,7 +319,9 @@ icon_loaded (GObject *source,
   g_assert_no_error (error);
   g_assert_nonnull (pixbuf);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   texture2 = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   compare_textures (texture, texture2);
 

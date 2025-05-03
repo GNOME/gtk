@@ -30,7 +30,7 @@ G_BEGIN_DECLS
 GDK_AVAILABLE_IN_ALL
 void       gdk_cairo_set_source_rgba    (cairo_t              *cr,
                                          const GdkRGBA        *rgba);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_20
 void       gdk_cairo_set_source_pixbuf  (cairo_t              *cr,
                                          const GdkPixbuf      *pixbuf,
                                          double                pixbuf_x,

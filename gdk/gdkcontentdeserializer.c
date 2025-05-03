@@ -640,7 +640,9 @@ pixbuf_deserializer_finish (GObject      *source,
   else if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
     {
       GdkTexture *texture;
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (pixbuf);
       g_value_take_object (value, texture);
     }

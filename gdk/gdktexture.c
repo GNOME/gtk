@@ -526,10 +526,13 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
  * Creates a new texture object representing the `GdkPixbuf`.
  *
  * This function is threadsafe, so that you can e.g. use GTask
- * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
- * while loading a big image.
+ * and [method@Gio.Task.run_in_thread] to avoid blocking the main
+ * thread while loading a big image.
  *
  * Returns: a new `GdkTexture`
+ *
+ * Deprecated: 4.20: Use e.g. libglycin, which can load many image
+ *   formats into GdkTexture
  */
 GdkTexture *
 gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
@@ -687,7 +690,9 @@ gdk_texture_new_from_bytes_pixbuf (GBytes  *bytes,
   if (pixbuf == NULL)
     return NULL;
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
   g_object_unref (pixbuf);
 
   return texture;
@@ -1142,9 +1147,9 @@ gdk_texture_get_render_data (GdkTexture  *self,
  *
  * This is a utility function intended for debugging and testing.
  * If you want more control over formats, proper error handling or
- * want to store to a [iface@Gio.File] or other location, you might want to
- * use [method@Gdk.Texture.save_to_png_bytes] or look into the
- * gdk-pixbuf library.
+ * want to store to a [iface@Gio.File] or other location, you might
+ * want to use [method@Gdk.Texture.save_to_png_bytes] or look into
+ * the libglycin library.
  *
  * Returns: %TRUE if saving succeeded, %FALSE on failure.
  */
@@ -1181,7 +1186,7 @@ gdk_texture_save_to_png (GdkTexture *texture,
  *
  * If you need more control over the generated image, such as
  * attaching metadata, you should look into an image handling
- * library such as the gdk-pixbuf library.
+ * library such as the libglycin library.
  *
  * If you are dealing with high dynamic range float data, you
  * might also want to consider [method@Gdk.Texture.save_to_tiff_bytes]

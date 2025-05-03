@@ -33,7 +33,9 @@ test_gdk_cairo_set_source_pixbuf (void)
   surface = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, 10, 10);
   cr = cairo_create (surface);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+G_GNUC_END_IGNORE_DEPRECATIONS
   cairo_paint (cr);
 
   cairo_destroy (cr);

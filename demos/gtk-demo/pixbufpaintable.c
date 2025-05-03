@@ -30,9 +30,9 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
   g_get_current_time (&val);
   gdk_pixbuf_animation_iter_advance (self->iter, &val);
-G_GNUC_END_IGNORE_DEPRECATIONS
   pixbuf = gdk_pixbuf_animation_iter_get_pixbuf (self->iter);
   texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   gdk_paintable_snapshot (GDK_PAINTABLE (texture), snapshot, width, height);
 

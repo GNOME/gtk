@@ -20,7 +20,9 @@ test_set_source_big_pixbuf (void)
   cr = cairo_create (surface);
   pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, FALSE, 8, WAY_TOO_BIG, 1);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gdk_cairo_set_source_pixbuf (cr, pixbuf, 0, 0);
+G_GNUC_END_IGNORE_DEPRECATIONS
   g_assert_cmpint (cairo_status (cr), !=, CAIRO_STATUS_SUCCESS);
 
   g_object_unref (pixbuf);

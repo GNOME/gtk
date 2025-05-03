@@ -43,7 +43,9 @@ cursor_callback (GdkCursor *cursor,
       return NULL;
     }
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
 
   g_object_unref (pixbuf);
 
