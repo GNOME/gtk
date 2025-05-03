@@ -32,6 +32,7 @@
 /* Used for PROCESS_DPI_AWARENESS */
 #include <shellscalingapi.h>
 #include <dxgi1_4.h>
+#include "gdk/win32/dcomp.h"
 
 #ifdef HAVE_EGL
 # include <epoxy/egl.h>
@@ -161,6 +162,7 @@ struct _GdkWin32Display
   dmanip_items *dmanip_items;
 
   /* D3D12 */
+  IDCompositionDevice *dcomp_device;
   IDXGIFactory4 *dxgi_factory;
   ID3D12Device *d3d12_device;
 
@@ -214,6 +216,7 @@ struct _GdkWin32DisplayClass
 
 GPtrArray *             _gdk_win32_display_get_monitor_list             (GdkWin32Display        *display);
 
+IDCompositionDevice *   gdk_win32_display_get_dcomp_device              (GdkWin32Display        *self);
 IDXGIFactory4 *         gdk_win32_display_get_dxgi_factory              (GdkWin32Display        *self);
 ID3D12Device *          gdk_win32_display_get_d3d12_device              (GdkWin32Display        *self);
 

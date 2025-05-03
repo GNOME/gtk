@@ -475,6 +475,14 @@ gdk_win32_display_create_d3d12_device (GdkWin32Display    *self,
   return result;
 }
 
+static void
+gdk_win32_display_init_dcomp (GdkWin32Display *self)
+{
+  const GUID my_IID_IDCompositionDevice = { 0xC37EA93A,0xE7AA,0x450D,0xB1,0x6F,0x97,0x46,0xCB,0x04,0x07,0xF3 };
+
+  hr_warn (DCompositionCreateDevice (NULL, &my_IID_IDCompositionDevice, (void **) &self->dcomp_device));
+}
+
 static gboolean
 gdk_win32_display_init_d3d12 (GdkWin32Display  *self,
                               GError          **error)
@@ -502,6 +510,25 @@ gdk_win32_display_init_d3d12 (GdkWin32Display  *self,
    }
 
   return self->d3d12_device != NULL;
+}
+
+/*<private>
+ * gdk_win32_display_get_dcomp_device:
+ * @self: the display
+ *
+ * Gets the Direct Composition device used to composite
+ * the UI.
+ * 
+ * If Direct Composition is not supported, NULL is returned.
+ * 
+ * Note that Wine does not support Direct Composition at this point.
+ *
+ * Returns: (nullable): the device
+ */
+IDCompositionDevice *
+gdk_win32_display_get_dcomp_device (GdkWin32Display *self)
+{
+  return self->dcomp_device;
 }
 
 /*<private>
@@ -683,6 +710,7 @@ _gdk_win32_display_open (const char *display_name)
           GDK_DEBUG (D3D12, "Failed to initialize D3D12: %s", error->message);
           g_clear_error (&error);
         }
+      gdk_win32_display_init_dcomp (win32_display);
 
       /* Precalculate display name */
       gdk_display_get_name (display);
