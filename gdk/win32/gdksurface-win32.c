@@ -470,6 +470,13 @@ gdk_win32_surface_constructed (GObject *object)
       gdk_dmanipulation_initialize_surface (surface);
     }
 
+  hr_warn (IDCompositionDevice_CreateTargetForHwnd (gdk_win32_display_get_dcomp_device (display_win32),
+                                                    impl->handle,
+                                                    FALSE,
+                                                    &impl->dcomp_target));
+  hr_warn (IDCompositionDevice_CreateVisual (gdk_win32_display_get_dcomp_device (display_win32), &impl->dcomp_visual));
+  hr_warn (IDCompositionTarget_SetRoot (impl->dcomp_target, impl->dcomp_visual));
+
   gdk_win32_surface_enable_transparency (surface);
   _gdk_win32_surface_register_dnd (surface);
   _gdk_win32_surface_update_style_bits (surface);
@@ -3413,6 +3420,35 @@ static void
 gdk_win32_drag_surface_iface_init (GdkDragSurfaceInterface *iface)
 {
   iface->present = gdk_win32_drag_surface_present;
+}
+
+/*<private>
+ * gdk_win32_surface_set_dcomp_content:
+ * @self: The surface to set the content on
+ * @dcomp_content: (nullable): The content to set.
+ * 
+ * Sets the content to be displayed in the surface.
+ * 
+ * This function should be called by draw contexts when they are created
+ * or destroyed.
+ * They set up their preferred method of rendering and then set it using
+ * this function. The dcomp_content must be valid content for the
+ * [IDCompositionVisual::SetContent()](https://learn.microsoft.com/en-us/windows/win32/api/dcomp/nf-dcomp-idcompositionvisual-setcontent)
+ * function.
+ * 
+ * The content should be set to NULL again when the draw context gets
+ * destroyed.
+ */
+void
+gdk_win32_surface_set_dcomp_content (GdkWin32Surface *self,
+                                     IUnknown        *dcomp_content)
+{
+  GdkWin32Display *display;
+
+  display = GDK_WIN32_DISPLAY (gdk_surface_get_display (GDK_SURFACE (self)));
+
+  hr_warn (IDCompositionVisual_SetContent (self->dcomp_visual, dcomp_content));
+  hr_warn (IDCompositionDevice_Commit (gdk_win32_display_get_dcomp_device (display)));
 }
 
 GdkSurface *
