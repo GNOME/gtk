@@ -93,41 +93,13 @@ gtk_gst_media_file_paintable_init (GdkPaintableInterface *iface)
   iface->get_intrinsic_aspect_ratio = gtk_gst_media_file_paintable_get_intrinsic_aspect_ratio;
 }
 
-G_DEFINE_TYPE_EXTENDED (GtkGstMediaFile, gtk_gst_media_file, GTK_TYPE_MEDIA_FILE, 0,
-                        G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
-                                               gtk_gst_media_file_paintable_init))
-
-G_MODULE_EXPORT
-void
-g_io_module_load (GIOModule *module)
-{
-  g_type_module_use (G_TYPE_MODULE (module));
-
-  g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
-                                  GTK_TYPE_GST_MEDIA_FILE,
-                                  "gstreamer",
-                                  10);
-}
-
-G_MODULE_EXPORT
-G_GNUC_NORETURN
-void
-g_io_module_unload (GIOModule *module)
-{
-  g_assert_not_reached ();
-}
-
-G_MODULE_EXPORT
-char **
-g_io_module_query (void)
-{
-  char *eps[] = {
-    (char *) GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
-    NULL
-  };
-
-  return g_strdupv (eps);
-}
+G_DEFINE_TYPE_WITH_CODE (GtkGstMediaFile, gtk_gst_media_file, GTK_TYPE_MEDIA_FILE,
+                         G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
+                                                gtk_gst_media_file_paintable_init);
+                         g_io_extension_point_implement (GTK_MEDIA_FILE_EXTENSION_POINT_NAME,
+                                                         g_define_type_id,
+                                                         "gstreamer",
+                                                         10))
 
 static void
 gtk_gst_media_file_ensure_prepared (GtkGstMediaFile *self)

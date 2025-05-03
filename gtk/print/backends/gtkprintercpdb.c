@@ -23,11 +23,6 @@ enum {
   PROP_PRINTER_OBJ
 };
 
-static void gtk_printer_cpdb_init       (GtkPrinterCpdb      *printer);
-static void gtk_printer_cpdb_class_init (GtkPrinterCpdbClass *class);
-
-static GType gtk_printer_cpdb_type = 0;
-
 static void gtk_printer_cpdb_set_property (GObject      *object,
                                            guint         prop_id,
                                            const GValue *value,
@@ -37,33 +32,7 @@ static void gtk_printer_cpdb_get_property (GObject      *object,
                                            GValue       *value,
                                            GParamSpec   *pspec);
 
-void 
-gtk_printer_cpdb_register_type (GTypeModule *module)
-{
-  const GTypeInfo object_info =
-  {
-    sizeof (GtkPrinterCpdbClass),
-    (GBaseInitFunc) NULL,
-    (GBaseFinalizeFunc) NULL,
-    (GClassInitFunc) gtk_printer_cpdb_class_init,
-    NULL,           /* class_finalize */
-    NULL,           /* class_data */
-    sizeof (GtkPrinterCpdb),
-    0,              /* n_preallocs */
-    (GInstanceInitFunc) gtk_printer_cpdb_init,
-  };
-
- gtk_printer_cpdb_type = g_type_module_register_type (module,
-                                                      GTK_TYPE_PRINTER,
-                                                      "GtkPrinterCpdb",
-                                                      &object_info, 0);
-}
-
-GType
-gtk_printer_cpdb_get_type (void)
-{
-  return gtk_printer_cpdb_type;
-}
+G_DEFINE_TYPE (GtkPrinterCpdb, gtk_printer_cpdb, GTK_TYPE_PRINTER)
 
 static void
 gtk_printer_cpdb_class_init (GtkPrinterCpdbClass *klass)

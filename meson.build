@@ -111,13 +111,6 @@ gtk_library_version = '1.@0@.@1@'.format(gtk_binary_age - gtk_interface_age, gtk
 
 gtk_api_version = '4.0'
 
-module_suffix = []
-# GModule requires file extension to be .so, not .dylib on Mac.
-# https://gitlab.gnome.org/GNOME/glib/issues/520
-if host_machine.system() == 'darwin'
-  module_suffix = 'so'
-endif
-
 x11_enabled      = get_option('x11-backend')
 wayland_enabled  = get_option('wayland-backend')
 broadway_enabled = get_option('broadway-backend')
@@ -883,7 +876,7 @@ subdir('gtk/css')
 subdir('gdk')
 subdir('gsk')
 subdir('gtk')
-subdir('modules')
+
 subdir('tools')
 subdir('po')
 subdir('docs/reference')
@@ -993,7 +986,6 @@ meson.add_devenv(devenv)
 if not meson.is_cross_build()
   gnome.post_install(
     glib_compile_schemas: true,
-    gio_querymodules: gio_module_dirs,
     gtk_update_icon_cache: get_option('build-demos'),
   )
 else

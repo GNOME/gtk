@@ -1,6 +1,7 @@
 subdir('a11y')
 subdir('deprecated')
 subdir('inspector')
+subdir('media')
 subdir('print')
 
 gtk_cargs = [
@@ -408,6 +409,7 @@ gtk_public_sources = files([
 ])
 
 gtk_public_sources += gtk_print_sources
+gtk_private_sources += print_backend_sources
 
 gtk_private_type_headers = files([
   'gtkcsstypesprivate.h',
@@ -991,6 +993,7 @@ gtk_sources += [
   gtk_dbus_src,
   gtk_deprecated_sources,
   inspector_sources,
+  media_sources,
   gtkresources,
   gtkmarshalers,
   gtkprivatetypebuiltins,
@@ -1010,6 +1013,7 @@ gtk_deps = [
   fontconfig_dep,
   pixbuf_dep,
   epoxy_dep,
+  media_deps,
   libm,
   graphene_dep,
   accesskit_dep,
@@ -1119,9 +1123,9 @@ darwin_versions = [
 # Library
 libgtk_static = static_library('gtk',
   sources: [typefuncs, gtk_sources, gtkmarshal_h, gtkprivatetypebuiltins_h, xdp_dbus_generated],
-  c_args: gtk_cargs + common_cflags,
+  c_args: gtk_cargs + print_backend_cflags + common_cflags,
   include_directories: [confinc, gdkinc, gskinc, gtkinc],
-  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep],
+  dependencies: gtk_deps + [libgtk_css_dep, libgdk_dep, libgsk_dep, media_deps, print_backend_deps],
   link_with: [libgtk_css, libgdk, libgsk ],
 )
 
