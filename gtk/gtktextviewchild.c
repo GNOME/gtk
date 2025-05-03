@@ -490,5 +490,5 @@ gtk_text_view_child_set_offset (GtkTextViewChild *self,
     }
 
   if (changed)
-    gtk_widget_queue_draw (GTK_WIDGET (self));
+    gtk_widget_queue_allocate (GTK_WIDGET (self));
 }

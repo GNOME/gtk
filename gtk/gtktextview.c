@@ -4901,6 +4901,12 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   text_window_size_allocate (priv->text_window, &text_rect);
 
+  /* Update adjustments */
+  if (!gtk_adjustment_is_animating (priv->hadjustment))
+    gtk_text_view_set_hadjustment_values (text_view);
+  if (!gtk_adjustment_is_animating (priv->vadjustment))
+    gtk_text_view_set_vadjustment_values (text_view);
+
   if (priv->center_child)
     {
       gtk_text_view_child_set_offset (priv->center_child, priv->xoffset, priv->yoffset);
@@ -4935,12 +4941,6 @@ gtk_text_view_size_allocate (GtkWidget *widget,
 
   /* Note that this will do some layout validation */
   gtk_text_view_allocate_children (text_view);
-
-  /* Update adjustments */
-  if (!gtk_adjustment_is_animating (priv->hadjustment))
-    gtk_text_view_set_hadjustment_values (text_view);
-  if (!gtk_adjustment_is_animating (priv->vadjustment))
-    gtk_text_view_set_vadjustment_values (text_view);
 
   /* Optimize display cache size */
   layout = gtk_widget_create_pango_layout (widget, "X");
@@ -8835,7 +8835,12 @@ gtk_text_view_value_changed (GtkAdjustment *adjustment,
 
   gtk_text_view_update_handles (text_view);
 
-  if (priv->anchored_children.length > 0)
+  if (priv->anchored_children.length > 0 ||
+      priv->left_child != NULL ||
+      priv->right_child != NULL ||
+      priv->top_child != NULL ||
+      priv->bottom_child != NULL ||
+      priv->center_child != NULL)
     gtk_widget_queue_allocate (GTK_WIDGET (text_view));
   else
     gtk_widget_queue_draw (GTK_WIDGET (text_view));
