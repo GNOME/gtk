@@ -470,6 +470,7 @@ gtk_gst_sink_texture_from_buffer (GtkGstSink      *self,
       gdk_dmabuf_texture_builder_set_height (builder, vmeta->height);
       gdk_dmabuf_texture_builder_set_n_planes (builder, vmeta->n_planes);
       gdk_dmabuf_texture_builder_set_color_state (builder, self->color_state);
+      gdk_dmabuf_texture_builder_set_premultiplied (builder, GST_VIDEO_INFO_FLAGS (&self->v_info) & GST_VIDEO_FLAG_PREMULTIPLIED_ALPHA);
 
       for (i = 0; i < vmeta->n_planes; i++)
         {

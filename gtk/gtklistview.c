@@ -1395,4 +1395,3 @@ gtk_list_view_scroll_to (GtkListView        *self,
 
   gtk_list_base_scroll_to (GTK_LIST_BASE (self), pos, flags, scroll);
 }
-

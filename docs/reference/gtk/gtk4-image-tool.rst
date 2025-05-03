@@ -64,6 +64,7 @@ Conversion
 ^^^^^^^^^^
 
 The ``convert`` command converts the image to a different format or color state.
+The format of the output file is determined from the filename extension.
 
 ``--format=FORMAT``
 
@@ -84,6 +85,8 @@ Relabeling
 ^^^^^^^^^^
 
 The ``relabel`` command changes the color state of an image without conversion.
+The format of the output file is determined from the filename extension.
+
 This can be useful to produce wrong color renderings for diagnostics.
 
 ``--color-state=COLORSTATE``

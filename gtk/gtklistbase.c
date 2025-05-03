@@ -1547,8 +1547,8 @@ gtk_list_base_size_allocate_child (GtkListBase *self,
 
   if (!graphene_rect_intersection (gtk_css_boxes_get_padding_rect (boxes),
                                    &GRAPHENE_RECT_INIT(
-                                     child_allocation.x + GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
-                                     child_allocation.y + GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
+                                     child_allocation.x - GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
+                                     child_allocation.y - GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
                                      child_allocation.width + 2 * GTK_LIST_BASE_CHILD_MAX_OVERDRAW,
                                      child_allocation.height + 2 * GTK_LIST_BASE_CHILD_MAX_OVERDRAW
                                    ),
@@ -2432,4 +2432,3 @@ gtk_list_base_scroll_to (GtkListBase        *self,
 
   gtk_list_base_scroll_to_item (self, pos, scroll);
 }
-

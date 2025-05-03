@@ -557,11 +557,9 @@ parse_one_background (GtkCssShorthandProperty  *shorthand,
         {
           value = gtk_css_color_value_parse (parser);
           if (value == NULL)
-            values[6] = gtk_css_value_ref (_gtk_css_style_property_get_initial_value 
-                                            (_gtk_css_shorthand_property_get_subproperty (shorthand, 6)));
-          else
-            values[6] = value;
+            return FALSE;
 
+          values[6] = value;
           value = NULL;
         }
       else

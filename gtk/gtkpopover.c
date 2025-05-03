@@ -1232,6 +1232,7 @@ gtk_popover_unmap (GtkWidget *widget)
   priv->surface_transform_changed_cb = 0;
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->unmap (widget);
+  gtk_tooltip_unset_surface (GTK_NATIVE (popover));
   gdk_surface_hide (priv->surface);
 }
 

@@ -1115,7 +1115,7 @@ gtk_accessible_platform_changed (GtkAccessible               *self,
     return;
 
   if (GTK_IS_WIDGET (self) &&
-      gtk_widget_get_root (GTK_WIDGET (self)) == NULL)
+      !gtk_widget_get_realized (GTK_WIDGET (self)))
     return;
 
   context = gtk_accessible_get_at_context (self);

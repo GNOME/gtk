@@ -430,7 +430,7 @@ gtk_application_window_measure (GtkWidget      *widget,
           int menubar_height = 0;
 
           gtk_widget_measure (priv->menubar, GTK_ORIENTATION_VERTICAL,
-                              for_size, &menubar_height, NULL, NULL, NULL);
+                              -1, &menubar_height, NULL, NULL, NULL);
 
 
           GTK_WIDGET_CLASS (gtk_application_window_parent_class)->measure (widget,
@@ -480,10 +480,12 @@ gtk_application_window_real_size_allocate (GtkWidget *widget,
                           &menubar_height, NULL, NULL, NULL);
 
       menubar_allocation.height = menubar_height;
-      gtk_widget_size_allocate  (priv->menubar, &menubar_allocation, baseline);
+      gtk_widget_size_allocate  (priv->menubar, &menubar_allocation, -1);
 
       child_allocation.y += menubar_height;
       child_allocation.height -= menubar_height;
+      if (baseline != -1)
+        baseline -= child_allocation.y;
       child = gtk_window_get_child (GTK_WINDOW (window));
       if (child != NULL && gtk_widget_get_visible (child))
         gtk_widget_size_allocate (child, &child_allocation, baseline);
