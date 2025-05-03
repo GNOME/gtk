@@ -87,28 +87,26 @@ gdk_d3d12_context_setup (GdkD3d12Context  *self,
 
       gdk_draw_context_get_buffer_size (draw_context, &width, &height);
 
-      hr = IDXGIFactory4_CreateSwapChainForHwnd (gdk_win32_display_get_dxgi_factory (display),
-                                                 (IUnknown *) self->command_queue,
-                                                 gdk_win32_surface_get_handle (surface),
-                                                 (&(DXGI_SWAP_CHAIN_DESC1) {
-                                                     .Width = width,
-                                                     .Height = height,
-                                                     .Format = DXGI_FORMAT_R8G8B8A8_UNORM,
-                                                     .Stereo = false,
-                                                     .SampleDesc = (DXGI_SAMPLE_DESC) {
-                                                         .Count = 1,
-                                                         .Quality = 0,
-                                                     },
-                                                     .BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT,
-                                                     .BufferCount = SWAP_CHAIN_BUFFER_COUNT,
-                                                     .Scaling = DXGI_SCALING_STRETCH,
-                                                     .SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL,
-                                                     .AlphaMode = DXGI_ALPHA_MODE_UNSPECIFIED,
-                                                     .Flags = 0,
-                                                 }),
-                                                 NULL,
-                                                 NULL,
-                                                 &swap_chain);
+      hr = IDXGIFactory4_CreateSwapChainForComposition (gdk_win32_display_get_dxgi_factory (display),
+                                                        (IUnknown *) self->command_queue,
+                                                        (&(DXGI_SWAP_CHAIN_DESC1) {
+                                                            .Width = width,
+                                                            .Height = height,
+                                                            .Format = DXGI_FORMAT_R8G8B8A8_UNORM,
+                                                            .Stereo = false,
+                                                            .SampleDesc = (DXGI_SAMPLE_DESC) {
+                                                                .Count = 1,
+                                                                .Quality = 0,
+                                                            },
+                                                            .BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT,
+                                                            .BufferCount = SWAP_CHAIN_BUFFER_COUNT,
+                                                            .Scaling = DXGI_SCALING_STRETCH,
+                                                            .SwapEffect = DXGI_SWAP_EFFECT_FLIP_SEQUENTIAL,
+                                                            .AlphaMode = DXGI_ALPHA_MODE_PREMULTIPLIED,
+                                                            .Flags = 0,
+                                                        }),
+                                                        NULL,
+                                                        &swap_chain);
         if (!gdk_win32_check_hresult (hr, error, "Failed to create swap chain"))
           return FALSE;
 
@@ -116,6 +114,8 @@ gdk_d3d12_context_setup (GdkD3d12Context  *self,
         gdk_win32_com_clear (&swap_chain);
         if (!gdk_win32_check_hresult (hr, error, "Swap chain version not new enough"))
           return FALSE;
+
+        gdk_win32_surface_set_dcomp_content (GDK_WIN32_SURFACE (surface), (IUnknown *) self->swap_chain);
       }
 
   return TRUE;
@@ -287,8 +287,11 @@ static void
 gdk_d3d12_context_dispose (GObject *object)
 {
   GdkD3d12Context *self = GDK_D3D12_CONTEXT (object);
+  GdkSurface *surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
 
   gdk_d3d12_context_reset_damage_tracker (self);
+
+  IDCompositionVisual_SetContent (GDK_WIN32_SURFACE (surface)->dcomp_visual, NULL);
 
   gdk_win32_com_clear (&self->swap_chain);
   gdk_win32_com_clear (&self->command_queue);
