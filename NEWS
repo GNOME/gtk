@@ -1,5 +1,58 @@
-Overview of Changes in 4.18.5, xx-xx-xxxx
+Overview of Changes in 4.18.6, xx-xx-xxxx
 =========================================
+
+Overview of Changes in 4.18.5, 03-05-2025
+=========================================
+
+* Bugs fixed:
+  - #5844 `gdk_surface_get_device_position: assertion 'GDK_IS_SURFACE (surface)'
+    failed` on popover close (Alessandro Astone)
+  - #7451 Cairo device scale changes lead to significant performance regression
+    in cairo blur (Sebastian Keller)
+  - #7479 gtkmm programs fail to start on Windows with AccessKit support enabled
+    (Matthias Clasen)
+  - #7482 Epiphany Crash in GTK file chooser when last used directory has
+    insufficient filesystem permissions: "GFileInfo created without
+    standard::type" (Philip Withnall)
+  - #7495 Failed to link with the mold linker (Matthias Clasen)
+  - #7513 Broken boxed-list ListBox (Sergey Bugaev)
+  - #7520 XCompose preventing GTK4 applications from launching (again) (Matthias
+    Clasen)
+  - #7522 critical when selecting label with use-underline but mnemonic with
+    screenreader enabled (Markus Göllnitz)
+  - !8432 GTK 4.18.4
+  - !8461 Some cherry-picked fixes for 4.18 (Sebastian Keller, Benjamin Otte,
+    Florian "sp1rit"​)
+  - !8487 early exit  if the clipped bound rectangle's area is zero after
+    snapping (Benjamin Otte)
+  - !8496 macos: fix crash when unfullscreening windows (4.18 backport) (Arjan
+    Molenaar)
+  - !8505 Backport: update macOS job for new CI runner (René de Hesselle)
+  - !8526 build: pin the msvc build to meson 1.7 (Matthias Clasen)
+  - !8527 build: pin the msvc build to meson 1.7 (Alessandro Astone, Sébastien
+    Wilmet, Sergey Bugaev, Vladimir Vaskov, Markus Göllnitz, Michael Weghorn,
+    Philip Withnall, Lukáš Tyrychtr, Benjamin Otte, Matthias Clasen, Liu
+    Jinchang, kolunmi, FeRD (Frank Dana))
+
+* Translation updates:
+  - Bulgarian (Alexander Shopov)
+  - Catalan (Jordi Mas i Hernandez)
+  - Chinese (China) (Luming Zh)
+  - Czech (Daniel Rusek)
+  - Georgian (Ekaterine Papava)
+  - Hungarian (Balázs Úr)
+  - Lithuanian (Aurimas Černius)
+  - Persian (Danial Behzadi)
+  - Polish (Piotr Drąg)
+  - Portuguese (Hugo Carvalho)
+  - Portuguese (Brazil) (Álvaro Burns)
+  - Romanian (Antonio Marin)
+  - Russian (Artur S0)
+  - Slovenian (Martin)
+  - Spanish (Daniel Mustieles)
+  - Swedish (Anders Jonsson)
+  - Turkish (Emin Tufan Çetin)
+  - Ukrainian (Yuri Chornoivan)
 
 Overview of Changes in 4.18.4, 06-04-2025
 =========================================
