@@ -18,7 +18,7 @@ if not exist %HOMEPATH%\.cargo\bin\rustup.exe rustup-init -y --default-toolchain
 
 @set PATH=%PATH%;%HOMEPATH%\.cargo\bin
 
-pip3 install --upgrade --user meson~=1.2 || goto :error
+pip3 install --upgrade --user packaging==24.2 meson==1.7.2 || goto :error
 meson setup -Dbackend_max_links=1 -Ddebug=false -Dwin32-backend=true -Dmedia-gstreamer=disabled -Dvulkan=disabled -Daccesskit=enabled _build %~1 || goto :error
 ninja -C _build || goto :error
 
