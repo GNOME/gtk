@@ -1,5 +1,186 @@
-Overview of Changes in 4.19.1, xx-xx-xxxx
+Overview of Changes in 4.19.2, xx-xx-xxxx
 =========================================
+
+
+Overview of Changes in 4.19.1, 02-05-2025
+=========================================
+
+* GtkText:
+ - Add bindings for the "Clear" key
+
+* GtkTextView:
+ - Make overlaid child widgets scroll again
+
+* GtkFileChooser:
+ - Fix a crash with inaccessible locations
+ - Add a forgotten accessible label
+
+* GtkVideo:
+ - Improve support for subsampled formats
+
+* GtkApplicationWindow:
+ - Improve layout
+
+* GtkWindow:
+ - Add gravity for resizing
+
+* GtkWidget:
+ - Fix invalidating cached request modes
+
+* Gdk:
+ - Add toplevel gravity for resizing
+ - Support relative dials on tablet pads
+
+* Gsk:
+ - Accept GSK_RENDERER=gl for the current gl renderer
+ - Support YUV formats better
+ - Improve cairo blur performance with fractional scales
+ - Use vertical subpixel positions for text rendering
+
+* Wayland:
+ - Defer to the compositor for drag cursors
+ - Support xdg-toplevel edge constraints
+ - Don't offload straight-alpha textures
+ - Use tablet protocol v2
+ - Add gdk_wayland_toplevel_get_xdg_toplevel
+
+* Macos:
+ - Fix a crash when unfullscreening windows
+
+* Android:
+ - Rework the initialization procedure for better meson compatibility
+ - Support multitouch properly
+ - Add initial ime support
+
+* Demos:
+ - Add bash completion support
+ - Drop the "Search Entry" demo
+
+* Tools:
+ - Add bash completion support
+ - Add an --offload flag to gtk4-rendernode-tool
+
+* Debugging:
+ - Reintroduce GTK_DEBUG=touch-ui to test touchscreen UI
+ - Avoid a crash when natives get unrealized
+
+* Build:
+ - Require wayland-protocols 1.44
+ - Fix build with mold
+ - Use ci-templates to update ci images
+
+* Bugs fixed:
+  - #5844 `gdk_surface_get_device_position: assertion 'GDK_IS_SURFACE (surface)'
+    failed` on popover close (Alessandro Astone)
+  - #6764 ListView: Rows are added too late and removed too early
+  - #7451 Cairo device scale changes lead to significant performance regression
+    in cairo blur (Sebastian Keller)
+  - #7458 Random crashes
+  - #7476 4.19.0: gnome-control-center missing animations (Benjamin Otte)
+  - #7479 gtkmm programs fail to start on Windows with AccessKit support enabled
+    (Matthias Clasen)
+  - #7480 testsuite needs a run with GDK_VULKAN_DISABLE=all GDK_GL_DISABLE=all
+    (Matthias Clasen)
+  - #7482 Epiphany Crash in GTK file chooser when last used directory has
+    insufficient filesystem permissions: "GFileInfo created without
+    standard::type" (Philip Withnall)
+  - #7495 Failed to link with the mold linker (Matthias Clasen)
+  - #7498 TextView overlay does not scroll with content (Matthias Clasen)
+  - #7510 macos: app crashes if unfullscreening window
+  - #7513 Broken boxed-list ListBox (Sergey Bugaev)
+  - #7520 XCompose preventing GTK4 applications from launching (again) (Matthias
+    Clasen)
+  - #7522 critical when selecting label with use-underline but mnemonic with
+    screenreader enabled (Markus Göllnitz)
+  - !7242 Add support for tablet pad relative dials (Peter Hutterer, René de
+    Hesselle)
+  - !8307 gsk: Go back to using subpixel y for text
+  - !8391 android: Advanced "dumb" IME implementation
+  - !8416 gtk: Reintroduce touchscreen simulation
+  - !8424 [gtk4] fix gdk_x11_surface_get_frame_extents with window borders.
+  - !8433 GtkGLArea: add note to docs regarding the output framebuffer
+  - !8434 build: Add bash completion support
+  - !8435 gtk-demo: Remove the "Search Entry" demo (Benjamin Otte)
+  - !8436 gtk-demo: Remove the "Search Entry" demo (Benjamin Otte)
+  - !8438 wayland: Don't set the selected cursor in init (Matthias Clasen)
+  - !8439 More commandline completion (Matthias Clasen)
+  - !8440 Keep renaming renderers (Matthias Clasen)
+  - !8441 Add Clear keybindings (Matthias Clasen)
+  - !8442 ci: Make fedora-clang run tests (Matthias Clasen)
+  - !8443 wayland: Add missing wp-color flag (Benjamin Otte)
+  - !8444 gtkfilechooserwidget: Handle the case of a saved location being
+    inaccessible (Matthias Clasen, Philip Withnall)
+  - !8445 wayland: Add support for xdg-toplevel edge constraints (Matthias
+    Clasen, Jonas Ådahl)
+  - !8447 various Vulkan fixes (Benjamin Otte)
+  - !8448 Misc small fixes (Matthias Clasen)
+  - !8451 widget: Check layout-related invariants (Matthias Clasen)
+  - !8453 accessible: Don't update platform state too early (Matthias Clasen)
+  - !8454 rendernodeparser: Fail properly if the texture couldn't be parsed
+    (Benjamin Otte)
+  - !8455 widget: Drop long-dead code
+  - !8456 android: Add toplevel surface in bindNative
+  - !8458 widget: Drop some unnecessary checks
+  - !8460 gdk: Add missing since marker to gdk_toplevel_get_capabilities()
+    (Sebastian Dröge)
+  - !8463 android: Rework initialization procedure (Florian "sp1rit"​)
+  - !8467 fix: Remove redundant assignment in _gdk_win32_surface_procedure
+  - !8468 gtkapplicationwindow: Improve measuring menubar (Sergey Bugaev)
+  - !8469 css: Error if the background color is invalid (Benjamin Otte)
+  - !8471 early exit  if the clipped bound rectangle's area is zero after
+    snapping (Doublonmousse, DoublonMousse)
+  - !8472 Various fixes and cleanups (Benjamin Otte)
+  - !8473 listbase: Fix row visibility (Vladimir Vaskov)
+  - !8474 GtkBuilder docs - fix XML tag syntax
+  - !8475 docs: recommend using properties instead of child (g.willems)
+  - !8476 rendernodeparser: Avoid an extra Cairo surface (Benjamin Otte)
+  - !8478 Add toplevel gravity
+  - !8479 wayland: Rely on upstream cursor-shape protocol (Matthias Clasen)
+  - !8482 Drop old NEWS
+  - !8484 nodeparser: Fix Cairo node parsing (Benjamin Otte)
+  - !8485 wayland: Refactor color a bit
+  - !8486 gdk: Add missing function docs (Bilal Elmoussaoui)
+  - !8488 msys: Make -Werror work (Benjamin Otte)
+  - !8489 Don't offload straight-alpha textures
+  - !8490 memorylayout: Fix check (Benjamin Otte)
+  - !8491 win32: Drop GdkWin32Screen (Benjamin Otte)
+  - !8492 wayland: Check alpha before offloading (Matthias Clasen)
+  - !8493 macos: fix crash when unfullscreening windows (Arjan Molenaar)
+  - !8495 tooltipwindow: Propagate child request mode (Sergey Bugaev)
+  - !8497 mediastream: Don't mark :prepared as writable (Sergey Bugaev)
+  - !8500 android: Support multitouch (Florian "sp1rit"​)
+  - !8504 Update macOS job for new CI runner (René de Hesselle)
+  - !8506 node-editor: Always try adding the Vulkan renderer (Benjamin Otte)
+  - !8507 win32: Remove lots of code (Benjamin Otte)
+  - !8508 drawcontext: Add opaque "context_data" to begin/end_draw (Benjamin
+    Otte)
+  - !8509 Switch to ci-templates (Carlos Garnacho)
+  - !8511 wayland: Rename gdkshm.h and gdkfractionalscale.h (Matthias Clasen)
+  - !8513 file-chooser-dialog: Make the search button a11y label a tooltip
+    (Lukáš Tyrychtr)
+  - !8516 label: set GDK_KEY_VoidSymbol when use-underline is set but no key is
+    found (Markus Göllnitz)
+  - !8517 docs: Small fixes (Sébastien Wilmet)
+  - !8518 widget: Warn if request modes are stale (Matthias Clasen)
+  - !8519 ci: Try to fix the arm build (Matthias Clasen)
+  - !8521 a11y atspi: Add null check in get_keybinding (Michael Weghorn)
+  - !8523 win32: Introduce hr_warn() (Benjamin Otte)
+  - !8524 Add gdk_wayland_toplevel_get_xdg_toplevel (Matthias Clasen)
+
+* Translation updates:
+  - Belarusian (Віктар Гаўрылавец)
+  - Bulgarian (Alexander Shopov)
+  - Catalan (Jordi Mas i Hernandez)
+  - Chinese (China) (Luming Zh)
+  - Czech (Daniel Rusek)
+  - Hungarian (Balázs Úr)
+  - Lithuanian (Aurimas Černius)
+  - Polish (Piotr Drąg)
+  - Portuguese (Hugo Carvalho)
+  - Russian (Artur S0)
+  - Slovenian (Martin)
+  - Spanish (Daniel Mustieles)
+  - Turkish (Emin Tufan Çetin)
 
 
 Overview of Changes in 4.19.0, 06-04-2025
