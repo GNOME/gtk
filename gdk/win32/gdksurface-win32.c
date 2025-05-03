@@ -374,6 +374,7 @@ gdk_win32_surface_constructed (GObject *object)
   GdkDisplay *display = gdk_surface_get_display (surface);
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   GdkFrameClock *frame_clock;
+  IDCompositionDevice *dcomp_device;
   HANDLE owner;
   ATOM klass = 0;
   DWORD dwStyle = 0, dwExStyle;
@@ -466,6 +467,17 @@ gdk_win32_surface_constructed (GObject *object)
         gdk_winpointer_initialize_surface (surface);
 
       gdk_dmanipulation_initialize_surface (surface);
+    }
+
+  dcomp_device = gdk_win32_display_get_dcomp_device (display_win32);
+  if (dcomp_device)
+    {
+      hr_warn (IDCompositionDevice_CreateTargetForHwnd (dcomp_device,
+                                                        impl->handle,
+                                                        FALSE,
+                                                        &impl->dcomp_target));
+      hr_warn (IDCompositionDevice_CreateVisual (dcomp_device, &impl->dcomp_visual));
+      hr_warn (IDCompositionTarget_SetRoot (impl->dcomp_target, impl->dcomp_visual));
     }
 
   gdk_win32_surface_enable_transparency (surface);
@@ -3411,6 +3423,41 @@ static void
 gdk_win32_drag_surface_iface_init (GdkDragSurfaceInterface *iface)
 {
   iface->present = gdk_win32_drag_surface_present;
+}
+
+/*<private>
+ * gdk_win32_surface_set_dcomp_content:
+ * @self: The surface to set the content on
+ * @dcomp_content: (nullable): The content to set.
+ * 
+ * Sets the content to be displayed in the surface.
+ * 
+ * This function should be called by draw contexts when they are created
+ * or destroyed.
+ * They set up their preferred method of rendering and then set it using
+ * this function. The dcomp_content must be valid content for the
+ * [IDCompositionVisual::SetContent()](https://learn.microsoft.com/en-us/windows/win32/api/dcomp/nf-dcomp-idcompositionvisual-setcontent)
+ * function.
+ * 
+ * The content should be set to NULL again when the draw context gets
+ * destroyed.
+ * 
+ * This function may not be called when Direct Composition is not in use.
+ * See gdk_win32_display_get_dcomp_device() for details.
+ */
+void
+gdk_win32_surface_set_dcomp_content (GdkWin32Surface *self,
+                                     IUnknown        *dcomp_content)
+{
+  GdkWin32Display *display;
+  IDCompositionDevice *dcomp_device;
+
+  display = GDK_WIN32_DISPLAY (gdk_surface_get_display (GDK_SURFACE (self)));
+  dcomp_device = gdk_win32_display_get_dcomp_device (display);
+  g_return_if_fail (dcomp_device != NULL);
+
+  hr_warn (IDCompositionVisual_SetContent (self->dcomp_visual, dcomp_content));
+  hr_warn (IDCompositionDevice_Commit (dcomp_device));
 }
 
 GdkSurface *
