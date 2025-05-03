@@ -383,10 +383,13 @@ gdk_win32_surface_constructed (GObject *object)
 
   impl->surface_scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
 
-  dwExStyle = 0;
   dwStyle = 0;
+  dwExStyle = 0;
   owner = NULL;
 
+  if (gdk_win32_display_get_dcomp_device (display_win32))
+    dwExStyle |= WS_EX_NOREDIRECTIONBITMAP;
+  
   if (G_OBJECT_TYPE (impl) == GDK_TYPE_WIN32_TOPLEVEL)
     {
       dwStyle |= WS_OVERLAPPEDWINDOW;
