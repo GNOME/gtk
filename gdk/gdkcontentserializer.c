@@ -691,7 +691,7 @@ serialize_texture_in_thread (GTask        *task,
   texture = g_value_get_object (value);
 
   if (strcmp (gdk_content_serializer_get_mime_type (serializer), "image/png") == 0)
-    bytes = gdk_save_png (texture);
+    bytes = gdk_save_png (texture, NULL);
   else if (strcmp (gdk_content_serializer_get_mime_type (serializer), "image/tiff") == 0)
     bytes = gdk_save_tiff (texture);
   else if (strcmp (gdk_content_serializer_get_mime_type (serializer), "image/jpeg") == 0)

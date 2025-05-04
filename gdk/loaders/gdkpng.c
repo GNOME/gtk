@@ -502,7 +502,8 @@ gdk_load_png (GBytes      *bytes,
 }
 
 GBytes *
-gdk_save_png (GdkTexture *texture)
+gdk_save_png (GdkTexture *texture,
+              GHashTable *options)
 {
   png_struct *png = NULL;
   png_info *info;
@@ -671,6 +672,45 @@ gdk_save_png (GdkTexture *texture)
   gdk_png_set_color_state (png, info, color_state, chunk_data);
 
   png_write_info (png, info);
+
+  if (options)
+    {
+      GHashTableIter iter;
+      char *key, *value;
+      int n_keys;
+      GArray *text_data;
+      png_textp text_ptr;
+
+      text_data = g_array_sized_new (FALSE, TRUE, sizeof (png_text), g_hash_table_size (options));
+      g_hash_table_iter_init (&iter, options);
+
+      while (g_hash_table_iter_next (&iter, (gpointer *) &key, (gpointer *) &value))
+        {
+          png_text text;
+          int len;
+
+          if (strncmp (key, "tEXt::", 6) != 0)
+            continue;
+
+          text.key = key + 6;
+          len = strlen (text.text);
+          if (len < 1 || len > 79)
+            continue;
+
+          text.compression = PNG_TEXT_COMPRESSION_NONE;
+          text.text = g_strdup (value);
+          text.text_length = strlen (value);
+          text.itxt_length = 0;
+          text.lang = NULL;
+          text.lang_key = NULL;
+
+          g_array_append_val (text_data, text);
+        }
+
+      n_keys = text_data->len;
+      text_ptr = (png_textp) g_array_free (text_data, FALSE);
+      png_set_text (png, info, text_ptr, n_keys);
+    }
 
 #if G_BYTE_ORDER == G_LITTLE_ENDIAN
   png_set_swap (png);
