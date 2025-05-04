@@ -21,6 +21,7 @@
 
 #include "gdkcontentdeserializer.h"
 
+#include "gdkmemorytexture.h"
 #include "gdkcontentformats.h"
 #include "filetransferportalprivate.h"
 #include "gdktexture.h"
@@ -31,6 +32,9 @@
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 
+#ifdef HAVE_GLYCIN
+#include <glycin.h>
+#endif
 
 /**
  * GdkContentDeserializer:
@@ -616,6 +620,78 @@ gdk_content_deserialize_finish (GAsyncResult  *result,
 
 /*** DESERIALIZERS ***/
 
+#ifdef HAVE_GLYCIN
+static void
+glycin_deserializer_finish (GObject      *source,
+                            GAsyncResult *res,
+                            gpointer      data)
+{
+  GlyLoader *loader = GLY_LOADER (source);
+  GdkContentDeserializer *deserializer = data;
+  GlyImage *image;
+  GlyFrame *frame;
+  GdkTexture *texture;
+  GError *error = NULL;
+
+  image = gly_loader_load_finish (loader, res, &error);
+  if (image == NULL)
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+
+  frame = gly_image_next_frame (image, &error);
+  g_object_unref (image);
+  if (frame == NULL)
+    {
+      gdk_content_deserializer_return_error (deserializer, error);
+      return;
+    }
+
+  texture = gdk_memory_texture_new (gly_frame_get_width (frame),
+                                    gly_frame_get_height (frame),
+                                    (GdkMemoryFormat) gly_frame_get_memory_format (frame),
+                                    gly_frame_get_buf_bytes (frame),
+                                    gly_frame_get_stride (frame));
+
+  g_object_unref (frame);
+
+  g_value_take_object (gdk_content_deserializer_get_value (deserializer), texture);
+  gdk_content_deserializer_return_success (deserializer);
+}
+
+static void
+glycin_deserializer (GdkContentDeserializer *deserializer)
+{
+  GlyLoader *loader;
+
+  loader = gly_loader_new_for_stream (gdk_content_deserializer_get_input_stream (deserializer));
+  gly_loader_load_async (loader,
+                         gdk_content_deserializer_get_cancellable (deserializer),
+                         glycin_deserializer_finish,
+                         deserializer);
+
+  g_object_unref (loader);
+}
+
+static void
+register_glycin_deserializers (void)
+{
+  char **formats;
+
+  formats = gly_loader_get_mime_types ();
+
+  for (int i = 0; formats[i]; i++)
+    gdk_content_register_deserializer (formats[i],
+                                       GDK_TYPE_TEXTURE,
+                                       glycin_deserializer,
+                                       NULL,
+                                       NULL);
+
+  g_strfreev (formats);
+}
+
+#else
 static void
 pixbuf_deserializer_finish (GObject      *source,
                             GAsyncResult *res,
@@ -657,10 +733,51 @@ static void
 pixbuf_deserializer (GdkContentDeserializer *deserializer)
 {
   gdk_pixbuf_new_from_stream_async (gdk_content_deserializer_get_input_stream (deserializer),
-				    gdk_content_deserializer_get_cancellable (deserializer),
+                                    gdk_content_deserializer_get_cancellable (deserializer),
                                     pixbuf_deserializer_finish,
                                     deserializer);
 }
+
+static void
+register_pixbuf_deserializers (void)
+{
+  GSList *formats, *f;
+
+  formats = gdk_pixbuf_get_formats ();
+
+  for (f = formats; f; f = f->next)
+    {
+      GdkPixbufFormat *fmt = f->data;
+      char **mimes, **m;
+      char *name;
+
+      name = gdk_pixbuf_format_get_name (fmt);
+      mimes = gdk_pixbuf_format_get_mime_types (fmt);
+      for (m = mimes; *m; m++)
+        {
+          /* Turning pngs, jpegs and tiffs into textures is handled above */
+          if (!g_str_equal (name, "png") &&
+              !g_str_equal (name, "jpeg") &&
+              !g_str_equal (name, "tiff"))
+            gdk_content_register_deserializer (*m,
+                                               GDK_TYPE_TEXTURE,
+                                               pixbuf_deserializer,
+                                               NULL,
+                                               NULL);
+          gdk_content_register_deserializer (*m,
+                                             GDK_TYPE_PIXBUF,
+                                             pixbuf_deserializer,
+                                             NULL,
+                                             NULL);
+        }
+      g_strfreev (mimes);
+      g_free (name);
+    }
+
+  g_slist_free (formats);
+}
+
+#endif /* HAVE_GLYCIN */
 
 static void
 texture_deserializer_finish (GObject      *source,
@@ -912,7 +1029,6 @@ static void
 init (void)
 {
   static gboolean initialized = FALSE;
-  GSList *formats, *f;
   const char *charset;
 
   if (initialized)
@@ -937,38 +1053,11 @@ init (void)
                                      NULL);
 
 
-  formats = gdk_pixbuf_get_formats ();
-
-  for (f = formats; f; f = f->next)
-    {
-      GdkPixbufFormat *fmt = f->data;
-      char **mimes, **m;
-      char *name;
-
-      name = gdk_pixbuf_format_get_name (fmt);
-      mimes = gdk_pixbuf_format_get_mime_types (fmt);
-      for (m = mimes; *m; m++)
-        {
-          /* Turning pngs, jpegs and tiffs into textures is handled above */
-          if (!g_str_equal (name, "png") &&
-              !g_str_equal (name, "jpeg") &&
-              !g_str_equal (name, "tiff"))
-            gdk_content_register_deserializer (*m,
-                                               GDK_TYPE_TEXTURE,
-                                               pixbuf_deserializer,
-                                               NULL,
-                                               NULL);
-          gdk_content_register_deserializer (*m,
-                                             GDK_TYPE_PIXBUF,
-                                             pixbuf_deserializer,
-                                             NULL,
-                                             NULL);
-        }
-      g_strfreev (mimes);
-      g_free (name);
-    }
-
-  g_slist_free (formats);
+#ifdef HAVE_GLYCIN
+  register_glycin_deserializers ();
+#else
+  register_pixbuf_deserializers ();
+#endif
 
 #if defined(G_OS_UNIX) && !defined(__APPLE__)
   file_transfer_portal_register ();
