@@ -34,6 +34,7 @@ sysprof_req        = '>= 3.38.0'
 vulkan_req         = '>= 1.3'
 gstreamer_req      = '>= 1.24.0'
 gi_req             = '>= 1.84'
+glycin_req         = '>= 1.3.alpha'
 
 fs = import('fs')
 gnome = import('gnome')
@@ -444,6 +445,10 @@ endif
 pangocairo_dep    = dependency('pangocairo', version: pango_req)
 pixbuf_dep        = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
                                default_options: ['png=enabled', 'jpeg=enabled', 'gif=enabled', 'builtin_loaders=all', 'man=false'])
+
+glycin_dep        = dependency('glycin-1', version: glycin_req, required: get_option('glycin'))
+cdata.set('HAVE_GLYCIN', glycin_dep.found())
+
 png_dep           = dependency('libpng', 'png')
 tiff_dep          = dependency('libtiff-4', 'tiff')
 jpeg_dep          = dependency('libjpeg', 'jpeg')

@@ -248,6 +248,10 @@ if profiler_enabled
   endif
 endif
 
+if glycin_dep.found()
+  gdk_deps += [glycin_dep]
+endif
+
 # add generated gdk sources
 gdk_sources += [
   gdkconfig,

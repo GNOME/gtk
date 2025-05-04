@@ -1073,6 +1073,10 @@ if pangoft_dep.found()
   gtk_deps += pangoft_dep
 endif
 
+if glycin_dep.found()
+  gtk_deps += glycin_dep
+endif
+
 if macos_enabled
   gtk_macos_frameworks = [
     'AppKit',
