@@ -5594,7 +5594,7 @@ native_filter_changed (GtkWidget *combo,
 
       filter = gtk_file_filter_new ();
       gtk_file_filter_set_name (filter, "Images");
-      gtk_file_filter_add_pixbuf_formats (filter);
+      gtk_file_filter_add_image_formats (filter);
       gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (native), filter);
       gtk_file_chooser_set_filter (GTK_FILE_CHOOSER (native), filter);
       g_object_unref (filter);
