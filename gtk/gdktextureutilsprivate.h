@@ -21,14 +21,6 @@
 
 G_BEGIN_DECLS
 
-GdkPixbuf *gtk_make_symbolic_pixbuf_from_data       (const char    *data,
-                                                     gsize          len,
-                                                     int            width,
-                                                     int            height,
-                                                     double         scale,
-                                                     const char    *debug_output_to,
-                                                     GError       **error);
-
 GdkTexture *gdk_texture_new_from_filename_with_fg   (const char    *filename,
                                                      gboolean      *only_fg,
                                                      GError       **error);
@@ -70,9 +62,6 @@ GdkTexture *gdk_texture_new_from_resource_symbolic  (const char    *path,
                                                      double         scale,
                                                      gboolean      *only_fg,
                                                      GError       **error);
-
-GdkTexture *gtk_load_symbolic_texture_from_file     (GFile         *file);
-GdkTexture *gtk_load_symbolic_texture_from_resource (const char    *path);
 
 GdkPaintable *gdk_paintable_new_from_filename_scaled (const char    *filename,
                                                       double         scale);

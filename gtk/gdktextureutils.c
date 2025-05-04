@@ -390,7 +390,7 @@ svg_has_symbolic_classes (const char *data,
 #endif
 }
 
-GdkPixbuf *
+static GdkPixbuf *
 gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
                                     gsize        file_len,
                                     int          width,
@@ -723,12 +723,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 GdkTexture *
-gtk_load_symbolic_texture_from_resource (const char *path)
-{
-  return gdk_texture_new_from_resource (path);
-}
-
-GdkTexture *
 gdk_texture_new_from_resource_symbolic (const char  *path,
                                         int          width,
                                         int          height,
@@ -748,30 +742,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (pixbuf);
     }
-
-  return texture;
-}
-
-GdkTexture *
-gtk_load_symbolic_texture_from_file (GFile *file)
-{
-  GdkPixbuf *pixbuf;
-  GdkTexture *texture;
-  GInputStream *stream;
-
-  stream = G_INPUT_STREAM (g_file_read (file, NULL, NULL));
-  if (stream == NULL)
-    return NULL;
-
-  pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
-  g_object_unref (stream);
-  if (pixbuf == NULL)
-    return NULL;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
-G_GNUC_END_IGNORE_DEPRECATIONS
-  g_object_unref (pixbuf);
 
   return texture;
 }
