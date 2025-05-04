@@ -58,6 +58,10 @@
 #include "gdksnapshot.h"
 #include "gdktexturedownloaderprivate.h"
 
+#ifdef HAVE_GLYCIN
+#include <glycin-1/glycin.h>
+#endif
+
 #include <glib/gi18n-lib.h>
 #include <graphene.h>
 #include "loaders/gdkpngprivate.h"
@@ -676,6 +680,40 @@ gdk_texture_new_from_bytes_internal (GBytes  *bytes,
     }
 }
 
+#ifdef HAVE_GLYCIN
+static GdkTexture *
+gdk_texture_new_from_bytes_glycin (GBytes  *bytes,
+                                   GError **error)
+{
+  GlyLoader *loader;
+  GlyImage *image;
+  GlyFrame *frame;
+  GdkTexture *texture;
+
+  loader = gly_loader_new_for_bytes (bytes);
+  image = gly_loader_load (loader, error);
+  g_object_unref (loader);
+
+  if (!image)
+    return NULL;
+
+  frame = gly_image_next_frame (image, error);
+  g_object_unref (image);
+
+  if (!frame)
+    return NULL;
+
+  texture = gdk_memory_texture_new (gly_frame_get_width (frame),
+                                    gly_frame_get_height (frame),
+                                    (GdkMemoryFormat) gly_frame_get_memory_format (frame),
+                                    gly_frame_get_buf_bytes (frame),
+                                    gly_frame_get_stride (frame));
+
+  g_object_unref (frame);
+
+  return texture;
+}
+#else
 static GdkTexture *
 gdk_texture_new_from_bytes_pixbuf (GBytes  *bytes,
                                    GError **error)
@@ -697,7 +735,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
   return texture;
 }
-
+#endif
 
 /**
  * gdk_texture_new_from_bytes:
@@ -742,7 +780,11 @@ gdk_texture_new_from_bytes (GBytes  *bytes,
 
   g_clear_error (&internal_error);
 
+#ifdef HAVE_GLYCIN
+  return gdk_texture_new_from_bytes_glycin (bytes, error);
+#else
   return gdk_texture_new_from_bytes_pixbuf (bytes, error);
+#endif
 }
 
 /**
