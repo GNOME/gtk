@@ -582,7 +582,7 @@ texture_new_from_bytes (GBytes    *bytes,
 
   options = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
   texture = gdk_load_png (bytes, options, error);
-  *only_fg = g_hash_table_contains (options, "foreground-only");
+  *only_fg = g_hash_table_contains (options, "only-foreground");
   g_hash_table_unref (options);
 
   return texture;
