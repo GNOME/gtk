@@ -127,6 +127,8 @@
  *
  * - "label": a user-visible string to display
  * - "icon": icon name to display
+ * - "gtk-macos-special": (macOS only, ignored by others) Add special meaning to a menu
+ *     in the macOS menu bar. See [Using GTK on Apple macOS](osx.html).
  *
  * Menu items will also show accelerators, which are usually associated
  * with actions via [method@Gtk.Application.set_accels_for_action],
