@@ -20,6 +20,10 @@
 
 #include "config.h"
 
+#ifdef __APPLE__
+#define VK_ENABLE_BETA_EXTENSIONS
+#endif
+
 #include "gdkvulkancontext.h"
 
 #include "gdkvulkancontextprivate.h"
@@ -1596,6 +1600,10 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
               device_extensions = g_ptr_array_new ();
               g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SWAPCHAIN_EXTENSION_NAME);
+#ifdef __APPLE__
+              if (physical_device_supports_extension (devices[i], VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME))
+                g_ptr_array_add (device_extensions, (gpointer) VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME);
+#endif
               if (features & GDK_VULKAN_FEATURE_YCBCR)
                 {
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
