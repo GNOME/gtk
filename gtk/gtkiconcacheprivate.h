@@ -16,7 +16,6 @@
  */
 #pragma once
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gtk/gtkiconthemeprivate.h>
 
 G_BEGIN_DECLS

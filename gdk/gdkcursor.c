@@ -24,9 +24,6 @@
 
 #include "config.h"
 
-#define GDK_PIXBUF_ENABLE_BACKEND
-#include <gdk-pixbuf/gdk-pixbuf.h>
-
 #include "gdkcursor.h"
 #include "gdkcursorprivate.h"
 #include "gdktexture.h"

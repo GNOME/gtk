@@ -147,7 +147,7 @@ open_file (GtkWidget *picker,
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_set_name (filter, "Images");
-  gtk_file_filter_add_pixbuf_formats (filter);
+  gtk_file_filter_add_image_formats (filter);
   filters = g_list_store_new (GTK_TYPE_FILE_FILTER);
   g_list_store_append (filters, filter);
   g_object_unref (filter);

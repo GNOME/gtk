@@ -24,10 +24,6 @@
 
 #include "config.h"
 
-/* needs to be first because any header might include gdk-pixbuf.h otherwise */
-#define GDK_PIXBUF_ENABLE_BACKEND
-#include <gdk-pixbuf/gdk-pixbuf.h>
-
 #include "gdkcursor.h"
 #include "gdkcursorprivate.h"
 

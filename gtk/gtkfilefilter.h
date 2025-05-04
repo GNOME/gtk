@@ -56,8 +56,11 @@ GDK_AVAILABLE_IN_4_4
 void            gtk_file_filter_add_suffix         (GtkFileFilter *filter,
                                                     const char    *suffix);
 
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_20_FOR(gtk_file_filter_add_image_formats)
 void            gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter);
+
+GDK_AVAILABLE_IN_4_20
+void            gtk_file_filter_add_image_formats  (GtkFileFilter *filter);
 
 GDK_AVAILABLE_IN_ALL
 const char **   gtk_file_filter_get_attributes     (GtkFileFilter *filter);
