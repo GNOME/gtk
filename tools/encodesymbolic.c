@@ -32,6 +32,7 @@
 #include <locale.h>
 
 #include "gdktextureutilsprivate.h"
+#include "loaders/gdkpngprivate.h"
 
 static char *output_dir = NULL;
 
@@ -48,17 +49,14 @@ main (int argc, char **argv)
 {
   char *path, *basename, *pngpath, *pngfile, *dot;
   GOptionContext *context;
-  GdkPixbuf *symbolic;
+  GdkTexture *symbolic;
   GError *error;
   int width, height;
   char **sizev;
-  GFileOutputStream *out;
   GFile *dest;
-  char *data;
-  gsize len;
-  GHashTable *options;
-  GPtrArray *keys;
-  GPtrArray *values;
+  GBytes *bytes;
+  gboolean only_fg = FALSE;
+  GHashTable *options = NULL;
 
   setlocale (LC_ALL, "");
 
@@ -101,23 +99,14 @@ main (int argc, char **argv)
   path = g_locale_to_utf8 (path, -1, NULL, NULL, NULL);
 #endif
 
-  error = NULL;
-  if (!g_file_get_contents (path, &data, &len, &error))
-    {
-      g_printerr (_("Can’t load file: %s\n"), error->message);
-      return 1;
-    }
-
   basename = g_path_get_basename (path);
 
-  symbolic = gtk_make_symbolic_pixbuf_from_data (data, len, width, height, 1.0, debug ? basename : NULL, &error);
+  symbolic = gdk_texture_new_from_filename_symbolic (path, width, height, 1.0, &only_fg, &error);
   if (symbolic == NULL)
     {
       g_printerr (_("Can’t load file: %s\n"), error->message);
       return 1;
     }
-
-  g_free (data);
 
   dot = strrchr (basename, '.');
   if (dot != NULL)
@@ -134,46 +123,31 @@ main (int argc, char **argv)
 
   dest = g_file_new_for_path (pngpath);
 
+  if (only_fg)
+    {
+      options = g_hash_table_new (g_str_hash, g_str_equal);
+      g_hash_table_insert (options, (gpointer) "tEXt::only-foreground", (gpointer) "1");
+    }
 
-  out = g_file_replace (dest,
-                        NULL, FALSE,
-                        G_FILE_CREATE_REPLACE_DESTINATION,
-                        NULL, &error);
-  if (out == NULL)
+  bytes = gdk_save_png (symbolic, options);
+
+  if (!g_file_replace_contents (dest,
+                                g_bytes_get_data (bytes, NULL),
+                                g_bytes_get_size (bytes),
+                                NULL,
+                                FALSE,
+                                G_FILE_CREATE_REPLACE_DESTINATION,
+                                NULL,
+                                NULL,
+                                &error))
     {
       g_printerr (_("Can’t save file %s: %s\n"), pngpath, error->message);
       return 1;
     }
 
-  options = gdk_pixbuf_get_options (symbolic);
-  keys = g_hash_table_get_keys_as_ptr_array (options);
-  values = g_hash_table_get_values_as_ptr_array (options);
-  g_ptr_array_add (keys, NULL);
-  g_ptr_array_add (values, NULL);
-
-  if (!gdk_pixbuf_save_to_streamv (symbolic,
-                                   G_OUTPUT_STREAM (out),
-                                   "png",
-                                   (char **) keys->pdata,
-                                   (char **) values->pdata,
-                                   NULL,
-                                   &error))
-    {
-      g_printerr (_("Can’t save file %s: %s\n"), pngpath, error->message);
-      return 1;
-    }
-
-  if (!g_output_stream_close (G_OUTPUT_STREAM (out), NULL, &error))
-    {
-      g_printerr (_("Can’t close stream"));
-      return 1;
-    }
-
-  g_ptr_array_unref (keys);
-  g_ptr_array_unref (values);
-  g_hash_table_unref (options);
-
-  g_object_unref (out);
+  g_bytes_unref (bytes);
+  g_object_unref (dest);
+  g_clear_pointer (&options, g_hash_table_unref);
   g_free (pngpath);
 
   return 0;
