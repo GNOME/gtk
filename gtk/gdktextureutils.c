@@ -20,6 +20,7 @@
 #include "gdktextureutilsprivate.h"
 #include "gtkscalerprivate.h"
 
+#include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdk/gdktextureprivate.h"
 #include "gdk/loaders/gdkpngprivate.h"
 
