@@ -126,7 +126,7 @@ main (int argc, char **argv)
   if (only_fg)
     {
       options = g_hash_table_new (g_str_hash, g_str_equal);
-      g_hash_table_insert (options, (gpointer) "tEXt::only-foreground", (gpointer) "1");
+      g_hash_table_insert (options, (gpointer) "tEXt::only-foreground", (gpointer) "true");
     }
 
   bytes = gdk_save_png (symbolic, options);
