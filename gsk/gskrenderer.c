@@ -54,6 +54,9 @@
 #ifdef GDK_WINDOWING_WAYLAND
 #include <gdk/wayland/gdkwayland.h>
 #endif
+#ifdef GDK_WINDOWING_MACOS
+#include <gdk/macos/gdkmacos.h>
+#endif
 #ifdef GDK_WINDOWING_BROADWAY
 #include "broadway/gskbroadwayrenderer.h"
 #endif
@@ -628,17 +631,19 @@ vulkan_supported_platform (GdkSurface *surface,
   GdkDisplay *display = gdk_surface_get_display (surface);
   VkPhysicalDeviceProperties props;
   GError *error = NULL;
-  gboolean platform_is_wayland;
+  gboolean platform_is_supported;
 
 #ifdef GDK_WINDOWING_WAYLAND
-  platform_is_wayland = GDK_IS_WAYLAND_DISPLAY (display);
+  platform_is_supported = GDK_IS_WAYLAND_DISPLAY (display);
+#elif defined(GDK_WINDOWING_MACOS)
+  platform_is_supported = GDK_IS_MACOS_DISPLAY (display);
 #else
-  platform_is_wayland = FALSE;
+  platform_is_supported = FALSE;
 #endif
 
-  if (!platform_is_wayland && !as_fallback)
+  if (!platform_is_supported && !as_fallback)
     {
-      GSK_DEBUG (RENDERER, "Not using Vulkan: platform is not Wayland");
+      GSK_DEBUG (RENDERER, "Not using Vulkan: platform is not Wayland or macOS");
       return FALSE;
     }
 
