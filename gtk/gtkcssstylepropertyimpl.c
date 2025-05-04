@@ -20,7 +20,6 @@
 #include "gtkstylepropertyprivate.h"
 
 #include <gobject/gvaluecollector.h>
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <math.h>
 
 #include <gtk/css/gtkcss.h>

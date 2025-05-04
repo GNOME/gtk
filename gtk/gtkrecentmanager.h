@@ -23,7 +23,6 @@
 #error "Only <gtk/gtk.h> can be included directly."
 #endif
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <gdk/gdk.h>
 #include <time.h>
 

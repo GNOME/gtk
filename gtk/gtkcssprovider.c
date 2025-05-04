@@ -42,7 +42,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdk/gdkprofilerprivate.h"
 #include <cairo-gobject.h>
 

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdkenumtypes.h"
 #include "gdkmemoryformatprivate.h"
 #include "gdksurface.h"
