@@ -26,7 +26,8 @@ GdkTexture *gdk_load_png        (GBytes         *bytes,
                                  GHashTable     *options,
                                  GError        **error);
 
-GBytes     *gdk_save_png        (GdkTexture     *texture);
+GBytes     *gdk_save_png        (GdkTexture     *texture,
+                                 GHashTable     *options);
 
 static inline gboolean
 gdk_is_png (GBytes *bytes)

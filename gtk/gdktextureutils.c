@@ -159,7 +159,6 @@ static GdkPixbuf *
 _gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
                                       int            width,
                                       int            height,
-                                      gboolean       aspect,
                                       GCancellable  *cancellable,
                                       GError       **error)
 {
@@ -171,7 +170,7 @@ _gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
 
   scales[0] = width;
   scales[1] = height;
-  scales[2] = aspect;
+  scales[2] = TRUE;
   g_signal_connect (loader, "size-prepared",
                     G_CALLBACK (size_prepared_cb2), scales);
 
@@ -186,7 +185,6 @@ static GdkPixbuf *
 _gdk_pixbuf_new_from_resource_at_scale (const char   *resource_path,
                                         int           width,
                                         int           height,
-                                        gboolean      preserve_aspect,
                                         GError      **error)
 {
   GInputStream *stream;
@@ -196,7 +194,7 @@ _gdk_pixbuf_new_from_resource_at_scale (const char   *resource_path,
   if (stream == NULL)
     return NULL;
 
-  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, preserve_aspect, NULL, error);
+  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, NULL, error);
   g_object_unref (stream);
 
   return pixbuf;
@@ -390,7 +388,7 @@ svg_has_symbolic_classes (const char *data,
 #endif
 }
 
-GdkPixbuf *
+static GdkPixbuf *
 gtk_make_symbolic_pixbuf_from_data (const char  *file_data,
                                     gsize        file_len,
                                     int          width,
@@ -650,7 +648,6 @@ GdkTexture *
 gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
                                       int            width,
                                       int            height,
-                                      gboolean       aspect,
                                       gboolean      *only_fg,
                                       GCancellable  *cancellable,
                                       GError       **error)
@@ -658,7 +655,7 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
   GdkPixbuf *pixbuf;
   GdkTexture *texture = NULL;
 
-  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, aspect, cancellable, error);
+  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, cancellable, error);
   if (pixbuf)
     {
       *only_fg = pixbuf_is_only_fg (pixbuf);
@@ -675,14 +672,13 @@ GdkTexture *
 gdk_texture_new_from_resource_at_scale (const char    *path,
                                         int            width,
                                         int            height,
-                                        gboolean       preserve_aspect,
                                         gboolean      *only_fg,
                                         GError       **error)
 {
   GdkPixbuf *pixbuf;
   GdkTexture *texture = NULL;
 
-  pixbuf = _gdk_pixbuf_new_from_resource_at_scale (path, width, height, preserve_aspect, error);
+  pixbuf = _gdk_pixbuf_new_from_resource_at_scale (path, width, height, error);
   if (pixbuf)
     {
       *only_fg = pixbuf_is_only_fg (pixbuf);
@@ -723,12 +719,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 GdkTexture *
-gtk_load_symbolic_texture_from_resource (const char *path)
-{
-  return gdk_texture_new_from_resource (path);
-}
-
-GdkTexture *
 gdk_texture_new_from_resource_symbolic (const char  *path,
                                         int          width,
                                         int          height,
@@ -748,30 +738,6 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (pixbuf);
     }
-
-  return texture;
-}
-
-GdkTexture *
-gtk_load_symbolic_texture_from_file (GFile *file)
-{
-  GdkPixbuf *pixbuf;
-  GdkTexture *texture;
-  GInputStream *stream;
-
-  stream = G_INPUT_STREAM (g_file_read (file, NULL, NULL));
-  if (stream == NULL)
-    return NULL;
-
-  pixbuf = gdk_pixbuf_new_from_stream (stream, NULL, NULL);
-  g_object_unref (stream);
-  if (pixbuf == NULL)
-    return NULL;
-
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  texture = gdk_texture_new_for_pixbuf (pixbuf);
-G_GNUC_END_IGNORE_DEPRECATIONS
-  g_object_unref (pixbuf);
 
   return texture;
 }

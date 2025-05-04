@@ -86,7 +86,7 @@ test_save_image (gconstpointer test_data)
 
   /* Test the internal apis here */
   if (g_str_has_suffix (filename, ".png"))
-    bytes = gdk_save_png (texture);
+    bytes = gdk_save_png (texture, NULL);
   else if (g_str_has_suffix (filename, ".tiff"))
     bytes = gdk_save_tiff (texture);
   else if (g_str_has_suffix (filename, ".jpeg"))

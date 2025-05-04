@@ -1163,7 +1163,7 @@ gdk_texture_save_to_png (GdkTexture *texture,
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), FALSE);
   g_return_val_if_fail (filename != NULL, FALSE);
 
-  bytes = gdk_save_png (texture);
+  bytes = gdk_save_png (texture, NULL);
   result = g_file_set_contents (filename,
                                 g_bytes_get_data (bytes, NULL),
                                 g_bytes_get_size (bytes),
@@ -1201,7 +1201,7 @@ gdk_texture_save_to_png_bytes (GdkTexture *texture)
 {
   g_return_val_if_fail (GDK_IS_TEXTURE (texture), NULL);
 
-  return gdk_save_png (texture);
+  return gdk_save_png (texture, NULL);
 }
 
 /**
