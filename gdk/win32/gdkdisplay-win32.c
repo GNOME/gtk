@@ -515,11 +515,16 @@ static void
 gdk_win32_display_init_dcomp (GdkWin32Display *self)
 {
   const GUID my_IID_IDCompositionDevice = { 0xC37EA93A,0xE7AA,0x450D,0xB1,0x6F,0x97,0x46,0xCB,0x04,0x07,0xF3 };
+  IDXGIDevice *dxgi_device;
 
   if (!gdk_has_feature (GDK_FEATURE_DCOMP))
     return;
   
-  hr_warn (DCompositionCreateDevice (NULL, &my_IID_IDCompositionDevice, (void **) &self->dcomp_device));
+  hr_warn (ID3D11Device_QueryInterface (self->d3d11_device, &IID_IDXGIDevice, (void **) &dxgi_device));
+
+  hr_warn (DCompositionCreateDevice (dxgi_device, &my_IID_IDCompositionDevice, (void **) &self->dcomp_device));
+
+  gdk_win32_com_clear (&dxgi_device);
 }
 
 static gboolean
