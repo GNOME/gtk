@@ -34,18 +34,6 @@ G_BEGIN_DECLS
 typedef struct _GdkWin32CairoContext GdkWin32CairoContext;
 typedef struct _GdkWin32CairoContextClass GdkWin32CairoContextClass;
 
-struct _GdkWin32CairoContext
-{
-  GdkCairoContext parent_instance;
-
-  /* Surface for the underlying window DC */
-  cairo_surface_t *hwnd_surface;
-};
-struct _GdkWin32CairoContextClass
-{
-  GdkCairoContextClass parent_class;
-};
-
 GDK_AVAILABLE_IN_ALL
 GType gdk_win32_cairo_context_get_type (void) G_GNUC_CONST;
 
