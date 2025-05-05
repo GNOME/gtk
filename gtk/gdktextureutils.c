@@ -691,6 +691,30 @@ G_GNUC_END_IGNORE_DEPRECATIONS
   return texture;
 }
 
+GdkTexture *
+gdk_texture_new_from_filename_at_scale (const char  *filename,
+                                        int          width,
+                                        int          height,
+                                        gboolean    *only_fg,
+                                        GError     **error)
+{
+  GFile *file;
+  GInputStream *stream;
+  GdkTexture *texture;
+
+  file = g_file_new_for_path (filename);
+  stream = G_INPUT_STREAM (g_file_read (file, NULL, error));
+  g_object_unref (file);
+
+  if (!stream)
+    return NULL;
+
+  texture = gdk_texture_new_from_stream_at_scale (stream, width, height, only_fg, NULL, error);
+  g_object_unref (stream);
+
+  return texture;
+}
+
 /* }}} */
 /* {{{ Symbolic texture API */
 
