@@ -519,6 +519,7 @@ gdk_save_png (GdkTexture *texture,
   int png_format;
   int depth;
   png_byte chunk_data[4];
+  png_textp text_ptr = NULL;
 
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
@@ -677,9 +678,8 @@ gdk_save_png (GdkTexture *texture,
     {
       GHashTableIter iter;
       char *key, *value;
-      int n_keys;
       GArray *text_data;
-      png_textp text_ptr;
+      int n_keys;
 
       text_data = g_array_sized_new (FALSE, TRUE, sizeof (png_text), g_hash_table_size (options));
       g_hash_table_iter_init (&iter, options);
@@ -689,16 +689,13 @@ gdk_save_png (GdkTexture *texture,
           png_text text;
           int len;
 
-          if (strncmp (key, "tEXt::", 6) != 0)
-            continue;
-
-          text.key = key + 6;
-          len = strlen (text.text);
+          len = strlen (key);
           if (len < 1 || len > 79)
             continue;
 
+          text.key = key;
           text.compression = PNG_TEXT_COMPRESSION_NONE;
-          text.text = g_strdup (value);
+          text.text = value;
           text.text_length = strlen (value);
           text.itxt_length = 0;
           text.lang = NULL;
@@ -731,6 +728,8 @@ gdk_save_png (GdkTexture *texture,
 
   gdk_color_state_unref (color_state);
   g_bytes_unref (bytes);
+
+  g_free (text_ptr);
 
   return g_bytes_new_take (io.data, io.size);
 }
