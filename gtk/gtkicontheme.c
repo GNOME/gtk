@@ -63,6 +63,10 @@
 #define GDK_ARRAY_PREALLOC 16
 #include "gdk/gdkarrayimpl.c"
 
+#ifdef HAVE_GLYCIN
+#include <glycin-1/glycin.h>
+#endif
+
 /**
  * GtkIconTheme:
  *
@@ -337,7 +341,7 @@ struct _GtkIconTheme
 
   guint custom_theme         : 1;
   guint is_display_singleton : 1;
-  guint pixbuf_supports_svg  : 1;
+  guint supports_svg         : 1;
   guint themes_valid         : 1;
 
   /* A list of all the themes needed to look up icons.
@@ -1229,18 +1233,31 @@ gtk_icon_theme_set_display (GtkIconTheme *self,
   g_object_thaw_notify (G_OBJECT (self));
 }
 
-/* Checks whether a loader for SVG files has been registered
- * with GdkPixbuf.
+/* Checks whether we have a loader for SVG files
  */
 static gboolean
-pixbuf_supports_svg (void)
+supports_svg (void)
 {
-  GSList *formats;
-  GSList *tmp_list;
   static int found_svg = -1;
 
   if (found_svg != -1)
     return found_svg;
+
+#ifdef HAVE_GLYCIN
+  char **formats;
+
+  found_svg = FALSE;
+  formats = gly_loader_get_mime_types ();
+  for (int i = 0; formats[i]; i++)
+    {
+      if (strcmp (formats[i], "image/svg") == 0)
+        found_svg = TRUE;
+    }
+  g_strfreev (formats);
+
+#else
+  GSList *formats;
+  GSList *tmp_list;
 
   formats = gdk_pixbuf_get_formats ();
 
@@ -1260,6 +1277,7 @@ pixbuf_supports_svg (void)
     }
 
   g_slist_free (formats);
+#endif
 
   return found_svg;
 }
@@ -1316,7 +1334,7 @@ gtk_icon_theme_init (GtkIconTheme *self)
   self->themes = NULL;
   self->unthemed_icons = NULL;
 
-  self->pixbuf_supports_svg = pixbuf_supports_svg ();
+  self->supports_svg = supports_svg ();
 }
 
 static gboolean
@@ -2188,7 +2206,7 @@ real_choose_icon (GtkIconTheme      *self,
           icon_name = gtk_string_set_lookup (&self->icons, icon_names[i]);
           if (icon_name)
             {
-              icon = theme_lookup_icon (theme, icon_name, size, scale, self->pixbuf_supports_svg);
+              icon = theme_lookup_icon (theme, icon_name, size, scale, self->supports_svg);
               if (icon)
                 goto out;
             }
@@ -2204,7 +2222,7 @@ real_choose_icon (GtkIconTheme      *self,
           icon_name = gtk_string_set_lookup (&self->icons, icon_names[i]);
           if (icon_name)
             {
-              icon = theme_lookup_icon (theme, icon_name, size, scale, self->pixbuf_supports_svg);
+              icon = theme_lookup_icon (theme, icon_name, size, scale, self->supports_svg);
               if (icon)
                 goto out;
             }
@@ -2221,7 +2239,7 @@ real_choose_icon (GtkIconTheme      *self,
           icon = icon_paintable_new (icon_names[i], size, scale);
 
           /* A SVG icon, when allowed, beats out a XPM icon, but not a PNG icon */
-          if (self->pixbuf_supports_svg &&
+          if (self->supports_svg &&
               unthemed_icon->svg_filename &&
               (!unthemed_icon->no_svg_filename ||
                suffix_from_name (unthemed_icon->no_svg_filename) < ICON_CACHE_FLAG_PNG_SUFFIX))
