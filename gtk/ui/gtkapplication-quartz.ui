@@ -5,7 +5,7 @@
       <item>
         <attribute name="label" translatable="yes">About %s</attribute>
         <attribute name="action">app.about</attribute>
-        <attribute name="x-gtk-private-special">replace-appname</attribute>
+        <attribute name="gtk-macos-special">replace-appname</attribute>
       </item>
     </section>
     <section>
@@ -17,23 +17,23 @@
     <section>
       <item>
         <attribute name="label" translatable="yes">Services</attribute>
-        <attribute name="x-gtk-private-special">services-submenu</attribute>
+        <attribute name="gtk-macos-special">services-submenu</attribute>
       </item>
     </section>
     <section>
       <item>
         <attribute name="label" translatable="yes">Hide %s</attribute>
-        <attribute name="x-gtk-private-special">hide-this</attribute>
+        <attribute name="gtk-macos-special">hide-this</attribute>
         <attribute name="action">gtkinternal.hide</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Hide Others</attribute>
-        <attribute name="x-gtk-private-special">hide-others</attribute>
+        <attribute name="gtk-macos-special">hide-others</attribute>
         <attribute name="action">gtkinternal.hide-others</attribute>
       </item>
       <item>
         <attribute name="label" translatable="yes">Show All</attribute>
-        <attribute name="x-gtk-private-special">show-all</attribute>
+        <attribute name="gtk-macos-special">show-all</attribute>
         <attribute name="action">gtkinternal.show-all</attribute>
       </item>
     </section>
@@ -41,7 +41,7 @@
       <item>
         <attribute name="label" translatable="yes">Quit %s</attribute>
         <attribute name="action">app.quit</attribute>
-        <attribute name="x-gtk-private-special">replace-appname</attribute>
+        <attribute name="gtk-macos-special">replace-appname</attribute>
       </item>
     </section>
   </menu>
@@ -80,6 +80,10 @@
           <attribute name="action">selection.select-all</attribute>
         </item>
       </section>
+    </submenu>
+    <submenu>
+      <attribute name="label" translatable="yes">_Window</attribute>
+      <attribute name="gtk-macos-special">window-submenu</attribute>
     </submenu>
   </menu>
 </interface>

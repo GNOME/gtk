@@ -32,6 +32,19 @@ application with [`Application.set_accels_for_action()`](method.Application.set_
 The menubar can be configured via [`Application.set_menubar()`](method.Application.set_menubar.html).
 Those actions can then be activated from the menu.
 
+### Window menu
+
+The Window menu is special in macOS: it provides a list of open windows and has options for moving and resizing
+windows. To automatically add those options to the Window menu, add the property `gtk-macos-special` with
+value `window-submenu`:
+
+```xml
+<submenu>
+  <attribute name="label" translatable="yes">_Window</attribute>
+  <attribute name="gtk-macos-special">window-submenu</attribute>
+</submenu>
+```
+
 ## Native window controls
 
 By default, GTK applications use common window decorators (close/minimize/maximize) on all platforms.
