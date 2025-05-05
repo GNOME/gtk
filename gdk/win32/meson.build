@@ -60,6 +60,7 @@ if have_egl
 endif
 
 d3d12_dep = [
+  cc.find_library('d3d11'),
   cc.find_library('d3d12'),
   cc.find_library('d3dcompiler'),
   cc.find_library('dcomp'),
