@@ -41,6 +41,11 @@ GdkTexture *gdk_texture_new_from_resource_at_scale  (const char    *path,
                                                      int            height,
                                                      gboolean      *only_fg,
                                                      GError       **error);
+GdkTexture *gdk_texture_new_from_filename_at_scale  (const char    *filename,
+                                                     int            width,
+                                                     int            height,
+                                                     gboolean      *only_fg,
+                                                     GError       **error);
 
 GdkTexture *gdk_texture_new_from_filename_symbolic  (const char    *path,
                                                      int            width,

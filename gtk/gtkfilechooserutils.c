@@ -22,6 +22,7 @@
 #include "deprecated/gtkfilechooser.h"
 #include "gtktypebuiltins.h"
 #include "gtkprivate.h"
+#include "gdktextureutilsprivate.h"
 #include <glib/gi18n-lib.h>
 
 
@@ -458,19 +459,21 @@ _gtk_file_info_get_icon (GFileInfo    *info,
                          GtkIconTheme *icon_theme)
 {
   GIcon *icon;
-  GdkPixbuf *pixbuf;
   const char *thumbnail_path;
 
   thumbnail_path = g_file_info_get_attribute_byte_string (info, G_FILE_ATTRIBUTE_THUMBNAIL_PATH);
 
   if (thumbnail_path)
     {
-      pixbuf = gdk_pixbuf_new_from_file_at_size (thumbnail_path,
-                                                 icon_size*scale, icon_size*scale,
-                                                 NULL);
+      GdkTexture *texture;
 
-      if (pixbuf != NULL)
-        return G_ICON (pixbuf);
+      texture = gdk_texture_new_from_filename_at_scale (thumbnail_path,
+                                                        icon_size*scale, icon_size*scale,
+                                                        NULL,
+                                                        NULL);
+
+      if (texture != NULL)
+        return G_ICON (texture);
     }
 
   icon = g_file_info_get_icon (info);
