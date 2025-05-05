@@ -859,7 +859,10 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
       success &= gdk_pixbuf_loader_close (loader, NULL);
 
       if (!success)
-        return NULL;
+        {
+          g_object_unref (loader);
+          return NULL;
+        }
 
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (gdk_pixbuf_loader_get_pixbuf (loader));
