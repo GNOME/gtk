@@ -21,32 +21,48 @@
 #include "gdkconfig.h"
 
 #include "gdkcairocontext-win32.h"
+#include "gdkdisplay-win32.h"
 #include "gdkprivate-win32.h"
 #include "gdksurface-win32.h"
-#include "gdkwin32misc.h"
 
-#include <cairo-win32.h>
+struct _GdkWin32CairoContext
+{
+  GdkCairoContext parent_instance;
 
-#include <windows.h>
+  IDCompositionSurface *dcomp_surface;
+
+  /* only set while drawing */
+  IDXGISurface *dxgi_surface;
+  cairo_surface_t *cairo_surface;
+};
+struct _GdkWin32CairoContextClass
+{
+  GdkCairoContextClass parent_class;
+};
+
 
 G_DEFINE_TYPE (GdkWin32CairoContext, gdk_win32_cairo_context, GDK_TYPE_CAIRO_CONTEXT)
 
-static cairo_surface_t *
-create_cairo_surface_for_surface (GdkSurface *surface)
+static void
+gdk_win32_cairo_context_ensure_dcomp_surface (GdkWin32CairoContext *self)
 {
-  cairo_surface_t *cairo_surface;
-  HDC hdc;
+  GdkDrawContext *context = GDK_DRAW_CONTEXT (self);
+  GdkWin32Display *display;
+  guint width, height;
 
-  hdc = GetDC (GDK_SURFACE_HWND (surface));
-  if (!hdc)
-    {
-      WIN32_GDI_FAILED ("GetDC");
-      return NULL;
-    }
+  if (self->dcomp_surface)
+    return;
 
-  cairo_surface = cairo_win32_surface_create_with_format (hdc, CAIRO_FORMAT_ARGB32);
+  display = GDK_WIN32_DISPLAY (gdk_draw_context_get_display (context));
+  gdk_draw_context_get_buffer_size (context, &width, &height);
 
-  return cairo_surface;
+  hr_warn (IDCompositionDevice_CreateSurface (gdk_win32_display_get_dcomp_device (display),
+                                              width, height,
+                                              DXGI_FORMAT_B8G8R8A8_UNORM,
+                                              DXGI_ALPHA_MODE_PREMULTIPLIED,
+                                              &self->dcomp_surface));
+  gdk_win32_surface_set_dcomp_content (GDK_WIN32_SURFACE (gdk_draw_context_get_surface (context)),
+                                       (IUnknown *) self->dcomp_surface);
 }
 
 static void
@@ -60,16 +76,34 @@ gdk_win32_cairo_context_begin_frame (GdkDrawContext  *draw_context,
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
   GdkSurface *surface;
   cairo_t *cr;
+  cairo_rectangle_int_t extents;
+  DXGI_MAPPED_RECT mapped_rect;
+  POINT offset;
 
-  surface = gdk_draw_context_get_surface (draw_context);
+  gdk_win32_cairo_context_ensure_dcomp_surface (self);
 
-  self->hwnd_surface = create_cairo_surface_for_surface (surface);
+  cairo_region_get_extents (region, &extents);
 
-  /* Clear the paint region.
-   * For non-double-buffered rendering we must clear it, otherwise
-   * semi-transparent pixels will "add up" with each repaint.
-   */
-  cr = cairo_create (self->hwnd_surface);
+  hr_warn (IDCompositionSurface_BeginDraw (self->dcomp_surface,
+                                           (&(RECT) {
+                                               .left = extents.x,
+                                               .top = extents.y,
+                                               .right = extents.x + extents.width,
+                                               .bottom = extents.y + extents.height
+                                           }),
+                                           &IID_IDXGISurface,
+                                           (void **) &self->dxgi_surface,
+                                           &offset));
+
+  hr_warn (IDXGISurface_Map (self->dxgi_surface, &mapped_rect, DXGI_MAP_READ | DXGI_MAP_WRITE));
+  
+  self->cairo_surface = cairo_image_surface_create_for_data (mapped_rect.pBits,
+                                                             CAIRO_FORMAT_ARGB32,
+                                                             extents.width,
+                                                             extents.height,
+                                                             mapped_rect.Pitch);
+
+  cr = cairo_create (self->cairo_surface);
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
   gdk_cairo_region (cr, region);
   cairo_fill (cr);
@@ -86,9 +120,13 @@ gdk_win32_cairo_context_end_frame (GdkDrawContext *draw_context,
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (draw_context);
 
-  cairo_surface_flush (self->hwnd_surface);
+  cairo_surface_flush (self->cairo_surface);
+  g_clear_pointer (&self->cairo_surface, cairo_surface_destroy);
 
-  g_clear_pointer (&self->hwnd_surface, cairo_surface_destroy);
+  hr_warn (IDXGISurface_Unmap (self->dxgi_surface));
+  gdk_win32_com_clear (&self->dxgi_surface);
+
+  hr_warn (IDCompositionSurface_EndDraw (self->dcomp_surface));
 }
 
 static void
@@ -101,7 +139,7 @@ gdk_win32_cairo_context_cairo_create (GdkCairoContext *context)
 {
   GdkWin32CairoContext *self = GDK_WIN32_CAIRO_CONTEXT (context);
 
-  return cairo_create (self->hwnd_surface);
+  return cairo_create (self->cairo_surface);
 }
 
 static void
