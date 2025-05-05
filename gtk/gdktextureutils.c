@@ -582,7 +582,8 @@ texture_new_from_bytes (GBytes    *bytes,
 
   options = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, g_free);
   texture = gdk_load_png (bytes, options, error);
-  *only_fg = g_hash_table_contains (options, "only-foreground");
+  if (only_fg)
+    *only_fg = g_hash_table_contains (options, "only-foreground");
   g_hash_table_unref (options);
 
   return texture;
@@ -634,7 +635,8 @@ gdk_texture_new_from_stream_with_fg (GInputStream  *stream,
   pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
   if (pixbuf)
     {
-      *only_fg = pixbuf_is_only_fg (pixbuf);
+      if (only_fg)
+        *only_fg = pixbuf_is_only_fg (pixbuf);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
 G_GNUC_END_IGNORE_DEPRECATIONS
@@ -658,7 +660,8 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
   pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, cancellable, error);
   if (pixbuf)
     {
-      *only_fg = pixbuf_is_only_fg (pixbuf);
+      if (only_fg)
+        *only_fg = pixbuf_is_only_fg (pixbuf);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
 G_GNUC_END_IGNORE_DEPRECATIONS
@@ -681,7 +684,8 @@ gdk_texture_new_from_resource_at_scale (const char    *path,
   pixbuf = _gdk_pixbuf_new_from_resource_at_scale (path, width, height, error);
   if (pixbuf)
     {
-      *only_fg = pixbuf_is_only_fg (pixbuf);
+      if (only_fg)
+        *only_fg = pixbuf_is_only_fg (pixbuf);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
 G_GNUC_END_IGNORE_DEPRECATIONS
@@ -732,7 +736,8 @@ gdk_texture_new_from_filename_symbolic (const char    *filename,
   pixbuf = make_symbolic_pixbuf_from_filename (filename, width, height, scale, error);
   if (pixbuf)
     {
-      *only_fg = pixbuf_is_only_fg (pixbuf);
+      if (only_fg)
+        *only_fg = pixbuf_is_only_fg (pixbuf);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
 G_GNUC_END_IGNORE_DEPRECATIONS
@@ -756,7 +761,8 @@ gdk_texture_new_from_resource_symbolic (const char  *path,
   pixbuf = make_symbolic_pixbuf_from_resource (path, width, height, scale, error);
   if (pixbuf)
     {
-      *only_fg = pixbuf_is_only_fg (pixbuf);
+      if (only_fg)
+        *only_fg = pixbuf_is_only_fg (pixbuf);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
 G_GNUC_END_IGNORE_DEPRECATIONS
@@ -780,7 +786,8 @@ gdk_texture_new_from_file_symbolic (GFile       *file,
   pixbuf = make_symbolic_pixbuf_from_file (file, width, height, scale, error);
   if (pixbuf)
     {
-      *only_fg = pixbuf_is_only_fg (pixbuf);
+      if (only_fg)
+        *only_fg = pixbuf_is_only_fg (pixbuf);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       texture = gdk_texture_new_for_pixbuf (pixbuf);
 G_GNUC_END_IGNORE_DEPRECATIONS
