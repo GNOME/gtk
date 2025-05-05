@@ -536,3 +536,32 @@ gtk_openuri_portal_open_uri_finish (GAsyncResult  *result,
 
   return g_task_propagate_boolean (G_TASK (result), error);
 }
+
+gboolean
+gtk_openuri_portal_can_open (const char *uri)
+{
+  const char *scheme;
+  GVariantBuilder opt_builder;
+  gboolean supported;
+
+  scheme = g_uri_peek_scheme (uri);
+  if (!scheme)
+    return FALSE;
+
+  if (!init_openuri_portal ())
+    return FALSE;
+
+  if (gtk_xdp_open_uri_get_version (openuri) < 5)
+    return TRUE;
+
+  g_variant_builder_init (&opt_builder, G_VARIANT_TYPE_VARDICT);
+  if (!gtk_xdp_open_uri_call_scheme_supported_sync (openuri,
+                                                    scheme,
+                                                    g_variant_builder_end (&opt_builder),
+                                                    &supported,
+                                                    NULL,
+                                                    NULL))
+   return TRUE;
+
+  return supported;
+}
