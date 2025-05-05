@@ -459,6 +459,71 @@ test_sections (void)
   g_object_unref (map);
 }
 
+static void
+test_changes (void)
+{
+  GtkMapListModel *map;
+  GListStore *store;
+  GObject *object[2];
+  GObject *item1;
+
+  store = new_store (1, 0, 1);
+  map = new_model (G_LIST_MODEL (store));
+  assert_model (map, "");
+  assert_changes (map, "");
+
+  // Add item to `store`
+  object[0] = g_object_new (G_TYPE_OBJECT, NULL);
+  g_object_set_qdata (object[0], number_quark, GUINT_TO_POINTER (1));
+  g_list_store_insert (store, 0, object[0]);
+  g_object_unref (object[0]);
+
+  assert_model (map, "2");
+  assert_changes (map, "+0*");
+
+  // Maintain a reference to the mapped item. This is crucial
+  // to reproduce the bug.
+  item1 = g_list_model_get_item (G_LIST_MODEL (map), 0);
+
+  // Add another item to `store`
+  object[0] = g_object_new (G_TYPE_OBJECT, NULL);
+  g_object_set_qdata (object[0], number_quark, GUINT_TO_POINTER (2));
+  g_list_store_insert (store, 0, object[0]);
+  g_object_unref (object[0]);
+
+  assert_model (map, "4 2");
+  assert_changes (map, "+0*");
+
+  g_object_unref (item1);
+  item1 = g_list_model_get_item (G_LIST_MODEL (map), 0);
+
+  object[0] = g_object_new (G_TYPE_OBJECT, NULL);
+  g_object_set_qdata (object[0], number_quark, GUINT_TO_POINTER (3));
+  object[1] = g_object_new (G_TYPE_OBJECT, NULL);
+  g_object_set_qdata (object[1], number_quark, GUINT_TO_POINTER (4));
+
+  g_list_store_splice (store, 1, 0, (gpointer *) object, 2);
+
+  g_object_unref (object[0]);
+  g_object_unref (object[1]);
+
+  assert_model (map, "4 6 8 2");
+  assert_changes (map, "1+2*");
+
+  g_object_unref (item1);
+  item1 = g_list_model_get_item (G_LIST_MODEL (map), 0);
+
+  g_list_store_splice (store, 0, 2, NULL, 0);
+
+  assert_model (map, "8 2");
+  assert_changes (map, "0-2*");
+
+  g_object_unref (item1);
+
+  g_object_unref (map);
+  g_object_unref (store);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -476,6 +541,7 @@ main (int argc, char *argv[])
   g_test_add_func ("/maplistmodel/remove_items", test_remove_items);
   g_test_add_func ("/maplistmodel/splice", test_splice);
   g_test_add_func ("/maplistmodel/sections", test_sections);
+  g_test_add_func ("/maplistmodel/changes", test_changes);
 
   return g_test_run ();
 }
