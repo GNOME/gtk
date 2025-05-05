@@ -85,6 +85,10 @@
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include <string.h>
 
+#ifdef HAVE_GLYCIN
+#include <glycin-1/glycin.h>
+#endif
+
 typedef struct _GtkFileFilterClass GtkFileFilterClass;
 typedef struct _FilterRule FilterRule;
 
@@ -768,9 +772,34 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
 void
 gtk_file_filter_add_image_formats (GtkFileFilter *filter)
 {
+#ifdef HAVE_GLYCIN
+  FilterRule *rule;
+  GPtrArray *array;
+  char **formats;
+
+  g_return_if_fail (GTK_IS_FILE_FILTER (filter));
+
+  rule = g_new (FilterRule, 1);
+  rule->type = FILTER_RULE_IMAGE_FORMATS;
+
+  array = g_ptr_array_new ();
+
+  formats = gly_loader_get_mime_types ();
+  for (int i = 0; formats[i]; i++)
+    g_ptr_array_add (array, g_content_type_from_mime_type (formats[i]));
+  g_strfreev (formats);
+
+  g_ptr_array_add (array, NULL);
+
+  rule->u.content_types = (char **)g_ptr_array_free (array, FALSE);
+
+  file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
+  file_filter_add_rule (filter, rule);
+#else
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_file_filter_add_pixbuf_formats (filter);
 G_GNUC_END_IGNORE_DEPRECATIONS
+#endif
 }
 
 /**
