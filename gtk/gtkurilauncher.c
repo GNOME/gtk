@@ -253,9 +253,38 @@ show_uri_done (GObject      *source,
 
   g_object_unref (task);
 }
+
+static gboolean
+gtk_can_show_uri (const char *uri)
+{
+  const char *scheme;
+  GAppInfo *app_info;
+
+  scheme = g_uri_peek_scheme (uri);
+  if (!scheme)
+    return FALSE;
+
+  app_info = g_app_info_get_default_for_uri_scheme (scheme);
+
+  if (!app_info)
+    {
+      GFile *file = g_file_new_for_uri (uri);
+      app_info = g_file_query_default_handler (file, NULL, NULL);
+      g_object_unref (file);
+    }
+
+  if (app_info)
+    {
+      g_object_unref (app_info);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 G_GNUC_END_IGNORE_DEPRECATIONS
 
- /* }}} */
+  /* }}} */
 /* {{{ Async API */
 
 /**
@@ -353,6 +382,52 @@ gtk_uri_launcher_launch_finish (GtkUriLauncher  *self,
   g_return_val_if_fail (g_task_get_source_tag (G_TASK (result)) == gtk_uri_launcher_launch, FALSE);
 
   return g_task_propagate_boolean (G_TASK (result), error);
+}
+
+/* }}}  */
+/* {{{ Misc API */
+
+/**
+ * gtk_uri_launcher_can_launch:
+ * @self: an uri launcher
+ * @parent: (nullable): the parent window
+ *
+ * Returns whether the launcher is likely to succeed
+ * in launching an application for its uri.
+ *
+ * This can be used to disable controls that trigger
+ * the launcher when they are known not to work.
+ *
+ * Returns: false if the launcher is known not to support
+ *   the uri, true otherwise
+ *
+ * Since: 4.20
+ */
+gboolean
+gtk_uri_launcher_can_launch (GtkUriLauncher *self,
+                             GtkWindow      *parent)
+{
+#ifndef G_OS_WIN32
+  GdkDisplay *display;
+#endif
+
+  if (self->uri == NULL)
+    return FALSE;
+
+  if (!g_uri_is_valid (self->uri, G_URI_FLAGS_NONE, NULL))
+    return FALSE;
+
+#ifndef G_OS_WIN32
+  if (parent)
+    display = gtk_widget_get_display (GTK_WIDGET (parent));
+  else
+    display = gdk_display_get_default ();
+
+  if (gdk_display_should_use_portal (display, PORTAL_OPENURI_INTERFACE, 3))
+    return gtk_openuri_portal_can_open (self->uri);
+#endif
+
+  return gtk_can_show_uri (self->uri);
 }
 
 /* }}} */

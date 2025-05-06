@@ -54,4 +54,6 @@ void     gtk_openuri_portal_open_uri_async  (const char          *uri,
 gboolean gtk_openuri_portal_open_uri_finish (GAsyncResult        *result,
                                              GError             **error);
 
+gboolean gtk_openuri_portal_can_open        (const char *uri);
+
 G_END_DECLS

@@ -49,9 +49,13 @@ void             gtk_uri_launcher_launch                      (GtkUriLauncher   
                                                                gpointer             user_data);
 
 GDK_AVAILABLE_IN_4_10
-gboolean         gtk_uri_launcher_launch_finish               (GtkUriLauncher     *self,
+gboolean         gtk_uri_launcher_launch_finish               (GtkUriLauncher      *self,
                                                                GAsyncResult        *result,
                                                                GError             **error);
 
+
+GDK_AVAILABLE_IN_4_20
+gboolean        gtk_uri_launcher_can_launch                   (GtkUriLauncher      *self,
+                                                               GtkWindow           *parent);
 
 G_END_DECLS
