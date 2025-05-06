@@ -24,7 +24,13 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/loaders/gdkpngprivate.h"
 
+#ifdef HAVE_GLYCIN
+#include <glycin-1/glycin.h>
+#endif
+
 /* {{{ Pixbuf helpers */
+
+#ifndef HAVE_GLYCIN
 
 static inline gboolean
 pixbuf_is_only_fg (GdkPixbuf *pixbuf)
@@ -84,46 +90,6 @@ load_from_stream (GdkPixbufLoader  *loader,
 }
 
 static void
-size_prepared_cb (GdkPixbufLoader *loader,
-                  int              width,
-                  int              height,
-                  gpointer         data)
-{
-  double *scale = data;
-
-  width = MAX (*scale * width, 1);
-  height = MAX (*scale * height, 1);
-
-  gdk_pixbuf_loader_set_size (loader, width, height);
-}
-
-/* Like gdk_pixbuf_new_from_stream_at_scale, but
- * load the image at its original size times the
- * given scale.
- */
-static GdkPixbuf *
-_gdk_pixbuf_new_from_stream_scaled (GInputStream  *stream,
-                                    double         scale,
-                                    GCancellable  *cancellable,
-                                    GError       **error)
-{
-  GdkPixbufLoader *loader;
-  GdkPixbuf *pixbuf;
-
-  loader = gdk_pixbuf_loader_new ();
-
-  if (scale != 0)
-    g_signal_connect (loader, "size-prepared",
-                      G_CALLBACK (size_prepared_cb), &scale);
-
-  pixbuf = load_from_stream (loader, stream, cancellable, error);
-
-  g_object_unref (loader);
-
-  return pixbuf;
-}
-
-static void
 size_prepared_cb2 (GdkPixbufLoader *loader,
                    int              width,
                    int              height,
@@ -155,50 +121,7 @@ size_prepared_cb2 (GdkPixbufLoader *loader,
   gdk_pixbuf_loader_set_size (loader, width, height);
 }
 
-static GdkPixbuf *
-_gdk_pixbuf_new_from_stream_at_scale (GInputStream  *stream,
-                                      int            width,
-                                      int            height,
-                                      GCancellable  *cancellable,
-                                      GError       **error)
-{
-  GdkPixbufLoader *loader;
-  GdkPixbuf *pixbuf;
-  int scales[3];
-
-  loader = gdk_pixbuf_loader_new ();
-
-  scales[0] = width;
-  scales[1] = height;
-  scales[2] = TRUE;
-  g_signal_connect (loader, "size-prepared",
-                    G_CALLBACK (size_prepared_cb2), scales);
-
-  pixbuf = load_from_stream (loader, stream, cancellable, error);
-
-  g_object_unref (loader);
-
-  return pixbuf;
-}
-
-static GdkPixbuf *
-_gdk_pixbuf_new_from_resource_at_scale (const char   *resource_path,
-                                        int           width,
-                                        int           height,
-                                        GError      **error)
-{
-  GInputStream *stream;
-  GdkPixbuf *pixbuf;
-
-  stream = g_resources_open_stream (resource_path, 0, error);
-  if (stream == NULL)
-    return NULL;
-
-  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, NULL, error);
-  g_object_unref (stream);
-
-  return pixbuf;
-}
+#endif
 
 /* }}} */
 /* {{{ Symbolic processing */
@@ -605,21 +528,7 @@ gdk_texture_new_from_stream_with_fg (GInputStream  *stream,
                                      GCancellable  *cancellable,
                                      GError       **error)
 {
-  GdkPixbuf *pixbuf;
-  GdkTexture *texture = NULL;
-
-  pixbuf = _gdk_pixbuf_new_from_stream_scaled (stream, 0, cancellable, error);
-  if (pixbuf)
-    {
-      if (only_fg)
-        *only_fg = pixbuf_is_only_fg (pixbuf);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      texture = gdk_texture_new_for_pixbuf (pixbuf);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      g_object_unref (pixbuf);
-    }
-
-  return texture;
+  return gdk_texture_new_from_stream_at_scale (stream, 0, 0, only_fg, cancellable, error);
 }
 
 GdkTexture *
@@ -630,21 +539,77 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
                                       GCancellable  *cancellable,
                                       GError       **error)
 {
-  GdkPixbuf *pixbuf;
-  GdkTexture *texture = NULL;
+#ifdef HAVE_GLYCIN
+  GlyLoader *loader;
+  GlyImage *image;
+  GlyFrame *frame;
+  GdkTexture *texture;
 
-  pixbuf = _gdk_pixbuf_new_from_stream_at_scale (stream, width, height, cancellable, error);
-  if (pixbuf)
+  loader = gly_loader_new_for_stream (stream);
+  image = gly_loader_load (loader, NULL);
+  g_clear_object (&loader);
+  if (image == NULL)
+    return NULL;
+
+  if (width == 0 || height == 0)
     {
-      if (only_fg)
-        *only_fg = pixbuf_is_only_fg (pixbuf);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      texture = gdk_texture_new_for_pixbuf (pixbuf);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      g_object_unref (pixbuf);
+      frame = gly_image_next_frame (image, NULL);
+    }
+  else
+    {
+      GlyFrameRequest *request;
+
+      request = gly_frame_request_new ();
+      gly_frame_request_set_scale (request, width, height);
+
+      frame = gly_image_get_specific_frame (image, request, NULL);
+      g_object_unref (request);
     }
 
+  g_clear_object (&image);
+  if (frame == NULL)
+    return NULL;
+
+  texture = gdk_memory_texture_new (gly_frame_get_width (frame),
+                                    gly_frame_get_height (frame),
+                                    (GdkMemoryFormat) gly_frame_get_memory_format (frame),
+                                    gly_frame_get_buf_bytes (frame),
+                                    gly_frame_get_stride (frame));
+  g_clear_object (&frame);
+
+  if (only_fg)
+    *only_fg = FALSE; /* FIXME */
+
   return texture;
+#else
+  GdkPixbufLoader *loader;
+  GdkPixbuf *pixbuf;
+  int scales[3];
+  GdkTexture *texture;
+
+  loader = gdk_pixbuf_loader_new ();
+
+  scales[0] = width;
+  scales[1] = height;
+  scales[2] = TRUE;
+  g_signal_connect (loader, "size-prepared",
+                    G_CALLBACK (size_prepared_cb2), scales);
+
+  pixbuf = load_from_stream (loader, stream, cancellable, error);
+
+  g_object_unref (loader);
+
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+  texture = gdk_texture_new_for_pixbuf (pixbuf);
+G_GNUC_END_IGNORE_DEPRECATIONS
+
+  if (only_fg)
+    *only_fg = pixbuf_is_only_fg (pixbuf);
+
+  g_object_unref (pixbuf);
+
+  return texture;
+#endif
 }
 
 GdkTexture *
@@ -654,19 +619,28 @@ gdk_texture_new_from_resource_at_scale (const char    *path,
                                         gboolean      *only_fg,
                                         GError       **error)
 {
-  GdkPixbuf *pixbuf;
+  GBytes *bytes;
   GdkTexture *texture = NULL;
 
-  pixbuf = _gdk_pixbuf_new_from_resource_at_scale (path, width, height, error);
-  if (pixbuf)
+  bytes = g_resources_lookup_data (path, 0, error);
+  if (!bytes)
+    return NULL;
+
+  if (gdk_texture_can_load (bytes))
     {
-      if (only_fg)
-        *only_fg = pixbuf_is_only_fg (pixbuf);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      texture = gdk_texture_new_for_pixbuf (pixbuf);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      g_object_unref (pixbuf);
+      /* We know these formats can't be scaled */
+      texture = gdk_texture_new_from_bytes_with_fg (bytes, only_fg, NULL);
     }
+  else
+    {
+      GInputStream *stream;
+
+      stream = g_memory_input_stream_new_from_bytes (bytes);
+      texture = gdk_texture_new_from_stream_at_scale (stream, width, height, only_fg, NULL, NULL);
+      g_object_unref (stream);
+    }
+
+  g_bytes_unref (bytes);
 
   return texture;
 }
@@ -740,7 +714,6 @@ gdk_texture_new_from_resource_symbolic (const char  *path,
   g_bytes_unref (bytes);
 
   return texture;
-
 }
 
 GdkTexture *
@@ -772,6 +745,8 @@ gdk_texture_new_from_file_symbolic (GFile     *file,
 /* }}} */
 /* {{{ Scaled paintable API */
 
+#ifndef HAVE_GLYCIN
+
 typedef struct {
   double scale;
 } LoaderData;
@@ -798,6 +773,8 @@ on_loader_size_prepared (GdkPixbufLoader *loader,
                               height * loader_data->scale);
 }
 
+#endif
+
 static GdkPaintable *
 gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
                                      double  scale)
@@ -809,6 +786,38 @@ gdk_paintable_new_from_bytes_scaled (GBytes *bytes,
     }
   else
     {
+#ifdef HAVE_GLYCIN
+      GlyLoader *loader;
+      GlyImage *image;
+      GlyFrameRequest *request;
+      GlyFrame *frame;
+      GdkTexture *texture;
+
+      loader = gly_loader_new_for_bytes (bytes);
+      image = gly_loader_load (loader, NULL);
+      g_object_unref (loader);
+      if (image == NULL)
+        return NULL;
+
+      request = gly_frame_request_new ();
+      gly_frame_request_set_scale (request,
+                                   (uint32_t) (gly_image_get_width (image) * scale),
+                                   (uint32_t) (gly_image_get_height (image) * scale));
+
+      frame = gly_image_get_specific_frame (image, request, NULL);
+      g_object_unref (request);
+      if (frame == NULL)
+        return NULL;
+
+      texture = gdk_memory_texture_new (gly_frame_get_width (frame),
+                                        gly_frame_get_height (frame),
+                                        (GdkMemoryFormat) gly_frame_get_memory_format (frame),
+                                        gly_frame_get_buf_bytes (frame),
+                                        gly_frame_get_stride (frame));
+      g_object_unref (frame);
+
+      return GDK_PAINTABLE (texture);
+#else
       GdkPixbufLoader *loader;
       gboolean success;
       GdkTexture *texture;
@@ -845,6 +854,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
       g_object_unref (texture);
 
       return paintable;
+#endif
     }
 }
 
