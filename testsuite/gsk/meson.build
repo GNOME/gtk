@@ -257,17 +257,11 @@ variants = {
 
 compare_xfails = {
   'gl': {
-    # the gradients are prone to rounding errors which become
-    # more pronounced in small clips, it seems
-    'radial-gradient-with-64-colorstops': ['plain','flip','rotate','repeate','mask','replay','clip','colorflip'],
-    'conic-gradient-with-64-colorstops': ['plain','flip','rotate','repeate','mask','replay','clip','colorflip'],
     'blur-child-bounds-oversize': ['clip'], # 6450
     'rounded-clip-with-huge-bounds': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'], # 6532
     'big-checkerboard': ['clipped'], # 6444
   },
   'vulkan': {
-    'radial-gradient-with-64-colorstops': ['clip', 'colorflip'],
-    'conic-gradient-with-64-colorstops': ['clip', 'colorflip'],
     'blur-child-bounds-oversize': ['clip'], # 6450
     'repeat-repeats-nested': ['clip'], # 6522
     'repeating-radial-gradient-edge-colors': ['colorflip'],
