@@ -396,6 +396,10 @@ gdk_content_deserializer_return_error (GdkContentDeserializer *deserializer,
  * @notify: destroy notify for @data
  *
  * Registers a function to deserialize object of a given type.
+ *
+ * Since 4.20, when looking up a deserializer to use, GTK will
+ * use the last registered deserializer for a given mime type,
+ * so applications can override the built-in deserializers.
  */
 void
 gdk_content_register_deserializer (const char                *mime_type,
@@ -432,7 +436,7 @@ lookup_deserializer (const char *mime_type,
 
   mime_type = g_intern_string (mime_type);
 
-  for (l = g_queue_peek_head_link (&deserializers); l; l = l->next)
+  for (l = g_queue_peek_tail_link (&deserializers); l; l = l->prev)
     {
       Deserializer *deserializer = l->data;
 

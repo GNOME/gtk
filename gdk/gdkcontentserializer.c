@@ -402,6 +402,10 @@ gdk_content_serializer_return_error (GdkContentSerializer *serializer,
  * @notify: destroy notify for @data
  *
  * Registers a function to serialize objects of a given type.
+ *
+ * Since 4.20, when looking up a serializer to use, GTK will
+ * use the last registered serializer for a given mime type,
+ * so applications can override the built-in serializers.
  */
 void
 gdk_content_register_serializer (GType                    type,
@@ -438,7 +442,7 @@ lookup_serializer (const char *mime_type,
 
   mime_type = g_intern_string (mime_type);
 
-  for (l = g_queue_peek_head_link (&serializers); l; l = l->next)
+  for (l = g_queue_peek_tail_link (&serializers); l; l = l->prev)
     {
       Serializer *serializer = l->data;
 
