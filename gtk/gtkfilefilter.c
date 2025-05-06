@@ -96,7 +96,7 @@ typedef enum {
   FILTER_RULE_PATTERN,
   FILTER_RULE_MIME_TYPE,
   FILTER_RULE_SUFFIX,
-  FILTER_RULE_IMAGE_FORMATS
+  FILTER_RULE_PIXBUF_FORMATS
 } FilterRuleType;
 
 struct _GtkFileFilterClass
@@ -224,7 +224,7 @@ filter_rule_free (FilterRule *rule)
       g_free (rule->u.pattern);
       break;
     case FILTER_RULE_MIME_TYPE:
-    case FILTER_RULE_IMAGE_FORMATS:
+    case FILTER_RULE_PIXBUF_FORMATS:
       g_strfreev (rule->u.content_types);
       break;
     default:
@@ -527,7 +527,7 @@ gtk_file_filter_buildable_init (GtkBuildableIface *iface)
  * [method@Gtk.FileFilter.add_mime_type],
  * [method@Gtk.FileFilter.add_pattern],
  * [method@Gtk.FileFilter.add_suffix] or
- * [method@Gtk.FileFilter.add_image_formats].
+ * [method@Gtk.FileFilter.add_pixbuf_formats].
  *
  * To create a filter that accepts any file, use:
  * ```c
@@ -714,8 +714,6 @@ gtk_file_filter_add_suffix (GtkFileFilter *filter,
  *
  * This is equivalent to calling [method@Gtk.FileFilter.add_mime_type]
  * for all the supported mime types.
- *
- * Deprecated: 4.20: Use [method@Gtk.FileFilter.add_image_formats] instead
  */
 void
 gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
@@ -727,7 +725,7 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
   g_return_if_fail (GTK_IS_FILE_FILTER (filter));
 
   rule = g_new (FilterRule, 1);
-  rule->type = FILTER_RULE_IMAGE_FORMATS;
+  rule->type = FILTER_RULE_PIXBUF_FORMATS;
 
   array = g_ptr_array_new ();
 
@@ -752,25 +750,6 @@ gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)
 
   file_filter_add_attribute (filter, G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE);
   file_filter_add_rule (filter, rule);
-}
-
-/**
- * gtk_file_filter_add_image_formats:
- * @filter: a file filter
- *
- * Adds a rule allowing image files in image formats supported by `GdkTexture`.
- *
- * This is equivalent to calling [method@Gtk.FileFilter.add_mime_type]
- * for all the supported mime types.
- *
- * Since: 4.20
- */
-void
-gtk_file_filter_add_image_formats (GtkFileFilter *filter)
-{
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-  gtk_file_filter_add_pixbuf_formats (filter);
-G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 /**
@@ -805,7 +784,7 @@ NSArray * _gtk_file_filter_get_as_pattern_nsstrings (GtkFileFilter *filter)
       switch (rule->type)
         {
         case FILTER_RULE_MIME_TYPE:
-        case FILTER_RULE_IMAGE_FORMATS:
+        case FILTER_RULE_PIXBUF_FORMATS:
           {
             int i;
 
@@ -861,7 +840,7 @@ void _gtk_file_filter_store_types_in_list (GtkFileFilter *filter, jobject list)
       switch (rule->type)
         {
         case FILTER_RULE_MIME_TYPE:
-        case FILTER_RULE_IMAGE_FORMATS:
+        case FILTER_RULE_PIXBUF_FORMATS:
           {
             for (gsize j = 0; rule->u.content_types[j] != NULL; j++)
               {
@@ -917,7 +896,7 @@ _gtk_file_filter_get_as_patterns (GtkFileFilter *filter)
           g_ptr_array_add (array, g_strdup (rule->u.pattern));
           break;
 
-        case FILTER_RULE_IMAGE_FORMATS:
+        case FILTER_RULE_PIXBUF_FORMATS:
           {
             GSList *formats, *l;
 
@@ -1005,7 +984,7 @@ gtk_file_filter_match (GtkFilter *filter,
           break;
 
         case FILTER_RULE_MIME_TYPE:
-        case FILTER_RULE_IMAGE_FORMATS:
+        case FILTER_RULE_PIXBUF_FORMATS:
           {
             const char *filter_content_type;
 
@@ -1080,13 +1059,13 @@ gtk_file_filter_to_gvariant (GtkFileFilter *filter)
           break;
 
         case FILTER_RULE_MIME_TYPE:
-        case FILTER_RULE_IMAGE_FORMATS:
+        case FILTER_RULE_PIXBUF_FORMATS:
           for (i = 0; rule->u.content_types[i]; i++)
             {
               g_variant_builder_add (&builder, "(us)", 1, rule->u.content_types[i]);
               if (name == NULL)
                 {
-                  if (rule->type == FILTER_RULE_IMAGE_FORMATS)
+                  if (rule->type == FILTER_RULE_PIXBUF_FORMATS)
                     name = g_strdup (_("Image"));
                   else
                     name = g_content_type_get_description (rule->u.content_types[i]);
