@@ -714,6 +714,9 @@ gtk_file_filter_add_suffix (GtkFileFilter *filter,
  *
  * This is equivalent to calling [method@Gtk.FileFilter.add_mime_type]
  * for all the supported mime types.
+ *
+ * Deprecated: 4.20: Use the api of your image loading framework (e.g. glycin)
+ *   to enumerate supported formats
  */
 void
 gtk_file_filter_add_pixbuf_formats (GtkFileFilter *filter)

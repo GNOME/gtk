@@ -246,14 +246,18 @@ test_variant_no_name (void)
   g_object_unref (filter);
 
   filter = gtk_file_filter_new ();
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_file_filter_add_pixbuf_formats (filter);
+G_GNUC_END_IGNORE_DEPRECATIONS
   variant = gtk_file_filter_to_gvariant (filter);
   g_variant_unref (variant);
   g_object_unref (filter);
 
   filter = gtk_file_filter_new ();
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_file_filter_add_pixbuf_formats (filter);
   gtk_file_filter_add_pixbuf_formats (filter);
+G_GNUC_END_IGNORE_DEPRECATIONS
   variant = gtk_file_filter_to_gvariant (filter);
   g_variant_unref (variant);
   g_object_unref (filter);
@@ -278,7 +282,9 @@ test_variant_no_name (void)
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_mime_type (filter, "image/png");
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_file_filter_add_pixbuf_formats (filter);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_file_filter_add_suffix (filter, "txt");
   gtk_file_filter_add_pattern (filter, "*.*");
   variant = gtk_file_filter_to_gvariant (filter);
@@ -286,7 +292,9 @@ test_variant_no_name (void)
   g_object_unref (filter);
 
   filter = gtk_file_filter_new ();
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_file_filter_add_pixbuf_formats (filter);
+G_GNUC_END_IGNORE_DEPRECATIONS
   gtk_file_filter_add_suffix (filter, "txt");
   gtk_file_filter_add_pattern (filter, "*.*");
   gtk_file_filter_add_mime_type (filter, "image/png");
@@ -298,7 +306,9 @@ test_variant_no_name (void)
   gtk_file_filter_add_suffix (filter, "txt");
   gtk_file_filter_add_pattern (filter, "*.*");
   gtk_file_filter_add_mime_type (filter, "image/png");
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   gtk_file_filter_add_pixbuf_formats (filter);
+G_GNUC_END_IGNORE_DEPRECATIONS
   variant = gtk_file_filter_to_gvariant (filter);
   g_variant_unref (variant);
   g_object_unref (filter);
