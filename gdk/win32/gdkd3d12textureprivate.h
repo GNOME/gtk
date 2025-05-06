@@ -1,5 +1,7 @@
 #pragma once
 
+#include <windows.h>
+
 #include "gdkd3d12texture.h"
 
 #include "gdkd3d12texturebuilder.h"

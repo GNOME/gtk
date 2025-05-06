@@ -25,9 +25,18 @@
 
 #include <gdk/gdktypes.h>
 
-#include <directx/d3d12.h>
-
 G_BEGIN_DECLS
+
+#ifndef __ID3D12Fence_FWD_DEFINED__
+#define __ID3D12Fence_FWD_DEFINED__
+typedef struct ID3D12Fence ID3D12Fence;
+#endif 	/* __ID3D12Fence_FWD_DEFINED__ */
+
+#ifndef __ID3D12Resource_FWD_DEFINED__
+#define __ID3D12Resource_FWD_DEFINED__
+typedef struct ID3D12Resource ID3D12Resource;
+#endif 	/* __ID3D12Resource_FWD_DEFINED__ */
+
 
 #define GDK_TYPE_D3D12_TEXTURE_BUILDER (gdk_d3d12_texture_builder_get_type ())
 GDK_AVAILABLE_IN_4_20
