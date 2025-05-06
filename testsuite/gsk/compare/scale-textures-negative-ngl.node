@@ -5,7 +5,7 @@ transform {
     child: container {
       texture {
         bounds: 0 0 50 50;
-        texture: url("data:,<svg width='50' height='50'><rect x='25' y='25' width='25' height='25' fill='red'/></svg>");
+        texture: url("data:;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAQUlEQVRo3u3RAQ0AIAwDwQ7/njcVQAJ3BppPEwAAAADgmjox0knv3livPCJEiBAhQoQIESJEiBAhQoQIESLkq5ABYt4CMJhVgV8AAAAASUVORK5CYII=");
       }
     }
   }
@@ -17,7 +17,7 @@ transform {
     child: container {
       texture {
         bounds: 0 0 50 50;
-        texture: url("data:,<svg width='50' height='50'><rect x='25' y='25' width='25' height='25' fill='lime'/></svg>");
+        texture: url("data:;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAQElEQVRo3u3RAQ0AIAwDwQ7/njcVQAJ3BppPEwAAAADgmjqy0undE+uVR4QIESJEiBAhQoQIESJEiBAhQoR8FTJh3wIwkNC9pwAAAABJRU5ErkJggg==");
       }
     }
   }
@@ -29,7 +29,7 @@ transform {
     child: container {
       texture {
         bounds: 0 0 50 50;
-        texture: url("data:,<svg width='50' height='50'><rect x='25' y='25' width='25' height='25' fill='blue'/></svg>");
+        texture: url("data:;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAQElEQVRo3u3RAQ0AMAgDQYZ/z0zFIGF3BppPIwAAAACAMadnpur1Qm55RIgQIUKECBEiRIgQIUKECBEiRMhXIRdg4AIwoUeBAAAAAABJRU5ErkJggg==");
       }
     }
   }
@@ -41,7 +41,7 @@ transform {
     child: container {
       texture {
         bounds: 0 0 50 50;
-        texture: url("data:,<svg width='50' height='50'><rect x='25' y='25' width='25' height='25' fill='yellow'/></svg>");
+        texture: url("data:;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAAQElEQVRo3u3RAQ0AIAACQbR/Z0yhbnpXgP1IAAAAAIBrxomRNt29MV95RIgQIUKECBEiRIgQIUKECBEiRMhXIQuLwAMvc5Ks9gAAAABJRU5ErkJggg==");
       }
     }
   }

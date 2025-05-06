@@ -3,6 +3,15 @@ clip {
   child: texture-scale {
     bounds: 0 0 19991 19991;
     filter: nearest;
-    texture: url('data:,<svg width="10" height="10" viewBox="0 0 10 10"><rect width="10" height="10" style="fill:red" /></svg>');
+    texture: memory {
+      format: BGRA8p;
+      width: 10;
+      height: 10;
+      offset: 0;
+      stride: 40;
+      data: url("data:application/gzip;base64,\
+H4sIAAAAAAACCmNg+P+fYRQPGgwALacVM5ABAAA=\
+");
+    }
   }
 }
