@@ -229,11 +229,19 @@ informative_render_tests = [
 ]
 
 renderers = [
-  { 'name': 'broadway' },
   { 'name': 'cairo' },
   { 'name': 'gl' },
-  { 'name': 'vulkan' },
 ]
+if broadway_enabled
+  renderers += [
+    { 'name': 'broadway' }
+  ]
+endif
+if have_vulkan
+  renderers += [
+    { 'name': 'vulkan' }
+  ]
+endif
 
 variants = {
   'plain': '--plain',
@@ -294,9 +302,7 @@ foreach renderer : renderers
       'TEST_FONT_DIR=@0@/fonts'.format(meson.current_source_dir())
     ]
 
-    if ((not testname.contains(exclude_term)) and
-        (renderer_name != 'broadway' or broadway_enabled) and
-        (renderer_name != 'vulkan' or have_vulkan))
+    if ((not testname.contains(exclude_term)))
 
       foreach variant : variants.keys()
         extra_suites = [ 'gsk-compare-' + variant + '-' + renderer_name ]

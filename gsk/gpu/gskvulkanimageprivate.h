@@ -78,12 +78,5 @@ VkFormat                gsk_vulkan_image_get_vk_format                  (GskVulk
 VkFramebuffer           gsk_vulkan_image_get_vk_framebuffer             (GskVulkanImage         *self,
                                                                          VkRenderPass            pass);
 
-static inline guint
-gsk_vulkan_mipmap_levels (gsize width,
-                          gsize height)
-{
-  return g_bit_nth_msf (MAX (width, height), -1) + 1;
-}
-
 G_END_DECLS
 
