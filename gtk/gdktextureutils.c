@@ -27,10 +27,23 @@
 #include "gtk/gtkdebug.h"
 #include "gtk/gtkenums.h"
 
-
 #include <librsvg/rsvg.h>
 
 /* {{{ svg helpers */
+
+#if !LIBRSVG_CHECK_VERSION (2,52,0)
+static gboolean
+rsvg_handle_get_intrinsic_size_in_pixels (RsvgHandle *handle, gdouble *out_width, gdouble *out_height)
+{
+  RsvgDimensionData dim;
+  rsvg_handle_get_dimensions (handle, &dim);
+  if (out_width)
+    *out_width = dim.width;
+  if (out_height)
+    *out_height = dim.height;
+  return TRUE;
+}
+#endif
 
 static GdkTexture *
 gdk_texture_new_from_rsvg (RsvgHandle  *handle,
@@ -54,9 +67,28 @@ gdk_texture_new_from_rsvg (RsvgHandle  *handle,
 
   cr = cairo_create (surface);
 
+#if !LIBRSVG_CHECK_VERSION (2,52,0)
+  {
+    RsvgDimensionData dim;
+    gdouble sx,sy,s;
+
+    rsvg_handle_get_dimensions (handle, &dim);
+    sx = (gdouble)width / dim.width;
+    sy = (gdouble)height / dim.height;
+    s = MIN (sx, sy);
+
+    cairo_scale (cr, s, s);
+  }
+
+  if (!rsvg_handle_render_cairo (handle, cr))
+    g_set_error (error, GDK_TEXTURE_ERROR, GDK_TEXTURE_ERROR_CORRUPT_IMAGE,
+                 "Error rendering SVG document (%s)", cairo_status_to_string (cairo_status (cr)));
+  else
+#else
   if (rsvg_handle_render_document (handle, cr,
                                    &(RsvgRectangle) { 0, 0, width, height },
                                    error))
+#endif
     {
       GBytes *bytes;
 
