@@ -337,7 +337,6 @@ struct _GtkIconTheme
 
   guint custom_theme         : 1;
   guint is_display_singleton : 1;
-  guint pixbuf_supports_svg  : 1;
   guint themes_valid         : 1;
 
   /* A list of all the themes needed to look up icons.
@@ -446,7 +445,6 @@ typedef struct
 {
   guint16 dir_index;    /* index in dirs */
   guint8 best_suffix;
-  guint8 best_suffix_no_svg;
 } IconThemeFile;
 
 typedef struct
@@ -493,8 +491,7 @@ static void              theme_destroy                    (IconTheme        *the
 static GtkIconPaintable *theme_lookup_icon                (IconTheme        *theme,
                                                            const char       *icon_name,
                                                            int               size,
-                                                           int               scale,
-                                                           gboolean          allow_svg);
+                                                           int               scale);
 static void              theme_subdir_load                (GtkIconTheme     *self,
                                                            IconTheme        *theme,
                                                            GKeyFile         *theme_file,
@@ -1234,41 +1231,6 @@ gtk_icon_theme_set_display (GtkIconTheme *self,
   g_object_thaw_notify (G_OBJECT (self));
 }
 
-/* Checks whether a loader for SVG files has been registered
- * with GdkPixbuf.
- */
-static gboolean
-pixbuf_supports_svg (void)
-{
-  GSList *formats;
-  GSList *tmp_list;
-  static int found_svg = -1;
-
-  if (found_svg != -1)
-    return found_svg;
-
-  formats = gdk_pixbuf_get_formats ();
-
-  found_svg = FALSE;
-  for (tmp_list = formats; tmp_list && !found_svg; tmp_list = tmp_list->next)
-    {
-      char **mime_types = gdk_pixbuf_format_get_mime_types (tmp_list->data);
-      char **mime_type;
-
-      for (mime_type = mime_types; *mime_type && !found_svg; mime_type++)
-        {
-          if (strcmp (*mime_type, "image/svg") == 0)
-            found_svg = TRUE;
-        }
-
-      g_strfreev (mime_types);
-    }
-
-  g_slist_free (formats);
-
-  return found_svg;
-}
-
 static void
 free_dir_mtime (IconThemeDirMtime *dir_mtime)
 {
@@ -1320,8 +1282,6 @@ gtk_icon_theme_init (GtkIconTheme *self)
   self->themes_valid = FALSE;
   self->themes = NULL;
   self->unthemed_icons = NULL;
-
-  self->pixbuf_supports_svg = pixbuf_supports_svg ();
 }
 
 static gboolean
@@ -2193,7 +2153,7 @@ real_choose_icon (GtkIconTheme      *self,
           icon_name = gtk_string_set_lookup (&self->icons, icon_names[i]);
           if (icon_name)
             {
-              icon = theme_lookup_icon (theme, icon_name, size, scale, self->pixbuf_supports_svg);
+              icon = theme_lookup_icon (theme, icon_name, size, scale);
               if (icon)
                 goto out;
             }
@@ -2209,7 +2169,7 @@ real_choose_icon (GtkIconTheme      *self,
           icon_name = gtk_string_set_lookup (&self->icons, icon_names[i]);
           if (icon_name)
             {
-              icon = theme_lookup_icon (theme, icon_name, size, scale, self->pixbuf_supports_svg);
+              icon = theme_lookup_icon (theme, icon_name, size, scale);
               if (icon)
                 goto out;
             }
@@ -2226,8 +2186,7 @@ real_choose_icon (GtkIconTheme      *self,
           icon = icon_paintable_new (icon_names[i], size, scale);
 
           /* A SVG icon, when allowed, beats out a XPM icon, but not a PNG icon */
-          if (self->pixbuf_supports_svg &&
-              unthemed_icon->svg_filename &&
+          if (unthemed_icon->svg_filename &&
               (!unthemed_icon->no_svg_filename ||
                suffix_from_name (unthemed_icon->no_svg_filename) < ICON_CACHE_FLAG_PNG_SUFFIX))
             icon->filename = g_strdup (unthemed_icon->svg_filename);
@@ -2948,14 +2907,13 @@ suffix_from_name (const char *name)
 }
 
 static IconCacheFlag
-best_suffix (IconCacheFlag suffix,
-             gboolean      allow_svg)
+best_suffix (IconCacheFlag suffix)
 {
   if ((suffix & ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX) != 0)
     return ICON_CACHE_FLAG_SYMBOLIC_PNG_SUFFIX;
   else if ((suffix & ICON_CACHE_FLAG_PNG_SUFFIX) != 0)
     return ICON_CACHE_FLAG_PNG_SUFFIX;
-  else if (allow_svg && ((suffix & ICON_CACHE_FLAG_SVG_SUFFIX) != 0))
+  else if ((suffix & ICON_CACHE_FLAG_SVG_SUFFIX) != 0)
     return ICON_CACHE_FLAG_SVG_SUFFIX;
   else if ((suffix & ICON_CACHE_FLAG_XPM_SUFFIX) != 0)
     return ICON_CACHE_FLAG_XPM_SUFFIX;
@@ -3032,8 +2990,7 @@ static GtkIconPaintable *
 theme_lookup_icon (IconTheme   *theme,
                    const char *icon_name, /* interned */
                    int          size,
-                   int          scale,
-                   gboolean     allow_svg)
+                   int          scale)
 {
   IconThemeDirSize *min_dir_size;
   IconThemeFile *min_file;
@@ -3058,11 +3015,7 @@ theme_lookup_icon (IconTheme   *theme,
 
       file = &g_array_index (dir_size->icon_files, IconThemeFile, GPOINTER_TO_INT(file_index));
 
-
-      if (allow_svg)
-        best_suffix = file->best_suffix;
-      else
-        best_suffix = file->best_suffix_no_svg;
+      best_suffix = file->best_suffix;
 
       if (best_suffix == ICON_CACHE_FLAG_NONE)
         continue;
@@ -3262,8 +3215,7 @@ theme_add_icon_file (IconTheme *theme,
     return;
 
   new_file.dir_index = dir_index;
-  new_file.best_suffix = best_suffix (suffixes, TRUE);
-  new_file.best_suffix_no_svg = best_suffix (suffixes, FALSE);
+  new_file.best_suffix = best_suffix (suffixes);
 
   index = dir_size->icon_files->len;
   g_array_append_val (dir_size->icon_files, new_file);
