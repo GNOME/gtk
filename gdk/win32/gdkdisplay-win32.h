@@ -29,6 +29,9 @@
 /* Used for active language or text service change notifications */
 #include <msctf.h>
 
+/* Used for PROCESS_DPI_AWARENESS */
+#include <shellscalingapi.h>
+
 #ifdef HAVE_EGL
 # include <epoxy/egl.h>
 #endif
@@ -53,12 +56,6 @@ struct _GdkWin32CbDnDItems
 typedef struct _GdkWin32CbDnDItems GdkWin32CbDnDItems;
 
 /* Define values used to set DPI-awareness */
-typedef enum _GdkWin32ProcessDpiAwareness {
-  PROCESS_DPI_UNAWARE = 0,
-  PROCESS_SYSTEM_DPI_AWARE = 1,
-  PROCESS_PER_MONITOR_DPI_AWARE = 2,
-  PROCESS_PER_MONITOR_DPI_AWARE_V2 = 3, /* Newer HiDPI type for Windows 10 1607+ */
-} GdkWin32ProcessDpiAwareness;
 
 /* From https://docs.microsoft.com/en-US/windows/win32/hidpi/dpi-awareness-context */
 /* DPI_AWARENESS_CONTEXT is declared by DEFINE_HANDLE */
@@ -74,34 +71,9 @@ typedef enum _GdkWin32ProcessDpiAwareness {
 #define DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2 (HANDLE)-4
 #endif
 
-typedef enum _GdkWin32MonitorDpiType { 
-  MDT_EFFECTIVE_DPI  = 0,
-  MDT_ANGULAR_DPI    = 1,
-  MDT_RAW_DPI        = 2,
-  MDT_DEFAULT        = MDT_EFFECTIVE_DPI
-} GdkWin32MonitorDpiType;
-
-/* APIs from shcore.dll */
-typedef HRESULT (WINAPI *funcSetProcessDpiAwareness) (GdkWin32ProcessDpiAwareness value);
-typedef HRESULT (WINAPI *funcGetProcessDpiAwareness) (HANDLE handle, GdkWin32ProcessDpiAwareness *awareness);
-typedef HRESULT (WINAPI *funcGetDpiForMonitor)       (HMONITOR                monitor,
-                                                      GdkWin32MonitorDpiType  dpi_type,
-                                                      UINT                   *dpi_x,
-                                                      UINT                   *dpi_y);
-
-typedef struct _GdkWin32ShcoreFuncs
-{
-  HMODULE hshcore;
-  funcSetProcessDpiAwareness setDpiAwareFunc;
-  funcGetProcessDpiAwareness getDpiAwareFunc;
-  funcGetDpiForMonitor getDpiForMonitorFunc;
-} GdkWin32ShcoreFuncs;
-
-/* DPI awareness APIs from user32.dll */
-typedef BOOL (WINAPI *funcSetProcessDPIAware) (void);
-typedef BOOL (WINAPI *funcIsProcessDPIAware)  (void);
-
 /*
+ * DPI awareness APIs from user32.dll, on later releases of Windows 10
+ *
  * funcSPDAC is SetProcessDpiAwarenessContext() and
  * funcGTDAC is GetThreadDpiAwarenessContext() and
  * funcADACE is AreDpiAwarenessContextsEqual() provided by user32.dll, on
@@ -115,8 +87,6 @@ typedef BOOL (WINAPI *funcADACE) (void *, void *);
 
 typedef struct _GdkWin32User32DPIFuncs
 {
-  funcSetProcessDPIAware setDpiAwareFunc;
-  funcIsProcessDPIAware isDpiAwareFunc;
   funcSPDAC setPDAC;
   funcGTDAC getTDAC;
   funcADACE areDACEqual;
@@ -213,10 +183,9 @@ struct _GdkWin32Display
 #endif
 
   /* HiDPI Items */
-  GdkWin32ProcessDpiAwareness dpi_aware_type;
+  PROCESS_DPI_AWARENESS dpi_aware_type;
   guint surface_scale;
 
-  GdkWin32ShcoreFuncs shcore_funcs;
   GdkWin32User32DPIFuncs user32_dpi_funcs;
 
   GdkWin32TabletInputAPI tablet_input_api;
