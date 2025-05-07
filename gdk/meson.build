@@ -15,6 +15,7 @@ gdk_public_sources = files([
   'gdkcontentproviderimpl.c',
   'gdkcontentserializer.c',
   'gdkcursor.c',
+  'gdkdamagetracker.c',
   'gdkdevice.c',
   'gdkdevicepad.c',
   'gdkdevicetool.c',
