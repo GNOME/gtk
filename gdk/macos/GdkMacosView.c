@@ -33,20 +33,6 @@
 
 @implementation GdkMacosView
 
--(id)initWithFrame:(NSRect)frame
-{
-  if ((self = [super initWithFrame:frame]))
-    {
-      GdkMacosLayer *layer = [GdkMacosLayer layer];
-
-      [self setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawNever];
-      [self setLayer:layer];
-      [self setWantsLayer:YES];
-    }
-
-  return self;
-}
-
 /**
  * If this view moves to a screen that has a different resolution scale (eg. Standard <=> Retina),
  * update the contentsScale of the layer, which will trigger a Vulkan VK_SUBOPTIMAL_KHR result, which

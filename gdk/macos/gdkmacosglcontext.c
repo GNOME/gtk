@@ -24,6 +24,8 @@
 #include <OpenGL/CGLIOSurface.h>
 #include <QuartzCore/QuartzCore.h>
 
+#import "GdkMacosLayer.h"
+
 #include "gdkmacosbuffer-private.h"
 #include "gdkmacosglcontext-private.h"
 #include "gdkmacossurface-private.h"
@@ -449,6 +451,15 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 
   if (surface != NULL)
     {
+      NSView *view = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface));
+
+      if (!GDK_IS_MACOS_LAYER ([view layer]))
+        {
+          [view setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawNever];
+          [view setLayer:[GdkMacosLayer layer]];
+          [view setWantsLayer:YES];
+        }
+
       /* Setup initial swap rectangle. We might not actually need this
        * anymore though as we are rendering to an IOSurface and we have
        * a scissor clip when rendering to it.
