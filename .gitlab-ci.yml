@@ -66,7 +66,7 @@ default:
 
 .container.fedora:
   variables:
-    BASE_TAG: '2025-04-29.0'
+    BASE_TAG: '2025-05-31.0'
     FDO_DISTRIBUTION_VERSION: 42
     FDO_DISTRIBUTION_TAG: "x86_64-${BASE_TAG}"
     FDO_DISTRIBUTION_PACKAGES:
@@ -83,6 +83,7 @@ default:
       graphviz
       libasan
       libcloudproviders-devel
+      librsvg2-devel
       libubsan
       meson
       mingw64-filesystem
