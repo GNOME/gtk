@@ -57,6 +57,7 @@ gdk_win32_deps = [
   pangowin32_dep, # FIXME
   cc.find_library('hid'),
   cc.find_library('opengl32'),
+  cc.find_library('shcore'),
 ]
 
 libgdk_win32 = static_library('gdk-win32',
