@@ -133,6 +133,63 @@ _gdk_other_api_failed (const char *where,
   g_warning ("%s: %s failed", where, api);
 }
 
+G_DEFINE_QUARK (gdk-win32-hresult-error-quark, gdk_win32_hresult_error)
+
+/*<private>
+ * gdk_win32_check_hresult:
+ * @hr: HRESULT to check
+ * @error: error to set on failure
+ * @format: (optional): format string for an optional
+ *   prefix message
+ * ...: arguments for the format string
+ *
+ * Checks a HRESULT with `SUCCEEDED(hr)` and if it didn't
+ * succeed, sets a GError. The code of the error will be the
+ * `hr` and the message will contain the formatted string if
+ * provided and the HRESULT error message as given by
+ * g_win32_error_message().
+ *
+ * Returns: TRUE if `SUCCEEDED(hr)`, FALSE otherwise
+ */
+gboolean
+gdk_win32_check_hresult (HRESULT     hr,
+                         GError    **error,
+                         const char *format,
+                         ...)
+{
+  g_assert (error == NULL || *error == NULL);
+
+  if (SUCCEEDED (hr))
+    return TRUE;
+
+  if (error == NULL)
+    {
+      /* skip */
+    }
+  else if (format)
+    {
+      va_list args;
+      char *err_msg, *prefix;
+
+      va_start (args, format);
+      prefix = g_strdup_vprintf (format, args);
+      va_end (args);
+
+      err_msg = g_win32_error_message (hr);
+      g_set_error (error, GDK_WIN32_HRESULT_ERROR, hr, "%s: %s", prefix, err_msg);
+      g_free (err_msg);
+    }
+  else
+    {
+      char *err_msg;
+
+      err_msg = g_win32_error_message (hr);
+      g_set_error_literal (error, GDK_WIN32_HRESULT_ERROR, hr, err_msg);
+      g_free (err_msg);
+    }
+
+  return FALSE;
+}
 
 /*
  * Like g_strdup_printf, but to a static buffer. Return value does not

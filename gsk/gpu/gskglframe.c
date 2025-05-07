@@ -15,6 +15,9 @@
 #include "gdkglcontextprivate.h"
 #include "gdkgltextureprivate.h"
 
+#ifdef GDK_WINDOWING_WIN32
+#include "win32/gdkd3d12textureprivate.h"
+#endif
 struct _GskGLFrame
 {
   GskGpuFrame parent_instance;
@@ -91,6 +94,8 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
           image = gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                 texture,
                                                 gdk_gl_texture_get_id (gl_texture),
+                                                0,
+                                                0,
                                                 FALSE,
                                                 gdk_gl_texture_has_mipmap (gl_texture) ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) : 0,
                                                 GSK_GPU_CONVERSION_NONE);
@@ -181,6 +186,8 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
               return gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                    texture,
                                                    tex_id,
+                                                   0,
+                                                   0,
                                                    TRUE,
                                                    (external ? GSK_GPU_IMAGE_EXTERNAL : 0),
                                                    conv);
@@ -188,6 +195,28 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
         }
     }
 #endif  /* HAVE_DMABUF && HAVE_EGL */
+#ifdef GDK_WINDOWING_WIN32
+  else if (GDK_IS_D3D12_TEXTURE (texture))
+    {
+      guint tex_id, mem_id, semaphore_id;
+
+      tex_id = gdk_d3d12_texture_import_gl (GDK_D3D12_TEXTURE (texture),
+                                            GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+                                            &mem_id,
+                                            &semaphore_id);
+      if (tex_id)
+        {
+          return gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                               texture,
+                                               tex_id,
+                                               mem_id,
+                                               semaphore_id,
+                                               TRUE,
+                                               0,
+                                               GSK_GPU_CONVERSION_NONE);
+        }
+    }
+#endif
 
   return GSK_GPU_FRAME_CLASS (gsk_gl_frame_parent_class)->upload_texture (frame, with_mipmap, texture);
 }

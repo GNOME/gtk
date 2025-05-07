@@ -31,6 +31,9 @@
 
 #ifdef GDK_RENDERING_VULKAN
 #include <vulkan/vulkan.h>
+#ifdef GDK_WINDOWING_WIN32
+#include <vulkan/vulkan_win32.h>
+#endif
 #endif
 
 G_BEGIN_DECLS
@@ -44,11 +47,14 @@ typedef struct _GdkDisplayClass GdkDisplayClass;
 
 typedef enum {
   GDK_VULKAN_FEATURE_DMABUF                     = 1 << 0,
-  GDK_VULKAN_FEATURE_YCBCR                      = 1 << 1,
-  GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT           = 1 << 2,
-  GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT           = 1 << 3,
-  GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT        = 1 << 4,
-  GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE      = 1 << 5,
+  GDK_VULKAN_FEATURE_WIN32                      = 1 << 1,
+  GDK_VULKAN_FEATURE_YCBCR                      = 1 << 2,
+  GDK_VULKAN_FEATURE_TIMELINE_SEMAPHORE         = 1 << 3,
+  GDK_VULKAN_FEATURE_SEMAPHORE_EXPORT           = 1 << 4,
+  GDK_VULKAN_FEATURE_SEMAPHORE_IMPORT           = 1 << 5,
+  GDK_VULKAN_FEATURE_WIN32_SEMAPHORE            = 1 << 6,
+  GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT        = 1 << 7,
+  GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE      = 1 << 8,
 } GdkVulkanFeatures;
 
 #define GDK_VULKAN_N_FEATURES 6

@@ -21,6 +21,7 @@
 
 #include "gdkenums.h"
 #include "gdkmemorylayoutprivate.h"
+#include "gdkdxgiformatprivate.h"
 #include "gdktypes.h"
 
 /* epoxy needs this, see https://github.com/anholt/libepoxy/issues/299 */
@@ -117,6 +118,17 @@ guint32                 gdk_memory_format_get_dmabuf_rgb_fourcc
                                                             (GdkMemoryFormat             format);
 guint32                 gdk_memory_format_get_dmabuf_yuv_fourcc
                                                             (GdkMemoryFormat             format);
+
+gboolean                gdk_memory_format_find_by_dxgi_format       (DXGI_FORMAT                 format,
+                                                                     gboolean                    premultiplied,
+                                                                     GdkMemoryFormat            *out_format);
+DXGI_FORMAT             gdk_memory_format_get_dxgi_format           (GdkMemoryFormat             format,
+                                                                     guint                      *out_shader_4_component_mapping);
+DXGI_FORMAT             gdk_memory_format_get_dxgi_srgb_format      (GdkMemoryFormat             format);
+DXGI_FORMAT             gdk_memory_format_get_dxgi_rgba_format      (GdkMemoryFormat             format,
+                                                                     GdkMemoryFormat            *out_rgba_format,
+                                                                     guint                      *out_shader_4_component_mapping);
+guint32                 gdk_memory_format_get_dmabuf_fourcc (GdkMemoryFormat             format);
 const char *            gdk_memory_format_get_name          (GdkMemoryFormat             format);
 
 void                    gdk_memory_convert                  (guchar                     *dest_data,

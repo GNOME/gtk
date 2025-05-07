@@ -25,6 +25,8 @@ GskGpuImage *           gsk_gl_image_new                                (GskGLDe
 GskGpuImage *           gsk_gl_image_new_for_texture                    (GskGLDevice            *device,
                                                                          GdkTexture             *owner,
                                                                          GLuint                  tex_id,
+                                                                         GLuint                  mem_id,
+                                                                         GLuint                  semaphore_id,
                                                                          gboolean                take_ownership,
                                                                          GskGpuImageFlags        extra_flags,
                                                                          GskGpuConversion        conv);

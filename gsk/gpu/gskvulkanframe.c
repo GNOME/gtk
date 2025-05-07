@@ -12,9 +12,20 @@
 #include "gdk/gdkglcontextprivate.h"
 #include "gdk/gdkgltextureprivate.h"
 
+#ifdef GDK_WINDOWING_WIN32
+#include "gdk/win32/gdkd3d12textureprivate.h"
+#endif
+
 #define GDK_ARRAY_NAME gsk_semaphores
 #define GDK_ARRAY_TYPE_NAME GskSemaphores
 #define GDK_ARRAY_ELEMENT_TYPE VkSemaphore
+#define GDK_ARRAY_PREALLOC 16
+#define GDK_ARRAY_NO_MEMSET 1
+#include "gdk/gdkarrayimpl.c"
+
+#define GDK_ARRAY_NAME gsk_semaphore_values
+#define GDK_ARRAY_TYPE_NAME GskSemaphoreValues
+#define GDK_ARRAY_ELEMENT_TYPE uint64_t
 #define GDK_ARRAY_PREALLOC 16
 #define GDK_ARRAY_NO_MEMSET 1
 #include "gdk/gdkarrayimpl.c"
@@ -29,6 +40,7 @@
 struct _GskVulkanSemaphores
 {
   GskSemaphores wait_semaphores;
+  GskSemaphoreValues wait_semaphore_values;
   GskPipelineStages wait_stages;
   GskSemaphores signal_semaphores;
 };
@@ -247,6 +259,26 @@ gsk_vulkan_frame_upload_texture (GskGpuFrame  *frame,
         }
     }
 #endif
+#ifdef GDK_WINDOWING_WIN32
+  if (GDK_IS_D3D12_TEXTURE (texture))
+    {
+      GdkD3D12Texture *d3d_texture = GDK_D3D12_TEXTURE (texture);
+      GskGpuImage *image;
+
+      image = gsk_vulkan_image_new_for_d3d12resource (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                      gdk_d3d12_texture_get_resource (d3d_texture),
+                                                      gdk_d3d12_texture_get_resource_handle (d3d_texture),
+                                                      gdk_d3d12_texture_get_fence (d3d_texture),
+                                                      gdk_d3d12_texture_get_fence_handle (d3d_texture),
+                                                      gdk_d3d12_texture_get_fence_wait (d3d_texture),
+                                                      gdk_memory_format_alpha (gdk_texture_get_format (texture)) != GDK_MEMORY_ALPHA_STRAIGHT);
+      if (image)
+        {
+          gsk_gpu_image_toggle_ref_texture (image, texture);
+          return image;
+        }
+    }
+#endif
 
   return GSK_GPU_FRAME_CLASS (gsk_vulkan_frame_parent_class)->upload_texture (frame, with_mipmap, texture);
 }
@@ -289,8 +321,11 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
                          GskGpuOp          *op)
 {
   GskVulkanFrame *self = GSK_VULKAN_FRAME (frame);
+  GskVulkanDevice *device;
   GskVulkanSemaphores semaphores;
   GskVulkanCommandState state = { 0, };
+
+  device = GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame));
 
   GSK_VK_CHECK (vkBeginCommandBuffer, self->vk_command_buffer,
                                       &(VkCommandBufferBeginInfo) {
@@ -308,6 +343,7 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
                             (VkDeviceSize[1]) { 0 });
 
   gsk_semaphores_init (&semaphores.wait_semaphores);
+  gsk_semaphore_values_init (&semaphores.wait_semaphore_values);
   gsk_pipeline_stages_init (&semaphores.wait_stages);
   gsk_semaphores_init (&semaphores.signal_semaphores);
 
@@ -315,6 +351,7 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
     {
       gsk_vulkan_semaphores_add_wait (&semaphores,
                                       self->vk_acquire_semaphore,
+                                      0,
                                       VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT);
     }
 
@@ -331,7 +368,7 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
 
   GSK_VK_CHECK (vkEndCommandBuffer, self->vk_command_buffer);
 
-  GSK_VK_CHECK (vkQueueSubmit, gsk_vulkan_device_get_vk_queue (GSK_VULKAN_DEVICE (gsk_gpu_frame_get_device (frame))),
+  GSK_VK_CHECK (vkQueueSubmit, gsk_vulkan_device_get_vk_queue (device),
                                1,
                                &(VkSubmitInfo) {
                                   .sType = VK_STRUCTURE_TYPE_SUBMIT_INFO,
@@ -342,10 +379,16 @@ gsk_vulkan_frame_submit (GskGpuFrame       *frame,
                                   .waitSemaphoreCount = gsk_semaphores_get_size (&semaphores.wait_semaphores),
                                   .pSignalSemaphores = gsk_semaphores_get_data (&semaphores.signal_semaphores),
                                   .signalSemaphoreCount = gsk_semaphores_get_size (&semaphores.signal_semaphores),
+                                  .pNext = gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_TIMELINE_SEMAPHORE) ? &(VkTimelineSemaphoreSubmitInfo) {
+                                       .sType = VK_STRUCTURE_TYPE_TIMELINE_SEMAPHORE_SUBMIT_INFO,
+                                       .waitSemaphoreValueCount = gsk_semaphore_values_get_size (&semaphores.wait_semaphore_values),
+                                       .pWaitSemaphoreValues = gsk_semaphore_values_get_data (&semaphores.wait_semaphore_values),
+                                  } : NULL,
                                },
                                NULL);
 
   gsk_semaphores_clear (&semaphores.wait_semaphores);
+  gsk_semaphore_values_clear (&semaphores.wait_semaphore_values);
   gsk_pipeline_stages_clear (&semaphores.wait_stages);
   gsk_semaphores_clear (&semaphores.signal_semaphores);
 }
@@ -409,9 +452,11 @@ gsk_vulkan_frame_init (GskVulkanFrame *self)
 void
 gsk_vulkan_semaphores_add_wait (GskVulkanSemaphores  *self,
                                 VkSemaphore           semaphore,
+                                guint64               semaphore_wait,
                                 VkPipelineStageFlags  stage)
 {
   gsk_semaphores_append (&self->wait_semaphores, semaphore);
+  gsk_semaphore_values_append (&self->wait_semaphore_values, semaphore_wait);
   gsk_pipeline_stages_append (&self->wait_stages, stage);
 }
 

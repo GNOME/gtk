@@ -35,6 +35,7 @@ struct _GskVulkanImage
   VkImageView vk_framebuffer_image_view;
   GskVulkanYcbcr *ycbcr;
   VkSemaphore vk_semaphore;
+  uint64_t vk_semaphore_wait;
   struct {
     VkDescriptorSet vk_descriptor_set;
     gsize pool_id;
@@ -357,6 +358,7 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
   VkSamplerYcbcrModelConversion vk_model;
   VkSamplerYcbcrRange vk_range;
   gboolean needs_conversion;
+  gsize memory_index;
 
   g_assert (width > 0 && height > 0);
 
@@ -498,10 +500,13 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                 self->vk_image,
                                 &requirements);
 
-  self->allocator = gsk_vulkan_device_find_allocator (device,
-                                                      requirements.memoryTypeBits,
-                                                      0,
-                                                      tiling == VK_IMAGE_TILING_LINEAR ? GSK_VULKAN_MEMORY_MAPPABLE : 0);
+  memory_index = gsk_vulkan_device_find_allocator (device,
+                                                   requirements.memoryTypeBits,
+                                                   0,
+                                                   tiling == VK_IMAGE_TILING_LINEAR ? GSK_VULKAN_MEMORY_MAPPABLE : 0);
+  self->allocator = gsk_vulkan_device_get_allocator (device, memory_index);
+  gsk_vulkan_allocator_ref (self->allocator);
+
   gsk_vulkan_alloc (self->allocator,
                     requirements.size,
                     requirements.alignment,
@@ -809,6 +814,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
   VkComponentMapping vk_components;
   VkMemoryRequirements requirements;
   VkSamplerYcbcrConversion vk_conversion;
+  gsize memory_index;
   GskVulkanImage *self;
   VkResult res;
   gsize n_modifiers;
@@ -956,6 +962,10 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                                 self->vk_image,
                                 &requirements);
 
+  memory_index = gsk_vulkan_device_find_allocator (device,
+                                                   requirements.memoryTypeBits,
+                                                   0,
+                                                   VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
   self->allocator = gsk_vulkan_device_get_external_allocator (device);
   gsk_vulkan_allocator_ref (self->allocator);
 
@@ -968,7 +978,7 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
                                   &(VkMemoryAllocateInfo) {
                                       .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
                                       .allocationSize = requirements.size,
-                                      .memoryTypeIndex = g_bit_nth_lsf (requirements.memoryTypeBits, -1),
+                                      .memoryTypeIndex = memory_index,
                                       .pNext = &(VkExportMemoryAllocateInfo) {
                                           .sType = VK_STRUCTURE_TYPE_EXPORT_MEMORY_ALLOCATE_INFO,
                                           .handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
@@ -1172,6 +1182,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
       VkMemoryRequirements2 requirements = {
           .sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2,
       };
+      gsize memory_index;
 
       GSK_VK_CHECK (func_vkGetMemoryFdPropertiesKHR, vk_device,
                                                      VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
@@ -1215,6 +1226,10 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
             }
         }
 
+      memory_index = gsk_vulkan_device_find_allocator (device,
+                                                       fd_props.memoryTypeBits,
+                                                       0,
+                                                       VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
       gsk_vulkan_alloc (self->allocator,
                         requirements.memoryRequirements.size,
                         requirements.memoryRequirements.alignment,
@@ -1223,7 +1238,7 @@ gsk_vulkan_image_new_for_dmabuf (GskVulkanDevice *device,
                                       &(VkMemoryAllocateInfo) {
                                           .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
                                           .allocationSize = requirements.memoryRequirements.size,
-                                          .memoryTypeIndex = g_bit_nth_lsf (fd_props.memoryTypeBits, -1),
+                                          .memoryTypeIndex = memory_index,
                                           .pNext = &(VkImportMemoryFdInfoKHR) {
                                               .sType = VK_STRUCTURE_TYPE_IMPORT_MEMORY_FD_INFO_KHR,
                                               .handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_DMA_BUF_BIT_EXT,
@@ -1434,6 +1449,246 @@ gsk_vulkan_image_to_dmabuf_texture (GskVulkanImage *self,
   gsk_gpu_image_toggle_ref_texture (GSK_GPU_IMAGE (self), texture);
 
   return texture;
+}
+#endif
+
+#ifdef GDK_WINDOWING_WIN32
+static gboolean
+gsk_vulkan_is_same_device (VkDevice           vk_device,
+                           ID3D12DeviceChild *child)
+{
+  /* FIXME: implement */
+  return TRUE;
+}
+
+GskGpuImage *
+gsk_vulkan_image_new_for_d3d12resource (GskVulkanDevice *device,
+                                        ID3D12Resource  *resource,
+                                        HANDLE           resource_handle,
+                                        ID3D12Fence     *fence,
+                                        HANDLE           fence_handle,
+                                        guint64          fence_wait,
+                                        gboolean         premultiplied)
+{
+  GskVulkanImage *self;
+  VkDevice vk_device;
+  VkFormat vk_format;
+  VkComponentMapping vk_components;
+  VkSamplerYcbcrConversion vk_conversion;
+  PFN_vkGetMemoryWin32HandlePropertiesKHR func_vkGetMemoryWin32HandlePropertiesKHR;
+  VkResult res;
+  GdkMemoryFormat format;
+  GskGpuImageFlags flags;
+  D3D12_RESOURCE_DESC desc;
+  gsize memory_index;
+  gboolean needs_conversion;
+  VkMemoryRequirements2 requirements = {
+      .sType = VK_STRUCTURE_TYPE_MEMORY_REQUIREMENTS_2,
+  };
+  VkMemoryWin32HandlePropertiesKHR handle_properties = {
+      .sType = VK_STRUCTURE_TYPE_MEMORY_WIN32_HANDLE_PROPERTIES_KHR,
+  };
+
+  if (!gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_WIN32))
+    {
+      GDK_DEBUG (D3D12, "Vulkan does not support D3D12Resource import");
+      return NULL;
+    }
+
+  vk_device = gsk_vulkan_device_get_vk_device (device);
+  func_vkGetMemoryWin32HandlePropertiesKHR = (PFN_vkGetMemoryWin32HandlePropertiesKHR) vkGetDeviceProcAddr (vk_device, "vkGetMemoryWin32HandlePropertiesKHR");
+  ID3D12Resource_GetDesc (resource, &desc);
+
+  if (!gsk_vulkan_is_same_device (vk_device, (ID3D12DeviceChild *) resource))
+    {
+      GDK_DEBUG (D3D12, "Resource is from a different device");
+      return NULL;
+    }
+
+  if (!gdk_memory_format_find_by_dxgi_format (desc.Format, premultiplied, &format))
+    {
+      GDK_DEBUG (D3D12, "Unsupported DXGI format %u", desc.Format);
+      return NULL;
+    }
+
+  vk_format = gdk_memory_format_vk_format (format, &vk_components, &needs_conversion);
+  if (vk_format == VK_FORMAT_UNDEFINED)
+    {
+      GDK_DEBUG (D3D12, "GTK's Vulkan doesn't support DXGI format %u", desc.Format);
+      return NULL;
+    }
+
+  if (needs_conversion && !gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_YCBCR))
+    {
+      GDK_DEBUG (D3D12, "Vulkan driver cannot import DXGI format %u because it lacks YCbCr support", desc.Format);
+      return NULL;
+    }
+
+  if (!gsk_vulkan_device_supports_format (device,
+                                          vk_format,
+                                          0, 1,
+                                          VK_IMAGE_TILING_OPTIMAL,
+                                          VK_IMAGE_USAGE_SAMPLED_BIT,
+                                          desc.Width, desc.Height,
+                                          &flags))
+    {
+      GDK_DEBUG (D3D12, "Vulkan driver does not support DXGI format %u", desc.Format);
+      return NULL;
+    }
+
+  flags &= ~(GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_RENDERABLE);
+  if (desc.MipLevels)
+    flags |= GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP;
+
+  self = g_object_new (GSK_TYPE_VULKAN_IMAGE, NULL);
+
+  self->device = g_object_ref (device);
+  self->vk_tiling = VK_IMAGE_TILING_OPTIMAL;
+  self->vk_format = vk_format;
+  self->vk_pipeline_stage = VK_PIPELINE_STAGE_TOP_OF_PIPE_BIT;
+  self->vk_image_layout = VK_IMAGE_LAYOUT_UNDEFINED;
+  self->vk_access = 0;
+
+  res  = vkCreateImage (vk_device,
+                        &(VkImageCreateInfo) {
+                            .sType = VK_STRUCTURE_TYPE_IMAGE_CREATE_INFO,
+                            .flags = 0,
+                            .imageType = VK_IMAGE_TYPE_2D,
+                            .format = vk_format,
+                            .extent = { desc.Width, desc.Height, 1 },
+                            .mipLevels = desc.MipLevels,
+                            .arrayLayers = 1,
+                            .samples = VK_SAMPLE_COUNT_1_BIT,
+                            .tiling = self->vk_tiling,
+                            .usage = VK_IMAGE_USAGE_SAMPLED_BIT |
+                                     (flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_DOWNLOADABLE) ? VK_IMAGE_USAGE_TRANSFER_SRC_BIT : 0),
+                            .sharingMode = VK_SHARING_MODE_EXCLUSIVE,
+                            .initialLayout = self->vk_image_layout,
+                            .pNext = &(VkExternalMemoryImageCreateInfo) {
+                                .sType = VK_STRUCTURE_TYPE_EXTERNAL_MEMORY_IMAGE_CREATE_INFO,
+                                .handleTypes = VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_RESOURCE_BIT,
+                            },
+                        },
+                        NULL,
+                        &self->vk_image);
+  if (res != VK_SUCCESS)
+    {
+      GDK_DEBUG (D3D12, "vkCreateImage() failed: %s", gdk_vulkan_strerror (res));
+      return NULL;
+    }
+
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
+                       flags |
+                       (!premultiplied ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0) |
+                       (needs_conversion ? GSK_GPU_IMAGE_EXTERNAL : 0) |
+                       (desc.MipLevels > 1 ? GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP : 0),
+                       GSK_GPU_CONVERSION_NONE,
+                       format,
+                       desc.Width, desc.Height);
+
+  vkGetImageMemoryRequirements2 (vk_device,
+                                 &(VkImageMemoryRequirementsInfo2) {
+                                     .sType = VK_STRUCTURE_TYPE_IMAGE_MEMORY_REQUIREMENTS_INFO_2,
+                                     .image = self->vk_image,
+                                 },
+                                 &requirements);
+	// Vulkan memory import
+	GSK_VK_CHECK (func_vkGetMemoryWin32HandlePropertiesKHR, vk_device,
+                                                          VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_RESOURCE_BIT,
+                                                          resource_handle,
+                                                          &handle_properties);
+
+  memory_index = gsk_vulkan_device_find_allocator (device,
+                                                   handle_properties.memoryTypeBits,
+                                                   0,
+                                                   VK_MEMORY_PROPERTY_DEVICE_LOCAL_BIT);
+  self->allocator = gsk_vulkan_device_get_external_allocator (device);
+  gsk_vulkan_allocator_ref (self->allocator);
+
+  gsk_vulkan_alloc (self->allocator,
+                    requirements.memoryRequirements.size,
+                    requirements.memoryRequirements.alignment,
+                    &self->allocation);
+
+  GSK_VK_CHECK (vkAllocateMemory, vk_device,
+                                  &(VkMemoryAllocateInfo) {
+                                      .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
+                                      .allocationSize = requirements.memoryRequirements.size,
+                                      .memoryTypeIndex = memory_index,
+                                      .pNext = &(VkImportMemoryWin32HandleInfoKHR) {
+                                          .sType = VK_STRUCTURE_TYPE_IMPORT_MEMORY_WIN32_HANDLE_INFO_KHR,
+                                          .handleType = VK_EXTERNAL_MEMORY_HANDLE_TYPE_D3D12_RESOURCE_BIT,
+                                          .handle = resource_handle,
+                                          .pNext = &(VkMemoryDedicatedAllocateInfo) {
+                                              .sType = VK_STRUCTURE_TYPE_MEMORY_DEDICATED_ALLOCATE_INFO,
+                                              .image = self->vk_image,
+                                          }
+                                      }
+                                  },
+                                  NULL,
+                                  &self->allocation.vk_memory);
+
+  GSK_VK_CHECK (vkBindImageMemory2, gsk_vulkan_device_get_vk_device (self->device),
+                                    1,
+                                    &(VkBindImageMemoryInfo) {
+                                        .sType = VK_STRUCTURE_TYPE_BIND_IMAGE_MEMORY_INFO,
+                                        .image = self->vk_image,
+                                        .memory = self->allocation.vk_memory,
+                                        .memoryOffset = self->allocation.offset,
+                                    });
+
+  if (gsk_vulkan_device_has_feature (device, GDK_VULKAN_FEATURE_WIN32_SEMAPHORE) && fence)
+    {
+      PFN_vkImportSemaphoreWin32HandleKHR func_vkImportSemaphoreWin32HandleKHR;
+      func_vkImportSemaphoreWin32HandleKHR = (PFN_vkImportSemaphoreWin32HandleKHR) vkGetDeviceProcAddr (vk_device, "vkImportSemaphoreWin32HandleKHR");
+
+      GSK_VK_CHECK (vkCreateSemaphore, vk_device,
+                                        &(VkSemaphoreCreateInfo) {
+                                            .sType = VK_STRUCTURE_TYPE_SEMAPHORE_CREATE_INFO,
+                                            .pNext = &(VkSemaphoreTypeCreateInfo) {
+                                                .sType = VK_STRUCTURE_TYPE_SEMAPHORE_TYPE_CREATE_INFO,
+                                                .semaphoreType = VK_SEMAPHORE_TYPE_TIMELINE,
+                                            },
+                                        },
+                                        NULL,
+                                        &self->vk_semaphore);
+
+      GSK_VK_CHECK (func_vkImportSemaphoreWin32HandleKHR, vk_device,
+                                                          &(VkImportSemaphoreWin32HandleInfoKHR) {
+                                                              .sType = VK_STRUCTURE_TYPE_IMPORT_SEMAPHORE_WIN32_HANDLE_INFO_KHR,
+                                                              .handleType = VK_EXTERNAL_SEMAPHORE_HANDLE_TYPE_D3D12_FENCE_BIT,
+                                                              .semaphore = self->vk_semaphore,
+                                                              .handle = fence_handle,
+                                                          });
+      self->vk_semaphore_wait = fence_wait;
+    }
+
+  if (needs_conversion)
+    {
+      self->ycbcr = gsk_vulkan_device_get_ycbcr (device,
+                                                  &(GskVulkanYcbcrInfo) {
+                                                      .vk_format = vk_format,
+                                                      .vk_components = vk_components,
+                                                      .vk_ycbcr_model = VK_SAMPLER_YCBCR_MODEL_CONVERSION_RGB_IDENTITY,
+                                                      .vk_ycbcr_range = VK_SAMPLER_YCBCR_RANGE_ITU_FULL,
+                                                  });
+      gsk_vulkan_ycbcr_ref (self->ycbcr);
+      vk_conversion = gsk_vulkan_ycbcr_get_vk_conversion (self->ycbcr);
+    }
+  else
+    vk_conversion = VK_NULL_HANDLE;
+
+  gsk_vulkan_image_create_view (self,
+                                vk_format,
+                                &vk_components,
+                                vk_conversion);
+
+  GDK_DEBUG (D3D12, "Vulkan uploaded %ux%u resource of %sformat %u",
+             (guint) desc.Width, (guint) desc.Height,
+             needs_conversion ? "YUV " : "",
+             desc.Format);
+
+  return GSK_GPU_IMAGE (self);
 }
 #endif
 
@@ -1669,7 +1924,10 @@ gsk_vulkan_image_transition (GskVulkanImage       *self,
   if (self->vk_pipeline_stage == VK_IMAGE_LAYOUT_GENERAL &&
       self->vk_semaphore)
     {
-      gsk_vulkan_semaphores_add_wait (semaphores, self->vk_semaphore, stage);
+      gsk_vulkan_semaphores_add_wait (semaphores,
+                                      self->vk_semaphore,
+                                      self->vk_semaphore_wait,
+                                      stage);
     }
 
   vkCmdPipelineBarrier (command_buffer,
