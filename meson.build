@@ -34,6 +34,7 @@ sysprof_req        = '>= 3.38.0'
 vulkan_req         = '>= 1.3'
 gstreamer_req      = '>= 1.24.0'
 gi_req             = '>= 1.84'
+rsvg_req           = '>= 2.60'
 
 fs = import('fs')
 gnome = import('gnome')
@@ -448,6 +449,7 @@ pixbuf_dep        = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
 png_dep           = dependency('libpng', 'png')
 tiff_dep          = dependency('libtiff-4', 'tiff')
 jpeg_dep          = dependency('libjpeg', 'jpeg')
+rsvg_dep          = dependency('librsvg-2.0', version: rsvg_req)
 
 epoxy_dep         = dependency('epoxy', version: epoxy_req)
 xkbdep            = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
