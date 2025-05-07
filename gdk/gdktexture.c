@@ -532,7 +532,7 @@ gdk_texture_new_for_surface (cairo_surface_t *surface)
  * Returns: a new `GdkTexture`
  *
  * Deprecated: 4.20: Use e.g. libglycin, which can load many image
- *   formats into GdkTexture
+ *   formats into a `GdkTexture`
  */
 GdkTexture *
 gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
@@ -567,7 +567,7 @@ gdk_texture_new_for_pixbuf (GdkPixbuf *pixbuf)
  * Creates a new texture by loading an image from a resource.
  *
  * The file format is detected automatically. The supported formats
- * are PNG and JPEG, though more formats might be available.
+ * are PNG, JPEG and TIFF, though more formats might be available.
  *
  * It is a fatal error if @resource_path does not specify a valid
  * image resource and the program will abort if that happens.
@@ -613,6 +613,10 @@ gdk_texture_new_from_resource (const char *resource_path)
  *
  * The file format is detected automatically. The supported formats
  * are PNG, JPEG and TIFF, though more formats might be available.
+ *
+ * Note that this function should not be used with untrusted data.
+ * Use a proper image loading framework such as libglycin, which can
+ * load many image formats into a `GdkTexture`.
  *
  * If %NULL is returned, then @error will be set.
  *
@@ -709,6 +713,10 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * The file format is detected automatically. The supported formats
  * are PNG, JPEG and TIFF, though more formats might be available.
  *
+ * Note that this function should not be used with untrusted data.
+ * Use a proper image loading framework such as libglycin, which can
+ * load many image formats into a `GdkTexture`.
+ *
  * If %NULL is returned, then @error will be set.
  *
  * This function is threadsafe, so that you can e.g. use GTask
@@ -754,6 +762,10 @@ gdk_texture_new_from_bytes (GBytes  *bytes,
  *
  * The file format is detected automatically. The supported formats
  * are PNG, JPEG and TIFF, though more formats might be available.
+ *
+ * Note that this function should not be used with untrusted data.
+ * Use a proper image loading framework such as libglycin, which can
+ * load many image formats into a `GdkTexture`.
  *
  * If %NULL is returned, then @error will be set.
  *
