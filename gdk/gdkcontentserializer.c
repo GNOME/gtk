@@ -32,7 +32,6 @@
 #include "gdkmemorytextureprivate.h"
 #include "gdkprivate.h"
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include <string.h>
 
 
@@ -611,57 +610,6 @@ gdk_content_serialize_finish (GAsyncResult  *result,
 
 /*** SERIALIZERS ***/
 
-
-static void
-pixbuf_serializer_finish (GObject      *source,
-                          GAsyncResult *res,
-                          gpointer      serializer)
-{
-  GError *error = NULL;
-
-  if (!gdk_pixbuf_save_to_stream_finish (res, &error))
-    gdk_content_serializer_return_error (serializer, error);
-  else
-    gdk_content_serializer_return_success (serializer);
-}
-
-static void
-pixbuf_serializer (GdkContentSerializer *serializer)
-{
-  const GValue *value;
-  GdkPixbuf *pixbuf;
-  const char *name;
-
-  name = gdk_content_serializer_get_user_data (serializer);
-  value = gdk_content_serializer_get_value (serializer);
-
-  if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))
-    {
-      pixbuf = g_value_dup_object (value);
-    }
-  else if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
-    {
-      GdkTexture *texture = g_value_get_object (value);
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      pixbuf = gdk_pixbuf_get_from_texture (texture);
-G_GNUC_END_IGNORE_DEPRECATIONS
-    }
-  else
-    {
-      g_assert_not_reached ();
-    }
-
-  gdk_pixbuf_save_to_stream_async (pixbuf,
-                                   gdk_content_serializer_get_output_stream (serializer),
-                                   name,
-                                   gdk_content_serializer_get_cancellable (serializer),
-                                   pixbuf_serializer_finish,
-                                   serializer,
-                                   g_str_equal (name, "png") ? "compression" : NULL, "2",
-                                   NULL);
-  g_object_unref (pixbuf);
-}
-
 static void
 texture_serializer_finish (GObject      *source,
                            GAsyncResult *res,
@@ -974,7 +922,6 @@ static void
 init (void)
 {
   static gboolean initialized = FALSE;
-  GSList *formats, *f;
   const char *charset;
 
   if (initialized)
@@ -996,42 +943,6 @@ init (void)
                                    "image/jpeg",
                                    texture_serializer,
                                    NULL, NULL);
-
-  formats = gdk_pixbuf_get_formats ();
-
-  for (f = formats; f; f = f->next)
-    {
-      GdkPixbufFormat *fmt = f->data;
-      char **mimes, **m;
-      char *name;
-
-      if (!gdk_pixbuf_format_is_writable (fmt))
-        continue;
-
-      name = gdk_pixbuf_format_get_name (fmt);
-      mimes = gdk_pixbuf_format_get_mime_types (fmt);
-      for (m = mimes; *m; m++)
-        {
-          /* Turning textures into pngs, tiffs or jpegs is handled above */
-          if (!g_str_equal (name, "png") &&
-              !g_str_equal (name, "tiff") &&
-              !g_str_equal (name, "jpeg"))
-            gdk_content_register_serializer (GDK_TYPE_TEXTURE,
-                                             *m,
-                                             pixbuf_serializer,
-                                             gdk_pixbuf_format_get_name (fmt),
-                                             g_free);
-          gdk_content_register_serializer (GDK_TYPE_PIXBUF,
-                                           *m,
-                                           pixbuf_serializer,
-                                           gdk_pixbuf_format_get_name (fmt),
-                                           g_free);
-        }
-      g_strfreev (mimes);
-      g_free (name);
-    }
-
-  g_slist_free (formats);
 
 #if defined(G_OS_UNIX) && !defined(__APPLE__)
   file_transfer_portal_register ();

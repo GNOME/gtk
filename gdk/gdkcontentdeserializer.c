@@ -29,8 +29,6 @@
 #include "loaders/gdkpngprivate.h"
 #include "loaders/gdktiffprivate.h"
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
-
 
 /**
  * GdkContentDeserializer:
@@ -621,52 +619,6 @@ gdk_content_deserialize_finish (GAsyncResult  *result,
 /*** DESERIALIZERS ***/
 
 static void
-pixbuf_deserializer_finish (GObject      *source,
-                            GAsyncResult *res,
-                            gpointer      deserializer)
-{
-  GdkPixbuf *pixbuf;
-  GValue *value;
-  GError *error = NULL;
-
-  pixbuf = gdk_pixbuf_new_from_stream_finish (res, &error);
-  if (pixbuf == NULL)
-    {
-      gdk_content_deserializer_return_error (deserializer, error);
-      return;
-    }
-
-  value = gdk_content_deserializer_get_value (deserializer);
-  if (G_VALUE_HOLDS (value, GDK_TYPE_PIXBUF))
-    {
-      g_value_take_object (value, pixbuf);
-    }
-  else if (G_VALUE_HOLDS (value, GDK_TYPE_TEXTURE))
-    {
-      GdkTexture *texture;
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      texture = gdk_texture_new_for_pixbuf (pixbuf);
-G_GNUC_END_IGNORE_DEPRECATIONS
-      g_object_unref (pixbuf);
-      g_value_take_object (value, texture);
-    }
-  else
-    {
-      g_assert_not_reached ();
-    }
-  gdk_content_deserializer_return_success (deserializer);
-}
-
-static void
-pixbuf_deserializer (GdkContentDeserializer *deserializer)
-{
-  gdk_pixbuf_new_from_stream_async (gdk_content_deserializer_get_input_stream (deserializer),
-				    gdk_content_deserializer_get_cancellable (deserializer),
-                                    pixbuf_deserializer_finish,
-                                    deserializer);
-}
-
-static void
 texture_deserializer_finish (GObject      *source,
                              GAsyncResult *result,
                              gpointer      deserializer)
@@ -916,7 +868,6 @@ static void
 init (void)
 {
   static gboolean initialized = FALSE;
-  GSList *formats, *f;
   const char *charset;
 
   if (initialized)
@@ -939,40 +890,6 @@ init (void)
                                      texture_deserializer,
                                      NULL,
                                      NULL);
-
-
-  formats = gdk_pixbuf_get_formats ();
-
-  for (f = formats; f; f = f->next)
-    {
-      GdkPixbufFormat *fmt = f->data;
-      char **mimes, **m;
-      char *name;
-
-      name = gdk_pixbuf_format_get_name (fmt);
-      mimes = gdk_pixbuf_format_get_mime_types (fmt);
-      for (m = mimes; *m; m++)
-        {
-          /* Turning pngs, jpegs and tiffs into textures is handled above */
-          if (!g_str_equal (name, "png") &&
-              !g_str_equal (name, "jpeg") &&
-              !g_str_equal (name, "tiff"))
-            gdk_content_register_deserializer (*m,
-                                               GDK_TYPE_TEXTURE,
-                                               pixbuf_deserializer,
-                                               NULL,
-                                               NULL);
-          gdk_content_register_deserializer (*m,
-                                             GDK_TYPE_PIXBUF,
-                                             pixbuf_deserializer,
-                                             NULL,
-                                             NULL);
-        }
-      g_strfreev (mimes);
-      g_free (name);
-    }
-
-  g_slist_free (formats);
 
 #if defined(G_OS_UNIX) && !defined(__APPLE__)
   file_transfer_portal_register ();
