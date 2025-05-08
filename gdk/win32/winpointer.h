@@ -305,16 +305,6 @@ typedef struct tagPOINTER_DEVICE_CURSOR_INFO {
 
 #endif /* POINTER_FLAG_NONE */
 
-#if WINVER < 0x0601
-
-typedef struct tagGESTURECONFIG {
-  DWORD dwID;
-  DWORD dwWant;
-  DWORD dwBlock;
-} GESTURECONFIG,*PGESTURECONFIG;
-
-#endif /* WINVER < 0x0601 */
-
 #ifndef MICROSOFT_TABLETPENSERVICE_PROPERTY
 #define MICROSOFT_TABLETPENSERVICE_PROPERTY _T("MicrosoftTabletPenServiceProperty")
 #endif
