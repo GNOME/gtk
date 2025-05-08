@@ -14,6 +14,7 @@
             <property name="top-margin">20</property>
             <property name="bottom-margin">20</property>
             <property name="monospace">1</property>
+            <property name="editable">0</property>
             <property name="buffer">
               <object class="GtkTextBuffer" id="buffer"/>
             </property>
