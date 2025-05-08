@@ -424,7 +424,7 @@ struct _GtkIconPaintable
    */
   GMutex texture_lock;
 
-  GdkTexture *texture;
+  GskRenderNode *node;
 };
 
 typedef struct
@@ -502,7 +502,7 @@ static GtkIconPaintable *icon_paintable_new               (const char       *ico
                                                            int               desired_scale);
 static inline IconCacheFlag
                          suffix_from_name                 (const char       *name);
-static void              icon_ensure_texture__locked      (GtkIconPaintable *icon,
+static void              icon_ensure_node__locked         (GtkIconPaintable *icon,
                                                            gboolean          in_thread);
 static void              gtk_icon_theme_unset_display     (GtkIconTheme     *self);
 static void              gtk_icon_theme_set_display       (GtkIconTheme     *self,
@@ -2438,7 +2438,7 @@ load_icon_thread (GTask        *task,
   GtkIconPaintable *self = GTK_ICON_PAINTABLE (source_object);
 
   g_mutex_lock (&self->texture_lock);
-  icon_ensure_texture__locked (self, TRUE);
+  icon_ensure_node__locked (self, TRUE);
   g_mutex_unlock (&self->texture_lock);
   g_task_return_pointer (task, NULL, NULL);
 }
@@ -2519,16 +2519,16 @@ gtk_icon_theme_lookup_icon (GtkIconTheme       *self,
 
   if (flags & GTK_ICON_LOOKUP_PRELOAD)
     {
-      gboolean has_texture = FALSE;
+      gboolean has_node = FALSE;
 
       /* If we fail to get the lock it is because some other thread is
          currently loading the icon, so we need to do nothing */
       if (g_mutex_trylock (&icon->texture_lock))
         {
-          has_texture = icon->texture != NULL;
+          has_node = icon->node != NULL;
           g_mutex_unlock (&icon->texture_lock);
 
-          if (!has_texture)
+          if (!has_node)
             {
               GTask *task = g_task_new (icon, NULL, NULL, NULL);
               g_task_run_in_thread (task, load_icon_thread);
@@ -3486,7 +3486,7 @@ gtk_icon_paintable_finalize (GObject *object)
   g_free (icon->icon_name);
 
   g_clear_object (&icon->loadable);
-  g_clear_object (&icon->texture);
+  g_clear_pointer (&icon->node, gsk_render_node_unref);
 #ifdef G_OS_WIN32
   g_clear_object (&icon->win32_icon);
 #endif
@@ -3699,17 +3699,18 @@ gtk_icon_paintable_is_symbolic (GtkIconPaintable *icon)
  * that size.
  */
 static void
-icon_ensure_texture__locked (GtkIconPaintable *icon,
-                             gboolean          in_thread)
+icon_ensure_node__locked (GtkIconPaintable *icon,
+                          gboolean          in_thread)
 {
   gint64 before;
   int pixel_size;
   GError *load_error = NULL;
   gboolean only_fg = FALSE;
+  GdkTexture *texture = NULL;
 
   icon_cache_mark_used_if_cached (icon);
 
-  if (icon->texture)
+  if (icon->node)
     return;
 
   before = GDK_PROFILER_CURRENT_TIME;
@@ -3725,7 +3726,7 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
 #ifdef G_OS_WIN32
   if (icon->win32_icon)
     {
-      icon->texture = gdk_texture_new_for_pixbuf (icon->win32_icon);
+      texture = gdk_texture_new_for_pixbuf (icon->win32_icon);
     }
   else
 #endif
@@ -3734,30 +3735,30 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
       if (icon->is_svg)
         {
           if (icon->is_symbolic)
-            icon->texture = gdk_texture_new_from_resource_symbolic (icon->filename,
-                                                                    pixel_size, pixel_size,
-                                                                    icon->desired_scale,
-                                                                    &only_fg,
-                                                                    &load_error);
+            texture = gdk_texture_new_from_resource_symbolic (icon->filename,
+                                                              pixel_size, pixel_size,
+                                                              icon->desired_scale,
+                                                              &only_fg,
+                                                              &load_error);
           else
-            icon->texture = gdk_texture_new_from_resource_at_scale (icon->filename,
-                                                                    pixel_size, pixel_size,
-                                                                    &only_fg,
-                                                                    &load_error);
+            texture = gdk_texture_new_from_resource_at_scale (icon->filename,
+                                                              pixel_size, pixel_size,
+                                                              &only_fg,
+                                                              &load_error);
         }
       else
-        icon->texture = gdk_texture_new_from_resource_with_fg (icon->filename, &only_fg);
+        texture = gdk_texture_new_from_resource_with_fg (icon->filename, &only_fg);
     }
   else if (icon->filename)
     {
       if (icon->is_svg)
         {
           if (icon->is_symbolic)
-            icon->texture = gdk_texture_new_from_filename_symbolic (icon->filename,
-                                                                    pixel_size, pixel_size,
-                                                                    icon->desired_scale,
-                                                                    &only_fg,
-                                                                    &load_error);
+            texture = gdk_texture_new_from_filename_symbolic (icon->filename,
+                                                              pixel_size, pixel_size,
+                                                              icon->desired_scale,
+                                                              &only_fg,
+                                                              &load_error);
           else
             {
               GFile *file = g_file_new_for_path (icon->filename);
@@ -3765,11 +3766,11 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
 
               if (stream)
                 {
-                  icon->texture = gdk_texture_new_from_stream_at_scale (stream,
-                                                                        pixel_size, pixel_size,
-                                                                        &only_fg,
-                                                                        NULL,
-                                                                        &load_error);
+                  texture = gdk_texture_new_from_stream_at_scale (stream,
+                                                                  pixel_size, pixel_size,
+                                                                  &only_fg,
+                                                                  NULL,
+                                                                  &load_error);
                   g_object_unref (stream);
                 }
 
@@ -3778,7 +3779,7 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
         }
       else
         {
-          icon->texture = gdk_texture_new_from_filename_with_fg (icon->filename, &only_fg, &load_error);
+          texture = gdk_texture_new_from_filename_with_fg (icon->filename, &only_fg, &load_error);
         }
     }
   else
@@ -3794,13 +3795,13 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
            * to the desired size
            */
           if (icon->is_svg)
-            icon->texture = gdk_texture_new_from_stream_at_scale (stream,
-                                                                  pixel_size, pixel_size,
-                                                                  &only_fg,
-                                                                  NULL,
-                                                                  &load_error);
+            texture = gdk_texture_new_from_stream_at_scale (stream,
+                                                            pixel_size, pixel_size,
+                                                            &only_fg,
+                                                            NULL,
+                                                            &load_error);
           else
-            icon->texture = gdk_texture_new_from_stream_with_fg (stream, &only_fg, NULL, &load_error);
+            texture = gdk_texture_new_from_stream_with_fg (stream, &only_fg, NULL, &load_error);
 
           g_object_unref (stream);
         }
@@ -3808,15 +3809,18 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
 
   icon->only_fg = only_fg;
 
-  if (!icon->texture)
+  if (!texture)
     {
       g_warning ("Failed to load icon %s: %s", icon->filename, load_error ? load_error->message : "");
       g_clear_error (&load_error);
-      icon->texture = gdk_texture_new_from_resource (IMAGE_MISSING_RESOURCE_PATH);
+      texture = gdk_texture_new_from_resource (IMAGE_MISSING_RESOURCE_PATH);
       icon->icon_name = g_strdup ("image-missing");
       icon->is_symbolic = FALSE;
       icon->only_fg = FALSE;
     }
+
+  icon->node = gsk_texture_node_new (texture, &GRAPHENE_RECT_INIT (0, 0, gdk_texture_get_width (texture), gdk_texture_get_height (texture)));
+  g_object_unref (texture);
 
   if (GDK_PROFILER_IS_RUNNING)
     {
@@ -3830,22 +3834,22 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
     }
 }
 
-static GdkTexture *
-gtk_icon_paintable_ensure_texture (GtkIconPaintable *self)
+static GskRenderNode *
+gtk_icon_paintable_ensure_node (GtkIconPaintable *self)
 {
-  GdkTexture *texture = NULL;
+  GskRenderNode *node = NULL;
 
   g_mutex_lock (&self->texture_lock);
 
-  icon_ensure_texture__locked (self, FALSE);
+  icon_ensure_node__locked (self, FALSE);
 
-  texture = self->texture;
+  node = self->node;
 
   g_mutex_unlock (&self->texture_lock);
 
-  g_assert (texture != NULL);
+  g_assert (node != NULL);
 
-  return texture;
+  return node;
 }
 
 static void
@@ -3885,6 +3889,32 @@ icon_paintable_snapshot (GdkPaintable *paintable,
   gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, width, height, NULL, 0);
 }
 
+/* Like gtk_snapshot_append_node, but transforms the node
+ * to make its bounds match the given rect
+ */
+static void
+gtk_snapshot_append_node_scaled (GtkSnapshot     *snapshot,
+                                 GskRenderNode   *node,
+                                 graphene_rect_t *bounds)
+{
+  if (graphene_rect_equal (bounds, &node->bounds))
+    {
+      gtk_snapshot_append_node (snapshot, node);
+    }
+  else
+    {
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (bounds->origin.x,
+                                                              bounds->origin.y));
+      gtk_snapshot_scale (snapshot, bounds->size.width / node->bounds.size.width,
+                                    bounds->size.height / node->bounds.size.height);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- node->bounds.origin.x,
+                                                              - node->bounds.origin.y));
+      gtk_snapshot_append_node (snapshot, node);
+      gtk_snapshot_restore (snapshot);
+    }
+}
+
 static void
 gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
                                       GtkSnapshot          *snapshot,
@@ -3894,26 +3924,25 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
                                       gsize                 n_colors)
 {
   GtkIconPaintable *icon = GTK_ICON_PAINTABLE (paintable);
-  GdkTexture *texture;
-  int texture_width, texture_height;
+  GskRenderNode *node;
   double render_width;
   double render_height;
   graphene_rect_t render_rect;
+  double node_width, node_height;
 
-  texture = gtk_icon_paintable_ensure_texture (icon);
+  node = gtk_icon_paintable_ensure_node (icon);
 
-  texture_width = gdk_texture_get_width (texture);
-  texture_height = gdk_texture_get_height (texture);
+  node_width = node->bounds.size.width;
+  node_height = node->bounds.size.height;
 
-  /* Keep aspect ratio and center */
-  if (texture_width >= texture_height)
+  if (node_width >= node_height)
     {
       render_width = width;
-      render_height = height * ((double)texture_height / texture_width);
+      render_height = height * (node_height / node_width);
     }
   else
     {
-      render_width = width * ((double)texture_width / texture_height);
+      render_width = width * (node_width / node_height);
       render_height = height;
     }
 
@@ -3927,7 +3956,7 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
     {
       g_debug ("snapshot symbolic icon using mask");
       gtk_snapshot_push_mask (snapshot, GSK_MASK_MODE_ALPHA);
-      gtk_snapshot_append_texture (snapshot, texture, &render_rect);
+      gtk_snapshot_append_node_scaled (snapshot, node, &render_rect);
       gtk_snapshot_pop (snapshot);
       gtk_snapshot_append_color (snapshot, &colors[0], &render_rect);
       gtk_snapshot_pop (snapshot);
@@ -3943,12 +3972,12 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
                          &colors[2], &colors[1]);
 
       gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
-      gtk_snapshot_append_texture (snapshot, texture, &render_rect);
+      gtk_snapshot_append_node_scaled (snapshot, node, &render_rect);
       gtk_snapshot_pop (snapshot);
     }
   else
     {
-      gtk_snapshot_append_texture (snapshot, texture, &render_rect);
+      gtk_snapshot_append_node_scaled (snapshot, node, &render_rect);
     }
 }
 
@@ -4071,15 +4100,23 @@ gtk_icon_theme_lookup_by_gicon (GtkIconTheme       *self,
 
   if (GDK_IS_TEXTURE (gicon))
     {
+      GdkTexture *texture = GDK_TEXTURE (gicon);
       paintable = icon_paintable_new (NULL, size, scale);
-      paintable->texture = g_object_ref (GDK_TEXTURE (gicon));
+      paintable->node = gsk_texture_node_new (texture,
+                                              &GRAPHENE_RECT_INIT (0, 0,
+                                                 gdk_texture_get_width (texture),
+                                                 gdk_texture_get_height (texture)));
     }
   else if (GDK_IS_PIXBUF (gicon))
     {
-      paintable = icon_paintable_new (NULL, size, scale);
 G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      paintable->texture = gdk_texture_new_for_pixbuf (GDK_PIXBUF (gicon));
+      GdkTexture *texture = gdk_texture_new_for_pixbuf (GDK_PIXBUF (gicon));
 G_GNUC_END_IGNORE_DEPRECATIONS
+      paintable = icon_paintable_new (NULL, size, scale);
+      paintable->node = gsk_texture_node_new (texture,
+                                              &GRAPHENE_RECT_INIT (0, 0,
+                                                 gdk_texture_get_width (texture),
+                                                 gdk_texture_get_height (texture)));
     }
   else if (G_IS_FILE_ICON (gicon))
     {
