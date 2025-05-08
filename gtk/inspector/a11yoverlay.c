@@ -343,6 +343,7 @@ recurse_child_widgets (GtkA11yOverlay *self,
 
       if (hint)
         {
+          int toplevel_width;
           PangoLayout *layout;
           PangoRectangle extents;
           GdkRGBA black = { 0, 0, 0, 1 };
@@ -354,10 +355,11 @@ recurse_child_widgets (GtkA11yOverlay *self,
             { 0, 0, 0, 1 },
           };
 
+          toplevel_width = MAX (width, gtk_widget_get_width (GTK_WIDGET (gtk_widget_get_native (widget))) - 10);
           gtk_snapshot_save (snapshot);
 
           layout = gtk_widget_create_pango_layout (widget, hint);
-          pango_layout_set_width (layout, width * PANGO_SCALE);
+          pango_layout_set_width (layout, toplevel_width * PANGO_SCALE);
 
           pango_layout_get_pixel_extents (layout, NULL, &extents);
 
