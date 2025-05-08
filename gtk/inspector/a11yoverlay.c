@@ -325,6 +325,19 @@ check_widget_accessibility_errors (GtkWidget  *widget,
 }
 
 static void
+center_over_within (graphene_rect_t       *rect,
+                    const graphene_rect_t *over,
+                    const graphene_rect_t *within)
+{
+  graphene_point_t center;
+
+  graphene_rect_get_center (over, &center);
+
+  rect->origin.x = CLAMP (center.x - 0.5 * rect->size.width, within->origin.x, within->origin.x + within->size.width - rect->size.width);
+  rect->origin.y = CLAMP (center.y - 0.5 * rect->size.height, within->origin.y, within->origin.y + within->size.height - rect->size.height);
+}
+
+static void
 recurse_child_widgets (GtkA11yOverlay *self,
                        GtkWidget      *widget,
                        GtkSnapshot    *snapshot)
@@ -360,7 +373,7 @@ recurse_child_widgets (GtkA11yOverlay *self,
 
       if (hint)
         {
-          int toplevel_width;
+          int toplevel_width, toplevel_height;
           PangoLayout *layout;
           PangoRectangle extents;
           GdkRGBA black = { 0, 0, 0, 1 };
@@ -371,8 +384,14 @@ recurse_child_widgets (GtkA11yOverlay *self,
             { 0, 0, 0, 1 },
             { 0, 0, 0, 1 },
           };
+          GtkNative *native;
+          graphene_rect_t over, within, bounds;
+          gboolean ret G_GNUC_UNUSED;
 
-          toplevel_width = MAX (width, gtk_widget_get_width (GTK_WIDGET (gtk_widget_get_native (widget))) - 10);
+          native = gtk_widget_get_native (widget);
+          toplevel_width = gtk_widget_get_width (GTK_WIDGET (native));
+          toplevel_height = gtk_widget_get_height (GTK_WIDGET (native));
+
           gtk_snapshot_save (snapshot);
 
           layout = gtk_widget_create_pango_layout (widget, hint);
@@ -385,18 +404,29 @@ recurse_child_widgets (GtkA11yOverlay *self,
           extents.width += 10;
           extents.height += 10;
 
+          ret = gtk_widget_compute_point (widget, GTK_WIDGET (native), &GRAPHENE_POINT_INIT (0, 0), &over.origin);
+          over.size.width = width;
+          over.size.height = height;
+
+          graphene_rect_init (&within, 0, 0, toplevel_width, toplevel_height);
+
+          graphene_rect_init (&bounds, 0, 0, extents.width, extents.height);
+          center_over_within (&bounds, &over, &within);
+
           color.alpha = 0.8f;
 
-          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (0.5 * (width - extents.width), 0.5 * (height - extents.height)));
+          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (bounds.origin.x - over.origin.x,
+                                                                  bounds.origin.y - over.origin.y));
 
           gtk_snapshot_append_border (snapshot,
-                                       &GSK_ROUNDED_RECT_INIT (extents.x, extents.y,
+                                       &GSK_ROUNDED_RECT_INIT (0, 0,
                                                                extents.width, extents.height),
                                       widths, colors);
           gtk_snapshot_append_color (snapshot, &color,
-                                     &GRAPHENE_RECT_INIT (extents.x, extents.y,
+                                     &GRAPHENE_RECT_INIT (0, 0,
                                                           extents.width, extents.height));
 
+          gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (5, 5));
           gtk_snapshot_append_layout (snapshot, layout, &black);
           g_object_unref (layout);
 
