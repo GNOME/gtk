@@ -142,14 +142,10 @@ check_accessibility_errors (GtkATContext       *context,
   switch (gtk_accessible_role_get_naming (role))
     {
     case GTK_ACCESSIBLE_NAME_ALLOWED:
-      return FIX_SEVERITY_GOOD;
+      break;
 
     case GTK_ACCESSIBLE_NAME_REQUIRED:
-      if (label_set)
-        {
-          return FIX_SEVERITY_GOOD;
-        }
-      else
+      if (!label_set)
         {
           if (gtk_accessible_role_supports_name_from_author (role))
             {
@@ -161,10 +157,6 @@ check_accessibility_errors (GtkATContext       *context,
                   *hint = g_strdup_printf ("%s must have text content or label", role_name);
 
                   return FIX_SEVERITY_ERROR;
-                }
-              else
-                {
-                  return FIX_SEVERITY_GOOD;
                 }
             }
           else
@@ -183,18 +175,10 @@ check_accessibility_errors (GtkATContext       *context,
 
           return FIX_SEVERITY_ERROR;
         }
-      else
-        {
-          return FIX_SEVERITY_GOOD;
-        }
       break;
 
     case GTK_ACCESSIBLE_NAME_RECOMMENDED:
-      if (label_set)
-        {
-          return FIX_SEVERITY_GOOD;
-        }
-      else
+      if (!label_set)
         {
           *hint = g_strdup_printf ("label recommended for %s", role_name);
 
@@ -203,11 +187,7 @@ check_accessibility_errors (GtkATContext       *context,
       break;
 
     case GTK_ACCESSIBLE_NAME_NOT_RECOMMENDED:
-      if (!label_set)
-        {
-          return FIX_SEVERITY_GOOD;
-        }
-      else
+      if (label_set)
         {
           *hint = g_strdup_printf ("label not recommended for %s", role_name);
 
