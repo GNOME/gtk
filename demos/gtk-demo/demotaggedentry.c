@@ -60,6 +60,11 @@ demo_tagged_entry_init (DemoTaggedEntry *entry)
   gtk_style_context_add_provider_for_display (gdk_display_get_default (),
                                               GTK_STYLE_PROVIDER (provider),
                                               800);
+
+  gtk_accessible_update_property (GTK_ACCESSIBLE (entry),
+                                  GTK_ACCESSIBLE_PROPERTY_LABEL, "Tagged Entry",
+                                  -1);
+
   g_object_unref (provider);
 }
 
@@ -421,7 +426,11 @@ demo_tagged_entry_tag_set_has_close_button (DemoTaggedEntryTag *tag,
       GtkWidget *image;
 
       image = gtk_image_new_from_icon_name ("window-close-symbolic");
+      g_object_set (image, "accessible-role", GTK_ACCESSIBLE_ROLE_PRESENTATION, NULL);
       tag->button = gtk_button_new ();
+      gtk_accessible_update_property (GTK_ACCESSIBLE (tag->button),
+                                      GTK_ACCESSIBLE_PROPERTY_LABEL, "Close",
+                                      -1);
       gtk_button_set_child (GTK_BUTTON (tag->button), image);
       gtk_widget_set_halign (tag->button, GTK_ALIGN_CENTER);
       gtk_widget_set_valign (tag->button, GTK_ALIGN_CENTER);
