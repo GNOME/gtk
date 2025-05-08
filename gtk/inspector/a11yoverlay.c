@@ -287,6 +287,23 @@ check_accessibility_errors (GtkATContext       *context,
       return FIX_SEVERITY_ERROR;
     }
 
+  if (role == GTK_ACCESSIBLE_ROLE_BUTTON)
+    {
+      GtkAccessible *accessible = gtk_at_context_get_accessible (context);
+
+      if (GTK_IS_WIDGET (accessible))
+        {
+          int width = gtk_widget_get_width (GTK_WIDGET (accessible));
+          int height = gtk_widget_get_height (GTK_WIDGET (accessible));
+
+          if (width < 24 || height < 24)
+            {
+              *hint = g_strdup_printf ("Button is too small: %dx%d", width, height);
+              return FIX_SEVERITY_ERROR;
+            }
+        }
+    }
+
   return FIX_SEVERITY_GOOD;
 }
 
