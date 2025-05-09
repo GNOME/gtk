@@ -444,6 +444,11 @@ gsk_path_parse (const char *string)
             /* Look for special contours */
             if (parse_rectangle (&p, &x1, &y1, &w, &h))
               {
+                if (cmd == 'm')
+                  {
+                    x1 += x;
+                    y1 += y;
+                  }
                 gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x1, y1, w, h));
                 if (_strchr ("zZX", prev_cmd))
                   {
@@ -456,8 +461,12 @@ gsk_path_parse (const char *string)
               }
             else if (parse_circle (&p, &x1, &y1, &r))
               {
+                if (cmd == 'm')
+                  {
+                    x1 += x;
+                    y1 += y;
+                  }
                 gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (x1, y1), r);
-
                 if (_strchr ("zZX", prev_cmd))
                   {
                     path_x = x1 + r;
@@ -469,6 +478,11 @@ gsk_path_parse (const char *string)
               }
             else if (parse_rounded_rect (&p, &rr))
               {
+                if (cmd == 'm')
+                  {
+                    rr.bounds.origin.x += x;
+                    rr.bounds.origin.y += y;
+                  }
                 gsk_path_builder_add_rounded_rect (builder, &rr);
 
                 if (_strchr ("zZX", prev_cmd))
