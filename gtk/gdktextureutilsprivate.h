@@ -18,6 +18,7 @@
 #pragma once
 
 #include <gdk/gdk.h>
+#include <gsk/gsk.h>
 
 G_BEGIN_DECLS
 
@@ -69,5 +70,10 @@ GdkPaintable *gdk_paintable_new_from_resource_scaled (const char    *path,
                                                       double         scale);
 GdkPaintable *gdk_paintable_new_from_file_scaled     (GFile         *file,
                                                       double         scale);
+
+GskRenderNode *gsk_render_node_new_from_resource_symbolic (const char *path,
+                                                           gboolean   *only_fg);
+GskRenderNode *gsk_render_node_new_from_filename_symbolic (const char *filename,
+                                                           gboolean   *only_fg);
 
 G_END_DECLS
