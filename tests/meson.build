@@ -1,6 +1,6 @@
 gtk_tests = [
   # testname, optional extra sources
-  ['testsymbolic'],
+  ['testsymbolic', [], [libgtk_static_dep]],
   ['testcursor'],
   ['callbackcursor'],
   ['devicepixels'],
