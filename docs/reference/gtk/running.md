@@ -367,7 +367,10 @@ disable certain features.
 : Disable graphics offload to subsurfaces
 
 `threads`
-: Disabled the use of threads where possible
+: Disables the use of threads where possible
+
+`icon-nodes`
+: Disables the svg-to-node conversion for symbolic icons.
 
 ### `GDK_GL_DISABLE`
 
