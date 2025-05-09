@@ -159,6 +159,7 @@ static const GdkDebugKey gdk_feature_keys[] = {
   { "dmabuf",     GDK_FEATURE_DMABUF,           "Disable dmabuf support" },
   { "offload",    GDK_FEATURE_OFFLOAD,          "Disable graphics offload" },
   { "threads",    GDK_FEATURE_THREADS,          "Disable threads where possible" },
+  { "icon-nodes", GDK_FEATURE_ICON_NODES,       "Disable svg->node conversion for symbolic icons" },
 };
 
 static GdkFeatures gdk_features;
