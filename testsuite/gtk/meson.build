@@ -114,6 +114,13 @@ endif
 
 # Tests that test private apis and therefore are linked against libgtk-4.a
 internal_tests = [
+  {
+    'name': 'symbolic',
+    'sources': [
+      'symbolic.c',
+      '../reftests/reftest-compare.c',
+    ],
+  },
   { 'name': 'bitmask' },
   {
     'name': 'composetable',
