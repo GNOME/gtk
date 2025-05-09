@@ -49,6 +49,7 @@ const GdkDebugKey gdk_vulkan_feature_keys[] = {
   { "win32-semaphore", GDK_VULKAN_FEATURE_WIN32_SEMAPHORE, "Disable Windows sync support" },
   { "incremental-present", GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT, "Do not send damage regions" },
   { "swapchain-maintenance", GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE, "Do not use advanced swapchain features" },
+  { "portability-subset", GDK_VULKAN_FEATURE_PORTABILITY_SUBSET, "Vulkan implementation is non-conformant" },
 };
 #endif
 
@@ -680,6 +681,9 @@ physical_device_check_features (VkPhysicalDevice device)
   if (swapchain_maintenance1_features.swapchainMaintenance1 ||
       physical_device_supports_extension (device, VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME))
     features |= GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE;
+
+  if (physical_device_supports_extension (device, VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME))
+    features |= GDK_VULKAN_FEATURE_PORTABILITY_SUBSET;
 
   return features;
 }
@@ -1600,10 +1604,6 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
 
               device_extensions = g_ptr_array_new ();
               g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SWAPCHAIN_EXTENSION_NAME);
-#ifdef __APPLE__
-              if (physical_device_supports_extension (devices[i], VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME))
-                g_ptr_array_add (device_extensions, (gpointer) VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME);
-#endif
               if (features & GDK_VULKAN_FEATURE_YCBCR)
                 {
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_SAMPLER_YCBCR_CONVERSION_EXTENSION_NAME);
@@ -1652,6 +1652,10 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                   g_ptr_array_add (device_extensions, (gpointer) VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME);
                   swapchain_maintenance1_features.pNext = create_device_pNext;
                   create_device_pNext = &swapchain_maintenance1_features;
+                }
+              if (features & GDK_VULKAN_FEATURE_PORTABILITY_SUBSET)
+                {
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME);
                 }
 
 #define ENABLE_IF(flag) ((features & (flag)) ? VK_TRUE : VK_FALSE)
@@ -1748,6 +1752,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   uint32_t i;
   GPtrArray *used_extensions;
   gboolean have_debug_report = FALSE;
+  VkInstanceCreateFlags flags = 0;
   VkResult res;
 
   g_assert (display->vk_instance == NULL);
@@ -1775,9 +1780,6 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   g_ptr_array_add (used_extensions, (gpointer) VK_KHR_SURFACE_EXTENSION_NAME);
   g_ptr_array_add (used_extensions, (gpointer) VK_KHR_GET_PHYSICAL_DEVICE_PROPERTIES_2_EXTENSION_NAME);
   g_ptr_array_add (used_extensions, (gpointer) GDK_DISPLAY_GET_CLASS (display)->vk_extension_name);
-#ifdef __APPLE__
-  g_ptr_array_add (used_extensions, (gpointer) VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
-#endif
 
   for (i = 0; i < n_extensions; i++)
     {
@@ -1805,12 +1807,17 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
         g_ptr_array_add (used_extensions, (gpointer) VK_EXT_SURFACE_MAINTENANCE_1_EXTENSION_NAME);
       if (g_str_equal (extensions[i].extensionName, VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME))
         g_ptr_array_add (used_extensions, (gpointer) VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME);
+      if (g_str_equal (extensions[i].extensionName, VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME))
+        {
+          g_ptr_array_add (used_extensions, (gpointer) VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+          flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+        }
     }
 
   res = vkCreateInstance (&(VkInstanceCreateInfo) {
                                .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
                                .pNext = NULL,
-                               .flags = VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR,
+                               .flags = flags,
                                .pApplicationInfo = &(VkApplicationInfo) {
                                    .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
                                    .pNext = NULL,
