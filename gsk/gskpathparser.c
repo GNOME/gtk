@@ -456,6 +456,7 @@ gsk_path_parse (const char *string)
                     path_y = y1;
                   }
 
+                cmd = 'z';
                 x = x1;
                 y = y1;
               }
@@ -473,6 +474,7 @@ gsk_path_parse (const char *string)
                     path_y = y1;
                   }
 
+                cmd = 'z';
                 x = x1 + r;
                 y = y1;
               }
@@ -491,6 +493,7 @@ gsk_path_parse (const char *string)
                     path_y = rr.bounds.origin.y;
                   }
 
+                cmd = 'Z';
                 x = rr.bounds.origin.x + rr.corner[GSK_CORNER_TOP_LEFT].width;
                 y = rr.bounds.origin.y;
               }
@@ -761,7 +764,7 @@ gsk_path_parse (const char *string)
                     y2 += y;
                   }
                 if (_strchr ("zZ", prev_cmd))
-                  { 
+                  {
                     gsk_path_builder_move_to (builder, x, y);
                     path_x = x;
                     path_y = y;
