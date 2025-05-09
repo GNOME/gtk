@@ -416,6 +416,11 @@ struct _GtkIconPaintable
   guint is_symbolic     : 1;
   guint only_fg         : 1;
 
+  /* Debug flags for testing svg->node conversion */
+  guint allow_node     : 1;
+  guint allow_recolor  : 1;
+  guint allow_mask     : 1;
+
   /* Cached information if we go ahead and try to load the icon.
    *
    * All access to these are protected by the texture_lock. Everything
@@ -3454,6 +3459,10 @@ static void
 gtk_icon_paintable_init (GtkIconPaintable *icon)
 {
   g_mutex_init (&icon->texture_lock);
+
+  icon->allow_node = 1;
+  icon->allow_recolor = 1;
+  icon->allow_mask = 1;
 }
 
 static GtkIconPaintable *
@@ -3736,10 +3745,11 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
         {
           if (icon->is_symbolic)
             {
-              icon->node = gsk_render_node_new_from_resource_symbolic (icon->filename,
-                                                                       pixel_size, pixel_size,
-                                                                       icon->desired_scale,
-                                                                       &only_fg);
+              if (icon->allow_node)
+                icon->node = gsk_render_node_new_from_resource_symbolic (icon->filename,
+                                                                         pixel_size, pixel_size,
+                                                                         icon->desired_scale,
+                                                                         &only_fg);
               if (!icon->node)
                 texture = gdk_texture_new_from_resource_symbolic (icon->filename,
                                                                   pixel_size, pixel_size,
@@ -3762,10 +3772,11 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
         {
           if (icon->is_symbolic)
             {
-              icon->node = gsk_render_node_new_from_filename_symbolic (icon->filename,
-                                                                       pixel_size, pixel_size,
-                                                                       icon->desired_scale,
-                                                                       &only_fg);
+              if (icon->allow_node)
+                icon->node = gsk_render_node_new_from_filename_symbolic (icon->filename,
+                                                                         pixel_size, pixel_size,
+                                                                         icon->desired_scale,
+                                                                         &only_fg);
               if (!icon->node)
                 texture = gdk_texture_new_from_filename_symbolic (icon->filename,
                                                                   pixel_size, pixel_size,
@@ -4065,16 +4076,22 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
                       render_width,
                       render_height);
 
-  recolored = recolor_node (node, colors, n_colors);
+  if (icon->is_symbolic && icon->allow_recolor)
+    recolored = recolor_node (node, colors, n_colors);
+  else
+    recolored = NULL;
+
   if (recolored)
     {
-      g_debug ("snapshot symbolic icon by recoloring");
+      g_debug ("snapshot symbolic icon as recolored node");
       gtk_snapshot_append_node_scaled (snapshot, recolored, &render_rect);
       gsk_render_node_unref (recolored);
     }
-  else if (icon->is_symbolic && icon->only_fg)
+  else if (icon->is_symbolic && icon->only_fg && icon->allow_mask)
     {
-      g_debug ("snapshot symbolic icon using mask");
+      g_debug ("snapshot symbolic icon %s using mask",
+               gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE
+               ? "as texture" : "as node");
       gtk_snapshot_push_mask (snapshot, GSK_MASK_MODE_ALPHA);
       gtk_snapshot_append_node_scaled (snapshot, node, &render_rect);
       gtk_snapshot_pop (snapshot);
@@ -4086,7 +4103,9 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
       graphene_matrix_t matrix;
       graphene_vec4_t offset;
 
-      g_debug ("snapshot symbolic icon using color-matrix");
+      g_debug ("snapshot symbolic icon %s using color-matrix",
+               gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE
+               ? "as texture" : "as node");
       init_color_matrix (&matrix, &offset,
                          &colors[0], &colors[3],
                          &colors[2], &colors[1]);
@@ -4179,6 +4198,17 @@ gtk_icon_paintable_new_for_file (GFile *file,
   icon->is_symbolic = icon_uri_is_symbolic (icon->filename, -1);
 
   return icon;
+}
+
+void
+gtk_icon_paintable_set_debug (GtkIconPaintable *icon,
+                              gboolean          allow_node,
+                              gboolean          allow_recolor,
+                              gboolean          allow_mask)
+{
+  icon->allow_node = allow_node;
+  icon->allow_recolor = allow_recolor;
+  icon->allow_mask = allow_mask;
 }
 
 /**
