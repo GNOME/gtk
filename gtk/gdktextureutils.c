@@ -19,10 +19,14 @@
 #include <gdk/gdk.h>
 #include "gdktextureutilsprivate.h"
 #include "gtkscalerprivate.h"
+#include "gtksnapshot.h"
 
 #include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdk/gdktextureprivate.h"
 #include "gdk/loaders/gdkpngprivate.h"
+#include "gdk/gdkdebugprivate.h"
+#include "gtk/gtkdebug.h"
+
 
 /* {{{ Pixbuf helpers */
 
@@ -903,6 +907,255 @@ gdk_paintable_new_from_file_scaled (GFile  *file,
   g_bytes_unref (bytes);
 
   return paintable;
+}
+
+/* }}} */
+/* {{{ Render node API */
+
+typedef struct
+{
+  double width, height;
+  GtkSnapshot *snapshot;
+  gboolean only_fg;
+} ParserData;
+
+static void
+start_element_cb (GMarkupParseContext *context,
+                  const gchar         *element_name,
+                  const gchar        **attribute_names,
+                  const gchar        **attribute_values,
+                  gpointer             user_data,
+                  GError             **error)
+{
+  ParserData *data = user_data;
+
+  if (strcmp (element_name, "svg") == 0)
+    {
+      const char *width = NULL;
+      const char *height = NULL;
+      char *end;
+
+      for (int i = 0; attribute_names[i]; i++)
+        {
+          if (strcmp (attribute_names[i], "width") == 0)
+            width = attribute_values[i];
+          else if (strcmp (attribute_names[i], "height") == 0)
+            height = attribute_values[i];
+        }
+
+      if (!width)
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_MISSING_ATTRIBUTE,
+                       "Missing attribute: %s", width);
+          return;
+        }
+      data->width = g_ascii_strtod (width, &end);
+      if (end && strcmp (end, "px") != 0)
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Invalid width attribute: %s", width);
+          return;
+        }
+
+      if (!height)
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_MISSING_ATTRIBUTE,
+                       "Missing attribute: %s", height);
+          return;
+        }
+
+      data->height = g_ascii_strtod (height, &end);
+      if (end && strcmp (end, "px") != 0)
+        {
+          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                       "Invalid height attribute: %s", height);
+          return;
+        }
+      gtk_snapshot_push_clip (data->snapshot, &GRAPHENE_RECT_INIT (0, 0, data->width, data->height));
+    }
+  else if (strcmp (element_name, "g") == 0)
+    {
+      /* Do nothing */
+    }
+  else if (strcmp (element_name, "p") == 0 ||
+           strcmp (element_name, "path") == 0)
+    {
+      const char *path_attr = NULL;
+      const char *fill_rule_attr = NULL;
+      const char *fill_opacity_attr = NULL;
+      const char *class_attr = NULL;
+      GskPath *path;
+      GskFillRule fill_rule;
+      double opacity;
+      GdkRGBA color;
+      char *end;
+
+      if (!g_markup_collect_attributes (element_name,
+                                        attribute_names,
+                                        attribute_values,
+                                        error,
+                                        G_MARKUP_COLLECT_STRING, "d", &path_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill-rule", &fill_rule_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill-opacity", &fill_opacity_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "class", &class_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill", NULL,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "style", NULL,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "id", NULL,
+                                        G_MARKUP_COLLECT_INVALID))
+        {
+          return;
+        }
+
+      if (fill_rule_attr && strcmp (fill_rule_attr, "evenodd") == 0)
+        fill_rule = GSK_FILL_RULE_EVEN_ODD;
+      else
+        fill_rule = GSK_FILL_RULE_WINDING;
+
+      if (fill_opacity_attr)
+        {
+          opacity = g_ascii_strtod (fill_opacity_attr, &end);
+          if (end && *end != '\0')
+            {
+              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                           "Invalid fill-opacity attribute: %s", fill_opacity_attr);
+              return;
+            }
+        }
+      else
+        opacity = 1;
+
+      if (class_attr)
+        data->only_fg = FALSE;
+      else
+        class_attr = "foreground";
+
+      if (strcmp (class_attr, "foreground") == 0)
+        color = (GdkRGBA) { 0, 0, 0, opacity };
+      else if (strcmp (class_attr, "success") == 0)
+        color = (GdkRGBA) { 1, 0, 0, opacity };
+      else if (strcmp (class_attr, "warning") == 0)
+        color = (GdkRGBA) { 0, 1, 0, opacity };
+      else if (strcmp (class_attr, "error") == 0)
+        color = (GdkRGBA) { 0, 0, 1, opacity };
+
+      path = gsk_path_parse (path_attr);
+      gtk_snapshot_append_fill (data->snapshot, path, fill_rule, &color);
+
+      gsk_path_unref (path);
+    }
+  else if (strcmp (element_name, "filter") == 0 ||
+           strcmp (element_name, "mask") == 0)
+    {
+      g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                   "Unhandled element: %s", element_name);
+          return;
+    }
+}
+
+static void
+end_element_cb (GMarkupParseContext *context,
+                const gchar         *element_name,
+                gpointer             user_data,
+                GError             **error)
+{
+  ParserData *data = user_data;
+
+  if (strcmp (element_name, "svg") == 0)
+    gtk_snapshot_pop (data->snapshot);
+}
+
+static GskRenderNode *
+gsk_render_node_new_from_bytes_symbolic (GBytes   *bytes,
+                                         int       width,
+                                         int       height,
+                                         double    scale,
+                                         gboolean *only_fg)
+{
+  GMarkupParseContext *context;
+  GMarkupParser parser = {
+    start_element_cb,
+    end_element_cb,
+    NULL,
+    NULL,
+    NULL,
+  };
+  ParserData data;
+  GError *error = NULL;
+  const char *text;
+  gsize len;
+  GskRenderNode *nodes[2], *node;
+
+  data.width = data.height = 0;
+  data.only_fg = TRUE;
+  data.snapshot = gtk_snapshot_new ();
+
+  text = g_bytes_get_data (bytes, &len);
+
+  context = g_markup_parse_context_new (&parser, G_MARKUP_PREFIX_ERROR_POSITION, &data, NULL);
+  if (!g_markup_parse_context_parse (context, text, len, &error))
+    {
+      g_markup_parse_context_free (context);
+      if (GTK_DEBUG_CHECK (ICONTHEME))
+        gdk_debug_message ("Failed to convert svg to node: %s", error->message);
+      g_error_free (error);
+      return NULL;
+    }
+
+  g_markup_parse_context_free (context);
+
+  if (only_fg)
+    *only_fg = data.only_fg;
+
+  /* force the expected bounds with a transparent color node */
+  nodes[0] = gsk_color_node_new (&(GdkRGBA) { 0, 0, 0, 0 },
+                                &GRAPHENE_RECT_INIT (0, 0, data.width,data.height));
+  nodes[1] = gtk_snapshot_free_to_node (data.snapshot);
+  node = gsk_container_node_new (nodes, 2);
+  gsk_render_node_unref (nodes[0]);
+  gsk_render_node_unref (nodes[1]);
+  return node;
+}
+
+GskRenderNode *
+gsk_render_node_new_from_resource_symbolic (const char *path,
+                                            int         width,
+                                            int         height,
+                                            double      scale,
+                                            gboolean   *only_fg)
+{
+  GBytes *bytes;
+  GskRenderNode *node;
+
+  bytes = g_resources_lookup_data (path, 0, NULL);
+  if (!bytes)
+    return NULL;
+
+  node = gsk_render_node_new_from_bytes_symbolic (bytes, width, height, scale, only_fg);
+  g_bytes_unref (bytes);
+
+  return node;
+}
+
+GskRenderNode *
+gsk_render_node_new_from_filename_symbolic (const char *filename,
+                                            int         width,
+                                            int         height,
+                                            double      scale,
+                                            gboolean   *only_fg)
+{
+  char *text;
+  gsize len;
+  GBytes *bytes;
+  GskRenderNode *node;
+
+  if (!g_file_get_contents (filename, &text, &len, NULL))
+    return NULL;
+
+  bytes = g_bytes_new_take (text, len);
+  node = gsk_render_node_new_from_bytes_symbolic (bytes, width, height, scale, only_fg);
+  g_bytes_unref (bytes);
+
+  return node;
 }
 
 /* }}} */
