@@ -4050,6 +4050,138 @@ enforce_logical_size (GskRenderNode *node,
   return node;
 }
 
+static gboolean
+recolor_node2 (GskRenderNode *node,
+               const GdkRGBA  colors[4],
+               GtkSnapshot   *snapshot)
+{
+  switch ((int) gsk_render_node_get_node_type (node))
+    {
+    case GSK_CONTAINER_NODE:
+      for (guint i = 0; i < gsk_container_node_get_n_children (node); i++)
+        if (!recolor_node2 (gsk_container_node_get_child (node, i), colors, snapshot))
+          return FALSE;
+      return TRUE;
+
+    case GSK_TRANSFORM_NODE:
+      {
+        gboolean ret;
+
+        gtk_snapshot_save (snapshot);
+        gtk_snapshot_transform (snapshot, gsk_transform_node_get_transform (node));
+        ret = recolor_node2 (gsk_transform_node_get_child (node), colors, snapshot);
+        gtk_snapshot_restore (snapshot);
+
+        return ret;
+      }
+
+    case GSK_CLIP_NODE:
+      {
+        gboolean ret;
+
+        gtk_snapshot_push_clip (snapshot, gsk_clip_node_get_clip (node));
+        ret = recolor_node2 (gsk_clip_node_get_child (node), colors, snapshot);
+        gtk_snapshot_pop (snapshot);
+
+        return ret;
+      }
+
+    case GSK_OPACITY_NODE:
+      {
+        gboolean ret;
+
+        gtk_snapshot_push_opacity (snapshot, gsk_opacity_node_get_opacity (node));
+        ret = recolor_node2 (gsk_opacity_node_get_child (node), colors, snapshot);
+        gtk_snapshot_pop (snapshot);
+
+        return ret;
+      }
+
+    case GSK_FILL_NODE:
+      {
+        gboolean ret;
+
+        gtk_snapshot_push_fill (snapshot,
+                                gsk_fill_node_get_path (node),
+                                gsk_fill_node_get_fill_rule (node));
+        ret = recolor_node2 (gsk_fill_node_get_child (node), colors, snapshot);
+        gtk_snapshot_pop (snapshot);
+
+        return ret;
+      }
+      break;
+
+    case GSK_STROKE_NODE:
+      {
+        gboolean ret;
+
+        gtk_snapshot_push_stroke (snapshot,
+                                  gsk_stroke_node_get_path (node),
+                                  gsk_stroke_node_get_stroke (node));
+        ret = recolor_node2 (gsk_stroke_node_get_child (node), colors, snapshot);
+        gtk_snapshot_pop (snapshot);
+
+        return ret;
+      }
+
+    case GSK_COLOR_NODE:
+      {
+        graphene_rect_t bounds;
+        GdkRGBA color;
+        float alpha;
+
+        gsk_render_node_get_bounds (node, &bounds);
+        color = *gsk_color_node_get_color (node);
+
+        /* Preserve the alpha that was set from fill-opacity */
+        alpha = color.alpha;
+        color.alpha = 1;
+
+        if (gdk_rgba_equal (&color, &(GdkRGBA) { 0, 0, 0, 1 }))
+          color = colors[GTK_SYMBOLIC_COLOR_FOREGROUND];
+        else if (gdk_rgba_equal (&color, &(GdkRGBA) { 0, 0, 1, 1 }))
+          color = colors[GTK_SYMBOLIC_COLOR_ERROR];
+        else if (gdk_rgba_equal (&color, &(GdkRGBA) { 0, 1, 0, 1 }))
+          color = colors[GTK_SYMBOLIC_COLOR_WARNING];
+        else if (gdk_rgba_equal (&color, &(GdkRGBA) { 1, 0, 0, 1 }))
+          color = colors[GTK_SYMBOLIC_COLOR_SUCCESS];
+
+        color.alpha *= alpha;
+
+        gtk_snapshot_append_color (snapshot, &color, &bounds);
+      }
+      return TRUE;
+
+    default:
+      return FALSE;
+    }
+}
+
+static gboolean
+recolor_node (GskRenderNode  *node,
+              const GdkRGBA  *colors,
+              gsize           n_colors,
+              GskRenderNode **recolored)
+{
+  GtkSnapshot *snapshot;
+  gboolean ret;
+
+  if (gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE)
+    {
+      *recolored = NULL;
+      return FALSE;
+    }
+
+  snapshot = gtk_snapshot_new ();
+  ret = recolor_node2 (node, colors, snapshot);
+  *recolored = gtk_snapshot_free_to_node (snapshot);
+
+  if (!ret)
+    g_clear_pointer (recolored, gsk_render_node_unref);
+
+  return ret;
+}
+
 static void
 gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
                                       GtkSnapshot          *snapshot,
@@ -4059,7 +4191,7 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
                                       gsize                 n_colors)
 {
   GtkIconPaintable *icon = GTK_ICON_PAINTABLE (paintable);
-  GskRenderNode *node;
+  GskRenderNode *node, *recolored;
   double render_width;
   double render_height;
   graphene_rect_t icon_rect;
@@ -4086,7 +4218,15 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
                       render_width,
                       render_height);
 
-  if (icon->is_symbolic && icon->only_fg)
+  if (recolor_node (node, colors, n_colors, &recolored))
+    {
+      g_debug ("snapshot symbolic icon as recolored node");
+      recolored = enforce_logical_size (recolored, icon->width, icon->height);
+
+      gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
+      gsk_render_node_unref (recolored);
+    }
+  else if (icon->is_symbolic && icon->only_fg)
     {
       g_debug ("snapshot symbolic icon %s using mask",
                gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE
