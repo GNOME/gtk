@@ -10,8 +10,8 @@ clip {
         offset: 0;
         stride: 80;
         data: url("data:application/gzip;base64,\
-    H4sIAAAAAAACA2NgYPjPMIpH8SgexaN4FJOIAUXkZkNABgAA\
-    ");
+H4sIAAAAAAACA2NgYPjPMIpH8SgexaN4FJOIAUXkZkNABgAA\
+");
       }
     }
   }

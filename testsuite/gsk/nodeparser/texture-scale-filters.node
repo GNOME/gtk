@@ -1,22 +1,58 @@
 texture-scale {
-  texture: url('data:,<svg width="10" height="10" viewBox="0 0 10 10"><rect width="10" height="10" style="fill:red"/></svg>');
   bounds: 0 0 50 50;
+  texture: memory {
+    format: BGRA8p;
+    width: 10;
+    height: 10;
+    offset: 0;
+    stride: 40;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAzvD8P//GTTMgAWcGeTqhqKbsakDAA6D0eeQAQAA\
+");
+  }
 }
 
 texture-scale {
-  texture: url('data:,<svg width="10" height="10" viewBox="0 0 10 10"><rect width="10" height="10" style="fill:red"/></svg>');
   bounds: 0 0 50 50;
   filter: linear;
+  texture: memory {
+    format: BGRA8p;
+    width: 10;
+    height: 10;
+    offset: 0;
+    stride: 40;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAzvD8P//GTTMgAWcGeTqhqKbsakDAA6D0eeQAQAA\
+");
+  }
 }
 
 texture-scale {
-  texture: url('data:,<svg width="10" height="10" viewBox="0 0 10 10"><rect width="10" height="10" style="fill:red"/></svg>');
   bounds: 0 0 50 50;
   filter: nearest;
+  texture: memory {
+    format: BGRA8p;
+    width: 10;
+    height: 10;
+    offset: 0;
+    stride: 40;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAzvD8P//GTTMgAWcGeTqhqKbsakDAA6D0eeQAQAA\
+");
+  }
 }
 
 texture-scale {
-  texture: url('data:,<svg width="10" height="10" viewBox="0 0 10 10"><rect width="10" height="10" style="fill:red"/></svg>');
   bounds: 0 0 50 50;
   filter: trilinear;
+  texture: memory {
+    format: BGRA8p;
+    width: 10;
+    height: 10;
+    offset: 0;
+    stride: 40;
+    data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAzvD8P//GTTMgAWcGeTqhqKbsakDAA6D0eeQAQAA\
+");
+  }
 }
