@@ -58,9 +58,9 @@
  * If the file isn’t loaded successfully, the image will contain a
  * “broken image” icon similar to that used in many web browsers.
  *
- * If you want to handle errors in loading the file yourself,
- * for example by displaying an error message, then load the image with
- * [ctor@Gdk.Texture.new_from_file], then create the `GtkImage` with
+ * If you want to handle errors in loading the file yourself, for example
+ * by displaying an error message, then load the image with an image
+ * loading framework such as libglycin, then create the `GtkImage` with
  * [ctor@Gtk.Image.new_from_paintable].
  *
  * Sometimes an application will want to avoid depending on external data
@@ -406,9 +406,9 @@ gtk_image_get_property (GObject     *object,
  * will display a “broken image” icon. This function never returns %NULL,
  * it always returns a valid `GtkImage` widget.
  *
- * If you need to detect failures to load the file, use
- * [ctor@Gdk.Texture.new_from_file] to load the file yourself,
- * then create the `GtkImage` from the texture.
+ * If you need to detect failures to load the file, use an
+ * image loading framework such as libglycin to load the file
+ * yourself, then create the `GtkImage` from the texture.
  *
  * The storage type (see [method@Gtk.Image.get_storage_type])
  * of the returned image is not defined, it will be whatever
@@ -438,9 +438,9 @@ gtk_image_new_from_file   (const char *filename)
  * display a “broken image” icon. This function never returns %NULL,
  * it always returns a valid `GtkImage` widget.
  *
- * If you need to detect failures to load the file, use
- * [ctor@GdkPixbuf.Pixbuf.new_from_file] to load the file yourself,
- * then create the `GtkImage` from the pixbuf.
+ * If you need to detect failures to load the file, use an
+ * image loading framework such as libglycin to load the file
+ * yourself, then create the `GtkImage` from the texture.
  *
  * The storage type (see [method@Gtk.Image.get_storage_type]) of
  * the returned image is not defined, it will be whatever is
@@ -577,6 +577,11 @@ gtk_image_new_from_gicon (GIcon *icon)
  * @filename: (type filename) (nullable): a filename
  *
  * Sets a `GtkImage` to show a file.
+ *
+ * Note that this function should not be used with untrusted data.
+ * Use a proper image loading framework such as libglycin, which can
+ * load many image formats into a `GdkTexture`, and then use
+ * [method@Gtk.Image.set_from_paintable].
  *
  * See [ctor@Gtk.Image.new_from_file] for details.
  */

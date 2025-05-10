@@ -52,8 +52,8 @@
  * “broken image” icon similar to that used in many web browsers.
  * If you want to handle errors in loading the file yourself,
  * for example by displaying an error message, then load the image with
- * [ctor@Gdk.Texture.new_from_file], then create the `GtkPicture` with
- * [ctor@Gtk.Picture.new_for_paintable].
+ * and image loading framework such as libglycin, then create the `GtkPicture`
+ * with [ctor@Gtk.Picture.new_for_paintable].
  *
  * Sometimes an application will want to avoid depending on external data
  * files, such as image files. See the documentation of `GResource` for details.
@@ -580,9 +580,9 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * If the file isn’t found or can’t be loaded, the resulting
  * `GtkPicture` is empty.
  *
- * If you need to detect failures to load the file, use
- * [ctor@Gdk.Texture.new_from_file] to load the file yourself,
- * then create the `GtkPicture` from the texture.
+ * If you need to detect failures to load the file, use an
+ * image loading framework such as libglycin to load the file
+ * yourself, then create the `GtkPicture` from the texture.
  *
  * Returns: a new `GtkPicture`
  */
@@ -675,6 +675,11 @@ gtk_picture_new_for_resource (const char *resource_path)
  *
  * Makes @self load and display @file.
  *
+ * Note that this function should not be used with untrusted data.
+ * Use a proper image loading framework such as libglycin, which can
+ * load many image formats into a `GdkTexture`, and then use
+ * [method@Gtk.Picture.set_paintable].
+ *
  * See [ctor@Gtk.Picture.new_for_file] for details.
  */
 void
@@ -730,6 +735,11 @@ gtk_picture_get_file (GtkPicture *self)
  * @filename: (type filename) (nullable): the filename to play
  *
  * Makes @self load and display the given @filename.
+ *
+ * Note that this function should not be used with untrusted data.
+ * Use a proper image loading framework such as libglycin, which can
+ * load many image formats into a `GdkTexture`, and then use
+ * [method@Gtk.Picture.set_paintable].
  *
  * This is a utility function that calls [method@Gtk.Picture.set_file].
  */
@@ -849,7 +859,7 @@ paintable_size_equal (GdkPaintable *one,
  *
  * Makes @self display the given @paintable.
  *
- * If @paintable is %NULL, nothing will be displayed.
+ * If @paintable is `NULL`, nothing will be displayed.
  *
  * See [ctor@Gtk.Picture.new_for_paintable] for details.
  */
