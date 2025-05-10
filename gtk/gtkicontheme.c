@@ -3738,7 +3738,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           if (icon->is_symbolic)
             icon->texture = gdk_texture_new_from_resource_symbolic (icon->filename,
                                                                     pixel_size, pixel_size,
-                                                                    icon->desired_scale,
                                                                     &only_fg,
                                                                     &load_error);
           else
@@ -3757,7 +3756,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           if (icon->is_symbolic)
             icon->texture = gdk_texture_new_from_filename_symbolic (icon->filename,
                                                                     pixel_size, pixel_size,
-                                                                    icon->desired_scale,
                                                                     &only_fg,
                                                                     &load_error);
           else
