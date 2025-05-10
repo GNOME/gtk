@@ -161,6 +161,7 @@ testsuite/gtk/ui/constraints.ui
 testsuite/gtk/ui/container1.ui
 testsuite/gtk/ui/container8.ui
 testsuite/gtk/ui/scale1.ui
+testsuite/gtk/ui/test10.ui
 testsuite/gtk/ui/test8.ui
 testsuite/gtk/ui/test9.ui
 testsuite/reftests/721800-0px-dotted-border.ref.ui
