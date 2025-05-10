@@ -3725,7 +3725,9 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
 #ifdef G_OS_WIN32
   if (icon->win32_icon)
     {
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
       icon->texture = gdk_texture_new_for_pixbuf (icon->win32_icon);
+G_GNUC_END_IGNORE_DEPRECATIONS
     }
   else
 #endif

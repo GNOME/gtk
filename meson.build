@@ -78,6 +78,7 @@ if host_machine.system() == 'windows'
   add_project_arguments(['-DUNICODE',
                          '-D_UNICODE',
                          '-DCOBJMACROS',
+                         '-DWINVER=_WIN32_WINNT_WIN10',
                          '-D_WIN32_WINNT=_WIN32_WINNT_WIN10'], language: 'c')
 endif
 
