@@ -209,6 +209,8 @@ main (int argc, char *argv[])
   GtkWidget *sw;
   GtkWidget *list;
   GFile *file;
+  GFileInfo *info;
+  GListModel *dirlist;
   GtkWidget *headerbar;
   GtkWidget *large_toggle;
 
@@ -225,7 +227,20 @@ main (int argc, char *argv[])
   else
     file = g_file_new_for_path ("/usr/share/icons/Adwaita/symbolic/actions");
 
-  model = G_LIST_MODEL (gtk_map_list_model_new (G_LIST_MODEL (gtk_directory_list_new ("standard::name", file)), add_icon_size_to_file_info, GINT_TO_POINTER (16), NULL));
+  info = g_file_query_info (file, "standard::name,standard::type", G_FILE_QUERY_INFO_NONE, NULL, NULL);
+  if (g_file_info_get_file_type (info) == G_FILE_TYPE_REGULAR)
+    {
+      g_file_info_set_attribute_object (info, "standard::file", G_OBJECT (file));
+      dirlist = G_LIST_MODEL (g_list_store_new (G_TYPE_FILE_INFO));
+      g_list_store_append (G_LIST_STORE (dirlist), info);
+    }
+  else
+    {
+      g_object_unref (info);
+      dirlist = G_LIST_MODEL (gtk_directory_list_new ("standard::name", file));
+    }
+
+  model = G_LIST_MODEL (gtk_map_list_model_new (dirlist, add_icon_size_to_file_info, GINT_TO_POINTER (16), NULL));
   g_object_unref (file);
 
   factory = gtk_signal_list_item_factory_new ();
