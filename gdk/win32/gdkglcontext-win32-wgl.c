@@ -63,6 +63,27 @@ typedef struct _GdkWin32GLContextClass    GdkWin32GLContextWGLClass;
 
 G_DEFINE_TYPE (GdkWin32GLContextWGL, gdk_win32_gl_context_wgl, GDK_TYPE_WIN32_GL_CONTEXT)
 
+static ATOM
+gdk_win32_gl_context_get_class (void)
+{
+  static ATOM class_atom = 0;
+
+  if (class_atom)
+    return class_atom;
+
+  class_atom = RegisterClassExW (&(WNDCLASSEX) {
+                                     .cbSize = sizeof (WNDCLASSEX),
+                                     .style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC,
+                                     .lpfnWndProc = DefWindowProc,
+                                     .hInstance = this_module (),
+                                     .lpszClassName  = L"GdkWin32GL",
+                                 });
+  if (class_atom == 0)
+    WIN32_API_FAILED ("RegisterClassExW");
+
+  return class_atom;
+}
+
 static void
 gdk_win32_gl_context_wgl_dispose (GObject *gobject)
 {
@@ -514,26 +535,16 @@ gdk_create_dummy_wgl_context (GdkWin32Display *display_win32,
 static HWND
 create_dummy_gl_window (void)
 {
-  WNDCLASS wclass = { 0, };
   ATOM klass;
   HWND hwnd = NULL;
 
-  wclass.lpszClassName = L"GdkGLDummyWindow";
-  wclass.lpfnWndProc = DefWindowProc;
-  wclass.hInstance = this_module ();
-  wclass.style = CS_OWNDC;
-
-  klass = RegisterClass (&wclass);
+  klass = gdk_win32_gl_context_get_class ();
   if (klass)
     {
       hwnd = CreateWindow (MAKEINTRESOURCE (klass),
                            NULL, WS_POPUP,
                            0, 0, 0, 0, NULL, NULL,
                            this_module (), NULL);
-      if (!hwnd)
-        {
-          UnregisterClass (MAKEINTRESOURCE (klass), this_module ());
-        }
     }
 
   return hwnd;
