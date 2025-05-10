@@ -97,6 +97,11 @@ option('android-runtime',
        value: 'enabled',
        description : 'Enable the runtime for running native applications on Android')
 
+option('librsvg',
+       type: 'feature',
+       value: 'enabled',
+       description: 'Use librsvg for symbolic icons')
+
 # Introspection
 
 option('introspection',

@@ -26,11 +26,13 @@
 #include "gdk/gdkdebugprivate.h"
 #include "gtk/gtkdebug.h"
 
-
+#ifdef HAVE_RSVG
 #include <librsvg/rsvg.h>
+#endif
 
 /* {{{ svg helpers */
 
+#ifdef HAVE_RSVG
 static GdkTexture *
 gdk_texture_new_from_rsvg (RsvgHandle  *handle,
                            int          width,
@@ -73,12 +75,18 @@ gdk_texture_new_from_rsvg (RsvgHandle  *handle,
 
   return texture;
 }
+#endif
 
 static GdkTexture *
 gdk_texture_new_from_svg_bytes (GBytes  *bytes,
                                 double   scale,
                                 GError **error)
 {
+#ifndef HAVE_RSVG
+  g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "Svg support is disabled");
+  return NULL;
+#else
   const guchar *data;
   gsize len;
   RsvgHandle *handle;
@@ -106,10 +114,13 @@ gdk_texture_new_from_svg_bytes (GBytes  *bytes,
   g_object_unref (handle);
 
   return texture;
+#endif
 }
 
 /* }}} */
- /* {{{ Symbolic processing */
+/* {{{ Symbolic processing */
+
+#ifdef HAVE_RSVG
 
 static char *
 make_stylesheet (const char *fg_color,
@@ -267,6 +278,7 @@ svg_has_symbolic_classes (GBytes *bytes)
   return TRUE;
 #endif
 }
+#endif
 
 static GdkTexture *
 gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
@@ -276,6 +288,11 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
                                      GError   **error)
 
 {
+#ifndef HAVE_RSVG
+  g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "Svg support is disabled");
+  return NULL;
+#else
   RsvgHandle *handle;
   double w, h;
   const char *r_string = "rgb(255,0,0)";
@@ -372,6 +389,7 @@ out:
     *out_only_fg = only_fg;
 
   return texture;
+#endif
 }
 
 /* }}} */
@@ -487,6 +505,11 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
                                       GCancellable  *cancellable,
                                       GError       **error)
 {
+#ifndef HAVE_RSVG
+  g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED,
+                       "Svg support is disabled");
+  return NULL;
+#else
   RsvgHandle *handle;
   GdkTexture *texture;
 
@@ -501,6 +524,7 @@ gdk_texture_new_from_stream_at_scale (GInputStream  *stream,
   g_object_unref (handle);
 
   return texture;
+#endif
 }
 
 GdkTexture *

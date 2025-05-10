@@ -449,7 +449,8 @@ pixbuf_dep        = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_req,
 png_dep           = dependency('libpng', 'png')
 tiff_dep          = dependency('libtiff-4', 'tiff')
 jpeg_dep          = dependency('libjpeg', 'jpeg')
-rsvg_dep          = dependency('librsvg-2.0', version: rsvg_req)
+rsvg_dep          = dependency('librsvg-2.0', version: rsvg_req, required: get_option('librsvg'))
+cdata.set('HAVE_RSVG', rsvg_dep.found())
 
 epoxy_dep         = dependency('epoxy', version: epoxy_req)
 xkbdep            = dependency('xkbcommon', version: xkbcommon_req, required: wayland_enabled)
@@ -1026,6 +1027,7 @@ summary('Sysprof support', libsysprof_capture_dep.found(), section: 'Features')
 summary('Colord support', colord_dep.found(), section: 'Features')
 summary('Tracker support', tracker3_dep.found(), section: 'Features')
 summary('AccessKit support', accesskit_dep.found(), section: 'Features')
+summary('librsvg support', rsvg_dep.found(), section: 'Features')
 
 summary('Compiler', cc.get_id(), section: 'Toolchain')
 summary('Linker', cc.get_linker_id(), section: 'Toolchain')
