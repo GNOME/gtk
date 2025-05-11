@@ -416,7 +416,6 @@ static GdkTexture *
 gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
                                      int        width,
                                      int        height,
-                                     double     scale,
                                      gboolean  *out_only_fg,
                                      GError   **error)
 
@@ -443,10 +442,11 @@ gdk_texture_new_from_bytes_symbolic (GBytes    *bytes,
   if (has_symbolic_classes || width == 0 || height == 0)
     svg_find_size_strings (file_data, file_len, &icon_width_str, &icon_height_str);
 
-  if (width == 0)
-    width = (int) (g_ascii_strtoull (icon_width_str, NULL, 0) * scale);
-  if (height == 0)
-    height = (int) (g_ascii_strtoull (icon_height_str, NULL, 0) * scale);
+  if (width == 0 || height == 0)
+    {
+      width = (int) g_ascii_strtoull (icon_width_str, NULL, 0);
+      height = (int) g_ascii_strtoull (icon_height_str, NULL, 0);
+    }
 
   if (!has_symbolic_classes)
     {
@@ -702,7 +702,6 @@ GdkTexture *
 gdk_texture_new_from_filename_symbolic (const char  *filename,
                                         int          width,
                                         int          height,
-                                        double       scale,
                                         gboolean    *only_fg,
                                         GError     **error)
 {
@@ -710,7 +709,10 @@ gdk_texture_new_from_filename_symbolic (const char  *filename,
   GdkTexture *texture;
 
   file = g_file_new_for_path (filename);
-  texture = gdk_texture_new_from_file_symbolic (file, width, height, scale, only_fg, error);
+  texture = gdk_texture_new_from_file_symbolic (file,
+                                                width, height,
+                                                only_fg,
+                                                error);
   g_object_unref (file);
 
   return texture;
@@ -720,7 +722,6 @@ GdkTexture *
 gdk_texture_new_from_resource_symbolic (const char  *path,
                                         int          width,
                                         int          height,
-                                        double       scale,
                                         gboolean    *only_fg,
                                         GError     **error)
 {
@@ -733,7 +734,6 @@ gdk_texture_new_from_resource_symbolic (const char  *path,
 
   texture = gdk_texture_new_from_bytes_symbolic (bytes,
                                                  width, height,
-                                                 scale,
                                                  only_fg,
                                                  error);
 
@@ -747,7 +747,6 @@ GdkTexture *
 gdk_texture_new_from_file_symbolic (GFile     *file,
                                     int        width,
                                     int        height,
-                                    double     scale,
                                     gboolean  *only_fg,
                                     GError   **error)
 {
@@ -760,7 +759,6 @@ gdk_texture_new_from_file_symbolic (GFile     *file,
 
   texture = gdk_texture_new_from_bytes_symbolic (bytes,
                                                  width, height,
-                                                 scale,
                                                  only_fg,
                                                  error);
 

@@ -3738,7 +3738,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           if (icon->is_symbolic)
             icon->texture = gdk_texture_new_from_resource_symbolic (icon->filename,
                                                                     pixel_size, pixel_size,
-                                                                    icon->desired_scale,
                                                                     &only_fg,
                                                                     &load_error);
           else
@@ -3757,7 +3756,6 @@ G_GNUC_END_IGNORE_DEPRECATIONS
           if (icon->is_symbolic)
             icon->texture = gdk_texture_new_from_filename_symbolic (icon->filename,
                                                                     pixel_size, pixel_size,
-                                                                    icon->desired_scale,
                                                                     &only_fg,
                                                                     &load_error);
           else
@@ -3941,8 +3939,10 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
 
       g_debug ("snapshot symbolic icon using color-matrix");
       init_color_matrix (&matrix, &offset,
-                         &colors[0], &colors[3],
-                         &colors[2], &colors[1]);
+                         &colors[GTK_SYMBOLIC_COLOR_FOREGROUND],
+                         &colors[GTK_SYMBOLIC_COLOR_SUCCESS],
+                         &colors[GTK_SYMBOLIC_COLOR_WARNING],
+                         &colors[GTK_SYMBOLIC_COLOR_ERROR]);
 
       gtk_snapshot_push_color_matrix (snapshot, &matrix, &offset);
       gtk_snapshot_append_texture (snapshot, texture, &render_rect);

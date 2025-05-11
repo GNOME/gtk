@@ -101,7 +101,7 @@ main (int argc, char **argv)
 
   basename = g_path_get_basename (path);
 
-  symbolic = gdk_texture_new_from_filename_symbolic (path, width, height, 1.0, &only_fg, &error);
+  symbolic = gdk_texture_new_from_filename_symbolic (path, width, height, &only_fg, &error);
   if (symbolic == NULL)
     {
       g_printerr (_("Can’t load file: %s\n"), error->message);

@@ -4,7 +4,16 @@
     child: subsurface {
       child: texture {
         bounds: 0 0 10 10;
-        texture: url('data:image/svg+xml;utf-8,<svg width="10" height="10"></svg>');
+        texture: memory {
+          format: BGRA8p;
+          width: 10;
+          height: 10;
+          offset: 0;
+          stride: 40;
+          data: url("data:application/gzip;base64,\
+H4sIAAAAAAACAzvD8P//GTTMgAWcGeTqhqKbsakDAA6D0eeQAQAA\
+");
+        }
       }
     }
   }
@@ -14,7 +23,16 @@
     child: subsurface {
       child: texture {
         bounds: 0 0 20 20;
-        texture: url('data:image/svg+xml;utf-8,<svg width="20" height="20"></svg>');
+        texture: memory {
+          format: BGRA8p;
+          width: 20;
+          height: 20;
+          offset: 0;
+          stride: 80;
+          data: url("data:application/gzip;base64,\
+H4sIAAAAAAACA2NgYPjPMIpH8SgexaN4FJOIAUXkZkNABgAA\
+");
+        }
       }
     }
   }
