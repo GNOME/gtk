@@ -50,6 +50,7 @@ gdk_macos_vulkan_context_create_surface (GdkVulkanContext *context,
 {
   GdkSurface *gdk_surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (context));
   NSView *view = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (gdk_surface));
+  NSWindow *window;
   VkResult result;
   CAMetalLayer *layer;
   double scale = gdk_surface_get_scale_factor (gdk_surface);
@@ -58,6 +59,13 @@ gdk_macos_vulkan_context_create_surface (GdkVulkanContext *context,
   [layer setOpaque:NO];
   [layer setContentsScale: scale];
   [view setLayer:layer];
+
+  /* This is a workaround to make sure a window is visible when
+   * gtk_widget_set_visible() is called on a window.
+   * Windows are presented normally with gtk_window_present().
+   */
+  if ((window = GDK_MACOS_SURFACE (gdk_surface)->window))
+    [window orderFront:window];
 
   result = GDK_VK_CHECK (vkCreateMetalSurfaceEXT,
                          gdk_vulkan_context_get_instance (context),
