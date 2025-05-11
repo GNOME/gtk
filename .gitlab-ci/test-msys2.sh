@@ -46,6 +46,7 @@ meson setup \
     -Dwayland-backend=false \
     -Dwin32-backend=true \
     -Dintrospection=enabled \
+    -Dlibsrvg=disabled \
     _build
 unset CCACHE_DISABLE
 

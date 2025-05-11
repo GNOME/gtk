@@ -352,7 +352,7 @@ macos-arm64:
         - ccache
   variables:
     BACKEND_FLAGS: "-Dx11-backend=false -Dbroadway-backend=true"
-    FEATURE_FLAGS: "-Daccesskit=enabled -Dgobject-introspection:werror=false -Dintrospection=enabled -Dmedia-gstreamer=disabled"
+    FEATURE_FLAGS: "-Daccesskit=enabled -Dgobject-introspection:werror=false -Dintrospection=enabled -Dmedia-gstreamer=disabled -Dlibrsvg=disabled"
     EXTRA_MESON_FLAGS: ""
     # additional settings
     CCACHE_MAXSIZE: "250Mi"
@@ -435,7 +435,7 @@ android:
   variables:
     EXTRA_MESON_FLAGS: "-Dgperf:werror=false"
     BACKEND_FLAGS: "-Dandroid-backend=true"
-    FEATURE_FLAGS: "-Dmedia-gstreamer=disabled"
+    FEATURE_FLAGS: "-Dmedia-gstreamer=disabled -Dlibsrvg=disabled"
   before_script:
     - .gitlab-ci/show-info-linux.sh
     # We aren't actually using pixiewood here, we just make get the ${ARCH}.cross, android.cross, fontconfig.wrap and glib/hack.patch files.
