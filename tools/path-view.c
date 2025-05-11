@@ -35,9 +35,11 @@ struct _PathView
   gboolean do_fill;
   gboolean show_points;
   gboolean show_controls;
+  GskPath *scaled_path;
   GskPath *line_path;
   GskPath *point_path;
   GdkRGBA point_color;
+  double zoom;
 };
 
 enum {
@@ -50,6 +52,7 @@ enum {
   PROP_POINT_COLOR,
   PROP_SHOW_POINTS,
   PROP_SHOW_CONTROLS,
+  PROP_ZOOM,
   N_PROPERTIES
 };
 
@@ -65,6 +68,7 @@ G_DEFINE_TYPE (PathView, path_view, GTK_TYPE_WIDGET)
 static void
 path_view_init (PathView *self)
 {
+  gtk_widget_set_focusable (GTK_WIDGET (self), TRUE);
   self->do_fill = TRUE;
   self->stroke = gsk_stroke_new (1);
   self->fill_rule = GSK_FILL_RULE_WINDING;
@@ -72,6 +76,7 @@ path_view_init (PathView *self)
   self->bg = (GdkRGBA) { 1, 1, 1, 1};
   self->point_color = (GdkRGBA) { 1, 0, 0, 1};
   self->padding = 10;
+  self->zoom = 1;
 }
 
 static void
@@ -133,6 +138,10 @@ path_view_get_property (GObject    *object,
       g_value_set_boxed (value, &self->point_color);
       break;
 
+    case PROP_ZOOM:
+      g_value_set_double (value, self->zoom);
+      break;
+
      default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
       break;
@@ -143,7 +152,7 @@ static void
 update_bounds (PathView *self)
 {
   if (self->do_fill)
-    gsk_path_get_bounds (self->path, &self->bounds);
+    gsk_path_get_bounds (self->scaled_path, &self->bounds);
   else
     gsk_path_get_stroke_bounds (self->path, self->stroke, &self->bounds);
 
@@ -169,22 +178,31 @@ update_bounds (PathView *self)
 typedef struct
 {
   PathView *self;
+  GskPathBuilder *scaled_builder;
   GskPathBuilder *line_builder;
   GskPathBuilder *point_builder;
 } ControlData;
 
 static gboolean
 collect_cb (GskPathOperation        op,
-            const graphene_point_t *pts,
+            const graphene_point_t *orig_pts,
             gsize                   n_pts,
             float                   weight,
             gpointer                data)
 {
   ControlData *cd = data;
+  graphene_point_t pts[4];
+
+  for (int i = 0; i < n_pts; i++)
+    {
+      pts[i].x = cd->self->zoom * orig_pts[i].x;
+      pts[i].y = cd->self->zoom * orig_pts[i].y;
+    }
 
   switch (op)
     {
     case GSK_PATH_MOVE:
+      gsk_path_builder_move_to (cd->scaled_builder, pts[0].x, pts[0].y);
       if (cd->point_builder)
         gsk_path_builder_add_circle (cd->point_builder, &pts[0], 4);
       if (cd->line_builder)
@@ -193,6 +211,7 @@ collect_cb (GskPathOperation        op,
 
     case GSK_PATH_LINE:
     case GSK_PATH_CLOSE:
+      gsk_path_builder_line_to (cd->scaled_builder, pts[1].x, pts[1].y);
       if (cd->point_builder)
         gsk_path_builder_add_circle (cd->point_builder, &pts[1], 4);
       if (cd->line_builder)
@@ -201,6 +220,10 @@ collect_cb (GskPathOperation        op,
 
     case GSK_PATH_QUAD:
     case GSK_PATH_CONIC:
+      if (op == GSK_PATH_QUAD)
+        gsk_path_builder_quad_to (cd->scaled_builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      else
+        gsk_path_builder_conic_to (cd->scaled_builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, weight);
       if (cd->point_builder)
         {
           if (cd->self->show_controls)
@@ -215,6 +238,7 @@ collect_cb (GskPathOperation        op,
       break;
 
     case GSK_PATH_CUBIC:
+      gsk_path_builder_cubic_to (cd->scaled_builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
       if (cd->point_builder)
         {
           if (cd->self->show_controls)
@@ -246,8 +270,12 @@ update_controls (PathView *self)
 
   data.self = self;
 
+  g_clear_pointer (&self->scaled_path, gsk_path_unref);
   g_clear_pointer (&self->line_path, gsk_path_unref);
   g_clear_pointer (&self->point_path, gsk_path_unref);
+
+  if (self->path)
+    data.scaled_builder = gsk_path_builder_new ();
 
   if (self->path && self->show_controls)
     data.line_builder = gsk_path_builder_new ();
@@ -255,10 +283,12 @@ update_controls (PathView *self)
   if (self->path && (self->show_points || self->show_controls))
     data.point_builder = gsk_path_builder_new ();
 
-  if (data.line_builder || data.point_builder)
+  if (data.scaled_builder || data.line_builder || data.point_builder)
     {
       gsk_path_foreach (self->path, -1, collect_cb, &data);
 
+      if (data.scaled_builder)
+        self->scaled_path = gsk_path_builder_free_to_path (data.scaled_builder);
       if (data.line_builder)
         self->line_path = gsk_path_builder_free_to_path (data.line_builder);
       if (data.point_builder)
@@ -266,6 +296,30 @@ update_controls (PathView *self)
     }
 
   update_bounds (self);
+}
+
+static void
+path_view_set_fill_rule (PathView    *self,
+                         GskFillRule  fill_rule)
+{
+  if (self->fill_rule == fill_rule)
+    return;
+
+  self->fill_rule = fill_rule;
+  gtk_widget_queue_draw (GTK_WIDGET (self));
+}
+
+static void
+path_view_set_zoom (PathView *self,
+                    double    zoom)
+{
+  zoom = CLAMP (zoom, 1, 20);
+
+  if (self->zoom == zoom)
+    return;
+
+  self->zoom = zoom;
+  update_controls (self);
 }
 
 static void
@@ -297,8 +351,7 @@ path_view_set_property (GObject      *object,
       break;
 
     case PROP_FILL_RULE:
-      self->fill_rule = g_value_get_enum (value);
-      gtk_widget_queue_draw (GTK_WIDGET (self));
+      path_view_set_fill_rule (self, g_value_get_enum (value));
       break;
 
     case PROP_FG_COLOR:
@@ -325,6 +378,11 @@ path_view_set_property (GObject      *object,
       self->point_color = *(GdkRGBA *) g_value_get_boxed (value);
       gtk_widget_queue_draw (GTK_WIDGET (self));
       break;
+
+   case PROP_ZOOM:
+      path_view_set_zoom (self, g_value_get_double (value));
+      update_controls (self);
+     break;
 
      default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -363,9 +421,9 @@ path_view_snapshot (GtkWidget   *widget,
   gtk_snapshot_append_color (snapshot, &self->bg, &bounds);
 
   if (self->do_fill)
-    gtk_snapshot_append_fill (snapshot, self->path, self->fill_rule, &self->fg);
+    gtk_snapshot_append_fill (snapshot, self->scaled_path, self->fill_rule, &self->fg);
   else
-    gtk_snapshot_append_stroke (snapshot, self->path, self->stroke, &self->fg);
+    gtk_snapshot_append_stroke (snapshot, self->scaled_path, self->stroke, &self->fg);
 
   if (self->line_path)
     {
@@ -386,6 +444,30 @@ path_view_snapshot (GtkWidget   *widget,
   gtk_snapshot_restore (snapshot);
 }
 
+static void
+path_view_change_zoom (GtkWidget  *widget,
+                       const char *action_name,
+                       GVariant   *parameter)
+{
+  PathView *self = PATH_VIEW (widget);
+  double factor;
+
+  g_variant_get (parameter, "d", &factor);
+
+  path_view_set_zoom (self, self->zoom * factor);
+}
+
+static void
+path_view_toggle_fill_rule (GtkWidget  *widget,
+                            const char *action_name,
+                            GVariant   *parameter)
+{
+  PathView *self = PATH_VIEW (widget);
+
+  path_view_set_fill_rule (self, self->fill_rule == GSK_FILL_RULE_WINDING
+                                 ? GSK_FILL_RULE_EVEN_ODD
+                                 : GSK_FILL_RULE_WINDING);
+}
 static void
 path_view_class_init (PathViewClass *class)
 {
@@ -445,7 +527,27 @@ path_view_class_init (PathViewClass *class)
                             GDK_TYPE_RGBA,
                             G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
 
+  properties[PROP_ZOOM]
+      = g_param_spec_double ("zoom", NULL, NULL,
+                             1, 20, 1,
+                             G_PARAM_READWRITE|G_PARAM_EXPLICIT_NOTIFY);
+
   g_object_class_install_properties (object_class, N_PROPERTIES, properties);
+
+  gtk_widget_class_install_action (widget_class, "zoom", "d",
+                                   path_view_change_zoom);
+
+  gtk_widget_class_install_property_action (widget_class, "points", "show-points");
+  gtk_widget_class_install_property_action (widget_class, "controls", "show-controls");
+
+  gtk_widget_class_install_action (widget_class, "fill-rule", NULL,
+                                   path_view_toggle_fill_rule);
+
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_plus, 0, "zoom", "d", 1.2);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_minus, 0, "zoom", "d", 1/1.2);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_p, 0, "points", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_c, 0, "controls", NULL);
+  gtk_widget_class_add_binding_action (widget_class, GDK_KEY_f, 0, "fill-rule", NULL);
 }
 
 GtkWidget *
