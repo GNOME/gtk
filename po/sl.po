@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk+ master\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-05-06 13:42+0000\n"
-"PO-Revision-Date: 2025-05-06 18:50+0200\n"
+"POT-Creation-Date: 2025-05-10 19:35+0000\n"
+"PO-Revision-Date: 2025-05-11 10:07+0200\n"
 "Last-Translator: Martin Srebotnjak <miles@filmsi.net>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "Language: sl_SI\n"
@@ -84,11 +84,11 @@ msgstr "Ni mogoče določiti vsebine kot »%s«."
 msgid "Cannot provide contents as %s"
 msgstr "Ni mogoče določiti vsebine kot %s."
 
-#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:466
+#: gdk/gdkdisplay.c:176 gdk/gdkglcontext.c:468
 msgid "The current backend does not support OpenGL"
 msgstr "Trenutno zagnan ozadnji program ne podpira OpenGL"
 
-#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1709
+#: gdk/gdkdisplay.c:1364 gdk/gdkvulkancontext.c:1750
 msgid "Vulkan support disabled via GDK_DISABLE"
 msgstr "Podpora Vulkan je onemogočena z GDK_DISABLE"
 
@@ -150,25 +150,25 @@ msgstr "Funkcija Poteg/Spust iz drugih programov ni podprta."
 msgid "No compatible formats to transfer contents."
 msgstr "Ni skladnih zapisov za prenos vsebine."
 
-#: gdk/gdkglcontext.c:426 gdk/x11/gdkglcontext-glx.c:654
+#: gdk/gdkglcontext.c:428 gdk/x11/gdkglcontext-glx.c:654
 msgid "No GL API allowed."
 msgstr "API GL ni dovoljen."
 
-#: gdk/gdkglcontext.c:449 gdk/win32/gdkglcontext-win32-wgl.c:719
+#: gdk/gdkglcontext.c:451 gdk/win32/gdkglcontext-win32-wgl.c:719
 #: gdk/win32/gdkglcontext-win32-wgl.c:862
 #: gdk/win32/gdkglcontext-win32-wgl.c:906 gdk/x11/gdkglcontext-glx.c:700
 msgid "Unable to create a GL context"
 msgstr "Ni mogoče ustvariti vsebine GL"
 
-#: gdk/gdkglcontext.c:1314
+#: gdk/gdkglcontext.c:1316
 msgid "OpenGL ES API disabled via GDK_DISABLE"
 msgstr "Podpora OpenGL ES API je onemogočena z GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1326
+#: gdk/gdkglcontext.c:1328
 msgid "OpenGL API disabled via GDK_DISABLE"
 msgstr "Podpora OpenGL API je onemogočena z GDK_DISABLE"
 
-#: gdk/gdkglcontext.c:1337
+#: gdk/gdkglcontext.c:1339
 #, c-format
 msgid "Application does not support %s API"
 msgstr "Program ne podpira vmesnika API %s"
@@ -176,17 +176,17 @@ msgstr "Program ne podpira vmesnika API %s"
 #. translators: This is about OpenGL backend names, like
 #. * "Trying to use X11 GLX, but EGL is already in use"
 #.
-#: gdk/gdkglcontext.c:2114
+#: gdk/gdkglcontext.c:2130
 #, c-format
 msgid "Trying to use %s, but %s is already in use"
 msgstr "Podana je zahteva za uporabo %s, a je %s že v uporabi."
 
-#: gdk/gdkglcontext.c:2125
+#: gdk/gdkglcontext.c:2141
 #, c-format
 msgid "Trying to use %s, but it is disabled via GDK_DISABLE"
 msgstr "Poskus uporabe %s, vendar je onemogočeno prek GDK_DISABLE"
 
-#: gdk/gdktexture.c:674
+#: gdk/gdktexture.c:678
 msgid "Unknown image format."
 msgstr "Neznan zapis slike."
 
@@ -899,6 +899,10 @@ msgstr "Izrisovalnik ne podpira OpenGL ES 3.0"
 #: gsk/gpu/gskglrenderer.c:64
 msgid "OpenGL 3.3 required"
 msgstr "Potrebujete OpenGL 3.3"
+
+#: gsk/gpu/gskvulkanrenderer.c:158
+msgid "Vulkan support disabled during GTK build"
+msgstr "Podpora za Vulkan je med gradnjo GTK onemogočena"
 
 #: gtk/a11y/gtkatspiaction.c:288
 msgctxt "accessibility"
@@ -2553,7 +2557,7 @@ msgstr "Program"
 msgid "Audio"
 msgstr "Zvok"
 
-#: gtk/gtkfilechooserwidget.c:3819 gtk/gtkfilefilter.c:1090
+#: gtk/gtkfilechooserwidget.c:3819 gtk/gtkfilefilter.c:1072
 msgid "Image"
 msgstr "Slika"
 
@@ -2682,7 +2686,7 @@ msgstr "Kodiranje znakov"
 msgid "Line Ending"
 msgstr "Konec vrstice"
 
-#: gtk/gtkfilefilter.c:1103
+#: gtk/gtkfilefilter.c:1085
 msgid "Unspecified"
 msgstr "Nedoločeno"
 
