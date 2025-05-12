@@ -174,3 +174,134 @@ _gsk_stroke_set_dashes (GskStroke  *stroke,
 
   g_array_unref (d);
 }
+
+typedef struct
+{
+  GskPathBuilder *scaled_builder;
+  GskPathBuilder *line_builder;
+  GskPathBuilder *point_builder;
+  gboolean points;
+  gboolean controls;
+  double zoom;
+} ControlData;
+
+static gboolean
+collect_cb (GskPathOperation        op,
+            const graphene_point_t *orig_pts,
+            gsize                   n_pts,
+            float                   weight,
+            gpointer                data)
+{
+  ControlData *cd = data;
+  graphene_point_t pts[4];
+
+  for (int i = 0; i < n_pts; i++)
+    {
+      pts[i].x = cd->zoom * orig_pts[i].x;
+      pts[i].y = cd->zoom * orig_pts[i].y;
+    }
+
+  switch (op)
+    {
+    case GSK_PATH_MOVE:
+      gsk_path_builder_move_to (cd->scaled_builder, pts[0].x, pts[0].y);
+      if (cd->points)
+        gsk_path_builder_add_circle (cd->point_builder, &pts[0], 4);
+      if (cd->controls)
+        gsk_path_builder_move_to (cd->line_builder, pts[0].x, pts[0].y);
+      break;
+
+    case GSK_PATH_LINE:
+    case GSK_PATH_CLOSE:
+      gsk_path_builder_line_to (cd->scaled_builder, pts[1].x, pts[1].y);
+      if (cd->points)
+        gsk_path_builder_add_circle (cd->point_builder, &pts[1], 4);
+      if (cd->controls)
+        gsk_path_builder_line_to (cd->line_builder, pts[1].x, pts[1].y);
+      break;
+
+    case GSK_PATH_QUAD:
+    case GSK_PATH_CONIC:
+      if (op == GSK_PATH_QUAD)
+        gsk_path_builder_quad_to (cd->scaled_builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
+      else
+        gsk_path_builder_conic_to (cd->scaled_builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, weight);
+      if (cd->points)
+        {
+          if (cd->controls)
+            gsk_path_builder_add_circle (cd->point_builder, &pts[1], 3);
+          gsk_path_builder_add_circle (cd->point_builder, &pts[2], 4);
+        }
+      if (cd->controls)
+        {
+          gsk_path_builder_line_to (cd->line_builder, pts[1].x, pts[1].y);
+          gsk_path_builder_line_to (cd->line_builder, pts[2].x, pts[2].y);
+        }
+      break;
+
+    case GSK_PATH_CUBIC:
+      gsk_path_builder_cubic_to (cd->scaled_builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
+      if (cd->points)
+        {
+          if (cd->controls)
+            {
+              gsk_path_builder_add_circle (cd->point_builder, &pts[1], 3);
+              gsk_path_builder_add_circle (cd->point_builder, &pts[2], 3);
+            }
+          gsk_path_builder_add_circle (cd->point_builder, &pts[3], 4);
+        }
+      if (cd->controls)
+        {
+          gsk_path_builder_line_to (cd->line_builder, pts[1].x, pts[1].y);
+          gsk_path_builder_line_to (cd->line_builder, pts[2].x, pts[2].y);
+          gsk_path_builder_line_to (cd->line_builder, pts[3].x, pts[3].y);
+        }
+      break;
+
+    default:
+      g_assert_not_reached ();
+    }
+
+  return TRUE;
+}
+
+void
+collect_render_data (GskPath   *path,
+                     gboolean   points,
+                     gboolean   controls,
+                     double     zoom,
+                     GskPath  **scaled_path,
+                     GskPath  **line_path,
+                     GskPath  **point_path)
+{
+  ControlData cd;
+
+  memset (&cd, 0, sizeof (ControlData));
+
+  cd.points = points;
+  cd.controls = controls;
+  cd.zoom = zoom;
+
+  cd.scaled_builder = gsk_path_builder_new ();
+  if (controls)
+    {
+      cd.line_builder = gsk_path_builder_new ();
+      cd.point_builder = gsk_path_builder_new ();
+    }
+  else if (points)
+    {
+      cd.point_builder = gsk_path_builder_new ();
+    }
+
+  gsk_path_foreach (path, -1, collect_cb, &cd);
+
+  *scaled_path = gsk_path_builder_free_to_path (cd.scaled_builder);
+  if (cd.line_builder)
+    *line_path = gsk_path_builder_free_to_path (cd.line_builder);
+  else
+    *line_path = NULL;
+  if (cd.point_builder)
+    *point_path = gsk_path_builder_free_to_path (cd.point_builder);
+  else
+    *point_path = NULL;
+}

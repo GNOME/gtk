@@ -20,6 +20,7 @@
 #include "config.h"
 
 #include "path-view.h"
+#include "gtk-path-tool.h"
 
 struct _PathView
 {
@@ -175,125 +176,21 @@ update_bounds (PathView *self)
   gtk_widget_queue_resize (GTK_WIDGET (self));
 }
 
-typedef struct
-{
-  PathView *self;
-  GskPathBuilder *scaled_builder;
-  GskPathBuilder *line_builder;
-  GskPathBuilder *point_builder;
-} ControlData;
-
-static gboolean
-collect_cb (GskPathOperation        op,
-            const graphene_point_t *orig_pts,
-            gsize                   n_pts,
-            float                   weight,
-            gpointer                data)
-{
-  ControlData *cd = data;
-  graphene_point_t pts[4];
-
-  for (int i = 0; i < n_pts; i++)
-    {
-      pts[i].x = cd->self->zoom * orig_pts[i].x;
-      pts[i].y = cd->self->zoom * orig_pts[i].y;
-    }
-
-  switch (op)
-    {
-    case GSK_PATH_MOVE:
-      gsk_path_builder_move_to (cd->scaled_builder, pts[0].x, pts[0].y);
-      if (cd->point_builder)
-        gsk_path_builder_add_circle (cd->point_builder, &pts[0], 4);
-      if (cd->line_builder)
-        gsk_path_builder_move_to (cd->line_builder, pts[0].x, pts[0].y);
-      break;
-
-    case GSK_PATH_LINE:
-    case GSK_PATH_CLOSE:
-      gsk_path_builder_line_to (cd->scaled_builder, pts[1].x, pts[1].y);
-      if (cd->point_builder)
-        gsk_path_builder_add_circle (cd->point_builder, &pts[1], 4);
-      if (cd->line_builder)
-        gsk_path_builder_line_to (cd->line_builder, pts[1].x, pts[1].y);
-      break;
-
-    case GSK_PATH_QUAD:
-    case GSK_PATH_CONIC:
-      if (op == GSK_PATH_QUAD)
-        gsk_path_builder_quad_to (cd->scaled_builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y);
-      else
-        gsk_path_builder_conic_to (cd->scaled_builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, weight);
-      if (cd->point_builder)
-        {
-          if (cd->self->show_controls)
-            gsk_path_builder_add_circle (cd->point_builder, &pts[1], 3);
-          gsk_path_builder_add_circle (cd->point_builder, &pts[2], 4);
-        }
-      if (cd->line_builder)
-        {
-          gsk_path_builder_line_to (cd->line_builder, pts[1].x, pts[1].y);
-          gsk_path_builder_line_to (cd->line_builder, pts[2].x, pts[2].y);
-        }
-      break;
-
-    case GSK_PATH_CUBIC:
-      gsk_path_builder_cubic_to (cd->scaled_builder, pts[1].x, pts[1].y, pts[2].x, pts[2].y, pts[3].x, pts[3].y);
-      if (cd->point_builder)
-        {
-          if (cd->self->show_controls)
-            {
-              gsk_path_builder_add_circle (cd->point_builder, &pts[1], 3);
-              gsk_path_builder_add_circle (cd->point_builder, &pts[2], 3);
-            }
-          gsk_path_builder_add_circle (cd->point_builder, &pts[3], 4);
-        }
-      if (cd->line_builder)
-        {
-          gsk_path_builder_line_to (cd->line_builder, pts[1].x, pts[1].y);
-          gsk_path_builder_line_to (cd->line_builder, pts[2].x, pts[2].y);
-          gsk_path_builder_line_to (cd->line_builder, pts[3].x, pts[3].y);
-        }
-      break;
-
-    default:
-      g_assert_not_reached ();
-    }
-
-  return TRUE;
-}
-
 static void
 update_controls (PathView *self)
 {
-  ControlData data = { 0, };
-
-  data.self = self;
-
   g_clear_pointer (&self->scaled_path, gsk_path_unref);
   g_clear_pointer (&self->line_path, gsk_path_unref);
   g_clear_pointer (&self->point_path, gsk_path_unref);
 
   if (self->path)
-    data.scaled_builder = gsk_path_builder_new ();
-
-  if (self->path && self->show_controls)
-    data.line_builder = gsk_path_builder_new ();
-
-  if (self->path && (self->show_points || self->show_controls))
-    data.point_builder = gsk_path_builder_new ();
-
-  if (data.scaled_builder || data.line_builder || data.point_builder)
-    {
-      gsk_path_foreach (self->path, -1, collect_cb, &data);
-
-      if (data.scaled_builder)
-        self->scaled_path = gsk_path_builder_free_to_path (data.scaled_builder);
-      if (data.line_builder)
-        self->line_path = gsk_path_builder_free_to_path (data.line_builder);
-      if (data.point_builder)
-        self->point_path = gsk_path_builder_free_to_path (data.point_builder);
-    }
+    collect_render_data (self->path,
+                         self->show_points,
+                         self->show_controls,
+                         self->zoom,
+                         &self->scaled_path,
+                         &self->line_path,
+                         &self->point_path);
 
   update_bounds (self);
 }
