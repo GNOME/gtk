@@ -18,3 +18,11 @@ void     get_color      (GdkRGBA    *rgba,
 
 void     _gsk_stroke_set_dashes (GskStroke  *stroke,
                                  const char *dashes);
+
+void collect_render_data (GskPath   *path,
+                          gboolean   points,
+                          gboolean   controls,
+                          double     zoom,
+                          GskPath  **scaled_path,
+                          GskPath  **line_path,
+                          GskPath  **point_path);

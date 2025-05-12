@@ -38,19 +38,25 @@ show_path_fill (GskPath       *path,
                 const GdkRGBA *bg_color,
                 gboolean       show_points,
                 gboolean       show_controls,
-                const GdkRGBA *point_color)
+                const GdkRGBA *point_color,
+                double         zoom)
 {
   GtkWidget *window, *sw, *child;
+  GtkEventController *controller;
 
   window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), _("Path Preview"));
-
-//  gtk_window_set_default_size (GTK_WINDOW (window), 700, 500);
 
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_propagate_natural_width (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_window_set_child (GTK_WINDOW (window), sw);
+
+  controller = gtk_shortcut_controller_new ();
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller),
+                                        gtk_shortcut_new (gtk_keyval_trigger_new (GDK_KEY_q, GDK_CONTROL_MASK),
+                                                          gtk_named_action_new ("window.close")));
+  gtk_widget_add_controller (window, controller);
 
   child = path_view_new (path);
   g_object_set (child,
@@ -61,6 +67,7 @@ show_path_fill (GskPath       *path,
                 "show-points", show_points,
                 "show-controls", show_controls,
                 "point-color", point_color,
+                "zoom", zoom,
                 NULL);
 
   gtk_widget_set_hexpand (child, TRUE);
@@ -80,7 +87,8 @@ show_path_stroke (GskPath       *path,
                   const GdkRGBA *bg_color,
                   gboolean       show_points,
                   gboolean       show_controls,
-                  const GdkRGBA *point_color)
+                  const GdkRGBA *point_color,
+                  double         zoom)
 {
   GtkWidget *window, *sw, *child;
 
@@ -103,6 +111,7 @@ show_path_stroke (GskPath       *path,
                 "show-points", show_points,
                 "show-controls", show_controls,
                 "point-color", point_color,
+                "zoom", zoom,
                 NULL);
 
   gtk_widget_set_hexpand (child, TRUE);
@@ -127,6 +136,7 @@ do_show (int          *argc,
   const char *fg_color = "black";
   const char *bg_color = "white";
   const char *point_color = "red";
+  double zoom = 1;
   double line_width = 1;
   const char *cap = "butt";
   const char *join = "miter";
@@ -144,6 +154,7 @@ do_show (int          *argc,
     { "fg-color", 0, 0, G_OPTION_ARG_STRING, &fg_color, N_("Foreground color"), N_("COLOR") },
     { "bg-color", 0, 0, G_OPTION_ARG_STRING, &bg_color, N_("Background color"), N_("COLOR") },
     { "point-color", 0, 0, G_OPTION_ARG_STRING, &point_color, N_("Point color"), N_("COLOR") },
+    { "zoom", 0, 0, G_OPTION_ARG_DOUBLE, &zoom, N_("Zoom level (number)"), N_("VALUE") },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &args, NULL, N_("PATH") },
     { NULL, }
   };
@@ -234,9 +245,9 @@ do_show (int          *argc,
   _gsk_stroke_set_dashes (stroke, dashes);
 
   if (do_stroke)
-    show_path_stroke (path, stroke, &fg, &bg, show_points, show_controls, &pc);
+    show_path_stroke (path, stroke, &fg, &bg, show_points, show_controls, &pc, zoom);
   else
-    show_path_fill (path, fill_rule, &fg, &bg, show_points, show_controls, &pc);
+    show_path_fill (path, fill_rule, &fg, &bg, show_points, show_controls, &pc, zoom);
 
   gsk_path_unref (path);
 
