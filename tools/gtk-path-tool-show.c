@@ -42,16 +42,21 @@ show_path_fill (GskPath       *path,
                 double         zoom)
 {
   GtkWidget *window, *sw, *child;
+  GtkEventController *controller;
 
   window = gtk_window_new ();
   gtk_window_set_title (GTK_WINDOW (window), _("Path Preview"));
-
-//  gtk_window_set_default_size (GTK_WINDOW (window), 700, 500);
 
   sw = gtk_scrolled_window_new ();
   gtk_scrolled_window_set_propagate_natural_width (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_scrolled_window_set_propagate_natural_height (GTK_SCROLLED_WINDOW (sw), TRUE);
   gtk_window_set_child (GTK_WINDOW (window), sw);
+
+  controller = gtk_shortcut_controller_new ();
+  gtk_shortcut_controller_add_shortcut (GTK_SHORTCUT_CONTROLLER (controller),
+                                        gtk_shortcut_new (gtk_keyval_trigger_new (GDK_KEY_q, GDK_CONTROL_MASK),
+                                                          gtk_named_action_new ("window.close")));
+  gtk_widget_add_controller (window, controller);
 
   child = path_view_new (path);
   g_object_set (child,
