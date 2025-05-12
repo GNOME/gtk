@@ -85,7 +85,7 @@ GST_DEBUG_CATEGORY (gtk_debug_gst_sink);
                      "video/x-raw(" GST_CAPS_FEATURE_MEMORY_D3D12_MEMORY "), " \
                      "width = " GST_VIDEO_SIZE_RANGE ", " \
                      "height = " GST_VIDEO_SIZE_RANGE ", " \
-                     "framerate = " GST_VIDEO_FPS_RANGE ", "
+                     "framerate = " GST_VIDEO_FPS_RANGE "; "
 #else
 #define D3D12_TEXTURE_CAPS ""
 #endif
@@ -105,7 +105,7 @@ GST_STATIC_PAD_TEMPLATE ("sink",
     GST_PAD_SINK,
     GST_PAD_ALWAYS,
     GST_STATIC_CAPS(DMABUF_TEXTURE_CAPS "; "
-                    D3D12_TEXTURE_CAPS "; "
+                    D3D12_TEXTURE_CAPS
                     GL_TEXTURE_CAPS "; "
                     MEMORY_TEXTURE_CAPS)
     );
