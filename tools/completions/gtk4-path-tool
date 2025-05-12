@@ -45,7 +45,7 @@ _gtk4_path_tool()
             ;;
 
         show|render)
-            opts="--help --help-all --help-fill --help-stroke --fill --stroke --points --controls --fg-color --bg-color --point-color"
+            opts="--help --help-all --help-fill --help-stroke --fill --stroke --points --controls --fg-color --bg-color --point-color --fill-rule --line-width --line-join --miter-limit --dashes --dash-offset --zoom"
             COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
             return 0
             ;;
