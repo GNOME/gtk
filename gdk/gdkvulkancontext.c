@@ -682,8 +682,10 @@ physical_device_check_features (VkPhysicalDevice device)
       physical_device_supports_extension (device, VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME))
     features |= GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE;
 
+#ifdef VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME
   if (physical_device_supports_extension (device, VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME))
     features |= GDK_VULKAN_FEATURE_PORTABILITY_SUBSET;
+#endif
 
   return features;
 }
@@ -1653,10 +1655,12 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                   swapchain_maintenance1_features.pNext = create_device_pNext;
                   create_device_pNext = &swapchain_maintenance1_features;
                 }
+#ifdef VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME
               if (features & GDK_VULKAN_FEATURE_PORTABILITY_SUBSET)
                 {
                   g_ptr_array_add (device_extensions, (gpointer) VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME);
                 }
+#endif
 
 #define ENABLE_IF(flag) ((features & (flag)) ? VK_TRUE : VK_FALSE)
               GDK_DISPLAY_DEBUG (display, VULKAN, "Using Vulkan device %u, queue %u", i, j);
