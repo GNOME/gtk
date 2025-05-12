@@ -38,7 +38,8 @@ show_path_fill (GskPath       *path,
                 const GdkRGBA *bg_color,
                 gboolean       show_points,
                 gboolean       show_controls,
-                const GdkRGBA *point_color)
+                const GdkRGBA *point_color,
+                double         zoom)
 {
   GtkWidget *window, *sw, *child;
 
@@ -61,6 +62,7 @@ show_path_fill (GskPath       *path,
                 "show-points", show_points,
                 "show-controls", show_controls,
                 "point-color", point_color,
+                "zoom", zoom,
                 NULL);
 
   gtk_widget_set_hexpand (child, TRUE);
@@ -80,7 +82,8 @@ show_path_stroke (GskPath       *path,
                   const GdkRGBA *bg_color,
                   gboolean       show_points,
                   gboolean       show_controls,
-                  const GdkRGBA *point_color)
+                  const GdkRGBA *point_color,
+                  double         zoom)
 {
   GtkWidget *window, *sw, *child;
 
@@ -103,6 +106,7 @@ show_path_stroke (GskPath       *path,
                 "show-points", show_points,
                 "show-controls", show_controls,
                 "point-color", point_color,
+                "zoom", zoom,
                 NULL);
 
   gtk_widget_set_hexpand (child, TRUE);
@@ -127,6 +131,7 @@ do_show (int          *argc,
   const char *fg_color = "black";
   const char *bg_color = "white";
   const char *point_color = "red";
+  double zoom = 1;
   double line_width = 1;
   const char *cap = "butt";
   const char *join = "miter";
@@ -144,6 +149,7 @@ do_show (int          *argc,
     { "fg-color", 0, 0, G_OPTION_ARG_STRING, &fg_color, N_("Foreground color"), N_("COLOR") },
     { "bg-color", 0, 0, G_OPTION_ARG_STRING, &bg_color, N_("Background color"), N_("COLOR") },
     { "point-color", 0, 0, G_OPTION_ARG_STRING, &point_color, N_("Point color"), N_("COLOR") },
+    { "zoom", 0, 0, G_OPTION_ARG_DOUBLE, &zoom, N_("Zoom level (number)"), N_("VALUE") },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_STRING_ARRAY, &args, NULL, N_("PATH") },
     { NULL, }
   };
@@ -234,9 +240,9 @@ do_show (int          *argc,
   _gsk_stroke_set_dashes (stroke, dashes);
 
   if (do_stroke)
-    show_path_stroke (path, stroke, &fg, &bg, show_points, show_controls, &pc);
+    show_path_stroke (path, stroke, &fg, &bg, show_points, show_controls, &pc, zoom);
   else
-    show_path_fill (path, fill_rule, &fg, &bg, show_points, show_controls, &pc);
+    show_path_fill (path, fill_rule, &fg, &bg, show_points, show_controls, &pc, zoom);
 
   gsk_path_unref (path);
 
