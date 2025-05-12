@@ -57,7 +57,9 @@ Showing
 ^^^^^^^
 
 The ``show`` command displays the given path in a window. The interior
-of the path is filled.
+of the path is filled. The window allows some interactive control with
+key bindings: '+'/'-' change the zoom level, 'p' toggles display of points,
+'c' toggles display of controls, 'f' changes the fill rule.
 
 ``--fill``
 
@@ -129,6 +131,10 @@ of the path is filled.
 
   The offset into the dash pattern where dashing should begin.
   The default value is 0.
+
+``--zoom=NUMBER``
+
+  Set the zoom level to the given number (between 1 and 20).
 
 Rendering
 ^^^^^^^^^
@@ -211,6 +217,10 @@ The interior of the path is filled.
 
   The offset into the dash pattern where dashing should begin.
   The default value is 0.
+
+``--zoom=NUMBER``
+
+  Set the zoom level to the given number (between 1 and 20).
 
 Reversing
 ^^^^^^^^^
