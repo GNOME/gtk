@@ -44,7 +44,7 @@
 
 #ifdef GDK_WINDOWING_WAYLAND
 #include "wayland/gdkwayland.h"
-#include "gtkimcontextwayland.h"
+#include "gtkimcontextwaylandprivate.h"
 #endif
 
 #ifdef GDK_WINDOWING_BROADWAY

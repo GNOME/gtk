@@ -21,8 +21,7 @@
 #include <string.h>
 #include <wayland-client-protocol.h>
 
-#include "gtk/gtkdragsourceprivate.h"
-#include "gtk/gtkimcontextwayland.h"
+#include "gtk/gtkimcontextwaylandprivate.h"
 #include "gtk/gtkimmoduleprivate.h"
 
 #include "gdk/wayland/gdkwayland.h"
