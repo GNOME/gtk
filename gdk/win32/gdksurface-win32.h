@@ -199,10 +199,6 @@ struct _GdkWin32Surface
 
   IDirectManipulationViewport *dmanipulation_viewport_pan;
   IDirectManipulationViewport *dmanipulation_viewport_zoom;
-
-#ifdef HAVE_EGL
-  guint egl_force_redraw_all : 1;
-#endif
 };
 
 struct _GdkWin32SurfaceClass

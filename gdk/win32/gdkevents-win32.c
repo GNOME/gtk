@@ -2723,20 +2723,17 @@ gdk_event_translate (MSG *msg,
        * To obtain the correct result when testing the value of wParam,
        * an application must combine the value 0xFFF0 with the wParam value by using the bitwise AND operator. */
       switch (msg->wParam & 0xFFF0)
-	{
-	case SC_MINIMIZE:
-	case SC_RESTORE:
+        {
+        case SC_MINIMIZE:
+        case SC_RESTORE:
           do_show_surface (surface, msg->wParam == SC_MINIMIZE ? TRUE : FALSE);
+          break;
 
-          if (msg->wParam == SC_RESTORE)
-            _gdk_win32_surface_invalidate_egl_framebuffer (surface);
-
-	  break;
         case SC_MAXIMIZE:
           impl = GDK_WIN32_SURFACE (surface);
           impl->maximizing = TRUE;
-	  break;
-	}
+          break;
+        }
 
       break;
 

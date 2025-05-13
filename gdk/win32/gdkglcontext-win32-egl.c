@@ -52,31 +52,6 @@ typedef struct _GdkWin32GLContextClass    GdkWin32GLContextEGLClass;
 
 G_DEFINE_TYPE (GdkWin32GLContextEGL, gdk_win32_gl_context_egl, GDK_TYPE_WIN32_GL_CONTEXT)
 
-static gboolean
-is_egl_force_redraw (GdkSurface *surface)
-{
-  /* We only need to call gdk_window_invalidate_rect () if necessary */
-  if (surface->gl_paint_context != NULL && gdk_gl_context_get_use_es (surface->gl_paint_context))
-    {
-      GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-
-      return impl->egl_force_redraw_all;
-    }
-  return FALSE;
-}
-
-static void
-reset_egl_force_redraw (GdkSurface *surface)
-{
-  if (surface->gl_paint_context != NULL && gdk_gl_context_get_use_es (surface->gl_paint_context))
-    {
-      GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-
-      if (impl->egl_force_redraw_all)
-        impl->egl_force_redraw_all = FALSE;
-    }
-}
-
 static void
 gdk_win32_gl_context_egl_end_frame (GdkDrawContext *draw_context,
                                     gpointer        context_data,
@@ -92,17 +67,6 @@ gdk_win32_gl_context_egl_end_frame (GdkDrawContext *draw_context,
   gdk_gl_context_make_current (context);
 
   egl_surface = gdk_surface_get_egl_surface (surface);
-
-  if (is_egl_force_redraw (surface))
-    {
-      GdkRectangle rect = {0, 0, gdk_surface_get_width (surface), gdk_surface_get_height (surface)};
-
-      /* We need to do gdk_window_invalidate_rect() so that we don't get glitches after maximizing or
-       *  restoring
-       */
-      gdk_surface_invalidate_rect (surface, &rect);
-      reset_egl_force_redraw (surface);
-    }
 
   eglSwapBuffers (gdk_display_get_egl_display (display), egl_surface);
 }

@@ -88,9 +88,6 @@ void      gdk_win32_surface_destroy_egl_surface     (GdkWin32Surface *self);
 
 GType     gdk_win32_gl_context_egl_get_type         (void) G_GNUC_CONST;
 
-void
-_gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface);
-
 #endif /* !DONT_INCLUDE_LIBEPOXY */
 
 HGLRC     gdk_win32_private_wglGetCurrentContext (void);
