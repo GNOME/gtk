@@ -115,11 +115,6 @@ struct _GdkW32DragMoveResizeContext
   /* Not used */
   guint32            timestamp;
 
-  /* TRUE if during the next redraw we should call SetWindowPos() to push
-   * the surface size and position to the native HWND.
-   */
-  gboolean           native_move_resize_pending;
-
   /* The cursor we should use while the operation is running. */
   GdkCursor         *cursor;
 };
@@ -210,10 +205,6 @@ GType _gdk_win32_surface_get_type (void);
 
 void  _gdk_win32_surface_update_style_bits   (GdkSurface *surface);
 
-void  _gdk_win32_get_window_client_area_rect (GdkSurface *surface,
-                                              int         scale,
-                                              RECT       *rect);
-
 void gdk_win32_surface_move (GdkSurface *surface,
                              int         x,
                              int         y);
@@ -224,10 +215,8 @@ void gdk_win32_surface_move_resize (GdkSurface *surface,
                                     int         width,
                                     int         height);
 
-GdkSurface *gdk_win32_drag_surface_new       (GdkDisplay *display);
+GdkSurface *    gdk_win32_drag_surface_new                      (GdkDisplay             *display);
 
-RECT
-gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context);
 
 #ifdef HAVE_EGL
 EGLSurface gdk_win32_surface_get_egl_surface (GdkSurface *surface,
