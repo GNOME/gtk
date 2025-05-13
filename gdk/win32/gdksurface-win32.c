@@ -864,7 +864,6 @@ gdk_win32_surface_resize (GdkSurface *surface,
                            outer_rect.right - outer_rect.left,
                            outer_rect.bottom - outer_rect.top,
                            SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER));
-  surface->resize_count += 1;
 
   if (!GDK_WIN32_SURFACE (surface)->force_recompute_size)
     gdk_surface_request_layout (surface);
