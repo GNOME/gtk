@@ -987,10 +987,6 @@ if os_unix
 endif
 
 
-devenv = environment()
-devenv.set('GTK_PATH', meson.current_build_dir() / 'modules')
-meson.add_devenv(devenv)
-
 if not meson.is_cross_build()
   gnome.post_install(
     glib_compile_schemas: true,
