@@ -941,8 +941,6 @@ gdk_win32_surface_move_resize_internal (GdkSurface *surface,
     }
   else
     {
-      _gdk_win32_surface_invalidate_egl_framebuffer (surface);
-
       if (with_move)
         {
           gdk_win32_surface_do_move_resize (surface, x, y, width, height);
@@ -1967,9 +1965,6 @@ gdk_win32_surface_end_move_resize_drag (GdkSurface *surface)
 {
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
   GdkW32DragMoveResizeContext *context = &impl->drag_move_resize_context;
-  
-  if (context->op == GDK_WIN32_DRAGOP_RESIZE)
-    _gdk_win32_surface_invalidate_egl_framebuffer (surface);
 
   context->op = GDK_WIN32_DRAGOP_NONE;
 
@@ -2363,8 +2358,6 @@ gdk_win32_surface_unmaximize (GdkSurface *surface)
 			   GDK_SURFACE_HWND (surface),
 			   _gdk_win32_surface_state_to_string (surface->state)));
 
-  _gdk_win32_surface_invalidate_egl_framebuffer (surface);
-
   if (GDK_SURFACE_IS_MAPPED (surface))
     GtkShowSurfaceHWND (surface, SW_RESTORE);
   else
@@ -2460,7 +2453,6 @@ gdk_win32_surface_unfullscreen (GdkSurface *surface)
 
       impl->hint_flags = fi->hint_flags;
       SetWindowLong (GDK_SURFACE_HWND (surface), GWL_STYLE, fi->style);
-      _gdk_win32_surface_invalidate_egl_framebuffer (surface);
       API_CALL (SetWindowPos, (GDK_SURFACE_HWND (surface), HWND_NOTOPMOST,
 			       fi->r.left, fi->r.top,
 			       fi->r.right - fi->r.left, fi->r.bottom - fi->r.top,
@@ -3486,23 +3478,6 @@ gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context)
     }
 
   return queued_hwnd_rect;
-}
-
-void
-_gdk_win32_surface_invalidate_egl_framebuffer (GdkSurface *surface)
-{
-/* If we are using ANGLE, we need to force redraw of the whole surface and its child surfaces
- *  as we need to re-acquire the EGL surfaces that we rendered to upload to Cairo explicitly,
- *  using gdk_window_invalidate_rect (), when we maximize or restore
- */
-#ifdef HAVE_EGL
-  if (surface->gl_paint_context != NULL && gdk_gl_context_get_use_es (surface->gl_paint_context))
-    {
-      GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-
-      impl->egl_force_redraw_all = TRUE;
-    }
-#endif
 }
 
 GdkSurface *
