@@ -70,10 +70,8 @@ typedef struct _GdkWin32GLContextWGL      GdkWin32GLContextWGL;
 
 GdkGLContext *  gdk_win32_display_init_wgl              (GdkDisplay             *display,
                                                          GError                **error);
-void            gdk_win32_gl_context_wgl_bind_surface   (GdkWin32GLContextWGL   *ctx,
-                                                         GdkWin32Surface        *win32_surface);
 
-GType     gdk_win32_gl_context_wgl_get_type         (void) G_GNUC_CONST;
+GType           gdk_win32_gl_context_wgl_get_type       (void) G_GNUC_CONST;
 
 /* EGL */
 #define GDK_TYPE_WIN32_GL_CONTEXT_EGL     (gdk_win32_gl_context_egl_get_type())
@@ -81,10 +79,6 @@ GType     gdk_win32_gl_context_wgl_get_type         (void) G_GNUC_CONST;
 #define GDK_IS_WIN32_GL_CONTEXT_EGL(obj)  (G_TYPE_CHECK_INSTANCE_TYPE ((obj), GDK_TYPE_WIN32_GL_CONTEXT_EGL))
 
 typedef struct _GdkWin32GLContextEGL      GdkWin32GLContextEGL;
-
-gboolean  gdk_win32_display_init_egl                (GdkDisplay  *display,
-                                                     GError     **error);
-void      gdk_win32_surface_destroy_egl_surface     (GdkWin32Surface *self);
 
 GType     gdk_win32_gl_context_egl_get_type         (void) G_GNUC_CONST;
 
