@@ -389,6 +389,18 @@ and `decrease-value`.
 Since GTK 4.10, the best way to suppose changing the value is by implementing
 the [iface@Gtk.AccessibleRange] interface.
 
+## Out-of-process embedding
+
+Some types of applications commonly split their UI into multiple processes.
+A typical example would be web browsers with one process for each web page that
+is loaded in a tab. In this case, there is a need to 'graft' the accessible
+tree of the out-of-process components into the main accessible tree of the
+application.
+
+The AT-SPI accessibility backend of GTK supports this, using the
+`GtkAtSpiSocket` interface, which implements the org.a11y.atspi.Socket
+D-Bus interface on the accessibility bus.
+
 ## Other resources
 
 The Orca screenreader has [Tips for Application Developers](https://gitlab.gnome.org/GNOME/orca/-/blob/main/README-APPLICATION-DEVELOPERS.md).
