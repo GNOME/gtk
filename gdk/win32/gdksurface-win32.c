@@ -2821,9 +2821,6 @@ _gdk_win32_surface_request_layout (GdkSurface *surface)
                                          &surface->x, &surface->y,
                                           NULL, NULL);
         }
-
-      if (!impl->inhibit_configure)
-        impl->force_recompute_size = TRUE;
     }
 }
 
