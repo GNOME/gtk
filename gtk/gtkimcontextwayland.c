@@ -21,8 +21,7 @@
 #include <string.h>
 #include <wayland-client-protocol.h>
 
-#include "gtk/gtkdragsourceprivate.h"
-#include "gtk/gtkimcontextwayland.h"
+#include "gtk/gtkimcontextwaylandprivate.h"
 #include "gtk/gtkimmoduleprivate.h"
 
 #include "gdk/wayland/gdkwayland.h"
@@ -53,7 +52,7 @@ struct _GtkIMContextWaylandGlobal
 
 struct _GtkIMContextWaylandClass
 {
-  GtkIMContextSimpleClass parent_class;
+  GtkIMContextClass parent_class;
 };
 
 struct preedit {
@@ -69,7 +68,7 @@ struct surrounding_delete {
 
 struct _GtkIMContextWayland
 {
-  GtkIMContextSimple parent_instance;
+  GtkIMContext parent_instance;
   GtkWidget *widget;
 
   struct {
@@ -98,8 +97,8 @@ static void notify_surrounding_text (GtkIMContextWayland *context);
 static void notify_cursor_location (GtkIMContextWayland *context);
 static void notify_content_type (GtkIMContextWayland *context);
 
-G_DEFINE_TYPE_WITH_CODE (GtkIMContextWayland, gtk_im_context_wayland, GTK_TYPE_IM_CONTEXT_SIMPLE,
-			 gtk_im_module_ensure_extension_point ();
+G_DEFINE_TYPE_WITH_CODE (GtkIMContextWayland, gtk_im_context_wayland, GTK_TYPE_IM_CONTEXT,
+                         gtk_im_module_ensure_extension_point ();
                          g_io_extension_point_implement (GTK_IM_MODULE_EXTENSION_POINT_NAME,
                                                          g_define_type_id,
                                                          "wayland",
@@ -161,7 +160,7 @@ text_input_preedit (void                     *data,
     return;
 
   context = GTK_IM_CONTEXT_WAYLAND (global->current);
-      
+
   g_free (context->pending_preedit.text);
   context->pending_preedit.text = g_strdup (text);
   context->pending_preedit.cursor_begin = cursor_begin;
@@ -220,6 +219,7 @@ static void
 text_input_commit_apply (GtkIMContextWaylandGlobal *global)
 {
   GtkIMContextWayland *context;
+
   context = GTK_IM_CONTEXT_WAYLAND (global->current);
   if (context->pending_commit)
     g_signal_emit_by_name (global->current, "commit", context->pending_commit);
@@ -553,19 +553,6 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
   if (attrs)
     *attrs = NULL;
 
-  GTK_IM_CONTEXT_CLASS (gtk_im_context_wayland_parent_class)->get_preedit_string (context,
-                                                                                  str, attrs,
-                                                                                  cursor_pos);
-
-  /* If the parent implementation returns a len>0 string, go with it */
-  if (str && *str)
-    {
-      if (**str)
-        return;
-
-      g_free (*str);
-    }
-
   preedit_str =
     context_wayland->current_preedit.text ? context_wayland->current_preedit.text : "";
 
@@ -606,12 +593,42 @@ gtk_im_context_wayland_get_preedit_string (GtkIMContext   *context,
     }
 }
 
+static void
+gtk_im_context_commit_char (GtkIMContext *context,
+                            gunichar      ch)
+{
+  char buf[8] = { 0, };
+
+  g_unichar_to_utf8 (ch, buf);
+
+  g_signal_emit_by_name (context, "commit", buf);
+}
+
 static gboolean
 gtk_im_context_wayland_filter_keypress (GtkIMContext *context,
-                                        GdkEvent     *key)
+                                        GdkEvent     *event)
 {
-  /* This is done by the compositor */
-  return GTK_IM_CONTEXT_CLASS (gtk_im_context_wayland_parent_class)->filter_keypress (context, key);
+  guint keyval, state;
+  gunichar ch;
+  GdkModifierType no_text_input_mask = GDK_ALT_MASK|GDK_CONTROL_MASK;
+
+  if (gdk_event_get_event_type (event) == GDK_KEY_RELEASE)
+    return FALSE;
+
+  keyval = gdk_key_event_get_keyval (event);
+  state = gdk_event_get_modifier_state (event);
+
+  if (state & no_text_input_mask)
+    return FALSE;
+
+  ch = gdk_keyval_to_unicode (keyval);
+  if (ch != 0 && !g_unichar_iscntrl (ch))
+    {
+      gtk_im_context_commit_char (context, ch);
+      return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -798,8 +815,6 @@ gtk_im_context_wayland_reset (GtkIMContext *context)
 {
   notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
                     ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_OTHER);
-
-  GTK_IM_CONTEXT_CLASS (gtk_im_context_wayland_parent_class)->reset (context);
 }
 
 static void
@@ -875,9 +890,6 @@ static void
 gtk_im_context_wayland_commit (GtkIMContext *context,
                                const gchar  *str)
 {
-  if (GTK_IM_CONTEXT_CLASS (gtk_im_context_wayland_parent_class)->commit)
-    GTK_IM_CONTEXT_CLASS (gtk_im_context_wayland_parent_class)->commit (context, str);
-
   notify_im_change (GTK_IM_CONTEXT_WAYLAND (context),
                     ZWP_TEXT_INPUT_V3_CHANGE_CAUSE_INPUT_METHOD);
 }
