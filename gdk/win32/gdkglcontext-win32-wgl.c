@@ -63,6 +63,19 @@ typedef struct _GdkWin32GLContextClass    GdkWin32GLContextWGLClass;
 
 G_DEFINE_TYPE (GdkWin32GLContextWGL, gdk_win32_gl_context_wgl, GDK_TYPE_WIN32_GL_CONTEXT)
 
+static HDC
+gdk_win32_gl_context_wgl_get_dc (GdkWin32GLContextWGL *self)
+{
+  if (GDK_WIN32_GL_CONTEXT (self)->handle)
+    {
+      return GetDC (GDK_WIN32_GL_CONTEXT (self)->handle);
+    }
+  else
+    {
+      GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self));
+    
+      return GDK_WIN32_DISPLAY (display)->dummy_context_wgl.hdc;
+    }
 }
 
 static void
@@ -102,10 +115,7 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "win32", "swap buffers");
 
-  if (surface != NULL)
-    hdc = surface_win32->hdc;
-  else
-    hdc = display_win32->dummy_context_wgl.hdc;
+  hdc = gdk_win32_gl_context_wgl_get_dc (context_wgl);
 
   /* context->old_updated_area[0] contains this frame's updated region
    * (what actually changed since the previous frame) */
@@ -991,14 +1001,14 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   legacy_bit = share != NULL && gdk_gl_context_is_legacy (share);
 
   if (surface != NULL)
-    hdc = GDK_WIN32_SURFACE (surface)->hdc;
-  else
-    hdc = display_win32->dummy_context_wgl.hdc;
+    gdk_win32_gl_context_ensure_handle (GDK_DRAW_CONTEXT (context));
+  
+  hdc = gdk_win32_gl_context_wgl_get_dc (context_wgl);
 
   if (!set_wgl_pixformat_for_hdc (display_win32,
-                                 &hdc,
-                                 &pixel_format,
-                                 &recreate_dummy_context))
+                                  &hdc,
+                                  &pixel_format,
+                                  &recreate_dummy_context))
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_UNSUPPORTED_FORMAT,
@@ -1138,18 +1148,15 @@ static gboolean
 gdk_win32_gl_context_wgl_make_current (GdkGLContext *context,
                                        gboolean      surfaceless)
 {
-  GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (context);
+  GdkWin32GLContextWGL *self = GDK_WIN32_GL_CONTEXT_WGL (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   HDC hdc;
 
-  if (surfaceless || surface == NULL)
-    hdc = display_win32->dummy_context_wgl.hdc;
-  else
-    hdc = GDK_WIN32_SURFACE (surface)->hdc;
+  hdc = gdk_win32_gl_context_wgl_get_dc (self);
 
-  if (!gdk_win32_private_wglMakeCurrent (hdc, context_wgl->wgl_context))
+  if (!gdk_win32_private_wglMakeCurrent (hdc, self->wgl_context))
     return FALSE;
 
   return TRUE;
