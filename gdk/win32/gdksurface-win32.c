@@ -1809,8 +1809,8 @@ setup_drag_move_resize_context (GdkSurface                  *surface,
         {
           swx += impl->shadow.left;
           swy += impl->shadow.top;
-          swwidth -= impl->shadow_x;
-          swheight -= impl->shadow_y;
+          swwidth -= impl->shadow.left + impl->shadow.right;
+          swheight -= impl->shadow.top + impl->shadow.bottom;
         }
 
       pointer_outside_of_surface = root_x < swx || root_x > swx + swwidth ||
@@ -1860,8 +1860,8 @@ setup_drag_move_resize_context (GdkSurface                  *surface,
           unmax_width = placement.rcNormalPosition.right - placement.rcNormalPosition.left;
           unmax_height = placement.rcNormalPosition.bottom - placement.rcNormalPosition.top;
 
-          shadow_unmax_width = unmax_width - impl->shadow_x * impl->surface_scale;
-          shadow_unmax_height = unmax_height - impl->shadow_y * impl->surface_scale;
+          shadow_unmax_width = unmax_width - (impl->shadow.left + impl->shadow.right) * impl->surface_scale;
+          shadow_unmax_height = unmax_height - (impl->shadow.top + impl->shadow.bottom) * impl->surface_scale;
 
           if (offsetx * impl->surface_scale < (shadow_unmax_width / 2) &&
               offsety * impl->surface_scale < (shadow_unmax_height / 2))
@@ -2613,8 +2613,6 @@ gdk_win32_surface_set_shadow_width (GdkSurface *surface,
   impl->shadow.right = right;
   impl->shadow.top = top;
   impl->shadow.bottom = bottom;
-  impl->shadow_x = left + right;
-  impl->shadow_y = top + bottom;
 }
 
 static void
