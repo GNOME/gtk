@@ -46,6 +46,14 @@ struct _GdkD3d12ContextClass
   GdkDrawContextClass parent_class;
 };
 
+enum {
+  RELEASE_BUFFERS,
+
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 G_DEFINE_TYPE (GdkD3d12Context, gdk_d3d12_context, GDK_TYPE_DRAW_CONTEXT)
 
 static void
@@ -228,6 +236,8 @@ gdk_d3d12_context_surface_detach (GdkDrawContext *context)
 
   gdk_damage_tracker_finish (&self->damage_tracker);
 
+  g_signal_emit (self, signals[RELEASE_BUFFERS], 0);
+
   gdk_win32_com_clear (&self->swap_chain);
 }
 
@@ -238,6 +248,8 @@ gdk_d3d12_context_surface_resized (GdkDrawContext *context)
   guint width, height;
 
   gdk_damage_tracker_reset (&self->damage_tracker);
+
+  g_signal_emit (self, signals[RELEASE_BUFFERS], 0);
 
   gdk_draw_context_get_buffer_size (context, &width, &height);
 
@@ -273,6 +285,24 @@ gdk_d3d12_context_class_init (GdkD3d12ContextClass *klass)
   draw_context_class->surface_attach = gdk_d3d12_context_surface_attach;
   draw_context_class->surface_detach = gdk_d3d12_context_surface_detach;
   draw_context_class->surface_resized = gdk_d3d12_context_surface_resized;
+
+  /*<private>
+   * GdkD3d12Context::release-buffers
+   * @context: the object on which the signal is emitted
+   *
+   * Emitted when all outstanding buffers of the swapchain need to be
+   * released.
+   *
+   * Usually this means that the swapchain will be resized.
+   */
+  signals[RELEASE_BUFFERS] =
+    g_signal_new (g_intern_static_string ("release-buffers"),
+		              G_OBJECT_CLASS_TYPE (object_class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
 }
 
 static void
