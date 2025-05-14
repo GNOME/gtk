@@ -63,25 +63,6 @@ typedef struct _GdkWin32GLContextClass    GdkWin32GLContextWGLClass;
 
 G_DEFINE_TYPE (GdkWin32GLContextWGL, gdk_win32_gl_context_wgl, GDK_TYPE_WIN32_GL_CONTEXT)
 
-static ATOM
-gdk_win32_gl_context_get_class (void)
-{
-  static ATOM class_atom = 0;
-
-  if (class_atom)
-    return class_atom;
-
-  class_atom = RegisterClassExW (&(WNDCLASSEX) {
-                                     .cbSize = sizeof (WNDCLASSEX),
-                                     .style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC,
-                                     .lpfnWndProc = DefWindowProc,
-                                     .hInstance = this_module (),
-                                     .lpszClassName  = L"GdkWin32GL",
-                                 });
-  if (class_atom == 0)
-    WIN32_API_FAILED ("RegisterClassExW");
-
-  return class_atom;
 }
 
 static void

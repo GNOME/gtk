@@ -61,6 +61,8 @@ struct _GdkWin32GLContextClass
   GdkGLContextClass parent_class;
 };
 
+ATOM            gdk_win32_gl_context_get_class          (void);
+
 /* WGL */
 #define GDK_TYPE_WIN32_GL_CONTEXT_WGL     (gdk_win32_gl_context_wgl_get_type())
 #define GDK_WIN32_GL_CONTEXT_WGL(obj)     (G_TYPE_CHECK_INSTANCE_CAST ((obj), GDK_TYPE_WIN32_GL_CONTEXT_WGL, GdkWin32GLContextWGL))

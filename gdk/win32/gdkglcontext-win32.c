@@ -45,6 +45,28 @@
 
 G_DEFINE_ABSTRACT_TYPE (GdkWin32GLContext, gdk_win32_gl_context, GDK_TYPE_GL_CONTEXT)
 
+ATOM
+gdk_win32_gl_context_get_class (void)
+{
+  static ATOM class_atom = 0;
+
+  if (class_atom)
+    return class_atom;
+
+  class_atom = RegisterClassExW (&(WNDCLASSEX) {
+                                     .cbSize = sizeof (WNDCLASSEX),
+                                     .style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC,
+                                     .lpfnWndProc = DefWindowProc,
+                                     .hInstance = this_module (),
+                                     .lpszClassName  = L"GdkWin32GL",
+                                 });
+  if (class_atom == 0)
+    WIN32_API_FAILED ("RegisterClassExW");
+
+  return class_atom;
+}
+
+
 static void
 gdk_win32_gl_context_class_init (GdkWin32GLContextClass *klass)
 {
