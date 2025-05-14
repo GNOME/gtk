@@ -43,5 +43,7 @@ struct _GskGpuRendererClass
 GdkDrawContext *        gsk_gpu_renderer_get_context                    (GskGpuRenderer         *self);
 GskGpuDevice *          gsk_gpu_renderer_get_device                     (GskGpuRenderer         *self);
 
+void                    gsk_gpu_renderer_clear_frames                   (GskGpuRenderer         *self);
+
 G_END_DECLS
 
