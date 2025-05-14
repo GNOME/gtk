@@ -54,6 +54,8 @@ G_BEGIN_DECLS
 struct _GdkWin32GLContext
 {
   GdkGLContext parent_instance;
+
+  HWND handle;
 };
 
 struct _GdkWin32GLContextClass

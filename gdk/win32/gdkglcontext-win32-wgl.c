@@ -63,6 +63,25 @@ typedef struct _GdkWin32GLContextClass    GdkWin32GLContextWGLClass;
 
 G_DEFINE_TYPE (GdkWin32GLContextWGL, gdk_win32_gl_context_wgl, GDK_TYPE_WIN32_GL_CONTEXT)
 
+static HDC
+gdk_wgl_get_default_hdc (GdkWin32Display *display_win32)
+{
+  return GetDC (display_win32->hwnd);
+}
+
+static HDC
+gdk_win32_gl_context_wgl_get_dc (GdkWin32GLContextWGL *self)
+{
+  if (GDK_WIN32_GL_CONTEXT (self)->handle)
+    {
+      return GetDC (GDK_WIN32_GL_CONTEXT (self)->handle);
+    }
+  else
+    {
+      GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self));
+    
+      return gdk_wgl_get_default_hdc (GDK_WIN32_DISPLAY (display));
+    }
 }
 
 static void
@@ -91,9 +110,6 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
 {
   GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
   GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (context);
-  GdkSurface *surface = gdk_gl_context_get_surface (context);
-  GdkWin32Display *display_win32 = (GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context)));
-  GdkWin32Surface *surface_win32 = GDK_WIN32_SURFACE (surface);
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->end_frame (draw_context, context_data, painted);
 
@@ -129,7 +145,7 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
         }
     }
 
-  SwapBuffers (surface_win32->hdc);
+  SwapBuffers (gdk_win32_gl_context_wgl_get_dc (context_wgl));
 }
 
 static void
@@ -156,12 +172,6 @@ gdk_win32_gl_context_wgl_get_damage (GdkGLContext *gl_context)
     }
 
   return GDK_GL_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->get_damage (gl_context);
-}
-
-static HDC
-gdk_wgl_get_default_hdc (GdkWin32Display *display_win32)
-{
-  return GetDC (display_win32->hwnd);
 }
 typedef struct {
   GArray *array;
@@ -879,7 +889,6 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   HGLRC hglrc;
   HDC hdc;
 
-  GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
   GdkGLContext *share = gdk_display_get_gl_context (display);
@@ -907,10 +916,7 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
     }
   else
     {
-      if (surface != NULL)
-        hdc = GDK_WIN32_SURFACE (surface)->hdc;
-      else
-        hdc = gdk_wgl_get_default_hdc (display_win32);
+      hdc = gdk_win32_gl_context_wgl_get_dc (context_wgl);
     }
 
   if (!set_wgl_pixformat_for_hdc (display_win32, hdc))
@@ -1024,21 +1030,51 @@ static gboolean
 gdk_win32_gl_context_wgl_make_current (GdkGLContext *context,
                                        gboolean      surfaceless)
 {
-  GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (context);
-  GdkDisplay *display = gdk_gl_context_get_display (context);
-  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
-  GdkSurface *surface = gdk_gl_context_get_surface (context);
+  GdkWin32GLContextWGL *self = GDK_WIN32_GL_CONTEXT_WGL (context);
   HDC hdc;
 
-  if (surfaceless || surface == NULL)
-    hdc = gdk_wgl_get_default_hdc (display_win32);
-  else
-    hdc = GDK_WIN32_SURFACE (surface)->hdc;
+  hdc = gdk_win32_gl_context_wgl_get_dc (self);
 
-  if (!gdk_win32_private_wglMakeCurrent (hdc, context_wgl->wgl_context))
+  if (!gdk_win32_private_wglMakeCurrent (hdc, self->wgl_context))
     return FALSE;
 
   return TRUE;
+}
+
+static void
+gdk_win32_gl_context_wgl_maybe_remake_current (GdkWin32GLContextWGL *self)
+{
+  if (gdk_win32_private_wglGetCurrentContext () != self->wgl_context)
+    return;
+
+  gdk_win32_gl_context_wgl_make_current (GDK_GL_CONTEXT (self), FALSE);
+}
+
+static gboolean
+gdk_win32_gl_context_wgl_surface_attach (GdkDrawContext  *context,
+                                         GError         **error)
+{
+  GdkWin32GLContextWGL *self = GDK_WIN32_GL_CONTEXT_WGL (context);
+  GdkWin32GLContext *win32_context = GDK_WIN32_GL_CONTEXT (context);
+  GdkWin32Display *win32_display = GDK_WIN32_DISPLAY (gdk_draw_context_get_display (context));
+
+  if (!GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->surface_attach (context, error))
+    return FALSE;
+
+  set_wgl_pixformat_for_hdc (win32_display, GetDC (win32_context->handle));
+  gdk_win32_gl_context_wgl_maybe_remake_current (self);
+
+  return TRUE;
+}
+
+static void
+gdk_win32_gl_context_wgl_surface_detach (GdkDrawContext  *context)
+{
+  GdkWin32GLContextWGL *self = GDK_WIN32_GL_CONTEXT_WGL (context);
+
+  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->surface_detach (context);
+    
+  gdk_win32_gl_context_wgl_maybe_remake_current (self);
 }
 
 static void
@@ -1058,6 +1094,8 @@ gdk_win32_gl_context_wgl_class_init (GdkWin32GLContextWGLClass *klass)
 
   draw_context_class->end_frame = gdk_win32_gl_context_wgl_end_frame;
   draw_context_class->empty_frame = gdk_win32_gl_context_wgl_empty_frame;
+  draw_context_class->surface_attach = gdk_win32_gl_context_wgl_surface_attach;
+  draw_context_class->surface_detach = gdk_win32_gl_context_wgl_surface_detach;
 
   gobject_class->dispose = gdk_win32_gl_context_wgl_dispose;
 }
