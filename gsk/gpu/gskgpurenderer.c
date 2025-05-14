@@ -207,10 +207,18 @@ gsk_gpu_renderer_realize (GskRenderer  *renderer,
   return TRUE;
 }
 
-static void
-gsk_gpu_renderer_unrealize (GskRenderer *renderer)
+/*<private>
+ * gsk_gpu_renderer_clear_frames:
+ * @self: the renderer
+ * 
+ * Waits for all frames to finish executing and then deletes them.
+ * 
+ * This will release all the memory held by the renderer that is not
+ * in the cache.
+ */
+void
+gsk_gpu_renderer_clear_frames (GskGpuRenderer *self)
 {
-  GskGpuRenderer *self = GSK_GPU_RENDERER (renderer);
   GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
   gsize i;
 
@@ -224,6 +232,15 @@ gsk_gpu_renderer_unrealize (GskRenderer *renderer)
         gsk_gpu_frame_wait (priv->frames[i]);
       g_clear_object (&priv->frames[i]);
     }
+}
+
+static void
+gsk_gpu_renderer_unrealize (GskRenderer *renderer)
+{
+  GskGpuRenderer *self = GSK_GPU_RENDERER (renderer);
+  GskGpuRendererPrivate *priv = gsk_gpu_renderer_get_instance_private (self);
+
+  gsk_gpu_renderer_clear_frames (self);
 
   g_clear_object (&priv->context);
   g_clear_object (&priv->device);
