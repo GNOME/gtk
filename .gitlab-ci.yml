@@ -445,7 +445,7 @@ android:
     - cp -f pixiewood/prepare/wraps/glib/hack.patch subprojects/packagefiles/glib_hack.patch
     - sed -i 's/\[provide\]/diff_files = glib_hack.patch\n\n\0/' subprojects/glib.wrap
     # Drop this as soon as Debian/the container has meson >= 1.7.0
-    - git clone --depth 1 https://github.com/mesonbuild/meson.git --branch 1.7.0
+    - git clone --depth 1 https://github.com/mesonbuild/meson.git --branch 1.8.0
   script:
     - ./meson/meson.py setup
             --cross-file "${ANDROID_HOME}/toolchain.cross"
