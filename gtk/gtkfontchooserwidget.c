@@ -2473,7 +2473,7 @@ gtk_font_chooser_widget_update_font_features (GtkFontChooserWidget *fontchooser)
         hb_face_destroy (hb_face);
     }
 
-#if FONT_FEATURES_USE_PANGOFT2
+#ifdef FONT_FEATURES_USE_PANGOFT2
   if (PANGO_IS_FC_FONT (pango_font))
     pango_fc_font_unlock_face (PANGO_FC_FONT (pango_font));
 #endif
