@@ -156,7 +156,8 @@ struct _GdkWin32Surface
   int initial_x;
   int initial_y;
 
-  /* left/right/top/bottom width of the shadow/resize-grip around the surface HWND */
+  /* left/right/top/bottom width of the shadow/resize-grip around the surface HWND 
+     in application units, not device pixels */
   RECT shadow;
 
   /* left+right and top+bottom from @shadow */

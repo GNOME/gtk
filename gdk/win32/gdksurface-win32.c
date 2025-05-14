@@ -1807,8 +1807,8 @@ setup_drag_move_resize_context (GdkSurface                  *surface,
        */
       if (op == GDK_WIN32_DRAGOP_MOVE && !maximized)
         {
-          swx += impl->shadow.left / impl->surface_scale;
-          swy += impl->shadow.top / impl->surface_scale;
+          swx += impl->shadow.left;
+          swy += impl->shadow.top;
           swwidth -= impl->shadow_x;
           swheight -= impl->shadow_y;
         }
@@ -2614,10 +2614,10 @@ gdk_win32_surface_set_shadow_width (GdkSurface *surface,
   if (impl->zero_shadow)
     return;
 
-  impl->shadow.left = left * impl->surface_scale;;
-  impl->shadow.right = right * impl->surface_scale;
-  impl->shadow.top = top * impl->surface_scale;;
-  impl->shadow.bottom = bottom * impl->surface_scale;
+  impl->shadow.left = left;
+  impl->shadow.right = right;
+  impl->shadow.top = top;
+  impl->shadow.bottom = bottom;
   impl->shadow_x = left + right;
   impl->shadow_y = top + bottom;
 }
