@@ -160,10 +160,6 @@ struct _GdkWin32Surface
      in application units, not device pixels */
   RECT shadow;
 
-  /* left+right and top+bottom from @shadow */
-  int shadow_x;
-  int shadow_y;
-
   guint inhibit_configure : 1;
 
   /* If TRUE, the @temp_styles is set to the styles that were temporarily

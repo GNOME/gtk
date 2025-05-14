@@ -1585,8 +1585,8 @@ _gdk_win32_surface_fill_min_max_info (GdkSurface *surface,
           mmi->ptMaxSize.y = nearest_info.rcWork.bottom - nearest_info.rcWork.top;
         }
 
-      mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXVIRTUALSCREEN) + impl->shadow_x * impl->surface_scale;
-      mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYVIRTUALSCREEN) + impl->shadow_y * impl->surface_scale;
+      mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXVIRTUALSCREEN) + (impl->shadow.left + impl->shadow.right) * impl->surface_scale;
+      mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYVIRTUALSCREEN) + (impl->shadow.left + impl->shadow.right) * impl->surface_scale;
     }
 
   return TRUE;
