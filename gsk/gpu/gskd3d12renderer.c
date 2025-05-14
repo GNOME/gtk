@@ -29,6 +29,14 @@ struct _GskD3d12RendererClass
 G_DEFINE_TYPE (GskD3d12Renderer, gsk_d3d12_renderer, GSK_TYPE_GPU_RENDERER)
 
 #ifdef GDK_WINDOWING_WIN32
+
+static void
+gsk_d3d12_renderer_release_buffers_cb (GdkD3d12Context  *context,
+                                       GskD3d12Renderer *self)
+{
+  
+}
+
 static GdkDrawContext *
 gsk_d3d12_renderer_create_context (GskGpuRenderer       *renderer,
                                    GdkDisplay           *display,
@@ -49,6 +57,10 @@ gsk_d3d12_renderer_create_context (GskGpuRenderer       *renderer,
   if (context == NULL)
     return NULL;
 
+  g_signal_connect_swapped (context,
+                            "release-buffers",
+                            G_CALLBACK (gsk_gpu_renderer_clear_frames),
+                            renderer);
   *supported = -1;
 
   return GDK_DRAW_CONTEXT (context);
@@ -97,6 +109,16 @@ gsk_d3d12_renderer_get_backbuffer (GskGpuRenderer *renderer)
   return result;
 }
 
+static void
+gsk_d3d12_renderer_unrealize (GskRenderer *renderer)
+{
+  g_signal_handlers_disconnect_by_func (gsk_gpu_renderer_get_context (GSK_GPU_RENDERER (renderer)),
+                                        gsk_gpu_renderer_clear_frames,
+                                        renderer);
+
+  GSK_RENDERER_CLASS (gsk_d3d12_renderer_parent_class)->unrealize (renderer);
+}
+
 #else /* !GDK_WINDOWING_WIN32 */
 
 static gboolean
@@ -116,6 +138,7 @@ gsk_d3d12_renderer_realize (GskRenderer  *renderer,
 static void
 gsk_d3d12_renderer_class_init (GskD3d12RendererClass *klass)
 {
+  GskRendererClass *renderer_class = GSK_RENDERER_CLASS (klass);
 #ifdef GDK_WINDOWING_WIN32
   GskGpuRendererClass *gpu_renderer_class = GSK_GPU_RENDERER_CLASS (klass);
 
@@ -127,9 +150,9 @@ gsk_d3d12_renderer_class_init (GskD3d12RendererClass *klass)
   gpu_renderer_class->save_current = gsk_d3d12_renderer_save_current;
   gpu_renderer_class->restore_current = gsk_d3d12_renderer_restore_current;
   gpu_renderer_class->get_backbuffer = gsk_d3d12_renderer_get_backbuffer;
-#else
-  GskRendererClass *renderer_class = GSK_RENDERER_CLASS (klass);
 
+  renderer_class->unrealize = gsk_d3d12_renderer_unrealize;
+#else
   renderer_class->realize = gsk_d3d12_renderer_realize;
 #endif
 }
