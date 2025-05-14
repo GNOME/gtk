@@ -331,9 +331,6 @@ RegisterGdkClass (GType wtype)
   wcl.hbrBackground = NULL; \
   wcl.hCursor = LoadCursor (NULL, IDC_ARROW);
 
-  /* MSDN: CS_OWNDC is needed for OpenGL contexts */
-  wcl.style |= CS_OWNDC;
-
   if (wtype != GDK_TYPE_WIN32_DRAG_SURFACE)
     {
       if (0 == klassTOPLEVEL)
@@ -489,7 +486,6 @@ gdk_win32_surface_constructed (GObject *object)
                     G_CALLBACK (gdk_win32_impl_frame_clock_after_paint),
                     impl);
 
-  impl->hdc = GetDC (impl->handle);
   impl->inhibit_configure = TRUE;
 
   G_OBJECT_CLASS (gdk_win32_surface_parent_class)->constructed (object);
