@@ -58,10 +58,6 @@
 
 /* forward declarations */
 static void gdk_surface_win32_finalize (GObject *object);
-static void compute_toplevel_size      (GdkSurface *surface,
-                                        gboolean    update_geometry,
-                                        int        *width,
-                                        int        *height);
 
 static void gdk_win32_toplevel_state_callback   (GdkSurface *surface);
 static void gdk_win32_surface_set_transient_for (GdkSurface *surface,
@@ -2725,6 +2721,8 @@ gdk_win32_surface_set_input_region (GdkSurface     *surface,
 static void
 compute_toplevel_size (GdkSurface *surface,
                        gboolean    update_geometry,
+                       int         desired_width,
+                       int         desired_height,
                        int        *width,
                        int        *height)
 {
@@ -2753,8 +2751,14 @@ compute_toplevel_size (GdkSurface *surface,
   gdk_toplevel_notify_compute_size (GDK_TOPLEVEL (surface), &size);
   g_warn_if_fail (size.width > 0);
   g_warn_if_fail (size.height > 0);
-  *width = size.width;
-  *height = size.height;
+  if (desired_width > 0)
+    *width = MAX (size.min_width, desired_width);
+  else
+    *width = size.width;
+  if (desired_height > 0)
+    *height = MAX (size.min_height, desired_height);
+  else
+    *height = size.height;
 
   if (size.shadow.is_valid)
     {
@@ -3175,28 +3179,35 @@ gdk_win32_toplevel_compute_size (GdkSurface *surface)
 {
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
   int width, height;
-  bool size_changed;
+  bool size_changed, needs_resize;
 
-  compute_toplevel_size (surface, TRUE, &width, &height);
+  compute_toplevel_size (surface,
+                         TRUE,
+                         impl->next_layout.configured_width,
+                         impl->next_layout.configured_height,
+                         &width, &height);
 
-  if (impl->force_recompute_size)
-    {
-      size_changed = surface->width != width ||
-                      surface->height != height;
-
-      surface->width = width;
-      surface->height = height;
-      gdk_win32_surface_resize (surface, width, height);
-      impl->force_recompute_size = FALSE;
-    }
+  needs_resize = impl->force_recompute_size;
+  if (impl->next_layout.configured_width)
+    needs_resize |= width != impl->next_layout.configured_width;
   else
-    {
-      size_changed = surface->width != impl->next_layout.configured_width ||
-                      surface->height != impl->next_layout.configured_height;
+    needs_resize |= width != surface->width;
+  if (impl->next_layout.configured_height)
+    needs_resize |= height != impl->next_layout.configured_height;
+  else
+    needs_resize |= height != surface->height;
 
-      surface->width = impl->next_layout.configured_width;
-      surface->height = impl->next_layout.configured_height;
-    }
+  size_changed = surface->width != width ||
+                 surface->height != height;
+  surface->width = width;
+  surface->height = height;
+
+  if (needs_resize)
+    gdk_win32_surface_resize (surface, width, height);
+
+  impl->force_recompute_size = FALSE;
+  impl->next_layout.configured_width = 0;
+  impl->next_layout.configured_height = 0;
 
   if (size_changed)
     _gdk_surface_update_size (surface);
@@ -3237,7 +3248,7 @@ gdk_win32_toplevel_present (GdkToplevel       *toplevel,
 
   g_clear_pointer (&impl->toplevel_layout, gdk_toplevel_layout_unref);
   impl->toplevel_layout = gdk_toplevel_layout_copy (layout);
-  compute_toplevel_size (surface, FALSE, &width, &height);
+  compute_toplevel_size (surface, FALSE, 0, 0, &width, &height);
   gdk_win32_surface_resize (surface, width, height);
 
   if (gdk_toplevel_layout_get_maximized (layout, &maximize) && maximize)
