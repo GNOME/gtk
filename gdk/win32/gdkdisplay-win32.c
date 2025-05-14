@@ -1248,11 +1248,7 @@ gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
       HDC hdc;
 
       if (surface != NULL)
-        {
-          if (GDK_WIN32_SURFACE (surface)->hdc == NULL)
-            GDK_WIN32_SURFACE (surface)->hdc = GetDC (GDK_SURFACE_HWND (surface));
-          hdc = GDK_WIN32_SURFACE (surface)->hdc;
-        }
+        GetDC (GDK_SURFACE_HWND (surface));
       else
         hdc = GetDC (NULL);
 
@@ -1263,11 +1259,9 @@ gdk_win32_display_get_monitor_scale_factor (GdkWin32Display *display_win32,
       dpix = GetDeviceCaps (hdc, LOGPIXELSX);
       dpiy = GetDeviceCaps (hdc, LOGPIXELSY);
 
-      /*
-       * If surface is not NULL, the HDC should not be released, since surfaces have
-       * Win32 HWNDs created with CS_OWNDC
-       */
-      if (surface == NULL)
+      if (surface != NULL)
+        ReleaseDC (GDK_SURFACE_HWND (surface), hdc);
+      else
         ReleaseDC (NULL, hdc);
 
       is_scale_acquired = TRUE;
