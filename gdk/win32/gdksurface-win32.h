@@ -164,10 +164,6 @@ struct _GdkWin32Surface
   int shadow_x;
   int shadow_y;
 
-  /* Set to TRUE when GTK tells us that shadow are 0 everywhere.
-   * We don't actually set shadow to 0, we just set this bit.
-   */
-  guint zero_shadow : 1;
   guint inhibit_configure : 1;
 
   /* If TRUE, the @temp_styles is set to the styles that were temporarily

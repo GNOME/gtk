@@ -2605,14 +2605,9 @@ gdk_win32_surface_set_shadow_width (GdkSurface *surface,
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  GDK_NOTE (MISC, g_print ("gdk_win32_surface_set_shadow_width: surface %p, "
-                           "left %d, top %d, right %d, bottom %d\n",
-                           surface, left, top, right, bottom));
-
-  impl->zero_shadow = left == 0 && right == 0 && top == 0 && bottom == 0;
-
-  if (impl->zero_shadow)
-    return;
+  GDK_DEBUG (MISC, "gdk_win32_surface_set_shadow_width: surface %p, "
+                   "left %d, top %d, right %d, bottom %d\n",
+                   surface, left, top, right, bottom);
 
   impl->shadow.left = left;
   impl->shadow.right = right;
