@@ -2818,33 +2818,16 @@ _gdk_win32_surface_request_layout (GdkSurface *surface)
 }
 
 static gboolean
-_gdk_win32_surface_compute_size (GdkSurface *surface)
+gdk_win32_surface_compute_size (GdkSurface *surface)
 {
   GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-  int width, height;
   bool size_changed;
 
-  if (GDK_IS_TOPLEVEL (surface))
-    compute_toplevel_size (surface, TRUE, &width, &height);
+  size_changed = surface->width != impl->next_layout.configured_width ||
+                  surface->height != impl->next_layout.configured_height;
 
-  if (GDK_IS_TOPLEVEL (surface) && impl->force_recompute_size)
-    {
-      size_changed = surface->width != width ||
-                      surface->height != height;
-
-      surface->width = width;
-      surface->height = height;
-      gdk_win32_surface_resize (surface, width, height);
-      impl->force_recompute_size = FALSE;
-    }
-  else
-    {
-      size_changed = surface->width != impl->next_layout.configured_width ||
-                      surface->height != impl->next_layout.configured_height;
-
-      surface->width = impl->next_layout.configured_width;
-      surface->height = impl->next_layout.configured_height;
-    }
+  surface->width = impl->next_layout.configured_width;
+  surface->height = impl->next_layout.configured_height;
 
   if (size_changed)
     _gdk_surface_update_size (surface);
@@ -2870,13 +2853,11 @@ gdk_win32_surface_class_init (GdkWin32SurfaceClass *klass)
   impl_class->set_input_region = gdk_win32_surface_set_input_region;
   impl_class->destroy = gdk_win32_surface_destroy;
 
-  //impl_class->beep = gdk_x11_surface_beep;
-
   impl_class->destroy_notify = gdk_win32_surface_destroy_notify;
   impl_class->drag_begin = _gdk_win32_surface_drag_begin;
   impl_class->get_scale = _gdk_win32_surface_get_scale;
   impl_class->request_layout = _gdk_win32_surface_request_layout;
-  impl_class->compute_size = _gdk_win32_surface_compute_size;
+  impl_class->compute_size = gdk_win32_surface_compute_size;
 }
 
 /**
@@ -3189,15 +3170,52 @@ gdk_win32_toplevel_finalize (GObject *object)
   G_OBJECT_CLASS (gdk_win32_toplevel_parent_class)->finalize (object);
 }
 
+static gboolean
+gdk_win32_toplevel_compute_size (GdkSurface *surface)
+{
+  GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
+  int width, height;
+  bool size_changed;
+
+  compute_toplevel_size (surface, TRUE, &width, &height);
+
+  if (impl->force_recompute_size)
+    {
+      size_changed = surface->width != width ||
+                      surface->height != height;
+
+      surface->width = width;
+      surface->height = height;
+      gdk_win32_surface_resize (surface, width, height);
+      impl->force_recompute_size = FALSE;
+    }
+  else
+    {
+      size_changed = surface->width != impl->next_layout.configured_width ||
+                      surface->height != impl->next_layout.configured_height;
+
+      surface->width = impl->next_layout.configured_width;
+      surface->height = impl->next_layout.configured_height;
+    }
+
+  if (size_changed)
+    _gdk_surface_update_size (surface);
+
+  return FALSE;
+}
+
 static void
 gdk_win32_toplevel_class_init (GdkWin32ToplevelClass *class)
 {
+  GdkSurfaceClass *surface_class = GDK_SURFACE_CLASS (class);
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
   object_class->constructed = gdk_win32_toplevel_constructed;
   object_class->finalize = gdk_win32_toplevel_finalize;
   object_class->get_property = gdk_win32_toplevel_get_property;
   object_class->set_property = gdk_win32_toplevel_set_property;
+
+  surface_class->compute_size = gdk_win32_toplevel_compute_size;
 
   gdk_toplevel_install_properties (object_class, 1);
 }
