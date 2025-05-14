@@ -577,18 +577,21 @@ fontify (const char    *format,
 
   if (!subprocess)
     {
-      if (g_error_matches (error, G_SPAWN_ERROR, G_SPAWN_ERROR_NOENT))
-        {
-          static gboolean warned = FALSE;
+      static gboolean warned = FALSE;
 
-          if (!warned)
+      if (!warned)
+        {
+          if (g_error_matches (error, G_SPAWN_ERROR, G_SPAWN_ERROR_NOENT))
             {
-              warned = TRUE;
               g_message ("For syntax highlighting, install the “highlight” program");
             }
+          else
+            {
+              g_message ("%s", error->message);
+            }
+
+          warned = TRUE;
         }
-      else
-        g_warning ("%s", error->message);
 
       g_clear_error (&error);
 
