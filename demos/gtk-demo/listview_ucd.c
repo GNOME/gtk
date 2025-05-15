@@ -255,7 +255,7 @@ selection_changed (GObject    *object,
   if (g_unichar_isprint (codepoint))
     g_unichar_to_utf8 (codepoint, buffer);
 
-  gtk_inscription_set_text (GTK_INSCRIPTION (label), buffer);
+  gtk_label_set_text (GTK_LABEL (label), buffer);
 }
 
 GtkWidget *
