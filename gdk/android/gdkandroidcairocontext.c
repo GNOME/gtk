@@ -191,7 +191,7 @@ gdk_android_cairo_context_end_frame (GdkDrawContext *draw_context,
                                 &GDK_MEMORY_LAYOUT_SIMPLE (GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, width, height, self->surface.buffer.stride * bpp),
                                 GDK_COLOR_STATE_SRGB,
                                 cairo_image_surface_get_data (self->active_surface),
-                                &GDK_MEMORY_LAYOUT_SIMPLE (GDK_MEMORY_R8G8B8A8_PREMULTIPLIED, width, height, cairo_image_surface_get_stride (self->active_surface)),
+                                &GDK_MEMORY_LAYOUT_SIMPLE (GDK_MEMORY_B8G8R8A8_PREMULTIPLIED, width, height, cairo_image_surface_get_stride (self->active_surface)),
                                 GDK_COLOR_STATE_SRGB);
 
           ANativeWindow_unlockAndPost (self->surface.window);
