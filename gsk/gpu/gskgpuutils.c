@@ -159,4 +159,3 @@ gsk_gpu_color_state_apply_conversion (GdkColorState    *color_state,
       return NULL;
   }
 }
-

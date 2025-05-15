@@ -2,6 +2,8 @@
 
 #include "gskglimageprivate.h"
 
+#include "gskgpuutilsprivate.h"
+
 #include "gdk/gdkdisplayprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 
@@ -130,7 +132,11 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
       conv = GSK_GPU_CONVERSION_NONE;
     }
 
-  gsk_gpu_image_setup (GSK_GPU_IMAGE (self), flags, conv, format, width, height);
+  gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
+                       flags,
+                       conv,
+                       gdk_memory_format_get_default_shader_op (format),
+                       format, width, height);
 
   /* texture_id == 0 means backbuffer */
 
@@ -190,6 +196,7 @@ gsk_gl_image_new (GskGLDevice      *device,
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags,
                        conv,
+                       gdk_memory_format_get_default_shader_op (format),
                        format,
                        width, height);
 
@@ -256,7 +263,7 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
 
   if (format != real_format)
     {
-      flags = (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT ? GSK_GPU_IMAGE_STRAIGHT_ALPHA : 0);
+      flags = 0;
     }
   else
     {
@@ -268,6 +275,7 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags | extra_flags,
                        conv,
+                       gdk_memory_format_get_default_shader_op (format),
                        format,
                        gdk_texture_get_width (owner),
                        gdk_texture_get_height (owner));

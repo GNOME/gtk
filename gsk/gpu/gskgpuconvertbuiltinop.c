@@ -97,7 +97,7 @@ gsk_gpu_convert_from_builtin_op (GskGpuFrame             *frame,
                                                         gsk_gpu_get_shader_color_state (builtin), FALSE),
                            GDK_BUILTIN_COLOR_STATE_ID (builtin) |
                            (opacity < 1.0 ? VARIATION_OPACITY : 0) |
-                           ((gsk_gpu_image_get_flags (image->image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA) ? VARIATION_STRAIGHT_ALPHA : 0),
+                           ((gsk_gpu_image_get_sample_method (image->image) == GSK_GPU_SAMPLE_STRAIGHT_ALPHA) ? VARIATION_STRAIGHT_ALPHA : 0),
                            clip,
                            (GskGpuImage *[1]) { image->image },
                            (GskGpuSampler[1]) { image->sampler },
@@ -126,7 +126,7 @@ gsk_gpu_convert_to_builtin_op (GskGpuFrame             *frame,
                                                         gsk_gpu_get_shader_color_state (builtin), FALSE),
                            GDK_BUILTIN_COLOR_STATE_ID (builtin) |
                            (opacity < 1.0 ? VARIATION_OPACITY : 0) |
-                           ((gsk_gpu_image_get_flags (image->image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA) ? VARIATION_STRAIGHT_ALPHA : 0) |
+                           ((gsk_gpu_image_get_sample_method (image->image) == GSK_GPU_SAMPLE_STRAIGHT_ALPHA) ? VARIATION_STRAIGHT_ALPHA : 0) |
                            (builtin_premultiplied ? VARIATION_PREMULTIPLY : 0) |
                            VARIATION_REVERSE,
                            clip,
