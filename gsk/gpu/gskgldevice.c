@@ -651,9 +651,6 @@ gsk_gl_device_get_format_flags (GskGLDevice      *self,
         *out_flags |= GSK_GPU_IMAGE_BLIT;
     }
 
-  if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
-    *out_flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
-
   return TRUE;
 }
 

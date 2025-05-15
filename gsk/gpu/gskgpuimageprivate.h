@@ -33,6 +33,7 @@ GType                   gsk_gpu_image_get_type                          (void) G
 void                    gsk_gpu_image_setup                             (GskGpuImage            *self,
                                                                          GskGpuImageFlags        flags,
                                                                          GskGpuConversion        conversion,
+                                                                         GdkShaderOp             shader_op,
                                                                          GdkMemoryFormat         format,
                                                                          gsize                   width,
                                                                          gsize                   height);
