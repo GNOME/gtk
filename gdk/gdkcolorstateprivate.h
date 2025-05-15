@@ -181,6 +181,23 @@ _gdk_color_state_equal (GdkColorState *self,
   return self->klass->equal (self, other);
 }
 
+#define gdk_color_state_equivalent(a,b) _gdk_color_state_equivalent ((a), (b))
+static inline gboolean
+_gdk_color_state_equivalent (GdkColorState *self,
+                             GdkColorState *other)
+{
+  const GdkCicp *cicp1;
+  const GdkCicp *cicp2;
+
+  if (self == other)
+    return TRUE;
+
+  cicp1 = self->klass->get_cicp (self);
+  cicp2 = self->klass->get_cicp (other);
+
+  return gdk_cicp_equivalent (cicp1, cicp2);
+}
+
 /* Note: the functions returned from this expect the source
  * color state to be passed as self
  */

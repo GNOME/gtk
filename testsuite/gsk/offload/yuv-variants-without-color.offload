@@ -1,0 +1,32 @@
+0: not offloaded
+1: not offloaded
+2: not offloaded
+3: not offloaded
+4: not offloaded
+5: not offloaded
+6: not offloaded
+7: not offloaded
+8: offloaded, raised, above: 7, texture: 256x64, source: 0 0 256 64, dest: 512 0 256 64
+9: offloaded, raised, above: 8, texture: 256x64, source: 0 0 256 64, dest: 512 64 256 64
+10: offloaded, raised, above: 9, texture: 256x64, source: 0 0 256 64, dest: 512 128 256 64
+11: offloaded, raised, above: 10, texture: 256x64, source: 0 0 256 64, dest: 512 192 256 64
+12: not offloaded
+13: not offloaded
+14: not offloaded
+15: not offloaded
+16: not offloaded
+17: not offloaded
+18: not offloaded
+19: not offloaded
+20: not offloaded
+21: not offloaded
+22: not offloaded
+23: not offloaded
+24: not offloaded
+25: not offloaded
+26: not offloaded
+27: not offloaded
+28: not offloaded
+29: not offloaded
+30: not offloaded
+31: not offloaded

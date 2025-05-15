@@ -54,6 +54,8 @@
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 #include "presentation-time-client-protocol.h"
 
+#include "gdkdmabuffourccprivate.h"
+
 #include "gsk/gskrectprivate.h"
 
 /**
@@ -730,8 +732,23 @@ gdk_wayland_surface_sync_color_state (GdkSurface *surface)
   if (!self->color_state_changed)
     return;
 
-  gdk_wayland_color_surface_set_color_state (self->display_server.color,
-                                             gdk_surface_get_color_state (surface));
+  /* Note that we don't have the actual fourcc here (since thats up
+   * up to mesa) so we just pass DRM_FORMAT_RGBA8888.
+   */
+  if (gdk_wayland_color_surface_can_set_color_state (self->display_server.color,
+                                                     gdk_surface_get_color_state (surface),
+                                                     DRM_FORMAT_RGBA8888,
+                                                     TRUE))
+    {
+      gdk_wayland_color_surface_set_color_state (self->display_server.color,
+                                                 gdk_surface_get_color_state (surface),
+                                                 DRM_FORMAT_RGBA8888,
+                                                 TRUE);
+    }
+  else
+    {
+      gdk_wayland_color_surface_unset_color_state (self->display_server.color);
+    }
 
   self->color_state_changed = FALSE;
 }
@@ -915,11 +932,10 @@ gdk_wayland_surface_create_wl_surface (GdkSurface *surface)
           wp_viewporter_get_viewport (display_wayland->viewporter, wl_surface);
     }
 
-  if (display_wayland->color)
-    self->display_server.color = gdk_wayland_color_surface_new (display_wayland->color,
-                                                                wl_surface,
-                                                                preferred_changed,
-                                                                self);
+  self->display_server.color = gdk_wayland_color_surface_new (display_wayland->color,
+                                                              wl_surface,
+                                                              preferred_changed,
+                                                              self);
 
   self->display_server.wl_surface = wl_surface;
 }

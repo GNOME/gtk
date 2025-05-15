@@ -535,6 +535,50 @@ if os_linux
       )
     endif
   endforeach
+
+  no_color_offload_tests = [
+    'default-cs.node',
+    'yuv-variants-without-color.node',
+  ]
+
+  foreach test : no_color_offload_tests
+    test('offload ' + test, offload,
+      args: [
+        join_paths(meson.current_source_dir(), 'offload', test)
+      ],
+      env: [
+        'GTK_A11Y=test',
+        'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+        'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+        'GDK_DEBUG=force-offload:default-settings:no-portals',
+        'GDK_WAYLAND_DISABLE=wp_color_manager_v1,wp_color_representation_manager_v1',
+      ],
+      protocol: 'exitcode',
+      suite: ['gsk', 'offload'],
+    )
+  endforeach
+
+  color_offload_tests = [
+    'yuv-variants-with-color.node',
+  ]
+
+  foreach test : color_offload_tests
+    test('offload ' + test, offload,
+      args: [
+        join_paths(meson.current_source_dir(), 'offload', test)
+      ],
+      env: [
+        'GTK_A11Y=test',
+        'G_TEST_SRCDIR=@0@'.format(meson.current_source_dir()),
+        'G_TEST_BUILDDIR=@0@'.format(meson.current_build_dir()),
+        'GDK_DEBUG=force-offload:color-mgmt:default-settings:no-portals',
+        'REQUIRE_COLOR_PROTOCOLS=1',
+      ],
+      protocol: 'exitcode',
+      suite: ['gsk', 'offload'],
+    )
+  endforeach
+
 endif
 
 tests = [

@@ -1307,6 +1307,7 @@ add_wayland_protocols (GdkDisplay          *display,
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->presentation);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->single_pixel_buffer);
       append_wayland_protocol_row (gen, d->color ? gdk_wayland_color_get_color_manager (d->color) : NULL);
+      append_wayland_protocol_row (gen, d->color ? gdk_wayland_color_get_color_representation_manager (d->color) : NULL);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->system_bell);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->cursor_shape);
       append_wayland_protocol_row (gen, (struct wl_proxy *)d->toplevel_icon);
@@ -1349,6 +1350,7 @@ dump_wayland_protocols (GdkDisplay *display,
       append_wayland_protocol (string, (struct wl_proxy *)d->presentation, &count);
       append_wayland_protocol (string, (struct wl_proxy *)d->single_pixel_buffer, &count);
       append_wayland_protocol (string, d->color ? gdk_wayland_color_get_color_manager (d->color) : NULL, &count);
+      append_wayland_protocol (string, d->color ? gdk_wayland_color_get_color_representation_manager (d->color) : NULL, &count);
       append_wayland_protocol (string, (struct wl_proxy *)d->system_bell, &count);
       append_wayland_protocol (string, (struct wl_proxy *)d->cursor_shape, &count);
       append_wayland_protocol (string, (struct wl_proxy *)d->toplevel_icon, &count);

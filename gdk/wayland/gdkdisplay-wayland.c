@@ -62,6 +62,7 @@
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 #include "presentation-time-client-protocol.h"
 #include "color-management-v1-client-protocol.h"
+#include "color-representation-v1-client-protocol.h"
 
 #include "gdk/gdkprivate.h"
 
@@ -657,9 +658,11 @@ gdk_registry_handle_global (void               *data,
     }
   else if (match_global (display_wayland, interface, version, wp_color_manager_v1_interface.name, 0))
     {
-      if (!display_wayland->color)
-        display_wayland->color = gdk_wayland_color_new (display_wayland);
       gdk_wayland_color_set_color_manager (display_wayland->color, registry, id, version);
+    }
+  else if (match_global (display_wayland, interface, version, wp_color_representation_manager_v1_interface.name, 0))
+    {
+      gdk_wayland_color_set_color_representation (display_wayland->color, registry, id, version);
     }
   else if (match_global (display_wayland, interface, version, wp_single_pixel_buffer_manager_v1_interface.name, 0))
     {
@@ -736,6 +739,8 @@ _gdk_wayland_display_open (const char *display_name)
   display_wayland->wl_display = wl_display;
   gdk_wayland_display_install_gsources (display_wayland);
 
+  display_wayland->color = gdk_wayland_color_new (display_wayland);
+
   init_skip_protocols (display_wayland);
 
   gdk_wayland_display_init_settings (display);
@@ -810,11 +815,7 @@ _gdk_wayland_display_open (const char *display_name)
       return NULL;
     }
 
-  if (display_wayland->color)
-    {
-      if (!gdk_wayland_color_prepare (display_wayland->color))
-        g_clear_pointer (&display_wayland->color, gdk_wayland_color_free );
-    }
+  gdk_wayland_color_prepare (display_wayland->color);
 
   gdk_display_emit_opened (display);
 
