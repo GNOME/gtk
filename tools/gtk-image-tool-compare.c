@@ -78,14 +78,7 @@ do_compare (int          *argc,
     }
 
   for (int i = 0; i < 2; i++)
-    {
-      texture[i] = gdk_texture_new_from_filename (filenames[i], &error);
-      if (texture[i] == NULL)
-        {
-          g_printerr (_("Failed to load %s: %s\n"), filenames[i], error->message);
-          exit (1);
-        }
-    }
+    texture[i] = load_image_file (filenames[i]);
 
   diff = reftest_compare_textures (texture[0], texture[1]);
 

@@ -29,12 +29,72 @@
 #include <gtk/gtk.h>
 #include "gtk-image-tool.h"
 
+static void
+deserialize_error_func (const GskParseLocation *start,
+                        const GskParseLocation *end,
+                        const GError           *error,
+                        gpointer                user_data)
+{
+  GString *string = g_string_new ("<data>");
+
+  g_string_append_printf (string, ":%zu:%zu",
+                          start->lines + 1, start->line_chars + 1);
+  if (start->lines != end->lines || start->line_chars != end->line_chars)
+    {
+      g_string_append (string, "-");
+      if (start->lines != end->lines)
+        g_string_append_printf (string, "%zu:", end->lines + 1);
+      g_string_append_printf (string, "%zu", end->line_chars + 1);
+    }
+
+  g_printerr (_("Error at %s: %s\n"), string->str, error->message);
+
+  g_string_free (string, TRUE);
+}
+
+static GskRenderNode *
+load_node_file (const char *filename)
+{
+  GFile *file;
+  GBytes *bytes;
+  GError *error = NULL;
+
+  file = g_file_new_for_commandline_arg (filename);
+  bytes = g_file_load_bytes (file, NULL, NULL, &error);
+  g_object_unref (file);
+
+  if (bytes == NULL)
+    {
+      g_printerr (_("Failed to load node file: %s\n"), error->message);
+      g_clear_error (&error);
+      exit (1);
+    }
+
+  return gsk_render_node_deserialize (bytes, deserialize_error_func, NULL);
+}
 
 GdkTexture *
 load_image_file (const char *filename)
 {
   GError *error = NULL;
   GdkTexture *texture;
+
+  if (g_str_has_suffix (filename, ".node"))
+    {
+      GskRenderNode *node;
+
+      node = load_node_file (filename);
+      if (gsk_render_node_get_node_type (node) != GSK_TEXTURE_NODE)
+        {
+          g_printerr (_("%s is not a texture node\n"), filename);
+          exit (1);
+        }
+
+      texture = g_object_ref (gsk_texture_node_get_texture (node));
+      gsk_render_node_unref (node);
+
+      return texture;
+    }
 
   texture = gdk_texture_new_from_filename (filename, &error);
   if (!texture)
