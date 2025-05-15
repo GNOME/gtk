@@ -1585,8 +1585,8 @@ _gdk_win32_surface_fill_min_max_info (GdkSurface *surface,
           mmi->ptMaxSize.y = nearest_info.rcWork.bottom - nearest_info.rcWork.top;
         }
 
-      mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXVIRTUALSCREEN) + impl->shadow_x * impl->surface_scale;
-      mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYVIRTUALSCREEN) + impl->shadow_y * impl->surface_scale;
+      mmi->ptMaxTrackSize.x = GetSystemMetrics (SM_CXVIRTUALSCREEN) + (impl->shadow.left + impl->shadow.right) * impl->surface_scale;
+      mmi->ptMaxTrackSize.y = GetSystemMetrics (SM_CYVIRTUALSCREEN) + (impl->shadow.left + impl->shadow.right) * impl->surface_scale;
     }
 
   return TRUE;
@@ -2723,20 +2723,17 @@ gdk_event_translate (MSG *msg,
        * To obtain the correct result when testing the value of wParam,
        * an application must combine the value 0xFFF0 with the wParam value by using the bitwise AND operator. */
       switch (msg->wParam & 0xFFF0)
-	{
-	case SC_MINIMIZE:
-	case SC_RESTORE:
+        {
+        case SC_MINIMIZE:
+        case SC_RESTORE:
           do_show_surface (surface, msg->wParam == SC_MINIMIZE ? TRUE : FALSE);
+          break;
 
-          if (msg->wParam == SC_RESTORE)
-            _gdk_win32_surface_invalidate_egl_framebuffer (surface);
-
-	  break;
         case SC_MAXIMIZE:
           impl = GDK_WIN32_SURFACE (surface);
           impl->maximizing = TRUE;
-	  break;
-	}
+          break;
+        }
 
       break;
 
@@ -2923,9 +2920,9 @@ gdk_event_translate (MSG *msg,
 
       /* Show, New size or position => configure event */
       if (!(hwndpos->flags & SWP_NOCLIENTMOVE) ||
-	  !(hwndpos->flags & SWP_NOCLIENTSIZE) ||
-	  (hwndpos->flags & SWP_SHOWWINDOW))
-	{
+          !(hwndpos->flags & SWP_NOCLIENTSIZE) ||
+          (hwndpos->flags & SWP_SHOWWINDOW))
+	      {
           if (!IsIconic (msg->hwnd) && !GDK_SURFACE_DESTROYED (surface))
             {
               if (!_gdk_win32_surface_lacks_wm_decorations (surface) &&
@@ -2938,13 +2935,7 @@ gdk_event_translate (MSG *msg,
 
               gdk_surface_request_layout (surface);
             }
-	}
-
-      if (!(hwndpos->flags & SWP_NOCLIENTSIZE))
-	{
-	  if (surface->resize_count > 1)
-	    surface->resize_count -= 1;
-	}
+        }
 
       /* Call modal timer immediate so that we repaint faster after a resize. */
       if (GDK_WIN32_DISPLAY (gdk_surface_get_display (surface))->display_surface_record->modal_operation_in_progress & GDK_WIN32_MODAL_OP_SIZEMOVE_MASK)

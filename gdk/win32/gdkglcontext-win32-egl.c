@@ -52,31 +52,6 @@ typedef struct _GdkWin32GLContextClass    GdkWin32GLContextEGLClass;
 
 G_DEFINE_TYPE (GdkWin32GLContextEGL, gdk_win32_gl_context_egl, GDK_TYPE_WIN32_GL_CONTEXT)
 
-static gboolean
-is_egl_force_redraw (GdkSurface *surface)
-{
-  /* We only need to call gdk_window_invalidate_rect () if necessary */
-  if (surface->gl_paint_context != NULL && gdk_gl_context_get_use_es (surface->gl_paint_context))
-    {
-      GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-
-      return impl->egl_force_redraw_all;
-    }
-  return FALSE;
-}
-
-static void
-reset_egl_force_redraw (GdkSurface *surface)
-{
-  if (surface->gl_paint_context != NULL && gdk_gl_context_get_use_es (surface->gl_paint_context))
-    {
-      GdkWin32Surface *impl = GDK_WIN32_SURFACE (surface);
-
-      if (impl->egl_force_redraw_all)
-        impl->egl_force_redraw_all = FALSE;
-    }
-}
-
 static void
 gdk_win32_gl_context_egl_end_frame (GdkDrawContext *draw_context,
                                     gpointer        context_data,
@@ -93,31 +68,7 @@ gdk_win32_gl_context_egl_end_frame (GdkDrawContext *draw_context,
 
   egl_surface = gdk_surface_get_egl_surface (surface);
 
-  if (is_egl_force_redraw (surface))
-    {
-      GdkRectangle rect = {0, 0, gdk_surface_get_width (surface), gdk_surface_get_height (surface)};
-
-      /* We need to do gdk_window_invalidate_rect() so that we don't get glitches after maximizing or
-       *  restoring
-       */
-      gdk_surface_invalidate_rect (surface, &rect);
-      reset_egl_force_redraw (surface);
-    }
-
   eglSwapBuffers (gdk_display_get_egl_display (display), egl_surface);
-}
-
-static void
-gdk_win32_gl_context_egl_begin_frame (GdkDrawContext  *draw_context,
-                                      gpointer         context_data,
-                                      GdkMemoryDepth   depth,
-                                      cairo_region_t  *update_area,
-                                      GdkColorState  **out_color_state,
-                                      GdkMemoryDepth  *out_depth)
-{
-  gdk_win32_surface_handle_queued_move_resize (draw_context);
-
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->begin_frame (draw_context, context_data, depth, update_area, out_color_state, out_depth);
 }
 
 static void
@@ -133,7 +84,6 @@ gdk_win32_gl_context_egl_class_init (GdkWin32GLContextClass *klass)
 
   context_class->backend_type = GDK_GL_EGL;
 
-  draw_context_class->begin_frame = gdk_win32_gl_context_egl_begin_frame;
   draw_context_class->end_frame = gdk_win32_gl_context_egl_end_frame;
   draw_context_class->empty_frame = gdk_win32_gl_context_egl_empty_frame;
 }

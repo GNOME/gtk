@@ -162,19 +162,6 @@ gdk_win32_gl_context_wgl_get_damage (GdkGLContext *gl_context)
   return GDK_GL_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->get_damage (gl_context);
 }
 
-static void
-gdk_win32_gl_context_wgl_begin_frame (GdkDrawContext  *draw_context,
-                                      gpointer         context_data,
-                                      GdkMemoryDepth   depth,
-                                      cairo_region_t  *update_area,
-                                      GdkColorState  **out_color_state,
-                                      GdkMemoryDepth  *out_depth)
-{
-  gdk_win32_surface_handle_queued_move_resize (draw_context);
-
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->begin_frame (draw_context, context_data, depth, update_area, out_color_state, out_depth);
-}
-
 typedef struct {
   GArray *array;
   guint committed;
@@ -1191,7 +1178,6 @@ gdk_win32_gl_context_wgl_class_init (GdkWin32GLContextWGLClass *klass)
   context_class->is_current = gdk_win32_gl_context_wgl_is_current;
   context_class->get_damage = gdk_win32_gl_context_wgl_get_damage;
 
-  draw_context_class->begin_frame = gdk_win32_gl_context_wgl_begin_frame;
   draw_context_class->end_frame = gdk_win32_gl_context_wgl_end_frame;
   draw_context_class->empty_frame = gdk_win32_gl_context_wgl_empty_frame;
 

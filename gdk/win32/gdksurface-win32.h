@@ -115,11 +115,6 @@ struct _GdkW32DragMoveResizeContext
   /* Not used */
   guint32            timestamp;
 
-  /* TRUE if during the next redraw we should call SetWindowPos() to push
-   * the surface size and position to the native HWND.
-   */
-  gboolean           native_move_resize_pending;
-
   /* The cursor we should use while the operation is running. */
   GdkCursor         *cursor;
 };
@@ -156,17 +151,10 @@ struct _GdkWin32Surface
   int initial_x;
   int initial_y;
 
-  /* left/right/top/bottom width of the shadow/resize-grip around the surface HWND */
+  /* left/right/top/bottom width of the shadow/resize-grip around the surface HWND 
+     in application units, not device pixels */
   RECT shadow;
 
-  /* left+right and top+bottom from @shadow */
-  int shadow_x;
-  int shadow_y;
-
-  /* Set to TRUE when GTK tells us that shadow are 0 everywhere.
-   * We don't actually set shadow to 0, we just set this bit.
-   */
-  guint zero_shadow : 1;
   guint inhibit_configure : 1;
 
   /* If TRUE, the @temp_styles is set to the styles that were temporarily
@@ -206,10 +194,6 @@ struct _GdkWin32Surface
 
   IDirectManipulationViewport *dmanipulation_viewport_pan;
   IDirectManipulationViewport *dmanipulation_viewport_zoom;
-
-#ifdef HAVE_EGL
-  guint egl_force_redraw_all : 1;
-#endif
 };
 
 struct _GdkWin32SurfaceClass
@@ -221,10 +205,6 @@ GType _gdk_win32_surface_get_type (void);
 
 void  _gdk_win32_surface_update_style_bits   (GdkSurface *surface);
 
-void  _gdk_win32_get_window_client_area_rect (GdkSurface *surface,
-                                              int         scale,
-                                              RECT       *rect);
-
 void gdk_win32_surface_move (GdkSurface *surface,
                              int         x,
                              int         y);
@@ -235,10 +215,8 @@ void gdk_win32_surface_move_resize (GdkSurface *surface,
                                     int         width,
                                     int         height);
 
-GdkSurface *gdk_win32_drag_surface_new       (GdkDisplay *display);
+GdkSurface *    gdk_win32_drag_surface_new                      (GdkDisplay             *display);
 
-RECT
-gdk_win32_surface_handle_queued_move_resize (GdkDrawContext *draw_context);
 
 #ifdef HAVE_EGL
 EGLSurface gdk_win32_surface_get_egl_surface (GdkSurface *surface,
