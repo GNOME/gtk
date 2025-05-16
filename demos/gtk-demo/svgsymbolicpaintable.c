@@ -1,8 +1,8 @@
-#include "symbolicpaintable.h"
+#include "svgsymbolicpaintable.h"
 
 #include <gtk/gtk.h>
 
-struct _SymbolicPaintable
+struct _SvgSymbolicPaintable
 {
   GObject parent_instance;
   GFile *file;
@@ -11,7 +11,7 @@ struct _SymbolicPaintable
   double height;
 };
 
-struct _SymbolicPaintableClass
+struct _SvgSymbolicPaintableClass
 {
   GObjectClass parent_class;
 };
@@ -301,7 +301,7 @@ render_node_from_symbolic (GFile  *file,
   return node;
 }
 
-/* }}} */
+/* }}} */ 
 /* {{{ Render node recoloring */
 
 /* This recolors nodes that are produced from
@@ -422,36 +422,32 @@ recolor_node (GskRenderNode  *node,
 /* {{{ GdkPaintable implementation */
 
 static void
-symbolic_paintable_snapshot (GdkPaintable *paintable,
-                             GdkSnapshot  *snapshot,
-                             double        width,
-                             double        height)
+svg_symbolic_paintable_snapshot (GdkPaintable *paintable,
+                                 GdkSnapshot  *snapshot,
+                                 double        width,
+                                 double        height)
 {
   gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, width, height, NULL, 0);
 }
 
 static int
-symbolic_paintable_get_intrinsic_width (GdkPaintable *paintable)
+svg_symbolic_paintable_get_intrinsic_width (GdkPaintable *paintable)
 {
-  SymbolicPaintable *self = SYMBOLIC_PAINTABLE (paintable);
-
-  return ceil (self->width);
+  return ceil (SVG_SYMBOLIC_PAINTABLE (paintable)->width);
 }
 
 static int
-symbolic_paintable_get_intrinsic_height (GdkPaintable *paintable)
+svg_symbolic_paintable_get_intrinsic_height (GdkPaintable *paintable)
 {
-  SymbolicPaintable *self = SYMBOLIC_PAINTABLE (paintable);
-
-  return ceil (self->height);
+  return ceil (SVG_SYMBOLIC_PAINTABLE (paintable)->height);
 }
 
 static void
-symbolic_paintable_init_interface (GdkPaintableInterface *iface)
+svg_symbolic_paintable_init_interface (GdkPaintableInterface *iface)
 {
-  iface->snapshot = symbolic_paintable_snapshot;
-  iface->get_intrinsic_width = symbolic_paintable_get_intrinsic_width;
-  iface->get_intrinsic_height = symbolic_paintable_get_intrinsic_height;
+  iface->snapshot = svg_symbolic_paintable_snapshot;
+  iface->get_intrinsic_width = svg_symbolic_paintable_get_intrinsic_width;
+  iface->get_intrinsic_height = svg_symbolic_paintable_get_intrinsic_height;
 }
 
 /* }}} */
@@ -486,14 +482,14 @@ gtk_snapshot_append_node_scaled (GtkSnapshot     *snapshot,
 
 
 static void
-symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
-                                      GdkSnapshot          *snapshot,
-                                      double                width,
-                                      double                height,
-                                      const GdkRGBA        *colors,
-                                      gsize                 n_colors)
+svg_symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
+                                          GdkSnapshot          *snapshot,
+                                          double                width,
+                                          double                height,
+                                          const GdkRGBA        *colors,
+                                          gsize                 n_colors)
 {
-  SymbolicPaintable *self = SYMBOLIC_PAINTABLE (paintable);
+  SvgSymbolicPaintable *self = SVG_SYMBOLIC_PAINTABLE (paintable);
   double render_width;
   double render_height;
   graphene_rect_t icon_rect;
@@ -538,43 +534,43 @@ symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
 }
 
 static void
-symbolic_symbolic_paintable_init_interface (GtkSymbolicPaintableInterface *iface)
+svg_symbolic_symbolic_paintable_init_interface (GtkSymbolicPaintableInterface *iface)
 {
-  iface->snapshot_symbolic = symbolic_paintable_snapshot_symbolic;
+  iface->snapshot_symbolic = svg_symbolic_paintable_snapshot_symbolic;
 }
 
 /* }}} */
 /* {{{ GObject boilerplate */
 
-G_DEFINE_TYPE_WITH_CODE (SymbolicPaintable, symbolic_paintable, G_TYPE_OBJECT,
+G_DEFINE_TYPE_WITH_CODE (SvgSymbolicPaintable, svg_symbolic_paintable, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
-                                                symbolic_paintable_init_interface)
+                                                svg_symbolic_paintable_init_interface)
                          G_IMPLEMENT_INTERFACE (GTK_TYPE_SYMBOLIC_PAINTABLE,
-                                                symbolic_symbolic_paintable_init_interface))
+                                                svg_symbolic_symbolic_paintable_init_interface))
 
 static void
-symbolic_paintable_init (SymbolicPaintable *self)
+svg_symbolic_paintable_init (SvgSymbolicPaintable *self)
 {
 }
 
 static void
-symbolic_paintable_dispose (GObject *object)
+svg_symbolic_paintable_dispose (GObject *object)
 {
-  SymbolicPaintable *self = SYMBOLIC_PAINTABLE (object);
+  SvgSymbolicPaintable *self = SVG_SYMBOLIC_PAINTABLE (object);
 
   g_clear_object (&self->file);
   g_clear_pointer (&self->node, gsk_render_node_unref);
 
-  G_OBJECT_CLASS (symbolic_paintable_parent_class)->dispose (object);
+  G_OBJECT_CLASS (svg_symbolic_paintable_parent_class)->dispose (object);
 }
 
 static void
-symbolic_paintable_set_property (GObject      *object,
-                                 guint         prop_id,
-                                 const GValue *value,
-                                 GParamSpec   *pspec)
+svg_symbolic_paintable_set_property (GObject      *object,
+                                     guint         prop_id,
+                                     const GValue *value,
+                                     GParamSpec   *pspec)
 {
-  SymbolicPaintable *self = SYMBOLIC_PAINTABLE (object);
+  SvgSymbolicPaintable *self = SVG_SYMBOLIC_PAINTABLE (object);
 
   switch (prop_id)
     {
@@ -592,12 +588,12 @@ symbolic_paintable_set_property (GObject      *object,
 }
 
 static void
-symbolic_paintable_get_property (GObject    *object,
-                                 guint       prop_id,
-                                 GValue     *value,
-                                 GParamSpec *pspec)
+svg_symbolic_paintable_get_property (GObject    *object,
+                                     guint       prop_id,
+                                     GValue     *value,
+                                     GParamSpec *pspec)
 {
-  SymbolicPaintable *self = SYMBOLIC_PAINTABLE (object);
+  SvgSymbolicPaintable *self = SVG_SYMBOLIC_PAINTABLE (object);
 
   switch (prop_id)
     {
@@ -612,13 +608,13 @@ symbolic_paintable_get_property (GObject    *object,
 
 
 static void
-symbolic_paintable_class_init (SymbolicPaintableClass *class)
+svg_symbolic_paintable_class_init (SvgSymbolicPaintableClass *class)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (class);
 
-  object_class->dispose = symbolic_paintable_dispose;
-  object_class->set_property = symbolic_paintable_set_property;
-  object_class->get_property = symbolic_paintable_get_property;
+  object_class->dispose = svg_symbolic_paintable_dispose;
+  object_class->set_property = svg_symbolic_paintable_set_property;
+  object_class->get_property = svg_symbolic_paintable_get_property;
 
   g_object_class_install_property (object_class, PROP_FILE,
                                    g_param_spec_object ("file", NULL, NULL,
@@ -630,9 +626,9 @@ symbolic_paintable_class_init (SymbolicPaintableClass *class)
 /* {{{ Public API */
 
 GdkPaintable *
-symbolic_paintable_new (GFile *file)
+svg_symbolic_paintable_new (GFile *file)
 {
-  return g_object_new (SYMBOLIC_TYPE_PAINTABLE,
+  return g_object_new (SVG_TYPE_SYMBOLIC_PAINTABLE,
                        "file", file,
                        NULL);
 }
