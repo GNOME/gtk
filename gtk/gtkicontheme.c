@@ -305,7 +305,6 @@ typedef enum
 #define LRU_CACHE_SIZE 100
 #define MAX_LRU_TEXTURE_SIZE 128
 
-typedef struct _GtkIconPaintableClass GtkIconPaintableClass;
 typedef struct _GtkIconThemeClass     GtkIconThemeClass;
 
 
