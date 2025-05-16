@@ -121,6 +121,8 @@ start_element_cb (GMarkupParseContext  *context,
                                         G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill", NULL,
                                         G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "style", &style_attr,
                                         G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "id", NULL,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "color", NULL,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "overflow", NULL,
                                         G_MARKUP_COLLECT_INVALID))
         {
           return;
