@@ -516,6 +516,7 @@ gtk_public_headers = files([
   'gtkgridview.h',
   'gtkheaderbar.h',
   'gtkicontheme.h',
+  'gtkiconpaintable.h',
   'gtkimage.h',
   'gtkimcontext.h',
   'gtkimcontextsimple.h',

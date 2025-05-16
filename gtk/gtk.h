@@ -163,6 +163,7 @@
 #include <gtk/gtkgridview.h>
 #include <gtk/gtkheaderbar.h>
 #include <gtk/gtkicontheme.h>
+#include <gtk/gtkiconpaintable.h>
 #include <gtk/deprecated/gtkiconview.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkimcontext.h>
