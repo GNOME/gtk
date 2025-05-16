@@ -101,6 +101,8 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
     return gsk_vulkan_renderer_new ();
 #endif
+  else if (g_ascii_strcasecmp (renderer_name, "d3d12") == 0)
+    return gsk_d3d12_renderer_new ();
   else
     return NULL;
 G_GNUC_END_IGNORE_DEPRECATIONS
