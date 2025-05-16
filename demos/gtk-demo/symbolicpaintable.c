@@ -327,6 +327,16 @@ recolor_node2 (GskRenderNode *node,
 
         return ret;
       }
+    case GSK_CLIP_NODE:
+      {
+        gboolean ret;
+
+        gtk_snapshot_push_clip (snapshot, gsk_clip_node_get_clip (node));
+        ret = recolor_node2 (gsk_clip_node_get_child (node), colors, snapshot);
+        gtk_snapshot_pop (snapshot);
+
+        return ret;
+      }
     case GSK_FILL_NODE:
       {
         gboolean ret;
