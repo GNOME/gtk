@@ -204,6 +204,14 @@ interface IDCompositionDevice2;
 #endif /* __cplusplus */
 #endif
 
+#ifndef __IDCompositionDevice3_FWD_DEFINED__
+#define __IDCompositionDevice3_FWD_DEFINED__
+typedef interface IDCompositionDevice3 IDCompositionDevice3;
+#ifdef __cplusplus
+interface IDCompositionDevice3;
+#endif /* __cplusplus */
+#endif
+
 #ifndef __IDCompositionDesktopDevice_FWD_DEFINED__
 #define __IDCompositionDesktopDevice_FWD_DEFINED__
 typedef interface IDCompositionDesktopDevice IDCompositionDesktopDevice;
@@ -4322,6 +4330,325 @@ static inline HRESULT IDCompositionShadowEffect_SetAlphaAnimation(IDCompositionS
 #endif /*__IDCompositionShadowEffect_INTERFACE_DEFINED__ */
 
 /*****************************************************************************
+ * IDCompositionDevice3 interface
+ */
+#ifndef __IDCompositionDevice3_INTERFACE_DEFINED__
+#define __IDCompositionDevice3_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDCompositionDevice3, 0x0987cb06, 0xf916, 0x48bf, 0x8d,0x35, 0xce,0x76,0x41,0x78,0x1b,0xd9);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("0987cb06-f916-48bf-8d35-ce7641781bd9")
+IDCompositionDevice3 : public IDCompositionDevice2
+{
+    virtual HRESULT STDMETHODCALLTYPE CreateGaussianBlurEffect(
+        /* TODO IDCompositionGaussianBlurEffect */ void **gaussianBlurEffect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateBrightnessEffect(
+        /* TODO IDCompositionBrightnessEffect */ void **brightnessEffect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateColorMatrixEffect(
+        /* TODO IDCompositionColorMatrixEffect */ void **colorMatrixEffect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateShadowEffect(
+        /* TODO IDCompositionShadowEffect */ void **shadowEffect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateHueRotationEffect(
+        /* TODO IDCompositionHueRotationEffect */ void **hueRotationEffect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateSaturationEffect(
+        IDCompositionSaturationEffect **saturationEffect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateTurbulenceEffect(
+        /* TODO IDCompositionTurbulenceEffect */ void **turbulenceEffect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateLinearTransferEffect(
+        /* TODO IDCompositionLinearTransferEffect */ void **linearTransferEffect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateTableTransferEffect(
+        /* TODO IDCompositionTableTransferEffect */ void **tableTransferEffect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateCompositeEffect(
+        /* TODO DCompositionCompositeEffect */ void **compositeEffect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateBlendEffect(
+        /* TODO TODO IDCompositionBlendEffect */ void **blendEffect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateArithmeticCompositeEffect(
+        /* TODO IDCompositionArithmeticCompositeEffect */ void **arithmeticCompositeEffect) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE CreateAffineTransform2DEffect(
+        /* TODO IDCompositionAffineTransform2DEffect */ void **affineTransform2dEffect) = 0;
+}
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDCompositionDevice3, 0x0987cb06, 0xf916, 0x48bf, 0x8d,0x35, 0xce,0x76,0x41,0x78,0x1b,0xd9);
+#endif
+#else
+typedef struct IDCompositionDevice3Vtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDCompositionDevice3 *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDCompositionDevice3 *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDCompositionDevice3 *This);
+
+    /*** IDCompositionDevice2 methods ***/
+    HRESULT (STDMETHODCALLTYPE *Commit)(
+        IDCompositionDevice3 *This);
+
+    HRESULT (STDMETHODCALLTYPE *WaitForCommitCompletion)(
+        IDCompositionDevice3 *This);
+
+    HRESULT (STDMETHODCALLTYPE *GetFrameStatistics)(
+        IDCompositionDevice3 *This,
+        DCOMPOSITION_FRAME_STATISTICS *statistics);
+
+    HRESULT (STDMETHODCALLTYPE *CreateVisual)(
+        IDCompositionDevice3 *This,
+        IDCompositionVisual2 **visual);
+
+    HRESULT (STDMETHODCALLTYPE *CreateSurfaceFactory)(
+        IDCompositionDevice3 *This,
+        IUnknown *rendering_device,
+        IDCompositionSurfaceFactory **surface_factory);
+
+    HRESULT (STDMETHODCALLTYPE *CreateSurface)(
+        IDCompositionDevice3 *This,
+        UINT width,
+        UINT height,
+        DXGI_FORMAT pixel_format,
+        DXGI_ALPHA_MODE alpha_mode,
+        IDCompositionSurface **surface);
+
+    HRESULT (STDMETHODCALLTYPE *CreateVirtualSurface)(
+        IDCompositionDevice3 *This,
+        UINT width,
+        UINT height,
+        DXGI_FORMAT pixel_format,
+        DXGI_ALPHA_MODE alpha_mode,
+        IDCompositionVirtualSurface **surface);
+
+    HRESULT (STDMETHODCALLTYPE *CreateTranslateTransform)(
+        IDCompositionDevice3 *This,
+        IDCompositionTranslateTransform **transform);
+
+    HRESULT (STDMETHODCALLTYPE *CreateScaleTransform)(
+        IDCompositionDevice3 *This,
+        IDCompositionScaleTransform **transform);
+
+    HRESULT (STDMETHODCALLTYPE *CreateRotateTransform)(
+        IDCompositionDevice3 *This,
+        IDCompositionRotateTransform **transform);
+
+    HRESULT (STDMETHODCALLTYPE *CreateSkewTransform)(
+        IDCompositionDevice3 *This,
+        IDCompositionSkewTransform **transform);
+
+    HRESULT (STDMETHODCALLTYPE *CreateMatrixTransform)(
+        IDCompositionDevice3 *This,
+        IDCompositionMatrixTransform **transform);
+
+    HRESULT (STDMETHODCALLTYPE *CreateTransformGroup)(
+        IDCompositionDevice3 *This,
+        IDCompositionTransform **transforms,
+        UINT elements,
+        IDCompositionTransform **transform_group);
+
+    HRESULT (STDMETHODCALLTYPE *CreateTranslateTransform3D)(
+        IDCompositionDevice3 *This,
+        IDCompositionTranslateTransform3D **transform_3d);
+
+    HRESULT (STDMETHODCALLTYPE *CreateScaleTransform3D)(
+        IDCompositionDevice3 *This,
+        IDCompositionScaleTransform3D **transform_3d);
+
+    HRESULT (STDMETHODCALLTYPE *CreateRotateTransform3D)(
+        IDCompositionDevice3 *This,
+        IDCompositionRotateTransform3D **transform_3d);
+
+    HRESULT (STDMETHODCALLTYPE *CreateMatrixTransform3D)(
+        IDCompositionDevice3 *This,
+        IDCompositionMatrixTransform3D **transform_3d);
+
+    HRESULT (STDMETHODCALLTYPE *CreateTransform3DGroup)(
+        IDCompositionDevice3 *This,
+        IDCompositionTransform3D **transforms_3d,
+        UINT elements,
+        IDCompositionTransform3D **transform_3d_group);
+
+    HRESULT (STDMETHODCALLTYPE *CreateEffectGroup)(
+        IDCompositionDevice3 *This,
+        IDCompositionEffectGroup **effect_group);
+
+    HRESULT (STDMETHODCALLTYPE *CreateRectangleClip)(
+        IDCompositionDevice3 *This,
+        IDCompositionRectangleClip **clip);
+
+    HRESULT (STDMETHODCALLTYPE *CreateAnimation)(
+        IDCompositionDevice3 *This,
+        IDCompositionAnimation **animation);
+
+    /*** IDCompositionDevice3 methods (incomplete) ***/
+    HRESULT (STDMETHODCALLTYPE *CreateGaussianBlurEffect)(
+        IDCompositionDevice3 *This,
+        void **gaussianBlurEffect); /* TODO IDCompositionGaussianBlurEffect */
+
+    HRESULT (STDMETHODCALLTYPE *CreateBrightnessEffect)(
+        IDCompositionDevice3 *This,
+        void **brightnessEffect); /* TODO IDCompositionBrightnessEffect */
+
+    HRESULT (STDMETHODCALLTYPE *CreateColorMatrixEffect)(
+        IDCompositionDevice3 *This,
+        void **colorMatrixEffect); /* TODO IDCompositionColorMatrixEffect */
+
+    HRESULT (STDMETHODCALLTYPE *CreateShadowEffect)(
+        IDCompositionDevice3 *This,
+        void **shadowEffect); /* TODO IDCompositionShadowEffect */
+
+    /* others omitted for now */
+    END_INTERFACE
+} IDCompositionDevice3Vtbl;
+
+interface IDCompositionDevice3 {
+    CONST_VTBL IDCompositionDevice3Vtbl* lpVtbl;
+};
+
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDCompositionDevice3_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDCompositionDevice3_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDCompositionDevice3_Release(This) (This)->lpVtbl->Release(This)
+/*** IDCompositionDevice2 methods ***/
+#define IDCompositionDevice3_Commit(This) (This)->lpVtbl->Commit(This)
+#define IDCompositionDevice3_WaitForCommitCompletion(This) (This)->lpVtbl->WaitForCommitCompletion(This)
+#define IDCompositionDevice3_GetFrameStatistics(This,statistics) (This)->lpVtbl->GetFrameStatistics(This,statistics)
+#define IDCompositionDevice3_CreateVisual(This,visual) (This)->lpVtbl->CreateVisual(This,visual)
+#define IDCompositionDevice3_CreateSurfaceFactory(This,rendering_device,surface_factory) (This)->lpVtbl->CreateSurfaceFactory(This,rendering_device,surface_factory)
+#define IDCompositionDevice3_CreateSurface(This,width,height,pixel_format,alpha_mode,surface) (This)->lpVtbl->CreateSurface(This,width,height,pixel_format,alpha_mode,surface)
+#define IDCompositionDevice3_CreateVirtualSurface(This,width,height,pixel_format,alpha_mode,surface) (This)->lpVtbl->CreateVirtualSurface(This,width,height,pixel_format,alpha_mode,surface)
+#define IDCompositionDevice3_CreateTranslateTransform(This,transform) (This)->lpVtbl->CreateTranslateTransform(This,transform)
+#define IDCompositionDevice3_CreateScaleTransform(This,transform) (This)->lpVtbl->CreateScaleTransform(This,transform)
+#define IDCompositionDevice3_CreateRotateTransform(This,transform) (This)->lpVtbl->CreateRotateTransform(This,transform)
+#define IDCompositionDevice3_CreateSkewTransform(This,transform) (This)->lpVtbl->CreateSkewTransform(This,transform)
+#define IDCompositionDevice3_CreateMatrixTransform(This,transform) (This)->lpVtbl->CreateMatrixTransform(This,transform)
+#define IDCompositionDevice3_CreateTransformGroup(This,transforms,elements,transform_group) (This)->lpVtbl->CreateTransformGroup(This,transforms,elements,transform_group)
+#define IDCompositionDevice3_CreateTranslateTransform3D(This,transform_3d) (This)->lpVtbl->CreateTranslateTransform3D(This,transform_3d)
+#define IDCompositionDevice3_CreateScaleTransform3D(This,transform_3d) (This)->lpVtbl->CreateScaleTransform3D(This,transform_3d)
+#define IDCompositionDevice3_CreateRotateTransform3D(This,transform_3d) (This)->lpVtbl->CreateRotateTransform3D(This,transform_3d)
+#define IDCompositionDevice3_CreateMatrixTransform3D(This,transform_3d) (This)->lpVtbl->CreateMatrixTransform3D(This,transform_3d)
+#define IDCompositionDevice3_CreateTransform3DGroup(This,transforms_3d,elements,transform_3d_group) (This)->lpVtbl->CreateTransform3DGroup(This,transforms_3d,elements,transform_3d_group)
+#define IDCompositionDevice3_CreateEffectGroup(This,effect_group) (This)->lpVtbl->CreateEffectGroup(This,effect_group)
+#define IDCompositionDevice3_CreateRectangleClip(This,clip) (This)->lpVtbl->CreateRectangleClip(This,clip)
+#define IDCompositionDevice3_CreateAnimation(This,animation) (This)->lpVtbl->CreateAnimation(This,animation)
+/*** IDCompositionDevice3 methods (incomplete) ***/
+#define IDCompositionDevice3_CreateGaussianBlurEffect(This,gaussianBlurEffect) (This)->lpVtbl->CreateGaussianBlurEffect(This,gaussianBlurEffect)
+#define IDCompositionDevice3_CreateBrightnessEffect(This,brightnessEffect) (This)->lpVtbl->CreateBrightnessEffect(This,brightnessEffect)
+#define IDCompositionDevice3_CreateColorMatrixEffect(This,brightnessEffect) (This)->lpVtbl->CreateColorMatrixEffect(This,brightnessEffect)
+#define IDCompositionDevice3_CreateShadowEffect(This,shadowEffect) (This)->lpVtbl->CreateShadowEffect(This,shadowEffect)
+#else
+/*** IUnknown methods ***/
+static inline HRESULT IDCompositionDevice3_QueryInterface(IDCompositionDevice3* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static inline ULONG IDCompositionDevice3_AddRef(IDCompositionDevice3* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static inline ULONG IDCompositionDevice3_Release(IDCompositionDevice3* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDCompositionDevice2 methods ***/
+static inline HRESULT IDCompositionDevice3_Commit(IDCompositionDevice3* This) {
+    return This->lpVtbl->Commit(This);
+}
+static inline HRESULT IDCompositionDevice3_WaitForCommitCompletion(IDCompositionDevice3* This) {
+    return This->lpVtbl->WaitForCommitCompletion(This);
+}
+static inline HRESULT IDCompositionDevice3_GetFrameStatistics(IDCompositionDevice3* This,DCOMPOSITION_FRAME_STATISTICS *statistics) {
+    return This->lpVtbl->GetFrameStatistics(This,statistics);
+}
+static inline HRESULT IDCompositionDevice3_CreateVisual(IDCompositionDevice3* This,IDCompositionVisual2 **visual) {
+    return This->lpVtbl->CreateVisual(This,visual);
+}
+static inline HRESULT IDCompositionDevice3_CreateSurfaceFactory(IDCompositionDevice3* This,IUnknown *rendering_device,IDCompositionSurfaceFactory **surface_factory) {
+    return This->lpVtbl->CreateSurfaceFactory(This,rendering_device,surface_factory);
+}
+static inline HRESULT IDCompositionDevice3_CreateSurface(IDCompositionDevice3* This,UINT width,UINT height,DXGI_FORMAT pixel_format,DXGI_ALPHA_MODE alpha_mode,IDCompositionSurface **surface) {
+    return This->lpVtbl->CreateSurface(This,width,height,pixel_format,alpha_mode,surface);
+}
+static inline HRESULT IDCompositionDevice3_CreateVirtualSurface(IDCompositionDevice3* This,UINT width,UINT height,DXGI_FORMAT pixel_format,DXGI_ALPHA_MODE alpha_mode,IDCompositionVirtualSurface **surface) {
+    return This->lpVtbl->CreateVirtualSurface(This,width,height,pixel_format,alpha_mode,surface);
+}
+static inline HRESULT IDCompositionDevice3_CreateTranslateTransform(IDCompositionDevice3* This,IDCompositionTranslateTransform **transform) {
+    return This->lpVtbl->CreateTranslateTransform(This,transform);
+}
+static inline HRESULT IDCompositionDevice3_CreateScaleTransform(IDCompositionDevice3* This,IDCompositionScaleTransform **transform) {
+    return This->lpVtbl->CreateScaleTransform(This,transform);
+}
+static inline HRESULT IDCompositionDevice3_CreateRotateTransform(IDCompositionDevice3* This,IDCompositionRotateTransform **transform) {
+    return This->lpVtbl->CreateRotateTransform(This,transform);
+}
+static inline HRESULT IDCompositionDevice3_CreateSkewTransform(IDCompositionDevice3* This,IDCompositionSkewTransform **transform) {
+    return This->lpVtbl->CreateSkewTransform(This,transform);
+}
+static inline HRESULT IDCompositionDevice3_CreateMatrixTransform(IDCompositionDevice3* This,IDCompositionMatrixTransform **transform) {
+    return This->lpVtbl->CreateMatrixTransform(This,transform);
+}
+static inline HRESULT IDCompositionDevice3_CreateTransformGroup(IDCompositionDevice3* This,IDCompositionTransform **transforms,UINT elements,IDCompositionTransform **transform_group) {
+    return This->lpVtbl->CreateTransformGroup(This,transforms,elements,transform_group);
+}
+static inline HRESULT IDCompositionDevice3_CreateTranslateTransform3D(IDCompositionDevice3* This,IDCompositionTranslateTransform3D **transform_3d) {
+    return This->lpVtbl->CreateTranslateTransform3D(This,transform_3d);
+}
+static inline HRESULT IDCompositionDevice3_CreateScaleTransform3D(IDCompositionDevice3* This,IDCompositionScaleTransform3D **transform_3d) {
+    return This->lpVtbl->CreateScaleTransform3D(This,transform_3d);
+}
+static inline HRESULT IDCompositionDevice3_CreateRotateTransform3D(IDCompositionDevice3* This,IDCompositionRotateTransform3D **transform_3d) {
+    return This->lpVtbl->CreateRotateTransform3D(This,transform_3d);
+}
+static inline HRESULT IDCompositionDevice3_CreateMatrixTransform3D(IDCompositionDevice3* This,IDCompositionMatrixTransform3D **transform_3d) {
+    return This->lpVtbl->CreateMatrixTransform3D(This,transform_3d);
+}
+static inline HRESULT IDCompositionDevice3_CreateTransform3DGroup(IDCompositionDevice3* This,IDCompositionTransform3D **transforms_3d,UINT elements,IDCompositionTransform3D **transform_3d_group) {
+    return This->lpVtbl->CreateTransform3DGroup(This,transforms_3d,elements,transform_3d_group);
+}
+static inline HRESULT IDCompositionDevice3_CreateEffectGroup(IDCompositionDevice3* This,IDCompositionEffectGroup **effect_group) {
+    return This->lpVtbl->CreateEffectGroup(This,effect_group);
+}
+static inline HRESULT IDCompositionDevice3_CreateRectangleClip(IDCompositionDevice3* This,IDCompositionRectangleClip **clip) {
+    return This->lpVtbl->CreateRectangleClip(This,clip);
+}
+static inline HRESULT IDCompositionDevice3_CreateAnimation(IDCompositionDevice3* This,IDCompositionAnimation **animation) {
+    return This->lpVtbl->CreateAnimation(This,animation);
+}
+/*** IDCompositionDevice3 methods (incomplete) ***/
+static inline HRESULT IDCompositionDevice3_CreateGaussianBlurEffect(IDCompositionDevice3* This, void **gaussianBlurEffect) /* TODO IDCompositionGaussianBlurEffect */ {
+    return This->lpVtbl->CreateGaussianBlurEffect(This,gaussianBlurEffect);
+}
+static inline HRESULT IDCompositionDevice3_CreateBrightnessEffect(IDCompositionDevice3* This, void **brightnessEffect) /* TODO IDCompositionBrightnessEffect */ {
+    return This->lpVtbl->CreateBrightnessEffect(This,brightnessEffect);
+}
+static inline HRESULT IDCompositionDevice3_CreateColorMatrixEffect(IDCompositionDevice3* This, void **colorMatrixEffect) /* TODO IDCompositionColorMatrixEffect */ {
+    return This->lpVtbl->CreateColorMatrixEffect(This,colorMatrixEffect);
+}
+static inline HRESULT IDCompositionDevice3_CreateShadowEffect(IDCompositionDevice3* This, void **shadowEffect) /* TODO IDCompositionShadowEffect */ {
+    return This->lpVtbl->CreateShadowEffect(This,shadowEffect);
+}*/
+#endif
+#endif
+
+#endif
+
+#endif  /* __IDCompositionDevice3_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
  * IDCompositionDesktopDevice interface
  */
 #ifndef __IDCompositionDesktopDevice_INTERFACE_DEFINED__
@@ -4612,6 +4939,12 @@ static inline HRESULT IDCompositionDesktopDevice_CreateSurfaceFromHwnd(IDComposi
 
 STDAPI DCompositionCreateDevice(IDXGIDevice *dxgi_device, REFIID iid, void **device);
 STDAPI DCompositionCreateDevice2(IUnknown *rendering_device, REFIID iid, void **device);
+
+#if (_WIN32_WINNT >= 0x0A00)
+
+STDAPI DCompositionCreateDevice3(IUnknown *renderingDevice, REFIID iid, void **device);
+
+#endif
 /* Begin additional prototypes for all interfaces */
 
 
