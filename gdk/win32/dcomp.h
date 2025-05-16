@@ -1158,13 +1158,13 @@ typedef struct IDCompositionEffectGroupVtbl {
         IDCompositionEffectGroup *This);
 
     /*** IDCompositionEffectGroup methods ***/
-    HRESULT (STDMETHODCALLTYPE *SetOpacity)(
-        IDCompositionEffectGroup *This,
-        float opacity);
-
     HRESULT (STDMETHODCALLTYPE *SetOpacityAnimation)(
         IDCompositionEffectGroup *This,
         IDCompositionAnimation *animation);
+
+    HRESULT (STDMETHODCALLTYPE *SetOpacity)(
+        IDCompositionEffectGroup *This,
+        float opacity);
 
     HRESULT (STDMETHODCALLTYPE *SetTransform3D)(
         IDCompositionEffectGroup *This,
@@ -1184,8 +1184,8 @@ interface IDCompositionEffectGroup {
 #define IDCompositionEffectGroup_AddRef(This) (This)->lpVtbl->AddRef(This)
 #define IDCompositionEffectGroup_Release(This) (This)->lpVtbl->Release(This)
 /*** IDCompositionEffectGroup methods ***/
-#define IDCompositionEffectGroup_SetOpacity(This,opacity) (This)->lpVtbl->SetOpacity(This,opacity)
 #define IDCompositionEffectGroup_SetOpacityAnimation(This,animation) (This)->lpVtbl->SetOpacityAnimation(This,animation)
+#define IDCompositionEffectGroup_SetOpacity(This,opacity) (This)->lpVtbl->SetOpacity(This,opacity)
 #define IDCompositionEffectGroup_SetTransform3D(This,transform) (This)->lpVtbl->SetTransform3D(This,transform)
 #else
 /*** IUnknown methods ***/
