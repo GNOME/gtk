@@ -94,99 +94,56 @@ start_element_cb (GMarkupParseContext  *context,
     {
       /* Do nothing */
     }
-  else if (strcmp (element_name, "p") == 0 ||
-           strcmp (element_name, "path") == 0)
+  else if (strcmp (element_name, "path") == 0)
     {
       const char *path_attr = NULL;
       const char *fill_rule_attr = NULL;
       const char *fill_opacity_attr = NULL;
+      const char *stroke_width_attr = NULL;
+      const char *stroke_opacity_attr = NULL;
+      const char *stroke_linecap_attr = NULL;
+      const char *stroke_linejoin_attr = NULL;
+      const char *stroke_miterlimit_attr = NULL;
+      const char *stroke_dasharray_attr = NULL;
+      const char *stroke_dashoffset_attr = NULL;
       const char *opacity_attr = NULL;
       const char *class_attr = NULL;
-      const char *style_attr = NULL;
-      GskPath *path;
+      GskPath *path = NULL;
+      GskStroke *stroke = NULL;
       GskFillRule fill_rule;
       double opacity;
-      GdkRGBA color;
+      double fill_opacity;
+      double stroke_opacity;
+      GdkRGBA fill_color;
+      GdkRGBA stroke_color;
       char *end;
+      gboolean do_fill = FALSE;
+      gboolean do_stroke = FALSE;
 
       if (!g_markup_collect_attributes (element_name,
                                         attribute_names,
                                         attribute_values,
                                         error,
                                         G_MARKUP_COLLECT_STRING, "d", &path_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "class", &class_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "opacity", &opacity_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill", NULL,
                                         G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill-rule", &fill_rule_attr,
                                         G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill-opacity", &fill_opacity_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "opacity", &opacity_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "class", &class_attr,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "fill", NULL,
-                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "style", &style_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke", NULL,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-width", &stroke_width_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-opacity", &stroke_opacity_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-linecap", &stroke_linecap_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-linejoin", &stroke_linejoin_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-miterlimit", &stroke_miterlimit_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-dasharray", &stroke_dasharray_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "stroke-dashoffset", &stroke_dashoffset_attr,
+                                        G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "style", NULL,
                                         G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "id", NULL,
                                         G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "color", NULL,
                                         G_MARKUP_COLLECT_STRING|G_MARKUP_COLLECT_OPTIONAL, "overflow", NULL,
                                         G_MARKUP_COLLECT_INVALID))
         {
-          return;
-        }
-
-      if (fill_rule_attr && strcmp (fill_rule_attr, "evenodd") == 0)
-        fill_rule = GSK_FILL_RULE_EVEN_ODD;
-      else
-        fill_rule = GSK_FILL_RULE_WINDING;
-
-      opacity = 1;
-
-      if (fill_opacity_attr)
-        {
-          opacity = g_ascii_strtod (fill_opacity_attr, &end);
-          if (end && *end != '\0')
-            {
-              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                           "Invalid fill-opacity attribute: %s", fill_opacity_attr);
-              return;
-            }
-        }
-      else if (opacity_attr)
-        {
-          opacity = g_ascii_strtod (opacity_attr, &end);
-          if (end && *end != '\0')
-            {
-              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                           "Invalid opacity attribute: %s", fill_opacity_attr);
-              return;
-            }
-        }
-      else if (style_attr)
-        {
-          char *p;
-
-          p = strstr (style_attr, "opacity:");
-          if (p)
-            {
-              opacity = g_ascii_strtod (p, &end);
-              if (end && *end != '\0' && *end != ';')
-                {
-                  g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                               "Failed to parse opacity in style attribute: %s", style_attr);
-                  return;
-                }
-            }
-        }
-
-      if (!class_attr)
-        class_attr = "foreground";
-
-      if (strcmp (class_attr, "foreground") == 0)
-        color = (GdkRGBA) { 0, 0, 0, opacity };
-      else if (strcmp (class_attr, "success") == 0)
-        color = (GdkRGBA) { 1, 0, 0, opacity };
-      else if (strcmp (class_attr, "warning") == 0)
-        color = (GdkRGBA) { 0, 1, 0, opacity };
-      else if (strcmp (class_attr, "error") == 0)
-        color = (GdkRGBA) { 0, 0, 1, opacity };
-      else
-        {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Unsupported class: %s", class_attr);
           return;
         }
 
@@ -198,15 +155,246 @@ start_element_cb (GMarkupParseContext  *context,
           return;
         }
 
-      gtk_snapshot_append_fill (data->snapshot, path, fill_rule, &color);
+      fill_opacity = 1;
+      if (fill_opacity_attr)
+        {
+          fill_opacity = g_ascii_strtod (fill_opacity_attr, &end);
+          if (end && *end != '\0')
+            {
+              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                           "Invalid fill-opacity attribute: %s", fill_opacity_attr);
+              goto cleanup;
+            }
+          fill_opacity = CLAMP (fill_opacity, 0, 1);
+        }
 
-      gsk_path_unref (path);
+      stroke_opacity = 1;
+      if (stroke_opacity_attr)
+        {
+          stroke_opacity = g_ascii_strtod (stroke_opacity_attr, &end);
+          if (end && *end != '\0')
+            {
+              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                           "Invalid stroke-opacity attribute: %s", stroke_opacity_attr);
+              goto cleanup;
+            }
+          stroke_opacity = CLAMP (stroke_opacity, 0, 1);
+        }
+
+      if (!class_attr)
+        {
+          fill_color = (GdkRGBA) { 0, 0, 0, fill_opacity };
+          do_fill = TRUE;
+          do_stroke = FALSE;
+        }
+      else
+        {
+          const char * const *classes;
+
+          classes = (const char * const *) g_strsplit (class_attr, " ", 0);
+
+          if (g_strv_contains (classes, "transparent-fill"))
+            {
+              do_fill = FALSE;
+            }
+          else if (g_strv_contains (classes, "foreground-fill"))
+            {
+              do_fill = TRUE;
+              fill_color = (GdkRGBA) { 0, 0, 0, fill_opacity };
+            }
+          else if (g_strv_contains (classes, "success") ||
+                   g_strv_contains (classes, "success-fill"))
+            {
+              do_fill = TRUE;
+              fill_color = (GdkRGBA) { 1, 0, 0, fill_opacity };
+            }
+          else if (g_strv_contains (classes, "warning") ||
+                   g_strv_contains (classes, "warning-fill"))
+            {
+              do_fill = TRUE;
+              fill_color = (GdkRGBA) { 0, 1, 0, 1 };
+            }
+          else if (g_strv_contains (classes, "error") ||
+                   g_strv_contains (classes, "error-fill"))
+            {
+              do_fill = TRUE;
+              fill_color = (GdkRGBA) { 0, 0, 1, fill_opacity };
+            }
+          else
+            {
+              do_fill = TRUE;
+              fill_color = (GdkRGBA) { 0, 0, 0, fill_opacity };
+            }
+
+          if (g_strv_contains (classes, "success-stroke"))
+            {
+              do_stroke = TRUE;
+              stroke_color = (GdkRGBA) { 1, 0, 0, stroke_opacity };
+            }
+          else if (g_strv_contains (classes, "warning-stroke"))
+            {
+              do_stroke = TRUE;
+              stroke_color = (GdkRGBA) { 0, 1, 0, stroke_opacity };
+            }
+          else if (g_strv_contains (classes, "error-stroke"))
+            {
+              do_stroke = TRUE;
+              stroke_color = (GdkRGBA) { 0, 0, 1, stroke_opacity };
+            }
+          else if (g_strv_contains (classes, "foreground-stroke"))
+            {
+              do_stroke = TRUE;
+              stroke_color = (GdkRGBA) { 0, 0, 0, stroke_opacity };
+            }
+          else
+            {
+              do_stroke = FALSE;
+            }
+
+          g_strfreev ((char **) classes);
+        }
+
+      opacity = 1;
+      if (opacity_attr)
+        {
+          opacity = g_ascii_strtod (opacity_attr, &end);
+          if (end && *end != '\0')
+            {
+              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                           "Invalid opacity attribute: %s", opacity_attr);
+              goto cleanup;
+            }
+        }
+
+      if (fill_rule_attr && strcmp (fill_rule_attr, "evenodd") == 0)
+        fill_rule = GSK_FILL_RULE_EVEN_ODD;
+      else
+        fill_rule = GSK_FILL_RULE_WINDING;
+
+      stroke = gsk_stroke_new (1);
+
+      if (stroke_width_attr)
+        {
+          double w = g_ascii_strtod (stroke_width_attr, &end);
+          if (end && *end != '\0')
+            {
+              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                           "Can't handle stroke-width attribute: %s", stroke_width_attr);
+              goto cleanup;
+            }
+
+          gsk_stroke_set_line_width (stroke, w);
+        }
+
+      if (stroke_linecap_attr)
+        {
+          if (strcmp (stroke_linecap_attr, "butt") == 0)
+            gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_BUTT);
+          else if (strcmp (stroke_linecap_attr, "round") == 0)
+            gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_ROUND);
+          else if (strcmp (stroke_linecap_attr, "square") == 0)
+            gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_SQUARE);
+          else
+            {
+              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                           "Can't handle stroke-linecap attribute: %s", stroke_linecap_attr);
+              goto cleanup;
+            }
+        }
+
+      if (stroke_linejoin_attr)
+        {
+          if (strcmp (stroke_linejoin_attr, "miter") == 0)
+            gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_MITER);
+          else if (strcmp (stroke_linejoin_attr, "round") == 0)
+            gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_ROUND);
+          else if (strcmp (stroke_linejoin_attr, "bevel") == 0)
+            gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_BEVEL);
+          else
+            {
+              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                           "Can't handle stroke-linejoin attribute: %s", stroke_linejoin_attr);
+              goto cleanup;
+            }
+        }
+
+      if (stroke_miterlimit_attr)
+        {
+          double ml = g_ascii_strtod (stroke_miterlimit_attr, &end);
+          if ((end && *end != '\0') || ml < 1)
+            {
+              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                           "Invalid stroke-miterlimit attribute: %s", stroke_miterlimit_attr);
+              goto cleanup;
+            }
+
+          gsk_stroke_set_miter_limit (stroke, ml);
+        }
+
+      if (stroke_dasharray_attr &&
+          strcmp (stroke_dasharray_attr, "none") != 0)
+        {
+          char **str;
+          gsize n_dash;
+
+          str = g_strsplit_set (stroke_dasharray_attr, ", ", 0);
+
+          n_dash = g_strv_length (str);
+          if (n_dash > 0)
+            {
+              float *dash = g_newa (float, n_dash);
+
+              for (int i = 0; i < n_dash; i++)
+                {
+                  dash[i] = g_ascii_strtod (str[i], &end);
+                  if (end && *end != '\0')
+                    {
+                      g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                                   "Failed to parse stroke-dasharray attribute: %s", stroke_dasharray_attr);
+                      g_strfreev (str);
+                      goto cleanup;
+                    }
+                }
+
+              gsk_stroke_set_dash (stroke, dash, n_dash);
+            }
+
+          g_strfreev (str);
+        }
+
+      if (stroke_dashoffset_attr)
+        {
+          double offset = g_ascii_strtod (stroke_dashoffset_attr, &end);
+          if (end && *end != '\0')
+            {
+              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+                           "Failed to parse stroke-dashoffset attribute: %s", stroke_dashoffset_attr);
+              goto cleanup;
+            }
+
+          gsk_stroke_set_dash_offset (stroke, offset);
+        }
+
+      if (opacity != 1)
+        gtk_snapshot_push_opacity (data->snapshot, opacity);
+
+      if (do_fill)
+        gtk_snapshot_append_fill (data->snapshot, path, fill_rule, &fill_color);
+
+      if (do_stroke)
+        gtk_snapshot_append_stroke (data->snapshot, path, stroke, &stroke_color);
+
+      if (opacity != 1)
+        gtk_snapshot_pop (data->snapshot);
+
+cleanup:
+      g_clear_pointer (&path, gsk_path_unref);
+      g_clear_pointer (&stroke, gsk_stroke_free);
     }
   else
     {
       g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
                    "Unhandled element: %s", element_name);
-      return;
     }
 }
 
@@ -304,8 +492,8 @@ render_node_from_symbolic (GFile  *file,
 /* }}} */ 
 /* {{{ Render node recoloring */
 
-/* This recolors nodes that are produced from
- * symbolic icons: container, transform, fill, color
+/* This recolors nodes that are produced from symbolic
+ * icons: container, clip, transform, fill, stroke, color
  *
  * It relies on the fact that the SVG parser uses
  * fixed RGBA values for the symbolic colors.
@@ -324,6 +512,7 @@ recolor_node2 (GskRenderNode  *node,
         if (!recolor_node2 (gsk_container_node_get_child (node, i), colors, snapshot, error))
           return FALSE;
       return TRUE;
+
     case GSK_TRANSFORM_NODE:
       {
         gboolean ret;
@@ -335,6 +524,7 @@ recolor_node2 (GskRenderNode  *node,
 
         return ret;
       }
+
     case GSK_CLIP_NODE:
       {
         gboolean ret;
@@ -345,6 +535,7 @@ recolor_node2 (GskRenderNode  *node,
 
         return ret;
       }
+
     case GSK_FILL_NODE:
       {
         gboolean ret;
@@ -357,7 +548,20 @@ recolor_node2 (GskRenderNode  *node,
 
         return ret;
       }
-      break;
+
+    case GSK_STROKE_NODE:
+      {
+        gboolean ret;
+
+        gtk_snapshot_push_stroke (snapshot,
+                                  gsk_stroke_node_get_path (node),
+                                  gsk_stroke_node_get_stroke (node));
+        ret = recolor_node2 (gsk_stroke_node_get_child (node), colors, snapshot, error);
+        gtk_snapshot_pop (snapshot);
+
+        return ret;
+      }
+
     case GSK_COLOR_NODE:
       {
         graphene_rect_t bounds;
@@ -385,6 +589,7 @@ recolor_node2 (GskRenderNode  *node,
         gtk_snapshot_append_color (snapshot, &color, &bounds);
       }
       return TRUE;
+
     default:
       {
         char *name = g_enum_to_string (GSK_TYPE_RENDER_NODE_TYPE,
@@ -395,6 +600,7 @@ recolor_node2 (GskRenderNode  *node,
         g_free (name);
       }
       return FALSE;
+
     }
 }
 
@@ -454,7 +660,7 @@ svg_symbolic_paintable_init_interface (GdkPaintableInterface *iface)
 /* {{{ GtkSymbolicPaintable implementation */
 
 /* Like gtk_snapshot_append_node, but transforms the node
- * to make its bounds match the given rect
+ * to map the @from rect to the @to rect.
  */
 static void
 gtk_snapshot_append_node_scaled (GtkSnapshot     *snapshot,
@@ -479,7 +685,6 @@ gtk_snapshot_append_node_scaled (GtkSnapshot     *snapshot,
       gtk_snapshot_restore (snapshot);
     }
 }
-
 
 static void
 svg_symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
