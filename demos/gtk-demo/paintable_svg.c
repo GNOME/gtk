@@ -4,12 +4,16 @@
  * to display an SVG image that can be scaled by resizing the window.
  *
  * This demo relies on librsvg, which GTK itself does not link against.
+ *
+ * It also demonstrates an implementation of GtkSymbolicPaintable
+ * for rendering symbolic SVG icons.
  */
 
 #include <gtk/gtk.h>
 #include <librsvg/rsvg.h>
 
 #include "svgpaintable.h"
+#include "symbolicpaintable.h"
 
 
 static void
@@ -26,8 +30,13 @@ open_response_cb (GObject *source,
     {
       GdkPaintable *paintable;
 
-      paintable = svg_paintable_new (file);
+      if (strstr (g_file_peek_path (file), "symbolic"))
+        paintable = symbolic_paintable_new (file);
+      else
+        paintable = svg_paintable_new (file);
+
       gtk_image_set_from_paintable (image, paintable);
+
       g_object_unref (paintable);
       g_object_unref (file);
     }
