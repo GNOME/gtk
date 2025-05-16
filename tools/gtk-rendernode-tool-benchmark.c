@@ -137,7 +137,7 @@ do_benchmark (int          *argc,
     }
 
   if (renderers == NULL || renderers[0] == NULL)
-    renderers = g_strdupv ((char **) (const char *[]) { "gl", "vulkan", "cairo", NULL });
+    renderers = g_strdupv ((char **) (const char *[]) { "gl", "vulkan", "d3d12", "cairo", NULL });
   
   node = load_node_file (filenames[0]);
 
