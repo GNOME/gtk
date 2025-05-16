@@ -434,6 +434,17 @@ gdk_win32_display_create_d3d_devices (GdkWin32Display    *self,
   HRESULT hr;
   guint i;
 
+  if (d3d11_device && !gdk_has_feature (GDK_FEATURE_D3D11))
+    {
+      g_set_error (error, GDK_WIN32_HRESULT_ERROR, DXGI_ERROR_NOT_FOUND, "D3D11 disabled via GDK_DISABLE");
+      return FALSE;
+    }
+  if (d3d12_device && !gdk_has_feature (GDK_FEATURE_D3D12))
+    {
+      g_set_error (error, GDK_WIN32_HRESULT_ERROR, DXGI_ERROR_NOT_FOUND, "D3D12 disabled via GDK_DISABLE");
+      return FALSE;
+    }
+
   /* This function records the first error in the error variable and then
      sets error = NULL to ignore future errors. */
 
