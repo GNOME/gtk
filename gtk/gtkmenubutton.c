@@ -945,7 +945,8 @@ gtk_menu_button_dispose (GObject *object)
 /**
  * gtk_menu_button_set_popover:
  * @menu_button: a `GtkMenuButton`
- * @popover: (nullable): a `GtkPopover`, or %NULL to unset and disable the button
+ * @popover: (nullable) (type GtkPopover): a `GtkPopover`, or %NULL to unset and
+ *   disable the button
  *
  * Sets the `GtkPopover` that will be popped up when the @menu_button is clicked.
  *
