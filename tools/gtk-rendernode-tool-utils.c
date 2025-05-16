@@ -95,6 +95,8 @@ get_renderer_for_name (const char *renderer_name)
   else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
     return gsk_vulkan_renderer_new ();
 #endif
+  else if (g_ascii_strcasecmp (renderer_name, "d3d12") == 0)
+    return gsk_d3d12_renderer_new ();
   else
     return NULL;
 }
