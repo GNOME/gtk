@@ -348,6 +348,10 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   else if (g_ascii_strcasecmp (renderer_name, "vulkan") == 0)
     return gsk_vulkan_renderer_new ();
 #endif
+#ifdef GDK_WINDOWING_WIN32
+  else if (g_ascii_strcasecmp (renderer_name, "d3d12") == 0)
+    return gsk_d3d12_renderer_new ();
+#endif
   else
     return NULL;
 G_GNUC_END_IGNORE_DEPRECATIONS
@@ -364,6 +368,9 @@ get_renderer_names (void)
     "gl",
 #ifdef GDK_RENDERING_VULKAN
     "vulkan",
+#endif
+#ifdef GDK_WINDOWING_WIN32
+    "d3d12",
 #endif
     NULL
   };
