@@ -229,9 +229,10 @@ end_element_cb (GMarkupParseContext  *context,
 }
 
 static GskRenderNode *
-parse_symbolic_svg (GBytes *bytes,
-                    double *width,
-                    double *height)
+parse_symbolic_svg (GBytes  *bytes,
+                    double  *width,
+                    double  *height,
+                    GError **error)
 {
   GMarkupParseContext *context;
   GMarkupParser parser = {
@@ -242,7 +243,6 @@ parse_symbolic_svg (GBytes *bytes,
     NULL,
   };
   ParserData data;
-  GError *error = NULL;
   const char *text;
   gsize len;
 
@@ -253,11 +253,9 @@ parse_symbolic_svg (GBytes *bytes,
   text = g_bytes_get_data (bytes, &len);
 
   context = g_markup_parse_context_new (&parser, G_MARKUP_PREFIX_ERROR_POSITION, &data, NULL);
-  if (!g_markup_parse_context_parse (context, text, len, &error))
+  if (!g_markup_parse_context_parse (context, text, len, error))
     {
       GskRenderNode *node;
-
-      g_error_free (error);
 
       g_markup_parse_context_free (context);
       if (data.has_clip)
@@ -283,12 +281,21 @@ render_node_from_symbolic (GFile  *file,
 {
   GBytes *bytes;
   GskRenderNode *node;
+  GError *error = NULL;
 
   bytes = g_file_load_bytes (file, NULL, NULL, NULL);
   if (!bytes)
     return NULL;
 
-  node = parse_symbolic_svg (bytes, width, height);
+  node = parse_symbolic_svg (bytes, width, height, &error);
+  if (!node)
+    {
+      g_warning ("Failed to parse %s: %s",
+                 g_file_peek_path (file),
+                 error->message);
+      g_error_free (error);
+    }
+
   g_bytes_unref (bytes);
 
   return node;
@@ -305,15 +312,16 @@ render_node_from_symbolic (GFile  *file,
  */
 
 static gboolean
-recolor_node2 (GskRenderNode *node,
-               const GdkRGBA  colors[4],
-               GtkSnapshot   *snapshot)
+recolor_node2 (GskRenderNode  *node,
+               const GdkRGBA   colors[4],
+               GtkSnapshot    *snapshot,
+               GError        **error)
 {
   switch ((int) gsk_render_node_get_node_type (node))
     {
     case GSK_CONTAINER_NODE:
       for (guint i = 0; i < gsk_container_node_get_n_children (node); i++)
-        if (!recolor_node2 (gsk_container_node_get_child (node, i), colors, snapshot))
+        if (!recolor_node2 (gsk_container_node_get_child (node, i), colors, snapshot, error))
           return FALSE;
       return TRUE;
     case GSK_TRANSFORM_NODE:
@@ -322,7 +330,7 @@ recolor_node2 (GskRenderNode *node,
 
         gtk_snapshot_save (snapshot);
         gtk_snapshot_transform (snapshot, gsk_transform_node_get_transform (node));
-        ret = recolor_node2 (gsk_transform_node_get_child (node), colors, snapshot);
+        ret = recolor_node2 (gsk_transform_node_get_child (node), colors, snapshot, error);
         gtk_snapshot_restore (snapshot);
 
         return ret;
@@ -332,7 +340,7 @@ recolor_node2 (GskRenderNode *node,
         gboolean ret;
 
         gtk_snapshot_push_clip (snapshot, gsk_clip_node_get_clip (node));
-        ret = recolor_node2 (gsk_clip_node_get_child (node), colors, snapshot);
+        ret = recolor_node2 (gsk_clip_node_get_child (node), colors, snapshot, error);
         gtk_snapshot_pop (snapshot);
 
         return ret;
@@ -344,7 +352,7 @@ recolor_node2 (GskRenderNode *node,
         gtk_snapshot_push_fill (snapshot,
                                 gsk_fill_node_get_path (node),
                                 gsk_fill_node_get_fill_rule (node));
-        ret = recolor_node2 (gsk_fill_node_get_child (node), colors, snapshot);
+        ret = recolor_node2 (gsk_fill_node_get_child (node), colors, snapshot, error);
         gtk_snapshot_pop (snapshot);
 
         return ret;
@@ -378,6 +386,14 @@ recolor_node2 (GskRenderNode *node,
       }
       return TRUE;
     default:
+      {
+        char *name = g_enum_to_string (GSK_TYPE_RENDER_NODE_TYPE,
+                                       gsk_render_node_get_node_type (node));
+        g_set_error (error,
+                     G_IO_ERROR, G_IO_ERROR_FAILED,
+                     "Unsupported node type %s", name);
+        g_free (name);
+      }
       return FALSE;
     }
 }
@@ -386,13 +402,14 @@ static gboolean
 recolor_node (GskRenderNode  *node,
               const GdkRGBA  *colors,
               gsize           n_colors,
-              GskRenderNode **recolored)
+              GskRenderNode **recolored,
+              GError        **error)
 {
   GtkSnapshot *snapshot;
   gboolean ret;
 
   snapshot = gtk_snapshot_new ();
-  ret = recolor_node2 (node, colors, snapshot);
+  ret = recolor_node2 (node, colors, snapshot, error);
   *recolored = gtk_snapshot_free_to_node (snapshot);
 
   if (!ret)
@@ -482,6 +499,7 @@ symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
   graphene_rect_t icon_rect;
   graphene_rect_t render_rect;
   GskRenderNode *recolored;
+  GError *error = NULL;
 
   if (!self->node)
     return;
@@ -504,14 +522,18 @@ symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
                       render_width,
                       render_height);
 
-  if (recolor_node (self->node, colors, n_colors, &recolored))
+  if (!recolor_node (self->node, colors, n_colors, &recolored, &error))
     {
-      gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
-      gsk_render_node_unref (recolored);
+      g_warning ("Failed to recolor %s: %s",
+                 g_file_peek_path (self->file),
+                 error->message);
+      g_error_free (error);
+      gtk_snapshot_append_node_scaled (snapshot, self->node, &icon_rect, &render_rect);
     }
   else
     {
-      gtk_snapshot_append_node_scaled (snapshot, self->node, &icon_rect, &render_rect);
+      gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
+      gsk_render_node_unref (recolored);
     }
 }
 
