@@ -18,7 +18,7 @@ open_response_cb (GObject *source,
                   void *data)
 {
   GtkFileDialog *dialog = GTK_FILE_DIALOG (source);
-  GtkPicture *picture = data;
+  GtkImage *image = data;
   GFile *file;
 
   file = gtk_file_dialog_open_finish (dialog, result, NULL);
@@ -27,22 +27,22 @@ open_response_cb (GObject *source,
       GdkPaintable *paintable;
 
       paintable = svg_paintable_new (file);
-      gtk_picture_set_paintable (GTK_PICTURE (picture), paintable);
+      gtk_image_set_from_paintable (image, paintable);
       g_object_unref (paintable);
       g_object_unref (file);
     }
 }
 
 static void
-show_file_open (GtkWidget  *button,
-                GtkPicture *picture)
+show_file_open (GtkWidget *button,
+                GtkImage  *image)
 {
   GtkFileFilter *filter;
   GtkFileDialog *dialog;
   GListStore *filters;
 
   dialog = gtk_file_dialog_new ();
-  gtk_file_dialog_set_title (dialog, "Open node file");
+  gtk_file_dialog_set_title (dialog, "Open svg image");
 
   filter = gtk_file_filter_new ();
   gtk_file_filter_add_mime_type (filter, "image/svg+xml");
@@ -55,7 +55,7 @@ show_file_open (GtkWidget  *button,
   gtk_file_dialog_open (dialog,
                         GTK_WINDOW (gtk_widget_get_root (button)),
                         NULL,
-                        open_response_cb, picture);
+                        open_response_cb, image);
 }
 
 static GtkWidget *window;
@@ -64,7 +64,7 @@ GtkWidget *
 do_paintable_svg (GtkWidget *do_widget)
 {
   GtkWidget *header;
-  GtkWidget *picture;
+  GtkWidget *image;
   GtkWidget *button;
   GFile *file;
   GdkPaintable *paintable;
@@ -81,17 +81,16 @@ do_paintable_svg (GtkWidget *do_widget)
       button = gtk_button_new_with_mnemonic ("_Open");
       gtk_header_bar_pack_start (GTK_HEADER_BAR (header), button);
 
-      picture = gtk_picture_new ();
-      gtk_picture_set_can_shrink (GTK_PICTURE (picture), TRUE);
-      gtk_widget_set_size_request (picture, 16, 16);
+      image = gtk_image_new ();
+      gtk_widget_set_size_request (image, 16, 16);
 
-      g_signal_connect (button, "clicked", G_CALLBACK (show_file_open), picture);
+      g_signal_connect (button, "clicked", G_CALLBACK (show_file_open), image);
 
-      gtk_window_set_child (GTK_WINDOW (window), picture);
+      gtk_window_set_child (GTK_WINDOW (window), image);
 
       file = g_file_new_for_uri ("resource:///paintable_svg/org.gtk.gtk4.NodeEditor.Devel.svg");
       paintable = svg_paintable_new (file);
-      gtk_picture_set_paintable (GTK_PICTURE (picture), paintable);
+      gtk_image_set_from_paintable (GTK_IMAGE (image), paintable);
       g_object_unref (paintable);
       g_object_unref (file);
     }
