@@ -825,6 +825,11 @@ struct _GdkMemoryFormatDescription
   GdkMemoryAlpha alpha;
   GdkMemoryFormat premultiplied;
   GdkMemoryFormat straight;
+  struct {
+    /* -1 if none exists, ie the format is already RGBA */
+    GdkMemoryFormat format;
+    GdkSwizzle swizzle;
+  } rgba;
   gsize alignment;
   GdkMemoryDepth depth;
   const GdkMemoryFormat *fallbacks;
@@ -836,10 +841,6 @@ struct _GdkMemoryFormatDescription
     GLenum srgb_format;
     GLenum type;
     GLint swizzle[4];
-    /* -1 if none exists, ie the format is already RGBA
-     * or the format doesn't have 4 channels */
-    GdkMemoryFormat rgba_format;
-    GLint rgba_swizzle[4];
   } gl;
 #ifdef GDK_RENDERING_VULKAN
   struct {
@@ -886,6 +887,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_B8G8R8A8,
+    .rgba = {
+        .format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        .swizzle = GDK_SWIZZLE (B, G, R, A)
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -899,8 +904,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-        .rgba_swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -936,6 +939,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8R8G8B8,
+    .rgba = {
+        .format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        .swizzle = GDK_SWIZZLE (G, B, A, R)
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -949,8 +956,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGRA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-        .rgba_swizzle = { GL_GREEN, GL_BLUE, GL_ALPHA, GL_RED },
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -986,6 +991,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_R8G8B8A8,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -998,7 +1007,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1034,6 +1042,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8B8G8R8,
+    .rgba = {
+        .format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        .swizzle = GDK_SWIZZLE (A, B, G, R)
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1047,8 +1059,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
-        .rgba_swizzle = { GL_ALPHA, GL_BLUE, GL_GREEN, GL_RED },
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1084,6 +1094,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_B8G8R8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_B8G8R8A8,
+    .rgba = {
+        .format = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
+        .swizzle = GDK_SWIZZLE (R, G, B, A)
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1097,8 +1111,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = GDK_MEMORY_R8G8B8A8,
-        .rgba_swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1134,6 +1146,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_A8R8G8B8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8R8G8B8,
+    .rgba = {
+        .format = GDK_MEMORY_R8G8B8A8,
+        .swizzle = GDK_SWIZZLE (G, B, A, R)
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1147,8 +1163,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGRA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = GDK_MEMORY_R8G8B8A8,
-        .rgba_swizzle = { GL_GREEN, GL_BLUE, GL_ALPHA, GL_RED },
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1184,6 +1198,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_R8G8B8A8,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1196,7 +1214,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1232,6 +1249,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_A8B8G8R8_PREMULTIPLIED,
     .straight = GDK_MEMORY_A8B8G8R8,
+    .rgba = {
+        .format = GDK_MEMORY_R8G8B8A8,
+        .swizzle = GDK_SWIZZLE (A, B, G, R)
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1245,8 +1266,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = GDK_MEMORY_R8G8B8A8,
-        .rgba_swizzle = { GL_ALPHA, GL_BLUE, GL_GREEN, GL_RED },
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1282,6 +1301,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_B8G8R8X8,
     .straight = GDK_MEMORY_B8G8R8X8,
+    .rgba = {
+        .format = GDK_MEMORY_R8G8B8A8,
+        .swizzle = GDK_SWIZZLE (B, G, R, 1)
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1295,8 +1318,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
-        .rgba_format = GDK_MEMORY_R8G8B8X8,
-        .rgba_swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ONE },
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1332,6 +1353,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_X8R8G8B8,
     .straight = GDK_MEMORY_X8R8G8B8,
+    .rgba = {
+        .format = GDK_MEMORY_R8G8B8A8,
+        .swizzle = GDK_SWIZZLE (G, B, A, 1)
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1346,8 +1371,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGRA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
-        .rgba_format = GDK_MEMORY_R8G8B8A8,
-        .rgba_swizzle = { GL_GREEN, GL_BLUE, GL_ALPHA, GL_ONE },
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1383,6 +1406,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R8G8B8X8,
     .straight = GDK_MEMORY_R8G8B8X8,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1396,7 +1423,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1432,6 +1458,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_X8B8G8R8,
     .straight = GDK_MEMORY_X8B8G8R8,
+    .rgba = {
+        .format = GDK_MEMORY_R8G8B8A8,
+        .swizzle = GDK_SWIZZLE (A, B, G, 1)
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1446,8 +1476,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ONE },
-        .rgba_format = GDK_MEMORY_R8G8B8A8,
-        .rgba_swizzle = { GL_ALPHA, GL_BLUE, GL_GREEN, GL_ONE },
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1483,6 +1511,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R8G8B8,
     .straight = GDK_MEMORY_R8G8B8,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1497,7 +1529,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGB,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1533,6 +1564,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_B8G8R8,
     .straight = GDK_MEMORY_B8G8R8,
+    .rgba = {
+        .format = GDK_MEMORY_R8G8B8,
+        .swizzle = GDK_SWIZZLE (B, G, R, 1)
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1546,8 +1581,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_BGR,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = GDK_MEMORY_R8G8B8,
-        .rgba_swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1583,6 +1616,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R16G16B16,
     .straight = GDK_MEMORY_R16G16B16,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1599,7 +1636,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGB,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1635,6 +1671,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1650,7 +1690,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1686,6 +1725,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R16G16B16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1701,7 +1744,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1737,6 +1779,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R16G16B16_FLOAT,
     .straight = GDK_MEMORY_R16G16B16_FLOAT,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1752,7 +1798,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGB,
         .type = GL_HALF_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1788,6 +1833,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16_FLOAT,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1802,7 +1851,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_HALF_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1838,6 +1886,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R16G16B16A16_FLOAT,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1852,7 +1904,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_HALF_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1888,6 +1939,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R32G32B32_FLOAT,
     .straight = GDK_MEMORY_R32G32B32_FLOAT,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1903,7 +1958,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGB,
         .type = GL_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1939,6 +1993,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R32G32B32A32_FLOAT,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -1953,7 +2011,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -1989,6 +2046,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED,
     .straight = GDK_MEMORY_R32G32B32A32_FLOAT,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2003,7 +2064,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RGBA,
         .type = GL_FLOAT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2039,6 +2099,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_G8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_G8A8,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2052,7 +2116,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RG,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2088,6 +2151,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_G8A8_PREMULTIPLIED,
     .straight = GDK_MEMORY_G8A8,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2101,7 +2168,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RG,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2137,6 +2203,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8,
     .straight = GDK_MEMORY_G8,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2150,7 +2220,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_ONE },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2186,6 +2255,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_G16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_G16A16,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2202,7 +2275,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RG,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2238,6 +2310,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_STRAIGHT,
     .premultiplied = GDK_MEMORY_G16A16_PREMULTIPLIED,
     .straight = GDK_MEMORY_G16A16,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2254,7 +2330,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RG,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_GREEN },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2290,6 +2365,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G16,
     .straight = GDK_MEMORY_G16,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2306,7 +2385,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_ONE },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2342,6 +2420,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A8,
     .straight = GDK_MEMORY_A8,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guchar),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2355,7 +2437,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2391,6 +2472,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A16,
     .straight = GDK_MEMORY_A16,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2407,7 +2492,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2443,6 +2527,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A16_FLOAT,
     .straight = GDK_MEMORY_A16_FLOAT,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint16),
     .depth = GDK_MEMORY_FLOAT16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2458,7 +2546,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_HALF_FLOAT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2494,6 +2581,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_PREMULTIPLIED,
     .premultiplied = GDK_MEMORY_A32_FLOAT,
     .straight = GDK_MEMORY_A32_FLOAT,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (float),
     .depth = GDK_MEMORY_FLOAT32,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2509,7 +2600,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_FLOAT,
         .swizzle = { GL_RED, GL_RED, GL_RED, GL_RED },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2549,6 +2639,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_B8R8_420,
     .straight = GDK_MEMORY_G8_B8R8_420,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2563,7 +2657,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2603,6 +2696,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_R8B8_420,
     .straight = GDK_MEMORY_G8_R8B8_420,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2617,7 +2714,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2657,6 +2753,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_B8R8_422,
     .straight = GDK_MEMORY_G8_B8R8_422,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2671,7 +2771,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2711,6 +2810,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_R8B8_422,
     .straight = GDK_MEMORY_G8_R8B8_422,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2725,7 +2828,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2765,6 +2867,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_B8R8_444,
     .straight = GDK_MEMORY_G8_B8R8_444,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2779,7 +2885,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2819,6 +2924,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_R8B8_444,
     .straight = GDK_MEMORY_G8_R8B8_444,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2833,7 +2942,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
         .swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2873,6 +2981,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G10X6_B10X6R10X6_420,
     .straight = GDK_MEMORY_G10X6_B10X6R10X6_420,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint32),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2888,7 +3000,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2928,6 +3039,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G12X4_B12X4R12X4_420,
     .straight = GDK_MEMORY_G12X4_B12X4R12X4_420,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint32),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2943,7 +3058,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -2983,6 +3097,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G16_B16R16_420,
     .straight = GDK_MEMORY_G16_B16R16_420,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint32),
     .depth = GDK_MEMORY_U16,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -2998,7 +3116,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3042,6 +3159,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_B8_R8_410,
     .straight = GDK_MEMORY_G8_B8_R8_410,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3056,7 +3177,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3100,6 +3220,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_R8_B8_410,
     .straight = GDK_MEMORY_G8_R8_B8_410,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3114,7 +3238,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3158,6 +3281,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_B8_R8_411,
     .straight = GDK_MEMORY_G8_B8_R8_411,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3172,7 +3299,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3216,6 +3342,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_R8_B8_411,
     .straight = GDK_MEMORY_G8_R8_B8_411,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3230,7 +3360,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3274,6 +3403,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_B8_R8_420,
     .straight = GDK_MEMORY_G8_B8_R8_420,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3288,7 +3421,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3332,6 +3464,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_R8_B8_420,
     .straight = GDK_MEMORY_G8_R8_B8_420,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3346,7 +3482,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3390,6 +3525,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_B8_R8_422,
     .straight = GDK_MEMORY_G8_B8_R8_422,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3404,7 +3543,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3448,6 +3586,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_R8_B8_422,
     .straight = GDK_MEMORY_G8_R8_B8_422,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3462,7 +3604,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3506,6 +3647,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_B8_R8_444,
     .straight = GDK_MEMORY_G8_B8_R8_444,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3520,7 +3665,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3564,6 +3708,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8_R8_B8_444,
     .straight = GDK_MEMORY_G8_R8_B8_444,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3578,7 +3726,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3614,6 +3761,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8B8G8R8_422,
     .straight = GDK_MEMORY_G8B8G8R8_422,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3628,7 +3779,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3664,6 +3814,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_G8R8G8B8_422,
     .straight = GDK_MEMORY_G8R8G8B8_422,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3678,7 +3832,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3714,6 +3867,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_B8G8R8G8_422,
     .straight = GDK_MEMORY_B8G8R8G8_422,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3728,7 +3885,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_RED, GL_GREEN, GL_BLUE, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -3764,6 +3920,10 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .alpha = GDK_MEMORY_ALPHA_OPAQUE,
     .premultiplied = GDK_MEMORY_R8G8B8G8_422,
     .straight = GDK_MEMORY_R8G8B8G8_422,
+    .rgba = {
+        .format = -1,
+        .swizzle = GDK_SWIZZLE_IDENTITY
+    },
     .alignment = G_ALIGNOF (guint8),
     .depth = GDK_MEMORY_U8,
     .fallbacks = (GdkMemoryFormat[]) {
@@ -3778,7 +3938,6 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
         .swizzle = { GL_BLUE, GL_GREEN, GL_RED, GL_ALPHA },
-        .rgba_format = -1,
     },
 #ifdef GDK_RENDERING_VULKAN
     .vulkan = {
@@ -4221,7 +4380,7 @@ gdk_memory_format_gl_rgba_format (GdkMemoryFormat  format,
                                   GLenum          *out_type,
                                   GLint            out_swizzle[4])
 {
-  GdkMemoryFormat actual = memory_formats[format].gl.rgba_format;
+  GdkMemoryFormat actual = memory_formats[format].rgba.format;
 
   if (actual == -1)
     return FALSE;
@@ -4234,7 +4393,7 @@ gdk_memory_format_gl_rgba_format (GdkMemoryFormat  format,
   *out_internal_srgb_format = memory_formats[actual].gl.internal_srgb_format;
   *out_format = memory_formats[actual].gl.format;
   *out_type = memory_formats[actual].gl.type;
-  memcpy (out_swizzle, memory_formats[format].gl.rgba_swizzle, sizeof(GLint) * 4);
+  gdk_swizzle_to_gl (memory_formats[format].rgba.swizzle, out_swizzle);
 
   return TRUE;
 }
@@ -4304,7 +4463,7 @@ gdk_memory_format_vk_rgba_format (GdkMemoryFormat     format,
                                   GdkMemoryFormat    *out_rgba_format,
                                   VkComponentMapping *out_swizzle)
 {
-  GdkMemoryFormat actual = memory_formats[format].gl.rgba_format;
+  GdkMemoryFormat actual = memory_formats[format].rgba.format;
 
   if (actual == -1)
     return VK_FORMAT_UNDEFINED;
@@ -4312,7 +4471,7 @@ gdk_memory_format_vk_rgba_format (GdkMemoryFormat     format,
   if (out_rgba_format)
     *out_rgba_format = actual;
   if (out_swizzle)
-    vk_swizzle_from_gl_swizzle (out_swizzle, memory_formats[format].gl.rgba_swizzle);
+    gdk_swizzle_to_vk_component_mapping (memory_formats[format].rgba.swizzle, out_swizzle);
   return memory_formats[actual].vulkan.vk_format;
 }
 #endif
@@ -4408,7 +4567,7 @@ gdk_memory_format_get_dxgi_rgba_format (GdkMemoryFormat  format,
                                         GdkMemoryFormat *out_rgba_format,
                                         guint           *out_shader_4_component_mapping)
 {
-  GdkMemoryFormat actual = memory_formats[format].gl.rgba_format;
+  GdkMemoryFormat actual = memory_formats[format].rgba.format;
 
   if (actual == -1)
     return DXGI_FORMAT_UNKNOWN;
@@ -4416,7 +4575,7 @@ gdk_memory_format_get_dxgi_rgba_format (GdkMemoryFormat  format,
   if (out_rgba_format)
     *out_rgba_format = actual;
   if (out_shader_4_component_mapping)
-    *out_shader_4_component_mapping = dxgi_swizzle_from_gl_swizzle (memory_formats[format].gl.swizzle);
+    *out_shader_4_component_mapping = gdk_swizzle_to_d3d12 (memory_formats[format].rgba.swizzle);
   return memory_formats[actual].win32.dxgi_format;
 }
 
