@@ -489,7 +489,7 @@ render_node_from_symbolic (GFile  *file,
   return node;
 }
 
-/* }}} */ 
+/* }}} */
 /* {{{ Render node recoloring */
 
 /* This recolors nodes that are produced from symbolic

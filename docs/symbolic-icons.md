@@ -35,7 +35,7 @@ Note that when a full SVG renderer is used to render symbolics, other attributes
 
 ### Styling
 
-The effective style that is used for recoloring is the follwing:
+The effective style that is used for recoloring is the following:
 
 ```
 path,.foreground-fill {
