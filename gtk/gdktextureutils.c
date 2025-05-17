@@ -231,7 +231,7 @@ load_symbolic_svg (const char     *escaped_file_data,
                             "fill: ", fg_string," !important;"
                           "}\n"
                           ".warning {"
-                             "fill: ", warning_color_string, " !important;"
+                            "fill: ", warning_color_string, " !important;"
                           "}\n"
                           ".error {"
                             "fill: ", error_color_string ," !important;"
