@@ -22,6 +22,7 @@
 #include "gdkenums.h"
 #include "gdkmemorylayoutprivate.h"
 #include "gdkdxgiformatprivate.h"
+#include "gdkswizzleprivate.h"
 #include "gdktypes.h"
 
 /* epoxy needs this, see https://github.com/anholt/libepoxy/issues/299 */
