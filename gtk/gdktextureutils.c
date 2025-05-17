@@ -404,9 +404,8 @@ svg_has_symbolic_classes (const char *data,
                           gsize       len)
 {
 #ifdef HAVE_MEMMEM
-  return memmem (data, len, "class=\"error\"", strlen ("class=\"error\"")) != NULL ||
-         memmem (data, len, "class=\"warning\"", strlen ("class=\"warning\"")) != NULL ||
-         memmem (data, len, "class=\"success\"", strlen ("class=\"success\"")) != NULL;
+  /* Not super precise, but good enough */
+  return memmem (data, len, "class=\"", strlen ("class=\"")) != NULL;
 #else
   return TRUE;
 #endif
