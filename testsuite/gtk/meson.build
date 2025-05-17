@@ -134,6 +134,12 @@ internal_tests = [
   { 'name': 'a11y' },
   { 'name': 'listitemmanager' },
   { 'name': 'colorutils' },
+  { 'name': 'symbolic',
+    'sources': [
+      'symbolic.c',
+      '../reftests/reftest-compare.c',
+    ],
+  },
 ]
 
 is_debug = get_option('buildtype').startswith('debug')
