@@ -536,6 +536,17 @@ recolor_node2 (GskRenderNode  *node,
         return ret;
       }
 
+    case GSK_OPACITY_NODE:
+      {
+        gboolean ret;
+
+        gtk_snapshot_push_opacity (snapshot, gsk_opacity_node_get_opacity (node));
+        ret = recolor_node2 (gsk_opacity_node_get_child (node), colors, snapshot, error);
+        gtk_snapshot_pop (snapshot);
+
+        return ret;
+      }
+
     case GSK_FILL_NODE:
       {
         gboolean ret;
