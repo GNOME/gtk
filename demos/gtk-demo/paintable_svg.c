@@ -31,9 +31,9 @@ open_response_cb (GObject *source,
       GdkPaintable *paintable;
 
       if (strstr (g_file_peek_path (file), "symbolic"))
-        paintable = svg_symbolic_paintable_new (file);
+        paintable = GDK_PAINTABLE (svg_symbolic_paintable_new (file));
       else
-        paintable = svg_paintable_new (file);
+        paintable = GDK_PAINTABLE (svg_paintable_new (file));
 
       gtk_image_set_from_paintable (image, paintable);
 
@@ -98,7 +98,7 @@ do_paintable_svg (GtkWidget *do_widget)
       gtk_window_set_child (GTK_WINDOW (window), image);
 
       file = g_file_new_for_uri ("resource:///paintable_svg/org.gtk.gtk4.NodeEditor.Devel.svg");
-      paintable = svg_paintable_new (file);
+      paintable = GDK_PAINTABLE (svg_paintable_new (file));
       gtk_image_set_from_paintable (GTK_IMAGE (image), paintable);
       g_object_unref (paintable);
       g_object_unref (file);

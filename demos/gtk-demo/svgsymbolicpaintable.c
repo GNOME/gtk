@@ -830,7 +830,7 @@ svg_symbolic_paintable_class_init (SvgSymbolicPaintableClass *class)
 /* }}} */
 /* {{{ Public API */
 
-GdkPaintable *
+SvgSymbolicPaintable *
 svg_symbolic_paintable_new (GFile *file)
 {
   return g_object_new (SVG_TYPE_SYMBOLIC_PAINTABLE,
