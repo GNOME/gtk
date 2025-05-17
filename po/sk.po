@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2025-05-12 17:55+0000\n"
-"PO-Revision-Date: 2025-05-16 23:10+0200\n"
+"PO-Revision-Date: 2025-05-17 12:14+0200\n"
 "Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -1428,7 +1428,7 @@ msgstr "varovanie"
 #: gtk/gtkaccessible.c:828
 msgctxt "accessibility"
 msgid "alert dialog"
-msgstr ""
+msgstr "dialóg s varovaním"
 
 #: gtk/gtkaccessible.c:829
 msgctxt "accessibility"
@@ -1453,17 +1453,18 @@ msgstr "bunka"
 #: gtk/gtkaccessible.c:833
 msgctxt "accessibility"
 msgid "checkbox"
-msgstr ""
+msgstr "zaškrtávacie pole"
 
 #: gtk/gtkaccessible.c:834
 msgctxt "accessibility"
 msgid "column header"
 msgstr "hlavička stĺpca"
 
+# Vstup, ktorý ovláda iný prvok, napríklad zoznam alebo mriežku, ktorý sa môže dynamicky zobrazovať, aby pomohol používateľovi nastaviť hodnotu vstupu.
 #: gtk/gtkaccessible.c:835
 msgctxt "accessibility"
 msgid "combo box"
-msgstr ""
+msgstr "kombinované pole"
 
 #: gtk/gtkaccessible.c:836
 msgctxt "accessibility"
@@ -1471,11 +1472,9 @@ msgid "command"
 msgstr "príkaz"
 
 #: gtk/gtkaccessible.c:837
-#, fuzzy
-#| msgid "Composited"
 msgctxt "accessibility"
 msgid "composite"
-msgstr "Kompozitné"
+msgstr "zložený prvok"
 
 #: gtk/gtkaccessible.c:838
 msgctxt "accessibility"
@@ -1490,7 +1489,7 @@ msgstr "dokument"
 #: gtk/gtkaccessible.c:840
 msgctxt "accessibility"
 msgid "feed"
-msgstr ""
+msgstr "kanál"
 
 #: gtk/gtkaccessible.c:841
 msgctxt "accessibility"
@@ -1500,7 +1499,7 @@ msgstr "formulár"
 #: gtk/gtkaccessible.c:842
 msgctxt "accessibility"
 msgid "generic"
-msgstr ""
+msgstr "kontajner bez názvu"
 
 #: gtk/gtkaccessible.c:843
 msgctxt "accessibility"
@@ -1515,7 +1514,7 @@ msgstr "bunka mriežky"
 #: gtk/gtkaccessible.c:845
 msgctxt "accessibility"
 msgid "group"
-msgstr ""
+msgstr "zoskupenie"
 
 #: gtk/gtkaccessible.c:846
 msgctxt "accessibility"
@@ -1535,17 +1534,17 @@ msgstr "vstup"
 #: gtk/gtkaccessible.c:849
 msgctxt "accessibility"
 msgid "label"
-msgstr "štítok"
+msgstr "označenie"
 
 #: gtk/gtkaccessible.c:850
 msgctxt "accessibility"
 msgid "landmark"
-msgstr ""
+msgstr "orientačný bod"
 
 #: gtk/gtkaccessible.c:851
 msgctxt "accessibility"
 msgid "legend"
-msgstr ""
+msgstr "legenda"
 
 #: gtk/gtkaccessible.c:852
 msgctxt "accessibility"
@@ -1567,97 +1566,101 @@ msgctxt "accessibility"
 msgid "list item"
 msgstr "položka zoznamu"
 
+# A live region where new information is added in meaningful order and old information may disappear.
 #: gtk/gtkaccessible.c:856
 msgctxt "accessibility"
 msgid "log"
-msgstr "záznam"
+msgstr "žurnál"
 
+# A type of landmark role. It represents the main content of the document.
+# There should be only one main role per page.
 #: gtk/gtkaccessible.c:857
-#, fuzzy
-#| msgid "_Domain"
 msgctxt "accessibility"
 msgid "main"
-msgstr "_Doména"
+msgstr "hlavný obsah"
 
 #: gtk/gtkaccessible.c:858
 msgctxt "accessibility"
 msgid "marquee"
-msgstr ""
+msgstr "rolujúci text"
 
 #: gtk/gtkaccessible.c:859
 msgctxt "accessibility"
 msgid "math"
-msgstr ""
+msgstr "vzorec"
 
+# A meter is a visual representation of a numeric value that falls within a known range. It conveys a status or performance level, like temperature, disk usage, or battery life.
 #: gtk/gtkaccessible.c:860
 msgctxt "accessibility"
 msgid "meter"
-msgstr ""
+msgstr "indikátor hodnoty"
 
 #: gtk/gtkaccessible.c:861
 msgctxt "accessibility"
 msgid "menu"
-msgstr ""
+msgstr "ponuka"
 
 #: gtk/gtkaccessible.c:862
 msgctxt "accessibility"
 msgid "menu bar"
-msgstr ""
+msgstr "panel ponuky"
 
 #: gtk/gtkaccessible.c:863
 msgctxt "accessibility"
 msgid "menu item"
-msgstr ""
+msgstr "položka ponuky"
 
 #: gtk/gtkaccessible.c:864
 msgctxt "accessibility"
 msgid "menu item checkbox"
-msgstr ""
+msgstr "zaškrtávacia položka ponuky"
 
 #: gtk/gtkaccessible.c:865
 msgctxt "accessibility"
 msgid "menu item radio"
-msgstr ""
+msgstr "rádiová položka ponuky"
 
 #: gtk/gtkaccessible.c:866
 msgctxt "accessibility"
 msgid "navigation"
 msgstr "navigácia"
 
+# Prvok, ktorý nie je zastúpený v technológiách prístupnosti. Táto rola je synonymom pre GTK_ACCESSIBLE_ROLE_PRESENTATION.
 #: gtk/gtkaccessible.c:867
 msgctxt "accessibility"
 msgid "none"
-msgstr ""
+msgstr "bez významu"
 
 #: gtk/gtkaccessible.c:868
 msgctxt "accessibility"
 msgid "note"
-msgstr ""
+msgstr "poznámka"
 
 #: gtk/gtkaccessible.c:869
 msgctxt "accessibility"
 msgid "option"
 msgstr "voľba"
 
+# Prvok, ktorý nie je zastúpený v technológiách prístupnosti. Táto rola je synonymom pre GTK_ACCESSIBLE_ROLE_NONE.
 #: gtk/gtkaccessible.c:870
 msgctxt "accessibility"
 msgid "presentation"
-msgstr "prezentácia"
+msgstr "vizuálny prvok"
 
 #: gtk/gtkaccessible.c:871
 msgctxt "accessibility"
 msgid "progress bar"
-msgstr ""
+msgstr "ukazovateľ priebehu"
 
 #: gtk/gtkaccessible.c:872
 msgctxt "accessibility"
 msgid "radio"
-msgstr ""
+msgstr "rádio prepínač"
 
 #: gtk/gtkaccessible.c:873
 msgctxt "accessibility"
 msgid "radio group"
-msgstr ""
+msgstr "zoskupenie rádio prepínačov"
 
 #: gtk/gtkaccessible.c:874
 msgctxt "accessibility"
@@ -1667,7 +1670,7 @@ msgstr "rozsah"
 #: gtk/gtkaccessible.c:875
 msgctxt "accessibility"
 msgid "region"
-msgstr ""
+msgstr "oblasť"
 
 #: gtk/gtkaccessible.c:876
 msgctxt "accessibility"
@@ -1677,33 +1680,27 @@ msgstr "riadok"
 #: gtk/gtkaccessible.c:877
 msgctxt "accessibility"
 msgid "row group"
-msgstr ""
+msgstr "zoskupenie riadkov"
 
 #: gtk/gtkaccessible.c:878
 msgctxt "accessibility"
 msgid "row header"
-msgstr ""
+msgstr "hlavička riadka"
 
 #: gtk/gtkaccessible.c:879
 msgctxt "accessibility"
 msgid "scroll bar"
-msgstr ""
+msgstr "posuvník"
 
 #: gtk/gtkaccessible.c:880
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Search"
 msgctxt "accessibility"
 msgid "search"
-msgstr "Hľadať"
+msgstr "vyhľadávanie"
 
 #: gtk/gtkaccessible.c:881
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Search"
 msgctxt "accessibility"
 msgid "search box"
-msgstr "Hľadať"
+msgstr "vyhľadávacie pole"
 
 #: gtk/gtkaccessible.c:882
 msgctxt "accessibility"
@@ -1713,15 +1710,12 @@ msgstr "sekcia"
 #: gtk/gtkaccessible.c:883
 msgctxt "accessibility"
 msgid "section head"
-msgstr ""
+msgstr "hlavička sekcie"
 
 #: gtk/gtkaccessible.c:884
-#, fuzzy
-#| msgctxt "Action name"
-#| msgid "Select"
 msgctxt "accessibility"
 msgid "select"
-msgstr "Výber"
+msgstr "výber"
 
 #: gtk/gtkaccessible.c:885
 msgctxt "accessibility"
@@ -1731,12 +1725,12 @@ msgstr "oddeľovač"
 #: gtk/gtkaccessible.c:886
 msgctxt "accessibility"
 msgid "slider"
-msgstr ""
+msgstr "posuvný regulátor"
 
 #: gtk/gtkaccessible.c:887
 msgctxt "accessibility"
 msgid "spin button"
-msgstr ""
+msgstr "krokovacie tlačidlo"
 
 #: gtk/gtkaccessible.c:888
 msgctxt "accessibility"
@@ -1746,7 +1740,7 @@ msgstr "stav"
 #: gtk/gtkaccessible.c:889
 msgctxt "accessibility"
 msgid "structure"
-msgstr ""
+msgstr "štruktúra"
 
 #: gtk/gtkaccessible.c:890
 msgctxt "accessibility"
@@ -1756,7 +1750,7 @@ msgstr "prepínač"
 #: gtk/gtkaccessible.c:891
 msgctxt "accessibility"
 msgid "tab"
-msgstr "tabulátor"
+msgstr "karta"
 
 #: gtk/gtkaccessible.c:892
 msgctxt "accessibility"
@@ -1766,12 +1760,12 @@ msgstr "tabuľka"
 #: gtk/gtkaccessible.c:893
 msgctxt "accessibility"
 msgid "tab list"
-msgstr ""
+msgstr "zoznam kariet"
 
 #: gtk/gtkaccessible.c:894
 msgctxt "accessibility"
 msgid "tab panel"
-msgstr ""
+msgstr "panel kariet"
 
 #: gtk/gtkaccessible.c:895
 msgctxt "accessibility"
@@ -1791,22 +1785,22 @@ msgstr "šasovač"
 #: gtk/gtkaccessible.c:898
 msgctxt "accessibility"
 msgid "tool bar"
-msgstr ""
+msgstr "panel nástrojov"
 
 #: gtk/gtkaccessible.c:899
 msgctxt "accessibility"
 msgid "tool tip"
-msgstr ""
+msgstr "bublinový popis"
 
 #: gtk/gtkaccessible.c:900
 msgctxt "accessibility"
 msgid "tree"
-msgstr ""
+msgstr "strom"
 
 #: gtk/gtkaccessible.c:901
 msgctxt "accessibility"
 msgid "tree grid"
-msgstr ""
+msgstr "stromová mriežka"
 
 #: gtk/gtkaccessible.c:902
 msgctxt "accessibility"
@@ -1816,7 +1810,7 @@ msgstr "položka stromu"
 #: gtk/gtkaccessible.c:903
 msgctxt "accessibility"
 msgid "widget"
-msgstr ""
+msgstr "interaktívny prvok"
 
 #: gtk/gtkaccessible.c:904
 msgctxt "accessibility"
@@ -1836,23 +1830,17 @@ msgstr "odsek"
 #: gtk/gtkaccessible.c:908
 msgctxt "accessibility"
 msgid "block quote"
-msgstr ""
+msgstr "úryvok"
 
 #: gtk/gtkaccessible.c:909
-#, fuzzy
-#| msgctxt "sizegroup mode"
-#| msgid "Vertical"
 msgctxt "accessibility"
 msgid "article"
-msgstr "Zvislý"
+msgstr "článok"
 
 #: gtk/gtkaccessible.c:910
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "command"
 msgctxt "accessibility"
 msgid "comment"
-msgstr "príkaz"
+msgstr "komentár"
 
 #: gtk/gtkaccessible.c:911
 msgctxt "accessibility"
@@ -1873,10 +1861,8 @@ msgid "Reason not specified"
 msgstr "Dôvod nebol určený"
 
 #: gtk/gtkapplicationwindow.c:234
-#, fuzzy
-#| msgid "Menu"
 msgid "Menu bar"
-msgstr "Ponuka"
+msgstr "Panel ponuky"
 
 #: gtk/gtkbookmarksmanager.c:53
 #, c-format
@@ -2035,7 +2021,7 @@ msgstr "Svetlá žltá"
 #: gtk/gtkcolorchooserwidget.c:461
 msgctxt "Color name"
 msgid "Yellow"
-msgstr ""
+msgstr "Žltá"
 
 #: gtk/gtkcolorchooserwidget.c:462
 msgctxt "Color name"
@@ -2203,10 +2189,8 @@ msgid "Custom"
 msgstr "Vlastná"
 
 #: gtk/gtkcolorchooserwidget.c:579
-#, fuzzy
-#| msgid "Color"
 msgid "Add Color"
-msgstr "Farba"
+msgstr "Pridať farbu"
 
 #: gtk/gtkcolorchooserwidget.c:601
 #, c-format
@@ -2284,9 +2268,6 @@ msgid "Paper Margins"
 msgstr "Okraje papiera"
 
 #: gtk/gtkeditablelabel.c:170 gtk/ui/gtkapplication-quartz.ui:50
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Edit"
 msgid "_Edit"
 msgstr "_Upraviť"
 
@@ -2297,22 +2278,16 @@ msgstr "_Kopírovať"
 
 #: gtk/gtkeditablelabel.c:344 gtk/gtklabel.c:5966 gtk/gtktext.c:2891
 #: gtk/gtktextview.c:9448
-#, fuzzy
-#| msgctxt "OpenType layout"
-#| msgid "Contextual Alternates"
 msgid "Context menu"
-msgstr "Kontextové náhrady"
+msgstr "Kontextová ponuka"
 
 # tooltip
 #: gtk/gtkentry.c:3687
 msgid "Insert Emoji"
-msgstr "Vloží emotikonu"
+msgstr "Vloží smejka"
 
 #. Translators: Label for a search button and entry, should be translated as a verb
 #: gtk/gtkfilechooserdialog.c:477 gtk/ui/gtkfilechooserwidget.ui:123
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Search"
 msgid "Search"
 msgstr "Hľadať"
 
@@ -2399,10 +2374,9 @@ msgid "_Save"
 msgstr "_Uložiť"
 
 #: gtk/gtkfilechoosernativeportal.c:499
-#, fuzzy, c-format
-#| msgid "libEGL not available"
+#, c-format
 msgid "The session bus is not available"
-msgstr "Knižnica libEGL nie je dostupná"
+msgstr "Zbernica relácie nie je dostupná"
 
 # tooltip
 #: gtk/gtkfilechoosernativequartz.c:348 gtk/ui/gtkfilechooserwidget.ui:299
@@ -3490,32 +3464,24 @@ msgstr "Odpojí"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:495
 #: gtk/print/backends/gtkprintbackendcups.c:5637
-#, fuzzy
-#| msgid "Urgent"
 msgctxt "Print job priority"
 msgid "Urgent"
 msgstr "Urgentná"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:496
 #: gtk/print/backends/gtkprintbackendcups.c:5638
-#, fuzzy
-#| msgid "High"
 msgctxt "Print job priority"
 msgid "High"
 msgstr "Vysoká"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:497
 #: gtk/print/backends/gtkprintbackendcups.c:5639
-#, fuzzy
-#| msgid "Medium"
 msgctxt "Print job priority"
 msgid "Medium"
 msgstr "Stredná"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:498
 #: gtk/print/backends/gtkprintbackendcups.c:5640
-#, fuzzy
-#| msgid "Low"
 msgctxt "Print job priority"
 msgid "Low"
 msgstr "Nízka"
@@ -3547,17 +3513,13 @@ msgstr "Kedy tlačiť"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:560
 #, fuzzy
-#| msgctxt "printer option"
-#| msgid "Print at time"
 msgid "Print at time"
 msgstr "Čas tlače"
 
 #: gtk/print/backends/gtkprintbackendcpdb.c:623
-#, fuzzy
-#| msgid "CSS Border"
 msgctxt "print option"
 msgid "Borderless"
-msgstr "Hranica CSS"
+msgstr "Bezokrajová tlač"
 
 #. Translators: this is a printer status.
 #: gtk/print/backends/gtkprintbackendcpdb.c:1482
