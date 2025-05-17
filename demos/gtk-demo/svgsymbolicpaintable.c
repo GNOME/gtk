@@ -478,9 +478,13 @@ render_node_from_symbolic (GFile  *file,
   node = parse_symbolic_svg (bytes, width, height, &error);
   if (!node)
     {
-      g_warning ("Failed to parse %s: %s",
-                 g_file_peek_path (file),
-                 error->message);
+      char *path;
+
+      path = g_file_get_path (file);
+      if (!path)
+        path = g_file_get_uri (file);
+      g_warning ("Failed to parse %s: %s", path, error->message);
+      g_free (path);
       g_error_free (error);
     }
 
