@@ -227,17 +227,32 @@ load_symbolic_svg (const char     *escaped_file_data,
                            "width=\"", icon_width_str, "\" "
                            "height=\"", icon_height_str, "\">"
                         "<style type=\"text/css\">"
-                          "rect,circle,path {"
+                          "rect,circle,path,.foreground-fill {"
                             "fill: ", fg_string," !important;"
                           "}\n"
-                          ".warning {"
-                             "fill: ", warning_color_string, " !important;"
+                          ".warning,.warning-fill {"
+                            "fill: ", warning_color_string, " !important;"
                           "}\n"
-                          ".error {"
+                          ".error,.error-fill {"
                             "fill: ", error_color_string ," !important;"
                           "}\n"
-                          ".success {"
+                          ".success,.success-fill {"
                             "fill: ", success_color_string, " !important;"
+                          "}\n"
+                          ".transparent-fill {"
+                            "fill: none !important;"
+                          "}\n"
+                          ".foreground-stroke {"
+                            "stroke: ", fg_string," !important;"
+                          "}\n"
+                          ".warning-stroke {"
+                            "stroke: ", warning_color_string, " !important;"
+                          "}\n"
+                          ".error-stroke {"
+                            "stroke: ", error_color_string ," !important;"
+                          "}\n"
+                          ".success-stroke {"
+                            "stroke: ", success_color_string, " !important;"
                           "}"
                         "</style>"
                         "<xi:include href=\"data:text/xml;base64,",
@@ -404,9 +419,8 @@ svg_has_symbolic_classes (const char *data,
                           gsize       len)
 {
 #ifdef HAVE_MEMMEM
-  return memmem (data, len, "class=\"error\"", strlen ("class=\"error\"")) != NULL ||
-         memmem (data, len, "class=\"warning\"", strlen ("class=\"warning\"")) != NULL ||
-         memmem (data, len, "class=\"success\"", strlen ("class=\"success\"")) != NULL;
+  /* Not super precise, but good enough */
+  return memmem (data, len, "class=\"", strlen ("class=\"")) != NULL;
 #else
   return TRUE;
 #endif
