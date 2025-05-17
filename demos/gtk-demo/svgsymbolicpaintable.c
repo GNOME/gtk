@@ -478,9 +478,13 @@ render_node_from_symbolic (GFile  *file,
   node = parse_symbolic_svg (bytes, width, height, &error);
   if (!node)
     {
-      g_warning ("Failed to parse %s: %s",
-                 g_file_peek_path (file),
-                 error->message);
+      char *path;
+
+      path = g_file_get_path (file);
+      if (!path)
+        path = g_file_get_uri (file);
+      g_warning ("Failed to parse %s: %s", path, error->message);
+      g_free (path);
       g_error_free (error);
     }
 
@@ -531,6 +535,17 @@ recolor_node2 (GskRenderNode  *node,
 
         gtk_snapshot_push_clip (snapshot, gsk_clip_node_get_clip (node));
         ret = recolor_node2 (gsk_clip_node_get_child (node), colors, snapshot, error);
+        gtk_snapshot_pop (snapshot);
+
+        return ret;
+      }
+
+    case GSK_OPACITY_NODE:
+      {
+        gboolean ret;
+
+        gtk_snapshot_push_opacity (snapshot, gsk_opacity_node_get_opacity (node));
+        ret = recolor_node2 (gsk_opacity_node_get_child (node), colors, snapshot, error);
         gtk_snapshot_pop (snapshot);
 
         return ret;
@@ -830,7 +845,7 @@ svg_symbolic_paintable_class_init (SvgSymbolicPaintableClass *class)
 /* }}} */
 /* {{{ Public API */
 
-GdkPaintable *
+SvgSymbolicPaintable *
 svg_symbolic_paintable_new (GFile *file)
 {
   return g_object_new (SVG_TYPE_SYMBOLIC_PAINTABLE,

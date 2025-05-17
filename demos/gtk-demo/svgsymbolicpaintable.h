@@ -8,6 +8,6 @@ G_BEGIN_DECLS
 
 G_DECLARE_FINAL_TYPE (SvgSymbolicPaintable, svg_symbolic_paintable, SVG, SYMBOLIC_PAINTABLE, GObject)
 
-GdkPaintable * svg_symbolic_paintable_new   (GFile *file);
+SvgSymbolicPaintable * svg_symbolic_paintable_new   (GFile *file);
 
 G_END_DECLS

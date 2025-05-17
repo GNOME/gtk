@@ -159,7 +159,7 @@ svg_paintable_class_init (SvgPaintableClass *class)
                                                         G_PARAM_READWRITE));
 }
 
-GdkPaintable *
+SvgPaintable *
 svg_paintable_new (GFile *file)
 {
   return g_object_new (SVG_TYPE_PAINTABLE,
