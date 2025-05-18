@@ -11,7 +11,6 @@ void                    gsk_gpu_convert_from_cicp_op                    (GskGpuF
                                                                          const GdkCicp                  *cicp,
                                                                          GskGpuColorStates               color_states,
                                                                          float                           opacity,
-                                                                         gboolean                        straight_alpha,
                                                                          const graphene_point_t         *offset,
                                                                          const GskGpuShaderImage        *image);
 
@@ -21,7 +20,6 @@ void                    gsk_gpu_convert_to_cicp_op                      (GskGpuF
                                                                          const GdkCicp                  *cicp,
                                                                          GskGpuColorStates               color_states,
                                                                          float                           opacity,
-                                                                         gboolean                        straight_alpha,
                                                                          const graphene_point_t         *offset,
                                                                          const GskGpuShaderImage        *image);
 

@@ -3,8 +3,7 @@
 #include "common.glsl"
 
 #define VARIATION_OPACITY              (1u << 0)
-#define VARIATION_STRAIGHT_ALPHA       (1u << 1)
-#define VARIATION_REVERSE              (1u << 2)
+#define VARIATION_REVERSE              (1u << 1)
 
 #define HAS_VARIATION(var) ((GSK_VARIATION & var) == var)
 
@@ -468,12 +467,7 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  vec4 pixel;
-
-  if (HAS_VARIATION (VARIATION_STRAIGHT_ALPHA))
-    pixel = gsk_texture_straight_alpha (GSK_TEXTURE0, _tex_coord);
-  else
-    pixel = texture (GSK_TEXTURE0, _tex_coord);
+  vec4 pixel = gsk_texture0 (_tex_coord);
 
   if (HAS_VARIATION (VARIATION_REVERSE))
     pixel = convert_color_to_cicp (pixel,

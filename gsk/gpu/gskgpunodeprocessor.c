@@ -596,11 +596,7 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                  const graphene_rect_t *rect,
                                  const graphene_rect_t *tex_rect)
 {
-  gboolean straight_alpha;
-
   g_assert (self->pending_globals == 0);
-
-  straight_alpha = gsk_gpu_image_get_sample_method (image) != GSK_GPU_SAMPLE_DEFAULT;
 
   if (GDK_IS_BUILTIN_COLOR_STATE (image_color_state))
     {
@@ -628,7 +624,6 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                     cicp,
                                     gsk_gpu_color_states_create_cicp (self->ccs, TRUE, TRUE),
                                     self->opacity,
-                                    straight_alpha,
                                     &self->offset,
                                     &(GskGpuShaderImage) {
                                       image,
@@ -4376,7 +4371,6 @@ gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
                                   cicp,
                                   gsk_gpu_color_states_create_cicp (image_color_state, TRUE, target_premultiplied),
                                   self->opacity,
-                                  FALSE,
                                   &self->offset,
                                   &(GskGpuShaderImage) {
                                       image,
