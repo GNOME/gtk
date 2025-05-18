@@ -18,6 +18,11 @@ void            main_clip_rounded               (void);
 #endif
 
 #define GSK_SHADER_CLIP (GSK_FLAGS & 3u)
+/* Defined by the shader compilers directly */
+/* #define GSK_TEXTURE0_IS_EXTERNAL ((GSK_FLAGS >> 2u) & 1u) */
+/* #define GSK_TEXTURE1_IS_EXTERNAL ((GSK_FLAGS >> 3u) & 1u) */
+#define GSK_TEXTURE0_SAMPLE_OP ((GSK_FLAGS >> 4u) & 7u)
+#define GSK_TEXTURE1_SAMPLE_OP ((GSK_FLAGS >> 8u) & 7u)
 
 #include "color.glsl"
 #include "rect.glsl"
@@ -151,6 +156,36 @@ gsk_texture_straight_alpha (sampler2D tex,
   br.rgb *= br.a;
   return mix (mix (tl, tr, pos.x), mix (bl, br, pos.x), pos.y);
 }
+
+#if GSK_N_TEXTURES > 0
+vec4
+gsk_texture0 (vec2 pos)
+{
+  if (GSK_TEXTURE0_SAMPLE_OP == GDK_SHADER_DEFAULT)
+    return texture (GSK_TEXTURE0, pos);
+  else if (GSK_TEXTURE0_SAMPLE_OP == GDK_SHADER_STRAIGHT)
+    return gsk_texture_straight_alpha (GSK_TEXTURE0, pos);
+  else if (GSK_TEXTURE0_SAMPLE_OP == GDK_SHADER_2_PLANES)
+    return vec4 (texture (GSK_TEXTURE0, pos).x, texture (GSK_TEXTURE0_1, pos).xy, 1.0).brga;
+  else if (GSK_TEXTURE0_SAMPLE_OP == GDK_SHADER_3_PLANES)
+    return vec4 (texture (GSK_TEXTURE0_2, pos).x, texture (GSK_TEXTURE0, pos).x, texture (GSK_TEXTURE0_1, pos).x, 1.0);
+}
+#endif
+
+#if GSK_N_TEXTURES > 1
+vec4
+gsk_texture1 (vec2 pos)
+{
+  if (GSK_TEXTURE1_SAMPLE_OP == GDK_SHADER_DEFAULT)
+    return texture (GSK_TEXTURE1, pos);
+  else if (GSK_TEXTURE1_SAMPLE_OP == GDK_SHADER_STRAIGHT)
+    return gsk_texture_straight_alpha (GSK_TEXTURE1, pos);
+  else if (GSK_TEXTURE1_SAMPLE_OP == GDK_SHADER_2_PLANES)
+    return vec4 (texture (GSK_TEXTURE1, pos).x, texture (GSK_TEXTURE1_1, pos).xy, 1.0).brga;
+  else if (GSK_TEXTURE1_SAMPLE_OP == GDK_SHADER_3_PLANES)
+    return vec4 (texture (GSK_TEXTURE1_2, pos).x, texture (GSK_TEXTURE1, pos).x, texture (GSK_TEXTURE1_1, pos).x, 1.0);
+}
+#endif
 
 void            run                             (out vec4 color,
                                                  out vec2 pos);

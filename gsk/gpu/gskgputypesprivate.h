@@ -22,6 +22,9 @@ typedef struct _GskGpuShaderOp          GskGpuShaderOp;
 typedef struct _GskGpuShaderOpClass     GskGpuShaderOpClass;
 typedef struct _GskVulkanSemaphores     GskVulkanSemaphores;
 
+#define GSK_GPU_SHADER_OP_SHIFT 4
+#define GSK_GPU_SHADER_OP_MASK ((1 << GSK_GPU_SHADER_OP_SHIFT) - 1)
+
 typedef enum {
   GSK_GPU_IMAGE_EXTERNAL       = (1 << 0),
   GSK_GPU_IMAGE_TOGGLE_REF     = (1 << 1),

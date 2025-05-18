@@ -150,7 +150,7 @@ gsk_vulkan_device_create_vk_image_set_layout (GskVulkanDevice *self)
                                                      {
                                                          .binding = 0,
                                                          .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-                                                         .descriptorCount = 1,
+                                                         .descriptorCount = 3,
                                                          .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
                                                      }
                                                  },

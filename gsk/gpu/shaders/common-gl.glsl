@@ -35,20 +35,28 @@ uniform PushConstants
 
 #ifdef GSK_TEXTURE0_IS_EXTERNAL
 uniform samplerExternalOES GSK_TEXTURE0;
+#define GSK_TEXTURE0_1 GSK_TEXTURE0
+#define GSK_TEXTURE0_2 GSK_TEXTURE0
 #define HAS_EXTERNAL_TEXTURES
 #else
 uniform sampler2D GSK_TEXTURE0;
+uniform sampler2D GSK_TEXTURE0_1;
+uniform sampler2D GSK_TEXTURE0_2;
 #endif
 
 #if GSK_N_TEXTURES > 1
 
 #ifdef GSK_TEXTURE1_IS_EXTERNAL
 uniform samplerExternalOES GSK_TEXTURE1;
+#define GSK_TEXTURE1_1 GSK_TEXTURE1
+#define GSK_TEXTURE1_2 GSK_TEXTURE1
 #ifndef HAS_EXTERNAL_TEXTURES
 #define HAS_EXTERNAL_TEXTURES
 #endif
 #else
 uniform sampler2D GSK_TEXTURE1;
+uniform sampler2D GSK_TEXTURE1_1;
+uniform sampler2D GSK_TEXTURE1_2;
 #endif
 
 #endif
