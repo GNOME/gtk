@@ -638,7 +638,8 @@ gsk_gl_device_get_format_flags (GskGLDevice      *self,
   if (!(gl_flags & GDK_GL_FORMAT_USABLE))
     return FALSE;
 
-  *out_flags |= GSK_GPU_IMAGE_DOWNLOADABLE;
+  if (gdk_shader_op_get_n_shaders (gdk_memory_format_get_default_shader_op (format)) <= 1)
+    *out_flags |= GSK_GPU_IMAGE_DOWNLOADABLE;
 
   if ((gl_flags & GDK_GL_FORMAT_RENDERABLE) && gsk_gl_swizzle_is_framebuffer_compatible (swizzle))
     *out_flags |= GSK_GPU_IMAGE_RENDERABLE;

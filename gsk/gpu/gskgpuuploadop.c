@@ -40,13 +40,12 @@ gsk_gpu_upload_op_gl_command_with_area (GskGpuOp                    *op,
 
   draw_func (op, data, &layout);
 
-  gl_format = gsk_gl_image_get_gl_format (gl_image);
-  gl_type = gsk_gl_image_get_gl_type (gl_image);
+  gl_format = gsk_gl_image_get_gl_format (gl_image, 0);
+  gl_type = gsk_gl_image_get_gl_type (gl_image, 0);
   bpp = gdk_memory_format_get_plane_block_bytes (layout.format, 0);
   stride = layout.planes[0].stride;
 
-  glActiveTexture (GL_TEXTURE0);
-  gsk_gl_image_bind_texture (gl_image);
+  gsk_gl_image_bind_textures (gl_image, GL_TEXTURE0);
   
   glPixelStorei (GL_UNPACK_ALIGNMENT, gdk_memory_format_alignment (layout.format));
 

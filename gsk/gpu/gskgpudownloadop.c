@@ -317,7 +317,7 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
   Texture *texture;
 #endif
 
-  texture_id = gsk_gl_image_get_texture_id (GSK_GL_IMAGE (self->image));
+  texture_id = gsk_gl_image_get_texture_id (GSK_GL_IMAGE (self->image), 0);
 
 #ifdef HAVE_DMABUF
   context = GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame));
@@ -499,7 +499,7 @@ gsk_gpu_download_into_op_gl_command (GskGpuOp          *op,
                                                   gsk_gpu_image_get_conversion (self->image));
 
   gdk_gl_context_download (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
-                           gsk_gl_image_get_texture_id (GSK_GL_IMAGE (self->image)),
+                           gsk_gl_image_get_texture_id (GSK_GL_IMAGE (self->image), 0),
                            gsk_gpu_image_get_format (self->image),
                            real_cs,
                            self->data,

@@ -11,14 +11,14 @@ struct _GskGLImage
 {
   GskGpuImage parent_instance;
 
-  guint texture_id;
-  guint memory_id;
+  guint texture_id[3];
+  guint memory_id[3];
   guint semaphore_id;
   guint framebuffer_id;
 
-  GLint gl_internal_format;
-  GLenum gl_format;
-  GLenum gl_type;
+  GLint gl_internal_format[3];
+  GLenum gl_format[3];
+  GLenum gl_type[3];
 
   guint owns_texture : 1;
 };
@@ -38,23 +38,39 @@ gsk_gl_image_get_projection_matrix (GskGpuImage       *image,
 
   GSK_GPU_IMAGE_CLASS (gsk_gl_image_parent_class)->get_projection_matrix (image, out_projection);
 
-  if (self->texture_id == 0)
+  if (self->texture_id[0] == 0)
     graphene_matrix_scale (out_projection, 1.f, -1.f, 1.f);
+}
+
+static gsize
+gsk_gl_image_get_n_textures (GskGLImage *self)
+{
+  gsize n;
+
+  for (n = 1; n < 3; n++)
+    {
+      if (self->texture_id[n] == 0)
+        break;
+    }
+
+  return n;
 }
 
 static void
 gsk_gl_image_finalize (GObject *object)
 {
   GskGLImage *self = GSK_GL_IMAGE (object);
+  gsize n_textures = gsk_gl_image_get_n_textures (self);
 
-  if (self->texture_id && self->framebuffer_id)
+
+  if (self->texture_id[0] && self->framebuffer_id)
     glDeleteFramebuffers (1, &self->framebuffer_id);
 
   if (self->owns_texture)
-    glDeleteTextures (1, &self->texture_id);
+    glDeleteTextures (n_textures, self->texture_id);
 
-  if (self->memory_id)
-    glDeleteMemoryObjectsEXT (1, &self->memory_id);
+  if (self->memory_id[0])
+    glDeleteMemoryObjectsEXT (n_textures, self->memory_id);
 
   if (self->semaphore_id)
     glDeleteSemaphoresEXT (1, &self->semaphore_id);
@@ -114,21 +130,21 @@ gsk_gl_image_new_backbuffer (GskGLDevice    *device,
                                 &flags,
                                 &gl_internal_format,
                                 &gl_internal_srgb_format,
-                                &self->gl_format,
-                                &self->gl_type,
+                                &self->gl_format[0],
+                                &self->gl_type[0],
                                 swizzle);
 
   if (is_srgb)
     {
       if (gl_internal_srgb_format != -1)
-        self->gl_internal_format = gl_internal_srgb_format;
+        self->gl_internal_format[0] = gl_internal_srgb_format;
       else /* FIXME: Happens when the driver uses formats that it does not expose */
-        self->gl_internal_format = gl_internal_format;
+        self->gl_internal_format[0] = gl_internal_format;
       conv = GSK_GPU_CONVERSION_SRGB;
     }
   else
     {
-      self->gl_internal_format = gl_internal_format;
+      self->gl_internal_format[0] = gl_internal_format;
       conv = GSK_GPU_CONVERSION_NONE;
     }
 
@@ -178,18 +194,18 @@ gsk_gl_image_new (GskGLDevice      *device,
                                 &flags,
                                 &gl_internal_format,
                                 &gl_internal_srgb_format,
-                                &self->gl_format,
-                                &self->gl_type,
+                                &self->gl_format[0],
+                                &self->gl_type[0],
                                 swizzle);
 
   if (try_srgb && gl_internal_srgb_format != -1)
     {
-      self->gl_internal_format = gl_internal_srgb_format;
+      self->gl_internal_format[0] = gl_internal_srgb_format;
       conv = GSK_GPU_CONVERSION_SRGB;
     }
   else
     {
-      self->gl_internal_format = gl_internal_format;
+      self->gl_internal_format[0] = gl_internal_format;
       conv = GSK_GPU_CONVERSION_NONE;
     }
 
@@ -200,18 +216,18 @@ gsk_gl_image_new (GskGLDevice      *device,
                        format,
                        width, height);
 
-  glGenTextures (1, &self->texture_id);
+  glGenTextures (1, self->texture_id);
   self->owns_texture = TRUE;
 
   glActiveTexture (GL_TEXTURE0);
-  glBindTexture (GL_TEXTURE_2D, self->texture_id);
- 
+  glBindTexture (GL_TEXTURE_2D, self->texture_id[0]);
+
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
-  glTexImage2D (GL_TEXTURE_2D, 0, self->gl_internal_format, width, height, 0, self->gl_format, self->gl_type, NULL);
+  glTexImage2D (GL_TEXTURE_2D, 0, self->gl_internal_format[0], width, height, 0, self->gl_format[0], self->gl_type[0], NULL);
 
   /* Only apply swizzle if really needed, might not even be
    * supported if default values are set
@@ -255,11 +271,11 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
                                 &flags,
                                 &gl_internal_format,
                                 &gl_internal_srgb_format,
-                                &self->gl_format,
-                                &self->gl_type,
+                                &self->gl_format[0],
+                                &self->gl_type[0],
                                 swizzle);
   
-  self->gl_internal_format = gl_internal_format;
+  self->gl_internal_format[0] = gl_internal_format;
 
   if (format != real_format)
     {
@@ -281,8 +297,8 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
                        gdk_texture_get_height (owner));
   gsk_gpu_image_toggle_ref_texture (GSK_GPU_IMAGE (self), owner);
 
-  self->texture_id = tex_id;
-  self->memory_id = mem_id;
+  self->texture_id[0] = tex_id;
+  self->memory_id[0] = mem_id;
   self->semaphore_id = semaphore_id;
   self->owns_texture = take_ownership;
 
@@ -300,12 +316,24 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
 }
 
 void
-gsk_gl_image_bind_texture (GskGLImage *self)
+gsk_gl_image_bind_textures (GskGLImage *self,
+                            GLenum      target)
 {
   if (gsk_gpu_image_get_flags (GSK_GPU_IMAGE (self)) & GSK_GPU_IMAGE_EXTERNAL)
-    glBindTexture (GL_TEXTURE_EXTERNAL_OES, self->texture_id);
+    {
+      glActiveTexture (target);
+      glBindTexture (GL_TEXTURE_EXTERNAL_OES, self->texture_id[0]);
+    }
   else
-    glBindTexture (GL_TEXTURE_2D, self->texture_id);
+    {
+      gsize i;
+
+      for (i = 0; self->texture_id[i]; i++)
+        {
+          glActiveTexture (target + i);
+          glBindTexture (GL_TEXTURE_2D, self->texture_id[i]);
+        }
+    }
 }
 
 void
@@ -321,15 +349,17 @@ gsk_gl_image_bind_framebuffer_target (GskGLImage *self,
     }
 
   /* We're the renderbuffer */
-  if (self->texture_id == 0)
+  if (self->texture_id[0] == 0)
     {
       glBindFramebuffer (target, 0);
       return;
     }
 
+  g_assert (self->texture_id[1] == 0);
+
   glGenFramebuffers (1, &self->framebuffer_id);
   glBindFramebuffer (target, self->framebuffer_id);
-  glFramebufferTexture2D (target, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->texture_id, 0);
+  glFramebufferTexture2D (target, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, self->texture_id[0], 0);
   status = glCheckFramebufferStatus (target);
 
   switch (status)
@@ -368,37 +398,41 @@ gsk_gl_image_bind_framebuffer (GskGLImage *self)
 gboolean
 gsk_gl_image_is_flipped (GskGLImage *self)
 {
-  return self->texture_id == 0;
+  return self->texture_id[0] == 0;
 }
 
 GLint
-gsk_gl_image_get_gl_internal_format (GskGLImage *self)
+gsk_gl_image_get_gl_internal_format (GskGLImage *self,
+                                     gsize       nth)
 {
-  return self->gl_internal_format;
+  return self->gl_internal_format[nth];
 }
 
 GLenum
-gsk_gl_image_get_gl_format (GskGLImage *self)
+gsk_gl_image_get_gl_format (GskGLImage *self,
+                            gsize       nth)
 {
-  return self->gl_format;
+  return self->gl_format[nth];
 }
 
 GLenum
-gsk_gl_image_get_gl_type (GskGLImage *self)
+gsk_gl_image_get_gl_type (GskGLImage *self,
+                          gsize       nth)
 {
-  return self->gl_type;
+  return self->gl_type[nth];
 }
 
 GLuint
-gsk_gl_image_get_texture_id (GskGLImage *self)
+gsk_gl_image_get_texture_id (GskGLImage *self,
+                             gsize       nth)
 {
-  return self->texture_id;
+  return self->texture_id[nth];
 }
 
 void
 gsk_gl_image_steal_texture_ownership (GskGLImage *self)
 {
-  g_assert (self->texture_id);
+  g_assert (self->texture_id[0]);
   g_assert (self->owns_texture);
 
   self->owns_texture = FALSE;
