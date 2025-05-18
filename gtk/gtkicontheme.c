@@ -3750,17 +3750,14 @@ gtk_icon_paintable_get_icon_name (GtkIconPaintable *icon)
 
 /**
  * gtk_icon_paintable_is_symbolic: (get-property is-symbolic)
- * @self: a `GtkIconPaintable`
+ * @self: an icon paintable
  *
  * Checks if the icon is symbolic or not.
  *
  * This currently uses only the file name and not the file contents
  * for determining this. This behaviour may change in the future.
  *
- * Note that to render a symbolic `GtkIconPaintable` properly (with
- * recoloring), you have to set its icon name on a `GtkImage`.
- *
- * Returns: %TRUE if the icon is symbolic, %FALSE otherwise
+ * Returns: true if the icon is symbolic, false otherwise
  */
 gboolean
 gtk_icon_paintable_is_symbolic (GtkIconPaintable *icon)
