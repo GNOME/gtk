@@ -266,6 +266,8 @@ gsk_gpu_shader_op_alloc (GskGpuFrame               *frame,
   GskGpuShaderFlags flags;
 
   flags = gsk_gpu_shader_flags_create (clip,
+                                       op_class->n_textures > 0 ? gsk_gpu_image_get_shader_op (images[0]) : 0,
+                                       op_class->n_textures > 1 ? gsk_gpu_image_get_shader_op (images[1]) : 0,
                                        op_class->n_textures > 0 && (gsk_gpu_image_get_flags (images[0]) & GSK_GPU_IMAGE_EXTERNAL),
                                        op_class->n_textures > 1 && (gsk_gpu_image_get_flags (images[1]) & GSK_GPU_IMAGE_EXTERNAL));
   texture_vertex_size = gsk_gpu_frame_get_texture_vertex_size (frame, op_class->n_textures);

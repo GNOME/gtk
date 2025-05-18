@@ -167,6 +167,12 @@ gsk_gpu_image_get_conversion (GskGpuImage *self)
   return priv->conversion;
 }
 
+GdkShaderOp
+gsk_gpu_image_get_shader_op (GskGpuImage *self)
+{
+  return GDK_SHADER_DEFAULT;
+}
+
 void
 gsk_gpu_image_set_flags (GskGpuImage      *self,
                          GskGpuImageFlags  flags)

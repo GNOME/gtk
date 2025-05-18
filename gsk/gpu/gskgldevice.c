@@ -577,7 +577,17 @@ gsk_gl_device_use_program (GskGLDevice               *self,
 
   /* space by 3 because external textures may need 3 texture units */
   glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE0"), 0);
+  if (!gsk_gpu_shader_flags_has_external_texture0 (flags))
+    {
+      glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE0_1"), 1);
+      glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE0_2"), 2);
+    }
   glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE1"), 3);
+  if (!gsk_gpu_shader_flags_has_external_texture1 (flags))
+    {
+      glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE1_1"), 4);
+      glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE1_2"), 5);
+    }
 }
 
 GLuint

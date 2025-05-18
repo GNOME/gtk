@@ -38,6 +38,8 @@ uniform samplerExternalOES GSK_TEXTURE0;
 #define HAS_EXTERNAL_TEXTURES
 #else
 uniform sampler2D GSK_TEXTURE0;
+uniform sampler2D GSK_TEXTURE0_1;
+uniform sampler2D GSK_TEXTURE0_2;
 #endif
 
 #if GSK_N_TEXTURES > 1
@@ -49,6 +51,8 @@ uniform samplerExternalOES GSK_TEXTURE1;
 #endif
 #else
 uniform sampler2D GSK_TEXTURE1;
+uniform sampler2D GSK_TEXTURE1_1;
+uniform sampler2D GSK_TEXTURE1_2;
 #endif
 
 #endif
