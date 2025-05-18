@@ -41,11 +41,7 @@ void
 run (out vec4 color,
      out vec2 position)
 {
-  vec4 pixel;
-  if (HAS_VARIATION (VARIATION_STRAIGHT_ALPHA))
-    pixel = gsk_texture_straight_alpha (GSK_TEXTURE0, _tex_coord);
-  else
-    pixel = texture (GSK_TEXTURE0, _tex_coord);
+  vec4 pixel = gsk_texture0 (_tex_coord);
 
   pixel = output_color_from_alt (pixel);
 
