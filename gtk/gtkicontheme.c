@@ -3737,7 +3737,6 @@ gtk_icon_paintable_get_file (GtkIconPaintable *icon)
  * If the icon was created without an icon theme, this function
  * returns %NULL.
  *
- *
  * Returns: (nullable) (type filename): the themed icon-name for the
  *   icon, or %NULL if its not a themed icon.
  */
