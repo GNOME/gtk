@@ -401,11 +401,6 @@ struct _GtkIconPaintable
   char *filename;
   GLoadableIcon *loadable;
 
-#ifdef G_OS_WIN32
-  /* win32 icon (if there is any) */
-  GdkPixbuf *win32_icon;
-#endif
-
   /* Parameters influencing the scaled icon
    */
   int desired_size;
@@ -2248,9 +2243,14 @@ real_choose_icon (GtkIconTheme      *self,
 
       if (hIcon)
         {
+          GdkPixbuf *win32_icon;
           icon = icon_paintable_new (resources[0], size, scale);
-          icon->win32_icon = gdk_win32_icon_to_pixbuf_libgtk_only (hIcon, NULL, NULL);
+          win32_icon = gdk_win32_icon_to_pixbuf_libgtk_only (hIcon, NULL, NULL);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
+          icon->texture = gdk_texture_new_for_pixbuf (win32_icon);
+G_GNUC_END_IGNORE_DEPRECATIONS
           DestroyIcon (hIcon);
+          g_object_unref (win32_icon);
           goto out;
         }
       g_strfreev (resources);
@@ -3471,9 +3471,6 @@ gtk_icon_paintable_finalize (GObject *object)
 
   g_clear_object (&icon->loadable);
   g_clear_object (&icon->texture);
-#ifdef G_OS_WIN32
-  g_clear_object (&icon->win32_icon);
-#endif
 
   g_mutex_clear (&icon->texture_lock);
 
@@ -3706,15 +3703,6 @@ icon_ensure_texture__locked (GtkIconPaintable *icon,
   /* At this point, we need to actually get the icon; either from the
    * builtin image or by loading the file
    */
-#ifdef G_OS_WIN32
-  if (icon->win32_icon)
-    {
-G_GNUC_BEGIN_IGNORE_DEPRECATIONS
-      icon->texture = gdk_texture_new_for_pixbuf (icon->win32_icon);
-G_GNUC_END_IGNORE_DEPRECATIONS
-    }
-  else
-#endif
   if (icon->is_resource)
     {
       if (icon->is_svg)
