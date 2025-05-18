@@ -21,6 +21,36 @@ enum {
   NUM_PROPERTIES
 };
 
+/* {{{ Utilities */
+
+/* Like gtk_snapshot_append_node, but transforms the node
+ * to map the @from rect to the @to rect.
+ */
+static void
+gtk_snapshot_append_node_scaled (GtkSnapshot     *snapshot,
+                                 GskRenderNode   *node,
+                                 graphene_rect_t *from,
+                                 graphene_rect_t *to)
+{
+  if (graphene_rect_equal (from, to))
+    {
+      gtk_snapshot_append_node (snapshot, node);
+    }
+  else
+    {
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (to->origin.x,
+                                                              to->origin.y));
+      gtk_snapshot_scale (snapshot, to->size.width / from->size.width,
+                                    to->size.height / from->size.height);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- from->origin.x,
+                                                              - from->origin.y));
+      gtk_snapshot_append_node (snapshot, node);
+      gtk_snapshot_restore (snapshot);
+    }
+}
+
+/* }}} */
 /* {{{ SVG Parser */
 
 /* Not a complete SVG parser by any means.
@@ -429,16 +459,16 @@ parse_symbolic_svg (GBytes  *bytes,
   };
   ParserData data;
   const char *text;
-  gsize len;
+  gsize length;
 
   data.width = data.height = 0;
   data.snapshot = gtk_snapshot_new ();
   data.has_clip = FALSE;
 
-  text = g_bytes_get_data (bytes, &len);
+  text = g_bytes_get_data (bytes, &length);
 
   context = g_markup_parse_context_new (&parser, G_MARKUP_PREFIX_ERROR_POSITION, &data, NULL);
-  if (!g_markup_parse_context_parse (context, text, len, error))
+  if (!g_markup_parse_context_parse (context, text, length, error))
     {
       GskRenderNode *node;
 
@@ -468,7 +498,7 @@ file_path (GFile *file)
   return path;
 }
 
-GskRenderNode *
+static GskRenderNode *
 render_node_from_symbolic (GFile  *file,
                            double *width,
                            double *height)
@@ -680,34 +710,7 @@ svg_symbolic_paintable_init_interface (GdkPaintableInterface *iface)
 }
 
 /* }}} */
-/* {{{ GtkSymbolicPaintable implementation */
-
-/* Like gtk_snapshot_append_node, but transforms the node
- * to map the @from rect to the @to rect.
- */
-static void
-gtk_snapshot_append_node_scaled (GtkSnapshot     *snapshot,
-                                 GskRenderNode   *node,
-                                 graphene_rect_t *from,
-                                 graphene_rect_t *to)
-{
-  if (graphene_rect_equal (from, to))
-    {
-      gtk_snapshot_append_node (snapshot, node);
-    }
-  else
-    {
-      gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (to->origin.x,
-                                                              to->origin.y));
-      gtk_snapshot_scale (snapshot, to->size.width / from->size.width,
-                                    to->size.height / from->size.height);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- from->origin.x,
-                                                              - from->origin.y));
-      gtk_snapshot_append_node (snapshot, node);
-      gtk_snapshot_restore (snapshot);
-    }
-}
+ /* {{{ GtkSymbolicPaintable implementation */
 
 static void
 svg_symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
