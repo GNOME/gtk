@@ -19,9 +19,8 @@ struct _GskGpuConvertBuiltinOp
 
 #define VARIATION_COLOR_SPACE_MASK     (0xFF)
 #define VARIATION_OPACITY              (1u << 8)
-#define VARIATION_STRAIGHT_ALPHA       (1u << 9)
-#define VARIATION_PREMULTIPLY          (1u << 10)
-#define VARIATION_REVERSE              (1u << 11)
+#define VARIATION_PREMULTIPLY          (1u << 9)
+#define VARIATION_REVERSE              (1u << 10)
 
 static void
 gsk_gpu_convert_builtin_op_print_instance (GskGpuShaderOp *shader,
@@ -33,8 +32,6 @@ gsk_gpu_convert_builtin_op_print_instance (GskGpuShaderOp *shader,
 
   gsk_gpu_print_rect (string, instance->rect);
   gsk_gpu_print_image (string, shader->images[0]);
-  if (shader->variation & VARIATION_STRAIGHT_ALPHA)
-    gsk_gpu_print_string (string, "straight");
   if (shader->variation & VARIATION_REVERSE)
     gsk_gpu_print_string (string, "reverse");
   gsk_gpu_print_string (string, gdk_color_state_get_name (builtin));
@@ -96,8 +93,7 @@ gsk_gpu_convert_from_builtin_op (GskGpuFrame             *frame,
                            gsk_gpu_color_states_create (ccs, TRUE,
                                                         gsk_gpu_get_shader_color_state (builtin), FALSE),
                            GDK_BUILTIN_COLOR_STATE_ID (builtin) |
-                           (opacity < 1.0 ? VARIATION_OPACITY : 0) |
-                           ((gsk_gpu_image_get_sample_method (image->image) == GSK_GPU_SAMPLE_STRAIGHT_ALPHA) ? VARIATION_STRAIGHT_ALPHA : 0),
+                           (opacity < 1.0 ? VARIATION_OPACITY : 0),
                            clip,
                            (GskGpuImage *[1]) { image->image },
                            (GskGpuSampler[1]) { image->sampler },
@@ -126,7 +122,6 @@ gsk_gpu_convert_to_builtin_op (GskGpuFrame             *frame,
                                                         gsk_gpu_get_shader_color_state (builtin), FALSE),
                            GDK_BUILTIN_COLOR_STATE_ID (builtin) |
                            (opacity < 1.0 ? VARIATION_OPACITY : 0) |
-                           ((gsk_gpu_image_get_sample_method (image->image) == GSK_GPU_SAMPLE_STRAIGHT_ALPHA) ? VARIATION_STRAIGHT_ALPHA : 0) |
                            (builtin_premultiplied ? VARIATION_PREMULTIPLY : 0) |
                            VARIATION_REVERSE,
                            clip,
