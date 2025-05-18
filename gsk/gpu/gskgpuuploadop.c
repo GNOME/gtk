@@ -398,8 +398,10 @@ struct _GskGpuUploadCairoOp
   GskGpuOp op;
 
   GskGpuImage *image;
+  cairo_rectangle_int_t area;
   graphene_rect_t viewport;
   GskGpuCairoFunc func;
+  GskGpuCairoPrintFunc print_func;
   gpointer user_data;
   GDestroyNotify user_destroy;
 
@@ -426,7 +428,10 @@ gsk_gpu_upload_cairo_op_print (GskGpuOp    *op,
   GskGpuUploadCairoOp *self = (GskGpuUploadCairoOp *) op;
 
   gsk_gpu_print_op (string, indent, "upload-cairo");
+  gsk_gpu_print_int_rect (string, &self->area);
   gsk_gpu_print_image (string, self->image);
+  if (self->print_func)
+    self->print_func (self->user_data, string);
   gsk_gpu_print_newline (string);
 }
 
@@ -437,24 +442,24 @@ gsk_gpu_upload_cairo_op_draw (GskGpuOp              *op,
 {
   GskGpuUploadCairoOp *self = (GskGpuUploadCairoOp *) op;
   cairo_surface_t *surface;
+  float sx, sy;
   cairo_t *cr;
-  int width, height;
-
-  width = gsk_gpu_image_get_width (self->image);
-  height = gsk_gpu_image_get_height (self->image);
 
   surface = cairo_image_surface_create_for_data (data,
                                                  CAIRO_FORMAT_ARGB32,
-                                                 width, height,
+                                                 self->area.width,
+                                                 self->area.height,
                                                  layout->planes[0].stride);
-  cairo_surface_set_device_scale (surface,
-                                  width / self->viewport.size.width,
-                                  height / self->viewport.size.height);
+  sx = self->area.width / self->viewport.size.width;
+  sy = self->area.height / self->viewport.size.height;
+  cairo_surface_set_device_scale (surface, sx, sy);
+  cairo_surface_set_device_offset (surface, - sx * self->viewport.origin.x,
+                                            - sy * self->viewport.origin.y);
+
   cr = cairo_create (surface);
   cairo_set_operator (cr, CAIRO_OPERATOR_CLEAR);
   cairo_paint (cr);
   cairo_set_operator (cr, CAIRO_OPERATOR_OVER);
-  cairo_translate (cr, -self->viewport.origin.x, -self->viewport.origin.y);
 
   self->func (self->user_data, cr);
 
@@ -472,12 +477,13 @@ gsk_gpu_upload_cairo_op_vk_command (GskGpuOp              *op,
 {
   GskGpuUploadCairoOp *self = (GskGpuUploadCairoOp *) op;
 
-  return gsk_gpu_upload_op_vk_command (op,
-                                       frame,
-                                       state,
-                                       GSK_VULKAN_IMAGE (self->image),
-                                       gsk_gpu_upload_cairo_op_draw,
-                                       &self->buffer);
+  return gsk_gpu_upload_op_vk_command_with_area (op,
+                                                 frame,
+                                                 state,
+                                                 GSK_VULKAN_IMAGE (self->image),
+                                                 &self->area,
+                                                 gsk_gpu_upload_cairo_op_draw,
+                                                 &self->buffer);
 }
 #endif
 
@@ -488,10 +494,11 @@ gsk_gpu_upload_cairo_op_gl_command (GskGpuOp          *op,
 {
   GskGpuUploadCairoOp *self = (GskGpuUploadCairoOp *) op;
 
-  return gsk_gpu_upload_op_gl_command (op,
-                                       frame,
-                                       self->image,
-                                       gsk_gpu_upload_cairo_op_draw);
+  return gsk_gpu_upload_op_gl_command_with_area (op,
+                                                 frame,
+                                                 self->image,
+                                                 &self->area,
+                                                 gsk_gpu_upload_cairo_op_draw);
 }
 
 static const GskGpuOpClass GSK_GPU_UPLOAD_CAIRO_OP_CLASS = {
@@ -513,22 +520,54 @@ gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
                          gpointer               user_data,
                          GDestroyNotify         user_destroy)
 {
+  GskGpuImage *image;
+
+  image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
+                                              FALSE,
+                                              GDK_MEMORY_DEFAULT,
+                                              gsk_gpu_color_state_get_conversion (GDK_COLOR_STATE_SRGB),
+                                              ceil (graphene_vec2_get_x (scale) * viewport->size.width),
+                                              ceil (graphene_vec2_get_y (scale) * viewport->size.height));
+
+  gsk_gpu_upload_cairo_into_op (frame,
+                                image,
+                                &(const cairo_rectangle_int_t) {
+                                  0, 0,
+                                  gsk_gpu_image_get_width (image),
+                                  gsk_gpu_image_get_height (image),
+                                },
+                                viewport,
+                                func,
+                                NULL,
+                                user_data,
+                                user_destroy);
+
+  g_object_unref (image);
+
+  return image;
+}
+
+void
+gsk_gpu_upload_cairo_into_op (GskGpuFrame                 *frame,
+                              GskGpuImage                 *image,
+                              const cairo_rectangle_int_t *area,
+                              const graphene_rect_t       *viewport,
+                              GskGpuCairoFunc              func,
+                              GskGpuCairoPrintFunc         print_func,
+                              gpointer                     user_data,
+                              GDestroyNotify               user_destroy)
+{
   GskGpuUploadCairoOp *self;
 
   self = (GskGpuUploadCairoOp *) gsk_gpu_op_alloc (frame, &GSK_GPU_UPLOAD_CAIRO_OP_CLASS);
 
-  self->image = gsk_gpu_device_create_upload_image (gsk_gpu_frame_get_device (frame),
-                                                    FALSE,
-                                                    GDK_MEMORY_DEFAULT,
-                                                    gsk_gpu_color_state_get_conversion (GDK_COLOR_STATE_SRGB),
-                                                    ceil (graphene_vec2_get_x (scale) * viewport->size.width),
-                                                    ceil (graphene_vec2_get_y (scale) * viewport->size.height));
+  self->image = g_object_ref (image);
+  self->area = *area;
   self->viewport = *viewport;
   self->func = func;
+  self->print_func = print_func;
   self->user_data = user_data;
   self->user_destroy = user_destroy;
-
-  return self->image;
 }
 
 typedef struct _GskGpuUploadGlyphOp GskGpuUploadGlyphOp;
