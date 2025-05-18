@@ -637,7 +637,7 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                       tex_rect
                                     });
     }
-  else if (straight_alpha ||
+  else if (gsk_gpu_image_get_shader_op (image) != GDK_SHADER_DEFAULT ||
            self->opacity < 1.0 ||
            !gdk_color_state_equal (image_color_state, self->ccs))
     {
@@ -647,7 +647,6 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                                                         image_color_state,
                                                                         TRUE),
                           self->opacity,
-                          straight_alpha,
                           &self->offset,
                           &(GskGpuShaderImage) {
                               image,
@@ -4393,7 +4392,6 @@ gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
                           gsk_gpu_color_states_create (self->ccs, target_premultiplied,
                                                        image_color_state, TRUE),
                           self->opacity,
-                          FALSE,
                           &self->offset,
                           &(GskGpuShaderImage) {
                               image,
