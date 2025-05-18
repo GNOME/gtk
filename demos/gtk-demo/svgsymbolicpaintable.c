@@ -21,6 +21,36 @@ enum {
   NUM_PROPERTIES
 };
 
+/* {{{ Utilities */
+
+/* Like gtk_snapshot_append_node, but transforms the node
+ * to map the @from rect to the @to rect.
+ */
+static void
+gtk_snapshot_append_node_scaled (GtkSnapshot     *snapshot,
+                                 GskRenderNode   *node,
+                                 graphene_rect_t *from,
+                                 graphene_rect_t *to)
+{
+  if (graphene_rect_equal (from, to))
+    {
+      gtk_snapshot_append_node (snapshot, node);
+    }
+  else
+    {
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (to->origin.x,
+                                                              to->origin.y));
+      gtk_snapshot_scale (snapshot, to->size.width / from->size.width,
+                                    to->size.height / from->size.height);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- from->origin.x,
+                                                              - from->origin.y));
+      gtk_snapshot_append_node (snapshot, node);
+      gtk_snapshot_restore (snapshot);
+    }
+}
+
+/* }}} */
 /* {{{ SVG Parser */
 
 /* Not a complete SVG parser by any means.
@@ -33,6 +63,15 @@ typedef struct
   GtkSnapshot *snapshot;
   gboolean has_clip;
 } ParserData;
+
+static void
+set_attribute_error (GError     **error,
+                     const char  *name,
+                     const char  *value)
+{
+  g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
+               "Could not handle %s attribute: %s", name, value);
+}
 
 static void
 start_element_cb (GMarkupParseContext  *context,
@@ -67,8 +106,7 @@ start_element_cb (GMarkupParseContext  *context,
       data->width = g_ascii_strtod (width_attr, &end);
       if (end && *end != '\0' && strcmp (end, "px") != 0)
         {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Invalid width attribute: %s", width_attr);
+          set_attribute_error (error, "width", width_attr);
           return;
         }
 
@@ -82,8 +120,7 @@ start_element_cb (GMarkupParseContext  *context,
       data->height = g_ascii_strtod (height_attr, &end);
       if (end && *end != '\0' && strcmp (end, "px") != 0)
         {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Invalid height attribute: %s", height_attr);
+          set_attribute_error (error, "height", height_attr);
           return;
         }
 
@@ -150,8 +187,7 @@ start_element_cb (GMarkupParseContext  *context,
       path = gsk_path_parse (path_attr);
       if (!path)
         {
-          g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                       "Failed to parse path: %s", path_attr);
+          set_attribute_error (error, "d", path_attr);
           return;
         }
 
@@ -161,8 +197,7 @@ start_element_cb (GMarkupParseContext  *context,
           fill_opacity = g_ascii_strtod (fill_opacity_attr, &end);
           if (end && *end != '\0')
             {
-              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                           "Invalid fill-opacity attribute: %s", fill_opacity_attr);
+              set_attribute_error (error, "fill-opacity", fill_opacity_attr);
               goto cleanup;
             }
           fill_opacity = CLAMP (fill_opacity, 0, 1);
@@ -174,8 +209,7 @@ start_element_cb (GMarkupParseContext  *context,
           stroke_opacity = g_ascii_strtod (stroke_opacity_attr, &end);
           if (end && *end != '\0')
             {
-              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                           "Invalid stroke-opacity attribute: %s", stroke_opacity_attr);
+              set_attribute_error (error, "stroke-opacity", stroke_opacity_attr);
               goto cleanup;
             }
           stroke_opacity = CLAMP (stroke_opacity, 0, 1);
@@ -260,8 +294,7 @@ start_element_cb (GMarkupParseContext  *context,
           opacity = g_ascii_strtod (opacity_attr, &end);
           if (end && *end != '\0')
             {
-              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                           "Invalid opacity attribute: %s", opacity_attr);
+              set_attribute_error (error, "opacity", opacity_attr);
               goto cleanup;
             }
         }
@@ -278,8 +311,7 @@ start_element_cb (GMarkupParseContext  *context,
           double w = g_ascii_strtod (stroke_width_attr, &end);
           if (end && *end != '\0')
             {
-              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                           "Can't handle stroke-width attribute: %s", stroke_width_attr);
+              set_attribute_error (error, "stroke-width", stroke_width_attr);
               goto cleanup;
             }
 
@@ -296,8 +328,7 @@ start_element_cb (GMarkupParseContext  *context,
             gsk_stroke_set_line_cap (stroke, GSK_LINE_CAP_SQUARE);
           else
             {
-              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                           "Can't handle stroke-linecap attribute: %s", stroke_linecap_attr);
+              set_attribute_error (error, "stroke-linecap", stroke_linecap_attr);
               goto cleanup;
             }
         }
@@ -312,8 +343,7 @@ start_element_cb (GMarkupParseContext  *context,
             gsk_stroke_set_line_join (stroke, GSK_LINE_JOIN_BEVEL);
           else
             {
-              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                           "Can't handle stroke-linejoin attribute: %s", stroke_linejoin_attr);
+              set_attribute_error (error, "stroke-linejoin", stroke_linejoin_attr);
               goto cleanup;
             }
         }
@@ -323,8 +353,7 @@ start_element_cb (GMarkupParseContext  *context,
           double ml = g_ascii_strtod (stroke_miterlimit_attr, &end);
           if ((end && *end != '\0') || ml < 1)
             {
-              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                           "Invalid stroke-miterlimit attribute: %s", stroke_miterlimit_attr);
+              set_attribute_error (error, "stroke-miterlimit", stroke_miterlimit_attr);
               goto cleanup;
             }
 
@@ -349,8 +378,7 @@ start_element_cb (GMarkupParseContext  *context,
                   dash[i] = g_ascii_strtod (str[i], &end);
                   if (end && *end != '\0')
                     {
-                      g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                                   "Failed to parse stroke-dasharray attribute: %s", stroke_dasharray_attr);
+                      set_attribute_error (error, "stroke-dasharray", stroke_dasharray_attr);
                       g_strfreev (str);
                       goto cleanup;
                     }
@@ -367,8 +395,7 @@ start_element_cb (GMarkupParseContext  *context,
           double offset = g_ascii_strtod (stroke_dashoffset_attr, &end);
           if (end && *end != '\0')
             {
-              g_set_error (error, G_MARKUP_ERROR, G_MARKUP_ERROR_INVALID_CONTENT,
-                           "Failed to parse stroke-dashoffset attribute: %s", stroke_dashoffset_attr);
+              set_attribute_error (error, "stroke-dashoffset", stroke_dashoffset_attr);
               goto cleanup;
             }
 
@@ -432,16 +459,16 @@ parse_symbolic_svg (GBytes  *bytes,
   };
   ParserData data;
   const char *text;
-  gsize len;
+  gsize length;
 
   data.width = data.height = 0;
   data.snapshot = gtk_snapshot_new ();
   data.has_clip = FALSE;
 
-  text = g_bytes_get_data (bytes, &len);
+  text = g_bytes_get_data (bytes, &length);
 
   context = g_markup_parse_context_new (&parser, G_MARKUP_PREFIX_ERROR_POSITION, &data, NULL);
-  if (!g_markup_parse_context_parse (context, text, len, error))
+  if (!g_markup_parse_context_parse (context, text, length, error))
     {
       GskRenderNode *node;
 
@@ -462,7 +489,16 @@ parse_symbolic_svg (GBytes  *bytes,
   return gtk_snapshot_free_to_node (data.snapshot);
 }
 
-GskRenderNode *
+static char *
+file_path (GFile *file)
+{
+  char *path = g_file_get_path (file);
+  if (!path)
+    path = g_file_get_uri (file);
+  return path;
+}
+
+static GskRenderNode *
 render_node_from_symbolic (GFile  *file,
                            double *width,
                            double *height)
@@ -471,18 +507,20 @@ render_node_from_symbolic (GFile  *file,
   GskRenderNode *node;
   GError *error = NULL;
 
-  bytes = g_file_load_bytes (file, NULL, NULL, NULL);
+  bytes = g_file_load_bytes (file, NULL, NULL, &error);
   if (!bytes)
-    return NULL;
+    {
+      char *path = file_path (file);
+      g_warning ("Failed to load %s: %s", path, error->message);
+      g_free (path);
+      g_error_free (error);
+      return NULL;
+    }
 
   node = parse_symbolic_svg (bytes, width, height, &error);
   if (!node)
     {
-      char *path;
-
-      path = g_file_get_path (file);
-      if (!path)
-        path = g_file_get_uri (file);
+      char *path = file_path (file);
       g_warning ("Failed to parse %s: %s", path, error->message);
       g_free (path);
       g_error_free (error);
@@ -672,34 +710,7 @@ svg_symbolic_paintable_init_interface (GdkPaintableInterface *iface)
 }
 
 /* }}} */
-/* {{{ GtkSymbolicPaintable implementation */
-
-/* Like gtk_snapshot_append_node, but transforms the node
- * to map the @from rect to the @to rect.
- */
-static void
-gtk_snapshot_append_node_scaled (GtkSnapshot     *snapshot,
-                                 GskRenderNode   *node,
-                                 graphene_rect_t *from,
-                                 graphene_rect_t *to)
-{
-  if (graphene_rect_equal (from, to))
-    {
-      gtk_snapshot_append_node (snapshot, node);
-    }
-  else
-    {
-      gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (to->origin.x,
-                                                              to->origin.y));
-      gtk_snapshot_scale (snapshot, to->size.width / from->size.width,
-                                    to->size.height / from->size.height);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- from->origin.x,
-                                                              - from->origin.y));
-      gtk_snapshot_append_node (snapshot, node);
-      gtk_snapshot_restore (snapshot);
-    }
-}
+ /* {{{ GtkSymbolicPaintable implementation */
 
 static void
 svg_symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
@@ -717,7 +728,7 @@ svg_symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
   GskRenderNode *recolored;
   GError *error = NULL;
 
-  if (!self->node)
+  if (!self->file)
     return;
 
   if (self->width >= self->height)
@@ -738,13 +749,17 @@ svg_symbolic_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
                       render_width,
                       render_height);
 
-  if (!recolor_node (self->node, colors, n_colors, &recolored, &error))
+  if (!self->node)
     {
-      g_warning ("Failed to recolor %s: %s",
-                 g_file_peek_path (self->file),
-                 error->message);
+      gtk_snapshot_append_color (snapshot, &(GdkRGBA) { 238/255.0, 106/255.0, 167/255.0,  1 }, &GRAPHENE_RECT_INIT (0, 0, width, height));
+    }
+  else if (!recolor_node (self->node, colors, n_colors, &recolored, &error))
+    {
+      char *path = file_path (self->file);
+      g_warning ("Failed to recolor %s: %s", path, error->message);
+      g_free (path);
       g_error_free (error);
-      gtk_snapshot_append_node_scaled (snapshot, self->node, &icon_rect, &render_rect);
+      gtk_snapshot_append_color (snapshot, &(GdkRGBA) { 238/255.0, 106/255.0, 167/255.0,  1 }, &render_rect);
     }
   else
     {
@@ -797,9 +812,10 @@ svg_symbolic_paintable_set_property (GObject      *object,
     case PROP_FILE:
       g_set_object (&self->file, g_value_get_object (value));
       g_clear_pointer (&self->node, gsk_render_node_unref);
-      self->node = render_node_from_symbolic (self->file,
-                                              &self->width,
-                                              &self->height);
+      if (self->file)
+        self->node = render_node_from_symbolic (self->file,
+                                                &self->width,
+                                                &self->height);
       break;
 
     default:
