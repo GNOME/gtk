@@ -483,8 +483,18 @@ gdk_android_toplevel_get_property (GObject    *object,
       g_value_set_boolean (value, TRUE);
       break;
 
+    case N_PROPERTIES + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE:
+      g_value_set_enum (value, surface->fullscreen_mode);
+      break;
+
     case N_PROPERTIES + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
       g_value_set_boolean (value, FALSE);
+      break;
+
+    case N_PROPERTIES + GDK_TOPLEVEL_PROP_CAPABILITIES:
+      g_value_set_flags (value, GDK_TOPLEVEL_CAPABILITIES_MAXIMIZE |
+                                GDK_TOPLEVEL_CAPABILITIES_FULLSCREEN |
+                                GDK_TOPLEVEL_CAPABILITIES_MINIMIZE);
       break;
 
     case N_PROPERTIES + GDK_TOPLEVEL_PROP_GRAVITY:
@@ -532,6 +542,11 @@ gdk_android_toplevel_set_property (GObject      *object,
       break;
 
     case N_PROPERTIES + GDK_TOPLEVEL_PROP_DELETABLE:
+      break;
+
+    case N_PROPERTIES + GDK_TOPLEVEL_PROP_FULLSCREEN_MODE:
+      surface->fullscreen_mode = g_value_get_enum (value);
+      g_object_notify_by_pspec (G_OBJECT (surface), pspec);
       break;
 
     case N_PROPERTIES + GDK_TOPLEVEL_PROP_SHORTCUTS_INHIBITED:
