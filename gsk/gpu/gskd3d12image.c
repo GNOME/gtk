@@ -19,8 +19,8 @@ struct _GskD3d12Image
   D3D12_RESOURCE_STATES state;
 
   D3D12_CPU_DESCRIPTOR_HANDLE rtv;
-  D3D12_CPU_DESCRIPTOR_HANDLE srv_cpu;
-  D3D12_GPU_DESCRIPTOR_HANDLE srv_gpu;
+  D3D12_CPU_DESCRIPTOR_HANDLE srv_cpu[3];
+  D3D12_GPU_DESCRIPTOR_HANDLE srv_gpu[3];
 };
 
 G_DEFINE_TYPE (GskD3d12Image, gsk_d3d12_image, GSK_TYPE_GPU_IMAGE)
@@ -304,11 +304,15 @@ static void
 gsk_d3d12_image_finalize (GObject *object)
 {
   GskD3d12Image *self = GSK_D3D12_IMAGE (object);
+  gsize i;
 
   if (self->rtv.ptr)
     gsk_d3d12_device_free_rtv (self->device, &self->rtv);
-  if (self->srv_cpu.ptr)
-    gsk_d3d12_device_free_srv (self->device, &self->srv_cpu);
+  for (i = 0; i < G_N_ELEMENTS (self->srv_cpu); i++)
+    {
+      if (self->srv_cpu[i].ptr)
+        gsk_d3d12_device_free_srv (self->device, &self->srv_cpu[i]);
+    }
 
   gdk_win32_com_clear (&self->resource);
 
@@ -354,30 +358,48 @@ gsk_d3d12_image_get_rtv (GskD3d12Image *self)
 }
 
 const D3D12_GPU_DESCRIPTOR_HANDLE *
-gsk_d3d12_image_get_srv (GskD3d12Image *self)
+gsk_d3d12_image_get_srv (GskD3d12Image *self,
+                         gsize          nth)
 {
-  if (self->srv_cpu.ptr == 0)
+  if (self->srv_cpu[0].ptr == 0)
     {
       D3D12_RESOURCE_DESC desc;
+      GdkMemoryFormat format;
+      gsize i;
 
       ID3D12Resource_GetDesc (self->resource, &desc);
-      gsk_d3d12_device_alloc_srv (self->device, &self->srv_cpu, &self->srv_gpu);
-      ID3D12Device_CreateShaderResourceView (gsk_d3d12_device_get_d3d12_device (self->device),
-                                             self->resource,
-                                             (&(D3D12_SHADER_RESOURCE_VIEW_DESC) {
-                                                 .Format = desc.Format,
-                                                 .ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D,
-                                                 .Shader4ComponentMapping = self->swizzle,
-                                                 .Texture2D = {
-                                                     .MostDetailedMip = 0,
-                                                     .MipLevels = desc.MipLevels,
-                                                     .PlaneSlice = 0,
-                                                     .ResourceMinLODClamp = 0.0f
-                                                 }
-                                             }),
-                                             self->srv_cpu);
+      format = gsk_gpu_image_get_format (GSK_GPU_IMAGE (self));
+
+      for (i = 0; ; i++)
+        {
+          DXGI_FORMAT dxgi_format;
+          guint plane_slice;
+          
+          dxgi_format = gdk_memory_format_get_dxgi_srv_format (format, i, &plane_slice);
+          if (dxgi_format == DXGI_FORMAT_UNKNOWN)
+            break;
+          gsk_d3d12_device_alloc_srv (self->device, &self->srv_cpu[i], &self->srv_gpu[i]);
+          ID3D12Device_CreateShaderResourceView (gsk_d3d12_device_get_d3d12_device (self->device),
+                                                 self->resource,
+                                                 (&(D3D12_SHADER_RESOURCE_VIEW_DESC) {
+                                                     .Format = dxgi_format,
+                                                     .ViewDimension = D3D12_SRV_DIMENSION_TEXTURE2D,
+                                                     .Shader4ComponentMapping = self->swizzle,
+                                                     .Texture2D = {
+                                                         .MostDetailedMip = 0,
+                                                         .MipLevels = desc.MipLevels,
+                                                         .PlaneSlice = plane_slice,
+                                                         .ResourceMinLODClamp = 0.0f
+                                                     }
+                                                 }),
+                                                 self->srv_cpu[i]);
+      }
     }
-  return &self->srv_gpu;
+
+  if (self->srv_cpu[nth].ptr == 0)
+    return NULL;
+
+  return &self->srv_gpu[nth];
 }
 
 void

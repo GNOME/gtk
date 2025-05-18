@@ -264,7 +264,7 @@ gsk_gpu_shader_op_d3d12_command_n (GskGpuOp             *op,
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
   GskGpuOp *next;
-  gsize i, n_ops, max_ops_per_draw;
+  gsize i, j, n_ops, max_ops_per_draw;
   ID3D12PipelineState *pipeline;
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_MERGE))
@@ -313,9 +313,15 @@ gsk_gpu_shader_op_d3d12_command_n (GskGpuOp             *op,
           gsk_d3d12_image_transition (GSK_D3D12_IMAGE (self->images[i]),
                                       state->command_list,
                                       D3D12_RESOURCE_STATE_PIXEL_SHADER_RESOURCE);
-          ID3D12GraphicsCommandList_SetGraphicsRootDescriptorTable (state->command_list,
-                                                                    GSK_D3D12_ROOT_TEXTURE_0 + i,
-                                                                    *gsk_d3d12_image_get_srv (GSK_D3D12_IMAGE (self->images[i])));
+          for (j = 0; j < 3; j++)
+            {
+              const D3D12_GPU_DESCRIPTOR_HANDLE *srv = gsk_d3d12_image_get_srv (GSK_D3D12_IMAGE (self->images[i]), j);
+              if (srv == NULL)
+                break;
+              ID3D12GraphicsCommandList_SetGraphicsRootDescriptorTable (state->command_list,
+                                                                        GSK_D3D12_ROOT_TEXTURE_0 + 3 * i + j,
+                                                                        *srv);
+            }
           state->current_images[i] = self->images[i];
         }
       if (state->current_samplers[i] != self->samplers[i])
@@ -324,9 +330,12 @@ gsk_gpu_shader_op_d3d12_command_n (GskGpuOp             *op,
           gsk_d3d12_device_get_sampler (GSK_D3D12_DEVICE (gsk_gpu_frame_get_device (frame)),
                                         self->samplers[i],
                                         &descriptor);
-          ID3D12GraphicsCommandList_SetGraphicsRootDescriptorTable (state->command_list,
-                                                                    GSK_D3D12_ROOT_SAMPLER_0 + i,
-                                                                    descriptor);
+          for (j = 0; j < 3; j++)
+            {
+              ID3D12GraphicsCommandList_SetGraphicsRootDescriptorTable (state->command_list,
+                                                                        GSK_D3D12_ROOT_SAMPLER_0 + 3 * i + j,
+                                                                        descriptor);
+            }
           state->current_samplers[i] = self->samplers[i];
         }
     }

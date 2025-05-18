@@ -853,6 +853,10 @@ struct _GdkMemoryFormatDescription
   struct {
     DXGI_FORMAT dxgi_format;
     DXGI_FORMAT dxgi_srgb_format;
+    struct {
+      DXGI_FORMAT dxgi_format;
+      guint plane_slice;
+    } srv[2];
   } win32;
   struct {
     guint32 rgb_fourcc;
@@ -917,6 +921,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
       .dxgi_format = DXGI_FORMAT_B8G8R8A8_UNORM,
       .dxgi_srgb_format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB,
+        .srv = { { DXGI_FORMAT_B8G8R8A8_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ARGB8888,
@@ -970,6 +975,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
       .dxgi_format = DXGI_FORMAT_UNKNOWN,
       .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_BGRA8888,
@@ -1022,6 +1028,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
       .dxgi_format = DXGI_FORMAT_R8G8B8A8_UNORM,
       .dxgi_srgb_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+        .srv = { { DXGI_FORMAT_R8G8B8A8_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ABGR8888,
@@ -1075,6 +1082,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
       .dxgi_format = DXGI_FORMAT_UNKNOWN,
       .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_RGBA8888,
@@ -1128,6 +1136,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_B8G8R8A8_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB,
+        .srv = { { DXGI_FORMAT_B8G8R8A8_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ARGB8888,
@@ -1181,6 +1190,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_BGRA8888,
@@ -1233,6 +1243,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R8G8B8A8_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+        .srv = { { DXGI_FORMAT_R8G8B8A8_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ABGR8888,
@@ -1286,6 +1297,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_RGBA8888,
@@ -1339,6 +1351,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_B8G8R8A8_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB,
+        .srv = { { DXGI_FORMAT_B8G8R8A8_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_XRGB8888,
@@ -1393,6 +1406,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_BGRX8888,
@@ -1446,6 +1460,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R8G8B8A8_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_R8G8B8A8_UNORM_SRGB,
+        .srv = { { DXGI_FORMAT_R8G8B8A8_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_XBGR8888,
@@ -1500,6 +1515,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_RGBX8888,
@@ -1554,6 +1570,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_BGR888,
@@ -1607,6 +1624,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_RGB888,
@@ -1663,6 +1681,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -1718,6 +1737,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R16G16B16A16_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R16G16B16A16_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ABGR16161616,
@@ -1773,6 +1793,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R16G16B16A16_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R16G16B16A16_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ABGR16161616,
@@ -1828,6 +1849,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -1882,6 +1904,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R16G16B16A16_FLOAT,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R16G16B16A16_FLOAT, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ABGR16161616F,
@@ -1936,6 +1959,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R16G16B16A16_FLOAT,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R16G16B16A16_FLOAT, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_ABGR16161616F,
@@ -1991,6 +2015,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R32G32B32_FLOAT,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R32G32B32_FLOAT, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2045,6 +2070,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R32G32B32A32_FLOAT,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R32G32B32A32_FLOAT, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2099,6 +2125,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R32G32B32A32_FLOAT,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R32G32B32A32_FLOAT, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2152,6 +2179,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R8G8_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R8G8_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2205,6 +2233,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R8G8_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R8G8_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2258,6 +2287,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R8_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R8_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_R8,
@@ -2314,6 +2344,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R16G16_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R16G16_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2370,6 +2401,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R16G16_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R16G16_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2426,6 +2458,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
       .dxgi_format = DXGI_FORMAT_R16_UNORM,
       .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R16_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = DRM_FORMAT_R16,
@@ -2479,6 +2512,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_A8_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_A8_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2535,6 +2569,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R16_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R16_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2590,6 +2625,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R16_FLOAT,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R16_FLOAT, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2645,6 +2681,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_R32_FLOAT,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R32_FLOAT, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2703,6 +2740,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_NV12,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R8_UNORM, 0 }, { DXGI_FORMAT_R8G8_UNORM, 1 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2761,6 +2799,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2819,6 +2858,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2877,6 +2917,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2935,6 +2976,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -2993,6 +3035,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3052,6 +3095,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_P010,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R16_UNORM, 0 }, { DXGI_FORMAT_R16G16_UNORM, 1 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3111,6 +3155,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3170,6 +3215,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_P016,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_P016, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3232,6 +3278,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3294,6 +3341,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3356,6 +3404,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_NV11,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_NV11, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3418,6 +3467,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3480,6 +3530,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3542,6 +3593,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3604,6 +3656,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3666,6 +3719,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3728,6 +3782,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3790,6 +3845,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3844,6 +3900,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_YUY2,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_YUY2, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3898,6 +3955,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -3952,6 +4010,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
          .dxgi_format = DXGI_FORMAT_R8G8_B8G8_UNORM,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_R8G8_B8G8_UNORM, 0 }, { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -4006,6 +4065,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .win32 = {
         .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
+        .srv = { { DXGI_FORMAT_UNKNOWN, 0 }, },
     },
     .dmabuf = {
         .rgb_fourcc = 0,
@@ -4636,6 +4696,21 @@ gdk_memory_format_get_dxgi_rgba_format (GdkMemoryFormat  format,
   return memory_formats[actual].win32.dxgi_format;
 }
 
+DXGI_FORMAT
+gdk_memory_format_get_dxgi_srv_format (GdkMemoryFormat  format,
+                                       gsize            nth,
+                                       guint           *out_plane_slice)
+{
+  if (nth >= G_N_ELEMENTS (memory_formats[format].win32.srv))
+    {
+      *out_plane_slice = 0;
+      return DXGI_FORMAT_UNKNOWN;
+    }
+
+  *out_plane_slice = memory_formats[format].win32.srv[nth].plane_slice;
+  return memory_formats[format].win32.srv[nth].dxgi_format;
+}
+
 gboolean
 gdk_memory_format_find_by_dmabuf_fourcc (guint32          fourcc,
                                          gboolean         premultiplied,
@@ -4718,6 +4793,12 @@ const char *
 gdk_memory_format_get_name (GdkMemoryFormat format)
 {
   return memory_formats[format].name;
+}
+
+GdkShaderOp
+gdk_memory_format_get_default_shader_op (GdkMemoryFormat format)
+{
+  return memory_formats[format].default_shader_op;
 }
 
 static void

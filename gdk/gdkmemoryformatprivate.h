@@ -138,6 +138,9 @@ DXGI_FORMAT             gdk_memory_format_get_dxgi_srgb_format      (GdkMemoryFo
 DXGI_FORMAT             gdk_memory_format_get_dxgi_rgba_format      (GdkMemoryFormat             format,
                                                                      GdkMemoryFormat            *out_rgba_format,
                                                                      guint                      *out_shader_4_component_mapping);
+DXGI_FORMAT             gdk_memory_format_get_dxgi_srv_format       (GdkMemoryFormat             format,
+                                                                     gsize                       nth,
+                                                                     guint                      *plane_slice_number);
 guint32                 gdk_memory_format_get_dmabuf_fourcc (GdkMemoryFormat             format);
 const char *            gdk_memory_format_get_name          (GdkMemoryFormat             format);
 
