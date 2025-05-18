@@ -5,6 +5,7 @@
 #include "gskgpuframeprivate.h"
 #include "gskgpuprintprivate.h"
 #include "gskgpushaderflagsprivate.h"
+#include "gskgpuutilsprivate.h"
 #include "gskgldeviceprivate.h"
 #include "gskglframeprivate.h"
 #include "gskglimageprivate.h"
@@ -160,7 +161,7 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
   GskGpuShaderOp *self = (GskGpuShaderOp *) op;
   GskGpuShaderOpClass *shader_op_class = (GskGpuShaderOpClass *) op->op_class;
   GskGpuOp *next;
-  gsize i, n_ops, max_ops_per_draw;
+  gsize i, j, n_ops, max_ops_per_draw;
 
   if (state->current_program.op_class != op->op_class ||
       state->current_program.color_states != self->color_states ||
@@ -182,14 +183,14 @@ gsk_gpu_shader_op_gl_command_n (GskGpuOp          *op,
     {
       if (state->current_images[i] != self->images[i])
         {
-          glActiveTexture (GL_TEXTURE0 + 3 * i);
-          gsk_gl_image_bind_texture (GSK_GL_IMAGE (self->images[i]));
+          gsk_gl_image_bind_textures (GSK_GL_IMAGE (self->images[i]), GL_TEXTURE0 + 3 * i);
           state->current_images[i] = self->images[i];
         }
       if (state->current_samplers[i] != self->samplers[i])
         {
-          glBindSampler (3 * i, gsk_gl_device_get_sampler_id (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
-                                                              self->samplers[i]));
+          for (j = 0; j < 3; j++)
+            glBindSampler (3 * i + j, gsk_gl_device_get_sampler_id (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                                                    self->samplers[i]));
           state->current_samplers[i] = self->samplers[i];
         }
     }
