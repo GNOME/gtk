@@ -57,6 +57,20 @@ typedef enum {
 
 #define GDK_MEMORY_DEPTH_BITS 3
 
+typedef enum {
+  GDK_SHADER_DEFAULT,
+  GDK_SHADER_STRAIGHT,
+  GDK_SHADER_2_PLANES,
+  GDK_SHADER_3_PLANES
+} GdkShaderOp;
+
+static inline gsize
+gdk_shader_op_get_n_shaders (GdkShaderOp op)
+{
+  static gsize n_shaders[] = { 1, 1, 2, 3 };
+  return n_shaders[op];
+}
+
 gsize                   gdk_memory_format_alignment         (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryAlpha          gdk_memory_format_alpha             (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_format_get_premultiplied (GdkMemoryFormat             format) G_GNUC_CONST;
@@ -86,6 +100,8 @@ GdkMemoryDepth          gdk_memory_depth_merge              (GdkMemoryDepth     
 GdkMemoryFormat         gdk_memory_depth_get_format         (GdkMemoryDepth              depth) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_depth_get_alpha_format   (GdkMemoryDepth              depth) G_GNUC_CONST;
 const char *            gdk_memory_depth_get_name           (GdkMemoryDepth              depth);
+GdkShaderOp             gdk_memory_format_get_default_shader_op
+                                                            (GdkMemoryFormat             format);
 gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat             format,
                                                              gboolean                    gles,
                                                              GLint                      *out_internal_format,

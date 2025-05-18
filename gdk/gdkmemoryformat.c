@@ -833,6 +833,7 @@ struct _GdkMemoryFormatDescription
   gsize alignment;
   GdkMemoryDepth depth;
   const GdkMemoryFormat *fallbacks;
+  GdkShaderOp default_shader_op;
   struct {
     GLint internal_gl_format;
     GLint internal_gles_format;
@@ -897,6 +898,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_BGRA,
@@ -949,6 +951,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
@@ -1000,6 +1003,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .fallbacks = (GdkMemoryFormat[]) {
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
@@ -1052,6 +1056,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
@@ -1104,6 +1109,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8,
         -1,
     },
+    .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_BGRA,
@@ -1156,6 +1162,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8,
         -1,
     },
+    .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
@@ -1207,6 +1214,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .fallbacks = (GdkMemoryFormat[]) {
         -1,
     },
+    .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
@@ -1259,6 +1267,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8,
         -1,
     },
+    .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
@@ -1311,6 +1320,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_BGRA,
@@ -1364,6 +1374,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
@@ -1416,6 +1427,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
@@ -1469,6 +1481,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGBA8,
         .internal_gles_format = GL_RGBA8,
@@ -1522,6 +1535,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGB8,
         .internal_gles_format = GL_RGB8,
@@ -1574,6 +1588,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGB8,
         .internal_gles_format = GL_RGB8,
@@ -1629,6 +1644,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGB16,
         .internal_gles_format = GL_RGB16,
@@ -1683,6 +1699,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGBA16,
         .internal_gles_format = GL_RGBA16,
@@ -1737,6 +1754,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8,
         -1,
     },
+    .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
         .internal_gl_format = GL_RGBA16,
         .internal_gles_format = GL_RGBA16,
@@ -1791,6 +1809,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGB16F,
         .internal_gles_format = GL_RGB16F,
@@ -1844,6 +1863,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGBA16F,
         .internal_gles_format = GL_RGBA16F,
@@ -1897,6 +1917,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8,
         -1,
     },
+    .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
         .internal_gl_format = GL_RGBA16F,
         .internal_gles_format = GL_RGBA16F,
@@ -1951,6 +1972,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGB32F,
         .internal_gles_format = GL_RGB32F,
@@ -2004,6 +2026,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RGBA32F,
         .internal_gles_format = GL_RGBA32F,
@@ -2057,6 +2080,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8,
         -1,
     },
+    .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
         .internal_gl_format = GL_RGBA32F,
         .internal_gles_format = GL_RGBA32F,
@@ -2109,6 +2133,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RG8,
         .internal_gles_format = GL_RG8,
@@ -2161,6 +2186,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8,
         -1,
     },
+    .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
         .internal_gl_format = GL_RG8,
         .internal_gles_format = GL_RG8,
@@ -2213,6 +2239,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_R8,
         .internal_gles_format = GL_R8,
@@ -2268,6 +2295,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_RG16,
         .internal_gles_format = GL_RG16,
@@ -2323,6 +2351,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8,
         -1,
     },
+    .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
         .internal_gl_format = GL_RG16,
         .internal_gles_format = GL_RG16,
@@ -2378,6 +2407,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_R16,
         .internal_gles_format = GL_R16,
@@ -2430,6 +2460,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_R8,
         .internal_gles_format = GL_R8,
@@ -2485,6 +2516,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_R16,
         .internal_gles_format = GL_R16,
@@ -2539,6 +2571,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_R16F,
         .internal_gles_format = GL_R16F,
@@ -2593,6 +2626,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
         .internal_gl_format = GL_R32F,
         .internal_gles_format = GL_R32F,
@@ -2650,6 +2684,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -2707,6 +2742,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -2764,6 +2800,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -2821,6 +2858,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -2878,6 +2916,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -2935,6 +2974,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -2993,6 +3033,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3051,6 +3092,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3109,6 +3151,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3170,6 +3213,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3231,6 +3275,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3292,6 +3337,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3353,6 +3399,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3414,6 +3461,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3475,6 +3523,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3536,6 +3585,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3597,6 +3647,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3658,6 +3709,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3719,6 +3771,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3772,6 +3825,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3825,6 +3879,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3878,6 +3933,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -3931,6 +3987,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
         GDK_MEMORY_R8G8B8A8_PREMULTIPLIED,
         -1,
     },
+    .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
         .internal_gl_format = -1,
         .internal_gles_format = -1,
@@ -4671,6 +4728,12 @@ const char *
 gdk_memory_format_get_name (GdkMemoryFormat format)
 {
   return memory_formats[format].name;
+}
+
+GdkShaderOp
+gdk_memory_format_get_default_shader_op (GdkMemoryFormat format)
+{
+  return memory_formats[format].default_shader_op;
 }
 
 static void
