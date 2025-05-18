@@ -11,8 +11,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gtk\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
-"POT-Creation-Date: 2025-05-13 01:49+0000\n"
-"PO-Revision-Date: 2025-05-13 05:53+0200\n"
+"POT-Creation-Date: 2025-05-17 20:28+0000\n"
+"PO-Revision-Date: 2025-05-19 01:07+0200\n"
 "Last-Translator: Ekaterine Papava <papava.e@gtu.ge>\n"
 "Language-Team: Georgian <http://mail.gnome.org/mailman/listinfo/gnome-ge-"
 "list>\n"
@@ -54,22 +54,22 @@ msgstr "გაცვლის ცარიელი ბუფერიდან 
 msgid "No compatible formats to transfer clipboard contents."
 msgstr "გაცვლის ბაფერის შემცველობის შესანახად თავსებადი ფორმატი არ არსებობს."
 
-#: gdk/gdkcolorstate.c:1057
+#: gdk/gdkcolorstate.c:1078
 #, c-format
 msgid "cicp: Unspecified parameters not supported"
 msgstr "cicp: მიუთითებელი პარამეტრები მხარდაჭერილი არაა"
 
-#: gdk/gdkcolorstate.c:1103
+#: gdk/gdkcolorstate.c:1124
 #, c-format
 msgid "cicp: Transfer function %u not supported"
 msgstr "cicp: გადაცემის ფუნქცია %u მხარდაჭერილი არაა"
 
-#: gdk/gdkcolorstate.c:1134
+#: gdk/gdkcolorstate.c:1155
 #, c-format
 msgid "cicp: Color primaries %u not supported"
 msgstr "cicp: ფერის ძირითადები %u მხარდაჭერილი არაა"
 
-#: gdk/gdkcolorstate.c:1161
+#: gdk/gdkcolorstate.c:1182
 #, c-format
 msgid "cicp: Matrix coefficients %u, %s not supported"
 msgstr "cicp: მატრიცის კოეფიციენტები %u და %s მხარდაჭერილი არაა"
@@ -152,9 +152,9 @@ msgstr "შემცველობის გადატანის თავ�
 msgid "No GL API allowed."
 msgstr "GL API არ არის დაშვებული."
 
-#: gdk/gdkglcontext.c:451 gdk/win32/gdkglcontext-win32-wgl.c:719
-#: gdk/win32/gdkglcontext-win32-wgl.c:862
-#: gdk/win32/gdkglcontext-win32-wgl.c:906 gdk/x11/gdkglcontext-glx.c:700
+#: gdk/gdkglcontext.c:451 gdk/win32/gdkglcontext-win32-wgl.c:706
+#: gdk/win32/gdkglcontext-win32-wgl.c:849
+#: gdk/win32/gdkglcontext-win32-wgl.c:893 gdk/x11/gdkglcontext-glx.c:700
 msgid "Unable to create a GL context"
 msgstr "GL-ის კონტექსტის შექმნა შეუძლებელია"
 
@@ -769,21 +769,21 @@ msgstr "IDataObject_GetData (0x%x) -ის შეცდომა, დააბ�
 msgid "Failed to transmute DnD data W32 format 0x%x to %p (%s)"
 msgstr "DnD-ის W32 მონაცემების ფორმატის 0x%x-დან %p-ში (%s) გადაყვანის შეცდომა"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:649
+#: gdk/win32/gdkglcontext-win32-wgl.c:636
 msgid "No GL implementation is available"
 msgstr "GL-ის იმპლემენტაცია არ არსებობს"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:728
+#: gdk/win32/gdkglcontext-win32-wgl.c:715
 #, c-format
 msgid "WGL version %d.%d is too low, need at least %d.%d"
 msgstr "WGL-ის ვერსია %d.%d ძალიან ძველია. საჭიროა მინიმუმ %d.%d"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:746
+#: gdk/win32/gdkglcontext-win32-wgl.c:733
 #, c-format
 msgid "GL implementation cannot share GL contexts"
 msgstr "GL-ის განხორციელებებს GL-ის კონტექსტების გაზიარება არ შეუძლიათ"
 
-#: gdk/win32/gdkglcontext-win32-wgl.c:1026
+#: gdk/win32/gdkglcontext-win32-wgl.c:1013
 msgid "No available configurations for the given pixel format"
 msgstr "მითითებული პიქსელის ფორმატისთვის ხელმისაწვდომი კონფიგურაციების გარეშე"
 
@@ -7833,29 +7833,24 @@ msgstr ""
 "იღებს, მხოლოდ, ორ გამოსახულების ფაილს\n"
 "\n"
 
-#: tools/gtk-image-tool-compare.c:85 tools/gtk-rendernode-tool-compare.c:111
-#, c-format
-msgid "Failed to load %s: %s\n"
-msgstr "\"%s'-ის ჩატვირთვა ჩავარდა: %s\n"
-
-#: tools/gtk-image-tool-compare.c:96 tools/gtk-rendernode-tool-compare.c:122
+#: tools/gtk-image-tool-compare.c:89 tools/gtk-rendernode-tool-compare.c:122
 #, c-format
 msgid "Could not save diff image to %s\n"
 msgstr ""
 "ვერ ჩავწერე სხვაობის გამოსახულება %s-ში\n"
 "\n"
 
-#: tools/gtk-image-tool-compare.c:106 tools/gtk-rendernode-tool-compare.c:132
+#: tools/gtk-image-tool-compare.c:99 tools/gtk-rendernode-tool-compare.c:132
 #, c-format
 msgid "Differences witten to %s.\n"
 msgstr "განსხვავებები ჩაწერილია %s-ში.\n"
 
-#: tools/gtk-image-tool-compare.c:108 tools/gtk-rendernode-tool-compare.c:134
+#: tools/gtk-image-tool-compare.c:101 tools/gtk-rendernode-tool-compare.c:134
 #, c-format
 msgid "The images are different.\n"
 msgstr "გამოსახულებები განსხვავდება.\n"
 
-#: tools/gtk-image-tool-compare.c:111 tools/gtk-rendernode-tool-compare.c:137
+#: tools/gtk-image-tool-compare.c:104 tools/gtk-rendernode-tool-compare.c:137
 #, c-format
 msgid "No differences.\n"
 msgstr "განსხვავებების გარეშე.\n"
@@ -7972,7 +7967,22 @@ msgstr "სათაურის ზოლი არ დაემატება
 msgid "Show one or more images."
 msgstr "ერთი ან მეტი გამოსახულების ჩვენება."
 
-#: tools/gtk-image-tool-utils.c:255
+#: tools/gtk-image-tool-utils.c:50 tools/gtk-rendernode-tool-utils.c:54
+#, c-format
+msgid "Error at %s: %s\n"
+msgstr "შეცდომა მისამართზე %s: %s\n"
+
+#: tools/gtk-image-tool-utils.c:68 tools/gtk-rendernode-tool-utils.c:72
+#, c-format
+msgid "Failed to load node file: %s\n"
+msgstr "შეცდომა კვანძის ფაილის ჩატვირთვისას: %s\n"
+
+#: tools/gtk-image-tool-utils.c:89
+#, c-format
+msgid "%s is not a texture node\n"
+msgstr "%s ტექსტურის კვანძი არაა\n"
+
+#: tools/gtk-image-tool-utils.c:315
 #, c-format
 msgid "cicp must be 4 numbers, separated by /\n"
 msgstr "cicp 4 რიცხვი უნდა იყოს, გამოყოფილი სიმბოლოთი /\n"
@@ -8436,6 +8446,11 @@ msgstr "აუცილებელია ორი ფაილის მით
 msgid "Failed to create renderer: %s\n"
 msgstr "რენდერერის შექმნა ჩავარდა: %s\n"
 
+#: tools/gtk-rendernode-tool-compare.c:111
+#, c-format
+msgid "Failed to load %s: %s\n"
+msgstr "\"%s'-ის ჩატვირთვა ჩავარდა: %s\n"
+
 #: tools/gtk-rendernode-tool-extract.c:73
 #: tools/gtk-rendernode-tool-extract.c:149
 #, c-format
@@ -8524,16 +8539,6 @@ msgstr "რენდერის კვანძის ჩვენება."
 #, c-format
 msgid "Can only preview a single .node file\n"
 msgstr "შეგიძლიათ მხოლოდ ერთი .node ფაილის გადახედვა\n"
-
-#: tools/gtk-rendernode-tool-utils.c:54
-#, c-format
-msgid "Error at %s: %s\n"
-msgstr "შეცდომა მისამართზე %s: %s\n"
-
-#: tools/gtk-rendernode-tool-utils.c:72
-#, c-format
-msgid "Failed to load node file: %s\n"
-msgstr "შეცდომა კვანძის ფაილის ჩატვირთვისას: %s\n"
 
 #: tools/updateiconcache.c:1402
 #, c-format
@@ -9843,9 +9848,6 @@ msgstr ""
 
 #~ msgid "\"%s\" is not a valid attribute type"
 #~ msgstr "\"%s\" ატრიბუტის უმართებლო ტიპია"
-
-#~ msgid "\"%s\" is not a valid attribute name"
-#~ msgstr "\"%s\" ატრიბუტის უმართებლო სახელია"
 
 #~ msgid ""
 #~ "\"%s\" could not be converted to a value of type \"%s\" for attribute "
