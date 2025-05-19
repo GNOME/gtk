@@ -41,7 +41,6 @@ gdk_macos_public_headers = files([
   'gdkmacosmonitor.h',
   'gdkmacosseat.h',
   'gdkmacossurface.h',
-  'gdkmacosvulkancontext.h',
 ])
 
 install_headers(gdk_macos_public_headers, 'gdkmacos.h', subdir: 'gtk-4.0/gdk/macos/')

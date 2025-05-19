@@ -43,7 +43,7 @@
 #include "gdkmacossurface-private.h"
 #include "gdkmacostoplevelsurface-private.h"
 #include "gdkmacosutils-private.h"
-#include "gdkmacosvulkancontext.h"
+#include "gdkmacosvulkancontext-private.h"
 
 G_DEFINE_TYPE (GdkMacosDisplay, gdk_macos_display, GDK_TYPE_DISPLAY)
 

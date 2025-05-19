@@ -27,7 +27,7 @@
 
 #import <QuartzCore/CAMetalLayer.h>
 
-#include "gdkmacosvulkancontext.h"
+#include "gdkmacosvulkancontext-private.h"
 
 #include "gdkmacosdisplay.h"
 #include "gdkmacossurface-private.h"
