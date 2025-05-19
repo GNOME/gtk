@@ -838,7 +838,6 @@ struct _GdkMemoryFormatDescription
     GLint internal_format;
     GLint internal_srgb_format;
     GLenum format;
-    GLenum srgb_format;
     GLenum type;
     GLint swizzle[4];
   } gl;
