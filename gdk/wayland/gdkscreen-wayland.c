@@ -1657,6 +1657,7 @@ xdg_output_handle_name (void                  *data,
   GDK_NOTE (MISC,
             g_message ("handle name xdg-output %d", monitor->id));
 
+  g_free (monitor->name);
   monitor->name = g_strdup (name);
 }
 
@@ -1799,12 +1800,41 @@ output_handle_mode (void             *data,
     apply_monitor_change (monitor);
 }
 
+static void
+output_handle_name (void             *data,
+                    struct wl_output *wl_output,
+                    const char       *name)
+{
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
+
+  GDK_NOTE (MISC,
+            g_message ("handle name output %d", monitor->id));
+
+  g_free (monitor->name);
+  monitor->name = g_strdup (name);
+}
+
+static void
+output_handle_description (void             *data,
+                           struct wl_output *xdg_output,
+                           const char       *description)
+{
+#ifdef G_ENABLE_DEBUG
+  GdkWaylandMonitor *monitor = (GdkWaylandMonitor *) data;
+
+  GDK_NOTE (MISC,
+            g_message ("handle description output %d", monitor->id));
+#endif
+}
+
 static const struct wl_output_listener output_listener =
 {
   output_handle_geometry,
   output_handle_mode,
   output_handle_done,
   output_handle_scale,
+  output_handle_name,
+  output_handle_description,
 };
 
 void
