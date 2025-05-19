@@ -835,8 +835,7 @@ struct _GdkMemoryFormatDescription
   const GdkMemoryFormat *fallbacks;
   GdkShaderOp default_shader_op;
   struct {
-    GLint internal_gl_format;
-    GLint internal_gles_format;
+    GLint internal_format;
     GLint internal_srgb_format;
     GLenum format;
     GLenum srgb_format;
@@ -900,8 +899,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_BGRA,
+        .internal_format = GL_BGRA,
         .internal_srgb_format = -1,
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
@@ -953,8 +951,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_RGBA8,
+        .internal_format = GL_RGBA8,
         .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_BGRA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
@@ -1005,8 +1002,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_RGBA8,
+        .internal_format = GL_RGBA8,
         .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_RGBA,
         .type = GL_UNSIGNED_BYTE,
@@ -1058,8 +1054,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_RGBA8,
+        .internal_format = GL_RGBA8,
         .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_RGBA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
@@ -1111,8 +1106,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
-        .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_BGRA,
+        .internal_format = GL_BGRA,
         .internal_srgb_format = -1,
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
@@ -1164,8 +1158,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
-        .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_RGBA8,
+        .internal_format = GL_RGBA8,
         .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_BGRA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
@@ -1216,8 +1209,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
-        .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_RGBA8,
+        .internal_format = GL_RGBA8,
         .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_RGBA,
         .type = GL_UNSIGNED_BYTE,
@@ -1269,8 +1261,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
-        .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_RGBA8,
+        .internal_format = GL_RGBA8,
         .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_RGBA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
@@ -1322,8 +1313,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_BGRA,
+        .internal_format = GL_BGRA,
         .internal_srgb_format = -1,
         .format = GL_BGRA,
         .type = GL_UNSIGNED_BYTE,
@@ -1376,8 +1366,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_RGBA8,
+        .internal_format = GL_RGBA8,
         .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_BGRA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
@@ -1429,8 +1418,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_RGBA8,
+        .internal_format = GL_RGBA8,
         .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_RGBA,
         .type = GL_UNSIGNED_BYTE,
@@ -1483,8 +1471,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGBA8,
-        .internal_gles_format = GL_RGBA8,
+        .internal_format = GL_RGBA8,
         .internal_srgb_format = GL_SRGB8_ALPHA8,
         .format = GL_RGBA,
         .type = GDK_GL_UNSIGNED_BYTE_FLIPPED,
@@ -1537,8 +1524,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGB8,
-        .internal_gles_format = GL_RGB8,
+        .internal_format = GL_RGB8,
         .internal_srgb_format = GL_SRGB8,
         .format = GL_RGB,
         .type = GL_UNSIGNED_BYTE,
@@ -1590,8 +1576,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGB8,
-        .internal_gles_format = GL_RGB8,
+        .internal_format = GL_RGB8,
         .internal_srgb_format = GL_SRGB8,
         .format = GL_BGR,
         .type = GL_UNSIGNED_BYTE,
@@ -1646,8 +1631,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGB16,
-        .internal_gles_format = GL_RGB16,
+        .internal_format = GL_RGB16,
         .internal_srgb_format = -1,
         .format = GL_RGB,
         .type = GL_UNSIGNED_SHORT,
@@ -1701,8 +1685,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGBA16,
-        .internal_gles_format = GL_RGBA16,
+        .internal_format = GL_RGBA16,
         .internal_srgb_format = -1,
         .format = GL_RGBA,
         .type = GL_UNSIGNED_SHORT,
@@ -1756,8 +1739,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
-        .internal_gl_format = GL_RGBA16,
-        .internal_gles_format = GL_RGBA16,
+        .internal_format = GL_RGBA16,
         .internal_srgb_format = -1,
         .format = GL_RGBA,
         .type = GL_UNSIGNED_SHORT,
@@ -1811,8 +1793,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGB16F,
-        .internal_gles_format = GL_RGB16F,
+        .internal_format = GL_RGB16F,
         .internal_srgb_format = -1,
         .format = GL_RGB,
         .type = GL_HALF_FLOAT,
@@ -1865,8 +1846,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGBA16F,
-        .internal_gles_format = GL_RGBA16F,
+        .internal_format = GL_RGBA16F,
         .internal_srgb_format = -1,
         .format = GL_RGBA,
         .type = GL_HALF_FLOAT,
@@ -1919,8 +1899,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
-        .internal_gl_format = GL_RGBA16F,
-        .internal_gles_format = GL_RGBA16F,
+        .internal_format = GL_RGBA16F,
         .internal_srgb_format = -1,
         .format = GL_RGBA,
         .type = GL_HALF_FLOAT,
@@ -1974,8 +1953,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGB32F,
-        .internal_gles_format = GL_RGB32F,
+        .internal_format = GL_RGB32F,
         .internal_srgb_format = -1,
         .format = GL_RGB,
         .type = GL_FLOAT,
@@ -2028,8 +2006,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RGBA32F,
-        .internal_gles_format = GL_RGBA32F,
+        .internal_format = GL_RGBA32F,
         .internal_srgb_format = -1,
         .format = GL_RGBA,
         .type = GL_FLOAT,
@@ -2082,8 +2059,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
-        .internal_gl_format = GL_RGBA32F,
-        .internal_gles_format = GL_RGBA32F,
+        .internal_format = GL_RGBA32F,
         .internal_srgb_format = -1,
         .format = GL_RGBA,
         .type = GL_FLOAT,
@@ -2135,8 +2111,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RG8,
-        .internal_gles_format = GL_RG8,
+        .internal_format = GL_RG8,
         .internal_srgb_format = -1,
         .format = GL_RG,
         .type = GL_UNSIGNED_BYTE,
@@ -2188,8 +2163,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
-        .internal_gl_format = GL_RG8,
-        .internal_gles_format = GL_RG8,
+        .internal_format = GL_RG8,
         .internal_srgb_format = -1,
         .format = GL_RG,
         .type = GL_UNSIGNED_BYTE,
@@ -2241,8 +2215,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_R8,
-        .internal_gles_format = GL_R8,
+        .internal_format = GL_R8,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
@@ -2297,8 +2270,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_RG16,
-        .internal_gles_format = GL_RG16,
+        .internal_format = GL_RG16,
         .internal_srgb_format = -1,
         .format = GL_RG,
         .type = GL_UNSIGNED_SHORT,
@@ -2353,8 +2325,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_STRAIGHT,
     .gl = {
-        .internal_gl_format = GL_RG16,
-        .internal_gles_format = GL_RG16,
+        .internal_format = GL_RG16,
         .internal_srgb_format = -1,
         .format = GL_RG,
         .type = GL_UNSIGNED_SHORT,
@@ -2409,8 +2380,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_R16,
-        .internal_gles_format = GL_R16,
+        .internal_format = GL_R16,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -2462,8 +2432,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_R8,
-        .internal_gles_format = GL_R8,
+        .internal_format = GL_R8,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
@@ -2518,8 +2487,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_R16,
-        .internal_gles_format = GL_R16,
+        .internal_format = GL_R16,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -2573,8 +2541,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_R16F,
-        .internal_gles_format = GL_R16F,
+        .internal_format = GL_R16F,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_HALF_FLOAT,
@@ -2628,8 +2595,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_DEFAULT,
     .gl = {
-        .internal_gl_format = GL_R32F,
-        .internal_gles_format = GL_R32F,
+        .internal_format = GL_R32F,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_FLOAT,
@@ -2686,8 +2652,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
@@ -2744,8 +2709,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
@@ -2802,8 +2766,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
@@ -2860,8 +2823,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
@@ -2918,8 +2880,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
@@ -2976,8 +2937,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_BYTE,
@@ -3035,8 +2995,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3094,8 +3053,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3153,8 +3111,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3215,8 +3172,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3277,8 +3233,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3339,8 +3294,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3401,8 +3355,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3463,8 +3416,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3525,8 +3477,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3587,8 +3538,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3649,8 +3599,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3711,8 +3660,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3773,8 +3721,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_3_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3827,8 +3774,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3881,8 +3827,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3935,8 +3880,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -3989,8 +3933,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
     .default_shader_op = GDK_SHADER_2_PLANES,
     .gl = {
-        .internal_gl_format = -1,
-        .internal_gles_format = -1,
+        .internal_format = -1,
         .internal_srgb_format = -1,
         .format = GL_RED,
         .type = GL_UNSIGNED_SHORT,
@@ -4391,13 +4334,13 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
                              GLenum          *out_type,
                              GLint            out_swizzle[4])
 {
-  if (memory_formats[format].gl.internal_gl_format == -1)
+  if (memory_formats[format].gl.internal_format == -1)
     return FALSE;
 
-  if (gles)
-    *out_internal_format = memory_formats[format].gl.internal_gles_format;
+  if (!gles && memory_formats[format].gl.internal_format == GL_BGRA)
+    *out_internal_format = GL_RGBA8;
   else
-    *out_internal_format = memory_formats[format].gl.internal_gl_format;
+    *out_internal_format = memory_formats[format].gl.internal_format;
   *out_internal_srgb_format = memory_formats[format].gl.internal_srgb_format;
   *out_format = memory_formats[format].gl.format;
   *out_type = memory_formats[format].gl.type;
@@ -4443,10 +4386,7 @@ gdk_memory_format_gl_rgba_format (GdkMemoryFormat  format,
     return FALSE;
 
   *out_actual_format = actual;
-  if (gles)
-    *out_internal_format = memory_formats[actual].gl.internal_gles_format;
-  else
-    *out_internal_format = memory_formats[actual].gl.internal_gl_format;
+  *out_internal_format = memory_formats[actual].gl.internal_format;
   *out_internal_srgb_format = memory_formats[actual].gl.internal_srgb_format;
   *out_format = memory_formats[actual].gl.format;
   *out_type = memory_formats[actual].gl.type;
