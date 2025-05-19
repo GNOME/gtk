@@ -23,7 +23,7 @@
 #include "gtkgstsinkprivate.h"
 
 #include <gtk/gtk.h>
-#include <gst/player/gstplayer-video-renderer.h>
+#include <gst/play/play.h>
 #include <graphene.h>
 
 #include <math.h>
@@ -206,8 +206,8 @@ gtk_gst_paintable_paintable_init (GdkPaintableInterface *iface)
 }
 
 static GstElement *
-gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *renderer,
-                                                    GstPlayer              *player)
+gtk_gst_paintable_video_renderer_create_video_sink (GstPlayVideoRenderer *renderer,
+                                                    GstPlay              *play)
 {
   GtkGstPaintable *self = GTK_GST_PAINTABLE (renderer);
   GstElement *sink;
@@ -308,7 +308,7 @@ gtk_gst_paintable_video_renderer_create_video_sink (GstPlayerVideoRenderer *rend
 }
 
 static void
-gtk_gst_paintable_video_renderer_init (GstPlayerVideoRendererInterface *iface)
+gtk_gst_paintable_video_renderer_init (GstPlayVideoRendererInterface *iface)
 {
   iface->create_video_sink = gtk_gst_paintable_video_renderer_create_video_sink;
 }
@@ -316,7 +316,7 @@ gtk_gst_paintable_video_renderer_init (GstPlayerVideoRendererInterface *iface)
 G_DEFINE_TYPE_WITH_CODE (GtkGstPaintable, gtk_gst_paintable, G_TYPE_OBJECT,
                          G_IMPLEMENT_INTERFACE (GDK_TYPE_PAINTABLE,
                                                 gtk_gst_paintable_paintable_init)
-                         G_IMPLEMENT_INTERFACE (GST_TYPE_PLAYER_VIDEO_RENDERER,
+                         G_IMPLEMENT_INTERFACE (GST_TYPE_PLAY_VIDEO_RENDERER,
                                                 gtk_gst_paintable_video_renderer_init));
 
 static void
