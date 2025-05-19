@@ -27,7 +27,6 @@ struct _GskVulkanDevice
   GskVulkanAllocator *external_allocator;
   GdkVulkanFeatures features;
 
-  GHashTable *ycbcr_cache;
   GHashTable *render_pass_cache;
   GHashTable *pipeline_cache;
 
@@ -293,9 +292,6 @@ gsk_vulkan_device_finalize (GObject *object)
 
   g_object_steal_data (G_OBJECT (display), "-gsk-vulkan-device");
 
-  g_assert (g_hash_table_size (self->ycbcr_cache) == 0);
-  g_hash_table_unref (self->ycbcr_cache);
-
   g_hash_table_iter_init (&iter, self->pipeline_cache);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
@@ -364,7 +360,6 @@ gsk_vulkan_device_class_init (GskVulkanDeviceClass *klass)
 static void
 gsk_vulkan_device_init (GskVulkanDevice *self)
 {
-  self->ycbcr_cache = g_hash_table_new (gsk_vulkan_ycbcr_info_hash, gsk_vulkan_ycbcr_info_equal);
   self->render_pass_cache = g_hash_table_new (render_pass_cache_key_hash, render_pass_cache_key_equal);
   self->pipeline_cache = g_hash_table_new (pipeline_cache_key_hash, pipeline_cache_key_equal);
 
@@ -684,28 +679,6 @@ gsk_vulkan_device_get_vk_sampler (GskVulkanDevice     *self,
     }
 
   return self->vk_samplers[sampler];
-}
-
-GskVulkanYcbcr *
-gsk_vulkan_device_get_ycbcr (GskVulkanDevice          *self,
-                             const GskVulkanYcbcrInfo *info)
-{
-  GskVulkanYcbcr *ycbcr;
-
-  ycbcr = g_hash_table_lookup (self->ycbcr_cache, info);
-  if (ycbcr)
-    return ycbcr;
-
-  ycbcr = gsk_vulkan_ycbcr_new (self, info);
-  g_hash_table_insert (self->ycbcr_cache, (gpointer) gsk_vulkan_ycbcr_get_info (ycbcr), ycbcr);
-  return ycbcr;
-}
-
-void
-gsk_vulkan_device_remove_ycbcr (GskVulkanDevice *self,
-                                GskVulkanYcbcr  *ycbcr)
-{
-  g_hash_table_remove (self->ycbcr_cache, gsk_vulkan_ycbcr_get_info (ycbcr));
 }
 
 VkRenderPass

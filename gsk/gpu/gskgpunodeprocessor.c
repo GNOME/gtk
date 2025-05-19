@@ -9,6 +9,7 @@
 #include "gskgpublitopprivate.h"
 #include "gskgpubluropprivate.h"
 #include "gskgpucacheprivate.h"
+#include "gskgpucachedglyphprivate.h"
 #include "gskgpuclearopprivate.h"
 #include "gskgpuclipprivate.h"
 #include "gskgpucolorizeopprivate.h"
@@ -3173,14 +3174,14 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       glyph_origin.x /= align_scale;
       glyph_origin.y /= align_scale;
 
-      image = gsk_gpu_cache_lookup_glyph_image (cache,
-                                                self->frame,
-                                                font,
-                                                glyphs[i].glyph,
-                                                flags,
-                                                scale,
-                                                &glyph_bounds,
-                                                &glyph_offset);
+      image = gsk_gpu_cached_glyph_lookup (cache,
+                                           self->frame,
+                                           font,
+                                           glyphs[i].glyph,
+                                           flags,
+                                           scale,
+                                           &glyph_bounds,
+                                           &glyph_offset);
 
       glyph_tex_rect = GRAPHENE_RECT_INIT (-glyph_bounds.origin.x / scale,
                                            -glyph_bounds.origin.y / scale,
