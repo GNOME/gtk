@@ -1,0 +1,36 @@
+stroke {
+  child: color {
+    bounds: -50 -25000 50 50;
+    color: red;
+  }
+  path: "\
+M 0 -25000\
+L 14694.6297 20225.4257\
+L -23776.41296 -7725.4257 \
+L  23776.41296 -7725.4257 \
+L -14694.6297  20225.4257\
+Z";
+  line-width: 1000;
+  line-cap: butt;
+  line-join: miter;
+}
+
+clip {
+  clip: 0 -25000 50 50;
+  child: stroke {
+    child: color {
+      bounds: -25000 -25000 50000 50000;
+      color: blue;
+    }
+    path: "\
+M 0 -25000\
+L 14694.6297 20225.4257\
+L -23776.41296 -7725.4257 \
+L  23776.41296 -7725.4257 \
+L -14694.6297  20225.4257\
+Z";
+    line-width: 1000;
+    line-cap: butt;
+    line-join: miter;
+  }
+}
