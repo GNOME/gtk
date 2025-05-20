@@ -5,6 +5,7 @@
  */
 
 #include <gtk/gtk.h>
+#include "svgsymbolicpaintable.h"
 
 static guint tick_cb;
 static GtkAdjustment *hadjustment;
@@ -13,7 +14,7 @@ static GtkWidget *window = NULL;
 static GtkWidget *scrolledwindow;
 static int selected;
 
-#define N_WIDGET_TYPES 9
+#define N_WIDGET_TYPES 10
 
 
 static int hincrement = 5;
@@ -274,6 +275,185 @@ populate_list2 (void)
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), list);
 }
 
+struct {
+  const char *path;
+  GdkPaintable *paintable;
+} symbolics[] = {
+  { "actions/bookmark-new-symbolic.svg", NULL },
+  { "actions/color-select-symbolic.svg", NULL },
+  { "actions/document-open-recent-symbolic.svg", NULL },
+  { "actions/document-open-symbolic.svg", NULL },
+  { "actions/document-save-as-symbolic.svg", NULL },
+  { "actions/document-save-symbolic.svg", NULL },
+  { "actions/edit-clear-all-symbolic.svg", NULL },
+  { "actions/edit-clear-symbolic-rtl.svg", NULL },
+  { "actions/edit-clear-symbolic.svg", NULL },
+  { "actions/edit-copy-symbolic.svg", NULL },
+  { "actions/edit-cut-symbolic.svg", NULL },
+  { "actions/edit-delete-symbolic.svg", NULL },
+  { "actions/edit-find-symbolic.svg", NULL },
+  { "actions/edit-paste-symbolic.svg", NULL },
+  { "actions/edit-select-all-symbolic.svg", NULL },
+  { "actions/find-location-symbolic.svg", NULL },
+  { "actions/folder-new-symbolic.svg", NULL },
+  { "actions/function-linear-symbolic.svg", NULL },
+  { "actions/gesture-pinch-symbolic.svg", NULL },
+  { "actions/gesture-rotate-anticlockwise-symbolic.svg", NULL },
+  { "actions/gesture-rotate-clockwise-symbolic.svg", NULL },
+  { "actions/gesture-stretch-symbolic.svg", NULL },
+  { "actions/gesture-swipe-left-symbolic.svg", NULL },
+  { "actions/gesture-swipe-right-symbolic.svg", NULL },
+  { "actions/gesture-two-finger-swipe-left-symbolic.svg", NULL },
+  { "actions/gesture-two-finger-swipe-right-symbolic.svg", NULL },
+  { "actions/go-next-symbolic-rtl.svg", NULL },
+  { "actions/go-next-symbolic.svg", NULL },
+  { "actions/go-previous-symbolic-rtl.svg", NULL },
+  { "actions/go-previous-symbolic.svg", NULL },
+  { "actions/insert-image-symbolic.svg", NULL },
+  { "actions/insert-object-symbolic.svg", NULL },
+  { "actions/list-add-symbolic.svg", NULL },
+  { "actions/list-remove-all-symbolic.svg", NULL },
+  { "actions/list-remove-symbolic.svg", NULL },
+  { "actions/media-eject-symbolic.svg", NULL },
+  { "actions/media-playback-pause-symbolic.svg", NULL },
+  { "actions/media-playback-start-symbolic.svg", NULL },
+  { "actions/media-playback-stop-symbolic.svg", NULL },
+  { "actions/media-record-symbolic.svg", NULL },
+  { "actions/object-select-symbolic.svg", NULL },
+  { "actions/open-menu-symbolic.svg", NULL },
+  { "actions/pan-down-symbolic.svg", NULL },
+  { "actions/pan-end-symbolic-rtl.svg", NULL },
+  { "actions/pan-end-symbolic.svg", NULL },
+  { "actions/pan-start-symbolic-rtl.svg", NULL },
+  { "actions/pan-start-symbolic.svg", NULL },
+  { "actions/pan-up-symbolic.svg", NULL },
+  { "actions/system-run-symbolic.svg", NULL },
+  { "actions/system-search-symbolic.svg", NULL },
+  { "actions/value-decrease-symbolic.svg", NULL },
+  { "actions/value-increase-symbolic.svg", NULL },
+  { "actions/view-conceal-symbolic.svg", NULL },
+  { "actions/view-grid-symbolic.svg", NULL },
+  { "actions/view-list-symbolic.svg", NULL },
+  { "actions/view-more-symbolic.svg", NULL },
+  { "actions/view-refresh-symbolic.svg", NULL },
+  { "actions/view-reveal-symbolic.svg", NULL },
+  { "actions/window-close-symbolic.svg", NULL },
+  { "actions/window-maximize-symbolic.svg", NULL },
+  { "actions/window-minimize-symbolic.svg", NULL },
+  { "actions/window-restore-symbolic.svg", NULL },
+  { "categories/emoji-activities-symbolic.svg", NULL },
+  { "categories/emoji-body-symbolic.svg", NULL },
+  { "categories/emoji-flags-symbolic.svg", NULL },
+  { "categories/emoji-food-symbolic.svg", NULL },
+  { "categories/emoji-nature-symbolic.svg", NULL },
+  { "categories/emoji-objects-symbolic.svg", NULL },
+  { "categories/emoji-people-symbolic.svg", NULL },
+  { "categories/emoji-recent-symbolic.svg", NULL },
+  { "categories/emoji-symbols-symbolic.svg", NULL },
+  { "categories/emoji-travel-symbolic.svg", NULL },
+  { "devices/drive-harddisk-symbolic.svg", NULL },
+  { "devices/printer-symbolic.svg", NULL },
+  { "emblems/emblem-important-symbolic.svg", NULL },
+  { "emblems/emblem-system-symbolic.svg", NULL },
+  { "emotes/face-smile-big-symbolic.svg", NULL },
+  { "emotes/face-smile-symbolic.svg", NULL },
+  { "mimetypes/application-x-executable-symbolic.svg", NULL },
+  { "mimetypes/text-x-generic-symbolic.svg", NULL },
+  { "places/folder-documents-symbolic.svg", NULL },
+  { "places/folder-download-symbolic.svg", NULL },
+  { "places/folder-music-symbolic.svg", NULL },
+  { "places/folder-pictures-symbolic.svg", NULL },
+  { "places/folder-publicshare-symbolic.svg", NULL },
+  { "places/folder-remote-symbolic.svg", NULL },
+  { "places/folder-saved-search-symbolic.svg", NULL },
+  { "places/folder-symbolic.svg", NULL },
+  { "places/folder-templates-symbolic.svg", NULL },
+  { "places/folder-videos-symbolic.svg", NULL },
+  { "places/network-server-symbolic.svg", NULL },
+  { "places/network-workgroup-symbolic.svg", NULL },
+  { "places/user-desktop-symbolic.svg", NULL },
+  { "places/user-home-symbolic.svg", NULL },
+  { "places/user-trash-symbolic.svg", NULL },
+  { "status/audio-volume-high-symbolic.svg", NULL },
+  { "status/audio-volume-low-symbolic.svg", NULL },
+  { "status/audio-volume-medium-symbolic.svg", NULL },
+  { "status/audio-volume-muted-symbolic.svg", NULL },
+  { "status/call-x-symbolic.svg", NULL },
+  { "status/caps-lock-symbolic.svg", NULL },
+  { "status/changes-allow-symbolic.svg", NULL },
+  { "status/changes-prevent-symbolic.svg", NULL },
+  { "status/dialog-error-symbolic.svg", NULL },
+  { "status/dialog-information-symbolic.svg", NULL },
+  { "status/dialog-password-symbolic.svg", NULL },
+  { "status/dialog-question-symbolic.svg", NULL },
+  { "status/dialog-warning-symbolic.svg", NULL },
+  { "status/display-brightness-symbolic.svg", NULL },
+  { "status/media-playlist-repeat-symbolic.svg", NULL },
+  { "status/orientation-landscape-inverse-symbolic.svg", NULL },
+  { "status/orientation-landscape-symbolic.svg", NULL },
+  { "status/orientation-portrait-inverse-symbolic.svg", NULL },
+  { "status/orientation-portrait-symbolic.svg", NULL },
+  { "status/process-working-symbolic.svg", NULL },
+  { "status/switch-off-symbolic.svg", NULL },
+  { "status/switch-on-symbolic.svg", NULL }, 
+};
+
+static GtkWidget *
+create_path (void)
+{
+  GtkWidget *image;
+  static int idx = 0;
+
+  idx = (idx + 1) % G_N_ELEMENTS (symbolics);
+  if (symbolics[idx].paintable == NULL)
+    {
+      char *uri;
+      GFile *file;
+
+      uri = g_strconcat ("resource://", "/org/gtk/libgtk/icons/scalable/", symbolics[idx].path, NULL);
+      file = g_file_new_for_uri (uri);
+      symbolics[idx].paintable = GDK_PAINTABLE (svg_symbolic_paintable_new (file));
+      g_object_unref (file);
+      g_free (uri);
+    }
+
+  image = gtk_image_new ();
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+  gtk_image_set_from_paintable (GTK_IMAGE (image), symbolics[idx].paintable);
+
+  return image;
+}
+
+static void
+populate_paths (void)
+{
+  GtkWidget *grid;
+  int top, left;
+
+  grid = gtk_grid_new ();
+  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
+  gtk_widget_set_margin_start (grid, 10);
+  gtk_widget_set_margin_end (grid, 10);
+  gtk_widget_set_margin_top (grid, 10);
+  gtk_widget_set_margin_bottom (grid, 10);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+
+  for (top = 0; top < 100; top++)
+    for (left = 0; left < 15; left++)
+       {
+         gtk_grid_attach (GTK_GRID (grid), create_path (), left, top, 1, 1);
+       }
+
+  hincrement = 0;
+  vincrement = 5;
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
+                                  GTK_POLICY_NEVER,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), grid);
+}
+
 static void
 set_widget_type (int type)
 {
@@ -330,6 +510,11 @@ set_widget_type (int type)
     case 8:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling a grid");
       populate_grid ();
+      break;
+
+    case 9:
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling paths");
+      populate_paths ();
       break;
 
     default:
