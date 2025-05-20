@@ -25,6 +25,7 @@ gdk_macos_sources = gdk_macos_public_sources + files([
   'gdkmacospasteboard.c',
   'gdkmacospopupsurface.c',
   'gdkmacostoplevelsurface.c',
+  'gdkmacosvulkancontext.c',
   'GdkMacosBaseView.c',
   'GdkMacosLayer.c',
   'GdkMacosTile.c',

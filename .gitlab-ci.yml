@@ -352,7 +352,7 @@ macos-arm64:
         - ccache
   variables:
     BACKEND_FLAGS: "-Dx11-backend=false -Dbroadway-backend=true"
-    FEATURE_FLAGS: "-Daccesskit=enabled -Dgobject-introspection:werror=false -Dintrospection=enabled -Dmedia-gstreamer=disabled"
+    FEATURE_FLAGS: "-Dvulkan=disabled -Daccesskit=enabled -Dgobject-introspection:werror=false -Dintrospection=enabled -Dmedia-gstreamer=disabled"
     EXTRA_MESON_FLAGS: ""
     # additional settings
     CCACHE_MAXSIZE: "250Mi"

@@ -20,6 +20,10 @@
 
 #include "config.h"
 
+#ifdef __APPLE__
+#define VK_ENABLE_BETA_EXTENSIONS
+#endif
+
 #include "gdkvulkancontext.h"
 
 #include "gdkvulkancontextprivate.h"
@@ -45,6 +49,7 @@ const GdkDebugKey gdk_vulkan_feature_keys[] = {
   { "win32-semaphore", GDK_VULKAN_FEATURE_WIN32_SEMAPHORE, "Disable Windows sync support" },
   { "incremental-present", GDK_VULKAN_FEATURE_INCREMENTAL_PRESENT, "Do not send damage regions" },
   { "swapchain-maintenance", GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE, "Do not use advanced swapchain features" },
+  { "portability-subset", GDK_VULKAN_FEATURE_PORTABILITY_SUBSET, "Vulkan implementation is non-conformant" },
 };
 #endif
 
@@ -676,6 +681,11 @@ physical_device_check_features (VkPhysicalDevice device)
   if (swapchain_maintenance1_features.swapchainMaintenance1 ||
       physical_device_supports_extension (device, VK_EXT_SWAPCHAIN_MAINTENANCE_1_EXTENSION_NAME))
     features |= GDK_VULKAN_FEATURE_SWAPCHAIN_MAINTENANCE;
+
+#ifdef VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME
+  if (physical_device_supports_extension (device, VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME))
+    features |= GDK_VULKAN_FEATURE_PORTABILITY_SUBSET;
+#endif
 
   return features;
 }
@@ -1645,6 +1655,12 @@ gdk_display_create_vulkan_device (GdkDisplay  *display,
                   swapchain_maintenance1_features.pNext = create_device_pNext;
                   create_device_pNext = &swapchain_maintenance1_features;
                 }
+#ifdef VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME
+              if (features & GDK_VULKAN_FEATURE_PORTABILITY_SUBSET)
+                {
+                  g_ptr_array_add (device_extensions, (gpointer) VK_KHR_PORTABILITY_SUBSET_EXTENSION_NAME);
+                }
+#endif
 
 #define ENABLE_IF(flag) ((features & (flag)) ? VK_TRUE : VK_FALSE)
               GDK_DISPLAY_DEBUG (display, VULKAN, "Using Vulkan device %u, queue %u", i, j);
@@ -1740,6 +1756,7 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
   uint32_t i;
   GPtrArray *used_extensions;
   gboolean have_debug_report = FALSE;
+  VkInstanceCreateFlags flags = 0;
   VkResult res;
 
   g_assert (display->vk_instance == NULL);
@@ -1794,12 +1811,17 @@ gdk_display_create_vulkan_instance (GdkDisplay  *display,
         g_ptr_array_add (used_extensions, (gpointer) VK_EXT_SURFACE_MAINTENANCE_1_EXTENSION_NAME);
       if (g_str_equal (extensions[i].extensionName, VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME))
         g_ptr_array_add (used_extensions, (gpointer) VK_EXT_SWAPCHAIN_COLOR_SPACE_EXTENSION_NAME);
+      if (g_str_equal (extensions[i].extensionName, VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME))
+        {
+          g_ptr_array_add (used_extensions, (gpointer) VK_KHR_PORTABILITY_ENUMERATION_EXTENSION_NAME);
+          flags |= VK_INSTANCE_CREATE_ENUMERATE_PORTABILITY_BIT_KHR;
+        }
     }
 
   res = vkCreateInstance (&(VkInstanceCreateInfo) {
                                .sType = VK_STRUCTURE_TYPE_INSTANCE_CREATE_INFO,
                                .pNext = NULL,
-                               .flags = 0,
+                               .flags = flags,
                                .pApplicationInfo = &(VkApplicationInfo) {
                                    .sType = VK_STRUCTURE_TYPE_APPLICATION_INFO,
                                    .pNext = NULL,
