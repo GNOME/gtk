@@ -188,10 +188,13 @@ gdk_display_default_rate_egl_config (GdkDisplay *display,
   int tmp;
 
   if (!eglGetConfigAttrib (egl_display, config, EGL_SAMPLE_BUFFERS, &tmp) || tmp != 0)
-    distance += 0x20000;
+    distance += 0x40000;
 
   if (!eglGetConfigAttrib (egl_display, config, EGL_DEPTH_SIZE, &tmp) || tmp != 0 ||
       !eglGetConfigAttrib (egl_display, config, EGL_STENCIL_SIZE, &tmp) || tmp != 0)
+    distance += 0x20000;
+
+  if (!eglGetConfigAttrib (egl_display, config, EGL_SURFACE_TYPE, &tmp) || (tmp & EGL_SWAP_BEHAVIOR_PRESERVED_BIT) == 0)
     distance += 0x10000;
 #endif
 
