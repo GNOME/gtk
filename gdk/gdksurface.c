@@ -1206,12 +1206,17 @@ gdk_surface_ensure_egl_surface (GdkSurface     *self,
        gdk_display_get_egl_config (display, priv->egl_surface_depth) != gdk_display_get_egl_config (display, depth)))
     {
       GdkGLContext *cleared;
-      EGLint attribs[4];
+      EGLint attribs[4], tmp;
+      EGLDisplay egl_display;
+      EGLConfig egl_config;
       int i;
 
       cleared = gdk_gl_context_clear_current_if_surface (self);
       if (priv->egl_surface != NULL)
         eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
+
+      egl_display = gdk_display_get_egl_display (display),
+      egl_config = gdk_display_get_egl_config (display, depth),
 
       i = 0;
       if (depth == GDK_MEMORY_U8_SRGB && display->have_egl_gl_colorspace)
@@ -1223,20 +1228,24 @@ gdk_surface_ensure_egl_surface (GdkSurface     *self,
       g_assert (i < G_N_ELEMENTS (attribs));
       attribs[i++] = EGL_NONE;
 
-      priv->egl_surface = eglCreateWindowSurface (gdk_display_get_egl_display (display),
-                                                  gdk_display_get_egl_config (display, depth),
+      priv->egl_surface = eglCreateWindowSurface (egl_display,
+                                                  egl_config,
                                                   (EGLNativeWindowType) priv->egl_native_window,
                                                   attribs);
       if (priv->egl_surface == EGL_NO_SURFACE)
         {
           /* just assume the error is no srgb support and try again without */
           self->is_srgb = FALSE;
-          priv->egl_surface = eglCreateWindowSurface (gdk_display_get_egl_display (display),
-                                                      gdk_display_get_egl_config (display, depth),
+          priv->egl_surface = eglCreateWindowSurface (egl_display,
+                                                      egl_config,
                                                       (EGLNativeWindowType) priv->egl_native_window,
                                                       NULL);
         }
       priv->egl_surface_depth = depth;
+
+      if (eglGetConfigAttrib (egl_display, egl_config, EGL_SURFACE_TYPE, &tmp)
+          && (tmp & EGL_SWAP_BEHAVIOR_PRESERVED_BIT) != 0)
+        eglSurfaceAttrib (egl_display, priv->egl_surface, EGL_SWAP_BEHAVIOR, EGL_BUFFER_PRESERVED);
 
       if (cleared)
         {

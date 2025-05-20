@@ -483,14 +483,20 @@ gdk_gl_context_real_get_damage (GdkGLContext *context)
   if (priv->egl_context && display->have_egl_buffer_age)
     {
       GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
+      EGLDisplay egl_display;
       EGLSurface egl_surface;
-      int buffer_age = 0;
-      egl_surface = gdk_surface_get_egl_surface (surface);
-      gdk_gl_context_make_current (context);
-      eglQuerySurface (gdk_display_get_egl_display (display), egl_surface,
-                       EGL_BUFFER_AGE_EXT, &buffer_age);
+      EGLint swap_behavior = EGL_BUFFER_DESTROYED, buffer_age = 0;
 
-      if (buffer_age > 0 && buffer_age <= GDK_GL_MAX_TRACKED_BUFFERS)
+      egl_display = gdk_display_get_egl_display (display);
+      egl_surface = gdk_surface_get_egl_surface (surface);
+
+      gdk_gl_context_make_current (context);
+
+      eglQuerySurface (egl_display, egl_surface, EGL_SWAP_BEHAVIOR, &swap_behavior);
+      eglQuerySurface (egl_display, egl_surface, EGL_BUFFER_AGE_EXT, &buffer_age);
+
+      if (swap_behavior == EGL_BUFFER_PRESERVED &&
+          buffer_age > 0 && buffer_age <= GDK_GL_MAX_TRACKED_BUFFERS)
         {
           cairo_region_t *damage = cairo_region_create ();
           int i;
