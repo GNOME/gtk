@@ -17,6 +17,7 @@
 #include <glib/gstdio.h>
 
 #include "gdk/gdkdisplayprivate.h"
+#include "gdk/gdkdmabuffourccprivate.h"
 #include "gdk/gdkdmabuftexturebuilderprivate.h"
 #include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
@@ -325,22 +326,25 @@ gsk_gpu_download_op_gl_command (GskGpuOp          *op,
 
   if (gdk_gl_context_export_dmabuf (context, texture_id, &texture->dmabuf))
     {
-      GdkDmabufTextureBuilder *db;
+      if (texture->dmabuf.modifier != DRM_FORMAT_MOD_INVALID)
+        {
+          GdkDmabufTextureBuilder *db;
 
-      db = gdk_dmabuf_texture_builder_new ();
-      gdk_dmabuf_texture_builder_set_display (db, gdk_gl_context_get_display (context));
-      gdk_dmabuf_texture_builder_set_dmabuf (db, &texture->dmabuf);
-      gdk_dmabuf_texture_builder_set_premultiplied (db, gdk_memory_format_get_premultiplied (gsk_gpu_image_get_format (self->image)));
-      gdk_dmabuf_texture_builder_set_width (db, gsk_gpu_image_get_width (self->image));
-      gdk_dmabuf_texture_builder_set_height (db, gsk_gpu_image_get_height (self->image));
-      gdk_dmabuf_texture_builder_set_color_state (db, self->color_state);
+          db = gdk_dmabuf_texture_builder_new ();
+          gdk_dmabuf_texture_builder_set_display (db, gdk_gl_context_get_display (context));
+          gdk_dmabuf_texture_builder_set_dmabuf (db, &texture->dmabuf);
+          gdk_dmabuf_texture_builder_set_premultiplied (db, gdk_memory_format_get_premultiplied (gsk_gpu_image_get_format (self->image)));
+          gdk_dmabuf_texture_builder_set_width (db, gsk_gpu_image_get_width (self->image));
+          gdk_dmabuf_texture_builder_set_height (db, gsk_gpu_image_get_height (self->image));
+          gdk_dmabuf_texture_builder_set_color_state (db, self->color_state);
 
-      *self->texture = gdk_dmabuf_texture_builder_build (db, release_dmabuf_texture, texture, NULL);
+          *self->texture = gdk_dmabuf_texture_builder_build (db, release_dmabuf_texture, texture, NULL);
 
-      g_object_unref (db);
+          g_object_unref (db);
 
-      if (*self->texture)
-        return op->next;
+          if (*self->texture)
+            return op->next;
+        }
 
       gdk_dmabuf_close_fds (&texture->dmabuf);
     }
