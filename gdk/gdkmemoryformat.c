@@ -1766,7 +1766,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     .mipmap_linear = gdk_mipmap_guint16_4_linear,
   },
   [GDK_MEMORY_R16G16B16_FLOAT] = {
-    .name = "RGBA16f",
+    .name = "RGB16f",
     .n_planes = 1,
     .block_size = { 1, 1 },
     .planes = {
