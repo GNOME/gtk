@@ -359,8 +359,10 @@ gdk_texture_downloader_download_bytes (const GdkTextureDownloader *self,
 /**
  * gdk_texture_downloader_download_bytes_with_planes:
  * @self: the downloader
- * @out_offsets: (out) (array fixed-size=4): The offsets of the resulting data planes in bytes
- * @out_strides: (out) (array fixed-size=4): The stride of the resulting data planes in bytes
+ * @out_offsets: (out caller-allocates) (array fixed-size=4):
+ *   The offsets of the resulting data planes in bytes
+ * @out_strides: (out caller-allocates) (array fixed-size=4):
+ *   The stride of the resulting data planes in bytes
  *
  * Downloads the given texture pixels into a `GBytes`. The offsets and
  * strides of the resulting buffer will be stored in the respective values.
