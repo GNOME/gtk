@@ -508,6 +508,7 @@ gdk_d3d12_texture_import_gl (GdkD3D12Texture *self,
     }
 
   if (!gdk_memory_format_gl_format (texture->format,
+                                    0,
                                     gdk_gl_context_get_use_es (context),
                                     &gl_internal_format,
                                     &gl_internal_srgb_format,

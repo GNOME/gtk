@@ -103,6 +103,7 @@ const char *            gdk_memory_depth_get_name           (GdkMemoryDepth     
 GdkShaderOp             gdk_memory_format_get_default_shader_op
                                                             (GdkMemoryFormat             format);
 gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat             format,
+                                                             gsize                       plane,
                                                              gboolean                    gles,
                                                              GLint                      *out_internal_format,
                                                              GLint                      *out_internal_srgb_format,

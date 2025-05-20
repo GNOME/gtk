@@ -2331,6 +2331,7 @@ gdk_gl_context_find_format (GdkGLContext    *self,
         continue;
 
       if (!gdk_memory_format_gl_format (format,
+                                        0,
                                         gdk_gl_context_get_use_es (self),
                                         &q_internal_format,
                                         &q_internal_srgb_format,
@@ -2373,6 +2374,7 @@ gdk_gl_context_download (GdkGLContext          *self,
       ((gdk_gl_context_get_format_flags (self, tex_format) & GDK_GL_FORMAT_USABLE) == GDK_GL_FORMAT_USABLE))
     {
       if (!gdk_memory_format_gl_format (tex_format,
+                                        0,
                                         gdk_gl_context_get_use_es (self),
                                         &gl_internal_format, &gl_internal_srgb_format,
                                         &gl_format, &gl_type, gl_swizzle))
@@ -2447,6 +2449,7 @@ gdk_gl_context_download (GdkGLContext          *self,
                 actual_format = gdk_memory_format_get_straight (actual_format);
 
               if (!gdk_memory_format_gl_format (actual_format,
+                                                0,
                                                 gdk_gl_context_get_use_es (self),
                                                 &gl_internal_format, &gl_internal_srgb_format,
                                                 &gl_read_format, &gl_read_type, gl_swizzle))
@@ -2462,6 +2465,7 @@ gdk_gl_context_download (GdkGLContext          *self,
             actual_format = gdk_memory_format_get_straight (actual_format);
 
           if (!gdk_memory_format_gl_format (actual_format,
+                                            0,
                                             gdk_gl_context_get_use_es (self),
                                             &gl_internal_format, &gl_internal_srgb_format,
                                             &gl_read_format, &gl_read_type, gl_swizzle))

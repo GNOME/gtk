@@ -674,6 +674,7 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
 
   /* First, try the actual format */
   if (gdk_memory_format_gl_format (format,
+                                   0,
                                    gdk_gl_context_get_use_es (context),
                                    out_gl_internal_format,
                                    out_gl_internal_srgb_format,
@@ -710,6 +711,7 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
   for (i = 0; fallbacks[i] != -1; i++)
     {
       if (gdk_memory_format_gl_format (fallbacks[i],
+                                       0,
                                        gdk_gl_context_get_use_es (context),
                                        out_gl_internal_format,
                                        out_gl_internal_srgb_format,
