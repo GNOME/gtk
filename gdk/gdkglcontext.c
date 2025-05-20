@@ -677,6 +677,7 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
   GdkDisplay *display = gdk_surface_get_display (surface);
   EGLSurface egl_surface;
   G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
+  guint buffer_width, buffer_height;
 
   if (priv->egl_context == NULL)
     return;
@@ -684,16 +685,19 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
   gdk_gl_context_make_current (context);
 
   egl_surface = gdk_surface_get_egl_surface (surface);
+  gdk_draw_context_get_buffer_size (draw_context, &buffer_width, &buffer_height);
 
-  if (priv->eglSwapBuffersWithDamage)
+  if (priv->eglSwapBuffersWithDamage &&
+      cairo_region_contains_rectangle (painted,
+                                       &(cairo_rectangle_int_t) {
+                                           0, 0,
+                                           buffer_width, buffer_height
+                                       }) == CAIRO_REGION_OVERLAP_IN)
     {
       EGLint stack_rects[4 * 4]; /* 4 rects */
       EGLint *heap_rects = NULL;
       int i, j, n_rects = cairo_region_num_rectangles (painted);
-      guint buffer_width, buffer_height;
       EGLint *rects;
-
-      gdk_draw_context_get_buffer_size (draw_context, &buffer_width, &buffer_height);
 
       if (n_rects < G_N_ELEMENTS (stack_rects) / 4)
         rects = (EGLint *)&stack_rects;
