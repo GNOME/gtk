@@ -515,6 +515,7 @@ static void
 gdk_win32_display_init_dcomp (GdkWin32Display *self)
 {
   const GUID my_IID_IDCompositionDevice = { 0xC37EA93A,0xE7AA,0x450D,0xB1,0x6F,0x97,0x46,0xCB,0x04,0x07,0xF3 };
+  const GUID my_IID_IDCompositionDevice3 = { 0x0987CB06,0xF916,0x48BF,0x8D,0x35,0xCE,0x76,0x41,0x78,0x1B,0xD9 };
   IDXGIDevice *dxgi_device;
 
   if (!gdk_has_feature (GDK_FEATURE_DCOMP))
@@ -522,7 +523,13 @@ gdk_win32_display_init_dcomp (GdkWin32Display *self)
   
   hr_warn (ID3D11Device_QueryInterface (self->d3d11_device, &IID_IDXGIDevice, (void **) &dxgi_device));
 
-  hr_warn (DCompositionCreateDevice (dxgi_device, &my_IID_IDCompositionDevice, (void **) &self->dcomp_device));
+  /*
+   * Please see https://stackoverflow.com/questions/63381368/direct-composition-idcompositiongaussianblureffect-throwing-access-violation-ex
+   * for the rationale why this IDCompositionDevice/IDCompositionDevice3 creation process
+   * must go this way, otherwise calling IDCompositionDevice3_CreateShadowEffect() will crash!
+   */
+  hr_warn (DCompositionCreateDevice3 ((IUnknown *)dxgi_device, &my_IID_IDCompositionDevice, (void **) &self->dcomp_device));
+  hr_warn (IDCompositionDevice3_QueryInterface (self->dcomp_device, &my_IID_IDCompositionDevice3, (void **) &self->dcomp_device3));
 
   gdk_win32_com_clear (&dxgi_device);
 }
@@ -585,6 +592,25 @@ IDCompositionDevice *
 gdk_win32_display_get_dcomp_device (GdkWin32Display *self)
 {
   return self->dcomp_device;
+}
+
+/*<private>
+ * gdk_win32_display_get_dcomp_device3:
+ * @self: the display
+ *
+ * Gets the Direct Composition3 device used to composite
+ * the UI.
+ * 
+ * If Direct Composition is not supported, NULL is returned.
+ * 
+ * Note that Wine does not support Direct Composition at this point.
+ *
+ * Returns: (nullable): the device
+ */
+IDCompositionDevice3 *
+gdk_win32_display_get_dcomp_device3 (GdkWin32Display *self)
+{
+  return self->dcomp_device3;
 }
 
 /*<private>
