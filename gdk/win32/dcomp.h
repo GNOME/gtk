@@ -13,6 +13,8 @@
 #include <ole2.h>
 #endif
 
+#include <dcommon.h>
+
 #ifndef __dcomp_h__
 #define __dcomp_h__
 
@@ -209,6 +211,38 @@ typedef interface IDCompositionDesktopDevice IDCompositionDesktopDevice;
 interface IDCompositionDesktopDevice;
 #endif /* __cplusplus */
 #endif
+
+#ifndef __IDCompositionFilterEffect_FWD_DEFINED__
+#define __IDCompositionFilterEffect_FWD_DEFINED__
+typedef interface IDCompositionFilterEffect IDCompositionFilterEffect;
+#ifdef __cplusplus
+interface IDCompositionFilterEffect;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __IDCompositionGaussianBlurEffect_FWD_DEFINED__
+#define __IDCompositionGaussianBlurEffect_FWD_DEFINED__
+typedef interface IDCompositionGaussianBlurEffect IDCompositionGaussianBlurEffect;
+#ifdef __cplusplus
+interface IDCompositionGaussianBlurEffect;
+#endif /* __cplusplus */
+#endif
+
+#ifndef __IDCompositionShadowEffect_FWD_DEFINED__
+#define __IDCompositionShadowEffect_FWD_DEFINED__
+typedef interface IDCompositionShadowEffect IDCompositionShadowEffect;
+#ifdef __cplusplus
+interface IDCompositionShadowEffect;
+#endif /* __cplusplus */
+#endif
+
+typedef D2D_VECTOR_4F D2D1_VECTOR_4F;
+
+typedef enum D2D1_BORDER_MODE {
+  D2D1_BORDER_MODE_SOFT = 0,
+  D2D1_BORDER_MODE_HARD = 1,
+  D2D1_BORDER_MODE_FORCE_DWORD = 0xffffffff,
+} D2D1_BORDER_MODE;
 
 /* Headers for imported files */
 
@@ -3812,6 +3846,480 @@ static inline HRESULT IDCompositionDevice2_CreateAnimation(IDCompositionDevice2*
 
 
 #endif  /* __IDCompositionDevice2_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IDCompositionFilterEffect interface
+ */
+#ifndef __IDCompositionFilterEffect_INTERFACE_DEFINED__
+#define __IDCompositionFilterEffect_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDCompositionFilterEffect, 0x30c421d5, 0x8cb2, 0x4e9f, 0xb1,0x33, 0x37,0xbe,0x27,0x0d,0x4a,0xc2);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("30c421d5-8cb2-4e9f-b133-37be270d4ac2")
+IDCompositionFilterEffect : public IDCompositionEffect
+{
+    // Sets the input at the given index to the filterEffect (NULL will use source visual, unless flagged otherwise)
+    virtual HRESULT STDMETHODCALLTYPE SetInput(
+        UINT index,
+        IUnknown *input,
+        UINT flags
+        ) = 0;
+}
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDCompositionFilterEffect, 0x30c421d5, 0x8cb2, 0x4e9f, 0xb1,0x33, 0x37,0xbe,0x27,0x0d,0x4a,0xc2);
+#endif
+#else
+typedef struct IDCompositionFilterEffectVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDCompositionFilterEffect *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDCompositionFilterEffect *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDCompositionFilterEffect *This);
+
+    /* IDCompositionFilterEffect methods */
+    HRESULT (STDMETHODCALLTYPE *SetInput)(
+        IDCompositionFilterEffect *This,
+        UINT index,
+        IUnknown *input,
+        UINT flags);
+
+    END_INTERFACE
+} IDCompositionFilterEffectVtbl;
+
+interface IDCompositionFilterEffect {
+    CONST_VTBL IDCompositionFilterEffectVtbl* lpVtbl;
+};
+
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDCompositionFilterEffect_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDCompositionFilterEffect_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDCompositionFilterEffect_Release(This) (This)->lpVtbl->Release(This)
+/*** IDCompositionFilterEffect methods ***/
+#define IDCompositionFilterEffect_SetInput(This,index,input,flags) (This)->lpVtbl->SetInput(This,index,input,flags)
+#else
+/*** IUnknown methods ***/
+static inline HRESULT IDCompositionFilterEffect_QueryInterface(IDCompositionFilterEffect* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static inline ULONG IDCompositionFilterEffect_AddRef(IDCompositionFilterEffect* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static inline ULONG IDCompositionFilterEffect_Release(IDCompositionFilterEffect* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDCompositionFilterEffect methods ***/
+static inline HRESULT IDCompositionFilterEffect_SetInput(IDCompositionFilterEffect* This, UINT index, IUnknown *input, UINT flags) {
+    return This->lpVtbl->SetInput(This, index, input, flags);
+}
+#endif
+#endif
+
+#endif
+
+#endif /* __IDCompositionFilterEffect_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IDCompositionGaussianBlurEffect interface
+ */
+#ifndef __IDCompositionGaussianBlurEffect_INTERFACE_DEFINED__
+#define __IDCompositionGaussianBlurEffect_INTERFACE_DEFINED__
+
+/* 45D4D0B7-1BD4-454E-8894-2BFA68443033 */
+DEFINE_GUID(IID_IDCompositionGaussianBlurEffect, 0x45d4d0b7, 0x1bd4, 0x454e, 0x88,0x94, 0x2b,0xfa,0x68,0x44,0x30,0x33);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("45d4d0b7-1bd4-454e-8894-2bfa68443033")
+IDCompositionGaussianBlurEffect : public IDCompositionFilterEffect
+{
+    // Changes the amount of blur to be applied.
+    virtual HRESULT STDMETHODCALLTYPE SetStandardDeviation(
+        float amount
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetStandardDeviationAnimation(
+        IDCompositionAnimation* animation
+        ) = 0;
+
+    // Changes border mode (see D2D1_GAUSSIANBLUR)
+    virtual HRESULT STDMETHODCALLTYPE SetBorderMode(
+        D2D1_BORDER_MODE mode
+        ) = 0;
+}
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDCompositionGaussianBlurEffect, 0x45d4d0b7, 0x1bd4, 0x454e, 0x88,0x94, 0x2b,0xfa,0x68,0x44,0x30,0x33);
+#endif
+#else
+typedef struct IDCompositionGaussianBlurEffectVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDCompositionGaussianBlurEffect *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDCompositionGaussianBlurEffect *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDCompositionGaussianBlurEffect *This);
+
+    /* IDCompositionFilterEffect methods */
+    HRESULT (STDMETHODCALLTYPE *SetInput)(
+        IDCompositionGaussianBlurEffect *This,
+        UINT index,
+        IUnknown *input,
+        UINT flags);
+
+    /* IDCompositionGaussianBlurEffect methods */
+#if defined (__cplusplus) && defined (_MSC_VER)
+    HRESULT (STDMETHODCALLTYPE *SetStandardDeviation)(
+        IDCompositionGaussianBlurEffect *This,
+        float amount
+        );
+
+    HRESULT (STDMETHODCALLTYPE *SetStandardDeviationAnimation)(
+        IDCompositionGaussianBlurEffect *This,
+        IDCompositionAnimation* animation
+        );
+#else
+    HRESULT (STDMETHODCALLTYPE *SetStandardDeviationAnimation)(
+        IDCompositionGaussianBlurEffect *This,
+        IDCompositionAnimation* animation
+        );
+    HRESULT (STDMETHODCALLTYPE *SetStandardDeviation)(
+        IDCompositionGaussianBlurEffect *This,
+        float amount
+        );
+#endif
+    HRESULT (STDMETHODCALLTYPE *SetBorderMode)(
+        IDCompositionGaussianBlurEffect *This,
+        D2D1_BORDER_MODE mode
+        );
+
+    END_INTERFACE
+} IDCompositionGaussianBlurEffectVtbl;
+
+interface IDCompositionGaussianBlurEffect {
+    CONST_VTBL IDCompositionGaussianBlurEffectVtbl* lpVtbl;
+};
+
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDCompositionGaussianBlurEffect_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDCompositionGaussianBlurEffect_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDCompositionGaussianBlurEffect_Release(This) (This)->lpVtbl->Release(This)
+/*** IDCompositionFilterEffect methods ***/
+#define IDCompositionGaussianBlurEffect_SetInput(This,index,input,flags) (This)->lpVtbl->SetInput(This,index,input,flags)
+/*** IDCompositionGaussianBlurEffect methods ***/
+#define IDCompositionGaussianBlurEffect_SetStandardDeviation(This,amount) (This)->lpVtbl->SetStandardDeviation(This,amount)
+#define IDCompositionGaussianBlurEffect_SetStandardDeviationAnimation(This,animation) (This)->lpVtbl->SetStandardDeviationAnimation(This,animation)
+#define IDCompositionGaussianBlurEffect_SetBorderMode(This,mode) (This)->lpVtbl->SetBorderMode(This,mode)
+#else
+/*** IUnknown methods ***/
+static inline HRESULT IDCompositionGaussianBlurEffect_QueryInterface(IDCompositionGaussianBlurEffect* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static inline ULONG IDCompositionGaussianBlurEffect_AddRef(IDCompositionGaussianBlurEffect* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static inline ULONG IDCompositionGaussianBlurEffect_Release(IDCompositionGaussianBlurEffect* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDCompositionFilterEffect methods ***/
+static inline HRESULT IDCompositionGaussianBlurEffect_SetInput(IDCompositionGaussianBlurEffect* This, UINT index, IUnknown *input, UINT flags) {
+    return This->lpVtbl->SetInput(This, index, input, flags);
+}
+/*** IDCompositionGaussianBlurEffect methods ***/
+static inline HRESULT IDCompositionGaussianBlurEffect_SetStandardDeviation(IDCompositionGaussianBlurEffect* This, float amount) {
+    return This->lpVtbl->SetStandardDeviation(This, amount);
+}
+static inline HRESULT IDCompositionGaussianBlurEffect_SetStandardDeviationAnimation(IDCompositionGaussianBlurEffect* This, IDCompositionAnimation *animation) {
+    return This->lpVtbl->SetStandardDeviationAnimation(This, animation);
+}
+static inline HRESULT IDCompositionGaussianBlurEffect_SetBorderMode(IDCompositionGaussianBlurEffect* This, D2D1_BORDER_MODE mode) {
+    return This->lpVtbl->SetBorderMode(This, mode);
+}
+#endif
+#endif
+
+#endif
+#endif /* __IDCompositionGaussianBlurEffect_INTERFACE_DEFINED__ */
+
+/*****************************************************************************
+ * IDCompositionShadowEffect interface
+ */
+#ifndef __IDCompositionShadowEffect_INTERFACE_DEFINED__
+#define __IDCompositionShadowEffect_INTERFACE_DEFINED__
+
+DEFINE_GUID(IID_IDCompositionShadowEffect, 0x4ad18ac0, 0xcfd2, 0x4c2f, 0xbb,0x62, 0x96,0xe5,0x4f,0xdb,0x68,0x79);
+#if defined(__cplusplus) && !defined(CINTERFACE)
+MIDL_INTERFACE("4ad18ac0-cfd2-4c2f-bb62-96e54fdb6879")
+IDCompositionShadowEffect : public IDCompositionFilterEffect
+{
+    // Changes the amount of blur to be applied.
+    virtual HRESULT STDMETHODCALLTYPE SetStandardDeviation(
+        float amount
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetStandardDeviationAnimation(
+        IDCompositionAnimation* animation
+        ) = 0;
+
+    // Changes shadow color
+    virtual HRESULT STDMETHODCALLTYPE SetColor(
+        const D2D1_VECTOR_4F &color
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetRed(
+        float amount
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetRedAnimation(
+        IDCompositionAnimation* animation
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetGreen(
+        float amount
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetGreenAnimation(
+        IDCompositionAnimation* animation
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetBlue(
+        float amount
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetBlueAnimation(
+        IDCompositionAnimation* animation
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetAlpha(
+        float amount
+        ) = 0;
+
+    virtual HRESULT STDMETHODCALLTYPE SetAlphaAnimation(
+        IDCompositionAnimation* animation
+        ) = 0;
+}
+#ifdef __CRT_UUID_DECL
+__CRT_UUID_DECL(IDCompositionShadowEffect, 0x4ad18ac0, 0xcfd2, 0x4c2f, 0xbb,0x62, 0x96,0xe5,0x4f,0xdb,0x68,0x79);
+#endif
+#else
+typedef struct IDCompositionShadowEffectVtbl {
+    BEGIN_INTERFACE
+
+    /*** IUnknown methods ***/
+    HRESULT (STDMETHODCALLTYPE *QueryInterface)(
+        IDCompositionShadowEffect *This,
+        REFIID riid,
+        void **ppvObject);
+
+    ULONG (STDMETHODCALLTYPE *AddRef)(
+        IDCompositionShadowEffect *This);
+
+    ULONG (STDMETHODCALLTYPE *Release)(
+        IDCompositionShadowEffect *This);
+
+    /* IDCompositionFilterEffect methods */
+    HRESULT (STDMETHODCALLTYPE *SetInput)(
+        IDCompositionShadowEffect *This,
+        UINT index,
+        IUnknown *input,
+        UINT flags);
+
+    /* IDCompositionShadowEffect methods */
+#if defined (__cplusplus) && defined (_MSC_VER)
+    HRESULT (STDMETHODCALLTYPE *SetStandardDeviation)(
+        IDCompositionShadowEffect *This,
+        float amount
+        );
+
+    HRESULT (STDMETHODCALLTYPE *SetStandardDeviationAnimation)(
+        IDCompositionShadowEffect *This,
+        IDCompositionAnimation* animation
+        );
+#else
+    HRESULT (STDMETHODCALLTYPE *SetStandardDeviationAnimation)(
+        IDCompositionShadowEffect *This,
+        IDCompositionAnimation* animation
+        );
+    HRESULT (STDMETHODCALLTYPE *SetStandardDeviation)(
+        IDCompositionShadowEffect *This,
+        float amount
+        );
+#endif
+    HRESULT (STDMETHODCALLTYPE *SetColor)(
+        IDCompositionShadowEffect *This,
+        const D2D1_VECTOR_4F *color
+        );
+#if defined (__cplusplus) && defined (_MSC_VER)
+    HRESULT (STDMETHODCALLTYPE *SetRed)(
+        IDCompositionShadowEffect *This,
+        float amount
+        );
+
+    HRESULT (STDMETHODCALLTYPE *SetRedAnimation)(
+        IDCompositionShadowEffect *This,
+        IDCompositionAnimation* animation
+        );
+    HRESULT (STDMETHODCALLTYPE *SetGreen)(
+        IDCompositionShadowEffect *This,
+        float amount
+        );
+
+    HRESULT (STDMETHODCALLTYPE *SetGreenAnimation)(
+        IDCompositionShadowEffect *This,
+        IDCompositionAnimation* animation
+        );
+    HRESULT (STDMETHODCALLTYPE *SetBlue)(
+        IDCompositionShadowEffect *This,
+        float amount
+        );
+
+    HRESULT (STDMETHODCALLTYPE *SetBlueAnimation)(
+        IDCompositionShadowEffect *This,
+        IDCompositionAnimation* animation
+        );
+    HRESULT (STDMETHODCALLTYPE *SetAlpha)(
+        IDCompositionShadowEffect *This,
+        float amount
+        );
+
+    HRESULT (STDMETHODCALLTYPE *SetAlphaAnimation)(
+        IDCompositionShadowEffect *This,
+        IDCompositionAnimation* animation
+        );
+#else
+    HRESULT (STDMETHODCALLTYPE *SetRedAnimation)(
+        IDCompositionShadowEffect *This,
+        IDCompositionAnimation* animation
+        );
+    HRESULT (STDMETHODCALLTYPE *SetRed)(
+        IDCompositionShadowEffect *This,
+        float amount
+        );
+    HRESULT (STDMETHODCALLTYPE *SetGreenAnimation)(
+        IDCompositionShadowEffect *This,
+        IDCompositionAnimation* animation
+        );
+    HRESULT (STDMETHODCALLTYPE *SetGreen)(
+        IDCompositionShadowEffect *This,
+        float amount
+        );
+    HRESULT (STDMETHODCALLTYPE *SetBlueAnimation)(
+        IDCompositionShadowEffect *This,
+        IDCompositionAnimation* animation
+        );
+    HRESULT (STDMETHODCALLTYPE *SetBlue)(
+        IDCompositionShadowEffect *This,
+        float amount
+        );
+    HRESULT (STDMETHODCALLTYPE *SetAlphaAnimation)(
+        IDCompositionShadowEffect *This,
+        IDCompositionAnimation* animation
+        );
+    HRESULT (STDMETHODCALLTYPE *SetAlpha)(
+        IDCompositionShadowEffect *This,
+        float amount
+        );
+#endif
+
+    END_INTERFACE
+} IDCompositionShadowEffectVtbl;
+
+interface IDCompositionShadowEffect {
+    CONST_VTBL IDCompositionShadowEffectVtbl* lpVtbl;
+};
+
+
+#ifdef COBJMACROS
+#ifndef WIDL_C_INLINE_WRAPPERS
+/*** IUnknown methods ***/
+#define IDCompositionShadowEffect_QueryInterface(This,riid,ppvObject) (This)->lpVtbl->QueryInterface(This,riid,ppvObject)
+#define IDCompositionShadowEffect_AddRef(This) (This)->lpVtbl->AddRef(This)
+#define IDCompositionShadowEffect_Release(This) (This)->lpVtbl->Release(This)
+/*** IDCompositionFilterEffect methods ***/
+#define IDCompositionShadowEffect_SetInput(This,index,input,flags) (This)->lpVtbl->SetInput(This,index,input,flags)
+/*** IDCompositionShadowEffect methods ***/
+#define IDCompositionShadowEffect_SetStandardDeviation(This,amount) (This)->lpVtbl->SetStandardDeviation(This,amount)
+#define IDCompositionShadowEffect_SetStandardDeviationAnimation(This,animation) (This)->lpVtbl->SetStandardDeviationAnimation(This,animation)
+#define IDCompositionShadowEffect_SetColor(This,color) (This)->lpVtbl->SetColor(This,color)
+#define IDCompositionShadowEffect_SetRed(This,amount) (This)->lpVtbl->SetRed(This,amount)
+#define IDCompositionShadowEffect_SetRedAnimation(This,animation) (This)->lpVtbl->SetRedAnimation(This,animation)
+#define IDCompositionShadowEffect_SetGreen(This,amount) (This)->lpVtbl->SetGreen(This,amount)
+#define IDCompositionShadowEffect_SetGreenAnimation(This,animation) (This)->lpVtbl->SetGreenAnimation(This,animation)
+#define IDCompositionShadowEffect_SetBlue(This,amount) (This)->lpVtbl->SetBlue(This,amount)
+#define IDCompositionShadowEffect_SetBlueAnimation(This,animation) (This)->lpVtbl->SetBlueAnimation(This,animation)
+#define IDCompositionShadowEffect_SetAlpha(This,amount) (This)->lpVtbl->SetAlpha(This,amount)
+#define IDCompositionShadowEffect_SetAlphaAnimation(This,animation) (This)->lpVtbl->SetAlphaAnimation(This,animation)
+#else
+/*** IUnknown methods ***/
+static inline HRESULT IDCompositionShadowEffect_QueryInterface(IDCompositionShadowEffect* This,REFIID riid,void **ppvObject) {
+    return This->lpVtbl->QueryInterface(This,riid,ppvObject);
+}
+static inline ULONG IDCompositionShadowEffect_AddRef(IDCompositionShadowEffect* This) {
+    return This->lpVtbl->AddRef(This);
+}
+static inline ULONG IDCompositionShadowEffect_Release(IDCompositionShadowEffect* This) {
+    return This->lpVtbl->Release(This);
+}
+/*** IDCompositionFilterEffect methods ***/
+static inline HRESULT IDCompositionShadowEffect_SetInput(IDCompositionShadowEffect* This, UINT index, IUnknown *input, UINT flags) {
+    return This->lpVtbl->SetInput(This, index, input, flags);
+}
+/*** IDCompositionShadowEffect methods ***/
+static inline HRESULT IDCompositionShadowEffect_SetStandardDeviation(IDCompositionShadowEffect* This, float amount) {
+    return This->lpVtbl->SetStandardDeviation(This, amount);
+}
+static inline HRESULT IDCompositionShadowEffect_SetStandardDeviationAnimation(IDCompositionShadowEffect* This, IDCompositionAnimation *animation) {
+    return This->lpVtbl->SetStandardDeviationAnimation(This, animation);
+}
+static inline HRESULT IDCompositionShadowEffect_Color(IDCompositionShadowEffect* This, const D2D1_VECTOR_4F *color) {
+    return This->lpVtbl->SetColor(This, color);
+}
+static inline HRESULT IDCompositionShadowEffect_SetRed(IDCompositionShadowEffect* This, float amount) {
+    return This->lpVtbl->SetRed(This, amount);
+}
+static inline HRESULT IDCompositionShadowEffect_SetRedAnimation(IDCompositionShadowEffect* This, IDCompositionAnimation *animation) {
+    return This->lpVtbl->SetRedAnimation(This, animation);
+}
+static inline HRESULT IDCompositionShadowEffect_SetBlue(IDCompositionShadowEffect* This, float amount) {
+    return This->lpVtbl->SetBlue(This, amount);
+}
+static inline HRESULT IDCompositionShadowEffect_SetBlueAnimation(IDCompositionShadowEffect* This, IDCompositionAnimation *animation) {
+    return This->lpVtbl->SetBlueAnimation(This, animation);
+}
+static inline HRESULT IDCompositionShadowEffect_SetGreen(IDCompositionShadowEffect* This, float amount) {
+    return This->lpVtbl->SetGreen(This, amount);
+}
+static inline HRESULT IDCompositionShadowEffect_SetGreenAnimation(IDCompositionShadowEffect* This, IDCompositionAnimation *animation) {
+    return This->lpVtbl->SetGreenAnimation(This, animation);
+}
+static inline HRESULT IDCompositionShadowEffect_SetAlpha(IDCompositionShadowEffect* This, float amount) {
+    return This->lpVtbl->SetAlpha(This, amount);
+}
+static inline HRESULT IDCompositionShadowEffect_SetAlphaAnimation(IDCompositionShadowEffect* This, IDCompositionAnimation *animation) {
+    return This->lpVtbl->SetAlphaAnimation(This, animation);
+}
+#endif
+#endif
+#endif
+
+#endif /*__IDCompositionShadowEffect_INTERFACE_DEFINED__ */
 
 /*****************************************************************************
  * IDCompositionDesktopDevice interface
