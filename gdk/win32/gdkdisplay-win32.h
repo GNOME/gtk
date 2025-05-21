@@ -164,6 +164,7 @@ struct _GdkWin32Display
 
   /* D3D12 */
   IDCompositionDevice *dcomp_device;
+  IDCompositionDevice3 *dcomp_device3;
   IDXGIFactory4 *dxgi_factory;
   ID3D11Device *d3d11_device;
   ID3D12Device *d3d12_device;
@@ -219,6 +220,7 @@ struct _GdkWin32DisplayClass
 GPtrArray *             _gdk_win32_display_get_monitor_list             (GdkWin32Display        *display);
 
 IDCompositionDevice *   gdk_win32_display_get_dcomp_device              (GdkWin32Display        *self);
+IDCompositionDevice3 *  gdk_win32_display_get_dcomp_device3             (GdkWin32Display        *self);
 IDXGIFactory4 *         gdk_win32_display_get_dxgi_factory              (GdkWin32Display        *self);
 ID3D11Device *          gdk_win32_display_get_d3d11_device              (GdkWin32Display        *self);
 ID3D12Device *          gdk_win32_display_get_d3d12_device              (GdkWin32Display        *self);
