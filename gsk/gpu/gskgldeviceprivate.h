@@ -29,6 +29,6 @@ void                    gsk_gl_device_find_gl_format                    (GskGLDe
                                                                          GLint                  *out_gl_internal_srgb_format,
                                                                          GLenum                 *out_gl_format,
                                                                          GLenum                 *out_gl_type,
-                                                                         GLint                   out_swizzle[4]);
+                                                                         GdkSwizzle             *out_swizzle);
 
 G_END_DECLS

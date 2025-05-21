@@ -112,7 +112,7 @@ gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat    
                                                              GLint                      *out_internal_srgb_format,
                                                              GLenum                     *out_format,
                                                              GLenum                     *out_type,
-                                                             GLint                       out_swizzle[4]) G_GNUC_WARN_UNUSED_RESULT;
+                                                             GdkSwizzle                 *out_swizzle) G_GNUC_WARN_UNUSED_RESULT;
 #ifdef GDK_RENDERING_VULKAN
 VkFormat                gdk_memory_format_vk_format         (GdkMemoryFormat             format,
                                                              VkComponentMapping         *out_swizzle,

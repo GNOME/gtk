@@ -4902,7 +4902,7 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
                              GLint           *out_internal_srgb_format,
                              GLenum          *out_format,
                              GLenum          *out_type,
-                             GLint            out_swizzle[4])
+                             GdkSwizzle      *out_swizzle)
 {
   if (memory_formats[format].shader[plane].gl.internal_format == 0)
     return FALSE;
@@ -4914,7 +4914,7 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
   *out_internal_srgb_format = memory_formats[format].shader[plane].gl.internal_srgb_format;
   *out_format = memory_formats[format].shader[plane].gl.format;
   *out_type = memory_formats[format].shader[plane].gl.type;
-  gdk_swizzle_to_gl (memory_formats[format].shader[plane].swizzle, out_swizzle);
+  *out_swizzle = memory_formats[format].shader[plane].swizzle;
 
   return TRUE;
 }

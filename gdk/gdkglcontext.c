@@ -2322,7 +2322,7 @@ gdk_gl_context_find_format (GdkGLContext    *self,
     {
       GLint q_internal_format, q_internal_srgb_format;
       GLenum q_format, q_type;
-      GLint q_swizzle[4];
+      GdkSwizzle q_swizzle;
 
       if (gdk_memory_format_alpha (format) != alpha)
         continue;
@@ -2337,7 +2337,7 @@ gdk_gl_context_find_format (GdkGLContext    *self,
                                         &q_internal_srgb_format,
                                         &q_format,
                                         &q_type,
-                                        q_swizzle))
+                                        &q_swizzle))
         continue;
 
       if (q_format != gl_format || q_type != gl_type)
@@ -2362,7 +2362,7 @@ gdk_gl_context_download (GdkGLContext          *self,
   gsize expected_stride;
   GLint gl_internal_format, gl_internal_srgb_format;
   GLenum gl_format, gl_type;
-  GLint gl_swizzle[4];
+  GdkSwizzle gl_swizzle;
 
   g_assert (gdk_memory_format_get_n_planes (tex_format) == 1);
 
@@ -2377,7 +2377,7 @@ gdk_gl_context_download (GdkGLContext          *self,
                                         0,
                                         gdk_gl_context_get_use_es (self),
                                         &gl_internal_format, &gl_internal_srgb_format,
-                                        &gl_format, &gl_type, gl_swizzle))
+                                        &gl_format, &gl_type, &gl_swizzle))
         {
           g_assert_not_reached ();
         }
@@ -2452,7 +2452,7 @@ gdk_gl_context_download (GdkGLContext          *self,
                                                 0,
                                                 gdk_gl_context_get_use_es (self),
                                                 &gl_internal_format, &gl_internal_srgb_format,
-                                                &gl_read_format, &gl_read_type, gl_swizzle))
+                                                &gl_read_format, &gl_read_type, &gl_swizzle))
                 {
                   g_assert_not_reached ();
                 }
@@ -2468,7 +2468,7 @@ gdk_gl_context_download (GdkGLContext          *self,
                                             0,
                                             gdk_gl_context_get_use_es (self),
                                             &gl_internal_format, &gl_internal_srgb_format,
-                                            &gl_read_format, &gl_read_type, gl_swizzle))
+                                            &gl_read_format, &gl_read_type, &gl_swizzle))
             {
               g_assert_not_reached ();
             }

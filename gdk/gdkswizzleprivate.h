@@ -34,6 +34,18 @@ typedef guint32 GdkSwizzle;
 #define GDK_SWIZZLE_IDENTITY GDK_SWIZZLE (R, G, B, A)
 #define GDK_SWIZZLE_OPAQUE GDK_SWIZZLE (R, G, B, 1)
 
+static inline gboolean
+gdk_swizzle_is_identity (GdkSwizzle swizzle)
+{
+  return swizzle == GDK_SWIZZLE_IDENTITY;
+}
+
+static inline gboolean
+gdk_swizzle_is_framebuffer_compatible (GdkSwizzle swizzle)
+{
+  return swizzle == GDK_SWIZZLE_IDENTITY ||
+         swizzle == GDK_SWIZZLE_OPAQUE;
+}
 static inline GdkSwizzleComponent
 gdk_swizzle_get_component (GdkSwizzle swizzle,
                            gsize      nth)

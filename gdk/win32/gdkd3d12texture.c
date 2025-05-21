@@ -495,7 +495,7 @@ gdk_d3d12_texture_import_gl (GdkD3D12Texture *self,
   GLint gl_internal_format, gl_internal_srgb_format;
   GLenum gl_format, gl_type;
   GLenum gl_error;
-  GLint gl_swizzle[4];
+  GdkSwizzle gl_swizzle;
 
   /* We assume that the context is current, the caller needs to juggle that */
   g_assert (gdk_gl_context_get_current () == context);
@@ -514,7 +514,7 @@ gdk_d3d12_texture_import_gl (GdkD3D12Texture *self,
                                     &gl_internal_srgb_format,
                                     &gl_format,
                                     &gl_type,
-                                    gl_swizzle))
+                                    &gl_swizzle))
     {
       GDK_DEBUG (D3D12, "Not importing %ux%u texture, format %s has no matching GL format",
                 texture->width, texture->height,
