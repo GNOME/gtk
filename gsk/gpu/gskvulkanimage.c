@@ -384,9 +384,16 @@ gsk_vulkan_image_new (GskVulkanDevice           *device,
                                             &tiling, &flags))
     {
       GdkMemoryFormat rgba_format;
+      GdkSwizzle rgba_swizzle;
 
       /* Second, try the potential RGBA format */
-      vk_format = gdk_memory_format_vk_rgba_format (format, &rgba_format, &vk_components);
+      if (gdk_memory_format_get_rgba_format (format, &rgba_format, &rgba_swizzle))
+        {
+          vk_format = gdk_memory_format_vk_format (rgba_format, &vk_components, &needs_conversion);
+          gdk_swizzle_to_vk_component_mapping (rgba_swizzle, &vk_components);
+        }
+      else
+        vk_format = VK_FORMAT_UNDEFINED;
       if (try_srgb && vk_format != VK_FORMAT_UNDEFINED)
         vk_srgb_format = gdk_memory_format_vk_srgb_format (rgba_format);
       else
@@ -847,15 +854,16 @@ gsk_vulkan_image_new_dmabuf (GskVulkanDevice *device,
     {
       /* Second, try the potential RGBA format, but as a fallback */
       GdkMemoryFormat rgba_format;
-      vk_format = gdk_memory_format_vk_rgba_format (format, &rgba_format, NULL);
-      if (vk_format != VK_FORMAT_UNDEFINED)
+      GdkSwizzle rgba_swizzle;
+      if (gdk_memory_format_get_rgba_format (format, &rgba_format, &rgba_swizzle))
         {
           vk_format = gdk_memory_format_vk_format (rgba_format, &vk_components, &needs_conversion);
+          gdk_swizzle_to_vk_component_mapping (rgba_swizzle, &vk_components);
           if (try_srgb)
             vk_srgb_format = gdk_memory_format_vk_srgb_format (format);
         }
       else
-        vk_srgb_format = VK_FORMAT_UNDEFINED;
+        vk_format = vk_srgb_format = VK_FORMAT_UNDEFINED;
       if (gsk_vulkan_device_check_dmabuf_format (device, vk_srgb_format, &vk_components, width, height,
                                                  modifiers, &flags, &n_modifiers))
         {

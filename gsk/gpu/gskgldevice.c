@@ -672,6 +672,7 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
   GdkMemoryFormat alt_format;
   const GdkMemoryFormat *fallbacks;
   gsize i;
+  GdkSwizzle swizzle;
 
   /* First, try the actual format */
   if (gdk_memory_format_gl_format (format,
@@ -691,20 +692,26 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
     }
 
   /* Second, try the potential RGBA format */
-  if (gdk_memory_format_gl_rgba_format (format,
-                                        gdk_gl_context_get_use_es (context),
-                                        &alt_format,
-                                        out_gl_internal_format,
-                                        out_gl_internal_srgb_format,
-                                        out_gl_format,
-                                        out_gl_type,
-                                        out_swizzle) &&
-      gsk_gl_device_get_format_flags (self, context, alt_format, out_swizzle, &flags) &&
-      ((flags & required_flags) == required_flags))
+  if (gdk_memory_format_get_rgba_format (format,
+                                         &alt_format,
+                                         &swizzle) &&
+      gdk_memory_format_gl_format (alt_format,
+                                   0,
+                                   gdk_gl_context_get_use_es (context),
+                                   out_gl_internal_format,
+                                   out_gl_internal_srgb_format,
+                                   out_gl_format,
+                                   out_gl_type,
+                                   out_swizzle))
     {
-      *out_format = format;
-      *out_flags = flags;
-      return;
+      gdk_swizzle_to_gl (swizzle, out_swizzle);
+      if (gsk_gl_device_get_format_flags (self, context, alt_format, out_swizzle, &flags) &&
+          ((flags & required_flags) == required_flags))
+        {
+          *out_format = format;
+          *out_flags = flags;
+          return;
+        }
     }
 
   /* Next, try the fallbacks */

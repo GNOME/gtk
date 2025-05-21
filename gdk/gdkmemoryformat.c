@@ -4539,6 +4539,22 @@ gdk_memory_format_get_straight (GdkMemoryFormat format)
   return memory_formats[format].straight;
 }
 
+gboolean
+gdk_memory_format_get_rgba_format (GdkMemoryFormat  format,
+                                   GdkMemoryFormat *out_format,
+                                   GdkSwizzle      *out_swizzle)
+{
+  GdkMemoryFormat actual = memory_formats[format].rgba.format;
+
+  if (actual == -1)
+    return FALSE;
+
+  *out_swizzle = memory_formats[format].rgba.swizzle;
+  *out_format = actual;
+
+  return TRUE;
+}
+
 gsize
 gdk_memory_format_alignment (GdkMemoryFormat format)
 {
@@ -4564,9 +4580,6 @@ gdk_memory_format_alignment (GdkMemoryFormat format)
  * Use gdk_memory_format_get_premultiplied() and
  * gdk_memory_format_get_straight() to transition between
  * premultiplied and straight alpha if you need to.
- *
- * Use gdk_memory_format_gl_rgba_format() to get an equivalent RGBA
- * format and swizzle.
  *
  * The expected order of operation when looking for supported formats
  * is the following:
@@ -4906,52 +4919,6 @@ gdk_memory_format_gl_format (GdkMemoryFormat  format,
   return TRUE;
 }
 
-/*
- * gdk_memory_format_gl_rgba_format:
- * @format: The format to query
- * @gles: TRUE for GLES, FALSE for GL
- * @out_actual_format: The actual RGBA format
- * @out_internal_format: the GL internal format
- * @out_internal_srgb_format: the GL internal format to use for automatic
- *   sRGB<=>linear conversion
- * @out_format: the GL format
- * @out_type: the GL type
- * @out_swizzle: The swizzle to use 
- *
- * Maps the given format to a GL format that uses RGBA and uses swizzling,
- * as opposed to trying to find a GL format that is swapped in the right
- * direction.
- *
- * This format is guaranteed equivalent in memory layout to the original
- * format, so uploading/downloading code can treat them the same.
- *
- * Returns: %TRUE if the format exists and is different from the given format.
- **/
-gboolean
-gdk_memory_format_gl_rgba_format (GdkMemoryFormat  format,
-                                  gboolean         gles,
-                                  GdkMemoryFormat *out_actual_format,
-                                  GLint           *out_internal_format,
-                                  GLint           *out_internal_srgb_format,
-                                  GLenum          *out_format,
-                                  GLenum          *out_type,
-                                  GLint            out_swizzle[4])
-{
-  GdkMemoryFormat actual = memory_formats[format].rgba.format;
-
-  if (actual == -1)
-    return FALSE;
-
-  *out_actual_format = actual;
-  *out_internal_format = memory_formats[actual].shader[0].gl.internal_format;
-  *out_internal_srgb_format = memory_formats[actual].shader[0].gl.internal_srgb_format;
-  *out_format = memory_formats[actual].shader[0].gl.format;
-  *out_type = memory_formats[actual].shader[0].gl.type;
-  gdk_swizzle_to_gl (memory_formats[format].rgba.swizzle, out_swizzle);
-
-  return TRUE;
-}
-
 #ifdef GDK_RENDERING_VULKAN
 
 /* Vulkan version of gdk_memory_format_gl_format()
@@ -4985,25 +4952,6 @@ VkFormat
 gdk_memory_format_vk_srgb_format (GdkMemoryFormat format)
 {
   return memory_formats[format].vulkan.vk_srgb_format;
-}
-
-/* Vulkan version of gdk_memory_format_gl_rgba_format()
- * Returns VK_FORMAT_UNDEFINED on failure */
-VkFormat
-gdk_memory_format_vk_rgba_format (GdkMemoryFormat     format,
-                                  GdkMemoryFormat    *out_rgba_format,
-                                  VkComponentMapping *out_swizzle)
-{
-  GdkMemoryFormat actual = memory_formats[format].rgba.format;
-
-  if (actual == -1)
-    return VK_FORMAT_UNDEFINED;
-
-  if (out_rgba_format)
-    *out_rgba_format = actual;
-  if (out_swizzle)
-    gdk_swizzle_to_vk_component_mapping (memory_formats[format].rgba.swizzle, out_swizzle);
-  return memory_formats[actual].vulkan.vk_format;
 }
 #endif
 
@@ -5055,25 +5003,6 @@ DXGI_FORMAT
 gdk_memory_format_get_dxgi_srgb_format (GdkMemoryFormat format)
 {
   return memory_formats[format].win32.dxgi_srgb_format;
-}
-
-/* DXGI version of gdk_memory_format_gl_rgba_format()
- * Returns DXGI_FORMAT_UNKNOWN on failure */
-DXGI_FORMAT
-gdk_memory_format_get_dxgi_rgba_format (GdkMemoryFormat  format,
-                                        GdkMemoryFormat *out_rgba_format,
-                                        guint           *out_shader_4_component_mapping)
-{
-  GdkMemoryFormat actual = memory_formats[format].rgba.format;
-
-  if (actual == -1)
-    return DXGI_FORMAT_UNKNOWN;
-
-  if (out_rgba_format)
-    *out_rgba_format = actual;
-  if (out_shader_4_component_mapping)
-    *out_shader_4_component_mapping = gdk_swizzle_to_d3d12 (memory_formats[format].rgba.swizzle);
-  return memory_formats[actual].win32.dxgi_format;
 }
 
 gboolean

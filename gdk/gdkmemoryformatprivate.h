@@ -77,6 +77,9 @@ GdkMemoryFormat         gdk_memory_format_get_premultiplied (GdkMemoryFormat    
 GdkMemoryFormat         gdk_memory_format_get_straight      (GdkMemoryFormat             format) G_GNUC_CONST;
 const GdkMemoryFormat * gdk_memory_format_get_fallbacks     (GdkMemoryFormat             format) G_GNUC_CONST;
 GdkMemoryFormat         gdk_memory_format_get_mipmap_format (GdkMemoryFormat             format) G_GNUC_CONST;
+gboolean                gdk_memory_format_get_rgba_format   (GdkMemoryFormat             format,
+                                                             GdkMemoryFormat            *out_format,
+                                                             GdkSwizzle                 *out_swizzle);
 GdkMemoryDepth          gdk_memory_format_get_depth         (GdkMemoryFormat             format,
                                                              gboolean                    srgb) G_GNUC_CONST;
 gsize                   gdk_memory_format_get_n_planes      (GdkMemoryFormat             format) G_GNUC_CONST;
@@ -110,22 +113,11 @@ gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat    
                                                              GLenum                     *out_format,
                                                              GLenum                     *out_type,
                                                              GLint                       out_swizzle[4]) G_GNUC_WARN_UNUSED_RESULT;
-gboolean                gdk_memory_format_gl_rgba_format    (GdkMemoryFormat             format,
-                                                             gboolean                    gles,
-                                                             GdkMemoryFormat            *out_actual_format,
-                                                             GLint                      *out_internal_format,
-                                                             GLint                      *out_internal_srgb_format,
-                                                             GLenum                     *out_format,
-                                                             GLenum                     *out_type,
-                                                             GLint                       out_swizzle[4]) G_GNUC_WARN_UNUSED_RESULT;
 #ifdef GDK_RENDERING_VULKAN
 VkFormat                gdk_memory_format_vk_format         (GdkMemoryFormat             format,
                                                              VkComponentMapping         *out_swizzle,
                                                              gboolean                   *needs_ycbcr_conversion);
 VkFormat                gdk_memory_format_vk_srgb_format    (GdkMemoryFormat             format);
-VkFormat                gdk_memory_format_vk_rgba_format    (GdkMemoryFormat             format,
-                                                             GdkMemoryFormat            *out_rgba_format,
-                                                             VkComponentMapping         *out_swizzle);
 #endif
 gboolean                gdk_memory_format_find_by_dmabuf_fourcc
                                                             (guint32                     fourcc,
@@ -143,9 +135,6 @@ gboolean                gdk_memory_format_find_by_dxgi_format       (DXGI_FORMAT
 DXGI_FORMAT             gdk_memory_format_get_dxgi_format           (GdkMemoryFormat             format,
                                                                      guint                      *out_shader_4_component_mapping);
 DXGI_FORMAT             gdk_memory_format_get_dxgi_srgb_format      (GdkMemoryFormat             format);
-DXGI_FORMAT             gdk_memory_format_get_dxgi_rgba_format      (GdkMemoryFormat             format,
-                                                                     GdkMemoryFormat            *out_rgba_format,
-                                                                     guint                      *out_shader_4_component_mapping);
 guint32                 gdk_memory_format_get_dmabuf_fourcc (GdkMemoryFormat             format);
 const char *            gdk_memory_format_get_name          (GdkMemoryFormat             format);
 
