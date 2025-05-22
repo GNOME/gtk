@@ -105,6 +105,11 @@ GdkMemoryFormat         gdk_memory_depth_get_alpha_format   (GdkMemoryDepth     
 const char *            gdk_memory_depth_get_name           (GdkMemoryDepth              depth);
 GdkShaderOp             gdk_memory_format_get_default_shader_op
                                                             (GdkMemoryFormat             format);
+gsize                   gdk_memory_format_get_shader_plane  (GdkMemoryFormat             format,
+                                                             gsize                       plane,
+                                                             gsize                      *width_subsample,
+                                                             gsize                      *height_subsample,
+                                                             gsize                      *bpp);
 gboolean                gdk_memory_format_gl_format         (GdkMemoryFormat             format,
                                                              gsize                       plane,
                                                              gboolean                    gles,

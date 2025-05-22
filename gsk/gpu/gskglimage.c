@@ -163,37 +163,68 @@ gsk_gl_image_new (GskGLDevice      *device,
                   gsize             height)
 {
   GskGLImage *self;
-  GdkSwizzle swizzle;
+  GdkSwizzle swizzle[3];
   GskGpuImageFlags flags;
   GskGpuConversion conv;
   GLint gl_internal_format, gl_internal_srgb_format;
-  gsize max_size;
+  gsize i, max_size, n_textures;
+  GdkShaderOp shader_op;
 
   max_size = gsk_gpu_device_get_max_image_size (GSK_GPU_DEVICE (device));
   if (width > max_size || height > max_size)
     return NULL;
 
+  shader_op = gdk_memory_format_get_default_shader_op (format);
+  n_textures = gdk_shader_op_get_n_shaders (shader_op);
   self = g_object_new (GSK_TYPE_GL_IMAGE, NULL);
 
-  gsk_gl_device_find_gl_format (device,
-                                format,
-                                required_flags,
-                                &format,
-                                &flags,
-                                &gl_internal_format,
-                                &gl_internal_srgb_format,
-                                &self->gl_format[0],
-                                &self->gl_type[0],
-                                &swizzle);
-
-  if (try_srgb && gl_internal_srgb_format != -1)
+  if (n_textures == 1 || (required_flags & (~GSK_GPU_IMAGE_FILTERABLE)) != 0)
     {
-      self->gl_internal_format[0] = gl_internal_srgb_format;
-      conv = GSK_GPU_CONVERSION_SRGB;
+      n_textures = 1;
+
+      gsk_gl_device_find_gl_format (device,
+                                    format,
+                                    required_flags,
+                                    &format,
+                                    &flags,
+                                    &gl_internal_format,
+                                    &gl_internal_srgb_format,
+                                    &self->gl_format[0],
+                                    &self->gl_type[0],
+                                    &swizzle[0]);
+
+      if (try_srgb && gl_internal_srgb_format != -1)
+        {
+          self->gl_internal_format[0] = gl_internal_srgb_format;
+          conv = GSK_GPU_CONVERSION_SRGB;
+        }
+      else
+        {
+          self->gl_internal_format[0] = gl_internal_format;
+          conv = GSK_GPU_CONVERSION_NONE;
+        }
     }
   else
     {
-      self->gl_internal_format[0] = gl_internal_format;
+      GdkGLContext *context = gdk_gl_context_get_current ();
+      GLint srgb_format;
+
+      for (i = 0; i < n_textures; i++)
+        {
+          if (!gdk_memory_format_gl_format (format,
+                                            i,
+                                            gdk_gl_context_get_use_es (context),
+                                            &self->gl_internal_format[i],
+                                            &srgb_format,
+                                            &self->gl_format[i],
+                                            &self->gl_type[i],
+                                            &swizzle[i]))
+            {
+              g_assert_not_reached ();
+            }
+        }
+
+      flags = GSK_GPU_IMAGE_FILTERABLE;
       conv = GSK_GPU_CONVERSION_NONE;
     }
 
@@ -204,32 +235,42 @@ gsk_gl_image_new (GskGLDevice      *device,
                        format,
                        width, height);
 
-  glGenTextures (1, self->texture_id);
+  glGenTextures (n_textures, self->texture_id);
   self->owns_texture = TRUE;
 
-  glActiveTexture (GL_TEXTURE0);
-  glBindTexture (GL_TEXTURE_2D, self->texture_id[0]);
-
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-  glTexImage2D (GL_TEXTURE_2D, 0, self->gl_internal_format[0], width, height, 0, self->gl_format[0], self->gl_type[0], NULL);
-
-  /* Only apply swizzle if really needed, might not even be
-   * supported if default values are set
-   */
-  if (!gdk_swizzle_is_identity (swizzle))
+  for (i = 0; i < n_textures; i++)
     {
-      GLint gl_swizzle[4];
+      gsize width_subsample, height_subsample, bpp;
 
-      gdk_swizzle_to_gl (swizzle, gl_swizzle);
-      /* Set each channel independently since GLES 3.0 doesn't support the iv method */
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, gl_swizzle[0]);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, gl_swizzle[1]);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, gl_swizzle[2]);
-      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, gl_swizzle[3]);
+      glActiveTexture (GL_TEXTURE0);
+      glBindTexture (GL_TEXTURE_2D, self->texture_id[i]);
+
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
+      gdk_memory_format_get_shader_plane (format,
+                                          i,
+                                          &width_subsample,
+                                          &height_subsample,
+                                          &bpp);
+      glTexImage2D (GL_TEXTURE_2D, 0, self->gl_internal_format[i], width / width_subsample, height / height_subsample, 0, self->gl_format[i], self->gl_type[i], NULL);
+
+      /* Only apply swizzle if really needed, might not even be
+       * supported if default values are set
+       */
+      if (!gdk_swizzle_is_identity (swizzle[i]))
+        {
+          GLint gl_swizzle[4];
+
+          gdk_swizzle_to_gl (swizzle[i], gl_swizzle);
+          /* Set each channel independently since GLES 3.0 doesn't support the iv method */
+          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_R, gl_swizzle[0]);
+          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_G, gl_swizzle[1]);
+          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_B, gl_swizzle[2]);
+          glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_SWIZZLE_A, gl_swizzle[3]);
+        }
     }
 
   return GSK_GPU_IMAGE (self);

@@ -5095,6 +5095,35 @@ gdk_memory_format_get_default_shader_op (GdkMemoryFormat format)
   return memory_formats[format].default_shader_op;
 }
 
+gsize
+gdk_memory_format_get_shader_plane (GdkMemoryFormat  format,
+                                    gsize            plane,
+                                    gsize           *width_subsample,
+                                    gsize           *height_subsample,
+                                    gsize           *bpp)
+{
+  guint p = memory_formats[format].shader[plane].plane;
+
+  if (plane == 0 &&
+      (format == GDK_MEMORY_G8B8G8R8_422 ||
+       format == GDK_MEMORY_G8R8G8B8_422 ||
+       format == GDK_MEMORY_R8G8B8G8_422 ||
+       format == GDK_MEMORY_B8G8R8G8_422))
+    {
+      *width_subsample = 1;
+      *height_subsample = 1;
+      *bpp = 2;
+    }
+  else
+    {
+      *width_subsample = memory_formats[format].planes[p].block_size.width;
+      *height_subsample = memory_formats[format].planes[p].block_size.height;
+      *bpp = memory_formats[format].planes[p].block_bytes;
+    }
+
+  return p;
+}
+
 static void
 premultiply (float (*rgba)[4],
              gsize  n)

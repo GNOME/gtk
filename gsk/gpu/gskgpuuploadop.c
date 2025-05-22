@@ -28,8 +28,9 @@ gsk_gpu_upload_op_gl_command_with_area (GskGpuOp                    *op,
 {
   GskGLImage *gl_image = GSK_GL_IMAGE (image);
   GdkMemoryLayout layout;
-  guchar *data;
-  guint gl_format, gl_type, stride, bpp;
+  guchar *data, *pdata;
+  guint i, p, gl_format, gl_type, stride, tex_id;
+  gsize width_subsample, height_subsample, bpp;
 
   gdk_memory_layout_init (&layout,
                           gsk_gpu_image_get_format (GSK_GPU_IMAGE (image)),
@@ -40,35 +41,62 @@ gsk_gpu_upload_op_gl_command_with_area (GskGpuOp                    *op,
 
   draw_func (op, data, &layout);
 
-  gl_format = gsk_gl_image_get_gl_format (gl_image, 0);
-  gl_type = gsk_gl_image_get_gl_type (gl_image, 0);
-  bpp = gdk_memory_format_get_plane_block_bytes (layout.format, 0);
-  stride = layout.planes[0].stride;
-
-  gsk_gl_image_bind_textures (gl_image, GL_TEXTURE0);
+  glActiveTexture (GL_TEXTURE0);
   
   glPixelStorei (GL_UNPACK_ALIGNMENT, gdk_memory_format_alignment (layout.format));
 
-  /* GL_UNPACK_ROW_LENGTH is available on desktop GL, OpenGL ES >= 3.0, or if
-   * the GL_EXT_unpack_subimage extension for OpenGL ES 2.0 is available
-   */
-  if (stride == gsk_gpu_image_get_width (image) * bpp)
+  for (i = 0; i < 3; i++)
     {
-      glTexSubImage2D (GL_TEXTURE_2D, 0, area->x, area->y, area->width, area->height, gl_format, gl_type, data);
-    }
-  else if (stride % bpp == 0)
-    {
-      glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
+      tex_id = gsk_gl_image_get_texture_id (gl_image, i);
+      if (tex_id == 0)
+        break;
 
-      glTexSubImage2D (GL_TEXTURE_2D, 0, area->x, area->y, area->width, area->height, gl_format, gl_type, data);
+      glBindTexture (GL_TEXTURE_2D, tex_id);
 
-      glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
-    }
-  else
-    {
-      gsize i;
-      for (i = 0; i < area->height; i++)
-        glTexSubImage2D (GL_TEXTURE_2D, 0, area->x, area->y + i, area->width, 1, gl_format, gl_type, data + (i * stride));
+      p = gdk_memory_format_get_shader_plane (layout.format,
+                                              i,
+                                              &width_subsample,
+                                              &height_subsample,
+                                              &bpp);
+
+      gl_format = gsk_gl_image_get_gl_format (gl_image, i);
+      gl_type = gsk_gl_image_get_gl_type (gl_image, i);
+      stride = layout.planes[p].stride;
+      pdata = data + gdk_memory_layout_offset (&layout, p, 0, 0);
+
+      if (stride == area->width * bpp / width_subsample)
+        {
+          glTexSubImage2D (GL_TEXTURE_2D, 0, 
+                           area->x / width_subsample, area->y / height_subsample,
+                           area->width / width_subsample, area->height / height_subsample,
+                           gl_format, gl_type,
+                           pdata);
+        }
+      else if (stride % bpp == 0)
+        {
+          glPixelStorei (GL_UNPACK_ROW_LENGTH, stride / bpp);
+
+          glTexSubImage2D (GL_TEXTURE_2D, 0, 
+                           area->x / width_subsample, area->y / height_subsample,
+                           area->width / width_subsample, area->height / height_subsample,
+                           gl_format, gl_type,
+                           pdata);
+
+          glPixelStorei (GL_UNPACK_ROW_LENGTH, 0);
+        }
+      else
+        {
+          gsize y;
+          for (y = 0; y < area->height / height_subsample; y++)
+            {
+              glTexSubImage2D (GL_TEXTURE_2D, 0, 
+                               area->x / width_subsample, area->y / height_subsample + y,
+                               area->width / width_subsample, 1,
+                               gl_format, gl_type,
+                               pdata + (y * stride));
+
+            }
+        }
     }
 
   glPixelStorei (GL_UNPACK_ALIGNMENT, 4);
