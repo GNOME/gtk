@@ -154,20 +154,25 @@
           </object>
         </child>
         <child type="end">
-          <object class="GtkScaleButton" id="scale_scale">
+          <object class="GtkButton" id="zoom_in">
+            <property name="css-classes">circular
+flat</property>
             <property name="focus-on-click">0</property>
             <property name="valign">center</property>
-            <property name="adjustment">
-              <object class="GtkAdjustment">
-                <property name="lower">-4</property>
-                <property name="value">0</property>
-                <property name="upper">4</property>
-                <property name="step-increment">0.1</property>
-                <property name="page-increment">0.5</property>
-              </object>
-            </property>
-            <property name="icons">zoom-in-symbolic</property>
-            <property name="tooltip-text" translatable="yes">Scale the image</property>
+            <property name="icon-name">zoom-in-symbolic</property>
+            <property name="tooltip-text" translatable="yes">Zoom in</property>
+            <signal name="clicked" handler="zoom_in_cb"/>
+          </object>
+        </child>
+        <child type="end">
+          <object class="GtkButton" id="zoom_out">
+            <property name="css-classes">circular
+flat</property>
+            <property name="focus-on-click">0</property>
+            <property name="valign">center</property>
+            <property name="icon-name">zoom-out-symbolic</property>
+            <property name="tooltip-text" translatable="yes">Zoom out</property>
+            <signal name="clicked" handler="zoom_out_cb"/>
           </object>
         </child>
       </object>
