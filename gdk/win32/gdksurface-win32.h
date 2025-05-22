@@ -132,7 +132,7 @@ struct _GdkWin32Surface
   HANDLE handle;
 
   IDCompositionTarget *dcomp_target;
-  IDCompositionVisual *dcomp_visual;
+  IDCompositionVisual2 *dcomp_visual;
 
   HICON   hicon_big;
   HICON   hicon_small;
