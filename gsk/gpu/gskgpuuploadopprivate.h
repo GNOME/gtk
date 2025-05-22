@@ -33,12 +33,6 @@ void                    gsk_gpu_upload_cairo_into_op                    (GskGpuF
                                                                          gpointer                        user_data,
                                                                          GDestroyNotify                  user_destroy);
 
-void                    gsk_gpu_upload_glyph_op                         (GskGpuFrame                    *frame,
-                                                                         GskGpuImage                    *image,
-                                                                         PangoFont                      *font,
-                                                                         PangoGlyph                      glyph,
-                                                                         const cairo_rectangle_int_t    *area,
-                                                                         const graphene_point_t         *origin);
 
 G_END_DECLS
 
