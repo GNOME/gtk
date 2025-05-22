@@ -352,7 +352,7 @@ macos-arm64:
         - ccache
   variables:
     BACKEND_FLAGS: "-Dx11-backend=false -Dbroadway-backend=true"
-    FEATURE_FLAGS: "-Daccesskit=enabled -Dgobject-introspection:werror=false -Dintrospection=enabled -Dmedia-gstreamer=disabled"
+    FEATURE_FLAGS: "-Dvulkan=disabled -Daccesskit=enabled -Dgobject-introspection:werror=false -Dintrospection=enabled -Dmedia-gstreamer=disabled"
     EXTRA_MESON_FLAGS: ""
     # additional settings
     CCACHE_MAXSIZE: "250Mi"
@@ -467,16 +467,17 @@ android:
   extends:
     - .distribution.android
   stage: android
-  allow_failure: true
   artifacts:
     paths:
       - apks
     expire_in: 1 day
   rules:
-    # Only build Android application bundles automatically on main
-    - if: $CI_COMMIT_BRANCH == "main"
-    - if: $CI_COMMIT_BRANCH != "main"
+    # Treat Android application bundle build job like a normal job on main or when marge is checking the changeset
+    - if: $CI_COMMIT_BRANCH == "main" || $GITLAB_USER_LOGIN == "marge-bot" || $CI_MERGE_REQUEST_ASSIGNEES == "marge-bot"
+      # normal CI job
+    - if: $CI_COMMIT_BRANCH != "main" && $GITLAB_USER_LOGIN != "marge-bot" && $CI_MERGE_REQUEST_ASSIGNEES != "marge-bot"
       when: "manual"
+      allow_failure: true
   needs: ['container:android']
   before_script:
     - .gitlab-ci/show-info-linux.sh

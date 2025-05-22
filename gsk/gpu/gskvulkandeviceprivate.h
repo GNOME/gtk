@@ -47,11 +47,6 @@ VkPipelineLayout        gsk_vulkan_device_get_vk_pipeline_layout        (GskVulk
 VkSampler               gsk_vulkan_device_get_vk_sampler                (GskVulkanDevice        *self,
                                                                          GskGpuSampler           sampler) G_GNUC_PURE;
 
-GskVulkanYcbcr *        gsk_vulkan_device_get_ycbcr                     (GskVulkanDevice        *self,
-                                                                         const GskVulkanYcbcrInfo *info);
-void                    gsk_vulkan_device_remove_ycbcr                  (GskVulkanDevice        *self,
-                                                                         GskVulkanYcbcr         *ycbcr);
-
 VkRenderPass            gsk_vulkan_device_get_vk_render_pass            (GskVulkanDevice        *self,
                                                                          VkFormat                format,
                                                                          VkAttachmentLoadOp      vk_load_op,

@@ -77,3 +77,28 @@ If you create a macOS app for your application, you can provide
 custom UTI/MIME types mappings in the
 [Information Property List](https://developer.apple.com/documentation/bundleresources/information_property_list)
 for your application.
+
+## Vulkan support
+
+GTK can be compiled with Vulkan support on macOS, via
+[MoltenVK](https://github.com/KhronosGroup/MoltenVK).
+
+The macOS version links with the Vulkan loader library, and not with
+the vulkan library (MoltenVK) directly.
+
+### Homebrew
+
+Install the following packages to enable Vulkan support:
+
+```sh
+brew install vulkan-loader shaderc molten-vk
+```
+
+### Vulkan SDK
+
+Download the [Vulkan SDK for macOS](https://vulkan.lunarg.com/sdk/home) from LunarG.
+Set it up according to their
+[instructions](https://vulkan.lunarg.com/doc/sdk/latest/mac/getting_started.html).
+Pay special attention to the environment variables that need to be set: `VULKAN_SDK`,
+`DYLD_LIBRARY_PATH`, `VK_ICD_FILENAMES`, and `VK_LAYER_PATH`. You can also use the provided
+`setup-env.sh` script in the SDK root folder.

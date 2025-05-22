@@ -7,6 +7,7 @@
 
 typedef struct _GskGpuBuffer            GskGpuBuffer;
 typedef struct _GskGpuCache             GskGpuCache;
+typedef struct _GskGpuCachePrivate      GskGpuCachePrivate;
 typedef struct _GskGpuClip              GskGpuClip;
 typedef guint32                         GskGpuColorStates;
 typedef struct _GskGpuDevice            GskGpuDevice;

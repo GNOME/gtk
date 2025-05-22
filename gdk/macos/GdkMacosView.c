@@ -20,27 +20,18 @@
 
 #include "config.h"
 
-#include <CoreGraphics/CoreGraphics.h>
+#include "gdkconfig.h"
+
+#import <CoreGraphics/CoreGraphics.h>
+#ifdef GDK_RENDERING_VULKAN
+#import <QuartzCore/CAMetalLayer.h>
+#endif
 
 #import "GdkMacosLayer.h"
 #import "GdkMacosView.h"
 #import "GdkMacosWindow.h"
 
 @implementation GdkMacosView
-
--(id)initWithFrame:(NSRect)frame
-{
-  if ((self = [super initWithFrame:frame]))
-    {
-      GdkMacosLayer *layer = [GdkMacosLayer layer];
-
-      [self setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawNever];
-      [self setLayer:layer];
-      [self setWantsLayer:YES];
-    }
-
-  return self;
-}
 
 -(BOOL)isFlipped
 {
@@ -78,6 +69,10 @@
 
 -(void)setOpaqueRegion:(const cairo_region_t *)opaqueRegion
 {
+  /* No-op for Vulkan/Metal layer */
+  if (![[self layer] isKindOfClass: [GdkMacosLayer class]])
+    return;
+
   [(GdkMacosLayer *)[self layer] setOpaqueRegion:opaqueRegion];
 }
 
@@ -88,6 +83,10 @@
 
 -(void)swapBuffer:(GdkMacosBuffer *)buffer withDamage:(const cairo_region_t *)damage
 {
+  /* No-op for Vulkan/Metal layer */
+  if (![[self layer] isKindOfClass: [GdkMacosLayer class]])
+    return;
+
   if (self->_nextFrameDirty)
     {
       self->_nextFrameDirty = FALSE;

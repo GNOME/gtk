@@ -157,7 +157,6 @@ os_unix = not os_win32
 
 if os_darwin
   wayland_enabled = false
-  vulkan_enabled = false
 else
   macos_enabled = false
 endif
@@ -454,7 +453,7 @@ xkbdep            = dependency('xkbcommon', version: xkbcommon_req, required: wa
 graphene_dep      = dependency('graphene-gobject-1.0', version: graphene_req,
                                default_options: ['tests=false', 'gobject_types=true'])
 iso_codes_dep     = dependency('iso-codes', required: false)
-gstplayer_dep     = dependency('gstreamer-player-1.0', version: gstreamer_req,
+gstplay_dep       = dependency('gstreamer-play-1.0', version: gstreamer_req,
                                required: get_option('media-gstreamer'),
                                default_options: [
                                  'python=disabled',
@@ -465,7 +464,7 @@ gstallocators_dep = dependency('gstreamer-allocators-1.0', version: gstreamer_re
                                required: get_option('media-gstreamer'))
 if os_win32
   gstd3d12_dep    = dependency('gstreamer-d3d12-1.0', version: gstreamer_req,
-                                   required: get_option('media-gstreamer'))
+                               required: get_option('media-gstreamer'))
 else
   gstd3d12_dep = dependency('', required: false)
 endif

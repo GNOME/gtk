@@ -3,6 +3,7 @@
 #include "gskvulkanycbcrprivate.h"
 
 #include "gskgpucacheprivate.h"
+#include "gskgpucachedprivate.h"
 
 struct _GskVulkanYcbcr
 {
@@ -18,7 +19,7 @@ struct _GskVulkanYcbcr
   VkPipelineLayout vk_pipeline_layouts[2];
 };
 
-guint
+static guint
 gsk_vulkan_ycbcr_info_hash (gconstpointer info_)
 {
   const GskVulkanYcbcrInfo *info = info_;
@@ -32,7 +33,7 @@ gsk_vulkan_ycbcr_info_hash (gconstpointer info_)
          info->vk_format;
 }
 
-gboolean
+static gboolean
 gsk_vulkan_ycbcr_info_equal (gconstpointer info1_,
                              gconstpointer info2_)
 {
@@ -49,10 +50,11 @@ gsk_vulkan_ycbcr_info_equal (gconstpointer info1_,
 }
 
 static void
-gsk_vulkan_ycbcr_free (GskGpuCache  *cache,
-                       GskGpuCached *cached)
+gsk_vulkan_ycbcr_free (GskGpuCached *cached)
 {
+  GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cached->cache);
   GskVulkanYcbcr *self = (GskVulkanYcbcr *) cached;
+  GskGpuCache *cache = cached->cache;
   GskVulkanDevice *device;
   VkDevice vk_device;
 
@@ -61,7 +63,7 @@ gsk_vulkan_ycbcr_free (GskGpuCache  *cache,
 
   g_assert (self->ref_count == 0);
 
-  gsk_vulkan_device_remove_ycbcr (device, self);
+  g_hash_table_remove (priv->ycbcr_cache, &self->info);
 
   vkDestroySampler (vk_device, self->vk_sampler, NULL);
   vkDestroySamplerYcbcrConversion (vk_device, self->vk_conversion, NULL);
@@ -72,21 +74,8 @@ gsk_vulkan_ycbcr_free (GskGpuCache  *cache,
   g_free (self);
 }
 
-static inline gboolean
-gsk_gpu_cached_is_old (GskGpuCache  *self,
-                       GskGpuCached *cached,
-                       gint64        cache_timeout,
-                       gint64        timestamp)
-{
-  if (cache_timeout < 0)
-    return -1;
-  else
-    return timestamp - cached->timestamp > cache_timeout;
-}
-
 static gboolean
-gsk_vulkan_ycbcr_should_collect (GskGpuCache  *cache,
-                                 GskGpuCached *cached,
+gsk_vulkan_ycbcr_should_collect (GskGpuCached *cached,
                                  gint64        cache_timeout,
                                  gint64        timestamp)
 {
@@ -95,7 +84,7 @@ gsk_vulkan_ycbcr_should_collect (GskGpuCache  *cache,
   if (self->ref_count > 0)
     return FALSE;
 
-  return gsk_gpu_cached_is_old (cache, cached, cache_timeout, timestamp);
+  return gsk_gpu_cached_is_old (cached, cache_timeout, timestamp);
 }
 
 static const GskGpuCachedClass GSK_VULKAN_YCBCR_CLASS =
@@ -106,14 +95,36 @@ static const GskGpuCachedClass GSK_VULKAN_YCBCR_CLASS =
   gsk_vulkan_ycbcr_should_collect
 };
 
+void
+gsk_vulkan_ycbcr_init_cache (GskGpuCache *cache)
+{
+  GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cache);
+
+  priv->ycbcr_cache = g_hash_table_new (gsk_vulkan_ycbcr_info_hash, gsk_vulkan_ycbcr_info_equal);
+}
+
+void
+gsk_vulkan_ycbcr_finish_cache (GskGpuCache *cache)
+{
+  GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cache);
+
+  g_assert (g_hash_table_size (priv->ycbcr_cache) == 0);
+  g_hash_table_unref (priv->ycbcr_cache);
+}
+
 GskVulkanYcbcr *
-gsk_vulkan_ycbcr_new (GskVulkanDevice *device,
+gsk_vulkan_ycbcr_get (GskVulkanDevice          *device,
                       const GskVulkanYcbcrInfo *info)
 {
   GskGpuCache *cache = gsk_gpu_device_get_cache (GSK_GPU_DEVICE (device));
+  GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (cache);
   VkDevice vk_device = gsk_vulkan_device_get_vk_device (device);
   VkDescriptorSetLayout vk_image_set_layout;
   GskVulkanYcbcr *self;
+
+  self = g_hash_table_lookup (priv->ycbcr_cache, info);
+  if (self)
+    return self;
 
   self = gsk_gpu_cached_new (cache, &GSK_VULKAN_YCBCR_CLASS);
 
@@ -184,6 +195,8 @@ gsk_vulkan_ycbcr_new (GskVulkanDevice *device,
                                                                               vk_image_set_layout,
                                                                               self->vk_descriptor_set_layout);
 
+  g_hash_table_insert (priv->ycbcr_cache, &self->info, self);
+
   return self;
 }
 
@@ -199,12 +212,8 @@ void
 gsk_vulkan_ycbcr_unref (GskVulkanYcbcr *self)
 {
   self->ref_count--;
-}
 
-const GskVulkanYcbcrInfo *
-gsk_vulkan_ycbcr_get_info (GskVulkanYcbcr *self)
-{
-  return &self->info;
+  gsk_gpu_cached_use ((GskGpuCached *) self);
 }
 
 VkSamplerYcbcrConversion

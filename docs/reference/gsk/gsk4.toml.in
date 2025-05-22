@@ -34,6 +34,7 @@ base_url = "https://gitlab.gnome.org/GNOME/gtk/-/blob/main/"
 [extra]
 content_files = [
   "paths.md",
+  "node-format.md",
 ]
 content_images = [
   "../images/favicon.svg",

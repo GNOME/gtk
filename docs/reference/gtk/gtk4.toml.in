@@ -85,7 +85,6 @@ content_files = [
   "x11.md",
   "tools.md",
   "visual_index.md",
-  "node-format.md",
 ]
 content_images = [
   "../images/favicon.svg",
