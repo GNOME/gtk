@@ -60,9 +60,11 @@ struct _GtkPrinterCups
   gchar *temporary_queue_device_uri; /* Device uri of temporary queue for this printer */
 
   ipp_pstate_t state;
+#if CUPS_VERSION_MAJOR < 3
   gboolean reading_ppd;
   char       *ppd_name;
   ppd_file_t *ppd_file;
+#endif
 
   char     *media_default;
   GList    *media_supported;
@@ -122,8 +124,10 @@ void                     gtk_printer_cups_register_type (GTypeModule     *module
 GtkPrinterCups          *gtk_printer_cups_new           (const char      *name,
                                                          GtkPrintBackend *backend,
                                                          gpointer         colord_client);
+#if CUPS_VERSION_MAJOR < 3
 ppd_file_t              *gtk_printer_cups_get_ppd       (GtkPrinterCups  *printer);
 const char              *gtk_printer_cups_get_ppd_name  (GtkPrinterCups  *printer);
+#endif
 
 #ifdef HAVE_COLORD
 void                     gtk_printer_cups_update_settings (GtkPrinterCups *printer,

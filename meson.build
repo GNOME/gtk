@@ -800,7 +800,13 @@ endif
 
 if os_unix
   cpdb_dep = dependency('cpdb-frontend', version : '>=2.0', required: get_option('print-cpdb'))
-  cups_dep = dependency('cups', version : '>=2.0', required: get_option('print-cups'))
+  cups_dep = dependency('cups', version : ['>=2.0', '<3.0'], required: false)
+  if not cups_dep.found()
+    cups_dep = dependency('cups3', version : '>=3.0', required: false)
+    if not cups_dep.found() and get_option('print-cups').enabled()
+      error('CUPS >= 2.0 required')
+    endif
+  endif
 endif
 
 # Shell completion

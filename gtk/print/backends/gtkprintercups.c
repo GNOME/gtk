@@ -75,8 +75,10 @@ gtk_printer_cups_init (GtkPrinterCups *printer)
   printer->original_resource = NULL;
   printer->original_port = 0;
   printer->request_original_uri = FALSE;
+#if CUPS_VERSION_MAJOR < 3
   printer->ppd_name = NULL;
   printer->ppd_file = NULL;
+#endif
   printer->default_cover_before = NULL;
   printer->default_cover_after = NULL;
   printer->remote = FALSE;
@@ -125,7 +127,6 @@ gtk_printer_cups_finalize (GObject *object)
   g_free (printer->hostname);
   g_free (printer->original_hostname);
   g_free (printer->original_resource);
-  g_free (printer->ppd_name);
   g_free (printer->default_cover_before);
   g_free (printer->default_cover_after);
   g_strfreev (printer->auth_info_required);
@@ -154,8 +155,11 @@ gtk_printer_cups_finalize (GObject *object)
 
   G_GNUC_BEGIN_IGNORE_DEPRECATIONS
 
+#if CUPS_VERSION_MAJOR < 3
+  g_free (printer->ppd_name);
   if (printer->ppd_file)
     ppdClose (printer->ppd_file);
+#endif
 
   G_GNUC_END_IGNORE_DEPRECATIONS
 
@@ -470,8 +474,10 @@ colord_update_device (GtkPrinterCups *printer)
     goto out;
 
   /* not yet assigned a printer */
+#if CUPS_VERSION_MAJOR < 3
   if (printer->ppd_file == NULL)
     goto out;
+#endif
 
   /* old cached profile no longer valid */
   if (printer->colord_profile)
@@ -600,6 +606,7 @@ gtk_printer_cups_new (const char      *name,
   return printer;
 }
 
+#if CUPS_VERSION_MAJOR < 3
 ppd_file_t *
 gtk_printer_cups_get_ppd (GtkPrinterCups *printer)
 {
@@ -618,3 +625,4 @@ gtk_printer_cups_get_ppd_name (GtkPrinterCups  *printer)
 
   return result;
 }
+#endif
