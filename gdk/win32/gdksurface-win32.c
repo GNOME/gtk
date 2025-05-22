@@ -376,10 +376,12 @@ gdk_win32_surface_constructed (GObject *object)
   ATOM klass = 0;
   DWORD dwStyle = 0, dwExStyle;
   RECT rect;
+  IDCompositionVisual *visual = NULL;
   const char *title;
   wchar_t *wtitle;
   int pos;
   int size;
+  const GUID my_IID_IDCompositionVisual = { 0x4D93059D,0x097B,0x4651,0x9A,0x60,0xF0,0xF2,0x51,0x16,0xE2,0xF3 };
 
   impl->surface_scale = gdk_win32_display_get_monitor_scale_factor (display_win32, NULL, NULL);
 
@@ -474,8 +476,9 @@ gdk_win32_surface_constructed (GObject *object)
                                                         impl->handle,
                                                         FALSE,
                                                         &impl->dcomp_target));
-      hr_warn (IDCompositionDevice_CreateVisual (dcomp_device, &impl->dcomp_visual));
-      hr_warn (IDCompositionTarget_SetRoot (impl->dcomp_target, impl->dcomp_visual));
+      hr_warn (IDCompositionDevice3_CreateVisual (gdk_win32_display_get_dcomp_device3 (display_win32), &impl->dcomp_visual));
+      hr_warn (IDCompositionVisual2_QueryInterface (impl->dcomp_visual, &my_IID_IDCompositionVisual, (void **)&visual));
+      hr_warn (IDCompositionTarget_SetRoot (impl->dcomp_target, visual));
     }
 
   gdk_win32_surface_enable_transparency (surface);
@@ -489,6 +492,7 @@ gdk_win32_surface_constructed (GObject *object)
 
   impl->inhibit_configure = TRUE;
 
+  g_win32_clear_com (&visual);
   G_OBJECT_CLASS (gdk_win32_surface_parent_class)->constructed (object);
 }
 
