@@ -56,7 +56,8 @@ struct _NodeEditorWindow
   GtkWidget *testcase_cairo_checkbutton;
   GtkWidget *testcase_name_entry;
   GtkWidget *testcase_save_button;
-  GtkWidget *scale_scale;
+  GtkWidget *zoom_in;
+  GtkWidget *zoom_out;
   GtkWidget *crash_warning;
 
   GtkWidget *renderer_listbox;
@@ -71,6 +72,8 @@ struct _NodeEditorWindow
   gboolean auto_reload;
   gboolean mark_as_safe_pending;
   gulong after_paint_handler;
+
+  int zoom_level;
 };
 
 struct _NodeEditorWindowClass
@@ -286,7 +289,6 @@ reload (NodeEditorWindow *self)
 {
   char *text;
   GBytes *bytes;
-  float scale;
   GskRenderNode *big_node;
 
   mark_autosave_as_unsafe ();
@@ -299,10 +301,11 @@ reload (NodeEditorWindow *self)
   /* If this is too slow, go fix the parser performance */
   self->node = gsk_render_node_deserialize (bytes, deserialize_error_func, self);
 
-  scale = gtk_scale_button_get_value (GTK_SCALE_BUTTON (self->scale_scale));
-  if (self->node && scale != 0.)
+  if (self->node && self->zoom_level != 0)
     {
-      scale = pow (2., scale);
+      float scale;
+
+      scale = pow (1.2, self->zoom_level);
       big_node = gsk_transform_node_new (self->node, gsk_transform_scale (NULL, scale, scale));
     }
   else if (self->node)
@@ -367,14 +370,6 @@ text_changed (GtkTextBuffer    *buffer,
     reload (self);
 
   highlight_text (self);
-}
-
-static void
-scale_changed (GObject          *object,
-               GParamSpec       *pspec,
-               NodeEditorWindow *self)
-{
-  text_changed (self->text_buffer, self);
 }
 
 static gboolean
@@ -1717,6 +1712,34 @@ close_crash_warning (GtkButton        *button,
   gtk_revealer_set_reveal_child (GTK_REVEALER (self->crash_warning), FALSE);
 }
 
+#define MIN_ZOOM -10
+#define MAX_ZOOM 10
+
+static void
+update_zoom_buttons (NodeEditorWindow *self)
+{
+  gtk_widget_set_sensitive (self->zoom_in, self->zoom_level < MAX_ZOOM);
+  gtk_widget_set_sensitive (self->zoom_out, self->zoom_level > MIN_ZOOM);
+}
+
+static void
+zoom_in_cb (GtkButton        *button,
+            NodeEditorWindow *self)
+{
+  self->zoom_level = CLAMP (self->zoom_level + 1, MIN_ZOOM, MAX_ZOOM);
+  update_zoom_buttons (self);
+  text_changed (self->text_buffer, self);
+}
+
+static void
+zoom_out_cb (GtkButton        *button,
+             NodeEditorWindow *self)
+{
+  self->zoom_level = CLAMP (self->zoom_level - 1, MIN_ZOOM, MAX_ZOOM);
+  update_zoom_buttons (self);
+  text_changed (self->text_buffer, self);
+}
+
 static void
 node_editor_window_class_init (NodeEditorWindowClass *class)
 {
@@ -1751,8 +1774,9 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_cairo_checkbutton);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_name_entry);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, testcase_save_button);
-  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, scale_scale);
   gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, crash_warning);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, zoom_in);
+  gtk_widget_class_bind_template_child (widget_class, NodeEditorWindow, zoom_out);
 
   gtk_widget_class_bind_template_callback (widget_class, text_view_query_tooltip_cb);
   gtk_widget_class_bind_template_callback (widget_class, open_cb);
@@ -1766,6 +1790,8 @@ node_editor_window_class_init (NodeEditorWindowClass *class)
   gtk_widget_class_bind_template_callback (widget_class, on_picture_drop_cb);
   gtk_widget_class_bind_template_callback (widget_class, click_gesture_pressed);
   gtk_widget_class_bind_template_callback (widget_class, close_crash_warning);
+  gtk_widget_class_bind_template_callback (widget_class, zoom_in_cb);
+  gtk_widget_class_bind_template_callback (widget_class, zoom_out_cb);
 
   gtk_widget_class_install_action (widget_class, "smart-edit", NULL, edit_action_cb);
 
@@ -1914,6 +1940,7 @@ node_editor_window_init (NodeEditorWindow *self)
 
   gtk_widget_init_template (GTK_WIDGET (self));
 
+  self->zoom_level = 0;
   self->auto_reload = TRUE;
 
   self->renderers = g_list_store_new (GDK_TYPE_PAINTABLE);
@@ -1966,7 +1993,6 @@ node_editor_window_init (NodeEditorWindow *self)
 
   self->text_buffer = gtk_text_buffer_new (self->tag_table);
   g_signal_connect (self->text_buffer, "changed", G_CALLBACK (text_changed), self);
-  g_signal_connect (self->scale_scale, "notify::value", G_CALLBACK (scale_changed), self);
   gtk_text_view_set_buffer (GTK_TEXT_VIEW (self->text_view), self->text_buffer);
 
   set_initial_text (self);
