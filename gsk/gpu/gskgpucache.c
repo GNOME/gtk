@@ -4,6 +4,7 @@
 
 #include "gskgpucachedglyphprivate.h"
 #include "gskgpucachedfillprivate.h"
+#include "gskgpucachedstrokeprivate.h"
 #include "gskgpucachedprivate.h"
 #include "gskgpudeviceprivate.h"
 #include "gskgpuframeprivate.h"
@@ -880,6 +881,7 @@ gsk_gpu_cache_dispose (GObject *object)
 
   gsk_gpu_cache_clear_cache (self);
 
+  gsk_gpu_cached_stroke_finish_cache (self);
   gsk_gpu_cached_fill_finish_cache (self);
 
 #ifdef GDK_RENDERING_VULKAN
@@ -923,6 +925,7 @@ gsk_gpu_cache_init (GskGpuCache *self)
   gsk_vulkan_ycbcr_init_cache (self);
 #endif
   gsk_gpu_cached_fill_init_cache (self);
+  gsk_gpu_cached_stroke_init_cache (self);
 }
 
 GskGpuImage *
