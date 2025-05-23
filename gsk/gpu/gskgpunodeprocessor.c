@@ -11,6 +11,7 @@
 #include "gskgpucacheprivate.h"
 #include "gskgpucachedglyphprivate.h"
 #include "gskgpucachedfillprivate.h"
+#include "gskgpucachedstrokeprivate.h"
 #include "gskgpuclearopprivate.h"
 #include "gskgpuclipprivate.h"
 #include "gskgpucolorizeopprivate.h"
@@ -42,7 +43,6 @@
 #include "gskrectprivate.h"
 #include "gskrendernodeprivate.h"
 #include "gskroundedrectprivate.h"
-#include "gskstrokeprivate.h"
 #include "gsktransformprivate.h"
 #include "gskprivate.h"
 
@@ -3530,62 +3530,37 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
   g_object_unref (mask_image);
 }
 
-typedef struct _StrokeData StrokeData;
-struct _StrokeData
-{
-  GskPath *path;
-  GskStroke stroke;
-};
-
-static void
-gsk_stroke_data_free (gpointer data)
-{
-  StrokeData *stroke = data;
-
-  gsk_path_unref (stroke->path);
-  gsk_stroke_clear (&stroke->stroke);
-  g_free (stroke);
-}
-
-static void
-gsk_gpu_node_processor_stroke_path (gpointer  data,
-                                    cairo_t  *cr)
-{
-  StrokeData *stroke = data;
-
-  gsk_stroke_to_cairo (&stroke->stroke, cr);
-  gsk_path_to_cairo (stroke->path, cr);
-  cairo_set_source_rgba (cr, 1, 1, 1, 1);
-  cairo_stroke (cr);
-}
-
 static void
 gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
                                         GskRenderNode       *node)
 {
-  graphene_rect_t clip_bounds, source_rect;
-  GskGpuImage *mask_image, *source_image;
+  graphene_rect_t clip_bounds;
+  GskGpuImage *mask_image;
   GskRenderNode *child;
+  graphene_rect_t tex_rect;
+  GskGpuCache *cache;
 
   if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
     return;
 
   child = gsk_stroke_node_get_child (node);
 
-  mask_image = gsk_gpu_upload_cairo_op (self->frame,
-                                        &self->scale,
-                                        &clip_bounds,
-                                        gsk_gpu_node_processor_stroke_path,
-                                        g_memdup2 (&(StrokeData) {
-                                            .path = gsk_path_ref (gsk_stroke_node_get_path (node)),
-                                            .stroke = GSK_STROKE_INIT_COPY (gsk_stroke_node_get_stroke (node))
-                                        }, sizeof (StrokeData)),
-                                        (GDestroyNotify) gsk_stroke_data_free);
-  g_return_if_fail (mask_image != NULL);
+  cache = gsk_gpu_device_get_cache (gsk_gpu_frame_get_device (self->frame));
+
+  mask_image = gsk_gpu_cached_stroke_lookup (cache,
+                                             self->frame,
+                                             &self->scale,
+                                             &clip_bounds,
+                                             gsk_stroke_node_get_path (node),
+                                             gsk_stroke_node_get_stroke (node),
+                                             &tex_rect);
+  if (mask_image == NULL)
+    return;
+
   if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
     {
       gsk_gpu_colorize_op (self->frame,
-                           GSK_GPU_SHADER_CLIP_NONE,
+                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clip_bounds),
                            self->ccs,
                            self->opacity,
                            &self->offset,
@@ -3593,40 +3568,46 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
                              mask_image,
                              GSK_GPU_SAMPLER_DEFAULT,
                              &clip_bounds,
-                             &clip_bounds,
+                             &tex_rect,
                            },
                            gsk_color_node_get_color2 (child));
-      return;
+    }
+  else
+    {
+      GskGpuImage *source_image;
+      graphene_rect_t source_rect;
+
+      source_image = gsk_gpu_node_processor_get_node_as_image (self,
+                                                               0,
+                                                               &clip_bounds,
+                                                               child,
+                                                               &source_rect);
+      if (source_image != NULL)
+        {
+          gsk_gpu_mask_op (self->frame,
+                           gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clip_bounds),
+                           &clip_bounds,
+                           &self->offset,
+                           self->opacity,
+                           GSK_MASK_MODE_ALPHA,
+                           &(GskGpuShaderImage) {
+                             source_image,
+                             GSK_GPU_SAMPLER_DEFAULT,
+                             NULL,
+                             &source_rect,
+                           },
+                           &(GskGpuShaderImage) {
+                             mask_image,
+                             GSK_GPU_SAMPLER_DEFAULT,
+                             &clip_bounds,
+                             &tex_rect,
+                           });
+
+          g_object_unref (source_image);
+        }
     }
 
-  source_image = gsk_gpu_node_processor_get_node_as_image (self,
-                                                           0,
-                                                           &clip_bounds,
-                                                           child,
-                                                           &source_rect);
-  if (source_image == NULL)
-    return;
-
-  gsk_gpu_mask_op (self->frame,
-                   gsk_gpu_clip_get_shader_clip (&self->clip, &self->offset, &clip_bounds),
-                   &clip_bounds,
-                   &self->offset,
-                   self->opacity,
-                   GSK_MASK_MODE_ALPHA,
-                   &(GskGpuShaderImage) {
-                       source_image,
-                       GSK_GPU_SAMPLER_DEFAULT,
-                       NULL,
-                       &source_rect,
-                   },
-                   &(GskGpuShaderImage) {
-                       mask_image,
-                       GSK_GPU_SAMPLER_DEFAULT,
-                       NULL,
-                       &clip_bounds,
-                   });
-
-  g_object_unref (source_image);
+  g_object_unref (mask_image);
 }
 
 static void

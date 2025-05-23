@@ -279,6 +279,8 @@ compare_xfails = {
     'inter-optical-scaling': ['flip', 'rotate'],
     'fill-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
     'fill-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
+    'stroke-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
+    'stroke-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
   }
 }
 
