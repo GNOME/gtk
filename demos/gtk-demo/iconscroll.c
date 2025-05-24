@@ -6,6 +6,7 @@
 
 #include <gtk/gtk.h>
 #include "svgsymbolicpaintable.h"
+#include "gtk/gtkrendernodepaintableprivate.h"
 
 static guint tick_cb;
 static GtkAdjustment *hadjustment;
@@ -14,7 +15,7 @@ static GtkWidget *window = NULL;
 static GtkWidget *scrolledwindow;
 static int selected;
 
-#define N_WIDGET_TYPES 10
+#define N_WIDGET_TYPES 11
 
 
 static int hincrement = 5;
@@ -454,6 +455,81 @@ populate_paths (void)
   gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), grid);
 }
 
+static GtkWidget *
+create_squiggle (void)
+{
+  GtkWidget *image;
+  graphene_rect_t bounds = GRAPHENE_RECT_INIT (0, 0, 18, 18);
+  GskRenderNode *child, *node;
+  GdkPaintable *paintable;
+  GskStroke *stroke;
+  GskPathBuilder *builder;
+  GskPath *path;
+  float x, y;
+
+  builder = gsk_path_builder_new ();
+
+  x = g_random_double_range (1, 16);
+  y = g_random_double_range (1, 16);
+  gsk_path_builder_move_to (builder, x, y);
+  for (int i = 0; i < 5; i++)
+    {
+      x = g_random_double_range (1, 16);
+      y = g_random_double_range (1, 16);
+      gsk_path_builder_line_to (builder, x, y);
+    }
+  gsk_path_builder_close (builder);
+
+  path = gsk_path_builder_free_to_path (builder);
+  stroke = gsk_stroke_new (1);
+
+  child = gsk_color_node_new (&(GdkRGBA) { 0, 0, 0, 1}, &bounds);
+  node = gsk_stroke_node_new (child, path, stroke);
+  paintable = gtk_render_node_paintable_new (node, &bounds);
+
+  image = gtk_image_new ();
+  gtk_image_set_icon_size (GTK_IMAGE (image), GTK_ICON_SIZE_LARGE);
+  gtk_image_set_from_paintable (GTK_IMAGE (image), paintable);
+
+  g_object_unref (paintable);
+  gsk_stroke_free (stroke);
+  gsk_path_unref (path);
+  gsk_render_node_unref (node);
+  gsk_render_node_unref (child);
+
+  return image;
+}
+
+static void
+populate_squiggles (void)
+{
+  GtkWidget *grid;
+  int top, left;
+
+  grid = gtk_grid_new ();
+  gtk_widget_set_halign (grid, GTK_ALIGN_CENTER);
+  gtk_widget_set_margin_start (grid, 10);
+  gtk_widget_set_margin_end (grid, 10);
+  gtk_widget_set_margin_top (grid, 10);
+  gtk_widget_set_margin_bottom (grid, 10);
+  gtk_grid_set_row_spacing (GTK_GRID (grid), 10);
+  gtk_grid_set_column_spacing (GTK_GRID (grid), 10);
+
+  for (top = 0; top < 100; top++)
+    for (left = 0; left < 15; left++)
+       {
+         gtk_grid_attach (GTK_GRID (grid), create_squiggle (), left, top, 1, 1);
+       }
+
+  hincrement = 0;
+  vincrement = 5;
+
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolledwindow),
+                                  GTK_POLICY_NEVER,
+                                  GTK_POLICY_AUTOMATIC);
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (scrolledwindow), grid);
+}
+
 static void
 set_widget_type (int type)
 {
@@ -515,6 +591,11 @@ set_widget_type (int type)
     case 9:
       gtk_window_set_title (GTK_WINDOW (window), "Scrolling paths");
       populate_paths ();
+      break;
+
+    case 10:
+      gtk_window_set_title (GTK_WINDOW (window), "Scrolling squiggles");
+      populate_squiggles ();
       break;
 
     default:

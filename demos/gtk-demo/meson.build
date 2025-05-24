@@ -140,6 +140,7 @@ extra_demo_sources = files([
   'suggestionentry.c',
   'unicode-names.c',
   'svgsymbolicpaintable.c',
+  '../../gtk/gtkrendernodepaintable.c'
 ])
 
 if os_unix
@@ -232,6 +233,8 @@ foreach flag: common_cflags
     demo_cflags += flag
   endif
 endforeach
+
+demo_cflags += [ '-DGTK_COMPILATION=1' ]
 
 gtkdemo_deps += [ profile_conf_h ]
 
