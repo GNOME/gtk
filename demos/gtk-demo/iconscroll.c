@@ -685,7 +685,10 @@ do_iconscroll (GtkWidget *do_widget)
       gtk_widget_realize (window);
       hadjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "hadjustment"));
       vadjustment = GTK_ADJUSTMENT (gtk_builder_get_object (builder, "vadjustment"));
-      set_widget_type (0);
+      if (g_getenv ("ICONSCROLL"))
+        set_widget_type (CLAMP (atoi (g_getenv ("ICONSCROLL")), 0, N_WIDGET_TYPES));
+      else
+        set_widget_type (0);
 
       label = GTK_WIDGET (gtk_builder_get_object (builder, "fps_label"));
       id = g_timeout_add_full (G_PRIORITY_HIGH, 500, update_fps, label, NULL);
