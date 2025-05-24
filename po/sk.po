@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2025-05-12 17:55+0000\n"
-"PO-Revision-Date: 2025-05-17 12:14+0200\n"
+"PO-Revision-Date: 2025-05-19 16:25+0200\n"
 "Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -2465,14 +2465,11 @@ msgstr "Nepodarilo sa vybrať súbor"
 
 #: gtk/gtkfilechooserwidget.c:1727 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
-msgstr ""
+msgstr "Zobrazí ako mriežku"
 
 #: gtk/gtkfilechooserwidget.c:1733
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "list item"
 msgid "List View"
-msgstr "položka zoznamu"
+msgstr "Zobrazí ako zoznam"
 
 #: gtk/gtkfilechooserwidget.c:1796
 msgid "_Visit File"
@@ -2657,20 +2654,16 @@ msgid "Accessed"
 msgstr "Použité"
 
 #: gtk/gtkfilechooserwidget.c:7411
-#, fuzzy
-#| msgid "Size"
 msgid "_Size"
-msgstr "Veľkosť"
+msgstr "_Veľkosť"
 
 #: gtk/gtkfilechooserwidget.c:7415
 msgid "T_ype"
-msgstr ""
+msgstr "_Typ"
 
 #: gtk/gtkfilechooserwidget.c:7419
-#, fuzzy
-#| msgid "Show _Time"
 msgid "_Time"
-msgstr "Zobraziť ča_s"
+msgstr "Ča_s"
 
 #: gtk/gtkfilechooserwidget.c:7425 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
@@ -2690,25 +2683,19 @@ msgid "Type"
 msgstr "Typ"
 
 #: gtk/gtkfiledialog.c:886
-#, fuzzy
-#| msgid "Files"
 msgid "Pick Files"
-msgstr "Súbory"
+msgstr "Výber súborov"
 
 # DK: nahlásil by som bug na rozdelenie pre obidva výskyty - jedno bude dialog title a druhé asi button label
 # PK: je to titulok podla zdrojaku
 # window title
 #: gtk/gtkfiledialog.c:886
-#, fuzzy
-#| msgid "Pick a Font"
 msgid "Pick a File"
-msgstr "Výber písma"
+msgstr "Výber súboru"
 
 #: gtk/gtkfiledialog.c:891
-#, fuzzy
-#| msgid "Select a File"
 msgid "Save a File"
-msgstr "Výber súboru"
+msgstr "Uloženie súboru"
 
 #: gtk/gtkfiledialog.c:895 gtk/ui/gtkappchooserdialog.ui:53
 #: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:34
@@ -2716,40 +2703,28 @@ msgid "_Select"
 msgstr "_Vybrať"
 
 #: gtk/gtkfiledialog.c:896
-#, fuzzy
-#| msgid "Select a File"
 msgid "Select Folders"
-msgstr "Výber súboru"
+msgstr "Výber priečinkov"
 
 #: gtk/gtkfiledialog.c:896
-#, fuzzy
-#| msgid "Select a File"
 msgid "Select a Folder"
-msgstr "Výber súboru"
+msgstr "Výber priečinku"
 
 #: gtk/gtkfiledialog.c:1397 gtk/gtkfiledialog.c:1514 gtk/gtkfiledialog.c:1623
-#, fuzzy
-#| msgid "Binding:"
 msgid "Encoding"
-msgstr "Previazanie:"
+msgstr "Kódovanie"
 
 #: gtk/gtkfiledialog.c:1634
-#, fuzzy
-#| msgid "Binding:"
 msgid "Line Ending"
-msgstr "Previazanie:"
+msgstr "Ukončenie riadku"
 
 #: gtk/gtkfilefilter.c:1085
-#, fuzzy
-#| msgid "Unspecified error"
 msgid "Unspecified"
-msgstr "Nešpecifikovaná chyba"
+msgstr "Neurčený typ"
 
 #: gtk/gtkfontchooserdialog.c:195 gtk/gtkfontchooserdialog.c:198
-#, fuzzy
-#| msgid "Change name"
 msgid "Change Font Features"
-msgstr "Zmeniť názov"
+msgstr "Zmení vlastnosti písma"
 
 #: gtk/gtkfontchooserwidget.c:1491
 msgctxt "Font variation axis"
@@ -2777,22 +2752,18 @@ msgid "Optical Size"
 msgstr "Optická veľkosť"
 
 #: gtk/gtkfontchooserwidget.c:2053
-#, fuzzy
-#| msgid "Default"
 msgctxt "Font feature value"
 msgid "Default"
-msgstr "Predvolený"
+msgstr "Predvolená hodnota"
 
 #: gtk/gtkfontchooserwidget.c:2070
-#, fuzzy
-#| msgid "Enabled"
 msgctxt "Font feature value"
 msgid "Enable"
-msgstr "Povolené"
+msgstr "Povoliť"
 
 #: gtk/gtkfontchooserwidget.c:2406
 msgid "Default"
-msgstr "Predvolený"
+msgstr "Predvolená hodnota"
 
 #: gtk/gtkfontchooserwidget.c:2469
 msgid "Ligatures"
@@ -2802,34 +2773,28 @@ msgstr "Ligatúry"
 msgid "Letter Case"
 msgstr "Veľkosť písma"
 
+# myslí sa tým horný dolný index
 #: gtk/gtkfontchooserwidget.c:2471
 msgid "Number Case"
-msgstr "Veľkosť čísel"
+msgstr "Číselné indexy"
 
 #: gtk/gtkfontchooserwidget.c:2472
 msgid "Number Spacing"
-msgstr "Medzery medzi číslami"
+msgstr "Zarovnanie čísel"
 
 #: gtk/gtkfontchooserwidget.c:2473
 msgid "Numeric Extras"
-msgstr ""
+msgstr "Špeciálne číselné vlastnosti"
 
 #: gtk/gtkfontchooserwidget.c:2474
-#, fuzzy
-#| msgctxt "OpenType layout"
-#| msgid "Fractions"
 msgid "Fractions"
-msgstr "Úlomky"
+msgstr "Zlomky"
 
 #: gtk/gtkfontchooserwidget.c:2475
-#, fuzzy
-#| msgid "Style Properties"
 msgid "Style Variations"
-msgstr "Vlastnosti štýlu"
+msgstr "Varianty štýlu"
 
 #: gtk/gtkfontchooserwidget.c:2477
-#, fuzzy
-#| msgid "Character Variants"
 msgid "Character Variations"
 msgstr "Varianty znakov"
 
@@ -2843,10 +2808,8 @@ msgid "Close"
 msgstr "Zavrieť"
 
 #: gtk/deprecated/gtkinfobar.c:502
-#, fuzzy
-#| msgid "Close the window"
 msgid "Close the infobar"
-msgstr "Zavrie okno"
+msgstr "Zavrie infopanel"
 
 #: gtk/gtklabel.c:5905 gtk/gtktext.c:6355 gtk/gtktextview.c:9366
 msgid "Cu_t"
@@ -2925,19 +2888,14 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmediacontrols.c:415
-#, fuzzy
-#| msgid "_Stop"
 msgctxt "media controls tooltip"
 msgid "Stop"
-msgstr "_Zastaviť"
+msgstr "Zastavenie"
 
 #: gtk/gtkmediacontrols.c:420 gtk/ui/gtkmediacontrols.ui:28
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "_Play"
 msgctxt "media controls tooltip"
 msgid "Play"
-msgstr "_Hrať"
+msgstr "Prehrávanie"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
 #: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6471
@@ -3347,10 +3305,8 @@ msgid "Computer"
 msgstr "Počítač"
 
 #: gtk/gtkplacesview.c:593
-#, fuzzy
-#| msgid "Recent Servers"
 msgid "Remove server"
-msgstr "Nedávne servery"
+msgstr "Odoberie server"
 
 #: gtk/gtkplacesview.c:876
 msgid "Searching for network locations"
