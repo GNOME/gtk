@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2025-05-12 17:55+0000\n"
-"PO-Revision-Date: 2025-05-17 12:14+0200\n"
+"PO-Revision-Date: 2025-05-24 16:57+0200\n"
 "Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -2465,14 +2465,11 @@ msgstr "Nepodarilo sa vybrať súbor"
 
 #: gtk/gtkfilechooserwidget.c:1727 gtk/ui/gtkfilechooserwidget.ui:66
 msgid "Grid View"
-msgstr ""
+msgstr "Zobrazí ako mriežku"
 
 #: gtk/gtkfilechooserwidget.c:1733
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "list item"
 msgid "List View"
-msgstr "položka zoznamu"
+msgstr "Zobrazí ako zoznam"
 
 #: gtk/gtkfilechooserwidget.c:1796
 msgid "_Visit File"
@@ -2657,20 +2654,16 @@ msgid "Accessed"
 msgstr "Použité"
 
 #: gtk/gtkfilechooserwidget.c:7411
-#, fuzzy
-#| msgid "Size"
 msgid "_Size"
-msgstr "Veľkosť"
+msgstr "_Veľkosť"
 
 #: gtk/gtkfilechooserwidget.c:7415
 msgid "T_ype"
-msgstr ""
+msgstr "_Typ"
 
 #: gtk/gtkfilechooserwidget.c:7419
-#, fuzzy
-#| msgid "Show _Time"
 msgid "_Time"
-msgstr "Zobraziť ča_s"
+msgstr "Ča_s"
 
 #: gtk/gtkfilechooserwidget.c:7425 gtk/gtkplacessidebar.c:2306
 #: gtk/inspector/a11y.ui:43 gtk/inspector/actions.ui:18
@@ -2690,25 +2683,19 @@ msgid "Type"
 msgstr "Typ"
 
 #: gtk/gtkfiledialog.c:886
-#, fuzzy
-#| msgid "Files"
 msgid "Pick Files"
-msgstr "Súbory"
+msgstr "Výber súborov"
 
 # DK: nahlásil by som bug na rozdelenie pre obidva výskyty - jedno bude dialog title a druhé asi button label
 # PK: je to titulok podla zdrojaku
 # window title
 #: gtk/gtkfiledialog.c:886
-#, fuzzy
-#| msgid "Pick a Font"
 msgid "Pick a File"
-msgstr "Výber písma"
+msgstr "Výber súboru"
 
 #: gtk/gtkfiledialog.c:891
-#, fuzzy
-#| msgid "Select a File"
 msgid "Save a File"
-msgstr "Výber súboru"
+msgstr "Uloženie súboru"
 
 #: gtk/gtkfiledialog.c:895 gtk/ui/gtkappchooserdialog.ui:53
 #: gtk/ui/gtkcolorchooserdialog.ui:41 gtk/ui/gtkfontchooserdialog.ui:34
@@ -2716,40 +2703,28 @@ msgid "_Select"
 msgstr "_Vybrať"
 
 #: gtk/gtkfiledialog.c:896
-#, fuzzy
-#| msgid "Select a File"
 msgid "Select Folders"
-msgstr "Výber súboru"
+msgstr "Výber priečinkov"
 
 #: gtk/gtkfiledialog.c:896
-#, fuzzy
-#| msgid "Select a File"
 msgid "Select a Folder"
-msgstr "Výber súboru"
+msgstr "Výber priečinku"
 
 #: gtk/gtkfiledialog.c:1397 gtk/gtkfiledialog.c:1514 gtk/gtkfiledialog.c:1623
-#, fuzzy
-#| msgid "Binding:"
 msgid "Encoding"
-msgstr "Previazanie:"
+msgstr "Kódovanie"
 
 #: gtk/gtkfiledialog.c:1634
-#, fuzzy
-#| msgid "Binding:"
 msgid "Line Ending"
-msgstr "Previazanie:"
+msgstr "Ukončenie riadku"
 
 #: gtk/gtkfilefilter.c:1085
-#, fuzzy
-#| msgid "Unspecified error"
 msgid "Unspecified"
-msgstr "Nešpecifikovaná chyba"
+msgstr "Neurčený typ"
 
 #: gtk/gtkfontchooserdialog.c:195 gtk/gtkfontchooserdialog.c:198
-#, fuzzy
-#| msgid "Change name"
 msgid "Change Font Features"
-msgstr "Zmeniť názov"
+msgstr "Zmení vlastnosti písma"
 
 #: gtk/gtkfontchooserwidget.c:1491
 msgctxt "Font variation axis"
@@ -2777,22 +2752,18 @@ msgid "Optical Size"
 msgstr "Optická veľkosť"
 
 #: gtk/gtkfontchooserwidget.c:2053
-#, fuzzy
-#| msgid "Default"
 msgctxt "Font feature value"
 msgid "Default"
-msgstr "Predvolený"
+msgstr "Predvolená hodnota"
 
 #: gtk/gtkfontchooserwidget.c:2070
-#, fuzzy
-#| msgid "Enabled"
 msgctxt "Font feature value"
 msgid "Enable"
-msgstr "Povolené"
+msgstr "Povoliť"
 
 #: gtk/gtkfontchooserwidget.c:2406
 msgid "Default"
-msgstr "Predvolený"
+msgstr "Predvolená hodnota"
 
 #: gtk/gtkfontchooserwidget.c:2469
 msgid "Ligatures"
@@ -2802,34 +2773,28 @@ msgstr "Ligatúry"
 msgid "Letter Case"
 msgstr "Veľkosť písma"
 
+# myslí sa tým horný dolný index
 #: gtk/gtkfontchooserwidget.c:2471
 msgid "Number Case"
-msgstr "Veľkosť čísel"
+msgstr "Číselné indexy"
 
 #: gtk/gtkfontchooserwidget.c:2472
 msgid "Number Spacing"
-msgstr "Medzery medzi číslami"
+msgstr "Zarovnanie čísel"
 
 #: gtk/gtkfontchooserwidget.c:2473
 msgid "Numeric Extras"
-msgstr ""
+msgstr "Špeciálne číselné vlastnosti"
 
 #: gtk/gtkfontchooserwidget.c:2474
-#, fuzzy
-#| msgctxt "OpenType layout"
-#| msgid "Fractions"
 msgid "Fractions"
-msgstr "Úlomky"
+msgstr "Zlomky"
 
 #: gtk/gtkfontchooserwidget.c:2475
-#, fuzzy
-#| msgid "Style Properties"
 msgid "Style Variations"
-msgstr "Vlastnosti štýlu"
+msgstr "Varianty štýlu"
 
 #: gtk/gtkfontchooserwidget.c:2477
-#, fuzzy
-#| msgid "Character Variants"
 msgid "Character Variations"
 msgstr "Varianty znakov"
 
@@ -2843,10 +2808,8 @@ msgid "Close"
 msgstr "Zavrieť"
 
 #: gtk/deprecated/gtkinfobar.c:502
-#, fuzzy
-#| msgid "Close the window"
 msgid "Close the infobar"
-msgstr "Zavrie okno"
+msgstr "Zavrie infopanel"
 
 #: gtk/gtklabel.c:5905 gtk/gtktext.c:6355 gtk/gtktextview.c:9366
 msgid "Cu_t"
@@ -2925,19 +2888,14 @@ msgid "%d:%02d"
 msgstr "%d:%02d"
 
 #: gtk/gtkmediacontrols.c:415
-#, fuzzy
-#| msgid "_Stop"
 msgctxt "media controls tooltip"
 msgid "Stop"
-msgstr "_Zastaviť"
+msgstr "Zastavenie"
 
 #: gtk/gtkmediacontrols.c:420 gtk/ui/gtkmediacontrols.ui:28
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "_Play"
 msgctxt "media controls tooltip"
 msgid "Play"
-msgstr "_Hrať"
+msgstr "Prehrávanie"
 
 #: gtk/gtkmessagedialog.c:165 gtk/gtkmessagedialog.c:183
 #: gtk/print/gtkprintbackend.c:655 gtk/gtkwindow.c:6471
@@ -3347,10 +3305,8 @@ msgid "Computer"
 msgstr "Počítač"
 
 #: gtk/gtkplacesview.c:593
-#, fuzzy
-#| msgid "Recent Servers"
 msgid "Remove server"
-msgstr "Nedávne servery"
+msgstr "Odoberie server"
 
 #: gtk/gtkplacesview.c:876
 msgid "Searching for network locations"
@@ -4305,10 +4261,8 @@ msgid "Bottom to top"
 msgstr "Zdola nahor"
 
 #: gtk/gtkprintdialog.c:1759
-#, fuzzy
-#| msgid "Failed to write cache file: %s\n"
 msgid "Failed to create the read file descriptor"
-msgstr "Zlyhalo zapísanie súboru vyrovnávacieho úložiska: %s\n"
+msgstr "Zlyhalo vytvorenie popisovača súbor na čítanie"
 
 #: gtk/gtkprogressbar.c:629
 #, c-format
@@ -4336,10 +4290,8 @@ msgstr ""
 "názvom „%1$s“"
 
 #: gtk/gtksearchentry.c:838
-#, fuzzy
-#| msgid "Clear entry"
 msgid "Clear Entry"
-msgstr "Vymazať záznam"
+msgstr "Vymazať vstup"
 
 #. Translators: This string is used to mark left/right variants of modifier
 #. * keys in the shortcut window (e.g. Control_L vs Control_R). Please keep
@@ -4426,106 +4378,82 @@ msgstr "Skúste vyhľadať niečo iné"
 
 # tooltip
 #: gtk/gtkstacksidebar.c:160
-#, fuzzy
 #| msgid "Toggle Sidebar"
 msgctxt "accessibility"
 msgid "Sidebar"
-msgstr "Prepne bočný panel"
+msgstr "Bočný panel"
 
 #: gtk/gtktext.c:6381
-#, fuzzy
-#| msgid "Text Direction"
 msgid "Change di_rection"
-msgstr "Smer textu"
+msgstr "Zmeniť _smer"
 
 #: gtk/gtktext.c:6386 gtk/gtktextview.c:9404
 msgid "Insert _Emoji"
-msgstr "Vložiť _emotikonu"
+msgstr "Vložiť _emodži"
 
 #: gtk/gtktextencoding.c:31
 msgctxt "Encoding name"
 msgid "Automatically Detected"
-msgstr ""
+msgstr "Rozpoznať automaticky"
 
 #: gtk/gtktextencoding.c:32
 msgctxt "Encoding name"
 msgid "ASCII"
-msgstr ""
+msgstr "ASCII"
 
 #: gtk/gtktextencoding.c:34 gtk/gtktextencoding.c:47 gtk/gtktextencoding.c:74
 #: gtk/gtktextencoding.c:95
-#, fuzzy
-#| msgid "Yesterday"
 msgctxt "Encoding name"
 msgid "Western"
-msgstr "Včera"
+msgstr "Západoeurópske"
 
 #: gtk/gtktextencoding.c:35 gtk/gtktextencoding.c:75 gtk/gtktextencoding.c:93
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Fan-Fold European"
 msgctxt "Encoding name"
 msgid "Central European"
-msgstr "Európsky Fan-Fold"
+msgstr "Stredoeurópske"
 
 #: gtk/gtktextencoding.c:36
-#, fuzzy
-#| msgctxt "paper size"
-#| msgid "Fan-Fold European"
 msgctxt "Encoding name"
 msgid "South European"
-msgstr "Európsky Fan-Fold"
+msgstr "Juhoeurópske"
 
 #: gtk/gtktextencoding.c:37 gtk/gtktextencoding.c:45 gtk/gtktextencoding.c:100
 msgctxt "Encoding name"
 msgid "Baltic"
-msgstr ""
+msgstr "Pobaltské"
 
 #: gtk/gtktextencoding.c:38 gtk/gtktextencoding.c:76 gtk/gtktextencoding.c:83
 #: gtk/gtktextencoding.c:85 gtk/gtktextencoding.c:94
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Cyrillic"
 msgctxt "Encoding name"
 msgid "Cyrillic"
-msgstr "Cyrilika"
+msgstr "Azbuka"
 
 #: gtk/gtktextencoding.c:39 gtk/gtktextencoding.c:79 gtk/gtktextencoding.c:99
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Arabic"
 msgctxt "Encoding name"
 msgid "Arabic"
 msgstr "Arabské"
 
 #: gtk/gtktextencoding.c:40 gtk/gtktextencoding.c:96
-#, fuzzy
-#| msgid "_Green:"
 msgctxt "Encoding name"
 msgid "Greek"
-msgstr "_Zelená:"
+msgstr "Grécke"
 
 #: gtk/gtktextencoding.c:41
-#, fuzzy
-#| msgid "Visual"
 msgctxt "Encoding name"
 msgid "Hebrew Visual"
-msgstr "Vizuálne"
+msgstr "Hebrejské (vizuálne)"
 
 #: gtk/gtktextencoding.c:42 gtk/gtktextencoding.c:77 gtk/gtktextencoding.c:97
 msgctxt "Encoding name"
 msgid "Turkish"
-msgstr ""
+msgstr "Turecké"
 
 #: gtk/gtktextencoding.c:43
 msgctxt "Encoding name"
 msgid "Nordic"
-msgstr ""
+msgstr "Severské"
 
 #: gtk/gtktextencoding.c:44 gtk/gtktextencoding.c:89
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Thai"
 msgctxt "Encoding name"
 msgid "Thai"
 msgstr "Thajské"
@@ -4533,27 +4461,21 @@ msgstr "Thajské"
 #: gtk/gtktextencoding.c:46
 msgctxt "Encoding name"
 msgid "Celtic"
-msgstr ""
+msgstr "Keltské"
 
 #: gtk/gtktextencoding.c:48
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Armenian"
 msgctxt "Encoding name"
 msgid "Romanian"
-msgstr "Arménske"
+msgstr "Rumunské"
 
 #: gtk/gtktextencoding.c:50 gtk/gtktextencoding.c:51 gtk/gtktextencoding.c:52
 #: gtk/gtktextencoding.c:53 gtk/gtktextencoding.c:54 gtk/gtktextencoding.c:55
 #: gtk/gtktextencoding.c:56 gtk/gtktextencoding.c:57
 msgctxt "Encoding name"
 msgid "Unicode"
-msgstr ""
+msgstr "Unicode"
 
 #: gtk/gtktextencoding.c:59
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Armenian"
 msgctxt "Encoding name"
 msgid "Armenian"
 msgstr "Arménske"
@@ -4561,90 +4483,71 @@ msgstr "Arménske"
 #: gtk/gtktextencoding.c:60 gtk/gtktextencoding.c:61 gtk/gtktextencoding.c:67
 msgctxt "Encoding name"
 msgid "Chinese Traditional"
-msgstr ""
+msgstr "Čínske tradičné"
 
 #: gtk/gtktextencoding.c:62
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Cyrillic"
 msgctxt "Encoding name"
 msgid "Cyrillic/Russian"
-msgstr "Cyrilika"
+msgstr "Ruská azbuka"
 
 #: gtk/gtktextencoding.c:63 gtk/gtktextencoding.c:64 gtk/gtktextencoding.c:65
 #: gtk/gtktextencoding.c:81 gtk/gtktextencoding.c:87
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Javanese"
 msgctxt "Encoding name"
 msgid "Japanese"
-msgstr "Jávske"
+msgstr "Japonské"
 
 #: gtk/gtktextencoding.c:66 gtk/gtktextencoding.c:82 gtk/gtktextencoding.c:84
 #: gtk/gtktextencoding.c:90
 msgctxt "Encoding name"
 msgid "Korean"
-msgstr ""
+msgstr "Kórejské"
 
 #: gtk/gtktextencoding.c:69 gtk/gtktextencoding.c:70 gtk/gtktextencoding.c:71
 msgctxt "Encoding name"
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "Čínske zjednodušené"
 
 #: gtk/gtktextencoding.c:72
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Georgian"
 msgctxt "Encoding name"
 msgid "Georgian"
 msgstr "Gruzínske"
 
 #: gtk/gtktextencoding.c:78 gtk/gtktextencoding.c:98
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Hebrew"
 msgctxt "Encoding name"
 msgid "Hebrew"
 msgstr "Hebrejské"
 
 #: gtk/gtktextencoding.c:86
-#, fuzzy
-#| msgctxt "Script"
-#| msgid "Cyrillic"
 msgctxt "Encoding name"
 msgid "Cyrillic/Ukrainian"
-msgstr "Cyrilika"
+msgstr "Ukrajinská azbuka"
 
 #: gtk/gtktextencoding.c:88 gtk/gtktextencoding.c:91 gtk/gtktextencoding.c:101
-#, fuzzy
-#| msgctxt "input method menu"
-#| msgid "Vietnamese (VIQR)"
 msgctxt "Encoding name"
 msgid "Vietnamese"
-msgstr "Vietnamský (VIQR)"
+msgstr "Vietnamské"
 
 #: gtk/gtktextencoding.c:163
 msgctxt "Line ending name"
 msgid "Unchanged"
-msgstr ""
+msgstr "Nezmenené"
 
 #: gtk/gtktextencoding.c:164
 msgctxt "Line ending name"
 msgid "Unix/Linux"
-msgstr ""
+msgstr "Unix/Linux"
 
 #: gtk/gtktextencoding.c:165
-#, fuzzy
 #| msgctxt "accessibility"
 #| msgid "window"
 msgctxt "Line ending name"
 msgid "Windows"
-msgstr "okno"
+msgstr "Windows"
 
 #: gtk/gtktextencoding.c:166
 msgctxt "Line ending name"
 msgid "Mac OS Classic"
-msgstr ""
+msgstr "Mac OS"
 
 #: gtk/gtktextview.c:9386
 msgid "_Undo"
@@ -4703,24 +4606,17 @@ msgid "Role"
 msgstr "Úloha"
 
 #: gtk/inspector/a11y.ui:71
-#, fuzzy
-#| msgid "Direction"
 msgid "Description"
-msgstr "Smer"
+msgstr "Popis"
 
 #: gtk/inspector/a11y.ui:99 gtk/inspector/misc-info.ui:296
 #: tools/gtk-path-tool-info.c:132
-#, fuzzy
-#| msgctxt "OpenType layout"
-#| msgid "Left Bounds"
 msgid "Bounds"
-msgstr "Ľavé ohraničenia"
+msgstr "Hranice"
 
 #: gtk/inspector/a11y.ui:125
-#, fuzzy
-#| msgid "Object path"
 msgid "Object Path"
-msgstr "Cesta objektu"
+msgstr "Cesta k objektu"
 
 #: gtk/inspector/a11y.ui:164
 msgid "Attribute"
@@ -4769,12 +4665,12 @@ msgstr "prázdna"
 #: gtk/inspector/clipboard.c:291 gtk/inspector/clipboard.c:344
 msgctxt "clipboard"
 msgid "local"
-msgstr ""
+msgstr "miestna"
 
 #: gtk/inspector/clipboard.c:293 gtk/inspector/clipboard.c:346
 msgctxt "clipboard"
 msgid "remote"
-msgstr ""
+msgstr "vzdialená"
 
 #: gtk/inspector/clipboard.ui:30
 msgid "Drag and hold here"
@@ -4786,7 +4682,7 @@ msgstr "Schránka"
 
 #: gtk/inspector/clipboard.ui:107
 msgid "Primary"
-msgstr ""
+msgstr "Hlavná"
 
 # jedná sa o titulnú stránku takže (žiadna)
 #: gtk/inspector/controllers.c:126
@@ -4797,12 +4693,12 @@ msgstr "Žiadna"
 #: gtk/inspector/controllers.c:129
 msgctxt "event phase"
 msgid "Capture"
-msgstr "Zachytiť"
+msgstr "Zachytenie"
 
 #: gtk/inspector/controllers.c:132
 msgctxt "event phase"
 msgid "Bubble"
-msgstr "Bublina"
+msgstr "Prebublanie"
 
 #: gtk/inspector/controllers.c:135
 msgctxt "event phase"
@@ -4810,11 +4706,9 @@ msgid "Target"
 msgstr "Cieľ"
 
 #: gtk/inspector/controllers.c:156
-#, fuzzy
-#| msgid "Cumulative"
 msgctxt "propagation limit"
 msgid "Native"
-msgstr "Kumulatívne"
+msgstr "Rovnaký prvok"
 
 #: gtk/inspector/css-editor.c:135
 msgid "You can type here any CSS rule recognized by GTK."
@@ -4846,10 +4740,8 @@ msgid "Save the current CSS"
 msgstr "Uložiť aktuálne pravidlo CSS"
 
 #: gtk/inspector/css-editor.ui:51
-#, fuzzy
-#| msgid "Show other locations"
 msgid "Show deprecations"
-msgstr "Zobraziť ďalšie umiestnenia"
+msgstr "Zobrazí zastarané prvky"
 
 #: gtk/inspector/css-node-tree.ui:28 tools/gtk-builder-tool-preview.c:178
 #: tools/gtk-builder-tool-screenshot.c:359
@@ -4865,30 +4757,23 @@ msgid "CSS Property"
 msgstr "Vlastnosť CSS"
 
 #: gtk/inspector/general.c:469
-#, fuzzy
-#| msgid "Theme is hardcoded by GTK_THEME"
 msgid "IM Context is hardcoded by GTK_IM_MODULE"
-msgstr "Motív je vynútený podľa premennej prostredia GTK_THEME"
+msgstr "Kontext vstupnej metódy je natvrdo nastavený pomocou GTK_IM_MODULE"
 
 # jedná sa o titulnú stránku takže (žiadna)
 #: gtk/inspector/general.c:644
-#, fuzzy
-#| msgctxt "font"
-#| msgid "None"
 msgctxt "GL renderer"
 msgid "None"
-msgstr "Žiadne"
+msgstr "Žiadny"
 
 # prečo stredný rod?
 # PK: prever
 # PM: v master vetve
 # datum
 #: gtk/inspector/general.c:741
-#, fuzzy
-#| msgid "Unknown"
 msgctxt "GL version"
 msgid "Unknown"
-msgstr "Neznámy"
+msgstr "Neznáma"
 
 # jedná sa o titulnú stránku takže (žiadna)
 #: gtk/inspector/general.c:995 gtk/inspector/general.c:1034
@@ -4897,17 +4782,12 @@ msgid "None"
 msgstr "Žiadne"
 
 #: gtk/inspector/general.ui:13
-#, fuzzy
-#| msgid "Copy to clipboard"
 msgid "Copy to clipboard as gitlab markdown"
-msgstr "Skopírovať do schránky"
+msgstr "Skopíruje do schránky so značkovaním gitlab"
 
 #: gtk/inspector/general.ui:45
-#, fuzzy
-#| msgid "Opening %d Item"
-#| msgid_plural "Opening %d Items"
 msgid "Operating System"
-msgstr "Otvára sa %d položiek"
+msgstr "Operačný systém"
 
 #: gtk/inspector/general.ui:71
 msgid "GTK Version"
@@ -4923,23 +4803,19 @@ msgstr "Vykresľovač GSK"
 
 #: gtk/inspector/general.ui:149
 msgid "Pango Fontmap"
-msgstr ""
+msgstr "Mapovanie písiem Pango"
 
 #: gtk/inspector/general.ui:175
-#, fuzzy
-#| msgid "GDK Backend"
 msgid "Media Backend"
-msgstr "Obslužný program GDK"
+msgstr "Obslužný program médií"
 
 #: gtk/inspector/general.ui:201
 msgid "Input Method"
 msgstr "Metóda vstupu"
 
 #: gtk/inspector/general.ui:227
-#, fuzzy
-#| msgid "Accessibility"
 msgid "Accessibility Backend"
-msgstr "Zjednodušenie ovládania"
+msgstr "Obslužný program pre pístupnosť"
 
 #: gtk/inspector/general.ui:264
 msgid "Application ID"
@@ -4955,7 +4831,7 @@ msgstr "Predpona"
 
 #: gtk/inspector/general.ui:354
 msgid "Environment"
-msgstr ""
+msgstr "Prostredie"
 
 #: gtk/inspector/general.ui:457
 msgid "Display"
@@ -4970,16 +4846,12 @@ msgid "Composited"
 msgstr "Kompozitné"
 
 #: gtk/inspector/general.ui:535
-#, fuzzy
-#| msgid "Available Protocols"
 msgid "Protocols"
-msgstr "Dostupné protokoly"
+msgstr "Protokoly"
 
 #: gtk/inspector/general.ui:591
-#, fuzzy
-#| msgid "GSK Renderer"
 msgid "GL Renderer"
-msgstr "Vykresľovač GSK"
+msgstr "Vykresľovač GL"
 
 #: gtk/inspector/general.ui:620
 msgid "GL Vendor"
@@ -4990,46 +4862,32 @@ msgid "GL Version"
 msgstr "Verzia GL"
 
 #: gtk/inspector/general.ui:676
-#, fuzzy
-#| msgid "GL Vendor"
 msgid "GL Backend Vendor"
-msgstr "Výrobca GL"
+msgstr "Výrobca obslužného programu GL"
 
 #: gtk/inspector/general.ui:703
-#, fuzzy
-#| msgid "GL Version"
 msgid "GL Backend Version"
-msgstr "Verzia GL"
+msgstr "Verzia obslužného programu GL"
 
 #: gtk/inspector/general.ui:753
-#, fuzzy
-#| msgid "GL Version"
 msgid "GL Full Version"
-msgstr "Verzia GL"
+msgstr "Úplná verzia GL"
 
 #: gtk/inspector/general.ui:782
-#, fuzzy
-#| msgid "GL Version"
 msgid "GLSL Version"
-msgstr "Verzia GL"
+msgstr "Verzia GLSL"
 
 #: gtk/inspector/general.ui:811
-#, fuzzy
-#| msgid "GL Version"
 msgid "GL Extensions"
-msgstr "Verzia GL"
+msgstr "Rozšírenia GL"
 
 #: gtk/inspector/general.ui:899
-#, fuzzy
-#| msgid "GL Version"
 msgid "EGL Extensions"
-msgstr "Verzia GL"
+msgstr "Rozšírenia GL"
 
 #: gtk/inspector/general.ui:986
-#, fuzzy
-#| msgid "Gestures"
 msgid "GL Features"
-msgstr "Gestá"
+msgstr "Funkcionality GL"
 
 # button
 #: gtk/inspector/general.ui:1022
@@ -5038,32 +4896,26 @@ msgstr "Zariadenie Vulkan"
 
 #: gtk/inspector/general.ui:1049
 msgid "Vulkan API Version"
-msgstr ""
+msgstr "Verzia Vulkan API"
 
 #: gtk/inspector/general.ui:1076
 msgid "Vulkan Driver Version"
-msgstr ""
+msgstr "Verzia ovládača Vuklan"
 
 # button
 #: gtk/inspector/general.ui:1125
-#, fuzzy
-#| msgid "Vulkan Device"
 msgid "Vulkan Layers"
-msgstr "Zariadenie Vulkan"
+msgstr "Vrstvy Vulkan"
 
 # button
 #: gtk/inspector/general.ui:1194
-#, fuzzy
-#| msgid "Vulkan Device"
 msgid "Vulkan Extensions"
-msgstr "Zariadenie Vulkan"
+msgstr "Rozšírenia Vulkan"
 
 # button
 #: gtk/inspector/general.ui:1281
-#, fuzzy
-#| msgid "Vulkan Device"
 msgid "Vulkan Features"
-msgstr "Zariadenie Vulkan"
+msgstr "Funkcionality Vulkan"
 
 #: gtk/inspector/menu.c:264
 msgid "Unnamed section"
@@ -5111,7 +4963,7 @@ msgstr "Režim požiadaviek"
 
 #: gtk/inspector/misc-info.ui:236
 msgid "Measure map"
-msgstr ""
+msgstr "Mapovanie merania"
 
 #: gtk/inspector/misc-info.ui:253
 msgid "Expand"
@@ -5119,7 +4971,7 @@ msgstr "Rozbaliť"
 
 #: gtk/inspector/misc-info.ui:321
 msgid "Baseline"
-msgstr "Základná čiara"
+msgstr "Základná línia"
 
 #: gtk/inspector/misc-info.ui:346
 msgid "Surface"
@@ -5152,16 +5004,12 @@ msgid "Frame Rate"
 msgstr "Frekvencia snímok"
 
 #: gtk/inspector/misc-info.ui:527 gtk/inspector/visual.ui:314
-#, fuzzy
-#| msgid "Font Scale"
 msgid "Scale"
-msgstr "Mierka písma"
+msgstr "Mierka"
 
 #: gtk/inspector/misc-info.ui:552
-#, fuzzy
-#| msgid "Color Name"
 msgid "Color state"
-msgstr "Názov farby"
+msgstr "Farba stavu"
 
 #: gtk/inspector/misc-info.ui:577
 msgid "Mapped"
@@ -5296,23 +5144,19 @@ msgstr "Ukladanie RenderNode zlyhalo"
 
 #: gtk/inspector/recorder.ui:20
 msgid "Recording Options"
-msgstr ""
+msgstr "Voľby zaznamenávania"
 
-# tooltip
 #: gtk/inspector/recorder.ui:24
-#, fuzzy
-#| msgid "Record frames"
 msgid "Record events"
-msgstr "Zaznamená snímky"
+msgstr "Zaznamenať udalosti"
 
-# tooltip
 #: gtk/inspector/recorder.ui:28
 msgid "Add debug nodes"
-msgstr "Pridá ladiace uzly"
+msgstr "Pridať ladiace uzly"
 
 #: gtk/inspector/recorder.ui:32
 msgid "Highlight event sequences"
-msgstr ""
+msgstr "Zvýrazniť sekvencie udalostí"
 
 # tooltip
 #: gtk/inspector/recorder.ui:42
@@ -5363,9 +5207,8 @@ msgstr "Veľkosť:"
 
 #: gtk/inspector/shortcuts.ui:17
 msgid "Trigger"
-msgstr ""
+msgstr "Spúťač"
 
-# jedná sa o titulnú stránku takže (žiadna)
 #: gtk/inspector/size-groups.c:228
 msgctxt "sizegroup mode"
 msgid "None"
@@ -5391,10 +5234,8 @@ msgid "Mode"
 msgstr "Režim"
 
 #: gtk/inspector/statistics.c:814
-#, fuzzy
-#| msgid "GLib must be configured with --enable-debug"
 msgid "GLib must be configured with -Dbuildtype=debug"
-msgstr "Knižnica Glib musí byť konfigurovaná s parametrom --enable-debug"
+msgstr "Knižnica GLib musí byť nakonfigurovaná s voľbou -Dbuildtype=debug"
 
 #: gtk/inspector/statistics.ui:41
 msgid "Self 1"
@@ -5425,17 +5266,13 @@ msgid "Enable statistics with GOBJECT_DEBUG=instance-count"
 msgstr "Povoliť štatistiky s GOBJECT_DEBUG=instance-count"
 
 #: gtk/inspector/strv-editor.c:83
-#, fuzzy, c-format
-#| msgid "Remove"
+#, c-format
 msgid "Remove %s"
-msgstr "Odstrániť"
+msgstr "Odstrániť %s"
 
 #: gtk/inspector/strv-editor.c:115
-#, fuzzy
-#| msgctxt "Stock label"
-#| msgid "_Add"
 msgid "Add"
-msgstr "P_ridať"
+msgstr "Pridať"
 
 #: gtk/inspector/tree-data.ui:10
 msgid "Show data"
@@ -5447,7 +5284,7 @@ msgstr "Usporiadanie"
 
 #: gtk/inspector/type-info.ui:35
 msgid "Implements"
-msgstr ""
+msgstr "Implementuje"
 
 #: gtk/inspector/visual.ui:34
 msgid "GTK Theme"
@@ -5475,12 +5312,12 @@ msgstr "Smer textu"
 
 #. translators: these strings must be separated by newlines
 #: gtk/inspector/visual.ui:184
-#, fuzzy
-#| msgid "Left-to-Right"
 msgid ""
 "Left-to-Right\n"
 "Right-to-Left"
-msgstr "Zľava-doprava"
+msgstr ""
+"Zľava doprava\n"
+"Sprava doľava"
 
 #: gtk/inspector/visual.ui:201
 msgid "Animations"
@@ -5491,10 +5328,8 @@ msgid "Slowdown"
 msgstr "Spomaliť"
 
 #: gtk/inspector/visual.ui:361
-#, fuzzy
-#| msgid "Renderer"
 msgid "Rendering"
-msgstr "Vykresľovač"
+msgstr "Vykresľovanie"
 
 #. translators: these strings must be separated by newlines
 #: gtk/inspector/visual.ui:376
@@ -5503,12 +5338,12 @@ msgid ""
 "Automatic\n"
 "Manual"
 msgstr ""
+"Automatické\n"
+"Ručné"
 
 #: gtk/inspector/visual.ui:403
-#, fuzzy
-#| msgid "Frame Rate"
 msgid "Show Framerate"
-msgstr "Frekvencia snímok"
+msgstr "Zobraziť frekvenciu snímok"
 
 #: gtk/inspector/visual.ui:428
 msgid "Show Graphic Updates"
@@ -5519,16 +5354,15 @@ msgid ""
 "Tints all the places where the current renderer uses Cairo instead of the "
 "GPU."
 msgstr ""
+"Zatieni všetky miesta, kde aktuálny vykresľovač využíva Cairo namiesto GPU."
 
 #: gtk/inspector/visual.ui:454
-#, fuzzy
-#| msgid "Show program version"
 msgid "Show Cairo Rendering"
-msgstr "Zobrazí verziu programu"
+msgstr "Zobraziť vykresľovanie Cairom"
 
 #: gtk/inspector/visual.ui:479
 msgid "Show Baselines"
-msgstr "Zobraziť základné čiary"
+msgstr "Zobraziť základné línie"
 
 #: gtk/inspector/visual.ui:507
 msgid "Show Layout Borders"
@@ -5547,34 +5381,28 @@ msgid "CSS Margin"
 msgstr "Okraj CSS"
 
 #: gtk/inspector/visual.ui:594
-#, fuzzy
-#| msgid "Paper Margins"
 msgid "Widget Margin"
-msgstr "Okraje papiera"
+msgstr "Okraje prvku"
 
 #: gtk/inspector/visual.ui:629
 msgid "Show Focus"
-msgstr ""
+msgstr "Zobraziť zameriavač"
 
 #: gtk/inspector/visual.ui:654
-#, fuzzy
-#| msgid "Accessibility"
 msgid "Show Accessibility warnings"
-msgstr "Zjednodušenie ovládania"
+msgstr "Zobraziť upozornenia prístupnosti"
 
 #: gtk/inspector/visual.ui:679
-#, fuzzy
-#| msgid "Show Graphic Updates"
 msgid "Show Graphics Offload"
-msgstr "Zobraziť grafické aktualizácie"
+msgstr "Zobraziť odľahčenie grafiky"
 
 #: gtk/inspector/visual.ui:714
 msgid "Show Touch UI"
-msgstr ""
+msgstr "Zobraziť dotykové rozhranie"
 
 #: gtk/inspector/visual.ui:745
 msgid "Inspect Inspector"
-msgstr ""
+msgstr "Skúmať Inšpektora"
 
 #: gtk/inspector/window.ui:27
 msgid "Select an Object"
@@ -5611,32 +5439,28 @@ msgstr "Prepne bočný panel"
 
 #: gtk/inspector/window.ui:253
 msgid "Refresh action state"
-msgstr ""
+msgstr "Obnoví stav akcie"
 
 #: gtk/inspector/window.ui:327
 msgid "Previous object"
 msgstr "Predchádzajúci objekt"
 
 #: gtk/inspector/window.ui:334
-#, fuzzy
-#| msgid "Child Properties"
 msgid "Child object"
-msgstr "Vlastnosti potomka"
+msgstr "Podriadený objekt"
 
+# myslí sa objekt na rovnakej úrovni
 #: gtk/inspector/window.ui:341
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "Pre_vious"
 msgid "Previous sibling"
-msgstr "Pre_dchádzajúca"
+msgstr "Predchádzajúci súrodenec"
 
 #: gtk/inspector/window.ui:347
 msgid "List Position"
-msgstr ""
+msgstr "Pozícia v zozname"
 
 #: gtk/inspector/window.ui:354
 msgid "Next sibling"
-msgstr ""
+msgstr "Nasledujúci súrodenec"
 
 #: gtk/inspector/window.ui:384
 msgid "Miscellaneous"
@@ -5676,11 +5500,11 @@ msgstr "Lupa"
 
 #: gtk/inspector/window.ui:506
 msgid "Accessibility"
-msgstr "Zjednodušenie ovládania"
+msgstr "Prístupnosť"
 
 #: gtk/inspector/window.ui:530
 msgid "Global"
-msgstr ""
+msgstr "Globálne"
 
 #: gtk/inspector/window.ui:543
 msgid "Information"
