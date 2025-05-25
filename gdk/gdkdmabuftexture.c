@@ -272,11 +272,11 @@ gdk_dmabuf_texture_new_from_builder (GdkDmabufTextureBuilder *builder,
   self->dmabuf = dmabuf;
 
   GDK_DISPLAY_DEBUG (display, DMABUF,
-                     "Creating dmabuf texture, format %.4s:%#" G_GINT64_MODIFIER "x, %s%u planes, memory format %u",
+                     "Creating dmabuf texture, format %.4s:%#" G_GINT64_MODIFIER "x, %s%u planes, memory format %s",
                      (char *) &dmabuf.fourcc, dmabuf.modifier,
                      gdk_dmabuf_texture_builder_get_premultiplied (builder) ? " premultiplied, " : "",
                      dmabuf.n_planes,
-                     GDK_TEXTURE (self)->format);
+                     gdk_memory_format_get_name (GDK_TEXTURE (self)->format));
 
   /* Set this only once we know that the texture will be created.
    * Otherwise dispose() will run the callback */
