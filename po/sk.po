@@ -14,7 +14,7 @@ msgstr ""
 "Project-Id-Version: gtk+\n"
 "Report-Msgid-Bugs-To: https://gitlab.gnome.org/GNOME/gtk/-/issues/\n"
 "POT-Creation-Date: 2025-05-12 17:55+0000\n"
-"PO-Revision-Date: 2025-05-24 16:57+0200\n"
+"PO-Revision-Date: 2025-05-25 13:53+0200\n"
 "Last-Translator: Peter Mráz <etkinator@gmail.com>\n"
 "Language-Team: Slovak <gnome-sk-list@gnome.org>\n"
 "Language: sk\n"
@@ -5537,29 +5537,27 @@ msgstr "Záznamník"
 #: gtk/open-type-layout.h:14
 msgctxt "OpenType layout"
 msgid "Access All Alternates"
-msgstr "Prístup ku všetkým náhradám"
+msgstr "Prístup ku všetkým alternatívam"
 
 #: gtk/open-type-layout.h:15
 msgctxt "OpenType layout"
 msgid "Above-base Forms"
-msgstr "Formy nad základom"
+msgstr "Formy nad základnou líniou"
 
 #: gtk/open-type-layout.h:16
 msgctxt "OpenType layout"
 msgid "Above-base Mark Positioning"
-msgstr "Umiestnenie  značiek nad základom"
+msgstr "Umiestnenie značiek nad základnou líniou"
 
 #: gtk/open-type-layout.h:17
 msgctxt "OpenType layout"
 msgid "Above-base Substitutions"
-msgstr "Substitúcie nad základom"
+msgstr "Náhrady nad základnou líniou"
 
 #: gtk/open-type-layout.h:18
-#, fuzzy
-#| msgid "Authentication"
 msgctxt "OpenType layout"
 msgid "Alternative Fractions"
-msgstr "Overenie totožnosti"
+msgstr "Alternatívne zlomky"
 
 #: gtk/open-type-layout.h:19
 msgctxt "OpenType layout"
@@ -5569,22 +5567,22 @@ msgstr "Akhandy"
 #: gtk/open-type-layout.h:20
 msgctxt "OpenType layout"
 msgid "Below-base Forms"
-msgstr "Formy pod základom"
+msgstr "Formy pod základnou líniou"
 
 #: gtk/open-type-layout.h:21
 msgctxt "OpenType layout"
 msgid "Below-base Mark Positioning"
-msgstr "Umiestnenie značiek pod základom"
+msgstr "Umiestnenie značiek pod základnou líniou"
 
 #: gtk/open-type-layout.h:22
 msgctxt "OpenType layout"
 msgid "Below-base Substitutions"
-msgstr "Substitúcie pod základom"
+msgstr "Náhrady pod základnou líniou"
 
 #: gtk/open-type-layout.h:23
 msgctxt "OpenType layout"
 msgid "Contextual Alternates"
-msgstr "Kontextové náhrady"
+msgstr "Kontextové alternatívy"
 
 #: gtk/open-type-layout.h:24
 msgctxt "OpenType layout"
@@ -5594,52 +5592,52 @@ msgstr "Formy citlivé na veľkosť písmen"
 #: gtk/open-type-layout.h:25
 msgctxt "OpenType layout"
 msgid "Glyph Composition / Decomposition"
-msgstr "Skladanie / rozklad glyfov"
+msgstr "Zloženie / rozloženie glyfov"
 
 #: gtk/open-type-layout.h:26
 msgctxt "OpenType layout"
 msgid "Conjunct Form After Ro"
-msgstr ""
+msgstr "Spojená forma po znaku Ro"
 
 #: gtk/open-type-layout.h:27
 msgctxt "OpenType layout"
 msgid "Conjunct Forms"
-msgstr ""
+msgstr "Spojené formy"
 
 #: gtk/open-type-layout.h:28
 msgctxt "OpenType layout"
 msgid "Contextual Ligatures"
-msgstr ""
+msgstr "Kontextové ligatúry"
 
 #: gtk/open-type-layout.h:29
 msgctxt "OpenType layout"
 msgid "Centered CJK Punctuation"
-msgstr ""
+msgstr "Centrovaná interpunkcia pre CJK"
 
 #: gtk/open-type-layout.h:30
 msgctxt "OpenType layout"
 msgid "Capital Spacing"
-msgstr ""
+msgstr "Rozostupy medzi kapitálkami"
 
 #: gtk/open-type-layout.h:31
 msgctxt "OpenType layout"
 msgid "Contextual Swash"
-msgstr ""
+msgstr "Kontextové ozdobné písmená"
 
 #: gtk/open-type-layout.h:32
 msgctxt "OpenType layout"
 msgid "Cursive Positioning"
-msgstr ""
+msgstr "Umiestnenie kurzívy"
 
 #: gtk/open-type-layout.h:33
 msgctxt "OpenType layout"
 msgid "Petite Capitals From Capitals"
-msgstr ""
+msgstr "Drobné kapitálky z veľkých písmen"
 
 #: gtk/open-type-layout.h:34
 msgctxt "OpenType layout"
 msgid "Small Capitals From Capitals"
-msgstr ""
+msgstr "Malé kapitálky z veľkých písmen"
 
 #: gtk/open-type-layout.h:35
 msgctxt "OpenType layout"
@@ -5649,12 +5647,12 @@ msgstr "Vzdialenosti"
 #: gtk/open-type-layout.h:36
 msgctxt "OpenType layout"
 msgid "Discretionary Ligatures"
-msgstr ""
+msgstr "Voliteľné ligatúry"
 
 #: gtk/open-type-layout.h:37
 msgctxt "OpenType layout"
 msgid "Denominators"
-msgstr ""
+msgstr "Menovatele"
 
 #: gtk/open-type-layout.h:38
 msgctxt "OpenType layout"
@@ -5664,37 +5662,37 @@ msgstr "Formy bez bodky"
 #: gtk/open-type-layout.h:39
 msgctxt "OpenType layout"
 msgid "Expert Forms"
-msgstr "Expertné formy"
+msgstr "Odborné formy"
 
 #: gtk/open-type-layout.h:40
 msgctxt "OpenType layout"
 msgid "Final Glyph on Line Alternates"
-msgstr ""
+msgstr "Alternatívy pre posledný glyf na riadku"
 
 #: gtk/open-type-layout.h:41
 msgctxt "OpenType layout"
 msgid "Terminal Forms #2"
-msgstr "Terminálové formy č.2"
+msgstr "Záverečné formy č. 2"
 
 #: gtk/open-type-layout.h:42
 msgctxt "OpenType layout"
 msgid "Terminal Forms #3"
-msgstr "Terminálové formy č.3"
+msgstr "Záverečné formy č. 3"
 
 #: gtk/open-type-layout.h:43
 msgctxt "OpenType layout"
 msgid "Terminal Forms"
-msgstr "Terminálové formy"
+msgstr "Záverečné formy"
 
 #: gtk/open-type-layout.h:44
 msgctxt "OpenType layout"
 msgid "Flattened accent forms"
-msgstr ""
+msgstr "Sploštené akcentové formy"
 
 #: gtk/open-type-layout.h:45
 msgctxt "OpenType layout"
 msgid "Fractions"
-msgstr "Úlomky"
+msgstr "Zlomky"
 
 #: gtk/open-type-layout.h:46
 msgctxt "OpenType layout"
@@ -5709,12 +5707,12 @@ msgstr "Polovičné formy"
 #: gtk/open-type-layout.h:48
 msgctxt "OpenType layout"
 msgid "Halant Forms"
-msgstr ""
+msgstr "Formy halant"
 
 #: gtk/open-type-layout.h:49
 msgctxt "OpenType layout"
 msgid "Alternate Half Widths"
-msgstr ""
+msgstr "Alternatívne polovičné šírky"
 
 #: gtk/open-type-layout.h:50
 msgctxt "OpenType layout"
@@ -5724,12 +5722,12 @@ msgstr "Historické formy"
 #: gtk/open-type-layout.h:51
 msgctxt "OpenType layout"
 msgid "Horizontal Kana Alternates"
-msgstr ""
+msgstr "Horizontálne alternatívy pre kana"
 
 #: gtk/open-type-layout.h:52
 msgctxt "OpenType layout"
 msgid "Historical Ligatures"
-msgstr ""
+msgstr "Historické ligatúry"
 
 #: gtk/open-type-layout.h:53
 msgctxt "OpenType layout"
@@ -5739,7 +5737,7 @@ msgstr "Hangul"
 #: gtk/open-type-layout.h:54
 msgctxt "OpenType layout"
 msgid "Hojo Kanji Forms"
-msgstr ""
+msgstr "Formy Hojo Kanji"
 
 #: gtk/open-type-layout.h:55
 msgctxt "OpenType layout"
@@ -5764,7 +5762,7 @@ msgstr "Kurzíva"
 #: gtk/open-type-layout.h:59
 msgctxt "OpenType layout"
 msgid "Justification Alternates"
-msgstr ""
+msgstr "Alternatívy pre zarovnanie"
 
 #: gtk/open-type-layout.h:60
 msgctxt "OpenType layout"
@@ -5789,7 +5787,7 @@ msgstr "Formy JIS2004"
 #: gtk/open-type-layout.h:64
 msgctxt "OpenType layout"
 msgid "Kerning"
-msgstr "Kerning"
+msgstr "Kerning (medzery medzi písmenami)"
 
 #: gtk/open-type-layout.h:65
 msgctxt "OpenType layout"
@@ -5797,22 +5795,19 @@ msgid "Left Bounds"
 msgstr "Ľavé ohraničenia"
 
 #: gtk/open-type-layout.h:66
-#, fuzzy
-#| msgctxt "cover page"
-#| msgid "Standard"
 msgctxt "OpenType layout"
 msgid "Standard Ligatures"
-msgstr "Štandardné"
+msgstr "Štandardné ligatúry"
 
 #: gtk/open-type-layout.h:67
 msgctxt "OpenType layout"
 msgid "Leading Jamo Forms"
-msgstr ""
+msgstr "Počiatočné formy Jamo"
 
 #: gtk/open-type-layout.h:68
 msgctxt "OpenType layout"
 msgid "Lining Figures"
-msgstr ""
+msgstr "Číslice na základnej línii"
 
 #: gtk/open-type-layout.h:69
 msgctxt "OpenType layout"
@@ -5820,73 +5815,69 @@ msgid "Localized Forms"
 msgstr "Lokalizované formy"
 
 #: gtk/open-type-layout.h:70
-#, fuzzy
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right alternates"
-msgstr "Značka _zľava doprava (LRM)"
+msgstr "Alternatívy pre písanie zľava doprava"
 
 #: gtk/open-type-layout.h:71
-#, fuzzy
-#| msgid "LRM _Left-to-right mark"
 msgctxt "OpenType layout"
 msgid "Left-to-right mirrored forms"
-msgstr "Značka _zľava doprava (LRM)"
+msgstr "Zrkadlené formy pre písanie zľava doprava"
 
 #: gtk/open-type-layout.h:72
 msgctxt "OpenType layout"
 msgid "Mark Positioning"
-msgstr ""
+msgstr "Umiestnenie značiek"
 
 #: gtk/open-type-layout.h:73
 msgctxt "OpenType layout"
 msgid "Medial Forms #2"
-msgstr "Mediálne formy č.2"
+msgstr "Stredové formy č.2"
 
 #: gtk/open-type-layout.h:74
 msgctxt "OpenType layout"
 msgid "Medial Forms"
-msgstr "Mediálne formy"
+msgstr "Stredové formy"
 
 #: gtk/open-type-layout.h:75
 msgctxt "OpenType layout"
 msgid "Mathematical Greek"
-msgstr ""
+msgstr "Matematické grécke formy"
 
 #: gtk/open-type-layout.h:76
 msgctxt "OpenType layout"
 msgid "Mark to Mark Positioning"
-msgstr ""
+msgstr "Umiestnenie značiek voči iným značkám"
 
 #: gtk/open-type-layout.h:77
 msgctxt "OpenType layout"
 msgid "Mark Positioning via Substitution"
-msgstr ""
+msgstr "Umiestnenie značiek pomocou náhrady"
 
 #: gtk/open-type-layout.h:78
 msgctxt "OpenType layout"
 msgid "Alternate Annotation Forms"
-msgstr ""
+msgstr "Alternatívne formy anotácií"
 
 #: gtk/open-type-layout.h:79
 msgctxt "OpenType layout"
 msgid "NLC Kanji Forms"
-msgstr ""
+msgstr "Formy NLC Kanji"
 
 #: gtk/open-type-layout.h:80
 msgctxt "OpenType layout"
 msgid "Nukta Forms"
-msgstr ""
+msgstr "Formy s nukta"
 
 #: gtk/open-type-layout.h:81
 msgctxt "OpenType layout"
 msgid "Numerators"
-msgstr ""
+msgstr "Čitatele"
 
 #: gtk/open-type-layout.h:82
 msgctxt "OpenType layout"
 msgid "Oldstyle Figures"
-msgstr ""
+msgstr "Číslice v starom štýle"
 
 #: gtk/open-type-layout.h:83
 msgctxt "OpenType layout"
@@ -5894,125 +5885,114 @@ msgid "Optical Bounds"
 msgstr "Optické ohraničenia"
 
 #: gtk/open-type-layout.h:84
-#, fuzzy
-#| msgid "Signals"
 msgctxt "OpenType layout"
 msgid "Ordinals"
-msgstr "Signály"
+msgstr "Radové číslovky"
 
 #: gtk/open-type-layout.h:85
 msgctxt "OpenType layout"
 msgid "Ornaments"
-msgstr "Ornamenty"
+msgstr "Ozdoby"
 
 #: gtk/open-type-layout.h:86
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Widths"
-msgstr ""
+msgstr "Proporčné alternatívne šírky"
 
 #: gtk/open-type-layout.h:87
 msgctxt "OpenType layout"
 msgid "Petite Capitals"
-msgstr ""
+msgstr "Drobné kapitálky"
 
 #: gtk/open-type-layout.h:88
 msgctxt "OpenType layout"
 msgid "Proportional Kana"
-msgstr ""
+msgstr "Proporčná kana"
 
 #: gtk/open-type-layout.h:89
-#, fuzzy
-#| msgid "Properties"
 msgctxt "OpenType layout"
 msgid "Proportional Figures"
-msgstr "Vlastnosti"
+msgstr "Proporčné číslice"
 
 #: gtk/open-type-layout.h:90
 msgctxt "OpenType layout"
 msgid "Pre-Base Forms"
-msgstr ""
+msgstr "Formy pred základnou líniou"
 
 #: gtk/open-type-layout.h:91
 msgctxt "OpenType layout"
 msgid "Pre-base Substitutions"
-msgstr ""
+msgstr "Náhrady pred základnou líniou"
 
 #: gtk/open-type-layout.h:92
 msgctxt "OpenType layout"
 msgid "Post-base Forms"
-msgstr ""
+msgstr "Formy po základnej línii"
 
 #: gtk/open-type-layout.h:93
 msgctxt "OpenType layout"
 msgid "Post-base Substitutions"
-msgstr ""
+msgstr "Náhrady po základnej línii"
 
 #: gtk/open-type-layout.h:94
 msgctxt "OpenType layout"
 msgid "Proportional Widths"
-msgstr ""
+msgstr "Proporčné šírky"
 
 #: gtk/open-type-layout.h:95
 msgctxt "OpenType layout"
 msgid "Quarter Widths"
-msgstr ""
+msgstr "Štvrtinové šírky"
 
 #: gtk/open-type-layout.h:96
 msgctxt "OpenType layout"
 msgid "Randomize"
-msgstr ""
+msgstr "Náhodné variácie"
 
 #: gtk/open-type-layout.h:97
 msgctxt "OpenType layout"
 msgid "Required Contextual Alternates"
-msgstr ""
+msgstr "Požadované kontextové alternatívy"
 
 #: gtk/open-type-layout.h:98
 msgctxt "OpenType layout"
 msgid "Rakar Forms"
-msgstr ""
+msgstr "Formy Rakar"
 
 #: gtk/open-type-layout.h:99
 msgctxt "OpenType layout"
 msgid "Required Ligatures"
-msgstr ""
+msgstr "Požadované ligatúry"
 
 #: gtk/open-type-layout.h:100
 msgctxt "OpenType layout"
 msgid "Reph Forms"
-msgstr ""
+msgstr "Formy Reph"
 
 #: gtk/open-type-layout.h:101
-#, fuzzy
-#| msgctxt "output-bin"
-#| msgid "Right Bin"
 msgctxt "OpenType layout"
 msgid "Right Bounds"
-msgstr "Pravý výstupný zásobník"
+msgstr "Pravé ohraničenia"
 
 #: gtk/open-type-layout.h:102
-#, fuzzy
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left alternates"
-msgstr "Značka s_prava doľava (RLM)"
+msgstr "Alternatívy pre písanie sprava doľava"
 
 #: gtk/open-type-layout.h:103
-#, fuzzy
-#| msgid "RLM _Right-to-left mark"
 msgctxt "OpenType layout"
 msgid "Right-to-left mirrored forms"
-msgstr "Značka s_prava doľava (RLM)"
+msgstr "Zrkadlené formy pre písanie sprava doľava"
 
 #: gtk/open-type-layout.h:104
 msgctxt "OpenType layout"
 msgid "Ruby Notation Forms"
-msgstr ""
+msgstr "Formy pre zápis ruby"
 
 #: gtk/open-type-layout.h:105
 msgctxt "OpenType layout"
 msgid "Required Variation Alternates"
-msgstr ""
+msgstr "Požadované variácie alternatív"
 
 #: gtk/open-type-layout.h:106
 msgctxt "OpenType layout"
@@ -6022,7 +6002,7 @@ msgstr "Štylistické alternatívy"
 #: gtk/open-type-layout.h:107
 msgctxt "OpenType layout"
 msgid "Scientific Inferiors"
-msgstr ""
+msgstr "Vedecké dolné indexy"
 
 #: gtk/open-type-layout.h:108
 msgctxt "OpenType layout"
@@ -6042,12 +6022,12 @@ msgstr "Zjednodušené formy"
 #: gtk/open-type-layout.h:111
 msgctxt "OpenType layout"
 msgid "Math script style alternates"
-msgstr ""
+msgstr "Alternatívy matematického rukopisného štýlu"
 
 #: gtk/open-type-layout.h:112
 msgctxt "OpenType layout"
 msgid "Stretching Glyph Decomposition"
-msgstr ""
+msgstr "Rozklad naťahovacích glyfov"
 
 #: gtk/open-type-layout.h:113
 msgctxt "OpenType layout"
@@ -6062,52 +6042,52 @@ msgstr "Horný index"
 #: gtk/open-type-layout.h:115
 msgctxt "OpenType layout"
 msgid "Swash"
-msgstr ""
+msgstr "Ozdobný ťah"
 
 #: gtk/open-type-layout.h:116
 msgctxt "OpenType layout"
 msgid "Titling"
-msgstr ""
+msgstr "Nadpisové formy"
 
 #: gtk/open-type-layout.h:117
 msgctxt "OpenType layout"
 msgid "Trailing Jamo Forms"
-msgstr ""
+msgstr "Koncové formy jamo"
 
 #: gtk/open-type-layout.h:118
 msgctxt "OpenType layout"
 msgid "Traditional Name Forms"
-msgstr ""
+msgstr "Tradičné formy pre mená"
 
 #: gtk/open-type-layout.h:119
 msgctxt "OpenType layout"
 msgid "Tabular Figures"
-msgstr ""
+msgstr "Tabuľkové číslice"
 
 #: gtk/open-type-layout.h:120
 msgctxt "OpenType layout"
 msgid "Traditional Forms"
-msgstr ""
+msgstr "Tradičné formy"
 
 #: gtk/open-type-layout.h:121
 msgctxt "OpenType layout"
 msgid "Third Widths"
-msgstr ""
+msgstr "Tretinové šírky"
 
 #: gtk/open-type-layout.h:122
 msgctxt "OpenType layout"
 msgid "Unicase"
-msgstr ""
+msgstr "Jednotná veľkosť písmen"
 
 #: gtk/open-type-layout.h:123
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Metrics"
-msgstr ""
+msgstr "Alternatívne zvislé metriky"
 
 #: gtk/open-type-layout.h:124
 msgctxt "OpenType layout"
 msgid "Vattu Variants"
-msgstr "Varianty Vattu"
+msgstr "Varianty znaku vattu"
 
 #: gtk/open-type-layout.h:125
 msgctxt "OpenType layout"
@@ -6117,42 +6097,42 @@ msgstr "Zvislé písanie"
 #: gtk/open-type-layout.h:126
 msgctxt "OpenType layout"
 msgid "Alternate Vertical Half Metrics"
-msgstr ""
+msgstr "Alternatívne zvislé polovičné metriky"
 
 #: gtk/open-type-layout.h:127
 msgctxt "OpenType layout"
 msgid "Vowel Jamo Forms"
-msgstr ""
+msgstr "Samohláskové formy jamo"
 
 #: gtk/open-type-layout.h:128
 msgctxt "OpenType layout"
 msgid "Vertical Kana Alternates"
-msgstr ""
+msgstr "Zvislé alternatívy kana"
 
 #: gtk/open-type-layout.h:129
 msgctxt "OpenType layout"
 msgid "Vertical Kerning"
-msgstr "Zvislý Kerning"
+msgstr "Zvislý Kerning (medzery medzi písmenami)"
 
 #: gtk/open-type-layout.h:130
 msgctxt "OpenType layout"
 msgid "Proportional Alternate Vertical Metrics"
-msgstr ""
+msgstr "Proporčné alternatívne zvislé metriky"
 
 #: gtk/open-type-layout.h:131
 msgctxt "OpenType layout"
 msgid "Vertical Alternates and Rotation"
-msgstr ""
+msgstr "Zvislé alternatívy a rotácia"
 
 #: gtk/open-type-layout.h:132
 msgctxt "OpenType layout"
 msgid "Vertical Alternates for Rotation"
-msgstr ""
+msgstr "Zvislé alternatívy pre rotáciu"
 
 #: gtk/open-type-layout.h:133
 msgctxt "OpenType layout"
 msgid "Slashed Zero"
-msgstr ""
+msgstr "Nula s lomkou"
 
 #: gtk/print/paper_names_offsets.c:4
 msgctxt "paper size"
@@ -6652,67 +6632,67 @@ msgstr "Obálka you6"
 #: gtk/print/paper_names_offsets.c:103
 msgctxt "paper size"
 msgid "10×11"
-msgstr "10×11"
+msgstr "10×11 (palce)"
 
 #: gtk/print/paper_names_offsets.c:104
 msgctxt "paper size"
 msgid "10×13"
-msgstr "10×13"
+msgstr "10×13 (palce)"
 
 #: gtk/print/paper_names_offsets.c:105
 msgctxt "paper size"
 msgid "10×14"
-msgstr "10×14"
+msgstr "10×14 (palce)"
 
 #: gtk/print/paper_names_offsets.c:106
 msgctxt "paper size"
 msgid "10×15"
-msgstr "10×15"
+msgstr "10×15 (palce)"
 
 #: gtk/print/paper_names_offsets.c:107
 msgctxt "paper size"
 msgid "11×12"
-msgstr "11×12"
+msgstr "11×12 (palce)"
 
 #: gtk/print/paper_names_offsets.c:108
 msgctxt "paper size"
 msgid "11×15"
-msgstr "11×15"
+msgstr "11×15 (palce)"
 
 #: gtk/print/paper_names_offsets.c:109
 msgctxt "paper size"
 msgid "12×19"
-msgstr "12×19"
+msgstr "12×19 (palce)"
 
 #: gtk/print/paper_names_offsets.c:110
 msgctxt "paper size"
 msgid "5×7"
-msgstr "5×7"
+msgstr "5×7 (palce)"
 
 #: gtk/print/paper_names_offsets.c:111
 msgctxt "paper size"
 msgid "6×9 Envelope"
-msgstr "Obálka 6×9"
+msgstr "Obálka 6×9 (palce)"
 
 #: gtk/print/paper_names_offsets.c:112
 msgctxt "paper size"
 msgid "7×9 Envelope"
-msgstr "Obálka 7×9"
+msgstr "Obálka 7×9 (palce)"
 
 #: gtk/print/paper_names_offsets.c:113
 msgctxt "paper size"
 msgid "8×10 Envelope"
-msgstr "Obálka 8×10"
+msgstr "Obálka 8×10 (palce)"
 
 #: gtk/print/paper_names_offsets.c:114
 msgctxt "paper size"
 msgid "9×11 Envelope"
-msgstr "Obálka 9×11"
+msgstr "Obálka 9×11 (palce)"
 
 #: gtk/print/paper_names_offsets.c:115
 msgctxt "paper size"
 msgid "9×12 Envelope"
-msgstr "Obálka 9×12"
+msgstr "Obálka 9×12 (palce)"
 
 #: gtk/print/paper_names_offsets.c:116
 msgctxt "paper size"
@@ -6877,27 +6857,27 @@ msgstr "Obálka Monarch"
 #: gtk/print/paper_names_offsets.c:148
 msgctxt "paper size"
 msgid "#10 Envelope"
-msgstr "Obálka #10"
+msgstr "Obálka č.10"
 
 #: gtk/print/paper_names_offsets.c:149
 msgctxt "paper size"
 msgid "#11 Envelope"
-msgstr "Obálka #11"
+msgstr "Obálka č.11"
 
 #: gtk/print/paper_names_offsets.c:150
 msgctxt "paper size"
 msgid "#12 Envelope"
-msgstr "Obálka #12"
+msgstr "Obálka č.12"
 
 #: gtk/print/paper_names_offsets.c:151
 msgctxt "paper size"
 msgid "#14 Envelope"
-msgstr "Obálka #14"
+msgstr "Obálka č.14"
 
 #: gtk/print/paper_names_offsets.c:152
 msgctxt "paper size"
 msgid "#9 Envelope"
-msgstr "Obálka #9"
+msgstr "Obálka č.9"
 
 #: gtk/print/paper_names_offsets.c:153
 msgctxt "paper size"
@@ -6952,7 +6932,7 @@ msgstr "Folio sp"
 #: gtk/print/paper_names_offsets.c:163
 msgctxt "paper size"
 msgid "Invite Envelope"
-msgstr "Uvítacia obálka"
+msgstr "Obálka na pozvánky"
 
 #: gtk/print/paper_names_offsets.c:164
 msgctxt "paper size"
@@ -7070,7 +7050,7 @@ msgstr "Stránky"
 
 #: gtk/ui/gtkaboutdialog.ui:43
 msgid "Logo"
-msgstr ""
+msgstr "Logo"
 
 #: gtk/ui/gtkaboutdialog.ui:68
 msgid "About"
@@ -7078,33 +7058,25 @@ msgstr "O programe"
 
 #: gtk/ui/gtkaboutdialog.ui:129 gtk/ui/gtkaboutdialog.ui:157
 msgid "Credits"
-msgstr "Poďakovanie"
+msgstr "Zásluhy"
 
 #: gtk/ui/gtkaboutdialog.ui:221
 msgid "System"
 msgstr "Systém"
 
 #: gtk/ui/gtkaboutdialog.ui:240
-#, fuzzy
-#| msgid "Information"
 msgid "System Information"
-msgstr "Informácie"
+msgstr "Informácie o systéme"
 
 #: gtk/ui/gtkappchooserdialog.ui:4
-#, fuzzy
-#| msgid "Select _All"
 msgid "Select App"
-msgstr "Vybr_ať všetko"
+msgstr "Výber aplikácie"
 
 #: gtk/ui/gtkappchooserdialog.ui:63
-#, fuzzy
-#| msgid "_View All Applications"
 msgid "_View All Apps"
 msgstr "Zobraziť _všetky aplikácie"
 
 #: gtk/ui/gtkappchooserdialog.ui:69
-#, fuzzy
-#| msgid "_Find New Applications"
 msgid "_Find New Apps"
 msgstr "_Nájsť nové aplikácie"
 
@@ -7137,16 +7109,12 @@ msgid "Quit %s"
 msgstr "Ukončiť %s"
 
 #: gtk/ui/gtkapplication-quartz.ui:53
-#, fuzzy
-#| msgid "_Undo"
 msgid "Undo"
-msgstr "Vrátiť _späť"
+msgstr "Vrátiť späť"
 
 #: gtk/ui/gtkapplication-quartz.ui:57
-#, fuzzy
-#| msgid "_Redo"
 msgid "Redo"
-msgstr "_Opakovať vrátené"
+msgstr "Opakovať vrátené"
 
 #: gtk/ui/gtkapplication-quartz.ui:63
 msgid "Cut"
@@ -7161,24 +7129,16 @@ msgid "Paste"
 msgstr "Vložiť"
 
 #: gtk/ui/gtkapplication-quartz.ui:75
-#, fuzzy
-#| msgctxt "keyboard label"
-#| msgid "Delete"
 msgid "Delete"
-msgstr "Delete"
+msgstr "Odstrániť"
 
 #: gtk/ui/gtkapplication-quartz.ui:79
-#, fuzzy
-#| msgid "Select _All"
 msgid "Select All"
-msgstr "Vybr_ať všetko"
+msgstr "Vybrať všetko"
 
 #: gtk/ui/gtkapplication-quartz.ui:85
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "window"
 msgid "_Window"
-msgstr "okno"
+msgstr "_Okno"
 
 #: gtk/ui/gtkassistant.ui:64
 msgid "_Finish"
@@ -7203,11 +7163,11 @@ msgstr "Vyberie farbu z obrazovky"
 
 #: gtk/ui/gtkcoloreditor.ui:66
 msgid "The current color"
-msgstr ""
+msgstr "Aktuálna farba"
 
 #: gtk/ui/gtkcoloreditor.ui:84
 msgid "Hexadecimal color or color name"
-msgstr ""
+msgstr "Šestnástkový kód farby alebo jej názov"
 
 #: gtk/ui/gtkcoloreditor.ui:99
 msgid "Hue"
@@ -7215,11 +7175,11 @@ msgstr "Odtieň"
 
 #: gtk/ui/gtkcoloreditor.ui:115
 msgid "Alpha value"
-msgstr "Hodnoty alfy"
+msgstr "Hodnota alfy"
 
 #: gtk/ui/gtkcoloreditor.ui:133
 msgid "Saturation and value"
-msgstr "Sýtosť a hodnota"
+msgstr "Sýtosť a jas"
 
 #: gtk/ui/gtkcoloreditor.ui:157
 msgctxt "Color channel"
@@ -7309,10 +7269,9 @@ msgid "Remote location — only searching the current folder"
 msgstr "Vzdialené umiestnenie - vyhľadávanie iba v aktuálnom priečinku"
 
 #: gtk/ui/gtkfilechooserwidget.ui:301
-#, fuzzy
 #| msgid "Filter by"
 msgid "Filter"
-msgstr "Filtrovať podľa"
+msgstr "Filter"
 
 #: gtk/ui/gtkfilechooserwidget.ui:334
 msgid "Folder Name"
@@ -7331,10 +7290,8 @@ msgid "Search font name"
 msgstr "Vyhľadajte názov písma"
 
 #: gtk/ui/gtkfontchooserwidget.ui:77 gtk/ui/gtkfontchooserwidget.ui:80
-#, fuzzy
-#| msgid "Filter by"
 msgid "Filters"
-msgstr "Filtrovať podľa"
+msgstr "Filtre"
 
 #: gtk/ui/gtkfontchooserwidget.ui:92
 msgid "Filter by"
@@ -7350,43 +7307,31 @@ msgstr "Jazyk"
 
 #: gtk/ui/gtkfontchooserwidget.ui:198 gtk/ui/gtkfontchooserwidget.ui:200
 #: gtk/ui/gtkfontchooserwidget.ui:350 gtk/ui/gtkfontchooserwidget.ui:354
-#, fuzzy
-#| msgid "Preview text"
 msgid "Preview Font"
-msgstr "Text náhľadu"
+msgstr "Náhľad písma"
 
 #: gtk/ui/gtkfontchooserwidget.ui:296
 msgid "No Fonts Found"
 msgstr "Nenašli sa žiadne písma"
 
 #: gtk/ui/gtkfontchooserwidget.ui:334
-#, fuzzy
-#| msgid "Font Scale"
 msgid "Font Name"
-msgstr "Mierka písma"
+msgstr "Názov písma"
 
 #: gtk/ui/gtkfontchooserwidget.ui:379
 msgid "Font Variation Axes"
-msgstr ""
+msgstr "Osi variácií písma"
 
 #: gtk/ui/gtkfontchooserwidget.ui:427
-#, fuzzy
-#| msgid "Font Scale"
 msgid "Font Features"
-msgstr "Mierka písma"
+msgstr "Vlastnosti písma"
 
 #: gtk/ui/gtkmediacontrols.ui:45
-#, fuzzy
-#| msgctxt "accessibility"
-#| msgid "option"
 msgctxt "media controls"
 msgid "Position"
-msgstr "voľba"
+msgstr "Pozícia"
 
-#  atk name
 #: gtk/ui/gtkmediacontrols.ui:61
-#, fuzzy
-#| msgid "Volume"
 msgctxt "media controls"
 msgid "Volume"
 msgstr "Hlasitosť"
@@ -7461,10 +7406,8 @@ msgid "Enter server address…"
 msgstr "Zadajte adresu servera…"
 
 #: gtk/ui/gtkplacesview.ui:265
-#, fuzzy
-#| msgid "No recent servers found"
 msgid "Show recent servers"
-msgstr "Nenašli sa žiadne nedávne servery"
+msgstr "Zobrazí nedávno použité servery"
 
 #. this is the header for the printer status column in the print dialog
 #: gtk/print/ui/gtkprintunixdialog.ui:142
@@ -7667,19 +7610,16 @@ msgid "Some of the settings in the dialog conflict"
 msgstr "Niektoré nastavenia v dialógovom okne si odporujú"
 
 #: gtk/ui/gtkvideo.ui:25
-#, fuzzy
-#| msgctxt "Stock label, media"
-#| msgid "_Play"
 msgid "Play"
-msgstr "_Hrať"
+msgstr "Prehrať"
 
 #: tools/encodesymbolic.c:42
 msgid "Output to this directory instead of cwd"
-msgstr "Výstup do nasledujúceho namiesto aktuálneho pracovného priečinka"
+msgstr "Výstup do uvedeného adresára namiesto pracovného"
 
 #: tools/encodesymbolic.c:43
 msgid "Generate debug output"
-msgstr ""
+msgstr "Generuje ladiaci výstup"
 
 #: tools/encodesymbolic.c:93
 #, c-format
@@ -7697,26 +7637,7 @@ msgid "Can’t save file %s: %s\n"
 msgstr "Nedá sa uložiť súbor %s: %s\n"
 
 #: tools/gtk-builder-tool.c:36
-#, fuzzy, c-format
-#| msgid ""
-#| "Usage:\n"
-#| "  gtk-builder-tool [COMMAND] [OPTION…] FILE\n"
-#| "\n"
-#| "Commands:\n"
-#| "  validate     Validate the file\n"
-#| "  simplify     Simplify the file\n"
-#| "  enumerate    List all named objects\n"
-#| "  preview      Preview the file\n"
-#| "\n"
-#| "Simplify Options:\n"
-#| "  --replace    Replace the file\n"
-#| "  --3to4       Convert from GTK 3 to GTK 4\n"
-#| "\n"
-#| "Preview Options:\n"
-#| "  --id=ID      Preview only the named object\n"
-#| "  --css=FILE   Use style from CSS file\n"
-#| "\n"
-#| "Perform various tasks on GtkBuilder .ui files.\n"
+#, c-format
 msgid ""
 "Usage:\n"
 "  gtk4-builder-tool [COMMAND] [OPTION…] FILE\n"
@@ -7733,23 +7654,16 @@ msgid ""
 "\n"
 msgstr ""
 "Použitie:\n"
-"  gtk-builder-tool [PRÍKAZ] [VOĽBY…] SÚBOR\n"
+"  gtk4-builder-tool [PRÍKAZ] [VOĽBY…] SÚBOR\n"
 "\n"
 "Príkazy:\n"
 "  validate    Schváli súbor\n"
 "  simplify    Zjednoduší súbor\n"
 "  enumerate   Vypíše zoznam všetkých pomenovaných objektov\n"
 "  preview     Zobrazí ukážku súboru\n"
+"  render       Zachytí snímok súboru\n"
+"  screenshot   Zachytí snímok súboru\n"
 "\n"
-"Voľby zjednodušenia:\n"
-"  --replace   Nahradí súbor\n"
-"  --3to4      Prevedie z GTK 3 do GTK 4\n"
-"\n"
-"Voľby náhľadu:\n"
-"  --id=IDENTIFIKÁTOR   Zobrazí náhľad iba pomenovaného objektu\n"
-"  --css=SÚBOR          Použije štýl zo súboru CSS\n"
-"\n"
-"Vykonanie rozličných úloh na súboroch .ui nástroja GtkBuilder.\n"
 
 #: tools/gtk-builder-tool-enumerate.c:56 tools/gtk-builder-tool-preview.c:179
 #: tools/gtk-builder-tool-preview.c:180 tools/gtk-builder-tool-screenshot.c:360
@@ -7759,49 +7673,46 @@ msgstr ""
 #: tools/gtk-rendernode-tool-extract.c:294 tools/gtk-rendernode-tool-info.c:226
 #: tools/gtk-rendernode-tool-show.c:122
 msgid "FILE"
-msgstr ""
+msgstr "SÚBOR"
 
 #: tools/gtk-builder-tool-enumerate.c:64
 msgid "Print all named objects."
-msgstr ""
+msgstr "Vypíše všetky pomenované objekty."
 
 #: tools/gtk-builder-tool-preview.c:128 tools/gtk-builder-tool-screenshot.c:236
 #, c-format
 msgid "No object with ID '%s' found\n"
-msgstr ""
+msgstr "Nenašiel sa žiadny objekt s identifikátorom „%s“\n"
 
 #: tools/gtk-builder-tool-preview.c:130
 #, c-format
 msgid "No previewable object found\n"
-msgstr ""
+msgstr "Nenašiel sa žiadny objekt s náhľadom\n"
 
 #: tools/gtk-builder-tool-preview.c:136
 #, c-format
 msgid "Objects of type %s can't be previewed\n"
-msgstr ""
+msgstr "Objekt typu %s sa nedá zobraziť v náhľade\n"
 
 #: tools/gtk-builder-tool-preview.c:178
 msgid "Preview only the named object"
-msgstr ""
+msgstr "Zobrazí náhľad iba pomenovaných objektov"
 
 #: tools/gtk-builder-tool-preview.c:179 tools/gtk-builder-tool-screenshot.c:360
 msgid "Use style from CSS file"
-msgstr ""
+msgstr "Použije štýl zo súboru CSS"
 
 #: tools/gtk-builder-tool-preview.c:187 tools/gtk-builder-tool-screenshot.c:370
 #: tools/gtk-builder-tool-validate.c:274
 #: tools/gtk-rendernode-tool-benchmark.c:108
 #: tools/gtk-rendernode-tool-render.c:262 tools/gtk-rendernode-tool-show.c:129
-#, fuzzy, c-format
-#| msgid "Could not initialize EGL display"
+#, c-format
 msgid "Could not initialize windowing system\n"
-msgstr "Nepodarilo sa inicializovať displej EGL"
+msgstr "Nepodarilo sa inicializovať okenný systém\n"
 
 #: tools/gtk-builder-tool-preview.c:195
-#, fuzzy
-#| msgid "Preview text"
 msgid "Preview the file."
-msgstr "Text náhľadu"
+msgstr "Zobrazí náhľad súboru."
 
 #: tools/gtk-builder-tool-preview.c:208 tools/gtk-builder-tool-screenshot.c:391
 #: tools/gtk-builder-tool-simplify.c:2733 tools/gtk-builder-tool-validate.c:293
@@ -7812,7 +7723,7 @@ msgstr "Nie je určený žiadny súbor typu .ui\n"
 #: tools/gtk-builder-tool-preview.c:214
 #, c-format
 msgid "Can only preview a single .ui file\n"
-msgstr ""
+msgstr "Je možné zobraziť náhľad iba jedného súboru .ui\n"
 
 #: tools/gtk-builder-tool-screenshot.c:238
 #, fuzzy, c-format
