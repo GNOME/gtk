@@ -279,8 +279,9 @@ gsk_gl_image_new (GskGLDevice      *device,
 GskGpuImage *
 gsk_gl_image_new_for_texture (GskGLDevice      *device,
                               GdkTexture       *owner,
-                              GLuint            tex_id,
-                              GLuint            mem_id,
+                              gsize             n_textures,
+                              GLuint           *tex_id,
+                              GLuint           *mem_id,
                               GLuint            semaphore_id,
                               gboolean          take_ownership,
                               GskGpuImageFlags  extra_flags,
@@ -291,6 +292,10 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
   GskGLImage *self;
   GLint gl_internal_format, gl_internal_srgb_format;
   GdkSwizzle swizzle;
+  GdkShaderOp shader_op;
+  gsize i;
+
+  g_assert (n_textures <= 3);
 
   format = gdk_texture_get_format (owner);
 
@@ -306,7 +311,7 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
                                 &self->gl_format[0],
                                 &self->gl_type[0],
                                 &swizzle);
-  
+
   self->gl_internal_format[0] = gl_internal_format;
 
   if (format != real_format)
@@ -319,18 +324,31 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
       if (extra_flags & GSK_GPU_IMAGE_EXTERNAL)
         flags &= ~(GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_DOWNLOADABLE);
     }
-  
+  if (n_textures > 1)
+    flags &= ~(GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_DOWNLOADABLE);
+
+  shader_op = gdk_memory_format_get_default_shader_op (format);
+  if (gdk_shader_op_get_n_shaders (shader_op) != n_textures)
+    {
+      g_assert (n_textures == 1);
+      shader_op = GDK_SHADER_DEFAULT;
+    }
+
   gsk_gpu_image_setup (GSK_GPU_IMAGE (self),
                        flags | extra_flags,
                        conv,
-                       gdk_memory_format_get_default_shader_op (format),
+                       shader_op,
                        format,
                        gdk_texture_get_width (owner),
                        gdk_texture_get_height (owner));
   gsk_gpu_image_toggle_ref_texture (GSK_GPU_IMAGE (self), owner);
 
-  self->texture_id[0] = tex_id;
-  self->memory_id[0] = mem_id;
+  for (i = 0; i < n_textures; i++)
+    {
+      self->texture_id[i] = tex_id[i];
+      if (mem_id)
+        self->memory_id[i] = mem_id[i];
+    }
   self->semaphore_id = semaphore_id;
   self->owns_texture = take_ownership;
 
@@ -342,7 +360,7 @@ gsk_gl_image_new_for_texture (GskGLDevice      *device,
     {
       glWaitSemaphoreEXT (semaphore_id,
                           0, NULL,
-                          1, &tex_id, (GLenum[1]) {GL_LAYOUT_GENERAL_EXT });
+                          n_textures, tex_id, (GLenum[1]) {GL_LAYOUT_GENERAL_EXT });
     }
   return GSK_GPU_IMAGE (self);
 }
