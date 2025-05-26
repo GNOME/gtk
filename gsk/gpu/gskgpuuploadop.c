@@ -14,6 +14,7 @@
 #endif
 
 #include "gdk/gdkcolorstateprivate.h"
+#include "gdk/gdkdmabuftextureprivate.h"
 #include "gdk/gdkglcontextprivate.h"
 #include "gdk/gdktextureprivate.h"
 #include "gsk/gskdebugprivate.h"
@@ -363,7 +364,16 @@ gsk_gpu_upload_texture_op_try (GskGpuFrame      *frame,
 
       if (!GDK_IS_MEMORY_TEXTURE (texture))
         {
-          gdk_debug_message ("Unoptimized upload for %s", G_OBJECT_TYPE_NAME (texture));
+          if (GDK_IS_DMABUF_TEXTURE (texture))
+            {
+              const GdkDmabuf *dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+              gdk_debug_message ("Unoptimized upload for dmabuf %.4s:%#" G_GINT64_MODIFIER "x",
+                                 (char *) &dmabuf->fourcc, dmabuf->modifier);
+            }
+          else
+            {
+              gdk_debug_message ("Unoptimized upload for %s", G_OBJECT_TYPE_NAME (texture));
+            }
         }
 
       if (gdk_texture_get_format (texture) != gsk_gpu_image_get_format (image))
