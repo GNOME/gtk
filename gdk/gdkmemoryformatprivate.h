@@ -124,15 +124,14 @@ VkFormat                gdk_memory_format_vk_format         (GdkMemoryFormat    
                                                              gboolean                   *needs_ycbcr_conversion);
 VkFormat                gdk_memory_format_vk_srgb_format    (GdkMemoryFormat             format);
 #endif
-gboolean                gdk_memory_format_find_by_dmabuf_fourcc
-                                                            (guint32                     fourcc,
-                                                             gboolean                    premultiplied,
-                                                             GdkMemoryFormat            *out_format,
-                                                             gboolean                   *out_is_yuv);
-guint32                 gdk_memory_format_get_dmabuf_rgb_fourcc
-                                                            (GdkMemoryFormat             format);
-guint32                 gdk_memory_format_get_dmabuf_yuv_fourcc
-                                                            (GdkMemoryFormat             format);
+gboolean                gdk_memory_format_find_by_dmabuf_fourcc     (guint32                     fourcc,
+                                                                     gboolean                    premultiplied,
+                                                                     GdkMemoryFormat            *out_format,
+                                                                     gboolean                   *out_is_yuv);
+guint32                 gdk_memory_format_get_dmabuf_rgb_fourcc     (GdkMemoryFormat             format);
+guint32                 gdk_memory_format_get_dmabuf_yuv_fourcc     (GdkMemoryFormat             format);
+guint32                 gdk_memory_format_get_dmabuf_shader_fourcc  (GdkMemoryFormat             format,
+                                                                     gsize                       plane);
 
 gboolean                gdk_memory_format_find_by_dxgi_format       (DXGI_FORMAT                 format,
                                                                      gboolean                    premultiplied,

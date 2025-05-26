@@ -308,6 +308,88 @@ gdk_dmabuf_egl_import_dmabuf (GdkGLContext    *context,
   return texture_id;
 }
 
+gsize
+gdk_dmabuf_egl_import_dmabuf_multiplane (GdkGLContext    *context,
+                                         int              width,
+                                         int              height,
+                                         const GdkDmabuf *dmabuf,
+                                         guint            out_tex_id[3])
+{
+  GdkDisplay *display = gdk_gl_context_get_display (context);
+  gsize i, n;
+  guint32 fourcc;
+  GdkMemoryFormat format;
+  gboolean ignored_is_yuv;
+  EGLImage images[3];
+
+  gdk_dmabuf_egl_init (display);
+
+  if (!gdk_memory_format_find_by_dmabuf_fourcc (dmabuf->fourcc, TRUE, &format, &ignored_is_yuv))
+    return 0;
+
+  n = gdk_shader_op_get_n_shaders (gdk_memory_format_get_default_shader_op (format));
+
+  for (i = 0; i < n; i++)
+    {
+      gsize plane, width_subsample, height_subsample, ignored_bpp;
+
+      plane = gdk_memory_format_get_shader_plane (format,
+                                                  i,
+                                                  &width_subsample,
+                                                  &height_subsample,
+                                                  &ignored_bpp);
+      fourcc = gdk_memory_format_get_dmabuf_shader_fourcc (format, i);
+      if (fourcc == 0)
+        break;
+
+      images[i] = gdk_dmabuf_egl_create_image (display,
+                                               width / width_subsample,
+                                               height / height_subsample,
+                                               &(GdkDmabuf) {
+                                                   .fourcc = fourcc,
+                                                   .modifier = dmabuf->modifier,
+                                                   .n_planes = 1,
+                                                   .planes = {
+                                                       {
+                                                         .fd = dmabuf->planes[plane].fd,
+                                                         .stride = dmabuf->planes[plane].stride,
+                                                         .offset = dmabuf->planes[plane].offset,
+                                                       }
+                                                   }
+                                               },
+                                               0, 0);
+      if (images[i] == EGL_NO_IMAGE)
+        break;
+    }
+
+  if (i < n)
+    {
+      gsize j;
+      for (j = 0; j < i; j++)
+        eglDestroyImageKHR (gdk_display_get_egl_display (display), images[j]);
+      return 0;
+    }
+
+  glGenTextures (n, out_tex_id);
+  for (i = 0; i < n; i++)
+    {
+      glBindTexture (GL_TEXTURE_2D, out_tex_id[i]);
+      glEGLImageTargetTexture2DOES (GL_TEXTURE_2D, images[i]);
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+      glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+      eglDestroyImageKHR (gdk_display_get_egl_display (display), images[i]);
+    }
+
+  GDK_DISPLAY_DEBUG (display, DMABUF,
+                     "Imported %dx%d %.4s:%#" G_GINT64_MODIFIER "x dmabuf as multiplane texture with %zu planes",
+                     width, height,
+                     (char *) &dmabuf->fourcc, dmabuf->modifier,
+                     n);
+
+  return n;
+}
+
 #endif  /* HAVE_DMABUF && HAVE_EGL */
 
 /* Hack. We don't include gsk/gsk.h here to avoid a build order problem
