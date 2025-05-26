@@ -528,6 +528,7 @@ gsk_gpu_upload_cairo_op (GskGpuFrame           *frame,
                                               gsk_gpu_color_state_get_conversion (GDK_COLOR_STATE_SRGB),
                                               ceil (graphene_vec2_get_x (scale) * viewport->size.width),
                                               ceil (graphene_vec2_get_y (scale) * viewport->size.height));
+  g_assert (image != NULL);
 
   gsk_gpu_upload_cairo_into_op (frame,
                                 image,
