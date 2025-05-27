@@ -93,6 +93,41 @@ typedef struct _GtkPrintBackendCupsClass GtkPrintBackendCupsClass;
 
 static GType print_backend_cups_type = 0;
 
+#if CUPS_VERSION_MAJOR < 3
+#define cupsGetServer() cupsServer()
+#define cupsGetUser() cupsUser()
+
+#define _httpConnect(host, port, addrlist, family, encryption, blocking, msec, cancel) httpConnect2(host, port, addrlist, family, encryption, blocking, msec, cancel)
+
+#define ippGetPort() ippPort()
+#define ippGetNextAttribute(ipp_message) ippNextAttribute(ipp_message)
+#define ippGetFirstAttribute(ipp_message) ippFirstAttribute(ipp_message)
+
+#define CUPS_PTYPE_REMOTE             CUPS_PRINTER_REMOTE
+#define CUPS_PTYPE_DEFAULT            CUPS_PRINTER_DEFAULT
+#define CUPS_PTYPE_REJECTING          CUPS_PRINTER_REJECTING
+
+#define IPP_OP_PRINT_JOB              IPP_PRINT_JOB
+#define IPP_OP_GET_JOB_ATTRIBUTES     IPP_GET_JOB_ATTRIBUTES
+#define IPP_OP_GET_PRINTER_ATTRIBUTES IPP_GET_PRINTER_ATTRIBUTES
+#define IPP_OP_CUPS_GET_DEFAULT       CUPS_GET_DEFAULT
+#define IPP_OP_CUPS_GET_PRINTERS      CUPS_GET_PRINTERS
+
+#define IPP_STATUS_OK_CONFLICTING     IPP_OK_CONFLICT
+
+#define IPP_PSTATE_STOPPED            IPP_PRINTER_STOPPED
+
+#define IPP_JSTATE_PENDING            IPP_JOB_PENDING
+#define IPP_JSTATE_HELD               IPP_JOB_HELD
+#define IPP_JSTATE_PROCESSING         IPP_JOB_PROCESSING
+#define IPP_JSTATE_STOPPED            IPP_JOB_STOPPED
+#define IPP_JSTATE_CANCELED           IPP_JOB_CANCELLED
+#define IPP_JSTATE_ABORTED            IPP_JOB_ABORTED
+#define IPP_JSTATE_COMPLETED          IPP_JOB_COMPLETED
+#else
+#define _httpConnect(host, port, addrlist, family, encryption, blocking, msec, cancel) httpConnect(host, port, addrlist, family, encryption, blocking, msec, cancel)
+#endif
+
 typedef void (* GtkPrintCupsResponseCallbackFunc) (GtkPrintBackend *print_backend,
                                                    GtkCupsResult   *result,
                                                    gpointer         user_data);
@@ -195,7 +230,9 @@ static GList *              cups_printer_list_papers               (GtkPrinter  
 static GtkPageSetup *       cups_printer_get_default_page_size     (GtkPrinter                        *printer);
 static void                 cups_printer_request_details           (GtkPrinter                        *printer);
 static gboolean             cups_request_default_printer           (GtkPrintBackendCups               *print_backend);
+#if CUPS_VERSION_MAJOR < 3
 static gboolean             cups_request_ppd                       (GtkPrinter                        *printer);
+#endif
 static gboolean             cups_printer_get_hard_margins          (GtkPrinter                        *printer,
 								    gdouble                           *top,
 								    gdouble                           *bottom,
@@ -416,12 +453,14 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
 				   GIOChannel       *cache_io)
 {
   cairo_surface_t *surface;
+#if CUPS_VERSION_MAJOR < 3
   ppd_file_t      *ppd_file = NULL;
   ppd_attr_t      *ppd_attr = NULL;
   ppd_attr_t      *ppd_attr_res = NULL;
   ppd_attr_t      *ppd_attr_screen_freq = NULL;
   ppd_attr_t      *ppd_attr_res_screen_freq = NULL;
   gchar           *res_string = NULL;
+#endif
   gint             level = 2;
 
   if (gtk_printer_accepts_pdf (printer))
@@ -429,6 +468,7 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
   else
     surface = cairo_ps_surface_create_for_stream  (_cairo_write_to_cups, cache_io, width, height);
 
+#if CUPS_VERSION_MAJOR < 3
   ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
 
   if (ppd_file != NULL)
@@ -480,6 +520,7 @@ cups_printer_create_cairo_surface (GtkPrinter       *printer,
       else if (ppd_attr_screen_freq != NULL && atof (ppd_attr_screen_freq->value) > 0.0)
         gtk_print_settings_set_printer_lpi (settings, atof (ppd_attr_screen_freq->value));
     }
+#endif
 
   if (cairo_surface_get_type (surface) == CAIRO_SURFACE_TYPE_PS)
     {
@@ -584,10 +625,11 @@ add_cups_options (const gchar *key,
 {
   CupsOptionsData *data = (CupsOptionsData *) user_data;
   GtkCupsRequest *request = data->request;
+#if CUPS_VERSION_MAJOR < 3
   GtkPrinterCups *printer = data->printer;
+#endif
   gboolean custom_value = FALSE;
   gchar *new_value = NULL;
-  gint i;
 
   if (!key || !value)
     return;
@@ -600,6 +642,7 @@ add_cups_options (const gchar *key,
 
   key = key + strlen ("cups-");
 
+#if CUPS_VERSION_MAJOR < 3
   if (printer && printer->ppd_file && !g_str_has_prefix (value, "Custom."))
     {
       ppd_coption_t *coption;
@@ -609,7 +652,7 @@ add_cups_options (const gchar *key,
       coption = ppdFindCustomOption (printer->ppd_file, key);
       if (coption && coption->option)
         {
-          for (i = 0; i < coption->option->num_choices; i++)
+          for (int i = 0; i < coption->option->num_choices; i++)
             {
               /* Are custom values enabled ? */
               if (g_str_equal (coption->option->choices[i].choice, "Custom"))
@@ -683,6 +726,7 @@ add_cups_options (const gchar *key,
             }
         }
     }
+#endif
 
   /* Add "Custom." prefix to custom values if not already added. */
   if (custom_value)
@@ -722,7 +766,7 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
 
   if (cups_printer->avahi_browsed)
     {
-      http = httpConnect2 (cups_printer->hostname, cups_printer->port,
+      http = _httpConnect (cups_printer->hostname, cups_printer->port,
                            NULL, AF_UNSPEC,
                            HTTP_ENCRYPTION_IF_REQUESTED,
                            1, 30000,
@@ -731,7 +775,7 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
         {
           request = gtk_cups_request_new_with_username (http,
                                                         GTK_CUPS_POST,
-                                                        IPP_PRINT_JOB,
+                                                        IPP_OP_PRINT_JOB,
                                                         data_io,
                                                         cups_printer->hostname,
                                                         cups_printer->device_uri,
@@ -768,7 +812,7 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
     {
       request = gtk_cups_request_new_with_username (NULL,
                                                     GTK_CUPS_POST,
-                                                    IPP_PRINT_JOB,
+                                                    IPP_OP_PRINT_JOB,
                                                     data_io,
                                                     NULL,
                                                     cups_printer->device_uri,
@@ -780,7 +824,7 @@ gtk_print_backend_cups_print_stream (GtkPrintBackend         *print_backend,
                         "ipp",
                         NULL,
                         "localhost",
-                        ippPort (),
+                        ippGetPort (),
                         "/printers/%s",
                         gtk_printer_get_name (gtk_print_job_get_printer (job)));
     }
@@ -1144,7 +1188,7 @@ request_password (gpointer data)
   if (dispatch->backend->username != NULL)
     username = dispatch->backend->username;
   else
-    username = cupsUser ();
+    username = cupsGetUser ();
 
   auth_info_required = g_new0 (gchar*, length + 1);
   auth_info_required[0] = g_strdup ("hostname");
@@ -1194,28 +1238,28 @@ request_password (gpointer data)
 
       switch (ippGetOperation (dispatch->request->ipp_request))
         {
-          case IPP_PRINT_JOB:
+          case IPP_OP_PRINT_JOB:
             if (job_title != NULL && printer_name != NULL)
               prompt = g_strdup_printf ( _("Authentication is required to print document “%s” on printer %s"), job_title, printer_name);
             else
               prompt = g_strdup_printf ( _("Authentication is required to print a document on %s"), hostname);
             break;
-          case IPP_GET_JOB_ATTRIBUTES:
+          case IPP_OP_GET_JOB_ATTRIBUTES:
             if (job_title != NULL)
               prompt = g_strdup_printf ( _("Authentication is required to get attributes of job “%s”"), job_title);
             else
               prompt = g_strdup ( _("Authentication is required to get attributes of a job"));
             break;
-          case IPP_GET_PRINTER_ATTRIBUTES:
+          case IPP_OP_GET_PRINTER_ATTRIBUTES:
             if (printer_name != NULL)
               prompt = g_strdup_printf ( _("Authentication is required to get attributes of printer %s"), printer_name);
             else
               prompt = g_strdup ( _("Authentication is required to get attributes of a printer"));
             break;
-          case CUPS_GET_DEFAULT:
+          case IPP_OP_CUPS_GET_DEFAULT:
             prompt = g_strdup_printf ( _("Authentication is required to get default printer of %s"), hostname);
             break;
-          case CUPS_GET_PRINTERS:
+          case IPP_OP_CUPS_GET_PRINTERS:
             prompt = g_strdup_printf ( _("Authentication is required to get printers from %s"), hostname);
             break;
           default:
@@ -1469,7 +1513,7 @@ request_auth_info (gpointer user_data)
           if (dispatch->backend->username != NULL)
             auth_info_default[i] = g_strdup (dispatch->backend->username);
           else
-            auth_info_default[i] = g_strdup (cupsUser ());
+            auth_info_default[i] = g_strdup (cupsGetUser ());
           auth_info_visible[i] = TRUE;
         }
       else if (g_strcmp0 (dispatch->request->auth_info_required[i], "password") == 0)
@@ -1638,7 +1682,7 @@ cups_dispatch_watch_finalize (GSource *source)
       if (dispatch->backend->username != NULL)
         username = dispatch->backend->username;
       else
-        username = cupsUser ();
+        username = cupsGetUser ();
 
       key = g_strconcat (username, "@", hostname, NULL);
       GTK_NOTE (PRINTING,
@@ -1782,25 +1826,25 @@ cups_request_job_info_cb (GtkPrintBackendCups *print_backend,
   done = FALSE;
   switch (state)
     {
-    case IPP_JOB_PENDING:
-    case IPP_JOB_HELD:
-    case IPP_JOB_STOPPED:
+    case IPP_JSTATE_PENDING:
+    case IPP_JSTATE_HELD:
+    case IPP_JSTATE_STOPPED:
       gtk_print_job_set_status (data->job,
 				GTK_PRINT_STATUS_PENDING);
       break;
-    case IPP_JOB_PROCESSING:
+    case IPP_JSTATE_PROCESSING:
       gtk_print_job_set_status (data->job,
 				GTK_PRINT_STATUS_PRINTING);
       break;
     default:
-    case IPP_JOB_CANCELLED:
-    case IPP_JOB_ABORTED:
+    case IPP_JSTATE_CANCELED:
+    case IPP_JSTATE_ABORTED:
       gtk_print_job_set_status (data->job,
 				GTK_PRINT_STATUS_FINISHED_ABORTED);
       done = TRUE;
       break;
     case 0:
-    case IPP_JOB_COMPLETED:
+    case IPP_JSTATE_COMPLETED:
       gtk_print_job_set_status (data->job,
 				GTK_PRINT_STATUS_FINISHED);
       done = TRUE;
@@ -1837,7 +1881,7 @@ cups_request_job_info (CupsJobPollData *data)
 
   request = gtk_cups_request_new_with_username (NULL,
                                                 GTK_CUPS_POST,
-                                                IPP_GET_JOB_ATTRIBUTES,
+                                                IPP_OP_GET_JOB_ATTRIBUTES,
                                                 NULL,
                                                 NULL,
                                                 NULL,
@@ -2352,7 +2396,7 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
       for (i = 0; i < ippGetCount (attr); i++)
         {
           col = ippGetCollection (attr, i);
-          for (iter = ippFirstAttribute (col); iter != NULL; iter = ippNextAttribute (col))
+          for (iter = ippGetFirstAttribute (col); iter != NULL; iter = ippGetNextAttribute (col))
             {
               switch (ippGetValueTag (iter))
                 {
@@ -2408,9 +2452,9 @@ cups_printer_handle_attribute (GtkPrintBackendCups *cups_backend,
           media_size = g_new0 (MediaSize, 1);
           number_of_dimensions = 0;
 
-          for (iter = ippFirstAttribute (media_size_collection);
+          for (iter = ippGetFirstAttribute (media_size_collection);
                iter != NULL;
-               iter = ippNextAttribute (media_size_collection))
+               iter = ippGetNextAttribute (media_size_collection))
             {
               if (g_strcmp0 (ippGetName (iter), "x-dimension") == 0 &&
                   ippGetValueTag (iter) == IPP_TAG_INTEGER)
@@ -2521,15 +2565,17 @@ cups_create_printer (GtkPrintBackendCups *cups_backend,
 		   &port,
 		   resource, sizeof (resource));
 
+#if CUPS_VERSION_MAJOR < 3
   if (strncmp (resource, "/printers/", 10) == 0)
     {
       cups_printer->ppd_name = g_strdup (resource + 10);
       GTK_NOTE (PRINTING,
 		g_print ("CUPS Backend: Setting ppd name '%s' for printer/class '%s'\n", cups_printer->ppd_name, info->printer_name));
     }
+#endif
 
   gethostname (uri, sizeof (uri));
-  cups_server = g_strdup (cupsServer());
+  cups_server = g_strdup (cupsGetServer());
 
   if (strcasecmp (uri, hostname) == 0)
     strcpy (hostname, "localhost");
@@ -2798,16 +2844,16 @@ cups_request_printer_info_cb (GtkPrintBackendCups *cups_backend,
     }
 
   response = gtk_cups_result_get_response (result);
-  attr = ippFirstAttribute (response);
+  attr = ippGetFirstAttribute (response);
   while (attr && ippGetGroupTag (attr) != IPP_TAG_PRINTER)
-    attr = ippNextAttribute (response);
+    attr = ippGetNextAttribute (response);
 
   if (attr)
     {
       while (attr && ippGetGroupTag (attr) == IPP_TAG_PRINTER)
         {
           cups_printer_handle_attribute (cups_backend, attr, info);
-          attr = ippNextAttribute (response);
+          attr = ippGetNextAttribute (response);
         }
 
       if (info->printer_name && info->printer_uri)
@@ -2889,7 +2935,10 @@ cups_request_printer_info (GtkPrinterCups *printer)
   GtkCupsRequest         *request;
   http_t                 *http;
 
-  http = httpConnect2 (printer->hostname, printer->port, NULL, AF_UNSPEC, HTTP_ENCRYPTION_IF_REQUESTED, 1, 30000, NULL);
+  if (printer->is_temporary)
+    http = _httpConnect (cupsGetServer (), ippGetPort (), NULL, AF_UNSPEC, HTTP_ENCRYPTION_IF_REQUESTED, 1, 30000, NULL);
+  else
+    http = _httpConnect (printer->hostname, printer->port, NULL, AF_UNSPEC, HTTP_ENCRYPTION_IF_REQUESTED, 1, 30000, NULL);
   if (http)
     {
       data = g_new0 (RequestPrinterInfoData, 1);
@@ -2898,7 +2947,7 @@ cups_request_printer_info (GtkPrinterCups *printer)
 
       request = gtk_cups_request_new_with_username (http,
                                                     GTK_CUPS_POST,
-                                                    IPP_GET_PRINTER_ATTRIBUTES,
+                                                    IPP_OP_GET_PRINTER_ATTRIBUTES,
                                                     NULL,
                                                     NULL,
                                                     NULL,
@@ -2996,7 +3045,7 @@ cups_create_local_printer_cb (GtkPrintBackendCups *print_backend,
 
   response = gtk_cups_result_get_response (result);
 
-  if (ippGetStatusCode (response) <= IPP_OK_CONFLICT)
+  if (ippGetStatusCode (response) <= IPP_STATUS_OK_CONFLICTING)
     {
       if ((attr = ippFindAttribute (response, "printer-uri-supported", IPP_TAG_URI)) != NULL)
         {
@@ -3096,23 +3145,23 @@ create_cups_printer_from_avahi_data (AvahiConnectionTestData *data)
   if (data->got_printer_state)
     {
       info->state = data->printer_state;
-      info->is_paused = info->state == IPP_PRINTER_STOPPED;
+      info->is_paused = info->state == IPP_PSTATE_STOPPED;
     }
 
   info->got_printer_type = data->got_printer_type;
   if (data->got_printer_type)
     {
-      if (data->printer_type & CUPS_PRINTER_DEFAULT)
+      if (data->printer_type & CUPS_PTYPE_DEFAULT)
         info->default_printer = TRUE;
       else
         info->default_printer = FALSE;
 
-      if (data->printer_type & CUPS_PRINTER_REMOTE)
+      if (data->printer_type & CUPS_PTYPE_REMOTE)
         info->remote_printer = TRUE;
       else
         info->remote_printer = FALSE;
 
-      if (data->printer_type & CUPS_PRINTER_REJECTING)
+      if (data->printer_type & CUPS_PTYPE_REJECTING)
         info->is_accepting_jobs = FALSE;
       else
         info->is_accepting_jobs = TRUE;
@@ -3755,8 +3804,8 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
   g_object_weak_ref (G_OBJECT (backend), backend_finalized_cb, &backend_finalized);
 
   response = gtk_cups_result_get_response (result);
-  for (attr = ippFirstAttribute (response); attr != NULL;
-       attr = ippNextAttribute (response))
+  for (attr = ippGetFirstAttribute (response); attr != NULL;
+       attr = ippGetNextAttribute (response))
     {
       GtkPrinter *printer;
       gboolean status_changed = FALSE;
@@ -3766,7 +3815,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       /* Skip leading attributes until we hit a printer...
        */
       while (attr != NULL && ippGetGroupTag (attr) != IPP_TAG_PRINTER)
-        attr = ippNextAttribute (response);
+        attr = ippGetNextAttribute (response);
 
       if (attr == NULL)
         break;
@@ -3774,7 +3823,7 @@ cups_request_printer_list_cb (GtkPrintBackendCups *cups_backend,
       while (attr != NULL && ippGetGroupTag (attr) == IPP_TAG_PRINTER)
         {
           cups_printer_handle_attribute (cups_backend, attr, info);
-          attr = ippNextAttribute (response);
+          attr = ippGetNextAttribute (response);
         }
 
       if (info->printer_name == NULL ||
@@ -3996,7 +4045,7 @@ cups_request_printer_list (GtkPrintBackendCups *cups_backend)
 
   request = gtk_cups_request_new_with_username (NULL,
                                                 GTK_CUPS_POST,
-                                                CUPS_GET_PRINTERS,
+                                                IPP_OP_CUPS_GET_PRINTERS,
                                                 NULL,
                                                 NULL,
                                                 NULL,
@@ -4039,6 +4088,7 @@ cups_get_printer_list (GtkPrintBackend *backend)
     }
 }
 
+#if CUPS_VERSION_MAJOR < 3
 typedef struct {
   GtkPrinterCups *printer;
   GIOChannel *ppd_io;
@@ -4210,7 +4260,7 @@ cups_request_ppd (GtkPrinter *printer)
   else
     {
       if (cups_printer->is_temporary)
-        hostname = cupsServer ();
+        hostname = cupsGetServer ();
       else
         hostname = cups_printer->hostname;
       port = cups_printer->port;
@@ -4291,6 +4341,7 @@ cups_request_ppd (GtkPrinter *printer)
 
   return FALSE;
 }
+#endif
 
 /* Ordering matters for default preference */
 static const char *lpoptions_locations[] = {
@@ -4402,7 +4453,11 @@ cups_parse_user_options (const char     *filename,
           continue;
 
       /* We found our printer, parse the options */
+#if CUPS_VERSION_MAJOR < 3
       num_options = cupsParseOptions (lineptr, num_options, options);
+#else
+      num_options = cupsParseOptions (lineptr, NULL, num_options, options);
+#endif
     }
 
   fclose (fp);
@@ -4564,7 +4619,7 @@ cups_request_default_printer (GtkPrintBackendCups *print_backend)
 
   request = gtk_cups_request_new_with_username (NULL,
                                                 GTK_CUPS_POST,
-                                                CUPS_GET_DEFAULT,
+                                                IPP_OP_CUPS_GET_DEFAULT,
                                                 NULL,
                                                 NULL,
                                                 NULL,
@@ -4595,6 +4650,7 @@ cups_printer_request_details (GtkPrinter *printer)
                               cups_printer->temporary_queue_device_uri);
 #endif
     }
+#if CUPS_VERSION_MAJOR < 3
   else if (!cups_printer->reading_ppd &&
            gtk_printer_cups_get_ppd (cups_printer) == NULL)
     {
@@ -4618,8 +4674,18 @@ cups_printer_request_details (GtkPrinter *printer)
       else
         cups_request_ppd (printer);
     }
+#else
+  else
+    {
+      if (cups_printer->request_original_uri)
+        cups_printer->request_original_uri = FALSE;
+
+      cups_request_printer_info (cups_printer);
+    }
+#endif
 }
 
+#if CUPS_VERSION_MAJOR < 3
 static char *
 ppd_text_to_utf8 (ppd_file_t *ppd_file,
 		  const char *text)
@@ -4730,6 +4796,7 @@ static const struct {
    up an extra panel of settings in a print dialog. */
   { "Miscellaneous", NC_("printing option group", "Miscellaneous") }
 };
+#endif
 
 static const struct {
   const char *ppd_keyword;
@@ -4836,6 +4903,7 @@ static const struct {
   { "job-priority", "gtk-job-prio" }
 };
 
+#if CUPS_VERSION_MAJOR < 3
 /* keep sorted when changing */
 static const char *color_option_whitelist[] = {
   "BRColorEnhancement",
@@ -4932,6 +5000,7 @@ static const char *finishing_group_whitelist[] = {
   "FinishingPage",
   "HPFinishingPanel",
 };
+#endif
 
 /* keep sorted when changing */
 static const char *cups_option_blacklist[] = {
@@ -4942,6 +5011,7 @@ static const char *cups_option_blacklist[] = {
   "PageSize",
 };
 
+#if CUPS_VERSION_MAJOR < 3
 static char *
 get_option_text (ppd_file_t   *ppd_file,
 		 ppd_option_t *option)
@@ -5004,6 +5074,7 @@ group_has_option (ppd_group_t  *group,
     }
   return FALSE;
 }
+#endif
 
 static void
 set_option_off (GtkPrinterOption *option)
@@ -5023,6 +5094,7 @@ value_is_off (const char *value)
 	   strcasecmp (value, "False") == 0);
 }
 
+#if CUPS_VERSION_MAJOR < 3
 static const char *
 ppd_group_name (ppd_group_t *group)
 {
@@ -5367,6 +5439,7 @@ get_ppd_option_name (const gchar *keyword)
 
   return g_strdup_printf ("cups-%s", keyword);
 }
+#endif
 
 static gchar *
 get_lpoption_name (const gchar *lpoption)
@@ -5404,6 +5477,7 @@ string_in_table (const gchar *str,
 
 #define STRING_IN_TABLE(_str, _table) (string_in_table (_str, _table, G_N_ELEMENTS (_table)))
 
+#if CUPS_VERSION_MAJOR < 3
 static void
 handle_option (GtkPrinterOptionSet *set,
 	       ppd_file_t          *ppd_file,
@@ -5497,6 +5571,7 @@ handle_group (GtkPrinterOptionSet *set,
     handle_group (set, ppd_file, &group->subgroups[i], toplevel_group, settings);
 
 }
+#endif
 
 #ifdef HAVE_COLORD
 
@@ -5720,7 +5795,9 @@ cups_printer_get_options (GtkPrinter           *printer,
 {
   GtkPrinterOptionSet *set;
   GtkPrinterOption *option;
+#if CUPS_VERSION_MAJOR < 3
   ppd_file_t *ppd_file;
+#endif
   int i;
   char *print_at[] = { "now", "at", "on-hold" };
   char *n_up[] = {"1", "2", "4", "6", "9", "16" };
@@ -5923,6 +6000,7 @@ cups_printer_get_options (GtkPrinter           *printer,
   g_object_unref (option);
 
   /* Printer (ppd) specific settings */
+#if CUPS_VERSION_MAJOR < 3
   ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
   if (ppd_file)
     {
@@ -5972,6 +6050,7 @@ cups_printer_get_options (GtkPrinter           *printer,
         handle_group (set, ppd_file, &ppd_file->groups[i], &ppd_file->groups[i], settings);
     }
   else
+#endif
     {
       /* Try IPP options */
 
@@ -6104,6 +6183,7 @@ cups_printer_get_options (GtkPrinter           *printer,
 }
 
 
+#if CUPS_VERSION_MAJOR < 3
 static void
 mark_option_from_set (GtkPrinterOptionSet *set,
 		      ppd_file_t          *ppd_file,
@@ -6158,7 +6238,9 @@ set_conflicts_from_option (GtkPrinterOptionSet *set,
       g_free (name);
     }
 }
+#endif
 
+#if CUPS_VERSION_MAJOR < 3
 static void
 set_conflicts_from_group (GtkPrinterOptionSet *set,
 			  ppd_file_t          *ppd_file,
@@ -6172,11 +6254,13 @@ set_conflicts_from_group (GtkPrinterOptionSet *set,
   for (i = 0; i < group->num_subgroups; i++)
     set_conflicts_from_group (set, ppd_file, &group->subgroups[i]);
 }
+#endif
 
 static gboolean
 cups_printer_mark_conflicts (GtkPrinter          *printer,
 			     GtkPrinterOptionSet *options)
 {
+#if CUPS_VERSION_MAJOR < 3
   ppd_file_t *ppd_file;
   int num_conflicts;
   int i;
@@ -6200,13 +6284,18 @@ cups_printer_mark_conflicts (GtkPrinter          *printer,
     }
 
   return num_conflicts > 0;
+#else
+  return FALSE;
+#endif
 }
 
 struct OptionData {
   GtkPrinter *printer;
   GtkPrinterOptionSet *options;
   GtkPrintSettings *settings;
+#if CUPS_VERSION_MAJOR < 3
   ppd_file_t *ppd_file;
+#endif
 };
 
 typedef struct {
@@ -6649,14 +6738,19 @@ cups_printer_get_settings_from_options (GtkPrinter          *printer,
 					GtkPrintSettings    *settings)
 {
   struct OptionData data;
+#if CUPS_VERSION_MAJOR < 3
   const char *print_at, *print_at_time;
+#endif
 
   data.printer = printer;
   data.options = options;
   data.settings = settings;
+#if CUPS_VERSION_MAJOR < 3
   data.ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
+#endif
 
   gtk_printer_option_set_foreach (options, foreach_option_get_settings, &data);
+#if CUPS_VERSION_MAJOR < 3
   if (data.ppd_file != NULL)
     {
       GtkPrinterOption *cover_before, *cover_after;
@@ -6690,6 +6784,7 @@ cups_printer_get_settings_from_options (GtkPrinter          *printer,
       else if (strcmp (print_at, "on-hold") == 0)
 	gtk_print_settings_set (settings, "cups-job-hold-until", "indefinite");
     }
+#endif
 }
 
 static void
@@ -6829,6 +6924,7 @@ cups_printer_prepare_for_print (GtkPrinter       *printer,
   gtk_print_job_set_rotate (print_job, TRUE);
 }
 
+#if CUPS_VERSION_MAJOR < 3
 static GtkPageSetup *
 create_page_setup (ppd_file_t *ppd_file,
 		   ppd_size_t *size)
@@ -6868,6 +6964,7 @@ create_page_setup (ppd_file_t *ppd_file,
 
   return page_setup;
 }
+#endif
 
 static GtkPageSetup *
 create_page_setup_from_media (gchar     *media,
@@ -6902,17 +6999,17 @@ create_page_setup_from_media (gchar     *media,
 static GList *
 cups_printer_list_papers (GtkPrinter *printer)
 {
-  ppd_file_t *ppd_file;
-  ppd_size_t *size;
   GtkPageSetup *page_setup;
   GtkPrinterCups *cups_printer = GTK_PRINTER_CUPS (printer);
   GList *result = NULL;
-  int i;
+#if CUPS_VERSION_MAJOR < 3
+  ppd_file_t *ppd_file;
+  ppd_size_t *size;
 
   ppd_file = gtk_printer_cups_get_ppd (cups_printer);
   if (ppd_file != NULL)
     {
-      for (i = 0; i < ppd_file->num_sizes; i++)
+      for (int i = 0; i < ppd_file->num_sizes; i++)
         {
           size = &ppd_file->sizes[i];
 
@@ -6921,7 +7018,9 @@ cups_printer_list_papers (GtkPrinter *printer)
           result = g_list_prepend (result, page_setup);
         }
     }
-  else if (cups_printer->media_supported != NULL &&
+  else
+#endif
+  if (cups_printer->media_supported != NULL &&
            cups_printer->media_size_supported != NULL &&
            /*
             * 'media_supported' list can contain names of minimal and maximal sizes
@@ -6966,6 +7065,7 @@ cups_printer_get_default_page_size (GtkPrinter *printer)
 {
   GtkPrinterCups *cups_printer = GTK_PRINTER_CUPS (printer);
   GtkPageSetup   *result = NULL;
+#if CUPS_VERSION_MAJOR < 3
   ppd_option_t   *option;
   ppd_file_t     *ppd_file;
   ppd_size_t     *size;
@@ -6983,7 +7083,9 @@ cups_printer_get_default_page_size (GtkPrinter *printer)
 
       result = create_page_setup (ppd_file, size);
     }
-  else if (cups_printer->media_default != NULL)
+  else
+#endif
+  if (cups_printer->media_default != NULL)
     {
       MediaSize *media_size;
       GList     *media_iter;
@@ -7023,8 +7125,9 @@ cups_printer_get_hard_margins (GtkPrinter *printer,
 			       gdouble    *right)
 {
   GtkPrinterCups *cups_printer = GTK_PRINTER_CUPS (printer);
-  ppd_file_t     *ppd_file;
   gboolean        result = FALSE;
+#if CUPS_VERSION_MAJOR < 3
+  ppd_file_t     *ppd_file;
 
   ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
   if (ppd_file != NULL)
@@ -7035,7 +7138,9 @@ cups_printer_get_hard_margins (GtkPrinter *printer,
       *top = ppd_file->custom_margins[3];
       result = TRUE;
     }
-  else if (cups_printer->media_margin_default_set)
+  else
+#endif
+    if (cups_printer->media_margin_default_set)
     {
       *left = POINTS_PER_INCH * cups_printer->media_left_margin_default / MM_PER_INCH;
       *bottom = POINTS_PER_INCH * cups_printer->media_bottom_margin_default / MM_PER_INCH;
@@ -7055,10 +7160,10 @@ cups_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
 					      gdouble      *left,
 					      gdouble      *right)
 {
+#if CUPS_VERSION_MAJOR < 3
   ppd_file_t *ppd_file;
   ppd_size_t *size;
   const gchar *paper_name;
-  int i;
 
   ppd_file = gtk_printer_cups_get_ppd (GTK_PRINTER_CUPS (printer));
   if (ppd_file == NULL)
@@ -7066,7 +7171,7 @@ cups_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
 
   paper_name = gtk_paper_size_get_ppd_name (paper_size);
 
-  for (i = 0; i < ppd_file->num_sizes; i++)
+  for (int i = 0; i < ppd_file->num_sizes; i++)
     {
       size = &ppd_file->sizes[i];
       if (g_strcmp0(size->name, paper_name) == 0)
@@ -7086,6 +7191,9 @@ cups_printer_get_hard_margins_for_paper_size (GtkPrinter   *printer,
   *top = ppd_file->custom_margins[3];
 
   return TRUE;
+#else
+  return FALSE;
+#endif
 }
 
 static GtkPrintCapabilities
@@ -7094,10 +7202,12 @@ cups_printer_get_capabilities (GtkPrinter *printer)
   GtkPrintCapabilities  capabilities = 0;
   GtkPrinterCups       *cups_printer = GTK_PRINTER_CUPS (printer);
 
+#if CUPS_VERSION_MAJOR < 3
   if (gtk_printer_cups_get_ppd (cups_printer))
     {
       capabilities = GTK_PRINT_CAPABILITY_REVERSE;
     }
+#endif
 
   if (cups_printer->supports_copies)
     {
