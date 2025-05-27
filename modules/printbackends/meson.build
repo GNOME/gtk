@@ -58,7 +58,13 @@ if enabled_print_backends.contains('papi')
 endif
 
 if enabled_print_backends.contains('cups')
-  cups_dep = dependency('cups', version : '>=1.7', required: print_strict_deps)
+  cups_dep = dependency('cups', version : ['>=1.7', '<3.0'], required: false)
+  if not cups_dep.found()
+    cups_dep = dependency('cups3', version : '>=3.0', required: false)
+    if not cups_dep.found() and print_strict_deps
+      error('CUPS >= 1.7 required')
+    endif
+  endif
   if cups_dep.found()
     cups_extra_deps = []
 
