@@ -91,6 +91,7 @@ compare_render_tests = [
   'fill-huge-path',
   'fill-opacity',
   'fill-scaled-up',
+  'fill-subpixel-shift-nocairo',
   'fill-with-3d-contents-nocairo',
   'glyph-cache-overflow',
   'glyph-cache-overflow-slices',

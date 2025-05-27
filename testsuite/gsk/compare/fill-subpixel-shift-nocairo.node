@@ -1,0 +1,50 @@
+transform {
+  transform: translate(0.5, 128);
+  child: container "7" {
+    transform {
+      transform: translate(0.25, 64);
+      child: container "6" {
+        transform {
+          transform: translate(0.125, 32);
+          child: container "5" {
+            transform {
+              transform: translate(0.0625, 16);
+              child: container "4" {
+                transform {
+                  transform: translate(0.03125, 8);
+                  child: container "3" {
+                    transform {
+                      transform: translate(0.015625, 4);
+                      child: container "2" {
+                        transform {
+                          transform: translate(0.0078125, 2);
+                          child: container "1" {
+                            fill "f" {
+                              path: "M 10 10 h1 v1 h-1 z";
+                            }
+                            transform {
+                              transform: translate(0.00390625, 1);
+                              child: "f";
+                            }
+                          }
+                        }
+                        "1";
+                      }
+                    }
+                    "2";
+                  }
+                }
+                "3";
+              }
+            }
+            "4";
+          }
+        }
+        "5";
+      }
+    }
+    "6";
+  }
+}
+"7";
+
