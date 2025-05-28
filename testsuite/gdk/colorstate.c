@@ -77,42 +77,42 @@ image_distance (const guchar *data,
                 gsize         height)
 {
   float dist = 0;
-  gsize imax = 0, jmax = 0;
+  gsize x, y, xmax = 0, ymax = 0;
   float r1 = 0, g1 = 0, b1 = 0, a1 = 0;
   float r2 = 0, g2 = 0, b2 = 0, a2 = 0;
 
-  for (gsize i = 0; i < height; i++)
+  for (y = 0; y < height; y++)
     {
-      const float *p = (const float *) (data + i * stride);
-      const float *p2 = (const float *) (data2 + i * stride2);
+      const float *p = (const float *) (data + y * stride);
+      const float *p2 = (const float *) (data2 + y * stride2);
 
-      for (gsize j = 0; j < width; j++)
+      for (x = 0; x < width; x++)
         {
           float dr, dg, db, da;
 
-          if (p[4 * j + 3] == 0 &&
-              p2[4 * j + 3] == 0)
+          if (p[4 * x + 3] == 0 &&
+              p2[4 * x + 3] == 0)
             continue;
 
-          dr = p[4 * j + 0] - p2[4 * j + 0];
-          dg = p[4 * j + 1] - p2[4 * j + 1];
-          db = p[4 * j + 2] - p2[4 * j + 2];
-          da = p[4 * j + 3] - p2[4 * j + 3];
+          dr = p[4 * x + 0] - p2[4 * x + 0];
+          dg = p[4 * x + 1] - p2[4 * x + 1];
+          db = p[4 * x + 2] - p2[4 * x + 2];
+          da = p[4 * x + 3] - p2[4 * x + 3];
 
           float d = dr * dr + dg * dg + db * db + da * da;
           if (d > dist)
             {
               dist = d;
-              imax = i;
-              jmax = j;
-              r1 = p[4*j+0];
-              g1 = p[4*j+1];
-              b1 = p[4*j+2];
-              a1 = p[4*j+3];
-              r2 = p2[4*j+0];
-              g2 = p2[4*j+1];
-              b2 = p2[4*j+2];
-              a2 = p2[4*j+3];
+              xmax = x;
+              ymax = y;
+              r1 = p[4*x+0];
+              g1 = p[4*x+1];
+              b1 = p[4*x+2];
+              a1 = p[4*x+3];
+              r2 = p2[4*x+0];
+              g2 = p2[4*x+1];
+              b2 = p2[4*x+2];
+              a2 = p2[4*x+3];
             }
         }
     }
@@ -120,8 +120,8 @@ image_distance (const guchar *data,
   if (g_test_verbose() &&
       dist > 0)
     {
-      g_print ("worst pixel %" G_GSIZE_FORMAT " %" G_GSIZE_FORMAT ": %f %f %f %f  vs  %f %f %f %f\n",
-               imax, jmax, r1, g1, b1, a1, r2, g2, b2, a2);
+      g_test_message ("worst pixel %" G_GSIZE_FORMAT " %" G_GSIZE_FORMAT ": %f %f %f %f  vs  %f %f %f %f\n",
+                      xmax, ymax, r1, g1, b1, a1, r2, g2, b2, a2);
     }
 
   return sqrt (dist);
