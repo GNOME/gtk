@@ -153,7 +153,8 @@ create_pdf (GskRenderNode  *node,
 static void
 render_file (const char *filename,
              const char *renderer_name,
-             const char *save_file)
+             const char *save_file,
+             gboolean    snap)
 {
   GskRenderNode *node;
   GBytes *bytes;
@@ -202,6 +203,7 @@ render_file (const char *filename,
     {
       GdkTexture *texture;
       GskRenderer *renderer;
+      graphene_rect_t bounds;
 
       renderer = create_renderer (renderer_name, &error);
       if (renderer == NULL)
@@ -210,7 +212,20 @@ render_file (const char *filename,
           exit (1);
         }
 
-      texture = gsk_renderer_render_texture (renderer, node, NULL);
+      gsk_render_node_get_bounds (node, &bounds);
+      if (snap)
+        {
+          graphene_rect_t snapped;
+
+          snapped.origin.x = floorf (bounds.origin.x);
+          snapped.origin.y = floorf (bounds.origin.y);
+          snapped.size.width = ceilf (bounds.origin.x + bounds.size.width) - snapped.origin.x;
+          snapped.size.height = ceilf (bounds.origin.y + bounds.size.height) - snapped.origin.y;
+
+          bounds = snapped;
+        }
+
+      texture = gsk_renderer_render_texture (renderer, node, &bounds);
 
       if (g_str_has_suffix (save_to, ".tif") ||
           g_str_has_suffix (save_to, ".tiff"))
@@ -250,8 +265,10 @@ do_render (int          *argc,
   GOptionContext *context;
   char **filenames = NULL;
   char *renderer = NULL;
+  gboolean snap = FALSE;
   const GOptionEntry entries[] = {
     { "renderer", 0, 0, G_OPTION_ARG_STRING, &renderer, N_("Renderer to use"), N_("RENDERER") },
+    { "dont-move", 0, 0, G_OPTION_ARG_NONE, &snap, N_("Keep node position unchanged"),  NULL },
     { G_OPTION_REMAINING, 0, 0, G_OPTION_ARG_FILENAME_ARRAY, &filenames, NULL, N_("FILE…") },
     { NULL, }
   };
@@ -290,7 +307,7 @@ do_render (int          *argc,
       exit (1);
     }
 
-  render_file (filenames[0], renderer, filenames[1]);
+  render_file (filenames[0], renderer, filenames[1], snap);
 
   g_strfreev (filenames);
 }
