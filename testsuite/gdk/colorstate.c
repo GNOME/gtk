@@ -1,5 +1,16 @@
+#include "config.h"
+
 #include <gdk/gdk.h>
 #include <math.h>
+
+#ifdef HAVE_DRM_FOURCC_H
+#endif
+#include "udmabuf.h"
+
+typedef enum {
+  TEXTURE_METHOD_PLAIN,
+  TEXTURE_METHOD_DMABUF
+} TextureMethod;
 
 static GdkColorState *
 get_color_state (guint        id,
@@ -117,7 +128,10 @@ image_distance (const guchar *data,
 }
 
 static void
-test_convert (gconstpointer testdata)
+test_convert (gconstpointer testdata,
+              TextureMethod method,
+              float         max_distance_premultiplied,
+              float         max_distance_straight)
 {
   GdkColorState *cs = (GdkColorState *) testdata;
   char *path;
@@ -130,11 +144,18 @@ test_convert (gconstpointer testdata)
   gsize stride, stride2;
   gsize width, height;
   GdkMemoryFormat test_format;
+  float max_distance;
 
   if (g_test_rand_bit ())
-    test_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+    {
+      max_distance = max_distance_premultiplied;
+      test_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+    }
   else
-    test_format = GDK_MEMORY_R32G32B32A32_FLOAT;
+    {
+      max_distance = max_distance_straight;
+      test_format = GDK_MEMORY_R32G32B32A32_FLOAT;
+    }
 
   path = g_test_build_filename (G_TEST_DIST, "image-data", "image.png", NULL);
 
@@ -143,6 +164,21 @@ test_convert (gconstpointer testdata)
   g_assert_no_error (error);
   g_assert_true (gdk_color_state_equal (gdk_texture_get_color_state (texture),
                                         gdk_color_state_get_srgb ()));
+  if (method == TEXTURE_METHOD_DMABUF)
+    {
+#ifdef HAVE_DRM_FOURCC_H
+      texture = udmabuf_texture_from_texture (texture, &error);
+#else
+      g_assert_not_reached ();
+#endif
+    }
+  if (texture == NULL)
+    {
+      g_test_skip (error->message);
+      g_clear_error (&error);
+      return;
+    }
+
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
 
@@ -178,7 +214,7 @@ test_convert (gconstpointer testdata)
   data2 = g_bytes_get_data (bytes2, NULL);
 
   /* Check that the conversions produce pixels that are close enough */
-  g_assert_cmpfloat (image_distance (data, stride, data2, stride2, width, height), <, 0.001);
+  g_assert_cmpfloat (image_distance (data, stride, data2, stride2, width, height), <, max_distance);
 
   if (g_test_verbose ())
     g_test_message ("%g\n", image_distance (data, stride, data2, stride2, width, height));
@@ -190,6 +226,20 @@ test_convert (gconstpointer testdata)
   g_object_unref (texture);
   g_free (path);
 }
+
+static void
+test_convert_plain (gconstpointer testdata)
+{
+  test_convert (testdata, TEXTURE_METHOD_PLAIN, 0.001, 0.001);
+}
+
+#ifdef HAVE_DRM_FOURCC_H
+static void
+test_convert_dmabuf (gconstpointer testdata)
+{
+  test_convert (testdata, TEXTURE_METHOD_DMABUF, 0.02, 0.005);
+}
+#endif
 
 static void
 test_png (gconstpointer testdata)
@@ -275,7 +325,7 @@ main (int argc, char *argv[])
 {
   guint i;
 
-  (g_test_init) (&argc, &argv, NULL);
+  (gtk_test_init) (&argc, &argv, NULL);
 
   g_test_add_func ("/colorstate/equal", test_equal);
   g_test_add_func ("/colorstate/cicp", test_cicp);
@@ -290,9 +340,14 @@ main (int argc, char *argv[])
       if (csi == NULL)
         break;
 
-      test_name = g_strdup_printf ("/colorstate/convert/srgb/%s", cs_name);
-      g_test_add_data_func_full (test_name, gdk_color_state_ref (csi), test_convert, (GDestroyNotify) gdk_color_state_unref);
+      test_name = g_strdup_printf ("/colorstate/convert-plain/srgb/%s", cs_name);
+      g_test_add_data_func_full (test_name, gdk_color_state_ref (csi), test_convert_plain, (GDestroyNotify) gdk_color_state_unref);
       g_free (test_name);
+#ifdef HAVE_DRM_FOURCC_H
+      test_name = g_strdup_printf ("/colorstate/convert-dmabuf/srgb/%s", cs_name);
+      g_test_add_data_func_full (test_name, gdk_color_state_ref (csi), test_convert_dmabuf, (GDestroyNotify) gdk_color_state_unref);
+      g_free (test_name);
+#endif
       test_name = g_strdup_printf ("/colorstate/png/%s", cs_name);
       g_test_add_data_func_full (test_name, gdk_color_state_ref (csi), test_png, (GDestroyNotify) gdk_color_state_unref);
       g_free (test_name);
@@ -317,9 +372,14 @@ main (int argc, char *argv[])
 
               if (color_state)
                 {
-                  char *test_name = g_strdup_printf ("/colorstate/convert/srgb/cicp/%u/%u/%u/0", primaries, tf, matrix);
-                  g_test_add_data_func_full (test_name, gdk_color_state_ref (color_state), test_convert, (GDestroyNotify) gdk_color_state_unref);
+                  char *test_name = g_strdup_printf ("/colorstate/convert/plain/srgb/cicp/%u/%u/%u/0", primaries, tf, matrix);
+                  g_test_add_data_func_full (test_name, gdk_color_state_ref (color_state), test_convert_plain, (GDestroyNotify) gdk_color_state_unref);
                   g_free (test_name);
+#ifdef HAVE_DRM_FOURCC_H
+                  test_name = g_strdup_printf ("/colorstate/convert/dmabuf/srgb/cicp/%u/%u/%u/0", primaries, tf, matrix);
+                  g_test_add_data_func_full (test_name, gdk_color_state_ref (color_state), test_convert_dmabuf, (GDestroyNotify) gdk_color_state_unref);
+                  g_free (test_name);
+#endif
 
                   gdk_color_state_unref (color_state);
                 }
@@ -328,9 +388,14 @@ main (int argc, char *argv[])
               color_state = gdk_cicp_params_build_color_state (params, NULL);
               if (color_state)
                 {
-                  char *test_name = g_strdup_printf ("/colorstate/convert/srgb/cicp/%u/%u/%u/1", primaries, tf, matrix);
-                  g_test_add_data_func_full (test_name, gdk_color_state_ref (color_state), test_convert, (GDestroyNotify) gdk_color_state_unref);
+                  char *test_name = g_strdup_printf ("/colorstate/convert/plain/srgb/cicp/%u/%u/%u/1", primaries, tf, matrix);
+                  g_test_add_data_func_full (test_name, gdk_color_state_ref (color_state), test_convert_plain, (GDestroyNotify) gdk_color_state_unref);
                   g_free (test_name);
+#ifdef HAVE_DRM_FOURCC_H
+                  test_name = g_strdup_printf ("/colorstate/convert/dmabuf/srgb/cicp/%u/%u/%u/1", primaries, tf, matrix);
+                  g_test_add_data_func_full (test_name, gdk_color_state_ref (color_state), test_convert_dmabuf, (GDestroyNotify) gdk_color_state_unref);
+                  g_free (test_name);
+#endif
 
                   gdk_color_state_unref (color_state);
                 }
