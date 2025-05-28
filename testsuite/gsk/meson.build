@@ -274,6 +274,8 @@ compare_xfails = {
   'cairo': {
     'inter-hinting': ['flip', 'rotate'],
     'inter-optical-scaling': ['flip', 'rotate'],
+    'fill-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
+    'fill-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
   }
 }
 

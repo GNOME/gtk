@@ -1,3 +1,8 @@
+color {
+  bounds: 0 0 21 276;
+  color: rgb(0,0,0);
+}
+
 transform {
   transform: translate(0.5, 128);
   child: container "7" {
@@ -21,6 +26,10 @@ transform {
                           child: container "1" {
                             fill "f" {
                               path: "M 10 10 h1 v1 h-1 z";
+                              child: color {
+                                bounds: 0 0 20 20;
+                                color: #ff0000;
+                              }
                             }
                             transform {
                               transform: translate(0.00390625, 1);
