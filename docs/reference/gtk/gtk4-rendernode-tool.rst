@@ -64,6 +64,10 @@ FILE argument.
   Use the given renderer. Use ``--renderer=help`` to get a information
   about possible values for the ``RENDERER``.
 
+``--dont-move``
+
+Keep the node position unchanged, relative to the pixel grid.
+
 Benchmark
 ^^^^^^^^^
 
