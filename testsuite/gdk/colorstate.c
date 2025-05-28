@@ -79,6 +79,10 @@ image_distance (const guchar *data,
         {
           float dr, dg, db, da;
 
+          if (p[4 * j + 3] == 0 &&
+              p2[4 * j + 3] == 0)
+            continue;
+
           dr = p[4 * j + 0] - p2[4 * j + 0];
           dg = p[4 * j + 1] - p2[4 * j + 1];
           db = p[4 * j + 2] - p2[4 * j + 2];
@@ -90,14 +94,14 @@ image_distance (const guchar *data,
               dist = d;
               imax = i;
               jmax = j;
-              r1 = p[4+j+0];
-              g1 = p[4+j+1];
-              b1 = p[4+j+2];
-              a1 = p[4+j+3];
-              r2 = p2[4+j+0];
-              g2 = p2[4+j+1];
-              b2 = p2[4+j+2];
-              a2 = p2[4+j+3];
+              r1 = p[4*j+0];
+              g1 = p[4*j+1];
+              b1 = p[4*j+2];
+              a1 = p[4*j+3];
+              r2 = p2[4*j+0];
+              g2 = p2[4*j+1];
+              b2 = p2[4*j+2];
+              a2 = p2[4*j+3];
             }
         }
     }
