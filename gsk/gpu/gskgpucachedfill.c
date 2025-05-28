@@ -17,8 +17,8 @@
 
 #include "gsk/gskprivate.h"
 
-#define SUBPIXEL_SCALE_X 16
-#define SUBPIXEL_SCALE_Y 16
+#define SUBPIXEL_SCALE_X 32
+#define SUBPIXEL_SCALE_Y 32
 
 typedef struct _GskGpuCachedFill GskGpuCachedFill;
 
