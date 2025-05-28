@@ -40,7 +40,8 @@
 static gboolean
 gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
                                            GdkDmabufFormatsBuilder   *formats,
-                                           GdkDmabufFormatsBuilder   *internal)
+                                           GdkDmabufFormatsBuilder   *internal,
+                                           GdkDmabufFormatsBuilder   *external)
 {
   GdkGLContext *context = gdk_display_get_gl_context (display);
   EGLDisplay egl_display = gdk_display_get_egl_display (display);
@@ -127,7 +128,11 @@ gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
           if (advertise)
             gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], modifiers[j]);
 
-          if (!external_only[j])
+          if (external_only[j])
+            {
+              gdk_dmabuf_formats_builder_add_format (external, fourccs[i], modifiers[j]);
+            }
+          else
             {
               gdk_dmabuf_formats_builder_add_format (internal, fourccs[i], modifiers[j]);
               all_external = FALSE;
@@ -271,6 +276,8 @@ gdk_dmabuf_egl_import_dmabuf (GdkGLContext    *context,
        * that the driver did not explicitly advertise. */
       if (gdk_gl_context_get_use_es (context))
         target = GL_TEXTURE_EXTERNAL_OES;
+      else if (gdk_dmabuf_formats_contains (display->egl_external_formats, dmabuf->fourcc, dmabuf->modifier))
+        return 0; /* GL can't handle external only formats and drivers often fail to reject them */
       else
         target = GL_TEXTURE_2D;
     }
@@ -408,8 +415,7 @@ void
 gdk_dmabuf_egl_init (GdkDisplay *display)
 {
 #if defined (HAVE_DMABUF) && defined (HAVE_EGL)
-  GdkDmabufFormatsBuilder *formats;
-  GdkDmabufFormatsBuilder *internal;
+  GdkDmabufFormatsBuilder *formats, *internal, *external;
   gboolean retval = FALSE;
   GError *error = NULL;
   GskRenderer *renderer;
@@ -426,15 +432,17 @@ gdk_dmabuf_egl_init (GdkDisplay *display)
 
   formats = gdk_dmabuf_formats_builder_new ();
   internal = gdk_dmabuf_formats_builder_new ();
+  external = gdk_dmabuf_formats_builder_new ();
 
   previous = gdk_gl_context_get_current ();
   if (previous)
     g_object_ref (previous);
 
-  retval = gdk_dmabuf_egl_downloader_collect_formats (display, formats, internal);
+  retval = gdk_dmabuf_egl_downloader_collect_formats (display, formats, internal, external);
 
   display->egl_dmabuf_formats = gdk_dmabuf_formats_builder_free_to_formats (formats);
   display->egl_internal_formats = gdk_dmabuf_formats_builder_free_to_formats (internal);
+  display->egl_external_formats = gdk_dmabuf_formats_builder_free_to_formats (external);
 
   if (!retval)
     {

@@ -440,6 +440,7 @@ gdk_display_dispose (GObject *object)
 
   g_clear_pointer (&display->egl_dmabuf_formats, gdk_dmabuf_formats_unref);
   g_clear_pointer (&display->egl_internal_formats, gdk_dmabuf_formats_unref);
+  g_clear_pointer (&display->egl_external_formats, gdk_dmabuf_formats_unref);
 #ifdef GDK_RENDERING_VULKAN
   if (display->vk_instance)
     gdk_display_destroy_vulkan_instance (display);
