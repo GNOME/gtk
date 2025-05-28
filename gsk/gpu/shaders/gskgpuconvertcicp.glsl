@@ -138,7 +138,8 @@ cicp_to_xyz (uint cp)
     {
     case 1u: return srgb_to_xyz;
     case 5u: return pal_to_xyz;
-    case 6u: return ntsc_to_xyz;
+    case 6u:
+    case 7u: return ntsc_to_xyz;
     case 9u: return rec2020_to_xyz;
     case 10u: return identity;
     case 12u: return p3_to_xyz;
@@ -153,7 +154,8 @@ cicp_from_xyz (uint cp)
     {
     case 1u: return xyz_to_srgb;
     case 5u: return xyz_to_pal;
-    case 6u: return xyz_to_ntsc;
+    case 6u:
+    case 7u: return xyz_to_ntsc;
     case 9u: return xyz_to_rec2020;
     case 10u: return identity;
     case 12u: return xyz_to_p3;
