@@ -453,6 +453,8 @@ convert_color_to_cicp (vec4 color,
 
   color.rgb = _yuv * color.rgb + _yuv_add;
 
+  color.rgb = clamp (color.rgb, 0.0, 1.0);
+
   if (_range == 0u)
     {
       color.r = color.r * 224.0/255.0 + 16.0/255.0;

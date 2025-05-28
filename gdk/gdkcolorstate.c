@@ -907,6 +907,9 @@ transform_to_cicp (GdkCicpColorState *self,
           values[i][1] = res[1];
           values[i][2] = res[2] + 0.5;
         }
+      values[i][0] = CLAMP (values[i][0], 0.0, 1.0);
+      values[i][1] = CLAMP (values[i][1], 0.0, 1.0);
+      values[i][2] = CLAMP (values[i][2], 0.0, 1.0);
       if (self->cicp.range == GDK_CICP_RANGE_NARROW)
         {
           values[i][0] = values[i][0] * 224.0 / 255.0 + 16.0 / 255.0;
