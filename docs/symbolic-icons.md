@@ -2,6 +2,8 @@
 
 GTK has been using a simple subset of SVG for symbolic, recolorable icons for a long time. This document is an attempt to describe the format that we use.
 
+Note that support for strokes, and style classes other than "success", "warning" and "error" has been added in GTK 4.20 and GTK 3.24.50.
+
 ### Allowed primitives
 
 We use `path` elements as graphics primitives. They may be grouped with `g` elements.
