@@ -169,11 +169,9 @@ point_snap_to_grid_floor (const graphene_point_t *src,
                        y / sy - offset->y);
 }
 
-#define quick_round(f) ((int) ((f) + 0.5f))
-
 static inline void
-compute_subpixel_offset (const graphene_point_t *orig,
-                         const graphene_point_t *snapped,
+compute_subpixel_offset (const graphene_rect_t *orig,
+                         const graphene_rect_t *snapped,
                          const graphene_vec2_t  *scale,
                          guint                  *fx,
                          guint                  *fy,
@@ -186,11 +184,14 @@ compute_subpixel_offset (const graphene_point_t *orig,
   sx = graphene_vec2_get_x (scale);
   sy = graphene_vec2_get_y (scale);
 
-  delta_x = orig->x - snapped->x;
-  delta_y = orig->y - snapped->y;
+  delta_x = orig->origin.x - snapped->origin.x;
+  delta_y = orig->origin.y - snapped->origin.y;
 
-  *fx = quick_round (delta_x * sx * SUBPIXEL_SCALE_X);
-  *fy = quick_round (delta_y * sy * SUBPIXEL_SCALE_Y);
+  /* We're not rounding here, since we don't want to
+   * push the opposite corner out of the snapped bounds
+   */
+  *fx = (guint) (delta_x * sx * SUBPIXEL_SCALE_X);
+  *fy = (guint) (delta_y * sy * SUBPIXEL_SCALE_Y);
 
   *dx = *fx / (sx * SUBPIXEL_SCALE_X) - delta_x;
   *dy = *fy / (sy * SUBPIXEL_SCALE_Y) - delta_y;
@@ -242,8 +243,8 @@ gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
    * apply to place the origin of the path bounds on the
    * subpixel grid and the subpixel position itself as fx,fy.
    */
-  compute_subpixel_offset (&path_bounds.origin,
-                           &viewport.origin,
+  compute_subpixel_offset (&path_bounds,
+                           &viewport,
                            scale,
                            &fx, &fy,
                            &dx, &dy);
