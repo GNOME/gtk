@@ -99,13 +99,30 @@ gdk_dmabuf_egl_downloader_collect_formats (GdkDisplay                *display,
            */
           gboolean advertise = modifiers[j] != DRM_FORMAT_MOD_LINEAR &&
                                (!external_only[j] || gdk_gl_context_get_use_es (context));
+          GdkMemoryFormat format;
+          gboolean is_yuv;
+
+          if (!gdk_memory_format_find_by_dmabuf_fourcc (fourccs[i],
+                                                        TRUE,
+                                                        &format,
+                                                        &is_yuv))
+            {
+              GDK_DISPLAY_DEBUG (display, DMABUF,
+                                 "Skipping EGL %sdmabuf format %.4s::%016" G_GINT64_MODIFIER "x",
+                                 external_only[j] ? "external " : "",
+                                 (char *) &fourccs[i],
+                                 modifiers[j]);
+              continue;
+            }
 
           GDK_DISPLAY_DEBUG (display, DMABUF,
-                             "EGL %s %sdmabuf format %.4s::%016" G_GINT64_MODIFIER "x",
+                             "EGL %s %sdmabuf format %.4s::%016" G_GINT64_MODIFIER "x as %s%s",
                              advertise ? "advertises" : "supports",
                              external_only[j] ? "external " : "",
                              (char *) &fourccs[i],
-                             modifiers[j]);
+                             modifiers[j],
+                             gdk_memory_format_get_name (format),
+                             is_yuv ? " (YUV)" : "");
 
           if (advertise)
             gdk_dmabuf_formats_builder_add_format (formats, fourccs[i], modifiers[j]);
