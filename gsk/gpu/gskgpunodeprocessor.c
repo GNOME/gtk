@@ -3120,8 +3120,10 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   graphene_point_t offset;
   guint num_glyphs;
   float scale;
-  float align_scale;
+  float align_scale_x, align_scale_y;
+  unsigned int flags_mask;
   const float pango_scale = PANGO_SCALE;
+  cairo_hint_style_t hint_style;
   const GdkColor *color;
   GdkColorState *alt;
   GskGpuColorStates color_states;
@@ -3140,6 +3142,7 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
   glyphs = gsk_text_node_get_glyphs (node, &num_glyphs);
   font = gsk_text_node_get_font (node);
   offset = *gsk_text_node_get_offset (node);
+  hint_style = gsk_text_node_get_font_hint_style (node);
   color = gsk_text_node_get_color2 (node);
 
   alt = gsk_gpu_color_states_find (self->ccs, color);
@@ -3153,7 +3156,17 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
 
   scale = MAX (graphene_vec2_get_x (&self->scale), graphene_vec2_get_y (&self->scale));
 
-  align_scale = scale * 4;
+  if (hint_style != CAIRO_HINT_STYLE_NONE)
+    {
+      align_scale_x = scale * 4;
+      align_scale_y = scale;
+      flags_mask = 3;
+    }
+  else
+    {
+      align_scale_x = align_scale_y = scale * 4;
+      flags_mask = 15;
+    }
 
   for (guint i = 0; i < num_glyphs; i++)
     {
@@ -3166,11 +3179,11 @@ gsk_gpu_node_processor_add_glyph_node (GskGpuNodeProcessor *self,
       glyph_origin = GRAPHENE_POINT_INIT (offset.x + glyphs[i].geometry.x_offset / pango_scale,
                                           offset.y + glyphs[i].geometry.y_offset / pango_scale);
 
-      glyph_origin.x = floorf (glyph_origin.x * align_scale + 0.5f);
-      glyph_origin.y = floorf (glyph_origin.y * align_scale + 0.5f);
-      flags = (((int) glyph_origin.x & 3) | (((int) glyph_origin.y & 3) << 2)) & 15;
-      glyph_origin.x /= align_scale;
-      glyph_origin.y /= align_scale;
+      glyph_origin.x = floorf (glyph_origin.x * align_scale_x + 0.5f);
+      glyph_origin.y = floorf (glyph_origin.y * align_scale_y + 0.5f);
+      flags = (((int) glyph_origin.x & 3) | (((int) glyph_origin.y & 3) << 2)) & flags_mask;
+      glyph_origin.x /= align_scale_x;
+      glyph_origin.y /= align_scale_y;
 
       image = gsk_gpu_cached_glyph_lookup (cache,
                                            self->frame,
