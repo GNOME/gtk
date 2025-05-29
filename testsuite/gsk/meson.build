@@ -89,6 +89,7 @@ compare_render_tests = [
   'fill-fractional-translate-gradient',
   'fill-fractional-translate',
   'fill-huge-path',
+  'fill-node-without-path',
   'fill-opacity',
   'fill-scaled-up',
   'fill-subpixel-shift-nocairo',
