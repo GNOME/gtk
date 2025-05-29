@@ -2369,6 +2369,9 @@ gdk_gl_context_download (GdkGLContext          *self,
         {
           g_assert_not_reached ();
         }
+
+      glBindTexture (GL_TEXTURE_2D, tex_id);
+
       if (dest_layout->planes[0].stride == expected_stride &&
           dest_layout->format == tex_format)
         {

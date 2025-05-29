@@ -113,7 +113,7 @@ gsk_gl_device_create_download_image (GskGpuDevice   *device,
   return gsk_gl_image_new (self,
                            gdk_memory_depth_get_format (depth),
                            gdk_memory_depth_is_srgb (depth),
-                           GSK_GPU_IMAGE_RENDERABLE,
+                           GSK_GPU_IMAGE_RENDERABLE | GSK_GPU_IMAGE_DOWNLOADABLE,
                            width,
                            height);
 }

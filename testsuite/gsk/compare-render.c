@@ -675,19 +675,14 @@ run_single_test (const TestSetup *setup,
   if (setup->create_test)
     {
       test = setup->create_test (org_test, test_data);
-      save_node (test, file_name, setup->name, ".node");
     }
   else
     test = gsk_render_node_ref (org_test);
 
   rendered = gsk_renderer_render_texture (renderer, test, render_bounds);
-  save_image (rendered, file_name, setup->name, ".out.png");
 
   if (setup->create_reference)
-    {
-      reference = setup->create_reference (renderer, org_reference, test_data);
-      save_image (reference, file_name, setup->name, ".ref.png");
-    }
+    reference = setup->create_reference (renderer, org_reference, test_data);
   else
     reference = g_object_ref (org_reference);
 
@@ -697,8 +692,16 @@ run_single_test (const TestSetup *setup,
   diff = reftest_compare_textures (reference, rendered);
   if (diff)
     {
-      save_image (diff, file_name, setup->name, ".diff.png");
       g_test_fail ();
+    }
+
+  if (diff || g_test_verbose ())
+    {
+      save_node (test, file_name, setup->name, ".node");
+      save_image (reference, file_name, setup->name, ".ref.png");
+      save_image (rendered, file_name, setup->name, ".out.png");
+      if (diff)
+        save_image (diff, file_name, setup->name, ".diff.png");
     }
 
   g_clear_object (&diff);

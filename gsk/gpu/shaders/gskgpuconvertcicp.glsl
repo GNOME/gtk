@@ -138,7 +138,8 @@ cicp_to_xyz (uint cp)
     {
     case 1u: return srgb_to_xyz;
     case 5u: return pal_to_xyz;
-    case 6u: return ntsc_to_xyz;
+    case 6u:
+    case 7u: return ntsc_to_xyz;
     case 9u: return rec2020_to_xyz;
     case 10u: return identity;
     case 12u: return p3_to_xyz;
@@ -153,7 +154,8 @@ cicp_from_xyz (uint cp)
     {
     case 1u: return xyz_to_srgb;
     case 5u: return xyz_to_pal;
-    case 6u: return xyz_to_ntsc;
+    case 6u:
+    case 7u: return xyz_to_ntsc;
     case 9u: return xyz_to_rec2020;
     case 10u: return identity;
     case 12u: return xyz_to_p3;
@@ -410,6 +412,8 @@ apply_cicp_oetf (vec3 color,
     }
 }
 
+const vec3 narrow_range_scale = vec3(224.0, 219.0, 224.0);
+
 vec4
 convert_color_from_cicp (vec4 color,
                          bool from_premul,
@@ -420,11 +424,7 @@ convert_color_from_cicp (vec4 color,
     color = color_unpremultiply (color);
 
   if (_range == 0u)
-    {
-      color.r = (color.r - 16.0/255.0) * 255.0/224.0;
-      color.g = (color.g - 16.0/255.0) * 255.0/219.0;
-      color.b = (color.b - 16.0/255.0) * 255.0/224.0;
-    }
+    color.rgb = clamp (fma (color.rgb, 255.0 / narrow_range_scale, vec3 (-16.0 / narrow_range_scale)), 0.0, 1.0);
 
   color.rgb = _yuv * (color.rgb + _yuv_add);
 
@@ -453,12 +453,10 @@ convert_color_to_cicp (vec4 color,
 
   color.rgb = _yuv * color.rgb + _yuv_add;
 
+  color.rgb = clamp (color.rgb, 0.0, 1.0);
+
   if (_range == 0u)
-    {
-      color.r = color.r * 224.0/255.0 + 16.0/255.0;
-      color.g = color.g * 219.0/255.0 + 16.0/255.0;
-      color.b = color.b * 224.0/255.0 + 16.0/255.0;
-    }
+    color.rgb = fma (color.rgb, narrow_range_scale / 255.0, vec3 (16.0 / 255.0));
 
   if (to_premul)
     color = color_premultiply (color);

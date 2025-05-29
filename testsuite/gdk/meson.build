@@ -10,7 +10,6 @@ tests = [
   { 'name': 'array' },
   { 'name': 'cairo' },
   { 'name': 'clipboard', 'parallel': false, 'suites': 'flaky' },
-  { 'name': 'colorstate' },
   { 'name': 'contentformats' },
   { 'name': 'contentserializer' },
   { 'name': 'cursor' },
@@ -40,6 +39,13 @@ if os_linux
       # to work on developer machines or downstream build environments
       'suites': [ 'needs-udmabuf' ],
     },
+    { 'name': 'colorstate',
+      'sources': [ 'udmabuf.c' ],
+    },
+  ]
+else
+  tests += [
+    { 'name': 'colorstate' }
   ]
 endif
 

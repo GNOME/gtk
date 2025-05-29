@@ -270,6 +270,22 @@ udmabuf_texture_from_texture (GdkTexture  *texture,
       fourcc = DRM_FORMAT_BGRA8888;
       premultiplied = FALSE;
       break;
+    case GDK_MEMORY_R8G8B8A8:
+      fourcc = DRM_FORMAT_ABGR8888;
+      premultiplied = FALSE;
+      break;
+    case GDK_MEMORY_A8B8G8R8:
+      fourcc = DRM_FORMAT_RGBA8888;
+      premultiplied = FALSE;
+      break;
+    case GDK_MEMORY_R16G16B16A16_FLOAT:
+      fourcc = DRM_FORMAT_ABGR16161616F;
+      premultiplied = FALSE;
+      break;
+    case GDK_MEMORY_R16G16B16A16_FLOAT_PREMULTIPLIED:
+      fourcc = DRM_FORMAT_ABGR16161616F;
+      premultiplied = TRUE;
+      break;
 #endif
     default:
       g_set_error (error,

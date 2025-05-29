@@ -1,5 +1,16 @@
+#include "config.h"
+
 #include <gdk/gdk.h>
 #include <math.h>
+
+#ifdef HAVE_DRM_FOURCC_H
+#endif
+#include "udmabuf.h"
+
+typedef enum {
+  TEXTURE_METHOD_PLAIN,
+  TEXTURE_METHOD_DMABUF
+} TextureMethod;
 
 static GdkColorState *
 get_color_state (guint        id,
@@ -66,38 +77,42 @@ image_distance (const guchar *data,
                 gsize         height)
 {
   float dist = 0;
-  gsize imax = 0, jmax = 0;
+  gsize x, y, xmax = 0, ymax = 0;
   float r1 = 0, g1 = 0, b1 = 0, a1 = 0;
   float r2 = 0, g2 = 0, b2 = 0, a2 = 0;
 
-  for (gsize i = 0; i < height; i++)
+  for (y = 0; y < height; y++)
     {
-      const float *p = (const float *) (data + i * stride);
-      const float *p2 = (const float *) (data2 + i * stride2);
+      const float *p = (const float *) (data + y * stride);
+      const float *p2 = (const float *) (data2 + y * stride2);
 
-      for (gsize j = 0; j < width; j++)
+      for (x = 0; x < width; x++)
         {
           float dr, dg, db, da;
 
-          dr = p[4 * j + 0] - p2[4 * j + 0];
-          dg = p[4 * j + 1] - p2[4 * j + 1];
-          db = p[4 * j + 2] - p2[4 * j + 2];
-          da = p[4 * j + 3] - p2[4 * j + 3];
+          if (p[4 * x + 3] == 0 &&
+              p2[4 * x + 3] == 0)
+            continue;
+
+          dr = p[4 * x + 0] - p2[4 * x + 0];
+          dg = p[4 * x + 1] - p2[4 * x + 1];
+          db = p[4 * x + 2] - p2[4 * x + 2];
+          da = p[4 * x + 3] - p2[4 * x + 3];
 
           float d = dr * dr + dg * dg + db * db + da * da;
           if (d > dist)
             {
               dist = d;
-              imax = i;
-              jmax = j;
-              r1 = p[4+j+0];
-              g1 = p[4+j+1];
-              b1 = p[4+j+2];
-              a1 = p[4+j+3];
-              r2 = p2[4+j+0];
-              g2 = p2[4+j+1];
-              b2 = p2[4+j+2];
-              a2 = p2[4+j+3];
+              xmax = x;
+              ymax = y;
+              r1 = p[4*x+0];
+              g1 = p[4*x+1];
+              b1 = p[4*x+2];
+              a1 = p[4*x+3];
+              r2 = p2[4*x+0];
+              g2 = p2[4*x+1];
+              b2 = p2[4*x+2];
+              a2 = p2[4*x+3];
             }
         }
     }
@@ -105,15 +120,18 @@ image_distance (const guchar *data,
   if (g_test_verbose() &&
       dist > 0)
     {
-      g_print ("worst pixel %" G_GSIZE_FORMAT " %" G_GSIZE_FORMAT ": %f %f %f %f  vs  %f %f %f %f\n",
-               imax, jmax, r1, g1, b1, a1, r2, g2, b2, a2);
+      g_test_message ("worst pixel %" G_GSIZE_FORMAT " %" G_GSIZE_FORMAT ": %f %f %f %f  vs  %f %f %f %f\n",
+                      xmax, ymax, r1, g1, b1, a1, r2, g2, b2, a2);
     }
 
   return sqrt (dist);
 }
 
 static void
-test_convert (gconstpointer testdata)
+test_convert (gconstpointer testdata,
+              TextureMethod method,
+              float         max_distance_premultiplied,
+              float         max_distance_straight)
 {
   GdkColorState *cs = (GdkColorState *) testdata;
   char *path;
@@ -126,11 +144,18 @@ test_convert (gconstpointer testdata)
   gsize stride, stride2;
   gsize width, height;
   GdkMemoryFormat test_format;
+  float max_distance;
 
   if (g_test_rand_bit ())
-    test_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+    {
+      max_distance = max_distance_premultiplied;
+      test_format = GDK_MEMORY_R32G32B32A32_FLOAT_PREMULTIPLIED;
+    }
   else
-    test_format = GDK_MEMORY_R32G32B32A32_FLOAT;
+    {
+      max_distance = max_distance_straight;
+      test_format = GDK_MEMORY_R32G32B32A32_FLOAT;
+    }
 
   path = g_test_build_filename (G_TEST_DIST, "image-data", "image.png", NULL);
 
@@ -139,6 +164,21 @@ test_convert (gconstpointer testdata)
   g_assert_no_error (error);
   g_assert_true (gdk_color_state_equal (gdk_texture_get_color_state (texture),
                                         gdk_color_state_get_srgb ()));
+  if (method == TEXTURE_METHOD_DMABUF)
+    {
+#ifdef HAVE_DRM_FOURCC_H
+      texture = udmabuf_texture_from_texture (texture, &error);
+#else
+      g_assert_not_reached ();
+#endif
+    }
+  if (texture == NULL)
+    {
+      g_test_skip (error->message);
+      g_clear_error (&error);
+      return;
+    }
+
   width = gdk_texture_get_width (texture);
   height = gdk_texture_get_height (texture);
 
@@ -174,7 +214,7 @@ test_convert (gconstpointer testdata)
   data2 = g_bytes_get_data (bytes2, NULL);
 
   /* Check that the conversions produce pixels that are close enough */
-  g_assert_cmpfloat (image_distance (data, stride, data2, stride2, width, height), <, 0.001);
+  g_assert_cmpfloat (image_distance (data, stride, data2, stride2, width, height), <, max_distance);
 
   if (g_test_verbose ())
     g_test_message ("%g\n", image_distance (data, stride, data2, stride2, width, height));
@@ -186,6 +226,20 @@ test_convert (gconstpointer testdata)
   g_object_unref (texture);
   g_free (path);
 }
+
+static void
+test_convert_plain (gconstpointer testdata)
+{
+  test_convert (testdata, TEXTURE_METHOD_PLAIN, 0.001, 0.001);
+}
+
+#ifdef HAVE_DRM_FOURCC_H
+static void
+test_convert_dmabuf (gconstpointer testdata)
+{
+  test_convert (testdata, TEXTURE_METHOD_DMABUF, 0.02, 0.005);
+}
+#endif
 
 static void
 test_png (gconstpointer testdata)
@@ -271,7 +325,7 @@ main (int argc, char *argv[])
 {
   guint i;
 
-  (g_test_init) (&argc, &argv, NULL);
+  (gtk_test_init) (&argc, &argv, NULL);
 
   g_test_add_func ("/colorstate/equal", test_equal);
   g_test_add_func ("/colorstate/cicp", test_cicp);
@@ -286,9 +340,14 @@ main (int argc, char *argv[])
       if (csi == NULL)
         break;
 
-      test_name = g_strdup_printf ("/colorstate/convert/srgb/%s", cs_name);
-      g_test_add_data_func_full (test_name, gdk_color_state_ref (csi), test_convert, (GDestroyNotify) gdk_color_state_unref);
+      test_name = g_strdup_printf ("/colorstate/convert-plain/srgb/%s", cs_name);
+      g_test_add_data_func_full (test_name, gdk_color_state_ref (csi), test_convert_plain, (GDestroyNotify) gdk_color_state_unref);
       g_free (test_name);
+#ifdef HAVE_DRM_FOURCC_H
+      test_name = g_strdup_printf ("/colorstate/convert-dmabuf/srgb/%s", cs_name);
+      g_test_add_data_func_full (test_name, gdk_color_state_ref (csi), test_convert_dmabuf, (GDestroyNotify) gdk_color_state_unref);
+      g_free (test_name);
+#endif
       test_name = g_strdup_printf ("/colorstate/png/%s", cs_name);
       g_test_add_data_func_full (test_name, gdk_color_state_ref (csi), test_png, (GDestroyNotify) gdk_color_state_unref);
       g_free (test_name);
@@ -313,9 +372,14 @@ main (int argc, char *argv[])
 
               if (color_state)
                 {
-                  char *test_name = g_strdup_printf ("/colorstate/convert/srgb/cicp/%u/%u/%u/0", primaries, tf, matrix);
-                  g_test_add_data_func_full (test_name, gdk_color_state_ref (color_state), test_convert, (GDestroyNotify) gdk_color_state_unref);
+                  char *test_name = g_strdup_printf ("/colorstate/convert/plain/srgb/cicp/%u/%u/%u/0", primaries, tf, matrix);
+                  g_test_add_data_func_full (test_name, gdk_color_state_ref (color_state), test_convert_plain, (GDestroyNotify) gdk_color_state_unref);
                   g_free (test_name);
+#ifdef HAVE_DRM_FOURCC_H
+                  test_name = g_strdup_printf ("/colorstate/convert/dmabuf/srgb/cicp/%u/%u/%u/0", primaries, tf, matrix);
+                  g_test_add_data_func_full (test_name, gdk_color_state_ref (color_state), test_convert_dmabuf, (GDestroyNotify) gdk_color_state_unref);
+                  g_free (test_name);
+#endif
 
                   gdk_color_state_unref (color_state);
                 }
@@ -324,9 +388,14 @@ main (int argc, char *argv[])
               color_state = gdk_cicp_params_build_color_state (params, NULL);
               if (color_state)
                 {
-                  char *test_name = g_strdup_printf ("/colorstate/convert/srgb/cicp/%u/%u/%u/1", primaries, tf, matrix);
-                  g_test_add_data_func_full (test_name, gdk_color_state_ref (color_state), test_convert, (GDestroyNotify) gdk_color_state_unref);
+                  char *test_name = g_strdup_printf ("/colorstate/convert/plain/srgb/cicp/%u/%u/%u/1", primaries, tf, matrix);
+                  g_test_add_data_func_full (test_name, gdk_color_state_ref (color_state), test_convert_plain, (GDestroyNotify) gdk_color_state_unref);
                   g_free (test_name);
+#ifdef HAVE_DRM_FOURCC_H
+                  test_name = g_strdup_printf ("/colorstate/convert/dmabuf/srgb/cicp/%u/%u/%u/1", primaries, tf, matrix);
+                  g_test_add_data_func_full (test_name, gdk_color_state_ref (color_state), test_convert_dmabuf, (GDestroyNotify) gdk_color_state_unref);
+                  g_free (test_name);
+#endif
 
                   gdk_color_state_unref (color_state);
                 }
