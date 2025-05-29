@@ -172,10 +172,17 @@ do_render (int          *argc,
   _gsk_stroke_set_dashes (stroke, dashes);
 
   if (do_stroke)
-    gsk_path_get_stroke_bounds (scaled_path, stroke, &bounds);
+    {
+      gsk_path_get_stroke_bounds (scaled_path, stroke, &bounds);
+      graphene_rect_inset (&bounds, -10, -10);
+    }
   else
-    gsk_path_get_bounds (scaled_path, &bounds);
-  graphene_rect_inset (&bounds, -10, -10);
+    {
+      if (gsk_path_get_bounds (scaled_path, &bounds))
+        graphene_rect_inset (&bounds, -10, -10);
+      else
+        graphene_rect_init (&bounds, -10, -10, 20, 20);
+    }
 
   fg_node = gsk_color_node_new (&fg, &bounds);
   pc_node = gsk_color_node_new (&pc, &bounds);

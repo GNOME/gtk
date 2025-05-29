@@ -175,19 +175,24 @@ gtk_path_transform (GskPath                *line_path,
                     GskPath                *path,
                     const graphene_point_t *offset)
 {
-  GskPathMeasure *measure = gsk_path_measure_new (line_path);
-  GtkPathTransform transform = { measure, gsk_path_builder_new (), *offset };
+  GtkPathTransform transform;
   graphene_rect_t bounds;
 
-  gsk_path_get_bounds (path, &bounds);
+  if (!gsk_path_get_bounds (path, &bounds))
+    return NULL;
+
+  transform.measure = gsk_path_measure_new (line_path);
+  transform.builder = gsk_path_builder_new ();
+  transform.offset = *offset;
+
   if (bounds.origin.x + bounds.size.width > 0)
-    transform.scale = gsk_path_measure_get_length (measure) / (bounds.origin.x + bounds.size.width);
+    transform.scale = gsk_path_measure_get_length (transform.measure) / (bounds.origin.x + bounds.size.width);
   else
     transform.scale = 1.0f;
 
   gsk_path_foreach (path, -1, gtk_path_transform_op, &transform);
 
-  gsk_path_measure_unref (measure);
+  gsk_path_measure_unref (transform.measure);
 
   return gsk_path_builder_free_to_path (transform.builder);
 }

@@ -111,7 +111,7 @@ gboolean                gsk_path_is_closed                      (GskPath        
 
 GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_get_bounds                     (GskPath                *self,
-                                                                 graphene_rect_t        *bounds);
+                                                                 graphene_rect_t        *bounds) G_GNUC_WARN_UNUSED_RESULT;
 
 GDK_AVAILABLE_IN_4_14
 gboolean                gsk_path_get_stroke_bounds              (GskPath                *self,

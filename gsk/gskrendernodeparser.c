@@ -3577,8 +3577,10 @@ parse_fill_node (GtkCssParser *parser,
   if (child == NULL)
     {
       graphene_rect_t bounds;
-      gsk_path_get_bounds (path, &bounds);
-      child = create_default_render_node_with_bounds (&bounds);
+      if (gsk_path_get_bounds (path, &bounds))
+        child = create_default_render_node_with_bounds (&bounds);
+      else
+        child = gsk_container_node_new (NULL, 0);
     }
 
   result = gsk_fill_node_new (child, path, rule);

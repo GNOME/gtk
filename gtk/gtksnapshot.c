@@ -1256,7 +1256,9 @@ gtk_snapshot_append_fill (GtkSnapshot   *snapshot,
 {
   graphene_rect_t bounds;
 
-  gsk_path_get_bounds (path, &bounds);
+  if (!gsk_path_get_bounds (path, &bounds))
+    return;
+
   gtk_snapshot_push_fill (snapshot, path, fill_rule);
   gtk_snapshot_append_color (snapshot, color, &bounds);
   gtk_snapshot_pop (snapshot);

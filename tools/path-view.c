@@ -153,7 +153,10 @@ static void
 update_bounds (PathView *self)
 {
   if (self->do_fill)
-    gsk_path_get_bounds (self->scaled_path, &self->bounds);
+    {
+      if (!gsk_path_get_bounds (self->scaled_path, &self->bounds))
+        graphene_rect_init (&self->bounds, 0, 0, 0, 0);
+    }
   else
     gsk_path_get_stroke_bounds (self->path, self->stroke, &self->bounds);
 
