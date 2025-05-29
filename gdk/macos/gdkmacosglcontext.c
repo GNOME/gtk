@@ -458,6 +458,8 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
           [view setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawNever];
           [view setLayer:[GdkMacosLayer layer]];
           [view setWantsLayer:YES];
+          [[view layer] setCornerRadius:15.0];
+          [[view layer] setMasksToBounds:YES];
         }
 
       /* Setup initial swap rectangle. We might not actually need this
