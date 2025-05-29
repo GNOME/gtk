@@ -1,0 +1,27 @@
+color {
+  color: black;
+}
+
+/* Since 1/32 is 0.03123, a shift of 0.01 gives us the
+ * subpixel position 0, so we should get a single pixel
+ * with #ff0000. Without dx/dy, the rendering leaks
+ * into the next pixel.
+ */
+transform {
+  transform: translate(0.01, 0);
+  child: fill "f" {
+    path: "M10 10 h 1 v 1 h -1 z";
+    child: color {
+      color: #ff0000;
+    }
+  }
+}
+
+/* This node is reusing the same path and the same subpixel
+ * position, so it should reuse the cached image from the
+ * first node.
+ */
+transform {
+  transform: translate(0.00, 1);
+  child: "f";
+}
