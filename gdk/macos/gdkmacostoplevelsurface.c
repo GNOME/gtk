@@ -637,7 +637,8 @@ _gdk_macos_toplevel_surface_constructed (GObject *object)
    * because macOS tries to dynamically calculate the shadow.
    * Instead provide a tiny bit of alpha, so shadows are drawn around the window.
    */
-  [window setBackgroundColor:[[NSColor blackColor] colorWithAlphaComponent:0.00001]];
+  // [window setBackgroundColor:[[NSColor blackColor] colorWithAlphaComponent:0.00001]];
+  [window setBackgroundColor:[NSColor clearColor]];
 
   /* Allow NSWindow to go fullscreen */
   [window setCollectionBehavior:NSWindowCollectionBehaviorFullScreenPrimary];
