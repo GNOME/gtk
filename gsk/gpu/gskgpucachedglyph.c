@@ -88,6 +88,65 @@ static const GskGpuCachedClass GSK_GPU_CACHED_GLYPH_CLASS =
   gsk_gpu_cached_glyph_should_collect
 };
 
+typedef struct
+{
+  PangoFont *font;
+  PangoGlyph glyph;
+} DrawGlyph;
+
+static void
+draw_glyph_free (gpointer data)
+{
+  DrawGlyph *dg = (DrawGlyph *) data;
+
+  g_object_unref (dg->font);
+  g_free (dg);
+}
+
+static void
+draw_glyph (gpointer  data,
+            cairo_t  *cr)
+{
+  DrawGlyph *dg = (DrawGlyph *) data;
+  PangoRectangle ink_rect = { 0, };
+
+  /* Draw glyph */
+  cairo_set_source_rgba (cr, 1, 1, 1, 1);
+
+  /* The pango code for drawing hex boxes uses the glyph width */
+  if (dg->glyph & PANGO_GLYPH_UNKNOWN_FLAG)
+    pango_font_get_glyph_extents (dg->font, dg->glyph, &ink_rect, NULL);
+
+  pango_cairo_show_glyph_string (cr,
+                                 dg->font,
+                                 &(PangoGlyphString) {
+                                     .num_glyphs = 1,
+                                     .glyphs = (PangoGlyphInfo[1]) { {
+                                         .glyph = dg->glyph,
+                                         .geometry = {
+                                           .width = ink_rect.width,
+                                         }
+                                     } }
+                                 });
+}
+
+static void
+draw_glyph_print (gpointer  data,
+                  GString  *string)
+{
+  DrawGlyph *dg = (DrawGlyph *) data;
+  PangoFontDescription *desc;
+  char *str;
+
+  desc = pango_font_describe_with_absolute_size (dg->font);
+  str = pango_font_description_to_string (desc);
+
+  g_string_append_printf (string, "glyph %u font %s", dg->glyph, str);
+
+  g_free (str);
+  pango_font_description_free (desc);
+}
+
 GskGpuImage *
 gsk_gpu_cached_glyph_lookup (GskGpuCache            *self,
                              GskGpuFrame            *frame,
@@ -164,18 +223,25 @@ gsk_gpu_cached_glyph_lookup (GskGpuCache            *self,
                                        - origin.y + subpixel_y);
   ((GskGpuCached *) cache)->pixels = (rect.size.width + 2 * padding) * (rect.size.height + 2 * padding);
 
-  gsk_gpu_upload_glyph_op (frame,
-                           cache->image,
-                           scaled_font,
-                           glyph,
-                           &(cairo_rectangle_int_t) {
-                               .x = rect.origin.x - padding,
-                               .y = rect.origin.y - padding,
-                               .width = rect.size.width + 2 * padding,
-                               .height = rect.size.height + 2 * padding,
-                           },
-                           &GRAPHENE_POINT_INIT (cache->origin.x + padding,
-                                                 cache->origin.y + padding));
+  gsk_gpu_upload_cairo_into_op (frame,
+                                cache->image,
+                                &(cairo_rectangle_int_t) {
+                                  .x = rect.origin.x - padding,
+                                  .y = rect.origin.y - padding,
+                                  .width = rect.size.width + 2 * padding,
+                                  .height = rect.size.height + 2 * padding,
+                                },
+                                &GRAPHENE_RECT_INIT (- cache->origin.x - padding,
+                                                     - cache->origin.y - padding,
+                                                     rect.size.width + 2 * padding,
+                                                     rect.size.height + 2 * padding),
+                                draw_glyph,
+                                draw_glyph_print,
+                                g_memdup2 (&(DrawGlyph) {
+                                  .font = g_object_ref (scaled_font),
+                                  .glyph = glyph
+                                }, sizeof (DrawGlyph)),
+                                draw_glyph_free);
 
   g_hash_table_insert (priv->glyph_cache, cache, cache);
   gsk_gpu_cached_use ((GskGpuCached *) cache);

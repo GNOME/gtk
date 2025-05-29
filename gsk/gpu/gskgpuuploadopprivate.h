@@ -8,6 +8,8 @@ G_BEGIN_DECLS
 
 typedef void            (* GskGpuCairoFunc)                             (gpointer                        user_data,
                                                                          cairo_t                        *cr);
+typedef void            (* GskGpuCairoPrintFunc)                        (gpointer                        user_data,
+                                                                         GString                        *string);
 
 GskGpuImage *           gsk_gpu_upload_texture_op_try                   (GskGpuFrame                    *frame,
                                                                          gboolean                        with_mipmap,
@@ -22,12 +24,15 @@ GskGpuImage *           gsk_gpu_upload_cairo_op                         (GskGpuF
                                                                          gpointer                        user_data,
                                                                          GDestroyNotify                  user_destroy);
 
-void                    gsk_gpu_upload_glyph_op                         (GskGpuFrame                    *frame,
+void                    gsk_gpu_upload_cairo_into_op                    (GskGpuFrame                    *frame,
                                                                          GskGpuImage                    *image,
-                                                                         PangoFont                      *font,
-                                                                         PangoGlyph                      glyph,
                                                                          const cairo_rectangle_int_t    *area,
-                                                                         const graphene_point_t         *origin);
+                                                                         const graphene_rect_t          *viewport,
+                                                                         GskGpuCairoFunc                 func,
+                                                                         GskGpuCairoPrintFunc            print_func,
+                                                                         gpointer                        user_data,
+                                                                         GDestroyNotify                  user_destroy);
+
 
 G_END_DECLS
 

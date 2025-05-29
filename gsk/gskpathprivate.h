@@ -58,5 +58,23 @@ gboolean                gsk_path_foreach_with_tolerance         (GskPath        
 void                    gsk_path_builder_add_contour            (GskPathBuilder         *builder,
                                                                  GskContour             *contour);
 
+static inline void
+gsk_cairo_set_fill_rule (cairo_t     *cr,
+                         GskFillRule  fill_rule)
+{
+  switch (fill_rule)
+    {
+      case GSK_FILL_RULE_WINDING:
+        cairo_set_fill_rule (cr, CAIRO_FILL_RULE_WINDING);
+        break;
+      case GSK_FILL_RULE_EVEN_ODD:
+        cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
+        break;
+      default:
+        g_assert_not_reached ();
+        break;
+    }
+}
+
 G_END_DECLS
 

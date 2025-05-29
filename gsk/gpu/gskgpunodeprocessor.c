@@ -3452,7 +3452,6 @@ typedef struct _FillData FillData;
 struct _FillData
 {
   GskPath *path;
-  GdkColor color;
   GskFillRule fill_rule;
 };
 
@@ -3461,7 +3460,6 @@ gsk_fill_data_free (gpointer data)
 {
   FillData *fill = data;
 
-  gdk_color_finish (&fill->color);
   gsk_path_unref (fill->path);
   g_free (fill);
 }
@@ -3472,20 +3470,11 @@ gsk_gpu_node_processor_fill_path (gpointer  data,
 {
   FillData *fill = data;
 
-  switch (fill->fill_rule)
-  {
-    case GSK_FILL_RULE_WINDING:
-      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_WINDING);
-      break;
-    case GSK_FILL_RULE_EVEN_ODD:
-      cairo_set_fill_rule (cr, CAIRO_FILL_RULE_EVEN_ODD);
-      break;
-    default:
-      g_assert_not_reached ();
-      break;
-  }
+  cairo_set_fill_rule (cr, fill->fill_rule == GSK_FILL_RULE_WINDING
+                           ? CAIRO_FILL_RULE_WINDING
+                           : CAIRO_FILL_RULE_EVEN_ODD);
   gsk_path_to_cairo (fill->path, cr);
-  gdk_cairo_set_source_color (cr, GDK_COLOR_STATE_SRGB, &fill->color);
+  cairo_set_source_rgba (cr, 1, 1, 1, 1);
   cairo_fill (cr);
 }
 
@@ -3496,17 +3485,11 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
   graphene_rect_t clip_bounds, source_rect;
   GskGpuImage *mask_image, *source_image;
   GskRenderNode *child;
-  GdkColor color;
 
   if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
     return;
 
   child = gsk_fill_node_get_child (node);
-
-  if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
-    gdk_color_init_copy (&color, gsk_color_node_get_color2 (child));
-  else
-    gdk_color_init (&color, GDK_COLOR_STATE_SRGB, (float[]) { 1, 1, 1, 1 });
 
   mask_image = gsk_gpu_upload_cairo_op (self->frame,
                                         &self->scale,
@@ -3514,19 +3497,25 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
                                         gsk_gpu_node_processor_fill_path,
                                         g_memdup2 (&(FillData) {
                                             .path = gsk_path_ref (gsk_fill_node_get_path (node)),
-                                            .color = color,
                                             .fill_rule = gsk_fill_node_get_fill_rule (node)
                                         }, sizeof (FillData)),
                                         (GDestroyNotify) gsk_fill_data_free);
   g_return_if_fail (mask_image != NULL);
+
   if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
     {
-      gsk_gpu_node_processor_image_op (self,
-                                       mask_image,
-                                       GDK_COLOR_STATE_SRGB,
-                                       GSK_GPU_SAMPLER_DEFAULT,
-                                       &clip_bounds,
-                                       &clip_bounds);
+      gsk_gpu_colorize_op (self->frame,
+                           GSK_GPU_SHADER_CLIP_NONE,
+                           self->ccs,
+                           self->opacity,
+                           &self->offset,
+                           &(GskGpuShaderImage) {
+                             mask_image,
+                             GSK_GPU_SAMPLER_DEFAULT,
+                             &clip_bounds,
+                             &clip_bounds,
+                           },
+                           gsk_color_node_get_color2 (child));
       return;
     }
 
@@ -3564,7 +3553,6 @@ typedef struct _StrokeData StrokeData;
 struct _StrokeData
 {
   GskPath *path;
-  GdkColor color;
   GskStroke stroke;
 };
 
@@ -3573,7 +3561,6 @@ gsk_stroke_data_free (gpointer data)
 {
   StrokeData *stroke = data;
 
-  gdk_color_finish (&stroke->color);
   gsk_path_unref (stroke->path);
   gsk_stroke_clear (&stroke->stroke);
   g_free (stroke);
@@ -3587,7 +3574,7 @@ gsk_gpu_node_processor_stroke_path (gpointer  data,
 
   gsk_stroke_to_cairo (&stroke->stroke, cr);
   gsk_path_to_cairo (stroke->path, cr);
-  gdk_cairo_set_source_color (cr, GDK_COLOR_STATE_SRGB, &stroke->color);
+  cairo_set_source_rgba (cr, 1, 1, 1, 1);
   cairo_stroke (cr);
 }
 
@@ -3598,17 +3585,11 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
   graphene_rect_t clip_bounds, source_rect;
   GskGpuImage *mask_image, *source_image;
   GskRenderNode *child;
-  GdkColor color;
 
   if (!gsk_gpu_node_processor_clip_node_bounds_and_snap_to_grid (self, node, &clip_bounds))
     return;
 
   child = gsk_stroke_node_get_child (node);
-
-  if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
-    gdk_color_init_copy (&color, gsk_color_node_get_color2 (child));
-  else
-    gdk_color_init (&color, GDK_COLOR_STATE_SRGB, (float[]) { 1, 1, 1, 1 });
 
   mask_image = gsk_gpu_upload_cairo_op (self->frame,
                                         &self->scale,
@@ -3616,19 +3597,24 @@ gsk_gpu_node_processor_add_stroke_node (GskGpuNodeProcessor *self,
                                         gsk_gpu_node_processor_stroke_path,
                                         g_memdup2 (&(StrokeData) {
                                             .path = gsk_path_ref (gsk_stroke_node_get_path (node)),
-                                            .color = color,
                                             .stroke = GSK_STROKE_INIT_COPY (gsk_stroke_node_get_stroke (node))
                                         }, sizeof (StrokeData)),
                                         (GDestroyNotify) gsk_stroke_data_free);
   g_return_if_fail (mask_image != NULL);
   if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
     {
-      gsk_gpu_node_processor_image_op (self,
-                                       mask_image,
-                                       GDK_COLOR_STATE_SRGB,
-                                       GSK_GPU_SAMPLER_DEFAULT,
-                                       &clip_bounds,
-                                       &clip_bounds);
+      gsk_gpu_colorize_op (self->frame,
+                           GSK_GPU_SHADER_CLIP_NONE,
+                           self->ccs,
+                           self->opacity,
+                           &self->offset,
+                           &(GskGpuShaderImage) {
+                             mask_image,
+                             GSK_GPU_SAMPLER_DEFAULT,
+                             &clip_bounds,
+                             &clip_bounds,
+                           },
+                           gsk_color_node_get_color2 (child));
       return;
     }
 
