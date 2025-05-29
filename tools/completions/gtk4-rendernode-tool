@@ -72,7 +72,7 @@ _gtk4_rendernode_tool()
             ;;
 
         render)
-            opts="--help --renderer"
+            opts="--help --renderer --dont-move"
             COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
             return 0
             ;;
