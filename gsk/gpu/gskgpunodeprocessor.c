@@ -3473,7 +3473,8 @@ gsk_gpu_node_processor_add_fill_node (GskGpuNodeProcessor *self,
                                            gsk_fill_node_get_path (node),
                                            gsk_fill_node_get_fill_rule (node),
                                            &tex_rect);
-  g_return_if_fail (mask_image != NULL);
+  if (mask_image == NULL)
+    return;
 
   if (GSK_RENDER_NODE_TYPE (child) == GSK_COLOR_NODE)
     {
