@@ -24,25 +24,31 @@ GskGpuImage *           gsk_gl_image_new                                (GskGLDe
                                                                          gsize                   height);
 GskGpuImage *           gsk_gl_image_new_for_texture                    (GskGLDevice            *device,
                                                                          GdkTexture             *owner,
-                                                                         GLuint                  tex_id,
-                                                                         GLuint                  mem_id,
+                                                                         gsize                   n_textures,
+                                                                         GLuint                 *tex_id,
+                                                                         GLuint                 *mem_id,
                                                                          GLuint                  semaphore_id,
                                                                          gboolean                take_ownership,
                                                                          GskGpuImageFlags        extra_flags,
                                                                          GskGpuConversion        conv);
                                                                          
 
-void                    gsk_gl_image_bind_texture                       (GskGLImage             *self);
+void                    gsk_gl_image_bind_textures                      (GskGLImage             *self,
+                                                                         GLenum                  target);
 void                    gsk_gl_image_bind_framebuffer                   (GskGLImage             *self);
 void                    gsk_gl_image_bind_framebuffer_target            (GskGLImage             *self,
                                                                          GLenum                  target);
 
 gboolean                gsk_gl_image_is_flipped                         (GskGLImage             *self);
-GLint                   gsk_gl_image_get_gl_internal_format             (GskGLImage             *self);
-GLenum                  gsk_gl_image_get_gl_format                      (GskGLImage             *self);
-GLenum                  gsk_gl_image_get_gl_type                        (GskGLImage             *self);
+GLint                   gsk_gl_image_get_gl_internal_format             (GskGLImage             *self,
+                                                                         gsize                   nth);
+GLenum                  gsk_gl_image_get_gl_format                      (GskGLImage             *self,
+                                                                         gsize                   nth);
+GLenum                  gsk_gl_image_get_gl_type                        (GskGLImage             *self,
+                                                                         gsize                   nth);
 
-GLuint                  gsk_gl_image_get_texture_id                     (GskGLImage             *self);
+GLuint                  gsk_gl_image_get_texture_id                     (GskGLImage             *self,
+                                                                         gsize                   nth);
 void                    gsk_gl_image_steal_texture_ownership            (GskGLImage             *self);
 
 G_END_DECLS

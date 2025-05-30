@@ -577,7 +577,17 @@ gsk_gl_device_use_program (GskGLDevice               *self,
 
   /* space by 3 because external textures may need 3 texture units */
   glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE0"), 0);
+  if (!gsk_gpu_shader_flags_has_external_texture0 (flags))
+    {
+      glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE0_1"), 1);
+      glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE0_2"), 2);
+    }
   glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE1"), 3);
+  if (!gsk_gpu_shader_flags_has_external_texture1 (flags))
+    {
+      glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE1_1"), 4);
+      glUniform1i (glGetUniformLocation (program_id, "GSK_TEXTURE1_2"), 5);
+    }
 }
 
 GLuint
@@ -590,33 +600,10 @@ gsk_gl_device_get_sampler_id (GskGLDevice   *self,
 }
 
 static gboolean
-gsk_gl_swizzle_is_framebuffer_compatible (GLint swizzle[4])
-{
-  if (swizzle[0] != GL_RED ||
-      swizzle[1] != GL_GREEN ||
-      swizzle[2] != GL_BLUE ||
-      /* We accept GL_ONE here because that is used for RGBX channels and in that case
-       * this value is ignored */
-      (swizzle[3] != GL_ALPHA && swizzle[3] != GL_ONE))
-    return FALSE;
-
-  return TRUE;
-}
-
-static gboolean
-gsk_gl_swizzle_is_identity (GLint swizzle[4])
-{
-  return swizzle[0] == GL_RED &&
-         swizzle[1] == GL_GREEN &&
-         swizzle[2] == GL_BLUE &&
-         swizzle[3] == GL_ALPHA;
-}
-
-static gboolean
 gsk_gl_device_get_format_flags (GskGLDevice      *self,
                                 GdkGLContext     *context,
                                 GdkMemoryFormat   format,
-                                GLint             swizzle[4],
+                                GdkSwizzle        swizzle,
                                 GskGpuImageFlags *out_flags)
 {
   GdkGLMemoryFlags gl_flags;
@@ -628,21 +615,19 @@ gsk_gl_device_get_format_flags (GskGLDevice      *self,
   if (!(gl_flags & GDK_GL_FORMAT_USABLE))
     return FALSE;
 
-  *out_flags |= GSK_GPU_IMAGE_DOWNLOADABLE;
+  if (gdk_shader_op_get_n_shaders (gdk_memory_format_get_default_shader_op (format)) <= 1)
+    *out_flags |= GSK_GPU_IMAGE_DOWNLOADABLE;
 
-  if ((gl_flags & GDK_GL_FORMAT_RENDERABLE) && gsk_gl_swizzle_is_framebuffer_compatible (swizzle))
+  if ((gl_flags & GDK_GL_FORMAT_RENDERABLE) && gdk_swizzle_is_framebuffer_compatible (swizzle))
     *out_flags |= GSK_GPU_IMAGE_RENDERABLE;
   if (gl_flags & GDK_GL_FORMAT_FILTERABLE)
     *out_flags |= GSK_GPU_IMAGE_FILTERABLE;
   if ((gl_flags & (GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE)) == (GDK_GL_FORMAT_RENDERABLE | GDK_GL_FORMAT_FILTERABLE))
     {
       *out_flags |= GSK_GPU_IMAGE_CAN_MIPMAP;
-      if (gsk_gl_swizzle_is_identity (swizzle))
+      if (gdk_swizzle_is_identity (swizzle))
         *out_flags |= GSK_GPU_IMAGE_BLIT;
     }
-
-  if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
-    *out_flags |= GSK_GPU_IMAGE_STRAIGHT_ALPHA;
 
   return TRUE;
 }
@@ -657,23 +642,25 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
                               GLint            *out_gl_internal_srgb_format,
                               GLenum           *out_gl_format,
                               GLenum           *out_gl_type,
-                              GLint             out_swizzle[4])
+                              GdkSwizzle       *out_swizzle)
 {
   GdkGLContext *context = gdk_gl_context_get_current ();
   GskGpuImageFlags flags;
   GdkMemoryFormat alt_format;
   const GdkMemoryFormat *fallbacks;
   gsize i;
+  GdkSwizzle swizzle;
 
   /* First, try the actual format */
   if (gdk_memory_format_gl_format (format,
+                                   0,
                                    gdk_gl_context_get_use_es (context),
                                    out_gl_internal_format,
                                    out_gl_internal_srgb_format,
                                    out_gl_format,
                                    out_gl_type,
                                    out_swizzle) &&
-      gsk_gl_device_get_format_flags (self, context, format, out_swizzle, &flags) &&
+      gsk_gl_device_get_format_flags (self, context, format, *out_swizzle, &flags) &&
       ((flags & required_flags) == required_flags))
     {
       *out_format = format;
@@ -682,20 +669,26 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
     }
 
   /* Second, try the potential RGBA format */
-  if (gdk_memory_format_gl_rgba_format (format,
-                                        gdk_gl_context_get_use_es (context),
-                                        &alt_format,
-                                        out_gl_internal_format,
-                                        out_gl_internal_srgb_format,
-                                        out_gl_format,
-                                        out_gl_type,
-                                        out_swizzle) &&
-      gsk_gl_device_get_format_flags (self, context, alt_format, out_swizzle, &flags) &&
-      ((flags & required_flags) == required_flags))
+  if (gdk_memory_format_get_rgba_format (format,
+                                         &alt_format,
+                                         &swizzle) &&
+      gdk_memory_format_gl_format (alt_format,
+                                   0,
+                                   gdk_gl_context_get_use_es (context),
+                                   out_gl_internal_format,
+                                   out_gl_internal_srgb_format,
+                                   out_gl_format,
+                                   out_gl_type,
+                                   out_swizzle))
     {
-      *out_format = format;
-      *out_flags = flags;
-      return;
+      *out_swizzle = swizzle;
+      if (gsk_gl_device_get_format_flags (self, context, alt_format, *out_swizzle, &flags) &&
+          ((flags & required_flags) == required_flags))
+        {
+          *out_format = format;
+          *out_flags = flags;
+          return;
+        }
     }
 
   /* Next, try the fallbacks */
@@ -703,13 +696,14 @@ gsk_gl_device_find_gl_format (GskGLDevice      *self,
   for (i = 0; fallbacks[i] != -1; i++)
     {
       if (gdk_memory_format_gl_format (fallbacks[i],
+                                       0,
                                        gdk_gl_context_get_use_es (context),
                                        out_gl_internal_format,
                                        out_gl_internal_srgb_format,
                                        out_gl_format,
                                        out_gl_type,
                                        out_swizzle) &&
-          gsk_gl_device_get_format_flags (self, context, fallbacks[i], out_swizzle, &flags) &&
+          gsk_gl_device_get_format_flags (self, context, fallbacks[i], *out_swizzle, &flags) &&
           ((flags & required_flags) == required_flags))
         {
           *out_format = fallbacks[i];

@@ -93,8 +93,9 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
 
           image = gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                 texture,
-                                                gdk_gl_texture_get_id (gl_texture),
-                                                0,
+                                                1,
+                                                (GLuint[1]) { gdk_gl_texture_get_id (gl_texture), },
+                                                NULL,
                                                 0,
                                                 FALSE,
                                                 gdk_gl_texture_has_mipmap (gl_texture) ? (GSK_GPU_IMAGE_CAN_MIPMAP | GSK_GPU_IMAGE_MIPMAP) : 0,
@@ -113,11 +114,13 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
     {
       const GdkDmabuf *dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
       GdkMemoryFormat format = gdk_texture_get_format (texture);
-      gboolean external;
-      GLuint tex_id;
+      gboolean external, supported_conversion = TRUE;
+      GLuint tex_id[3];
       GskGpuConversion conv;
       EGLint color_space_hint, range_hint;
+      gsize n;
 
+      /* First try single-image import */
       if (gdk_memory_format_get_dmabuf_yuv_fourcc (format) == dmabuf->fourcc)
         {
           conv = gsk_gpu_color_state_get_conversion (gdk_texture_get_color_state (texture));
@@ -130,7 +133,7 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
               GDK_DEBUG (DMABUF, "EGL cannot import YUV dmabufs of colorstate %s",
                          gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
               /* no hints for these */
-              dmabuf = NULL;
+              supported_conversion = FALSE;
               break;
 
             case GSK_GPU_CONVERSION_BT601:
@@ -156,7 +159,7 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
 
             default:
               g_assert_not_reached ();
-              dmabuf = NULL;
+              supported_conversion = FALSE;
               break;
             }
         }
@@ -168,30 +171,49 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
         }
       else
         {
-          g_warn_if_reached ();
-          dmabuf = NULL;
+          supported_conversion = FALSE;
         }
 
-      if (dmabuf != NULL)
+      if (supported_conversion)
         {
-          tex_id = gdk_dmabuf_egl_import_dmabuf (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
-                                                 gdk_texture_get_width (texture),
-                                                 gdk_texture_get_height (texture),
-                                                 dmabuf,
-                                                 color_space_hint,
-                                                 range_hint,
-                                                 &external);
-          if (tex_id)
+          tex_id[0] = gdk_dmabuf_egl_import_dmabuf (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+                                                    gdk_texture_get_width (texture),
+                                                    gdk_texture_get_height (texture),
+                                                    dmabuf,
+                                                    color_space_hint,
+                                                    range_hint,
+                                                    &external);
+          if (tex_id[0])
             {
               return gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                    texture,
+                                                   1,
                                                    tex_id,
-                                                   0,
+                                                   NULL,
                                                    0,
                                                    TRUE,
                                                    (external ? GSK_GPU_IMAGE_EXTERNAL : 0),
                                                    conv);
             }
+        }
+
+      /* Then try multi-image import */
+      n = gdk_dmabuf_egl_import_dmabuf_multiplane (GDK_GL_CONTEXT (gsk_gpu_frame_get_context (frame)),
+                                                   gdk_texture_get_width (texture),
+                                                   gdk_texture_get_height (texture),
+                                                   dmabuf,
+                                                   tex_id);
+      if (n > 0)
+        {
+          return gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
+                                               texture,
+                                               n,
+                                               tex_id,
+                                               NULL,
+                                               0,
+                                               TRUE,
+                                               0,
+                                               GSK_GPU_CONVERSION_NONE);
         }
     }
 #endif  /* HAVE_DMABUF && HAVE_EGL */
@@ -208,8 +230,9 @@ gsk_gl_frame_upload_texture (GskGpuFrame  *frame,
         {
           return gsk_gl_image_new_for_texture (GSK_GL_DEVICE (gsk_gpu_frame_get_device (frame)),
                                                texture,
-                                               tex_id,
-                                               mem_id,
+                                               1,
+                                               &tex_id,
+                                               &mem_id,
                                                semaphore_id,
                                                TRUE,
                                                0,

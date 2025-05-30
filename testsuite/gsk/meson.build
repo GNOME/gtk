@@ -424,6 +424,8 @@ node_parser_tests = [
   'gradient-fail.errors',
   'gradients.node',
   'gradients.ref.node',
+  'huge-angle.node',
+  'huge-angle.ref.node',
   'mask-modes.node',
   'mask-modes.ref.node',
   'node-names.node',

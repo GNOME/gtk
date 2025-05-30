@@ -8,6 +8,7 @@ struct _GskGpuImagePrivate
 {
   GskGpuImageFlags flags;
   GskGpuConversion conversion;
+  GdkShaderOp shader_op;
   GdkMemoryFormat format;
   gsize width;
   gsize height;
@@ -77,6 +78,7 @@ void
 gsk_gpu_image_setup (GskGpuImage      *self,
                      GskGpuImageFlags  flags,
                      GskGpuConversion  conversion,
+                     GdkShaderOp       shader_op,
                      GdkMemoryFormat   format,
                      gsize             width,
                      gsize             height)
@@ -86,6 +88,7 @@ gsk_gpu_image_setup (GskGpuImage      *self,
   priv->flags = flags;
   priv->format = format;
   priv->conversion = conversion;
+  priv->shader_op = shader_op;
   priv->width = width;
   priv->height = height;
 }
@@ -165,6 +168,14 @@ gsk_gpu_image_get_conversion (GskGpuImage *self)
   GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
 
   return priv->conversion;
+}
+
+GdkShaderOp
+gsk_gpu_image_get_shader_op (GskGpuImage *self)
+{
+  GskGpuImagePrivate *priv = gsk_gpu_image_get_instance_private (self);
+
+  return priv->shader_op;
 }
 
 void

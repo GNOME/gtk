@@ -596,11 +596,7 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                  const graphene_rect_t *rect,
                                  const graphene_rect_t *tex_rect)
 {
-  gboolean straight_alpha;
-
   g_assert (self->pending_globals == 0);
-
-  straight_alpha = gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA;
 
   if (GDK_IS_BUILTIN_COLOR_STATE (image_color_state))
     {
@@ -628,7 +624,6 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                     cicp,
                                     gsk_gpu_color_states_create_cicp (self->ccs, TRUE, TRUE),
                                     self->opacity,
-                                    straight_alpha,
                                     &self->offset,
                                     &(GskGpuShaderImage) {
                                       image,
@@ -637,7 +632,7 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                       tex_rect
                                     });
     }
-  else if (straight_alpha ||
+  else if (gsk_gpu_image_get_shader_op (image) != GDK_SHADER_DEFAULT ||
            self->opacity < 1.0 ||
            !gdk_color_state_equal (image_color_state, self->ccs))
     {
@@ -647,7 +642,6 @@ gsk_gpu_node_processor_image_op (GskGpuNodeProcessor   *self,
                                                                         image_color_state,
                                                                         TRUE),
                           self->opacity,
-                          straight_alpha,
                           &self->offset,
                           &(GskGpuShaderImage) {
                               image,
@@ -769,7 +763,8 @@ gsk_gpu_copy_image (GskGpuFrame   *frame,
                                                 width, height);
 
   if (gsk_gpu_frame_should_optimize (frame, GSK_GPU_OPTIMIZE_BLIT) &&
-      (flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_STRAIGHT_ALPHA | GSK_GPU_IMAGE_FILTERABLE)) == (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_BLIT) &&
+      (flags & (GSK_GPU_IMAGE_BLIT | GSK_GPU_IMAGE_FILTERABLE)) == (GSK_GPU_IMAGE_FILTERABLE | GSK_GPU_IMAGE_BLIT) &&
+      gsk_gpu_image_get_shader_op (image) == GDK_SHADER_DEFAULT &&
       gdk_color_state_equal (ccs, image_cs))
     {
       gsk_gpu_blit_op (frame,
@@ -2082,7 +2077,8 @@ gsk_gpu_node_processor_draw_texture_tiles (GskGpuNodeProcessor    *self,
             }
 
           if (need_mipmap &&
-              (gsk_gpu_image_get_flags (tile) & (GSK_GPU_IMAGE_STRAIGHT_ALPHA | GSK_GPU_IMAGE_CAN_MIPMAP)) != GSK_GPU_IMAGE_CAN_MIPMAP)
+              (gsk_gpu_image_get_shader_op (tile) != GDK_SHADER_DEFAULT ||
+               ((gsk_gpu_image_get_flags (tile) & GSK_GPU_IMAGE_CAN_MIPMAP)) != GSK_GPU_IMAGE_CAN_MIPMAP))
             {
               tile = gsk_gpu_copy_image (self->frame, self->ccs, tile, tile_cs, TRUE);
               tile_cs = self->ccs;
@@ -2184,7 +2180,8 @@ gsk_gpu_node_processor_add_texture_node (GskGpuNodeProcessor *self,
 
   if (should_mipmap)
     {
-      if ((gsk_gpu_image_get_flags (image) & (GSK_GPU_IMAGE_STRAIGHT_ALPHA | GSK_GPU_IMAGE_CAN_MIPMAP)) != GSK_GPU_IMAGE_CAN_MIPMAP ||
+      if ((gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_CAN_MIPMAP) != GSK_GPU_IMAGE_CAN_MIPMAP ||
+          gsk_gpu_image_get_shader_op (image) != GDK_SHADER_DEFAULT ||
           !gdk_color_state_equal (image_cs, self->ccs))
         {
           image = gsk_gpu_copy_image (self->frame, self->ccs, image, image_cs, TRUE);
@@ -2286,7 +2283,7 @@ gsk_gpu_get_texture_node_as_image (GskGpuFrame           *frame,
     }
 
   if (!gdk_color_state_equal (ccs, image_cs) ||
-      gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA ||
+      gsk_gpu_image_get_shader_op (image) != GDK_SHADER_DEFAULT ||
       ((flags & GSK_GPU_AS_IMAGE_SAMPLED_OUT_OF_BOUNDS) &&
        gdk_memory_format_alpha (gsk_gpu_image_get_format (image)) == GDK_MEMORY_ALPHA_OPAQUE))
     {
@@ -2389,7 +2386,7 @@ gsk_gpu_node_processor_add_texture_scale_node (GskGpuNodeProcessor *self,
       return;
     }
 
-  if ((gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA) ||
+  if (gsk_gpu_image_get_shader_op (image) != GDK_SHADER_DEFAULT ||
       (need_mipmap && !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_CAN_MIPMAP)) ||
       !gdk_color_state_equal (image_cs, self->ccs))
     {
@@ -4323,12 +4320,28 @@ gsk_gpu_node_processor_render (GskGpuNodeProcessor   *self,
 
 static void
 gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
-                                   gboolean               target_premultiplied,
+                                   GdkShaderOp            target_shader_op,
                                    GskGpuImage           *image,
                                    GdkColorState         *image_color_state,
                                    const graphene_rect_t *rect,
                                    const graphene_rect_t *tex_rect)
 {
+  gboolean target_premultiplied;
+
+  switch (target_shader_op)
+    {
+    case GDK_SHADER_DEFAULT:
+      target_premultiplied = TRUE;
+      break;
+    case GDK_SHADER_STRAIGHT:
+      target_premultiplied = FALSE;
+      break;
+    case GDK_SHADER_2_PLANES:
+    case GDK_SHADER_3_PLANES:
+    default:
+      g_return_if_reached ();
+    }
+
   gsk_gpu_node_processor_sync_globals (self, 0);
 
   if (GDK_IS_BUILTIN_COLOR_STATE (self->ccs))
@@ -4358,7 +4371,6 @@ gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
                                   cicp,
                                   gsk_gpu_color_states_create_cicp (image_color_state, TRUE, target_premultiplied),
                                   self->opacity,
-                                  FALSE,
                                   &self->offset,
                                   &(GskGpuShaderImage) {
                                       image,
@@ -4374,7 +4386,6 @@ gsk_gpu_node_processor_convert_to (GskGpuNodeProcessor   *self,
                           gsk_gpu_color_states_create (self->ccs, target_premultiplied,
                                                        image_color_state, TRUE),
                           self->opacity,
-                          FALSE,
                           &self->offset,
                           &(GskGpuShaderImage) {
                               image,
@@ -4450,7 +4461,7 @@ gsk_gpu_node_processor_process (GskGpuFrame           *frame,
           self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
 
           gsk_gpu_node_processor_convert_to (&self,
-                                             !(gsk_gpu_image_get_flags (target) & GSK_GPU_IMAGE_STRAIGHT_ALPHA),
+                                             gsk_gpu_image_get_shader_op (target),
                                              image,
                                              ccs,
                                              &clip_bounds,
@@ -4479,7 +4490,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
   GskGpuNodeProcessor self;
   GskGpuImage *target, *intermediate = NULL;
   gsize width, height;
-  gboolean target_premultiplied, image_premultiplied;
+  gboolean target_shader_op, image_shader_op;
 
   width = gsk_gpu_image_get_width (image);
   height = gsk_gpu_image_get_height (image);
@@ -4493,12 +4504,12 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
   if (target == NULL)
     return NULL;
 
-  target_premultiplied = !(gsk_gpu_image_get_flags (target) & GSK_GPU_IMAGE_STRAIGHT_ALPHA);
-  image_premultiplied = !(gsk_gpu_image_get_flags (image) & GSK_GPU_IMAGE_STRAIGHT_ALPHA);
+  target_shader_op = gsk_gpu_image_get_shader_op (target);
+  image_shader_op = gsk_gpu_image_get_shader_op (image);
 
   /* We need to go via an intermediate colorstate */
-  if (!(GDK_IS_DEFAULT_COLOR_STATE (image_color_state) && image_premultiplied) &&
-      !(GDK_IS_DEFAULT_COLOR_STATE (target_color_state) && target_premultiplied))
+  if (!(GDK_IS_DEFAULT_COLOR_STATE (image_color_state) && image_shader_op == GDK_SHADER_DEFAULT) &&
+      !(GDK_IS_DEFAULT_COLOR_STATE (target_color_state) && target_shader_op == GDK_SHADER_DEFAULT))
     {
       GdkColorState *ccs = gdk_color_state_get_rendering_color_state (image_color_state);
 
@@ -4507,7 +4518,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
         return NULL;
       image = intermediate;
       image_color_state = ccs;
-      image_premultiplied = TRUE;
+      image_shader_op = GDK_SHADER_DEFAULT;
     }
 
   gsk_gpu_node_processor_init (&self,
@@ -4527,7 +4538,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
   self.pending_globals |= GSK_GPU_GLOBAL_BLEND;
   gsk_gpu_node_processor_sync_globals (&self, 0);
 
-  if (GDK_IS_DEFAULT_COLOR_STATE (target_color_state) && target_premultiplied)
+  if (GDK_IS_DEFAULT_COLOR_STATE (target_color_state) && target_shader_op == GDK_SHADER_DEFAULT)
     {
       gsk_gpu_node_processor_image_op (&self,
                                        image,
@@ -4539,7 +4550,7 @@ gsk_gpu_node_processor_convert_image (GskGpuFrame     *frame,
   else
     {
       gsk_gpu_node_processor_convert_to (&self,
-                                         target_premultiplied,
+                                         target_shader_op,
                                          image,
                                          image_color_state,
                                          &GRAPHENE_RECT_INIT (0, 0, width, height),

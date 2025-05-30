@@ -964,9 +964,8 @@ normalize_angle (float angle)
   if (angle >= 0 && angle < 360)
     return angle;
 
-  while (angle >= 360)
-    angle -= 360;
-  while (angle < 0)
+  angle = fmodf (angle, 360);
+  if (angle < 0)
     angle += 360;
 
   /* Due to precision issues we may end up with a result that is just

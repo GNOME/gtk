@@ -29,7 +29,11 @@ layout(constant_id=2) const uint GSK_VARIATION = 0;
 #define PASS_FLAT(_loc) layout(location = _loc) flat in
 
 layout(set = 0, binding = 0) uniform sampler2D GSK_TEXTURE0;
+layout(set = 0, binding = 1) uniform sampler2D GSK_TEXTURE0_1;
+layout(set = 0, binding = 2) uniform sampler2D GSK_TEXTURE0_2;
 layout(set = 1, binding = 0) uniform sampler2D GSK_TEXTURE1;
+layout(set = 1, binding = 1) uniform sampler2D GSK_TEXTURE1_1;
+layout(set = 1, binding = 2) uniform sampler2D GSK_TEXTURE1_2;
 
 layout(location = 0) out vec4 out_color;
 

@@ -157,8 +157,7 @@ gsk_gpu_mipmap_op_gl_command (GskGpuOp          *op,
 {
   GskGpuMipmapOp *self = (GskGpuMipmapOp *) op;
 
-  glActiveTexture (GL_TEXTURE0);
-  gsk_gl_image_bind_texture (GSK_GL_IMAGE (self->image));
+  gsk_gl_image_bind_textures (GSK_GL_IMAGE (self->image), GL_TEXTURE0);
   /* need to reset the images again */
   state->current_images[0] = NULL;
 

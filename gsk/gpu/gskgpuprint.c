@@ -13,6 +13,30 @@ gsk_gpu_print_indent (GString *string,
   g_string_append_printf (string, "%*s", 2 * indent, "");
 }
 
+static void
+gsk_gpu_print_shader_op (GString     *string,
+                         GdkShaderOp  op)
+{
+  switch (op)
+    {
+      case GDK_SHADER_DEFAULT:
+        g_string_append (string, " ");
+        break;
+      case GDK_SHADER_STRAIGHT:
+        g_string_append (string, "-");
+        break;
+      case GDK_SHADER_2_PLANES:
+        g_string_append (string, "2");
+        break;
+      case GDK_SHADER_3_PLANES:
+        g_string_append (string, "3");
+        break;
+      default:
+        g_assert_not_reached ();
+        break;
+    }
+}
+
 void
 gsk_gpu_print_shader_flags (GString           *string,
                             GskGpuShaderFlags  flags,
@@ -29,18 +53,23 @@ gsk_gpu_print_shader_flags (GString           *string,
   switch (clip)
     {
       case GSK_GPU_SHADER_CLIP_NONE:
-        g_string_append (string, "⬚ ");
+        g_string_append (string, "⬚");
         break;
       case GSK_GPU_SHADER_CLIP_RECT:
-        g_string_append (string, "□ ");
+        g_string_append (string, "□");
         break;
       case GSK_GPU_SHADER_CLIP_ROUNDED:
-        g_string_append (string, "▢ ");
+        g_string_append (string, "▢");
         break;
       default:
         g_assert_not_reached ();
         break;
     }
+
+  gsk_gpu_print_shader_op (string, gsk_gpu_shader_flags_get_texture0_op (flags));
+  gsk_gpu_print_shader_op (string, gsk_gpu_shader_flags_get_texture1_op (flags));
+
+  g_string_append_c (string, ' ');
 }
 
 void

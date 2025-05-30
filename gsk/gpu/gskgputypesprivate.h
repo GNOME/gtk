@@ -22,16 +22,18 @@ typedef struct _GskGpuShaderOp          GskGpuShaderOp;
 typedef struct _GskGpuShaderOpClass     GskGpuShaderOpClass;
 typedef struct _GskVulkanSemaphores     GskVulkanSemaphores;
 
+#define GSK_GPU_SHADER_OP_SHIFT 4
+#define GSK_GPU_SHADER_OP_MASK ((1 << GSK_GPU_SHADER_OP_SHIFT) - 1)
+
 typedef enum {
   GSK_GPU_IMAGE_EXTERNAL       = (1 << 0),
   GSK_GPU_IMAGE_TOGGLE_REF     = (1 << 1),
-  GSK_GPU_IMAGE_STRAIGHT_ALPHA = (1 << 2),
-  GSK_GPU_IMAGE_BLIT           = (1 << 3),
-  GSK_GPU_IMAGE_CAN_MIPMAP     = (1 << 4),
-  GSK_GPU_IMAGE_MIPMAP         = (1 << 5),
-  GSK_GPU_IMAGE_FILTERABLE     = (1 << 6),
-  GSK_GPU_IMAGE_RENDERABLE     = (1 << 7),
-  GSK_GPU_IMAGE_DOWNLOADABLE   = (1 << 8),
+  GSK_GPU_IMAGE_BLIT           = (1 << 2),
+  GSK_GPU_IMAGE_CAN_MIPMAP     = (1 << 3),
+  GSK_GPU_IMAGE_MIPMAP         = (1 << 4),
+  GSK_GPU_IMAGE_FILTERABLE     = (1 << 5),
+  GSK_GPU_IMAGE_RENDERABLE     = (1 << 6),
+  GSK_GPU_IMAGE_DOWNLOADABLE   = (1 << 7),
 } GskGpuImageFlags;
 
 typedef enum {
