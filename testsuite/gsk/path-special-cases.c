@@ -225,6 +225,9 @@ test_rsvg_parse (void)
     { "M 10 20, M 10 20", NULL },
     { "M 10 20, M 10 20", NULL },
     { "M 10 20, ", NULL },
+
+    /* The following are not part of the rsvg tests */
+
     // an icon that was triggering broken handling of 'm'
     // Note that the output here is using 'M' to ensure the expected rendering
     { "M 4 1 c -1.660156 0 -3 1.339844 -3 3 v 8 c 0 1.660156 1.339844 3 3 3 h 8 c 1.660156 0 3 -1.339844 3 -3 v -8 c 0 -1.660156 -1.339844 -3 -3 -3 z m 0 6 h 8 v 2 h -8 z m 0 0", "m 4 1 c -1.660156 0 -3 1.339844 -3 3 v 8 c 0 1.660156 1.339844 3 3 3 h 8 c 1.660156 0 3 -1.339844 3 -3 v -8 c 0 -1.660156 -1.339844 -3 -3 -3 z M 4 7 h 8 v 2 h -8 z m 0 0" },
@@ -247,6 +250,11 @@ test_rsvg_parse (void)
       "M 10 8 c -1.089844 0 -2 0.910156 -2 2 v 3 c 0 1.089844 0.910156 2 2 2 h 3 c 1.089844 0 2 -0.910156 2 -2 v -3 c 0 -1.089844 -0.910156 -2 -2 -2 z "
       "M 2 10 h 3 v 3 h -3 z "
       "M 10 10 h 3 v 3 h -3 z" },
+    // omitted commands
+    { "M 10 10 20 30 z", "M 10 10 L 20 30 z" },
+    { "M 10 10 c 1 2 3 4 5 6 4 2 1 0 2 2 z",
+      "M 10 10 c 1 2 3 4 5 6 c 4 2 1 0 2 2 z" },
+    { "M 1 2 A 1 2 3 1 16 7 1 2 3 1 16 7", "path" },
   };
   int i;
 
