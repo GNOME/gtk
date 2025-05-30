@@ -40,6 +40,7 @@ gsk_private_sources = files([
   'gpu/gskgpucache.c',
   'gpu/gskgpucachedfill.c',
   'gpu/gskgpucachedglyph.c',
+  'gpu/gskgpucachedstroke.c',
   'gpu/gskgpuclearop.c',
   'gpu/gskgpuclip.c',
   'gpu/gskgpucolorizeop.c',

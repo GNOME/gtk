@@ -3,7 +3,7 @@ color {
   color: rgb(0,0,0);
 }
 transform {
-  transform: translate(2.6, 2);
+  transform: translate(2.5, 2);
   child: stroke {
     child: color {
       bounds: 0 0 50 50;
