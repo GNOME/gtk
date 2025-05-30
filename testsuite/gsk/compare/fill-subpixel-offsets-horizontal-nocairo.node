@@ -1,0 +1,166 @@
+color {
+  bounds: -75 5 171 138;
+  color: rgb(0,0,0);
+}
+
+transform {
+  transform: translate(0.5, 64);
+  child: container "6" {
+    transform {
+      transform: translate(0.25, 32);
+      child: container "5" {
+        transform {
+          transform: translate(0.125, 16);
+          child: container "4" {
+            transform {
+              transform: translate(0.0625, 8);
+              child: container "3" {
+                transform {
+                  transform: translate(0.03125, 4);
+                  child: container "2" {
+                    transform {
+                      transform: translate(0.015625, 2);
+                      child: container "1" {
+                        container "f" {
+                          fill {
+                            path: "M -69.5 10 v1 h.5 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M -59.75 10 v1 h.75 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M -49.875 10 v1 h.875 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M -39.9375 10 v1 h.9375 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M -29.96875 10 v1 h.96875 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M -19.984375 10 v1 h.984375 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M -9.9921875 10 v1 h.9921875 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M 0.00310625 10 v1 h.99609375 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M 10 10 v1 h1 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M 20 10 v1 h.99609375 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M 30 10 v1 h.9921875 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M 40 10 v1 h.984375 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M 50 10 v1 h.96875 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M 60 10 v1 h.9375 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M 70 10 v1 h.875 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M 80 10 v1 h.75 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                          fill {
+                            path: "M 90 10 v1 h.5 v-1 z";
+                            child: color {
+                              bounds: -90 0 200 20;
+                              color: #008000;
+                            }
+                          }
+                        }
+                        transform {
+                          transform: translate(0.00390625, 1);
+                          child: "f";
+                        }
+                      }
+                    }
+                    "1";
+                  }
+                }
+                "2";
+              }
+            }
+            "3";
+          }
+        }
+        "4";
+      }
+    }
+    "5";
+  }
+}
+"6";

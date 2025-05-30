@@ -89,8 +89,12 @@ compare_render_tests = [
   'fill-fractional-translate-gradient',
   'fill-fractional-translate',
   'fill-huge-path',
+  'fill-node-without-path',
   'fill-opacity',
   'fill-scaled-up',
+  'fill-subpixel-offsets-horizontal-nocairo',
+  'fill-subpixel-offsets-vertical-nocairo',
+  'fill-subpixel-shift-nocairo',
   'fill-with-3d-contents-nocairo',
   'glyph-cache-overflow',
   'glyph-cache-overflow-slices',
@@ -273,6 +277,8 @@ compare_xfails = {
   'cairo': {
     'inter-hinting': ['flip', 'rotate'],
     'inter-optical-scaling': ['flip', 'rotate'],
+    'fill-fractional-translate': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
+    'fill-fractional-translate-gradient': ['plain','flip','rotate','repeat','mask','replay','clip','colorflip'],
   }
 }
 

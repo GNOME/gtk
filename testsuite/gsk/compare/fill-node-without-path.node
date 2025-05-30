@@ -1,0 +1,8 @@
+color {
+  bounds: 0 0 1 1;
+  color: black;
+}
+
+fill {
+  path: "M 10 10";
+}

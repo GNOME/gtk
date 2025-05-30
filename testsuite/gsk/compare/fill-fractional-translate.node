@@ -3,7 +3,7 @@ color {
   color: rgba(0,0,0,1);
 }
 transform {
-  transform: translate(2, 2.6);
+  transform: translate(2, 2.5);
   child: fill {
     child: color {
       bounds: 0 0 50 50;
