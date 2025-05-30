@@ -5,4 +5,4 @@ revision=1.26
 depth=1
 
 [provide]
-dependency_names = gstreamer-1.0, gstreamer-player-1.0, gstreamer-gl-1.0
+dependency_names = gstreamer-1.0, gstreamer-play-1.0, gstreamer-gl-1.0
