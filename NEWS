@@ -1,6 +1,134 @@
 Overview of Changes in 4.19.2, xx-xx-xxxx
 =========================================
 
+* Add g_uri_launcher_can_laucher to determine if a given
+  uri has a handler
+
+* GtkIconTheme:
+ - Allow strokes in symbolic icons
+ - Document the symbolic icon format
+
+* GL:
+ - Support multiplane texture formats
+
+* GSK:
+ - Fix some bugs in the path parser
+ - Cache masks for fill and stroke nodes
+
+* Deprecations:
+ - Deprecate the remaining pixbuf APIs
+
+* Tools:
+ - Add some interactive controls to gtk4-path-tool
+
+* Build:
+ - Include modules in libgtk
+
+* Wayland:
+ - Stop handling compose sequences client-side, since
+   the compositor does it
+
+* MacOS:
+ - Support window snapping
+ - Better window menu support
+
+* Windows:
+ - Fix resizing problems with the cairo renderer
+ - Add aPI for D3D12 textures
+
+* Bugs fixed:
+  - #6519 AtSpiSocket not in gir
+  - #7277 Support mac os snapping feature
+  - #7450 Wrong behavior of GdkKeymap on macOS (Elisa Pau)
+  - #7524 `Gtk.MapListModel` becomes desynchronized when the original list model
+    is modified (Matthias Clasen)
+  - #7541 Win32: window resize issues (not repainted or wrong direction) with
+    cairo renderer (Benjamin Otte)
+  - !7883 Add GdkD3d12Texture (Benjamin Otte)
+  - !8061 Deprecate the last few undeprecated GdkPixbuf apis (Matthias Clasen)
+  - !8080 macos: Add (experimental) Vulkan support (Arjan Molenaar)
+  - !8481 Color representation protocol support (Matthias Clasen)
+  - !8498 macos: Add Window menu as a special case (Arjan Molenaar)
+  - !8501 macos: Fix native window snapping (Arjan Molenaar)
+  - !8522 modules: Let modules be statically linked into libgtk (Florian
+    "sp1rit"​)
+  - !8530 Some more pixbuf work (Matthias Clasen)
+  - !8533 Drop unnecessary includes (Matthias Clasen)
+  - !8534 css: Use different api (Matthias Clasen)
+  - !8535 icons: Fix the fg-only optimization (Matthias Clasen)
+  - !8537 Add gtk_uri_launcher_can_launch
+  - !8538 Bump the openuri portal api (Matthias Clasen)
+  - !8539 gpu: Move function (Benjamin Otte)
+  - !8540 Revert "file filer: Replace an api" (Matthias Clasen)
+  - !8542 GDK/Win32: Some more cleanups (Chun-wei Fan)
+  - !8543 Allow overriding (de)serializers (Matthias Clasen)
+  - !8544 node-editor: Help isn't editable (Matthias Clasen)
+  - !8545 Improve the a11y overlay (Matthias Clasen)
+  - !8548 path: Fix handling of 'm' (Matthias Clasen)
+  - !8549 path: Fix handling of custom contours (Matthias Clasen)
+  - !8550 icons: Update folder-new-symbolic from Adwaita (Matthias Clasen)
+  - !8551 A bunch of fixes (Benjamin Otte)
+  - !8552 docs: Some updates (Matthias Clasen)
+  - !8553 demos: Simplify the app icons (Matthias Clasen)
+  - !8555 icontheme: Cosmetics (Matthias Clasen)
+  - !8556 wayland: Stop deriving from GtkIMContextSimple (Matthias Clasen)
+  - !8557 path tool: Add some interactive control (Matthias Clasen)
+  - !8558 some win32 fixes (Benjamin Otte)
+  - !8560 Document the atspi socket (Matthias Clasen)
+  - !8561 win32 fixes (Benjamin Otte)
+  - !8564 ci: fix the android build ci (Florian "sp1rit"​)
+  - !8565 gtk-demo: Fix the ucd demo (Matthias Clasen)
+  - !8566 android: fix cairo renderer framebuffer format conversion (Florian
+    "sp1rit"​)
+  - !8567 image-tool: Use shared infrastructure (Matthias Clasen)
+  - !8569 gtk-demo: Add a symbolic paintable (Matthias Clasen)
+  - !8570 gtk-demo: Rename a class (Matthias Clasen)
+  - !8571 Split off gtkiconpaintable.h (Matthias Clasen)
+  - !8572 menubutton: Annotate popover type (Sergey Bugaev)
+  - !8573 Allow strokes in symbolic icons
+  - !8575 docs: Document a pitfall of nested ui files (Matthias Clasen)
+  - !8576 Cosmetics (Matthias Clasen)
+  - !8577 Cosmetics (Matthias Clasen)
+  - !8578 icontheme: Drop non_blocking flags (Matthias Clasen)
+  - !8579 android: introduce properties missing from toplevel (Florian
+    "sp1rit"​)
+  - !8580 Implement caching for path fills (Benjamin Otte, Matthias Clasen)
+  - !8581 testsuite: Add a bunch of compare tests (Benjamin Otte)
+  - !8582 memorytexturebuilder: Fix set_color_state annotation (Robert Mader)
+  - !8583 rework GskGpuCache a bit (Benjamin Otte)
+  - !8584 gstreamer: Port to GstPlay (Benjamin Otte)
+  - !8586 ci: Let marge also do the android job (Florian "sp1rit"​)
+  - !8587 Move the node format docs (Matthias Clasen)
+  - !8589 egl: Handle EGL_SWAP_BEHAVIOR and avoid SwapBuffersWithDamage() if
+    whole buffer was damaged (Benjamin Otte)
+  - !8590 Clean up a few more icons (Matthias Clasen)
+  - !8592 node-editor: Redo the zoom ui (Matthias Clasen)
+  - !8593 icons: Simplify some icons (Matthias Clasen)
+  - !8594 Build with libcups 3
+  - !8597 dmabuf: egl: Skip unknown drm formats (Robert Mader)
+  - !8598 Cache strokes (Matthias Clasen)
+  - !8600 GL: Add multiplane texture support (Benjamin Otte)
+  - !8602 rendernode tool: Add a --dont-move option (Benjamin Otte, Matthias
+    Clasen)
+  - !8603 texturedownloader: Fix annotations (Benjamin Otte)
+  - !8605 CI/MSVC: fix accesskit-c build with non-native Rust toolchain (L. E.
+    Segovia)
+  - !8606 gsk: Prepare for fill and stroke caching (Matthias Clasen)
+  - !8607 docs: Add more details about symbolic icons (Matthias Clasen)
+  - !8608 Make gsk_path_get_bounds() WARN_IF_UNUSED_RESULT (Benjamin Otte)
+  - !8609 Revert 6d15f59fef2330dca2e27 (Matthias Clasen)
+  - !8611 Small icon fixes (Matthias Clasen)
+
+* Translation updates:
+  - Finnish (Jiri Grönroos)
+  - Georgian (Ekaterine Papava)
+  - German (Christian Kirbach)
+  - Hebrew (Yaron Shahrabani, Yosef Or Boczko)
+  - Interlingua (International Auxiliary Language Association) (Emilio
+    Sepúlveda)
+  - Slovak (Peter Mráz)
+  - Slovenian (Martin)
+  - Uzbek (Baxrom Raxmatov)
 
 Overview of Changes in 4.19.1, 02-05-2025
 =========================================
