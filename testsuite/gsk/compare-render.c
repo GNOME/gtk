@@ -200,6 +200,26 @@ make_random_clip (cairo_rectangle_int_t *int_clip,
                   int                    width,
                   int                    height)
 {
+  const char *clip = g_getenv ("OVERRIDE_CLIP");
+
+  if (clip)
+    {
+      char **str = g_strsplit (clip, ",", -1);
+
+      if (g_strv_length (str) == 4)
+        {
+          int_clip->width = CLAMP (atoi (str[2]), 1, width);
+          int_clip->height = CLAMP (atoi (str[3]), 1, height);
+          int_clip->x = CLAMP (atoi (str[0]), 0, width - int_clip->width);
+          int_clip->y = CLAMP (atoi (str[1]), 0, height - int_clip->height);
+
+          g_strfreev (str);
+          return;
+        }
+
+      g_strfreev (str);
+    }
+
   int_clip->width = g_test_rand_int_range (1, width);
   int_clip->height = g_test_rand_int_range (1, height);
 
@@ -480,6 +500,8 @@ clip_setup (GskRenderNode *node)
   else
     make_random_clip (result, ceil (bounds.size.width), ceil (bounds.size.height));
 
+  g_print ("Node bounds %g %g %g %g\n",
+           bounds.origin.x, bounds.origin.y, bounds.size.width, bounds.size.height);
   g_print ("Random clip rectangle %d %d %d %d\n",
            result->x, result->y, result->width, result->height);
 
