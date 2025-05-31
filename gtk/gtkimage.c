@@ -578,12 +578,12 @@ gtk_image_new_from_gicon (GIcon *icon)
  *
  * Sets a `GtkImage` to show a file.
  *
- * Note that this function should not be used with untrusted data.
- * Use a proper image loading framework such as libglycin, which can
- * load many image formats into a `GdkTexture`, and then use
- * [method@Gtk.Image.set_from_paintable].
- *
  * See [ctor@Gtk.Image.new_from_file] for details.
+ *
+ * > ⚠️ Note that this function should not be used with untrusted data.
+ * > Use a proper image loading framework such as libglycin, which can
+ * > load many image formats into a `GdkTexture`, and then use
+ * > [method@Gtk.Image.set_from_paintable].
  */
 void
 gtk_image_set_from_file (GtkImage    *image,
