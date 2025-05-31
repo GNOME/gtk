@@ -161,14 +161,13 @@ mod_subpixel (float  pos,
 }
 
 GskGpuImage *
-gsk_gpu_cached_fill_lookup (GskGpuCache            *self,
-                            GskGpuFrame            *frame,
-                            const graphene_vec2_t  *scale,
-                            const graphene_point_t *offset,
-                            const graphene_rect_t  *bounds,
-                            GskPath                *path,
-                            GskFillRule             fill_rule,
-                            graphene_rect_t        *out_rect)
+gsk_gpu_cached_fill_lookup (GskGpuCache           *self,
+                            GskGpuFrame           *frame,
+                            const graphene_vec2_t *scale,
+                            const graphene_rect_t *bounds,
+                            GskPath               *path,
+                            GskFillRule            fill_rule,
+                            graphene_rect_t       *out_rect)
 {
   GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (self);
   float sx = graphene_vec2_get_x (scale);
@@ -179,8 +178,8 @@ gsk_gpu_cached_fill_lookup (GskGpuCache            *self,
   GskGpuImage *image = NULL;
   graphene_rect_t viewport;
 
-  fx = mod_subpixel (- sx * offset->x, SUBPIXEL_SCALE_X, &dx);
-  fy = mod_subpixel (- sy * offset->y, SUBPIXEL_SCALE_Y, &dy);
+  fx = mod_subpixel (sx * bounds->origin.x, SUBPIXEL_SCALE_X, &dx);
+  fy = mod_subpixel (sy * bounds->origin.y, SUBPIXEL_SCALE_Y, &dy);
 
   cache = g_hash_table_lookup (priv->fill_cache,
                                &(GskGpuCachedFill) {
