@@ -614,15 +614,15 @@ gdk_texture_new_from_resource (const char *resource_path)
  * The file format is detected automatically. The supported formats
  * are PNG, JPEG and TIFF, though more formats might be available.
  *
- * Note that this function should not be used with untrusted data.
- * Use a proper image loading framework such as libglycin, which can
- * load many image formats into a `GdkTexture`.
- *
- * If %NULL is returned, then @error will be set.
+ * If `NULL` is returned, then @error will be set.
  *
  * This function is threadsafe, so that you can e.g. use GTask
  * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
+ *
+ * > ⚠️  Note that this function should not be used with untrusted data.
+ * > Use a proper image loading framework such as libglycin, which can
+ * > load many image formats into a `GdkTexture`.
  *
  * Return value: A newly-created `GdkTexture`
  */
@@ -713,15 +713,15 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * The file format is detected automatically. The supported formats
  * are PNG, JPEG and TIFF, though more formats might be available.
  *
- * Note that this function should not be used with untrusted data.
- * Use a proper image loading framework such as libglycin, which can
- * load many image formats into a `GdkTexture`.
- *
- * If %NULL is returned, then @error will be set.
+ * If `NULL` is returned, then @error will be set.
  *
  * This function is threadsafe, so that you can e.g. use GTask
  * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
+ *
+ * > ⚠️  Note that this function should not be used with untrusted data.
+ * > Use a proper image loading framework such as libglycin, which can
+ * > load many image formats into a `GdkTexture`.
  *
  * Return value: A newly-created `GdkTexture`
  *
@@ -763,15 +763,15 @@ gdk_texture_new_from_bytes (GBytes  *bytes,
  * The file format is detected automatically. The supported formats
  * are PNG, JPEG and TIFF, though more formats might be available.
  *
- * Note that this function should not be used with untrusted data.
- * Use a proper image loading framework such as libglycin, which can
- * load many image formats into a `GdkTexture`.
- *
- * If %NULL is returned, then @error will be set.
+ * If `NULL` is returned, then @error will be set.
  *
  * This function is threadsafe, so that you can e.g. use GTask
  * and [method@Gio.Task.run_in_thread] to avoid blocking the main thread
  * while loading a big image.
+ *
+ * > ⚠️  Note that this function should not be used with untrusted data.
+ * > Use a proper image loading framework such as libglycin, which can
+ * > load many image formats into a `GdkTexture`.
  *
  * Return value: A newly-created `GdkTexture`
  *
