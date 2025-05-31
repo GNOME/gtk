@@ -92,6 +92,7 @@ compare_render_tests = [
   'fill-node-without-path',
   'fill-opacity',
   'fill-scaled-up',
+  'fill-scale-up-with-bad-clip',
   'fill-subpixel-offsets-horizontal-nocairo',
   'fill-subpixel-offsets-vertical-nocairo',
   'fill-subpixel-shift-nocairo',

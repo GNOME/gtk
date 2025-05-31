@@ -1,0 +1,21 @@
+color {
+  color: rgba(0,0,0,0);
+  bounds: -10 -10 20 20;
+}
+clip {
+  clip: -9 1 16 8;
+  child: transform {
+    transform: scale(80);
+    child: container {
+      fill {
+        child: color {
+          bounds: -0.125 -0.125 0.25 0.25;
+          color: rgb(0,0,0);
+        }
+        path: "\
+M -0.125 -0.125 h 0.25 v 0.25 h -0.25 z";
+        fill-rule: winding;
+      }
+    }
+  }
+}
