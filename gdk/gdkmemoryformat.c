@@ -3719,7 +3719,7 @@ static const GdkMemoryFormatDescription memory_formats[] = {
     },
 #endif
     .win32 = {
-        .dxgi_format = DXGI_FORMAT_NV11,
+        .dxgi_format = DXGI_FORMAT_UNKNOWN,
         .dxgi_srgb_format = DXGI_FORMAT_UNKNOWN,
     },
     .dmabuf = {
