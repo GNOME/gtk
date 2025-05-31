@@ -130,6 +130,7 @@ if os_unix
   gtk_tests += [
     ['testfontchooserdialog'],
     ['parallel', [], [ libgtk_static_dep, libm ] ],
+    ['testsymbolic', [], [ libgtk_static_dep ] ],
   ]
 endif
 
