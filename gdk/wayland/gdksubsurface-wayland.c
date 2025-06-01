@@ -34,32 +34,39 @@
 
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 
-G_DEFINE_TYPE (GdkWaylandSubsurface, gdk_wayland_subsurface, GDK_TYPE_SUBSURFACE)
+/* {{{ Utilities */
 
-static void
-gdk_wayland_subsurface_init (GdkWaylandSubsurface *self)
+/* Note: The GdkDihedral transforms are *inverses* of the corresponding
+ * wl_output_transform transforms.
+ *
+ * This is intentional: The GdkDihedral is the transform we want the
+ * compositor to apply. set_buffer_transform is about *already transformed*
+ * content. By telling the compositor that the content is already transformed
+ * by the inverse of the GdkDihedral, we get it to apply the transform we want.
+ */
+static inline enum wl_output_transform
+gdk_texture_transform_to_wl (GdkDihedral transform)
 {
+  return (enum wl_output_transform) transform;
 }
 
-static void
-gdk_wayland_subsurface_finalize (GObject *object)
+static inline GdkDihedral
+wl_output_transform_to_gdk (enum wl_output_transform transform)
 {
-  GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (object);
-
-  g_clear_object (&self->texture);
-  g_clear_pointer (&self->frame_callback, wl_callback_destroy);
-  g_clear_pointer (&self->opaque_region, wl_region_destroy);
-  g_clear_pointer (&self->viewport, wp_viewport_destroy);
-  g_clear_pointer (&self->color, gdk_wayland_color_surface_free);
-  g_clear_pointer (&self->subsurface, wl_subsurface_destroy);
-  g_clear_pointer (&self->surface, wl_surface_destroy);
-  g_clear_pointer (&self->bg_viewport, wp_viewport_destroy);
-  g_clear_pointer (&self->bg_subsurface, wl_subsurface_destroy);
-  g_clear_pointer (&self->bg_surface, wl_surface_destroy);
-  g_clear_pointer (&self->idle_inhibitor, zwp_idle_inhibitor_v1_destroy);
-
-  G_OBJECT_CLASS (gdk_wayland_subsurface_parent_class)->finalize (object);
+  return (GdkDihedral) transform;
 }
+
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_NORMAL == (int) GDK_DIHEDRAL_NORMAL);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_90 == (int) GDK_DIHEDRAL_90);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_180 == (int) GDK_DIHEDRAL_180);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_270 == (int) GDK_DIHEDRAL_270);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED == (int) GDK_DIHEDRAL_FLIPPED);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_90 == (int) GDK_DIHEDRAL_FLIPPED_90);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_180 == (int) GDK_DIHEDRAL_FLIPPED_180);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_270 == (int) GDK_DIHEDRAL_FLIPPED_270);
+
+/* }}} */
+/* {{{ Dmabuf buffer handling */
 
 static void
 dmabuf_buffer_release (void             *data,
@@ -180,6 +187,9 @@ get_dmabuf_texture_wl_buffer (GdkWaylandSubsurface *self,
                                g_object_ref (texture));
 }
 
+/* }}} */
+/* {{{ GL texture buffer handling */
+
 typedef struct {
   GdkTexture *texture;
   GdkDmabuf dmabuf;
@@ -206,31 +216,12 @@ static const struct wl_buffer_listener gl_buffer_listener = {
 static struct wl_buffer *
 get_gl_texture_wl_buffer (GdkWaylandSubsurface *self,
                           GdkTexture           *texture,
-                          guint32              *out_fourcc)
+                          GdkDmabuf            *dmabuf)
 {
-  GdkDisplay *display = gdk_surface_get_display (GDK_SUBSURFACE (self)->parent);
-  GdkGLTexture *gltexture = GDK_GL_TEXTURE (texture);
-  GdkGLContext *glcontext;
   GLBufferData gldata;
 
-  *out_fourcc = 0;
-
-  glcontext = gdk_display_get_gl_context (display);
-  if (glcontext == NULL ||
-      !gdk_gl_context_is_shared (glcontext, gdk_gl_texture_get_context (gltexture)))
-    return NULL;
-
-  /* Can we avoid this when a right context is current already? */
-  gdk_gl_context_make_current (glcontext);
-
-  if (!gdk_gl_context_export_dmabuf (glcontext,
-                                     gdk_gl_texture_get_id (gltexture),
-                                     &gldata.dmabuf))
-    return NULL;
-
+  gldata.dmabuf = *dmabuf;
   gldata.texture = g_object_ref (texture);
-
-  *out_fourcc = gldata.dmabuf.fourcc;
 
   return get_dmabuf_wl_buffer (self,
                                &gldata.dmabuf,
@@ -240,51 +231,101 @@ get_gl_texture_wl_buffer (GdkWaylandSubsurface *self,
                                g_memdup2 (&gldata, sizeof (gldata)));
 }
 
-static struct wl_buffer *
-get_wl_buffer (GdkWaylandSubsurface *self,
-               GdkTexture           *texture,
-               guint32              *out_fourcc,
-               gboolean             *out_premultiplied)
+static gboolean
+export_gl_texture_as_dmabuf (GdkDisplay *display,
+                             GdkTexture *texture,
+                             GdkDmabuf  *dmabuf)
+{
+  GdkGLTexture *gltexture = GDK_GL_TEXTURE (texture);
+  GdkGLContext *glcontext;
+
+  dmabuf->n_planes = 0;
+
+  glcontext = gdk_display_get_gl_context (display);
+  if (glcontext == NULL ||
+      !gdk_gl_context_is_shared (glcontext, gdk_gl_texture_get_context (gltexture)))
+    return FALSE;
+
+  /* Can we avoid this when a right context is current already? */
+  gdk_gl_context_make_current (glcontext);
+
+  return gdk_gl_context_export_dmabuf (glcontext,
+                                       gdk_gl_texture_get_id (gltexture),
+                                       dmabuf);
+}
+
+/* }}} */
+/* {{{ General texture buffer handling */
+
+static gboolean
+get_texture_info (GdkWaylandSubsurface *self,
+                  GdkTexture           *texture,
+                  guint32              *out_fourcc,
+                  gboolean             *out_premultiplied,
+                  GdkDmabuf            *out_dmabuf)
 {
   GdkDisplay *display = gdk_surface_get_display (GDK_SUBSURFACE (self)->parent);
-  struct wl_buffer *buffer = NULL;
-  GdkMemoryFormat format;
+  gboolean done = FALSE;
+
+  /* We only return dmabuf information for GL textures.
+   * In other cases, we set n_planes to 0.
+   */
+  out_dmabuf->n_planes = 0;
 
   if (GDK_IS_DMABUF_TEXTURE (texture))
     {
       const GdkDmabuf *dmabuf;
 
-      buffer = get_dmabuf_texture_wl_buffer (self, texture);
-
       dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
       *out_fourcc = dmabuf->fourcc;
-      format = gdk_texture_get_format (texture);
+      *out_premultiplied = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED;
+      done = TRUE;
     }
   else if (GDK_IS_GL_TEXTURE (texture))
     {
-      buffer = get_gl_texture_wl_buffer (self, texture, out_fourcc);
-      format = gdk_texture_get_format (texture);
+      done = export_gl_texture_as_dmabuf (display, texture, out_dmabuf);
+      *out_fourcc = out_dmabuf->fourcc;
+      *out_premultiplied = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED;
     }
 
-  if (GDK_DISPLAY_DEBUG_CHECK (display, FORCE_OFFLOAD))
+  if (!done && GDK_DISPLAY_DEBUG_CHECK (display, FORCE_OFFLOAD))
     {
-      if (!buffer)
-        {
-          buffer = _gdk_wayland_shm_texture_get_wl_buffer (GDK_WAYLAND_DISPLAY (display), texture);
-          format = gdk_texture_get_format (texture);
-          if (format == GDK_MEMORY_G8_B8R8_420)
-            *out_fourcc = DRM_FORMAT_NV12;
-          else if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_OPAQUE)
-            *out_fourcc = DRM_FORMAT_RGBX8888;
-          else
-            *out_fourcc = DRM_FORMAT_RGBA8888;
-        }
+      GdkMemoryFormat format = gdk_texture_get_format (texture);
+
+      done = TRUE;
+      if (format == GDK_MEMORY_G8_B8R8_420)
+        *out_fourcc = DRM_FORMAT_NV12;
+      else if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_OPAQUE)
+        *out_fourcc = DRM_FORMAT_RGBX8888;
+      else
+        *out_fourcc = DRM_FORMAT_RGBA8888;
+      *out_premultiplied = gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_PREMULTIPLIED;
     }
 
-  *out_premultiplied = gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_PREMULTIPLIED;
+  return done;
+}
+
+static struct wl_buffer *
+get_wl_buffer_from_info (GdkWaylandSubsurface *self,
+                         GdkTexture           *texture,
+                         GdkDmabuf            *dmabuf)
+{
+  GdkDisplay *display = gdk_surface_get_display (GDK_SUBSURFACE (self)->parent);
+  struct wl_buffer *buffer = NULL;
+
+  if (GDK_IS_DMABUF_TEXTURE (texture))
+    buffer = get_dmabuf_texture_wl_buffer (self, texture);
+  else if (GDK_IS_GL_TEXTURE (texture) && dmabuf->n_planes > 0)
+    buffer = get_gl_texture_wl_buffer (self, texture, dmabuf);
+
+  if (!buffer && GDK_DISPLAY_DEBUG_CHECK (display, FORCE_OFFLOAD))
+    buffer = _gdk_wayland_shm_texture_get_wl_buffer (GDK_WAYLAND_DISPLAY (display), texture);
 
   return buffer;
 }
+
+/* }}} */
+/* {{{ Single-pixel buffer handling */
 
 static void
 sp_buffer_release (void             *data,
@@ -313,34 +354,8 @@ get_sp_buffer (GdkWaylandSubsurface *self)
   return buffer;
 }
 
-/* Note: The GdkDihedral transforms are *inverses* of the corresponding
- * wl_output_transform transforms.
- *
- * This is intentional: The GdkDihedral is the transform we want the
- * compositor to apply. set_buffer_transform is about *already transformed*
- * content. By telling the compositor that the content is already transformed
- * by the inverse of the GdkDihedral, we get it to apply the transform we want.
- */
-static inline enum wl_output_transform
-gdk_texture_transform_to_wl (GdkDihedral transform)
-{
-  return (enum wl_output_transform) transform;
-}
-
-static inline GdkDihedral
-wl_output_transform_to_gdk (enum wl_output_transform transform)
-{
-  return (GdkDihedral) transform;
-}
-
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_NORMAL == (int) GDK_DIHEDRAL_NORMAL);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_90 == (int) GDK_DIHEDRAL_90);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_180 == (int) GDK_DIHEDRAL_180);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_270 == (int) GDK_DIHEDRAL_270);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED == (int) GDK_DIHEDRAL_FLIPPED);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_90 == (int) GDK_DIHEDRAL_FLIPPED_90);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_180 == (int) GDK_DIHEDRAL_FLIPPED_180);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_270 == (int) GDK_DIHEDRAL_FLIPPED_270);
+/* }}} */
+/* {{{ Attach vfunc helpers */
 
 static void
 ensure_bg_surface (GdkWaylandSubsurface *self)
@@ -467,6 +482,9 @@ update_background (GdkWaylandSubsurface  *self,
   return background_changed;
 }
 
+/* }}} */
+/* {{{ The big, beautiful attach vfunc */
+
 static gboolean
 gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                GdkTexture            *texture,
@@ -480,6 +498,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
   GdkWaylandSurface *parent = GDK_WAYLAND_SURFACE (sub->parent);
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (sub->parent));
+  GdkDmabuf dmabuf = { .n_planes = 0, };
   struct wl_buffer *buffer = NULL;
   gboolean result = FALSE;
   GdkWaylandSubsurface *sib = sibling ? GDK_WAYLAND_SUBSURFACE (sibling) : NULL;
@@ -593,22 +612,17 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          self);
     }
   else if (texture && texture != self->texture &&
-           (buffer = get_wl_buffer (self, texture, &fourcc, &premultiplied)) == NULL)
+           (!get_texture_info (self, texture, &fourcc, &premultiplied, &dmabuf) ||
+           !gdk_wayland_color_surface_can_set_color_state (self->color,
+                                                           gdk_texture_get_color_state (texture),
+                                                           fourcc, premultiplied)))
     {
+      gdk_dmabuf_close_fds (&dmabuf);
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "[%p] 🗙 Failed to create wl_buffer for %s",
+                         "[%p] 🗙 Texture colorstate %s (%.4s, %s) not supported",
                          self,
-                         G_OBJECT_TYPE_NAME (texture));
-    }
-  else if (buffer && !gdk_wayland_color_surface_can_set_color_state (self->color,
-                                                                     gdk_texture_get_color_state (texture),
-                                                                     fourcc, premultiplied))
-    {
-      g_clear_pointer (&buffer, wl_buffer_destroy);
-      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "[%p] 🗙 Texture colorstate %s not supported",
-                         self,
-                         gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
+                         gdk_color_state_get_name (gdk_texture_get_color_state (texture)),
+                         (char *) &fourcc, premultiplied ? "premultiplied" : "straight");
     }
   else
     {
@@ -628,6 +642,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
         {
           self->fourcc = fourcc;
           self->premultiplied = premultiplied;
+          buffer = get_wl_buffer_from_info (self, texture, &dmabuf);
           result = buffer != NULL;
           if (result)
             GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
@@ -659,7 +674,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                gdk_texture_get_height (texture),
                                self->dest.x, self->dest.y,
                                self->dest.width, self->dest.height);
-          g_clear_pointer (&buffer, wl_buffer_destroy);
+          gdk_dmabuf_close_fds (&dmabuf);
           result = TRUE;
         }
     }
@@ -756,7 +771,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     }
   else /* !result */
     {
-      g_clear_pointer (&buffer, wl_buffer_destroy);
+      g_assert (buffer == NULL);
 
       if (g_set_object (&self->texture, NULL))
         {
@@ -800,6 +815,9 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
 
   return result;
 }
+
+/* }}} */
+/* {{{ Other vfuncs */
 
 static void
 gdk_wayland_subsurface_detach (GdkSubsurface *sub)
@@ -882,6 +900,36 @@ gdk_wayland_subsurface_get_background_rect (GdkSubsurface   *sub,
   return rect->size.width > 0 && rect->size.height > 0;
 }
 
+/* }}} */
+/* {{{ GObject boilerplate */
+
+G_DEFINE_TYPE (GdkWaylandSubsurface, gdk_wayland_subsurface, GDK_TYPE_SUBSURFACE)
+
+static void
+gdk_wayland_subsurface_init (GdkWaylandSubsurface *self)
+{
+}
+
+static void
+gdk_wayland_subsurface_finalize (GObject *object)
+{
+  GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (object);
+
+  g_clear_object (&self->texture);
+  g_clear_pointer (&self->frame_callback, wl_callback_destroy);
+  g_clear_pointer (&self->opaque_region, wl_region_destroy);
+  g_clear_pointer (&self->viewport, wp_viewport_destroy);
+  g_clear_pointer (&self->color, gdk_wayland_color_surface_free);
+  g_clear_pointer (&self->subsurface, wl_subsurface_destroy);
+  g_clear_pointer (&self->surface, wl_surface_destroy);
+  g_clear_pointer (&self->bg_viewport, wp_viewport_destroy);
+  g_clear_pointer (&self->bg_subsurface, wl_subsurface_destroy);
+  g_clear_pointer (&self->bg_surface, wl_surface_destroy);
+  g_clear_pointer (&self->idle_inhibitor, zwp_idle_inhibitor_v1_destroy);
+
+  G_OBJECT_CLASS (gdk_wayland_subsurface_parent_class)->finalize (object);
+}
+
 static void
 gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
 {
@@ -898,6 +946,9 @@ gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
   subsurface_class->get_transform = gdk_wayland_subsurface_get_transform;
   subsurface_class->get_background_rect = gdk_wayland_subsurface_get_background_rect;
 };
+
+/* }}} */
+/* {{{ API */
 
 static void
 frame_callback (void               *data,
@@ -1001,3 +1052,7 @@ gdk_wayland_subsurface_uninhibit_idle (GdkSubsurface *subsurface)
 
   g_clear_pointer (&sub->idle_inhibitor, zwp_idle_inhibitor_v1_destroy);
 }
+
+/* }}} */
+
+/* vim:set foldmethod=marker: */

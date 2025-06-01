@@ -764,15 +764,6 @@ gdk_wayland_color_prepare (GdkWaylandColor *color)
       g_clear_pointer (&color->color_representation_manager, wp_color_representation_manager_v1_destroy);
     }
 
-  if (color->color_representation_manager &&
-      (!(color->color_representation_supported.alpha_modes & (1 << WP_COLOR_REPRESENTATION_SURFACE_V1_ALPHA_MODE_PREMULTIPLIED_ELECTRICAL)) ||
-       !(color->color_representation_supported.alpha_modes & (1 << WP_COLOR_REPRESENTATION_SURFACE_V1_ALPHA_MODE_STRAIGHT))))
-
-    {
-      GDK_DISPLAY_DEBUG (GDK_DISPLAY (color->display), MISC, "Not using color representation: Missing alpha modes");
-      g_clear_pointer (&color->color_representation_manager, wp_color_representation_manager_v1_destroy);
-    }
-
   return color->color_manager != NULL || color->color_representation_manager != NULL;
 }
 
