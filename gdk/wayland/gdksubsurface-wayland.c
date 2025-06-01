@@ -34,32 +34,39 @@
 
 #include "linux-dmabuf-unstable-v1-client-protocol.h"
 
-G_DEFINE_TYPE (GdkWaylandSubsurface, gdk_wayland_subsurface, GDK_TYPE_SUBSURFACE)
+/* {{{ Utilities */
 
-static void
-gdk_wayland_subsurface_init (GdkWaylandSubsurface *self)
+/* Note: The GdkDihedral transforms are *inverses* of the corresponding
+ * wl_output_transform transforms.
+ *
+ * This is intentional: The GdkDihedral is the transform we want the
+ * compositor to apply. set_buffer_transform is about *already transformed*
+ * content. By telling the compositor that the content is already transformed
+ * by the inverse of the GdkDihedral, we get it to apply the transform we want.
+ */
+static inline enum wl_output_transform
+gdk_texture_transform_to_wl (GdkDihedral transform)
 {
+  return (enum wl_output_transform) transform;
 }
 
-static void
-gdk_wayland_subsurface_finalize (GObject *object)
+static inline GdkDihedral
+wl_output_transform_to_gdk (enum wl_output_transform transform)
 {
-  GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (object);
-
-  g_clear_object (&self->texture);
-  g_clear_pointer (&self->frame_callback, wl_callback_destroy);
-  g_clear_pointer (&self->opaque_region, wl_region_destroy);
-  g_clear_pointer (&self->viewport, wp_viewport_destroy);
-  g_clear_pointer (&self->color, gdk_wayland_color_surface_free);
-  g_clear_pointer (&self->subsurface, wl_subsurface_destroy);
-  g_clear_pointer (&self->surface, wl_surface_destroy);
-  g_clear_pointer (&self->bg_viewport, wp_viewport_destroy);
-  g_clear_pointer (&self->bg_subsurface, wl_subsurface_destroy);
-  g_clear_pointer (&self->bg_surface, wl_surface_destroy);
-  g_clear_pointer (&self->idle_inhibitor, zwp_idle_inhibitor_v1_destroy);
-
-  G_OBJECT_CLASS (gdk_wayland_subsurface_parent_class)->finalize (object);
+  return (GdkDihedral) transform;
 }
+
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_NORMAL == (int) GDK_DIHEDRAL_NORMAL);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_90 == (int) GDK_DIHEDRAL_90);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_180 == (int) GDK_DIHEDRAL_180);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_270 == (int) GDK_DIHEDRAL_270);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED == (int) GDK_DIHEDRAL_FLIPPED);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_90 == (int) GDK_DIHEDRAL_FLIPPED_90);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_180 == (int) GDK_DIHEDRAL_FLIPPED_180);
+G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_270 == (int) GDK_DIHEDRAL_FLIPPED_270);
+
+/* }}} */
+/* {{{ Dmabuf buffer handling */
 
 static void
 dmabuf_buffer_release (void             *data,
@@ -180,6 +187,9 @@ get_dmabuf_texture_wl_buffer (GdkWaylandSubsurface *self,
                                g_object_ref (texture));
 }
 
+/* }}} */
+/* {{{ GL texture buffer handling */
+
 typedef struct {
   GdkTexture *texture;
   GdkDmabuf dmabuf;
@@ -240,6 +250,9 @@ get_gl_texture_wl_buffer (GdkWaylandSubsurface *self,
                                g_memdup2 (&gldata, sizeof (gldata)));
 }
 
+/* }}} */
+/* {{{ General texture buffer handling */
+
 static struct wl_buffer *
 get_wl_buffer (GdkWaylandSubsurface *self,
                GdkTexture           *texture,
@@ -286,6 +299,9 @@ get_wl_buffer (GdkWaylandSubsurface *self,
   return buffer;
 }
 
+/* }}} */
+/* {{{ Single-pixel buffer handling */
+
 static void
 sp_buffer_release (void             *data,
                    struct wl_buffer *buffer)
@@ -313,34 +329,8 @@ get_sp_buffer (GdkWaylandSubsurface *self)
   return buffer;
 }
 
-/* Note: The GdkDihedral transforms are *inverses* of the corresponding
- * wl_output_transform transforms.
- *
- * This is intentional: The GdkDihedral is the transform we want the
- * compositor to apply. set_buffer_transform is about *already transformed*
- * content. By telling the compositor that the content is already transformed
- * by the inverse of the GdkDihedral, we get it to apply the transform we want.
- */
-static inline enum wl_output_transform
-gdk_texture_transform_to_wl (GdkDihedral transform)
-{
-  return (enum wl_output_transform) transform;
-}
-
-static inline GdkDihedral
-wl_output_transform_to_gdk (enum wl_output_transform transform)
-{
-  return (GdkDihedral) transform;
-}
-
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_NORMAL == (int) GDK_DIHEDRAL_NORMAL);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_90 == (int) GDK_DIHEDRAL_90);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_180 == (int) GDK_DIHEDRAL_180);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_270 == (int) GDK_DIHEDRAL_270);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED == (int) GDK_DIHEDRAL_FLIPPED);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_90 == (int) GDK_DIHEDRAL_FLIPPED_90);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_180 == (int) GDK_DIHEDRAL_FLIPPED_180);
-G_STATIC_ASSERT ((int) WL_OUTPUT_TRANSFORM_FLIPPED_270 == (int) GDK_DIHEDRAL_FLIPPED_270);
+/* }}} */
+/* {{{ Attach vfunc helpers */
 
 static void
 ensure_bg_surface (GdkWaylandSubsurface *self)
@@ -466,6 +456,9 @@ update_background (GdkWaylandSubsurface  *self,
 
   return background_changed;
 }
+
+/* }}} */
+/* {{{ The big, beautiful attach vfunc */
 
 static gboolean
 gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
@@ -801,6 +794,9 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   return result;
 }
 
+/* }}} */
+/* {{{ Other vfuncs */
+
 static void
 gdk_wayland_subsurface_detach (GdkSubsurface *sub)
 {
@@ -882,6 +878,36 @@ gdk_wayland_subsurface_get_background_rect (GdkSubsurface   *sub,
   return rect->size.width > 0 && rect->size.height > 0;
 }
 
+/* }}} */
+/* {{{ GObject boilerplate */
+
+G_DEFINE_TYPE (GdkWaylandSubsurface, gdk_wayland_subsurface, GDK_TYPE_SUBSURFACE)
+
+static void
+gdk_wayland_subsurface_init (GdkWaylandSubsurface *self)
+{
+}
+
+static void
+gdk_wayland_subsurface_finalize (GObject *object)
+{
+  GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (object);
+
+  g_clear_object (&self->texture);
+  g_clear_pointer (&self->frame_callback, wl_callback_destroy);
+  g_clear_pointer (&self->opaque_region, wl_region_destroy);
+  g_clear_pointer (&self->viewport, wp_viewport_destroy);
+  g_clear_pointer (&self->color, gdk_wayland_color_surface_free);
+  g_clear_pointer (&self->subsurface, wl_subsurface_destroy);
+  g_clear_pointer (&self->surface, wl_surface_destroy);
+  g_clear_pointer (&self->bg_viewport, wp_viewport_destroy);
+  g_clear_pointer (&self->bg_subsurface, wl_subsurface_destroy);
+  g_clear_pointer (&self->bg_surface, wl_surface_destroy);
+  g_clear_pointer (&self->idle_inhibitor, zwp_idle_inhibitor_v1_destroy);
+
+  G_OBJECT_CLASS (gdk_wayland_subsurface_parent_class)->finalize (object);
+}
+
 static void
 gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
 {
@@ -898,6 +924,9 @@ gdk_wayland_subsurface_class_init (GdkWaylandSubsurfaceClass *class)
   subsurface_class->get_transform = gdk_wayland_subsurface_get_transform;
   subsurface_class->get_background_rect = gdk_wayland_subsurface_get_background_rect;
 };
+
+/* }}} */
+/* {{{ API */
 
 static void
 frame_callback (void               *data,
@@ -1001,3 +1030,7 @@ gdk_wayland_subsurface_uninhibit_idle (GdkSubsurface *subsurface)
 
   g_clear_pointer (&sub->idle_inhibitor, zwp_idle_inhibitor_v1_destroy);
 }
+
+/* }}} */
+
+/* vim:set foldmethod=marker: */
