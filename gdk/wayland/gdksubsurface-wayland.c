@@ -627,18 +627,12 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                          self);
     }
   else if (texture && texture != self->texture &&
-           (buffer = get_wl_buffer (self, texture, &fourcc, &premultiplied)) == NULL)
+           (!get_texture_info (self, texture, &fourcc, &premultiplied, &dmabuf) ||
+           !gdk_wayland_color_surface_can_set_color_state (self->color,
+                                                           gdk_texture_get_color_state (texture),
+                                                           fourcc, premultiplied)))
     {
-      GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "[%p] 🗙 Failed to create wl_buffer for %s",
-                         self,
-                         G_OBJECT_TYPE_NAME (texture));
-    }
-  else if (buffer && !gdk_wayland_color_surface_can_set_color_state (self->color,
-                                                                     gdk_texture_get_color_state (texture),
-                                                                     fourcc, premultiplied))
-    {
-      g_clear_pointer (&buffer, wl_buffer_destroy);
+      gdk_dmabuf_close_fds (&dmabuf);
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
                          "[%p] 🗙 Texture colorstate %s not supported",
                          self,
@@ -662,6 +656,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
         {
           self->fourcc = fourcc;
           self->premultiplied = premultiplied;
+          buffer = get_wl_buffer_from_info (self, texture, &dmabuf);
           result = buffer != NULL;
           if (result)
             GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
@@ -693,7 +688,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
                                gdk_texture_get_height (texture),
                                self->dest.x, self->dest.y,
                                self->dest.width, self->dest.height);
-          g_clear_pointer (&buffer, wl_buffer_destroy);
+          gdk_dmabuf_close_fds (&dmabuf);
           result = TRUE;
         }
     }
@@ -790,7 +785,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     }
   else /* !result */
     {
-      g_clear_pointer (&buffer, wl_buffer_destroy);
+      g_assert (buffer == NULL);
 
       if (g_set_object (&self->texture, NULL))
         {
