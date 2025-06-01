@@ -17,12 +17,6 @@
     </glib>
     <cairo/>
     <fontconfig/>
-    <rsvg revision="librsvg-2.40">
-      <patch>meson-for-gdkpixbuf</patch>
-    </rsvg>
-    <gdk-pixbuf>
-      <patch>rsvg</patch>
-    </gdk-pixbuf>
   </dependencies>
   <build target="gtk4-demo" java-sources="gdk/android/glue/java/">
     <configure-options>
