@@ -324,22 +324,6 @@ get_wl_buffer_from_info (GdkWaylandSubsurface *self,
   return buffer;
 }
 
-static struct wl_buffer *
-get_wl_buffer (GdkWaylandSubsurface *self,
-               GdkTexture           *texture,
-               guint32              *out_fourcc,
-               gboolean             *out_premultiplied)
-{
-  GdkDmabuf dmabuf;
-
-  if (get_texture_info (self, texture, out_fourcc, out_premultiplied, &dmabuf))
-    return get_wl_buffer_from_info (self, texture, &dmabuf);
-
-  gdk_dmabuf_close_fds (&dmabuf);
-
-  return NULL;
-}
-
 /* }}} */
 /* {{{ Single-pixel buffer handling */
 
@@ -514,6 +498,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   GdkWaylandSubsurface *self = GDK_WAYLAND_SUBSURFACE (sub);
   GdkWaylandSurface *parent = GDK_WAYLAND_SURFACE (sub->parent);
   GdkWaylandDisplay *display = GDK_WAYLAND_DISPLAY (gdk_surface_get_display (sub->parent));
+  GdkDmabuf dmabuf = { .n_planes = 0, };
   struct wl_buffer *buffer = NULL;
   gboolean result = FALSE;
   GdkWaylandSubsurface *sib = sibling ? GDK_WAYLAND_SUBSURFACE (sibling) : NULL;
