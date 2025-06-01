@@ -1,0 +1,17 @@
+color {
+  bounds: 0 0 16 16;
+  color: black;
+}
+
+transform {
+  /* 0.0009765625 = 1/1024 */
+  transform: scale(16) translate(0.0009765625, 0.0009765625);
+  child: fill {
+    child: color {
+      bounds: 0 0 1 1;
+      color: red;
+    }
+    path: "M 0.25 0.25 h 0.5 v 0.5 h -0.5 z";
+    fill-rule: winding;
+  }
+}

@@ -1,0 +1,19 @@
+color {
+  bounds: 0 0 16 16;
+  color: black;
+}
+
+transform {
+  /* 0.0009765625 = 1/1024 */
+  transform: scale(16) translate(0.0009765625, 0.0009765625);
+  child: stroke {
+    child: color {
+      bounds: 0 0 1 1;
+      color: red;
+    }
+    path: "M 0.3125 0.3125 h 0.375 v 0.375 h -0.375 z";
+    line-width: 0.125;
+    line-cap: square;
+    line-join: miter;
+  }
+}
