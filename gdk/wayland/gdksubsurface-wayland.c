@@ -216,31 +216,12 @@ static const struct wl_buffer_listener gl_buffer_listener = {
 static struct wl_buffer *
 get_gl_texture_wl_buffer (GdkWaylandSubsurface *self,
                           GdkTexture           *texture,
-                          guint32              *out_fourcc)
+                          GdkDmabuf            *dmabuf)
 {
-  GdkDisplay *display = gdk_surface_get_display (GDK_SUBSURFACE (self)->parent);
-  GdkGLTexture *gltexture = GDK_GL_TEXTURE (texture);
-  GdkGLContext *glcontext;
   GLBufferData gldata;
 
-  *out_fourcc = 0;
-
-  glcontext = gdk_display_get_gl_context (display);
-  if (glcontext == NULL ||
-      !gdk_gl_context_is_shared (glcontext, gdk_gl_texture_get_context (gltexture)))
-    return NULL;
-
-  /* Can we avoid this when a right context is current already? */
-  gdk_gl_context_make_current (glcontext);
-
-  if (!gdk_gl_context_export_dmabuf (glcontext,
-                                     gdk_gl_texture_get_id (gltexture),
-                                     &gldata.dmabuf))
-    return NULL;
-
+  gldata.dmabuf = *dmabuf;
   gldata.texture = g_object_ref (texture);
-
-  *out_fourcc = gldata.dmabuf.fourcc;
 
   return get_dmabuf_wl_buffer (self,
                                &gldata.dmabuf,
@@ -250,8 +231,98 @@ get_gl_texture_wl_buffer (GdkWaylandSubsurface *self,
                                g_memdup2 (&gldata, sizeof (gldata)));
 }
 
+static gboolean
+export_gl_texture_as_dmabuf (GdkDisplay *display,
+                             GdkTexture *texture,
+                             GdkDmabuf  *dmabuf)
+{
+  GdkGLTexture *gltexture = GDK_GL_TEXTURE (texture);
+  GdkGLContext *glcontext;
+
+  dmabuf->n_planes = 0;
+
+  glcontext = gdk_display_get_gl_context (display);
+  if (glcontext == NULL ||
+      !gdk_gl_context_is_shared (glcontext, gdk_gl_texture_get_context (gltexture)))
+    return FALSE;
+
+  /* Can we avoid this when a right context is current already? */
+  gdk_gl_context_make_current (glcontext);
+
+  return gdk_gl_context_export_dmabuf (glcontext,
+                                       gdk_gl_texture_get_id (gltexture),
+                                       dmabuf);
+}
+
 /* }}} */
 /* {{{ General texture buffer handling */
+
+static gboolean
+get_texture_info (GdkWaylandSubsurface *self,
+                  GdkTexture           *texture,
+                  guint32              *out_fourcc,
+                  gboolean             *out_premultiplied,
+                  GdkDmabuf            *out_dmabuf)
+{
+  GdkDisplay *display = gdk_surface_get_display (GDK_SUBSURFACE (self)->parent);
+  gboolean done = FALSE;
+
+  /* We only return dmabuf information for GL textures.
+   * In other cases, we set n_planes to 0.
+   */
+  out_dmabuf->n_planes = 0;
+
+  if (GDK_IS_DMABUF_TEXTURE (texture))
+    {
+      const GdkDmabuf *dmabuf;
+
+      dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
+      *out_fourcc = dmabuf->fourcc;
+      *out_premultiplied = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED;
+      done = TRUE;
+    }
+  else if (GDK_IS_GL_TEXTURE (texture))
+    {
+      done = export_gl_texture_as_dmabuf (display, texture, out_dmabuf);
+      *out_fourcc = out_dmabuf->fourcc;
+      *out_premultiplied = gdk_memory_format_alpha (gdk_texture_get_format (texture)) == GDK_MEMORY_ALPHA_PREMULTIPLIED;
+    }
+
+  if (!done && GDK_DISPLAY_DEBUG_CHECK (display, FORCE_OFFLOAD))
+    {
+      GdkMemoryFormat format = gdk_texture_get_format (texture);
+
+      done = TRUE;
+      if (format == GDK_MEMORY_G8_B8R8_420)
+        *out_fourcc = DRM_FORMAT_NV12;
+      else if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_OPAQUE)
+        *out_fourcc = DRM_FORMAT_RGBX8888;
+      else
+        *out_fourcc = DRM_FORMAT_RGBA8888;
+      *out_premultiplied = gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_PREMULTIPLIED;
+    }
+
+  return done;
+}
+
+static struct wl_buffer *
+get_wl_buffer_from_info (GdkWaylandSubsurface *self,
+                         GdkTexture           *texture,
+                         GdkDmabuf            *dmabuf)
+{
+  GdkDisplay *display = gdk_surface_get_display (GDK_SUBSURFACE (self)->parent);
+  struct wl_buffer *buffer = NULL;
+
+  if (GDK_IS_DMABUF_TEXTURE (texture))
+    buffer = get_dmabuf_texture_wl_buffer (self, texture);
+  else if (GDK_IS_GL_TEXTURE (texture) && dmabuf->n_planes > 0)
+    buffer = get_gl_texture_wl_buffer (self, texture, dmabuf);
+
+  if (!buffer && GDK_DISPLAY_DEBUG_CHECK (display, FORCE_OFFLOAD))
+    buffer = _gdk_wayland_shm_texture_get_wl_buffer (GDK_WAYLAND_DISPLAY (display), texture);
+
+  return buffer;
+}
 
 static struct wl_buffer *
 get_wl_buffer (GdkWaylandSubsurface *self,
@@ -259,44 +330,14 @@ get_wl_buffer (GdkWaylandSubsurface *self,
                guint32              *out_fourcc,
                gboolean             *out_premultiplied)
 {
-  GdkDisplay *display = gdk_surface_get_display (GDK_SUBSURFACE (self)->parent);
-  struct wl_buffer *buffer = NULL;
-  GdkMemoryFormat format;
+  GdkDmabuf dmabuf;
 
-  if (GDK_IS_DMABUF_TEXTURE (texture))
-    {
-      const GdkDmabuf *dmabuf;
+  if (get_texture_info (self, texture, out_fourcc, out_premultiplied, &dmabuf))
+    return get_wl_buffer_from_info (self, texture, &dmabuf);
 
-      buffer = get_dmabuf_texture_wl_buffer (self, texture);
+  gdk_dmabuf_close_fds (&dmabuf);
 
-      dmabuf = gdk_dmabuf_texture_get_dmabuf (GDK_DMABUF_TEXTURE (texture));
-      *out_fourcc = dmabuf->fourcc;
-      format = gdk_texture_get_format (texture);
-    }
-  else if (GDK_IS_GL_TEXTURE (texture))
-    {
-      buffer = get_gl_texture_wl_buffer (self, texture, out_fourcc);
-      format = gdk_texture_get_format (texture);
-    }
-
-  if (GDK_DISPLAY_DEBUG_CHECK (display, FORCE_OFFLOAD))
-    {
-      if (!buffer)
-        {
-          buffer = _gdk_wayland_shm_texture_get_wl_buffer (GDK_WAYLAND_DISPLAY (display), texture);
-          format = gdk_texture_get_format (texture);
-          if (format == GDK_MEMORY_G8_B8R8_420)
-            *out_fourcc = DRM_FORMAT_NV12;
-          else if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_OPAQUE)
-            *out_fourcc = DRM_FORMAT_RGBX8888;
-          else
-            *out_fourcc = DRM_FORMAT_RGBA8888;
-        }
-    }
-
-  *out_premultiplied = gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_PREMULTIPLIED;
-
-  return buffer;
+  return NULL;
 }
 
 /* }}} */
