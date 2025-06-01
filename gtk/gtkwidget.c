@@ -10065,7 +10065,7 @@ gtk_widget_set_tooltip_text (GtkWidget  *widget,
 
   g_clear_pointer (&priv->tooltip_markup, g_free);
 
-  priv->tooltip_markup = tooltip_text != NULL ? g_markup_escape_text (text, -1) : NULL;
+  priv->tooltip_markup = tooltip_text != NULL ? g_markup_escape_text (tooltip_text, -1) : NULL;
 
   gtk_widget_set_has_tooltip (widget, priv->tooltip_text != NULL);
   if (_gtk_widget_get_visible (widget))
