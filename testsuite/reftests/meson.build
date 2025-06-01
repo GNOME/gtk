@@ -373,6 +373,8 @@ testdata = [
   'image-load-from-file.css',
   'image-load-from-file.ref.ui',
   'image-load-from-file.ui',
+  'image-sizing.ref.ui',
+  'image-sizing.ui',
   'inscription-markup.ref.ui',
   'inscription-markup.ui',
   'inscription-overflow.ref.ui',
