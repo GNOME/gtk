@@ -619,9 +619,10 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
     {
       gdk_dmabuf_close_fds (&dmabuf);
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "[%p] 🗙 Texture colorstate %s not supported",
+                         "[%p] 🗙 Texture colorstate %s (%.4s, %s) not supported",
                          self,
-                         gdk_color_state_get_name (gdk_texture_get_color_state (texture)));
+                         gdk_color_state_get_name (gdk_texture_get_color_state (texture)),
+                         (char *) &fourcc, premultiplied ? "premultiplied" : "straight");
     }
   else
     {
