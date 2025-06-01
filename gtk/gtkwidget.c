@@ -10042,11 +10042,9 @@ gtk_widget_set_tooltip_text (GtkWidget  *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GObject *object = G_OBJECT (widget);
-  char *tooltip_text, *tooltip_markup;
+  const char *tooltip_text;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  g_object_freeze_notify (object);
 
   /* Treat an empty string as a NULL string,
    * because an empty string would be useless for a tooltip:
@@ -10054,19 +10052,20 @@ gtk_widget_set_tooltip_text (GtkWidget  *widget,
   if (text != NULL && *text == '\0')
     {
       tooltip_text = NULL;
-      tooltip_markup = NULL;
     }
   else
     {
-      tooltip_text = g_strdup (text);
-      tooltip_markup = text != NULL ? g_markup_escape_text (text, -1) : NULL;
+      tooltip_text = text;
     }
 
-  g_clear_pointer (&priv->tooltip_markup, g_free);
-  g_clear_pointer (&priv->tooltip_text, g_free);
+  if (!g_set_str (&priv->tooltip_text, tooltip_text))
+    return;
 
-  priv->tooltip_text = tooltip_text;
-  priv->tooltip_markup = tooltip_markup;
+  g_object_freeze_notify (object);
+
+  g_clear_pointer (&priv->tooltip_markup, g_free);
+
+  priv->tooltip_markup = tooltip_text != NULL ? g_markup_escape_text (text, -1) : NULL;
 
   gtk_widget_set_has_tooltip (widget, priv->tooltip_text != NULL);
   if (_gtk_widget_get_visible (widget))
@@ -10122,11 +10121,9 @@ gtk_widget_set_tooltip_markup (GtkWidget  *widget,
 {
   GtkWidgetPrivate *priv = gtk_widget_get_instance_private (widget);
   GObject *object = G_OBJECT (widget);
-  char *tooltip_markup;
+  const char *tooltip_markup;
 
   g_return_if_fail (GTK_IS_WIDGET (widget));
-
-  g_object_freeze_notify (object);
 
   /* Treat an empty string as a NULL string,
    * because an empty string would be useless for a tooltip:
@@ -10134,12 +10131,14 @@ gtk_widget_set_tooltip_markup (GtkWidget  *widget,
   if (markup != NULL && *markup == '\0')
     tooltip_markup = NULL;
   else
-    tooltip_markup = g_strdup (markup);
+    tooltip_markup = markup;
+
+  if (!g_set_str (&priv->tooltip_markup, tooltip_markup))
+    return;
+
+  g_object_freeze_notify (object);
 
   g_clear_pointer (&priv->tooltip_text, g_free);
-  g_clear_pointer (&priv->tooltip_markup, g_free);
-
-  priv->tooltip_markup = tooltip_markup;
 
   /* Store the tooltip without markup, as we might end up using
    * it for widget descriptions in the accessibility layer
