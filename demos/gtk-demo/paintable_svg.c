@@ -1,12 +1,12 @@
 /* Paintable/SVG
  *
  * This demo shows wrapping a librsvg RsvgHandle in a GdkPaintable
- * to display an SVG image that can be scaled by resizing the window.
- *
- * This demo relies on librsvg, which GTK itself does not link against.
+ * to display an SVG image in a GtkPicture that can be scaled by
+ * resizing the window.
  *
  * It also demonstrates an implementation of GtkSymbolicPaintable
- * for rendering symbolic SVG icons.
+ * for rendering symbolic SVG icons. Note that symbolic recoloring
+ * requires using a GtkImage as a widget.
  */
 
 #include <gtk/gtk.h>
