@@ -509,6 +509,13 @@ G_GNUC_END_IGNORE_DEPRECATIONS
  * The `GtkImage` will track changes to the @paintable and update
  * its size and contents in response to it.
  *
+ * Note that paintables are still subject to the icon size that is
+ * set on the image. If you want to display a paintable at its intrinsic
+ * size, use [class@Gtk.Picture] instead.
+ *
+ * If @paintable is a [iface@Gtk.SymbolicPaintable], then it will be
+ * recolored with the symbolic palette from the theme.
+ *
  * Returns: a new `GtkImage`
  */
 GtkWidget*
