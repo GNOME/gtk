@@ -59,6 +59,7 @@ gtk_css_value_reference_free (GtkCssValue *value)
   gtk_css_variable_value_unref (value->value);
   if (value->file)
     g_object_unref (value->file);
+  g_free (value);
 }
 
 static ResolveResult
