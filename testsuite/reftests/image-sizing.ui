@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkWindow" id="window1">
+    <property name="decorated">0</property>
+    <property name="default-width">400</property>
+    <property name="default-height">300</property>
+    <child>
+      <object class="GtkImage">
+        <property name="name">image</property>
+        <property name="paintable">green-200x200.png</property>
+      </object>
+    </child>
+  </object>
+</interface>

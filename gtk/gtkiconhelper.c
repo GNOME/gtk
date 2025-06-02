@@ -248,18 +248,18 @@ gtk_icon_helper_paintable_snapshot (GdkPaintable *paintable,
         ratio = gdk_paintable_get_intrinsic_aspect_ratio (self->paintable);
         if (ratio == 0)
           {
-            w = width;
-            h = height;
+            w = MIN (width, gtk_icon_helper_get_size (self));
+            h = MIN (height, gtk_icon_helper_get_size (self));
           }
         else if (ratio > image_ratio)
           {
-            w = width;
+            w = MIN (width, gtk_icon_helper_get_size (self));
             h = width / ratio;
           }
         else
           {
-            w = height * ratio;
-            h = height;
+            h = MIN (height, gtk_icon_helper_get_size (self));
+            w = h * ratio;
           }
 
         x = floor (width - ceil (w)) / 2;
