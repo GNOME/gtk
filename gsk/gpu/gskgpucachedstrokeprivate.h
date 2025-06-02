@@ -15,7 +15,6 @@ void                    gsk_gpu_cached_stroke_finish_cache              (GskGpuC
 GskGpuImage *           gsk_gpu_cached_stroke_lookup                    (GskGpuCache            *self,
                                                                          GskGpuFrame            *frame,
                                                                          const graphene_vec2_t  *scale,
-                                                                         const graphene_point_t *offset,
                                                                          const graphene_rect_t  *bounds,
                                                                          GskPath                *path,
                                                                          const GskStroke        *stroke,

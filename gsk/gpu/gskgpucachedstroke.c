@@ -162,26 +162,27 @@ stroke_path_print (gpointer  data,
 
 static gsize
 mod_subpixel (float  pos,
-              gsize  scale,
+              float  scale,
+              gsize  subpixel_scale,
               float *delta)
 {
-  pos = fmod (scale * pos, scale);
+  scale *= subpixel_scale;
+  pos = fmod (scale * pos, subpixel_scale);
   *delta = (ceil (pos) - pos) / scale;
   if (pos > 0.0)
-    return scale - (gsize) ceil (pos);
+    return subpixel_scale - (gsize) ceil (pos);
   else
     return (gsize) - ceil (pos);
 }
 
 GskGpuImage *
-gsk_gpu_cached_stroke_lookup (GskGpuCache            *self,
-                              GskGpuFrame            *frame,
-                              const graphene_vec2_t  *scale,
-                              const graphene_point_t *offset,
-                              const graphene_rect_t  *bounds,
-                              GskPath                *path,
-                              const GskStroke        *stroke,
-                              graphene_rect_t        *out_rect)
+gsk_gpu_cached_stroke_lookup (GskGpuCache           *self,
+                              GskGpuFrame           *frame,
+                              const graphene_vec2_t *scale,
+                              const graphene_rect_t *bounds,
+                              GskPath               *path,
+                              const GskStroke       *stroke,
+                              graphene_rect_t       *out_rect)
 {
   GskGpuCachePrivate *priv = gsk_gpu_cache_get_private (self);
   float sx = graphene_vec2_get_x (scale);
@@ -192,8 +193,8 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache            *self,
   GskGpuImage *image = NULL;
   graphene_rect_t viewport;
 
-  fx = mod_subpixel (- sx * offset->x, SUBPIXEL_SCALE_X, &dx);
-  fy = mod_subpixel (- sy * offset->y, SUBPIXEL_SCALE_Y, &dy);
+  fx = mod_subpixel (bounds->origin.x, sx, SUBPIXEL_SCALE_X, &dx);
+  fy = mod_subpixel (bounds->origin.y, sy, SUBPIXEL_SCALE_Y, &dy);
 
   cache = g_hash_table_lookup (priv->stroke_cache,
                                &(GskGpuCachedStroke) {
@@ -218,7 +219,11 @@ gsk_gpu_cached_stroke_lookup (GskGpuCache            *self,
     }
 
   if (!gsk_path_get_stroke_bounds (path, stroke, &viewport) ||
-      !gsk_rect_snap_to_grid (&viewport, scale, &GRAPHENE_POINT_INIT ((float) fx / SUBPIXEL_SCALE_X, (float) fy / SUBPIXEL_SCALE_Y), &viewport))
+      !gsk_rect_snap_to_grid (&viewport,
+                              scale,
+                              &GRAPHENE_POINT_INIT ((float) fx / (sx * SUBPIXEL_SCALE_X), 
+                                                    (float) fy / (sy * SUBPIXEL_SCALE_Y)),
+                              &viewport))
     return NULL;
 
   padding = 1;
