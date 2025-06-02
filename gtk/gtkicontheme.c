@@ -2089,46 +2089,23 @@ static inline gboolean
 icon_name_is_symbolic (const char *icon_name,
                        int          icon_name_len)
 {
-
-  if (icon_name_len < 0)
-    icon_name_len = strlen (icon_name);
-
-  if (icon_name_len > strlen ("-symbolic"))
-    {
-      if (strcmp (icon_name + icon_name_len - strlen ("-symbolic"), "-symbolic") == 0)
-        return TRUE;
-    }
-
-  if (icon_name_len > strlen ("-symbolic-ltr"))
-    {
-      if (strcmp (icon_name + icon_name_len - strlen ("-symbolic-ltr"), "-symbolic-ltr") == 0 ||
-          strcmp (icon_name + icon_name_len - strlen ("-symbolic-rtl"), "-symbolic-rtl") == 0)
-        return TRUE;
-    }
+  if (g_str_has_suffix (icon_name, "-symbolic") ||
+      g_str_has_suffix (icon_name, "-symbolic-ltr") ||
+      g_str_has_suffix (icon_name, "-symbolic-rtl"))
+    return TRUE;
 
   return FALSE;
 }
 
 static inline gboolean
 icon_uri_is_symbolic (const char *icon_name,
-                      int          icon_name_len)
+                      int         icon_name_len)
 {
-  if (icon_name_len < 0)
-    icon_name_len = strlen (icon_name);
-
-  if (icon_name_len > strlen ("-symbolic.svg"))
-    {
-      if (strcmp (icon_name + icon_name_len - strlen ("-symbolic.svg"), "-symbolic.svg") == 0 ||
-          strcmp (icon_name + icon_name_len - strlen (".symbolic.png"), ".symbolic.png") == 0)
-        return TRUE;
-    }
-
-  if (icon_name_len > strlen ("-symbolic-ltr.svg"))
-    {
-      if (strcmp (icon_name + icon_name_len - strlen ("-symbolic.ltr.svg"), "-symbolic-ltr.svg") == 0 ||
-          strcmp (icon_name + icon_name_len - strlen ("-symbolic.rtl.svg"), "-symbolic-rtl.svg") == 0)
-        return TRUE;
-    }
+  if (g_str_has_suffix (icon_name, "-symbolic.svg") ||
+      g_str_has_suffix (icon_name, ".symbolic.png") ||
+      g_str_has_suffix (icon_name, "-symbolic-ltr.svg") ||
+      g_str_has_suffix (icon_name, "-symbolic-rtl.svg"))
+    return TRUE;
 
   return FALSE;
 }
