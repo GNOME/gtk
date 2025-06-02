@@ -1,0 +1,9 @@
+<interface>
+  <object class="GtkImage">
+    <property name="paintable">
+      <object class="GtkIconPaintable">
+       <property name="file">resource:///org/gtk/libgtk/icons/scalable/status/dialog-warning-symbolic.svg</property>
+      </object>
+    </property>
+  </object>
+</interface>

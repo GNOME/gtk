@@ -696,6 +696,7 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
   GtkBuilderPrivate *priv = gtk_builder_get_instance_private (builder);
   DelayedProperty *property;
   GError *error = NULL;
+  GObject *object;
 
   if (!properties)
     return;
@@ -737,20 +738,22 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
       else if (G_IS_PARAM_SPEC_OBJECT (prop->pspec) &&
                (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PIXBUF) &&
                (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_TEXTURE) &&
-               (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GDK_TYPE_PAINTABLE) &&
                (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GTK_TYPE_SHORTCUT_TRIGGER) &&
                (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != GTK_TYPE_SHORTCUT_ACTION) &&
                (G_PARAM_SPEC_VALUE_TYPE (prop->pspec) != G_TYPE_FILE))
         {
-          GObject *object = g_hash_table_lookup (priv->objects,
-                                                 g_strstrip (prop->text->str));
+          object = g_hash_table_lookup (priv->objects,
+                                        g_strstrip (prop->text->str));
 
           if (object)
             {
               g_value_init (&property_value, G_OBJECT_TYPE (object));
               g_value_set_object (&property_value, object);
             }
-          else
+          else if (!gtk_builder_value_from_string (builder, prop->pspec,
+                                                   prop->text->str,
+                                                   &property_value,
+                                                   NULL))
             {
               if (prop->pspec->flags & G_PARAM_CONSTRUCT_ONLY)
                 {
@@ -779,11 +782,12 @@ gtk_builder_get_parameters (GtkBuilder         *builder,
                                                &property_value,
                                                &error))
         {
+
           g_warning ("Failed to set property %s.%s to %s: %s",
                      g_type_name (object_type), prop->pspec->name, prop->text->str,
                      error->message);
-          g_error_free (error);
-          error = NULL;
+
+          g_clear_error (&error);
           continue;
         }
 
