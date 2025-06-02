@@ -677,10 +677,11 @@ gtk_picture_new_for_resource (const char *resource_path)
  *
  * See [ctor@Gtk.Picture.new_for_file] for details.
  *
- * > ⚠️ Note that this function should not be used with untrusted data.
- * > Use a proper image loading framework such as libglycin, which can
- * > load many image formats into a `GdkTexture`, and then use
- * > [method@Gtk.Image.set_from_paintable].
+ * ::: warning
+ *     Note that this function should not be used with untrusted data.
+ *     Use a proper image loading framework such as libglycin, which can
+ *     load many image formats into a `GdkTexture`, and then use
+ *     [method@Gtk.Image.set_from_paintable].
  */
 void
 gtk_picture_set_file (GtkPicture *self,
@@ -738,10 +739,11 @@ gtk_picture_get_file (GtkPicture *self)
  *
  * This is a utility function that calls [method@Gtk.Picture.set_file].
  *
- * > ⚠️ Note that this function should not be used with untrusted data.
- * > Use a proper image loading framework such as libglycin, which can
- * > load many image formats into a `GdkTexture`, and then use
- * > [method@Gtk.Image.set_from_paintable].
+ * ::: warning
+ *     Note that this function should not be used with untrusted data.
+ *     Use a proper image loading framework such as libglycin, which can
+ *     load many image formats into a `GdkTexture`, and then use
+ *     [method@Gtk.Image.set_from_paintable].
  */
 void
 gtk_picture_set_filename (GtkPicture *self,
