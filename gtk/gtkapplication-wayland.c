@@ -156,7 +156,7 @@ gtk_application_impl_wayland_inhibit (GtkApplicationImpl         *impl,
   inhibitor->flags = flags;
   wayland->inhibitors = g_slist_prepend (wayland->inhibitors, inhibitor);
 
-  if (flags & GTK_APPLICATION_INHIBIT_IDLE && impl->application == gtk_window_get_application (window))
+  if (flags & GTK_APPLICATION_INHIBIT_IDLE && window && impl->application == gtk_window_get_application (window))
     {
       surface = gtk_native_get_surface (GTK_NATIVE (window));
       if (GDK_IS_WAYLAND_TOPLEVEL (surface))
