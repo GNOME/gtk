@@ -2160,7 +2160,7 @@ real_choose_icon (GtkIconTheme      *self,
           icon_name = gtk_string_set_lookup (&self->icons, icon_names[i]);
           if (icon_name)
             {
-              icon = theme_lookup_icon (theme, icon_name, size, scale, self->pixbuf_supports_svg);
+              icon = theme_lookup_icon (theme, icon_name, size, scale, TRUE);
               if (icon)
                 goto out;
             }
@@ -2176,7 +2176,7 @@ real_choose_icon (GtkIconTheme      *self,
           icon_name = gtk_string_set_lookup (&self->icons, icon_names[i]);
           if (icon_name)
             {
-              icon = theme_lookup_icon (theme, icon_name, size, scale, self->pixbuf_supports_svg);
+              icon = theme_lookup_icon (theme, icon_name, size, scale, self->pixbuf_supports_svg || icon_name_is_symbolic (icon_name, -1));
               if (icon)
                 goto out;
             }
