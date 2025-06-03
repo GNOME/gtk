@@ -488,6 +488,8 @@ enum
   PROP_FILE,
   PROP_ICON_NAME,
   PROP_IS_SYMBOLIC,
+  PROP_SIZE,
+  PROP_SCALE,
 };
 
 G_DEFINE_TYPE_WITH_CODE (GtkIconPaintable, gtk_icon_paintable, G_TYPE_OBJECT,
@@ -551,6 +553,14 @@ gtk_icon_paintable_get_property (GObject    *object,
       g_value_set_boolean (value, icon->is_symbolic);
       break;
 
+    case PROP_SIZE:
+      g_value_set_int (value, icon->desired_size);
+      break;
+
+    case PROP_SCALE:
+      g_value_set_int (value, icon->desired_scale);
+      break;
+
     default:
       G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
     }
@@ -575,7 +585,27 @@ gtk_icon_paintable_set_property (GObject      *object,
       break;
 
     case PROP_IS_SYMBOLIC:
-      icon->is_symbolic = g_value_get_boolean (value);
+      if (icon->is_symbolic != g_value_get_boolean (value))
+        {
+          icon->is_symbolic = g_value_get_boolean (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+
+    case PROP_SIZE:
+      if (icon->desired_size != g_value_get_int (value))
+        {
+          icon->desired_size = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
+      break;
+
+    case PROP_SCALE:
+      if (icon->desired_scale != g_value_get_int (value))
+        {
+          icon->desired_scale = g_value_get_int (value);
+          g_object_notify_by_pspec (object, pspec);
+        }
       break;
 
     default:
@@ -625,7 +655,17 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
   g_object_class_install_property (gobject_class, PROP_IS_SYMBOLIC,
                                    g_param_spec_boolean ("is-symbolic", NULL, NULL,
                                                         FALSE,
-                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_DEPRECATED));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY | G_PARAM_DEPRECATED));
+
+  g_object_class_install_property (gobject_class, PROP_SIZE,
+                                   g_param_spec_int ("size", NULL, NULL,
+                                                     0, G_MAXINT, 16,
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
+
+  g_object_class_install_property (gobject_class, PROP_SCALE,
+                                   g_param_spec_int ("scale", NULL, NULL,
+                                                     0, G_MAXINT, 1,
+                                                     G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_EXPLICIT_NOTIFY));
 }
 
 /* }}} */
@@ -732,15 +772,11 @@ gtk_icon_paintable_new_for_file (GFile *file,
                                  int    size,
                                  int    scale)
 {
-  GtkIconPaintable *icon;
-
-  icon = g_object_new (GTK_TYPE_ICON_PAINTABLE,
+  return g_object_new (GTK_TYPE_ICON_PAINTABLE,
                        "file", file,
+                       "size", size,
+                       "scale", scale,
                        NULL);
-  icon->desired_size = size;
-  icon->desired_scale = scale;
-
-  return icon;
 }
 
 /**
