@@ -37,9 +37,9 @@ GtkIconPaintable *      gtk_icon_paintable_new_for_file         (GFile          
 
 GDK_AVAILABLE_IN_ALL
 GFile *                 gtk_icon_paintable_get_file             (GtkIconPaintable       *self);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_20
 const char *            gtk_icon_paintable_get_icon_name        (GtkIconPaintable       *self);
-GDK_AVAILABLE_IN_ALL
+GDK_DEPRECATED_IN_4_20
 gboolean                gtk_icon_paintable_is_symbolic          (GtkIconPaintable       *self);
 
 G_END_DECLS

@@ -607,21 +607,25 @@ gtk_icon_paintable_class_init (GtkIconPaintableClass *klass)
    * GtkIconPaintable:icon-name:
    *
    * The icon name that was chosen during lookup.
+   *
+   * Deprecated: 4.20
    */
   g_object_class_install_property (gobject_class, PROP_ICON_NAME,
                                    g_param_spec_string ("icon-name", NULL, NULL,
                                                         NULL,
-                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
+                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_DEPRECATED));
 
   /**
    * GtkIconPaintable:is-symbolic: (getter is_symbolic)
    *
    * Whether the icon is symbolic or not.
+   *
+   * Deprecated: 4.20
    */
   g_object_class_install_property (gobject_class, PROP_IS_SYMBOLIC,
                                    g_param_spec_boolean ("is-symbolic", NULL, NULL,
                                                         FALSE,
-                                                        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_BLURB | G_PARAM_STATIC_NICK));
+                                                        G_PARAM_READWRITE | G_PARAM_STATIC_NAME | G_PARAM_DEPRECATED));
 }
 
 /* }}} */
@@ -749,6 +753,8 @@ gtk_icon_paintable_new_for_file (GFile *file,
  * for determining this. This behaviour may change in the future.
  *
  * Returns: true if the icon is symbolic, false otherwise
+ *
+ * Deprecated: 4.20
  */
 gboolean
 gtk_icon_paintable_is_symbolic (GtkIconPaintable *icon)
@@ -774,6 +780,8 @@ gtk_icon_paintable_is_symbolic (GtkIconPaintable *icon)
  *
  * Returns: (nullable) (type filename): the themed icon-name for the
  *   icon, or %NULL if its not a themed icon.
+ *
+ * Deprecated: 4.20
  */
 const char *
 gtk_icon_paintable_get_icon_name (GtkIconPaintable *icon)
