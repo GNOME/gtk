@@ -2997,11 +2997,11 @@ compare_dir_size_matches (IconThemeDirSize *dir_a, int difference_a,
 }
 
 static GtkIconPaintable *
-theme_lookup_icon (IconTheme   *theme,
+theme_lookup_icon (IconTheme  *theme,
                    const char *icon_name, /* interned */
-                   int          size,
-                   int          scale,
-                   gboolean     allow_svg)
+                   int         size,
+                   int         scale,
+                   gboolean    allow_svg)
 {
   IconThemeDirSize *min_dir_size;
   IconThemeFile *min_file;
