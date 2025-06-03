@@ -2160,7 +2160,7 @@ real_choose_icon (GtkIconTheme      *self,
           icon_name = gtk_string_set_lookup (&self->icons, icon_names[i]);
           if (icon_name)
             {
-              icon = theme_lookup_icon (theme, icon_name, size, scale, self->pixbuf_supports_svg);
+              icon = theme_lookup_icon (theme, icon_name, size, scale, TRUE);
               if (icon)
                 goto out;
             }
@@ -2176,7 +2176,7 @@ real_choose_icon (GtkIconTheme      *self,
           icon_name = gtk_string_set_lookup (&self->icons, icon_names[i]);
           if (icon_name)
             {
-              icon = theme_lookup_icon (theme, icon_name, size, scale, self->pixbuf_supports_svg);
+              icon = theme_lookup_icon (theme, icon_name, size, scale, self->pixbuf_supports_svg || icon_name_is_symbolic (icon_name, -1));
               if (icon)
                 goto out;
             }
@@ -2997,11 +2997,11 @@ compare_dir_size_matches (IconThemeDirSize *dir_a, int difference_a,
 }
 
 static GtkIconPaintable *
-theme_lookup_icon (IconTheme   *theme,
+theme_lookup_icon (IconTheme  *theme,
                    const char *icon_name, /* interned */
-                   int          size,
-                   int          scale,
-                   gboolean     allow_svg)
+                   int         size,
+                   int         scale,
+                   gboolean    allow_svg)
 {
   IconThemeDirSize *min_dir_size;
   IconThemeFile *min_file;
