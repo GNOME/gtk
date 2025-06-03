@@ -379,7 +379,6 @@ struct {
   { "status/audio-volume-low-symbolic.svg", NULL },
   { "status/audio-volume-medium-symbolic.svg", NULL },
   { "status/audio-volume-muted-symbolic.svg", NULL },
-  { "status/call-x-symbolic.svg", NULL },
   { "status/caps-lock-symbolic.svg", NULL },
   { "status/changes-allow-symbolic.svg", NULL },
   { "status/changes-prevent-symbolic.svg", NULL },
