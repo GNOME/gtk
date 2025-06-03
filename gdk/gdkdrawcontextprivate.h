@@ -55,6 +55,9 @@ struct _GdkDrawContextClass
                                                                  cairo_region_t         *painted);
   void                  (* empty_frame)                         (GdkDrawContext         *context);
   void                  (* surface_resized)                     (GdkDrawContext         *context);
+  gboolean              (* surface_attach)                      (GdkDrawContext         *context,
+                                                                 GError                **error);
+  void                  (* surface_detach)                      (GdkDrawContext         *context);
 };
 
 void                    gdk_draw_context_surface_resized        (GdkDrawContext         *context);
@@ -68,6 +71,10 @@ void                    gdk_draw_context_end_frame_full         (GdkDrawContext 
                                                                  gpointer                context_data);
 
 void                    gdk_draw_context_empty_frame            (GdkDrawContext         *context);
+
+gboolean                gdk_draw_context_attach                 (GdkDrawContext         *self,
+                                                                 GError                **error);
+void                    gdk_draw_context_detach                 (GdkDrawContext         *self);
 
 const cairo_region_t *  gdk_draw_context_get_render_region      (GdkDrawContext         *self);
 GdkColorState *         gdk_draw_context_get_color_state        (GdkDrawContext         *self);

@@ -358,8 +358,11 @@ gsize           gdk_surface_get_n_subsurfaces  (GdkSurface          *surface);
 GdkSubsurface * gdk_surface_get_subsurface     (GdkSurface          *surface,
                                                 gsize                idx);
 
-GdkColorState * gdk_surface_get_color_state    (GdkSurface          *surface);
-void            gdk_surface_set_color_state    (GdkSurface          *surface,
-                                                GdkColorState       *color_state);
+GdkColorState *         gdk_surface_get_color_state                     (GdkSurface             *surface);
+void                    gdk_surface_set_color_state                     (GdkSurface             *surface,
+                                                                         GdkColorState          *color_state);
+void                    gdk_surface_set_attached_context                (GdkSurface             *self,
+                                                                         GdkDrawContext         *context);
+GdkDrawContext *        gdk_surface_get_attached_context                (GdkSurface             *self);
 
 G_END_DECLS

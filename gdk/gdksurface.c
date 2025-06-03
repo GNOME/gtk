@@ -81,6 +81,7 @@ struct _GdkSurfacePrivate
   cairo_region_t *opaque_region;
   cairo_rectangle_int_t opaque_rect; /* This is different from the region */
 
+  GdkDrawContext *attached_context;
   gpointer widget;
 
   GdkColorState *color_state;
@@ -1004,6 +1005,12 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   if (GDK_SURFACE_DESTROYED (surface))
     return;
+
+  if (priv->attached_context)
+    {
+      gdk_draw_context_detach (priv->attached_context);
+      g_assert (priv->attached_context == NULL);
+    }
 
   GDK_SURFACE_GET_CLASS (surface)->destroy (surface, foreign_destroy);
 
@@ -3276,4 +3283,31 @@ gdk_surface_set_color_state (GdkSurface    *surface,
   priv->color_state = gdk_color_state_ref (color_state);
 
   gdk_surface_invalidate_rect (surface, NULL);
+}
+
+/*<private>
+ * gdk_surface_set_attached_context:
+ * @self: the surface
+ * @context: (nullable): the context to attach
+ *
+ * This function is an implementation detail for GdkDrawContext.
+ *
+ * Use draw context functions like gdk_draw_context_attach() or
+ * gdk_draw_context_detach().
+ **/
+void
+gdk_surface_set_attached_context (GdkSurface     *self,
+                                  GdkDrawContext *context)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+  
+  priv->attached_context = context;
+}
+
+GdkDrawContext *
+gdk_surface_get_attached_context (GdkSurface *self)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+
+  return priv->attached_context;
 }
