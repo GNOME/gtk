@@ -281,7 +281,7 @@ gtk_gst_sink_set_caps (GstBaseSink *bsink,
 {
   GtkGstSink *self = GTK_GST_SINK (bsink);
 
-  GST_DEBUG_OBJECT (self, "set caps with %" GST_PTR_FORMAT, caps);
+  GST_INFO_OBJECT (self, "set caps with %" GST_PTR_FORMAT, caps);
 
 #ifdef GDK_WINDOWING_WIN32
   if (gst_caps_features_contains (gst_caps_get_features (caps, 0), GST_CAPS_FEATURE_MEMORY_D3D12_MEMORY))
