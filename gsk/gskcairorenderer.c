@@ -54,6 +54,7 @@ static gboolean
 gsk_cairo_renderer_realize (GskRenderer  *renderer,
                             GdkDisplay   *display,
                             GdkSurface   *surface,
+                            gboolean      attach,
                             GError      **error)
 {
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
@@ -62,6 +63,11 @@ G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   if (surface)
     self->cairo_context = gdk_surface_create_cairo_context (surface);
 G_GNUC_END_IGNORE_DEPRECATIONS
+  if (attach && !gdk_draw_context_attach (GDK_DRAW_CONTEXT (self->cairo_context), error))
+    {
+      g_clear_object (&self->cairo_context);
+      return FALSE;
+    }
 
   return TRUE;
 }
@@ -71,7 +77,12 @@ gsk_cairo_renderer_unrealize (GskRenderer *renderer)
 {
   GskCairoRenderer *self = GSK_CAIRO_RENDERER (renderer);
 
-  g_clear_object (&self->cairo_context);
+  if (self->cairo_context)
+    {
+      gdk_draw_context_detach (GDK_DRAW_CONTEXT (self->cairo_context));
+
+      g_clear_object (&self->cairo_context);
+    }
 }
 
 static GdkTexture *

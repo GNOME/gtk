@@ -70,6 +70,7 @@
 #include "gdk/gdktextureprivate.h"
 #include "gdk/gdktoplevelprivate.h"
 
+#include "gsk/gskrendererprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 
 #include <cairo-gobject.h>
@@ -4511,7 +4512,7 @@ gtk_window_realize (GtkWidget *widget)
   gdk_surface_set_widget (surface, widget);
 
   if (priv->renderer == NULL)
-    priv->renderer = gsk_renderer_new_for_surface (surface);
+    priv->renderer = gsk_renderer_new_for_surface_full (surface, TRUE);
 
   g_signal_connect_swapped (surface, "notify::state", G_CALLBACK (surface_state_changed), widget);
   g_signal_connect_swapped (surface, "notify::mapped", G_CALLBACK (surface_state_changed), widget);

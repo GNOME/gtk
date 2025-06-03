@@ -29,6 +29,7 @@
 
 #include "gdk/gdksurfaceprivate.h"
 #include "gdk/gdkdragsurfacesize.h"
+#include "gsk/gskrendererprivate.h"
 
 /* for the drag icons */
 #include "gtkcolorswatchprivate.h"
@@ -208,7 +209,7 @@ gtk_drag_icon_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_drag_icon_parent_class)->realize (widget);
 
-  icon->renderer = gsk_renderer_new_for_surface (icon->surface);
+  icon->renderer = gsk_renderer_new_for_surface_full (icon->surface, TRUE);
 
   gtk_native_realize (GTK_NATIVE (icon));
 }
