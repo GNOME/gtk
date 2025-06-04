@@ -40,6 +40,7 @@ usage (void)
              "Commands:\n"
              "  benchmark    Benchmark rendering of a node\n"
              "  compare      Compare nodes or images\n"
+             "  convert      Convert into nodes\n"
              "  extract      Extract data urls\n"
              "  info         Provide information about the node\n"
              "  show         Show the node\n"
@@ -120,6 +121,8 @@ main (int argc, const char *argv[])
     do_compare (&argc, &argv);
   else if (strcmp (argv[0], "extract") == 0)
     do_extract (&argc, &argv);
+  else if (strcmp (argv[0], "convert") == 0)
+    do_convert (&argc, &argv);
   else
     usage ();
 
