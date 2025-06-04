@@ -45,6 +45,8 @@ struct _GtkCssImageRecolor
   GskRenderNode *node;
   double width;
   double height;
+  gboolean single_path;
+  gboolean only_fg;
 };
 
 struct _GtkCssImageRecolorClass

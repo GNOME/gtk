@@ -409,6 +409,7 @@ struct _GtkIconPaintable
   guint is_resource     : 1;
   guint is_symbolic     : 1;
   guint only_fg         : 1;
+  guint single_path     : 1;
 
   /* Debug flags for testing svg->node conversion */
   guint allow_node     : 1;
@@ -3792,6 +3793,7 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
   GError *load_error = NULL;
   GdkTexture *texture = NULL;
   gboolean only_fg = FALSE;
+  gboolean single_path = FALSE;
 
   icon_cache_mark_used_if_cached (icon);
 
@@ -3817,6 +3819,7 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
               if (icon->allow_node)
                 icon->node = gsk_render_node_new_from_resource_symbolic (icon->filename,
                                                                          &only_fg,
+                                                                         &single_path,
                                                                          &icon->width,
                                                                          &icon->height);
               if (!icon->node)
@@ -3843,6 +3846,7 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
               if (icon->allow_node)
                 icon->node = gsk_render_node_new_from_filename_symbolic (icon->filename,
                                                                          &only_fg,
+                                                                         &single_path,
                                                                          &icon->width,
                                                                          &icon->height);
               if (!icon->node)
@@ -3900,6 +3904,7 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
     }
 
   icon->only_fg = only_fg;
+  icon->single_path = single_path;
 
   if (icon->node)
     {
@@ -4025,6 +4030,7 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
   double render_height;
   graphene_rect_t icon_rect;
   graphene_rect_t render_rect;
+  gboolean colors_opaque;
 
   node = gtk_icon_paintable_ensure_node (icon);
   gsk_render_node_ref (node);
@@ -4047,7 +4053,25 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
                       render_width,
                       render_height);
 
-  if (icon->is_symbolic && icon->only_fg && icon->allow_mask)
+  if (icon->only_fg)
+    colors_opaque = gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
+  else
+    colors_opaque = gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND]) &&
+                    gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_SUCCESS]) &&
+                    gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_WARNING]) &&
+                    gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_ERROR]);
+
+  if (icon->is_symbolic && icon->allow_recolor &&
+      (icon->single_path || colors_opaque) &&
+      gsk_render_node_recolor (node, colors, n_colors, &recolored))
+    {
+      g_debug ("snapshot symbolic icon as recolored node");
+      recolored = enforce_logical_size (recolored, icon->width, icon->height);
+
+      gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
+      gsk_render_node_unref (recolored);
+    }
+  else if (icon->is_symbolic && icon->only_fg && icon->allow_mask)
     {
       g_debug ("snapshot symbolic icon %s using mask",
                gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE
@@ -4060,15 +4084,6 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
       gtk_snapshot_pop (snapshot);
       gtk_snapshot_append_color (snapshot, &colors[0], &render_rect);
       gtk_snapshot_pop (snapshot);
-    }
-  else if (icon->is_symbolic && icon->allow_recolor &&
-           gsk_render_node_recolor (node, colors, n_colors, &recolored))
-    {
-      g_debug ("snapshot symbolic icon as recolored node");
-      recolored = enforce_logical_size (recolored, icon->width, icon->height);
-
-      gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
-      gsk_render_node_unref (recolored);
     }
   else if (icon->is_symbolic)
     {

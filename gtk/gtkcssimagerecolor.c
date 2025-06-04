@@ -83,7 +83,7 @@ gtk_css_image_recolor_load_node (GtkCssImageRecolor  *recolor,
           g_str_has_suffix (resource_path, "-symbolic-ltr.svg") ||
           g_str_has_suffix (resource_path, "-symbolic-rtl.svg"))
         {
-          recolor->node = gsk_render_node_new_from_resource_symbolic (resource_path, NULL, &recolor->width, &recolor->height);
+          recolor->node = gsk_render_node_new_from_resource_symbolic (resource_path, &recolor->only_fg, &recolor->single_path, &recolor->width, &recolor->height);
         }
 
       if (!recolor->node)
@@ -95,6 +95,8 @@ gtk_css_image_recolor_load_node (GtkCssImageRecolor  *recolor,
           else
             texture = gdk_texture_new_from_resource_symbolic (resource_path, 0, 0, &only_fg, NULL);
 
+          recolor->only_fg = FALSE;
+          recolor->single_path = FALSE;
           recolor->width = gdk_texture_get_width (texture);
           recolor->height = gdk_texture_get_height (texture);
           recolor->node = gsk_texture_node_new (texture, &GRAPHENE_RECT_INIT (0, 0,
@@ -112,7 +114,7 @@ gtk_css_image_recolor_load_node (GtkCssImageRecolor  *recolor,
           g_str_has_suffix (path, "-symbolic-ltr.svg") ||
           g_str_has_suffix (path, "-symbolic-rtl.svg"))
         {
-          recolor->node = gsk_render_node_new_from_filename_symbolic (path, NULL, &recolor->width, &recolor->height);
+          recolor->node = gsk_render_node_new_from_filename_symbolic (path, &recolor->only_fg, &recolor->single_path, &recolor->width, &recolor->height);
         }
 
       if (!recolor->node)
@@ -123,6 +125,8 @@ gtk_css_image_recolor_load_node (GtkCssImageRecolor  *recolor,
             texture = gdk_texture_new_from_file (recolor->file, NULL);
           else
             texture = gdk_texture_new_from_file_symbolic (recolor->file, 0, 0, &only_fg, NULL);
+          recolor->only_fg = FALSE;
+          recolor->single_path = FALSE;
           recolor->width = gdk_texture_get_width (texture);
           recolor->height = gdk_texture_get_height (texture);
           recolor->node = gsk_texture_node_new (texture, &GRAPHENE_RECT_INIT (0, 0,
@@ -157,6 +161,8 @@ gtk_css_image_recolor_load (GtkCssImageRecolor    *recolor,
       image->node = gsk_render_node_ref (recolor->node);
       image->width = recolor->width;
       image->height = recolor->height;
+      image->only_fg = recolor->only_fg;
+      image->single_path = recolor->single_path;
     }
   else
     {
@@ -195,6 +201,7 @@ gtk_css_image_recolor_snapshot (GtkCssImage *image,
   GskRenderNode *recolored;
   graphene_rect_t icon_rect;
   graphene_rect_t render_rect;
+  gboolean colors_opaque;
 
   if (recolor->node == NULL)
     return;
@@ -242,7 +249,16 @@ gtk_css_image_recolor_snapshot (GtkCssImage *image,
   colors[GTK_SYMBOLIC_COLOR_WARNING] = *sc;
   colors[GTK_SYMBOLIC_COLOR_ERROR] = *ec;
 
-  if (gsk_render_node_recolor (recolor->node, colors, 4, &recolored))
+    if (recolor->only_fg)
+    colors_opaque = gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND]);
+  else
+    colors_opaque = gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND]) &&
+                    gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_SUCCESS]) &&
+                    gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_WARNING]) &&
+                    gdk_rgba_is_opaque (&colors[GTK_SYMBOLIC_COLOR_ERROR]);
+
+  if ((recolor->single_path || colors_opaque) &&
+      gsk_render_node_recolor (recolor->node, colors, 4, &recolored))
     {
       gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
       gsk_render_node_unref (recolored);
