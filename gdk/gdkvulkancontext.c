@@ -371,43 +371,6 @@ fallback_present_mode:
   return VK_PRESENT_MODE_FIFO_KHR;
 }
 
-static void
-gdk_vulkan_context_dispose (GObject *gobject)
-{
-  GdkVulkanContext *context = GDK_VULKAN_CONTEXT (gobject);
-  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
-  VkDevice device;
-  guint i;
-
-  for (i = 0; i < priv->n_images; i++)
-    {
-      cairo_region_destroy (priv->regions[i]);
-    }
-  g_clear_pointer (&priv->regions, g_free);
-  g_clear_pointer (&priv->images, g_free);
-  priv->n_images = 0;
-
-  device = gdk_vulkan_context_get_device (context);
-
-  if (priv->swapchain != VK_NULL_HANDLE)
-    {
-      vkDestroySwapchainKHR (device,
-                             priv->swapchain,
-                             NULL);
-      priv->swapchain = VK_NULL_HANDLE;
-    }
-
-  if (priv->surface != VK_NULL_HANDLE)
-    {
-      vkDestroySurfaceKHR (gdk_vulkan_context_get_instance (context),
-                           priv->surface,
-                           NULL);
-      priv->surface = VK_NULL_HANDLE;
-    }
-
-  G_OBJECT_CLASS (gdk_vulkan_context_parent_class)->dispose (gobject);
-}
-
 static gboolean
 gdk_vulkan_context_check_swapchain (GdkVulkanContext  *context,
                                     GError           **error)
@@ -879,56 +842,6 @@ gdk_vulkan_context_end_frame (GdkDrawContext *draw_context,
     }
 }
 
-static void
-gdk_vulkan_context_surface_resized (GdkDrawContext *draw_context)
-{
-  GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
-  GError *error = NULL;
-
-  if (!gdk_vulkan_context_check_swapchain (context, &error))
-    {
-      g_warning ("%s", error->message);
-      g_error_free (error);
-      return;
-    }
-}
-
-static void
-gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
-{
-  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
-  GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
-
-  gobject_class->dispose = gdk_vulkan_context_dispose;
-
-  draw_context_class->begin_frame = gdk_vulkan_context_begin_frame;
-  draw_context_class->end_frame = gdk_vulkan_context_end_frame;
-  draw_context_class->surface_resized = gdk_vulkan_context_surface_resized;
-
-  /**
-   * GdkVulkanContext::images-updated:
-   * @context: the object on which the signal is emitted
-   *
-   * Emitted when the images managed by this context have changed.
-   *
-   * Usually this means that the swapchain had to be recreated,
-   * for example in response to a change of the surface size.
-   */
-  signals[IMAGES_UPDATED] =
-    g_signal_new (g_intern_static_string ("images-updated"),
-		  G_OBJECT_CLASS_TYPE (gobject_class),
-                  G_SIGNAL_RUN_LAST,
-                  0,
-                  NULL, NULL,
-                  NULL,
-                  G_TYPE_NONE, 0);
-}
-
-static void
-gdk_vulkan_context_init (GdkVulkanContext *self)
-{
-}
-
 static gboolean
 gdk_vulkan_context_real_init (GInitable     *initable,
                               GCancellable  *cancellable,
@@ -1103,6 +1016,93 @@ out_surface:
                        NULL);
   priv->surface = VK_NULL_HANDLE;
   return FALSE;
+}
+
+static void
+gdk_vulkan_context_dispose (GObject *gobject)
+{
+  GdkVulkanContext *context = GDK_VULKAN_CONTEXT (gobject);
+  GdkVulkanContextPrivate *priv = gdk_vulkan_context_get_instance_private (context);
+  VkDevice device;
+  guint i;
+
+  for (i = 0; i < priv->n_images; i++)
+    {
+      cairo_region_destroy (priv->regions[i]);
+    }
+  g_clear_pointer (&priv->regions, g_free);
+  g_clear_pointer (&priv->images, g_free);
+  priv->n_images = 0;
+
+  device = gdk_vulkan_context_get_device (context);
+
+  if (priv->swapchain != VK_NULL_HANDLE)
+    {
+      vkDestroySwapchainKHR (device,
+                             priv->swapchain,
+                             NULL);
+      priv->swapchain = VK_NULL_HANDLE;
+    }
+
+  if (priv->surface != VK_NULL_HANDLE)
+    {
+      vkDestroySurfaceKHR (gdk_vulkan_context_get_instance (context),
+                           priv->surface,
+                           NULL);
+      priv->surface = VK_NULL_HANDLE;
+    }
+
+  G_OBJECT_CLASS (gdk_vulkan_context_parent_class)->dispose (gobject);
+}
+
+static void
+gdk_vulkan_context_surface_resized (GdkDrawContext *draw_context)
+{
+  GdkVulkanContext *context = GDK_VULKAN_CONTEXT (draw_context);
+  GError *error = NULL;
+
+  if (!gdk_vulkan_context_check_swapchain (context, &error))
+    {
+      g_warning ("%s", error->message);
+      g_error_free (error);
+      return;
+    }
+}
+
+static void
+gdk_vulkan_context_class_init (GdkVulkanContextClass *klass)
+{
+  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
+  GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
+
+  gobject_class->dispose = gdk_vulkan_context_dispose;
+
+  draw_context_class->begin_frame = gdk_vulkan_context_begin_frame;
+  draw_context_class->end_frame = gdk_vulkan_context_end_frame;
+  draw_context_class->surface_resized = gdk_vulkan_context_surface_resized;
+
+  /**
+   * GdkVulkanContext::images-updated:
+   * @context: the object on which the signal is emitted
+   *
+   * Emitted when the images managed by this context have changed.
+   *
+   * Usually this means that the swapchain had to be recreated,
+   * for example in response to a change of the surface size.
+   */
+  signals[IMAGES_UPDATED] =
+    g_signal_new (g_intern_static_string ("images-updated"),
+		  G_OBJECT_CLASS_TYPE (gobject_class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  NULL,
+                  G_TYPE_NONE, 0);
+}
+
+static void
+gdk_vulkan_context_init (GdkVulkanContext *self)
+{
 }
 
 static void
