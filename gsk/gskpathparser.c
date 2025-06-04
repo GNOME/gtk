@@ -392,9 +392,9 @@ GskPath *
 gsk_path_parse (const char *string)
 {
   GskPathBuilder *builder;
-  double x, y;
+  double x, y; /* current point */
   double prev_x1, prev_y1;
-  double path_x, path_y;
+  double path_x, path_y; /* start point of the current subpath */
   const char *p;
   char cmd;
   char prev_cmd;
@@ -450,11 +450,8 @@ gsk_path_parse (const char *string)
                     y1 += y;
                   }
                 gsk_path_builder_add_rect (builder, &GRAPHENE_RECT_INIT (x1, y1, w, h));
-                if (_strchr ("zZX", prev_cmd))
-                  {
-                    path_x = x1;
-                    path_y = y1;
-                  }
+                path_x = x1;
+                path_y = y1;
 
                 cmd = 'z';
                 x = x1;
@@ -468,11 +465,8 @@ gsk_path_parse (const char *string)
                     y1 += y;
                   }
                 gsk_path_builder_add_circle (builder, &GRAPHENE_POINT_INIT (x1, y1), r);
-                if (_strchr ("zZX", prev_cmd))
-                  {
-                    path_x = x1 + r;
-                    path_y = y1;
-                  }
+                path_x = x1 + r;
+                path_y = y1;
 
                 cmd = 'z';
                 x = x1 + r;
@@ -487,11 +481,8 @@ gsk_path_parse (const char *string)
                   }
                 gsk_path_builder_add_rounded_rect (builder, &rr);
 
-                if (_strchr ("zZX", prev_cmd))
-                  {
-                    path_x = rr.bounds.origin.x + rr.corner[GSK_CORNER_TOP_LEFT].width;
-                    path_y = rr.bounds.origin.y;
-                  }
+                path_x = rr.bounds.origin.x + rr.corner[GSK_CORNER_TOP_LEFT].width;
+                path_y = rr.bounds.origin.y;
 
                 cmd = 'Z';
                 x = rr.bounds.origin.x + rr.corner[GSK_CORNER_TOP_LEFT].width;
@@ -510,11 +501,8 @@ gsk_path_parse (const char *string)
                 else
                   {
                     gsk_path_builder_move_to (builder, x1, y1);
-                    if (_strchr ("zZX", prev_cmd))
-                      {
-                        path_x = x1;
-                        path_y = y1;
-                      }
+                    path_x = x1;
+                    path_y = y1;
                   }
 
                 x = x1;

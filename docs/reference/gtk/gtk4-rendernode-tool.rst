@@ -18,6 +18,7 @@ SYNOPSIS
 |
 |   **gtk4-rendernode-tool** benchmark [OPTIONS...] <FILE>
 |   **gtk4-rendernode-tool** compare [OPTIONS...] <FILE1> <FILE2>
+|   **gtk4-rendernode-tool** convert [OPTIONS...] <FILE1>
 |   **gtk4-rendernode-tool** extract [OPTIONS...] <FILE>
 |   **gtk4-rendernode-tool** info [OPTIONS...] <FILE>
 |   **gtk4-rendernode-tool** render [OPTIONS...] <FILE> [<FILE>]
@@ -110,6 +111,24 @@ exit code is 1. If the images are identical, it is 0.
 
   Don't write results to stdout.
 
+Convert
+^^^^^^^
+
+The ``convert`` command converts a symbolic SVG icon into a node and writes
+the result to stdout.
+
+``--fg=COLOR``
+``--success=COLOR``
+``--warning=COLOR``
+``--error=COLOR``
+
+  Set the symbolic colors to recolor the icon with. If not specified, default
+  colors are used.
+
+``--size=SIZE``
+
+  Sets the size to render the icon at. The size can be either a number or
+  a string of the form ``WIDTHxHEIGHT``.
 
 Extract
 ^^^^^^^

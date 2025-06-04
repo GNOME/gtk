@@ -53,6 +53,12 @@ _gtk4_rendernode_tool()
             return 0
             ;;
 
+        convert)
+            opts="--help --fg --success --warning --error --size"
+            COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
+            return 0
+            ;;
+
         extract)
             opts="--help --dir --verbose"
             COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
