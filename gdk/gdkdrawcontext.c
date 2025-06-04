@@ -114,7 +114,6 @@ gdk_draw_context_dispose (GObject *gobject)
                      G_OBJECT_TYPE_NAME (self), self);
           gdk_draw_context_detach (self);
         }
-      priv->surface->draw_contexts = g_slist_remove (priv->surface->draw_contexts, self);
       g_clear_object (&priv->surface);
     }
   g_clear_object (&priv->display);
@@ -148,7 +147,6 @@ gdk_draw_context_set_property (GObject      *gobject,
       priv->surface = g_value_dup_object (value);
       if (priv->surface)
         {
-          priv->surface->draw_contexts = g_slist_prepend (priv->surface->draw_contexts, context);
           if (priv->display)
             {
               g_assert (priv->display == gdk_surface_get_display (priv->surface));
