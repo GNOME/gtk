@@ -738,7 +738,8 @@ gdk_wayland_surface_sync_color_state (GdkSurface *surface)
   if (gdk_wayland_color_surface_can_set_color_state (self->display_server.color,
                                                      gdk_surface_get_color_state (surface),
                                                      DRM_FORMAT_RGBA8888,
-                                                     TRUE))
+                                                     TRUE,
+                                                     NULL))
     {
       gdk_wayland_color_surface_set_color_state (self->display_server.color,
                                                  gdk_surface_get_color_state (surface),

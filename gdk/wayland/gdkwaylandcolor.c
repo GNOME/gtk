@@ -1273,45 +1273,65 @@ gdk_wayland_color_surface_unset_color_state (GdkWaylandColorSurface *self)
 }
 
 gboolean
-gdk_wayland_color_surface_can_set_color_state (GdkWaylandColorSurface *self,
-                                               GdkColorState          *cs,
-                                               guint32                 fourcc,
-                                               gboolean                premultiplied)
+gdk_wayland_color_surface_can_set_color_state (GdkWaylandColorSurface  *self,
+                                               GdkColorState           *cs,
+                                               guint32                  fourcc,
+                                               gboolean                 premultiplied,
+                                               GError                 **error)
 {
   GdkMemoryFormat format;
   gboolean is_yuv;
   GdkColorState *default_cs;
 
   if (!gdk_memory_format_find_by_dmabuf_fourcc (fourcc, premultiplied, &format, &is_yuv))
-    return FALSE;
+    {
+      g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, "No memory format for fourcc");
+      return FALSE;
+    }
 
   default_cs = is_yuv ? GDK_COLOR_STATE_YUV : GDK_COLOR_STATE_SRGB;
 
   if (!self->mgmt_surface)
     {
       if (!gdk_color_state_equivalent (cs, default_cs))
-        return FALSE;
+        {
+          g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, "No color-management, non-default color state");
+          return FALSE;
+        }
     }
   else
     {
       if (!gdk_wayland_color_get_image_description (self->color, cs))
-        return FALSE;
+        {
+          g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, "No image description");
+          return FALSE;
+        }
     }
 
   if (!self->color->color_representation_manager)
     {
       if (!gdk_color_state_equivalent (cs, default_cs))
-        return FALSE;
+        {
+          g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, "No color-representation, non-default color state");
+          return FALSE;
+        }
 
       if (gdk_memory_format_alpha (format) == GDK_MEMORY_ALPHA_STRAIGHT)
-        return FALSE;
+        {
+          g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, "No color-representation, straight alpha");
+          return FALSE;
+        }
     }
   else
     {
       uint32_t coefficients, range, alpha;
 
       if (!gdk_wayland_color_get_color_representation (self->color, cs, format, &coefficients, &range, &alpha))
-        return FALSE;
+        {
+          g_set_error_literal (error, G_IO_ERROR, G_IO_ERROR_FAILED, coefficients == 0 ? "Coefficients not supported"
+                                                                                       : "Alpha not supported");
+          return FALSE;
+        }
     }
 
   return TRUE;
