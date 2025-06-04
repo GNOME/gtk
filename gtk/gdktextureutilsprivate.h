@@ -73,10 +73,12 @@ GdkPaintable *gdk_paintable_new_from_file_scaled     (GFile         *file,
 
 GskRenderNode *gsk_render_node_new_from_resource_symbolic (const char *path,
                                                            gboolean   *only_fg,
+                                                           gboolean   *single_path,
                                                            double     *width,
                                                            double     *height);
 GskRenderNode *gsk_render_node_new_from_filename_symbolic (const char *filename,
                                                            gboolean   *only_fg,
+                                                           gboolean   *single_path,
                                                            double     *width,
                                                            double     *height);
 

@@ -931,6 +931,7 @@ typedef struct
   GtkSnapshot *snapshot;
   gboolean only_fg;
   gboolean has_clip;
+  guint n_paths;
 } ParserData;
 
 static void
@@ -1282,10 +1283,16 @@ start_element_cb (GMarkupParseContext  *context,
         gtk_snapshot_push_opacity (data->snapshot, opacity);
 
       if (do_fill)
-        gtk_snapshot_append_fill (data->snapshot, path, fill_rule, &fill_color);
+        {
+          data->n_paths++;
+          gtk_snapshot_append_fill (data->snapshot, path, fill_rule, &fill_color);
+        }
 
       if (do_stroke)
-        gtk_snapshot_append_stroke (data->snapshot, path, stroke, &stroke_color);
+        {
+          data->n_paths++;
+          gtk_snapshot_append_stroke (data->snapshot, path, stroke, &stroke_color);
+        }
 
       if (opacity != 1)
         gtk_snapshot_pop (data->snapshot);
@@ -1322,6 +1329,7 @@ end_element_cb (GMarkupParseContext *context,
 static GskRenderNode *
 gsk_render_node_new_from_bytes_symbolic (GBytes   *bytes,
                                          gboolean *only_fg,
+                                         gboolean *single_path,
                                          double   *width,
                                          double   *height)
 {
@@ -1342,6 +1350,7 @@ gsk_render_node_new_from_bytes_symbolic (GBytes   *bytes,
   data.only_fg = TRUE;
   data.snapshot = gtk_snapshot_new ();
   data.has_clip = FALSE;
+  data.n_paths = 0;
 
   text = g_bytes_get_data (bytes, &len);
 
@@ -1369,6 +1378,9 @@ gsk_render_node_new_from_bytes_symbolic (GBytes   *bytes,
   if (only_fg)
     *only_fg = data.only_fg;
 
+  if (single_path)
+    *single_path = data.n_paths == 1;
+
   *width = data.width;
   *height = data.height;
 
@@ -1378,6 +1390,7 @@ gsk_render_node_new_from_bytes_symbolic (GBytes   *bytes,
 GskRenderNode *
 gsk_render_node_new_from_resource_symbolic (const char *path,
                                             gboolean   *only_fg,
+                                            gboolean   *single_path,
                                             double     *width,
                                             double     *height)
 {
@@ -1391,7 +1404,7 @@ gsk_render_node_new_from_resource_symbolic (const char *path,
   if (!bytes)
     return NULL;
 
-  node = gsk_render_node_new_from_bytes_symbolic (bytes, only_fg, width, height);
+  node = gsk_render_node_new_from_bytes_symbolic (bytes, only_fg, single_path, width, height);
   g_bytes_unref (bytes);
 
   return node;
@@ -1400,6 +1413,7 @@ gsk_render_node_new_from_resource_symbolic (const char *path,
 GskRenderNode *
 gsk_render_node_new_from_filename_symbolic (const char *filename,
                                             gboolean   *only_fg,
+                                            gboolean   *single_path,
                                             double     *width,
                                             double     *height)
 {
@@ -1415,7 +1429,7 @@ gsk_render_node_new_from_filename_symbolic (const char *filename,
     return NULL;
 
   bytes = g_bytes_new_take (text, len);
-  node = gsk_render_node_new_from_bytes_symbolic (bytes, only_fg, width, height);
+  node = gsk_render_node_new_from_bytes_symbolic (bytes, only_fg, single_path, width, height);
   g_bytes_unref (bytes);
 
   return node;
