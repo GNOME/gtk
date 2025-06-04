@@ -121,6 +121,10 @@ void                    gtk_snapshot_append_conic_gradient2     (GtkSnapshot    
                                                                  GskHueInterpolation      hue_interpolation,
                                                                  const GskColorStop2     *stops,
                                                                  gsize                    n_stops);
+void                    gtk_snapshot_append_node_scaled         (GtkSnapshot             *snapshot,
+                                                                 GskRenderNode           *node,
+                                                                 graphene_rect_t         *from,
+                                                                 graphene_rect_t         *to);
 
 
 G_END_DECLS

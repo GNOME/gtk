@@ -21,6 +21,7 @@
 
 #include "gtk/gtkcssimageurlprivate.h"
 #include "gtk/gtkcssvalueprivate.h"
+#include "gsk/gsktypes.h"
 
 G_BEGIN_DECLS
 
@@ -41,7 +42,9 @@ struct _GtkCssImageRecolor
   GFile *file;
   GtkCssValue *color;
   GtkCssValue *palette;
-  GdkTexture *texture;
+  GskRenderNode *node;
+  double width;
+  double height;
 };
 
 struct _GtkCssImageRecolorClass

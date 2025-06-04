@@ -2641,11 +2641,9 @@ check {
   border-radius: 3px;
   -gtk-icon-size: 14px;
 
-  &:checked { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("#{$assets}/check-symbolic.symbolic.png")),
-                                            -gtk-recolor(url("#{$assets}/check@2-symbolic.symbolic.png"))); }
+  &:checked { -gtk-icon-source: -gtk-recolor(url("#{$assets}/check-symbolic.svg")); }
 
-  &:indeterminate { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("#{$assets}/dash-symbolic.symbolic.png")),
-                                                  -gtk-recolor(url("#{$assets}/dash@2-symbolic.symbolic.png"))); }
+  &:indeterminate { -gtk-icon-source: -gtk-recolor(url("#{$assets}/dash-symbolic.svg")); }
 }
 
 %radio,
@@ -2653,11 +2651,9 @@ radio {
   border-radius: 100%;
   -gtk-icon-size: 14px;
 
-  &:checked { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("#{$assets}/bullet-symbolic.symbolic.png")),
-                                            -gtk-recolor(url("#{$assets}/bullet@2-symbolic.symbolic.png"))); }
+  &:checked { -gtk-icon-source: -gtk-recolor(url("#{$assets}/bullet-symbolic.svg")); }
 
-  &:indeterminate { -gtk-icon-source: -gtk-scaled(-gtk-recolor(url("#{$assets}/dash-symbolic.symbolic.png")),
-                                                  -gtk-recolor(url("#{$assets}/dash@2-symbolic.symbolic.png"))); }
+  &:indeterminate { -gtk-icon-source: -gtk-recolor(url("#{$assets}/dash-symbolic.svg")); }
 }
 
 treeview.view check,

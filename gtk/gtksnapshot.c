@@ -2307,6 +2307,31 @@ gtk_snapshot_append_node (GtkSnapshot   *snapshot,
   gtk_snapshot_append_node_internal (snapshot, gsk_render_node_ref (node));
 }
 
+
+void
+gtk_snapshot_append_node_scaled (GtkSnapshot     *snapshot,
+                                 GskRenderNode   *node,
+                                 graphene_rect_t *from,
+                                 graphene_rect_t *to)
+{
+  if (graphene_rect_equal (from, to))
+    {
+      gtk_snapshot_append_node (snapshot, node);
+    }
+  else
+    {
+      gtk_snapshot_save (snapshot);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (to->origin.x,
+                                                              to->origin.y));
+      gtk_snapshot_scale (snapshot, to->size.width / from->size.width,
+                                    to->size.height / from->size.height);
+      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- from->origin.x,
+                                                              - from->origin.y));
+      gtk_snapshot_append_node (snapshot, node);
+      gtk_snapshot_restore (snapshot);
+    }
+}
+
 /**
  * gtk_snapshot_append_cairo:
  * @snapshot: a `GtkSnapshot`
