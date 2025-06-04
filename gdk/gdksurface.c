@@ -896,10 +896,10 @@ gdk_surface_get_property (GObject    *object,
 void
 _gdk_surface_update_size (GdkSurface *surface)
 {
-  GSList *l;
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
 
-  for (l = surface->draw_contexts; l; l = l->next)
-    gdk_draw_context_surface_resized (l->data);
+  if (priv->attached_context)
+    gdk_draw_context_surface_resized (priv->attached_context);
 
   g_object_notify (G_OBJECT (surface), "width");
   g_object_notify (G_OBJECT (surface), "height");
