@@ -235,18 +235,6 @@ gdk_wayland_surface_update_size (GdkSurface               *surface,
   if (width_changed || height_changed)
     impl->viewport_dirty = TRUE;
 
-  if (impl->display_server.egl_window)
-    {
-      guint w, h;
-      gdk_wayland_surface_get_buffer_size (surface, NULL, &w, &h);
-      GDK_DISPLAY_DEBUG (gdk_surface_get_display (surface), OPENGL,
-                         "Using fractional scale %g for EGL window (%d %d => %d %d)",
-                         gdk_fractional_scale_to_double (&impl->scale),
-                         surface->width, surface->height,
-                         w, h);
-      wl_egl_window_resize (impl->display_server.egl_window, w, h, 0, 0);
-    }
-
   gdk_surface_invalidate_rect (surface, NULL);
 
   if (width_changed)
@@ -969,12 +957,6 @@ gdk_wayland_surface_constructed (GObject *object)
 static void
 gdk_wayland_surface_destroy_wl_surface (GdkWaylandSurface *self)
 {
-  if (self->display_server.egl_window)
-    {
-      gdk_surface_set_egl_native_window (GDK_SURFACE (self), NULL);
-      g_clear_pointer (&self->display_server.egl_window, wl_egl_window_destroy);
-    }
-
   g_clear_pointer (&self->display_server.viewport, wp_viewport_destroy);
   g_clear_pointer (&self->display_server.fractional_scale, wp_fractional_scale_v1_destroy);
   g_clear_pointer (&self->display_server.color, gdk_wayland_color_surface_free);
@@ -1413,21 +1395,6 @@ _gdk_wayland_surface_offset_next_wl_buffer (GdkSurface *surface,
 
   impl->pending_buffer_offset_x = x;
   impl->pending_buffer_offset_y = y;
-}
-
-void
-gdk_wayland_surface_ensure_wl_egl_window (GdkSurface *surface)
-{
-  GdkWaylandSurface *impl = GDK_WAYLAND_SURFACE (surface);
-  guint width, height;
-
-  if (impl->display_server.egl_window != NULL)
-    return;
-
-  gdk_wayland_surface_get_buffer_size (surface, NULL, &width, &height);
-  impl->display_server.egl_window =
-    wl_egl_window_create (impl->display_server.wl_surface, width, height);
-  gdk_surface_set_egl_native_window (surface, impl->display_server.egl_window);
 }
 
 /* }}} */

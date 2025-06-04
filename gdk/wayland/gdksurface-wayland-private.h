@@ -41,7 +41,6 @@ struct _GdkWaylandSurface
     struct wl_surface *wl_surface;
     struct xdg_surface *xdg_surface;
     struct zxdg_surface_v6 *zxdg_surface_v6;
-    struct wl_egl_window *egl_window;
     struct wp_fractional_scale_v1 *fractional_scale;
     struct wp_viewport *viewport;
     GdkWaylandColorSurface *color;
@@ -163,8 +162,6 @@ void gdk_wayland_surface_inhibit_shortcuts (GdkSurface *surface,
                                            GdkSeat   *gdk_seat);
 void gdk_wayland_surface_restore_shortcuts (GdkSurface *surface,
                                            GdkSeat   *gdk_seat);
-
-void                    gdk_wayland_surface_ensure_wl_egl_window        (GdkSurface  *surface);
 
 #define XDG_SHELL_CALL(obj,func,surface,...) \
   switch (GDK_WAYLAND_DISPLAY (gdk_surface_get_display (GDK_SURFACE (surface)))->shell_variant) \
