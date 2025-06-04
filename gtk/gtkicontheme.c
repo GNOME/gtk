@@ -47,7 +47,7 @@
 #include "gtkmain.h"
 #include "gtkprivate.h"
 #include "gtksettingsprivate.h"
-#include "gtksnapshot.h"
+#include "gtksnapshotprivate.h"
 #include "gtkstyleproviderprivate.h"
 #include "gtksymbolicpaintable.h"
 #include "gtkwidgetprivate.h"
@@ -3990,33 +3990,6 @@ icon_paintable_snapshot (GdkPaintable *paintable,
                          double        height)
 {
   gtk_symbolic_paintable_snapshot_symbolic (GTK_SYMBOLIC_PAINTABLE (paintable), snapshot, width, height, NULL, 0);
-}
-
-/* Like gtk_snapshot_append_node, but transforms the node
- * to make its bounds match the given rect
- */
-static void
-gtk_snapshot_append_node_scaled (GtkSnapshot     *snapshot,
-                                 GskRenderNode   *node,
-                                 graphene_rect_t *from,
-                                 graphene_rect_t *to)
-{
-  if (graphene_rect_equal (from, to))
-    {
-      gtk_snapshot_append_node (snapshot, node);
-    }
-  else
-    {
-      gtk_snapshot_save (snapshot);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (to->origin.x,
-                                                              to->origin.y));
-      gtk_snapshot_scale (snapshot, to->size.width / from->size.width,
-                                    to->size.height / from->size.height);
-      gtk_snapshot_translate (snapshot, &GRAPHENE_POINT_INIT (- from->origin.x,
-                                                              - from->origin.y));
-      gtk_snapshot_append_node (snapshot, node);
-      gtk_snapshot_restore (snapshot);
-    }
 }
 
 static GskRenderNode *
