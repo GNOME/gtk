@@ -6,13 +6,13 @@ Note that support for strokes, and style classes other than "success", "warning"
 
 ### Allowed primitives
 
-We use `path` elements as graphics primitives. They may be grouped with `g` elements.
+We use `path` elements as graphics primitives. They may be grouped with `g` elements, but those are otherwise ignored.
 
 ### Supported attributes
 
 The `d` attribute is required on `path` elements, to specify the path.
 
-These attributes are allowed:
+These attributes are allowed on `path` elements:
 
 - `fill`: ignored. The fill is determined based on the `class` attribute
 - `stroke`: ignored. The stroke is determined based on the `class` attribute
