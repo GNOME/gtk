@@ -1077,8 +1077,6 @@ gdk_x11_surface_constructed (GObject *object)
 
   self->surface_scale = display_x11->screen->surface_scale;
 
-  gdk_surface_set_egl_native_window (surface, (void *) self->xid);
-
   gdk_x11_surface_set_title (surface, get_default_title ());
 
   class_hint = XAllocClassHint ();
@@ -1297,7 +1295,6 @@ gdk_x11_surface_destroy (GdkSurface *surface,
 
   if (!foreign_destroy)
     {
-      gdk_surface_set_egl_native_window (surface, NULL);
       gdk_x11_surface_destroy_glx_drawable (impl);
 
       XDestroyWindow (GDK_SURFACE_XDISPLAY (surface), GDK_SURFACE_XID (surface));

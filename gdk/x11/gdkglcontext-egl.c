@@ -97,14 +97,29 @@ gdk_x11_gl_context_egl_make_current (GdkGLContext *context,
   return TRUE;
 }
 
+static gboolean
+gdk_x11_gl_context_egl_surface_attach (GdkDrawContext  *context,
+                                       GError         **error)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (context);
+
+  gdk_gl_context_set_egl_native_window (GDK_GL_CONTEXT (context),
+                                        (void *) gdk_x11_surface_get_xid (surface));
+
+  return TRUE;
+}
+
 static void
 gdk_x11_gl_context_egl_class_init (GdkX11GLContextEGLClass *klass)
 {
+  GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
   GdkGLContextClass *context_class = GDK_GL_CONTEXT_CLASS (klass);
 
   context_class->backend_type = GDK_GL_EGL;
 
   context_class->make_current = gdk_x11_gl_context_egl_make_current;
+
+  draw_context_class->surface_attach = gdk_x11_gl_context_egl_surface_attach;
 }
 
 static void

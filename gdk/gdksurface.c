@@ -72,12 +72,6 @@ typedef struct _GdkSurfacePrivate GdkSurfacePrivate;
 
 struct _GdkSurfacePrivate
 {
-  gpointer egl_native_window;
-#ifdef HAVE_EGL
-  EGLSurface egl_surface;
-  GdkMemoryDepth egl_surface_depth;
-#endif
-
   cairo_region_t *opaque_region;
   cairo_rectangle_int_t opaque_rect; /* This is different from the region */
 
@@ -1014,9 +1008,6 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
 
   GDK_SURFACE_GET_CLASS (surface)->destroy (surface, foreign_destroy);
 
-  /* backend must have unset this */
-  g_assert (priv->egl_native_window == NULL);
-
   if (surface->gl_paint_context)
     {
       /* Make sure to destroy if current */
@@ -1149,120 +1140,6 @@ gdk_surface_get_mapped (GdkSurface *surface)
   g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
 
   return GDK_SURFACE_IS_MAPPED (surface);
-}
-
-void
-gdk_surface_set_egl_native_window (GdkSurface *self,
-                                   gpointer    native_window)
-{
-#ifdef HAVE_EGL
-  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
-  GdkGLContext *current = NULL;
-
-  /* This checks that all EGL platforms we support conform to the same struct sizes.
-   * When this ever fails, there will be some fun times happening for whoever tries
-   * this weird EGL backend... */
-  G_STATIC_ASSERT (sizeof (gpointer) == sizeof (EGLNativeWindowType));
-
-  if (priv->egl_surface != NULL)
-    {
-      GdkDisplay *display = gdk_surface_get_display (self);
-
-      current = gdk_gl_context_clear_current_if_surface (self);
-
-      eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
-      priv->egl_surface = NULL;
-    }
-
-  priv->egl_native_window = native_window;
-
-  if (current)
-    {
-      gdk_gl_context_make_current (current);
-      g_object_unref (current);
-    }
-}
-
-gpointer /* EGLSurface */
-gdk_surface_get_egl_surface (GdkSurface *self)
-{
-  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
-
-  return priv->egl_surface;
-}
-
-GdkMemoryDepth
-gdk_surface_ensure_egl_surface (GdkSurface     *self,
-                                GdkMemoryDepth  depth)
-{
-  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
-  GdkDisplay *display = gdk_surface_get_display (self);
-
-  g_return_val_if_fail (priv->egl_native_window != NULL, depth);
-
-  if (depth == GDK_MEMORY_NONE)
-    {
-      if (priv->egl_surface_depth == GDK_MEMORY_NONE)
-        depth = GDK_MEMORY_U8;
-      else
-        depth = priv->egl_surface_depth;
-    }
-
-  if (priv->egl_surface == NULL ||
-      (priv->egl_surface != NULL &&
-       gdk_display_get_egl_config (display, priv->egl_surface_depth) != gdk_display_get_egl_config (display, depth)))
-    {
-      GdkGLContext *cleared;
-      EGLint attribs[4], tmp;
-      EGLDisplay egl_display;
-      EGLConfig egl_config;
-      int i;
-
-      cleared = gdk_gl_context_clear_current_if_surface (self);
-      if (priv->egl_surface != NULL)
-        eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
-
-      egl_display = gdk_display_get_egl_display (display),
-      egl_config = gdk_display_get_egl_config (display, depth),
-
-      i = 0;
-      if (depth == GDK_MEMORY_U8_SRGB && display->have_egl_gl_colorspace)
-        {
-          attribs[i++] = EGL_GL_COLORSPACE_KHR;
-          attribs[i++] = EGL_GL_COLORSPACE_SRGB_KHR;
-          self->is_srgb = TRUE;
-        }
-      g_assert (i < G_N_ELEMENTS (attribs));
-      attribs[i++] = EGL_NONE;
-
-      priv->egl_surface = eglCreateWindowSurface (egl_display,
-                                                  egl_config,
-                                                  (EGLNativeWindowType) priv->egl_native_window,
-                                                  attribs);
-      if (priv->egl_surface == EGL_NO_SURFACE)
-        {
-          /* just assume the error is no srgb support and try again without */
-          self->is_srgb = FALSE;
-          priv->egl_surface = eglCreateWindowSurface (egl_display,
-                                                      egl_config,
-                                                      (EGLNativeWindowType) priv->egl_native_window,
-                                                      NULL);
-        }
-      priv->egl_surface_depth = depth;
-
-      if (eglGetConfigAttrib (egl_display, egl_config, EGL_SURFACE_TYPE, &tmp)
-          && (tmp & EGL_SWAP_BEHAVIOR_PRESERVED_BIT) != 0)
-        eglSurfaceAttrib (egl_display, priv->egl_surface, EGL_SWAP_BEHAVIOR, EGL_BUFFER_PRESERVED);
-
-      if (cleared)
-        {
-          gdk_gl_context_make_current (cleared);
-          g_object_unref (cleared);
-        }
-    }
-
-  return priv->egl_surface_depth;
-#endif
 }
 
 gboolean

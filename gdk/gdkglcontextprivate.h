@@ -156,6 +156,11 @@ void                    gdk_gl_context_get_matching_version     (GdkGLContext   
                                                                  gboolean                legacy,
                                                                  GdkGLVersion           *out_version);
 
+#ifdef HAVE_EGL
+void                    gdk_gl_context_set_egl_native_window    (GdkGLContext           *self,
+                                                                 gpointer                native_window);
+#endif
+
 void                    gdk_gl_context_push_debug_group         (GdkGLContext    *context,
                                                                  const char      *message);
 void                    gdk_gl_context_push_debug_group_printf  (GdkGLContext    *context,

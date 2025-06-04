@@ -99,6 +99,7 @@ gdk_wayland_gl_context_surface_attach (GdkDrawContext  *context,
                                        GError         **error)
 {
   GdkWaylandGLContext *self = GDK_WAYLAND_GL_CONTEXT (context);
+  GdkGLContext *gl_context = GDK_GL_CONTEXT (context);
   GdkSurface *surface;
   guint width, height;
 
@@ -109,7 +110,7 @@ gdk_wayland_gl_context_surface_attach (GdkDrawContext  *context,
   gdk_draw_context_get_buffer_size (context, &width, &height);
   self->egl_window = wl_egl_window_create (gdk_wayland_surface_get_wl_surface (surface),
                                            width, height);
-  gdk_surface_set_egl_native_window (surface, self->egl_window);
+  gdk_gl_context_set_egl_native_window (gl_context, self->egl_window);
 
   return TRUE;
 }
@@ -119,11 +120,7 @@ gdk_wayland_gl_context_surface_detach (GdkDrawContext *context)
 {
   GdkWaylandGLContext *self = GDK_WAYLAND_GL_CONTEXT (context);
 
-  if (self->egl_window)
-    {
-      gdk_surface_set_egl_native_window (gdk_draw_context_get_surface (context), NULL);
-      g_clear_pointer (&self->egl_window, wl_egl_window_destroy);
-    }
+  g_clear_pointer (&self->egl_window, wl_egl_window_destroy);
 }
 
 static void

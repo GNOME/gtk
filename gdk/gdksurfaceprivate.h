@@ -302,12 +302,6 @@ void gdk_surface_get_geometry (GdkSurface *surface,
 
 void                    gdk_surface_set_frame_clock             (GdkSurface             *surface,
                                                                  GdkFrameClock          *clock);
-void                    gdk_surface_set_egl_native_window       (GdkSurface             *self,
-                                                                 gpointer                native_window);
-GdkMemoryDepth          gdk_surface_ensure_egl_surface          (GdkSurface             *self,
-                                                                 GdkMemoryDepth          depth);
-gpointer /*EGLSurface*/ gdk_surface_get_egl_surface             (GdkSurface             *self);
-
 gboolean                gdk_surface_get_gl_is_srgb              (GdkSurface             *self);
 
 void                    gdk_surface_set_widget                  (GdkSurface             *self,
