@@ -3790,8 +3790,8 @@ icon_ensure_node__locked (GtkIconPaintable *icon,
   gint64 before;
   int pixel_size;
   GError *load_error = NULL;
-  gboolean only_fg = FALSE;
   GdkTexture *texture = NULL;
+  gboolean only_fg = FALSE;
 
   icon_cache_mark_used_if_cached (icon);
 
@@ -4047,16 +4047,7 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
                       render_width,
                       render_height);
 
-  if (icon->is_symbolic && icon->allow_recolor &&
-      gsk_render_node_recolor (node, colors, n_colors, &recolored))
-    {
-      g_debug ("snapshot symbolic icon as recolored node");
-      recolored = enforce_logical_size (recolored, icon->width, icon->height);
-
-      gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
-      gsk_render_node_unref (recolored);
-    }
-  else if (icon->is_symbolic && icon->only_fg && icon->allow_mask)
+  if (icon->is_symbolic && icon->only_fg && icon->allow_mask)
     {
       g_debug ("snapshot symbolic icon %s using mask",
                gsk_render_node_get_node_type (node) == GSK_TEXTURE_NODE
@@ -4069,6 +4060,15 @@ gtk_icon_paintable_snapshot_symbolic (GtkSymbolicPaintable *paintable,
       gtk_snapshot_pop (snapshot);
       gtk_snapshot_append_color (snapshot, &colors[0], &render_rect);
       gtk_snapshot_pop (snapshot);
+    }
+  else if (icon->is_symbolic && icon->allow_recolor &&
+           gsk_render_node_recolor (node, colors, n_colors, &recolored))
+    {
+      g_debug ("snapshot symbolic icon as recolored node");
+      recolored = enforce_logical_size (recolored, icon->width, icon->height);
+
+      gtk_snapshot_append_node_scaled (snapshot, recolored, &icon_rect, &render_rect);
+      gsk_render_node_unref (recolored);
     }
   else if (icon->is_symbolic)
     {
