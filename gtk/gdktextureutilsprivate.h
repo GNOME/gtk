@@ -80,4 +80,10 @@ GskRenderNode *gsk_render_node_new_from_filename_symbolic (const char *filename,
                                                            double     *width,
                                                            double     *height);
 
+gboolean gsk_render_node_recolor (GskRenderNode  *node,
+                                  const GdkRGBA  *colors,
+                                  gsize           n_colors,
+                                  GskRenderNode **recolored);
+
+
 G_END_DECLS
