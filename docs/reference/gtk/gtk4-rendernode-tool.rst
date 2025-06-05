@@ -117,6 +117,13 @@ Convert
 The ``convert`` command converts a symbolic SVG icon into a node and writes
 the result to stdout.
 
+``--recolor``
+
+  If this option is used, the resulting node will have its symbolic colors
+  replaced by the values given to the ``--fg``, ``--success``, ``--warning``
+  and ``--error`` options. Otherwise, the node will have the unreplaced
+  colors, which can be useful to diagnose rendering issues.
+
 ``--fg=COLOR``
 ``--success=COLOR``
 ``--warning=COLOR``

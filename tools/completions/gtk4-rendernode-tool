@@ -54,7 +54,7 @@ _gtk4_rendernode_tool()
             ;;
 
         convert)
-            opts="--help --fg --success --warning --error --size"
+            opts="--help --recolor --fg --success --warning --error --size"
             COMPREPLY=( $(compgen -W "${opts}" -- ${cur}) )
             return 0
             ;;

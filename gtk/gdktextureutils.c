@@ -21,7 +21,6 @@
 #include "gtkscalerprivate.h"
 #include "gtksnapshot.h"
 
-#include <gdk-pixbuf/gdk-pixbuf.h>
 #include "gdk/gdktextureprivate.h"
 #include "gdk/loaders/gdkpngprivate.h"
 #include "gdk/gdkdebugprivate.h"

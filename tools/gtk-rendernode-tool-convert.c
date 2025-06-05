@@ -70,11 +70,17 @@ do_convert (int          *argc,
 {
   GOptionContext *context;
   char **filenames = NULL;
+  gboolean recolor = FALSE;
   const GdkRGBA fg_default = { 0.7450980392156863, 0.7450980392156863, 0.7450980392156863, 1.0};
   const GdkRGBA success_default = { 0.3046921492332342,0.6015716792553597, 0.023437857633325704, 1.0};
   const GdkRGBA warning_default = {0.9570458533607996, 0.47266346227206835, 0.2421911955443656, 1.0 };
   const GdkRGBA error_default = { 0.796887159533074, 0 ,0, 1.0 };
-  GdkRGBA colors[4];
+  GdkRGBA colors[4] = {
+    [GTK_SYMBOLIC_COLOR_FOREGROUND] = { 0, 0, 0, 1 },
+    [GTK_SYMBOLIC_COLOR_ERROR] =      { 0, 0, 1, 1 },
+    [GTK_SYMBOLIC_COLOR_WARNING] =    { 0, 1, 0, 1 },
+    [GTK_SYMBOLIC_COLOR_SUCCESS] =    { 1, 0, 0, 1 },
+  };
   char *fc = NULL;
   char *sc = NULL;
   char *wc = NULL;
@@ -83,6 +89,7 @@ do_convert (int          *argc,
   guint64 width = 16;
   guint64 height = 16;
   const GOptionEntry entries[] = {
+    { "recolor", 0, 0, G_OPTION_ARG_NONE, &recolor, N_("Recolor the node"), NULL },
     { "fg", 0, 0, G_OPTION_ARG_STRING, &fc, N_("Foreground color"), N_("COLOR") },
     { "success", 0, 0, G_OPTION_ARG_STRING, &sc, N_("Success color"), N_("COLOR") },
     { "warning", 0, 0, G_OPTION_ARG_STRING, &wc, N_("Warning color"), N_("COLOR") },
@@ -108,14 +115,33 @@ do_convert (int          *argc,
 
   g_option_context_free (context);
 
-  if (!fc || !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND], fc))
-    colors[GTK_SYMBOLIC_COLOR_FOREGROUND] = fg_default;
-  if (!sc || !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_SUCCESS], sc))
-    colors[GTK_SYMBOLIC_COLOR_SUCCESS] = success_default;
-  if (!wc || !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_WARNING], wc))
-    colors[GTK_SYMBOLIC_COLOR_WARNING] = warning_default;
-  if (!ec || !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_ERROR], ec))
-    colors[GTK_SYMBOLIC_COLOR_ERROR] = error_default;
+  if (recolor)
+    {
+      colors[GTK_SYMBOLIC_COLOR_FOREGROUND] = fg_default;
+      colors[GTK_SYMBOLIC_COLOR_SUCCESS] = success_default;
+      colors[GTK_SYMBOLIC_COLOR_WARNING] = warning_default;
+      colors[GTK_SYMBOLIC_COLOR_ERROR] = error_default;
+      if (fc && !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_FOREGROUND], fc))
+        {
+          g_printerr ("Failed to parse as color: %s\n", fc);
+          exit (1);
+        }
+      if (sc && !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_SUCCESS], sc))
+        {
+          g_printerr ("Failed to parse as color: %s\n", fc);
+          exit (1);
+        }
+      if (wc && !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_WARNING], wc))
+        {
+          g_printerr ("Failed to parse as color: %s\n", fc);
+          exit (1);
+        }
+      if (ec && !gdk_rgba_parse (&colors[GTK_SYMBOLIC_COLOR_ERROR], ec))
+        {
+          g_printerr ("Failed to parse as color: %s\n", fc);
+          exit (1);
+        }
+    }
 
   if (size)
     {
