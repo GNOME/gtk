@@ -1,5 +1,6 @@
 #include <gtk/gtk.h>
 #include "gtkiconthemeprivate.h"
+#include "gtkiconpaintableprivate.h"
 #include "gdkrgbaprivate.h"
 #include "../reftests/reftest-compare.h"
 

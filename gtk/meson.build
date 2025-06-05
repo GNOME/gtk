@@ -264,6 +264,7 @@ gtk_public_sources = files([
   'gtkgridlayout.c',
   'gtkgridview.c',
   'gtkheaderbar.c',
+  'gtkiconpaintable.c',
   'gtkicontheme.c',
   'gtkimage.c',
   'gtkimagedefinition.c',
