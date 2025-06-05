@@ -42,10 +42,6 @@
 struct _GdkWin32GLContextEGL
 {
   GdkWin32GLContext parent_instance;
-
-  /* EGL (Angle) Context Items */
-  EGLContext egl_context;
-  guint do_frame_sync : 1;
 };
 
 typedef struct _GdkWin32GLContextClass    GdkWin32GLContextEGLClass;
@@ -53,27 +49,20 @@ typedef struct _GdkWin32GLContextClass    GdkWin32GLContextEGLClass;
 G_DEFINE_TYPE (GdkWin32GLContextEGL, gdk_win32_gl_context_egl, GDK_TYPE_WIN32_GL_CONTEXT)
 
 static void
-gdk_win32_gl_context_egl_end_frame (GdkDrawContext *draw_context,
-                                    gpointer        context_data,
-                                    cairo_region_t *painted)
-{
-  GdkGLContext *context = GDK_GL_CONTEXT (draw_context);
-  GdkSurface *surface = gdk_gl_context_get_surface (context);
-  GdkDisplay *display = gdk_gl_context_get_display (context);
-  EGLSurface egl_surface;
-
-  GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_egl_parent_class)->end_frame (draw_context, context_data, painted);
-
-  gdk_gl_context_make_current (context);
-
-  egl_surface = gdk_surface_get_egl_surface (surface);
-
-  eglSwapBuffers (gdk_display_get_egl_display (display), egl_surface);
-}
-
-static void
 gdk_win32_gl_context_egl_empty_frame (GdkDrawContext *draw_context)
 {
+}
+
+static gboolean
+gdk_x11_gl_context_egl_surface_attach (GdkDrawContext  *context,
+                                       GError         **error)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (context);
+
+  gdk_gl_context_set_egl_native_window (GDK_GL_CONTEXT (context),
+                                        gdk_win32_surface_get_handle (surface));
+
+  return TRUE;
 }
 
 static void
@@ -84,7 +73,6 @@ gdk_win32_gl_context_egl_class_init (GdkWin32GLContextClass *klass)
 
   context_class->backend_type = GDK_GL_EGL;
 
-  draw_context_class->end_frame = gdk_win32_gl_context_egl_end_frame;
   draw_context_class->empty_frame = gdk_win32_gl_context_egl_empty_frame;
 }
 

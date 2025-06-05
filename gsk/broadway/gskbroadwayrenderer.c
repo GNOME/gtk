@@ -45,6 +45,7 @@ static gboolean
 gsk_broadway_renderer_realize (GskRenderer  *renderer,
                                GdkDisplay   *display,
                                GdkSurface   *surface,
+                               gboolean      attach,
                                GError      **error)
 {
   GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
@@ -57,6 +58,11 @@ gsk_broadway_renderer_realize (GskRenderer  *renderer,
     }
 
   self->draw_context = gdk_broadway_draw_context_context (surface);
+  if (attach && !gdk_draw_context_attach (GDK_DRAW_CONTEXT (self->draw_context), error))
+    {
+      g_clear_object (&self->draw_context);
+      return FALSE;
+    }
 
   return TRUE;
 }
@@ -65,6 +71,9 @@ static void
 gsk_broadway_renderer_unrealize (GskRenderer *renderer)
 {
   GskBroadwayRenderer *self = GSK_BROADWAY_RENDERER (renderer);
+
+  gdk_draw_context_detach (GDK_DRAW_CONTEXT (self->draw_context));
+
   g_clear_object (&self->draw_context);
 }
 

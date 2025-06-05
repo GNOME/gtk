@@ -72,15 +72,10 @@ typedef struct _GdkSurfacePrivate GdkSurfacePrivate;
 
 struct _GdkSurfacePrivate
 {
-  gpointer egl_native_window;
-#ifdef HAVE_EGL
-  EGLSurface egl_surface;
-  GdkMemoryDepth egl_surface_depth;
-#endif
-
   cairo_region_t *opaque_region;
   cairo_rectangle_int_t opaque_rect; /* This is different from the region */
 
+  GdkDrawContext *attached_context;
   gpointer widget;
 
   GdkColorState *color_state;
@@ -895,10 +890,10 @@ gdk_surface_get_property (GObject    *object,
 void
 _gdk_surface_update_size (GdkSurface *surface)
 {
-  GSList *l;
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (surface);
 
-  for (l = surface->draw_contexts; l; l = l->next)
-    gdk_draw_context_surface_resized (l->data);
+  if (priv->attached_context)
+    gdk_draw_context_surface_resized (priv->attached_context);
 
   g_object_notify (G_OBJECT (surface), "width");
   g_object_notify (G_OBJECT (surface), "height");
@@ -1005,10 +1000,13 @@ _gdk_surface_destroy_hierarchy (GdkSurface *surface,
   if (GDK_SURFACE_DESTROYED (surface))
     return;
 
-  GDK_SURFACE_GET_CLASS (surface)->destroy (surface, foreign_destroy);
+  if (priv->attached_context)
+    {
+      gdk_draw_context_detach (priv->attached_context);
+      g_assert (priv->attached_context == NULL);
+    }
 
-  /* backend must have unset this */
-  g_assert (priv->egl_native_window == NULL);
+  GDK_SURFACE_GET_CLASS (surface)->destroy (surface, foreign_destroy);
 
   if (surface->gl_paint_context)
     {
@@ -1142,120 +1140,6 @@ gdk_surface_get_mapped (GdkSurface *surface)
   g_return_val_if_fail (GDK_IS_SURFACE (surface), FALSE);
 
   return GDK_SURFACE_IS_MAPPED (surface);
-}
-
-void
-gdk_surface_set_egl_native_window (GdkSurface *self,
-                                   gpointer    native_window)
-{
-#ifdef HAVE_EGL
-  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
-  GdkGLContext *current = NULL;
-
-  /* This checks that all EGL platforms we support conform to the same struct sizes.
-   * When this ever fails, there will be some fun times happening for whoever tries
-   * this weird EGL backend... */
-  G_STATIC_ASSERT (sizeof (gpointer) == sizeof (EGLNativeWindowType));
-
-  if (priv->egl_surface != NULL)
-    {
-      GdkDisplay *display = gdk_surface_get_display (self);
-
-      current = gdk_gl_context_clear_current_if_surface (self);
-
-      eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
-      priv->egl_surface = NULL;
-    }
-
-  priv->egl_native_window = native_window;
-
-  if (current)
-    {
-      gdk_gl_context_make_current (current);
-      g_object_unref (current);
-    }
-}
-
-gpointer /* EGLSurface */
-gdk_surface_get_egl_surface (GdkSurface *self)
-{
-  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
-
-  return priv->egl_surface;
-}
-
-GdkMemoryDepth
-gdk_surface_ensure_egl_surface (GdkSurface     *self,
-                                GdkMemoryDepth  depth)
-{
-  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
-  GdkDisplay *display = gdk_surface_get_display (self);
-
-  g_return_val_if_fail (priv->egl_native_window != NULL, depth);
-
-  if (depth == GDK_MEMORY_NONE)
-    {
-      if (priv->egl_surface_depth == GDK_MEMORY_NONE)
-        depth = GDK_MEMORY_U8;
-      else
-        depth = priv->egl_surface_depth;
-    }
-
-  if (priv->egl_surface == NULL ||
-      (priv->egl_surface != NULL &&
-       gdk_display_get_egl_config (display, priv->egl_surface_depth) != gdk_display_get_egl_config (display, depth)))
-    {
-      GdkGLContext *cleared;
-      EGLint attribs[4], tmp;
-      EGLDisplay egl_display;
-      EGLConfig egl_config;
-      int i;
-
-      cleared = gdk_gl_context_clear_current_if_surface (self);
-      if (priv->egl_surface != NULL)
-        eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
-
-      egl_display = gdk_display_get_egl_display (display),
-      egl_config = gdk_display_get_egl_config (display, depth),
-
-      i = 0;
-      if (depth == GDK_MEMORY_U8_SRGB && display->have_egl_gl_colorspace)
-        {
-          attribs[i++] = EGL_GL_COLORSPACE_KHR;
-          attribs[i++] = EGL_GL_COLORSPACE_SRGB_KHR;
-          self->is_srgb = TRUE;
-        }
-      g_assert (i < G_N_ELEMENTS (attribs));
-      attribs[i++] = EGL_NONE;
-
-      priv->egl_surface = eglCreateWindowSurface (egl_display,
-                                                  egl_config,
-                                                  (EGLNativeWindowType) priv->egl_native_window,
-                                                  attribs);
-      if (priv->egl_surface == EGL_NO_SURFACE)
-        {
-          /* just assume the error is no srgb support and try again without */
-          self->is_srgb = FALSE;
-          priv->egl_surface = eglCreateWindowSurface (egl_display,
-                                                      egl_config,
-                                                      (EGLNativeWindowType) priv->egl_native_window,
-                                                      NULL);
-        }
-      priv->egl_surface_depth = depth;
-
-      if (eglGetConfigAttrib (egl_display, egl_config, EGL_SURFACE_TYPE, &tmp)
-          && (tmp & EGL_SWAP_BEHAVIOR_PRESERVED_BIT) != 0)
-        eglSurfaceAttrib (egl_display, priv->egl_surface, EGL_SWAP_BEHAVIOR, EGL_BUFFER_PRESERVED);
-
-      if (cleared)
-        {
-          gdk_gl_context_make_current (cleared);
-          g_object_unref (cleared);
-        }
-    }
-
-  return priv->egl_surface_depth;
-#endif
 }
 
 gboolean
@@ -3276,4 +3160,31 @@ gdk_surface_set_color_state (GdkSurface    *surface,
   priv->color_state = gdk_color_state_ref (color_state);
 
   gdk_surface_invalidate_rect (surface, NULL);
+}
+
+/*<private>
+ * gdk_surface_set_attached_context:
+ * @self: the surface
+ * @context: (nullable): the context to attach
+ *
+ * This function is an implementation detail for GdkDrawContext.
+ *
+ * Use draw context functions like gdk_draw_context_attach() or
+ * gdk_draw_context_detach().
+ **/
+void
+gdk_surface_set_attached_context (GdkSurface     *self,
+                                  GdkDrawContext *context)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+  
+  priv->attached_context = context;
+}
+
+GdkDrawContext *
+gdk_surface_get_attached_context (GdkSurface *self)
+{
+  GdkSurfacePrivate *priv = gdk_surface_get_instance_private (self);
+
+  return priv->attached_context;
 }

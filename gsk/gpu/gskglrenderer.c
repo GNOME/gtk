@@ -191,6 +191,7 @@ static gboolean
 gsk_ngl_renderer_realize (GskRenderer  *renderer,
                           GdkDisplay   *display,
                           GdkSurface   *surface,
+                          gboolean      attach,
                           GError      **error)
 {
   g_set_error_literal (error,

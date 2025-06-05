@@ -134,6 +134,9 @@ struct _GdkGLContextPrivate
   int max_debug_label_length;
 
 #ifdef HAVE_EGL
+  gpointer egl_native_window;
+  EGLSurface egl_surface;
+  GdkMemoryDepth egl_surface_depth;
   EGLContext egl_context;
   EGLBoolean (*eglSwapBuffersWithDamage) (EGLDisplay, EGLSurface, const EGLint *, EGLint);
 #endif
@@ -482,18 +485,15 @@ gdk_gl_context_real_get_damage (GdkGLContext *context)
 
   if (priv->egl_context && display->have_egl_buffer_age)
     {
-      GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
       EGLDisplay egl_display;
-      EGLSurface egl_surface;
       EGLint swap_behavior = EGL_BUFFER_DESTROYED, buffer_age = 0;
 
       egl_display = gdk_display_get_egl_display (display);
-      egl_surface = gdk_surface_get_egl_surface (surface);
 
       gdk_gl_context_make_current (context);
 
-      eglQuerySurface (egl_display, egl_surface, EGL_SWAP_BEHAVIOR, &swap_behavior);
-      eglQuerySurface (egl_display, egl_surface, EGL_BUFFER_AGE_EXT, &buffer_age);
+      eglQuerySurface (egl_display, priv->egl_surface, EGL_SWAP_BEHAVIOR, &swap_behavior);
+      eglQuerySurface (egl_display, priv->egl_surface, EGL_BUFFER_AGE_EXT, &buffer_age);
 
       if (swap_behavior == EGL_BUFFER_PRESERVED &&
           buffer_age > 0 && buffer_age <= GDK_GL_MAX_TRACKED_BUFFERS)
@@ -585,7 +585,7 @@ gdk_gl_context_real_make_current (GdkGLContext *context,
     return FALSE;
 
   if (!surfaceless)
-    egl_surface = gdk_surface_get_egl_surface (gdk_gl_context_get_surface (context));
+    egl_surface = priv->egl_surface;
   else
     egl_surface = EGL_NO_SURFACE;
 
@@ -597,6 +597,113 @@ gdk_gl_context_real_make_current (GdkGLContext *context,
   return FALSE;
 #endif
 }
+
+#ifdef HAVE_EGL
+void
+gdk_gl_context_set_egl_native_window (GdkGLContext *self,
+                                      gpointer      native_window)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+  GdkGLContext *current = NULL;
+
+  /* This checks that all EGL platforms we support conform to the same struct sizes.
+   * When this ever fails, there will be some fun times happening for whoever tries
+   * this weird EGL backend... */
+  G_STATIC_ASSERT (sizeof (gpointer) == sizeof (EGLNativeWindowType));
+
+  if (priv->egl_surface != NULL)
+    {
+      GdkDrawContext *draw_context = GDK_DRAW_CONTEXT (self);
+      GdkDisplay *display = gdk_draw_context_get_display (draw_context);
+
+      current = gdk_gl_context_clear_current_if_surface (gdk_draw_context_get_surface (draw_context));
+
+      eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
+      priv->egl_surface = NULL;
+    }
+
+  priv->egl_native_window = native_window;
+
+  if (current)
+    {
+      gdk_gl_context_make_current (current);
+      g_object_unref (current);
+    }
+}
+
+static void
+gdk_gl_context_ensure_egl_surface (GdkGLContext   *self,
+                                   GdkMemoryDepth  depth)
+{
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+  GdkDrawContext *draw_context = GDK_DRAW_CONTEXT (self);
+  GdkSurface *surface = gdk_draw_context_get_surface (draw_context);
+  GdkDisplay *display = gdk_draw_context_get_display (draw_context);
+
+  g_return_if_fail (priv->egl_native_window != NULL);
+
+  if (depth == GDK_MEMORY_NONE)
+    {
+      if (priv->egl_surface_depth == GDK_MEMORY_NONE)
+        depth = GDK_MEMORY_U8;
+      else
+        depth = priv->egl_surface_depth;
+    }
+
+  if (priv->egl_surface == NULL ||
+      (priv->egl_surface != NULL &&
+       gdk_display_get_egl_config (display, priv->egl_surface_depth) != gdk_display_get_egl_config (display, depth)))
+    {
+      GdkGLContext *cleared;
+      EGLint attribs[4], tmp;
+      EGLDisplay egl_display;
+      EGLConfig egl_config;
+      int i;
+
+      cleared = gdk_gl_context_clear_current_if_surface (surface);
+      if (priv->egl_surface != NULL)
+        eglDestroySurface (gdk_display_get_egl_display (display), priv->egl_surface);
+
+      egl_display = gdk_display_get_egl_display (display),
+      egl_config = gdk_display_get_egl_config (display, depth),
+
+      i = 0;
+      if (depth == GDK_MEMORY_U8_SRGB && display->have_egl_gl_colorspace)
+        {
+          attribs[i++] = EGL_GL_COLORSPACE_KHR;
+          attribs[i++] = EGL_GL_COLORSPACE_SRGB_KHR;
+          surface->is_srgb = TRUE;
+        }
+      g_assert (i < G_N_ELEMENTS (attribs));
+      attribs[i++] = EGL_NONE;
+
+      priv->egl_surface = eglCreateWindowSurface (egl_display,
+                                                  egl_config,
+                                                  (EGLNativeWindowType) priv->egl_native_window,
+                                                  attribs);
+      if (priv->egl_surface == EGL_NO_SURFACE)
+        {
+          /* just assume the error is no srgb support and try again without */
+          surface->is_srgb = FALSE;
+          priv->egl_surface = eglCreateWindowSurface (egl_display,
+                                                      egl_config,
+                                                      (EGLNativeWindowType) priv->egl_native_window,
+                                                      NULL);
+        }
+      priv->egl_surface_depth = depth;
+
+      if (eglGetConfigAttrib (egl_display, egl_config, EGL_SURFACE_TYPE, &tmp)
+          && (tmp & EGL_SWAP_BEHAVIOR_PRESERVED_BIT) != 0)
+        eglSurfaceAttrib (egl_display, priv->egl_surface, EGL_SWAP_BEHAVIOR, EGL_BUFFER_PRESERVED);
+
+      if (cleared)
+        {
+          gdk_gl_context_make_current (cleared);
+          g_object_unref (cleared);
+        }
+    }
+}
+#endif
 
 static void
 gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
@@ -622,9 +729,9 @@ gdk_gl_context_real_begin_frame (GdkDrawContext  *draw_context,
 
 #ifdef HAVE_EGL
   if (priv->egl_context)
-    *out_depth = gdk_surface_ensure_egl_surface (surface, depth);
-  else
-    *out_depth = GDK_MEMORY_U8;
+    gdk_gl_context_ensure_egl_surface (context, depth);
+  
+  *out_depth = priv->egl_surface_depth;
 
   if (*out_depth == GDK_MEMORY_U8_SRGB)
     *out_color_state = gdk_color_state_get_no_srgb_tf (color_state);
@@ -675,7 +782,6 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
   GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (context);
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_surface_get_display (surface);
-  EGLSurface egl_surface;
   G_GNUC_UNUSED gint64 begin_time = GDK_PROFILER_CURRENT_TIME;
   guint buffer_width, buffer_height;
 
@@ -684,7 +790,6 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
 
   gdk_gl_context_make_current (context);
 
-  egl_surface = gdk_surface_get_egl_surface (surface);
   gdk_draw_context_get_buffer_size (draw_context, &buffer_width, &buffer_height);
 
   if (priv->eglSwapBuffersWithDamage &&
@@ -714,14 +819,29 @@ gdk_gl_context_real_end_frame (GdkDrawContext *draw_context,
           rects[j++] = rect.width;
           rects[j++] = rect.height;
         }
-      priv->eglSwapBuffersWithDamage (gdk_display_get_egl_display (display), egl_surface, rects, n_rects);
+      priv->eglSwapBuffersWithDamage (gdk_display_get_egl_display (display), priv->egl_surface, rects, n_rects);
       g_free (heap_rects);
     }
   else
-    eglSwapBuffers (gdk_display_get_egl_display (display), egl_surface);
+    eglSwapBuffers (gdk_display_get_egl_display (display), priv->egl_surface);
 #endif
 
   gdk_profiler_add_mark (begin_time, GDK_PROFILER_CURRENT_TIME - begin_time, "EGL swap buffers", NULL);
+}
+
+static void
+gdk_gl_context_surface_detach (GdkDrawContext *draw_context)
+{
+#ifdef HAVE_EGL
+  GdkGLContext *self = GDK_GL_CONTEXT (draw_context);
+  GdkGLContextPrivate *priv = gdk_gl_context_get_instance_private (self);
+
+  gdk_gl_context_set_egl_native_window (self, NULL);
+  g_assert (priv->egl_native_window == NULL);
+  g_assert (priv->egl_surface == NULL);
+
+  priv->egl_surface_depth = GDK_MEMORY_NONE;
+#endif
 }
 
 static void
@@ -754,6 +874,7 @@ gdk_gl_context_class_init (GdkGLContextClass *klass)
 
   draw_context_class->begin_frame = gdk_gl_context_real_begin_frame;
   draw_context_class->end_frame = gdk_gl_context_real_end_frame;
+  draw_context_class->surface_detach = gdk_gl_context_surface_detach;
   draw_context_class->surface_resized = gdk_gl_context_surface_resized;
 
   /**

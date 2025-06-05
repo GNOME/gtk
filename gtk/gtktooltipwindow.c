@@ -39,6 +39,7 @@
 #include "gtkcssboxesimplprivate.h"
 
 #include "gdk/gdksurfaceprivate.h"
+#include "gsk/gskrendererprivate.h"
 
 struct _GtkTooltipWindow
 {
@@ -219,7 +220,7 @@ gtk_tooltip_window_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_tooltip_window_parent_class)->realize (widget);
 
-  window->renderer = gsk_renderer_new_for_surface (window->surface);
+  window->renderer = gsk_renderer_new_for_surface_full (window->surface, TRUE);
 
   gtk_native_realize (GTK_NATIVE (window));
 }

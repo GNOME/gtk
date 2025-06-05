@@ -73,6 +73,18 @@ static void
 gdk_android_gl_context_empty_frame (GdkDrawContext *draw_context)
 {}
 
+static gboolean
+gdk_android_gl_context_surface_attach (GdkDrawContext  *context,
+                                       GError         **error)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (context);
+
+  gdk_gl_context_set_egl_native_window (GDK_GL_CONTEXT (context),
+                                        GDK_ANDROID_SURFACE (surface)->native);
+
+  return TRUE;
+}
+
 static GLuint
 gdk_android_gl_context_get_default_framebuffer (GdkGLContext *gl_context)
 {
@@ -108,6 +120,7 @@ gdk_android_gl_context_class_init (GdkAndroidGLContextClass *class)
   draw_context_class->begin_frame = gdk_android_gl_context_begin_frame;
   draw_context_class->end_frame = gdk_android_gl_context_end_frame;
   draw_context_class->empty_frame = gdk_android_gl_context_empty_frame;
+  draw_context_class->surface_attach = gdk_android_gl_context_surface_attach;
   gl_context_class->backend_type = GDK_GL_EGL;
   gl_context_class->get_default_framebuffer = gdk_android_gl_context_get_default_framebuffer;
   gl_context_class->realize = gdk_android_gl_context_realize;

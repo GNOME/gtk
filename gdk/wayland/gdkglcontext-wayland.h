@@ -22,22 +22,8 @@
 #pragma once
 
 #include "gdkglcontextprivate.h"
-#include "gdkdisplayprivate.h"
-#include "gdksurface.h"
-
-#include <epoxy/egl.h>
 
 G_BEGIN_DECLS
-
-struct _GdkWaylandGLContext
-{
-  GdkGLContext parent_instance;
-};
-
-struct _GdkWaylandGLContextClass
-{
-  GdkGLContextClass parent_class;
-};
 
 GdkGLContext *  gdk_wayland_display_init_gl                         (GdkDisplay        *display,
                                                                      GError           **error);

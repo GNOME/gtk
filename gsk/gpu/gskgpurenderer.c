@@ -182,6 +182,7 @@ static gboolean
 gsk_gpu_renderer_realize (GskRenderer  *renderer,
                           GdkDisplay   *display,
                           GdkSurface   *surface,
+                          gboolean      attach,
                           GError      **error)
 {
   GskGpuRenderer *self = GSK_GPU_RENDERER (renderer);
@@ -196,6 +197,12 @@ gsk_gpu_renderer_realize (GskRenderer  *renderer,
   priv->context = GSK_GPU_RENDERER_GET_CLASS (self)->create_context (self, display, surface, &context_optimizations, error);
   if (priv->context == NULL)
     {
+      g_clear_object (&priv->device);
+      return FALSE;
+    }
+  if (attach && !gdk_draw_context_attach (priv->context, error))
+    {
+      g_clear_object (&priv->context);
       g_clear_object (&priv->device);
       return FALSE;
     }
@@ -224,6 +231,8 @@ gsk_gpu_renderer_unrealize (GskRenderer *renderer)
         gsk_gpu_frame_wait (priv->frames[i]);
       g_clear_object (&priv->frames[i]);
     }
+
+  gdk_draw_context_detach (priv->context);
 
   g_clear_object (&priv->context);
   g_clear_object (&priv->device);

@@ -1378,19 +1378,15 @@ gdk_display_create_vulkan_context (GdkDisplay  *self,
 
   if (surface)
     {
-      return g_initable_new (GDK_DISPLAY_GET_CLASS (self)->vk_context_type,
-                             NULL,
-                             error,
-                             "surface", surface,
-                             NULL);
+      return g_object_new (GDK_DISPLAY_GET_CLASS (self)->vk_context_type,
+                           "surface", surface,
+                           NULL);
     }
   else
     {
-      return g_initable_new (GDK_DISPLAY_GET_CLASS (self)->vk_context_type,
-                             NULL,
-                             error,
-                             "display", self,
-                             NULL);
+      return g_object_new (GDK_DISPLAY_GET_CLASS (self)->vk_context_type,
+                           "display", self,
+                           NULL);
     }
 }
 

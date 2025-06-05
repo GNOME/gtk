@@ -148,6 +148,7 @@
 #include "gtknativeprivate.h"
 
 #include "gtkroundedboxprivate.h"
+#include "gsk/gskrendererprivate.h"
 #include "gsk/gskroundedrectprivate.h"
 #include "gtkcssshadowvalueprivate.h"
 #include "gtkcsscornervalueprivate.h"
@@ -1069,7 +1070,7 @@ gtk_popover_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_popover_parent_class)->realize (widget);
 
-  priv->renderer = gsk_renderer_new_for_surface (priv->surface);
+  priv->renderer = gsk_renderer_new_for_surface_full (priv->surface, TRUE);
 
   gtk_native_realize (GTK_NATIVE (popover));
 }

@@ -152,6 +152,7 @@ static gboolean
 gsk_vulkan_renderer_realize (GskRenderer  *renderer,
                              GdkDisplay   *display,
                              GdkSurface   *surface,
+                             gboolean      attach,
                              GError      **error)
 {
   g_set_error_literal (error, GDK_VULKAN_ERROR, GDK_VULKAN_ERROR_NOT_AVAILABLE,

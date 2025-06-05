@@ -42,6 +42,7 @@ struct _GskRendererClass
   gboolean             (* realize)                              (GskRenderer            *renderer,
                                                                  GdkDisplay             *display,
                                                                  GdkSurface             *surface,
+                                                                 gboolean                attach,
                                                                  GError                **error);
   void                 (* unrealize)                            (GskRenderer            *renderer);
 
@@ -52,6 +53,9 @@ struct _GskRendererClass
                                                                  GskRenderNode          *root,
                                                                  const cairo_region_t   *invalid);
 };
+
+GskRenderer *           gsk_renderer_new_for_surface_full       (GdkSurface             *surface,
+                                                                 gboolean                attach);
 
 GskDebugFlags           gsk_renderer_get_debug_flags            (GskRenderer    *renderer);
 void                    gsk_renderer_set_debug_flags            (GskRenderer    *renderer,

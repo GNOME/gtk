@@ -34,6 +34,7 @@
 #include "gtkprivate.h"
 
 #include "gdk/gdksurfaceprivate.h"
+#include "gsk/gskrendererprivate.h"
 
 enum {
   DRAG_STARTED,
@@ -262,7 +263,7 @@ gtk_text_handle_realize (GtkWidget *widget)
 
   GTK_WIDGET_CLASS (gtk_text_handle_parent_class)->realize (widget);
 
-  handle->renderer = gsk_renderer_new_for_surface (handle->surface);
+  handle->renderer = gsk_renderer_new_for_surface_full (handle->surface, TRUE);
 
   gtk_native_realize (GTK_NATIVE (handle));
 }
