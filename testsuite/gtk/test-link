@@ -1,0 +1,16 @@
+#! /bin/sh
+
+if ldd "$1" | grep librsvg; then
+  # using system librsvg
+  exit 0
+fi
+
+if nm -D "$1" | grep rsvg_; then
+  echo "BAD: librsvg symbols leaked"
+  exit 1
+fi
+
+if nm -D "$1" | grep cr_; then
+  echo "BAD: libcroco symbols leaked"
+  exit 1
+fi
