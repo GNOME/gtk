@@ -654,9 +654,6 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
   if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, error))
     return NULL;
 
-  if (!gdk_win32_gl_context_wgl_init_basic (display_win32, error))
-    return FALSE;
-
   context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL,
                           "display", display,
                           NULL);
@@ -1007,6 +1004,14 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
    * must stick to a legacy context if the shared context is a legacy context
    */
   legacy_bit = share != NULL && gdk_gl_context_is_legacy (share);
+
+  if (share == NULL)
+    {
+      /* This is the path only used by the initial GL context during init */
+
+      if (!gdk_win32_gl_context_wgl_init_basic (display_win32, error))
+        return 0;
+    }
 
   if (surface != NULL)
     hdc = GDK_WIN32_SURFACE (surface)->hdc;
