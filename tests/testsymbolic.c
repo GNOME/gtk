@@ -1,6 +1,6 @@
 #include <gtk/gtk.h>
 
-#include "gtk/gtkiconthemeprivate.h"
+#include "gtk/gtkiconpaintableprivate.h"
 
 static const char css[] =
 ".testimage {\n"

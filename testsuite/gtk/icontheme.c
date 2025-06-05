@@ -132,7 +132,9 @@ assert_icon_lookup_fails (const char         *icon_name,
 
   /* We never truly *fail*, but check that we got the image-missing fallback */
   g_assert_nonnull (info);
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   g_assert_cmpstr (gtk_icon_paintable_get_icon_name (info), ==, "image-missing");
+G_GNUC_END_IGNORE_DEPRECATIONS
 }
 
 static void

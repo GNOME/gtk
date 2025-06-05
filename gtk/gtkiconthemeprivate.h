@@ -28,7 +28,6 @@ const char *gtk_string_set_add (GtkStringSet *set,
 
 int gtk_icon_theme_get_serial (GtkIconTheme *self);
 
-void gtk_icon_paintable_set_debug (GtkIconPaintable *icon,
-                                   gboolean          allow_node,
-                                   gboolean          allow_recolor,
-                                   gboolean          allow_mask);
+void icon_cache_remove              (GtkIconPaintable *icon);
+void icon_cache_mark_used_if_cached (GtkIconPaintable *icon);
+

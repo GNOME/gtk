@@ -108,7 +108,10 @@ ensure_paintable_for_gicon (GtkIconHelper    *self,
                                          dir,
                                          flags);
 
+G_GNUC_BEGIN_IGNORE_DEPRECATIONS
   *symbolic = gtk_icon_paintable_is_symbolic (icon);
+G_GNUC_END_IGNORE_DEPRECATIONS
+
   return GDK_PAINTABLE (icon);
 }
 
