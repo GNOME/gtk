@@ -1,12 +1,25 @@
 Overview of Changes in 4.19.2, xx-xx-xxxx
 =========================================
 
+* GtkImage:
+ - Change the sizing behavior for paintables. Stop scaling them up
+
 * Add g_uri_launcher_can_laucher to determine if a given
   uri has a handler
 
 * GtkIconTheme:
  - Allow strokes in symbolic icons
  - Document the symbolic icon format
+ - Add a small parser for symbolic svg files
+ - Convert symbolic svgs to render nodes and rasterize them later
+
+* Resources:
+ - Clean up and simplify all symbolic icons and theme assets,
+   so they can be handled by the built-in svg parser
+ - Stop including png versions of symbolic icons and theme assets
+
+* CSS:
+ - Plug a memory leak in the css variables code
 
 * GL:
  - Support multiplane texture formats
@@ -14,12 +27,17 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
 * GSK:
  - Fix some bugs in the path parser
  - Cache masks for fill and stroke nodes
+ - Fix some corner cases of path semantics to match svg
 
 * Deprecations:
  - Deprecate the remaining pixbuf APIs
 
 * Tools:
  - Add some interactive controls to gtk4-path-tool
+ - Add a command to convert symbolic svgs to nodes
+
+* Demos:
+ - Fix lighting in the gears GL demo
 
 * Build:
  - Include modules in libgtk
@@ -27,6 +45,7 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
 * Wayland:
  - Stop handling compose sequences client-side, since
    the compositor does it
+ - Plug a memory leak in the offloading code
 
 * MacOS:
  - Support window snapping
@@ -43,6 +62,7 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
   - #7524 `Gtk.MapListModel` becomes desynchronized when the original list model
     is modified (Matthias Clasen)
   - #7541 Win32: window resize issues (not repainted or wrong direction) with
+  - #7572 path caching fallout (Matthias Clasen, Benjamin Otte)
     cairo renderer (Benjamin Otte)
   - !7883 Add GdkD3d12Texture (Benjamin Otte)
   - !8061 Deprecate the last few undeprecated GdkPixbuf apis (Matthias Clasen)
@@ -118,6 +138,31 @@ Overview of Changes in 4.19.2, xx-xx-xxxx
   - !8608 Make gsk_path_get_bounds() WARN_IF_UNUSED_RESULT (Benjamin Otte)
   - !8609 Revert 6d15f59fef2330dca2e27 (Matthias Clasen)
   - !8611 Small icon fixes (Matthias Clasen)
+  - !8547 Convert symbolic icons to render nodes (Matthias Clasen)
+  - !8599 wayland: Plug a memory leak (Matthias Clasen)
+  - !8613 Add some more path parser tests (Matthias Clasen)
+  - !8617 gpu: Do not use fma() in GLSL shaders (Robert Mader)
+  - !8620 docs: Make warnings more bold (Matthias Clasen)
+  - !8621 rendernodeparser: Make gzipped data consistent (Benjamin Otte)
+  - !8622 Add a test (Matthias Clasen)
+  - !8623 popover: Document parent widget requirements (James Westman)
+  - !8625 widget: Only set tooltip when text has changed (Khalid Abu Shawarib)
+  - !8626 Make the paintable demo use a picture (Matthias Clasen)
+  - !8627 iconhelper: Stop scaling up paintables (Matthias Clasen)
+  - !8628 gpu: Include scale when snapping (Benjamin Otte)
+  - !8629 cssrefvalue: free the value itself (Zander Brown)
+  - !8632 image: Expand docs (Matthias Clasen)
+  - !8633 docs: Use proper admonitions (Matthias Clasen)
+  - !8634 gtk-demo: Drop an accidentally snuck in icon (Matthias Clasen)
+  - !8635 gstreamer: Promote set_caps caps print to info (Robert Mader)
+  - !8636 icons: Apply matrix transforms (Matthias Clasen, Jakub Steiner)
+  - !8637 Clean up and fix rotate gesture icons (Matthias Clasen)
+  - !8638 Guard against window being NULL (Sebastian Wiesner)
+  - !8639 Always allow symbolic svgs (Matthias Clasen)
+  - !8640 Fix supercritical issue in gtk4-demo (Benjamin Otte)
+  - !8641 snapshot: Move a helper (Matthias Clasen)
+  - !8642 More svg rendering and path work (Matthias Clasen)
+  - !8643 Improve symbolic icon handling (Matthias Clasen)
 
 * Translation updates:
   - Finnish (Jiri Grönroos)
