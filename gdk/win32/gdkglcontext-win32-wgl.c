@@ -596,19 +596,13 @@ check_vendor_is_nvidia (void)
   return g_ascii_strncasecmp (vendor, "NVIDIA", strlen ("NVIDIA")) == 0;
 }
 
-GdkGLContext *
-gdk_win32_display_init_wgl (GdkDisplay  *display,
-                            GError     **error)
+static gboolean
+gdk_win32_gl_context_wgl_init_basic (GdkWin32Display  *display_win32,
+                                     GError          **error)
 {
   int best_idx = 0;
-  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
-  GdkGLContext *context;
   HDC hdc;
 
-  if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, error))
-    return NULL;
-
-  
   /* acquire and cache dummy Window (HWND & HDC) and
    * dummy GL Context, it is used to query functions
    * and used for other stuff as well
@@ -635,7 +629,7 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
                            GDK_GL_ERROR_NOT_AVAILABLE,
                            _("No GL implementation is available"));
 
-      return NULL;
+      return FALSE;
     }
 
   display_win32->hasWglARBCreateContext =
@@ -646,6 +640,22 @@ gdk_win32_display_init_wgl (GdkDisplay  *display,
     epoxy_has_gl_extension ("GL_WIN_swap_hint");
 
   display_win32->wgl_quirks.disallow_swap_exchange = check_vendor_is_nvidia ();
+  
+  return TRUE;
+}
+
+GdkGLContext *
+gdk_win32_display_init_wgl (GdkDisplay  *display,
+                            GError     **error)
+{
+  GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (display);
+  GdkGLContext *context;
+
+  if (!gdk_gl_backend_can_be_used (GDK_GL_WGL, error))
+    return NULL;
+
+  if (!gdk_win32_gl_context_wgl_init_basic (display_win32, error))
+    return FALSE;
 
   context = g_object_new (GDK_TYPE_WIN32_GL_CONTEXT_WGL,
                           "display", display,
