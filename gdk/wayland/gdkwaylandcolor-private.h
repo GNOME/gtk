@@ -40,10 +40,11 @@ GdkWaylandColorSurface *
 
 void              gdk_wayland_color_surface_free                (GdkWaylandColorSurface *self);
 
-gboolean          gdk_wayland_color_surface_can_set_color_state (GdkWaylandColorSurface *self,
-                                                                 GdkColorState          *cs,
-                                                                 guint32                 fourcc,
-                                                                 gboolean                premultiplied);
+gboolean          gdk_wayland_color_surface_can_set_color_state (GdkWaylandColorSurface  *self,
+                                                                 GdkColorState           *cs,
+                                                                 guint32                  fourcc,
+                                                                 gboolean                 premultiplied,
+                                                                 GError                 **error);
 void              gdk_wayland_color_surface_set_color_state     (GdkWaylandColorSurface *self,
                                                                  GdkColorState          *cs,
                                                                  guint32                 fourcc,

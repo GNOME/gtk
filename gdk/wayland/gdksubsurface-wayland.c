@@ -519,6 +519,7 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
   gboolean premultiplied = TRUE;
   gboolean was_transparent;
   gboolean is_transparent;
+  GError *error = NULL;
 
   if (sub->parent == NULL)
     {
@@ -615,14 +616,17 @@ gdk_wayland_subsurface_attach (GdkSubsurface         *sub,
            (!get_texture_info (self, texture, &fourcc, &premultiplied, &dmabuf) ||
            !gdk_wayland_color_surface_can_set_color_state (self->color,
                                                            gdk_texture_get_color_state (texture),
-                                                           fourcc, premultiplied)))
+                                                           fourcc, premultiplied,
+                                                           &error)))
     {
       gdk_dmabuf_close_fds (&dmabuf);
       GDK_DISPLAY_DEBUG (gdk_surface_get_display (sub->parent), OFFLOAD,
-                         "[%p] 🗙 Texture colorstate %s (%.4s, %s) not supported",
+                         "[%p] 🗙 Texture colorstate %s (%.4s, %s): %s",
                          self,
                          gdk_color_state_get_name (gdk_texture_get_color_state (texture)),
-                         (char *) &fourcc, premultiplied ? "premultiplied" : "straight");
+                         (char *) &fourcc, premultiplied ? "premultiplied" : "straight",
+                         error->message);
+      g_error_free (error);
     }
   else
     {
