@@ -485,9 +485,9 @@ choose_pixel_format_opengl32 (GdkWin32Display *display_win32,
 }
 
 static int
-get_wgl_pfd (HDC                    hdc,
-             PIXELFORMATDESCRIPTOR *pfd,
-             GdkWin32Display       *display_win32)
+gdk_win32_wgl_choose_pixelformat (GdkWin32Display       *display_win32,
+                                  HDC                    hdc,
+                                  PIXELFORMATDESCRIPTOR *pfd)
 {
   int best_pf = 0;
 
@@ -532,7 +532,7 @@ gdk_init_dummy_wgl_context (GdkWin32Display *display_win32)
 
   memset (&pfd, 0, sizeof (PIXELFORMATDESCRIPTOR));
 
-  best_idx = get_wgl_pfd (display_win32->dummy_context_wgl.hdc, &pfd, display_win32);
+  best_idx = gdk_win32_wgl_choose_pixelformat (display_win32, display_win32->dummy_context_wgl.hdc, &pfd);
 
   if (best_idx != 0)
     set_pixel_format_result = SetPixelFormat (display_win32->dummy_context_wgl.hdc,
@@ -937,7 +937,7 @@ set_wgl_pixformat_for_hdc (GdkWin32Display *display_win32,
    * one single time per window HDC
    */
   GDK_NOTE (OPENGL, g_print ("requesting pixel format...\n"));
-  *best_idx = get_wgl_pfd (*hdc, &pfd, display_win32);
+  *best_idx = gdk_win32_wgl_choose_pixelformat (display_win32, *hdc, &pfd);
 
   if (display_win32->dummy_context_wgl.hwnd != NULL)
     {
