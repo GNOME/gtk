@@ -596,11 +596,12 @@ check_vendor_is_nvidia (void)
   return g_ascii_strncasecmp (vendor, "NVIDIA", strlen ("NVIDIA")) == 0;
 }
 
-static gboolean
-gdk_win32_gl_context_wgl_init_basic (GdkWin32Display  *display_win32,
-                                     GError          **error)
+static int
+gdk_win32_gl_context_wgl_init_basic (GdkWin32Display        *display_win32,
+                                     PIXELFORMATDESCRIPTOR  *pfd,
+                                     GError                **error)
 {
-  int best_idx = 0;
+  int pixel_format = 0;
   HDC hdc;
 
   /* acquire and cache dummy Window (HWND & HDC) and
@@ -616,32 +617,49 @@ gdk_win32_gl_context_wgl_init_basic (GdkWin32Display  *display_win32,
         display_win32->dummy_context_wgl.hdc = GetDC (display_win32->dummy_context_wgl.hwnd);
     }
 
-  best_idx = gdk_init_dummy_wgl_context (display_win32);
+  pixel_format = gdk_init_dummy_wgl_context (display_win32);
   hdc = display_win32->dummy_context_wgl.hdc;
 
-  if (best_idx == 0 ||
-     !wglMakeCurrent (hdc, display_win32->dummy_context_wgl.hglrc))
+  if (pixel_format != 0 &&
+      wglMakeCurrent (hdc, display_win32->dummy_context_wgl.hglrc))
     {
-      if (display_win32->dummy_context_wgl.hglrc != NULL)
-        wglDeleteContext (display_win32->dummy_context_wgl.hglrc);
+      display_win32->hasWglARBCreateContext =
+        epoxy_has_wgl_extension (hdc, "WGL_ARB_create_context");
+      display_win32->hasWglARBPixelFormat =
+        epoxy_has_wgl_extension (hdc, "WGL_ARB_pixel_format");
+      display_win32->hasGlWINSwapHint =
+        epoxy_has_gl_extension ("GL_WIN_swap_hint");
 
+      display_win32->wgl_quirks.disallow_swap_exchange = check_vendor_is_nvidia ();
+      
+      hdc = display_win32->dummy_context_wgl.hdc;
+
+      GDK_DEBUG (OPENGL, "Selecting pixel format for default context...\n");
+      pixel_format = gdk_win32_wgl_choose_pixelformat (display_win32, hdc, pfd);
+    }
+
+  /*
+   * Ditch the initial dummy HDC, HGLRC and HWND used to initialize WGL,
+   * we want to ensure that the HDC of the notification HWND that we will
+   * also use for our new dummy HDC will have the correct pixel format set
+   */
+  wglDeleteContext (display_win32->dummy_context_wgl.hglrc);
+  display_win32->dummy_context_wgl.hglrc = NULL;
+  display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
+
+  DestroyWindow (display_win32->dummy_context_wgl.hwnd);
+  display_win32->dummy_context_wgl.hwnd = NULL;
+
+  if (pixel_format == 0)
+    {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_NOT_AVAILABLE,
                            _("No GL implementation is available"));
 
-      return FALSE;
+      return 0;
     }
 
-  display_win32->hasWglARBCreateContext =
-    epoxy_has_wgl_extension (hdc, "WGL_ARB_create_context");
-  display_win32->hasWglARBPixelFormat =
-    epoxy_has_wgl_extension (hdc, "WGL_ARB_pixel_format");
-  display_win32->hasGlWINSwapHint =
-    epoxy_has_gl_extension ("GL_WIN_swap_hint");
-
-  display_win32->wgl_quirks.disallow_swap_exchange = check_vendor_is_nvidia ();
-  
-  return TRUE;
+  return pixel_format;
 }
 
 GdkGLContext *
@@ -925,20 +943,20 @@ create_wgl_context (GdkGLContext    *context,
 
 static gboolean
 set_wgl_pixformat_for_hdc (GdkWin32Display       *display_win32,
-                           HDC                   *hdc,
+                           HDC                    hdc,
                            int                    pixel_format,
                            PIXELFORMATDESCRIPTOR *pfd)
 {
   gboolean skip_acquire = FALSE;
   gboolean set_pixel_format_result = FALSE;
 
-  if (GetPixelFormat (*hdc) != 0)
+  if (GetPixelFormat (hdc) != 0)
     {
       skip_acquire = TRUE;
       set_pixel_format_result = TRUE;
     }
   else
-    set_pixel_format_result = SetPixelFormat (*hdc, pixel_format, pfd);
+    set_pixel_format_result = SetPixelFormat (hdc, pixel_format, pfd);
 
   /* SetPixelFormat() failed, bail out */
   if (!set_pixel_format_result)
@@ -985,30 +1003,14 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
     {
       /* This is the path only used by the initial GL context during init */
 
-      if (!gdk_win32_gl_context_wgl_init_basic (display_win32, error))
+      pixel_format = gdk_win32_gl_context_wgl_init_basic (display_win32, error);
+
+      if (pixel_format == 0)
         return 0;
 
       hdc = display_win32->dummy_context_wgl.hdc;
 
-      /* one is only allowed to call SetPixelFormat(), and so ChoosePixelFormat()
-      * one single time per window HDC
-      */
-      GDK_NOTE (OPENGL, g_print ("requesting pixel format...\n"));
-      pixel_format = gdk_win32_wgl_choose_pixelformat (display_win32, hdc, &pfd);
-
-      /*
-      * Ditch the initial dummy HDC, HGLRC and HWND used to initialize WGL,
-      * we want to ensure that the HDC of the notification HWND that we will
-      * also use for our new dummy HDC will have the correct pixel format set
-      */
-      wglDeleteContext (display_win32->dummy_context_wgl.hglrc);
-      display_win32->dummy_context_wgl.hglrc = NULL;
-      display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
-      hdc = display_win32->dummy_context_wgl.hdc;
       recreate_dummy_context = TRUE;
-
-      DestroyWindow (display_win32->dummy_context_wgl.hwnd);
-      display_win32->dummy_context_wgl.hwnd = NULL;
     }
   else
     {
