@@ -770,29 +770,6 @@ create_wgl_context_with_attribs (HDC           hdc,
 }
 
 static HGLRC
-create_base_wgl_context (GdkWin32Display *display_win32,
-                         HDC              hdc,
-                         gboolean         force_create_base_context,
-                         gboolean        *remove_base_context)
-{
-  HGLRC hglrc_base = NULL;
-
-  if (force_create_base_context || display_win32->dummy_context_wgl.hglrc == NULL)
-    {
-      hglrc_base = wglCreateContext (hdc);
-
-      if (hglrc_base == NULL)
-        return NULL;
-
-      *remove_base_context = !force_create_base_context;
-    }
-  else
-    hglrc_base = display_win32->dummy_context_wgl.hglrc;
-
-  return hglrc_base;
-}
-
-static HGLRC
 create_wgl_context (GdkGLContext    *context,
                     GdkWin32Display *display_win32,
                     HDC              hdc,
@@ -804,24 +781,28 @@ create_wgl_context (GdkGLContext    *context,
   /* We need a legacy context for *all* cases, if no WGL contexts are created */
   HGLRC hglrc_base, hglrc;
   GdkGLVersion version;
-  gboolean remove_base_context = FALSE;
 
   hglrc = NULL;
 
   if (display_win32->hasWglARBCreateContext)
     {
-      hglrc_base = create_base_wgl_context (display_win32,
-                                            hdc,
-                                            FALSE,
-                                           &remove_base_context);
-
-      if (hglrc_base == NULL || !wglMakeCurrent (hdc, hglrc_base))
+      /* We need a current context for wglCreateContextAttribsARB() */
+      if (share)
         {
-          g_clear_pointer (&hglrc_base, gdk_win32_private_wglDeleteContext);
-          g_set_error_literal (error, GDK_GL_ERROR,
-                               GDK_GL_ERROR_NOT_AVAILABLE,
-                               _("Unable to create a GL context"));
-          return 0;
+          gdk_gl_context_make_current (share);
+        }
+      else
+        {
+          hglrc_base = wglCreateContext (hdc);
+
+          if (hglrc_base == NULL || !wglMakeCurrent (hdc, hglrc_base))
+            {
+              g_clear_pointer (&hglrc_base, gdk_win32_private_wglDeleteContext);
+              g_set_error_literal (error, GDK_GL_ERROR,
+                                  GDK_GL_ERROR_NOT_AVAILABLE,
+                                  _("Unable to create a GL context"));
+              return 0;
+            }
         }
 
       if (!legacy)
@@ -867,8 +848,7 @@ create_wgl_context (GdkGLContext    *context,
       gdk_gl_context_set_is_legacy (context, legacy);
     }
 
-  if (remove_base_context)
-    g_clear_pointer (&hglrc_base, gdk_win32_private_wglDeleteContext);
+  g_clear_pointer (&hglrc_base, gdk_win32_private_wglDeleteContext);
 
   return hglrc;
 }
