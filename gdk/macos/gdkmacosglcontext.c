@@ -451,15 +451,6 @@ gdk_macos_gl_context_real_realize (GdkGLContext  *context,
 
   if (surface != NULL)
     {
-      NSView *view = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface));
-
-      if (!GDK_IS_MACOS_LAYER ([view layer]))
-        {
-          [view setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawNever];
-          [view setLayer:[GdkMacosLayer layer]];
-          [view setWantsLayer:YES];
-        }
-
       /* Setup initial swap rectangle. We might not actually need this
        * anymore though as we are rendering to an IOSurface and we have
        * a scissor clip when rendering to it.
@@ -576,6 +567,24 @@ gdk_macos_gl_context_surface_resized (GdkDrawContext *draw_context)
     CGLUpdateContext (self->cgl_context);
 }
 
+
+static gboolean
+gdk_macos_gl_context_surface_attach (GdkDrawContext  *context,
+                                     GError         **error)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (context);
+  NSView *view = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface));
+
+  if (!GDK_IS_MACOS_LAYER ([view layer]))
+    {
+      [view setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawNever];
+      [view setLayer:[GdkMacosLayer layer]];
+      [view setWantsLayer:YES];
+    }
+
+  return TRUE;
+}
+
 static gboolean
 gdk_macos_gl_context_clear_current (GdkGLContext *context)
 {
@@ -689,6 +698,7 @@ gdk_macos_gl_context_class_init (GdkMacosGLContextClass *klass)
   draw_context_class->end_frame = gdk_macos_gl_context_end_frame;
   draw_context_class->empty_frame = gdk_macos_gl_context_empty_frame;
   draw_context_class->surface_resized = gdk_macos_gl_context_surface_resized;
+  draw_context_class->surface_attach = gdk_macos_gl_context_surface_attach;
 
   gl_class->get_damage = gdk_macos_gl_context_get_damage;
   gl_class->clear_current = gdk_macos_gl_context_clear_current;

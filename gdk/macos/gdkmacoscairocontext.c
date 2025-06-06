@@ -44,23 +44,6 @@ struct _GdkMacosCairoContextClass
 
 G_DEFINE_TYPE (GdkMacosCairoContext, _gdk_macos_cairo_context, GDK_TYPE_CAIRO_CONTEXT)
 
-static void
-_gdk_macos_cairo_context_constructed(GObject *object)
-{
-  GdkMacosCairoContext *self = (GdkMacosCairoContext *)object;
-  GdkSurface *surface;
-  NSView *view;
-
-  g_assert (GDK_IS_MACOS_CAIRO_CONTEXT (self));
-
-  surface = gdk_draw_context_get_surface (GDK_DRAW_CONTEXT (self));
-  view = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface));
-
-  [view setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawNever];
-  [view setLayer:[GdkMacosLayer layer]];
-  [view setWantsLayer:YES];
-}
-
 static cairo_t *
 _gdk_macos_cairo_context_cairo_create (GdkCairoContext *cairo_context)
 {
@@ -266,21 +249,33 @@ _gdk_macos_cairo_context_surface_resized (GdkDrawContext *draw_context)
   /* Do nothing, next begin_frame will get new buffer */
 }
 
+static gboolean
+_gdk_macos_cairo_context_surface_attach (GdkDrawContext  *context,
+                                         GError         **error)
+{
+  GdkSurface *surface = gdk_draw_context_get_surface (context);
+  NSView *view = _gdk_macos_surface_get_view (GDK_MACOS_SURFACE (surface));
+
+  [view setLayerContentsRedrawPolicy:NSViewLayerContentsRedrawNever];
+  [view setLayer:[GdkMacosLayer layer]];
+  [view setWantsLayer:YES];
+
+  return TRUE;
+}
+
 static void
 _gdk_macos_cairo_context_class_init (GdkMacosCairoContextClass *klass)
 {
   GdkCairoContextClass *cairo_context_class = GDK_CAIRO_CONTEXT_CLASS (klass);
   GdkDrawContextClass *draw_context_class = GDK_DRAW_CONTEXT_CLASS (klass);
-  GObjectClass *g_object_class = G_OBJECT_CLASS (klass);
 
   draw_context_class->begin_frame = _gdk_macos_cairo_context_begin_frame;
   draw_context_class->end_frame = _gdk_macos_cairo_context_end_frame;
   draw_context_class->empty_frame = _gdk_macos_cairo_context_empty_frame;
   draw_context_class->surface_resized = _gdk_macos_cairo_context_surface_resized;
+  draw_context_class->surface_attach = _gdk_macos_cairo_context_surface_attach;
 
   cairo_context_class->cairo_create = _gdk_macos_cairo_context_cairo_create;
-
-  g_object_class->constructed = _gdk_macos_cairo_context_constructed;
 }
 
 static void
