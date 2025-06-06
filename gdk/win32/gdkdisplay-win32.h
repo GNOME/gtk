@@ -98,13 +98,6 @@ typedef enum {
   GDK_WIN32_TABLET_INPUT_API_WINPOINTER
 } GdkWin32TabletInputAPI;
 
-typedef struct
-{
-  HWND hwnd;
-  HDC hdc;
-  HGLRC hglrc;
-} GdkWin32GLDummyContextWGL;
-
 /* for Direct Manipulation support */
 typedef struct
 {
@@ -167,7 +160,6 @@ struct _GdkWin32Display
   dmanip_items *dmanip_items;
 
   /* WGL/OpenGL Items */
-  GdkWin32GLDummyContextWGL dummy_context_wgl;
   int wgl_pixel_format;
   guint hasWglARBCreateContext : 1;
   guint hasWglARBPixelFormat : 1;

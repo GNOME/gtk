@@ -605,8 +605,6 @@ gdk_win32_gl_context_wgl_init_basic (GdkWin32Display  *display_win32,
       return FALSE;
     }
 
-  display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
-
   return TRUE;
 }
 

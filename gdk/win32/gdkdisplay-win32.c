@@ -671,13 +671,6 @@ gdk_win32_display_dispose (GObject *object)
 {
   GdkWin32Display *display_win32 = GDK_WIN32_DISPLAY (object);
 
-  if (display_win32->dummy_context_wgl.hglrc != NULL)
-    {
-      wglMakeCurrent (NULL, NULL);
-      wglDeleteContext (display_win32->dummy_context_wgl.hglrc);
-      display_win32->dummy_context_wgl.hglrc = NULL;
-    }
-
   if (display_win32->hwnd != NULL)
     {
       DestroyWindow (display_win32->hwnd);
