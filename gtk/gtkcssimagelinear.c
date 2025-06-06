@@ -141,7 +141,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
                                double       height)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
-  GskColorStop2 *stops;
+  GskGradientStop *stops;
   double angle; /* actual angle of the gradient line in degrees */
   double x, y; /* coordinates of start point */
   double length; /* distance in pixels for 100% */
@@ -213,7 +213,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
 
   offset = start;
   last = -1;
-  stops = g_newa (GskColorStop2, linear->n_stops);
+  stops = g_newa (GskGradientStop, linear->n_stops);
 
   for (i = 0; i < linear->n_stops; i++)
     {

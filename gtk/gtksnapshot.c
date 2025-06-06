@@ -119,8 +119,8 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     } stroke;
     struct {
       gsize n_shadows;
-      GskShadow2 *shadows;
-      GskShadow2 a_shadow; /* Used if n_shadows == 1 */
+      GskShadowEntry *shadows;
+      GskShadowEntry a_shadow; /* Used if n_shadows == 1 */
     } shadow;
     struct {
       GskBlendMode blend_mode;
@@ -708,7 +708,7 @@ gtk_snapshot_collect_repeat (GtkSnapshot      *snapshot,
       /* Repeating a color node entirely is pretty easy by just increasing
        * the size of the color node.
        */
-      GskRenderNode *color_node = gsk_color_node_new2 (gsk_color_node_get_color2 (node), bounds);
+      GskRenderNode *color_node = gsk_color_node_new2 (gsk_color_node_get_gdk_color (node), bounds);
 
       gsk_render_node_unref (node);
 
@@ -1417,11 +1417,11 @@ gtk_snapshot_push_shadow (GtkSnapshot     *snapshot,
                           const GskShadow *shadow,
                           gsize            n_shadows)
 {
-  GskShadow2 *shadow2;
+  GskShadowEntry *shadow2;
 
   g_return_if_fail (n_shadows > 0);
 
-  shadow2 = g_new (GskShadow2, n_shadows);
+  shadow2 = g_new (GskShadowEntry, n_shadows);
   for (gsize i = 0; i < n_shadows; i++)
     {
       gdk_color_init_from_rgba (&shadow2[i].color, &shadow[i].color);
@@ -1448,9 +1448,9 @@ gtk_snapshot_push_shadow (GtkSnapshot     *snapshot,
  * The image is recorded until the next call to [method@Gtk.Snapshot.pop].
  */
 void
-gtk_snapshot_push_shadow2 (GtkSnapshot      *snapshot,
-                           const GskShadow2 *shadow,
-                           gsize             n_shadows)
+gtk_snapshot_push_shadow2 (GtkSnapshot          *snapshot,
+                           const GskShadowEntry *shadow,
+                           gsize                 n_shadows)
 {
   GtkSnapshotState *state;
   GskTransform *transform;
@@ -1480,8 +1480,8 @@ gtk_snapshot_push_shadow2 (GtkSnapshot      *snapshot,
     }
   else
     {
-      state->data.shadow.shadows = g_malloc (sizeof (GskShadow2) * n_shadows);
-      memcpy (state->data.shadow.shadows, shadow, sizeof (GskShadow2) * n_shadows);
+      state->data.shadow.shadows = g_malloc (sizeof (GskShadowEntry) * n_shadows);
+      memcpy (state->data.shadow.shadows, shadow, sizeof (GskShadowEntry) * n_shadows);
       for (i = 0; i < n_shadows; i++)
         {
           gdk_color_init_copy (&state->data.shadow.shadows[i].color, &shadow[i].color);
@@ -2555,9 +2555,9 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
                                      const GskColorStop     *stops,
                                      gsize                   n_stops)
 {
-  GskColorStop2 *stops2;
+  GskGradientStop *stops2;
 
-  stops2 = g_new (GskColorStop2, n_stops);
+  stops2 = g_new (GskGradientStop, n_stops);
   for (gsize i = 0; i < n_stops; i++)
     {
       stops2[i].offset = stops[i].offset;
@@ -2590,14 +2590,14 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
  * Appends a linear gradient node with the given stops to @snapshot.
  */
 void
-gtk_snapshot_append_linear_gradient2 (GtkSnapshot             *snapshot,
-                                      const graphene_rect_t   *bounds,
-                                      const graphene_point_t  *start_point,
-                                      const graphene_point_t  *end_point,
-                                      GdkColorState           *interpolation,
-                                      GskHueInterpolation      hue_interpolation,
-                                      const GskColorStop2     *stops,
-                                      gsize                    n_stops)
+gtk_snapshot_append_linear_gradient2 (GtkSnapshot            *snapshot,
+                                      const graphene_rect_t  *bounds,
+                                      const graphene_point_t *start_point,
+                                      const graphene_point_t *end_point,
+                                      GdkColorState          *interpolation,
+                                      GskHueInterpolation     hue_interpolation,
+                                      const GskGradientStop  *stops,
+                                      gsize                   n_stops)
 {
   GskRenderNode *node;
   graphene_rect_t real_bounds;
@@ -2674,9 +2674,9 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
                                                const GskColorStop     *stops,
                                                gsize                   n_stops)
 {
-  GskColorStop2 *stops2;
+  GskGradientStop *stops2;
 
-  stops2 = g_new (GskColorStop2, n_stops);
+  stops2 = g_new (GskGradientStop, n_stops);
   for (gsize i = 0; i < n_stops; i++)
     {
       stops2[i].offset = stops[i].offset;
@@ -2709,14 +2709,14 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
  * Appends a repeating linear gradient node with the given stops to @snapshot.
  */
 void
-gtk_snapshot_append_repeating_linear_gradient2 (GtkSnapshot             *snapshot,
-                                                const graphene_rect_t   *bounds,
-                                                const graphene_point_t  *start_point,
-                                                const graphene_point_t  *end_point,
-                                                GdkColorState           *interpolation,
-                                                GskHueInterpolation      hue_interpolation,
-                                                const GskColorStop2     *stops,
-                                                gsize                    n_stops)
+gtk_snapshot_append_repeating_linear_gradient2 (GtkSnapshot            *snapshot,
+                                                const graphene_rect_t  *bounds,
+                                                const graphene_point_t *start_point,
+                                                const graphene_point_t *end_point,
+                                                GdkColorState          *interpolation,
+                                                GskHueInterpolation     hue_interpolation,
+                                                const GskGradientStop  *stops,
+                                                gsize                   n_stops)
 {
   GskRenderNode *node;
   graphene_rect_t real_bounds;
@@ -2791,9 +2791,9 @@ gtk_snapshot_append_conic_gradient (GtkSnapshot            *snapshot,
                                     const GskColorStop     *stops,
                                     gsize                   n_stops)
 {
-  GskColorStop2 *stops2;
+  GskGradientStop *stops2;
 
-  stops2 = g_new (GskColorStop2, n_stops);
+  stops2 = g_new (GskGradientStop, n_stops);
   for (gsize i = 0; i < n_stops; i++)
     {
       stops2[i].offset = stops[i].offset;
@@ -2827,14 +2827,14 @@ gtk_snapshot_append_conic_gradient (GtkSnapshot            *snapshot,
  * Appends a conic gradient node with the given stops to @snapshot.
  */
 void
-gtk_snapshot_append_conic_gradient2 (GtkSnapshot             *snapshot,
-                                     const graphene_rect_t   *bounds,
-                                     const graphene_point_t  *center,
-                                     float                    rotation,
-                                     GdkColorState           *interpolation,
-                                     GskHueInterpolation      hue_interpolation,
-                                     const GskColorStop2     *stops,
-                                     gsize                    n_stops)
+gtk_snapshot_append_conic_gradient2 (GtkSnapshot            *snapshot,
+                                     const graphene_rect_t  *bounds,
+                                     const graphene_point_t *center,
+                                     float                   rotation,
+                                     GdkColorState          *interpolation,
+                                     GskHueInterpolation     hue_interpolation,
+                                     const GskGradientStop  *stops,
+                                     gsize                   n_stops)
 {
   GskRenderNode *node;
   graphene_rect_t real_bounds;
@@ -2906,9 +2906,9 @@ gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
                                      const GskColorStop     *stops,
                                      gsize                   n_stops)
 {
-  GskColorStop2 *stops2;
+  GskGradientStop *stops2;
 
-  stops2 = g_new (GskColorStop2, n_stops);
+  stops2 = g_new (GskGradientStop, n_stops);
   for (gsize i = 0; i < n_stops; i++)
     {
       stops2[i].offset = stops[i].offset;
@@ -2946,17 +2946,17 @@ gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
  * Appends a radial gradient node with the given stops to @snapshot.
  */
 void
-gtk_snapshot_append_radial_gradient2 (GtkSnapshot             *snapshot,
-                                      const graphene_rect_t   *bounds,
-                                      const graphene_point_t  *center,
-                                      float                    hradius,
-                                      float                    vradius,
-                                      float                    start,
-                                      float                    end,
-                                      GdkColorState           *interpolation,
-                                      GskHueInterpolation      hue_interpolation,
-                                      const GskColorStop2     *stops,
-                                      gsize                    n_stops)
+gtk_snapshot_append_radial_gradient2 (GtkSnapshot            *snapshot,
+                                      const graphene_rect_t  *bounds,
+                                      const graphene_point_t *center,
+                                      float                   hradius,
+                                      float                   vradius,
+                                      float                   start,
+                                      float                   end,
+                                      GdkColorState          *interpolation,
+                                      GskHueInterpolation     hue_interpolation,
+                                      const GskGradientStop  *stops,
+                                      gsize                   n_stops)
 {
   GskRenderNode *node;
   graphene_rect_t real_bounds;
@@ -3031,9 +3031,9 @@ gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
                                                const GskColorStop     *stops,
                                                gsize                   n_stops)
 {
-  GskColorStop2 *stops2;
+  GskGradientStop *stops2;
 
-  stops2 = g_new (GskColorStop2, n_stops);
+  stops2 = g_new (GskGradientStop, n_stops);
   for (gsize i = 0; i < n_stops; i++)
     {
       stops2[i].offset = stops[i].offset;
@@ -3071,17 +3071,17 @@ gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
  * Appends a repeating radial gradient node with the given stops to @snapshot.
  */
 void
-gtk_snapshot_append_repeating_radial_gradient2 (GtkSnapshot             *snapshot,
-                                                const graphene_rect_t   *bounds,
-                                                const graphene_point_t  *center,
-                                                float                    hradius,
-                                                float                    vradius,
-                                                float                    start,
-                                                float                    end,
-                                                GdkColorState           *interpolation,
-                                                GskHueInterpolation      hue_interpolation,
-                                                const GskColorStop2     *stops,
-                                                gsize                    n_stops)
+gtk_snapshot_append_repeating_radial_gradient2 (GtkSnapshot            *snapshot,
+                                                const graphene_rect_t  *bounds,
+                                                const graphene_point_t *center,
+                                                float                   hradius,
+                                                float                   vradius,
+                                                float                   start,
+                                                float                   end,
+                                                GdkColorState          *interpolation,
+                                                GskHueInterpolation     hue_interpolation,
+                                                const GskGradientStop  *stops,
+                                                gsize                   n_stops)
 {
   GskRenderNode *node;
   graphene_rect_t real_bounds;

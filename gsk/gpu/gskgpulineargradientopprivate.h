@@ -19,7 +19,7 @@ void                    gsk_gpu_linear_gradient_op                      (GskGpuF
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *start,
                                                                          const graphene_point_t         *end,
-                                                                         const GskColorStop2            *stops,
+                                                                         const GskGradientStop          *stops,
                                                                          gsize                           n_stops);
 
 

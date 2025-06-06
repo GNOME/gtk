@@ -38,11 +38,11 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
                               double              height)
 {
   GtkCssImageConic *self = GTK_CSS_IMAGE_CONIC (image);
-  GskColorStop2 *stops;
+  GskGradientStop *stops;
   int i, last;
   double offset;
 
-  stops = g_newa (GskColorStop2, self->n_stops);
+  stops = g_newa (GskGradientStop, self->n_stops);
 
   last = -1;
   offset = 0;

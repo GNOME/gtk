@@ -1511,9 +1511,9 @@ parse_stops (GtkCssParser *parser,
              gpointer      out_stops)
 {
   GArray *stops;
-  GskColorStop2 stop;
+  GskGradientStop stop;
 
-  stops = g_array_new (FALSE, FALSE, sizeof (GskColorStop2));
+  stops = g_array_new (FALSE, FALSE, sizeof (GskGradientStop));
 
   for (;;)
     {
@@ -1529,7 +1529,7 @@ parse_stops (GtkCssParser *parser,
 
       if (stops->len == 0 && stop.offset < 0)
         gtk_css_parser_error_value (parser, "Color stop offset must be >= 0");
-      else if (stops->len > 0 && stop.offset < g_array_index (stops, GskColorStop2, stops->len - 1).offset)
+      else if (stops->len > 0 && stop.offset < g_array_index (stops, GskGradientStop, stops->len - 1).offset)
         gtk_css_parser_error_value (parser, "Color stop offset must be >= previous value");
       else if (stop.offset > 1)
         gtk_css_parser_error_value (parser, "Color stop offset must be <= 1");
@@ -1568,7 +1568,7 @@ clear_stops (gpointer inout_stops)
     {
       for (int i = 0; i < (*stops)->len; i++)
         {
-          GskColorStop2 *stop = &g_array_index (*stops, GskColorStop2, i);
+          GskGradientStop *stop = &g_array_index (*stops, GskGradientStop, i);
           gdk_color_finish (&stop->color);
         }
 
@@ -1618,7 +1618,7 @@ parse_shadows (GtkCssParser *parser,
 
   do
     {
-      GskShadow2 shadow;
+      GskShadowEntry shadow;
       GdkColor color = GDK_COLOR_SRGB (0, 0, 0, 1);
       double dx = 0, dy = 0, radius = 0;
 
@@ -1657,7 +1657,7 @@ clear_shadows (gpointer inout_shadows)
 
   for (gsize i = 0; i < shadows->len; i++)
     {
-      GskShadow2 *shadow = &g_array_index (shadows, GskShadow2, i);
+      GskShadowEntry *shadow = &g_array_index (shadows, GskShadowEntry, i);
       gdk_color_finish (&shadow->color);
     }
 
@@ -2418,10 +2418,10 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
   if (stops == NULL)
     {
-      GskColorStop2 from = { 0.0, GDK_COLOR_SRGB (0.667, 1, 0, 1) };
-      GskColorStop2 to = { 1.0, GDK_COLOR_SRGB (1, 0, 0.8, 1) };
+      GskGradientStop from = { 0.0, GDK_COLOR_SRGB (0.667, 1, 0, 1) };
+      GskGradientStop to = { 1.0, GDK_COLOR_SRGB (1, 0, 0.8, 1) };
 
-      stops = g_array_new (FALSE, FALSE, sizeof (GskColorStop2));
+      stops = g_array_new (FALSE, FALSE, sizeof (GskGradientStop));
       g_array_append_val (stops, from);
       g_array_append_val (stops, to);
     }
@@ -2434,14 +2434,14 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
                                                       &start, &end,
                                                       interpolation,
                                                       hue_interpolation,
-                                                      (GskColorStop2 *) stops->data,
+                                                      (GskGradientStop *) stops->data,
                                                       stops->len);
   else
     result = gsk_linear_gradient_node_new2 (&bounds,
                                             &start, &end,
                                             interpolation,
                                             hue_interpolation,
-                                            (GskColorStop2 *) stops->data,
+                                            (GskGradientStop *) stops->data,
                                             stops->len);
 
   clear_stops (&stops);
@@ -2494,10 +2494,10 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
   if (stops == NULL)
     {
-      GskColorStop2 from = { 0.0, GDK_COLOR_SRGB (0.667, 1, 0, 1) };
-      GskColorStop2 to = { 1.0, GDK_COLOR_SRGB (1, 0, 0.8, 1) };
+      GskGradientStop from = { 0.0, GDK_COLOR_SRGB (0.667, 1, 0, 1) };
+      GskGradientStop to = { 1.0, GDK_COLOR_SRGB (1, 0, 0.8, 1) };
 
-      stops = g_array_new (FALSE, FALSE, sizeof (GskColorStop2));
+      stops = g_array_new (FALSE, FALSE, sizeof (GskGradientStop));
       g_array_append_val (stops, from);
       g_array_append_val (stops, to);
     }
@@ -2520,7 +2520,7 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
                                                       start, end,
                                                       interpolation,
                                                       hue_interpolation,
-                                                      (GskColorStop2 *) stops->data,
+                                                      (GskGradientStop *) stops->data,
                                                       stops->len);
   else
     result = gsk_radial_gradient_node_new2 (&bounds, &center,
@@ -2528,7 +2528,7 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
                                             start, end,
                                             interpolation,
                                             hue_interpolation,
-                                            (GskColorStop2 *) stops->data,
+                                            (GskGradientStop *) stops->data,
                                             stops->len);
 
   clear_stops (&stops);
@@ -2574,10 +2574,10 @@ parse_conic_gradient_node (GtkCssParser *parser,
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
   if (stops == NULL)
     {
-      GskColorStop2 from = { 0.0, GDK_COLOR_SRGB (0.667, 1, 0, 1) };
-      GskColorStop2 to = { 1.0, GDK_COLOR_SRGB (1, 0, 0.8, 1) };
+      GskGradientStop from = { 0.0, GDK_COLOR_SRGB (0.667, 1, 0, 1) };
+      GskGradientStop to = { 1.0, GDK_COLOR_SRGB (1, 0, 0.8, 1) };
 
-      stops = g_array_new (FALSE, FALSE, sizeof (GskColorStop2));
+      stops = g_array_new (FALSE, FALSE, sizeof (GskGradientStop));
       g_array_append_val (stops, from);
       g_array_append_val (stops, to);
     }
@@ -2589,7 +2589,7 @@ parse_conic_gradient_node (GtkCssParser *parser,
                                          &center, rotation,
                                          interpolation,
                                          hue_interpolation,
-                                         (GskColorStop2 *) stops->data,
+                                         (GskGradientStop *) stops->data,
                                          stops->len);
 
   clear_stops (&stops);
@@ -3670,7 +3670,7 @@ parse_shadow_node (GtkCssParser *parser,
                    Context      *context)
 {
   GskRenderNode *child = NULL;
-  GArray *shadows = g_array_new (FALSE, TRUE, sizeof (GskShadow2));
+  GArray *shadows = g_array_new (FALSE, TRUE, sizeof (GskShadowEntry));
   const Declaration declarations[] = {
     { "child", parse_node, clear_node, &child },
     { "shadows", parse_shadows, clear_shadows, shadows },
@@ -3683,11 +3683,11 @@ parse_shadow_node (GtkCssParser *parser,
 
   if (shadows->len == 0)
     {
-      GskShadow2 default_shadow = { GDK_COLOR_SRGB (0, 0, 0, 1), GRAPHENE_POINT_INIT (1, 1), 0 };
+      GskShadowEntry default_shadow = { GDK_COLOR_SRGB (0, 0, 0, 1), GRAPHENE_POINT_INIT (1, 1), 0 };
       g_array_append_val (shadows, default_shadow);
     }
 
-  result = gsk_shadow_node_new2 (child, (GskShadow2 *)shadows->data, shadows->len);
+  result = gsk_shadow_node_new2 (child, (GskShadowEntry *)shadows->data, shadows->len);
 
   clear_shadows (shadows);
   g_array_free (shadows, TRUE);
@@ -4566,10 +4566,10 @@ append_node_param (Printer       *p,
 }
 
 static void
-append_stops_param (Printer             *p,
-                    const char          *param_name,
-                    const GskColorStop2 *stops,
-                    gsize                n_stops)
+append_stops_param (Printer               *p,
+                    const char            *param_name,
+                    const GskGradientStop *stops,
+                    gsize                  n_stops)
 {
   gsize i;
 
@@ -5277,7 +5277,7 @@ render_node_print (Printer       *p,
       {
         start_node (p, "color", node_name);
         append_rect_param (p, "bounds", &node->bounds);
-        append_color_param (p, "color", gsk_color_node_get_color2 (node));
+        append_color_param (p, "color", gsk_color_node_get_gdk_color (node));
         end_node (p);
       }
       break;
@@ -5307,7 +5307,7 @@ render_node_print (Printer       *p,
         append_rect_param (p, "bounds", &node->bounds);
         append_point_param (p, "start", gsk_linear_gradient_node_get_start (node));
         append_point_param (p, "end", gsk_linear_gradient_node_get_end (node));
-        append_stops_param (p, "stops", gsk_linear_gradient_node_get_color_stops2 (node),
+        append_stops_param (p, "stops", gsk_linear_gradient_node_get_gradient_stops (node),
                                         gsk_linear_gradient_node_get_n_color_stops (node));
 
         interpolation = gsk_linear_gradient_node_get_interpolation_color_state (node);
@@ -5337,7 +5337,7 @@ render_node_print (Printer       *p,
         append_float_param (p, "start", gsk_radial_gradient_node_get_start (node), 0.0f);
         append_float_param (p, "end", gsk_radial_gradient_node_get_end (node), 1.0f);
 
-        append_stops_param (p, "stops", gsk_radial_gradient_node_get_color_stops2 (node),
+        append_stops_param (p, "stops", gsk_radial_gradient_node_get_gradient_stops (node),
                                         gsk_radial_gradient_node_get_n_color_stops (node));
 
         interpolation = gsk_radial_gradient_node_get_interpolation_color_state (node);
@@ -5360,7 +5360,7 @@ render_node_print (Printer       *p,
         append_point_param (p, "center", gsk_conic_gradient_node_get_center (node));
         append_float_param (p, "rotation", gsk_conic_gradient_node_get_rotation (node), 0.0f);
 
-        append_stops_param (p, "stops", gsk_conic_gradient_node_get_color_stops2 (node),
+        append_stops_param (p, "stops", gsk_conic_gradient_node_get_gradient_stops (node),
                                         gsk_conic_gradient_node_get_n_color_stops (node));
 
         interpolation = gsk_conic_gradient_node_get_interpolation_color_state (node);
@@ -5389,8 +5389,8 @@ render_node_print (Printer       *p,
         start_node (p, "outset-shadow", node_name);
 
         append_float_param (p, "blur", gsk_outset_shadow_node_get_blur_radius (node), 0.0f);
-        if (!gdk_color_equal (gsk_outset_shadow_node_get_color2 (node), &GDK_COLOR_SRGB (0, 0, 0, 1)))
-          append_color_param (p, "color", gsk_outset_shadow_node_get_color2 (node));
+        if (!gdk_color_equal (gsk_outset_shadow_node_get_gdk_color (node), &GDK_COLOR_SRGB (0, 0, 0, 1)))
+          append_color_param (p, "color", gsk_outset_shadow_node_get_gdk_color (node));
         append_float_param (p, "dx", gsk_outset_shadow_node_get_dx (node), 1.0f);
         append_float_param (p, "dy", gsk_outset_shadow_node_get_dy (node), 1.0f);
         append_rounded_rect_param (p, "outline", gsk_outset_shadow_node_get_outline (node));
@@ -5488,7 +5488,7 @@ render_node_print (Printer       *p,
 
     case GSK_BORDER_NODE:
       {
-        const GdkColor *colors = gsk_border_node_get_colors2 (node);
+        const GdkColor *colors = gsk_border_node_get_gdk_colors (node);
         const float *widths = gsk_border_node_get_widths (node);
         guint i, n;
         start_node (p, "border", node_name);
@@ -5558,7 +5558,7 @@ render_node_print (Printer       *p,
         g_string_append (p->str, "shadows: ");
         for (i = 0; i < n_shadows; i ++)
           {
-            const GskShadow2 *s = gsk_shadow_node_get_shadow2 (node, i);
+            const GskShadowEntry *s = gsk_shadow_node_get_shadow_entry (node, i);
 
             if (i > 0)
               g_string_append (p->str, ", ");
@@ -5588,8 +5588,8 @@ render_node_print (Printer       *p,
         start_node (p, "inset-shadow", node_name);
 
         append_float_param (p, "blur", gsk_inset_shadow_node_get_blur_radius (node), 0.0f);
-        if (!gdk_color_equal (gsk_inset_shadow_node_get_color2 (node), &GDK_COLOR_SRGB (0, 0, 0, 1)))
-          append_color_param (p, "color", gsk_inset_shadow_node_get_color2 (node));
+        if (!gdk_color_equal (gsk_inset_shadow_node_get_gdk_color (node), &GDK_COLOR_SRGB (0, 0, 0, 1)))
+          append_color_param (p, "color", gsk_inset_shadow_node_get_gdk_color (node));
         append_float_param (p, "dx", gsk_inset_shadow_node_get_dx (node), 1.0f);
         append_float_param (p, "dy", gsk_inset_shadow_node_get_dy (node), 1.0f);
         append_rounded_rect_param (p, "outline", gsk_inset_shadow_node_get_outline (node));
@@ -5638,7 +5638,7 @@ render_node_print (Printer       *p,
     case GSK_TEXT_NODE:
       {
         const graphene_point_t *offset = gsk_text_node_get_offset (node);
-        const GdkColor *color = gsk_text_node_get_color2 (node);
+        const GdkColor *color = gsk_text_node_get_gdk_color (node);
 
         start_node (p, "text", node_name);
 

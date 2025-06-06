@@ -18,7 +18,7 @@ void                    gsk_gpu_conic_gradient_op                       (GskGpuF
                                                                          const graphene_rect_t          *rect,
                                                                          const graphene_point_t         *center,
                                                                          float                           angle,
-                                                                         const GskColorStop2            *stops,
+                                                                         const GskGradientStop          *stops,
                                                                          gsize                           n_stops);
 
 

@@ -757,13 +757,13 @@ gboolean
 gtk_css_shadow_value_push_snapshot (const GtkCssValue *value,
                                     GtkSnapshot       *snapshot)
 {
-  GskShadow2 *shadows;
+  GskShadowEntry *shadows;
   guint i;
 
   if (gtk_css_shadow_value_is_clear (value))
     return FALSE;
 
-  shadows = g_newa (GskShadow2, value->n_shadows);
+  shadows = g_newa (GskShadowEntry, value->n_shadows);
 
   for (i = 0; i < value->n_shadows; i++)
     {

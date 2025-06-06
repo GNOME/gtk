@@ -81,7 +81,7 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
                                double       height)
 {
   GtkCssImageRadial *radial = GTK_CSS_IMAGE_RADIAL (image);
-  GskColorStop2 *stops;
+  GskGradientStop *stops;
   double x, y;
   double hradius, vradius;
   double start, end;
@@ -160,7 +160,7 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
 
   offset = start;
   last = -1;
-  stops = g_newa (GskColorStop2, radial->n_stops);
+  stops = g_newa (GskGradientStop, radial->n_stops);
 
   for (i = 0; i < radial->n_stops; i++)
     {

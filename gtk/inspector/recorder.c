@@ -534,7 +534,7 @@ node_name (GskRenderNode *node)
       return g_strdup (gsk_debug_node_get_message (node));
 
     case GSK_COLOR_NODE:
-      return gdk_color_to_string (gsk_color_node_get_color2 (node));
+      return gdk_color_to_string (gsk_color_node_get_gdk_color (node));
 
     case GSK_TEXTURE_NODE:
       {
@@ -898,7 +898,7 @@ get_color2_texture (const GdkColor *color)
 }
 
 static GdkTexture *
-get_linear_gradient_texture (gsize n_stops, const GskColorStop2 *stops)
+get_linear_gradient_texture (gsize n_stops, const GskGradientStop *stops)
 {
   cairo_surface_t *surface;
   cairo_t *cr;
@@ -1196,7 +1196,7 @@ populate_render_node_properties (GListStore    *store,
       break;
 
     case GSK_COLOR_NODE:
-      add_color_row (store, "Color", gsk_color_node_get_color2 (node));
+      add_color_row (store, "Color", gsk_color_node_get_gdk_color (node));
       break;
 
     case GSK_LINEAR_GRADIENT_NODE:
@@ -1205,7 +1205,7 @@ populate_render_node_properties (GListStore    *store,
         const graphene_point_t *start = gsk_linear_gradient_node_get_start (node);
         const graphene_point_t *end = gsk_linear_gradient_node_get_end (node);
         const gsize n_stops = gsk_linear_gradient_node_get_n_color_stops (node);
-        const GskColorStop2 *stops = gsk_linear_gradient_node_get_color_stops2 (node);
+        const GskGradientStop *stops = gsk_linear_gradient_node_get_gradient_stops (node);
         GdkColorState *interpolation = gsk_linear_gradient_node_get_interpolation_color_state (node);
         GskHueInterpolation hue_interpolation = gsk_linear_gradient_node_get_hue_interpolation (node);
         int i;
@@ -1241,7 +1241,7 @@ populate_render_node_properties (GListStore    *store,
         const float hradius = gsk_radial_gradient_node_get_hradius (node);
         const float vradius = gsk_radial_gradient_node_get_vradius (node);
         const gsize n_stops = gsk_radial_gradient_node_get_n_color_stops (node);
-        const GskColorStop2 *stops = gsk_radial_gradient_node_get_color_stops2 (node);
+        const GskGradientStop *stops = gsk_radial_gradient_node_get_gradient_stops (node);
         GdkColorState *interpolation = gsk_radial_gradient_node_get_interpolation_color_state (node);
         GskHueInterpolation hue_interpolation = gsk_radial_gradient_node_get_hue_interpolation (node);
         int i;
@@ -1275,7 +1275,7 @@ populate_render_node_properties (GListStore    *store,
         const graphene_point_t *center = gsk_conic_gradient_node_get_center (node);
         const float rotation = gsk_conic_gradient_node_get_rotation (node);
         const gsize n_stops = gsk_conic_gradient_node_get_n_color_stops (node);
-        const GskColorStop2 *stops = gsk_conic_gradient_node_get_color_stops2 (node);
+        const GskGradientStop *stops = gsk_conic_gradient_node_get_gradient_stops (node);
         GdkColorState *interpolation = gsk_conic_gradient_node_get_interpolation_color_state (node);
         GskHueInterpolation hue_interpolation = gsk_conic_gradient_node_get_hue_interpolation (node);
         gsize i;
@@ -1341,7 +1341,7 @@ populate_render_node_properties (GListStore    *store,
 
         add_text_row (store, "Position", "%.2f %.2f", offset->x, offset->y);
 
-        add_color_row (store, "Color", gsk_text_node_get_color2 (node));
+        add_color_row (store, "Color", gsk_text_node_get_gdk_color (node));
       }
       break;
 
@@ -1349,7 +1349,7 @@ populate_render_node_properties (GListStore    *store,
       {
         const char *name[4] = { "Top", "Right", "Bottom", "Left" };
         const float *widths = gsk_border_node_get_widths (node);
-        const GdkColor *colors = gsk_border_node_get_colors2 (node);
+        const GdkColor *colors = gsk_border_node_get_gdk_colors (node);
         int i;
 
         for (i = 0; i < 4; i++)
@@ -1481,7 +1481,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
 
     case GSK_INSET_SHADOW_NODE:
       {
-        const GdkColor *color = gsk_inset_shadow_node_get_color2 (node);
+        const GdkColor *color = gsk_inset_shadow_node_get_gdk_color (node);
         float dx = gsk_inset_shadow_node_get_dx (node);
         float dy = gsk_inset_shadow_node_get_dy (node);
         float spread = gsk_inset_shadow_node_get_spread (node);
@@ -1499,7 +1499,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
     case GSK_OUTSET_SHADOW_NODE:
       {
         const GskRoundedRect *outline = gsk_outset_shadow_node_get_outline (node);
-        const GdkColor *color = gsk_outset_shadow_node_get_color2 (node);
+        const GdkColor *color = gsk_outset_shadow_node_get_gdk_color (node);
         float dx = gsk_outset_shadow_node_get_dx (node);
         float dy = gsk_outset_shadow_node_get_dy (node);
         float spread = gsk_outset_shadow_node_get_spread (node);
@@ -1644,7 +1644,7 @@ G_GNUC_END_IGNORE_DEPRECATIONS
         for (i = 0; i < gsk_shadow_node_get_n_shadows (node); i++)
           {
             char *label;
-            const GskShadow2 *shadow = gsk_shadow_node_get_shadow2 (node, i);
+            const GskShadowEntry *shadow = gsk_shadow_node_get_shadow_entry (node, i);
 
             label = g_strdup_printf ("Color %d", i);
             add_color_row (store, label, &shadow->color);
