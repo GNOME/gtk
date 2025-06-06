@@ -92,18 +92,12 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkWin32Display *display_win32 = (GDK_WIN32_DISPLAY (gdk_gl_context_get_display (context)));
   GdkWin32Surface *surface_win32 = GDK_WIN32_SURFACE (surface);
-  HDC hdc;
 
   GDK_DRAW_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->end_frame (draw_context, context_data, painted);
 
   gdk_gl_context_make_current (context);
 
   gdk_profiler_add_mark (GDK_PROFILER_CURRENT_TIME, 0, "win32", "swap buffers");
-
-  if (surface != NULL)
-    hdc = surface_win32->hdc;
-  else
-    hdc = display_win32->dummy_context_wgl.hdc;
 
   /* context->old_updated_area[0] contains this frame's updated region
    * (what actually changed since the previous frame) */
@@ -133,7 +127,7 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
         }
     }
 
-  SwapBuffers (hdc);
+  SwapBuffers (surface_win32->hdc);
 }
 
 static void
