@@ -82,6 +82,10 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
       last = i;
     }
 
+  for (i = 0; i + 1 < self->n_stops; i++)
+    stops[i].transition_hint = (stops[i+1].offset - stops[i].offset) / 2;
+  stops[self->n_stops - 1].transition_hint = 1;
+
   if (self->color_space != GTK_CSS_COLOR_SPACE_SRGB)
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
 

@@ -2562,6 +2562,10 @@ gtk_snapshot_append_linear_gradient (GtkSnapshot            *snapshot,
   for (gsize i = 0; i < n_stops; i++)
     {
       stops2[i].offset = stops[i].offset;
+      if (i + 1 < n_stops)
+        stops2[i].transition_hint = (stops[i+1].offset - stops[i].offset) / 2;
+      else
+        stops2[i].transition_hint = 1;
       gdk_color_init_from_rgba (&stops2[i].color, &stops[i].color);
     }
 
@@ -2681,6 +2685,10 @@ gtk_snapshot_append_repeating_linear_gradient (GtkSnapshot            *snapshot,
   for (gsize i = 0; i < n_stops; i++)
     {
       stops2[i].offset = stops[i].offset;
+      if (i + 1 < n_stops)
+        stops2[i].transition_hint = (stops[i+1].offset - stops[i].offset) / 2;
+      else
+        stops2[i].transition_hint = 1;
       gdk_color_init_from_rgba (&stops2[i].color, &stops[i].color);
     }
 
@@ -2798,6 +2806,10 @@ gtk_snapshot_append_conic_gradient (GtkSnapshot            *snapshot,
   for (gsize i = 0; i < n_stops; i++)
     {
       stops2[i].offset = stops[i].offset;
+      if (i + 1 < n_stops)
+        stops2[i].transition_hint = (stops[i+1].offset - stops[i].offset) / 2;
+      else
+        stops2[i].transition_hint = 1;
       gdk_color_init_from_rgba (&stops2[i].color, &stops[i].color);
     }
 
@@ -2913,6 +2925,10 @@ gtk_snapshot_append_radial_gradient (GtkSnapshot            *snapshot,
   for (gsize i = 0; i < n_stops; i++)
     {
       stops2[i].offset = stops[i].offset;
+      if (i + 1 < n_stops)
+        stops2[i].transition_hint = (stops[i+1].offset - stops[i].offset) / 2;
+      else
+        stops2[i].transition_hint = 1;
       gdk_color_init_from_rgba (&stops2[i].color, &stops[i].color);
     }
 
@@ -3038,6 +3054,10 @@ gtk_snapshot_append_repeating_radial_gradient (GtkSnapshot            *snapshot,
   for (gsize i = 0; i < n_stops; i++)
     {
       stops2[i].offset = stops[i].offset;
+      if (i + 1 < n_stops)
+        stops2[i].transition_hint = (stops[i+1].offset - stops[i].offset) / 2;
+      else
+        stops2[i].transition_hint = 1;
       gdk_color_init_from_rgba (&stops2[i].color, &stops[i].color);
     }
 

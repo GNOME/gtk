@@ -195,6 +195,10 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
       last = i;
     }
 
+  for (i = 0; i + 1 < radial->n_stops; i++)
+    stops[i].transition_hint = (stops[i+1].offset - stops[i].offset) / 2;
+  stops[radial->n_stops - 1].transition_hint = 1;
+
   if (radial->color_space != GTK_CSS_COLOR_SPACE_SRGB)
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
 

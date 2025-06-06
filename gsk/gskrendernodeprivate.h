@@ -188,6 +188,7 @@ typedef struct _GskGradientStop GskGradientStop;
 struct _GskGradientStop
 {
   float offset;
+  float transition_hint;
   GdkColor color;
 };
 

@@ -2418,8 +2418,16 @@ parse_linear_gradient_node_internal (GtkCssParser *parser,
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
   if (stops == NULL)
     {
-      GskGradientStop from = { 0.0, GDK_COLOR_SRGB (0.667, 1, 0, 1) };
-      GskGradientStop to = { 1.0, GDK_COLOR_SRGB (1, 0, 0.8, 1) };
+      GskGradientStop from = {
+        .offset = 0.0,
+        .transition_hint = 0.5,
+        .color = GDK_COLOR_SRGB (0.667, 1, 0, 1)
+      };
+      GskGradientStop to = {
+        .offset = 1.0,
+        .transition_hint = 0.5,
+        .color = GDK_COLOR_SRGB (1, 0, 0.8, 1)
+      };
 
       stops = g_array_new (FALSE, FALSE, sizeof (GskGradientStop));
       g_array_append_val (stops, from);
@@ -2494,8 +2502,16 @@ parse_radial_gradient_node_internal (GtkCssParser *parser,
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
   if (stops == NULL)
     {
-      GskGradientStop from = { 0.0, GDK_COLOR_SRGB (0.667, 1, 0, 1) };
-      GskGradientStop to = { 1.0, GDK_COLOR_SRGB (1, 0, 0.8, 1) };
+      GskGradientStop from = {
+        .offset = 0.0,
+        .transition_hint = 0.5,
+        .color = GDK_COLOR_SRGB (0.667, 1, 0, 1)
+      };
+      GskGradientStop to = {
+        .offset = 1.0,
+        .transition_hint = 0.5,
+        .color = GDK_COLOR_SRGB (1, 0, 0.8, 1)
+      };
 
       stops = g_array_new (FALSE, FALSE, sizeof (GskGradientStop));
       g_array_append_val (stops, from);
@@ -2574,8 +2590,16 @@ parse_conic_gradient_node (GtkCssParser *parser,
   parse_declarations (parser, context, declarations, G_N_ELEMENTS (declarations));
   if (stops == NULL)
     {
-      GskGradientStop from = { 0.0, GDK_COLOR_SRGB (0.667, 1, 0, 1) };
-      GskGradientStop to = { 1.0, GDK_COLOR_SRGB (1, 0, 0.8, 1) };
+      GskGradientStop from = {
+        .offset = 0.0,
+        .transition_hint = 0.5,
+        .color = GDK_COLOR_SRGB (0.667, 1, 0, 1)
+      };
+      GskGradientStop to = {
+        .offset = 1.0,
+        .transition_hint = 0.5,
+        .color = GDK_COLOR_SRGB (1, 0, 0.8, 1)
+      };
 
       stops = g_array_new (FALSE, FALSE, sizeof (GskGradientStop));
       g_array_append_val (stops, from);
