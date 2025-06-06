@@ -1005,18 +1005,28 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
 
       if (!gdk_win32_gl_context_wgl_init_basic (display_win32, error))
         return 0;
+
+      hdc = display_win32->dummy_context_wgl.hdc;
+
+      /* one is only allowed to call SetPixelFormat(), and so ChoosePixelFormat()
+      * one single time per window HDC
+      */
+      GDK_NOTE (OPENGL, g_print ("requesting pixel format...\n"));
+      pixel_format = gdk_win32_wgl_choose_pixelformat (display_win32, hdc, &pfd);
     }
-
-  if (surface != NULL)
-    hdc = GDK_WIN32_SURFACE (surface)->hdc;
   else
-    hdc = display_win32->dummy_context_wgl.hdc;
+    {
+      if (surface != NULL)
+        hdc = GDK_WIN32_SURFACE (surface)->hdc;
+      else
+        hdc = display_win32->dummy_context_wgl.hdc;
 
-  /* one is only allowed to call SetPixelFormat(), and so ChoosePixelFormat()
-   * one single time per window HDC
-   */
-  GDK_NOTE (OPENGL, g_print ("requesting pixel format...\n"));
-  pixel_format = gdk_win32_wgl_choose_pixelformat (display_win32, hdc, &pfd);
+      /* one is only allowed to call SetPixelFormat(), and so ChoosePixelFormat()
+      * one single time per window HDC
+      */
+      GDK_NOTE (OPENGL, g_print ("requesting pixel format...\n"));
+      pixel_format = gdk_win32_wgl_choose_pixelformat (display_win32, hdc, &pfd);
+    }
 
   if (pixel_format == 0 ||
       !set_wgl_pixformat_for_hdc (display_win32,
