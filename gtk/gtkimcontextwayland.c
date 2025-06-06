@@ -126,6 +126,19 @@ gtk_im_context_wayland_get_global (GtkIMContextWayland *self)
   return global;
 }
 
+struct wl_proxy *
+gtk_im_context_wayland_get_text_protocol (GdkDisplay *display)
+{
+  GtkIMContextWaylandGlobal *global;
+
+  global = gtk_im_context_wayland_global_get (display);
+
+  if (!global)
+    return NULL;
+
+  return (struct wl_proxy *) global->text_input;
+}
+
 static void
 notify_im_change (GtkIMContextWayland                 *context,
                   enum zwp_text_input_v3_change_cause  cause)
@@ -749,7 +762,7 @@ gtk_im_context_wayland_global_free (gpointer data)
   g_free (global);
 }
 
-static GtkIMContextWaylandGlobal *
+GtkIMContextWaylandGlobal *
 gtk_im_context_wayland_global_get (GdkDisplay *display)
 {
   GtkIMContextWaylandGlobal *global;
