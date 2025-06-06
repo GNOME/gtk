@@ -69,21 +69,6 @@ gdk_wgl_get_default_hdc (GdkWin32Display *display_win32)
   return GetDC (display_win32->hwnd);
 }
 
-static HDC
-gdk_win32_gl_context_wgl_get_dc (GdkWin32GLContextWGL *self)
-{
-  if (GDK_WIN32_GL_CONTEXT (self)->handle)
-    {
-      return GetDC (GDK_WIN32_GL_CONTEXT (self)->handle);
-    }
-  else
-    {
-      GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self));
-    
-      return gdk_wgl_get_default_hdc (GDK_WIN32_DISPLAY (display));
-    }
-}
-
 static void
 gdk_win32_gl_context_wgl_dispose (GObject *gobject)
 {
@@ -145,7 +130,7 @@ gdk_win32_gl_context_wgl_end_frame (GdkDrawContext *draw_context,
         }
     }
 
-  SwapBuffers (gdk_win32_gl_context_wgl_get_dc (context_wgl));
+  SwapBuffers (GetDC (GDK_WIN32_GL_CONTEXT (context)->handle));
 }
 
 static void
@@ -923,7 +908,7 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
     }
   else
     {
-      hdc = gdk_win32_gl_context_wgl_get_dc (context_wgl);
+      hdc = gdk_wgl_get_default_hdc (display_win32);
     }
 
   /* if there isn't wglCreateContextAttribsARB() on WGL, use a legacy context */
@@ -1031,7 +1016,16 @@ gdk_win32_gl_context_wgl_make_current (GdkGLContext *context,
   GdkWin32GLContextWGL *self = GDK_WIN32_GL_CONTEXT_WGL (context);
   HDC hdc;
 
-  hdc = gdk_win32_gl_context_wgl_get_dc (self);
+  if (GDK_WIN32_GL_CONTEXT (self)->handle)
+    {
+      hdc = GetDC (GDK_WIN32_GL_CONTEXT (self)->handle);
+    }
+  else
+    {
+      GdkDisplay *display = gdk_draw_context_get_display (GDK_DRAW_CONTEXT (self));
+    
+      hdc = gdk_wgl_get_default_hdc (GDK_WIN32_DISPLAY (display));
+    }
 
   if (!gdk_win32_private_wglMakeCurrent (hdc, self->wgl_context))
     return FALSE;
