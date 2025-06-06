@@ -113,12 +113,12 @@ gsk_pango_renderer_draw_glyph_item (PangoRenderer  *renderer,
   get_color (crenderer, PANGO_RENDER_PART_FOREGROUND, &color);
 
   if (glyph_item->item->analysis.font)
-    gtk_snapshot_append_text2 (crenderer->snapshot,
-                               glyph_item->item->analysis.font,
-                               glyph_item->glyphs,
-                               &color,
-                               (float) x / PANGO_SCALE,
-                               (float) y / PANGO_SCALE);
+    gtk_snapshot_add_text (crenderer->snapshot,
+                           glyph_item->item->analysis.font,
+                           glyph_item->glyphs,
+                           &color,
+                           (float) x / PANGO_SCALE,
+                           (float) y / PANGO_SCALE);
 
   gdk_color_finish (&color);
 
@@ -139,12 +139,12 @@ gsk_pango_renderer_draw_rectangle (PangoRenderer     *renderer,
 
   get_color (crenderer, part, &color);
 
-  gtk_snapshot_append_color2 (crenderer->snapshot,
-                              &color,
-                              &GRAPHENE_RECT_INIT ((double)x / PANGO_SCALE,
-                                                   (double)y / PANGO_SCALE,
-                                                   (double)width / PANGO_SCALE,
-                                                   (double)height / PANGO_SCALE));
+  gtk_snapshot_add_color (crenderer->snapshot,
+                          &color,
+                          &GRAPHENE_RECT_INIT ((double)x / PANGO_SCALE,
+                                               (double)y / PANGO_SCALE,
+                                               (double)width / PANGO_SCALE,
+                                               (double)height / PANGO_SCALE));
 
   gdk_color_finish (&color);
 }
@@ -226,7 +226,7 @@ gsk_pango_renderer_draw_error_underline (PangoRenderer *renderer,
                                    hh / 2);
 
   gtk_snapshot_push_rounded_clip (crenderer->snapshot, &dot);
-  gtk_snapshot_append_color2 (crenderer->snapshot, &color, &dot.bounds);
+  gtk_snapshot_add_color (crenderer->snapshot, &color, &dot.bounds);
   gtk_snapshot_pop (crenderer->snapshot);
 
   gdk_color_finish (&color);
@@ -510,12 +510,12 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
   GdkColor color2;
 
   gdk_color_init_from_rgba (&color2, color);
-  gtk_snapshot_append_layout2 (snapshot, layout, &color2);
+  gtk_snapshot_add_layout (snapshot, layout, &color2);
   gdk_color_finish (&color2);
 }
 
 /* < private >
- * gtk_snapshot_append_layout2:
+ * gtk_snapshot_add_layout:
  * @snapshot: a `GtkSnapshot`
  * @layout: the `PangoLayout` to render
  * @color: the foreground color to render the layout in
@@ -529,9 +529,9 @@ gtk_snapshot_append_layout (GtkSnapshot   *snapshot,
  * may not be added to the @snapshot.
  **/
 void
-gtk_snapshot_append_layout2 (GtkSnapshot    *snapshot,
-                             PangoLayout    *layout,
-                             const GdkColor *color)
+gtk_snapshot_add_layout (GtkSnapshot    *snapshot,
+                         PangoLayout    *layout,
+                         const GdkColor *color)
 {
   GskPangoRenderer *crenderer;
 

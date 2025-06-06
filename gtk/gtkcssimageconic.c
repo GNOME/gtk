@@ -85,7 +85,7 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
   if (self->color_space != GTK_CSS_COLOR_SPACE_SRGB)
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
 
-  gtk_snapshot_append_conic_gradient2 (
+  gtk_snapshot_add_conic_gradient (
           snapshot,
           &GRAPHENE_RECT_INIT (0, 0, width, height),
           &GRAPHENE_POINT_INIT (_gtk_css_position_value_get_x (self->center, width),

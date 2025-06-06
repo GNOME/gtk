@@ -197,9 +197,9 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
 
           gtk_css_color_to_color (gtk_css_color_value_get_color (stop->color), &color);
 
-          gtk_snapshot_append_color2 (snapshot,
-                                      &color,
-                                      &GRAPHENE_RECT_INIT (0, 0, width, height));
+          gtk_snapshot_add_color (snapshot,
+                                  &color,
+                                  &GRAPHENE_RECT_INIT (0, 0, width, height));
 
           gdk_color_finish (&color);
           return;
@@ -256,7 +256,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
 
   if (linear->repeating)
-    gtk_snapshot_append_repeating_linear_gradient2 (
+    gtk_snapshot_add_repeating_linear_gradient (
         snapshot,
         &GRAPHENE_RECT_INIT (0, 0, width, height),
         &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
@@ -265,7 +265,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
         gtk_css_hue_interpolation_to_hue_interpolation (linear->hue_interp),
         stops, linear->n_stops);
   else
-    gtk_snapshot_append_linear_gradient2 (
+    gtk_snapshot_add_linear_gradient (
         snapshot,
         &GRAPHENE_RECT_INIT (0, 0, width, height),
         &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
