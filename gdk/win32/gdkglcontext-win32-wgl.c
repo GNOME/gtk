@@ -156,6 +156,11 @@ gdk_win32_gl_context_wgl_get_damage (GdkGLContext *gl_context)
   return GDK_GL_CONTEXT_CLASS (gdk_win32_gl_context_wgl_parent_class)->get_damage (gl_context);
 }
 
+static HDC
+gdk_wgl_get_default_hdc (GdkWin32Display *display_win32)
+{
+  return GetDC (display_win32->hwnd);
+}
 typedef struct {
   GArray *array;
   guint committed;
@@ -911,14 +916,14 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
       if (!gdk_win32_gl_context_wgl_init_basic (display_win32, error))
         return 0;
 
-      hdc = display_win32->dummy_context_wgl.hdc;
+      hdc = gdk_wgl_get_default_hdc (display_win32);
     }
   else
     {
       if (surface != NULL)
         hdc = GDK_WIN32_SURFACE (surface)->hdc;
       else
-        hdc = display_win32->dummy_context_wgl.hdc;
+        hdc = gdk_wgl_get_default_hdc (display_win32);
     }
 
   if (!set_wgl_pixformat_for_hdc (display_win32, hdc))
@@ -1039,7 +1044,7 @@ gdk_win32_gl_context_wgl_make_current (GdkGLContext *context,
   HDC hdc;
 
   if (surfaceless || surface == NULL)
-    hdc = display_win32->dummy_context_wgl.hdc;
+    hdc = gdk_wgl_get_default_hdc (display_win32);
   else
     hdc = GDK_WIN32_SURFACE (surface)->hdc;
 
