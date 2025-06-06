@@ -927,28 +927,10 @@ static gboolean
 set_wgl_pixformat_for_hdc (GdkWin32Display       *display_win32,
                            HDC                   *hdc,
                            int                    pixel_format,
-                           PIXELFORMATDESCRIPTOR *pfd,
-                           gboolean              *recreate_dummy_context)
+                           PIXELFORMATDESCRIPTOR *pfd)
 {
   gboolean skip_acquire = FALSE;
   gboolean set_pixel_format_result = FALSE;
-
-  if (display_win32->dummy_context_wgl.hwnd != NULL)
-    {
-      /*
-       * Ditch the initial dummy HDC, HGLRC and HWND used to initialize WGL,
-       * we want to ensure that the HDC of the notification HWND that we will
-       * also use for our new dummy HDC will have the correct pixel format set
-       */
-      wglDeleteContext (display_win32->dummy_context_wgl.hglrc);
-      display_win32->dummy_context_wgl.hglrc = NULL;
-      display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
-      *hdc = display_win32->dummy_context_wgl.hdc;
-      *recreate_dummy_context = TRUE;
-
-      DestroyWindow (display_win32->dummy_context_wgl.hwnd);
-      display_win32->dummy_context_wgl.hwnd = NULL;
-    }
 
   if (GetPixelFormat (*hdc) != 0)
     {
@@ -1013,6 +995,20 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
       */
       GDK_NOTE (OPENGL, g_print ("requesting pixel format...\n"));
       pixel_format = gdk_win32_wgl_choose_pixelformat (display_win32, hdc, &pfd);
+
+      /*
+      * Ditch the initial dummy HDC, HGLRC and HWND used to initialize WGL,
+      * we want to ensure that the HDC of the notification HWND that we will
+      * also use for our new dummy HDC will have the correct pixel format set
+      */
+      wglDeleteContext (display_win32->dummy_context_wgl.hglrc);
+      display_win32->dummy_context_wgl.hglrc = NULL;
+      display_win32->dummy_context_wgl.hdc = GetDC (display_win32->hwnd);
+      hdc = display_win32->dummy_context_wgl.hdc;
+      recreate_dummy_context = TRUE;
+
+      DestroyWindow (display_win32->dummy_context_wgl.hwnd);
+      display_win32->dummy_context_wgl.hwnd = NULL;
     }
   else
     {
@@ -1030,10 +1026,9 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
 
   if (pixel_format == 0 ||
       !set_wgl_pixformat_for_hdc (display_win32,
-                                 &hdc,
+                                  hdc,
                                   pixel_format,
-                                 &pfd,
-                                 &recreate_dummy_context))
+                                  &pfd))
     {
       g_set_error_literal (error, GDK_GL_ERROR,
                            GDK_GL_ERROR_UNSUPPORTED_FORMAT,
