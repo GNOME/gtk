@@ -892,7 +892,6 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   int flags = 0;
   HGLRC hglrc;
   HDC hdc;
-  gboolean recreate_dummy_context = FALSE;
 
   GdkSurface *surface = gdk_gl_context_get_surface (context);
   GdkDisplay *display = gdk_gl_context_get_display (context);
@@ -919,8 +918,6 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
         return 0;
 
       hdc = display_win32->dummy_context_wgl.hdc;
-
-      recreate_dummy_context = TRUE;
     }
   else
     {
@@ -954,28 +951,6 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
                               flags,
                               legacy_bit,
                               error);
-
-  if (recreate_dummy_context)
-    {
-      display_win32->dummy_context_wgl.hglrc =
-        create_wgl_context (context,
-                            display_win32,
-                            display_win32->dummy_context_wgl.hdc,
-                            NULL,
-                            flags,
-                            legacy_bit,
-                            error);
-
-      if (display_win32->dummy_context_wgl.hglrc == NULL)
-        {
-          if (hglrc != NULL)
-            {
-              wglDeleteContext (hglrc);
-              hglrc = NULL;
-            }
-        }
-    }
-
   if (hglrc == NULL)
     return 0;
 
