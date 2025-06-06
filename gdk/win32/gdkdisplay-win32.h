@@ -168,6 +168,7 @@ struct _GdkWin32Display
 
   /* WGL/OpenGL Items */
   GdkWin32GLDummyContextWGL dummy_context_wgl;
+  int wgl_pixel_format;
   guint hasWglARBCreateContext : 1;
   guint hasWglARBPixelFormat : 1;
   guint hasGlWINSwapHint : 1;
