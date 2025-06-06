@@ -489,25 +489,15 @@ gdk_win32_wgl_choose_pixelformat (GdkWin32Display       *display_win32,
                                   HDC                    hdc,
                                   PIXELFORMATDESCRIPTOR *pfd)
 {
-  int best_pf = 0;
+  int best_pf;
 
   if (display_win32->hasWglARBPixelFormat)
     {
-      /* Save up the HDC and HGLRC that we are currently using, to restore back to it when we are done here */
-      HDC hdc_current = wglGetCurrentDC ();
-      HGLRC hglrc_current = wglGetCurrentContext ();
-
       if (!wglMakeCurrent (display_win32->dummy_context_wgl.hdc,
                            display_win32->dummy_context_wgl.hglrc))
-        {
-          wglMakeCurrent (hdc_current, hglrc_current);
-          return 0;
-        }
+        return 0;
 
       best_pf = choose_pixel_format_arb_attribs (display_win32, hdc);
-
-      /* Go back to the HDC that we were using, since we are done with the dummy HDC and GL Context */
-      wglMakeCurrent (hdc_current, hglrc_current);
     }
   else
     {
@@ -845,9 +835,6 @@ create_wgl_context (GdkGLContext    *context,
   HGLRC hglrc_base, hglrc;
   GdkGLVersion version;
   gboolean remove_base_context = FALSE;
-  /* Save up the HDC and HGLRC that we are currently using, to restore back to it when we are done here  */
-  HDC hdc_current = wglGetCurrentDC ();
-  HGLRC hglrc_current = wglGetCurrentContext ();
 
   hglrc = NULL;
 
@@ -927,8 +914,6 @@ create_wgl_context (GdkGLContext    *context,
 
   if (remove_base_context)
     g_clear_pointer (&hglrc_base, gdk_win32_private_wglDeleteContext);
-
-  wglMakeCurrent (hdc_current, hglrc_current);
 
   return hglrc;
 }
@@ -1073,9 +1058,6 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
 
   context_wgl->wgl_context = hglrc;
 
-  HDC hdc_current = wglGetCurrentDC ();
-  HGLRC hglrc_current = wglGetCurrentContext ();
-
   if (wglMakeCurrent (hdc, hglrc))
     {
       if (display_win32->hasWglARBPixelFormat)
@@ -1130,8 +1112,6 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
             wglGetProcAddress ("glAddSwapHintRectWIN");
         }
     }
-
-  wglMakeCurrent (hdc_current, hglrc_current);
 
   if (context_wgl->swap_method == SWAP_METHOD_UNDEFINED)
     g_message ("Unknown swap method");
