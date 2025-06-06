@@ -484,28 +484,6 @@ choose_pixel_format_opengl32 (GdkWin32Display *display_win32,
   return best.index;
 }
 
-static int
-gdk_win32_wgl_choose_pixelformat (GdkWin32Display *display_win32,
-                                  HDC              hdc)
-{
-  int best_pf;
-
-  if (display_win32->hasWglARBPixelFormat)
-    {
-      if (!wglMakeCurrent (display_win32->dummy_context_wgl.hdc,
-                           display_win32->dummy_context_wgl.hglrc))
-        return 0;
-
-      best_pf = choose_pixel_format_arb_attribs (display_win32, hdc);
-    }
-  else
-    {
-      best_pf = choose_pixel_format_opengl32 (display_win32, hdc);
-    }
-
-  return best_pf;
-}
-
 static HGLRC
 gdk_create_dummy_wgl_context (GdkWin32Display *display_win32,
                               HDC              hdc)
@@ -604,14 +582,11 @@ gdk_win32_gl_context_wgl_init_basic (GdkWin32Display  *display_win32,
 
       display_win32->wgl_quirks.disallow_swap_exchange = check_vendor_is_nvidia ();
       
-      display_win32->dummy_context_wgl.hdc = hdc;
-      display_win32->dummy_context_wgl.hglrc = hglrc;
-
       GDK_DEBUG (OPENGL, "Selecting pixel format for default context...\n");
-      display_win32->wgl_pixel_format = gdk_win32_wgl_choose_pixelformat (display_win32, hdc);
-
-      display_win32->dummy_context_wgl.hdc = NULL;
-      display_win32->dummy_context_wgl.hglrc = NULL;      
+      if (display_win32->hasWglARBPixelFormat)
+        display_win32->wgl_pixel_format = choose_pixel_format_arb_attribs (display_win32, hdc);
+      else
+        display_win32->wgl_pixel_format = choose_pixel_format_opengl32 (display_win32, hdc);
     }
 
   /*
