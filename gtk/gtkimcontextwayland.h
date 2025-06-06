@@ -18,10 +18,16 @@
 #pragma once
 
 #include <gtk/gtk.h>
+#include <glib-object.h>
+#include <gdk/gdkdisplay.h>
+#include <wayland-client-protocol.h>
 
 G_BEGIN_DECLS
 
 GType         gtk_im_context_wayland_get_type (void) G_GNUC_CONST;
+
+struct wl_proxy *gtk_im_context_wayland_get_text_protocol (GdkDisplay *display);
+
 
 G_END_DECLS
 
