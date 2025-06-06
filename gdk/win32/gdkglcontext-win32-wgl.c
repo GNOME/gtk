@@ -924,20 +924,14 @@ create_wgl_context (GdkGLContext    *context,
 }
 
 static gboolean
-set_wgl_pixformat_for_hdc (GdkWin32Display *display_win32,
-                           HDC             *hdc,
-                           int             *best_idx,
-                           gboolean        *recreate_dummy_context)
+set_wgl_pixformat_for_hdc (GdkWin32Display       *display_win32,
+                           HDC                   *hdc,
+                           int                    pixel_format,
+                           PIXELFORMATDESCRIPTOR *pfd,
+                           gboolean              *recreate_dummy_context)
 {
   gboolean skip_acquire = FALSE;
   gboolean set_pixel_format_result = FALSE;
-  PIXELFORMATDESCRIPTOR pfd = {0};
-
-  /* one is only allowed to call SetPixelFormat(), and so ChoosePixelFormat()
-   * one single time per window HDC
-   */
-  GDK_NOTE (OPENGL, g_print ("requesting pixel format...\n"));
-  *best_idx = gdk_win32_wgl_choose_pixelformat (display_win32, *hdc, &pfd);
 
   if (display_win32->dummy_context_wgl.hwnd != NULL)
     {
@@ -961,14 +955,14 @@ set_wgl_pixformat_for_hdc (GdkWin32Display *display_win32,
       skip_acquire = TRUE;
       set_pixel_format_result = TRUE;
     }
-  else if (*best_idx != 0)
-    set_pixel_format_result = SetPixelFormat (*hdc, *best_idx, &pfd);
+  else
+    set_pixel_format_result = SetPixelFormat (*hdc, pixel_format, pfd);
 
-  /* ChoosePixelFormat() or SetPixelFormat() failed, bail out */
-  if (*best_idx == 0 || !set_pixel_format_result)
+  /* SetPixelFormat() failed, bail out */
+  if (!set_pixel_format_result)
     return FALSE;
 
-  GDK_NOTE (OPENGL, g_print ("%s""requested and set pixel format: %d\n", skip_acquire ? "already " : "", *best_idx));
+  GDK_NOTE (OPENGL, g_print ("%s""requested and set pixel format: %d\n", skip_acquire ? "already " : "", pixel_format));
 
   return TRUE;
 }
@@ -978,8 +972,8 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
                                   GError **error)
 {
   GdkWin32GLContextWGL *context_wgl = GDK_WIN32_GL_CONTEXT_WGL (context);
-
   gboolean debug_bit, compat_bit, legacy_bit;
+  PIXELFORMATDESCRIPTOR pfd = {0};
 
   /* request flags and specific versions for core (3.2+) WGL context */
   int flags = 0;
@@ -1018,9 +1012,17 @@ gdk_win32_gl_context_wgl_realize (GdkGLContext *context,
   else
     hdc = display_win32->dummy_context_wgl.hdc;
 
-  if (!set_wgl_pixformat_for_hdc (display_win32,
+  /* one is only allowed to call SetPixelFormat(), and so ChoosePixelFormat()
+   * one single time per window HDC
+   */
+  GDK_NOTE (OPENGL, g_print ("requesting pixel format...\n"));
+  pixel_format = gdk_win32_wgl_choose_pixelformat (display_win32, hdc, &pfd);
+
+  if (pixel_format == 0 ||
+      !set_wgl_pixformat_for_hdc (display_win32,
                                  &hdc,
-                                 &pixel_format,
+                                  pixel_format,
+                                 &pfd,
                                  &recreate_dummy_context))
     {
       g_set_error_literal (error, GDK_GL_ERROR,
