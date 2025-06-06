@@ -518,10 +518,11 @@ gdk_create_dummy_wgl_context (GdkWin32Display *display_win32,
   int pixel_format;
   HGLRC hglrc;
 
-  pixel_format = gdk_win32_wgl_choose_pixelformat (display_win32, hdc, &pfd);
+  pixel_format = choose_pixel_format_opengl32 (display_win32, hdc);
   if (pixel_format == 0)
     return NULL;
 
+  DescribePixelFormat (hdc, pixel_format, sizeof (PIXELFORMATDESCRIPTOR), &pfd);
   if (!SetPixelFormat (hdc, pixel_format, &pfd))
     return NULL;
 
