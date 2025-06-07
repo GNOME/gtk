@@ -62,3 +62,8 @@ o {
   background-image: radial-gradient(ellipse farthest-corner at center, rgb(255,0,0) 0, rgb(255,255,0) 10%, rgb(255,255,0) 20%, rgb(0,128,0) 90%, rgb(0,128,0) 100%);
   border-image-source: repeating-radial-gradient(ellipse farthest-corner at center, rgb(255,0,0) 0, rgb(255,255,0) 10%, rgb(255,255,0) 20%, rgb(0,128,0) 90%, rgb(0,128,0) 100%);
 }
+
+p {
+  background-image: radial-gradient(ellipse farthest-corner at center, rgb(255,0,0) 0, rgb(255,0,0) 10%, rgb(0,128,0), rgb(255,255,0) 90%, rgb(255,255,0) 100%);
+  border-image-source: repeating-radial-gradient(ellipse farthest-corner at center, rgb(255,0,0) 0, rgb(255,0,0) 10%, rgb(0,128,0), rgb(255,255,0) 90%, rgb(255,255,0) 100%);
+}
