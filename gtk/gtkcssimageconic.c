@@ -156,7 +156,12 @@ gtk_css_image_conic_parse_color_stop (GtkCssImageConic *self,
 
   if (color == NULL)
     {
-      gtk_css_parser_error_syntax (parser, "Expected shadow value to contain a length");
+      if (angles[0])
+        gtk_css_value_unref (angles[0]);
+      if (angles[1])
+        gtk_css_value_unref (angles[1]);
+
+      gtk_css_parser_error_syntax (parser, "Expected color stop to contain a color");
       goto fail;
     }
 
