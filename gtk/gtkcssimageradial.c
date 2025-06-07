@@ -195,9 +195,15 @@ gtk_css_image_radial_snapshot (GtkCssImage *image,
       last = i;
     }
 
-  for (i = 0; i + 1 < radial->n_stops; i++)
-    stops[i].transition_hint = (stops[i+1].offset - stops[i].offset) / 2;
-  stops[radial->n_stops - 1].transition_hint = 1;
+  stops[0].transition_hint = 0;
+  for (i = 1; i < radial->n_stops; i++)
+    {
+      const GtkCssImageRadialColorStop *stop = &radial->color_stops[i];
+      if (stop->transition_hint)
+        stops[i].transition_hint = CLAMP (gtk_css_number_value_get (stop->transition_hint, hradius), stops[i - 1].offset, stops[i].offset);
+      else
+        stops[i].transition_hint = (stops[i - 1].offset + stops[i].offset) / 2;
+    }
 
   if (radial->color_space != GTK_CSS_COLOR_SPACE_SRGB)
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
@@ -232,6 +238,24 @@ gtk_css_image_radial_parse_color_stop (GtkCssImageRadial *radial,
 {
   GtkCssImageRadialColorStop stop;
 
+  if (gtk_css_number_value_can_parse (parser))
+    {
+      stop.transition_hint = gtk_css_number_value_parse (parser,
+                                                         GTK_CSS_PARSE_PERCENT
+                                                         | GTK_CSS_PARSE_LENGTH);
+      if (stop.transition_hint == NULL)
+        return 0;
+
+      if (!gtk_css_parser_has_token (parser, GTK_CSS_TOKEN_COMMA))
+        return 0;
+
+      gtk_css_parser_consume_token (parser);
+    }
+  else
+    {
+      stop.transition_hint = NULL;
+    }
+
   stop.color = gtk_css_color_value_parse (parser);
   if (stop.color == NULL)
     return 0;
@@ -243,6 +267,8 @@ gtk_css_image_radial_parse_color_stop (GtkCssImageRadial *radial,
                                                 | GTK_CSS_PARSE_LENGTH);
       if (stop.offset == NULL)
         {
+          if (stop.transition_hint)
+            gtk_css_value_unref (stop.transition_hint);
           gtk_css_value_unref (stop.color);
           return 0;
         }
@@ -500,6 +526,12 @@ gtk_css_image_radial_print (GtkCssImage *image,
       if (i > 0)
         g_string_append (string, ", ");
 
+      if (stop->transition_hint)
+        {
+          gtk_css_value_print (stop->transition_hint, string);
+          g_string_append (string, ", ");
+        }
+
       gtk_css_value_print (stop->color, string);
 
       if (stop->offset)
@@ -546,13 +578,14 @@ gtk_css_image_radial_compute (GtkCssImage          *image,
       scopy->color = gtk_css_value_compute (stop->color, property_id, context);
 
       if (stop->offset)
-        {
-          scopy->offset = gtk_css_value_compute (stop->offset, property_id, context);
-        }
+        scopy->offset = gtk_css_value_compute (stop->offset, property_id, context);
       else
-        {
-          scopy->offset = NULL;
-        }
+        scopy->offset = NULL;
+
+      if (stop->transition_hint)
+        scopy->transition_hint = gtk_css_value_compute (stop->transition_hint, property_id, context);
+      else
+        scopy->transition_hint = NULL;
     }
 
   return GTK_CSS_IMAGE (copy);
@@ -623,6 +656,20 @@ gtk_css_image_radial_transition (GtkCssImage *start_image,
       if ((start_stop->offset != NULL) != (end_stop->offset != NULL))
         goto fail;
 
+      if (start_stop->transition_hint == NULL)
+        {
+          stop->transition_hint = NULL;
+        }
+      else
+        {
+          stop->transition_hint = gtk_css_value_transition (start_stop->transition_hint,
+                                                            end_stop->transition_hint,
+                                                            property_id,
+                                                            progress);
+          if (stop->transition_hint == NULL)
+            goto fail;
+        }
+
       if (start_stop->offset == NULL)
         {
           stop->offset = NULL;
@@ -684,6 +731,7 @@ gtk_css_image_radial_equal (GtkCssImage *image1,
       const GtkCssImageRadialColorStop *stop2 = &radial2->color_stops[i];
 
       if (!gtk_css_value_equal0 (stop1->offset, stop2->offset) ||
+          !gtk_css_value_equal0 (stop1->transition_hint, stop2->transition_hint) ||
           !gtk_css_value_equal (stop1->color, stop2->color))
         return FALSE;
     }
@@ -701,6 +749,8 @@ gtk_css_image_radial_dispose (GObject *object)
     {
       GtkCssImageRadialColorStop *stop = &radial->color_stops[i];
 
+      if (stop->transition_hint)
+        gtk_css_value_unref (stop->transition_hint);
       gtk_css_value_unref (stop->color);
       if (stop->offset)
         gtk_css_value_unref (stop->offset);
@@ -738,6 +788,12 @@ gtk_css_image_radial_is_computed (GtkCssImage *image)
     for (i = 0; i < radial->n_stops; i ++)
       {
         const GtkCssImageRadialColorStop *stop = &radial->color_stops[i];
+
+       if (stop->transition_hint && !gtk_css_value_is_computed (stop->transition_hint))
+         {
+           computed = FALSE;
+           break;
+         }
 
         if (stop->offset && !gtk_css_value_is_computed (stop->offset))
           {
@@ -809,6 +865,11 @@ gtk_css_image_radial_resolve (GtkCssImage          *image,
         scopy->offset = gtk_css_value_ref (stop->offset);
       else
         scopy->offset = NULL;
+
+      if (stop->transition_hint)
+        scopy->transition_hint = gtk_css_value_ref (stop->transition_hint);
+      else
+        scopy->transition_hint = NULL;
     }
 
   return GTK_CSS_IMAGE (copy);
@@ -837,4 +898,3 @@ static void
 _gtk_css_image_radial_init (GtkCssImageRadial *radial)
 {
 }
-

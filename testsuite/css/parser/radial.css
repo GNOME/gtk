@@ -52,3 +52,8 @@ m {
   background-image: radial-gradient(circle in hsl longer hue, red, yellow);
   border-image-source: repeating-radial-gradient(circle in hsl longer hue, red, yellow);
 }
+
+n {
+  background-image: radial-gradient(20px 30px at 20px 30px, red, 20%, yellow 100%);
+  border-image-source: repeating-radial-gradient(20px 30px at 20px 30px, red, 20%, yellow 100%);
+}
