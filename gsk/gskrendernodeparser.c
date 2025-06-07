@@ -1524,6 +1524,16 @@ parse_stops (GtkCssParser *parser,
 
       stop.offset = dval;
 
+      if (gtk_css_parser_has_number (parser))
+        {
+          if (!gtk_css_parser_consume_number (parser, &dval))
+            goto error;
+
+          stop.transition_hint = dval;
+        }
+      else
+        stop.transition_hint = 0.5;
+
       if (!parse_color (parser, context, &stop.color))
         goto error;
 
@@ -4607,6 +4617,13 @@ append_stops_param (Printer               *p,
         g_string_append (p->str, ", ");
 
       string_append_double (p->str, stops[i].offset);
+
+      if (i > 0 && stops[i].transition_hint != 0.5)
+        {
+          g_string_append_c (p->str, ' ');
+          string_append_double (p->str, stops[i].transition_hint);
+        }
+
       g_string_append_c (p->str, ' ');
       print_color (p, &stops[i].color);
     }

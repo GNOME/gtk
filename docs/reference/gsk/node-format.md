@@ -256,7 +256,7 @@ matrix3d() production to specify all 16 values individually.
 | bounds            | `<rect>`        | 50             | always      |
 | center            | `<point>`       | 25, 25         | always      |
 | rotation          | `<number>`      | 0              | always      |
-| stops             | `<color-stop>`  | 0 #AF0, 1 #F0C | always      |
+| stops             | `<color-stops>` | 0 #AF0, 1 #F0C | always      |
 | interpolation     | `<color-state>` | srgb           | non-default |
 | hue-interpolation | `<hue-interp>`  | shorter        | non-default |
 
@@ -265,6 +265,15 @@ Creates a node like `gsk_conic_gradient_node_new()` with the given properties.
 Possible values for the hue-interpolation property are:
 
     hue-interpolation: shorter | longer | increasing | decreasing
+
+The syntax for color stops is:
+
+    color-stops: <color-stop> { "," <color-stop> }*
+    color-stop: <offset> [<transition-hint>] <color>
+    offset: <number>
+    transition-hint: <number>
+
+The default value for transition hints is 0.5.
 
 ### cross-fade
 
@@ -339,7 +348,7 @@ Creates a node like `gsk_inset_shadow_node_new()` with the given properties.
 | bounds            | `<rect>`        | 50             | always      |
 | start             | `<point>`       | 0 0            | always      |
 | end               | `<point>`       | 0 50           | always      |
-| stops             | `<color-stop>`  | 0 #AF0, 1 #F0C | always      |
+| stops             | `<color-stops>` | 0 #AF0, 1 #F0C | always      |
 | interpolation     | `<color-state>` | srgb           | non-default |
 | hue-interpolation | `<hue-interp>`  | shorter        | non-default |
 
@@ -391,7 +400,7 @@ Creates a node like `gsk_outset_shadow_node_new()` with the given properties.
 | vradius           | `<number>`      | 25             | always      |
 | start             | `<number>`      | 0              | always      |
 | end               | `<number>`      | 1              | always      |
-| stops             | `<color-stop>`  | 0 #AF0, 1 #F0C | always      |
+| stops             | `<color-stops>` | 0 #AF0, 1 #F0C | always      |
 | interpolation     | `<color-state>` | srgb           | non-default |
 | hue-interpolation | `<hue-interp>`  | shorter        | non-default |
 
@@ -414,7 +423,7 @@ Creates a node like `gsk_repeat_node_new()` with the given properties.
 | bounds   | `<rect>`         | 50                     | always      |
 | start    | `<point>`        | 0 0                    | always      |
 | end      | `<point>`        | 0 50                   | always      |
-| stops    | `<color-stop>`   | 0 #AF0, 1 #F0C         | always      |
+| stops    | `<color-stops>`  | 0 #AF0, 1 #F0C         | always      |
 
 Creates a node like `gsk_repeating_linear_gradient_node_new()` with the given
 properties.
@@ -429,7 +438,7 @@ properties.
 | vradius  | `<number>`       | 25                     | always      |
 | start    | `<number>`       | 0                      | always      |
 | end      | `<number>`       | 1                      | always      |
-| stops    | `<color-stop>`   | 0 #AF0, 1 #F0C         | always      |
+| stops    | `<color-stops>`  | 0 #AF0, 1 #F0C         | always      |
 
 Creates a node like `gsk_repeating_radial_gradient_node_new()` with the given
 properties.
