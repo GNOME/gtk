@@ -67,7 +67,7 @@ gsk_gpu_radial_gradient_op (GskGpuFrame            *frame,
                             const graphene_point_t *radius,
                             float                   start,
                             float                   end,
-                            const GskColorStop2    *stops,
+                            const GskGradientStop  *stops,
                             gsize                   n_stops)
 {
   GskGpuRadialgradientInstance *instance;

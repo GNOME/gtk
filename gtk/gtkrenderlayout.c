@@ -52,7 +52,7 @@ gtk_css_style_snapshot_layout (GtkCssBoxes *boxes,
 
   has_shadow = gtk_css_shadow_value_push_snapshot (style->used->text_shadow, snapshot);
 
-  gtk_snapshot_append_layout2 (snapshot, layout, &color);
+  gtk_snapshot_add_layout (snapshot, layout, &color);
 
   if (has_shadow)
     gtk_snapshot_pop (snapshot);
@@ -223,9 +223,9 @@ snapshot_insertion_cursor (GtkSnapshot     *snapshot,
       else
         offset = stem_width - stem_width / 2;
 
-      gtk_snapshot_append_color2 (snapshot,
-                                  &color,
-                                  &GRAPHENE_RECT_INIT (- offset, 0, stem_width, height));
+      gtk_snapshot_add_color (snapshot,
+                              &color,
+                              &GRAPHENE_RECT_INIT (- offset, 0, stem_width, height));
     }
 }
 

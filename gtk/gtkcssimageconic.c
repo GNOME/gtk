@@ -38,11 +38,11 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
                               double              height)
 {
   GtkCssImageConic *self = GTK_CSS_IMAGE_CONIC (image);
-  GskColorStop2 *stops;
+  GskGradientStop *stops;
   int i, last;
   double offset;
 
-  stops = g_newa (GskColorStop2, self->n_stops);
+  stops = g_newa (GskGradientStop, self->n_stops);
 
   last = -1;
   offset = 0;
@@ -82,10 +82,14 @@ gtk_css_image_conic_snapshot (GtkCssImage        *image,
       last = i;
     }
 
+  for (i = 0; i + 1 < self->n_stops; i++)
+    stops[i].transition_hint = (stops[i+1].offset - stops[i].offset) / 2;
+  stops[self->n_stops - 1].transition_hint = 1;
+
   if (self->color_space != GTK_CSS_COLOR_SPACE_SRGB)
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
 
-  gtk_snapshot_append_conic_gradient2 (
+  gtk_snapshot_add_conic_gradient (
           snapshot,
           &GRAPHENE_RECT_INIT (0, 0, width, height),
           &GRAPHENE_POINT_INIT (_gtk_css_position_value_get_x (self->center, width),

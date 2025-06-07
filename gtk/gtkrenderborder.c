@@ -361,7 +361,7 @@ snapshot_frame_fill (GtkSnapshot          *snapshot,
       return;
     }
 
-  gtk_snapshot_append_border2 (snapshot, outline, border_width, colors);
+  gtk_snapshot_add_border (snapshot, outline, border_width, colors);
 }
 
 static void
@@ -720,10 +720,10 @@ gtk_css_style_snapshot_border (GtkCssBoxes *boxes,
               border_style[3] <= GTK_BORDER_STYLE_SOLID)
             {
               /* The most common case of a solid border */
-              gtk_snapshot_append_border2 (snapshot,
-                                           gtk_css_boxes_get_border_box (boxes),
-                                           border_width,
-                                           colors);
+              gtk_snapshot_add_border (snapshot,
+                                       gtk_css_boxes_get_border_box (boxes),
+                                       border_width,
+                                       colors);
             }
           else
             {

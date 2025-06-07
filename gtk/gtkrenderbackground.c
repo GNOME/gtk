@@ -61,12 +61,12 @@ gtk_theming_background_snapshot_color (GtkCssBoxes       *boxes,
   gtk_css_color_to_color (bg_color, &color);
   if (gsk_rounded_rect_is_rectilinear (box))
     {
-      gtk_snapshot_append_color2 (snapshot, &color, &box->bounds);
+      gtk_snapshot_add_color (snapshot, &color, &box->bounds);
     }
   else
     {
       gtk_snapshot_push_rounded_clip (snapshot, box);
-      gtk_snapshot_append_color2 (snapshot, &color, &box->bounds);
+      gtk_snapshot_add_color (snapshot, &color, &box->bounds);
       gtk_snapshot_pop (snapshot);
     }
   gdk_color_finish (&color);

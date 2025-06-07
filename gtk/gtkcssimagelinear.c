@@ -141,7 +141,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
                                double       height)
 {
   GtkCssImageLinear *linear = GTK_CSS_IMAGE_LINEAR (image);
-  GskColorStop2 *stops;
+  GskGradientStop *stops;
   double angle; /* actual angle of the gradient line in degrees */
   double x, y; /* coordinates of start point */
   double length; /* distance in pixels for 100% */
@@ -197,9 +197,9 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
 
           gtk_css_color_to_color (gtk_css_color_value_get_color (stop->color), &color);
 
-          gtk_snapshot_append_color2 (snapshot,
-                                      &color,
-                                      &GRAPHENE_RECT_INIT (0, 0, width, height));
+          gtk_snapshot_add_color (snapshot,
+                                  &color,
+                                  &GRAPHENE_RECT_INIT (0, 0, width, height));
 
           gdk_color_finish (&color);
           return;
@@ -213,7 +213,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
 
   offset = start;
   last = -1;
-  stops = g_newa (GskColorStop2, linear->n_stops);
+  stops = g_newa (GskGradientStop, linear->n_stops);
 
   for (i = 0; i < linear->n_stops; i++)
     {
@@ -252,11 +252,15 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
       last = i;
     }
 
+  for (i = 0; i + 1 < linear->n_stops; i++)
+    stops[i].transition_hint = (stops[i+1].offset - stops[i].offset) / 2;
+  stops[linear->n_stops - 1].transition_hint = 1;
+
   if (linear->color_space != GTK_CSS_COLOR_SPACE_SRGB)
     g_warning_once ("Gradient interpolation color spaces are not supported yet");
 
   if (linear->repeating)
-    gtk_snapshot_append_repeating_linear_gradient2 (
+    gtk_snapshot_add_repeating_linear_gradient (
         snapshot,
         &GRAPHENE_RECT_INIT (0, 0, width, height),
         &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
@@ -265,7 +269,7 @@ gtk_css_image_linear_snapshot (GtkCssImage *image,
         gtk_css_hue_interpolation_to_hue_interpolation (linear->hue_interp),
         stops, linear->n_stops);
   else
-    gtk_snapshot_append_linear_gradient2 (
+    gtk_snapshot_add_linear_gradient (
         snapshot,
         &GRAPHENE_RECT_INIT (0, 0, width, height),
         &GRAPHENE_POINT_INIT (width / 2 + x * (start - 0.5), height / 2 + y * (start - 0.5)),
