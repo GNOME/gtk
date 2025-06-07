@@ -1258,9 +1258,9 @@ gtk_at_spi_context_platform_change (GtkATContext                *ctx,
       if (gtk_accessible_get_accessible_role (accessible) == GTK_ACCESSIBLE_ROLE_WINDOW)
         {
           if (state)
-            emit_window_event (self, "activate");
+            emit_window_event (self, "Activate");
           else
-            emit_window_event (self, "deactivate");
+            emit_window_event (self, "Deactivate");
         }
     }
 }
