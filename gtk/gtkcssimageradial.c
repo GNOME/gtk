@@ -258,7 +258,12 @@ gtk_css_image_radial_parse_color_stop (GtkCssImageRadial *radial,
 
   stop.color = gtk_css_color_value_parse (parser);
   if (stop.color == NULL)
-    return 0;
+    {
+      if (stop.transition_hint)
+        gtk_css_value_unref (stop.transition_hint);
+      gtk_css_parser_error_syntax (parser, "Expected color stop to contain a color");
+      return 0;
+    }
 
   if (gtk_css_number_value_can_parse (parser))
     {
@@ -272,13 +277,34 @@ gtk_css_image_radial_parse_color_stop (GtkCssImageRadial *radial,
           gtk_css_value_unref (stop.color);
           return 0;
         }
+
+      g_array_append_val (stop_array, stop);
+
+      if (gtk_css_number_value_can_parse (parser))
+        {
+          if (stop.transition_hint)
+            stop.transition_hint = gtk_css_value_ref (stop.transition_hint);
+          stop.color = gtk_css_value_ref (stop.color);
+
+          stop.offset = gtk_css_number_value_parse (parser,
+                                                    GTK_CSS_PARSE_PERCENT
+                                                    | GTK_CSS_PARSE_LENGTH);
+          if (stop.offset == NULL)
+            {
+              if (stop.transition_hint)
+                gtk_css_value_unref (stop.transition_hint);
+              gtk_css_value_unref (stop.color);
+              return 0;
+            }
+
+          g_array_append_val (stop_array, stop);
+        }
     }
   else
     {
       stop.offset = NULL;
+      g_array_append_val (stop_array, stop);
     }
-
-  g_array_append_val (stop_array, stop);
 
   return 1;
 }
